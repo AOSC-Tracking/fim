@@ -1,0 +1,225 @@
+#ifndef CC_FBVI_H
+#define CC_FBVI_H
+#include "fim.h"
+namespace fim
+{
+class CommandConsole
+{
+	/*
+	 * the registered command methods and objects
+	 */
+	std::vector<Command*> commands;			//command->method
+
+	/*
+	 * the aliases to actions (compounds of commands)
+	 */
+	std::map<fim::string,fim::string> aliases;	//alias->commands
+
+	/*
+	 * bindings of key codes to actions (compounds of commands)
+	 */
+	std::map<int,fim::string> bindings;		//code->commands
+
+	/*
+	 * mapping of key name to key code
+	 */
+	std::map<fim::string,int > key_bindings;	//symbol->code
+
+	/*
+	 * the image browser logic
+	 */
+	Browser browser;
+
+	/*
+	 * the identifier->variable binding
+	 */
+	std::map<const fim::string,Var> variables;	//id->var
+
+	/*
+	 * the buffer of marked files
+	 */
+	std::set<fim::string> marked_files;		//filenames
+
+	/*
+	 * flags
+	 */
+	bool	ic;					//in console
+	int	cycles,isinscript;			//FIX ME
+	int	nofb;					//FIX ME
+
+
+	/*
+	 * the mapping structure for autocommands (<event,pattern,action>)
+	 */
+	typedef std::map<fim::string,std::vector<fim::string> >  autocmds_p_t;	//pattern - commands
+	typedef std::map<fim::string,autocmds_p_t >  autocmds_t;		//autocommand - pattern - commands
+	autocmds_t autocmds;
+	
+	/*
+	 * the last executed action (being a command line or key bounded command issued)
+	 */
+	fim::string last_action;
+	
+	bool recordMode;//WORKON...
+	typedef std::pair<fim::string,int> recorded_action_t;
+	typedef std::vector<recorded_action_t > recorded_actions_t;
+	recorded_actions_t recorded_actions;
+
+	void clearRecordBuffer(){}
+	bool dont_record_last_action;
+	fim::string CommandConsole::memorize_last(const fim::string &cmd)
+	{
+		//WARNING : DANGER
+		if(dont_record_last_action==false)last_action=cmd;
+		dont_record_last_action=false;	//from now on we can memorize again
+		return "";
+	}
+
+	fim::string CommandConsole::repeat_last(const std::vector<fim::string> &args)
+	{
+		/*
+		 * WARNING : there is an intricacy concerning the semantics of this command :
+		 * - This command should NOT be registered as last_command, nor any alias 
+		 *   triggering it. But this solution would require heavy parsing and very
+		 *   complicated machinery and information propagation... 
+		 * - A solution would be confining the repeat_last only to interactive commands,
+		 *   but this would be a lot sorrowful too, and requires the non-registration 
+		 *   of the 'repeat_last;' issuing..
+		 * - So, since the recording is made AFTER the command was executed, we set
+		 *   a dont_record_last_action flag after each detection of repeat_last, so we do not 
+		 *   record the containing string.
+		 */
+		execute(last_action.c_str(),0);
+		dont_record_last_action=true;	//the issuing action will not be recorded
+		return "";
+	}
+
+	fim::string CommandConsole::dump_record_buffer(const std::vector<fim::string> &args)
+	{
+		fim::string res;
+		for(int i=0;i<recorded_actions.size();++i)
+			res+=recorded_actions[i].first;
+		return res;
+	}
+	
+	fim::string CommandConsole::execute_record_buffer(const std::vector<fim::string> &args)
+	{
+		execute(dump_record_buffer(args).c_str(),0);
+		return "";
+	}
+	
+	fim::string CommandConsole::start_recording(const std::vector<fim::string> &args)
+	{
+		recorded_actions.clear();
+		recordMode=true;
+		return "";
+	}
+
+	fim::string CommandConsole:: stop_recording(const std::vector<fim::string> &args)
+	{
+		/*
+		 * since the last recorded action was stop_recording, we pop out the last command
+		 */
+		if(recorded_actions.size()>0)recorded_actions.pop_back();
+		recordMode=false;
+		return "";
+	}
+
+	fim::string CommandConsole::sanitize_action(const fim::string &cmd)
+	{
+		/*
+		 * the purpose of this method is to sanitize the action token
+		 * in order to gain a dumpable and self standing action
+		 */
+		if(cmd.c_str()[strlen(cmd.c_str())-1]!=';')
+			return cmd+fim::string(";");
+		return cmd;
+	}
+
+	void CommandConsole::record_action(const fim::string &cmd)
+	{
+		//FIX ME
+		//recorded_actions.push_back(recorded_action_t(cmd,0));
+		recorded_actions.push_back(recorded_action_t(sanitize_action(cmd),0));
+	}
+
+	public:
+
+	std::vector<fim::string> scripts;		//scripts to execute : FIX ME PRIVATE
+	
+	int noFrameBuffer(){return nofb!=0;}
+	void setNoFrameBuffer(){nofb==1;}
+	CommandConsole::CommandConsole();
+	void CommandConsole::markCurrentFile(){if(browser.current()!="")marked_files.insert(browser.current());}
+	fim::string CommandConsole::markCurrentFile(const std::vector<fim::string>& args){markCurrentFile();}
+	void CommandConsole::display();
+	char * CommandConsole::command_generator (const char *text,int state);
+	void CommandConsole::executionCycle();
+	void CommandConsole::init();
+	int  CommandConsole::inConsole()const{return ic;};
+	fim::string CommandConsole::execute(fim::string cmd, std::vector<fim::string> args);
+	CommandConsole::~CommandConsole();
+	float CommandConsole::getFloatVariable(const fim::string &varname);
+	int  CommandConsole::getIntVariable(const fim::string & varname);
+	int  CommandConsole::setVariable(const fim::string& varname,int value);
+	float CommandConsole::setVariable(const fim::string& varname,float value);
+	bool CommandConsole::push(const fim::string nf){return browser.push(nf);}
+	int  CommandConsole::executeFile(const char *s);
+	fim::string CommandConsole::echo(const std::vector<fim::string> &args);
+	fim::string CommandConsole::executeFile(const std::vector<fim::string> &args);
+	fim::string CommandConsole::help(const std::vector<fim::string> &args);
+	fim::string CommandConsole::quit(const std::vector<fim::string> &args);
+	fim::string CommandConsole::foo (const std::vector<fim::string> &args);
+	fim::string CommandConsole::status(const std::vector<fim::string> &args);
+	void CommandConsole::execute(const char *s, int add_history_);
+	private:
+	int  CommandConsole::toggleStatusLine();
+	int  CommandConsole::addCommand(Command *c);
+	Command* CommandConsole::findCommand(fim::string cmd);
+	fim::string CommandConsole::alias(std::vector<Arg> args);
+	fim::string CommandConsole::alias(const fim::string& a,const fim::string& c);
+	fim::string CommandConsole::aliasRecall(fim::string cmd);
+	fim::string CommandConsole::system(const std::vector<fim::string>& args);
+	fim::string CommandConsole::autocmd(const std::vector<fim::string>& args);
+	fim::string CommandConsole::autocmd_del(const fim::string &event,const fim::string &pat){}
+	fim::string CommandConsole::autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
+	fim::string CommandConsole::autocmds_list();
+	typedef std::pair<fim::string,fim::string> autocmds_frame_t;
+	typedef std::set<autocmds_frame_t> autocmds_stack_t;
+	autocmds_stack_t autocmds_stack;
+	std::vector<fim::string> CommandConsole::autocmds_sub_list(const fim::string &event);
+	fim::string CommandConsole::bind(const std::vector<fim::string>& args);
+	fim::string CommandConsole::bind(std::vector<Arg> args);
+	fim::string CommandConsole::displayAliases();
+	fim::string CommandConsole::dummy(std::vector<Arg> args);
+	fim::string CommandConsole::variables_list(const std::vector<fim::string>& args){return get_variables_list();}
+	fim::string CommandConsole::unalias(const std::vector<fim::string>& args);
+	char ** CommandConsole::tokenize_(const char *s);
+	void CommandConsole::executeBinding(const int c);
+	fim::string CommandConsole::getBoundAction(const int c);
+//	void CommandConsole::execute(fim::string cmd);
+	void CommandConsole::exit(int i);
+	fim::string CommandConsole::unbind(int c);
+	fim::string CommandConsole::bind(int c,fim::string binding);
+	fim::string CommandConsole::unbind(const std::vector<fim::string>& args);
+	fim::string CommandConsole::dump_key_codes(const std::vector<fim::string>& args);
+	public:
+	void CommandConsole::quit();
+	int  CommandConsole::drawOutput();
+	int  CommandConsole::isInScript(){return isinscript;}
+	fim::string CommandConsole::autocmd_exec(const fim::string &event,const fim::string &fname);
+	int current_image (){return browser.current_image ();}
+	int current_images(){return browser.current_images();}
+	int CommandConsole::catchInteractiveCommand();
+	private:
+	fim::string CommandConsole::autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname);
+	void autocmd_push_stack(const autocmds_frame_t& frame);
+	void autocmd_pop_stack(const autocmds_frame_t& frame);
+	int  autocmd_in_stack(const autocmds_frame_t& frame);
+	fim::string CommandConsole::current()const{ return browser.current();}
+	bool CommandConsole::regexp_match(const char*s, const char*r)const;
+	fim::string CommandConsole::get_variables_list();
+};
+};
+
+#endif

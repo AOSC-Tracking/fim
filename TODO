@@ -1,0 +1,37 @@
+	SOLVED BUGS:
+20070128	it seems that all of the scaling pre-display hooks cause harm!
+	OPEN   BUGS:
+20070129	control 4 crashes the prog ... why ? :)
+20070211	mysterious "open : No such file or directory" warning..
+	FIX:
+#20070121	fix the broken terminal emulator, fix the image browser then
+20070125	fix the string vs variable problem
+#20070125	fix the display/statusline relationship..
+20070128	fixa l'argument passing che e' problematico! e fixa i commenti!
+20070129	fix the KEY binding
+20070211	flex and bison parts should be rewritten
+	ADD:
+20070129	dump internal commands function
+20070129	implement a new millisleep function..
+20070125	add pipe to other commands and exec and system (screenshot with fbgrab, for example)
+20070126	debugger x scoprire i tasti .. ocr..
+20070128	add support for command renaming with checks...
+20070130	~ proper signal handing for while cycle interruption..
+20070201	cwd,ls,pwd,stat,file...
+20070201	meccanismo --norc, --rc=..
+20070208	when you find time, rewrite the parser in full C++
+	DATES:
+20061223	inception
+20070201	vedi se si possono usare control e shift e frecce e scala asimmetrica e scopri 
+		l'esistenza di funzioni alternative, tipo flip o simili, nei meandri di fbi :P
+20070202	come trattare gli $ nelle stringhe ?
+20070202	stress testing (1000+d-) gave : CommandConsole.cpp:577: "pipe error"
+20070202	aspect ratio expansion and pan speed factors..
+20070204	make stricter the policy of recording (only aliases and/or lines.complete the time behaviour
+20070204	deconfigurable features : default config, autocommands, recording, last_action, system
+20070208	Added FIM_NOFB, FIM_DEFAULT_KEY_CONFIG, FIM_DEFAULT_CONFIG compilation flags
+20070210	eliminate the fresh variable from the config! : 
+20070210	elimina il tearing dell'immagine! dovrebbe essere una questione di switch!
+20070210	add an interface to modify key bindings and keycode bindings.
+20070210	there are memory leaks probably, or some memory corruption. the 'pornview' alias at long hangs the computer.
+20070210	fix properly the file parser (comments problems!) and max script filelen limit

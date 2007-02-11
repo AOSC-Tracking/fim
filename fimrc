@@ -1,0 +1,146 @@
+#autocmd "Prev" ""  "echo 'PREV'" ;
+#autocmd "Prev" "1"  "echo 'PREV1'" ;
+#autocmd "Prev" "2"  "echo 'PREV2'" ;
+#autocmd "Next" ""  "echo 'NEXT'" ;
+#quit;
+#info;
+#next;
+#autocmd;
+#bind 29 "scale_factor_increase";
+#bind 31 "scale_factor_decrease";
+#bind 29 "scale_factor_grow";
+#bind 31 "scale_factor_shrink";
+verbose=0;
+#autowidth=1;
+alias "q" "quit";
+bind 'f' "files";
+bind 'q' "quit";
+bind 'f' "file";
+bind 'n' "next;display;";
+bind 'h' "help";
+bind 'H' "help";
+bind 'x' "echo";
+bind 'e' "echo";
+bind 'p' "prev;display;";
+bind 'P' "pop";
+bind 's' "sort";
+bind 'S' "toggleDisplayStatus;";
+bind 'r' "reload";
+bind 'R' "redisplay";
+bind 'd' "display";
+bind '+' "magnify";
+bind 'a' "auto_scale;";
+bind 'Tab' "toggleVerbosity";
+bind 'C-v' "toggleKeyVerbosity";
+bind 'C-k' "toggleKeyVerbosity";
+bind 'v' "toggleDisplayStatus;";
+bind 'A' "A";
+bind 'm' "mark";
+bind '-' "reduce";
+bind "Up" "panup";
+bind 'k' "panup";
+bind "Right" "panright";
+bind 'l' "panright";
+bind "Down" "pandown";
+bind 'j' "pandown";
+bind "Left" "panleft";
+bind 'h' "panleft";
+bind ' ' "scrolldown";
+bind "PageUp" "next";
+bind "PageDown" "prev";
+bind 'i' "info";
+bind 'P' "f=`files`/2;prev  --f";
+bind 'N' "f=`files`/2;next  --f";
+
+bind 'C-g' "system 'fbgrab fim.png'";
+bind 'C-r' "start_recording;";
+bind 'Q' "stop_recording";
+bind 'D' "dump_record_buffer;";
+bind 'E' "execute_record_buffer;";
+bind 'C-e' "execute_record_buffer;";
+bind 'C-x' "execute_record_buffer;";
+bind 'X' "execute_record_buffer;";
+bind '.' "repeat_last;";
+
+reload;
+#verbose=1;
+#display;
+alias 'A' "'autotop=1-autotop;'";
+alias "toggleVerbosity" "verbose=1-verbose;fresh=1;reload;";
+alias "toggleKeyVerbosity" "verbose_keys=1-verbose_keys;redisplay;";
+
+auto_scale_v=1;
+verbose_keys=0;
+display_status=1;
+verbose=1;
+#verbose_keys=1;
+
+autocmd "Next" "" "echo 'rendering next image..'";
+autocmd "Prev" "" "echo 'rendering prev image..'";
+
+#autocmd "PostDisplay" "" "echo '\\nthis is a file\\n'";
+
+autocmd "PostGoto" "" "reload;";
+autocmd "PostGoto" "" "reload;";
+
+autocmd "PostNext" "" "reload;";
+autocmd "PostPrev" "" "reload;";
+
+autocmd "PostLoad"   "" "fresh=1" ;
+autocmd "PostLoad"   "" "if(autowidth*fresh){auto_width_scale;}";
+autocmd "PostLoad"   "" "if(auto_scale_v*fresh){auto_scale;}";
+autocmd "PostLoad" ".*photos.*" "auto_width_scale;";
+autocmd "PostLoad"   "" "if(fresh){display;}";
+autocmd "PostLoad"   "" "fresh=0";
+
+autocmd "PostReload" "" "fresh=1" ;
+autocmd "PostReload" "" "if(autowidth*fresh){auto_width_scale;}";
+autocmd "PostReload" "" "if(auto_scale_v*fresh){auto_scale;}";
+autocmd "PostReload" ".*photos.*" "auto_width_scale;";
+autocmd "PostLoad"   "" "if(fresh){redisplay;}";
+autocmd "PostReload" "" "fresh=0";
+
+autocmd "PostInteractiveCommand"   "" "if(fresh){display;}";
+alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};";
+bind 'N' 'next10';
+alias "endless_slideshow" "while(1){next;display;sleep '1';};";
+alias "pornview" "echo 'press any key repeatedly to terminate' ;endless_slideshow;";
+bind "C-p" "pornview";
+
+#autocmd "PreExecutionCycle" "" "redisplay;";
+
+autocmd "PreExecutionCycle" "" "reload;";
+autocmd "PreExecutionCycle" "" "redisplay;";
+autocmd "PreExecutionCycle" "" "fresh=0;";
+
+
+autocmd "PostInteractiveCommand" "" "if(autowidth*fresh==1){auto_width_scale;redisplay;};";
+autocmd "PostInteractiveCommand" "" "if(autowidth*fresh==0){redisplay;};";
+autocmd "PostInteractiveCommand" "" "fresh=0;";
+#extra..
+bind 'w' "auto_width_scale";
+bind 'C-h' "auto_height_scale";
+#bind 'C-a' "auto_scale";
+#autocmd "PostDisplay" "" "quit";
+#autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n';";
+autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
+autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
+autocmd "PostDisplay" ".*gif" "echo 'this is a gif file';";
+####display_status=1;
+alias "toggleDisplayStatus" "display_status=1-display_status;reload;";
+push "media/fim.png";
+push "media/image.png";
+push "media/image.jpg";
+push "media/icon_smile.gif";
+echo "WELCOME : to switch to the command line interface press ':' ";
+alias "toggleAutoScale" "auto_scale_v=1-auto_scale_v;autowidth=0;reload;";
+alias "toggleAutoWidth" "autowidth=1-autowidth;auto_scale_v=0;reload;";
+bind 'C-w'   'toggleAutoWidth;';
+bind 'C-a' "toggleAutoScale;";
+bind 'C-b' "toggleAutoScale;";
+bind 'C-c' "toggleAutoScale;";
+bind 'A'   "toggleAutoScale;";
+#This is a FIM initialization file. 
+#Without one of these FIM is nothing.
+#So use it, but with caution! FIM is still severely bugged! 
+

@@ -1,0 +1,173 @@
+------------------------------------------------------------------------------
+*fim.txt*	For Fim version 0.1.  Last change: 2007 01 30
+
+			Fim - main help file (UNDER DEVELOPEMENT)
+
+First of all, please view this documentation in VIM with ':set syntax=help' :)
+if you already know Vim, you will know that in this way you can use this
+documentation as it would be a hypertext.
+
+Thank you for giving a try to this software; one can regard it as a 'hack', in the
+sense it is the result of the passionate work of multiple people.
+------------------------------------------------------------------------------
+							*
+
+									 k
+      Move around:  Use the cursor keys, or "h" to go left,	       h   l
+		    "j" to go down, "k" to go up, "l" to go right.	 j
+Close this window:  Use ":q<Enter>".
+   Get out of Vim:  Use ":qa!<Enter>" (careful, all changes are lost!).
+
+
+Fim stands for Fbi IMproved.  Most of Fbi was made by Gerd Knorr, and Fim is
+mainly an interface rework applied roughly as a patch to Fbi.
+
+See |credits|.
+
+
+Introduction to Fim					*ref* *reference*
+
+1. Introduction			|intro|
+2. Fim on the internet		|internet|
+3. Credits			|credits|
+4. Notation			|notation|
+5. Modes, introduction		|vim-modes-intro|
+6. Switching from mode to mode	|mode-switching|
+7. The window contents		|window-contents|
+8. Definitions			|definitions|
+*. Language Reference		|definitions|
+*. Commands Reference		|commands-reference|
+*. Commands Reference		|auto-commands|
+*. Commands Reference		|pattern-matching|
+*. Dangers			|dangers|
+
+
+==============================================================================
+*. Commands Reference				*commands-reference*
+
+The internal Fim commands are lightweight enough to be used as parts of bigger
+commands.
+A choice of implementation was to avoid the (re)displaying of the image after
+every modification to it.
+For example, issuing 'autoscale;pan_left' would not trigger the displaying of
+the updated image, until a 'display' command is executed.
+
+
+This (default) behaviour allows for particular uses of this software: 
+flexibility of use is gained.
+
+Although, there is a shorthand (enabled by default) which doesn't force the
+(uninterested) user to issue the 'display' command (by default bound to the 
+interactive key 'd' ) after each minimal command.
+
+This mechanism is known as |auto-commands|.
+
+==============================================================================
+*. Auto commands				*auto-commands*
+>
+	:autocmd EVENT PAT ACTION
+
+Auto commands is a feature present in Vim and other powerful command line 
+software, as for example Mutt (there the autocommand concept is a little 
+different and therefore called 'hook' ).
+
+The auto-command mechanism provides the user with the ability of making the 
+program executing certain actions only in certain circumstances.
+
+By 'circumstances' we mean :
+  - a user issued EVENT
+  - the current filename in the browser respects a certain pattern (PAT)
+
+an EVENT can be one of:
+
+'Predisplay'	: before a display is executed
+'Postdisplay'	: after  a display is executed
+
+'PreRedisplay'	: before a redisplay is executed
+'PostRedisplay'	: after  a redisplay is executed
+
+'PrePan'	: before a pan action is executed
+'PostPan'	: after  a pan action is executed
+
+'PreScale'	: before a scaling occurs
+'PostScale'	: after  a scaling occurs
+
+'PreLoad'	: before a loading occurs
+'PostLoad'	: after  a loading occurs
+
+'PreReload'	: before a reloading occurs
+'PosReload'	: after  a reloading occurs
+
+'PreNext'	: before a reloading occurs
+'PostNext'	: after  a reloading occurs
+
+'PrePrev'	: before a reloading occurs
+'PostPrev'	: after  a reloading occurs
+
+'PreExecutionCycle'  : right before the program gets interactive 
+'PostExecutionCycle' : right after  the program gets interactive
+
+'PreInteractiveCommand'  : right before each any interactive command
+'PostInteractiveCommand' : right after  each any interactive command
+
+'PreGoto'	: before a goto jump
+'PostGoto'	: after  a goto jump
+
+
+If more than one ACTION matches for a certain (EVENT,file) couple, the
+corresponding execution occurs in the sequence specified in the autocommand
+specification phase.
+
+Examples:
+>
+	:autocmd 'PreNext' '*' 'pop;'
+	:autocmd 'PostNext' '*' 'auto_scale;display;'
+
+
+In principle, one could program Fim autocommands to do very nasty and errorful
+things; consider, for example:
+>
+	:autocmd 'PostDisplay' '*' 'display;'
+
+This tells Fim to 'display' the current image each time after the image is ..
+.. 'display'ed !
+This in turn would lead Fim to an endless 'display' loop.
+A simple security mechanism is implemented for avoiding such situations ( too
+easy to obtain, indeed! ) :
+Each time an autocommand is triggered, a special data structure keeps hold of
+the fact that 'file x is under autocommand y', and avoids the repeating of a 
+situation 'file x is under autocommand y again' by simply skipping the
+ *
+ autocommand and warning the user accordingly.
+
+INOLTRE C'e' DA DIRE CHE UN POST COMMAND MATCHERA ANCORA SUL FILENAME VECCHIO
+SE C'e' CAMBIO DI FILE!
+
+==============================================================================
+*. Pattern matching				*pattern-matching*
+
+
+==============================================================================
+8. Definitions						*definitions*
+
+==============================================================================
+8. Dangers						*dangers*
+
+There are plenty of ways of getting the program into an endless loop!
+Examples are :
+	An aliased repeat_last...
+
+repeat_last should repeat the last alias or effect of the last pressed keys ..
+..if a line contains repeat_last, it is not recorded in the last_buffer..
+idea : repeat_last N ?!
+Warning : repeat_last do NOT work in scripts *
+
+REPEAT_LAST SHOULD BE EXPERIMENTAL!
+!
+
+
+*222222*
+WHAT PREPEND EXAMPLE	~
+PreRedisplay
+PostRedisplay
+------------------------------------------------------------------------------
