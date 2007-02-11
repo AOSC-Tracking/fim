@@ -1,26 +1,44 @@
 ------------------------------------------------------------------------------
-*fim.txt*	For Fim version 0.1.  Last change: 2007 01 30
+*fim.txt*	For Fim version 0.1.  Last change: 2007 02 12
 
 			Fim - main help file (UNDER DEVELOPEMENT)
 
 First of all, please view this documentation in VIM with ':set syntax=help' :)
 if you already know Vim, you will know that in this way you can use this
 documentation as it would be a hypertext.
+If you do not know Vim, you can find it at http://www.vim.org.
+
 
 Thank you for giving a try to this software; one can regard it as a 'hack', in the
 sense it is the result of the passionate work of multiple people.
+
 ------------------------------------------------------------------------------
-							*
+*. Introduction 						*intro*
 
 									 k
-      Move around:  Use the cursor keys, or "h" to go left,	       h   l
+      Move the image around:
+                    Use the cursor keys, or "h" to go left,	       h   l
 		    "j" to go down, "k" to go up, "l" to go right.	 j
-Close this window:  Use ":q<Enter>".
-   Get out of Vim:  Use ":qa!<Enter>" (careful, all changes are lost!).
+   Get out of Fim:  Use ":q<Enter>" (careful, all changes are lost!).
 
 
-Fim stands for Fbi IMproved.  Most of Fbi was made by Gerd Knorr, and Fim is
-mainly an interface rework applied roughly as a patch to Fbi.
+Fim stands for Fbi IMproved.
+
+Fbi is a framebuffer-based image viewer, made by Gerd Knorr, and Fim is
+mainly an interface rework applied roughly as a patch to it.
+
+The main purposes of Fim is to improve the features that weew lacking in Fbi.
+
+This includes principally the configurability of the keyboard bindings.
+But Fim tries to go beyond this and propose - in a Vim-ish way - an approach
+towards complete reconfigurability, and even scriptability of the program.
+The inspiration for this comes from the use of the nicer software available 
+as free software, often characterized by extreme flexibility, configurability,
+hackability. This concerns mainly text editors, but why can't apply to an 
+image viewer, too ?
+
+==============================================================================
+*. Index				*index*
 
 See |credits|.
 
@@ -29,6 +47,13 @@ Introduction to Fim					*ref* *reference*
 
 1. Introduction			|intro|
 2. Fim on the internet		|internet|
+3. Basic Usage			|basics|
+4. Command Line Mode		|cli|
+5. Command Line Mode Basics	|cli-basics|
+6. Commands Reference		|commands-reference|
+7. Autocommands			|autocommands|
+8. Pattern Matching		|pattern-matching|
+
 3. Credits			|credits|
 4. Notation			|notation|
 5. Modes, introduction		|vim-modes-intro|
@@ -36,11 +61,81 @@ Introduction to Fim					*ref* *reference*
 7. The window contents		|window-contents|
 8. Definitions			|definitions|
 *. Language Reference		|definitions|
-*. Commands Reference		|commands-reference|
-*. Commands Reference		|auto-commands|
 *. Commands Reference		|pattern-matching|
 *. Dangers			|dangers|
 
+
+==============================================================================
+*. Fim on the internet				*internet*
+
+As of now, you could be able to browse the Fim code on :
+	http://code.autistici.org/svn/fim/
+and get the latest source code tree issuing  	:
+ 	svn co svn+ssh://dezperado@code.autistici.org/svn/fim
+
+The documentation is distributed with the software.
+
+==============================================================================
+*. Basic Usage					*basics*
+
+The basic usage of Fim consists of calling it from the shell ,in a non-X
+environment (assuming the framebuffer enabled):
+
+ #fim picture.jpg picture.png
+
+Like in Fbi or any other reasonable image viewer, you could be able to view 
+the next or previous image by pressing PageUp or PageDown, or to pan the image
+around using the arrows.
+Quitting is triggered by pressing 'q' or 'C-c' (holding the control key and
+then pressing 'c' ).
+
+In this very basic way, you use the portion of Fim that mimics Fbi.
+
+You could benefit of Fim features by familiarizing to its command line mode.
+
+==============================================================================
+*. Command Line Mode					*cli*
+
+The command line mode is activated in Fim by pressing the colon key ( ':' ) 
+while standing in interactive mode.
+A little cursor will appear on the lower left corner of the screen, and 
+subsequent keyboard pressure will reveal that sentences can be written into it.
+
+In this mode, you can issue the internal commands of Fim in an interactive 
+fashion, consult the (limited) online help provided with the commands, and 
+experiment with the commands.
+
+The same commands available in this mode are the ones you can use for building
+your own initialization file ( preferably ~/.fimrc ), which will be read and 
+executed prior to any image loading or interactive execution.
+
+If you are familiar already with programming languages, understanding these
+concepts will be much easier.
+
+==============================================================================
+*. Commands Line Mode Basics				*cli-basics*
+
+You can warm up yourself by experimenting with the autocompletion feature 
+built in Fim:
+Enter the command line mode hitting ':' one time, then press the Tab key.
+
+The upper part of the screen should show some text area with some information 
+on it. Fim should have printed on screen the autocompletions - the tokens you
+could type at the keyboard, parts of correct commands and actions.
+
+Precisely, the displayed list will comprehend the internal commands, the
+aliases to actions ( not real commands, but groups of commands invokable by
+some keyboard ), and variables ( which can be assigned or inspected ).
+
+For singling out the variables, you can also use the 'variables' command.
+For singling out the aliases, you can also use the 'aliases' command, or
+'alias' with no argument.
+
+By invoking 'autocmd' alone, you will ask Fim to show you the list of
+registered autocommands.
+
+The autocommand feature is one of the most powerful in Fim, and is  explained
+in detail the section dedicated to the 'autocmd' command.
 
 ==============================================================================
 *. Commands Reference				*commands-reference*
@@ -146,6 +241,15 @@ SE C'e' CAMBIO DI FILE!
 ==============================================================================
 *. Pattern matching				*pattern-matching*
 
+Pattern matching capabilities are used for matching a filename with some auto
+command.
+
+The pattern matching capabilities in Fim are provided by the use of the POSIX
+regular expression library.
+
+The relevant man page is 'man 7 regex'.
+
+EXAMPLES:
 
 ==============================================================================
 8. Definitions						*definitions*
