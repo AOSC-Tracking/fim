@@ -9,18 +9,17 @@ documentation as it would be a hypertext.
 If you do not know Vim, you can find it at http://www.vim.org.
 
 
-Thank you for giving a try to this software; one can regard it as a 'hack', in the
-sense it is the result of the passionate work of multiple people.
+Thank you for giving a try to this software; one can regard it as a 'hack',in
+the sense it is the result of the passionate work of multiple people.
 
 ------------------------------------------------------------------------------
-*. Introduction 						*intro*
+0. Introduction 						*intro*
 
 									 k
       Move the image around:
                     Use the cursor keys, or "h" to go left,	       h   l
 		    "j" to go down, "k" to go up, "l" to go right.	 j
    Get out of Fim:  Use ":q<Enter>" (careful, all changes are lost!).
-
 
 Fim stands for Fbi IMproved.
 
@@ -38,14 +37,12 @@ hackability. This concerns mainly text editors, but why can't apply to an
 image viewer, too ?
 
 ==============================================================================
-*. Index				*index*
-
-See |credits|.
-
+1. Index						*index*
 
 Introduction to Fim					*ref* *reference*
 
-1. Introduction			|intro|
+0. Introduction			|intro|
+1. Index			|index|
 2. Fim on the internet		|internet|
 3. Basic Usage			|basics|
 4. Command Line Mode		|cli|
@@ -53,30 +50,30 @@ Introduction to Fim					*ref* *reference*
 6. Commands Reference		|commands-reference|
 7. Autocommands			|autocommands|
 8. Pattern Matching		|pattern-matching|
-
-3. Credits			|credits|
-4. Notation			|notation|
-5. Modes, introduction		|vim-modes-intro|
-6. Switching from mode to mode	|mode-switching|
-7. The window contents		|window-contents|
-8. Definitions			|definitions|
-*. Language Reference		|definitions|
-*. Commands Reference		|pattern-matching|
-*. Dangers			|dangers|
+9. Dangers			|dangers|
+10. Language Reference		|langref|
+11. Credits			|credits|
 
 
 ==============================================================================
-*. Fim on the internet				*internet*
+2. Fim on the internet				*internet*
 
-As of now, you could be able to browse the Fim code on :
+As of now, the official Fim page is https://code.autistici.org/project/fim, 
+although it doesn't say much.
+
+You could be able to browse the Fim code on :
 	http://code.autistici.org/svn/fim/
 and get the latest source code tree issuing  	:
  	svn co svn+ssh://dezperado@code.autistici.org/svn/fim
 
 The documentation is distributed with the software.
 
+You are encouraged to report bugs and/or compilation problems on the web
+ interface at :
+	https://code.autistici.org/trac/fim
+
 ==============================================================================
-*. Basic Usage					*basics*
+3. Basic Usage					*basics*
 
 The basic usage of Fim consists of calling it from the shell ,in a non-X
 environment (assuming the framebuffer enabled):
@@ -94,7 +91,7 @@ In this very basic way, you use the portion of Fim that mimics Fbi.
 You could benefit of Fim features by familiarizing to its command line mode.
 
 ==============================================================================
-*. Command Line Mode					*cli*
+4. Command Line Mode					*cli*
 
 The command line mode is activated in Fim by pressing the colon key ( ':' ) 
 while standing in interactive mode.
@@ -113,7 +110,7 @@ If you are familiar already with programming languages, understanding these
 concepts will be much easier.
 
 ==============================================================================
-*. Commands Line Mode Basics				*cli-basics*
+5. Commands Line Mode Basics				*cli-basics*
 
 You can warm up yourself by experimenting with the autocompletion feature 
 built in Fim:
@@ -135,30 +132,32 @@ By invoking 'autocmd' alone, you will ask Fim to show you the list of
 registered autocommands.
 
 The autocommand feature is one of the most powerful in Fim, and is  explained
-in detail the section dedicated to the 'autocmd' command.
+in detail in the section dedicated to the 'autocmd' command.
 
 ==============================================================================
-*. Commands Reference				*commands-reference*
+6. Commands Reference				*commands-reference*
 
 The internal Fim commands are lightweight enough to be used as parts of bigger
-commands.
+commands, that we will call actions.
 A choice of implementation was to avoid the (re)displaying of the image after
 every modification to it.
 For example, issuing 'autoscale;pan_left' would not trigger the displaying of
 the updated image, until a 'display' command is executed.
 
-
-This (default) behaviour allows for particular uses of this software: 
-flexibility of use is gained.
+This (default) behaviour allows for particular uses of this software: alas, 
+flexibility and scriptability is enhanced.
 
 Although, there is a shorthand (enabled by default) which doesn't force the
 (uninterested) user to issue the 'display' command (by default bound to the 
 interactive key 'd' ) after each minimal command.
 
-This mechanism is known as |auto-commands|.
+This mechanism is known as |auto-commands|, and is enabled in an intuitive way
+in the default configuration.
+
+ UNFINISHED
 
 ==============================================================================
-*. Auto commands				*auto-commands*
+7. Auto commands				*auto-commands*
 >
 	:autocmd EVENT PAT ACTION
 
@@ -169,9 +168,9 @@ different and therefore called 'hook' ).
 The auto-command mechanism provides the user with the ability of making the 
 program executing certain actions only in certain circumstances.
 
-By 'circumstances' we mean :
-  - a user issued EVENT
-  - the current filename in the browser respects a certain pattern (PAT)
+By 'circumstances' we mean the pair:
+  - it is the case that the user issued a certain EVENT
+  - the current file name in the image browser respects a certain PATTERN
 
 an EVENT can be one of:
 
@@ -202,22 +201,33 @@ an EVENT can be one of:
 'PreExecutionCycle'  : right before the program gets interactive 
 'PostExecutionCycle' : right after  the program gets interactive
 
-'PreInteractiveCommand'  : right before each any interactive command
-'PostInteractiveCommand' : right after  each any interactive command
+'PreInteractiveCommand'  : right before an (any) interactive command
+'PostInteractiveCommand' : right after  an (any) interactive command
 
 'PreGoto'	: before a goto jump
 'PostGoto'	: after  a goto jump
 
-
-If more than one ACTION matches for a certain (EVENT,file) couple, the
+If more than one ACTION matches for a certain (EVENT,PATTERN) couple, the
 corresponding execution occurs in the sequence specified in the autocommand
 specification phase.
 
 Examples:
 >
-	:autocmd 'PreNext' '*' 'pop;'
-	:autocmd 'PostNext' '*' 'auto_scale;display;'
+	:autocmd 'PreNext'  '*' 'pop;'
+	:autocmd 'PostNext' '*' 'load;'
+	:autocmd 'PostNext' '*' 'display;'
+	:autocmd 'PreDisplay' '.*picture.*' 'auto_scale;'
 
+The first will tell Fim to pop the current image off the file list before
+ displaying the next one.
+
+The second will load the image right after the next command.
+
+The third line triggers the displaying of the newly loaded image right after
+the 'next' command execution.
+
+The fourth triggers before displaying, and 'auto_scale's the image only if 
+the file name contains the substring 'picture'.
 
 In principle, one could program Fim autocommands to do very nasty and errorful
 things; consider, for example:
@@ -226,20 +236,17 @@ things; consider, for example:
 
 This tells Fim to 'display' the current image each time after the image is ..
 .. 'display'ed !
-This in turn would lead Fim to an endless 'display' loop.
+This would lead Fim to an endless 'display' loop.
 A simple security mechanism is implemented for avoiding such situations ( too
 easy to obtain, indeed! ) :
-Each time an autocommand is triggered, a special data structure keeps hold of
+
+Each time an autocommand is triggered, a data structure keeps hold of
 the fact that 'file x is under autocommand y', and avoids the repeating of a 
 situation 'file x is under autocommand y again' by simply skipping the
- *
- autocommand and warning the user accordingly.
-
-INOLTRE C'e' DA DIRE CHE UN POST COMMAND MATCHERA ANCORA SUL FILENAME VECCHIO
-SE C'e' CAMBIO DI FILE!
+autocommand and warning the user accordingly.
 
 ==============================================================================
-*. Pattern matching				*pattern-matching*
+8. Pattern matching				*pattern-matching*
 
 Pattern matching capabilities are used for matching a filename with some auto
 command.
@@ -249,10 +256,9 @@ regular expression library.
 
 The relevant man page is 'man 7 regex'.
 
-EXAMPLES:
-
-==============================================================================
-8. Definitions						*definitions*
+If you are used to regular expressions in Unix, you shouldn't have problems 
+with Fim's regular expressions, as they are similar to the ones used in the 
+'grep' utility.
 
 ==============================================================================
 8. Dangers						*dangers*
@@ -264,14 +270,19 @@ Examples are :
 repeat_last should repeat the last alias or effect of the last pressed keys ..
 ..if a line contains repeat_last, it is not recorded in the last_buffer..
 idea : repeat_last N ?!
+
 Warning : repeat_last do NOT work in scripts *
 
-REPEAT_LAST SHOULD BE EXPERIMENTAL!
-!
+ UNFINISHED
 
+==============================================================================
+10.Language reference 						*langref*
 
-*222222*
-WHAT PREPEND EXAMPLE	~
-PreRedisplay
-PostRedisplay
+ UNFINISHED
+
+==============================================================================
+11.Credits 							*credits*
+
+ UNFINISHED
+
 ------------------------------------------------------------------------------
