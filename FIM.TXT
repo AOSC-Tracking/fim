@@ -213,13 +213,13 @@ specification phase.
 
 Examples:
 >
-	:autocmd 'PreNext'  '*' 'pop;'
+	:autocmd 'PreNext'  '*' 'remove;'
 	:autocmd 'PostNext' '*' 'load;'
 	:autocmd 'PostNext' '*' 'display;'
 	:autocmd 'PreDisplay' '.*picture.*' 'auto_scale;'
 
-The first will tell Fim to pop the current image off the file list before
- displaying the next one.
+The first will tell Fim to remove the current image off the file list before
+displaying the next one, in a sort of 'consume' fashion.
 
 The second will load the image right after the next command.
 
@@ -277,6 +277,22 @@ Warning : repeat_last do NOT work in scripts *
 
 ==============================================================================
 10.Language reference 						*langref*
+
+The implemented Fim minilanguage gives the user the possibility of storing 
+values into variables, then performing simple arithmetics, while loops, and 
+executing conditionally with the if and if-else construct.
+
+Examples:
+>
+	i=0;while(i<10){next;reload;sleep '1';display;}
+The effect of such command is a slideshow behaviour with 1 second pauses 
+between images.
+
+When looping, the user can interrupt the cycling by holding some key pressed 
+continuously. Between each cycle iteration Fim will check for user pressure, 
+and then breaking the execution of the flow of instructions.
+
+So, the commands following the loop will be ignored.
 
  UNFINISHED
 

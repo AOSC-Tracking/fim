@@ -73,7 +73,7 @@ stmt:
 	| IDENTIFIER { $$ = opr('x',1,scon($1)); }
 	| IDENTIFIER args { $$ = opr('x',2,scon($1),$2); }
 ///	CRASHY !! | IDENTIFIER { $$ = opr(PRINT, 1, scon($1)); $$->type=typeId; printf("invoked command!\n"); }
-	| IDENTIFIER '=' expr { $$ = opr('=', 2, vscon($1,'i'), $3); }
+	| IDENTIFIER '=' expr  { $$ = opr('=', 2, vscon($1,'i'), $3); }
 	| IDENTIFIER '=' FLOAT { $$ = opr('=', 2, vscon($1,'f'), fcon($3)); }
 //	| expr { $$ = opr(PRINT, 1, $1); }
 	| '!' IDENTIFIER args { $$ = opr('p',2,scon($2),$3); }

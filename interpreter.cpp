@@ -37,9 +37,16 @@ int ex(nodeType *p)
 		case vId:
 		{
 			//printf("key : %s\n",p->scon.s);
-			//warning to the next conversion..
-			if(p->typeHint=='f')return (int)cc.getFloatVariable(p->scon.s) ;
-			else return cc.getIntVariable(p->scon.s) ;
+			//beware the next conversion..
+//			cout<<"f("<<p->scon.s<< ")="<< cc.getFloatVariable(p->scon.s) ;
+			if(cc.getVariableType(p->scon.s)=='f')return (int)cc.getFloatVariable(p->scon.s);
+			else return (int)cc.getIntVariable(p->scon.s);
+/*			if(p->typeHint=='f')
+			{
+				cout << "vId node f\n";
+				return (int)cc.getFloatVariable(p->scon.s);
+			}
+			else return cc.getIntVariable(p->scon.s) ;*/
 		}
 		case stringCon: //printf("string(\"%s\")\n",p->scon.s);
 		case typeOpr:
@@ -49,9 +56,15 @@ int ex(nodeType *p)
 		case IF: if (ex(p->opr.op[0])) ex(p->opr.op[1]);
 		else if (p->opr.nops > 2) ex(p->opr.op[2]); return 0;
 		case PRINT: if(p->opr.op[0]->type!=stringCon)
-				    ;//printf("result : %d\n", ex(p->opr.op[0]));
+			    {
+				//cout << "getting f " << cc.getFloatVariable(p->scon.s) << "\n";
+				//cout << "getting i " << cc.getIntVariable  (p->scon.s) << "\n";
+		   	        cout<<ex(p->opr.op[0])<<"\n";//printf("result : %d\n", ex(p->opr.op[0]));
+		            }
 			    else 
-			    	;//printf("result : %s\n", p->opr.op[0]->scon.s);
+		            {
+			    	cout<<p->opr.op[0]->scon.s<<"\n";//printf("result : %s\n", p->opr.op[0]->scon.s);
+			    }
 			    return 0;
 //		case PRINT: printf("result : %d\n", ex(p->opr.op[0])); return 0;
 		case ';': ex(p->opr.op[0]); return ex(p->opr.op[1]);
@@ -61,8 +74,10 @@ int ex(nodeType *p)
 	          {
 			int times=ex(p->opr.op[1]);
 			if(times<0)return -1;
-			for (int i=0;i<times;++i)
+			for (int i=0;i<times && cc.catchInteractiveCommand()==0;++i)
+			{
 				ex(p->opr.op[0]);
+			}
 		  	return 0;	
 		  }
 		  return -1;
@@ -151,10 +166,11 @@ int ex(nodeType *p)
 			{
 				fValue=p->opr.op[1]->fid.f;
 				if(fValue==0.0f)exit(0);
+				//cout << "setting " << fValue << "\n"; 	//this works
 				cc.setVariable(s,fValue);
 //				if(cc.setVariable(s,fValue)!=fValue)exit(0);
 				return (int)fValue;
-			}
+			}//'i'
 			else
 			{
 				iValue=ex(p->opr.op[1]);

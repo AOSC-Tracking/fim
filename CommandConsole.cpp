@@ -220,7 +220,8 @@ namespace fim
 		addCommand(new Command(fim::string("quit"  ),fim::string("terminates the program"),this,&CommandConsole::quit));
 		addCommand(new Command(fim::string("exec"  ),fim::string("executes script files"),this,&CommandConsole::executeFile));
 		addCommand(new Command(fim::string("echo"  ),fim::string("echoes its arguments"),this,&CommandConsole::echo));
-		addCommand(new Command(fim::string("foo"   ),fim::string("a dummy command"),this,&CommandConsole::foo));
+		//addCommand(new Command(fim::string("foo"   ),fim::string("a dummy command"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string("print"   ),fim::string("displays the value of a variable"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("if"    ),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("else"    ),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("while" ),fim::string("while(expression){action;}"),this,&CommandConsole::foo));
@@ -800,6 +801,11 @@ namespace fim
 		if(args.size()==0)fim::cout<<"echo command\n";
 		for(int i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
 		return "";
+	}
+
+	int CommandConsole::getVariableType(const fim::string &varname)
+	{
+		return variables[varname].getType();
 	}
 
 	int CommandConsole::getIntVariable(const fim::string &varname)

@@ -160,6 +160,7 @@ class CommandConsole
 	fim::string CommandConsole::execute(fim::string cmd, std::vector<fim::string> args);
 	CommandConsole::~CommandConsole();
 	float CommandConsole::getFloatVariable(const fim::string &varname);
+	int CommandConsole::getVariableType(const fim::string &varname);
 	int  CommandConsole::getIntVariable(const fim::string & varname);
 	int  CommandConsole::setVariable(const fim::string& varname,int value);
 	float CommandConsole::setVariable(const fim::string& varname,float value);

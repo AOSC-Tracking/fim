@@ -3,6 +3,7 @@
 	OPEN   BUGS:
 20070129	control 4 crashes the prog ... why ? :)
 20070211	mysterious "open : No such file or directory" warning..
+20070212	with no image in the list, the screen should become black
 	FIX:
 #20070121	fix the broken terminal emulator, fix the image browser then
 20070125	fix the string vs variable problem
@@ -10,6 +11,7 @@
 20070128	fixa l'argument passing che e' problematico! e fixa i commenti!
 20070129	fix the KEY binding
 20070211	flex and bison parts should be rewritten
+20070212	fix the command evaluation
 	ADD:
 20070129	dump internal commands function
 20070129	implement a new millisleep function..
@@ -34,4 +36,4 @@
 20070210	elimina il tearing dell'immagine! dovrebbe essere una questione di switch!
 20070210	add an interface to modify key bindings and keycode bindings.
 20070210	there are memory leaks probably, or some memory corruption. the 'pornview' alias at long hangs the computer.
-20070210	fix properly the file parser (comments problems!) and max script filelen limit
+20070210	fix properly the file parser (comments problems!) and max script filelength limit
