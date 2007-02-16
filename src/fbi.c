@@ -42,8 +42,8 @@
 #include "filter.h"
 #include "list.h"
 
-#include "jpeg/transupp.h"		/* Support routines for jpegtran */
-#include "jpegtools.h"
+//#include "jpeg/transupp.h"		/* Support routines for jpegtran */
+//#include "jpegtools.h"
 
 #define TRUE            1
 #define FALSE           0

@@ -2,7 +2,7 @@
  * The following code contains key bindings and aliases definitions
  * which make up a first usable configuration for FIM.
  */
-#if(FIM_DEFAULT_CONFIG)
+#if FIM_DEFAULT_CONFIG
 		alias("q","quit");
 		bind('f',"files");
 		bind('q',"quit");
@@ -129,7 +129,7 @@
  *
  * But by modifying this file one can experiment!
  */
-#if(FIM_DEFAULT_KEY_CONFIG)
+#if FIM_DEFAULT_KEY_CONFIG
 		/*
 		 * Standard key configuration
 		 */

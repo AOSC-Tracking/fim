@@ -289,6 +289,7 @@ char ** fim_completion (const char *text, int start,int end)
 	const int nmatch=1;
 	regmatch_t pmatch[nmatch];
 	char bc;
+
 	if(regcomp(&blank_regex,"^ \\+$", 0)==-1)
 	{
 //		std::cout << "error calling regcomp!" << "\n";
@@ -352,7 +353,11 @@ void completion_display_matches_hook(char **matches,int num,int max)
 //		strcpy(buffer+strlen(buffer)," ");
 	}
 	//      status_screen((unsigned char*)buffer, NULL);
-	cout << buffer << "\n" ;
+	
+	//cout << buffer << "\n" ;
+	fb_status_screen(buffer, 0);
+
+
 //	std::cout << buffer << "\n" ;
  //     status((unsigned char*)"here shall be autocompletions", NULL);
 }

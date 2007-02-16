@@ -264,8 +264,19 @@ with Fim's regular expressions, as they are similar to the ones used in the
 8. Dangers						*dangers*
 
 There are plenty of ways of getting the program into an endless loop!
-Examples are :
-	An aliased repeat_last...
+For instance,
+>
+	:alias 'loop' 'loop;'
+will loop forever by calling itself!
+
+A better example of looping is the following sequence:
+>
+	:alias "endless_slideshow" "while(1){next;display;sleep '1';};";
+	:alias "pornview" "echo 'press to terminate' ;endless_slideshow;";
+	:bind "C-p" "pornview";
+
+This will turn FIM into slideshow mode, which can be interrupted by the
+continued pressure of some key (some unbound key is better!).
 
 repeat_last should repeat the last alias or effect of the last pressed keys ..
 ..if a line contains repeat_last, it is not recorded in the last_buffer..

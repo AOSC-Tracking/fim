@@ -1,6 +1,6 @@
 Source: fbi
 Section: graphics
-Build-Depends: debhelper (>=4), libjpeg-dev, libtiff-dev, libpng3-dev | libpng-dev, libungif4-dev, xlibs-dev, xutils, libpcd-dev, libexif-dev, libcurl-dev
+Build-Depends: debhelper (>=4), libjpeg-dev, libtiff-dev, libpng3-dev | libpng-dev, libungif4-dev, xlibs-dev, xutils, libpcd-dev, libexif-dev
 Priority: optional
 Maintainer: Gerd Knorr <kraxel@debian.org>
 Standards-Version: 3.6.1
