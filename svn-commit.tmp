@@ -1,8 +1,0 @@
-Fixed a rudimentary configure mechanism and sanitized the Makefile.
-Introduced a bug with png transparency while eliminating CURL LIRC and EXIF dependencies.
---This line, and those below, will be ignored--
-
-M    src/fbi.c
-M    src/debian/control
-M    src/Make.config
-M    src/GNUmakefile
