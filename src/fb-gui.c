@@ -32,7 +32,8 @@ void fb_clear_screen(void)
 	fb_memset(fb_mem,0,fb_fix.line_length * fb_var.yres);
 }
 
-static void fb_clear_rect(int x1, int x2, int y1,int y2)
+//static
+void fb_clear_rect(int x1, int x2, int y1,int y2)
 {
     unsigned char *ptr;
     int y,h;

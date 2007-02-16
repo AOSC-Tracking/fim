@@ -140,7 +140,7 @@ bind 'C-a' "toggleAutoScale;";
 bind 'C-b' "toggleAutoScale;";
 bind 'C-c' "toggleAutoScale;";
 bind 'A'   "toggleAutoScale;";
+toggleVerbosity;
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So use it, but with caution! FIM is still severely bugged! 
-

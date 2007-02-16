@@ -128,7 +128,7 @@ char *make_info(struct ida_image *img, float scale)
 	return linebuffer;
 }
 
-void fb_status_screen(const char *msg)
+void fb_status_screen(const char *msg, int noDraw=1)
 {
 	//FIX ME
 	if(!msg) return;
@@ -222,7 +222,7 @@ void fb_status_screen(const char *msg)
 		    }
 	    p=s;
 	}
-	if(!cc.drawOutput())return;
+	if(!cc.drawOutput() || noDraw)return;//CONVENTION!
 //	    if (!visible) return;
 //	    y = fb_var.yres - f->height - ys;
 //	    y = 1*f->height;
@@ -468,20 +468,23 @@ void console_switch(int is_busy)
 	case FB_REL_REQ:
 		fb_switch_release();
 	case FB_INACTIVE:
-///	visible = 0;///////
+	visible = 0;///////
 	break;
 	case FB_ACQ_REQ:
 		fb_switch_acquire();
 	case FB_ACTIVE:
-//	visible = 1;	///////////
+		visible = 1;	///////////
 		redraw = 1;
 		ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
-	//fb_clear_screen();
+		/*
+		 * PROBLEMS : //fb_clear_screen causes tearing!
+		 */
+		//fb_clear_screen();
 	/*
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched!
 	 */
-		cc.display();
+		//cc.display();
 //	if (is_busy) status("busy, please wait ...", NULL);		
 	break;
 	default:

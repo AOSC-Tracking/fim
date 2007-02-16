@@ -44,6 +44,9 @@ class Image
 	void Image::display();
 	void Image::redisplay();
 	int Image::onBottom();
+	int Image::onRight();
+	int Image::onLeft();
+	int Image::onTop();
 	void Image::auto_width_scale();
 	void Image::auto_height_scale();
 	private:

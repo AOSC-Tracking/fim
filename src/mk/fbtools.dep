@@ -32,11 +32,13 @@ fbtools.o: fbtools.c /usr/include/stdio.h /usr/include/features.h \
   /usr/include/setjmp.h /usr/include/bits/setjmp.h \
   /usr/include/sys/ioctl.h /usr/include/bits/ioctls.h \
   /usr/include/asm/ioctls.h /usr/include/asm/ioctl.h \
-  /usr/include/bits/ioctl-types.h /usr/include/sys/mman.h \
-  /usr/include/bits/mman.h /usr/include/sys/wait.h \
-  /usr/include/sys/resource.h /usr/include/bits/resource.h \
-  /usr/include/linux/kd.h /usr/include/linux/types.h \
-  /usr/include/linux/posix_types.h /usr/include/linux/stddef.h \
-  /usr/include/asm/posix_types.h /usr/include/asm/types.h \
-  /usr/include/linux/vt.h /usr/include/linux/fb.h /usr/include/asm/page.h \
+  /usr/include/asm-generic/ioctl.h /usr/include/bits/ioctl-types.h \
+  /usr/include/sys/mman.h /usr/include/bits/mman.h \
+  /usr/include/sys/wait.h /usr/include/sys/resource.h \
+  /usr/include/bits/resource.h /usr/include/linux/kd.h \
+  /usr/include/linux/types.h /usr/include/linux/posix_types.h \
+  /usr/include/linux/stddef.h /usr/include/asm/posix_types.h \
+  /usr/include/asm/types.h /usr/include/linux/vt.h \
+  /usr/include/linux/fb.h /usr/include/asm/page.h \
+  /usr/include/asm-generic/memory_model.h /usr/include/asm-generic/page.h \
   fbtools.h

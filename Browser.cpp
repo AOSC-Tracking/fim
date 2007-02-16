@@ -39,7 +39,6 @@ namespace fim
 				//image->display();
 				image->redisplay();
 				this->display_status(info().c_str(), NULL);
-				cout << "";
 			}
 			cc.autocmd_exec("PostRedisplay",c);
 		}
@@ -195,7 +194,6 @@ namespace fim
 				//fb_clear_screen();
 				image->display();
 				this->display_status(info().c_str(), NULL);
-				cout << "";
 			}
 			cc.autocmd_exec("PostDisplay",c);
 		}

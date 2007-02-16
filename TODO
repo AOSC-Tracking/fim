@@ -1,18 +1,21 @@
 	SOLVED BUGS:
 20070128	it seems that all of the scaling pre-display hooks cause harm!
+20070216	elimina il tearing dell'immagine! dovrebbe essere una questione di switch!
 	OPEN   BUGS:
 20070129	control 4 crashes the prog ... why ? :)
 20070211	mysterious "open : No such file or directory" warning..
 20070212	with no image in the list, the screen should become black
 	FIX:
-#20070121	fix the broken terminal emulator, fix the image browser then
+#20070121	fix the image browser then
 20070125	fix the string vs variable problem
 #20070125	fix the display/statusline relationship..
 20070128	fixa l'argument passing che e' problematico! e fixa i commenti!
 20070129	fix the KEY binding
 20070211	flex and bison parts should be rewritten
 20070212	fix the command evaluation
+20070216	eliminate image tearing by optimizing svga_show_image
 	ADD:
+20070216	create an installer!
 20070129	dump internal commands function
 20070129	implement a new millisleep function..
 20070125	add pipe to other commands and exec and system (screenshot with fbgrab, for example)
@@ -33,7 +36,6 @@
 20070204	deconfigurable features : default config, autocommands, recording, last_action, system
 20070208	Added FIM_NOFB, FIM_DEFAULT_KEY_CONFIG, FIM_DEFAULT_CONFIG compilation flags
 20070210	eliminate the fresh variable from the config! : 
-20070210	elimina il tearing dell'immagine! dovrebbe essere una questione di switch!
 20070210	add an interface to modify key bindings and keycode bindings.
 20070210	there are memory leaks probably, or some memory corruption. the 'pornview' alias at long hangs the computer.
 20070210	fix properly the file parser (comments problems!) and max script filelength limit

@@ -87,6 +87,7 @@ std::ostream& operator<<(std::ostream &os,const string& s);
 
 };
 void status(const char *desc, const char *info);
+void fb_status_screen(const char *msg, int noDraw);
 
 #define FIM_MAX_SCRIPT_FILE (4096*4)
 

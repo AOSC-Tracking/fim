@@ -584,10 +584,10 @@ namespace fim
 		{
 			cycles++;
 #ifndef FIM_NOFB
-			if (switch_last != fb_switch_state)
+/*			if (switch_last != fb_switch_state)
 			{
 				console_switch(0);
-			}
+			}*/
 			fd_set          set;
 			struct timeval  limit;
 			FD_SET(0, &set);

@@ -14,9 +14,10 @@ extern "C"{
 int  fb_font_width(void);
 int  fb_font_height(void);
 
-
+extern void fb_clear_rect(int x1, int x2, int y1,int y2);
+	
 extern int switch_last, fb_switch_state;
-extern int redraw;
+extern int redraw,visible;
 extern unsigned int statusline_cursor;
 
 extern void fb_status_line(unsigned char *msg);

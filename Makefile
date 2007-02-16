@@ -33,6 +33,7 @@ hack:	clean patch
 
 clean:
 	@ rm *.o fim -f src/*.o src/*/*.o yacc.output yacc.tab.cpp yacc.tab.hpp lex.yy.cc  src/exiftran
+	@ make md5
 
 patch:
 
@@ -70,6 +71,10 @@ report:
 
 exec:	test
 	
+
+
+md5:
+	@rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
 
 .PHONY:
 	@true

@@ -1,5 +1,10 @@
 #include "Image.h"
 
+/*
+ *	20070215	the pos variable seems unused!
+ * 	20070215	idea : separate redraw into redraw_compulsory+need_redraw
+ * 			and keep old_ and new_ for wverwevery variable!
+ */
 namespace fim
 {
 /*
@@ -67,11 +72,12 @@ namespace fim
 #ifndef FIM_NOFB
 		if(cc.noFrameBuffer())return 0;
 		//FIX UPPER MEMORY CONSUMPTION LIMIT...
-#define MAXMEM 100*1000*1000.0
+#define MAXMEM  100*1000*1000.0
 		maxscale = MAXMEM /(float)( fimg->i.width * fimg->i.height * 3 );
 #undef MAXMEM 
 		//if (newscale < minscale ) newscale = minscale;
-		if (newscale > maxscale ) newscale = maxscale;
+		if(newscale > maxscale ) newscale = maxscale;
+		if(newscale == scale){return 0;/*no need to rescale*/}
 //		cout << "scale  :"  << scale << "-> " << newscale<< "\n";
 		scale_fix_top_left();
 //		sprintf(linebuffer,"scaling (%.0f%%) %s ...", scale*100, fname);
@@ -81,9 +87,10 @@ namespace fim
 		{
 			simg = scale_image(fimg,scale);
 			img = simg;
+			redraw=1;
 		}
+		else redraw=0;
 #endif
-		redraw=1;
 	}
 
 	void Image::redisplay()
@@ -151,11 +158,13 @@ namespace fim
 		}
 		if(only_first_rescale){only_first_rescale=0;return;}
 		
-		while(fb_switch_state!=0)//FB_ACTIVE
+/*		while(fb_switch_state!=0)//FB_ACTIVE
 		{
 	    		fb_switch_state=3;//FB_ACQ_REQ;
-			console_switch(1);
-		}
+		//	console_switch(1);
+		}*/
+        
+
 		if(redraw)
 		{
 			redraw=0;
@@ -163,8 +172,21 @@ namespace fim
 			 * there should be more work to use double buffering
 			 * and avoid image tearing!
 			 */
-			fb_clear_screen();
-			svga_display_image(img, left, top);
+		//while(switch_last != fb_switch_state) console_switch(0);
+
+		//fb_clear_screen();
+		while (switch_last != fb_switch_state) { console_switch(0); continue; }
+		//fb_clear_screen();
+		svga_display_image(img, left, top);
+		fb_status_screen("", 0);
+		//fb_switch_release();
+		console_switch(0);
+/*		while (switch_last != fb_switch_state)
+		{
+			console_switch(0);
+			continue;
+		}*/
+	
 		}
 		while(fb_switch_state!=2)//fb_inactive
 		{
@@ -174,7 +196,7 @@ namespace fim
 		}
 /*	    while(switch_last != fb_switch_state)
             {
-		    console_switch(0);
+		    //console_switch(0);
 	    }*/
 //	    if (switch_last != fb_switch_state) { console_switch(0);}
 //	    status(desc, info);
@@ -254,21 +276,6 @@ namespace fim
 #endif
 	}
 
-/*
-void Image::scale_fix_top_left()
-{
-	unsigned int width, height;
-	float cx,cy;
-	cx = (float)(left + fb_var.xres/2) / (img->i.width  * scale);
-	cy = (float)(top  + fb_var.yres/2) / (img->i.height * scale);
-	width  = (int)(img->i.width  * newscale);
-	height = (int)(img->i.height * newscale);
-
-	left   = (int)(cx * width ) - fb_var.xres/2;
-	top    = (int)(cy * height) - fb_var.yres/2;
-	scale = newscale;
-}*/
-
 	void Image::load(const char *fname_)
 	{
 		/*
@@ -318,18 +325,21 @@ void Image::scale_fix_top_left()
 
 	void Image::pan_up()
 	{
+	    if(this->onTop())return;
 	    top -= steps;
 	    redraw=1;
 	}
 
 	void Image::pan_down()
 	{
+	    if(this->onBottom())return;
 	    top += steps;
 	    redraw=1;
 	}
 
 	void Image::pan_right()
 	{
+	    if(onRight())return;
 	    if (pos < len) pos+=steps;
 	    left+=steps;
 	    redraw=1;
@@ -337,6 +347,7 @@ void Image::scale_fix_top_left()
 
 	void Image::pan_left()
 	{
+	    if(onLeft())return;
 	    if (pos > 0) pos-=steps;
 	    left-=steps;
 	    redraw=1;
@@ -348,14 +359,44 @@ void Image::scale_fix_top_left()
 		/**
 		 **	PERCHE NON FUNZIONA?
 		 **/
-		if(img && invalid==0)
+		if(img && invalid==0) return (top + fb_var.yres >= img->i.height);
 //		return ( top+img->i.height<fb_var.yres);
-		return (top + fb_var.yres >= img->i.height);
 		else return 0;
 #else
 		return 0;
 #endif
 	}
+
+	int Image::onRight()
+	{
+#ifndef FIM_NOFB
+		if(img && invalid==0)return (left + fb_var.xres >= img->i.width);
+		else return 0;
+#else
+		return 0;
+#endif
+	}
+
+	int Image::onLeft()
+	{
+#ifndef FIM_NOFB
+		if(img && invalid==0)return (left <= 0 );
+		else return 0;
+#else
+		return 0;
+#endif
+	}
+
+	int Image::onTop()
+	{
+#ifndef FIM_NOFB
+		if(img && invalid==0)return (top <= 0 );
+		else return 0;
+#else
+		return 0;
+#endif
+	}
+
 	char* Image::getInfo()
 	{
 		if(fimg)return make_info(fimg,scale);return NULL;

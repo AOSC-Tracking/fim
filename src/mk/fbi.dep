@@ -37,8 +37,9 @@ fbi.o: fbi.c /usr/include/stdio.h /usr/include/features.h \
   /usr/include/locale.h /usr/include/bits/locale.h \
   /usr/include/sys/time.h /usr/include/sys/ioctl.h \
   /usr/include/bits/ioctls.h /usr/include/asm/ioctls.h \
-  /usr/include/asm/ioctl.h /usr/include/bits/ioctl-types.h \
-  /usr/include/sys/mman.h /usr/include/bits/mman.h \
-  /usr/include/linux/fb.h /usr/include/asm/types.h /usr/include/jpeglib.h \
-  /usr/include/jconfig.h /usr/include/jmorecfg.h loader.h list.h dither.h \
-  fbtools.h fb-gui.h filter.h jpeg/transupp.h jpegtools.h
+  /usr/include/asm/ioctl.h /usr/include/asm-generic/ioctl.h \
+  /usr/include/bits/ioctl-types.h /usr/include/sys/mman.h \
+  /usr/include/bits/mman.h /usr/include/linux/fb.h \
+  /usr/include/asm/types.h /usr/include/jpeglib.h /usr/include/jconfig.h \
+  /usr/include/jmorecfg.h loader.h list.h dither.h fbtools.h fb-gui.h \
+  filter.h jpeg/transupp.h jpegtools.h

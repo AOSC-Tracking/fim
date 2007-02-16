@@ -659,6 +659,49 @@ static float auto_scale(struct ida_image *img)
 }*/
 
 /* ---------------------------------------------------------------------- */
+/* by dez
+ */
+static unsigned char *
+clear_line(int bpp, int line, int owidth,
+	     char unsigned *dest)
+{
+    unsigned char  *ptr  = (void*)dest;
+    unsigned short *ptr2 = (void*)dest;
+    unsigned long  *ptr4 = (void*)dest;
+    int x;
+
+    switch (fb_var.bits_per_pixel) {
+    case 8:
+	bzero(ptr, owidth);
+	ptr += owidth;
+	return ptr;
+    case 15:
+    case 16:
+	for (x = 0; x < owidth; x++) {
+	    ptr2[x] = 0x0;
+	}
+	ptr2 += owidth;
+	return (char*)ptr2;
+    case 24:
+	for (x = 0; x < owidth; x++) {
+	    ptr[3*x+2] = 0x0;
+	    ptr[3*x+1] = 0x0;
+	    ptr[3*x+0] = 0x0;
+	}
+	ptr += owidth * 3;
+	return ptr;
+    case 32:
+	for (x = 0; x < owidth; x++) {
+	    ptr4[x] = 0x0;
+	}
+	ptr4 += owidth;
+	return (char*)ptr4;
+    default:
+	/* keep compiler happy */
+	return NULL;
+    }
+}
+
 
 static unsigned char *
 convert_line(int bpp, int line, int owidth,
@@ -797,20 +840,46 @@ svga_display_image(struct ida_image *img, int xoff, int yoff)
     unsigned int     dwidth  = MIN(img->i.width,  fb_var.xres);
     unsigned int     dheight = MIN(img->i.height, fb_var.yres);
     unsigned int     data, video, bank, offset, bytes, y;
+    int yo=(fb_var.yres-dheight)/2;
+    int xo=(fb_var.xres-dwidth )/2;
+    int cxo=fb_var.xres-dwidth-xo;
+    int cyo=fb_var.yres-yo;
+	    
+    if (!visible)//COMMENT THIS IF svga_display_image IS NOT IN A CYCLE
+	return;
 
-//    if (!visible)
-//	return;
+    //fb_clear_screen();//EXPERIMENTAL
+    //if(xoff&&yoff)fb_clear_rect(0,xoff,0,yoff);
+
     bytes = (fb_var.bits_per_pixel+7)/8;
 
     /* offset for image data (image > screen, select visible area) */
     offset = (yoff * img->i.width + xoff) * 3;
-
+    
     /* offset for video memory (image < screen, center image) */
     video = 0, bank = 0;
     if (img->i.width < fb_var.xres)
-	video += bytes * ((fb_var.xres - img->i.width) / 2);
-    if (img->i.height < fb_var.yres)
-	video += fb_fix.line_length * ((fb_var.yres - img->i.height) / 2);
+    {	    
+	    video += bytes * ((fb_var.xres - img->i.width) / 2);
+    }
+    if (img->i.height < fb_var.yres )
+    {	   
+	    video += fb_fix.line_length * ((fb_var.yres - img->i.height) / 2);
+    }
+
+    if (dheight < fb_var.yres ) 
+    {	    /* clear the screen */
+	    for ( y = 0; y < yo;++y) { clear_line(fb_var.bits_per_pixel, y, fb_var.xres, fb_mem+fb_fix.line_length*y); }
+	    for ( y = dheight+yo; y < fb_var.yres;++y) { clear_line(fb_var.bits_per_pixel, y, fb_var.xres, fb_mem+fb_fix.line_length*y); }
+    }
+
+    if (dwidth < fb_var.xres )
+    {	    for ( y = 0; y < fb_var.yres;++y)
+	    {
+		    clear_line(fb_var.bits_per_pixel, y, xo, fb_mem+fb_fix.line_length*y);
+		    clear_line(fb_var.bits_per_pixel, y, cxo,fb_mem+fb_fix.line_length*y+bytes*(xo+dwidth));
+	    }
+    }
 
     /* go ! */
     for (data = 0, y = 0;
