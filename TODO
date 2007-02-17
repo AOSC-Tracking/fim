@@ -16,6 +16,7 @@
 20070212	fix the command evaluation
 20070216	eliminate image tearing by optimizing svga_show_image
 	ADD:
+20070217	fix the default /etc/fimrc or better, builtin config!
 20070216	create an installer!
 20070129	dump internal commands function
 20070129	implement a new millisleep function..

@@ -9,16 +9,17 @@ LD=ld
 ##########################################################
 # add our flags + libs
 #
-srcdir	= ./src
+#srcdir	= ./src
+srcdir	= ./
 #VPATH	= $(srcdir)
 -include Make.config
-#include $(srcdir)/mk/Variables.mk
+include $(srcdir)/mk/Variables.mk
 
 #The following flags, if set, enable certain optional features.
 DEFINES=-D FIM_DEFAULT_CONFIG -D FIM_DEFAULT_KEY_CONFIG #-D FIM_NOFB
 
 CFLAGS	+= -DVERSION='"$(VERSION)"' $(DEFINES)
-CPPFLAGS +=  $(CFLAGS)  $(DEFINES)
+CXXFLAGS +=  $(CFLAGS)  $(DEFINES)
 LDLIBS	+= -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lFS -lz
 
 OBJS_FBI := \
@@ -27,13 +28,39 @@ OBJS_FBI := \
 	src/ppm.o src/bmp.o
 
 OBJS_FIM := \
+	lex.yy.o \
+	yacc.tab.o \
 	Arg.o Browser.o Command.o CommandConsole.o Image.o Var.o \
 	common.o \
 	fim.o interpreter.o \
-	lex.yy.o \
-	string.o yacc.tab.o
+	string.o
+
+FLEX   := flex
+BISON  := bison
+LEX    := $(FLEX)
+YACC   := $(BISON)
+LFLAGS := -+
+YFLAGS := -v -d
+
+
+all: fim
+
+flo:	fls
+
+fls:	lex.yy.cc yacc.tab.cpp
+
+lex.yy.cc : 
+	$(LEX) $(LFLAGS) lex.lex
+
+yacc.tab.cpp:
+	$(YACC) $(YFLAGS) yacc.ypp
+
+lex.yy.o : fls
+
+yacc.tab.o : fls
 
 all:	fim
+
 #################################################################
 # poor man's autoconf ;-)
 
@@ -49,8 +76,8 @@ HAVE_LIBUNGIF	:= $(call ac_lib,DGifOpenFileName,ungif)
 HAVE_LIBPNG	:= $(call ac_lib,png_read_info,png,-lz)
 HAVE_LIBTIFF	:= $(call ac_lib,TIFFOpen,tiff)
 HAVE_LIBFS	:= $(call ac_lib,FSOpenServer,FS)
-HAVE_LIBFOO	:= $(call ac_lib,FSOpenServer,foo)
 endef
+##HAVE_LIBFOO	:= $(call ac_lib,FSOpenServer,foo)
 
 
 ########################################################################
@@ -111,14 +138,9 @@ lib_cflags	:= $(call ac_lib_cflags,$(libraries))
 O=-O3
 CFLAGS		+= $(inc_cflags) $(lib_cflags) $(O)
 
+TARGETS	= fim
 
-install: all
-	#$(INSTALL_DIR) $(bindir)
-	#$(INSTALL_BINARY) $(TARGETS) $(bindir)
-	#$(INSTALL_SCRIPT) fbgs.sh $(bindir)
-	#$(INSTALL_DIR) $(mandir)/man1
-	#$(INSTALL_DATA) fim.man $(mandir)/man1/fbi.1
-	#$(INSTALL_DATA) fbgs.sh.man $(mandir)/man1/fbgs.1
+
 
 clean:
 	rm -f $(OBJS_FBI) $(depfiles)  $(OBJS_FIM)  *.o fim -f src/*.o src/*/*.o yacc.output yacc.tab.cpp yacc.tab.hpp lex.yy.cc Make.config md5sums.md5
@@ -133,15 +155,23 @@ clean:
 md5:
 	@rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
 
-fim:	flex $(OBJS_FBI) $(OBJS_FIM)
+fim:    $(OBJS_FIM) $(OBJS_FBI)
 	$(GPP) -o fim $(OBJS_FBI) $(OBJS_FIM) $(LDLIBS)
 	@ strip fim
 
 flex:
-	flex -+ lex.lex
-	bison -v  -d yacc.ypp
+	flex  $(LFLAGS) lex.lex
+	bison $(YFLAGS) yacc.ypp
 	$(GPP) -c lex.yy.cc
 	$(GPP) -c yacc.tab.cpp
+
+install:	all
+	$(INSTALL_DIR) $(bindir)
+	$(INSTALL_BINARY) $(TARGETS) $(bindir)
+	#$(INSTALL_SCRIPT) fbgs.sh $(bindir)
+	#$(INSTALL_DIR) $(mandir)/man1
+	#$(INSTALL_DATA) fim.man $(mandir)/man1/fbi.1
+	#$(INSTALL_DATA) fbgs.sh.man $(mandir)/man1/fbgs.1
 
 test:
 	@./fim #~/M*s/*g
@@ -178,4 +208,7 @@ wc:
 
 #clean:
 #	@ make md5
+include $(srcdir)/mk/Compile.mk
+include $(srcdir)/mk/Maintainer.mk
+#-include $(depfiles)
 

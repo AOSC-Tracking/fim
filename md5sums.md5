@@ -10,10 +10,10 @@ b6f33511175b2b2f2d3bff2bcf7746c8  CommandConsole.cpp
 b75673a207a065a5ff1ae348111d05c3  FIM.TXT
 2d58eeedc1e3427f1ae81884a917e7f4  Image.cpp
 7cc83fc01412a8c28f7d0b09a10e0e88  Image.h
-c8534dc71371012773dd3e95aa536706  Makefile
+a7d2062244e47915f523a42edbdaa243  Makefile
 41e83160b2447d4aa6b2d05431ade081  README
 763e20df7cd3effa0ca1f8b9902a14fb  README.FIRST
-a4f7bca600d34f562a6e6ba082cb59f3  TODO
+e3c646349b85dfaf27bab8b80c983bba  TODO
 7d53100904d102bdba250d658fafbbe9  Var.cpp
 3e8e5048f14fbad4d0c4b7d76ba65adc  Var.h
 c62cd7a5551d571062a44b04cf1858ea  common.cpp
@@ -35,6 +35,10 @@ eac4dd8a7468e120afc9ce1826c87b51  lex.lex
 9ee646ffab71107d1a11407be52f33a5  media/icon_smile.gif
 678a53eb8e6ed99afdc84d7baff69eea  media/image.jpg
 134243503f32e042f51ab665a5eebabb  media/image.png
+6076703f074589795ce26347f87d9ed8  mk/Autoconf.mk
+a049c4be051d08f9b4696f5625823666  mk/Compile.mk
+bb7fda3e7b11b1fb90f5e5902f4e3b2a  mk/Maintainer.mk
+9e8f3bf2f5812329cd3ceee010478550  mk/Variables.mk
 0c56db0143f4f80c369ee3af7425af6e  src/COPYING
 edc757b2b67840428990b58add2ed4c2  src/GNUmakefile
 b1ce6512c3c0f968dfc49155c4b5d334  src/INSTALL
