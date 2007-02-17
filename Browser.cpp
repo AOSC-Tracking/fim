@@ -317,10 +317,11 @@ namespace fim
 		/*
 		 *	FIX ME
 		 */
+		//if(n==current_n())return "";//Achtung!
 		int N=flist.size();
 		if(!N)return "";
 		cp=n;
-		if(cp<0)cp=(cp%N)+N;
+		if(cp<0)cp=(cp%N)+N+1;//+1 added lately
 		if(cp>N) cp=1+(n%N);
 		if(!cp)++cp;
 //		std::cout << "next " << n << "\n";
@@ -367,17 +368,17 @@ namespace fim
 		 *	FIX ME
 		 *	there should be a way to have an interactive goto
 		 */
-		int g=-1;
+		if(n_files()==0)return "no image to go to!";
+		int g=current_n()+1;
 		if(args.size()<1)return "please specify a file to view ( a number or ^ or $ ) \n";
 		else
 		{
 			char c=*(args[0].c_str());
-			if(isdigit(c))
-				g=atoi(args[0].c_str());
+			if(isdigit(c)  || c=='-')g=atoi(args[0].c_str());
 			else if(c=='^' || c=='f')g=1;
 			else if(c=='$' || c=='l')g=n();
 			else cout << " please specify a number or ^ or $\n";
-			if(g!=-1)
+			//if(g!=-1)
 			{	
 				fim::string c=current();
 				cc.autocmd_exec("PreGoto",c);

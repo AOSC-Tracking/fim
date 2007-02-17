@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include "common.h"
 #include "lex.h"
+#include "fim.h"
 
 #define  yylex lexer->yylex
 
@@ -70,8 +71,14 @@ stmt:
 //	| STRING { $$ = scon($1); }
 //	| IDENTIFIER { $$ = xscon($1); }
 	| INTEGER IDENTIFIER { $$ = opr('r',2,opr('x',1,scon($2)),con($1)); }
-	| IDENTIFIER { $$ = opr('x',1,scon($1)); }
-	| IDENTIFIER args { $$ = opr('x',2,scon($1),$2); }
+	| IDENTIFIER      { $$ = opr('x',1,scon($1));     }
+//	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,dupstr("\"ciao\"")))); }
+//	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr(3))))); }
+//	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,scon(dupstr("ciao"))))); }
+	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
+//	| '$'             { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
+//	| '^'             { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
+	| IDENTIFIER args { $$ = opr('x',2,scon($1),$2);  }
 ///	CRASHY !! | IDENTIFIER { $$ = opr(PRINT, 1, scon($1)); $$->type=typeId; printf("invoked command!\n"); }
 	| IDENTIFIER '=' expr  { $$ = opr('=', 2, vscon($1,'i'), $3); }
 	| IDENTIFIER '=' FLOAT { $$ = opr('=', 2, vscon($1,'f'), fcon($3)); }

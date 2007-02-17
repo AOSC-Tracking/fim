@@ -28,6 +28,16 @@ class CommandConsole;
 
 char * command_generator (const char *text,int state);
 
+char * dupnstr (int n)
+{
+	//allocation of a single string
+	char *r = (char*) malloc (16);
+	//FIX ME
+	if(!r){assert(r);cc.quit();}
+	sprintf(r,"%d",n);
+	return (r);
+}
+
 char * dupstr (const char* s)
 {
 	//allocation and duplication of a single string

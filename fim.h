@@ -76,6 +76,7 @@ void initialize_readline ();
 
 
 char * dupstr (const char* s);
+char * dupnstr (int n);
 namespace fim
 {
 	static fim_stream cout;

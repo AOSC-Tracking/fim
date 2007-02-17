@@ -26,7 +26,8 @@ Fim stands for Fbi IMproved.
 Fbi is a framebuffer-based image viewer, made by Gerd Knorr, and Fim is
 mainly an interface rework applied roughly as a patch to it.
 
-The main purposes of Fim is to improve the features that weew lacking in Fbi.
+The main purposes of Fim is to boost the features present Fbi and adding new
+ones. 
 
 This includes principally the configurability of the keyboard bindings.
 But Fim tries to go beyond this and propose - in a Vim-ish way - an approach
@@ -54,7 +55,6 @@ Introduction to Fim					*ref* *reference*
 10. Language Reference		|langref|
 11. Credits			|credits|
 
-
 ==============================================================================
 2. Fim on the internet				*internet*
 
@@ -64,6 +64,10 @@ although it doesn't say much.
 You could be able to browse the Fim code on :
 	http://code.autistici.org/svn/fim/
 and get the latest source code tree issuing  	:
+
+wget -r http://code.autistici.org/svn/fim/ && cd code.autistici.org/svn/fim 
+
+or (not available yet)
  	svn co svn+ssh://dezperado@code.autistici.org/svn/fim
 
 The documentation is distributed with the software.
@@ -71,6 +75,9 @@ The documentation is distributed with the software.
 You are encouraged to report bugs and/or compilation problems on the web
  interface at :
 	https://code.autistici.org/trac/fim
+
+To send me a more complete report:
+ ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
 
 ==============================================================================
 3. Basic Usage					*basics*
@@ -108,6 +115,26 @@ executed prior to any image loading or interactive execution.
 
 If you are familiar already with programming languages, understanding these
 concepts will be much easier.
+
+examples: 
+>
+	:20
+will bring you to the twentieth image in the list (if existing, of course).
+>
+	:$
+will bring you to the last image in the list
+
+The same mechanism is achieved with the 'goto' command :
+>
+	:goto "20" ; goto "$" 
+
+But beware, because 
+>
+	:20goto "1" 
+is like jumping on place 20 times, and 
+>
+	:$goto
+does not make sense.
 
 ==============================================================================
 5. Commands Line Mode Basics				*cli-basics*
@@ -174,8 +201,8 @@ By 'circumstances' we mean the pair:
 
 an EVENT can be one of:
 
-'Predisplay'	: before a display is executed
-'Postdisplay'	: after  a display is executed
+'PreDisplay'	: before a display is executed
+'PostDisplay'	: after  a display is executed
 
 'PreRedisplay'	: before a redisplay is executed
 'PostRedisplay'	: after  a redisplay is executed

@@ -101,14 +101,24 @@ STRINGC_DQ {STRINGC}|\'
 	return STRING;
 	}
 
-
 {ID}	{
 	astrcpy(yylval.sValue,yytext);
 	return IDENTIFIER;
 	}
 
-[0-9]+	{
+-?[0-9]+	{
 	yylval.iValue = atoi(yytext);
+	return INTEGER;
+	}
+
+"$"	{
+	yylval.iValue = -1;
+	return INTEGER;
+	}
+
+
+"^"	{
+	yylval.iValue = 0;
 	return INTEGER;
 	}
 
