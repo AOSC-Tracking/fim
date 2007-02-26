@@ -5,7 +5,6 @@
 20070129	control 4 crashes the prog ... why ? :)
 20070211	mysterious "open : No such file or directory" warning..
 20070212	with no image in the list, the screen should become black
-20070216	png/gif transparency bug introduced with trans.. library cut (not with clear_line)
 	FIX:
 #20070121	fix the image browser then
 20070125	fix the string vs variable problem

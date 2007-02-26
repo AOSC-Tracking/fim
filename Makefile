@@ -126,10 +126,10 @@ TIFF_LDLIBS	:= -ltiff
 #LIRC_LDLIBS	:= -llirc_client
 
 #PCD_OBJS	:= pcd.o
-JPEG_OBJS	:= jpeg.o
-UNGIF_OBJS	:= gif.o
-PNG_OBJS	:= png.o
-TIFF_OBJS	:= tiff.o
+JPEG_OBJS	:= src/jpeg.o
+UNGIF_OBJS	:= src/gif.o
+PNG_OBJS	:= src/png.o
+TIFF_OBJS	:= src/tiff.o
 #LIRC_OBJS	:= lirc.o
 
 
@@ -141,6 +141,7 @@ CFLAGS		+= $(inc_cflags) $(lib_cflags) $(O)
 TARGETS	= fim
 
 
+OBJS_FBI	+= $(call ac_lib_mkvar,$(libraries),OBJS)
 
 clean:
 	rm -f $(OBJS_FBI) $(depfiles)  $(OBJS_FIM)  *.o fim -f src/*.o src/*/*.o yacc.output yacc.tab.cpp yacc.tab.hpp lex.yy.cc Make.config md5sums.md5
