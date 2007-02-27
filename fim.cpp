@@ -26,24 +26,31 @@ using std :: vector;
 
 class CommandConsole;
 
-char * command_generator (const char *text,int state);
+char *fontname;
+static char * command_generator (const char *text,int state);
 
+/*
+ *	Allocation of a small string for storing the 
+ *	representation of an integer.
+ */
 char * dupnstr (int n)
 {
 	//allocation of a single string
 	char *r = (char*) malloc (16);
 	//FIX ME
-	if(!r){assert(r);cc.quit();}
+	if(!r){/*assert(r);*/cc.quit();}
 	sprintf(r,"%d",n);
 	return (r);
 }
 
+/*
+ *	Allocation and duplication of a single string
+ */
 char * dupstr (const char* s)
 {
-	//allocation and duplication of a single string
 	char *r = (char*) malloc (strlen (s) + 1);
 	//FIX ME
-	if(!r){assert(r);cc.quit();}
+	if(!r){/*assert(r);*/cc.quit();}
 	strcpy (r, s);
 	return (r);
 }
@@ -75,11 +82,18 @@ namespace fim
 	}
 	
 	void tty_restore()
-	{
+	{	
+		//POSIX.1 compliant:
+		//"a SIGIO signal is sent whenever input or output becomes possible on that file descriptor"
 		fcntl(0,F_SETFL,saved_fl);
+		//the Terminal Console State Attributes will be set right NOW
 		tcsetattr (0, TCSANOW, &saved_attributes);
 	}
 
+	/*
+	 * This routine terminates the program as cleanly as possible.
+	 * It should be used whenever useful.
+	 */
 	void cleanup_and_exit(int code)
 	{
 	#ifndef FIM_NOFB
@@ -89,8 +103,13 @@ namespace fim
 	#endif
 		exit(code);
 	}
-};
+}
 
+/*
+ *	Set the 'status bar' of the program.
+ *	desc will be placed on the left corner
+ *	info on the right
+ */
 void status(const char *desc, const char *info)
 {
 	//FIX ME
@@ -123,6 +142,10 @@ void status(const char *desc, const char *info)
 #endif
 }
 
+/*
+ *	Creates a little description of some image,
+ *	and plates it in a NUL terminated static buffer.
+ */
 char *make_info(struct ida_image *img, float scale)
 {
 	//FIX ME
@@ -138,15 +161,17 @@ char *make_info(struct ida_image *img, float scale)
 	return linebuffer;
 }
 
+/*
+ *	This function treats the framebuffer screen as a text outout terminal.
+ *	So it prints msg thre.
+ *	if noDraw is set, the screen will be not refreshed.
+	//FIX ME
+ */
 void fb_status_screen(const char *msg, int noDraw=1)
 {
-	//FIX ME
 	if(!msg) return;
 	if(cc.noFrameBuffer())return;
 #ifndef FIM_NOFB
-	/*
-	 * This function treats the framebuffer screen as a terminal
-	 */
 
 	int y,i,j,l,w;
 	//TODO : VARIABLES HERE!!
@@ -237,12 +262,14 @@ void fb_status_screen(const char *msg, int noDraw=1)
 //	    y = fb_var.yres - f->height - ys;
 //	    y = 1*f->height;
 	    y = 1*fb_font_height();
+	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
+//	    for(i=R-1;i>=0;--i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
+//
 //	    fb_memset(fb_mem + fb_fix.line_length * y, 0,
 //	    fb_fix.line_length * (f->height+ys));
 //	    fb_line(0, fb_var.xres, y, y);
 	//    cline=0; strcpy(columns[0],"gaba");
 //	    for(i=cline;i>=0;--i) fs_puts(f, 0, y*(i+1), columns[i]);
-	    for(i=R-1;i>=0;--i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
 //	    for(i=cline;i>=0;--i) fs_puts(f, 0, y*(i+1), "foo");
 //	    for(i=0;i>=0;--i) fs_puts(f, 0, y*(i+1), "foo");
 //    fs_puts(f, 0, y+ys, msg);
@@ -254,31 +281,20 @@ void fb_status_screen(const char *msg, int noDraw=1)
 #endif
 }
 
+/*
+ * sets the status bar of the screen to the specified strings:
+ *  desc on the left corner
+ *  info on the right corner
+ *  FIXME : actually, info is ignored
+ */
 void status_screen(const char *desc, char *info)
 {
 #ifndef FIM_NOFB
 	/*
 	 *	TO FIX
 	 */
-	int chars, ilen;
-	char *str;
 	if(!desc)return;
 	fb_status_screen(desc);
-    	return;
-//    if (!statusline) return;
-	chars = fb_var.xres / fb_font_width();
-	str = (char*) malloc(chars+1);
-	assert(str);
-/*    if (info) {
-	ilen = strlen(info);
-	sprintf(str, "%-*.*s [ %s ] H - Help",
-		chars-14-ilen, chars-14-ilen, desc, info);
-    } else*/ {
-//	sprintf(str, "%-*.*s | H - Help", chars-11, chars-11, desc);
-//	sprintf(str, "%s",  desc);
-    	}
-    //fb_status_screen(str);
-	free(str);
 #endif
 }
 
@@ -291,15 +307,16 @@ namespace rl
  *     contents of rl_line_buffer in case we want to do some simple
  *     parsing.  Return the array of matches, or NULL if there aren't any.
  */
-char ** fim_completion (const char *text, int start,int end)
+static char ** fim_completion (const char *text, int start,int end)
 {
 	//FIX ME
 	char **matches;
 	regex_t blank_regex;	//should be static!!!
 	const int nmatch=1;
 	regmatch_t pmatch[nmatch];
-	char bc;
+	//char bc;
 
+	//compilation of regular expression
 	if(regcomp(&blank_regex,"^ \\+$", 0)==-1)
 	{
 //		std::cout << "error calling regcomp!" << "\n";
@@ -342,7 +359,7 @@ char ** fim_completion (const char *text, int start,int end)
 /*
  * 	this function is called to display the proposed autocompletions
  */
-void completion_display_matches_hook(char **matches,int num,int max)
+static void completion_display_matches_hook(char **matches,int num,int max)
 {
 	//FIX ME
 	//rl_display_match_list(matches,num,max);
@@ -353,7 +370,7 @@ void completion_display_matches_hook(char **matches,int num,int max)
 	//return;
 	for(int i=0;i<num && matches[i] && f>0;++i)
 	{
-		w=min(strlen(matches[i])+1,f);
+		w=min(strlen(matches[i])+1,(size_t)f);
 		if(f>0){
 		strncpy(buffer+l,matches[i],w);
 		w=strlen(buffer+l);l+=w;f-=w;}
@@ -372,11 +389,11 @@ void completion_display_matches_hook(char **matches,int num,int max)
  //     status((unsigned char*)"here shall be autocompletions", NULL);
 }
 
-void redisplay()
+static void redisplay()
 {	
 	//FIX ME
-	static int c=100;
-//    fb_setcolor(c=~c);//sleep(1);
+	//static int c=100;
+//	fb_setcolor(c=~c);//sleep(1);
 #ifndef FIM_NOFB
 	status(( char*)rl_line_buffer,NULL);
 #else
@@ -386,9 +403,10 @@ void redisplay()
 //	fprintf(stdout,"::%s\n",rl_line_buffer);
 }
 
-int redisplay_hook()
+static int redisplay_hook()
 {
 	redisplay();
+	return 0;
 }
 
 /*
@@ -415,7 +433,7 @@ void initialize_readline ()
 	rl_hook_func_t *rl_pre_input_hook=redisplay_hook;*/
 	//std::cout << "readline initialized\n";
 }
-};
+}
 
 
 namespace fim
@@ -443,14 +461,14 @@ namespace fim
 		else (obj->*method)(args);
 	}*/
 //};
-};
+}
 
 fim::CommandConsole cc;
 
 /* Generator function for command completion.  STATE lets us
  *    know whether to start from scratch; without any state
  *       (i.e. STATE == 0), then we start at the top of the list. */
-char * command_generator (const char *text,int state)
+static char * command_generator (const char *text,int state)
 {
 //	static int list_index, len;
 //	char *name;
@@ -547,13 +565,13 @@ static struct option fim_options[] = {
 	FlexLexer *lexer;
 	using namespace fim;
 
-void version()
+static void version()
 {
 	//FIX ME
 #define FIM_VERSION "0.1"
     fprintf(stderr,
 		    "fim version " FIM_VERSION", by dez ; compiled on %s.\n%s"
-		    __DATE__,
+		    ,__DATE__,
     		    "\nbased on fbi version 1.31  (c) by 1999-2003 Gerd Knorr\n");
 #undef FIM_VERSION
 }
@@ -564,7 +582,7 @@ int main(int argc,char *argv[])
 	 * an adapted version of the main function
 	 * of the original version of the fbi program
 	 */
-	void *fp;
+	//void *fp;
 	//std::map<fim::string,fim::string (fim::CommandConsole::*)(std::vector<Arg>)> map;
 	//m.insert(20,33);
 	//m[20]=33;
@@ -573,10 +591,8 @@ int main(int argc,char *argv[])
 //	cc.bind('a'-'a'+1,"comando control e a");
 //	
 //	cc.bind('b'-'a'+1,"comando control e b");
-	    int              timeout = -1;
+/*	
 	int              randomize = -1;
-	int              opt_index = 0;
-	int              vt = 0;
 	int              backup = 0;
 	int              preserve = 0;
 
@@ -584,14 +600,18 @@ int main(int argc,char *argv[])
 	struct ida_image *simg    = NULL;
 	struct ida_image *img     = NULL;
 	float            scale    = 1;
-	float            newscale = 1;
+	float            newscale = 1;*/
+ 	int              timeout = -1;
+	int              opt_index = 0;
+	int              vt = 0;
 
 //	int              c
-	int editable = 0, once = 0;
-	int              i, arg, key;
+	//int editable = 0, once = 0;
+	int              i;//, arg, key;
 
-	char             *line, *info, *desc;
-    	char             linebuffer[128];
+	//char             *line, *info, *desc;
+	char             *desc,*info;
+    	//char             linebuffer[128];
 
 	setlocale(LC_ALL,"");
 	char c;
@@ -699,7 +719,7 @@ int main(int argc,char *argv[])
 		cc.push(argv[i]);
 	}
 	lexer=new yyFlexLexer;	//used by YYLEX
-	fim::CommandConsole *ccp;
+	//fim::CommandConsole *ccp;
 //	main_hack( );
 //
 

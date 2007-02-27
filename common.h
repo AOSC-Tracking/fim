@@ -15,12 +15,12 @@ namespace fim
 	class CommandConsole;
 	class string;
 	//extern fim::CommandConsole cc;
-};
+}
 
 //live from src/loader.h:
 enum ida_extype {
     EXTRA_COMMENT = 1,
-    EXTRA_EXIF    = 2,
+    EXTRA_EXIF    = 2
 };
 
 struct ida_extra {

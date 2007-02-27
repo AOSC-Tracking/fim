@@ -19,7 +19,7 @@ std::basic_ostream<char, std::char_traits<char> >::basic_ostream(const <anonymou
 //		std::ostream os;
 		public:
 	//	basic_ostream()
-		fim_stream::fim_stream(){}
+		fim_stream(){}
 		fim_stream& operator<<(float f)
 		{
 			char s[32];sprintf(s,"%f",f);
@@ -52,5 +52,5 @@ std::basic_ostream<char, std::char_traits<char> >::basic_ostream(const <anonymou
 			return *this;
 		}
 	};
-};
+}
 #endif

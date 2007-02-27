@@ -1,9 +1,12 @@
 
 # All of this is in balance as an elephant on thin ice..
 # it's horrible.
+# 20070227 ..but i am fixing this :)
 
+WARNINGS := -Wall -pedantic #-Wextra -pedantic
 GCC=gcc
-GPP=g++ -fpermissive -fno-default-inline -g
+#GPP=g++ -fpermissive -fno-default-inline -g
+GPP=g++ -fno-default-inline $(WARNINGS)
 LD=ld
 
 ##########################################################
@@ -18,9 +21,9 @@ include $(srcdir)/mk/Variables.mk
 #The following flags, if set, enable certain optional features.
 DEFINES=-D FIM_DEFAULT_CONFIG -D FIM_DEFAULT_KEY_CONFIG #-D FIM_NOFB
 
-CFLAGS	+= -DVERSION='"$(VERSION)"' $(DEFINES)
-CXXFLAGS +=  $(CFLAGS)  $(DEFINES)
-LDLIBS	+= -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lFS -lz
+CFLAGS	 += -DVERSION='"$(VERSION)"' $(DEFINES)
+CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
+LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lFS -lz
 
 OBJS_FBI := \
 	src/fbi.o src/fbtools.o src/fs.o src/fb-gui.o \

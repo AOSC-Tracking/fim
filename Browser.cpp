@@ -7,7 +7,7 @@ namespace fim
 		 * returns a string with the info about the files in list
 		 */
 		fim::string fileslist;
-		for(int i=0;i<flist.size();++i)fileslist+=flist[i]+fim::string(" ");
+		for(unsigned int i=0;i<flist.size();++i)fileslist+=flist[i]+fim::string(" ");
 		cout << fileslist.c_str();
 		return fileslist;
 	}
@@ -17,7 +17,7 @@ namespace fim
 		/*
 		 * accessory method
 		 */
-		for(int i=0;i<flist.size();++i)
+		for(unsigned int i=0;i<flist.size();++i)
 			os << flist[i] << "\n";
 		return os;
 	}
@@ -62,7 +62,7 @@ namespace fim
 		fim::string s;
 		if(flist.size()<=0)return nofile;
 		assert(cp);
-		if(current_n()==flist.size())cp--;
+		if(current_n()==(int)flist.size())cp--;
 		s=flist[flist.size()-1];
 		flist.pop_back();
 		return s;
@@ -178,6 +178,7 @@ namespace fim
 		//FIX ME
 		if(cc.getIntVariable("display_status"))
 			status((const char*)l, image?image->getInfo():"*");
+		return "";
 	}
 
 	fim::string Browser::display(const std::vector<fim::string> &args)
@@ -257,7 +258,7 @@ namespace fim
 		/* 
 		 * returns whether the file nf is in the files list
 		 */
-		for(int i=0;i<flist.size();++i)
+		for(unsigned int i=0;i<flist.size();++i)
 			if(flist[i]==nf)return true;
 		return false;
 	}
@@ -403,8 +404,8 @@ namespace fim
 			 * if this software will have success, we will have indices here :)
 			 * sort(rlist.begin(),rlist.end());...
 			 */
-			for(int r=0;r<rlist.size();++r)
-			for(int i=0;i<flist.size();++i)
+			for(unsigned int r=0;r<rlist.size();++r)
+			for(unsigned int i=0;i<flist.size();++i)
 			if(flist[i]==rlist[r])
 			{
 //				std::cout << "removing" << flist[i]<<"\n";
@@ -567,4 +568,4 @@ namespace fim
 		cc.autocmd_exec("PostPrev",c);
 		return "";
 	}
-};
+}

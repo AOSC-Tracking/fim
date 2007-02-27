@@ -6,29 +6,30 @@ namespace fim
 
 class Command
 {
-	enum {BrowserT,CommandConsoleT};
+	public:
+	fim::string cmd,
+		    help ;
+	Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),browserf(bf),browser(b) { type=BrowserT;}
+	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),consolef(cf),console(c) { type=CommandConsoleT;}
+
+	fim::string getHelp()const{return help;}
+	private:
+	enum	{ BrowserT,CommandConsoleT };
 	int type;
+	union{
+		fim::string (Browser::*browserf)(const std::vector<fim::string>&) ;
+		fim::string (CommandConsole::*consolef)(const std::vector<fim::string>&) ;
+	};
 	union{
 		Browser *browser;
 		CommandConsole *console;
 	};
 
-	union{
-		fim::string (Browser::*browserf)(const std::vector<fim::string>&) ;
-		fim::string (CommandConsole::*consolef)(const std::vector<fim::string>&) ;
-	};
-	private:
 	public:
-	fim::string cmd;
-	fim::string help;
-	public:
-	fim::string Command::getHelp()const{return help;}
-	Command::Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),browserf(bf),browser(b) { type=BrowserT;}
-	Command::Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),consolef(cf),console(c) { type=CommandConsoleT;}
 	
-	Command::~Command() { }
+	~Command() { }
 	
-/*	fim::string Command::execute(const std::vector<Arg> &args)
+/*	fim::string execute(const std::vector<Arg> &args)
 	{
 //		assert(browser && browserf);
 //		(browser->*browserf)(args);	
@@ -37,7 +38,7 @@ class Command
 		return "not ok.";
 	}*/
 
-	fim::string Command::execute(const std::vector<fim::string> &args)
+	fim::string execute(const std::vector<fim::string> &args)
 	{
 	//	assert(browser && browserf);
 		assert(browser);//!!!!!!!!!!!!!!!!!!
@@ -53,5 +54,5 @@ class Command
 	bool operator < (Command c)const{return cmd< c.cmd;}
 	bool operator <=(Command c)const{return cmd<=c.cmd;}
 };
-};
+}
 #endif

@@ -17,7 +17,7 @@ namespace fim
 		/*
 		 * is cmd a valid internal Fim command ?
 		 */
-		for(int i=0;i<commands.size();++i) 
+		for(unsigned int i=0;i<commands.size();++i) 
 			if(commands[i] && commands[i]->cmd==cmd)
 				return commands[i];
 		return NULL;
@@ -145,7 +145,7 @@ namespace fim
 			return displayAliases();
 		}
 		if(args.size()<2)return "alias : please specify some action to do\n";
-		for(int i=1;i<args.size();++i) cmdlist+=args[i].val;
+		for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
 		if(aliases[args[0].val]!="")
 		{
 			aliases[args[0].val]=cmdlist;
@@ -263,7 +263,7 @@ namespace fim
 			if(getIntVariable("no_rc_file")==0 )
 				executeFile(rcfile);	//GLOBAL DEFAULT CONFIGURATION FILE
 		}
-		for(int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
+		for(unsigned int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
 		//qui ci vorrebbe stat e behaviour condizionale dettata
 		//dalla presenza di /etc/fimrc ...
 	}
@@ -315,7 +315,7 @@ namespace fim
 //			completions.push_back(fim::string("$")+(*vi).first);
 			completions.push_back((*vi).first);
 		}
-		for(int i=0;i<commands.size();++i)
+		for(unsigned int i=0;i<commands.size();++i)
 		{
 			completions.push_back(commands[i]->cmd);
 		}
@@ -326,7 +326,7 @@ namespace fim
 
 	//	std::vector<fim::string> completions;
 //		for(int i=list_index;i<commands.size();++i)
-		for(int i=list_index;i<completions.size();++i)
+		for(unsigned int i=list_index;i<completions.size();++i)
 		{
 		//	if(!commands[i])continue;
 //???????????			if(!completions[i])continue;
@@ -375,13 +375,13 @@ namespace fim
 		 *	scope of this program it is enough.
 		 */
 		const char *b=s,*e;	//e will point to the end of the token or fim::string (a separator or NULL)
-		int n;
-		char c;
+		//int n;
+		//char c;
 		const char*separators=" -=";
 		if(s==NULL) return NULL;
 		fim::string str(s);
 		fim::string t;
-		assert(strlen(s)>=str.length());
+		assert(strlen(s)>=(size_t)str.length());
 		char **tokens;
 		if((tokens=(char**)calloc(4,MAXTOCS))==NULL)
 			return NULL;
@@ -439,7 +439,7 @@ namespace fim
 		if(r!=0){ferror("pipe error\n");}
 		r=write(pipedesc[1],s,strlen(s));
 		close(pipedesc[1]);
-		if(r!=strlen(s)){ferror("write error");} 
+		if(r!=(int)strlen(s)){ferror("write error");} 
 		for(char*p=s;*p;++p)if(*p=='\n')*p=' ';
 //		cout << s << "\n";
 		yyparse();
@@ -484,7 +484,7 @@ namespace fim
 //			sl=strlen(cmd.c_str());
 //			r=write(pipedesc[1],cmd.c_str(),sl);
 //			if(r!=sl){ferror("pipe write error");exit(-1);} 
-			for(int i=0;i<args.size();++i)
+			for(unsigned int i=0;i<args.size();++i)
 			{
 //				if(args[i].c_str()==NULL){ferror("bad arguments.");}
 //				r=write(pipedesc[1]," ",1);
@@ -516,7 +516,7 @@ namespace fim
 			//assignment of an alias
 			std::vector<Arg> aargs;	//Arg args :P
 			if(args.size()){
-			for(int i=0;i<args.size();++i)
+			for(unsigned int i=0;i<args.size();++i)
 			{
 //				std::cout<<" "<<args[i]<<"\n";
 				aargs.push_back(Arg(args[i]));
@@ -529,7 +529,7 @@ namespace fim
 		else
 		{
 			//if(_commands[cmd]!="")
-			if(c=findCommand(cmd))
+			if((c=findCommand(cmd))!=NULL)
 			{
 			//	std::cout << "cmd : '" << cmd << "'\n";
 			//	std::cout << "args: " << args << "\n";
@@ -571,7 +571,7 @@ namespace fim
 		tattr.c_cc[VTIME] = 1;
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		
-		int c,r;char buf[64];
+		int c,r;//char buf[64];
 		r=read(0,&c,4);
 		tcsetattr (0, TCSAFLUSH, &sattr);
 		return r;
@@ -699,18 +699,19 @@ namespace fim
 		this->exit(0);
 	}
 
-	fim::string CommandConsole::quit(const std::vector<fim::string> &args) { this->quit(); }
+	fim::string CommandConsole::quit(const std::vector<fim::string> &args) { this->quit(); return "";}
 
 	fim::string CommandConsole::executeFile(const std::vector<fim::string> &args)
 	{
-		for(int i=0;i<args.size();++i)executeFile(args[i].c_str());
+		for(unsigned int i=0;i<args.size();++i)executeFile(args[i].c_str());
 		return "";
 	}
 	
 	fim::string CommandConsole::foo(const std::vector<fim::string> &args)
 	{
 		//std::cout<<"foo ";
-		for(int i=0;i<args.size();++i)std::cout<<" "<<args[i];std::cout<<"\n";
+		for(unsigned int i=0;i<args.size();++i)std::cout<<" "<<args[i];std::cout<<"\n";
+		return "";
 	}
 
 	CommandConsole::~CommandConsole()
@@ -733,6 +734,7 @@ namespace fim
 		 */
 		int sl=getIntVariable("status_line")?0:1;
 		setVariable("status_line",sl);
+		return 0;
 	}
 
 	int CommandConsole::setVariable(const fim::string& varname,int value)
@@ -776,7 +778,7 @@ namespace fim
 		}
 		r=read(fd,buf,sizeof(buf)-1);buf[r]='\0';
 		cout << "read " << r << " bytes from " << s << "\n";
-		buf[min(fim::string::max(),sizeof(buf)-1)]='\0';
+		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
 //		cout << "\"\n"<<  buf << "\"\n";	//segfaults!
 		isinscript=1;
 		execute(buf,0);
@@ -799,7 +801,7 @@ namespace fim
 		 * a command to echo arguments, for debug and learning purposes
 		 */
 		if(args.size()==0)fim::cout<<"echo command\n";
-		for(int i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
+		for(unsigned int i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
 		return "";
 	}
 
@@ -967,7 +969,7 @@ namespace fim
 		 */
 //		cout << "autocmd_exec_cmd...\n";
 //		cout << "autocmd_exec_cmd. for pat '" << fname <<  "'\n";
-		for (int i=0;i<autocmds[event][pat].size();++i)
+		for (unsigned int i=0;i<autocmds[event][pat].size();++i)
 		{
 			if(regexp_match(fname.c_str(),pat.c_str()))	//UNFINISHED : if fname matches path pattern.. now matches ALWAYS
 			{
@@ -1054,7 +1056,7 @@ namespace fim
 
 	fim::string CommandConsole::system(const std::vector<fim::string>& args)
 	{
-		for(int i=0;i<args.size();++i)
+		for(unsigned int i=0;i<args.size();++i)
 		{
 			std::system(args[i].c_str());
 		}
@@ -1063,7 +1065,7 @@ namespace fim
 	
 	fim::string CommandConsole::status(const std::vector<fim::string> &args)
 	{
-		for(int i=0;i<args.size();++i)
+		for(unsigned int i=0;i<args.size();++i)
 		{
 			browser.display_status(args[i].c_str(),NULL);
 		}
@@ -1076,13 +1078,14 @@ namespace fim
 		 * removes the binding from an alias to the associated action
 		 */
 		if(args.size()<1)return "unalias : please specify an alias to remove!\n";
-		for(int i=0;i<args.size();++i)
+		for(unsigned int i=0;i<args.size();++i)
 		if(aliases[args[i]]!="")
 		{
 			aliases.erase(args[i]);
 			return "";//fim::string("unalias : \"")+args[i]+fim::string("\" successfully unaliased.\n");
-		}else
-			return fim::string("unalias : \"")+args[i]+fim::string("\" there is not such alias.\n");
+		}
+		else return fim::string("unalias : \"")+args[i]+fim::string("\" there is not such alias.\n");
+		return "";
 	}
 
 	fim::string CommandConsole::dump_key_codes(const std::vector<fim::string>& args)
@@ -1098,4 +1101,4 @@ namespace fim
 		}
 		return acl;
 	}
-};
+}

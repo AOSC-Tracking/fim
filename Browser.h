@@ -24,76 +24,76 @@ class Browser
 	int cp;
 
 	Image *image;
-	int Browser::current_n()const{ return cp?cp-1:cp; }
-	const fim::string Browser::pop();
+	int current_n()const{ return cp?cp-1:cp; }
+	const fim::string pop();
 	public:
-	int Browser::current_image()const{ return cp; }
-	int Browser::current_images()const{ return n(); }
-	Browser::Browser();
-	Browser::~Browser() { }
-	fim::string Browser::current()const{ return cp?flist[current_n()]:nofile; }
-	fim::string Browser::goto_image(const std::vector<fim::string> &args);
-	fim::string Browser::goto_image(int n);
-	fim::string Browser::pan_up(const std::vector<fim::string> &args);
-	fim::string Browser::pan_down(const std::vector<fim::string> &args);
-	fim::string Browser::auto_scale(const std::vector<fim::string> &args);
-	fim::string Browser::auto_width_scale(const std::vector<fim::string> &args);
-	fim::string Browser::auto_height_scale(const std::vector<fim::string> &args);
-	fim::string Browser::pan_right(const std::vector<fim::string> &args);
-	fim::string Browser::pan_left(const std::vector<fim::string> &args);
-	fim::string Browser::reduce(const std::vector<fim::string> &args);
-	fim::string Browser::magnify(const std::vector<fim::string> &args);
-	fim::string Browser::scale_factor_increase(const std::vector<fim::string> &args);
-	fim::string Browser::scale_factor_decrease(const std::vector<fim::string> &args);
-	fim::string Browser::scale_factor_grow(const std::vector<fim::string> &args);
-	fim::string Browser::scale_factor_shrink(const std::vector<fim::string> &args);
-	fim::string Browser::display(const std::vector<fim::string> &args);
-	fim::string Browser::display_status(const char *l,const char*r);
+	int current_image()const{ return cp; }
+	int current_images()const{ return n(); }
+	Browser();
+	~Browser() { }
+	fim::string current()const{ return cp?flist[current_n()]:nofile; }
+	fim::string goto_image(const std::vector<fim::string> &args);
+	fim::string goto_image(int n);
+	fim::string pan_up(const std::vector<fim::string> &args);
+	fim::string pan_down(const std::vector<fim::string> &args);
+	fim::string auto_scale(const std::vector<fim::string> &args);
+	fim::string auto_width_scale(const std::vector<fim::string> &args);
+	fim::string auto_height_scale(const std::vector<fim::string> &args);
+	fim::string pan_right(const std::vector<fim::string> &args);
+	fim::string pan_left(const std::vector<fim::string> &args);
+	fim::string reduce(const std::vector<fim::string> &args);
+	fim::string magnify(const std::vector<fim::string> &args);
+	fim::string scale_factor_increase(const std::vector<fim::string> &args);
+	fim::string scale_factor_decrease(const std::vector<fim::string> &args);
+	fim::string scale_factor_grow(const std::vector<fim::string> &args);
+	fim::string scale_factor_shrink(const std::vector<fim::string> &args);
+	fim::string display(const std::vector<fim::string> &args);
+	fim::string display_status(const char *l,const char*r);
 
-	fim::string Browser::reload(const std::vector<fim::string> &args);
-	fim::string Browser::list(const std::vector<fim::string> &args){return list();}
-	fim::string Browser::push(const std::vector<fim::string> &args)
+	fim::string reload(const std::vector<fim::string> &args);
+	fim::string list(const std::vector<fim::string> &args){return list();}
+	fim::string push(const std::vector<fim::string> &args)
 	{
-		for(int i=0;i<args.size();++i)
+		for(unsigned int i=0;i<args.size();++i)
 			push(args[i]);
 		return "";
 	}
-	fim::string Browser::n(const std::vector<fim::string> &args){return n();}
-	fim::string Browser::get(const std::vector<fim::string> &args){return get();}
-	fim::string Browser::_sort(const std::vector<fim::string> &args){return _sort();}
-	fim::string Browser::next(const std::vector<fim::string> &args){return next(args.size()>0?((int)args[0]):1);}
-	fim::string Browser::prev(int n=1);
-	fim::string Browser::prev(const std::vector<fim::string> &args){return prev(args.size()>0?((int)args[0]):1);}
-	fim::string Browser::remove(const std::vector<fim::string> &args);
-	fim::string Browser::info(const std::vector<fim::string> &args);
-	fim::string Browser::scrolldown(const std::vector<fim::string> &args);
-	fim::string Browser::info();
-	std::ostream& Browser::print(std::ostream &os)const;
-	void Browser::redisplay();
-	fim::string Browser::redisplay(const std::vector<fim::string> &args);
+	fim::string n(const std::vector<fim::string> &args){return n();}
+	fim::string get(const std::vector<fim::string> &args){return get();}
+	fim::string _sort(const std::vector<fim::string> &args){return _sort();}
+	fim::string next(const std::vector<fim::string> &args){return next(args.size()>0?((int)args[0]):1);}
+	fim::string prev(int n=1);
+	fim::string prev(const std::vector<fim::string> &args){return prev(args.size()>0?((int)args[0]):1);}
+	fim::string remove(const std::vector<fim::string> &args);
+	fim::string info(const std::vector<fim::string> &args);
+	fim::string scrolldown(const std::vector<fim::string> &args);
+	fim::string info();
+	std::ostream& print(std::ostream &os)const;
+	void redisplay();
+	fim::string redisplay(const std::vector<fim::string> &args);
 
 
-	fim::string Browser::load(const std::vector<fim::string> &args);
-	fim::string Browser::pop(const std::vector<fim::string> &args);
-	bool Browser::present(const fim::string nf);
-	bool Browser::push(const fim::string nf);
+	fim::string load(const std::vector<fim::string> &args);
+	fim::string pop(const std::vector<fim::string> &args);
+	bool present(const fim::string nf);
+	bool push(const fim::string nf);
 
-	fim::string Browser::display()
+	fim::string display()
 	{
 		return display(std::vector<fim::string>());
 	}
 	private:
-	fim::string Browser::reload();
-	fim::string Browser::list()const;
+	fim::string reload();
+	fim::string list()const;
 
-	int Browser::n_files()const;
-	const fim::string Browser::n()const;
-	fim::string Browser::get()const;
-	fim::string Browser::_sort();
-	fim::string Browser::next(int n);
-	fim::string Browser::do_next(int n);
+	int n_files()const;
+	const fim::string n()const;
+	fim::string get()const;
+	fim::string _sort();
+	fim::string next(int n);
+	fim::string do_next(int n);
 	public:
 };
-};
+}
 
 #endif

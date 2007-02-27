@@ -33,6 +33,7 @@ int ex(nodeType *p)
 		case cmdId: assert(0);return -1;//cc.execute(fim::string::string(p->scon.s));return 0;
 		case intCon: return p->con.value;
 //	case floatCon: return (int)(void*)(p->fid.f);
+	        case floatCon: return 0;//FIXME
 	//case vId: printf("key : %s\n",p->scon.s); return vars[p->scon.s];
 		case vId:
 		{

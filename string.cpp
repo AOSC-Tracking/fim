@@ -16,7 +16,7 @@ namespace fim
 	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
 	{
 		std::cout<<"{";
-		for(int i=0;i<v.size();++i)
+		for(unsigned int i=0;i<v.size();++i)
 			std::cout<<v[i]<<",";
 		std::cout<<"}";
 		return os;
@@ -60,8 +60,8 @@ namespace fim
 	int  string::length()const { return strlen(s); }
 	int  string::size()const { return length(); }
 	int  string::find(const string&str)const{return find(str.s);}
-	int  string::assign(const string&str){strcpy(s,str.s);}
+	int  string::assign(const string&str){strcpy(s,str.s);return length();}
 	int  string::find(const char*ss)const{const char*p=strstr(s,ss);if(!p)return -1;return p-s;}
  	std::ostream& string::print(std::ostream &os)const { return os<<s; }
 
-};
+}

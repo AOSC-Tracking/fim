@@ -33,10 +33,11 @@ namespace fim{
 	void tty_restore();
 	void tty_raw(void);
 	void cleanup_and_exit(int code);
-};
+}
 
 
 void status_screen(const char *desc, char *info);
+void fb_status_screen(const char *msg, int noDraw);
 namespace fim{
 class Arg;
 class Browser;
@@ -46,7 +47,7 @@ class Image;
 class Var;
 class fim_stream;
 //	extern static fim_stream cout;
-};
+}
 
 namespace rl{
 /*typedef struct
@@ -57,12 +58,12 @@ namespace rl{
 }COMMAND;
 */
 
-char ** fim_completion (const char *text, int start,int end);
-void completion_display_matches_hook(char **matches,int num,int max);
-void redisplay();
-int redisplay_hook();
+//char ** fim_completion (const char *text, int start,int end);
+//void completion_display_matches_hook(char **matches,int num,int max);
+//void redisplay();
+//int redisplay_hook();
 void initialize_readline ();
-};
+}
 #include "extern.h"
 #include "string.h"
 #include "Command.h"
@@ -86,7 +87,7 @@ class CommandConsole;
 
 std::ostream& operator<<(std::ostream &os,const string& s);
 
-};
+}
 void status(const char *desc, const char *info);
 void fb_status_screen(const char *msg, int noDraw);
 

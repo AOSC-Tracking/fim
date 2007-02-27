@@ -65,7 +65,7 @@ namespace fim
 		 //
 		//TODO : MAX MEMORY INSTEAD OF MAX SCALE!!
 		float maxscale=10.0;
-		float minscale= 0.1;
+		//float minscale= 0.1;
 	    	if(!img)invalid=1;
 	    	if(!img)return -1;
 	    	if(invalid)return -1;//IN CASE OF MEMORY PROBLEMS
@@ -91,6 +91,7 @@ namespace fim
 		}
 		else redraw=0;
 #endif
+		return 0;
 	}
 
 	void Image::redisplay()
@@ -401,4 +402,4 @@ namespace fim
 	{
 		if(fimg)return make_info(fimg,scale);return NULL;
 	}
-};
+}

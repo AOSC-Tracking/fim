@@ -4,7 +4,8 @@
 	OPEN   BUGS:
 20070129	control 4 crashes the prog ... why ? :)
 20070211	mysterious "open : No such file or directory" warning..
-20070212	with no image in the list, the screen should become black
+20070212	with no image in the list, the screen should become black	
+20070227	(still) to fix the xonsole switching redraw problem
 	FIX:
 #20070121	fix the image browser then
 20070125	fix the string vs variable problem
@@ -14,6 +15,7 @@
 20070211	flex and bison parts should be rewritten
 20070212	fix the command evaluation
 20070216	eliminate image tearing by optimizing svga_show_image
+20070227	make memory-error tolerant..
 	ADD:
 20070217	fix the default /etc/fimrc or better, builtin config!
 20070216	create an installer!
