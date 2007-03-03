@@ -35,6 +35,7 @@ class Image
 	//void auto_scale_();
 	int valid(){return invalid?0:1;}////////!!!!
 	Image(const char *fname_);
+	~Image();
 
 	void pan_up();
 	void pan_down();

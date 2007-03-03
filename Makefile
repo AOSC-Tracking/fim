@@ -7,7 +7,7 @@
 WARNINGS := -Wall -pedantic #-Wextra -pedantic
 GCC=gcc
 #GPP=g++ -fpermissive -fno-default-inline -g
-GPP=g++ -fno-default-inline $(WARNINGS)
+GPP=g++ -fno-default-inline #-g $(WARNINGS)
 LD=ld
 
 ##########################################################
@@ -19,8 +19,15 @@ srcdir	= ./
 -include Make.config
 include $(srcdir)/mk/Variables.mk
 
-#The following flags, if set, enable certain optional features.
-DEFINES=-D FIM_DEFAULT_CONFIG -D FIM_DEFAULT_KEY_CONFIG #-D FIM_NOFB
+# The following flags, if set, enable certain optional features (conditional compiling).
+# remember to issue a make clean before changing these and recompiling..
+DEFINES  :=
+DEFINES  += -D FIM_DEFAULT_CONFIG
+DEFINES  += -D FIM_DEFAULT_KEY_CONFIG
+#DEFINES  += -D FIM_NOFB
+DEFINES  += -D FIM_AUTOCMDS
+DEFINES  += -D FIM_RECORDING
+#DEFINES  += -D FIM_SWITCH_FIXUP	#still bugful 
 
 CFLAGS	 += -DVERSION='"$(VERSION)"' $(DEFINES)
 CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
@@ -180,7 +187,7 @@ install:	all
 	#$(INSTALL_DATA) fbgs.sh.man $(mandir)/man1/fbgs.1
 
 test:
-	@./fim #~/M*s/*g
+	@./fim media/* #~/M*s/*g
 
 #all:  $(OBJS_FIM)
 #fim: $(OBJS_FBI)  $(OBJS_FIM)

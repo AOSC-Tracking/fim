@@ -83,7 +83,7 @@ namespace fim
 		scale_fix_top_left();
 //		sprintf(linebuffer,"scaling (%.0f%%) %s ...", scale*100, fname);
 //		status(linebuffer, NULL);
-		if(simg)free_image(simg);
+		if(simg){free_image(simg);simg=NULL;}
 		if(fimg)
 		{
 			simg = scale_image(fimg,scale);
@@ -397,6 +397,11 @@ namespace fim
 #else
 		return 0;
 #endif
+	}
+	
+	Image::~Image()
+	{
+		free_mem();
 	}
 
 	char* Image::getInfo()

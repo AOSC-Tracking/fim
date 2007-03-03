@@ -502,21 +502,23 @@ void console_switch(int is_busy)
 	case FB_REL_REQ:
 		fb_switch_release();
 	case FB_INACTIVE:
-	visible = 0;///////
+		visible = 0;///////
 	break;
 	case FB_ACQ_REQ:
 		fb_switch_acquire();
 	case FB_ACTIVE:
 		visible = 1;	///////////
-		redraw = 1;
-		ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
+		//redraw = 1;
+		//ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
 		/*
 		 * PROBLEMS : //fb_clear_screen causes tearing!
 		 */
 		//fb_clear_screen();
 	/*
 	 * thanks to the next line, the image is redrawn each time 
-	 * the console is switched!
+	 * the console is switched! 
+	 *
+	 *  UNTRUE !
 	 */
 		//cc.display();
 //	if (is_busy) status("busy, please wait ...", NULL);		

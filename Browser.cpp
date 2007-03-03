@@ -30,18 +30,24 @@ namespace fim
 		 * the first time it should be displayed.
 		 * So, this behaviour is different from reloading..
 		 */
+		/*
+		 *	THIS METHOD TRIGGERS A BUG.
+		 * 
+		 */
 		fim::string c=current();
 		if(image)
 		{
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreRedisplay",c);
+#endif
 			if(image)
 			{
-				//fb_clear_screen();
-				//image->display();
-				image->redisplay();
-				this->display_status(info().c_str(), NULL);
+				image->redisplay();	//THE BUG IS NOT HERE
+				this->display_status(info().c_str(), NULL);//THE BUG IS NOT HERE
 			}
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostRedisplay",c);
+#endif
 		}
 		else cout << "no image object in memory, sorry\n";
 	}
@@ -77,9 +83,13 @@ namespace fim
 		if(image)
 		{
 			fim::string c=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
+#endif
 			if(image)image->pan_up();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
+#endif
 		}
 		return "";
 	}
@@ -92,9 +102,13 @@ namespace fim
 		if(image)
 		{
 			fim::string c=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
+#endif
 			if(image)image->pan_down();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
+#endif
 		}
 		return "";
 	}
@@ -107,9 +121,13 @@ namespace fim
 		if(image)
 		{
 			fim::string c=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
+#endif
 			if(image)image->auto_height_scale();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
+#endif
 		}
 		return "";
 	}
@@ -121,10 +139,14 @@ namespace fim
 		 */
 		if(image)
 		{
+#ifdef FIM_AUTOCMDS
 			fim::string c=current();
 			cc.autocmd_exec("PreScale",c);
+#endif
 			if(image)image->auto_width_scale();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
+#endif
 		}
 		return "";
 	}
@@ -137,9 +159,13 @@ namespace fim
 		if(image)
 		{
 			fim::string c=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
+#endif
 			if(image)image->auto_scale();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
+#endif
 		}
 		return "";
 	}
@@ -152,9 +178,13 @@ namespace fim
 		if(image)
 		{
 			fim::string c=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
+#endif
 			if(image)image->pan_right();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
+#endif
 		}
 		return "";
 	}
@@ -167,9 +197,13 @@ namespace fim
 		if(image)
 		{
 			fim::string c=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
+#endif
 			if(image)image->pan_left();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
+#endif
 		}
 		return "";
 	}
@@ -190,14 +224,18 @@ namespace fim
 		fim::string c=current();
 		if(image)
 		{
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreDisplay",c);
+#endif
 			if(image)
 			{
 				//fb_clear_screen();
 				image->display();
 				this->display_status(info().c_str(), NULL);
 			}
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostDisplay",c);
+#endif
 		}
 		else cout << "no image to display, sorry!";
 		return "";
@@ -211,7 +249,9 @@ namespace fim
 		 * tries to load a new one from the current filename
 		 */
 		fim::string c=current();
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreReload",c);
+#endif
 		if(image) delete image;
 		image = new Image(current().c_str());
 		if(image && ! (image->valid()))
@@ -220,7 +260,9 @@ namespace fim
 			return fim::string("error reloading the file ")
 				+c+fim::string("\n");
 		}
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostReload",c);
+#endif
 		return "";
 	}
 
@@ -231,7 +273,9 @@ namespace fim
 		 */
 		fim::string c=current();
 		if(image) return "";
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreLoad",c);
+#endif
 		image = new Image(current().c_str());
 		if(image && ! (image->valid()))
 		{
@@ -239,7 +283,9 @@ namespace fim
 			return fim::string("error loading the file ")
 				+c+fim::string("\n");
 		}
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostLoad",c);
+#endif
 		return "";
 	}
 
@@ -340,10 +386,14 @@ namespace fim
 		 */
 		fim::string c=current();
 //		cc.autocmd_exec("PreNext",current());
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreNext",c);
+#endif
 		fim::string result=do_next(n);
+#ifdef FIM_AUTOCMDS
 //		cc.autocmd_exec("PostNext",current());
 		cc.autocmd_exec("PostNext",c);
+#endif
 		return "";
 	}
 
@@ -383,9 +433,13 @@ namespace fim
 			//if(g!=-1)
 			{	
 				fim::string c=current();
+#ifdef FIM_AUTOCMDS
 				cc.autocmd_exec("PreGoto",c);
+#endif
 				goto_image(g);
+#ifdef FIM_AUTOCMDS
 				cc.autocmd_exec("PostGoto",c);
+#endif
 			}
 		}
 		return "";
@@ -526,13 +580,17 @@ namespace fim
 		{
 			float factor = (float)cc.getFloatVariable("magnify_factor");
 			fim::string c=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
+#endif
 			if(image)
 			{
 				if(factor) image->magnify(factor);
 				else	image->magnify();
 			}
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
+#endif
 		}
 		return "";
 	}
@@ -547,13 +605,17 @@ namespace fim
 		{
 			float factor = (float)cc.getFloatVariable("reduce_factor");
 			fim::string c=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
+#endif
 			if(image)
 			{
 				if(factor) image->reduce(factor);
 				else	image->reduce();
 			}
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
+#endif
 		}
 		return "";
 	}
@@ -564,9 +626,13 @@ namespace fim
 		 * make the previous image in the list current
 		 */
 		fim::string c=current();
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PrePrev",c);
+#endif
 		fim::string result=do_next(-n);
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostPrev",c);
+#endif
 		return "";
 	}
 }

@@ -182,8 +182,10 @@ namespace fim
 
 	CommandConsole::CommandConsole()
 	{
+#ifdef FIM_RECORDING
 		dont_record_last_action=false;
 		recordMode=false;
+#endif
 		nofb=0;
 		rl::initialize_readline();
 		cycles=0;isinscript=0;
@@ -232,13 +234,17 @@ namespace fim
 		addCommand(new Command(fim::string("sleep" ),fim::string("sleeps for n (default 1) seconds"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("mark" ),fim::string("marks the current file"),this,&CommandConsole::markCurrentFile));
 		addCommand(new Command(fim::string("help"  ),fim::string("provides online help"),this,&CommandConsole::help));
+#ifdef FIM_AUTOCMDS
 		addCommand(new Command(fim::string("autocmd"  ),fim::string("autocommands"),this,&CommandConsole::autocmd));
+#endif
 		addCommand(new Command(fim::string("system"  ),fim::string("system() invocation"),this,&CommandConsole::system));
+#ifdef FIM_RECORDING
 		addCommand(new Command(fim::string("start_recording"  ),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));
 		addCommand(new Command(fim::string("stop_recording"  ),fim::string("stops recording of commands"),this,&CommandConsole::stop_recording));
 		addCommand(new Command(fim::string("dump_record_buffer"  ),fim::string("dumps on screen record buffer"),this,&CommandConsole::dump_record_buffer));
 		addCommand(new Command(fim::string("execute_record_buffer"  ),fim::string("executes the record buffer"),this,&CommandConsole::execute_record_buffer));
 		addCommand(new Command(fim::string("repeat_last"  ),fim::string("repeats the last action"),this,&CommandConsole::repeat_last));
+#endif
 		addCommand(new Command(fim::string("variables"  ),fim::string("displayed the associated variables"),this,&CommandConsole::variables_list));
 		addCommand(new Command(fim::string("dump_key_codes"  ),fim::string("dumps the key codes"),this,&CommandConsole::dump_key_codes));
 		/*
@@ -422,9 +428,13 @@ namespace fim
 		if(bindings[c]!="")
 		{
 			fim::string cf=current();
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreInteractiveCommand",cf);
+#endif
 			execute(getBoundAction(c).c_str(),0);
+#ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostInteractiveCommand",cf);
+#endif
 		}
 	}
 
@@ -583,7 +593,6 @@ namespace fim
 		int c;
 
 		//exitBinding = 10;
-
 		if ( exitBinding == 0 ) return 1;	/* any key triggers an exit */
 
 		c = catchInteractiveCommand(seconds);
@@ -639,17 +648,20 @@ namespace fim
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		
 		int c,r;//char buf[64];
-		r=read(0,&c,4);
+		//r=read(0,&c,4);
+		r=read(0,&c,1); if(r>0&&c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
 		tcsetattr (0, TCSAFLUSH, &sattr);
 
-		if( r==0 ) return -1;	/*	-1 means 'no character pressed */
+		if( r<=0 ) return -1;	/*	-1 means 'no character pressed	*/
 
-		return c;/*  we return the read key */
+		return c;		/*	we return the read key		*/
 	}
 
 	void CommandConsole::executionCycle()
 	{
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreExecutionCycle","<>");
+#endif
 	 	while(1)
 		{
 			cycles++;
@@ -682,14 +694,22 @@ namespace fim
 					}*/
 
 					fim::string cf=current();
+#ifdef FIM_AUTOCMDS
 					cc.autocmd_exec("PreInteractiveCommand",cf);
+#endif
+#ifdef FIM_RECORDING
 					if(recordMode)record_action(fim::string(rl));
+#endif
 					ic=0; // we 'exit' from the console for a while
 					execute(rl,1);	//execution of the command line with history
 					ic=1;
 //					execute("redisplay;",0);	//execution of the command line with history
+#ifdef FIM_AUTOCMDS
 					cc.autocmd_exec("PostInteractiveCommand",cf);
+#endif
+#ifdef FIM_RECORDING
 					memorize_last(rl);
+#endif
 					//p.s.:note that current() returns not necessarily the same in 
 					//the two autocmd_exec() calls..
 				}
@@ -698,7 +718,7 @@ namespace fim
 			}
 			else
 			{
-				int c;char buf[64];
+				int c,r;char buf[64];
 				tty_raw();
 //				int c=getchar();
 //				int c=fgetc(stdin);
@@ -711,8 +731,42 @@ namespace fim
 				 *	the keyboard is needed!.
 				 */
 				c=0;
-//				read(0,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
-				if(read(0,&c,4)>0)	//up to four chars should suffice
+				/*
+				 * patch: the following read blocks the program even when switching console
+				 */
+				//r=read(0,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
+				/*
+				 * so the next code shoul circumvent this behaviour!
+				 */
+				
+#ifdef  FIM_SWITCH_FIXUP
+				/*
+				 * THIS CODE DOES NOT WORK AS OF NOW
+				 */
+				struct termios tattr, sattr;
+				int   seconds;
+				seconds = 1;
+				//we set the terminal in raw mode.
+				//fcntl(0,F_GETFL,&saved_fl);
+				tcgetattr (0, &sattr);
+
+				//fcntl(0,F_SETFL,O_BLOCK);
+				memcpy(&tattr,&sattr,sizeof(struct termios));
+				tattr.c_lflag &= ~(ICANON|ECHO);
+				tattr.c_cc[VMIN]  = 0;
+				tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
+				tcsetattr (0, TCSAFLUSH, &tattr);
+				c=catchInteractiveCommand(1);//if(c==-1){r=0;c=0;}else r=1;	// 1 second read wait
+				r=1;
+				//cout << " cycles : " << cycles << "\n";
+				if( r==0 && switch_last != fb_switch_state ){console_switch(1);c=0;r=0;}
+				//if(   switch_last != fb_switch_state ){console_switch(1);}
+				tcsetattr (0, TCSAFLUSH, &sattr);
+#else
+				//if(read(0,&c,4)>0)	//up to four chars should suffice
+				r=read(0,&c,4);	//up to four chars should suffice
+#endif
+				if(r>0)
 				{
 //					cout<< "got:           "<<(char*)c<<"(   "  <<c<<")"<<"\n";
 					if(getIntVariable("verbose_keys"))
@@ -728,26 +782,32 @@ namespace fim
 					else
 					{
 						this->executeBinding(c);
+#ifdef FIM_RECORDING
 						if(recordMode) record_action(getBoundAction(c));
 						memorize_last(getBoundAction(c));
+#endif
 					}
 				}else
 				{
 					//cout<< "error reading key from keyboard\n";
 					/*
 					 * 	This happens when console switching, too.
+					 * 	( switching out of the current! )
 					 * 	So a redraw after is not bad.
 					 * 	But it should work when stepping into the console,
 					 * 	not out..
-					 *
+					 *	
 					 * 	PLACE A MECHANISM HERE..
+					 * 20070303 THIS IS EVIL
 					 */
-					//FIX! (this shoul hack the console switch problem)
+					//FIX! (this should hack the console switch problem)
 					//browser.display();
 				}
 			}
 		}
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostExecutionCycle","<>");
+#endif
 	}
 
 	void CommandConsole::exit(int i)
@@ -898,6 +958,22 @@ namespace fim
 		return inConsole() || this->getIntVariable("verbose");
 	}
 
+	fim::string CommandConsole::get_variables_list()
+	{
+		/*
+		 * FIX ME
+		 */
+		fim::string acl;
+		std::map<fim::string,fim::Var>::const_iterator vi;
+		for( vi=variables.begin();vi!=variables.end();++vi)
+		{
+			acl+=((*vi).first);
+			acl+=" ";
+		}
+		return acl;
+	}
+
+#ifdef FIM_AUTOCMDS
 	std::vector<fim::string> CommandConsole::autocmds_sub_list(const fim::string &event)
 	{
 		/*
@@ -913,21 +989,6 @@ namespace fim
 			acl+=" ";
 		}*/
 		return sub_list;
-	}
-
-	fim::string CommandConsole::get_variables_list()
-	{
-		/*
-		 * FIX ME
-		 */
-		fim::string acl;
-		std::map<fim::string,fim::Var>::const_iterator vi;
-		for( vi=variables.begin();vi!=variables.end();++vi)
-		{
-			acl+=((*vi).first);
-			acl+=" ";
-		}
-		return acl;
 	}
 
 	fim::string CommandConsole::autocmds_list()
@@ -1050,14 +1111,6 @@ namespace fim
 		return "";
 	}
 
-	void CommandConsole::display()
-	{
-		/*
-		 * quick and dirty display function
-		 */
-		browser.display();
-	}
-
 	void CommandConsole::autocmd_push_stack(const autocmds_frame_t& frame)
 	{
 		//WARNING : ERROR DETECTION IS MISSING
@@ -1078,6 +1131,7 @@ namespace fim
 		 */
 		return  autocmds_stack.find(frame)!=autocmds_stack.end();
 	}
+#endif
 	
 	bool CommandConsole::regexp_match(const char*s, const char*r)const
 	{
@@ -1171,4 +1225,14 @@ namespace fim
 		}
 		return acl;
 	}
+
+	void CommandConsole::display()
+	{
+		/*
+		 * quick and dirty display function
+		 */
+		browser.display();
+	}
+
 }
+

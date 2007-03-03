@@ -49,18 +49,21 @@ class CommandConsole
 	int	nofb;					//FIX ME
 	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
 
+#ifdef FIM_AUTOCMDS
 	/*
 	 * the mapping structure for autocommands (<event,pattern,action>)
 	 */
 	typedef std::map<fim::string,std::vector<fim::string> >  autocmds_p_t;	//pattern - commands
 	typedef std::map<fim::string,autocmds_p_t >  autocmds_t;		//autocommand - pattern - commands
 	autocmds_t autocmds;
+#endif
 	
 	/*
 	 * the last executed action (being a command line or key bounded command issued)
 	 */
 	fim::string last_action;
 	
+#ifdef FIM_RECORDING
 	bool recordMode;//WORKON...
 	typedef std::pair<fim::string,int> recorded_action_t;
 	typedef std::vector<recorded_action_t > recorded_actions_t;
@@ -143,6 +146,7 @@ class CommandConsole
 		//recorded_actions.push_back(recorded_action_t(cmd,0));
 		recorded_actions.push_back(recorded_action_t(sanitize_action(cmd),0));
 	}
+#endif
 
 	public:
 
@@ -209,16 +213,20 @@ class CommandConsole
 	void quit();
 	int  drawOutput();
 	int  isInScript(){return isinscript;}
+#ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
+#endif
 	int current_image (){return browser.current_image ();}
 	int current_images(){return browser.current_images();}
 	int catchLoopBreakingCommand(int seconds=0);
 	private:
 	int catchInteractiveCommand(int seconds=0);
+#ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname);
 	void autocmd_push_stack(const autocmds_frame_t& frame);
 	void autocmd_pop_stack(const autocmds_frame_t& frame);
 	int  autocmd_in_stack(const autocmds_frame_t& frame);
+#endif
 	fim::string current()const{ return browser.current();}
 	bool regexp_match(const char*s, const char*r)const;
 	fim::string get_variables_list();
