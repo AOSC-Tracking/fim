@@ -1,3 +1,4 @@
+/* $Id$ */
 
 #include "fim.h"
 
@@ -180,7 +181,7 @@ namespace fim
 	}
 
 	CommandConsole::CommandConsole()
-	{	
+	{
 		dont_record_last_action=false;
 		recordMode=false;
 		nofb=0;
@@ -414,6 +415,9 @@ namespace fim
 	{
 		/*
 		 *	Executes the command eventually bound to c.
+		 *	Doesn't log anything.
+		 *	Just interpretates and executes the binding.
+		 *	If the binding is inexistent, ignores silently the error.
 		 */
 		if(bindings[c]!="")
 		{
@@ -507,9 +511,24 @@ namespace fim
 		}
 		if(cmd=="sleep")
 		{
+			int seconds;
 			//sleeping for an amount of time specified in seconds.
-			if(args.size()>0)sleep(atoi(args[0].c_str()));
-			else sleep(1); return "";
+			
+			if(args.size()>0) seconds=atoi(args[0].c_str());
+			else seconds=1;
+#if 0
+				sleep(seconds);
+#else
+				/*
+				 * WARNING : if the user press some key, we want this 
+				 * to trigger some command.
+				 * But beware, because this forces the sleep to reoccur!
+				 * FIXME
+				 */
+				//while(seconds>0 && catchLoopBreakingCommand(seconds--))sleep(1);
+				catchLoopBreakingCommand(seconds);
+#endif
+			return "";
 		}
 		if(cmd=="alias")
 		{
@@ -544,15 +563,63 @@ namespace fim
 		return "If you see this string, please report it to the program maintainer :P\n";
 	}
 
-	int CommandConsole::catchInteractiveCommand()
+	int CommandConsole::catchLoopBreakingCommand(int seconds)
 	{
-		/*
+		/*	
+		 *	This method is invoked during non interactive loops to
+		 *	provide a method for interactive loop breaking.
+		 *
+		 *	The provided mechanism allows the user to press any key
+		 *	during the loop, and the loop will continue its execution,
+		 *	unless the pressed key is not exitBinding.
+		 *
+		 *	If not, and the key is bound to some action; this action
+		 *	is executed.
+		 *
+		 *	FIXME : this could nest while loops !
+		 *
+		 *	returns 0 if no command was received.
+		 */
+		int c;
+
+		//exitBinding = 10;
+
+		if ( exitBinding == 0 ) return 1;	/* any key triggers an exit */
+
+		c = catchInteractiveCommand(seconds);
+	//	while((c = catchInteractiveCommand(seconds))!=-1)
+		while(c!=-1)
+		{
+			/* while characters read */
+			//if( c == -1 ) return 0;	/* no chars read */
+			if( c != exitBinding )  /* some char read */
+			{
+				/*
+				 * we give the user chance to issue commands
+				 * and some times to realize this.
+				 *
+				 * is it a desirable behaviour ?
+				 */
+				executeBinding(c);
+				c = catchInteractiveCommand(1);
+//				return 0;/* could be a command key */
+			}
+			if(c==exitBinding) return 1; 		/* the user hit the exitBinding key */
+		}
+		return 0; 		/* no chars read  */
+
+	}
+		
+	int CommandConsole::catchInteractiveCommand(int seconds)
+	{
+		/*	
+		 *
 		 *	THIS DOES NOT WORK, BECAUSE IT IS A BLOCKING READ.
-		 *	MAKE THIS READ UNBLOCKING AN UNCOMMENT.
+		 *	MAKE THIS READ UNBLOCKING AN UNCOMMENT. <- ?
 		 *	
 		 *	FIX ME
 		 *
-		 *	note : this call should 'steal' 1/10 of second..
+		 *	NOTE : this call should 'steal' circa 1/10 of second..
 		 */
 		fd_set          set;
 		FD_SET(0, &set);
@@ -563,18 +630,21 @@ namespace fim
 		    
 	//	fcntl(0,F_GETFL,&saved_fl);
 		tcgetattr (0, &sattr);
-		    
+
 		//fcntl(0,F_SETFL,O_BLOCK);
 		memcpy(&tattr,&sattr,sizeof(struct termios));
 		tattr.c_lflag &= ~(ICANON|ECHO);
-		tattr.c_cc[VMIN] = 0;
-		tattr.c_cc[VTIME] = 1;
+		tattr.c_cc[VMIN]  = 0;
+		tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		
 		int c,r;//char buf[64];
 		r=read(0,&c,4);
 		tcsetattr (0, TCSAFLUSH, &sattr);
-		return r;
+
+		if( r==0 ) return -1;	/*	-1 means 'no character pressed */
+
+		return c;/*  we return the read key */
 	}
 
 	void CommandConsole::executionCycle()

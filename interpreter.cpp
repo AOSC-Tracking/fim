@@ -1,3 +1,4 @@
+/* $Id$ */
 #include <cstdio>
 #include <map>
 #include "lex.h"
@@ -53,7 +54,7 @@ int ex(nodeType *p)
 		case typeOpr:
 		switch(p->opr.oper)
 		{
-		case WHILE: while(ex(p->opr.op[0]) && cc.catchInteractiveCommand()==0) {ex(p->opr.op[1]);} return 0;
+		case WHILE: while(ex(p->opr.op[0]) && (cc.catchLoopBreakingCommand(0)==0)) {ex(p->opr.op[1]);} return 0;
 		case IF: if (ex(p->opr.op[0])) ex(p->opr.op[1]);
 		else if (p->opr.nops > 2) ex(p->opr.op[2]); return 0;
 		case PRINT: if(p->opr.op[0]->type!=stringCon)
@@ -75,7 +76,7 @@ int ex(nodeType *p)
 	          {
 			int times=ex(p->opr.op[1]);
 			if(times<0)return -1;
-			for (int i=0;i<times && cc.catchInteractiveCommand()==0;++i)
+			for (int i=0;i<times && cc.catchLoopBreakingCommand(0)==0;++i)
 			{
 				ex(p->opr.op[0]);
 			}

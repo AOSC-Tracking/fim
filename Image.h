@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef IMAGE_FBVI_H
 #define IMAGE_FBVI_H
 #include "fim.h"

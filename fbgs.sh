@@ -1,7 +1,9 @@
 #!/bin/bash
+# $Id$
 
-#this is a modified version of the original fbgs script,by Gerd Knorr
-#and is capable of displaying pdf, eps, ps, and dvi files
+# This is a modified version of the original fbgs script,by Gerd Knorr
+# and is capable of displaying pdf, eps, ps, and dvi files.
+# Now enhanced for viewing .cbr and .cbz files :)!
 #
 #20060917	modified by dez
 #20061229	added .cbr and .cbz support (on file extension basis, not detection!)

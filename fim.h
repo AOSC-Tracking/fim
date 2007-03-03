@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef FBVI_H
 #define FBVI_H
 /*
@@ -26,6 +27,7 @@
 //
 #include <termios.h>
 #include <fcntl.h>
+#include <time.h>
 #include "common.h"
 //#include <unistd.h>
 //

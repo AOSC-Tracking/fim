@@ -1,3 +1,4 @@
+/* $Id$ */
 typedef enum { intCon, floatCon, typeOpr, stringCon,cmdId,vId } nodeEnum;
 /* constants */
 typedef struct {

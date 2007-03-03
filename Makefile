@@ -1,3 +1,4 @@
+# $Id$
 
 # All of this is in balance as an elephant on thin ice..
 # it's horrible.
@@ -24,6 +25,7 @@ DEFINES=-D FIM_DEFAULT_CONFIG -D FIM_DEFAULT_KEY_CONFIG #-D FIM_NOFB
 CFLAGS	 += -DVERSION='"$(VERSION)"' $(DEFINES)
 CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
 LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lFS -lz
+#-lrt (realtime) cannot be used :(
 
 OBJS_FBI := \
 	src/fbi.o src/fbtools.o src/fs.o src/fb-gui.o \
@@ -202,13 +204,14 @@ report:
 exec:	test
 
 edit:
-	vim fim.cpp +':split fim.h'
+	$(EDITOR) fim.cpp +':split fim.h' # Vim ! :)
 
 .PHONY:
 	@true
 
 wc:
-	wc $(FIM) 	# missing headers..
+	wc *.cpp *.h yacc.ypp lex.lex
+	@#wc $(FIM) # missing headers..
 
 #clean:
 #	@ make md5

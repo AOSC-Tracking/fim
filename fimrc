@@ -104,9 +104,11 @@ autocmd "PostInteractiveCommand"   "" "if(fresh){display;}";
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};";
 bind 'N' 'next10';
 alias "endless_slideshow" "while(1){next;display;sleep '1';};";
+alias "bookview" "while(1){display;sleep '2';scrolldown;};";
+alias "comicview" "while(1){display;sleep '1';scrolldown;};";
 alias "pornview" "echo 'press any key repeatedly to terminate' ;endless_slideshow;";
-bind "C-p" "pornview";
-
+bind  "C-p" "pornview";
+bind  "C-b" "bookview";
 #autocmd "PreExecutionCycle" "" "redisplay;";
 
 autocmd "PreExecutionCycle" "" "reload;";
@@ -137,7 +139,6 @@ alias "toggleAutoScale" "auto_scale_v=1-auto_scale_v;autowidth=0;reload;";
 alias "toggleAutoWidth" "autowidth=1-autowidth;auto_scale_v=0;reload;";
 bind 'C-w'   'toggleAutoWidth;';
 bind 'C-a' "toggleAutoScale;";
-bind 'C-b' "toggleAutoScale;";
 bind 'C-c' "toggleAutoScale;";
 bind 'A'   "toggleAutoScale;";
 toggleVerbosity;

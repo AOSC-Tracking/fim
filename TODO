@@ -6,6 +6,7 @@
 20070211	mysterious "open : No such file or directory" warning..
 20070212	with no image in the list, the screen should become black	
 20070227	(still) to fix the xonsole switching redraw problem
+20070303	introduced bugs concerning commands nested into loops :P
 	FIX:
 #20070121	fix the image browser then
 20070125	fix the string vs variable problem
@@ -16,6 +17,11 @@
 20070212	fix the command evaluation
 20070216	eliminate image tearing by optimizing svga_show_image
 20070227	make memory-error tolerant..
+20070303	fix rar and zip dependencies in Makefiles and such for fbgs.sh
+20070303	see if while-nesting is a real danger!
+20070303	realtime clock... -lrt cannot  be used with FIM
+20070303	update the while construct documentation and fix the while command execution bugs 
+20070303	add an interface for setting exitBinding (now Enter!)
 	ADD:
 20070217	fix the default /etc/fimrc or better, builtin config!
 20070216	create an installer!
@@ -42,3 +48,5 @@
 20070210	add an interface to modify key bindings and keycode bindings.
 20070210	there are memory leaks probably, or some memory corruption. the 'pornview' alias at long hangs the computer.
 20070210	fix properly the file parser (comments problems!) and max script filelength limit
+	TIPS
+20070302	use __FUNCTION__ : is not ANSI, but GCC

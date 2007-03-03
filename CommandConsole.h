@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef CC_FBVI_H
 #define CC_FBVI_H
 #include "fim.h"
@@ -46,7 +47,7 @@ class CommandConsole
 	bool	ic;					//in console
 	int	cycles,isinscript;			//FIX ME
 	int	nofb;					//FIX ME
-
+	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
 
 	/*
 	 * the mapping structure for autocommands (<event,pattern,action>)
@@ -211,8 +212,9 @@ class CommandConsole
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	int current_image (){return browser.current_image ();}
 	int current_images(){return browser.current_images();}
-	int catchInteractiveCommand();
+	int catchLoopBreakingCommand(int seconds=0);
 	private:
+	int catchInteractiveCommand(int seconds=0);
 	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname);
 	void autocmd_push_stack(const autocmds_frame_t& frame);
 	void autocmd_pop_stack(const autocmds_frame_t& frame);

@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef STRING_FBVI_H
 #define STRING_FBVI_H
 namespace fim

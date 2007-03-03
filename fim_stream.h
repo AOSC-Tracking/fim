@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef FBVI_STREAM_FBVI_H
 #define FBVI_STREAM_FBVI_H
 #include "fim.h"

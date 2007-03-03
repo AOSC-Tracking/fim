@@ -1,3 +1,4 @@
+/* $Id$ */
 #include "fim.h"
 
 void trec(char *str,const char *f,const char*t)

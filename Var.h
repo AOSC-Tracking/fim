@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef VAR_FBVI_H
 #define VAR_FBVI_H
 

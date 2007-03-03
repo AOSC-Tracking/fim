@@ -1,3 +1,4 @@
+/* $Id$ */
 /*
  * The following code contains key bindings and aliases definitions
  * which make up a first usable configuration for FIM.
@@ -187,6 +188,9 @@
 		key_bindings["First"]=2117163803;
 		key_bindings["Last"] =2117360411;
 		key_bindings["Tab"] =9;
+		key_bindings["Any"] =0;	/*	EXPERIMENTAL	*/
+
+		exitBinding = key_bindings["Enter"];	/*  Enter will terminate loops */
 //		key_bindings[" "]=' ';
 //		key_bindings["."]='.';
 //		key_bindings[","]=',';

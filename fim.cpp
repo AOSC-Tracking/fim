@@ -1,3 +1,4 @@
+/* $Id$ */
 
 #include "fim.h"
 #include <signal.h>

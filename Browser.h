@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef BROWSER_FBVI_H
 #define BROWSER_FBVI_H
 #include "fim.h"

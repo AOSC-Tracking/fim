@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef COMMAND_FBVI_H
 #define COMMAND_FBVI_H
 #include "fim.h"
