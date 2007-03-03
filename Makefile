@@ -4,7 +4,7 @@
 # it's horrible.
 # 20070227 ..but i am fixing this :)
 
-WARNINGS := -Wall -pedantic #-Wextra -pedantic
+#WARNINGS := -Wall -pedantic #-Wextra -pedantic
 GCC=gcc
 #GPP=g++ -fpermissive -fno-default-inline -g
 GPP=g++ -fno-default-inline #-g $(WARNINGS)
