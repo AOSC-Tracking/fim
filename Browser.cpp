@@ -113,6 +113,54 @@ namespace fim
 		return "";
 	}
 
+	fim::string Browser::scale_increment(const std::vector<fim::string> &args)
+	{
+		/*
+		 * scale the image 
+		 */
+		double deltascale;
+		if(args.size()==0)return "";
+		deltascale=atof(args[0].c_str());
+		if(deltascale==0.0)return "";
+		if(strstr(args[0].c_str(),"%"))deltascale*=.01;
+		if(image)
+		{
+			fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PreScale",c);
+#endif
+			if(image)image->scale_increment(deltascale);
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostScale",c);
+#endif
+		}
+		return "";
+	}
+
+	fim::string Browser::scale(const std::vector<fim::string> &args)
+	{
+		/*
+		 * scale the image 
+		 */
+		double newscale;
+		if(args.size()==0)return "";
+		newscale=atof(args[0].c_str());
+		if(newscale==0.0)return "";
+		if(strstr(args[0].c_str(),"%"))newscale*=.01;
+		if(image)
+		{
+			fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PreScale",c);
+#endif
+			if(image)image->setscale(newscale);
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostScale",c);
+#endif
+		}
+		return "";
+	}
+	
 	fim::string Browser::auto_height_scale(const std::vector<fim::string> &args)
 	{
 		/*

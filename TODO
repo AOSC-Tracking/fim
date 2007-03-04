@@ -34,6 +34,26 @@
 20070201	cwd,ls,pwd,stat,file...
 20070201	meccanismo --norc, --rc=..
 20070208	when you find time, rewrite the parser in full C++
+20070303	IDEAS :
+		autocmd =~
+		load cfg, save cfg
+		flip=yes|no
+		scale=i|i:i|:i|i:|
+		fit  =width|height|none|image|min|max
+		center=t|b|l|r|tl|tr|bl|br|center
+		orientation=90|... [cw|ccw] | flip
+		mirror=yes|no
+		persistent_options= word*|'*'
+		transient_options = word*
+		logfile=...
+		debugfile=..
+		cwd=word
+		negative=..
+		interpolator=..
+		options_style=stacked|trasient|permanent_save	
+			function : 
+		[n]%[r|l]
+		+|-n[%]
 	DATES:
 20061223	inception
 20070201	vedi se si possono usare control e shift e frecce e scala asimmetrica e scopri 

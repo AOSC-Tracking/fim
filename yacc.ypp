@@ -71,11 +71,17 @@ stmt:
 	| PRINT STRING { $$ = opr(PRINT, 1, scon($2)); }
 //	| STRING { $$ = scon($1); }
 //	| IDENTIFIER { $$ = xscon($1); }
-	| INTEGER IDENTIFIER { $$ = opr('r',2,opr('x',1,scon($2)),con($1)); }
+	| INTEGER IDENTIFIER { if($1>0){$$ = opr('r',2,opr('x',1,scon($2)),con($1)); }}
 	| IDENTIFIER      { $$ = opr('x',1,scon($1));     }
 //	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,dupstr("\"ciao\"")))); }
 //	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr(3))))); }
 //	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,scon(dupstr("ciao"))))); }
+	| '+' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
+	| INTEGER'%'{if($1>0)  {$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
+//	| '-' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+//	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
 	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
 //	| '$'             { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
 //	| '^'             { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }

@@ -37,8 +37,10 @@ class Browser
 	fim::string goto_image(int n);
 	fim::string pan_up(const std::vector<fim::string> &args);
 	fim::string pan_down(const std::vector<fim::string> &args);
+	fim::string scale_increment(const std::vector<fim::string> &args);
 	fim::string auto_scale(const std::vector<fim::string> &args);
 	fim::string auto_width_scale(const std::vector<fim::string> &args);
+	fim::string scale(const std::vector<fim::string> &args);
 	fim::string auto_height_scale(const std::vector<fim::string> &args);
 	fim::string pan_right(const std::vector<fim::string> &args);
 	fim::string pan_left(const std::vector<fim::string> &args);

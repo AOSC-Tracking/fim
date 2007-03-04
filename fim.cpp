@@ -32,6 +32,21 @@ static char * command_generator (const char *text,int state);
 
 /*
  *	Allocation of a small string for storing the 
+ *	representation of a double.
+ */
+char * dupnstr (double n)
+{
+	//allocation of a single string
+	char *r = (char*) malloc (16);
+	//FIX ME
+	if(!r){/*assert(r);*/cc.quit();}
+	sprintf(r,"%f",n);
+	return (r);
+}
+
+
+/*
+ *	Allocation of a small string for storing the 
  *	representation of an integer.
  */
 char * dupnstr (int n)

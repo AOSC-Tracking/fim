@@ -79,6 +79,7 @@ void initialize_readline ();
 
 
 char * dupstr (const char* s);
+char * dupnstr (double n);
 char * dupnstr (int n);
 namespace fim
 {

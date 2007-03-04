@@ -51,6 +51,8 @@ class Image
 	int onTop();
 	void auto_width_scale();
 	void auto_height_scale();
+	int setscale(double ns){newscale=ns;rescale();return 0;}
+	int scale_increment(double ds){if(scale+ds>0.0)newscale=scale+ds;rescale();return 0;}
 	private:
 	void reset();
 	void scale_fix_top_left();
