@@ -70,6 +70,7 @@ namespace fim
 	    	if(!img)invalid=1;
 	    	if(!img)return -1;
 	    	if(invalid)return -1;//IN CASE OF MEMORY PROBLEMS
+		if(tiny() && newscale<scale){newscale=scale;return 0;}
 #ifndef FIM_NOFB
 		if(cc.noFrameBuffer())return 0;
 		//FIX UPPER MEMORY CONSUMPTION LIMIT...
@@ -83,10 +84,26 @@ namespace fim
 		scale_fix_top_left();
 //		sprintf(linebuffer,"scaling (%.0f%%) %s ...", scale*100, fname);
 //		status(linebuffer, NULL);
-		if(simg){free_image(simg);simg=NULL;}
+
+//		if(simg){free_image(simg);simg=NULL;}
 		if(fimg)
 		{
-			simg = scale_image(fimg,scale);
+			/*
+			 * In case of memory allocation failure, we would
+			 * like to recover the current image  :) . 
+			 *
+			 * Here it would be nice to add some sort of memory manager 
+			 * keeping score of copies and ... too complicated ...
+			 */
+			struct ida_image *backup_img=simg;
+			simg  = scale_image(fimg,scale);
+			if(!simg)
+			{
+				simg=backup_img;
+				status("rescaling failed (insufficient memory!)", getInfo());
+				sleep(1);	//just to give a glimpse..
+			}
+			else      free_image(backup_img);
 			img = simg;
 			redraw=1;
 		}

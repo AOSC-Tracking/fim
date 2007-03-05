@@ -78,6 +78,8 @@ stmt:
 //	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,scon(dupstr("ciao"))))); }
 	| '+' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
 	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| '*' FLOAT   { $$ = opr('x',2,scon(dupstr("scale_multiply")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
+	| '*' INTEGER { $$ = opr('x',2,scon(dupstr("scale_multiply")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
 	| FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
 	| INTEGER'%'{if($1>0)  {$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
 //	| '-' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }

@@ -53,10 +53,11 @@ class Image
 	void auto_height_scale();
 	int setscale(double ns){newscale=ns;rescale();return 0;}
 	int scale_increment(double ds){if(scale+ds>0.0)newscale=scale+ds;rescale();return 0;}
+	int scale_multiply(double  sm){if(scale*sm>0.0)newscale=scale*sm;rescale();return 0;}
 	private:
 	void reset();
 	void scale_fix_top_left();
-
+	int tiny(){if(!img)return 1; return ( img->i.width<=1 || img->i.height<=1 );}
 	int rescale();
 	void load(const char *fname_);
 	void free_mem();

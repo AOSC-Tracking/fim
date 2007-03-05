@@ -22,6 +22,7 @@
 20070303	realtime clock... -lrt cannot  be used with FIM
 20070303	update the while construct documentation and fix the while command execution bugs 
 20070303	add an interface for setting exitBinding (now Enter!)
+20070305	i am not sure the scale_image security patch is complete.
 	ADD:
 20070217	fix the default /etc/fimrc or better, builtin config!
 20070216	create an installer!

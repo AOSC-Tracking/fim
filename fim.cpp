@@ -536,7 +536,7 @@ void console_switch(int is_busy)
 	 *  UNTRUE !
 	 */
 		//cc.display();
-//	if (is_busy) status("busy, please wait ...", NULL);		
+	if (is_busy) status("busy, please wait ...", NULL);		
 	break;
 	default:
 	break;

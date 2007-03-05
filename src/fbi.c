@@ -623,6 +623,7 @@ scale_image(struct ida_image *src, float scale)
     unsigned int y;
 
     dest = malloc(sizeof(*dest));
+    /* dez: */ if(!dest)return NULL;
     memset(dest,0,sizeof(*dest));
     memset(&rect,0,sizeof(rect));
     memset(&p,0,sizeof(p));
@@ -637,6 +638,7 @@ scale_image(struct ida_image *src, float scale)
     
     data = desc_resize.init(src,&rect,&dest->i,&p);
     dest->data = malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
 	if (switch_last != fb_switch_state)
 	    console_switch(1);

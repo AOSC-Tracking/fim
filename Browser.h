@@ -38,6 +38,7 @@ class Browser
 	fim::string pan_up(const std::vector<fim::string> &args);
 	fim::string pan_down(const std::vector<fim::string> &args);
 	fim::string scale_increment(const std::vector<fim::string> &args);
+	fim::string scale_multiply(const std::vector<fim::string> &args);
 	fim::string auto_scale(const std::vector<fim::string> &args);
 	fim::string auto_width_scale(const std::vector<fim::string> &args);
 	fim::string scale(const std::vector<fim::string> &args);
@@ -70,6 +71,7 @@ class Browser
 	fim::string remove(const std::vector<fim::string> &args);
 	fim::string info(const std::vector<fim::string> &args);
 	fim::string scrolldown(const std::vector<fim::string> &args);
+	fim::string scrollforward(const std::vector<fim::string> &args);
 	fim::string info();
 	std::ostream& print(std::ostream &os)const;
 	void redisplay();

@@ -134,6 +134,30 @@ namespace fim
 		return "";
 	}
 
+	fim::string Browser::scale_multiply(const std::vector<fim::string> &args)
+	{
+		/*
+		 * scale the image 
+		 */
+		double multiscale;
+		if(args.size()==0)return "";
+		multiscale=atof(args[0].c_str());
+		if(multiscale==0.0)return "";
+		if(image)
+		{
+			fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PreScale",c);
+#endif
+			status("please wait while rescaling...", image?image->getInfo():"*");
+			if(image)image->scale_multiply(multiscale);
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostScale",c);
+#endif
+		}
+		return "";
+	}
+	
 	fim::string Browser::scale_increment(const std::vector<fim::string> &args)
 	{
 		/*
@@ -150,6 +174,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
+			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->scale_increment(deltascale);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -174,6 +199,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
+			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->setscale(newscale);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -193,6 +219,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
+			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->auto_height_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -212,6 +239,7 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PreScale",c);
 #endif
+			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->auto_width_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -231,6 +259,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
+			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->auto_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -306,7 +335,8 @@ namespace fim
 			cc.autocmd_exec("PostDisplay",c);
 #endif
 		}
-		else cout << "no image to display, sorry!";
+		else{ cout << "no image to display, sorry!";
+		status("no image loaded.", "*");}
 		return "";
 	}
 
@@ -322,6 +352,7 @@ namespace fim
 		cc.autocmd_exec("PreReload",c);
 #endif
 		if(image) delete image;
+		status("please wait while reloading...", "*");
 		image = new Image(current().c_str());
 		if(image && ! (image->valid()))
 		{
@@ -345,6 +376,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreLoad",c);
 #endif
+		status("please wait while loading...", "*");
 		image = new Image(current().c_str());
 		if(image && ! (image->valid()))
 		{
@@ -567,6 +599,28 @@ namespace fim
 		return "";
 	}
 
+	fim::string Browser::scrollforward(const std::vector<fim::string> &args)
+	{
+		/*
+		 * scrolls the image as it were a book :)
+		 *
+		 * FIX ME
+		 */
+		if(image)
+		{
+			if(image->onRight() && image->onBottom())
+				next();
+			else
+			if(image->onRight())
+			{
+				image->pan_down();
+				while(!(image->onLeft()))image->pan_left();
+			}
+			else image->pan_right();
+		}
+		return "";
+	}
+
 	fim::string Browser::scrolldown(const std::vector<fim::string> &args)
 	{
 		/*
@@ -671,6 +725,7 @@ namespace fim
 #endif
 			if(image)
 			{
+				status("please wait while rescaling...", image?image->getInfo():"*");
 				if(factor) image->magnify(factor);
 				else	image->magnify();
 			}
@@ -696,6 +751,7 @@ namespace fim
 #endif
 			if(image)
 			{
+				status("please wait while rescaling...", image?image->getInfo():"*");
 				if(factor) image->reduce(factor);
 				else	image->reduce();
 			}
