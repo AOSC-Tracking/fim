@@ -64,7 +64,9 @@ UNCBR="rar x"                   # suits for Alexander Roshal's RAR 3.51
 while [[ "$1" != "" ]];do
 	f="$1";shift
 [[ "$f" =~ \\.cbr$ ]] && ( $UNCBR "$f"    "$DIR"  ) 
+[[ "$f" =~ \\.rar$ ]] && ( $UNCBR "$f"    "$DIR"  ) 
 [[ "$f" =~ \\.cbz$ ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+[[ "$f" =~ \\.zip$ ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
 ###############################################################################
 ##		HANDLING OF DVI,PS AND PDF FILES
 ###############################################################################
@@ -101,8 +103,10 @@ if test "$pages" -eq "0"; then
 fi
 fi
 done
-$FBI $fbiopts -P $DIR/*
 # show pages
+$FBI $fbiopts -P -- $DIR/* $DIR/*/* $DIR/*/*/* $DIR/*/*/*/* $DIR/*/*/*/*/* $DIR/*/*/*/*/*/* $DIR/*/*/*/*/*/*/*
+#$FBI $fbiopts -P  `find $DIR -iname '*.png' -or -iname '*.jpg' -or -iname '*.gif' -or -iname '*.jpeg' -or -iname '*.tiff' -or -iname '*.bmp'`
+#$FBI $fbiopts -P -- $files
 #fbi $fbiopts -P $DIR/ps*.tiff
 
 

@@ -49,7 +49,14 @@ namespace fim
 			cc.autocmd_exec("PostRedisplay",c);
 #endif
 		}
-		else cout << "no image object in memory, sorry\n";
+		else
+		{
+			cout << "no image object in memory, sorry\n";
+#ifdef FIM_REMOVE_FAILED
+			if(current()!="")pop_current();	//removes the current file from the list.
+#endif
+
+		}
 	}
 
 	Browser::Browser():nofile("")
@@ -59,6 +66,20 @@ namespace fim
 		 */
 		image=NULL;
 		cp=0;	//and to file index 0 (no file)
+	}
+
+	const fim::string Browser::pop_current()
+	{	
+		/*
+		 * pop the last image filename from the filenames list
+		 *
+		 * WARNING : SAME AS ERASE !
+		 */
+		fim::string s;
+		if(flist.size()<=0)return nofile;
+		assert(cp);
+		flist.erase(flist.begin()+current_n());
+		return s;
 	}
 
 	const fim::string Browser::pop()
@@ -328,6 +349,9 @@ namespace fim
 		if(image && ! (image->valid()))
 		{
 			delete image;image=NULL;
+#ifdef FIM_REMOVE_FAILED
+			pop_current();	//removes the current file from the list.
+#endif
 			return fim::string("error loading the file ")
 				+c+fim::string("\n");
 		}
@@ -364,12 +388,26 @@ namespace fim
 		 * FIX ME:
 		 * no repetition!????
 		 * */
+		
+#ifdef FIM_CHECK_FILE_EXISTENCE
+		/*
+		 * skip adding the filename in the list if
+		 * it is not existent or it is a directory...
+		 */
+		struct stat stat_s;
+		if(-1==stat(nf.c_str(),&stat_s))return "";
+		if(S_ISDIR(stat_s.st_mode))return "";
+#endif
+
+#ifdef FIM_CKECK_DUPLICATES
 		if(present(nf))
 		{
 			//there could be an option to have duplicates...
 			//std::cout << "no duplicates allowed..\n";
 			return false;
 		}
+#endif
+
 		flist.push_back(nf);
 		if(cp==0)++cp;
 		//cout<<nf<<" ";

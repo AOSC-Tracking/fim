@@ -30,6 +30,8 @@
 #include <time.h>
 #include "common.h"
 //#include <unistd.h>
+//#include <sys/stat.h>
+//#include <sys/types.h>
 //
 namespace fim{
 	void tty_restore();

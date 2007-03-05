@@ -78,6 +78,8 @@ class Browser
 
 	fim::string load(const std::vector<fim::string> &args);
 	fim::string pop(const std::vector<fim::string> &args);
+	const fim::string Browser::pop_current();
+	fim::string Browser::pop_current(const std::vector<fim::string> &args){return pop_current();}
 	bool present(const fim::string nf);
 	bool push(const fim::string nf);
 
