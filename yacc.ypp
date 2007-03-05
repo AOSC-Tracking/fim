@@ -39,6 +39,7 @@ void yyerror(char *s);
 %token <iValue> INTEGER
 //%token <sValue> PIPE
 %token <sValue> STRING
+%token <sValue> REGEXP
 %token <fValue> FLOAT
 %token <sValue> IDENTIFIER
 %token WHILE IF DO PRINT ELSE
@@ -76,6 +77,7 @@ stmt:
 //	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,dupstr("\"ciao\"")))); }
 //	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr(3))))); }
 //	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,scon(dupstr("ciao"))))); }
+	| REGEXP { $$ = opr('x',2,scon(dupstr("regexp_goto")),opr('a',1,opr('a',1,scon($1)))); }
 	| '+' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
 	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
 	| '*' FLOAT   { $$ = opr('x',2,scon(dupstr("scale_multiply")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }

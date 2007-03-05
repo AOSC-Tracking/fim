@@ -478,6 +478,33 @@ namespace fim
 		return n_files()?(flist[current_n()]):nofile;
 	}
 
+	fim::string Browser::regexp_goto(const std::vector<fim::string> &args)
+	{
+		/*
+		 * goes to the next filename-matching file
+		 */
+		unsigned int i,j,c=current_n(),s=flist.size();
+		if( args.size() < 1 || s < 1 )return "";
+		for(j=0;j<s;++j)
+		{
+			i=(j+c+1)%s;
+			if(cc.regexp_match(flist[i].c_str(),args[0].c_str()))
+			{	
+				//cout << flist[i] << " matches!!!\n"; 
+				fim::string c=current();
+#ifdef FIM_AUTOCMDS
+				cc.autocmd_exec("PreGoto",c);
+#endif
+				goto_image(i+1);
+#ifdef FIM_AUTOCMDS
+				cc.autocmd_exec("PostGoto",c);
+				return "";
+#endif
+			}
+		}
+		return "";
+	}
+
 	fim::string Browser::goto_image(int n)
 	{
 		/*

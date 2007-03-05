@@ -132,6 +132,11 @@ STRINGC_DQ {STRINGC}|\'
 	return *yytext;
 	}
 
+^"/".+  {  
+	astrcpy(yylval.sValue,yytext+1);;
+	return REGEXP;
+	}
+
 [ \t]+ { /* we ignore whitespace */ ; }
 
 

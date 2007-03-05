@@ -33,6 +33,7 @@ class Browser
 	Browser();
 	~Browser() { }
 	fim::string current()const{ return cp?flist[current_n()]:nofile; }
+	fim::string regexp_goto(const std::vector<fim::string> &args);
 	fim::string goto_image(const std::vector<fim::string> &args);
 	fim::string goto_image(int n);
 	fim::string pan_up(const std::vector<fim::string> &args);

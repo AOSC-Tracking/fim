@@ -213,6 +213,7 @@ class CommandConsole
 	void quit();
 	int  drawOutput();
 	int  isInScript(){return isinscript;}
+	bool regexp_match(const char*s, const char*r)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 #endif
@@ -228,7 +229,6 @@ class CommandConsole
 	int  autocmd_in_stack(const autocmds_frame_t& frame);
 #endif
 	fim::string current()const{ return browser.current();}
-	bool regexp_match(const char*s, const char*r)const;
 	fim::string get_variables_list();
 };
 }
