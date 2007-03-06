@@ -26,7 +26,9 @@ This file is often outdated : FIM is a lot better than it seems here :)
 20070303	update the while construct documentation and fix the while command execution bugs 
 20070303	add an interface for setting exitBinding (now Enter!)
 20070305	i am not sure the scale_image security patch is complete.
+20070306	primary goals : documentation and warning messages!
 	ADD:
+20070306	add a way to dump to stdout the default configuration file contents
 20070305	add a handier interface for regexp searching (/)
 20070217	fix the default /etc/fimrc or better, builtin config!
 20070216	create an installer!

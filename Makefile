@@ -31,6 +31,7 @@ DEFINES  += -D FIM_RECORDING
 DEFINES  += -D FIM_CKECK_DUPLICATES
 DEFINES  += -D FIM_CHECK_FILE_EXISTENCE
 DEFINES  += -D FIM_REMOVE_FAILED        # a file which failed loading is removed from the list
+DEFINES  += -D FIM_DEFAULT_CONFIGURATION
 
 CFLAGS	 += -DVERSION='"$(VERSION)"' $(DEFINES)
 CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
@@ -60,19 +61,38 @@ YFLAGS := -v -d
 
 all: fim
 
+CommandConsole.o : conf.h
+
+# please complete the following dependencies:
+# (there's still an extra dependency from lex..)
+#lex.yy.o   :  lex.yy.cc
+lex.yy.cc  :  lex.lex
+#yacc.tab.o :  yacc.ypp lex.lex
+
+%.cc: %.lex
+	$(LEX) $(LFLAGS) $<
+
+lex.yy.cc: lex.lex
+	$(LEX) $(LFLAGS) $<
+
 flo:	fls
 
 fls:	lex.yy.cc yacc.tab.cpp
 
-lex.yy.cc : 
-	$(LEX) $(LFLAGS) lex.lex
+#lex.yy.cc : 
+#	$(LEX) $(LFLAGS) lex.lex
 
-yacc.tab.cpp:
+yacc.tab.ypp : yacc.tab.cpp
+
+yacc.tab.cpp: lex.yy.cc yacc.ypp
 	$(YACC) $(YFLAGS) yacc.ypp
 
-lex.yy.o : fls
+#lex.yy.o : fls 
+lex.yy.o : lex.yy.cc yacc.tab.ypp
 
-yacc.tab.o : fls
+#yacc.tab.o : fls
+yacc.tab.o : yacc.tab.cpp
+
 
 all:	fim
 
@@ -161,6 +181,7 @@ OBJS_FBI	+= $(call ac_lib_mkvar,$(libraries),OBJS)
 clean:
 	rm -f $(OBJS_FBI) $(depfiles)  $(OBJS_FIM)  *.o fim -f src/*.o src/*/*.o yacc.output yacc.tab.cpp yacc.tab.hpp lex.yy.cc Make.config md5sums.md5
 	@rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
+	@ rm -f conf.h
 
 #realclean distclean:
 #	@ rm -f Make.config
@@ -170,6 +191,12 @@ clean:
 
 md5:
 	@rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
+
+
+conf.h:	fimrc
+	echo 'char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > conf.h   
+	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
+	echo '"";' >> conf.h
 
 fim:    $(OBJS_FIM) $(OBJS_FBI)
 	$(GPP) -o fim $(OBJS_FBI) $(OBJS_FIM) $(LDLIBS)

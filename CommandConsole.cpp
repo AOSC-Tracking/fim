@@ -1,6 +1,9 @@
 /* $Id$ */
 
 #include "fim.h"
+#ifdef FIM_DEFAULT_CONFIGURATION
+#include "conf.h"
+#endif
 
 extern int yyparse();
 
@@ -265,6 +268,7 @@ namespace fim
 		 *	Here the program loads the initialization scripts
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
+
 		char rcfile[FIM_MAX_SCRIPT_FILE];
 		char *e = getenv("HOME");
 		if(e && strlen(e)<128)
@@ -273,9 +277,23 @@ namespace fim
 			strcat(rcfile,"/.fimrc");
 			cout << rcfile;
 			if(getIntVariable("no_rc_file")==0 )
-				executeFile(rcfile);	//GLOBAL DEFAULT CONFIGURATION FILE
+			{
+				if(-1==executeFile(rcfile));	//GLOBAL DEFAULT CONFIGURATION FILE
+				{
+					//if no configuration file is present, we use the default configuration!
+#ifdef FIM_DEFAULT_CONFIGURATION
+					execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0);
+#endif		
+				}
+
+			}
 		}
 		for(unsigned int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
+		if ( browser.empty_file_list() )
+		{
+			printHelpMessage();
+			this->quit();
+		}
 		//qui ci vorrebbe stat e behaviour condizionale dettata
 		//dalla presenza di /etc/fimrc ...
 	}

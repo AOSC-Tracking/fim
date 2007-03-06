@@ -594,6 +594,7 @@ static void version()
 #undef FIM_VERSION
 }
 
+
 int main(int argc,char *argv[])
 {
 	/*
@@ -633,7 +634,6 @@ int main(int argc,char *argv[])
 
 	setlocale(LC_ALL,"");
 	char c;
-
 
 	setlocale(LC_ALL,"");
     	for (;;) {
@@ -724,8 +724,7 @@ int main(int argc,char *argv[])
 	default:
 	case 'h':
 //	    usage(argv[0]);
-	    printf("The help will be here soon!\n");
-	    printf("Please read the documentation distributed with the program first!\n");
+	    cc.printHelpMessage();
 	    exit(0);
 //	    cc.exit(1);
 	;

@@ -28,6 +28,7 @@ class Browser
 	int current_n()const{ return cp?cp-1:cp; }
 	const fim::string pop();
 	public:
+	int empty_file_list()const{ return flist.size()==0;}
 	int current_image()const{ return cp; }
 	int current_images()const{ return n(); }
 	Browser();

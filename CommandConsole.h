@@ -230,6 +230,13 @@ class CommandConsole
 #endif
 	fim::string current()const{ return browser.current();}
 	fim::string get_variables_list();
+	public:
+	void printHelpMessage()
+	{
+		printf("\nThe help will be here soon!\n");
+		printf("Please read the documentation distributed with the program first!\n");
+		printf("example usage : fim image.jpg *png\n");
+	}
 };
 }
 
