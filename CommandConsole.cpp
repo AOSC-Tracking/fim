@@ -164,7 +164,7 @@ namespace fim
 
 	fim::string CommandConsole::dummy(std::vector<Arg> args)
 	{
-		std::cout << "dummy function : for test purposes :)\n";
+		//std::cout << "dummy function : for test purposes :)\n";
 		return "dummy function : for test purposes :)\n";
 	}
 
@@ -332,30 +332,46 @@ namespace fim
 		 */
 		static int list_index=0;
 		if(state==0)list_index=0;
-
+		while(isdigit(*text))text++;	//initial  repeat match
+		const fim::string cmd(text);
+		if(cmd=="")return NULL;
 		std::vector<fim::string> completions;
 		std::map<fim::string,fim::string>::const_iterator ai;
 		std::map<fim::string,fim::Var>::const_iterator vi;
-		for( ai=aliases.begin();ai!=aliases.end();++ai)
+		for(unsigned int i=0;i<commands.size();++i)
 		{
-			completions.push_back((*ai).first);
+			if(commands[i]->cmd.find(cmd)==0)
+			completions.push_back(commands[i]->cmd);
+		}
+		//for( unsigned int i=0;i<=aliases.size();++i)
+		for( ai=aliases.begin();ai!=aliases.end();++ai)
+		{	
+			if((ai->first).find(cmd)==0){
+			//if(aliases[i].find(cmd)==0){
+//			cout << ".." << ai->first << ".." << " matches " << cmd << "\n";
+//			completions.push_back(aliases[i]);}
+			completions.push_back((*ai).first);}
 		}
 		for( vi=variables.begin();vi!=variables.end();++vi)
 		{
+			if((vi->first).find(cmd)==0)
 //			completions.push_back(fim::string("$")+(*vi).first);
 			completions.push_back((*vi).first);
 		}
-		for(unsigned int i=0;i<commands.size();++i)
-		{
-			completions.push_back(commands[i]->cmd);
-		}
+#ifndef FIM_COMMAND_AUTOCOMPLETION
+		/* THIS DIRECTIVE IS MOTIVATED BY SOME STRANGE BUG!
+		 */
 		sort(completions.begin(),completions.end());
+#endif 
 		
-		while(isdigit(*text))text++;	//initial  repeat match
-		fim::string cmd(text);
-
+		/*
+		 * THE FOLLOWING CODE SHOULD BE OBSOLETE BY NOW..
+		 */
 	//	std::vector<fim::string> completions;
 //		for(int i=list_index;i<commands.size();++i)
+
+/*		for(unsigned int i=list_index;i<completions.size();++i)
+				cout << cmd << " matches with " << completions[i].c_str()<<  "\n";*/
 		for(unsigned int i=list_index;i<completions.size();++i)
 		{
 		//	if(!commands[i])continue;
@@ -365,6 +381,7 @@ namespace fim
 			{
 				list_index++;
 				//std::cout << cmd << " matches with " << commands[i]->cmd<<  "\n";
+				//cout << cmd << " matches with " << completions[i].c_str()<<  "\n";
 				//readline will free this strings..
 //				return dupstr(commands[i]->cmd.c_str());
 				return dupstr(completions[i].c_str());
@@ -590,8 +607,25 @@ namespace fim
 				return c->execute(args);
 			}
 			else
-	//			std::cout << "NO `"<<cmd<<" "<<args<<"`\n";
-				cout << "NO `"<<cmd.c_str()<<"...\n";
+			{
+#ifdef FIM_COMMAND_AUTOCOMPLETION
+				char *match = this->command_generator(cmd.c_str(),0);
+				if(!match)
+#endif
+				cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
+#ifdef FIM_COMMAND_AUTOCOMPLETION
+				else
+				{
+					/*
+					 * in case command autocompletion is enabled
+					 */
+					//cout << "but found :`"<<match<<"...\n";
+					if((c=findCommand(match))!=NULL)
+						return c->execute(args);
+				}
+#endif
+				return "";
+			}
 		}
 		return "If you see this string, please report it to the program maintainer :P\n";
 	}
@@ -842,7 +876,7 @@ namespace fim
 		 *	This method should be called only when there is no
 		 *	potential harm to the console.
 		 */
-		std::cout<<"\nThe program ended successfully\n";
+		//std::cout<<"\nThe program ended successfully\n";
 		std::exit(i);
 	}
 
@@ -866,7 +900,7 @@ namespace fim
 	fim::string CommandConsole::foo(const std::vector<fim::string> &args)
 	{
 		//std::cout<<"foo ";
-		for(unsigned int i=0;i<args.size();++i)std::cout<<" "<<args[i];std::cout<<"\n";
+		//for(unsigned int i=0;i<args.size();++i)std::cout<<" "<<args[i];std::cout<<"\n";
 		return "";
 	}
 

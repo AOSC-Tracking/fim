@@ -1,16 +1,16 @@
 19590ef48c95598a97c781b137f67f21  Arg.cpp
 8bcb4d2da64155aad4a0b2c231110b4f  Arg.h
 a5d1f6f0fadf283ea7efea0416ba6407  Browser.cpp
-431331de1dbc0cc7ef607143f72b29b1  Browser.h
+7ce1cb0eecdc7e8b30305a5596785549  Browser.h
 0c56db0143f4f80c369ee3af7425af6e  COPYING
 f70406a665a45a7d919a3c07de13dd4e  Command.cpp
 fe68336ca68b326159e85c00c891803a  Command.h
-22e04056738e2bff81937f6bafea648f  CommandConsole.cpp
-ee591f130f2de6e9cd6225b533f99182  CommandConsole.h
+84c5e3ee80de93d307443a271630edfd  CommandConsole.cpp
+1a0e77cae3d33dcab3d3a2dda340a052  CommandConsole.h
 18dc88e17cb179a70a23317f7c3998a3  FIM.TXT
 934c51de86ccc3931377afd625a32842  Image.cpp
 0e2fa03ff01c142c99c7a148d1f0cb2d  Image.h
-33fe9d754d8f5ce8dd7645255635e6ae  Makefile
+905f9e8eaf30bf9319b5fb1036fc62db  Makefile
 41e83160b2447d4aa6b2d05431ade081  README
 763e20df7cd3effa0ca1f8b9902a14fb  README.FIRST
 ff56ca2edb4de287093ca47bbbf0c847  TODO
@@ -22,7 +22,7 @@ fa4d81150ba863590bb8705e4a763565  conf.h
 e65556a7824f256bd6ead336c749ea4b  defaultConfiguration.cpp
 685ab52cf3da703dc00a1ce9ec6f8e24  extern.h
 ca455ab5adc6a16d59aaa2eac4e83c7e  fbgs.sh
-718abcb95b625ba55647a6f7d62903d6  fim.cpp
+f92759ac7b4f40f783a740df22dae83d  fim.cpp
 152b31add7dc2567f6ad4c8569868520  fim.h
 6a37972b6d5910eab2c26debdc46c70c  fim_stream.h
 cc769ed52368f4be9a6853853adc4ecf  fimrc
@@ -32,6 +32,7 @@ a54cbf349bed9982dcda66159d579297  lex.h
 8be456f99b1385c529fd8ef03c556d56  string.cpp
 1017d0d3ac3b26bb2d56103030eaf277  string.h
 7f326aa46697d3b2dbe4ef4f9ff667ea  svn-commit.10.tmp
+637e58aee86f073413faaed57ff49c92  svn-commit.11.tmp
 4dbc41cf9ed2d88c29af8c8061267aca  svn-commit.2.tmp
 21ccbcfa99fc481c37c02df7fbdb245d  svn-commit.3.tmp
 a34c766f9a0514f2955a754ca7e68803  svn-commit.4.tmp
