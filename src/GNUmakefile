@@ -42,7 +42,7 @@ HAVE_LIBPNG	:= $(call ac_lib,png_read_info,png,-lz)
 HAVE_LIBTIFF	:= $(call ac_lib,TIFFOpen,tiff)
 HAVE_LIBLIRC	:= $(call ac_lib,lirc_init,lirc_client)
 endef
-
+HAVE_X11	:= # Now there is no more X11 nor libFS dependency!! :)
 
 ########################################################################
 # conditional stuff
@@ -50,7 +50,7 @@ endef
 ifeq ($(HAVE_X11),yes)
 CFLAGS	+= -I/usr/X11R6/include -I/usr/X11R6/include/X11/fonts
 LDFLAGS	+= -L/usr/X11R6/$(LIB)
-LDLIBS	+= -lFS
+#LDLIBS	+= -lFS
 OBJS	+= xwd.o
 else
 CFLAGS	+= -DX_DISPLAY_MISSING=1

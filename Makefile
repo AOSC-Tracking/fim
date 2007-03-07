@@ -3,6 +3,9 @@
 # All of this is in balance as an elephant on thin ice..
 # it's horrible.
 # 20070227 ..but i am fixing this :)
+# 20070307 no more reference to libFS nor X11 !
+#
+##########################################################
 
 #WARNINGS := -Wall -pedantic #-Wextra -pedantic
 GCC=gcc
@@ -10,7 +13,7 @@ GCC=gcc
 GPP=g++ -fno-default-inline #-g $(WARNINGS)
 LD=ld
 
-##########################################################
+#################################################################
 # add our flags + libs
 #
 #srcdir	= ./src
@@ -19,25 +22,29 @@ srcdir	= ./
 -include Make.config
 include $(srcdir)/mk/Variables.mk
 
-# The following flags, if set, enable certain optional features (conditional compiling).
-# remember to issue a make clean before changing these and recompiling..
-DEFINES  :=
-DEFINES  += -D FIM_DEFAULT_CONFIG
-DEFINES  += -D FIM_DEFAULT_KEY_CONFIG
-#DEFINES  += -D FIM_NOFB
-DEFINES  += -D FIM_AUTOCMDS
-DEFINES  += -D FIM_RECORDING
+#################################################################
+# The following flags, if set, enable certain optional features at compile time.
+# Remember to issue a 'make clean' before changing one of these and recompiling..
+
+ DEFINES  :=
+ DEFINES  += -D FIM_DEFAULT_KEY_CONFIG	# with a builtin default key mapping (advised)
+ DEFINES  += -D FIM_DEFAULT_CONFIG	# with a builtin default (minimal) key binding
+ DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
+#DEFINES  += -D FIM_NOFB		# disable the framebuffer (for debug mostly)
+ DEFINES  += -D FIM_AUTOCMDS		# autocommands
+ DEFINES  += -D FIM_RECORDING		# command recording
 #DEFINES  += -D FIM_SWITCH_FIXUP	# still bugful 
-DEFINES  += -D FIM_CKECK_DUPLICATES
-DEFINES  += -D FIM_CHECK_FILE_EXISTENCE
-DEFINES  += -D FIM_REMOVE_FAILED        # a file which failed loading is removed from the list
-DEFINES  += -D FIM_DEFAULT_CONFIGURATION
-#DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, as of now
+ DEFINES  += -D FIM_CKECK_DUPLICATES	# if enabled, no duplicates will be allowed in the filename list
+ DEFINES  += -D FIM_CHECK_FILE_EXISTENCE # when a filename is added in the list, a verification occurs
+ DEFINES  += -D FIM_REMOVE_FAILED	# a file which failed loading is removed from the list
+#DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
+
+#################################################################
 
 CFLAGS	 += -DVERSION='"$(VERSION)"' $(DEFINES)
 CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
-LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lFS -lz
-#-lrt (realtime) cannot be used :(
+LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lz
+#-lrt (realtime library ) cannot be used :(  (causes harm!)
 
 OBJS_FBI := \
 	src/fbi.o src/fbtools.o src/fs.o src/fb-gui.o \
@@ -59,41 +66,34 @@ YACC   := $(BISON)
 LFLAGS := -+
 YFLAGS := -v -d
 
-
 all: fim
 
 CommandConsole.o : conf.h
 
-# please complete the following dependencies:
-# (there's still an extra dependency from lex..)
-#lex.yy.o   :  lex.yy.cc
-lex.yy.cc  :  lex.lex
-#yacc.tab.o :  yacc.ypp lex.lex
+#
+# The dependencies in the lexer/parser subsystem are tricky :
+# 
+# lex.yy.o   :  lex.yy.cc
+# lex.yy.cc  :  lex.lex
+# yacc.tab.o :  yacc.ypp lex.lex
+#
 
-%.cc: %.lex
-	$(LEX) $(LFLAGS) $<
-
-lex.yy.cc: lex.lex
-	$(LEX) $(LFLAGS) $<
-
-flo:	fls
-
-fls:	lex.yy.cc yacc.tab.cpp
-
-#lex.yy.cc : 
+#
+# The canonical (procedural) commands for the lexer/parser:
+#
 #	$(LEX) $(LFLAGS) lex.lex
+#	$(YACC) $(YFLAGS) yacc.ypp
+#
 
-yacc.tab.ypp : yacc.tab.cpp
+# The goal-oriented way : 
 
-yacc.tab.cpp: lex.yy.cc yacc.ypp
-	$(YACC) $(YFLAGS) yacc.ypp
+%.yy.cc: %.lex
+	$(LEX) $(LFLAGS) $<
 
-#lex.yy.o : fls 
-lex.yy.o : lex.yy.cc yacc.tab.ypp
+%.tab.cpp: %.ypp lex.lex
+	$(YACC) $(YFLAGS) $<
 
-#yacc.tab.o : fls
-yacc.tab.o : yacc.tab.cpp
-
+lex.yy.o : lex.yy.cc yacc.tab.cpp
 
 all:	fim
 
@@ -111,10 +111,12 @@ HAVE_LIBJPEG	:= $(call ac_lib,jpeg_start_compress,jpeg)
 HAVE_LIBUNGIF	:= $(call ac_lib,DGifOpenFileName,ungif)
 HAVE_LIBPNG	:= $(call ac_lib,png_read_info,png,-lz)
 HAVE_LIBTIFF	:= $(call ac_lib,TIFFOpen,tiff)
-HAVE_LIBFS	:= $(call ac_lib,FSOpenServer,FS)
+#HAVE_LIBFS	:= $(call ac_lib,FSOpenServer,FS)
 endef
 ##HAVE_LIBFOO	:= $(call ac_lib,FSOpenServer,foo)
 
+HAVE_X11	:= # Now there is no more X11 nor libFS dependency!! :)
+HAVE_LIBFS	:= 
 
 ########################################################################
 
@@ -181,7 +183,7 @@ OBJS_FBI	+= $(call ac_lib_mkvar,$(libraries),OBJS)
 
 clean:
 	rm -f $(OBJS_FBI) $(depfiles)  $(OBJS_FIM)  *.o fim -f src/*.o src/*/*.o yacc.output yacc.tab.cpp yacc.tab.hpp lex.yy.cc Make.config md5sums.md5
-	@rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
+	@ rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
 	@ rm -f conf.h
 
 #realclean distclean:
@@ -217,7 +219,7 @@ install:	all
 	#$(INSTALL_DATA) fim.man $(mandir)/man1/fbi.1
 	#$(INSTALL_DATA) fbgs.sh.man $(mandir)/man1/fbgs.1
 
-test:
+test:	fim
 	@./fim media/* #~/M*s/*g
 
 #all:  $(OBJS_FIM)
@@ -257,3 +259,4 @@ include $(srcdir)/mk/Compile.mk
 include $(srcdir)/mk/Maintainer.mk
 #-include $(depfiles)
 
+#################################################################
