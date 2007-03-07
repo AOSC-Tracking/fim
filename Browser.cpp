@@ -40,7 +40,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreRedisplay",c);
 #endif
-			if(image)
+		if(image)
 			{
 				image->redisplay();	//THE BUG IS NOT HERE
 				this->display_status(info().c_str(), NULL);//THE BUG IS NOT HERE
@@ -53,7 +53,10 @@ namespace fim
 		{
 			cout << "no image object in memory, sorry\n";
 #ifdef FIM_REMOVE_FAILED
-			if(current()!="")pop_current();	//removes the current file from the list.
+			if(current()!=""){pop_current();	//removes the current file from the list.
+#ifdef FIM_AUTOSKIP_FAILED
+			next(0);reload();}
+#endif
 #endif
 
 		}
@@ -149,7 +152,6 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->scale_multiply(multiscale);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -174,7 +176,6 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->scale_increment(deltascale);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -199,7 +200,6 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->setscale(newscale);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -219,7 +219,6 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->auto_height_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -239,7 +238,6 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PreScale",c);
 #endif
-			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->auto_width_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -259,7 +257,6 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			status("please wait while rescaling...", image?image->getInfo():"*");
 			if(image)image->auto_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -309,7 +306,7 @@ namespace fim
 	fim::string Browser::display_status(const char *l,const char *r)
 	{
 		//FIX ME
-		if(cc.getIntVariable("display_status"))
+		if(cc.getIntVariable("_display_status"))
 			status((const char*)l, image?image->getInfo():"*");
 		return "";
 	}
@@ -325,7 +322,11 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreDisplay",c);
 #endif
-			if(image)
+			/*
+			 * the following is a trick to override redisplaying..
+			 */
+			if(image && cc.getIntVariable("_override_display")==0)
+			//	if(image)
 			{
 				//fb_clear_screen();
 				image->display();
@@ -352,7 +353,6 @@ namespace fim
 		cc.autocmd_exec("PreReload",c);
 #endif
 		if(image) delete image;
-		status("please wait while reloading...", "*");
 		image = new Image(current().c_str());
 		if(image && ! (image->valid()))
 		{
@@ -382,7 +382,10 @@ namespace fim
 		{
 			delete image;image=NULL;
 #ifdef FIM_REMOVE_FAILED
-			pop_current();	//removes the current file from the list.
+			if(current()!=""){pop_current();	//removes the current file from the list.
+#ifdef FIM_AUTOSKIP_FAILED
+			next(0);reload();}
+#endif
 #endif
 			return fim::string("error loading the file ")
 				+c+fim::string("\n");
@@ -633,6 +636,10 @@ namespace fim
 		 *
 		 * FIX ME
 		 */
+		fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PrePan",c);
+#endif
 		if(image)
 		{
 			if(image->onRight() && image->onBottom())
@@ -645,6 +652,9 @@ namespace fim
 			}
 			else image->pan_right();
 		}
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostPan",c);
+#endif
 		return "";
 	}
 
@@ -658,7 +668,7 @@ namespace fim
 		if(image)
 		{
 			if(image->onBottom()) next();
-			else image->pan_down();
+			else pan_down(std::vector<fim::string>());
 		}
 		return "";
 	}
@@ -752,7 +762,6 @@ namespace fim
 #endif
 			if(image)
 			{
-				status("please wait while rescaling...", image?image->getInfo():"*");
 				if(factor) image->magnify(factor);
 				else	image->magnify();
 			}
@@ -778,7 +787,6 @@ namespace fim
 #endif
 			if(image)
 			{
-				status("please wait while rescaling...", image?image->getInfo():"*");
 				if(factor) image->reduce(factor);
 				else	image->reduce();
 			}

@@ -170,9 +170,11 @@ class CommandConsole
 	int  setVariable(const fim::string& varname,int value);
 	float setVariable(const fim::string& varname,float value);
 	bool push(const fim::string nf){return browser.push(nf);}
+#ifndef FIM_NOSCRIPTING
 	int  executeFile(const char *s);
-	fim::string echo(const std::vector<fim::string> &args);
 	fim::string executeFile(const std::vector<fim::string> &args);
+#endif
+	fim::string echo(const std::vector<fim::string> &args);
 	fim::string help(const std::vector<fim::string> &args);
 	fim::string quit(const std::vector<fim::string> &args);
 	fim::string foo (const std::vector<fim::string> &args);

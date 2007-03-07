@@ -96,24 +96,28 @@ namespace fim
 			 * keeping score of copies and ... too complicated ...
 			 */
 			struct ida_image *backup_img=simg;
+			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
+				status("please wait while rescaling...", getInfo());
 			simg  = scale_image(fimg,scale);
 			if(!simg)
 			{
 				simg=backup_img;
-				status("rescaling failed (insufficient memory!)", getInfo());
+				if(cc.getIntVariable("_display_busy"))
+					status( "rescaling failed (insufficient memory!)", getInfo());
 				sleep(1);	//just to give a glimpse..
 			}
 			else      free_image(backup_img);
 			img = simg;
 			redraw=1;
 		}
-		else redraw=0;
+		//else redraw=0;
 #endif
 		return 0;
 	}
 
 	void Image::redisplay()
 	{
+	    	redraw=1;
 		display();
 	}
 
@@ -191,20 +195,20 @@ namespace fim
 			 * there should be more work to use double buffering
 			 * and avoid image tearing!
 			 */
-		//while(switch_last != fb_switch_state) console_switch(0);
+			//while(switch_last != fb_switch_state) console_switch(0);
 
-		//fb_clear_screen();
-		while (switch_last != fb_switch_state) { console_switch(0); continue; }
-		//fb_clear_screen();
-		svga_display_image(img, left, top);
-		fb_status_screen("", 0);
-		//fb_switch_release();
-		console_switch(0);
-/*		while (switch_last != fb_switch_state)
-		{
+			//fb_clear_screen();
+			while (switch_last != fb_switch_state) { console_switch(0); continue; }
+			//fb_clear_screen();
+			svga_display_image(img, left, top);
+			//fb_status_screen("", 0);
+			//fb_switch_release();
 			console_switch(0);
-			continue;
-		}*/
+/*			while (switch_last != fb_switch_state)
+			{
+				console_switch(0);
+				continue;
+			}*/
 	
 		}
 		while(fb_switch_state!=2)//fb_inactive
@@ -305,6 +309,7 @@ namespace fim
 		free_mem();
 		fname = dupstr(fname_);
 		assert(fname);
+		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))status("please wait while reloading...", "*");
 #ifndef FIM_NOFB
 		fimg = read_image(fname);
 #else

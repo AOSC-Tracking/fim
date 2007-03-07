@@ -658,7 +658,7 @@ int main(int argc,char *argv[])
 	    break;
 	case 'v':
 //	    statusline = 1;
-	    cc.setVariable("verbose",1);
+	    cc.setVariable("_display_status",1);
 	    break;
 	case 'P':
 //	    textreading = 1;

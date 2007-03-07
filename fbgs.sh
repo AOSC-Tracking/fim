@@ -7,14 +7,15 @@
 #
 #20060917	modified by dez
 #20061229	added .cbr and .cbz support (on file extension basis, not detection!)
-
+#20070307	added .tar,.tgz support
 # tmp dir
 DIR="${TMPDIR-/var/tmp}/fbps-$$"
 mkdir -p $DIR	|| exit 1
 trap "rm -rf $DIR" EXIT
 FBI=/usr/bin/fbi
 #FBI=~/fim/fim
-FBI=./fim
+#FBI=./fim
+FBI=fim
 #FBI='/usr/local/bin/fbi -a '
 #FBI='fbi'
 
@@ -60,13 +61,18 @@ done
 ###############################################################################
 UNCBZ="unzip" ; ZOPT="-x '*/*'" # suits for Info-ZIP implementation
 UNCBR="rar x"                   # suits for Alexander Roshal's RAR 3.51
+UNTAR="tar xf"
+UNTGZ="tar xzf"
 
 while [[ "$1" != "" ]];do
 	f="$1";shift
-[[ "$f" =~ \\.cbr$ ]] && ( $UNCBR "$f"    "$DIR"  ) 
-[[ "$f" =~ \\.rar$ ]] && ( $UNCBR "$f"    "$DIR"  ) 
-[[ "$f" =~ \\.cbz$ ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
-[[ "$f" =~ \\.zip$ ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+[[ "$f" =~ \\.cbr$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
+[[ "$f" =~ \\.rar$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
+[[ "$f" =~ \\.cbz$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+[[ "$f" =~ \\.zip$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+[[ "$f" =~ \\.tgz$    ]] && ( $UNTGZ "$f" -C "$DIR" ) 
+[[ "$f" =~ \\.tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
+[[ "$f" =~ \\.tar$    ]] && ( $UNTAR "$f" -C "$DIR" ) 
 ###############################################################################
 ##		HANDLING OF DVI,PS AND PDF FILES
 ###############################################################################

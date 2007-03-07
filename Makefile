@@ -30,6 +30,8 @@ include $(srcdir)/mk/Variables.mk
  DEFINES  += -D FIM_DEFAULT_KEY_CONFIG	# with a builtin default key mapping (advised)
  DEFINES  += -D FIM_DEFAULT_CONFIG	# with a builtin default (minimal) key binding
  DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
+ DEFINES  += -D FIM_NOFIMRC             # with ~/.fimrc loading disabled
+#DEFINES  += -D FIM_NOSCRIPTING         # any script loading disabled
 #DEFINES  += -D FIM_NOFB		# disable the framebuffer (for debug mostly)
  DEFINES  += -D FIM_AUTOCMDS		# autocommands
  DEFINES  += -D FIM_RECORDING		# command recording
@@ -37,6 +39,7 @@ include $(srcdir)/mk/Variables.mk
  DEFINES  += -D FIM_CKECK_DUPLICATES	# if enabled, no duplicates will be allowed in the filename list
  DEFINES  += -D FIM_CHECK_FILE_EXISTENCE # when a filename is added in the list, a verification occurs
  DEFINES  += -D FIM_REMOVE_FAILED	# a file which failed loading is removed from the list
+ DEFINES  += -D FIM_AUTOSKIP_FAILED	# if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
 #DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
 
 #################################################################
@@ -68,7 +71,6 @@ YFLAGS := -v -d
 
 all: fim
 
-CommandConsole.o : conf.h
 
 #
 # The dependencies in the lexer/parser subsystem are tricky :
@@ -131,9 +133,9 @@ ifeq ($(HAVE_LIBTIFF),no)
 $(error sorry, you should install libtiff first!)
 endif
 
-ifeq ($(HAVE_LIBFS),no)
-$(error sorry, you should install libFS first!)
-endif
+#ifeq ($(HAVE_LIBFS),no)
+#$(error sorry, you should install libFS first!)
+#endif
 
 ifeq ($(HAVE_LIBPNG),no)
 $(error sorry, you should install libpng first!)
@@ -147,6 +149,14 @@ endif
 
 ifeq ($(HAVE_LIBFOO),yes)
 $(error "I can't believe it !, you have libFOO :) !")
+endif
+
+ifneq ($(findstring FIM_DEFAULT_CONFIGURATION,$(DEFINES)),)
+CommandConsole.o : conf.h
+endif
+
+ifneq ($(findstring FIM_DEFAULT_CONFIG,$(DEFINES)),)
+CommandConsole.o : defaultConfiguration.cpp
 endif
 
 ########################################################################
@@ -214,7 +224,7 @@ flex:
 install:	all
 	$(INSTALL_DIR) $(bindir)
 	$(INSTALL_BINARY) $(TARGETS) $(bindir)
-	#$(INSTALL_SCRIPT) fbgs.sh $(bindir)
+	$(INSTALL_SCRIPT) fbgs.sh $(bindir)/fimgs
 	#$(INSTALL_DIR) $(mandir)/man1
 	#$(INSTALL_DATA) fim.man $(mandir)/man1/fbi.1
 	#$(INSTALL_DATA) fbgs.sh.man $(mandir)/man1/fbgs.1

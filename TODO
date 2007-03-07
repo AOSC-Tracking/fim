@@ -1,5 +1,10 @@
 	$Id$
 This file is often outdated : FIM is a lot better than it seems here :)
+	UNSOLVED,MAIN BUGS:
+20070307	Console switching does not work properly.
+20070307	It is not clear which key terminates always loops.
+20070307	Config file parsing is still buggy regards comments.
+20070307	Duplicate autocommands are allowed. This is bad!
 	SOLVED BUGS:
 20070128	it seems that all of the scaling pre-display hooks cause harm!
 20070216	elimina il tearing dell'immagine! dovrebbe essere una questione di switch!
@@ -28,6 +33,8 @@ This file is often outdated : FIM is a lot better than it seems here :)
 20070305	i am not sure the scale_image security patch is complete.
 20070306	primary goals : documentation and warning messages!
 	ADD:
+20070307	/
+20070307	someday: to integrate with a speech recognizer ? :)
 20070306	add a way to dump to stdout the default configuration file contents
 20070305	add a handier interface for regexp searching (/)
 20070217	fix the default /etc/fimrc or better, builtin config!

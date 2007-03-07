@@ -8,11 +8,13 @@
 		bind('f',"files");
 		bind('q',"quit");
 		bind('f',"file");
-		bind('n',"next;display;");
+		//bind('n',"next;display;");
+		bind('n',"next");
 		bind('h',"help");
 		bind('x',"echo");
 		bind('e',"echo");
-		bind('p',"prev;display;");
+		//bind('p',"prev;display;");
+		bind('p',"prev");
 		bind('P',"pop");
 		bind('s',"sort");
 		bind('r',"reload");
@@ -46,11 +48,11 @@
 
 /*		alias('A',"'autotop=1-autotop;'");
 		alias("toggleVerbosity","verbose=1-verbose;display;");
-		alias("toggleKeyVerbosity","verbose_keys=1-verbose_keys;display;");*/
+		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");*/
 	
 		setVariable("console_key",':');
 /*		setVariable("autowidth",1);
-		setVariable("verbose_keys",0);*/
+		setVariable("_verbose_keys",0);*/
 		setVariable("magnify_factor",1.322f);
 		setVariable("scale_factor_multiplier",1.1f);
 		setVariable("scale_factor_delta",0.01f);
@@ -146,7 +148,7 @@
 		/*	32=0x20 to 65=0x40	*/
 		for(char i=' ';i<='@';++i,*k=i) key_bindings[k]=i;
 
-		/*	91=0x5B to 06=0x60	*/
+		/*	91=0x5B to 96=0x60	*/
 		for(char i='[';i<'a';++i,*k=i) key_bindings[k]=i;
 
 		/*	123=0x7B to 127=0x7F (DEL)	*/
@@ -189,6 +191,7 @@
 		key_bindings["Last"] =2117360411;
 		key_bindings["Tab"] =9;
 		key_bindings["Any"] =0;	/*	EXPERIMENTAL	*/
+		key_bindings["Esc"] =27;
 
 		exitBinding = key_bindings["Enter"];	/*  Enter will terminate loops */
 //		key_bindings[" "]=' ';

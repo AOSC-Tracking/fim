@@ -229,7 +229,9 @@ namespace fim
 		addCommand(new Command(fim::string("auto_height_scale" ),fim::string("scale the image so that it fits vertically in the screen" ),&browser,&Browser::auto_height_scale));
 		addCommand(new Command(fim::string("bind" ),fim::string("binds some keyboard shortcut to an action"),this,&CommandConsole::bind));
 		addCommand(new Command(fim::string("quit"  ),fim::string("terminates the program"),this,&CommandConsole::quit));
+#ifndef FIM_NOSCRIPTING
 		addCommand(new Command(fim::string("exec"  ),fim::string("executes script files"),this,&CommandConsole::executeFile));
+#endif
 		addCommand(new Command(fim::string("echo"  ),fim::string("echoes its arguments"),this,&CommandConsole::echo));
 		//addCommand(new Command(fim::string("foo"   ),fim::string("a dummy command"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("print"   ),fim::string("displays the value of a variable"),this,&CommandConsole::foo));
@@ -268,7 +270,8 @@ namespace fim
 		 *	Here the program loads the initialization scripts
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
-
+#ifndef FIM_NOFIMRC
+#ifndef FIM_NOSCRIPTING
 		char rcfile[FIM_MAX_SCRIPT_FILE];
 		char *e = getenv("HOME");
 		if(e && strlen(e)<128)
@@ -276,19 +279,27 @@ namespace fim
 			strcpy(rcfile,e);
 			strcat(rcfile,"/.fimrc");
 			cout << rcfile;
-			if(getIntVariable("no_rc_file")==0 )
+			if(getIntVariable("_no_rc_file")==0 )
 			{
 				if(-1==executeFile(rcfile));	//GLOBAL DEFAULT CONFIGURATION FILE
+#endif
+#endif
 				{
 					//if no configuration file is present, we use the default configuration!
 #ifdef FIM_DEFAULT_CONFIGURATION
 					execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0);
 #endif		
 				}
+#ifndef FIM_NOFIMRC
+#ifndef FIM_NOSCRIPTING
 
 			}
 		}
+#endif		
+#endif		
+#ifndef FIM_NOSCRIPTING
 		for(unsigned int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
+#endif		
 		if ( browser.empty_file_list() )
 		{
 			printHelpMessage();
@@ -671,6 +682,8 @@ namespace fim
 //				return 0;/* could be a command key */
 			}
 			if(c==exitBinding) return 1; 		/* the user hit the exitBinding key */
+			if(c==key_bindings["Esc"]) return 1; 		/* the user hit the exitBinding key */
+			if(c==key_bindings[":"]) return 1; 		/* the user hit the exitBinding key */
 		}
 		return 0; 		/* no chars read  */
 
@@ -829,7 +842,7 @@ namespace fim
 				if(r>0)
 				{
 //					cout<< "got:           "<<(char*)c<<"(   "  <<c<<")"<<"\n";
-					if(getIntVariable("verbose_keys"))
+					if(getIntVariable("_verbose_keys"))
 					{
 						/*
 						 * <0x20 ? print ^ 0x40+..
@@ -891,11 +904,13 @@ namespace fim
 
 	fim::string CommandConsole::quit(const std::vector<fim::string> &args) { this->quit(); return "";}
 
+#ifndef FIM_NOSCRIPTING
 	fim::string CommandConsole::executeFile(const std::vector<fim::string> &args)
 	{
 		for(unsigned int i=0;i<args.size();++i)executeFile(args[i].c_str());
 		return "";
 	}
+#endif
 	
 	fim::string CommandConsole::foo(const std::vector<fim::string> &args)
 	{
@@ -922,8 +937,8 @@ namespace fim
 		 *
 		 * FIX ME
 		 */
-		int sl=getIntVariable("status_line")?0:1;
-		setVariable("status_line",sl);
+		int sl=getIntVariable("_status_line")?0:1;
+		setVariable("_status_line",sl);
 		return 0;
 	}
 
@@ -947,6 +962,7 @@ namespace fim
 		return variables[varname].setFloat(value);
 	}
 	
+#ifndef FIM_NOSCRIPTING
 	int CommandConsole::executeFile(const char *s)
 	{
 		/*
@@ -984,6 +1000,7 @@ namespace fim
 		r=write(fd,buf,r); r=write(fd,"spazzatura",8); close(fd); sync();*/
 		return 0;
 	}
+#endif
 
 	fim::string CommandConsole::echo(const std::vector<fim::string> &args)
 	{
@@ -1015,7 +1032,7 @@ namespace fim
 
 	int CommandConsole::drawOutput()
 	{
-		return inConsole() || this->getIntVariable("verbose");
+		return inConsole() || this->getIntVariable("_display_status");
 	}
 
 	fim::string CommandConsole::get_variables_list()
