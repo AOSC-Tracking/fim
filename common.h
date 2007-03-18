@@ -1,7 +1,7 @@
 /* $Id$ */
 #ifndef COMMON_H
 #define COMMON_H
-
+#undef yyFlexLexer
 #include <FlexLexer.h>
 #include <linux/fb.h>
 //#include "lex.h"

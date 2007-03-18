@@ -106,8 +106,8 @@ namespace fim
 		 */
 		if(image)
 		{
-			fim::string c=current();
 #ifdef FIM_AUTOCMDS
+			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
 			if(image)image->pan_up();
@@ -125,8 +125,8 @@ namespace fim
 		 */
 		if(image)
 		{
-			fim::string c=current();
 #ifdef FIM_AUTOCMDS
+			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
 			if(image)image->pan_down();

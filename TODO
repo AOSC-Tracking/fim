@@ -17,6 +17,7 @@ This file is often outdated : FIM is a lot better than it seems here :)
 20070227	(still) to fix the console switching redraw problem
 20070303	introduced bugs concerning commands nested into loops :P
 	FIX:
+20070312	fix dumping of recording in some file!	
 #20070121	fix the image browser then
 20070125	fix the string vs variable problem
 #20070125	fix the display/statusline relationship..

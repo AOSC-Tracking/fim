@@ -5,6 +5,7 @@
  *	20070215	the pos variable seems unused!
  * 	20070215	idea : separate redraw into redraw_compulsory+need_redraw
  * 			and keep old_ and new_ for wverwevery variable!
+ *	20070318	i0ma afraid that pan operations hide some big bug..
  */
 namespace fim
 {
@@ -156,6 +157,10 @@ namespace fim
 		else
 		//if (redraw  ) 
 		{
+			/*
+			 * This code should be studied in detail..
+			 * as it is is straight from fbi.
+			 */
 	    		if (img->i.height <= fb_var.yres)
 	    		{
 				top = 0;

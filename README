@@ -8,8 +8,8 @@ FIM aims to be a highly customizable and scriptable image
  viewer targeted at the users who are confortable with software
  like the Vim text editor or the Mutt mail user agent.
 
-It is based on the Fbi image viewer, by Gerd Knorr, and works in the 
- framebuffer console (so, not in X mode).
+It is based on the Fbi image viewer, by Gerd Hoffmann, and works in the 
+ framebuffer console (so, it is not an X progam! ).
 
 ================================================================================
 			Features
@@ -17,30 +17,40 @@ It is based on the Fbi image viewer, by Gerd Knorr, and works in the
 
 Implemented features: 
 
- - interactive vs command mode
- - on-screen debug console in command mode
- - command line autocompletion (thanks to the readline)
- - key-action binding, with shift and control combinations
- - command aliases support
+ - interactive (default) vs command line mode
+ - every possible internal action has a textual command name
+ - on-screen debug and information console in command mode
+ - command line history
+ - command line tab-based command autocompletion (thanks to the readline)
+ - command line command autocompletion (optional)
+ - key-action binding, with SHIFT and CONTROL key combinations
  - simple if-while scriptability, with integer variables and arithmetic evaluation
- - event autocommands (in vim style)
- - configuration (initialization) file support
- - wrapper script to convert pdf,ps,eps,dvi,cbr(rar),cbz(zip) contents into images
-   and display with FIM
+ - command aliases support (macros)
+ - event autocommands (in Vim's 'autocmd' style)
  - regular expressions to enrich autocommand behaviour
+ - configuration (initialization) file support
+ - usable builtin default configuration
+ - wrapper script to convert pdf,ps,eps,dvi,cbr(rar),cbz(zip),tar,tar.gz,tgz
+   contents into images and display with Fim
+ - index based goto
+ - regular expressions (on filename) based goto
+ - stuff     usual for an image viewer (scale, pan, etc..)
+ - stuff (un)usual for an image viewer (setting scale factor, auto width scale, 
+   auto heigth scale, marking of 'interesting' files, sorting of files in the
+   list, recording/replaying of sessions, repeat last action )
+ - script file execution
+ - system call
+ - these features could be enabled or disabled at compile time editing the Makefile
 
-Working on features : 
+Yet unimplemented features :
 
  - decent (auto)documentation, in gdb style!
+ - better argument passing to commands (with internal environment variables)
  - regular expressions to restrict the image selection
-
-Future features :
-
  - mutt-like hooks (vs autocommands)
  - mutt-like patterns ~p, ~r ...
- - advanced pattern selection of images on other criterias
- - quick goto command
- - system(), exec() and pipe  support (and the dangers it brings...)
+ - advanced pattern selection of images on other criterias ?
+ - exec() and pipe()  support (and the dangers it brings...)
 
 ================================================================================
 			Compilation Requirements
@@ -48,50 +58,62 @@ Future features :
 
  - fbi, with curl and exif support disabled
  - the GNU readline library
- - flex and bison (not any lex and yacc)
- - the GCC, of course
- - the libraries required by FBI
+ - flex and bison (NOT any lex and yacc)
+ - the GCC ( Gnu Compiler Collection )
+ - header files for : libpng, libjpeg, libungif, libtiff
+
+ Libraries originally required by Fbi but removed from Fim : libFS, libCURL, libLIRC
 
 ================================================================================
 			Run Time Requirements
 ================================================================================
 
  - A Linux box
- - The framebuffer console 
- - the libraries required by FBI
+ - The framebuffer ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
+   ( and usually found in "/usr/src/linux/Documentation/fb" in the kernel source
+    code tree ).
+ - library files for : libpng, libjpeg, libungif, libtiff
+
+================================================================================
+			Technical intro
+================================================================================
+
+The original architecture of Fim is based on the wonderful fbi-1.31, written by
+Gerd Hoffmann/Knorr: ( Fbi can be obtained at http://linux.bytesex.org/fbida/ ).
+
+The idea was to enrich Fbi with a command line and configurability features.
+
+An idea of the concept was settled when developing a small 'vim-like fbi patch'
+for fbi back in 2005:
+http://dezperado.altervista.org/coding.html#vim-like-fbi,%20and%20the%20wrapper%20fbgs.sh%20script%20modified%20for%20handling%20of%20ps,dvi%20and%20pdf%20files
+
+The code is applied as a patch an the existing fbi source tree, but it is by 
+any means near to what is now Fim.
 
 ================================================================================
 			Technical overview
 ================================================================================
 
-Its architecture is based on the wonderful fbi-1.31, written by Gerd Knorr:
- ( fbi can be obtained at http://linux.bytesex.org/fbida/ ).
+To run Fim requires a Linux box with the framebuffer device enabled in the 
+kernel, and some popular image file decoding libraries.
 
-An idea of the concept was settled when developing a small 'vim-like fbi patch'
-for fbi back in 2005/2007:
-http://dezperado.altervista.org/coding.html#vim-like-fbi,%20and%20the%20wrapper%20fbgs.sh%20script%20modified%20for%20handling%20of%20ps,dvi%20and%20pdf%20files
-
-The code is applied as a patch to the existing fbi source tree.
-
-FIM is developed as a C/C++ soup, and to compile requires:
-
- - fbi, with curl and exif support disabled
- - the GNU readline library
- - flex and bison (not any lex and yacc)
- - the GCC, of course
-
-To run it requires a Linux box with the framebuffer device enabled in the kernel.
 Information about the framebuffer can be found under the directory
  "./Documentation/fb"
  inside the kernel tree 
  (usually "/usr/src/linux/Documentation/fb" ).
 
+The libraries can be found on their sites (as of 20070312):
+
+ libpng   : http://www.libpng.org/
+ libjpeg  : http://www.ijg.org/
+ libungif : http://sourceforge.net/projects/libungif/
+
+Note that it is highly likely that you already have these libraries on your
+system.
 
 From the original README, it reads that Gerd himself built FBI hacking
 "a svgalib PhotoCD viewer", so regard this software as a big, dirty code
 ball :) .
-
-
 
 Useful documents I read during the coding of this patch:
 
@@ -106,7 +128,21 @@ Tested platforms :
  - 2.6.17 Linux Kernel, GCC-3.4.6, gentoo
  - 2.6.17 Linux Kernel, GCC-4.1.1, gentoo
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 1.875d, gentoo
+ - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 2.2   , gentoo
+ - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.33,bison 2.2   , gentoo
 
+================================================================================
+			Gentoo Installation Tips
+================================================================================
 
+On the Gentoo Linux distribution , you should not have problems building Fim by
+first installing some libraries :
 
+ $ emerge media-libs/giflib media-libs/jpeg media-libs/libpng media-libs/tiff
+and Bison (from 1.875d on) and Flex :
+ $ emerge flex bison
+
+This should suffice.
+BEWARE : THERE COULD BE PROBLEMS WITH FLEX/BISON! 
+"flex version 2.5.4" and "bison (GNU Bison) 1.875d" are known to work.
 

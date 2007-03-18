@@ -9,8 +9,15 @@
 #include "yacc.tab.hpp"
 #include "common.h"
 void yyerror(char *);
-int pipedesc[2];
+#ifdef YY_PROTO
+//this branch is taken by flex 2.5.4
+//int yywrap YY_PROTO((void)){return 1;}
+#else
+//this branch is taken by flex 2.5.33
+int yywrap (){return 1;}
+#endif
 
+int pipedesc[2];
 /*#define YY_INPUT(buf,result,max_size) \
 { \
 	int r=read(pipedesc[0],buf,1); \
@@ -147,8 +154,4 @@ STRINGC_DQ {STRINGC}|\'
 \#.*\n  { /*  ... a command encountered... */ ; }
 
 %%
-int yywrap(void)
-{
-	return 1;
-}
 
