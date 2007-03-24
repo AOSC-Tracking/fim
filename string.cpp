@@ -32,6 +32,7 @@ namespace fim
 	string::string(const string& s){strcpy(this->s,s.s);}
 	string::string(const char *str){strncpy(s,str,TOKSIZE-1);s[TOKSIZE-1]='\0';/*??*/}
 	string::string(const int &i){sprintf(s,"%d",i);}//this works if TOKSIZE is enough
+	string::string(const unsigned int &i){sprintf(s,"%u",i);}//this works if TOKSIZE is enough
 	const char*string::c_str()const{return s;}
 	bool string::operator==(const string& s)const{return strcmp(this->s,s.s)==0;}
 	bool string::operator==(const char *  s)const{return strcmp(this->s,  s)==0;}

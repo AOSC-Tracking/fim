@@ -328,8 +328,8 @@ namespace fim
 		img=fimg;
 //		assert(img);
 	        redraw=1;
-		if(! img){cout<<"warning : image loading error!\n";invalid=1;}
-		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;}
+		if(! img){cout<<"warning : image loading error!\n";invalid=1;return;}
+		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return;}
 	}
 
 	void Image::free_mem()

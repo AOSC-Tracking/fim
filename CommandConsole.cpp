@@ -11,6 +11,9 @@ namespace fim
 {
 	int nochars(const char *s)
 	{
+		/*
+		 * 1 if the string is null or empty, 0 otherwise
+		 */
 		if(s==NULL)return 1;
 		while(*s && isspace(*s))++s;
 		return *s=='\0'?1:0;
@@ -19,7 +22,7 @@ namespace fim
 	Command* CommandConsole::findCommand(fim::string cmd)
 	{
 		/*
-		 * is cmd a valid internal Fim command ?
+		 * is cmd a valid internal (registered) Fim command ?
 		 */
 		for(unsigned int i=0;i<commands.size();++i) 
 			if(commands[i] && commands[i]->cmd==cmd)
@@ -38,14 +41,14 @@ namespace fim
 		if(bindings[c]!="")
 		{
 			bindings[c]=binding;
-			return fim::string("binding ")+fim::string(c)
-				+fim::string(" successfully replaced to ")+fim::string(bindings[c])+fim::string("\n");
+			return fim::string("keycode ")+fim::string(c)
+				+fim::string(" successfully reassigned to ")+fim::string(bindings[c])+fim::string("\n");
 		}
 		else
 		{
 			bindings[c]=binding;
-			return fim::string("binding ")+fim::string(c)
-				+fim::string(" successfully added to ")+fim::string(bindings[c])+fim::string("\n");
+			return fim::string("keycode ")+fim::string(c)
+				+fim::string(" successfully assigned to ")+fim::string(bindings[c])+fim::string("\n");
 		}
 	}
 
@@ -53,11 +56,12 @@ namespace fim
 	{
 		/*
 		 *	this is the interactive bind command
-		 *
+		 *	the user supplies a string with the key combination, and if valid, its keycode
+		 *	is associated to the user supplied actin (be it a command, alias, etc..)
 		 *	FIX ME
 		 */
 		const char *kerr="bind : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
-		if(args.size()!=2)return "usage : bind KEY COMMAND\n";
+		if(args.size()!=2)return "usage : bind KEY ACTION\n";
 		const char*key=(args[0].c_str());
 		if(!key)return kerr;
 		int l=strlen(key);
@@ -68,8 +72,8 @@ namespace fim
 	fim::string CommandConsole::unbind(const std::vector<fim::string>& args)
 	{
 		/*
-		 * 	unbinds the first specified in args..
-		 *	PLEASE FINISH THIS FUNCTION:
+		 * 	unbinds the action eventually bound to the first key name specified in args..
+		 *	IDEAS : multiple unbindings ?
 		 *	maybe you should made surjective the binding_keys mapping..
 		 */
 		if(args.size()!=1)return "unbind : specify the key to unbind\n";
@@ -79,7 +83,7 @@ namespace fim
 	fim::string CommandConsole::unbind(int c)
 	{
 		/*
-		 * undinds the key with code c
+		 * undinds the action eventually bound to the key combination code c
 		 */
 		if(bindings[c]!="")
 		{
@@ -89,7 +93,7 @@ namespace fim
 		else
 			return fim::string("unbind ")+fim::string(c)+fim::string(": there were not such binding.\n");
 	}
-
+#if 0
 	fim::string CommandConsole::bind(std::vector<Arg> args)
 	{
 		/*
@@ -112,23 +116,25 @@ namespace fim
 		return bind(c,cmdlist);*/
 		return "....";
 	}
-
+#endif
 	fim::string CommandConsole::aliasRecall(fim::string cmd)
 	{
 		/*
-		 * returns the alias command specified by cmd
+		 * returns the alias command eventually specified by token cmd
 		 */
 		return aliases[cmd];
 	}
 
-	fim::string CommandConsole::displayAliases()
+	fim::string CommandConsole::getAliasesList()
 	{
-		//FIX ME
+		/*
+		 * collates all registered action aliases together in a single string
+		 * */
 		fim::string aliases_expanded;
 		std::map<fim::string,fim::string>::const_iterator ai;
 		for( ai=aliases.begin();ai!=aliases.end();++ai)
 		{
-			if(ai->second == "")continue;//FIX ME PLEASE
+			if(ai->second == "")continue;//FIX THIS : THIS SHOULD NOT OCCUR
 			aliases_expanded+="alias ";
 			aliases_expanded+=((*ai).first);
 			aliases_expanded+="=\"";
@@ -146,7 +152,7 @@ namespace fim
 		fim::string cmdlist;
 		if(args.size()==0)
 		{
-			return displayAliases();
+			return getAliasesList();
 		}
 		if(args.size()<2)return "alias : please specify some action to do\n";
 		for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
@@ -180,6 +186,7 @@ namespace fim
 			if(cmd)return  cmd->getHelp()+fim::string("\n");
 			else cout << args[0] << " : no such command\n";
 		}
+		this->setVariable("_display_console",1);
 		return "usage : help CMD   (use TAB to get a list of commands :) )\n";
 	}
 
@@ -257,6 +264,7 @@ namespace fim
 #endif
 		addCommand(new Command(fim::string("variables"  ),fim::string("displayed the associated variables"),this,&CommandConsole::variables_list));
 		addCommand(new Command(fim::string("dump_key_codes"  ),fim::string("dumps the key codes"),this,&CommandConsole::dump_key_codes));
+		addCommand(new Command(fim::string("clear"  ),fim::string("clears the virtual console"),this,&CommandConsole::clear));
 		/*
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */
@@ -266,26 +274,28 @@ namespace fim
 	void CommandConsole::init()
 	{
 		/*
-		 *	FIX ME
-		 *	Here the program loads the initialization scripts
+		 *	Here the program loads initialization scripts :
+		 * 	the default configuration file, and user invoked scripts.
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
+		int fimrcs=0;
 #ifndef FIM_NOFIMRC
 #ifndef FIM_NOSCRIPTING
-		char rcfile[FIM_MAX_SCRIPT_FILE];
+		char rcfile[_POSIX_PATH_MAX];
 		char *e = getenv("HOME");
-		if(e && strlen(e)<128)
+		if(e && strlen(e)<_POSIX_PATH_MAX-8)//strlen("/.fimrc")+2
 		{
 			strcpy(rcfile,e);
 			strcat(rcfile,"/.fimrc");
-			cout << rcfile;
 			if(getIntVariable("_no_rc_file")==0 )
 			{
-				if(-1==executeFile(rcfile));	//GLOBAL DEFAULT CONFIGURATION FILE
+				if(-1==executeFile(rcfile));	//if execution fails for some reason
 #endif
 #endif
 				{
-					//if no configuration file is present, we use the default configuration!
+					/*
+					 if no configuration file is present, or fails loading,
+					 we use the default configuration (raccomended !)  !	*/
 #ifdef FIM_DEFAULT_CONFIGURATION
 					execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0);
 #endif		
@@ -300,13 +310,17 @@ namespace fim
 #ifndef FIM_NOSCRIPTING
 		for(unsigned int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
 #endif		
-		if ( browser.empty_file_list() )
+		if ( browser.empty_file_list() && scripts.size()==0 )
 		{
+#ifndef FIM_NOFB
 			printHelpMessage();
+			//when debugging Fim, we are not interested in this feature
 			this->quit();
+#endif
 		}
-		//qui ci vorrebbe stat e behaviour condizionale dettata
-		//dalla presenza di /etc/fimrc ...
+		/*
+		 *	FIX ME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
+		 * */
 	}
 
 	int CommandConsole::addCommand(Command *c)
@@ -314,7 +328,7 @@ namespace fim
 		/*
 		 * C is added to the commands list
 		 */
-		assert(c);
+		assert(c);	//see the macro NDEBUG for this
 		commands.push_back(c);
 		return 0;
 	}
@@ -419,12 +433,10 @@ namespace fim
 		return NULL;
 	}
 
-#define MAXSTRING 4096
 #define istrncpy(x,y,z) {strncpy(x,y,z-1);x[z-1]='\0';}
-#define ferror(s) {/*fatal error*/printf("%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);exit(-1);}
-#define  	MAXTOCS 128
+#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);cc.quit(-1);}
 
-
+#if 0
 	char ** CommandConsole::tokenize_(const char *s)
 	{
 		//questa funzione mi ha fatto bestemmiare un sacco
@@ -462,6 +474,7 @@ namespace fim
 		tokens[ntoks]=NULL;
 		return tokens;
 	}
+#endif
 
 	fim::string CommandConsole::getBoundAction(const int c)
 	{
@@ -500,9 +513,12 @@ namespace fim
 		//executes a whole line, and stores it in the command history, eventually
 		//if(s==NULL){ferror("null command");return;}
 		assert(s);
+		//we open a pipe with the lexer/parser
 		int r = pipe(pipedesc);
 		if(r!=0){ferror("pipe error\n");}
+		//we write there our script or commands
 		r=write(pipedesc[1],s,strlen(s));
+		//we are done!
 		close(pipedesc[1]);
 		if(r!=(int)strlen(s)){ferror("write error");} 
 		for(char*p=s;*p;++p)if(*p=='\n')*p=' ';
@@ -511,6 +527,7 @@ namespace fim
 //		printf("\n");
 		close(pipedesc[0]);
 		//this->execute(fim::string(s));
+		//we add to history only meaningful commands/aliases.
 		if(add_history_)if(nochars(s)==0)add_history(s);
 		free(s);
 	}
@@ -604,7 +621,7 @@ namespace fim
 			//std::cout << this->alias(aargs) << "\n";
 			cout << this->alias(aargs) << "\n";
 			return "";}
-			return displayAliases();
+			return getAliasesList();
 		}
 		else
 		{
@@ -776,6 +793,7 @@ namespace fim
 					ic=0; // we 'exit' from the console for a while
 					execute(rl,1);	//execution of the command line with history
 					ic=1;
+					this->setVariable("_display_console",1);	//!!
 //					execute("redisplay;",0);	//execution of the command line with history
 #ifdef FIM_AUTOCMDS
 					cc.autocmd_exec("PostInteractiveCommand",cf);
@@ -893,7 +911,7 @@ namespace fim
 		std::exit(i);
 	}
 
-	void CommandConsole::quit()
+	void CommandConsole::quit(int i)
 	{
 		/*
 		 * the method to be called to exit from the program safely
@@ -1032,7 +1050,37 @@ namespace fim
 
 	int CommandConsole::drawOutput()
 	{
-		return inConsole() || this->getIntVariable("_display_status");
+		//return inConsole() || this->getIntVariable("_display_status");
+		return inConsole() || this->getIntVariable("_display_console");
+	}
+
+	fim::string CommandConsole::get_aliases_list()
+	{
+		/*
+		 * FIX ME
+		 */
+		fim::string completions;
+		std::map<fim::string,fim::string>::const_iterator ai;
+		for( ai=aliases.begin();ai!=aliases.end();++ai)
+		{	
+			completions+=((*ai).first);
+			completions+=" ";
+		}
+		return completions;
+	}
+
+	fim::string CommandConsole::get_commands_list()
+	{
+		/*
+		 * FIX ME
+		 */
+		fim::string completions;
+		for(unsigned int i=0;i<commands.size();++i)
+		{
+			if(i)completions+=" ";
+			completions+=(commands[i]->cmd);
+		}
+		return completions;
 	}
 
 	fim::string CommandConsole::get_variables_list()
@@ -1213,10 +1261,11 @@ namespace fim
 	bool CommandConsole::regexp_match(const char*s, const char*r)const
 	{
 		/*
-		 *	FIX ME
+		 *	given a string s, and a Posix regular expression r, this
+		 *	method returns true if there is match. false otherwise.
 		 */
-		regex_t regex;	//should be static!!!
-		const int nmatch=1;
+		regex_t regex;		//should be static!!!
+		const int nmatch=1;	// we are satisfied with the first match, aren't we ?
 		regmatch_t pmatch[nmatch];
 
 		/*
@@ -1227,7 +1276,8 @@ namespace fim
 		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
 		if(regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE )==-1)
 		{
-			cout << "error calling regcomp (invalid regexp?)!" << "\n";
+			/* error calling regcomp (invalid regexp?)! (should we warn the user ?) */
+			//cout << "error calling regcomp (invalid regexp?)!" << "\n";
 			return false;
 		}
 		else
@@ -1248,7 +1298,7 @@ namespace fim
 		}
 		else
 		{
-		//	cout << "no match" << "\n";
+			/*	no match	*/
 		};
 		regfree(&regex);
 		return false;
@@ -1276,14 +1326,15 @@ namespace fim
 	fim::string CommandConsole::unalias(const std::vector<fim::string>& args)
 	{
 		/*
-		 * removes the binding from an alias to the associated action
+		 * removes the actions assigned to the specified aliases
 		 */
 		if(args.size()<1)return "unalias : please specify an alias to remove!\n";
 		for(unsigned int i=0;i<args.size();++i)
 		if(aliases[args[i]]!="")
 		{
 			aliases.erase(args[i]);
-			return "";//fim::string("unalias : \"")+args[i]+fim::string("\" successfully unaliased.\n");
+			return "";
+			//fim::string("unalias : \"")+args[i]+fim::string("\" successfully unaliased.\n");
 		}
 		else return fim::string("unalias : \"")+args[i]+fim::string("\" there is not such alias.\n");
 		return "";
@@ -1297,7 +1348,7 @@ namespace fim
 		{
 			acl+=((*ki).first);
 			acl+=" -> ";
-			acl+=((*ki).second);
+			acl+=(unsigned int)(((*ki).second));
 			acl+=", ";
 		}
 		return acl;
@@ -1310,6 +1361,5 @@ namespace fim
 		 */
 		browser.display();
 	}
-
 }
 

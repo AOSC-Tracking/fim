@@ -33,9 +33,11 @@ This file is often outdated : FIM is a lot better than it seems here :)
 20070303	add an interface for setting exitBinding (now Enter!)
 20070305	i am not sure the scale_image security patch is complete.
 20070306	primary goals : documentation and warning messages!
+	SCIENCE FICTION:
+20070307	someday: to integrate with a speech recognizer ? :)
+20070323	image understanding language - based pattern selection  :)
 	ADD:
 20070307	/
-20070307	someday: to integrate with a speech recognizer ? :)
 20070306	add a way to dump to stdout the default configuration file contents
 20070305	add a handier interface for regexp searching (/)
 20070217	fix the default /etc/fimrc or better, builtin config!
@@ -43,12 +45,12 @@ This file is often outdated : FIM is a lot better than it seems here :)
 20070129	dump internal commands function
 20070129	implement a new millisleep function..
 20070125	add pipe to other commands and exec and system (screenshot with fbgrab, for example)
-20070126	debugger x scoprire i tasti .. ocr..
+20070126	debugger x scoprire i tasti
 20070128	add support for command renaming with checks...
 20070130	~ proper signal handing for while cycle interruption..
 20070201	cwd,ls,pwd,stat,file...
 20070201	meccanismo --norc, --rc=..
-20070208	when you find time, rewrite the parser in full C++
+20070208	when you find time, rewrite the parser in full C++ or traditional, clean C
 20070303	IDEAS :
 		autocmd =~
 		load cfg, save cfg

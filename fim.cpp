@@ -38,12 +38,10 @@ char * dupnstr (double n)
 {
 	//allocation of a single string
 	char *r = (char*) malloc (16);
-	//FIX ME
 	if(!r){/*assert(r);*/cc.quit();}
 	sprintf(r,"%f",n);
 	return (r);
 }
-
 
 /*
  *	Allocation of a small string for storing the 
@@ -53,7 +51,6 @@ char * dupnstr (int n)
 {
 	//allocation of a single string
 	char *r = (char*) malloc (16);
-	//FIX ME
 	if(!r){/*assert(r);*/cc.quit();}
 	sprintf(r,"%d",n);
 	return (r);
@@ -65,7 +62,6 @@ char * dupnstr (int n)
 char * dupstr (const char* s)
 {
 	char *r = (char*) malloc (strlen (s) + 1);
-	//FIX ME
 	if(!r){/*assert(r);*/cc.quit();}
 	strcpy (r, s);
 	return (r);
@@ -121,6 +117,15 @@ namespace fim
 	}
 }
 
+void sanitize_string(char *s, int c=0)
+{	
+	int n=c;
+	//cleans the string terminating it when some non printable character is encountered
+	if(s)
+	while(*s && (c--||!n))if(!isgraph(*s)||*s=='\n'){*s=' ';++s;}else ++s;
+	return;
+}
+
 /*
  *	Set the 'status bar' of the program.
  *	desc will be placed on the left corner
@@ -128,19 +133,20 @@ namespace fim
  */
 void status(const char *desc, const char *info)
 {
-	//FIX ME
+	//FIX ME : this function always draws ?
 	int chars, ilen;
 	char *str,*p;
 #ifndef FIM_NOFB
 //	if (!statusline)return;
 	chars = fb_var.xres / fb_font_width();
+	if(chars<48)return;//something strange..
 	str = (char*) malloc(chars+1);
 	if(!str)return;
 	if (info)
 	{
 		ilen = strlen(info);
 		sprintf(str, "%-*.*s [ %s ] H - Help",
-		chars-14-ilen, chars-14-ilen, desc, info);
+		chars-14-ilen, chars-14-ilen, desc, info);//here above there is the need of 14+ilen chars
 	}
 	else
 	{
@@ -181,12 +187,14 @@ char *make_info(struct ida_image *img, float scale)
  *	This function treats the framebuffer screen as a text outout terminal.
  *	So it prints msg thre.
  *	if noDraw is set, the screen will be not refreshed.
+	 *	NULL,NULL is the clearing combination !!
 	//FIX ME
  */
-void fb_status_screen(const char *msg, int noDraw=1)
-{
-	if(!msg) return;
-	if(cc.noFrameBuffer())return;
+void fb_status_screen(const char *msg)//, int noDraw=1)
+{	
+	/*	WARNING		*/
+	//noDraw=0;
+	/*	WARNING		*/
 #ifndef FIM_NOFB
 
 	int y,i,j,l,w;
@@ -200,7 +208,10 @@ void fb_status_screen(const char *msg, int noDraw=1)
 		   ccol=0;	//current column	[0..C]
 	const char *p=msg,	//p points to the substring not yet printed
 	      	    *s=p;	//s advances and updates p
-	while(*p)
+	if(!msg) {memset(columns,' ',R*(C+1));cline=0;ccol=0;p=NULL;/*noDraw=0;*/}
+	//if(!msg) return;
+	if(cc.noFrameBuffer())return;
+	if(p)while(*p)
 	{
 	    //while there are characters to put on screen, we advance
 	    while(*s && *s!='\n')++s;
@@ -210,6 +221,7 @@ void fb_status_screen(const char *msg, int noDraw=1)
 	    w=0;
 	    while(l>0)	//line processing
 	    {
+#if 0
 		    if(0)
 		    {
 			    //clear the current line
@@ -223,12 +235,14 @@ void fb_status_screen(const char *msg, int noDraw=1)
 			    }
 		    
 		    }
+#endif
 		    //w is the number of writable characters on this line ( w in [0,C-ccol] )
 		    w=min(C-ccol,l);
 		    //there remains l-=w non '\n' characters yet to process in the first substring
 		    l-=w;
 		    //we place the characters on the line (not padded,though)
 		    strncpy(columns[cline]+ccol,p,w);
+		    sanitize_string(columns[cline]+ccol,w);
 		    //the current column index is updated,too
 		    ccol+=w;
 		    //we blank the rest of the line (SHOULD BE UNNECESSARY)
@@ -273,7 +287,8 @@ void fb_status_screen(const char *msg, int noDraw=1)
 		    }
 	    p=s;
 	}
-	if(!cc.drawOutput() || noDraw)return;//CONVENTION!
+	//if(!cc.drawOutput() || noDraw)return;//CONVENTION!
+	if(!cc.drawOutput() )return;//CONVENTION!
 //	    if (!visible) return;
 //	    y = fb_var.yres - f->height - ys;
 //	    y = 1*f->height;
@@ -292,7 +307,7 @@ void fb_status_screen(const char *msg, int noDraw=1)
 #undef R 
 #undef C 
 #else
-	printf("%s",msg);
+	if(msg)printf("%s",msg);
 	return;
 #endif
 }
@@ -308,8 +323,9 @@ void status_screen(const char *desc, char *info)
 #ifndef FIM_NOFB
 	/*
 	 *	TO FIX
+	 *	NULL,NULL is the clearing combination !!
 	 */
-	if(!desc)return;
+	//if(!desc)return;	// !!
 	fb_status_screen(desc);
 #endif
 }
@@ -327,33 +343,25 @@ static char ** fim_completion (const char *text, int start,int end)
 {
 	//FIX ME
 	char **matches;
-	regex_t blank_regex;	//should be static!!!
-	const int nmatch=1;
-	regmatch_t pmatch[nmatch];
-	//char bc;
 
-	//compilation of regular expression
-	if(regcomp(&blank_regex,"^ \\+$", 0)==-1)
+	if(start==end && end<1)
 	{
-//		std::cout << "error calling regcomp!" << "\n";
+#if 0
+		char **__s,*_s;
+		_s=dupstr("");
+		if(! _s)return NULL;
+		__s=(char**)calloc(1,sizeof(char*));
+		if(!__s)return NULL;__s[0]=_s;
+		//we print all of the commands, with no completion, though.
+#endif
+		cout << "variables : "<<cc.get_variables_list()<<"\n";
+		cout << "commands  : "<<cc.get_commands_list()<<"\n";
+		cout << "aliases   : "<<cc.get_aliases_list()<<"\n";
+		rl_attempted_completion_over = 1;
+		/* this could be set only here :) */
+		return NULL;
 	}
-	else
-	{
-//		std::cout << "done calling regcomp!" << "\n";
-	}
-	if(regexec(&blank_regex,rl_line_buffer+start,nmatch,pmatch,0)==0)
-	{
-//		std::cout << "\"";
-//		for(int m=pmatch[0].rm_so;m<pmatch[0].rm_eo;++m)
-//			std::cout << rl_line_buffer[start+m];
-//		std::cout << "\"\n";
-	}
-	else
-	{
-//		std::cout << "no match" << "\n";
-	};
-	regfree(&blank_regex);
-	       
+	
         matches = (char **)NULL;
 
             /* If this word is at the start of the line, then it is a command
@@ -397,8 +405,9 @@ static void completion_display_matches_hook(char **matches,int num,int max)
 	}
 	//      status_screen((unsigned char*)buffer, NULL);
 	
+	//fb_status_screen(buffer, 0);
 	//cout << buffer << "\n" ;
-	fb_status_screen(buffer, 0);
+	fb_status_screen(buffer);
 
 
 //	std::cout << buffer << "\n" ;
@@ -425,6 +434,12 @@ static int redisplay_hook()
 	return 0;
 }
 
+int fim_rl_end(int a,int b)
+{
+	rl_point=rl_end;
+	return 0;
+}
+
 /*
  *	initial setup to set the readline library working
  */
@@ -443,6 +458,17 @@ void initialize_readline ()
         rl_event_hook=redisplay_hook;
         rl_pre_input_hook=redisplay_hook;
 #endif
+	//rl_completion_entry_function=NULL;
+	/*
+	 * to do:
+	 * see rl_filename_quoting_function ..
+	 * */
+	//rl_inhibit_completion=1;
+	rl_filename_quoting_desired=1;
+	rl_filename_quote_characters="\"";
+	//rl_bind_key('~',fim_rl_end);
+	//rl_bind_keyseq("g",fim_rl_end);
+	//rl_set_prompt("$");
 
 /*	rl_voidfunc_t *rl_redisplay_function=redisplay;
 	rl_hook_func_t *rl_event_hook=redisplay_hook;
@@ -831,5 +857,4 @@ int main(int argc,char *argv[])
 	cc.executionCycle();
 	return 0;
 }
-
 

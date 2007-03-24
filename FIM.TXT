@@ -7,6 +7,7 @@ $Id$
 First of all, please view this documentation in VIM with ':set syntax=help' :)
 if you already know Vim, you will know that in this way you can use this
 documentation as it would be a hypertext.
+( or add "autocmd BufReadPost FIM.TXT set syntax=help" into your ~/.vimrc ! )
 If you do not know Vim, you can find it at http://www.vim.org.
 
 
@@ -55,6 +56,7 @@ Introduction to Fim					*ref* *reference*
 9. Dangers			|dangers|
 10. Language Reference		|langref|
 11. Credits			|credits|
+12. FAQs			|faq|
 
 ==============================================================================
 2. Fim on the internet				*internet*
@@ -337,6 +339,9 @@ So, the commands following the loop will be ignored.
 
 ==============================================================================
 11.Credits 							*credits*
+
+==============================================================================
+11.FAQs 							*faq*
 
  UNFINISHED
 

@@ -40,7 +40,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreRedisplay",c);
 #endif
-		if(image)
+			if(image)
 			{
 				image->redisplay();	//THE BUG IS NOT HERE
 				this->display_status(info().c_str(), NULL);//THE BUG IS NOT HERE
@@ -58,7 +58,6 @@ namespace fim
 			next(0);reload();}
 #endif
 #endif
-
 		}
 	}
 
@@ -74,7 +73,8 @@ namespace fim
 	const fim::string Browser::pop_current()
 	{	
 		/*
-		 * pop the last image filename from the filenames list
+		 * pops the current image filename from the filenames list
+		 * ( note that it doesn't refresh the image in any way ! )
 		 *
 		 * WARNING : SAME AS ERASE !
 		 */
@@ -88,7 +88,8 @@ namespace fim
 	const fim::string Browser::pop()
 	{	
 		/*
-		 * pop the last image filename from the filenames list
+		 * pops the last image filename from the filenames list
+		 * ( note that it doesn't refresh the image in any way ! )
 		 */
 		fim::string s;
 		if(flist.size()<=0)return nofile;
@@ -115,6 +116,7 @@ namespace fim
 			cc.autocmd_exec("PostPan",c);
 #endif
 		}
+		else prev();
 		return "";
 	}
 	
@@ -134,13 +136,14 @@ namespace fim
 			cc.autocmd_exec("PostPan",c);
 #endif
 		}
+		else next(1);
 		return "";
 	}
 
 	fim::string Browser::scale_multiply(const std::vector<fim::string> &args)
 	{
 		/*
-		 * scale the image 
+		 * scales the image by a user specified factor
 		 */
 		double multiscale;
 		if(args.size()==0)return "";
@@ -163,7 +166,7 @@ namespace fim
 	fim::string Browser::scale_increment(const std::vector<fim::string> &args)
 	{
 		/*
-		 * scale the image 
+		 * increments the scale additively
 		 */
 		double deltascale;
 		if(args.size()==0)return "";
@@ -187,7 +190,7 @@ namespace fim
 	fim::string Browser::scale(const std::vector<fim::string> &args)
 	{
 		/*
-		 * scale the image 
+		 * scales the image to a certain factor
 		 */
 		double newscale;
 		if(args.size()==0)return "";
@@ -211,7 +214,7 @@ namespace fim
 	fim::string Browser::auto_height_scale(const std::vector<fim::string> &args)
 	{
 		/*
-		 * scale the image to fit in the screen in the vertical dimension
+		 * scale this image to fit in the screen in the vertical dimension
 		 */
 		if(image)
 		{
@@ -230,7 +233,7 @@ namespace fim
 	fim::string Browser::auto_width_scale(const std::vector<fim::string> &args)
 	{
 		/*
-		 * scale the image to fit in the screen in the horizontal dimension
+		 * scale this image to fit in the screen in the horizontal dimension
 		 */
 		if(image)
 		{
@@ -249,7 +252,7 @@ namespace fim
 	fim::string Browser::auto_scale(const std::vector<fim::string> &args)
 	{
 		/*
-		 * auto scale the image
+		 * auto scale the image accordingly to the *default* settings !
 		 */
 		if(image)
 		{
@@ -281,6 +284,7 @@ namespace fim
 			cc.autocmd_exec("PostPan",c);
 #endif
 		}
+		else next(1);
 		return "";
 	}
 
@@ -300,6 +304,7 @@ namespace fim
 			cc.autocmd_exec("PostPan",c);
 #endif
 		}
+		else prev();
 		return "";
 	}
 
@@ -314,7 +319,7 @@ namespace fim
 	fim::string Browser::display(const std::vector<fim::string> &args)
 	{
 		/*
-		 * display the current image, if loaded, on screen
+		 * display the current image, if already loaded, on screen
 		 */
 		fim::string c=current();
 		if(image)
@@ -349,6 +354,7 @@ namespace fim
 		 * tries to load a new one from the current filename
 		 */
 		fim::string c=current();
+		if(empty_file_list())return "sorry, no image to reload\n";
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreReload",c);
 #endif
@@ -357,9 +363,16 @@ namespace fim
 		if(image && ! (image->valid()))
 		{
 			delete image;image=NULL;
-			return fim::string("error reloading the file ")
+#ifdef FIM_REMOVE_FAILED
+			if(current()!=""){pop_current();	//removes the current file from the list.
+#ifdef FIM_AUTOSKIP_FAILED
+			next(0);reload();}
+#endif
+#endif
+			return fim::string("error loading the file ")
 				+c+fim::string("\n");
 		}
+
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostReload",c);
 #endif
@@ -372,7 +385,8 @@ namespace fim
 		 * loads the current file, if not already loaded
 		 */
 		fim::string c=current();
-		if(image) return "";
+		if(image) return "image already loaded\n";		//warning
+		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreLoad",c);
 #endif
@@ -430,8 +444,16 @@ namespace fim
 		 * it is not existent or it is a directory...
 		 */
 		struct stat stat_s;
+		/*	if the file doesn't exist, return */
 		if(-1==stat(nf.c_str(),&stat_s))return "";
-		if(S_ISDIR(stat_s.st_mode))return "";
+		/*	if it is a char device , return */
+		//if(  S_ISCHR(stat_s.st_mode))return "";
+		/*	if it is a block device , return */
+		//if(  S_ISBLK(stat_s.st_mode))return "";
+		/*	if it is a directory , return */
+		//if(  S_ISDIR(stat_s.st_mode))return "";
+		/*	..hmm.. paranoia is better */
+		if(! S_ISREG(stat_s.st_mode))return "";
 #endif
 
 #ifdef FIM_CKECK_DUPLICATES
@@ -451,7 +473,9 @@ namespace fim
 	
 	fim::string Browser::reload()
 	{
+		if(n_files())
 		return reload(std::vector<fim::string>());
+		return "";
 	}
 
 	int Browser::n_files()const
@@ -652,6 +676,7 @@ namespace fim
 			}
 			else image->pan_right();
 		}
+		else next(1);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -670,6 +695,7 @@ namespace fim
 			if(image->onBottom()) next();
 			else pan_down(std::vector<fim::string>());
 		}
+		else next(1);
 		return "";
 	}
 

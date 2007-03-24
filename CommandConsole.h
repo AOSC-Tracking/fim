@@ -197,8 +197,10 @@ class CommandConsole
 	autocmds_stack_t autocmds_stack;
 	std::vector<fim::string> autocmds_sub_list(const fim::string &event);
 	fim::string bind(const std::vector<fim::string>& args);
+#if 0
 	fim::string bind(std::vector<Arg> args);
-	fim::string displayAliases();
+#endif
+	fim::string getAliasesList();
 	fim::string dummy(std::vector<Arg> args);
 	fim::string variables_list(const std::vector<fim::string>& args){return get_variables_list();}
 	fim::string unalias(const std::vector<fim::string>& args);
@@ -211,8 +213,9 @@ class CommandConsole
 	fim::string bind(int c,fim::string binding);
 	fim::string unbind(const std::vector<fim::string>& args);
 	fim::string dump_key_codes(const std::vector<fim::string>& args);
+	fim::string clear(const std::vector<fim::string>& args){status_screen(NULL,NULL);}
 	public:
-	void quit();
+	void quit(int i=0);
 	int  drawOutput();
 	int  isInScript(){return isinscript;}
 	bool regexp_match(const char*s, const char*r)const;
@@ -231,8 +234,10 @@ class CommandConsole
 	int  autocmd_in_stack(const autocmds_frame_t& frame);
 #endif
 	fim::string current()const{ return browser.current();}
-	fim::string get_variables_list();
 	public:
+	fim::string get_variables_list();
+	fim::string get_aliases_list();
+	fim::string get_commands_list();
 	void printHelpMessage()
 	{
 		printf("\nThe help will be here soon!\n");
