@@ -2,6 +2,8 @@
 #ifndef CC_FBVI_H
 #define CC_FBVI_H
 #include "fim.h"
+//#include <stdio.h>
+#include <sys/resource.h>
 namespace fim
 {
 class CommandConsole
@@ -15,7 +17,7 @@ class CommandConsole
 	 * the aliases to actions (compounds of commands)
 	 */
 	std::map<fim::string,fim::string> aliases;	//alias->commands
-
+	
 	/*
 	 * bindings of key codes to actions (compounds of commands)
 	 */
@@ -74,8 +76,11 @@ class CommandConsole
 	fim::string memorize_last(const fim::string &cmd)
 	{
 		//WARNING : DANGER
-		if(dont_record_last_action==false)last_action=cmd;
-		dont_record_last_action=false;	//from now on we can memorize again
+		if(dont_record_last_action==false)
+		{
+			last_action=cmd;
+		}
+		dont_record_last_action=true;	//from now on we can memorize again
 		return "";
 	}
 
@@ -102,7 +107,13 @@ class CommandConsole
 	{
 		fim::string res;
 		for(unsigned int i=0;i<recorded_actions.size();++i)
+		{
+			res+="usleep '";
+			res+=recorded_actions[i].second;
+			res+="';\n";
 			res+=recorded_actions[i].first;
+			res+="\n";
+		}
 		return res;
 	}
 	
@@ -140,13 +151,10 @@ class CommandConsole
 		return cmd;
 	}
 
-	void record_action(const fim::string &cmd)
-	{
-		//FIX ME
-		//recorded_actions.push_back(recorded_action_t(cmd,0));
-		recorded_actions.push_back(recorded_action_t(sanitize_action(cmd),0));
-	}
+	void record_action(const fim::string &cmd);
 #endif
+
+	int fim_stdin;	// the standard input file descriptor
 
 	public:
 
@@ -173,6 +181,8 @@ class CommandConsole
 #ifndef FIM_NOSCRIPTING
 	int  executeFile(const char *s);
 	fim::string executeFile(const std::vector<fim::string> &args);
+	int executeStdFileDescriptor(FILE *fd);
+	int executeFileDescriptor(int fd);
 #endif
 	fim::string echo(const std::vector<fim::string> &args);
 	fim::string help(const std::vector<fim::string> &args);
@@ -188,6 +198,7 @@ class CommandConsole
 	fim::string alias(const fim::string& a,const fim::string& c);
 	fim::string aliasRecall(fim::string cmd);
 	fim::string system(const std::vector<fim::string>& args);
+	fim::string sys_popen(const std::vector<fim::string>& args);
 	fim::string autocmd(const std::vector<fim::string>& args);
 	fim::string autocmd_del(const fim::string &event,const fim::string &pat){return "";}
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);

@@ -4,7 +4,7 @@
 #ifdef FIM_DEFAULT_CONFIGURATION
 #include "conf.h"
 #endif
-
+#include <sys/times.h>
 extern int yyparse();
 
 namespace fim
@@ -198,6 +198,7 @@ namespace fim
 #endif
 		nofb=0;
 		rl::initialize_readline();
+		fim_stdin=0;
 		cycles=0;isinscript=0;
 		addCommand(new Command(fim::string("next" ),fim::string("displays the next picture in the list"),&browser,&Browser::next));
 		addCommand(new Command(fim::string("prev" ),fim::string("displays the previous picture in the list"),&browser,&Browser::prev));
@@ -255,6 +256,7 @@ namespace fim
 		addCommand(new Command(fim::string("autocmd"  ),fim::string("autocommands"),this,&CommandConsole::autocmd));
 #endif
 		addCommand(new Command(fim::string("system"  ),fim::string("system() invocation"),this,&CommandConsole::system));
+		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string("start_recording"  ),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));
 		addCommand(new Command(fim::string("stop_recording"  ),fim::string("stops recording of commands"),this,&CommandConsole::stop_recording));
@@ -586,7 +588,15 @@ namespace fim
 			yyparse();
 			close(pipedesc[0]);
 			return "";
-		}
+		}else
+		if(cmd=="usleep")
+		{
+			unsigned int useconds;
+			if(args.size()>0) useconds=atoi(args[0].c_str());
+			else useconds=1;
+			usleep((unsigned long)useconds);
+			return "";
+		}else
 		if(cmd=="sleep")
 		{
 			int seconds;
@@ -735,8 +745,8 @@ namespace fim
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		
 		int c,r;//char buf[64];
-		//r=read(0,&c,4);
-		r=read(0,&c,1); if(r>0&&c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
+		//r=read(fim_stdin,&c,4);
+		r=read(fim_stdin,&c,1); if(r>0&&c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
 
 		//we restore the previous console attributes
 		tcsetattr (0, TCSAFLUSH, &sattr);
@@ -825,7 +835,7 @@ namespace fim
 				/*
 				 * patch: the following read blocks the program even when switching console
 				 */
-				//r=read(0,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
+				//r=read(fim_stdin,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
 				/*
 				 * so the next code shoul circumvent this behaviour!
 				 */
@@ -854,8 +864,8 @@ namespace fim
 				//if(   switch_last != fb_switch_state ){console_switch(1);}
 				tcsetattr (0, TCSAFLUSH, &sattr);
 #else
-				//if(read(0,&c,4)>0)	//up to four chars should suffice
-				r=read(0,&c,4);	//up to four chars should suffice
+				//if(read(fim_stdin,&c,4)>0)	//up to four chars should suffice
+				r=read(fim_stdin,&c,4);	//up to four chars should suffice
 #endif
 				if(r>0)
 				{
@@ -981,7 +991,44 @@ namespace fim
 	}
 	
 #ifndef FIM_NOSCRIPTING
-	int CommandConsole::executeFile(const char *s)
+	int CommandConsole::executeStdFileDescriptor(FILE* fd)
+	{
+		/*
+		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
+		 */
+		int r;
+		char buf[4096*32];//FIXME
+		if(fd==NULL)return -1;
+		r=fread(buf,1,sizeof(buf)-1,fd);if(r!=-1)buf[r]='\0';
+		if(r==-1)return -1;
+		//cout << "read " << r << " bytes from descriptor" << (int)fd << "\n";
+		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
+		//cout << buf; 
+		isinscript=1;
+		execute(buf,0);
+		isinscript=0;
+		return 0;
+	}
+	int CommandConsole::executeFileDescriptor(int fd)
+	{
+		/*
+		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
+		 */
+		int r;
+		char buf[4096*32];//FIXME
+		if(fd==-1)return -1;
+		r=read(fd,buf,sizeof(buf)-1);if(r!=-1)buf[r]='\0';
+		if(r==-1)return -1;
+		//cout << "read " << r << " bytes from descriptor" << fd << "\n";
+		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
+		//cout << buf; 
+		isinscript=1;
+		execute(buf,0);
+		isinscript=0;
+		return 0;
+	}
+
+int CommandConsole::executeFile(const char *s)
 	{
 		/*
 		 * FIX ME 
@@ -1000,13 +1047,14 @@ namespace fim
 			cout << "error opening " << s << "\n";
 			return -1; 
 		}
-		r=read(fd,buf,sizeof(buf)-1);buf[r]='\0';
+		executeFileDescriptor(fd);
+/*		r=read(fd,buf,sizeof(buf)-1);buf[r]='\0';
 		cout << "read " << r << " bytes from " << s << "\n";
 		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
 //		cout << "\"\n"<<  buf << "\"\n";	//segfaults!
 		isinscript=1;
 		execute(buf,0);
-		isinscript=0;
+		isinscript=0;*/
 		close(fd);
 ///		cout << buf << "\n";	
 //		cout << "please note that executeFile is still unfinished..\n";
@@ -1305,6 +1353,20 @@ namespace fim
 		return true;
 	}
 
+	fim::string CommandConsole::sys_popen(const std::vector<fim::string>& args)
+	{
+		for(unsigned int i=0;i<args.size();++i)
+		{
+			FILE* fd=popen(args[i].c_str(),"r");
+			//int fd=(int)popen("/bin/echo quit","r");
+			//cout << "popening " << args[i].c_str() <<", "<<(int)fd<<  "\n";
+			executeStdFileDescriptor(fd);
+			pclose(fd);
+			//fim_stdin=popen(args[i].c_str());
+		}
+		return "";
+	}
+
 	fim::string CommandConsole::system(const std::vector<fim::string>& args)
 	{
 		for(unsigned int i=0;i<args.size();++i)
@@ -1361,5 +1423,42 @@ namespace fim
 		 */
 		browser.display();
 	}
+#ifdef FIM_RECORDING
+	void CommandConsole::record_action(const fim::string &cmd)
+	{
+		/*	(action,millisleeps waitingbefore) is registered	*/
+		/*
+		 * PROBLEMS:
+		 * clock_gettime() needs librealtime, and segfaults
+		 * clock() gives process time, with no sense
+		 * times() gives process time
+		 * getrusage() gives process time
+		 * time() gives time in seconds..
+		 * asctime(),ctime() give time in seconds..
+		 *
+		 * HOW DO I COULD MEASURE THE TIME PASSED FROM ONE USER INPUT TO ANOTHER ?
+		 * */
+		static int pt=0;int t,d;
+		/*
+		//struct rusage usage; getrusage(RUSAGE_SELF,&usage);
+		struct timespec ts;
+		static struct tms buf;
+		if(cmd=="" | cmd=="\n")return;//quick fixup
+		*/
+		//if(pt==0)times(&buf);
+		//if(pt==0)clock_gettime(CLOCK_MONOTONIC,&ts);
+		//pt=buf.tms_utime;
+		//pt=ts.tv_nsec;
+		//clock_gettime(CLOCK_MONOTONIC,&ts);
+		//t=ts.tv_nsec;
+		//times(&buf);
+	 	//t=buf.tms_utime;
+		//d=(int)(((double(t-pt)))/((double)CLOCKS_PER_SEC)*1000000.0);
+		//cout << " t: " << t << "pt:" << pt <<" : "<< d<< "\n";
+		//HELP : NEED A WAY TO MEASURE ELAPSED TIME IN MILLISECONDS..
+		d=100000;
+		recorded_actions.push_back(recorded_action_t(sanitize_action(cmd),d));
+	}
+#endif
 }
 

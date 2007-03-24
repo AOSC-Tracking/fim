@@ -47,7 +47,7 @@ include $(srcdir)/mk/Variables.mk
 CFLAGS	 += -DVERSION='"$(VERSION)"' $(DEFINES)
 CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
 LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lz
-#-lrt (realtime library ) cannot be used :(  (causes harm!)
+#-lrt (realtime library ) cannot be used :(  (causes segmentation fault!)
 
 OBJS_FBI := \
 	src/fbi.o src/fbtools.o src/fs.o src/fb-gui.o \
