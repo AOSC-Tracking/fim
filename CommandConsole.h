@@ -103,25 +103,9 @@ class CommandConsole
 		return "";
 	}
 
-	fim::string dump_record_buffer(const std::vector<fim::string> &args)
-	{
-		fim::string res;
-		for(unsigned int i=0;i<recorded_actions.size();++i)
-		{
-			res+="usleep '";
-			res+=recorded_actions[i].second;
-			res+="';\n";
-			res+=recorded_actions[i].first;
-			res+="\n";
-		}
-		return res;
-	}
+	fim::string dump_record_buffer(const std::vector<fim::string> &args);
 	
-	fim::string execute_record_buffer(const std::vector<fim::string> &args)
-	{
-		execute(dump_record_buffer(args).c_str(),0);
-		return "";
-	}
+	fim::string execute_record_buffer(const std::vector<fim::string> &args);
 	
 	fim::string start_recording(const std::vector<fim::string> &args)
 	{

@@ -180,6 +180,7 @@ int ex(nodeType *p)
 				return iValue;
 			}
 	case UMINUS: return -ex(p->opr.op[0]); //unary minus
+	case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]);
 	case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
 	case '-': return ex(p->opr.op[0]) - ex(p->opr.op[1]);
 	case '*': return ex(p->opr.op[0]) * ex(p->opr.op[1]);

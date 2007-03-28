@@ -140,6 +140,7 @@ bind 'f' "next;display;";
 bind 'b' "prev;display;";
 alias "plisten" 'popen "nc -l -p 9999 "';
 alias "wlisten" "while(1){sleep;plisten;}"
+alias "random_slideshow" "while(1){goto random;}"
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So use it, but with caution! FIM is still severely bugged! 

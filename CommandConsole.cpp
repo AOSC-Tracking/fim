@@ -4,7 +4,8 @@
 #ifdef FIM_DEFAULT_CONFIGURATION
 #include "conf.h"
 #endif
-#include <sys/times.h>
+//#include <sys/times.h>
+#include <sys/time.h>
 extern int yyparse();
 
 namespace fim
@@ -255,7 +256,9 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		addCommand(new Command(fim::string("autocmd"  ),fim::string("autocommands"),this,&CommandConsole::autocmd));
 #endif
+#ifndef FIM_NO_SYSTEM
 		addCommand(new Command(fim::string("system"  ),fim::string("system() invocation"),this,&CommandConsole::system));
+#endif
 		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string("start_recording"  ),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));
@@ -332,6 +335,9 @@ namespace fim
 		 */
 		assert(c);	//see the macro NDEBUG for this
 		commands.push_back(c);
+		/*
+		 * here an insertion sort would be nice..
+		 */
 		return 0;
 	}
 
@@ -814,7 +820,7 @@ namespace fim
 					//p.s.:note that current() returns not necessarily the same in 
 					//the two autocmd_exec() calls..
 				}
-				if(rl && *rl=='\0')ic=!ic;
+				if(rl && *rl=='\0'){ic=!ic;set_status_bar("",NULL);}
 				if(rl)free(rl);
 			}
 			else
@@ -1086,7 +1092,9 @@ int CommandConsole::executeFile(const char *s)
 	int CommandConsole::getIntVariable(const fim::string &varname)
 	{
 //		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
+		if(strcmp(varname.c_str(),"random"))
 		return variables[varname];
+		else return fim_rand();
 	}
 
 	float CommandConsole::getFloatVariable(const fim::string &varname)
@@ -1367,6 +1375,7 @@ int CommandConsole::executeFile(const char *s)
 		return "";
 	}
 
+#ifndef FIM_NO_SYSTEM
 	fim::string CommandConsole::system(const std::vector<fim::string>& args)
 	{
 		for(unsigned int i=0;i<args.size();++i)
@@ -1375,6 +1384,7 @@ int CommandConsole::executeFile(const char *s)
 		}
 		return "";
 	}
+#endif
 	
 	fim::string CommandConsole::status(const std::vector<fim::string> &args)
 	{
@@ -1428,7 +1438,10 @@ int CommandConsole::executeFile(const char *s)
 	{
 		/*	(action,millisleeps waitingbefore) is registered	*/
 		/*
-		 * PROBLEMS:
+		 * PROBLEM:
+		  clock_gettime() clock() times() getrusage() time() asctime() ctime() 
+		  are NOT suitable
+
 		 * clock_gettime() needs librealtime, and segfaults
 		 * clock() gives process time, with no sense
 		 * times() gives process time
@@ -1436,28 +1449,45 @@ int CommandConsole::executeFile(const char *s)
 		 * time() gives time in seconds..
 		 * asctime(),ctime() give time in seconds..
 		 *
-		 * HOW DO I COULD MEASURE THE TIME PASSED FROM ONE USER INPUT TO ANOTHER ?
+		 * gettimeofday was suggested by antani, instantaneously (thx)
 		 * */
-		static int pt=0;int t,d;
-		/*
-		//struct rusage usage; getrusage(RUSAGE_SELF,&usage);
-		struct timespec ts;
-		static struct tms buf;
-		if(cmd=="" | cmd=="\n")return;//quick fixup
-		*/
-		//if(pt==0)times(&buf);
-		//if(pt==0)clock_gettime(CLOCK_MONOTONIC,&ts);
-		//pt=buf.tms_utime;
-		//pt=ts.tv_nsec;
-		//clock_gettime(CLOCK_MONOTONIC,&ts);
-		//t=ts.tv_nsec;
-		//times(&buf);
-	 	//t=buf.tms_utime;
-		//d=(int)(((double(t-pt)))/((double)CLOCKS_PER_SEC)*1000000.0);
-		//cout << " t: " << t << "pt:" << pt <<" : "<< d<< "\n";
-		//HELP : NEED A WAY TO MEASURE ELAPSED TIME IN MILLISECONDS..
-		d=100000;
+		static int pt=0;int t,d,err;//t,pt in ms; d in us
+	        struct timeval tv;
+		if(cmd==""){pt=0;return;}
+	        if(!pt){err=gettimeofday(&tv, NULL);pt=tv.tv_usec/1000+tv.tv_sec*1000;}
+	        err=gettimeofday(&tv, NULL);t=tv.tv_usec/1000+tv.tv_sec*1000;
+		d=(t-pt)*1000;
+		pt=t;
 		recorded_actions.push_back(recorded_action_t(sanitize_action(cmd),d));
+	}
+
+	fim::string CommandConsole::dump_record_buffer(const std::vector<fim::string> &args)
+	{
+		fim::string res;
+		for(unsigned int i=0;i<recorded_actions.size();++i)
+		{
+			res+="usleep '";
+			res+=recorded_actions[i].second;
+			res+="';\n";
+			res+=recorded_actions[i].first;
+			res+="\n";
+		}
+		return res;
+	}
+
+	fim::string CommandConsole::execute_record_buffer(const std::vector<fim::string> &args)
+	{
+		execute(dump_record_buffer(args).c_str(),0);
+		/* for unknown reasons, the following code gives problems : image resizes don't work..
+		 * but the present (above) doesn't support interruptions ...
+		 * */
+/*		fim::string res;
+		for(unsigned int i=0;i<recorded_actions.size();++i)
+		{
+			res=recorded_actions[i].first+(fim::string)recorded_actions[i].second;
+			execute(res.c_str(),0);
+		}*/
+		return "";
 	}
 #endif
 }

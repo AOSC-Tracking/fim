@@ -82,6 +82,7 @@ namespace fim
 		if(flist.size()<=0)return nofile;
 		assert(cp);
 		flist.erase(flist.begin()+current_n());
+		cc.setVariable("filelistlen",current_images());
 		return s;
 	}
 
@@ -97,6 +98,7 @@ namespace fim
 		if(current_n()==(int)flist.size())cp--;
 		s=flist[flist.size()-1];
 		flist.pop_back();
+		cc.setVariable("filelistlen",current_images());
 		return s;
 	}
 
@@ -312,7 +314,7 @@ namespace fim
 	{
 		//FIX ME
 		if(cc.getIntVariable("_display_status"))
-			status((const char*)l, image?image->getInfo():"*");
+			set_status_bar((const char*)l, image?image->getInfo():"*");
 		return "";
 	}
 
@@ -342,7 +344,7 @@ namespace fim
 #endif
 		}
 		else{ cout << "no image to display, sorry!";
-		status("no image loaded.", "*");}
+		set_status_bar("no image loaded.", "*");}
 		return "";
 	}
 
@@ -360,6 +362,7 @@ namespace fim
 #endif
 		if(image) delete image;
 		image = new Image(current().c_str());
+		cc.setVariable("fileindex",current_image());
 		if(image && ! (image->valid()))
 		{
 			delete image;image=NULL;
@@ -390,8 +393,9 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreLoad",c);
 #endif
-		status("please wait while loading...", "*");
+		set_status_bar("please wait while loading...", "*");
 		image = new Image(current().c_str());
+		cc.setVariable("fileindex",current_image());
 		if(image && ! (image->valid()))
 		{
 			delete image;image=NULL;
@@ -466,6 +470,7 @@ namespace fim
 #endif
 
 		flist.push_back(nf);
+		cc.setVariable("filelistlen",current_images());
 		if(cp==0)++cp;
 		//cout<<nf<<" ";
 		return false;
@@ -544,6 +549,7 @@ namespace fim
 		if(cp<0)cp=(cp%N)+N+1;//+1 added lately
 		if(cp>N) cp=1+(n%N);
 		if(!cp)++cp;
+		cc.setVariable("fileindex",current_image());
 //		std::cout << "next " << n << "\n";
 //		return n_files()?(flist[current_n()]):nofile;
 		fim::string result = n_files()?(flist[current_n()]):nofile;
@@ -582,6 +588,7 @@ namespace fim
 		cp+=N;
 		cp%=N;
 		if(!cp)cp=N;
+		cc.setVariable("fileindex",current_image());
 		fim::string result = n_files()?(flist[current_n()]):nofile;
 		return "";
 	}

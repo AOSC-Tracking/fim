@@ -26,6 +26,7 @@ using std :: pair;
 using std :: vector;
 
 class CommandConsole;
+int fim_rand(){return rand();}
 
 char *fontname;
 static char * command_generator (const char *text,int state);
@@ -136,8 +137,10 @@ void status(const char *desc, const char *info)
 	//FIX ME : this function always draws ?
 	int chars, ilen;
 	char *str,*p;
+	char prompt[2];*prompt=':';*(prompt+1)='\0';
 #ifndef FIM_NOFB
 //	if (!statusline)return;
+	if(!cc.inConsole())*prompt='\0';
 	chars = fb_var.xres / fb_font_width();
 	if(chars<48)return;//something strange..
 	str = (char*) malloc(chars+1);
@@ -145,16 +148,16 @@ void status(const char *desc, const char *info)
 	if (info)
 	{
 		ilen = strlen(info);
-		sprintf(str, "%-*.*s [ %s ] H - Help",
+		sprintf(str, "%s%-*.*s [ %s ] H - Help",prompt,
 		chars-14-ilen, chars-14-ilen, desc, info);//here above there is the need of 14+ilen chars
 	}
 	else
 	{
-		sprintf(str, "%-*.*s | H - Help", chars-11, chars-11, desc);
+		sprintf(str, "%s%-*.*s | H - Help",prompt, chars-11, chars-11, desc);
 	}
 	extern int rl_point;
 	static int statusline_cursor;
-	statusline_cursor=rl_point;
+	statusline_cursor=rl_point+1;
     
 	if( statusline_cursor < chars && cc.inConsole()  ) str[statusline_cursor]='_';
 	p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
@@ -162,6 +165,11 @@ void status(const char *desc, const char *info)
 	fb_status_line((unsigned char*)str);
 	free(str);
 #endif
+}
+
+void set_status_bar(const char *desc, const char *info)
+{
+	status(desc,info);
 }
 
 /*
@@ -416,12 +424,16 @@ static void completion_display_matches_hook(char **matches,int num,int max)
 
 static void redisplay()
 {	
-	//FIX ME
+	/*
+	 * DANGER
+	 *  buffer overflow awaiting
+	 */
 	//static int c=100;
 //	fb_setcolor(c=~c);//sleep(1);
 #ifndef FIM_NOFB
 	status(( char*)rl_line_buffer,NULL);
 #else
+	
 	printf("%s",rl_line_buffer);
 #endif
 //	fprintf(stderr,"::%s\n",rl_line_buffer);

@@ -93,7 +93,8 @@ class CommandConsole;
 std::ostream& operator<<(std::ostream &os,const string& s);
 }
 
-void status(const char *desc, const char *info);
+//void status(const char *desc, const char *info);
+void set_status_bar(const char *desc, const char *info);
 void fb_status_screen(const char *msg, int noDraw);
-
+int fim_rand();
 #endif

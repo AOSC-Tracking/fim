@@ -85,6 +85,7 @@ namespace fim
 		scale_fix_top_left();
 //		sprintf(linebuffer,"scaling (%.0f%%) %s ...", scale*100, fname);
 //		status(linebuffer, NULL);
+		cc.setVariable("scale",newscale*100);
 
 //		if(simg){free_image(simg);simg=NULL;}
 		if(fimg)
@@ -98,18 +99,22 @@ namespace fim
 			 */
 			struct ida_image *backup_img=simg;
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
-				status("please wait while rescaling...", getInfo());
+				set_status_bar("please wait while rescaling...", getInfo());
 			simg  = scale_image(fimg,scale);
 			if(!simg)
 			{
 				simg=backup_img;
 				if(cc.getIntVariable("_display_busy"))
-					status( "rescaling failed (insufficient memory!)", getInfo());
+					set_status_bar( "rescaling failed (insufficient memory!)", getInfo());
 				sleep(1);	//just to give a glimpse..
 			}
 			else      free_image(backup_img);
 			img = simg;
 			redraw=1;
+			cc.setVariable("height",(int)fimg->i.height);
+			cc.setVariable("sheight",(int)img->i.height);
+			cc.setVariable("width",(int)fimg->i.width);
+			cc.setVariable("swidth",(int)img->i.width);
 		}
 		//else redraw=0;
 #endif
@@ -314,7 +319,7 @@ namespace fim
 		free_mem();
 		fname = dupstr(fname_);
 		assert(fname);
-		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))status("please wait while reloading...", "*");
+		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))set_status_bar("please wait while reloading...", "*");
 #ifndef FIM_NOFB
 		fimg = read_image(fname);
 #else
