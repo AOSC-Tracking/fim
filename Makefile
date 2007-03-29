@@ -244,12 +244,12 @@ tgz:	clean
 
 
 report:
-	@flex -V  
-	@echo '-' ; 
-	@bison -V
-	@echo '-' ; 
-	@gcc -v
-	@echo '-' ; 
+	@flex -V   2>&1
+	@echo '-'  
+	@bison -V  2>&1
+	@echo '-'   
+	@gcc -v    2>&1
+	@echo '-'   
 	@echo 'now please report the bug with this information to the author via email' ; 
 
 exec:	test

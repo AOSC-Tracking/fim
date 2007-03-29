@@ -46,7 +46,7 @@ class CommandConsole
 	/*
 	 * flags
 	 */
-	bool	ic;					//in console
+	int 	ic;					//in console if 1. not if 0. willing to exit from console mode if -1
 	int	cycles,isinscript;			//FIX ME
 	int	nofb;					//FIX ME
 	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
@@ -139,21 +139,23 @@ class CommandConsole
 #endif
 
 	int fim_stdin;	// the standard input file descriptor
+	char prompt[2];
 
 	public:
+	const char*get_prompt(){return prompt;}
 
 	std::vector<fim::string> scripts;		//scripts to execute : FIX ME PRIVATE
 	
 	int noFrameBuffer(){return nofb!=0;}
 	void setNoFrameBuffer(){nofb=1;}
 	CommandConsole();
-	void markCurrentFile(){if(browser.current()!="")marked_files.insert(browser.current());}
+	void markCurrentFile();
 	fim::string markCurrentFile(const std::vector<fim::string>& args){markCurrentFile();return "";}
 	void display();
 	char * command_generator (const char *text,int state);
 	void executionCycle();
 	void init();
-	int  inConsole()const{return ic;};
+	int  inConsole()const{return ic==1;};
 	fim::string execute(fim::string cmd, std::vector<fim::string> args);
 	~CommandConsole();
 	float getFloatVariable(const fim::string &varname);
@@ -183,6 +185,7 @@ class CommandConsole
 	fim::string aliasRecall(fim::string cmd);
 	fim::string system(const std::vector<fim::string>& args);
 	fim::string sys_popen(const std::vector<fim::string>& args);
+	fim::string set_interactive_mode(const std::vector<fim::string>& args);
 	fim::string autocmd(const std::vector<fim::string>& args);
 	fim::string autocmd_del(const fim::string &event,const fim::string &pat){return "";}
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);

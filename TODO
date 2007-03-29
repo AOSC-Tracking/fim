@@ -4,34 +4,22 @@ This file is often outdated : FIM is a lot better than it seems here :)
 20070307	Console switching does not work properly.
 20070307	It is not clear which key terminates always loops.
 20070307	Config file parsing is still buggy regards comments.
-20070307	Duplicate autocommands are allowed. This is bad!
-	SOLVED BUGS:
-20070128	it seems that all of the scaling pre-display hooks cause harm!
-20070216	elimina il tearing dell'immagine! dovrebbe essere una questione di switch!
-20070211	mysterious "open : No such file or directory" warning..
-20070227	make memory-error tolerant..
-20070210	there are memory leaks probably, or some memory corruption. the 'pornview' alias at long hangs the computer.
 	OPEN   BUGS:
 20070129	control 4 crashes the prog ... why ? :)
-20070212	with no image in the list, the screen should become black	
 20070227	(still) to fix the console switching redraw problem
 20070303	introduced bugs concerning commands nested into loops :P
 	FIX:
 20070312	fix dumping of recording in some file!	
 #20070121	fix the image browser then
 20070125	fix the string vs variable problem
-#20070125	fix the display/statusline relationship..
 20070128	fixa l'argument passing che e' problematico! e fixa i commenti!
 20070129	fix the KEY binding
 20070211	flex and bison parts should be rewritten
 20070212	fix the command evaluation
-20070216	eliminate image tearing by optimizing svga_show_image
 20070303	fix rar and zip dependencies in Makefiles and such for fbgs.sh
 20070303	see if while-nesting is a real danger!
-20070303	realtime clock... -lrt cannot  be used with FIM
 20070303	update the while construct documentation and fix the while command execution bugs 
 20070303	add an interface for setting exitBinding (now Enter!)
-20070305	i am not sure the scale_image security patch is complete.
 20070306	primary goals : documentation and warning messages!
 	SCIENCE FICTION:
 20070307	someday: to integrate with a speech recognizer ? :)
@@ -39,11 +27,8 @@ This file is often outdated : FIM is a lot better than it seems here :)
 	ADD:
 20070307	/
 20070306	add a way to dump to stdout the default configuration file contents
-20070305	add a handier interface for regexp searching (/)
-20070217	fix the default /etc/fimrc or better, builtin config!
-20070216	create an installer!
+0070216	create an installer!
 20070129	dump internal commands function
-20070129	implement a new millisleep function..
 20070125	add pipe to other commands and exec and system (screenshot with fbgrab, for example)
 20070126	debugger x scoprire i tasti
 20070128	add support for command renaming with checks...
@@ -84,5 +69,13 @@ This file is often outdated : FIM is a lot better than it seems here :)
 20070210	eliminate the fresh variable from the config! : 
 20070210	add an interface to modify key bindings and keycode bindings.
 20070210	fix properly the file parser (comments problems!) and max script filelength limit
+
+20070129	implement a new millisleep function..
+20070305	add a handier interface for regexp searching (/)
+20070125	fix the display/statusline relationship..
+20070216	eliminate image tearing by optimizing svga_show_image
+20070303	realtime clock... -lrt cannot  be used with FIM
+20070305	i am not sure the scale_image security patch is complete.
+20070217	fix the default /etc/fimrc or better, builtin config!
 	TIPS
 20070302	use __FUNCTION__ : is not ANSI, but GCC

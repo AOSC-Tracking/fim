@@ -510,6 +510,16 @@ namespace fim
 		return n_files()?(flist[current_n()]):nofile;
 	}
 
+	fim::string Browser::regexp_goto_next(const std::vector<fim::string> &args)
+	{
+		/*
+		 * goes to the next filename-matching file
+		 */
+		std::vector<fim::string> arg;
+		arg.push_back(last_regexp);
+		return regexp_goto(arg);
+	}
+
 	fim::string Browser::regexp_goto(const std::vector<fim::string> &args)
 	{
 		/*
@@ -519,6 +529,7 @@ namespace fim
 		if( args.size() < 1 || s < 1 )return "";
 		for(j=0;j<s;++j)
 		{
+			last_regexp=args[0];
 			i=(j+c+1)%s;
 			if(cc.regexp_match(flist[i].c_str(),args[0].c_str()))
 			{	
@@ -530,10 +541,18 @@ namespace fim
 				goto_image(i+1);
 #ifdef FIM_AUTOCMDS
 				cc.autocmd_exec("PostGoto",c);
+				if(!cc.inConsole())
+					set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
 				return "";
 #endif
 			}
 		}
+		cout << "sorry, no filename matches \""<<args[0]<<"\"\n";
+		if(!cc.inConsole())
+			set_status_bar((fim::string("sorry, no filename matches \"")+
+						args[0]+
+						fim::string("\"")).c_str(),NULL);
+		
 		return "";
 	}
 

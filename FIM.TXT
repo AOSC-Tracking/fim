@@ -83,7 +83,7 @@ You are encouraged to report bugs and/or compilation problems on the web
 If you want to help actively to the project, it would be much appreciated for
 me to receive by email a more complete report:
 
- ( make;make report ) 2>&1 | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
+ ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
 
 You can report to dezperado _FOobAr_ autistici _Baz_ org, by replacing _FOobAr_
 with a '@' and _Baz_ with a '.'.
@@ -397,5 +397,7 @@ as soon as this is necessary.
  'random'	: a random number, between 0 and RAND_MAX (see "man 3 rand").
  		  setting this variable is useless, altough possible: it is 
 		  regenerated between each call.
+
+ 'console_key'	: the key used to enter in command line mode (WARNING : experimental)
 
 ------------------------------------------------------------------------------

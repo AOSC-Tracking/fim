@@ -27,6 +27,8 @@ class Browser
 	Image *image;
 	int current_n()const{ return cp?cp-1:cp; }
 	const fim::string pop();
+	
+	fim::string last_regexp;
 	public:
 	int empty_file_list()const{ return flist.size()==0;}
 	int current_image()const{ return cp; }
@@ -35,6 +37,7 @@ class Browser
 	~Browser() { }
 	fim::string current()const{ return cp?flist[current_n()]:nofile; }
 	fim::string regexp_goto(const std::vector<fim::string> &args);
+	fim::string regexp_goto_next(const std::vector<fim::string> &args);
 	fim::string goto_image(const std::vector<fim::string> &args);
 	fim::string goto_image(int n);
 	fim::string pan_up(const std::vector<fim::string> &args);

@@ -137,10 +137,11 @@ void status(const char *desc, const char *info)
 	//FIX ME : this function always draws ?
 	int chars, ilen;
 	char *str,*p;
-	char prompt[2];*prompt=':';*(prompt+1)='\0';
+	const char *prompt=cc.get_prompt();
+	char no_prompt[1];*no_prompt='\0';
 #ifndef FIM_NOFB
 //	if (!statusline)return;
-	if(!cc.inConsole())*prompt='\0';
+	if(!cc.inConsole())prompt=no_prompt;
 	chars = fb_var.xres / fb_font_width();
 	if(chars<48)return;//something strange..
 	str = (char*) malloc(chars+1);
@@ -450,6 +451,11 @@ int fim_rl_end(int a,int b)
 {
 	rl_point=rl_end;
 	return 0;
+}
+
+int fim_set_command_line_text(const char*s)
+{
+	rl_replace_line(s,0);
 }
 
 /*

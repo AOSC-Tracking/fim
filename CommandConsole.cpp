@@ -220,6 +220,7 @@ namespace fim
 		addCommand(new Command(fim::string("remove" ),fim::string("remove the current file or the selected ones from the list" ),&browser,&Browser::remove));
 		addCommand(new Command(fim::string("info" ),fim::string("info about the current file" ),&browser,&Browser::info));
 		addCommand(new Command(fim::string("regexp_goto" ),fim::string("jumps to the first image matching the given pattern"),&browser,&Browser::regexp_goto));
+		addCommand(new Command(fim::string("regexp_goto_next" ),fim::string("jumps to the next image matching the last given pattern"),&browser,&Browser::regexp_goto_next));
 		addCommand(new Command(fim::string("scale_increment" ),fim::string("increments the scale by a percentual amount"),&browser,&Browser::scale_increment));
 		addCommand(new Command(fim::string("scale_multiply" ),fim::string("multiplies the scale by the specified amount"),&browser,&Browser::scale_multiply));
 		addCommand(new Command(fim::string("scale_factor_grow" ),fim::string("multiply the scale factors reduce_factor and magnify_factor by scale_factor_multiplier"),&browser,&Browser::scale_factor_increase));
@@ -256,6 +257,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		addCommand(new Command(fim::string("autocmd"  ),fim::string("autocommands"),this,&CommandConsole::autocmd));
 #endif
+		addCommand(new Command(fim::string("set_interactive_mode"  ),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
 #ifndef FIM_NO_SYSTEM
 		addCommand(new Command(fim::string("system"  ),fim::string("system() invocation"),this,&CommandConsole::system));
 #endif
@@ -283,6 +285,8 @@ namespace fim
 		 * 	the default configuration file, and user invoked scripts.
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
+		*prompt=':';
+		*(prompt+1)='\0';
 		int fimrcs=0;
 #ifndef FIM_NOFIMRC
 #ifndef FIM_NOSCRIPTING
@@ -783,7 +787,7 @@ namespace fim
 #else
 			//ic=true;
 #endif
-			if(ic)
+			if(ic==1)
 			{
 				char *rl=readline(":");
 				if(rl==NULL)
@@ -805,10 +809,10 @@ namespace fim
 #endif
 #ifdef FIM_RECORDING
 					if(recordMode)record_action(fim::string(rl));
-#endif
+#endif					
 					ic=0; // we 'exit' from the console for a while
 					execute(rl,1);	//execution of the command line with history
-					ic=1;
+					ic=(ic==-1)?0:1; //a command could change the mode !
 					this->setVariable("_display_console",1);	//!!
 //					execute("redisplay;",0);	//execution of the command line with history
 #ifdef FIM_AUTOCMDS
@@ -820,7 +824,7 @@ namespace fim
 					//p.s.:note that current() returns not necessarily the same in 
 					//the two autocmd_exec() calls..
 				}
-				if(rl && *rl=='\0'){ic=!ic;set_status_bar("",NULL);}
+				if(rl && *rl=='\0'){ic=0;set_status_bar("",NULL);}
 				if(rl)free(rl);
 			}
 			else
@@ -885,7 +889,31 @@ namespace fim
 						cout << buf ;
 					}
 					tty_restore();
-					if(c==getIntVariable("console_key"))ic=!ic;	//should be configurable..
+					if(c==getIntVariable("console_key"))ic=1;	//should be configurable..
+					else if(c=='/')
+					{
+						/*
+						 * this is a hack to handle vim-styled regexp searches
+						 */
+						ic=1;
+						int tmp=rl_filename_completion_desired;
+						rl_inhibit_completion=1;
+						*prompt='/';
+						char *rl=readline("/"); // !!
+						*prompt=':';
+						rl_inhibit_completion=tmp;
+						ic=0;
+						if(rl==NULL)
+						{
+							//quit();
+						}
+						else if(rl!="")
+						{
+							std::vector<fim::string> args;
+							args.push_back(rl);
+							execute("regexp_goto",args);
+						}
+					}
 					else
 					{
 						this->executeBinding(c);
@@ -959,9 +987,13 @@ namespace fim
 		 *	FIX ME :
 		 *	PRINTING MARKED FILES..
 		 */
-		std::cout << "\n";
-		for(std::set<fim::string>::iterator i=marked_files.begin();i!=marked_files.end();++i)
+		if(!marked_files.empty())
+		{
+			std::cerr << "The following files were marked by the user :\n";
+			std::cout << "\n";
+			for(std::set<fim::string>::iterator i=marked_files.begin();i!=marked_files.end();++i)
 			std::cout << *i << "\n";
+		}
 	}
 
 	int CommandConsole::toggleStatusLine()
@@ -1236,6 +1268,13 @@ int CommandConsole::executeFile(const char *s)
 		 *
 		 * TODO : VALID VS INVALID EVENTS?
 		 */
+		if(cmd==""){cout << "can't add empty autocommand\n";return "";}
+		for(unsigned int i=0;i<autocmds[event][pat].size();++i)
+			if((autocmds[event][pat][i])==cmd)
+			{
+				cout << "autocommand "<<cmd<<" already specified for event \""<<event<<"\" and pattern \""<<pat<<"\"\n";
+				return "";
+			}
 		autocmds[event][pat].push_back(cmd);
 		return "";
 	}
@@ -1359,6 +1398,12 @@ int CommandConsole::executeFile(const char *s)
 		regfree(&regex);
 		return false;
 		return true;
+	}
+
+	fim::string CommandConsole::set_interactive_mode(const std::vector<fim::string>& args)
+	{
+		ic=-1;set_status_bar("",NULL);
+		return "";
 	}
 
 	fim::string CommandConsole::sys_popen(const std::vector<fim::string>& args)
@@ -1490,5 +1535,6 @@ int CommandConsole::executeFile(const char *s)
 		return "";
 	}
 #endif
+	void CommandConsole::markCurrentFile(){if(browser.current()!=""){marked_files.insert(browser.current());cout<<"Marked file \""<<browser.current()<<"\"\n";}}
 }
 
