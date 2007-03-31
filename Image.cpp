@@ -2,7 +2,6 @@
 #include "Image.h"
 
 /*
- *	20070215	the pos variable seems unused!
  * 	20070215	idea : separate redraw into redraw_compulsory+need_redraw
  * 			and keep old_ and new_ for wverwevery variable!
  *	20070318	i0ma afraid that pan operations hide some big bug..
@@ -143,7 +142,9 @@ namespace fim
 		if(invalid)return;//IN CASE OF MEMORY PROBLEMS
 		
 		int autotop=cc.getIntVariable("autotop");
-
+		int flip=cc.getIntVariable("autoflip");
+		int mirror=cc.getIntVariable("automirror");
+    
 #ifndef FIM_NOFB
 		if (new_image && redraw)
 		{
@@ -210,7 +211,7 @@ namespace fim
 			//fb_clear_screen();
 			while (switch_last != fb_switch_state) { console_switch(0); continue; }
 			//fb_clear_screen();
-			svga_display_image(img, left, top);
+			svga_display_image(img, left, top, mirror, flip);
 			//fb_status_screen("", 0);
 			//fb_switch_release();
 			console_switch(0);
@@ -260,7 +261,7 @@ namespace fim
 			 *	variables prior to first visualization without displaying..
 			 */
 			only_first_rescale=1;
-			this->display();
+			//this->display();
 			//if(cc.isInScript()==0)this->auto_scale();
 			//this->auto_scale();
 			//this->magnify();
@@ -279,7 +280,6 @@ namespace fim
 		len =0;
 		top = 0;
 		left = 0;
-		pos= 0;
 		fimg    = NULL;
 		simg    = NULL;
 		img     = NULL;
@@ -374,7 +374,6 @@ namespace fim
 	void Image::pan_right()
 	{
 	    if(onRight())return;
-	    if (pos < len) pos+=steps;
 	    left+=steps;
 	    redraw=1;
 	}
@@ -382,7 +381,6 @@ namespace fim
 	void Image::pan_left()
 	{
 	    if(onLeft())return;
-	    if (pos > 0) pos-=steps;
 	    left-=steps;
 	    redraw=1;
 	}

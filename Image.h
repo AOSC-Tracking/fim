@@ -25,7 +25,7 @@ class Image
 	//int redraw;
 	int only_first_rescale;		//TEMPORARY
 	
-	int steps,top,len,pos,left ;
+	int steps,top,len,left ;
 	char             *line, *info, *desc;
 	char *fname;
 

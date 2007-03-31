@@ -155,7 +155,10 @@ namespace fim
 		{
 			return getAliasesList();
 		}
-		if(args.size()<2)return "alias : please specify some action to do\n";
+		if(args.size()<2)
+		{
+			return 	fim::string("alias \"")+args[0].val+fim::string("\" \"")+aliases[args[0].val]+fim::string("\"\n");
+		}
 		for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
 		if(aliases[args[0].val]!="")
 		{
@@ -632,7 +635,7 @@ namespace fim
 		{
 			//assignment of an alias
 			std::vector<Arg> aargs;	//Arg args :P
-			if(args.size()){
+			//if(args.size()){
 			for(unsigned int i=0;i<args.size();++i)
 			{
 //				std::cout<<" "<<args[i]<<"\n";
@@ -640,8 +643,8 @@ namespace fim
 			}
 			//std::cout << this->alias(aargs) << "\n";
 			cout << this->alias(aargs) << "\n";
-			return "";}
-			return getAliasesList();
+			return "";//}
+			//return getAliasesList();
 		}
 		else
 		{
@@ -1139,7 +1142,7 @@ int CommandConsole::executeFile(const char *s)
 	int CommandConsole::drawOutput()
 	{
 		//return inConsole() || this->getIntVariable("_display_status");
-		return inConsole() || this->getIntVariable("_display_console");
+		return (inConsole() || this->getIntVariable("_display_console"));
 	}
 
 	fim::string CommandConsole::get_aliases_list()

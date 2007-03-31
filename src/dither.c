@@ -139,13 +139,16 @@ init_dither(int shades_r, int shades_g, int shades_b, int shades_gray)
 }
 
 void
-dither_line(unsigned char *src, unsigned char *dest, int y, int width)
+dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror)
 {
     register long   a, b;
     long           *ymod, xmod;
 
     ymod = DM[y & DITHER_MASK];
-
+    //	mirror patch by dez
+    register int inc;inc=mirror?-1:1;
+    dest=mirror?dest+width-1:dest;
+    //	mirror patch by dez
     while (width--) {
 	xmod = width & DITHER_MASK;
 
@@ -163,7 +166,10 @@ dither_line(unsigned char *src, unsigned char *dest, int y, int width)
 	    a >>= 8;
 	b += a;
 
-	*(dest++) = b & 0xff;
+    //	mirror patch by dez
+	*(dest) = b & 0xff;
+	dest+=inc;
+	//*(dest++) = b & 0xff;
     }
 }
 

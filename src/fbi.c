@@ -707,22 +707,24 @@ clear_line(int bpp, int line, int owidth,
 
 static unsigned char *
 convert_line(int bpp, int line, int owidth,
-	     char unsigned *dest, char unsigned *buffer)
+	     char unsigned *dest, char unsigned *buffer, int mirror)//dez's mirror patch
 {
     unsigned char  *ptr  = (void*)dest;
     unsigned short *ptr2 = (void*)dest;
     unsigned long  *ptr4 = (void*)dest;
     int x;
+    int xm;//mirror patch
 
     switch (fb_var.bits_per_pixel) {
     case 8:
-	dither_line(buffer, ptr, line, owidth);
+	dither_line(buffer, ptr, line, owidth, mirror);
 	ptr += owidth;
 	return ptr;
     case 15:
     case 16:
 	for (x = 0; x < owidth; x++) {
-	    ptr2[x] = lut_red[buffer[x*3]] |
+            xm=mirror?owidth-1-x:x;
+	    ptr2[xm] = lut_red[buffer[x*3]] |
 		lut_green[buffer[x*3+1]] |
 		lut_blue[buffer[x*3+2]];
 	}
@@ -730,15 +732,17 @@ convert_line(int bpp, int line, int owidth,
 	return (char*)ptr2;
     case 24:
 	for (x = 0; x < owidth; x++) {
-	    ptr[3*x+2] = buffer[3*x+0];
-	    ptr[3*x+1] = buffer[3*x+1];
-	    ptr[3*x+0] = buffer[3*x+2];
+            xm=mirror?owidth-1-x:x;
+	    ptr[3*xm+2] = buffer[3*x+0];
+	    ptr[3*xm+1] = buffer[3*x+1];
+	    ptr[3*xm+0] = buffer[3*x+2];
 	}
 	ptr += owidth * 3;
 	return ptr;
     case 32:
 	for (x = 0; x < owidth; x++) {
-	    ptr4[x] = lut_red[buffer[x*3]] |
+            xm=mirror?owidth-1-x:x;
+	    ptr4[xm] = lut_red[buffer[x*3]] |
 		lut_green[buffer[x*3+1]] |
 		lut_blue[buffer[x*3+2]];
 	}
@@ -837,7 +841,7 @@ void svga_dither_palette(int r, int g, int b)
 
 //static void
 void
-svga_display_image(struct ida_image *img, int xoff, int yoff)
+svga_display_image(struct ida_image *img, int xoff, int yoff, int mirror, int flip)
 {
     unsigned int     dwidth  = MIN(img->i.width,  fb_var.xres);
     unsigned int     dheight = MIN(img->i.height, fb_var.yres);
@@ -846,7 +850,7 @@ svga_display_image(struct ida_image *img, int xoff, int yoff)
     int xo=(fb_var.xres-dwidth )/2;
     int cxo=fb_var.xres-dwidth-xo;
     int cyo=fb_var.yres-yo;
-	    
+
     if (!visible)//COMMENT THIS IF svga_display_image IS NOT IN A CYCLE
 	return;
 
@@ -884,12 +888,19 @@ svga_display_image(struct ida_image *img, int xoff, int yoff)
     }
 
     /* go ! */
+    //flip patch
+#ifndef min
+#define min(x,y) ((x)<(y)?(x):(y))
+    int fb_fix_line_length=fb_fix.line_length;
+    if(flip) {	fb_fix_line_length*=-1; video += (min(img->i.height,dheight)-1)*(fb_fix.line_length);}
+#endif
+    //flip patch
     for (data = 0, y = 0;
 	 data < img->i.width * img->i.height * 3
 	     && data / img->i.width / 3 < dheight;
-	 data += img->i.width * 3, video += fb_fix.line_length) {
+	 data += img->i.width * 3, video += fb_fix_line_length) {
 	convert_line(fb_var.bits_per_pixel, y++, dwidth,
-		     fb_mem+video, img->data + data + offset);
+		     fb_mem+video, img->data + data + offset,mirror);//<- mirror patch
     }
 }
 
