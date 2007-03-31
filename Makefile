@@ -35,7 +35,7 @@ include $(srcdir)/mk/Variables.mk
 #DEFINES  += -D FIM_NOFB		# disable the framebuffer (for debug mostly)
  DEFINES  += -D FIM_AUTOCMDS		# autocommands
  DEFINES  += -D FIM_RECORDING		# command recording
-#DEFINES  += -D FIM_SWITCH_FIXUP	# still bugful 
+ DEFINES  += -D FIM_SWITCH_FIXUP	# still bugful 
  DEFINES  += -D FIM_CKECK_DUPLICATES	# if enabled, no duplicates will be allowed in the filename list
  DEFINES  += -D FIM_CHECK_FILE_EXISTENCE # when a filename is added in the list, a verification occurs
  DEFINES  += -D FIM_REMOVE_FAILED	# a file which failed loading is removed from the list

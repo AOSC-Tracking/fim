@@ -43,13 +43,13 @@ namespace fim
 		{
 			bindings[c]=binding;
 			return fim::string("keycode ")+fim::string(c)
-				+fim::string(" successfully reassigned to ")+fim::string(bindings[c])+fim::string("\n");
+				+fim::string(" successfully reassigned to \"")+fim::string(bindings[c])+fim::string("\"\n");
 		}
 		else
 		{
 			bindings[c]=binding;
 			return fim::string("keycode ")+fim::string(c)
-				+fim::string(" successfully assigned to ")+fim::string(bindings[c])+fim::string("\n");
+				+fim::string(" successfully assigned to \"")+fim::string(bindings[c])+fim::string("\"\n");
 		}
 	}
 
@@ -451,46 +451,6 @@ namespace fim
 #define istrncpy(x,y,z) {strncpy(x,y,z-1);x[z-1]='\0';}
 #define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);cc.quit(-1);}
 
-#if 0
-	char ** CommandConsole::tokenize_(const char *s)
-	{
-		//questa funzione mi ha fatto bestemmiare un sacco
-		/*
-		 *	This is not cutting edge parsing, so for the limited
-		 *	scope of this program it is enough.
-		 */
-		const char *b=s,*e;	//e will point to the end of the token or fim::string (a separator or NULL)
-		//int n;
-		//char c;
-		const char*separators=" -=";
-		if(s==NULL) return NULL;
-		fim::string str(s);
-		fim::string t;
-		assert(strlen(s)>=(size_t)str.length());
-		char **tokens;
-		if((tokens=(char**)calloc(4,MAXTOCS))==NULL)
-			return NULL;
-		int ntoks=0;
-		b+=strspn(b,separators);	//we skip the first separators
-		e=b;
-		while( (e+=strcspn(e,separators))>b )
-		{
-			if((tokens[ntoks]=(char *)calloc(e-b+1,1))==NULL)
-			{
-				for(int i=ntoks-1;i>=0;--i)
-					free(tokens[i]);
-				return NULL;
-			}
-			strncpy(tokens[ntoks],b,e-b);
-			tokens[ntoks++][e-b]='\0';
-			e+=strspn(e,separators);
-			b=e;
-		}
-		tokens[ntoks]=NULL;
-		return tokens;
-	}
-#endif
-
 	fim::string CommandConsole::getBoundAction(const int c)
 	{
 		return bindings[c];
@@ -537,30 +497,18 @@ namespace fim
 		close(pipedesc[1]);
 		if(r!=(int)strlen(s)){ferror("write error");} 
 		for(char*p=s;*p;++p)if(*p=='\n')*p=' ';
-//		cout << s << "\n";
 		yyparse();
-//		printf("\n");
 		close(pipedesc[0]);
-		//this->execute(fim::string(s));
 		//we add to history only meaningful commands/aliases.
 		if(add_history_)if(nochars(s)==0)add_history(s);
 		free(s);
 	}
-
-/*	void CommandConsole::execute(fim::string cmd)
-	{
-		//this method executes a single command without arguments.
-		std::cout <<  this->execute(cmd,std::vector<fim::string>());
-	}*/
 
         fim::string CommandConsole::execute(fim::string cmd, std::vector<fim::string> args)
 	{
 		/*
 		 *	This is the method where the tokenized commands are executed.
 		 */
-		//cout << "about to exec " << cmd.c_str() << "\n";
-//		if(cmd=="quit")quit();
-//		std::cout << cmd << "\n";
 		//this method executes single commands with arguments.
 		Command *c=NULL;
 		/*
@@ -635,26 +583,18 @@ namespace fim
 		{
 			//assignment of an alias
 			std::vector<Arg> aargs;	//Arg args :P
-			//if(args.size()){
 			for(unsigned int i=0;i<args.size();++i)
 			{
-//				std::cout<<" "<<args[i]<<"\n";
 				aargs.push_back(Arg(args[i]));
 			}
-			//std::cout << this->alias(aargs) << "\n";
 			cout << this->alias(aargs) << "\n";
-			return "";//}
-			//return getAliasesList();
+			return "";
 		}
 		else
 		{
 			//if(_commands[cmd]!="")
 			if((c=findCommand(cmd))!=NULL)
 			{
-			//	std::cout << "cmd : '" << cmd << "'\n";
-			//	std::cout << "args: " << args << "\n";
-			//	std::cout << "`"<<cmd<<" "<<args<<"`\n";
-	//			std::cout<<c->execute(args)<<"\n";
 				return c->execute(args);
 			}
 			else
@@ -778,10 +718,6 @@ namespace fim
 		{
 			cycles++;
 #ifndef FIM_NOFB
-/*			if (switch_last != fb_switch_state)
-			{
-				console_switch(0);
-			}*/
 			fd_set          set;
 			struct timeval  limit;
 			FD_SET(0, &set);
@@ -801,11 +737,6 @@ namespace fim
 				}
 				else if(rl!="")
 				{
-			/*		if (switch_last != fb_switch_state)
-					{
-						console_switch(1);
-					}*/
-
 					fim::string cf=current();
 #ifdef FIM_AUTOCMDS
 					cc.autocmd_exec("PreInteractiveCommand",cf);
@@ -855,34 +786,46 @@ namespace fim
 				
 #ifdef  FIM_SWITCH_FIXUP
 				/*
-				 * THIS CODE DOES NOT WORK AS OF NOW
+				 * this way the console switches the right way :
+				 * the following code taken live from the original fbi.c
 				 */
-				struct termios tattr, sattr;
-				int   seconds;
-				seconds = 1;
-				//we set the terminal in raw mode.
-				//fcntl(0,F_GETFL,&saved_fl);
-				tcgetattr (0, &sattr);
-
-				//fcntl(0,F_SETFL,O_BLOCK);
-				memcpy(&tattr,&sattr,sizeof(struct termios));
-				tattr.c_lflag &= ~(ICANON|ECHO);
-				tattr.c_cc[VMIN]  = 0;
-				tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
-				tcsetattr (0, TCSAFLUSH, &tattr);
-				c=catchInteractiveCommand(1);//if(c==-1){r=0;c=0;}else r=1;	// 1 second read wait
-				r=1;
-				//cout << " cycles : " << cycles << "\n";
-				if( r==0 && switch_last != fb_switch_state ){console_switch(1);c=0;r=0;}
-				//if(   switch_last != fb_switch_state ){console_switch(1);}
-				tcsetattr (0, TCSAFLUSH, &sattr);
-#else
-				//if(read(fim_stdin,&c,4)>0)	//up to four chars should suffice
+				{
+				fd_set set;
+				int fdmax;
+				struct timeval  limit;
+				int timeout=1,rc,paused=0;
+	
+			        FD_ZERO(&set);
+			        FD_SET(fim_stdin, &set);
+			        fdmax = 1;
+#ifdef FBI_HAVE_LIBLIRC
+				/*
+				 * expansion code :)
+				 */
+			        if (-1 != lirc) {
+			            FD_SET(lirc,&set);
+			            fdmax = lirc+1;
+			        }
+#endif
+			        limit.tv_sec = timeout;
+			        limit.tv_usec = 0;
+			        rc = select(fdmax, &set, NULL, NULL,
+			                    (0 != timeout && !paused) ? &limit : NULL);
+			            if (switch_last != fb_switch_state) {
+			            console_switch(1);
+			            continue;
+			        }
+				if (FD_ISSET(fim_stdin,&set))rc = read(fim_stdin, &c, 4);
+				r=rc;
+				}
+#else	
+				/*
+				 * this way the console switches the wrong way
+				 */
 				r=read(fim_stdin,&c,4);	//up to four chars should suffice
 #endif
 				if(r>0)
 				{
-//					cout<< "got:           "<<(char*)c<<"(   "  <<c<<")"<<"\n";
 					if(getIntVariable("_verbose_keys"))
 					{
 						/*
@@ -937,9 +880,9 @@ namespace fim
 					 *	
 					 * 	PLACE A MECHANISM HERE..
 					 * 20070303 THIS IS EVIL
+					 * 20070401 console switching bug solved!
+					 *  and here ?
 					 */
-					//FIX! (this should hack the console switch problem)
-					//browser.display();
 				}
 			}
 		}
@@ -954,7 +897,6 @@ namespace fim
 		 *	This method should be called only when there is no
 		 *	potential harm to the console.
 		 */
-		//std::cout<<"\nThe program ended successfully\n";
 		std::exit(i);
 	}
 
@@ -979,8 +921,6 @@ namespace fim
 	
 	fim::string CommandConsole::foo(const std::vector<fim::string> &args)
 	{
-		//std::cout<<"foo ";
-		//for(unsigned int i=0;i<args.size();++i)std::cout<<" "<<args[i];std::cout<<"\n";
 		return "";
 	}
 
@@ -1414,11 +1354,14 @@ int CommandConsole::executeFile(const char *s)
 		for(unsigned int i=0;i<args.size();++i)
 		{
 			FILE* fd=popen(args[i].c_str(),"r");
-			//int fd=(int)popen("/bin/echo quit","r");
+			/*
+			 * example:
+			 *
+			 * int fd=(int)popen("/bin/echo quit","r");
+			 */
 			//cout << "popening " << args[i].c_str() <<", "<<(int)fd<<  "\n";
 			executeStdFileDescriptor(fd);
 			pclose(fd);
-			//fim_stdin=popen(args[i].c_str());
 		}
 		return "";
 	}
@@ -1538,6 +1481,13 @@ int CommandConsole::executeFile(const char *s)
 		return "";
 	}
 #endif
-	void CommandConsole::markCurrentFile(){if(browser.current()!=""){marked_files.insert(browser.current());cout<<"Marked file \""<<browser.current()<<"\"\n";}}
+	void CommandConsole::markCurrentFile()
+	{
+		if(browser.current()!="")
+		{
+			marked_files.insert(browser.current());
+			cout<<"Marked file \""<<browser.current()<<"\"\n";
+		}
+	}
 }
 

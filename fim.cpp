@@ -502,33 +502,6 @@ void initialize_readline ()
 }
 
 
-namespace fim
-{
-	/*
-	 *	Implementation of a dumb string class.
-	 */
-//class CommandConsoleCommand:public Command
-//{
-//	CommandConsole *obj;
-//	fim::string (CommandConsole::*method)(std::vector<Arg>);
-//	public:
-/*	CommandConsoleCommand::CommandConsoleCommand(
-			fim::string cmd,
-			fim::string (CommandConsole::*method)(std::vector<Arg>),
-			CommandConsole *obj,
-			fim::string help)
-	:Command(cmd,help),method(method),obj(obj)
-	{}
-	fim::string execute(const std::vector<Arg> &args)
-	{
-		std::cout << "dummy execution of " << cmd << ":\n";
-		std::cout << obj << ":\n";
-		if(!obj){std::cout<<"warning : null command pointer!\n";}
-		else (obj->*method)(args);
-	}*/
-//};
-}
-
 fim::CommandConsole cc;
 
 /* Generator function for command completion.  STATE lets us
@@ -572,21 +545,21 @@ void console_switch(int is_busy)
 	case FB_ACQ_REQ:
 		fb_switch_acquire();
 	case FB_ACTIVE:
+		//when stepping in console..
 		visible = 1;	///////////
-		//redraw = 1;
-		//ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
-		/*
-		 * PROBLEMS : //fb_clear_screen causes tearing!
-		 */
-		//fb_clear_screen();
+		ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
+		redraw = 1;
+		cc.setVariable("fresh",1);	//!!
 	/*
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched! 
-	 *
-	 *  UNTRUE !
 	 */
-		//cc.display();
-	if (is_busy) status("busy, please wait ...", NULL);		
+		cc.display();
+		/*
+		 * PROBLEMS : image tearing (also in actual fbi..)
+		 */
+		//fb_clear_screen();
+	//if (is_busy) status("busy, please wait ...", NULL);		
 	break;
 	default:
 	break;
@@ -597,7 +570,9 @@ void console_switch(int is_busy)
 
 
 
-// FIX ME
+/*
+ * yet unfinished
+ */
 static struct option fim_options[] = {
     {"version",    no_argument,       NULL, 'V'},  /* version */
     {"help",       no_argument,       NULL, 'h'},  /* help */
@@ -638,9 +613,10 @@ static void version()
 	//FIX ME
 #define FIM_VERSION "0.1"
     fprintf(stderr,
-		    "fim version " FIM_VERSION", by dez ; compiled on %s.\n%s"
-		    ,__DATE__,
-    		    "\nbased on fbi version 1.31  (c) by 1999-2003 Gerd Knorr\n");
+		    "FIM : Fbi IMproved, version " FIM_VERSION", by dezperado@autistici.org\n%s\nbuilt on %s\n",
+    		    "( based on fbi version 1.31  (c) by 1999-2003 Gerd Hoffmann )\n",
+		    __DATE__
+		    );
 #undef FIM_VERSION
 }
 
@@ -711,7 +687,6 @@ int main(int argc,char *argv[])
 	    cc.setVariable("_display_status",1);
 	    break;
 	case 'P':
-//	    textreading = 1;
 	    cc.setVariable("autowidth",1);
 	    break;
 	case 'g':
@@ -786,9 +761,6 @@ int main(int argc,char *argv[])
 		cc.push(argv[i]);
 	}
 	lexer=new yyFlexLexer;	//used by YYLEX
-	//fim::CommandConsole *ccp;
-//	main_hack( );
-//
 
 #ifndef FIM_NOFB
 	if(!cc.noFrameBuffer())
@@ -853,29 +825,9 @@ int main(int argc,char *argv[])
 		}
 	}
 	}
-	// svga main loop 
 //	std::cerr << "terminal is NOT YET in raw mode now.\n";
-	tty_raw();
+//	tty_raw();
 //    	std::cerr << "terminal is in raw mode now.\n";
-	desc = NULL;
-	info = NULL;
-	fd_set          set;
-	struct timeval  limit;
-	FD_SET(0, &set);
-	limit.tv_sec = timeout;
-	limit.tv_usec = 0;
-	if (FD_ISSET(0,&set))
-	{
-		/* stdin, i.e. keyboard */
-// 	   rl::redisplay();
-// 	   rl::redisplay();
-//  	  	rl::redisplay();
-/*    		char *rl = readline(":");
-  		  if(rl && *rl && *rl!='\n')add_history(rl);
-		    if(rl)free(rl);*/
-//		cc.execute();
-//	  fb_setcolor(100);
-    	}
 #endif
 	cc.init();
 	cc.executionCycle();

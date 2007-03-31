@@ -4,7 +4,7 @@
 /*
  * 	20070215	idea : separate redraw into redraw_compulsory+need_redraw
  * 			and keep old_ and new_ for wverwevery variable!
- *	20070318	i0ma afraid that pan operations hide some big bug..
+ *	20070318	i'am afraid that pan operations hide some big bug..
  */
 namespace fim
 {
@@ -18,17 +18,15 @@ namespace fim
 	void Image::auto_scale()
 	{
 		float xs,ys;
-//		if(!img){img=fimg;}
 		if(!img){return;}
 		if(!fimg){invalid=1;return;}
 #ifndef FIM_NOFB
 		xs = (float)fb_var.xres / fimg->i.width;
 		ys = (float)fb_var.yres / fimg->i.height;
 #else
-		xs=ys=10.0f;
+		xs=ys=1.0f;
 #endif
 		newscale = (xs < ys) ? xs : ys;
-//		cout << "autoscale  xs:"  << xs << ",ys:" << ys<< "\n";
 		rescale();
 	}
 
@@ -46,7 +44,6 @@ namespace fim
 
 	void Image::auto_width_scale()
 	{
-//		if(!img){img=fimg;}
 		if(!img){return;}
 		if(!fimg){invalid=1;return;}
 //		if(cc.isInScript())return;
@@ -61,12 +58,10 @@ namespace fim
 		/*
 		 *	THIS CODE IS BUGFUL, WHEN CALLED FROM THE CONSTRUCTOR...
 		 *	...OR IN THE PRE-USER PHASE..
+		 * 	20070401 hmm  i think it is ok now
 		 */
 		 //	so look at this code as a patch:
 		 //
-		//TODO : MAX MEMORY INSTEAD OF MAX SCALE!!
-		float maxscale=10.0;
-		//float minscale= 0.1;
 	    	if(!img)invalid=1;
 	    	if(!img)return -1;
 	    	if(invalid)return -1;//IN CASE OF MEMORY PROBLEMS
@@ -74,13 +69,8 @@ namespace fim
 #ifndef FIM_NOFB
 		if(cc.noFrameBuffer())return 0;
 		//FIX UPPER MEMORY CONSUMPTION LIMIT...
-#define MAXMEM  100*1000*1000.0
-		maxscale = MAXMEM /(float)( fimg->i.width * fimg->i.height * 3 );
-#undef MAXMEM 
-		//if (newscale < minscale ) newscale = minscale;
-		if(newscale > maxscale ) newscale = maxscale;
+//		if(newscale > maxscale ) newscale = maxscale;
 		if(newscale == scale){return 0;/*no need to rescale*/}
-//		cout << "scale  :"  << scale << "-> " << newscale<< "\n";
 		scale_fix_top_left();
 //		sprintf(linebuffer,"scaling (%.0f%%) %s ...", scale*100, fname);
 //		status(linebuffer, NULL);
@@ -115,7 +105,7 @@ namespace fim
 			cc.setVariable("width",(int)fimg->i.width);
 			cc.setVariable("swidth",(int)img->i.width);
 		}
-		//else redraw=0;
+		else redraw=0;
 #endif
 		return 0;
 	}
@@ -138,8 +128,8 @@ namespace fim
 		 */
 		if(redraw==0 || cc.noFrameBuffer())return;
 
-		if(!img)invalid=1;//IN CASE OF MEMORY PROBLEMS
-		if(invalid)return;//IN CASE OF MEMORY PROBLEMS
+		if(!img)invalid=1;
+		if(invalid)return;
 		
 		int autotop=cc.getIntVariable("autotop");
 		int flip=cc.getIntVariable("autoflip");
@@ -155,7 +145,6 @@ namespace fim
 			/* start with centered image, if larger than screen */
 			if (img->i.width > fb_var.xres )
 				left = (img->i.width - fb_var.xres) / 2;
-//			if (img->i.height > fb_var.yres && !textreading)
 			if (img->i.height > fb_var.yres &&  autotop==0)
 				top = (img->i.height - fb_var.yres) / 2;
 			new_image = 0;
@@ -192,53 +181,16 @@ namespace fim
 		}
 		if(only_first_rescale){only_first_rescale=0;return;}
 		
-/*		while(fb_switch_state!=0)//FB_ACTIVE
-		{
-	    		fb_switch_state=3;//FB_ACQ_REQ;
-		//	console_switch(1);
-		}*/
-        
-
 		if(redraw)
 		{
 			redraw=0;
 			/*
-			 * there should be more work to use double buffering
+			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
 			 */
-			//while(switch_last != fb_switch_state) console_switch(0);
-
-			//fb_clear_screen();
-			while (switch_last != fb_switch_state) { console_switch(0); continue; }
 			//fb_clear_screen();
 			svga_display_image(img, left, top, mirror, flip);
-			//fb_status_screen("", 0);
-			//fb_switch_release();
-			console_switch(0);
-/*			while (switch_last != fb_switch_state)
-			{
-				console_switch(0);
-				continue;
-			}*/
-	
 		}
-		while(fb_switch_state!=2)//fb_inactive
-		{
-	  		//  	fb_switch_state=0;
-			//    console_switch(1);
-			return;
-		}
-/*	    while(switch_last != fb_switch_state)
-            {
-		    //console_switch(0);
-	    }*/
-//	    if (switch_last != fb_switch_state) { console_switch(0);}
-//	    status(desc, info);
-	
-
-//	    	status_screen(desc, ( char*)info);
-//    		cout << "displaying\n";
-  //  		cout << desc << "\n";
 #endif
 	}
 
@@ -263,9 +215,6 @@ namespace fim
 			only_first_rescale=1;
 			//this->display();
 			//if(cc.isInScript()==0)this->auto_scale();
-			//this->auto_scale();
-			//this->magnify();
-			//this->rescale();
 		}
 	}
 
@@ -286,7 +235,7 @@ namespace fim
 		fname = NULL;
 		desc = NULL;
 		info = NULL;
-		invalid=0;//!!!!!!!!!!!
+		invalid=0;
 	}
 	
 	void Image::scale_fix_top_left()
@@ -315,7 +264,6 @@ namespace fim
 		 *	FIX ME
 		 */
 		if(fname_==NULL){invalid=1;return;}
-//		cout << "..loading "<< fname_ << "\n";
 		free_mem();
 		fname = dupstr(fname_);
 		assert(fname);
@@ -388,11 +336,7 @@ namespace fim
 	int Image::onBottom()
 	{
 #ifndef FIM_NOFB
-		/**
-		 **	PERCHE NON FUNZIONA?
-		 **/
 		if(img && invalid==0) return (top + fb_var.yres >= img->i.height);
-//		return ( top+img->i.height<fb_var.yres);
 		else return 0;
 #else
 		return 0;
