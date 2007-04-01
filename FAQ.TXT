@@ -1,0 +1,3 @@
+ $Id$
+
+Please consult the FAQ section in the FIM.TXT file.

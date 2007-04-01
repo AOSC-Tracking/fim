@@ -1,41 +1,53 @@
 	$Id$
 This file is often outdated : FIM is far better than it seems here :)
-	UNSOLVED,MAIN BUGS:
-20070307	It is not clear which key terminates always loops.
-20070307	Config file parsing is still buggy regards comments.
+
+Please read the FIM.TXT file and the fimrc template to discover nice FIM features.
+
 	OPEN   BUGS:
+20070307	It is not clear which key terminates always loops.
+20070307	config file parsing is still to be checked throughly
 20070129	control 4 crashes the prog ... why ? :)
-20070303	introduced bugs concerning commands nested into loops :P
-	FIX:
+20070303	problems when panning during a loop
+
+	MISSING SMALL FIXES:
 20070312	fix dumping of recording in some file!	
-#20070121	fix the image browser then
 20070125	fix the string vs variable problem
 20070128	fixa l'argument passing che e' problematico! e fixa i commenti!
 20070129	fix the KEY binding
 20070211	flex and bison parts should be rewritten
 20070212	fix the command evaluation
 20070303	fix rar and zip dependencies in Makefiles and such for fbgs.sh
-20070303	see if while-nesting is a real danger!
+20070303	see if while-nesting is a real danger or not!
 20070303	update the while construct documentation and fix the while command execution bugs 
 20070303	add an interface for setting exitBinding (now Enter!)
 20070306	primary goals : documentation and warning messages!
-	SCIENCE FICTION:
-20070307	someday: to integrate with a speech recognizer ? :)
-20070323	image understanding language - based pattern selection  :)
-	ADD:
-20070307	/
 20070306	add a way to dump to stdout the default configuration file contents
-0070216	create an installer!
+20070210	fix properly the file parser (comments problems!) and max script filelength limit
+20070210	add an interface to modify key bindings and keycode bindings.
+20070401	variables : $VARNAME or $(VARNAME) or VARNAME ?
+
+	SCIENCE FICTION WISHED ADD-ONS:
+20070307	someday: to integrate with a speech recognizer for command issuing
+20070323	image understanding language - based pattern selection
+20070401	?= /semanticexp/ operator
+
+	ADD:
+20070401	~= /regexp/ operator
+20070401	<=,>= operators
+20070401	find's -exec '{}' ';' -like predicate syntax
+20070216	create a decent installer
 20070129	dump internal commands function
 20070125	add pipe to other commands and exec and system (screenshot with fbgrab, for example)
-20070126	debugger x scoprire i tasti
+20070126	better key printout to ease configuration
 20070128	add support for command renaming with checks...
-20070130	~ proper signal handing for while cycle interruption..
+20070130	proper signal handing for while cycle interruption..
 20070201	cwd,ls,pwd,stat,file...
-20070201	meccanismo --norc, --rc=..
-20070208	when you find time, rewrite the parser in full C++ or traditional, clean C
-20070303	IDEAS :
-		autocmd =~
+20070201	--norc, --rc= mechanisms
+20070208	? rewrite the parser in full C++ or traditional, clean C
+20070201	asymmetric scaling
+
+	MISC IDEAS :
+20070303
 		load cfg, save cfg
 		flip=yes|no
 		scale=i|i:i|:i|i:|
@@ -54,26 +66,17 @@ This file is often outdated : FIM is far better than it seems here :)
 			function : 
 		[n]%[r|l]
 		+|-n[%]
+20070401	better variable handling : boolean variables, conversion, 'no' prefixing,
+		completion fitting the language rules..
+
 	DATES:
 20061223	inception
-20070201	vedi se si possono usare control e shift e frecce e scala asimmetrica e scopri 
-		l'esistenza di funzioni alternative, tipo flip o simili, nei meandri di fbi :P
 20070202	come trattare gli $ nelle stringhe ?
 20070202	stress testing (1000+d-) gave : CommandConsole.cpp:577: "pipe error"
 20070202	aspect ratio expansion and pan speed factors..
 20070204	make stricter the policy of recording (only aliases and/or lines.complete the time behaviour
-20070204	deconfigurable features : default config, autocommands, recording, last_action, system
-20070208	Added FIM_NOFB, FIM_DEFAULT_KEY_CONFIG, FIM_DEFAULT_CONFIG compilation flags
-20070210	eliminate the fresh variable from the config! : 
-20070210	add an interface to modify key bindings and keycode bindings.
-20070210	fix properly the file parser (comments problems!) and max script filelength limit
-
-20070129	implement a new millisleep function..
-20070305	add a handier interface for regexp searching (/)
-20070125	fix the display/statusline relationship..
-20070216	eliminate image tearing by optimizing svga_show_image
-20070303	realtime clock... -lrt cannot  be used with FIM
-20070305	i am not sure the scale_image security patch is complete.
-20070217	fix the default /etc/fimrc or better, builtin config!
+20070210	eliminate the fresh variable from the config?
+20070216	eliminate image tearing by studying the framebuffer device
 	TIPS
 20070302	use __FUNCTION__ : is not ANSI, but GCC
+20070303	realtime clock... -lrt cannot  be used with FIM

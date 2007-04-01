@@ -71,7 +71,7 @@ ID  [a-z_A-Z][a-z_A-Z0-9]*
 ARG [a-z_A-Z0-9]+
 HH  [a-f]|[A-F]|[0-9]
 __SYMBOL   [%:;,.\-\\$|!/(){}_]
-SYMBOL [-()<>=+*\/;{}.,`:$\\^%]
+SYMBOL [-()<>=+*\/;{}.,`:$\\^%#]
 EXCLMARK !
 STRINGC	 {SYMBOL}|{DIGIT}|{UC}|{LC}|[ _]
 STRINGC_Q  {STRINGC}|\"
@@ -151,7 +151,7 @@ STRINGC_DQ {STRINGC}|\'
 . printf("Unknown character :'%s'\n",yytext);yyerror("Unknown character");
 	/*THERE SHOULD GO LEX ERRORS..*/
 
-\#.*\n  { /*  ... a command encountered... */ ; }
+\#.*$  { /*  ... a command encountered... */ ; }
 
 %%
 

@@ -194,7 +194,7 @@ OBJS_FBI	+= $(call ac_lib_mkvar,$(libraries),OBJS)
 
 clean:
 	rm -f $(OBJS_FBI) $(depfiles)  $(OBJS_FIM)  *.o fim -f src/*.o src/*/*.o yacc.output yacc.tab.cpp yacc.tab.hpp lex.yy.cc Make.config md5sums.md5
-	@ rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
+	#@ rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
 	@ rm -f conf.h
 
 #realclean distclean:
@@ -203,8 +203,8 @@ clean:
 #	@ make md5
 #	make clean
 
-md5:
-	@rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
+#md5:
+#	@rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
 
 
 conf.h:	fimrc

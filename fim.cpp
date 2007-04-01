@@ -826,7 +826,7 @@ int main(int argc,char *argv[])
 	}
 	}
 //	std::cerr << "terminal is NOT YET in raw mode now.\n";
-//	tty_raw();
+	tty_raw(); // this, here, inhibits unwanted key printout
 //    	std::cerr << "terminal is in raw mode now.\n";
 #endif
 	cc.init();

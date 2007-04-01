@@ -1,6 +1,6 @@
 $Id$
 ------------------------------------------------------------------------------
-*fim.txt*	For Fim version 0.1.  Last change: 2007 02 12
+*fim.txt*	For Fim version 0.1 (alpha).
 
 			Fim - main help file (UNDER DEVELOPEMENT)
 
@@ -27,6 +27,7 @@ Fim stands for Fbi IMproved.
 
 Fbi is a framebuffer-based image viewer, made by Gerd Knorr, and Fim is
 mainly an interface rework applied roughly as a patch to it.
+The idea of making Fim came after long usage sessions of Vim and Fbi.
 
 The main purposes of Fim is to boost the features present Fbi and adding new
 ones. 
@@ -46,21 +47,23 @@ Introduction to Fim					*ref* *reference*
 
 0. Introduction			|intro|
 1. Index			|index|
-2. Fim on the internet		|internet|
+2. Fim on the Internet		|internet|
 3. Basic Usage			|basics|
 4. Command Line Mode		|cli|
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
-7. Autocommands			|autocommands|
+6.1. Scaling, flipping		|scaling|
+6.2. Autocommands		|autocommands|
+6.3. Variables			|variables|
+7. Command Line,More		|cli-more|
 8. Pattern Matching		|pattern-matching|
 9. Dangers			|dangers|
 10. Language Reference		|langref|
 11. Credits			|credits|
 12. FAQs			|faq|
-13. Variables			|variables|
 
 ==============================================================================
-2. Fim on the internet				*internet*
+2. Fim on the Internet				*internet*
 
 As of now, the official Fim page is https://code.autistici.org/project/fim, 
 although it doesn't say much.
@@ -201,7 +204,25 @@ in the default configuration.
  UNFINISHED
 
 ==============================================================================
-7. Auto commands				*auto-commands*
+6.5. Scaling, Flipping				*scaling*
+>
+	:flip
+will set flip the current image
+>
+	:mirror
+will mirror the current image
+
+so, the next two lines will have the same effect of rotating the image 180
+degrees:
+>
+	:mirror;flip
+	:flip;mirror
+
+
+UNFINISHED
+
+==============================================================================
+6.2. Auto commands				*autocommands*
 >
 	:autocmd EVENT PATTERN ACTION
 
@@ -305,22 +326,103 @@ p.s.: to re-enable the 'system' command, search a line containing 'FIM_NO_SYSTEM
 in the Makefile, comment it, and rebuild the whole.
 
 ==============================================================================
+6.3.Variables	 						*variables*
+
+FIM has defined, and keeps updated, the following internal variables.
+No mechanism enforces them to be read only, but beware that FIM will change them
+as soon as this is necessary.
+
+ 'swidth'	: the current scaled image width
+ 'sheight'	: the current scaled image heigth
+
+ 'width'	: the current image width
+ 'height'	: the current image heigth
+
+ 'scale'	: the current image scale (percent size)
+
+ 'filelistlen'	: the current file list length
+ 'fileindex'	: the current image file index
+
+ 'filename'	: the current image file name (NOT YET IMPLEMENTED)
+
+ 'random'	: a random number, between 0 and RAND_MAX (see "man 3 rand").
+ 		  setting this variable is useless, altough possible: it is 
+		  regenerated between each call.
+
+ 'console_key'	: the key used to enter in command line mode (WARNING : experimental)
+
+==============================================================================
+7.Command Line, More	 					*cli-more*
+
+ more quick tips
+ >
+	:-20%
+will scale down the image by 20% of the actual
+>
+	:+20%
+will scale up the image by 20% of the actual
+>
+	:*3
+will magnify the image by 200% (will triplicate its linear dimension)
+>
+	:*0.5
+will half the displayed image
+ 
+ regular expression search:
+>
+	/.*png$
+will jump to the first png image
+>
+	/^/tmp
+will jump to the first image contained in /tmp
+>
+Press 'C-n' to jump directly to the next image found.
+
+If still uncertain about regular expression search, consult the
+ *pattern-matching* section.
+
+
+==============================================================================
 8. Pattern matching				*pattern-matching*
 
 Pattern matching capabilities are used for matching a filename with some auto
-command.
+command or in the interactive '/' search prompt.
 
 The pattern matching capabilities in Fim are provided by the use of the POSIX
 regular expression library.
 
-The relevant man page is 'man 7 regex'.
+The relevant man page for POSIX regular expressions is 'man 7 regex'.
 
 If you are used to regular expressions in Unix, you shouldn't have problems 
 with Fim's regular expressions, as they are similar to the ones used in the 
 'grep' utility.
 
+
+Otherwise, here are some quick tips for interactive search:
+>
+	/my pic.png
+will jump to the first picture whom name contains 'my pic.png'
+>
+	/^my pic.png$
+will jump to 'my pic.png'
+>
+	/my.*.png$
+will jump to the first .png picture whom name contains 'my'
+>
+	/^my.*.png$
+will jump to the first .png picture whom name begins with 'my' 
+
+When multiple filenames match the search pattern, you can jump to the next 
+matcing with the default 'C-n'(control key and n) binding.
+
+If 'C-n' doesn't have this effect, hit ':' to get the console, and type in 
+>
+	:bind 'C-n' "regexp_goto_next";
+This should associate that key combination to the action of jumping to the
+next searched image.
+
 ==============================================================================
-8. Dangers						*dangers*
+9. Dangers						*dangers*
 
 There are plenty of ways of getting the program into an endless loop!
 For instance,
@@ -369,35 +471,34 @@ So, the commands following the loop will be ignored.
 ==============================================================================
 11.Credits 							*credits*
 
-==============================================================================
-12.FAQs 							*faq*
+ Fim is a rework of Fbi , which is a framebuffer console image viewer written
+ by Gerd Hoffmann.
+
+ Fim is an idea of dezperado, which can be contacted through the email address
+ scrambled as dezperado _FOobAr_ autistici _Baz_ org.
 
  UNFINISHED
+
 ==============================================================================
+12.FAQs 							*faq*
+ 
+ Q: We are in $Date$, why do you still use the framebuffer, uh ?
+ A: De gustibus non disputandum est.
 
-13.Variables	 						*variables*
+ Q: Do you prefer complicated software over simple to use?
+ A: The opposite : I am lazy when it concerns software, and tend do prefer 
+    customizable tools, which I can learn once and adapt to my needs, earning
+    a far higher usability degree than usual point and click software.
+    Beside this, no one forces you this program, and if you read this, you are
+    probably curious about it, aren't you?
+ 
+ Q: When compiling, I get a compilation error when making lex.yy.o or yacc.tab.o!
+ A: Please execute 'make report' and mail its output. It should be due to the
+    fact Fim relies on some experimental features of Bison.
 
-FIM has defined, and keeps updated, the following internal variables.
-No mechanism enforces them to be read only, but beware that FIM will change them
-as soon as this is necessary.
-
- 'swidth'	: the current scaled image width
- 'sheight'	: the current scaled image heigth
-
- 'width'	: the current image width
- 'height'	: the current image heigth
-
- 'scale'	: the current image scale (percent size)
-
- 'filelistlen'	: the current file list length
- 'fileindex'	: the current image file index
-
- 'filename'	: the current image file name (NOT YET IMPLEMENTED)
-
- 'random'	: a random number, between 0 and RAND_MAX (see "man 3 rand").
- 		  setting this variable is useless, altough possible: it is 
-		  regenerated between each call.
-
- 'console_key'	: the key used to enter in command line mode (WARNING : experimental)
+ Q: I am a big fan of Fim, could I help you suggesting features, or contributing
+    with code?
+ A: Yes, please drop me an email or find me on the #fim channel of some IRC
+    server which still I have to define.
 
 ------------------------------------------------------------------------------

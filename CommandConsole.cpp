@@ -994,18 +994,28 @@ namespace fim
 	{
 		/*
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
+		 *
+		 * p.s.: yes, we have horrible limits here..
 		 */
 		int r;
 		char buf[4096*32];//FIXME
+		//char *buf;
+		struct stat ss;
 		if(fd==-1)return -1;
+		//if(-1==fstat(fd,&ss))return-1;
+		//buf=NULL;
+		//if(S_ISREG(fd)||S_ISLNK(fd))buf=(char*)malloc(ss.st_size);
+		//if(!buf)return-1;
 		r=read(fd,buf,sizeof(buf)-1);if(r!=-1)buf[r]='\0';
-		if(r==-1)return -1;
+		//if(r==-1){free(buf);return -1;}
 		//cout << "read " << r << " bytes from descriptor" << fd << "\n";
+		//buf[min((size_t)fim::string::max(),ss.st_size-1)]='\0';
 		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
 		//cout << buf; 
 		isinscript=1;
 		execute(buf,0);
 		isinscript=0;
+		//free(buf);
 		return 0;
 	}
 
@@ -1021,7 +1031,7 @@ int CommandConsole::executeFile(const char *s)
 		if(-1==stat(s,&stat_s))return -1;
 		cout << "executing " << s << "\n";
 		int fd,r;
-		char buf[4096*32];//FIXME
+		//char buf[4096*32];//FIXME
 		fd=open(s,0);
 		if(fd+1==0)
 		{
