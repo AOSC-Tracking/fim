@@ -3,9 +3,7 @@
 #include <stdio.h>
 
 #include <stdlib.h>
-//#include "calc3.h"
 #include "lex.h"
-//#include "y.tab.h"
 #include "yacc.tab.hpp"
 #include "common.h"
 void yyerror(char *);
@@ -32,6 +30,7 @@ int pipedesc[2];
 	if(0)printf("letti in input : %d(%c)\n",r,*buf); \
 	result = (buf[0]==EOF||r<1)?EOB_ACT_END_OF_FILE:EOB_ACT_CONTINUE_SCAN; \
 	result = (buf[0]==EOF||r<1)?0:1; \
+	if(result<=0) {close(pipedesc[0]);close(pipedesc[1]);} \
 	if(r==0)number_to_move == YY_MORE_ADJ; \
 }
 
@@ -53,9 +52,16 @@ int pipedesc[2];
 	astrcpy(dst,src+1) \
 }
 
+//to lower
+#define tl(src) \
+{ \
+	if((src)==NULL)yyerror("null pointer given!\n"); \
+	{char*s=src;while(*s){*s=tolower(*s);++s;}} \
+}
 
 
 %}
+
 
 DIGIT    [0-9]
 NUMBER [0-9]+
@@ -90,30 +96,26 @@ STRINGC_DQ {STRINGC}|\'
 "do" return DO;
 
 
-
-
-\'{STRINGC_Q}*\' {
-	//(yytext+1)[strlen(yytext+1)-1]='\0';
-	//astrcpy(yylval.sValue,yytext+1);;
-	trec(yytext+1,"n\\","\n\\");
+\'((\\\')|[^\'])*\' {
+	trec(yytext+1,"n\\\'","\n\\\'");
 	qastrcpy(yylval.sValue,yytext);;
 	return STRING;
 	}
 
-\"{STRINGC_DQ}*\" {
-	//(yytext+1)[strlen(yytext+1)-1]='\0';
-	//astrcpy(yylval.sValue,yytext+1);;
-	trec(yytext+1,"n\\","\n\\");
+\"((\\\")|[^\"])*\" {
+	trec(yytext+1,"n\\\"","\n\\\"");
 	qastrcpy(yylval.sValue,yytext);;
 	return STRING;
 	}
 
 {ID}	{
 	astrcpy(yylval.sValue,yytext);
+	//tl(yylval.sValue);
+	// tolower breaks aliases, but it would be useful on  keywords, above..
 	return IDENTIFIER;
 	}
 
--?[0-9]+	{
+[0-9]+	{
 	yylval.iValue = atoi(yytext);
 	return INTEGER;
 	}
@@ -122,7 +124,6 @@ STRINGC_DQ {STRINGC}|\'
 	yylval.iValue = -1;
 	return INTEGER;
 	}
-
 
 "^"	{
 	yylval.iValue = 0;
@@ -151,7 +152,7 @@ STRINGC_DQ {STRINGC}|\'
 . printf("Unknown character :'%s'\n",yytext);yyerror("Unknown character");
 	/*THERE SHOULD GO LEX ERRORS..*/
 
-\#.*$  { /*  ... a command encountered... */ ; }
+\#.*$  { /*  ... a comment encountered... */ ; }
 
 %%
 

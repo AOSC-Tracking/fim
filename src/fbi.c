@@ -107,7 +107,8 @@ int                        fd, switch_last, debug;
 unsigned short red[256],  green[256],  blue[256];
 struct fb_cmap cmap  = { 0, 256, red,  green,  blue };
 
-static float fbgamma = 1;
+//static float fbgamma = 1;
+float fbgamma = 1.0;
 
 /* Command line options. */
 

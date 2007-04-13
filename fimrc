@@ -33,7 +33,7 @@ bind 'e' "echo";
 bind 'p' "prev;display;";
 bind 'P' "pop";
 bind 's' "sort";
-bind 'S' "toggleDisplayStatus;";
+bind 'S' "toggleDisplayStatus";
 bind 'r' "reload";
 bind 'R' "redisplay";
 bind 'd' "display";
@@ -42,7 +42,7 @@ bind 'a' "auto_scale;";
 bind 'Tab' "toggleVerbosity";
 bind 'C-v' "toggleKeyVerbosity";
 bind 'C-k' "toggleKeyVerbosity";
-bind 'v' "toggleDisplayStatus;";
+bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
 bind 'C-m' "mark";
 bind '-' "reduce";
@@ -112,27 +112,30 @@ alias "fastread"          "while(1){display;scrollforward;};";
 alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow;";
 bind  "C-p" "pornview";
 bind  "C-b" "bookview";
-autocmd "PreExecutionCycle" "" "fresh=1;reload;redisplay;";
+autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0;" ;
+autocmd "PreExecutionCycle" "" "fresh=1;reload;";
+autocmd "PreExecutionCycle" "" "redisplay;";
+autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "fresh=0;";
 #extra..
 bind 'w' "auto_width_scale";
 bind 'C-h' "auto_height_scale";
-alias "diagonal_nw" "panleft;panup;";
-alias "diagonal_ne" "panright;panup;";
-alias "diagonal_se" "panright;pandown;";
-alias "diagonal_sw" "panleft;pandown;";
+alias "diagonal_nw" "pan_nw;";
+alias "diagonal_ne" "pan_ne;";
+alias "diagonal_se" "pan_se;";
+alias "diagonal_sw" "pan_sw;";
 bind "d" "diagonal_nw;";
 bind "D" "diagonal_se;";
 bind "x" "diagonal_ne;";
 bind "X" "diagonal_sw;";
+alias "toggleDisplayStatus" "_display_status=1-_display_status;";
+alias "toggleDisplayBusy" "_display_busy=1-_display_busy;";
 #bind 'C-a' "auto_scale";
-#autocmd "PostDisplay" "" "quit";
 #autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n';";
 #autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
 #autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
 #autocmd "PostDisplay" ".*gif" "echo 'this is a gif file';";
 ####_display_status=1;
-alias "toggleDisplayStatus" "_display_status=1-_display_status;redisplay;";
 #push "media/fim.png";
 #push "media/image.png";
 #push "media/image.jpg";
@@ -148,9 +151,10 @@ bind 'A'   "toggleAutoScale;";
 #toggleVerbosity;
 #bind 'f' "next;display;";
 bind 'b' "prev;display;";
+bind 'B' "toggleDisplayBusy";
 alias "plisten" 'popen "nc -l -p 9999 "';
 alias "wlisten" "while(1){sleep;plisten;}"
 alias "random_slideshow" "while(1){goto random;}"
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
-#So use it, but with caution! FIM is still severely bugged! 
+#So use it, but with caution! FIM is still bugged! 

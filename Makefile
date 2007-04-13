@@ -42,10 +42,12 @@ include $(srcdir)/mk/Variables.mk
  DEFINES  += -D FIM_AUTOSKIP_FAILED	# if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
  DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
  DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
-
+ FIM_VERSION:= 0.1
+ FIM_AUTHOR := '"dezperado@autistici.org"'
 #################################################################
 
-CFLAGS	 += -DVERSION='"$(VERSION)"' $(DEFINES)
+CFLAGS	 += -DFIM_VERSION='"$(FIM_VERSION)"' $(DEFINES)
+CFLAGS	 += -DFIM_AUTHOR='"$(FIM_AUTHOR)"'
 CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
 LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lz
 #-lrt (realtime library ) cannot be used :(  (causes segmentation fault!)

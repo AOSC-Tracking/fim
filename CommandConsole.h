@@ -1,4 +1,22 @@
 /* $Id$ */
+/*
+ CommandConsole.h : Fim console dispatcher header file
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
 #ifndef CC_FBVI_H
 #define CC_FBVI_H
 #include "fim.h"
@@ -236,12 +254,19 @@ class CommandConsole
 	fim::string get_variables_list();
 	fim::string get_aliases_list();
 	fim::string get_commands_list();
-	void printHelpMessage()
+	void printHelpMessage(char *pn="fim");
+	void appendPostInitCommand(const fim::string &c)
 	{
-		printf("\nThe help will be here soon!\n");
-		printf("Please read the documentation distributed with the program first!\n");
-		printf("example usage : fim image.jpg *png\n");
+		postInitCommand+=c;
 	}
+	void appendPostExecutionCommand(const fim::string &c)
+	{
+		postExecutionCommand+=c;
+	}
+	private:
+	fim::string postInitCommand;
+	fim::string postExecutionCommand;
+	int show_must_go_on;
 };
 }
 

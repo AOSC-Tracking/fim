@@ -7,7 +7,6 @@ Please read the FIM.TXT file and the fimrc template to discover nice FIM feature
 20070307	It is not clear which key terminates always loops.
 20070307	config file parsing is still to be checked throughly
 20070129	control 4 crashes the prog ... why ? :)
-20070303	problems when panning during a loop
 
 	MISSING SMALL FIXES:
 20070312	fix dumping of recording in some file!	

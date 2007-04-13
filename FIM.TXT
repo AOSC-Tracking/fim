@@ -52,13 +52,19 @@ Introduction to Fim					*ref* *reference*
 4. Command Line Mode		|cli|
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
-6.1. Scaling, flipping		|scaling|
-6.2. Autocommands		|autocommands|
-6.3. Variables			|variables|
+6.1. Loading and browsing	|commands-browsing|
+6.2. Scaling, flipping		|scaling|
+6.3. Panning,moving		|commands-scroll|
+6.4. Recording 			|commands-recording|
+6.5. Console related commands	|commands-console|
+6.6. System Interaction		|commands-system|
+6.7. Variables			|commands-variables|
+6.8. Autocommands		|commands-autocommands|
 7. Command Line,More		|cli-more|
+7.1. Default configuration	|default-config|
 8. Pattern Matching		|pattern-matching|
 9. Dangers			|dangers|
-10. Language Reference		|langref|
+10. Syntax Reference		|syntref|
 11. Credits			|credits|
 12. FAQs			|faq|
 
@@ -201,11 +207,76 @@ interactive key 'd' ) after each minimal command.
 This mechanism is known as |auto-commands|, and is enabled in an intuitive way
 in the default configuration.
 
- UNFINISHED
+==============================================================================
+6.1. Loading and browsing the images		*commands-browse*
+
+When first entered in Fim, you should note its behaviour is perfectly similar
+to that of Fbi ( and how could it? - you could ask.. ) :
+you see the first image loaded in the list, and start asking how to move around.
+
+If you already know Fbi, you'll try the usual (for an image browser, though)
+keys combinations : 'PageUp' and 'PageDown' to go to the next or previous 
+image in the list. Also, you'll note that the 'q' key quits the program, and 
+the '+' and '-' keus will scale the image. Quite natural.
+
+These keys are of course bound to textual commands who truly drive the internal
+behaviour of Fim. Here are the first ones, essential to start understanding the
+underneath logic driving the program behaviour:
+
+'quit'	quits the program, eventually executing some action, as specified with
+the '-F' invocation option, or at run time, or in the configuration file, by
+the means of some autocommand.
+
+'sort'	sorts the image list alphabetically.
+
+'prev'	jumps to the next image in the list
+'next'	jumps to the previous image in the list
+'pop'	remove the last image from the list
+'remove' remove the current image from the list
+
+The forementioned commands are quiet, in the way they do not directly affect
+the image graphics displayed on screen; this effects will be achieved through
+the use of the autocommands mechanism, triggering 'reload's and 'display's when
+desired.
+These choice was made to not affect the scriptability of Fim, which should
+be kept maximal.
+Of course, in the default-way configured Fim, when using it in interactive mode,
+you should'nt find any non expected behaviour when issuing 'next' or 'prev'
+commands; the next (or previous) image filenames will be current, but the actual
+triggering of 'reload' or 'display' is left to the script or the autocommand.
+
+'load'	loads the current image in the list, if not already loaded
+'reload'  reloads the current image in the list, regardless its load status
+
+As you see, there seems to be some redundancy in the commands, as here specified.
+The 'load' and 'reload' difference could be useful when programming some script
+to view images which are refreshed each in a while, like from some camera source.
+
+'display' displays the current image , if not already displayed
+'redisplay' displays the current image, regardless its display status
+
+Difference in 'display' and 'redisplay' arise when thinking about ancilliary
+graphics Fim should load, like status bars or the on-screen console.
+Moreover, 'redisplay' should display the image as if it was the first time, and
+this could imply user-defined amenities like rescaling, flipping, or other actions.
+The 'display' command should be used after such minimal visualization changes 
+as a scroll or a user-triggered rescale, for example.
+
+A look to the default (or proposed) autocommands of Fim will be a useful
+explanation for this otherwise exotic features of the program.
 
 ==============================================================================
-6.5. Scaling, Flipping				*scaling*
->
+6.2. Scaling, Flipping				*commands-scaling*
+
+auto_scale
+auto_width_scale
+auto_height_scale
+
+reduce
+magnify
+flip
+mirror
+
 	:flip
 will set flip the current image
 >
@@ -222,7 +293,99 @@ degrees:
 UNFINISHED
 
 ==============================================================================
-6.2. Auto commands				*autocommands*
+6.3. Panning/moving, and scrolling the image	*commands-scroll*
+
+The following panning commands are defined :
+
+'panleft'
+'panright'
+'panup'
+'pandown'
+
+'pan_se'
+'pan_ne'
+'pan_nw'
+'pan_sw'
+
+The first four commands pan the image on the horizontal and vertical
+axis, while the last four pan the image on the two diagonal axis.
+
+'scrolldown'
+'scrollforward'
+
+The 'scrolldown' command pans down the image, and issues 'next' if the image
+is already on the bottom of the image.
+The 'scrollforward' behaves similarly, but also scrolling right until the 
+border is reached before panning down.
+
+ UNFINISHED
+
+==============================================================================
+6.4. Recording					*commands-recording*
+
+stop_recording
+dump_record_buffer
+execute_record_buffer
+repeat_last
+
+ UNFINISHED
+
+==============================================================================
+6.5. Console related commands			*commands-console*
+
+echo
+clear
+info
+
+ UNFINISHED
+
+==============================================================================
+6.6. System interaction				*commands-system*
+
+system
+popen
+
+'quit'
+
+mark
+
+The 'sleep' command freezes the program execution for a user defined number of
+seconds, default 1.
+
+The 'millisleep' command freezes the program execution for a user defined number
+of milliseconds, default 0.
+
+ UNFINISHED
+
+==============================================================================
+6.7.Variables	 						*variables*
+
+FIM has defined, and keeps updated, the following internal variables.
+No mechanism enforces them to be read only, but beware that FIM will change them
+as soon as this is necessary.
+
+ 'swidth'	: the current scaled image width
+ 'sheight'	: the current scaled image heigth
+
+ 'width'	: the current image width
+ 'height'	: the current image heigth
+
+ 'scale'	: the current image scale (percent size)
+
+ 'filelistlen'	: the current file list length
+ 'fileindex'	: the current image file index
+
+ 'filename'	: the current image file name (NOT YET IMPLEMENTED)
+
+ 'random'	: a random number, between 0 and RAND_MAX (see "man 3 rand").
+ 		  setting this variable is useless, altough possible: it is 
+		  regenerated between each call.
+
+ 'console_key'	: the key used to enter in command line mode (WARNING : experimental)
+
+
+==============================================================================
+6.8. Auto commands				*commands-autocommands*
 >
 	:autocmd EVENT PATTERN ACTION
 
@@ -262,14 +425,14 @@ an EVENT can be one of:
 'PreReload'	: before a reloading occurs
 'PosReload'	: after  a reloading occurs
 
-'PreNext'	: before a reloading occurs
-'PostNext'	: after  a reloading occurs
+'PreNext'	: before a next image command executes
+'PostNext'	: after  a next image command executes
 
-'PrePrev'	: before a reloading occurs
-'PostPrev'	: after  a reloading occurs
+'PrePrev'	: before a previous image command executes
+'PostPrev'	: after  a previous iamge command executes
 
 'PreExecutionCycle'  : right before the program gets interactive 
-'PostExecutionCycle' : right after  the program gets interactive
+'PostExecutionCycle' : right after  the program executed interactively (after quit)
 
 'PreInteractiveCommand'  : right before an (any) interactive command
 'PostInteractiveCommand' : right after  an (any) interactive command
@@ -326,32 +489,6 @@ p.s.: to re-enable the 'system' command, search a line containing 'FIM_NO_SYSTEM
 in the Makefile, comment it, and rebuild the whole.
 
 ==============================================================================
-6.3.Variables	 						*variables*
-
-FIM has defined, and keeps updated, the following internal variables.
-No mechanism enforces them to be read only, but beware that FIM will change them
-as soon as this is necessary.
-
- 'swidth'	: the current scaled image width
- 'sheight'	: the current scaled image heigth
-
- 'width'	: the current image width
- 'height'	: the current image heigth
-
- 'scale'	: the current image scale (percent size)
-
- 'filelistlen'	: the current file list length
- 'fileindex'	: the current image file index
-
- 'filename'	: the current image file name (NOT YET IMPLEMENTED)
-
- 'random'	: a random number, between 0 and RAND_MAX (see "man 3 rand").
- 		  setting this variable is useless, altough possible: it is 
-		  regenerated between each call.
-
- 'console_key'	: the key used to enter in command line mode (WARNING : experimental)
-
-==============================================================================
 7.Command Line, More	 					*cli-more*
 
  more quick tips
@@ -381,6 +518,13 @@ Press 'C-n' to jump directly to the next image found.
 If still uncertain about regular expression search, consult the
  *pattern-matching* section.
 
+==============================================================================
+7.1. Default Configuration			*default-config*
+
+The following actions come as default aliases :
+
+
+ UNFINISHED
 
 ==============================================================================
 8. Pattern matching				*pattern-matching*
@@ -448,7 +592,7 @@ Warning : repeat_last do NOT work in scripts *
  UNFINISHED
 
 ==============================================================================
-10.Language reference 						*langref*
+10.Syntax reference 						*syntref*
 
 The implemented Fim minilanguage gives the user the possibility of storing 
 values into variables, then performing simple arithmetics, while loops, and 
@@ -482,7 +626,8 @@ So, the commands following the loop will be ignored.
 ==============================================================================
 12.FAQs 							*faq*
  
- Q: We are in $Date$, why do you still use the framebuffer, uh ?
+ Q: We are in $Date$,
+    so why do you still use the framebuffer, uh ?
  A: De gustibus non disputandum est.
 
  Q: Do you prefer complicated software over simple to use?
@@ -493,12 +638,42 @@ So, the commands following the loop will be ignored.
     probably curious about it, aren't you?
  
  Q: When compiling, I get a compilation error when making lex.yy.o or yacc.tab.o!
- A: Please execute 'make report' and mail its output. It should be due to the
-    fact Fim relies on some experimental features of Bison.
+ A: Please execute 'make report' and mail me its output. It should be due to the
+    fact that Fim relies on some experimental features of Bison.
+    Consider upgrading Bison as a possible solution.
+
+ Q: Is it true that no feature was removed from Fbi ?
+ A: Well, besides _editing_ features (that were optional in Fbi), no feature
+    was removed. Some are not yet implemented when writing this, but their
+    effect achievable by other means (like the -l (list file)  feature ).
 
  Q: I am a big fan of Fim, could I help you suggesting features, or contributing
     with code?
  A: Yes, please drop me an email or find me on the #fim channel of some IRC
     server which still I have to define.
+
+ Q: I wish to use Fim for commercial purposes, could I?
+ A: I think you could, as long as Fim is licensed under the GPL version 2.
+
+ Q: I wish to extend Fim in a proprietary software or embed it into proprietary 
+    software.
+ A: You couldn't, sorry. Type 'man gpl' to discover why. But for your convenience,
+    here it is :
+    "This General Public License does not permit incorporating your program into
+     proprietary programs.  If your program is a subroutine library, you may consider
+     it more useful to permit linking proprietary applications with the library.
+     If this is what you want to do, use the GNU Library General Public License
+     instead of this License."
+    Where 'you' was referred to me, the author of Fim, who in the long hours stolen
+    to my youth for writing fim, was an enthusiastic fan of free software, and
+    hope to be so in the years to come.
+
+ Q: I wish to use Fim for military purposes, could I ?
+ A: Remember me to add somewhere a clause to deny this to you.
+
+ Q: I wish to donate you money, beer, pizza, or a new laprop; could I?
+ A: Yes, you could, as in this moment of my life i am completely broken.
+    No, I am not a looser, but just not a hawk.
+    Contact me for the details of sending me the goods.
 
 ------------------------------------------------------------------------------

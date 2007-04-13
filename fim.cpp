@@ -1,4 +1,22 @@
 /* $Id$ */
+/*
+ fim.cpp : Fim main program
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
 
 #include "fim.h"
 #include <signal.h>
@@ -12,7 +30,7 @@
 
 
 //#define DEFAULT_DEVICE  "/dev/fb0"
-#define DEFAULT_DEVICE  "/dev/fb/0"
+//#define DEFAULT_DEVICE  "/dev/fb/0"
 
 /*
  * we use a portion of the STL
@@ -129,8 +147,8 @@ void sanitize_string(char *s, int c=0)
 
 /*
  *	Set the 'status bar' of the program.
- *	desc will be placed on the left corner
- *	info on the right
+ *	- desc will be placed on the left corner
+ *	- info on the right
  */
 void status(const char *desc, const char *info)
 {
@@ -140,11 +158,10 @@ void status(const char *desc, const char *info)
 	const char *prompt=cc.get_prompt();
 	char no_prompt[1];*no_prompt='\0';
 #ifndef FIM_NOFB
-//	if (!statusline)return;
 	if(!cc.inConsole())prompt=no_prompt;
 	chars = fb_var.xres / fb_font_width();
 	if(chars<48)return;//something strange..
-	str = (char*) malloc(chars+1);
+	str = (char*) malloc(chars+1);//this malloc is free
 	if(!str)return;
 	if (info)
 	{
@@ -224,7 +241,7 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 	const char *p=msg,	//p points to the substring not yet printed
 	      	    *s=p;	//s advances and updates p
 	if(!msg) {memset(columns,' ',R*(C+1));cline=0;ccol=0;p=NULL;/*noDraw=0;*/}
-	//if(!msg) return;
+	if(msg&&*msg=='\0')return;
 	if(cc.noFrameBuffer())return;
 	if(p)while(*p)
 	{
@@ -591,9 +608,11 @@ static struct option fim_options[] = {
     {"edit",       no_argument,       NULL, 'e'},  /* enable editing */
     {"list",       required_argument, NULL, 'l'},
     {"vt",         required_argument, NULL, 'T'},
-    {"backup",     no_argument,       NULL, 'b'},
-    {"preserve",   no_argument,       NULL, 'p'},
+//    {"backup",     no_argument,       NULL, 'b'},
+//    {"preserve",   no_argument,       NULL, 'p'},
     {"execute",    required_argument,       NULL, 'E'},
+    {"command",    required_argument,       NULL, 'c'},
+    {"final-command",    required_argument,       NULL, 'F'},
     {"debug",      no_argument,       NULL, 'D'},
     {"no-rc-file",      no_argument,       NULL, 'N'},
 
@@ -608,16 +627,16 @@ static struct option fim_options[] = {
 	FlexLexer *lexer;
 	using namespace fim;
 
+
 static void version()
 {
-	//FIX ME
-#define FIM_VERSION "0.1"
     fprintf(stderr,
-		    "FIM : Fbi IMproved, version " FIM_VERSION", by dezperado@autistici.org\n%s\nbuilt on %s\n",
-    		    "( based on fbi version 1.31  (c) by 1999-2003 Gerd Hoffmann )\n",
+		    "FIM - Fbi IMproved "FIM_VERSION
+		    ", by "FIM_AUTHOR
+		    ", built on %s\n",
 		    __DATE__
+    		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
 		    );
-#undef FIM_VERSION
 }
 
 
@@ -627,43 +646,16 @@ int main(int argc,char *argv[])
 	 * an adapted version of the main function
 	 * of the original version of the fbi program
 	 */
-	//void *fp;
-	//std::map<fim::string,fim::string (fim::CommandConsole::*)(std::vector<Arg>)> map;
-	//m.insert(20,33);
-	//m[20]=33;
-	//std::cout<<m[20]<<"\n";
-//	cc.bind('E',"comando E");
-//	cc.bind('a'-'a'+1,"comando control e a");
-//	
-//	cc.bind('b'-'a'+1,"comando control e b");
-/*	
-	int              randomize = -1;
-	int              backup = 0;
-	int              preserve = 0;
-
-	struct ida_image *fimg    = NULL;
-	struct ida_image *simg    = NULL;
-	struct ida_image *img     = NULL;
-	float            scale    = 1;
-	float            newscale = 1;*/
  	int              timeout = -1;
 	int              opt_index = 0;
 	int              vt = 0;
-
-//	int              c
-	//int editable = 0, once = 0;
-	int              i;//, arg, key;
-
-	//char             *line, *info, *desc;
+	int              i;
 	char             *desc,*info;
-    	//char             linebuffer[128];
-
-	setlocale(LC_ALL,"");
 	char c;
 
-	setlocale(LC_ALL,"");
+	setlocale(LC_ALL,"");	//uhm..
     	for (;;) {
-	    c = getopt_long(argc, argv, "u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNh",
+	    c = getopt_long(argc, argv, "c:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",
 			fim_options, &opt_index);
 	if (c == -1)
 	    break;
@@ -672,45 +664,58 @@ int main(int argc,char *argv[])
 	    // long option, nothing to do
 	    break;
 	case '1':
+	    //fbi's
+	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
 //	    once = 1;
 	    break;
 	case 'a':
+	    //fbi's
 	    cc.setVariable("autotop",1);
-//	    autoup   = 1;
-//	    autodown = 1;
 	    break;
 	case 'q':
-//	    statusline = 0;
+	    //fbi's
+	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
 	    break;
 	case 'v':
-//	    statusline = 1;
+	    //fbi's
 	    cc.setVariable("_display_status",1);
 	    break;
 	case 'P':
+	    //fbi's
 	    cc.setVariable("autowidth",1);
 	    break;
 	case 'g':
-//	    fbgamma = atof(optarg);
+	    //fbi's
+	    fbgamma = atof(optarg);
 	    break;
 	case 'r':
+	    //fbi's
 //	    pcd_res = atoi(optarg);
 	    break;
 	case 's':
 //	    steps = atoi(optarg);
+	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
 	    break;
 	case 't':
+	    //fbi's
 //	    timeout = atoi(optarg);
+	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
 	    break;
 	case 'u':
+	    //fbi's
+	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
 //	    randomize = 1;
 	    break;
 	case 'd':
-//	    fbdev = optarg;
+	    //fbi's
+	    fbdev = optarg;
 	    break;
 	case 'm':
-//	    fbmode = optarg;
+	    //fbi's
+	    fbmode = optarg;
 	    break;
-	case 'f':
+//removed, editing features :
+/*	case 'f':
 //	    fontname = optarg;
 	    break;
 	case 'e':
@@ -721,43 +726,48 @@ int main(int argc,char *argv[])
 	    break;
 	case 'p':
 //	    preserve = 1;
-	    break;
+	    break;*/
 	case 'l':
+	    //fbi's
 //	    flist_add_list(optarg);
+	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
 	    break;
 	case 'T':
+	    //fbi's virtual terminal
 	    vt = atoi(optarg);
 	    break;
 	case 'V':
 	    version();
 	    return 0;
 	    break;
+	case 'c':
+	    //fim's
+	    cc.appendPostInitCommand(optarg);
+	    break;
+	case 'F':
+	    //fim's
+	    cc.appendPostExecutionCommand(optarg);
+	    break;
 	case 'E':
+	    //fim's
 	    cc.scripts.push_back(optarg);
-	    /*
-	     *
-	     * cc.execute(optarg,0);
-	     *
-	     */
 	    break;
 	case 'D':
+	    //fim's
 	    cc.setNoFrameBuffer();	// no framebuffer (debug) mode
 	    break;
 	case 'N':
+	    //fim's
 		cc.setVariable("no_rc_file",1);
 	    break;
 	default:
 	case 'h':
-//	    usage(argv[0]);
-	    cc.printHelpMessage();
-	    exit(0);
-//	    cc.exit(1);
-	;
+	    cc.printHelpMessage(argv[0]);
+	    std::exit(0);
 	}
     }
 	for (i = optind; i < argc; i++)
 	{
-		//flist_add(argv[i]);
 		cc.push(argv[i]);
 	}
 	lexer=new yyFlexLexer;	//used by YYLEX
@@ -765,26 +775,19 @@ int main(int argc,char *argv[])
 #ifndef FIM_NOFB
 	if(!cc.noFrameBuffer())
 	{
-//    std::cerr << "0\n";
-	//initialization of the framebuffer text
+		//initialization of the framebuffer text
 		fb_text_init1(fontname);
-//    std::cerr << "1\n";
-	//initialization of the framebuffer text
+		//initialization of the framebuffer text
 		fd = fb_init(fbdev, fbmode, vt);
-//    std::cerr << "2\n";
-	//setting signals to handle in the right ways signals
+		//setting signals to handle in the right ways signals
 		fb_catch_exit_signals();
-	//???
-//		std::cout << "..1..\n";
 		fb_switch_init();
 		/*
-		 *	SEMBRA CHE COMMENTARE LA SEGUENTE RIGA NON ABBIA EFFETTO!
+		 * C-z is inhibited now (for framebuffer's screen safety!)
 		 */
 		signal(SIGTSTP,SIG_IGN);
 		//set text color to white ?
 		fb_text_init2();
-//    		std::cout << "..2..\n";
-  
 
 		switch (fb_var.bits_per_pixel) {
 	case 8:
@@ -825,12 +828,11 @@ int main(int argc,char *argv[])
 		}
 	}
 	}
-//	std::cerr << "terminal is NOT YET in raw mode now.\n";
-	tty_raw(); // this, here, inhibits unwanted key printout
-//    	std::cerr << "terminal is in raw mode now.\n";
+	tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
 #endif
 	cc.init();
 	cc.executionCycle();
-	return 0;
+	cc.quit(0);
+	return 0;	//there wil be no return
 }
 

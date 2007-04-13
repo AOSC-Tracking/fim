@@ -86,7 +86,7 @@ while [[ "$1" != "" ]];do
 #echo
 if ( [[ "$f" =~ \\.ps$  ]] || [[ "$f" =~ \\.pdf$  ]] ) ; then 
 gs	-dSAVER -dNOPAUSE -dBATCH			\
-	-sDEVICE=png256 -r200x200 -sOutputFile=$DIR/ps%03d.png	\
+	-sDEVICE=png256 -r240x240 -sOutputFile=$DIR/ps%03d.png	\
 	$gsopts						\
 	"$f"
 #	-sPDFPassword="$password"			\

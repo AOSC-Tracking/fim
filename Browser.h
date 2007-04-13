@@ -1,4 +1,21 @@
 /* $Id$ */
+/*
+ Browser.h : Image browser header file
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 #ifndef BROWSER_FBVI_H
 #define BROWSER_FBVI_H
 #include "fim.h"
@@ -40,6 +57,10 @@ class Browser
 	fim::string regexp_goto_next(const std::vector<fim::string> &args);
 	fim::string goto_image(const std::vector<fim::string> &args);
 	fim::string goto_image(int n);
+	fim::string pan_ne(const std::vector<fim::string> &args);
+	fim::string pan_nw(const std::vector<fim::string> &args);
+	fim::string pan_sw(const std::vector<fim::string> &args);
+	fim::string pan_se(const std::vector<fim::string> &args);
 	fim::string pan_up(const std::vector<fim::string> &args);
 	fim::string pan_down(const std::vector<fim::string> &args);
 	fim::string scale_increment(const std::vector<fim::string> &args);

@@ -1,4 +1,22 @@
 /* $Id$ */
+/*
+ Browser.cpp : Fim image browser
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
 #include "fim.h"
 namespace fim
 {
@@ -139,6 +157,90 @@ namespace fim
 #endif
 		}
 		else next(1);
+		return "";
+	}
+
+	fim::string Browser::pan_ne(const std::vector<fim::string> &args)
+	{
+		/*
+		 * pan the image ne
+		 */
+		if(image)
+		{
+#ifdef FIM_AUTOCMDS
+			fim::string c=current();
+			cc.autocmd_exec("PrePan",c);
+#endif
+			if(image)image->pan_up();
+			if(image)image->pan_right();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostPan",c);
+#endif
+		}
+		//else prev();
+		return "";
+	}
+
+	fim::string Browser::pan_nw(const std::vector<fim::string> &args)
+	{
+		/*
+		 * pan the image nw
+		 */
+		if(image)
+		{
+#ifdef FIM_AUTOCMDS
+			fim::string c=current();
+			cc.autocmd_exec("PrePan",c);
+#endif
+			if(image)image->pan_up();
+			if(image)image->pan_left();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostPan",c);
+#endif
+		}
+		else prev();
+		return "";
+	}
+
+	fim::string Browser::pan_sw(const std::vector<fim::string> &args)
+	{
+		/*
+		 * pan the image sw
+		 */
+		if(image)
+		{
+#ifdef FIM_AUTOCMDS
+			fim::string c=current();
+			cc.autocmd_exec("PrePan",c);
+#endif
+			if(image)image->pan_down();
+			if(image)image->pan_left();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostPan",c);
+#endif
+		}
+		//else next(0);
+		return "";
+	}
+
+	fim::string Browser::pan_se(const std::vector<fim::string> &args)
+	{
+		/*
+		 * pan the image se
+		 */
+		if(image)
+		{
+#ifdef FIM_AUTOCMDS
+			fim::string c=current();
+			cc.autocmd_exec("PrePan",c);
+#endif
+			if(image)image->pan_down();
+			if(image)image->pan_right();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostPan",c);
+#endif
+		}
+		else next(0);
 		return "";
 	}
 
@@ -456,7 +558,8 @@ namespace fim
 		//if(  S_ISBLK(stat_s.st_mode))return "";
 		/*	if it is a directory , return */
 		//if(  S_ISDIR(stat_s.st_mode))return "";
-		/*	..hmm.. paranoia is better */
+		/*	..hmm.. paranoia is better :
+		 *	we want a regular file .. */
 		if(! S_ISREG(stat_s.st_mode))return "";
 #endif
 
@@ -671,10 +774,11 @@ namespace fim
 			/*
 			 * removes the current file from the list
 			 */
-			if(cp-1==current_n())--cp;
+/*			if(cp-1==current_n())--cp;
 			flist.erase(flist.begin()+current_n());
 			if(cp==0 && n_files()) ++cp;
-			return "";
+			return "";*/
+			return pop_current();
 		}
 		return "";
 	}

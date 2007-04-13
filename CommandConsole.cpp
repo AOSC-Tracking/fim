@@ -1,4 +1,21 @@
 /* $Id$ */
+/*
+ CommandConsole.cpp : Fim console dispatcher
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 
 #include "fim.h"
 #ifdef FIM_DEFAULT_CONFIGURATION
@@ -212,6 +229,10 @@ namespace fim
 		addCommand(new Command(fim::string("list" ),fim::string("displays the files list"),&browser,&Browser::list));
 		addCommand(new Command(fim::string("pop"  ),fim::string("pop the last file from the files list"),&browser,&Browser::pop));
 		addCommand(new Command(fim::string("file" ),fim::string("displays the current file's name"),&browser,&Browser::get));
+		addCommand(new Command(fim::string("pan_ne" ),fim::string("pans the image north east"),&browser,&Browser::pan_ne));
+		addCommand(new Command(fim::string("pan_nw" ),fim::string("pans the image north west"),&browser,&Browser::pan_nw));
+		addCommand(new Command(fim::string("pan_sw" ),fim::string("pans the image south west"),&browser,&Browser::pan_sw));
+		addCommand(new Command(fim::string("pan_se" ),fim::string("pans the image south east"),&browser,&Browser::pan_se));
 		addCommand(new Command(fim::string("panup" ),fim::string("pans the image up"),&browser,&Browser::pan_up));
 		addCommand(new Command(fim::string("pandown" ),fim::string("pans the image down"),&browser,&Browser::pan_down));
 		addCommand(new Command(fim::string("panleft" ),fim::string("pans the image left"),&browser,&Browser::pan_left));
@@ -283,6 +304,7 @@ namespace fim
 
 	void CommandConsole::init()
 	{
+		show_must_go_on=1;
 		/*
 		 *	Here the program loads initialization scripts :
 		 * 	the default configuration file, and user invoked scripts.
@@ -330,6 +352,8 @@ namespace fim
 			this->quit();
 #endif
 		}
+		autocmd_add("PreExecutionCycle","",postInitCommand.c_str());
+		autocmd_add("PostExecutionCycle","",postExecutionCommand.c_str());
 		/*
 		 *	FIX ME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
 		 * */
@@ -369,6 +393,8 @@ namespace fim
 		 *	TODO : INSTEAD OF USING commands[], make a new vector 
 		 *	with completions!
 		 *	FIX ME
+		 *
+		 *	DANGER : this method allocates memory
 		 */
 		static int list_index=0;
 		if(state==0)list_index=0;
@@ -404,12 +430,6 @@ namespace fim
 		sort(completions.begin(),completions.end());
 #endif 
 		
-		/*
-		 * THE FOLLOWING CODE SHOULD BE OBSOLETE BY NOW..
-		 */
-	//	std::vector<fim::string> completions;
-//		for(int i=list_index;i<commands.size();++i)
-
 /*		for(unsigned int i=list_index;i<completions.size();++i)
 				cout << cmd << " matches with " << completions[i].c_str()<<  "\n";*/
 		for(unsigned int i=list_index;i<completions.size();++i)
@@ -420,12 +440,8 @@ namespace fim
 			if(completions[i].find(cmd)==0)
 			{
 				list_index++;
-				//std::cout << cmd << " matches with " << commands[i]->cmd<<  "\n";
-				//cout << cmd << " matches with " << completions[i].c_str()<<  "\n";
 				//readline will free this strings..
-//				return dupstr(commands[i]->cmd.c_str());
-				return dupstr(completions[i].c_str());
-				//return dupstr((fim::string("$")+completions[i]).c_str());
+				return dupstr(completions[i].c_str());// is this malloc free ?
 			}
 			else
 				;//std::cout << cmd << " no matches with " << commands[i]->cmd<<  "\n";
@@ -483,8 +499,11 @@ namespace fim
 		 *	This method executes a character string containing a script.
 		 *	The second argument specigies whether the command is added or 
 		 *	not to the command history buffer.
+		 *
+		 *	note : the pipe here opened shall be closed in the yyparse()
+		 *	call, by the YY_INPUT macro (defined by me in lex.lex)
 		 */
-		char *s=dupstr(ss);
+		char *s=dupstr(ss);//this malloc is free
 		//executes a whole line, and stores it in the command history, eventually
 		//if(s==NULL){ferror("null command");return;}
 		assert(s);
@@ -494,11 +513,10 @@ namespace fim
 		//we write there our script or commands
 		r=write(pipedesc[1],s,strlen(s));
 		//we are done!
-		close(pipedesc[1]);
 		if(r!=(int)strlen(s)){ferror("write error");} 
 		for(char*p=s;*p;++p)if(*p=='\n')*p=' ';
+		close(pipedesc[1]);
 		yyparse();
-		close(pipedesc[0]);
 		//we add to history only meaningful commands/aliases.
 		if(add_history_)if(nochars(s)==0)add_history(s);
 		free(s);
@@ -526,28 +544,27 @@ namespace fim
 			 */
 			int r = pipe(pipedesc),sl;
 			if(r!=0){ferror("pipe error\n");exit(-1);}
-//			sl=strlen(cmd.c_str());
-//			r=write(pipedesc[1],cmd.c_str(),sl);
-//			if(r!=sl){ferror("pipe write error");exit(-1);} 
 			for(unsigned int i=0;i<args.size();++i)
 			{
-//				if(args[i].c_str()==NULL){ferror("bad arguments.");}
-//				r=write(pipedesc[1]," ",1);
-//				if(r!= 1){ferror("pipe write error\n");}
-//				sl=strlen(args[i].c_str());
-//				r=write(pipedesc[1],args[i].c_str(),sl);
-//				if(r!=sl){ferror("pipe write error\n");}
 				ex+=fim::string(" \""); ex+=args[i];
 				ex+=fim::string("\""); 
 			}
 			sl=strlen(ex.c_str());
-			//std::cout << "\"" << ex <<  "\"\n";
 			r=write(pipedesc[1],ex.c_str(),sl);
 			if(r!=sl){ferror("pipe write error");exit(-1);} 
-
+			
+			/*
+			 * now the yyparse macro YY_INPUT itself handles the closing of the pipe.
+			 *
+			 * in this way nested commands could not cause harm, because the pipe
+			 * is terminated BEFORE executing the command, and reusing pipedesc
+			 * is harmless.
+			 *
+			 * before occurred multiple pipe creations, on the same descriptor buffer,
+			 * resulting in a loss of the original descriptors on openings..
+			 */
 			close(pipedesc[1]);
 			yyparse();
-			close(pipedesc[0]);
 			return "";
 		}else
 		if(cmd=="usleep")
@@ -612,7 +629,11 @@ namespace fim
 					 */
 					//cout << "but found :`"<<match<<"...\n";
 					if((c=findCommand(match))!=NULL)
+					{	
+						free(match);	// bug fixed
 						return c->execute(args);
+					}
+					free(match);	// bug fixed
 				}
 #endif
 				return "";
@@ -712,9 +733,11 @@ namespace fim
 	void CommandConsole::executionCycle()
 	{
 #ifdef FIM_AUTOCMDS
-		cc.autocmd_exec("PreExecutionCycle","<>");
+		fim::string initial=browser.current();
+		cc.autocmd_exec("PreExecutionCycle",initial);
+		//cc.autocmd_exec("PreExecutionCycle","<>");
 #endif
-	 	while(1)
+	 	while(show_must_go_on)
 		{
 			cycles++;
 #ifndef FIM_NOFB
@@ -744,10 +767,10 @@ namespace fim
 #ifdef FIM_RECORDING
 					if(recordMode)record_action(fim::string(rl));
 #endif					
-					ic=0; // we 'exit' from the console for a while
+					//ic=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
 					execute(rl,1);	//execution of the command line with history
 					ic=(ic==-1)?0:1; //a command could change the mode !
-					this->setVariable("_display_console",1);	//!!
+//					this->setVariable("_display_console",1);	//!!
 //					execute("redisplay;",0);	//execution of the command line with history
 #ifdef FIM_AUTOCMDS
 					cc.autocmd_exec("PostInteractiveCommand",cf);
@@ -887,7 +910,8 @@ namespace fim
 			}
 		}
 #ifdef FIM_AUTOCMDS
-		cc.autocmd_exec("PostExecutionCycle","<>");
+		//cc.autocmd_exec("PostExecutionCycle","<>");
+		cc.autocmd_exec("PostExecutionCycle",initial);
 #endif
 	}
 
@@ -909,7 +933,15 @@ namespace fim
 		this->exit(0);
 	}
 
-	fim::string CommandConsole::quit(const std::vector<fim::string> &args) { this->quit(); return "";}
+	fim::string CommandConsole::quit(const std::vector<fim::string> &args)
+	{
+		//this->quit();
+		/*
+		 * now the postcycle execution autocommands are enabled !
+		 * */
+		show_must_go_on=0;
+		return "";
+	}
 
 #ifndef FIM_NOSCRIPTING
 	fim::string CommandConsole::executeFile(const std::vector<fim::string> &args)
@@ -1321,6 +1353,10 @@ int CommandConsole::executeFile(const char *s)
 		 */
 		if(!r || !strlen(r))return true;
 
+		/* fixup code for a mysterious bug
+		 */
+		if(*r=='*')return false;
+
 		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
 		if(regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE )==-1)
 		{
@@ -1498,6 +1534,13 @@ int CommandConsole::executeFile(const char *s)
 			marked_files.insert(browser.current());
 			cout<<"Marked file \""<<browser.current()<<"\"\n";
 		}
+	}
+
+	void CommandConsole::printHelpMessage(char *pn)
+	{
+		std::cout<<" Usage: "<<pn<<" [OPTIONS] [FILES]\n";
+		printf("\nThe help will be here soon!\n");
+		printf("Please read the documentation distributed with the program first! (FIM.TXT)\n");
 	}
 }
 
