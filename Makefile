@@ -11,6 +11,7 @@
 GCC=gcc
 #GPP=g++ -fpermissive -fno-default-inline -g
 GPP=g++ -fno-default-inline #-g $(WARNINGS)
+FLAGS :=
 LD=ld
 
 #################################################################
@@ -42,12 +43,14 @@ include $(srcdir)/mk/Variables.mk
  DEFINES  += -D FIM_AUTOSKIP_FAILED	# if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
  DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
  DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
+ DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
  FIM_VERSION:= 0.1
  FIM_AUTHOR := '"dezperado@autistici.org"'
 #################################################################
 
 CFLAGS	 += -DFIM_VERSION='"$(FIM_VERSION)"' $(DEFINES)
 CFLAGS	 += -DFIM_AUTHOR='"$(FIM_AUTHOR)"'
+CFLAGS   += $(FLAGS)
 CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
 LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lz
 #-lrt (realtime library ) cannot be used :(  (causes segmentation fault!)
@@ -186,10 +189,17 @@ TIFF_OBJS	:= src/tiff.o
 
 inc_cflags	:= $(call ac_inc_cflags,$(includes))
 lib_cflags	:= $(call ac_lib_cflags,$(libraries))
-O=-O3
+O:=-O3
+STRIP:='strip'
+ifneq ($(findstring FIM_PROFILING,$(DEFINES)),)
+O:=-O0
+FLAGS += -pg -g
+STRIP:='echo'
+endif
+
 CFLAGS		+= $(inc_cflags) $(lib_cflags) $(O)
 
-TARGETS	= fim
+TARGETS	:= fim
 
 
 OBJS_FBI	+= $(call ac_lib_mkvar,$(libraries),OBJS)
@@ -215,8 +225,8 @@ conf.h:	fimrc
 	echo '"";' >> conf.h
 
 fim:    $(OBJS_FIM) $(OBJS_FBI)
-	$(GPP) -o fim $(OBJS_FBI) $(OBJS_FIM) $(LDLIBS)
-	@ strip fim
+	$(GPP) -o fim $(OBJS_FBI) $(OBJS_FIM) $(LDLIBS) $(FLAGS)
+	@ $(STRIP) fim
 
 flex:
 	flex  $(LFLAGS) lex.lex

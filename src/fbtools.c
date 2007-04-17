@@ -165,8 +165,12 @@ fb_memset (void *addr, int c, size_t len)
     i = (c & 0xff) << 8;
     i |= i << 16;
     len >>= 2;
+#ifdef FIM_IS_SLOWER_THAN_FBI
     for (p = addr; len--; p++)
 	*p = i;
+#else
+    memset(addr, i, len );
+#endif
 #else
     memset(addr, c, len);
 #endif

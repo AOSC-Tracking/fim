@@ -1,4 +1,35 @@
 	$Id$
+-------------------------------------------------------------------------------
+	Current development directions
+20070417	It has come the time to decide the future developments of Fim.
+	A lot of doubts arose. Here they are:
+	- integration of the command line completion with the lexer/parser, to
+	  gain consistency
+	- introduction of a windowing system (yes, a wierd thing), but this
+	  would imply a prior reordering of the underlying Fbi code
+	- decisions about the nature of the language:
+	  - should the variables be accessed like Bash,Perl, or C?
+	  - should strings exist?
+	  - should arrays exist ?
+	  - should types exist ?
+	  - should boolean options exist (like in Vim's paste/nopaste) ?
+	  - should multi (quad/..) options exist (like in Mutt) ?
+	- could it be nice to attach options set to an image/browser (e.g.: 
+	  autowidth in only a window in a multiwindow scenario )?
+	- once the core of Fim is clean enough, would it be the moment of porting 
+	  it to X and/or aalib/cacalib/directFB ?
+	- integration with external libraries/scripts/etc.. ?
+
+	These issues need reflection and study of the practical and theoretical
+	advantages/possibilities/limitations of the alternatives.
+	Meanwhile, the current development effort will be focused on enhancing
+	the existing code, possibly not adding features but enhancing the code
+	structure and converting the odd Fbi code in elegant, or possibly more
+	optimized, (especially the hacked, critical parts concerning mirroring
+	and flipping! ) Fim code.
+	- it would be nice to use autoconf and/or automake to automate builds..
+-------------------------------------------------------------------------------
+
 This file is often outdated : FIM is far better than it seems here :)
 
 Please read the FIM.TXT file and the fimrc template to discover nice FIM features.

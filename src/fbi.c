@@ -680,23 +680,35 @@ clear_line(int bpp, int line, int owidth,
 	return ptr;
     case 15:
     case 16:
+#ifdef FIM_IS_SLOWER_THAN_FBI
 	for (x = 0; x < owidth; x++) {
 	    ptr2[x] = 0x0;
 	}
+#else
+	memset(ptr,0x0,2*owidth);
+#endif
 	ptr2 += owidth;
 	return (char*)ptr2;
     case 24:
+#ifdef FIM_IS_SLOWER_THAN_FBI
 	for (x = 0; x < owidth; x++) {
 	    ptr[3*x+2] = 0x0;
 	    ptr[3*x+1] = 0x0;
 	    ptr[3*x+0] = 0x0;
 	}
+#else
+	memset(ptr,0x0,3*owidth);
+#endif
 	ptr += owidth * 3;
 	return ptr;
     case 32:
+#ifdef FIM_IS_SLOWER_THAN_FBI
 	for (x = 0; x < owidth; x++) {
 	    ptr4[x] = 0x0;
 	}
+#else
+	memset(ptr,0x0,4*owidth);
+#endif
 	ptr4 += owidth;
 	return (char*)ptr4;
     default:
