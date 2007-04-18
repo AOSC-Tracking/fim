@@ -29,6 +29,19 @@
 	and flipping! ) Fim code.
 	- it would be nice to use autoconf and/or automake to automate builds..
 -------------------------------------------------------------------------------
+Optimization:
+20070418	Got ~400% speedup on image display thanks to trivial changes in
+	the drawing code : memset and memcpy instead of assignations, and a less
+	trivial change by swapping RGB channels on loading time instead that on
+	drawing time. The analysis was made with the gprof profiler, nicely.
+
+Maybe one day me or some contributor will read 
+	http://www.cvl.isy.liu.se/ScOut/Publications/PaperInfo/sf05.html
+	or
+Example 4.14 of the Intel Architecture SW Manual Optimization explains how to
+and find some useful idea.
+use PSHUFLW,PSHUFW,PSHUFD to reverse contiguous words in registers.
+-------------------------------------------------------------------------------
 
 This file is often outdated : FIM is far better than it seems here :)
 

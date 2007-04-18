@@ -152,6 +152,8 @@ dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror
     while (width--) {
 	xmod = width & DITHER_MASK;
 
+#ifndef FIM_IS_SLOWER_THAN_FBI
+	//RGB swapped patch
 	b = red_dither[*(src++)];
 	if (ymod[xmod] < b)
 	    b >>= 8;
@@ -165,6 +167,22 @@ dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror
 	if (ymod[xmod] < a)
 	    a >>= 8;
 	b += a;
+#else
+	//original
+	b = blue_dither[*(src++)];
+	if (ymod[xmod] < b)
+	    b >>= 8;
+
+	a = green_dither[*(src++)];
+	if (ymod[xmod] < a)
+	    a >>= 8;
+	b += a;
+
+	a = red_dither[*(src++)];
+	if (ymod[xmod] < a)
+	    a >>= 8;
+	b += a;
+#endif
 
     //	mirror patch by dez
 	*(dest) = b & 0xff;

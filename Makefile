@@ -11,7 +11,11 @@
 GCC=gcc
 #GPP=g++ -fpermissive -fno-default-inline -g
 GPP=g++ -fno-default-inline #-g $(WARNINGS)
-FLAGS :=
+AFLAGS := # architecture-specific flags
+#AFLAGS += -msse2
+AFLAGS += -mmmx
+FLAGS  :=
+FLAGS  += $(AFLAGS)
 LD=ld
 
 #################################################################
@@ -43,7 +47,8 @@ include $(srcdir)/mk/Variables.mk
  DEFINES  += -D FIM_AUTOSKIP_FAILED	# if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
  DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
  DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
- DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
+#DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
+#DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
  FIM_VERSION:= 0.1
  FIM_AUTHOR := '"dezperado@autistici.org"'
 #################################################################
@@ -189,11 +194,15 @@ TIFF_OBJS	:= src/tiff.o
 
 inc_cflags	:= $(call ac_inc_cflags,$(includes))
 lib_cflags	:= $(call ac_lib_cflags,$(libraries))
-O:=-O3
+
+O:=-O3 -funroll-loops
 STRIP:='strip'
+
 ifneq ($(findstring FIM_PROFILING,$(DEFINES)),)
-O:=-O0
+#O:=-O 
+O:=-O3  -funroll-loops
 FLAGS += -pg -g
+FLAGS += 
 STRIP:='echo'
 endif
 

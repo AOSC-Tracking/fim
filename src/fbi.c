@@ -609,6 +609,20 @@ struct ida_image* read_image(char *filename)
 	    console_switch(1);
 	loader->read(img->data + img->i.width * 3 * y, y, data);
     }
+#ifndef FIM_IS_SLOWER_THAN_FBI
+    {
+	register char t;
+	register char	*p=img->data,
+		 	*pm=p+img->i.width*3*y;
+	while(p<pm)
+	{
+            t=*p;
+            *p=p[2];
+            p[2]=t;
+	    p+=3;
+	}
+    }
+#endif
     loader->done(data);
     return img;
 }
@@ -735,30 +749,105 @@ convert_line(int bpp, int line, int owidth,
 	return ptr;
     case 15:
     case 16:
+#ifndef FIM_IS_SLOWER_THAN_FBI
+	//swapped RGB patch
+	for (x = 0; x < owidth; x++) {
+            xm=mirror?owidth-1-x:x;
+	    ptr2[xm] = lut_red[buffer[x*1]] |
+		lut_green[buffer[x*3+3]] |
+		lut_blue[buffer[x*3+2]];
+	}
+#else
 	for (x = 0; x < owidth; x++) {
             xm=mirror?owidth-1-x:x;
 	    ptr2[xm] = lut_red[buffer[x*3]] |
 		lut_green[buffer[x*3+1]] |
 		lut_blue[buffer[x*3+2]];
 	}
+#endif
 	ptr2 += owidth;
 	return (char*)ptr2;
     case 24:
+#ifdef FIM_IS_SLOWER_THAN_FBI
 	for (x = 0; x < owidth; x++) {
             xm=mirror?owidth-1-x:x;
 	    ptr[3*xm+2] = buffer[3*x+0];
 	    ptr[3*xm+1] = buffer[3*x+1];
 	    ptr[3*xm+0] = buffer[3*x+2];
 	}
+#else
+	//swapped RGB patch
+	if(!mirror)
+	{
+		/*
+		 * this code could be faster if using processor specific routines..
+		 * ... or maybe even not ?
+		 */
+		owidth*=3;
+#if 0
+		for (x = 0; x < owidth; x+=3)
+		{
+	            ptr[x+2] = buffer[x+0];
+		    ptr[x+1] = buffer[x+1];
+		    ptr[x+0] = buffer[x+2];
+		}
+#else
+		/*
+		 * this is far worse than the preceding !
+		 */
+		memcpy(ptr,buffer,owidth);
+		register char t;
+		register i=x;
+		//since RGB and GBR swap already done, this is not necessary
+		/*for (i = 0; i < owidth; i+=3)
+		{
+	            t=ptr[i];
+	            ptr[i]=ptr[i+2];
+	            ptr[i+2]=t;
+		}*/
+#endif
+		owidth/=3;
+	}else
+//this is still slow ... FIXME
+#if 0
+	for (x = 0; x < owidth; x++) {
+	    x*=3;
+            xm=3*owidth-x-3;
+	    ptr[xm+2] = buffer[x+0];
+	    ptr[xm+1] = buffer[x+1];
+	    ptr[xm+0] = buffer[x+2];
+	    x/=3;
+	}
+#else
+	for (x = 0; x < owidth; x++) {
+	    x*=3;
+            xm=3*owidth-x-3;
+	    ptr[xm+2] = buffer[x+2];
+	    ptr[xm+1] = buffer[x+1];
+	    ptr[xm+0] = buffer[x+0];
+	    x/=3;
+	}
+#endif
+#endif
 	ptr += owidth * 3;
 	return ptr;
     case 32:
+#ifndef FIM_IS_SLOWER_THAN_FBI
+	//swapped RGB patch
+	for (x = 0; x < owidth; x++) {
+            xm=mirror?owidth-1-x:x;
+	    ptr4[xm] = lut_red[buffer[x*1]] |
+		lut_green[buffer[x*3+3]] |
+		lut_blue[buffer[x*3+2]];
+	}
+#else
 	for (x = 0; x < owidth; x++) {
             xm=mirror?owidth-1-x:x;
 	    ptr4[xm] = lut_red[buffer[x*3]] |
 		lut_green[buffer[x*3+1]] |
 		lut_blue[buffer[x*3+2]];
 	}
+#endif
 	ptr4 += owidth;
 	return (char*)ptr4;
     default:
