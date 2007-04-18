@@ -156,11 +156,26 @@ int fs_puts(struct fs_font *f, unsigned int x, unsigned int y,
 	/* clear with bg color */
 	start = pos + x*fs_bpp + f->fontHeader.max_bounds.descent * fb_fix.line_length;
 	w = (f->eindex[c]->width+1)*fs_bpp;
+#ifdef FIM_IS_SLOWER_THAN_FBI
 	for (j = 0; j < f->height; j++) {
 /////	    memset_combine(start,0x20,w);
 	    memset(start,0,w);
 	    start += fb_fix.line_length;
 	}
+#else
+	//sometimes we can gather multiple calls..
+	if(fb_fix.line_length==w)
+	{
+		//contiguous case
+		memset(start,0,w*f->height);
+	    	start += fb_fix.line_length*f->height;
+	}
+	else
+	for (j = 0; j < f->height; j++) {
+	    memset(start,0,w);
+	    start += fb_fix.line_length;
+	}
+#endif
 	/* draw char */
 	start = pos + x*fs_bpp + fb_fix.line_length * (f->height-f->eindex[c]->ascent);
 	fs_render_fb(start,fb_fix.line_length,f->eindex[c],f->gindex[c]);

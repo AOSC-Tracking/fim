@@ -749,20 +749,27 @@ convert_line(int bpp, int line, int owidth,
 	return ptr;
     case 15:
     case 16:
-#ifndef FIM_IS_SLOWER_THAN_FBI
+#ifdef FIM_IS_SLOWER_THAN_FBI
 	//swapped RGB patch
-	for (x = 0; x < owidth; x++) {
-            xm=mirror?owidth-1-x:x;
-	    ptr2[xm] = lut_red[buffer[x*1]] |
-		lut_green[buffer[x*3+3]] |
-		lut_blue[buffer[x*3+2]];
-	}
-#else
 	for (x = 0; x < owidth; x++) {
             xm=mirror?owidth-1-x:x;
 	    ptr2[xm] = lut_red[buffer[x*3]] |
 		lut_green[buffer[x*3+1]] |
 		lut_blue[buffer[x*3+2]];
+	}
+#else
+	if(!mirror)
+	for (x = 0; x < owidth; x++) {
+	    ptr2[x] = lut_red[buffer[x*3+2]] |
+		lut_green[buffer[x*3+1]] |
+		lut_blue[buffer[x*3]];
+	}
+	else
+	for (x = 0,xm=owidth; x < owidth; x++) {
+            xm--;
+	    ptr2[xm] = lut_red[buffer[x*3+2]] |
+		lut_green[buffer[x*3+1]] |
+		lut_blue[buffer[x*3]];
 	}
 #endif
 	ptr2 += owidth;
@@ -836,9 +843,9 @@ convert_line(int bpp, int line, int owidth,
 	//swapped RGB patch
 	for (x = 0; x < owidth; x++) {
             xm=mirror?owidth-1-x:x;
-	    ptr4[xm] = lut_red[buffer[x*1]] |
-		lut_green[buffer[x*3+3]] |
-		lut_blue[buffer[x*3+2]];
+	    ptr4[xm] = lut_red[buffer[x*3+2]] |
+		lut_green[buffer[x*3+1]] |
+		lut_blue[buffer[x*3]];
 	}
 #else
 	for (x = 0; x < owidth; x++) {
