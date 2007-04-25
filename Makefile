@@ -4,7 +4,7 @@
 # it's horrible.
 # 20070227 ..but i am fixing this :)
 # 20070307 no more reference to libFS nor X11 !
-#
+# 20070425 the original Fbi makefile is no more used
 ##########################################################
 
 #WARNINGS := -Wall -pedantic #-Wextra -pedantic
@@ -21,9 +21,7 @@ LD=ld
 #################################################################
 # add our flags + libs
 #
-#srcdir	= ./src
 srcdir	= ./
-#VPATH	= $(srcdir)
 -include Make.config
 include $(srcdir)/mk/Variables.mk
 
@@ -57,7 +55,8 @@ CFLAGS	 += -DFIM_VERSION='"$(FIM_VERSION)"' $(DEFINES)
 CFLAGS	 += -DFIM_AUTHOR='"$(FIM_AUTHOR)"'
 CFLAGS   += $(FLAGS)
 CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
-LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lz
+#LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lz
+LDLIBS	 += -lreadline -lm -lfl
 #-lrt (realtime library ) cannot be used :(  (causes segmentation fault!)
 
 OBJS_FBI := \
@@ -124,6 +123,7 @@ HAVE_LIBJPEG	:= $(call ac_lib,jpeg_start_compress,jpeg)
 HAVE_LIBUNGIF	:= $(call ac_lib,DGifOpenFileName,ungif)
 HAVE_LIBPNG	:= $(call ac_lib,png_read_info,png,-lz)
 HAVE_LIBTIFF	:= $(call ac_lib,TIFFOpen,tiff)
+HAVE_LIBGPM	:= $(call ac_lib,Gpm_PushRoi,gpm)
 #HAVE_LIBFS	:= $(call ac_lib,FSOpenServer,FS)
 endef
 ##HAVE_LIBFOO	:= $(call ac_lib,FSOpenServer,foo)
@@ -140,8 +140,19 @@ else
 CFLAGS	+= -DX_DISPLAY_MISSING=1
 endif
 
-ifeq ($(HAVE_LIBTIFF),no)
-$(error sorry, you should install libtiff first!)
+ifneq ($(HAVE_LIBGPM),no)
+LDLIBS += $(GPM_LDLIBS)
+endif
+#DEFINES  += -D FIM_USE_GPM	        # Mouse events support (still unfinished, so disabled for now)
+
+ifneq ($(HAVE_LIBPNG),no)
+LDLIBS += $(PNG_LDLIBS)
+$(echo you dont have gpm..)
+endif
+
+ifneq ($(HAVE_LIBTIFF),no)
+LDLIBS += $(TIFF_LDLIBS)
+#$(error sorry, you should install libtiff first!)
 endif
 
 #ifeq ($(HAVE_LIBFS),no)
@@ -152,8 +163,14 @@ ifeq ($(HAVE_LIBPNG),no)
 $(error sorry, you should install libpng first!)
 endif
 
-ifeq ($(HAVE_LIBJPEG),no)
-$(error sorry, you should install libjpeg first!)
+ifeq ($(HAVE_LIBGIF),no)
+LDLIBS += $(GIF_LDLIBS)
+#$(error sorry, you should install libpng first!)
+endif
+
+ifneq ($(HAVE_LIBJPEG),no)
+LDLIBS += $(JPEG_LDLIBS)
+#$(error sorry, you should install libjpeg first!)
 endif
 
 #We had some rudimental library existence check ..
@@ -175,13 +192,14 @@ endif
 
 includes	= ENDIAN_H
 #libraries	= PCD JPEG UNGIF PNG TIFF LIRC
-libraries	= JPEG UNGIF PNG TIFF 
+libraries	= JPEG UNGIF PNG TIFF GPM
 
 #PCD_LDLIBS	:= -lpcd
 JPEG_LDLIBS	:= -ljpeg
 UNGIF_LDLIBS	:= -lungif
 PNG_LDLIBS	:= -lpng -lz
 TIFF_LDLIBS	:= -ltiff
+GPM_LDLIBS	:= -lgpm
 #LIRC_LDLIBS	:= -llirc_client
 
 #PCD_OBJS	:= pcd.o

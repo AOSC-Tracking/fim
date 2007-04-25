@@ -88,7 +88,9 @@ namespace fim
 		if(cc.noFrameBuffer())return 0;
 		//FIX UPPER MEMORY CONSUMPTION LIMIT...
 //		if(newscale > maxscale ) newscale = maxscale;
-		if(newscale == scale){return 0;/*no need to rescale*/}
+		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;
+		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
+		orientation=neworientation; // fix this
 		scale_fix_top_left();
 //		sprintf(linebuffer,"scaling (%.0f%%) %s ...", scale*100, fname);
 //		status(linebuffer, NULL);
@@ -107,7 +109,9 @@ namespace fim
 			struct ida_image *backup_img=simg;
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 				set_status_bar("please wait while rescaling...", getInfo());
-			simg  = scale_image(fimg,scale);
+			simg  = scale_image(fimg,scale,cc.getFloatVariable("ascale"));
+			if( simg && orientation!=0 && orientation != 2)simg  = rotate_image(simg,orientation==1?0:1);
+			if( simg && orientation== 2)simg  = flip_image(simg);
 			if(!simg)
 			{
 				simg=backup_img;
@@ -240,8 +244,10 @@ namespace fim
 	{
 		new_image=1;
 		redraw=1;
-		scale    = 1;
-		newscale = 1;
+		scale    = 1.0;
+		newscale = 1.0;
+		ascale   = 1.0;
+		newascale= 1.0;
 		editable = 0; once = 0;
 		steps = 50;
 		len =0;
@@ -254,12 +260,16 @@ namespace fim
 		desc = NULL;
 		info = NULL;
 		invalid=0;
+		orientation=0;
+		neworientation=0;
 	}
 	
 	void Image::scale_fix_top_left()
 	{
 		/*
 		 * this function operates on the image currently in memory
+		 *
+		 * WARNING : IT SEEMS .. USELESS :)
 		 */
 #ifndef FIM_NOFB
 		float old=scale;float fnew=newscale;

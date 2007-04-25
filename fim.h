@@ -58,6 +58,9 @@
 #include <fcntl.h>	/* file descriptor manipulation interface (Posix)	*/
 #include <time.h>	/* time related functionality (Posix)			*/
 #include "common.h"	/* misc FIM stuff					*/
+#ifdef FIM_USE_GPM
+#include <gpm.h>	/* mouse events						*/
+#endif
 /*#include <unistd.h>*/ /* standard Posix symbolic constants and types		*/
 /*#include <sys/stat.h> */
 /*#include <sys/types.h>*/

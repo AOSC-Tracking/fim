@@ -41,6 +41,7 @@
 #include "fb-gui.h"
 #include "filter.h"
 #include "list.h"
+#include "op.h"
 
 //#include "jpeg/transupp.h"		/* Support routines for jpegtran */
 //#include "jpegtools.h"
@@ -627,15 +628,16 @@ struct ida_image* read_image(char *filename)
     return img;
 }
 
-//static struct ida_image*
+//all dez's
 struct ida_image*
-scale_image(struct ida_image *src, float scale)
+flip_image(struct ida_image *src)
 {
     struct op_resize_parm p;
     struct ida_rect  rect;
     struct ida_image *dest;
     void *data;
     unsigned int y;
+    struct ida_op *desc_p;
 
     dest = malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
@@ -643,14 +645,95 @@ scale_image(struct ida_image *src, float scale)
     memset(&rect,0,sizeof(rect));
     memset(&p,0,sizeof(p));
     
-    p.width  = src->i.width  * scale;
-    p.height = src->i.height * scale;
+    p.width  = src->i.width;
+    p.height = src->i.height;
     p.dpi    = src->i.dpi;
     if (0 == p.width)
 	p.width = 1;
     if (0 == p.height)
 	p.height = 1;
     
+    desc_p=&desc_flip_vert;
+
+    data = desc_p->init(src,&rect,&dest->i,&p);
+    dest->data = malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    for (y = 0; y < dest->i.height; y++) {
+	if (switch_last != fb_switch_state)
+	    console_switch(1);
+	desc_p->work(src,&rect,
+			 dest->data + 3 * dest->i.width * y,
+			 y, data);
+    }
+    desc_p->done(data);
+    return dest;
+}
+//all dez's
+struct ida_image*
+rotate_image(struct ida_image *src, unsigned int rotation)
+{
+    struct op_resize_parm p;
+    struct ida_rect  rect;
+    struct ida_image *dest;
+    void *data;
+    unsigned int y;
+    struct ida_op *desc_p;
+
+    dest = malloc(sizeof(*dest));
+    /* dez: */ if(!dest)return NULL;
+    memset(dest,0,sizeof(*dest));
+    memset(&rect,0,sizeof(rect));
+    memset(&p,0,sizeof(p));
+    
+    p.width  = src->i.width;
+    p.height = src->i.height;
+    p.dpi    = src->i.dpi;
+    if (0 == p.width)
+	p.width = 1;
+    if (0 == p.height)
+	p.height = 1;
+    
+    rotation%=2;
+    if(rotation==0){desc_p=&desc_rotate_ccw;}
+    if(rotation==1){desc_p=&desc_rotate_cw ;}
+
+    data = desc_p->init(src,&rect,&dest->i,&p);
+    dest->data = malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    for (y = 0; y < dest->i.height; y++) {
+	if (switch_last != fb_switch_state)
+	    console_switch(1);
+	desc_p->work(src,&rect,
+			 dest->data + 3 * dest->i.width * y,
+			 y, data);
+    }
+    desc_p->done(data);
+    return dest;
+}
+//static struct ida_image*
+struct ida_image*
+scale_image(struct ida_image *src, float scale, float ascale)
+{
+    struct op_resize_parm p;
+    struct ida_rect  rect;
+    struct ida_image *dest;
+    void *data;
+    unsigned int y;
+    /* dez: */ if(ascale<=0.0||ascale>=100.0)ascale=1.0;
+
+    dest = malloc(sizeof(*dest));
+    /* dez: */ if(!dest)return NULL;
+    memset(dest,0,sizeof(*dest));
+    memset(&rect,0,sizeof(rect));
+    memset(&p,0,sizeof(p));
+    
+    p.width  = src->i.width  * scale * ascale;
+    p.height = src->i.height * scale;
+    p.dpi    = src->i.dpi;
+    if (0 == p.width)
+	p.width = 1;
+    if (0 == p.height)
+	p.height = 1;
     data = desc_resize.init(src,&rect,&dest->i,&p);
     dest->data = malloc(dest->i.width * dest->i.height * 3);
     /* dez: */ if(!(dest->data)){free(dest);return NULL;}
@@ -662,6 +745,7 @@ scale_image(struct ida_image *src, float scale)
 			 y, data);
     }
     desc_resize.done(data);
+
     return dest;
 }
 /*

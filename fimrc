@@ -34,8 +34,9 @@ bind 'p' "prev;display;";
 bind 'P' "pop";
 bind 's' "sort";
 bind 'S' "toggleDisplayStatus";
-bind 'r' "reload";
-bind 'R' "redisplay";
+bind 'R' "reload";
+#bind 'R' "redisplay";
+bind 'r' "rotate";
 bind 'd' "display";
 bind '+' "magnify";
 bind 'a' "auto_scale;";
@@ -153,8 +154,11 @@ bind 'A'   "toggleAutoScale;";
 bind 'b' "prev;display;";
 bind 'B' "toggleDisplayBusy";
 alias "plisten" 'popen "nc -l -p 9999 "';
-alias "wlisten" "while(1){sleep;plisten;}"
-alias "random_slideshow" "while(1){goto random;}"
+alias "wlisten" "while(1){sleep;plisten;}";
+alias "random_slideshow" "while(1){goto random;}";
+alias "rotate_ccw" "orientation=orientation+1;fresh=1;redisplay;";
+alias "rotate_cw" "orientation=orientation-1;fresh=1;redisplay;";
+alias "rotate" "rotate_cw";
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So use it, but with caution! FIM is still bugged! 

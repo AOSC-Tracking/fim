@@ -730,8 +730,23 @@ namespace fim
 		return c;		/*	we return the read key		*/
 	}
 
+#ifdef	FIM_USE_GPM
+/*
+	int gh(Gpm_Event *event, void *clientdata)
+	{
+		exit(0);
+		cc.quit();
+		return 'n';
+		return 0;
+	}
+*/
+#endif
+
 	void CommandConsole::executionCycle()
 	{
+#ifdef	FIM_USE_GPM
+		//Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,NULL);
+#endif
 #ifdef FIM_AUTOCMDS
 		fim::string initial=browser.current();
 		cc.autocmd_exec("PreExecutionCycle",initial);
@@ -846,6 +861,12 @@ namespace fim
 				 * this way the console switches the wrong way
 				 */
 				r=read(fim_stdin,&c,4);	//up to four chars should suffice
+#endif
+#ifdef	FIM_USE_GPM
+/*
+				Gpm_Event *EVENT;
+				if(Gpm_GetEvent(EVENT)==1)quit();
+				else cout << "...";*/
 #endif
 				if(r>0)
 				{

@@ -34,9 +34,14 @@ class Image
 	struct ida_image *simg    ;
 	struct ida_image *img     ;
 	float            scale    ;
+	float            ascale    ;
 	float            newscale ;
+	float            newascale ;
 	int              c, editable , once ;
-	int              need_read ;
+//	int              need_read ;
+	int              neworientation;
+	int              orientation;
+	int              rotation;
 	int              i, arg, key;
 	int    new_image,invalid;		//the first time the image is loaded it is set to 1
 	//int redraw;

@@ -99,7 +99,9 @@ extern     char             linebuffer[128];
 void show_error(unsigned char *msg);
 extern void fb_clear_mem(void);
 
-extern struct ida_image* scale_image(struct ida_image *src, float scale);
+extern struct ida_image* scale_image(struct ida_image *src, float scale, float ascale);
+extern struct ida_image* rotate_image(struct ida_image *src, unsigned int rotation);
+extern struct ida_image* flip_image(struct ida_image *src);
 void free_image(struct ida_image *img);
 struct ida_image* read_image(char *filename);
 struct flist* flist_next(struct flist *f, int eof, int loop);
