@@ -249,7 +249,8 @@ namespace fim
 		ascale   = 1.0;
 		newascale= 1.0;
 		editable = 0; once = 0;
-		steps = 50;
+		steps = cc.getIntVariable("steps");
+		if(steps<1)steps = 50;
 		len =0;
 		top = 0;
 		left = 0;
@@ -332,6 +333,20 @@ namespace fim
 	{
 		newscale = scale * factor;
 		rescale();
+	}
+
+	void Image::bottom_align()
+	{
+	    if(this->onBottom())return;
+	    if(img && invalid==0)top = img->i.height - fb_var.yres;
+	    redraw=1;
+	}
+
+	void Image::top_align()
+	{
+	    if(this->onTop())return;
+	    top=0;
+	    redraw=1;
 	}
 
 	void Image::pan_up()

@@ -63,6 +63,8 @@ class Image
 	void pan_down();
 	void pan_right();
 	void pan_left();
+	void top_align();
+	void bottom_align();
 	void reduce(float factor=1.322);	//FIX ME
 	void magnify(float factor=1.322);
 	void display();

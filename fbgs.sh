@@ -47,7 +47,7 @@ FBI=fim
 #FBI='fbi'
 
 # parse options
-fbiopts="-a"
+fbiopts="-w"
 gsopts="-q"
 passwd=""
 opt=1
@@ -81,7 +81,9 @@ do
 		-h)	help text
 			exit 1
 			;;
-	        *) break;;
+	        *)	
+			fbiopts="$fbiopts $1";
+			break;;
 #		-*)	echo "unknown option: $1"
 #			exit 1
 #			;;
@@ -112,9 +114,10 @@ do
 #[[ "$f" =~ \\.dvi$ ]] && f="/tmp/$$.ps" && dvips -q "$f" -o "$f" &&  trap "rm $f ; rm -fRd $DIR" EXIT
 
 
-#[[ "$f" =~ \\.dvi$ ]] && fbiopts=" -o $fbiopts"
-[[ "$f" =~ \\.pdf$ ]] && fbiopts=" -o $fbiopts"
-#[[ "$f" =~ \\.ps$  ]] && fbiopts=" -o $fbiopts"
+[[ "$f" =~ \\.dvi$ ]] && fbiopts=" -P $fbiopts"
+#[[ "$f" =~ \\.pdf$ ]] && fbiopts=" -o $fbiopts"
+[[ "$f" =~ \\.pdf$ ]] && fbiopts=" -P $fbiopts"
+[[ "$f" =~ \\.ps$  ]] && fbiopts=" -P $fbiopts"
 # run ghostscript
 #echo
 #echo "### rendering pages, please wait ... ###"
@@ -176,8 +179,9 @@ fi
 #fi
 done
 # show pages
-fbiopts=
-$FBI $fbiopts -P -- $DIR/* $DIR/*/* $DIR/*/*/* $DIR/*/*/*/* $DIR/*/*/*/*/* $DIR/*/*/*/*/*/* $DIR/*/*/*/*/*/*/*
+#fbiopts=
+#$FBI $fbiopts -P -- $DIR/* $DIR/*/* $DIR/*/*/* $DIR/*/*/*/* $DIR/*/*/*/*/* $DIR/*/*/*/*/*/* $DIR/*/*/*/*/*/*/*
+find $DIR/  | $FBI $fbiopts  -- -
 
 #$FBI $fbiopts -P  `find $DIR -iname '*.png' -or -iname '*.jpg' -or -iname '*.gif' -or -iname '*.jpeg' -or -iname '*.tiff' -or -iname '*.bmp'`
 #$FBI $fbiopts -P -- $files

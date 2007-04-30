@@ -57,6 +57,8 @@ class Browser
 	fim::string regexp_goto_next(const std::vector<fim::string> &args);
 	fim::string goto_image(const std::vector<fim::string> &args);
 	fim::string goto_image(int n);
+	fim::string top_align(const std::vector<fim::string> &args);
+	fim::string bottom_align(const std::vector<fim::string> &args);
 	fim::string pan_ne(const std::vector<fim::string> &args);
 	fim::string pan_nw(const std::vector<fim::string> &args);
 	fim::string pan_sw(const std::vector<fim::string> &args);

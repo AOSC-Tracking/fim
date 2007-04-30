@@ -1,13 +1,11 @@
 # $Id$
 
 # All of this is in balance as an elephant on thin ice..
-# it's horrible.
-# 20070227 ..but i am fixing this :)
-# 20070307 no more reference to libFS nor X11 !
-# 20070425 the original Fbi makefile is no more used
 ##########################################################
 
-#WARNINGS := -Wall -pedantic #-Wextra -pedantic
+WARNINGS    := -ansi -Wall
+CWARNINGS   := $(WARNINGS)
+CXXWARNINGS := $(WARNINGS)
 GCC=gcc
 #GPP=g++ -fpermissive -fno-default-inline -g
 GPP=g++ -fno-default-inline #-g $(WARNINGS)
@@ -53,8 +51,8 @@ include $(srcdir)/mk/Variables.mk
 
 CFLAGS	 += -DFIM_VERSION='"$(FIM_VERSION)"' $(DEFINES)
 CFLAGS	 += -DFIM_AUTHOR='"$(FIM_AUTHOR)"'
-CFLAGS   += $(FLAGS)
-CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(WARNINGS)
+CFLAGS   += $(FLAGS) $(CWARNING)
+CXXFLAGS +=  $(CFLAGS)  $(DEFINES) $(CXXWARNINGS)
 #LDLIBS	 += -lreadline -lm -lfl -ltiff -ljpeg -lpng -lgif -lz
 LDLIBS	 += -lreadline -lm -lfl
 #-lrt (realtime library ) cannot be used :(  (causes segmentation fault!)

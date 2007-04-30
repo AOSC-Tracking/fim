@@ -221,6 +221,7 @@ namespace fim
 		rl::initialize_readline();
 		fim_stdin=0;
 		cycles=0;isinscript=0;
+		setVariable("steps",50);
 		addCommand(new Command(fim::string("next" ),fim::string("displays the next picture in the list"),&browser,&Browser::next));
 		addCommand(new Command(fim::string("prev" ),fim::string("displays the previous picture in the list"),&browser,&Browser::prev));
 		addCommand(new Command(fim::string("push" ),fim::string("pushes a file in the files list"),&browser,&Browser::push));
@@ -253,6 +254,8 @@ namespace fim
 		addCommand(new Command(fim::string("scale_factor_decrease" ),fim::string( "subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor" ),&browser,&Browser::scale_factor_decrease));
 		addCommand(new Command(fim::string("magnify" ),fim::string("magnifies the displayed image" ),&browser,&Browser::magnify));
 		addCommand(new Command(fim::string("reduce"),fim::string("reduces the displayed image" ),&browser,&Browser::reduce));
+		addCommand(new Command(fim::string("top_align"),fim::string("aligns to the upper side the image" ),&browser,&Browser::top_align));
+		addCommand(new Command(fim::string("bottom_align"),fim::string("aligns to the lower side the image" ),&browser,&Browser::bottom_align));
 		addCommand(new Command(fim::string("goto"),fim::string("goes to the index image" ),&browser,&Browser::goto_image));
 		addCommand(new Command(fim::string("status"),fim::string("sets the status line"),this,&CommandConsole::status));
 		addCommand(new Command(fim::string("scrolldown" ),fim::string("scrolls down the image, going next if at bottom" ),&browser,&Browser::scrolldown));
@@ -312,7 +315,7 @@ namespace fim
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
 		*prompt=':';
 		*(prompt+1)='\0';
-		int fimrcs=0;
+		//int fimrcs=0;
 #ifndef FIM_NOFIMRC
 #ifndef FIM_NOSCRIPTING
 		char rcfile[_POSIX_PATH_MAX];
@@ -1053,7 +1056,7 @@ namespace fim
 		int r;
 		char buf[4096*32];//FIXME
 		//char *buf;
-		struct stat ss;
+		//struct stat ss;
 		if(fd==-1)return -1;
 		//if(-1==fstat(fd,&ss))return-1;
 		//buf=NULL;
@@ -1083,7 +1086,7 @@ int CommandConsole::executeFile(const char *s)
 //		errno=1;		//comment me
 		if(-1==stat(s,&stat_s))return -1;
 		cout << "executing " << s << "\n";
-		int fd,r;
+		//int fd,r;
 		//char buf[4096*32];//FIXME
 		fd=open(s,0);
 		if(fd+1==0)

@@ -479,6 +479,7 @@ int fim_rl_end(int a,int b)
 int fim_set_command_line_text(const char*s)
 {
 	rl_replace_line(s,0);
+	return 0;
 }
 
 /*
@@ -605,6 +606,7 @@ static struct option fim_options[] = {
     {"random",     no_argument,       NULL, 'u'},  /* randomize images */
     {"font",       required_argument, NULL, 'f'},  /* font */
     {"autozoom",   no_argument,       NULL, 'a'},
+    {"autowidth",   no_argument,       NULL, 'w'},
     {"edit",       no_argument,       NULL, 'e'},  /* enable editing */
     {"list",       required_argument, NULL, 'l'},
     {"vt",         required_argument, NULL, 'T'},
@@ -615,6 +617,7 @@ static struct option fim_options[] = {
     {"final-command",    required_argument,       NULL, 'F'},
     {"debug",      no_argument,       NULL, 'D'},
     {"no-rc-file",      no_argument,       NULL, 'N'},
+    {"read-from-stdin",      no_argument,       NULL, '-'},
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -639,6 +642,10 @@ static void version()
 		    );
 }
 
+void chomp(char *s)
+{
+	for(;*s;++s)if(*s=='\n')*s='\0';
+}
 
 int main(int argc,char *argv[])
 {
@@ -646,23 +653,25 @@ int main(int argc,char *argv[])
 	 * an adapted version of the main function
 	 * of the original version of the fbi program
 	 */
- 	int              timeout = -1;
+// 	int              timeout = -1;
 	int              opt_index = 0;
 	int              vt = 0;
 	int              i;
-	char             *desc,*info;
+	int              read_file_list_from_stdin;
+	read_file_list_from_stdin=0;
+//	char             *desc,*info;
 	char c;
 
 	setlocale(LC_ALL,"");	//uhm..
     	for (;;) {
-	    c = getopt_long(argc, argv, "c:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",
+	    c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",
 			fim_options, &opt_index);
 	if (c == -1)
 	    break;
 	switch (c) {
-	case 0:
+/*	case 0:
 	    // long option, nothing to do
-	    break;
+	    break;*/
 	case '1':
 	    //fbi's
 	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
@@ -674,15 +683,21 @@ int main(int argc,char *argv[])
 	    break;
 	case 'q':
 	    //fbi's
-	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	    //fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	    cc.setVariable("_display_status",0);
 	    break;
 	case 'v':
 	    //fbi's
 	    cc.setVariable("_display_status",1);
 	    break;
+	case 'w':
+	    //fbi's
+	    cc.setVariable("autowidth",1);
+	    break;
 	case 'P':
 	    //fbi's
 	    cc.setVariable("autowidth",1);
+	    cc.setVariable("autotop",1);
 	    break;
 	case 'g':
 	    //fbi's
@@ -693,8 +708,7 @@ int main(int argc,char *argv[])
 //	    pcd_res = atoi(optarg);
 	    break;
 	case 's':
-//	    steps = atoi(optarg);
-	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	    if(atoi(optarg)>0) cc.setVariable("steps",atoi(optarg));
 	    break;
 	case 't':
 	    //fbi's
@@ -760,6 +774,15 @@ int main(int argc,char *argv[])
 	    //fim's
 		cc.setVariable("no_rc_file",1);
 	    break;
+	case '-':
+	    //fim's
+	    read_file_list_from_stdin=1;
+	    break;
+	case 0:
+	    //fim's
+	    read_file_list_from_stdin=1;
+	    printf("bene!\n");
+	    break;
 	default:
 	case 'h':
 	    cc.printHelpMessage(argv[0]);
@@ -768,9 +791,32 @@ int main(int argc,char *argv[])
     }
 	for (i = optind; i < argc; i++)
 	{
-		cc.push(argv[i]);
+		if(*argv[i]=='-'&&!argv[i][1])read_file_list_from_stdin=1;
+		else cc.push(argv[i]);
 	}
 	lexer=new yyFlexLexer;	//used by YYLEX
+
+#if 1
+	
+	/*
+	 * this is Vim's solution for stdin reading
+	 * */
+	if(read_file_list_from_stdin)
+	{
+		char *lineptr=NULL;
+		size_t bs=0;
+		while(getline(&lineptr,&bs,stdin)>0)
+		{
+			chomp(lineptr);
+			cc.push(lineptr);
+			printf("%s\n",lineptr);
+			free(lineptr);
+			lineptr=NULL;
+		}
+		close(0);
+		dup(2);
+	}
+#endif
 
 #ifndef FIM_NOFB
 	if(!cc.noFrameBuffer())

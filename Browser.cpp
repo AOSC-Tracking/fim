@@ -820,12 +820,19 @@ namespace fim
 		 *
 		 * FIX ME
 		 */
+		fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PrePan",c);
+#endif
 		if(image)
 		{
 			if(image->onBottom()) next();
 			else pan_down(std::vector<fim::string>());
 		}
 		else next(1);
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostPan",c);
+#endif
 		return "";
 	}
 
@@ -968,4 +975,49 @@ namespace fim
 #endif
 		return "";
 	}
+
+	fim::string Browser::top_align(const std::vector<fim::string> &args)
+	{
+		/*
+		 * align to top the displayed image
+		 */ 
+		if(image)
+		{
+			fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PrePan",c);
+#endif
+			if(image)
+			{
+				image->top_align();
+			}
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostPan",c);
+#endif
+		}
+		return "";
+	}
+
+	fim::string Browser::bottom_align(const std::vector<fim::string> &args)
+	{
+		/*
+		 * align to the bottom the displayed image
+		 */ 
+		if(image)
+		{
+			fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PrePan",c);
+#endif
+			if(image)
+			{
+				image->bottom_align();
+			}
+#ifdef FIM_AUTOCMDS
+			cc.autocmd_exec("PostPan",c);
+#endif
+		}
+		return "";
+	}
+
 }

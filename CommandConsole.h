@@ -229,7 +229,7 @@ class CommandConsole
 	fim::string bind(int c,fim::string binding);
 	fim::string unbind(const std::vector<fim::string>& args);
 	fim::string dump_key_codes(const std::vector<fim::string>& args);
-	fim::string clear(const std::vector<fim::string>& args){status_screen(NULL,NULL);}
+	fim::string clear(const std::vector<fim::string>& args){status_screen(NULL,NULL);return "";}
 	public:
 	void quit(int i=0);
 	int  drawOutput();
