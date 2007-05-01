@@ -19,9 +19,9 @@ LD=ld
 #################################################################
 # add our flags + libs
 #
-srcdir	= ./
+srcdir	= ./src
 -include Make.config
-include $(srcdir)/mk/Variables.mk
+include mk/Variables.mk
 
 #################################################################
 # The following flags, if set, enable certain optional features at compile time.
@@ -58,17 +58,17 @@ LDLIBS	 += -lreadline -lm -lfl
 #-lrt (realtime library ) cannot be used :(  (causes segmentation fault!)
 
 OBJS_FBI := \
-	src/fbi.o src/fbtools.o src/fs.o src/fb-gui.o \
-	src/dither.o src/loader.o src/filter.o src/op.o \
-	src/ppm.o src/bmp.o
+	$(srcdir)/fbi_src/fbi.o $(srcdir)/fbi_src/fbtools.o $(srcdir)/fbi_src/fs.o $(srcdir)/fbi_src/fb-gui.o \
+	$(srcdir)/fbi_src/dither.o $(srcdir)/fbi_src/loader.o $(srcdir)/fbi_src/filter.o $(srcdir)/fbi_src/op.o \
+	$(srcdir)/fbi_src/ppm.o $(srcdir)/fbi_src/bmp.o
 
 OBJS_FIM := \
-	lex.yy.o \
-	yacc.tab.o \
-	Arg.o Browser.o Command.o CommandConsole.o Image.o Var.o \
-	common.o \
-	fim.o interpreter.o \
-	string.o
+	$(srcdir)/lex.yy.o \
+	$(srcdir)/yacc.tab.o \
+	$(srcdir)/Arg.o $(srcdir)/Browser.o $(srcdir)/Command.o $(srcdir)/CommandConsole.o $(srcdir)/Image.o $(srcdir)/Var.o \
+	$(srcdir)/common.o \
+	$(srcdir)/fim.o $(srcdir)/interpreter.o \
+	$(srcdir)/string.o
 
 FLEX   := flex
 BISON  := bison
@@ -79,6 +79,7 @@ YFLAGS := -v -d
 
 all: fim
 
+include doc/Makefile
 
 #
 # The dependencies in the lexer/parser subsystem are tricky :
@@ -97,20 +98,24 @@ all: fim
 
 # The goal-oriented way : 
 
+#src/lex.yy.cc: src/lex.lex
 %.yy.cc: %.lex
 	$(LEX) $(LFLAGS) $<
+	mv *.yy.cc src
 
-%.tab.cpp: %.ypp lex.lex
+%.tab.cpp: %.ypp $(srcdir)/lex.lex
 	$(YACC) $(YFLAGS) $<
+	mv *.tab.cpp src
+	mv *.tab.hpp src
 
-lex.yy.o : lex.yy.cc yacc.tab.cpp
+$(srcdir)/lex.yy.o : $(srcdir)/lex.yy.cc $(srcdir)/yacc.tab.cpp
 
-all:	fim
+all:	fim docs
 
 #################################################################
 # poor man's autoconf ;-)
 
-include $(srcdir)/mk/Autoconf.mk
+include mk/Autoconf.mk
 
 #
 # A partial automake
@@ -178,11 +183,11 @@ $(error "I can't believe it !, you have libFOO :) !")
 endif
 
 ifneq ($(findstring FIM_DEFAULT_CONFIGURATION,$(DEFINES)),)
-CommandConsole.o : conf.h
+$(srcdir)/CommandConsole.o : $(srcdir)/conf.h
 endif
 
 ifneq ($(findstring FIM_DEFAULT_CONFIG,$(DEFINES)),)
-CommandConsole.o : defaultConfiguration.cpp
+$(srcdir)/CommandConsole.o : $(srcdir)/defaultConfiguration.cpp
 endif
 
 ########################################################################
@@ -201,10 +206,10 @@ GPM_LDLIBS	:= -lgpm
 #LIRC_LDLIBS	:= -llirc_client
 
 #PCD_OBJS	:= pcd.o
-JPEG_OBJS	:= src/jpeg.o
-UNGIF_OBJS	:= src/gif.o
-PNG_OBJS	:= src/png.o
-TIFF_OBJS	:= src/tiff.o
+JPEG_OBJS	:= $(srcdir)/fbi_src/jpeg.o
+UNGIF_OBJS	:= $(srcdir)/fbi_src/gif.o
+PNG_OBJS	:= $(srcdir)/fbi_src/png.o
+TIFF_OBJS	:= $(srcdir)/fbi_src/tiff.o
 #LIRC_OBJS	:= lirc.o
 
 
@@ -229,14 +234,14 @@ TARGETS	:= fim
 
 OBJS_FBI	+= $(call ac_lib_mkvar,$(libraries),OBJS)
 
-clean:
-	rm -f $(OBJS_FBI) $(depfiles)  $(OBJS_FIM)  *.o fim -f src/*.o src/*/*.o yacc.output yacc.tab.cpp yacc.tab.hpp lex.yy.cc Make.config md5sums.md5
+clean:	docsclean
+	rm -f $(OBJS_FBI) $(depfiles)  $(OBJS_FIM)  $(srcdir)/*.o fim -f $(srcdir)/fbi_src/*.o $(srcdir)/fbi_src/*/*.o $(srcdir)/yacc.output $(srcdir)/yacc.tab.cpp $(srcdir)/yacc.tab.hpp $(srcdir)/lex.yy.cc Make.config md5sums.md5 yacc.output
 	#@ rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
 	@ rm -f conf.h
 
 #realclean distclean:
 #	@ rm -f Make.config
-#	@ cd src ; rm -f $(TARGETS) *~ xpm/*~ *.bak
+#	@ cd src/fbi_src ; rm -f $(TARGETS) *~ xpm/*~ *.bak
 #	@ make md5
 #	make clean
 
@@ -244,10 +249,10 @@ clean:
 #	@rm -f md5sums.md5 ; md5sum * */* */*/* */*/*/* > md5sums.md5 2> /dev/null || true
 
 
-conf.h:	fimrc
-	echo 'char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > conf.h   
-	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
-	echo '"";' >> conf.h
+$(srcdir)/conf.h:	$(srcdir)/fimrc
+	echo 'char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $(srcdir)/conf.h   
+	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $(srcdir)/fimrc >> $(srcdir)/conf.h
+	echo '"";' >> $(srcdir)/conf.h
 
 fim:    $(OBJS_FIM) $(OBJS_FBI)
 	$(GPP) -o fim $(OBJS_FBI) $(OBJS_FIM) $(LDLIBS) $(FLAGS)
@@ -262,10 +267,14 @@ flex:
 install:	all
 	$(INSTALL_DIR) $(bindir)
 	$(INSTALL_BINARY) $(TARGETS) $(bindir)
-	$(INSTALL_SCRIPT) fbgs.sh $(bindir)/fimgs
-	#$(INSTALL_DIR) $(mandir)/man1
-	#$(INSTALL_DATA) fim.man $(mandir)/man1/fbi.1
-	#$(INSTALL_DATA) fbgs.sh.man $(mandir)/man1/fbgs.1
+	$(INSTALL_SCRIPT) $(srcdir)/fbgs.sh $(bindir)/fimgs
+	$(INSTALL_DIR) $(mandir)/man1
+	$(INSTALL_DATA) doc/fim.man $(mandir)/man1/fim.1
+	$(INSTALL_DIR) $(docdir)/fim
+	$(INSTALL_DATA) doc/FIM.TXT $(docdir)/fim/
+	$(INSTALL_DATA) doc/FIM.html $(docdir)/fim/
+
+#	$(INSTALL_DATA) fbgs.sh.man $(mandir)/man1/fbgs.1
 
 test:	fim
 	@./fim media/* #~/M*s/*g
@@ -292,19 +301,19 @@ report:
 exec:	test
 
 edit:
-	$(EDITOR) fim.cpp +':split fim.h' # Vim ! :)
+	$(EDITOR) $(srcdir)/fim.cpp +':split $(srcdir)/fim.h' # Vim ! :)
 
 .PHONY:
 	@true
 
 wc:
-	wc *.cpp *.h yacc.ypp lex.lex
+	wc $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/yacc.ypp $(srcdir)/lex.lex
 	@#wc $(FIM) # missing headers..
 
 #clean:
 #	@ make md5
-include $(srcdir)/mk/Compile.mk
-include $(srcdir)/mk/Maintainer.mk
+include mk/Compile.mk
+include mk/Maintainer.mk
 #-include $(depfiles)
 
 #################################################################

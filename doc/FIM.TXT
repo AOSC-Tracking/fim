@@ -1,4 +1,3 @@
-$Id$
 ------------------------------------------------------------------------------
 *fim.txt*	For Fim version 0.1 (alpha).
 
@@ -53,18 +52,18 @@ Introduction to Fim					*ref* *reference*
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
 6.1. Loading and browsing	|commands-browsing|
-6.2. Scaling, flipping		|scaling|
+6.2. Scaling, flipping		|commands-scaling|
 6.3. Panning,moving		|commands-scroll|
 6.4. Recording 			|commands-recording|
 6.5. Console related commands	|commands-console|
 6.6. System Interaction		|commands-system|
-6.7. Variables			|commands-variables|
+6.7. Variables			|variables|
 6.8. Autocommands		|commands-autocommands|
 7. Command Line,More		|cli-more|
 7.1. Default configuration	|default-config|
 8. Pattern Matching		|pattern-matching|
 9. Dangers			|dangers|
-10. Syntax Reference		|syntref|
+10. Syntax Reference		|syntax-ref|
 11. Credits			|credits|
 12. FAQs			|faq|
 
@@ -208,7 +207,7 @@ This mechanism is known as |auto-commands|, and is enabled in an intuitive way
 in the default configuration.
 
 ==============================================================================
-6.1. Loading and browsing the images		*commands-browse*
+6.1. Loading and browsing the images		*commands-browsing*
 
 When first entered in Fim, you should note its behaviour is perfectly similar
 to that of Fbi ( and how could it? - you could ask.. ) :
@@ -268,15 +267,32 @@ explanation for this otherwise exotic features of the program.
 ==============================================================================
 6.2. Scaling, Flipping				*commands-scaling*
 
-auto_scale
-auto_width_scale
-auto_height_scale
+There are a number of ways for scaling the currently viewed image.
+Here are some:
 
-reduce
-magnify
-flip
-mirror
+'auto_width_scale
+'auto_height_scale'
+'auto_scale'
 
+These three commands scale the image respectively according to the screen
+width, or its heigth, or the minimum between these.
+
+'reduce'
+'magnify'
+
+Reduce or magnify the image size by multiplying the current scale by a predefined
+factor.
+
+'flip'
+
+Flip the image on the horizontal axis.
+
+'mirror'
+
+Flip the image along the vertical axis.
+
+So,
+>
 	:flip
 will set flip the current image
 >
@@ -289,8 +305,17 @@ degrees:
 	:mirror;flip
 	:flip;mirror
 
+Moreover, there is the special syntax that allows you for example:
 
-UNFINISHED
+>
+	:20.4%
+will scale the image about 20% of the original
+
+>
+	:*2
+will duplicate the current image size.
+
+<UNFINISHED>
 
 ==============================================================================
 6.3. Panning/moving, and scrolling the image	*commands-scroll*
@@ -315,39 +340,112 @@ axis, while the last four pan the image on the two diagonal axis.
 
 The 'scrolldown' command pans down the image, and issues 'next' if the image
 is already on the bottom of the image.
+
 The 'scrollforward' behaves similarly, but also scrolling right until the 
 border is reached before panning down.
 
- UNFINISHED
+Moreover, there are too commands for aligning the image on the top or on the
+bottom of the screen:
+
+'top_align'
+'bottom_align'
+
+<UNFINISHED>
 
 ==============================================================================
 6.4. Recording					*commands-recording*
 
-stop_recording
-dump_record_buffer
-execute_record_buffer
-repeat_last
+Recording is a mechanism for making fim remember the commands you issue 
+interactively at the console or with the keys, and repeating them.
 
- UNFINISHED
+One could use this feature for perfomative purposes or for some particular kind
+of slideshow or ..who knows..
+
+So, use 
+>
+	:start_recording
+to make recording mode active.
+To stop recording, issue:
+>
+	:stop_recording
+
+To view the recorded commands, textually, issue:
+>
+	:dump_record_buffer
+
+Then, if you are sure is this the sequence that you want, type:
+>
+	:execute_record_buffer
+
+>
+	:execute_record_buffer
+
+Regardless of recording mode, 'repeat_last' will repeat the last executed action.
+
+Note that commands triggered by autocommands are NOT recorded.
+I doubt someone would want otherwise..
+
+<UNFINISHED>
 
 ==============================================================================
 6.5. Console related commands			*commands-console*
 
-echo
-clear
-info
+>
+	:echo
+	:clear
+	:info
 
- UNFINISHED
+These are commands to echo text to the console, or clear it, or display some 
+information on screen.
+
+<UNFINISHED>
 
 ==============================================================================
 6.6. System interaction				*commands-system*
 
-system
-popen
+Currently, there are two commands to interact with the system:
 
+'system'
+'popen'
+
+They execute respectively, the 'system' and the 'popen' system calls.
+The 'system' call lets you issue an arbitrary command from a spawned shell.
+So, beware its power, as it is dangerous as hell.
+
+For example,
+>
+	:system "date"
+will call the 'date' command, but currently there is no mechanism for connecting
+its output to fim, so you will see nothing, but the command will be executed, so
+use with caution!
+
+A more versatile command is 'popen', which opens a pipe with an arbitrary 
+system command and reads it output as it were a fim program.
+
+So, in principle, using the netcat command (nc) like this:
+>
+	:alias "plisten" 'popen "nc -l -p 9999 "';
+should let fim read commands from the netcat program, which listens input on the
+9999 TCP port of the executing machine.
+
+This is VERY DANGEROUS, too.
+
+
+On the other side, a safer command is :
 'quit'
 
-mark
+for leaving the program, or 
+>
+	:mark
+which will print the currently viewed filename on the exiting of fim.
+
+In this way, you could use fim like this:
+
+$ fim pictures/* > nicepictures.txt
+
+and marking nice images while viewing them (pressing the default 'C-m' key for).
+Once out of fim, the nicepictures.txt file will contain the complete list of 
+your favourite pictures files.
 
 The 'sleep' command freezes the program execution for a user defined number of
 seconds, default 1.
@@ -355,7 +453,13 @@ seconds, default 1.
 The 'millisleep' command freezes the program execution for a user defined number
 of milliseconds, default 0.
 
- UNFINISHED
+NOTE: in this stage of development of fim, string manipulation is not yet
+supported, so it is not possible to execute external commands involving internal
+fim variables.
+
+Read the TODO file to discover when and why this will be reworked.
+
+<UNFINISHED>
 
 ==============================================================================
 6.7.Variables	 						*variables*
@@ -383,6 +487,9 @@ as soon as this is necessary.
 
  'console_key'	: the key used to enter in command line mode (WARNING : experimental)
 
+Note : there is still much to do here..
+
+<UNFINISHED>
 
 ==============================================================================
 6.8. Auto commands				*commands-autocommands*
@@ -521,10 +628,10 @@ If still uncertain about regular expression search, consult the
 ==============================================================================
 7.1. Default Configuration			*default-config*
 
-The following actions come as default aliases :
+The following actions come as default aliases : see the 'fimrc' file 
+distributed with the sources to get a nice idea of the way of writing one.
 
-
- UNFINISHED
+<UNFINISHED>
 
 ==============================================================================
 8. Pattern matching				*pattern-matching*
@@ -589,10 +696,12 @@ idea : repeat_last N ?!
 
 Warning : repeat_last do NOT work in scripts *
 
- UNFINISHED
+Of course, beware the system commands, described some sections ago.
+
+<UNFINISHED>
 
 ==============================================================================
-10.Syntax reference 						*syntref*
+10.Syntax reference 						*syntax-ref*
 
 The implemented Fim minilanguage gives the user the possibility of storing 
 values into variables, then performing simple arithmetics, while loops, and 
@@ -610,7 +719,9 @@ and then breaking the execution of the flow of instructions.
 
 So, the commands following the loop will be ignored.
 
- UNFINISHED
+The formal grammar of the fim minilanguage will be included here soon.
+
+<UNFINISHED>
 
 ==============================================================================
 11.Credits 							*credits*
@@ -621,7 +732,9 @@ So, the commands following the loop will be ignored.
  Fim is an idea of dezperado, which can be contacted through the email address
  scrambled as dezperado _FOobAr_ autistici _Baz_ org.
 
- UNFINISHED
+ In the source archive, there are the doctags.c program and a slightly modified
+ vim2html.pl, which were taken from the original source archive of Vim 7.0 
+ (although not an integral part of Vim but helper programs).
 
 ==============================================================================
 12.FAQs 							*faq*
@@ -671,9 +784,10 @@ So, the commands following the loop will be ignored.
  Q: I wish to use Fim for military purposes, could I ?
  A: Remember me to add somewhere a clause to deny this to you.
 
- Q: I wish to donate you money, beer, pizza, or a new laprop; could I?
+ Q: I wish to donate you money, beer, pizza, or a new laptop; could I?
  A: Yes, you could, as in this moment of my life i am completely broken.
     No, I am not a looser, but just not a hawk.
     Contact me for the details of sending me the goods.
 
 ------------------------------------------------------------------------------
+$Id$

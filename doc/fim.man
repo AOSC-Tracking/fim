@@ -26,9 +26,9 @@ mapped to.
 .B -m mode
 name of the video mode to use video mode (must be listed in
 /etc/fb.modes).  Default is not to change the video mode.
-.c.TP
-.c.B -q
-.cbe quiet: don't print anything.
+.c .TP
+.c .B -q
+.c be quiet: don't print anything.
 .TP
 .B -h
 display help and terminate the program
@@ -81,13 +81,13 @@ The \fBscriptfile\fP will be executed right after the default initialization fil
 .TP
 .B -N
 No initialization file will be read (default is ~/.fimrc) at startup.
-.c.TP
-.c.B -f font
-.cSet font.  This can be either a pcf console font file or a X11 font
-.cspec.  Using X11 fonts requires a font server (The one specified in
-.cthe environment variable FONTSERVER or on localhost).  The FBFONT
-.cenvironment variable is used as default.  If unset, fim will
-.cfallback to 10x20 (X11) / lat1u-16.psf (console).
+.c .TP
+.c .B -f font
+.c Set font.  This can be either a pcf console font file or a X11 font
+.c spec.  Using X11 fonts requires a font server (The one specified in
+.c the environment variable FONTSERVER or on localhost).  The FBFONT
+.c environment variable is used as default.  If unset, fim will
+.c fallback to 10x20 (X11) / lat1u-16.psf (console).
 .TP
 .B -a
 Enable autozoom.  fim will automagically pick a reasonable zoom factor

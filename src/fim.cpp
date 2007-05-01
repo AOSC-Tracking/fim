@@ -26,7 +26,7 @@
 #include <linux/fb.h>
 #include <linux/kd.h>
 #include <linux/vt.h>
-#include "src/fbtools.h"
+#include "fbi_src/fbtools.h"
 
 
 //#define DEFAULT_DEVICE  "/dev/fb0"
