@@ -91,67 +91,13 @@ class CommandConsole
 
 	void clearRecordBuffer(){}
 	bool dont_record_last_action;
-	fim::string memorize_last(const fim::string &cmd)
-	{
-		//WARNING : DANGER
-		if(dont_record_last_action==false)
-		{
-			last_action=cmd;
-		}
-		dont_record_last_action=true;	//from now on we can memorize again
-		return "";
-	}
-
-	fim::string repeat_last(const std::vector<fim::string> &args)
-	{
-		/*
-		 * WARNING : there is an intricacy concerning the semantics of this command :
-		 * - This command should NOT be registered as last_command, nor any alias 
-		 *   triggering it. But this solution would require heavy parsing and very
-		 *   complicated machinery and information propagation... 
-		 * - A solution would be confining the repeat_last only to interactive commands,
-		 *   but this would be a lot sorrowful too, and requires the non-registration 
-		 *   of the 'repeat_last;' issuing..
-		 * - So, since the recording is made AFTER the command was executed, we set
-		 *   a dont_record_last_action flag after each detection of repeat_last, so we do not 
-		 *   record the containing string.
-		 */
-		execute(last_action.c_str(),0);
-		dont_record_last_action=true;	//the issuing action will not be recorded
-		return "";
-	}
-
+	fim::string memorize_last(const fim::string &cmd);
+	fim::string repeat_last(const std::vector<fim::string> &args);
 	fim::string dump_record_buffer(const std::vector<fim::string> &args);
-	
 	fim::string execute_record_buffer(const std::vector<fim::string> &args);
-	
-	fim::string start_recording(const std::vector<fim::string> &args)
-	{
-		recorded_actions.clear();
-		recordMode=true;
-		return "";
-	}
-
-	fim::string  stop_recording(const std::vector<fim::string> &args)
-	{
-		/*
-		 * since the last recorded action was stop_recording, we pop out the last command
-		 */
-		if(recorded_actions.size()>0)recorded_actions.pop_back();
-		recordMode=false;
-		return "";
-	}
-
-	fim::string sanitize_action(const fim::string &cmd)
-	{
-		/*
-		 * the purpose of this method is to sanitize the action token
-		 * in order to gain a dumpable and self standing action
-		 */
-		if(cmd.c_str()[strlen(cmd.c_str())-1]!=';')
-			return cmd+fim::string(";");
-		return cmd;
-	}
+	fim::string start_recording(const std::vector<fim::string> &args);
+	fim::string stop_recording(const std::vector<fim::string> &args);
+	fim::string sanitize_action(const fim::string &cmd);
 
 	void record_action(const fim::string &cmd);
 #endif
@@ -182,10 +128,10 @@ class CommandConsole
 	int  setVariable(const fim::string& varname,int value);
 	float setVariable(const fim::string& varname,float value);
 	bool push(const fim::string nf){return browser.push(nf);}
+	int executeStdFileDescriptor(FILE *fd);
 #ifndef FIM_NOSCRIPTING
 	int  executeFile(const char *s);
 	fim::string executeFile(const std::vector<fim::string> &args);
-	int executeStdFileDescriptor(FILE *fd);
 	int executeFileDescriptor(int fd);
 #endif
 	fim::string echo(const std::vector<fim::string> &args);

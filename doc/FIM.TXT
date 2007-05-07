@@ -1,42 +1,43 @@
 ------------------------------------------------------------------------------
-*fim.txt*	For Fim version 0.1 (alpha).
+*FIM.TXT*	For Fim version 0.1 (alpha).
 
 			Fim - main help file (UNDER DEVELOPEMENT)
 
-First of all, please view this documentation in VIM with ':set syntax=help' :)
+First of all, please view this text file in VIM with ':set syntax=help'.
 if you already know Vim, you will know that in this way you can use this
-documentation as it would be a hypertext.
+documentation as it was a hypertext.
 ( or add "autocmd BufReadPost FIM.TXT set syntax=help" into your ~/.vimrc ! )
 If you do not know Vim, you can find it at http://www.vim.org.
 
-
 Thank you for giving a try to this software; one can regard it as a 'hack',in
-the sense it is the result of the passionate work of multiple people.
-
+the sense it is an elaboration of the passionate work of multiple people.
+>
 ------------------------------------------------------------------------------
 0. Introduction 						*intro*
 
 									 k
-      Move the image around:
-                    Use the cursor keys, or "h" to go left,	       h   l
+      Fim Quickstart : to move the image around,
+                    use the cursor keys, or "h" to go left,	       h   l
 		    "j" to go down, "k" to go up, "l" to go right.	 j
-   Get out of Fim:  Use ":q<Enter>" (careful, all changes are lost!).
+   Get out of Fim:  Use ":q<Enter>" (press ':', then 'q', then 'enter').
 
 Fim stands for Fbi IMproved.
 
-Fbi is a framebuffer-based image viewer, made by Gerd Knorr, and Fim is
-mainly an interface rework applied roughly as a patch to it.
+Fbi is a |framebuffer| based image viewer, made by Gerd Knorr, and Fim is
+primarily an interface rework applied roughly as a patch to it.
 The idea of making Fim came after long usage sessions of Vim and Fbi.
 
 The main purposes of Fim is to boost the features present Fbi and adding new
-ones. 
+ones, to achieve configurability and use flexibility. 
 
-This includes principally the configurability of the keyboard bindings.
+The primary aim of configurability is the complete freedom of the keyboard
+bindings.
+Fim has a mechanism for the creation of a |configuration| file.
 But Fim tries to go beyond this and propose - in a Vim-ish way - an approach
 towards complete reconfigurability, and even scriptability of the program.
 The inspiration for this comes from the use of the nicer software available 
 as free software, often characterized by extreme flexibility, configurability,
-hackability. This concerns mainly text editors, but why can't apply to an 
+hackability. This concerns mainly text editors, but why can't this apply to an 
 image viewer, too ?
 
 ==============================================================================
@@ -47,7 +48,9 @@ Introduction to Fim					*ref* *reference*
 0. Introduction			|intro|
 1. Index			|index|
 2. Fim on the Internet		|internet|
-3. Basic Usage			|basics|
+3. Installation, basic usage	|basics|
+3.1. Configuration		|configuration|
+3.2. Keyboard binding		|keyboard|
 4. Command Line Mode		|cli|
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
@@ -63,7 +66,9 @@ Introduction to Fim					*ref* *reference*
 7.1. Default configuration	|default-config|
 8. Pattern Matching		|pattern-matching|
 9. Dangers			|dangers|
-10. Syntax Reference		|syntax-ref|
+10. Technicalia			|technicalia|
+10.1. Syntax Reference		|syntax-ref|
+10.2. Framebuffer mini how to	|framebuffer|
 11. Credits			|credits|
 12. FAQs			|faq|
 
@@ -72,6 +77,7 @@ Introduction to Fim					*ref* *reference*
 
 As of now, the official Fim page is https://code.autistici.org/project/fim, 
 although it doesn't say much.
+http://www.autistici.org/dezperado/fim contains FIM documentation, too.
 
 You could be able to browse the Fim code on :
 	http://code.autistici.org/svn/fim/
@@ -97,7 +103,11 @@ You can report to dezperado _FOobAr_ autistici _Baz_ org, by replacing _FOobAr_
 with a '@' and _Baz_ with a '.'.
 
 ==============================================================================
-3. Basic Usage					*basics*
+3. Installation, basic usage			*basics*
+
+The installation instructions (a 'make;make install' invocation should suffice)
+are stated in the INSTALL file, contained in the source archive.
+ 
 
 The basic usage of Fim consists of calling it from the Linux console, in a
 non-X environment, assuming the framebuffer enabled ( if you do not know if 
@@ -112,13 +122,54 @@ should start Fim and display the images.
 Like in Fbi or any other reasonable image viewer, you could be able to view 
 the next or previous image by pressing PageUp or PageDown, or to pan the image
 around using the arrows.
-Quitting is triggered by pressing 'q' or 'C-c' (holding the control key and
+Quitting is triggered by pressing 'q' or <C-c> (holding the control key and
 then pressing 'c' ).
 
 In this very basic way, you use the portion of Fim that mimics Fbi.
 
 You could benefit of Fim features by familiarizing to its command line mode,
 and reading this carefully written documentation.
+
+==============================================================================
+3.1. Configuration					*configuration*
+
+To configure fim, and/or to modify its default behaviour, you could create
+a .fimrc file in your home directory:
+ 
+$ touch ~/.fimrc
+
+and then edit the file and filling it only with lines you could write live
+in the fim console or feed to Fim via the -c (pre-execution command) or -F (
+final command) switches.
+
+Soon fim will have a switch for telling you if it was compiled with configuration
+file support (default enabled) or not.
+Even if compiled with script support, a default configuration has probably
+built in the program, and all of the interpreting mechanisms are there.
+
+===============================================================================
+3.2. Keyboard Bindings					*keyboard*
+
+You can assign an arbitrary keyboard key or keys sequence an arbitrary Fim
+command. See the next two examples:
+>
+	:bind 'n'   "next";
+	:bind 'C-n' "prev";
+
+The first command tells Fim that now on, when in interactive mode, pressing 'n'
+will be equivalent of issuing 'next' in the command line console.
+
+Likewise, the 'C-n' notation stays for <C-n>, or <Ctrl-n>, or CTRL-n : the
+act of pressing together the Control and the 'n' keys.
+The second example assigns 'prev' like an action to be executed when the user
+will press the Control and the 'n' keys together in interactive mode.
+
+Note that these commands work inside Fim, and can be written inside the ~/.fimrc
+configuration file (without the heading ':', though! ).
+
+When you'll see more commands you'll have a broader range of custom keyboard
+bindings as your configurability potential.
+If you are curious, jump to the |commands-reference| section right now.
 
 ==============================================================================
 4. Command Line Mode					*cli*
@@ -350,16 +401,24 @@ bottom of the screen:
 'top_align'
 'bottom_align'
 
-<UNFINISHED>
+As every command, these commands can be executed with the repeated syntax:
+>
+	:2scrolldown "1"
+will scroll down two times the image by one pixel, but
+>
+
+	:1scrolldown "2"
+will scroll down the image one time, of an amount of two pixels.
 
 ==============================================================================
 6.4. Recording					*commands-recording*
 
-Recording is a mechanism for making fim remember the commands you issue 
-interactively at the console or with the keys, and repeating them.
+Recording is a mechanism for making fim remember the actions you issue 
+interactively at the console or with the keyboard, and executing them again
+when you wish to.
 
 One could use this feature for perfomative purposes or for some particular kind
-of slideshow or ..who knows..
+of slideshow or ...who knows...
 
 So, use 
 >
@@ -369,23 +428,46 @@ To stop recording, issue:
 >
 	:stop_recording
 
+Please note that fim will record only actions; it mean that no information about
+the keyboard will be included there.
+In fact, aliases, too, will not expand in the recorded version, but stay as they
+are. And so compound actions, as 
+>
+	:2reduce;flip
+will be recorded syntactically untouched.
+
 To view the recorded commands, textually, issue:
 >
 	:dump_record_buffer
 
-Then, if you are sure is this the sequence that you want, type:
+Then, if you are sure this is the sequence that you want, type:
 >
 	:execute_record_buffer
-
+The recorded buffer will execute as if it was just typed fresh by the user
+interactively in one script file.
+Of course, typing in 
 >
-	:execute_record_buffer
+	:2execute_record_buffer
+may serve you as an example that the recorded actions could be executed as many
+times as one would want.
 
-Regardless of recording mode, 'repeat_last' will repeat the last executed action.
+One only difference will hold : timing information (approximately) is recorded
+too, resulting in pauses between single subcommands, reflecting the timing 
+of the recorded sequence.
+>
+	:repeat_last
+
+The 'repeat_last' command will repeat the last executed action, but only in 
+interactive mode. See |dangers| to discover why.
 
 Note that commands triggered by autocommands are NOT recorded.
-I doubt someone would want otherwise..
 
-<UNFINISHED>
+However, when executing a record buffer, autocommands are active.
+
+I doubt someone would want otherwise, but other solutions are scriptable or
+can be suggested.
+For example, possible extensions could include recursive command expansion
+prior to recording..
 
 ==============================================================================
 6.5. Console related commands			*commands-console*
@@ -396,9 +478,7 @@ I doubt someone would want otherwise..
 	:info
 
 These are commands to echo text to the console, or clear it, or display some 
-information on screen.
-
-<UNFINISHED>
+information on screen about the displayed image.
 
 ==============================================================================
 6.6. System interaction				*commands-system*
@@ -430,8 +510,8 @@ should let fim read commands from the netcat program, which listens input on the
 
 This is VERY DANGEROUS, too.
 
-
 On the other side, a safer command is :
+
 'quit'
 
 for leaving the program, or 
@@ -443,7 +523,7 @@ In this way, you could use fim like this:
 
 $ fim pictures/* > nicepictures.txt
 
-and marking nice images while viewing them (pressing the default 'C-m' key for).
+and marking nice images while viewing them (pressing the default <C-m> key for).
 Once out of fim, the nicepictures.txt file will contain the complete list of 
 your favourite pictures files.
 
@@ -458,8 +538,6 @@ supported, so it is not possible to execute external commands involving internal
 fim variables.
 
 Read the TODO file to discover when and why this will be reworked.
-
-<UNFINISHED>
 
 ==============================================================================
 6.7.Variables	 						*variables*
@@ -485,31 +563,34 @@ as soon as this is necessary.
  		  setting this variable is useless, altough possible: it is 
 		  regenerated between each call.
 
- 'console_key'	: the key used to enter in command line mode (WARNING : experimental)
+ 'console_key'	: the key used to enter in command line mode (WARNING:experimental)
 
-Note : there is still much to do here..
+Note : there is still much to do about variables.
 
 <UNFINISHED>
 
 ==============================================================================
 6.8. Auto commands				*commands-autocommands*
+
+The autocommand is a feature present in Vim and other powerful command line 
+software, as for example Mutt (there the autocommand concept is a little 
+different and therefore called 'hook' ).
+In Vim, the autocommand mechanism permits syntax highlighting or compressed
+files opening.
+
+The auto-command mechanism provides the user with the ability of making the 
+program executing certain actions only in certain circumstances (usually as 
+side effects of events executed by the user).
+
+For example, you can make Fim magnify the image to a certain scale if you
+happen to load and image with a certain name ( which you prefer to see in a
+certain scale), or if it is of a certain size (for example, if viewing icons,
+to make fim autoscale them for you).
 >
 	:autocmd EVENT PATTERN ACTION
 
-Auto commands is a feature present in Vim and other powerful command line 
-software, as for example Mutt (there the autocommand concept is a little 
-different and therefore called 'hook' ) or Vim (there an autocommand could 
-display a colorful syntax if the file has a certain name).
-
-For example, you can make Fim magnify the image to a certain scale if the
-image has a certain name, or if it is of a certain size.
-
-The auto-command mechanism provides the user with the ability of making the 
-program executing certain actions only in certain circumstances (usually events
-triggered by the user).
-
-By 'circumstances' we mean that :
-  - it is the case that the user issued a certain EVENT
+It is the cas that the user 
+  - issued a certain EVENT and
   - the current file name in the image browser respects a certain PATTERN
 
 an EVENT can be one of:
@@ -560,8 +641,10 @@ Examples:
 
 The first will tell Fim to remove the current image off the file list before
 displaying the next one, in a sort of "consume-view" fashion.
+Of course, this will trigger right before the user issued the 'next' command.
 
 The second will load the image right after the next command.
+Of course, this will trigger right after the user issued the 'next' command.
 
 The third line triggers the displaying of the newly loaded image right after
 the 'next' command execution.
@@ -620,7 +703,7 @@ will jump to the first png image
 	/^/tmp
 will jump to the first image contained in /tmp
 >
-Press 'C-n' to jump directly to the next image found.
+Press <C-n> to jump directly to the next image found.
 
 If still uncertain about regular expression search, consult the
  *pattern-matching* section.
@@ -664,9 +747,9 @@ will jump to the first .png picture whom name contains 'my'
 will jump to the first .png picture whom name begins with 'my' 
 
 When multiple filenames match the search pattern, you can jump to the next 
-matcing with the default 'C-n'(control key and n) binding.
+matcing with the default <C-n> (control key and n) binding.
 
-If 'C-n' doesn't have this effect, hit ':' to get the console, and type in 
+If <C-n> doesn't have this effect, hit ':' to get the console, and type in 
 >
 	:bind 'C-n' "regexp_goto_next";
 This should associate that key combination to the action of jumping to the
@@ -690,18 +773,19 @@ A better example of looping is the following sequence:
 This will turn FIM into slideshow mode, which can be interrupted by the
 continued pressure of some key (some unbound key is better!).
 
-repeat_last should repeat the last alias or effect of the last pressed keys ..
-..if a line contains repeat_last, it is not recorded in the last_buffer..
-idea : repeat_last N ?!
+'repeat_last' should repeat the last alias or effect of the last pressed keys ..
+..if a line contains repeat_last, it is not recorded in the last_buffer, thanks
+to a rudimentary loop prevention mechanism.
 
-Warning : repeat_last do NOT work in scripts *
-
-Of course, beware the system commands, described some sections ago.
-
-<UNFINISHED>
+Of course, beware the |commands-system| commands, described some sections ago.
 
 ==============================================================================
-10.Syntax reference 						*syntax-ref*
+10.Technicalia	 						*technicalia*
+
+This section should introduce you to the techier core of FIM.
+
+==============================================================================
+10.1.Syntax reference 						*syntax-ref*
 
 The implemented Fim minilanguage gives the user the possibility of storing 
 values into variables, then performing simple arithmetics, while loops, and 
@@ -719,9 +803,91 @@ and then breaking the execution of the flow of instructions.
 
 So, the commands following the loop will be ignored.
 
-The formal grammar of the fim minilanguage will be included here soon.
+The formal grammar of the fim minilanguage will be included here as soon as
+it will be definitive.
+For the current one, take a look to the src/fimrc file to take an idea of 
+the default configuration file, written in the Fim minilanguage.
 
 <UNFINISHED>
+
+==============================================================================
+10.2. Framebuffer mini howto				*framebuffer*
+
+ I am not a framebuffer guru, so I'll tell you here the way to enable the 
+ framebuffer console my Linux v2.6.17.1. Every kernel gets outdated soon, 
+ but these informations should be informative enough for future kernels, too.
+ Outdated, but comprehensive info can be found at :
+              http://tldp.org/HOWTO/Framebuffer-HOWTO.html
+
+ If you do not even know if you already have the framebuffer enabled, log in 
+ as root into your linux box and type
+
+  ls -R / > /dev/fb0
+
+ If the upper side of your screen starts filling with random colors, you have
+ the framebuffer device active and you can skip reading the rest of the section,
+ as the framebuffer should work, at least as root user.
+ 
+ If the above operations fails for some reason, consider recompiling the kernel
+ and enabling the famebuffer.
+ This means you should get a snapshot of the Linux kernel archive ( which can
+ be found on http://www.kernel.org ) on your computer.
+
+ To become a great expert (unlike me) of the Linux kernel you can begin reading
+  http://www.faqs.org/docs/Linux-HOWTO/Kernel-HOWTO.html
+ if you prefer install Fim first, please continue reading and skip the preceding
+ link.
+
+ As root:
+
+  mkdir -p /usr/src
+  cd /usr/src/
+  wget http://kernel.org/pub/linux/kernel/v2.6/linux-2.6.21.1.tar.bz2
+  tar xvjf linux-2.6.21.1.tar.bz2
+  ln -s linux-2.6.21.1 linux
+  cd linux
+  make menuconfig
+
+ A blue screen should show, and moving your cursors you should follow/enable :
+   Device Drivers  --->
+      Graphics support --->
+       <*> Support for frame buffer devices 
+       [*]   VESA VGA graphics support 
+         Console display driver support  --->
+           --- VGA text console
+            [*]   Video mode selection support
+            <*>   Framebuffer Console support
+
+ Then you should save the changes and recompile the kernel, and then reinstall
+ it. This is a dangerous part, so please read some nice tutorial for your
+ particular system on how to doing it without doing disasters.
+
+ I assume you learn how to recompile and reinstall your new kernel now..
+
+ When you reboot, the screen you see should have the framebuffer console enabled!
+
+ Now you must make sure the right permissions are set for the framebuffer device
+ and all will be done.
+
+ Fim needs read-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), 
+
+ If using udev, you can edit :
+ /etc/udev/permissions.d/50-udev.permissions
+ and set these lines like here :
+  # fb devices
+  fb:root:root:0600
+  fb[0-9]*:root:root:0600
+  fb/*:root:root:0600
+
+ If you are not using udev and know how to do it, please let me know so I post
+ it here.
+
+ Other sources of documentation for the framebuffer console could be the 
+ following man pages :
+
+ fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4)
+
+ Or the file /usr/src/linux/Documentation/fb/vesafb.txt
 
 ==============================================================================
 11.Credits 							*credits*
@@ -729,7 +895,7 @@ The formal grammar of the fim minilanguage will be included here soon.
  Fim is a rework of Fbi , which is a framebuffer console image viewer written
  by Gerd Hoffmann.
 
- Fim is an idea of dezperado, which can be contacted through the email address
+ Fim is an idea of dezperado, who can be contacted through the email address
  scrambled as dezperado _FOobAr_ autistici _Baz_ org.
 
  In the source archive, there are the doctags.c program and a slightly modified

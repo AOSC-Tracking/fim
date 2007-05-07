@@ -349,32 +349,44 @@ namespace fim
 	    redraw=1;
 	}
 
-	void Image::pan_up()
+	void Image::pan_up(int s)
 	{
+	    if(s<0)pan_down(-s);
+	    else{
 	    if(this->onTop())return;
-	    top -= steps;
-	    redraw=1;
+	    s=(s==0)?steps:s;
+	    top -= s;
+	    redraw=1;}
 	}
 
-	void Image::pan_down()
+	void Image::pan_down(int s)
 	{
+	    if(s<0)pan_up(-s);
+	    else{
 	    if(this->onBottom())return;
-	    top += steps;
-	    redraw=1;
+	    s=(s==0)?steps:s;
+	    top += s;
+	    redraw=1;}
 	}
 
-	void Image::pan_right()
+	void Image::pan_right(int s)
 	{
+	    if(s<0)pan_left(s);
+	    else{
 	    if(onRight())return;
-	    left+=steps;
-	    redraw=1;
+	    s=(s==0)?steps:s;
+	    left+=s;
+	    redraw=1;}
 	}
 
-	void Image::pan_left()
+	void Image::pan_left(int s)
 	{
+            if(s<0)pan_right(s);
+	    else{
 	    if(onLeft())return;
-	    left-=steps;
-	    redraw=1;
+	    s=(s==0)?steps:s;
+	    left-=s;
+	    redraw=1;}
 	}
 
 	int Image::onBottom()

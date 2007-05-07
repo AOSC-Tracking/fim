@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#define firstorzero(x) (x.size()?((int)(x[0])):0)
+
 #include "fim.h"
 namespace fim
 {
@@ -131,7 +133,7 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image)image->pan_up();
+			if(image)image->pan_up(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -151,7 +153,7 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image)image->pan_down();
+			if(image)image->pan_down(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -383,7 +385,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image)image->pan_right();
+			if(image)image->pan_right(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -403,7 +405,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image)image->pan_left();
+			if(image)image->pan_left(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif

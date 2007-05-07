@@ -106,6 +106,7 @@ while test "$opt" = "1"
 do
 	f="$1";
 	shift;
+	[[ "$f" =~ '^http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
 	[[ -z "$f" ]] && break ;
 	#while [[ ! -f "$f" ]] ; do shift ; [[ "$#" -lt 0 ]] && break 2 ; done
 ###############################################################################
@@ -182,7 +183,7 @@ done
 #fbiopts=
 #$FBI $fbiopts -P -- $DIR/* $DIR/*/* $DIR/*/*/* $DIR/*/*/*/* $DIR/*/*/*/*/* $DIR/*/*/*/*/*/* $DIR/*/*/*/*/*/*/*
 find $DIR/  | $FBI $fbiopts  -- -
-
+#cacaview $DIR/*
 #$FBI $fbiopts -P  `find $DIR -iname '*.png' -or -iname '*.jpg' -or -iname '*.gif' -or -iname '*.jpeg' -or -iname '*.tiff' -or -iname '*.bmp'`
 #$FBI $fbiopts -P -- $files
 #fbi $fbiopts -P $DIR/ps*.tiff

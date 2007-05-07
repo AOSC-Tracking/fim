@@ -120,6 +120,7 @@ Please read the FIM.TXT file and the fimrc template to discover nice FIM feature
 20070204	make stricter the policy of recording (only aliases and/or lines.complete the time behaviour
 20070210	eliminate the fresh variable from the config?
 20070216	eliminate image tearing by studying the framebuffer device
+	idea : repeat_last N ?!
 	TIPS
 20070302	use __FUNCTION__ : is not ANSI, but GCC
 20070303	realtime clock... -lrt cannot  be used with FIM

@@ -1,3 +1,54 @@
  $Id$
 
-This will be the home of installation instructions for FIM.
+To build Fim, type 'make' in its source directory, once expanded the archive.
+Then use 'make install' as root :
+
+# su 
+Password:
+# make install
+checking for libdir name ... lib
+install -d /usr/local/bin
+install -s fim /usr/local/bin
+install ./src/fbgs.sh /usr/local/bin/fimgs
+install -d /usr/local/share/man/man1
+install -m 644 doc/fim.man /usr/local/share/man/man1/fim.1
+install -d /usr/local/share/doc/fim
+install -m 644 doc/FIM.TXT /usr/local/share/doc/fim/
+install -m 644 doc/FIM.html /usr/local/share/doc/fim/
+
+ofr
+
+# su -c 'make install'
+Password:
+checking for libdir name ... lib
+install -d /usr/local/bin
+install -s fim /usr/local/bin
+...
+
+to install the fim executable, the fim wrapper script (fimgs), the fim man page,
+and documentation in the dedicated directories in /usr/local.
+
+If something goes wrong, please email me the output of 'make report', or the .tgz
+file resulting from the following statement execution:
+
+ ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
+
+Have fun!
+
+p.s.: if you do not even know if you have the framebuffer or it is correctly configured,
+there is a section of the doc/FIM.TXT file dedicated to this!
+
+Consider reading it!
+
+p.p.s.: consider that to build Fim, you need the following programs installed:
+
+ flex	(the lexer generator)
+ bison	(the parser generator)
+ gcc	(the C compiler)
+ g++	(the C++ compiler)
+
+and some libraries, like libjpg, libpng, libgif, libtiff.
+
+All of these programs are probably already on your system, and if not, your system will
+ probably give a way to install them (apt-get on debian, emerge on gentoo.. ).
+

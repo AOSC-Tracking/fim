@@ -59,10 +59,10 @@ class Image
 	Image(const char *fname_);
 	~Image();
 
-	void pan_up();
-	void pan_down();
-	void pan_right();
-	void pan_left();
+	void pan_up   (int s=0);
+	void pan_down (int s=0);
+	void pan_right(int s=0);
+	void pan_left (int s=0);
 	void top_align();
 	void bottom_align();
 	void reduce(float factor=1.322);	//FIX ME
