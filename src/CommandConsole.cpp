@@ -79,12 +79,53 @@ namespace fim
 		 *	FIX ME
 		 */
 		const char *kerr="bind : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
-		if(args.size()!=2)return "usage : bind KEY ACTION\n";
+		if(args.size()!=2){
+			fim::string binding_expanded;
+			binding_expanded+="bind '";
+			binding_expanded+=args[0];
+			binding_expanded+="' '";
+			binding_expanded+=bindings[key_bindings[args[0]]];
+			binding_expanded+="'\n";
+			if(args.size()==1)return binding_expanded;
+			if(args.size()==0)return getBindingsList();
+			//return "usage : bind KEY ACTION\n";
+		}
 		const char*key=(args[0].c_str());
 		if(!key)return kerr;
 		int l=strlen(key);
 		if(!l)return kerr;
+		if(args[1]=="") return unbind(args[0]);
 		return bind(key_bindings[args[0]],args[1]);
+	}
+
+	fim::string CommandConsole::getBindingsList()
+	{
+		/*
+		 * collates all registered action bindings together in a single string
+		 * */
+		fim::string bindings_expanded;
+		std::map<int,fim::string>::const_iterator bi;
+		for( bi=bindings.begin();bi!=bindings.end();++bi)
+		{
+			if(bi->second == "")continue;//FIX THIS : THIS SHOULD NOT OCCUR
+			bindings_expanded+="bind \"";
+			bindings_expanded+=inverse_key_bindings[((*bi).first)];
+			bindings_expanded+="\" \"";
+			bindings_expanded+=((*bi).second);
+			bindings_expanded+="\"\n";
+		}
+		return bindings_expanded;
+	}
+
+
+	fim::string CommandConsole::unbind(const fim::string& key)
+	{
+		/*
+		 * 	unbinds the action eventually bound to the first key name specified in args..
+		 *	IDEAS : multiple unbindings ?
+		 *	maybe you should made surjective the binding_keys mapping..
+		 */
+		return unbind(key_bindings[key]);
 	}
 
 	fim::string CommandConsole::unbind(const std::vector<fim::string>& args)
@@ -95,7 +136,7 @@ namespace fim
 		 *	maybe you should made surjective the binding_keys mapping..
 		 */
 		if(args.size()!=1)return "unbind : specify the key to unbind\n";
-		return unbind(key_bindings[args[0]]);
+		return unbind(args[0]);
 	}
 
 	fim::string CommandConsole::unbind(int c)

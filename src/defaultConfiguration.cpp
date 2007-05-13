@@ -213,4 +213,13 @@
 //		key_bindings[" "]=' ';
 //		key_bindings["."]='.';
 //		key_bindings[","]=',';
+//
+{
+		std::map<fim::string,int>::const_iterator ki;
+		for( ki=key_bindings.begin();ki!=key_bindings.end();++ki)
+		{
+			inverse_key_bindings[(((*ki).second))]=((*ki).first);
+			//inverse_key_bindings[10]="ciao";//((*ki).first);
+		}
+}
 #endif

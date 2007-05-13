@@ -81,12 +81,13 @@ http://www.autistici.org/dezperado/fim contains FIM documentation, too.
 
 You could be able to browse the Fim code on :
 	http://code.autistici.org/svn/fim/
-and get the latest source code tree issuing  	:
+and get the latest source code tree issuing :
+
+ 	svn export http://code.autistici.org/svn/fim
+
+or
 
 wget -r http://code.autistici.org/svn/fim/ && cd code.autistici.org/svn/fim 
-
-or (not available yet : permission denied as for now)
- 	svn co svn+ssh://dezperado@code.autistici.org/svn/fim
 
 The documentation is distributed with the software.
 
@@ -318,7 +319,7 @@ explanation for this otherwise exotic features of the program.
 ==============================================================================
 6.2. Scaling, Flipping				*commands-scaling*
 
-There are a number of ways for scaling the currently viewed image.
+There is a number of ways for scaling the currently viewed image.
 Here are some:
 
 'auto_width_scale
@@ -328,11 +329,12 @@ Here are some:
 These three commands scale the image respectively according to the screen
 width, or its heigth, or the minimum between these.
 
-'reduce'
-'magnify'
 
-Reduce or magnify the image size by multiplying the current scale by a predefined
-factor.
+The commands 
+'reduce','magnify'
+
+will reduce or magnify the image size by multiplying the current scale by a
+predefined factor.
 
 'flip'
 

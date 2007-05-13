@@ -45,6 +45,7 @@ class CommandConsole
 	 * mapping of key name to key code
 	 */
 	std::map<fim::string,int > key_bindings;	//symbol->code
+	std::map<int, fim::string> inverse_key_bindings;//code->symbol
 
 	/*
 	 * the image browser logic
@@ -173,7 +174,9 @@ class CommandConsole
 	void exit(int i);
 	fim::string unbind(int c);
 	fim::string bind(int c,fim::string binding);
+	fim::string unbind(const fim::string& key);
 	fim::string unbind(const std::vector<fim::string>& args);
+	fim::string getBindingsList();
 	fim::string dump_key_codes(const std::vector<fim::string>& args);
 	fim::string clear(const std::vector<fim::string>& args){status_screen(NULL,NULL);return "";}
 	public:
