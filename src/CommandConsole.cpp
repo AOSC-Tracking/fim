@@ -1068,6 +1068,15 @@ namespace fim
 		//variables[varname]=value;
 		return variables[varname].setFloat(value);
 	}
+
+	int CommandConsole::setVariable(const fim::string& varname,const char*value)
+	{
+		/*
+		 * an internal function to set a user variable
+		 */
+		fim::string s(value);
+		return (int)(variables[varname].setString(s));
+	}
 	
 	int CommandConsole::executeStdFileDescriptor(FILE* fd)
 	{
@@ -1173,6 +1182,15 @@ int CommandConsole::executeFile(const char *s)
 		return variables[varname].getType();
 	}
 
+	int CommandConsole::printVariable(const fim::string &varname)
+	{	
+		//if(getVariableType(varname))
+		//cout<<getIntVariable(varname);
+//		else
+			cout<<getStringVariable(varname);
+		return 0;
+	}
+
 	int CommandConsole::getIntVariable(const fim::string &varname)
 	{
 //		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
@@ -1186,6 +1204,11 @@ int CommandConsole::executeFile(const char *s)
 //		cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
 //		cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
 		return variables[varname].getFloat();
+	}
+
+	fim::string CommandConsole::getStringVariable(const fim::string &varname)
+	{
+		return variables[varname].getString();
 	}
 
 	int CommandConsole::drawOutput()

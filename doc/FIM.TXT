@@ -322,7 +322,7 @@ explanation for this otherwise exotic features of the program.
 There is a number of ways for scaling the currently viewed image.
 Here are some:
 
-'auto_width_scale
+'auto_width_scale'
 'auto_height_scale'
 'auto_scale'
 
@@ -559,7 +559,7 @@ as soon as this is necessary.
  'filelistlen'	: the current file list length
  'fileindex'	: the current image file index
 
- 'filename'	: the current image file name (NOT YET IMPLEMENTED)
+ 'filename'	: the current image file name
 
  'random'	: a random number, between 0 and RAND_MAX (see "man 3 rand").
  		  setting this variable is useless, altough possible: it is 

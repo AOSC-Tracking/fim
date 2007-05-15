@@ -1,6 +1,11 @@
 	$Id$
 -------------------------------------------------------------------------------
 	Current development directions
+20070514	There is a growing need to document the target audience of this
+	software and its purposes.
+	Then:
+	- integrate with external libraries for image analysis (like ANIMAL)
+	- integrate with some scripting language (perl, python)
 20070417	It has come the time to decide the future developments of Fim.
 	A lot of doubts arose. Here they are:
 	- integration of the command line completion with the lexer/parser, to

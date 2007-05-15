@@ -124,10 +124,13 @@ class CommandConsole
 	fim::string execute(fim::string cmd, std::vector<fim::string> args);
 	~CommandConsole();
 	float getFloatVariable(const fim::string &varname);
+	fim::string getStringVariable(const fim::string &varname);
 	int getVariableType(const fim::string &varname);
 	int  getIntVariable(const fim::string & varname);
+	int  printVariable(const fim::string & varname);
 	int  setVariable(const fim::string& varname,int value);
 	float setVariable(const fim::string& varname,float value);
+	int setVariable(const fim::string& varname,const char*value);
 	bool push(const fim::string nf){return browser.push(nf);}
 	int executeStdFileDescriptor(FILE *fd);
 #ifndef FIM_NOSCRIPTING

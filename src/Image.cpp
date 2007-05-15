@@ -234,6 +234,7 @@ namespace fim
 			 *	this is a 'patch' to do a first setting of top,left,etc
 			 *	variables prior to first visualization without displaying..
 			 */
+			cc.setVariable("filename",fname_);
 			only_first_rescale=1;
 			//this->display();
 			//if(cc.isInScript()==0)this->auto_scale();

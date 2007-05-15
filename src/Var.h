@@ -16,16 +16,24 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
+/*
+ * This class is horrible. Maybe it has come the time of taking advantage of using really C++
+ * and using classes hierarchies.
+ */
 #ifndef VAR_FBVI_H
 #define VAR_FBVI_H
 
 #include "fim.h"
+#include "string.h"
 namespace fim
 {
 class Var
 {
 	union{float f;
-	int i;};
+	int i;
+	};
+	fim::string s;
 	int type;
 	public:
 	Var(const Var &v)
@@ -39,17 +47,32 @@ class Var
 		type=type_;
 		if(type=='i')i=atoi(s);
 		else if(type=='f')f=atof(s);
+		else if(type=='s')this->s=s;
 		else i=0;
 	}
 /*	void operator= (int   i){if(type=='i')this->i=i;}
 	void operator= (float f){if(type=='f')this->f=f;}*/
 	void operator= (int   i){type='i';this->i=i;}
 	void operator= (float f){setFloat(f);}
+	void operator= (fim::string &s){setString(s);}
 	float setFloat(float f){type='f';return this->f=f;}
 	int   setInt(int i){type='i';return this->i=i;}
+	fim::string setString(fim::string &s){type='s';this->s=s;return this->s;}
 	int getType()const{return type;}
 	int getInt()const{return(type=='i')?i:0;}
 	float getFloat()const{return(type=='f')?f:0.0f;}
+	fim::string getString()
+	{
+		char buf[16];
+		if(type=='s')return this->s;
+		else
+		{
+			if(type=='i')sprintf(buf,"%d",i);
+			else if(type=='f')sprintf(buf,"%f",f);
+			return buf;
+		}
+		
+	}
 	operator int()const{return getInt();}
 	operator float()const{return getFloat();}
 	bool operator==(const Var &v)const

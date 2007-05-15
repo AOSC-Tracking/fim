@@ -48,10 +48,17 @@ void yyerror(char *s);
 //%nonassoc FI
 //%nonassoc ELSE
 //%left '$'
-%left GE LE EQ NE '>' '<' 'a' 'x'
+//lower priority
+%left ';'
+%nonassoc '}' '{'
+%left GE LE EQ NE '>' '<'
+%left '.'
+%nonassoc '(' ')'
+%left '%'
 %left '+' '-'
 %left '*' '/'
 %nonassoc UMINUS
+//higher priority
 %type <nPtr> stmt expr stmt_list stmt_block args arg
 
 %%
@@ -87,7 +94,7 @@ stmt:
 	| INTEGER'%'{{$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}}
 	| '-' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
 	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
-	| "goto" expr     { $$ = opr('x',2,scon(dupstr("goto")),$2); } // TODO
+//	| "goto" expr     { $$ = opr('x',2,scon(dupstr("goto")),$2); } // TODO
 	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
 //	| '$'             { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
 //	| '^'             { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
@@ -96,6 +103,7 @@ stmt:
 ///	CRASHY !! | IDENTIFIER { $$ = opr(PRINT, 1, scon($1)); $$->type=typeId; printf("invoked command!\n"); }
 	| IDENTIFIER '=' expr  { $$ = opr('=', 2, vscon($1,'i'), $3); }
 	| IDENTIFIER '=' FLOAT { $$ = opr('=', 2, vscon($1,'f'), fcon($3)); }
+	| IDENTIFIER '=' STRING{ $$ = opr('=', 2, vscon($1,'s'), scon($3)); }
 //	| expr { $$ = opr(PRINT, 1, $1); }
 	| '!' IDENTIFIER args { $$ = opr('p',2,scon($2),$3); }
 	;
@@ -105,12 +113,17 @@ args:
 	| arg args { $$ = opr('a', 2, $1, $2); }
 //	| expr { $$ = opr('a',1,  $1 ); }
 //	| args  { $$ = opr('a', 2, scon($1), $2); }
-	//| IDENTIFIER { $$ = opr('a', 1, vscon($1) ); }
+	//| IDENTIFIER { $$ = opr('a', 1, vscon($1) ); } MI
 	//| args IDENTIFIER { $$ = opr('a', 2, $1, $2); }
 	;
 arg:
 	STRING   { $$ = opr('a', 1, scon($1)); }
-	| '(' expr ')'  { $$ = opr('a',1,  $2 ); }
+//	| INTEGER  { $$ = opr('a', 1, scon($1)); }
+//	| IDENTIFIER { $$ = vscon($1,'v');  }
+	| arg '.' arg { $$ = opr('.', 2, $1, $3); }
+//	| arg '.' arg { $$ = opr('a',1,opr('.', 2, $1, $3)); }
+//	| '(' expr ')'  { $$ = opr('a',1,  $2 ); }
+	| expr { $$ = opr('a',1,  $1 ); }
 	;
 
 stmt_block:
@@ -134,7 +147,6 @@ stmt_list:
 expr:
 	INTEGER { $$ = con($1);}
 	| IDENTIFIER { $$ = vscon($1,'v');  }
-	| '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
 	| expr '%' expr { $$ = opr('%', 2, $1, $3); }
 	| expr '+' expr { $$ = opr('+', 2, $1, $3); }
 	| expr '-' expr { $$ = opr('-', 2, $1, $3); }
@@ -146,8 +158,10 @@ expr:
 	| expr LE expr { $$ = opr(LE, 2, $1, $3); }
 	| expr NE expr { $$ = opr(NE, 2, $1, $3); }
 	| expr EQ expr { $$ = opr(EQ, 2, $1, $3); }
+//	| '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } //conflicts
+	| '-' expr %prec UMINUS { $$ = opr('-', 2, con(0), $2); }
 	| '(' expr ')' { $$ = $2; }
-	| '`' IDENTIFIER '`' { $$ = opr('x',1,scon($2)); }
+//	| '`' IDENTIFIER '`' { $$ = opr('x',1,scon($2)); }
 ;
 
 %%

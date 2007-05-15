@@ -28,6 +28,8 @@
 /*
  *	This code implements the interpreter of the script language
  *	It is triggered by the flex and bison files.
+ *
+ *	Questo codice e' uno scorfano a vedersi!
  */
 std::ostream & operator<<(std::ostream &os,const nodeType &p)
 {
@@ -35,6 +37,91 @@ std::ostream & operator<<(std::ostream &os,const nodeType &p)
 	return os;
 }
 
+int ex(nodeType *p);
+
+/*
+ *	this function evaluates a single 'arg' entry
+ */
+fim::string cvar(nodeType *p)
+{
+	nodeType *np=p;
+  	fim::string arg;
+/*	if(np->opr.oper=='a' )
+	{
+		if(np->type == stringCon )
+		{
+			return (np->scon.s);
+		}
+	}*/
+	int i;
+	if(np->type == typeOpr && np->opr.oper=='.' )
+	for(i=0;i<p->opr.nops;++i)
+	{
+		np=(p->opr.op[i]);
+		arg+=cvar(np);
+	}
+	else
+	if(np->type == typeOpr && np->opr.oper=='a' )
+	for(i=0;i<p->opr.nops;++i)
+	{
+		np=(p->opr.op[i]);
+		if(np->type == stringCon )arg=(np->scon.s);
+		if(np->type == typeOpr   )arg=ex(np);
+	}
+	else
+	if(np->type == vId )
+	{
+		arg=cc.getStringVariable(np->scon.s);
+	}
+	else
+	{
+		arg=ex(np);
+	}
+	return arg;
+}
+
+/*
+ *	this function evaluates a whole chain of arg entries
+ */
+std::vector<fim::string> var(nodeType *p)
+{
+	nodeType *np=p;
+  	std::vector<fim::string> args;
+	int i;
+	if(p->type == typeOpr && np->opr.oper=='a' )
+	for(i=0;i<p->opr.nops;++i)
+	{
+		np=(p->opr.op[i]);
+		if(np->type == stringCon )
+		{
+			args.push_back(np->scon.s);
+		}
+		else
+		if(np->type == typeOpr && np->opr.oper=='a' )
+		{
+		  	std::vector<fim::string> vargs=var(np);
+			for(unsigned int j=0;j<vargs.size();++j) args.push_back(vargs[j]);
+		}
+		else
+		args.push_back(cvar(np));
+	}
+	else
+	if(p->type == typeOpr && np->opr.oper=='.' )
+	for(i=0;i<p->opr.nops;++i)
+	{
+		np=(p->opr.op[i]);
+		if(np->type == typeOpr && np->opr.oper=='.' )
+		{
+		  	std::vector<fim::string> vargs=var(np);
+			for(unsigned int j=0;j<vargs.size();++j) args.push_back(vargs[j]);
+		}
+	}
+	else
+	{
+		args.push_back(cvar(np));
+	}
+	return args;
+}
 
 using namespace fim;
 extern CommandConsole cc;
@@ -83,7 +170,8 @@ int ex(nodeType *p)
 		            }
 			    else 
 		            {
-			    	cout<<p->opr.op[0]->scon.s<<"\n";//printf("result : %s\n", p->opr.op[0]->scon.s);
+		                cc.printVariable(p->opr.op[0]->scon.s);
+			    	//cout<<p->opr.op[0]->scon.s<<"\n";//printf("result : %s\n", p->opr.op[0]->scon.s);
 			    }
 			    return 0;
 //		case PRINT: printf("result : %d\n", ex(p->opr.op[0])); return 0;
@@ -118,59 +206,52 @@ int ex(nodeType *p)
 			  nodeType *dp;
 //			  std::cout << "args..\n";
                           np=(np->opr.op[1]); //the right subtree first node
-			  while( np &&    np->opr.nops >=1 && np->opr.oper=='a')
-//			  while(  ((np=(np->opr.op[1])) != NULL ) && np->opr.nops >=1 && np->opr.oper=='a')
+//			  while( np &&    np->opr.nops >=1 && np->opr.oper=='a')
+			  while( np &&    np->opr.nops >=1 )
+			  if( np->opr.oper=='a' )
 		  	  {
+				  args=var(np);
+//				  cout << var(np) << "\n";
+				  break;
+				  return 0;
 				  /*
 				   * we descend the right subtree  (the subtree of arguments)
 				   * (thus we waste the benefit of the multi argument operator!)
 				   */
-//				  std::cout << *np << "\n";
-//				  std::cout << "args '"<<  np->opr.op[0]->scon.s<<  "'\n";
-//				  std::cout << "arg..\n";
-//				  if((dp->type)==typeOpr || (dp->type)==intCon) args.push_back(ex(dp));
-//				  if((dp->type)==stringCon) args.push_back(dp->scon.s);//}
 				  dp=np->opr.op[0];	//we descend 1 step in the left subtree (under arg)
 				  dp=dp->opr.op[0];
                           	  if(np->opr.nops < 2) 
 				  {
-					  np=NULL;
-					  //std::cout << dp->opr.oper<< " bom..\n";
-//					  cout << "nops==1  ";
+					np=NULL;
 			          }
 				  else
 				  {
 					np=(np->opr.op[1]);
-//				  	if((dp->type)==stringCon) args.push_back(dp->scon.s);//}
 			          }
                    		  if( ((dp->opr.op[0])) && (dp->type)==stringCon)//|| (dp->type)==intCon) 
 				  {	
-					  args.push_back(dp->scon.s);
-//					  cout <<  dp->scon.s<< " is arg!!.  ";
+					  //probably dead code
 				  }
+                   		  if( ((dp->opr.op[0])) && (dp->type)==typeOpr)//|| (dp->type)==intCon) 
+				  {	
+					  //probably dead code
+				  }
+				  else if( ((dp->opr.oper=='.')))
+				  {
+					  //probably dead code
+			          }
 				  else;
-/*				  if( ((dp->opr.op[0])) && (dp->type)==intCon)//|| (dp->type)==intCon) 
-				  {
-					  args.push_back(dp->con.value);
-					  //std::cout <<   " addrgh!!.\n";
-				  }
-			          else
-				  if((dp->type)==typeOpr && ((dp->opr.op[0])) )//|| (dp->type)==intCon) 
-				  {
-					  args.push_back(ex(dp));
-//				          std::cout << dp->con.value<<   " argh!!.\n";
-			          }*/
-//			          else std::cout << " uff.\n";
-//				  cout << "cycled\n";
 				  assert(dp);
 			  }
-//			   std::cout << ".\n";
-//			   cout << "gathered " << (int)(0+args.size())<< " parameters\n";
+		  	  else if( np->opr.oper=='.' )
+			  {
+				  //probably dead code
+			  }
 		  }
 		  {
-			  fim::string result(cc.execute(fim::string::string(p->opr.op[0]->scon.s),args));//.c_str());
-			  cout << result;
-		   return atoi(result.c_str());
+			fim::string result(cc.execute(fim::string::string(p->opr.op[0]->scon.s),args));//.c_str());
+			cout << result;
+			return atoi(result.c_str());
 		  }
 	}
 	case 'a':
@@ -190,6 +271,21 @@ int ex(nodeType *p)
 				cc.setVariable(s,fValue);
 //				if(cc.setVariable(s,fValue)!=fValue)exit(0);
 				return (int)fValue;
+			}//'i'
+			else if(typeHint=='s')
+			{
+			    if(p->opr.op[1]->type!=stringCon)
+			    {
+				    //error ?
+				    //cout << "error ? \n";
+		            }
+			    else 
+		            {
+				// got a string!
+	       		        cc.setVariable(s,p->opr.op[0]->scon.s);
+		                return cc.getIntVariable(s);
+			    }
+			    return -1;
 			}//'i'
 			else
 			{
