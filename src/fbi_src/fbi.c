@@ -1079,6 +1079,7 @@ svga_display_image(struct ida_image *img, int xoff, int yoff, int mirror, int fl
 		    clear_line(fb_var.bits_per_pixel, y, cxo,fb_mem+fb_fix.line_length*y+bytes*(xo+dwidth));
 	    }
     }
+    //for ( y = 0; y < fb_var.yres;y+=100)fb_line(0, fb_var.xres, y, y);
 
     /* go ! */
     //flip patch

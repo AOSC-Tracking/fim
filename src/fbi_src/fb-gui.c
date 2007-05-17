@@ -68,7 +68,8 @@ static void fb_setpixel(int x, int y, unsigned int color)
     fs_setpixel(ptr, color);
 }
 
-static void fb_line(int x1, int x2, int y1,int y2)
+//static void fb_line(int x1, int x2, int y1,int y2)
+void fb_line(int x1, int x2, int y1,int y2)
 {
     int x,y,h;
     float inc;

@@ -42,7 +42,7 @@ include mk/Variables.mk
  DEFINES  += -D FIM_REMOVE_FAILED	# a file which failed loading is removed from the list
  DEFINES  += -D FIM_AUTOSKIP_FAILED	# if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
  DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
- DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
+#DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
 #DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
 #DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
  FIM_VERSION:= 0.1

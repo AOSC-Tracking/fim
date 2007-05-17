@@ -85,6 +85,7 @@ STRINGC_DQ {STRINGC}|\'
 
 
 %%
+"!" return SYSTEM;
 ">=" return GE;
 "<=" return LE;
 "==" return EQ;
@@ -92,7 +93,7 @@ STRINGC_DQ {STRINGC}|\'
 "while" return WHILE;
 "if" return IF;
 "else" return ELSE;
-"print" return PRINT;
+	/*"print" return PRINT;*/
 "do" return DO;
 
 

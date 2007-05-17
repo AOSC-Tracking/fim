@@ -54,28 +54,37 @@ fim::string cvar(nodeType *p)
 		}
 	}*/
 	int i;
-	if(np->type == typeOpr && np->opr.oper=='.' )
+	if(p->type == typeOpr && p->opr.oper=='.' )
 	for(i=0;i<p->opr.nops;++i)
 	{
 		np=(p->opr.op[i]);
 		arg+=cvar(np);
 	}
 	else
-	if(np->type == typeOpr && np->opr.oper=='a' )
+	if(p->type == typeOpr && p->opr.oper=='a' )
 	for(i=0;i<p->opr.nops;++i)
 	{
+		//warning : only 1 should be allowed here..
 		np=(p->opr.op[i]);
-		if(np->type == stringCon )arg=(np->scon.s);
-		if(np->type == typeOpr   )arg=ex(np);
+//		if(np->type == stringCon )arg=(np->scon.s);
+//		if(np->type == typeOpr   )
+//		{
+			arg=cvar(np);
+//		}
+//		if(np->type == typeOpr   ){cout<<"A";arg=ex(np);}
+//		if(np->type == intCon )arg=ex(np);
 	}
 	else
-	if(np->type == vId )
+	if(p->type == stringCon )arg=(p->scon.s);
+	else
+	if(p->type == vId )
 	{
-		arg=cc.getStringVariable(np->scon.s);
+		arg=cc.getStringVariable(p->scon.s);
 	}
+	else if(p->type == intCon )arg=ex(p);
 	else
 	{
-		arg=ex(np);
+		arg=ex(p);
 	}
 	return arg;
 }
@@ -146,8 +155,9 @@ int ex(nodeType *p)
 			//printf("key : %s\n",p->scon.s);
 			//beware the next conversion..
 //			cout<<"f("<<p->scon.s<< ")="<< cc.getFloatVariable(p->scon.s) ;
-			if(cc.getVariableType(p->scon.s)=='f')return (int)cc.getFloatVariable(p->scon.s);
-			else return (int)cc.getIntVariable(p->scon.s);
+		//	if(cc.getVariableType(p->scon.s)=='f')return (int)cc.getFloatVariable(p->scon.s);
+		//	else return (int)cc.getIntVariable(p->scon.s);
+			return (int)cc.getStringVariable(p->scon.s);
 /*			if(p->typeHint=='f')
 			{
 				cout << "vId node f\n";
@@ -162,7 +172,7 @@ int ex(nodeType *p)
 		case WHILE: while(ex(p->opr.op[0]) && (cc.catchLoopBreakingCommand(0)==0)) {ex(p->opr.op[1]);} return 0;
 		case IF: if (ex(p->opr.op[0])) ex(p->opr.op[1]);
 		else if (p->opr.nops > 2) ex(p->opr.op[2]); return 0;
-		case PRINT: if(p->opr.op[0]->type!=stringCon)
+/*		case PRINT: if(p->opr.op[0]->type!=stringCon)
 			    {
 				//cout << "getting f " << cc.getFloatVariable(p->scon.s) << "\n";
 				//cout << "getting i " << cc.getIntVariable  (p->scon.s) << "\n";
@@ -174,7 +184,7 @@ int ex(nodeType *p)
 			    	//cout<<p->opr.op[0]->scon.s<<"\n";//printf("result : %s\n", p->opr.op[0]->scon.s);
 			    }
 			    return 0;
-//		case PRINT: printf("result : %d\n", ex(p->opr.op[0])); return 0;
+//		case PRINT: printf("result : %d\n", ex(p->opr.op[0])); return 0;*/
 		case ';': ex(p->opr.op[0]); return ex(p->opr.op[1]);
 		case 'r': 
 		  if( p->opr.nops == 2 )
@@ -204,14 +214,12 @@ int ex(nodeType *p)
 	          {
 			  nodeType *np=p;	
 			  nodeType *dp;
-//			  std::cout << "args..\n";
                           np=(np->opr.op[1]); //the right subtree first node
 //			  while( np &&    np->opr.nops >=1 && np->opr.oper=='a')
 			  while( np &&    np->opr.nops >=1 )
 			  if( np->opr.oper=='a' )
 		  	  {
 				  args=var(np);
-//				  cout << var(np) << "\n";
 				  break;
 				  return 0;
 				  /*
@@ -267,17 +275,14 @@ int ex(nodeType *p)
 			{
 				fValue=p->opr.op[1]->fid.f;
 				if(fValue==0.0f)exit(0);
-				//cout << "setting " << fValue << "\n"; 	//this works
 				cc.setVariable(s,fValue);
-//				if(cc.setVariable(s,fValue)!=fValue)exit(0);
 				return (int)fValue;
 			}//'i'
 			else if(typeHint=='s')
 			{
 			    if(p->opr.op[1]->type!=stringCon)
 			    {
-				    //error ?
-				    //cout << "error ? \n";
+				//this shouldn't happen
 		            }
 			    else 
 		            {
@@ -287,10 +292,21 @@ int ex(nodeType *p)
 			    }
 			    return -1;
 			}//'i'
-			else
+			else if(typeHint=='i')
 			{
 				iValue=ex(p->opr.op[1]);
 				cc.setVariable(s,iValue);
+				return iValue;
+			}
+			else if(typeHint=='v')
+			{
+				//this shouldn't happen
+			}
+			else if(typeHint=='a')
+			{
+				fim::string r=cvar(p->opr.op[1]);
+				iValue=r;
+				cc.setVariable(s,r.c_str());
 				return iValue;
 			}
 	case UMINUS: return -ex(p->opr.op[0]); //unary minus

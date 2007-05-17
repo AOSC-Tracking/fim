@@ -59,8 +59,17 @@ class Var
 	int   setInt(int i){type='i';return this->i=i;}
 	fim::string setString(fim::string &s){type='s';this->s=s;return this->s;}
 	int getType()const{return type;}
-	int getInt()const{return(type=='i')?i:0;}
-	float getFloat()const{return(type=='f')?f:0.0f;}
+	int getInt()const{return(type=='i')?i:
+		(type=='f'?((int)(f)):
+		 (type=='s'?(atoi(s.c_str())):0)
+		 )
+		;}
+	float getFloat()const{return(type=='f')?f:
+		(type=='i'?
+		 	((int)f):
+			((type=='s')?atof(s.c_str()):0.0f)
+			)
+			;}
 	fim::string getString()
 	{
 		char buf[16];

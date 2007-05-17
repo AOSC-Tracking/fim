@@ -529,11 +529,27 @@ and marking nice images while viewing them (pressing the default <C-m> key for).
 Once out of fim, the nicepictures.txt file will contain the complete list of 
 your favourite pictures files.
 
+Another nice trick is the following :
+$ fim `fim *`
+this will first display some images; when the first fim instance will terminate,
+a second will start, displaying only chosen images.
+
+Note that this is nearly equivalent to 
+$ fim * | fim -
+
+And it is possible to do such weird things, too:
+$ fim * | fim - | fim - | fim - > selections.txt
+
 The 'sleep' command freezes the program execution for a user defined number of
 seconds, default 1.
 
 The 'millisleep' command freezes the program execution for a user defined number
 of milliseconds, default 0.
+
+'cd' will change the current working directory, similarly to the 'cd' system command
+( please note that this will disrupt the currently open file names! )
+
+'pwd' will display the current wirking directory, similarly to the 'pwd' system command
 
 NOTE: in this stage of development of fim, string manipulation is not yet
 supported, so it is not possible to execute external commands involving internal

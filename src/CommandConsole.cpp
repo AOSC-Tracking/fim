@@ -312,7 +312,7 @@ namespace fim
 #endif
 		addCommand(new Command(fim::string("echo"  ),fim::string("echoes its arguments"),this,&CommandConsole::echo));
 		//addCommand(new Command(fim::string("foo"   ),fim::string("a dummy command"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string("print"   ),fim::string("displays the value of a variable"),this,&CommandConsole::foo));
+		//addCommand(new Command(fim::string("print"   ),fim::string("displays the value of a variable"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("if"    ),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("else"    ),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("while" ),fim::string("while(expression){action;}"),this,&CommandConsole::foo));
@@ -329,6 +329,8 @@ namespace fim
 #ifndef FIM_NO_SYSTEM
 		addCommand(new Command(fim::string("system"  ),fim::string("system() invocation"),this,&CommandConsole::system));
 #endif
+		addCommand(new Command(fim::string("cd"  ),fim::string("chdir() invocation"),this,&CommandConsole::cd));
+		addCommand(new Command(fim::string("pwd"  ),fim::string("getcwdgetcwd() invocation"),this,&CommandConsole::pwd));
 		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string("start_recording"  ),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));
@@ -1078,6 +1080,20 @@ namespace fim
 		return (int)(variables[varname].setString(s));
 	}
 	
+	fim::string CommandConsole::readStdFileDescriptor(FILE* fd)
+	{
+		/*
+		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
+		 */
+		int r;
+		char buf[4096*32];//FIXME
+		if(fd==NULL)return -1;
+		r=fread(buf,1,sizeof(buf)-1,fd);if(r!=-1)buf[r]='\0';
+		if(r==-1)return -1;
+		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
+		return fim::string(buf);
+	}
+
 	int CommandConsole::executeStdFileDescriptor(FILE* fd)
 	{
 		/*
@@ -1195,7 +1211,7 @@ int CommandConsole::executeFile(const char *s)
 	{
 //		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
 		if(strcmp(varname.c_str(),"random"))
-		return variables[varname];
+		return variables[varname].getInt();
 		else return fim_rand();
 	}
 
@@ -1502,13 +1518,53 @@ int CommandConsole::executeFile(const char *s)
 		return "";
 	}
 
+	fim::string CommandConsole::cd(const std::vector<fim::string>& args)
+	{
+		static fim::string oldpwd=pwd(std::vector<fim::string>());
+		for(unsigned int i=0;i<args.size();++i)
+		{
+			fim::string dir=args[i];
+			if(dir=="-")dir=oldpwd;
+			oldpwd=pwd(std::vector<fim::string>());
+			chdir(dir.c_str());
+		}
+		return "";
+	}
+
+	fim::string CommandConsole::pwd(const std::vector<fim::string>& args)
+	{
+		fim::string cwd="";
+#ifdef _GNU_SOURCE
+		char *p=get_current_dir_name();
+		if(p)cwd=p;
+		else cwd="";
+		if(p)free(p);
+#endif
+		return cwd;
+	}
+
 #ifndef FIM_NO_SYSTEM
 	fim::string CommandConsole::system(const std::vector<fim::string>& args)
 	{
 		for(unsigned int i=0;i<args.size();++i)
 		{
+			FILE* fd=popen(args[i].c_str(),"r");
+			/*
+			 * example:
+			 *
+			 * int fd=(int)popen("/bin/echo quit","r");
+			 */
+			//cout << "popening " << args[i].c_str() <<", "<<(int)fd<<  "\n";
+			cout << readStdFileDescriptor(fd);
+			executeStdFileDescriptor(fd);
+			pclose(fd);
+		}
+#if 0
+		for(unsigned int i=0;i<args.size();++i)
+		{
 			std::system(args[i].c_str());
 		}
+#endif
 		return "";
 	}
 #endif
