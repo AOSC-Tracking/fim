@@ -330,7 +330,7 @@ namespace fim
 		addCommand(new Command(fim::string("system"  ),fim::string("system() invocation"),this,&CommandConsole::system));
 #endif
 		addCommand(new Command(fim::string("cd"  ),fim::string("chdir() invocation"),this,&CommandConsole::cd));
-		addCommand(new Command(fim::string("pwd"  ),fim::string("getcwdgetcwd() invocation"),this,&CommandConsole::pwd));
+		addCommand(new Command(fim::string("pwd"  ),fim::string("getcwd() invocation"),this,&CommandConsole::pwd));
 		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string("start_recording"  ),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));

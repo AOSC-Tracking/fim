@@ -11,6 +11,10 @@ FIM aims to be a highly customizable and scriptable image
 It is based on the Fbi image viewer, by Gerd Hoffmann, and works in the 
  framebuffer console (so, it is not an X progam! ).
 
+FIM is free software, and it ships under the GPL software license, complete with
+documentation, in form of a doc/FIM.TXT documentation file, a man page, lots
+of comments in the code, and some text files.
+
 ================================================================================
 			Features
 ================================================================================
@@ -24,7 +28,7 @@ Implemented features:
  - command line tab-based command autocompletion (thanks to the readline)
  - command line command autocompletion (optional)
  - key-action binding, with SHIFT and CONTROL key combinations
- - simple if-while scriptability, with integer variables and arithmetic evaluation
+ - simple if-while scriptability, with integer,float,and string variables and arithmetic evaluation
  - command aliases support (macros)
  - event autocommands (in Vim's 'autocmd' style)
  - regular expressions to enrich autocommand behaviour
@@ -40,17 +44,14 @@ Implemented features:
    list, recording/replaying of sessions, repeat last action )
  - script file execution
  - system call
+ - pipe with some input program
  - these features could be enabled or disabled at compile time editing the Makefile
 
 Yet unimplemented features :
 
  - decent (auto)documentation, in gdb style!
- - better argument passing to commands (with internal environment variables)
- - regular expressions to restrict the image selection
- - mutt-like hooks (vs autocommands)
  - mutt-like patterns ~p, ~r ...
  - advanced pattern selection of images on other criterias ?
- - exec() and pipe()  support (and the dangers it brings...)
 
 ================================================================================
 			Compilation Requirements
@@ -72,7 +73,7 @@ Yet unimplemented features :
  - The framebuffer ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
    ( and usually found in "/usr/src/linux/Documentation/fb" in the kernel source
     code tree ).
- - library files for : libpng, libjpeg, libungif, libtiff
+ - library files for : libpng, libjpeg, libungif, libtiff, libreadline
 
 ================================================================================
 			Technical intro

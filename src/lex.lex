@@ -85,11 +85,14 @@ STRINGC_DQ {STRINGC}|\'
 
 
 %%
-"!" return SYSTEM;
+"|" return SYSTEM;
+"!"  return NOT;
 ">=" return GE;
 "<=" return LE;
 "==" return EQ;
 "!=" return NE;
+"&&" return AND;
+"||" return OR;
 "while" return WHILE;
 "if" return IF;
 "else" return ELSE;

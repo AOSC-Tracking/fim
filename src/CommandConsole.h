@@ -133,7 +133,7 @@ class CommandConsole
 	int setVariable(const fim::string& varname,const char*value);
 	bool push(const fim::string nf){return browser.push(nf);}
 	int executeStdFileDescriptor(FILE *fd);
-	fim::string CommandConsole::readStdFileDescriptor(FILE* fd);
+	fim::string readStdFileDescriptor(FILE* fd);
 #ifndef FIM_NOSCRIPTING
 	int  executeFile(const char *s);
 	fim::string executeFile(const std::vector<fim::string> &args);
@@ -153,8 +153,8 @@ class CommandConsole
 	fim::string alias(const fim::string& a,const fim::string& c);
 	fim::string aliasRecall(fim::string cmd);
 	fim::string system(const std::vector<fim::string>& args);
-	fim::string CommandConsole::cd(const std::vector<fim::string>& args);
-	fim::string CommandConsole::pwd(const std::vector<fim::string>& args);
+	fim::string cd(const std::vector<fim::string>& args);
+	fim::string pwd(const std::vector<fim::string>& args);
 	fim::string sys_popen(const std::vector<fim::string>& args);
 	fim::string set_interactive_mode(const std::vector<fim::string>& args);
 	fim::string autocmd(const std::vector<fim::string>& args);

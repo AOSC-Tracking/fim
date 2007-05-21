@@ -1,6 +1,18 @@
  $Id$
 
+Summary:
+
+====== INSTALLATION
+====== INSTALLATION BUG REPORTING
+====== FRAMEBUFFER PROBLEMS
+====== DEPENDENCIES
+====== DEPENDENCIES : example on Gentoo
+====== TODO
+
+====== INSTALLATION
+
 To build Fim, type 'make' in its source directory, once expanded the archive.
+
 Then use 'make install' as root :
 
 # su 
@@ -16,7 +28,7 @@ install -d /usr/local/share/doc/fim
 install -m 644 doc/FIM.TXT /usr/local/share/doc/fim/
 install -m 644 doc/FIM.html /usr/local/share/doc/fim/
 
-ofr
+or
 
 # su -c 'make install'
 Password:
@@ -28,6 +40,8 @@ install -s fim /usr/local/bin
 to install the fim executable, the fim wrapper script (fimgs), the fim man page,
 and documentation in the dedicated directories in /usr/local.
 
+====== INSTALLATION BUG REPORTING
+
 If something goes wrong, please email me the output of 'make report', or the .tgz
 file resulting from the following statement execution:
 
@@ -35,10 +49,15 @@ file resulting from the following statement execution:
 
 Have fun!
 
+====== FRAMEBUFFER PROBLEMS
+
 p.s.: if you do not even know if you have the framebuffer or it is correctly configured,
-there is a section of the doc/FIM.TXT file dedicated to this!
+there is a section of the doc/FIM.TXT file dedicated to this, and the same information in
+the man page.
 
 Consider reading it!
+
+====== DEPENDENCIES
 
 p.p.s.: consider that to build Fim, you need the following programs installed:
 
@@ -47,8 +66,24 @@ p.p.s.: consider that to build Fim, you need the following programs installed:
  gcc	(the C compiler)
  g++	(the C++ compiler)
 
-and some libraries, like libjpg, libpng, libgif, libtiff.
+and some libraries, like libjpg, libpng, libgif, libtiff, libreadline.
 
 All of these programs are probably already on your system, and if not, your system will
  probably give a way to install them (apt-get on debian, emerge on gentoo.. ).
 
+====== DEPENDENCIES : example on Gentoo
+
+On a Gentoo system, you should resolve dependencies running as root:
+
+# emerge media-libs/libpng media-libs/jpeg media-libs/tiff media-libs/giflib sys-libs/readline
+
+And install the essential developer tools flex and bison:
+
+# emerge sys-devel/flex sys-devel/bison
+
+====== TODO
+
+A gift in form of a well written gentoo/debian/other distribution dependency file
+would be much appreciated.
+
+Suggestions are welcome, too!

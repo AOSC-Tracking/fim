@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
-*FIM.TXT*	For Fim version 0.1 (alpha).
+*FIM.TXT*	For Fim,  alpha version
 
-			Fim - main help file (UNDER DEVELOPEMENT)
+			Fim - main help file
 
 First of all, please view this text file in VIM with ':set syntax=help'.
 if you already know Vim, you will know that in this way you can use this
@@ -24,11 +24,16 @@ the sense it is an elaboration of the passionate work of multiple people.
 Fim stands for Fbi IMproved.
 
 Fbi is a |framebuffer| based image viewer, made by Gerd Knorr, and Fim is
-primarily an interface rework applied roughly as a patch to it.
-The idea of making Fim came after long usage sessions of Vim and Fbi.
+primarily an interface rework applied roughly as a patch to it, by dezperado.
 
-The main purposes of Fim is to boost the features present Fbi and adding new
-ones, to achieve configurability and use flexibility. 
+The idea of making Fim came after long usage sessions of Vim and Fbi, and a
+science fiction film.
+
+The main purpose of Fim is to boost the features present Fbi and adding new
+ones, to achieve configurability and use flexibility, and use speed.
+
+Ease is a primary concern, too. So absolutely no programming language knowledge
+nor reading this manual is needed to use FIM.
 
 The primary aim of configurability is the complete freedom of the keyboard
 bindings.
@@ -48,6 +53,7 @@ Introduction to Fim					*ref* *reference*
 0. Introduction			|intro|
 1. Index			|index|
 2. Fim on the Internet		|internet|
+2.1. Contact information	|contact|
 3. Installation, basic usage	|basics|
 3.1. Configuration		|configuration|
 3.2. Keyboard binding		|keyboard|
@@ -71,6 +77,7 @@ Introduction to Fim					*ref* *reference*
 10.2. Framebuffer mini how to	|framebuffer|
 11. Credits			|credits|
 12. FAQs			|faq|
+13. BUGS			|bugs|
 
 ==============================================================================
 2. Fim on the Internet				*internet*
@@ -95,13 +102,24 @@ You are encouraged to report bugs and/or compilation problems on the web
  interface at :
 	https://code.autistici.org/trac/fim
 
+==============================================================================
+2.1. Contact information					*contact*
+
 If you want to help actively to the project, it would be much appreciated for
-me to receive by email a more complete report:
+me to receive by email a complete report:
 
  ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
 
-You can report to dezperado _FOobAr_ autistici _Baz_ org, by replacing _FOobAr_
+You can report it to dezperado _FOobAr_ autistici _Baz_ org, by replacing _FOobAr_
 with a '@' and _Baz_ with a '.'.
+
+Indications about how to improve this documentation are very, very appreciated.
+Suggestions, patches, etc..  about the software are appreciated, too.
+Ideas on the FIM language and potential use are welcome, too.
+
+p.s.: please read the BUGS file when submitting a bug and the |BUGS| section 
+to consult the current bug list.
+
 
 ==============================================================================
 3. Installation, basic usage			*basics*
@@ -972,6 +990,23 @@ the default configuration file, written in the Fim minilanguage.
  A: Yes, you could, as in this moment of my life i am completely broken.
     No, I am not a looser, but just not a hawk.
     Contact me for the details of sending me the goods.
+
+==============================================================================
+13.BUGS								*bugs*
+
+ The following are known problems (bugs) which were reported and await for a
+ solution.
+
+ if you want to report a bug, please consult the BUGS file.
+ if you want to contribute with help, please read the |contact| information.
+
+ - Problems with unusual resolutions (like those on popular laptop wide screens).
+   Although unusual resolutions bugs are welcome.
+
+ - GNU Flex version prior to 2.5.4 and GNU Bison version prior 1.875d" are
+   known to give compilation problems, so make sure you have newer versions of
+   these.
+   This note is especially precious for debian/ubuntu users.
 
 ------------------------------------------------------------------------------
 $Id$
