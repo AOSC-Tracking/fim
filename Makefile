@@ -267,14 +267,15 @@ flex:
 install:	all
 	$(INSTALL_DIR) $(bindir)
 	$(INSTALL_BINARY) $(TARGETS) $(bindir)
-	$(INSTALL_SCRIPT) $(srcdir)/fbgs.sh $(bindir)/fimgs
+	$(INSTALL_SCRIPT) $(srcdir)/fimgs.sh $(bindir)/fimgs
 	$(INSTALL_DIR) $(mandir)/man1
-	$(INSTALL_DATA) doc/fim.man $(mandir)/man1/fim.1
+	$(INSTALL_DATA) doc/fim.man   $(mandir)/man1/fim.1
+	$(INSTALL_DATA) doc/fimgs.man $(mandir)/man1/fimgs.1
 	$(INSTALL_DIR) $(docdir)/fim
 	$(INSTALL_DATA) doc/FIM.TXT $(docdir)/fim/
 	$(INSTALL_DATA) doc/FIM.html $(docdir)/fim/
 
-#	$(INSTALL_DATA) fbgs.sh.man $(mandir)/man1/fbgs.1
+#	$(INSTALL_DATA) fimgs.sh.man $(mandir)/man1/fimgs.1
 
 test:	fim
 	@./fim media/* #~/M*s/*g

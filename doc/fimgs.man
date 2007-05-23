@@ -1,0 +1,31 @@
+.c $Id$
+.TH fimgs 1 "(c) 2007 dezperado"
+.SH NAME
+fimgs - poor man's [http://]PostScript/pdf/dvi/cbr/rar/cbz/zip viewer for the linux
+framebuffer console
+.SH SYNOPSIS
+.B fimgs [ options ] file
+.SH DESCRIPTION
+.B fimgs  
+is a simple wrapper script which takes a PostScript or pdf
+or .cbr or .rar or .cbz or .zip or dvi
+or any of the above
+prefixed with http:// 
+as input, renders the pages using ghostscript into a
+temporarely directory and finally calls fbi to display them.
+In case of compressed archives (in zip or rar formats), the images 
+are decompressed into a directory adn displayed.
+In this latter case, only images contained in the archive will be displayed
+(no nested archives or pdf's or ps's or dvi's).
+.SH OPTIONS
+fimgs understands all fim options (they are passed through).
+
+.c Additionally you can specify -l, -xl or -xxl to get the pages
+.c rendered with 100, 120 or 150 dpi (default is 75).
+
+You can
+use option -p <password> if your PDF file requires password.
+.SH SEE ALSO
+fim(1), gs(1), fbi(1)
+.SH AUTHOR
+dezperado <dezperado@autistici.org>

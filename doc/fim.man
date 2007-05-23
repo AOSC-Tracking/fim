@@ -202,7 +202,7 @@ logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
 .SH SEE ALSO
-fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4)
+fimgs(1), fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4)
 .c , jpegtran(1)
 .SH AUTHOR
 dezperado <dezperado@autistici.org> is the author of fim, "fbi improved".

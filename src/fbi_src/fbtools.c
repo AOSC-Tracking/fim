@@ -21,7 +21,8 @@
 #include <linux/vt.h>
 #include <linux/fb.h>
 
-#include <asm/page.h>
+/*#include <asm/page.h>*/ /* seems like this gives problems */
+#include <sys/user.h>	  /* this should be a safer replacement */
 
 #include "fbtools.h"
 

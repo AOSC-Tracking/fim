@@ -21,7 +21,7 @@ Password:
 checking for libdir name ... lib
 install -d /usr/local/bin
 install -s fim /usr/local/bin
-install ./src/fbgs.sh /usr/local/bin/fimgs
+install ./src/fimgs.sh /usr/local/bin/fimgs
 install -d /usr/local/share/man/man1
 install -m 644 doc/fim.man /usr/local/share/man/man1/fim.1
 install -d /usr/local/share/doc/fim

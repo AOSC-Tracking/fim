@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
-*FIM.TXT*	For Fim,  alpha version
+*FIM.TXT*	For Fim,  alpha version (pre-versioned distribution release)
 
 			Fim - main help file
 
@@ -32,8 +32,9 @@ science fiction film.
 The main purpose of Fim is to boost the features present Fbi and adding new
 ones, to achieve configurability and use flexibility, and use speed.
 
-Ease is a primary concern, too. So absolutely no programming language knowledge
-nor reading this manual is needed to use FIM.
+Ease of use is a primary concern, too.
+So absolutely no programming language knowledge nor reading this manual is
+needed to use FIM.
 
 The primary aim of configurability is the complete freedom of the keyboard
 bindings.
@@ -54,9 +55,11 @@ Introduction to Fim					*ref* *reference*
 1. Index			|index|
 2. Fim on the Internet		|internet|
 2.1. Contact information	|contact|
+2.2. Help wanted		|help-wanted|
 3. Installation, basic usage	|basics|
 3.1. Configuration		|configuration|
 3.2. Keyboard binding		|keyboard|
+3.3. The fimgs script		|fimgs|
 4. Command Line Mode		|cli|
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
@@ -78,6 +81,7 @@ Introduction to Fim					*ref* *reference*
 11. Credits			|credits|
 12. FAQs			|faq|
 13. BUGS			|bugs|
+14. License 			|license|
 
 ==============================================================================
 2. Fim on the Internet				*internet*
@@ -120,6 +124,57 @@ Ideas on the FIM language and potential use are welcome, too.
 p.s.: please read the BUGS file when submitting a bug and the |BUGS| section 
 to consult the current bug list.
 
+==============================================================================
+2.2. Help wanted					*help-wanted*
+
+If you like Fim, you are welcome to do contribute with your help.
+
+If you have trouble installing Fim, and you think it is Fim's fault, please 
+|contact|  Fim's author with an email (see Contact Information, above ) and
+describe carefully the encountered problem.
+
+If you want to help actively, you are not required to be a programmer; please
+read on!
+
+There are the major (P)roblem areas and the possible (C)ontributions:
+ 
+ P: Build process ( right now it is scary, especially for the part concerning 
+   dependencies, and pisses off new users from Fim ).
+
+ C: autoscan/autoconf/automake scripts and/or suggestions would be very
+    appreciated.
+    And distribution specific files and instructions for resolving dependencies,
+    too!
+
+ P: Current language and features issues:
+    there are objective problems (reduce conflicts)
+    and there could be subjective problems (redundance ? useless constructs? )
+
+ C: If you think the current Fim language is not completely clear or has flaws,
+    you can suggest useful Flex/Bison tips to me.
+    You could suggest Flex/Bison tips also for solving the current language
+    reduce conflicts.
+
+ P: The documentation maybe is not informative enough
+ 
+ C: You could describe your personal experience with Fim, providing the pluses
+    and minuses in it, the way you use it, and the ways you would like to.
+    If you have interest in it, your help will contribute to inspire better
+    versions.
+
+ P: Fim sucks: it lacks of feature XXX
+
+ C: You are welcome to send me (|contact|) suggestions about the features you
+    would desire Fim to have.
+ 
+ P: Fim sucks: its command autodocumentation is poor
+
+ C: You are welcome to suggest me ways to integrate the documentation in this
+    manual in the man page and in the code.
+    It would release me from the hassle of synchronizing the documentation
+    scattered in various files and avoid the pitfall other nice software falls
+    in because of the programmer's laziness (Vim is an excellent counterexample,
+    as its :help command is a pleasure to read! ).
 
 ==============================================================================
 3. Installation, basic usage			*basics*
@@ -189,6 +244,35 @@ configuration file (without the heading ':', though! ).
 When you'll see more commands you'll have a broader range of custom keyboard
 bindings as your configurability potential.
 If you are curious, jump to the |commands-reference| section right now.
+
+===============================================================================
+3.3. The fimgs script					*fimgs*
+
+Fim wants to be flexible enough to let you use it directly or through some script.
+It comes out of the box with one wrapper script, called fimgs (or fimgs.sh)
+which is capable of converting some file formats in other, which fim understands.
+
+The fimgs script is capable of fetching a file from the web from you, displaying
+it in the framebuffer using fim, and deleting it from the temporary directory
+where it has been stored.
+
+Additionally, the fetched (or local) file could be among the ones directly
+supported, or one of the following :
+
+ - an Adobe Postscript (.ps, .eps) document
+ - an Adobe Portable Document Format (.pdf) document
+ - a TeX DeVice Indipendent file format (.dvi) document
+
+ - a PKZIP compressed archive (.zip, .cbz)
+ - a RAR   compressed archive (.rar, .cbr)
+ - a Tape ARchive archive (.tar)
+ - a g-Zipped Tape ARchive archive (.tgz, .tar.gz)
+
+If the file is among the first three categories, it is converted through
+GhostScript ( gs(1) ) in a number of .png files in a temporary directory.
+
+If the file is among the archives file formats listed, it is decompressed in a
+temporary directory and displayed file by file with fim.
 
 ==============================================================================
 4. Command Line Mode					*cli*
@@ -931,7 +1015,7 @@ the default configuration file, written in the Fim minilanguage.
  Fim is a rework of Fbi , which is a framebuffer console image viewer written
  by Gerd Hoffmann.
 
- Fim is an idea of dezperado, who can be contacted through the email address
+ Fim is an idea of dezperado, who can be |contact|'ed through the email address
  scrambled as dezperado _FOobAr_ autistici _Baz_ org.
 
  In the source archive, there are the doctags.c program and a slightly modified
@@ -951,10 +1035,13 @@ the default configuration file, written in the Fim minilanguage.
     a far higher usability degree than usual point and click software.
     Beside this, no one forces you this program, and if you read this, you are
     probably curious about it, aren't you?
+    Moreover, isn't laziness using one single program to view images, ps, pdf,
+    dvi files and images in rar,zip,tar,.. archives through a sole single 
+    program ( |fimgs| )?
  
  Q: When compiling, I get a compilation error when making lex.yy.o or yacc.tab.o!
  A: Please execute 'make report' and mail me its output. It should be due to the
-    fact that Fim relies on some experimental features of Bison.
+    fact that Fim relies on some experimental features of Bison : |bugs|.
     Consider upgrading Bison as a possible solution.
 
  Q: Is it true that no feature was removed from Fbi ?
@@ -964,11 +1051,12 @@ the default configuration file, written in the Fim minilanguage.
 
  Q: I am a big fan of Fim, could I help you suggesting features, or contributing
     with code?
- A: Yes, please drop me an email or find me on the #fim channel of some IRC
-    server which still I have to define.
+ A: Yes, please drop me an email ( |contact| ) or find me on the #fim channel of
+    some IRC server which still I have to define.
 
  Q: I wish to use Fim for commercial purposes, could I?
- A: I think you could, as long as Fim is licensed under the GPL version 2.
+ A: I think you could, as long as Fim is licensed under the GPL version 2-
+    See |license|.
 
  Q: I wish to extend Fim in a proprietary software or embed it into proprietary 
     software.
@@ -989,13 +1077,21 @@ the default configuration file, written in the Fim minilanguage.
  Q: I wish to donate you money, beer, pizza, or a new laptop; could I?
  A: Yes, you could, as in this moment of my life i am completely broken.
     No, I am not a looser, but just not a hawk.
-    Contact me for the details of sending me the goods.
+    |contact| me for the details of sending me the goods.
+
+ Q: I have problems with the framebuffer. Could you help me?
+ A: Consider reading |framebuffer| .
+
+ Q: Which file formats are supported ?
+ A: Fim should display the more common file formats (png,jpeg,gif,bmp).
+    Consider reading |fimgs| to learn how to view archives and renderable
+    document files with the help of fim.
 
 ==============================================================================
 13.BUGS								*bugs*
 
- The following are known problems (bugs) which were reported and await for a
- solution.
+ The following are known program problems (bugs) which were reported and await
+ for a solution.
 
  if you want to report a bug, please consult the BUGS file.
  if you want to contribute with help, please read the |contact| information.
@@ -1007,6 +1103,14 @@ the default configuration file, written in the Fim minilanguage.
    known to give compilation problems, so make sure you have newer versions of
    these.
    This note is especially precious for debian/ubuntu users.
+
+==============================================================================
+14.License 							*license*
+
+Fim is free software, and is licensed under the GPLv2, also known as GNU General
+Public License, version 2, which is included with the main Fim package, in the
+COPYING file.
+This is stated too in each source file preamble.
 
 ------------------------------------------------------------------------------
 $Id$

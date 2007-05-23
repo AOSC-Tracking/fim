@@ -7,8 +7,8 @@ in the fim directory , issue:
  # make 
  # make test
  # ls -l fim
- # chmod +x ./fbgs.sh 
- # ./fbgs.sh media/*.pdf
+ # chmod +x ./src/fimgs.sh 
+ # ./src/fimgs.sh media/*.pdf
 
  And in order to have a *working* configuration file, issue:
  # cp fimrc ~/.fimrc

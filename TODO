@@ -66,7 +66,7 @@ Please read the FIM.TXT file and the fimrc template to discover nice FIM feature
 20070129	fix the KEY binding
 20070211	flex and bison parts should be rewritten
 20070212	fix the command evaluation
-20070303	fix rar and zip dependencies in Makefiles and such for fbgs.sh
+20070303	fix rar and zip dependencies in Makefiles and such for fimgs.sh
 20070303	see if while-nesting is a real danger or not!
 20070303	update the while construct documentation and fix the while command execution bugs 
 20070303	add an interface for setting exitBinding (now Enter!)
