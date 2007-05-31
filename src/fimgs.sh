@@ -182,7 +182,7 @@ done
 # show pages
 #fbiopts=
 #$FBI $fbiopts -P -- $DIR/* $DIR/*/* $DIR/*/*/* $DIR/*/*/*/* $DIR/*/*/*/*/* $DIR/*/*/*/*/*/* $DIR/*/*/*/*/*/*/*
-find $DIR/  | $FBI $fbiopts  -- -
+find $DIR/ -type f | $FBI $fbiopts  -- -
 #cacaview $DIR/*
 #$FBI $fbiopts -P  `find $DIR -iname '*.png' -or -iname '*.jpg' -or -iname '*.gif' -or -iname '*.jpeg' -or -iname '*.tiff' -or -iname '*.bmp'`
 #$FBI $fbiopts -P -- $files
