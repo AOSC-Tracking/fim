@@ -19,7 +19,10 @@ When submitting a bug report, please follow the following rules:
  - make a report about the current environment:
    ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
   and send me the created .tgz file
- - please give me informatin about the exact way you experienced the problem
+ - please give me information about the exact way you experienced the problem
+ - please send me the config.log file, too.
+   it is of vital importance!
+   the config.log file is created by the configure script when you run the ./configure script
 
 You can mail you report to dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_
 with a '@' and _Baz_ with a '.'.

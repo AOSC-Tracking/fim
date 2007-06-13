@@ -9,7 +9,7 @@ FIM aims to be a highly customizable and scriptable image
  like the Vim text editor or the Mutt mail user agent.
 
 It is based on the Fbi image viewer, by Gerd Hoffmann, and works in the 
- framebuffer console (so, it is not an X progam! ).
+ Linux framebuffer console ( so, it is not an X program! ).
 
 FIM is free software, and it ships under the GPL software license, complete with
 documentation, in form of a doc/FIM.TXT documentation file, a man page, lots

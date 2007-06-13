@@ -634,8 +634,8 @@ static struct option fim_options[] = {
 static void version()
 {
     fprintf(stderr,
-		    "FIM - Fbi IMproved "FIM_VERSION
-		    ", by "FIM_AUTHOR
+		    "FIM - Fbi IMproved "//FIM_VERSION
+		    ", by "//FIM_AUTHOR
 		    ", built on %s\n",
 		    __DATE__
     		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"

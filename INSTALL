@@ -2,6 +2,8 @@
 
 Summary:
 
+====== BUILDING FROM SVN
+====== BUILDING FROM A COMPRESSED ARCHIVE
 ====== INSTALLATION
 ====== INSTALLATION BUG REPORTING
 ====== FRAMEBUFFER PROBLEMS
@@ -9,9 +11,46 @@ Summary:
 ====== DEPENDENCIES : example on Gentoo
 ====== TODO
 
+====== BUILDING FROM SVN
+
+If you happen to have downloaed fim from the svn archive, 
+run the ./autogen.sh script.
+However, this require you to have the automake, autoconf, and 
+aclocal programs. If you don't have these, the ./autogen.sh 
+script won't work.
+
+The ./autogen.sh script will create a ./configure script, which
+will generate a Makefile file, which finally will permit you to 
+build the fim executable and install it.
+
+====== BUILDING FROM A COMPRESSED ARCHIVE
+
+To build fim, you should first unpack the .tgz archive.
+Say you have just downloaded fim.tgz from the Internet.
+So:
+
+tar xvzf fim.tgz
+cd fim/
+./configure --help=short
+./configure
+make
+
+Typing ./configure will run the configure script, which will test
+your machine for potential problems regarding the build and 
+installation of Fim.
+
+The configure script will build the Makefile file, which is essential to build 
+fim.
+If the configure script terminates with an error, please contact the author of
+fim giving him the generated config.log file and any useful information  to 
+spot the problem.
+
+Please see the BUGS file for bugs reporting.
+
 ====== INSTALLATION
 
-To build Fim, type 'make' in its source directory, once expanded the archive.
+To build Fim, type 'make' in its source directory, once expanded the archive
+and having run the ./configure script before.
 
 Then use 'make install' as root :
 
@@ -48,6 +87,7 @@ file resulting from the following statement execution:
  ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
 
 Have fun!
+p.s.: please see the BUGS file for bug reporting!
 
 ====== FRAMEBUFFER PROBLEMS
 

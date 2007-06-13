@@ -1,6 +1,7 @@
 	$Id$
 -------------------------------------------------------------------------------
 	Current development directions
+20070613	sync documentation, website and the whole with VERSION :)
 20070517	automated documentation is a future issue
 20070517	an useless, optional grid, under or over the image
 20070514	There is a growing need to document the target audience of this
