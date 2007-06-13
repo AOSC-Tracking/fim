@@ -86,12 +86,19 @@ Introduction to Fim					*ref* *reference*
 ==============================================================================
 2. Fim on the Internet				*internet*
 
-As of now, the official Fim page is https://code.autistici.org/project/fim, 
+Right now, the official Fim page is 
+
+	http://www.autistici.org/dezperado/
+
+It contains all the relevant Fim documentation, and the downloadable Fim
+archives.
+
+The unofficial page is https://code.autistici.org/project/fim, 
 although it doesn't say much.
-http://www.autistici.org/dezperado/fim contains FIM documentation, too.
 
 You could be able to browse the Fim code on :
 	http://code.autistici.org/svn/fim/
+
 and get the latest source code tree issuing :
 
  	svn export http://code.autistici.org/svn/fim
@@ -100,11 +107,13 @@ or
 
 wget -r http://code.autistici.org/svn/fim/ && cd code.autistici.org/svn/fim 
 
-The documentation is distributed with the software.
+The documentation is distributed with the software. See the INSTALL file for
+installation instructions and issues.
 
 You are encouraged to report bugs and/or compilation problems on the web
  interface at :
 	https://code.autistici.org/trac/fim
+ but when encountering bugs, please read |BUGS|.
 
 ==============================================================================
 2.1. Contact information					*contact*
@@ -113,11 +122,13 @@ If you want to help actively to the project, it would be much appreciated for
 me to receive by email a complete report:
 
  ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
+ and please send me the file config.log, generated when running ./configure
 
-You can report it to dezperado _FOobAr_ autistici _Baz_ org, by replacing _FOobAr_
-with a '@' and _Baz_ with a '.'.
+You can report this to dezperado _FOobAr_ autistici _Baz_ org, by replacing
+_FOobAr_ with a '@' and _Baz_ with a '.'.
 
 Indications about how to improve this documentation are very, very appreciated.
+
 Suggestions, patches, etc..  about the software are appreciated, too.
 Ideas on the FIM language and potential use are welcome, too.
 

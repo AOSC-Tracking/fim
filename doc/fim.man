@@ -205,13 +205,13 @@ work.
 fimgs(1), fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4)
 .c , jpegtran(1)
 .SH AUTHOR
-dezperado <dezperado@autistici.org> is the author of fim, "fbi improved".
+dezperado <dezperado _ GUESS _ autistici.org> is the author of fim, "fbi improved".
 
-Gerd Knorr <kraxel@bytesex.org> is the original author of fbi, upon which this code is based.
+Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based.
 .SH COPYRIGHT
-Copyright (C) 2006-2007 dezperado <dezperado@autistici.org>
+Copyright (C) 2006-2007 dezperado <dezperado _ GUESS _ autistici.org>
 
-Copyright (C) 1999-2000 Gerd Knorr <kraxel@bytesex.org>
+Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>
 .P
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

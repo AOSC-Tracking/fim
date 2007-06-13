@@ -13,6 +13,8 @@ bin_PROGRAMS = fim
 
 bin_SCRIPTS = fimgs.sh
 
+doc_DATA = fimrc
+
 lex.yy.o  : lex.yy.cc
 #lex.yy.cc: lex.lex
 
