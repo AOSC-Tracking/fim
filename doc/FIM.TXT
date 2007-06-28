@@ -113,7 +113,7 @@ installation instructions and issues.
 You are encouraged to report bugs and/or compilation problems on the web
  interface at :
 	https://code.autistici.org/trac/fim
- but when encountering bugs, please read |BUGS|.
+ but when encountering bugs, please read |bugs|.
 
 ==============================================================================
 2.1. Contact information					*contact*
@@ -132,7 +132,7 @@ Indications about how to improve this documentation are very, very appreciated.
 Suggestions, patches, etc..  about the software are appreciated, too.
 Ideas on the FIM language and potential use are welcome, too.
 
-p.s.: please read the BUGS file when submitting a bug and the |BUGS| section 
+p.s.: please read the BUGS file when submitting a bug and the |bugs| section 
 to consult the current bug list.
 
 ==============================================================================
@@ -936,8 +936,33 @@ So, the commands following the loop will be ignored.
 
 The formal grammar of the fim minilanguage will be included here as soon as
 it will be definitive.
-For the current one, take a look to the src/fimrc file to take an idea of 
+For the current one, take a look to the src/fimrc file to get an idea of 
 the default configuration file, written in the Fim minilanguage.
+
+Note that this language is still in an embryonal phase and many functionalities
+are still not implemented...
+
+Right now comparison makes only sense between integers or integer variables.
+Comparison with strings will convert these in integers and this is not probably
+what you want.
+
+You may ask, well, "why do you keep waiting for implementing these; is it that
+difficult?".
+Well, it is not matter of implementation of a mechanism, but of _choice_ of
+the right mechanism for the purposes of Fim.
+A lot of questions still await for an answer in Fim. Here are few:
+ - should the interpreter cast variables of different types ?
+ - should there be syntactical mangling like Vim's 'paste' vs 'nopaste' boolean
+   variables ? These can be thought as functors with pointers !
+ - should there be enumerations ? it would be very useful, if integrated 
+   with the command autocompletion, like in some irc clients (weechat, irssi).
+ - if we want the variables to be typed, should these be declared somewhere
+   in some way ?
+ - and functions ? debugging ?
+
+ meanwhile these issues are thought of, Fim code will be mainly cleaned up to
+ reach a higher level of generality ( an ambitious aim is to invade X some day,
+ optionally of course ), and configure/build/compatibility issues solved.
 
 <UNFINISHED>
 

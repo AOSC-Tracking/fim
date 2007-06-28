@@ -75,6 +75,10 @@ do
 #			fbiopts="$fbiopts $1 $2"
 #			shift; shift
 #			;;
+		# explicit option passing
+		-c)	fbiopts="$fbiopts -c $2"
+			shift; shift
+			;;
 		-p)	password="$2"
 			shift; shift
 			;;
@@ -82,7 +86,7 @@ do
 			exit 1
 			;;
 	        *)	
-			fbiopts="$fbiopts $1";
+			[[ "$1" =~ '^-.*' ]] && fbiopts="$fbiopts $1";
 			break;;
 #		-*)	echo "unknown option: $1"
 #			exit 1
@@ -113,6 +117,7 @@ do
 ##		HANDLING OF DVI,PS AND PDF FILES
 ###############################################################################
 #[[ "$f" =~ \\.dvi$ ]] && f="/tmp/$$.ps" && dvips -q "$f" -o "$f" &&  trap "rm $f ; rm -fRd $DIR" EXIT
+#[[ -f "$f" ]] || { echo "an option!" ;  fbiopts="$fbiopts $f" ; break ; } # not a file, but an option
 
 
 [[ "$f" =~ \\.dvi$ ]] && fbiopts=" -P $fbiopts"
@@ -182,7 +187,8 @@ done
 # show pages
 #fbiopts=
 #$FBI $fbiopts -P -- $DIR/* $DIR/*/* $DIR/*/*/* $DIR/*/*/*/* $DIR/*/*/*/*/* $DIR/*/*/*/*/*/* $DIR/*/*/*/*/*/*/*
-find $DIR/ -type f | $FBI $fbiopts  -- -
+#echo "options are $fbiopts"
+find $DIR/ -type f  | $FBI $fbiopts  -- -
 #cacaview $DIR/*
 #$FBI $fbiopts -P  `find $DIR -iname '*.png' -or -iname '*.jpg' -or -iname '*.gif' -or -iname '*.jpeg' -or -iname '*.tiff' -or -iname '*.bmp'`
 #$FBI $fbiopts -P -- $files

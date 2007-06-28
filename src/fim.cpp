@@ -217,10 +217,12 @@ char *make_info(struct ida_image *img, float scale)
 
 /*
  *	This function treats the framebuffer screen as a text outout terminal.
- *	So it prints msg thre.
+ *	So it prints all the contents of its buffer on screen..
  *	if noDraw is set, the screen will be not refreshed.
 	 *	NULL,NULL is the clearing combination !!
 	//FIX ME
+	20070628 now this function adapts to the screen resolution. yet there happens 
+	something strange for a number of lines filling more than half of the screen.. 
  */
 void fb_status_screen(const char *msg)//, int noDraw=1)
 {	
@@ -230,12 +232,22 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 #ifndef FIM_NOFB
 
 	int y,i,j,l,w;
-	//TODO : VARIABLES HERE!!
-#define R 24
-//#define R 30
-//#define C 80
-#define C 120+4
-	static char columns[R][C+1];//columns[:][C]='\0'
+	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
+	static char **columns=NULL;
+	C=(fb_var.xres/fb_font_width());
+	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
+	/* R rows and C columns; the last one for string terminators..
+	 */
+	if(!columns)columns=(char**)calloc(sizeof(char*)*R+(C+1),1);
+	/* 
+	 * seems tricky : we allocate one single buffer and use it as console 
+	 * storage and console pointers storage ...
+	 *
+	 * note that we don't deallocate this area until program termination.
+	 * it is because we keep the framebuffer...
+	 * */
+	for(i=0;i<R;++i)columns[i]=(char*)(columns+sizeof(char*)*R+i*(C+1));
+	if(!columns)return;
 	static int cline=0,	//current line		[0..R-1]
 		   ccol=0;	//current column	[0..C]
 	const char *p=msg,	//p points to the substring not yet printed
@@ -253,21 +265,6 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 	    w=0;
 	    while(l>0)	//line processing
 	    {
-#if 0
-		    if(0)
-		    {
-			    //clear the current line
-			    for(i=ccol;i<C;++i)columns[cline][i]=' ';
-			
-			    //clear all the lines after
-			    for(i=cline+1;i<R;++i)
-			    {
-				    for(j=0;j<C;++j)columns[i][j]=' ';
-				    columns[i][C]='\0';
-			    }
-		    
-		    }
-#endif
 		    //w is the number of writable characters on this line ( w in [0,C-ccol] )
 		    w=min(C-ccol,l);
 		    //there remains l-=w non '\n' characters yet to process in the first substring
@@ -321,23 +318,9 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 	}
 	//if(!cc.drawOutput() || noDraw)return;//CONVENTION!
 	if(!cc.drawOutput() )return;//CONVENTION!
-//	    if (!visible) return;
-//	    y = fb_var.yres - f->height - ys;
-//	    y = 1*f->height;
+
 	    y = 1*fb_font_height();
 	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
-//	    for(i=R-1;i>=0;--i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
-//
-//	    fb_memset(fb_mem + fb_fix.line_length * y, 0,
-//	    fb_fix.line_length * (f->height+ys));
-//	    fb_line(0, fb_var.xres, y, y);
-	//    cline=0; strcpy(columns[0],"gaba");
-//	    for(i=cline;i>=0;--i) fs_puts(f, 0, y*(i+1), columns[i]);
-//	    for(i=cline;i>=0;--i) fs_puts(f, 0, y*(i+1), "foo");
-//	    for(i=0;i>=0;--i) fs_puts(f, 0, y*(i+1), "foo");
-//    fs_puts(f, 0, y+ys, msg);
-#undef R 
-#undef C 
 #else
 	if(msg)printf("%s",msg);
 	return;
