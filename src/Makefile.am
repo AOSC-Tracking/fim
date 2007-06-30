@@ -161,7 +161,7 @@ fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
 
 #FIMLIBS+=-ljpeg
 #FIMLIBS+=-lreadline
-FIMLIBS+= -lm # -lfl
+FIMLIBS+= -lm  -lfl
 #FIMLIBS+=-lz # -lpng
 #FIMLIBS+=-ltiff
 #FIMLIBS+=-lgpm

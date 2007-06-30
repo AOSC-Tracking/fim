@@ -1,3 +1,5 @@
+/* this option tells flex to provide us a 1==yywrap() with -fl */
+%option noyywrap
 %{
 #include <math.h>
 #include <stdio.h>
@@ -7,12 +9,15 @@
 #include "yacc.tab.hpp"
 #include "common.h"
 void yyerror(char *);
+#if 0
+/* we use %option noyywrap now ! */
 #ifdef YY_PROTO
 //this branch is taken by flex 2.5.4
 //int yywrap YY_PROTO((void)){return 1;}
 #else
 //this branch is taken by flex 2.5.33
 int yywrap (){return 1;}
+#endif
 #endif
 
 int pipedesc[2];

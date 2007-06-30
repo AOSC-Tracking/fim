@@ -233,8 +233,8 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 
 	int y,i,j,l,w;
 	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
-	static char **columns=NULL;
 	C=(fb_var.xres/fb_font_width());
+	static char **columns=NULL;
 	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
 	/* R rows and C columns; the last one for string terminators..
 	 */
