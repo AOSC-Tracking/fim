@@ -113,16 +113,21 @@ AC_ARG_ENABLE(default_config, AC_HELP_STRING([--disable-default_config], [Builti
         fi
 ])
 
+	EXTRADEFS=
 #		DEFS="$DEFS -D FIM_DEFAULT_CONFIG"
-#	if test x$have_default_bindings != xno; then
+#		EXTRADEFS="$EXTRADEFS -D FIM_DEFAULT_CONFIG"
+	if test x$have_default_bindings != xno; then
 #		DEFS="$DEFS -D FIM_DEFAULT_CONFIG"
-#	fi
-#	if test x$have_default_mapping != xno; then
+		EXTRADEFS="$EXTRADEFS -D FIM_DEFAULT_CONFIG"
+	fi
+	if test x$have_default_mapping != xno; then
 #		DEFS="$DEFS -D FIM_DEFAULT_KEY_CONFIG"
-#	fi
-#	if test x$have_default_config != xno; then
+		EXTRADEFS="$EXTRADEFS -D FIM_DEFAULT_KEY_CONFIG"
+	fi
+	if test x$have_default_config != xno; then
 #		DEFS="$DEFS -D FIM_DEFAULT_CONFIGURATION"
-#	fi
+		EXTRADEFS="$EXTRADEFS -D FIM_DEFAULT_CONFIGURATION"
+	fi
 
 #CPPFLAGS=$DEPS
 AC_SUBST(LIBPNG_CFLAGS)
@@ -392,6 +397,34 @@ fi
 
 #AC_MSG_CHECKING(whether struct dirent defines d_ino)
 
+dnl ==================
+
+fim_cv_nofimrc=no
+AC_ARG_ENABLE(fimrc, AC_HELP_STRING([--enable-fimrc], [Fim will by default load the ~.fimrc file.]),
+[if test $enableval = yes; then
+        fim_cv_fimrc=yes
+fi])
+
+if test x$fim_cv_fimrc = xyes; then
+	have_fimrc=yes
+else
+	EXTRADEFS="$EXTRADEFS -D FIM_NOFIMRC"
+fi
+
+
+dnl ==================
+
+fim_cv_warnings=no
+AC_ARG_ENABLE(screen, AC_HELP_STRING([--enable-screen], [Fim will work under screen (EXPERIMENTAL!)]),
+[if test $enableval = yes; then
+        fim_cv_screen=yes
+fi])
+
+if test x$fim_cv_screen = xyes; then
+        # boz patch is on
+	have_boz_patch=yes
+	EXTRADEFS="$EXTRADEFS -D FIM_BOZ_PATCH"
+fi
 
 dnl ==================
 
@@ -454,6 +487,7 @@ AC_SUBST(LIBIMAPDEPS)
 
 AC_SUBST(FIMLIBS)
 AC_SUBST(DEFS)
+AC_SUBST(EXTRADEFS)
 AC_SUBST(FIM_LIB_OBJECTS)
 
 #AC_CONFIG_FILES([Makefile],[src/Makefile])
@@ -475,6 +509,8 @@ AC_MSG_NOTICE([
 	jpeg file support                   : ${fim_handle_jpeg}
 	tiff file support                   : ${fim_handle_tiff}
 	gif  file support                   : ${fim_handle_gif}
+	patch for running under screen on?  : ${have_boz_patch:-no}
+	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 
 	If you are not satisfied with this configuration, please run :
 

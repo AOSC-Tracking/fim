@@ -131,11 +131,12 @@ EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs.sh \
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
 
  DEFINES  :=
-# The following defines should migrate outta here!
- DEFINES  += -D FIM_DEFAULT_KEY_CONFIG  # with a builtin default key mapping (advised)
- DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key binding
- DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
+# The following defines already migrated outta here...
+#DEFINES  += -D FIM_DEFAULT_KEY_CONFIG  # with a builtin default key mapping (advised)
+#DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key binding
+#DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
 
+# The following defines should migrate outta here!
  DEFINES  += -D FIM_NOFIMRC             # with ~/.fimrc loading disabled
 #DEFINES  += -D FIM_NOSCRIPTING         # any script loading disabled
 #DEFINES  += -D FIM_NOFB                # disable the framebuffer (for debug mostly)
@@ -147,13 +148,14 @@ EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs.sh \
  DEFINES  += -D FIM_REMOVE_FAILED       # a file which failed loading is removed from the list
  DEFINES  += -D FIM_AUTOSKIP_FAILED     # if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
  DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
+#DEFINES  += -D FIM_BOZ_PATCH		 # added from configure..
 #DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
 #DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
 #DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
  FIM_VERSION:= $(VERSION)
  FIM_AUTHOR := '"dezperado _CUT_ autistici _CUT_ org"'
 
-DEFINES += -D X_DISPLAY_MISSING $(DEFS)
+DEFINES += -D X_DISPLAY_MISSING @DEFS@ @EXTRADEFS@
 
 AM_CPPFLAGS=${DEFINES}
 
@@ -162,7 +164,8 @@ fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
 #FIMLIBS+=-ljpeg
 #FIMLIBS+=-lreadline
 FIMLIBS+= -lm  -lfl
-#FIMLIBS+=-lz # -lpng
+#FIMLIBS+=-lpng
+#FIMLIBS+=-lz
 #FIMLIBS+=-ltiff
 #FIMLIBS+=-lgpm
 FIMLIBS+=-L/lib
