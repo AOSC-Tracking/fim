@@ -11,7 +11,7 @@
 #bind 29 "scale_factor_grow";
 #bind 31 "scale_factor_shrink";
 _display_status=0;
-_max_cached_images=0;
+_max_cached_images=5;
 _max_cached_memory=80000000;	# not yet functional
 _prefetch=1;
 #autowidth=1;

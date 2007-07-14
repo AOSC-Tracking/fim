@@ -72,7 +72,7 @@ namespace fim
 			lru.erase(oi);
 			imageCache.erase(reverseCache[oi]);
 			reverseCache.erase(oi);
-			cc.setVariable("_cached_elements",cached_elements());
+			cc.setVariable("_cached_images",cached_elements());
 			return 0;
 		}
 		return -1;
@@ -131,7 +131,7 @@ namespace fim
 		{	
 			imageCache[fim::string(fname)]=ni;
 			reverseCache[ni]=fim::string(fname);
-			cc.setVariable("_cached_elements",cached_elements());
+			cc.setVariable("_cached_images",cached_elements());
 			mark_used(fname);
 		}
 		return ni;
