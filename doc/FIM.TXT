@@ -696,6 +696,13 @@ as soon as this is necessary.
 
  'console_key'	: the key used to enter in command line mode (WARNING:experimental)
 
+ '_max_cached_images'	: the maximum number of images Fim will cache. if -1, unlimited
+
+ '_max_cached_memory'	: the maximum amount of memory that will be cached (not implemented yet)
+
+ '_prefetch'	: if 0 or unset, no prefetching will be adopted.
+
+
 Note : there is still much to do about variables.
 
 <UNFINISHED>

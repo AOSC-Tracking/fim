@@ -44,6 +44,8 @@ Implemented features:
    list, recording/replaying of sessions, repeat last action )
  - script file execution
  - system call
+ - image caching
+ - image prefetching
  - pipe with some input program
  - these features could be enabled or disabled at compile time editing the Makefile
 

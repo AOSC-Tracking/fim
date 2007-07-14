@@ -11,6 +11,9 @@
 #bind 29 "scale_factor_grow";
 #bind 31 "scale_factor_shrink";
 _display_status=0;
+_max_cached_images=0;
+_max_cached_memory=80000000;	# not yet functional
+_prefetch=1;
 #autowidth=1;
 alias "toggleautoflip" "autoflip=1-autoflip;";
 alias "flip" "toggleautoflip;redisplay;";
@@ -121,6 +124,7 @@ autocmd "PreExecutionCycle" "" "fresh=1;reload;";
 autocmd "PreExecutionCycle" "" "redisplay;";
 autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "fresh=0;";
+#autocmd "PostInteractiveCommand" "" "prefetch;";
 #extra..
 bind 'w' "auto_width_scale";
 bind 'C-h' "auto_height_scale";

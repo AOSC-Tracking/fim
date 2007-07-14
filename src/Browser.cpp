@@ -22,6 +22,9 @@
 #include "fim.h"
 namespace fim
 {
+	int Browser::current_n()const{ return current_n(cp); }
+	int Browser::current_n(int ccp)const{ return ccp?ccp-1:ccp; }
+
 	fim::string Browser::list()const
 	{
 		/*
@@ -464,12 +467,13 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreReload",c);
 #endif
-		if(image) delete image;
-		image = new Image(current().c_str());
+		if(image) cache.free(image);
+		image = cache.getImage(current().c_str());
+		if(cc.getIntVariable("_prefetch")) cache.prefetch(get_next_filename(1).c_str());
 		cc.setVariable("fileindex",current_image());
 		if(image && ! (image->valid()))
 		{
-			delete image;image=NULL;
+			cache.free(image);image=NULL;
 #ifdef FIM_REMOVE_FAILED
 			if(current()!=""){pop_current();	//removes the current file from the list.
 #ifdef FIM_AUTOSKIP_FAILED
@@ -498,11 +502,12 @@ namespace fim
 		cc.autocmd_exec("PreLoad",c);
 #endif
 		set_status_bar("please wait while loading...", "*");
-		image = new Image(current().c_str());
+		image = cache.getImage(current().c_str());
+		if(cc.getIntVariable("_prefetch")) cache.prefetch(get_next_filename(1).c_str());
 		cc.setVariable("fileindex",current_image());
 		if(image && ! (image->valid()))
 		{
-			delete image;image=NULL;
+			cache.free(image);image=NULL;
 #ifdef FIM_REMOVE_FAILED
 			if(current()!=""){pop_current();	//removes the current file from the list.
 #ifdef FIM_AUTOSKIP_FAILED
@@ -625,6 +630,18 @@ namespace fim
 		return regexp_goto(arg);
 	}
 
+	fim::string Browser::prefetch(const std::vector<fim::string> &args)
+	{
+		/*
+		 * fetches in the cache the next image..
+		 *
+		 * FIX ME : enrich this behaviour
+		 */
+		if( args.size() > 0 )return "";
+		cache.prefetch(get_next_filename(1).c_str());
+		return "";
+	}
+
 	fim::string Browser::regexp_goto(const std::vector<fim::string> &args)
 	{
 		/*
@@ -698,6 +715,24 @@ namespace fim
 #endif
 		return "";
 	}
+
+	fim::string Browser::get_next_filename(int n)
+	{
+		/*
+		 * returns to the next image in the list, the mechanism
+		 * p.s.: n<>0
+		 */
+		int ccp=cp;
+		int N=flist.size();
+		if(!N)return "";
+		ccp+=n;
+		ccp%=N;
+		ccp+=N;
+		ccp%=N;
+		if(!ccp)ccp=N;
+		return flist[current_n(ccp)];
+	}
+
 
 	fim::string Browser::do_next(int n)
 	{

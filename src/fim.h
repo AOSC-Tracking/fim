@@ -96,6 +96,7 @@ void initialize_readline ();
 #include "Command.h"
 #include "Arg.h"
 #include "Var.h"
+#include "Cache.h"
 #include "Image.h"
 #include "Browser.h"
 #include "CommandConsole.h"

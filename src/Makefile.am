@@ -63,6 +63,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	      fim.h \
 	      Arg.h \
 	Browser.h \
+	Cache.h \
 	Command.h \
 	CommandConsole.h \
 	Image.h \
@@ -77,6 +78,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	string.h \
 	Arg.cpp \
 	Browser.cpp \
+	Cache.cpp \
 	Command.cpp \
 	CommandConsole.cpp \
 	Image.cpp \
