@@ -1685,8 +1685,7 @@ int CommandConsole::executeFile(const char *s)
 	void CommandConsole::printHelpMessage(char *pn)
 	{
 		std::cout<<" Usage: "<<pn<<" [OPTIONS] [FILES]\n";
-		printf("\nThe help will be here soon!\n");
-		printf("Please read the documentation distributed with the program first! (FIM.TXT)\n");
+		/*  printf("\nThe help will be here soon!\n");*/
 	}
 
 #ifdef FIM_RECORDING

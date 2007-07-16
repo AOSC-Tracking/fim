@@ -40,7 +40,7 @@ class Cache
 	/**/
 	int mark_used(const char *fname);
 	public:
-	Cache::Cache();
+	Cache();
 
 	/*	erases the image from the cache	*/
 	int erase(fim::Image* oi);
@@ -54,8 +54,8 @@ class Cache
 	/**/
 	int prefetch(const char *fname);
 
-	Image* Cache::get_lru();
-	int Cache::free_some_lru();
+	Image* get_lru();
+	int free_some_lru();
 };
 }
 

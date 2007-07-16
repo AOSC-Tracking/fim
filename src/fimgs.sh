@@ -5,19 +5,25 @@
 # and is capable of displaying pdf, eps, ps, and dvi files.
 # Now enhanced for viewing .cbr and .cbz files :)!
 #
-#20060917	modified by dez
-#20061229	added .cbr and .cbz support (on file extension basis, not detection!)
-#20070307	added .tar,.tgz support
-# tmp dir
+# Note : it won't probably work on bash, version < 3.0 because of regular expressions.
+
+# this script wants a temporary directory to stores rendered/wget'ed files
+# this directory is named after the process ID
 DIR="${TMPDIR-/var/tmp}/fbps-$$"
+
+# we must have write permissions in that directory
 mkdir -p $DIR	|| exit 1
+
+# we want that directory clean after this script execution, no matter what happens
 trap "rm -rf $DIR" EXIT
 
-declare -f 
+# useless for now :)
+# declare -f 
 
-export -f
+# useless, too
+# export -f
 
-# as advised in man which, for mysterious reasons
+# as advised in man which, for mysterious reasons ( C compatible )
 which ()
 {
 	( alias; declare -f ; ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
@@ -37,14 +43,18 @@ function info()  { echo '  [+]' "$@" 1>&2 ;  }
 function einfo() { echo '  [-]' "$@" 1>&2 ;  }
 function die() { einfo "ERROR : "$@ 1>&2 ; exit -1 ; }
 
-check_in_path fim || die "no fim in \$PATH"
-
-#FBI=/usr/bin/fbi
-#FBI=~/fim/fim
-#FBI=./fim
+# our favourite framebuffer viewing program :)
 FBI=fim
-#FBI='/usr/local/bin/fbi -a '
-#FBI='fbi'
+
+check_in_path $FBI  || die "no fim in \$PATH"
+check_in_path echo  || die "no echo in \$PATH"
+check_in_path find  || die "no find in \$PATH"
+check_in_path wget  || die "no wget in \$PATH"
+check_in_path gs    || die "no gs (ghostscript) in \$PATH"
+check_in_path tar   || die "no tar in \$PATH"
+check_in_path basename   || die "no basename in \$PATH"
+check_in_path md5sum   || die "no md5sum in \$PATH"
+
 
 # parse options
 fbiopts="-w"
@@ -103,6 +113,7 @@ UNCBZ="unzip" ; ZOPT="-x '*/*'" # suits for Info-ZIP implementation
 UNCBR="rar x"                   # suits for Alexander Roshal's RAR 3.51
 UNTAR="tar xf"
 UNTGZ="tar xzf"
+UNBZ="tar xjf"
 #while [[ "$1" != "" ]]
 #while [[ "$#" -gt "0" ]]
 while test "$opt" = "1"
@@ -121,15 +132,11 @@ do
 
 
 [[ "$f" =~ \\.dvi$ ]] && fbiopts=" -P $fbiopts"
-#[[ "$f" =~ \\.pdf$ ]] && fbiopts=" -o $fbiopts"
 [[ "$f" =~ \\.pdf$ ]] && fbiopts=" -P $fbiopts"
 [[ "$f" =~ \\.ps$  ]] && fbiopts=" -P $fbiopts"
-# run ghostscript
-#echo
-#echo "### rendering pages, please wait ... ###"
-#echo
+[[ "$f" =~ \\.eps$  ]] && fbiopts=" -P $fbiopts"
 
-if ( [[ "$f" =~ \\.ps$  ]] || [[ "$f" =~ \\.pdf$  ]] )
+if ( [[ "$f" =~ \\.ps$  ]] || [[ "$f" =~ \\.pdf$  ]] ) || ( [[ "$f" =~ \\.eps$  ]] || [[ "$f" =~ \\.dvi$  ]] )
 then 
 
 BDIR=''
@@ -139,21 +146,26 @@ then
 	DIRS=${DIRS// /}
 	DIRS=${DIRS//-/}
 	BDIR="$DIR/$DIRS"
+	# this means that giving duplicate imput files will overwrite the original render directory...
 else
 	BDIR="$DIR/"$(basename "$f")
 fi
-mkdir -p $BDIR # 	|| exit 1
-info "rendering to $BDIR"
+mkdir -p $BDIR  	|| die "failed mkdir $BDIR"
+info "rendering $f to $BDIR.."
+
 #this is a workaround for gs's .. bug ..
+
 [[ "$f" =~ "^\.\."  ]] && f="$PWD/$f"
 
+# note : we cannot render gs renderable documents with more than 1000 pages...
 gs	-dSAVER -dNOPAUSE -dBATCH			\
 	-sDEVICE=png256 -r240x240 -sOutputFile=$BDIR/ps%03d.png	\
 	$gsopts						\
-	"$f"
-
+	"$f" || die "ghostscript failed rendering!"
+# still unused options :
 #	-sPDFPassword="$password"			\
-#-sDEVICE=tiffpack -sOutputFile=$DIR/ps%03d.tiff	\
+#	-sDEVICE=tiffpack				\
+#	-sOutputFile=$DIR/ps%03d.tiff
 
 # tell the user we are done :-)
 #echo -ne "\\007"
@@ -169,7 +181,10 @@ gs	-dSAVER -dNOPAUSE -dBATCH			\
 #	echo "Oops: ghostscript wrote no pages ($pages)?"
 #	echo
 #	exit 1
-else
+elif ( ( [[ "$f" =~ \\.cbr$  ]] || [[ "$f" =~ \\.cbz$  ]] ) || ( [[ "$f" =~ \\.rar$  ]] || [[ "$f" =~ \\.zip$  ]] ) || ( [[ "$f" =~ \\.tgz$  ]] || [[ "$f" =~ \\.tar.gz$  ]] ) || ( [[ "$f" =~ \\.tar$  ]] || [[ "$f" =~ \\.tar.bz2$  ]] ) )  && ! [[ "$f" =~ '^http://' ]]
+then
+# in the case of an archive ...
+# an ideal fimgs script would unpack recursively in search for interesting files..
 
 [[ "$f" =~ \\.cbr$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
 [[ "$f" =~ \\.rar$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
@@ -178,9 +193,14 @@ else
 [[ "$f" =~ \\.tgz$    ]] && ( $UNTGZ "$f" -C "$DIR" ) 
 [[ "$f" =~ \\.tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
 [[ "$f" =~ \\.tar$    ]] && ( $UNTAR "$f" -C "$DIR" ) 
+[[ "$f" =~ \\.tar.bz2$ ]] && ( $UNBZ "$f" -C "$DIR" ) 
+
+# ... but this fimgs script is lazy and it gets satisfied with a bare decompress !
 
 # lone file handling..
 #[[ "$?" == 0 ]] || echo "this script is not suited for file $f" 
+else
+	[[ -f "$DIR/`basename $f`" ]] || cp -- "$f" "$DIR" || die "problems copying $f to $DIR"
 fi
 #fi
 done
@@ -188,10 +208,20 @@ done
 #fbiopts=
 #$FBI $fbiopts -P -- $DIR/* $DIR/*/* $DIR/*/*/* $DIR/*/*/*/* $DIR/*/*/*/*/* $DIR/*/*/*/*/*/* $DIR/*/*/*/*/*/*/*
 #echo "options are $fbiopts"
-find $DIR/ -type f  | $FBI $fbiopts  -- -
-#cacaview $DIR/*
-#$FBI $fbiopts -P  `find $DIR -iname '*.png' -or -iname '*.jpg' -or -iname '*.gif' -or -iname '*.jpeg' -or -iname '*.tiff' -or -iname '*.bmp'`
+
+# there should be some filter to avoid feed garbage to fim ... 
+find $DIR/ -type f -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.gif' -or -iname '*.bmp' -or -iname '*.tiff' | $FBI $fbiopts  -- -
+
+# when no framebuffer device is available, we could invoke another console viewer, couldn't we ?
+# cacaview $DIR/*
+
+# the pld syntax
+# $FBI $fbiopts -P  `find $DIR -iname '*.png' -or -iname '*.jpg' -or -iname '*.gif' -or -iname '*.jpeg' -or -iname '*.tiff' -or -iname '*.bmp'`
+
+# or the older ..
 #$FBI $fbiopts -P -- $files
+
+# or the ancient one
 #fbi $fbiopts -P $DIR/ps*.tiff
 
 

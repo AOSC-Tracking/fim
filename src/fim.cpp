@@ -583,20 +583,20 @@ static struct option fim_options[] = {
     {"quiet",      no_argument,       NULL, 'q'},  /* quiet */
     {"verbose",    no_argument,       NULL, 'v'},  /* verbose */
     {"scroll",     required_argument, NULL, 's'},  /* set scrool */
-    {"timeout",    required_argument, NULL, 't'},  /* timeout value */
-    {"once",       no_argument,       NULL, '1'},  /* loop only once */
+/*    {"timeout",    required_argument, NULL, 't'},*/  /* timeout value */
+/*    {"once",       no_argument,       NULL, '1'},*/  /* loop only once */
     {"resolution", required_argument, NULL, 'r'},  /* select resolution */
     {"random",     no_argument,       NULL, 'u'},  /* randomize images */
-    {"font",       required_argument, NULL, 'f'},  /* font */
+/*    {"font",       required_argument, NULL, 'f'},*/  /* font */
     {"autozoom",   no_argument,       NULL, 'a'},
     {"autowidth",   no_argument,       NULL, 'w'},
-    {"edit",       no_argument,       NULL, 'e'},  /* enable editing */
-    {"list",       required_argument, NULL, 'l'},
+/*    {"edit",       no_argument,       NULL, 'e'},*/  /* enable editing */
+/*    {"list",       required_argument, NULL, 'l'},*/
     {"vt",         required_argument, NULL, 'T'},
 //    {"backup",     no_argument,       NULL, 'b'},
 //    {"preserve",   no_argument,       NULL, 'p'},
-    {"execute",    required_argument,       NULL, 'E'},
-    {"command",    required_argument,       NULL, 'c'},
+    {"execute-script",    required_argument,       NULL, 'E'},
+    {"execute-command",    required_argument,       NULL, 'c'},
     {"final-command",    required_argument,       NULL, 'F'},
     {"debug",      no_argument,       NULL, 'D'},
     {"no-rc-file",      no_argument,       NULL, 'N'},
@@ -647,7 +647,8 @@ int main(int argc,char *argv[])
 
 	setlocale(LC_ALL,"");	//uhm..
     	for (;;) {
-	    c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",
+	    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
+	    c = getopt_long(argc, argv, "wc:uvahPqVr:m:d:g:s:T:E:DNhF:",
 			fim_options, &opt_index);
 	if (c == -1)
 	    break;
@@ -655,11 +656,11 @@ int main(int argc,char *argv[])
 /*	case 0:
 	    // long option, nothing to do
 	    break;*/
-	case '1':
+//	case '1':
 	    //fbi's
-	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
 //	    once = 1;
-	    break;
+//	    break;
 	case 'a':
 	    //fbi's
 	    cc.setVariable("autotop",1);
@@ -693,11 +694,11 @@ int main(int argc,char *argv[])
 	case 's':
 	    if(atoi(optarg)>0) cc.setVariable("steps",atoi(optarg));
 	    break;
-	case 't':
+//	case 't':
 	    //fbi's
 //	    timeout = atoi(optarg);
-	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
-	    break;
+//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+//	    break;
 	case 'u':
 	    //fbi's
 	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
@@ -724,11 +725,11 @@ int main(int argc,char *argv[])
 	case 'p':
 //	    preserve = 1;
 	    break;*/
-	case 'l':
+//	case 'l':
 	    //fbi's
 //	    flist_add_list(optarg);
-	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
-	    break;
+//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+//	    break;
 	case 'T':
 	    //fbi's virtual terminal
 	    vt = atoi(optarg);
@@ -769,6 +770,24 @@ int main(int argc,char *argv[])
 	default:
 	case 'h':
 	    cc.printHelpMessage(argv[0]);
+	    std::cout << " where OPTIONS are taken from :\n";
+	    for(i=0;i<(sizeof(fim_options)/sizeof(struct option))-1;++i)
+	    {	
+	   	std::cout << "\t-"<<(char)(fim_options[i].val) ;
+		std::cout << "\t\t";
+	    	std::cout << "--"<<fim_options[i].name ;
+		switch(fim_options[i].has_arg){
+		case no_argument:
+		break;
+		case required_argument:
+		std::cout << " <arg>";
+		break;
+		default:
+		;
+		};
+		std::cout << "\n";
+		}
+		std::cout << " ( Please read the documentation distributed with the program, too, in FIM.TXT)\n";
 	    std::exit(0);
 	}
     }
