@@ -17,6 +17,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 #include "fim.h"
+//#include "string.h"
 
 namespace fim
 {
@@ -25,6 +26,17 @@ namespace fim
 	 *	this string should be dynamic as soon as possible,
 	 *	without breaking the rest of the program.
 	 */
+
+	void string::_string_init()
+	{	
+		/* the string is initialized as unallocated and blank */
+#ifdef _FIM_DYNAMIC_STRING
+		s=NULL;
+		len=0;
+#else
+		*s='\0';
+#endif
+	}
 
 	std::ostream& operator<<(std::ostream &os,const string& s)
 	{
@@ -45,42 +57,325 @@ namespace fim
 		return b.print(os);
 	}
 
-	string::string(){ this->reset(); }
-	string::string(const string& s){strcpy(this->s,s.s);}
-	string::string(const char *str){strncpy(s,str,TOKSIZE-1);s[TOKSIZE-1]='\0';/*??*/}
-	string::string(const int &i){sprintf(s,"%d",i);}//this works if TOKSIZE is enough
-	string::string(const unsigned int &i){sprintf(s,"%u",i);}//this works if TOKSIZE is enough
-	const char*string::c_str()const{return s;}
-	bool string::operator==(const string& s)const{return strcmp(this->s,s.s)==0;}
-	bool string::operator==(const char *  s)const{return strcmp(this->s,  s)==0;}
-	bool string::operator!=(const string& s)const{return strcmp(this->s,s.s)!=0;}
-	bool string::operator<=(const string& s)const{return strcmp(this->s,s.s)<=0;}
-	bool string::operator>=(const string& s)const{return strcmp(this->s,s.s)>=0;}
-	bool string::operator <(const string& s)const{return strcmp(this->s,s.s) <0;}
-	bool string::operator >(const string& s)const{return strcmp(this->s,s.s) >0;}
+	string::string()
+	{
+		_string_init();
+		/* no allocation is necessary for an empty string */
+	}
+
+	string::string(const string& s)
+	{
+		_string_init();
+		this->assign(s.c_str());
+	}
+
+	string::string(const char *str)
+	{
+		_string_init();
+		this->assign(str);
+	}
+
+	string::~string()
+	{
+#ifdef _FIM_DYNAMIC_STRING
+		if(s && len==0){std::cout <<"anomalia\n";exit(-1);}
+
+		if(s)
+		{
+			fim_free(s);
+		}
+#else
+#endif
+	}
+
+
+#define FIM_CHARS_FOR_INT 16
+
+	string::string(const int &i)
+	{
+		_string_init();
+		char buf[FIM_CHARS_FOR_INT];
+		sprintf(buf,"%d",i);
+		assign(buf);
+	}
+
+	string::string(const unsigned int &i)
+	{
+		_string_init();
+		char buf[FIM_CHARS_FOR_INT];
+		sprintf(buf,"%u",i);
+		assign(buf);
+	}
+
+	const char*string::c_str()const
+	{
+		if(  this->isempty() == true ) return "";
+//		return dupstr(s);
+		return s;
+	}
+
+	/*
+	 * null or empty is the same for us
+	 * */
+	bool string::operator==(const string& s)const
+	{
+		return ((*this) == s.c_str());
+	}
+
+	bool string::operator==(const char *  s)const
+	{
+		/* both empty ? */
+		if(fim_empty_string(s) && this->isempty())return true;
+		/* if one only is empty then are not equal */
+		if(fim_empty_string(s) || this->isempty())return false;
+		return strcmp(this->s,  s)==0;
+	}
+
+	bool string::operator!=(const string& s)const
+	{
+		return !((*this)==s);
+	}
+
+	bool string::operator<=(const string& s)const
+	{	
+		return ((*this)<s)||((*this)==s);
+	}
+
+	bool string::operator>=(const string& s)const
+	{
+		return ((*this)>s)||((*this)==s);
+	}
+
+	bool string::operator <(const string& s)const
+	{
+		return ((*this)<s.c_str());
+	}
+
+	bool string::operator >(const string& s)const
+	{
+		return ((*this)>s.c_str());
+	}
+
+	bool string::operator >(const char *s)const
+	{
+		if(this->isempty())return false;
+		if(!s || !*s)return true;
+		/* this is not an empty string */
+		return (strcmp(this->s,s) >0);
+	}
+
+	bool string::operator <(const char *s)const
+	{
+		if(this->isempty())
+		{
+			if( s && *s )return true;
+			else return false;
+		}
+		/* this is not an empty string */
+		if(s && !*s)return false;
+		return (strcmp(this->s,s) <0);
+	}
 
 	string& string::operator =(const string& s)
 	{
-		*(this->s)='\0';
-		int len=strlen(this->s),slen=strlen(s.s),flen=TOKSIZE-1-slen-len;
-		strncat(this->s+len,s.s,flen);
+		assign(s);
 		return *this;
 	} 
-	string& string::operator+=(const string& s)
+
+	/*
+	 * essentially, realloc for a l chars long string
+	 *
+	 * returns the new allocated size
+	 * in case of allocation error, returns the available allocated space (could be >= 0)
+	 * */
+	int string::reallocate(int l=0)
 	{
-		int len=strlen(this->s),slen=strlen(s.s),flen=TOKSIZE-1-slen-len;
-		strncat(this->s+len,s.s,flen);
-		return *this;
-	} 
-	string& string::operator+(const string& s)const
+		if(l<=0)return reset(0);
+#ifdef _FIM_DYNAMIC_STRING
+		++l;
+		if(l<size())return size();
+		char *ns;/* new string */
+//		std::cout <<"realloc..\n";
+		ns=(char*)realloc((void*)s,l);/* the terminator is our stuff */
+		if(ns)
+		{
+			s=ns;
+			if(l>len)memset(s+len,0,l-len);
+			len=l;
+		}
+		//if realloc fails, we keep the old one
+#else
+#endif
+		return this->size();
+	}
+
+	string string::operator+=(const string& s)
 	{
-		return string(*this)+=s;
+//		exit(0);	//////////////////////////
+
+		int r,n;// returned, needed
+		n = ( this->length() + s.length() );
+		r = this->reallocate( n );
+//		std::cout << "realloc : "<< n << "->" << r << "\n" ; 
+		if(r < n || r==0)
+		{
+//			std::cout << "severe error in"<<__FILE__<<":"<<__LINE__<<" \n";
+			return *this; // ! FIXME !
+		}
+//		std::cout << "catenating\n";
+		int tlen=strlen(this->s),
+		    slen=strlen(s.c_str()),
+		    flen=this->size()-1-slen-tlen;
+		strncat(this->s+tlen,s.c_str(),slen);
+//		std::cout << this->s<<"\n";
+		return string(*this);
 	} 
-	int  string::length()const { return strlen(s); }
-	int  string::size()const { return length(); }
-	int  string::find(const string&str)const{return find(str.s);}
-	int  string::assign(const string&str){strcpy(s,str.s);return length();}
-	int  string::find(const char*ss)const{const char*p=strstr(s,ss);if(!p)return -1;return p-s;}
- 	std::ostream& string::print(std::ostream &os)const { return os<<s; }
+
+	/* allocates a new object and returns it */
+	string string::operator+(const string& s)const
+	{
+		string res(*this);
+		res+=s;
+		return res;
+	}
+
+	/* reports the effective used space */
+	int  string::length()const
+	{
+		if(isempty())return 0;
+		return strlen(s);
+	}
+
+	/* reports the effective allocated space */
+	int  string::size()const
+	{
+#ifdef _FIM_DYNAMIC_STRING
+		if(!s)return 0;
+		return len;
+#else
+		return sizeof(s);
+#endif
+	}
+
+	int  string::find(const string&str)const
+	{
+		return find(str.c_str());
+	}
+
+	/*
+	 * returns the new length
+	 * */
+	int  string::assign(const string&str)
+	{
+		return assign(str.c_str());
+	}
+
+	/*
+	 * returns the new length
+	 * */
+	int  string::assign(const char *s)
+	{
+		int l,r;
+		if(!s || !*s)	// length is zero in these cases
+		{
+			return this->reset(0);
+		}
+		l=strlen(s);//at least 1, as the string is not empty
+
+		/*
+		 * the string is reset, and should allocate some bytes for us (or have already allocated)..
+		 * */
+		if((r=reset(l))<1 || l<1 )
+		{
+//			std::cout << "severe error in"<<__FILE__<<":"<<__LINE__<<" \n";
+			return this->reset(0);
+		}
+
+		strncpy(this->s,s,r);	//r can be longer than strlen(s)
+
+		this->s[max((min(r-1,l)),0)]='\0';	/* remember r is the size of the allocated space */
+
+//		std::cout << "\""<<this->s <<"\" assigned ("<<l<<")\n";
+
+		return (this->size());	/*  the effective allocated memory */
+	}
+	
+	/*
+	 * empty or null string is always found
+	 * */
+	int  string::find(const char*ss)const
+	{
+		if( this->isempty() && !ss      )return 0;
+		if( this->isempty() && *ss!='\0')return -1;
+		if(!this->isempty() && *ss=='\0')return 0;
+
+		const char*p=strstr(s,ss);if(!p)return -1;return p-s;
+	}
+ 	
+	std::ostream& string::print(std::ostream &os)const
+	{
+		if(this->isempty())return os;
+		return os<<this->s;
+	}
+
+	/*
+	 * a string is empty if NULL or allocated to zero bytes (if possible)
+	 * */
+	bool string::isempty()const
+	{
+#ifdef _FIM_DYNAMIC_STRING
+		return (s==NULL || len==0 || *s=='\0');
+#else
+		return *s=='\0';
+#endif
+	}
+
+	/* 
+	 * make room for a string long at most l
+	 *
+	 * moreover, the allocated space is cleared and the maximum
+	 * returns the new allocated size
+	 * in case of allocation error, returns the available allocated space (could be >= 0)
+	 */
+	int string::reset(int l)
+	{
+//		std::cout << "l: " << l << "\n";
+		l=min(l,max_string());	/* etica professionale */
+
+//		if(l<0)ferror("resetting string to <0");
+
+#ifdef _FIM_DYNAMIC_STRING
+		//blanking
+		if(s){fim_free(s); s=NULL;len=0;}
+		//do we need some allocation? only if l was already > 0
+		if(l+1<len && s)
+		{
+			memset(s,0,l+1);
+		}else
+		if(l++>0)
+		{
+
+#if 1
+			// this is a sort of buffering
+//			#define BUFSIZE 64
+			#define BUFSIZE TOKSIZE
+			l=(l<BUFSIZE?BUFSIZE:l);
+#endif
+
+			s=(char*)(fim_calloc(l));
+
+//			std::cout<<"allocated "<<(int*)s<<"\n";
+//
+			len=(s?l:0);	/* who knows .. */
+		}
+		else
+		{
+			/* we keep the string blanked  and we are happy */
+		}
+#else
+		*s='\0';
+#endif
+		return (this->size());
+	}
 
 }

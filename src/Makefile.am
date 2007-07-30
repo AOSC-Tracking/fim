@@ -21,8 +21,8 @@ lex.yy.o  : lex.yy.cc
 lex.yy.cc: lex.lex
 	$(LEX) $(LFLAGS) lex.lex
 
-LFLAGS := -+
-YFLAGS := -v -d
+LFLAGS = -+
+YFLAGS = -v -d
 
 yacc.tab.cpp: yacc.ypp lex.lex
 	$(YACC) $(YFLAGS) yacc.ypp -o yacc.tab.cpp
@@ -132,16 +132,16 @@ EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs.sh \
 #fim_cpp_CPP_FLAGS=-DFIM_VERSION -DFIM_AUTHOR
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
 
- DEFINES  :=
+ DEFINES  =
 # The following defines already migrated outta here...
 #DEFINES  += -D FIM_DEFAULT_KEY_CONFIG  # with a builtin default key mapping (advised)
-#DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key binding
+DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key binding
 #DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
 
 # The following defines should migrate outta here!
  DEFINES  += -D FIM_NOFIMRC             # with ~/.fimrc loading disabled
 #DEFINES  += -D FIM_NOSCRIPTING         # any script loading disabled
-#DEFINES  += -D FIM_NOFB                # disable the framebuffer (for debug mostly)
+ DEFINES  += -D FIM_NOFB                # disable the framebuffer (for debug mostly)
  DEFINES  += -D FIM_AUTOCMDS            # autocommands
  DEFINES  += -D FIM_RECORDING           # command recording
  DEFINES  += -D FIM_SWITCH_FIXUP        # still bugful
@@ -154,8 +154,8 @@ EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs.sh \
 #DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
 #DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
 #DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
- FIM_VERSION:= $(VERSION)
- FIM_AUTHOR := '"dezperado _CUT_ autistici _CUT_ org"'
+ FIM_VERSION= $(VERSION)
+ FIM_AUTHOR = '"dezperado _CUT_ autistici _CUT_ org"'
 
 DEFINES += -D X_DISPLAY_MISSING @DEFS@ @EXTRADEFS@
 
@@ -175,7 +175,7 @@ FIMLIBS+=-L/lib
 #FIMLIBS+=-lgif
 
 
-O:=-O3 -funroll-loops
+#O=-O3 -funroll-loops
 
  
 fim_LDADD = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(FIMLIBS) \

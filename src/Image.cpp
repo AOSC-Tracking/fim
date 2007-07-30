@@ -38,12 +38,14 @@ namespace fim
 		float xs,ys;
 		if(!img){return;}
 		if(!fimg){invalid=1;return;}
-#ifndef FIM_NOFB
-		xs = (float)fb_var.xres / fimg->i.width;
-		ys = (float)fb_var.yres / fimg->i.height;
-#else
-		xs=ys=1.0f;
-#endif
+
+		if(g_fim_no_framebuffer)xs=ys=1.0f;
+		else
+		{
+			xs = (float)fb_var.xres / fimg->i.width;
+			ys = (float)fb_var.yres / fimg->i.height;
+		}
+
 		newscale = (xs < ys) ? xs : ys;
 		rescale();
 	}
@@ -54,9 +56,10 @@ namespace fim
 		if(!img){return;}
 		if(!fimg){invalid=1;return;}
 //		if(cc.isInScript())return;
-#ifndef FIM_NOFB
+//
+		if(g_fim_no_framebuffer=0)newscale = (float)fb_var.xres / fimg->i.width;
 		newscale = (float)fb_var.yres / fimg->i.height;
-#endif
+
 		rescale();
 	}
 
@@ -65,9 +68,9 @@ namespace fim
 		if(!img){return;}
 		if(!fimg){invalid=1;return;}
 //		if(cc.isInScript())return;
-#ifndef FIM_NOFB
-		newscale = (float)fb_var.xres / fimg->i.width;
-#endif
+//
+		if(g_fim_no_framebuffer=0)newscale = (float)fb_var.xres / fimg->i.width;
+
 		rescale();
 	}
 
@@ -84,7 +87,9 @@ namespace fim
 	    	if(!img)return -1;
 	    	if(invalid)return -1;//IN CASE OF MEMORY PROBLEMS
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
-#ifndef FIM_NOFB
+
+		if(g_fim_no_framebuffer)return 0;
+
 		if(cc.noFrameBuffer())return 0;
 		//FIX UPPER MEMORY CONSUMPTION LIMIT...
 //		if(newscale > maxscale ) newscale = maxscale;
@@ -128,7 +133,6 @@ namespace fim
 			cc.setVariable("swidth",(int)img->i.width);
 		}
 		else redraw=0;
-#endif
 		return 0;
 	}
 
@@ -157,7 +161,8 @@ namespace fim
 		int flip=cc.getIntVariable("autoflip");
 		int mirror=cc.getIntVariable("automirror");
     
-#ifndef FIM_NOFB
+		if(g_fim_no_framebuffer)return;
+
 		if (new_image && redraw)
 		{
 			if(autotop && img->i.height>=fb_var.yres) //THIS SHOULD BECOME AN AUTOCMD..
@@ -213,7 +218,6 @@ namespace fim
 			//fb_clear_screen();
 			svga_display_image(img, left, top, mirror, flip);
 		}
-#endif
 	}
 
 	Image::Image(const char *fname_)
@@ -273,7 +277,8 @@ namespace fim
 		 *
 		 * WARNING : IT SEEMS .. USELESS :)
 		 */
-#ifndef FIM_NOFB
+		if(g_fim_no_framebuffer)return;
+
 		float old=scale;float fnew=newscale;
 		unsigned int width, height;
 		float cx,cy;
@@ -285,7 +290,6 @@ namespace fim
 		top    = (int)(cy * height - fb_var.yres/2);
 		//the cast was added by me...
 		scale = newscale;
-#endif
 	}
 
 	void Image::load(const char *fname_)
@@ -298,11 +302,12 @@ namespace fim
 		fname = dupstr(fname_);//safe
 		assert(fname);
 		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))set_status_bar("please wait while reloading...", "*");
-#ifndef FIM_NOFB
-		fimg = read_image(fname);
-#else
-		fimg=NULL;
-#endif
+
+		if(g_fim_no_framebuffer)
+			fimg=NULL;
+		else
+			fimg = read_image(fname);
+
 //		desc = make_desc(&fimg->i,fname);
 //	    	info = make_info(fimg,scale);
 //		desc = info = "foo";
@@ -392,42 +397,34 @@ namespace fim
 
 	int Image::onBottom()
 	{
-#ifndef FIM_NOFB
+		if(g_fim_no_framebuffer)return 0;
+
 		if(img && invalid==0) return (top + fb_var.yres >= img->i.height);
 		else return 0;
-#else
-		return 0;
-#endif
 	}
 
 	int Image::onRight()
 	{
-#ifndef FIM_NOFB
+		if(g_fim_no_framebuffer)return 0;
+
 		if(img && invalid==0)return (left + fb_var.xres >= img->i.width);
 		else return 0;
-#else
-		return 0;
-#endif
 	}
 
 	int Image::onLeft()
 	{
-#ifndef FIM_NOFB
+		if(g_fim_no_framebuffer)return 0;
+
 		if(img && invalid==0)return (left <= 0 );
 		else return 0;
-#else
-		return 0;
-#endif
 	}
 
 	int Image::onTop()
 	{
-#ifndef FIM_NOFB
+		if(g_fim_no_framebuffer)return 0;
+
 		if(img && invalid==0)return (top <= 0 );
 		else return 0;
-#else
-		return 0;
-#endif
 	}
 	
 	Image::~Image()

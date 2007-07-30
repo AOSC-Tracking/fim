@@ -276,7 +276,9 @@ namespace fim
 		addCommand(new Command(fim::string("pan_sw" ),fim::string("pans the image south west"),&browser,&Browser::pan_sw));
 		addCommand(new Command(fim::string("pan_se" ),fim::string("pans the image south east"),&browser,&Browser::pan_se));
 		addCommand(new Command(fim::string("panup" ),fim::string("pans the image up"),&browser,&Browser::pan_up));
-		addCommand(new Command(fim::string("pandown" ),fim::string("pans the image down"),&browser,&Browser::pan_down));
+//		std::cout <<  "^^^\n";
+		addCommand(new Command("pandown" ,"pans the image down",&browser,&Browser::pan_down));
+//		exit(0);
 		addCommand(new Command(fim::string("panleft" ),fim::string("pans the image left"),&browser,&Browser::pan_left));
 		addCommand(new Command(fim::string("panright" ),fim::string("pans the image right"),&browser,&Browser::pan_right));
 		addCommand(new Command(fim::string("load" ),fim::string("load the image, if not yet loaded"),&browser,&Browser::load));
@@ -391,15 +393,16 @@ namespace fim
 		for(unsigned int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
 #endif		
 		if ( browser.empty_file_list() && scripts.size()==0 )
+		if(g_fim_no_framebuffer==0)
 		{
-#ifndef FIM_NOFB
 			printHelpMessage();
 			//when debugging Fim, we are not interested in this feature
 			this->quit();
-#endif
 		}
-		autocmd_add("PreExecutionCycle","",postInitCommand.c_str());
-		autocmd_add("PostExecutionCycle","",postExecutionCommand.c_str());
+		if(postInitCommand!=fim::string(""))
+			autocmd_add("PreExecutionCycle","",postInitCommand.c_str());
+		if(postExecutionCommand!=fim::string(""))
+			autocmd_add("PostExecutionCycle","",postExecutionCommand.c_str());
 		/*
 		 *	FIX ME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
 		 * */
@@ -802,15 +805,17 @@ namespace fim
 	 	while(show_must_go_on)
 		{
 			cycles++;
-#ifndef FIM_NOFB
-			fd_set          set;
-			struct timeval  limit;
-			FD_SET(0, &set);
-			limit.tv_sec = -1;
-			limit.tv_usec = 0;
-#else
-			//ic=true;
-#endif
+
+			if(g_fim_no_framebuffer==0)
+			{
+				fd_set          set;
+				struct timeval  limit;
+				FD_SET(0, &set);
+				limit.tv_sec = -1;
+				limit.tv_usec = 0;
+			}
+			else;//ic=true;
+
 			if(ic==1)
 			{
 				char *rl=readline(":");
@@ -1090,7 +1095,7 @@ namespace fim
 		if(fd==NULL)return -1;
 		r=fread(buf,1,sizeof(buf)-1,fd);if(r!=-1)buf[r]='\0';
 		if(r==-1)return -1;
-		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
+		buf[min((size_t)fim::string::max_string(),sizeof(buf)-1)]='\0';
 		return fim::string(buf);
 	}
 
@@ -1105,7 +1110,7 @@ namespace fim
 		r=fread(buf,1,sizeof(buf)-1,fd);if(r!=-1)buf[r]='\0';
 		if(r==-1)return -1;
 		//cout << "read " << r << " bytes from descriptor" << (int)fd << "\n";
-		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
+		buf[min((size_t)fim::string::max_string(),sizeof(buf)-1)]='\0';
 		//cout << buf; 
 		isinscript=1;
 		execute(buf,0);
@@ -1134,7 +1139,7 @@ namespace fim
 		//if(r==-1){free(buf);return -1;}
 		//cout << "read " << r << " bytes from descriptor" << fd << "\n";
 		//buf[min((size_t)fim::string::max(),ss.st_size-1)]='\0';
-		buf[min((size_t)fim::string::max(),sizeof(buf)-1)]='\0';
+		buf[min((size_t)fim::string::max_string(),sizeof(buf)-1)]='\0';
 		//cout << buf; 
 		isinscript=1;
 		execute(buf,0);

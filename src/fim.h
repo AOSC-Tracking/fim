@@ -120,6 +120,6 @@ void fb_status_screen(const char *msg, int noDraw);
 int fim_rand();
 namespace rl
 {
-int fim_set_command_line_text(const char*s);
+	int fim_set_command_line_text(const char*s);
 }
 #endif

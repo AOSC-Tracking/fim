@@ -21,6 +21,7 @@
 #include "common.h"
 //#include "src/fbtools.h"	//for FB_ costants..
 #define min(x,y) ((x)<(y)?(x):(y))
+#define max(x,y) ((x)>(y)?(x):(y))
 extern rl_hook_func_t *rl_event_hook;
 extern rl_hook_func_t *rl_pre_input_hook;
 
@@ -115,4 +116,5 @@ extern int svga_show(struct ida_image *img, int timeout, char *desc, char *info,
 }
 class fim::CommandConsole;
 extern fim::CommandConsole cc;
+extern int g_fim_no_framebuffer;
 #endif

@@ -18,8 +18,27 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
+/*
+ * if defined, gives problems with STL templates ..
+ */
+//#define _FIM_DYNAMIC_STRING 1
+
 namespace fim
 {
+#define fim_free(x) {free(x);}
+//#define fim_free(x) {std::cout<<"freeing "<<(int*)x<<"\n";free(x);x=NULL;std::cout<<"freeed!\n";}
+#define fim_calloc(x) calloc((x),1)
+#define fim_malloc(x) malloc(x)
+#define fim_realloc(x,n) realloc((x),(n))
+#define fim_empty_string(s) (!(s) || !(*(s)))
+
+#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);cc.quit(-1);}
+	/*
+	 *	Allocation and duplication of a single string
+	 */
+	static char * fim_dupstr (const char* s);
+
 	class string{
 	/*
 	 * this is a declaration of my love to the STL.. (i wrote this dumb code 
@@ -29,9 +48,22 @@ namespace fim
 	 * FIX ME : all of this should be made dynamic, but with the right semantics.
 	 */
         static const int TOKSIZE=128*8*4*2;	//max len.NUL included
+#ifdef _FIM_DYNAMIC_STRING
+	char*s;		/* the string : can be NULL */
+	int len;	/* the allocated amount */
+#else
 	char s[TOKSIZE];
+#endif
 	public :
-	void reset(){*s='\0';}
+	void _string_init();
+
+	int reallocate(int l);
+
+	int reset(int l);
+
+	bool isempty()const;
+
+	~string();
 	string();
 	string(const string& s);
 	string(const char *str);
@@ -45,15 +77,19 @@ namespace fim
 	bool operator>=(const string& s)const;
 	bool operator <(const string& s)const;
 	bool operator >(const string& s)const;
+	bool operator >(const char *s)const;
+	bool operator <(const char *s)const;
 
 	string& operator =(const string& s);
-	string& operator+=(const string& s);
-	string& operator+(const string& s)const;
+	string operator+=(const string& s);
+	string operator+(const string& s)const;
+	int  reinit(const int n)const;
 	int  length()const;
-	static int  max(){return TOKSIZE-1;}
+	static int  max_string(){return TOKSIZE-1;}
 	int  size()const;
 	int  find(const string&str)const;
 	int  assign(const string&str);
+	int  assign(const char*str);
 	int  find(const char*ss)const;
  	std::ostream& print(std::ostream &os)const;
 //	int operator=(int &i,const string& s){i=-1;return i;}

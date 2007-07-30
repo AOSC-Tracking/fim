@@ -127,12 +127,14 @@ namespace fim
 	 */
 	void cleanup_and_exit(int code)
 	{
-	#ifndef FIM_NOFB
-		fb_clear_mem();
-		tty_restore();
-		fb_cleanup();
-	#endif
-		exit(code);
+		if(g_fim_no_framebuffer)
+			exit(code);
+		else
+		{
+			fb_clear_mem();
+			tty_restore();
+			fb_cleanup();
+		}
 	}
 }
 
@@ -157,7 +159,9 @@ void status(const char *desc, const char *info)
 	char *str,*p;
 	const char *prompt=cc.get_prompt();
 	char no_prompt[1];*no_prompt='\0';
-#ifndef FIM_NOFB
+
+	if(g_fim_no_framebuffer)return;
+
 	if(!cc.inConsole())prompt=no_prompt;
 	chars = fb_var.xres / fb_font_width();
 	if(chars<48)return;//something strange..
@@ -182,7 +186,6 @@ void status(const char *desc, const char *info)
 
 	fb_status_line((unsigned char*)str);
 	free(str);
-#endif
 }
 
 void set_status_bar(const char *desc, const char *info)
@@ -229,7 +232,11 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 	/*	WARNING		*/
 	//noDraw=0;
 	/*	WARNING		*/
-#ifndef FIM_NOFB
+	if(g_fim_no_framebuffer)
+	{
+		if(msg)printf("%s",msg);
+		return;
+	}
 
 	int y,i,j,l,w;
 	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
@@ -321,10 +328,6 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 
 	    y = 1*fb_font_height();
 	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
-#else
-	if(msg)printf("%s",msg);
-	return;
-#endif
 }
 
 /*
@@ -335,14 +338,14 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
  */
 void status_screen(const char *desc, char *info)
 {
-#ifndef FIM_NOFB
+	if(g_fim_no_framebuffer)return;
+
 	/*
 	 *	TO FIX
 	 *	NULL,NULL is the clearing combination !!
 	 */
 	//if(!desc)return;	// !!
 	fb_status_screen(desc);
-#endif
 }
 
 namespace rl
@@ -437,12 +440,10 @@ static void redisplay()
 	 */
 	//static int c=100;
 //	fb_setcolor(c=~c);//sleep(1);
-#ifndef FIM_NOFB
-	status(( char*)rl_line_buffer,NULL);
-#else
-	
-	printf("%s",rl_line_buffer);
-#endif
+	if(g_fim_no_framebuffer)
+		printf("%s",rl_line_buffer);
+	else 
+		status(( char*)rl_line_buffer,NULL);
 //	fprintf(stderr,"::%s\n",rl_line_buffer);
 //	fprintf(stdout,"::%s\n",rl_line_buffer);
 }
@@ -476,13 +477,15 @@ void initialize_readline ()
 	/* Tell the completer that we want a crack first. */
 	rl_attempted_completion_function = fim_completion;
 	rl_completion_display_matches_hook=completion_display_matches_hook;
-#ifndef FIM_NOFB
-	rl_catch_signals=0;
-	rl_catch_sigwinch=0;
-	rl_redisplay_function=redisplay;
-        rl_event_hook=redisplay_hook;
-        rl_pre_input_hook=redisplay_hook;
-#endif
+
+	if(g_fim_no_framebuffer==0)
+	{
+		rl_catch_signals=0;
+		rl_catch_sigwinch=0;
+		rl_redisplay_function=redisplay;
+	        rl_event_hook=redisplay_hook;
+	        rl_pre_input_hook=redisplay_hook;
+	}
 	//rl_completion_entry_function=NULL;
 	/*
 	 * to do:
@@ -504,6 +507,7 @@ void initialize_readline ()
 
 
 fim::CommandConsole cc;
+	int g_fim_no_framebuffer;
 
 /* Generator function for command completion.  STATE lets us
  *    know whether to start from scratch; without any state
@@ -601,6 +605,7 @@ static struct option fim_options[] = {
     {"debug",      no_argument,       NULL, 'D'},
     {"no-rc-file",      no_argument,       NULL, 'N'},
     {"read-from-stdin",      no_argument,       NULL, '-'},
+    {"no-framebuffer",      no_argument,       NULL, 't'},
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -630,6 +635,7 @@ void chomp(char *s)
 	for(;*s;++s)if(*s=='\n')*s='\0';
 }
 
+
 int main(int argc,char *argv[])
 {
 	/*
@@ -644,11 +650,12 @@ int main(int argc,char *argv[])
 	read_file_list_from_stdin=0;
 //	char             *desc,*info;
 	char c;
+	g_fim_no_framebuffer=0;
 
 	setlocale(LC_ALL,"");	//uhm..
     	for (;;) {
 	    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-	    c = getopt_long(argc, argv, "wc:uvahPqVr:m:d:g:s:T:E:DNhF:",
+	    c = getopt_long(argc, argv, "wc:uvahPqVr:m:d:g:s:T:E:DNhF:t",
 			fim_options, &opt_index);
 	if (c == -1)
 	    break;
@@ -758,6 +765,10 @@ int main(int argc,char *argv[])
 	    //fim's
 		cc.setVariable("no_rc_file",1);
 	    break;
+	case 't':
+	    //fim's
+	    	g_fim_no_framebuffer=1;
+	    break;
 	case '-':
 	    //fim's
 	    read_file_list_from_stdin=1;
@@ -811,7 +822,7 @@ int main(int argc,char *argv[])
 		{
 			chomp(lineptr);
 			cc.push(lineptr);
-			printf("%s\n",lineptr);
+			//printf("%s\n",lineptr);
 			free(lineptr);
 			lineptr=NULL;
 		}
@@ -820,7 +831,8 @@ int main(int argc,char *argv[])
 	}
 #endif
 
-#ifndef FIM_NOFB
+	if(g_fim_no_framebuffer==0)
+	{
 	if(!cc.noFrameBuffer())
 	{
 		//initialization of the framebuffer text
@@ -834,6 +846,7 @@ int main(int argc,char *argv[])
 		 * C-z is inhibited now (for framebuffer's screen safety!)
 		 */
 		signal(SIGTSTP,SIG_IGN);
+		//signal(SIGSEGV,cleanup_and_exit);
 		//set text color to white ?
 		fb_text_init2();
 
@@ -877,7 +890,7 @@ int main(int argc,char *argv[])
 	}
 	}
 	tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
-#endif
+	}
 	cc.init();
 	cc.executionCycle();
 	cc.quit(0);

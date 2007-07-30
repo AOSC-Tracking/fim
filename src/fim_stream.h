@@ -57,11 +57,13 @@ std::basic_ostream<char, std::char_traits<char> >::basic_ostream(const <anonymou
 		}
 		fim_stream& operator<<(const  char* s)
 		{
-#ifndef FIM_NOFB
-			if(s)status_screen(s,NULL);
-#else
-			if(s)printf("%s",s);
-#endif
+			if(g_fim_no_framebuffer==0)
+			{
+				if(s)status_screen(s,NULL);
+			}
+			else
+				if(s)printf("%s",s);
+
 			return *this;
 		}
 		fim_stream& operator<<(const  fim::string&s)
