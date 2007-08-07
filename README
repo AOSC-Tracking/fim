@@ -27,14 +27,14 @@ Implemented features:
  - command line history
  - command line tab-based command autocompletion (thanks to the readline)
  - command line command autocompletion (optional)
- - key-action binding, with SHIFT and CONTROL key combinations
+ - key-action binding, with Shift and Control key combinations
  - simple if-while scriptability, with integer,float,and string variables and arithmetic evaluation
  - command aliases support (macros)
  - event autocommands (in Vim's 'autocmd' style)
  - regular expressions to enrich autocommand behaviour
  - configuration (initialization) file support
  - usable builtin default configuration
- - wrapper script to convert pdf,ps,eps,dvi,cbr(rar),cbz(zip),tar,tar.gz,tgz
+ - wrapper script to convert pdf,ps,eps,dvi,cbr(rar),cbz(zip),tar,tar.gz,tgz,http://...
    contents into images and display with Fim
  - index based goto
  - regular expressions (on filename) based goto
@@ -46,8 +46,8 @@ Implemented features:
  - system call
  - image caching
  - image prefetching
- - pipe with some input program
- - these features could be enabled or disabled at compile time editing the Makefile
+ - pipe commands from some input program
+ - many of these features could be enabled or disabled at compile time editing the Makefile
 
 Yet unimplemented features :
 
@@ -60,10 +60,15 @@ Yet unimplemented features :
 ================================================================================
 
  - fbi, with curl and exif support disabled
- - the GNU readline library
- - flex and bison (NOT any lex and yacc)
- - the GCC ( Gnu Compiler Collection )
- - header files for : libpng, libjpeg, libungif, libtiff
+ - the GNU readline library ( http://directory.fsf.org/readline.html )
+ - GNU flex  (NOT any lex ) ( http://directory.fsf.org/flex.html  )
+ - GNU bison (NOT any yacc) ( http://directory.fsf.org/bison.html )
+ - the GCC ( Gnu Compiler Collection ) ( http://directory.fsf.org/gcc.html )
+ - header files for :
+	libpng		  ( http://directory.fsf.org/libpng.html )
+	libjpeg		  ( http://www.ijg.org/ )
+ 	libungif	  ( http://sourceforge.net/projects/libungif/ )
+	libtiff 	  ( http://www.libtiff.org/ )
 
  Libraries originally required by Fbi but removed from Fim : libFS, libCURL, libLIRC
 
@@ -110,6 +115,7 @@ The libraries can be found on their sites (as of 20070312):
  libpng   : http://www.libpng.org/
  libjpeg  : http://www.ijg.org/
  libungif : http://sourceforge.net/projects/libungif/
+ libtiff  : http://www.libtiff.org/
 
 Note that it is highly likely that you already have these libraries on your
 system.
@@ -126,6 +132,9 @@ Useful documents I read during the coding of this patch:
 - Ray Lischner, STL Pocket Reference, O'Reilly, 2004 
 man console_codes
 man fb.modes
+
+Useful documents I could read later on:
+man 3 history
 
 Tested platforms :
  - 2.6.17 Linux Kernel, GCC-3.4.6, gentoo
@@ -146,6 +155,26 @@ and Bison (from 1.875d on) and Flex :
  $ emerge flex bison
 
 This should suffice.
+Once these requirements are satisfied, you could proceed with the 
+	./configure ; make ; make install
+sequence.
+Installation details are in the INSTALL file.
+
 BEWARE : THERE COULD BE PROBLEMS WITH FLEX/BISON! 
+
 "flex version 2.5.4" and "bison (GNU Bison) 1.875d" are known to work.
+
+================================================================================
+			License
+================================================================================
+
+ Fim is free software, and is licensed under the GPLv2 or later.
+
+ Fim extends the Fbi program by Gerd Hoffmann, which is GPLv2.
+ Fim also uses a regex.c file from the GNU Regular Expressions library, 
+distributed on http://directory.fsf.org/regex.html, in the version shipped with
+the Mutt mail user agent (http://www.mutt.org).
+ It also uses some scripts shipped with the Vim text editor (http://www.vim.org),
+which is licensed compatibly with the GPL.
+
 
