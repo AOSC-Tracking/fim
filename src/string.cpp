@@ -21,6 +21,7 @@
 
 namespace fim
 {
+#ifndef _FIM_STRING_WRAPPER
 	/*
 	 *	FIX ME : 
 	 *	this string should be dynamic as soon as possible,
@@ -45,10 +46,10 @@ namespace fim
 
 	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
 	{
-		std::cout<<"{";
+		os<<"{";
 		for(unsigned int i=0;i<v.size();++i)
-			std::cout<<v[i]<<",";
-		std::cout<<"}";
+			os<<v[i]<<",";
+		os<<"}";
 		return os;
 	}
 
@@ -89,7 +90,6 @@ namespace fim
 	}
 
 
-#define FIM_CHARS_FOR_INT 16
 
 	string::string(const int &i)
 	{
@@ -116,7 +116,7 @@ namespace fim
 
 	/*
 	 * null or empty is the same for us
-	 * */
+	 */
 	bool string::operator==(const string& s)const
 	{
 		return ((*this) == s.c_str());
@@ -377,5 +377,33 @@ namespace fim
 #endif
 		return (this->size());
 	}
+#else
+	std::ostream& operator<<(std::ostream &os,const string& s)
+	{
+		return os;//.print(os);
+	}
 
+	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
+	{
+		std::cout<<"{";
+		for(unsigned int i=0;i<v.size();++i)
+			std::cout<<v[i]<<",";
+		std::cout<<"}";
+		return os;
+	}
+
+	std::ostream& operator<<(std::ostream &os, const Browser & b)
+	{
+		return os;
+	}
+
+	string::string(const string& s):std::string(s.c_str())
+	{
+	}
+
+	string::string(int i)//:std::string(i)
+	{
+		*((std::string*)this) = i;
+	}
+#endif
 }

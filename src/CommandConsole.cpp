@@ -59,14 +59,26 @@ namespace fim
 		if(bindings[c]!="")
 		{
 			bindings[c]=binding;
-			return fim::string("keycode ")+fim::string(c)
-				+fim::string(" successfully reassigned to \"")+fim::string(bindings[c])+fim::string("\"\n");
+			fim::string rs("keycode ");
+			rs+=(int)c;
+			rs+=" successfully reassigned to \"";
+			rs+=bindings[c];
+			rs+="\"\n";
+			return rs;
+//			return fim::string("keycode ")+fim::string(c)
+//				+fim::string(" successfully reassigned to \"")+fim::string(bindings[c])+fim::string("\"\n");
 		}
 		else
 		{
 			bindings[c]=binding;
-			return fim::string("keycode ")+fim::string(c)
-				+fim::string(" successfully assigned to \"")+fim::string(bindings[c])+fim::string("\"\n");
+			fim::string rs("keycode ");
+			rs+=(int)c;
+			rs+=" successfully assigned to \"";
+			rs+=bindings[c];
+			rs+="\"\n";
+			return rs;
+//			return fim::string("keycode ")+fim::string(c)
+//				+fim::string(" successfully assigned to \"")+fim::string(bindings[c])+fim::string("\"\n");
 		}
 	}
 
@@ -144,13 +156,21 @@ namespace fim
 		/*
 		 * undinds the action eventually bound to the key combination code c
 		 */
+		fim::string rs("unbind ");
 		if(bindings[c]!="")
 		{
 			bindings.erase(c);
-			return fim::string("unbind ")+fim::string(c)+fim::string(": successfully unbinded.\n");
+			rs+=c;
+			rs+=": successfully unbinded.\n";
+			return rs;
+//			return fim::string("unbind ")+fim::string(c)+fim::string(": successfully unbinded.\n");
 		}
 		else
-			return fim::string("unbind ")+fim::string(c)+fim::string(": there were not such binding.\n");
+		{
+			rs+=c;
+			rs+=": there were not such binding.\n";
+//			return fim::string("unbind ")+fim::string(c)+fim::string(": there were not such binding.\n");
+		}
 	}
 #if 0
 	fim::string CommandConsole::bind(std::vector<Arg> args)
@@ -215,18 +235,39 @@ namespace fim
 		}
 		if(args.size()<2)
 		{
-			return 	fim::string("alias \"")+args[0].val+fim::string("\" \"")+aliases[args[0].val]+fim::string("\"\n");
+			string  r;
+				r+=fim::string("alias \"");
+				r+=args[0].val;
+				r+=fim::string("\" \"");
+				r+=aliases[args[0].val];
+				r+=fim::string("\"\n");
+				return r;
+//			return 	fim::string("alias \"")+
+//				args[0].val;
+//				fim::string("\" \"")+
+//				aliases[args[0].val];
+//				fim::string("\"\n");
 		}
 		for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
 		if(aliases[args[0].val]!="")
 		{
 			aliases[args[0].val]=cmdlist;
-			return fim::string("alias ")+args[0].val+fim::string(" successfully replaced.\n");
+//			return fim::string("alias ")+args[0].val+fim::string(" successfully replaced.\n");
+			string r;
+			r+=fim::string("alias ");
+			r+=args[0].val;
+			r+=fim::string(" successfully replaced.\n");
+			return r;
 		}
 		else
 		{
 			aliases[args[0].val]=cmdlist;
-			return fim::string("alias ")+args[0].val+fim::string(" successfully added.\n");
+			string r;
+//			return fim::string("alias ")+args[0].val+fim::string(" successfully added.\n");
+			r+=fim::string("alias ");
+			r+=args[0].val;
+			r+=fim::string(" successfully added.\n");
+			return r;
 		}
 	}
 
@@ -553,17 +594,28 @@ namespace fim
 		 *	call, by the YY_INPUT macro (defined by me in lex.lex)
 		 */
 		char *s=dupstr(ss);//this malloc is free
-		//executes a whole line, and stores it in the command history, eventually
-		//if(s==NULL){ferror("null command");return;}
-		assert(s);
+		if(s==NULL)
+		{
+			//if(s==NULL){ferror("null command");return;}
+			//assert(s);
+			//this shouldn't happen
+			this->quit(0);
+		}
 		//we open a pipe with the lexer/parser
 		int r = pipe(pipedesc);
-		if(r!=0){ferror("pipe error\n");}
+		if(r!=0)
+		{
+			ferror("pipe error\n");
+		}
 		//we write there our script or commands
 		r=write(pipedesc[1],s,strlen(s));
 		//we are done!
-		if(r!=(int)strlen(s)){ferror("write error");} 
-		for(char*p=s;*p;++p)if(*p=='\n')*p=' ';
+		if(r!=(int)strlen(s))
+		{
+			ferror("write error");
+		} 
+		for(char*p=s;*p;++p)
+			if(*p=='\n')*p=' ';
 		close(pipedesc[1]);
 		yyparse();
 		//we add to history only meaningful commands/aliases.
@@ -581,6 +633,7 @@ namespace fim
 		/*
 		 * we first determine if this is an alias
 		 */
+
 		fim::string ocmd=aliasRecall(cmd);
 		if(ocmd!="")
 		{
@@ -615,7 +668,7 @@ namespace fim
 			close(pipedesc[1]);
 			yyparse();
 			return "";
-		}else
+		}
 		if(cmd=="usleep")
 		{
 			unsigned int useconds;
@@ -1090,11 +1143,12 @@ namespace fim
 		/*
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
 		 */
+		return "";
 		int r;
 		char buf[4096*32];//FIXME
-		if(fd==NULL)return -1;
+		if(fd==NULL)return "-1";
 		r=fread(buf,1,sizeof(buf)-1,fd);if(r!=-1)buf[r]='\0';
-		if(r==-1)return -1;
+		if(r==-1)return "-1";
 		buf[min((size_t)fim::string::max_string(),sizeof(buf)-1)]='\0';
 		return fim::string(buf);
 	}
@@ -1105,6 +1159,7 @@ namespace fim
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
 		 */
 		int r;
+		return 0;
 		char buf[4096*32];//FIXME
 		if(fd==NULL)return -1;
 		r=fread(buf,1,sizeof(buf)-1,fd);if(r!=-1)buf[r]='\0';
@@ -1121,6 +1176,7 @@ namespace fim
 #ifndef FIM_NOSCRIPTING
 	int CommandConsole::executeFileDescriptor(int fd)
 	{
+		return 0;
 		/*
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
 		 *

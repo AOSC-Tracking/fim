@@ -38,6 +38,17 @@ std::basic_ostream<char, std::char_traits<char> >::basic_ostream(const <anonymou
 		public:
 	//	basic_ostream()
 		fim_stream(){}
+		fim_stream& operator<<(const  char* s);
+		fim_stream& operator<<(const unsigned char* s)
+		{
+			*this<<(const char*)s;
+			return *this;
+		}
+		fim_stream& operator<<(const  fim::string&s)
+		{
+			*this<<(const  char*)(s.c_str());
+			return *this;
+		}
 		fim_stream& operator<<(float f)
 		{
 			char s[32];sprintf(s,"%f",f);
@@ -48,27 +59,6 @@ std::basic_ostream<char, std::char_traits<char> >::basic_ostream(const <anonymou
 		{
 			char s[32];sprintf(s,"%d",i);
 			*this<<s;
-			return *this;
-		}
-		fim_stream& operator<<(const unsigned char* s)
-		{
-			*this<<(const char*)s;
-			return *this;
-		}
-		fim_stream& operator<<(const  char* s)
-		{
-			if(g_fim_no_framebuffer==0)
-			{
-				if(s)status_screen(s,NULL);
-			}
-			else
-				if(s)printf("%s",s);
-
-			return *this;
-		}
-		fim_stream& operator<<(const  fim::string&s)
-		{
-			*this<<(const  char*)(s.c_str());
 			return *this;
 		}
 	};

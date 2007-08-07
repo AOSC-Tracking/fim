@@ -64,7 +64,7 @@ class Command
 		if(!browser || !browserf)
 		{
 			//std::cout << cmd.c_str() << " : "<< "\n";
-			return "problems executing command..";
+			return fim::string("problems executing command..");
 		}else
 		return (browser->*browserf)(args);
 	}

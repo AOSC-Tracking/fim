@@ -237,7 +237,12 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 		if(msg)printf("%s",msg);
 		return;
 	}
-
+	else
+	{
+		//WARNING : TEMPORARY !!! FIX ME
+		//in this temporary implementation of std::string wrapper will crash
+		//return ;
+	}
 	int y,i,j,l,w;
 	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
 	C=(fb_var.xres/fb_font_width());
@@ -638,6 +643,7 @@ void chomp(char *s)
 
 int main(int argc,char *argv[])
 {
+//	sleep(10);
 	/*
 	 * an adapted version of the main function
 	 * of the original version of the fbi program
@@ -891,7 +897,10 @@ int main(int argc,char *argv[])
 	}
 	tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
 	}
-	cc.init();
+
+	cc.init(); //WARNING : SEVERE BUG !!!
+	//return 0;
+//	cc.quit(0);	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	cc.executionCycle();
 	cc.quit(0);
 	return 0;	//there wil be no return

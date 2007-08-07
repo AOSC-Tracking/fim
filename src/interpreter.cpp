@@ -25,6 +25,13 @@
 #include "fim.h"
 #include "common.h"
 
+
+fim::string stringsample()
+{
+	return string("uno stringone!\n");
+}
+
+
 /*
  *	This code implements the interpreter of the script language
  *	It is triggered by the flex and bison files.
@@ -138,25 +145,35 @@ int ex(nodeType *p)
 {
 	int iValue;
 	float fValue;
-			char *s;
+	char *s;
 
+	
   	std::vector<fim::string> args;
 	int typeHint;
 	if (!p) return 0;
 	switch(p->type)
 	{
-		case cmdId: assert(0);return -1;//cc.execute(fim::string::string(p->scon.s));return 0;
-		case intCon: return p->con.value;
+		case cmdId:
+			assert(0);
+			return -1;
+			//cc.execute(fim::string::string(p->scon.s));return 0;
+		case intCon:
+			return p->con.value;
 //	case floatCon: return (int)(void*)(p->fid.f);
-	        case floatCon: return 0;//FIXME
+	        case floatCon:
+			return 0;//FIXME
 	//case vId: printf("key : %s\n",p->scon.s); return vars[p->scon.s];
 		case vId:
 		{
+			/*
+			 * variable identifier encountered
+			 * */
 			//printf("key : %s\n",p->scon.s);
 			//beware the next conversion..
 //			cout<<"f("<<p->scon.s<< ")="<< cc.getFloatVariable(p->scon.s) ;
 		//	if(cc.getVariableType(p->scon.s)=='f')return (int)cc.getFloatVariable(p->scon.s);
 		//	else return (int)cc.getIntVariable(p->scon.s);
+			
 			return (int)cc.getStringVariable(p->scon.s);
 /*			if(p->typeHint=='f')
 			{
@@ -166,12 +183,21 @@ int ex(nodeType *p)
 			else return cc.getIntVariable(p->scon.s) ;*/
 		}
 		case stringCon: //printf("string(\"%s\")\n",p->scon.s);
-		case typeOpr:
+		case typeOpr:	/*	some operator	*/
 		switch(p->opr.oper)
 		{
-		case WHILE: while(ex(p->opr.op[0]) && (cc.catchLoopBreakingCommand(0)==0)) {ex(p->opr.op[1]);} return 0;
-		case IF: if (ex(p->opr.op[0])) ex(p->opr.op[1]);
-		else if (p->opr.nops > 2) ex(p->opr.op[2]); return 0;
+			case WHILE:
+				while(ex(p->opr.op[0]) && (cc.catchLoopBreakingCommand(0)==0))
+				{
+					ex(p->opr.op[1]);
+				}
+				return 0;
+			case IF:
+				if (ex(p->opr.op[0]))
+					ex(p->opr.op[1]);
+				else if (p->opr.nops > 2)
+					ex(p->opr.op[2]);
+				return 0;
 /*		case PRINT: if(p->opr.op[0]->type!=stringCon)
 			    {
 				//cout << "getting f " << cc.getFloatVariable(p->scon.s) << "\n";
@@ -185,90 +211,115 @@ int ex(nodeType *p)
 			    }
 			    return 0;
 //		case PRINT: printf("result : %d\n", ex(p->opr.op[0])); return 0;*/
-		case ';': ex(p->opr.op[0]); return ex(p->opr.op[1]);
-		case 'r': 
-		  if( p->opr.nops == 2 )
-		  //if( p->opr.nops ==2 && (p->opr.op[0])->type=='x')
-	          {
-			int times=ex(p->opr.op[1]);
-			if(times<0)return -1;
-			for (int i=0;i<times && cc.catchLoopBreakingCommand(0)==0;++i)
-			{
+			case ';':
+				/*
+				 *		;
+				 *             / \
+				 *          cmd   cmd
+				 * */
 				ex(p->opr.op[0]);
+				return ex(p->opr.op[1]);
+			case 'r': 
+			//if( p->opr.nops ==2 && (p->opr.op[0])->type=='x')
+			if( p->opr.nops == 2 )
+			{
+				int times=ex(p->opr.op[1]);
+				if(times<0)return -1;
+				for (int i=0;i<times && cc.catchLoopBreakingCommand(0)==0;++i)
+				{
+					ex(p->opr.op[0]);
+				}
+			  	return 0;	
 			}
-		  	return 0;	
-		  }
-		  return -1;
-		case 'x': 
-		  /*
-		   * when encountering an 'x' node, the first (left) subtree should 
-		   * contain the string with the identifier of the command to 
-		   * execute.
-		   */
-		  {
-		  	if( p->opr.nops<1 )
-		  {
-			  return -1;
-		  }
-		  if(p->opr.nops==2)	//int yacc.ypp we specified only 2 ops per x node
-	          {
-			  nodeType *np=p;	
-			  nodeType *dp;
-                          np=(np->opr.op[1]); //the right subtree first node
-//			  while( np &&    np->opr.nops >=1 && np->opr.oper=='a')
-			  while( np &&    np->opr.nops >=1 )
-			  if( np->opr.oper=='a' )
-		  	  {
-				  args=var(np);
-				  break;
-				  return 0;
-				  /*
-				   * we descend the right subtree  (the subtree of arguments)
-				   * (thus we waste the benefit of the multi argument operator!)
-				   */
-				  dp=np->opr.op[0];	//we descend 1 step in the left subtree (under arg)
-				  dp=dp->opr.op[0];
-                          	  if(np->opr.nops < 2) 
-				  {
-					np=NULL;
-			          }
-				  else
-				  {
-					np=(np->opr.op[1]);
-			          }
-                   		  if( ((dp->opr.op[0])) && (dp->type)==stringCon)//|| (dp->type)==intCon) 
-				  {	
-					  //probably dead code
-				  }
-                   		  if( ((dp->opr.op[0])) && (dp->type)==typeOpr)//|| (dp->type)==intCon) 
-				  {	
-					  //probably dead code
-				  }
-				  else if( ((dp->opr.oper=='.')))
-				  {
-					  //probably dead code
-			          }
-				  else;
-				  assert(dp);
-			  }
-		  	  else if( np->opr.oper=='.' )
+			else return -1;
+			case 'x': 
+			  /*
+			   * when encountering an 'x' node, the first (left) subtree should 
+			   * contain the string with the identifier of the command to 
+			   * execute.
+			   */
 			  {
-				  //probably dead code
+			  	if( p->opr.nops<1 )
+			  {
+				  return -1;
 			  }
-		  }
-		  {
-			fim::string result(cc.execute(fim::string::string(p->opr.op[0]->scon.s),args));//.c_str());
-			cout << result;
-			return atoi(result.c_str());
-		  }
-	}
-	case 'a':
-		// we shouldn't be here, because 'a' (argument) nodes are evaluated elsewhere
-		assert(0);
-			  return -1;
-	//case '=': return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
-	case '=':
-		//assignment of a variable
+			  if(p->opr.nops==2)	//int yacc.ypp we specified only 2 ops per x node
+		          {
+				  nodeType *np=p;	
+				  nodeType *dp;
+	                          np=(np->opr.op[1]); //the right subtree first node
+	//			  while( np &&    np->opr.nops >=1 && np->opr.oper=='a')
+				  while( np &&    np->opr.nops >=1 )
+				  if( np->opr.oper=='a' )
+			  	  {
+					  args=var(np);
+					  break;
+					  return 0;
+					  /*
+					   * we descend the right subtree  (the subtree of arguments)
+					   * (thus we waste the benefit of the multi argument operator!)
+					   */
+					  dp=np->opr.op[0];	//we descend 1 step in the left subtree (under arg)
+					  dp=dp->opr.op[0];
+	                          	  if(np->opr.nops < 2) 
+					  {
+						np=NULL;
+				          }
+					  else
+					  {
+						np=(np->opr.op[1]);
+				          }
+	                   		  if( ((dp->opr.op[0])) && (dp->type)==stringCon)//|| (dp->type)==intCon) 
+					  {	
+						  //probably dead code
+					  }
+	                   		  if( ((dp->opr.op[0])) && (dp->type)==typeOpr)//|| (dp->type)==intCon) 
+					  {	
+						  //probably dead code
+					  }
+					  else if( ((dp->opr.oper=='.')))
+					  {
+						  //probably dead code
+				          }
+					  else;
+					  assert(dp);
+				  }
+			  	  else if( np->opr.oper=='.' )
+				  {
+					  //probably dead code
+				  }
+			  }
+			  {
+				/*
+				 * single command execution
+				 */
+				fim::string result;
+
+				//result = (cc.execute(fim::string::string(p->opr.op[0]->scon.s),args));//.c_str());
+
+				if(p)
+				if(p->opr.op[0])
+				if(p->opr.op[0]->scon.s) result =
+				       	cc.execute(p->opr.op[0]->scon.s,args);
+				/* sometimes there are NULLs  : BAD !!  */
+
+//				result = stringsample();
+//				return 0;
+//				std::cout << "\""<<result << "\"\n";
+
+//				static int c=0; std::cout << ++c << "\n";
+				
+//				cc.quit(0);
+				return atoi(result.c_str());
+			  }
+		}
+		case 'a':
+			// we shouldn't be here, because 'a' (argument) nodes are evaluated elsewhere
+			assert(0);
+			return -1;
+		//case '=': return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
+		case '=':
+			//assignment of a variable
 			s=p->opr.op[0]->scon.s;
 			typeHint=p->opr.op[0]->typeHint;
 			if(typeHint=='f')
@@ -280,17 +331,17 @@ int ex(nodeType *p)
 			}//'i'
 			else if(typeHint=='s')
 			{
-			    if(p->opr.op[1]->type!=stringCon)
-			    {
-				//this shouldn't happen
-		            }
-			    else 
-		            {
-				// got a string!
-	       		        cc.setVariable(s,p->opr.op[0]->scon.s);
-		                return cc.getIntVariable(s);
-			    }
-			    return -1;
+				if(p->opr.op[1]->type!=stringCon)
+				{
+					//this shouldn't happen
+				}
+				else 
+				{
+					// got a string!
+		       		        cc.setVariable(s,p->opr.op[0]->scon.s);
+			                return cc.getIntVariable(s);
+				}
+				return -1;
 			}//'i'
 			else if(typeHint=='i')
 			{
@@ -309,22 +360,22 @@ int ex(nodeType *p)
 				cc.setVariable(s,r.c_str());
 				return iValue;
 			}
-	case UMINUS: return -ex(p->opr.op[0]); //unary minus
-	case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]);
-	case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
-	case '-': return ex(p->opr.op[0]) - ex(p->opr.op[1]);
-	case '*': return ex(p->opr.op[0]) * ex(p->opr.op[1]);
-	case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]);
-	case '<': return ex(p->opr.op[0]) < ex(p->opr.op[1]);
-	case '>': return ex(p->opr.op[0]) > ex(p->opr.op[1]);
-	//comparison operators : evaluation to integer..
-	case GE: return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
-	case LE: return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
-	case NE: return ex(p->opr.op[0]) != ex(p->opr.op[1]);
-	case EQ: return ex(p->opr.op[0]) == ex(p->opr.op[1]);
-	case AND:return ex(p->opr.op[0]) && ex(p->opr.op[1]);
-	case OR :return ex(p->opr.op[0]) || ex(p->opr.op[1]);
-	}
+			case UMINUS: return -ex(p->opr.op[0]); //unary minus
+			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]);
+			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
+			case '-': return ex(p->opr.op[0]) - ex(p->opr.op[1]);
+			case '*': return ex(p->opr.op[0]) * ex(p->opr.op[1]);
+			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]);
+			case '<': return ex(p->opr.op[0]) < ex(p->opr.op[1]);
+			case '>': return ex(p->opr.op[0]) > ex(p->opr.op[1]);
+			//comparison operators : evaluation to integer..
+			case GE: return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
+			case LE: return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
+			case NE: return ex(p->opr.op[0]) != ex(p->opr.op[1]);
+			case EQ: return ex(p->opr.op[0]) == ex(p->opr.op[1]);
+			case AND:return ex(p->opr.op[0]) && ex(p->opr.op[1]);
+			case OR :return ex(p->opr.op[0]) || ex(p->opr.op[1]);
+		}
 	}
 	return 0;
 }

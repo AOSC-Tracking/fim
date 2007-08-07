@@ -73,6 +73,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	extern.h \
 	fim.h \
 	fim_stream.h \
+	fim_stream.cpp \
 	fimgs.sh \
 	lex.h \
 	string.h \
@@ -145,7 +146,7 @@ DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key bi
  DEFINES  += -D FIM_AUTOCMDS            # autocommands
  DEFINES  += -D FIM_RECORDING           # command recording
  DEFINES  += -D FIM_SWITCH_FIXUP        # still bugful
- DEFINES  += -D FIM_CKECK_DUPLICATES    # if enabled, no duplicates will be allowed in the filename list
+ DEFINES  += -D FIM_CHECK_DUPLICATES    # if enabled, no duplicates will be allowed in the filename list
  DEFINES  += -D FIM_CHECK_FILE_EXISTENCE # when a filename is added in the list, a verification occurs
  DEFINES  += -D FIM_REMOVE_FAILED       # a file which failed loading is removed from the list
  DEFINES  += -D FIM_AUTOSKIP_FAILED     # if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
@@ -159,7 +160,8 @@ DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key bi
 
 DEFINES += -D X_DISPLAY_MISSING @DEFS@ @EXTRADEFS@
 
-AM_CPPFLAGS=${DEFINES}
+AM_CPPFLAGS=${DEFINES} ${FIM_CFLAGS}
+AM_LDFLAGS=${FIM_CFLAGS}
 
 fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
 

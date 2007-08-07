@@ -480,8 +480,12 @@ namespace fim
 			next(0);reload();}
 #endif
 #endif
-			return fim::string("error loading the file ")
-				+c+fim::string("\n");
+			fim::string rs("error loading the file ");
+			rs+=c;
+			rs+="\n";
+			return rs;
+///			return fim::string("error loading the file ")
+//				+c+fim::string("\n");
 		}
 
 #ifdef FIM_AUTOCMDS
@@ -514,8 +518,12 @@ namespace fim
 			next(0);reload();}
 #endif
 #endif
-			return fim::string("error loading the file ")
-				+c+fim::string("\n");
+			fim::string rs("error loading the file ");
+			rs+=c;
+			rs+="\n";
+			return rs;
+//			return fim::string("error loading the file ")
+//				+c+fim::string("\n");
 		}
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostLoad",c);
@@ -570,7 +578,7 @@ namespace fim
 		if(! S_ISREG(stat_s.st_mode))return "";
 #endif
 
-#ifdef FIM_CKECK_DUPLICATES
+#ifdef FIM_CHECK_DUPLICATES
 		if(present(nf))
 		{
 			//there could be an option to have duplicates...

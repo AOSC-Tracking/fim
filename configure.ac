@@ -131,6 +131,7 @@ AC_ARG_ENABLE(default_config, AC_HELP_STRING([--disable-default_config], [Builti
 
 #CPPFLAGS=$DEPS
 AC_SUBST(LIBPNG_CFLAGS)
+AC_SUBST(FIM_CFLAGS)
 AC_SUBST(LIBPNG_LIBS)
 
 
@@ -463,7 +464,7 @@ AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CFLAGS],
         [if test $withval != yes; then
                 AC_DEFINE_UNQUOTED(CFLAGS, "$withval",
                  [custom CFLAGS])
-		CFLAGS="$CFLAGS $withval"
+		FIM_CFLAGS="$CFLAGS $withval"
         fi],
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
 
@@ -503,7 +504,7 @@ AC_MSG_NOTICE([
 	default minimal key mapping         : ${have_default_mapping:-no}
 	default minimal key bindings        : ${have_default_bindings:-no}
 	default configuration file builtin  : ${have_default_config:-no}
-        compile time warnings               : ${fim_cv_warnings:-no} ( ${CFLAGS} )
+        compile time warnings               : ${fim_cv_warnings:-no} ( ${FIM_CFLAGS} )
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
 	png  file support                   : ${fim_handle_png:-no}
 	jpeg file support                   : ${fim_handle_jpeg}
