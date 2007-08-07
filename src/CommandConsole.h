@@ -165,9 +165,6 @@ class CommandConsole
 	autocmds_stack_t autocmds_stack;
 	std::vector<fim::string> autocmds_sub_list(const fim::string &event);
 	fim::string bind(const std::vector<fim::string>& args);
-#if 0
-	fim::string bind(std::vector<Arg> args);
-#endif
 	fim::string getAliasesList();
 	fim::string dummy(std::vector<Arg> args);
 	fim::string variables_list(const std::vector<fim::string>& args){return get_variables_list();}

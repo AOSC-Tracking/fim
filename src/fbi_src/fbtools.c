@@ -23,6 +23,10 @@
 
 /*#include <asm/page.h>*/ /* seems like this gives problems */
 #include <sys/user.h>	  /* this should be a safer replacement */
+#if 0
+#include <signal.h>	  /* added by dez. missing when compiling with -ansi */
+#include <asm/signal.h>	  /* added by dez. missing when compiling with -ansi */
+#endif
 
 #include "fbtools.h"
 
@@ -364,8 +368,8 @@ int fb_init(char *device, char *mode, int vt)
 		exit(1);
 	    }
 	    close(fb);
-//	    fprintf(stderr,"map: vt%02d => fb%d\n",
-//		    c2m.console,c2m.framebuffer);
+/*	    fprintf(stderr,"map: vt%02d => fb%d\n",
+		    c2m.console,c2m.framebuffer);*/
 	    sprintf(fbdev,devices->fbnr,c2m.framebuffer);
 	    device = fbdev;
 #else
@@ -541,6 +545,8 @@ fb_catch_exit_signals(void)
 
     /* cleanup */
     fb_cleanup();
+#ifdef HAVE_SYS_SIGLIST
     fprintf(stderr,"Oops: %s\n",sys_siglist[termsig]);
+#endif
     exit(42);
 }

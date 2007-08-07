@@ -21,13 +21,7 @@
 #ifdef FIM_DEFAULT_CONFIGURATION
 #include "conf.h"
 #endif
-//#include <sys/times.h>
 #include <sys/time.h>
-
-//#include <fstream>
-//#include <algorithm>
-//#include <ostream>
-//#include <ostream>
 
 extern int yyparse();
 
@@ -164,40 +158,15 @@ namespace fim
 			bindings.erase(c);
 			rs+=c;
 			rs+=": successfully unbinded.\n";
-			return rs;
-//			return fim::string("unbind ")+fim::string(c)+fim::string(": successfully unbinded.\n");
 		}
 		else
 		{
 			rs+=c;
 			rs+=": there were not such binding.\n";
-//			return fim::string("unbind ")+fim::string(c)+fim::string(": there were not such binding.\n");
 		}
+		return rs;
 	}
-#if 0
-	fim::string CommandConsole::bind(std::vector<Arg> args)
-	{
-		/*
-		 *	FIX ME 
-		 */
-		/*
-		fim::string cmdlist;
-		int c,C,tmp;
-		if(args.size()<2)
-		{
-			return "bind <>: cant't add an empty binding!\n";
-		}
-		if((tmp=strlen(args[0].val.c_str()))<1||tmp>2)
-			return "bind <>: bad key specifier!\n";
-		if(tmp==2)C= args[0].val.c_str()[0];
-		if(tmp==2)c=(args[0].val.c_str()[1]+1)-'a';
-		if(tmp==1)c= args[0].val.c_str()[0];
-		if((tmp==2)&&(C!='C'))return "bind : wrong format.\n";
-		for(int i=1;i<args.size();++i)cmdlist+=args[i].val;
-		return bind(c,cmdlist);*/
-		return "....";
-	}
-#endif
+
 	fim::string CommandConsole::aliasRecall(fim::string cmd)
 	{
 		/*
@@ -244,17 +213,11 @@ namespace fim
 				r+=aliases[args[0].val];
 				r+=fim::string("\"\n");
 				return r;
-//			return 	fim::string("alias \"")+
-//				args[0].val;
-//				fim::string("\" \"")+
-//				aliases[args[0].val];
-//				fim::string("\"\n");
 		}
 		for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
 		if(aliases[args[0].val]!="")
 		{
 			aliases[args[0].val]=cmdlist;
-//			return fim::string("alias ")+args[0].val+fim::string(" successfully replaced.\n");
 			string r;
 			r+=fim::string("alias ");
 			r+=args[0].val;
@@ -282,7 +245,8 @@ namespace fim
 	fim::string CommandConsole::help(const std::vector<fim::string> &args)
 	{	
 		/*
-		 *	FIX ME
+		 *	FIX ME:
+		 *	the online help system still needs rework
 		 */
 		Command *cmd;
 		if(!args.empty())
@@ -319,9 +283,7 @@ namespace fim
 		addCommand(new Command(fim::string("pan_sw" ),fim::string("pans the image south west"),&browser,&Browser::pan_sw));
 		addCommand(new Command(fim::string("pan_se" ),fim::string("pans the image south east"),&browser,&Browser::pan_se));
 		addCommand(new Command(fim::string("panup" ),fim::string("pans the image up"),&browser,&Browser::pan_up));
-//		std::cout <<  "^^^\n";
 		addCommand(new Command("pandown" ,"pans the image down",&browser,&Browser::pan_down));
-//		exit(0);
 		addCommand(new Command(fim::string("panleft" ),fim::string("pans the image left"),&browser,&Browser::pan_left));
 		addCommand(new Command(fim::string("panright" ),fim::string("pans the image right"),&browser,&Browser::pan_right));
 		addCommand(new Command(fim::string("load" ),fim::string("load the image, if not yet loaded"),&browser,&Browser::load));
@@ -501,19 +463,15 @@ namespace fim
 			if(commands[i]->cmd.find(cmd)==0)
 			completions.push_back(commands[i]->cmd);
 		}
-		//for( unsigned int i=0;i<=aliases.size();++i)
 		for( ai=aliases.begin();ai!=aliases.end();++ai)
 		{	
 			if((ai->first).find(cmd)==0){
-			//if(aliases[i].find(cmd)==0){
 //			cout << ".." << ai->first << ".." << " matches " << cmd << "\n";
-//			completions.push_back(aliases[i]);}
 			completions.push_back((*ai).first);}
 		}
 		for( vi=variables.begin();vi!=variables.end();++vi)
 		{
 			if((vi->first).find(cmd)==0)
-//			completions.push_back(fim::string("$")+(*vi).first);
 			completions.push_back((*vi).first);
 		}
 #ifndef FIM_COMMAND_AUTOCOMPLETION
@@ -526,9 +484,6 @@ namespace fim
 				cout << cmd << " matches with " << completions[i].c_str()<<  "\n";*/
 		for(unsigned int i=list_index;i<completions.size();++i)
 		{
-		//	if(!commands[i])continue;
-//???????????			if(!completions[i])continue;
-//			if(commands[i]->cmd.find(cmd)==0)
 			if(completions[i].find(cmd)==0)
 			{
 				list_index++;
@@ -713,7 +668,6 @@ namespace fim
 		}
 		else
 		{
-			//if(_commands[cmd]!="")
 			if((c=findCommand(cmd))!=NULL)
 			{
 				return c->execute(args);
@@ -734,11 +688,11 @@ namespace fim
 					//cout << "but found :`"<<match<<"...\n";
 					if((c=findCommand(match))!=NULL)
 					{	
-						free(match);	// bug fixed
+						free(match);
 						return c->execute(args);
 					}
 					else cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
-					free(match);	// bug fixed
+					free(match);
 				}
 #endif
 				return "";
@@ -855,7 +809,6 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		fim::string initial=browser.current();
 		cc.autocmd_exec("PreExecutionCycle",initial);
-		//cc.autocmd_exec("PreExecutionCycle","<>");
 
 #endif
 	 	while(show_must_go_on)
@@ -877,9 +830,10 @@ namespace fim
 				char *rl=readline(":");
 				if(rl==NULL)
 				{
-					//printf("rl null\n");
-					//this->exit(0);
-					quit();
+					/*
+					 * error handling needed
+					 * */
+					this->quit();
 				}
 				else if(rl!="")
 				{
@@ -1029,17 +983,11 @@ namespace fim
 					 * 	So a redraw after is not bad.
 					 * 	But it should work when stepping into the console,
 					 * 	not out..
-					 *	
-					 * 	PLACE A MECHANISM HERE..
-					 * 20070303 THIS IS EVIL
-					 * 20070401 console switching bug solved!
-					 *  and here ?
 					 */
 				}
 			}
 		}
 #ifdef FIM_AUTOCMDS
-		//cc.autocmd_exec("PostExecutionCycle","<>");
 		cc.autocmd_exec("PostExecutionCycle",initial);
 #endif
 	}
@@ -1064,7 +1012,6 @@ namespace fim
 
 	fim::string CommandConsole::quit(const std::vector<fim::string> &args)
 	{
-		//this->quit();
 		/*
 		 * now the postcycle execution autocommands are enabled !
 		 * */
@@ -1118,7 +1065,6 @@ namespace fim
 		 * an internal function to set a user variable
 		 */
 //		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
-		//variables[varname]=value;
 		return variables[varname].setInt(value);
 	}
 
@@ -1128,7 +1074,6 @@ namespace fim
 		 * an internal function to set a user variable
 		 */
 //		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
-		//variables[varname]=value;
 		return variables[varname].setFloat(value);
 	}
 
@@ -1146,6 +1091,7 @@ namespace fim
 		/*
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
 		 */
+
 		int r;
 		char buf[4096];
 		fim::string cmds;
@@ -1235,36 +1181,36 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::get_aliases_list()
 	{
 		/*
-		 * FIX ME
+		 * returns the list of set action aliases
 		 */
-		fim::string completions;
+		fim::string aliases_list;
 		std::map<fim::string,fim::string>::const_iterator ai;
 		for( ai=aliases.begin();ai!=aliases.end();++ai)
 		{	
-			completions+=((*ai).first);
-			completions+=" ";
+			aliases_list+=((*ai).first);
+			aliases_list+=" ";
 		}
-		return completions;
+		return aliases_list;
 	}
 
 	fim::string CommandConsole::get_commands_list()
 	{
 		/*
-		 * FIX ME
+		 * returns the list of registered commands
 		 */
-		fim::string completions;
+		fim::string commands_list;
 		for(unsigned int i=0;i<commands.size();++i)
 		{
-			if(i)completions+=" ";
-			completions+=(commands[i]->cmd);
+			if(i)commands_list+=" ";
+			commands_list+=(commands[i]->cmd);
 		}
-		return completions;
+		return commands_list;
 	}
 
 	fim::string CommandConsole::get_variables_list()
 	{
 		/*
-		 * FIX ME
+		 * returns the list of set variables
 		 */
 		fim::string acl;
 		std::map<fim::string,fim::Var>::const_iterator vi;
@@ -1377,7 +1323,6 @@ int CommandConsole::executeFile(const char *s)
 		 *
 		 *	SO THE FIRST MATCHING SHOULD RETURN!
 		 */
-//		cout << "autocmd_exec..\n";
 		autocmds_p_t::const_iterator api;
 		/*
 		 *	we want to prevent from looping autocommands, so this rudimentary
@@ -1510,7 +1455,6 @@ int CommandConsole::executeFile(const char *s)
 			 *
 			 * int fd=(int)popen("/bin/echo quit","r");
 			 */
-			//cout << "popening " << args[i].c_str() <<", "<<(int)fd<<  "\n";
 			executeStdFileDescriptor(fd);
 			pclose(fd);
 		}
@@ -1545,6 +1489,10 @@ int CommandConsole::executeFile(const char *s)
 #ifndef FIM_NO_SYSTEM
 	fim::string CommandConsole::system(const std::vector<fim::string>& args)
 	{
+		/*
+		 * executes the shell commands given in the arguments
+		 * and returns the standard output
+		 * */
 		for(unsigned int i=0;i<args.size();++i)
 		{
 			FILE* fd=popen(args[i].c_str(),"r");
@@ -1553,7 +1501,6 @@ int CommandConsole::executeFile(const char *s)
 			 *
 			 * int fd=(int)popen("/bin/echo quit","r");
 			 */
-			//cout << "popening " << args[i].c_str() <<", "<<(int)fd<<  "\n";
 			cout << readStdFileDescriptor(fd);
 			pclose(fd);
 		}

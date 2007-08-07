@@ -25,14 +25,15 @@ typedef struct _FSXCharInfo {
     short       width;
     short       ascent;
     short       descent;
-    //unsigned short      attributes;
+    /*unsigned short      attributes;*/
 } FSXCharInfo;
 
 typedef struct _FSXFontInfoHeader {
-    //int         flags;
+    /*int         flags;
     //FSRange     char_range;
     //unsigned    draw_direction;
     //FSChar2b    default_char;
+    */
     FSXCharInfo min_bounds;
     FSXCharInfo max_bounds;
     short       font_ascent;
@@ -41,7 +42,7 @@ typedef struct _FSXFontInfoHeader {
 
 struct fs_font {
     FSXFontInfoHeader  fontHeader;
-    //unsigned char      *propData;
+    /*unsigned char      *propData;*/
     FSXCharInfo        *extents;
     unsigned char      *glyphs;
     int                maxenc,width,height;

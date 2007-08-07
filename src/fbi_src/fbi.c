@@ -43,8 +43,8 @@
 #include "list.h"
 #include "op.h"
 
-//#include "jpeg/transupp.h"		/* Support routines for jpegtran */
-//#include "jpegtools.h"
+/*#include "jpeg/transupp.h"	*/	/* Support routines for jpegtran */
+/*#include "jpegtools.h"	*/
 
 #define TRUE            1
 #define FALSE           0
@@ -108,7 +108,7 @@ int                        fd, switch_last, debug;
 unsigned short red[256],  green[256],  blue[256];
 struct fb_cmap cmap  = { 0, 256, red,  green,  blue };
 
-//static float fbgamma = 1;
+/*static float fbgamma = 1;*/
 float fbgamma = 1.0;
 
 /* Command line options. */
@@ -146,7 +146,7 @@ struct option fbi_options[] = {
 };
 
 /* font handling */
-//static char *fontname = NULL;
+/*static char *fontname = NULL;*/
 
 /* ---------------------------------------------------------------------- */
 
@@ -359,7 +359,7 @@ static void status(const unsigned char *desc, const char *info)
     free(str);
 }
 
-//static void show_error(unsigned char *msg)
+/*static void show_error(unsigned char *msg)*/
 void show_error(unsigned char *msg)
 {
     fb_status_line(msg);
@@ -518,7 +518,7 @@ tty_restore(void)
 }*/
 
 static void
-//void
+/*void*/
 console_switch(int is_busy)
 {
     switch (fb_switch_state) {
@@ -534,7 +534,7 @@ console_switch(int is_busy)
 	redraw = 1;
 	ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
 	fb_clear_screen();
-//	if (is_busy) status("busy, please wait ...", NULL);		
+/*	if (is_busy) status("busy, please wait ...", NULL);		*/
 	break;
     default:
 	break;
@@ -545,7 +545,7 @@ console_switch(int is_busy)
 
 /* ---------------------------------------------------------------------- */
 
-//static void free_image(struct ida_image *img)
+/*static void free_image(struct ida_image *img)*/
 void free_image(struct ida_image *img)
 {
     if (img) {
@@ -555,7 +555,7 @@ void free_image(struct ida_image *img)
     }
 }
 
-//static struct ida_image*
+/*static struct ida_image**/
 struct ida_image* read_image(char *filename)
 {
     char command[1024];
@@ -628,7 +628,7 @@ struct ida_image* read_image(char *filename)
     return img;
 }
 
-//all dez's
+/*all dez's*/
 struct ida_image*
 flip_image(struct ida_image *src)
 {
@@ -668,7 +668,7 @@ flip_image(struct ida_image *src)
     desc_p->done(data);
     return dest;
 }
-//all dez's
+/*all dez's*/
 struct ida_image*
 rotate_image(struct ida_image *src, unsigned int rotation)
 {
@@ -695,7 +695,7 @@ rotate_image(struct ida_image *src, unsigned int rotation)
     
     rotation%=2;
     if(rotation==0){desc_p=&desc_rotate_ccw;}
-    if(rotation==1){desc_p=&desc_rotate_cw ;}
+    else	   {desc_p=&desc_rotate_cw ;}
 
     data = desc_p->init(src,&rect,&dest->i,&p);
     dest->data = malloc(dest->i.width * dest->i.height * 3);
@@ -710,7 +710,7 @@ rotate_image(struct ida_image *src, unsigned int rotation)
     desc_p->done(data);
     return dest;
 }
-//static struct ida_image*
+/*static struct ida_image*	*/
 struct ida_image*
 scale_image(struct ida_image *src, float scale, float ascale)
 {
@@ -818,13 +818,13 @@ clear_line(int bpp, int line, int owidth,
 
 static unsigned char *
 convert_line(int bpp, int line, int owidth,
-	     char unsigned *dest, char unsigned *buffer, int mirror)//dez's mirror patch
+	     char unsigned *dest, char unsigned *buffer, int mirror)/*dez's mirror patch*/
 {
     unsigned char  *ptr  = (void*)dest;
     unsigned short *ptr2 = (void*)dest;
     unsigned long  *ptr4 = (void*)dest;
     int x;
-    int xm;//mirror patch
+    int xm;/*mirror patch*/
 
     switch (fb_var.bits_per_pixel) {
     case 8:
@@ -834,7 +834,7 @@ convert_line(int bpp, int line, int owidth,
     case 15:
     case 16:
 #ifdef FIM_IS_SLOWER_THAN_FBI
-	//swapped RGB patch
+	/*swapped RGB patch*/
 	for (x = 0; x < owidth; x++) {
             xm=mirror?owidth-1-x:x;
 	    ptr2[xm] = lut_red[buffer[x*3]] |
@@ -867,7 +867,7 @@ convert_line(int bpp, int line, int owidth,
 	    ptr[3*xm+0] = buffer[3*x+2];
 	}
 #else
-	//swapped RGB patch
+	/*swapped RGB patch*/
 	if(!mirror)
 	{
 		/*
@@ -889,7 +889,7 @@ convert_line(int bpp, int line, int owidth,
 		memcpy(ptr,buffer,owidth);
 		register char t;
 		register i=x;
-		//since RGB and GBR swap already done, this is not necessary
+		/*since RGB and GBR swap already done, this is not necessary*/
 		/*for (i = 0; i < owidth; i+=3)
 		{
 	            t=ptr[i];
@@ -899,7 +899,7 @@ convert_line(int bpp, int line, int owidth,
 #endif
 		owidth/=3;
 	}else
-//this is still slow ... FIXME
+/*this is still slow ... FIXME*/
 #if 0
 	for (x = 0; x < owidth; x++) {
 	    x*=3;
@@ -924,7 +924,7 @@ convert_line(int bpp, int line, int owidth,
 	return ptr;
     case 32:
 #ifndef FIM_IS_SLOWER_THAN_FBI
-	//swapped RGB patch
+	/*swapped RGB patch*/
 	for (x = 0; x < owidth; x++) {
             xm=mirror?owidth-1-x:x;
 	    ptr4[xm] = lut_red[buffer[x*3+2]] |
@@ -961,7 +961,7 @@ static void init_one(int32_t *lut, int bits, int shift)
 	    lut[i] = (i >> (8 - bits)) << shift;
 }
 
-//static void
+/*static void*/
 void lut_init(int depth)
 {
     if (fb_var.red.length   &&
@@ -1008,7 +1008,7 @@ static unsigned short calc_gamma(int n, int max)
     return ret;
 }
 
-//static void
+/*static void*/
 void linear_palette(int bit)
 {
     int i, size = 256 >> (8 - bit);
@@ -1017,7 +1017,7 @@ void linear_palette(int bit)
         red[i] = green[i] = blue[i] = calc_gamma(i,size);
 }
 
-//static void
+/*static void*/
 void svga_dither_palette(int r, int g, int b)
 {
     int             rs, gs, bs, i;
@@ -1032,7 +1032,7 @@ void svga_dither_palette(int r, int g, int b)
     }
 }
 
-//static void
+/*static void*/
 void
 svga_display_image(struct ida_image *img, int xoff, int yoff, int mirror, int flip)
 {
@@ -1044,11 +1044,11 @@ svga_display_image(struct ida_image *img, int xoff, int yoff, int mirror, int fl
     int cxo=fb_var.xres-dwidth-xo;
     int cyo=fb_var.yres-yo;
 
-    if (!visible)//COMMENT THIS IF svga_display_image IS NOT IN A CYCLE
+    if (!visible)/*COMMENT THIS IF svga_display_image IS NOT IN A CYCLE*/
 	return;
 
-    //fb_clear_screen();//EXPERIMENTAL
-    //if(xoff&&yoff)fb_clear_rect(0,xoff,0,yoff);
+    /*fb_clear_screen();//EXPERIMENTAL
+    if(xoff&&yoff)fb_clear_rect(0,xoff,0,yoff);*/
 
     bytes = (fb_var.bits_per_pixel+7)/8;
 
@@ -1079,22 +1079,22 @@ svga_display_image(struct ida_image *img, int xoff, int yoff, int mirror, int fl
 		    clear_line(fb_var.bits_per_pixel, y, cxo,fb_mem+fb_fix.line_length*y+bytes*(xo+dwidth));
 	    }
     }
-    //for ( y = 0; y < fb_var.yres;y+=100)fb_line(0, fb_var.xres, y, y);
+    /*for ( y = 0; y < fb_var.yres;y+=100)fb_line(0, fb_var.xres, y, y);*/
 
     /* go ! */
-    //flip patch
+    /*flip patch*/
 #ifndef min
 #define min(x,y) ((x)<(y)?(x):(y))
     int fb_fix_line_length=fb_fix.line_length;
     if(flip) {	fb_fix_line_length*=-1; video += (min(img->i.height,dheight)-1)*(fb_fix.line_length);}
 #endif
-    //flip patch
+    /*flip patch*/
     for (data = 0, y = 0;
 	 data < img->i.width * img->i.height * 3
 	     && data / img->i.width / 3 < dheight;
 	 data += img->i.width * 3, video += fb_fix_line_length) {
 	convert_line(fb_var.bits_per_pixel, y++, dwidth,
-		     fb_mem+video, img->data + data + offset,mirror);//<- mirror patch
+		     fb_mem+video, img->data + data + offset,mirror);/*<- mirror patch*/
     }
 }
 
@@ -1172,7 +1172,7 @@ svga_show(struct ida_image *img, int timeout, char *desc, char *info, int *nr)
 
 	if (FD_ISSET(0,&set)) {
 */	    /* stdin, i.e. keyboard */
-//	    rc = read(0, key, sizeof(key)-1);
+/*rc = read(0, key, sizeof(key)-1);*/
 /*    fb_setcolor(100);
     cleanup_and_exit(0);
 
@@ -1389,7 +1389,7 @@ static char *file_desc(char *filename)
 }
 
 static char *make_desc(struct ida_image_info *img, char *filename)
-//char *make_desc(struct ida_image_info *img, char *filename)
+/*char *make_desc(struct ida_image_info *img, char *filename)*/
 {
     static char linebuffer[128];
     struct ida_extra *extra;
@@ -1415,7 +1415,7 @@ static char *make_desc(struct ida_image_info *img, char *filename)
     return linebuffer;
 }
 
-//char *make_info(struct ida_image *img, float scale)
+/*char *make_info(struct ida_image *img, float scale)*/
 static char *make_info(struct ida_image *img, float scale)
 {
     static char linebuffer[128];
@@ -1503,7 +1503,7 @@ static char edit_line(char *line, int max)
 	    len++;
 	    line[len] = 0;
 */
-//	} else if (0 /* debug */) {
+/*	} else if (0 /-* debug *-/) {*/
 /*	    debug_key(key);
 	    sleep(1);
 	}
@@ -1530,7 +1530,7 @@ static void edit_desc(char *filename)
 
 /* ---------------------------------------------------------------------- */
 
-//void cleanup_and_exit(int code)
+/*void cleanup_and_exit(int code)*/
 /*static void cleanup_and_exit(int code)
 {
     fb_clear_mem();

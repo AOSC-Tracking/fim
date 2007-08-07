@@ -711,7 +711,7 @@ int framebuffer_init()
 		}
 	}
 	}
-
+	return 0;
 }
 
 
@@ -860,7 +860,7 @@ int main(int argc,char *argv[])
 	case 'h':
 	    cc.printHelpMessage(argv[0]);
 	    std::cout << " where OPTIONS are taken from :\n";
-	    for(i=0;i<(sizeof(fim_options)/sizeof(struct option))-1;++i)
+	    for(i=0;((unsigned int)i)<(sizeof(fim_options)/sizeof(struct option))-1;++i)
 	    {	
 	   	std::cout << "\t-"<<(char)(fim_options[i].val) ;
 		std::cout << "\t\t";
