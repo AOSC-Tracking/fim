@@ -137,7 +137,6 @@ class CommandConsole
 #ifndef FIM_NOSCRIPTING
 	int  executeFile(const char *s);
 	fim::string executeFile(const std::vector<fim::string> &args);
-	int executeFileDescriptor(int fd);
 #endif
 	fim::string echo(const std::vector<fim::string> &args);
 	fim::string help(const std::vector<fim::string> &args);
@@ -210,14 +209,8 @@ class CommandConsole
 	fim::string get_aliases_list();
 	fim::string get_commands_list();
 	void printHelpMessage(char *pn="fim");
-	void appendPostInitCommand(const fim::string &c)
-	{
-		postInitCommand+=c;
-	}
-	void appendPostExecutionCommand(const fim::string &c)
-	{
-		postExecutionCommand+=c;
-	}
+	void appendPostInitCommand(const char* c);
+	void appendPostExecutionCommand(const fim::string &c);
 	private:
 	fim::string postInitCommand;
 	fim::string postExecutionCommand;

@@ -227,7 +227,7 @@ char *make_info(struct ida_image *img, float scale)
 	20070628 now this function adapts to the screen resolution. yet there happens 
 	something strange for a number of lines filling more than half of the screen.. 
  */
-void fb_status_screen(const char *msg)//, int noDraw=1)
+static void fb_status_screen(const char *msg)//, int noDraw=1)
 {	
 	/*	WARNING		*/
 	//noDraw=0;
@@ -239,18 +239,18 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 	}
 	else
 	{
-		//WARNING : TEMPORARY !!! FIX ME
-		//in this temporary implementation of std::string wrapper will crash
-		//return ;
 	}
 	int y,i,j,l,w;
+	// R rows, C columns
 	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
 	C=(fb_var.xres/fb_font_width());
 	static char **columns=NULL;
+	static char *columns_data=NULL;
 	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
 	/* R rows and C columns; the last one for string terminators..
 	 */
-	if(!columns)columns=(char**)calloc(sizeof(char*)*R+(C+1),1);
+	if(!columns)columns=(char**)calloc(sizeof(char**)*R,1);
+	if(!columns_data)columns_data=(char*)calloc(sizeof(char)*(R*(C+1)),1);
 	/* 
 	 * seems tricky : we allocate one single buffer and use it as console 
 	 * storage and console pointers storage ...
@@ -258,14 +258,24 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 	 * note that we don't deallocate this area until program termination.
 	 * it is because we keep the framebuffer...
 	 * */
-	for(i=0;i<R;++i)columns[i]=(char*)(columns+sizeof(char*)*R+i*(C+1));
-	if(!columns)return;
+	if(!columns || !columns_data)return;
+
+	for(i=0;i<R;++i)columns[i]=columns_data+i*(C+1);
+
 	static int cline=0,	//current line		[0..R-1]
 		   ccol=0;	//current column	[0..C]
 	const char *p=msg,	//p points to the substring not yet printed
 	      	    *s=p;	//s advances and updates p
-	if(!msg) {memset(columns,' ',R*(C+1));cline=0;ccol=0;p=NULL;/*noDraw=0;*/}
+
+	if(!msg)
+	{
+		cline=0;
+		ccol=0;
+		p=NULL;
+		/*noDraw=0;*/
+	}
 	if(msg&&*msg=='\0')return;
+
 	if(cc.noFrameBuffer())return;
 	if(p)while(*p)
 	{
@@ -328,11 +338,16 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 		    }
 	    p=s;
 	}
+
 	//if(!cc.drawOutput() || noDraw)return;//CONVENTION!
 	if(!cc.drawOutput() )return;//CONVENTION!
 
 	    y = 1*fb_font_height();
 	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
+
+	    /*
+	     *WARNING : note that columns and columns_data arrays are not freed and should not, as long as they are static.
+	     * */
 }
 
 /*
@@ -344,7 +359,6 @@ void fb_status_screen(const char *msg)//, int noDraw=1)
 void status_screen(const char *desc, char *info)
 {
 	if(g_fim_no_framebuffer)return;
-
 	/*
 	 *	TO FIX
 	 *	NULL,NULL is the clearing combination !!
@@ -428,9 +442,7 @@ static void completion_display_matches_hook(char **matches,int num,int max)
 	}
 	//      status_screen((unsigned char*)buffer, NULL);
 	
-	//fb_status_screen(buffer, 0);
-	//cout << buffer << "\n" ;
-	fb_status_screen(buffer);
+//	fb_status_screen(buffer);
 
 
 //	std::cout << buffer << "\n" ;
@@ -496,7 +508,7 @@ void initialize_readline ()
 	 * to do:
 	 * see rl_filename_quoting_function ..
 	 * */
-	//rl_inhibit_completion=1;
+	//rl_inhibit_completion=1;	//if set, TABs are read as normal characters
 	rl_filename_quoting_desired=1;
 	rl_filename_quote_characters="\"";
 	//rl_bind_key('~',fim_rl_end);
@@ -622,6 +634,7 @@ static struct option fim_options[] = {
 
 	FlexLexer *lexer;
 	using namespace fim;
+	int              vt = 0;
 
 
 static void version()
@@ -640,17 +653,76 @@ void chomp(char *s)
 	for(;*s;++s)if(*s=='\n')*s='\0';
 }
 
+int framebuffer_init()
+{
+	if(!cc.noFrameBuffer())
+	{
+		//initialization of the framebuffer text
+		fb_text_init1(fontname);
+		//initialization of the framebuffer text
+		fd = fb_init(fbdev, fbmode, vt);
+		//setting signals to handle in the right ways signals
+		fb_catch_exit_signals();
+		fb_switch_init();
+		/*
+		 * C-z is inhibited now (for framebuffer's screen safety!)
+		 */
+		signal(SIGTSTP,SIG_IGN);
+		//signal(SIGSEGV,cleanup_and_exit);
+		//set text color to white ?
+		fb_text_init2();
+
+		switch (fb_var.bits_per_pixel) {
+	case 8:
+		svga_dither_palette(8, 8, 4);
+		dither = TRUE;
+		init_dither(8, 8, 4, 2);
+		break;
+	case 15:
+    	case 16:
+        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
+        	    linear_palette(5);
+		if (fb_var.green.length == 5) {
+		    lut_init(15);
+		} else {
+		    lut_init(16);
+		}
+		break;
+	case 24:
+        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
+      	      linear_palette(8);
+		break;
+	case 32:
+        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
+          	  linear_palette(8);
+		lut_init(24);
+		break;
+	default:
+		fprintf(stderr, "Oops: %i bit/pixel ???\n",
+			fb_var.bits_per_pixel);
+		exit(1);
+    	}
+    	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR ||
+		fb_var.bits_per_pixel == 8)
+	{
+		if (-1 == ioctl(fd,FBIOPUTCMAP,&cmap)) {
+	    		perror("ioctl FBIOPUTCMAP");
+		    exit(1);
+		}
+	}
+	}
+
+}
+
 
 int main(int argc,char *argv[])
 {
-//	sleep(10);
 	/*
 	 * an adapted version of the main function
 	 * of the original version of the fbi program
 	 */
 // 	int              timeout = -1;
 	int              opt_index = 0;
-	int              vt = 0;
 	int              i;
 	int              read_file_list_from_stdin;
 	read_file_list_from_stdin=0;
@@ -839,70 +911,13 @@ int main(int argc,char *argv[])
 
 	if(g_fim_no_framebuffer==0)
 	{
-	if(!cc.noFrameBuffer())
-	{
-		//initialization of the framebuffer text
-		fb_text_init1(fontname);
-		//initialization of the framebuffer text
-		fd = fb_init(fbdev, fbmode, vt);
-		//setting signals to handle in the right ways signals
-		fb_catch_exit_signals();
-		fb_switch_init();
-		/*
-		 * C-z is inhibited now (for framebuffer's screen safety!)
-		 */
-		signal(SIGTSTP,SIG_IGN);
-		//signal(SIGSEGV,cleanup_and_exit);
-		//set text color to white ?
-		fb_text_init2();
-
-		switch (fb_var.bits_per_pixel) {
-	case 8:
-		svga_dither_palette(8, 8, 4);
-		dither = TRUE;
-		init_dither(8, 8, 4, 2);
-		break;
-	case 15:
-    	case 16:
-        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
-        	    linear_palette(5);
-		if (fb_var.green.length == 5) {
-		    lut_init(15);
-		} else {
-		    lut_init(16);
-		}
-		break;
-	case 24:
-        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
-      	      linear_palette(8);
-		break;
-	case 32:
-        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
-          	  linear_palette(8);
-		lut_init(24);
-		break;
-	default:
-		fprintf(stderr, "Oops: %i bit/pixel ???\n",
-			fb_var.bits_per_pixel);
-		exit(1);
-    	}
-    	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR ||
-		fb_var.bits_per_pixel == 8)
-	{
-		if (-1 == ioctl(fd,FBIOPUTCMAP,&cmap)) {
-	    		perror("ioctl FBIOPUTCMAP");
-		    exit(1);
-		}
-	}
-	}
-	tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
+		framebuffer_init();
+		tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
 	}
 
-	cc.init(); //WARNING : SEVERE BUG !!!
-	//return 0;
-//	cc.quit(0);	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	cc.init();
 	cc.executionCycle();
 	cc.quit(0);
-	return 0;	//there wil be no return
+	return 0;	//there will be no return
 }
 

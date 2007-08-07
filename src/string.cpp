@@ -380,7 +380,8 @@ namespace fim
 #else
 	std::ostream& operator<<(std::ostream &os,const string& s)
 	{
-		return os;//.print(os);
+		return os << s.c_str();
+		//.print(os);
 	}
 
 	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
@@ -403,7 +404,26 @@ namespace fim
 
 	string::string(int i)//:std::string(i)
 	{
-		*((std::string*)this) = i;
+		char buf[FIM_CHARS_FOR_INT];
+		snprintf(buf,FIM_CHARS_FOR_INT-1,"%d",i);
+		buf[FIM_CHARS_FOR_INT-1]='\0';
+		append(buf);
+	}
+	
+	/*
+	 * see the next commented declaration ? it is pure evil, do not use it !
+	 *
+	#define	FIM_STRING_INITIAL_LENGTH 64
+	string::string():std::string(FIM_STRING_INITIAL_LENGTH,'\0'){}
+	*/
+	string::string():std::string(""){}
+
+	string string::operator+(const string s)const
+	{
+		string res(*this);
+		res+=s.c_str();
+		return string(res);
 	}
 #endif
 }
+

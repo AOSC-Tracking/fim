@@ -80,6 +80,8 @@ using namespace fim;
 
 
 
+fim::string slurp_file(fim::string filename);
+void append_to_file(fim::string filename, fim::string lines);
 
 
 

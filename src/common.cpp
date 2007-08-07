@@ -16,7 +16,14 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#include "fim.h"
+
+// including fim.h poses incompatibilities with <fstream>
+//#include "fim.h"
+
+#include <iostream>
+#include "string.h"
+#include <string>
+#include <fstream>
 
 void trec(char *str,const char *f,const char*t)
 {
@@ -54,6 +61,41 @@ void trec(char *str,const char *f,const char*t)
 		}
 		++_p;
 	} 
+
+
 }
+
+	fim::string slurp_file(fim::string filename)
+	{
+		std::string file;
+		std::ifstream fs;
+		fs.open(filename.c_str(),std::ios::binary);
+		if(fs.is_open())
+		{
+			std::string tmp;
+			/* FIXME : this is not efficient */
+			while(!fs.eof())
+			{
+				getline(fs,tmp);
+				tmp+="\n" ;
+				file+=tmp;
+			}
+				printf("%s\n",file.c_str());
+		}
+		fs.close();
+		return fim::string(file.c_str());
+	}
+
+	void append_to_file(fim::string filename, fim::string lines)
+	{
+		std::ofstream fs;
+		fs.open(filename.c_str(),std::ios::app|std::ios::binary);
+		if(fs.is_open())
+		{
+			fs << "\""<< lines.c_str()<<"\"" ;
+		}
+		fs.close();
+		sync();
+	}
 
 

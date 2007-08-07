@@ -22,8 +22,8 @@
 /*
  * the rest of the program waits still for a proper adaptation of dynamic strings.
  */
-#define _FIM_DYNAMIC_STRING 1
-//#define _FIM_STRING_WRAPPER 1
+//#define _FIM_DYNAMIC_STRING 1
+#define _FIM_STRING_WRAPPER 1
 
 
 #define FIM_CHARS_FOR_INT 16
@@ -107,59 +107,24 @@ namespace fim
 	class string:public std::string
 	{
 		public:
-		string::string(){}
-		string::string(const char*s):std::string(s){}
-		string::string(int i);//:std::string(i)
+		string();
+		//string::string():std::string(FIM_STRING_INITIAL_LENGTH,'\0'){}
+
+		/* a virtual destructor will behave correctly when destroying this class
+		 * objects with base pointers .. */
+		~string(){}
+		string(const char*s):std::string(s){}
+		string(int i);//:std::string(i)
 
 /*
  		the following two operators are very nice to use but pose unexpected problems.		
 */
-
  		operator int  ()const{return atoi(this->c_str());}
 		operator float()const{return atof(this->c_str());}
 
-
-		/* allocates a new object and returns it */
-#if 1
-		void string::concatenate(const char* s)
-		{
-			if(s)
-			*((std::string*)this)+=std::string(s);
-		}
-
-		void string::operator+=(const string &s)
-		{
-			/* note that this method is necessary when
-			 * conversion operators exist, for conversion precedence issues .. */
-			concatenate(s.c_str());
-		}
-
-		void string::operator+=(const char* s)
-		{
-			if(s)concatenate(s);
-		}
-
-		void string::operator+=(const int i)
-		{
-			char buf[FIM_CHARS_FOR_INT];
-			sprintf(buf,"%d",i);			
-			*((std::string*)this)+=std::string(buf);
-		}
-
-		string string::operator+(const string s)const
-		{
-			string res(*this);
-			res+=s.c_str();
-			return string(res);
-		}
-#endif
-	
+		string operator+(const string s)const;
 		/* copy constructor */
-#if 1
-		string::string(const string& s);
-//		string::string(const string& s):std::string(s.c_str());
-#endif
-		static int  max_string(){return 128*8*4*2;}
+		string(const string& s);
 	};
 
 
