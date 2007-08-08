@@ -23,8 +23,11 @@ When submitting a bug report, please follow the following rules:
  - please send me the config.log file, too.
    it is of vital importance!
    the config.log file is created by the configure script when you run the ./configure script
+ - if you are using an ad hoc method for installing (say, the ebuild for the Gentoo Linux ),
+   consider sending the logfile created and named in the error messages.
 
-You can mail you report to dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_
+==== CONTACT
+You can mail your report to dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_
 with a '@' and _Baz_ with a '.'.
 
 

@@ -9,7 +9,7 @@
 # no-dependencies was due to problems with conditional sources
 # nostdinc disables the standard -I. include which breaks a correct string.h include
 AUTOMAKE_OPTIONS = nostdinc no-dependencies
-SUBDIRS = src doc
+SUBDIRS = src doc distros
 
 EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL  README README.FIRST TODO \
 	Makefile.am configure.ac configure \

@@ -496,6 +496,7 @@ AC_SUBST(FIM_LIB_OBJECTS)
 AC_OUTPUT(Makefile)
 AC_OUTPUT(src/Makefile)
 AC_OUTPUT(doc/Makefile)
+AC_OUTPUT(distros/Makefile)
 #AC_OUTPUT
 
 AC_MSG_NOTICE([
