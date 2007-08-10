@@ -1,6 +1,19 @@
 	$Id$
+
+This file is a melange of ideas aimed towards further development.
+If you are interested into FIM internals, philosophy, and evolution, you
+are welcome to read this file.
+
+If you intend to learn about FIM, please read the program documentation  in the
+ doc directory.
+
 -------------------------------------------------------------------------------
 	Current development directions
+20070811	PORT ACROSS DIFFERENT AUTOMAKE VERSIONS !
+20070810	the time is right for a massive fimrc rewrite and example scripts:
+		you could also write a little cookbook in the documentation, 
+		with examples like :
+			find -name *jpg | fim - | xargs convert -0 
 20070613	sync documentation, website and the whole with VERSION :)
 20070517	automated documentation is a future issue
 20070517	an useless, optional grid, under or over the image
@@ -122,13 +135,12 @@ Please read the FIM.TXT file and the fimrc template to discover nice FIM feature
 
 	DATES:
 20061223	inception
-20070202	come trattare gli $ nelle stringhe ?
 20070202	stress testing (1000+d-) gave : CommandConsole.cpp:577: "pipe error"
-20070202	aspect ratio expansion and pan speed factors..
 20070204	make stricter the policy of recording (only aliases and/or lines.complete the time behaviour
+	IDEAS
 20070210	eliminate the fresh variable from the config?
 20070216	eliminate image tearing by studying the framebuffer device
-	idea : repeat_last N ?!
+		repeat_last N ?!
 	TIPS
 20070302	use __FUNCTION__ : is not ANSI, but GCC
 20070303	realtime clock... -lrt cannot  be used with FIM

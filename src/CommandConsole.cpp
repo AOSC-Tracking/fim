@@ -302,6 +302,7 @@ namespace fim
 		addCommand(new Command(fim::string("scale_factor_decrease" ),fim::string( "subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor" ),&browser,&Browser::scale_factor_decrease));
 		addCommand(new Command(fim::string("magnify" ),fim::string("magnifies the displayed image" ),&browser,&Browser::magnify));
 		addCommand(new Command(fim::string("reduce"),fim::string("reduces the displayed image" ),&browser,&Browser::reduce));
+		addCommand(new Command(fim::string("return"),fim::string("returns from the program with a status code"),this,&CommandConsole::do_return));
 		addCommand(new Command(fim::string("top_align"),fim::string("aligns to the upper side the image" ),&browser,&Browser::top_align));
 		addCommand(new Command(fim::string("bottom_align"),fim::string("aligns to the lower side the image" ),&browser,&Browser::bottom_align));
 		addCommand(new Command(fim::string("goto"),fim::string("goes to the index image" ),&browser,&Browser::goto_image));
@@ -1006,7 +1007,8 @@ namespace fim
 		/*
 		 * the method to be called to exit from the program safely
 		 */
-    		cleanup_and_exit(0);
+    		cleanup_and_exit(i);
+		/* the following command should be ignored */
 		this->exit(0);
 	}
 
@@ -1514,6 +1516,16 @@ int CommandConsole::executeFile(const char *s)
 	}
 #endif
 	
+	/*
+	 * returns immediately
+	 * */
+	fim::string CommandConsole::do_return(const std::vector<fim::string> &args)
+	{
+		if( args.size() < 0 ) this->quit(0);
+		else	this->quit( (int) args[0] );
+		return "";/* it shouldn' return, though :) */
+	}
+
 	fim::string CommandConsole::status(const std::vector<fim::string> &args)
 	{
 		for(unsigned int i=0;i<args.size();++i)

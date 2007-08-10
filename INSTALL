@@ -3,7 +3,8 @@
 Summary:
 
 ====== BUILDING FROM SVN
-====== BUILDING ON GENTOO LINUX
+====== BUILDING ON GENTOO LINUX - with overlays (reccomended)
+====== BUILDING ON GENTOO LINUX - without overlays
 ====== BUILDING ON DEBIAN LINUX
 ====== BUILDING FROM A COMPRESSED ARCHIVE
 ====== INSTALLATION
@@ -12,7 +13,6 @@ Summary:
 ====== DEPENDENCIES
 ====== DEPENDENCIES : example on Gentoo
 ====== TODO
-
 ====== BUILDING FROM SVN
 
 If you happen to have downloaed fim from the svn archive, 
@@ -25,7 +25,20 @@ The ./autogen.sh script will create a ./configure script, which
 will generate a Makefile file, which finally will permit you to 
 build the fim executable and install it.
 
-====== BUILDING ON GENTOO
+====== BUILDING ON GENTOO LINUX - with overlays (reccomended)
+
+Fim is in the gentoo 'sunrise' overlay. So, you can 'emerge fim' if 
+yoe have this overlay installed on your system.
+Here it shows how to do it :
+
+ su
+ emerge layman
+ layman -a sunrise
+ echo "source /usr/portage/local/layman/make.conf" >> /etc/make.conf
+ layman -S
+ USE='gif jpeg png tiff' emerge fim
+ 
+====== BUILDING ON GENTOO LINUX - without overlays
 
 On a gentoo system, you should resolve library dependencies with :
 
@@ -53,7 +66,12 @@ as a bug report; see BUGS for this!
 ====== BUILDING ON DEBIAN LINUX
 
 Actually I don't own a Debian system to try on, but I already have 
-a file in distros/debian/control
+a file in distros/debian/control (useless, though :) )
+
+Other libraries are installable by running:
+apt-get install libreadline5-dev
+apt-get install libungif4-dev
+...
 
 If you could give me some help with this, I would be very grateful to you.
 

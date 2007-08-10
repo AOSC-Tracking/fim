@@ -254,7 +254,7 @@ if test x$fim_handle_tiff != xno ; then
       have_tiff=yes,
       have_tiff=no
       AC_MSG_WARN(*** TIFF loader will not be built (TIFF library not found) ***))
-    if test x"$have_tiff" = yes; then
+    if test x"$have_tiff" = xyes; then
       AC_MSG_CHECKING([for tiff.h])
       AC_TRY_CPP(
 [#include <stdio.h>
@@ -265,7 +265,7 @@ if test x$fim_handle_tiff != xno ; then
         have_tiff=yes,
         have_tiff=no)
       AC_MSG_RESULT($have_tiff)
-      if test x"$have_tiff" = yes; then
+      if test x"$have_tiff" = xyes; then
         LIBTIFF='-ltiff'
       else
           AC_MSG_WARN(*** TIFF loader will not be built (TIFF header file not found) ***)
@@ -318,7 +318,7 @@ if test x$fim_handle_jpeg != xno ; then
       have_jpeg=yes,
       have_jpeg=no
       AC_MSG_WARN(*** JPEG loader will not be built (JPEG library not found) ***))
-    if test x"$have_jpeg" = yes; then
+    if test x"$have_jpeg" = xyes; then
       AC_MSG_CHECKING([for jpeglib.h])
       AC_TRY_CPP(
 [#include <stdio.h>
@@ -329,7 +329,7 @@ if test x$fim_handle_jpeg != xno ; then
         have_jpeg=yes,
         have_jpeg=no)
       AC_MSG_RESULT($have_jpeg)
-      if test x"$have_jpeg" = yes; then
+      if test x"$have_jpeg" = xyes; then
         LIBJPEG='-ljpeg'
       else
           AC_MSG_WARN(*** JPEG loader will not be built (JPEG header file not found) ***)
@@ -402,7 +402,7 @@ dnl ==================
 
 fim_cv_nofimrc=no
 AC_ARG_ENABLE(fimrc, AC_HELP_STRING([--enable-fimrc], [Fim will by default load the ~.fimrc file.]),
-[if test x$enableval = yes; then
+[if test x$enableval = xyes; then
         fim_cv_fimrc=yes
 fi])
 
@@ -431,7 +431,7 @@ dnl ==================
 
 fim_cv_warnings=no
 AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug], [Turns on debug options (recommended, for debugging)]),
-[if test x$enableval = yes; then
+[if test x$enableval = xyes; then
         fim_cv_debug=yes
 fi])
 
@@ -439,19 +439,19 @@ dnl ==================
 
 fim_cv_warnings=no
 AC_ARG_ENABLE(warnings, AC_HELP_STRING([--enable-warnings], [Turns on compiler warnings (recommended, for debugging)]),
-[if test x$enableval = yes; then
+[if test x$enableval = xyes; then
         fim_cv_warnings=yes
 fi])
 
 if test x$GCC = xyes ; then
-	if test x$fim_cv_debug = yes; then
+	if test x$fim_cv_debug = xyes; then
         # CFLAGS are resetted
         CFLAGS="-g"
 	fi
 fi
 
 if test x$GCC = xyes ; then
-	if test x$fim_cv_warnings = yes ; then
+	if test x$fim_cv_warnings = xyes ; then
         CFLAGS="-Wall -pedantic $CFLAGS"
 	fi
 fi
@@ -465,7 +465,7 @@ AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CFLAGS],
 	 In case you want completely reset CFLAGS use :
 	 CFLAGS='<all that you want>' ./configure ..
 	]),
-        [if test x$withval != yes; then
+        [if test x$withval != xyes; then
                 AC_DEFINE_UNQUOTED(CFLAGS, "$withval",
                  [custom CFLAGS])
 		FIM_CFLAGS="$CFLAGS $withval"
@@ -477,7 +477,7 @@ dnl ==================
 
 # This code still awaits for integration ...
 AC_ARG_WITH(exec-shell, AC_HELP_STRING([--with-exec-shell=SHELL], [Specify alternate shell (ONLY if /bin/sh is broken)]),
-        [if test x$withval != yes; then
+        [if test x$withval != xyes; then
                 AC_DEFINE_UNQUOTED(EXECSHELL, "$withval",
                  [program to use for shell commands])
          else

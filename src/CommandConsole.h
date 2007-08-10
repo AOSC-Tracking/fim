@@ -142,6 +142,7 @@ class CommandConsole
 	fim::string help(const std::vector<fim::string> &args);
 	fim::string quit(const std::vector<fim::string> &args);
 	fim::string foo (const std::vector<fim::string> &args);
+	fim::string do_return(const std::vector<fim::string> &args);
 	fim::string status(const std::vector<fim::string> &args);
 	void execute(const char *s, int add_history_);
 	private:

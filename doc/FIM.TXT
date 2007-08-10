@@ -642,16 +642,36 @@ and marking nice images while viewing them (pressing the default <C-m> key for).
 Once out of fim, the nicepictures.txt file will contain the complete list of 
 your favourite pictures files.
 
+You could leave the program using 'return'. In this case, you could supply arguments
+to 'return'. The argument is converted to a number and set as the program return code.
+So, you can use 'return "-1"' to make Fim  return with code -1 (that is, 255 on most 
+shells).
+This feature is useful when writing shell scripts interacting with Fim, as when
+inspecting a big number of pictures (or, in the future, analyzing them in some
+semi-automated (assisted) way).
+
 Another nice trick is the following :
 $ fim `fim *`
 this will first display some images; when the first fim instance will terminate,
-a second will start, displaying only chosen images.
+a second will start, displaying only the chosen images, thus narrowing the image list.
 
 Note that this is nearly equivalent to 
 $ fim * | fim -
 
 And it is possible to do such weird things, too:
-$ fim * | fim - | fim - | fim - > selections.txt
+
+$ fim * | fim - | fim - | fim - > selections.txt 
+ to get a list of marked pictures
+
+ or 
+
+$ find ./* -name '*.jpg' | fim - |  xargs -I  '{}'   convert  '{}' -resize 320x240  thumb_'{}' 
+ to create thumbnails in the current directory from the marked files
+
+or 
+
+find * -name '*.jpg' | fim - | tar czf nicer.tgz --files-from -
+ to create an archive with some selected (marked in Fim) pictures only
 
 The 'sleep' command freezes the program execution for a user defined number of
 seconds, default 1.
@@ -1066,6 +1086,9 @@ A lot of questions still await for an answer in Fim. Here are few:
  In the source archive, there are the doctags.c program and a slightly modified
  vim2html.pl, which were taken from the original source archive of Vim 7.0 
  (although not an integral part of Vim but helper programs).
+
+ Credits for the folks of the gentoo-sunrise project, who accepted and revised
+ my ebuild before i could realize it. 
 
 ==============================================================================
 12.FAQs 							*faq*

@@ -128,12 +128,13 @@ namespace fim
 	void cleanup_and_exit(int code)
 	{
 		if(g_fim_no_framebuffer)
-			exit(code);
+			std::exit(code);
 		else
 		{
 			fb_clear_mem();
 			tty_restore();
 			fb_cleanup();
+			std::exit(code);
 		}
 	}
 }
@@ -700,14 +701,14 @@ int framebuffer_init()
 	default:
 		fprintf(stderr, "Oops: %i bit/pixel ???\n",
 			fb_var.bits_per_pixel);
-		exit(1);
+		std::exit(1);
     	}
     	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR ||
 		fb_var.bits_per_pixel == 8)
 	{
 		if (-1 == ioctl(fd,FBIOPUTCMAP,&cmap)) {
 	    		perror("ioctl FBIOPUTCMAP");
-		    exit(1);
+		    std::exit(1);
 		}
 	}
 	}
@@ -862,7 +863,8 @@ int main(int argc,char *argv[])
 	    std::cout << " where OPTIONS are taken from :\n";
 	    for(i=0;((unsigned int)i)<(sizeof(fim_options)/sizeof(struct option))-1;++i)
 	    {	
-	   	std::cout << "\t-"<<(char)(fim_options[i].val) ;
+	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
+	   	else std::cout << "\t-";
 		std::cout << "\t\t";
 	    	std::cout << "--"<<fim_options[i].name ;
 		switch(fim_options[i].has_arg){

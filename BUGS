@@ -3,6 +3,7 @@ $Id$
 ==== KNOWN BUGS
 Please refer to the documentation (doc/FIM.TXT) for a complete list of known bugs (BUGS section).
 
+20070811	SEVERE : THE AUTOMAKE STUFF WORKS ONLY WITH AUTOMAKE 1.10 . TO BE SOLVED SOON!
 ==== BUG REPORTING
 For sending a bug report, please frop me an email with a subject line beginning with 'FIM : '.
 Contact information is in the doc/FIM.TXT file.
