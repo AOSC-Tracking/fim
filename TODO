@@ -9,7 +9,7 @@ If you intend to learn about FIM, please read the program documentation  in the
 
 -------------------------------------------------------------------------------
 	Current development directions
-20070811	PORT ACROSS DIFFERENT AUTOMAKE VERSIONS !
+20070811	to familiarize with AC_PREREQ and AM_INIT_AUTOMAKE to a rudimentary dependency check for maintainers
 20070810	the time is right for a massive fimrc rewrite and example scripts:
 		you could also write a little cookbook in the documentation, 
 		with examples like :

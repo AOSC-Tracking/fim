@@ -53,6 +53,7 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES], ['$(top_srcdir)/VERSION'])
 CPPFLAGS=''
 
 
+AC_SUBST(FIM_LIBS)
 AC_SUBST(FIM_LIB_OBJECTS)
 AC_SUBST(VERSION)
 #AC_LANG_POP([C++])
@@ -182,7 +183,8 @@ fi
 AC_MSG_CHECKING(where to put the documentation)
 AC_ARG_WITH(docdir, AC_HELP_STRING([--with-docdir=PATH], [Specify where to put the documentation]),
         [fim_cv_docdir=$withval],
-        [fim_cv_docdir="${prefix}/doc/fim-${fim_cv_version}"])
+        [fim_cv_docdir='${prefix}/doc/fim-${fim_cv_version}'])
+# FIXME : the above line seems troublesome, BUT IT IS NOT (see the muttrc).
 
 AC_MSG_RESULT($fim_cv_docdir)
 
@@ -224,9 +226,13 @@ if test x$fim_handle_gif != xno ; then
     fi
   fi
 
-  if test x$with_libgif != xno ; then
+#  if test x$with_libgif != xno ; then
+# the following needs thorough testing
+  if test x"$have_gif" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS gif.o"
   FIMLIBS="$FIMLIBS $LIBGIF"
+  else
+    fim_handle_gif=no
   fi
 
 #  if test x$with_libgif != xno && test -z "$LIBGIF"; then
@@ -273,9 +279,13 @@ if test x$fim_handle_tiff != xno ; then
     fi
   fi
 
-  if test x$with_libtiff != xno ; then
+#  if test x$with_libtiff != xno ; then
+# the following needs thorough testing
+  if test x"$have_tiff" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS tiff.o"
   FIMLIBS="$FIMLIBS $LIBTIFF"
+  else
+    fim_handle_tiff=no
   fi
 
 #  if test x$with_libtiff != xno && test -z "$LIBTIFF"; then
@@ -295,7 +305,7 @@ dnl ============= GNU readline : essential
 
 FIMLIBS="$FIMLIBS -lreadline"
 
-dnl ============= GNU gpm, inofficial yet
+dnl ============= GNU gpm, unofficial yet
 
 #    AC_CHECK_LIB(gpm,Gpm_Open,
 #      ,true,
@@ -337,9 +347,14 @@ if test x$fim_handle_jpeg != xno ; then
     fi
   fi
 
-  if test x$with_libjpeg != xno ; then
+#  if test x$with_libjpeg != xno ; then
+# the following needs thorough testing
+  if test x"$have_jpeg" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS jpeg.o"
   FIMLIBS="$FIMLIBS $LIBJPEG"
+  AC_DEFINE([HAVE_LIBJPEG],[1],[We have libjpeg])
+  else
+    fim_handle_jpeg=no
   fi
 
 #  if test x$with_libjpeg != xno && test -z "$LIBJPEG"; then
@@ -512,9 +527,9 @@ AC_MSG_NOTICE([
         compile time warnings               : ${fim_cv_warnings:-no} ( ${FIM_CFLAGS} )
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
 	png  file support                   : ${fim_handle_png:-no}
-	jpeg file support                   : ${fim_handle_jpeg}
-	tiff file support                   : ${fim_handle_tiff}
-	gif  file support                   : ${fim_handle_gif}
+	jpeg file support                   : ${fim_handle_jpeg:-no}
+	tiff file support                   : ${fim_handle_tiff:-no}
+	gif  file support                   : ${fim_handle_gif:-no}
 	patch for running under screen on?  : ${have_boz_patch:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 

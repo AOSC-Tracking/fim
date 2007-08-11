@@ -24,7 +24,9 @@
 #include <sys/mman.h>
 #include <linux/fb.h>
 
-#include <jpeglib.h>
+#ifdef HAVE_LIBJPEG
+# include <jpeglib.h>
+#endif
 
 #ifdef HAVE_LIBEXIF
 # include <libexif/exif-data.h>

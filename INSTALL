@@ -6,6 +6,7 @@ Summary:
 ====== BUILDING ON GENTOO LINUX - with overlays (reccomended)
 ====== BUILDING ON GENTOO LINUX - without overlays
 ====== BUILDING ON DEBIAN LINUX
+====== BUILDING ON CENTOS LINUX (RED HAT LINUX)
 ====== BUILDING FROM A COMPRESSED ARCHIVE
 ====== INSTALLATION
 ====== INSTALLATION BUG REPORTING
@@ -74,6 +75,14 @@ apt-get install libungif4-dev
 ...
 
 If you could give me some help with this, I would be very grateful to you.
+
+====== BUILDING ON CENTOS LINUX (RED HAT LINUX)
+
+On a yum-based system, you would resolve dependencies with yum:
+
+yum install readline
+yum install readline-devel
+...
 
 ====== BUILDING FROM A COMPRESSED ARCHIVE
 
