@@ -3,12 +3,19 @@
 This file is a melange of ideas aimed towards further development.
 If you are interested into FIM internals, philosophy, and evolution, you
 are welcome to read this file.
+Of course, the BUGS file is a source of constant inspiration for further work, too.
 
 If you intend to learn about FIM, please read the program documentation  in the
  doc directory.
 
 -------------------------------------------------------------------------------
 	Current development directions
+20070812	examine fbi's weak points like http://freshmeat.net/articles/view/2203/ and fix them in Fim, if present.
+20070812	study the benefits of integration with libraries like:
+		DirectFB : for a simpler driver and display mechanism
+		MXK : for fancy input devices and capabilities
+		...
+20070812	integrate the freshmeat-announce script
 20070811	to familiarize with AC_PREREQ and AM_INIT_AUTOMAKE to a rudimentary dependency check for maintainers
 20070810	the time is right for a massive fimrc rewrite and example scripts:
 		you could also write a little cookbook in the documentation, 

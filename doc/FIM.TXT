@@ -60,6 +60,7 @@ Introduction to Fim					*ref* *reference*
 3.1. Configuration		|configuration|
 3.2. Keyboard binding		|keyboard|
 3.3. The fimgs script		|fimgs|
+3.4. System integration tips	|tips|
 4. Command Line Mode		|cli|
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
@@ -131,6 +132,7 @@ Indications about how to improve this documentation are very, very appreciated.
 
 Suggestions, patches, etc..  about the software are appreciated, too.
 Ideas on the FIM language and potential use are welcome, too.
+The current bunch of ideas and inspiration is put in the TODO file.
 
 p.s.: please read the BUGS file when submitting a bug and the |bugs| section 
 to consult the current bug list.
@@ -284,6 +286,25 @@ GhostScript ( gs(1) ) in a number of .png files in a temporary directory.
 
 If the file is among the archives file formats listed, it is decompressed in a
 temporary directory and displayed file by file with fim.
+
+===============================================================================
+3.4. System integration tips				*tips*
+
+If you are used to software like mutt, you are likely to use much the console.
+Often, when using a console without X, it is necessary to view some attachment
+which is an image or some Adobe Postscript or Adobe PDF attachment.
+In these cases, Fim could be integrated in the ~/.mailcap file, read by mutt:
+
+image/*;( [ "$DISPLAY" != "" ] && kuickshow %s ) || ( ( ( tty | grep tty ) && fim  %s ) || cacaview %s )
+image/png;( [ "$DISPLAY" != "" ] && kuickshow %s ) || ( ( ( tty | grep tty ) && fim  %s ) || cacaview %s )
+image/jpeg;( [ "$DISPLAY" != "" ] && kuickshow %s ) || ( ( ( tty | grep tty ) && fim  %s ) || cacaview %s )
+application/pdf;( [ "$DISPLAY" != "" ] && acroread %s ) || ( ( ( tty | grep tty ) && fimgs  %s ) )
+
+This will tell mutt ot use kuickshow to display images under the X environment,
+and Fim otherwise.
+Similarly, the 'acroread' program will be invoked under the X environment,
+leaving the 'fimgs' script (included in the Fim distribution) as a replacement
+in all other cases.
 
 ==============================================================================
 4. Command Line Mode					*cli*
@@ -1160,6 +1181,7 @@ A lot of questions still await for an answer in Fim. Here are few:
 
  The following are known program problems (bugs) which were reported and await
  for a solution.
+ Some other are listed in the BUGS file.
 
  if you want to report a bug, please consult the BUGS file.
  if you want to contribute with help, please read the |contact| information.

@@ -24,13 +24,13 @@
 /* We have libpng */
 #undef HAVE_LIBPNG
 
-//* We have libjpeg */
+/* We have libjpeg */
 #undef HAVE_LIBJPEG
 
-//* We have libtiff */
+/* We have libtiff */
 #undef HAVE_LIBTIFF
 
-//* We have libgif */
+/* We have libgif */
 #undef HAVE_LIBGIF
 
 /* Define to 1 if you have the <memory.h> header file. */

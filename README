@@ -1,7 +1,18 @@
 ================================================================================
 		FIM - Fbi IMproved (alpha) README document.
 ================================================================================
-			Overview
+	1		Overview
+	2		Description
+	3		Features
+	4		Compilation Requirements
+	5		Run Time Requirements
+	6		Original Idea
+	7		Technical overview
+	8		Gentoo Installation Tips
+	9		License
+	10		Contact
+================================================================================
+	1		Overview
 ================================================================================
 
 FIM aims to be a highly customizable and scriptable image
@@ -16,7 +27,31 @@ documentation, in form of a doc/FIM.TXT documentation file, a man page, lots
 of comments in the code, and some text files.
 
 ================================================================================
-			Features
+	2		Description
+================================================================================
+
+FIM aims to be a highly customizable and scriptable image viewer targeted at the
+users who are confortable with software like the Vim text editor or the Mutt
+mail user agent.
+
+It is based on the Fbi image viewer, by Gerd Hoffmann, and works in the Linux
+framebuffer console ( so, it is not an X program! ).
+
+It is capable of regular expressions based (on filename) image viewing,vim-like
+autocommands, it offers GNU readline command line autocompletion and history,
+completely customizable key bindings, external/internal (if-while based)
+scriptability (through return codes, standard input/output, and commands given
+at invocation time, initialization file), and much more.
+
+However, it still needs some (power) user response to resolve some points about
+the core functionalities, and a thorough configuration/installation testing.
+
+FIM is free software, and it ships under the GPL software license, complete with
+documentation, in form of a doc/FIM.TXT documentation file, a man page, lots
+of comments in the (sometimes still dirty) code, and some text files.
+
+================================================================================
+	3		Features
 ================================================================================
 
 Implemented features: 
@@ -56,7 +91,7 @@ Yet unimplemented features :
  - advanced pattern selection of images on other criterias ?
 
 ================================================================================
-			Compilation Requirements
+	4		Compilation Requirements
 ================================================================================
 
  - fbi, with curl and exif support disabled
@@ -73,17 +108,17 @@ Yet unimplemented features :
  Libraries originally required by Fbi but removed from Fim : libFS, libCURL, libLIRC
 
 ================================================================================
-			Run Time Requirements
+	5		Run Time Requirements
 ================================================================================
 
- - A Linux box
- - The framebuffer ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
+ - A Linux (not sure if it is necessary for it to be an x86; i think not) box
+ - The framebuffer device ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
    ( and usually found in "/usr/src/linux/Documentation/fb" in the kernel source
     code tree ).
- - library files for : libpng, libjpeg, libungif, libtiff, libreadline
+ - shared library files for : libpng, libjpeg, libungif, libtiff, libreadline
 
 ================================================================================
-			Technical intro
+	6		Original Idea
 ================================================================================
 
 The original architecture of Fim is based on the wonderful fbi-1.31, written by
@@ -98,8 +133,12 @@ http://dezperado.altervista.org/coding.html#vim-like-fbi,%20and%20the%20wrapper%
 The code is applied as a patch an the existing fbi source tree, but it is by 
 any means near to what is now Fim.
 
+Fim aims at a complete reorganization of the Fbi code, and ideally towards an
+implementation of the most scriptable and configurable image viewer ever - not
+tied to the framebuffer device and to a sole keyboard input.
+
 ================================================================================
-			Technical overview
+	7		Technical overview
 ================================================================================
 
 To run Fim requires a Linux box with the framebuffer device enabled in the 
@@ -142,9 +181,10 @@ Tested platforms :
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 1.875d, gentoo
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 2.2   , gentoo
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.33,bison 2.2   , gentoo
+ - some other, but non documented here.
 
 ================================================================================
-			Gentoo Installation Tips
+	8		Gentoo Installation Tips
 ================================================================================
 
 On the Gentoo Linux distribution , you should not have problems building Fim by
@@ -165,12 +205,12 @@ BEWARE : THERE COULD BE PROBLEMS WITH FLEX/BISON!
 "flex version 2.5.4" and "bison (GNU Bison) 1.875d" are known to work.
 
 ================================================================================
-			License
+	9		License
 ================================================================================
 
  Fim is free software, and is licensed under the GPLv2 or later.
 
- Fim extends the Fbi program by Gerd Hoffmann, which is GPLv2.
+ Fim extends the Fbi program by Gerd Hoffmann, which is "GPLv2 or later".
  Fim also uses a regex.c file from the GNU Regular Expressions library, 
 distributed on http://directory.fsf.org/regex.html, in the version shipped with
 the Mutt mail user agent (http://www.mutt.org).
@@ -178,7 +218,7 @@ the Mutt mail user agent (http://www.mutt.org).
 which is licensed compatibly with the GPL.
 
 ================================================================================
-			Contact
+	10		Contact
 ================================================================================
 
 You can contact the Fim author via email: dezperado_FOobAr_autistici_Baz_org, by
@@ -186,5 +226,6 @@ replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
 
 If it is for a bug report or installation help, be sure of reading the
 documentation and the BUGS file first, and then you're welcome.
-If it is for other suggestions or ideas, you are welcome, too!
+If it is for other suggestions or ideas, you are welcome, too (and don't miss
+the TODO file, too)!
 

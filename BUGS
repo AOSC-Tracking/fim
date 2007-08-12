@@ -1,37 +1,45 @@
 $Id$
 
 ==== KNOWN BUGS
+
 Please refer to the documentation (doc/FIM.TXT) for a complete list of known bugs (BUGS section).
 
 20070811	The automake required for autogen.sh'in this package is 1.10.
 		So users who want to build from the svn repository are required to use this version.
 
-
 20070811	On CENTOS 64 bit, i reported linking problems : -ltermcap is required, too.
+		I Don't know exactly how to fix this issue.
 
-20070811	there is a fim_cv_docdir issue in the configure.ac
+20070811	There seems to be a fim_cv_docdir issue in the configure.ac, but maybe not!
 
-20070811	seems like the configure script acts as there were graphics libraries even if these are not present
+2007*		Bugs shared with fbi:
+		- do not switch console or interrupt the program while it is busy: it could hang your console
+		  and force you to make tricks to get back the terminal (like typing blindly through consoles,
+		  or trying to get to some X instance via ALT-F7-like sequences, or even restart the computer),
+		  and blind typing could be dangerous, if you do now know what you are doing!
+
 ==== BUG REPORTING
-For sending a bug report, please frop me an email with a subject line beginning with 'FIM : '.
-Contact information is in the doc/FIM.TXT file.
+
+For sending a bug report, please frop me an email with a subject line beginning with '[FIM]'.
+Contact information is in the doc/FIM.TXT file, or in the bottom of this file.
 
 Please DO NOT dare sending bug reportings about installation unless you have read the INSTALL
 file and you are sure all the dependencies on your system have been resolved.
 
-For example  "FIM : problems with resolution 457x3778" would be a good, informative 
+For example  "[FIM] problems with resolution 457x3778" would be a good, informative 
 subject for me.
 
 When submitting a bug report, please follow the following rules:
 
  - be as much informative as possible when describing yout experience.
  - make a report about the current environment:
-   ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
+   ( make ; make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
   and send me the created .tgz file
  - please give me information about the exact way you experienced the problem
- - please send me the config.log file, too.
+ - please give me information about the resolution you are running on
+ - please send me the config.log file, too (especially if it is a build bug).
    it is of vital importance!
-   the config.log file is created by the configure script when you run the ./configure script
+   (the config.log file is created by the configure script when you run the ./configure script)
  - if you are using an ad hoc method for installing (say, the ebuild for the Gentoo Linux ),
    consider sending the logfile created and named in the error messages.
 
