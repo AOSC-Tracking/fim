@@ -4,6 +4,7 @@
   The following code contains key bindings and aliases definitions
   which make up a first usable configuration for FIM.
  
+ (c) 2007 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

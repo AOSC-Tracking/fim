@@ -1,6 +1,8 @@
 #!/bin/bash
 # $Id$
 
+# (c) 2007 Michele Martone
+
 # This is a modified version of the original fbgs script,by Gerd Knorr
 # and is capable of displaying pdf, eps, ps, and dvi files.
 # Now enhanced for viewing .cbr and .cbz files :)!
