@@ -2,7 +2,7 @@
 #ifndef STRING_FBVI_H
 #define STRING_FBVI_H
 /*
- string.h : Fim's own string implementatino header file
+ string.h : Fim's own string implementation header file
 
  (c) 2007 Michele Martone
 
