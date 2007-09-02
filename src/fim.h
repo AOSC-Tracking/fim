@@ -83,6 +83,9 @@ class CommandConsole;
 class Command;
 class Image;
 class Var;
+#ifdef FIM_WINDOWS
+class Window;
+#endif
 class fim_stream;
 }
 
@@ -95,6 +98,7 @@ void initialize_readline ();
 }
 #include "extern.h"
 #include "string.h"
+#include "Window.h"
 #include "Command.h"
 #include "Arg.h"
 #include "Var.h"

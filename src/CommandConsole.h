@@ -24,10 +24,15 @@
 #include "fim.h"
 //#include <stdio.h>
 #include <sys/resource.h>
+
+
 namespace fim
 {
 class CommandConsole
 {
+#ifdef FIM_WINDOWS
+	fim::Window window;
+#endif
 	/*
 	 * the registered command methods and objects
 	 */
@@ -159,6 +164,7 @@ class CommandConsole
 	fim::string pwd(const std::vector<fim::string>& args);
 	fim::string sys_popen(const std::vector<fim::string>& args);
 	fim::string set_interactive_mode(const std::vector<fim::string>& args);
+	fim::string set_in_console(const std::vector<fim::string>& args);
 	fim::string autocmd(const std::vector<fim::string>& args);
 	fim::string autocmd_del(const fim::string &event,const fim::string &pat){return "";}
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
@@ -211,6 +217,14 @@ class CommandConsole
 	void printHelpMessage(char *pn="fim");
 	void appendPostInitCommand(const char* c);
 	void appendPostExecutionCommand(const fim::string &c);
+
+	#ifdef FIM_WINDOWS
+	unsigned int viewport_height()const;
+	unsigned int viewport_width()const;
+	unsigned int viewport_xorigin()const;
+	unsigned int viewport_yorigin()const;
+	const Window & current_window()const;
+	#endif
 	private:
 	fim::string postInitCommand;
 	fim::string postExecutionCommand;

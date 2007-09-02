@@ -616,6 +616,11 @@ prior to recording..
 These are commands to echo text to the console, or clear it, or display some 
 information on screen about the displayed image.
 
+
+>
+	:set_console_mode
+Sets the console mode on (useful for scripts, EXPERIMENTAL).
+
 ==============================================================================
 6.6. System interaction				*commands-system*
 

@@ -63,6 +63,7 @@ struct ida_image* read_image(char *filename);
 char *make_info(struct ida_image *img, float scale);
 char *make_desc(struct ida_image_info *img, char *filename);
 extern void svga_display_image(struct ida_image *img, int xoff, int yoff,int,int);//mirror and flip patch
+extern void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
 //extern void status(const char *desc,const char *info);
 //extern void status_screen(const char *desc, char *info);
 extern void fb_setcolor(int c);

@@ -261,7 +261,11 @@ namespace fim
 		return "usage : help CMD   (use TAB to get a list of commands :) )\n";
 	}
 
+#ifdef FIM_WINDOWS
+	CommandConsole::CommandConsole():window(Rect(0,0,1024,768))
+#else
 	CommandConsole::CommandConsole()
+#endif
 	{
 #ifdef FIM_RECORDING
 		dont_record_last_action=false;
@@ -272,6 +276,9 @@ namespace fim
 		fim_stdin=0;
 		cycles=0;isinscript=0;
 		setVariable("steps",50);
+#ifdef FIM_WINDOWS
+		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"),&window,&Window::cmd));
+#endif
 		addCommand(new Command(fim::string("next" ),fim::string("displays the next picture in the list"),&browser,&Browser::next));
 		addCommand(new Command(fim::string("prev" ),fim::string("displays the previous picture in the list"),&browser,&Browser::prev));
 		addCommand(new Command(fim::string("push" ),fim::string("pushes a file in the files list"),&browser,&Browser::push));
@@ -336,6 +343,7 @@ namespace fim
 		addCommand(new Command(fim::string("autocmd"  ),fim::string("autocommands"),this,&CommandConsole::autocmd));
 #endif
 		addCommand(new Command(fim::string("set_interactive_mode"  ),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
+		addCommand(new Command(fim::string("set_console_mode"  ),fim::string("sets console mode"),this,&CommandConsole::set_in_console));
 #ifndef FIM_NO_SYSTEM
 		addCommand(new Command(fim::string("system"  ),fim::string("system() invocation"),this,&CommandConsole::system));
 #endif
@@ -1443,6 +1451,15 @@ int CommandConsole::executeFile(const char *s)
 		return true;
 	}
 
+	fim::string CommandConsole::set_in_console(const std::vector<fim::string>& args)
+	{
+		/*
+		 * EXPERIMENTAL !!
+		 * */
+		ic = 1;
+		return "";
+	}
+
 	fim::string CommandConsole::set_interactive_mode(const std::vector<fim::string>& args)
 	{
 		ic=-1;set_status_bar("",NULL);
@@ -1715,5 +1732,32 @@ int CommandConsole::executeFile(const char *s)
 	{
 		postExecutionCommand+=c;
 	}
+	
+#ifdef FIM_WINDOWS
+	const Window & CommandConsole::current_window()const
+	{
+		return window;
+	}
+
+	unsigned int CommandConsole::viewport_height()const
+	{
+		return current_window().c_focused().heigth();
+	}
+
+	unsigned int CommandConsole::viewport_width()const
+	{
+		return current_window().c_focused().width();
+	}
+
+	unsigned int CommandConsole::viewport_xorigin()const
+	{
+		return current_window().c_focused().xorigin();
+	}
+
+	unsigned int CommandConsole::viewport_yorigin()const
+	{
+		return current_window().c_focused().yorigin();
+	}
+#endif
 }
 

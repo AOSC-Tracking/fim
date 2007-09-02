@@ -1,8 +1,8 @@
-# This file should be processed with automake..
+# This file should be processed with automake to generate Makefile.in
 #
 # $Id$
 #
-# inspired by mutt's  Makefile.am 
+# inspired by mutt's Makefile.am 
 
 subdir = src
 
@@ -68,6 +68,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	CommandConsole.h \
 	Image.h \
 	Var.h \
+	Window.h \
 	common.h \
 	conf.h \
 	extern.h \
@@ -84,6 +85,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	CommandConsole.cpp \
 	Image.cpp \
 	Var.cpp \
+	Window.cpp \
 	common.cpp \
 	interpreter.cpp \
 	string.cpp \
@@ -151,6 +153,7 @@ DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key bi
  DEFINES  += -D FIM_REMOVE_FAILED       # a file which failed loading is removed from the list
  DEFINES  += -D FIM_AUTOSKIP_FAILED     # if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
  DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
+#DEFINES  += -D FIM_WINDOWS		# Fim own's window system. EXPERIMENTAL!
 #DEFINES  += -D FIM_BOZ_PATCH		 # added from configure..
 #DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
 #DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations

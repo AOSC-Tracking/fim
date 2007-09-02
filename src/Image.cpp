@@ -218,7 +218,16 @@ namespace fim
 			 * and avoid image tearing!
 			 */
 			//fb_clear_screen();
+#ifdef FIM_WINDOWS
+			svga_display_image_new(img, left, top,
+					cc.viewport_xorigin(),
+					cc.viewport_width(),
+					cc.viewport_yorigin(),
+					cc.viewport_height(),
+					mirror, flip);
+#else
 			svga_display_image(img, left, top, mirror, flip);
+#endif					
 		}
 	}
 

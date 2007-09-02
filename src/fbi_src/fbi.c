@@ -789,6 +789,7 @@ clear_line(int bpp, int line, int owidth,
     unsigned char  *ptr  = (void*)dest;
     unsigned short *ptr2 = (void*)dest;
     unsigned long  *ptr4 = (void*)dest;
+    unsigned ZERO_BYTE=0x00;
     int x;
 
     switch (fb_var.bits_per_pixel) {
@@ -803,7 +804,7 @@ clear_line(int bpp, int line, int owidth,
 	    ptr2[x] = 0x0;
 	}
 #else
-	memset(ptr,0x0,2*owidth);
+	memset(ptr,ZERO_BYTE,2*owidth);
 #endif
 	ptr2 += owidth;
 	return (char*)ptr2;
@@ -815,7 +816,7 @@ clear_line(int bpp, int line, int owidth,
 	    ptr[3*x+0] = 0x0;
 	}
 #else
-	memset(ptr,0x0,3*owidth);
+	memset(ptr,ZERO_BYTE,3*owidth);
 #endif
 	ptr += owidth * 3;
 	return ptr;
@@ -825,7 +826,7 @@ clear_line(int bpp, int line, int owidth,
 	    ptr4[x] = 0x0;
 	}
 #else
-	memset(ptr,0x0,4*owidth);
+	memset(ptr,ZERO_BYTE,4*owidth);
 #endif
 	ptr4 += owidth;
 	return (char*)ptr4;
@@ -1052,6 +1053,94 @@ void svga_dither_palette(int r, int g, int b)
     }
 }
 
+
+/*
+ * framebuffer memory offset for x pixels left and y right from the screen
+ * (by dez)
+ */
+#define FB_BPP  (((fb_var.bits_per_pixel+7)/8))
+#define FB_MEM_LINE_OFFSET  ((FB_BPP*fb_var.xres))
+#define FB_MEM_OFFSET(x,y)  (( FB_BPP*(x) + FB_MEM_LINE_OFFSET * (y) ))
+#define FB_MEM(x,y) ((fb_mem+FB_MEM_OFFSET((x),(y))))
+
+/*#define fb_fix_line_length*/
+
+void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip)
+{
+/*	bx is the box's x origin
+ *	by is the box's y origin
+ *	bw is the box's width
+ *	bh is the box's heigth
+ * */
+
+	/*
+	 * WARNING : SHOULD ASSeRT BX+BW < FB_VAR.XReS ..!!
+	 * */
+    unsigned int     dwidth  = MIN(img->i.width,  bw);
+    unsigned int     dheight = MIN(img->i.height, bh);
+    unsigned int     data, video, bank, offset, bytes, y;
+    int yo=(bh-dheight)/2;
+    int xo=(bw-dwidth )/2;
+    int cxo=bw-dwidth-xo;
+    int cyo=bh-yo;
+
+    if (!visible)/*COMMENT THIS IF svga_display_image IS NOT IN A CYCLE*/
+	return;
+    /*fb_clear_screen();//EXPERIMENTAL
+    if(xoff&&yoff)fb_clear_rect(0,xoff,0,yoff);*/
+
+    bytes = FB_BPP;
+
+    /* offset for image data (image > screen, select visible area) */
+    offset = (yoff * img->i.width + xoff) * 3;
+    
+    /* offset for video memory (image < screen, center image) */
+    video = 0, bank = 0;
+    video += FB_BPP * (bx);
+    if (img->i.width < bw)
+    {	    
+	    video += FB_BPP * (xo);
+    }
+    
+    video += fb_fix.line_length * (by);
+    if (img->i.height < bh )
+    {	   
+	    video += fb_fix.line_length * (yo);
+    }
+
+    if (dheight < bh ) 
+    {	    /* clear the screen */
+	    for ( y = by; y < by+yo;++y) { clear_line(FB_BPP, y, bw, FB_MEM(bx,y)); }
+	    for ( y = by+dheight+yo; y < by+bh;++y) { clear_line(FB_BPP, y, bw, FB_MEM(bx,y)); }
+    }
+
+    if (dwidth < bw )
+    {	    for ( y = by; y < by+bh;++y)
+	    {
+		    clear_line(FB_BPP, y, xo, FB_MEM(bx,y));
+		    clear_line(FB_BPP, y, cxo,FB_MEM(bx+xo+dwidth,y));
+	    }
+    }
+    /*for ( y = 0; y < fb_var.yres;y+=100)fb_line(0, fb_var.xres, y, y);*/
+
+    /* go ! */
+    /*flip patch*/
+#ifndef min
+#define min(x,y) ((x)<(y)?(x):(y))
+#endif
+    int fb_fix_line_length=FB_MEM_LINE_OFFSET;
+    if(flip) {	fb_fix_line_length*=-1; video += (min(img->i.height,dheight)-1)*(fb_fix.line_length);}
+    /*flip patch*/
+    for (data = 0, y = by;
+	 data < img->i.width * img->i.height * 3
+	     && data / img->i.width / 3 < dheight;
+	 data += img->i.width * 3, video += fb_fix_line_length)
+    {
+	convert_line(fb_var.bits_per_pixel, y++, dwidth,
+		     fb_mem+video, img->data + data + offset,mirror);/*<- mirror patch*/
+    }
+}
+
 /*static void*/
 void
 svga_display_image(struct ida_image *img, int xoff, int yoff, int mirror, int flip)
@@ -1105,9 +1194,9 @@ svga_display_image(struct ida_image *img, int xoff, int yoff, int mirror, int fl
     /*flip patch*/
 #ifndef min
 #define min(x,y) ((x)<(y)?(x):(y))
+#endif
     int fb_fix_line_length=fb_fix.line_length;
     if(flip) {	fb_fix_line_length*=-1; video += (min(img->i.height,dheight)-1)*(fb_fix.line_length);}
-#endif
     /*flip patch*/
     for (data = 0, y = 0;
 	 data < img->i.width * img->i.height * 3

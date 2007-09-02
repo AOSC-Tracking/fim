@@ -31,18 +31,34 @@ class Command
 		    help ;
 	Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),browserf(bf),browser(b) { type=BrowserT;}
 	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),consolef(cf),console(c) { type=CommandConsoleT;}
+#ifdef FIM_WINDOWS
+	Command(fim::string cmd,fim::string help,Window *w=NULL,fim::string(Window::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),windowf(cf),window(w) { type=WindowT;}
+#endif
 
 	fim::string getHelp()const{return help;}
 	private:
-	enum	{ BrowserT,CommandConsoleT };
+	enum
+	{
+		BrowserT,
+#ifdef FIM_WINDOWS
+		WindowT,
+#endif
+		CommandConsoleT 
+	};
 	int type;
 	union{
 		fim::string (Browser::*browserf)(const std::vector<fim::string>&) ;
 		fim::string (CommandConsole::*consolef)(const std::vector<fim::string>&) ;
+#ifdef FIM_WINDOWS
+		fim::string (Window::*windowf)(const std::vector<fim::string>&) ;
+#endif
 	};
 	union{
 		Browser *browser;
 		CommandConsole *console;
+#ifdef FIM_WINDOWS
+		Window *window;
+#endif
 	};
 
 	public:
