@@ -34,10 +34,10 @@ class Cache
 	lru_t		lru;
 
 	/*	the count of cached images	*/
-	int cached_elements();
+	int cached_elements()const;
 
 	/*	whether we should free some cache ..	*/
-	bool need_free();
+	bool need_free()const;
 
 	/**/
 	int mark_used(const char *fname);

@@ -22,9 +22,16 @@
 #include "Image.h"
 
 /*
- * 	20070215	idea : separate redraw into redraw_compulsory+need_redraw
- * 			and keep old_ and new_ for wverwevery variable!
- *	20070318	i'am afraid that pan operations hide some big bug..
+ * TODO :
+ *	Windowing related problems:
+ *
+ * 	Implement a mechanism such that each Image instance owns
+ *	one only copy of the original image, and zero or more rescaled versions,
+ *	for display use only.
+ * 	Once freed, an image could free all of its buffers, depending on the caching policy.
+ *
+ * 	When windowing will be implemented, note that redisplay will be also affected
+ * 	after window geometry change. Update mechanisms are needed..
  */
 namespace fim
 {
@@ -35,17 +42,64 @@ namespace fim
  *	 Private ones are stricter.
  * 
  */
+	int Image::valid()const
+	{
+		return invalid?0:1;
+	}
+
+	int Image::viewport_width()
+	{
+		return fb_var.xres;
+	}
+
+	int Image::viewport_height()
+	{
+		return fb_var.yres;
+	}
+
+	int Image::width()
+	{
+		return fimg->i.width;
+	}
+
+	int Image::heigth()
+	{
+		return fimg->i.height;
+	}
+
+        bool Image::check_valid()
+	{
+		return ! check_invalid();
+	}
+
+        bool Image::check_invalid()
+        {
+                /*
+                 *      WARNING ! was:
+
+                        if(!img){return;}
+                        if(!fimg){invalid=1;return;}
+                */
+
+                if(!img ){img=fimg;}
+                if(!img)
+                {
+                        invalid=1;
+                        return true;
+                }
+                return false;
+        }
+
 	void Image::auto_scale()
 	{
 		float xs,ys;
-		if(!img){return;}
-		if(!fimg){invalid=1;return;}
+		if( check_invalid() ) return;
 
 		if(g_fim_no_framebuffer)xs=ys=1.0f;
 		else
 		{
-			xs = (float)fb_var.xres / fimg->i.width;
-			ys = (float)fb_var.yres / fimg->i.height;
+			xs = (float)viewport_width() / fimg->i.width;
+			ys = (float)viewport_height() / fimg->i.height;
 		}
 
 		newscale = (xs < ys) ? xs : ys;
@@ -54,24 +108,19 @@ namespace fim
 
 	void Image::auto_height_scale()
 	{
-		if(!img){img=fimg;}
-		if(!img){return;}
-		if(!fimg){invalid=1;return;}
-//		if(cc.isInScript())return;
-//
-		if(g_fim_no_framebuffer=0)newscale = (float)fb_var.xres / fimg->i.width;
-		newscale = (float)fb_var.yres / fimg->i.height;
+		if( check_invalid() ) return;
+
+		if(g_fim_no_framebuffer=0)newscale = (float)viewport_width() / fimg->i.width;
+		newscale = (float)viewport_height() / fimg->i.height;
 
 		rescale();
 	}
 
 	void Image::auto_width_scale()
 	{
-		if(!img){return;}
-		if(!fimg){invalid=1;return;}
-//		if(cc.isInScript())return;
-//
-		if(g_fim_no_framebuffer=0)newscale = (float)fb_var.xres / fimg->i.width;
+		if( check_invalid() ) return;
+
+		if(g_fim_no_framebuffer=0)newscale = (float)viewport_width() / fimg->i.width;
 
 		rescale();
 	}
@@ -79,15 +128,11 @@ namespace fim
 	int Image::rescale()
 	{
 		/*
-		 *	THIS CODE IS BUGFUL, WHEN CALLED FROM THE CONSTRUCTOR...
-		 *	...OR IN THE PRE-USER PHASE..
+		 *	This code is bugful, when called from the constructor, on in a pre-user phase.
 		 * 	20070401 hmm  i think it is ok now
 		 */
-		 //	so look at this code as a patch:
-		 //
-	    	if(!img)invalid=1;
-	    	if(!img)return -1;
-	    	if(invalid)return -1;//IN CASE OF MEMORY PROBLEMS
+		if( check_invalid() ) return - 1;
+
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
 
 		if(g_fim_no_framebuffer)return 0;
@@ -99,7 +144,6 @@ namespace fim
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=neworientation; // fix this
 		scale_fix_top_left();
-//		sprintf(linebuffer,"scaling (%.0f%%) %s ...", scale*100, fname);
 //		status(linebuffer, NULL);
 		cc.setVariable("scale",newscale*100);
 
@@ -156,8 +200,7 @@ namespace fim
 		 */
 		if(redraw==0 || cc.noFrameBuffer())return;
 
-		if(!img)invalid=1;
-		if(invalid)return;
+		if( check_invalid() ) return;
 		
 		int autotop=cc.getIntVariable("autotop");
 		int flip=cc.getIntVariable("autoflip");
@@ -167,15 +210,15 @@ namespace fim
 
 		if (new_image && redraw)
 		{
-			if(autotop && img->i.height>=fb_var.yres) //THIS SHOULD BECOME AN AUTOCMD..
+			if(autotop && img->i.height>=viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
 		  	{
-			    top=autotop>0?0:img->i.height-fb_var.yres;
+			    top=autotop>0?0:img->i.height-viewport_height();
 			}
 			/* start with centered image, if larger than screen */
-			if (img->i.width > fb_var.xres )
-				left = (img->i.width - fb_var.xres) / 2;
-			if (img->i.height > fb_var.yres &&  autotop==0)
-				top = (img->i.height - fb_var.yres) / 2;
+			if (img->i.width > viewport_width() )
+				left = (img->i.width - viewport_width()) / 2;
+			if (img->i.height > viewport_height() &&  autotop==0)
+				top = (img->i.height - viewport_height()) / 2;
 			new_image = 0;
 		}
 		else
@@ -185,7 +228,7 @@ namespace fim
 			 * This code should be studied in detail..
 			 * as it is is straight from fbi.
 			 */
-	    		if (img->i.height <= fb_var.yres)
+	    		if (img->i.height <= viewport_height())
 	    		{
 				top = 0;
 	    		}
@@ -193,10 +236,10 @@ namespace fim
 			{
 				if (top < 0)
 					top = 0;
-				if (top + fb_var.yres > img->i.height)
-		    			top = img->i.height - fb_var.yres;
+				if (top + viewport_height() > img->i.height)
+		    			top = img->i.height - viewport_height();
 	    		}
-			if (img->i.width <= fb_var.xres)
+			if (img->i.width <= viewport_width())
 			{
 				left = 0;
 	    		}
@@ -204,8 +247,8 @@ namespace fim
 			{
 				if (left < 0)
 				    left = 0;
-				if (left + fb_var.xres > img->i.width)
-			    		left = img->i.width - fb_var.xres;
+				if (left + viewport_width() > img->i.width)
+			    		left = img->i.width - viewport_width();
 		    	}
 		}
 		if(only_first_rescale){only_first_rescale=0;return;}
@@ -238,9 +281,8 @@ namespace fim
 		 */
 		reset();
 		load(fname_);
-		if(invalid || (!img) || (!fimg))
+		if( check_invalid() || (!fimg) ) 
 		{
-			invalid=1;
 			cout << "invalid loading ! \n";
 		}
 		else
@@ -264,18 +306,13 @@ namespace fim
 		newscale = 1.0;
 		ascale   = 1.0;
 		newascale= 1.0;
-		editable = 0; once = 0;
 		steps = cc.getIntVariable("steps");
 		if(steps<1)steps = 50;
-		len =0;
 		top = 0;
 		left = 0;
 		fimg    = NULL;
 		simg    = NULL;
 		img     = NULL;
-		fname = NULL;
-		desc = NULL;
-		info = NULL;
 		invalid=0;
 		orientation=0;
 		neworientation=0;
@@ -293,12 +330,12 @@ namespace fim
 		float old=scale;float fnew=newscale;
 		unsigned int width, height;
 		float cx,cy;
-		cx = (float)(left + fb_var.xres/2) / (img->i.width  * old);
-		cy = (float)(top  + fb_var.yres/2) / (img->i.height * old);
+		cx = (float)(left + viewport_width()/2) / (img->i.width  * old);
+		cy = (float)(top  + viewport_height()/2) / (img->i.height * old);
 		width  = (int)(img->i.width  * fnew);
 		height = (int)(img->i.height * fnew);
-		left   = (int)(cx * width  - fb_var.xres/2);
-		top    = (int)(cy * height - fb_var.yres/2);
+		left   = (int)(cx * width  - viewport_width()/2);
+		top    = (int)(cy * height - viewport_height()/2);
 		//the cast was added by me...
 		scale = newscale;
 	}
@@ -310,25 +347,18 @@ namespace fim
 		 */
 		if(fname_==NULL){invalid=1;return;}//DANGER
 		free_mem();
-		fname = dupstr(fname_);//safe
-		assert(fname);
+		fname=fname_;
 		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))set_status_bar("please wait while reloading...", "*");
 
 		if(g_fim_no_framebuffer)
 			fimg=NULL;
 		else
-			fimg = read_image(fname);
+			fimg = read_image((char*)fname_);
 
-//		desc = make_desc(&fimg->i,fname);
-//	    	info = make_info(fimg,scale);
-//		desc = info = "foo";
-		desc = info = "";
-//		cout << fname << "\n";//return;
 		img=fimg;
 //		assert(img);
 	        redraw=1;
 		if(! img){cout<<"warning : image loading error!\n";invalid=1;return;}
-		if(!fname){cout<<"warning : string loading error!\n";fname=NULL;invalid=1;return;}
 		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return;}
 	}
 
@@ -336,7 +366,6 @@ namespace fim
 	{
 		if(fimg) free_image(fimg);
 		if(simg) free_image(simg);
-		if(fname) free(fname);
 		reset();
 	}
 
@@ -354,88 +383,88 @@ namespace fim
 
 	void Image::bottom_align()
 	{
-	    if(this->onBottom())return;
-	    if(img && invalid==0)top = img->i.height - fb_var.yres;
-	    redraw=1;
+		if(this->onBottom())return;
+		if( check_valid() )top = img->i.height - viewport_height();
+		redraw=1;
 	}
 
 	void Image::top_align()
 	{
-	    if(this->onTop())return;
-	    top=0;
-	    redraw=1;
+		if(this->onTop())return;
+		top=0;
+		redraw=1;
 	}
 
 	void Image::pan_up(int s)
 	{
-	    if(s<0)pan_down(-s);
-	    else{
-	    if(this->onTop())return;
-	    s=(s==0)?steps:s;
-	    top -= s;
-	    redraw=1;}
+		if(s<0)pan_down(-s);
+		else
+		{
+			if(this->onTop())return;
+			s=(s==0)?steps:s;
+			top -= s;
+			redraw=1;
+		}
 	}
 
 	void Image::pan_down(int s)
 	{
-	    if(s<0)pan_up(-s);
-	    else{
-	    if(this->onBottom())return;
-	    s=(s==0)?steps:s;
-	    top += s;
-	    redraw=1;}
+		if(s<0)pan_up(-s);
+		else
+		{
+			if(this->onBottom())return;
+			s=(s==0)?steps:s;
+			top += s;
+			redraw=1;
+		}
 	}
 
 	void Image::pan_right(int s)
 	{
-	    if(s<0)pan_left(s);
-	    else{
-	    if(onRight())return;
-	    s=(s==0)?steps:s;
-	    left+=s;
-	    redraw=1;}
+		if(s<0)pan_left(s);
+		else
+		{
+			if(onRight())return;
+			s=(s==0)?steps:s;
+			left+=s;
+			redraw=1;
+		}
 	}
 
 	void Image::pan_left(int s)
 	{
-            if(s<0)pan_right(s);
-	    else{
-	    if(onLeft())return;
-	    s=(s==0)?steps:s;
-	    left-=s;
-	    redraw=1;}
+		if(s<0)pan_right(s);
+		else
+		{
+			if(onLeft())return;
+			s=(s==0)?steps:s;
+			left-=s;
+			redraw=1;
+		}
 	}
 
 	int Image::onBottom()
 	{
-		if(g_fim_no_framebuffer)return 0;
-
-		if(img && invalid==0) return (top + fb_var.yres >= img->i.height);
-		else return 0;
+		if(g_fim_no_framebuffer || check_invalid() )return 0;
+		return (top + viewport_height() >= img->i.height);
 	}
 
 	int Image::onRight()
 	{
-		if(g_fim_no_framebuffer)return 0;
-
-		if(img && invalid==0)return (left + fb_var.xres >= img->i.width);
-		else return 0;
+		if(g_fim_no_framebuffer || check_invalid() )return 0;
+		return (left + viewport_width() >= img->i.width);
 	}
 
 	int Image::onLeft()
 	{
-		if(g_fim_no_framebuffer)return 0;
-
-		if(img && invalid==0)return (left <= 0 );
-		else return 0;
+		if(g_fim_no_framebuffer || check_invalid() )return 0;
+		return (left <= 0 );
 	}
 
 	int Image::onTop()
 	{
-		if(g_fim_no_framebuffer)return 0;
-
-		if(img && invalid==0)return (top <= 0 );
-		else return 0;
+		if(g_fim_no_framebuffer || check_invalid() )return 0;
+		return (top <= 0 );
 	}
 	
 	Image::~Image()

@@ -28,7 +28,7 @@ namespace fim
 		lru.erase(lru.begin(),lru.end());
 	}
 
-	int Cache::cached_elements()
+	int Cache::cached_elements()const
 	{
 		int count=0;
 		cachels_t::const_iterator ci;
@@ -80,7 +80,7 @@ namespace fim
 		return -1;
 	}
 
-	bool Cache::need_free()
+	bool Cache::need_free()const
 	{
 		/*	temporary : we free elements for more than some cached images	*/
 

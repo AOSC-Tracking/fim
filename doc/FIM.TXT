@@ -72,6 +72,7 @@ Introduction to Fim					*ref* *reference*
 6.6. System Interaction		|commands-system|
 6.7. Variables			|variables|
 6.8. Autocommands		|commands-autocommands|
+6.9. Windows			|commands-windows|
 7. Command Line,More		|cli-more|
 7.1. Default configuration	|default-config|
 8. Pattern Matching		|pattern-matching|
@@ -502,7 +503,16 @@ will scale the image about 20% of the original
 	:*2
 will duplicate the current image size.
 
+
+There is ongoing support to asymmetric scaling:
+>
+	:ascale="2.0"
+
+will widen the image of a factor of two, leaving the heigth untouched. It needs
+redraw to make effect, and will affect the next images, too.
+
 <UNFINISHED>
+
 
 ==============================================================================
 6.3. Panning/moving, and scrolling the image	*commands-scroll*
@@ -756,7 +766,7 @@ Note : there is still much to do about variables.
 <UNFINISHED>
 
 ==============================================================================
-6.8. Auto commands				*commands-autocommands*
+6.8. Autocommands				*commands-autocommands*
 
 The autocommand is a feature present in Vim and other powerful command line 
 software, as for example Mutt (there the autocommand concept is a little 
@@ -863,6 +873,16 @@ p.s.: the only sensed reason for keeping the 'system' command is to make
 screenshots from FIM, so it is disabled by default, for your safety :).
 p.s.: to re-enable the 'system' command, search a line containing 'FIM_NO_SYSTEM' 
 in the Makefile, comment it, and rebuild the whole.
+
+==============================================================================
+6.9. Windows						*commands-windows*
+
+If Fim is compiled with the windows support, multiple viewports and windows
+could display images on screen once.
+
+This whole subsystem in developement phase :).
+
+<UNFINISHED>
 
 ==============================================================================
 7.Command Line, More	 					*cli-more*
