@@ -18,6 +18,8 @@ Please refer to the documentation (doc/FIM.TXT) for a complete list of known bug
 		  or trying to get to some X instance via ALT-F7-like sequences, or even restart the computer),
 		  and blind typing could be dangerous, if you do now know what you are doing!
 
+20070904	problems could occur with the commands giving output when no std::cout << "" is returned soon after (see Commandconsole.cpp mehods for this..)
+
 ==== BUG REPORTING
 
 For sending a bug report, please frop me an email with a subject line beginning with '[FIM]'.

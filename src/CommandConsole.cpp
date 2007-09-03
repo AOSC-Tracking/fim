@@ -89,17 +89,19 @@ namespace fim
 		 *	FIX ME
 		 */
 		const char *kerr="bind : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
-		if(args.size()!=2){
+		if(args.size()==0)return getBindingsList();
+		if(args.size()==1)
+		{
 			fim::string binding_expanded;
 			binding_expanded+="bind '";
 			binding_expanded+=args[0];
 			binding_expanded+="' '";
 			binding_expanded+=bindings[key_bindings[args[0]]];
 			binding_expanded+="'\n";
-			if(args.size()==1)return binding_expanded;
-			if(args.size()==0)return getBindingsList();
+			return binding_expanded;
 			//return "usage : bind KEY ACTION\n";
 		}
+		if(args.size()!=2) return kerr;
 		const char*key=(args[0].c_str());
 		if(!key)return kerr;
 		int l=strlen(key);
@@ -665,7 +667,7 @@ namespace fim
 				catchLoopBreakingCommand(seconds);
 #endif
 			return "";
-		}
+		}else
 		if(cmd=="alias")
 		{
 			//assignment of an alias
@@ -681,7 +683,8 @@ namespace fim
 		{
 			if((c=findCommand(cmd))!=NULL)
 			{
-				return c->execute(args);
+				cout << c->execute(args);
+				return "";//this is patch code for broken console..
 			}
 			else
 			{
