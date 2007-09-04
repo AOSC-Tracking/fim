@@ -43,7 +43,23 @@ class Browser
 	 */
 	int cp;
 
-	Image *image;
+	Image *loaded_image;
+
+	inline Image *image()const
+	{
+	       	return loaded_image;
+	}
+
+	inline Viewport *viewport()const
+	{
+		/* 
+		 *		DANGER 
+		 * A valid pointer should be returned 
+		 * whenever the image is loaded !
+		 * */
+		return (Viewport*)image();
+	}
+
 	int current_n()const;
 	int current_n(int ccp)const;
 	const fim::string pop();

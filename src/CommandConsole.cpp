@@ -1744,7 +1744,7 @@ int CommandConsole::executeFile(const char *s)
 
 	unsigned int CommandConsole::viewport_height()const
 	{
-		return current_window().c_focused().heigth();
+		return current_window().c_focused().height();
 	}
 
 	unsigned int CommandConsole::viewport_width()const

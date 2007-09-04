@@ -68,6 +68,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	CommandConsole.h \
 	Image.h \
 	Var.h \
+	Viewport.h \
 	Window.h \
 	common.h \
 	conf.h \
@@ -85,6 +86,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	CommandConsole.cpp \
 	Image.cpp \
 	Var.cpp \
+	Viewport.cpp \
 	Window.cpp \
 	common.cpp \
 	interpreter.cpp \

@@ -83,6 +83,7 @@ class CommandConsole;
 class Command;
 class Image;
 class Var;
+class Viewport;
 #ifdef FIM_WINDOWS
 class Window;
 #endif
@@ -104,6 +105,7 @@ void initialize_readline ();
 #include "Var.h"
 #include "Cache.h"
 #include "Image.h"
+#include "Viewport.h"
 #include "Browser.h"
 #include "CommandConsole.h"
 #include "fim_stream.h"
@@ -116,6 +118,7 @@ namespace fim
 {
 static fim_stream cout;
 class Browser;
+class Viewport;
 class CommandConsole;
 std::ostream& operator<<(std::ostream &os,const string& s);
 }
