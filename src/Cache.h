@@ -49,6 +49,9 @@ class Cache
 
 	/*	returns an image from the cache or loads it from disk	*/
 	Image *getImage(const char *fname);
+
+	/*	returns whether a file is already cached */
+	bool Cache::haveImage(const char *fname);
 	
 	/*	the caller declares this image as free	*/
 	int free(fim::Image* oi);

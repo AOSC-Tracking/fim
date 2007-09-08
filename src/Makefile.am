@@ -144,7 +144,7 @@ DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key bi
 #DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
 
 # The following defines should migrate outta here!
- DEFINES  += -D FIM_NOFIMRC             # with ~/.fimrc loading disabled
+#DEFINES  += -D FIM_NOFIMRC             # with ~/.fimrc loading disabled
 #DEFINES  += -D FIM_NOSCRIPTING         # any script loading disabled
  DEFINES  += -D FIM_NOFB                # disable the framebuffer (for debug mostly)
  DEFINES  += -D FIM_AUTOCMDS            # autocommands
@@ -155,9 +155,10 @@ DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key bi
  DEFINES  += -D FIM_REMOVE_FAILED       # a file which failed loading is removed from the list
  DEFINES  += -D FIM_AUTOSKIP_FAILED     # if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
  DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
-#DEFINES  += -D FIM_WINDOWS		# Fim own's window system. EXPERIMENTAL!
+ DEFINES  += -D FIM_WINDOWS		# Fim own's window system. EXPERIMENTAL!
 #DEFINES  += -D FIM_BOZ_PATCH		 # added from configure..
 #DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
+DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
 #DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
 #DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
  FIM_VERSION= $(VERSION)

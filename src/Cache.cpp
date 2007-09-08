@@ -57,6 +57,10 @@ namespace fim
 
 	int Cache::free_some_lru()
 	{
+		/*
+		 * this triggering deletion (and memory freeying) of cached elements
+		 * (yes, it is a sort of garbage collector, with its pros and cons)
+		 */
 		if ( cached_elements() < 1 ) return 0;
 		return erase( get_lru()  );
 	}
@@ -113,6 +117,14 @@ namespace fim
 		return getImage(fname)?0:-1;
 	}
 
+	bool Cache::haveImage(const char *fname)
+	{
+		/*	acca' nun stimm'a'ppazzia'	*/
+		if(!fname)return NULL;
+
+		return ( this->imageCache[fim::string(fname)] != NULL );
+	}
+
 	Image *Cache::getImage(const char *fname)
 	{
 		Image *ni = NULL;
@@ -121,18 +133,18 @@ namespace fim
 		if(!fname)return ni;
 
 		/*	cache lookup first	*/
-		cached_elements();
-		if(ni = imageCache[fim::string(fname)])
+		this->cached_elements();
+		if(ni = this->imageCache[fim::string(fname)])
 		{
-			mark_used(fname);
+			this->mark_used(fname);
 			return ni;
 		}
 		
 		/*	load attempt as alternative approach	*/
 		if( ni = new Image(fname) )
 		{	
-			imageCache[fim::string(fname)]=ni;
-			reverseCache[ni]=fim::string(fname);
+			this->imageCache[fim::string(fname)]=ni;
+			this->reverseCache[ni]=fim::string(fname);
 			cc.setVariable("_cached_images",cached_elements());
 			mark_used(fname);
 		}

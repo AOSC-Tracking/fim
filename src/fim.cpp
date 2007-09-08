@@ -624,7 +624,9 @@ static struct option fim_options[] = {
     {"final-command",    required_argument,       NULL, 'F'},
     {"debug",      no_argument,       NULL, 'D'},
     {"no-rc-file",      no_argument,       NULL, 'N'},
+#ifdef FIM_READ_STDIN
     {"read-from-stdin",      no_argument,       NULL, '-'},
+#endif
     {"no-framebuffer",      no_argument,       NULL, 't'},
 
     /* long-only options */
@@ -727,8 +729,10 @@ int main(int argc,char *argv[])
 // 	int              timeout = -1;
 	int              opt_index = 0;
 	int              i;
+#ifdef FIM_READ_STDIN
 	int              read_file_list_from_stdin;
 	read_file_list_from_stdin=0;
+#endif
 //	char             *desc,*info;
 	char c;
 	g_fim_no_framebuffer=0;
@@ -844,12 +848,13 @@ int main(int argc,char *argv[])
 	    break;
 	case 'N':
 	    //fim's
-		cc.setVariable("no_rc_file",1);
+		cc.setVariable("_no_rc_file",1);
 	    break;
 	case 't':
 	    //fim's
 	    	g_fim_no_framebuffer=1;
 	    break;
+#ifdef FIM_READ_STDIN
 	case '-':
 	    //fim's
 	    read_file_list_from_stdin=1;
@@ -857,8 +862,8 @@ int main(int argc,char *argv[])
 	case 0:
 	    //fim's
 	    read_file_list_from_stdin=1;
-	    printf("bene!\n");
 	    break;
+#endif
 	default:
 	case 'h':
 	    cc.printHelpMessage(argv[0]);
@@ -886,12 +891,15 @@ int main(int argc,char *argv[])
     }
 	for (i = optind; i < argc; i++)
 	{
+#ifdef FIM_READ_STDIN
 		if(*argv[i]=='-'&&!argv[i][1])read_file_list_from_stdin=1;
-		else cc.push(argv[i]);
+		else
+#endif
+			cc.push(argv[i]);
 	}
 	lexer=new yyFlexLexer;	//used by YYLEX
 
-#if 1
+#ifdef FIM_READ_STDIN
 	
 	/*
 	 * this is Vim's solution for stdin reading

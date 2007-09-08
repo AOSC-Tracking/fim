@@ -389,7 +389,7 @@ namespace fim
 			strcat(rcfile,"/.fimrc");
 			if(getIntVariable("_no_rc_file")==0 )
 			{
-				if(-1==executeFile(rcfile));	//if execution fails for some reason
+				if(-1==executeFile(rcfile))//if execution fails for some reason
 #endif
 #endif
 				{
@@ -404,6 +404,13 @@ namespace fim
 #ifndef FIM_NOSCRIPTING
 
 			}
+
+		}
+		if(getIntVariable("_no_default_configuration")==0 )
+		{
+#ifdef FIM_DEFAULT_CONFIGURATION
+			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0);
+#endif		
 		}
 #endif		
 #endif		
@@ -1744,7 +1751,7 @@ int CommandConsole::executeFile(const char *s)
 
 	unsigned int CommandConsole::viewport_height()const
 	{
-		return current_window().c_focused().height();
+		return current_window().c_focused().heigth();
 	}
 
 	unsigned int CommandConsole::viewport_width()const

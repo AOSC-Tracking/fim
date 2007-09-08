@@ -415,10 +415,11 @@ fi
 
 dnl ==================
 
-fim_cv_nofimrc=no
-AC_ARG_ENABLE(fimrc, AC_HELP_STRING([--enable-fimrc], [Fim will by default load the ~.fimrc file.]),
-[if test x$enableval = xyes; then
-        fim_cv_fimrc=yes
+fim_cv_fimrc=yes
+
+AC_ARG_ENABLE(fimrc, AC_HELP_STRING([--disable-fimrc], [Fim will by default load the ~.fimrc file.]),
+[if test x$enableval = xno; then
+        fim_cv_fimrc=no
 fi])
 
 if test x$fim_cv_fimrc = xyes; then
@@ -426,7 +427,6 @@ if test x$fim_cv_fimrc = xyes; then
 else
 	EXTRADEFS="$EXTRADEFS -D FIM_NOFIMRC"
 fi
-
 
 dnl ==================
 

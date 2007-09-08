@@ -631,6 +631,11 @@ struct ida_image* read_image(char *filename)
 	loader->read(img->data + img->i.width * 3 * y, y, data);
     }
 #ifndef FIM_IS_SLOWER_THAN_FBI
+    /*
+     * this patch aligns the pixel bytes in the order they should
+     * be dumped to the video memory, resulting in much faster image
+     * drawing in fim than in fbi !
+     * */
     {
 	register char t;
 	register char	*p=img->data,
@@ -1523,6 +1528,32 @@ static char *make_desc(struct ida_image_info *img, char *filename)
 
     return linebuffer;
 }
+
+/* 
+ * dez's function, on the way to windowing Fim!
+ * */
+struct ida_image * fbi_image_clone(struct ida_image *img)
+{
+	/* note that to fulfill free_image(), the descriptor and data couldn't be allocated together
+	 * */
+	if(!img || !img->data)return NULL;
+	struct ida_image *nimg=NULL;
+	int n;
+	if(!(nimg=calloc(1,sizeof(struct ida_image))))return NULL;
+	memcpy(nimg,img,sizeof(struct ida_image));
+	/*note .. no checks .. :P */
+	n = img->i.width * img->i.height * 3;
+	
+	nimg->data = malloc( n );
+	if(!(nimg->data))
+	{
+		free(nimg);
+		return NULL;
+	}
+	memcpy(nimg->data, img->data,n);
+	return nimg;
+}
+
 
 /*char *make_info(struct ida_image *img, float scale)*/
 static char *make_info(struct ida_image *img, float scale)

@@ -137,12 +137,14 @@ namespace fim
 
 	int Viewport::viewport_width()
 	{
-		return fb_var.xres;
+//		return fb_var.xres;
+		return cc.viewport_width();
 	}
 
 	int Viewport::viewport_height()
 	{
-		return fb_var.yres;
+		return cc.viewport_height();
+//		return fb_var.yres;
 	}
 
 	void Viewport::reduce(float factor)

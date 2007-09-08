@@ -62,6 +62,7 @@ void yyerror(char *s);
 %token <sValue> REGEXP
 %token <fValue> FLOAT
 %token <sValue> IDENTIFIER
+%token <sValue> NEWLINE
 %token <sValue> COMMAND		//unimplemented yet
 %token WHILE IF DO PRINT ELSE SYSTEM AND OR NOT
 //%nonassoc IFX
@@ -133,6 +134,7 @@ stmt:
 //	| IDENTIFIER '=' FLOAT { $$ = opr('=', 2, vscon($1,'f'), fcon($3)); }
 //	| IDENTIFIER '=' STRING{ $$ = opr('=', 2, vscon($1,'s'), scon($3)); }
 	| IDENTIFIER '=' arg { $$ = opr('=', 2, vscon($1,'a'), $3); }
+	| NEWLINE { /* this still doesn't work as we would like to */ }
 	;
 
 args:

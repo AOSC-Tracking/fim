@@ -102,15 +102,17 @@ class Rect
 		}
 		return Rect(x,y,w,h);
 	}
-	int vlgrow()   { ++h; return 0; } 
-	int vlshrink() { --h; return 0; }
-	int vugrow()   { --y; ++h ; return 0; } 
-	int vushrink() { ++y; --h ; return 0; }
 
-	int hlgrow()   { --x; ++w ; return 0; } 
-	int hrshrink() { --w; return 0; }
-	int hrgrow()   { ++w; return 0; } 
-	int hlshrink() { ++x; --w ; return 0; }
+	/* todo : to unsigned integer ! */
+	int vlgrow(int units=1)   { h+=units; return 0; } 
+	int vlshrink(int units=1) { h-=units; return 0; }
+	int vugrow(int units=1)   { y-=units; h+=units ; return 0; } 
+	int vushrink(int units=1) { y+=units; h-=units ; return 0; }
+
+	int hlgrow(int units=1)   { x-=units; w+=units ; return 0; } 
+	int hrshrink(int units=1) { w-=units; return 0; }
+	int hrgrow(int units=1)   { w+=units; return 0; } 
+	int hlshrink(int units=1) { x+=units; w-=units ; return 0; }
 	bool operator==(const Rect&rect)const
 	{
 		return x==rect.x &&
@@ -181,15 +183,15 @@ class Window
 	int count_hdivs()const;
 	int count_vdivs()const;
 
-	int vlgrow();
-	int vugrow();
-	int vushrink();
-	int vlshrink();
+	int vlgrow(int units);
+	int vugrow(int units);
+	int vushrink(int units);
+	int vlshrink(int units);
 
-	int hlgrow();
-	int hrgrow();
-	int hlshrink();
-	int hrshrink();
+	int hlgrow(int units);
+	int hrgrow(int units);
+	int hlshrink(int units);
+	int hrshrink(int units);
 
 	Window & focused()const;
 	Window & shadowed()const;

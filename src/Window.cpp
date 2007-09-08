@@ -20,7 +20,7 @@
 */
 
 /*
- *	This code is still experimental.
+ *	This code is still experimental and programmed in great hurry.
  */
 
 
@@ -48,6 +48,32 @@ namespace fim
 			else if(cmd == "draw")
 			{
 				draw();
+				return "\n";
+			}
+			else if(cmd == "normalize")
+			{
+				normalize();
+				return "\n";
+			}
+			else if(cmd == "enlarge")
+			{
+				/*
+				 * NOTE : this is not yet RECURSIVE !
+				 * */
+				enlarge(10);
+				return "\n";
+			}
+			else if(cmd == "venlarge")
+			{
+				/*
+				 * NOTE : this is not yet RECURSIVE !
+				 * */
+				venlarge(10);
+				return "\n";
+			}
+			else if(cmd == "henlarge")
+			{
+				henlarge(10);
 				return "\n";
 			}
 			else if(cmd == "up"   ) { move_focus(Up   ); }
@@ -524,15 +550,20 @@ namespace fim
 			/*
 			 *
 			 */
+			if( isleaf() )return 0;
 			if( left() == focused() )
 			{
-				left() .hrgrow();
-				right().hlshrink();
+				left() .hrgrow(units);
+//				left() .venlarge(units); //evil
+				right().hlshrink(units);
+				right().normalize();
 			}
 			else
 			{
-				right(). hrgrow();
-				left() .hlshrink();
+				right(). hrgrow(units);
+//				right().venlarge(units); //evil
+				left() .hlshrink(units);
+				left() .normalize();
 			}
 			return 0;
 	}
@@ -542,15 +573,20 @@ namespace fim
 			/*
 			 *
 			 */
+			if( isleaf() )return 0;
 			if( upper() == focused() )
 			{
-				upper().vlgrow();
-				lower().vushrink();
+				upper().vlgrow(units);
+//				upper().henlarge(units); //evil
+				lower().vushrink(units);
+				lower().normalize();
 			}
 			else
 			{
-				lower().vugrow();
-				upper().vlshrink();
+				lower().vugrow(units);
+//				lower().henlarge(units); //evil
+				upper().vlshrink(units);
+				upper().normalize();
 			}
 			return 0;
 	}
@@ -563,11 +599,11 @@ namespace fim
 //			std::cout << "enlarge\n";
 			if(ishsplit() && can_vgrow(focused(),units))
 			{
-				return henlarge();
+				return henlarge(units);
 			}else
 			if(isvsplit() && can_hgrow(focused(),units))
 			{
-				return venlarge();
+				return venlarge(units);
 			}else
 			// isleaf()
 			return 0;
@@ -575,15 +611,15 @@ namespace fim
 	}
 
 
-	int Window::vlgrow()   {  return corners.vlgrow(); } 
-	int Window::vlshrink() {  return corners.vlshrink(); }
-	int Window::vugrow()   {  return corners.vugrow(); } 
-	int Window::vushrink() {  return corners.vushrink(); }
+	int Window::vlgrow(int units=1)   {  return corners.vlgrow(  units); } 
+	int Window::vlshrink(int units=1) {  return corners.vlshrink(units); }
+	int Window::vugrow(int units=1)   {  return corners.vugrow(  units); } 
+	int Window::vushrink(int units=1) {  return corners.vushrink(units); }
 
-	int Window::hlgrow()   {  return corners.hlgrow(); } 
-	int Window::hlshrink() {  return corners.hlshrink(); }
-	int Window::hrgrow()   {  return corners.hrgrow(); } 
-	int Window::hrshrink() {  return corners.hrshrink(); }
+	int Window::hlgrow(int units=1)   {  return corners.hlgrow(  units); } 
+	int Window::hlshrink(int units=1) {  return corners.hlshrink(units); }
+	int Window::hrgrow(int units=1)   {  return corners.hrgrow(  units); } 
+	int Window::hrshrink(int units=1) {  return corners.hrshrink(units); }
 
 	void Window::draw()const
 	{
