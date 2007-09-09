@@ -214,7 +214,7 @@ class Window
 	bool operator==(const Window&window)const;
 	public:
 
-	Viewport viewport;
+	Viewport *viewport;
 	Viewport & current_viewport()const;
 
 	const Window & c_focused()const;

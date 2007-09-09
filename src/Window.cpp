@@ -97,10 +97,12 @@ namespace fim
 
 	Window::Window(const Rect& corners_):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
 	{
+		viewport=NULL;
 	}
 
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
 	{
+		viewport=NULL;
 	}
 
 	bool Window::issplit()const
@@ -642,7 +644,8 @@ namespace fim
 	Viewport & Window::current_viewport()const
 	{
 		//FIXME
-		return (Viewport &)(viewport);
+		return *viewport;
+//		return (Viewport &)(viewport);
 	}	
 
 	Image *Window::getImage()const

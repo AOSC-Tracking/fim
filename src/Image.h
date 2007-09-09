@@ -18,10 +18,12 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#include "fim.h"
+
 #ifndef IMAGE_FBVI_H
 #define IMAGE_FBVI_H
-#include "Viewport.h"
-#include "fim.h"
+
+
 namespace fim
 {
 /*
@@ -38,7 +40,7 @@ namespace fim
  *	reflecting the content of an image file and 
  *	some rescaled images caches.
  */
-class Image:public Viewport
+class Image
 {
 
 	//int redraw;	// there is already an external one!
@@ -48,18 +50,64 @@ class Image:public Viewport
 	Image(const char *fname_);
 	~Image();
 
+	float            scale    ;	/* viewport variables */
+	float            ascale   ;
+	float            newscale ;
+	float            newascale ;
+
 	bool revertToLoaded();
 	private:
-	void reset();
 
-	virtual int rescale();
 
 	/* image methods */
 	bool load(const char *fname_);
 
 	/* virtual stuff */
-	inline int width();
-	inline int height();
+
+	protected:
+	int              neworientation;
+	int              orientation;
+	int              rotation;
+
+	int    invalid;		//the first time the image is loaded it is set to 1
+	int    new_image;		//the first time the image is loaded it is set to 1
+	int only_first_rescale;		//TEMPORARY
+
+	string  fname;  /* viewport variable, too */
+
+
+        struct ida_image *img     ;     /* local (eventually) copy images */
+	struct ida_image *fimg    ;     /* master image */
+
+	public:
+	void reset();
+	int rescale();
+
+	const char* getName(){return fname.c_str();}
+        int tiny()const;
+
+	/* viewport methods */
+
+	void reduce(float factor=1.322);	//FIX ME
+	void magnify(float factor=1.322);
+
+
+	int setscale(double ns);
+	/* viewport methods ? */
+	int scale_increment(double ds);
+	int scale_multiply (double sm);
+
+	bool check_invalid();
+	bool check_valid();
+
+        void free();
+
+	char* getInfo();
+	virtual void scale_fix_top_left(){}
+
+	int width();
+	int height();
+
 };
 }
 #endif

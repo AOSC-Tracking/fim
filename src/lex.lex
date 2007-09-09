@@ -177,7 +177,7 @@ STRINGC_DQ {STRINGC}|\'
 
 [ \t]+ { /* we ignore whitespace */ ; }
 
-'\n'	{
+"\n"	{
 	return NEWLINE;	/* still experimental */
 	}
 

@@ -52,6 +52,128 @@ namespace fim
 		return fimg->i.height;
 	}
 
+	Image::Image(const char *fname_)
+	{
+		/*
+		 *	FIX ME
+		 */
+		reset();
+		load(fname_);
+		if( check_invalid() || (!fimg) ) 
+		{
+			cout << "warning : invalid loading ! \n";
+		}
+		else
+		{
+			/*
+			 *	this is a 'patch' to do a first setting of top,left,etc
+			 *	variables prior to first visualization without displaying..
+			 */
+			cc.setVariable("filename",fname_);
+			only_first_rescale=1;
+			//this->display();
+			//if(cc.isInScript()==0)this->auto_scale();
+		}
+	}
+
+	void Image::reset()
+	{
+		steps = cc.getIntVariable("steps");
+		if(steps<1)steps = 50;
+	}
+	
+	bool Image::load(const char *fname_)
+	{
+		/*
+		 *	FIX ME
+		 */
+		if(fname_==NULL){invalid=1;return false;}//DANGER
+		this->free();
+		fname=fname_;
+		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))set_status_bar("please wait while reloading...", "*");
+
+		if(g_fim_no_framebuffer)
+			fimg=NULL;
+		else
+			fimg = read_image((char*)fname_);
+
+		img=fimg;
+	        redraw=1;
+		if(! img){cout<<"warning : image loading error!\n"   ;invalid=1;return false;}
+		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return false;}
+		return true;
+	}
+
+	Image::~Image()
+	{
+		this->free();
+	}
+
+	bool Image::revertToLoaded()
+	{
+		if(img==fimg) img = NULL;
+		if( img )//in the case img is a third copy (should not occur)
+		{
+			free_image(img);
+			img = NULL;
+		}
+		if(!fimg) return false; // this is bad, but could occur!
+		reset();
+		return  true;
+		
+	}
+
+        int Image::tiny()const{if(!img)return 1; return ( img->i.width<=1 || img->i.height<=1 );}
+
+	int Image::scale_multiply(double  sm)
+	{
+		if(scale*sm>0.0)newscale=scale*sm;rescale();return 0;
+	}
+
+	int Image::scale_increment(double ds)
+	{
+		if(scale+ds>0.0)newscale=scale+ds;rescale();return 0;
+	}
+
+	int Image::setscale(double ns)
+	{
+		newscale=ns;rescale();
+		return 0;
+	}
+
+
+        bool Image::check_valid()
+	{
+		return ! check_invalid();
+	}
+
+        bool Image::check_invalid()
+        {
+                /*
+                 *      WARNING ! was:
+
+                        if(!img){return;}
+                        if(!fimg){invalid=1;return;}
+                */
+
+		//ACHTUNG! 
+		//if(!img ){img=fimg;}
+                if(!img)
+                {
+                        invalid=1;
+                        return true;
+                }
+                return false;
+        }
+
+
+
+        void Image::free()
+        {
+                if(fimg!=img) free_image(img );
+                if(fimg     ) free_image(fimg);
+                reset();
+        }
 
 	int Image::rescale()
 	{
@@ -108,76 +230,24 @@ namespace fim
 		return 0;
 	}
 
-	Image::Image(const char *fname_)
+
+	void Image::reduce(float factor)
 	{
-		/*
-		 *	FIX ME
-		 */
-		reset();
-		load(fname_);
-		if( check_invalid() || (!fimg) ) 
-		{
-			cout << "warning : invalid loading ! \n";
-		}
-		else
-		{
-			/*
-			 *	this is a 'patch' to do a first setting of top,left,etc
-			 *	variables prior to first visualization without displaying..
-			 */
-			cc.setVariable("filename",fname_);
-			only_first_rescale=1;
-			//this->display();
-			//if(cc.isInScript()==0)this->auto_scale();
-		}
+		newscale = scale / factor;
+		rescale();
 	}
 
-	void Image::reset()
+	void Image::magnify(float factor)
 	{
-		((Viewport*)this)->reset(); /* i love vtable */
-
-		steps = cc.getIntVariable("steps");
-		if(steps<1)steps = 50;
-	}
-	
-	bool Image::load(const char *fname_)
-	{
-		/*
-		 *	FIX ME
-		 */
-		if(fname_==NULL){invalid=1;return false;}//DANGER
-		free();
-		fname=fname_;
-		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))set_status_bar("please wait while reloading...", "*");
-
-		if(g_fim_no_framebuffer)
-			fimg=NULL;
-		else
-			fimg = read_image((char*)fname_);
-
-		img=fimg;
-	        redraw=1;
-		if(! img){cout<<"warning : image loading error!\n"   ;invalid=1;return false;}
-		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return false;}
-		return true;
+		newscale = scale * factor;
+		rescale();
 	}
 
-	Image::~Image()
+	char* Image::getInfo()
 	{
-		free();
+		// ATENCION!
+		if(fimg)return make_info(fimg,scale);return NULL;
 	}
 
-	bool Image::revertToLoaded()
-	{
-		if(img==fimg) img = NULL;
-		if( img )//in the case img is a third copy (should not occur)
-		{
-			free_image(img);
-			img = NULL;
-		}
-		if(!fimg) return false; // this is bad, but could occur!
-		reset();
-		return  true;
-		
-	}
+
 }

@@ -34,13 +34,13 @@
  */
 namespace fim
 {
-	Viewport::Viewport()
+	Viewport::Viewport():Image(NULL)
 	{
 		// WARNING : this constructor will be filled soon
 		image=NULL;
 	}
 
-	Viewport::Viewport(const Viewport &v)
+	Viewport::Viewport(const Viewport &v):Image(NULL)
 	{
 		// WARNING
 		image=NULL;
@@ -123,52 +123,22 @@ namespace fim
 		return (top <= 0 );
 	}
 
-        bool Viewport::check_valid()
-	{
-		return ! check_invalid();
-	}
-
-        bool Viewport::check_invalid()
-        {
-                /*
-                 *      WARNING ! was:
-
-                        if(!img){return;}
-                        if(!fimg){invalid=1;return;}
-                */
-
-		//ACHTUNG! 
-		//if(!img ){img=fimg;}
-                if(!img)
-                {
-                        invalid=1;
-                        return true;
-                }
-                return false;
-        }
-
 	int Viewport::viewport_width()
 	{
-//		return fb_var.xres;
+#ifdef FIM_WINDOWS
 		return cc.viewport_width();
+#else
+		return fb_var.xres;
+#endif
 	}
 
 	int Viewport::viewport_height()
 	{
+#ifdef FIM_WINDOWS
 		return cc.viewport_height();
-//		return fb_var.yres;
-	}
-
-	void Viewport::reduce(float factor)
-	{
-		newscale = scale / factor;
-		rescale();
-	}
-
-	void Viewport::magnify(float factor)
-	{
-		newscale = scale * factor;
-		rescale();
+#else
+		return fb_var.yres;
+#endif
 	}
 
 	void Viewport::bottom_align()
@@ -185,24 +155,7 @@ namespace fim
 		redraw=1;
 	}
 
-	void Viewport::auto_height_scale()
-	{
-		if( check_invalid() ) return;
 
-		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / this->width();
-		newscale = (float)this->viewport_height() / this->height();
-
-		rescale();
-	}
-
-	void Viewport::auto_width_scale()
-	{
-		if( check_invalid() ) return;
-
-		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / width();
-
-		rescale();
-	}
 
 	void Viewport::redisplay()
 	{
@@ -296,12 +249,6 @@ namespace fim
 		}
 	}
 
-	char* Viewport::getInfo()
-	{
-		// ATENCION!
-		if(fimg)return make_info(fimg,scale);return NULL;
-	}
-
 	void Viewport::auto_scale()
 	{
 		float xs,ys;
@@ -315,6 +262,68 @@ namespace fim
 		}
 
 		newscale = (xs < ys) ? xs : ys;
+		rescale();
+	}
+
+	int Viewport::valid()const
+	{
+		return invalid?0:1;
+	}
+
+	Viewport::Viewport* clone()
+	{
+		/*
+		 * FIXME : this is essential to implement properly window splitting mechanisms!!
+		 **/
+		return NULL;
+//		return new Viewport();
+	}
+
+
+        Image* Viewport::getImage()const
+	{
+		return image;
+	}
+
+        void Viewport::setImage(fim::Image* ni)
+	{
+		if(ni)image = ni;
+	}
+
+        void Viewport::reset()
+        {
+		((Image*)this)->reset(); /* i love vtable */
+                new_image=1;
+                redraw=1;
+                scale    = 1.0;
+                newscale = 1.0;
+                ascale   = 1.0;
+                newascale= 1.0;
+                top = 0;
+                left = 0;
+                fimg    = NULL;
+                img     = NULL;
+                invalid=0;
+                orientation=0;
+                neworientation=0;
+        }
+
+	void Viewport::auto_height_scale()
+	{
+		if( check_invalid() ) return;
+
+		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / this->width();
+		newscale = (float)this->viewport_height() / this->height();
+
+		rescale();
+	}
+
+	void Viewport::auto_width_scale()
+	{
+		if( check_invalid() ) return;
+
+		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / width();
+
 		rescale();
 	}
 
@@ -338,37 +347,6 @@ namespace fim
 		top    = (int)(cy * height - this->viewport_height()/2);
 		//the cast was added by me...
 		scale = newscale;
-	}
-
-	int Viewport::valid()const
-	{
-		return invalid?0:1;
-	}
-
-	Viewport::Viewport* clone()
-	{
-		/*
-		 * FIXME : this is essential to implement properly window splitting mechanisms!!
-		 **/
-		return NULL;
-//		return new Viewport();
-	}
-
-        void Viewport::free()
-        {
-                if(fimg!=img) free_image(img );
-                if(fimg     ) free_image(fimg);
-                reset();
-        }
-
-        Image* Viewport::getImage()const
-	{
-		return image;
-	}
-
-        void Viewport::setImage(fim::Image* ni)
-	{
-		if(ni)image = ni;
 	}
 
 }
