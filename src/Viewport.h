@@ -26,6 +26,9 @@ namespace fim
 	/*
 	 * A viewport displays one single image, so it contains the information
 	 * relative to the way it is displayed.
+	 *
+	 * FIXME:
+	 * 20070909 A Viewport object does NOT own an image, so it should be deallocated elsewhere!!
 	 * */
 class Viewport
 {
@@ -42,7 +45,27 @@ class Viewport
 
 	string	fname;	/* viewport variable, too */
 
+	private:
+	fim::Image *image;	//FIXME : this is the future !
+
 	public:
+        void reset()
+        {
+                new_image=1;
+                redraw=1;
+                scale    = 1.0;
+                newscale = 1.0;
+                ascale   = 1.0;
+                newascale= 1.0;
+                top = 0;
+                left = 0;
+                fimg    = NULL;
+                img     = NULL;
+                invalid=0;
+                orientation=0;
+                neworientation=0;
+        }
+
 	Viewport();
 	Viewport(const Viewport &v);
 
@@ -83,7 +106,7 @@ class Viewport
 	void reduce(float factor=1.322);	//FIX ME
 	void magnify(float factor=1.322);
 
-	virtual int rescale(){};
+	virtual int rescale(){return -1;};
 	/*virtual*/ Viewport* clone();
 
 	/* viewport methods */
@@ -92,8 +115,8 @@ class Viewport
 	void auto_width_scale();
 	void auto_height_scale();
 	int setscale(double ns){newscale=ns;rescale();return 0;}
-	virtual int width()=0;
-	virtual int height()=0;
+	virtual int width(){return 0;}
+	virtual int height(){return 0;};
 
 	/* viewport methods ? */
 	int scale_increment(double ds){if(scale+ds>0.0)newscale=scale+ds;rescale();return 0;}
@@ -104,6 +127,10 @@ class Viewport
 	const char* getName(){return fname.c_str();}
 	void auto_scale();
 
+        void Viewport::free();
+
+        void Viewport::setImage(fim::Image* ni);
+        Image* Viewport::getImage()const;
 };
 }
 #endif

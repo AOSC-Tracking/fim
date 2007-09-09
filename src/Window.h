@@ -130,9 +130,8 @@ class Window
 	enum Spacings{ hspacing=0, vspacing=0};
 
 	/* FIXME : temporary : this will be a Viewport ! */
-	Image *image;
 	public:
-	Image *getImage()const{return image;}
+	Image *getImage()const;
 	private:
 
 /*
@@ -214,6 +213,10 @@ class Window
 
 	bool operator==(const Window&window)const;
 	public:
+
+	Viewport viewport;
+	Viewport & current_viewport()const;
+
 	const Window & c_focused()const;
 	const Window & c_shadowed()const;
         fim::string cmd(const std::vector<fim::string> &args);

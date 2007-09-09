@@ -50,15 +50,7 @@ class Browser
 
 	Image *image()const;
 
-	inline Viewport *viewport()const
-	{
-		/* 
-		 *		DANGER 
-		 * A valid pointer should be returned 
-		 * whenever the image is loaded !
-		 * */
-		return (Viewport*)image();
-	}
+	Viewport& viewport()const;
 
 	int current_n()const;
 	int current_n(int ccp)const;
@@ -149,6 +141,8 @@ class Browser
 	fim::string _sort();
 	fim::string next(int n);
 	fim::string do_next(int n);
+
+	void free_current_image();
 	public:
 };
 }

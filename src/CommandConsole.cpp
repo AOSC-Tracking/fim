@@ -62,7 +62,7 @@ namespace fim
 		{
 			bindings[c]=binding;
 			fim::string rs("keycode ");
-			rs+=(int)c;
+			rs+=string((int)c);
 			rs+=" successfully reassigned to \"";
 			rs+=bindings[c];
 			rs+="\"\n";
@@ -72,7 +72,7 @@ namespace fim
 		{
 			bindings[c]=binding;
 			fim::string rs("keycode ");
-			rs+=(int)c;
+			rs+=string((int)c);
 			rs+=" successfully assigned to \"";
 			rs+=bindings[c];
 			rs+="\"\n";
@@ -1744,6 +1744,11 @@ int CommandConsole::executeFile(const char *s)
 	}
 	
 #ifdef FIM_WINDOWS
+	Viewport& CommandConsole::current_viewport()const
+	{
+		return current_window().current_viewport();
+	}
+
 	const Window & CommandConsole::current_window()const
 	{
 		return window;

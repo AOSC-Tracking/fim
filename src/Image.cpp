@@ -75,7 +75,6 @@ namespace fim
 //		status(linebuffer, NULL);
 		cc.setVariable("scale",newscale*100);
 
-//		if(simg){free_image(simg);simg=NULL;}
 		if(fimg)
 		{
 			/*
@@ -85,21 +84,20 @@ namespace fim
 			 * Here it would be nice to add some sort of memory manager 
 			 * keeping score of copies and ... too complicated ...
 			 */
-			struct ida_image *backup_img=simg;
+			struct ida_image *backup_img=img;
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 				set_status_bar("please wait while rescaling...", getInfo());
-			simg  = scale_image(fimg,scale,cc.getFloatVariable("ascale"));
-			if( simg && orientation!=0 && orientation != 2)simg  = rotate_image(simg,orientation==1?0:1);
-			if( simg && orientation== 2)simg  = flip_image(simg);
-			if(!simg)
+			img  = scale_image(fimg,scale,cc.getFloatVariable("ascale"));
+			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
+			if( img && orientation== 2)img  = flip_image(img);
+			if(!img)
 			{
-				simg=backup_img;
+				img=backup_img;
 				if(cc.getIntVariable("_display_busy"))
 					set_status_bar( "rescaling failed (insufficient memory!)", getInfo());
 				sleep(1);	//just to give a glimpse..
 			}
 			else      free_image(backup_img);
-			img = simg;
 			redraw=1;
 			cc.setVariable("height",(int)fimg->i.height);
 			cc.setVariable("sheight",(int)img->i.height);
@@ -119,7 +117,7 @@ namespace fim
 		load(fname_);
 		if( check_invalid() || (!fimg) ) 
 		{
-			cout << "invalid loading ! \n";
+			cout << "warning : invalid loading ! \n";
 		}
 		else
 		{
@@ -136,31 +134,19 @@ namespace fim
 
 	void Image::reset()
 	{
-		new_image=1;
-		redraw=1;
-		scale    = 1.0;
-		newscale = 1.0;
-		ascale   = 1.0;
-		newascale= 1.0;
+		((Viewport*)this)->reset(); /* i love vtable */
+
 		steps = cc.getIntVariable("steps");
 		if(steps<1)steps = 50;
-		top = 0;
-		left = 0;
-		fimg    = NULL;
-		simg    = NULL;
-		img     = NULL;
-		invalid=0;
-		orientation=0;
-		neworientation=0;
 	}
 	
-	void Image::load(const char *fname_)
+	bool Image::load(const char *fname_)
 	{
 		/*
 		 *	FIX ME
 		 */
-		if(fname_==NULL){invalid=1;return;}//DANGER
-		free_mem();
+		if(fname_==NULL){invalid=1;return false;}//DANGER
+		free();
 		fname=fname_;
 		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))set_status_bar("please wait while reloading...", "*");
 
@@ -170,37 +156,24 @@ namespace fim
 			fimg = read_image((char*)fname_);
 
 		img=fimg;
-//		assert(img);
 	        redraw=1;
-		if(! img){cout<<"warning : image loading error!\n";invalid=1;return;}
-		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return;}
-	}
-
-	void Image::free_mem()
-	{
-		if(fimg) free_image(fimg);
-		if(simg) free_image(simg);
-		reset();
+		if(! img){cout<<"warning : image loading error!\n"   ;invalid=1;return false;}
+		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return false;}
+		return true;
 	}
 
 	Image::~Image()
 	{
-		free_mem();
+		free();
 	}
 
 	bool Image::revertToLoaded()
 	{
-		if(img==simg) img = NULL;
 		if(img==fimg) img = NULL;
 		if( img )//in the case img is a third copy (should not occur)
 		{
 			free_image(img);
 			img = NULL;
-		}
-		if(fimg!=simg)//image was scaled once
-		{
-			free_image(simg);
-			simg = NULL;
 		}
 		if(!fimg) return false; // this is bad, but could occur!
 		reset();

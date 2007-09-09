@@ -37,11 +37,13 @@ namespace fim
 	Viewport::Viewport()
 	{
 		// WARNING : this constructor will be filled soon
+		image=NULL;
 	}
 
 	Viewport::Viewport(const Viewport &v)
 	{
 		// WARNING
+		image=NULL;
 		memcpy(this,&v,sizeof(Viewport));
 		this->img  = fbi_image_clone(this->img );
 		this->fimg = fbi_image_clone(this->fimg);
@@ -212,8 +214,8 @@ namespace fim
 	{
 		/*
 		 *	FIX ME
-		 */
-		/*
+		 *
+		 *
 		 *	the display function draws the image in the frame buffer
 		 *	memory.
 		 *	no scaling occurs, only some alignment.
@@ -345,8 +347,28 @@ namespace fim
 
 	Viewport::Viewport* clone()
 	{
+		/*
+		 * FIXME : this is essential to implement properly window splitting mechanisms!!
+		 **/
 		return NULL;
 //		return new Viewport();
+	}
+
+        void Viewport::free()
+        {
+                if(fimg!=img) free_image(img );
+                if(fimg     ) free_image(fimg);
+                reset();
+        }
+
+        Image* Viewport::getImage()const
+	{
+		return image;
+	}
+
+        void Viewport::setImage(fim::Image* ni)
+	{
+		if(ni)image = ni;
 	}
 
 }

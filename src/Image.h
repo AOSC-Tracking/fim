@@ -40,7 +40,6 @@ namespace fim
  */
 class Image:public Viewport
 {
-	struct ida_image *simg    ;
 
 	//int redraw;	// there is already an external one!
 
@@ -56,8 +55,7 @@ class Image:public Viewport
 	virtual int rescale();
 
 	/* image methods */
-	void load(const char *fname_);
-	void free_mem();
+	bool load(const char *fname_);
 
 	/* virtual stuff */
 	inline int width();

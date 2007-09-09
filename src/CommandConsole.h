@@ -219,6 +219,7 @@ class CommandConsole
 	void appendPostExecutionCommand(const fim::string &c);
 
 	#ifdef FIM_WINDOWS
+	Viewport& CommandConsole::current_viewport()const;
 	unsigned int viewport_height()const;
 	unsigned int viewport_width()const;
 	unsigned int viewport_xorigin()const;

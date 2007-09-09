@@ -638,6 +638,18 @@ namespace fim
 	}
 
 }
+
+	Viewport & Window::current_viewport()const
+	{
+		//FIXME
+		return (Viewport &)(viewport);
+	}	
+
+	Image *Window::getImage()const
+	{
+		return current_viewport().getImage();
+	}
+
 #if 0
 /*
  *	A test main program.
