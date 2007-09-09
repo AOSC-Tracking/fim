@@ -41,6 +41,10 @@ class Cache
 
 	/**/
 	int mark_used(const char *fname);
+
+	bool is_in_cache(fim::Image* oi);
+
+	bool cacheImage( fim::Image* ni );
 	public:
 	Cache();
 
@@ -51,7 +55,7 @@ class Cache
 	Image *getImage(const char *fname);
 
 	/*	returns whether a file is already cached */
-	bool Cache::haveImage(const char *fname);
+	bool haveImage(const char *fname);
 	
 	/*	the caller declares this image as free	*/
 	int free(fim::Image* oi);

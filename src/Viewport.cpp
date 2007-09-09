@@ -36,7 +36,17 @@ namespace fim
 {
 	Viewport::Viewport()
 	{
-	// WARNING : this constructor will be filled soon
+		// WARNING : this constructor will be filled soon
+	}
+
+	Viewport::Viewport(const Viewport &v)
+	{
+		// WARNING
+		memcpy(this,&v,sizeof(Viewport));
+		this->img  = fbi_image_clone(this->img );
+		this->fimg = fbi_image_clone(this->fimg);
+		// WARNING : these could be NULL's : fixme
+		// WARNING : THIS INSTANTIATION OF Viewport NEEDS AD HOC DESTRUCTOR!
 	}
 
 	void Viewport::pan_up(int s)
@@ -298,7 +308,7 @@ namespace fim
 		if(g_fim_no_framebuffer)xs=ys=1.0f;
 		else
 		{
-			xs = (float)this->viewport_width() / fimg->i.width;
+			xs = (float)this->viewport_width()  / fimg->i.width;
 			ys = (float)this->viewport_height() / fimg->i.height;
 		}
 
@@ -318,11 +328,11 @@ namespace fim
 		float old=scale;float fnew=newscale;
 		unsigned int width, height;
 		float cx,cy;
-		cx = (float)(left + this->viewport_width()/2) / (img->i.width  * old);
+		cx = (float)(left + this->viewport_width() /2) / (img->i.width  * old);
 		cy = (float)(top  + this->viewport_height()/2) / (img->i.height * old);
 		width  = (int)(img->i.width  * fnew);
 		height = (int)(img->i.height * fnew);
-		left   = (int)(cx * width  - this->viewport_width()/2);
+		left   = (int)(cx * width  - this->viewport_width() /2);
 		top    = (int)(cy * height - this->viewport_height()/2);
 		//the cast was added by me...
 		scale = newscale;
@@ -333,6 +343,11 @@ namespace fim
 		return invalid?0:1;
 	}
 
+	Viewport::Viewport* clone()
+	{
+		return NULL;
+//		return new Viewport();
+	}
 
 }
 

@@ -72,7 +72,8 @@ namespace fim
 		{
 			return -1;
 		}
-		if(reverseCache[oi]!="")
+
+		if(is_in_cache(oi))
 		{
 			delete imageCache[reverseCache[oi]];
 			lru.erase(oi);
@@ -101,10 +102,35 @@ namespace fim
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
 
+	bool Cache::is_in_cache(fim::Image* oi)
+	{
+		/*	acca' nun stimm'a'ppazzia'	*/
+		if(!oi)return -1;
+		return reverseCache[oi]!="";
+	}
+
 	int Cache::free(fim::Image* oi)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!oi)return -1;
+
+		if(!is_in_cache(oi))
+		{
+			/* if the image is not already one of ours, it 
+			 * is probably a cloned one, and the caller 
+			 * didn't know this.
+			 *
+			 * in this case we keep it in the cache, 
+			 * so it could be useful in the future.
+			 * */
+			if( oi->revertToLoaded() )//removes internal scale caches
+				cacheImage( oi );
+		}
+
+		/*
+		 * fixme : we should explicitly mark for deletion someday.. 
+		 * */
+
 		//if(need_free())return erase(oi);
 		/*	careful here !!	*/
 		//if(need_free())free_some_lru();
@@ -143,12 +169,21 @@ namespace fim
 		/*	load attempt as alternative approach	*/
 		if( ni = new Image(fname) )
 		{	
-			this->imageCache[fim::string(fname)]=ni;
-			this->reverseCache[ni]=fim::string(fname);
-			cc.setVariable("_cached_images",cached_elements());
-			mark_used(fname);
+			cacheImage( ni );
+			mark_used( fname );
 		}
 		return ni;
+	}
+
+	bool Cache::cacheImage( fim::Image* ni )
+	{
+		/*	acca' nun stimm'a'ppazzia'	*/
+		if(!ni)return ni;
+
+		this->imageCache[fim::string( ni->getName() )]=ni;
+		this->reverseCache[ni]=fim::string( ni->getName() );
+		cc.setVariable("_cached_images",cached_elements());
+		mark_used( ni->getName() );
 	}
 	
 	/*		*/
@@ -161,3 +196,4 @@ namespace fim
 		return 0;
 	}
 }
+

@@ -49,6 +49,7 @@ class Image:public Viewport
 	Image(const char *fname_);
 	~Image();
 
+	bool revertToLoaded();
 	private:
 	void reset();
 

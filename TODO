@@ -21,6 +21,7 @@ If you intend to learn about FIM, please read the program documentation  in the
 			- (to study) active variables - variables triggering actions
 			- vim like 'set', 'let', 'unlet' commands..
 20070812	examine fbi's weak points like http://freshmeat.net/articles/view/2203/ and fix them in Fim, if present.
+20070908	handle C++ exceptions and full error handling
 20070812	study the benefits of integration with libraries like:
 		DirectFB : for a simpler driver and display mechanism
 		MXK : for fancy input devices and capabilities

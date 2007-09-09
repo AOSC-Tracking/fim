@@ -188,4 +188,23 @@ namespace fim
 		free_mem();
 	}
 
+	bool Image::revertToLoaded()
+	{
+		if(img==simg) img = NULL;
+		if(img==fimg) img = NULL;
+		if( img )//in the case img is a third copy (should not occur)
+		{
+			free_image(img);
+			img = NULL;
+		}
+		if(fimg!=simg)//image was scaled once
+		{
+			free_image(simg);
+			simg = NULL;
+		}
+		if(!fimg) return false; // this is bad, but could occur!
+		reset();
+		return  true;
+		
+	}
 }

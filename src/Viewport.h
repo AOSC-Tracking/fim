@@ -44,6 +44,7 @@ class Viewport
 
 	public:
 	Viewport();
+	Viewport(const Viewport &v);
 
 	int valid()const;
 
@@ -83,6 +84,7 @@ class Viewport
 	void magnify(float factor=1.322);
 
 	virtual int rescale(){};
+	/*virtual*/ Viewport* clone();
 
 	/* viewport methods */
 	void display();
@@ -99,6 +101,7 @@ class Viewport
 
 	/* viewport methods */
 	char* getInfo();
+	const char* getName(){return fname.c_str();}
 	void auto_scale();
 
 };

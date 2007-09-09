@@ -23,6 +23,9 @@
 #include "fim.h"
 namespace fim
 {
+/*
+ * The Browser class oversees image browsing.
+ */
 class Browser
 {
 	/*
@@ -45,10 +48,7 @@ class Browser
 
 	Image *loaded_image;
 
-	inline Image *image()const
-	{
-	       	return loaded_image;
-	}
+	Image *image()const;
 
 	inline Viewport *viewport()const
 	{

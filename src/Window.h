@@ -129,6 +129,12 @@ class Window
 
 	enum Spacings{ hspacing=0, vspacing=0};
 
+	/* FIXME : temporary : this will be a Viewport ! */
+	Image *image;
+	public:
+	Image *getImage()const{return image;}
+	private:
+
 /*
  * should we model some status bar here ?
  *

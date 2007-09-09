@@ -1068,4 +1068,14 @@ namespace fim
 		return "";
 	}
 
+	Image *Browser::image()const
+	{
+	#ifdef FIM_WINDOWS
+	       	return loaded_image;
+		return cc.current_window().getImage();
+	#else
+	       	return loaded_image;
+	#endif
+	}
 }
+

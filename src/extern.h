@@ -116,6 +116,7 @@ void fb_cleanup(void);
 //static struct flist  *fcurrent;
 //static int           fcount;
 extern int svga_show(struct ida_image *img, int timeout, char *desc, char *info, int *nr);
+extern struct ida_image * fbi_image_clone(struct ida_image *img);
 }
 class fim::CommandConsole;
 extern fim::CommandConsole cc;
