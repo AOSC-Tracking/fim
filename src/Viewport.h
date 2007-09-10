@@ -62,7 +62,7 @@ class Viewport
 	protected:
 
 	int only_first_rescale;		//TEMPORARY
-	//int redraw;	// there is already an external one!
+	int redraw;	// there is already an external one!
 	/* viewport methods */
 	int viewport_width();
 	int viewport_height();
@@ -77,6 +77,7 @@ class Viewport
 	/* viewport methods */
 	void display();
 	void redisplay();
+	void null_display();
 
 	void auto_width_scale();
 	void auto_height_scale();

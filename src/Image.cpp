@@ -144,6 +144,7 @@ namespace fim
 		{
 			free_image(img);
 			img = fimg;
+	        	redraw=1;
 		}
 		if(!fimg) return false; // this is bad, but could occur!
 //		reset();
@@ -224,6 +225,9 @@ namespace fim
 		orientation=neworientation; // fix this
 //		scale_fix_top_left();
 //		status(linebuffer, NULL);
+
+		newscale=1.0;scale=1.0; ascale=1.0; // FIXME : WARNING 
+
 		cc.setVariable("scale",newscale*100);
 		if(fimg)
 		{
@@ -237,6 +241,7 @@ namespace fim
 			struct ida_image *backup_img=img;
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 				set_status_bar("please wait while rescaling...", getInfo());
+			//FIXME !!!
 				cout << " scale ; " << scale << "\n";
 				cout << "ascale ; " <<ascale << "\n";
 				cout << "w:"<<width()<<"\n";
@@ -251,7 +256,7 @@ namespace fim
 					set_status_bar( "rescaling failed (insufficient memory!)", getInfo());
 				sleep(1);	//just to give a glimpse..
 			}
-			else      free_image(backup_img);
+			else if(img!=fimg) free_image(backup_img);
 			redraw=1;
 			cc.setVariable("height",(int)fimg->i.height);
 			cc.setVariable("sheight",(int)img->i.height);

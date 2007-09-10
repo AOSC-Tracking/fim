@@ -83,6 +83,8 @@ void fb_text_init1(char *font);
 extern struct fb_var_screeninfo   fb_var;
 extern void svga_dither_palette(int r, int g, int b);
 
+extern unsigned int fs_bpp;
+
 //int             dither = FALSE, pcd_res = 3, steps = 50;
 extern int             dither, pcd_res, steps;
 extern void            init_dither(int, int, int, int);

@@ -48,6 +48,13 @@ namespace fim
 		return os;
 	}
 
+
+	fim::string Browser::redisplay(const std::vector<fim::string> &args)
+	{
+		redisplay();
+		return "";
+	}
+
 	void Browser::redisplay()
 	{
 		return; // FIXMe
@@ -130,6 +137,7 @@ namespace fim
 		return s;
 	}
 
+#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string Browser::pan_up(const std::vector<fim::string> &args)
 	{
 		/*
@@ -421,6 +429,7 @@ namespace fim
 		else prev();
 		return "";
 	}
+#endif
 
 	fim::string Browser::display_status(const char *l,const char *r)
 	{
@@ -460,12 +469,19 @@ namespace fim
 		return "";
 	}
 
+	fim::string Browser::no_image(const std::vector<fim::string> &args)
+	{
+		free_current_image();
+		return "";
+	}
+
 	void Browser::free_current_image()
 	{
 #ifdef FIM_WINDOWS
+		if(image()) cache.free(image());
 		if(image()) viewport().free(); //NOTE : cache is wasted in this way.
+		// FIXME : here should land support for cache reusing !
 		viewport().setImage( NULL );
-//		viewport().setImage( cache.getImage(current().c_str()) );
 #else
 		if(image())
 		{
@@ -474,6 +490,36 @@ namespace fim
 		}
 		loaded_image = cache.getImage(current().c_str());
 #endif
+	}
+
+	fim::string Browser::load_error_handle(fim::string c)
+	{
+		if(image() && ! (viewport().check_valid()))
+		{
+			cout << "BAD SIGN..\n";
+			free_current_image();
+#ifdef FIM_REMOVE_FAILED
+			if(current()!=""){pop_current();	//removes the current file from the list.
+#ifdef FIM_AUTOSKIP_FAILED
+#ifdef FIM_ALWAYS_UNDEFINED
+			next(0);reload();
+#endif
+#endif
+			}
+#endif
+			fim::string rs("error loading the file ");
+			rs+=c;
+			rs+="\n";
+			return rs;
+		}
+		return "";
+	}
+
+	fim::string Browser::reload()
+	{
+		if(n_files())
+		return reload(std::vector<fim::string>());
+		return "";
 	}
 
 	fim::string Browser::reload(const std::vector<fim::string> &args)
@@ -497,22 +543,8 @@ namespace fim
 
 		if(cc.getIntVariable("_prefetch")) cache.prefetch(get_next_filename(1).c_str());/*this will become an autocommand*/
 		cc.setVariable("fileindex",current_image());
-		if(image() && ! (viewport().valid()))
-		{
-			free_current_image();
-#ifdef FIM_REMOVE_FAILED
-			if(current()!=""){pop_current();	//removes the current file from the list.
-#ifdef FIM_AUTOSKIP_FAILED
-			next(0);reload();}
-#endif
-#endif
-			fim::string rs("error loading the file ");
-			rs+=c;
-			rs+="\n";
-			return rs;
-///			return fim::string("error loading the file ")
-//				+c+fim::string("\n");
-		}
+
+		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
 
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostReload",c);
@@ -526,7 +558,11 @@ namespace fim
 		 * loads the current file, if not already loaded
 		 */
 		fim::string c=current();
-		if(image()) return "image already loaded\n";		//warning
+		if(image() && ( image()->getName() == current()) )
+		{
+			return "image already loaded\n";		//warning
+		}
+		free_current_image();
 		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreLoad",c);
@@ -538,26 +574,10 @@ namespace fim
 #else
 		loaded_image = cache.getImage(current().c_str());
 #endif
-
 		if(cc.getIntVariable("_prefetch")) cache.prefetch(get_next_filename(1).c_str());
 		cc.setVariable("fileindex",current_image());
-		if(image() && ! (viewport().check_valid()))
-		{
-			free_current_image();
-#ifdef FIM_REMOVE_FAILED
-			if(current()!=""){pop_current();	//removes the current file from the list.
-#ifdef FIM_AUTOSKIP_FAILED
-			next(0);reload();
-#endif
-			}
-#endif
-			fim::string rs("error loading the file ");
-			rs+=c;
-			rs+="\n";
-			return rs;
-//			return fim::string("error loading the file ")
-//				+c+fim::string("\n");
-		}
+
+		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostLoad",c);
 #endif
@@ -619,7 +639,7 @@ namespace fim
 			return false;
 		}
 #endif
-
+//		cout << "PUSHING : " << info()<<  "\n";
 		flist.push_back(nf);
 		cc.setVariable("filelistlen",current_images());
 		if(cp==0)++cp;
@@ -627,13 +647,6 @@ namespace fim
 		return false;
 	}
 	
-	fim::string Browser::reload()
-	{
-		if(n_files())
-		return reload(std::vector<fim::string>());
-		return "";
-	}
-
 	int Browser::n_files()const
 	{
 		/*
@@ -745,13 +758,11 @@ namespace fim
 		 * jumps to the next image in the list
 		 */
 		fim::string c=current();
-//		cc.autocmd_exec("PreNext",current());
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreNext",c);
 #endif
 		fim::string result=do_next(n);
 #ifdef FIM_AUTOCMDS
-//		cc.autocmd_exec("PostNext",current());
 		cc.autocmd_exec("PostNext",c);
 #endif
 		return "";
@@ -861,6 +872,7 @@ namespace fim
 		return "";
 	}
 
+#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string Browser::scrollforward(const std::vector<fim::string> &args)
 	{
 		/*
@@ -913,6 +925,7 @@ namespace fim
 #endif
 		return "";
 	}
+#endif
 
 	fim::string Browser::info(const std::vector<fim::string> &args)
 	{
@@ -927,7 +940,17 @@ namespace fim
 	/*return fim::string(" [")+current()+fim::string("] (")
 		+fim::string(cp)+fim::string("/")
 		+fim::string(n_files())+fim::string(")\n");*/
+#if 0
+		string fl;
+		for(unsigned int r=0;r<flist.size();++r)
+		{
+			fl+=flist[r];
+			fl+="\n";
+		}
+		return fl;
+#else
 		return current();
+#endif
 	//	return list();
 	}
 
@@ -936,12 +959,7 @@ namespace fim
 		return info(std::vector<fim::string>(0));
 	}
 
-	fim::string Browser::redisplay(const std::vector<fim::string> &args)
-	{
-		redisplay();
-		return "";
-	}
-
+#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string Browser::scale_factor_grow(const std::vector<fim::string> &args)
 	{
 		/*
@@ -1037,9 +1055,11 @@ namespace fim
 		}
 		return "";
 	}
+#endif
 
 	fim::string Browser::prev(int n)
 	{
+		return "";
 		/*
 		 * make the previous image in the list current
 		 */
@@ -1121,6 +1141,17 @@ namespace fim
 #else
 		return (Viewport&)only_viewport;
 #endif
+	}
+
+	fim::string Browser::current()const
+	{
+		if(empty_file_list())return nofile; // FIXME: patch!
+	       	return cp?flist[current_n()]:nofile;
+	}
+
+	int Browser::empty_file_list()const
+	{
+		return flist.size()==0;
 	}
 }
 

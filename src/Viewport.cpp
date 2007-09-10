@@ -62,7 +62,7 @@ namespace fim
 			if(this->onTop())return;
 			s=(s==0)?steps:s;
 			top -= s;
-			redraw=1;
+			this->redraw=1;
 		}
 	}
 
@@ -74,7 +74,7 @@ namespace fim
 			if(this->onBottom())return;
 			s=(s==0)?steps:s;
 			top += s;
-			redraw=1;
+			this->redraw=1;
 		}
 	}
 
@@ -86,7 +86,7 @@ namespace fim
 			if(onRight())return;
 			s=(s==0)?steps:s;
 			left+=s;
-			redraw=1;
+			this->redraw=1;
 		}
 	}
 
@@ -98,7 +98,7 @@ namespace fim
 			if(onLeft())return;
 			s=(s==0)?steps:s;
 			left-=s;
-			redraw=1;
+			this->redraw=1;
 		}
 	}
 
@@ -148,22 +148,34 @@ namespace fim
 	{
 		if(this->onBottom())return;
 		if( check_valid() )top = image->height() - this->viewport_height();
-		redraw=1;
+		this->redraw=1;
 	}
 
 	void Viewport::top_align()
 	{
 		if(this->onTop())return;
 		top=0;
-		redraw=1;
+		this->redraw=1;
 	}
 
 
 
 	void Viewport::redisplay()
 	{
-	    	redraw=1;
+	    	this->redraw=1;
 		display();
+	}
+
+	void Viewport::null_display()
+	{
+		if( g_fim_no_framebuffer || cc.noFrameBuffer() )return;
+		if(this->redraw==0 || cc.noFrameBuffer())return;
+		fb_clear_rect(
+				cc.viewport_xorigin(),
+				cc.viewport_xorigin()+cc.viewport_width()*fs_bpp,
+				cc.viewport_yorigin(),
+				cc.viewport_yorigin()+cc.viewport_height()
+				);
 	}
 
 	void Viewport::display()
@@ -176,16 +188,16 @@ namespace fim
 		 *	memory.
 		 *	no scaling occurs, only some alignment.
 		 */
-		if(redraw==0 || cc.noFrameBuffer())return;
-
+		if(this->redraw==0 || cc.noFrameBuffer())return;
+//		if(cc.noFrameBuffer())return;
+		if( check_invalid() ) null_display();//  NEW
 		if( check_invalid() ) return;
 		int autotop=cc.getIntVariable("autotop");
 		int flip=cc.getIntVariable("autoflip");
 		int mirror=cc.getIntVariable("automirror");
     
 		if(g_fim_no_framebuffer)return;
-
-		if (new_image && redraw)
+		if (new_image && this->redraw)
 		{
 			if(autotop && image->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
 		  	{
@@ -199,7 +211,7 @@ namespace fim
 			new_image = 0;
 		}
 		else
-		//if (redraw  ) 
+		//if (this->redraw  ) 
 		{
 			/*
 			 * This code should be studied in detail..
@@ -230,9 +242,9 @@ namespace fim
 		}
 		if(only_first_rescale){only_first_rescale=0;return;}
 		
-		if(redraw)
+		if(this->redraw)
 		{
-			redraw=0;
+			this->redraw=0;
 			/*
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
@@ -299,6 +311,8 @@ namespace fim
 		}
 
 		//if(ni)
+		image = NULL;
+		reset(); // !
 		image = ni;
 		//WARNING !!
 	}
@@ -307,7 +321,7 @@ namespace fim
         {
 		if(image)image->reset();
                 new_image=1;
-                redraw=1;
+                this->redraw=1;
                 top  = 0;
                 left = 0;
         }
@@ -371,7 +385,7 @@ namespace fim
         bool Viewport::check_invalid()
 	{
 		// FIXME
-		if(!image)return false;
+		if(!image)return true;
 		if( image)return image->check_invalid();
 		return true;
 	}

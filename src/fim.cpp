@@ -130,7 +130,10 @@ namespace fim
 	void cleanup_and_exit(int code)
 	{
 		if(g_fim_no_framebuffer)
+		{
+			tty_restore();
 			std::exit(code);
+		}
 		else
 		{
 			fb_clear_mem();
@@ -735,8 +738,7 @@ int main(int argc,char *argv[])
 #endif
 //	char             *desc,*info;
 	char c;
-	g_fim_no_framebuffer=1;
-	int g_fim_no_framebuffer_tmp=0;//patch : FIXME
+	g_fim_no_framebuffer=0;
 
 	setlocale(LC_ALL,"");	//uhm..
     	for (;;) {
@@ -853,7 +855,7 @@ int main(int argc,char *argv[])
 	    break;
 	case 't':
 	    //fim's
-	    	g_fim_no_framebuffer_tmp=1;
+	    	g_fim_no_framebuffer=1;
 	    break;
 #ifdef FIM_READ_STDIN
 	case '-':
@@ -896,7 +898,9 @@ int main(int argc,char *argv[])
 		if(*argv[i]=='-'&&!argv[i][1])read_file_list_from_stdin=1;
 		else
 #endif
+		{
 			cc.push(argv[i]);
+		}
 	}
 	lexer=new yyFlexLexer;	//used by YYLEX
 
@@ -922,7 +926,7 @@ int main(int argc,char *argv[])
 	}
 #endif
 
-	if((g_fim_no_framebuffer=g_fim_no_framebuffer_tmp)==0)
+	if((g_fim_no_framebuffer)==0)
 	{
 		framebuffer_init();
 		tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)

@@ -63,12 +63,12 @@ class Browser
 	fim::string last_regexp;
 	fim::Cache cache;
 	public:
-	int empty_file_list()const{ return flist.size()==0;}
+	int empty_file_list()const;
 	int current_image()const{ return cp; }
 	int current_images()const{ return n(); }
 	Browser();
 	~Browser() { }
-	fim::string current()const{ return cp?flist[current_n()]:nofile; }
+	fim::string current()const;
 	fim::string regexp_goto(const std::vector<fim::string> &args);
 	fim::string prefetch(const std::vector<fim::string> &args);
 	fim::string regexp_goto_next(const std::vector<fim::string> &args);
@@ -76,6 +76,7 @@ class Browser
 	fim::string goto_image(int n);
 	fim::string top_align(const std::vector<fim::string> &args);
 	fim::string bottom_align(const std::vector<fim::string> &args);
+#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string pan_ne(const std::vector<fim::string> &args);
 	fim::string pan_nw(const std::vector<fim::string> &args);
 	fim::string pan_sw(const std::vector<fim::string> &args);
@@ -96,6 +97,9 @@ class Browser
 	fim::string scale_factor_decrease(const std::vector<fim::string> &args);
 	fim::string scale_factor_grow(const std::vector<fim::string> &args);
 	fim::string scale_factor_shrink(const std::vector<fim::string> &args);
+	fim::string scrolldown(const std::vector<fim::string> &args);
+	fim::string scrollforward(const std::vector<fim::string> &args);
+#endif
 	fim::string display(const std::vector<fim::string> &args);
 	fim::string display_status(const char *l,const char*r);
 
@@ -115,8 +119,6 @@ class Browser
 	fim::string prev(const std::vector<fim::string> &args){return prev(args.size()>0?((int)args[0]):1);}
 	fim::string remove(const std::vector<fim::string> &args);
 	fim::string info(const std::vector<fim::string> &args);
-	fim::string scrolldown(const std::vector<fim::string> &args);
-	fim::string scrollforward(const std::vector<fim::string> &args);
 	fim::string info();
 	std::ostream& print(std::ostream &os)const;
 	void redisplay();
@@ -127,6 +129,7 @@ class Browser
 	fim::string pop(const std::vector<fim::string> &args);
 	const fim::string pop_current();
 	fim::string pop_current(const std::vector<fim::string> &args){return pop_current();}
+	fim::string no_image(const std::vector<fim::string> &args);
 	bool present(const fim::string nf);
 	bool push(const fim::string nf);
 
@@ -146,6 +149,7 @@ class Browser
 	fim::string do_next(int n);
 
 	void free_current_image();
+	fim::string Browser::load_error_handle(fim::string c);
 	public:
 };
 }

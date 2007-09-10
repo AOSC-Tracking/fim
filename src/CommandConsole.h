@@ -138,7 +138,7 @@ class CommandConsole
 	int  setVariable(const fim::string& varname,int value);
 	float setVariable(const fim::string& varname,float value);
 	int setVariable(const fim::string& varname,const char*value);
-	bool push(const fim::string nf){return browser.push(nf);}
+	bool push(const fim::string nf);
 	int executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd);
 #ifndef FIM_NOSCRIPTING
