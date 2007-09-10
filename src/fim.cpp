@@ -527,7 +527,7 @@ void initialize_readline ()
 
 
 fim::CommandConsole cc;
-	int g_fim_no_framebuffer;
+	int g_fim_no_framebuffer=1;
 
 /* Generator function for command completion.  STATE lets us
  *    know whether to start from scratch; without any state
@@ -735,7 +735,8 @@ int main(int argc,char *argv[])
 #endif
 //	char             *desc,*info;
 	char c;
-	g_fim_no_framebuffer=0;
+	g_fim_no_framebuffer=1;
+	int g_fim_no_framebuffer_tmp=0;//patch : FIXME
 
 	setlocale(LC_ALL,"");	//uhm..
     	for (;;) {
@@ -852,7 +853,7 @@ int main(int argc,char *argv[])
 	    break;
 	case 't':
 	    //fim's
-	    	g_fim_no_framebuffer=1;
+	    	g_fim_no_framebuffer_tmp=1;
 	    break;
 #ifdef FIM_READ_STDIN
 	case '-':
@@ -921,7 +922,7 @@ int main(int argc,char *argv[])
 	}
 #endif
 
-	if(g_fim_no_framebuffer==0)
+	if((g_fim_no_framebuffer=g_fim_no_framebuffer_tmp)==0)
 	{
 		framebuffer_init();
 		tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)

@@ -38,12 +38,14 @@ namespace fim
 	{
 		// WARNING : this constructor will be filled soon
 		image=NULL;
+		reset();
 	}
 
 	Viewport::Viewport(const Viewport &v):Image(NULL)
 	{
 		// WARNING
 		image=NULL;
+		reset();
 		memcpy(this,&v,sizeof(Viewport));
 		this->img  = fbi_image_clone(this->img );
 		this->fimg = fbi_image_clone(this->fimg);
@@ -175,8 +177,11 @@ namespace fim
 		 */
 		if(redraw==0 || cc.noFrameBuffer())return;
 
+		cout << "predis\n";
+		if(img)cout << "postdis!!!\n";
 		if( check_invalid() ) return;
-		
+		if(img)cout << "postdis!!!\n";
+		cout << "postdis\n";
 		int autotop=cc.getIntVariable("autotop");
 		int flip=cc.getIntVariable("autoflip");
 		int mirror=cc.getIntVariable("automirror");
@@ -279,15 +284,19 @@ namespace fim
 //		return new Viewport();
 	}
 
-
         Image* Viewport::getImage()const
 	{
-		return image;
+		return (Image*)this; // !!
+		//return image;
 	}
 
         void Viewport::setImage(fim::Image* ni)
 	{
+		if(!ni)return;
 		if(ni)image = ni;
+		if(ni->img )img=ni->img;
+		if(ni->fimg)fimg=ni->fimg;
+		//WARNING !!
 	}
 
         void Viewport::reset()

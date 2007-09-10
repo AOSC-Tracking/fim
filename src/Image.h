@@ -56,13 +56,17 @@ class Image
 	float            newascale ;
 
 	bool revertToLoaded();
+
+	/* virtual stuff */
+        struct ida_image *img     ;     /* local (eventually) copy images */
+	struct ida_image *fimg    ;     /* master image */
+
+
 	private:
 
 
 	/* image methods */
 	bool load(const char *fname_);
-
-	/* virtual stuff */
 
 	protected:
 	int              neworientation;
@@ -76,8 +80,6 @@ class Image
 	string  fname;  /* viewport variable, too */
 
 
-        struct ida_image *img     ;     /* local (eventually) copy images */
-	struct ida_image *fimg    ;     /* master image */
 
 	public:
 	void reset();

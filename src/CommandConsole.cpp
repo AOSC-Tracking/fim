@@ -263,12 +263,13 @@ namespace fim
 		return "usage : help CMD   (use TAB to get a list of commands :) )\n";
 	}
 
-#ifdef FIM_WINDOWS
-	CommandConsole::CommandConsole():window(Rect(0,0,1024,768))
-#else
 	CommandConsole::CommandConsole()
-#endif
 	{
+#ifdef FIM_WINDOWS
+		// FIXME : DANGER
+		window = new Window(Rect(0,0,1024,768));
+#endif
+
 #ifdef FIM_RECORDING
 		dont_record_last_action=false;
 		recordMode=false;
@@ -279,7 +280,7 @@ namespace fim
 		cycles=0;isinscript=0;
 		setVariable("steps",50);
 #ifdef FIM_WINDOWS
-		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"),&window,&Window::cmd));
+		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"), window,&Window::cmd));
 #endif
 		addCommand(new Command(fim::string("next" ),fim::string("displays the next picture in the list"),&browser,&Browser::next));
 		addCommand(new Command(fim::string("prev" ),fim::string("displays the previous picture in the list"),&browser,&Browser::prev));
@@ -1746,12 +1747,15 @@ int CommandConsole::executeFile(const char *s)
 #ifdef FIM_WINDOWS
 	Viewport& CommandConsole::current_viewport()const
 	{
+		//FIXME
 		return current_window().current_viewport();
 	}
 
 	const Window & CommandConsole::current_window()const
 	{
-		return window;
+		//FIXME
+
+		return *window;
 	}
 
 	unsigned int CommandConsole::viewport_height()const

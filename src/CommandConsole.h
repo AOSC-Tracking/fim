@@ -31,7 +31,7 @@ namespace fim
 class CommandConsole
 {
 #ifdef FIM_WINDOWS
-	fim::Window window;
+	fim::Window * window;
 #endif
 	/*
 	 * the registered command methods and objects

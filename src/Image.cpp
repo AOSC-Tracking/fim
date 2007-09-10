@@ -57,9 +57,9 @@ namespace fim
 		/*
 		 *	FIX ME
 		 */
+		img=fimg=NULL; //this is important
 		reset();
-		load(fname_);
-		if( check_invalid() || (!fimg) ) 
+		if( !load(fname_) || check_invalid() || (!fimg) ) 
 		{
 			cout << "warning : invalid loading ! \n";
 		}
@@ -100,7 +100,7 @@ namespace fim
 		img=fimg;
 	        redraw=1;
 		if(! img){cout<<"warning : image loading error!\n"   ;invalid=1;return false;}
-		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return false;}
+//		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return false;}
 		return true;
 	}
 
@@ -165,8 +165,6 @@ namespace fim
                 }
                 return false;
         }
-
-
 
         void Image::free()
         {

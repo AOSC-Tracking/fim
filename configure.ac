@@ -132,8 +132,13 @@ AC_ARG_ENABLE(default_config, AC_HELP_STRING([--disable-default_config], [Builti
 
 #CPPFLAGS=$DEPS
 AC_SUBST(LIBPNG_CFLAGS)
-AC_SUBST(FIM_CFLAGS)
 AC_SUBST(LIBPNG_LIBS)
+AC_SUBST(FIM_CFLAGS)
+AC_SUBST(FIM_CXXFLAGS)
+
+# if the wollowing are commented, system defaults will be used
+#FIM_CFLAGS="-g -O2"
+#FIM_CXXFLAGS="-g -O2"
 
 
 AC_ARG_ENABLE(system, AC_HELP_STRING([--disable-system], [Disable system() and pipe() calls.]),
@@ -475,15 +480,19 @@ dnl ==================
 
 # This code still awaits for integration ...
 AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CFLAGS], 
-	[Specify a custom (no spaces!!) single CFLAGS append value.  e.g.: -pg
+	[Specify a custom CFLAGS append value.  e.g.: -pg
 	 You can't call this argument multiple times.
 	 In case you want completely reset CFLAGS use :
 	 CFLAGS='<all that you want>' ./configure ..
 	]),
-        [if test x$withval != xyes; then
+        [if test "x$withval" != x; then
                 AC_DEFINE_UNQUOTED(CFLAGS, "$withval",
                  [custom CFLAGS])
-		FIM_CFLAGS="$CFLAGS $withval"
+		FIM_CFLAGS="$withval"
+		CFLAGS="$FIM_CFLAGS"
+		CXXFLAGS="$FIM_CFLAGS"
+	else
+		FIM_CFLAGS="$CFLAGS"
         fi],
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
 
@@ -509,6 +518,9 @@ AC_SUBST(FIMLIBS)
 AC_SUBST(DEFS)
 AC_SUBST(EXTRADEFS)
 AC_SUBST(FIM_LIB_OBJECTS)
+
+#CFLAGS="$FIM_CFLAGS"
+#CXXFLAGS="$FIM_CFLAGS"
 
 #AC_CONFIG_FILES([Makefile],[src/Makefile])
 

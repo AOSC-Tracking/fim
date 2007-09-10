@@ -50,6 +50,7 @@ namespace fim
 
 	void Browser::redisplay()
 	{
+		return; // FIXMe
 		/*
 		 * Given a current() file, we display it again like 
 		 * the first time it should be displayed.
@@ -129,6 +130,7 @@ namespace fim
 
 	fim::string Browser::pan_up(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * pan the image up
 		 */
@@ -149,6 +151,7 @@ namespace fim
 	
 	fim::string Browser::pan_down(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * pan the image down
 		 */
@@ -169,6 +172,7 @@ namespace fim
 
 	fim::string Browser::pan_ne(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * pan the image ne
 		 */
@@ -190,6 +194,7 @@ namespace fim
 
 	fim::string Browser::pan_nw(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * pan the image nw
 		 */
@@ -211,6 +216,7 @@ namespace fim
 
 	fim::string Browser::pan_sw(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * pan the image sw
 		 */
@@ -232,6 +238,7 @@ namespace fim
 
 	fim::string Browser::pan_se(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * pan the image se
 		 */
@@ -253,6 +260,7 @@ namespace fim
 
 	fim::string Browser::scale_multiply(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * scales the image by a user specified factor
 		 */
@@ -276,6 +284,7 @@ namespace fim
 	
 	fim::string Browser::scale_increment(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * increments the scale additively
 		 */
@@ -300,6 +309,7 @@ namespace fim
 
 	fim::string Browser::scale(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * scales the image to a certain factor
 		 */
@@ -324,6 +334,7 @@ namespace fim
 	
 	fim::string Browser::auto_height_scale(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * scale this image to fit in the screen in the vertical dimension
 		 */
@@ -343,6 +354,7 @@ namespace fim
 	
 	fim::string Browser::auto_width_scale(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * scale this image to fit in the screen in the horizontal dimension
 		 */
@@ -362,6 +374,7 @@ namespace fim
 
 	fim::string Browser::auto_scale(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * auto scale the image accordingly to the *default* settings !
 		 */
@@ -381,6 +394,7 @@ namespace fim
 
 	fim::string Browser::pan_right(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * pan the image right
 		 */
@@ -401,6 +415,7 @@ namespace fim
 
 	fim::string Browser::pan_left(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * pan the image left
 		 */
@@ -461,7 +476,7 @@ namespace fim
 	{
 #ifdef FIM_WINDOWS
 		if(image()) viewport().free(); //NOTE : cache is wasted in this way.
-		viewport().setImage( cache.getImage(current().c_str()) );
+//		viewport().setImage( cache.getImage(current().c_str()) );
 #else
 		if(image())
 		{
@@ -525,7 +540,7 @@ namespace fim
 		if(image()) return "image already loaded\n";		//warning
 		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
-		cc.autocmd_exec("PreLoad",c);
+//		cc.autocmd_exec("PreLoad",c);
 #endif
 		set_status_bar("please wait while loading...", "*");
 
@@ -859,6 +874,7 @@ namespace fim
 
 	fim::string Browser::scrollforward(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * scrolls the image as it were a book :)
 		 *
@@ -889,6 +905,7 @@ namespace fim
 
 	fim::string Browser::scrolldown(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * scrolls the image down 
 		 *
@@ -986,6 +1003,7 @@ namespace fim
 
 	fim::string Browser::magnify(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * magnify the displayed image
 		 * FIX ME 
@@ -1011,6 +1029,7 @@ namespace fim
 
 	fim::string Browser::reduce(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * reduce the displayed image
 		 * FIX ME 
@@ -1036,6 +1055,7 @@ namespace fim
 
 	fim::string Browser::prev(int n)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * make the previous image in the list current
 		 */
@@ -1052,6 +1072,7 @@ namespace fim
 
 	fim::string Browser::top_align(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * align to top the displayed image
 		 */ 
@@ -1074,6 +1095,7 @@ namespace fim
 
 	fim::string Browser::bottom_align(const std::vector<fim::string> &args)
 	{
+		return "CLOSED\n";//FIXMe
 		/*
 		 * align to the bottom the displayed image
 		 */ 
@@ -1096,6 +1118,7 @@ namespace fim
 
 	Image *Browser::image()const
 	{
+//		return NULL; // this is safe.. but invalidating
 	#ifdef FIM_WINDOWS
 //		return cc.current_window().getImage();
 		return cc.current_viewport().getImage();

@@ -97,12 +97,12 @@ namespace fim
 
 	Window::Window(const Rect& corners_):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
 	{
-		viewport=NULL;
+		viewport=new Viewport();
 	}
 
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
 	{
-		viewport=NULL;
+		viewport=new Viewport();
 	}
 
 	bool Window::issplit()const
@@ -644,6 +644,11 @@ namespace fim
 	Viewport & Window::current_viewport()const
 	{
 		//FIXME
+		if(!viewport)
+		{
+			cout << "WINDOW : NO VIeWPORT !\n";
+			cc.quit();
+		}
 		return *viewport;
 //		return (Viewport &)(viewport);
 	}	
