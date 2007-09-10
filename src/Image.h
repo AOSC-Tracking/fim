@@ -43,7 +43,6 @@ namespace fim
 class Image
 {
 
-	//int redraw;	// there is already an external one!
 
 	public:
 
@@ -74,8 +73,6 @@ class Image
 	int              rotation;
 
 	int    invalid;		//the first time the image is loaded it is set to 1
-	int    new_image;		//the first time the image is loaded it is set to 1
-	int only_first_rescale;		//TEMPORARY
 
 	string  fname;  /* viewport variable, too */
 
@@ -83,7 +80,7 @@ class Image
 
 	public:
 	void reset();
-	int rescale();
+	int rescale( float ns=0.0 );
 
 	const char* getName(){return fname.c_str();}
         int tiny()const;
@@ -105,11 +102,14 @@ class Image
         void free();
 
 	char* getInfo();
-	virtual void scale_fix_top_left(){}
+//	virtual void scale_fix_top_left(){}
 
 	int width();
+	int original_width();
 	int height();
+	int original_height();
 
+	void resize(int nw, int nh);
 };
 }
 #endif

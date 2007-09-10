@@ -42,14 +42,28 @@ namespace fim
  *	 Private ones are stricter.
  * 
  */
-	int Image::width()
+	int Image::original_width()
 	{
+		//FIXME
 		return fimg->i.width;
+	}
+
+	int Image::original_height()
+	{
+		//FIXME
+		return fimg->i.height;
+	}
+
+		int Image::width()
+	{
+		//FIXME
+		return img->i.width;
 	}
 
 	int Image::height()
 	{
-		return fimg->i.height;
+		//FIXME
+		return img->i.height;
 	}
 
 	Image::Image(const char *fname_)
@@ -70,7 +84,7 @@ namespace fim
 			 *	variables prior to first visualization without displaying..
 			 */
 			cc.setVariable("filename",fname_);
-			only_first_rescale=1;
+//			only_first_rescale=1; // WARNING !!
 			//this->display();
 			//if(cc.isInScript()==0)this->auto_scale();
 		}
@@ -80,6 +94,18 @@ namespace fim
 	{
 		steps = cc.getIntVariable("steps");
 		if(steps<1)steps = 50;
+
+                scale    = 1.0;
+                newscale = 1.0;
+                ascale   = 1.0;
+                newascale= 1.0;
+
+                fimg    = NULL; // !
+                invalid=0;
+                img     = NULL;
+                orientation=0;
+                neworientation=0;
+
 	}
 	
 	bool Image::load(const char *fname_)
@@ -173,14 +199,14 @@ namespace fim
                 reset();
         }
 
-	int Image::rescale()
+	int Image::rescale( float ns )
 	{
+		if(ns!=0.0)newscale=ns;//patch
 		/*
 		 *	This code is bugful, when called from the constructor, on in a pre-user phase.
 		 * 	20070401 hmm  i think it is ok now
 		 */
 		if( check_invalid() ) return - 1;
-
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
 
 		if(g_fim_no_framebuffer)return 0;
@@ -191,7 +217,7 @@ namespace fim
 		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=neworientation; // fix this
-		scale_fix_top_left();
+//		scale_fix_top_left();
 //		status(linebuffer, NULL);
 		cc.setVariable("scale",newscale*100);
 
@@ -247,5 +273,11 @@ namespace fim
 		if(fimg)return make_info(fimg,scale);return NULL;
 	}
 
+	void Image::resize(int nw, int nh)
+	{
+		//fixme
+		if(check_invalid())return;
+		
+	}
 
 }

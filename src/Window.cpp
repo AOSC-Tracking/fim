@@ -97,12 +97,16 @@ namespace fim
 
 	Window::Window(const Rect& corners_):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
 	{
+		viewport=NULL;
 		viewport=new Viewport();
+		if(!viewport)cc.quit(); // WARNING
 	}
 
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
 	{
+		viewport=NULL;
 		viewport=new Viewport();
+		if(!viewport)cc.quit(); // WARNING
 	}
 
 	bool Window::issplit()const

@@ -266,7 +266,7 @@ namespace fim
 	CommandConsole::CommandConsole()
 	{
 #ifdef FIM_WINDOWS
-		// FIXME : DANGER
+		// FIXME : DANGER, WARNING
 		window = new Window(Rect(0,0,1024,768));
 #endif
 
@@ -425,10 +425,13 @@ namespace fim
 			//when debugging Fim, we are not interested in this feature
 			this->quit();
 		}
+#ifdef FIM_AUTOCMDS
+		// WARNING
 		if(postInitCommand!=fim::string(""))
 			autocmd_add("PreExecutionCycle","",postInitCommand.c_str());
 		if(postExecutionCommand!=fim::string(""))
 			autocmd_add("PostExecutionCycle","",postExecutionCommand.c_str());
+#endif
 		/*
 		 *	FIX ME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
 		 * */

@@ -33,7 +33,7 @@ namespace fim
 	 * FIXME:
 	 * 20070909 A Viewport object does NOT own an image, so it should be deallocated elsewhere!!
 	 * */
-class Viewport:public Image
+class Viewport
 {
 	protected:
 	int		steps,top,left ;	/* viewport variables */
@@ -61,10 +61,13 @@ class Viewport:public Image
 
 	protected:
 
+	int only_first_rescale;		//TEMPORARY
+	//int redraw;	// there is already an external one!
 	/* viewport methods */
 	int viewport_width();
 	int viewport_height();
 
+	int    new_image;		//the first time the image is loaded it is set to 1
 	public:
 	/* viewport methods */
 	void top_align();
@@ -83,6 +86,11 @@ class Viewport:public Image
         Image* Viewport::getImage()const;
 
 	void auto_scale();
+
+	void free();
+        bool check_invalid();
+        bool check_valid();
+	int valid();
 };
 }
 #endif

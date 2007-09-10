@@ -34,21 +34,22 @@
  */
 namespace fim
 {
-	Viewport::Viewport():Image(NULL)
+	Viewport::Viewport()
 	{
 		// WARNING : this constructor will be filled soon
 		image=NULL;
 		reset();
 	}
 
-	Viewport::Viewport(const Viewport &v):Image(NULL)
+	Viewport::Viewport(const Viewport &v)
 	{
 		// WARNING
+//		image=new Image(v.getImage());
 		image=NULL;
 		reset();
 		memcpy(this,&v,sizeof(Viewport));
-		this->img  = fbi_image_clone(this->img );
-		this->fimg = fbi_image_clone(this->fimg);
+//		image->img  = fbi_image_clone(this->img );
+//		image->fimg = fbi_image_clone(this->fimg);
 		// WARNING : these could be NULL's : fixme
 		// WARNING : THIS INSTANTIATION OF Viewport NEEDS AD HOC DESTRUCTOR!
 	}
@@ -104,13 +105,13 @@ namespace fim
 	int Viewport::onBottom()
 	{
 		if(g_fim_no_framebuffer || check_invalid() )return 0;
-		return (top + viewport_height() >= img->i.height);
+		return (top + viewport_height() >= image->height());
 	}
 
 	int Viewport::onRight()
 	{
 		if(g_fim_no_framebuffer || check_invalid() )return 0;
-		return (left + viewport_width() >= img->i.width);
+		return (left + viewport_width() >= image->width());
 	}
 
 	int Viewport::onLeft()
@@ -146,7 +147,7 @@ namespace fim
 	void Viewport::bottom_align()
 	{
 		if(this->onBottom())return;
-		if( check_valid() )top = img->i.height - this->viewport_height();
+		if( check_valid() )top = image->height() - this->viewport_height();
 		redraw=1;
 	}
 
@@ -177,11 +178,7 @@ namespace fim
 		 */
 		if(redraw==0 || cc.noFrameBuffer())return;
 
-		cout << "predis\n";
-		if(img)cout << "postdis!!!\n";
 		if( check_invalid() ) return;
-		if(img)cout << "postdis!!!\n";
-		cout << "postdis\n";
 		int autotop=cc.getIntVariable("autotop");
 		int flip=cc.getIntVariable("autoflip");
 		int mirror=cc.getIntVariable("automirror");
@@ -190,15 +187,15 @@ namespace fim
 
 		if (new_image && redraw)
 		{
-			if(autotop && img->i.height>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
+			if(autotop && image->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
 		  	{
-			    top=autotop>0?0:img->i.height-this->viewport_height();
+			    top=autotop>0?0:image->height()-this->viewport_height();
 			}
 			/* start with centered image, if larger than screen */
-			if (img->i.width > this->viewport_width() )
-				left = (img->i.width - this->viewport_width()) / 2;
-			if (img->i.height > this->viewport_height() &&  autotop==0)
-				top = (img->i.height - this->viewport_height()) / 2;
+			if (image->width()  > this->viewport_width() )
+				left = (image->width() - this->viewport_width()) / 2;
+			if (image->height() > this->viewport_height() &&  autotop==0)
+				top = (image->height() - this->viewport_height()) / 2;
 			new_image = 0;
 		}
 		else
@@ -208,7 +205,7 @@ namespace fim
 			 * This code should be studied in detail..
 			 * as it is is straight from fbi.
 			 */
-	    		if (img->i.height <= this->viewport_height())
+	    		if (image->height() <= this->viewport_height())
 	    		{
 				top = 0;
 	    		}
@@ -216,10 +213,10 @@ namespace fim
 			{
 				if (top < 0)
 					top = 0;
-				if (top + this->viewport_height() > img->i.height)
-		    			top = img->i.height - this->viewport_height();
+				if (top + this->viewport_height() > image->height())
+		    			top = image->height() - this->viewport_height();
 	    		}
-			if (img->i.width <= this->viewport_width())
+			if (image->width() <= this->viewport_width())
 			{
 				left = 0;
 	    		}
@@ -227,14 +224,15 @@ namespace fim
 			{
 				if (left < 0)
 				    left = 0;
-				if (left + this->viewport_width() > img->i.width)
-			    		left = img->i.width - this->viewport_width();
+				if (left + this->viewport_width() > image->width())
+			    		left = image->width() - this->viewport_width();
 		    	}
 		}
 		if(only_first_rescale){only_first_rescale=0;return;}
 		
 		if(redraw)
 		{
+		cout << "DISPLAY\n";
 			redraw=0;
 			/*
 			 * there should be more work to use double buffering (if possible!?)
@@ -242,7 +240,7 @@ namespace fim
 			 */
 			//fb_clear_screen();
 #ifdef FIM_WINDOWS
-			svga_display_image_new(img, left, top,
+			svga_display_image_new(image->img, left, top,
 					cc.viewport_xorigin(),
 					cc.viewport_width(),
 					cc.viewport_yorigin(),
@@ -262,17 +260,18 @@ namespace fim
 		if(g_fim_no_framebuffer)xs=ys=1.0f;
 		else
 		{
-			xs = (float)this->viewport_width()  / fimg->i.width;
-			ys = (float)this->viewport_height() / fimg->i.height;
+			xs = (float)this->viewport_width()  / image->original_width();
+			ys = (float)this->viewport_height() / image->original_height();
 		}
 
-		newscale = (xs < ys) ? xs : ys;
-		rescale();
+		image->rescale( (xs < ys) ? xs : ys );
 	}
 
-	int Viewport::valid()const
+	int Viewport::valid()
 	{
-		return invalid?0:1;
+		//fixme
+		return check_valid();
+//		return invalid?0:1;
 	}
 
 	Viewport::Viewport* clone()
@@ -280,13 +279,14 @@ namespace fim
 		/*
 		 * FIXME : this is essential to implement properly window splitting mechanisms!!
 		 **/
+		cc.quit();
 		return NULL;
 //		return new Viewport();
 	}
 
         Image* Viewport::getImage()const
 	{
-		return (Image*)this; // !!
+		return image; // !!
 		//return image;
 	}
 
@@ -294,68 +294,82 @@ namespace fim
 	{
 		if(!ni)return;
 		if(ni)image = ni;
-		if(ni->img )img=ni->img;
-		if(ni->fimg)fimg=ni->fimg;
+//		if(ni->img )img=ni->img;
+//		if(ni->fimg)fimg=ni->fimg;
 		//WARNING !!
 	}
 
         void Viewport::reset()
         {
-		((Image*)this)->reset(); /* i love vtable */
+		if(image)image->reset();
                 new_image=1;
                 redraw=1;
-                scale    = 1.0;
-                newscale = 1.0;
-                ascale   = 1.0;
-                newascale= 1.0;
                 top = 0;
                 left = 0;
-                fimg    = NULL;
-                img     = NULL;
-                invalid=0;
-                orientation=0;
-                neworientation=0;
         }
 
 	void Viewport::auto_height_scale()
 	{
+		float newscale;
 		if( check_invalid() ) return;
 
-		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / this->width();
-		newscale = (float)this->viewport_height() / this->height();
+		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / image->width();
+		else newscale = (float)this->viewport_height() / image->height();
 
-		rescale();
+		image->rescale(newscale);
 	}
 
 	void Viewport::auto_width_scale()
 	{
+		float newscale;
 		if( check_invalid() ) return;
 
-		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / width();
+		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / image->width();
 
-		rescale();
+		image->rescale(newscale);
 	}
 
 	void Viewport::scale_fix_top_left()
 	{
+		return;
 		/*
 		 * this function operates on the image currently in memory
 		 *
 		 * WARNING : IT SEEMS .. USELESS :)
 		 */
 		if(g_fim_no_framebuffer)return;
-
-		float old=scale;float fnew=newscale;
+		if(!image)return;
+			
+		float old=image->scale;float fnew=image->newscale;
 		unsigned int width, height;
 		float cx,cy;
-		cx = (float)(left + this->viewport_width() /2) / (img->i.width  * old);
-		cy = (float)(top  + this->viewport_height()/2) / (img->i.height * old);
-		width  = (int)(img->i.width  * fnew);
-		height = (int)(img->i.height * fnew);
-		left   = (int)(cx * width  - this->viewport_width() /2);
-		top    = (int)(cy * height - this->viewport_height()/2);
+		cx = (float)(left + this->viewport_width() /2) / (image->width()  * old);
+		cy = (float)(top  + this->viewport_height()/2) / (image->height() * old);
+//		image->width  = (int)(image->width()  * fnew);
+//		image->height = (int)(image->height() * fnew);
+		left   = (int)(cx * image->width()  - this->viewport_width() /2);
+		top    = (int)(cy * image->height() - this->viewport_height()/2);
 		//the cast was added by me...
-		scale = newscale;
+//		image->scale = newscale;
+	}
+
+	void Viewport::free()
+	{
+		//WARNING : THIS SHOULD FREE IMAGES !!
+		//see browser first
+	}
+
+        bool Viewport::check_valid()
+	{
+		return ! check_invalid();
+	}
+
+        bool Viewport::check_invalid()
+	{
+		// FIXME
+		if(!image)return false;
+		if( image)return image->check_invalid();
+		return true;
 	}
 
 }
