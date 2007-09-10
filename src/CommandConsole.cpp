@@ -1293,6 +1293,7 @@ int CommandConsole::executeFile(const char *s)
 			acl+=(*aui); 
 			acl+="\"\n"; 
 		}
+		if(acl=="")acl="no autocommands loaded\n";
 		return acl;
 	}
 
@@ -1330,13 +1331,16 @@ int CommandConsole::executeFile(const char *s)
 		 *
 		 * TODO : VALID VS INVALID EVENTS?
 		 */
-		if(cmd==""){cout << "can't add empty autocommand\n";return "";}
+		if(cmd=="")
+		{
+			cout << "can't add empty autocommand\n";return "";
+		}
 		for(unsigned int i=0;i<autocmds[event][pat].size();++i)
-			if((autocmds[event][pat][i])==cmd)
-			{
-				cout << "autocommand "<<cmd<<" already specified for event \""<<event<<"\" and pattern \""<<pat<<"\"\n";
-				return "";
-			}
+		if((autocmds[event][pat][i])==cmd)
+		{
+			cout << "autocommand "<<cmd<<" already specified for event \""<<event<<"\" and pattern \""<<pat<<"\"\n";
+			return "";
+		}
 		autocmds[event][pat].push_back(cmd);
 		return "";
 	}
@@ -1756,8 +1760,11 @@ int CommandConsole::executeFile(const char *s)
 
 	const Window & CommandConsole::current_window()const
 	{
-		//FIXME
-
+		if(!window)
+		{
+			cout << "no window!!\n";
+			cc.quit(); // note that this is a violation :)
+		}
 		return *window;
 	}
 

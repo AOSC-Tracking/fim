@@ -54,16 +54,18 @@ namespace fim
 		return fimg->i.height;
 	}
 
-		int Image::width()
+	int Image::width()
 	{
 		//FIXME
 		return img->i.width;
+		return (img?img:fimg)->i.width;
 	}
 
 	int Image::height()
 	{
 		//FIXME
 		return img->i.height;
+		return (img?img:fimg)->i.height;
 	}
 
 	Image::Image(const char *fname_)
@@ -141,15 +143,18 @@ namespace fim
 		if( img )//in the case img is a third copy (should not occur)
 		{
 			free_image(img);
-			img = NULL;
+			img = fimg;
 		}
 		if(!fimg) return false; // this is bad, but could occur!
-		reset();
+//		reset();
 		return  true;
 		
 	}
 
-        int Image::tiny()const{if(!img)return 1; return ( img->i.width<=1 || img->i.height<=1 );}
+        int Image::tiny()const
+	{
+		if(!img)return 1; return ( img->i.width<=1 || img->i.height<=1 );
+	}
 
 	int Image::scale_multiply(double  sm)
 	{
@@ -183,7 +188,7 @@ namespace fim
                 */
 
 		//ACHTUNG! 
-		//if(!img ){img=fimg;}
+		if(!img ){img=fimg;}
                 if(!img)
                 {
                         invalid=1;
@@ -201,7 +206,7 @@ namespace fim
 
 	int Image::rescale( float ns )
 	{
-		if(ns!=0.0)newscale=ns;//patch
+		if(ns>0.0)newscale=ns;//patch
 		/*
 		 *	This code is bugful, when called from the constructor, on in a pre-user phase.
 		 * 	20070401 hmm  i think it is ok now
@@ -220,7 +225,6 @@ namespace fim
 //		scale_fix_top_left();
 //		status(linebuffer, NULL);
 		cc.setVariable("scale",newscale*100);
-
 		if(fimg)
 		{
 			/*
@@ -233,6 +237,10 @@ namespace fim
 			struct ida_image *backup_img=img;
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 				set_status_bar("please wait while rescaling...", getInfo());
+				cout << " scale ; " << scale << "\n";
+				cout << "ascale ; " <<ascale << "\n";
+				cout << "w:"<<width()<<"\n";
+				cout << "h:"<<height()<<"\n";
 			img  = scale_image(fimg,scale,cc.getFloatVariable("ascale"));
 			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
 			if( img && orientation== 2)img  = flip_image(img);

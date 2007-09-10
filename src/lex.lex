@@ -177,11 +177,6 @@ STRINGC_DQ {STRINGC}|\'
 
 [ \t]+ { /* we ignore whitespace */ ; }
 
-"\n"	{
-	return NEWLINE;	/* still experimental */
-	}
-
-
 
 . printf("Unknown character :'%s'\n",yytext);yyerror("Unknown character");
 	/*THERE SHOULD GO LEX ERRORS..*/

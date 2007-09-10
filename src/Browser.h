@@ -46,7 +46,10 @@ class Browser
 	 */
 	int cp;
 
+#ifndef FIM_WINDOWS
 	Image *loaded_image;
+	Viewport only_viewport;
+#endif
 
 	Image *image()const;
 

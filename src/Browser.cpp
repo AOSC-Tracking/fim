@@ -92,7 +92,9 @@ namespace fim
 		/*
 		 * we initialize to no file
 		 */
+#ifndef FIM_WINDOWS
 		loaded_image=NULL;
+#endif
 		cp=0;	//and to file index 0 (no file)
 	}
 
@@ -462,6 +464,7 @@ namespace fim
 	{
 #ifdef FIM_WINDOWS
 		if(image()) viewport().free(); //NOTE : cache is wasted in this way.
+		viewport().setImage( NULL );
 //		viewport().setImage( cache.getImage(current().c_str()) );
 #else
 		if(image())
@@ -526,7 +529,7 @@ namespace fim
 		if(image()) return "image already loaded\n";		//warning
 		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
-//		cc.autocmd_exec("PreLoad",c);
+		cc.autocmd_exec("PreLoad",c);
 #endif
 		set_status_bar("please wait while loading...", "*");
 
@@ -1115,6 +1118,8 @@ namespace fim
 		 * */
 #ifdef FIM_WINDOWS
 		return (cc.current_viewport());
+#else
+		return (Viewport&)only_viewport;
 #endif
 	}
 }

@@ -43,26 +43,22 @@ namespace fim
 class Image
 {
 
-
+	friend class Viewport;
 	public:
 
 	Image(const char *fname_);
 	~Image();
 
+	bool revertToLoaded();
+	private:
 	float            scale    ;	/* viewport variables */
 	float            ascale   ;
 	float            newscale ;
 	float            newascale ;
 
-	bool revertToLoaded();
-
 	/* virtual stuff */
         struct ida_image *img     ;     /* local (eventually) copy images */
 	struct ida_image *fimg    ;     /* master image */
-
-
-	private:
-
 
 	/* image methods */
 	bool load(const char *fname_);
@@ -76,6 +72,7 @@ class Image
 
 	string  fname;  /* viewport variable, too */
 
+        void free();
 
 
 	public:
@@ -99,7 +96,6 @@ class Image
 	bool check_invalid();
 	bool check_valid();
 
-        void free();
 
 	char* getInfo();
 //	virtual void scale_fix_top_left(){}

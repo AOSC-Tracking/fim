@@ -420,6 +420,40 @@ fi
 
 dnl ==================
 
+fim_cv_autocommands=yes
+
+AC_ARG_ENABLE(autocommands, AC_HELP_STRING([--disable-autocommands], [Fim will by default use autocommands.]),
+[if test x$enableval = xno; then
+        fim_cv_autocommands=no
+fi])
+
+if test x$fim_cv_autocommands = xyes; then
+	have_autocommands=yes
+	EXTRADEFS="$EXTRADEFS -D FIM_AUTOCMDS"
+else
+	have_autocommands=no
+fi
+
+
+dnl ==================
+
+fim_cv_windows=yes
+
+AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Enable Fim's own windowing system.]),
+[if test x$enableval = xno; then
+        fim_cv_windows=no
+fi])
+
+if test x$fim_cv_windows = xyes; then
+	have_windows=yes
+	EXTRADEFS="$EXTRADEFS -D FIM_WINDOWS"
+else
+	have_windows=no
+fi
+
+
+dnl ==================
+
 fim_cv_fimrc=yes
 
 AC_ARG_ENABLE(fimrc, AC_HELP_STRING([--disable-fimrc], [Fim will by default load the ~.fimrc file.]),
@@ -544,6 +578,8 @@ AC_MSG_NOTICE([
 	gif  file support                   : ${fim_handle_gif:-no}
 	patch for running under screen on?  : ${have_boz_patch:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
+	autocommands enabled                : ${have_autocommands:-no}
+	internal windowing system           : ${have_windows:-no}
 
 	If you are not satisfied with this configuration, please run :
 

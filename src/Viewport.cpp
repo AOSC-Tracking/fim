@@ -232,7 +232,6 @@ namespace fim
 		
 		if(redraw)
 		{
-		cout << "DISPLAY\n";
 			redraw=0;
 			/*
 			 * there should be more work to use double buffering (if possible!?)
@@ -247,7 +246,7 @@ namespace fim
 					cc.viewport_height(),
 					mirror, flip);
 #else
-			svga_display_image(img, left, top, mirror, flip);
+			svga_display_image(image->img, left, top, mirror, flip);
 #endif					
 		}
 	}
@@ -292,10 +291,15 @@ namespace fim
 
         void Viewport::setImage(fim::Image* ni)
 	{
-		if(!ni)return;
-		if(ni)image = ni;
-//		if(ni->img )img=ni->img;
-//		if(ni->fimg)fimg=ni->fimg;
+		//the image could be NULL
+		//this image is not tightly bound!
+		if(image)
+		{
+		
+		}
+
+		//if(ni)
+		image = ni;
 		//WARNING !!
 	}
 
@@ -304,7 +308,7 @@ namespace fim
 		if(image)image->reset();
                 new_image=1;
                 redraw=1;
-                top = 0;
+                top  = 0;
                 left = 0;
         }
 
