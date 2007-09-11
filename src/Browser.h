@@ -116,7 +116,7 @@ class Browser
 	fim::string _sort(const std::vector<fim::string> &args){return _sort();}
 	fim::string next(const std::vector<fim::string> &args){return next(args.size()>0?((int)args[0]):1);}
 	fim::string prev(int n=1);
-	fim::string prev(const std::vector<fim::string> &args){return prev(args.size()>0?((int)args[0]):1);}
+	fim::string prev(const std::vector<fim::string> &args);
 	fim::string remove(const std::vector<fim::string> &args);
 	fim::string info(const std::vector<fim::string> &args);
 	fim::string info();
@@ -149,7 +149,7 @@ class Browser
 	fim::string do_next(int n);
 
 	void free_current_image();
-	fim::string Browser::load_error_handle(fim::string c);
+	fim::string load_error_handle(fim::string c);
 	public:
 };
 }

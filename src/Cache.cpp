@@ -36,7 +36,7 @@ namespace fim
 		return count;
 	}
 
-	Image* Cache::get_lru()
+	Image* Cache::get_lru( bool unused )
 	{
 		lru_t::const_iterator lrui;
 
@@ -47,7 +47,7 @@ namespace fim
 		if ( cached_elements() < 1 ) return NULL;
 		cachels_t::const_iterator ci;
 		for( ci=imageCache.begin();ci!=imageCache.end();++ci)
-		if( lru[ci->second] < m_time )
+		if( lru[ci->second] < m_time  && ( ! unused || usageCounter[ci->first]<=0  ) )
 		{
 			m_time = lru[ci->second];
 			l_img  = ci->second;
@@ -124,7 +124,7 @@ namespace fim
 			 * so it could be useful in the future.
 			 * */
 			if( oi->revertToLoaded() )//removes internal scale caches
-				cacheImage( oi );
+				cacheImage( oi ); //FIXME : validity should be checked ..
 		}
 
 		/*
@@ -151,7 +151,53 @@ namespace fim
 		return ( this->imageCache[fim::string(fname)] != NULL );
 	}
 
-	Image *Cache::getImage(const char *fname)
+	bool Cache::freeCachedImage(Image *image)
+	{
+		if(image)
+			return freeCachedImage(image->getName());
+	}
+
+	bool Cache::freeCachedImage(const char *fname)
+	{
+		/*
+		 * declare this image as unused and decrease a relative counter.
+		 * then delete image.
+		 * a useImage action will do the converse operation.
+		 *
+		 * if the image was a clone, it is deleted!
+		 * */
+		int i;
+		if(!haveImage(fname)) return true;	// we couldn't care less
+		if( usageCounter[fname] <= 0 ) return false;//some problem!
+		usageCounter[fname]--;
+		if( usageCounter[fname] >= 0 && (i=cloneCache[fname].size())>0 )
+		{
+			delete cloneCache[fname][i-1];
+			cloneCache[fname].pop_back();
+		}
+		return ( free( this->imageCache[fim::string(fname)] ) == 0 );
+	}
+
+	Image * Cache::useCachedImage(const char *fname)
+	{
+		/*
+		 * declare this image as used an increase a relative counter.
+		 * a freeImage action will do the converse operation (and delete).
+		 * */
+		Image * image=NULL;
+		if(!haveImage(fname))
+		{
+			image = getImage(fname);
+			if(haveImage(fname)) usageCounter[fname]=0;
+			else return NULL; // lassimm' perd'
+		}
+		usageCounter[fname]++;
+		image=getImage(fname);// in this way we update the LRU cache :)
+		if( usageCounter[fname] >= 1 && image )image=image->getClone(); // EVIL !!
+		return image;	
+	}
+
+	Image * Cache::getImage(const char *fname)
 	{
 		Image *ni = NULL;
 	

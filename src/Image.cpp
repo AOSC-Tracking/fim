@@ -293,4 +293,19 @@ namespace fim
 		
 	}
 
+	Image::Image(const Image& image)
+	{
+		// FIXME
+		img=fimg=NULL; //this is important
+		reset();
+		memcpy(this,&image,sizeof(Image));
+		img  = fbi_image_clone(image.img );
+		fimg = fbi_image_clone(image.fimg);
+	}
+
+	Image * Image::getClone()
+	{
+		return new Image(*this);
+	}
+
 }

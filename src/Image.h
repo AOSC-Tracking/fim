@@ -74,6 +74,7 @@ class Image
 
         void free();
 
+	Image(const Image& image); // yes, a private constructor
 
 	public:
 	void reset();
@@ -105,6 +106,7 @@ class Image
 	int height();
 	int original_height();
 
+	Image * getClone();
 	void resize(int nw, int nh);
 };
 }

@@ -478,14 +478,14 @@ namespace fim
 	void Browser::free_current_image()
 	{
 #ifdef FIM_WINDOWS
-		if(image()) cache.free(image());
+		if(image()) cache.freeCachedImage(image());
 		if(image()) viewport().free(); //NOTE : cache is wasted in this way.
 		// FIXME : here should land support for cache reusing !
 		viewport().setImage( NULL );
 #else
 		if(image())
 		{
-			cache.free(image());
+			cache.freeCachedImage(image());
 			loaded_image=NULL;
 		}
 		loaded_image = cache.getImage(current().c_str());
@@ -536,9 +536,9 @@ namespace fim
 #endif
 		free_current_image();
 #ifdef FIM_WINDOWS
-		viewport().setImage( cache.getImage(current().c_str()) );
+		viewport().setImage( cache.useCachedImage(current().c_str()) );
 #else
-		loaded_image = cache.getImage(current().c_str());
+		loaded_image = cache.useCachedImage(current().c_str());
 #endif
 
 		if(cc.getIntVariable("_prefetch")) cache.prefetch(get_next_filename(1).c_str());/*this will become an autocommand*/
@@ -570,7 +570,7 @@ namespace fim
 		set_status_bar("please wait while loading...", "*");
 
 #ifdef FIM_WINDOWS
-		viewport().setImage( cache.getImage(current().c_str()) );
+		viewport().setImage( cache.useCachedImage(current().c_str()) );
 #else
 		loaded_image = cache.getImage(current().c_str());
 #endif
@@ -766,6 +766,27 @@ namespace fim
 		cc.autocmd_exec("PostNext",c);
 #endif
 		return "";
+	}
+
+	fim::string Browser::prev(int n)
+	{
+		/*
+		 * make the previous image in the list current
+		 */
+		fim::string c=current();
+#ifdef FIM_AUTOCMDS
+		cc.autocmd_exec("PrePrev",c);
+#endif
+		fim::string result=do_next(-n);
+#ifdef FIM_AUTOCMDS
+		cc.autocmd_exec("PostPrev",c);
+#endif
+		return "";
+	}
+
+	fim::string Browser::prev(const std::vector<fim::string> &args)
+	{
+		return prev(args.size()>0?((int)args[0]):1);
 	}
 
 	fim::string Browser::get_next_filename(int n)
@@ -1056,23 +1077,6 @@ namespace fim
 		return "";
 	}
 #endif
-
-	fim::string Browser::prev(int n)
-	{
-		return "";
-		/*
-		 * make the previous image in the list current
-		 */
-		fim::string c=current();
-#ifdef FIM_AUTOCMDS
-		cc.autocmd_exec("PrePrev",c);
-#endif
-		fim::string result=do_next(-n);
-#ifdef FIM_AUTOCMDS
-		cc.autocmd_exec("PostPrev",c);
-#endif
-		return "";
-	}
 
 	fim::string Browser::top_align(const std::vector<fim::string> &args)
 	{

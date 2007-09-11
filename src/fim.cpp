@@ -131,7 +131,7 @@ namespace fim
 	{
 		if(g_fim_no_framebuffer)
 		{
-			tty_restore();
+		//	tty_restore();
 			std::exit(code);
 		}
 		else
