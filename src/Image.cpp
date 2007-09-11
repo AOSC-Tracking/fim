@@ -94,7 +94,7 @@ namespace fim
 
 	void Image::reset()
 	{
-
+		cout << "ReSeT!\n";
                 scale    = 1.0;
                 newscale = 1.0;
                 ascale   = 1.0;
@@ -224,7 +224,7 @@ namespace fim
 //		scale_fix_top_left();
 //		status(linebuffer, NULL);
 
-		newscale=1.0;scale=1.0; ascale=1.0; // FIXME : WARNING 
+//		newscale=2.0;scale=2.0; ascale=1.0; // FIXME : WARNING 
 
 		cc.setVariable("scale",newscale*100);
 		if(fimg)
@@ -244,7 +244,7 @@ namespace fim
 				cout << "ascale ; " <<ascale << "\n";
 				cout << "w:"<<width()<<"\n";
 				cout << "h:"<<height()<<"\n";
-			img  = scale_image(fimg,scale,cc.getFloatVariable("ascale"));
+			img  = scale_image(fimg,scale=newscale,cc.getFloatVariable("ascale"));
 			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
 			if( img && orientation== 2)img  = flip_image(img);
 			if(!img)
@@ -268,12 +268,14 @@ namespace fim
 
 	void Image::reduce(float factor)
 	{
+//		factor = 2.0;scale=1.0;ascale=1.0;
 		newscale = scale / factor;
 		rescale();
 	}
 
 	void Image::magnify(float factor)
 	{
+//		factor = 2.0;scale=1.0;ascale=1.0;
 		newscale = scale * factor;
 		rescale();
 	}

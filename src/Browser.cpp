@@ -57,7 +57,7 @@ namespace fim
 
 	void Browser::redisplay()
 	{
-		return; // FIXMe
+		//return; // FIXMe
 		/*
 		 * Given a current() file, we display it again like 
 		 * the first time it should be displayed.
@@ -263,7 +263,6 @@ namespace fim
 		return "";
 	}
 
-#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string Browser::scale_multiply(const std::vector<fim::string> &args)
 	{
 		/*
@@ -391,7 +390,6 @@ namespace fim
 		}
 		return "";
 	}
-#endif
 
 	fim::string Browser::pan_right(const std::vector<fim::string> &args)
 	{
@@ -979,7 +977,6 @@ namespace fim
 		return info(std::vector<fim::string>(0));
 	}
 
-#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string Browser::scale_factor_grow(const std::vector<fim::string> &args)
 	{
 		/*
@@ -1075,7 +1072,6 @@ namespace fim
 		}
 		return "";
 	}
-#endif
 
 	fim::string Browser::top_align(const std::vector<fim::string> &args)
 	{

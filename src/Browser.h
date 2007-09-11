@@ -86,7 +86,6 @@ class Browser
 	fim::string pan_left(const std::vector<fim::string> &args);
 	fim::string scrolldown(const std::vector<fim::string> &args);
 	fim::string scrollforward(const std::vector<fim::string> &args);
-#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string scale_increment(const std::vector<fim::string> &args);
 	fim::string scale_multiply(const std::vector<fim::string> &args);
 	fim::string auto_scale(const std::vector<fim::string> &args);
@@ -99,7 +98,6 @@ class Browser
 	fim::string scale_factor_decrease(const std::vector<fim::string> &args);
 	fim::string scale_factor_grow(const std::vector<fim::string> &args);
 	fim::string scale_factor_shrink(const std::vector<fim::string> &args);
-#endif
 	fim::string display(const std::vector<fim::string> &args);
 	fim::string display_status(const char *l,const char*r);
 
