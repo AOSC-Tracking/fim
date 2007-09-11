@@ -98,14 +98,14 @@ namespace fim
 	Window::Window(const Rect& corners_):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
 	{
 		viewport=NULL;
-		viewport=new Viewport();
+		viewport=new Viewport(this);
 		if(!viewport)cc.quit(); // WARNING
 	}
 
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
 	{
 		viewport=NULL;
-		viewport=new Viewport();
+		viewport=new Viewport(this);
 		if(!viewport)cc.quit(); // WARNING
 	}
 
@@ -247,6 +247,7 @@ namespace fim
 		{
 			first  = new Window(this->corners.hsplit(Rect::Upper));
 			second = new Window(this->corners.hsplit(Rect::Lower));
+			viewport = NULL;
 		}
 		else focused().hsplit();
 	}
@@ -265,6 +266,7 @@ namespace fim
 		{
 			first  = new Window(this->corners.vsplit(Rect::Left ));
 			second = new Window(this->corners.vsplit(Rect::Right));
+			viewport = NULL;
 		}
 		else focused().vsplit();
 	}
@@ -395,7 +397,7 @@ namespace fim
 		return focus = ~focus;
 	}
 
-	int Window::heigth()const
+	int Window::height()const
 	{
 		return corners.h ;
 	}
@@ -406,7 +408,7 @@ namespace fim
 		return corners.w=w;
 	}
 
-	int Window::setheigth(int h)
+	int Window::setheight(int h)
 	{
 		//!
 		return corners.h=h;
@@ -442,7 +444,7 @@ namespace fim
 	bool Window::can_vgrow(const Window & window, int howmuch)
 	{
 	//!!
-		return window.heigth() + howmuch + vspacing  < heigth();
+		return window.height() + howmuch + vspacing  < height();
 	}
 
 	bool Window::can_hgrow(const Window & window, int howmuch)
@@ -474,18 +476,18 @@ namespace fim
 		return
 //		(hnormalize(xorigin(), width())!= -1);
 		(hnormalize(xorigin(), width() )!= -1) &&
-		(vnormalize(yorigin(), heigth())!= -1);
+		(vnormalize(yorigin(), height())!= -1);
 	}
 
 	int Window::vnormalize(int y, int h)
 	{
 		/*
-		 * equalizes the horizontal divisions heigths
+		 * equalizes the horizontal divisions heights
 		 * */
 		if(isleaf())
 		{
 			setyorigin(y);
-			setheigth(h);
+			setheight(h);
 			return 0;
 		}
 		else
@@ -498,7 +500,7 @@ namespace fim
 			if(hdivs>h)return -1;// no space left
 			//...
 			setyorigin(y);
-			setheigth(h);
+			setheight(h);
 
 			if(ishsplit())
 			{
@@ -643,11 +645,42 @@ namespace fim
 		}
 	}
 
-}
+	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
+	void Window::recursive_redisplay()const
+	{
+		if(isleaf())
+		{
+			if(viewport)viewport->redisplay();
+			cout << "leaf: "<< width() << " " << height() << "\n";
+		}
+		else
+		{
+			focused().recursive_redisplay();
+			shadowed().recursive_redisplay();
+		}
+	}
+
+	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
+	void Window::recursive_display()const
+	{
+		if(isleaf())
+		{
+			if(viewport)viewport->display();
+		}
+		else
+		{
+			focused().recursive_display();
+			shadowed().recursive_display();
+		}
+	}
+
 
 	Viewport & Window::current_viewport()const
 	{
 		//FIXME
+		if(!isleaf()) return focused().current_viewport();
+
+		// isleaf
 		if(!viewport)
 		{
 			cout << "WINDOW : NO VIeWPORT !\n";
@@ -662,6 +695,7 @@ namespace fim
 		return current_viewport().getImage();
 	}
 
+}
 #if 0
 /*
  *	A test main program.

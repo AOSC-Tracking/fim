@@ -30,6 +30,7 @@ namespace fim
 {
 class CommandConsole
 {
+	friend class Browser;
 #ifdef FIM_WINDOWS
 	fim::Window * window;
 #endif

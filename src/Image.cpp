@@ -240,10 +240,10 @@ namespace fim
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 				set_status_bar("please wait while rescaling...", getInfo());
 			//FIXME !!!
-				cout << " scale ; " << scale << "\n";
+/*				cout << " scale ; " << scale << "\n";
 				cout << "ascale ; " <<ascale << "\n";
 				cout << "w:"<<width()<<"\n";
-				cout << "h:"<<height()<<"\n";
+				cout << "h:"<<height()<<"\n";*/
 			img  = scale_image(fimg,scale=newscale,cc.getFloatVariable("ascale"));
 			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
 			if( img && orientation== 2)img  = flip_image(img);
@@ -256,6 +256,7 @@ namespace fim
 			}
 			else if(img!=fimg) free_image(backup_img);
 			redraw=1;
+ 	                new_image=1; // for centering
 			cc.setVariable("height",(int)fimg->i.height);
 			cc.setVariable("sheight",(int)img->i.height);
 			cc.setVariable("width",(int)fimg->i.width);

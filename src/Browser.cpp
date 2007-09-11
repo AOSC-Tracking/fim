@@ -75,7 +75,10 @@ namespace fim
 #endif
 			if(image())
 			{
-				viewport().redisplay();	//THE BUG IS NOT HERE
+//				viewport().redisplay();	//THE BUG IS NOT HERE
+				cc.display();
+				//FIXME
+//				if(cc.window)cc.window->recursive_redisplay();	//THE BUG IS NOT HERE
 				this->display_status(info().c_str(), NULL);//THE BUG IS NOT HERE
 			}
 #ifdef FIM_AUTOCMDS
@@ -457,7 +460,10 @@ namespace fim
 			//	if(image())
 			{
 				//fb_clear_screen();
-				viewport().display();
+				//viewport().display();
+				cc.display();
+//				FIXME
+//				if(cc.window)cc.window->recursive_display();	//THE BUG IS NOT HERE
 				this->display_status(info().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS

@@ -1609,7 +1609,11 @@ int CommandConsole::executeFile(const char *s)
 		/*
 		 * quick and dirty display function
 		 */
-		browser.display();
+		// FIXME
+//		browser.display();
+//		if(window)window->recursive_display();
+		if(window)window->recursive_redisplay();
+		
 	}
 #ifdef FIM_RECORDING
 	void CommandConsole::record_action(const fim::string &cmd)
@@ -1771,7 +1775,7 @@ int CommandConsole::executeFile(const char *s)
 
 	unsigned int CommandConsole::viewport_height()const
 	{
-		return current_window().c_focused().heigth();
+		return current_window().c_focused().height();
 	}
 
 	unsigned int CommandConsole::viewport_width()const

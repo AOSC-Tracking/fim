@@ -69,6 +69,7 @@ class Image
 	int              rotation;
 
 	int    invalid;		//the first time the image is loaded it is set to 1
+	int    new_image;		//the first time the image is loaded it is set to 1
 
 	string  fname;  /* viewport variable, too */
 

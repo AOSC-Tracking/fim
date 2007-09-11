@@ -38,12 +38,13 @@ class Viewport
 	protected:
 	int		steps,top,left ;	/* viewport variables */
 
-	Image *image;	// !! 
+	Image  *image;	// !! 
+	Window *window;
 
 	public:
         void reset();
 
-	Viewport();
+	Viewport(Window *window);
 	Viewport(const Viewport &v);
 
 	int valid()const;
@@ -59,6 +60,8 @@ class Viewport
 	int onLeft();
 	int onTop();
 
+	int xorigin();
+	int yorigin();
 	protected:
 
 	int only_first_rescale;		//TEMPORARY
@@ -67,7 +70,6 @@ class Viewport
 	int viewport_width();
 	int viewport_height();
 
-	int    new_image;		//the first time the image is loaded it is set to 1
 	public:
 	/* viewport methods */
 	void top_align();

@@ -169,7 +169,7 @@ class Window
 	bool can_vgrow(const Window & window, int howmuch);
 	bool can_hgrow(const Window & window, int howmuch);
 
-	int heigth()const;
+	int height()const;
 	int width()const;
 	int xorigin()const;
 	int yorigin()const;
@@ -207,7 +207,7 @@ class Window
 	Window & right();
 
 	int setwidth(int w);
-	int setheigth(int h);
+	int setheight(int h);
 	int setxorigin(int x);
 	int setyorigin(int y);
 
@@ -221,6 +221,8 @@ class Window
 	const Window & c_shadowed()const;
         fim::string cmd(const std::vector<fim::string> &args);
 	void draw()const;
+	void recursive_redisplay()const;
+	void recursive_display()const;
 };
 
 }

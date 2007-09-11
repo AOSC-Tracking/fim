@@ -34,14 +34,14 @@
  */
 namespace fim
 {
-	Viewport::Viewport()
+	Viewport::Viewport(Window *window_):window(window_)
 	{
 		// WARNING : this constructor will be filled soon
 		image=NULL;
 		reset();
 	}
 
-	Viewport::Viewport(const Viewport &v)
+	Viewport::Viewport(const Viewport &v):window(v.window)
 	{
 		// WARNING
 //		image=new Image(v.getImage());
@@ -129,7 +129,9 @@ namespace fim
 	int Viewport::viewport_width()
 	{
 #ifdef FIM_WINDOWS
-		return cc.viewport_width();
+		//return cc.viewport_width();
+		//FIXME !
+		return window->width();
 #else
 		return fb_var.xres;
 #endif
@@ -138,7 +140,9 @@ namespace fim
 	int Viewport::viewport_height()
 	{
 #ifdef FIM_WINDOWS
-		return cc.viewport_height();
+//		return cc.viewport_height();
+		//FIXME !
+		return window->height();
 #else
 		return fb_var.yres;
 #endif
@@ -158,12 +162,22 @@ namespace fim
 		redraw=1;
 	}
 
-
-
 	void Viewport::redisplay()
 	{
 	    	redraw=1;
 		display();
+	}
+
+	int Viewport::xorigin()
+	{
+		//FIXME !
+		return window->xorigin();
+	}
+
+	int Viewport::yorigin()
+	{
+		//FIXME !
+		return window->yorigin();
 	}
 
 	void Viewport::null_display()
@@ -172,10 +186,10 @@ namespace fim
 		if(redraw==0 || cc.noFrameBuffer())return;
 #ifdef FIM_WINDOWS
 		fb_clear_rect(
-				cc.viewport_xorigin(),
-				cc.viewport_xorigin()+cc.viewport_width()*fs_bpp,
-				cc.viewport_yorigin(),
-				cc.viewport_yorigin()+cc.viewport_height()
+				xorigin(),
+				xorigin()+viewport_width()*fs_bpp,
+				yorigin(),
+				yorigin()+viewport_height()
 				);
 #else
 		fb_clear_rect( 0, viewport_width()*fs_bpp, 0, viewport_height());
@@ -201,8 +215,9 @@ namespace fim
 		int mirror=cc.getIntVariable("automirror");
     
 		if(g_fim_no_framebuffer)return;
-		if (new_image && redraw)
+		if (image->new_image && redraw)
 		{
+			cout << "NeW!!\n";
 			if(autotop && image->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
 		  	{
 			    top=autotop>0?0:image->height()-this->viewport_height();
@@ -212,8 +227,7 @@ namespace fim
 				left = (image->width() - this->viewport_width()) / 2;
 			if (image->height() > this->viewport_height() &&  autotop==0)
 				top = (image->height() - this->viewport_height()) / 2;
-			new_image = 0;
-			cout << "HMMM1\n";
+			image->new_image = 0;
 		}
 		else
 		if (redraw  ) 
@@ -261,18 +275,18 @@ namespace fim
 			//fb_clear_screen();
 #ifdef FIM_WINDOWS
 			svga_display_image_new(image->img, left, top,
-					cc.viewport_xorigin(),
-					cc.viewport_width(),
-					cc.viewport_yorigin(),
-					cc.viewport_height(),
+					xorigin(),
+					viewport_width(),
+					yorigin(),
+					viewport_height(),
 					mirror, flip);
 #else
 			svga_display_image(image->img, left, top, mirror, flip);
 #endif					
-			cout 
+/*			cout 
 				<<  top << " "
 				<< left << " "
-				<< "\n";
+				<< "\n";*/
 		}
 	}
 
@@ -332,8 +346,11 @@ namespace fim
 
         void Viewport::reset()
         {
-		if(image)image->reset();
-                new_image=1;
+		if(image)
+		{
+			image->reset();
+                	image->new_image=1;
+		}
                 redraw=1;
                 top  = 0;
                 left = 0;
