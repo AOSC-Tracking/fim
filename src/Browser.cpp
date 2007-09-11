@@ -101,6 +101,8 @@ namespace fim
 		 */
 #ifndef FIM_WINDOWS
 		loaded_image=NULL;
+		only_viewport = new Viewport();
+		// DANGER !!
 #endif
 		cp=0;	//and to file index 0 (no file)
 	}
@@ -137,7 +139,6 @@ namespace fim
 		return s;
 	}
 
-#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string Browser::pan_up(const std::vector<fim::string> &args)
 	{
 		/*
@@ -262,6 +263,7 @@ namespace fim
 		return "";
 	}
 
+#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string Browser::scale_multiply(const std::vector<fim::string> &args)
 	{
 		/*
@@ -389,6 +391,7 @@ namespace fim
 		}
 		return "";
 	}
+#endif
 
 	fim::string Browser::pan_right(const std::vector<fim::string> &args)
 	{
@@ -429,7 +432,6 @@ namespace fim
 		else prev();
 		return "";
 	}
-#endif
 
 	fim::string Browser::display_status(const char *l,const char *r)
 	{
@@ -488,7 +490,7 @@ namespace fim
 			cache.freeCachedImage(image());
 			loaded_image=NULL;
 		}
-		loaded_image = cache.getImage(current().c_str());
+//		loaded_image = cache.getImage(current().c_str());
 #endif
 	}
 
@@ -562,17 +564,16 @@ namespace fim
 		{
 			return "image already loaded\n";		//warning
 		}
-		free_current_image();
 		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PreLoad",c);
 #endif
 		set_status_bar("please wait while loading...", "*");
-
+		free_current_image();
 #ifdef FIM_WINDOWS
 		viewport().setImage( cache.useCachedImage(current().c_str()) );
 #else
-		loaded_image = cache.getImage(current().c_str());
+		loaded_image = cache.useCachedImage(current().c_str());
 #endif
 		if(cc.getIntVariable("_prefetch")) cache.prefetch(get_next_filename(1).c_str());
 		cc.setVariable("fileindex",current_image());
@@ -893,7 +894,6 @@ namespace fim
 		return "";
 	}
 
-#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string Browser::scrollforward(const std::vector<fim::string> &args)
 	{
 		/*
@@ -946,7 +946,6 @@ namespace fim
 #endif
 		return "";
 	}
-#endif
 
 	fim::string Browser::info(const std::vector<fim::string> &args)
 	{
@@ -1143,12 +1142,17 @@ namespace fim
 #ifdef FIM_WINDOWS
 		return (cc.current_viewport());
 #else
-		return (Viewport&)only_viewport;
+		// DANGER !
+		return *only_viewport;
 #endif
 	}
 
 	fim::string Browser::current()const
 	{
+		/*
+		 * dilemma : should the current() filename and next() operations
+		 * be relative to viewport's own current's ?
+		 * */
 		if(empty_file_list())return nofile; // FIXME: patch!
 	       	return cp?flist[current_n()]:nofile;
 	}

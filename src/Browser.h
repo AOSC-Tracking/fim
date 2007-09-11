@@ -48,7 +48,7 @@ class Browser
 
 #ifndef FIM_WINDOWS
 	Image *loaded_image;
-	Viewport only_viewport;
+	Viewport *only_viewport;
 #endif
 
 	Image *image()const;
@@ -76,29 +76,29 @@ class Browser
 	fim::string goto_image(int n);
 	fim::string top_align(const std::vector<fim::string> &args);
 	fim::string bottom_align(const std::vector<fim::string> &args);
-#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string pan_ne(const std::vector<fim::string> &args);
 	fim::string pan_nw(const std::vector<fim::string> &args);
 	fim::string pan_sw(const std::vector<fim::string> &args);
 	fim::string pan_se(const std::vector<fim::string> &args);
 	fim::string pan_up(const std::vector<fim::string> &args);
 	fim::string pan_down(const std::vector<fim::string> &args);
+	fim::string pan_right(const std::vector<fim::string> &args);
+	fim::string pan_left(const std::vector<fim::string> &args);
+	fim::string scrolldown(const std::vector<fim::string> &args);
+	fim::string scrollforward(const std::vector<fim::string> &args);
+#ifdef FIM_ALWAYS_UNDEFINED
 	fim::string scale_increment(const std::vector<fim::string> &args);
 	fim::string scale_multiply(const std::vector<fim::string> &args);
 	fim::string auto_scale(const std::vector<fim::string> &args);
 	fim::string auto_width_scale(const std::vector<fim::string> &args);
 	fim::string scale(const std::vector<fim::string> &args);
 	fim::string auto_height_scale(const std::vector<fim::string> &args);
-	fim::string pan_right(const std::vector<fim::string> &args);
-	fim::string pan_left(const std::vector<fim::string> &args);
 	fim::string reduce(const std::vector<fim::string> &args);
 	fim::string magnify(const std::vector<fim::string> &args);
 	fim::string scale_factor_increase(const std::vector<fim::string> &args);
 	fim::string scale_factor_decrease(const std::vector<fim::string> &args);
 	fim::string scale_factor_grow(const std::vector<fim::string> &args);
 	fim::string scale_factor_shrink(const std::vector<fim::string> &args);
-	fim::string scrolldown(const std::vector<fim::string> &args);
-	fim::string scrollforward(const std::vector<fim::string> &args);
 #endif
 	fim::string display(const std::vector<fim::string> &args);
 	fim::string display_status(const char *l,const char*r);

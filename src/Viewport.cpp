@@ -170,12 +170,16 @@ namespace fim
 	{
 		if( g_fim_no_framebuffer || cc.noFrameBuffer() )return;
 		if(this->redraw==0 || cc.noFrameBuffer())return;
+#ifdef FIM_WINDOWS
 		fb_clear_rect(
 				cc.viewport_xorigin(),
 				cc.viewport_xorigin()+cc.viewport_width()*fs_bpp,
 				cc.viewport_yorigin(),
 				cc.viewport_yorigin()+cc.viewport_height()
 				);
+#else
+		fb_clear_rect( 0, viewport_width()*fs_bpp, 0, viewport_height());
+#endif
 	}
 
 	void Viewport::display()
@@ -209,10 +213,13 @@ namespace fim
 			if (image->height() > this->viewport_height() &&  autotop==0)
 				top = (image->height() - this->viewport_height()) / 2;
 			new_image = 0;
+			cout << "HMMM1\n";
 		}
 		else
-		//if (this->redraw  ) 
+//		if (this->redraw  ) 
+		if(0)
 		{
+			cout << "HMMM\n";
 			/*
 			 * This code should be studied in detail..
 			 * as it is is straight from fbi.
@@ -260,6 +267,10 @@ namespace fim
 #else
 			svga_display_image(image->img, left, top, mirror, flip);
 #endif					
+			cout 
+				<<  top << " "
+				<< left << " "
+				<< "\n";
 		}
 	}
 
@@ -324,6 +335,14 @@ namespace fim
                 this->redraw=1;
                 top  = 0;
                 left = 0;
+
+#ifdef FIM_WINDOWS
+		steps = cc.getIntVariable("steps");
+		if(steps<1)steps = 50;
+#else 
+		// WARNING : FIXME, TEMPORARY
+		steps = 50;
+#endif
         }
 
 	void Viewport::auto_height_scale()

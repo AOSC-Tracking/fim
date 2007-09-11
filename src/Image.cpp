@@ -94,8 +94,6 @@ namespace fim
 
 	void Image::reset()
 	{
-		steps = cc.getIntVariable("steps");
-		if(steps<1)steps = 50;
 
                 scale    = 1.0;
                 newscale = 1.0;
