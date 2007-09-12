@@ -485,7 +485,7 @@ namespace fim
 	{
 #ifdef FIM_WINDOWS
 		if(image()) cache.freeCachedImage(image());
-		if(image()) viewport().free(); //NOTE : cache is wasted in this way.
+//		if(image()) viewport().free(); //NOTE : cache is wasted in this way.
 		// FIXME : here should land support for cache reusing !
 		viewport().setImage( NULL );
 #else
@@ -1142,9 +1142,11 @@ namespace fim
 		 * whenever the image is loaded !
 		 * */
 #ifdef FIM_WINDOWS
+
 		return (cc.current_viewport());
 #else
 		// DANGER !
+//		if(!only_viewport)cc.quit();
 		return *only_viewport;
 #endif
 	}

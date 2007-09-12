@@ -99,14 +99,14 @@ namespace fim
 	{
 		viewport=NULL;
 		viewport=new Viewport(this);
-		if(!viewport)cc.quit(); // WARNING
+//		if(!viewport)cc.quit(); // WARNING
 	}
 
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
 	{
 		viewport=NULL;
 		viewport=new Viewport(this);
-		if(!viewport)cc.quit(); // WARNING
+//		if(!viewport)cc.quit(); // WARNING
 	}
 
 	bool Window::issplit()const
@@ -684,7 +684,7 @@ namespace fim
 		if(!viewport)
 		{
 			cout << "WINDOW : NO VIeWPORT !\n";
-			cc.quit();
+//			cc.quit();
 		}
 		return *viewport;
 //		return (Viewport &)(viewport);

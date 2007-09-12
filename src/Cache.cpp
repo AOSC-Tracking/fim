@@ -32,6 +32,8 @@ namespace fim
 	{
 		int count=0;
 		cachels_t::const_iterator ci;
+
+		// FIXME : :)
 		for( ci=imageCache.begin();ci!=imageCache.end();++ci)++count;
 		return count;
 	}
@@ -44,6 +46,7 @@ namespace fim
 		time_t m_time;
 		m_time = time(NULL);
 		Image*  l_img=NULL;
+
 		if ( cached_elements() < 1 ) return NULL;
 		cachels_t::const_iterator ci;
 		for( ci=imageCache.begin();ci!=imageCache.end();++ci)
@@ -53,6 +56,17 @@ namespace fim
 			l_img  = ci->second;
 		}
 		return l_img;
+	}
+
+	int Cache::free_all()
+	{
+		/*
+		 * free all unused elements from the cache
+		 */
+		
+		rcachels_t rcc = reverseCache;
+                for(    rcachels_t::const_iterator rcci=rcc.begin(); rcci!=rcc.end();++rcci )
+			if(usageCounter[rcci->first->getName()]==0)erase( rcci->first );
 	}
 
 	int Cache::free_some_lru()
@@ -65,24 +79,12 @@ namespace fim
 		return erase( get_lru()  );
 	}
 
-	int Cache::erase(fim::Image* oi)
+	int Cache::erase_clone(fim::Image* oi)
 	{
-		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!oi)
-		{
-			return -1;
-		}
-
-		if(is_in_cache(oi))
-		{
-			delete imageCache[reverseCache[oi]];
-			lru.erase(oi);
-			imageCache.erase(reverseCache[oi]);
-			reverseCache.erase(oi);
-			cc.setVariable("_cached_images",cached_elements());
-			return 0;
-		}
-		return -1;
+		if(!oi || !is_in_clone_cache(oi))return -1;
+		delete oi;
+		clone_pool.erase(oi);
+		return 0;
 	}
 
 	bool Cache::need_free()const
@@ -102,6 +104,13 @@ namespace fim
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
 
+	bool Cache::is_in_clone_cache(fim::Image* oi)
+	{
+		/*	acca' nun stimm'a'ppazzia'	*/
+		if(!oi)return -1;
+		return *(clone_pool.find(oi))==oi;
+	}
+
 	bool Cache::is_in_cache(fim::Image* oi)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
@@ -109,6 +118,7 @@ namespace fim
 		return reverseCache[oi]!="";
 	}
 
+#if 0
 	int Cache::free(fim::Image* oi)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
@@ -116,6 +126,7 @@ namespace fim
 
 		if(!is_in_cache(oi))
 		{
+#if 0
 			/* if the image is not already one of ours, it 
 			 * is probably a cloned one, and the caller 
 			 * didn't know this.
@@ -125,6 +136,10 @@ namespace fim
 			 * */
 			if( oi->revertToLoaded() )//removes internal scale caches
 				cacheImage( oi ); //FIXME : validity should be checked ..
+#else
+			delete oi;
+#endif
+			return 0;
 		}
 
 		/*
@@ -136,6 +151,7 @@ namespace fim
 		//if(need_free())free_some_lru();
 		else return 0;	/* no free needed */
 	}
+#endif
 
 	int Cache::prefetch(const char *fname)
 	{
@@ -151,31 +167,98 @@ namespace fim
 		return ( this->imageCache[fim::string(fname)] != NULL );
 	}
 
-	bool Cache::freeCachedImage(Image *image)
+	Image * Cache::loadNewImage(const char *fname)
 	{
-		if(image)
-			return freeCachedImage(image->getName());
+		Image *ni = NULL;
+		/*	load attempt as alternative approach	*/
+		if( ni = new Image(fname) )
+		{	
+			if( cacheNewImage( ni ) ) 
+			return ni;
+		}
+		return NULL;
+	}
+	
+	Image * Cache::getImage(const char *fname)
+	{
+		Image *ni = NULL;
+	
+		/*	acca' nun stimm'a'ppazzia'	*/
+		if(!fname)return ni;
+
+		/*	cache lookup */
+		this->cached_elements();
+		if(ni = this->imageCache[fim::string(fname)])
+		{
+			this->mark_used(fname);
+			return ni;
+		}
+		return ni;//could be NULL
 	}
 
-	bool Cache::freeCachedImage(const char *fname)
+	bool Cache::cacheNewImage( fim::Image* ni )
 	{
-		/*
-		 * declare this image as unused and decrease a relative counter.
-		 * then delete image.
-		 * a useImage action will do the converse operation.
-		 *
-		 * if the image was a clone, it is deleted!
-		 * */
-		int i;
-		if(!haveImage(fname)) return true;	// we couldn't care less
-		if( usageCounter[fname] <= 0 ) return false;//some problem!
-		usageCounter[fname]--;
-		if( usageCounter[fname] >= 0 && (i=cloneCache[fname].size())>0 )
+		/*	acca' nun stimm'a'ppazzia'	*/
+		if(!ni)return ni;
+
+		this->imageCache[fim::string( ni->getName() )]=ni;
+		this->reverseCache[ni]=fim::string( ni->getName() );
+		mark_used( ni->getName() );
+		usageCounter[ni->getName()]=0; // we yet don't assume any usage
+		cc.setVariable("_cached_images",cached_elements());
+	}
+	
+	int Cache::erase(fim::Image* oi)
+	{
+		/*	acca' nun stimm'a'ppazzia'	*/
+		if(!oi)
 		{
-			delete cloneCache[fname][i-1];
-			cloneCache[fname].pop_back();
+			return -1;
 		}
-		return ( free( this->imageCache[fim::string(fname)] ) == 0 );
+
+		if(is_in_cache(oi))
+		{
+			usageCounter[oi->getName()]=0;
+			lru.erase(oi);
+			imageCache.erase(reverseCache[oi]);
+			reverseCache.erase(oi);
+//			delete imageCache[reverseCache[oi]];
+			delete oi; // NEW !!
+			cc.setVariable("_cached_images",cached_elements());
+			return 0;
+		}
+		return -1;
+	}
+
+	/*		*/
+	int Cache::mark_used(const char *fname)
+	{
+		if(!fname) return -1;
+		if(!imageCache[fim::string(fname)])return -1;
+		if(fim::string(fname)=="")return -1;
+		lru[imageCache[fim::string(fname)]]=time(NULL);
+		return 0;
+	}
+
+	bool Cache::freeCachedImage(Image *image)
+	{
+		// WARNING : FIXME : DANGER !!
+		if( !image )return false;
+		if( is_in_cache(image))
+		{
+			usageCounter[image->getName()]--;
+			this->erase( image );
+			return true;
+		}
+		else
+		if( is_in_clone_cache(image) )
+		{
+			usageCounter[image->getName()]--;
+			erase_clone(image);
+			return true;
+		}
+		else
+		return false;
 	}
 
 	Image * Cache::useCachedImage(const char *fname)
@@ -185,61 +268,30 @@ namespace fim
 		 * a freeImage action will do the converse operation (and delete).
 		 * */
 		Image * image=NULL;
+		if(!fname) return NULL;
 		if(!haveImage(fname))
 		{
-			image = getImage(fname);
-			if(haveImage(fname)) usageCounter[fname]=0;
-			else return NULL; // lassimm' perd'
+			if( image = loadNewImage(fname) )
+			{
+				usageCounter[fname]=1;
+			}
+			else
+			{
+				usageCounter[fname]=0;
+			}
+			return image;
 		}
-		usageCounter[fname]++;
 		image=getImage(fname);// in this way we update the LRU cache :)
-		if( usageCounter[fname] >= 1 && image )image=image->getClone(); // EVIL !!
-		return image;	
-	}
-
-	Image * Cache::getImage(const char *fname)
-	{
-		Image *ni = NULL;
-	
-		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!fname)return ni;
-
-		/*	cache lookup first	*/
-		this->cached_elements();
-		if(ni = this->imageCache[fim::string(fname)])
+		if(!image)return NULL;// this is an error condition
+		usageCounter[fname]++;
+		if( usageCounter[fname] > 1 )
 		{
-			this->mark_used(fname);
-			return ni;
+//			image = image->getClone(); // EVIL !!
+			image = new Image(*image); // cloning
+			if(image)clone_pool.insert(image);
+			else return NULL; //means that cloning failed.
 		}
-		
-		/*	load attempt as alternative approach	*/
-		if( ni = new Image(fname) )
-		{	
-			cacheImage( ni );
-			mark_used( fname );
-		}
-		return ni;
-	}
-
-	bool Cache::cacheImage( fim::Image* ni )
-	{
-		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!ni)return ni;
-
-		this->imageCache[fim::string( ni->getName() )]=ni;
-		this->reverseCache[ni]=fim::string( ni->getName() );
-		cc.setVariable("_cached_images",cached_elements());
-		mark_used( ni->getName() );
-	}
-	
-	/*		*/
-	int Cache::mark_used(const char *fname)
-	{
-		if(!fname) return -1;
-		if(!imageCache[fim::string(fname)])return -1;
-		if(fim::string(fname)=="")return -1;
-		lru[imageCache[fim::string(fname)]]=time(NULL);
-		return 0;
+		return image;	//so, it could be a clone..
 	}
 }
 

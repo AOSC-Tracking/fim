@@ -224,8 +224,6 @@ namespace fim
 //		scale_fix_top_left();
 //		status(linebuffer, NULL);
 
-//		newscale=2.0;scale=2.0; ascale=1.0; // FIXME : WARNING 
-
 		cc.setVariable("scale",newscale*100);
 		if(fimg)
 		{
@@ -244,6 +242,9 @@ namespace fim
 				cout << "ascale ; " <<ascale << "\n";
 				cout << "w:"<<width()<<"\n";
 				cout << "h:"<<height()<<"\n";*/
+
+//			newscale=1.0;ascale=1.0;
+//
 			img  = scale_image(fimg,scale=newscale,cc.getFloatVariable("ascale"));
 			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
 			if( img && orientation== 2)img  = flip_image(img);
@@ -299,7 +300,7 @@ namespace fim
 		// FIXME
 		img=fimg=NULL; //this is important
 		reset();
-		memcpy(this,&image,sizeof(Image));
+		memcpy(this,&image,sizeof(Image)); // very evil
 		img  = fbi_image_clone(image.img );
 		fimg = fbi_image_clone(image.fimg);
 	}

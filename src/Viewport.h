@@ -39,12 +39,19 @@ class Viewport
 	int		steps,top,left ;	/* viewport variables */
 
 	Image  *image;	// !! 
+#ifdef FIM_WINDOWS
 	Window *window;
+#endif
 
 	public:
         void reset();
 
-	Viewport(Window *window);
+	Viewport( //yes, horrible
+#ifdef FIM_WINDOWS
+			Window *window
+#endif
+			);
+
 	Viewport(const Viewport &v);
 
 	int valid()const;

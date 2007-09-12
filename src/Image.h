@@ -75,9 +75,10 @@ class Image
 
         void free();
 
-	Image(const Image& image); // yes, a private constructor
 
 	public:
+	Image(const Image& image); // yes, a private constructor (was)
+
 	void reset();
 	int rescale( float ns=0.0 );
 

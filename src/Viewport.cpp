@@ -34,14 +34,21 @@
  */
 namespace fim
 {
-	Viewport::Viewport(Window *window_):window(window_)
+	Viewport::Viewport(
+#ifdef FIM_WINDOWS
+			Window *window_):window(window_
+#endif
+			)
 	{
 		// WARNING : this constructor will be filled soon
 		image=NULL;
 		reset();
 	}
 
-	Viewport::Viewport(const Viewport &v):window(v.window)
+	Viewport::Viewport(const Viewport &v)
+#ifdef FIM_WINDOWS
+		:window(v.window)
+#endif
 	{
 		// WARNING
 //		image=new Image(v.getImage());
@@ -171,13 +178,21 @@ namespace fim
 	int Viewport::xorigin()
 	{
 		//FIXME !
+#ifdef FIM_WINDOWS
 		return window->xorigin();
+#else
+		return 0;
+#endif
 	}
 
 	int Viewport::yorigin()
 	{
 		//FIXME !
+#ifdef FIM_WINDOWS
 		return window->yorigin();
+#else
+		return 0;
+#endif
 	}
 
 	void Viewport::null_display()
@@ -317,7 +332,7 @@ namespace fim
 		/*
 		 * FIXME : this is essential to implement properly window splitting mechanisms!!
 		 **/
-		cc.quit();
+//		cc.quit();
 		return NULL;
 //		return new Viewport();
 	}

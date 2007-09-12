@@ -1612,7 +1612,11 @@ int CommandConsole::executeFile(const char *s)
 		// FIXME
 //		browser.display();
 //		if(window)window->recursive_display();
+#ifdef FIM_WINDOWS
 		if(window)window->recursive_redisplay();
+#else
+		browser.redisplay();
+#endif
 		
 	}
 #ifdef FIM_RECORDING
@@ -1767,8 +1771,9 @@ int CommandConsole::executeFile(const char *s)
 	{
 		if(!window)
 		{
+			// WARNING : FIXME
 			cout << "no window!!\n";
-			cc.quit(); // note that this is a violation :)
+//			cc.quit(); // note that this is a violation :)
 		}
 		return *window;
 	}
