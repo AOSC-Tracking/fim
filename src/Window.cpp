@@ -247,7 +247,11 @@ namespace fim
 		{
 			first  = new Window(this->corners.hsplit(Rect::Upper));
 			second = new Window(this->corners.hsplit(Rect::Lower));
-			viewport = NULL;
+			if(viewport)
+			{
+				delete viewport;
+				viewport = NULL;
+			}
 		}
 		else focused().hsplit();
 	}
@@ -266,7 +270,11 @@ namespace fim
 		{
 			first  = new Window(this->corners.vsplit(Rect::Left ));
 			second = new Window(this->corners.vsplit(Rect::Right));
-			viewport = NULL;
+			if(viewport)
+			{
+				delete viewport;
+				viewport = NULL;
+			}
 		}
 		else focused().vsplit();
 	}
@@ -275,6 +283,8 @@ namespace fim
 	{
 		/*
 		 * closing a leaf window implies its rejoining with the parent one
+		 *
+		 * FIXME : unfinished
 		 * */
 		if(   !isvalid() ) return;
 
@@ -294,10 +304,24 @@ namespace fim
 			/*
 			 * some inheritance operations needed here!
 			 */
-			delete first;
-			first  = NULL;
-			delete second;
-			second = NULL;
+
+			// WARNING : dangerous
+			if(viewport)
+			{
+				cout << "viewport should be NULL!\n";
+				// an error should be spawned
+			}
+			if( viewport = focused().viewport )
+			{
+				viewport ->reassign(this);
+				focused().viewport=NULL;
+			}
+			else
+			{
+				// error action
+			}
+			delete first;  first  = NULL;
+			delete second; second = NULL;
 		}
 		else focused().close();
 		print();

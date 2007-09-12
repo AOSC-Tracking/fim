@@ -212,9 +212,11 @@ class Window
 	int setyorigin(int y);
 
 	bool operator==(const Window&window)const;
-	public:
 
 	Viewport *viewport;
+
+	public:
+
 	Viewport & current_viewport()const;
 
 	const Window & c_focused()const;

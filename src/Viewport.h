@@ -45,6 +45,7 @@ class Viewport
 
 	public:
         void reset();
+        void reassign(Window *w);
 
 	Viewport( //yes, horrible
 #ifdef FIM_WINDOWS

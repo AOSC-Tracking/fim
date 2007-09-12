@@ -442,5 +442,6 @@ namespace fim
 		return true;
 	}
 
+        void Viewport::reassign(Window *w){window = w;}
 }
 
