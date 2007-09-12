@@ -278,7 +278,6 @@ namespace fim
 			    		left = image->width() - this->viewport_width();
 		    	}
 		}
-		if(only_first_rescale){only_first_rescale=0;return;}
 		
 		if(redraw)
 		{

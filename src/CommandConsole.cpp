@@ -277,7 +277,7 @@ namespace fim
 		nofb=0;
 		rl::initialize_readline();
 		fim_stdin=0;
-		cycles=0;isinscript=0;
+		cycles=0;
 		setVariable("steps",50);
 #ifdef FIM_WINDOWS
 		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"), window,&Window::cmd));
@@ -399,7 +399,7 @@ namespace fim
 					 if no configuration file is present, or fails loading,
 					 we use the default configuration (raccomended !)  !	*/
 #ifdef FIM_DEFAULT_CONFIGURATION
-					execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0);
+					execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
 #endif		
 				}
 #ifndef FIM_NOFIMRC
@@ -411,7 +411,7 @@ namespace fim
 		if(getIntVariable("_no_default_configuration")==0 )
 		{
 #ifdef FIM_DEFAULT_CONFIGURATION
-			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0);
+			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
 #endif		
 		}
 #endif		
@@ -558,14 +558,14 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreInteractiveCommand",cf);
 #endif
-			execute(getBoundAction(c).c_str(),0);
+			execute(getBoundAction(c).c_str(),0,0);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostInteractiveCommand",cf);
 #endif
 		}
 	}
 
-	void CommandConsole::execute(const char *ss, int add_history_)
+	void CommandConsole::execute(const char *ss, int add_history_, int suppress_output_)
 	{
 		/*
 		 *	This method executes a character string containing a script.
@@ -871,10 +871,10 @@ namespace fim
 					if(recordMode)record_action(fim::string(rl));
 #endif					
 					//ic=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
-					execute(rl,1);	//execution of the command line with history
+					execute(rl,1,0);	//execution of the command line with history
 					ic=(ic==-1)?0:1; //a command could change the mode !
 //					this->setVariable("_display_console",1);	//!!
-//					execute("redisplay;",0);	//execution of the command line with history
+//					execute("redisplay;",0,0);	//execution of the command line with history
 #ifdef FIM_AUTOCMDS
 					cc.autocmd_exec("PostInteractiveCommand",cf);
 #endif
@@ -1141,17 +1141,13 @@ namespace fim
 		if(fd==NULL)return -1;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
 		if(r==-1)return -1;
-		isinscript=1;
-		execute(cmds.c_str(),0);
-		isinscript=0;
+		execute(cmds.c_str(),0,1);
 		return 0;
 	}
 
 int CommandConsole::executeFile(const char *s)
 	{
-		isinscript=1;
-		execute(slurp_file(s).c_str(),0);
-		isinscript=0;
+		execute(slurp_file(s).c_str(),0,1);
 		return 0;
 	}
 
@@ -1391,7 +1387,7 @@ int CommandConsole::executeFile(const char *s)
 			if(regexp_match(fname.c_str(),pat.c_str()))	//UNFINISHED : if fname matches path pattern.. now matches ALWAYS
 			{
 //				cout << "should exec '"<<event<<"'->'"<<autocmds[event][pat][i]<<"'\n";
-				execute((autocmds[event][pat][i]).c_str(),0);
+				execute((autocmds[event][pat][i]).c_str(),0,1);
 			}
 		}
 		return "";
@@ -1663,7 +1659,7 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::execute_record_buffer(const std::vector<fim::string> &args)
 	{
-		execute(dump_record_buffer(args).c_str(),0);
+		execute(dump_record_buffer(args).c_str(),0,0);
 		/* for unknown reasons, the following code gives problems : image resizes don't work..
 		 * but the present (above) doesn't support interruptions ...
 		 * */
@@ -1671,7 +1667,7 @@ int CommandConsole::executeFile(const char *s)
 		for(unsigned int i=0;i<recorded_actions.size();++i)
 		{
 			res=recorded_actions[i].first+(fim::string)recorded_actions[i].second;
-			execute(res.c_str(),0);
+			execute(res.c_str(),0,1);
 		}*/
 		return "";
 	}
@@ -1717,7 +1713,7 @@ int CommandConsole::executeFile(const char *s)
 		 *   a dont_record_last_action flag after each detection of repeat_last, so we do not 
 		 *   record the containing string.
 		 */
-		execute(last_action.c_str(),0);
+		execute(last_action.c_str(),0,0);
 		dont_record_last_action=true;	//the issuing action will not be recorded
 		return "";
 	}

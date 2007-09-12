@@ -49,7 +49,7 @@ class Image
 	Image(const char *fname_);
 	~Image();
 
-	bool revertToLoaded();
+//	bool revertToLoaded();
 	private:
 	float            scale    ;	/* viewport variables */
 	float            ascale   ;
@@ -74,16 +74,16 @@ class Image
 	string  fname;  /* viewport variable, too */
 
         void free();
+	void reset();
 
 
+        int tiny()const;
 	public:
 	Image(const Image& image); // yes, a private constructor (was)
 
-	void reset();
 	int rescale( float ns=0.0 );
 
 	const char* getName(){return fname.c_str();}
-        int tiny()const;
 
 	/* viewport methods */
 
@@ -109,7 +109,7 @@ class Image
 	int original_height();
 
 	Image * getClone();
-	void resize(int nw, int nh);
+//	void resize(int nw, int nh);
 };
 }
 #endif

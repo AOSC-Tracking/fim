@@ -104,6 +104,12 @@ namespace fim
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
 
+	bool Cache::used_image(const char* fname)
+	{
+		/*	acca' nun stimm'a'ppazzia'	*/
+		return usageCounter[fname] >= 1;
+	}
+
 	bool Cache::is_in_clone_cache(fim::Image* oi)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
@@ -159,6 +165,9 @@ namespace fim
 		return getImage(fname)?0:-1;
 	}
 
+	/*
+	 * is this image already in cache ?
+	 * */
 	bool Cache::haveImage(const char *fname)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
@@ -181,6 +190,9 @@ namespace fim
 	
 	Image * Cache::getImage(const char *fname)
 	{
+		/*
+		 * returns an image if already in cache ..
+		 * */
 		Image *ni = NULL;
 	
 		/*	acca' nun stimm'a'ppazzia'	*/
@@ -230,9 +242,13 @@ namespace fim
 		return -1;
 	}
 
-	/*		*/
 	int Cache::mark_used(const char *fname)
 	{
+		/*
+		 * if the specified file is cached, in this way it is marked as used, too
+		 *
+		 * NOTE : the usage count is not affected, 
+		 * */
 		if(!fname) return -1;
 		if(!imageCache[fim::string(fname)])return -1;
 		if(fim::string(fname)=="")return -1;
@@ -242,9 +258,13 @@ namespace fim
 
 	bool Cache::freeCachedImage(Image *image)
 	{
+		/*
+		 * if the supplied image is cached as a master image of a clone, it is freed and deregistered.
+		 * if not, no action is performed.
+		 * */
 		// WARNING : FIXME : DANGER !!
 		if( !image )return false;
-		if( is_in_cache(image))
+		if( is_in_cache(image) )
 		{
 			usageCounter[image->getName()]--;
 			this->erase( image );
@@ -266,25 +286,24 @@ namespace fim
 		/*
 		 * declare this image as used an increase a relative counter.
 		 * a freeImage action will do the converse operation (and delete).
+		 * if the image is not already cached, it is loaded, if possible.
+		 *
+		 * so, if there is no such image, NULL is returned
 		 * */
 		Image * image=NULL;
 		if(!fname) return NULL;
 		if(!haveImage(fname))
 		{
-			if( image = loadNewImage(fname) )
-			{
-				usageCounter[fname]=1;
-			}
-			else
-			{
-				usageCounter[fname]=0;
-			}
+			/*
+			 * no image cached; we try to load one
+			 * */
+			usageCounter[fname]+=((image = loadNewImage(fname))?1:0);
 			return image;
 		}
 		image=getImage(fname);// in this way we update the LRU cache :)
 		if(!image)return NULL;// this is an error condition
 		usageCounter[fname]++;
-		if( usageCounter[fname] > 1 )
+		if( used_image( fname ) )
 		{
 //			image = image->getClone(); // EVIL !!
 			image = new Image(*image); // cloning

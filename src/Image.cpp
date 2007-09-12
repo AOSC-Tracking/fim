@@ -44,37 +44,36 @@ namespace fim
  */
 	int Image::original_width()
 	{
-		//FIXME
+		//WARNING : assumes the image is valid
 		return fimg->i.width;
 	}
 
 	int Image::original_height()
 	{
-		//FIXME
+		//WARNING : assumes the image is valid
 		return fimg->i.height;
 	}
 
 	int Image::width()
 	{
-		//FIXME
+		//WARNING : assumes the image is valid
 		return img->i.width;
-		return (img?img:fimg)->i.width;
+//		return (img?img:fimg)->i.width;
 	}
 
 	int Image::height()
 	{
-		//FIXME
+		//WARNING : assumes the image is valid
 		return img->i.height;
-		return (img?img:fimg)->i.height;
+//		return (img?img:fimg)->i.height;
 	}
 
 	Image::Image(const char *fname_)
 	{
 		/*
-		 *	FIX ME
+		 *	an image object is created from an image filename
 		 */
-		img=fimg=NULL; //this is important
-		reset();
+		reset();	// pointers blank
 		if( !load(fname_) || check_invalid() || (!fimg) ) 
 		{
 			cout << "warning : invalid loading ! \n";
@@ -86,34 +85,33 @@ namespace fim
 			 *	variables prior to first visualization without displaying..
 			 */
 			cc.setVariable("filename",fname_);
-//			only_first_rescale=1; // WARNING !!
-			//this->display();
-			//if(cc.isInScript()==0)this->auto_scale();
 		}
 	}
 
 	void Image::reset()
 	{
-		cout << "ReSeT!\n";
+		/*
+		 * pointers are blanked and values set to default 
+		 * */
                 scale    = 1.0;
                 newscale = 1.0;
                 ascale   = 1.0;
                 newascale= 1.0;
 
-                fimg    = NULL; // !
                 invalid=0;
+                fimg    = NULL;
                 img     = NULL;
                 orientation=0;
                 neworientation=0;
-
 	}
 	
 	bool Image::load(const char *fname_)
 	{
 		/*
 		 *	FIX ME
+		 *	an image is loaded and initializes this image.
 		 */
-		if(fname_==NULL){invalid=1;return false;}//DANGER
+		if(fname_==NULL){return false;}//DANGER
 		this->free();
 		fname=fname_;
 		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))set_status_bar("please wait while reloading...", "*");
@@ -135,6 +133,7 @@ namespace fim
 		this->free();
 	}
 
+	/*
 	bool Image::revertToLoaded()
 	{
 		if(img==fimg) img = NULL;
@@ -145,10 +144,9 @@ namespace fim
 	        	redraw=1;
 		}
 		if(!fimg) return false; // this is bad, but could occur!
-//		reset();
 		return  true;
 		
-	}
+	}*/
 
         int Image::tiny()const
 	{
@@ -171,7 +169,6 @@ namespace fim
 		return 0;
 	}
 
-
         bool Image::check_valid()
 	{
 		return ! check_invalid();
@@ -180,11 +177,8 @@ namespace fim
         bool Image::check_invalid()
         {
                 /*
-                 *      WARNING ! was:
-
-                        if(!img){return;}
-                        if(!fimg){invalid=1;return;}
-                */
+		 * the image is declared invalid if the image structures are not loaded.
+                 */
 
 		//ACHTUNG! 
 		if(!img ){img=fimg;}
@@ -193,18 +187,28 @@ namespace fim
                         invalid=1;
                         return true;
                 }
+		invalid=0;
                 return false;
         }
 
         void Image::free()
         {
-                if(fimg!=img) free_image(img );
+		/*
+		 * the image descriptors are freed if necessary and pointers blanked
+		 * */
+                if(fimg!=img && img ) free_image(img );
                 if(fimg     ) free_image(fimg);
                 reset();
         }
 
+// if the image rescaling mechanism is suspected of bugs, this will inhibit its use.
+#define FIM_BUGGED_RESCALE 1
+
 	int Image::rescale( float ns )
 	{
+#if FIM_BUGGED_RESCALE
+		return 0;
+#endif
 		if(ns>0.0)newscale=ns;//patch
 		/*
 		 *	This code is bugful, when called from the constructor, on in a pre-user phase.
@@ -285,20 +289,23 @@ namespace fim
 	char* Image::getInfo()
 	{
 		// ATENCION!
-		if(fimg)return make_info(fimg,scale);return NULL;
+		if(fimg)return make_info(img,scale);return NULL;
 	}
 
+	/*
 	void Image::resize(int nw, int nh)
 	{
 		//fixme
 		if(check_invalid())return;
-		
-	}
+	}*/
 
 	Image::Image(const Image& image)
 	{
+		/*
+		 * builds a clone of this image.
+		 * it should be completely independent from this object.
+		 * */
 		// FIXME
-		img=fimg=NULL; //this is important
 		reset();
 		memcpy(this,&image,sizeof(Image)); // very evil
 		img  = fbi_image_clone(image.img );
@@ -307,6 +314,10 @@ namespace fim
 
 	Image * Image::getClone()
 	{
+		/*
+		 * returns a clone of this image.
+		 * it should be completely independent from this object.
+		 * */
 		return new Image(*this);
 	}
 

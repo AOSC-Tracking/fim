@@ -4,6 +4,7 @@ $Id$
 
 Please refer to the documentation (doc/FIM.TXT) for a complete list of known bugs (BUGS section).
 
+20070912	Debugging it with the framebuffer under gdb hangs the console (even with -p).
 20070811	The automake required for autogen.sh'in this package is 1.10.
 		So users who want to build from the svn repository are required to use this version.
 

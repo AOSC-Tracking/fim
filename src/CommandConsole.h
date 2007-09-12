@@ -152,7 +152,7 @@ class CommandConsole
 	fim::string foo (const std::vector<fim::string> &args);
 	fim::string do_return(const std::vector<fim::string> &args);
 	fim::string status(const std::vector<fim::string> &args);
-	void execute(const char *s, int add_history_);
+	void execute(const char *ss, int add_history_, int suppress_output_);
 	private:
 	int  toggleStatusLine();
 	int  addCommand(Command *c);
@@ -194,7 +194,6 @@ class CommandConsole
 	public:
 	void quit(int i=0);
 	int  drawOutput();
-	int  isInScript(){return isinscript;}
 	bool regexp_match(const char*s, const char*r)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);

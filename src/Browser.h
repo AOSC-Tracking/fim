@@ -136,6 +136,7 @@ class Browser
 		return display(std::vector<fim::string>());
 	}
 	private:
+	fim::string loadCurrentImage();
 	fim::string reload();
 	fim::string list()const;
 

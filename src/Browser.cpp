@@ -20,6 +20,7 @@
 */
 
 #define firstorzero(x) (x.size()?((int)(x[0])):0)
+#define noargs (std::vector<fim::string>())
 
 #include "fim.h"
 namespace fim
@@ -481,28 +482,10 @@ namespace fim
 		return "";
 	}
 
-	void Browser::free_current_image()
-	{
-#ifdef FIM_WINDOWS
-		if(image()) cache.freeCachedImage(image());
-//		if(image()) viewport().free(); //NOTE : cache is wasted in this way.
-		// FIXME : here should land support for cache reusing !
-		viewport().setImage( NULL );
-#else
-		if(image())
-		{
-			cache.freeCachedImage(image());
-			loaded_image=NULL;
-		}
-//		loaded_image = cache.getImage(current().c_str());
-#endif
-	}
-
 	fim::string Browser::load_error_handle(fim::string c)
 	{
 		if(image() && ! (viewport().check_valid()))
 		{
-			cout << "BAD SIGN..\n";
 			free_current_image();
 #ifdef FIM_REMOVE_FAILED
 			if(current()!=""){pop_current();	//removes the current file from the list.
@@ -528,6 +511,59 @@ namespace fim
 		return "";
 	}
 
+// if the cache is suspected of bugs, this will inhibit its use.
+#define FIM_BUGGED_CACHE 1
+	fim::string Browser::loadCurrentImage()
+	{
+#ifndef FIM_BUGGED_CACHE
+#ifdef FIM_WINDOWS
+		viewport().setImage( cache.useCachedImage(current().c_str()) );
+#else
+		loaded_image = cache.useCachedImage(current().c_str());
+#endif
+#else
+		viewport().setImage( new Image(current().c_str()) );
+#endif
+		return "";
+	}
+
+	void Browser::free_current_image()
+	{
+#ifndef FIM_BUGGED_CACHE
+#ifdef FIM_WINDOWS
+		if(image()) cache.freeCachedImage(image());
+		// FIXME : here should land support for cache reusing !
+		viewport().setImage( NULL );
+#else
+		if(image())
+		{
+			cache.freeCachedImage(image());
+			loaded_image=NULL;
+		}
+//		loaded_image = cache.getImage(current().c_str());
+#endif
+#else
+		delete image();
+		viewport().setImage( NULL );
+#endif
+	}
+
+	fim::string Browser::prefetch(const std::vector<fim::string> &args)
+	{
+		/*
+		 * fetches in the cache the next image..
+		 *
+		 * FIX ME : enrich this behaviour
+		 */
+#ifdef FIM_BUGGED_CACHE
+		return "";
+#endif
+
+		if( args.size() > 0 )return "";
+		cache.prefetch(get_next_filename(1).c_str());
+		return "";
+	}
+
 	fim::string Browser::reload(const std::vector<fim::string> &args)
 	{
 		/*
@@ -541,13 +577,10 @@ namespace fim
 		cc.autocmd_exec("PreReload",c);
 #endif
 		free_current_image();
-#ifdef FIM_WINDOWS
-		viewport().setImage( cache.useCachedImage(current().c_str()) );
-#else
-		loaded_image = cache.useCachedImage(current().c_str());
-#endif
 
-		if(cc.getIntVariable("_prefetch")) cache.prefetch(get_next_filename(1).c_str());/*this will become an autocommand*/
+		loadCurrentImage();
+
+		if(cc.getIntVariable("_prefetch")) prefetch(noargs);/*this will become an autocommand*/
 		cc.setVariable("fileindex",current_image());
 
 		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
@@ -574,12 +607,10 @@ namespace fim
 #endif
 		set_status_bar("please wait while loading...", "*");
 		free_current_image();
-#ifdef FIM_WINDOWS
-		viewport().setImage( cache.useCachedImage(current().c_str()) );
-#else
-		loaded_image = cache.useCachedImage(current().c_str());
-#endif
-		if(cc.getIntVariable("_prefetch")) cache.prefetch(get_next_filename(1).c_str());
+
+		loadCurrentImage();
+
+		if(cc.getIntVariable("_prefetch")) prefetch(noargs);
 		cc.setVariable("fileindex",current_image());
 
 		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
@@ -687,18 +718,6 @@ namespace fim
 		std::vector<fim::string> arg;
 		arg.push_back(last_regexp);
 		return regexp_goto(arg);
-	}
-
-	fim::string Browser::prefetch(const std::vector<fim::string> &args)
-	{
-		/*
-		 * fetches in the cache the next image..
-		 *
-		 * FIX ME : enrich this behaviour
-		 */
-		if( args.size() > 0 )return "";
-		cache.prefetch(get_next_filename(1).c_str());
-		return "";
 	}
 
 	fim::string Browser::regexp_goto(const std::vector<fim::string> &args)
