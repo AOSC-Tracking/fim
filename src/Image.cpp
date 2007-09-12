@@ -202,7 +202,7 @@ namespace fim
         }
 
 // if the image rescaling mechanism is suspected of bugs, this will inhibit its use.
-#define FIM_BUGGED_RESCALE 1
+#define FIM_BUGGED_RESCALE 0
 
 	int Image::rescale( float ns )
 	{
@@ -252,6 +252,7 @@ namespace fim
 			img  = scale_image(fimg,scale=newscale,cc.getFloatVariable("ascale"));
 			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
 			if( img && orientation== 2)img  = flip_image(img);
+
 			if(!img)
 			{
 				img=backup_img;
@@ -259,9 +260,15 @@ namespace fim
 					set_status_bar( "rescaling failed (insufficient memory!)", getInfo());
 				sleep(1);	//just to give a glimpse..
 			}
-			else if(img!=fimg) free_image(backup_img);
+			else 
+			{
+				if( backup_img && backup_img!=fimg ) free_image(backup_img);
+			}
+
+
 			redraw=1;
  	                new_image=1; // for centering
+
 			cc.setVariable("height",(int)fimg->i.height);
 			cc.setVariable("sheight",(int)img->i.height);
 			cc.setVariable("width",(int)fimg->i.width);
@@ -274,14 +281,12 @@ namespace fim
 
 	void Image::reduce(float factor)
 	{
-//		factor = 2.0;scale=1.0;ascale=1.0;
 		newscale = scale / factor;
 		rescale();
 	}
 
 	void Image::magnify(float factor)
 	{
-//		factor = 2.0;scale=1.0;ascale=1.0;
 		newscale = scale * factor;
 		rescale();
 	}

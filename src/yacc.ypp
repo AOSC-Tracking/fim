@@ -153,6 +153,10 @@ arg:
 
 stmt_block:
 	'{' stmt_list '}' { $$ = opr(';', 2, $2, NULL); }
+//	| INTEGER '{' stmt_list '}' { $$ =          opr(';', 2, opr('r',2,opr('x',1,scon($3)),con($1)), NULL); } //BAD
+	| INTEGER '{' stmt_list '}' { if($1>0){$$ = opr('r',2,opr(';', 2, $3, NULL) ,con($1)); }}
+//	| '{' stmt_list '}'INTEGER { if($4>0){$$ = opr('r',2,opr(';', 2, $2, NULL) ,con($4)); }}
+//	| '[' INTEGER ']' '{' stmt_list '}' { if($2>0){$$ = opr('r',2,opr(';', 2, $5, NULL) ,con($2)); }}
 	| stmt ';' { $$ = opr(';', 2, $1, NULL); }
 	| WHILE '(' expr ')' stmt_block { $$ = opr(WHILE, 2, $3, $5); }
 	| DO stmt_block WHILE '(' expr ')' { $$ = opr(WHILE, 2, $5, $2); }
