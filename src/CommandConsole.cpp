@@ -242,6 +242,9 @@ namespace fim
 
 	fim::string CommandConsole::dummy(std::vector<Arg> args)
 	{
+		/*
+		 *
+		 * */
 		//std::cout << "dummy function : for test purposes :)\n";
 		return "dummy function : for test purposes :)\n";
 	}
@@ -265,18 +268,9 @@ namespace fim
 
 	CommandConsole::CommandConsole()
 	{
-#ifdef FIM_WINDOWS
-		// FIXME : DANGER, WARNING
-		if( g_fim_no_framebuffer )
-			/* fake pixels, as we are in text (er.. less than!) mode */
-			window = new Window( Rect(0,0,80,48) );
-		else
-			/* true pixels, as we are in framebuffer mode */
-			window = new Window( Rect(0,0,fb_var.xres,fb_var.yres) );
 		/*
-		 * FIXME : exceptions should be launched here in case ...
+		 * FIXME : dependencies.. argh !
 		 * */
-#endif
 
 #ifdef FIM_RECORDING
 		dont_record_last_action=false;
@@ -379,6 +373,24 @@ namespace fim
 
 	void CommandConsole::init()
 	{
+		/*
+		 * FIXME : dependencies.. argh !
+		 * */
+
+#ifdef FIM_WINDOWS
+		// FIXME : DANGER, WARNING
+		// THIS SHOULD BE IN THE CONSTRUCTOR, AND SHALL BE SOME DAY :)
+		if( g_fim_no_framebuffer )
+			/* fake pixels, as we are in text (er.. less than!) mode */
+			window = new Window( Rect(0,0,80,48) );
+		else
+			/* true pixels, as we are in framebuffer mode */
+			window = new Window( Rect(0,0,fb_var.xres,fb_var.yres) );
+		/*
+		 * FIXME : exceptions should be launched here in case ...
+		 * */
+#endif
+
 		show_must_go_on=1;
 		/*
 		 *	Here the program loads initialization scripts :
@@ -548,6 +560,9 @@ namespace fim
 
 	fim::string CommandConsole::getBoundAction(const int c)
 	{
+		/*
+		 * returns the action assigned to key biding c
+		 * */
 		return bindings[c];
 	}
 
@@ -1056,6 +1071,9 @@ namespace fim
 #ifndef FIM_NOSCRIPTING
 	fim::string CommandConsole::executeFile(const std::vector<fim::string> &args)
 	{
+		/*
+		 *
+		 * */
 		for(unsigned int i=0;i<args.size();++i)executeFile(args[i].c_str());
 		return "";
 	}
@@ -1063,6 +1081,9 @@ namespace fim
 	
 	fim::string CommandConsole::foo(const std::vector<fim::string> &args)
 	{
+		/*
+		 * useful function for bogus commands, but autocompletable (like language constructs)
+		 * */
 		return "";
 	}
 
@@ -1154,12 +1175,18 @@ namespace fim
 
 int CommandConsole::executeFile(const char *s)
 	{
+		/*
+		 *
+		 * */
 		execute(slurp_file(s).c_str(),0,1);
 		return 0;
 	}
 
 	fim::string CommandConsole::echo(const std::vector<fim::string> &args)
 	{
+		/*
+		 *
+		 * */
 		/*
 		 * a command to echo arguments, for debug and learning purposes
 		 */
@@ -1170,11 +1197,17 @@ int CommandConsole::executeFile(const char *s)
 
 	int CommandConsole::getVariableType(const fim::string &varname)
 	{
+		/*
+		 *
+		 * */
 		return variables[varname].getType();
 	}
 
 	int CommandConsole::printVariable(const fim::string &varname)
 	{	
+		/*
+		 *
+		 * */
 		//if(getVariableType(varname))
 		//cout<<getIntVariable(varname);
 //		else
@@ -1184,6 +1217,9 @@ int CommandConsole::executeFile(const char *s)
 
 	int CommandConsole::getIntVariable(const fim::string &varname)
 	{
+		/*
+		 *
+		 * */
 //		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
 		if(strcmp(varname.c_str(),"random"))
 		return variables[varname].getInt();
@@ -1192,6 +1228,9 @@ int CommandConsole::executeFile(const char *s)
 
 	float CommandConsole::getFloatVariable(const fim::string &varname)
 	{
+		/*
+		 *
+		 * */
 //		cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
 //		cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
 		return variables[varname].getFloat();
@@ -1199,11 +1238,17 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::getStringVariable(const fim::string &varname)
 	{
+		/*
+		 *
+		 * */
 		return variables[varname].getString();
 	}
 
 	int CommandConsole::drawOutput()
 	{
+		/*
+		 *
+		 * */
 		//return inConsole() || this->getIntVariable("_display_status");
 		return (inConsole() || this->getIntVariable("_display_console"));
 	}
@@ -1485,11 +1530,17 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::set_interactive_mode(const std::vector<fim::string>& args)
 	{
 		ic=-1;set_status_bar("",NULL);
+		/*
+		 *
+		 * */
 		return "";
 	}
 
 	fim::string CommandConsole::sys_popen(const std::vector<fim::string>& args)
 	{
+		/*
+		 *
+		 * */
 		for(unsigned int i=0;i<args.size();++i)
 		{
 			FILE* fd=popen(args[i].c_str(),"r");
@@ -1506,6 +1557,9 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::cd(const std::vector<fim::string>& args)
 	{
+		/*
+		 * change working directory
+		 * */
 		static fim::string oldpwd=pwd(std::vector<fim::string>());
 		for(unsigned int i=0;i<args.size();++i)
 		{
@@ -1519,6 +1573,9 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::pwd(const std::vector<fim::string>& args)
 	{
+		/*
+		 * yes, print working directory
+		 * */
 		fim::string cwd="";
 #ifdef _GNU_SOURCE
 		char *p=get_current_dir_name();
@@ -1562,6 +1619,9 @@ int CommandConsole::executeFile(const char *s)
 	 * */
 	fim::string CommandConsole::do_return(const std::vector<fim::string> &args)
 	{
+		/*
+		 *
+		 * */
 		if( args.size() < 0 ) this->quit(0);
 		else	this->quit( (int) args[0] );
 		return "";/* it shouldn' return, though :) */
@@ -1569,6 +1629,9 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::status(const std::vector<fim::string> &args)
 	{
+		/*
+		 *
+		 * */
 		for(unsigned int i=0;i<args.size();++i)
 		{
 			browser.display_status(args[i].c_str(),NULL);
@@ -1595,6 +1658,9 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::dump_key_codes(const std::vector<fim::string>& args)
 	{
+		/*
+		 *
+		 * */
 		fim::string acl;
 		std::map<fim::string,int>::const_iterator ki;
 		for( ki=key_bindings.begin();ki!=key_bindings.end();++ki)
@@ -1638,7 +1704,7 @@ int CommandConsole::executeFile(const char *s)
 		 * time() gives time in seconds..
 		 * asctime(),ctime() give time in seconds..
 		 *
-		 * gettimeofday was suggested by antani, instantaneously (thx)
+		 * gettimeofday was suggested by antani, instantaneously (thx antani)
 		 * */
 		static int pt=0;int t,d,err;//t,pt in ms; d in us
 	        struct timeval tv;
@@ -1652,6 +1718,9 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::dump_record_buffer(const std::vector<fim::string> &args)
 	{
+		/*
+		 *
+		 * */
 		fim::string res;
 		for(unsigned int i=0;i<recorded_actions.size();++i)
 		{
@@ -1666,6 +1735,9 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::execute_record_buffer(const std::vector<fim::string> &args)
 	{
+		/*
+		 *
+		 * */
 		execute(dump_record_buffer(args).c_str(),0,0);
 		/* for unknown reasons, the following code gives problems : image resizes don't work..
 		 * but the present (above) doesn't support interruptions ...
@@ -1681,6 +1753,9 @@ int CommandConsole::executeFile(const char *s)
 #endif
 	void CommandConsole::markCurrentFile()
 	{
+		/*
+		 *
+		 * */
 		if(browser.current()!="")
 		{
 			marked_files.insert(browser.current());
@@ -1690,6 +1765,9 @@ int CommandConsole::executeFile(const char *s)
 
 	void CommandConsole::printHelpMessage(char *pn)
 	{
+		/*
+		 *
+		 * */
 		std::cout<<" Usage: "<<pn<<" [OPTIONS] [FILES]\n";
 		/*  printf("\nThe help will be here soon!\n");*/
 	}
@@ -1727,6 +1805,9 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::start_recording(const std::vector<fim::string> &args)
 	{
+		/*
+		 *
+		 * */
 		recorded_actions.clear();
 		recordMode=true;
 		return "";
@@ -1755,23 +1836,35 @@ int CommandConsole::executeFile(const char *s)
 #endif
 	void CommandConsole::appendPostInitCommand(const char* c)
 	{
+		/*
+		 *
+		 * */
 		postInitCommand+=c;
 	}
 
 	void CommandConsole::appendPostExecutionCommand(const fim::string &c)
 	{
+		/*
+		 *
+		 * */
 		postExecutionCommand+=c;
 	}
 	
 #ifdef FIM_WINDOWS
 	Viewport& CommandConsole::current_viewport()const
 	{
+		/*
+		 *
+		 * */
 		//FIXME
 		return current_window().current_viewport();
 	}
 
 	const Window & CommandConsole::current_window()const
 	{
+		/*
+		 *
+		 * */
 		if(!window)
 		{
 			// WARNING : FIXME
