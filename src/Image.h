@@ -78,6 +78,7 @@ class Image
 
 
         int tiny()const;
+	char *make_info(struct ida_image *img, float scale);
 	public:
 	Image(const Image& image); // yes, a private constructor (was)
 

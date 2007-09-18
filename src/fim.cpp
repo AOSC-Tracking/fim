@@ -200,31 +200,6 @@ void set_status_bar(const char *desc, const char *info)
 }
 
 /*
- *	Creates a little description of some image,
- *	and plates it in a NUL terminated static buffer.
- */
-char *make_info(struct ida_image *img, float scale)
-{
-	//FIX ME
-	static char linebuffer[128];
-	char imagemode[3],*imp;
-	imp=imagemode;
-	if(cc.getIntVariable("autoflip"))*(imp++)='F';
-	if(cc.getIntVariable("automirror"))*(imp++)='M';
-	*imp='\0';
-	snprintf(linebuffer, sizeof(linebuffer),
-	     "%s%.0f%% %dx%d%s %d/%d",
-	     /*fcurrent->tag*/ 0 ? "* " : "",
-	     scale*100,
-	     img->i.width, img->i.height,
-	     imagemode,
-	     cc.current_image(),
-	     cc.current_images()
-	     );
-	return linebuffer;
-}
-
-/*
  *	This function treats the framebuffer screen as a text outout terminal.
  *	So it prints all the contents of its buffer on screen..
  *	if noDraw is set, the screen will be not refreshed.
@@ -653,6 +628,42 @@ static void version()
 		    ", built on %s\n",
 		    __DATE__
     		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
+		"Compile flags:\n"
+#ifdef FIM_WINDOWS
+		"+FIM_WINDOWS"
+#else
+		"-FIM_WINDOWS"
+#endif
+		" "
+#ifdef FIM_DEFAULT_KEY_CONFIG  
+		"+FIM_DEFAULT_KEY_CONFIG"
+#else
+		"-FIM_DEFAULT_KEY_CONFIG"
+#endif
+		" "
+#ifdef FIM_DEFAULT_CONFIG      
+		"+FIM_DEFAULT_CONFIG"
+#else
+		"-FIM_DEFAULT_CONFIG"
+#endif
+		" "
+#ifdef FIM_DEFAULT_CONFIGURATION 
+		"+FIM_DEFAULT_CONFIGURATION"
+#else
+		"-FIM_DEFAULT_CONFIGURATION"
+#endif
+		" "
+#ifdef FIM_NOFIMRC
+		"+FIM_NOFIMRC"
+#else
+		"-FIM_NOFIMRC"
+#endif
+		" "
+#ifdef FIM_AUTOCMDS
+		"+FIM_AUTOCMDS"
+#else
+		"-FIM_AUTOCMDS"
+#endif
 		    );
 }
 
@@ -931,6 +942,7 @@ int main(int argc,char *argv[])
 		framebuffer_init();
 		tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
 	}
+	rl::initialize_readline();
 
 	cc.init();
 	cc.executionCycle();

@@ -198,8 +198,6 @@ class CommandConsole
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 #endif
-	int current_image (){return browser.current_image ();}
-	int current_images(){return browser.current_images();}
 	int catchLoopBreakingCommand(int seconds=0);
 	private:
 	int catchInteractiveCommand(int seconds=0);

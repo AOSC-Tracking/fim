@@ -267,7 +267,15 @@ namespace fim
 	{
 #ifdef FIM_WINDOWS
 		// FIXME : DANGER, WARNING
-		window = new Window(Rect(0,0,1024,768));
+		if( g_fim_no_framebuffer )
+			/* fake pixels, as we are in text (er.. less than!) mode */
+			window = new Window( Rect(0,0,80,48) );
+		else
+			/* true pixels, as we are in framebuffer mode */
+			window = new Window( Rect(0,0,fb_var.xres,fb_var.yres) );
+		/*
+		 * FIXME : exceptions should be launched here in case ...
+		 * */
 #endif
 
 #ifdef FIM_RECORDING
@@ -275,7 +283,6 @@ namespace fim
 		recordMode=false;
 #endif
 		nofb=0;
-		rl::initialize_readline();
 		fim_stdin=0;
 		cycles=0;
 		setVariable("steps",50);
@@ -290,7 +297,7 @@ namespace fim
 		addCommand(new Command(fim::string("redisplay" ),fim::string("re-displays the current file"),&browser,&Browser::redisplay));
 		addCommand(new Command(fim::string("list" ),fim::string("displays the files list"),&browser,&Browser::list));
 		addCommand(new Command(fim::string("pop"  ),fim::string("pop the last file from the files list"),&browser,&Browser::pop));
-		addCommand(new Command(fim::string("file" ),fim::string("displays the current file's name"),&browser,&Browser::get));
+		addCommand(new Command(fim::string("file" ),fim::string("displays the current file's name (UNFINISHED)"),&browser,&Browser::info));
 		addCommand(new Command(fim::string("pan_ne" ),fim::string("pans the image north east"),&browser,&Browser::pan_ne));
 		addCommand(new Command(fim::string("pan_nw" ),fim::string("pans the image north west"),&browser,&Browser::pan_nw));
 		addCommand(new Command(fim::string("pan_sw" ),fim::string("pans the image south west"),&browser,&Browser::pan_sw));

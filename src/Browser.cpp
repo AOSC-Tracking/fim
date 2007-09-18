@@ -52,21 +52,19 @@ namespace fim
 
 	fim::string Browser::redisplay(const std::vector<fim::string> &args)
 	{
+		/*
+		 * for now redisplaying is optionless
+		 */
 		redisplay();
 		return "";
 	}
 
 	void Browser::redisplay()
 	{
-		//return; // FIXMe
 		/*
 		 * Given a current() file, we display it again like 
 		 * the first time it should be displayed.
 		 * So, this behaviour is different from reloading..
-		 */
-		/*
-		 *	THIS METHOD TRIGGERS A BUG.
-		 * 
 		 */
 		fim::string c=current();
 		if(image())
@@ -76,11 +74,13 @@ namespace fim
 #endif
 			if(image())
 			{
-//				viewport().redisplay();	//THE BUG IS NOT HERE
+				/*
+				 * FIXME : philosophically, this is wrong.
+				 * viewport().redisplay(); <- and this should be good
+				 * :)
+				 * */
 				cc.display();
-				//FIXME
-//				if(cc.window)cc.window->recursive_redisplay();	//THE BUG IS NOT HERE
-				this->display_status(info().c_str(), NULL);//THE BUG IS NOT HERE
+				this->display_status(info().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostRedisplay",c);
@@ -101,12 +101,12 @@ namespace fim
 	Browser::Browser():nofile("")
 	{	
 		/*
-		 * we initialize to no file
+		 * we initialize to no file the current file name
 		 */
 #ifndef FIM_WINDOWS
-		loaded_image=NULL;
 		only_viewport = new Viewport();
 		// DANGER !!
+		// EXCEPTIONS NEEDED
 #endif
 		cp=0;	//and to file index 0 (no file)
 	}
@@ -147,6 +147,11 @@ namespace fim
 	{
 		/*
 		 * pan the image up
+		 * +----------+
+		 * |          |
+		 * |          |
+		 * |   :-)    |
+		 * +----------+
 		 */
 		if(image())
 		{
@@ -167,6 +172,11 @@ namespace fim
 	{
 		/*
 		 * pan the image down
+		 * +----------+
+		 * |   :-)    |
+		 * |          |
+		 * |          |
+		 * +----------+
 		 */
 		if(image())
 		{
@@ -187,6 +197,11 @@ namespace fim
 	{
 		/*
 		 * pan the image ne
+		 * +----------+
+		 * |          |
+		 * |          |
+		 * | :-)      |
+		 * +----------+
 		 */
 		if(image())
 		{
@@ -208,7 +223,12 @@ namespace fim
 	{
 		/*
 		 * pan the image nw
-		 */
+		 * +----------+
+		 * |          |
+		 * |          |
+		 * |     :-)  |
+		 * +----------+		 
+		 * */
 		if(image())
 		{
 #ifdef FIM_AUTOCMDS
@@ -229,6 +249,11 @@ namespace fim
 	{
 		/*
 		 * pan the image sw
+		 * +----------+
+		 * |     :-)  |
+		 * |          |
+		 * |          |
+		 * +----------+
 		 */
 		if(image())
 		{
@@ -250,6 +275,11 @@ namespace fim
 	{
 		/*
 		 * pan the image se
+		 * +----------+
+		 * | :-)      |
+		 * |          |
+		 * |          |
+		 * +----------+
 		 */
 		if(image())
 		{
@@ -438,6 +468,9 @@ namespace fim
 	fim::string Browser::display_status(const char *l,const char *r)
 	{
 		//FIX ME
+		/*
+		 * displays the left text message and a right bracketed one
+		 * */
 		if(cc.getIntVariable("_display_status"))
 			set_status_bar((const char*)l, image()?image()->getInfo():"*");
 		return "";
@@ -478,12 +511,19 @@ namespace fim
 
 	fim::string Browser::no_image(const std::vector<fim::string> &args)
 	{
+		/*
+		 * sets no image as the current one
+		 * */
 		free_current_image();
 		return "";
 	}
 
 	fim::string Browser::load_error_handle(fim::string c)
 	{
+		/*
+		 * assume there was a load attempt : check and take some action in case of error
+		 * FIXME
+		 * */
 		if(image() && ! (viewport().check_valid()))
 		{
 			free_current_image();
@@ -506,6 +546,11 @@ namespace fim
 
 	fim::string Browser::reload()
 	{
+		/*
+		 * FIXME
+		 *
+		 * reload the current filename
+		 * */
 		if(n_files())
 		return reload(std::vector<fim::string>());
 		return "";
@@ -515,12 +560,13 @@ namespace fim
 #define FIM_BUGGED_CACHE 1
 	fim::string Browser::loadCurrentImage()
 	{
+		/*
+		 * FIXME
+		 *
+		 * load the current image
+		 * */
 #ifndef FIM_BUGGED_CACHE
-#ifdef FIM_WINDOWS
 		viewport().setImage( cache.useCachedImage(current().c_str()) );
-#else
-		loaded_image = cache.useCachedImage(current().c_str());
-#endif
 #else
 		viewport().setImage( new Image(current().c_str()) );
 #endif
@@ -529,23 +575,16 @@ namespace fim
 
 	void Browser::free_current_image()
 	{
+		/*
+		 * FIXME
+		 * */
 #ifndef FIM_BUGGED_CACHE
-#ifdef FIM_WINDOWS
 		if(image()) cache.freeCachedImage(image());
 		// FIXME : here should land support for cache reusing !
-		viewport().setImage( NULL );
-#else
-		if(image())
-		{
-			cache.freeCachedImage(image());
-			loaded_image=NULL;
-		}
-//		loaded_image = cache.getImage(current().c_str());
-#endif
 #else
 		delete image();
-		viewport().setImage( NULL );
 #endif
+		viewport().setImage( NULL );
 	}
 
 	fim::string Browser::prefetch(const std::vector<fim::string> &args)
@@ -555,8 +594,11 @@ namespace fim
 		 *
 		 * FIX ME : enrich this behaviour
 		 */
+		/*
+		 * FIXME
+		 * */
 #ifdef FIM_BUGGED_CACHE
-		return "";
+		return " prefetching disabled";
 #endif
 
 		if( args.size() > 0 )return "";
@@ -675,11 +717,9 @@ namespace fim
 			return false;
 		}
 #endif
-//		cout << "PUSHING : " << info()<<  "\n";
 		flist.push_back(nf);
 		cc.setVariable("filelistlen",current_images());
 		if(cp==0)++cp;
-		//cout<<nf<<" ";
 		return false;
 	}
 	
@@ -693,12 +733,10 @@ namespace fim
 
 	const fim::string Browser::n()const
 	{
+		/*
+		 *	FIX ME
+		 */
 		return fim::string(n_files());
-	}
-
-	fim::string Browser::get()const
-	{
-		return current();
 	}
 
 	fim::string Browser::_sort()
@@ -999,6 +1037,9 @@ namespace fim
 
 	fim::string Browser::info()
 	{
+		/*
+		 *	FIX ME
+		 */
 		return info(std::vector<fim::string>(0));
 	}
 
@@ -1144,17 +1185,22 @@ namespace fim
 
 	Image *Browser::image()const
 	{
-//		return NULL; // this is safe.. but invalidating
+		/*
+		 *	FIX ME
+		 */
 	#ifdef FIM_WINDOWS
-//		return cc.current_window().getImage();
 		return cc.current_viewport().getImage();
 	#else
-	       	return loaded_image;
+		if(!only_viewport)return NULL;
+		return only_viewport->getImage();
 	#endif
 	}
 
 	Viewport& Browser::viewport()const
 	{
+		/*
+		 *	FIX ME
+		 */
 		/* 
 		 *		DANGER 
 		 * A valid pointer should be returned 
@@ -1165,7 +1211,10 @@ namespace fim
 		return (cc.current_viewport());
 #else
 		// DANGER !
-//		if(!only_viewport)cc.quit();
+		if(!only_viewport)
+		{
+			cc.quit();
+		}
 		return *only_viewport;
 #endif
 	}
@@ -1182,7 +1231,36 @@ namespace fim
 
 	int Browser::empty_file_list()const
 	{
+		/*
+		 *	FIX ME
+		 */
 		return flist.size()==0;
+	}
+
+	fim::string Browser::display()
+	{
+		/*
+		 *	FIX ME
+		 */
+		return display(std::vector<fim::string>());
+	}
+
+	fim::string Browser::pop_current(const std::vector<fim::string> &args)
+	{
+		/*
+		 *	FIX ME
+		 */
+		return pop_current();
+	}
+
+	fim::string Browser::push(const std::vector<fim::string> &args)
+	{
+		/*
+		 *	FIX ME
+		 */
+		for(unsigned int i=0;i<args.size();++i)
+			push(args[i]);
+		return "";
 	}
 }
 

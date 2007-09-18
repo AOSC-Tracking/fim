@@ -47,7 +47,6 @@ class Browser
 	int cp;
 
 #ifndef FIM_WINDOWS
-	Image *loaded_image;
 	Viewport *only_viewport;
 #endif
 
@@ -62,10 +61,11 @@ class Browser
 	
 	fim::string last_regexp;
 	fim::Cache cache;
-	public:
-	int empty_file_list()const;
 	int current_image()const{ return cp; }
 	int current_images()const{ return n(); }
+	public:
+	int empty_file_list()const;
+
 	Browser();
 	~Browser() { }
 	fim::string current()const;
@@ -103,16 +103,12 @@ class Browser
 
 	fim::string reload(const std::vector<fim::string> &args);
 	fim::string list(const std::vector<fim::string> &args){return list();}
-	fim::string push(const std::vector<fim::string> &args)
-	{
-		for(unsigned int i=0;i<args.size();++i)
-			push(args[i]);
-		return "";
-	}
+	fim::string push(const std::vector<fim::string> &args);
+
 	fim::string n(const std::vector<fim::string> &args){return n();}
-	fim::string get(const std::vector<fim::string> &args){return get();}
 	fim::string _sort(const std::vector<fim::string> &args){return _sort();}
 	fim::string next(const std::vector<fim::string> &args){return next(args.size()>0?((int)args[0]):1);}
+
 	fim::string prev(int n=1);
 	fim::string prev(const std::vector<fim::string> &args);
 	fim::string remove(const std::vector<fim::string> &args);
@@ -126,15 +122,12 @@ class Browser
 	fim::string load(const std::vector<fim::string> &args);
 	fim::string pop(const std::vector<fim::string> &args);
 	const fim::string pop_current();
-	fim::string pop_current(const std::vector<fim::string> &args){return pop_current();}
+	fim::string pop_current(const std::vector<fim::string> &args);
 	fim::string no_image(const std::vector<fim::string> &args);
 	bool present(const fim::string nf);
 	bool push(const fim::string nf);
 
-	fim::string display()
-	{
-		return display(std::vector<fim::string>());
-	}
+	fim::string display();
 	private:
 	fim::string loadCurrentImage();
 	fim::string reload();
@@ -142,7 +135,6 @@ class Browser
 
 	int n_files()const;
 	const fim::string n()const;
-	fim::string get()const;
 	fim::string _sort();
 	fim::string next(int n);
 	fim::string do_next(int n);

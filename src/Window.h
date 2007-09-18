@@ -34,7 +34,8 @@
 #endif
 
 /*
- *	This code is still experimental.
+ *	This code is still experimental and programmed in great hurry.
+ *	FIXME
  */
 
 namespace fim
@@ -149,8 +150,11 @@ class Window
 	public:
 	enum Moves{Up,Down,Left,Right,NoMove};
 
+#if 0
 	void print();
 	void print_focused();
+	void draw()const;
+#endif
 	Window(const Rect& corners);
 
 	void split();
@@ -222,7 +226,6 @@ class Window
 	const Window & c_focused()const;
 	const Window & c_shadowed()const;
         fim::string cmd(const std::vector<fim::string> &args);
-	void draw()const;
 	void recursive_redisplay()const;
 	void recursive_display()const;
 };

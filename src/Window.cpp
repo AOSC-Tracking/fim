@@ -21,6 +21,7 @@
 
 /*
  *	This code is still experimental and programmed in great hurry.
+ *	FIXME
  */
 
 
@@ -45,11 +46,11 @@ namespace fim
 				vsplit();
 				return "\n";
 			}
-			else if(cmd == "draw")
+/*			else if(cmd == "draw")
 			{
 				draw();
 				return "\n";
-			}
+			}*/
 			else if(cmd == "normalize")
 			{
 				normalize();
@@ -84,12 +85,13 @@ namespace fim
 			{
 				close();
 			}
+			/*
 			else if(cmd == "test")
 			{
 				fim::cout << "test ok!!\n";
 				fb_clear_rect(10, 610, 100*4,100);
 				return "test ok!!!\n";
-			}
+			}*/
 			++i;
                 }
                 return "";
@@ -97,6 +99,10 @@ namespace fim
 
 	Window::Window(const Rect& corners_):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
 	{
+		/*
+		 * FIXME
+		 * should launch an exception here in the case!
+		 */
 		viewport=NULL;
 		viewport=new Viewport(this);
 //		if(!viewport)cc.quit(); // WARNING
@@ -104,6 +110,10 @@ namespace fim
 
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
 	{
+		/*
+		 * FIXME
+		 * should launch an exception here in the case!
+		 */
 		viewport=NULL;
 		viewport=new Viewport(this);
 //		if(!viewport)cc.quit(); // WARNING
@@ -213,6 +223,7 @@ namespace fim
 
 	void Window::split(){hsplit();}
 
+#if 0
 	void Window::print_focused()
 	{
 		if(isleaf())
@@ -232,6 +243,7 @@ namespace fim
 		if(!isleaf())first ->print();
 		if(!isleaf())second->print();
 	}
+#endif
 	
 	void Window::hsplit()
 	{
@@ -324,12 +336,14 @@ namespace fim
 			delete second; second = NULL;
 		}
 		else focused().close();
-		print();
+//		print();
 	}
 
 	void Window::balance()
 	{
-
+		/*
+		 * FIXME
+		 */
 	}
 
 	Window::Moves Window::reverseMove(Moves move)
@@ -508,6 +522,9 @@ namespace fim
 		/*
 		 * equalizes the horizontal divisions heights
 		 * */
+		/*
+		 * FIXME
+		 */
 		if(isleaf())
 		{
 			setyorigin(y);
@@ -545,6 +562,9 @@ namespace fim
 		/*
 		 * equalizes the vertical divisions widths
 		 * */
+		/*
+		 * FIXME
+		 */
 		if(isleaf())
 		{
 			setxorigin(x);
@@ -577,54 +597,67 @@ namespace fim
 		}
 	}
 
+#define FIM_BUGGED_ENLARGE 1
 	int Window::venlarge(int units=1)
 	{
+#if FIM_BUGGED_ENLARGE
 			/*
-			 *
+			 * +----------+
+			 * |    |     |
+			 * |   >|     |
+			 * |    |     |
+			 * |    |     |
+			 * +----------+
 			 */
 			if( isleaf() )return 0;
-			if( left() == focused() )
+
+			if(ishsplit())
 			{
-				left() .hrgrow(units);
-//				left() .venlarge(units); //evil
-				right().hlshrink(units);
-				right().normalize();
+				upper().hrgrow(units);
 			}
-			else
-			{
-				right(). hrgrow(units);
-//				right().venlarge(units); //evil
-				left() .hlshrink(units);
-				left() .normalize();
-			}
+			focused() .venlarge(units); //evil
+			if(ishsplit())shadowed().hlshrink(units);
+			if(ishsplit())shadowed().normalize();
+#endif
 			return 0;
 	}
 
 	int Window::henlarge(int units=1)
 	{
+#if FIM_BUGGED_ENLARGE
 			/*
-			 *
+			 * +----------+
+			 * |          |
+			 * |__________|
+			 * |     ^    |
+			 * |          |
+			 * +----------+
 			 */
 			if( isleaf() )return 0;
-			if( upper() == focused() )
+
+			if(ishsplit())
 			{
-				upper().vlgrow(units);
-//				upper().henlarge(units); //evil
-				lower().vushrink(units);
-				lower().normalize();
+				if(focused()==upper()) focused().vlgrow(units);
+				if(focused()==lower()) focused().vugrow(units);
 			}
-			else
+			focused().henlarge(units); //evil
+			if(ishsplit())
 			{
-				lower().vugrow(units);
-//				lower().henlarge(units); //evil
-				upper().vlshrink(units);
-				upper().normalize();
+				if(focused()==upper()) shadowed().vushrink(units);
+				if(focused()==lower()) shadowed().vlshrink(units);
+
+				shadowed().normalize(); 
 			}
+#endif
 			return 0;
 	}
 
 	int Window::enlarge(int units=1)
 	{
+		/*
+		 * FIXME
+		 */
+#if FIM_BUGGED_ENLARGE
 		/*
 		 * complicato ...
 		 */
@@ -639,6 +672,7 @@ namespace fim
 			}else
 			// isleaf()
 			return 0;
+#endif
 			return 0;
 	}
 
@@ -653,8 +687,12 @@ namespace fim
 	int Window::hrgrow(int units=1)   {  return corners.hrgrow(  units); } 
 	int Window::hrshrink(int units=1) {  return corners.hrshrink(units); }
 
+#if 0
 	void Window::draw()const
 	{
+		/*
+		 * 
+		 * */
 		if(isleaf())
 		{
 			// we draw
@@ -668,14 +706,17 @@ namespace fim
 			shadowed().draw();
 		}
 	}
+#endif
 
 	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
 	void Window::recursive_redisplay()const
 	{
+		/*
+		 * whole, deep, window redisplay
+		 * */
 		if(isleaf())
 		{
 			if(viewport)viewport->redisplay();
-			cout << "leaf: "<< width() << " " << height() << "\n";
 		}
 		else
 		{
@@ -687,6 +728,9 @@ namespace fim
 	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
 	void Window::recursive_display()const
 	{
+		/*
+		 * whole, deep, window display
+		 * */
 		if(isleaf())
 		{
 			if(viewport)viewport->display();
@@ -701,7 +745,9 @@ namespace fim
 
 	Viewport & Window::current_viewport()const
 	{
-		//FIXME
+		/*
+		 *	FIX ME
+		 */
 		if(!isleaf()) return focused().current_viewport();
 
 		// isleaf

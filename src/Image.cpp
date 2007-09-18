@@ -202,7 +202,7 @@ namespace fim
         }
 
 // if the image rescaling mechanism is suspected of bugs, this will inhibit its use.
-#define FIM_BUGGED_RESCALE 0
+#define FIM_BUGGED_RESCALE 1
 
 	int Image::rescale( float ns )
 	{
@@ -325,5 +325,33 @@ namespace fim
 		 * */
 		return new Image(*this);
 	}
+
+/*
+ *	Creates a little description of some image,
+ *	and plates it in a NUL terminated static buffer.
+ */
+char *Image::make_info(struct ida_image *img, float scale)
+{
+	//FIX ME
+	static char linebuffer[128];
+	char imagemode[3],*imp;
+	imp=imagemode;
+	if(cc.getIntVariable("autoflip"))*(imp++)='F';
+	if(cc.getIntVariable("automirror"))*(imp++)='M';
+	*imp='\0';
+	snprintf(linebuffer, sizeof(linebuffer),
+	     "%s%.0f%% %dx%d%s %d/%d",
+	     /*fcurrent->tag*/ 0 ? "* " : "",
+	     scale*100,
+	     img->i.width, img->i.height,
+	     imagemode,
+//	     cc.current_image(),
+	     (cc.getIntVariable("fileindex")),
+//	     cc.current_images()
+	     (cc.getIntVariable("filelistlen"))
+	     );
+	return linebuffer;
+}
+
 
 }
