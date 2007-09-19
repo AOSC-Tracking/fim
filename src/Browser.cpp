@@ -557,7 +557,7 @@ namespace fim
 	}
 
 // if the cache is suspected of bugs, this will inhibit its use.
-#define FIM_BUGGED_CACHE 1
+//#define FIM_BUGGED_CACHE 0
 	fim::string Browser::loadCurrentImage()
 	{
 		/*

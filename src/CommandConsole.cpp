@@ -280,9 +280,6 @@ namespace fim
 		fim_stdin=0;
 		cycles=0;
 		setVariable("steps",50);
-#ifdef FIM_WINDOWS
-		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"), window,&Window::cmd));
-#endif
 		addCommand(new Command(fim::string("no_image" ),fim::string("displays no image at all"),&browser,&Browser::no_image));
 		addCommand(new Command(fim::string("next" ),fim::string("displays the next picture in the list"),&browser,&Browser::next));
 		addCommand(new Command(fim::string("prev" ),fim::string("displays the previous picture in the list"),&browser,&Browser::prev));
@@ -389,6 +386,7 @@ namespace fim
 		/*
 		 * FIXME : exceptions should be launched here in case ...
 		 * */
+		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"), window,&Window::cmd));
 #endif
 
 		show_must_go_on=1;

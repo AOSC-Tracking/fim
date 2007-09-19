@@ -264,14 +264,14 @@ namespace fim
 		 * */
 		// WARNING : FIXME : DANGER !!
 		if( !image )return false;
-		if( is_in_cache(image) )
+		if( is_in_cache(image) && need_free() )
 		{
 			usageCounter[image->getName()]--;
 			this->erase( image );
 			return true;
 		}
 		else
-		if( is_in_clone_cache(image) )
+		if( is_in_clone_cache(image) && need_free() )
 		{
 			usageCounter[image->getName()]--;
 			erase_clone(image);
