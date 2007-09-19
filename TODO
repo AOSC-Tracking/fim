@@ -10,8 +10,12 @@ If you intend to learn about FIM, please read the program documentation  in the
 
 -------------------------------------------------------------------------------
 	Current development directions
+
+20070919	docs : a comparative table between image viewers to show the Fim niche
+20070919	docs : add example of system integration of Fim
 20070903	these features are currently going to be worked in the near future:
 			- the combined window+viewport subsystem
+			- move as much as possible of Fim to be scriptable. variables in primis!
 			- arbitrary long key sequence bindings (mutt-like)
 			- shortcuts algebra for commands
 			- parameter passing to commands 

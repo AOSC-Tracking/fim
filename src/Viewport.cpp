@@ -232,7 +232,6 @@ namespace fim
 		if(g_fim_no_framebuffer)return;
 		if (image->new_image && redraw)
 		{
-			cout << "NeW!!\n";
 			if(autotop && image->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
 		  	{
 			    top=autotop>0?0:image->height()-this->viewport_height();
@@ -244,8 +243,9 @@ namespace fim
 				top = (image->height() - this->viewport_height()) / 2;
 			image->new_image = 0;
 		}
-		else
-		if (redraw  ) 
+// uncommenting the next 2 lines will reinsert a bug
+//		else
+//		if (redraw  ) 
 		{
 			/*	
 			 *	20070911
@@ -397,30 +397,6 @@ namespace fim
 		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / image->width();
 
 		image->rescale(newscale);
-	}
-
-	void Viewport::scale_fix_top_left()
-	{
-		return;
-		/*
-		 * this function operates on the image currently in memory
-		 *
-		 * WARNING : IT SEEMS .. USELESS :)
-		 */
-		if(g_fim_no_framebuffer)return;
-		if(!image)return;
-			
-		float old=image->scale;float fnew=image->newscale;
-		unsigned int width, height;
-		float cx,cy;
-		cx = (float)(left + this->viewport_width() /2) / (image->width()  * old);
-		cy = (float)(top  + this->viewport_height()/2) / (image->height() * old);
-//		image->width  = (int)(image->width()  * fnew);
-//		image->height = (int)(image->height() * fnew);
-		left   = (int)(cx * image->width()  - this->viewport_width() /2);
-		top    = (int)(cy * image->height() - this->viewport_height()/2);
-		//the cast was added by me...
-//		image->scale = newscale;
 	}
 
 	void Viewport::free()

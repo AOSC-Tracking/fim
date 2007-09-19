@@ -202,7 +202,7 @@ namespace fim
         }
 
 // if the image rescaling mechanism is suspected of bugs, this will inhibit its use.
-#define FIM_BUGGED_RESCALE 1
+#define FIM_BUGGED_RESCALE 0
 
 	int Image::rescale( float ns )
 	{
@@ -225,7 +225,6 @@ namespace fim
 		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=neworientation; // fix this
-//		scale_fix_top_left();
 //		status(linebuffer, NULL);
 
 		cc.setVariable("scale",newscale*100);
@@ -248,16 +247,18 @@ namespace fim
 				cout << "h:"<<height()<<"\n";*/
 
 //			newscale=1.0;ascale=1.0;
+//			newscale=(newscale!=1.5?2.0:1.5); ascale=1.0;
 //
 			img  = scale_image(fimg,scale=newscale,cc.getFloatVariable("ascale"));
-			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
-			if( img && orientation== 2)img  = flip_image(img);
+//			img  = scale_image(fimg,scale=newscale,1.0);
+//			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
+//			if( img && orientation== 2)img  = flip_image(img);
 
 			if(!img)
 			{
 				img=backup_img;
 				if(cc.getIntVariable("_display_busy"))
-					set_status_bar( "rescaling failed (insufficient memory!)", getInfo());
+					set_status_bar( "rescaling failed (insufficient memory?!)", getInfo());
 				sleep(1);	//just to give a glimpse..
 			}
 			else 
@@ -278,7 +279,6 @@ namespace fim
 		return 0;
 	}
 
-
 	void Image::reduce(float factor)
 	{
 		newscale = scale / factor;
@@ -294,7 +294,7 @@ namespace fim
 	char* Image::getInfo()
 	{
 		// ATENCION!
-		if(fimg)return make_info(img,scale);return NULL;
+		if(fimg)return make_info();return NULL;
 	}
 
 	/*
@@ -330,9 +330,9 @@ namespace fim
  *	Creates a little description of some image,
  *	and plates it in a NUL terminated static buffer.
  */
-char *Image::make_info(struct ida_image *img, float scale)
+char *Image::make_info()
 {
-	//FIX ME
+	//FIX ME !
 	static char linebuffer[128];
 	char imagemode[3],*imp;
 	imp=imagemode;
@@ -343,11 +343,9 @@ char *Image::make_info(struct ida_image *img, float scale)
 	     "%s%.0f%% %dx%d%s %d/%d",
 	     /*fcurrent->tag*/ 0 ? "* " : "",
 	     scale*100,
-	     img->i.width, img->i.height,
+	     this->width(), this->height(),
 	     imagemode,
-//	     cc.current_image(),
 	     (cc.getIntVariable("fileindex")),
-//	     cc.current_images()
 	     (cc.getIntVariable("filelistlen"))
 	     );
 	return linebuffer;

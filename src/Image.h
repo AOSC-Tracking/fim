@@ -78,7 +78,7 @@ class Image
 
 
         int tiny()const;
-	char *make_info(struct ida_image *img, float scale);
+	char *make_info();
 	public:
 	Image(const Image& image); // yes, a private constructor (was)
 
@@ -102,7 +102,6 @@ class Image
 
 
 	char* getInfo();
-//	virtual void scale_fix_top_left(){}
 
 	int width();
 	int original_width();

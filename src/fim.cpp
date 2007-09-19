@@ -157,6 +157,7 @@ void sanitize_string(char *s, int c=0)
  *	Set the 'status bar' of the program.
  *	- desc will be placed on the left corner
  *	- info on the right
+ *	pointers are not freed
  */
 void status(const char *desc, const char *info)
 {
@@ -196,6 +197,9 @@ void status(const char *desc, const char *info)
 
 void set_status_bar(const char *desc, const char *info)
 {
+	/*
+	 * pointers are not freed, by any means
+	 */
 	status(desc,info);
 }
 
