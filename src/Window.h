@@ -129,12 +129,9 @@ class Window
 	private:
 
 	enum Spacings{ hspacing=0, vspacing=0};
+	enum Moves{Up,Down,Left,Right,NoMove};
 
 	/* FIXME : temporary : this will be a Viewport ! */
-	public:
-	Image *getImage()const;
-	private:
-
 /*
  * should we model some status bar here ?
  *
@@ -147,16 +144,6 @@ class Window
 	Window *first,*second;
 	bool amroot;
 	
-	public:
-	enum Moves{Up,Down,Left,Right,NoMove};
-
-#if 0
-	void print();
-	void print_focused();
-	void draw()const;
-#endif
-	Window(const Rect& corners);
-
 	void split();
 	void hsplit();
 	void vsplit();
@@ -173,10 +160,6 @@ class Window
 	bool can_vgrow(const Window & window, int howmuch);
 	bool can_hgrow(const Window & window, int howmuch);
 
-	int height()const;
-	int width()const;
-	int xorigin()const;
-	int yorigin()const;
 
 	void setroot();
 
@@ -222,12 +205,25 @@ class Window
 	public:
 
 	Viewport & current_viewport()const;
-
 	const Window & c_focused()const;
 	const Window & c_shadowed()const;
         fim::string cmd(const std::vector<fim::string> &args);
 	void recursive_redisplay()const;
 	void recursive_display()const;
+
+	Image *getImage()const;
+
+#if 0
+	void print();
+	void print_focused();
+	void draw()const;
+#endif
+	Window(const Rect& corners);
+
+	int height()const;
+	int width()const;
+	int xorigin()const;
+	int yorigin()const;
 };
 
 }

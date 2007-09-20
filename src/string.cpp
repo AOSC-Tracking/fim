@@ -19,7 +19,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "fim.h"
-//#include "string.h"
 
 namespace fim
 {
@@ -91,8 +90,6 @@ namespace fim
 #endif
 	}
 
-
-
 	string::string(const int &i)
 	{
 		_string_init();
@@ -112,8 +109,7 @@ namespace fim
 	const char*string::c_str()const
 	{
 		if(  this->isempty() == true ) return "";
-//		return dupstr(s);
-		return s;
+		return s;	/* yes, a heap allocated reference */
 	}
 
 	/*
@@ -197,7 +193,6 @@ namespace fim
 		++l;
 		if(l<size())return size();
 		char *ns;/* new string */
-//		std::cout <<"realloc..\n";
 		ns=(char*)realloc((void*)s,l);/* the terminator is our stuff */
 		if(ns)
 		{
@@ -213,23 +208,18 @@ namespace fim
 
 	string string::operator+=(const string& s)
 	{
-//		exit(0);	//////////////////////////
 
 		int r,n;// returned, needed
 		n = ( this->length() + s.length() );
 		r = this->reallocate( n );
-//		std::cout << "realloc : "<< n << "->" << r << "\n" ; 
 		if(r < n || r==0)
 		{
-//			std::cout << "severe error in"<<__FILE__<<":"<<__LINE__<<" \n";
 			return *this; // ! FIXME !
 		}
-//		std::cout << "catenating\n";
 		int tlen=strlen(this->s),
 		    slen=strlen(s.c_str()),
 		    flen=this->size()-1-slen-tlen;
 		strncat(this->s+tlen,s.c_str(),slen);
-//		std::cout << this->s<<"\n";
 		return string(*this);
 	} 
 
@@ -289,15 +279,12 @@ namespace fim
 		 * */
 		if((r=reset(l))<1 || l<1 )
 		{
-//			std::cout << "severe error in"<<__FILE__<<":"<<__LINE__<<" \n";
 			return this->reset(0);
 		}
 
 		strncpy(this->s,s,r);	//r can be longer than strlen(s)
 
 		this->s[max((min(r-1,l)),0)]='\0';	/* remember r is the size of the allocated space */
-
-//		std::cout << "\""<<this->s <<"\" assigned ("<<l<<")\n";
 
 		return (this->size());	/*  the effective allocated memory */
 	}
@@ -341,10 +328,7 @@ namespace fim
 	 */
 	int string::reset(int l)
 	{
-//		std::cout << "l: " << l << "\n";
 		l=min(l,max_string());	/* etica professionale */
-
-//		if(l<0)ferror("resetting string to <0");
 
 #ifdef _FIM_DYNAMIC_STRING
 		//blanking
@@ -366,8 +350,6 @@ namespace fim
 
 			s=(char*)(fim_calloc(l));
 
-//			std::cout<<"allocated "<<(int*)s<<"\n";
-//
 			len=(s?l:0);	/* who knows .. */
 		}
 		else
@@ -383,7 +365,6 @@ namespace fim
 	std::ostream& operator<<(std::ostream &os,const string& s)
 	{
 		return os << s.c_str();
-		//.print(os);
 	}
 
 	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
@@ -404,7 +385,7 @@ namespace fim
 	{
 	}
 
-	string::string(int i)//:std::string(i)
+	string::string(int i)
 	{
 		char buf[FIM_CHARS_FOR_INT];
 		snprintf(buf,FIM_CHARS_FOR_INT-1,"%d",i);

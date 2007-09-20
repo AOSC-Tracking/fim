@@ -4,14 +4,13 @@ $Id$
 
 Please refer to the documentation (doc/FIM.TXT) for a complete list of known bugs (BUGS section).
 
+20070919	while command suffers from being not interruptible in some cases (when image is small and not panable)
+20070919	The windowing system is bugged : split;vsplit;henlarge;display
+20070919	The windowing system is bugged :  make && src/fim media/* -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge:'
 20070912	Debugging it with the framebuffer under gdb hangs the console (even with -p).
-20070811	The automake required for autogen.sh'in this package is 1.10.
-		So users who want to build from the svn repository are required to use this version.
 
 20070811	On CENTOS 64 bit, i reported linking problems : -ltermcap is required, too.
 		I Don't know exactly how to fix this issue.
-
-20070811	There seems to be a fim_cv_docdir issue in the configure.ac, but maybe not!
 
 2007*		Bugs shared with fbi:
 		- do not switch console or interrupt the program while it is busy: it could hang your console
@@ -20,6 +19,11 @@ Please refer to the documentation (doc/FIM.TXT) for a complete list of known bug
 		  and blind typing could be dangerous, if you do now know what you are doing!
 
 20070904	problems could occur with the commands giving output when no std::cout << "" is returned soon after (see Commandconsole.cpp mehods for this..)
+
+==== FLEAS
+
+20070811	The automake required for autogen.sh'in this package is 1.10.
+		So users who want to build from the svn repository are required to use this version.
 
 ==== BUG REPORTING
 
@@ -47,6 +51,7 @@ When submitting a bug report, please follow the following rules:
    consider sending the logfile created and named in the error messages.
 
 ==== CONTACT
+
 You can mail your report to dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_
 with a '@' and _Baz_ with a '.'.
 

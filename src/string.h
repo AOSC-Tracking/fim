@@ -41,7 +41,6 @@ namespace fim
 #define fim_realloc(x,n) realloc((x),(n))
 #define fim_empty_string(s) (!(s) || !(*(s)))
 
-#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);cc.quit(-1);}
 	/*
 	 *	Allocation and duplication of a single string
 	 */
@@ -110,7 +109,6 @@ namespace fim
 	{
 		public:
 		string();
-		//string::string():std::string(FIM_STRING_INITIAL_LENGTH,'\0'){}
 
 		/* a virtual destructor will behave correctly when destroying this class
 		 * objects with base pointers .. */

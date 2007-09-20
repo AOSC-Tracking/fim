@@ -21,7 +21,7 @@
 
 /*
  *	This code is still experimental and programmed in great hurry.
- *	FIXME
+ *	FIXME : there are bugs.
  */
 
 
@@ -100,53 +100,99 @@ namespace fim
 	Window::Window(const Rect& corners_):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
 	{
 		/*
-		 * FIXME
-		 * should launch an exception here in the case!
+		 *  A new leave Window is created with a specified geometry.
+		 *  An exception is launched upon memory errors.
 		 */
+		focus=0;
 		viewport=NULL;
 		viewport=new Viewport(this);
-//		if(!viewport)cc.quit(); // WARNING
+
+		if( viewport == NULL ) throw FIM_E_NO_MEM;
 	}
 
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
 	{
 		/*
-		 * FIXME
-		 * should launch an exception here in the case!
+		 *  A new leave Window is created with a specified geometry.
+		 *  An exception is launched upon memory errors.
 		 */
 		viewport=NULL;
 		viewport=new Viewport(this);
-//		if(!viewport)cc.quit(); // WARNING
+
+		if( viewport == NULL ) throw FIM_E_NO_MEM;
 	}
 
 	bool Window::issplit()const
 	{
+		/*
+		 * return whether this window is split in some way
+		 * */
 		return ( first && second ) ;
 	}
 
 	bool Window::isleaf()const
 	{
+		/*
+		 * +----------+
+		 * |____|_____|
+		 * |+--+|     |
+		 * ||L ||     |
+		 * |+--+|     |
+		 * +----------+
+		 *   NON LEAF
+		 * +----------+
+		 *
+		 * +----------+
+		 * |          |
+		 * |  LEAF    |
+		 * |          |
+		 * |          |
+		 * +----------+
+		 */
 		return ( ! first && ! second ) ;
 	}
 
 	bool Window::isvalid()const
 	{	
+		/*
+		 * return whether this window is split right, if it is
+		 * */
 		return !(( first && ! second ) || ( ! first && second ) );
 	}
 
 	bool Window::ishsplit()const
 	{
+		/*
+		 * +----------+
+		 * |          |
+		 * |__________|
+		 * |          |
+		 * |          |
+		 * +----------+
+		 */
 		return ( issplit() && focused().corners.x==shadowed().corners.x ) ;
 	}
 	
 	bool Window::isvsplit()const
 	{
+		/*
+		 * +----------+
+		 * |    |     |
+		 * |    |     |
+		 * |    |     |
+		 * |    |     |
+		 * +----------+
+		 */
 		return ( issplit() && focused().corners.y==shadowed().corners.y ) ;
 	}
 	
 	const Window & Window::c_focused()const
 	{
-		if(isleaf())return (Window&)(*this);	// should launch an exception here!
+		/*
+		 * return a const reference to the focused window
+		 * throws an exception in case the window is not split!
+		 * */
+		if(isleaf())throw FIM_E_WINDOW_ERROR;
 
 		if(focus==0)return first->c_focused();
 		else return second->c_focused();
@@ -154,55 +200,63 @@ namespace fim
 
 	Window & Window::focused()const
 	{
-		if(isleaf())return (Window&)(*this);	// should launch an exception here!
+		/*
+		 * return a reference to the focused window
+		 * throws an exception in case the window is not split!
+		 * */
+		if(isleaf())throw FIM_E_WINDOW_ERROR;
 
 		if(focus==0)return *first;
 		else return *second;
 	}
 
-/*	const Window & Window::c_focused()const
-	{
-		if(isleaf())return *this;	// should launch an exception here!
-
-		if(focus==0)return *first;
-		else return *second;
-	}*/
-
 	Window & Window::upper()
 	{
-		if(!ishsplit())return *this;	// should launch an exception here!
+		/*
+		 * return a reference to the upper window
+		 * throws an exception in case the window is not split!
+		 * */
+		if(!ishsplit())throw FIM_E_WINDOW_ERROR;
 		return *first;
 	}
 
 	Window & Window::lower()
 	{
-		if(!ishsplit())return *this;	// should launch an exception here!
+		/*
+		 * return a reference to the lower window
+		 * throws an exception in case the window is not split!
+		 * */
+		if(!ishsplit())throw FIM_E_WINDOW_ERROR;
 		return *second;
 	}
 
 	Window & Window::left()
 	{
-		if(!isvsplit())return *this;	// should launch an exception here!
+		/*
+		 * return a reference to the left window
+		 * throws an exception in case the window is not split!
+		 * */
+		if(!isvsplit())throw FIM_E_WINDOW_ERROR;
 		return *first;
 	}
 
 	Window & Window::right()
 	{
-		if(!isvsplit())return *this;	// should launch an exception here!
+		/*
+		 * return a reference to the right window
+		 * throws an exception in case the window is not split!
+		 * */
+		if(!isvsplit())throw FIM_E_WINDOW_ERROR;
 		return *second;
 	}
-/*
-	const Window & Window::c_shadowed()const
-	{
-		if(isleaf())return *this;	// should launch an exception here!
 
-		if(focus!=0)return *first;
-		else return *second;
-	}
-*/
 	Window & Window::shadowed()const
 	{
-		if(isleaf())return (Window&)(*this);	// should launch an exception here!
+		/*
+		 * return a const reference to the right window
+		 * throws an exception in case the window is not split!
+		 * */		
+		if(isleaf())throw FIM_E_WINDOW_ERROR;
 
 		if(focus!=0)return *first;
 		else return *second;
@@ -210,7 +264,11 @@ namespace fim
 
 	const Window & Window::c_shadowed()const
 	{
-		if(isleaf())return (Window&)(*this);	// should launch an exception here!
+		/*
+		 * return a const reference to the shadowed window
+		 * throws an exception in case the window is not split!
+		 * */		
+		if(isleaf())throw FIM_E_WINDOW_ERROR;
 
 		if(focus!=0)return first->c_shadowed();
 		else return second->c_shadowed();
@@ -218,10 +276,19 @@ namespace fim
 
 	void Window::setroot()
 	{
+		/*
+		 * FIXME
+		 * */
 		amroot=true;
 	}
 
-	void Window::split(){hsplit();}
+	void Window::split()
+	{
+		/*
+		 * an alias for hsplit()
+		 * */
+		hsplit();
+	}
 
 #if 0
 	void Window::print_focused()
@@ -297,7 +364,14 @@ namespace fim
 		 * closing a leaf window implies its rejoining with the parent one
 		 *
 		 * FIXME : unfinished
-		 * */
+		 *
+		 * +----+-----+   +----------+
+		 * |    |     |   |          |
+		 * |    |     |-->|          |
+		 * |    |     |   |          |
+		 * |    |     |   |          |
+		 * +----+-----+   +----------+
+		 */
 		if(   !isvalid() ) return;
 
 		if(isleaf())
@@ -343,6 +417,13 @@ namespace fim
 	{
 		/*
 		 * FIXME
+		 * +---+-------+   +-----+-----+
+		 * |---+-------+   |     |     |
+		 * |           |-->|     |     |
+		 * |           |   +-----+-----+
+		 * |           |   |     |     |
+		 * |           |   |     |     |
+		 * +-----------+   +-----+-----+
 		 */
 	}
 
@@ -350,6 +431,11 @@ namespace fim
 	{
 		/*
 		 * returns the complementary window move
+		 *
+		 * ( > )^-1 = <
+		 * ( < )^-1 = >
+		 * ( ^ )^-1 = v
+		 * ( v )^-1 = ^
 		 * */
 		if(move==Left )return Right;
 		if(move==Right)return Left;
@@ -430,89 +516,182 @@ namespace fim
 	int Window::chfocus()
 	{
 		/*
-		 * this makes sense if issplit()
-		 * */
+		 * this makes sense if issplit().
+		 *
+		 * swaps the focus only.
+		 *
+		 * +----+----+   +----+----+
+		 * |    |    |   |    |    |
+		 * |    |    |   |    |    |
+		 * | F  | S  |-->| S  | F  |
+		 * |    |    |   |    |    |
+		 * +----+----+   +----+----+
+		 */
 		return focus = ~focus;
 	}
 
 	int Window::height()const
 	{
+		/*
+		 * +---+ +
+		 * |   | |
+		 * +---+ +
+		 */
 		return corners.h ;
 	}
 
 	int Window::setwidth(int w)
 	{
-		//!
+		/*
+		 * +---+
+		 * +---+
+		 * |   |
+		 * +---+
+		 */
 		return corners.w=w;
 	}
 
 	int Window::setheight(int h)
 	{
-		//!
+		/*
+		 * +---+ +
+		 * |   | |
+		 * +---+ +
+		 */
 		return corners.h=h;
 	}
 
 	int Window::width()const
 	{
+		/*
+		 * +---+
+		 * +---+
+		 * |   |
+		 * +---+
+		 */
 		return corners.w ;
 	}
 
 	int Window::setxorigin(int x)
 	{
-		//!
+		/*
+		 * o---+
+		 * |   |
+		 * +---+
+		 */
 		return corners.x=x ;
 	}
 
 	int Window::setyorigin(int y)
 	{
-		//!
+		/*
+		 * o---+
+		 * |   |
+		 * +---+
+		 */
 		return corners.y=y ;
 	}
 
 	int Window::xorigin()const
 	{
+		/*
+		 * o---+
+		 * |   |
+		 * +---+
+		 */
 		return corners.x ;
 	}
 
 	int Window::yorigin()const
 	{
+		/*
+		 * o---+
+		 * |   |
+		 * +---+
+		 */
 		return corners.y ;
 	}
 
 	bool Window::can_vgrow(const Window & window, int howmuch)
 	{
-	//!!
+		/*
+		 * Assuming that the argument window is a contained one, 
+		 * can this window grow the specified amount and assure the
+		 * minimum spacing is respected ?
+		 *
+		 * +--------+
+		 * +-^-+this|
+		 * | ? |    |
+		 * +-v-+    |
+		 * +--------+
+		 */
 		return window.height() + howmuch + vspacing  < height();
 	}
 
 	bool Window::can_hgrow(const Window & window, int howmuch)
 	{
-	//!!
-		return window.width() + howmuch + hspacing   < width();
+		/*
+		 * Assuming that the argument window is a contained one, 
+		 * can this window grow the specified amount and assure the
+		 * minimum spacing is respected ?
+		 *
+		 * +--------+
+		 * +---+this|
+		 * |<?>|    |
+		 * +---+    |
+		 * +--------+
+		 */		return window.width() + howmuch + hspacing   < width();
 	}
 
 
 	bool Window::operator==(const Window&window)const
 	{
+		/*
+		 * #===#
+		 * #   #
+		 * #===#
+		 */
 		return corners==window.corners;
 	}
 
 	int Window::count_hdivs()const
 	{
-	//!
+		/*
+		 * how many horizontal divisions ?
+		 *
+		 * +----------+
+		 * |          |
+		 * |          | hdivs = 3
+		 * +----------+
+		 * +----------+
+		 * +----------+
+		 * */
 		return (isleaf()|| !ishsplit())?1: first->count_hdivs()+ second->count_hdivs();
 	}
 
 	int Window::count_vdivs()const
 	{
+		/*
+		 * how many vertical divisions ?
+		 * */
 		return (isleaf()|| !isvsplit())?1: first->count_vdivs()+ second->count_vdivs();
 	}
 
 	int Window::normalize()
 	{
-	//!!
+		/*
+		 * FIXME vs balance
+		 *
+		 * +---+-------+   +-----+-----+
+		 * |---+-------+   |     |     |
+		 * |           |-->|     |     |
+		 * |           |   +-----+-----+
+		 * |           |   |     |     |
+		 * |           |   |     |     |
+		 * +-----------+   +-----+-----+
+		 */
 		return
-//		(hnormalize(xorigin(), width())!= -1);
+//		(hnormalize(xorigin(), width() )!= -1);
 		(hnormalize(xorigin(), width() )!= -1) &&
 		(vnormalize(yorigin(), height())!= -1);
 	}
@@ -520,10 +699,17 @@ namespace fim
 	int Window::vnormalize(int y, int h)
 	{
 		/*
-		 * equalizes the horizontal divisions heights
-		 * */
-		/*
+		 * balances the horizontal divisions height
+		 *
 		 * FIXME
+		 *
+		 * +---+-------+   +---+-------+
+		 * |---+-------+   |   |       |
+		 * |           |-->|   |       |
+		 * |           |   +---+-------+
+		 * |           |   |   |       |
+		 * |           |   |   |       |
+		 * +-----------+   +---+-------+
 		 */
 		if(isleaf())
 		{
@@ -560,10 +746,17 @@ namespace fim
 	int Window::hnormalize(int x, int w)
 	{
 		/*
-		 * equalizes the vertical divisions widths
-		 * */
-		/*
+		 * balances the vertical divisions width
+		 *
 		 * FIXME
+		 *
+		 * +---+-------+   +-----+-----+
+		 * |   |       |   |     |     |
+		 * |   |       |-->|     |     |
+		 * |---+-------+   +-----+-----+
+		 * |   |       |   |     |     |
+		 * |   |       |   |     |     |
+		 * +---+-------+   +-----+-----+
 		 */
 		if(isleaf())
 		{
@@ -600,12 +793,16 @@ namespace fim
 #define FIM_BUGGED_ENLARGE 1
 	int Window::venlarge(int units=1)
 	{
+		/*
+		 * SEEMS BUGGY:
+		 * make && src/fim media -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge:'
+		 * */
 #if FIM_BUGGED_ENLARGE
 			/*
 			 * +----------+
 			 * |    |     |
 			 * |   >|     |
-			 * |    |     |
+			 * | F  |  S  |
 			 * |    |     |
 			 * +----------+
 			 */
@@ -624,13 +821,17 @@ namespace fim
 
 	int Window::henlarge(int units=1)
 	{
+		/*
+		 * SEEMS BUGGY:
+		 * make && src/fim media -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge:'
+		 * */
 #if FIM_BUGGED_ENLARGE
 			/*
 			 * +----------+
-			 * |          |
+			 * |   S      |
 			 * |__________|
 			 * |     ^    |
-			 * |          |
+			 * |   F      |
 			 * +----------+
 			 */
 			if( isleaf() )return 0;
@@ -655,7 +856,7 @@ namespace fim
 	int Window::enlarge(int units=1)
 	{
 		/*
-		 * FIXME
+		 * FIXME : ???
 		 */
 #if FIM_BUGGED_ENLARGE
 		/*
@@ -746,18 +947,21 @@ namespace fim
 	Viewport & Window::current_viewport()const
 	{
 		/*
-		 *	FIX ME
+		 * returns a reference to the current window's viewport.
+		 * throws an exception if this window is a leaf.
+		 *
+		 * +#===#+-----+
+		 * ||   ||     |
+		 * ||   ||     |
+		 * ||FVP||     |
+		 * ||   ||     |
+		 * +#===#+-----+
 		 */
 		if(!isleaf()) return focused().current_viewport();
 
-		// isleaf
-		if(!viewport)
-		{
-			cout << "WINDOW : NO VIeWPORT !\n";
-//			cc.quit();
-		}
+		if(!viewport)throw FIM_E_TRAGIC; // isleaf()
+
 		return *viewport;
-//		return (Viewport &)(viewport);
 	}	
 
 	Image *Window::getImage()const

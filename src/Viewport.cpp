@@ -331,7 +331,6 @@ namespace fim
 		/*
 		 * FIXME : this is essential to implement properly window splitting mechanisms!!
 		 **/
-//		cc.quit();
 		return NULL;
 //		return new Viewport();
 	}

@@ -120,6 +120,15 @@ static fim_stream cout;
 class Browser;
 class CommandConsole;
 std::ostream& operator<<(std::ostream &os,const string& s);
+
+/* exceptions */
+typedef int FimException;
+#define FIM_E_NO_IMAGE 1
+#define FIM_E_NO_VIEWPORT 2
+#define FIM_E_WINDOW_ERROR 3
+#define FIM_E_TRAGIC -1	/* no hope */
+#define FIM_E_NO_MEM 4	/* also a return code */
+/* ... */
 }
 
 //void status(const char *desc, const char *info);

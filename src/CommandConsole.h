@@ -30,7 +30,6 @@ namespace fim
 {
 class CommandConsole
 {
-	friend class Browser;
 #ifdef FIM_WINDOWS
 	fim::Window * window;
 #endif
@@ -191,8 +190,8 @@ class CommandConsole
 	fim::string getBindingsList();
 	fim::string dump_key_codes(const std::vector<fim::string>& args);
 	fim::string clear(const std::vector<fim::string>& args){status_screen(NULL,NULL);return "";}
-	public:
 	void quit(int i=0);
+	public:
 	int  drawOutput();
 	bool regexp_match(const char*s, const char*r)const;
 #ifdef FIM_AUTOCMDS
@@ -209,24 +208,28 @@ class CommandConsole
 #endif
 	fim::string current()const{ return browser.current();}
 	public:
-	fim::string get_variables_list();
-	fim::string get_aliases_list();
-	fim::string get_commands_list();
+	fim::string get_variables_list()const;
+	fim::string get_aliases_list()const;
+	fim::string get_commands_list()const;
 	void printHelpMessage(char *pn="fim");
 	void appendPostInitCommand(const char* c);
 	void appendPostExecutionCommand(const fim::string &c);
 
 	#ifdef FIM_WINDOWS
 	Viewport& current_viewport()const;
+	const Window & current_window()const;
+	#endif
+	private:
+
+	/* candidates for deletion */
 	unsigned int viewport_height()const;
 	unsigned int viewport_width()const;
 	unsigned int viewport_xorigin()const;
 	unsigned int viewport_yorigin()const;
-	const Window & current_window()const;
-	#endif
-	private:
+
 	fim::string postInitCommand;
 	fim::string postExecutionCommand;
+
 	int show_must_go_on;
 };
 }

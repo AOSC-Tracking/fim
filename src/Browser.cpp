@@ -1213,7 +1213,7 @@ namespace fim
 		// DANGER !
 		if(!only_viewport)
 		{
-			cc.quit();
+			throw FIM_E_TRAGIC;
 		}
 		return *only_viewport;
 #endif

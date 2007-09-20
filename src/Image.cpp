@@ -315,6 +315,10 @@ namespace fim
 		memcpy(this,&image,sizeof(Image)); // very evil
 		img  = fbi_image_clone(image.img );
 		fimg = fbi_image_clone(image.fimg);
+
+		/* an exception is launched immediately */
+		if(!img || !fimg)
+			throw FIM_E_NO_IMAGE;
 	}
 
 	Image * Image::getClone()

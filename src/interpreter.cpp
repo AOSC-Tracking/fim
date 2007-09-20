@@ -38,7 +38,7 @@ fim::string stringsample()
  *	This code implements the interpreter of the script language
  *	It is triggered by the flex and bison files.
  *
- *	Questo codice e' uno scorfano a vedersi!
+ *	Questo codice e' una sozzura !
  */
 std::ostream & operator<<(std::ostream &os,const nodeType &p)
 {
@@ -311,7 +311,6 @@ int ex(nodeType *p)
 
 //				static int c=0; std::cout << ++c << "\n";
 				
-//				cc.quit(0);
 				return atoi(result.c_str());
 			  }
 		}

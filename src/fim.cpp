@@ -59,7 +59,7 @@ char * dupnstr (double n)
 {
 	//allocation of a single string
 	char *r = (char*) malloc (16);
-	if(!r){/*assert(r);*/cc.quit();}
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%f",n);
 	return (r);
 }
@@ -72,7 +72,7 @@ char * dupnstr (int n)
 {
 	//allocation of a single string
 	char *r = (char*) malloc (16);
-	if(!r){/*assert(r);*/cc.quit();}
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%d",n);
 	return (r);
 }
@@ -83,7 +83,7 @@ char * dupnstr (int n)
 char * dupstr (const char* s)
 {
 	char *r = (char*) malloc (strlen (s) + 1);
-	if(!r){/*assert(r);*/cc.quit();}
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	strcpy (r, s);
 	return (r);
 }
@@ -950,7 +950,6 @@ int main(int argc,char *argv[])
 
 	cc.init();
 	cc.executionCycle();
-	cc.quit(0);
 	return 0;	//there will be no return
 }
 

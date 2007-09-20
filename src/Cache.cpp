@@ -180,10 +180,18 @@ namespace fim
 	{
 		Image *ni = NULL;
 		/*	load attempt as alternative approach	*/
+		try
+		{
 		if( ni = new Image(fname) )
 		{	
 			if( cacheNewImage( ni ) ) 
 			return ni;
+		}
+		}
+		catch(FimException e)
+		{
+			ni = NULL; /* not a big problem */
+			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
 		return NULL;
 	}
@@ -306,7 +314,16 @@ namespace fim
 		if( used_image( fname ) )
 		{
 //			image = image->getClone(); // EVIL !!
-			image = new Image(*image); // cloning
+			try
+			{
+				image = new Image(*image); // cloning
+			}
+			catch(FimException e)
+			{
+				/* we will survive :P */
+				image = NULL; /* we make sure no taint remains */
+				if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
+			}
 			if(image)clone_pool.insert(image);
 			else return NULL; //means that cloning failed.
 		}

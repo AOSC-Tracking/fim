@@ -377,12 +377,21 @@ namespace fim
 #ifdef FIM_WINDOWS
 		// FIXME : DANGER, WARNING
 		// THIS SHOULD BE IN THE CONSTRUCTOR, AND SHALL BE SOME DAY :)
-		if( g_fim_no_framebuffer )
-			/* fake pixels, as we are in text (er.. less than!) mode */
-			window = new Window( Rect(0,0,80,48) );
-		else
-			/* true pixels, as we are in framebuffer mode */
-			window = new Window( Rect(0,0,fb_var.xres,fb_var.yres) );
+			
+		try
+		{
+			if( g_fim_no_framebuffer )
+				/* fake pixels, as we are in text (er.. less than!) mode */
+				window = new Window( Rect(0,0,80,48) );
+			else
+				/* true pixels, as we are in framebuffer mode */
+				window = new Window( Rect(0,0,fb_var.xres,fb_var.yres) );
+		}
+		catch(FimException e)
+		{
+			if( e == FIM_E_NO_MEM || true ) quit(FIM_E_NO_MEM);
+		}
+
 		/*
 		 * FIXME : exceptions should be launched here in case ...
 		 * */
@@ -554,7 +563,7 @@ namespace fim
 	}
 
 #define istrncpy(x,y,z) {strncpy(x,y,z-1);x[z-1]='\0';}
-#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);cc.quit(-1);}
+#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);throw FIM_E_TRAGIC;}
 
 	fim::string CommandConsole::getBoundAction(const int c)
 	{
@@ -587,6 +596,7 @@ namespace fim
 
 	void CommandConsole::execute(const char *ss, int add_history_, int suppress_output_)
 	{
+		try{
 		/*
 		 *	This method executes a character string containing a script.
 		 *	The second argument specigies whether the command is added or 
@@ -619,10 +629,22 @@ namespace fim
 		for(char*p=s;*p;++p)
 			if(*p=='\n')*p=' ';
 		close(pipedesc[1]);
-		yyparse();
-		//we add to history only meaningful commands/aliases.
+		try	{	yyparse();		}
+		catch	(FimException e)
+		{
+			if( e == FIM_E_TRAGIC || e == FIM_E_NO_MEM ) this->quit( FIM_E_NO_MEM );
+			else ;	/* ]:-)> */
+		}
+
 		if(add_history_)if(nochars(s)==0)add_history(s);
 		free(s);
+
+		}
+		catch	(FimException e)
+		{
+			if( e == FIM_E_TRAGIC || true ) this->quit( FIM_E_TRAGIC );
+		}
+		//we add to history only meaningful commands/aliases.
 	}
 
         fim::string CommandConsole::execute(fim::string cmd, std::vector<fim::string> args)
@@ -840,7 +862,7 @@ namespace fim
 	int gh(Gpm_Event *event, void *clientdata)
 	{
 		exit(0);
-		cc.quit();
+		quit();
 		return 'n';
 		return 0;
 	}
@@ -1036,6 +1058,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostExecutionCycle",initial);
 #endif
+		quit(0);
 	}
 
 	void CommandConsole::exit(int i)
@@ -1251,7 +1274,7 @@ int CommandConsole::executeFile(const char *s)
 		return (inConsole() || this->getIntVariable("_display_console"));
 	}
 
-	fim::string CommandConsole::get_aliases_list()
+	fim::string CommandConsole::get_aliases_list()const
 	{
 		/*
 		 * returns the list of set action aliases
@@ -1266,7 +1289,7 @@ int CommandConsole::executeFile(const char *s)
 		return aliases_list;
 	}
 
-	fim::string CommandConsole::get_commands_list()
+	fim::string CommandConsole::get_commands_list()const
 	{
 		/*
 		 * returns the list of registered commands
@@ -1280,7 +1303,7 @@ int CommandConsole::executeFile(const char *s)
 		return commands_list;
 	}
 
-	fim::string CommandConsole::get_variables_list()
+	fim::string CommandConsole::get_variables_list()const
 	{
 		/*
 		 * returns the list of set variables
@@ -1865,31 +1888,29 @@ int CommandConsole::executeFile(const char *s)
 		 * */
 		if(!window)
 		{
-			// WARNING : FIXME
-			cout << "no window!!\n";
-//			cc.quit(); // note that this is a violation :)
+			throw FIM_E_TRAGIC;
 		}
 		return *window;
 	}
 
 	unsigned int CommandConsole::viewport_height()const
 	{
-		return current_window().c_focused().height();
+		//return current_window().c_focused().height();
 	}
 
 	unsigned int CommandConsole::viewport_width()const
 	{
-		return current_window().c_focused().width();
+	//	return current_window().c_focused().width();
 	}
 
 	unsigned int CommandConsole::viewport_xorigin()const
 	{
-		return current_window().c_focused().xorigin();
+	//	return current_window().c_focused().xorigin();
 	}
 
 	unsigned int CommandConsole::viewport_yorigin()const
 	{
-		return current_window().c_focused().yorigin();
+//		return current_window().c_focused().yorigin();
 	}
 #endif
 	bool CommandConsole::push(const fim::string nf)

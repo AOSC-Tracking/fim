@@ -25,6 +25,34 @@
 
 namespace fim
 {
+		fim_stream& fim_stream::operator<<(const unsigned char* s)
+		{
+			*this<<(const char*)s;
+			return *this;
+		}
+
+
+		fim_stream& fim_stream::operator<<(const  fim::string&s)
+		{
+			*this<<(const  char*)(s.c_str());
+			return *this;
+		}
+
+
+		fim_stream& fim_stream::operator<<(float f)
+		{
+			char s[32];sprintf(s,"%f",f);
+			*this<<(const char*)s;
+			return *this;
+		}
+
+		fim_stream& fim_stream::operator<<(int i)
+		{
+			char s[32];sprintf(s,"%d",i);
+			*this<<s;
+			return *this;
+		}
+
 		fim_stream& fim_stream::operator<<(const  char* s)
 		{
 			if(g_fim_no_framebuffer==0)
