@@ -3,11 +3,12 @@
 Summary:
 
 ====== BUILDING FROM SVN
-====== BUILDING ON GENTOO LINUX - with overlays (reccomended)
+====== BUILDING ON GENTOO LINUX - with overlays (recommended)
 ====== BUILDING ON GENTOO LINUX - without overlays
 ====== BUILDING ON DEBIAN LINUX
 ====== BUILDING ON CENTOS LINUX (RED HAT LINUX)
-====== BUILDING FROM A COMPRESSED ARCHIVE
+====== BUILDING FROM A COMPRESSED ARCHIVE (recommended)
+====== CONFIGURE
 ====== INSTALLATION
 ====== INSTALLATION BUG REPORTING
 ====== FRAMEBUFFER PROBLEMS
@@ -26,7 +27,7 @@ The ./autogen.sh script will create a ./configure script, which
 will generate a Makefile file, which finally will permit you to 
 build the fim executable and install it.
 
-====== BUILDING ON GENTOO LINUX - with overlays (reccomended)
+====== BUILDING ON GENTOO LINUX - with overlays (recommended)
 
 Fim is in the gentoo 'sunrise' overlay. So, you can 'emerge fim' if 
 yoe have this overlay installed on your system.
@@ -84,7 +85,7 @@ yum install readline
 yum install readline-devel
 ...
 
-====== BUILDING FROM A COMPRESSED ARCHIVE
+====== BUILDING FROM A COMPRESSED ARCHIVE (recommended)
 
 To build fim, you should first unpack the .tgz archive.
 Say you have just downloaded fim.tgz from the Internet.
@@ -107,6 +108,38 @@ fim giving him the generated config.log file and any useful information  to
 spot the problem.
 
 Please see the BUGS file for bugs reporting.
+
+====== CONFIGURE
+
+What follows is a snip from the output of ./configure --help=short:
+
+Optional Features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --disable-dependency-tracking  speeds up one-time build
+  --enable-dependency-tracking   do not reject slow dependency extractors
+  --disable-largefile     omit support for large files
+  --disable-default_bindings
+                          Builtin default minimal key binding (unfinished)
+  --disable-default_mapping
+                          Builtin default minimal key binding (unfinished)
+  --disable-default_config
+                          Builtin default minimal key binding (unfinished)
+  --disable-system        Disable system() and pipe() calls.
+  --disable-gif           Disable gif support.
+  --disable-tiff          Disable tiff support.
+  --disable-jpeg          Disable jpeg support.
+  --disable-png           Disable png support.
+  --disable-autocommands  Fim will by default use autocommands.
+  --disable-windows       Enable Fim's own windowing system.
+  --disable-fimrc         Fim will by default load the ~.fimrc file.
+  --enable-screen         Fim will work under screen (EXPERIMENTAL!)
+  --enable-debug          Turns on debug options (recommended, for debugging)
+  --enable-warnings       Turns on compiler warnings (recommended, for
+                          debugging)
+
+These are options to the configure script shipped with tarball, and 
+serves ot hard-code various configuration options prior to building fim.
 
 ====== INSTALLATION
 

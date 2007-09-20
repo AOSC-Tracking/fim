@@ -211,7 +211,7 @@ class Window
 	void recursive_redisplay()const;
 	void recursive_display()const;
 
-	Image *getImage()const;
+	const Image *getImage()const;
 
 #if 0
 	void print();

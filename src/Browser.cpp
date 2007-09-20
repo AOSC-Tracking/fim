@@ -67,12 +67,12 @@ namespace fim
 		 * So, this behaviour is different from reloading..
 		 */
 		fim::string c=current();
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreRedisplay",c);
 #endif
-			if(image())
+			if(c_image())
 			{
 				/*
 				 * FIXME : philosophically, this is wrong.
@@ -153,13 +153,13 @@ namespace fim
 		 * |   :-)    |
 		 * +----------+
 		 */
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())viewport().pan_up(firstorzero(args));
+			if(c_image())viewport().pan_up(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -178,13 +178,13 @@ namespace fim
 		 * |          |
 		 * +----------+
 		 */
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())viewport().pan_down(firstorzero(args));
+			if(c_image())viewport().pan_down(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -203,14 +203,14 @@ namespace fim
 		 * | :-)      |
 		 * +----------+
 		 */
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())viewport().pan_up();
-			if(image())viewport().pan_right();
+			if(c_image())viewport().pan_up();
+			if(c_image())viewport().pan_right();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -229,14 +229,14 @@ namespace fim
 		 * |     :-)  |
 		 * +----------+		 
 		 * */
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())viewport().pan_up();
-			if(image())viewport().pan_left();
+			if(c_image())viewport().pan_up();
+			if(c_image())viewport().pan_left();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -255,14 +255,14 @@ namespace fim
 		 * |          |
 		 * +----------+
 		 */
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())viewport().pan_down();
-			if(image())viewport().pan_left();
+			if(c_image())viewport().pan_down();
+			if(c_image())viewport().pan_left();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -281,14 +281,14 @@ namespace fim
 		 * |          |
 		 * +----------+
 		 */
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())viewport().pan_down();
-			if(image())viewport().pan_right();
+			if(c_image())viewport().pan_down();
+			if(c_image())viewport().pan_right();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -306,13 +306,13 @@ namespace fim
 		if(args.size()==0)return "";
 		multiscale=atof(args[0].c_str());
 		if(multiscale==0.0)return "";
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(image())image()->scale_multiply(multiscale);
+			if(c_image())image()->scale_multiply(multiscale);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -330,13 +330,13 @@ namespace fim
 		deltascale=atof(args[0].c_str());
 		if(deltascale==0.0)return "";
 		if(strstr(args[0].c_str(),"%"))deltascale*=.01;
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(image())image()->scale_increment(deltascale);
+			if(c_image())image()->scale_increment(deltascale);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -354,13 +354,13 @@ namespace fim
 		newscale=atof(args[0].c_str());
 		if(newscale==0.0)return "";
 		if(strstr(args[0].c_str(),"%"))newscale*=.01;
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(image())image()->setscale(newscale);
+			if(c_image())image()->setscale(newscale);
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -373,13 +373,13 @@ namespace fim
 		/*
 		 * scale this image to fit in the screen in the vertical dimension
 		 */
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(image())viewport().auto_height_scale();
+			if(c_image())viewport().auto_height_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -392,13 +392,13 @@ namespace fim
 		/*
 		 * scale this image to fit in the screen in the horizontal dimension
 		 */
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(image())viewport().auto_width_scale();
+			if(c_image())viewport().auto_width_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -411,13 +411,13 @@ namespace fim
 		/*
 		 * auto scale the image accordingly to the *default* settings !
 		 */
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(image())viewport().auto_scale();
+			if(c_image())viewport().auto_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -430,13 +430,13 @@ namespace fim
 		/*
 		 * pan the image right
 		 */
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())viewport().pan_right(firstorzero(args));
+			if(c_image())viewport().pan_right(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -450,13 +450,13 @@ namespace fim
 		/*
 		 * pan the image left
 		 */
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())viewport().pan_left(firstorzero(args));
+			if(c_image())viewport().pan_left(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -482,7 +482,7 @@ namespace fim
 		 * display the current image, if already loaded, on screen
 		 */
 		fim::string c=current();
-		if(image())
+		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreDisplay",c);
@@ -491,7 +491,7 @@ namespace fim
 			 * the following is a trick to override redisplaying..
 			 */
 			if(image() && cc.getIntVariable("_override_display")==0)
-			//	if(image())
+			//	if(c_image())
 			{
 				//fb_clear_screen();
 				//viewport().display();
@@ -579,7 +579,7 @@ namespace fim
 		 * FIXME
 		 * */
 #ifndef FIM_BUGGED_CACHE
-		if(image()) cache.freeCachedImage(image());
+		if(c_image()) cache.freeCachedImage(image());
 		// FIXME : here should land support for cache reusing !
 #else
 		delete image();
@@ -966,7 +966,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-		if(image())
+		if(c_image())
 		{
 			if(viewport().onRight() && viewport().onBottom())
 				next();
@@ -996,7 +996,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-		if(image())
+		if(c_image())
 		{
 			if(viewport().onBottom()) next();
 			else pan_down(std::vector<fim::string>());
@@ -1095,14 +1095,14 @@ namespace fim
 		 * magnify the displayed image
 		 * FIX ME 
 		 */ 
-		if(image())
+		if(c_image())
 		{
 			float factor = (float)cc.getFloatVariable("magnify_factor");
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(image())
+			if(c_image())
 			{
 				if(factor) image()->magnify(factor);
 				else	image()->magnify();
@@ -1120,14 +1120,14 @@ namespace fim
 		 * reduce the displayed image
 		 * FIX ME 
 		 */ 
-		if(image())
+		if(c_image())
 		{
 			float factor = (float)cc.getFloatVariable("reduce_factor");
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(image())
+			if(c_image())
 			{
 				if(factor) image()->reduce(factor);
 				else	image()->reduce();
@@ -1144,13 +1144,13 @@ namespace fim
 		/*
 		 * align to top the displayed image
 		 */ 
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())
+			if(c_image())
 			{
 				viewport().top_align();
 			}
@@ -1166,13 +1166,13 @@ namespace fim
 		/*
 		 * align to the bottom the displayed image
 		 */ 
-		if(image())
+		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(image())
+			if(c_image())
 			{
 				viewport().bottom_align();
 			}
@@ -1181,6 +1181,19 @@ namespace fim
 #endif
 		}
 		return "";
+	}
+
+	const Image *Browser::c_image()const
+	{
+		/*
+		 *	FIX ME
+		 */
+	#ifdef FIM_WINDOWS
+		return cc.current_viewport().c_getImage();
+	#else
+		if(!only_viewport)return NULL;
+		return only_viewport->c_getImage();
+	#endif
 	}
 
 	Image *Browser::image()const

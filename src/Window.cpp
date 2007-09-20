@@ -964,7 +964,7 @@ namespace fim
 		return *viewport;
 	}	
 
-	Image *Window::getImage()const
+	const Image *Window::getImage()const
 	{
 		return current_viewport().getImage();
 	}

@@ -95,6 +95,7 @@ class Viewport
 
         void Viewport::setImage(fim::Image* ni);
 	void scale_fix_top_left();
+        const Image* Viewport::c_getImage()const;
         Image* Viewport::getImage()const;
 
 	void auto_scale();

@@ -58,14 +58,12 @@ namespace fim
 	{
 		//WARNING : assumes the image is valid
 		return img->i.width;
-//		return (img?img:fimg)->i.width;
 	}
 
 	int Image::height()
 	{
 		//WARNING : assumes the image is valid
 		return img->i.height;
-//		return (img?img:fimg)->i.height;
 	}
 
 	Image::Image(const char *fname_)
@@ -110,26 +108,30 @@ namespace fim
 		/*
 		 *	FIX ME
 		 *	an image is loaded and initializes this image.
+		 *	returns false if the image does not load
 		 */
 		if(fname_==NULL){return false;}//DANGER
 		this->free();
 		fname=fname_;
-		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))set_status_bar("please wait while reloading...", "*");
+		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
+			set_status_bar("please wait while reloading...", "*");
 
 		if(g_fim_no_framebuffer)
 			fimg=NULL;
 		else
 			fimg = read_image((char*)fname_);
 
-		img=fimg;
+		img=fimg;	/* no scaling : one copy only */
 	        redraw=1;
 		if(! img){cout<<"warning : image loading error!\n"   ;invalid=1;return false;}
-//		if(!fimg){cout<<"warning : image allocation error!\n";invalid=1;return false;}
 		return true;
 	}
 
 	Image::~Image()
 	{
+		/*
+		 * buffers are freed
+		 * */
 		this->free();
 	}
 
@@ -150,27 +152,42 @@ namespace fim
 
         int Image::tiny()const
 	{
+		/*
+		 * image width or height is <= 1
+		 * */
 		if(!img)return 1; return ( img->i.width<=1 || img->i.height<=1 );
 	}
 
 	int Image::scale_multiply(double  sm)
 	{
+		/*
+		 * current scale is multiplied by a factor
+		 * */
 		if(scale*sm>0.0)newscale=scale*sm;rescale();return 0;
 	}
 
 	int Image::scale_increment(double ds)
 	{
+		/*
+		 * current scale is multiplied by a factor
+		 * */
 		if(scale+ds>0.0)newscale=scale+ds;rescale();return 0;
 	}
 
 	int Image::setscale(double ns)
 	{
+		/*
+		 * a new scale is set
+		 * */
 		newscale=ns;rescale();
 		return 0;
 	}
 
         bool Image::check_valid()
 	{
+		/*
+		 * well, not ?
+		 * */
 		return ! check_invalid();
 	}
 
@@ -206,26 +223,22 @@ namespace fim
 
 	int Image::rescale( float ns )
 	{
+		/*
+		 * effective image rescaling
+		 * */
 #if FIM_BUGGED_RESCALE
 		return 0;
 #endif
 		if(ns>0.0)newscale=ns;//patch
-		/*
-		 *	This code is bugful, when called from the constructor, on in a pre-user phase.
-		 * 	20070401 hmm  i think it is ok now
-		 */
+
 		if( check_invalid() ) return - 1;
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
 
 		if(g_fim_no_framebuffer)return 0;
 
-		if(cc.noFrameBuffer())return 0;
-		//FIX UPPER MEMORY CONSUMPTION LIMIT...
-//		if(newscale > maxscale ) newscale = maxscale;
-		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;
+		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;	/* ehm ...  */
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=neworientation; // fix this
-//		status(linebuffer, NULL);
 
 		cc.setVariable("scale",newscale*100);
 		if(fimg)
@@ -240,19 +253,12 @@ namespace fim
 			struct ida_image *backup_img=img;
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 				set_status_bar("please wait while rescaling...", getInfo());
-			//FIXME !!!
-/*				cout << " scale ; " << scale << "\n";
-				cout << "ascale ; " <<ascale << "\n";
-				cout << "w:"<<width()<<"\n";
-				cout << "h:"<<height()<<"\n";*/
 
-//			newscale=1.0;ascale=1.0;
-//			newscale=(newscale!=1.5?2.0:1.5); ascale=1.0;
-//
 			img  = scale_image(fimg,scale=newscale,cc.getFloatVariable("ascale"));
-//			img  = scale_image(fimg,scale=newscale,1.0);
-//			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
-//			if( img && orientation== 2)img  = flip_image(img);
+
+			/* orientation can be 0,1,2,3 */
+			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
+			if( img && orientation== 2)img  = flip_image(img);
 
 			if(!img)
 			{
@@ -281,20 +287,32 @@ namespace fim
 
 	void Image::reduce(float factor)
 	{
+		/*
+		 * scale is adjusted by a dividing factor
+		 * */
 		newscale = scale / factor;
 		rescale();
 	}
 
 	void Image::magnify(float factor)
 	{
+		/*
+		 * scale is adjusted by a multiplying factor
+		 * */
 		newscale = scale * factor;
 		rescale();
 	}
 
 	char* Image::getInfo()
 	{
-		// ATENCION!
-		if(fimg)return make_info();return NULL;
+		/*
+		 * a short information about the current image is returned
+		 *
+		 * WARNING:
+		 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
+		 */
+		if(fimg)return make_info();
+		return NULL;
 	}
 
 	/*
@@ -325,7 +343,7 @@ namespace fim
 	{
 		/*
 		 * returns a clone of this image.
-		 * it should be completely independent from this object.
+		 * it should be an object completely independent from this.
 		 * */
 		return new Image(*this);
 	}
@@ -354,6 +372,5 @@ char *Image::make_info()
 	     );
 	return linebuffer;
 }
-
 
 }

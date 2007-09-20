@@ -74,7 +74,6 @@ class CommandConsole
 	 */
 	int 	ic;					//in console if 1. not if 0. willing to exit from console mode if -1
 	int	cycles,isinscript;			//FIX ME
-	int	nofb;					//FIX ME
 	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
 
 #ifdef FIM_AUTOCMDS
@@ -113,13 +112,13 @@ class CommandConsole
 	int fim_stdin;	// the standard input file descriptor
 	char prompt[2];
 
+#ifndef FIM_NOSCRIPTING
+	std::vector<fim::string> scripts;		//scripts to execute : FIX ME PRIVATE
+#endif
 	public:
 	const char*get_prompt(){return prompt;}
 
-	std::vector<fim::string> scripts;		//scripts to execute : FIX ME PRIVATE
 	
-	int noFrameBuffer(){return nofb!=0;}
-	void setNoFrameBuffer(){nofb=1;}
 	CommandConsole();
 	void markCurrentFile();
 	fim::string markCurrentFile(const std::vector<fim::string>& args){markCurrentFile();return "";}
@@ -142,6 +141,7 @@ class CommandConsole
 	int executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd);
 #ifndef FIM_NOSCRIPTING
+	bool push_script(const fim::string ns);
 	int  executeFile(const char *s);
 	fim::string executeFile(const std::vector<fim::string> &args);
 #endif

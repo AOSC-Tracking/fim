@@ -263,7 +263,7 @@ namespace fim
 			else cout << args[0] << " : no such command\n";
 		}
 		this->setVariable("_display_console",1);
-		return "usage : help CMD   (use TAB to get a list of commands :) )\n";
+		return "usage : help CMD   (use TAB in commandline mode to get a list of commands :) )\n";
 	}
 
 	CommandConsole::CommandConsole()
@@ -276,7 +276,6 @@ namespace fim
 		dont_record_last_action=false;
 		recordMode=false;
 #endif
-		nofb=0;
 		fim_stdin=0;
 		cycles=0;
 		setVariable("steps",50);
@@ -408,9 +407,21 @@ namespace fim
 		*(prompt+1)='\0';
 		//int fimrcs=0;
 #ifndef FIM_NOFIMRC
-#ifndef FIM_NOSCRIPTING
+  #ifndef FIM_NOSCRIPTING
 		char rcfile[_POSIX_PATH_MAX];
 		char *e = getenv("HOME");
+
+		/* default, hard-coded configuration first */
+		if(getIntVariable("_no_default_configuration")==0 )
+		{
+    #ifdef FIM_DEFAULT_CONFIGURATION
+			/* so the user could inspect what goes in the default configuration */
+			cc.setVariable("FIM_DEFAULT_CONFIG_FILE_CONTENTS",FIM_DEFAULT_CONFIG_FILE_CONTENTS);
+
+			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
+    #endif		
+		}
+
 		if(e && strlen(e)<_POSIX_PATH_MAX-8)//strlen("/.fimrc")+2
 		{
 			strcpy(rcfile,e);
@@ -418,34 +429,33 @@ namespace fim
 			if(getIntVariable("_no_rc_file")==0 )
 			{
 				if(-1==executeFile(rcfile))//if execution fails for some reason
-#endif
+  #endif
 #endif
 				{
 					/*
 					 if no configuration file is present, or fails loading,
 					 we use the default configuration (raccomended !)  !	*/
-#ifdef FIM_DEFAULT_CONFIGURATION
+  #ifdef FIM_DEFAULT_CONFIGURATION
 					execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
-#endif		
+  #endif		
 				}
 #ifndef FIM_NOFIMRC
-#ifndef FIM_NOSCRIPTING
+  #ifndef FIM_NOSCRIPTING
 
 			}
 
 		}
-		if(getIntVariable("_no_default_configuration")==0 )
-		{
-#ifdef FIM_DEFAULT_CONFIGURATION
-			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
-#endif		
-		}
-#endif		
+  #endif		
 #endif		
 #ifndef FIM_NOSCRIPTING
 		for(unsigned int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
 #endif		
-		if ( browser.empty_file_list() && scripts.size()==0 )
+		if ( 
+				browser.empty_file_list() 
+#ifndef FIM_NOSCRIPTING
+				&& scripts.size()==0 
+#endif		
+				)
 		if(g_fim_no_framebuffer==0)
 		{
 			printHelpMessage();
@@ -1917,5 +1927,13 @@ int CommandConsole::executeFile(const char *s)
 	{	
 		return browser.push(nf);
 	}
+
+#ifndef FIM_NOSCRIPTING
+	bool CommandConsole::push_script(const fim::string ns)
+	{	
+	    	scripts.push_back(ns);
+		return true;
+	}
+#endif
 }
 

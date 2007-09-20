@@ -51,6 +51,7 @@ class Browser
 #endif
 
 	Image *image()const;
+	const Image *c_image()const;
 
 	Viewport& viewport()const;
 

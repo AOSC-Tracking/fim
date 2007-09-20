@@ -917,10 +917,20 @@ If still uncertain about regular expression search, consult the
 ==============================================================================
 7.1. Default Configuration			*default-config*
 
-The following actions come as default aliases : see the 'fimrc' file 
+Lots of actions come as default aliases : see the 'fimrc' file 
 distributed with the sources to get a nice idea of the way of writing one.
 
-<UNFINISHED>
+Or simply execute the command 
+>
+	echo FIM_DEFAULT_CONFIG_FILE_CONTENTS
+
+This default configuration will be executed before any other command in Fim.
+After this, the "$(HOME)/.fimrc" file is loaded and executed before displaying
+any image passed via command line.
+
+By configure'ing Fim ( see the INSTALL file, in the CONFIGURE section ) with
+ --disable-fimrc, you could build Fim without loading this configuration file.
+
 
 ==============================================================================
 8. Pattern matching				*pattern-matching*

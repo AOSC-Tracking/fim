@@ -261,7 +261,7 @@ static void fb_status_screen(const char *msg)//, int noDraw=1)
 	}
 	if(msg&&*msg=='\0')return;
 
-	if(cc.noFrameBuffer())return;
+	if( g_fim_no_framebuffer )return;
 	if(p)while(*p)
 	{
 	    //while there are characters to put on screen, we advance
@@ -678,7 +678,7 @@ void chomp(char *s)
 
 int framebuffer_init()
 {
-	if(!cc.noFrameBuffer())
+	if( ! g_fim_no_framebuffer )
 	{
 		//initialization of the framebuffer text
 		fb_text_init1(fontname);
@@ -858,11 +858,15 @@ int main(int argc,char *argv[])
 	    break;
 	case 'E':
 	    //fim's
-	    cc.scripts.push_back(optarg);
+#ifndef FIM_NOSCRIPTING
+	    cc.push_script(optarg);
+#else
+	    cout << "sorry, no scripting available!\n";
+#endif
 	    break;
 	case 'D':
 	    //fim's
-	    cc.setNoFrameBuffer();	// no framebuffer (debug) mode
+//	    cc.setNoFrameBuffer();	// no framebuffer (debug) mode
 	    break;
 	case 'N':
 	    //fim's

@@ -11,6 +11,8 @@ If you intend to learn about FIM, please read the program documentation  in the
 -------------------------------------------------------------------------------
 	Current development directions
 
+20070920	and /etc/fimrc ? :)
+20070920	a command to exit from a script immediately
 20070920	system() interaction SAFE
 20070920	printing support ? :)
 20070920	framebuffer device selection

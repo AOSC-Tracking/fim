@@ -197,8 +197,8 @@ namespace fim
 
 	void Viewport::null_display()
 	{
-		if( g_fim_no_framebuffer || cc.noFrameBuffer() )return;
-		if(redraw==0 || cc.noFrameBuffer())return;
+		if( g_fim_no_framebuffer  )return;
+		if(redraw==0 )return;
 #ifdef FIM_WINDOWS
 		fb_clear_rect(
 				xorigin(),
@@ -221,8 +221,7 @@ namespace fim
 		 *	memory.
 		 *	no scaling occurs, only some alignment.
 		 */
-		if((redraw==0) || cc.noFrameBuffer())return;
-//		if(cc.noFrameBuffer())return;
+		if((redraw==0) )return;
 		if( check_invalid() ) null_display();//  NEW
 		if( check_invalid() ) return;
 		int autotop=cc.getIntVariable("autotop");
@@ -335,30 +334,43 @@ namespace fim
 //		return new Viewport();
 	}
 
+        const Image* Viewport::c_getImage()const
+	{
+		/*
+		 * returns the image pointer, regardless its use! 
+		 * */
+		return image;
+	}
+
         Image* Viewport::getImage()const
 	{
-		return image; // !!
-		//return image;
+		/*
+		 * returns the image pointer, regardless its use! 
+		 * */
+		return image;
 	}
 
         void Viewport::setImage(fim::Image* ni)
 	{
-		//the image could be NULL
-		//this image is not tightly bound!
-		if(image)
-		{
-		
-		}
+		/* 
+		 * the image could be NULL
+		 * this image is not tightly bound!
+		 *
+		 * FIXME
+		 */
 
-		//if(ni)
 		image = NULL;
-		reset(); // !
+		reset();
 		image = ni;
-		//WARNING !!
 	}
 
         void Viewport::reset()
         {
+		/*
+		 * resets some image flags and should reset the image position in the viewport
+		 *
+		 * FIXME
+		 * */
 		if(image)
 		{
 			image->reset();
@@ -379,21 +391,26 @@ namespace fim
 
 	void Viewport::auto_height_scale()
 	{
+		/*
+		 * scales the image in a way to fit in the viewport height
+		 * */
 		float newscale;
-		if( check_invalid() ) return;
+		if( check_invalid() || g_fim_no_framebuffer ) return;
 
-		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / image->width();
-		else newscale = (float)this->viewport_height() / image->height();
+		newscale = (float)this->viewport_height() / image->original_height();
 
 		image->rescale(newscale);
 	}
 
 	void Viewport::auto_width_scale()
 	{
+		/*
+		 * scales the image in a way to fit in the viewport width
+		 * */
 		float newscale;
-		if( check_invalid() ) return;
+		if( check_invalid() || g_fim_no_framebuffer ) return;
 
-		if(g_fim_no_framebuffer=0)newscale = (float)this->viewport_width() / image->width();
+		newscale = (float)this->viewport_width() / image->original_width();
 
 		image->rescale(newscale);
 	}
@@ -402,16 +419,24 @@ namespace fim
 	{
 		//WARNING : THIS SHOULD FREE IMAGES !!
 		//see browser first
+		//FIXME
 	}
 
         bool Viewport::check_valid()
 	{
+		/*
+		 * yes :)
+		 * */
 		return ! check_invalid();
 	}
 
         bool Viewport::check_invalid()
 	{
-		// FIXME
+		/*
+		 * this should not happen! (and probably doesn't happen :) )
+		 *
+		 * FIXME
+		 * */
 		if(!image)return true;
 		if( image)return image->check_invalid();
 		return true;
