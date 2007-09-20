@@ -11,6 +11,10 @@ If you intend to learn about FIM, please read the program documentation  in the
 -------------------------------------------------------------------------------
 	Current development directions
 
+20070920	system() interaction SAFE
+20070920	printing support ? :)
+20070920	framebuffer device selection
+20070920	as much as possible of Vim's language intuitive syntax
 20070919	docs : a comparative table between image viewers to show the Fim niche
 20070919	docs : add example of system integration of Fim
 20070903	these features are currently going to be worked in the near future:

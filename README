@@ -3,7 +3,7 @@
 ================================================================================
 	1		Overview
 	2		Description
-	3		Features
+	3		Features, comparison to other image viewers
 	4		Compilation Requirements
 	5		Run Time Requirements
 	6		Original Idea
@@ -51,7 +51,7 @@ documentation, in form of a doc/FIM.TXT documentation file, a man page, lots
 of comments in the (sometimes still dirty) code, and some text files.
 
 ================================================================================
-	3		Features
+	3		Features, comparison to other image viewers
 ================================================================================
 
 Implemented features: 
@@ -89,6 +89,42 @@ Yet unimplemented features :
  - decent (auto)documentation, in gdb style!
  - mutt-like patterns ~p, ~r ...
  - advanced pattern selection of images on other criterias ?
+
+
+ Here is a comparison of popular image viewers available on Linux, focusing on
+ the peculiar Fim features (so, Fim have no competitors because it is not in any
+ competition! ). We take in consideration free software only, of course.
+ Note also that no all of the feature could ever exist in all of the mentioned
+ programs, by their very nature.
+
+ ______________________________________________________________________________
+
+ \ Program :            kuickshow eog [xz]gv    fbi   FIM GQview
+ ______________________________________________________________________________
+ Features :
+
+ status:(a)lpha/(m)ature   m       m   m         a     m     m
+ environment(f=framebuffer)X      X  X,svga      f     f     X
+ linux specific                        ?         *     *
+ key rebindings            *                           *     *
+ external scriptability(bash,..)                 ~     *
+ internal scriptability                                *
+ internal scriptability minilanguage                   * 
+ printing support          *       *   ?                     *
+ slideshow                 *       *             *     *     *
+ caching                   *       ?                   *     *
+ preview browser           *                                 *
+ EXIF tag display          *                     *           *
+ internal windowing                                    *
+ internal image search                                 *
+ external image search                                       *
+ 'pan views' ('rich' views)                                  *
+ system interaction        *                           *     *
+ system interaction safe   *
+ remote commands                                             *
+ saves last folder         *                                 *
+ ______________________________________________________________________________
+ 
 
 ================================================================================
 	4		Compilation Requirements
@@ -157,11 +193,11 @@ The libraries can be found on their sites (as of 20070312):
  libtiff  : http://www.libtiff.org/
 
 Note that it is highly likely that you already have these libraries on your
-system.
+system, especially on Gentoo Linux.
 
 From the original README, it reads that Gerd himself built FBI hacking
 "a svgalib PhotoCD viewer", so regard this software as a big, dirty code
-ball :) .
+potpourri :) .
 
 Useful documents I read during the coding of this patch:
 
@@ -169,11 +205,15 @@ Useful documents I read during the coding of this patch:
 - The yacc & lex HOWTO
 - GNU readline manual
 - Ray Lischner, STL Pocket Reference, O'Reilly, 2004 
+- Herbert Schildt's C++, Complete Reference, Third Edition, Osborne McGraw-Hill, 1999
 man console_codes
 man fb.modes
+man fbi
 
 Useful documents I could read later on:
+vim -c ':help'
 man 3 history
+man readline
 
 Tested platforms :
  - 2.6.17 Linux Kernel, GCC-3.4.6, gentoo
@@ -229,3 +269,5 @@ documentation and the BUGS file first, and then you're welcome.
 If it is for other suggestions or ideas, you are welcome, too (and don't miss
 the TODO file, too)!
 
+ $Id$
+ vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=help:norl:

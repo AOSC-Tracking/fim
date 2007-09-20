@@ -1229,3 +1229,5 @@ This is stated too in each source file preamble.
 
 ------------------------------------------------------------------------------
 $Id$
+
+ vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=help:norl:
