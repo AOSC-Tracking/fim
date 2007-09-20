@@ -73,7 +73,7 @@ class CommandConsole
 	 * flags
 	 */
 	int 	ic;					//in console if 1. not if 0. willing to exit from console mode if -1
-	int	cycles,isinscript;			//FIX ME
+	int	cycles;			//FIX ME
 	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
 
 #ifdef FIM_AUTOCMDS
@@ -115,23 +115,26 @@ class CommandConsole
 #ifndef FIM_NOSCRIPTING
 	std::vector<fim::string> scripts;		//scripts to execute : FIX ME PRIVATE
 #endif
+
+	void markCurrentFile();
 	public:
+
+	fim::string execute(fim::string cmd, std::vector<fim::string> args);
+
 	const char*get_prompt(){return prompt;}
 
-	
 	CommandConsole();
-	void markCurrentFile();
+
 	fim::string markCurrentFile(const std::vector<fim::string>& args){markCurrentFile();return "";}
 	void display();
 	char * command_generator (const char *text,int state);
 	void executionCycle();
 	void init();
 	int  inConsole()const{return ic==1;};
-	fim::string execute(fim::string cmd, std::vector<fim::string> args);
 	~CommandConsole();
 	float getFloatVariable(const fim::string &varname);
 	fim::string getStringVariable(const fim::string &varname);
-	int getVariableType(const fim::string &varname);
+	int  getVariableType(const fim::string &varname);
 	int  getIntVariable(const fim::string & varname);
 	int  printVariable(const fim::string & varname);
 	int  setVariable(const fim::string& varname,int value);
@@ -142,17 +145,18 @@ class CommandConsole
 	fim::string readStdFileDescriptor(FILE* fd);
 #ifndef FIM_NOSCRIPTING
 	bool push_script(const fim::string ns);
-	int  executeFile(const char *s);
 	fim::string executeFile(const std::vector<fim::string> &args);
 #endif
+	private:
 	fim::string echo(const std::vector<fim::string> &args);
 	fim::string help(const std::vector<fim::string> &args);
 	fim::string quit(const std::vector<fim::string> &args);
 	fim::string foo (const std::vector<fim::string> &args);
 	fim::string do_return(const std::vector<fim::string> &args);
 	fim::string status(const std::vector<fim::string> &args);
+	int  executeFile(const char *s);
 	void execute(const char *ss, int add_history_, int suppress_output_);
-	private:
+
 	int  toggleStatusLine();
 	int  addCommand(Command *c);
 	Command* findCommand(fim::string cmd);
@@ -198,6 +202,7 @@ class CommandConsole
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 #endif
 	int catchLoopBreakingCommand(int seconds=0);
+
 	private:
 	int catchInteractiveCommand(int seconds=0);
 #ifdef FIM_AUTOCMDS
@@ -207,10 +212,13 @@ class CommandConsole
 	int  autocmd_in_stack(const autocmds_frame_t& frame);
 #endif
 	fim::string current()const{ return browser.current();}
+
 	public:
+
 	fim::string get_variables_list()const;
 	fim::string get_aliases_list()const;
 	fim::string get_commands_list()const;
+
 	void printHelpMessage(char *pn="fim");
 	void appendPostInitCommand(const char* c);
 	void appendPostExecutionCommand(const fim::string &c);
@@ -220,12 +228,6 @@ class CommandConsole
 	const Window & current_window()const;
 	#endif
 	private:
-
-	/* candidates for deletion */
-	unsigned int viewport_height()const;
-	unsigned int viewport_width()const;
-	unsigned int viewport_xorigin()const;
-	unsigned int viewport_yorigin()const;
 
 	fim::string postInitCommand;
 	fim::string postExecutionCommand;

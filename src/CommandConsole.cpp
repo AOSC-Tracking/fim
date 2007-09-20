@@ -90,6 +90,7 @@ namespace fim
 		 */
 		const char *kerr="bind : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
 		if(args.size()==0)return getBindingsList();
+		//return "usage : bind KEY ACTION\n";
 		if(args.size()==1)
 		{
 			fim::string binding_expanded;
@@ -99,7 +100,6 @@ namespace fim
 			binding_expanded+=bindings[key_bindings[args[0]]];
 			binding_expanded+="'\n";
 			return binding_expanded;
-			//return "usage : bind KEY ACTION\n";
 		}
 		if(args.size()!=2) return kerr;
 		const char*key=(args[0].c_str());
@@ -243,7 +243,7 @@ namespace fim
 	fim::string CommandConsole::dummy(std::vector<Arg> args)
 	{
 		/*
-		 *
+		 * useful for test purposes
 		 * */
 		//std::cout << "dummy function : for test purposes :)\n";
 		return "dummy function : for test purposes :)\n";
@@ -273,8 +273,8 @@ namespace fim
 		 * */
 
 #ifdef FIM_RECORDING
-		dont_record_last_action=false;
-		recordMode=false;
+		dont_record_last_action=false;		/* this variable is only useful in record mode */
+		recordMode=false;			/* we start not recording anything */
 #endif
 		fim_stdin=0;
 		cycles=0;
@@ -370,7 +370,7 @@ namespace fim
 	void CommandConsole::init()
 	{
 		/*
-		 * FIXME : dependencies.. argh !
+		 * FIXME : dependencies are very hard to track lately :) !
 		 * */
 
 #ifdef FIM_WINDOWS
@@ -403,6 +403,7 @@ namespace fim
 		 * 	the default configuration file, and user invoked scripts.
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
+//		executeFile("/etc/fimrc");	//GLOBAL DEFAULT CONFIGURATION FILE
 		*prompt=':';
 		*(prompt+1)='\0';
 		//int fimrcs=0;
@@ -491,7 +492,8 @@ namespace fim
 	{
 		/*
 		 * an internal alias method
-		 * FIX ERROR CHECKING
+		 *
+		 * FIXME: ERROR CHECKING NEEDED
 		 */
 		std::vector<fim::Arg> args;
 		args.push_back(Arg(a));
@@ -661,8 +663,8 @@ namespace fim
 	{
 		/*
 		 *	This is the method where the tokenized commands are executed.
+		 *	This method executes single commands with arguments.
 		 */
-		//this method executes single commands with arguments.
 		Command *c=NULL;
 		/*
 		 * we first determine if this is an alias
@@ -881,6 +883,9 @@ namespace fim
 
 	void CommandConsole::executionCycle()
 	{
+		/*
+		 * the cycle with fetches the instruction stream.
+		 * */
 #ifdef	FIM_USE_GPM
 		//Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,NULL);
 #endif
@@ -1103,7 +1108,7 @@ namespace fim
 	fim::string CommandConsole::executeFile(const std::vector<fim::string> &args)
 	{
 		/*
-		 *
+		 * FIXME : catched all ?
 		 * */
 		for(unsigned int i=0;i<args.size();++i)executeFile(args[i].c_str());
 		return "";
@@ -1121,8 +1126,8 @@ namespace fim
 	CommandConsole::~CommandConsole()
 	{
 		/*
-		 *	FIX ME :
-		 *	PRINTING MARKED FILES..
+		 * NOTE:
+		 * as long as this class is a singleton, we couldn't care less about memory freeing :)
 		 */
 		if(!marked_files.empty())
 		{
@@ -1176,6 +1181,8 @@ namespace fim
 	{
 		/*
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
+		 *
+		 * FIXME : catched all ?
 		 */
 
 		int r;
@@ -1192,6 +1199,8 @@ namespace fim
 	{
 		/*
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
+		 *
+		 * FIXME : catched all ?
 		 */
 
 		int r;
@@ -1204,10 +1213,12 @@ namespace fim
 		return 0;
 	}
 
-int CommandConsole::executeFile(const char *s)
+	int CommandConsole::executeFile(const char *s)
 	{
 		/*
+		 * executes a file denoted by filename
 		 *
+		 * FIXME : catched all ?
 		 * */
 		execute(slurp_file(s).c_str(),0,1);
 		return 0;
@@ -1215,9 +1226,6 @@ int CommandConsole::executeFile(const char *s)
 
 	fim::string CommandConsole::echo(const std::vector<fim::string> &args)
 	{
-		/*
-		 *
-		 * */
 		/*
 		 * a command to echo arguments, for debug and learning purposes
 		 */
@@ -1229,7 +1237,9 @@ int CommandConsole::executeFile(const char *s)
 	int CommandConsole::getVariableType(const fim::string &varname)
 	{
 		/*
+		 * returns the [internal] type of a variable
 		 *
+		 * FIXME : hmmmm...
 		 * */
 		return variables[varname].getType();
 	}
@@ -1237,19 +1247,21 @@ int CommandConsole::executeFile(const char *s)
 	int CommandConsole::printVariable(const fim::string &varname)
 	{	
 		/*
+		 * a variable is taken and converted to a string and printed
 		 *
+		 * FIXME
 		 * */
 		//if(getVariableType(varname))
 		//cout<<getIntVariable(varname);
 //		else
-			cout<<getStringVariable(varname);
+		cout<<getStringVariable(varname);
 		return 0;
 	}
 
 	int CommandConsole::getIntVariable(const fim::string &varname)
 	{
 		/*
-		 *
+		 * the variable name supplied is used as a key to the variables hash
 		 * */
 //		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
 		if(strcmp(varname.c_str(),"random"))
@@ -1260,7 +1272,7 @@ int CommandConsole::executeFile(const char *s)
 	float CommandConsole::getFloatVariable(const fim::string &varname)
 	{
 		/*
-		 *
+		 * the variable name supplied is used as a key to the variables hash
 		 * */
 //		cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
 //		cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
@@ -1270,7 +1282,7 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::getStringVariable(const fim::string &varname)
 	{
 		/*
-		 *
+		 * the variable name supplied is used as a key to the variables hash
 		 * */
 		return variables[varname].getString();
 	}
@@ -1645,13 +1657,10 @@ int CommandConsole::executeFile(const char *s)
 	}
 #endif
 	
-	/*
-	 * returns immediately
-	 * */
 	fim::string CommandConsole::do_return(const std::vector<fim::string> &args)
 	{
 		/*
-		 *
+		 * returns immediately the program with an exit code
 		 * */
 		if( args.size() < 0 ) this->quit(0);
 		else	this->quit( (int) args[0] );
@@ -1661,7 +1670,9 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::status(const std::vector<fim::string> &args)
 	{
 		/*
+		 * the status bar is updated.
 		 *
+		 * FIXME
 		 * */
 		for(unsigned int i=0;i<args.size();++i)
 		{
@@ -1673,7 +1684,7 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::unalias(const std::vector<fim::string>& args)
 	{
 		/*
-		 * removes the actions assigned to the specified aliases
+		 * removes the actions assigned to the specified aliases,
 		 */
 		if(args.size()<1)return "unalias : please specify an alias to remove!\n";
 		for(unsigned int i=0;i<args.size();++i)
@@ -1690,7 +1701,7 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::dump_key_codes(const std::vector<fim::string>& args)
 	{
 		/*
-		 *
+		 * all keyboard codes are dumped in the console.
 		 * */
 		fim::string acl;
 		std::map<fim::string,int>::const_iterator ki;
@@ -1709,9 +1720,6 @@ int CommandConsole::executeFile(const char *s)
 		/*
 		 * quick and dirty display function
 		 */
-		// FIXME
-//		browser.display();
-//		if(window)window->recursive_display();
 #ifdef FIM_WINDOWS
 		if(window)window->recursive_redisplay();
 #else
@@ -1750,7 +1758,7 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::dump_record_buffer(const std::vector<fim::string> &args)
 	{
 		/*
-		 *
+		 * the recorded commands are dumped in the console
 		 * */
 		fim::string res;
 		for(unsigned int i=0;i<recorded_actions.size();++i)
@@ -1767,7 +1775,7 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::execute_record_buffer(const std::vector<fim::string> &args)
 	{
 		/*
-		 *
+		 * all of the commands in the record buffer are re-executed.
 		 * */
 		execute(dump_record_buffer(args).c_str(),0,0);
 		/* for unknown reasons, the following code gives problems : image resizes don't work..
@@ -1785,7 +1793,8 @@ int CommandConsole::executeFile(const char *s)
 	void CommandConsole::markCurrentFile()
 	{
 		/*
-		 *
+		 * the current file will be added to the list of filenames
+		 * which will be printed upon the program termination.
 		 * */
 		if(browser.current()!="")
 		{
@@ -1797,7 +1806,7 @@ int CommandConsole::executeFile(const char *s)
 	void CommandConsole::printHelpMessage(char *pn)
 	{
 		/*
-		 *
+		 * a prompty help message is pretty printed in the console
 		 * */
 		std::cout<<" Usage: "<<pn<<" [OPTIONS] [FILES]\n";
 		/*  printf("\nThe help will be here soon!\n");*/
@@ -1807,6 +1816,11 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::memorize_last(const fim::string &cmd)
 	{
 		//WARNING : DANGER
+		/*
+		 * the last executed command is appended in the buffer.
+		 * of course, there are exceptions to these.
+		 * and are quite intricated...
+		 */
 		if(dont_record_last_action==false)
 		{
 			last_action=cmd;
@@ -1837,7 +1851,7 @@ int CommandConsole::executeFile(const char *s)
 	fim::string CommandConsole::start_recording(const std::vector<fim::string> &args)
 	{
 		/*
-		 *
+		 * recording of commands starts here
 		 * */
 		recorded_actions.clear();
 		recordMode=true;
@@ -1868,7 +1882,8 @@ int CommandConsole::executeFile(const char *s)
 	void CommandConsole::appendPostInitCommand(const char* c)
 	{
 		/*
-		 *
+		 * the supplied command is applied right before a normal execution of Fim
+		 * but after the configuration file loading
 		 * */
 		postInitCommand+=c;
 	}
@@ -1876,7 +1891,7 @@ int CommandConsole::executeFile(const char *s)
 	void CommandConsole::appendPostExecutionCommand(const fim::string &c)
 	{
 		/*
-		 *
+		 * the supplied command is applied right before a normal termination of Fim
 		 * */
 		postExecutionCommand+=c;
 	}
@@ -1885,16 +1900,19 @@ int CommandConsole::executeFile(const char *s)
 	Viewport& CommandConsole::current_viewport()const
 	{
 		/*
+		 * returns a reference to the current viewport.
 		 *
+		 * FIXME : and catch ?
 		 * */
-		//FIXME
 		return current_window().current_viewport();
 	}
 
 	const Window & CommandConsole::current_window()const
 	{
 		/*
-		 *
+		 * returns a reference to the current window.
+		 * there should be one :)
+		 * if not, consider the situation TRAGIC
 		 * */
 		if(!window)
 		{
@@ -1903,36 +1921,23 @@ int CommandConsole::executeFile(const char *s)
 		return *window;
 	}
 
-	unsigned int CommandConsole::viewport_height()const
-	{
-		//return current_window().c_focused().height();
-	}
-
-	unsigned int CommandConsole::viewport_width()const
-	{
-	//	return current_window().c_focused().width();
-	}
-
-	unsigned int CommandConsole::viewport_xorigin()const
-	{
-	//	return current_window().c_focused().xorigin();
-	}
-
-	unsigned int CommandConsole::viewport_yorigin()const
-	{
-//		return current_window().c_focused().yorigin();
-	}
 #endif
 	bool CommandConsole::push(const fim::string nf)
-	{	
+	{
+		/*
+		 * returns true if push was ok
+		 * */
 		return browser.push(nf);
 	}
 
 #ifndef FIM_NOSCRIPTING
 	bool CommandConsole::push_script(const fim::string ns)
-	{	
+	{
+		/*
+		 * pushes a script up in the pre-execution scriptfile list
+		 * */
 	    	scripts.push_back(ns);
-		return true;
+		return true; /* for now a fare return code */
 	}
 #endif
 }

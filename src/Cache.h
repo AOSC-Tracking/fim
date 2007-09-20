@@ -76,7 +76,7 @@ class Cache
 	/*	returns whether a file is already cached */
 	bool haveImage(const char *fname);
 
-	bool Cache::used_image(const char* fname);
+	bool used_image(const char* fname);
 	public:
 	Cache();
 
