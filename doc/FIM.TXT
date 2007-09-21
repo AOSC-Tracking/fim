@@ -753,7 +753,7 @@ as soon as this is necessary.
 
  'console_key'	: the key used to enter in command line mode (WARNING:experimental)
 
- '_cached_images'	: the current numer of images cached
+ '_cached_images'	: the current number of images cached
 
  '_max_cached_images'	: the maximum number of images Fim will cache. if -1, unlimited
 

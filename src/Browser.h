@@ -57,6 +57,7 @@ class Browser
 
 	int current_n()const;
 	int current_n(int ccp)const;
+//	const fim::string pop(fim::string popped="");
 	const fim::string pop();
 	fim::string get_next_filename(int n);
 	

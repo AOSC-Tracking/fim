@@ -88,11 +88,12 @@ namespace fim
 		}
 		else
 		{
-			cout << "no image object in memory, sorry\n";
+			load_error_handle(c);
+//			cout << "no image object in memory, sorry\n";
 #ifdef FIM_REMOVE_FAILED
-			if(current()!=""){pop_current();	//removes the current file from the list.
+//			if(current()!=""){pop_current();	//removes the current file from the list.
 #ifdef FIM_AUTOSKIP_FAILED
-			next(0);reload();}
+//			next(0);reload();}
 #endif
 #endif
 		}
@@ -127,6 +128,7 @@ namespace fim
 		return s;
 	}
 
+//	const fim::string Browser::pop(fim::string popped)
 	const fim::string Browser::pop()
 	{	
 		/*
@@ -138,7 +140,9 @@ namespace fim
 		assert(cp);
 		if(current_n()==(int)flist.size())cp--;
 		s=flist[flist.size()-1];
-		flist.pop_back();
+		//if(popped==fim::string(""))
+		flist.erase(flist.begin()+current_n());
+		//else flist.erase(flist.search(popped));
 		cc.setVariable("filelistlen",current_images());
 		return s;
 	}
@@ -522,16 +526,21 @@ namespace fim
 	{
 		/*
 		 * assume there was a load attempt : check and take some action in case of error
-		 * FIXME
+		 *
+		 * FIXME : this behaviour is BUGGY, because recursion will be killed off 
+		 *         by the autocommand loop prevention mechanism.
 		 * */
 		if(image() && ! (viewport().check_valid()))
 		{
 			free_current_image();
 #ifdef FIM_REMOVE_FAILED
-			if(current()!=""){pop_current();	//removes the current file from the list.
+			if(current()!="")
+			{
+				pop_current();	//removes the current file from the list.
 #ifdef FIM_AUTOSKIP_FAILED
 #ifdef FIM_ALWAYS_UNDEFINED
-			next(0);reload();
+				next(0);
+				reload(); /* this will not be effective ! */
 #endif
 #endif
 			}

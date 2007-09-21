@@ -123,7 +123,15 @@ namespace fim
 
 		img=fimg;	/* no scaling : one copy only */
 	        redraw=1;
+
 		if(! img){cout<<"warning : image loading error!\n"   ;invalid=1;return false;}
+
+		cc.setVariable("height" ,(int)fimg->i.height);
+		cc.setVariable("width"  ,(int)fimg->i.width );
+		cc.setVariable("sheight",(int) img->i.height);
+		cc.setVariable("swidth" ,(int) img->i.width );
+		cc.setVariable("scale"  ,newscale*100);
+		cc.setVariable("ascale" ,ascale);
 		return true;
 	}
 
@@ -186,7 +194,7 @@ namespace fim
         bool Image::check_valid()
 	{
 		/*
-		 * well, not ?
+		 * well,why not ?
 		 * */
 		return ! check_invalid();
 	}
@@ -276,10 +284,10 @@ namespace fim
 			redraw=1;
  	                new_image=1; // for centering
 
-			cc.setVariable("height",(int)fimg->i.height);
-			cc.setVariable("sheight",(int)img->i.height);
-			cc.setVariable("width",(int)fimg->i.width);
-			cc.setVariable("swidth",(int)img->i.width);
+			cc.setVariable("height" ,(int)fimg->i.height);
+			cc.setVariable("width"  ,(int)fimg->i.width );
+			cc.setVariable("sheight",(int) img->i.height);
+			cc.setVariable("swidth" ,(int) img->i.width );
 		}
 		else redraw=0;
 		return 0;

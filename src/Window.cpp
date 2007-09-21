@@ -34,8 +34,10 @@ namespace fim
         {
 		unsigned int i=0;
 		int rc=0;/*return code*/
+#ifdef FIM_AUTOCMDS
 		fim::string c=cc.getIntVariable("filename");
 		cc.autocmd_exec("PreWindowEvent",c);
+#endif
 		while(i<args.size())
                 {
 			string cmd=args[i];
@@ -102,7 +104,9 @@ namespace fim
 			}*/
 			++i;
                 }
+#ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostWindowEvent",c);
+#endif
                 return "";
         }
 
