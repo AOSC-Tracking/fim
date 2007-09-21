@@ -78,11 +78,6 @@ namespace fim
 		}
 		else
 		{
-			/*
-			 *	this is a 'patch' to do a first setting of top,left,etc
-			 *	variables prior to first visualization without displaying..
-			 */
-			cc.setVariable("filename",fname_);
 		}
 	}
 
@@ -260,7 +255,7 @@ namespace fim
 			 */
 			struct ida_image *backup_img=img;
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
-				set_status_bar("please wait while rescaling...", getInfo());
+				set_status_bar("please wait while rescaling...", getInfo().c_str());
 
 			img  = scale_image(fimg,scale=newscale,cc.getFloatVariable("ascale"));
 
@@ -272,7 +267,7 @@ namespace fim
 			{
 				img=backup_img;
 				if(cc.getIntVariable("_display_busy"))
-					set_status_bar( "rescaling failed (insufficient memory?!)", getInfo());
+					set_status_bar( "rescaling failed (insufficient memory?!)", getInfo().c_str());
 				sleep(1);	//just to give a glimpse..
 			}
 			else 
@@ -284,6 +279,9 @@ namespace fim
 			redraw=1;
  	                new_image=1; // for centering
 
+			/*
+			 * it is important to set these values after rotation, too!
+			 * */
 			cc.setVariable("height" ,(int)fimg->i.height);
 			cc.setVariable("width"  ,(int)fimg->i.width );
 			cc.setVariable("sheight",(int) img->i.height);
@@ -309,18 +307,6 @@ namespace fim
 		 * */
 		newscale = scale * factor;
 		rescale();
-	}
-
-	char* Image::getInfo()
-	{
-		/*
-		 * a short information about the current image is returned
-		 *
-		 * WARNING:
-		 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
-		 */
-		if(fimg)return make_info();
-		return NULL;
 	}
 
 	/*
@@ -358,13 +344,22 @@ namespace fim
 
 /*
  *	Creates a little description of some image,
- *	and plates it in a NUL terminated static buffer.
+ *	and places it in a NUL terminated static buffer.
  */
-char *Image::make_info()
+fim::string Image::getInfo()
 {
+	/*
+	 * a short information about the current image is returned
+	 *
+	 * WARNING:
+	 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
+	 */
 	//FIX ME !
+	if(!fimg)return "";
+
 	static char linebuffer[128];
 	char imagemode[3],*imp;
+	int n=cc.getIntVariable("fileindex");
 	imp=imagemode;
 	if(cc.getIntVariable("autoflip"))*(imp++)='F';
 	if(cc.getIntVariable("automirror"))*(imp++)='M';
@@ -375,10 +370,10 @@ char *Image::make_info()
 	     scale*100,
 	     this->width(), this->height(),
 	     imagemode,
-	     (cc.getIntVariable("fileindex")),
+	     n?n:1, /* ... */
 	     (cc.getIntVariable("filelistlen"))
 	     );
-	return linebuffer;
+	return fim::string(linebuffer);
 }
 
 }

@@ -80,21 +80,10 @@ namespace fim
 				 * :)
 				 * */
 				cc.display();
-				this->display_status(info().c_str(), NULL);
+				this->display_status(current().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostRedisplay",c);
-#endif
-		}
-		else
-		{
-			load_error_handle(c);
-//			cout << "no image object in memory, sorry\n";
-#ifdef FIM_REMOVE_FAILED
-//			if(current()!=""){pop_current();	//removes the current file from the list.
-#ifdef FIM_AUTOSKIP_FAILED
-//			next(0);reload();}
-#endif
 #endif
 		}
 	}
@@ -476,7 +465,7 @@ namespace fim
 		 * displays the left text message and a right bracketed one
 		 * */
 		if(cc.getIntVariable("_display_status"))
-			set_status_bar((const char*)l, image()?image()->getInfo():"*");
+			set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
 		return "";
 	}
 
@@ -502,7 +491,7 @@ namespace fim
 				cc.display();
 //				FIXME
 //				if(cc.window)cc.window->recursive_display();	//THE BUG IS NOT HERE
-				this->display_status(info().c_str(), NULL);
+				this->display_status(current().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostDisplay",c);
@@ -522,7 +511,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::load_error_handle(fim::string c)
+	int Browser::load_error_handle(fim::string c)
 	{
 		/*
 		 * assume there was a load attempt : check and take some action in case of error
@@ -539,18 +528,15 @@ namespace fim
 				pop_current();	//removes the current file from the list.
 #ifdef FIM_AUTOSKIP_FAILED
 #ifdef FIM_ALWAYS_UNDEFINED
-				next(0);
+				if(n_files())next(1);
 				reload(); /* this will not be effective ! */
 #endif
 #endif
 			}
 #endif
-			fim::string rs("error loading the file ");
-			rs+=c;
-			rs+="\n";
-			return rs;
+			return 1;
 		}
-		return "";
+		return 0;
 	}
 
 	fim::string Browser::reload()
@@ -572,11 +558,12 @@ namespace fim
 		/*
 		 * FIXME
 		 *
-		 * load the current image
+		 * an attempt to load the current image
 		 * */
 #ifndef FIM_BUGGED_CACHE
 		viewport().setImage( cache.useCachedImage(current().c_str()) );
 #else
+		// warning : in this cases exception handling is missing
 		viewport().setImage( new Image(current().c_str()) );
 #endif
 		return "";
@@ -586,6 +573,7 @@ namespace fim
 	{
 		/*
 		 * FIXME
+		 * only cleans up the internal data structures
 		 * */
 #ifndef FIM_BUGGED_CACHE
 		if(c_image()) cache.freeCachedImage(image());
@@ -602,9 +590,6 @@ namespace fim
 		 * fetches in the cache the next image..
 		 *
 		 * FIX ME : enrich this behaviour
-		 */
-		/*
-		 * FIXME
 		 * */
 #ifdef FIM_BUGGED_CACHE
 		return " prefetching disabled";
@@ -632,9 +617,8 @@ namespace fim
 		loadCurrentImage();
 
 		if(cc.getIntVariable("_prefetch")) prefetch(noargs);/*this will become an autocommand*/
-		cc.setVariable("fileindex",current_image());
 
-		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
+		while( n_files() && ! (viewport().check_valid()) && load_error_handle(c) );
 
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostReload",c);
@@ -657,14 +641,12 @@ namespace fim
 		cc.autocmd_exec("PreLoad",c);
 #endif
 		set_status_bar("please wait while loading...", "*");
-		free_current_image();
 
 		loadCurrentImage();
 
 		if(cc.getIntVariable("_prefetch")) prefetch(noargs);
-		cc.setVariable("fileindex",current_image());
 
-		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
+//		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostLoad",c);
 #endif
@@ -816,6 +798,7 @@ namespace fim
 		if(cp>N) cp=1+(n%N);
 		if(!cp)++cp;
 		cc.setVariable("fileindex",current_image());
+		cc.setVariable("filename", current().c_str());
 //		std::cout << "next " << n << "\n";
 //		return n_files()?(flist[current_n()]):nofile;
 		fim::string result = n_files()?(flist[current_n()]):nofile;
@@ -826,7 +809,7 @@ namespace fim
 	fim::string Browser::next(int n=1)
 	{
 		/*
-		 * jumps to the next image in the list
+		 * jumps n images forward in the image list
 		 */
 		fim::string c=current();
 #ifdef FIM_AUTOCMDS
@@ -842,7 +825,7 @@ namespace fim
 	fim::string Browser::prev(int n)
 	{
 		/*
-		 * make the previous image in the list current
+		 * jumps n images backwards in the image list
 		 */
 		fim::string c=current();
 #ifdef FIM_AUTOCMDS
@@ -881,7 +864,7 @@ namespace fim
 	fim::string Browser::do_next(int n)
 	{
 		/*
-		 * jumps to the next image in the list, the mechanism
+		 * jumps to the next n'th image in the list.
 		 * p.s.: n<>0
 		 */
 		int N=flist.size();
@@ -892,6 +875,7 @@ namespace fim
 		cp%=N;
 		if(!cp)cp=N;
 		cc.setVariable("fileindex",current_image());
+		cc.setVariable("filename", current().c_str());
 		fim::string result = n_files()?(flist[current_n()]):nofile;
 		return "";
 	}
@@ -1039,7 +1023,12 @@ namespace fim
 		}
 		return fl;
 #else
-		return current();
+		fim::string r=current();
+		if(image())
+			r+=image()->getInfo();
+		else
+			r+=" (unloaded)";
+		return r;
 #endif
 	//	return list();
 	}
@@ -1283,6 +1272,16 @@ namespace fim
 		for(unsigned int i=0;i<args.size();++i)
 			push(args[i]);
 		return "";
+	}
+
+	fim::string Browser::next(const std::vector<fim::string> &args)
+	{
+		return next(args.size()>0?((int)args[0]):1);
+	}
+
+	int Browser::current_image()const
+	{
+		return cp;
 	}
 }
 

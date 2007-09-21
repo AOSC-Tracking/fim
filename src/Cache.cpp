@@ -58,7 +58,7 @@ namespace fim
 		return l_img;
 	}
 
-	int Cache::free_all()
+	bool Cache::free_all()
 	{
 		/*
 		 * free all unused elements from the cache
@@ -67,6 +67,7 @@ namespace fim
 		rcachels_t rcc = reverseCache;
                 for(    rcachels_t::const_iterator rcci=rcc.begin(); rcci!=rcc.end();++rcci )
 			if(usageCounter[rcci->first->getName()]==0)erase( rcci->first );
+		return true;
 	}
 
 	int Cache::free_some_lru()
@@ -184,8 +185,7 @@ namespace fim
 		{
 		if( ni = new Image(fname) )
 		{	
-			if( cacheNewImage( ni ) ) 
-			return ni;
+			if( cacheNewImage( ni ) ) return ni;
 		}
 		}
 		catch(FimException e)
@@ -226,6 +226,7 @@ namespace fim
 		mark_used( ni->getName() );
 		usageCounter[ni->getName()]=0; // we yet don't assume any usage
 		cc.setVariable("_cached_images",cached_elements());
+		return true;
 	}
 	
 	int Cache::erase(fim::Image* oi)

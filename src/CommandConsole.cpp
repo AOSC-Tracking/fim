@@ -1284,11 +1284,17 @@ namespace fim
 	{
 		/*
 		 * the variable name supplied is used as a key to the variables hash
+		 *
+		 * FIXME : now the random stuff is done at interpreter level.
+		 *
+		 * BEWARE!
 		 * */
 //		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
-		if(strcmp(varname.c_str(),"random"))
-		return variables[varname].getInt();
-		else return fim_rand();
+//		if(strcmp(varname.c_str(),"random"))
+//		if(fim::string("random")!=varname)
+			return variables[varname].getInt();
+//		else
+//			return fim_rand();
 	}
 
 	float CommandConsole::getFloatVariable(const fim::string &varname)

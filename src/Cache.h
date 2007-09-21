@@ -71,7 +71,7 @@ class Cache
 
 	int free_some_lru();
 
-	int free_all();
+	bool free_all();
 	
 	/*	returns whether a file is already cached */
 	bool haveImage(const char *fname);

@@ -22,7 +22,6 @@
 #include <cstdio>
 #include <map>
 #include "lex.h"
-//#include "y.tab.h"
 #include "yacc.tab.hpp"
 #include "fim.h"
 #include "common.h"
@@ -55,13 +54,6 @@ fim::string cvar(nodeType *p)
 {
 	nodeType *np=p;
   	fim::string arg;
-/*	if(np->opr.oper=='a' )
-	{
-		if(np->type == stringCon )
-		{
-			return (np->scon.s);
-		}
-	}*/
 	int i;
 	if(p->type == typeOpr && p->opr.oper=='.' )
 	for(i=0;i<p->opr.nops;++i)
@@ -75,20 +67,19 @@ fim::string cvar(nodeType *p)
 	{
 		//warning : only 1 should be allowed here..
 		np=(p->opr.op[i]);
-//		if(np->type == stringCon )arg=(np->scon.s);
-//		if(np->type == typeOpr   )
-//		{
-			arg=cvar(np);
-//		}
-//		if(np->type == typeOpr   ){cout<<"A";arg=ex(np);}
-//		if(np->type == intCon )arg=ex(np);
+		arg=cvar(np);
 	}
 	else
 	if(p->type == stringCon )arg=(p->scon.s);
 	else
 	if(p->type == vId )
-	{
-		arg=cc.getStringVariable(p->scon.s);
+	{	
+		if(p->scon.s && 0==strcmp(p->scon.s,"random"))
+		{
+			arg=fim_rand();//FIXME
+		}
+		else
+			arg=cc.getStringVariable(p->scon.s);
 	}
 	else if(p->type == intCon )arg=ex(p);
 	else
@@ -155,36 +146,25 @@ int ex(nodeType *p)
 	if (!p) return 0;
 	switch(p->type)
 	{
-		case cmdId:
+/*		case cmdId:
 			assert(0);
-			return -1;
-			//cc.execute(fim::string::string(p->scon.s));return 0;
+			return -1;*/
 		case intCon:
 			return p->con.value;
-//	case floatCon: return (int)(void*)(p->fid.f);
 	        case floatCon:
 			return 0;//FIXME
-	//case vId: printf("key : %s\n",p->scon.s); return vars[p->scon.s];
 		case vId:
 		{
 			/*
 			 * variable identifier encountered
 			 * */
-			//printf("key : %s\n",p->scon.s);
-			//beware the next conversion..
-//			cout<<"f("<<p->scon.s<< ")="<< cc.getFloatVariable(p->scon.s) ;
-		//	if(cc.getVariableType(p->scon.s)=='f')return (int)cc.getFloatVariable(p->scon.s);
-		//	else return (int)cc.getIntVariable(p->scon.s);
 			
-			return (int)cc.getStringVariable(p->scon.s);
-/*			if(p->typeHint=='f')
-			{
-				cout << "vId node f\n";
-				return (int)cc.getFloatVariable(p->scon.s);
-			}
-			else return cc.getIntVariable(p->scon.s) ;*/
+			if(p->scon.s && 0==strcmp(p->scon.s,"random"))
+			       	return fim_rand();//FIXME
+			else
+				return (int)cc.getStringVariable(p->scon.s);
 		}
-		case stringCon: //printf("string(\"%s\")\n",p->scon.s);
+		case stringCon:
 		case typeOpr:	/*	some operator	*/
 		switch(p->opr.oper)
 		{
@@ -200,19 +180,6 @@ int ex(nodeType *p)
 				else if (p->opr.nops > 2)
 					ex(p->opr.op[2]);
 				return 0;
-/*		case PRINT: if(p->opr.op[0]->type!=stringCon)
-			    {
-				//cout << "getting f " << cc.getFloatVariable(p->scon.s) << "\n";
-				//cout << "getting i " << cc.getIntVariable  (p->scon.s) << "\n";
-		   	        cout<<ex(p->opr.op[0])<<"\n";//printf("result : %d\n", ex(p->opr.op[0]));
-		            }
-			    else 
-		            {
-		                cc.printVariable(p->opr.op[0]->scon.s);
-			    	//cout<<p->opr.op[0]->scon.s<<"\n";//printf("result : %s\n", p->opr.op[0]->scon.s);
-			    }
-			    return 0;
-//		case PRINT: printf("result : %d\n", ex(p->opr.op[0])); return 0;*/
 			case ';':
 				/*
 				 *		;
@@ -250,7 +217,6 @@ int ex(nodeType *p)
 				  nodeType *np=p;	
 				  nodeType *dp;
 	                          np=(np->opr.op[1]); //the right subtree first node
-	//			  while( np &&    np->opr.nops >=1 && np->opr.oper=='a')
 				  while( np &&    np->opr.nops >=1 )
 				  if( np->opr.oper=='a' )
 			  	  {
@@ -297,20 +263,12 @@ int ex(nodeType *p)
 				 */
 				fim::string result;
 
-				//result = (cc.execute(fim::string::string(p->opr.op[0]->scon.s),args));//.c_str());
-
 				if(p)
 				if(p->opr.op[0])
 				if(p->opr.op[0]->scon.s) result =
 				       	cc.execute(p->opr.op[0]->scon.s,args);
 				/* sometimes there are NULLs  : BAD !!  */
 
-//				result = stringsample();
-//				return 0;
-//				std::cout << "\""<<result << "\"\n";
-
-//				static int c=0; std::cout << ++c << "\n";
-				
 				return atoi(result.c_str());
 			  }
 		}
@@ -318,7 +276,6 @@ int ex(nodeType *p)
 			// we shouldn't be here, because 'a' (argument) nodes are evaluated elsewhere
 			assert(0);
 			return -1;
-		//case '=': return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
 		case '=':
 			//assignment of a variable
 			s=p->opr.op[0]->scon.s;
@@ -340,7 +297,10 @@ int ex(nodeType *p)
 				{
 					// got a string!
 		       		        cc.setVariable(s,p->opr.op[0]->scon.s);
-			                return cc.getIntVariable(s);
+					if(0==strcmp(s,"random"))
+			                	return fim_rand();//FIXME
+					else
+			                	return cc.getIntVariable(s);
 				}
 				return -1;
 			}//'i'

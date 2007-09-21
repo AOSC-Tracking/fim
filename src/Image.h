@@ -78,8 +78,8 @@ class Image
 
 
         int tiny()const;
-	char *make_info();
 	public:
+	fim::string getInfo();
 	Image(const Image& image); // yes, a private constructor (was)
 
 	int rescale( float ns=0.0 );
@@ -99,9 +99,6 @@ class Image
 
 	bool check_invalid();
 	bool check_valid();
-
-
-	char* getInfo();
 
 	int width();
 	int original_width();

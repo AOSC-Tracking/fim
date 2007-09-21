@@ -63,7 +63,7 @@ class Browser
 	
 	fim::string last_regexp;
 	fim::Cache cache;
-	int current_image()const{ return cp; }
+	int current_image()const;
 	int current_images()const{ return n(); }
 	public:
 	int empty_file_list()const;
@@ -109,7 +109,7 @@ class Browser
 
 	fim::string n(const std::vector<fim::string> &args){return n();}
 	fim::string _sort(const std::vector<fim::string> &args){return _sort();}
-	fim::string next(const std::vector<fim::string> &args){return next(args.size()>0?((int)args[0]):1);}
+	fim::string next(const std::vector<fim::string> &args);
 
 	fim::string prev(int n=1);
 	fim::string prev(const std::vector<fim::string> &args);
@@ -142,7 +142,7 @@ class Browser
 	fim::string do_next(int n);
 
 	void free_current_image();
-	fim::string load_error_handle(fim::string c);
+	int load_error_handle(fim::string c);
 	public:
 };
 }
