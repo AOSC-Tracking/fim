@@ -33,18 +33,19 @@ namespace fim
         fim::string Window::cmd(const std::vector<fim::string> &args)
         {
 		unsigned int i=0;
+		int rc=0;/*return code*/
+		fim::string c=cc.getIntVariable("filename");
+		cc.autocmd_exec("PreWindowEvent",c);
 		while(i<args.size())
                 {
 			string cmd=args[i];
 			if(cmd == "split" || cmd == "hsplit")
 			{
 				hsplit();
-				return "\n";
 			}
 			else if(cmd == "vsplit")
 			{
 				vsplit();
-				return "\n";
 			}
 /*			else if(cmd == "draw")
 			{
@@ -85,6 +86,13 @@ namespace fim
 			{
 				close();
 			}
+			else rc=-1;
+
+			/*
+			 * FIXME
+			 * */
+			if(rc!=0) return "window : bad command\n";
+
 			/*
 			else if(cmd == "test")
 			{
@@ -94,6 +102,7 @@ namespace fim
 			}*/
 			++i;
                 }
+		cc.autocmd_exec("PostWindowEvent",c);
                 return "";
         }
 
@@ -790,14 +799,15 @@ namespace fim
 		}
 	}
 
-#define FIM_BUGGED_ENLARGE 1
 	int Window::venlarge(int units=1)
 	{
+#if FIM_BUGGED_ENLARGE
+		return -1;
+#endif
 		/*
 		 * SEEMS BUGGY:
 		 * make && src/fim media -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge:'
 		 * */
-#if FIM_BUGGED_ENLARGE
 			/*
 			 * +----------+
 			 * |    |     |
@@ -815,7 +825,6 @@ namespace fim
 			focused() .venlarge(units); //evil
 			if(ishsplit())shadowed().hlshrink(units);
 			if(ishsplit())shadowed().normalize();
-#endif
 			return 0;
 	}
 
@@ -826,6 +835,8 @@ namespace fim
 		 * make && src/fim media -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge:'
 		 * */
 #if FIM_BUGGED_ENLARGE
+		return -1;
+#endif
 			/*
 			 * +----------+
 			 * |   S      |
@@ -849,7 +860,6 @@ namespace fim
 
 				shadowed().normalize(); 
 			}
-#endif
 			return 0;
 	}
 
@@ -859,6 +869,8 @@ namespace fim
 		 * FIXME : ???
 		 */
 #if FIM_BUGGED_ENLARGE
+			return -1;
+#endif
 		/*
 		 * complicato ...
 		 */
@@ -872,8 +884,6 @@ namespace fim
 				return venlarge(units);
 			}else
 			// isleaf()
-			return 0;
-#endif
 			return 0;
 	}
 

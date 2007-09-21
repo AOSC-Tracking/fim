@@ -161,10 +161,13 @@ DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key bi
 DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
 #DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
 #DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
- FIM_VERSION= $(VERSION)
- FIM_AUTHOR = '"dezperado _CUT_ autistici _CUT_ org"'
 
-DEFINES += -D X_DISPLAY_MISSING @DEFS@ @EXTRADEFS@
+ FIM_VERSION= $(VERSION)
+# FIM_AUTHOR = '"Michele Martone <dezperado _CUT_ autistici _CUT_ org>"'
+
+ DEFINES  += -D FIM_VERSION="\"$(FIM_VERSION)\""
+# DEFINES  += -D FIM_AUTHOR=$(FIM_AUTHOR)
+ DEFINES  += -D X_DISPLAY_MISSING @DEFS@ @EXTRADEFS@
 
 AM_CPPFLAGS=${DEFINES} ${FIM_CFLAGS}
 AM_LDFLAGS=${FIM_CFLAGS}

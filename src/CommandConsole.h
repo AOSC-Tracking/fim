@@ -213,6 +213,7 @@ class CommandConsole
 #endif
 	fim::string current()const{ return browser.current();}
 
+	fim::string get_alias_info(const fim::string aname);
 	public:
 
 	fim::string get_variables_list()const;
@@ -226,6 +227,8 @@ class CommandConsole
 	#ifdef FIM_WINDOWS
 	Viewport& current_viewport()const;
 	const Window & current_window()const;
+	
+	void dumpDefaultFimrc()const;
 	#endif
 	private:
 

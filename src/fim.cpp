@@ -601,15 +601,17 @@ static struct option fim_options[] = {
     {"vt",         required_argument, NULL, 'T'},
 //    {"backup",     no_argument,       NULL, 'b'},
 //    {"preserve",   no_argument,       NULL, 'p'},
-    {"execute-script",    required_argument,       NULL, 'E'},
-    {"execute-command",    required_argument,       NULL, 'c'},
-    {"final-command",    required_argument,       NULL, 'F'},
-    {"debug",      no_argument,       NULL, 'D'},
+    {"execute-script",   required_argument,       NULL, 'E'},
+    {"execute-commands", required_argument,       NULL, 'c'},
+    {"final-commands",   required_argument,       NULL, 'F'},
+//    {"debug",      no_argument,       NULL, 'D'},
     {"no-rc-file",      no_argument,       NULL, 'N'},
+    {"dump-default-fimrc",      no_argument,       NULL, 'D'},
 #ifdef FIM_READ_STDIN
     {"read-from-stdin",      no_argument,       NULL, '-'},
 #endif
     {"no-framebuffer",      no_argument,       NULL, 't'},
+    {"text-reading",      no_argument,       NULL, 'P'},
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -627,8 +629,20 @@ static struct option fim_options[] = {
 static void version()
 {
     fprintf(stderr,
-		    "FIM - Fbi IMproved "//FIM_VERSION
-		    ", by "//FIM_AUTHOR
+		    "FIM - Fbi IMproved "
+#ifdef FIM_VERSION
+		    FIM_VERSION
+#endif
+#ifdef FIM_REPOSITORY_VERSION 
+		    "( repository version "
+	FIM_REPOSITORY_VERSION 	    
+		    " )"
+#endif
+#define FIM_AUTHOR "Michele Martone <dezperado _CUT_ autistici _CUT_ org>"
+#ifdef FIM_AUTHOR 
+		    ", by "
+		    FIM_AUTHOR
+#endif
 		    ", built on %s\n",
 		    __DATE__
     		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
@@ -867,6 +881,8 @@ int main(int argc,char *argv[])
 	case 'D':
 	    //fim's
 //	    cc.setNoFrameBuffer();	// no framebuffer (debug) mode
+	    cc.dumpDefaultFimrc();
+	    std::exit(0);
 	    break;
 	case 'N':
 	    //fim's

@@ -198,6 +198,20 @@ namespace fim
 		return aliases_expanded;
 	}
 
+	fim::string CommandConsole::get_alias_info(const fim::string aname)
+	{
+		/*
+		 * FIXME: find a way to read aliases and make this function const !
+		 * */
+			string  r;
+				r+=fim::string("alias \"");
+				r+=aname;
+				r+=fim::string("\" \"");
+				r+=aliases[aname];
+				r+=fim::string("\"\n");
+				return r;
+	}
+
 	fim::string CommandConsole::alias(std::vector<Arg> args)
 	{
 		/*
@@ -210,13 +224,15 @@ namespace fim
 		}
 		if(args.size()<2)
 		{
+			return get_alias_info(args[0].val);
+/*
 			string  r;
 				r+=fim::string("alias \"");
 				r+=args[0].val;
 				r+=fim::string("\" \"");
 				r+=aliases[args[0].val];
 				r+=fim::string("\"\n");
-				return r;
+				return r;*/
 		}
 		for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
 		if(aliases[args[0].val]!="")
@@ -259,7 +275,13 @@ namespace fim
 		if(!args.empty())
 		{
 			cmd=findCommand(args[0]);
-			if(cmd)return  cmd->getHelp()+fim::string("\n");
+			if(cmd)
+				return  cmd->getHelp()+fim::string("\n");
+			else
+			if(aliasRecall(fim::string(args[0]))!="")
+				return
+					(args[0]+fim::string(" is an alias, and was declared:\n"))+
+					get_alias_info(args[0]);
 			else cout << args[0] << " : no such command\n";
 		}
 		this->setVariable("_display_console",1);
@@ -1940,5 +1962,10 @@ namespace fim
 		return true; /* for now a fare return code */
 	}
 #endif
+
+	void CommandConsole::dumpDefaultFimrc()const
+	{
+		std::cout << FIM_DEFAULT_CONFIG_FILE_CONTENTS << "\n";
+	}
 }
 

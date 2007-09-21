@@ -7,7 +7,7 @@ Please refer to the documentation (doc/FIM.TXT) for a complete list of known bug
 20070920	single windowing mode is broken now :) .. who cares
 20070920	system(...) is VERY UNSAFE : an image named $( rm .. ) could cause a disaster :)
 20070919	while command suffers from being not interruptible in some cases (when image is small and not panable)
-20070919	The windowing system is bugged : split;vsplit;henlarge;display
+20070919	The windowing system is bugged : split;vsplit;henlarge;display (therefore enlarging is DISABLED temporarily)
 20070919	The windowing system is bugged :  make && src/fim media/* -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge:'
 20070912	Debugging it with the framebuffer under gdb hangs the console (even with -p).
 

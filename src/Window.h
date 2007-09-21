@@ -42,6 +42,11 @@ namespace fim
 {
 
 /*
+ * temporarily disabled window enlarge functionality
+ * */
+#define FIM_BUGGED_ENLARGE 1
+
+/*
  
   The window class should model the behaviour of a binary splitting window
  in a portable manner.

@@ -89,8 +89,10 @@ Introduction to Fim					*ref* *reference*
 2. Fim on the Internet				*internet*
 
 Right now, the official Fim page is 
-
 	http://www.autistici.org/dezperado/
+
+Soon the official page, SVN repository and tarball repository will be on
+	http://savannah.nongnu.org/projects/fbi-improved
 
 It contains all the relevant Fim documentation, and the downloadable Fim
 archives.
@@ -102,7 +104,6 @@ You could be able to browse the Fim code on :
 	http://code.autistici.org/svn/fim/
 
 and get the latest source code tree issuing :
-
  	svn export http://code.autistici.org/svn/fim
 
 or
@@ -878,9 +879,37 @@ in the Makefile, comment it, and rebuild the whole.
 6.9. Windows						*commands-windows*
 
 If Fim is compiled with the windows support, multiple viewports and windows
-could display images on screen once.
+could display images on screen at once.
+It is a useful way for comparing multiple images in a synoptical way.
 
-This whole subsystem in developement phase :).
+This whole subsystem in developement phase, but some commands are already in.
+>
+	:window 'split'
+will split horizontally the current window, resulting in two viewports: an
+upper one and a lower one.
+>
+	:window 'vsplit'
+will split vertically the current window, resulting in two viewports: a
+right one and a left one.
+>
+	:window 'up'
+	:window 'down'
+	:window 'right'
+	:window 'left'
+These commands will change the focus to the currently selected window.
+>
+	:window 'normalize'
+will balance window sizes in a natural way.
+>
+	:window 'close'
+will close the current window (unsplit it) and enlarge the viewport to the
+containing window size.
+
+>
+	:window 'henlarge'
+	:window 'venlarge'
+These two commands are disabled because are buggy. They will be available
+soon!
 
 <UNFINISHED>
 
@@ -920,9 +949,13 @@ If still uncertain about regular expression search, consult the
 Lots of actions come as default aliases : see the 'fimrc' file 
 distributed with the sources to get a nice idea of the way of writing one.
 
-Or simply execute the command 
+Or execute the command 
 >
 	echo FIM_DEFAULT_CONFIG_FILE_CONTENTS
+
+Or simply invoke 'fim -D' to get the configuration on the standard output.
+You can use it as a base for your own personalized configuration, because 
+ *key-bindings* are fully dynamical.
 
 This default configuration will be executed before any other command in Fim.
 After this, the "$(HOME)/.fimrc" file is loaded and executed before displaying

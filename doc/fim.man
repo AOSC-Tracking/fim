@@ -1,5 +1,6 @@
 .c $Id$
-.TH fim 1 "(c) 2006-2007 dezperado"
+.c .TH fim 1 "(c) 2007 Michele Martone"
+.TH fim 1
 .SH NAME
 fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
@@ -16,30 +17,30 @@ Please note that the full documentation of
 is in the FIM.TXT file distributed in the source package.
 .SH OPTIONS
 .TP
-.B -h
-print usage info
-.TP
-.B -d device
+.c .B -h, --help
+.c print usage info
+.c .TP
+.B -d {device}, --device {device}
 framebuffer device to use.  Default is the one your vc is
 mapped to.
 .TP
-.B -m mode
+.B -m {mode}, --mode {mode}
 name of the video mode to use video mode (must be listed in
 /etc/fb.modes).  Default is not to change the video mode.
 .c .TP
-.c .B -q
+.c .B -q, --quiet
 .c be quiet: don't print anything.
 .TP
-.B -h
+.B -h, --help
 display help and terminate the program
 .TP
-.B -V
+.B -V, --version
 display version and terminate the program
 .TP
-.B -v
+.B -v, --verbose
 be verbose: show status bar.
 .TP
-.B -P
+.B -P, --text-reading
 Enable textreading mode.  This has the effect that fim will display
 images scaled to the width of the screen, and aligned to the top.
 Useful if the images you are watching text pages, all you have to do
@@ -49,18 +50,18 @@ key configuration, of course).
 .c .B -t sec
 .c timeout: load next image after >sec< seconds without any keypress
 .c .TP
-.c .B -g gamma
+.c .B -g {gamma}, --gamma {gamma}
 .c gamma correction.  Can also be put into the FBGAMMA environment
 .c variable.  Default is 1.0.  Requires Pseudocolor or Directcolor
 .c visual, doesn't work for Truecolor.
 .c .TP
-.c .B -r n
+.c .B -r n, --resolution {n}
 .c select resolution.  PhotoCD only, n = 1..5.
 .TP
-.B -s {n}
+.B -s {n}, --scroll {n}
 set scroll steps in pixels (default is 50).
 .TP
-.B -c {commands}
+.B -c {commands}, --execute-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.
 Please note that if your commands are more complicated than a simple 'next' or 'pornview'
 command, they must be quoted and escaped in a manner suitable for your shell!!
@@ -72,15 +73,21 @@ For example,
 size, then pan two times up, then display the image ; and then 
 do an endless loop consisting of bottom and top aligning, alternated.
 .TP
-.B -F {commands}
+.B -F {commands}, --final-commands {commands}
 The \fBcommands\fP string will be executed after exiting the interactive loop
 of the program (right before terminating the program).
 .TP
-.B -E {scriptfile}
+.B -T {terminal}, --vt {terminal}
+The \fBterminal\fP will be used as virtual terminal device file.
+.TP
+.B -E {scriptfile}, --execute-script {scriptfile}
 The \fBscriptfile\fP will be executed right after the default initialization file is executed.
 .TP
-.B -N
+.B -N, --no-rc-file
 No initialization file will be read (default is ~/.fimrc) at startup.
+.TP
+.B -D, --dump-default-fimrc
+The default fimrc file (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
 .c .TP
 .c .B -f font
 .c Set font.  This can be either a pcf console font file or a X11 font
@@ -89,7 +96,7 @@ No initialization file will be read (default is ~/.fimrc) at startup.
 .c environment variable is used as default.  If unset, fim will
 .c fallback to 10x20 (X11) / lat1u-16.psf (console).
 .TP
-.B -a
+.B -a, --autozoom
 Enable autozoom.  fim will automagically pick a reasonable zoom factor
 when loading a new image.
 .TP
@@ -98,12 +105,12 @@ Reads file list from stdin.
 
 So, you can use fim in such a fashion:
 $ find /mnt/media/ -name *.jpg | fim -
-.TP
-.B --autoup
-Like autozoom, but scale up only.
-.TP
-.B --autodown
-Like autozoom, but scale down only.
+.c .TP
+.c .B --autoup
+.c Like autozoom, but scale up only.
+.c .TP
+.c .B --autodown
+.c Like autozoom, but scale down only.
 .c .TP
 .c .B -u
 .c Randomize the order of the filenames.
@@ -117,7 +124,7 @@ Like autozoom, but scale down only.
 .c .B -p
 .c preserve timestamps (when editing images).
 .c .TP
-.B --comments
+.c .B --comments
 .c Display comment tags (if present) instead of the filename.  Probaby
 .c only useful if you added reasonable comments yourself (using wrjpgcom
 .c for example), otherwise you likely just find texts pointing to the
@@ -201,16 +208,21 @@ console switch handling.  That is obviously no problem for console
 logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
+.SH BUGS
+.B fim
+has bugs. Please read the 
+.B BUGS
+file shipped in the documentation directory to discover the known ones.
 .SH SEE ALSO
 fimgs(1), fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4)
 .c , jpegtran(1)
 .SH AUTHOR
-dezperado <dezperado _ GUESS _ autistici.org> is the author of fim, "fbi improved".
-
-Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based.
+.nf
+Michele Martone <dezperado _ GUESS _ autistici.org> is the author of fim, "fbi improved". 
+Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based. 
 .SH COPYRIGHT
-Copyright (C) 2006-2007 dezperado <dezperado _ GUESS _ autistici.org>
-
+.nf
+Copyright (C) 2007 Michele Martone <dezperado _ GUESS _ autistici.org>
 Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>
 .P
 This program is free software; you can redistribute it and/or modify
