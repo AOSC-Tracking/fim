@@ -443,7 +443,7 @@ namespace fim
 	}
 
 #ifdef FIM_WINDOWS
-        void Viewport::reassign(Window *w)
+        void Viewport::reassignWindow(Window *w)
 	{
 		window = w;
 	}

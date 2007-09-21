@@ -115,7 +115,7 @@ autocmd "PostNext" "" "reload;";
 autocmd "PostPrev" "" "reload;";
 #autocmd "PostDisplay"   "" "fresh=1" ;
 #autocmd "PreWindowEvent"   "" "";
-#autocmd "PostWindowEvent"   "" "redisplay;";
+autocmd "PostWindowEvent"   "" "display;";
 autocmd "PreRedisplay"   ".*/fbps-.*" "if(fresh){fresh=0;auto_width_scale;fresh=0;}";
 autocmd "PreRedisplay"   "" "if(autowidth*fresh){fresh=0;auto_width_scale;fresh=0;}";
 autocmd "PreRedisplay"   "" "if(auto_scale_v *fresh){fresh=0;auto_scale       ;fresh=0;}";
@@ -193,6 +193,10 @@ alias "wl" "window 'left'";
 alias "wr" "window 'right'";
 alias "split" "window 'split'";
 alias "vsplit" "window 'vsplit'";
+
+alias 'wnormalize' 'window "normalize"';
+alias 'wclose' 'window "close"';
+alias 'wc' 'window "close"';
 
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.

@@ -46,7 +46,7 @@ class Viewport
 	public:
         void reset();
 #ifdef FIM_WINDOWS
-        void reassign(Window *w);
+        void reassignWindow(Window *w);
 #endif
 
 	Viewport( //yes, horrible
@@ -76,10 +76,10 @@ class Viewport
 
 //	int redraw;	// there is already an external one!
 	/* viewport methods */
-	int viewport_width();
-	int viewport_height();
 
 	public:
+	int viewport_width();
+	int viewport_height();
 	/* viewport methods */
 	void top_align();
 	void bottom_align();

@@ -223,7 +223,7 @@ class Window
 	void print_focused();
 	void draw()const;
 #endif
-	Window(const Rect& corners);
+	Window(const Rect& corners, Viewport* vp=NULL);
 
 	int height()const;
 	int width()const;

@@ -106,15 +106,21 @@ namespace fim
                 return "";
         }
 
-	Window::Window(const Rect& corners_):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
+	Window::Window(const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
 	{
 		/*
 		 *  A new leave Window is created with a specified geometry.
 		 *  An exception is launched upon memory errors.
 		 */
 		focus=0;
-		viewport=NULL;
-		viewport=new Viewport(this);
+		if(vp)
+		{
+			viewport=new Viewport(*vp );
+			if(viewport)viewport->reassignWindow(this);
+
+		}
+		else
+			viewport=new Viewport(this);
 
 		if( viewport == NULL ) throw FIM_E_NO_MEM;
 	}
@@ -333,10 +339,14 @@ namespace fim
 		 * */
 		if(isleaf())
 		{
-			first  = new Window(this->corners.hsplit(Rect::Upper));
-			second = new Window(this->corners.hsplit(Rect::Lower));
-			if(viewport)
+			first  = new Window(this->corners.hsplit(Rect::Upper),viewport);
+			second = new Window(this->corners.hsplit(Rect::Lower),viewport);
+			if(viewport && first && second)
 			{
+#define FIM_COOL_WINDOWS_SPLITTING 1
+#if     FIM_COOL_WINDOWS_SPLITTING
+				first ->current_viewport().pan_up  ( second->current_viewport().viewport_height() );
+#endif
 				delete viewport;
 				viewport = NULL;
 			}
@@ -356,10 +366,13 @@ namespace fim
 		 * */
 		if(isleaf())
 		{
-			first  = new Window(this->corners.vsplit(Rect::Left ));
-			second = new Window(this->corners.vsplit(Rect::Right));
-			if(viewport)
+			first  = new Window(this->corners.vsplit(Rect::Left ),viewport);
+			second = new Window(this->corners.vsplit(Rect::Right),viewport);
+			if(viewport && first && second)
 			{
+#if     FIM_COOL_WINDOWS_SPLITTING
+				second->current_viewport().pan_right( first->current_viewport().viewport_width() );
+#endif
 				delete viewport;
 				viewport = NULL;
 			}
@@ -408,7 +421,7 @@ namespace fim
 			}
 			if( viewport = focused().viewport )
 			{
-				viewport ->reassign(this);
+				viewport ->reassignWindow(this);
 				focused().viewport=NULL;
 			}
 			else
