@@ -152,7 +152,8 @@ class Window
 	void split();
 	void hsplit();
 	void vsplit();
-	void close();
+	bool close();
+	bool swap(); // new
 	void balance();
 	int chfocus();
 	Moves move_focus(Moves move);
@@ -209,12 +210,16 @@ class Window
 
 	public:
 
+	/*
+	 * DANGER : nearly each of these method launches some exception!
+	 * */
+	
 	Viewport & current_viewport()const;
 	const Window & c_focused()const;
 	const Window & c_shadowed()const;
         fim::string cmd(const std::vector<fim::string> &args);
-	void recursive_redisplay()const;
-	void recursive_display()const;
+	bool recursive_redisplay()const;
+	bool recursive_display()const;
 
 	const Image *getImage()const;
 

@@ -36,7 +36,7 @@ namespace fim
 		int rc=0;/*return code*/
 #ifdef FIM_AUTOCMDS
 		fim::string c=cc.getIntVariable("filename");
-		cc.autocmd_exec("PreWindowEvent",c);
+		cc.autocmd_exec("PreWindow",c);
 #endif
 		while(i<args.size())
                 {
@@ -84,10 +84,8 @@ namespace fim
 			else if(cmd == "down" ) { move_focus(Down ); }
 			else if(cmd == "left" ) { move_focus(Left ); }
 			else if(cmd == "right") { move_focus(Right); }
-			else if(cmd == "close")
-			{
-				close();
-			}
+			else if(cmd == "close") { close(); }
+			else if(cmd == "swap") { swap(); }
 			else rc=-1;
 
 			/*
@@ -105,7 +103,7 @@ namespace fim
 			++i;
                 }
 #ifdef FIM_AUTOCMDS
-		cc.autocmd_exec("PostWindowEvent",c);
+		cc.autocmd_exec("PostWindow",c);
 #endif
                 return "";
         }
@@ -384,7 +382,53 @@ namespace fim
 		else focused().vsplit();
 	}
 
-	void Window::close()
+	bool Window::swap()
+	{
+		/*
+		 * swap window content
+		 *
+		 * FIXME : unfinished
+		 *
+		 * +-----+-----+   +-----+-----+
+		 * |     |     |   |     |     |
+		 * | S   | F   |-->| F   | S   |
+		 * |     |     |   |     |     |
+		 * |b.jpg|a.jpg|   |a.jpg|b.jpg|
+		 * +-----+-----+   +-----+-----+
+		 */
+		if(   !isvalid() ) return false;
+
+		if(isleaf())
+		{
+			// no problem
+			return false;
+		}
+		else if(focused().isleaf())
+		{
+			Viewport *vf,*vs;
+			vf = focused().viewport;
+			vs = shadowed().viewport;
+			// WARNING : dangerous
+			if(vf && vs)
+			{
+				vf ->reassignWindow(&(shadowed()));
+				vs ->reassignWindow(&( focused()));
+				focused().viewport  = vs;
+				shadowed().viewport = vf;
+			}
+			else
+			{
+				// an error should be spawned
+				// FIXME
+				return false;
+			}
+		}
+		else return focused().swap();
+		return true;
+	}
+
+
+	bool Window::close()
 	{
 		/*
 		 * closing a leaf window implies its rejoining with the parent one
@@ -398,11 +442,12 @@ namespace fim
 		 * |    |     |   |          |
 		 * +----+-----+   +----------+
 		 */
-		if(   !isvalid() ) return;
+		if(   !isvalid() ) return false;
 
 		if(isleaf())
 		{
 			// no problem
+			return false;
 		}
 		else if(focused().isleaf())
 		{
@@ -412,7 +457,6 @@ namespace fim
 			this->corners=Rect(focused().corners.x,focused().corners.y,shadowed().corners.w+focused().corners.w,shadowed().corners.h);
 			else ;//error
 			*/
-			std::cout << "closing..\n";
 			/*
 			 * some inheritance operations needed here!
 			 */
@@ -423,7 +467,7 @@ namespace fim
 				cout << "viewport should be NULL!\n";
 				// an error should be spawned
 			}
-			if( viewport = focused().viewport )
+			if( ( viewport = focused().viewport ) )
 			{
 				viewport ->reassignWindow(this);
 				focused().viewport=NULL;
@@ -431,12 +475,14 @@ namespace fim
 			else
 			{
 				// error action
+				return false;
 			}
 			delete first;  first  = NULL;
 			delete second; second = NULL;
 		}
-		else focused().close();
+		else return focused().close();
 //		print();
+		return true;
 	}
 
 	void Window::balance()
@@ -937,37 +983,55 @@ namespace fim
 #endif
 
 	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
-	void Window::recursive_redisplay()const
+	bool Window::recursive_redisplay()const
 	{
 		/*
 		 * whole, deep, window redisplay
 		 * */
+		bool re=false;//really redisplayed ? sometimes fim guesses it is not necessary
+		try
+		{
 		if(isleaf())
 		{
-			if(viewport)viewport->redisplay();
+			if(viewport)re=viewport->redisplay();
 		}
 		else
 		{
-			focused().recursive_redisplay();
-			shadowed().recursive_redisplay();
+			re |= focused().recursive_redisplay();
+			re |= shadowed().recursive_redisplay();
 		}
+		}
+		catch(FimException e)
+		{
+			if( e != FIM_E_WINDOW_ERROR) ;// this would be bad..
+		}
+		return re;
 	}
 
 	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
-	void Window::recursive_display()const
+	bool Window::recursive_display()const
 	{
 		/*
 		 * whole, deep, window display
 		 * */
+		bool re=false;//really displayed ? sometimes fim guesses it is not necessary
+		try
+		{
 		if(isleaf())
 		{
-			if(viewport)viewport->display();
+			if(viewport)re=viewport->display();
 		}
 		else
 		{
-			focused().recursive_display();
-			shadowed().recursive_display();
+			re |= focused().recursive_display();
+			re |= shadowed().recursive_display();
 		}
+		}
+		catch(FimException e)
+		{
+			if( e != FIM_E_WINDOW_ERROR) ;// this would be bad..
+		}
+		return re;
 	}
 
 

@@ -378,6 +378,7 @@ namespace fim
 		addCommand(new Command(fim::string("stop_recording"  ),fim::string("stops recording of commands"),this,&CommandConsole::stop_recording));
 		addCommand(new Command(fim::string("dump_record_buffer"  ),fim::string("dumps on screen record buffer"),this,&CommandConsole::dump_record_buffer));
 		addCommand(new Command(fim::string("execute_record_buffer"  ),fim::string("executes the record buffer"),this,&CommandConsole::execute_record_buffer));
+		addCommand(new Command(fim::string("eval"  ),fim::string("evaluates the arguments as commands, executing them"),this,&CommandConsole::eval));
 		addCommand(new Command(fim::string("repeat_last"  ),fim::string("repeats the last action"),this,&CommandConsole::repeat_last));
 #endif
 		addCommand(new Command(fim::string("variables"  ),fim::string("displayed the associated variables"),this,&CommandConsole::variables_list));
@@ -914,6 +915,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		fim::string initial=browser.current();
 		cc.autocmd_exec("PreExecutionCycle",initial);
+		cc.autocmd_exec("PreExecutionCycleArgs",initial);
 
 #endif
 	 	while(show_must_go_on)
@@ -1286,15 +1288,16 @@ namespace fim
 		 * the variable name supplied is used as a key to the variables hash
 		 *
 		 * FIXME : now the random stuff is done at interpreter level.
+		 * AND IT SHOULD NOT BE USED INTERNALY BY FIM!
 		 *
 		 * BEWARE!
 		 * */
-//		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
-//		if(strcmp(varname.c_str(),"random"))
-//		if(fim::string("random")!=varname)
+/*		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
+		if(strcmp(varname.c_str(),"random"))
+		if(fim::string("random")!=varname)*/
 			return variables[varname].getInt();
-//		else
-//			return fim_rand();
+/*		else
+ 		return fim_rand();*/
 	}
 
 	float CommandConsole::getFloatVariable(const fim::string &varname)
@@ -1463,6 +1466,14 @@ namespace fim
 		}
 		autocmds[event][pat].push_back(cmd);
 		return "";
+	}
+
+	fim::string CommandConsole::pre_autocmd_add(const fim::string &cmd)
+	{
+		/*
+		 * this autocommand will take argument related autocommands
+		 */
+	    	return autocmd_add("PreExecutionCycleArgs","",cmd);
 	}
 
 	fim::string CommandConsole::autocmd_exec(const fim::string &event,const fim::string &fname)
@@ -1743,18 +1754,52 @@ namespace fim
 		return acl;
 	}
 
-	void CommandConsole::display()
+	bool CommandConsole::redisplay()
 	{
 		/*
 		 * quick and dirty display function
 		 */
 #ifdef FIM_WINDOWS
-		if(window)window->recursive_redisplay();
+		bool needed_redisplay=false;
+		try
+		{
+			if(window)
+				needed_redisplay=window->recursive_redisplay();
+		}
+		catch	(FimException e)
+		{
+			//FIXME
+		}
+		return needed_redisplay;
 #else
 		browser.redisplay();
+		return true;
 #endif
-		
 	}
+
+	bool CommandConsole::display()
+	{
+		/*
+		 * quick and dirty display function
+		 */
+#ifdef FIM_WINDOWS
+		bool needed_redisplay=false;
+		try
+		{
+			if(window)
+				needed_redisplay=window->recursive_display();
+		}
+		catch	(FimException e)
+		{
+			//FIXME
+		}
+		return needed_redisplay;
+#else
+		browser.redisplay();
+		return true;
+#endif
+	}
+
 #ifdef FIM_RECORDING
 	void CommandConsole::record_action(const fim::string &cmd)
 	{
@@ -1815,6 +1860,18 @@ namespace fim
 			res=recorded_actions[i].first+(fim::string)recorded_actions[i].second;
 			execute(res.c_str(),0,1);
 		}*/
+		return "";
+	}
+
+	fim::string CommandConsole::eval(const std::vector<fim::string> &args)
+	{
+		/*
+		 * all of the commands given as arguments are executed.
+		 *
+		 * FIXME : return value should make more sense..
+		 * */
+		for(unsigned int i=0;i<args.size();++i)
+			execute(args[i].c_str(),0,0);
 		return "";
 	}
 #endif

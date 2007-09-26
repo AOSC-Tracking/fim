@@ -74,11 +74,13 @@ fim::string cvar(nodeType *p)
 	else
 	if(p->type == vId )
 	{	
-		if(p->scon.s && 0==strcmp(p->scon.s,"random"))
+#if 0
+		if(0 && p->scon.s && 0==strcmp(p->scon.s,"random"))
 		{
 			arg=fim_rand();//FIXME
 		}
 		else
+#endif
 			arg=cc.getStringVariable(p->scon.s);
 	}
 	else if(p->type == intCon )arg=ex(p);
@@ -159,9 +161,11 @@ int ex(nodeType *p)
 			 * variable identifier encountered
 			 * */
 			
-			if(p->scon.s && 0==strcmp(p->scon.s,"random"))
+#if 0
+			if(0 && p->scon.s && 0==strcmp(p->scon.s,"random"))
 			       	return fim_rand();//FIXME
 			else
+#endif
 				return (int)cc.getStringVariable(p->scon.s);
 		}
 		case stringCon:
@@ -297,9 +301,11 @@ int ex(nodeType *p)
 				{
 					// got a string!
 		       		        cc.setVariable(s,p->opr.op[0]->scon.s);
-					if(0==strcmp(s,"random"))
+#if 0
+					if(0 && 0==strcmp(s,"random"))
 			                	return fim_rand();//FIXME
 					else
+#endif
 			                	return cc.getIntVariable(s);
 				}
 				return -1;

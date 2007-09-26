@@ -53,7 +53,6 @@ int pipedesc[2];
 #define YY_INPUT(buf,result,max_size) \
 { \
 	int r=read(pipedesc[0],buf,1); \
-	if(0)printf("letti in input : %d(%c)\n",r,*buf); \
 	result = (buf[0]==EOF||r<1)?EOB_ACT_END_OF_FILE:EOB_ACT_CONTINUE_SCAN; \
 	result = (buf[0]==EOF||r<1)?0:1; \
 	if(result<=0) {close(pipedesc[0]);close(pipedesc[1]);} \

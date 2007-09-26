@@ -2,8 +2,15 @@ $Id$
 
 ==== KNOWN BUGS
 
-Please refer to the documentation (doc/FIM.TXT) for a complete list of known bugs (BUGS section).
+Please refer to the documentation (doc/FIM.TXT) for the rest of known bugs (BUGS section).
 
+-------------------------------------------------------------------------------
+   Never, for ANY reason, prezz C-z (^Z) with the intention of putting fim in
+   the background. It will blind your console and allow only for blind
+   typing, which is a very dangerous situation! (bug shared with fbi)
+-------------------------------------------------------------------------------
+
+20070922	open a pdf, :magnify;split;20next
 20070921	the autoskip failed images mechanism is buggy
 20070920	single windowing mode is broken now :) .. who cares
 20070920	system(...) is VERY UNSAFE : an image named $( rm .. ) could cause a disaster :)
@@ -20,6 +27,7 @@ Please refer to the documentation (doc/FIM.TXT) for a complete list of known bug
 		  and force you to make tricks to get back the terminal (like typing blindly through consoles,
 		  or trying to get to some X instance via ALT-F7-like sequences, or even restart the computer),
 		  and blind typing could be dangerous, if you do now know what you are doing!
+
 
 20070904	problems could occur with the commands giving output when no std::cout << "" is returned soon after (see Commandconsole.cpp mehods for this..)
 

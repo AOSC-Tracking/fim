@@ -45,12 +45,14 @@ namespace fim
 	int Image::original_width()
 	{
 		//WARNING : assumes the image is valid
+		if(orientation%2) return fimg->i.height;
 		return fimg->i.width;
 	}
 
 	int Image::original_height()
 	{
 		//WARNING : assumes the image is valid
+		if(orientation%2) return fimg->i.width;
 		return fimg->i.height;
 	}
 
@@ -125,6 +127,7 @@ namespace fim
 		cc.setVariable("width"  ,(int)fimg->i.width );
 		cc.setVariable("sheight",(int) img->i.height);
 		cc.setVariable("swidth" ,(int) img->i.width );
+		if(!g_fim_no_framebuffer)cc.setVariable("_fim_bpp" ,(int) fb_var.bits_per_pixel );
 		cc.setVariable("scale"  ,newscale*100);
 		cc.setVariable("ascale" ,ascale);
 		return true;
@@ -240,6 +243,7 @@ namespace fim
 		if(g_fim_no_framebuffer)return 0;
 
 		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;	/* ehm ...  */
+		newascale=cc.getFloatVariable("ascale"); if(newascale==0.0) newascale=1.0;
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=neworientation; // fix this
 
@@ -257,11 +261,39 @@ namespace fim
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 				set_status_bar("please wait while rescaling...", getInfo().c_str());
 
-			img  = scale_image(fimg,scale=newscale,cc.getFloatVariable("ascale"));
-
+#define FIM_PROGRESSIVE_RESCALING 0
+#if FIM_PROGRESSIVE_RESCALING
+			/*
+			 * progressive rescaling is computationally convenient in when newscale<scale
+			 * at the cost of a progressively worsening image quality (especially when newscale~scale)
+			 * and a sequence ----+ will suddenly 'clear' out the image quality, so it is not a desirable
+			 * option ...
+			 * */
+			if( 
+				//( newscale>scale && scale > 1.0) ||
+				( newscale<scale && scale < 1.0) )
+				img = scale_image( img,newscale/scale,newascale);
+			else
+				img = scale_image(fimg,newscale,newascale);
+#else
+			img = scale_image(fimg,newscale,newascale);
+#endif
 			/* orientation can be 0,1,2,3 */
-			if( img && orientation!=0 && orientation != 2)img  = rotate_image(img,orientation==1?0:1);
-			if( img && orientation== 2)img  = flip_image(img);
+			if( img && orientation!=0 && orientation != 2)
+			{
+				// we make a backup.. who knows!
+				struct ida_image *rb=img;
+				rb  = rotate_image(rb,orientation==1?0:1);
+				if(rb)img=rb;
+			}
+			if( img && orientation!=0 && orientation == 2)
+			{	
+				// we make a backup.. who knows!
+				struct ida_image *rb=img;
+				rb  = rotate_image(rb,0);
+				if(rb)rb  = rotate_image(img,0);
+				if(rb)img=rb;
+			}
 
 			if(!img)
 			{
@@ -272,13 +304,21 @@ namespace fim
 			}
 			else 
 			{
+				/* reallocation succeeded */
 				if( backup_img && backup_img!=fimg ) free_image(backup_img);
+				scale=newscale;
+				ascale=newascale;
+				redraw=1;
+ 		                new_image=1; // for centering
 			}
 
 
-			redraw=1;
- 	                new_image=1; // for centering
-
+#if 0
+			// debugging stuff
+			int dc;
+			dc=cc.getIntVariable("_dc");
+			cc.setVariable("_dc" ,(int)dc+1);
+#endif
 			/*
 			 * it is important to set these values after rotation, too!
 			 * */

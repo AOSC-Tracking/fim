@@ -11,7 +11,7 @@ SUBDIRS =
 
 bin_PROGRAMS = fim
 
-bin_SCRIPTS = fimgs.sh
+bin_SCRIPTS = fimgs
 
 doc_DATA = fimrc
 
@@ -76,7 +76,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	fim.h \
 	fim_stream.h \
 	fim_stream.cpp \
-	fimgs.sh \
+	fimgs \
 	lex.h \
 	string.h \
 	Arg.cpp \
@@ -121,7 +121,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 # jpegtools.h
 
 # regex.c is work in progress and awaits for integration
-EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs.sh \
+EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
 	regex.c \
 	fbi_src/tiff.c \
 	fbi_src/gif.c \
@@ -161,6 +161,7 @@ DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key bi
 DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
 #DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
 #DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
+ DEFINES  += -D FIM_RANDOM           # 'random' is a fake variable
 
  FIM_VERSION= $(VERSION)
 # FIM_AUTHOR = '"Michele Martone <dezperado _CUT_ autistici _CUT_ org>"'

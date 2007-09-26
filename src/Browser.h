@@ -28,6 +28,7 @@ namespace fim
  */
 class Browser
 {
+	private:
 	/*
 	 * The file browser holds the names of files in the slideshow.
 	 */

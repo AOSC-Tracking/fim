@@ -900,7 +900,7 @@ convert_line(int bpp, int line, int owidth,
 		 * this code could be faster if using processor specific routines..
 		 * ... or maybe even not ?
 		 */
-		owidth*=3;
+		//owidth*=3;
 #if 0
 		for (x = 0; x < owidth; x+=3)
 		{
@@ -912,9 +912,9 @@ convert_line(int bpp, int line, int owidth,
 		/*
 		 * this is far worse than the preceding !
 		 */
-		memcpy(ptr,buffer,owidth);
-		register char t;
-		register i=x;
+		memcpy(ptr,buffer,owidth*3);
+		//register char t;
+		//register i=x;
 		/*since RGB and GBR swap already done, this is not necessary*/
 		/*for (i = 0; i < owidth; i+=3)
 		{
@@ -923,7 +923,7 @@ convert_line(int bpp, int line, int owidth,
 	            ptr[i+2]=t;
 		}*/
 #endif
-		owidth/=3;
+		//owidth/=3;
 	}else
 /*this is still slow ... FIXME*/
 #if 0

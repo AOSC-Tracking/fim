@@ -172,7 +172,7 @@ namespace fim
 	bool Cache::haveImage(const char *fname)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!fname)return NULL;
+		if(!fname)return false;
 
 		return ( this->imageCache[fim::string(fname)] != NULL );
 	}

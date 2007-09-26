@@ -169,10 +169,14 @@ namespace fim
 		redraw=1;
 	}
 
-	void Viewport::redisplay()
+	bool Viewport::redisplay()
 	{
+		/*
+		 * we 'force' redraw.
+		 * display() has still the last word :P
+		 * */
 	    	redraw=1;
-		display();
+		return display();
 	}
 
 	int Viewport::xorigin()
@@ -211,7 +215,7 @@ namespace fim
 #endif
 	}
 
-	void Viewport::display()
+	bool Viewport::display()
 	{
 		/*
 		 *	FIX ME
@@ -220,15 +224,19 @@ namespace fim
 		 *	the display function draws the image in the frame buffer
 		 *	memory.
 		 *	no scaling occurs, only some alignment.
+		 *
+		 *	returns true when some drawing occurred.
 		 */
-		if((redraw==0) )return;
+		if((redraw==0) )return false;
 		if( check_invalid() ) null_display();//  NEW
-		if( check_invalid() ) return;
+		if( check_invalid() ) return false;
 		int autotop=cc.getIntVariable("autotop");
 		int flip=cc.getIntVariable("autoflip");
 		int mirror=cc.getIntVariable("automirror");
+		int neworientation=((cc.getIntVariable("orientation")%4)+4)%4;	/* ehm ...  */
+		if(neworientation!=image->orientation)image->rescale();
     
-		if(g_fim_no_framebuffer)return;
+		if(g_fim_no_framebuffer)return false;
 		if (image->new_image && redraw)
 		{
 			if(autotop && image->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
@@ -300,7 +308,9 @@ namespace fim
 				<<  top << " "
 				<< left << " "
 				<< "\n";*/
+			return true;
 		}
+		return false;
 	}
 
 	void Viewport::auto_scale()

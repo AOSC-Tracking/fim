@@ -4,7 +4,9 @@
 .SH NAME
 fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
-.B fim [ options ] [--] file ...
+.B fim [ options ] [--] files ...
+.TP
+.B ... | fim [ options ] [--] [ files ] - ...
 .SH DESCRIPTION
 .B fim
 displays the specified file(s) on the linux console using the

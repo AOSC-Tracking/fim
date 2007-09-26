@@ -79,8 +79,8 @@ namespace fim
 				 * viewport().redisplay(); <- and this should be good
 				 * :)
 				 * */
-				cc.display();
-				this->display_status(current().c_str(), NULL);
+				if( cc.redisplay() )
+					this->display_status(current().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostRedisplay",c);
@@ -488,10 +488,10 @@ namespace fim
 			{
 				//fb_clear_screen();
 				//viewport().display();
-				cc.display();
+				if( cc.display() )
+					this->display_status(current().c_str(), NULL);
 //				FIXME
 //				if(cc.window)cc.window->recursive_display();	//THE BUG IS NOT HERE
-				this->display_status(current().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostDisplay",c);
@@ -560,12 +560,19 @@ namespace fim
 		 *
 		 * an attempt to load the current image
 		 * */
+		try
+		{
 #ifndef FIM_BUGGED_CACHE
 		viewport().setImage( cache.useCachedImage(current().c_str()) );
 #else
 		// warning : in this cases exception handling is missing
 		viewport().setImage( new Image(current().c_str()) );
 #endif
+		}
+		catch(FimException e)
+		{
+			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
+		}
 		return "";
 	}
 

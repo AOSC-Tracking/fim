@@ -1,6 +1,6 @@
 /* $Id$ */
 /*
- fim.cpp : Fim main program
+ fim.cpp : Fim main program and accessory functions
 
  (c) 2007 Michele Martone
 
@@ -19,7 +19,11 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-
+/*
+ * This file contains mainly the code that couldn't fit in any of the existing classes.
+ * When the fbi->fim transition will be complete, it will be probably very very small, 
+ * as then all lone functions will be encapsulated.
+ * */
 #include "fim.h"
 #include <signal.h>
 #include <sys/ioctl.h>
@@ -376,9 +380,9 @@ static char ** fim_completion (const char *text, int start,int end)
 		if(!__s)return NULL;__s[0]=_s;
 		//we print all of the commands, with no completion, though.
 #endif
-		cout << "variables : "<<cc.get_variables_list()<<"\n";
-		cout << "commands  : "<<cc.get_commands_list()<<"\n";
-		cout << "aliases   : "<<cc.get_aliases_list()<<"\n";
+		cout << "VARIABLES : "<<cc.get_variables_list()<<"\n";
+		cout << "COMMANDS : "<<cc.get_commands_list()<<"\n";
+		cout << "ALIASES : "<<cc.get_aliases_list()<<"\n";
 		rl_attempted_completion_over = 1;
 		/* this could be set only here :) */
 		return NULL;
@@ -561,7 +565,7 @@ void console_switch(int is_busy)
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched! 
 	 */
-		cc.display();
+		cc.redisplay();
 		/*
 		 * PROBLEMS : image tearing (also in actual fbi..)
 		 */
@@ -595,6 +599,7 @@ static struct option fim_options[] = {
     {"random",     no_argument,       NULL, 'u'},  /* randomize images */
 /*    {"font",       required_argument, NULL, 'f'},*/  /* font */
     {"autozoom",   no_argument,       NULL, 'a'},
+    {"autotop",   no_argument,       NULL, 'A'},
     {"autowidth",   no_argument,       NULL, 'w'},
 /*    {"edit",       no_argument,       NULL, 'e'},*/  /* enable editing */
 /*    {"list",       required_argument, NULL, 'l'},*/
@@ -772,7 +777,7 @@ int main(int argc,char *argv[])
 	setlocale(LC_ALL,"");	//uhm..
     	for (;;) {
 	    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-	    c = getopt_long(argc, argv, "wc:uvahPqVr:m:d:g:s:T:E:DNhF:t",
+	    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:t",
 			fim_options, &opt_index);
 	if (c == -1)
 	    break;
@@ -787,25 +792,39 @@ int main(int argc,char *argv[])
 //	    break;
 	case 'a':
 	    //fbi's
-	    cc.setVariable("autotop",1);
+	    //cc.setVariable("autotop",1);
+	    //FIXME: still needs some tricking .. 
+	    cc.pre_autocmd_add("auto_scale_v=1;");
+	    break;
+	case 'A':
+	    //fbi's
+	    //cc.setVariable("autotop",1);
+	    //FIXME: still needs some tricking .. 
+	    cc.pre_autocmd_add("autotop=1;");
 	    break;
 	case 'q':
 	    //fbi's
 	    //fprintf(stderr,"sorry, this feature will be implemented soon\n");
-	    cc.setVariable("_display_status",0);
+	    //cc.setVariable("_display_status",0);
+	    cc.pre_autocmd_add("_display_status=0;");
 	    break;
 	case 'v':
 	    //fbi's
-	    cc.setVariable("_display_status",1);
+	    //cc.setVariable("_display_status",1);
+	    cc.pre_autocmd_add("_display_status=1;");
 	    break;
 	case 'w':
 	    //fbi's
-	    cc.setVariable("autowidth",1);
+	    //cc.setVariable("autowidth",1);
+	    cc.pre_autocmd_add("autowidth=1;");
 	    break;
 	case 'P':
 	    //fbi's
-	    cc.setVariable("autowidth",1);
-	    cc.setVariable("autotop",1);
+	    //FIXME
+//	    cc.setVariable("autowidth",1);
+//	    cc.setVariable("autotop",1);
+//	    strange : if the assignations occur in two pre_autocmd_add calls, it triggers a bug via fimgs:
+	    cc.pre_autocmd_add("autowidth=1;autotop=1;");
 	    break;
 	case 'g':
 	    //fbi's
@@ -816,7 +835,15 @@ int main(int argc,char *argv[])
 //	    pcd_res = atoi(optarg);
 	    break;
 	case 's':
-	    if(atoi(optarg)>0) cc.setVariable("steps",atoi(optarg));
+//	    if(atoi(optarg)>0) cc.setVariable("steps",atoi(optarg));
+	    if(atoi(optarg)>0)
+	    {
+	    	// fixme : still buggy
+	    	fim::string s="steps=";
+		s+=fim::string((int)atoi(optarg));
+		s+=";";
+		cc.pre_autocmd_add(s);
+	    }
 	    break;
 //	case 't':
 	    //fbi's

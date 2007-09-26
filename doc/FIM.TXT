@@ -761,6 +761,8 @@ as soon as this is necessary.
 
  '_prefetch'	: if 0 or unset, no prefetching will be adopted.
 
+ '_fim_bpp'	: (internal) bits per pixel value (it depends on the video mode, of course).
+
 
 Note : there is still much to do about variables.
 
@@ -824,6 +826,9 @@ an EVENT can be one of:
 
 'PreGoto'	: before a goto jump
 'PostGoto'	: after  a goto jump
+
+'PreWindow'	: before a window event
+'PostWindow'	: after  a window event
 
 If more than one ACTION matches for a certain (EVENT,PATTERN) couple, the
 corresponding execution occurs in the sequence specified in the autocommand
@@ -900,6 +905,12 @@ These commands will change the focus to the currently selected window.
 >
 	:window 'normalize'
 will balance window sizes in a natural way.
+>
+	:window 'swap'
+will close the currently selected window with the symmetrically
+corrispondent terminal one (of course, if both are splits of a same window).
+
+>
 >
 	:window 'close'
 will close the current window (unsplit it) and enlarge the viewport to the
@@ -1254,7 +1265,11 @@ A lot of questions still await for an answer in Fim. Here are few:
  if you want to report a bug, please consult the BUGS file.
  if you want to contribute with help, please read the |contact| information.
 
- - Problems with unusual resolutions (like those on popular laptop wide screens).
+ - Never, for ANY reason, prezz C-z (^Z) with the intention of putting fim in
+   the background. It will blind your console and allowing only for blind
+   typing, which is a very dangerous situation!
+
+  - Problems with unusual resolutions (like those on popular laptop wide screens).
    Although unusual resolutions bugs are welcome.
 
  - GNU Flex version prior to 2.5.4 and GNU Bison version prior 1.875d" are

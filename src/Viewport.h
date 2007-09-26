@@ -86,8 +86,8 @@ class Viewport
 	/*virtual*/ Viewport* clone();
 
 	/* viewport methods */
-	void display();
-	void redisplay();
+	bool display();
+	bool redisplay();
 	void null_display();
 
 	void auto_width_scale();

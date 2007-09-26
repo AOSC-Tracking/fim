@@ -126,7 +126,8 @@ class CommandConsole
 	CommandConsole();
 
 	fim::string markCurrentFile(const std::vector<fim::string>& args){markCurrentFile();return "";}
-	void display();
+	bool display();
+	bool redisplay();
 	char * command_generator (const char *text,int state);
 	void executionCycle();
 	void init();
@@ -186,6 +187,7 @@ class CommandConsole
 	void executeBinding(const int c);
 	fim::string getBoundAction(const int c);
 //	void execute(fim::string cmd);
+	fim::string eval(const std::vector<fim::string> &args);
 	void exit(int i);
 	fim::string unbind(int c);
 	fim::string bind(int c,fim::string binding);
@@ -200,6 +202,7 @@ class CommandConsole
 	bool regexp_match(const char*s, const char*r)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
+	fim::string pre_autocmd_add(const fim::string &cmd);
 #endif
 	int catchLoopBreakingCommand(int seconds=0);
 
@@ -214,6 +217,7 @@ class CommandConsole
 	fim::string current()const{ return browser.current();}
 
 	fim::string get_alias_info(const fim::string aname);
+	const Window & current_window()const;
 	public:
 
 	fim::string get_variables_list()const;
@@ -226,7 +230,6 @@ class CommandConsole
 
 	#ifdef FIM_WINDOWS
 	Viewport& current_viewport()const;
-	const Window & current_window()const;
 	
 	void dumpDefaultFimrc()const;
 	#endif

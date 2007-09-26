@@ -19,6 +19,16 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+/*
+	20070924
+	This grammar file is messed up.
+	It needs a solid revision to avoid conflits and introduce a slight tolerance
+	to expressions with excessive semicolons and such things.
+
+	Moreover, a solid revision will bring in a better C++ integration
+	and clean up well the interpreter.cpp file, too.
+*/
+
 %{
 
 #include <stdio.h>
@@ -135,6 +145,7 @@ stmt:
 //	| IDENTIFIER '=' STRING{ $$ = opr('=', 2, vscon($1,'s'), scon($3)); }
 	| IDENTIFIER '=' arg { $$ = opr('=', 2, vscon($1,'a'), $3); }
 //	| NEWLINE { /* this still doesn't work as we would like to */ }
+	| stmt ';' { $$ = $1; } // new
 	;
 
 args:
@@ -231,6 +242,11 @@ nodeType *xscon(char*s)
 
 nodeType *vscon(char*s,int typeHint)
 {
+#ifdef FIM_RANDOM
+	if( *(int*)(s+0) == 0x646e6172 // dnar
+	&& (*(int*)(s+4)<<8)== 0x006d6f00    ) // dnar
+	return con(fim_rand());
+#endif
 	nodeType *p=scon(s);
 	if(p)p->type = vId; 
 	if(p)p->typeHint = typeHint; 

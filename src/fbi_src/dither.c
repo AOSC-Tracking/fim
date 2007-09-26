@@ -170,7 +170,9 @@ dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror
     while (width--) {
 	xmod = width & DITHER_MASK;
 
-#ifndef FIM_IS_SLOWER_THAN_FBI
+#if 0
+// 20070923 : seems like there is NO NEED OF PATCHING THIS :)
+//#ifndef FIM_IS_SLOWER_THAN_FBI
 	/*RGB swapped patch	*/
 	b = red_dither[*(src++)];
 	if (ymod[xmod] < b)

@@ -11,6 +11,9 @@
 
 # this script wants a temporary directory to stores rendered/wget'ed files
 # this directory is named after the process ID
+
+# 20070925	regular expressions failed on some configurations, so were 'cut'.. :-(
+
 DIR="${TMPDIR-/var/tmp}/fbps-$$"
 
 # we must have write permissions in that directory
@@ -123,22 +126,23 @@ while test "$opt" = "1"
 do
 	f="$1";
 	shift;
-	[[ "$f" =~ '^http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
+#	[[ "$f" =~ '^http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
+	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
 	[[ -z "$f" ]] && break ;
 	#while [[ ! -f "$f" ]] ; do shift ; [[ "$#" -lt 0 ]] && break 2 ; done
 ###############################################################################
 ##		HANDLING OF DVI,PS AND PDF FILES
 ###############################################################################
-#[[ "$f" =~ \\.dvi$ ]] && f="/tmp/$$.ps" && dvips -q "$f" -o "$f" &&  trap "rm $f ; rm -fRd $DIR" EXIT
+#[[ "$f" =~ .dvi$ ]] && f="/tmp/$$.ps" && dvips -q "$f" -o "$f" &&  trap "rm $f ; rm -fRd $DIR" EXIT
 #[[ -f "$f" ]] || { echo "an option!" ;  fbiopts="$fbiopts $f" ; break ; } # not a file, but an option
 
 
-[[ "$f" =~ \\.dvi$ ]] && fbiopts=" -P $fbiopts"
-[[ "$f" =~ \\.pdf$ ]] && fbiopts=" -P $fbiopts"
-[[ "$f" =~ \\.ps$  ]] && fbiopts=" -P $fbiopts"
-[[ "$f" =~ \\.eps$  ]] && fbiopts=" -P $fbiopts"
+[[ "$f" =~ .dvi$ ]] && fbiopts=" -P $fbiopts"
+[[ "$f" =~ .pdf$ ]] && fbiopts=" -P $fbiopts"
+[[ "$f" =~ .ps$  ]] && fbiopts=" -P $fbiopts"
+[[ "$f" =~ .eps$  ]] && fbiopts=" -P $fbiopts"
 
-if ( [[ "$f" =~ \\.ps$  ]] || [[ "$f" =~ \\.pdf$  ]] ) || ( [[ "$f" =~ \\.eps$  ]] || [[ "$f" =~ \\.dvi$  ]] )
+if ( [[ "$f" =~ .ps$  ]] || [[ "$f" =~ .pdf$  ]] ) || ( [[ "$f" =~ .eps$  ]] || [[ "$f" =~ .dvi$  ]] )
 then 
 
 BDIR=''
@@ -183,19 +187,22 @@ gs	-dSAVER -dNOPAUSE -dBATCH			\
 #	echo "Oops: ghostscript wrote no pages ($pages)?"
 #	echo
 #	exit 1
-elif ( ( [[ "$f" =~ \\.cbr$  ]] || [[ "$f" =~ \\.cbz$  ]] ) || ( [[ "$f" =~ \\.rar$  ]] || [[ "$f" =~ \\.zip$  ]] ) || ( [[ "$f" =~ \\.tgz$  ]] || [[ "$f" =~ \\.tar.gz$  ]] ) || ( [[ "$f" =~ \\.tar$  ]] || [[ "$f" =~ \\.tar.bz2$  ]] ) )  && ! [[ "$f" =~ '^http://' ]]
+#elif ( ( [[ "$f" =~ \\.cbr$  ]] || [[ "$f" =~ \\.cbz$  ]] ) || ( [[ "$f" =~ \\.rar$  ]] || [[ "$f" =~ \\.zip$  ]] ) || ( [[ "$f" =~ \\.tgz$  ]] || [[ "$f" =~ \\.tar.gz$  ]] ) || ( [[ "$f" =~ \\.tar$  ]] || [[ "$f" =~ \\.tar.bz2$  ]] ) )  && ! [[ "$f" =~ '^http://' ]]
+elif ( ( [[ "$f" =~ .cbr$  ]] || [[ "$f" =~ .cbz$  ]] ) || ( [[ "$f" =~ .rar$  ]] || [[ "$f" =~ .zip$  ]] ) || ( [[ "$f" =~ .tgz$  ]] || [[ "$f" =~ .tar.gz$  ]] ) || ( [[ "$f" =~ .tar$  ]] || [[ "$f" =~ .tar.bz2$  ]] ) )  && ! [[ "$f" =~ 'http://' ]]
 then
 # in the case of an archive ...
 # an ideal fimgs script would unpack recursively in search for interesting files..
 
-[[ "$f" =~ \\.cbr$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
-[[ "$f" =~ \\.rar$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
-[[ "$f" =~ \\.cbz$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
-[[ "$f" =~ \\.zip$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
-[[ "$f" =~ \\.tgz$    ]] && ( $UNTGZ "$f" -C "$DIR" ) 
-[[ "$f" =~ \\.tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
-[[ "$f" =~ \\.tar$    ]] && ( $UNTAR "$f" -C "$DIR" ) 
-[[ "$f" =~ \\.tar.bz2$ ]] && ( $UNBZ "$f" -C "$DIR" ) 
+
+# 20070925 there were problems with '\\.' so i put '.' only :/
+[[ "$f" =~ .cbr$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
+[[ "$f" =~ .rar$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
+[[ "$f" =~ .cbz$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+[[ "$f" =~ .zip$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+[[ "$f" =~ .tgz$    ]] && ( $UNTGZ "$f" -C "$DIR" ) 
+[[ "$f" =~ .tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
+[[ "$f" =~ .tar$    ]] && ( $UNTAR "$f" -C "$DIR" ) 
+[[ "$f" =~ .tar.bz2$ ]] && ( $UNBZ "$f" -C "$DIR" ) 
 
 # ... but this fimgs script is lazy and it gets satisfied with a bare decompress !
 
