@@ -43,6 +43,7 @@ namespace fim
 class Image
 {
 
+
 	friend class Viewport;
 	public:
 

@@ -16,16 +16,11 @@ If you intend to learn about FIM, please read the program documentation  in the
 		-p option to read a script from stdin
 		a virtual class Context to implement a hierarchical namespace system for variables and maybe functions (to come)
 20070923	someday, a scrollback buffer and related mechanisms
-20070922	implement an eval statement
-20070921	argument passing to aliases, bash like ?!
-20070920	and /etc/fimrc ? :)
+20070921	argument passing to aliases, bash like ?! or vim-like ? 
 20070920	a command to exit from a script immediately
-20070920	system() interaction SAFE
 20070920	printing support ? :)
-20070920	framebuffer device selection
 20070920	as much as possible of Vim's language intuitive syntax
 20070919	docs : a comparative table between image viewers to show the Fim niche
-20070919	docs : add example of system integration of Fim
 20070903	these features are currently going to be worked in the near future:
 			- the combined window+viewport subsystem
 			- move as much as possible of Fim to be scriptable. variables in primis!

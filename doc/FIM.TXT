@@ -640,16 +640,18 @@ Currently, there are two commands to interact with the system:
 'system'
 'popen'
 
-They execute respectively, the 'system' and the 'popen' system calls.
+In both cases thetheir implementation uses 'system' and the 'popen'
+system calls.
 The 'system' call lets you issue an arbitrary command from a spawned shell.
+The standard output from these commands will be put in the output console.
 So, beware its power, as it is dangerous as hell.
 
 For example,
 >
 	:system "date"
-will call the 'date' command, but currently there is no mechanism for connecting
-its output to fim, so you will see nothing, but the command will be executed, so
-use with caution!
+will call the 'date' command, but currently there is no mechanism for
+connecting its output to fim, so you will see nothing, but the command will 
+be executed, so use with caution!
 
 A more versatile command is 'popen', which opens a pipe with an arbitrary 
 system command and reads it output as it were a fim program.
@@ -660,7 +662,8 @@ So, in principle, using the netcat command (nc) like this:
 should let fim read commands from the netcat program, which listens input on the
 9999 TCP port of the executing machine.
 
-This is VERY DANGEROUS, too.
+This is VERY DANGEROUS, too. Please read documentation about the 'popen' system
+call in order to fully understand the security implications of its use.
 
 On the other side, a safer command is :
 

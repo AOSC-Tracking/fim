@@ -79,6 +79,10 @@ do an endless loop consisting of bottom and top aligning, alternated.
 The \fBcommands\fP string will be executed after exiting the interactive loop
 of the program (right before terminating the program).
 .TP
+.B -f , --etc-fimrc
+The /etc/fimrc file will be executed prior to any other configuration file.
+If not specified, it is *ignored*.
+.TP
 .B -T {terminal}, --vt {terminal}
 The \fBterminal\fP will be used as virtual terminal device file.
 .TP

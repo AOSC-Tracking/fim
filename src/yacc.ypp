@@ -100,8 +100,14 @@ void yyerror(char *s);
 
 program:
 	//function { ; /*exit(0);*/ }
+//	func_dec { ; }
 	stmt_list { ex($1); freeNode($1); }
 	;
+
+//func_dec:
+//	"function"  IDENTIFIER '(' /*TODO: ARG_DECS */ ')'  { ; }
+//	;
+
 
 //function:
 	//function stmt { ex($2); freeNode($2); }

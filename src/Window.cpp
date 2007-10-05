@@ -127,6 +127,7 @@ namespace fim
 		if( viewport == NULL ) throw FIM_E_NO_MEM;
 	}
 
+#ifdef FIM_UNDEFINED
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
 	{
 		/*
@@ -138,6 +139,7 @@ namespace fim
 
 		if( viewport == NULL ) throw FIM_E_NO_MEM;
 	}
+#endif
 
 	bool Window::issplit()const
 	{

@@ -598,6 +598,7 @@ static struct option fim_options[] = {
     {"resolution", required_argument, NULL, 'r'},  /* select resolution */
     {"random",     no_argument,       NULL, 'u'},  /* randomize images */
 /*    {"font",       required_argument, NULL, 'f'},*/  /* font */
+    {"etc-fimrc",       required_argument, NULL, 'f'},  /* etc-fimrc read (experimental) */
     {"autozoom",   no_argument,       NULL, 'a'},
     {"autotop",   no_argument,       NULL, 'A'},
     {"autowidth",   no_argument,       NULL, 'w'},
@@ -777,7 +778,7 @@ int main(int argc,char *argv[])
 	setlocale(LC_ALL,"");	//uhm..
     	for (;;) {
 	    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-	    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:t",
+	    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tf",
 			fim_options, &opt_index);
 	if (c == -1)
 	    break;
@@ -807,6 +808,9 @@ int main(int argc,char *argv[])
 	    //fprintf(stderr,"sorry, this feature will be implemented soon\n");
 	    //cc.setVariable("_display_status",0);
 	    cc.pre_autocmd_add("_display_status=0;");
+	    break;
+	case 'f':
+	    cc.setVariable("_load_default_etc_fimrc",1);
 	    break;
 	case 'v':
 	    //fbi's

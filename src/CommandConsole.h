@@ -30,6 +30,73 @@ namespace fim
 {
 class CommandConsole
 {
+#ifdef FIM_NAMESPACES
+	class Namespace
+	{
+		/*
+		 * FIXME: experimental
+		 *
+		 * */
+		/*
+		 * the identifier->variable binding
+		 */
+		std::map<const fim::string,Var> variables;	//id->var
+	
+		public:
+		int setVariable(const fim::string& varname,int value)
+		{
+	//		return variables[varname].setInt(value);
+			return -1;
+		}
+
+		int getIntVariable(const fim::string &varname)
+		{
+			if( varname[1]==':' )
+			{
+				//a specific namespace was selected!
+				char ns = varname[0];
+				fim::string id=varname.c_str()+2;
+				if( ns == 'w' )
+				{
+					//window variable
+//					return cc.current_window().getIntVariable(id);
+				}
+				else
+				if( ns == 'v' )
+				{
+					//viewport variable
+//					return cc.current_window().current_viewport().getIntVariable(id);
+				}
+				else
+				if( ns == 'i' )
+				{
+					//image variable
+//					return cc.browser.image().getIntVariable(id);
+				}
+				else
+				if( ns == 'b' )
+				{
+					//browser variable
+//					return cc.browser.getIntVariable(id);
+				}
+				else
+				if( ns == 'g' )
+				{
+					//global variable
+//					return variables[id];
+				}
+				return -1;
+			}
+			else
+			{
+				// this scope was selected
+//				return variables[varname];
+			}
+			return 0;
+		}
+	};
+#endif
+
 #ifdef FIM_WINDOWS
 	fim::Window * window;
 #endif

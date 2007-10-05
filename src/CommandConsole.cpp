@@ -436,6 +436,13 @@ namespace fim
 		char *e = getenv("HOME");
 
 		/* default, hard-coded configuration first */
+		if(getIntVariable("_load_default_etc_fimrc")==1 )
+		{
+			// FIXME : MISSING CHECK OF EXISTENCE
+			if(-1==executeFile("/etc/fimrc"));//FIXME
+		}
+		
+		/* default, hard-coded configuration first */
 		if(getIntVariable("_no_default_configuration")==0 )
 		{
     #ifdef FIM_DEFAULT_CONFIGURATION
@@ -705,11 +712,13 @@ namespace fim
 			 */
 			int r = pipe(pipedesc),sl;
 			if(r!=0){ferror("pipe error\n");exit(-1);}
+#ifndef			FIM_ALIASES_WITHOUT_ARGUMENTS
 			for(unsigned int i=0;i<args.size();++i)
 			{
 				ex+=fim::string(" \""); ex+=args[i];
 				ex+=fim::string("\""); 
 			}
+#endif
 			sl=strlen(ex.c_str());
 			r=write(pipedesc[1],ex.c_str(),sl);
 			if(r!=sl){ferror("pipe write error");exit(-1);} 
@@ -1672,14 +1681,14 @@ namespace fim
 	fim::string CommandConsole::system(const std::vector<fim::string>& args)
 	{
 		/*
-		 * executes the shell commands given in the arguments
-		 * and returns the standard output
+		 * executes the shell commands given in the arguments,
+		 * one by one, and returns the (collated) standard output
 		 * */
 		for(unsigned int i=0;i<args.size();++i)
 		{
 			FILE* fd=popen(args[i].c_str(),"r");
 			/*
-			 * example:
+			 * popen example:
 			 *
 			 * int fd=(int)popen("/bin/echo quit","r");
 			 */

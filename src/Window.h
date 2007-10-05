@@ -131,6 +131,7 @@ class Rect
 
 class Window
 {
+	
 	private:
 
 	enum Spacings{ hspacing=0, vspacing=0};
@@ -146,6 +147,7 @@ class Window
  * */
 	Rect corners;//,status,canvas;
 	int focus;	// if 0 left/up ; otherwise right/lower
+
 	Window *first,*second;
 	bool amroot;
 	
@@ -170,7 +172,11 @@ class Window
 	void setroot();
 
 	private:
+#ifdef FIM_UNDEFINED
+	// seems useless, who knows ?
+	// throws FIM_E_NO_MEM exception
 	Window(const Window & root);
+#endif
 	bool isleaf()const;
 	bool isvalid()const;
 	bool issplit()const;
@@ -211,6 +217,11 @@ class Window
 	public:
 
 	/*
+	 * */
+	// throws FIM_E_NO_MEM exception
+	Window(const Rect& corners, Viewport* vp=NULL);
+
+	/*
 	 * DANGER : nearly each of these method launches some exception!
 	 * */
 	
@@ -228,8 +239,10 @@ class Window
 	void print_focused();
 	void draw()const;
 #endif
-	Window(const Rect& corners, Viewport* vp=NULL);
 
+	/* 
+	 * exception safe
+	 * */
 	int height()const;
 	int width()const;
 	int xorigin()const;
