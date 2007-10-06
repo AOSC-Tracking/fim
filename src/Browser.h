@@ -26,7 +26,11 @@ namespace fim
 /*
  * The Browser class oversees image browsing.
  */
+#ifdef FIM_NAMESPACES
+class Browser:public Namespace
+#else
 class Browser
+#endif
 {
 	private:
 	/*
@@ -52,7 +56,6 @@ class Browser
 #endif
 
 	Image *image()const;
-	const Image *c_image()const;
 
 	Viewport& viewport()const;
 
@@ -67,6 +70,7 @@ class Browser
 	int current_image()const;
 	int current_images()const{ return n(); }
 	public:
+	const Image *c_image()const;	// was private
 	int empty_file_list()const;
 
 	Browser();

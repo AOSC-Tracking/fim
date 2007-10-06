@@ -129,7 +129,11 @@ class Rect
 };
 
 
+#ifdef FIM_NAMESPACES
+class Window:public Namespace
+#else
 class Window
+#endif
 {
 	
 	private:

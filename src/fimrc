@@ -184,8 +184,8 @@ bind 'B' "toggleDisplayBusy";
 alias "plisten" 'popen "nc -l -p 9999 "';
 alias "wlisten" "while(1){sleep;plisten;}";
 alias "random_slideshow" "while(1){goto random;}";
-alias "rotate_ccw" "orientation=orientation+1;fresh=1;redisplay;";
-alias "rotate_cw"  "orientation=orientation+3;fresh=1;redisplay;";
+alias "rotate_ccw" "i:orientation=i:orientation+1;fresh=1;redisplay;";
+alias "rotate_cw"  "i:orientation=i:orientation+3;fresh=1;redisplay;";
 alias "rotate" "rotate_cw;display;";
 
 # window related aliases and commands

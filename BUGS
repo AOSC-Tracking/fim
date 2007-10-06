@@ -21,6 +21,8 @@ Please refer to the documentation (doc/FIM.TXT) for the rest of known bugs (BUGS
    typing, which is a very dangerous situation! (bug shared with fbi)
 -------------------------------------------------------------------------------
 
+
+20071006	namespace stuff is still in embryo phase. lots of bugs will arise soon :)
 20070922	open a pdf, :magnify;split;20next
 20070921	the autoskip failed images mechanism is buggy
 20070920	single windowing mode is broken now :) .. who cares

@@ -123,6 +123,17 @@ namespace fim
 
 		if(! img){cout<<"warning : image loading error!\n"   ;invalid=1;return false;}
 
+
+#ifdef FIM_NAMESPACES
+		setVariable("height" ,(int)fimg->i.height);
+		setVariable("width"  ,(int)fimg->i.width );
+		setVariable("sheight",(int) img->i.height);
+		setVariable("swidth" ,(int) img->i.width );
+		if(!g_fim_no_framebuffer)setVariable("_fim_bpp" ,(int) fb_var.bits_per_pixel );
+		setVariable("scale"  ,newscale*100);
+		setVariable("ascale" ,ascale);
+#endif
+
 		cc.setVariable("height" ,(int)fimg->i.height);
 		cc.setVariable("width"  ,(int)fimg->i.width );
 		cc.setVariable("sheight",(int) img->i.height);
@@ -242,7 +253,20 @@ namespace fim
 
 		if(g_fim_no_framebuffer)return 0;
 
-		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;	/* ehm ...  */
+//		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;	/* ehm ...  */
+#if 0
+#ifdef FIM_NAMESPACES
+		if( getIntVariable("v:orientation") == 0)
+			neworientation=((   getIntVariable(  "orientation")%4)+4)%4;	/* ehm ...  */
+		else
+			neworientation=((cc.getIntVariable("v:orientation")%4)+4)%4;	/* ehm ...  */
+#else
+			neworientation=((cc.getIntVariable("orientation"  )%4)+4)%4;	/* ehm ...  */
+#endif
+#else
+			neworientation=((  getIntVariable("orientation"  )%4)+4)%4;	/* ehm ...  */
+#endif
+
 		newascale=cc.getFloatVariable("ascale"); if(newascale==0.0) newascale=1.0;
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=neworientation; // fix this

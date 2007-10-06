@@ -19,8 +19,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef CC_FBVI_H
-#define CC_FBVI_H
+#ifndef CC_FBI_H
+#define CC_FBI_H
 #include "fim.h"
 //#include <stdio.h>
 #include <sys/resource.h>

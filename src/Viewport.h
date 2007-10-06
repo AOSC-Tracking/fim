@@ -21,8 +21,8 @@
 
 #include "fim.h"
 
-#ifndef VIEWPORT_FBVI_H
-#define VIEWPORT_FBVI_H
+#ifndef VIEWPORT_FBI_H
+#define VIEWPORT_FBI_H
 
 namespace fim
 {
@@ -33,7 +33,11 @@ namespace fim
 	 * FIXME:
 	 * 20070909 A Viewport object does NOT own an image, so it should be deallocated elsewhere!!
 	 * */
+#ifdef FIM_NAMESPACES
+class Viewport:public Namespace
+#else
 class Viewport
+#endif
 {
 	protected:
 	int		steps,top,left ;	/* viewport variables */

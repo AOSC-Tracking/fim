@@ -1183,32 +1183,6 @@ namespace fim
 		return 0;
 	}
 
-	int CommandConsole::setVariable(const fim::string& varname,int value)
-	{
-		/*
-		 * an internal function to set a user variable
-		 */
-//		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
-		return variables[varname].setInt(value);
-	}
-
-	float CommandConsole::setVariable(const fim::string& varname,float value)
-	{
-		/*
-		 * an internal function to set a user variable
-		 */
-//		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
-		return variables[varname].setFloat(value);
-	}
-
-	int CommandConsole::setVariable(const fim::string& varname,const char*value)
-	{
-		/*
-		 * an internal function to set a user variable
-		 */
-		fim::string s(value);
-		return (int)(variables[varname].setString(s));
-	}
 	
 	fim::string CommandConsole::readStdFileDescriptor(FILE* fd)
 	{
@@ -1291,41 +1265,6 @@ namespace fim
 		return 0;
 	}
 
-	int CommandConsole::getIntVariable(const fim::string &varname)
-	{
-		/*
-		 * the variable name supplied is used as a key to the variables hash
-		 *
-		 * FIXME : now the random stuff is done at interpreter level.
-		 * AND IT SHOULD NOT BE USED INTERNALY BY FIM!
-		 *
-		 * BEWARE!
-		 * */
-/*		cout << "getVariable " << varname  << " : " << (int)(variables[varname])<< "\n";
-		if(strcmp(varname.c_str(),"random"))
-		if(fim::string("random")!=varname)*/
-			return variables[varname].getInt();
-/*		else
- 		return fim_rand();*/
-	}
-
-	float CommandConsole::getFloatVariable(const fim::string &varname)
-	{
-		/*
-		 * the variable name supplied is used as a key to the variables hash
-		 * */
-//		cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
-//		cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
-		return variables[varname].getFloat();
-	}
-
-	fim::string CommandConsole::getStringVariable(const fim::string &varname)
-	{
-		/*
-		 * the variable name supplied is used as a key to the variables hash
-		 * */
-		return variables[varname].getString();
-	}
 
 	int CommandConsole::drawOutput()
 	{

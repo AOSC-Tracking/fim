@@ -137,7 +137,7 @@ STRINGC_DQ {STRINGC}|\'
 	return STRING;
 	}
 
-{ID}	{
+([gwibv]:)?{ID}	{
 	astrcpy(yylval.sValue,yytext);
 	//tl(yylval.sValue);
 	// tolower breaks aliases, but it would be useful on  keywords, above..

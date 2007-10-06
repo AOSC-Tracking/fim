@@ -67,6 +67,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Command.h \
 	CommandConsole.h \
 	Image.h \
+	Namespace.h \
 	Var.h \
 	Viewport.h \
 	Window.h \
@@ -85,6 +86,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Command.cpp \
 	CommandConsole.cpp \
 	Image.cpp \
+	Namespace.cpp \
 	Var.cpp \
 	Viewport.cpp \
 	Window.cpp \
@@ -155,7 +157,7 @@ DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key bi
  DEFINES  += -D FIM_REMOVE_FAILED       # a file which failed loading is removed from the list
  DEFINES  += -D FIM_AUTOSKIP_FAILED     # if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
  DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
-#DEFINES  += -D FIM_NAMESPACES		# Still an embryo
+ DEFINES  += -D FIM_NAMESPACES		# Each object among {Image,Browser,Viewport,Window} will also be a namespace
 #DEFINES  += -D FIM_ALIASES_WITHOUT_ARGUMENTS	# if defined, aliases are much more prosaic
 #DEFINES  += -D FIM_WINDOWS		# Fim own's window system. EXPERIMENTAL!
 #DEFINES  += -D FIM_BOZ_PATCH		 # added from configure..

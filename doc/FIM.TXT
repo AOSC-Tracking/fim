@@ -771,6 +771,37 @@ Note : there is still much to do about variables.
 
 <UNFINISHED>
 
+
+						*image-variable* *i:var*
+Prepending with "i:" a variable name, you will access to a variable which is 
+defined only on the current image.
+
+The following variables should be accessed prepended with 'i:' :
+
+ 'i:swidth'	: the currently selected image scaled width
+ 'i:sheight'	: the currently selected image scaled heigth
+
+ 'i:width'	: the currently selected image width
+ 'i:height'	: the currently selected image heigth
+
+ 'i:scale'	: the currently selected image scale (percent size)
+
+						*viewport-variable* *v:var*
+Prepending with "v:" a variable name, you will access to a variable which is 
+defined only on the current viewport.
+
+						*window-variable* *w:var*
+Prepending with "w:" a variable name, you will access to a variable which is 
+defined only on the current window.
+
+						*browser-variable* *b:var*
+Prepending with "b:" a variable name, you will access to a variable which is 
+defined only on the current browser (only one, for now).
+
+						*global-variable* *g:var*
+Prepending with "g:" a variable name, you will access to a global variable
+( it is equivalent to not specify "g:" at all ).
+
 ==============================================================================
 6.8. Autocommands				*commands-autocommands*
 

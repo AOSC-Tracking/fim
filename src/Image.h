@@ -20,9 +20,8 @@
 */
 #include "fim.h"
 
-#ifndef IMAGE_FBVI_H
-#define IMAGE_FBVI_H
-
+#ifndef IMAGE_FBI_H
+#define IMAGE_FBI_H
 
 namespace fim
 {
@@ -40,7 +39,13 @@ namespace fim
  *	reflecting the content of an image file and 
  *	some rescaled images caches.
  */
+
+
+#ifdef FIM_NAMESPACES
+class Image:public Namespace
+#else
 class Image
+#endif
 {
 
 

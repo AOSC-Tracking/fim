@@ -233,8 +233,8 @@ namespace fim
 		int autotop=cc.getIntVariable("autotop");
 		int flip=cc.getIntVariable("autoflip");
 		int mirror=cc.getIntVariable("automirror");
-		int neworientation=((cc.getIntVariable("orientation")%4)+4)%4;	/* ehm ...  */
-		if(neworientation!=image->orientation)image->rescale();
+		int neworientation=((cc.getIntVariable("i:orientation")%4)+4)%4;	/* ehm ...  */
+		if( neworientation!=image->orientation)image->rescale();
     
 		if(g_fim_no_framebuffer)return false;
 		if (image->new_image && redraw)

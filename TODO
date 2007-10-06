@@ -11,6 +11,7 @@ If you intend to learn about FIM, please read the program documentation  in the
 -------------------------------------------------------------------------------
 	Current development directions
 
+20071006	implement mechanisms or policies for namespace inheritage on windows split
 20070925	update notices regarding file format compatibilities in the man pages
 20070924	-i option to read an image file from stdin
 		-p option to read a script from stdin

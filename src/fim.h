@@ -102,6 +102,7 @@ void initialize_readline ();
 #include "Command.h"
 #include "Arg.h"
 #include "Var.h"
+#include "Namespace.h"
 #include "Image.h"
 #include "Cache.h"
 #include "Viewport.h"
@@ -129,6 +130,7 @@ typedef int FimException;
 #define FIM_E_TRAGIC -1	/* no hope */
 #define FIM_E_NO_MEM 4	/* also a return code */
 /* ... */
+
 }
 
 //void status(const char *desc, const char *info);
