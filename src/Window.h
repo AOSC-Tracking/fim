@@ -219,24 +219,23 @@ class Window
 	Viewport *viewport;
 
 	public:
-
 	/*
+	 * DANGER : nearly each of these methods launches some exception!
 	 * */
-	// throws FIM_E_NO_MEM exception
-	Window(const Rect& corners, Viewport* vp=NULL);
-
-	/*
-	 * DANGER : nearly each of these method launches some exception!
-	 * */
-	
-	Viewport & current_viewport()const;
 	const Window & c_focused()const;
 	const Window & c_shadowed()const;
-        fim::string cmd(const std::vector<fim::string> &args);
-	bool recursive_redisplay()const;
-	bool recursive_display()const;
+	Viewport & current_viewport()const;
 
-	const Image *getImage()const;
+	/* The only public method launching exceptions is the constructor now.
+	 * */
+	Window(const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
+
+	Viewport * current_viewportp()const;
+        fim::string cmd(const std::vector<fim::string> &args);
+	bool recursive_redisplay()const;	//exception safe
+	bool recursive_display()const;		//exception safe
+
+	const Image *getImage()const;		//exception safe
 
 #if 0
 	void print();
@@ -244,9 +243,6 @@ class Window
 	void draw()const;
 #endif
 
-	/* 
-	 * exception safe
-	 * */
 	int height()const;
 	int width()const;
 	int xorigin()const;

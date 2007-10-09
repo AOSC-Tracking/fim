@@ -57,7 +57,7 @@ class Browser
 
 	Image *image()const;
 
-	Viewport& viewport()const;
+	Viewport* viewport()const;
 
 	int current_n()const;
 	int current_n(int ccp)const;

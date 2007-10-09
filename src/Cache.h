@@ -30,12 +30,14 @@ class Cache
 	typedef std::map<fim::Image*,fim::string>  rcachels_t;	//image - filename
 	typedef std::map<fim::string,int >        ccachels_t;	//filename - counter
 	typedef std::map<fim::string,std::vector<fim::Image*> > cloned_cachels_t;	//filename - cloned images??
+	typedef std::map<fim::Image*,int >  	   cuc_t;	//image - filename
 
 	cachels_t 	imageCache;
 	rcachels_t	reverseCache;
 	lru_t		lru;
 	ccachels_t	usageCounter;
 	cloned_cachels_t cloneCache;
+	cuc_t		cloneUsageCounter;
 	std::set< fim::Image* > clone_pool;
 //	clone_counter_t cloneCounter;
 
@@ -49,13 +51,14 @@ class Cache
 	int mark_used(const char *fname);
 
 	bool is_in_cache(fim::Image* oi);
+	bool is_in_cache(const char* fname);
 	bool is_in_clone_cache(fim::Image* oi);
 
 	bool cacheNewImage( fim::Image* ni );
 	Image * loadNewImage(const char *fname);
 
 	/*	returns an image from the cache or loads it from disk marking it as used in the LRU (internal) */
-	Image *getImage(const char *fname);
+	Image *getCachedImage(const char *fname);
 
 	/*	the caller declares this image as free	*/
 //	int free(fim::Image* oi);
@@ -74,20 +77,22 @@ class Cache
 	bool free_all();
 	
 	/*	returns whether a file is already cached */
-	bool haveImage(const char *fname);
+//	bool haveLoadedImage(const char *fname);
 
-	bool used_image(const char* fname);
+	int used_image(const char* fname);
 	public:
 	Cache();
 
 	/*	free() and counter update */
 	bool freeCachedImage(Image *image);
 
-	/*	getImage() and counter update */
+	/*	getCachedImage() and counter update */
 	Image * useCachedImage(const char *fname);
 
 	/**/
 	int prefetch(const char *fname);
+
+	fim::string getReport();
 
 };
 }

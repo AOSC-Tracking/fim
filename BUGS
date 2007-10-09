@@ -22,6 +22,7 @@ Please refer to the documentation (doc/FIM.TXT) for the rest of known bugs (BUGS
 -------------------------------------------------------------------------------
 
 
+20071009	reported : failed rights on /dev/fb0 cause a segfaulted
 20071006	namespace stuff is still in embryo phase. lots of bugs will arise soon :)
 20070922	open a pdf, :magnify;split;20next
 20070921	the autoskip failed images mechanism is buggy
@@ -54,7 +55,7 @@ When submitting a bug report, please follow the following rules:
 
  - be as much informative as possible when describing yout experience.
  - make a report about the current environment:
-   ( make ; make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
+   ( make ; make report ) 2>&1 | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
   and send me the created .tgz file
  - please give me information about the exact way you experienced the problem
  - please give me information about the resolution you are running on
@@ -63,6 +64,21 @@ When submitting a bug report, please follow the following rules:
    (the config.log file is created by the configure script when you run the ./configure script)
  - if you are using an ad hoc method for installing (say, the ebuild for the Gentoo Linux ),
    consider sending the logfile created and named in the error messages.
+
+
+==== CORE DEBUGGING
+
+ Consider debugging with gdb or letting me do this for you!
+ by running
+
+	$ ulimit  -S -c unlimited
+
+ before Fim, in the case Fim should crash, it will generate a file called 'core'.
+ That file, if sent to me (but contact me before sending, because it could be big!),
+ will be helpful for debugging Fim and discover the causes of the crash.
+
+ p.s.: please compile the code with -O0 before sending me core dumps
+ (use -/configure --help=short to discover how)
 
 ==== CONTACT
 

@@ -83,6 +83,10 @@ namespace fim
 	int Cache::erase_clone(fim::Image* oi)
 	{
 		if(!oi || !is_in_clone_cache(oi))return -1;
+#ifdef FIM_CACHE_DEBUG
+		cout << "deleting " << oi->getName() << "\n";
+#endif
+		cloneUsageCounter.erase(oi);
 		delete oi;
 		clone_pool.erase(oi);
 		return 0;
@@ -105,10 +109,10 @@ namespace fim
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
 
-	bool Cache::used_image(const char* fname)
+	int Cache::used_image(const char* fname)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
-		return usageCounter[fname] >= 1;
+		return usageCounter[fname] ;
 	}
 
 	bool Cache::is_in_clone_cache(fim::Image* oi)
@@ -116,6 +120,13 @@ namespace fim
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!oi)return -1;
 		return *(clone_pool.find(oi))==oi;
+	}
+
+	bool Cache::is_in_cache(const char* fname)
+	{
+		/*	acca' nun stimm'a'ppazzia'	*/
+		if(!fname)return -1;
+		return imageCache[fname]!=NULL;
 	}
 
 	bool Cache::is_in_cache(fim::Image* oi)
@@ -163,19 +174,21 @@ namespace fim
 	int Cache::prefetch(const char *fname)
 	{
 		if(need_free())free_some_lru();
-		return getImage(fname)?0:-1;
+		return getCachedImage(fname)?0:-1;
 	}
 
 	/*
 	 * is this image already in cache ?
 	 * */
-	bool Cache::haveImage(const char *fname)
+#if 0
+	bool Cache::haveLoadedImage(const char *fname)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!fname)return false;
 
 		return ( this->imageCache[fim::string(fname)] != NULL );
 	}
+#endif
 
 	Image * Cache::loadNewImage(const char *fname)
 	{
@@ -196,7 +209,7 @@ namespace fim
 		return NULL;
 	}
 	
-	Image * Cache::getImage(const char *fname)
+	Image * Cache::getCachedImage(const char *fname)
 	{
 		/*
 		 * returns an image if already in cache ..
@@ -244,6 +257,9 @@ namespace fim
 			imageCache.erase(reverseCache[oi]);
 			reverseCache.erase(oi);
 //			delete imageCache[reverseCache[oi]];
+#ifdef FIM_CACHE_DEBUG
+			cout << "deleting " << oi->getName() << "\n";
+#endif
 			delete oi; // NEW !!
 			cc.setVariable("_cached_images",cached_elements());
 			return 0;
@@ -273,27 +289,40 @@ namespace fim
 		 * */
 		// WARNING : FIXME : DANGER !!
 		if( !image )return false;
-		if( is_in_cache(image) && need_free() )
+		if( is_in_cache(image) )
 		{
 			usageCounter[image->getName()]--;
-			this->erase( image );
+			if( need_free() )this->erase( image );
 			return true;
 		}
 		else
-		if( is_in_clone_cache(image) && need_free() )
+		if( is_in_clone_cache(image) )
 		{
+
 			usageCounter[image->getName()]--;
-			erase_clone(image);
+			erase_clone(image);	// we _always_ immediately delete clones
 			return true;
 		}
 		else
-		return false;
+		{
+#ifdef FIM_CACHE_DEBUG
+			cout << "critical error in cache!\n";
+#endif
+			return false; // <- this should NOT occur
+		}
 	}
 
 	Image * Cache::useCachedImage(const char *fname)
 	{
 		/*
-		 * declare this image as used an increase a relative counter.
+		 * the calling function needs an image, so calls this method.
+		 * if we already have the desired image and it is already used,
+		 * a clone is built and returned.
+		 *
+		 * if we have an unused master, we return it.
+		 *
+		 * then declare this image as used and increase a relative counter.
+		 *
 		 * a freeImage action will do the converse operation (and delete).
 		 * if the image is not already cached, it is loaded, if possible.
 		 *
@@ -301,34 +330,89 @@ namespace fim
 		 * */
 		Image * image=NULL;
 		if(!fname) return NULL;
-		if(!haveImage(fname))
+		if(!is_in_cache(fname)) 
 		{
 			/*
-			 * no image cached; we try to load one
+			 * no Image cached at all for this filename
 			 * */
-			usageCounter[fname]+=((image = loadNewImage(fname))?1:0);
+			image = loadNewImage(fname);
+			if(!image)return NULL; // bad luck!
+			usageCounter[fname]=1;
+			cc.setVariable("_cache_status",getReport().c_str());
 			return image;
 		}
-		image=getImage(fname);// in this way we update the LRU cache :)
-		if(!image)return NULL;// this is an error condition
-		usageCounter[fname]++;
-		if( used_image( fname ) )
+		else
 		{
-//			image = image->getClone(); // EVIL !!
-			try
+			/*
+			 * at least one copy of this filename image is in cache
+			 * */
+			image=getCachedImage(fname);// in this way we update the LRU cache :)
+			if(!image)
 			{
-				image = new Image(*image); // cloning
+				// critical error
+#ifdef FIM_CACHE_DEBUG
+				cout << "critical internal cache error!\n";
+#endif
+				cc.setVariable("_cache_status",getReport().c_str());
+				return NULL;
 			}
-			catch(FimException e)
+			if( used_image( fname ) )
 			{
-				/* we will survive :P */
-				image = NULL; /* we make sure no taint remains */
-				if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
+				// if the image was already used, cloning occurs
+//				image = image->getClone(); // EVIL !!
+				try
+				{
+					image = new Image(*image); // cloning
+				}
+				catch(FimException e)
+				{
+					/* we will survive :P */
+					image = NULL; /* we make sure no taint remains */
+					if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
+				}
+				if(!image)return NULL; //means that cloning failed.
+
+				clone_pool.insert(image); // we have a clone
+				cloneUsageCounter[image]=1;
 			}
-			if(image)clone_pool.insert(image);
-			else return NULL; //means that cloning failed.
+			// if loading and eventual cloning succeeded, we count the image as used of course
+			usageCounter[fname]++;
+			cc.setVariable("_cache_status",getReport().c_str());
+			return image;	//so, it could be a clone..
 		}
-		return image;	//so, it could be a clone..
+	}
+
+	fim::string Cache::getReport()
+	{
+		fim::string cache_report = "cache contents : \n";
+#if 0
+		cachels_t::const_iterator ci;
+		for( ci=imageCache.begin();ci!=imageCache.end();++ci)
+		{	
+			cache_report+=((*ci).first);
+			cache_report+=" ";
+			cache_report+=fim::string(usageCounter[((*ci).first)]);
+			cache_report+="\n";
+		}
+#else
+		ccachels_t::const_iterator ci;
+		for( ci=usageCounter.begin();ci!=usageCounter.end();++ci)
+		{	
+			cache_report+=((*ci).first);
+			cache_report+=" ";
+			cache_report+=fim::string((*ci).second);
+			cache_report+="\n";
+		}
+		std::set< fim::Image* >::const_iterator cpi;
+		cache_report += "clone pool contents : \n";
+		for( cpi=clone_pool.begin();cpi!=clone_pool.end();++cpi)
+		{	
+			cache_report+=(*cpi)->getName();
+			cache_report+=",";
+		}
+		cache_report+="\n";
+#endif
+		return cache_report;
 	}
 }
 

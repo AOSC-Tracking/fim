@@ -36,6 +36,8 @@ namespace fim
 #ifdef FIM_NAMESPACES
 		if( varname[1]==':' )
 		{
+			try
+			{
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
@@ -77,6 +79,8 @@ namespace fim
 				//invalid namespace
 				return 0;
 			}
+			}
+			catch(FimException e){}
 		}
 #endif
 		return variables[varname].setInt(value);
@@ -91,6 +95,8 @@ namespace fim
 #ifdef FIM_NAMESPACES
 		if( varname[1]==':' )
 		{
+			try
+			{
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
@@ -132,6 +138,8 @@ namespace fim
 				//invalid namespace
 				return 0;
 			}
+			}
+			catch(FimException e){}
 		}
 #endif
 		return variables[varname].setFloat(value);
@@ -147,6 +155,8 @@ namespace fim
 		if( varname[1]==':' )
 		{
 			//a specific namespace was selected!
+			try
+			{
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 			if( ns == 'w' )
@@ -187,6 +197,8 @@ namespace fim
 				//invalid namespace
 				return 0;
 			}
+			}
+			catch(FimException e){}
 		}
 #endif
 		return (int)(variables[varname].setString(s));
@@ -198,6 +210,8 @@ namespace fim
 #ifdef FIM_NAMESPACES
 		if( varname[1]==':' )
 		{
+			try
+			{
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
@@ -239,6 +253,8 @@ namespace fim
 				//invalid namespace
 				return 0;
 			}
+			}
+			catch(FimException e){}
 		}
 #endif
 		// this scope was selected
@@ -263,6 +279,7 @@ namespace fim
 #ifdef FIM_NAMESPACES
 		if( varname[1]==':' )
 		{
+			try{	
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
@@ -304,6 +321,8 @@ namespace fim
 				//invalid namespace
 				return 0.0;
 			}
+			}
+			catch(FimException e){}
 		}
 #endif
 		return variables[varname].getFloat();
@@ -317,6 +336,8 @@ namespace fim
 #ifdef FIM_NAMESPACES
 		if( varname[1]==':' )
 		{
+			try
+			{
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
@@ -358,6 +379,8 @@ namespace fim
 				//invalid namespace
 				return "";
 			}
+			}
+			catch(FimException e){}
 		}
 #endif
 		return variables[varname].getString();

@@ -1036,6 +1036,22 @@ namespace fim
 		return re;
 	}
 
+	Viewport * Window::current_viewportp()const
+	{
+		/*
+		 * returns a pointer to the current window's viewport.
+		 *
+		 * +#===#+-----+
+		 * ||   ||     |
+		 * ||   ||     |
+		 * ||FVP||     |
+		 * ||   ||     |
+		 * +#===#+-----+
+		 */
+		if(!isleaf()) return focused().current_viewportp();
+
+		return viewport;
+	}	
 
 	Viewport & Window::current_viewport()const
 	{
@@ -1059,7 +1075,10 @@ namespace fim
 
 	const Image *Window::getImage()const
 	{
-		return current_viewport().getImage();
+		if( current_viewportp() )
+			return current_viewportp()->getImage();
+		else
+			return NULL;
 	}
 
 }

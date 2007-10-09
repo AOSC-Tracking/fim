@@ -201,6 +201,8 @@ alias 'wnormalize' 'window "normalize"';
 alias 'wclose' 'window "close"';
 alias 'wc' 'window "close"';
 
+alias 'cache' 'echo _cache_status;';
+bind 'c' 'cache;';
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So feel free to modify it, but with caution! FIM is still alpha! 

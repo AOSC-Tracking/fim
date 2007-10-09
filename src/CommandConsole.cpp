@@ -1930,14 +1930,14 @@ namespace fim
 	}
 	
 #ifdef FIM_WINDOWS
-	Viewport& CommandConsole::current_viewport()const
+	Viewport* CommandConsole::current_viewport()const
 	{
 		/*
 		 * returns a reference to the current viewport.
 		 *
 		 * FIXME : and catch ?
 		 * */
-		return current_window().current_viewport();
+		return current_window().current_viewportp();
 	}
 
 	const Window & CommandConsole::current_window()const

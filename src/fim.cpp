@@ -754,6 +754,7 @@ int framebuffer_init()
 		}
 	}
 	}
+	if(fd==-1)return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
 	return 0;
 }
 

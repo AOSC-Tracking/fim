@@ -152,7 +152,7 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())viewport().pan_up(firstorzero(args));
+			if(c_image() && viewport())viewport()->pan_up(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -177,7 +177,7 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())viewport().pan_down(firstorzero(args));
+			if(c_image() && viewport() )viewport()->pan_down(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -202,8 +202,8 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())viewport().pan_up();
-			if(c_image())viewport().pan_right();
+			if(c_image() && viewport())viewport()->pan_up();
+			if(c_image() && viewport())viewport()->pan_right();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -228,8 +228,8 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())viewport().pan_up();
-			if(c_image())viewport().pan_left();
+			if(c_image() && viewport())viewport()->pan_up();
+			if(c_image() && viewport())viewport()->pan_left();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -254,8 +254,8 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())viewport().pan_down();
-			if(c_image())viewport().pan_left();
+			if(c_image() && viewport())viewport()->pan_down();
+			if(c_image() && viewport())viewport()->pan_left();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -280,8 +280,8 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())viewport().pan_down();
-			if(c_image())viewport().pan_right();
+			if(c_image() && viewport())viewport()->pan_down();
+			if(c_image() && viewport())viewport()->pan_right();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -372,7 +372,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(c_image())viewport().auto_height_scale();
+			if(c_image() && viewport())viewport()->auto_height_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -391,7 +391,7 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(c_image())viewport().auto_width_scale();
+			if(c_image() && viewport())viewport()->auto_width_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -410,7 +410,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PreScale",c);
 #endif
-			if(c_image())viewport().auto_scale();
+			if(c_image() && viewport())viewport()->auto_scale();
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
 #endif
@@ -429,7 +429,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())viewport().pan_right(firstorzero(args));
+			if(c_image())viewport()->pan_right(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -449,7 +449,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())viewport().pan_left(firstorzero(args));
+			if(c_image() && viewport())viewport()->pan_left(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -519,7 +519,7 @@ namespace fim
 		 * FIXME : this behaviour is BUGGY, because recursion will be killed off 
 		 *         by the autocommand loop prevention mechanism.
 		 * */
-		if(image() && ! (viewport().check_valid()))
+		if(image() && viewport() && ! (viewport()->check_valid()))
 		{
 			free_current_image();
 #ifdef FIM_REMOVE_FAILED
@@ -563,15 +563,16 @@ namespace fim
 		try
 		{
 #ifndef FIM_BUGGED_CACHE
-		viewport().setImage( cache.useCachedImage(current().c_str()) );
+		if(viewport())viewport()->setImage( cache.useCachedImage(current().c_str()) );
 #else
 		// warning : in this cases exception handling is missing
-		viewport().setImage( new Image(current().c_str()) );
+		if(viewport())viewport()->setImage( new Image(current().c_str()) );
 #endif
 		}
 		catch(FimException e)
 		{
-			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
+//		commented temporarily for safety reasons
+//			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
 		return "";
 	}
@@ -583,12 +584,18 @@ namespace fim
 		 * only cleans up the internal data structures
 		 * */
 #ifndef FIM_BUGGED_CACHE
-		if(c_image()) cache.freeCachedImage(image());
+//		#ifdef FIM_CACHE_DEBUG
+//		if(c_image())cout << "not using anymore " << image()->getName() << "\n";
+//		#endif
+		if(c_image())
+			if( ! cache.freeCachedImage(image()) )
+				cout << "some problem occurred during image freeing\n";
+		cc.setVariable("_cache_status",cache.getReport().c_str());
 		// FIXME : here should land support for cache reusing !
 #else
 		delete image();
 #endif
-		viewport().setImage( NULL );
+		if(viewport())viewport()->setImage( NULL );
 	}
 
 	fim::string Browser::prefetch(const std::vector<fim::string> &args)
@@ -625,7 +632,7 @@ namespace fim
 
 		if(cc.getIntVariable("_prefetch")) prefetch(noargs);/*this will become an autocommand*/
 
-		while( n_files() && ! (viewport().check_valid()) && load_error_handle(c) );
+		while( n_files() && viewport() && ! (viewport()->check_valid()) && load_error_handle(c) );
 
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostReload",c);
@@ -966,17 +973,17 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-		if(c_image())
+		if(c_image() && viewport())
 		{
-			if(viewport().onRight() && viewport().onBottom())
+			if(viewport()->onRight() && viewport()->onBottom())
 				next();
 			else
-			if(viewport().onRight())
+			if(viewport()->onRight())
 			{
-				viewport().pan_down();
-				while(!(viewport().onLeft()))viewport().pan_left();
+				viewport()->pan_down();
+				while(!(viewport()->onLeft()))viewport()->pan_left();
 			}
-			else viewport().pan_right();
+			else viewport()->pan_right();
 		}
 		else next(1);
 #ifdef FIM_AUTOCMDS
@@ -996,9 +1003,9 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-		if(c_image())
+		if(c_image() && viewport())
 		{
-			if(viewport().onBottom()) next();
+			if(viewport()->onBottom()) next();
 			else pan_down(std::vector<fim::string>());
 		}
 		else next(1);
@@ -1155,9 +1162,9 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())
+			if(c_image() && viewport())
 			{
-				viewport().top_align();
+				viewport()->top_align();
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
@@ -1177,9 +1184,9 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image())
+			if(c_image() && viewport())
 			{
-				viewport().bottom_align();
+				viewport()->bottom_align();
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
@@ -1194,7 +1201,14 @@ namespace fim
 		 *	FIX ME
 		 */
 	#ifdef FIM_WINDOWS
+#if 0
 		return cc.current_viewport().c_getImage();
+#else
+		if( cc.current_viewport() )
+			return cc.current_viewport()->c_getImage();
+		else
+			return NULL;
+#endif
 	#else
 		if(!only_viewport)return NULL;
 		return only_viewport->c_getImage();
@@ -1207,14 +1221,21 @@ namespace fim
 		 *	FIX ME
 		 */
 	#ifdef FIM_WINDOWS
+#if 0
 		return cc.current_viewport().getImage();
+#else
+		if( cc.current_viewport() )
+			return cc.current_viewport()->getImage();
+		else
+			return NULL;
+#endif
 	#else
 		if(!only_viewport)return NULL;
 		return only_viewport->getImage();
 	#endif
 	}
 
-	Viewport& Browser::viewport()const
+	Viewport* Browser::viewport()const
 	{
 		/*
 		 *	FIX ME
@@ -1233,7 +1254,8 @@ namespace fim
 		{
 			throw FIM_E_TRAGIC;
 		}
-		return *only_viewport;
+//		return *only_viewport;
+		return only_viewport;
 #endif
 	}
 
