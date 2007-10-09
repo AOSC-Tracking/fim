@@ -302,7 +302,7 @@ image/png;( [ "$DISPLAY" != "" ] && kuickshow %s ) || ( ( ( tty | grep tty ) && 
 image/jpeg;( [ "$DISPLAY" != "" ] && kuickshow %s ) || ( ( ( tty | grep tty ) && fim  %s ) || cacaview %s )
 application/pdf;( [ "$DISPLAY" != "" ] && acroread %s ) || ( ( ( tty | grep tty ) && fimgs  %s ) )
 
-This will tell mutt ot use kuickshow to display images under the X environment,
+This will tell mutt to use kuickshow to display images under the X environment,
 and Fim otherwise.
 Similarly, the 'acroread' program will be invoked under the X environment,
 leaving the 'fimgs' script (included in the Fim distribution) as a replacement
@@ -404,7 +404,7 @@ you see the first image loaded in the list, and start asking how to move around.
 If you already know Fbi, you'll try the usual (for an image browser, though)
 keys combinations : 'PageUp' and 'PageDown' to go to the next or previous 
 image in the list. Also, you'll note that the 'q' key quits the program, and 
-the '+' and '-' keus will scale the image. Quite natural.
+the '+' and '-' keys will scale the image. Quite natural.
 
 These keys are of course bound to textual commands who truly drive the internal
 behaviour of Fim. Here are the first ones, essential to start understanding the
@@ -442,7 +442,7 @@ to view images which are refreshed each in a while, like from some camera source
 'display' displays the current image , if not already displayed
 'redisplay' displays the current image, regardless its display status
 
-Difference in 'display' and 'redisplay' arise when thinking about ancilliary
+Difference in 'display' and 'redisplay' arise when thinking about ancillary
 graphics Fim should load, like status bars or the on-screen console.
 Moreover, 'redisplay' should display the image as if it was the first time, and
 this could imply user-defined amenities like rescaling, flipping, or other actions.
@@ -463,7 +463,7 @@ Here are some:
 'auto_scale'
 
 These three commands scale the image respectively according to the screen
-width, or its heigth, or the minimum between these.
+width, or its height, or the minimum between these.
 
 
 The commands 
@@ -509,7 +509,7 @@ There is ongoing support to asymmetric scaling:
 >
 	:ascale="2.0"
 
-will widen the image of a factor of two, leaving the heigth untouched. It needs
+will widen the image of a factor of two, leaving the height untouched. It needs
 redraw to make effect, and will affect the next images, too.
 
 <UNFINISHED>
@@ -598,7 +598,7 @@ Of course, typing in
 may serve you as an example that the recorded actions could be executed as many
 times as one would want.
 
-One only difference will hold : timing information (approximately) is recorded
+Only one difference will hold : timing information (approximately) is recorded
 too, resulting in pauses between single subcommands, reflecting the timing 
 of the recorded sequence.
 >
@@ -640,7 +640,7 @@ Currently, there are two commands to interact with the system:
 'system'
 'popen'
 
-In both cases thetheir implementation uses 'system' and the 'popen'
+In both cases their implementation uses 'system' and the 'popen'
 system calls.
 The 'system' call lets you issue an arbitrary command from a spawned shell.
 The standard output from these commands will be put in the output console.
@@ -722,7 +722,7 @@ of milliseconds, default 0.
 'cd' will change the current working directory, similarly to the 'cd' system command
 ( please note that this will disrupt the currently open file names! )
 
-'pwd' will display the current wirking directory, similarly to the 'pwd' system command
+'pwd' will display the current working directory, similarly to the 'pwd' system command
 
 NOTE: in this stage of development of fim, string manipulation is not yet
 supported, so it is not possible to execute external commands involving internal
@@ -738,10 +738,10 @@ No mechanism enforces them to be read only, but beware that FIM will change them
 as soon as this is necessary.
 
  'swidth'	: the current scaled image width
- 'sheight'	: the current scaled image heigth
+ 'sheight'	: the current scaled image height
 
  'width'	: the current image width
- 'height'	: the current image heigth
+ 'height'	: the current image height
 
  'scale'	: the current image scale (percent size)
 
@@ -751,7 +751,7 @@ as soon as this is necessary.
  'filename'	: the current image file name
 
  'random'	: a random number, between 0 and RAND_MAX (see "man 3 rand").
- 		  setting this variable is useless, altough possible: it is 
+ 		  setting this variable is useless, although possible: it is 
 		  regenerated between each call.
 
  'console_key'	: the key used to enter in command line mode (WARNING:experimental)
@@ -779,10 +779,10 @@ defined only on the current image.
 The following variables should be accessed prepended with 'i:' :
 
  'i:swidth'	: the currently selected image scaled width
- 'i:sheight'	: the currently selected image scaled heigth
+ 'i:sheight'	: the currently selected image scaled height
 
  'i:width'	: the currently selected image width
- 'i:height'	: the currently selected image heigth
+ 'i:height'	: the currently selected image height
 
  'i:scale'	: the currently selected image scale (percent size)
 
@@ -822,7 +822,7 @@ to make fim autoscale them for you).
 >
 	:autocmd EVENT PATTERN ACTION
 
-It is the cas that the user 
+It is the case that the user 
   - issued a certain EVENT and
   - the current file name in the image browser respects a certain PATTERN
 
@@ -850,7 +850,7 @@ an EVENT can be one of:
 'PostNext'	: after  a next image command executes
 
 'PrePrev'	: before a previous image command executes
-'PostPrev'	: after  a previous iamge command executes
+'PostPrev'	: after  a previous image command executes
 
 'PreExecutionCycle'  : right before the program gets interactive 
 'PostExecutionCycle' : right after  the program executed interactively (after quit)
@@ -921,7 +921,7 @@ If Fim is compiled with the windows support, multiple viewports and windows
 could display images on screen at once.
 It is a useful way for comparing multiple images in a synoptical way.
 
-This whole subsystem in developement phase, but some commands are already in.
+This whole subsystem is in development phase, but some commands are already in.
 >
 	:window 'split'
 will split horizontally the current window, resulting in two viewports: an
@@ -942,7 +942,7 @@ will balance window sizes in a natural way.
 >
 	:window 'swap'
 will close the currently selected window with the symmetrically
-corrispondent terminal one (of course, if both are splits of a same window).
+correspondent terminal one (of course, if both are splits of a same window).
 
 >
 >
@@ -1041,7 +1041,7 @@ will jump to the first .png picture whom name contains 'my'
 will jump to the first .png picture whom name begins with 'my' 
 
 When multiple filenames match the search pattern, you can jump to the next 
-matcing with the default <C-n> (control key and n) binding.
+matching with the default <C-n> (control key and n) binding.
 
 If <C-n> doesn't have this effect, hit ':' to get the console, and type in 
 >
@@ -1134,7 +1134,7 @@ A lot of questions still await for an answer in Fim. Here are few:
 
  I am not a framebuffer guru, so I'll tell you here the way to enable the 
  framebuffer console my Linux v2.6.17.1. Every kernel gets outdated soon, 
- but these informations should be informative enough for future kernels, too.
+ but these information should be informative enough for future kernels, too.
  Outdated, but comprehensive info can be found at :
               http://tldp.org/HOWTO/Framebuffer-HOWTO.html
 
@@ -1148,7 +1148,7 @@ A lot of questions still await for an answer in Fim. Here are few:
  as the framebuffer should work, at least as root user.
  
  If the above operations fails for some reason, consider recompiling the kernel
- and enabling the famebuffer.
+ and enabling the framebuffer.
  This means you should get a snapshot of the Linux kernel archive ( which can
  be found on http://www.kernel.org ) on your computer.
 
@@ -1299,17 +1299,17 @@ A lot of questions still await for an answer in Fim. Here are few:
  if you want to report a bug, please consult the BUGS file.
  if you want to contribute with help, please read the |contact| information.
 
- - Never, for ANY reason, prezz C-z (^Z) with the intention of putting fim in
-   the background. It will blind your console and allowing only for blind
-   typing, which is a very dangerous situation!
+ - Never, for ANY reason, press C-z (^Z) with the intention of putting fim in
+   the background. It will blind your console and allow only blind typing, 
+   which is a very dangerous situation!
 
   - Problems with unusual resolutions (like those on popular laptop wide screens).
    Although unusual resolutions bugs are welcome.
 
- - GNU Flex version prior to 2.5.4 and GNU Bison version prior 1.875d" are
+ - GNU Flex version prior to 2.5.4a and GNU Bison version prior 1.875d" are
    known to give compilation problems, so make sure you have newer versions of
-   these.
-   This note is especially precious for debian/ubuntu users.
+   these. Note that Flex 2.5.4a comes after Flex-2.5.4.
+   This note is especially precious for Debian/Ubuntu users.
 
 ==============================================================================
 14.License 							*license*
