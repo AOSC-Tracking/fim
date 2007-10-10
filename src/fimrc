@@ -196,6 +196,9 @@ alias "wr" "window 'right'";
 alias "split" "window 'split'";
 alias "vsplit" "window 'vsplit'";
 alias "swap" "window 'swap'";
+alias "ws " "window 'swap'";
+alias 'venlarge' 'window "venlarge"';
+alias 'henlarge' 'window "henlarge"';
 
 alias 'wnormalize' 'window "normalize"';
 alias 'wclose' 'window "close"';

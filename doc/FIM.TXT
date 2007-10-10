@@ -943,8 +943,6 @@ will balance window sizes in a natural way.
 	:window 'swap'
 will close the currently selected window with the symmetrically
 correspondent terminal one (of course, if both are splits of a same window).
-
->
 >
 	:window 'close'
 will close the current window (unsplit it) and enlarge the viewport to the
@@ -953,8 +951,14 @@ containing window size.
 >
 	:window 'henlarge'
 	:window 'venlarge'
-These two commands are disabled because are buggy. They will be available
-soon!
+These two commands resize the focused window.
+The shadowed window gets normalized.
+The first ('henlarge') enlarges the window if it is divided horizontally, thus
+enlarging it vertically.
+The second ('venlarge') enlarges the window if it is divided vertically thus
+enlarging it horizontally.
+
+It this sounds counfusing to you, please write me about it: i am confused too!
 
 <UNFINISHED>
 

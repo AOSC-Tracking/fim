@@ -55,7 +55,6 @@ class Image
 	Image(const char *fname_);
 	~Image();
 
-//	bool revertToLoaded();
 	private:
 	float            scale    ;	/* viewport variables */
 	float            ascale   ;

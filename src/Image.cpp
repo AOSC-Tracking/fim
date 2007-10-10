@@ -92,6 +92,8 @@ namespace fim
                 newscale = 1.0;
                 ascale   = 1.0;
                 newascale= 1.0;
+		setVariable("scale"  ,scale*100);
+		setVariable("ascale" ,ascale);
 
                 invalid=0;
                 fimg    = NULL;
@@ -148,21 +150,6 @@ namespace fim
 		 * */
 		this->free();
 	}
-
-	/*
-	bool Image::revertToLoaded()
-	{
-		if(img==fimg) img = NULL;
-		if( img )//in the case img is a third copy (should not occur)
-		{
-			free_image(img);
-			img = fimg;
-	        	redraw=1;
-		}
-		if(!fimg) return false; // this is bad, but could occur!
-		return  true;
-		
-	}*/
 
         int Image::tiny()const
 	{
@@ -262,7 +249,7 @@ namespace fim
 			neworientation=((  getIntVariable("orientation"  )%4)+4)%4;	/* ehm ...  */
 #endif
 
-		newascale=cc.getFloatVariable("ascale"); if(newascale==0.0) newascale=1.0;
+		float newascale=getFloatVariable("ascale"); if(newascale<=0.0) newascale=1.0;
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=neworientation; // fix this
 
@@ -345,6 +332,7 @@ namespace fim
 			cc.setVariable("width"  ,(int)fimg->i.width );
 			cc.setVariable("sheight",(int) img->i.height);
 			cc.setVariable("swidth" ,(int) img->i.width );
+			cc.setVariable("ascale" , ascale );
 		}
 		else redraw=0;
 		return 0;
@@ -379,7 +367,7 @@ namespace fim
 		scale(image.scale),
 		ascale(image.ascale),
 		newscale(image.newscale),
-		newascale(image.newascale),
+//		newascale(image.newascale),
 		orientation(image.orientation),
 		rotation(image.rotation),
 		neworientation(image.neworientation),

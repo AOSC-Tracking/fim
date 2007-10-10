@@ -356,7 +356,7 @@ namespace fim
 			second = new Window(this->corners.hsplit(Rect::Lower),viewport);
 			if(viewport && first && second)
 			{
-#define FIM_COOL_WINDOWS_SPLITTING 1
+#define FIM_COOL_WINDOWS_SPLITTING 0
 #if     FIM_COOL_WINDOWS_SPLITTING
 				first ->current_viewport().pan_up  ( second->current_viewport().viewport_height() );
 #endif
@@ -880,8 +880,9 @@ namespace fim
 #endif
 		/*
 		 * SEEMS BUGGY:
-		 * make && src/fim media -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge:'
 		 * */
+		 // make && src/fim media/* -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge'
+		 // make && src/fim media/* -c 'split;vsplit;window "venlarge";wd; window "venlarge";'
 			/*
 			 * +----------+
 			 * |    |     |
@@ -890,15 +891,31 @@ namespace fim
 			 * |    |     |
 			 * +----------+
 			 */
-			if( isleaf() )return 0;
-
-			if(ishsplit())
+			if( isleaf() )
 			{
-				upper().hrgrow(units);
+				if(viewport)redraw=1;// no effect
+				return 0;
 			}
-			focused() .venlarge(units); //evil
-			if(ishsplit())shadowed().hlshrink(units);
-			if(ishsplit())shadowed().normalize();
+
+			if(isvsplit())
+			{
+				/*
+				 * +-+-+
+				 * + | +
+				 * +-+-+
+				 * */
+				if(focused()==left()) focused().hrgrow(units);
+				if(focused()==right())focused().hlgrow(units);
+				focused().normalize();  // i think there is a more elegant way to this but hmm..
+				
+			}
+			focused().venlarge(units); //regardless the split status
+			if(isvsplit())
+			{
+				if(focused()==left())  shadowed().hlshrink(units);
+				if(focused()==right()) shadowed().hrshrink(units);
+				shadowed().normalize(); 
+			}
 			return 0;
 	}
 
@@ -906,12 +923,14 @@ namespace fim
 	{
 		/*
 		 * SEEMS BUGGY:
-		 * make && src/fim media -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge:'
 		 * */
+		 // make && src/fim media/* -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge'
 #if FIM_BUGGED_ENLARGE
 		return -1;
 #endif
 			/*
+			 * this operation doesn't change the outer bounds of the called window
+			 *
 			 * +----------+
 			 * |   S      |
 			 * |__________|
@@ -919,14 +938,25 @@ namespace fim
 			 * |   F      |
 			 * +----------+
 			 */
-			if( isleaf() )return 0;
+			if( isleaf() )
+			{
+				if(viewport)redraw=1;// no effect
+				return 0;
+			}
 
 			if(ishsplit())
 			{
+				/*
+				 * +---+
+				 * +---+
+				 * +---+
+				 * */
 				if(focused()==upper()) focused().vlgrow(units);
 				if(focused()==lower()) focused().vugrow(units);
+				focused().normalize();  // i think there is a more elegant way to thism but hmm..
+				
 			}
-			focused().henlarge(units); //evil
+			focused().henlarge(units); //regardless the split status
 			if(ishsplit())
 			{
 				if(focused()==upper()) shadowed().vushrink(units);

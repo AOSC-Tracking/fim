@@ -44,7 +44,7 @@ namespace fim
 /*
  * temporarily disabled window enlarge functionality
  * */
-#define FIM_BUGGED_ENLARGE 1
+#define FIM_BUGGED_ENLARGE 0
 
 /*
  
