@@ -244,6 +244,9 @@ namespace fim
 	
 	int Cache::erase(fim::Image* oi)
 	{
+		/*
+		 * erases the image from the image cache
+		 * */
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!oi)
 		{
@@ -289,9 +292,13 @@ namespace fim
 		 * */
 		// WARNING : FIXME : DANGER !!
 		if( !image )return false;
+//		if( is_in_cache(image) && usageCounter[image->getName()]==1 )
 		if( is_in_cache(image) )
 		{
 			usageCounter[image->getName()]--;
+			if( usageCounter[image->getName()] )
+				cout << "ALARM!!\n";
+//			usageCounter.erase(image->getName());
 			if( need_free() )this->erase( image );
 			return true;
 		}
@@ -340,6 +347,7 @@ namespace fim
 			usageCounter[fname]=1;
 			cc.setVariable("_cache_status",getReport().c_str());
 			return image;
+//			usageCounter[fname]=0;
 		}
 		else
 		{
