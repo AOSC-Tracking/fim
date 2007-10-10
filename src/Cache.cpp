@@ -204,7 +204,7 @@ namespace fim
 		catch(FimException e)
 		{
 			ni = NULL; /* not a big problem */
-			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
+//			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
 		return NULL;
 	}
@@ -376,7 +376,7 @@ namespace fim
 				{
 					/* we will survive :P */
 					image = NULL; /* we make sure no taint remains */
-					if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
+//					if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 				}
 				if(!image)return NULL; //means that cloning failed.
 

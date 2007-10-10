@@ -113,10 +113,7 @@ namespace fim
 		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 			set_status_bar("please wait while reloading...", "*");
 
-		if(g_fim_no_framebuffer)
-			fimg=NULL;
-		else
-			fimg = read_image((char*)fname_);
+		fimg = read_image((char*)fname_);
 
 		img=fimg;	/* no scaling : one copy only */
 	        redraw=1;
@@ -129,7 +126,7 @@ namespace fim
 		setVariable("width"  ,(int)fimg->i.width );
 		setVariable("sheight",(int) img->i.height);
 		setVariable("swidth" ,(int) img->i.width );
-		if(!g_fim_no_framebuffer)setVariable("_fim_bpp" ,(int) fb_var.bits_per_pixel );
+		setVariable("_fim_bpp" ,(int) fb_var.bits_per_pixel );
 		setVariable("scale"  ,newscale*100);
 		setVariable("ascale" ,ascale);
 #endif
@@ -138,7 +135,7 @@ namespace fim
 		cc.setVariable("width"  ,(int)fimg->i.width );
 		cc.setVariable("sheight",(int) img->i.height);
 		cc.setVariable("swidth" ,(int) img->i.width );
-		if(!g_fim_no_framebuffer)cc.setVariable("_fim_bpp" ,(int) fb_var.bits_per_pixel );
+		cc.setVariable("_fim_bpp" ,(int) fb_var.bits_per_pixel );
 		cc.setVariable("scale"  ,newscale*100);
 		cc.setVariable("ascale" ,ascale);
 		return true;
@@ -250,8 +247,6 @@ namespace fim
 
 		if( check_invalid() ) return - 1;
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
-
-		if(g_fim_no_framebuffer)return 0;
 
 //		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;	/* ehm ...  */
 #if 0
@@ -380,21 +375,27 @@ namespace fim
 		if(check_invalid())return;
 	}*/
 
-	Image::Image(const Image& image)
+	Image::Image(const Image& image):
+		scale(image.scale),
+		ascale(image.ascale),
+		newscale(image.newscale),
+		newascale(image.newascale),
+		orientation(image.orientation),
+		rotation(image.rotation),
+		neworientation(image.neworientation),
+		new_image(image.new_image)
 	{
 		/*
 		 * builds a clone of this image.
 		 * it should be completely independent from this object.
 		 * */
-		// FIXME
 		reset();
-		memcpy(this,&image,sizeof(Image)); // very evil
 		img  = fbi_image_clone(image.img );
 		fimg = fbi_image_clone(image.fimg);
 
 		/* an exception is launched immediately */
 		if(!img || !fimg)
-			throw FIM_E_NO_IMAGE;
+			/* temporarily, for security reasons :  throw FIM_E_NO_IMAGE*/;
 	}
 
 	Image * Image::getClone()

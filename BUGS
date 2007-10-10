@@ -77,8 +77,9 @@ When submitting a bug report, please follow the following rules:
  That file, if sent to me (but contact me before sending, because it could be big!),
  will be helpful for debugging Fim and discover the causes of the crash.
 
- p.s.: please compile the code with -O0 before sending me core dumps
- (use -/configure --help=short to discover how)
+ p.s.: please compile the code configuring in this way:
+ ( use ./configure --help='-O0 -ggdb' ) 
+ and don't forget to send me the executable file, too :)
 
 ==== CONTACT
 

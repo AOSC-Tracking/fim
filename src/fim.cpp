@@ -796,19 +796,25 @@ int main(int argc,char *argv[])
 	    //fbi's
 	    //cc.setVariable("autotop",1);
 	    //FIXME: still needs some tricking .. 
+#ifdef FIM_AUTOCMDS
 	    cc.pre_autocmd_add("auto_scale_v=1;");
+#endif
 	    break;
 	case 'A':
 	    //fbi's
 	    //cc.setVariable("autotop",1);
 	    //FIXME: still needs some tricking .. 
+#ifdef FIM_AUTOCMDS
 	    cc.pre_autocmd_add("autotop=1;");
+#endif
 	    break;
 	case 'q':
 	    //fbi's
 	    //fprintf(stderr,"sorry, this feature will be implemented soon\n");
 	    //cc.setVariable("_display_status",0);
+#ifdef FIM_AUTOCMDS
 	    cc.pre_autocmd_add("_display_status=0;");
+#endif
 	    break;
 	case 'f':
 	    cc.setVariable("_load_default_etc_fimrc",1);
@@ -816,12 +822,16 @@ int main(int argc,char *argv[])
 	case 'v':
 	    //fbi's
 	    //cc.setVariable("_display_status",1);
+#ifdef FIM_AUTOCMDS
 	    cc.pre_autocmd_add("_display_status=1;");
+#endif
 	    break;
 	case 'w':
 	    //fbi's
 	    //cc.setVariable("autowidth",1);
+#ifdef FIM_AUTOCMDS
 	    cc.pre_autocmd_add("autowidth=1;");
+#endif
 	    break;
 	case 'P':
 	    //fbi's
@@ -829,7 +839,9 @@ int main(int argc,char *argv[])
 //	    cc.setVariable("autowidth",1);
 //	    cc.setVariable("autotop",1);
 //	    strange : if the assignations occur in two pre_autocmd_add calls, it triggers a bug via fimgs:
+#ifdef FIM_AUTOCMDS
 	    cc.pre_autocmd_add("autowidth=1;autotop=1;");
+#endif
 	    break;
 	case 'g':
 	    //fbi's
@@ -847,7 +859,9 @@ int main(int argc,char *argv[])
 	    	fim::string s="steps=";
 		s+=fim::string((int)atoi(optarg));
 		s+=";";
+#ifdef FIM_AUTOCMDS
 		cc.pre_autocmd_add(s);
+#endif
 	    }
 	    break;
 //	case 't':

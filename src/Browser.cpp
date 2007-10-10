@@ -177,7 +177,7 @@ namespace fim
 			fim::string c=current();
 			cc.autocmd_exec("PrePan",c);
 #endif
-			if(c_image() && viewport() )viewport()->pan_down(firstorzero(args));
+			if(c_image() && viewport())viewport()->pan_down(firstorzero(args));
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostPan",c);
 #endif
@@ -460,10 +460,9 @@ namespace fim
 
 	fim::string Browser::display_status(const char *l,const char *r)
 	{
-		//FIX ME
 		/*
 		 * displays the left text message and a right bracketed one
-		 * */
+		 */
 		if(cc.getIntVariable("_display_status"))
 			set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
 		return "";
@@ -551,8 +550,6 @@ namespace fim
 		return "";
 	}
 
-// if the cache is suspected of bugs, this will inhibit its use.
-//#define FIM_BUGGED_CACHE 0
 	fim::string Browser::loadCurrentImage()
 	{
 		/*
@@ -571,6 +568,7 @@ namespace fim
 		}
 		catch(FimException e)
 		{
+			if(viewport())viewport()->setImage( NULL );
 //		commented temporarily for safety reasons
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
@@ -583,19 +581,8 @@ namespace fim
 		 * FIXME
 		 * only cleans up the internal data structures
 		 * */
-#ifndef FIM_BUGGED_CACHE
-//		#ifdef FIM_CACHE_DEBUG
-//		if(c_image())cout << "not using anymore " << image()->getName() << "\n";
-//		#endif
-		if(c_image())
-			if( ! cache.freeCachedImage(image()) )
-				cout << "some problem occurred during image freeing\n";
+		if(viewport())viewport()->free();
 		cc.setVariable("_cache_status",cache.getReport().c_str());
-		// FIXME : here should land support for cache reusing !
-#else
-		delete image();
-#endif
-		if(viewport())viewport()->setImage( NULL );
 	}
 
 	fim::string Browser::prefetch(const std::vector<fim::string> &args)
@@ -632,7 +619,7 @@ namespace fim
 
 		if(cc.getIntVariable("_prefetch")) prefetch(noargs);/*this will become an autocommand*/
 
-		while( n_files() && viewport() && ! (viewport()->check_valid()) && load_error_handle(c) );
+		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 
 #ifdef FIM_AUTOCMDS
 		cc.autocmd_exec("PostReload",c);
@@ -739,7 +726,7 @@ namespace fim
 	const fim::string Browser::n()const
 	{
 		/*
-		 *	FIX ME
+		 * the number of files in the filenames list
 		 */
 		return fim::string(n_files());
 	}
@@ -747,7 +734,7 @@ namespace fim
 	fim::string Browser::_sort()
 	{
 		/*
-		 *	FIX ME
+		 *	sorts the image filenames list
 		 */
 		sort(flist.begin(),flist.end());
 		return n_files()?(flist[current_n()]):nofile;
@@ -776,7 +763,6 @@ namespace fim
 			i=(j+c+1)%s;
 			if(cc.regexp_match(flist[i].c_str(),args[0].c_str()))
 			{	
-				//cout << flist[i] << " matches!!!\n"; 
 				fim::string c=current();
 #ifdef FIM_AUTOCMDS
 				cc.autocmd_exec("PreGoto",c);
@@ -804,7 +790,6 @@ namespace fim
 		/*
 		 *	FIX ME
 		 */
-		//if(n==current_n())return "";//Achtung!
 		int N=flist.size();
 		if(!N)return "";
 		cp=n;
@@ -813,10 +798,7 @@ namespace fim
 		if(!cp)++cp;
 		cc.setVariable("fileindex",current_image());
 		cc.setVariable("filename", current().c_str());
-//		std::cout << "next " << n << "\n";
-//		return n_files()?(flist[current_n()]):nofile;
 		fim::string result = n_files()?(flist[current_n()]):nofile;
-//		reload();
 		return result;
 	}
 
@@ -929,6 +911,8 @@ namespace fim
 	{
 		/*
 		 *	ONLY if the image filename exists and matches EXACTLY,
+		 *
+		 *	FIXME : dangerous!
 		 */
 		if(flist.size()<1)return "the files list is empty\n";
 		std::vector<fim::string> rlist=args;	//the remove list
@@ -1020,14 +1004,6 @@ namespace fim
 		/*
 		 *	short information in status-line format
 		 */
-		//std::cout << 
-//		fim_stream out;
-//		cout << "[" << current().c_str() << "] ("<<cp<<"/"<<n_files() << ")\n";
-//	return fim::string("[")+current()+fim::string("] (")+cp+fim::string("/")+n_files()+fim::string(")\n");
-
-	/*return fim::string(" [")+current()+fim::string("] (")
-		+fim::string(cp)+fim::string("/")
-		+fim::string(n_files())+fim::string(")\n");*/
 #if 0
 		string fl;
 		for(unsigned int r=0;r<flist.size();++r)
@@ -1050,7 +1026,7 @@ namespace fim
 	fim::string Browser::info()
 	{
 		/*
-		 *	FIX ME
+		 *	short information in status-line format
 		 */
 		return info(std::vector<fim::string>(0));
 	}
@@ -1104,8 +1080,7 @@ namespace fim
 	fim::string Browser::magnify(const std::vector<fim::string> &args)
 	{
 		/*
-		 * magnify the displayed image
-		 * FIX ME 
+		 * magnifies the displayed image
 		 */ 
 		if(c_image())
 		{
@@ -1116,8 +1091,10 @@ namespace fim
 #endif
 			if(c_image())
 			{
-				if(factor) image()->magnify(factor);
-				else	image()->magnify();
+				if(factor)
+					{if(image())image()->magnify(factor);}
+				else	
+					{if(image())image()->magnify();}
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -1129,8 +1106,7 @@ namespace fim
 	fim::string Browser::reduce(const std::vector<fim::string> &args)
 	{
 		/*
-		 * reduce the displayed image
-		 * FIX ME 
+		 * reduces the displayed image size
 		 */ 
 		if(c_image())
 		{
@@ -1141,8 +1117,8 @@ namespace fim
 #endif
 			if(c_image())
 			{
-				if(factor) image()->reduce(factor);
-				else	image()->reduce();
+				if(factor) {if(image())image()->reduce(factor);}
+				else	{if(image())image()->reduce();}
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostScale",c);
@@ -1154,7 +1130,7 @@ namespace fim
 	fim::string Browser::top_align(const std::vector<fim::string> &args)
 	{
 		/*
-		 * align to top the displayed image
+		 * aligns to top the displayed image
 		 */ 
 		if(c_image())
 		{
@@ -1176,7 +1152,7 @@ namespace fim
 	fim::string Browser::bottom_align(const std::vector<fim::string> &args)
 	{
 		/*
-		 * align to the bottom the displayed image
+		 * aligns to the bottom the displayed image
 		 */ 
 		if(c_image())
 		{
@@ -1198,17 +1174,13 @@ namespace fim
 	const Image *Browser::c_image()const
 	{
 		/*
-		 *	FIX ME
+		 *	a const pointer to the currently loaded image
 		 */
 	#ifdef FIM_WINDOWS
-#if 0
-		return cc.current_viewport().c_getImage();
-#else
 		if( cc.current_viewport() )
 			return cc.current_viewport()->c_getImage();
 		else
 			return NULL;
-#endif
 	#else
 		if(!only_viewport)return NULL;
 		return only_viewport->c_getImage();
@@ -1218,17 +1190,13 @@ namespace fim
 	Image *Browser::image()const
 	{
 		/*
-		 *	FIX ME
+		 *	the image loaded in the current viewport is returned
 		 */
 	#ifdef FIM_WINDOWS
-#if 0
-		return cc.current_viewport().getImage();
-#else
 		if( cc.current_viewport() )
 			return cc.current_viewport()->getImage();
 		else
 			return NULL;
-#endif
 	#else
 		if(!only_viewport)return NULL;
 		return only_viewport->getImage();
@@ -1237,24 +1205,16 @@ namespace fim
 
 	Viewport* Browser::viewport()const
 	{
-		/*
-		 *	FIX ME
-		 */
 		/* 
-		 *		DANGER 
-		 * A valid pointer should be returned 
+		 * A valid pointer will be returned 
 		 * whenever the image is loaded !
+		 *
+		 * NULL is returned in case no viewport is loaded.
 		 * */
 #ifdef FIM_WINDOWS
 
 		return (cc.current_viewport());
 #else
-		// DANGER !
-		if(!only_viewport)
-		{
-			throw FIM_E_TRAGIC;
-		}
-//		return *only_viewport;
 		return only_viewport;
 #endif
 	}
@@ -1272,7 +1232,7 @@ namespace fim
 	int Browser::empty_file_list()const
 	{
 		/*
-		 *	FIX ME
+		 *	is the filename list empty ?
 		 */
 		return flist.size()==0;
 	}
@@ -1280,7 +1240,7 @@ namespace fim
 	fim::string Browser::display()
 	{
 		/*
-		 *	FIX ME
+		 *	display the current image
 		 */
 		return display(std::vector<fim::string>());
 	}
@@ -1288,7 +1248,7 @@ namespace fim
 	fim::string Browser::pop_current(const std::vector<fim::string> &args)
 	{
 		/*
-		 *	FIX ME
+		 *	pops the last image filename off the image list
 		 */
 		return pop_current();
 	}
@@ -1296,7 +1256,7 @@ namespace fim
 	fim::string Browser::push(const std::vector<fim::string> &args)
 	{
 		/*
-		 *	FIX ME
+		 *	pushes a new image filename on the back of the image list
 		 */
 		for(unsigned int i=0;i<args.size();++i)
 			push(args[i]);
@@ -1305,11 +1265,17 @@ namespace fim
 
 	fim::string Browser::next(const std::vector<fim::string> &args)
 	{
+		/*
+		 * FIX ME
+		 * */
 		return next(args.size()>0?((int)args[0]):1);
 	}
 
 	int Browser::current_image()const
 	{
+		/*
+		 * FIX ME
+		 */
 		return cp;
 	}
 }

@@ -173,7 +173,6 @@ class Window
 	bool can_hgrow(const Window & window, int howmuch);
 
 
-	void setroot();
 
 	private:
 #ifdef FIM_UNDEFINED
@@ -218,13 +217,16 @@ class Window
 
 	Viewport *viewport;
 
-	public:
 	/*
 	 * DANGER : nearly each of these methods launches some exception!
 	 * */
 	const Window & c_focused()const;
 	const Window & c_shadowed()const;
+
 	Viewport & current_viewport()const;
+
+	public:
+	void setroot();	// only one root window should exist
 
 	/* The only public method launching exceptions is the constructor now.
 	 * */

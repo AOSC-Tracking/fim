@@ -36,8 +36,11 @@ namespace fim
 		int rc=0;/*return code*/
 #ifdef FIM_AUTOCMDS
 		fim::string c=cc.getIntVariable("filename");
-		cc.autocmd_exec("PreWindow",c);
+		// note that an autocommand on a transient object is lethal
+		if(amroot)cc.autocmd_exec("PreWindow",c);
 #endif
+		try
+		{
 		while(i<args.size())
                 {
 			string cmd=args[i];
@@ -102,8 +105,14 @@ namespace fim
 			}*/
 			++i;
                 }
+                }
+		catch(FimException e)
+		{
+			cout << "please note some problems occurred in the window subsystem\n";
+		}
 #ifdef FIM_AUTOCMDS
-		cc.autocmd_exec("PostWindow",c);
+		// note that an autocommand on a transient object is lethal
+		if(amroot)cc.autocmd_exec("PostWindow",c);
 #endif
                 return "";
         }
@@ -211,7 +220,7 @@ namespace fim
 		 * return a const reference to the focused window
 		 * throws an exception in case the window is not split!
 		 * */
-		if(isleaf())throw FIM_E_WINDOW_ERROR;
+		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
 		if(focus==0)return first->c_focused();
 		else return second->c_focused();
@@ -223,7 +232,7 @@ namespace fim
 		 * return a reference to the focused window
 		 * throws an exception in case the window is not split!
 		 * */
-		if(isleaf())throw FIM_E_WINDOW_ERROR;
+		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
 		if(focus==0)return *first;
 		else return *second;
@@ -235,7 +244,7 @@ namespace fim
 		 * return a reference to the upper window
 		 * throws an exception in case the window is not split!
 		 * */
-		if(!ishsplit())throw FIM_E_WINDOW_ERROR;
+		if(!ishsplit())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 		return *first;
 	}
 
@@ -245,7 +254,7 @@ namespace fim
 		 * return a reference to the lower window
 		 * throws an exception in case the window is not split!
 		 * */
-		if(!ishsplit())throw FIM_E_WINDOW_ERROR;
+		if(!ishsplit())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 		return *second;
 	}
 
@@ -255,7 +264,7 @@ namespace fim
 		 * return a reference to the left window
 		 * throws an exception in case the window is not split!
 		 * */
-		if(!isvsplit())throw FIM_E_WINDOW_ERROR;
+		if(!isvsplit())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 		return *first;
 	}
 
@@ -265,7 +274,7 @@ namespace fim
 		 * return a reference to the right window
 		 * throws an exception in case the window is not split!
 		 * */
-		if(!isvsplit())throw FIM_E_WINDOW_ERROR;
+		if(!isvsplit())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 		return *second;
 	}
 
@@ -275,7 +284,7 @@ namespace fim
 		 * return a const reference to the right window
 		 * throws an exception in case the window is not split!
 		 * */		
-		if(isleaf())throw FIM_E_WINDOW_ERROR;
+		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
 		if(focus!=0)return *first;
 		else return *second;
@@ -287,7 +296,7 @@ namespace fim
 		 * return a const reference to the shadowed window
 		 * throws an exception in case the window is not split!
 		 * */		
-		if(isleaf())throw FIM_E_WINDOW_ERROR;
+		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
 		if(focus!=0)return first->c_shadowed();
 		else return second->c_shadowed();
@@ -1068,7 +1077,7 @@ namespace fim
 		 */
 		if(!isleaf()) return focused().current_viewport();
 
-		if(!viewport)throw FIM_E_TRAGIC; // isleaf()
+		if(!viewport)/* temporarily, for security reasons throw FIM_E_TRAGIC*/; // isleaf()
 
 		return *viewport;
 	}	

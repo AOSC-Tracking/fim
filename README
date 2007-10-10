@@ -7,7 +7,7 @@
 	4		Compilation Requirements
 	5		Run Time Requirements
 	6		Original Idea
-	7		Technical overview
+	7		Technical overview (important for patch writers)
 	8		Gentoo Installation Tips
 	9		License
 	10		Contact
@@ -174,7 +174,7 @@ implementation of the most scriptable and configurable image viewer ever - not
 tied to the framebuffer device and to a sole keyboard input.
 
 ================================================================================
-	7		Technical overview
+	7		Technical overview (important for patch writers)
 ================================================================================
 
 To run Fim requires a Linux box with the framebuffer device enabled in the 
@@ -224,6 +224,14 @@ Tested platforms :
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 2.2   , gentoo
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.33,bison 2.2   , gentoo
  - some other, but non documented here.
+
+ -- 
+
+ If you intend to write patches or contribute to the code, be sure of reading 
+ all of the documentation and _write me an email first_ (i will give you some
+ advice).
+
+ The code is much complicated and is very susceptible.
 
 ================================================================================
 	8		Gentoo Installation Tips

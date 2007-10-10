@@ -66,10 +66,10 @@ class Browser
 	fim::string get_next_filename(int n);
 	
 	fim::string last_regexp;
-	fim::Cache cache;
 	int current_image()const;
 	int current_images()const{ return n(); }
 	public:
+	fim::Cache cache;	// was private
 	const Image *c_image()const;	// was private
 	int empty_file_list()const;
 

@@ -53,8 +53,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window)
-					return window->current_viewport().setVariable(id,value);
+				if(window && window->current_viewportp())
+					return window->current_viewportp()->setVariable(id,value);
 				else
 					return 0;
 			}
@@ -112,8 +112,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window)
-					return window->current_viewport().setVariable(id,value);
+				if(window && window->current_viewportp())
+					return window->current_viewportp()->setVariable(id,value);
 				else
 					return 0;
 			}
@@ -171,8 +171,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window)
-					return window->current_viewport().setVariable(id,s.c_str());
+				if(window && window->current_viewportp())
+					return window->current_viewportp()->setVariable(id,s.c_str());
 				else
 					return 0;
 			}
@@ -227,8 +227,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window)
-					return window->current_viewport().getIntVariable(id);
+				if(window && window->current_viewportp())
+					return window->current_viewportp()->getIntVariable(id);
 				else
 					return 0;
 			}
@@ -295,8 +295,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window)
-					return window->current_viewport().getFloatVariable(id);
+				if(window && window->current_viewportp())
+					return window->current_viewportp()->getFloatVariable(id);
 				else
 					return 0.0;
 			}
@@ -353,8 +353,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window)
-					return window->current_viewport().getStringVariable(id);
+				if(window && window->current_viewportp())
+					return window->current_viewportp()->getStringVariable(id);
 				else
 					return "";
 			}

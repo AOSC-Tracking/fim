@@ -167,7 +167,8 @@ DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
 #DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
  DEFINES  += -D FIM_RANDOM           # 'random' is a fake variable
  DEFINES  += -D FIM_CACHE_DEBUG		# Debug info on cache available
- DEFINES  += -D FIM_BUGGED_CACHE	# Guess..
+ DEFINES  += -D FIM_BUGGED_CACHE	# Sometimes something breaks and we want to isolate mechanisms
+#DEFINES  += -D FIM_NO_UNSAFE_CMDS		# Some unsafe commands are temporarily hidden
 
  FIM_VERSION= $(VERSION)
 # FIM_AUTHOR = '"Michele Martone <dezperado _CUT_ autistici _CUT_ org>"'

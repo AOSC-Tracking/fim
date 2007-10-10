@@ -60,6 +60,7 @@ class Viewport
 			);
 
 	Viewport(const Viewport &v);
+	~Viewport(){}
 
 	int valid()const;
 
@@ -87,7 +88,6 @@ class Viewport
 	/* viewport methods */
 	void top_align();
 	void bottom_align();
-	/*virtual*/ Viewport* clone();
 
 	/* viewport methods */
 	bool display();
@@ -108,6 +108,7 @@ class Viewport
         bool check_invalid();
         bool check_valid();
 	int valid();
+	bool scrollforward();
 };
 }
 #endif

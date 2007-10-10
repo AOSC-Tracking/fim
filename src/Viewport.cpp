@@ -51,14 +51,20 @@ namespace fim
 #endif
 	{
 		// WARNING
-//		image=new Image(v.getImage());
 		image=NULL;
 		reset();
-		memcpy(this,&v,sizeof(Viewport));
-//		image->img  = fbi_image_clone(this->img );
-//		image->fimg = fbi_image_clone(this->fimg);
-		// WARNING : these could be NULL's : fixme
-		// WARNING : THIS INSTANTIATION OF Viewport NEEDS AD HOC DESTRUCTOR!
+		try
+		{
+#ifndef FIM_BUGGED_CACHE
+			if(v.image) image = cc.browser.cache.useCachedImage(v.image->getName());
+#else
+			if(v.image)image = new Image(*v.image);
+#endif
+		}
+		catch(FimException e)
+		{
+			image=NULL;
+		}
 	}
 
 	void Viewport::pan_up(int s)
@@ -111,34 +117,35 @@ namespace fim
 
 	int Viewport::onBottom()
 	{
-		if(g_fim_no_framebuffer || check_invalid() )return 0;
+		if( check_invalid() )return 0;
 		return (top + viewport_height() >= image->height());
 	}
 
 	int Viewport::onRight()
 	{
-		if(g_fim_no_framebuffer || check_invalid() )return 0;
+		if( check_invalid() )return 0;
 		return (left + viewport_width() >= image->width());
 	}
 
 	int Viewport::onLeft()
 	{
-		if(g_fim_no_framebuffer || check_invalid() )return 0;
+		if( check_invalid() )return 0;
 		return (left <= 0 );
 	}
 
 	int Viewport::onTop()
 	{
-		if(g_fim_no_framebuffer || check_invalid() )return 0;
+		if( check_invalid() )return 0;
 		return (top <= 0 );
 	}
 
 	int Viewport::viewport_width()
 	{
+		/*
+		 * */
 #ifdef FIM_WINDOWS
-		//return cc.viewport_width();
-		//FIXME !
-		return window->width();
+		if(window)return window->width();
+		else return 0;
 #else
 		return fb_var.xres;
 #endif
@@ -146,10 +153,11 @@ namespace fim
 
 	int Viewport::viewport_height()
 	{
+		/*
+		 * */
 #ifdef FIM_WINDOWS
-//		return cc.viewport_height();
-		//FIXME !
-		return window->height();
+		if(window)return window->height();
+		else return 0;
 #else
 		return fb_var.yres;
 #endif
@@ -181,7 +189,7 @@ namespace fim
 
 	int Viewport::xorigin()
 	{
-		//FIXME !
+		// horizontal origin coordinate (upper)
 #ifdef FIM_WINDOWS
 		return window->xorigin();
 #else
@@ -191,7 +199,7 @@ namespace fim
 
 	int Viewport::yorigin()
 	{
-		//FIXME !
+		// vertical origin coordinate (upper)
 #ifdef FIM_WINDOWS
 		return window->yorigin();
 #else
@@ -201,6 +209,9 @@ namespace fim
 
 	void Viewport::null_display()
 	{
+		/*
+		 * for recovery purposes. FIXME
+		 * */
 		if( g_fim_no_framebuffer  )return;
 		if(redraw==0 )return;
 #ifdef FIM_WINDOWS
@@ -218,9 +229,6 @@ namespace fim
 	bool Viewport::display()
 	{
 		/*
-		 *	FIX ME
-		 *
-		 *
 		 *	the display function draws the image in the frame buffer
 		 *	memory.
 		 *	no scaling occurs, only some alignment.
@@ -236,7 +244,6 @@ namespace fim
 		int neworientation=((cc.getIntVariable("i:orientation")%4)+4)%4;	/* ehm ...  */
 		if( neworientation!=image->orientation)image->rescale();
     
-		if(g_fim_no_framebuffer)return false;
 		if (image->new_image && redraw)
 		{
 			if(autotop && image->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
@@ -295,19 +302,17 @@ namespace fim
 			 */
 			//fb_clear_screen();
 #ifdef FIM_WINDOWS
-			svga_display_image_new(image->img, left, top,
+			if(!g_fim_no_framebuffer)
+				svga_display_image_new(image->img, left, top,
 					xorigin(),
 					viewport_width(),
 					yorigin(),
 					viewport_height(),
 					mirror, flip);
 #else
-			svga_display_image(image->img, left, top, mirror, flip);
+			if(!g_fim_no_framebuffer)
+				svga_display_image(image->img, left, top, mirror, flip);
 #endif					
-/*			cout 
-				<<  top << " "
-				<< left << " "
-				<< "\n";*/
 			return true;
 		}
 		return false;
@@ -317,8 +322,6 @@ namespace fim
 	{
 		float xs,ys;
 		if( check_invalid() ) return;
-
-		if(g_fim_no_framebuffer)xs=ys=1.0f;
 		else
 		{
 			xs = (float)this->viewport_width()  / image->original_width();
@@ -330,18 +333,8 @@ namespace fim
 
 	int Viewport::valid()
 	{
-		//fixme
+		// int instead of bool
 		return check_valid();
-//		return invalid?0:1;
-	}
-
-	Viewport::Viewport* clone()
-	{
-		/*
-		 * FIXME : this is essential to implement properly window splitting mechanisms!!
-		 **/
-		return NULL;
-//		return new Viewport();
 	}
 
         const Image* Viewport::c_getImage()const
@@ -405,7 +398,7 @@ namespace fim
 		 * scales the image in a way to fit in the viewport height
 		 * */
 		float newscale;
-		if( check_invalid() || g_fim_no_framebuffer ) return;
+		if( check_invalid() ) return;
 
 		newscale = (float)this->viewport_height() / image->original_height();
 
@@ -418,7 +411,7 @@ namespace fim
 		 * scales the image in a way to fit in the viewport width
 		 * */
 		float newscale;
-		if( check_invalid() || g_fim_no_framebuffer ) return;
+		if( check_invalid() ) return;
 
 		newscale = (float)this->viewport_width() / image->original_width();
 
@@ -427,9 +420,20 @@ namespace fim
 
 	void Viewport::free()
 	{
-		//WARNING : THIS SHOULD FREE IMAGES !!
-		//see browser first
-		//FIXME
+		/*
+		 * frees the currently loaded image, if any
+		 */
+#ifndef FIM_BUGGED_CACHE
+		if(image)
+		{	
+			if( !cc.browser.cache.freeCachedImage(image) )
+				delete image;	// do it yourself :P
+		}
+#else
+		// warning : in this cases exception handling is missing
+		if(image)delete image;
+#endif
+		image = NULL;
 	}
 
         bool Viewport::check_valid()
@@ -444,8 +448,6 @@ namespace fim
 	{
 		/*
 		 * this should not happen! (and probably doesn't happen :) )
-		 *
-		 * FIXME
 		 * */
 		if(!image)return true;
 		if( image)return image->check_invalid();

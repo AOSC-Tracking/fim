@@ -121,10 +121,12 @@ class CommandConsole
 	std::map<fim::string,int > key_bindings;	//symbol->code
 	std::map<int, fim::string> inverse_key_bindings;//code->symbol
 
+	public:
 	/*
 	 * the image browser logic
 	 */
 	Browser browser;
+	private:
 
 	/*
 	 * the identifier->variable binding

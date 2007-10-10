@@ -408,6 +408,8 @@ namespace fim
 			else
 				/* true pixels, as we are in framebuffer mode */
 				window = new Window( Rect(0,0,fb_var.xres,fb_var.yres) );
+
+			if(window)window->setroot();
 		}
 		catch(FimException e)
 		{
@@ -605,7 +607,8 @@ namespace fim
 	}
 
 #define istrncpy(x,y,z) {strncpy(x,y,z-1);x[z-1]='\0';}
-#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);throw FIM_E_TRAGIC;}
+#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);}/* temporarily, for security reason : no exceptions launched */
+//#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);throw FIM_E_TRAGIC;}
 
 	fim::string CommandConsole::getBoundAction(const int c)
 	{
@@ -1949,7 +1952,8 @@ namespace fim
 		 * */
 		if(!window)
 		{
-			throw FIM_E_TRAGIC;
+//			temporarily, for security reasons
+//			throw FIM_E_TRAGIC;
 		}
 		return *window;
 	}

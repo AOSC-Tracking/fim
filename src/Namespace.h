@@ -36,9 +36,16 @@ namespace fim
 		 *
 		 * the identifier->variable binding
 		 */
-		std::map<const fim::string,Var> variables;	//id->var
+		typedef std::map<const fim::string,Var> variables_t;	//id->var
+		variables_t variables;	//id->var
 	
 		public:
+		/*
+		variables_t getVariables()const
+		{
+			return variables;
+		}*/
+
 		int setVariable(const fim::string& varname,int value)
 		{
 			return variables[varname].setInt(value);
