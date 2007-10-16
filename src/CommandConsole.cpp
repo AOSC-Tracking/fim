@@ -24,8 +24,10 @@
 #include "conf.h"
 #endif
 #include <sys/time.h>
+#include <errno.h>
 
 extern int yyparse();
+#define noargs (std::vector<fim::string>())
 
 namespace fim
 {
@@ -342,6 +344,7 @@ namespace fim
 		addCommand(new Command(fim::string("scrolldown" ),fim::string("scrolls down the image, going next if at bottom" ),&browser,&Browser::scrolldown));
 		addCommand(new Command(fim::string("scrollforward" ),fim::string("scrolls the image as it were reading it :)" ),&browser,&Browser::scrollforward));
 		addCommand(new Command(fim::string("scale" ),fim::string("scales the image according to a scale (ex.: 0.5,40%,..)" ),&browser,&Browser::scale));
+		addCommand(new Command(fim::string("set" ),fim::string("manipulates the internal variables" ),this,&CommandConsole::set));
 		addCommand(new Command(fim::string("auto_scale" ),fim::string("" ),&browser,&Browser::auto_scale));
 		addCommand(new Command(fim::string("auto_width_scale" ),fim::string("scale the image so that it fits horizontally in the screen" ),&browser,&Browser::auto_width_scale));
 		addCommand(new Command(fim::string("auto_height_scale" ),fim::string("scale the image so that it fits vertically in the screen" ),&browser,&Browser::auto_height_scale));
@@ -388,6 +391,7 @@ namespace fim
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */
 		#include "defaultConfiguration.cpp"
+		setVariable("pwd",pwd(noargs).c_str());
 	}
 
 	void CommandConsole::init()
@@ -1500,7 +1504,7 @@ namespace fim
 	}
 #endif
 	
-	bool CommandConsole::regexp_match(const char*s, const char*r)const
+	bool CommandConsole::regexp_match(const char*s, const char*r)//const
 	{
 		/*
 		 *	given a string s, and a Posix regular expression r, this
@@ -1520,7 +1524,7 @@ namespace fim
 		if(*r=='*')return false;
 
 		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
-		if(regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE )==-1)
+		if(regcomp(&regex,r, 0 | REG_EXTENDED | (getIntVariable("ignorecase")==0?0:REG_ICASE) )==-1)
 		{
 			/* error calling regcomp (invalid regexp?)! (should we warn the user ?) */
 			//cout << "error calling regcomp (invalid regexp?)!" << "\n";
@@ -1599,7 +1603,10 @@ namespace fim
 			fim::string dir=args[i];
 			if(dir=="-")dir=oldpwd;
 			oldpwd=pwd(std::vector<fim::string>());
-			chdir(dir.c_str());
+			int ret = chdir(dir.c_str());
+#if 1
+			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
+#endif
 		}
 		return "";
 	}
@@ -1982,5 +1989,25 @@ namespace fim
 	{
 		std::cout << FIM_DEFAULT_CONFIG_FILE_CONTENTS << "\n";
 	}
+
+	fim::string CommandConsole::set(const std::vector<fim::string> &args)
+	{
+		/*
+		 * with no arguments, prints out the variable names.
+		 * with one identifier as argument, prints out its value.
+		 * with two arguments, sets the first argument's value.
+		 *
+		 * FIXME : THIS IS NOT EXACTLY VIM'S BEHAVIOUR
+		 * */
+		if( ! args.size())return get_variables_list();
+		if(1==args.size())return getStringVariable(args[0]);
+		/*
+		 * warning!
+		 * */
+		if(2==args.size())return setVariable(args[0],args [1].c_str());
+		else
+		return "usage : set | set IDENTIFIER | set IDENTIFIER VALUE";
+	}
+
 }
 

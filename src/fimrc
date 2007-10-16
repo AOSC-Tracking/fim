@@ -23,6 +23,7 @@ _max_cached_images=5;
 _max_cached_memory=80000000;	# not yet functional
 _prefetch=1;
 autowidth=1;
+ignorecase=1;
 
 # useful aliases
 alias "toggleautoflip" "autoflip=1-autoflip;";

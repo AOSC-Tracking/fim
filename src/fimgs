@@ -164,7 +164,7 @@ info "rendering $f to $BDIR.."
 [[ "$f" =~ "^\.\."  ]] && f="$PWD/$f"
 
 # note : we cannot render gs renderable documents with more than 1000 pages...
-gs	-dSAVER -dNOPAUSE -dBATCH			\
+gs	-dSAFER -dNOPAUSE -dBATCH			\
 	-sDEVICE=png256 -r240x240 -sOutputFile=$BDIR/ps%03d.png	\
 	$gsopts						\
 	"$f" || die "ghostscript failed rendering!"

@@ -147,7 +147,7 @@ stmt:
 	| IDENTIFIER args { $$ = opr('x',2,scon($1),$2);  }
 	| INTEGER IDENTIFIER args { if($1>0){$$ = opr('r',2,opr('x',2,scon($2),$3),con($1)); }}
 //	| IDENTIFIER '=' expr  { $$ = opr('=', 2, vscon($1,'i'), $3); }
-//	| IDENTIFIER '=' FLOAT { $$ = opr('=', 2, vscon($1,'f'), fcon($3)); }
+	| IDENTIFIER '=' FLOAT { $$ = opr('=', 2, vscon($1,'f'), fcon($3)); }
 //	| IDENTIFIER '=' STRING{ $$ = opr('=', 2, vscon($1,'s'), scon($3)); }
 	| IDENTIFIER '=' arg { $$ = opr('=', 2, vscon($1,'a'), $3); }
 //	| NEWLINE { /* this still doesn't work as we would like to */ }

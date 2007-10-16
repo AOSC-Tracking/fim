@@ -632,6 +632,18 @@ information on screen about the displayed image.
 	:set_console_mode
 Sets the console mode on (useful for scripts, EXPERIMENTAL).
 
+>
+	:set "identifier" "value"
+Will set the variable named "identifier" to "value".
+>
+	:set "identifier" 
+Will print the value of the variable named "identifier".
+>
+	:set
+Will print all set variables values.
+( In the future, it will mimic Vim and will print all of the non standardly
+set variables ).
+
 ==============================================================================
 6.6. System interaction				*commands-system*
 
@@ -765,6 +777,9 @@ as soon as this is necessary.
  '_prefetch'	: if 0 or unset, no prefetching will be adopted.
 
  '_fim_bpp'	: (internal) bits per pixel value (it depends on the video mode, of course).
+
+ 'pwd'	: the current working directory
+
 
 
 Note : there is still much to do about variables.
@@ -1053,6 +1068,9 @@ If <C-n> doesn't have this effect, hit ':' to get the console, and type in
 This should associate that key combination to the action of jumping to the
 next searched image.
 
+Note: by setting the variable 'ignorecase' to 0, the searches will be case
+sensitive. 'ignorecase' is 1 by default.
+
 ==============================================================================
 9. Dangers						*dangers*
 
@@ -1132,6 +1150,45 @@ A lot of questions still await for an answer in Fim. Here are few:
  optionally of course ), and configure/build/compatibility issues solved.
 
 <UNFINISHED>
+ 
+ What follows now is an *incomplete* and *temporary* sort of grammar for Fim.
+
+ float      ::== {DIGIT}+"."{DIGIT}*
+ integer    ::== [0-9]+
+ string     ::== """ ( (\\\") | [^\"] )* """ 
+ string     ::== "'" ( (\\\') | [^\'] )* "'"
+ ID         ::== [a-z_A-Z][a-z_A-Z0-9]* 
+ identifier ::== ([gwibv]:)?{ID}
+ assignment ::== identifier "=" float
+ assignment ::== identifier "=" integer
+ assignment ::== identifier "=" expression
+ expression ::== integer | string | expression.expression 
+ expression ::== expression operator expression
+ operator   ::== "+" | "-" | "*" | "/" | "%" | boperator
+ boperator  ::== "||" | "&&" | "!"
+ statement  ::== "*" ( integer | float )
+ statement  ::== ( "+" | "-" ) ( integer | float ) "%"
+ statement  ::== integer "%"
+ statement  ::== integer
+ argument   ::== expression
+ statement  ::== command ( argument )*
+ statement  ::== "if" "(" expression ")" command;
+ statement  ::== "if" "(" expression ")" "{" statement "}"
+ statement  ::== (integer)? statement ";"+ | statement ";" statement | { statement }
+ program    ::== statement
+
+ Some word of explanation for strings : a string is any sequence of character
+ enclosed between single or double quotes.
+ A string enclosed by single quotes cannot contain a single quote (') if not
+ preceded by a backslash (\).
+ A string enclosed by double quotes cannot contain a double quote (") if not
+ preceded by a backslash (\).
+
+ With 'command' we referred to Fim commands, as explained in the reference
+ documentation section, or aliases.
+
+<UNFINISHED>
+
 
 ==============================================================================
 10.2. Framebuffer mini howto				*framebuffer*

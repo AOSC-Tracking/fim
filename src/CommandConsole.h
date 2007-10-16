@@ -251,6 +251,7 @@ class CommandConsole
 	fim::string getAliasesList();
 	fim::string dummy(std::vector<Arg> args);
 	fim::string variables_list(const std::vector<fim::string>& args){return get_variables_list();}
+	fim::string set(const std::vector<fim::string> &args);
 	fim::string unalias(const std::vector<fim::string>& args);
 	char ** tokenize_(const char *s);
 	void executeBinding(const int c);
@@ -268,7 +269,7 @@ class CommandConsole
 	void quit(int i=0);
 	public:
 	int  drawOutput();
-	bool regexp_match(const char*s, const char*r)const;
+	bool regexp_match(const char*s, const char*r);//const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	fim::string pre_autocmd_add(const fim::string &cmd);
