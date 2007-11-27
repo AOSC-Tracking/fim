@@ -132,7 +132,7 @@ class Browser
 	fim::string pop_current(const std::vector<fim::string> &args);
 	fim::string no_image(const std::vector<fim::string> &args);
 	bool present(const fim::string nf);
-	bool push(const fim::string nf);
+	bool push(fim::string nf);
 
 	fim::string display();
 	private:

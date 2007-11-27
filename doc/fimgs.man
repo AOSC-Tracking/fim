@@ -8,17 +8,22 @@ framebuffer console
 .SH DESCRIPTION
 .B fimgs  
 is a simple wrapper script which takes a PostScript or pdf
-or .cbr or .rar or .cbz or .zip or dvi
+or .cbr or .rar or .cbz or .zip or .dvi
 or any of the above
 prefixed with http:// 
 as input, renders the pages using ghostscript into a
 temporarely directory and finally calls fbi to display them.
 In case of compressed archives (in zip or rar formats), the images 
-are decompressed into a directory adn displayed.
+are decompressed into a directory and displayed.
 In this latter case, only images contained in the archive will be displayed
 (no nested archives or pdf's or ps's or dvi's).
 .SH OPTIONS
-fimgs understands all fim options (they are passed through).
+.c fimgs understands all fim options (they are passed through).
+.B fimgs
+still does not understand all of fim's options (they are not passed through).
+so please use 
+.B fimgs -h
+to get help on its options.
 
 .c Additionally you can specify -l, -xl or -xxl to get the pages
 .c rendered with 100, 120 or 150 dpi (default is 75).
@@ -26,6 +31,6 @@ fimgs understands all fim options (they are passed through).
 You can
 use option -p <password> if your PDF file requires password.
 .SH SEE ALSO
-fim(1), gs(1), fbi(1)
+fim(1), gs(1), fbi(1), fbgs(1), bash(1)
 .SH AUTHOR
-dezperado <dezperado@autistici.org>
+Michele Martone <dezperado _ GUESS _ autistici.org>. 

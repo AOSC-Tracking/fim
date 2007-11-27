@@ -5,7 +5,7 @@ CLEANFILES= doctags *.o  tags
 
 EXTRA_DIST = FIM.html FIM.TXT fim.man.html fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man
 
-man1_MANS = fim.man
+man1_MANS = fim.man fimgs.man
 
 # html stuff is installed in the documentation directories, too
 htmldir = $(docdir)

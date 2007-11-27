@@ -171,7 +171,8 @@ void status(const char *desc, const char *info)
 	const char *prompt=cc.get_prompt();
 	char no_prompt[1];*no_prompt='\0';
 
-	if(g_fim_no_framebuffer)return;
+	if(g_fim_no_framebuffer || fim_uninitialized)
+		return;
 
 	if(!cc.inConsole())prompt=no_prompt;
 	chars = fb_var.xres / fb_font_width();
@@ -630,6 +631,7 @@ static struct option fim_options[] = {
 	FlexLexer *lexer;
 	using namespace fim;
 	int              vt = 0;
+	int fim_uninitialized = 1; // new
 
 
 static void version()
@@ -1014,6 +1016,7 @@ int main(int argc,char *argv[])
 	}
 	rl::initialize_readline();
 
+	fim_uninitialized = 0; // new
 	cc.init();
 	cc.executionCycle();
 	return 0;	//there will be no return

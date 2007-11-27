@@ -675,7 +675,7 @@ namespace fim
 		return false;
 	}
 
-	bool Browser::push(const fim::string nf)
+	bool Browser::push(fim::string nf)
 	{	
 		/*
 		 * FIX ME:
@@ -689,16 +689,23 @@ namespace fim
 		 */
 		struct stat stat_s;
 		/*	if the file doesn't exist, return */
-		if(-1==stat(nf.c_str(),&stat_s))return "";
+		if(-1==stat(nf.c_str(),&stat_s))return false;
 		/*	if it is a char device , return */
 		//if(  S_ISCHR(stat_s.st_mode))return "";
 		/*	if it is a block device , return */
 		//if(  S_ISBLK(stat_s.st_mode))return "";
 		/*	if it is a directory , return */
 		//if(  S_ISDIR(stat_s.st_mode))return "";
-		/*	..hmm.. paranoia is better :
-		 *	we want a regular file .. */
-		if(! S_ISREG(stat_s.st_mode))return "";
+		/*	we want a regular file .. */
+		if(! S_ISREG(stat_s.st_mode))
+		{
+			/*
+			 * i am not fully sure this is effective
+			 * */
+			nf+=" is not a regular file!";
+			set_status_bar(nf.c_str(), "*");
+			return false;
+		}
 #endif
 
 #ifdef FIM_CHECK_DUPLICATES

@@ -36,6 +36,7 @@ which ()
 
 #export -f which
 
+# checks if the first supplied argument is in the current $PATH
 function check_in_path()
 {
 	local cmd="$1";
@@ -44,6 +45,7 @@ function check_in_path()
 	return 0
 }
 
+# output functions
 function info()  { echo '  [+]' "$@" 1>&2 ;  }
 function einfo() { echo '  [-]' "$@" 1>&2 ;  }
 function die() { einfo "ERROR : "$@ 1>&2 ; exit -1 ; }
@@ -91,13 +93,27 @@ do
 #			shift; shift
 #			;;
 		# explicit option passing
-		-c)	fbiopts="$fbiopts -c $2"
+		-c)	fbiopts="$fbiopts --execute-commands $2"
+			shift; shift
+			;;
+		-F)	fbiopts="$fbiopts --final-commands $2"
 			shift; shift
 			;;
 		-p)	password="$2"
 			shift; shift
 			;;
-		-h)	help text
+		-h)	
+			#help text
+			echo "$0 [ -p PDF-PASSWORD] [ -h ] [ -c PRE-COMMANDS ] [ -F FINAL-COMMANDS ] FILES"
+			echo -e "\nNote that FILE can be a (correctly named) :"
+			echo -e " PDF (.pdf) file"
+			echo -e " Postscript (.ps) file"
+			echo -e " TAR (.tar) archive"
+			echo -e " BZ2 (.bz2) archive"
+			echo -e " GZIP (.gz) archive"
+			echo -e " http://  resource (web resource)"
+			echo -e "\nNote that you cannot view files names like the options (no -- meta-option)."
+			echo -e "\n \`man fimgs\`   will give you more info."
 			exit 1
 			;;
 	        *)	
@@ -152,7 +168,7 @@ then
 	DIRS=${DIRS// /}
 	DIRS=${DIRS//-/}
 	BDIR="$DIR/$DIRS"
-	# this means that giving duplicate imput files will overwrite the original render directory...
+	# this means that giving duplicate input files will overwrite the original render directory...
 else
 	BDIR="$DIR/"$(basename "$f")
 fi
@@ -165,11 +181,11 @@ info "rendering $f to $BDIR.."
 
 # note : we cannot render gs renderable documents with more than 1000 pages...
 gs	-dSAFER -dNOPAUSE -dBATCH			\
+	-sPDFPassword="$password"			\
 	-sDEVICE=png256 -r240x240 -sOutputFile=$BDIR/ps%03d.png	\
 	$gsopts						\
 	"$f" || die "ghostscript failed rendering!"
 # still unused options :
-#	-sPDFPassword="$password"			\
 #	-sDEVICE=tiffpack				\
 #	-sOutputFile=$DIR/ps%03d.tiff
 
@@ -224,10 +240,10 @@ find $DIR/ -type f -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -in
 # when no framebuffer device is available, we could invoke another console viewer, couldn't we ?
 # cacaview $DIR/*
 
-# the pld syntax
+# the old syntax
 # $FBI $fbiopts -P  `find $DIR -iname '*.png' -or -iname '*.jpg' -or -iname '*.gif' -or -iname '*.jpeg' -or -iname '*.tiff' -or -iname '*.bmp'`
 
-# or the older ..
+# or the older one ..
 #$FBI $fbiopts -P -- $files
 
 # or the ancient one

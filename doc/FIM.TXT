@@ -61,6 +61,7 @@ Introduction to Fim					*ref* *reference*
 3.2. Keyboard binding		|keyboard|
 3.3. The fimgs script		|fimgs|
 3.4. System integration tips	|tips|
+3.5. The .inputrc file		|inputrc|
 4. Command Line Mode		|cli|
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
@@ -307,6 +308,12 @@ and Fim otherwise.
 Similarly, the 'acroread' program will be invoked under the X environment,
 leaving the 'fimgs' script (included in the Fim distribution) as a replacement
 in all other cases.
+
+===============================================================================
+3.5. The .inputrc file					*inputrc*
+
+Fim is linked with the GNU readline library, therefore it is susceptible to 
+chages in the ~/.inputrc configuration file contents.
 
 ==============================================================================
 4. Command Line Mode					*cli*

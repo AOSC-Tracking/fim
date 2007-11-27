@@ -121,6 +121,9 @@ extern int svga_show(struct ida_image *img, int timeout, char *desc, char *info,
 extern struct ida_image * fbi_image_clone(struct ida_image *img);
 }
 class fim::CommandConsole;
+
+/* in fim.cpp:  */
 extern fim::CommandConsole cc;
 extern int g_fim_no_framebuffer;
+extern int fim_uninitialized;
 #endif

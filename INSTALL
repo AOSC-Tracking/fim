@@ -30,7 +30,7 @@ build the fim executable and install it.
 ====== BUILDING ON GENTOO LINUX - with overlays (recommended)
 
 Fim is in the gentoo 'sunrise' overlay. So, you can 'emerge fim' if 
-yoe have this overlay installed on your system.
+you have this overlay installed on your system.
 Here it shows how to do it :
 
  su

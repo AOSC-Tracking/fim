@@ -1,16 +1,36 @@
 	$Id$
 
 This file is a melange of ideas aimed towards further development.
-If you are interested into FIM internals, philosophy, and evolution, you
+If you are interested into Fim internals, philosophy, and evolution, you
 are welcome to read this file.
 Of course, the BUGS file is a source of constant inspiration for further work, too.
 
-If you intend to learn about FIM, please read the program documentation  in the
- doc directory.
+If you intend to learn about Fim, please read the program documentation  in the
+ doc directory first.
+Warning : Stuff in this file could be outdated, but be necessary for further inspiration.
 
 -------------------------------------------------------------------------------
 	Current development directions
 
+20071127	in-depth study of Vim documentation to uniform languages as much as possible
+20071127	study autodocumentation issues
+20071127	prepare a cookbook
+20071127	possible namespaces : 
+	 w:... window variables
+	 g:... global variables
+	 l:... local  variables
+	 s:... script variables
+	 t:... tab    variables
+	 v:... vim    variables 
+20071127	functions, return status, stdout, stderr ?
+20071127	inspiration : #  vim +':help eval'
+20071127	histall, histdell
+20071127	fim -q --quiet, vs warning al primo avvio ?
+20071127	proposal of a 'cropped view' functionality to ease sequent joint pages reading
+20071026	investigate issues related to UTF-8, charset, and mapping stuff vs raw console modes..
+20071025	introduce a namespace : 'e:', to get environment variables!
+20071021	study context-sensitive command completion (so, with pre-parsing.. implying a modified parsing scheme!)
+20071021	think about a finite state machine capable of interpretating [n]<command key> a' la vim
 20071006	implement mechanisms or policies for namespace inheritage on windows split
 20070925	update notices regarding file format compatibilities in the man pages
 20070924	-i option to read an image file from stdin
@@ -94,9 +114,9 @@ and find some useful idea.
 use PSHUFLW,PSHUFW,PSHUFD to reverse contiguous words in registers.
 -------------------------------------------------------------------------------
 
-This file is often outdated : FIM is far better than it seems here :)
+This file is often outdated : Fim is far better than it seems here :)
 
-Please read the FIM.TXT file and the fimrc template to discover nice FIM features.
+Please read the FIM.TXT file and the fimrc template to discover nice Fim features.
 
 	OPEN   BUGS:
 20070307	It is not clear which key terminates always loops.
@@ -173,4 +193,4 @@ Please read the FIM.TXT file and the fimrc template to discover nice FIM feature
 		repeat_last N ?!
 	TIPS
 20070302	use __FUNCTION__ : is not ANSI, but GCC
-20070303	realtime clock... -lrt cannot  be used with FIM
+20070303	realtime clock... -lrt cannot  be used with Fim
