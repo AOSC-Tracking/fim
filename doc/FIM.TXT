@@ -62,6 +62,7 @@ Introduction to Fim					*ref* *reference*
 3.3. The fimgs script		|fimgs|
 3.4. System integration tips	|tips|
 3.5. The .inputrc file		|inputrc|
+3.6. Environment variables	|env|
 4. Command Line Mode		|cli|
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
@@ -314,6 +315,34 @@ in all other cases.
 
 Fim is linked with the GNU readline library, therefore it is susceptible to 
 chages in the ~/.inputrc configuration file contents.
+
+===============================================================================
+3.6. Environment variables				*env*
+
+Some environment variables affect Fim behaviour.
+>
+	FBGAMMA
+Will affect the gamma value during visualization.
+
+>
+	FBFONT
+Will affect the font used internally.
+Both X (X Font Server - xfs) and Linux Console fonts are available
+in the original Fbi. In Fim, xfs support has been disabled.
+Console font stuff is usually documented in 'man setfont', and the usual console
+font path is /usr/share/consolefonts/.
+Even a zipped font will work, like /usr/share/consolefonts/LatArCyrHeb-08.psfu.gz.
+
+>
+	FRAMEBUFFER
+Will affect the default framebuffer device file name used.
+Otherwise, /dev/fb/N and /dev/fbN device files will be probed incrementally.
+
+Example:
+>
+
+	FRAMEBUFFER=/dev/fb/1 fim *
+Will display the images in the second frame buffer device (if present).
 
 ==============================================================================
 4. Command Line Mode					*cli*

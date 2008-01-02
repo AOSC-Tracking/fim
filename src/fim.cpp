@@ -34,10 +34,6 @@
 #include <linux/vt.h>
 #include "fbi_src/fbtools.h"
 
-
-//#define DEFAULT_DEVICE  "/dev/fb0"
-//#define DEFAULT_DEVICE  "/dev/fb/0"
-
 /*
  * we use a portion of the STL
  */
@@ -52,7 +48,7 @@ using std :: vector;
 class CommandConsole;
 int fim_rand(){return rand();}
 
-char *fontname;
+char *fontname=NULL;
 static char * command_generator (const char *text,int state);
 
 /*
@@ -165,7 +161,7 @@ void sanitize_string(char *s, int c=0)
  */
 void status(const char *desc, const char *info)
 {
-	//FIX ME : this function always draws ?
+	//FIX ME : does this function always draw ?
 	int chars, ilen;
 	char *str,*p;
 	const char *prompt=cc.get_prompt();
@@ -763,6 +759,16 @@ int framebuffer_init()
 
 int main(int argc,char *argv[])
 {
+	{
+		/*
+		 * fbgamma and fontname are fbi - defined variables.
+		 * */
+		char *line;
+	    	if (NULL != (line = getenv("FBGAMMA")))
+	        	fbgamma = atof(line);
+	    	if (NULL != (line = getenv("FBFONT")))
+			fontname = line;
+	}
 	/*
 	 * an adapted version of the main function
 	 * of the original version of the fbi program

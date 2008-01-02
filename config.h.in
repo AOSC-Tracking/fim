@@ -9,6 +9,9 @@
 /* Defined, if libpng support is enabled */
 #undef FIM_WITH_LIBPNG
 
+/* Define to 1 if you have the <cstdio> header file. */
+#undef HAVE_CSTDIO
+
 /* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
 #undef HAVE_FSEEKO
 
@@ -24,6 +27,9 @@
 /* We have libjpeg */
 #undef HAVE_LIBJPEG
 
+/* Define to 1 if you have the <linux/fb.h> header file. */
+#undef HAVE_LINUX_FB_H
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
@@ -38,6 +44,9 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
@@ -102,7 +111,7 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
-/* Define if you want to use the included regex.c. */
+/* Define if you want to use the included (GNU) regex.c. */
 #undef USE_GNU_REGEX
 
 /* Version number of package */

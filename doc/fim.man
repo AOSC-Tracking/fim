@@ -186,6 +186,14 @@ distributed with fim.
 .c calls the jpegtran command to perform a lossless rotation if the image.
 .c It is especially useful if you review the images of your digital
 .c camera.
+.SH AFFECTING ENVIRONMENT VARIABLES
+.nf
+FBFONT		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.
+			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psfu.gz is a Linux console file.
+			Consult 'man setfont' for your current font paths.
+			NOTE : Currently xfs is disabled.
+FBGAMMA		(just like in fbi) gamma correction.
+FRAMEBUFFER	(just like in fbi) if set, will override user set framebuffer device file.
 .SH COMMON PROBLEMS
 .B fim
 needs read-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
@@ -220,7 +228,7 @@ has bugs. Please read the
 .B BUGS
 file shipped in the documentation directory to discover the known ones.
 .SH SEE ALSO
-fimgs(1), fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4)
+fimgs(1), fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)
 .c , jpegtran(1)
 .SH AUTHOR
 .nf

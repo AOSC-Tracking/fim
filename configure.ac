@@ -1,6 +1,15 @@
 dnl Process this file with autoconf to produce a configure script.
+dnl $Id$
 
 AC_PREREQ([2.54])
+
+# we'll move forward, one day or another
+#AC_PREREQ([2.61])
+
+# for future use, too
+#AC_PROG_CC(cc gcc)
+#AC_PROG_CXX(CC g++ gcc c++ cxx)
+
 AC_INIT([src/fim.h])
 
 AC_MSG_NOTICE([
@@ -11,6 +20,8 @@ AC_MSG_NOTICE([
 	There are options to this script, please run :
 	  ./configure --help=short
 	for a complete list of these options.
+
+	Please read BUGS and README and report any bug found to the Fim maintainer!
 ])
 
 
@@ -153,6 +164,19 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(stdarg.h sys/ioctl.h ioctl.h sysexits.h)
 AC_CHECK_HEADERS(sys/time.h sys/resource.h)
 AC_CHECK_HEADERS(unix.h)
+AC_CHECK_HEADERS([cstdio stdio.h], [break],)
+AC_CHECK_HEADERS([linux/fb.h], [break],)
+
+if test "X$ac_cv_header_cstdio" != "Xyes" && test "X$ac_cv_header_stdio_h" != "Xyes"; then
+  AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]])
+fi
+
+if test "X$ac_cv_header_linux_fb_h" != "Xyes" ; then
+  AC_MSG_ERROR([[Cannot find linux/fb.h.  Fim requires it!.]])
+fi
+
+
+
 
 AC_CHECK_FUNCS(setrlimit getsid)
 
@@ -160,11 +184,11 @@ AC_TYPE_SIGNAL
 
 
 
-AC_ARG_WITH(regex, AC_HELP_STRING([--with-regex], [Use the GNU regex library]),
+AC_ARG_WITH(regex, AC_HELP_STRING([--with-regex], [Use the GNU regex library insteat of the POSIX one]),
         [fim_cv_regex=yes],
         [AC_CHECK_FUNCS(regcomp, fim_cv_regex=no, fim_cv_regex=yes)])
 
-if test $fim_cv_regex = no ; then
+if test X$fim_cv_regex = Xno ; then
 AC_CACHE_CHECK([whether your system's regexp library is completely broken],
         [fim_cv_regex_broken],
         AC_TRY_RUN([
@@ -172,14 +196,14 @@ AC_CACHE_CHECK([whether your system's regexp library is completely broken],
 #include <regex.h>
 main() { regex_t blah ; regmatch_t p; p.rm_eo = p.rm_eo; return regcomp(&blah, "foo.*bar", REG_NOSUB) || regexec (&blah, "foobar", 0, NULL, 0); }],
         fim_cv_regex_broken=no, fim_cv_regex_broken=yes, fim_cv_regex_broken=yes))
-        if test $fim_cv_regex_broken = yes ; then
+        if test X$fim_cv_regex_broken = Xyes ; then
                 echo "Using the included GNU regex instead." >&AC_FD_MSG
                 fim_cv_regex=yes
         fi
 fi
 
-if test $fim_cv_regex = yes; then
-        AC_DEFINE(USE_GNU_REGEX,1,[ Define if you want to use the included regex.c. ])
+if test X$fim_cv_regex = Xyes; then
+        AC_DEFINE(USE_GNU_REGEX,1,[ Define if you want to use the included (GNU) regex.c. ])
         AC_LIBOBJ(regex)
 fi
 
@@ -471,7 +495,7 @@ dnl ==================
 
 fim_cv_warnings=no
 AC_ARG_ENABLE(screen, AC_HELP_STRING([--enable-screen], [Fim will work under screen (EXPERIMENTAL!)]),
-[if test x$enableval = yes; then
+[if test x$enableval = xyes; then
         fim_cv_screen=yes
 fi])
 
@@ -580,6 +604,7 @@ AC_MSG_NOTICE([
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 	internal windowing system           : ${have_windows:-no}
+	GNU regexp's (default is Posix)     : ${fim_cv_regex:-no}
 
 	If you are not satisfied with this configuration, please run :
 

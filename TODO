@@ -12,6 +12,8 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 -------------------------------------------------------------------------------
 	Current development directions
 
+20071230	UNIX domain sockets communication and multithreaded Fim
+20071230	A decent Features section in the web site, from the top.
 20071127	in-depth study of Vim documentation to uniform languages as much as possible
 20071127	study autodocumentation issues
 20071127	prepare a cookbook

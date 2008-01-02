@@ -41,10 +41,7 @@ It is capable of regular expressions based (on filename) image viewing,vim-like
 autocommands, it offers GNU readline command line autocompletion and history,
 completely customizable key bindings, external/internal (if-while based)
 scriptability (through return codes, standard input/output, and commands given
-at invocation time, initialization file), and much more.
-
-However, it still needs some (power) user response to resolve some points about
-the core functionalities, and a thorough configuration/installation testing.
+at invocation time, initialization file), and much more features.
 
 FIM is free software, and it ships under the GPL software license, complete with
 documentation, in form of a doc/FIM.TXT documentation file, a man page, lots

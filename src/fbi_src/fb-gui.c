@@ -134,7 +134,7 @@ void fb_text_init1(char *font)
 	f = fs_open(font ? font : x11_font);
 #endif
     if (NULL == f) {
-	fprintf(stderr,"no font available\n");
+	fprintf(stderr,"font \"%s\" is not available\n",font);
 	exit(1);
     }
 }

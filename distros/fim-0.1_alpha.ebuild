@@ -1,12 +1,12 @@
 # Copyright 1999-2007 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-
+# 20080102
 inherit autotools
 
 DESCRIPTION="Fbi IMproved is a framebuffer image viewer based on Fbi and inspired from Vim"
-HOMEPAGE="http://www.autistici.org/dezperado/fim"
-SRC_URI="http://www.autistici.org/dezperado/fim/${PN}-${PV/_/-}.tar.gz"
+HOMEPAGE="http://savannah.nongnu.org/projects/fbi-improved"
+SRC_URI="http://download.savannah.nongnu.org/releases/fbi-improved/${PN}-${PV/_/-}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -19,7 +19,7 @@ RDEPEND="gif? ( media-libs/giflib )
 	png? ( media-libs/libpng )
 	tiff? ( media-libs/tiff )
 	postscript? ( virtual/ghostscript media-libs/tiff )
-	screen? ( app-misc/screen )    
+	screen? ( app-misc/screen )
 	sys-libs/readline"
 
 DEPEND="${RDEPEND}
@@ -41,7 +41,9 @@ src_compile() {
 		$(use_enable jpeg) \
 		$(use_enable png) \
 		$(use_enable tiff) \
-		$(use_enable screen)
+		$(use_enable screen) \
+		--enable-fimrc \
+		--with-docdir="/usr/share/doc/${PF}"
 
 	# parallel make fails
 	emake -j1 || die "emake failed for ${P}"
