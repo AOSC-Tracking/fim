@@ -24,7 +24,7 @@
 namespace fim
 {
 /*
- * The Browser class oversees image browsing.
+ * A Browser object oversees image browsing.
  */
 #ifdef FIM_NAMESPACES
 class Browser:public Namespace
@@ -34,12 +34,12 @@ class Browser
 {
 	private:
 	/*
-	 * The file browser holds the names of files in the slideshow.
+	 * A file browser holds the names of files in the slideshow.
 	 */
 	std::vector<fim::string> flist;
 
 	/*
-	 * It has a dummy empty filename
+	 * It has a dummy empty filename for technical reasons
 	 */
 	const fim::string nofile;
 
@@ -52,6 +52,9 @@ class Browser
 	int cp;
 
 #ifndef FIM_WINDOWS
+	/*
+	 * When compiled with no multiple windowing support, one viewport only will last.
+	 * */
 	Viewport *only_viewport;
 #endif
 
@@ -61,15 +64,14 @@ class Browser
 
 	int current_n()const;
 	int current_n(int ccp)const;
-//	const fim::string pop(fim::string popped="");
 	const fim::string pop();
 	fim::string get_next_filename(int n);
 	
 	fim::string last_regexp;
 	int current_image()const;
 	int current_images()const{ return n(); }
-	public:
 	fim::Cache cache;	// was private
+	public:
 	const Image *c_image()const;	// was private
 	int empty_file_list()const;
 

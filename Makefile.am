@@ -83,3 +83,38 @@ help:
 	@echo 'Thanks for your collaboration'
 	@echo
 	@echo
+
+up: upload news
+
+news: freshmeat mail-announce
+
+# fixme : missing integration with ChangeLog file
+mail-announce:
+	@ figlet fim | mutt -s "fim-`cat VERSION` release" "fbi-improved-devel@nongnu.org"  -i -
+
+
+release: upload freshmeat
+
+upload: savannah 
+
+savannah:
+	echo -en "cd /releases/fbi-improved\nput fim-${fim_cv_version}.tar.gz"  | sftp "dezperado@dl.sv.gnu.org" -b -
+	lynx -dump dl.sv.gnu.org/releases/fbi-improved
+
+savannah-lookup:
+	lynx -dump dl.sv.gnu.org/releases/fbi-improved
+
+# fixme : missing integration with ChangeLog file and such information
+freshmeat: savannah
+	@ echo freshmeat-announce -v "fbi-`cat VERSION`" \
+	--project fbi-improved \
+	--license GPL \
+	--mailing-list-url      $$(cat README | grep "^Mailing List :"|sed s/^.*\ :.//g) \
+	--home-page-url         $$(cat README | grep "^Web Page  "|sed s/^.*\ :.//g) \
+	--cvs-url               $$(cat README | grep "^Repository"|sed s/^.*\ :.//g) \
+	--gzipped-tar-url       $$(cat README | grep "^Releases  "|sed s/^.*\ :.//g)/"fbi-`cat VERSION`".tar.gz \
+	--mirror-site-url       $$(cat README | grep "^Off.rror : "|sed s/^.*\ :.//g)
+#	--url-demo         $$(cat README | grep "^Web Page  "|sed s/^.*:.//g)
+#	--bzipped-tar-url  $$(cat README | grep "^Web Page  "|sed s/^.*:.//g)
+#	--changelog-url    $$(cat README | grep "^Web Page  "|sed s/^.*\ :.//g)/ChangeLog
+

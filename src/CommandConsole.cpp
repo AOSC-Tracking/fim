@@ -93,6 +93,12 @@ namespace fim
 		const char *kerr="bind : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
 		if(args.size()==0)return getBindingsList();
 		//return "usage : bind KEY ACTION\n";
+		if(args.size()>=1)
+		{
+			//FIXME:
+			//first arg should be a valid key code
+			//if(!isValidKeyCode(args[0]))return kerr;
+		}
 		if(args.size()==1)
 		{
 			fim::string binding_expanded;
@@ -495,9 +501,15 @@ namespace fim
 				)
 		if(g_fim_no_framebuffer==0)
 		{
-			printHelpMessage();
 			//when debugging Fim, we are not interested in this feature
+			#if 1
+			printHelpMessage();
 			this->quit();
+			#else
+			//EVIL right now
+			//help_and_exit(cc.getStringVariable("ARGV0"));
+			help_and_exit("fim");
+			#endif
 		}
 #ifdef FIM_AUTOCMDS
 		// WARNING

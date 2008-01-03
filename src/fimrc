@@ -27,11 +27,13 @@ ignorecase=1;
 
 # useful aliases
 alias "toggleautoflip" "autoflip=1-autoflip;";
-alias "flip" "toggleautoflip;redisplay;";
-alias "fliponce" "flip;toggleautoflip;";
+alias "toggleflip" "i:flipped=1-i:flipped;";
+alias "flip" "toggleflip;redisplay;";
+alias "fliponce" "flip;toggleflip;";
 alias "toggleautomirror" "automirror=1-automirror;";
-alias "mirror" "toggleautomirror;redisplay;";
-alias "mirroronce" "mirror;toggleautomirror;";
+alias "togglemirror" "i:mirrored=1-i:mirrored;";
+alias "mirror" "togglemirror;redisplay;";
+alias "mirroronce" "mirror;togglemirror;";
 alias "q" "quit;";
 
 # default bindings (binding is dynamical, so you can rebind keys even during program's execution)
@@ -185,8 +187,8 @@ bind 'B' "toggleDisplayBusy";
 alias "plisten" 'popen "nc -l -p 9999 "';
 alias "wlisten" "while(1){sleep;plisten;}";
 alias "random_slideshow" "while(1){goto random;}";
-alias "rotate_ccw" "i:orientation=i:orientation+1;fresh=1;redisplay;";
-alias "rotate_cw"  "i:orientation=i:orientation+3;fresh=1;redisplay;";
+alias "rotate_ccw" "i:orientation=i:orientation+1;fresh=1;i:fresh=1;redisplay;";
+alias "rotate_cw"  "i:orientation=i:orientation+3;fresh=1;i:fresh=1;redisplay;";
 alias "rotate" "rotate_cw;display;";
 
 # window related aliases and commands

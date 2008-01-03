@@ -10,7 +10,7 @@
 	7		Technical overview (important for patch writers)
 	8		Gentoo Installation Tips
 	9		License
-	10		Contact
+	10		Contact, URLs
 ================================================================================
 	1		Overview
 ================================================================================
@@ -265,7 +265,7 @@ the Mutt mail user agent (http://www.mutt.org).
 which is licensed compatibly with the GPL.
 
 ================================================================================
-	10		Contact
+	10		Contact, URLs
 ================================================================================
 
 You can contact the Fim author via email: dezperado_FOobAr_autistici_Baz_org, by
@@ -275,6 +275,14 @@ If it is for a bug report or installation help, be sure of reading the
 documentation and the BUGS file first, and then you're welcome.
 If it is for other suggestions or ideas, you are welcome, too (and don't miss
 the TODO file, too)!
+
+
+Web Page     : http://www.nongnu.org/fbi-improved/
+Mailing List : http://savannah.nongnu.org/mail/?group=fbi-improved
+Releases     : http://download.savannah.nongnu.org/releases/fbi-improved
+Repository   : http://code.autistici.org/project/fim/
+Off.  Mirror : http://www.autistici.org/dezperado/fim/
+
 
  $Id$
  vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=help:norl:

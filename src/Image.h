@@ -40,6 +40,7 @@ namespace fim
  *	some rescaled images caches.
  */
 
+#define FIM_SCALE_FACTOR 1.322
 
 #ifdef FIM_NAMESPACES
 class Image:public Namespace
@@ -49,7 +50,7 @@ class Image
 {
 
 
-	friend class Viewport;
+	friend class Viewport;		/* don't panic, we are wise people ;) */
 	public:
 
 	Image(const char *fname_);
@@ -59,7 +60,6 @@ class Image
 	float            scale    ;	/* viewport variables */
 	float            ascale   ;
 	float            newscale ;
-	float            newascale ;
 
 	/* virtual stuff */
         struct ida_image *img     ;     /* local (eventually) copy images */
@@ -69,14 +69,11 @@ class Image
 	bool load(const char *fname_);
 
 	protected:
-	int              neworientation;
-	int              orientation;
-	int              rotation;
+	int              orientation;	//aka rotation
 
 	int    invalid;		//the first time the image is loaded it is set to 1
-	int    new_image;		//the first time the image is loaded it is set to 1
 
-	string  fname;  /* viewport variable, too */
+	string  fname;		/* viewport variable, too */
 
         void free();
 	void reset();
@@ -84,6 +81,8 @@ class Image
 
         int tiny()const;
 	public:
+	bool update();
+
 	fim::string getInfo();
 	Image(const Image& image); // yes, a private constructor (was)
 
@@ -93,9 +92,10 @@ class Image
 
 	/* viewport methods */
 
-	void reduce(float factor=1.322);	//FIX ME
-	void magnify(float factor=1.322);
-
+	void reduce( float factor=FIM_SCALE_FACTOR );
+	void magnify(float factor=FIM_SCALE_FACTOR );
+	
+	int getOrientation();
 
 	int setscale(double ns);
 	/* viewport methods ? */

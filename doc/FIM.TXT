@@ -548,8 +548,61 @@ There is ongoing support to asymmetric scaling:
 will widen the image of a factor of two, leaving the height untouched. It needs
 redraw to make effect, and will affect the next images, too.
 
+
+Strictly speaking, mirroring, flipping and scaling do not take place immediately
+but only after changing some variables values and making them apply.
+
+Mirroring is controlled by : 'i:mirrored', 'v:mirrored', 'g:automirror' and
+applied with an per-image basis.
+When any one among these is -1, the image will not be mirrored.
+Otherwise, when any one among these is 1, the image will be mirrored.
+In the remaining case, the image will not be mirrored.
+
+And so for the flipping functionality:
+
+Flipping is controlled by : 'i:flipped', 'v:flipped', 'g:autoflip' and
+applied with an per-image basis.
+When any one among these is -1, the image will not be flipped.
+Otherwise, when any one among these is 1, the image will be flipped.
+In the remaining case, the image will not be flipped.
+
+
+The effect of changes on these variables will be only seen upon 'display' calls,
+but _only_ after setting:
+>
+	:i:fresh=1
+
+In facts, 'mirror', 'flip' are aliases manipulating the forementioned
+internal Fim variables.
+
 <UNFINISHED>
 
+==============================================================================
+6.*. Rotating					*rotating*
+
+
+Rotation of an image is triggered by the 'rotate', 'rotate_ccw', 'rotate_cw'
+commands, respectively rotating counterclockwise, counterclockwise, and
+clockwise.
+
+Rotation is controlled by : 'i:orientation', 'v:orientation', 'g:orientation'
+and applied with an per-image basis.
+In particular, the values of the three variables are summed up and the sum is 
+interpreted as the image orientation.
+
+If the sum is 0, no rotation will happen.
+If the sum is 1, a single ( 90') rotation will happen.
+If the sum is 2, a double (180') rotation will happen.
+If the sum is 3, a triple (270') rotation will happen.
+
+If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.
+
+Therefore, 
+>
+	:i:orientation=1
+	:i:orientation=5
+
+will do the same thing : rotate the image one time by 90'.
 
 ==============================================================================
 6.3. Panning/moving, and scrolling the image	*commands-scroll*

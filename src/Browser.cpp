@@ -117,7 +117,6 @@ namespace fim
 		return s;
 	}
 
-//	const fim::string Browser::pop(fim::string popped)
 	const fim::string Browser::pop()
 	{	
 		/*
@@ -129,9 +128,7 @@ namespace fim
 		assert(cp);
 		if(current_n()==(int)flist.size())cp--;
 		s=flist[flist.size()-1];
-		//if(popped==fim::string(""))
 		flist.erase(flist.begin()+current_n());
-		//else flist.erase(flist.search(popped));
 		cc.setVariable("filelistlen",current_images());
 		return s;
 	}
@@ -139,7 +136,7 @@ namespace fim
 	fim::string Browser::pan_up(const std::vector<fim::string> &args)
 	{
 		/*
-		 * pan the image up
+		 * pans the image up
 		 * +----------+
 		 * |          |
 		 * |          |
@@ -164,7 +161,7 @@ namespace fim
 	fim::string Browser::pan_down(const std::vector<fim::string> &args)
 	{
 		/*
-		 * pan the image down
+		 * pans the image down
 		 * +----------+
 		 * |   :-)    |
 		 * |          |
@@ -189,7 +186,7 @@ namespace fim
 	fim::string Browser::pan_ne(const std::vector<fim::string> &args)
 	{
 		/*
-		 * pan the image ne
+		 * pans the image up and right
 		 * +----------+
 		 * |          |
 		 * |          |
@@ -215,7 +212,7 @@ namespace fim
 	fim::string Browser::pan_nw(const std::vector<fim::string> &args)
 	{
 		/*
-		 * pan the image nw
+		 * pans the image up and left
 		 * +----------+
 		 * |          |
 		 * |          |
@@ -241,7 +238,7 @@ namespace fim
 	fim::string Browser::pan_sw(const std::vector<fim::string> &args)
 	{
 		/*
-		 * pan the image sw
+		 * pans the image down and left
 		 * +----------+
 		 * |     :-)  |
 		 * |          |
@@ -267,7 +264,7 @@ namespace fim
 	fim::string Browser::pan_se(const std::vector<fim::string> &args)
 	{
 		/*
-		 * pan the image se
+		 * pans the image down and right
 		 * +----------+
 		 * | :-)      |
 		 * |          |
@@ -316,7 +313,7 @@ namespace fim
 	fim::string Browser::scale_increment(const std::vector<fim::string> &args)
 	{
 		/*
-		 * increments the scale additively
+		 * increments the scale positively
 		 */
 		double deltascale;
 		if(args.size()==0)return "";
@@ -340,7 +337,7 @@ namespace fim
 	fim::string Browser::scale(const std::vector<fim::string> &args)
 	{
 		/*
-		 * scales the image to a certain factor
+		 * scales the image to a certain scale factor
 		 */
 		double newscale;
 		if(args.size()==0)return "";
@@ -364,7 +361,7 @@ namespace fim
 	fim::string Browser::auto_height_scale(const std::vector<fim::string> &args)
 	{
 		/*
-		 * scale this image to fit in the screen in the vertical dimension
+		 * scales this image to fit in the screen in the vertical dimension
 		 */
 		if(c_image())
 		{
@@ -383,7 +380,7 @@ namespace fim
 	fim::string Browser::auto_width_scale(const std::vector<fim::string> &args)
 	{
 		/*
-		 * scale this image to fit in the screen in the horizontal dimension
+		 * scales this image to fit in the screen in the horizontal dimension
 		 */
 		if(c_image())
 		{
@@ -421,7 +418,7 @@ namespace fim
 	fim::string Browser::pan_right(const std::vector<fim::string> &args)
 	{
 		/*
-		 * pan the image right
+		 * pans the image right
 		 */
 		if(c_image())
 		{
@@ -441,7 +438,7 @@ namespace fim
 	fim::string Browser::pan_left(const std::vector<fim::string> &args)
 	{
 		/*
-		 * pan the image left
+		 * pans the image left
 		 */
 		if(c_image())
 		{
@@ -471,7 +468,7 @@ namespace fim
 	fim::string Browser::display(const std::vector<fim::string> &args)
 	{
 		/*
-		 * display the current image, if already loaded, on screen
+		 * displays the current image, (if already loaded), on screen
 		 */
 		fim::string c=current();
 		if(c_image())
@@ -487,10 +484,13 @@ namespace fim
 			{
 				//fb_clear_screen();
 				//viewport().display();
+				/*
+				 * we redraw the whole screen and thus all of the windows
+				 * */
 				if( cc.display() )
 					this->display_status(current().c_str(), NULL);
-//				FIXME
-//				if(cc.window)cc.window->recursive_display();	//THE BUG IS NOT HERE
+//				FIXME:
+//				if(cc.window)cc.window->recursive_display();
 			}
 #ifdef FIM_AUTOCMDS
 			cc.autocmd_exec("PostDisplay",c);

@@ -146,7 +146,9 @@ typedef int FimException;
 
 //void status(const char *desc, const char *info);
 void set_status_bar(const char *desc, const char *info);
+void set_status_bar(fim::string desc, const char *info);
 void fb_status_screen(const char *msg, int noDraw);
+int help_and_exit(char *argv0);
 int fim_rand();
 namespace rl
 {

@@ -196,6 +196,11 @@ void status(const char *desc, const char *info)
 	free(str);
 }
 
+void set_status_bar(fim::string desc, const char *info)
+{
+	set_status_bar(desc.c_str(), info);
+}
+
 void set_status_bar(const char *desc, const char *info)
 {
 	/*
@@ -756,6 +761,31 @@ int framebuffer_init()
 	return 0;
 }
 
+int help_and_exit(char *argv0)
+{
+	    cc.printHelpMessage(argv0);
+	    std::cout << " where OPTIONS are taken from :\n";
+	    for(int i=0;((unsigned int)i)<(sizeof(fim_options)/sizeof(struct option))-1;++i)
+	    {	
+	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
+	   	else std::cout << "\t-";
+		std::cout << "\t\t";
+	    	std::cout << "--"<<fim_options[i].name ;
+		switch(fim_options[i].has_arg){
+		case no_argument:
+		break;
+		case required_argument:
+		std::cout << " <arg>";
+		break;
+		default:
+		;
+		};
+		std::cout << "\n";
+		}
+		std::cout << " ( Please read the documentation distributed with the program, too, in FIM.TXT)\n";
+	    std::exit(0);
+	    return 0;
+}
 
 int main(int argc,char *argv[])
 {
@@ -958,6 +988,8 @@ int main(int argc,char *argv[])
 #endif
 	default:
 	case 'h':
+	    help_and_exit(argv[0]);
+#if 0
 	    cc.printHelpMessage(argv[0]);
 	    std::cout << " where OPTIONS are taken from :\n";
 	    for(i=0;((unsigned int)i)<(sizeof(fim_options)/sizeof(struct option))-1;++i)
@@ -979,6 +1011,7 @@ int main(int argc,char *argv[])
 		}
 		std::cout << " ( Please read the documentation distributed with the program, too, in FIM.TXT)\n";
 	    std::exit(0);
+#endif
 	}
     }
 	for (i = optind; i < argc; i++)
@@ -1014,6 +1047,9 @@ int main(int argc,char *argv[])
 		dup(2);
 	}
 #endif
+
+	if(cc.browser.empty_file_list())
+		help_and_exit(argv[0]);
 
 	if((g_fim_no_framebuffer)==0)
 	{

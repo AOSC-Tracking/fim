@@ -238,14 +238,28 @@ namespace fim
 		if((redraw==0) )return false;
 		if( check_invalid() ) null_display();//  NEW
 		if( check_invalid() ) return false;
-		int autotop=cc.getIntVariable("autotop");
-		int flip=cc.getIntVariable("autoflip");
-		int mirror=cc.getIntVariable("automirror");
-		int neworientation=((cc.getIntVariable("i:orientation")%4)+4)%4;	/* ehm ...  */
-		if( neworientation!=image->orientation)image->rescale();
+		/*
+		 * should flip ? should mirror ?
+		 *
+		 * global or inner (not i: !) or local (v:) marker
+		 * */
+		int autotop=cc.getIntVariable("autotop")   | image->getIntVariable("autotop") | getIntVariable("autotop");
+		//int flip   =cc.getIntVariable("autoflip")  | image->getIntVariable("flipped") | getIntVariable("flipped");
+		int flip   =
+		((cc.getIntVariable("autoflip")== 1|image->getIntVariable("flipped")== 1|getIntVariable("flipped")== 1)&&
+		!(cc.getIntVariable("autoflip")==-1|image->getIntVariable("flipped")==-1|getIntVariable("flipped")==-1));
+		int mirror   =
+		((cc.getIntVariable("automirror")== 1|image->getIntVariable("mirrored")== 1|getIntVariable("mirrored")== 1)&&
+		!(cc.getIntVariable("automirror")==-1|image->getIntVariable("mirrored")==-1|getIntVariable("mirrored")==-1));
+
+		image->update();
     
-		if (image->new_image && redraw)
+		if (cc.getIntVariable("i:new") && redraw)
 		{
+			/*
+			 * If this is the first image display, we have
+			 * the right to rescale the image.
+			 * */
 			if(autotop && image->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
 		  	{
 			    top=autotop>0?0:image->height()-this->viewport_height();
@@ -255,9 +269,9 @@ namespace fim
 				left = (image->width() - this->viewport_width()) / 2;
 			if (image->height() > this->viewport_height() &&  autotop==0)
 				top = (image->height() - this->viewport_height()) / 2;
-			image->new_image = 0;
+			cc.setVariable("i:new",0);
 		}
-// uncommenting the next 2 lines will reinsert a bug
+// uncommenting the next 2 lines will reintroduce a bug
 //		else
 //		if (redraw  ) 
 		{
@@ -377,7 +391,7 @@ namespace fim
 		if(image)
 		{
 			image->reset();
-                	image->new_image=1;
+			cc.setVariable("new",1);
 		}
                 redraw=1;
                 top  = 0;

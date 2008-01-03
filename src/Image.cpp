@@ -77,6 +77,8 @@ namespace fim
 		if( !load(fname_) || check_invalid() || (!fimg) ) 
 		{
 			cout << "warning : invalid loading ! \n";
+			if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
+				set_status_bar( fim::string("error while loading \"")+ fim::string(fname_)+ fim::string("\"") , "*");
 		}
 		else
 		{
@@ -91,7 +93,6 @@ namespace fim
                 scale    = 1.0;
                 newscale = 1.0;
                 ascale   = 1.0;
-                newascale= 1.0;
 		setVariable("scale"  ,scale*100);
 		setVariable("ascale" ,ascale);
 
@@ -99,17 +100,16 @@ namespace fim
                 fimg    = NULL;
                 img     = NULL;
                 orientation=0;
-                neworientation=0;
+		setVariable("orientation" ,0);
 	}
 	
 	bool Image::load(const char *fname_)
 	{
 		/*
-		 *	FIX ME
 		 *	an image is loaded and initializes this image.
 		 *	returns false if the image does not load
 		 */
-		if(fname_==NULL){return false;}//DANGER
+		if(fname_==NULL){return false;}//no loading = no state change
 		this->free();
 		fname=fname_;
 		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
@@ -120,7 +120,10 @@ namespace fim
 		img=fimg;	/* no scaling : one copy only */
 	        redraw=1;
 
-		if(! img){cout<<"warning : image loading error!\n"   ;invalid=1;return false;}
+		if(! img)
+		{
+			cout<<"warning : image loading error!\n"   ;invalid=1;return false;
+		}
 
 
 #ifdef FIM_NAMESPACES
@@ -235,23 +238,10 @@ namespace fim
 		if( check_invalid() ) return - 1;
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
 
-//		neworientation=((cc.getIntVariable("orientation")%4)+4)%4;	/* ehm ...  */
-#if 0
-#ifdef FIM_NAMESPACES
-		if( getIntVariable("v:orientation") == 0)
-			neworientation=((   getIntVariable(  "orientation")%4)+4)%4;	/* ehm ...  */
-		else
-			neworientation=((cc.getIntVariable("v:orientation")%4)+4)%4;	/* ehm ...  */
-#else
-			neworientation=((cc.getIntVariable("orientation"  )%4)+4)%4;	/* ehm ...  */
-#endif
-#else
-			neworientation=((  getIntVariable("orientation"  )%4)+4)%4;	/* ehm ...  */
-#endif
-
+		int neworientation=getOrientation();
 		float newascale=getFloatVariable("ascale"); if(newascale<=0.0) newascale=1.0;
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
-		orientation=neworientation; // fix this
+		orientation=((neworientation%4)+4)%4; // fix this
 
 		cc.setVariable("scale",newscale*100);
 		if(fimg)
@@ -288,17 +278,33 @@ namespace fim
 			if( img && orientation!=0 && orientation != 2)
 			{
 				// we make a backup.. who knows!
+				// FIXME: should use a faster and memory-smarter method : in-place
 				struct ida_image *rb=img;
 				rb  = rotate_image(rb,orientation==1?0:1);
-				if(rb)img=rb;
+				if(rb)
+				{
+					free_image(img);
+					img=rb;
+				}
 			}
 			if( img && orientation!=0 && orientation == 2)
 			{	
 				// we make a backup.. who knows!
-				struct ida_image *rb=img;
-				rb  = rotate_image(rb,0);
-				if(rb)rb  = rotate_image(img,0);
-				if(rb)img=rb;
+				struct ida_image *rbb,*rb;
+				// FIXME: should use a faster and memory-smarter method : in-place
+				rb  = rotate_image(img,0);
+				if(rb)rbb  = rotate_image(rb,0);
+				if(rbb)
+				{
+					free_image(img);
+					free_image(rb);
+					img=rbb;
+				}
+				else
+				{
+					if(rbb)free_image(rbb);
+					if(rb )free_image(rb);
+				}
 			}
 
 			if(!img)
@@ -315,16 +321,8 @@ namespace fim
 				scale=newscale;
 				ascale=newascale;
 				redraw=1;
- 		                new_image=1; // for centering
 			}
 
-
-#if 0
-			// debugging stuff
-			int dc;
-			dc=cc.getIntVariable("_dc");
-			cc.setVariable("_dc" ,(int)dc+1);
-#endif
 			/*
 			 * it is important to set these values after rotation, too!
 			 * */
@@ -335,6 +333,7 @@ namespace fim
 			cc.setVariable("ascale" , ascale );
 		}
 		else redraw=0;
+		orientation=neworientation;
 		return 0;
 	}
 
@@ -367,11 +366,7 @@ namespace fim
 		scale(image.scale),
 		ascale(image.ascale),
 		newscale(image.newscale),
-//		newascale(image.newascale),
-		orientation(image.orientation),
-		rotation(image.rotation),
-		neworientation(image.neworientation),
-		new_image(image.new_image)
+		orientation(image.orientation)
 	{
 		/*
 		 * builds a clone of this image.
@@ -414,8 +409,23 @@ fim::string Image::getInfo()
 	char imagemode[3],*imp;
 	int n=cc.getIntVariable("fileindex");
 	imp=imagemode;
-	if(cc.getIntVariable("autoflip"))*(imp++)='F';
-	if(cc.getIntVariable("automirror"))*(imp++)='M';
+
+	//if(cc.getIntVariable("autoflip"))*(imp++)='F';
+	//if(cc.getIntVariable("automirror"))*(imp++)='M';
+
+	// should flip ? should mirror ?
+	int flip   =
+	((cc.getIntVariable("autoflip")== 1|cc.getIntVariable("v:flipped")== 1|getIntVariable("flipped")== 1)&&
+	!(cc.getIntVariable("autoflip")==-1|cc.getIntVariable("v:flipped")==-1|getIntVariable("flipped")==-1));
+	int mirror   =
+	((cc.getIntVariable("automirror")== 1|cc.getIntVariable("v:mirrored")== 1|getIntVariable("mirrored")== 1)&&
+	!(cc.getIntVariable("automirror")==-1|cc.getIntVariable("v:mirrored")==-1|getIntVariable("mirrored")==-1));
+
+	if(flip  )*(imp++)='F';
+	if(mirror)*(imp++)='M';
+
+
+
 	*imp='\0';
 	snprintf(linebuffer, sizeof(linebuffer),
 	     "%s%.0f%% %dx%d%s %d/%d",
@@ -429,4 +439,38 @@ fim::string Image::getInfo()
 	return fim::string(linebuffer);
 }
 
+	bool Image::update()
+	{
+		/*
+		 * updates the image according to its variables
+		 *
+		 * FIXME: a temporary method
+		 * */
+		setVariable("fresh",0);
+
+		/*
+		 * rotation dispatch
+		 * */
+                int neworientation=getOrientation();
+		if( neworientation!=orientation)
+		{
+			rescale();
+			orientation=neworientation;
+			return true;
+		}
+		return false;
+	}
+
+	int Image::getOrientation()
+	{
+		/*
+		 * warning : this should work more intuitively
+		 * */
+		return ((
+		(  getIntVariable("orientation")
+		+cc.getIntVariable("v:orientation")
+		+cc.getIntVariable("orientation")
+		)
+		%4)+4)%4;
+	}
 }
