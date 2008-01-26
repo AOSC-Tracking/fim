@@ -22,6 +22,7 @@
  *   (c) 1998-2002 Gerd Knorr <kraxel@bytesex.org>
  *
  */
+#ifndef FIM_NO_FBI
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -2024,3 +2025,5 @@ main_(int argc, char *argv[])
 	}
     }
 }*/
+#endif
+

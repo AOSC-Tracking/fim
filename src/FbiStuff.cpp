@@ -1,0 +1,1155 @@
+/* $Id$ */
+/*
+ FbiStuff.cpp : Misc fbi functions, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
+#ifdef FIM_NO_FBI
+
+#include "FbiStuff.h"
+#include "FbiStuffLoader.h"
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+namespace fim
+{
+
+extern FramebufferDevice ffd;
+
+
+// filter.c
+
+/* ----------------------------------------------------------------------- */
+
+static void
+op_grayscale(struct ida_image *src, struct ida_rect *rect,
+	     unsigned char *dst, int line, void *data)
+{
+    unsigned char *scanline;
+    int i,g;
+
+    scanline = src->data + line * src->i.width * 3;
+    memcpy(dst,scanline,src->i.width * 3);
+    if (line < rect->y1 || line >= rect->y2)
+	return;
+    dst      += 3*rect->x1;
+    scanline += 3*rect->x1;
+    for (i = rect->x1; i < rect->x2; i++) {
+	g = (scanline[0]*30 + scanline[1]*59+scanline[2]*11)/100;
+	dst[0] = g;
+	dst[1] = g;
+	dst[2] = g;
+	scanline += 3;
+	dst += 3;
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+
+struct op_3x3_handle {
+    struct op_3x3_parm filter;
+    int *linebuf;
+};
+
+static void*
+op_3x3_init(struct ida_image *src, struct ida_rect *rect,
+	    struct ida_image_info *i, void *parm)
+{
+    struct op_3x3_parm *args = (struct op_3x3_parm*)parm;
+    struct op_3x3_handle *h;
+
+    h = (struct op_3x3_handle*)malloc(sizeof(*h));
+    memcpy(&h->filter,args,sizeof(*args));
+    h->linebuf = (int*)malloc(sizeof(int)*3*(src->i.width));
+
+    *i = src->i;
+    return h;
+}
+
+static int inline
+op_3x3_calc_pixel(struct op_3x3_parm *p, unsigned char *s1,
+		  unsigned char *s2, unsigned char *s3)
+{
+    int val = 0;
+
+    val += p->f1[0] * s1[0];
+    val += p->f1[1] * s1[3];
+    val += p->f1[2] * s1[6];
+    val += p->f2[0] * s2[0];
+    val += p->f2[1] * s2[3];
+    val += p->f2[2] * s2[6];
+    val += p->f3[0] * s3[0];
+    val += p->f3[1] * s3[3];
+    val += p->f3[2] * s3[6];
+    if (p->mul && p->div)
+	val = val * p->mul / p->div;
+    val += p->add;
+    return val;
+}
+
+static void
+op_3x3_calc_line(struct ida_image *src, struct ida_rect *rect,
+		 int *dst, unsigned int line, struct op_3x3_parm *p)
+{
+    unsigned char b1[9],b2[9],b3[9];
+    unsigned char *s1,*s2,*s3;
+    unsigned int i,left,right;
+
+    s1 = src->data + (line-1) * src->i.width * 3;
+    s2 = src->data +  line    * src->i.width * 3;
+    s3 = src->data + (line+1) * src->i.width * 3;
+    if (0 == line)
+	s1 = src->data + line * src->i.width * 3;
+    if (src->i.height-1 == line)
+	s3 = src->data + line * src->i.width * 3;
+
+    left  = rect->x1;
+    right = rect->x2;
+    if (0 == left) {
+	/* left border special case: dup first col */
+	memcpy(b1,s1,3);
+	memcpy(b2,s2,3);
+	memcpy(b3,s3,3);
+	memcpy(b1+3,s1,6);
+	memcpy(b2+3,s2,6);
+	memcpy(b3+3,s3,6);
+	dst[0] = op_3x3_calc_pixel(p,b1,b2,b3);
+	dst[1] = op_3x3_calc_pixel(p,b1+1,b2+1,b3+1);
+	dst[2] = op_3x3_calc_pixel(p,b1+2,b2+2,b3+2);
+	left++;
+    }
+    if (src->i.width == right) {
+	/* right border */
+	memcpy(b1,s1+src->i.width*3-6,6);
+	memcpy(b2,s2+src->i.width*3-6,6);
+	memcpy(b3,s3+src->i.width*3-6,6);
+	memcpy(b1+3,s1+src->i.width*3-3,3);
+	memcpy(b2+3,s2+src->i.width*3-3,3);
+	memcpy(b3+3,s3+src->i.width*3-3,3);
+	dst[src->i.width*3-3] = op_3x3_calc_pixel(p,b1,b2,b3);
+	dst[src->i.width*3-2] = op_3x3_calc_pixel(p,b1+1,b2+1,b3+1);
+	dst[src->i.width*3-1] = op_3x3_calc_pixel(p,b1+2,b2+2,b3+2);
+	right--;
+    }
+    
+    dst += 3*left;
+    s1  += 3*(left-1);
+    s2  += 3*(left-1);
+    s3  += 3*(left-1);
+    for (i = left; i < right; i++) {
+	dst[0] = op_3x3_calc_pixel(p,s1++,s2++,s3++);
+	dst[1] = op_3x3_calc_pixel(p,s1++,s2++,s3++);
+	dst[2] = op_3x3_calc_pixel(p,s1++,s2++,s3++);
+	dst += 3;
+    }
+}
+
+static void
+op_3x3_clip_line(unsigned char *dst, int *src, int left, int right)
+{
+    int i,val;
+
+    src += left*3;
+    dst += left*3;
+    for (i = left*3; i < right*3; i++) {
+	val = *(src++);
+	if (val < 0)
+	    val = 0;
+	if (val > 255)
+	    val = 255;
+	*(dst++) = val;
+    }
+}
+
+static void
+op_3x3_work(struct ida_image *src, struct ida_rect *rect,
+	    unsigned char *dst, int line, void *data)
+{
+    struct op_3x3_handle *h = (struct op_3x3_handle *)data;
+    unsigned char *scanline;
+
+    scanline = (unsigned char*) src->data + line * src->i.width * 3;
+    memcpy(dst,scanline,src->i.width * 3);
+    if (line < rect->y1 || line >= rect->y2)
+	return;
+
+    op_3x3_calc_line(src,rect,h->linebuf,line,&h->filter);
+    op_3x3_clip_line(dst,h->linebuf,rect->x1,rect->x2);
+}
+
+static void
+op_3x3_free(void *data)
+{
+    struct op_3x3_handle *h = (struct op_3x3_handle *)data;
+
+    free(h->linebuf);
+    free(h);
+}
+	    
+/* ----------------------------------------------------------------------- */
+
+struct op_sharpe_handle {
+    int  factor;
+    int  *linebuf;
+};
+
+static void*
+op_sharpe_init(struct ida_image *src, struct ida_rect *rect,
+	       struct ida_image_info *i, void *parm)
+{
+    struct op_sharpe_parm *args = (struct op_sharpe_parm *)parm;
+    struct op_sharpe_handle *h;
+
+    h = (struct op_sharpe_handle *)malloc(sizeof(*h));
+    h->factor  = args->factor;
+    h->linebuf = (int *)malloc(sizeof(int)*3*(src->i.width));
+
+    *i = src->i;
+    return h;
+}
+
+static void
+op_sharpe_work(struct ida_image *src, struct ida_rect *rect,
+	       unsigned char *dst, int line, void *data)
+{
+    static struct op_3x3_parm laplace = {
+	f1: {  1,  1,  1 },
+	f2: {  1, -8,  1 },
+	f3: {  1,  1,  1 },
+    };
+    struct op_sharpe_handle *h = (struct op_sharpe_handle *)data;
+    unsigned char *scanline;
+    int i;
+
+    scanline = src->data + line * src->i.width * 3;
+    memcpy(dst,scanline,src->i.width * 3);
+    if (line < rect->y1 || line >= rect->y2)
+	return;
+
+    op_3x3_calc_line(src,rect,h->linebuf,line,&laplace);
+    for (i = rect->x1*3; i < rect->x2*3; i++)
+	h->linebuf[i] = scanline[i] - h->linebuf[i] * h->factor / 256;
+    op_3x3_clip_line(dst,h->linebuf,rect->x1,rect->x2);
+}
+
+static void
+op_sharpe_free(void *data)
+{
+    struct op_sharpe_handle *h = (struct op_sharpe_handle *)data;
+
+    free(h->linebuf);
+    free(h);
+}
+
+/* ----------------------------------------------------------------------- */
+
+struct op_resize_state {
+    float xscale,yscale,inleft;
+    float *rowbuf;
+    unsigned int width,height,srcrow;
+};
+
+static void*
+op_resize_init(struct ida_image *src, struct ida_rect *rect,
+	       struct ida_image_info *i, void *parm)
+{
+    struct op_resize_parm *args = (struct op_resize_parm *)parm;
+    struct op_resize_state *h;
+
+    h = (struct op_resize_state *)malloc(sizeof(*h));
+    h->width  = args->width;
+    h->height = args->height;
+    h->xscale = (float)args->width/src->i.width;
+    h->yscale = (float)args->height/src->i.height;
+    h->rowbuf = (float*)malloc(src->i.width * 3 * sizeof(float));
+    h->srcrow = 0;
+    h->inleft = 1;
+
+    *i = src->i;
+    i->width  = args->width;
+    i->height = args->height;
+    i->dpi    = args->dpi;
+    return h;
+}
+
+static void
+op_resize_work(struct ida_image *src, struct ida_rect *rect,
+	       unsigned char *dst, int line, void *data)
+{
+    struct op_resize_state *h = (struct op_resize_state *)data;
+    float outleft,left,weight,d0,d1,d2;
+    unsigned char *csrcline;
+    float *fsrcline;
+    unsigned int i,sx,dx;
+
+    /* scale y */
+    memset(h->rowbuf, 0, src->i.width * 3 * sizeof(float));
+    outleft = 1/h->yscale;
+    while (outleft > 0  &&  h->srcrow < src->i.height) {
+	if (outleft < h->inleft) {
+	    weight     = outleft * h->yscale;
+	    h->inleft -= outleft;
+	    outleft    = 0;
+	} else {
+	    weight     = h->inleft * h->yscale;
+	    outleft   -= h->inleft;
+	    h->inleft  = 0;
+	}
+#if 0
+	if (ffd.debug)
+	    fprintf(stderr,"y:  %6.2f%%: %d/%d => %d/%d\n",
+		    weight*100,h->srcrow,src->height,line,h->height);
+#endif
+	csrcline = src->data + h->srcrow * src->i.width * 3;
+	for (i = 0; i < src->i.width * 3; i++)
+	    h->rowbuf[i] += (float)csrcline[i] * weight;
+	if (0 == h->inleft) {
+	    h->inleft = 1;
+	    h->srcrow++;
+	}
+    }
+
+    /* scale x */
+    left = 1;
+    fsrcline = h->rowbuf;
+    for (sx = 0, dx = 0; dx < h->width; dx++) {
+	d0 = d1 = d2 = 0;
+	outleft = 1/h->xscale;
+	while (outleft > 0  &&  dx < h->width  &&  sx < src->i.width) {
+	    if (outleft < left) {
+		weight   = outleft * h->xscale;
+		left    -= outleft;
+		outleft  = 0;
+	    } else {
+		weight   = left * h->xscale;
+		outleft -= left;
+		left     = 0;
+	    }
+#if 0
+	    if (ffd.debug)
+		fprintf(stderr," x: %6.2f%%: %d/%d => %d/%d\n",
+			weight*100,sx,src->width,dx,h->width);
+#endif
+	    d0 += fsrcline[3*sx+0] * weight;
+	    d1 += fsrcline[3*sx+1] * weight;
+	    d2 += fsrcline[3*sx+2] * weight;
+	    if (0 == left) {
+		left = 1;
+		sx++;
+	    }
+	}
+	dst[0] = (unsigned char)d0;
+	dst[1] = (unsigned char)d1;
+	dst[2] = (unsigned char)d2;
+	dst += 3;
+    }
+}
+
+static void
+op_resize_done(void *data)
+{
+    struct op_resize_state *h = (struct op_resize_state *)data;
+
+    free(h->rowbuf);
+    free(h);
+}
+    
+/* ----------------------------------------------------------------------- */
+
+struct op_rotate_state {
+    float angle,sina,cosa;
+    struct ida_rect calc;
+    int cx,cy;
+};
+
+static void*
+op_rotate_init(struct ida_image *src, struct ida_rect *rect,
+	       struct ida_image_info *i, void *parm)
+{
+    struct op_rotate_parm *args = (struct op_rotate_parm *)parm;
+    struct op_rotate_state *h;
+    float  diag;
+
+    h = (struct op_rotate_state *)malloc(sizeof(*h));
+    h->angle = args->angle * 2 * M_PI / 360;
+    h->sina  = sin(h->angle);
+    h->cosa  = cos(h->angle);
+    h->cx    = (rect->x2 - rect->x1) / 2 + rect->x1;
+    h->cy    = (rect->y2 - rect->y1) / 2 + rect->y1;
+
+    /* the area we have to process (worst case: 45°) */
+    diag     = sqrt((rect->x2 - rect->x1)*(rect->x2 - rect->x1) +
+		    (rect->y2 - rect->y1)*(rect->y2 - rect->y1))/2;
+    h->calc.x1 = (int)(h->cx - diag);
+    h->calc.x2 = (int)(h->cx + diag);
+    h->calc.y1 = (int)(h->cy - diag);
+    h->calc.y2 = (int)(h->cy + diag);
+    if (h->calc.x1 < 0)
+	h->calc.x1 = 0;
+    if (h->calc.x2 > src->i.width)
+	h->calc.x2 = src->i.width;
+    if (h->calc.y1 < 0)
+	h->calc.y1 = 0;
+    if (h->calc.y2 > src->i.height)
+	h->calc.y2 = src->i.height;
+
+    *i = src->i;
+    return h;
+}
+
+static inline
+unsigned char* op_rotate_getpixel(struct ida_image *src, struct ida_rect *rect,
+				  int sx, int sy, int dx, int dy)
+{
+    static unsigned char black[] = { 0, 0, 0};
+
+    if (sx < rect->x1 || sx >= rect->x2 ||
+	sy < rect->y1 || sy >= rect->y2) {
+	if (dx < rect->x1 || dx >= rect->x2 ||
+	    dy < rect->y1 || dy >= rect->y2)
+	    return src->data + dy * src->i.width * 3 + dx * 3;
+	return black;
+    }
+    return src->data + sy * src->i.width * 3 + sx * 3;
+}
+
+static void
+op_rotate_work(struct ida_image *src, struct ida_rect *rect,
+	       unsigned char *dst, int y, void *data)
+{
+    struct op_rotate_state *h = (struct op_rotate_state *) data;
+    unsigned char *pix;
+    float fx,fy,w;
+    int x,sx,sy;
+
+    pix = src->data + y * src->i.width * 3;
+    memcpy(dst,pix,src->i.width * 3);
+    if (y < h->calc.y1 || y >= h->calc.y2)
+	return;
+
+    dst += 3*h->calc.x1;
+    memset(dst, 0, (h->calc.x2-h->calc.x1) * 3);
+    for (x = h->calc.x1; x < h->calc.x2; x++, dst+=3) {
+	fx = h->cosa * (x - h->cx) - h->sina * (y - h->cy) + h->cx;
+	fy = h->sina * (x - h->cx) + h->cosa * (y - h->cy) + h->cy;
+	sx = (int)fx;
+	sy = (int)fy;
+	if (fx < 0)
+	    sx--;
+	if (fy < 0)
+	    sy--;
+	fx -= sx;
+	fy -= sy;
+
+	pix = op_rotate_getpixel(src,rect,sx,sy,x,y);
+	w = (1-fx) * (1-fy);
+	dst[0] += (unsigned char)(pix[0] * w);
+	dst[1] += (unsigned char)(pix[1] * w);
+	dst[2] += (unsigned char)(pix[2] * w);
+	pix = op_rotate_getpixel(src,rect,sx+1,sy,x,y);
+	w = fx * (1-fy);
+	dst[0] += (unsigned char)(pix[0] * w);
+	dst[1] += (unsigned char)(pix[1] * w);
+	dst[2] += (unsigned char)(pix[2] * w);
+	pix = op_rotate_getpixel(src,rect,sx,sy+1,x,y);
+	w = (1-fx) * fy;
+	dst[0] += (unsigned char)(pix[0] * w);
+	dst[1] += (unsigned char)(pix[1] * w);
+	dst[2] += (unsigned char)(pix[2] * w);
+	pix = op_rotate_getpixel(src,rect,sx+1,sy+1,x,y);
+	w = fx * fy;
+	dst[0] += (unsigned char)(pix[0] * w);
+	dst[1] += (unsigned char)(pix[1] * w);
+	dst[2] += (unsigned char)(pix[2] * w);
+    }
+}
+
+static void
+op_rotate_done(void *data)
+{
+    struct op_rotate_state *h = (struct op_rotate_state *)data;
+
+    free(h);
+}
+
+/* ----------------------------------------------------------------------- */
+
+struct ida_op desc_grayscale = {
+    name:  "grayscale",
+    init:  op_none_init,
+    work:  op_grayscale,
+    done:  op_none_done,
+};
+struct ida_op desc_3x3 = {
+    name:  "3x3",
+    init:  op_3x3_init,
+    work:  op_3x3_work,
+    done:  op_3x3_free,
+};
+struct ida_op desc_sharpe = {
+    name:  "sharpe",
+    init:  op_sharpe_init,
+    work:  op_sharpe_work,
+    done:  op_sharpe_free,
+};
+struct ida_op desc_resize = {
+    name:  "resize",
+    init:  op_resize_init,
+    work:  op_resize_work,
+    done:  op_resize_done,
+};
+struct ida_op desc_rotate = {
+    name:  "rotate",
+    init:  op_rotate_init,
+    work:  op_rotate_work,
+    done:  op_rotate_done,
+};
+
+// end filter.c
+//
+
+
+
+// op.c
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* ----------------------------------------------------------------------- */
+/* functions                                                               */
+
+static char op_none_data_;
+
+static void
+op_flip_vert_(struct ida_image *src, struct ida_rect *rect,
+	     unsigned char *dst, int line, void *data)
+{
+    char *scanline;
+
+    scanline = (char*)src->data + (src->i.height - line - 1) * src->i.width * 3;
+    memcpy(dst,scanline,src->i.width*3);
+}
+
+static void
+op_flip_horz_(struct ida_image *src, struct ida_rect *rect,
+	     unsigned char *dst, int line, void *data)
+{
+    char *scanline;
+    unsigned int i;
+
+    scanline = (char*)src->data + (line+1) * src->i.width * 3;
+    for (i = 0; i < src->i.width; i++) {
+	scanline -= 3;
+	dst[0] = scanline[0];
+	dst[1] = scanline[1];
+	dst[2] = scanline[2];
+	dst += 3;
+    }
+}
+
+static void*
+op_rotate_init_(struct ida_image *src, struct ida_rect *rect,
+	       struct ida_image_info *i, void *parm)
+{
+    *i = src->i;
+    i->height = src->i.width;
+    i->width  = src->i.height;
+    i->dpi    = src->i.dpi;
+    return &op_none_data_;
+}
+
+static void
+op_rotate_cw_(struct ida_image *src, struct ida_rect *rect,
+	     unsigned char *dst, int line, void *data)
+{
+    char *pix;
+    unsigned int i;
+
+    pix = (char*) src->data + src->i.width * src->i.height * 3 + line * 3;
+    for (i = 0; i < src->i.height; i++) {
+	pix -= src->i.width * 3;
+	dst[0] = pix[0];
+	dst[1] = pix[1];
+	dst[2] = pix[2];
+	dst += 3;
+    }
+}
+
+static void
+op_rotate_ccw_(struct ida_image *src, struct ida_rect *rect,
+	      unsigned char *dst, int line, void *data)
+{
+    char *pix;
+    unsigned int i;
+
+    pix = (char*) src->data + (src->i.width-line-1) * 3;
+    for (i = 0; i < src->i.height; i++) {
+	dst[0] = pix[0];
+	dst[1] = pix[1];
+	dst[2] = pix[2];
+	pix += src->i.width * 3;
+	dst += 3;
+    }
+}
+
+static void
+op_invert_(struct ida_image *src, struct ida_rect *rect,
+	  unsigned char *dst, int line, void *data)
+{
+    unsigned char *scanline;
+    int i;
+
+    scanline = src->data + line * src->i.width * 3;
+    memcpy(dst,scanline,src->i.width * 3);
+    if (line < rect->y1 || line >= rect->y2)
+	return;
+    dst      += 3*rect->x1;
+    scanline += 3*rect->x1;
+    for (i = rect->x1; i < rect->x2; i++) {
+	dst[0] = 255-scanline[0];
+	dst[1] = 255-scanline[1];
+	dst[2] = 255-scanline[2];
+	scanline += 3;
+	dst += 3;
+    }
+}
+
+static void*
+op_crop_init_(struct ida_image *src, struct ida_rect *rect,
+	     struct ida_image_info *i, void *parm)
+{
+    if (rect->x2 - rect->x1 == src->i.width &&
+	rect->y2 - rect->y1 == src->i.height)
+	return NULL;
+    *i = src->i;
+    i->width  = rect->x2 - rect->x1;
+    i->height = rect->y2 - rect->y1;
+    return &op_none_data_;
+}
+
+static void
+op_crop_work_(struct ida_image *src, struct ida_rect *rect,
+	     unsigned char *dst, int line, void *data)
+{
+    unsigned char *scanline;
+    int i;
+
+    scanline = src->data + (line+rect->y1) * src->i.width * 3 + rect->x1 * 3;
+    for (i = rect->x1; i < rect->x2; i++) {
+	dst[0] = scanline[0];
+	dst[1] = scanline[1];
+	dst[2] = scanline[2];
+	scanline += 3;
+	dst += 3;
+    }
+}
+
+static void*
+op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
+		 struct ida_image_info *i, void *parm)
+{
+    static struct op_3x3_parm filter = {
+	f1: { -1, -1, -1 },
+	f2: { -1,  8, -1 },
+	f3: { -1, -1, -1 },
+    };
+    struct ida_rect rect;
+    struct ida_image img;
+    int x,y,limit;
+    unsigned char *line;
+    void *data;
+    
+    /* detect edges */
+    rect.x1 = 0;
+    rect.x2 = src->i.width;
+    rect.y1 = 0;
+    rect.y2 = src->i.height;
+    data = desc_3x3.init(src, &rect, &img.i, &filter);
+
+    img.data   = (unsigned char*)malloc(img.i.width * img.i.height * 3);
+    for (y = 0; y < (int)img.i.height; y++)
+	desc_3x3.work(src, &rect, img.data+3*img.i.width*y, y, data);
+    desc_3x3.done(data);
+    limit = 64;
+
+    /* y border */
+    for (y = 0; y < (int)img.i.height; y++) {
+	line = img.data + img.i.width*y*3;
+	for (x = 0; x < (int)img.i.width; x++)
+	    if (line[3*x+0] > limit ||
+		line[3*x+1] > limit ||
+		line[3*x+2] > limit)
+		break;
+	if (x != (int)img.i.width)
+	    break;
+    }
+    rect.y1 = y;
+    for (y = (int)img.i.height-1; y > rect.y1; y--) {
+	line = img.data + img.i.width*y*3;
+	for (x = 0; x < (int)img.i.width; x++)
+	    if (line[3*x+0] > limit ||
+		line[3*x+1] > limit ||
+		line[3*x+2] > limit)
+		break;
+	if (x != (int)img.i.width)
+	    break;
+    }
+    rect.y2 = y+1;
+
+    /* x border */
+    for (x = 0; x < (int)img.i.width; x++) {
+	for (y = 0; y < (int)img.i.height; y++) {
+	    line = img.data + (img.i.width*y+x) * 3;
+	    if (line[0] > limit ||
+		line[1] > limit ||
+		line[2] > limit)
+		break;
+	}
+	if (y != (int)img.i.height)
+	    break;
+    }
+    rect.x1 = x;
+    for (x = (int)img.i.width-1; x > rect.x1; x--) {
+	for (y = 0; y < (int)img.i.height; y++) {
+	    line = img.data + (img.i.width*y+x) * 3;
+	    if (line[0] > limit ||
+		line[1] > limit ||
+		line[2] > limit)
+		break;
+	}
+	if (y != (int)img.i.height)
+	    break;
+    }
+    rect.x2 = x+1;
+
+    free(img.data);
+    if (ffd.debug)
+	fprintf(stderr,"y: %d-%d/%d  --  x: %d-%d/%d\n",
+		rect.y1, rect.y2, img.i.height,
+		rect.x1, rect.x2, img.i.width);
+
+    if (0 == rect.x2 - rect.x1  ||  0 == rect.y2 - rect.y1)
+	return NULL;
+    
+    *unused = rect;
+    *i = src->i;
+    i->width  = rect.x2 - rect.x1;
+    i->height = rect.y2 - rect.y1;
+    return &op_none_data_;
+}
+
+/* ----------------------------------------------------------------------- */
+
+static char op_none_data;
+
+void* op_none_init(struct ida_image *src,  struct ida_rect *sel,
+		   struct ida_image_info *i, void *parm)
+{
+    *i = src->i;
+    return &op_none_data;
+}
+
+void  op_none_done(void *data) {}
+void  op_free_done(void *data) { free(data); }
+
+/* ----------------------------------------------------------------------- */
+
+struct ida_op desc_flip_vert = {
+    name:  "flip-vert",
+    init:  op_none_init,
+    work:  op_flip_vert_,
+    done:  op_none_done,
+};
+struct ida_op desc_flip_horz = {
+    name:  "flip-horz",
+    init:  op_none_init,
+    work:  op_flip_horz_,
+    done:  op_none_done,
+};
+struct ida_op desc_rotate_cw = {
+    name:  "rotate-cw",
+    init:  op_rotate_init_,
+    work:  op_rotate_cw_,
+    done:  op_none_done,
+};
+struct ida_op desc_rotate_ccw = {
+    name:  "rotate-ccw",
+    init:  op_rotate_init_,
+    work:  op_rotate_ccw_,
+    done:  op_none_done,
+};
+struct ida_op desc_invert = {
+    name:  "invert",
+    init:  op_none_init,
+    work:  op_invert_,
+    done:  op_none_done,
+};
+struct ida_op desc_crop = {
+    name:  "crop",
+    init:  op_crop_init_,
+    work:  op_crop_work_,
+    done:  op_none_done,
+};
+struct ida_op desc_autocrop = {
+    name:  "autocrop",
+    init:  op_autocrop_init_,
+    work:  op_crop_work_,
+    done:  op_none_done,
+};
+
+// end op.c
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+
+#ifdef USE_X11
+# include "fbi_src/viewer.h"
+#endif
+
+/* ---------------------------------------------------------------------- */
+/* load                                                                   */
+
+struct ppm_state {
+    FILE          *infile;
+    int           width,height;
+    unsigned char *row;
+};
+
+static void*
+pnm_init(FILE *fp, char *filename, unsigned int page,
+	 struct ida_image_info *i, int thumbnail)
+{
+    struct ppm_state *h;
+    char line[1024];
+
+    h = (struct ppm_state*)malloc(sizeof(*h));
+    memset(h,0,sizeof(*h));
+
+    h->infile = fp;
+    fgets(line,sizeof(line),fp); /* Px */
+    fgets(line,sizeof(line),fp); /* width height */
+    while ('#' == line[0])
+	fgets(line,sizeof(line),fp); /* skip comments */
+    sscanf(line,"%d %d",&h->width,&h->height);
+    fgets(line,sizeof(line),fp); /* ??? */
+    if (0 == h->width || 0 == h->height)
+	goto oops;
+    i->width  = h->width;
+    i->height = h->height;
+    i->npages = 1;
+    h->row = (unsigned char*)malloc(h->width*3);
+
+    return h;
+
+ oops:
+    fclose(fp);
+    free(h);
+    return NULL;
+}
+
+static void
+ppm_read(unsigned char *dst, unsigned int line, void *data)
+{
+    struct ppm_state *h =(struct ppm_state*) data;
+
+    fread(dst,h->width,3,h->infile);
+}
+
+static void
+pgm_read(unsigned char *dst, unsigned int line, void *data)
+{
+    struct ppm_state *h =(struct ppm_state*) data;
+    unsigned char *src;
+    int x;
+
+    fread(h->row,h->width,1,h->infile);
+    src = h->row;
+    for (x = 0; x < h->width; x++) {
+	dst[0] = src[0];
+	dst[1] = src[0];
+	dst[2] = src[0];
+	dst += 3;
+	src += 1;
+    }
+}
+
+static void
+pnm_done(void *data)
+{
+    struct ppm_state *h = (struct ppm_state *)data;
+
+    fclose(h->infile);
+    free(h->row);
+    free(h);
+}
+
+extern struct ida_loader ppm_loader ;
+extern struct ida_loader pgm_loader ;
+
+// 20080108 WARNING
+//static void __init init_rd(void)
+static void init_rd(void)
+{
+    load_register(&ppm_loader);
+    load_register(&pgm_loader);
+}
+
+#ifdef USE_X11
+/* ---------------------------------------------------------------------- */
+/* save                                                                   */
+
+static int
+ppm_write(FILE *fp, struct ida_image *img)
+{
+    fprintf(fp,"P6\n"
+	    "# written by ida " VERSION "\n"
+	    "# http://bytesex.org/ida/\n"
+	    "%d %d\n255\n",
+            img->i.width,img->i.height);
+    fwrite(img->data, img->i.height, 3*img->i.width, fp);
+    return 0;
+}
+
+static struct ida_writer ppm_writer = {
+    label:  "PPM",
+    ext:    { "ppm", NULL},
+    write:  ppm_write,
+};
+
+// 20080108 WARNING
+//static void __init init_wr(void)
+static void init_wr(void)
+{
+    write_register(&ppm_writer);
+}
+#endif
+
+
+
+
+/*static void free_image(struct ida_image *img)*/
+void FbiStuff::free_image(struct ida_image *img)
+{
+    if (img) {
+	if (img->data)
+	    free(img->data);
+	free(img);
+    }
+}
+
+/*static struct ida_image**/
+struct ida_image* FbiStuff::read_image(char *filename)
+{
+    char command[1024];
+    struct ida_loader *loader = NULL;
+    struct ida_image *img;
+    struct list_head *item;
+    char blk[512];
+    FILE *fp;
+    unsigned int y;
+    void *data;
+    
+    //WARNING
+    //new_image = 1;
+
+    /* open file */
+    if (NULL == (fp = fopen(filename, "r"))) {
+	//comment by dez, temporary
+	if(ffd.debug)
+		fprintf(stderr,"open %s: %s\n",filename,strerror(errno));
+	return NULL;
+    }
+    memset(blk,0,sizeof(blk));
+    fread(blk,1,sizeof(blk),fp);
+    rewind(fp);
+
+    /* pick loader */
+    list_for_each(item,&loaders) {
+        loader = list_entry(item, struct ida_loader, list);
+	if (NULL == loader->magic)
+	    break;
+	if (0 == memcmp(blk+loader->moff,loader->magic,loader->mlen))
+	    break;
+	loader = NULL;
+    }
+    if (NULL == loader) {
+	/* no loader found, try to use ImageMagick's convert */
+	sprintf(command,"convert \"%s\" ppm:-",filename);
+	if (NULL == (fp = popen(command,"r")))
+	    return NULL;
+	loader = &ppm_loader;
+    }
+
+    /* load image */
+    img = (struct ida_image*)malloc(sizeof(*img));
+    memset(img,0,sizeof(*img));
+    data = loader->init(fp,filename,0,&img->i,0);
+    if (NULL == data) {
+	if(ffd.debug)
+		fprintf(stderr,"loading %s [%s] FAILED\n",filename,loader->name);
+	free_image(img);
+	return NULL;
+    }
+    img->data = (unsigned char*)malloc(img->i.width * img->i.height * 3);
+    for (y = 0; y < img->i.height; y++) {
+	ffd.switch_if_needed();
+	loader->read(img->data + img->i.width * 3 * y, y, data);
+    }
+#ifndef FIM_IS_SLOWER_THAN_FBI
+    /*
+     * this patch aligns the pixel bytes in the order they should
+     * be dumped to the video memory, resulting in much faster image
+     * drawing in fim than in fbi !
+     * */
+    {
+	register char t;
+	register char	*p=(char*) img->data,
+		 	*pm=(char*)p+img->i.width*3*y;
+	while(p<pm)
+	{
+            t=*p;
+            *p=p[2];
+            p[2]=t;
+	    p+=3;
+	}
+    }
+#endif
+    loader->done(data);
+    return img;
+}
+
+/*all dez's*/
+struct ida_image*
+FbiStuff::rotate_image(struct ida_image *src, unsigned int rotation)
+{
+    struct op_resize_parm p;
+    struct ida_rect  rect;
+    struct ida_image *dest;
+    void *data;
+    unsigned int y;
+    struct ida_op *desc_p;
+
+    dest =(ida_image*) malloc(sizeof(*dest));
+    /* dez: */ if(!dest)return NULL;
+    memset(dest,0,sizeof(*dest));
+    memset(&rect,0,sizeof(rect));
+    memset(&p,0,sizeof(p));
+    
+    p.width  = src->i.width;
+    p.height = src->i.height;
+    p.dpi    = src->i.dpi;
+    if (0 == p.width)
+	p.width = 1;
+    if (0 == p.height)
+	p.height = 1;
+    
+    rotation%=2;
+    if(rotation==0){desc_p=&desc_rotate_ccw;}
+    else	   {desc_p=&desc_rotate_cw ;}
+
+    data = desc_p->init(src,&rect,&dest->i,&p);
+    dest->data = (unsigned char*)malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    for (y = 0; y < dest->i.height; y++) {
+	ffd.switch_if_needed();
+	desc_p->work(src,&rect,
+			 dest->data + 3 * dest->i.width * y,
+			 y, data);
+    }
+    desc_p->done(data);
+    return dest;
+}
+struct ida_image*	
+FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
+{
+    struct op_resize_parm p;
+    struct ida_rect  rect;
+    struct ida_image *dest;
+    void *data;
+    unsigned int y;
+    /* dez: */ if(ascale<=0.0||ascale>=100.0)ascale=1.0;
+
+    dest = (ida_image*)malloc(sizeof(*dest));
+    /* dez: */ if(!dest)return NULL;
+    memset(dest,0,sizeof(*dest));
+    memset(&rect,0,sizeof(rect));
+    memset(&p,0,sizeof(p));
+    
+    p.width  = (int)(src->i.width  * scale * ascale);
+    p.height = (int)(src->i.height * scale);
+    p.dpi    = (int)(src->i.dpi);
+    if (0 == p.width)
+	p.width = 1;
+    if (0 == p.height)
+	p.height = 1;
+    data = desc_resize.init(src,&rect,&dest->i,&p);
+    dest->data = (unsigned char*)malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    for (y = 0; y < dest->i.height; y++) {
+	ffd.switch_if_needed();
+	desc_resize.work(src,&rect,
+			 dest->data + 3 * dest->i.width * y,
+			 y, data);
+    }
+    desc_resize.done(data);
+
+    return dest;
+}
+
+struct ida_image * fbi_image_clone(struct ida_image *img)
+{
+	/* note that to fulfill free_image(), the descriptor and data couldn't be allocated together
+	 * */
+	if(!img || !img->data)return NULL;
+	struct ida_image *nimg=NULL;
+	int n;
+	if(!(nimg=(ida_image*)calloc(1,sizeof(struct ida_image))))return NULL;
+	memcpy(nimg,img,sizeof(struct ida_image));
+	/*note .. no checks .. :P */
+	n = img->i.width * img->i.height * 3;
+	
+	nimg->data = (unsigned char*)malloc( n );
+	if(!(nimg->data))
+	{
+		free(nimg);
+		return NULL;
+	}
+	memcpy(nimg->data, img->data,n);
+	return nimg;
+}
+
+
+
+}
+#endif
+
+

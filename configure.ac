@@ -10,7 +10,8 @@ AC_PREREQ([2.54])
 #AC_PROG_CC(cc gcc)
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
-AC_INIT([src/fim.h])
+# WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
+AC_INIT([src/fim.h],[0.0],[dezperado_FOobAr_autistici_Baz_org( by replacing _FOobAr_ with a '@' and _Baz_ with a '.')])
 
 AC_MSG_NOTICE([
         Welcome to the Fim configure script!
@@ -463,7 +464,7 @@ dnl ==================
 
 fim_cv_windows=yes
 
-AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Enable Fim's own windowing system.]),
+AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Disable Fim's own windowing system.]),
 [if test x$enableval = xno; then
         fim_cv_windows=no
 fi])
@@ -494,7 +495,7 @@ fi
 dnl ==================
 
 fim_cv_warnings=no
-AC_ARG_ENABLE(screen, AC_HELP_STRING([--enable-screen], [Fim will work under screen (EXPERIMENTAL!)]),
+AC_ARG_ENABLE(screen, AC_HELP_STRING([--enable-screen], [Fim will work under screen (please read BUGS)]),
 [if test x$enableval = xyes; then
         fim_cv_screen=yes
 fi])
@@ -508,7 +509,7 @@ fi
 dnl ==================
 
 fim_cv_warnings=no
-AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug], [Turns on debug options (recommended, for debugging)]),
+AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug], [Turns on debug options (recommended for debugging)]),
 [if test x$enableval = xyes; then
         fim_cv_debug=yes
 fi])

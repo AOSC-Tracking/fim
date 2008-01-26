@@ -16,6 +16,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#ifndef FIM_NO_FBI
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -215,4 +216,5 @@ void fb_text_box(int x, int y, char *lines[], unsigned int count)
 	y += f->height;
     }
 }
+#endif
 

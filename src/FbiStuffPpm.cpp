@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,20 +19,26 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_NO_FBI
+
+
+#ifdef FIM_NO_FBI
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
-#include "loader.h"
+//#include "loader.h"
+#include "FbiStuffLoader.h"
 #ifdef USE_X11
 # include "viewer.h"
 #endif
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
+
+namespace fim
+{
 
 struct ppm_state {
     FILE          *infile;
@@ -44,7 +53,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
     struct ppm_state *h;
     char line[1024];
 
-    h = malloc(sizeof(*h));
+    h = (struct ppm_state*) malloc(sizeof(*h));
     memset(h,0,sizeof(*h));
 
     h->infile = fp;
@@ -59,7 +68,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
     i->width  = h->width;
     i->height = h->height;
     i->npages = 1;
-    h->row = malloc(h->width*3);
+    h->row = (unsigned char*)malloc(h->width*3);
 
     return h;
 
@@ -72,7 +81,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
 static void
 ppm_read(unsigned char *dst, unsigned int line, void *data)
 {
-    struct ppm_state *h = data;
+    struct ppm_state *h = (struct ppm_state *) data;
 
     fread(dst,h->width,3,h->infile);
 }
@@ -80,7 +89,7 @@ ppm_read(unsigned char *dst, unsigned int line, void *data)
 static void
 pgm_read(unsigned char *dst, unsigned int line, void *data)
 {
-    struct ppm_state *h = data;
+    struct ppm_state *h = (struct ppm_state *) data;
     unsigned char *src;
     int x;
 
@@ -98,7 +107,7 @@ pgm_read(unsigned char *dst, unsigned int line, void *data)
 static void
 pnm_done(void *data)
 {
-    struct ppm_state *h = data;
+    struct ppm_state *h = (struct ppm_state *) data;
 
     fclose(h->infile);
     free(h->row);
@@ -115,7 +124,7 @@ struct ida_loader ppm_loader = {
     done:  pnm_done,
 };
 
-static struct ida_loader pgm_loader = {
+struct ida_loader pgm_loader = {
     magic: "P5",
     moff:  0,
     mlen:  2,
@@ -159,4 +168,7 @@ static void __init init_wr(void)
 }
 #endif
 
+}
+
 #endif
+

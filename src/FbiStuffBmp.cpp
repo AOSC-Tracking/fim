@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffBmp.cpp : fbi functions for BMP files, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +19,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_NO_FBI
+#ifdef FIM_NO_FBI
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +30,15 @@
 # include <endian.h>
 #endif
 
-#include "loader.h"
+//#include "loader.h"
+#include "FontServer.h"
+#include "FbiStuff.h"
+#include "FbiStuffLoader.h"
+
+namespace fim
+{
+
+extern FramebufferDevice ffd;
 
 /* ---------------------------------------------------------------------- */
 
@@ -86,7 +99,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 {
     struct bmp_state *h;
     
-    h = malloc(sizeof(*h));
+    h = (struct bmp_state *)malloc(sizeof(*h));
     memset(h,0,sizeof(*h));
     h->fp = fp;
 
@@ -109,7 +122,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
     h->hdr.imp_colors  = le32_to_cpu(h->hdr.imp_colors);
 #endif
 
-    if (debug)
+    if (ffd.debug)
 	fprintf(stderr,"bmp: hdr=%d size=%dx%d planes=%d"
 		" bits=%d size=%d res=%dx%d colors=%d/%d | %d\n",
 		h->hdr.size,h->hdr.width,h->hdr.height,
@@ -120,11 +133,13 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 	h->hdr.bit_cnt != 4  &&
 	h->hdr.bit_cnt != 8  &&
 	h->hdr.bit_cnt != 24) {
+	if(ffd.debug)
 	fprintf(stderr,"bmp: can't handle depth [%d]\n",h->hdr.bit_cnt);
 	goto oops;
     }
     if (h->hdr.compression[0] || h->hdr.compression[1] ||
 	h->hdr.compression[2] || h->hdr.compression[3]) {
+	if(ffd.debug)
 	fprintf(stderr,"bmp: can't handle compressed bitmaps [%c%c%c%c]\n",
 		h->hdr.compression[0],
 		h->hdr.compression[1],
@@ -157,7 +172,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 static void
 bmp_read(unsigned char *dst, unsigned int line, void *data)
 {
-    struct bmp_state *h = data;
+    struct bmp_state *h = (struct bmp_state *) data;
     unsigned int ll,y,x,pixel,byte = 0;
     
     ll = (((h->hdr.width * h->hdr.bit_cnt + 31) & ~0x1f) >> 3);
@@ -213,7 +228,7 @@ bmp_read(unsigned char *dst, unsigned int line, void *data)
 static void
 bmp_done(void *data)
 {
-    struct bmp_state *h = data;
+    struct bmp_state *h = (struct bmp_state *) data;
 
     fclose(h->fp);
     free(h);
@@ -233,4 +248,8 @@ static void __init init_rd(void)
 {
     load_register(&bmp_loader);
 }
+
+
+}
+
 #endif

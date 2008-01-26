@@ -16,7 +16,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#ifndef FIM_NO_FBI
 void            init_dither(int, int, int, int);
 /*void            dither_line(unsigned char *, unsigned char *, int, int);*/
 void            dither_line(unsigned char *, unsigned char *, int, int,int ); /*dez's mirror patch*/
 void            dither_line_gray(unsigned char *, unsigned char *, int, int);
+#endif
+

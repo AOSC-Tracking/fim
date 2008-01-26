@@ -67,6 +67,12 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Command.h \
 	CommandConsole.h \
 	Image.h \
+	FbiStuff.h \
+	FbiStuffList.h \
+	FbiStuffFbtools.h \
+	FbiStuffLoader.h \
+	FontServer.h \
+	FramebufferDevice.h \
 	Namespace.h \
 	Var.h \
 	Viewport.h \
@@ -85,6 +91,17 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Cache.cpp \
 	Command.cpp \
 	CommandConsole.cpp \
+	FbiStuff.cpp \
+	FbiStuffBmp.cpp \
+	FbiStuffPpm.cpp \
+	FbiStuffGif.cpp \
+	FbiStuffJpeg.cpp \
+	FbiStuffTiff.cpp \
+	FbiStuffPng.cpp \
+	FbiStuffFbtools.cpp \
+	FbiStuffLoader.cpp \
+	FontServer.cpp \
+	FramebufferDevice.cpp \
 	Image.cpp \
 	Namespace.cpp \
 	Var.cpp \
@@ -169,6 +186,7 @@ DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
  DEFINES  += -D FIM_CACHE_DEBUG		# Debug info on cache available
  DEFINES  += -D FIM_BUGGED_CACHE	# Sometimes something breaks and we want to isolate mechanisms
 #DEFINES  += -D FIM_NO_UNSAFE_CMDS		# Some unsafe commands are temporarily hidden
+ DEFINES  += -D FIM_NO_FBI		# experimental : fim's framebuffer code is used
 
  FIM_VERSION= $(VERSION)
 # FIM_AUTHOR = '"Michele Martone <dezperado _CUT_ autistici _CUT_ org>"'

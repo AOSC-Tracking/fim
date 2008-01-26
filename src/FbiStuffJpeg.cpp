@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
+
+ (c) 2007-2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,19 +19,52 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_NO_FBI
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <string.h>
-#include <errno.h>
+
+#ifdef FIM_NO_FBI
+
+#include <cstdio>
+#include <cstdlib>
+
+/*
+#ifdef HAVE_STDLIB_H
+#undef HAVE_STDLIB_H
+#endif
+
+#ifdef HAVE_STDDEF_H
+#undef HAVE_STDDEF_H
+#endif
+*/
+
+extern "C"
+{
+// we require C linkage for these symbols
 #include <jpeglib.h>
+}
+
+#include <cstring>
+//#include <stddef.h>
+//#include <errno.h>
+
 #ifdef HAVE_LIBEXIF
 # include <libexif/exif-data.h>
 #endif
 
-#include "loader.h"
-#include "misc.h"
+#include "FbiStuff.h"
+#include "FbiStuffLoader.h"
+//#include "loader.h"
+
+
+/*
+	#include "fbi_src/misc.h"
+*/
+
+#define container_of(ptr, type, member) ({			\
+        const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
+        (type *)( (char *)__mptr - offsetof(type,member) );})
+
+#define array_size(x) (sizeof(x)/sizeof(x[0]))
+
+/*								*/
 
 #ifdef USE_X11
 # include <X11/Xlib.h>
@@ -40,6 +76,11 @@
 # include "ida.h"
 # include "viewer.h"
 #endif
+namespace fim
+{
+
+extern FramebufferDevice ffd;
+
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -85,13 +126,19 @@ static void thumbnail_src_term(struct jpeg_decompress_struct *cinfo)
     /* nothing */
 }
 
-static struct jpeg_source_mgr thumbnail_mgr = {
+//!!
+//see jpeg_init
+   static struct jpeg_source_mgr thumbnail_mgr ;
+/*
+   static struct jpeg_source_mgr thumbnail_mgr = {
     .init_source         = thumbnail_src_init,
     .fill_input_buffer   = thumbnail_src_fill,
     .skip_input_data     = thumbnail_src_skip,
     .resync_to_restart   = jpeg_resync_to_restart,
     .term_source         = thumbnail_src_term,
 };
+*/
+//!!
 
 /* ---------------------------------------------------------------------- */
 /* jpeg loader                                                            */
@@ -103,7 +150,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     struct jpeg_state *h;
     jpeg_saved_marker_ptr mark;
     
-    h = malloc(sizeof(*h));
+    h = (struct jpeg_state *)malloc(sizeof(*h));
     memset(h,0,sizeof(*h));
     h->infile = fp;
 
@@ -117,13 +164,13 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     for (mark = h->cinfo.marker_list; NULL != mark; mark = mark->next) {
 	switch (mark->marker) {
 	case JPEG_COM:
-	    if (debug)
+	    if (ffd.debug)
 		fprintf(stderr,"jpeg: comment found (COM marker) [%.*s]\n",
 			(int)mark->data_length, mark->data);
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 	    break;
 	case JPEG_APP0 +1:
-	    if (debug)
+	    if (ffd.debug)
 		fprintf(stderr,"jpeg: exif data found (APP1 marker)\n");
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 
@@ -135,7 +182,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 		if (ed->data &&
 		    ed->data[0] == 0xff &&
 		    ed->data[1] == 0xd8) {
-		    if (debug)
+		    if (ffd.debug)
 			fprintf(stderr,"jpeg: exif thumbnail found\n");
 
 		    /* save away thumbnail data */
@@ -149,6 +196,14 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 	    break;
 	}
     }
+
+    // !! 
+    thumbnail_mgr.init_source         = thumbnail_src_init;
+    thumbnail_mgr.fill_input_buffer   = thumbnail_src_fill;
+    thumbnail_mgr.skip_input_data     = thumbnail_src_skip;
+    thumbnail_mgr.resync_to_restart   = jpeg_resync_to_restart;
+    thumbnail_mgr.term_source         = thumbnail_src_term;
+    // !! 
 
     if (h->thumbnail) {
 	/* save image size */
@@ -187,7 +242,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 static void
 jpeg_read(unsigned char *dst, unsigned int line, void *data)
 {
-    struct jpeg_state *h = data;
+    struct jpeg_state *h = (struct jpeg_state*)data;
     JSAMPROW row = dst;
     jpeg_read_scanlines(&h->cinfo, &row, 1);
 }
@@ -195,7 +250,7 @@ jpeg_read(unsigned char *dst, unsigned int line, void *data)
 static void
 jpeg_done(void *data)
 {
-    struct jpeg_state *h = data;
+    struct jpeg_state *h = (struct jpeg_state*)data;
     jpeg_destroy_decompress(&h->cinfo);
     if (h->infile)
 	fclose(h->infile);
@@ -304,5 +359,7 @@ static void __init init_wr(void)
     write_register(&jpeg_writer);
 }
 
+
 #endif
+}
 #endif

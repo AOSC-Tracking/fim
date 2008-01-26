@@ -37,6 +37,8 @@ namespace fim
 	//extern fim::CommandConsole cc;
 }
 
+#ifndef FIM_NO_FBI
+
 //live from src/loader.h:
 enum ida_extype {
     EXTRA_COMMENT = 1,
@@ -67,12 +69,9 @@ struct ida_image {
     struct ida_image_info  i;
     unsigned char          *data;
 };
+#endif
 
 
-
-
-
-//void trec(char *str,char ec);
 void trec(char *str,const char *f,const char*t);
 
 

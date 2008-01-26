@@ -82,7 +82,7 @@ void trec(char *str,const char *f,const char*t)
 				tmp+="\n" ;
 				file+=tmp;
 			}
-				printf("%s\n",file.c_str());
+			//	printf("%s\n",file.c_str());
 		}
 		fs.close();
 		return fim::string(file.c_str());

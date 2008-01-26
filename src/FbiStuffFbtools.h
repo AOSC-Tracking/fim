@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffFbtools.h : fbi functions from fbtools.c, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,8 +19,21 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_NO_FBI
-int lirc_fbi_init(void);
-int lirc_fbi_havedata(int* rc, char key[11]);
+#ifdef FIM_NO_FBI
+
+#include "FramebufferDevice.h"
+
+namespace fim
+{
+
+
+/* info about videomode - yes I know, quick & dirty... */
+/* init + cleanup */
+int fb_probe(void);
+void fb_catch_exit_signals(void);
+void svga_dither_palette(int r, int g, int b);
+
+}
+/* console switching */
 #endif
 

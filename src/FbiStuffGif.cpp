@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffGif.cpp : fbi functions for GIF files, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,14 +19,22 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_NO_FBI
+#ifdef FIM_NO_FBI
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <gif_lib.h>
 
-#include "loader.h"
+//#include "loader.h"
+#include "FbiStuff.h"
+#include "FbiStuffLoader.h"
+
+
+namespace fim
+{
+extern FramebufferDevice ffd;
+
 
 struct gif_state {
     FILE         *infile;
@@ -43,29 +54,29 @@ gif_fileread(struct gif_state *h)
 
     for (;;) {
 	if (GIF_ERROR == DGifGetRecordType(h->gif,&RecordType)) {
-	    if (debug)
+	    if (ffd.debug)
 		fprintf(stderr,"gif: DGifGetRecordType failed\n");
 	    PrintGifError();
-	    return -1;
+	    return (GifRecordType)-1;
 	}
 	switch (RecordType) {
 	case IMAGE_DESC_RECORD_TYPE:
-	    if (debug)
+	    if (ffd.debug)
 		fprintf(stderr,"gif: IMAGE_DESC_RECORD_TYPE found\n");
 	    return RecordType;
 	case EXTENSION_RECORD_TYPE:
-	    if (debug)
+	    if (ffd.debug)
 		fprintf(stderr,"gif: EXTENSION_RECORD_TYPE found\n");
 	    for (rc = DGifGetExtension(h->gif,&ExtCode,&Extension);
 		 NULL != Extension;
 		 rc = DGifGetExtensionNext(h->gif,&Extension)) {
 		if (rc == GIF_ERROR) {
-		    if (debug)
+		    if (ffd.debug)
 			fprintf(stderr,"gif: DGifGetExtension failed\n");
 		    PrintGifError();
-		    return -1;
+		    return (GifRecordType)-1;
 		}
-		if (debug) {
+		if (ffd.debug) {
 		    switch (ExtCode) {
 		    case COMMENT_EXT_FUNC_CODE:     type="comment";   break;
 		    case GRAPHICS_EXT_FUNC_CODE:    type="graphics";  break;
@@ -78,13 +89,13 @@ gif_fileread(struct gif_state *h)
 	    }
 	    break;
 	case TERMINATE_RECORD_TYPE:
-	    if (debug)
+	    if (ffd.debug)
 		fprintf(stderr,"gif: TERMINATE_RECORD_TYPE found\n");
 	    return RecordType;
 	default:
-	    if (debug)
+	    if (ffd.debug)
 		fprintf(stderr,"gif: unknown record type [%d]\n",RecordType);
-	    return -1;
+	    return (GifRecordType)-1;
 	}
     }
 }
@@ -96,7 +107,7 @@ gif_skipimage(struct gif_state *h)
     unsigned char *line;
     int i;
 
-    if (debug)
+    if (ffd.debug)
 	fprintf(stderr,"gif: skipping image record ...\n");
     DGifGetImageDesc(h->gif);
     line = malloc(h->gif->SWidth);
@@ -114,25 +125,25 @@ gif_init(FILE *fp, char *filename, unsigned int page,
     GifRecordType RecordType;
     int i, image = 0;
     
-    h = malloc(sizeof(*h));
+    h = (gif_state*)malloc(sizeof(*h));
     memset(h,0,sizeof(*h));
 
     h->infile = fp;
     h->gif = DGifOpenFileHandle(fileno(fp));
-    h->row = malloc(h->gif->SWidth * sizeof(GifPixelType));
+    h->row = (GifPixelType*)malloc(h->gif->SWidth * sizeof(GifPixelType));
 
     while (0 == image) {
 	RecordType = gif_fileread(h);
 	switch (RecordType) {
 	case IMAGE_DESC_RECORD_TYPE:
 	    if (GIF_ERROR == DGifGetImageDesc(h->gif)) {
-		if (debug)
+		if (ffd.debug)
 		    fprintf(stderr,"gif: DGifGetImageDesc failed\n");
 		PrintGifError();
 	    }
 	    if (NULL == h->gif->SColorMap &&
 		NULL == h->gif->Image.ColorMap) {
-		if (debug)
+		if (ffd.debug)
 		    fprintf(stderr,"gif: oops: no colormap found\n");
 		goto oops;
 	    }
@@ -145,12 +156,12 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 #endif
             info->npages = 1;
 	    image = 1;
-	    if (debug)
+	    if (ffd.debug)
 		fprintf(stderr,"gif: reading image record ...\n");
 	    if (h->gif->Image.Interlace) {
-		if (debug)
+		if (ffd.debug)
 		    fprintf(stderr,"gif: interlaced\n");
-		h->il = malloc(h->w * h->h * sizeof(GifPixelType));
+		h->il = (GifPixelType*)malloc(h->w * h->h * sizeof(GifPixelType));
 		for (i = 0; i < h->h; i += 8)
 		    DGifGetLine(h->gif, h->il + h->w*i,h->w);
 		for (i = 4; i < h->gif->SHeight; i += 8)
@@ -167,14 +178,14 @@ gif_init(FILE *fp, char *filename, unsigned int page,
     if (0 == info->width || 0 == info->height)
 	goto oops;
 
-    if (debug)
+    if (ffd.debug)
 	fprintf(stderr,"gif: s=%dx%d i=%dx%d\n",
 		h->gif->SWidth,h->gif->SHeight,
 		h->gif->Image.Width,h->gif->Image.Height);
     return h;
 
  oops:
-    if (debug)
+    if (ffd.debug)
 	fprintf(stderr,"gif: fatal error, aborting\n");
     DGifCloseFile(h->gif);
     fclose(h->infile);
@@ -186,7 +197,7 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 static void
 gif_read(unsigned char *dst, unsigned int line, void *data)
 {
-    struct gif_state *h = data;
+    struct gif_state *h = (struct gif_state *) data;
     GifColorType *cmap;
     int x;
     
@@ -212,9 +223,9 @@ gif_read(unsigned char *dst, unsigned int line, void *data)
 static void
 gif_done(void *data)
 {
-    struct gif_state *h = data;
+    struct gif_state *h = (struct gif_state *) data;
 
-    if (debug)
+    if (ffd.debug)
 	fprintf(stderr,"gif: done, cleaning up\n");
     DGifCloseFile(h->gif);
     fclose(h->infile);
@@ -237,6 +248,8 @@ static struct ida_loader gif_loader = {
 static void __init init_rd(void)
 {
     load_register(&gif_loader);
+}
+
 }
 #endif
 

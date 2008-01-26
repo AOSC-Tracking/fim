@@ -22,6 +22,7 @@
  * use linux consolefont psf files.
  * (c) 2001 Gerd Knorr <kraxel@bytesex.org>
  */
+#ifndef FIM_NO_FBI
 #include "config.h"
 
 #include <stdio.h>
@@ -552,4 +553,5 @@ int main(int argc, char *argv[])
     
     return 0;
 }
+#endif
 #endif

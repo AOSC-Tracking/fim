@@ -16,6 +16,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#ifndef FIM_NO_FBI
 extern int visible;
 
 void fb_clear_mem(void);
@@ -30,4 +31,5 @@ void fb_text_box(int x, int y, char *lines[], unsigned int count);
 struct fs_font * fb_font_get_current_font(void);
 int  fb_font_width(void);
 int  fb_font_height(void);
+#endif
 

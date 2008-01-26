@@ -21,6 +21,7 @@
  *
  */
 
+#ifndef FIM_NO_FBI
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -568,3 +569,4 @@ fb_catch_exit_signals(void)
 #endif
     exit(42);
 }
+#endif

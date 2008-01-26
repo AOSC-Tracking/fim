@@ -24,6 +24,7 @@
  *
  */
 
+#ifndef FIM_NO_FBI
 #include <stdlib.h>
 
 #include "dither.h"
@@ -229,3 +230,5 @@ dither_line_gray(unsigned char *src, unsigned char *dest, int y, int width)
 	*(dest++) = a & 0xff;
     }
 }
+#endif
+

@@ -199,7 +199,7 @@ class CommandConsole
 	bool redisplay();
 	char * command_generator (const char *text,int state);
 	void executionCycle();
-	void init();
+	int init();
 	int  inConsole()const{return ic==1;};
 	~CommandConsole();
 	float getFloatVariable(const fim::string &varname);

@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include "fim.h"
 namespace fim
 {
+	extern fim::CommandConsole cc;
+	
 	int Browser::current_n()const{ return current_n(cp); }
 	int Browser::current_n(int ccp)const{ return ccp?ccp-1:ccp; }
 

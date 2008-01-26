@@ -17,6 +17,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#ifndef FIM_NO_FBI
 struct op_3x3_parm {
     int f1[3];
     int f2[3];
@@ -43,3 +44,5 @@ extern struct ida_op desc_3x3;
 extern struct ida_op desc_sharpe;
 extern struct ida_op desc_resize;
 extern struct ida_op desc_rotate;
+#endif
+

@@ -16,6 +16,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#ifndef FIM_NO_FBI
+
 #define FB_ACTIVE    0
 #define FB_REL_REQ   1
 #define FB_INACTIVE  2
@@ -40,3 +42,5 @@ int  fb_switch_init(void);
 void fb_switch_release(void);
 void fb_switch_acquire(void);
 void fb_setcolor(int c);
+#endif
+

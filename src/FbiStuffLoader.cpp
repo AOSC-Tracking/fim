@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffLoader.cpp : fbi functions for loading files, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,15 +20,20 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef FIM_NO_FBI
+
+#ifdef FIM_NO_FBI
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "loader.h"
+//#include "loader.h"
+#include "FbiStuffLoader.h"
 
 /* ----------------------------------------------------------------------- */
+
+namespace fim
+{
 
 void load_bits_lsb(unsigned char *dst, unsigned char *src, int width,
 		   int on, int off)
@@ -103,11 +111,11 @@ int load_add_extra(struct ida_image_info *info, enum ida_extype type,
 {
     struct ida_extra *extra;
 
-    extra = malloc(sizeof(*extra));
+    extra = (struct ida_extra*)malloc(sizeof(*extra));
     if (NULL == extra)
 	return -1;
     memset(extra,0,sizeof(*extra));
-    extra->data = malloc(size);
+    extra->data = (unsigned char*)malloc(size);
     if (NULL == extra->data) {
 	free(extra);
 	return -1;
@@ -161,4 +169,9 @@ void write_register(struct ida_writer *writer)
 }
 #endif
 
+}
+
 #endif
+
+
+

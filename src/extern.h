@@ -31,6 +31,7 @@ extern rl_hook_func_t *rl_pre_input_hook;
  *	This file documents the dependency from fbi.
  */
 
+#ifndef FIM_NO_FBI
 extern "C"{
 int  fb_font_width(void);
 int  fb_font_height(void);
@@ -80,6 +81,7 @@ void fb_text_init2(void);
 int main_(int argc, char *argv[]);
 void fb_text_init1(char *font);
 
+extern struct ida_image * fbi_image_clone(struct ida_image *img);
 extern struct fb_var_screeninfo   fb_var;
 extern void svga_dither_palette(int r, int g, int b);
 
@@ -118,12 +120,11 @@ void fb_cleanup(void);
 //static struct flist  *fcurrent;
 //static int           fcount;
 extern int svga_show(struct ida_image *img, int timeout, char *desc, char *info, int *nr);
-extern struct ida_image * fbi_image_clone(struct ida_image *img);
 }
-class fim::CommandConsole;
+//class fim::CommandConsole;
 
 /* in fim.cpp:  */
-extern fim::CommandConsole cc;
+//extern fim::CommandConsole cc;
+#endif
 extern int g_fim_no_framebuffer;
-extern int fim_uninitialized;
 #endif

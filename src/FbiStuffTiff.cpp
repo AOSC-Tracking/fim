@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffTiff.cpp : fbi functions for TIFF files, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +19,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_NO_FBI
+
+#ifdef FIM_NO_FBI
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,11 +28,17 @@
 #include <inttypes.h>
 #include <tiffio.h>
 
-#include "loader.h"
+//#include "loader.h"
+#include "FbiStuff.h"
+#include "FbiStuffLoader.h"
 #ifdef USE_X11
 # include "viewer.h"
 #endif
 
+namespace fim
+{
+
+extern FramebufferDevice ffd;
 struct tiff_state {
     TIFF*          tif;
     char           emsg[1024];
@@ -49,7 +59,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     struct tiff_state *h;
 
     fclose(fp);
-    h = malloc(sizeof(*h));
+    h = (struct tiff_state *) malloc(sizeof(*h));
     memset(h,0,sizeof(*h));
 
     TIFFSetWarningHandler(NULL);
@@ -72,10 +82,12 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     TIFFGetField(h->tif, TIFFTAG_BITSPERSAMPLE,   &h->depth);
     TIFFGetField(h->tif, TIFFTAG_FILLORDER,       &h->fillorder);
     TIFFGetField(h->tif, TIFFTAG_PHOTOMETRIC,     &h->photometric);
-    h->row = malloc(TIFFScanlineSize(h->tif));
-    if (debug)
-	fprintf(stderr,"tiff: %" PRId32 "x%" PRId32 ", planar=%d, "
-		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" PRId32 "\n",
+    h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
+    if (ffd.debug)
+	fprintf(stderr,"tiff: %" "%d" "x%" "%d" ", planar=%d, "
+//	fprintf(stderr,"tiff: %" PRId32 "x%" PRId32 ", planar=%d, "
+		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" "%d" "\n",
+//		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" PRId32 "\n",
 		h->width,h->height,h->config,h->nsamples,h->depth,
 		h->fillorder,h->photometric,
 		TIFFScanlineSize(h->tif));
@@ -88,14 +100,14 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
 	/* for the more difficuilt cases we let libtiff
 	 * do all the hard work.  Drawback is that we lose
 	 * progressive loading and decode everything here */
-	if (debug)
+	if (ffd.debug)
 	    fprintf(stderr,"tiff: reading whole image [TIFFReadRGBAImage]\n");
-	h->image=malloc(4*h->width*h->height);
+	h->image=(uint32*)malloc(4*h->width*h->height);
 	TIFFReadRGBAImage(h->tif, h->width, h->height, h->image, 0);
     } else {
-	if (debug)
+	if (ffd.debug)
 	    fprintf(stderr,"tiff: reading scanline by scanline\n");
-	h->row = malloc(TIFFScanlineSize(h->tif));
+	h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
     }
 
     i->width  = h->width;
@@ -108,10 +120,10 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
 	case RESUNIT_NONE:
 	    break;
 	case RESUNIT_INCH:
-	    i->dpi = h->xres;
+	    i->dpi = (unsigned int)h->xres;
 	    break;
 	case RESUNIT_CENTIMETER:
-	    i->dpi = res_cm_to_inch(h->xres);
+	    i->dpi = (unsigned int)res_cm_to_inch(h->xres);
 	    break;
 	}
     }
@@ -128,7 +140,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
 static void
 tiff_read(unsigned char *dst, unsigned int line, void *data)
 {
-    struct tiff_state *h = data;
+    struct tiff_state *h = (struct tiff_state *) data;
     int s,on,off;
 
     if (h->image) {
@@ -182,7 +194,7 @@ tiff_read(unsigned char *dst, unsigned int line, void *data)
 static void
 tiff_done(void *data)
 {
-    struct tiff_state *h = data;
+    struct tiff_state *h = (struct tiff_state *) data;
 
     TIFFClose(h->tif);
     if (h->row)
@@ -270,5 +282,6 @@ static void __init init_wr(void)
 }
 
 #endif
-
+}
 #endif
+

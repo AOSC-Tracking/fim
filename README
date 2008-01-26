@@ -1,5 +1,5 @@
 ================================================================================
-		FIM - Fbi IMproved (alpha) README document.
+		FIM - Fbi IMproved    README document.
 ================================================================================
 	1		Overview
 	2		Description
@@ -10,7 +10,7 @@
 	7		Technical overview (important for patch writers)
 	8		Gentoo Installation Tips
 	9		License
-	10		Contact, URLs
+	10		Contacts, URLs
 ================================================================================
 	1		Overview
 ================================================================================
@@ -53,14 +53,14 @@ of comments in the (sometimes still dirty) code, and some text files.
 
 Implemented features: 
 
- - interactive (default) vs command line mode
- - every possible internal action has a textual command name
+ - interactive (default) and command line modes
+ - all of the functionality is scripted in an internal language
  - on-screen debug and information console in command mode
  - command line history
- - command line tab-based command autocompletion (thanks to the readline)
- - command line command autocompletion (optional)
- - key-action binding, with Shift and Control key combinations
- - simple if-while scriptability, with integer,float,and string variables and arithmetic evaluation
+ - command line tab-based command autocompletion (thanks to the GNU/readline)
+ - command line command autocompletion
+ - key-action binding, with Shift and Control key combinations for interactive mode
+ - simple if-while scriptability, with integer/float/string variables and arithmetic evaluation
  - command aliases support (macros)
  - event autocommands (in Vim's 'autocmd' style)
  - regular expressions to enrich autocommand behaviour
@@ -68,27 +68,28 @@ Implemented features:
  - usable builtin default configuration
  - wrapper script to convert pdf,ps,eps,dvi,cbr(rar),cbz(zip),tar,tar.gz,tgz,http://...
    contents into images and display with Fim
- - index based goto
- - regular expressions (on filename) based goto
+ - index based goto in Vim's style (:<number>)
+ - regular expressions (on filename) based goto and image search
  - stuff     usual for an image viewer (scale, pan, etc..)
  - stuff (un)usual for an image viewer (setting scale factor, auto width scale, 
    auto heigth scale, marking of 'interesting' files, sorting of files in the
    list, recording/replaying of sessions, repeat last action )
- - script file execution
+ - image flipping, mirroring, rotation, stretching
+ - external script file execution
  - system call
- - image caching
- - image prefetching
+ - image caching (optional)
+ - image prefetching (optional)
  - pipe commands from some input program
  - many of these features could be enabled or disabled at compile time editing the Makefile
 
 Yet unimplemented features :
 
- - decent (auto)documentation, in gdb style!
+ - autodocumentation, in gdb style!
  - mutt-like patterns ~p, ~r ...
  - advanced pattern selection of images on other criterias ?
 
 
- Here is a comparison of popular image viewers available on Linux, focusing on
+ Follows a comparison of popular image viewers available on Linux, focusing on
  the peculiar Fim features (so, Fim have no competitors because it is not in any
  competition! ). We take in consideration free software only, of course.
  Note also that no all of the feature could ever exist in all of the mentioned
@@ -96,19 +97,19 @@ Yet unimplemented features :
 
  ______________________________________________________________________________
 
- \ Program :            kuickshow eog [xz]gv    fbi   FIM GQview
+ \ Program :            kuickshow eog [xz]gv    fbi   FIM GQview dfbsee
  ______________________________________________________________________________
  Features :
 
- status:(a)lpha/(m)ature   m       m   m         a     m     m
- environment(f=framebuffer)X      X  X,svga      f     f     X
- linux specific                        ?         *     *
+ status:(a)lpha/(m)ature   m       m   m         a     m     m    m
+ environment(f=framebuffer)X      X  X,svga      f     f     X    f
+ linux specific                        ?         *     *          *
  key rebindings            *                           *     *
  external scriptability(bash,..)                 ~     *
  internal scriptability                                *
  internal scriptability minilanguage                   * 
  printing support          *       *   ?                     *
- slideshow                 *       *             *     *     *
+ slideshow                 *       *             *     *     *    *
  caching                   *       ?                   *     *
  preview browser           *                                 *
  EXIF tag display          *                     *           *
@@ -265,7 +266,7 @@ the Mutt mail user agent (http://www.mutt.org).
 which is licensed compatibly with the GPL.
 
 ================================================================================
-	10		Contact, URLs
+	10		Contacts, URLs
 ================================================================================
 
 You can contact the Fim author via email: dezperado_FOobAr_autistici_Baz_org, by
@@ -277,7 +278,7 @@ If it is for other suggestions or ideas, you are welcome, too (and don't miss
 the TODO file, too)!
 
 
-Web Page     : http://www.nongnu.org/fbi-improved/
+Web Page     : http://savannah.nongnu.org/projects/fbi-improved/
 Mailing List : http://savannah.nongnu.org/mail/?group=fbi-improved
 Releases     : http://download.savannah.nongnu.org/releases/fbi-improved
 Repository   : http://code.autistici.org/project/fim/

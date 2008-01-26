@@ -12,6 +12,11 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 -------------------------------------------------------------------------------
 	Current development directions
 
+
+20080126	start using config.h.in
+20080126	should implement a flex/bison version check in configure.ac
+20080126	time to think about a /etc/fimrc
+20080106	add examples/aliases to send emails with attached image from fim
 20080103	create a script to make a fimrc man page from fimrc
 20071230	UNIX domain sockets communication and multithreaded Fim
 20071230	A decent Features section in the web site, from the top.

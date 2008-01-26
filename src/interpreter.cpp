@@ -26,6 +26,10 @@
 #include "fim.h"
 #include "common.h"
 
+namespace fim
+{
+	extern CommandConsole cc;
+}
 
 fim::string stringsample()
 {
@@ -81,7 +85,7 @@ fim::string cvar(nodeType *p)
 		}
 		else
 #endif
-			arg=cc.getStringVariable(p->scon.s);
+			arg=fim::cc.getStringVariable(p->scon.s);
 	}
 	else if(p->type == intCon )arg=ex(p);
 	else
@@ -135,7 +139,6 @@ std::vector<fim::string> var(nodeType *p)
 }
 
 using namespace fim;
-extern CommandConsole cc;
 int ex(nodeType *p)
 {
 	int iValue;
@@ -166,14 +169,14 @@ int ex(nodeType *p)
 			       	return fim_rand();//FIXME
 			else
 #endif
-				return (int)cc.getStringVariable(p->scon.s);
+				return (int)fim::cc.getStringVariable(p->scon.s);
 		}
 		case stringCon:
 		case typeOpr:	/*	some operator	*/
 		switch(p->opr.oper)
 		{
 			case WHILE:
-				while(ex(p->opr.op[0]) && (cc.catchLoopBreakingCommand(0)==0))
+				while(ex(p->opr.op[0]) && (fim::cc.catchLoopBreakingCommand(0)==0))
 				{
 					ex(p->opr.op[1]);
 				}
@@ -198,7 +201,7 @@ int ex(nodeType *p)
 			{
 				int times=ex(p->opr.op[1]);
 				if(times<0)return -1;
-				for (int i=0;i<times && cc.catchLoopBreakingCommand(0)==0;++i)
+				for (int i=0;i<times && fim::cc.catchLoopBreakingCommand(0)==0;++i)
 				{
 					ex(p->opr.op[0]);
 				}
@@ -270,7 +273,7 @@ int ex(nodeType *p)
 				if(p)
 				if(p->opr.op[0])
 				if(p->opr.op[0]->scon.s) result =
-				       	cc.execute(p->opr.op[0]->scon.s,args);
+				       	fim::cc.execute(p->opr.op[0]->scon.s,args);
 				/* sometimes there are NULLs  : BAD !!  */
 
 				return atoi(result.c_str());
@@ -288,7 +291,7 @@ int ex(nodeType *p)
 			{
 				fValue=p->opr.op[1]->fid.f;
 				if(fValue==0.0f)exit(0);
-				cc.setVariable(s,fValue);
+				fim::cc.setVariable(s,fValue);
 				return (int)fValue;
 			}//'i'
 			else if(typeHint=='s')
@@ -300,20 +303,20 @@ int ex(nodeType *p)
 				else 
 				{
 					// got a string!
-		       		        cc.setVariable(s,p->opr.op[0]->scon.s);
+		       		        fim::cc.setVariable(s,p->opr.op[0]->scon.s);
 #if 0
 					if(0 && 0==strcmp(s,"random"))
 			                	return fim_rand();//FIXME
 					else
 #endif
-			                	return cc.getIntVariable(s);
+			                	return fim::cc.getIntVariable(s);
 				}
 				return -1;
 			}//'i'
 			else if(typeHint=='i')
 			{
 				iValue=ex(p->opr.op[1]);
-				cc.setVariable(s,iValue);
+				fim::cc.setVariable(s,iValue);
 				return iValue;
 			}
 			else if(typeHint=='v')
@@ -324,7 +327,7 @@ int ex(nodeType *p)
 			{
 				fim::string r=cvar(p->opr.op[1]);
 				iValue=r;
-				cc.setVariable(s,r.c_str());
+				fim::cc.setVariable(s,r.c_str());
 				return iValue;
 			}
 			case UMINUS: return -ex(p->opr.op[0]); //unary minus

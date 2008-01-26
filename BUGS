@@ -2,6 +2,11 @@ $Id$
 
 ==== KNOWN ISSUES
 
+20080126	Under --enable-screen, Fim behaves well but it doesn't handle well console switching:
+		after a console switch, it doesn't redraw the image if not triggered to do so.
+
+20080106	keys 'Insert,Cancel,Home,End' are not recognized in the commandline mode.
+		This issue will be fixed after the fbi core will be cleaned up and revised.
 20071005	flex-2.5.4 is known to have problems. flex-2.5.4a is known as a patched version of it
 20070811	On CENTOS 64 bit, i reported linking problems : -ltermcap is required, too.
 		I Don't know exactly how to fix this issue.
@@ -52,7 +57,7 @@ Please refer to the documentation (doc/FIM.TXT) for the rest of known bugs (BUGS
 
 ==== BUG REPORTING
 
-For sending a bug report, please frop me an email with a subject line beginning with '[FIM]'.
+For sending a bug report, please drop me an email with a subject line beginning with '[FIM]'.
 Contact information is in the doc/FIM.TXT file, or in the bottom of this file.
 
 Please DO NOT dare sending bug reports about installation unless you have read the INSTALL

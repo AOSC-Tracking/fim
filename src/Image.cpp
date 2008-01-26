@@ -1,8 +1,8 @@
 /* $Id$ */
 /*
- Image.h : Image manipulation and display
+ Image.cpp : Image manipulation and display
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,6 +35,10 @@
  */
 namespace fim
 {
+	extern CommandConsole cc;
+#ifdef FIM_NO_FBI
+	extern FramebufferDevice ffd;
+#endif
 /*
  *	There is a general rule here:
  *	 Public functions should be safe when called in 
@@ -115,10 +119,18 @@ namespace fim
 		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
 			set_status_bar("please wait while reloading...", "*");
 
+#ifdef FIM_NO_FBI
+		fimg = FbiStuff::read_image((char*)fname_);
+#else
 		fimg = read_image((char*)fname_);
+#endif
 
 		img=fimg;	/* no scaling : one copy only */
+#ifdef FIM_NO_FBI
+	        ffd.redraw=1;
+#else
 	        redraw=1;
+#endif
 
 		if(! img)
 		{
@@ -131,7 +143,11 @@ namespace fim
 		setVariable("width"  ,(int)fimg->i.width );
 		setVariable("sheight",(int) img->i.height);
 		setVariable("swidth" ,(int) img->i.width );
+#ifdef FIM_NO_FBI
+		setVariable("_fim_bpp" ,(int) ffd.fb_var.bits_per_pixel );
+#else
 		setVariable("_fim_bpp" ,(int) fb_var.bits_per_pixel );
+#endif
 		setVariable("scale"  ,newscale*100);
 		setVariable("ascale" ,ascale);
 #endif
@@ -140,7 +156,11 @@ namespace fim
 		cc.setVariable("width"  ,(int)fimg->i.width );
 		cc.setVariable("sheight",(int) img->i.height);
 		cc.setVariable("swidth" ,(int) img->i.width );
+#ifdef FIM_NO_FBI
+		cc.setVariable("_fim_bpp" ,(int) ffd.fb_var.bits_per_pixel );
+#else
 		cc.setVariable("_fim_bpp" ,(int) fb_var.bits_per_pixel );
+#endif
 		cc.setVariable("scale"  ,newscale*100);
 		cc.setVariable("ascale" ,ascale);
 		return true;
@@ -217,8 +237,14 @@ namespace fim
 		/*
 		 * the image descriptors are freed if necessary and pointers blanked
 		 * */
-                if(fimg!=img && img ) free_image(img );
+#ifdef FIM_NO_FBI
+                if(fimg!=img && img ) FbiStuff::free_image(img );
+                if(fimg     ) FbiStuff::free_image(fimg);
+#else
+		if(fimg!=img && img ) free_image(img );
                 if(fimg     ) free_image(fimg);
+
+#endif
                 reset();
         }
 
@@ -272,7 +298,11 @@ namespace fim
 			else
 				img = scale_image(fimg,newscale,newascale);
 #else
+# ifdef FIM_NO_FBI
+			img = FbiStuff::scale_image(fimg,newscale,newascale);
+# else
 			img = scale_image(fimg,newscale,newascale);
+# endif
 #endif
 			/* orientation can be 0,1,2,3 */
 			if( img && orientation!=0 && orientation != 2)
@@ -280,10 +310,18 @@ namespace fim
 				// we make a backup.. who knows!
 				// FIXME: should use a faster and memory-smarter method : in-place
 				struct ida_image *rb=img;
+#ifdef FIM_NO_FBI
+				rb  = FbiStuff::rotate_image(rb,orientation==1?0:1);
+#else
 				rb  = rotate_image(rb,orientation==1?0:1);
+#endif
 				if(rb)
 				{
+#ifdef FIM_NO_FBI
+					FbiStuff::free_image(img);
+#else
 					free_image(img);
+#endif
 					img=rb;
 				}
 			}
@@ -292,18 +330,33 @@ namespace fim
 				// we make a backup.. who knows!
 				struct ida_image *rbb,*rb;
 				// FIXME: should use a faster and memory-smarter method : in-place
+#ifdef FIM_NO_FBI
+				rb  = FbiStuff::rotate_image(img,0);
+				if(rb)rbb  = FbiStuff::rotate_image(rb,0);
+#else
 				rb  = rotate_image(img,0);
 				if(rb)rbb  = rotate_image(rb,0);
+#endif
 				if(rbb)
 				{
+#ifdef FIM_NO_FBI
+					FbiStuff::free_image(img);
+					FbiStuff::free_image(rb);
+#else
 					free_image(img);
 					free_image(rb);
+#endif
 					img=rbb;
 				}
 				else
 				{
+#ifdef FIM_NO_FBI
+					if(rbb)FbiStuff::free_image(rbb);
+					if(rb )FbiStuff::free_image(rb);
+#else
 					if(rbb)free_image(rbb);
 					if(rb )free_image(rb);
+#endif
 				}
 			}
 
@@ -317,10 +370,18 @@ namespace fim
 			else 
 			{
 				/* reallocation succeeded */
+#ifdef FIM_NO_FBI
+				if( backup_img && backup_img!=fimg ) FbiStuff::free_image(backup_img);
+#else
 				if( backup_img && backup_img!=fimg ) free_image(backup_img);
+#endif
 				scale=newscale;
 				ascale=newascale;
+#ifdef FIM_NO_FBI
+	        		ffd.redraw=1;
+#else
 				redraw=1;
+#endif
 			}
 
 			/*
@@ -332,7 +393,11 @@ namespace fim
 			cc.setVariable("swidth" ,(int) img->i.width );
 			cc.setVariable("ascale" , ascale );
 		}
+#ifdef FIM_NO_FBI
+		else ffd.redraw=0;
+#else
 		else redraw=0;
+#endif
 		orientation=neworientation;
 		return 0;
 	}

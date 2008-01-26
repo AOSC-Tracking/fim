@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,17 +19,25 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_NO_FBI
+
+#ifdef FIM_NO_FBI
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <png.h>
 
-#include "loader.h"
+//#include "loader.h"
+#include "FbiStuff.h"
+#include "FbiStuffLoader.h"
 #ifdef USE_X11
 # include "viewer.h"
 #endif
+namespace fim
+{
+
+extern FramebufferDevice ffd;
+
 
 static const char *ct[] = {
     "gray",  "X1", "rgb",  "palette",
@@ -51,15 +62,21 @@ png_init(FILE *fp, char *filename, unsigned int page,
     int pass, number_passes;
     unsigned int y;
     png_uint_32 resx, resy;
+    /*
     png_color_16 *file_bg, my_bg = {
 	.red   = 192,
 	.green = 192,
 	.blue  = 192,
 	.gray  = 192,
-    };
+    };*/
+    png_color_16 *file_bg, my_bg ;
+	my_bg .red   = 192;
+	my_bg .green = 192;
+	my_bg .blue  = 192;
+	my_bg .gray  = 192;
     int unit;
     
-    h = malloc(sizeof(*h));
+    h = (struct png_state *) malloc(sizeof(*h));
     memset(h,0,sizeof(*h));
 
     h->infile = fp;
@@ -81,7 +98,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
     i->height = h->h;
     if (PNG_RESOLUTION_METER == unit)
 	i->dpi = res_m_to_inch(resx);
-    if (debug)
+    if (ffd.debug)
 	fprintf(stderr,"png: color_type=%s #1\n",ct[h->color_type]);
     i->npages = 1;
     
@@ -103,13 +120,13 @@ png_init(FILE *fp, char *filename, unsigned int page,
     png_read_update_info(h->png, h->info);
 
     h->color_type = png_get_color_type(h->png, h->info);
-    if (debug)
+    if (ffd.debug)
 	fprintf(stderr,"png: color_type=%s #2\n",ct[h->color_type]);
     
-    h->image = malloc(i->width * i->height * 4);
+    h->image = (png_byte*)malloc(i->width * i->height * 4);
     
     for (pass = 0; pass < number_passes-1; pass++) {
-	if (debug)
+	if (ffd.debug)
 	    fprintf(stderr,"png: pass #%d\n",pass);
 	for (y = 0; y < i->height; y++) {
 	    png_bytep row = h->image + y * i->width * 4;
@@ -132,7 +149,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
 static void
 png_read(unsigned char *dst, unsigned int line, void *data)
 {
-    struct png_state *h = data;
+    struct png_state *h = (struct png_state *) data;
 
     png_bytep row = h->image + line * h->w * 4;
     switch (h->color_type) {
@@ -162,7 +179,7 @@ png_read(unsigned char *dst, unsigned int line, void *data)
 static void
 png_done(void *data)
 {
-    struct png_state *h = data;
+    struct png_state *h =(struct png_state *) data;
 
     free(h->image);
     png_destroy_read_struct(&h->png, &h->info, NULL);
@@ -253,5 +270,7 @@ static void __init init_wr(void)
     write_register(&png_writer);
 }
 
+
 #endif
+}
 #endif

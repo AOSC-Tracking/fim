@@ -1287,6 +1287,8 @@ A lot of questions still await for an answer in Fim. Here are few:
  but these information should be informative enough for future kernels, too.
  Outdated, but comprehensive info can be found at :
               http://tldp.org/HOWTO/Framebuffer-HOWTO.html
+	      
+ Check out also http://doc.trolltech.com/3.3/emb-framebuffer-howto.html
 
  If you do not even know if you already have the framebuffer enabled, log in 
  as root into your linux box and type

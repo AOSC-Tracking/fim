@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,10 @@
  * This file contains mainly the code that couldn't fit in any of the existing classes.
  * When the fbi->fim transition will be complete, it will be probably very very small, 
  * as then all lone functions will be encapsulated.
+ *
+ * p.s.: it will be also _much_ cleaner ...
  * */
+
 #include "fim.h"
 #include <signal.h>
 #include <sys/ioctl.h>
@@ -31,11 +34,13 @@
 
 #include <linux/fb.h>
 #include <linux/kd.h>
+#ifndef FIM_NO_FBI
 #include <linux/vt.h>
 #include "fbi_src/fbtools.h"
+#endif
 
 /*
- * we use a portion of the STL
+ * We use the STL (Standard Template Library)
  */
 using std :: endl;
 using std :: ifstream;
@@ -45,10 +50,12 @@ using std :: multimap;
 using std :: pair;
 using std :: vector;
 
-class CommandConsole;
 int fim_rand(){return rand();}
 
+#ifndef FIM_NO_FBI
 char *fontname=NULL;
+#endif
+
 static char * command_generator (const char *text,int state);
 
 /*
@@ -88,8 +95,18 @@ char * dupstr (const char* s)
 	return (r);
 }
 
+
+	static int fim_uninitialized = 1; // new
+
 namespace fim
 {
+	#ifdef FIM_NO_FBI
+	fim::FramebufferDevice ffd; //EXPERIMENTAL CODE : fim framebuffer device
+	//int redraw;
+	#endif
+
+	fim::CommandConsole cc;
+
 	struct termios  saved_attributes;
 	int             saved_fl;
 	/*
@@ -136,10 +153,17 @@ namespace fim
 		}
 		else
 		{
+#ifndef FIM_NO_FBI
 			fb_clear_mem();
 			tty_restore();
 			fb_cleanup();
 			std::exit(code);
+#else
+			ffd.fb_clear_mem();
+			tty_restore();
+			ffd.fb_cleanup();
+			std::exit(code);
+#endif
 		}
 	}
 }
@@ -171,7 +195,11 @@ void status(const char *desc, const char *info)
 		return;
 
 	if(!cc.inConsole())prompt=no_prompt;
+#ifndef FIM_NO_FBI
 	chars = fb_var.xres / fb_font_width();
+#else
+	chars = ffd.fb_var.xres / ffd.fb_font_width();
+#endif
 	if(chars<48)return;//something strange..
 	str = (char*) malloc(chars+1);//this malloc is free
 	if(!str)return;
@@ -192,7 +220,11 @@ void status(const char *desc, const char *info)
 	if( statusline_cursor < chars && cc.inConsole()  ) str[statusline_cursor]='_';
 	p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
 
+#ifndef FIM_NO_FBI
 	fb_status_line((unsigned char*)str);
+#else
+	ffd.fb_status_line((unsigned char*)str);
+#endif
 	free(str);
 }
 
@@ -233,8 +265,13 @@ static void fb_status_screen(const char *msg)//, int noDraw=1)
 	}
 	int y,i,j,l,w;
 	// R rows, C columns
+# ifdef FIM_NO_FBI
+	int R=(ffd.fb_var.yres/ffd.fb_font_height())/2,/* half screen : more seems evil */
+	C=(ffd.fb_var.xres/ffd.fb_font_width());
+# else
 	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
 	C=(fb_var.xres/fb_font_width());
+# endif
 	static char **columns=NULL;
 	static char *columns_data=NULL;
 	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
@@ -333,8 +370,13 @@ static void fb_status_screen(const char *msg)//, int noDraw=1)
 	//if(!cc.drawOutput() || noDraw)return;//CONVENTION!
 	if(!cc.drawOutput() )return;//CONVENTION!
 
+# ifdef FIM_NO_FBI
+	    y = 1*ffd.fb_font_height();
+	    for(i=0  ;i<R ;++i) ffd.fs_puts(ffd.fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
+# else
 	    y = 1*fb_font_height();
 	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
+# endif
 
 	    /*
 	     *WARNING : note that columns and columns_data arrays are not freed and should not, as long as they are static.
@@ -382,9 +424,9 @@ static char ** fim_completion (const char *text, int start,int end)
 		if(!__s)return NULL;__s[0]=_s;
 		//we print all of the commands, with no completion, though.
 #endif
-		cout << "VARIABLES : "<<cc.get_variables_list()<<"\n";
-		cout << "COMMANDS : "<<cc.get_commands_list()<<"\n";
-		cout << "ALIASES : "<<cc.get_aliases_list()<<"\n";
+		std::cout << "VARIABLES : "<<cc.get_variables_list()<<"\n";
+		std::cout << "COMMANDS : "<<cc.get_commands_list()<<"\n";
+		std::cout << "ALIASES : "<<cc.get_aliases_list()<<"\n";
 		rl_attempted_completion_over = 1;
 		/* this could be set only here :) */
 		return NULL;
@@ -502,7 +544,13 @@ void initialize_readline ()
 	//rl_inhibit_completion=1;	//if set, TABs are read as normal characters
 	rl_filename_quoting_desired=1;
 	rl_filename_quote_characters="\"";
-	//rl_bind_key('~',fim_rl_end);
+	//rl_reset_terminal("linux");
+	//rl_reset_terminal("vt100");
+	//rl_bind_key(0x09,fim_rl_end);
+	//rl_bind_key(0x7F,fim_rl_end);
+	//rl_bind_key(-1,fim_rl_end);
+	//rl_bind_key('~',fim_rl_end); // ..
+	//rl_bind_key('\t',rl_insert);
 	//rl_bind_keyseq("g",fim_rl_end);
 	//rl_set_prompt("$");
 
@@ -514,7 +562,6 @@ void initialize_readline ()
 }
 
 
-fim::CommandConsole cc;
 	int g_fim_no_framebuffer=1;
 
 /* Generator function for command completion.  STATE lets us
@@ -543,9 +590,8 @@ static char * command_generator (const char *text,int state)
 //	return ((char *)NULL);
 }
 
-#define TRUE            1
-#define FALSE           0
 
+#ifndef FIM_NO_FBI
 void console_switch(int is_busy)
 {
 	//FIX ME
@@ -580,7 +626,12 @@ void console_switch(int is_busy)
 	switch_last = fb_switch_state;
 	return;
 }
-
+#else
+void console_switch(int is_busy)
+{
+	return ffd.console_switch(is_busy);
+}
+#endif
 
 
 /*
@@ -631,8 +682,9 @@ static struct option fim_options[] = {
 
 	FlexLexer *lexer;
 	using namespace fim;
+#ifndef FIM_NO_FBI
 	int              vt = 0;
-	int fim_uninitialized = 1; // new
+#endif
 
 
 static void version()
@@ -699,13 +751,16 @@ void chomp(char *s)
 	for(;*s;++s)if(*s=='\n')*s='\0';
 }
 
+#ifndef FIM_NO_FBI
+#define TRUE            1
+#define FALSE           0
 int framebuffer_init()
 {
 	if( ! g_fim_no_framebuffer )
 	{
 		//initialization of the framebuffer text
 		fb_text_init1(fontname);
-		//initialization of the framebuffer text
+		//initialization of the framebuffer device handlers
 		fd = fb_init(fbdev, fbmode, vt);
 		//setting signals to handle in the right ways signals
 		fb_catch_exit_signals();
@@ -760,6 +815,7 @@ int framebuffer_init()
 	if(fd==-1)return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
 	return 0;
 }
+#endif
 
 int help_and_exit(char *argv0)
 {
@@ -789,16 +845,9 @@ int help_and_exit(char *argv0)
 
 int main(int argc,char *argv[])
 {
-	{
-		/*
-		 * fbgamma and fontname are fbi - defined variables.
-		 * */
-		char *line;
-	    	if (NULL != (line = getenv("FBGAMMA")))
-	        	fbgamma = atof(line);
-	    	if (NULL != (line = getenv("FBFONT")))
-			fontname = line;
-	}
+	char *default_fbdev=NULL,*default_fbmode=NULL;
+	int default_vt=-1;
+	float default_fbgamma=-1.0;
 	/*
 	 * an adapted version of the main function
 	 * of the original version of the fbi program
@@ -883,7 +932,7 @@ int main(int argc,char *argv[])
 	    break;
 	case 'g':
 	    //fbi's
-	    fbgamma = atof(optarg);
+	    default_fbgamma = atof(optarg);
 	    break;
 	case 'r':
 	    //fbi's
@@ -914,11 +963,11 @@ int main(int argc,char *argv[])
 	    break;
 	case 'd':
 	    //fbi's
-	    fbdev = optarg;
+	    default_fbdev = optarg;
 	    break;
 	case 'm':
 	    //fbi's
-	    fbmode = optarg;
+	    default_fbmode = optarg;
 	    break;
 //removed, editing features :
 /*	case 'f':
@@ -940,7 +989,7 @@ int main(int argc,char *argv[])
 //	    break;
 	case 'T':
 	    //fbi's virtual terminal
-	    vt = atoi(optarg);
+	    default_vt = atoi(optarg);
 	    break;
 	case 'V':
 	    version();
@@ -1024,6 +1073,8 @@ int main(int argc,char *argv[])
 			cc.push(argv[i]);
 		}
 	}
+
+
 	lexer=new yyFlexLexer;	//used by YYLEX
 
 #ifdef FIM_READ_STDIN
@@ -1048,18 +1099,48 @@ int main(int argc,char *argv[])
 	}
 #endif
 
+
 	if(cc.browser.empty_file_list())
 		help_and_exit(argv[0]);
 
 	if((g_fim_no_framebuffer)==0)
 	{
+#ifndef FIM_NO_FBI
+		{
+		/*
+		 * fbgamma and fontname are fbi - defined variables.
+		 * */
+		char *line;
+	    	if (NULL != (line = getenv("FBGAMMA")))
+	        	fbgamma = atof(line);
+	    	if (NULL != (line = getenv("FBFONT")))
+			fontname = line;
+		}
+		if(default_fbdev)fbdev = default_fbdev;
+		if(default_fbmode)fbmode = default_fbmode;
+		if(default_vt!=-1)vt = default_vt;
+		if(default_fbgamma!=-1.0)fbgamma = default_fbgamma ;
 		framebuffer_init();
+#else
+		if(default_fbdev)ffd.fbdev = default_fbdev;
+		if(default_fbmode)ffd.fbmode = default_fbmode;
+		if(default_vt!=-1)ffd.vt = default_vt;
+		if(default_fbgamma!=-1.0)ffd.fbgamma = default_fbgamma ;
+		if(ffd.framebuffer_init())cleanup_and_exit(0);
+#endif
 		tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
 	}
 	rl::initialize_readline();
 
 	fim_uninitialized = 0; // new
-	cc.init();
+	if(cc.init()!=0) return -1;
+
+//	ffd.test_drawing();
+	//while(1);
+	//while(1){int i;for(i=0;i<500000;++i)ffd.fb_mem[i]=200;}
+	//while(1)ffd.fb_rect(1,100,1,100);
+	//cleanup_and_exit(0);
+
 	cc.executionCycle();
 	return 0;	//there will be no return
 }

@@ -16,6 +16,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#ifndef FIM_NO_FBI
 extern struct ida_op desc_flip_vert;
 extern struct ida_op desc_flip_horz;
 extern struct ida_op desc_rotate_cw;
@@ -23,3 +24,5 @@ extern struct ida_op desc_rotate_ccw;
 extern struct ida_op desc_invert;
 extern struct ida_op desc_crop;
 extern struct ida_op desc_autocrop;
+#endif
+

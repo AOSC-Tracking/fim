@@ -1,6 +1,9 @@
+/* $Id$ */
 /*
-     (c) 2007 Michele Martone
-     (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
+ FbiStuffLoader.h : fbi functions for loading files, modified for fim
+
+ (c) 2008 Michele Martone
+ (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,12 +19,22 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_NO_FBI
 
-#include "list.h"
+#ifdef FIM_NO_FBI
+
+#ifndef FBI_STUFF_LOADER_FBI_H
+#define FBI_STUFF_LOADER_FBI_H
+
+
+#include "FbiStuffList.h"
+
+//#include "list.h"
 #ifdef USE_X11
 # include <X11/Intrinsic.h>
 #endif
+
+namespace fim
+{
 
 enum ida_extype {
     EXTRA_COMMENT = 1,
@@ -138,6 +151,9 @@ extern struct list_head writers;
 
 void load_register(struct ida_loader *loader);
 void write_register(struct ida_writer *writer);
+
+}
+#endif
 
 #endif
 

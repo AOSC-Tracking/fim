@@ -22,6 +22,8 @@
 /*	#include <malloc.h>	*/
 namespace fim
 {
+	extern fim::CommandConsole cc;
+
 	Cache::Cache()
 	{
 		/*	FIXME : potential flaw ?	*/
