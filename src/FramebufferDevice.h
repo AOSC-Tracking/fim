@@ -19,7 +19,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifdef FIM_NO_FBI
+/*
+ * This file comes from fbi, and will undergo severe reorganization.
+ * */
 
 #ifndef FRAMEBUFFER_DEVICE_FIM_H
 #define FRAMEBUFFER_DEVICE_FIM_H
@@ -234,28 +236,31 @@ class FramebufferDevice
 	void (*fs_setpixel)(void *ptr, unsigned int color);
 	private:
 
-static void setpixel1(void *ptr, unsigned int color)
-{
-    unsigned char *p = (unsigned char *) ptr;
-    *p = color;
-}
-static void setpixel2(void *ptr, unsigned int color)
-{
-    unsigned char *p = (unsigned char *) ptr;
-    *p = color;
-}
-static void setpixel3(void *ptr, unsigned int color)
-{
-    unsigned char *p = (unsigned char *) ptr;
-    *(p++) = (color >> 16) & 0xff;
-    *(p++) = (color >>  8) & 0xff;
-    *(p++) =  color        & 0xff;
-}
-static void setpixel4(void *ptr, unsigned int color)
-{
-    unsigned char *p = (unsigned char *) ptr;
-    *p = color;
-}
+	static void setpixel1(void *ptr, unsigned int color)
+	{
+	    unsigned char *p = (unsigned char *) ptr;
+	    *p = color;
+	}
+
+	static void setpixel2(void *ptr, unsigned int color)
+	{
+	    unsigned char *p = (unsigned char *) ptr;
+	    *p = color;
+	}
+
+	static void setpixel3(void *ptr, unsigned int color)
+	{
+	    unsigned char *p = (unsigned char *) ptr;
+	    *(p++) = (color >> 16) & 0xff;
+	    *(p++) = (color >>  8) & 0xff;
+	    *(p++) =  color        & 0xff;
+	}
+
+	static void setpixel4(void *ptr, unsigned int color)
+	{
+	    unsigned long *p = (unsigned long*) ptr;
+	    *p = color;
+	}
 
 
 
@@ -282,6 +287,9 @@ static void setpixel4(void *ptr, unsigned int color)
 	struct DEVS devs_default;
 	struct DEVS devs_devfs;
 
+#ifdef FIM_BOZ_PATCH
+	int with_boz_patch;
+#endif
 
 	// FBTOOLS.C
 	FramebufferDevice():
@@ -302,6 +310,9 @@ static void setpixel4(void *ptr, unsigned int color)
 	steps(50),
 	debug(0),
 	fs_setpixel(NULL),
+#ifdef FIM_BOZ_PATCH
+	with_boz_patch(0),
+#endif
 	fontserver(*this)
 	{
 		cmap.start  =  0;
@@ -368,7 +379,11 @@ static void setpixel4(void *ptr, unsigned int color)
 
 
 	void dev_init(void);
-	int fb_init(char *device, char *mode, int vt);
+	private:
+	int fb_init(char *device, char *mode, int vt
+			, int try_boz_patch=0
+			);
+	public:
 
 	void fb_memset (void *addr, int c, size_t len);
 	void fb_setcolor(int c) { fb_memset(fb_mem+fb_mem_offset,c,fb_fix.smem_len); }
@@ -377,7 +392,7 @@ static void setpixel4(void *ptr, unsigned int color)
 
 	void fb_setvt(int vtno);
 	int fb_setmode(char *name);
-	static int fb_activate_current(int tty);
+	int fb_activate_current(int tty);
 
 	void console_switch(int is_busy);
 
@@ -556,8 +571,6 @@ void init_one(int32_t *lut, int bits, int shift)
 }
 
 
-
-#endif
 
 #endif
 

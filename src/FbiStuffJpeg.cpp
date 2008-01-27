@@ -19,27 +19,22 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/*
+ * This file comes from fbi, and will undergo severe reorganization.
+ * */
 
-#ifdef FIM_NO_FBI
 
 #include <cstdio>
 #include <cstdlib>
 
 /*
-#ifdef HAVE_STDLIB_H
-#undef HAVE_STDLIB_H
-#endif
 
-#ifdef HAVE_STDDEF_H
-#undef HAVE_STDDEF_H
+#ifdef HAVE_STDLIB_H
+//#undef HAVE_STDLIB_H
+#define HAVE_STDLIB_H_BACKUP HAVE_STDLIB_H
 #endif
 */
 
-extern "C"
-{
-// we require C linkage for these symbols
-#include <jpeglib.h>
-}
 
 #include <cstring>
 //#include <stddef.h>
@@ -52,10 +47,16 @@ extern "C"
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 //#include "loader.h"
+//
+extern "C"
+{
+// we require C linkage for these symbols
+#include <jpeglib.h>
+}
 
 
 /*
-	#include "fbi_src/misc.h"
+	From fbi's misc.h :
 */
 
 #define container_of(ptr, type, member) ({			\
@@ -361,5 +362,10 @@ static void __init init_wr(void)
 
 
 #endif
-}
+/*
+#ifdef HAVE_STDLIB_H_BACKUP 
+#define HAVE_STDLIB_H HAVE_STDLIB_H_BACKUP 
+#undef HAVE_STDLIB_H_BACKUP 
 #endif
+*/
+}

@@ -31,9 +31,7 @@
 namespace fim
 {
 	extern CommandConsole cc;
-#ifdef FIM_NO_FBI
 	extern FramebufferDevice ffd;
-#endif
         fim::string Window::cmd(const std::vector<fim::string> &args)
         {
 		unsigned int i=0;
@@ -897,11 +895,7 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-#ifdef FIM_NO_FBI
 				if(viewport)ffd.redraw=1;// no effect
-#else
-				if(viewport)redraw=1;// no effect
-#endif
 				return 0;
 			}
 
@@ -948,11 +942,7 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-#ifdef FIM_NO_FBI
 				if(viewport)ffd.redraw=1;// no effect
-#else
-				if(viewport)redraw=1;// no effect
-#endif
 				return 0;
 			}
 

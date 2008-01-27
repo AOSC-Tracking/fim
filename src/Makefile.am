@@ -49,11 +49,13 @@ dist-hook:
 	-for file in $(BUILT_SOURCES) ; do rm -f $(distdir)/$$file ; done
 
 EXTRA_fim_SOURCES = 
-EXTRA_fim_SOURCES += fbi_src/png.c
-EXTRA_fim_SOURCES += fbi_src/jpeg.c
-EXTRA_fim_SOURCES += fbi_src/tiff.c
-EXTRA_fim_SOURCES += fbi_src/gif.c
-
+# The following files are indicated as source files by configure.ac
+# ( they are optional and are built via @FIM_LIB_OBJECTS@ )
+#
+EXTRA_fim_SOURCES += FbiStuffGif.cpp
+EXTRA_fim_SOURCES += FbiStuffJpeg.cpp
+EXTRA_fim_SOURCES += FbiStuffTiff.cpp
+EXTRA_fim_SOURCES += FbiStuffPng.cpp
 
 CLEANFILES=$(BUILT_SOURCES) yacc.output 
 
@@ -92,14 +94,10 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Command.cpp \
 	CommandConsole.cpp \
 	FbiStuff.cpp \
-	FbiStuffBmp.cpp \
-	FbiStuffPpm.cpp \
-	FbiStuffGif.cpp \
-	FbiStuffJpeg.cpp \
-	FbiStuffTiff.cpp \
-	FbiStuffPng.cpp \
 	FbiStuffFbtools.cpp \
 	FbiStuffLoader.cpp \
+	FbiStuffPpm.cpp \
+	FbiStuffBmp.cpp \
 	FontServer.cpp \
 	FramebufferDevice.cpp \
 	Image.cpp \
@@ -109,50 +107,13 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Window.cpp \
 	common.cpp \
 	interpreter.cpp \
-	string.cpp \
-	fbi_src/bmp.c \
-	fbi_src/dither.c \
-	fbi_src/fb-gui.c \
-	fbi_src/fbi.c \
-	fbi_src/fbi.spec \
-	fbi_src/fbtools.c \
-	fbi_src/filter.c \
-	fbi_src/loader.c \
-	fbi_src/op.c \
-	fbi_src/ppm.c \
-	fbi_src/fs.c \
-	fbi_src/fs.h \
-	fbi_src/config.h \
-	fbi_src/dither.h \
-	fbi_src/fb-gui.h \
-	fbi_src/fbtools.h \
-	fbi_src/filter.h \
-	fbi_src/lirc.h \
-	fbi_src/list.h \
-	fbi_src/loader.h \
-	fbi_src/misc.h \
-	fbi_src/op.h
+	string.cpp
 
-#fim_SOURCES += fbi_src/tiff.c
-#fim_SOURCES += fbi_src/gif.c
-#fim_SOURCES += fbi_src/jpeg.c
-
-# jpegtools.h
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
-	regex.c \
-	fbi_src/tiff.c \
-	fbi_src/gif.c \
-	fbi_src/jpeg.c \
-	fbi_src/png.c
+	regex.c
 
-#	fbi_src/jpegtools.c \
-#	fbi_src/exiftran.c 
-#	fbi_src/xwd.c
-#	fbi_src/pcd.c 
-#	fbi_src/lirc.c 
-#
 #fim_cpp_CPP_FLAGS=-DFIM_VERSION -DFIM_AUTHOR
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
 
@@ -186,7 +147,6 @@ DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
  DEFINES  += -D FIM_CACHE_DEBUG		# Debug info on cache available
  DEFINES  += -D FIM_BUGGED_CACHE	# Sometimes something breaks and we want to isolate mechanisms
 #DEFINES  += -D FIM_NO_UNSAFE_CMDS		# Some unsafe commands are temporarily hidden
- DEFINES  += -D FIM_NO_FBI		# experimental : fim's framebuffer code is used
 
  FIM_VERSION= $(VERSION)
 # FIM_AUTHOR = '"Michele Martone <dezperado _CUT_ autistici _CUT_ org>"'

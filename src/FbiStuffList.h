@@ -19,8 +19,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/*
+ * This file comes from fbi, and will undergo severe reorganization.
+ * */
 
-#ifdef FIM_NO_FBI
 
 #ifndef FBI_STUFF_LIST_FBI_H
 #define FBI_STUFF_LIST_FBI_H
@@ -194,8 +196,6 @@ static __inline__ void list_splice(struct list_head *list, struct list_head *hea
 
 
 //end from list.h 
-
-#endif
 
 #endif
 

@@ -19,8 +19,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/*
+ * This file comes from fbi, and will undergo severe reorganization.
+ * */
 
-#ifdef FIM_NO_FBI
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"
 
@@ -90,7 +92,11 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 			FontServer::fb_text_init1(fontname,&f);
 			//initialization of the framebuffer device handlers
 			fd = fb_init(fbdev, fbmode, vt);
-				if(fd==-1)return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
+			if(fd==-1)
+				fd = fb_init(fbdev, fbmode, vt,0xbabebabe==0xbabebabe);//maybe we are under screen..
+			if(fd==-1)
+				if(fd==-1)exit(1);
+					//return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
 			//setting signals to handle in the right ways signals
 			fb_catch_exit_signals();
 			fb_switch_init();
@@ -269,7 +275,7 @@ void FramebufferDevice::svga_display_image_new(struct ida_image *img, int xoff, 
     }
 }
 
-int FramebufferDevice::fb_init(char *device, char *mode, int vt)
+int FramebufferDevice::fb_init(char *device, char *mode, int vt, int try_boz_patch)
 {
     char   fbdev[16];
     struct vt_stat vts;
@@ -279,13 +285,15 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt)
     if (vt != 0)
 	fb_setvt(vt);
 
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!try_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_GETSTATE, &vts)) {
 	fprintf(stderr,"ioctl VT_GETSTATE: %s (not a linux console?)\n",
 		strerror(errno));
-	exit(1);
+	return -1;
+//	exit(1);
     }
-#endif
     
     if (NULL == device) {
 	device = getenv("FRAMEBUFFER");
@@ -296,7 +304,9 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt)
 		exit(1);
 	    }
 	    c2m.console = vts.v_active;
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!try_boz_patch){
+#endif
 	    if (-1 == ioctl(fb, FBIOGET_CON2FBMAP, &c2m)) {
 		perror("ioctl FBIOGET_CON2FBMAP");
 		exit(1);
@@ -306,7 +316,9 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt)
 		    c2m.console,c2m.framebuffer);*/
 	    sprintf(fbdev,devices->fbnr,c2m.framebuffer);
 	    device = fbdev;
-#else
+#ifdef FIM_BOZ_PATCH
+    	    }
+    else
 	    device = "/dev/fb0";
 #endif
 	}
@@ -332,16 +344,20 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt)
 	    exit(1);
 	}
     }
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!try_boz_patch)
+#endif
     if (-1 == ioctl(tty,KDGETMODE, &kd_mode)) {
 	perror("ioctl KDGETMODE");
 	exit(1);
     }
+#ifdef FIM_BOZ_PATCH
+    if(!try_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_GETMODE, &vt_omode)) {
 	perror("ioctl VT_GETMODE");
 	exit(1);
     }
-#endif
     tcgetattr(tty, &term);
     
     /* switch mode */
@@ -398,16 +414,21 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt)
 	    goto err;
 	}
     }
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!try_boz_patch)
+#endif
     if (-1 == ioctl(tty,KDSETMODE, KD_GRAPHICS)) {
 	perror("ioctl KDSETMODE");
 	goto err;
     }
-#endif
     fb_activate_current(tty);
 
     /* cls */
     fb_memset(fb_mem+fb_mem_offset,0,fb_fix.smem_len);
+
+#ifdef FIM_BOZ_PATCH
+    with_boz_patch=try_boz_patch;
+#endif
     return fb;
 
  err:
@@ -471,12 +492,13 @@ void FramebufferDevice::fb_setvt(int vtno)
     dup(0);
     dup(0);
 
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!with_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_GETSTATE, &vts)) {
 	perror("ioctl VT_GETSTATE");
 	exit(1);
     }
-#endif
     orig_vt_no = vts.v_active;
     if (-1 == ioctl(tty,VT_ACTIVATE, vtno)) {
 	perror("ioctl VT_ACTIVATE");
@@ -566,20 +588,27 @@ int FramebufferDevice::fb_activate_current(int tty)
 /* Hmm. radeonfb needs this. matroxfb doesn't. */
     struct vt_stat vts;
     
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!with_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_GETSTATE, &vts)) {
 	perror("ioctl VT_GETSTATE");
 	return -1;
     }
+#ifdef FIM_BOZ_PATCH
+    if(!with_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_ACTIVATE, vts.v_active)) {
 	perror("ioctl VT_ACTIVATE");
 	return -1;
     }
+#ifdef FIM_BOZ_PATCH
+    if(!with_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_WAITACTIVE, vts.v_active)) {
 	perror("ioctl VT_WAITACTIVE");
 	return -1;
     }
-#endif
     return 0;
 }
 
@@ -651,7 +680,6 @@ void FramebufferDevice::fb_line(int x1, int x2, int y1,int y2)
 	h = x2, x2 = x1, x1 = h;
     if (y2 < y1)
 	h = y2, y2 = y1, y1 = h;
-
     if (x2 - x1 < y2 - y1) {
 	inc = (float)(x2-x1)/(float)(y2-y1);
 	for (y = y1; y <= y2; y++) {
@@ -675,6 +703,7 @@ void FramebufferDevice::fb_rect(int x1, int x2, int y1,int y2)
     fb_line(x1, x1, y1, y2);
     fb_line(x2, x2, y1, y2);
 }
+
 void FramebufferDevice::fb_setpixel(int x, int y, unsigned int color)
 {
     unsigned char *ptr;
@@ -729,12 +758,16 @@ void FramebufferDevice::fb_cleanup(void)
     }
     close(fb);
 
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!with_boz_patch)
+#endif
     if (-1 == ioctl(tty,KDSETMODE, kd_mode))
 	perror("ioctl KDSETMODE");
+#ifdef FIM_BOZ_PATCH
+    if(!with_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_SETMODE, &vt_omode))
 	perror("ioctl VT_SETMODE");
-#endif
     if (orig_vt_no && -1 == ioctl(tty, VT_ACTIVATE, orig_vt_no))
 	perror("ioctl VT_ACTIVATE");
     if (orig_vt_no && -1 == ioctl(tty, VT_WAITACTIVE, orig_vt_no))
@@ -1106,23 +1139,25 @@ int FramebufferDevice::fb_switch_init()
     sigemptyset(&act.sa_mask);
     sigaction(SIGUSR1,&act,&old);
     sigaction(SIGUSR2,&act,&old);
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!with_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_GETMODE, &vt_mode)) {
 	perror("ioctl VT_GETMODE");
 	exit(1);
     }
-#endif
     vt_mode.mode   = VT_PROCESS;
     vt_mode.waitv  = 0;
     vt_mode.relsig = SIGUSR1;
     vt_mode.acqsig = SIGUSR2;
     
-#ifndef FIM_BOZ_PATCH
+#ifdef FIM_BOZ_PATCH
+    if(!with_boz_patch)
+#endif
     if (-1 == ioctl(tty,VT_SETMODE, &vt_mode)) {
 	perror("ioctl VT_SETMODE");
 	exit(1);
     }
-#endif
     return 0;
 }
 
@@ -1185,5 +1220,3 @@ int FramebufferDevice::fs_init_fb(int white8)
 
 
 }
-
-#endif

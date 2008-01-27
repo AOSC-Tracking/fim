@@ -19,7 +19,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifdef FIM_NO_FBI
+/*
+ * This file comes from fbi, and will undergo severe reorganization.
+ * */
 
 #ifndef FBI_STUFF_FBI_H
 #define FBI_STUFF_FBI_H
@@ -29,7 +31,6 @@
 #include "FbiStuffLoader.h"
 #include "FontServer.h"
 
-//#include "fbi_src/list.h"
 #ifdef USE_X11
 # include <X11/Intrinsic.h>
 #endif
@@ -103,5 +104,4 @@ struct ida_image * fbi_image_clone(struct ida_image *img);
 
 #endif
 
-#endif
 

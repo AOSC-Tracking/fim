@@ -19,8 +19,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/*
+ * This file comes from fbi, and will undergo severe reorganization.
+ * */
 
-#ifdef FIM_NO_FBI
 
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
@@ -832,7 +834,7 @@ struct ida_op desc_autocrop = {
 #include <errno.h>
 
 #ifdef USE_X11
-# include "fbi_src/viewer.h"
+# include "viewer.h"
 #endif
 
 /* ---------------------------------------------------------------------- */
@@ -1150,6 +1152,3 @@ struct ida_image * fbi_image_clone(struct ida_image *img)
 
 
 }
-#endif
-
-

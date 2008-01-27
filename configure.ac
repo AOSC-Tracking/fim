@@ -58,6 +58,7 @@ AC_PROG_CXX
 #AC_PROG_CXXCPP
 AC_CHECK_TOOL(AR, ar, ar)
 fim_cv_version=`cat VERSION`
+AC_LANG([C++])
 #AC_LANG_PUSH([C++])
 AM_INIT_AUTOMAKE(fim, $fim_cv_version)
 #AM_INIT_AUTOMAKE(fim, 1.0)
@@ -69,7 +70,6 @@ AC_SUBST(FIM_LIBS)
 AC_SUBST(FIM_LIB_OBJECTS)
 AC_SUBST(VERSION)
 #AC_LANG_POP([C++])
-#FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS string.o"
 
 fim="fim"
 AC_MSG_CHECKING([for prefix])
@@ -161,28 +161,29 @@ AC_ARG_ENABLE(system, AC_HELP_STRING([--disable-system], [Disable system() and p
 
 
 AC_HEADER_STDC
+AC_FUNC_MMAP
 
 AC_CHECK_HEADERS(stdarg.h sys/ioctl.h ioctl.h sysexits.h)
 AC_CHECK_HEADERS(sys/time.h sys/resource.h)
 AC_CHECK_HEADERS(unix.h)
-AC_CHECK_HEADERS([cstdio stdio.h], [break],)
-AC_CHECK_HEADERS([linux/fb.h], [break],)
+AC_CHECK_HEADERS([cstdio stdio.h], [break],AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]]))
+AC_CHECK_HEADERS([linux/fb.h], [break], AC_MSG_ERROR([[Cannot find linux/fb.h.  Fim requires it!.]]))
+AC_CHECK_HEADERS([linux/vt.h], [break], AC_MSG_ERROR([[Cannot find linux/vt.h.  Fim requires it!.]]))
+AC_CHECK_HEADERS([linux/kd.h], [break], AC_MSG_ERROR([[Cannot find linux/kd.h.  Fim requires it!.]]))
 
-if test "X$ac_cv_header_cstdio" != "Xyes" && test "X$ac_cv_header_stdio_h" != "Xyes"; then
-  AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]])
-fi
+dnl if test "X$ac_cv_header_cstdio" != "Xyes" && test "X$ac_cv_header_stdio_h" != "Xyes"; then
+dnl   AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]])
+dnl fi
 
-if test "X$ac_cv_header_linux_fb_h" != "Xyes" ; then
-  AC_MSG_ERROR([[Cannot find linux/fb.h.  Fim requires it!.]])
-fi
-
-
+dnl if test "X$ac_cv_header_linux_fb_h" != "Xyes" ; then
+dnl   AC_MSG_ERROR([[Cannot find linux/fb.h.  Fim requires it!.]])
+dnl fi
 
 
-AC_CHECK_FUNCS(setrlimit getsid)
+
+dnl AC_CHECK_FUNCS(setrlimit getsid)
 
 AC_TYPE_SIGNAL
-
 
 
 AC_ARG_WITH(regex, AC_HELP_STRING([--with-regex], [Use the GNU regex library insteat of the POSIX one]),
@@ -210,7 +211,7 @@ fi
 
 
 
-AC_MSG_CHECKING(where to put the documentation)
+AC_MSG_CHECKING(where to put the documentation...)
 AC_ARG_WITH(docdir, AC_HELP_STRING([--with-docdir=PATH], [Specify where to put the documentation]),
         [fim_cv_docdir=$withval],
         [fim_cv_docdir='${prefix}/doc/fim-${fim_cv_version}'])
@@ -259,7 +260,7 @@ if test x$fim_handle_gif != xno ; then
 #  if test x$with_libgif != xno ; then
 # the following needs thorough testing
   if test x"$have_gif" == xyes ; then
-  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS gif.o"
+  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffGif.o"
   FIMLIBS="$FIMLIBS $LIBGIF"
   else
     fim_handle_gif=no
@@ -312,7 +313,7 @@ if test x$fim_handle_tiff != xno ; then
 #  if test x$with_libtiff != xno ; then
 # the following needs thorough testing
   if test x"$have_tiff" == xyes ; then
-  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS tiff.o"
+  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffTiff.o"
   FIMLIBS="$FIMLIBS $LIBTIFF"
   else
     fim_handle_tiff=no
@@ -380,7 +381,7 @@ if test x$fim_handle_jpeg != xno ; then
 #  if test x$with_libjpeg != xno ; then
 # the following needs thorough testing
   if test x"$have_jpeg" == xyes ; then
-  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS jpeg.o"
+  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffJpeg.o"
   FIMLIBS="$FIMLIBS $LIBJPEG"
   AC_DEFINE([HAVE_LIBJPEG],[1],[We have libjpeg])
   else
@@ -427,7 +428,7 @@ if test x$fim_handle_png = xyes; then
                 LIBPNG_CFLAGS=`$LIBPNG_CONFIG --cflags`
                 LIBPNG_LIBS=`$LIBPNG_CONFIG --libs`
 		# finish this !
-                FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS png.o"
+                FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPng.o"
                 FIMLIBS="$FIMLIBS -lpng"
                 AC_DEFINE(FIM_WITH_LIBPNG, 1, [Defined, if libpng support is enabled])
         fi
@@ -495,14 +496,17 @@ fi
 dnl ==================
 
 fim_cv_warnings=no
-AC_ARG_ENABLE(screen, AC_HELP_STRING([--enable-screen], [Fim will work under screen (please read BUGS)]),
-[if test x$enableval = xyes; then
-        fim_cv_screen=yes
-fi])
+AC_ARG_ENABLE(screen, AC_HELP_STRING([--disable-screen], [Fim will try to work under screen by default (please read BUGS)]),
+[       if test x$enableval = xno; then
+		fim_cv_screen=no
+	else
+                fim_cv_screen=yes
+        fi
+],[ fim_cv_screen=yes ]
+)
 
-if test x$fim_cv_screen = xyes; then
+if test x$fim_cv_screen != xno; then
         # boz patch is on
-	have_boz_patch=yes
 	EXTRADEFS="$EXTRADEFS -D FIM_BOZ_PATCH"
 fi
 
@@ -601,7 +605,7 @@ AC_MSG_NOTICE([
 	jpeg file support                   : ${fim_handle_jpeg:-no}
 	tiff file support                   : ${fim_handle_tiff:-no}
 	gif  file support                   : ${fim_handle_gif:-no}
-	patch for running under screen on?  : ${have_boz_patch:-no}
+	patch for running under screen ?    : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 	internal windowing system           : ${have_windows:-no}

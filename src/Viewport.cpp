@@ -35,9 +35,7 @@
 namespace fim
 {
 	extern CommandConsole cc;
-#ifdef FIM_NO_FBI
 	extern FramebufferDevice ffd;
-#endif
 
 	Viewport::Viewport(
 #ifdef FIM_WINDOWS
@@ -80,11 +78,7 @@ namespace fim
 			if(this->onTop())return;
 			s=(s==0)?steps:s;
 			top -= s;
-#ifdef FIM_NO_FBI
 		        ffd.redraw=1;
-#else
-	        	redraw=1;
-#endif
 		}
 	}
 
@@ -96,11 +90,7 @@ namespace fim
 			if(this->onBottom())return;
 			s=(s==0)?steps:s;
 			top += s;
-#ifdef FIM_NO_FBI
 		        ffd.redraw=1;
-#else
-		        redraw=1;
-#endif
 		}
 	}
 
@@ -112,11 +102,7 @@ namespace fim
 			if(onRight())return;
 			s=(s==0)?steps:s;
 			left+=s;
-#ifdef FIM_NO_FBI
 		        ffd.redraw=1;
-#else
-	        	redraw=1;
-#endif
 		}
 	}
 
@@ -128,11 +114,7 @@ namespace fim
 			if(onLeft())return;
 			s=(s==0)?steps:s;
 			left-=s;
-#ifdef FIM_NO_FBI
 	        	ffd.redraw=1;
-#else
-		        redraw=1;
-#endif
 		}
 	}
 
@@ -188,22 +170,14 @@ namespace fim
 	{
 		if(this->onBottom())return;
 		if( check_valid() )top = image->height() - this->viewport_height();
-#ifdef FIM_NO_FBI
 	        ffd.redraw=1;
-#else
-	        redraw=1;
-#endif
 	}
 
 	void Viewport::top_align()
 	{
 		if(this->onTop())return;
 		top=0;
-#ifdef FIM_NO_FBI
 	        ffd.redraw=1;
-#else
-	        redraw=1;
-#endif
 	}
 
 	bool Viewport::redisplay()
@@ -212,11 +186,7 @@ namespace fim
 		 * we 'force' redraw.
 		 * display() has still the last word :P
 		 * */
-#ifdef FIM_NO_FBI
 	        ffd.redraw=1;
-#else
-	        redraw=1;
-#endif
 		return display();
 	}
 
@@ -246,33 +216,16 @@ namespace fim
 		 * for recovery purposes. FIXME
 		 * */
 		if( g_fim_no_framebuffer  )return;
-#ifdef FIM_NO_FBI
 		if(ffd.redraw==0 )return;
-#else
-		if(redraw==0 )return;
-#endif
 #ifdef FIM_WINDOWS
-# ifdef FIM_NO_FBI
 		ffd.fb_clear_rect(
 				xorigin(),
 				xorigin()+viewport_width()*ffd.fs_bpp,
 				yorigin(),
 				yorigin()+viewport_height()
 				);
-# else
-		fb_clear_rect(
-				xorigin(),
-				xorigin()+viewport_width()*fs_bpp,
-				yorigin(),
-				yorigin()+viewport_height()
-				);
-# endif
 #else
-# ifdef FIM_NO_FBI
 		ffd.fb_clear_rect( 0, viewport_width()*ffd.fs_bpp, 0, viewport_height());
-# else
-		fb_clear_rect( 0, viewport_width()*fs_bpp, 0, viewport_height());
-# endif
 #endif
 	}
 
@@ -285,11 +238,7 @@ namespace fim
 		 *
 		 *	returns true when some drawing occurred.
 		 */
-#ifdef FIM_NO_FBI
 		if((ffd.redraw==0) )return false;
-#else
-		if((redraw==0) )return false;
-#endif
 		if( check_invalid() ) null_display();//  NEW
 		if( check_invalid() ) return false;
 		/*
@@ -308,11 +257,7 @@ namespace fim
 
 		image->update();
     
-#ifdef FIM_NO_FBI
 		if (cc.getIntVariable("i:new") && ffd.redraw)
-#else
-		if (cc.getIntVariable("i:new") && redraw)
-#endif
 		{
 			/*
 			 * If this is the first image display, we have
@@ -365,15 +310,9 @@ namespace fim
 		    	}
 		}
 		
-#ifdef FIM_NO_FBI
 		if(ffd.redraw)
 		{
 			ffd.redraw=0;
-#else
-		if(redraw)
-		{
-			redraw=0;
-#endif
 			/*
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
@@ -381,11 +320,7 @@ namespace fim
 			//fb_clear_screen();
 #ifdef FIM_WINDOWS
 			if(!g_fim_no_framebuffer)
-# ifdef FIM_NO_FBI
 				ffd.svga_display_image_new(image->img, left, top,
-# else
-				svga_display_image_new(image->img, left, top,
-# endif
 					xorigin(),
 					viewport_width(),
 					yorigin(),
@@ -461,11 +396,7 @@ namespace fim
 			image->reset();
 			cc.setVariable("new",1);
 		}
-#ifdef FIM_NO_FBI
                 ffd.redraw=1;
-#else
-                redraw=1;
-#endif
                 top  = 0;
                 left = 0;
 

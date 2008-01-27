@@ -19,7 +19,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifdef FIM_NO_FBI
+/*
+ * This file comes from fbi, and will undergo severe reorganization.
+ * */
 
 #include "FramebufferDevice.h"
 
@@ -34,6 +36,3 @@ void fb_catch_exit_signals(void);
 void svga_dither_palette(int r, int g, int b);
 
 }
-/* console switching */
-#endif
-

@@ -29,7 +29,7 @@
 #include "../config.h"
 
 /*
- *	This is the main fim program file.
+ *	This is the main fim program header file.
  *	Estabilished 20061225 ( yes, i know what do you think about me now )
  * */
 #include <cstdlib>	/* <stdlib.h> standard C library definitions			*/
@@ -93,10 +93,8 @@ namespace fim{
 class Arg;
 class Browser;
 class CommandConsole;
-#ifdef FIM_NO_FBI
 class FontServer;
 class FramebufferDevice;
-#endif
 class Command;
 class Image;
 class Var;

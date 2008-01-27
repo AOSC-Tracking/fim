@@ -19,9 +19,11 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/*
+ * This file comes from fbi, and will undergo severe reorganization.
+ * */
 
 
-#ifdef FIM_NO_FBI
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -170,8 +172,4 @@ void write_register(struct ida_writer *writer)
 #endif
 
 }
-
-#endif
-
-
 

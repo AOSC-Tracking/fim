@@ -2,7 +2,7 @@ $Id$
 
 ==== KNOWN ISSUES
 
-20080126	Under --enable-screen, Fim behaves well but it doesn't handle well console switching:
+20080127	Under screen, Fim behaves well but it doesn't handle well console switching:
 		after a console switch, it doesn't redraw the image if not triggered to do so.
 
 20080106	keys 'Insert,Cancel,Home,End' are not recognized in the commandline mode.

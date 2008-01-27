@@ -32,9 +32,7 @@ extern int yyparse();
 namespace fim
 {
 	extern fim::CommandConsole cc;
-#ifdef FIM_NO_FBI
 	extern fim::FramebufferDevice ffd;
-#endif
 
 	static int nochars(const char *s)
 	{
@@ -415,12 +413,8 @@ namespace fim
 		// FIXME : DANGER, WARNING
 		// THIS SHOULD BE IN THE CONSTRUCTOR, AND SHALL BE SOME DAY :)
 			
-#ifndef FIM_NO_FBI
-		int xres=    fb_var.xres,yres=    fb_var.yres;
-#else
 		/* true pixels, as we are in framebuffer mode */
 		int xres=ffd.fb_var.xres,yres=ffd.fb_var.yres;
-#endif
 		if( g_fim_no_framebuffer )
 			/* fake pixels, as we are in text (er.. less than!) mode */
 			xres=80,yres=48;
@@ -1059,13 +1053,8 @@ namespace fim
 			        limit.tv_usec = 0;
 			        rc = select(fdmax, &set, NULL, NULL,
 			                    (0 != timeout && !paused) ? &limit : NULL);
-#ifdef FIM_NO_FBI
 			            if (ffd.switch_last != ffd.fb_switch_state) {
 			            ffd.console_switch(1);
-#else
-			            if (switch_last != fb_switch_state) {
-			            console_switch(1);
-#endif
 			            continue;
 			        }
 				if (FD_ISSET(fim_stdin,&set))rc = read(fim_stdin, &c, 4);
@@ -1635,7 +1624,8 @@ namespace fim
 			oldpwd=pwd(std::vector<fim::string>());
 			int ret = chdir(dir.c_str());
 #if 1
-			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
+//			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
+			if(ret) return (fim::string("cd error : ")+fim::string(strerror(errno)));
 #endif
 		}
 		return "";

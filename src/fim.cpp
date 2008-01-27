@@ -34,10 +34,6 @@
 
 #include <linux/fb.h>
 #include <linux/kd.h>
-#ifndef FIM_NO_FBI
-#include <linux/vt.h>
-#include "fbi_src/fbtools.h"
-#endif
 
 /*
  * We use the STL (Standard Template Library)
@@ -51,10 +47,6 @@ using std :: pair;
 using std :: vector;
 
 int fim_rand(){return rand();}
-
-#ifndef FIM_NO_FBI
-char *fontname=NULL;
-#endif
 
 static char * command_generator (const char *text,int state);
 
@@ -100,10 +92,7 @@ char * dupstr (const char* s)
 
 namespace fim
 {
-	#ifdef FIM_NO_FBI
 	fim::FramebufferDevice ffd; //EXPERIMENTAL CODE : fim framebuffer device
-	//int redraw;
-	#endif
 
 	fim::CommandConsole cc;
 
@@ -153,17 +142,10 @@ namespace fim
 		}
 		else
 		{
-#ifndef FIM_NO_FBI
-			fb_clear_mem();
-			tty_restore();
-			fb_cleanup();
-			std::exit(code);
-#else
 			ffd.fb_clear_mem();
 			tty_restore();
 			ffd.fb_cleanup();
 			std::exit(code);
-#endif
 		}
 	}
 }
@@ -195,11 +177,7 @@ void status(const char *desc, const char *info)
 		return;
 
 	if(!cc.inConsole())prompt=no_prompt;
-#ifndef FIM_NO_FBI
-	chars = fb_var.xres / fb_font_width();
-#else
 	chars = ffd.fb_var.xres / ffd.fb_font_width();
-#endif
 	if(chars<48)return;//something strange..
 	str = (char*) malloc(chars+1);//this malloc is free
 	if(!str)return;
@@ -220,11 +198,7 @@ void status(const char *desc, const char *info)
 	if( statusline_cursor < chars && cc.inConsole()  ) str[statusline_cursor]='_';
 	p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
 
-#ifndef FIM_NO_FBI
-	fb_status_line((unsigned char*)str);
-#else
 	ffd.fb_status_line((unsigned char*)str);
-#endif
 	free(str);
 }
 
@@ -265,13 +239,8 @@ static void fb_status_screen(const char *msg)//, int noDraw=1)
 	}
 	int y,i,j,l,w;
 	// R rows, C columns
-# ifdef FIM_NO_FBI
 	int R=(ffd.fb_var.yres/ffd.fb_font_height())/2,/* half screen : more seems evil */
 	C=(ffd.fb_var.xres/ffd.fb_font_width());
-# else
-	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
-	C=(fb_var.xres/fb_font_width());
-# endif
 	static char **columns=NULL;
 	static char *columns_data=NULL;
 	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
@@ -370,13 +339,8 @@ static void fb_status_screen(const char *msg)//, int noDraw=1)
 	//if(!cc.drawOutput() || noDraw)return;//CONVENTION!
 	if(!cc.drawOutput() )return;//CONVENTION!
 
-# ifdef FIM_NO_FBI
 	    y = 1*ffd.fb_font_height();
 	    for(i=0  ;i<R ;++i) ffd.fs_puts(ffd.fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
-# else
-	    y = 1*fb_font_height();
-	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
-# endif
 
 	    /*
 	     *WARNING : note that columns and columns_data arrays are not freed and should not, as long as they are static.
@@ -591,47 +555,10 @@ static char * command_generator (const char *text,int state)
 }
 
 
-#ifndef FIM_NO_FBI
-void console_switch(int is_busy)
-{
-	//FIX ME
-	switch (fb_switch_state) {
-	case FB_REL_REQ:
-		fb_switch_release();
-	case FB_INACTIVE:
-		visible = 0;///////
-	break;
-	case FB_ACQ_REQ:
-		fb_switch_acquire();
-	case FB_ACTIVE:
-		//when stepping in console..
-		visible = 1;	///////////
-		ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
-		redraw = 1;
-		cc.setVariable("fresh",1);	//!!
-	/*
-	 * thanks to the next line, the image is redrawn each time 
-	 * the console is switched! 
-	 */
-		cc.redisplay();
-		/*
-		 * PROBLEMS : image tearing (also in actual fbi..)
-		 */
-		//fb_clear_screen();
-	//if (is_busy) status("busy, please wait ...", NULL);		
-	break;
-	default:
-	break;
-    	}
-	switch_last = fb_switch_state;
-	return;
-}
-#else
 void console_switch(int is_busy)
 {
 	return ffd.console_switch(is_busy);
 }
-#endif
 
 
 /*
@@ -682,9 +609,6 @@ static struct option fim_options[] = {
 
 	FlexLexer *lexer;
 	using namespace fim;
-#ifndef FIM_NO_FBI
-	int              vt = 0;
-#endif
 
 
 static void version()
@@ -750,72 +674,6 @@ void chomp(char *s)
 {
 	for(;*s;++s)if(*s=='\n')*s='\0';
 }
-
-#ifndef FIM_NO_FBI
-#define TRUE            1
-#define FALSE           0
-int framebuffer_init()
-{
-	if( ! g_fim_no_framebuffer )
-	{
-		//initialization of the framebuffer text
-		fb_text_init1(fontname);
-		//initialization of the framebuffer device handlers
-		fd = fb_init(fbdev, fbmode, vt);
-		//setting signals to handle in the right ways signals
-		fb_catch_exit_signals();
-		fb_switch_init();
-		/*
-		 * C-z is inhibited now (for framebuffer's screen safety!)
-		 */
-		signal(SIGTSTP,SIG_IGN);
-		//signal(SIGSEGV,cleanup_and_exit);
-		//set text color to white ?
-		fb_text_init2();
-
-		switch (fb_var.bits_per_pixel) {
-	case 8:
-		svga_dither_palette(8, 8, 4);
-		dither = TRUE;
-		init_dither(8, 8, 4, 2);
-		break;
-	case 15:
-    	case 16:
-        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
-        	    linear_palette(5);
-		if (fb_var.green.length == 5) {
-		    lut_init(15);
-		} else {
-		    lut_init(16);
-		}
-		break;
-	case 24:
-        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
-      	      linear_palette(8);
-		break;
-	case 32:
-        	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR)
-          	  linear_palette(8);
-		lut_init(24);
-		break;
-	default:
-		fprintf(stderr, "Oops: %i bit/pixel ???\n",
-			fb_var.bits_per_pixel);
-		std::exit(1);
-    	}
-    	if (fb_fix.visual == FB_VISUAL_DIRECTCOLOR ||
-		fb_var.bits_per_pixel == 8)
-	{
-		if (-1 == ioctl(fd,FBIOPUTCMAP,&cmap)) {
-	    		perror("ioctl FBIOPUTCMAP");
-		    std::exit(1);
-		}
-	}
-	}
-	if(fd==-1)return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
-	return 0;
-}
-#endif
 
 int help_and_exit(char *argv0)
 {
@@ -1105,29 +963,11 @@ int main(int argc,char *argv[])
 
 	if((g_fim_no_framebuffer)==0)
 	{
-#ifndef FIM_NO_FBI
-		{
-		/*
-		 * fbgamma and fontname are fbi - defined variables.
-		 * */
-		char *line;
-	    	if (NULL != (line = getenv("FBGAMMA")))
-	        	fbgamma = atof(line);
-	    	if (NULL != (line = getenv("FBFONT")))
-			fontname = line;
-		}
-		if(default_fbdev)fbdev = default_fbdev;
-		if(default_fbmode)fbmode = default_fbmode;
-		if(default_vt!=-1)vt = default_vt;
-		if(default_fbgamma!=-1.0)fbgamma = default_fbgamma ;
-		framebuffer_init();
-#else
 		if(default_fbdev)ffd.fbdev = default_fbdev;
 		if(default_fbmode)ffd.fbmode = default_fbmode;
 		if(default_vt!=-1)ffd.vt = default_vt;
 		if(default_fbgamma!=-1.0)ffd.fbgamma = default_fbgamma ;
 		if(ffd.framebuffer_init())cleanup_and_exit(0);
-#endif
 		tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
 	}
 	rl::initialize_readline();
@@ -1142,6 +982,6 @@ int main(int argc,char *argv[])
 	//cleanup_and_exit(0);
 
 	cc.executionCycle();
-	return 0;	//there will be no return
+	return 0;
 }
 
