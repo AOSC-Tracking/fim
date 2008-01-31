@@ -38,6 +38,12 @@ namespace fim
  *	This class is evolving towards something
  *	reflecting the content of an image file and 
  *	some rescaled images caches.
+ *
+ *	Note that the way our code stores image data is device-dependent.
+ *	Therefore the need for a framebufferdevice reference in Image.
+ *
+ *	TODO : separate Image in a way multiple viewports could use the same image.
+ *	TODO : rename framebufferdevice.redraw -> this.need_redraw
  */
 
 #define FIM_SCALE_FACTOR 1.322
@@ -69,6 +75,7 @@ class Image
 	bool load(const char *fname_);
 
 	protected:
+	FramebufferDevice	&framebufferdevice;
 	int              orientation;	//aka rotation
 
 	int    invalid;		//the first time the image is loaded it is set to 1

@@ -27,14 +27,7 @@
 #define FRAMEBUFFER_DEVICE_FIM_H
 
 /*
- *
- * 20080106
- *
- * This code is still embryonal, and aims at replacing the whole core of 
- * fbi code and functionality (concerning framebuffer device stuff) in fim.
- *
- * So don't be surprised if the following code is deactivated via the preprocessor.
- *
+ * These are fbi's internals adapted to C++ and adapting to a loose OOP.
  * */
 
 
@@ -201,16 +194,9 @@ class FramebufferDevice
 	private:
 	FontServer fontserver;
 	char* fontname;
-	/*
-	struct fb_fix_screeninfo   fb_fix;
-	struct fb_var_screeninfo   fb_var;
-	unsigned char             *fb_mem;
-	int			   fb_mem_offset = 0;
-	int                        fb_switch_state = FB_ACTIVE;
-	*/
 
 	public:
-	int              vt ;
+	int             vt ;
 	int32_t         lut_red[256], lut_green[256], lut_blue[256];
 	int             dither , pcd_res , steps ;
 
@@ -261,10 +247,6 @@ class FramebufferDevice
 	    unsigned long *p = (unsigned long*) ptr;
 	    *p = color;
 	}
-
-
-
-
 
 	// FBI.C
 	/* framebuffer */

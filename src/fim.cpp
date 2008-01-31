@@ -35,6 +35,8 @@
 #include <linux/fb.h>
 #include <linux/kd.h>
 
+#include "readline.h"	/* readline stuff */
+
 /*
  * We use the STL (Standard Template Library)
  */
@@ -46,58 +48,30 @@ using std :: multimap;
 using std :: pair;
 using std :: vector;
 
-int fim_rand(){return rand();}
 
-static char * command_generator (const char *text,int state);
 
 /*
- *	Allocation of a small string for storing the 
- *	representation of a double.
- */
-char * dupnstr (double n)
-{
-	//allocation of a single string
-	char *r = (char*) malloc (16);
-	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
-	sprintf(r,"%f",n);
-	return (r);
-}
+ * Global variables.
+ * */
+	int g_fim_no_framebuffer=1;
+	FlexLexer *lexer;
+//	using namespace fim;
 
 /*
- *	Allocation of a small string for storing the 
- *	representation of an integer.
- */
-char * dupnstr (int n)
-{
-	//allocation of a single string
-	char *r = (char*) malloc (16);
-	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
-	sprintf(r,"%d",n);
-	return (r);
-}
-
-/*
- *	Allocation and duplication of a single string
- */
-char * dupstr (const char* s)
-{
-	char *r = (char*) malloc (strlen (s) + 1);
-	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
-	strcpy (r, s);
-	return (r);
-}
-
-
-	static int fim_uninitialized = 1; // new
-
+ * (nearly) all Fim stuff is in the fim namespace.
+ * */
 namespace fim
 {
-	fim::FramebufferDevice ffd; //EXPERIMENTAL CODE : fim framebuffer device
-
+	/*
+	 * Globals :/
+	 * */
+	fim::FramebufferDevice ffd; 
 	fim::CommandConsole cc;
+	static int fim_uninitialized = 1; // new
 
 	struct termios  saved_attributes;
 	int             saved_fl;
+
 	/*
 	 *	Setting the terminal in raw mode means:
 	 *	 - setting the line discipline
@@ -148,22 +122,14 @@ namespace fim
 			std::exit(code);
 		}
 	}
-}
-
-void sanitize_string(char *s, int c=0)
-{	
-	int n=c;
-	//cleans the string terminating it when some non printable character is encountered
-	if(s)
-	while(*s && (c--||!n))if(!isgraph(*s)||*s=='\n'){*s=' ';++s;}else ++s;
-	return;
-}
 
 /*
  *	Set the 'status bar' of the program.
  *	- desc will be placed on the left corner
  *	- info on the right
  *	pointers are not freed
+ *
+ *	dez's
  */
 void status(const char *desc, const char *info)
 {
@@ -191,7 +157,6 @@ void status(const char *desc, const char *info)
 	{
 		sprintf(str, "%s%-*.*s | H - Help",prompt, chars-11, chars-11, desc);
 	}
-	extern int rl_point;
 	static int statusline_cursor;
 	statusline_cursor=rl_point+1;
     
@@ -202,11 +167,17 @@ void status(const char *desc, const char *info)
 	free(str);
 }
 
+/*
+ *	dez's
+ */
 void set_status_bar(fim::string desc, const char *info)
 {
 	set_status_bar(desc.c_str(), info);
 }
 
+/*
+ *	dez's
+ */
 void set_status_bar(const char *desc, const char *info)
 {
 	/*
@@ -223,6 +194,8 @@ void set_status_bar(const char *desc, const char *info)
 	//FIX ME
 	20070628 now this function adapts to the screen resolution. yet there happens 
 	something strange for a number of lines filling more than half of the screen.. 
+
+	dez's
  */
 static void fb_status_screen(const char *msg)//, int noDraw=1)
 {	
@@ -290,7 +263,7 @@ static void fb_status_screen(const char *msg)//, int noDraw=1)
 		    l-=w;
 		    //we place the characters on the line (not padded,though)
 		    strncpy(columns[cline]+ccol,p,w);
-		    sanitize_string(columns[cline]+ccol,w);
+		    sanitize_string_from_nongraph(columns[cline]+ccol,w);
 		    //the current column index is updated,too
 		    ccol+=w;
 		    //we blank the rest of the line (SHOULD BE UNNECESSARY)
@@ -364,205 +337,11 @@ void status_screen(const char *desc, char *info)
 	fb_status_screen(desc);
 }
 
-namespace rl
-{
-/* 
- * Attempt to complete on the contents of TEXT.  START and END
- *     bound the region of rl_line_buffer that contains the word to
- *     complete.  TEXT is the word to complete.  We can use the entire
- *     contents of rl_line_buffer in case we want to do some simple
- *     parsing.  Return the array of matches, or NULL if there aren't any.
- */
-static char ** fim_completion (const char *text, int start,int end)
-{
-	//FIX ME
-	char **matches;
-
-	if(start==end && end<1)
-	{
-#if 0
-		char **__s,*_s;
-		_s=dupstr("");
-		if(! _s)return NULL;
-		__s=(char**)calloc(1,sizeof(char*));
-		if(!__s)return NULL;__s[0]=_s;
-		//we print all of the commands, with no completion, though.
-#endif
-		std::cout << "VARIABLES : "<<cc.get_variables_list()<<"\n";
-		std::cout << "COMMANDS : "<<cc.get_commands_list()<<"\n";
-		std::cout << "ALIASES : "<<cc.get_aliases_list()<<"\n";
-		rl_attempted_completion_over = 1;
-		/* this could be set only here :) */
-		return NULL;
-	}
-	
-        matches = (char **)NULL;
-
-            /* If this word is at the start of the line, then it is a command
-	     *  to complete.  Otherwise it is the name of a file in the current
-	     *  directory.
-	     */
-        if (start == 0)
-	{
-		//std::cout << "completion for word " << start << "\n";
-		matches = rl_completion_matches (text, command_generator);
-	}
-	else 
-	{
-		//std::cout << "sorry, no completion for word " << start << "\n";
-	}
-        return (matches);
 }
 
 /*
- * 	this function is called to display the proposed autocompletions
- */
-static void completion_display_matches_hook(char **matches,int num,int max)
-{
-	//FIX ME
-	//rl_display_match_list(matches,num,max);
-	char buffer[256];
-	int w,f,l;w=0;f=sizeof(buffer)-1;l=0;
-	buffer[0]='\0';
-	if(!matches)return;
-	//return;
-	for(int i=0;i<num && matches[i] && f>0;++i)
-	{
-		w=min(strlen(matches[i])+1,(size_t)f);
-		if(f>0){
-		strncpy(buffer+l,matches[i],w);
-		w=strlen(buffer+l);l+=w;f-=w;}
-		if(f>0){strcpy(buffer+l," ");--f;++l;}
-		buffer[l]='\0';
-//		strcpy(buffer+strlen(buffer),matches[i]);
-//		strcpy(buffer+strlen(buffer)," ");
-	}
-	//      status_screen((unsigned char*)buffer, NULL);
-	
-//	fb_status_screen(buffer);
-
-
-//	std::cout << buffer << "\n" ;
- //     status((unsigned char*)"here shall be autocompletions", NULL);
-}
-
-static void redisplay()
-{	
-	/*
-	 * DANGER
-	 *  buffer overflow awaiting
-	 */
-	//static int c=100;
-//	fb_setcolor(c=~c);//sleep(1);
-	if(g_fim_no_framebuffer)
-		printf("%s",rl_line_buffer);
-	else 
-		status(( char*)rl_line_buffer,NULL);
-//	fprintf(stderr,"::%s\n",rl_line_buffer);
-//	fprintf(stdout,"::%s\n",rl_line_buffer);
-}
-
-static int redisplay_hook()
-{
-	redisplay();
-	return 0;
-}
-
-int fim_rl_end(int a,int b)
-{
-	rl_point=rl_end;
-	return 0;
-}
-
-int fim_set_command_line_text(const char*s)
-{
-	rl_replace_line(s,0);
-	return 0;
-}
-
-/*
- *	initial setup to set the readline library working
- */
-void initialize_readline ()
-{
-	//FIX ME
-	/* Allow conditional parsing of the ~/.inputrc file. */
-	rl_readline_name = "fim";	//??
-	/* Tell the completer that we want a crack first. */
-	rl_attempted_completion_function = fim_completion;
-	rl_completion_display_matches_hook=completion_display_matches_hook;
-
-	if(g_fim_no_framebuffer==0)
-	{
-		rl_catch_signals=0;
-		rl_catch_sigwinch=0;
-		rl_redisplay_function=redisplay;
-	        rl_event_hook=redisplay_hook;
-	        rl_pre_input_hook=redisplay_hook;
-	}
-	//rl_completion_entry_function=NULL;
-	/*
-	 * to do:
-	 * see rl_filename_quoting_function ..
-	 * */
-	//rl_inhibit_completion=1;	//if set, TABs are read as normal characters
-	rl_filename_quoting_desired=1;
-	rl_filename_quote_characters="\"";
-	//rl_reset_terminal("linux");
-	//rl_reset_terminal("vt100");
-	//rl_bind_key(0x09,fim_rl_end);
-	//rl_bind_key(0x7F,fim_rl_end);
-	//rl_bind_key(-1,fim_rl_end);
-	//rl_bind_key('~',fim_rl_end); // ..
-	//rl_bind_key('\t',rl_insert);
-	//rl_bind_keyseq("g",fim_rl_end);
-	//rl_set_prompt("$");
-
-/*	rl_voidfunc_t *rl_redisplay_function=redisplay;
-	rl_hook_func_t *rl_event_hook=redisplay_hook;
-	rl_hook_func_t *rl_pre_input_hook=redisplay_hook;*/
-	//std::cout << "readline initialized\n";
-}
-}
-
-
-	int g_fim_no_framebuffer=1;
-
-/* Generator function for command completion.  STATE lets us
- *    know whether to start from scratch; without any state
- *       (i.e. STATE == 0), then we start at the top of the list. */
-static char * command_generator (const char *text,int state)
-{
-//	static int list_index, len;
-//	char *name;
-	/* If this is a new word to complete, initialize now.  This
-	 *      includes saving the length of TEXT for efficiency, and
-	 *	initializing the index variable to 0. 
-	 */
-	return cc.command_generator(text,state);
-
-		
-//	if (!state) { list_index = 0; len = strlen (text); }
-
-        /* Return the next name which partially matches from the
-	 * command list.
-	 */
-
-//	while (name = commands[list_index].name)
-//	{ list_index++; if (strncmp (name, text, len) == 0) return (dupstr(name)); }
-	/* If no names matched, then return NULL. */
-//	return ((char *)NULL);
-}
-
-
-void console_switch(int is_busy)
-{
-	return ffd.console_switch(is_busy);
-}
-
-
-/*
- * yet unfinished
+ * Yet unfinished. 
+ * This structure keeps hold of Fim's options flags.
  */
 static struct option fim_options[] = {
     {"version",    no_argument,       NULL, 'V'},  /* version */
@@ -607,73 +386,67 @@ static struct option fim_options[] = {
 };
 
 
-	FlexLexer *lexer;
-	using namespace fim;
 
-
-static void version()
+class FimInstance
 {
-    fprintf(stderr,
-		    "FIM - Fbi IMproved "
-#ifdef FIM_VERSION
-		    FIM_VERSION
-#endif
-#ifdef FIM_REPOSITORY_VERSION 
-		    "( repository version "
-	FIM_REPOSITORY_VERSION 	    
-		    " )"
-#endif
-#define FIM_AUTHOR "Michele Martone <dezperado _CUT_ autistici _CUT_ org>"
-#ifdef FIM_AUTHOR 
-		    ", by "
-		    FIM_AUTHOR
-#endif
-		    ", built on %s\n",
-		    __DATE__
-    		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
-		"Compile flags:\n"
-#ifdef FIM_WINDOWS
-		"+FIM_WINDOWS"
-#else
-		"-FIM_WINDOWS"
-#endif
-		" "
-#ifdef FIM_DEFAULT_KEY_CONFIG  
-		"+FIM_DEFAULT_KEY_CONFIG"
-#else
-		"-FIM_DEFAULT_KEY_CONFIG"
-#endif
-		" "
-#ifdef FIM_DEFAULT_CONFIG      
-		"+FIM_DEFAULT_CONFIG"
-#else
-		"-FIM_DEFAULT_CONFIG"
-#endif
-		" "
-#ifdef FIM_DEFAULT_CONFIGURATION 
-		"+FIM_DEFAULT_CONFIGURATION"
-#else
-		"-FIM_DEFAULT_CONFIGURATION"
-#endif
-		" "
-#ifdef FIM_NOFIMRC
-		"+FIM_NOFIMRC"
-#else
-		"-FIM_NOFIMRC"
-#endif
-		" "
-#ifdef FIM_AUTOCMDS
-		"+FIM_AUTOCMDS"
-#else
-		"-FIM_AUTOCMDS"
-#endif
-		    );
-}
-
-void chomp(char *s)
-{
-	for(;*s;++s)if(*s=='\n')*s='\0';
-}
+	static void version()
+	{
+	    fprintf(stderr,
+			    "FIM - Fbi IMproved "
+	#ifdef FIM_VERSION
+			    FIM_VERSION
+	#endif
+	#ifdef FIM_REPOSITORY_VERSION 
+			    "( repository version "
+		FIM_REPOSITORY_VERSION 	    
+			    " )"
+	#endif
+	#define FIM_AUTHOR "Michele Martone <dezperado _CUT_ autistici _CUT_ org>"
+	#ifdef FIM_AUTHOR 
+			    ", by "
+			    FIM_AUTHOR
+	#endif
+			    ", built on %s\n",
+			    __DATE__
+	    		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
+			"Compile flags:\n"
+	#ifdef FIM_WINDOWS
+			"+FIM_WINDOWS"
+	#else
+			"-FIM_WINDOWS"
+	#endif
+			" "
+	#ifdef FIM_DEFAULT_KEY_CONFIG  
+			"+FIM_DEFAULT_KEY_CONFIG"
+	#else
+			"-FIM_DEFAULT_KEY_CONFIG"
+	#endif
+			" "
+	#ifdef FIM_DEFAULT_CONFIG      
+			"+FIM_DEFAULT_CONFIG"
+	#else
+			"-FIM_DEFAULT_CONFIG"
+	#endif
+			" "
+	#ifdef FIM_DEFAULT_CONFIGURATION 
+			"+FIM_DEFAULT_CONFIGURATION"
+	#else
+			"-FIM_DEFAULT_CONFIGURATION"
+	#endif
+			" "
+	#ifdef FIM_NOFIMRC
+			"+FIM_NOFIMRC"
+	#else
+			"-FIM_NOFIMRC"
+	#endif
+			" "
+	#ifdef FIM_AUTOCMDS
+			"+FIM_AUTOCMDS"
+	#else
+			"-FIM_AUTOCMDS"
+	#endif
+			    );
+	}
 
 int help_and_exit(char *argv0)
 {
@@ -701,287 +474,302 @@ int help_and_exit(char *argv0)
 	    return 0;
 }
 
+
+	public:
+	int main(int argc,char *argv[])
+	{
+		char *default_fbdev=NULL,*default_fbmode=NULL;
+		int default_vt=-1;
+		float default_fbgamma=-1.0;
+		/*
+		 * an adapted version of the main function
+		 * of the original version of the fbi program
+		 */
+	// 	int              timeout = -1;
+		int              opt_index = 0;
+		int              i;
+	#ifdef FIM_READ_STDIN
+		int              read_file_list_from_stdin;
+		read_file_list_from_stdin=0;
+	#endif
+	//	char             *desc,*info;
+		char c;
+		g_fim_no_framebuffer=0;
+	
+		setlocale(LC_ALL,"");	//uhm..
+	    	for (;;) {
+		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
+		    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tf",
+				fim_options, &opt_index);
+		if (c == -1)
+		    break;
+		switch (c) {
+	/*	case 0:
+		    // long option, nothing to do
+		    break;*/
+	//	case '1':
+		    //fbi's
+	//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	//	    once = 1;
+	//	    break;
+		case 'a':
+		    //fbi's
+		    //cc.setVariable("autotop",1);
+		    //FIXME: still needs some tricking .. 
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add("auto_scale_v=1;");
+	#endif
+		    break;
+		case 'A':
+		    //fbi's
+		    //cc.setVariable("autotop",1);
+		    //FIXME: still needs some tricking .. 
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add("autotop=1;");
+	#endif
+		    break;
+		case 'q':
+		    //fbi's
+		    //fprintf(stderr,"sorry, this feature will be implemented soon\n");
+		    //cc.setVariable("_display_status",0);
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add("_display_status=0;");
+	#endif
+		    break;
+		case 'f':
+		    cc.setVariable("_load_default_etc_fimrc",1);
+		    break;
+		case 'v':
+		    //fbi's
+		    //cc.setVariable("_display_status",1);
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add("_display_status=1;");
+	#endif
+		    break;
+		case 'w':
+		    //fbi's
+		    //cc.setVariable("autowidth",1);
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add("autowidth=1;");
+	#endif
+		    break;
+		case 'P':
+		    //fbi's
+		    //FIXME
+	//	    cc.setVariable("autowidth",1);
+	//	    cc.setVariable("autotop",1);
+	//	    strange : if the assignations occur in two pre_autocmd_add calls, it triggers a bug via fimgs:
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add("autowidth=1;autotop=1;");
+	#endif
+		    break;
+		case 'g':
+		    //fbi's
+		    default_fbgamma = atof(optarg);
+		    break;
+		case 'r':
+		    //fbi's
+	//	    pcd_res = atoi(optarg);
+		    break;
+		case 's':
+	//	    if(atoi(optarg)>0) cc.setVariable("steps",atoi(optarg));
+		    if(atoi(optarg)>0)
+		    {
+		    	// fixme : still buggy
+		    	fim::string s="steps=";
+			s+=fim::string((int)atoi(optarg));
+			s+=";";
+	#ifdef FIM_AUTOCMDS
+			cc.pre_autocmd_add(s);
+	#endif
+		    }
+		    break;
+	//	case 't':
+		    //fbi's
+	//	    timeout = atoi(optarg);
+	//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	//	    break;
+		case 'u':
+		    //fbi's
+		    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	//	    randomize = 1;
+		    break;
+		case 'd':
+		    //fbi's
+		    default_fbdev = optarg;
+		    break;
+		case 'm':
+		    //fbi's
+		    default_fbmode = optarg;
+		    break;
+	//removed, editing features :
+	/*	case 'f':
+	//	    fontname = optarg;
+		    break;
+		case 'e':
+	//	    editable = 1;
+		    break;
+		case 'b':
+	//	    backup = 1;
+		    break;
+		case 'p':
+	//	    preserve = 1;
+		    break;*/
+	//	case 'l':
+		    //fbi's
+	//	    flist_add_list(optarg);
+	//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	//	    break;
+		case 'T':
+		    //fbi's virtual terminal
+		    default_vt = atoi(optarg);
+		    break;
+		case 'V':
+		    version();
+		    return 0;
+		    break;
+		case 'c':
+		    //fim's
+		    cc.appendPostInitCommand(optarg);
+		    break;
+		case 'F':
+		    //fim's
+		    cc.appendPostExecutionCommand(optarg);
+		    break;
+		case 'E':
+		    //fim's
+	#ifndef FIM_NOSCRIPTING
+		    cc.push_script(optarg);
+	#else
+		    cout << "sorry, no scripting available!\n";
+	#endif
+		    break;
+		case 'D':
+		    //fim's
+	//	    cc.setNoFrameBuffer();	// no framebuffer (debug) mode
+		    cc.dumpDefaultFimrc();
+		    std::exit(0);
+		    break;
+		case 'N':
+		    //fim's
+			cc.setVariable("_no_rc_file",1);
+		    break;
+		case 't':
+		    //fim's
+		    	g_fim_no_framebuffer=1;
+		    break;
+	#ifdef FIM_READ_STDIN
+		case '-':
+		    //fim's
+		    read_file_list_from_stdin=1;
+		    break;
+		case 0:
+		    //fim's
+		    read_file_list_from_stdin=1;
+		    break;
+	#endif
+		default:
+		case 'h':
+		    help_and_exit(argv[0]);
+	#if 0
+		    cc.printHelpMessage(argv[0]);
+		    std::cout << " where OPTIONS are taken from :\n";
+		    for(i=0;((unsigned int)i)<(sizeof(fim_options)/sizeof(struct option))-1;++i)
+		    {	
+		   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
+		   	else std::cout << "\t-";
+			std::cout << "\t\t";
+		    	std::cout << "--"<<fim_options[i].name ;
+			switch(fim_options[i].has_arg){
+			case no_argument:
+			break;
+			case required_argument:
+			std::cout << " <arg>";
+			break;
+			default:
+			;
+			};
+			std::cout << "\n";
+			}
+			std::cout << " ( Please read the documentation distributed with the program, too, in FIM.TXT)\n";
+		    std::exit(0);
+	#endif
+		}
+	    }
+		for (i = optind; i < argc; i++)
+		{
+	#ifdef FIM_READ_STDIN
+			if(*argv[i]=='-'&&!argv[i][1])read_file_list_from_stdin=1;
+			else
+	#endif
+			{
+				cc.push(argv[i]);
+			}
+		}
+	
+	
+		lexer=new yyFlexLexer;	//used by YYLEX
+	
+	#ifdef FIM_READ_STDIN
+		
+		/*
+		 * this is Vim's solution for stdin reading
+		 * */
+		if(read_file_list_from_stdin)
+		{
+			char *lineptr=NULL;
+			size_t bs=0;
+			while(getline(&lineptr,&bs,stdin)>0)
+			{
+				chomp(lineptr);
+				cc.push(lineptr);
+				//printf("%s\n",lineptr);
+				free(lineptr);
+				lineptr=NULL;
+			}
+			close(0);
+			dup(2);
+		}
+	#endif
+	
+	
+		if(cc.browser.empty_file_list())
+			help_and_exit(argv[0]);
+	
+		if((g_fim_no_framebuffer)==0)
+		{
+			if(default_fbdev)ffd.fbdev = default_fbdev;
+			if(default_fbmode)ffd.fbmode = default_fbmode;
+			if(default_vt!=-1)ffd.vt = default_vt;
+			if(default_fbgamma!=-1.0)ffd.fbgamma = default_fbgamma ;
+			if(ffd.framebuffer_init())cleanup_and_exit(0);
+			tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
+		}
+		rl::initialize_readline();
+	
+		fim_uninitialized = 0; // new
+		if(cc.init()!=0) return -1;
+	
+	//	ffd.test_drawing();
+		//while(1);
+		//while(1){int i;for(i=0;i<500000;++i)ffd.fb_mem[i]=200;}
+		//while(1)ffd.fb_rect(1,100,1,100);
+		//cleanup_and_exit(0);
+	
+		cc.executionCycle();
+		return 0;
+	}
+
+};
+
 int main(int argc,char *argv[])
 {
-	char *default_fbdev=NULL,*default_fbmode=NULL;
-	int default_vt=-1;
-	float default_fbgamma=-1.0;
 	/*
-	 * an adapted version of the main function
-	 * of the original version of the fbi program
-	 */
-// 	int              timeout = -1;
-	int              opt_index = 0;
-	int              i;
-#ifdef FIM_READ_STDIN
-	int              read_file_list_from_stdin;
-	read_file_list_from_stdin=0;
-#endif
-//	char             *desc,*info;
-	char c;
-	g_fim_no_framebuffer=0;
-
-	setlocale(LC_ALL,"");	//uhm..
-    	for (;;) {
-	    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-	    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tf",
-			fim_options, &opt_index);
-	if (c == -1)
-	    break;
-	switch (c) {
-/*	case 0:
-	    // long option, nothing to do
-	    break;*/
-//	case '1':
-	    //fbi's
-//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
-//	    once = 1;
-//	    break;
-	case 'a':
-	    //fbi's
-	    //cc.setVariable("autotop",1);
-	    //FIXME: still needs some tricking .. 
-#ifdef FIM_AUTOCMDS
-	    cc.pre_autocmd_add("auto_scale_v=1;");
-#endif
-	    break;
-	case 'A':
-	    //fbi's
-	    //cc.setVariable("autotop",1);
-	    //FIXME: still needs some tricking .. 
-#ifdef FIM_AUTOCMDS
-	    cc.pre_autocmd_add("autotop=1;");
-#endif
-	    break;
-	case 'q':
-	    //fbi's
-	    //fprintf(stderr,"sorry, this feature will be implemented soon\n");
-	    //cc.setVariable("_display_status",0);
-#ifdef FIM_AUTOCMDS
-	    cc.pre_autocmd_add("_display_status=0;");
-#endif
-	    break;
-	case 'f':
-	    cc.setVariable("_load_default_etc_fimrc",1);
-	    break;
-	case 'v':
-	    //fbi's
-	    //cc.setVariable("_display_status",1);
-#ifdef FIM_AUTOCMDS
-	    cc.pre_autocmd_add("_display_status=1;");
-#endif
-	    break;
-	case 'w':
-	    //fbi's
-	    //cc.setVariable("autowidth",1);
-#ifdef FIM_AUTOCMDS
-	    cc.pre_autocmd_add("autowidth=1;");
-#endif
-	    break;
-	case 'P':
-	    //fbi's
-	    //FIXME
-//	    cc.setVariable("autowidth",1);
-//	    cc.setVariable("autotop",1);
-//	    strange : if the assignations occur in two pre_autocmd_add calls, it triggers a bug via fimgs:
-#ifdef FIM_AUTOCMDS
-	    cc.pre_autocmd_add("autowidth=1;autotop=1;");
-#endif
-	    break;
-	case 'g':
-	    //fbi's
-	    default_fbgamma = atof(optarg);
-	    break;
-	case 'r':
-	    //fbi's
-//	    pcd_res = atoi(optarg);
-	    break;
-	case 's':
-//	    if(atoi(optarg)>0) cc.setVariable("steps",atoi(optarg));
-	    if(atoi(optarg)>0)
-	    {
-	    	// fixme : still buggy
-	    	fim::string s="steps=";
-		s+=fim::string((int)atoi(optarg));
-		s+=";";
-#ifdef FIM_AUTOCMDS
-		cc.pre_autocmd_add(s);
-#endif
-	    }
-	    break;
-//	case 't':
-	    //fbi's
-//	    timeout = atoi(optarg);
-//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
-//	    break;
-	case 'u':
-	    //fbi's
-	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
-//	    randomize = 1;
-	    break;
-	case 'd':
-	    //fbi's
-	    default_fbdev = optarg;
-	    break;
-	case 'm':
-	    //fbi's
-	    default_fbmode = optarg;
-	    break;
-//removed, editing features :
-/*	case 'f':
-//	    fontname = optarg;
-	    break;
-	case 'e':
-//	    editable = 1;
-	    break;
-	case 'b':
-//	    backup = 1;
-	    break;
-	case 'p':
-//	    preserve = 1;
-	    break;*/
-//	case 'l':
-	    //fbi's
-//	    flist_add_list(optarg);
-//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
-//	    break;
-	case 'T':
-	    //fbi's virtual terminal
-	    default_vt = atoi(optarg);
-	    break;
-	case 'V':
-	    version();
-	    return 0;
-	    break;
-	case 'c':
-	    //fim's
-	    cc.appendPostInitCommand(optarg);
-	    break;
-	case 'F':
-	    //fim's
-	    cc.appendPostExecutionCommand(optarg);
-	    break;
-	case 'E':
-	    //fim's
-#ifndef FIM_NOSCRIPTING
-	    cc.push_script(optarg);
-#else
-	    cout << "sorry, no scripting available!\n";
-#endif
-	    break;
-	case 'D':
-	    //fim's
-//	    cc.setNoFrameBuffer();	// no framebuffer (debug) mode
-	    cc.dumpDefaultFimrc();
-	    std::exit(0);
-	    break;
-	case 'N':
-	    //fim's
-		cc.setVariable("_no_rc_file",1);
-	    break;
-	case 't':
-	    //fim's
-	    	g_fim_no_framebuffer=1;
-	    break;
-#ifdef FIM_READ_STDIN
-	case '-':
-	    //fim's
-	    read_file_list_from_stdin=1;
-	    break;
-	case 0:
-	    //fim's
-	    read_file_list_from_stdin=1;
-	    break;
-#endif
-	default:
-	case 'h':
-	    help_and_exit(argv[0]);
-#if 0
-	    cc.printHelpMessage(argv[0]);
-	    std::cout << " where OPTIONS are taken from :\n";
-	    for(i=0;((unsigned int)i)<(sizeof(fim_options)/sizeof(struct option))-1;++i)
-	    {	
-	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
-	   	else std::cout << "\t-";
-		std::cout << "\t\t";
-	    	std::cout << "--"<<fim_options[i].name ;
-		switch(fim_options[i].has_arg){
-		case no_argument:
-		break;
-		case required_argument:
-		std::cout << " <arg>";
-		break;
-		default:
-		;
-		};
-		std::cout << "\n";
-		}
-		std::cout << " ( Please read the documentation distributed with the program, too, in FIM.TXT)\n";
-	    std::exit(0);
-#endif
-	}
-    }
-	for (i = optind; i < argc; i++)
-	{
-#ifdef FIM_READ_STDIN
-		if(*argv[i]=='-'&&!argv[i][1])read_file_list_from_stdin=1;
-		else
-#endif
-		{
-			cc.push(argv[i]);
-		}
-	}
-
-
-	lexer=new yyFlexLexer;	//used by YYLEX
-
-#ifdef FIM_READ_STDIN
-	
-	/*
-	 * this is Vim's solution for stdin reading
+	 * FimInstance will contain all of the fim's code someday.
+	 * ...someday.
 	 * */
-	if(read_file_list_from_stdin)
-	{
-		char *lineptr=NULL;
-		size_t bs=0;
-		while(getline(&lineptr,&bs,stdin)>0)
-		{
-			chomp(lineptr);
-			cc.push(lineptr);
-			//printf("%s\n",lineptr);
-			free(lineptr);
-			lineptr=NULL;
-		}
-		close(0);
-		dup(2);
-	}
-#endif
-
-
-	if(cc.browser.empty_file_list())
-		help_and_exit(argv[0]);
-
-	if((g_fim_no_framebuffer)==0)
-	{
-		if(default_fbdev)ffd.fbdev = default_fbdev;
-		if(default_fbmode)ffd.fbmode = default_fbmode;
-		if(default_vt!=-1)ffd.vt = default_vt;
-		if(default_fbgamma!=-1.0)ffd.fbgamma = default_fbgamma ;
-		if(ffd.framebuffer_init())cleanup_and_exit(0);
-		tty_raw(); // this, here, inhibits unwanted key printout (raw mode?!)
-	}
-	rl::initialize_readline();
-
-	fim_uninitialized = 0; // new
-	if(cc.init()!=0) return -1;
-
-//	ffd.test_drawing();
-	//while(1);
-	//while(1){int i;for(i=0;i<500000;++i)ffd.fb_mem[i]=200;}
-	//while(1)ffd.fb_rect(1,100,1,100);
-	//cleanup_and_exit(0);
-
-	cc.executionCycle();
-	return 0;
+	FimInstance fiminstance;
+	return fiminstance.main(argc,argv);
 }
+
 

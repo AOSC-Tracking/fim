@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include "string.h"
+#include "common.h"
 #include <string>
 #include <fstream>
 
@@ -99,5 +100,69 @@ void trec(char *str,const char *f,const char*t)
 		fs.close();
 		sync();
 	}
+
+/*
+ * Turns newline characters in NULs.
+ * Does stop on the first NUL encountered.
+ */
+void chomp(char *s)
+{
+	for(;*s;++s)if(*s=='\n')*s='\0';
+}
+
+/*
+ * cleans the input string terminating it when some non printable character is encountered
+ * */
+void sanitize_string_from_nongraph(char *s, int c=0)
+{	
+	int n=c;
+	if(s)
+	while(*s && (c--||!n))if(!isgraph(*s)||*s=='\n'){*s=' ';++s;}else ++s;
+	return;
+}
+
+/*
+ *	Allocation of a small string for storing the 
+ *	representation of a double.
+ */
+char * dupnstr (double n)
+{
+	//allocation of a single string
+	char *r = (char*) malloc (16);
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
+	sprintf(r,"%f",n);
+	return (r);
+}
+
+/*
+ *	Allocation of a small string for storing the *	representation of an integer.
+ */
+char * dupnstr (int n)
+{
+	//allocation of a single string
+	char *r = (char*) malloc (16);
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
+	sprintf(r,"%d",n);
+	return (r);
+}
+
+/*
+ *	Allocation and duplication of a single string
+ */
+char * dupstr (const char* s)
+{
+	char *r = (char*) malloc (strlen (s) + 1);
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
+	strcpy (r, s);
+	return (r);
+}
+
+/*
+ * Will be improved, if needed.
+ * */
+int fim_rand()
+{
+	return rand();
+}
 
 

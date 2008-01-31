@@ -40,7 +40,6 @@
 namespace fim
 {
 
-extern FramebufferDevice ffd;
 struct tiff_state {
     TIFF*          tif;
     char           emsg[1024];
@@ -85,7 +84,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     TIFFGetField(h->tif, TIFFTAG_FILLORDER,       &h->fillorder);
     TIFFGetField(h->tif, TIFFTAG_PHOTOMETRIC,     &h->photometric);
     h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
-    if (ffd.debug)
+    if (FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"tiff: %" "%d" "x%" "%d" ", planar=%d, "
 //	fprintf(stderr,"tiff: %" PRId32 "x%" PRId32 ", planar=%d, "
 		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" "%d" "\n",
@@ -102,12 +101,12 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
 	/* for the more difficuilt cases we let libtiff
 	 * do all the hard work.  Drawback is that we lose
 	 * progressive loading and decode everything here */
-	if (ffd.debug)
+	if (FbiStuff::fim_filereading_debug())
 	    fprintf(stderr,"tiff: reading whole image [TIFFReadRGBAImage]\n");
 	h->image=(uint32*)malloc(4*h->width*h->height);
 	TIFFReadRGBAImage(h->tif, h->width, h->height, h->image, 0);
     } else {
-	if (ffd.debug)
+	if (FbiStuff::fim_filereading_debug())
 	    fprintf(stderr,"tiff: reading scanline by scanline\n");
 	h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
     }

@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -265,7 +265,7 @@ class CommandConsole
 	fim::string unbind(const std::vector<fim::string>& args);
 	fim::string getBindingsList();
 	fim::string dump_key_codes(const std::vector<fim::string>& args);
-	fim::string clear(const std::vector<fim::string>& args){status_screen(NULL,NULL);return "";}
+	fim::string clear(const std::vector<fim::string>& args);
 	void quit(int i=0);
 	public:
 	int  drawOutput();

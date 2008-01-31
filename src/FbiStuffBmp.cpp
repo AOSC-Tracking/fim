@@ -41,7 +41,6 @@
 namespace fim
 {
 
-extern FramebufferDevice ffd;
 
 /* ---------------------------------------------------------------------- */
 
@@ -125,7 +124,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
     h->hdr.imp_colors  = le32_to_cpu(h->hdr.imp_colors);
 #endif
 
-    if (ffd.debug)
+    if (FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"bmp: hdr=%d size=%dx%d planes=%d"
 		" bits=%d size=%d res=%dx%d colors=%d/%d | %d\n",
 		h->hdr.size,h->hdr.width,h->hdr.height,
@@ -136,13 +135,13 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 	h->hdr.bit_cnt != 4  &&
 	h->hdr.bit_cnt != 8  &&
 	h->hdr.bit_cnt != 24) {
-	if(ffd.debug)
+	if(FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"bmp: can't handle depth [%d]\n",h->hdr.bit_cnt);
 	goto oops;
     }
     if (h->hdr.compression[0] || h->hdr.compression[1] ||
 	h->hdr.compression[2] || h->hdr.compression[3]) {
-	if(ffd.debug)
+	if(FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"bmp: can't handle compressed bitmaps [%c%c%c%c]\n",
 		h->hdr.compression[0],
 		h->hdr.compression[1],

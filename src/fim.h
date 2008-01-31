@@ -47,10 +47,6 @@
 #include <set> 		/* STL (Standard Template Library) set structure template 	*/
 #include <cassert>	/* <assert.h> C assertions ( IEEE Std 1003.1-2001 aka Posix ) 	*/
 
-#include <readline/readline.h>	/*	the GNU readline library	*/
-#include <readline/history.h> 	/*	the GNU readline library	*/
-#include <readline/keymaps.h> 	/*	the GNU readline library	*/
-
 #ifndef USE_GNU_REGEX
 # include <regex.h>		/*	the Posix (GNU implementation,not functionality) readline library	*/
 #else
@@ -84,10 +80,11 @@ namespace fim{
 	void tty_restore();
 	void tty_raw(void);
 	void cleanup_and_exit(int code);
-}
+	void status(const char *desc, const char *info);
 
 void status_screen(const char *desc, char *info);
 void fb_status_screen(const char *msg, int noDraw);
+}
 
 namespace fim{
 class Arg;
@@ -139,27 +136,16 @@ static fim_stream cout;
 class Browser;
 class CommandConsole;
 std::ostream& operator<<(std::ostream &os,const string& s);
-
-/* exceptions */
-typedef int FimException;
-#define FIM_E_NO_IMAGE 1
-#define FIM_E_NO_VIEWPORT 2
-#define FIM_E_WINDOW_ERROR 3
-#define FIM_E_TRAGIC -1	/* no hope */
-#define FIM_E_NO_MEM 4	/* also a return code */
-/* ... */
-
-}
-
 //void status(const char *desc, const char *info);
 void set_status_bar(const char *desc, const char *info);
 void set_status_bar(fim::string desc, const char *info);
-void fb_status_screen(const char *msg, int noDraw);
+}
+
 int help_and_exit(char *argv0);
 int fim_rand();
 namespace rl
 {
-	int fim_set_command_line_text(const char*s);
+	//int fim_set_command_line_text(const char*s);
 }
 
 /*

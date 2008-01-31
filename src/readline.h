@@ -1,8 +1,8 @@
 /* $Id$ */
 /*
- extern.h : Variables and includes for gluing Fim to Fbi and the lexer/parser subsystem
+ readline.h : Code dealing with the GNU readline library.
 
- (c) 2007-2008 Michele Martone
+ (c) 2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,15 +18,19 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef EXTERN_H
-#define EXTERN_H
-#include "common.h"
-#define min(x,y) ((x)<(y)?(x):(y))
-#define max(x,y) ((x)>(y)?(x):(y))
+#ifndef FIM_READLINE_H
+#define FIM_READLINE_H
 
-/*
- *	This file documents the dependency from fbi.
- */
+#include <readline/readline.h>	/*	the GNU readline library	*/
+#include <readline/history.h> 	/*	the GNU readline library	*/
+#include <readline/keymaps.h> 	/*	the GNU readline library	*/
 
-extern int g_fim_no_framebuffer;
+namespace rl
+{
+	void initialize_readline ();
+	//static
+	char * command_generator (const char *text,int state);
+};
+
 #endif
+

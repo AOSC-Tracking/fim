@@ -2,7 +2,7 @@
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ class Viewport
 {
 	protected:
 	int		steps,top,left ;	/* viewport variables */
+	FramebufferDevice	&framebufferdevice;
 
 	Image  *image;	// !! 
 #ifdef FIM_WINDOWS

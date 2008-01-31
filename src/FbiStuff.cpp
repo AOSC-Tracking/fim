@@ -1150,5 +1150,10 @@ struct ida_image * fbi_image_clone(struct ida_image *img)
 }
 
 
+	int FbiStuff::fim_filereading_debug()
+	{
+		extern FramebufferDevice ffd;
+		return ffd.debug;
+	}
 
 }

@@ -26,6 +26,8 @@
 #include <sys/time.h>
 #include <errno.h>
 
+#include "readline.h"
+
 extern int yyparse();
 #define noargs (std::vector<fim::string>())
 
@@ -2029,5 +2031,9 @@ namespace fim
 		return "usage : set | set IDENTIFIER | set IDENTIFIER VALUE";
 	}
 
+	fim::string CommandConsole::clear(const std::vector<fim::string>& args)
+	{
+		status_screen(NULL,NULL);return "";
+	}
 }
 

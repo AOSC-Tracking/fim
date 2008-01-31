@@ -35,7 +35,6 @@
 
 namespace fim
 {
-extern FramebufferDevice ffd;
 
 
 struct gif_state {
@@ -56,29 +55,29 @@ gif_fileread(struct gif_state *h)
 
     for (;;) {
 	if (GIF_ERROR == DGifGetRecordType(h->gif,&RecordType)) {
-	    if (ffd.debug)
+	    if (FbiStuff::fim_filereading_debug())
 		fprintf(stderr,"gif: DGifGetRecordType failed\n");
 	    PrintGifError();
 	    return (GifRecordType)-1;
 	}
 	switch (RecordType) {
 	case IMAGE_DESC_RECORD_TYPE:
-	    if (ffd.debug)
+	    if (FbiStuff::fim_filereading_debug())
 		fprintf(stderr,"gif: IMAGE_DESC_RECORD_TYPE found\n");
 	    return RecordType;
 	case EXTENSION_RECORD_TYPE:
-	    if (ffd.debug)
+	    if (FbiStuff::fim_filereading_debug())
 		fprintf(stderr,"gif: EXTENSION_RECORD_TYPE found\n");
 	    for (rc = DGifGetExtension(h->gif,&ExtCode,&Extension);
 		 NULL != Extension;
 		 rc = DGifGetExtensionNext(h->gif,&Extension)) {
 		if (rc == GIF_ERROR) {
-		    if (ffd.debug)
+		    if (FbiStuff::fim_filereading_debug())
 			fprintf(stderr,"gif: DGifGetExtension failed\n");
 		    PrintGifError();
 		    return (GifRecordType)-1;
 		}
-		if (ffd.debug) {
+		if (FbiStuff::fim_filereading_debug()) {
 		    switch (ExtCode) {
 		    case COMMENT_EXT_FUNC_CODE:     type="comment";   break;
 		    case GRAPHICS_EXT_FUNC_CODE:    type="graphics";  break;
@@ -91,11 +90,11 @@ gif_fileread(struct gif_state *h)
 	    }
 	    break;
 	case TERMINATE_RECORD_TYPE:
-	    if (ffd.debug)
+	    if (FbiStuff::fim_filereading_debug())
 		fprintf(stderr,"gif: TERMINATE_RECORD_TYPE found\n");
 	    return RecordType;
 	default:
-	    if (ffd.debug)
+	    if (FbiStuff::fim_filereading_debug())
 		fprintf(stderr,"gif: unknown record type [%d]\n",RecordType);
 	    return (GifRecordType)-1;
 	}
@@ -109,7 +108,7 @@ gif_skipimage(struct gif_state *h)
     unsigned char *line;
     int i;
 
-    if (ffd.debug)
+    if (FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"gif: skipping image record ...\n");
     DGifGetImageDesc(h->gif);
     line = malloc(h->gif->SWidth);
@@ -139,13 +138,13 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 	switch (RecordType) {
 	case IMAGE_DESC_RECORD_TYPE:
 	    if (GIF_ERROR == DGifGetImageDesc(h->gif)) {
-		if (ffd.debug)
+		if (FbiStuff::fim_filereading_debug())
 		    fprintf(stderr,"gif: DGifGetImageDesc failed\n");
 		PrintGifError();
 	    }
 	    if (NULL == h->gif->SColorMap &&
 		NULL == h->gif->Image.ColorMap) {
-		if (ffd.debug)
+		if (FbiStuff::fim_filereading_debug())
 		    fprintf(stderr,"gif: oops: no colormap found\n");
 		goto oops;
 	    }
@@ -158,10 +157,10 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 #endif
             info->npages = 1;
 	    image = 1;
-	    if (ffd.debug)
+	    if (FbiStuff::fim_filereading_debug())
 		fprintf(stderr,"gif: reading image record ...\n");
 	    if (h->gif->Image.Interlace) {
-		if (ffd.debug)
+		if (FbiStuff::fim_filereading_debug())
 		    fprintf(stderr,"gif: interlaced\n");
 		h->il = (GifPixelType*)malloc(h->w * h->h * sizeof(GifPixelType));
 		for (i = 0; i < h->h; i += 8)
@@ -180,14 +179,14 @@ gif_init(FILE *fp, char *filename, unsigned int page,
     if (0 == info->width || 0 == info->height)
 	goto oops;
 
-    if (ffd.debug)
+    if (FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"gif: s=%dx%d i=%dx%d\n",
 		h->gif->SWidth,h->gif->SHeight,
 		h->gif->Image.Width,h->gif->Image.Height);
     return h;
 
  oops:
-    if (ffd.debug)
+    if (FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"gif: fatal error, aborting\n");
     DGifCloseFile(h->gif);
     fclose(h->infile);
@@ -227,7 +226,7 @@ gif_done(void *data)
 {
     struct gif_state *h = (struct gif_state *) data;
 
-    if (ffd.debug)
+    if (FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"gif: done, cleaning up\n");
     DGifCloseFile(h->gif);
     fclose(h->infile);

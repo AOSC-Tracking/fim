@@ -87,6 +87,8 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	fim_stream.cpp \
 	fimgs \
 	lex.h \
+	readline.h \
+	readline.cpp \
 	string.h \
 	Arg.cpp \
 	Browser.cpp \

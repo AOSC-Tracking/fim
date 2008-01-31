@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,18 +35,27 @@ namespace fim
 
 
 void trec(char *str,const char *f,const char*t);
-
-
-
+void chomp(char *s);
+void sanitize_string_from_nongraph(char *s, int c);
 
 using namespace fim;
-
-
 
 fim::string slurp_file(fim::string filename);
 void append_to_file(fim::string filename, fim::string lines);
 
+char * dupstr (const char* s);
+char * dupnstr (double n);
+char * dupnstr (int n);
+int fim_rand();
 
+/* exceptions */
+typedef int FimException;
+#define FIM_E_NO_IMAGE 1
+#define FIM_E_NO_VIEWPORT 2
+#define FIM_E_WINDOW_ERROR 3
+#define FIM_E_TRAGIC -1	/* no hope */
+#define FIM_E_NO_MEM 4	/* also a return code */
+/* ... */
 
 
 

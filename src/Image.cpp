@@ -70,7 +70,7 @@ namespace fim
 		return img->i.height;
 	}
 
-	Image::Image(const char *fname_)
+	Image::Image(const char *fname_):framebufferdevice(fim::ffd)
 	{
 		/*
 		 *	an image object is created from an image filename
@@ -80,7 +80,7 @@ namespace fim
 		{
 			cout << "warning : invalid loading ! \n";
 			if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
-				set_status_bar( fim::string("error while loading \"")+ fim::string(fname_)+ fim::string("\"") , "*");
+				fim::set_status_bar( fim::string("error while loading \"")+ fim::string(fname_)+ fim::string("\"") , "*");
 		}
 		else
 		{
@@ -115,12 +115,12 @@ namespace fim
 		this->free();
 		fname=fname_;
 		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
-			set_status_bar("please wait while reloading...", "*");
+			fim::set_status_bar("please wait while reloading...", "*");
 
 		fimg = FbiStuff::read_image((char*)fname_);
 
 		img=fimg;	/* no scaling : one copy only */
-	        ffd.redraw=1;
+	        framebufferdevice.redraw=1;
 
 		if(! img)
 		{
@@ -133,7 +133,7 @@ namespace fim
 		setVariable("width"  ,(int)fimg->i.width );
 		setVariable("sheight",(int) img->i.height);
 		setVariable("swidth" ,(int) img->i.width );
-		setVariable("_fim_bpp" ,(int) ffd.fb_var.bits_per_pixel );
+		setVariable("_fim_bpp" ,(int) framebufferdevice.fb_var.bits_per_pixel );
 		setVariable("scale"  ,newscale*100);
 		setVariable("ascale" ,ascale);
 #endif
@@ -142,7 +142,7 @@ namespace fim
 		cc.setVariable("width"  ,(int)fimg->i.width );
 		cc.setVariable("sheight",(int) img->i.height);
 		cc.setVariable("swidth" ,(int) img->i.width );
-		cc.setVariable("_fim_bpp" ,(int) ffd.fb_var.bits_per_pixel );
+		cc.setVariable("_fim_bpp" ,(int) framebufferdevice.fb_var.bits_per_pixel );
 		cc.setVariable("scale"  ,newscale*100);
 		cc.setVariable("ascale" ,ascale);
 		return true;
@@ -257,7 +257,7 @@ namespace fim
 			 */
 			struct ida_image *backup_img=img;
 			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
-				set_status_bar("please wait while rescaling...", getInfo().c_str());
+				fim::set_status_bar("please wait while rescaling...", getInfo().c_str());
 
 #define FIM_PROGRESSIVE_RESCALING 0
 #if FIM_PROGRESSIVE_RESCALING
@@ -313,7 +313,7 @@ namespace fim
 			{
 				img=backup_img;
 				if(cc.getIntVariable("_display_busy"))
-					set_status_bar( "rescaling failed (insufficient memory?!)", getInfo().c_str());
+					fim::set_status_bar( "rescaling failed (insufficient memory?!)", getInfo().c_str());
 				sleep(1);	//just to give a glimpse..
 			}
 			else 
@@ -322,7 +322,7 @@ namespace fim
 				if( backup_img && backup_img!=fimg ) FbiStuff::free_image(backup_img);
 				scale=newscale;
 				ascale=newascale;
-	        		ffd.redraw=1;
+	        		framebufferdevice.redraw=1;
 			}
 
 			/*
@@ -334,7 +334,7 @@ namespace fim
 			cc.setVariable("swidth" ,(int) img->i.width );
 			cc.setVariable("ascale" , ascale );
 		}
-		else ffd.redraw=0;
+		else framebufferdevice.redraw=0;
 		orientation=neworientation;
 		return 0;
 	}
@@ -368,7 +368,8 @@ namespace fim
 		scale(image.scale),
 		ascale(image.ascale),
 		newscale(image.newscale),
-		orientation(image.orientation)
+		orientation(image.orientation),
+		framebufferdevice(fim::ffd)
 	{
 		/*
 		 * builds a clone of this image.

@@ -80,7 +80,6 @@ extern "C"
 namespace fim
 {
 
-extern FramebufferDevice ffd;
 
 
 /* ---------------------------------------------------------------------- */
@@ -165,13 +164,13 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     for (mark = h->cinfo.marker_list; NULL != mark; mark = mark->next) {
 	switch (mark->marker) {
 	case JPEG_COM:
-	    if (ffd.debug)
+	    if (FbiStuff::fim_filereading_debug())
 		fprintf(stderr,"jpeg: comment found (COM marker) [%.*s]\n",
 			(int)mark->data_length, mark->data);
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 	    break;
 	case JPEG_APP0 +1:
-	    if (ffd.debug)
+	    if (FbiStuff::fim_filereading_debug())
 		fprintf(stderr,"jpeg: exif data found (APP1 marker)\n");
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 
@@ -183,7 +182,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 		if (ed->data &&
 		    ed->data[0] == 0xff &&
 		    ed->data[1] == 0xd8) {
-		    if (ffd.debug)
+		    if (FbiStuff::fim_filereading_debug())
 			fprintf(stderr,"jpeg: exif thumbnail found\n");
 
 		    /* save away thumbnail data */

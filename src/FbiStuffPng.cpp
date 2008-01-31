@@ -38,8 +38,6 @@
 namespace fim
 {
 
-extern FramebufferDevice ffd;
-
 
 static const char *ct[] = {
     "gray",  "X1", "rgb",  "palette",
@@ -100,7 +98,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
     i->height = h->h;
     if (PNG_RESOLUTION_METER == unit)
 	i->dpi = res_m_to_inch(resx);
-    if (ffd.debug)
+    if (FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"png: color_type=%s #1\n",ct[h->color_type]);
     i->npages = 1;
     
@@ -122,13 +120,13 @@ png_init(FILE *fp, char *filename, unsigned int page,
     png_read_update_info(h->png, h->info);
 
     h->color_type = png_get_color_type(h->png, h->info);
-    if (ffd.debug)
+    if (FbiStuff::fim_filereading_debug())
 	fprintf(stderr,"png: color_type=%s #2\n",ct[h->color_type]);
     
     h->image = (png_byte*)malloc(i->width * i->height * 4);
     
     for (pass = 0; pass < number_passes-1; pass++) {
-	if (ffd.debug)
+	if (FbiStuff::fim_filereading_debug())
 	    fprintf(stderr,"png: pass #%d\n",pass);
 	for (y = 0; y < i->height; y++) {
 	    png_bytep row = h->image + y * i->width * 4;
