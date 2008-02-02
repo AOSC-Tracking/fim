@@ -25,9 +25,7 @@
 
 
 
-#include "FontServer.h"
 #include "fim.h"
-#include "FramebufferDevice.h"
 
 namespace fim
 {

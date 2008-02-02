@@ -26,6 +26,7 @@
 #ifndef FBI_STUFF_FBI_H
 #define FBI_STUFF_FBI_H
 
+#include "fim.h"
 
 #include "FramebufferDevice.h"
 #include "FbiStuffLoader.h"
@@ -48,16 +49,8 @@ struct list_head {
 extern struct list_head loaders;
 
 
-//extern FramebufferDevice ffd;
-
 namespace fim
 {
-
-extern int debug; //WARNING ! THIS IS UNINITIALIZED!
-
-
-
-
 
 class FbiStuff{
 public:

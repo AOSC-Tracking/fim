@@ -2,7 +2,7 @@
 /*
  Namespace.h : a class for local variables storage
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -205,7 +205,7 @@ namespace fim
 	}
 
 
-	int CommandConsole::getIntVariable(const fim::string &varname)
+	int CommandConsole::getIntVariable(const fim::string &varname)const
 	{
 #ifdef FIM_NAMESPACES
 		if( varname[1]==':' )
@@ -266,7 +266,10 @@ namespace fim
 		 *
 		 * BEWARE!
 		 * */
-		return variables[varname].getInt();
+		variables_t::const_iterator vi=variables.find(varname);
+		if(vi!=variables.end()) return vi->second;
+		else return 0;
+		//return ((c_variables_t)(variables))[varname].getInt();
 	}
 
 	float CommandConsole::getFloatVariable(const fim::string &varname)
@@ -385,5 +388,90 @@ namespace fim
 #endif
 		return variables[varname].getString();
 	}
+
+		int Namespace::setVariable(const fim::string& varname,int value)
+		{
+			return variables[varname].setInt(value);
+		}
+
+		float Namespace::setVariable(const fim::string& varname,float value)
+		{
+			/*
+			 * an internal function to set a user variable
+			 */
+	//		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
+			return variables[varname].setFloat(value);
+		}
+
+		int Namespace::setVariable(const fim::string& varname,const char*value)
+		{
+			/*
+			 * an internal function to set a user variable
+			 */
+			fim::string s(value);
+			return (int)(variables[varname].setString(s));
+		}
+	
+		int Namespace::getIntVariable(const fim::string &varname)const
+		{
+			// this scope was selected
+			//return variables[varname];
+			variables_t::const_iterator vi=variables.find(varname);
+			if(vi!=variables.end()) return vi->second;
+			else return 0;
+		}
+
+		float Namespace::getFloatVariable(const fim::string &varname)
+		{
+			/*
+			 * the variable name supplied is used as a key to the variables hash
+			 * */
+//			cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
+//			cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
+			return variables[varname].getFloat();
+		}
+
+		fim::string Namespace::getStringVariable(const fim::string &varname)
+		{
+			/*
+			 * the variable name supplied is used as a key to the variables hash
+			 * */
+			return variables[varname].getString();
+		}
+
+	        float Namespace::setGlobalVariable(const fim::string& varname,float value)
+		{
+			return cc.setVariable(varname,value);
+		}
+
+		int Namespace::setGlobalVariable(const fim::string& varname,int value)
+		{
+			return cc.setVariable(varname,value);
+		}
+
+		int Namespace::setGlobalVariable(const fim::string& varname,const char*value)
+		{
+			return cc.setVariable(varname,value);
+		}
+
+		int Namespace::getGlobalIntVariable(const fim::string &varname)const
+		{
+			return cc.getIntVariable(varname);
+		}
+
+		float Namespace::getGlobalFloatVariable(const fim::string &varname)
+		{
+			return cc.getFloatVariable(varname);
+		}
+
+		fim::string Namespace::getGlobalStringVariable(const fim::string &varname)
+		{
+			return cc.getStringVariable(varname);
+		}
+
+		fim::string Namespace::autocmd_exec(const fim::string &event,const fim::string &fname)
+		{
+			return cc.autocmd_exec(event,fname);
+		}
 }
 

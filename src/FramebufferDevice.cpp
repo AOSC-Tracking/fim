@@ -30,14 +30,12 @@ namespace fim
 {
 
 extern fim::CommandConsole cc;
-extern FramebufferDevice ffd;
-
 
 void _fb_switch_signal(int signal)
 {
+	extern FramebufferDevice ffd;
 	ffd.fb_switch_signal(signal);
 }
-
 
 int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
 {
@@ -86,27 +84,25 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 	int FramebufferDevice::framebuffer_init()
 	{
 		int rc=0;
-		if( ! g_fim_no_framebuffer )
-		{
-			//initialization of the framebuffer text
-			FontServer::fb_text_init1(fontname,&f);
-			//initialization of the framebuffer device handlers
-			fd = fb_init(fbdev, fbmode, vt);
-			if(fd==-1)
-				fd = fb_init(fbdev, fbmode, vt,0xbabebabe==0xbabebabe);//maybe we are under screen..
-			if(fd==-1)
-				if(fd==-1)exit(1);
-					//return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
-			//setting signals to handle in the right ways signals
-			fb_catch_exit_signals();
-			fb_switch_init();
-			/*
-			 * C-z is inhibited now (for framebuffer's screen safety!)
-			 */
-			signal(SIGTSTP,SIG_IGN);
-			//signal(SIGSEGV,cleanup_and_exit);
-			//set text color to white ?
-			if(rc=fb_text_init2())return rc;
+		//initialization of the framebuffer text
+		FontServer::fb_text_init1(fontname,&f);
+		//initialization of the framebuffer device handlers
+		fd = fb_init(fbdev, fbmode, vt);
+		if(fd==-1)
+			fd = fb_init(fbdev, fbmode, vt,0xbabebabe==0xbabebabe);//maybe we are under screen..
+		if(fd==-1)
+			if(fd==-1)exit(1);
+			//return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
+		//setting signals to handle in the right ways signals
+		fb_catch_exit_signals();
+		fb_switch_init();
+		/*
+		 * C-z is inhibited now (for framebuffer's screen safety!)
+		 */
+		signal(SIGTSTP,SIG_IGN);
+		//signal(SIGSEGV,cleanup_and_exit);
+		//set text color to white ?
+		if(rc=fb_text_init2())return rc;
 	
 			switch (fb_var.bits_per_pixel) {
 		case 8:
@@ -145,7 +141,6 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 		    		perror("ioctl FBIOPUTCMAP");
 			    std::exit(1);
 			}
-		}
 		}
 		return 0;
 	}
@@ -243,13 +238,43 @@ void FramebufferDevice::svga_display_image_new(struct ida_image *img, int xoff, 
     }
 
     if (dheight < bh ) 
-    {	    /* clear the screen */
-	    for ( y = by; y < by+yo;++y) { clear_line(FB_BPP, y, bw, FB_MEM(bx,y)); }
-	    for ( y = by+dheight+yo; y < by+bh;++y) { clear_line(FB_BPP, y, bw, FB_MEM(bx,y)); }
+    {	    
+    	/* clear by lines */
+#ifdef FIM_FASTER_CLEARLINES
+	if(bw==fb_var.xres && bx==0)
+	{
+		/*
+		 * +------------------------------+
+		 * | whole screen line clear join |
+		 * +------------------------------+
+		 */
+		// wide screen clear
+		{ clear_line(FB_BPP, by, bw*(bh), FB_MEM(bx,by)); }
+		
+		//top and bottom lines clear : maybe better
+		//{ clear_line(FB_BPP, by, bw*(yo), FB_MEM(bx,by)); }
+		//{ clear_line(FB_BPP, by+yo, bw*(dheight), FB_MEM(bx,by+yo)); }
+		//{ clear_line(FB_BPP, by+dheight+yo, bw*(bh-yo-dheight), FB_MEM(bx,by+yo+dheight)); }
+	}
+	else
+#endif
+	{
+	    	for ( y = by; y < by+yo;++y) { clear_line(FB_BPP, y, bw, FB_MEM(bx,y)); }
+		for ( y = by+dheight+yo; y < by+bh;++y) { clear_line(FB_BPP, y, bw, FB_MEM(bx,y)); }
+	}
     }
 
     if (dwidth < bw )
-    {	    for ( y = by; y < by+bh;++y)
+    {	    
+#ifdef FIM_FASTER_CLEARLINES
+    	    if(bw==fb_var.xres && bx==0)
+	    {
+	    	if (dheight >= bh ) 
+			clear_line(FB_BPP, by, bw*(bh), FB_MEM(bx,by));
+	    }
+	    else
+#endif
+    	    for ( y = by; y < by+bh;++y)
 	    {
 		    clear_line(FB_BPP, y, xo, FB_MEM(bx,y));
 		    clear_line(FB_BPP, y, cxo,FB_MEM(bx+xo+dwidth,y));
@@ -906,6 +931,12 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
     }
 }
 
+/*dez's*/
+/*unsigned char * FramebufferDevice::clear_lines(int bpp, int lines, int owidth, char unsigned *dest)
+{
+
+}*/
+
 unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, char unsigned *dest)
 {
     unsigned char  *ptr  = (unsigned char*)dest;
@@ -1046,7 +1077,7 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
     }
 }
 
-void FramebufferDevice::dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror)
+void inline FramebufferDevice::dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror)
 {
     register long   a, b;
     long           *ymod, xmod;
@@ -1218,5 +1249,185 @@ int FramebufferDevice::fs_init_fb(int white8)
     return 0;
 }
 
+/*
+ *	This function treats the framebuffer screen as a text outout terminal.
+ *	So it prints all the contents of its buffer on screen..
+ *	if noDraw is set, the screen will be not refreshed.
+	 *	NULL,NULL is the clearing combination !!
+	//FIX ME
+	20070628 now this function adapts to the screen resolution. yet there happens 
+	something strange for a number of lines filling more than half of the screen.. 
+
+	dez's
+ */
+void FramebufferDevice::fb_status_screen(const char *msg, int draw)
+{	
+	/*	WARNING		*/
+	//noDraw=0;
+	/*	WARNING		*/
+	int y,i,j,l,w;
+	// R rows, C columns
+	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
+	C=(fb_var.xres/fb_font_width());
+	static char **columns=NULL;
+	static char *columns_data=NULL;
+	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
+	/* R rows and C columns; the last one for string terminators..
+	 */
+	if(!columns)columns=(char**)calloc(sizeof(char**)*R,1);
+	if(!columns_data)columns_data=(char*)calloc(sizeof(char)*(R*(C+1)),1);
+	/* 
+	 * seems tricky : we allocate one single buffer and use it as console 
+	 * storage and console pointers storage ...
+	 *
+	 * note that we don't deallocate this area until program termination.
+	 * it is because we keep the framebuffer...
+	 * */
+	if(!columns || !columns_data)return;
+
+	for(i=0;i<R;++i)columns[i]=columns_data+i*(C+1);
+
+	static int cline=0,	//current line		[0..R-1]
+		   ccol=0;	//current column	[0..C]
+	const char *p=msg,	//p points to the substring not yet printed
+	      	    *s=p;	//s advances and updates p
+
+	if(!msg)
+	{
+		cline=0;
+		ccol=0;
+		p=NULL;
+		/*noDraw=0;*/
+	}
+	if(msg&&*msg=='\0')return;
+
+	if(p)while(*p)
+	{
+	    //while there are characters to put on screen, we advance
+	    while(*s && *s!='\n')++s;
+	    //now s points to an endline or a NUL
+	    l=s-p;
+	    //l is the number of characters which should go on screen (from *p to s[-1])
+	    w=0;
+	    while(l>0)	//line processing
+	    {
+		    //w is the number of writable characters on this line ( w in [0,C-ccol] )
+		    w=min(C-ccol,l);
+		    //there remains l-=w non '\n' characters yet to process in the first substring
+		    l-=w;
+		    //we place the characters on the line (not padded,though)
+		    strncpy(columns[cline]+ccol,p,w);
+		    sanitize_string_from_nongraph(columns[cline]+ccol,w);
+		    //the current column index is updated,too
+		    ccol+=w;
+		    //we blank the rest of the line (SHOULD BE UNNECESSARY)
+		    for(i=ccol;i<C;++i)columns[cline][i]=' ';
+		    //we terminate the line with a NUL
+		    columns[cline][C]='\0';
+		    //please note that ccol could still point to the middle of the line
+		    //the last writable column index is C
+	
+#ifdef CERCO_GRANE
+		    if(ccol>=C+1)cleanup_and_exit(-1);	//ehm.. who knows
+#else
+		    if(ccol>=C+1)return;
+#endif
+		    if(ccol==C)
+		    {
+			    //So if we are at the end of the line, we prepare 
+			    //for a new line
+			    ccol=0;
+			    cline=(cline+1)%(R);
+			    if(cline==0)
+			    for(i=0;i<R;++i)
+			    {
+				    for(j=0;j<C;++j)columns[i][j]=' ';
+				    columns[i][C]='\0';
+			    }
+			    //we clean the new line (SHOULD BE NECESSARY ONLY WITH THE FIRST LINE!)
+		    	    for(i=0;i<C;++i)columns[cline][i]=' ';
+		    }
+	            //we advance in the string for w chars 
+	    	    p+=w;	//a temporary assignment
+	    }
+	    	/*
+		 * after the chars in [p,s-1] are consumed, we can continue
+		 */
+		    while(*s=='\n')
+		    {
+			    ++s;
+			    ccol=0;
+			    cline=(cline+1)%(R);
+			    if(cline==0)
+			    for(i=0;i<R;++i)
+			    {
+				    for(j=0;j<C;++j)columns[i][j]=' ';
+				    columns[i][C]='\0';
+			    }
+		    }
+	    p=s;
+	}
+
+	//if(!cc.drawOutput() || noDraw)return;//CONVENTION!
+	if(!draw )return;//CONVENTION!
+
+	    y = 1*fb_font_height();
+	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
+
+	    /*
+	     *WARNING : note that columns and columns_data arrays are not freed and should not, as long as they are static.
+	     * */
+}
+
+	FramebufferDevice::FramebufferDevice():
+	fontname(NULL),
+	visible(1),
+	x11_font("10x20"),
+	ys( 3),
+	xs(10),
+	fb_mem_offset(0),
+	fb_switch_state(FB_ACTIVE),
+	orig_vt_no(0),
+	fbdev(NULL),
+	fbmode(NULL),
+	fbgamma(1.0),
+	vt(0),
+	dither(FALSE),
+	pcd_res(3),
+	steps(50),
+	debug(0),
+	fs_setpixel(NULL),
+#ifdef FIM_BOZ_PATCH
+	with_boz_patch(0),
+#endif
+	fontserver(*this)
+	{
+		cmap.start  =  0;
+		cmap.len    =  256;
+		cmap.red  =  red;
+		cmap.green  =  green;
+		cmap.blue  =  blue;
+		//! transp!
+		devs_default.fb0=   "/dev/fb0";
+		devs_default.fbnr=  "/dev/fb%d";
+		devs_default.ttynr= "/dev/tty%d";
+		devs_devfs.fb0=   "/dev/fb/0";
+		devs_devfs.fbnr=  "/dev/fb/%d";
+		devs_devfs.ttynr= "/dev/vc/%d";
+		ocmap.start = 0;
+		ocmap.len   = 256;
+		ocmap.red=ored;
+		ocmap.green=ogreen;
+		ocmap.blue=oblue;
+		/*
+		 * fbgamma and fontname are fbi - defined variables.
+		 * */
+		char *line;
+
+	    	if (NULL != (line = getenv("FBGAMMA")))
+	        	fbgamma = atof(line);
+	    	if (NULL != (line = getenv("FBFONT")))
+			fontname = line;
+	}
 
 }

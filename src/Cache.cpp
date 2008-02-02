@@ -22,8 +22,6 @@
 /*	#include <malloc.h>	*/
 namespace fim
 {
-	extern fim::CommandConsole cc;
-
 	Cache::Cache()
 	{
 		/*	FIXME : potential flaw ?	*/
@@ -101,12 +99,12 @@ namespace fim
 		/*
 		struct mallinfo mi = mallinfo();
 		cout << "allocated : " <<  mi.uordblks << "\n";
-		if( mi.uordblks > cc.getIntVariable("_max_cached_memory") )return true;
+		if( mi.uordblks > getIntGlobalVariable("_max_cached_memory") )return true;
 
 		these are not the values we want ..
 		*/
 
-		int mci = cc.getIntVariable("_max_cached_images");
+		int mci = getGlobalIntVariable("_max_cached_images");
 		if(mci==-1)return false;
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
@@ -240,7 +238,7 @@ namespace fim
 		this->reverseCache[ni]=fim::string( ni->getName() );
 		mark_used( ni->getName() );
 		usageCounter[ni->getName()]=0; // we yet don't assume any usage
-		cc.setVariable("_cached_images",cached_elements());
+		setGlobalVariable("_cached_images",cached_elements());
 		return true;
 	}
 	
@@ -266,7 +264,7 @@ namespace fim
 			cout << "deleting " << oi->getName() << "\n";
 #endif
 			delete oi; // NEW !!
-			cc.setVariable("_cached_images",cached_elements());
+			setGlobalVariable("_cached_images",cached_elements());
 			return 0;
 		}
 		return -1;
@@ -347,7 +345,7 @@ namespace fim
 			image = loadNewImage(fname);
 			if(!image)return NULL; // bad luck!
 			usageCounter[fname]=1;
-			cc.setVariable("_cache_status",getReport().c_str());
+			setGlobalVariable("_cache_status",getReport().c_str());
 			return image;
 //			usageCounter[fname]=0;
 		}
@@ -363,7 +361,7 @@ namespace fim
 #ifdef FIM_CACHE_DEBUG
 				cout << "critical internal cache error!\n";
 #endif
-				cc.setVariable("_cache_status",getReport().c_str());
+				setGlobalVariable("_cache_status",getReport().c_str());
 				return NULL;
 			}
 			if( used_image( fname ) )
@@ -387,7 +385,7 @@ namespace fim
 			}
 			// if loading and eventual cloning succeeded, we count the image as used of course
 			usageCounter[fname]++;
-			cc.setVariable("_cache_status",getReport().c_str());
+			setGlobalVariable("_cache_status",getReport().c_str());
 			return image;	//so, it could be a clone..
 		}
 	}

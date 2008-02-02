@@ -23,6 +23,12 @@
 #include "readline.h"
 #include "CommandConsole.h"
 
+#define min(x,y) ((x)<(y)?(x):(y))
+#define max(x,y) ((x)>(y)?(x):(y))
+
+/*
+ * This file is severely messed up :).
+ * */
 
 namespace fim
 {
@@ -53,9 +59,7 @@ static char ** fim_completion (const char *text, int start,int end)
 		if(!__s)return NULL;__s[0]=_s;
 		//we print all of the commands, with no completion, though.
 #endif
-		std::cout << "VARIABLES : "<<fim::cc.get_variables_list()<<"\n";
-		std::cout << "COMMANDS : "<<fim::cc.get_commands_list()<<"\n";
-		std::cout << "ALIASES : "<<fim::cc.get_aliases_list()<<"\n";
+		cc.print_commands();
 		rl_attempted_completion_over = 1;
 		/* this could be set only here :) */
 		return NULL;
@@ -110,6 +114,11 @@ static void completion_display_matches_hook(char **matches,int num,int max)
  //     status((unsigned char*)"here shall be autocompletions", NULL);
 }
 
+static void redisplay_no_fb()
+{
+	printf("%s",rl_line_buffer);
+}
+
 static void redisplay()
 {	
 	/*
@@ -118,10 +127,7 @@ static void redisplay()
 	 */
 	//static int c=100;
 //	fb_setcolor(c=~c);//sleep(1);
-	if(g_fim_no_framebuffer)
-		printf("%s",rl_line_buffer);
-	else 
-		fim::status(( char*)rl_line_buffer,NULL);
+	cc.set_status_bar(( char*)rl_line_buffer,NULL);
 //	fprintf(stderr,"::%s\n",rl_line_buffer);
 //	fprintf(stdout,"::%s\n",rl_line_buffer);
 }
@@ -129,6 +135,12 @@ static void redisplay()
 /*
  * ?!
  * */
+static int redisplay_hook_no_fb()
+{
+	redisplay_no_fb();
+	return 0;
+}
+
 static int redisplay_hook()
 {
 	redisplay();
@@ -156,7 +168,7 @@ static int fim_set_command_line_text(const char*s)
 /*
  *	initial setup to set the readline library working
  */
-void initialize_readline ()
+void initialize_readline (int with_no_framebuffer)
 {
 	//FIX ME
 	/* Allow conditional parsing of the ~/.inputrc file. */
@@ -165,7 +177,7 @@ void initialize_readline ()
 	rl_attempted_completion_function = fim_completion;
 	rl_completion_display_matches_hook=completion_display_matches_hook;
 
-	if(g_fim_no_framebuffer==0)
+	if(with_no_framebuffer==0)
 	{
 		rl_catch_signals=0;
 		rl_catch_sigwinch=0;

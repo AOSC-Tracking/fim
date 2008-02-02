@@ -61,9 +61,9 @@ CLEANFILES=$(BUILT_SOURCES) yacc.output
 
 
 fim_SOURCES  = $(BUILT_SOURCES) \
-		fim.cpp \
-	      fim.h \
-	      Arg.h \
+	fim.cpp \
+	fim.h \
+	Arg.h \
 	Browser.h \
 	Cache.h \
 	Command.h \
@@ -81,7 +81,6 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Window.h \
 	common.h \
 	conf.h \
-	extern.h \
 	fim.h \
 	fim_stream.h \
 	fim_stream.cpp \
@@ -121,44 +120,51 @@ EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
 
  DEFINES  =
 # The following defines already migrated outta here...
-#DEFINES  += -D FIM_DEFAULT_KEY_CONFIG  # with a builtin default key mapping (advised)
-DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key binding
-#DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
 
 # The following defines should migrate outta here!
 #DEFINES  += -D FIM_NOFIMRC             # with ~/.fimrc loading disabled
 #DEFINES  += -D FIM_NOSCRIPTING         # any script loading disabled
- DEFINES  += -D FIM_NOFB                # disable the framebuffer (for debug mostly)
 #DEFINES  += -D FIM_AUTOCMDS            # autocommands : they are enabled externally now
- DEFINES  += -D FIM_RECORDING           # command recording
- DEFINES  += -D FIM_SWITCH_FIXUP        # still bugful
- DEFINES  += -D FIM_CHECK_DUPLICATES    # if enabled, no duplicates will be allowed in the filename list
- DEFINES  += -D FIM_CHECK_FILE_EXISTENCE # when a filename is added in the list, a verification occurs
- DEFINES  += -D FIM_REMOVE_FAILED       # a file which failed loading is removed from the list
- DEFINES  += -D FIM_AUTOSKIP_FAILED     # if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
- DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
- DEFINES  += -D FIM_NAMESPACES		# Each object among {Image,Browser,Viewport,Window} will also be a namespace
 #DEFINES  += -D FIM_ALIASES_WITHOUT_ARGUMENTS	# if defined, aliases are much more prosaic
 #DEFINES  += -D FIM_WINDOWS		# Fim own's window system. EXPERIMENTAL!
 #DEFINES  += -D FIM_BOZ_PATCH		 # added from configure..
 #DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
-DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
 #DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
 #DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
- DEFINES  += -D FIM_RANDOM           # 'random' is a fake variable
- DEFINES  += -D FIM_CACHE_DEBUG		# Debug info on cache available
- DEFINES  += -D FIM_BUGGED_CACHE	# Sometimes something breaks and we want to isolate mechanisms
 #DEFINES  += -D FIM_NO_UNSAFE_CMDS		# Some unsafe commands are temporarily hidden
+#DEFINES  += -D FIM_FASTER_CLEARLINES	# We save mmapped memset() calls in this way (a very small gain, though)
+#DEFINES  += -D FIM_DEFAULT_KEY_CONFIG  # with a builtin default key mapping (advised)
+#DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
 
- FIM_VERSION= $(VERSION)
+# Moved to configure.ac (and thus to config.h) :
+#DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key binding
+#DEFINES  += -D FIM_NOFB                # disable the framebuffer (for debug mostly)
+#DEFINES  += -D FIM_RECORDING           # command recording
+#DEFINES  += -D FIM_SWITCH_FIXUP        # still bugful
+#DEFINES  += -D FIM_CHECK_DUPLICATES    # if enabled, no duplicates will be allowed in the filename list
+#DEFINES  += -D FIM_CHECK_FILE_EXISTENCE # when a filename is added in the list, a verification occurs
+#DEFINES  += -D FIM_REMOVE_FAILED       # a file which failed loading is removed from the list
+#DEFINES  += -D FIM_AUTOSKIP_FAILED     # if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
+#DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
+#DEFINES  += -D FIM_NAMESPACES		# Each object among {Image,Browser,Viewport,Window} will also be a namespace
+#DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
+#DEFINES  += -D FIM_RANDOM           # 'random' is a fake variable
+#DEFINES  += -D FIM_CACHE_DEBUG		# Debug info on cache available
+#DEFINES  += -D FIM_BUGGED_CACHE	# Sometimes something breaks and we want to isolate mechanisms
+#DEFINES  += -D X_DISPLAY_MISSING
+
+# DEFINES  += @DEFS@ 
+
+#FIM_VERSION= $(VERSION)
 # FIM_AUTHOR = '"Michele Martone <dezperado _CUT_ autistici _CUT_ org>"'
 
- DEFINES  += -D FIM_VERSION="\"$(FIM_VERSION)\""
+#DEFINES  += -D FIM_VERSION="\"$(FIM_VERSION)\""
 # DEFINES  += -D FIM_AUTHOR=$(FIM_AUTHOR)
- DEFINES  += -D X_DISPLAY_MISSING @DEFS@ @EXTRADEFS@
 
-AM_CPPFLAGS=${DEFINES} ${FIM_CFLAGS}
-AM_LDFLAGS=${FIM_CFLAGS}
+#AM_CPPFLAGS=${DEFINES} # ${FIM_CFLAGS} @FIM_DEFS@
+AM_CPPFLAGS=
+#AM_CXXFLAGS=-I . -I ..
+#AM_LDFLAGS=${FIM_CFLAGS}
 
 fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
 

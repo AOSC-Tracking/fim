@@ -27,7 +27,7 @@
 #ifndef FONT_SERVER_FIM_H
 #define FONT_SERVER_FIM_H
 
-//# include "FramebufferDevice.h"
+#include "fim.h"
 
 # include <errno.h>
 # include <unistd.h> //for NULL

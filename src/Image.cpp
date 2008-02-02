@@ -35,7 +35,6 @@
  */
 namespace fim
 {
-	extern CommandConsole cc;
 	extern FramebufferDevice ffd;
 /*
  *	There is a general rule here:
@@ -79,8 +78,8 @@ namespace fim
 		if( !load(fname_) || check_invalid() || (!fimg) ) 
 		{
 			cout << "warning : invalid loading ! \n";
-			if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
-				fim::set_status_bar( fim::string("error while loading \"")+ fim::string(fname_)+ fim::string("\"") , "*");
+			if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
+				cc.set_status_bar( fim::string("error while loading \"")+ fim::string(fname_)+ fim::string("\"") , "*");
 		}
 		else
 		{
@@ -114,8 +113,8 @@ namespace fim
 		if(fname_==NULL){return false;}//no loading = no state change
 		this->free();
 		fname=fname_;
-		if( cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
-			fim::set_status_bar("please wait while reloading...", "*");
+		if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
+			cc.set_status_bar("please wait while reloading...", "*");
 
 		fimg = FbiStuff::read_image((char*)fname_);
 
@@ -138,13 +137,13 @@ namespace fim
 		setVariable("ascale" ,ascale);
 #endif
 
-		cc.setVariable("height" ,(int)fimg->i.height);
-		cc.setVariable("width"  ,(int)fimg->i.width );
-		cc.setVariable("sheight",(int) img->i.height);
-		cc.setVariable("swidth" ,(int) img->i.width );
-		cc.setVariable("_fim_bpp" ,(int) framebufferdevice.fb_var.bits_per_pixel );
-		cc.setVariable("scale"  ,newscale*100);
-		cc.setVariable("ascale" ,ascale);
+		setGlobalVariable("height" ,(int)fimg->i.height);
+		setGlobalVariable("width"  ,(int)fimg->i.width );
+		setGlobalVariable("sheight",(int) img->i.height);
+		setGlobalVariable("swidth" ,(int) img->i.width );
+		setGlobalVariable("_fim_bpp" ,(int) framebufferdevice.fb_var.bits_per_pixel );
+		setGlobalVariable("scale"  ,newscale*100);
+		setGlobalVariable("ascale" ,ascale);
 		return true;
 	}
 
@@ -245,7 +244,7 @@ namespace fim
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=((neworientation%4)+4)%4; // fix this
 
-		cc.setVariable("scale",newscale*100);
+		setGlobalVariable("scale",newscale*100);
 		if(fimg)
 		{
 			/*
@@ -256,8 +255,8 @@ namespace fim
 			 * keeping score of copies and ... too complicated ...
 			 */
 			struct ida_image *backup_img=img;
-			if(cc.getIntVariable("_display_status_bar")||cc.getIntVariable("_display_busy"))
-				fim::set_status_bar("please wait while rescaling...", getInfo().c_str());
+			if(getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
+				cc.set_status_bar("please wait while rescaling...", getInfo().c_str());
 
 #define FIM_PROGRESSIVE_RESCALING 0
 #if FIM_PROGRESSIVE_RESCALING
@@ -312,8 +311,8 @@ namespace fim
 			if(!img)
 			{
 				img=backup_img;
-				if(cc.getIntVariable("_display_busy"))
-					fim::set_status_bar( "rescaling failed (insufficient memory?!)", getInfo().c_str());
+				if(getGlobalIntVariable("_display_busy"))
+					cc.set_status_bar( "rescaling failed (insufficient memory?!)", getInfo().c_str());
 				sleep(1);	//just to give a glimpse..
 			}
 			else 
@@ -328,11 +327,11 @@ namespace fim
 			/*
 			 * it is important to set these values after rotation, too!
 			 * */
-			cc.setVariable("height" ,(int)fimg->i.height);
-			cc.setVariable("width"  ,(int)fimg->i.width );
-			cc.setVariable("sheight",(int) img->i.height);
-			cc.setVariable("swidth" ,(int) img->i.width );
-			cc.setVariable("ascale" , ascale );
+			setGlobalVariable("height" ,(int)fimg->i.height);
+			setGlobalVariable("width"  ,(int)fimg->i.width );
+			setGlobalVariable("sheight",(int) img->i.height);
+			setGlobalVariable("swidth" ,(int) img->i.width );
+			setGlobalVariable("ascale" , ascale );
 		}
 		else framebufferdevice.redraw=0;
 		orientation=neworientation;
@@ -410,19 +409,19 @@ fim::string Image::getInfo()
 
 	static char linebuffer[128];
 	char imagemode[3],*imp;
-	int n=cc.getIntVariable("fileindex");
+	int n=getGlobalIntVariable("fileindex");
 	imp=imagemode;
 
-	//if(cc.getIntVariable("autoflip"))*(imp++)='F';
-	//if(cc.getIntVariable("automirror"))*(imp++)='M';
+	//if(getGlobalIntVariable("autoflip"))*(imp++)='F';
+	//if(getGlobalIntVariable("automirror"))*(imp++)='M';
 
 	// should flip ? should mirror ?
 	int flip   =
-	((cc.getIntVariable("autoflip")== 1|cc.getIntVariable("v:flipped")== 1|getIntVariable("flipped")== 1)&&
-	!(cc.getIntVariable("autoflip")==-1|cc.getIntVariable("v:flipped")==-1|getIntVariable("flipped")==-1));
+	((getGlobalIntVariable("autoflip")== 1|getGlobalIntVariable("v:flipped")== 1|getIntVariable("flipped")== 1)&&
+	!(getGlobalIntVariable("autoflip")==-1|getGlobalIntVariable("v:flipped")==-1|getIntVariable("flipped")==-1));
 	int mirror   =
-	((cc.getIntVariable("automirror")== 1|cc.getIntVariable("v:mirrored")== 1|getIntVariable("mirrored")== 1)&&
-	!(cc.getIntVariable("automirror")==-1|cc.getIntVariable("v:mirrored")==-1|getIntVariable("mirrored")==-1));
+	((getGlobalIntVariable("automirror")== 1|getGlobalIntVariable("v:mirrored")== 1|getIntVariable("mirrored")== 1)&&
+	!(getGlobalIntVariable("automirror")==-1|getGlobalIntVariable("v:mirrored")==-1|getIntVariable("mirrored")==-1));
 
 	if(flip  )*(imp++)='F';
 	if(mirror)*(imp++)='M';
@@ -437,7 +436,7 @@ fim::string Image::getInfo()
 	     this->width(), this->height(),
 	     imagemode,
 	     n?n:1, /* ... */
-	     (cc.getIntVariable("filelistlen"))
+	     (getGlobalIntVariable("filelistlen"))
 	     );
 	return fim::string(linebuffer);
 }
@@ -471,8 +470,8 @@ fim::string Image::getInfo()
 		 * */
 		return ((
 		(  getIntVariable("orientation")
-		+cc.getIntVariable("v:orientation")
-		+cc.getIntVariable("orientation")
+		+getGlobalIntVariable("v:orientation")
+		+getGlobalIntVariable("orientation")
 		)
 		%4)+4)%4;
 	}

@@ -7,6 +7,11 @@
 
 aclocal  || { echo "no aclocal  ?" ; exit 1 ; }
 
+#autoscan
+
+# we produce suitable config.h.in
+autoheader
+
 # we produce a configure script
 autoconf || { echo "no autoconf ?" ; exit 1 ; }
 

@@ -27,6 +27,7 @@
 #ifndef FBI_STUFF_LOADER_FBI_H
 #define FBI_STUFF_LOADER_FBI_H
 
+#include "fim.h"
 
 #include "FbiStuffList.h"
 

@@ -23,6 +23,7 @@
  * This file comes from fbi, and will undergo severe reorganization.
  * */
 
+#include "fim.h"
 
 
 #include <stdio.h>
@@ -34,9 +35,6 @@
 #endif
 
 //#include "loader.h"
-#include "FontServer.h"
-#include "FbiStuff.h"
-#include "FbiStuffLoader.h"
 
 namespace fim
 {

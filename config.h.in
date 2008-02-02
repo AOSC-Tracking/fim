@@ -6,6 +6,69 @@
 /* program to use for shell commands */
 #undef EXECSHELL
 
+/* */
+#undef FIM_AUTOCMDS
+
+/* */
+#undef FIM_AUTOSKIP_FAILED
+
+/* */
+#undef FIM_BOZ_PATCH
+
+/* */
+#undef FIM_BUGGED_CACHE
+
+/* */
+#undef FIM_CACHE_DEBUG
+
+/* */
+#undef FIM_CHECK_DUPLICATES
+
+/* */
+#undef FIM_CHECK_FILE_EXISTENCE
+
+/* */
+#undef FIM_COMMAND_AUTOCOMPLETION
+
+/* */
+#undef FIM_DEFAULT_CONFIG
+
+/* */
+#undef FIM_DEFAULT_CONFIGURATION
+
+/* */
+#undef FIM_DEFAULT_KEY_CONFIG
+
+/* */
+#undef FIM_NAMESPACES
+
+/* */
+#undef FIM_NOFB
+
+/* */
+#undef FIM_NOFIMRC
+
+/* */
+#undef FIM_RANDOM
+
+/* */
+#undef FIM_READ_STDIN
+
+/* */
+#undef FIM_RECORDING
+
+/* */
+#undef FIM_REMOVE_FAILED
+
+/* */
+#undef FIM_SWITCH_FIXUP
+
+/* */
+#undef FIM_VERSION
+
+/* Fim windowing support */
+#undef FIM_WINDOWS
+
 /* Defined, if libpng support is enabled */
 #undef FIM_WITH_LIBPNG
 
@@ -122,6 +185,9 @@
 
 /* Version number of package */
 #undef VERSION
+
+/* */
+#undef X_DISPLAY_MISSING
 
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */

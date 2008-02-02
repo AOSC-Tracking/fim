@@ -24,78 +24,18 @@
 #include "fim.h"
 //#include <stdio.h>
 #include <sys/resource.h>
+#include "FramebufferDevice.h"
 
 
 namespace fim
 {
 class CommandConsole
 {
-#ifdef FIM_NAMESPACES
-	class Namespace
-	{
-		/*
-		 * FIXME: experimental
-		 *
-		 * */
-		/*
-		 * the identifier->variable binding
-		 */
-		std::map<const fim::string,Var> variables;	//id->var
-	
-		public:
-		int setVariable(const fim::string& varname,int value)
-		{
-	//		return variables[varname].setInt(value);
-			return -1;
-		}
+	public:
 
-		int getIntVariable(const fim::string &varname)
-		{
-			if( varname[1]==':' )
-			{
-				//a specific namespace was selected!
-				char ns = varname[0];
-				fim::string id=varname.c_str()+2;
-				if( ns == 'w' )
-				{
-					//window variable
-//					return cc.current_window().getIntVariable(id);
-				}
-				else
-				if( ns == 'v' )
-				{
-					//viewport variable
-//					return cc.current_window().current_viewport().getIntVariable(id);
-				}
-				else
-				if( ns == 'i' )
-				{
-					//image variable
-//					return cc.browser.image().getIntVariable(id);
-				}
-				else
-				if( ns == 'b' )
-				{
-					//browser variable
-//					return cc.browser.getIntVariable(id);
-				}
-				else
-				if( ns == 'g' )
-				{
-					//global variable
-//					return variables[id];
-				}
-				return -1;
-			}
-			else
-			{
-				// this scope was selected
-//				return variables[varname];
-			}
-			return 0;
-		}
-	};
-#endif
+	struct termios  saved_attributes;
+	int             saved_fl;
+	private:
 
 #ifdef FIM_WINDOWS
 	fim::Window * window;
@@ -186,13 +126,14 @@ class CommandConsole
 #endif
 
 	void markCurrentFile();
+	FramebufferDevice &framebufferdevice;
 	public:
 
 	fim::string execute(fim::string cmd, std::vector<fim::string> args);
 
 	const char*get_prompt(){return prompt;}
 
-	CommandConsole();
+	CommandConsole(FramebufferDevice &_framebufferdevice);
 
 	fim::string markCurrentFile(const std::vector<fim::string>& args){markCurrentFile();return "";}
 	bool display();
@@ -205,7 +146,7 @@ class CommandConsole
 	float getFloatVariable(const fim::string &varname);
 	fim::string getStringVariable(const fim::string &varname);
 	int  getVariableType(const fim::string &varname);
-	int  getIntVariable(const fim::string & varname);
+	int  getIntVariable(const fim::string & varname)const;
 	int  printVariable(const fim::string & varname);
 	int  setVariable(const fim::string& varname,int value);
 	float setVariable(const fim::string& varname,float value);
@@ -303,7 +244,19 @@ class CommandConsole
 	
 	void dumpDefaultFimrc()const;
 	#endif
+
+	void tty_raw();
+	void tty_restore();
+	void cleanup_and_exit(int code);
+	
+	fim::string print_commands()const;
+
+	void status_screen(const char *desc, char *info);
+	void set_status_bar(fim::string desc, const char *info);
+	void set_status_bar(const char *desc, const char *info);
+
 	private:
+	int fim_uninitialized; // new, probably useless
 
 	fim::string postInitCommand;
 	fim::string postExecutionCommand;

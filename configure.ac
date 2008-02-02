@@ -26,7 +26,7 @@ AC_MSG_NOTICE([
 ])
 
 
-AM_CONFIG_HEADER([config.h])
+#AM_CONFIG_HEADER([config.h])
 #AC_CONFIG_SRCDIR(pinentry/pinentry.h)
 
 #
@@ -86,7 +86,6 @@ if test "x$U" != "x"; then
   AC_MSG_ERROR(Compiler not ANSI compliant)
 fi
 #AC_PROG_CPP
-#AC_CONFIG_HEADERS(..)
 AC_PROG_MAKE_SET
 
 AC_C_INLINE
@@ -126,20 +125,20 @@ AC_ARG_ENABLE(default_config, AC_HELP_STRING([--disable-default_config], [Builti
         fi
 ])
 
-	EXTRADEFS=
-#		DEFS="$DEFS -D FIM_DEFAULT_CONFIG"
-#		EXTRADEFS="$EXTRADEFS -D FIM_DEFAULT_CONFIG"
+	AH_TEMPLATE([FIM_DEFAULT_CONFIG])
 	if test x$have_default_bindings != xno; then
-#		DEFS="$DEFS -D FIM_DEFAULT_CONFIG"
-		EXTRADEFS="$EXTRADEFS -D FIM_DEFAULT_CONFIG"
+		FIM_DEFS="$FIM_DEFS -D FIM_DEFAULT_CONFIG"
+		AC_DEFINE([FIM_DEFAULT_CONFIG])
 	fi
+	AH_TEMPLATE([FIM_DEFAULT_KEY_CONFIG])
 	if test x$have_default_mapping != xno; then
-#		DEFS="$DEFS -D FIM_DEFAULT_KEY_CONFIG"
-		EXTRADEFS="$EXTRADEFS -D FIM_DEFAULT_KEY_CONFIG"
+		FIM_DEFS="$FIM_DEFS -D FIM_DEFAULT_KEY_CONFIG"
+		AC_DEFINE([FIM_DEFAULT_KEY_CONFIG])
 	fi
+	AH_TEMPLATE([FIM_DEFAULT_CONFIGURATION])
 	if test x$have_default_config != xno; then
-#		DEFS="$DEFS -D FIM_DEFAULT_CONFIGURATION"
-		EXTRADEFS="$EXTRADEFS -D FIM_DEFAULT_CONFIGURATION"
+		FIM_DEFS="$FIM_DEFS -D FIM_DEFAULT_CONFIGURATION"
+		AC_DEFINE([FIM_DEFAULT_CONFIGURATION])
 	fi
 
 #CPPFLAGS=$DEPS
@@ -170,6 +169,7 @@ AC_CHECK_HEADERS([cstdio stdio.h], [break],AC_MSG_ERROR([[Cannot find cstdio or 
 AC_CHECK_HEADERS([linux/fb.h], [break], AC_MSG_ERROR([[Cannot find linux/fb.h.  Fim requires it!.]]))
 AC_CHECK_HEADERS([linux/vt.h], [break], AC_MSG_ERROR([[Cannot find linux/vt.h.  Fim requires it!.]]))
 AC_CHECK_HEADERS([linux/kd.h], [break], AC_MSG_ERROR([[Cannot find linux/kd.h.  Fim requires it!.]]))
+
 
 dnl if test "X$ac_cv_header_cstdio" != "Xyes" && test "X$ac_cv_header_stdio_h" != "Xyes"; then
 dnl   AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]])
@@ -453,9 +453,10 @@ AC_ARG_ENABLE(autocommands, AC_HELP_STRING([--disable-autocommands], [Fim will b
         fim_cv_autocommands=no
 fi])
 
+AH_TEMPLATE([FIM_AUTOCMDS])
 if test x$fim_cv_autocommands = xyes; then
 	have_autocommands=yes
-	EXTRADEFS="$EXTRADEFS -D FIM_AUTOCMDS"
+	AC_DEFINE([FIM_AUTOCMDS])
 else
 	have_autocommands=no
 fi
@@ -470,9 +471,10 @@ AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Disable Fim's own wi
         fim_cv_windows=no
 fi])
 
+AH_TEMPLATE([FIM_WINDOWS])
 if test x$fim_cv_windows = xyes; then
 	have_windows=yes
-	EXTRADEFS="$EXTRADEFS -D FIM_WINDOWS"
+	AC_DEFINE([FIM_WINDOWS],1,[Fim windowing support])
 else
 	have_windows=no
 fi
@@ -487,10 +489,11 @@ AC_ARG_ENABLE(fimrc, AC_HELP_STRING([--disable-fimrc], [Fim will by default load
         fim_cv_fimrc=no
 fi])
 
+AH_TEMPLATE([FIM_NOFIMRC])
 if test x$fim_cv_fimrc = xyes; then
 	have_fimrc=yes
 else
-	EXTRADEFS="$EXTRADEFS -D FIM_NOFIMRC"
+	AC_DEFINE([FIM_NOFIMRC])
 fi
 
 dnl ==================
@@ -505,9 +508,10 @@ AC_ARG_ENABLE(screen, AC_HELP_STRING([--disable-screen], [Fim will try to work u
 ],[ fim_cv_screen=yes ]
 )
 
+AH_TEMPLATE([FIM_BOZ_PATCH])
 if test x$fim_cv_screen != xno; then
         # boz patch is on
-	EXTRADEFS="$EXTRADEFS -D FIM_BOZ_PATCH"
+	AC_DEFINE([FIM_BOZ_PATCH])
 fi
 
 dnl ==================
@@ -554,8 +558,7 @@ AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CFLAGS],
 		FIM_CFLAGS="$withval"
 		CFLAGS="$FIM_CFLAGS"
 		CXXFLAGS="$FIM_CFLAGS"
-	else
-		FIM_CFLAGS="$CFLAGS"
+		dnl ...else FIM_CFLAGS="$CFLAGS"
         fi],
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
 
@@ -574,12 +577,60 @@ AC_ARG_WITH(exec-shell, AC_HELP_STRING([--with-exec-shell=SHELL], [Specify alter
 
 dnl ==================
 
+
+dnl uhmmmmmm : doesn't seem to work
+dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 
+dnl         if test x$enableval = xyes; then
+dnl		AC_SUBST(DEFS)
+dnl	else
+dnl		AC_CONFIG_HEADERS([config.h])
+dnl        fi,[])
+AC_CONFIG_HEADERS([config.h])
+
+
+AH_TEMPLATE([FIM_RANDOM])
+AC_DEFINE([FIM_RANDOM])
+AH_TEMPLATE([FIM_DEFAULT_CONFIG])
+AC_DEFINE([FIM_DEFAULT_CONFIG])
+AH_TEMPLATE([FIM_NOFB])
+AC_DEFINE([FIM_NOFB])
+AH_TEMPLATE([FIM_RECORDING])
+AC_DEFINE([FIM_RECORDING])
+AH_TEMPLATE([FIM_SWITCH_FIXUP])
+AC_DEFINE([FIM_SWITCH_FIXUP])
+AH_TEMPLATE([FIM_CHECK_DUPLICATES])
+AC_DEFINE([FIM_CHECK_DUPLICATES])
+AH_TEMPLATE([FIM_CHECK_FILE_EXISTENCE])
+AC_DEFINE([FIM_CHECK_FILE_EXISTENCE])
+AH_TEMPLATE([FIM_REMOVE_FAILED])
+AC_DEFINE([FIM_REMOVE_FAILED])
+AH_TEMPLATE([FIM_AUTOSKIP_FAILED])
+AC_DEFINE([FIM_AUTOSKIP_FAILED])
+AH_TEMPLATE([FIM_COMMAND_AUTOCOMPLETION])
+AC_DEFINE([FIM_COMMAND_AUTOCOMPLETION])
+AH_TEMPLATE([FIM_NAMESPACES])
+AC_DEFINE([FIM_NAMESPACES])
+AH_TEMPLATE([FIM_READ_STDIN])
+AC_DEFINE([FIM_READ_STDIN])
+AH_TEMPLATE([FIM_CACHE_DEBUG])
+AC_DEFINE([FIM_CACHE_DEBUG])
+AH_TEMPLATE([FIM_BUGGED_CACHE])
+AC_DEFINE([FIM_BUGGED_CACHE])
+AH_TEMPLATE([FIM_VERSION])
+AC_DEFINE_UNQUOTED([FIM_VERSION],"${VERSION}")
+AH_TEMPLATE([X_DISPLAY_MISSING])
+AC_DEFINE([X_DISPLAY_MISSING])
+
+
+dnl ==================
+
 AC_SUBST(LIBIMAP)
 AC_SUBST(LIBIMAPDEPS)
 
 AC_SUBST(FIMLIBS)
-AC_SUBST(DEFS)
-AC_SUBST(EXTRADEFS)
+dnl AC_SUBST(DEFS)
+AC_SUBST(FIM_DEFS)
+
 AC_SUBST(FIM_LIB_OBJECTS)
 
 #CFLAGS="$FIM_CFLAGS"

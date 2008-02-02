@@ -23,7 +23,11 @@
 #include "fim.h"
 namespace fim
 {
+#ifdef FIM_NAMESPACES
+class Cache:public Namespace
+#else
 class Cache
+#endif
 {	
 	typedef std::map<fim::Image*,time_t> 	   lru_t;	//filename - last usage time
 	typedef std::map<fim::string,fim::Image*>  cachels_t;	//filename - image

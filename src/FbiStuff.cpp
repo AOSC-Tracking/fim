@@ -24,8 +24,7 @@
  * */
 
 
-#include "FbiStuff.h"
-#include "FbiStuffLoader.h"
+#include "fim.h"
 
 
 #include <stdio.h>
@@ -1022,10 +1021,17 @@ struct ida_image* FbiStuff::read_image(char *filename)
 	return NULL;
     }
     img->data = (unsigned char*)malloc(img->i.width * img->i.height * 3);
+#ifndef FIM_IS_SLOWER_THAN_FBI
+    for (y = 0; y < img->i.height; y++) {
+	loader->read(img->data + img->i.width * 3 * y, y, data);
+    }
+#else
     for (y = 0; y < img->i.height; y++) {
 	ffd.switch_if_needed();
 	loader->read(img->data + img->i.width * 3 * y, y, data);
     }
+#endif
+
 #ifndef FIM_IS_SLOWER_THAN_FBI
     /*
      * this patch aligns the pixel bytes in the order they should

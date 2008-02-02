@@ -23,6 +23,7 @@
  * This file comes from fbi, and will undergo severe reorganization.
  * */
 
+#include "fim.h"
 #include "FramebufferDevice.h"
 
 namespace fim

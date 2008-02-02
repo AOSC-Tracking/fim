@@ -34,7 +34,6 @@
  */
 namespace fim
 {
-	extern CommandConsole cc;
 	extern FramebufferDevice ffd;
 
 	Viewport::Viewport(
@@ -64,6 +63,7 @@ namespace fim
 		try
 		{
 #ifndef FIM_BUGGED_CACHE
+			extern CommandConsole cc;
 			if(v.image) image = cc.browser.cache.useCachedImage(v.image->getName());
 #else
 			if(v.image)image = new Image(*v.image);
@@ -220,7 +220,6 @@ namespace fim
 		/*
 		 * for recovery purposes. FIXME
 		 * */
-		if( g_fim_no_framebuffer  )return;
 		if(framebufferdevice.redraw==0 )return;
 #ifdef FIM_WINDOWS
 		framebufferdevice.fb_clear_rect(
@@ -251,18 +250,18 @@ namespace fim
 		 *
 		 * global or inner (not i: !) or local (v:) marker
 		 * */
-		int autotop=cc.getIntVariable("autotop")   | image->getIntVariable("autotop") | getIntVariable("autotop");
-		//int flip   =cc.getIntVariable("autoflip")  | image->getIntVariable("flipped") | getIntVariable("flipped");
+		int autotop=getGlobalIntVariable("autotop")   | image->getIntVariable("autotop") | getIntVariable("autotop");
+		//int flip   =getGlobalIntVariable("autoflip")  | image->getIntVariable("flipped") | getIntVariable("flipped");
 		int flip   =
-		((cc.getIntVariable("autoflip")== 1|image->getIntVariable("flipped")== 1|getIntVariable("flipped")== 1)&&
-		!(cc.getIntVariable("autoflip")==-1|image->getIntVariable("flipped")==-1|getIntVariable("flipped")==-1));
+		((getGlobalIntVariable("autoflip")== 1|image->getIntVariable("flipped")== 1|getIntVariable("flipped")== 1)&&
+		!(getGlobalIntVariable("autoflip")==-1|image->getIntVariable("flipped")==-1|getIntVariable("flipped")==-1));
 		int mirror   =
-		((cc.getIntVariable("automirror")== 1|image->getIntVariable("mirrored")== 1|getIntVariable("mirrored")== 1)&&
-		!(cc.getIntVariable("automirror")==-1|image->getIntVariable("mirrored")==-1|getIntVariable("mirrored")==-1));
+		((getGlobalIntVariable("automirror")== 1|image->getIntVariable("mirrored")== 1|getIntVariable("mirrored")== 1)&&
+		!(getGlobalIntVariable("automirror")==-1|image->getIntVariable("mirrored")==-1|getIntVariable("mirrored")==-1));
 
 		image->update();
     
-		if (cc.getIntVariable("i:new") && framebufferdevice.redraw)
+		if (getGlobalIntVariable("i:new") && framebufferdevice.redraw)
 		{
 			/*
 			 * If this is the first image display, we have
@@ -277,7 +276,7 @@ namespace fim
 				left = (image->width() - this->viewport_width()) / 2;
 			if (image->height() > this->viewport_height() &&  autotop==0)
 				top = (image->height() - this->viewport_height()) / 2;
-			cc.setVariable("i:new",0);
+			setGlobalVariable("i:new",0);
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
@@ -322,18 +321,15 @@ namespace fim
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
 			 */
-			//fb_clear_screen();
 #ifdef FIM_WINDOWS
-			if(!g_fim_no_framebuffer)
-				framebufferdevice.svga_display_image_new(image->img, left, top,
+			framebufferdevice.svga_display_image_new(image->img, left, top,
 					xorigin(),
 					viewport_width(),
 					yorigin(),
 					viewport_height(),
 					mirror, flip);
 #else
-			if(!g_fim_no_framebuffer)
-				svga_display_image(image->img, left, top, mirror, flip);
+			svga_display_image(image->img, left, top, mirror, flip);
 #endif					
 			return true;
 		}
@@ -399,14 +395,14 @@ namespace fim
 		if(image)
 		{
 			image->reset();
-			cc.setVariable("new",1);
+			setGlobalVariable("new",1);
 		}
                 framebufferdevice.redraw=1;
                 top  = 0;
                 left = 0;
 
 #ifdef FIM_WINDOWS
-		steps = cc.getIntVariable("steps");
+		steps = getGlobalIntVariable("steps");
 		if(steps<1)steps = 50;
 #else 
 		// WARNING : FIXME, TEMPORARY
@@ -448,6 +444,7 @@ namespace fim
 #ifndef FIM_BUGGED_CACHE
 		if(image)
 		{	
+			extern CommandConsole cc;
 			if( !cc.browser.cache.freeCachedImage(image) )
 				delete image;	// do it yourself :P
 		}

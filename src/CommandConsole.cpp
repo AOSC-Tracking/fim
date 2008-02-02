@@ -19,6 +19,11 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+/*
+ * TODO:
+ * 	framebufferdevice -> device
+ * 	output methods should be moved in some other, new class
+ * */
 #include "fim.h"
 #ifdef FIM_DEFAULT_CONFIGURATION
 #include "conf.h"
@@ -28,13 +33,18 @@
 
 #include "readline.h"
 
+#include <sys/ioctl.h>
+
+#include <signal.h>
+#include <linux/fb.h>
+#include <linux/kd.h>
+
+
 extern int yyparse();
 #define noargs (std::vector<fim::string>())
 
 namespace fim
 {
-	extern fim::CommandConsole cc;
-	extern fim::FramebufferDevice ffd;
 
 	static int nochars(const char *s)
 	{
@@ -301,8 +311,9 @@ namespace fim
 		return "usage : help CMD   (use TAB in commandline mode to get a list of commands :) )\n";
 	}
 
-	CommandConsole::CommandConsole()
+	CommandConsole::CommandConsole(FramebufferDevice &_framebufferdevice):framebufferdevice(_framebufferdevice)
 	{
+		fim_uninitialized = 1; // new
 		/*
 		 * FIXME : dependencies.. argh !
 		 * */
@@ -407,6 +418,7 @@ namespace fim
 
 	int CommandConsole::init()
 	{
+		fim_uninitialized = 0; // new
 		/*
 		 * FIXME : dependencies are very hard to track lately :) !
 		 * */
@@ -416,7 +428,7 @@ namespace fim
 		// THIS SHOULD BE IN THE CONSTRUCTOR, AND SHALL BE SOME DAY :)
 			
 		/* true pixels, as we are in framebuffer mode */
-		int xres=ffd.fb_var.xres,yres=ffd.fb_var.yres;
+		int xres=framebufferdevice.fb_var.xres,yres=framebufferdevice.fb_var.yres;
 		if( g_fim_no_framebuffer )
 			/* fake pixels, as we are in text (er.. less than!) mode */
 			xres=80,yres=48;
@@ -467,7 +479,7 @@ namespace fim
 		{
     #ifdef FIM_DEFAULT_CONFIGURATION
 			/* so the user could inspect what goes in the default configuration */
-			cc.setVariable("FIM_DEFAULT_CONFIG_FILE_CONTENTS",FIM_DEFAULT_CONFIG_FILE_CONTENTS);
+			setVariable("FIM_DEFAULT_CONFIG_FILE_CONTENTS",FIM_DEFAULT_CONFIG_FILE_CONTENTS);
 
 			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
     #endif		
@@ -515,7 +527,7 @@ namespace fim
 			this->quit();
 			#else
 			//EVIL right now
-			//help_and_exit(cc.getStringVariable("ARGV0"));
+			//help_and_exit(getStringVariable("ARGV0"));
 			help_and_exit("fim");
 			#endif
 		}
@@ -655,11 +667,11 @@ namespace fim
 		{
 			fim::string cf=current();
 #ifdef FIM_AUTOCMDS
-			cc.autocmd_exec("PreInteractiveCommand",cf);
+			autocmd_exec("PreInteractiveCommand",cf);
 #endif
 			execute(getBoundAction(c).c_str(),0,0);
 #ifdef FIM_AUTOCMDS
-			cc.autocmd_exec("PostInteractiveCommand",cf);
+			autocmd_exec("PostInteractiveCommand",cf);
 #endif
 		}
 	}
@@ -951,8 +963,8 @@ namespace fim
 #endif
 #ifdef FIM_AUTOCMDS
 		fim::string initial=browser.current();
-		cc.autocmd_exec("PreExecutionCycle",initial);
-		cc.autocmd_exec("PreExecutionCycleArgs",initial);
+		autocmd_exec("PreExecutionCycle",initial);
+		autocmd_exec("PreExecutionCycleArgs",initial);
 
 #endif
 	 	while(show_must_go_on)
@@ -983,7 +995,7 @@ namespace fim
 				{
 					fim::string cf=current();
 #ifdef FIM_AUTOCMDS
-					cc.autocmd_exec("PreInteractiveCommand",cf);
+					autocmd_exec("PreInteractiveCommand",cf);
 #endif
 #ifdef FIM_RECORDING
 					if(recordMode)record_action(fim::string(rl));
@@ -994,7 +1006,7 @@ namespace fim
 //					this->setVariable("_display_console",1);	//!!
 //					execute("redisplay;",0,0);	//execution of the command line with history
 #ifdef FIM_AUTOCMDS
-					cc.autocmd_exec("PostInteractiveCommand",cf);
+					autocmd_exec("PostInteractiveCommand",cf);
 #endif
 #ifdef FIM_RECORDING
 					memorize_last(rl);
@@ -1008,7 +1020,7 @@ namespace fim
 			else
 			{
 				int c,r;char buf[64];
-				tty_raw();
+				tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 //				int c=getchar();
 //				int c=fgetc(stdin);
 				/*
@@ -1055,8 +1067,8 @@ namespace fim
 			        limit.tv_usec = 0;
 			        rc = select(fdmax, &set, NULL, NULL,
 			                    (0 != timeout && !paused) ? &limit : NULL);
-			            if (ffd.switch_last != ffd.fb_switch_state) {
-			            ffd.console_switch(1);
+			            if (framebufferdevice.switch_last != framebufferdevice.fb_switch_state) {
+			            framebufferdevice.console_switch(1);
 			            continue;
 			        }
 				if (FD_ISSET(fim_stdin,&set))rc = read(fim_stdin, &c, 4);
@@ -1132,7 +1144,7 @@ namespace fim
 			}
 		}
 #ifdef FIM_AUTOCMDS
-		cc.autocmd_exec("PostExecutionCycle",initial);
+		autocmd_exec("PostExecutionCycle",initial);
 #endif
 		quit(0);
 	}
@@ -1766,7 +1778,7 @@ namespace fim
 		bool needed_redisplay=false;
 		try
 		{
-			if(window)
+			if(window && !g_fim_no_framebuffer)
 				needed_redisplay=window->recursive_display();
 		}
 		catch	(FimException e)
@@ -2031,9 +2043,144 @@ namespace fim
 		return "usage : set | set IDENTIFIER | set IDENTIFIER VALUE";
 	}
 
+	fim::string CommandConsole::print_commands()const
+	{
+		cout << "VARIABLES : "<<fim::cc.get_variables_list()<<"\n";
+		cout << "COMMANDS : "<<fim::cc.get_commands_list()<<"\n";
+		cout << "ALIASES : "<<fim::cc.get_aliases_list()<<"\n";
+		return "";
+	}
+
 	fim::string CommandConsole::clear(const std::vector<fim::string>& args)
 	{
 		status_screen(NULL,NULL);return "";
 	}
+
+	/*
+	 *	Setting the terminal in raw mode means:
+	 *	 - setting the line discipline
+	 *	 - setting the read rate
+	 *	 - disabling the echo
+	 */
+	void CommandConsole::tty_raw()
+	{
+		struct termios tattr;
+		//we set the terminal in raw mode.
+		    
+		fcntl(0,F_GETFL,saved_fl);
+		tcgetattr (0, &saved_attributes);
+		    
+		//fcntl(0,F_SETFL,O_BLOCK);
+		memcpy(&tattr,&saved_attributes,sizeof(struct termios));
+		tattr.c_lflag &= ~(ICANON|ECHO);
+		tattr.c_cc[VMIN] = 1;
+		tattr.c_cc[VTIME] = 0;
+		tcsetattr (0, TCSAFLUSH, &tattr);
+	}
+	
+	void CommandConsole::tty_restore()
+	{	
+		//POSIX.1 compliant:
+		//"a SIGIO signal is sent whenever input or output becomes possible on that file descriptor"
+		fcntl(0,F_SETFL,saved_fl);
+		//the Terminal Console State Attributes will be set right NOW
+		tcsetattr (0, TCSANOW, &saved_attributes);
+	}
+
+	/*
+	 * This routine terminates the program as cleanly as possible.
+	 * It should be used whenever useful.
+	 */
+	void CommandConsole::cleanup_and_exit(int code)
+	{
+		if(g_fim_no_framebuffer)
+		{
+		//	tty_restore();
+			std::exit(code);
+		}
+		else
+		{
+			framebufferdevice.fb_clear_mem();
+			tty_restore();
+			framebufferdevice.fb_cleanup();
+			std::exit(code);
+		}
+	}
+
+	/*
+	 * sets the status bar of the screen to the specified strings:
+	 *  desc on the left corner
+	 *  info on the right corner
+	 *  FIXME : actually, info is ignored
+	 */
+	void CommandConsole::status_screen(const char *desc, char *info)
+	{
+		if(g_fim_no_framebuffer)return;
+		/*
+		 *	TO FIX
+		 *	NULL,NULL is the clearing combination !!
+		 */
+		//if(!desc)return;	// !!
+		framebufferdevice.fb_status_screen(desc,drawOutput());
+	}
+
+	/*
+	 *	dez's
+	 */
+	void CommandConsole::set_status_bar(fim::string desc, const char *info)
+	{
+		set_status_bar(desc.c_str(), info);
+	}
+	
+	/*
+	 *	Set the 'status bar' of the program.
+	 *	- desc will be placed on the left corner
+	 *	- info on the right
+	 *	pointers are not freed
+	 *
+	 *	dez's
+	 */
+	void CommandConsole::set_status_bar(const char *desc, const char *info)
+	{
+		/*
+		 * pointers are not freed, by any means
+		 */
+		//FIX ME : does this function always draw ?
+		int chars, ilen;
+		char *str,*p;
+		const char *prompt=cc.get_prompt();
+		char no_prompt[1];*no_prompt='\0';
+	
+		if(g_fim_no_framebuffer || fim_uninitialized)
+			return;
+	
+		if(!cc.inConsole())prompt=no_prompt;
+		chars = framebufferdevice.fb_var.xres / framebufferdevice.fb_font_width();
+		if(chars<48)return;//something strange..
+		str = (char*) malloc(chars+1);//this malloc is free
+		if(!str)return;
+		if (info)
+		{
+			ilen = strlen(info);
+			sprintf(str, "%s%-*.*s [ %s ] H - Help",prompt,
+			chars-14-ilen, chars-14-ilen, desc, info);//here above there is the need of 14+ilen chars
+		}
+		else
+		{
+			sprintf(str, "%s%-*.*s | H - Help",prompt, chars-11, chars-11, desc);
+		}
+		static int statusline_cursor;
+		statusline_cursor=rl_point+1;
+	    
+		if( statusline_cursor < chars && cc.inConsole()  ) str[statusline_cursor]='_';
+		p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
+	
+		framebufferdevice.fb_status_line((unsigned char*)str);
+		free(str);
+	}
+
+
+
+
 }
 

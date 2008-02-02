@@ -2,7 +2,7 @@
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,13 +19,15 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "fim.h"
-
 #ifndef NAMESPACE_FBI_H
 #define NAMESPACE_FBI_H
 
+#include "fim.h"
+
 namespace fim
 {
+	extern CommandConsole cc;
+	typedef std::map<const fim::string,Var> variables_t;	//id->var
 	class Namespace
 	{
 		/*
@@ -36,7 +38,6 @@ namespace fim
 		 *
 		 * the identifier->variable binding
 		 */
-		typedef std::map<const fim::string,Var> variables_t;	//id->var
 		variables_t variables;	//id->var
 	
 		public:
@@ -46,52 +47,22 @@ namespace fim
 			return variables;
 		}*/
 
-		int setVariable(const fim::string& varname,int value)
-		{
-			return variables[varname].setInt(value);
-		}
+		int setVariable(const fim::string& varname,int value);
+		float setVariable(const fim::string& varname,float value);
+		int setVariable(const fim::string& varname,const char*value);
 
-		float setVariable(const fim::string& varname,float value)
-		{
-			/*
-			 * an internal function to set a user variable
-			 */
-	//		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
-			return variables[varname].setFloat(value);
-		}
+		int getIntVariable(const fim::string &varname)const;
+		float getFloatVariable(const fim::string &varname);
+		fim::string getStringVariable(const fim::string &varname);
 
-		int setVariable(const fim::string& varname,const char*value)
-		{
-			/*
-			 * an internal function to set a user variable
-			 */
-			fim::string s(value);
-			return (int)(variables[varname].setString(s));
-		}
-	
-		int getIntVariable(const fim::string &varname)
-		{
-			// this scope was selected
-			return variables[varname];
-		}
+		int  setGlobalVariable(const fim::string& varname,int value);
+	        float setGlobalVariable(const fim::string& varname,float value);
+		int setGlobalVariable(const fim::string& varname,const char*value);
 
-		float getFloatVariable(const fim::string &varname)
-		{
-			/*
-			 * the variable name supplied is used as a key to the variables hash
-			 * */
-//			cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
-//			cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
-			return variables[varname].getFloat();
-		}
-
-		fim::string getStringVariable(const fim::string &varname)
-		{
-			/*
-			 * the variable name supplied is used as a key to the variables hash
-			 * */
-			return variables[varname].getString();
-		}
+		int getGlobalIntVariable(const fim::string &varname)const;
+		float getGlobalFloatVariable(const fim::string &varname);
+		fim::string getGlobalStringVariable(const fim::string &varname);
+		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	};
 }
 

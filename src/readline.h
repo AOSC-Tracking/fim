@@ -28,7 +28,6 @@
 namespace rl
 {
 	void initialize_readline ();
-	//static
 	char * command_generator (const char *text,int state);
 };
 

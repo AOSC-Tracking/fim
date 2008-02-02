@@ -57,7 +57,7 @@ namespace fim
 		{
 			if(g_fim_no_framebuffer==0)
 			{
-				if(s)status_screen(s,"");
+				if(s)cc.status_screen(s,"");
 			}
 			else
 				if(s)printf("%s",s);

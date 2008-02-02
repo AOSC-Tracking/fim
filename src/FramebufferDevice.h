@@ -33,9 +33,12 @@
 
 
 #include "fim.h"
-#include "FbiStuff.h"
 #include "FontServer.h"
-#include "FbiStuffFbtools.h"
+
+
+//#include "FbiStuff.h"
+//#include "FontServer.h"
+//#include "FbiStuffFbtools.h"
 #include <stdio.h>
 #include <signal.h>
 #include <sys/ioctl.h>
@@ -274,56 +277,7 @@ class FramebufferDevice
 #endif
 
 	// FBTOOLS.C
-	FramebufferDevice():
-	fontname(NULL),
-	visible(1),
-	x11_font("10x20"),
-	ys( 3),
-	xs(10),
-	fb_mem_offset(0),
-	fb_switch_state(FB_ACTIVE),
-	orig_vt_no(0),
-	fbdev(NULL),
-	fbmode(NULL),
-	fbgamma(1.0),
-	vt(0),
-	dither(FALSE),
-	pcd_res(3),
-	steps(50),
-	debug(0),
-	fs_setpixel(NULL),
-#ifdef FIM_BOZ_PATCH
-	with_boz_patch(0),
-#endif
-	fontserver(*this)
-	{
-		cmap.start  =  0;
-		cmap.len    =  256;
-		cmap.red  =  red;
-		cmap.green  =  green;
-		cmap.blue  =  blue;
-		//! transp!
-		devs_default.fb0=   "/dev/fb0";
-		devs_default.fbnr=  "/dev/fb%d";
-		devs_default.ttynr= "/dev/tty%d";
-		devs_devfs.fb0=   "/dev/fb/0";
-		devs_devfs.fbnr=  "/dev/fb/%d";
-		devs_devfs.ttynr= "/dev/vc/%d";
-		ocmap.start = 0;
-		ocmap.len   = 256;
-		ocmap.red=ored;
-		ocmap.green=ogreen;
-		ocmap.blue=oblue;
-		/*
-		 * fbgamma and fontname are fbi - defined variables.
-		 * */
-		char *line;
-
-	    	if (NULL != (line = getenv("FBGAMMA")))
-	        	fbgamma = atof(line);
-	    	if (NULL != (line = getenv("FBFONT")))
-			fontname = line;
-	}
+	FramebufferDevice();
 
 
 /* -------------------------------------------------------------------- */
@@ -435,7 +389,7 @@ void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned i
 /* ---------------------------------------------------------------------- */
 /* by dez
  */
-unsigned char * clear_line(int bpp, int line, int owidth, char unsigned *dest);
+inline unsigned char * clear_line(int bpp, int line, int owidth, char unsigned *dest);
 unsigned char * convert_line(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror);/*dez's mirror patch*/
 
 
@@ -445,7 +399,7 @@ unsigned char * convert_line(int bpp, int line, int owidth, char unsigned *dest,
 
 
 void init_dither(int shades_r, int shades_g, int shades_b, int shades_gray);
-void dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror);
+inline void dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror);
 
 void dither_line_gray(unsigned char *src, unsigned char *dest, int y, int width);
 
@@ -548,6 +502,7 @@ void init_one(int32_t *lut, int bits, int shift)
 }
 
 
+	void fb_status_screen(const char *msg, int draw);
 };
 
 }

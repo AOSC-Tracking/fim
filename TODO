@@ -13,6 +13,7 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 	Current development directions
 
 
+20080202	see if the boost library could be useful to us
 20080127	to detect if running under screen and run accordingly ;)
 20080127	think about a multi-monitor strategy for a single instance of Fim: note that currently it is possible to specify a framebuffer device (therefore a monitor) via -d (--device)
 20080126	start using config.h.in

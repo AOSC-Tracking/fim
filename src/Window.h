@@ -2,7 +2,7 @@
 /*
  Window.h : Fim's own windowing system header file
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,11 +22,12 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "fim.h"
+
 #ifdef FIM_WINDOWS
 
 #include <vector>
 #include <iostream>
-#include "fim.h"
 
 
 #ifndef NULL

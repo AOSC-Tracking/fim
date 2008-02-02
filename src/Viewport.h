@@ -19,10 +19,11 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "fim.h"
 
 #ifndef VIEWPORT_FBI_H
 #define VIEWPORT_FBI_H
+
+#include "fim.h"
 
 namespace fim
 {

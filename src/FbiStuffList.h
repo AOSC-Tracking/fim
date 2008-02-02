@@ -23,10 +23,10 @@
  * This file comes from fbi, and will undergo severe reorganization.
  * */
 
-
 #ifndef FBI_STUFF_LIST_FBI_H
 #define FBI_STUFF_LIST_FBI_H
 
+#include "fim.h"
 
 //from list.h
 /*
