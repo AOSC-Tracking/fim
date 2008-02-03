@@ -64,6 +64,24 @@
 #undef FIM_SWITCH_FIXUP
 
 /* */
+#undef FIM_TMP_FILENAME
+
+/* */
+#undef FIM_TRY_CONVERT
+
+/* */
+#undef FIM_TRY_DIA
+
+/* */
+#undef FIM_TRY_INKSCAPE
+
+/* */
+#undef FIM_TRY_XCFTOPNM
+
+/* */
+#undef FIM_TRY_XFIG
+
+/* */
 #undef FIM_VERSION
 
 /* Fim windowing support */

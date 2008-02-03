@@ -220,7 +220,7 @@ char * command_generator (const char *text,int state)
 	 *      includes saving the length of TEXT for efficiency, and
 	 *	initializing the index variable to 0. 
 	 */
-	return fim::cc.command_generator(text,state);
+	return cc.command_generator(text,state);
 
 		
 //	if (!state) { list_index = 0; len = strlen (text); }

@@ -23,6 +23,7 @@
 #include "fim.h"
 namespace fim
 {
+typedef std::vector<fim::string> args_t;
 /*
  * A Browser object oversees image browsing.
  */
@@ -36,7 +37,7 @@ class Browser
 	/*
 	 * A file browser holds the names of files in the slideshow.
 	 */
-	std::vector<fim::string> flist;
+	args_t flist;
 
 	/*
 	 * It has a dummy empty filename for technical reasons
@@ -65,7 +66,7 @@ class Browser
 	int current_n()const;
 	int current_n(int ccp)const;
 	const fim::string pop();
-	fim::string get_next_filename(int n);
+	fim::string get_next_filename(int n)const;
 	
 	fim::string last_regexp;
 	int current_image()const;
@@ -78,61 +79,61 @@ class Browser
 	Browser();
 	~Browser() { }
 	fim::string current()const;
-	fim::string regexp_goto(const std::vector<fim::string> &args);
-	fim::string prefetch(const std::vector<fim::string> &args);
-	fim::string regexp_goto_next(const std::vector<fim::string> &args);
-	fim::string goto_image(const std::vector<fim::string> &args);
+	fim::string regexp_goto(const args_t &args);
+	fim::string prefetch(const args_t &args);
+	fim::string regexp_goto_next(const args_t &args);
+	fim::string goto_image(const args_t &args);
 	fim::string goto_image(int n);
-	fim::string top_align(const std::vector<fim::string> &args);
-	fim::string bottom_align(const std::vector<fim::string> &args);
-	fim::string pan_ne(const std::vector<fim::string> &args);
-	fim::string pan_nw(const std::vector<fim::string> &args);
-	fim::string pan_sw(const std::vector<fim::string> &args);
-	fim::string pan_se(const std::vector<fim::string> &args);
-	fim::string pan_up(const std::vector<fim::string> &args);
-	fim::string pan_down(const std::vector<fim::string> &args);
-	fim::string pan_right(const std::vector<fim::string> &args);
-	fim::string pan_left(const std::vector<fim::string> &args);
-	fim::string scrolldown(const std::vector<fim::string> &args);
-	fim::string scrollforward(const std::vector<fim::string> &args);
-	fim::string scale_increment(const std::vector<fim::string> &args);
-	fim::string scale_multiply(const std::vector<fim::string> &args);
-	fim::string auto_scale(const std::vector<fim::string> &args);
-	fim::string auto_width_scale(const std::vector<fim::string> &args);
-	fim::string scale(const std::vector<fim::string> &args);
-	fim::string auto_height_scale(const std::vector<fim::string> &args);
-	fim::string reduce(const std::vector<fim::string> &args);
-	fim::string magnify(const std::vector<fim::string> &args);
-	fim::string scale_factor_increase(const std::vector<fim::string> &args);
-	fim::string scale_factor_decrease(const std::vector<fim::string> &args);
-	fim::string scale_factor_grow(const std::vector<fim::string> &args);
-	fim::string scale_factor_shrink(const std::vector<fim::string> &args);
-	fim::string display(const std::vector<fim::string> &args);
+	fim::string top_align(const args_t &args);
+	fim::string bottom_align(const args_t &args);
+	fim::string pan_ne(const args_t &args);
+	fim::string pan_nw(const args_t &args);
+	fim::string pan_sw(const args_t &args);
+	fim::string pan_se(const args_t &args);
+	fim::string pan_up(const args_t &args);
+	fim::string pan_down(const args_t &args);
+	fim::string pan_right(const args_t &args);
+	fim::string pan_left(const args_t &args);
+	fim::string scrolldown(const args_t &args);
+	fim::string scrollforward(const args_t &args);
+	fim::string scale_increment(const args_t &args);
+	fim::string scale_multiply(const args_t &args);
+	fim::string auto_scale(const args_t &args);
+	fim::string auto_width_scale(const args_t &args);
+	fim::string scale(const args_t &args);
+	fim::string auto_height_scale(const args_t &args);
+	fim::string reduce(const args_t &args);
+	fim::string magnify(const args_t &args);
+	fim::string scale_factor_increase(const args_t &args);
+	fim::string scale_factor_decrease(const args_t &args);
+	fim::string scale_factor_grow(const args_t &args);
+	fim::string scale_factor_shrink(const args_t &args);
+	fim::string display(const args_t &args);
 	fim::string display_status(const char *l,const char*r);
 
-	fim::string reload(const std::vector<fim::string> &args);
-	fim::string list(const std::vector<fim::string> &args){return list();}
-	fim::string push(const std::vector<fim::string> &args);
+	fim::string reload(const args_t &args);
+	fim::string list(const args_t &args){return list();}
+	fim::string push(const args_t &args);
 
-	fim::string n(const std::vector<fim::string> &args){return n();}
-	fim::string _sort(const std::vector<fim::string> &args){return _sort();}
-	fim::string next(const std::vector<fim::string> &args);
+	fim::string n(const args_t &args){return n();}
+	fim::string _sort(const args_t &args){return _sort();}
+	fim::string next(const args_t &args);
 
 	fim::string prev(int n=1);
-	fim::string prev(const std::vector<fim::string> &args);
-	fim::string remove(const std::vector<fim::string> &args);
-	fim::string info(const std::vector<fim::string> &args);
+	fim::string prev(const args_t &args);
+	fim::string remove(const args_t &args);
+	fim::string info(const args_t &args);
 	fim::string info();
 	std::ostream& print(std::ostream &os)const;
 	void redisplay();
-	fim::string redisplay(const std::vector<fim::string> &args);
+	fim::string redisplay(const args_t &args);
 
 
-	fim::string load(const std::vector<fim::string> &args);
-	fim::string pop(const std::vector<fim::string> &args);
+	fim::string load(const args_t &args);
+	fim::string pop(const args_t &args);
 	const fim::string pop_current();
-	fim::string pop_current(const std::vector<fim::string> &args);
-	fim::string no_image(const std::vector<fim::string> &args);
+	fim::string pop_current(const args_t &args);
+	fim::string no_image(const args_t &args);
 	bool present(const fim::string nf);
 	bool push(fim::string nf);
 

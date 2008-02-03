@@ -2,7 +2,7 @@
 /*
  Var.h : Var class header file
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ class Var
 		if(type=='i')this->i=v.i;
 		if(type=='f')this->f=v.f;
 	}
+
 	Var(const char*s="0",int type_='i')
 	{
 		type=type_;
@@ -52,6 +53,7 @@ class Var
 		else if(type=='s')this->s=s;
 		else i=0;
 	}
+
 /*	void operator= (int   i){if(type=='i')this->i=i;}
 	void operator= (float f){if(type=='f')this->f=f;}*/
 	void operator= (int   i){type='i';this->i=i;}
@@ -66,13 +68,15 @@ class Var
 		 (type=='s'?(atoi(s.c_str())):0)
 		 )
 		;}
+
 	float getFloat()const{return(type=='f')?f:
 		(type=='i'?
 		 	((int)f):
 			((type=='s')?atof(s.c_str()):0.0f)
 			)
 			;}
-	fim::string getString()
+
+	fim::string getString()const
 	{
 		char buf[16];
 		if(type=='s')return this->s;
@@ -84,6 +88,7 @@ class Var
 		}
 		
 	}
+
 	operator int()const{return getInt();}
 	operator float()const{return getFloat();}
 	bool operator==(const Var &v)const

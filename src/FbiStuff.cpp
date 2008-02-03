@@ -36,6 +36,7 @@ namespace fim
 {
 
 extern FramebufferDevice ffd;
+extern CommandConsole cc;
 
 
 // filter.c
@@ -912,6 +913,11 @@ pnm_done(void *data)
     free(h->row);
     free(h);
 }
+#ifdef FIM_TRY_INKSCAPE
+#ifdef FIM_WITH_LIBPNG 
+	extern struct ida_loader png_loader ;
+#endif
+#endif
 
 extern struct ida_loader ppm_loader ;
 extern struct ida_loader pgm_loader ;
@@ -1002,13 +1008,86 @@ struct ida_image* FbiStuff::read_image(char *filename)
 	    break;
 	loader = NULL;
     }
+#ifdef FIM_TRY_DIA
+    if (NULL == loader && (*blk==0x1f) && (*(unsigned char*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
+    {
+	cc.set_status_bar("please wait while piping through 'dia'...", "*");
+    	/*
+	 * dez's
+	 * */
+	/* a gimp xcf file was found, and we try to use xcftopnm */
+	cc.set_status_bar("please wait while piping through 'dia'...", "*");
+	sprintf(command,"dia \"%s\" -e \"%s\"",
+		filename,FIM_TMP_FILENAME".png" );
+	if ( (fp = popen(command,"r")) && 0==fclose (fp))
+	if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
+	    return NULL;
+	unlink(FIM_TMP_FILENAME".png");
+	loader = &png_loader;
+    }
+#endif
+#ifdef FIM_TRY_XFIG
+    if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))
+    {
+	cc.set_status_bar("please wait while piping through 'fig2dev'...", "*");
+    	/*
+	 * dez's
+	 * */
+	/* a xfig file was found, and we try to use fig2dev */
+	sprintf(command,"fig2dev -L ppm \"%s\"",filename);
+	if (NULL == (fp = popen(command,"r")))
+	    return NULL;
+	loader = &ppm_loader;
+    }
+#endif
+#ifdef FIM_TRY_XCFTOPNM
+    if (NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
+    {
+	cc.set_status_bar("please wait while piping through 'xcftopnm'...", "*");
+    	/*
+	 * dez's
+	 * */
+	/* a gimp xcf file was found, and we try to use xcftopnm */
+	sprintf(command,"xcftopnm \"%s\"",filename);
+	if (NULL == (fp = popen(command,"r")))
+	    return NULL;
+	loader = &ppm_loader;
+    }
+#endif
+//#if 0
+#ifdef FIM_TRY_INKSCAPE
+#ifdef FIM_WITH_LIBPNG 
+    if (NULL == loader && (0 == memcmp(blk,"<?xml version=\"1.0\" encoding=\"UTF-8\"",36)))
+    {
+    	/*
+	 * dez's
+	 * */
+	/* an svg file was found, and we try to use inkscape with it
+	 * note that braindamaged inkscape doesn't export to stdout ...
+	 * */
+	cc.set_status_bar("please wait while piping through 'inkscape'...", "*");
+	sprintf(command,"inkscape \"%s\" --export-png \"%s\"",
+		filename,FIM_TMP_FILENAME );
+	if ( (fp = popen(command,"r")) && 0==fclose (fp))
+	if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
+	    return NULL;
+	unlink(FIM_TMP_FILENAME);
+	loader = &png_loader;
+    }
+#endif
+#endif
+//#endif
+#ifdef FIM_TRY_CONVERT
     if (NULL == loader) {
+	cc.set_status_bar("please wait while piping through 'convert'...", "*");
 	/* no loader found, try to use ImageMagick's convert */
 	sprintf(command,"convert \"%s\" ppm:-",filename);
 	if (NULL == (fp = popen(command,"r")))
 	    return NULL;
 	loader = &ppm_loader;
     }
+#endif
+    if (NULL == loader) return NULL;
 
     /* load image */
     img = (struct ida_image*)malloc(sizeof(*img));

@@ -29,12 +29,25 @@
 
 namespace fim
 {
+typedef std::vector<fim::string> args_t;
 class CommandConsole
 {
+	private:
+	int fim_uninitialized; // new, probably useless
+
+	fim::string postInitCommand;
+	fim::string postExecutionCommand;
+
+	int show_must_go_on;
 	public:
 
 	struct termios  saved_attributes;
 	int             saved_fl;
+
+	/*
+	 * the image browser logic
+	 */
+	Browser browser;
 	private:
 
 #ifdef FIM_WINDOWS
@@ -48,30 +61,31 @@ class CommandConsole
 	/*
 	 * the aliases to actions (compounds of commands)
 	 */
-	std::map<fim::string,fim::string> aliases;	//alias->commands
+	typedef std::map<fim::string,fim::string> aliases_t;	//alias->commands
+	aliases_t aliases;	//alias->commands
 	
 	/*
 	 * bindings of key codes to actions (compounds of commands)
 	 */
-	std::map<int,fim::string> bindings;		//code->commands
+	typedef std::map<int,fim::string> bindings_t;		//code->commands
+	bindings_t bindings;		//code->commands
 
 	/*
 	 * mapping of key name to key code
 	 */
-	std::map<fim::string,int > key_bindings;	//symbol->code
-	std::map<int, fim::string> inverse_key_bindings;//code->symbol
+	typedef std::map<fim::string,int > key_bindings_t;	//symbol->code
+	key_bindings_t	key_bindings;	//symbol->code
 
-	public:
-	/*
-	 * the image browser logic
-	 */
-	Browser browser;
+	typedef std::map<int, fim::string> inverse_key_bindings_t;//code->symbol
+	inverse_key_bindings_t inverse_key_bindings;//code->symbol
+
 	private:
 
 	/*
 	 * the identifier->variable binding
 	 */
-	std::map<const fim::string,Var> variables;	//id->var
+	typedef std::map<const fim::string,Var> variables_t;	//id->var
+	variables_t variables;	//id->var
 
 	/*
 	 * the buffer of marked files
@@ -89,7 +103,7 @@ class CommandConsole
 	/*
 	 * the mapping structure for autocommands (<event,pattern,action>)
 	 */
-	typedef std::map<fim::string,std::vector<fim::string> >  autocmds_p_t;	//pattern - commands
+	typedef std::map<fim::string,args_t >  autocmds_p_t;	//pattern - commands
 	typedef std::map<fim::string,autocmds_p_t >  autocmds_t;		//autocommand - pattern - commands
 	autocmds_t autocmds;
 #endif
@@ -105,15 +119,16 @@ class CommandConsole
 	typedef std::vector<recorded_action_t > recorded_actions_t;
 	recorded_actions_t recorded_actions;
 
-	void clearRecordBuffer(){}
+	void clearRecordBuffer(){}//?
 	bool dont_record_last_action;
 	fim::string memorize_last(const fim::string &cmd);
-	fim::string repeat_last(const std::vector<fim::string> &args);
-	fim::string dump_record_buffer(const std::vector<fim::string> &args);
-	fim::string execute_record_buffer(const std::vector<fim::string> &args);
-	fim::string start_recording(const std::vector<fim::string> &args);
-	fim::string stop_recording(const std::vector<fim::string> &args);
-	fim::string sanitize_action(const fim::string &cmd);
+	fim::string repeat_last(const args_t &args);
+	fim::string dump_record_buffer(const args_t &args);
+	fim::string do_dump_record_buffer(const args_t &args)const;
+	fim::string execute_record_buffer(const args_t &args);
+	fim::string start_recording(const args_t &args);
+	fim::string stop_recording(const args_t &args);
+	fim::string sanitize_action(const fim::string &cmd)const;
 
 	void record_action(const fim::string &cmd);
 #endif
@@ -122,32 +137,32 @@ class CommandConsole
 	char prompt[2];
 
 #ifndef FIM_NOSCRIPTING
-	std::vector<fim::string> scripts;		//scripts to execute : FIX ME PRIVATE
+	args_t scripts;		//scripts to execute : FIX ME PRIVATE
 #endif
 
 	void markCurrentFile();
 	FramebufferDevice &framebufferdevice;
 	public:
 
-	fim::string execute(fim::string cmd, std::vector<fim::string> args);
+	fim::string execute(fim::string cmd, args_t args);
 
-	const char*get_prompt(){return prompt;}
+	const char*get_prompt()const{return prompt;}
 
 	CommandConsole(FramebufferDevice &_framebufferdevice);
 
-	fim::string markCurrentFile(const std::vector<fim::string>& args){markCurrentFile();return "";}
+	fim::string markCurrentFile(const args_t& args);
 	bool display();
 	bool redisplay();
-	char * command_generator (const char *text,int state);
+	char * command_generator (const char *text,int state)const;
 	void executionCycle();
 	int init();
 	int  inConsole()const{return ic==1;};
 	~CommandConsole();
-	float getFloatVariable(const fim::string &varname);
-	fim::string getStringVariable(const fim::string &varname);
-	int  getVariableType(const fim::string &varname);
+	float getFloatVariable(const fim::string &varname)const;
+	fim::string getStringVariable(const fim::string &varname)const;
+	int  getVariableType(const fim::string &varname)const;
 	int  getIntVariable(const fim::string & varname)const;
-	int  printVariable(const fim::string & varname);
+	int  printVariable(const fim::string & varname)const;
 	int  setVariable(const fim::string& varname,int value);
 	float setVariable(const fim::string& varname,float value);
 	int setVariable(const fim::string& varname,const char*value);
@@ -155,62 +170,63 @@ class CommandConsole
 	int executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd);
 #ifndef FIM_NOSCRIPTING
-	bool push_script(const fim::string ns);
-	fim::string executeFile(const std::vector<fim::string> &args);
+	bool push_scriptfile(const fim::string ns);
+	fim::string executeFile(const args_t &args);
 #endif
 	private:
-	fim::string echo(const std::vector<fim::string> &args);
-	fim::string help(const std::vector<fim::string> &args);
-	fim::string quit(const std::vector<fim::string> &args);
-	fim::string foo (const std::vector<fim::string> &args);
-	fim::string do_return(const std::vector<fim::string> &args);
-	fim::string status(const std::vector<fim::string> &args);
+	fim::string echo(const args_t &args);
+	fim::string help(const args_t &args);
+	fim::string quit(const args_t &args);
+	fim::string foo (const args_t &args);
+	fim::string do_return(const args_t &args);
+	fim::string status(const args_t &args);
 	int  executeFile(const char *s);
 	void execute(const char *ss, int add_history_, int suppress_output_);
 
 	int  toggleStatusLine();
 	int  addCommand(Command *c);
-	Command* findCommand(fim::string cmd);
+	Command* findCommand(fim::string cmd)const;
 	fim::string alias(std::vector<Arg> args);
 	fim::string alias(const fim::string& a,const fim::string& c);
-	fim::string aliasRecall(fim::string cmd);
-	fim::string system(const std::vector<fim::string>& args);
-	fim::string cd(const std::vector<fim::string>& args);
-	fim::string pwd(const std::vector<fim::string>& args);
-	fim::string sys_popen(const std::vector<fim::string>& args);
-	fim::string set_interactive_mode(const std::vector<fim::string>& args);
-	fim::string set_in_console(const std::vector<fim::string>& args);
-	fim::string autocmd(const std::vector<fim::string>& args);
+	fim::string aliasRecall(fim::string cmd)const;
+	fim::string system(const args_t& args);
+	fim::string cd(const args_t& args);
+	fim::string pwd(const args_t& args);
+	fim::string sys_popen(const args_t& args);
+	fim::string set_interactive_mode(const args_t& args);
+	fim::string set_in_console(const args_t& args);
+	fim::string autocmd(const args_t& args);
 	fim::string autocmd_del(const fim::string &event,const fim::string &pat){return "";}
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
-	fim::string autocmds_list();
+	fim::string autocmds_list()const;
 	typedef std::pair<fim::string,fim::string> autocmds_frame_t;
 	typedef std::set<autocmds_frame_t> autocmds_stack_t;
 	autocmds_stack_t autocmds_stack;
-	std::vector<fim::string> autocmds_sub_list(const fim::string &event);
-	fim::string bind(const std::vector<fim::string>& args);
-	fim::string getAliasesList();
+	fim::string bind(const args_t& args);
+	fim::string getAliasesList()const;
 	fim::string dummy(std::vector<Arg> args);
-	fim::string variables_list(const std::vector<fim::string>& args){return get_variables_list();}
-	fim::string set(const std::vector<fim::string> &args);
-	fim::string unalias(const std::vector<fim::string>& args);
+	fim::string variables_list(const args_t& args){return get_variables_list();}
+	fim::string set(const args_t &args);
+	fim::string unalias(const args_t& args);
 	char ** tokenize_(const char *s);
 	void executeBinding(const int c);
-	fim::string getBoundAction(const int c);
+	fim::string getBoundAction(const int c)const;
 //	void execute(fim::string cmd);
-	fim::string eval(const std::vector<fim::string> &args);
-	void exit(int i);
+	fim::string eval(const args_t &args);
+	void exit(int i)const;
 	fim::string unbind(int c);
 	fim::string bind(int c,fim::string binding);
 	fim::string unbind(const fim::string& key);
-	fim::string unbind(const std::vector<fim::string>& args);
-	fim::string getBindingsList();
-	fim::string dump_key_codes(const std::vector<fim::string>& args);
-	fim::string clear(const std::vector<fim::string>& args);
+	fim::string unbind(const args_t& args);
+	fim::string getBindingsList()const;
+	fim::string dump_key_codes(const args_t& args);
+	fim::string do_dump_key_codes(const args_t& args)const;
+	fim::string clear(const args_t& args);
 	void quit(int i=0);
 	public:
+
 	int  drawOutput();
-	bool regexp_match(const char*s, const char*r);//const;
+	bool regexp_match(const char*s, const char*r)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	fim::string pre_autocmd_add(const fim::string &cmd);
@@ -218,30 +234,29 @@ class CommandConsole
 	int catchLoopBreakingCommand(int seconds=0);
 
 	private:
-	int catchInteractiveCommand(int seconds=0);
+	int catchInteractiveCommand(int seconds=0)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname);
 	void autocmd_push_stack(const autocmds_frame_t& frame);
 	void autocmd_pop_stack(const autocmds_frame_t& frame);
-	int  autocmd_in_stack(const autocmds_frame_t& frame);
+	int  autocmd_in_stack(const autocmds_frame_t& frame)const;
 #endif
 	fim::string current()const{ return browser.current();}
 
-	fim::string get_alias_info(const fim::string aname);
+	fim::string get_alias_info(const fim::string aname)const;
 	const Window & current_window()const;
-	public:
 
 	fim::string get_variables_list()const;
 	fim::string get_aliases_list()const;
 	fim::string get_commands_list()const;
+	public:
 
-	void printHelpMessage(char *pn="fim");
+	void printHelpMessage(char *pn="fim")const;
 	void appendPostInitCommand(const char* c);
 	void appendPostExecutionCommand(const fim::string &c);
 
 	#ifdef FIM_WINDOWS
 	Viewport* current_viewport()const;
-	
 	void dumpDefaultFimrc()const;
 	#endif
 
@@ -254,14 +269,6 @@ class CommandConsole
 	void status_screen(const char *desc, char *info);
 	void set_status_bar(fim::string desc, const char *info);
 	void set_status_bar(const char *desc, const char *info);
-
-	private:
-	int fim_uninitialized; // new, probably useless
-
-	fim::string postInitCommand;
-	fim::string postExecutionCommand;
-
-	int show_must_go_on;
 };
 }
 

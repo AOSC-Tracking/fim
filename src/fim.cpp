@@ -364,7 +364,7 @@ int help_and_exit(char *argv0)
 		case 'E':
 		    //fim's
 	#ifndef FIM_NOSCRIPTING
-		    cc.push_script(optarg);
+		    cc.push_scriptfile(optarg);
 	#else
 		    cout << "sorry, no scripting available!\n";
 	#endif

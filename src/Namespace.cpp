@@ -272,7 +272,7 @@ namespace fim
 		//return ((c_variables_t)(variables))[varname].getInt();
 	}
 
-	float CommandConsole::getFloatVariable(const fim::string &varname)
+	float CommandConsole::getFloatVariable(const fim::string &varname)const
 	{
 		/*
 		 * the variable name supplied is used as a key to the variables hash
@@ -328,10 +328,13 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		return variables[varname].getFloat();
+		variables_t::const_iterator vi=variables.find(varname);
+		if(vi!=variables.end()) return vi->second;
+		else return 0.0;
+//		return variables[varname].getFloat();
 	}
 
-	fim::string CommandConsole::getStringVariable(const fim::string &varname)
+	fim::string CommandConsole::getStringVariable(const fim::string &varname)const
 	{
 		/*
 		 * the variable name supplied is used as a key to the variables hash
@@ -386,7 +389,10 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		return variables[varname].getString();
+//		return variables[varname].getString();
+		variables_t::const_iterator vi=variables.find(varname);
+		if(vi!=variables.end()) return vi->second.getString();
+		else return "";
 	}
 
 		int Namespace::setVariable(const fim::string& varname,int value)
@@ -421,22 +427,28 @@ namespace fim
 			else return 0;
 		}
 
-		float Namespace::getFloatVariable(const fim::string &varname)
+		float Namespace::getFloatVariable(const fim::string &varname)const
 		{
 			/*
 			 * the variable name supplied is used as a key to the variables hash
 			 * */
 //			cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
 //			cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
-			return variables[varname].getFloat();
+//			return variables[varname].getFloat();
+			variables_t::const_iterator vi=variables.find(varname);
+			if(vi!=variables.end()) return vi->second.getString();
+			else return 0.0;
 		}
 
-		fim::string Namespace::getStringVariable(const fim::string &varname)
+		fim::string Namespace::getStringVariable(const fim::string &varname)const
 		{
 			/*
 			 * the variable name supplied is used as a key to the variables hash
 			 * */
-			return variables[varname].getString();
+			//return variables[varname].getString();
+			variables_t::const_iterator vi=variables.find(varname);
+			if(vi!=variables.end()) return vi->second.getString();
+			else return "";
 		}
 
 	        float Namespace::setGlobalVariable(const fim::string& varname,float value)

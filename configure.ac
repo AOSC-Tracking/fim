@@ -577,6 +577,119 @@ AC_ARG_WITH(exec-shell, AC_HELP_STRING([--with-exec-shell=SHELL], [Specify alter
 
 dnl ==================
 
+AC_ARG_ENABLE(convert, AC_HELP_STRING([--disable-convert], [Fim will try to use ImageMagick's convert as a last resort for opening unknown format files.]),
+[       if test x$enableval = xno; then
+		fim_cv_convert=no
+	else
+                fim_cv_convert=yes
+        fi
+],[ fim_cv_convert=yes ]
+)
+
+
+
+dnl ==================
+
+AC_ARG_ENABLE(xcftopnm, AC_HELP_STRING([--disable-xcftopnm], [Fim will try to use Gimp's xcftopnm for opening XCF format files.]),
+[       if test x$enableval = xno; then
+		fim_cv_xcftopnm=no
+	else
+                fim_cv_xcftopnm=yes
+        fi
+],[ fim_cv_xcftopnm=yes ]
+)
+
+dnl ==================
+
+AC_ARG_ENABLE(inkscape, AC_HELP_STRING([--disable-inkscape], [Fim will try to use Inkscape for opening SVG format files.]),
+[       if test x$enableval = xno; then
+		fim_cv_inkscape=no
+	else
+                fim_cv_inkscape=yes
+        fi
+],[ fim_cv_inkscape=yes ]
+)
+
+dnl ==================
+
+AC_ARG_ENABLE(xfig, AC_HELP_STRING([--disable-xfig], [Fim will try to use xfig (fig2dev) for opening FIG format files.]),
+[       if test x$enableval = xno; then
+		fim_cv_xfig=no
+	else
+                fim_cv_xfig=yes
+        fi
+],[ fim_cv_xfig=yes ]
+)
+
+dnl ==================
+
+AC_ARG_ENABLE(dia, AC_HELP_STRING([--disable-dia], [Fim will try to use dia for opening DIA format files.]),
+[       if test x$enableval = xno; then
+		fim_cv_dia=no
+	else
+                fim_cv_dia=yes
+        fi
+],[ fim_cv_dia=yes ]
+)
+
+dnl ==================
+AC_ARG_WITH(docdir, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put temporary files created when interacting with external conversion programs (default is "/tmp/__FIM_TEMPORARY_FILE").]),
+        [fim_cv_tmpfile=$withval],
+        [fim_cv_tmpfile="/tmp/__FIM_TEMPORARY_FILE"])
+dnl ==================
+
+
+AH_TEMPLATE([FIM_TRY_XCFTOPNM])
+AH_TEMPLATE([FIM_TRY_CONVERT])
+AH_TEMPLATE([FIM_TRY_INKSCAPE])
+AH_TEMPLATE([FIM_TRY_XFIG])
+AH_TEMPLATE([FIM_TRY_DIA])
+
+dnl ==================
+
+AC_CHECK_PROG(have_convert,convert,yes,no)
+        if test x$have_convert = xno -a x$fim_cv_convert = xyes ; then
+      		AC_MSG_WARN([Fim will try to invoke 'convert' to handle unknown format files, even if no 'convert' is currently in the program path: please install the Imagemagick package to obviate the problem or re-configure with --disable-convert.])
+	fi
+
+AC_CHECK_PROG(have_xcftopnm,xcftopnm,yes,no)
+        if test x$have_xcftopnm = xno -a x$fim_cv_xcftopnm = xyes ; then
+      		AC_MSG_WARN([Fim will try to invoke 'xcftopnm' to handle XCF format files, even if no 'xcftopnm' is currently in the program path: please install the Gimp package to obviate the problem or re-configure with --disable-xcftopnm.])
+	fi
+
+AC_CHECK_PROG(have_inkscape,inkscape,yes,no)
+        if test x$have_inkscape = xno -a x$fim_cv_inkscape = xyes ; then
+      		AC_MSG_WARN([Fim will try to invoke 'inkscape' to handle SVG format files, even if no 'inkscape' is currently in the program path: please install the Inkscape package to obviate the problem or re-configure with --disable-inkscape.])
+	fi
+
+AC_CHECK_PROG(have_xfig,fig2dev,yes,no)
+AC_CHECK_PROG(have_dia,dia,yes,no)
+
+dnl ==================
+
+        if test x$fim_cv_convert = xyes ; then
+		AC_DEFINE([FIM_TRY_CONVERT])
+	fi
+
+        if test x$fim_cv_xcftopnm = xyes ; then
+		AC_DEFINE([FIM_TRY_XCFTOPNM])
+	fi
+
+        if test x$fim_cv_inkscape = xyes ; then
+		AC_DEFINE([FIM_TRY_INKSCAPE])
+	fi
+
+        if test x$have_xfig = xyes -a x$fim_cv_xfig = xyes ; then
+		AC_DEFINE([FIM_TRY_XFIG])
+	fi
+
+        if test x$have_dia = xyes -a x$fim_cv_dia = xyes ; then
+		AC_DEFINE([FIM_TRY_DIA])
+	fi
+
+dnl ==================
+
+
 
 dnl uhmmmmmm : doesn't seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 
@@ -620,6 +733,8 @@ AH_TEMPLATE([FIM_VERSION])
 AC_DEFINE_UNQUOTED([FIM_VERSION],"${VERSION}")
 AH_TEMPLATE([X_DISPLAY_MISSING])
 AC_DEFINE([X_DISPLAY_MISSING])
+AH_TEMPLATE([FIM_TMP_FILENAME])
+AC_DEFINE_UNQUOTED([FIM_TMP_FILENAME],"$fim_cv_tmpfile")
 
 
 dnl ==================
@@ -638,10 +753,7 @@ AC_SUBST(FIM_LIB_OBJECTS)
 
 #AC_CONFIG_FILES([Makefile],[src/Makefile])
 
-AC_OUTPUT(Makefile)
-AC_OUTPUT(src/Makefile)
-AC_OUTPUT(doc/Makefile)
-AC_OUTPUT(distros/Makefile)
+AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile)
 #AC_OUTPUT
 
 AC_MSG_NOTICE([
@@ -661,6 +773,11 @@ AC_MSG_NOTICE([
 	autocommands enabled                : ${have_autocommands:-no}
 	internal windowing system           : ${have_windows:-no}
 	GNU regexp's (default is Posix)     : ${fim_cv_regex:-no}
+	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
+	use 'convert' for unknown files     : ${fim_cv_convert}
+	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
+	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
+
 
 	If you are not satisfied with this configuration, please run :
 

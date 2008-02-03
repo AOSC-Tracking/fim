@@ -187,7 +187,14 @@ png_done(void *data)
     free(h);
 }
 
+//used in FbiStuff.cpp
+#ifdef FIM_TRY_INKSCAPE
+#ifdef FIM_WITH_LIBPNG 
+struct ida_loader png_loader = {
+#else
 static struct ida_loader png_loader = {
+#endif
+#endif
     magic: "\x89PNG",
     moff:  0,
     mlen:  4,

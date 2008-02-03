@@ -20,9 +20,9 @@
 */
 
 #define firstorzero(x) (x.size()?((int)(x[0])):0)
-#define noargs (std::vector<fim::string>())
 
 #include "fim.h"
+
 namespace fim
 {
 	extern fim::CommandConsole cc;
@@ -52,7 +52,7 @@ namespace fim
 	}
 
 
-	fim::string Browser::redisplay(const std::vector<fim::string> &args)
+	fim::string Browser::redisplay(const args_t &args)
 	{
 		/*
 		 * for now redisplaying is optionless
@@ -135,7 +135,7 @@ namespace fim
 		return s;
 	}
 
-	fim::string Browser::pan_up(const std::vector<fim::string> &args)
+	fim::string Browser::pan_up(const args_t &args)
 	{
 		/*
 		 * pans the image up
@@ -160,7 +160,7 @@ namespace fim
 		return "";
 	}
 	
-	fim::string Browser::pan_down(const std::vector<fim::string> &args)
+	fim::string Browser::pan_down(const args_t &args)
 	{
 		/*
 		 * pans the image down
@@ -185,7 +185,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::pan_ne(const std::vector<fim::string> &args)
+	fim::string Browser::pan_ne(const args_t &args)
 	{
 		/*
 		 * pans the image up and right
@@ -211,7 +211,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::pan_nw(const std::vector<fim::string> &args)
+	fim::string Browser::pan_nw(const args_t &args)
 	{
 		/*
 		 * pans the image up and left
@@ -237,7 +237,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::pan_sw(const std::vector<fim::string> &args)
+	fim::string Browser::pan_sw(const args_t &args)
 	{
 		/*
 		 * pans the image down and left
@@ -263,7 +263,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::pan_se(const std::vector<fim::string> &args)
+	fim::string Browser::pan_se(const args_t &args)
 	{
 		/*
 		 * pans the image down and right
@@ -289,7 +289,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::scale_multiply(const std::vector<fim::string> &args)
+	fim::string Browser::scale_multiply(const args_t &args)
 	{
 		/*
 		 * scales the image by a user specified factor
@@ -312,7 +312,7 @@ namespace fim
 		return "";
 	}
 	
-	fim::string Browser::scale_increment(const std::vector<fim::string> &args)
+	fim::string Browser::scale_increment(const args_t &args)
 	{
 		/*
 		 * increments the scale positively
@@ -336,7 +336,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::scale(const std::vector<fim::string> &args)
+	fim::string Browser::scale(const args_t &args)
 	{
 		/*
 		 * scales the image to a certain scale factor
@@ -360,7 +360,7 @@ namespace fim
 		return "";
 	}
 	
-	fim::string Browser::auto_height_scale(const std::vector<fim::string> &args)
+	fim::string Browser::auto_height_scale(const args_t &args)
 	{
 		/*
 		 * scales this image to fit in the screen in the vertical dimension
@@ -379,7 +379,7 @@ namespace fim
 		return "";
 	}
 	
-	fim::string Browser::auto_width_scale(const std::vector<fim::string> &args)
+	fim::string Browser::auto_width_scale(const args_t &args)
 	{
 		/*
 		 * scales this image to fit in the screen in the horizontal dimension
@@ -398,7 +398,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::auto_scale(const std::vector<fim::string> &args)
+	fim::string Browser::auto_scale(const args_t &args)
 	{
 		/*
 		 * auto scale the image accordingly to the *default* settings !
@@ -417,7 +417,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::pan_right(const std::vector<fim::string> &args)
+	fim::string Browser::pan_right(const args_t &args)
 	{
 		/*
 		 * pans the image right
@@ -437,7 +437,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::pan_left(const std::vector<fim::string> &args)
+	fim::string Browser::pan_left(const args_t &args)
 	{
 		/*
 		 * pans the image left
@@ -467,7 +467,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::display(const std::vector<fim::string> &args)
+	fim::string Browser::display(const args_t &args)
 	{
 		/*
 		 * displays the current image, (if already loaded), on screen
@@ -503,7 +503,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::no_image(const std::vector<fim::string> &args)
+	fim::string Browser::no_image(const args_t &args)
 	{
 		/*
 		 * sets no image as the current one
@@ -548,7 +548,7 @@ namespace fim
 		 * reload the current filename
 		 * */
 		if(n_files())
-		return reload(std::vector<fim::string>());
+		return reload(args_t());
 		return "";
 	}
 
@@ -587,7 +587,7 @@ namespace fim
 		setGlobalVariable("_cache_status",cache.getReport().c_str());
 	}
 
-	fim::string Browser::prefetch(const std::vector<fim::string> &args)
+	fim::string Browser::prefetch(const args_t &args)
 	{
 		/*
 		 * fetches in the cache the next image..
@@ -603,7 +603,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::reload(const std::vector<fim::string> &args)
+	fim::string Browser::reload(const args_t &args)
 	{
 		/*
 		 * deletes the structures associated to the present image
@@ -619,7 +619,7 @@ namespace fim
 
 		loadCurrentImage();
 
-		if(getGlobalIntVariable("_prefetch")) prefetch(noargs);/*this will become an autocommand*/
+		if(getGlobalIntVariable("_prefetch")) prefetch(args_t());/*this will become an autocommand*/
 
 		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 
@@ -629,7 +629,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::load(const std::vector<fim::string> &args)
+	fim::string Browser::load(const args_t &args)
 	{
 		/*
 		 * loads the current file, if not already loaded
@@ -647,7 +647,7 @@ namespace fim
 
 		loadCurrentImage();
 
-		if(getGlobalIntVariable("_prefetch")) prefetch(noargs);
+		if(getGlobalIntVariable("_prefetch")) prefetch(args_t());
 
 //		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
 #ifdef FIM_AUTOCMDS
@@ -656,7 +656,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::pop(const std::vector<fim::string> &args)
+	fim::string Browser::pop(const args_t &args)
 	{
 		/*
 		 * deletes the last image from the files list
@@ -749,17 +749,17 @@ namespace fim
 		return n_files()?(flist[current_n()]):nofile;
 	}
 
-	fim::string Browser::regexp_goto_next(const std::vector<fim::string> &args)
+	fim::string Browser::regexp_goto_next(const args_t &args)
 	{
 		/*
 		 * goes to the next filename-matching file
 		 */
-		std::vector<fim::string> arg;
+		args_t arg;
 		arg.push_back(last_regexp);
 		return regexp_goto(arg);
 	}
 
-	fim::string Browser::regexp_goto(const std::vector<fim::string> &args)
+	fim::string Browser::regexp_goto(const args_t &args)
 	{
 		/*
 		 * goes to the next filename-matching file
@@ -843,12 +843,12 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::prev(const std::vector<fim::string> &args)
+	fim::string Browser::prev(const args_t &args)
 	{
 		return prev(args.size()>0?((int)args[0]):1);
 	}
 
-	fim::string Browser::get_next_filename(int n)
+	fim::string Browser::get_next_filename(int n)const
 	{
 		/*
 		 * returns to the next image in the list, the mechanism
@@ -885,7 +885,7 @@ namespace fim
 		return "";
 	}
 	
-	fim::string Browser::goto_image(const std::vector<fim::string> &args)
+	fim::string Browser::goto_image(const args_t &args)
 	{
 		/*
 		 *	FIX ME
@@ -916,7 +916,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::remove(const std::vector<fim::string> &args)
+	fim::string Browser::remove(const args_t &args)
 	{
 		/*
 		 *	ONLY if the image filename exists and matches EXACTLY,
@@ -924,7 +924,7 @@ namespace fim
 		 *	FIXME : dangerous!
 		 */
 		if(flist.size()<1)return "the files list is empty\n";
-		std::vector<fim::string> rlist=args;	//the remove list
+		args_t rlist=args;	//the remove list
 		if(rlist.size()>0)
 		{
 			/*
@@ -955,7 +955,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::scrollforward(const std::vector<fim::string> &args)
+	fim::string Browser::scrollforward(const args_t &args)
 	{
 		/*
 		 * scrolls the image as it were a book :)
@@ -985,7 +985,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::scrolldown(const std::vector<fim::string> &args)
+	fim::string Browser::scrolldown(const args_t &args)
 	{
 		/*
 		 * scrolls the image down 
@@ -999,7 +999,7 @@ namespace fim
 		if(c_image() && viewport())
 		{
 			if(viewport()->onBottom()) next();
-			else pan_down(std::vector<fim::string>());
+			else pan_down(args_t());
 		}
 		else next(1);
 #ifdef FIM_AUTOCMDS
@@ -1008,7 +1008,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::info(const std::vector<fim::string> &args)
+	fim::string Browser::info(const args_t &args)
 	{
 		/*
 		 *	short information in status-line format
@@ -1037,10 +1037,10 @@ namespace fim
 		/*
 		 *	short information in status-line format
 		 */
-		return info(std::vector<fim::string>(0));
+		return info(args_t(0));
 	}
 
-	fim::string Browser::scale_factor_grow(const std::vector<fim::string> &args)
+	fim::string Browser::scale_factor_grow(const args_t &args)
 	{
 		/*
 		 *	ALIAS AND DELETE ME!
@@ -1051,7 +1051,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::scale_factor_shrink(const std::vector<fim::string> &args)
+	fim::string Browser::scale_factor_shrink(const args_t &args)
 	{
 		/*
 		 *	ALIAS AND DELETE ME!
@@ -1062,7 +1062,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::scale_factor_increase(const std::vector<fim::string> &args)
+	fim::string Browser::scale_factor_increase(const args_t &args)
 	{
 		/*
 		 *	ALIAS AND DELETE ME!
@@ -1073,7 +1073,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::scale_factor_decrease(const std::vector<fim::string> &args)
+	fim::string Browser::scale_factor_decrease(const args_t &args)
 	{
 		/*
 		 *	ALIAS AND DELETE ME!
@@ -1086,7 +1086,7 @@ namespace fim
 	}
 
 
-	fim::string Browser::magnify(const std::vector<fim::string> &args)
+	fim::string Browser::magnify(const args_t &args)
 	{
 		/*
 		 * magnifies the displayed image
@@ -1112,7 +1112,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::reduce(const std::vector<fim::string> &args)
+	fim::string Browser::reduce(const args_t &args)
 	{
 		/*
 		 * reduces the displayed image size
@@ -1136,7 +1136,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::top_align(const std::vector<fim::string> &args)
+	fim::string Browser::top_align(const args_t &args)
 	{
 		/*
 		 * aligns to top the displayed image
@@ -1158,7 +1158,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::bottom_align(const std::vector<fim::string> &args)
+	fim::string Browser::bottom_align(const args_t &args)
 	{
 		/*
 		 * aligns to the bottom the displayed image
@@ -1251,10 +1251,10 @@ namespace fim
 		/*
 		 *	display the current image
 		 */
-		return display(std::vector<fim::string>());
+		return display(args_t());
 	}
 
-	fim::string Browser::pop_current(const std::vector<fim::string> &args)
+	fim::string Browser::pop_current(const args_t &args)
 	{
 		/*
 		 *	pops the last image filename off the image list
@@ -1262,7 +1262,7 @@ namespace fim
 		return pop_current();
 	}
 
-	fim::string Browser::push(const std::vector<fim::string> &args)
+	fim::string Browser::push(const args_t &args)
 	{
 		/*
 		 *	pushes a new image filename on the back of the image list
@@ -1272,7 +1272,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string Browser::next(const std::vector<fim::string> &args)
+	fim::string Browser::next(const args_t &args)
 	{
 		/*
 		 * FIX ME

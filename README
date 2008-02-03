@@ -56,6 +56,9 @@ Implemented features:
  - interactive (default) and command line modes
  - all of the functionality is scripted in an internal language
  - on-screen debug and information console in command mode
+ - multiple internal windows with indipendent images displayed at once
+ - per-image variables
+ - regular expression filename searches
  - command line history
  - command line tab-based command autocompletion (thanks to the GNU/readline)
  - command line command autocompletion
@@ -68,6 +71,7 @@ Implemented features:
  - usable builtin default configuration
  - wrapper script to convert pdf,ps,eps,dvi,cbr(rar),cbz(zip),tar,tar.gz,tgz,http://...
    contents into images and display with Fim
+ - embedded piping through 'convert','inkscape','xcftopnm','dia'... for a wider file formats compatibility
  - index based goto in Vim's style (:<number>)
  - regular expressions (on filename) based goto and image search
  - stuff     usual for an image viewer (scale, pan, etc..)
@@ -81,6 +85,8 @@ Implemented features:
  - image prefetching (optional)
  - pipe commands from some input program
  - many of these features could be enabled or disabled at compile time editing the Makefile
+ - runs under screen
+ - standard input file list read
 
 Yet unimplemented features :
 
@@ -121,6 +127,9 @@ Yet unimplemented features :
  system interaction safe   *
  remote commands                                             *
  saves last folder         *                                 *
+ runs under screen                                     *
+ standard input file list read                         *
+
  ______________________________________________________________________________
  
 
@@ -221,7 +230,7 @@ Tested platforms :
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 1.875d, gentoo
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 2.2   , gentoo
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.33,bison 2.2   , gentoo
- - some other, but non documented here.
+ - other ones, but non documented here.
 
  -- 
 

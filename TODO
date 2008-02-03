@@ -16,10 +16,8 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 20080202	see if the boost library could be useful to us
 20080127	to detect if running under screen and run accordingly ;)
 20080127	think about a multi-monitor strategy for a single instance of Fim: note that currently it is possible to specify a framebuffer device (therefore a monitor) via -d (--device)
-20080126	start using config.h.in
-20080126	should implement a flex/bison version check in configure.ac
-20080126	time to think about a /etc/fimrc
-20080106	add examples/aliases to send emails with attached image from fim
+20080126	time to think about an /etc/fimrc
+20080106	add examples/aliases to send emails with attached image from within fim
 20080103	create a script to make a fimrc man page from fimrc
 20071230	UNIX domain sockets communication and multithreaded Fim
 20071230	A decent Features section in the web site, from the top.

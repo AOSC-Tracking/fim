@@ -41,7 +41,6 @@
 
 
 extern int yyparse();
-#define noargs (std::vector<fim::string>())
 
 namespace fim
 {
@@ -56,7 +55,7 @@ namespace fim
 		return *s=='\0'?1:0;
 	}
 
-	Command* CommandConsole::findCommand(fim::string cmd)
+	Command* CommandConsole::findCommand(fim::string cmd)const
 	{
 		/*
 		 * is cmd a valid internal (registered) Fim command ?
@@ -97,7 +96,7 @@ namespace fim
 		}
 	}
 
-	fim::string CommandConsole::bind(const std::vector<fim::string>& args)
+	fim::string CommandConsole::bind(const args_t& args)
 	{
 		/*
 		 *	this is the interactive bind command
@@ -133,18 +132,20 @@ namespace fim
 		return bind(key_bindings[args[0]],args[1]);
 	}
 
-	fim::string CommandConsole::getBindingsList()
+	fim::string CommandConsole::getBindingsList()const
 	{
 		/*
 		 * collates all registered action bindings together in a single string
 		 * */
 		fim::string bindings_expanded;
-		std::map<int,fim::string>::const_iterator bi;
+		bindings_t::const_iterator bi;
 		for( bi=bindings.begin();bi!=bindings.end();++bi)
 		{
 			if(bi->second == "")continue;//FIX THIS : THIS SHOULD NOT OCCUR
 			bindings_expanded+="bind \"";
-			bindings_expanded+=inverse_key_bindings[((*bi).first)];
+			//bindings_expanded+=inverse_key_bindings[((*bi).first)];
+			inverse_key_bindings_t::const_iterator ikbi=inverse_key_bindings.find(((*bi).first));
+			if(ikbi!=inverse_key_bindings.end()) bindings_expanded+=ikbi->second;
 			bindings_expanded+="\" \"";
 			bindings_expanded+=((*bi).second);
 			bindings_expanded+="\"\n";
@@ -163,7 +164,7 @@ namespace fim
 		return unbind(key_bindings[key]);
 	}
 
-	fim::string CommandConsole::unbind(const std::vector<fim::string>& args)
+	fim::string CommandConsole::unbind(const args_t& args)
 	{
 		/*
 		 * 	unbinds the action eventually bound to the first key name specified in args..
@@ -194,15 +195,18 @@ namespace fim
 		return rs;
 	}
 
-	fim::string CommandConsole::aliasRecall(fim::string cmd)
+	fim::string CommandConsole::aliasRecall(fim::string cmd)const
 	{
 		/*
 		 * returns the alias command eventually specified by token cmd
 		 */
-		return aliases[cmd];
+		//return aliases[cmd];
+		std::map<fim::string,fim::string>::const_iterator ai=aliases.find(cmd);
+		if(ai!=aliases.end()) return ai->second;
+		return "";
 	}
 
-	fim::string CommandConsole::getAliasesList()
+	fim::string CommandConsole::getAliasesList()const
 	{
 		/*
 		 * collates all registered action aliases together in a single string
@@ -221,7 +225,7 @@ namespace fim
 		return aliases_expanded;
 	}
 
-	fim::string CommandConsole::get_alias_info(const fim::string aname)
+	fim::string CommandConsole::get_alias_info(const fim::string aname)const
 	{
 		/*
 		 * FIXME: find a way to read aliases and make this function const !
@@ -230,7 +234,9 @@ namespace fim
 				r+=fim::string("alias \"");
 				r+=aname;
 				r+=fim::string("\" \"");
-				r+=aliases[aname];
+				//r+=aliases[aname];
+				std::map<fim::string,fim::string>::const_iterator ai=aliases.find(aname);
+				if(ai!=aliases.end()) r+=ai->second;
 				r+=fim::string("\"\n");
 				return r;
 	}
@@ -288,7 +294,7 @@ namespace fim
 		return "dummy function : for test purposes :)\n";
 	}
 
-	fim::string CommandConsole::help(const std::vector<fim::string> &args)
+	fim::string CommandConsole::help(const args_t &args)
 	{	
 		/*
 		 *	FIX ME:
@@ -413,7 +419,7 @@ namespace fim
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */
 		#include "defaultConfiguration.cpp"
-		setVariable("pwd",pwd(noargs).c_str());
+		setVariable("pwd",pwd(args_t()).c_str());
 	}
 
 	int CommandConsole::init()
@@ -570,7 +576,7 @@ namespace fim
 		return alias(args);
 	}
 
-	char * CommandConsole::command_generator (const char *text,int state)
+	char * CommandConsole::command_generator (const char *text,int state)const
 	{
 		/*
 		 *	This is the reason why the commands should be kept
@@ -587,7 +593,7 @@ namespace fim
 		while(isdigit(*text))text++;	//initial  repeat match
 		const fim::string cmd(text);
 		if(cmd=="")return NULL;
-		std::vector<fim::string> completions;
+		args_t completions;
 		std::map<fim::string,fim::string>::const_iterator ai;
 		std::map<fim::string,fim::Var>::const_iterator vi;
 		for(unsigned int i=0;i<commands.size();++i)
@@ -647,12 +653,15 @@ namespace fim
 #define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);}/* temporarily, for security reason : no exceptions launched */
 //#define ferror(s) {/*fatal error*/fprintf(stderr,"%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);throw FIM_E_TRAGIC;}
 
-	fim::string CommandConsole::getBoundAction(const int c)
+	fim::string CommandConsole::getBoundAction(const int c)const
 	{
 		/*
 		 * returns the action assigned to key biding c
 		 * */
-		return bindings[c];
+		//return bindings[c];
+		std::map<int,fim::string>::const_iterator bi=bindings.find(c);
+		if(bi!=bindings.end()) return bi->second;
+		else return "";
 	}
 
 	void CommandConsole::executeBinding(const int c)
@@ -663,7 +672,8 @@ namespace fim
 		 *	Just interpretates and executes the binding.
 		 *	If the binding is inexistent, ignores silently the error.
 		 */
-		if(bindings[c]!="")
+		bindings_t::const_iterator bi=bindings.find(c);
+		if(bi!=bindings.end() && bi->second!="")
 		{
 			fim::string cf=current();
 #ifdef FIM_AUTOCMDS
@@ -729,7 +739,7 @@ namespace fim
 		//we add to history only meaningful commands/aliases.
 	}
 
-        fim::string CommandConsole::execute(fim::string cmd, std::vector<fim::string> args)
+        fim::string CommandConsole::execute(fim::string cmd, args_t args)
 	{
 		/*
 		 *	This is the method where the tokenized commands are executed.
@@ -894,14 +904,17 @@ namespace fim
 //				return 0;/* could be a command key */
 			}
 			if(c==exitBinding) return 1; 		/* the user hit the exitBinding key */
-			if(c==key_bindings["Esc"]) return 1; 		/* the user hit the exitBinding key */
-			if(c==key_bindings[":"]) return 1; 		/* the user hit the exitBinding key */
+			key_bindings_t::const_iterator ki;
+//			if(c==key_bindings["Esc"]) return 1; 		/* the user hit the exitBinding key */
+//			if(c==key_bindings[":"]) return 1; 		/* the user hit the exitBinding key */
+			if((ki=key_bindings.find("Esc"))!=key_bindings.end() && c==ki->second)return 1;
+			if((ki=key_bindings.find(":"  ))!=key_bindings.end() && c==ki->second)return 1;
 		}
 		return 0; 		/* no chars read  */
 
 	}
 		
-	int CommandConsole::catchInteractiveCommand(int seconds)
+	int CommandConsole::catchInteractiveCommand(int seconds)const
 	{
 		/*	
 		 *
@@ -1117,7 +1130,7 @@ namespace fim
 						}
 						else if(rl!="")
 						{
-							std::vector<fim::string> args;
+							args_t args;
 							args.push_back(rl);
 							execute("regexp_goto",args);
 						}
@@ -1149,7 +1162,7 @@ namespace fim
 		quit(0);
 	}
 
-	void CommandConsole::exit(int i)
+	void CommandConsole::exit(int i)const
 	{
 		/*
 		 *	This method should be called only when there is no
@@ -1168,7 +1181,7 @@ namespace fim
 		this->exit(0);
 	}
 
-	fim::string CommandConsole::quit(const std::vector<fim::string> &args)
+	fim::string CommandConsole::quit(const args_t &args)
 	{
 		/*
 		 * now the postcycle execution autocommands are enabled !
@@ -1178,7 +1191,7 @@ namespace fim
 	}
 
 #ifndef FIM_NOSCRIPTING
-	fim::string CommandConsole::executeFile(const std::vector<fim::string> &args)
+	fim::string CommandConsole::executeFile(const args_t &args)
 	{
 		/*
 		 * FIXME : catched all ?
@@ -1188,7 +1201,7 @@ namespace fim
 	}
 #endif
 	
-	fim::string CommandConsole::foo(const std::vector<fim::string> &args)
+	fim::string CommandConsole::foo(const args_t &args)
 	{
 		/*
 		 * useful function for bogus commands, but autocompletable (like language constructs)
@@ -1271,7 +1284,7 @@ namespace fim
 		return 0;
 	}
 
-	fim::string CommandConsole::echo(const std::vector<fim::string> &args)
+	fim::string CommandConsole::echo(const args_t &args)
 	{
 		/*
 		 * a command to echo arguments, for debug and learning purposes
@@ -1281,17 +1294,20 @@ namespace fim
 		return "";
 	}
 
-	int CommandConsole::getVariableType(const fim::string &varname)
+	int CommandConsole::getVariableType(const fim::string &varname)const
 	{
 		/*
 		 * returns the [internal] type of a variable
 		 *
 		 * FIXME : hmmmm...
 		 * */
-		return variables[varname].getType();
+		//return variables[varname].getType();
+		variables_t::const_iterator vi=variables.find(varname);
+		if(vi!=variables.end()) return vi->second;
+		else return 0;
 	}
 
-	int CommandConsole::printVariable(const fim::string &varname)
+	int CommandConsole::printVariable(const fim::string &varname)const
 	{	
 		/*
 		 * a variable is taken and converted to a string and printed
@@ -1360,24 +1376,7 @@ namespace fim
 	}
 
 #ifdef FIM_AUTOCMDS
-	std::vector<fim::string> CommandConsole::autocmds_sub_list(const fim::string &event)
-	{
-		/*
-		 * returns the autocommands available for the given event
-		 * ( more precisely, the couple (PATTERN,ACTION) )
-		 *  DELETE ME 
-		 */
-		autocmds_p_t::const_iterator api;
-		std::vector<fim::string> sub_list;
-	/*	for( api=autocmds[event].begin();api!=autocmds[event].end();++api )
-		{
-			acl+=((*ai).first);
-			acl+=" ";
-		}*/
-		return sub_list;
-	}
-
-	fim::string CommandConsole::autocmds_list()
+	fim::string CommandConsole::autocmds_list()const
 	{
 		/*
 		 * as of now, lists the events for which an autocmd could be assigned.
@@ -1393,7 +1392,7 @@ namespace fim
 		for(	autocmds_p_t::const_iterator api=((*ai)).second.begin();
 				api!=((*ai)).second.end();++api )
 		//.. display the list of autocommands...
-		for(	std::vector<fim::string>::const_iterator aui=((*api)).second.begin();
+		for(	args_t::const_iterator aui=((*api)).second.begin();
 				aui!=((*api)).second.end();++aui )
 		{
 			acl+="autocmd \""; 
@@ -1408,7 +1407,7 @@ namespace fim
 		return acl;
 	}
 
-	fim::string CommandConsole::autocmd(const std::vector<fim::string>& args)
+	fim::string CommandConsole::autocmd(const args_t& args)
 	{
 		/*
 		 * associates an action to a certain event in certain circumstances
@@ -1527,7 +1526,7 @@ namespace fim
 		autocmds_stack.erase(frame);
 	}
 	
-	int CommandConsole::autocmd_in_stack(const autocmds_frame_t& frame)
+	int CommandConsole::autocmd_in_stack(const autocmds_frame_t& frame)const
 	{
 		/*
 		 * this function prevents a second autocommand triggered against 
@@ -1537,7 +1536,7 @@ namespace fim
 	}
 #endif
 	
-	bool CommandConsole::regexp_match(const char*s, const char*r)//const
+	bool CommandConsole::regexp_match(const char*s, const char*r)const
 	{
 		/*
 		 *	given a string s, and a Posix regular expression r, this
@@ -1588,7 +1587,7 @@ namespace fim
 		return true;
 	}
 
-	fim::string CommandConsole::set_in_console(const std::vector<fim::string>& args)
+	fim::string CommandConsole::set_in_console(const args_t& args)
 	{
 		/*
 		 * EXPERIMENTAL !!
@@ -1597,7 +1596,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::set_interactive_mode(const std::vector<fim::string>& args)
+	fim::string CommandConsole::set_interactive_mode(const args_t& args)
 	{
 		ic=-1;set_status_bar("",NULL);
 		/*
@@ -1606,7 +1605,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::sys_popen(const std::vector<fim::string>& args)
+	fim::string CommandConsole::sys_popen(const args_t& args)
 	{
 		/*
 		 *
@@ -1625,17 +1624,17 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::cd(const std::vector<fim::string>& args)
+	fim::string CommandConsole::cd(const args_t& args)
 	{
 		/*
 		 * change working directory
 		 * */
-		static fim::string oldpwd=pwd(std::vector<fim::string>());
+		static fim::string oldpwd=pwd(args_t());
 		for(unsigned int i=0;i<args.size();++i)
 		{
 			fim::string dir=args[i];
 			if(dir=="-")dir=oldpwd;
-			oldpwd=pwd(std::vector<fim::string>());
+			oldpwd=pwd(args_t());
 			int ret = chdir(dir.c_str());
 #if 1
 //			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
@@ -1645,7 +1644,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::pwd(const std::vector<fim::string>& args)
+	fim::string CommandConsole::pwd(const args_t& args)
 	{
 		/*
 		 * yes, print working directory
@@ -1661,7 +1660,7 @@ namespace fim
 	}
 
 #ifndef FIM_NO_SYSTEM
-	fim::string CommandConsole::system(const std::vector<fim::string>& args)
+	fim::string CommandConsole::system(const args_t& args)
 	{
 		/*
 		 * executes the shell commands given in the arguments,
@@ -1688,7 +1687,7 @@ namespace fim
 	}
 #endif
 	
-	fim::string CommandConsole::do_return(const std::vector<fim::string> &args)
+	fim::string CommandConsole::do_return(const args_t &args)
 	{
 		/*
 		 * returns immediately the program with an exit code
@@ -1698,7 +1697,7 @@ namespace fim
 		return "";/* it shouldn' return, though :) */
 	}
 
-	fim::string CommandConsole::status(const std::vector<fim::string> &args)
+	fim::string CommandConsole::status(const args_t &args)
 	{
 		/*
 		 * the status bar is updated.
@@ -1712,7 +1711,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::unalias(const std::vector<fim::string>& args)
+	fim::string CommandConsole::unalias(const args_t& args)
 	{
 		/*
 		 * removes the actions assigned to the specified aliases,
@@ -1729,13 +1728,18 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::dump_key_codes(const std::vector<fim::string>& args)
+	fim::string CommandConsole::dump_key_codes(const args_t& args)
+	{
+		return do_dump_key_codes(args);
+	}
+
+	fim::string CommandConsole::do_dump_key_codes(const args_t& args)const
 	{
 		/*
 		 * all keyboard codes are dumped in the console.
 		 * */
 		fim::string acl;
-		std::map<fim::string,int>::const_iterator ki;
+		key_bindings_t::const_iterator ki;
 		for( ki=key_bindings.begin();ki!=key_bindings.end();++ki)
 		{
 			acl+=((*ki).first);
@@ -1820,7 +1824,12 @@ namespace fim
 		recorded_actions.push_back(recorded_action_t(sanitize_action(cmd),d));
 	}
 
-	fim::string CommandConsole::dump_record_buffer(const std::vector<fim::string> &args)
+	fim::string CommandConsole::dump_record_buffer(const args_t &args)
+	{
+		return do_dump_record_buffer(args);
+	}
+
+	fim::string CommandConsole::do_dump_record_buffer(const args_t &args)const
 	{
 		/*
 		 * the recorded commands are dumped in the console
@@ -1837,7 +1846,7 @@ namespace fim
 		return res;
 	}
 
-	fim::string CommandConsole::execute_record_buffer(const std::vector<fim::string> &args)
+	fim::string CommandConsole::execute_record_buffer(const args_t &args)
 	{
 		/*
 		 * all of the commands in the record buffer are re-executed.
@@ -1855,7 +1864,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::eval(const std::vector<fim::string> &args)
+	fim::string CommandConsole::eval(const args_t &args)
 	{
 		/*
 		 * all of the commands given as arguments are executed.
@@ -1880,7 +1889,7 @@ namespace fim
 		}
 	}
 
-	void CommandConsole::printHelpMessage(char *pn)
+	void CommandConsole::printHelpMessage(char *pn)const
 	{
 		/*
 		 * a prompty help message is pretty printed in the console
@@ -1906,7 +1915,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::repeat_last(const std::vector<fim::string> &args)
+	fim::string CommandConsole::repeat_last(const args_t &args)
 	{
 		/*
 		 * WARNING : there is an intricacy concerning the semantics of this command :
@@ -1925,7 +1934,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::start_recording(const std::vector<fim::string> &args)
+	fim::string CommandConsole::start_recording(const args_t &args)
 	{
 		/*
 		 * recording of commands starts here
@@ -1935,7 +1944,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::stop_recording(const std::vector<fim::string> &args)
+	fim::string CommandConsole::stop_recording(const args_t &args)
 	{
 		/*
 		 * since the last recorded action was stop_recording, we pop out the last command
@@ -1945,7 +1954,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::sanitize_action(const fim::string &cmd)
+	fim::string CommandConsole::sanitize_action(const fim::string &cmd)const
 	{
 		/*
 		 * the purpose of this method is to sanitize the action token
@@ -2009,7 +2018,7 @@ namespace fim
 	}
 
 #ifndef FIM_NOSCRIPTING
-	bool CommandConsole::push_script(const fim::string ns)
+	bool CommandConsole::push_scriptfile(const fim::string ns)
 	{
 		/*
 		 * pushes a script up in the pre-execution scriptfile list
@@ -2024,7 +2033,7 @@ namespace fim
 		std::cout << FIM_DEFAULT_CONFIG_FILE_CONTENTS << "\n";
 	}
 
-	fim::string CommandConsole::set(const std::vector<fim::string> &args)
+	fim::string CommandConsole::set(const args_t &args)
 	{
 		/*
 		 * with no arguments, prints out the variable names.
@@ -2051,7 +2060,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::clear(const std::vector<fim::string>& args)
+	fim::string CommandConsole::clear(const args_t& args)
 	{
 		status_screen(NULL,NULL);return "";
 	}
@@ -2179,8 +2188,10 @@ namespace fim
 		free(str);
 	}
 
-
-
-
+	fim::string CommandConsole::markCurrentFile(const args_t& args)
+	{
+		markCurrentFile();
+		return "";
+	}
 }
 
