@@ -170,6 +170,30 @@ class FimInstance
 	#else
 			"-FIM_AUTOCMDS"
 	#endif
+			" "
+	#ifdef FIM_BUGGED_CACHE
+			"+FIM_BUGGED_CACHE"
+	#else
+			"-FIM_BUGGED_CACHE"
+	#endif
+			" "
+	#ifdef FIM_AUTOSKIP_FAILED
+			"+FIM_AUTOSKIP_FAILED"
+	#else
+			"-FIM_AUTOSKIP_FAILED"
+	#endif
+			" "
+	#ifdef FIM_READ_STDIN
+			"+FIM_READ_STDIN"
+	#else
+			"-FIM_READ_STDIN"
+	#endif
+			" "
+	#ifdef FIM_BOZ_PATCH
+			"+FIM_BOZ_PATCH"
+	#else
+			"-FIM_BOZ_PATCH"
+	#endif
 			    );
 	}
 

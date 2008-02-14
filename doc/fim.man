@@ -11,8 +11,12 @@ fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .B fim
 displays the specified file(s) on the linux console using the
 framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png
-are supported directly.  For other formats fim tries to use
-ImageMagick's convert.
+are supported directly.  
+For 'xcf' (Gimp's) images, fim will try to use 'xcftopnm'.
+For '.fig' vectorial images, fim will try to use 'fig2dev'.
+For '.dia' vectorial images, fim will try to use 'dia'.
+For '.svg' vectorial images, fim will try to use 'inkscape'.
+For other formats fim will try to use ImageMagick's 'convert'.
 
 Please note that the full documentation of
 .B fim

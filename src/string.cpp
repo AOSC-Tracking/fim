@@ -90,7 +90,7 @@ namespace fim
 #endif
 	}
 
-	string::string(const int &i)
+	string::string(const int i)
 	{
 		_string_init();
 		char buf[FIM_CHARS_FOR_INT];
@@ -98,7 +98,7 @@ namespace fim
 		assign(buf);
 	}
 
-	string::string(const unsigned int &i)
+	string::string(const unsigned int i)
 	{
 		_string_init();
 		char buf[FIM_CHARS_FOR_INT];

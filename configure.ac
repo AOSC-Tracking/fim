@@ -69,6 +69,7 @@ CPPFLAGS=''
 AC_SUBST(FIM_LIBS)
 AC_SUBST(FIM_LIB_OBJECTS)
 AC_SUBST(VERSION)
+AC_SUBST(HTMLDOCS)
 #AC_LANG_POP([C++])
 
 fim="fim"
@@ -215,7 +216,7 @@ AC_MSG_CHECKING(where to put the documentation...)
 AC_ARG_WITH(docdir, AC_HELP_STRING([--with-docdir=PATH], [Specify where to put the documentation]),
         [fim_cv_docdir=$withval],
         [fim_cv_docdir='${prefix}/doc/fim-${fim_cv_version}'])
-# FIXME : the above line seems troublesome, BUT IT IS NOT (see the muttrc).
+# FIXME : the above line seems troublesome, BUT IT IS NOT (see the muttrc for this trick).
 
 AC_MSG_RESULT($fim_cv_docdir)
 
@@ -647,6 +648,12 @@ AH_TEMPLATE([FIM_TRY_DIA])
 
 dnl ==================
 
+AC_CHECK_PROG(have_man2html,man2html,yes,no)
+        if test x$have_man2html = xyes ; then
+      		AC_MSG_NOTICE([The installer will try to invoke 'man2html' to build html versions of the man pages.])
+		HTMLDOCS="FIM.html fim.man.html fimgs.man.html"
+	fi
+
 AC_CHECK_PROG(have_convert,convert,yes,no)
         if test x$have_convert = xno -a x$fim_cv_convert = xyes ; then
       		AC_MSG_WARN([Fim will try to invoke 'convert' to handle unknown format files, even if no 'convert' is currently in the program path: please install the Imagemagick package to obviate the problem or re-configure with --disable-convert.])
@@ -735,6 +742,9 @@ AH_TEMPLATE([X_DISPLAY_MISSING])
 AC_DEFINE([X_DISPLAY_MISSING])
 AH_TEMPLATE([FIM_TMP_FILENAME])
 AC_DEFINE_UNQUOTED([FIM_TMP_FILENAME],"$fim_cv_tmpfile")
+AH_TEMPLATE([FIM_ITERATED_COMMANDS])
+AC_DEFINE([FIM_ITERATED_COMMANDS])
+
 
 
 dnl ==================

@@ -40,6 +40,9 @@
 #undef FIM_DEFAULT_KEY_CONFIG
 
 /* */
+#undef FIM_ITERATED_COMMANDS
+
+/* */
 #undef FIM_NAMESPACES
 
 /* */

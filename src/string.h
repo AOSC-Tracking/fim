@@ -75,8 +75,8 @@ namespace fim
 	string();
 	string(const string& s);
 	string(const char *str);
-	string(const int &i);
-	string(const unsigned int &i);
+	string(const int i);
+	string(const unsigned int i);
 	const char*c_str()const;
 	bool operator==(const string& s)const;
 	bool operator==(const char *  s)const;

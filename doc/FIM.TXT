@@ -262,6 +262,26 @@ When you'll see more commands you'll have a broader range of custom keyboard
 bindings as your configurability potential.
 If you are curious, jump to the |commands-reference| section right now.
 
+
+Interactive mode offers a way of specifying that a (interactive) command should
+be executed more than one time.
+
+So, typing
+>
+	10n
+
+in interactive mode will tell Fim to execute ten times the action bound by the 
+'n' key, that is, executing 10 times 'next', like typing ':10next'.
+
+Using the dot key:
+>
+	.
+will repeat the last command. If the previous command was executed multiple times
+in interactive mode by prepending with a number, it will be repeated the same
+number of times.
+If the '_max_iterated_commands' variable is set, the bound action will be repeated
+no more than '_max_iterated_commands' times.
+
 ===============================================================================
 3.3. The fimgs script					*fimgs*
 
@@ -1437,9 +1457,19 @@ A lot of questions still await for an answer in Fim. Here are few:
  A: Consider reading |framebuffer| .
 
  Q: Which file formats are supported ?
- A: Fim should display the more common file formats (png,jpeg,gif,bmp).
+ A: Fim should display the more common file formats (png, jpeg, gif, bmp).
+    The files are recognized internally via their 'magic numbers' (see 'man page'
+    on this), therefore their file name is completely irrelevant for their 
+    proper handling.
     Consider reading |fimgs| to learn how to view archives and renderable
     document files with the help of fim.
+    Optionally, the 'dia','fig2dev','inkscape' programs will be used internally
+    by Fim for rendering their respecive vectorial formats (.dia,.fig,.svg) to 
+    a Fim interally supported format.
+    Gimp's xcftopnm will be tried to read '.xcf' file format files.
+    Moreover, consider that the 'convert' utility (shipped with the ImageMagick
+    package) will be tried to convert unrecognized format files, as a last
+    try.
 
 ==============================================================================
 13.BUGS								*bugs*

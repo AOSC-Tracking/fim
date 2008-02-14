@@ -21,6 +21,7 @@
 _display_status=0;
 _max_cached_images=5;
 _max_cached_memory=80000000;	# not yet functional
+_max_iterated_commands=100;
 _prefetch=1;
 autowidth=1;
 ignorecase=1;

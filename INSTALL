@@ -71,9 +71,18 @@ Actually I don't own a Debian system to try on, but I already have
 a file in distros/debian/control (useless, though :) )
 
 Other libraries are installable by running:
+apt-get install libc6-dev
+apt-get install build-essential
 apt-get install libreadline5-dev
 apt-get install libungif4-dev
+apt-get install libpng-dev
+apt-get install libjpeg-dev
+apt-get install libtiff-dev
+apt-get install flex
+apt-get install bison
 ...
+
+To use the full Fim potential, you could also install GhostScript, Inkscape, Dia, Xfig, Gimp.
 
 If you could give me some help with this, I would be very grateful to you.
 

@@ -673,13 +673,33 @@ namespace fim
 		 *	If the binding is inexistent, ignores silently the error.
 		 */
 		bindings_t::const_iterator bi=bindings.find(c);
+#define KEY_OFFSET 48
+
+#ifdef FIM_ITERATED_COMMANDS
+		static int it_buf=-1;
+		if( c>=48 && c <=57 && (bi==bindings.end() || bi->second==""))//a number, not bound
+		{
+			if(it_buf>0){it_buf*=10;it_buf+=c - KEY_OFFSET;}
+			else it_buf=c - KEY_OFFSET;
+		}
+#endif
+
 		if(bi!=bindings.end() && bi->second!="")
 		{
 			fim::string cf=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PreInteractiveCommand",cf);
 #endif
+#ifdef FIM_ITERATED_COMMANDS
+			int m = getIntVariable("_max_iterated_commands");
+			if(it_buf>0 && m>0)it_buf=it_buf%m;
+			fim::string nc=(it_buf<1?1:it_buf);
+			nc+="{"+getBoundAction(c)+";}";
+			execute(nc.c_str(),1,0);
+			it_buf=-1;
+#else
 			execute(getBoundAction(c).c_str(),0,0);
+#endif
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PostInteractiveCommand",cf);
 #endif
