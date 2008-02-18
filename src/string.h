@@ -4,7 +4,7 @@
 /*
  string.h : Fim's own string implementation header file
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -125,6 +125,8 @@ namespace fim
 		string operator+(const string s)const;
 		/* copy constructor */
 		string(const string& s);
+		bool re_match(const char*r)const;
+		void substitute(const char*r, const char* s, int flags=0);
 	};
 
 

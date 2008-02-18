@@ -106,15 +106,9 @@ namespace fim
 		 */
 		const char *kerr="bind : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
 		if(args.size()==0)return getBindingsList();
-		//return "usage : bind KEY ACTION\n";
-		if(args.size()>=1)
-		{
-			//FIXME:
-			//first arg should be a valid key code
-			//if(!isValidKeyCode(args[0]))return kerr;
-		}
 		if(args.size()==1)
 		{
+			//first arg should be a valid key code
 			fim::string binding_expanded;
 			binding_expanded+="bind '";
 			binding_expanded+=args[0];
@@ -123,7 +117,10 @@ namespace fim
 			binding_expanded+="'\n";
 			return binding_expanded;
 		}
-		if(args.size()!=2) return kerr;
+		/*
+		 * FIXME: there will be room for the binding comment by the user
+		 * */
+		if(args.size()<2) return kerr;
 		const char*key=(args[0].c_str());
 		if(!key)return kerr;
 		int l=strlen(key);
@@ -141,9 +138,8 @@ namespace fim
 		bindings_t::const_iterator bi;
 		for( bi=bindings.begin();bi!=bindings.end();++bi)
 		{
-			if(bi->second == "")continue;//FIX THIS : THIS SHOULD NOT OCCUR
+			//if(bi->second == "")continue;//FIX : THIS SHOULD NOT OCCUR
 			bindings_expanded+="bind \"";
-			//bindings_expanded+=inverse_key_bindings[((*bi).first)];
 			inverse_key_bindings_t::const_iterator ikbi=inverse_key_bindings.find(((*bi).first));
 			if(ikbi!=inverse_key_bindings.end()) bindings_expanded+=ikbi->second;
 			bindings_expanded+="\" \"";
@@ -178,7 +174,7 @@ namespace fim
 	fim::string CommandConsole::unbind(int c)
 	{
 		/*
-		 * undinds the action eventually bound to the key combination code c
+		 * unbinds the action eventually bound to the key combination code c
 		 */
 		fim::string rs("unbind ");
 		if(bindings[c]!="")
@@ -199,10 +195,12 @@ namespace fim
 	{
 		/*
 		 * returns the alias command eventually specified by token cmd
+		 *
+		 * Note : return aliases[cmd] would create an entry associated to cmd 
+		 * ( and this method would loose the chance to be const ).
 		 */
-		//return aliases[cmd];
-		std::map<fim::string,fim::string>::const_iterator ai=aliases.find(cmd);
-		if(ai!=aliases.end()) return ai->second;
+		aliases_t::const_iterator ai=aliases.find(cmd);
+		if(ai!=aliases.end()) return ai->second.first;
 		return "";
 	}
 
@@ -212,32 +210,38 @@ namespace fim
 		 * collates all registered action aliases together in a single string
 		 * */
 		fim::string aliases_expanded;
-		std::map<fim::string,fim::string>::const_iterator ai;
+		aliases_t::const_iterator ai;
 		for( ai=aliases.begin();ai!=aliases.end();++ai)
 		{
-			if(ai->second == "")continue;//FIX THIS : THIS SHOULD NOT OCCUR
+#if 0
+			if(ai->second.first == "")continue;//FIX THIS : THIS SHOULD NOT OCCUR
 			aliases_expanded+="alias ";
 			aliases_expanded+=((*ai).first);
 			aliases_expanded+="=\"";
-			aliases_expanded+=((*ai).second);
+			aliases_expanded+=((*ai).second.first);
 			aliases_expanded+="\"\n";
+#endif
+			aliases_expanded+=get_alias_info((*ai).first);
 		}
 		return aliases_expanded;
 	}
 
 	fim::string CommandConsole::get_alias_info(const fim::string aname)const
 	{
-		/*
-		 * FIXME: find a way to read aliases and make this function const !
-		 * */
 			string  r;
 				r+=fim::string("alias \"");
 				r+=aname;
 				r+=fim::string("\" \"");
-				//r+=aliases[aname];
-				std::map<fim::string,fim::string>::const_iterator ai=aliases.find(aname);
-				if(ai!=aliases.end()) r+=ai->second;
-				r+=fim::string("\"\n");
+				aliases_t::const_iterator ai=aliases.find(aname);
+				if(ai!=aliases.end())r+=ai->second.first;
+				r+=fim::string("\"");
+				if(ai!=aliases.end())
+				if(ai->second.second!="")
+				{
+					r+=" # ";
+					r+=ai->second.second;
+				}
+				r+=fim::string("\n");
 				return r;
 	}
 
@@ -246,7 +250,7 @@ namespace fim
 		/*
 		 * assigns to an alias some action
 		 */
-		fim::string cmdlist;
+		fim::string cmdlist,desc;
 		if(args.size()==0)
 		{
 			return getAliasesList();
@@ -254,19 +258,13 @@ namespace fim
 		if(args.size()<2)
 		{
 			return get_alias_info(args[0].val);
-/*
-			string  r;
-				r+=fim::string("alias \"");
-				r+=args[0].val;
-				r+=fim::string("\" \"");
-				r+=aliases[args[0].val];
-				r+=fim::string("\"\n");
-				return r;*/
 		}
-		for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
-		if(aliases[args[0].val]!="")
+		//for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
+		if(args.size()>=2)cmdlist+=args[1].val;
+		if(args.size()>=3)desc   +=args[2].val;
+		if(aliases[args[0].val].first!="")
 		{
-			aliases[args[0].val]=cmdlist;
+			aliases[args[0].val]=std::pair<fim::string,fim::string>(cmdlist,desc);
 			string r;
 			r+=fim::string("alias ");
 			r+=args[0].val;
@@ -275,9 +273,9 @@ namespace fim
 		}
 		else
 		{
-			aliases[args[0].val]=cmdlist;
+			aliases[args[0].val].first=cmdlist;
+			aliases[args[0].val].second=desc;
 			string r;
-//			return fim::string("alias ")+args[0].val+fim::string(" successfully added.\n");
 			r+=fim::string("alias ");
 			r+=args[0].val;
 			r+=fim::string(" successfully added.\n");
@@ -319,6 +317,7 @@ namespace fim
 
 	CommandConsole::CommandConsole(FramebufferDevice &_framebufferdevice):framebufferdevice(_framebufferdevice)
 	{
+		appended_post_init_command=false;
 		fim_uninitialized = 1; // new
 		/*
 		 * FIXME : dependencies.. argh !
@@ -467,7 +466,6 @@ namespace fim
 //		executeFile("/etc/fimrc");	//GLOBAL DEFAULT CONFIGURATION FILE
 		*prompt=':';
 		*(prompt+1)='\0';
-		//int fimrcs=0;
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
 		char rcfile[_POSIX_PATH_MAX];
@@ -519,24 +517,6 @@ namespace fim
 #ifndef FIM_NOSCRIPTING
 		for(unsigned int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
 #endif		
-		if ( 
-				browser.empty_file_list() 
-#ifndef FIM_NOSCRIPTING
-				&& scripts.size()==0 
-#endif		
-				)
-		if(g_fim_no_framebuffer==0)
-		{
-			//when debugging Fim, we are not interested in this feature
-			#if 1
-			printHelpMessage();
-			this->quit();
-			#else
-			//EVIL right now
-			//help_and_exit(getStringVariable("ARGV0"));
-			help_and_exit("fim");
-			#endif
-		}
 #ifdef FIM_AUTOCMDS
 		// WARNING
 		if(postInitCommand!=fim::string(""))
@@ -555,11 +535,8 @@ namespace fim
 		/*
 		 * C is added to the commands list
 		 */
-		assert(c);	//see the macro NDEBUG for this
+		assert(c);	//FIXME : see the macro NDEBUG for this
 		commands.push_back(c);
-		/*
-		 * here an insertion sort would be nice..
-		 */
 		return 0;
 	}
 
@@ -569,6 +546,7 @@ namespace fim
 		 * an internal alias method
 		 *
 		 * FIXME: ERROR CHECKING NEEDED
+		 * ( checks on arguments correctness ! )
 		 */
 		std::vector<fim::Arg> args;
 		args.push_back(Arg(a));
@@ -594,8 +572,8 @@ namespace fim
 		const fim::string cmd(text);
 		if(cmd=="")return NULL;
 		args_t completions;
-		std::map<fim::string,fim::string>::const_iterator ai;
-		std::map<fim::string,fim::Var>::const_iterator vi;
+		aliases_t::const_iterator ai;
+		variables_t::const_iterator vi;
 		for(unsigned int i=0;i<commands.size();++i)
 		{
 			if(commands[i]->cmd.find(cmd)==0)
@@ -691,15 +669,30 @@ namespace fim
 			autocmd_exec("PreInteractiveCommand",cf);
 #endif
 #ifdef FIM_ITERATED_COMMANDS
-			int m = getIntVariable("_max_iterated_commands");
-			if(it_buf>0 && m>0)it_buf=it_buf%m;
-			fim::string nc=(it_buf<1?1:it_buf);
-			nc+="{"+getBoundAction(c)+";}";
-			execute(nc.c_str(),1,0);
-			it_buf=-1;
-#else
-			execute(getBoundAction(c).c_str(),0,0);
+			if(it_buf>1)
+			{
+				int m = getIntVariable("_max_iterated_commands");
+				fim::string nc;
+				/*
+				 *  A non positive value of  _max_iterated_commands
+				 *  will imply no limits on it_buf.
+				 *
+				 *  We can't assume the user is not so dumb to set a near 31 bits value..
+				 */
+				if(m>0 && m+1>0)
+					it_buf=it_buf%(m+1);
+				nc=it_buf;
+				if(it_buf>1)
+					nc+="{"+getBoundAction(c)+";}";
+				else
+					nc = getBoundAction(c);
+					
+				execute(nc.c_str(),1,0);
+				it_buf=-1;
+			}
+			else
 #endif
+				execute(getBoundAction(c).c_str(),0,0);
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PostInteractiveCommand",cf);
 #endif
@@ -1319,11 +1312,9 @@ namespace fim
 		/*
 		 * returns the [internal] type of a variable
 		 *
-		 * FIXME : hmmmm...
 		 * */
-		//return variables[varname].getType();
 		variables_t::const_iterator vi=variables.find(varname);
-		if(vi!=variables.end()) return vi->second;
+		if(vi!=variables.end()) return vi->second.getType();
 		else return 0;
 	}
 
@@ -1357,7 +1348,7 @@ namespace fim
 		 * returns the list of set action aliases
 		 */
 		fim::string aliases_list;
-		std::map<fim::string,fim::string>::const_iterator ai;
+		aliases_t::const_iterator ai;
 		for( ai=aliases.begin();ai!=aliases.end();++ai)
 		{	
 			aliases_list+=((*ai).first);
@@ -1386,7 +1377,7 @@ namespace fim
 		 * returns the list of set variables
 		 */
 		fim::string acl;
-		std::map<fim::string,fim::Var>::const_iterator vi;
+		variables_t::const_iterator vi;
 		for( vi=variables.begin();vi!=variables.end();++vi)
 		{
 			acl+=((*vi).first);
@@ -1657,8 +1648,10 @@ namespace fim
 			oldpwd=pwd(args_t());
 			int ret = chdir(dir.c_str());
 #if 1
-//			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
 			if(ret) return (fim::string("cd error : ")+fim::string(strerror(errno)));
+#else
+			// deprecated
+			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
 #endif
 		}
 		return "";
@@ -1738,11 +1731,11 @@ namespace fim
 		 */
 		if(args.size()<1)return "unalias : please specify an alias to remove!\n";
 		for(unsigned int i=0;i<args.size();++i)
-		if(aliases[args[i]]!="")
+		if(aliases[args[i]].first!="")
 		{
 			aliases.erase(args[i]);
 			return "";
-			//fim::string("unalias : \"")+args[i]+fim::string("\" successfully unaliased.\n");
+			/* fim::string("unalias : \"")+args[i]+fim::string("\" successfully unaliased.\n"); */
 		}
 		else return fim::string("unalias : \"")+args[i]+fim::string("\" there is not such alias.\n");
 		return "";
@@ -1991,6 +1984,7 @@ namespace fim
 		 * the supplied command is applied right before a normal execution of Fim
 		 * but after the configuration file loading
 		 * */
+		appended_post_init_command=true;
 		postInitCommand+=c;
 	}
 
@@ -2002,6 +1996,15 @@ namespace fim
 		postExecutionCommand+=c;
 	}
 	
+	bool CommandConsole::appendedPostInitCommand()const
+	{
+		/*
+		 * whether some command will be executed right after initialization
+		 * */
+//		return appended_post_init_command;
+		return postInitCommand!=fim::string("");
+	}
+
 #ifdef FIM_WINDOWS
 	Viewport* CommandConsole::current_viewport()const
 	{
@@ -2045,6 +2048,10 @@ namespace fim
 		 * */
 	    	scripts.push_back(ns);
 		return true; /* for now a fare return code */
+	}
+	bool CommandConsole::with_scriptfile()const
+	{
+		return scripts.size() !=0;
 	}
 #endif
 
@@ -2149,7 +2156,6 @@ namespace fim
 		 *	TO FIX
 		 *	NULL,NULL is the clearing combination !!
 		 */
-		//if(!desc)return;	// !!
 		framebufferdevice.fb_status_screen(desc,drawOutput());
 	}
 
@@ -2177,13 +2183,13 @@ namespace fim
 		//FIX ME : does this function always draw ?
 		int chars, ilen;
 		char *str,*p;
-		const char *prompt=cc.get_prompt();
+		const char *prompt=get_prompt();
 		char no_prompt[1];*no_prompt='\0';
 	
 		if(g_fim_no_framebuffer || fim_uninitialized)
 			return;
 	
-		if(!cc.inConsole())prompt=no_prompt;
+		if(!inConsole())prompt=no_prompt;
 		chars = framebufferdevice.fb_var.xres / framebufferdevice.fb_font_width();
 		if(chars<48)return;//something strange..
 		str = (char*) malloc(chars+1);//this malloc is free
@@ -2201,7 +2207,7 @@ namespace fim
 		static int statusline_cursor;
 		statusline_cursor=rl_point+1;
 	    
-		if( statusline_cursor < chars && cc.inConsole()  ) str[statusline_cursor]='_';
+		if( statusline_cursor < chars && inConsole()  ) str[statusline_cursor]='_';
 		p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
 	
 		framebufferdevice.fb_status_line((unsigned char*)str);
@@ -2213,5 +2219,6 @@ namespace fim
 		markCurrentFile();
 		return "";
 	}
+
 }
 

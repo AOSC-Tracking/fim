@@ -25,6 +25,7 @@ _max_iterated_commands=100;
 _prefetch=1;
 autowidth=1;
 ignorecase=1;
+ascale="1.0";
 
 # useful aliases
 alias "toggleautoflip" "autoflip=1-autoflip;";
@@ -206,10 +207,16 @@ alias 'henlarge' 'window "henlarge"';
 
 alias 'wnormalize' 'window "normalize"';
 alias 'wclose' 'window "close"';
-alias 'wc' 'window "close"';
+alias 'wc' 'window "close"' "closes the current window";
 
 alias 'cache' 'echo _cache_status;';
 bind 'c' 'cache;';
+
+alias 'widen'  'i:ascale=i:ascale*"1.1";*1.0;';
+alias 'narrow' 'i:ascale=i:ascale/"1.1";*1.0;';
+bind  'y' "widen" "widens horizontally the image";
+bind  'Y' "narrow" "shrinks horizontally the image";
+
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So feel free to modify it, but with caution! FIM is still alpha! 

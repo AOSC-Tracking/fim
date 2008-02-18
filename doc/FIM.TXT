@@ -155,12 +155,16 @@ read on!
 
 There are the major (P)roblem areas and the possible (C)ontributions:
  
+ P: There are some problems with the keyboard input : seems like panning is somwhat
+   'slow' or choppy sometimes.
+
+ C: Yes, the input system should be fixed a little.
+    You are welcome to suggest improvements.
+
  P: Build process ( right now it is scary, especially for the part concerning 
    dependencies, and pisses off new users from Fim ).
 
- C: autoscan/autoconf/automake scripts and/or suggestions would be very
-    appreciated.
-    And distribution specific files and instructions for resolving dependencies,
+ C: And distribution specific files and instructions for resolving dependencies,
     too!
 
  P: Current language and features issues:
@@ -176,8 +180,7 @@ There are the major (P)roblem areas and the possible (C)ontributions:
  
  C: You could describe your personal experience with Fim, providing the pluses
     and minuses in it, the way you use it, and the ways you would like to.
-    If you have interest in it, your help will contribute to inspire better
-    versions.
+    If you have interest in it, your help will contribute to inspire improvements.
 
  P: Fim sucks: it lacks of feature XXX
 
@@ -272,6 +275,10 @@ So, typing
 
 in interactive mode will tell Fim to execute ten times the action bound by the 
 'n' key, that is, executing 10 times 'next', like typing ':10next'.
+
+So, the general form of this feature is:
+>
+	[n]<command key>
 
 Using the dot key:
 >
@@ -565,9 +572,18 @@ There is ongoing support to asymmetric scaling:
 >
 	:ascale="2.0"
 
-will widen the image of a factor of two, leaving the height untouched. It needs
-redraw to make effect, and will affect the next images, too.
+will widen the image of a factor of two, leaving the height untouched.
+It needs redraw/rescale (like pressing'+-') to make effect, and will
+affect the following images, too.
 
+Like many Fim variables, 'ascale' too can be global or local:
+>
+	:i:ascale="4.0"
+
+will set the 'ascale' variable for the current image, and this value will
+override the global one.
+
+Note: 'ascale' handling has still some problems.
 
 Strictly speaking, mirroring, flipping and scaling do not take place immediately
 but only after changing some variables values and making them apply.
@@ -1061,6 +1077,12 @@ right one and a left one.
 	:window 'left'
 These commands will change the focus to the currently selected window.
 >
+	:wu
+	:wd
+	:wr
+	:wl
+These are aliases specified in the default configuration for the former commands.
+>
 	:window 'normalize'
 will balance window sizes in a natural way.
 >
@@ -1069,13 +1091,16 @@ will close the currently selected window with the symmetrically
 correspondent terminal one (of course, if both are splits of a same window).
 >
 	:window 'close'
+	:wc
 will close the current window (unsplit it) and enlarge the viewport to the
 containing window size.
 
 >
 	:window 'henlarge'
 	:window 'venlarge'
-These two commands resize the focused window.
+	:henlarge
+	:venlarge
+These two commands (and their default aliases) resize the focused window.
 The shadowed window gets normalized.
 The first ('henlarge') enlarges the window if it is divided horizontally, thus
 enlarging it vertically.

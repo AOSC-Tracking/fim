@@ -204,7 +204,6 @@ namespace fim
 		return (int)(variables[varname].setString(s));
 	}
 
-
 	int CommandConsole::getIntVariable(const fim::string &varname)const
 	{
 #ifdef FIM_NAMESPACES

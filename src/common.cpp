@@ -23,6 +23,7 @@
 //#include "fim.h"
 
 #include <iostream>
+#include "fim.h"
 #include "string.h"
 #include "common.h"
 #include <string>
@@ -157,12 +158,84 @@ char * dupstr (const char* s)
 	return (r);
 }
 
+static int pick_word(char *f, unsigned int *w)
+{
+	int fd = open(f,O_RDONLY);
+	if(fd==-1) return -1;
+	if(read(fd,w,4)==4)return 0;
+	return -1;
+}
+
+
 /*
  * Will be improved, if needed.
  * */
 int fim_rand()
 {
-	return rand();
+	/*
+	 * Please don't use Fim for cryptographical purposes ;)
+	 * */
+	unsigned int w;
+	if(pick_word("/dev/urandom",&w)==0) return (w%RAND_MAX);
+	
+	srand(clock()); return rand();
+
 }
 
+	bool regexp_match(const char*s, const char*r, int ignorecase, int ignorenewlines)
+	{
+		/*
+		 *	given a string s, and a Posix regular expression r, this
+		 *	method returns true if there is match. false otherwise.
+		 */
+		regex_t regex;		//should be static!!!
+		const int nmatch=1;	// we are satisfied with the first match, aren't we ?
+		regmatch_t pmatch[nmatch];
+
+		/*
+		 * we allow for the default match, in case of null regexp
+		 */
+		if(!r || !strlen(r))return true;
+
+		/* fixup code for a mysterious bug
+		 */
+		if(*r=='*')return false;
+
+		fim::string aux;
+		if(ignorenewlines)
+		{
+			aux=s;
+		}
+
+		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
+		if(regcomp(&regex,r, 0 | REG_EXTENDED | (ignorecase==0?0:REG_ICASE) )==-1)
+		{
+			/* error calling regcomp (invalid regexp?)! (should we warn the user ?) */
+			//cout << "error calling regcomp (invalid regexp?)!" << "\n";
+			return false;
+		}
+		else
+		{
+//			cout << "done calling regcomp!" << "\n";
+		}
+		//if(regexec(&regex,s+0,nmatch,pmatch,0)==0)
+		if(regexec(&regex,s+0,nmatch,pmatch,0)!=REG_NOMATCH)
+		{
+//			cout << "'"<< s << "' matches with '" << r << "'\n";
+/*			cout << "match : " << "\n";
+			cout << "\"";
+			for(int m=pmatch[0].rm_so;m<pmatch[0].rm_eo;++m)
+				cout << s[0+m];
+			cout << "\"\n";*/
+			regfree(&regex);
+			return true;
+		}
+		else
+		{
+			/*	no match	*/
+		};
+		regfree(&regex);
+		return false;
+		return true;
+	}
 

@@ -117,56 +117,16 @@ void _fb_switch_signal(int signal);
  
 
 
-#define DITHER_LEVEL 8
-
-static long     red_mult, green_mult;
-static long     red_dither[256];
-static long     green_dither[256];
-static long     blue_dither[256];
-static long     gray_dither[256];
-
-typedef unsigned long vector[DITHER_LEVEL];
-typedef vector  matrix[DITHER_LEVEL];
-
-
-
-
-//#if DITHER_LEVEL == 8 ||  DITHER_LEVEL == 4
-//static int matrix   DM ;
-//#endif
-#if DITHER_LEVEL == 8
-#define DITHER_MASK 7
-static matrix   DM =
-{
-    {0, 32, 8, 40, 2, 34, 10, 42},
-    {48, 16, 56, 24, 50, 18, 58, 26},
-    {12, 44, 4, 36, 14, 46, 6, 38},
-    {60, 28, 52, 20, 62, 30, 54, 22},
-    {3, 35, 11, 43, 1, 33, 9, 41},
-    {51, 19, 59, 27, 49, 17, 57, 25},
-    {15, 47, 7, 39, 13, 45, 5, 37},
-    {63, 31, 55, 23, 61, 29, 53, 21}
-};
-
-#endif
-
-#if DITHER_LEVEL == 4
-#define DITHER_MASK 3
-static matrix   DM =
-{
-    {0, 8, 2, 10},
-    {12, 4, 14, 6},
-    {3, 11, 1, 9},
-    {15, 7, 13, 5}
-};
-
-#endif
-
-
 
 
 class FramebufferDevice
 {
+	long     red_mult, green_mult;
+	long     red_dither[256];
+	long     green_dither[256];
+	long     blue_dither[256];
+	long     gray_dither[256];
+
 	/*
 	 * 20080106
 	 * An UNFINISHED class providing access to a single framebuffer device.

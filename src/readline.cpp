@@ -135,11 +135,12 @@ static void redisplay()
 /*
  * ?!
  * */
+/*
 static int redisplay_hook_no_fb()
 {
 	redisplay_no_fb();
 	return 0;
-}
+}*/
 
 static int redisplay_hook()
 {
@@ -150,20 +151,20 @@ static int redisplay_hook()
 /*
  * ?!
  * */
-static int fim_rl_end(int a,int b)
+/*static int fim_rl_end(int a,int b)
 {
 	rl_point=rl_end;
 	return 0;
-}
+}*/
 
 /*
  * ?!
  * */
-static int fim_set_command_line_text(const char*s)
+/*static int fim_set_command_line_text(const char*s)
 {
 	rl_replace_line(s,0);
 	return 0;
-}
+}*/
 
 /*
  *	initial setup to set the readline library working

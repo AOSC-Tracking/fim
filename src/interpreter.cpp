@@ -2,7 +2,7 @@
 /*
  interpreter.cpp : Fim language interpreter
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ std::ostream & operator<<(std::ostream &os,const nodeType &p)
 	return os;
 }
 
-int ex(nodeType *p);
+Var ex(nodeType *p);
 
 /*
  *	this function evaluates a single 'arg' entry
@@ -139,7 +139,7 @@ std::vector<fim::string> var(nodeType *p)
 }
 
 using namespace fim;
-int ex(nodeType *p)
+Var ex(nodeType *p)
 {
 	int iValue;
 	float fValue;
@@ -157,7 +157,7 @@ int ex(nodeType *p)
 		case intCon:
 			return p->con.value;
 	        case floatCon:
-			return 0;//FIXME
+			return p->fid.f;
 		case vId:
 		{
 			/*
@@ -169,20 +169,26 @@ int ex(nodeType *p)
 			       	return fim_rand();//FIXME
 			else
 #endif
-				return (int)fim::cc.getStringVariable(p->scon.s);
+			if(fim::cc.getVariableType(p->scon.s)=='i')
+				return (int)fim::cc.getIntVariable(p->scon.s);
+			if(fim::cc.getVariableType(p->scon.s)=='f')
+				return (float)fim::cc.getFloatVariable(p->scon.s);
+			else
+			/* if(fim::cc.getVariableType(p->scon.s)=='s') */
+				return (fim::string)fim::cc.getStringVariable(p->scon.s);
 		}
 		case stringCon:
 		case typeOpr:	/*	some operator	*/
 		switch(p->opr.oper)
 		{
 			case WHILE:
-				while(ex(p->opr.op[0]) && (fim::cc.catchLoopBreakingCommand(0)==0))
+				while((int)ex(p->opr.op[0]) && (fim::cc.catchLoopBreakingCommand(0)==0))
 				{
 					ex(p->opr.op[1]);
 				}
 				return 0;
 			case IF:
-				if (ex(p->opr.op[0]))
+				if ((int)ex(p->opr.op[0]))
 					ex(p->opr.op[1]);
 				else if (p->opr.nops > 2)
 					ex(p->opr.op[2]);
@@ -290,7 +296,6 @@ int ex(nodeType *p)
 			if(typeHint=='f')
 			{
 				fValue=p->opr.op[1]->fid.f;
-				if(fValue==0.0f)exit(0);
 				fim::cc.setVariable(s,fValue);
 				return (int)fValue;
 			}//'i'

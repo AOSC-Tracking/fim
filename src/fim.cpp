@@ -66,7 +66,7 @@ namespace fim
  * Yet unfinished. 
  * This structure keeps hold of Fim's options flags.
  */
-static struct option fim_options[] = {
+struct option fim_options[] = {
     {"version",    no_argument,       NULL, 'V'},  /* version */
     {"help",       no_argument,       NULL, 'h'},  /* help */
     {"device",     required_argument, NULL, 'd'},  /* device */
@@ -243,6 +243,7 @@ int help_and_exit(char *argv0)
 	#endif
 	//	char             *desc,*info;
 		char c;
+		bool appendedPostInitCommand=false;
 		g_fim_no_framebuffer=0;
 	
 		setlocale(LC_ALL,"");	//uhm..
@@ -380,6 +381,7 @@ int help_and_exit(char *argv0)
 		case 'c':
 		    //fim's
 		    cc.appendPostInitCommand(optarg);
+		    appendedPostInitCommand=true;
 		    break;
 		case 'F':
 		    //fim's
@@ -481,7 +483,7 @@ int help_and_exit(char *argv0)
 	#endif
 	
 	
-		if(cc.browser.empty_file_list())
+		if(cc.browser.empty_file_list() && !cc.with_scriptfile() && !appendedPostInitCommand )
 			help_and_exit(argv[0]);
 	
 		if((g_fim_no_framebuffer)==0)

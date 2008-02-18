@@ -509,7 +509,43 @@ AC_ARG_ENABLE(screen, AC_HELP_STRING([--disable-screen], [Fim will try to work u
 ],[ fim_cv_screen=yes ]
 )
 
+dnl ==================
+
+
+AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan directories for files.]),
+[       if test x$enableval = xno; then
+		fim_cv_read_dirs=no
+	else
+                fim_cv_read_dirs=yes
+        fi
+],[ fim_cv_read_dirs=no ]
+)
+
+dnl ==================
+
+AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--enable-recursive-dirs], [Fim will try to recurse directories (implies --enable-read-dirs)]),
+[       if test x$enableval = xno; then
+		fim_cv_recursive_dirs=no
+	else
+                fim_cv_recursive_dirs=yes
+                fim_cv_read_dirs=yes
+        fi
+],[ fim_cv_recursive_dirs=no ]
+)
+
+dnl ==================
+
+AH_TEMPLATE([FIM_RECURSIVE_DIRS])
+AH_TEMPLATE([FIM_READ_DIRS])
 AH_TEMPLATE([FIM_BOZ_PATCH])
+
+if test x$fim_cv_read_dirs == xyes; then
+  AC_DEFINE([FIM_READ_DIRS])
+  if test x$fim_cv_recursive_dirs == xyes; then
+	  AC_DEFINE([FIM_RECURSIVE_DIRS])
+  fi
+fi
+
 if test x$fim_cv_screen != xno; then
         # boz patch is on
 	AC_DEFINE([FIM_BOZ_PATCH])
@@ -744,6 +780,8 @@ AH_TEMPLATE([FIM_TMP_FILENAME])
 AC_DEFINE_UNQUOTED([FIM_TMP_FILENAME],"$fim_cv_tmpfile")
 AH_TEMPLATE([FIM_ITERATED_COMMANDS])
 AC_DEFINE([FIM_ITERATED_COMMANDS])
+AH_TEMPLATE([FIM_SKIP_KNOWN_FILETYPES])
+AC_DEFINE([FIM_SKIP_KNOWN_FILETYPES])
 
 
 
@@ -774,6 +812,8 @@ AC_MSG_NOTICE([
 	default configuration file builtin  : ${have_default_config:-no}
         compile time warnings               : ${fim_cv_warnings:-no} ( ${FIM_CFLAGS} )
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
+	will read directories               : ${fim_cv_read_dirs}
+	will recurse directories            : ${fim_cv_recursive_dirs}
 	png  file support                   : ${fim_handle_png:-no}
 	jpeg file support                   : ${fim_handle_jpeg:-no}
 	tiff file support                   : ${fim_handle_tiff:-no}

@@ -1,5 +1,5 @@
 .c $Id$
-.TH fimgs 1 "(c) 2007 dezperado"
+.TH fimgs 1 "(c) 2007-2008 Michele Martone"
 .SH NAME
 fimgs - poor man's [http://]PostScript/pdf/dvi/cbr/rar/cbz/zip viewer for the linux
 framebuffer console

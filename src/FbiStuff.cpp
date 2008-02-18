@@ -25,7 +25,7 @@
 
 
 #include "fim.h"
-
+#include "common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1000,6 +1000,31 @@ struct ida_image* FbiStuff::read_image(char *filename)
     rewind(fp);
 
     /* pick loader */
+#ifdef FIM_SKIP_KNOWN_FILETYPES
+    if (NULL == loader && (*blk==0x42) && (*(unsigned char*)(blk+1)==0x5a))
+    {
+	cc.set_status_bar("skipping 'bz2'...", "*");
+	return NULL;
+    }
+/* gz is another ! */
+/*    if (NULL == loader && (*blk==0x30) && (*(unsigned char*)(blk+1)==0x30))
+    {
+	cc.set_status_bar("skipping 'gz'...", "*");
+	return NULL;
+    }*/
+    if (NULL == loader && (*blk==0x25) && (*(unsigned char*)(blk+1)==0x50 )
+     && NULL == loader && (*(unsigned char*)(blk+2)==0x44) && (*(unsigned char*)(blk+3)==0x46))
+    {
+	cc.set_status_bar("skipping 'pdf' (use fimgs for this)...", "*");
+	return NULL;
+    }
+    if (NULL == loader && (*blk==0x25) && (*(unsigned char*)(blk+1)==0x21 )
+     && NULL == loader && (*(unsigned char*)(blk+2)==0x50) && (*(unsigned char*)(blk+3)==0x53))
+    {
+	cc.set_status_bar("skipping 'ps' (use fimgs for this)...", "*");
+	return NULL;
+    }
+#endif
     list_for_each(item,&loaders) {
         loader = list_entry(item, struct ida_loader, list);
 	if (NULL == loader->magic)
@@ -1058,6 +1083,7 @@ struct ida_image* FbiStuff::read_image(char *filename)
 #ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 
     if (NULL == loader && (0 == memcmp(blk,"<?xml version=\"1.0\" encoding=\"UTF-8\"",36)))
+    //if(regexp_match(filename,".*svg$"))
     {
     	/*
 	 * dez's
@@ -1073,6 +1099,21 @@ struct ida_image* FbiStuff::read_image(char *filename)
 	    return NULL;
 	unlink(FIM_TMP_FILENAME);
 	loader = &png_loader;
+    }
+#endif
+#if 0
+/*
+ * Warning : this is potentially dangerous and so we wait a little before working on this.
+ * */
+    if((NULL == loader && (0 == memcmp(blk,"#!/usr/bin/fim",14))) ||
+       (NULL == loader && (0 == memcmp(blk,"#!/usr/sbin/fim",15))) ||
+       (NULL == loader && (0 == memcmp(blk,"#!/usr/local/bin/fim",20))) ||
+       (NULL == loader && (0 == memcmp(blk,"#!/usr/local/sbin/fim",21)))
+       )
+    {
+	cc.set_status_bar("loading Fim script file ...", "*");
+	cc.executeFile(filename);
+	return NULL;
     }
 #endif
 #endif

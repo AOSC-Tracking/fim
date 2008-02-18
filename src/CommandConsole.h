@@ -61,7 +61,8 @@ class CommandConsole
 	/*
 	 * the aliases to actions (compounds of commands)
 	 */
-	typedef std::map<fim::string,fim::string> aliases_t;	//alias->commands
+	typedef std::map<fim::string,std::pair<fim::string,fim::string> > aliases_t;	//alias->[commands,description]
+	//typedef std::map<fim::string,fim::string> aliases_t;	//alias->commands
 	aliases_t aliases;	//alias->commands
 	
 	/*
@@ -171,6 +172,7 @@ class CommandConsole
 	fim::string readStdFileDescriptor(FILE* fd);
 #ifndef FIM_NOSCRIPTING
 	bool push_scriptfile(const fim::string ns);
+	bool with_scriptfile()const;
 	fim::string executeFile(const args_t &args);
 #endif
 	private:
@@ -251,9 +253,11 @@ class CommandConsole
 	fim::string get_commands_list()const;
 	public:
 
+	bool appended_post_init_command;
 	void printHelpMessage(char *pn="fim")const;
 	void appendPostInitCommand(const char* c);
 	void appendPostExecutionCommand(const fim::string &c);
+	bool appendedPostInitCommand()const;
 
 	#ifdef FIM_WINDOWS
 	Viewport* current_viewport()const;

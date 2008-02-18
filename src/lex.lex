@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -125,23 +125,21 @@ STRINGC_DQ {STRINGC}|\'
 "do" return DO;
 
 
-\'((\\\')|[^\'])*\' {
-	trec(yytext+1,"n\\\'","\n\\\'");
-	qastrcpy(yylval.sValue,yytext);;
-	return STRING;
-	}
-
-\"((\\\")|[^\"])*\" {
-	trec(yytext+1,"n\\\"","\n\\\"");
-	qastrcpy(yylval.sValue,yytext);;
-	return STRING;
-	}
-
 ([gwibv]:)?{ID}	{
 	astrcpy(yylval.sValue,yytext);
 	//tl(yylval.sValue);
 	// tolower breaks aliases, but it would be useful on  keywords, above..
 	return IDENTIFIER;
+	}
+
+"0"[0-9]+ {
+	yylval.iValue = strtol(yytext,NULL,8);
+	return INTEGER;
+	}
+
+"0x"[0-9]+ {
+	yylval.iValue = strtol(yytext,NULL,16);
+	return INTEGER;
 	}
 
 [0-9]+	{
@@ -159,10 +157,26 @@ STRINGC_DQ {STRINGC}|\'
 	return INTEGER;
 	}
 
-{DIGIT}+"."{DIGIT}* {
-	//yylval.fValue = atof(yytext);
-	yylval.fValue = atof(yytext);
+"'"{DIGIT}+"."{DIGIT}*"'" {
+	yylval.fValue = atof(yytext+1);
 	return FLOAT;
+	}
+
+"\""{DIGIT}+"."{DIGIT}*"\"" {
+	yylval.fValue = atof(yytext+1);
+	return FLOAT;
+	}
+
+\'((\\\')|[^\'])*\' {
+	trec(yytext+1,"n\\\'","\n\\\'");
+	qastrcpy(yylval.sValue,yytext);;
+	return STRING;
+	}
+
+\"((\\\")|[^\"])*\" {
+	trec(yytext+1,"n\\\"","\n\\\"");
+	qastrcpy(yylval.sValue,yytext);;
+	return STRING;
 	}
 
 {SYMBOL} {

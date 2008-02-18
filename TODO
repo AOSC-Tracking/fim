@@ -2,21 +2,30 @@
 
 This file is a melange of ideas aimed towards further development.
 If you are interested into Fim internals, philosophy, and evolution, you
-are welcome to read this file.
-Of course, the BUGS file is a source of constant inspiration for further work, too.
+are welcome to read this file, and subscribe to the fim-devel mailing list, 
+( fbi-improved-devel@nongnu.org ).
 
-If you intend to learn about Fim, please read the program documentation  in the
- doc directory first.
-Warning : Stuff in this file could be outdated, but be necessary for further inspiration.
+Of course, the BUGS file is a source of constant inspiration (we could say,
+of a maniacal taste ) for further work, too.
+
+If you just intend to learn moare about Fim, please read the program
+documentation in the "doc" directory first.
+
+Warning : Stuff in this file could be outdated, but necessary for further
+inspiration.
 
 -------------------------------------------------------------------------------
 	Current development directions
 
 
-20080202	see if the boost library could be useful to us
-20080127	to detect if running under screen and run accordingly ;)
+20080216	add a third optional argument to bind : a description
+20080216	add textureview mode
+20080216	resuscitate rotation, inversion and filtering code from fbi
+20080216	hardcode CFLAGS and such variables in a fim executable at compile time
+20080216	add CFLAGS=-march=pentium4 ... and such optimization checks to the configure script
+20080127	to detect exactly if running under screen and run accordingly ;)
 20080127	think about a multi-monitor strategy for a single instance of Fim: note that currently it is possible to specify a framebuffer device (therefore a monitor) via -d (--device)
-20080126	time to think about an /etc/fimrc
+20080126	time to think about an /etc/fimrc at installation time
 20080106	add examples/aliases to send emails with attached image from within fim
 20080103	create a script to make a fimrc man page from fimrc
 20071230	UNIX domain sockets communication and multithreaded Fim
@@ -39,7 +48,6 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 20071026	investigate issues related to UTF-8, charset, and mapping stuff vs raw console modes..
 20071025	introduce a namespace : 'e:', to get environment variables!
 20071021	study context-sensitive command completion (so, with pre-parsing.. implying a modified parsing scheme!)
-20071021	think about a finite state machine capable of interpretating [n]<command key> a' la vim
 20071006	implement mechanisms or policies for namespace inheritage on windows split
 20070925	update notices regarding file format compatibilities in the man pages
 20070924	-i option to read an image file from stdin
@@ -50,7 +58,6 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 20070920	a command to exit from a script immediately
 20070920	printing support ? :)
 20070920	as much as possible of Vim's language intuitive syntax
-20070919	docs : a comparative table between image viewers to show the Fim niche
 20070903	these features are currently going to be worked in the near future:
 			- the combined window+viewport subsystem
 			- move as much as possible of Fim to be scriptable. variables in primis!
@@ -65,10 +72,13 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 20070812	examine fbi's weak points like http://freshmeat.net/articles/view/2203/ and fix them in Fim, if present.
 20070812	study the benefits of integration with libraries like:
 		DirectFB : for a simpler driver and display mechanism
+		SDL : to use X
 		MXK : for fancy input devices and capabilities
+		BOOST
+		cacalib
+		aalib
 		...
 20070812	integrate the freshmeat-announce(freshmeat-submit script
-20070811	to familiarize with AC_PREREQ and AM_INIT_AUTOMAKE to a rudimentary dependency check for maintainers
 20070810	the time is right for a massive fimrc rewrite and example scripts:
 		you could also write a little cookbook in the documentation, 
 		with examples like :
@@ -83,10 +93,7 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 	- integrate with some scripting language (perl, python)
 20070417	It has come the time to decide the future developments of Fim.
 	A lot of doubts arose. Here they are:
-	- integration of the command line completion with the lexer/parser, to
-	  gain consistency
-	- introduction of a windowing system (yes, a wierd thing), but this
-	  would imply a prior reordering of the underlying Fbi code
+	- integration of the command line completion with the lexer/parser, to gain consistency
 	- decisions about the nature of the language:
 	  - should the variables be accessed like Bash,Perl, or C?
 	  - should strings exist?
@@ -96,8 +103,6 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 	  - should multi (quad/..) options exist (like in Mutt) ?
 	- could it be nice to attach options set to an image/browser (e.g.: 
 	  autowidth in only a window in a multiwindow scenario )?
-	- once the core of Fim is clean enough, would it be the moment of porting 
-	  it to X and/or aalib/cacalib/directFB ?
 	- integration with external libraries/scripts/etc.. ?
 
 	These issues need reflection and study of the practical and theoretical
@@ -107,7 +112,6 @@ Warning : Stuff in this file could be outdated, but be necessary for further ins
 	structure and converting the odd Fbi code in elegant, or possibly more
 	optimized, (especially the hacked, critical parts concerning mirroring
 	and flipping! ) Fim code.
-	- it would be nice to use autoconf and/or automake to automate builds..
 -------------------------------------------------------------------------------
 Optimization:
 20070418	Got ~400% speedup on image display thanks to trivial changes in
@@ -144,7 +148,6 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 20070303	update the while construct documentation and fix the while command execution bugs 
 20070303	add an interface for setting exitBinding (now Enter!)
 20070306	primary goals : documentation and warning messages!
-20070306	add a way to dump to stdout the default configuration file contents
 20070210	fix properly the file parser (comments problems!) and max script filelength limit
 20070210	add an interface to modify key bindings and keycode bindings.
 20070401	variables : $VARNAME or $(VARNAME) or VARNAME ?
@@ -167,7 +170,6 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 20070201	cwd,ls,pwd,stat,file...
 20070201	--norc, --rc= mechanisms
 20070208	? rewrite the parser in full C++ or traditional, clean C
-20070201	asymmetric scaling
 
 	MISC IDEAS :
 20070303
@@ -203,3 +205,4 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 	TIPS
 20070302	use __FUNCTION__ : is not ANSI, but GCC
 20070303	realtime clock... -lrt cannot  be used with Fim
+

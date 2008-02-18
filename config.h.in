@@ -55,13 +55,22 @@
 #undef FIM_RANDOM
 
 /* */
+#undef FIM_READ_DIRS
+
+/* */
 #undef FIM_READ_STDIN
 
 /* */
 #undef FIM_RECORDING
 
 /* */
+#undef FIM_RECURSIVE_DIRS
+
+/* */
 #undef FIM_REMOVE_FAILED
+
+/* */
+#undef FIM_SKIP_KNOWN_FILETYPES
 
 /* */
 #undef FIM_SWITCH_FIXUP

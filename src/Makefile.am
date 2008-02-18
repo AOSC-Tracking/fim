@@ -110,6 +110,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	interpreter.cpp \
 	string.cpp
 
+CommandConsole.o: conf.h
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \

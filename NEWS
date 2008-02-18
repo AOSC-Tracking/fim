@@ -4,11 +4,12 @@
         	Version 0.2
  
  * internal windowing (with splitting, resizing, swapping) support
- * vim-styled variable scoping g:,i:,v:,w: (local variables)
- * .xcf, .fig, .dia, .svg files supported via wrapper calls
+ * .xcf, .fig, .dia, .svg files now viewable via wrapper calls
+ * introduced interactive command iteration ( in the [n]<command key> form )
  * fim will try to run under screen and over ssh now
- * enriched compile-time options via the ./configure script
  * custom framebuffer device, fonts and gamma are supported
+ * enriched compile-time options via the ./configure script
+ * vim-styled variable scoping g:,i:,v:,w: (local variables)
  * eradicated some bugs
  * introduced new variables, commands
 

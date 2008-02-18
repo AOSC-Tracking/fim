@@ -45,6 +45,40 @@ class Var
 		if(type=='f')this->f=v.f;
 	}
 
+	Var(float v)
+	{
+		type='f';
+		f=v;
+	}
+
+	Var(int v)
+	{
+		type='i';
+		i=v;
+	}
+
+	Var()
+	{
+		type='i';
+		const char *s="0";
+		if(type=='i')i=atoi(s);
+		else if(type=='f')f=atof(s);
+		else if(type=='s')this->s=s;
+		else i=0;
+	}
+
+	Var(const fim::string s)
+	{
+		type='s';
+		this->s=s.c_str();
+	}
+
+	Var(const char*s)
+	{
+		type='s';
+		this->s=s;
+	}
+/*
 	Var(const char*s="0",int type_='i')
 	{
 		type=type_;
@@ -53,7 +87,7 @@ class Var
 		else if(type=='s')this->s=s;
 		else i=0;
 	}
-
+*/
 /*	void operator= (int   i){if(type=='i')this->i=i;}
 	void operator= (float f){if(type=='f')this->f=f;}*/
 	void operator= (int   i){type='i';this->i=i;}
@@ -71,7 +105,7 @@ class Var
 
 	float getFloat()const{return(type=='f')?f:
 		(type=='i'?
-		 	((int)f):
+		 	((float)i):
 			((type=='s')?atof(s.c_str()):0.0f)
 			)
 			;}
@@ -91,10 +125,34 @@ class Var
 
 	operator int()const{return getInt();}
 	operator float()const{return getFloat();}
-	bool operator==(const Var &v)const
+	operator string()const{return getString();}
+
+	/*
+	 * These should be refined some day :)
+	 * */
+	Var  operator<=(const Var &v)const { return getFloat()<=v.getFloat(); }
+	Var  operator>=(const Var &v)const { return getFloat()>=v.getFloat(); }
+	Var  operator< (const Var &v)const { return getFloat()< v.getFloat(); }
+	Var  operator> (const Var &v)const { return getFloat()> v.getFloat(); }
+	Var operator!=(const Var &v)const {
+		if(getType()=='i' && v.getType()=='i')return getInt  ()!=v.getInt  (); 
+		if(getType()=='f' && v.getType()=='f')return getFloat()!=v.getFloat(); 
+		return getString()!=v.getString(); 
+	}
+	Var operator==(const Var &v)const { return 1-(int)(*this != v); }
+	Var operator/ (const Var &v)const { return getFloat()/(v.getFloat()!=0.0?v.getFloat():1); }
+	Var operator* (const Var &v)const { return getFloat()*v.getFloat(); }
+	Var operator+ (const Var &v)const { return getFloat()+v.getFloat(); }
+	Var operator- (const Var &v)const { return getFloat()-v.getFloat(); }
+	Var operator- ()const { return - getFloat(); }
+	Var operator% (const Var &v)const { return getInt()%v.getInt(); }
+	Var operator&&(const Var &v)const { return getInt()&&v.getInt(); }
+	Var operator||(const Var &v)const { return getInt()||v.getInt(); }
+
+/*	Var operator==(const Var &v)const
 	{
 		return (type==v.getType()) && (i==v.getInt());
-	}
+	}*/
 };
 }
 

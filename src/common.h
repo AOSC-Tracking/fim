@@ -48,6 +48,8 @@ char * dupnstr (double n);
 char * dupnstr (int n);
 int fim_rand();
 
+bool regexp_match(const char*s, const char*r, int ignorecase=1, int ignorenewlines=0);
+
 /* exceptions */
 typedef int FimException;
 #define FIM_E_NO_IMAGE 1

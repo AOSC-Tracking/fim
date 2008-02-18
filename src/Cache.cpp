@@ -196,7 +196,7 @@ namespace fim
 		/*	load attempt as alternative approach	*/
 		try
 		{
-		if( ni = new Image(fname) )
+		if( ( ni = new Image(fname) ) )
 		{	
 			if( cacheNewImage( ni ) ) return ni;
 		}
@@ -221,7 +221,7 @@ namespace fim
 
 		/*	cache lookup */
 		this->cached_elements();
-		if(ni = this->imageCache[fim::string(fname)])
+		if( ( ni = this->imageCache[fim::string(fname)]) )
 		{
 			this->mark_used(fname);
 			return ni;

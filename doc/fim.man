@@ -1,6 +1,6 @@
 .c $Id$
-.c .TH fim 1 "(c) 2007 Michele Martone"
-.TH fim 1
+.TH fim 1 "(c) 2007-2008 Michele Martone"
+.c .TH fim 1
 .SH NAME
 fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
@@ -240,7 +240,7 @@ Michele Martone <dezperado _ GUESS _ autistici.org> is the author of fim, "fbi i
 Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007 Michele Martone <dezperado _ GUESS _ autistici.org>
+Copyright (C) 2007-2008 Michele Martone <dezperado _ GUESS _ autistici.org>
 Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>
 .P
 This program is free software; you can redistribute it and/or modify

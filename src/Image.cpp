@@ -142,8 +142,8 @@ namespace fim
 		setGlobalVariable("sheight",(int) img->i.height);
 		setGlobalVariable("swidth" ,(int) img->i.width );
 		setGlobalVariable("_fim_bpp" ,(int) framebufferdevice.fb_var.bits_per_pixel );
-		setGlobalVariable("scale"  ,newscale*100);
-		setGlobalVariable("ascale" ,ascale);
+		//setGlobalVariable("scale"  ,newscale*100);
+		//setGlobalVariable("ascale" ,ascale);
 		return true;
 	}
 
@@ -240,7 +240,11 @@ namespace fim
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
 
 		int neworientation=getOrientation();
-		float newascale=getFloatVariable("ascale"); if(newascale<=0.0) newascale=1.0;
+		float	gascale=getGlobalFloatVariable("ascale"),
+			newascale=getFloatVariable("ascale");
+		newascale=(newascale>0.0 && newascale!=1.0)?newascale:((gascale>0.0 && gascale!=1.0)?gascale:1.0);
+		
+		//float newascale=getFloatVariable("ascale"); if(newascale<=0.0) newascale=1.0;
 		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
 		orientation=((neworientation%4)+4)%4; // fix this
 

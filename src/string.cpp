@@ -2,7 +2,7 @@
 /*
  string.cpp : A reimplementation of string class
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -406,6 +406,65 @@ namespace fim
 		string res(*this);
 		res+=s.c_str();
 		return string(res);
+	}
+
+	bool string::re_match(const char*r)const
+	{
+		/*
+		 * each occurrence of regular expression r will be substituted with t
+		 *
+		 * FIXME : return values could be more informative
+		 * */
+		regex_t regex;
+		const int nmatch=1;
+		regmatch_t pmatch[nmatch];
+
+		if( !r || !*r )
+			return false;
+
+		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE ) ==-1 )
+			return false;
+
+		if(regexec(&regex,c_str(),nmatch,pmatch,0)==0)
+		{
+			regfree(&regex);
+			return true;
+		}
+		return false;
+	}
+
+	void string::substitute(const char*r, const char* s, int flags)
+	{
+		/*
+		 * each occurrence of regular expression r will be substituted with t
+		 *
+		 * FIXME : return values could be more informative
+		 * */
+		regex_t regex;
+		const int nmatch=1;
+		regmatch_t pmatch[nmatch];
+
+		if( !r || !*r || !s )
+			return;
+
+		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE | flags ) ==-1 )
+			return;
+
+		int off=0;
+		const int s_len=strlen(s);
+		while(regexec(&regex,off+c_str(),nmatch,pmatch,0)==0)
+		{
+			/*
+			 * please note that this is not an efficient subsitution implementation.
+			 * */
+			std::string ss = substr(0,pmatch->rm_so);
+			ss+=s;
+			ss+=substr(pmatch->rm_eo,this->size());
+			*this=ss.c_str();
+
+		}
+		regfree(&regex);
+		return;
 	}
 #endif
 }

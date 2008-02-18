@@ -10,7 +10,7 @@
 	7		Technical overview (important for patch writers)
 	8		Gentoo Installation Tips
 	9		License
-	10		Contacts, URLs
+	10		Contacts, mailing lists, URLs
 ================================================================================
 	1		Overview
 ================================================================================
@@ -78,7 +78,8 @@ Implemented features:
  - stuff (un)usual for an image viewer (setting scale factor, auto width scale, 
    auto heigth scale, marking of 'interesting' files, sorting of files in the
    list, recording/replaying of sessions, repeat last action )
- - image flipping, mirroring, rotation, stretching
+ - image flipping, mirroring, rotation, stretching (asymmetric scaling)
+ - command iteration ( in the [n]<command key> form )
  - external script file execution
  - system call
  - image caching (optional)
@@ -129,6 +130,7 @@ Yet unimplemented features :
  saves last folder         *                                 *
  runs under screen                                     *
  standard input file list read                         *
+ mirroring                 ....
 
  ______________________________________________________________________________
  

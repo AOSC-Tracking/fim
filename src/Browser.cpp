@@ -21,6 +21,8 @@
 
 #define firstorzero(x) (x.size()?((int)(x[0])):0)
 
+#include <dirent.h>
+#include <sys/types.h>
 #include "fim.h"
 
 namespace fim
@@ -677,11 +679,64 @@ namespace fim
 		return false;
 	}
 
+#ifdef FIM_READ_DIRS
+	bool Browser::push_dir(fim::string nf)
+	{	
+		int d_n;
+		DIR *dir;
+		struct dirent *de;
+		fim::string f;
+
+		/*	we want a dir .. */
+		if( !is_dir( nf ))return false;
+		
+		if ( ! ( dir = opendir(nf.c_str() ) ))
+			return false;
+
+		f+=nf;
+		f+="/";
+		//are we sure -1 is not paranoid ?
+		while( ( de = readdir(dir) ) != NULL )
+		{
+			if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] ) continue;
+			if( de->d_name[0] == '.' && !de->d_name[1] ) continue;
+#if 1
+			/*
+			 * We follow the convention of ignoring hidden files.
+			 * */
+			if( de->d_name[0] == '.' ) continue;
+#endif
+			
+			/*
+			 * Warning : this is dangeous, as following circualr links could cause memory exhaustion.
+			 * */
+			if(is_dir( f+fim::string(de->d_name)))
+#ifdef FIM_RECURSIVE_DIRS
+				push_dir(f+fim::string(de->d_name));
+#else
+				continue;
+#endif
+			else 
+				push(f+fim::string(de->d_name));
+		}
+		return closedir(dir)!=NULL;
+	}
+
+	bool Browser::is_dir(fim::string nf)const
+	{
+		struct stat stat_s;
+		/*	if the directory doesn't exist, return */
+		if(-1==stat(nf.c_str(),&stat_s))return false;
+		if( ! S_ISDIR(stat_s.st_mode))return false;
+		return true;
+	}
+#endif
+
 	bool Browser::push(fim::string nf)
 	{	
 		/*
 		 * FIX ME:
-		 * no repetition!????
+		 * are we sure we want no repetition!????
 		 * */
 		
 #ifdef FIM_CHECK_FILE_EXISTENCE
@@ -698,6 +753,9 @@ namespace fim
 		//if(  S_ISBLK(stat_s.st_mode))return "";
 		/*	if it is a directory , return */
 		//if(  S_ISDIR(stat_s.st_mode))return "";
+#ifdef FIM_READ_DIRS
+		if(  S_ISDIR(stat_s.st_mode))return push_dir(nf);
+#endif
 		/*	we want a regular file .. */
 		if(! S_ISREG(stat_s.st_mode))
 		{

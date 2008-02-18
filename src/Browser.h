@@ -135,6 +135,10 @@ class Browser
 	fim::string pop_current(const args_t &args);
 	fim::string no_image(const args_t &args);
 	bool present(const fim::string nf);
+#ifdef FIM_READ_DIRS
+	bool is_dir(fim::string nf)const;
+	bool push_dir(fim::string nf);
+#endif
 	bool push(fim::string nf);
 
 	fim::string display();

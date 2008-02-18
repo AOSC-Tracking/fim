@@ -15,6 +15,7 @@ EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL  README README.FIRST TODO \
 	Makefile.am configure.ac configure \
 	AUTHORS ChangeLog NEWS aclocal.m4 config.h.in \
 	autogen.sh \
+	scripts \
 	depcomp missing install-sh
 
 # mhmhmhm 
@@ -23,11 +24,16 @@ EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL  README README.FIRST TODO \
 srcdir = src
 
 # still unfinished
-#signed-dist: $(distdir).tar.gz.sig
+signed-dist: $(distdir).tar.gz.sig
 
-#%.sig: %
-#	        gpg -sbav -u 0x.. $@ $<
+%.sig: %
+	        gpg -sbv -u EF1258B8 $@ $<
+#	        gpg -sbav -u EF1258B8 $@ $<
 
+
+# this rule is deprecated, too
+sanity-check:	all
+	@./src/fim -E scripts/tests/sanity.fim
 
 # this rule is deprecated, too
 test:	all
@@ -92,13 +98,12 @@ news: freshmeat mail-announce
 mail-announce:
 	@ figlet fim | mutt -s "fim-`cat VERSION` release" "fbi-improved-devel@nongnu.org"  -i -
 
-
 release: upload freshmeat
 
 upload: savannah 
 
-savannah:
-	echo -en "cd /releases/fbi-improved\nput fim-${fim_cv_version}.tar.gz"  | sftp "dezperado@dl.sv.gnu.org" -b -
+savannah: signed-dist dist
+	echo -en "cd /releases/fbi-improved\nput $(distdir).tar.gz.sig\n put fim-${fim_cv_version}.tar.gz"  | sftp "dezperado@dl.sv.gnu.org" -b 
 	lynx -dump dl.sv.gnu.org/releases/fbi-improved
 
 savannah-lookup:
