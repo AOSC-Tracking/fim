@@ -1,4 +1,30 @@
 ------------------------------------------------------------------------
+r119 | dezperado | 2008-02-18 15:23:07 +0000 (Mon, 18 Feb 2008) | 16 lines
+
+Updated string and float representations and operators.
+Removed some parser conflicts.
+Octal and hexadecimal integer constant representation now supported.
+Moved int ex() to Var ex() for this.
+Changed the policy of -E (no files should be in list prior to early Fim exit).
+Fixed some -Wall warning-triggering stuff.
+Asymmetric scaling aliases introduced.
+Directory read feature introduced (FIM_READ_DIRS,FIM_RECURSIVE_DIRS) (though disabld by default).
+Random numbers pour out of /dev/urandom now.
+Regexp substitution and matching into the string class introduced.
+Var class has higher dignity now and so was updated.
+Help optional argument added to command aliases.
+Introduced FIM_SKIP_KNOWN_FILETYPES feature (disabled by default).
+Introduced sanity check script : scripts/tests/sanity.fim.
+Retouched man pages and docs (which still awaits some formalization).
+
+------------------------------------------------------------------------
+r118 | dezperado | 2008-02-14 15:58:20 +0000 (Thu, 14 Feb 2008) | 4 lines
+
+Added and documented a functionality for numerically specifying the iteration of a command, in interactive mode.
+Documented the external converting programs compatibility.
+Set the ChangeLog as the subversion log.
+
+------------------------------------------------------------------------
 r117 | dezperado | 2008-02-03 18:46:05 +0000 (Sun, 03 Feb 2008) | 4 lines
 
 Added const specifiers to many methods in many classes, and adopted more typedefs.

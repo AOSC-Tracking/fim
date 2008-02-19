@@ -121,7 +121,6 @@ STRINGC_DQ {STRINGC}|\'
 "while" return WHILE;
 "if" return IF;
 "else" return ELSE;
-	/*"print" return PRINT;*/
 "do" return DO;
 
 

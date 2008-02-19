@@ -48,7 +48,6 @@ nodeType *fid(float f);
 nodeType *con(int value);
 nodeType *fcon(float fValue);
 nodeType *scon(char* s);
-nodeType *xscon(char*s);
 nodeType *vscon(char*s,int typeHint);
 void freeNode(nodeType *p);
 Var ex(nodeType *p);
@@ -72,7 +71,7 @@ void yyerror(char *s);
 %token <sValue> IDENTIFIER
 //%token <sValue> NEWLINE
 %token <sValue> COMMAND		//unimplemented yet
-%token WHILE IF DO PRINT ELSE SYSTEM AND OR NOT
+%token WHILE IF DO ELSE SYSTEM AND OR NOT
 //%nonassoc IFX
 //%nonassoc FI
 //%nonassoc ELSE
@@ -99,7 +98,8 @@ void yyerror(char *s);
 program:
 	//function { ; /*exit(0);*/ }
 //	func_dec { ; }
-	stmt_list { ex($1); freeNode($1); }
+	stmt { ex($1); freeNode($1); }
+	| stmt_list { ex($1); freeNode($1); }//conflict
 	;
 
 //func_dec:
@@ -115,20 +115,10 @@ program:
 //	;
 
 stmt:
-//	PRINT expr { $$ = opr(PRINT, 1, $2); }
-
-//	   SYSTEM args        { $$ = opr('x',2,scon(dupstr("system")),$2); }
 	   NOT args        { $$ = opr('x',2,scon(dupstr("system")),$2); }
-//	| '!' args { $$ = opr('x',2,scon("echo"),$2);  }
-//	| PRINT STRING { $$ = opr(PRINT, 1, scon($2)); }
-//	| PRINT args { $$ = opr('x',2,scon(dupstr("echo")),$2);  } //candidate for deletion
-//	| STRING { $$ = scon($1); }
-//	| IDENTIFIER { $$ = xscon($1); }
+//	|  SYSTEM args        { $$ = opr('x',2,scon(dupstr("system")),$2); }
 	| INTEGER IDENTIFIER { if($1>0){$$ = opr('r',2,opr('x',1,scon($2)),con($1)); }}
 	| IDENTIFIER      { $$ = opr('x',1,scon($1));     }
-//	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,dupstr("\"ciao\"")))); }
-//	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr(3))))); }
-//	| INTEGER         { $$ = opr('x',2,scon(dupstr("echo")),opr('a',1,opr('a',1,scon(dupstr("ciao"))))); }
 	| REGEXP { $$ = opr('x',2,scon(dupstr("regexp_goto")),opr('a',1,opr('a',1,scon($1)))); }
 	| '+' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
 	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
@@ -138,19 +128,14 @@ stmt:
 	| INTEGER'%'{{$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}}
 	| '-' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
 	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+	// $ and ^ work too (see lex.lex)
 	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
-//	| expr { $$ = opr(PRINT, 1, $1); }
-//	| '$'             { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
-//	| '^'             { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
 	| IDENTIFIER args { $$ = opr('x',2,scon($1),$2);  }
 	| INTEGER IDENTIFIER args { if($1>0){$$ = opr('r',2,opr('x',2,scon($2),$3),con($1)); }}
-//	| IDENTIFIER '=' expr  { $$ = opr('=', 2, vscon($1,'i'), $3); }
-//	| IDENTIFIER '=' FLOAT { $$ = opr('=', 2, vscon($1,'f'), fcon($3)); }
-//	| IDENTIFIER '=' STRING{ $$ = opr('=', 2, vscon($1,'s'), scon($3)); }
 	| IDENTIFIER '=' arg { $$ = opr('=', 2, vscon($1,'a'), $3); }
 //	| NEWLINE { /* this still doesn't work as we would like to */ }
 //	| stmt ';' { $$ = $1; } // new
-	| stmt_block ';' { $$ = $1; } // new
+	| stmt_block ';' { $$ = $1; } // conflict
 	;
 
 args:
@@ -159,12 +144,8 @@ args:
 	;
 arg:
 	  expr { $$ = opr('a',1,  $1 ); }
-//	| STRING   { $$ = opr('a', 1, scon($1)); }
-//	| INTEGER  { $$ = opr('a', 1, scon($1)); }
-//	| IDENTIFIER { $$ = vscon($1,'v');  } //necessary conflict
-	| arg '.' arg { $$ = opr('.', 2, $1, $3); }
-//	| arg '.' arg { $$ = opr('a',1,opr('.', 2, $1, $3)); }
-//	| '(' expr ')'  { $$ = opr('a',1,  $2 ); }
+//	| arg '.' arg { $$ = opr('.', 2, $1, $3); }
+	| expr '.' expr { $$ = opr('.', 2, $1, $3); }
 	;
 
 stmt_block:
@@ -177,8 +158,8 @@ stmt_block:
 	| WHILE '(' expr ')' stmt_block { $$ = opr(WHILE, 2, $3, $5); }
 	| DO stmt_block WHILE '(' expr ')' { $$ = opr(WHILE, 2, $5, $2); }
 	| IF '(' expr ')' stmt_block { $$ = opr(IF, 2, $3, $5); }
-	| IF '(' expr ')' '{' stmt_list '}' ELSE stmt_block { $$ = opr(IF, 3, $3, $6, $9); }
-//	| IF '(' expr ')' stmt_block ELSE stmt_block { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
+//	| IF '(' expr ')' '{' stmt_list '}' ELSE stmt_block { $$ = opr(IF, 3, $3, $6, $9); }
+	| IF '(' expr ')' stmt_block ELSE stmt_block { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
 	;
 	
 
@@ -195,7 +176,6 @@ expr:
 	| FLOAT   { $$ = fcon($1); }
 	| STRING  { $$ = scon($1); }
 //	| STRING   { $$ = opr('a', 1, scon($1)); }
-	//  INTEGER { $$ = opr('+', 2, con($1), con(0)); }
 	| IDENTIFIER { $$ = vscon($1,'v');  }
 	| NOT expr { $$ = opr('!', 1, $2); }
 	| expr '%' expr { $$ = opr('%', 2, $1, $3); }
@@ -212,7 +192,7 @@ expr:
 	| expr NE expr { $$ = opr(NE, 2, $1, $3); }
 	| expr EQ expr { $$ = opr(EQ, 2, $1, $3); }
 //	| '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } //conflicts
-	| '-' expr %prec UMINUS { $$ = opr('-', 2, con(0), $2); }
+	| '-' expr %prec UMINUS { $$ = opr('-', 2, con(0), $2); } // conflict
 	| '(' expr ')' { $$ = $2; }
 //	| '`' IDENTIFIER '`' { $$ = opr('x',1,scon($2)); }
 ;
@@ -226,8 +206,6 @@ expr:
 nodeType *scon(char*s)
 {
 	if(s==NULL)yyerror("TOKEN NULL!\n");
-//	printf("identifier : \"%s\" (%d)\n",s,(int)s);
-	//LEAKAGE PROBLEMS WITH DESTRUCTION! OKKIO!
 	nodeType *p;
 	size_t nodeSize;
 	/* allocate node */
@@ -236,16 +214,7 @@ nodeType *scon(char*s)
 		yyerror("out of memory");
 	/* copy information */
 	p->type = stringCon; 
-	//if((p->scon.s = (char*)calloc(1+strlen(s),1))==NULL) yyerror("out of memory");
-	//strcpy(p->scon.s,s); //OKKIO 
 	p->scon.s=s;
-//	printf("identifier : \"%s\"\n",p->scon.s);
-	return p;
-}
-nodeType *xscon(char*s)
-{
-	nodeType *p=scon(s);
-	if(p)p->type = cmdId; 
 	return p;
 }
 

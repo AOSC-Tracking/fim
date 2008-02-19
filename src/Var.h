@@ -20,8 +20,7 @@
 */
 
 /*
- * This class is horrible. Maybe it has come the time of taking advantage of using really C++
- * and using classes hierarchies.
+ * This class is horrible. 
  */
 #ifndef VAR_FBVI_H
 #define VAR_FBVI_H
@@ -43,6 +42,7 @@ class Var
 		this->type=v.type;
 		if(type=='i')this->i=v.i;
 		if(type=='f')this->f=v.f;
+		if(type=='s')this->s=v.s;
 	}
 
 	Var(float v)
@@ -103,7 +103,9 @@ class Var
 		 )
 		;}
 
-	float getFloat()const{return(type=='f')?f:
+	float getFloat()const{
+	
+	return(type=='f')?f:
 		(type=='i'?
 		 	((float)i):
 			((type=='s')?atof(s.c_str()):0.0f)
@@ -134,21 +136,53 @@ class Var
 	Var  operator>=(const Var &v)const { return getFloat()>=v.getFloat(); }
 	Var  operator< (const Var &v)const { return getFloat()< v.getFloat(); }
 	Var  operator> (const Var &v)const { return getFloat()> v.getFloat(); }
+	#define _both(t) (((getType()==t) && (v.getType()==t)))
+	#define _some_string() (getType()=='s' || v.getType()=='s')
+	#define _numeric() (!_some_string())
 	Var operator!=(const Var &v)const {
-		if(getType()=='i' && v.getType()=='i')return getInt  ()!=v.getInt  (); 
-		if(getType()=='f' && v.getType()=='f')return getFloat()!=v.getFloat(); 
-		return getString()!=v.getString(); 
+		if(_both('i'))return getInt  () !=v.getInt  (); 
+		if(_both('f'))return getFloat() !=v.getFloat();
+		if(_both('s'))return getString()!=v.getString(); 
+		return getFloat()!=v.getFloat();
 	}
 	Var operator==(const Var &v)const { return 1-(int)(*this != v); }
-	Var operator/ (const Var &v)const { return getFloat()/(v.getFloat()!=0.0?v.getFloat():1); }
-	Var operator* (const Var &v)const { return getFloat()*v.getFloat(); }
-	Var operator+ (const Var &v)const { return getFloat()+v.getFloat(); }
-	Var operator- (const Var &v)const { return getFloat()-v.getFloat(); }
-	Var operator- ()const { return - getFloat(); }
+	Var operator/ (const Var &v)const
+	{
+		if(_both('i')) return getInt()/(v.getInt()!=0?v.getInt():1); 
+		return getFloat()/(v.getFloat()!=0.0?v.getFloat():1); 
+	}
+	Var operator* (const Var &v)const
+	{
+		if(_both('i'))return getInt  ()*v.getInt  (); 
+		if(_both('f'))return getFloat()*v.getFloat();
+		if(_both('s'))return getFloat()*v.getFloat();
+		return getFloat()*v.getFloat(); 
+	}
+	Var operator+ (const Var &v)const
+	{
+		if(_both('i'))return getInt  ()+v.getInt  (); 
+		if(_both('f'))return getFloat()+v.getFloat();
+		if(_both('s'))return getFloat()+v.getFloat();//yes...
+		return getFloat()+v.getFloat(); 
+	}
+	Var operator- (const Var &v)const
+	{
+		if(_both('i'))return getInt  ()-v.getInt  (); 
+		if(_both('f'))return getFloat()-v.getFloat();
+		if(_both('s'))return getFloat()-v.getFloat();//yes...
+		return getFloat()-v.getFloat(); 
+	}
+	Var operator- ()const {
+	if(getType()=='i')return - getInt  (); 
+	if(getType()=='f')return - getFloat(); 
+	if(getType()=='s')return - getFloat(); 
+	}
 	Var operator% (const Var &v)const { return getInt()%v.getInt(); }
 	Var operator&&(const Var &v)const { return getInt()&&v.getInt(); }
 	Var operator||(const Var &v)const { return getInt()||v.getInt(); }
-
+	#undef _numeric
+	#undef _some_string
+	#undef _both
 /*	Var operator==(const Var &v)const
 	{
 		return (type==v.getType()) && (i==v.getInt());

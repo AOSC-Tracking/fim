@@ -54,7 +54,7 @@ Var ex(nodeType *p);
 /*
  *	this function evaluates a single 'arg' entry
  */
-fim::string cvar(nodeType *p)
+Var cvar(nodeType *p)
 {
 	nodeType *np=p;
   	fim::string arg;
@@ -63,7 +63,7 @@ fim::string cvar(nodeType *p)
 	for(i=0;i<p->opr.nops;++i)
 	{
 		np=(p->opr.op[i]);
-		arg+=cvar(np);
+		arg+=(string)(cvar(np).getString());
 	}
 	else
 	if(p->type == typeOpr && p->opr.oper=='a' )
@@ -87,10 +87,11 @@ fim::string cvar(nodeType *p)
 #endif
 			arg=fim::cc.getStringVariable(p->scon.s);
 	}
-	else if(p->type == intCon )arg=ex(p);
+	else if(p->type == intCon )return p->con.value;
+	else if(p->type == floatCon)return p->fid.f;
 	else
 	{
-		arg=ex(p);
+		return ex(p);
 	}
 	return arg;
 }
@@ -151,9 +152,6 @@ Var ex(nodeType *p)
 	if (!p) return 0;
 	switch(p->type)
 	{
-/*		case cmdId:
-			assert(0);
-			return -1;*/
 		case intCon:
 			return p->con.value;
 	        case floatCon:
@@ -335,7 +333,7 @@ Var ex(nodeType *p)
 				fim::cc.setVariable(s,r.c_str());
 				return iValue;
 			}
-			case UMINUS: return -ex(p->opr.op[0]); //unary minus
+//			case UMINUS: return -ex(p->opr.op[0]); //unary minus
 			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]);
 			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
 			case '-': return ex(p->opr.op[0]) - ex(p->opr.op[1]);

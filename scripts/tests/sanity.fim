@@ -1,5 +1,7 @@
 #!/usr/local/bin/fim -E
 
+# $Id$
+
 #!/usr/local/bin/fim -t -E 
 #!/usr/local/bin/fim --no-framebuffer  -E
 #!/usr/bin/env fim -E
@@ -59,7 +61,6 @@ fv="2.0";
 if ( fv )  { echo "float variables work"; }
 else { echo "float variables don't work"; return -1; }
 
-# the next constructs trigger bugs:
 if ( fv == "0.0" ) { echo "float variables don't work"; return -1; }
 else { echo "float variables work"; }
 
