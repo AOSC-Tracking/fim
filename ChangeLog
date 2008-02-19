@@ -1,4 +1,11 @@
 ------------------------------------------------------------------------
+r120 | dezperado | 2008-02-19 17:13:06 +0000 (Tue, 19 Feb 2008) | 4 lines
+
+Worked on cleaning up the parser.
+Fixed a little mixed type operators (float - integer - int).
+Marked conflicting parser rules.
+
+------------------------------------------------------------------------
 r119 | dezperado | 2008-02-18 15:23:07 +0000 (Mon, 18 Feb 2008) | 16 lines
 
 Updated string and float representations and operators.
