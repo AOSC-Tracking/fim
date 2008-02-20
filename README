@@ -291,10 +291,11 @@ the TODO file, too)!
 
 Web Page     : http://savannah.nongnu.org/projects/fbi-improved/
 Mailing List : http://savannah.nongnu.org/mail/?group=fbi-improved
+	(or http://lists.nongnu.org/mailman/listinfo/fbi-improved-devel)
 Releases     : http://download.savannah.nongnu.org/releases/fbi-improved
-Repository   : http://code.autistici.org/project/fim/
+Repository   : http://code.autistici.org/svn/fim/
 Off.  Mirror : http://www.autistici.org/dezperado/fim/
-
+ChangeLog    : http://code.autistici.org/svn/fim/ChangeLog
 
  $Id$
  vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=help:norl:

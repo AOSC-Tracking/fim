@@ -139,10 +139,15 @@ class Var
 	#define _both(t) (((getType()==t) && (v.getType()==t)))
 	#define _some_string() (getType()=='s' || v.getType()=='s')
 	#define _numeric() (!_some_string())
+	#define _p_t(op) std::cout<<op<<"("<<(char)getType()<<","<<(char)v.getType()<<")\n";
 	Var operator!=(const Var &v)const {
+		//_p_t("!=")
 		if(_both('i'))return getInt  () !=v.getInt  (); 
 		if(_both('f'))return getFloat() !=v.getFloat();
-		if(_both('s'))return getString()!=v.getString(); 
+		if(_both('s'))
+		{
+			return getString()!=v.getString(); 
+		}
 		return getFloat()!=v.getFloat();
 	}
 	Var operator==(const Var &v)const { return 1-(int)(*this != v); }

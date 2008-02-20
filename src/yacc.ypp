@@ -157,7 +157,7 @@ args:
 // a command argument is an expression or a concatenation of expressions
 arg:
 	  expr { $$ = opr('a',1,  $1 ); }
-	| expr '.' expr { $$ = opr('.', 2, $1, $3); }
+//	| expr '.' expr { $$ = opr('.', 2, $1, $3); }
 	;
 
 // a stmt_block is a block of one or more statements/statement lists
@@ -201,6 +201,7 @@ expr:
 	  INTEGER { $$ = con($1);}
 	| FLOAT   { $$ = fcon($1); }
 	| STRING  { $$ = scon($1); }
+	| expr '.' expr { $$ = opr('.', 2, $1, $3); }
 	| IDENTIFIER { $$ = vscon($1,'v');  }
 	| NOT expr { $$ = opr('!', 1, $2); }
 	| expr '%' expr { $$ = opr('%', 2, $1, $3); }

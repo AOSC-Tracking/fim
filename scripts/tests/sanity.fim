@@ -84,6 +84,26 @@ else { echo "float variables don't work"; return -1; }
 #}
 #}
 
+echo	"tab works";
+echo
+	"newline works";
+
+if
+( 1==1 )
+{
+	echo "multiline" " and multiarg constructs ".
+		"work"
+}
+else { return -1; }
+
+# the following string collation operators is still problematic
+
+if( "aba"=="a"."ba" ){echo "string collation works";}
+else {echo "string collation does not work"; return -1;}
+
+if( "aba"!="a"."sba" ){echo "string collation works";}
+else {echo "string collation does not work"; return -1;}
+
 rc=0;
 return rc;
 

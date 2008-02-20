@@ -312,7 +312,8 @@ Var ex(nodeType *p)
 			                	return fim_rand();//FIXME
 					else
 #endif
-			                	return fim::cc.getIntVariable(s);
+			                	//return fim::cc.getIntVariable(s);
+			                	return fim::cc.getStringVariable(s);
 				}
 				return -1;
 			}//'i'
@@ -331,7 +332,9 @@ Var ex(nodeType *p)
 				fim::string r=cvar(p->opr.op[1]);
 				iValue=r;
 				fim::cc.setVariable(s,r.c_str());
-				return iValue;
+			        return fim::cc.getStringVariable(s);
+				// 20080220
+				//return iValue;
 			}
 //			case UMINUS: return -ex(p->opr.op[0]); //unary minus
 			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]);

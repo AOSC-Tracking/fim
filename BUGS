@@ -1,5 +1,9 @@
 $Id$
 
+==== ISSUES UNDER REWORK
+
+20080220	the string operators and generally the Fim language are under rework
+
 ==== KNOWN ISSUES
 
 20080127	Under screen, Fim behaves well but it doesn't handle well console switching:

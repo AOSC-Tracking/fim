@@ -330,6 +330,7 @@ namespace fim
 		fim_stdin=0;
 		cycles=0;
 		setVariable("steps",50);
+//		addCommand(new Command(fim::string("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
 		addCommand(new Command(fim::string("no_image" ),fim::string("displays no image at all"),&browser,&Browser::no_image));
 		addCommand(new Command(fim::string("next" ),fim::string("displays the next picture in the list"),&browser,&Browser::next));
 		addCommand(new Command(fim::string("prev" ),fim::string("displays the previous picture in the list"),&browser,&Browser::prev));
@@ -1297,7 +1298,25 @@ namespace fim
 		return 0;
 	}
 
+#if 0
+	fim::string CommandConsole::get_expr_type(const args_t &args);
+	{
+		/*
+		 * a command to echo arguments types, for debug and learning purposes
+		 */
+		if(args.size()==0)fim::cout<<"type command\n";
+		for(unsigned int i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
+		return "";
+
+	}
+#endif
+
 	fim::string CommandConsole::echo(const args_t &args)
+	{
+		return do_echo(args);
+	}
+
+	fim::string CommandConsole::do_echo(const args_t &args)const
 	{
 		/*
 		 * a command to echo arguments, for debug and learning purposes

@@ -18,6 +18,7 @@ inspiration.
 	Current development directions
 
 
+20080219	fill in a spec file for building rpm packages
 20080216	add a third optional argument to bind : a description
 20080216	add textureview mode
 20080216	resuscitate rotation, inversion and filtering code from fbi

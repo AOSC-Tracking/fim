@@ -24,7 +24,7 @@ EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL  README README.FIRST TODO \
 srcdir = src
 
 # still unfinished
-signed-dist: $(distdir).tar.gz.sig
+signed-dist: $(distdir).tar.gz.sig $(distdir).tar.bz2.sig
 
 %.sig: %
 	        gpg -sbv -u EF1258B8 $@ $<
@@ -33,16 +33,19 @@ signed-dist: $(distdir).tar.gz.sig
 
 # this rule is deprecated, too
 sanity-check:	all
-	@./src/fim -E scripts/tests/sanity.fim
+	@./src/fim -E scripts/tests/sanity.fim -t
+
+#news-dump:
+#	awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS > f
 
 # this rule is deprecated, too
 test:	all
 	@./src/fim media/* #~/M*s/*g
 
 # this rule is old and deprecated
-tgz:	clean
-	tar -czf ../fim.`date +%Y%m%d%H%M`.tgz ../fim/*
-	ls -l ../fim*.tgz  -v
+#tgz:	clean
+#	tar -czf ../fim.`date +%Y%m%d%H%M`.tgz ../fim/*
+#	ls -l ../fim*.tgz  -v
 
 # this rule is encouraged
 report:
@@ -98,28 +101,72 @@ news: freshmeat mail-announce
 mail-announce:
 	@ figlet fim | mutt -s "fim-`cat VERSION` release" "fbi-improved-devel@nongnu.org"  -i -
 
+log: changelog
+
+changelog:
+	svn2cl
+
 release: upload freshmeat
 
 upload: savannah 
 
-savannah: signed-dist dist
-	echo -en "cd /releases/fbi-improved\nput $(distdir).tar.gz.sig\n put fim-${fim_cv_version}.tar.gz"  | sftp "dezperado@dl.sv.gnu.org" -b 
+savannah: signed-dist dist dist-bzip2
+	echo -en "cd /releases/fbi-improved\nput $(distdir).tar.gz.sig\n put fim-${fim_cv_version}.tar.gz\n put fim-${fim_cv_version}.tar.bz2\n put fim-${fim_cv_version}.tar.bz2.sig"  | sftp "dezperado@dl.sv.gnu.org" -b 
 	lynx -dump dl.sv.gnu.org/releases/fbi-improved
 
 savannah-lookup:
 	lynx -dump dl.sv.gnu.org/releases/fbi-improved
 
 # fixme : missing integration with ChangeLog file and such information
-freshmeat: savannah
-	@ echo freshmeat-announce -v "fbi-`cat VERSION`" \
+freshmeat_old: 
+	@ awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
+	@echo freshmeat-submit -v "fbi-`cat VERSION`" \
 	--project fbi-improved \
 	--license GPL \
 	--mailing-list-url      $$(cat README | grep "^Mailing List :"|sed s/^.*\ :.//g) \
 	--home-page-url         $$(cat README | grep "^Web Page  "|sed s/^.*\ :.//g) \
 	--cvs-url               $$(cat README | grep "^Repository"|sed s/^.*\ :.//g) \
-	--gzipped-tar-url       $$(cat README | grep "^Releases  "|sed s/^.*\ :.//g)/"fbi-`cat VERSION`".tar.gz \
-	--mirror-site-url       $$(cat README | grep "^Off.rror : "|sed s/^.*\ :.//g)
+	--gzipped-tar-url       $$(cat README | grep "^Releases  "|sed s/^.*\ :.//g)/"fim-`cat VERSION`".tar.gz \
+	--mirror-site-url       $$(cat README | grep "^Off.*rror : "|sed s/^.*\ :.//g) \
+	--changelog-url         $$(cat README | grep "^ChangeLog  "|sed s/^.*\ :.//g)
+	@ echo "are you sure ? (any key to abort, yes to continue)"  && read yes && [[ "$${yes}" == "yes" ]] && \
+	awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS | \
+	 freshmeat-submit -v "fbi-`cat VERSION`" \
+	--project fbi-improved \
+	--license GPL \
+	--mailing-list-url      $$(cat README | grep "^Mailing List :"|sed s/^.*\ :.//g) \
+	--home-page-url         $$(cat README | grep "^Web Page  "|sed s/^.*\ :.//g) \
+	--cvs-url               $$(cat README | grep "^Repository"|sed s/^.*\ :.//g) \
+	--gzipped-tar-url       $$(cat README | grep "^Releases  "|sed s/^.*\ :.//g)/"fim-`cat VERSION`".tar.gz \
+	--mirror-site-url       $$(cat README | grep "^Off.*rror : "|sed s/^.*\ :.//g) \
+	--changelog-url         $$(cat README | grep "^ChangeLog  "|sed s/^.*\ :.//g)
 #	--url-demo         $$(cat README | grep "^Web Page  "|sed s/^.*:.//g)
 #	--bzipped-tar-url  $$(cat README | grep "^Web Page  "|sed s/^.*:.//g)
-#	--changelog-url    $$(cat README | grep "^Web Page  "|sed s/^.*\ :.//g)/ChangeLog
+
+freshmeat-submit:
+	@echo Project: fbi-improved
+	@echo Version: `cat VERSION`
+	@echo Release-Focus: Major feature enhancements
+	@echo Hide: N
+	@echo Home-Page-URL: $$(cat README | grep "^Web Page  "|sed s/^.*\ :.//g)
+	@echo Mailing-List-URL: $$(cat README | grep "^Mailing List :"|sed s/^.*\ :.//g)
+	@echo Gzipped-Tar-URL: $$(cat README | grep "^Releases  "|sed s/^.*\ :.//g)/"fim-`cat VERSION`".tar.gz
+	@echo Bzipped-Tar-URL: $$(cat README | grep "^Releases  "|sed s/^.*\ :.//g)/"fim-`cat VERSION`".tar.bz2
+	@echo License: GPL
+	@echo Mirror-Site-URL: $$(cat README | grep "^Off.*rror : "|sed s/^.*\ :.//g)
+	@echo ChangeLog-URL: $$(cat README | grep "^ChangeLog  "|sed s/^.*\ :.//g)
+	@echo CVS-URL: $$(cat README | grep "^Repository"|sed s/^.*\ :.//g)
+	@echo 
+	@ awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
+
+freshmeat:
+	@ echo "are you sure ? (any key to abort, yes to continue)"  && read yes && [[ "$${yes}" == "yes" ]] && \
+	make freshmeat-submit | grep -v '^make\[' | freshmeat-submit
+
+commit: log
+	svn commit
+
+# This awaits completion.
+#rpm: dist
+#        rpmbuild -ta @PACKAGE@-@VERSION@.tar.gz
 

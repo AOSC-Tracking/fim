@@ -177,6 +177,8 @@ class CommandConsole
 #endif
 	private:
 	fim::string echo(const args_t &args);
+	fim::string do_echo(const args_t &args)const;
+//	fim::string get_expr_type(const args_t &args);
 	fim::string help(const args_t &args);
 	fim::string quit(const args_t &args);
 	fim::string foo (const args_t &args);
