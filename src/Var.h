@@ -141,7 +141,7 @@ class Var
 	#define _numeric() (!_some_string())
 	#define _p_t(op) std::cout<<op<<"("<<(char)getType()<<","<<(char)v.getType()<<")\n";
 	Var operator!=(const Var &v)const {
-		//_p_t("!=")
+		_p_t("!=")
 		if(_both('i'))return getInt  () !=v.getInt  (); 
 		if(_both('f'))return getFloat() !=v.getFloat();
 		if(_both('s'))
@@ -167,7 +167,7 @@ class Var
 	{
 		if(_both('i'))return getInt  ()+v.getInt  (); 
 		if(_both('f'))return getFloat()+v.getFloat();
-		if(_both('s'))return getFloat()+v.getFloat();//yes...
+		if(_both('s'))return getString()+v.getString();//yes...
 		return getFloat()+v.getFloat(); 
 	}
 	Var operator- (const Var &v)const
@@ -183,6 +183,7 @@ class Var
 	if(getType()=='s')return - getFloat(); 
 	}
 	Var operator% (const Var &v)const { return getInt()%v.getInt(); }
+//	Var operator, (const Var &v)const { return (getString()+v.getString()); }
 	Var operator&&(const Var &v)const { return getInt()&&v.getInt(); }
 	Var operator||(const Var &v)const { return getInt()||v.getInt(); }
 	#undef _numeric

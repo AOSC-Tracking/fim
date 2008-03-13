@@ -1,3 +1,11 @@
+2008-02-20 17:50  dezperado
+
+	* : This is a release candidate for 0.2.
+	  Minimal language def changes. The substantial ones will come in a
+	  future release.
+	  ChangeLog is now prettier, thanks to _ale.
+	  Makefile.am freshmeat stuff updated.
+
 2008-02-19 18:11  dezperado
 
 	* : Broke down a little more and commented the language grammar.

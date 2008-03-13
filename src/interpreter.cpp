@@ -41,7 +41,7 @@ fim::string stringsample()
  *	This code implements the interpreter of the script language
  *	It is triggered by the flex and bison files.
  *
- *	Questo codice e' una sozzura !
+ *	This code will be fully cleaned when the Fim language will settle.
  */
 std::ostream & operator<<(std::ostream &os,const nodeType &p)
 {
@@ -60,21 +60,31 @@ Var cvar(nodeType *p)
   	fim::string arg;
 	int i;
 	if(p->type == typeOpr && p->opr.oper=='.' )
+	{
 	for(i=0;i<p->opr.nops;++i)
 	{
 		np=(p->opr.op[i]);
 		arg+=(string)(cvar(np).getString());
 	}
+		return arg;//NEW 20080221
+	}
 	else
 	if(p->type == typeOpr && p->opr.oper=='a' )
+	{
 	for(i=0;i<p->opr.nops;++i)
 	{
 		//warning : only 1 should be allowed here..
 		np=(p->opr.op[i]);
 		arg=cvar(np);
 	}
+		//return arg;//NEW 20080221
+	}
 	else
-	if(p->type == stringCon )arg=(p->scon.s);
+	if(p->type == stringCon )
+	{
+		arg=(p->scon.s);
+		return arg;//NEW 20080221
+	}
 	else
 	if(p->type == vId )
 	{	
@@ -176,9 +186,16 @@ Var ex(nodeType *p)
 				return (fim::string)fim::cc.getStringVariable(p->scon.s);
 		}
 		case stringCon:
+			// a single string token was encountered
+			return Var(p->scon.s);
 		case typeOpr:	/*	some operator	*/
 		switch(p->opr.oper)
 		{
+			case '.':
+				// we use the ',' operator
+				//return (ex(p->opr.op[0]) , ex(p->opr.op[1]));
+				//string collation (we assume these are strings !)
+				return (ex(p->opr.op[0]) + ex(p->opr.op[1]));
 			case WHILE:
 				while((int)ex(p->opr.op[0]) && (fim::cc.catchLoopBreakingCommand(0)==0))
 				{
@@ -258,6 +275,7 @@ Var ex(nodeType *p)
 					  }
 					  else if( ((dp->opr.oper=='.')))
 					  {
+				  	//cout <<  "DEAD CODE\n";
 						  //probably dead code
 				          }
 					  else;
@@ -265,6 +283,7 @@ Var ex(nodeType *p)
 				  }
 			  	  else if( np->opr.oper=='.' )
 				  {
+				  	//cout <<  "DEAD CODE\n";
 					  //probably dead code
 				  }
 			  }
@@ -336,10 +355,14 @@ Var ex(nodeType *p)
 				// 20080220
 				//return iValue;
 			}
-//			case UMINUS: return -ex(p->opr.op[0]); //unary minus
 			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]);
 			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
-			case '-': return ex(p->opr.op[0]) - ex(p->opr.op[1]);
+			/* unary minus is still under definition */
+			case UMINUS:
+				return Var(0) - ex(p->opr.op[0]);
+			case '-': 
+				if ( 2==p->opr.nops) return ex(p->opr.op[0]) - ex(p->opr.op[1]);
+				else return Var(0) - ex(p->opr.op[0]);
 			case '*': return ex(p->opr.op[0]) * ex(p->opr.op[1]);
 			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]);
 			case '<': return ex(p->opr.op[0]) < ex(p->opr.op[1]);

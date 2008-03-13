@@ -1285,6 +1285,15 @@ A lot of questions still await for an answer in Fim. Here are few:
 
 <UNFINISHED>
  
+ Basic types:  
+
+ double_quoted_string : gets interpreted before evaluation
+ single_quoted_string : does not get interpreted
+ integer
+ float
+
+<UNFINISHED>
+
  What follows now is an *incomplete* and *temporary* sort of grammar for Fim.
 
  float      ::== {DIGIT}+"."{DIGIT}*

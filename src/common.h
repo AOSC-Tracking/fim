@@ -36,7 +36,8 @@ namespace fim
 
 void trec(char *str,const char *f,const char*t);
 void chomp(char *s);
-void sanitize_string_from_nongraph(char *s, int c);
+void sanitize_string_from_nongraph(char *s, int c=0);
+void sanitize_string_from_nongraph_except_newline(char *s, int c=0);
 
 using namespace fim;
 
@@ -50,6 +51,11 @@ int fim_rand();
 
 bool regexp_match(const char*s, const char*r, int ignorecase=1, int ignorenewlines=0);
 
+int strchr_count(const char*s, int c);
+int lines_count(const char*s, int cols);
+int newlines_count(const char*s);
+const char* next_row(const char*s, int cols);
+int fim_common_test();
 /* exceptions */
 typedef int FimException;
 #define FIM_E_NO_IMAGE 1

@@ -18,6 +18,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#ifndef FIM_LEX_H
+#define FIM_LEX_H
+
 typedef enum { intCon, floatCon, typeOpr, stringCon,cmdId,vId } nodeEnum;
 /* constants */
 typedef struct {
@@ -54,4 +57,6 @@ oprNodeType opr; /* operators */
 };
 } nodeType;
 extern int sym[26];
+
+#endif
 

@@ -32,9 +32,9 @@
 
 
 
+#include "DebugConsole.h"
 #include "fim.h"
 #include "FontServer.h"
-
 
 //#include "FbiStuff.h"
 //#include "FontServer.h"
@@ -121,6 +121,10 @@ void _fb_switch_signal(int signal);
 
 class FramebufferDevice
 {
+#ifndef FIM_KEEP_BROKEN_CONSOLE
+	MiniConsole mc;
+#endif
+
 	long     red_mult, green_mult;
 	long     red_dither[256];
 	long     green_dither[256];
@@ -463,6 +467,8 @@ void init_one(int32_t *lut, int bits, int shift)
 
 
 	void fb_status_screen(const char *msg, int draw);
+	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
+	void console_control(int arg);//experimental
 };
 
 }

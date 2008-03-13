@@ -113,8 +113,20 @@ void chomp(char *s)
 
 /*
  * cleans the input string terminating it when some non printable character is encountered
+ * (except newline)
  * */
-void sanitize_string_from_nongraph(char *s, int c=0)
+void sanitize_string_from_nongraph_except_newline(char *s, int c)
+{	
+	int n=c;
+	if(s)
+	while(*s && (c--||!n))if(!isgraph(*s)){*s=' ';++s;}else ++s;
+	return;
+}
+
+/*
+ * cleans the input string terminating it when some non printable character is encountered
+ * */
+void sanitize_string_from_nongraph(char *s, int c)
 {	
 	int n=c;
 	if(s)
@@ -165,7 +177,6 @@ static int pick_word(char *f, unsigned int *w)
 	if(read(fd,w,4)==4)return 0;
 	return -1;
 }
-
 
 /*
  * Will be improved, if needed.
@@ -238,4 +249,106 @@ int fim_rand()
 		return false;
 		return true;
 	}
+
+int strchr_count(const char*s, int c)
+{
+	int n=0;
+	if(!s)return 0;
+	while((s=strchr(s,c))!=NULL && *s){++n;++s;}
+	return n;
+}
+
+
+int newlines_count(const char*s)
+{
+	/*
+	 * "" 0
+	 * "aab" 0
+	 * "aaaaba\nemk" 1
+	 * "aaaaba\nemk\n" 2
+	 * */
+	int c=strchr_count(s,'\n');
+	if(s[strlen(s)-1]=='\n')++c;
+	return c;
+}
+
+const char* next_row(const char*s, int cols)
+{
+	/*
+	 * returns a pointer to the first char *after*
+	 * the newline or the last one of the string.
+	 *
+	 * for cols=3:
+	 * next_row("123\n")  -> \0
+	 * next_row("123\n4") ->  4
+	 * next_row("12")     -> \0
+	 * next_row("1234")   ->  4
+	 * */
+	const char *b=s;int l=strlen(s);
+	if(!s)return NULL;
+	if((s=strchr(s,'\n'))!=NULL)
+	{
+		// we have a newline marking the end of line:
+		// with newline-column merge (*s==\n and s+1 is after)
+		if((s-b)<=cols) return s+1;
+		// ... or without merge (b[cols]!=\n and belongs to the next line)
+		else return b+=cols;
+	}
+	return b+(l>=cols?cols:l);// no newlines in this string; we return the cols'th char or the NUL
+}
+
+int lines_count(const char*s, int cols)
+{
+	/* for cols=6
+	 *
+	 * "" 0
+	 * "aab" 0
+	 * "aaaaba\nemk" 1
+	 * "aaaaba\nemk\n" 2
+	 * "aaaabaa\nemk\n" 3
+	 * */
+	if(cols<=0)return -1;
+	if(cols==0)return newlines_count(s);
+
+	int n=0;
+	const char*b;
+	if(!s)return 0;
+	b=s;
+	while((s=strchr(s,'\n'))!=NULL && *s)
+	{
+		/*
+		 * we want a cols long sequence followed by \n
+		 * to be counted as one line, just as cols chars alone.
+		 *
+		 * moreover, we want to be able to enter in this body
+		 * even if *++s is NUL, just to perform this computation.
+		 */
+		n+=s>b?(s-1-b)/cols:0;	/* extra lines due to the excessive line width (if s==b we can't expect any wrapping, of course )	*/
+		++n;	// the \n is counted as a new line
+		b=++s;	// if now *s==NUL, strchr simply will fail
+	};
+	//printf("n:%d\n",n);
+	s=b;//*b==NUL or *b points to the last substring non newline terminated
+	n+=(strlen(s))/cols;	// we count the last substring chars (with no wrapping exceptions)
+	return n;
+}
+
+int fim_common_test()
+{	
+	/*
+	 * this function should test the correctness of the functions in this file.
+	 * it should be used for debug purposes, for Fim maintainance.
+	 * */
+	printf("%d\n",0==lines_count("" ,6));
+	printf("%d\n",0==lines_count("aab" ,6));
+	printf("%d\n",1==lines_count("aaaaba\nemk" ,6));
+	printf("%d\n",2==lines_count("aaaaba\nemk\n" ,6));
+	printf("%d\n",3==lines_count("aaaabaa\nemk\n" ,6));
+	printf("%d\n",*next_row("123\n",3)=='\0');
+	printf("%d\n",*next_row("123\n4",3)=='4');
+	printf("%d\n",*next_row("12",3)=='\0');
+	printf("%d\n",*next_row("1234",3)=='4');
+	return 0;
+}
+
 

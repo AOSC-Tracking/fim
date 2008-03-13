@@ -70,20 +70,6 @@ else { echo "float variables don't work"; return -1; }
 if ( fv != "3.0" )  { echo "float variables work"; }
 else { echo "float variables don't work"; return -1; }
 
-
-#if ( 0) 
-#{
-#if ( 0.0 == 0.0 ) 
-#{
-#	echo "floating point arithmetics works";
-#}
-#else
-#{
-#	echo "floating point arithmetics does not work";
-#	return -1;
-#}
-#}
-
 echo	"tab works";
 echo
 	"newline works";
@@ -96,12 +82,10 @@ if
 }
 else { return -1; }
 
-# the following string collation operators is still problematic
-
-if( "aba"=="a"."ba" ){echo "string collation works";}
+if( "aba"."a"=="a"."ba"."a" ){echo "string collation works";}
 else {echo "string collation does not work"; return -1;}
 
-if( "aba"!="a"."sba" ){echo "string collation works";}
+if( "aba"!="a"."sba"."a" ){echo "string collation works";}
 else {echo "string collation does not work"; return -1;}
 
 rc=0;

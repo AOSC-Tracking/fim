@@ -43,6 +43,9 @@
 #undef FIM_ITERATED_COMMANDS
 
 /* */
+#undef FIM_KEEP_BROKEN_CONSOLE
+
+/* */
 #undef FIM_NAMESPACES
 
 /* */

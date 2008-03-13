@@ -29,7 +29,7 @@
 #include "lex.h"
 #include "yacc.tab.hpp"
 #include "common.h"
-void yyerror(char *);
+void yyerror(const char *);
 #if 0
 /* we use %option noyywrap now ! */
 #ifdef YY_PROTO
@@ -123,7 +123,6 @@ STRINGC_DQ {STRINGC}|\'
 "else" return ELSE;
 "do" return DO;
 
-
 ([gwibv]:)?{ID}	{
 	astrcpy(yylval.sValue,yytext);
 	//tl(yylval.sValue);
@@ -146,7 +145,7 @@ STRINGC_DQ {STRINGC}|\'
 	return INTEGER;
 	}
 
-"$"	{
+"$" 	{
 	yylval.iValue = -1;
 	return INTEGER;
 	}
@@ -167,7 +166,7 @@ STRINGC_DQ {STRINGC}|\'
 	}
 
 \'((\\\')|[^\'])*\' {
-	trec(yytext+1,"n\\\'","\n\\\'");
+	//trec(yytext+1,"n\\\'","\n\\\'");
 	qastrcpy(yylval.sValue,yytext);;
 	return STRING;
 	}
@@ -188,6 +187,9 @@ STRINGC_DQ {STRINGC}|\'
 	}
 
 [ \t]+ { /* we ignore whitespace */ ; }
+
+
+\n { /* return NEWLINE; */ /* this works ! in this case, it means that we ignore \n */ }
 
 
 . printf("Unknown character :'%s'\n",yytext);yyerror("Unknown character");

@@ -1297,10 +1297,16 @@ int FramebufferDevice::fs_init_fb(int white8)
 	20070628 now this function adapts to the screen resolution. yet there happens 
 	something strange for a number of lines filling more than half of the screen.. 
 
+	//FIX ME : move this functionality to some new class and add ways to scroll and manipulate it
+
 	dez's
  */
 void FramebufferDevice::fb_status_screen(const char *msg, int draw)
 {	
+#ifndef FIM_KEEP_BROKEN_CONSOLE
+	return fb_status_screen_new(msg, draw,0);
+#endif
+
 	/*	WARNING		*/
 	//noDraw=0;
 	/*	WARNING		*/
@@ -1417,6 +1423,37 @@ void FramebufferDevice::fb_status_screen(const char *msg, int draw)
 	     *WARNING : note that columns and columns_data arrays are not freed and should not, as long as they are static.
 	     * */
 }
+
+void FramebufferDevice::console_control(int arg)//experimental
+{
+	if(arg==0x01)fb_status_screen_new(NULL,0,arg);//experimental
+	if(arg==0x02)fb_status_screen_new(NULL,0,arg);//experimental
+	return;
+}
+
+#ifndef FIM_KEEP_BROKEN_CONSOLE
+void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flags)//experimental
+{
+	//printf("ccd\n");
+	mc.add(msg);
+	// draw e' quasi sempre 0..
+	if(!draw )return;//CONVENTION!
+	//printf("ccc\n");
+//	mc.dump();
+	
+	//fb_clear_rect(0, fb_var.xres-1 ,0,fb_var.yres/2);
+
+//	int y = fb_var.yres - f->height - ys;
+//	int bpp_=(fb_fix.line_length/fb_var.xres);
+	fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
+
+	mc.dump();
+//	mc.dump(0,1000000);
+	return;
+}
+#endif
+
+
 
 	FramebufferDevice::FramebufferDevice():
 	fontname(NULL),

@@ -68,6 +68,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Cache.h \
 	Command.h \
 	CommandConsole.h \
+	DebugConsole.h \
 	Image.h \
 	FbiStuff.h \
 	FbiStuffList.h \
@@ -94,6 +95,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Cache.cpp \
 	Command.cpp \
 	CommandConsole.cpp \
+	DebugConsole.cpp \
 	FbiStuff.cpp \
 	FbiStuffFbtools.cpp \
 	FbiStuffLoader.cpp \

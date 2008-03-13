@@ -127,6 +127,9 @@ namespace fim
 		string(const string& s);
 		bool re_match(const char*r)const;
 		void substitute(const char*r, const char* s, int flags=0);
+		fim::string line(int ln)const;
+		int lines()const;
+		int find_re(const char*r,int *mbuf=NULL)const;
 	};
 
 

@@ -226,6 +226,8 @@ class CommandConsole
 	fim::string dump_key_codes(const args_t& args);
 	fim::string do_dump_key_codes(const args_t& args)const;
 	fim::string clear(const args_t& args);
+//	fim::string scroll_up(const args_t& args);
+//	fim::string scroll_down(const args_t& args);
 	void quit(int i=0);
 	public:
 

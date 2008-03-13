@@ -18,6 +18,10 @@ inspiration.
 	Current development directions
 
 
+20080313	make each cpp file include exactly the header files used
+20080228	to download files from a web page with fimgs
+20080223	fine grain the grammar using whitespaces too
+20080222	merge documentation for lame users
 20080219	fill in a spec file for building rpm packages
 20080216	add a third optional argument to bind : a description
 20080216	add textureview mode

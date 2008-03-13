@@ -97,6 +97,7 @@ namespace fim
 	class Command;
 	class Image;
 	class Var;
+	class MiniConsole;
 #ifdef FIM_WINDOWS
 	class Window;
 	class Viewport;
@@ -121,6 +122,7 @@ namespace rl
 #include "Viewport.h"
 #include "Window.h"
 #include "Browser.h"
+#include "DebugConsole.h"
 #include "FramebufferDevice.h"
 #include "CommandConsole.h"
 #include "fim_stream.h"

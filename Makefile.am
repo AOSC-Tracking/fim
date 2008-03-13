@@ -144,7 +144,7 @@ freshmeat_old:
 #	--bzipped-tar-url  $$(cat README | grep "^Web Page  "|sed s/^.*:.//g)
 
 freshmeat-submit:
-	@echo Project: fbi-improved
+	@echo Project: fim
 	@echo Version: `cat VERSION`
 	@echo Release-Focus: Major feature enhancements
 	@echo Hide: N

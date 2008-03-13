@@ -415,6 +415,8 @@ namespace fim
 		addCommand(new Command(fim::string("variables"  ),fim::string("displayed the associated variables"),this,&CommandConsole::variables_list));
 		addCommand(new Command(fim::string("dump_key_codes"  ),fim::string("dumps the key codes"),this,&CommandConsole::dump_key_codes));
 		addCommand(new Command(fim::string("clear"  ),fim::string("clears the virtual console"),this,&CommandConsole::clear));
+//		addCommand(new Command(fim::string("scrollup"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
+//		addCommand(new Command(fim::string("scrolldown"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
 		/*
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */
@@ -2106,6 +2108,20 @@ namespace fim
 		return "";
 	}
 
+/*	fim::string CommandConsole::scroll_up(const args_t& args)
+	{
+		if(g_fim_no_framebuffer) { } else
+			framebufferdevice.console_control(0x01);//experimental
+		return "";
+	}
+
+	fim::string CommandConsole::scroll_down(const args_t& args)
+	{
+		if(g_fim_no_framebuffer) { } else
+			framebufferdevice.console_control(0x02);//experimental
+		return "";
+	}*/
+
 	fim::string CommandConsole::clear(const args_t& args)
 	{
 		status_screen(NULL,NULL);return "";
@@ -2191,6 +2207,8 @@ namespace fim
 	 *	- desc will be placed on the left corner
 	 *	- info on the right
 	 *	pointers are not freed
+	 *
+	 *	TODO: a printf-like general functionality
 	 *
 	 *	dez's
 	 */

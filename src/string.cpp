@@ -433,6 +433,36 @@ namespace fim
 		return false;
 	}
 
+	int string::find_re(const char*r, int *mbuf)const
+	{
+		/*
+		 * each occurrence of regular expression r will be substituted with t
+		 *
+		 * FIXME : return values could be more informative
+		 * */
+		regex_t regex;
+		const int nmatch=1;
+		regmatch_t pmatch[nmatch];
+
+		if( !r || !*r )
+			return -1;
+
+		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE ) ==-1 )
+			return -1;
+
+		if(regexec(&regex,c_str(),nmatch,pmatch,0)==0)
+		{
+			regfree(&regex);
+			if(mbuf)
+			{
+				mbuf[0]=pmatch->rm_so;
+				mbuf[1]=pmatch->rm_eo;
+			}
+			return pmatch->rm_so;
+		}
+		return -1;
+	}
+
 	void string::substitute(const char*r, const char* s, int flags)
 	{
 		/*
@@ -465,6 +495,44 @@ namespace fim
 		}
 		regfree(&regex);
 		return;
+	}
+
+	int string::lines()const
+	{
+		/*
+		 * each empty line will be counted unless it is the last and not only.
+		 * */
+		const char*s=c_str(),*f=s;
+		int c=0;
+		if(!s)return 0;
+		while((s=strchr(s,'\n'))!=NULL){++c;f=++s;}
+		return c+(strlen(f)>0);
+	}
+
+	fim::string string::line(int ln)const
+	{
+		/*
+		 * returns the ln'th line of the string, if found, or ""
+		 * */
+		const char*s,*f;
+		s=this->c_str();
+		f=s;
+		if(ln< 0 || !s)return "";
+		while( ln && ((f=strchr(s,'\n'))!=NULL ) )
+		{
+			--ln;
+			s=f+1;
+		}
+		if(!ln)
+		{
+			const char *se=s;
+			if(!*s)se=s+strlen(s);
+			else se=strchr(s,'\n');
+			fim::string rs;
+			rs=substr(s-this->c_str(),se-s).c_str();
+			return rs;
+		}
+		return "";
 	}
 #endif
 }
