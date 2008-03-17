@@ -21,25 +21,26 @@
 
 #include "fim.h"
 
-
 namespace fim
 {
-/*
- *	20080313	Note that there were problems (BUGS) when adding long lines (ex.: lwidth=128).
- *	in interactive mode, typing
- *
- *	10i\t
- *	used to trigger a crash. This was fixed, but some more bugs could still reside here.
- *
- *	This class is still UNFINISHED.
- * */
 
-//#define DEBUG 1
+	extern fim::FramebufferDevice ffd;
+	extern fim::CommandConsole cc;
 
-extern fim::FramebufferDevice ffd;
-extern fim::CommandConsole cc;
 		#define min(x,y) ((x)<(y)?(x):(y))
-		int MiniConsole::dump(int f, int l)
+		int MiniConsole::line_length(int li)
+		{
+			if(li<cline)
+			{
+				return li<cline?(line[li+1]-line[li]):(ccol);
+			}
+			else
+			if(li<0)return 0;
+			// in the case li==cline, ccol==bp-buffer will do the job:
+			return ccol;
+		}
+
+		int MiniConsole::do_dump(int f, int l)const
 		{
 			/*
 			 *
@@ -49,9 +50,11 @@ extern fim::CommandConsole cc;
 			 * if f<0 and l>=0 and f+l<0 and -f<=cline,
 			 * lines from cline+f to cline-l will be dumped
 			 *
+			 * FIXME : this function returns often with -1 !
 			 * */
 			int i;
 			char *s;
+			int maxcols = ffd.fb_var.xres/ffd.fb_font_width();
 	
 			if(f<0 && l>=0 && f+l<0 && -f<=cline) { f=cline+f; l=cline-l; }
 			else
@@ -59,81 +62,42 @@ extern fim::CommandConsole cc;
 			else
 				return -1;// unsupported combination
 			
-			
-//			for(i=0  ;i<R ;++i) do_dump(i-f,s);//from 0 to l-f
-//			for(i=f ;i<=l ;++i) do_dump(i  ,s);//from 0 to l-f
-		
-			//if(!cc.drawOutput())return 0;//CONVENTION!
-			// FIX ME
-			char buf[200];
+			if(maxcols<1)return -1;
+
+			char buf[maxcols+1]; // ! we work on a stack, don't we ?! Fortran teaches us something here.
 
 			if(*bp)return -1;//if *bp then we could print garbage so we exit before damage is done
 
-			/*
-			 * resetting of f an l
-			 * */
-
-		/*
-		 * WE HAVE THE NEED TO KNOW THE CURRENT LINE LENGTH..
-		 * */
-//			static unsigned char blanks[200];
-//			static int blanked=0;
-//			if(!blanked){unsigned char *k=blanks+200;while(k-->blanks){*k=' ';}k[199]='\0';}
-
-		//	f=0; l=cline;
-		//	if(l>cline)l=cline;	// we crop to the lines that will fit in the console
-		//	if(l+1-f >rows)f=l-rows+1;	// we crop to the lines that will fit in the console
-#ifndef DEBUG
 	    		int y = 1*ffd.fb_font_height();
-//	    		for(i=0  ;i<rows ;++i)ffd.fs_puts(ffd.fb_font_get_current_font(), 0, y*(i),blanks);
-#endif
+			l-=f; l%=(rows+1); l+=f;
 	    		for(i=f  ;i<=l   ;++i)
 			{
-//				char bb[100];
-//				sprintf(bb,"%d",i);
-				//bzero(buf,sizeof(buf));
-				//strncpy(buf,line[i],min(lwidth,strlen(line[i])));
-				//strncpy(buf,line[i],(line[i]+ccol)-bp);
-				int t = i<cline?(line[i+1]-line[i]):(lwidth);
-				//while(buf[t]=='\n' && t>0)--t;
-				while(buf[t]=='\n' )--t;
-				//int t = i<cline?(line[i+1]-line[i]):(strchr(line[i],'\n')-line[i]);
+				int t = (i<cline?(line[i+1]-line[i]):(ccol))%(min(maxcols,lwidth)+1);
+				if( t<0 )return -1; // hmmm
 				strncpy(buf,line[i],t);
-				
-#if 1
-				//yes, both
-				buf[t]='\0';
-				buf[lwidth]='\0';
-#else
-				char *k=buf+t;
-				buf[lwidth]='\0';
-				while(*k){*k=' ';++k;}
-#endif				
-				sanitize_string_from_nongraph_except_newline(buf,0);
-#ifndef DEBUG
-			//	ffd.fs_puts(ffd.fb_font_get_current_font(), 0, y*(i-f), (unsigned char*)bb);
+				while(buf[t-1]=='\n' && t>0)--t;
+				buf[maxcols]='\0';
+				while(t<maxcols){buf[t++]=' ';}
+				/*
+				 * Since the user is free to set any value > 0 for the line width,
+				 * we truncate the line for the interval exceeding the screen width.
+				 * */
+				buf[ ffd.fb_var.xres/ffd.fb_font_width() ]='\0';
 				ffd.fs_puts(ffd.fb_font_get_current_font(), 0, y*(i-f), (unsigned char*)buf);
-	//			ffd.fs_puts(ffd.fb_font_get_current_font(), t, y*(i-f), (unsigned char*)(blanks+sizeof(blanks)-1-(lwidth-t)));
-#else
-				printf("%s\n",buf);
-#endif
 			}
 			return 0;
 		#undef min
 		}
 
-		void MiniConsole::add(const char* cs)
+		int MiniConsole::add(const char* cs)
 		{
-			//const char *cs=fs.c_str();
 			char *s,*b;
 			int nc;
 			int nl,ol=cline;
 
-	//		int nls=cline; //TEMPORARY
-
-			if(!cs)return;
+			if(!cs)return -1;
 			nc=strlen(cs);
-			if(!nc)return;
+			if(!nc)return -1;
 			nl=lines_count(cs,lwidth);
 			// we count exactly the number of new entries needed in the arrays we have
 			if((s=strchr(cs,'\n'))!=NULL && s!=cs)nl+=(ccol+(s-cs-1))/lwidth;// single line with \n or multiline
@@ -143,14 +107,13 @@ extern fim::CommandConsole cc;
 			 * we check for room (please note that nl >= the effective new lines introduced , while
 			 * nc amounts to the exact extra room needed )
 			 * */
-			if(nc+1+(bp-buffer)>bsize || nl+1+cline>lsize)return;//no room : realloc needed ; 1 is for secur1ty
+			if(nc+1+(bp-buffer)>bsize || nl+1+cline>lsize)return -2;//no room : realloc needed ; 1 is for secur1ty
 
 			// we copy the whole new string in our buffer
 			strcpy(bp,cs);
-			//sanitize_string_from_nongraph_except_newline(bp,0);
+			sanitize_string_from_nongraph_except_newline(bp,0);
 			s=bp-ccol;// we will work in our buffer space now on
 			b=s;
-//			std::cout << "<>:"<<bp<<" - " << ccol << " = " << s << "\n";
 			while(*s && (s=(char*)next_row(s,lwidth))!=NULL && *s)
 			{
 				line[++cline]=s;// we keep track of each new line
@@ -159,9 +122,7 @@ extern fim::CommandConsole cc;
 			}// !s || !*s
 			if(!*s && s-b==lwidth){line[++cline]=(bp=s);}// we keep track of the last line too
 			
-	//		nls=cline-nls;
-	//		char nlb[100];sprintf(nlb,"new %d lines, nl=%d!",nls,nl);
-	//		cc.set_status_bar(nlb,NULL);
+
 			if(ol==cline)
 			{
 				ccol=strlen(line[cline]);	// we update the current (right after last) column
@@ -172,23 +133,41 @@ extern fim::CommandConsole cc;
 				ccol=strlen(bp);	// we update the current (right after last) column
 				bp+=ccol;	// the buffer points to the current column
 			}
-//			std::cout << "lbp: "<< ccol<<"\n";
+			return 0;
 		}
 
-		MiniConsole::MiniConsole()
+		int MiniConsole::setRows(int nr)
 		{
-			int BS=1024;
-			bsize =BS*128;
-			lsize =BS*8;
+			/*
+			 * We update the displayed rows, if this is physically possible
+			 * */
+			int maxrows = ffd.fb_var.yres/ffd.fb_font_height();
+			if(nr>0 && nr<=maxrows)
+			{
+				rows=nr;
+				return 0;
+			}
+			return -1;
+		}
 
-			lwidth=128;
-			rows=24;
+		MiniConsole::MiniConsole(int lw, int r)
+		{
+			/*
+			 * We initialize the console
+			 * */
+			int BS=1024;	//block size of 1k
+
+			bsize = BS * 128;
+			lsize = BS *   8;
+
+			lwidth=lw<=0?128:lw;
+			rows=r<=0?24:r;
 
 			cline =0;
-			ccol=0;
+			ccol  =0;
 			buffer=(char*) calloc(bsize,sizeof(char ));
 			line  =(char**)calloc(lsize,sizeof(char*));
-			bp=buffer;
+			bp    =buffer;
 			if(!buffer || !line)
 			{
 				bsize=0;
@@ -203,24 +182,32 @@ extern fim::CommandConsole cc;
 			}
 		}
 
-		int MiniConsole::dump(int amount)
+		int MiniConsole::do_dump(int amount)const
 		{
+			/*
+			 * We dump:
+			 * 	the last amount of lines if	amount >  0
+			 * 	all the lines if		amount == 0
+			 * 	the first ones if		amount <  0
+			 * */
 			if(amount > 0)
 			{
 				// dumps the last amount of lines
 				amount=amount>cline?cline:amount;
-				dump(cline-amount+1,cline);
-			}else
+				do_dump(cline-amount+1,cline);
+			}
+			else
 			if(amount ==0)
 			{
 				// dumps all of the lines
-				dump(0,cline);
-			}else
+				do_dump(0,cline);
+			}
+			else
 			if(amount < 0)
 			{
 				// dumps the first amount of lines
-				if(-amount>=cline)cline+=amount;
-				dump(0,cline);
+				if(-amount>=cline)amount+=cline;
+				do_dump(0,-amount);
 			}
 			return 0;
 		}
@@ -255,12 +242,12 @@ extern fim::CommandConsole cc;
 			if(gbuffer==0)return  0;
 			char *p;int i,d;
 			p=buffer;
-			buffer=(char*)realloc(buffer,bsize+gbuffer*sizeof(char));
+			buffer=(char*)realloc(buffer,(bsize+gbuffer)*sizeof(char));
 			if(!buffer){buffer=p;return -1;/* no change */}
 			if((d=(p-buffer))!=0)// in the case a shift is needed
 			{
-				for(i=0;i<cline;++i)line[i]+=d;
-				bp+=d;
+				for(i=0;i<cline;++i)line[i]-=d;
+				bp-=d;
 			}
 			bsize+=gbuffer;
 			return 0;
@@ -268,7 +255,10 @@ extern fim::CommandConsole cc;
 
 		int MiniConsole::grow()
 		{
-			return grow(128,1024);
+			/*
+			 * We grow a specified amount both the line count and the line buffer.
+			 * */
+			return grow(1024,8*1024);
 		}
 
 		int MiniConsole::grow(int glines, int gbuffer)
@@ -290,12 +280,11 @@ extern fim::CommandConsole cc;
 			/* FINISH ME AND TEST ME */
 			int gb,gl;
 			gb=grow_buffer(gbuffer);
-			gl=grow_lines(gbuffer);
+			gl=grow_lines (glines);
 			return !( gb==0 && 0==gl );// 0 if both 0
 		}
 
-
-		int MiniConsole::reformat(int newlsize)
+		int MiniConsole::reformat(int newlwidth)
 		{
 			/*
 			 * This method reformats the whole buffer array; that is, it recomputes
@@ -305,37 +294,61 @@ extern fim::CommandConsole cc;
 			 *
 			 * If the new lines are longer than before, then it could not fail.
 			 * Upon a successful execution, the width is updated.
-			 *
-			 * WRITE ME
+			 * 
 			 * */
-			/* FINISH ME AND TEST ME */
-			if(newlsize==lsize)return 0;//are we sure?
-			if(newlsize> lsize)
+			int nls;
+			if(newlwidth==lwidth)return 0;//are we sure?
+			if(newlwidth< lwidth)
 			{
-				// no risk
-				return -1;
+				// realloc needed
+				if ( ( nls=lines_count(buffer, newlwidth) + 1 ) < lsize )
+				if ( grow_lines( nls )!=0 )return -1;
 			}
-			else
+			if(newlwidth> lwidth || ( lines_count(buffer, newlwidth) + 1 < lsize ) )
 			{
-				// risk
+				// no realloc, no risk
+				fim::string buf=buffer;
+				if(buf.size()==(bp-buffer))
+				{
+					ccol=0;cline=0;lwidth=newlwidth;*line=buffer;bp=buffer;
+					// the easy way
+					add(buf.c_str());// by adding a very big chunk of text, we make sure it gets formatted.
+					return 0;
+				}
+				// if some error happened in buf string initialization, we return -1
 				return -1;
 			}
 			return -1;
 		}
 
-		int MiniConsole::do_dump(int line,char *s)
-		{
-			/*
-			 * this method dumps on the output device at line 'line' the string s.
-			 * */
-			return -1;
-			//y = 1*fb_font_height();
-			//for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
-		}
 		int MiniConsole::dump()
 		{
-			dump((cline-rows+1)>=0?(cline-rows+1):0,cline);
-			return 0;
+			/*
+			 * We dump on screen the textual console contents.
+			 * We care about user set variables.
+			 * */
+			int co=getGlobalIntVariable(FV_CONSOLE_LINE_OFFSET);
+			int lw=getGlobalIntVariable(FV_CONSOLE_LINE_WIDTH );
+			int ls=getGlobalIntVariable(FV_CONSOLE_ROWS       );
+			setGlobalVariable(FV_CONSOLE_BUFFER_TOTAL,bsize);
+			setGlobalVariable(FV_CONSOLE_BUFFER_FREE,bsize-(bp-buffer));
+			setGlobalVariable(FV_CONSOLE_BUFFER_USED,(bp-buffer));
+			// we eventually update internal variables now
+			setRows(ls);
+			if( lw > 0 && lw!=lwidth ) reformat(lw);
+			if(co>=0)
+				return do_dump((cline-rows+1-co)>=0?(cline-rows+1-co):0,cline-co);
+			else
+				return do_dump(-co-1,cline);
+			return -1;
 		}
 
+		int MiniConsole::do_dump()const
+		{
+			/*
+			 * We dump on screen the textual console contents.
+			 * */
+			return do_dump((cline-rows+1)>=0?(cline-rows+1):0,cline);
+		}
 }
+

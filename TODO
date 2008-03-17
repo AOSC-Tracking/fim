@@ -18,6 +18,8 @@ inspiration.
 	Current development directions
 
 
+20080316	i need a class/superclass with the command acception functionality, in a way each object
+		would be directly responsible for a bunch of commands.
 20080313	make each cpp file include exactly the header files used
 20080228	to download files from a web page with fimgs
 20080223	fine grain the grammar using whitespaces too

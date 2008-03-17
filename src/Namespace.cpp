@@ -42,6 +42,7 @@ namespace fim
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 			if( ns == 'w' )
+#ifdef FIM_WINDOWS
 			{
 				//window variable
 				if(window)
@@ -59,6 +60,7 @@ namespace fim
 					return 0;
 			}
 			else
+#endif
 			if( ns == 'i' )
 			{
 				//image variable
@@ -100,6 +102,7 @@ namespace fim
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
+#ifdef FIM_WINDOWS
 			if( ns == 'w' )
 			{
 				//window variable
@@ -118,6 +121,7 @@ namespace fim
 					return 0;
 			}
 			else
+#endif
 			if( ns == 'i' )
 			{
 				//image variable
@@ -159,6 +163,7 @@ namespace fim
 			{
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
+#ifdef FIM_WINDOWS
 			if( ns == 'w' )
 			{
 				//window variable
@@ -177,6 +182,7 @@ namespace fim
 					return 0;
 			}
 			else
+#endif
 			if( ns == 'i' )
 			{
 				//image variable
@@ -214,6 +220,7 @@ namespace fim
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
+#ifdef FIM_WINDOWS
 			if( ns == 'w' )
 			{
 				//window variable
@@ -232,6 +239,7 @@ namespace fim
 					return 0;
 			}
 			else
+#endif
 			if( ns == 'i' )
 			{
 				//image variable
@@ -285,6 +293,7 @@ namespace fim
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
+#ifdef FIM_WINDOWS
 			if( ns == 'w' )
 			{
 				//window variable
@@ -303,6 +312,7 @@ namespace fim
 					return 0.0;
 			}
 			else
+#endif
 			if( ns == 'i' )
 			{
 				//image variable
@@ -346,6 +356,7 @@ namespace fim
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
+#ifdef FIM_WINDOWS
 			if( ns == 'w' )
 			{
 				//window variable
@@ -364,6 +375,7 @@ namespace fim
 					return "";
 			}
 			else
+#endif
 			if( ns == 'i' )
 			{
 				//image variable

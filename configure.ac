@@ -102,7 +102,7 @@ have_default_bindings=yes
 have_default_mapping=yes
 have_default_config=yes
 
-AC_ARG_ENABLE(default_bindings, AC_HELP_STRING([--disable-default_bindings], [Builtin default minimal key binding (unfinished)]),
+AC_ARG_ENABLE(default_bindings, AC_HELP_STRING([--disable-default-bindings], [Builtin default minimal key binding]),
 [       if test x$enableval = xyes; then
 		have_default_bindings=yes
 	else
@@ -110,7 +110,7 @@ AC_ARG_ENABLE(default_bindings, AC_HELP_STRING([--disable-default_bindings], [Bu
         fi
 ])
 
-AC_ARG_ENABLE(default_mapping, AC_HELP_STRING([--disable-default_mapping], [Builtin default minimal key binding (unfinished)]),
+AC_ARG_ENABLE(default_mapping, AC_HELP_STRING([--disable-default-mapping], [Builtin default minimal key mapping]),
 [       if test x$enableval = xyes; then
                 have_default_mapping=yes
 	else
@@ -118,7 +118,7 @@ AC_ARG_ENABLE(default_mapping, AC_HELP_STRING([--disable-default_mapping], [Buil
         fi
 ])
 
-AC_ARG_ENABLE(default_config, AC_HELP_STRING([--disable-default_config], [Builtin default minimal key binding (unfinished)]),
+AC_ARG_ENABLE(default_config, AC_HELP_STRING([--disable-default-config], [Builtin default minimal configuration]),
 [       if test x$enableval = xyes; then
                 have_default_config=yes
 	else
@@ -467,7 +467,7 @@ dnl ==================
 
 fim_cv_windows=yes
 
-AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Disable Fim's own windowing system.]),
+AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Disable Fim's own windowing system. (deprecated)]),
 [if test x$enableval = xno; then
         fim_cv_windows=no
 fi])

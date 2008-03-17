@@ -100,8 +100,8 @@ namespace fim
 	class MiniConsole;
 #ifdef FIM_WINDOWS
 	class Window;
-	class Viewport;
 #endif
+	class Viewport;
 	class fim_stream;
 }
 
@@ -157,5 +157,12 @@ namespace fim
 #define FV_PWD				"pwd"
 #define FV_REDUCE_FACTOR		"reduce_factor"
 #define FV_STEPS 			"steps"
+#define FV_CONSOLE_ROWS 		"rows"
+#define FV_CONSOLE_LINE_WIDTH 		"lwidth"
+#define FV_CONSOLE_LINE_OFFSET 		"console_offset"
+#define FV_CONSOLE_BUFFER_LINES		"console_lines"
+#define FV_CONSOLE_BUFFER_TOTAL		"console_buffer_total"
+#define FV_CONSOLE_BUFFER_FREE		"console_buffer_free"
+#define FV_CONSOLE_BUFFER_USED		"console_buffer_used"
 
 #endif

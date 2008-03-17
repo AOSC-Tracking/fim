@@ -39,6 +39,7 @@ void trec(char *str,const char *f,const char*t)
 	 *	this function could be optimized.
 	 */
 	if(!str || !f || !t || strlen(f)-strlen(t))return;
+	int tl=strlen(f);//table length
 	char*_p=str;
 	const char *fp;
 	const char *tp;
@@ -48,18 +49,21 @@ void trec(char *str,const char *f,const char*t)
 		tp=t;
 		while(*fp)
 		{
+			//  if the following char is backslash-escaped and is in our from-list ..
 			if( *_p == '\\' && *(_p+1) == *fp )
 			{
+				char*pp;
 				*_p = *tp;//translation	
 				++_p;  //new focus
-				char*pp;
 				pp=_p+1;
-				while(*pp){pp[-1]=*pp;++pp;}
+				while(*pp){pp[-1]=*pp;++pp;}//!*pp means we are done :)
 				pp[-1]='\0';
 				//if(*_p=='\\')++_p;//we want a single pass
-				if(*_p)++_p;//we want a single pass
+//				if(*_p)++_p;//we want a single pass // ! BUG
+				fp=f+tl;// in this way  *(fp) == '\0' (single translation pass) as soon as we continue
 				if(!*_p)return;
-				continue;
+				--_p;//note that the outermost loop will increment this anyway
+				continue;//we jump straight to while(NUL)
 			}
 			++fp;++tp;
 		}
@@ -119,7 +123,7 @@ void sanitize_string_from_nongraph_except_newline(char *s, int c)
 {	
 	int n=c;
 	if(s)
-	while(*s && (c--||!n))if(!isgraph(*s)){*s=' ';++s;}else ++s;
+	while(*s && (c--||!n))if(!isgraph(*s)&&*s!='\n'){*s=' ';++s;}else ++s;
 	return;
 }
 

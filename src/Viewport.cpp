@@ -155,7 +155,7 @@ namespace fim
 		if(window)return window->width();
 		else return 0;
 #else
-		return fb_var.xres;
+		return ffd.fb_var.xres;
 #endif
 	}
 
@@ -167,7 +167,7 @@ namespace fim
 		if(window)return window->height();
 		else return 0;
 #else
-		return fb_var.yres;
+		return ffd.fb_var.yres;
 #endif
 	}
 
@@ -329,7 +329,10 @@ namespace fim
 					viewport_height(),
 					mirror, flip);
 #else
-			svga_display_image(image->img, left, top, mirror, flip);
+			framebufferdevice.svga_display_image_new(image->img, left, top,
+			0,ffd.fb_var.xres,
+			0,ffd.fb_var.yres,
+			mirror, flip);
 #endif					
 			return true;
 		}

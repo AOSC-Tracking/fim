@@ -125,7 +125,6 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 		int rc=0;
 		//initialization of the framebuffer text
 		FontServer::fb_text_init1(fontname,&f);
-		//initialization of the framebuffer device handlers
 		fd = fb_init(fbdev, fbmode, vt);
 		if(fd==-1)
 			fd = fb_init(fbdev, fbmode, vt,0xbabebabe==0xbabebabe);//maybe we are under screen..
@@ -141,6 +140,12 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 		signal(SIGTSTP,SIG_IGN);
 		//signal(SIGSEGV,cleanup_and_exit);
 		//set text color to white ?
+		
+		// textual console reformatting
+		mc.setRows ((fb_var.yres/fb_font_height())/2);
+		mc.reformat(fb_var.xres/fb_font_width());
+
+		//initialization of the framebuffer device handlers
 		if(rc=fb_text_init2())return rc;
 	
 			switch (fb_var.bits_per_pixel) {
@@ -1435,7 +1440,16 @@ void FramebufferDevice::console_control(int arg)//experimental
 void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flags)//experimental
 {
 	//printf("ccd\n");
-	mc.add(msg);
+	int r;
+	r=mc.add(msg);
+	if(r==-2)
+	{
+		r=mc.grow();
+		if(r==-1)return;
+		r=mc.add(msg);
+		if(r==-1)return;
+	}
+
 	// draw e' quasi sempre 0..
 	if(!draw )return;//CONVENTION!
 	//printf("ccc\n");
@@ -1476,8 +1490,14 @@ void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flag
 #ifdef FIM_BOZ_PATCH
 	with_boz_patch(0),
 #endif
+#ifndef FIM_KEEP_BROKEN_CONSOLE
+	//mc(48,12),
+//	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
+//	C=(fb_var.xres/fb_font_width());
+#endif
 	fontserver(*this)
 	{
+
 		cmap.start  =  0;
 		cmap.len    =  256;
 		cmap.red  =  red;

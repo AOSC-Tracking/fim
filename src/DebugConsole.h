@@ -24,6 +24,7 @@
 
 #include <vector>
 #include "fim.h"
+#include "Namespace.h"
 
 namespace fim
 {
@@ -31,10 +32,13 @@ namespace fim
 	{
 		public:
 		//virtual void add(string s)=0;
-		virtual int do_dump(int line, char *s)=0;
+	//	virtual int do_dump(int f, int l)const;
 	};
 
-	class MiniConsole:public FimConsole
+	class MiniConsole
+#ifdef FIM_NAMESPACES
+	:public Namespace
+#endif
 	{
 		char *buffer;	// the raw console buffer
 		char **line;	// the (displayed) line pointers array
@@ -52,18 +56,23 @@ namespace fim
 
 		public:
 
-		MiniConsole();
-		int dump(int amount);
-		int dump(int f, int l);
-		int dump();
-		int do_dump(int line,char *s);
+		MiniConsole(int lw=48, int r=12);
+		int dump();	// non const due to user variables reaction
+		int grow();
+		int setRows(int nr);
+		int add(const char* cs);
+		int reformat(int newlsize);
+
+		private:
+
+		int line_length(int li);
+		int do_dump(int amount)const;
+		int do_dump(int f, int l)const;
+		int do_dump()const;
 
 		int grow_lines(int glines);
 		int grow_buffer(int gbuffer);
-		int grow();
 		int grow(int glines, int gbuffer);
-		int reformat(int newlsize);
-		void add(const char* cs);
 	};
 }
 

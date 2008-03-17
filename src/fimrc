@@ -26,6 +26,7 @@ _prefetch=1;
 autowidth=1;
 ignorecase=1;
 ascale="1.0";
+console_offset=0;
 
 # useful aliases
 alias "toggleautoflip" "autoflip=1-autoflip;";
@@ -216,6 +217,10 @@ alias 'widen'  'i:ascale=i:ascale*"1.1";*1.0;';
 alias 'narrow' 'i:ascale=i:ascale/"1.1";*1.0;';
 bind  'y' "widen" "widens horizontally the image";
 bind  'Y' "narrow" "shrinks horizontally the image";
+alias 'console_scroll_up'   'if(console_offset<console_lines){console_offset=console_offset+1;}';
+alias 'console_scroll_down' 'if(console_offset>0){console_offset=console_offset-1;}';
+alias 'cscrollup' 'console_scroll_up';
+alias 'cscrolldown' 'console_scroll_down';
 
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.

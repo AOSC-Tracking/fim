@@ -250,8 +250,9 @@ class CommandConsole
 	fim::string current()const{ return browser.current();}
 
 	fim::string get_alias_info(const fim::string aname)const;
+#ifdef FIM_WINDOWS
 	const Window & current_window()const;
-
+#endif
 	fim::string get_variables_list()const;
 	fim::string get_aliases_list()const;
 	fim::string get_commands_list()const;
@@ -263,10 +264,10 @@ class CommandConsole
 	void appendPostExecutionCommand(const fim::string &c);
 	bool appendedPostInitCommand()const;
 
-	#ifdef FIM_WINDOWS
+#ifdef FIM_WINDOWS
 	Viewport* current_viewport()const;
+#endif
 	void dumpDefaultFimrc()const;
-	#endif
 
 	void tty_raw();
 	void tty_restore();
