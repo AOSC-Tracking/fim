@@ -61,6 +61,10 @@ class Browser
 
 	Image *image()const;
 
+#ifdef FIM_READ_STDIN_IMAGE
+	Image *default_image;	// experimental
+#endif
+
 	Viewport* viewport()const;
 
 	int current_n()const;
@@ -73,6 +77,9 @@ class Browser
 	int current_images()const{ return n(); }
 	fim::Cache cache;	// was private
 	public:
+#ifdef FIM_READ_STDIN_IMAGE
+	void set_default_image(Image *stdin_image);
+#endif
 	const Image *c_image()const;	// was private
 	int empty_file_list()const;
 
@@ -111,6 +118,7 @@ class Browser
 	fim::string display(const args_t &args);
 	fim::string display_status(const char *l,const char*r);
 
+	bool can_reload()const;
 	fim::string reload(const args_t &args);
 	fim::string list(const args_t &args){return list();}
 	fim::string push(const args_t &args);

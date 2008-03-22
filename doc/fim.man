@@ -106,6 +106,12 @@ The default fimrc file (the one hardcoded in the fim executable) is dumped on st
 .c environment variable is used as default.  If unset, fim will
 .c fallback to 10x20 (X11) / lat1u-16.psf (console).
 .TP
+.B -i, --image-from-stdin
+Will read one single image from the standard input (yes: the image, not the filename).
+.TP
+.B -p, --script-from-stdin
+Will read commands from stdin prior to entering in interactive mode.
+.TP
 .B -a, --autozoom
 Enable autozoom.  fim will automagically pick a reasonable zoom factor
 when loading a new image.
@@ -113,8 +119,11 @@ when loading a new image.
 .B -
 Reads file list from stdin.
 
-So, you can use fim in such a fashion:
-$ find /mnt/media/ -name *.jpg | fim -
+Note that these three standard input reading functionalities conflict - if two or more of them occur in fim invocation, fim will exit with an error.
+
+See the section
+.B EXAMPLES
+below to read some useful (and unique) ways of employing fim.
 .c .TP
 .c .B --autoup
 .c Like autozoom, but scale up only.
@@ -226,6 +235,49 @@ console switch handling.  That is obviously no problem for console
 logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
+.SH EXAMPLES
+find /mnt/media/ -name *.jpg | 
+.B fim
+-
+.P
+will make fim read the file list from standard input.
+.P
+.P
+
+cat script.fim | 
+.B fim
+-p images/*
+.P
+will make fim read the script file
+.B script.fim
+from standard input prior to displaying files in the directory
+.B images
+.P
+.P
+
+scanimage ... | tee scan.ppm | 
+.B fim -i
+.P
+will make fim read the image scanned from a flatbed scanner as soon as it is read 
+.P
+.P
+
+.B fim
+* > selection.txt
+.P
+will output the file names marked with 'm' in fim to a file.
+.P
+.P
+
+.B fim 
+* |
+.B fim
+-
+.P
+will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
+.P
+.P
+
 .SH BUGS
 .B fim
 has bugs. Please read the 

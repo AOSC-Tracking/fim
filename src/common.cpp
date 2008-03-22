@@ -73,6 +73,35 @@ void trec(char *str,const char *f,const char*t)
 
 }
 
+	char* slurp_binary_fd(int fd,int *rs)
+	{
+			/*
+			 * If badly tuned, this code is a true allocator grinder :)
+			 *
+			 * slurps a binary file (possibly a stream) and returns the allocated memory.
+			 *
+			 * FIXME : use stat if possible.
+			 * FIXME : it is not throughly tested
+			 * */
+			char	*buf=NULL;
+			int	inc=1024*256,rb=0,nrb=0;
+			buf=(char*)calloc(inc,1);
+			if(!buf) return buf;
+			while((nrb=read(fd,buf+rb,inc))>0)
+			{
+				char *tb;
+				// if(nrb==inc) a full read. let's try again
+				// else we assume this is the last read (could not be true, of course)
+				tb=(char*)realloc(buf,rb+=nrb);
+				if(tb!=NULL)
+					buf=tb;
+				else
+					{rb-=nrb;continue;}
+			}
+			if(rs){*rs=rb;}
+			return buf;
+	}
+
 	fim::string slurp_file(fim::string filename)
 	{
 		std::string file;

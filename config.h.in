@@ -64,6 +64,9 @@
 #undef FIM_READ_STDIN
 
 /* */
+#undef FIM_READ_STDIN_IMAGE
+
+/* */
 #undef FIM_RECORDING
 
 /* */

@@ -1,6 +1,11 @@
 	
 	FIM NEWS -- history of user-visible changes in FIM.
 
+        	Version 0.3-alpha
+
+ * reading image files (-i) and scripts (-p) from stdin
+ * improved the debug console, now buffered and with scrolling
+
         	Version 0.2
  
  * internal windowing (with splitting, resizing, swapping) support

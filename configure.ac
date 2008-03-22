@@ -511,6 +511,18 @@ AC_ARG_ENABLE(screen, AC_HELP_STRING([--disable-screen], [Fim will try to work u
 
 dnl ==================
 
+fim_cv_read_stdin_image=yes
+AC_ARG_ENABLE(stdin-image-reading, AC_HELP_STRING([--disable-stdin-image-reading], [Fim will read an image from stdin with the -i switch. (experimental)]),
+[       if test x$enableval = xno; then
+		fim_cv_read_stdin_image=no
+	else
+                fim_cv_read_stdin_image=yes
+        fi
+],[ fim_cv_read_stdin_image=yes ]
+)
+
+dnl ==================
+
 
 AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan directories for files.]),
 [       if test x$enableval = xno; then
@@ -538,6 +550,8 @@ dnl ==================
 AH_TEMPLATE([FIM_RECURSIVE_DIRS])
 AH_TEMPLATE([FIM_READ_DIRS])
 AH_TEMPLATE([FIM_BOZ_PATCH])
+AH_TEMPLATE([FIM_READ_STDIN])
+AH_TEMPLATE([FIM_READ_STDIN_IMAGE])
 
 if test x$fim_cv_read_dirs == xyes; then
   AC_DEFINE([FIM_READ_DIRS])
@@ -546,9 +560,29 @@ if test x$fim_cv_read_dirs == xyes; then
   fi
 fi
 
+dnl ==================
+
 if test x$fim_cv_screen != xno; then
         # boz patch is on
 	AC_DEFINE([FIM_BOZ_PATCH])
+fi
+
+dnl ==================
+
+fim_cv_read_stdin=yes
+
+if test x$fim_cv_read_stdin != xno; then
+	AC_DEFINE([FIM_READ_STDIN])
+fi
+
+dnl ==================
+
+dnl NOTE THAT IN THE CODE FIM_READ_STDIN_IMAGE depends on FIM_READ_STDIN, too
+if test x$fim_cv_read_stdin_image = xyes -a x$fim_cv_read_stdin = xyes; then
+	AC_DEFINE([FIM_READ_STDIN_IMAGE])
+else
+	# we revert to no just for the printout
+	fim_cv_read_stdin_image=no
 fi
 
 dnl ==================
@@ -766,8 +800,6 @@ AH_TEMPLATE([FIM_COMMAND_AUTOCOMPLETION])
 AC_DEFINE([FIM_COMMAND_AUTOCOMPLETION])
 AH_TEMPLATE([FIM_NAMESPACES])
 AC_DEFINE([FIM_NAMESPACES])
-AH_TEMPLATE([FIM_READ_STDIN])
-AC_DEFINE([FIM_READ_STDIN])
 AH_TEMPLATE([FIM_CACHE_DEBUG])
 AC_DEFINE([FIM_CACHE_DEBUG])
 AH_TEMPLATE([FIM_BUGGED_CACHE])
@@ -824,6 +856,7 @@ AC_MSG_NOTICE([
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 	internal windowing system           : ${have_windows:-no}
+	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexp's (default is Posix)     : ${fim_cv_regex:-no}
 	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
 	use 'convert' for unknown files     : ${fim_cv_convert}

@@ -100,6 +100,8 @@ struct option fim_options[] = {
 #endif
     {"no-framebuffer",      no_argument,       NULL, 't'},
     {"text-reading",      no_argument,       NULL, 'P'},
+    {"image-from-stdin",      no_argument,       NULL, 'i'},
+    {"script-from-stdin",      no_argument,       NULL, 'p'},
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -197,7 +199,7 @@ class FimInstance
 			    );
 	}
 
-int help_and_exit(char *argv0)
+int help_and_exit(char *argv0, int code=0)
 {
 	    cc.printHelpMessage(argv0);
 	    std::cout << " where OPTIONS are taken from :\n";
@@ -219,8 +221,8 @@ int help_and_exit(char *argv0)
 		std::cout << "\n";
 		}
 		std::cout << " ( Please read the documentation distributed with the program, too, in FIM.TXT)\n";
-	    std::exit(0);
-	    return 0;
+	    std::exit(code);
+	    return code;
 }
 
 
@@ -240,16 +242,23 @@ int help_and_exit(char *argv0)
 	#ifdef FIM_READ_STDIN
 		int              read_file_list_from_stdin;
 		read_file_list_from_stdin=0;
+		#ifdef FIM_READ_STDIN_IMAGE
+		int		 read_one_file_from_stdin;
+		read_one_file_from_stdin=0;
+		#endif
+		int		 read_one_script_file_from_stdin;
+		read_one_script_file_from_stdin=0;
 	#endif
 	//	char             *desc,*info;
 		char c;
 		bool appendedPostInitCommand=false;
+		Image* stream_image=NULL;
 		g_fim_no_framebuffer=0;
 	
 		setlocale(LC_ALL,"");	//uhm..
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tf",
+		    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tfip",
 				fim_options, &opt_index);
 		if (c == -1)
 		    break;
@@ -287,7 +296,11 @@ int help_and_exit(char *argv0)
 	#endif
 		    break;
 		case 'f':
-		    cc.setVariable("_load_default_etc_fimrc",1);
+		    cc.setVariable("_load_default_etc_fimrc",0);
+		    /*
+		     * note that this solution is temporary, because it clashes with -E (should have precedence, instead)
+		     * */
+		    cc.push_scriptfile(optarg);
 		    break;
 		case 'v':
 		    //fbi's
@@ -348,6 +361,14 @@ int help_and_exit(char *argv0)
 		    //fbi's
 		    default_fbdev = optarg;
 		    break;
+		case 'i':
+		    //fim's
+#ifdef FIM_READ_STDIN_IMAGE
+		    read_one_file_from_stdin=1;
+#else
+		    fprintf(stderr,"sorry, the reading of images from stdin was disabled at compile time\n");
+#endif
+		    break;
 		case 'm':
 		    //fbi's
 		    default_fbmode = optarg;
@@ -391,6 +412,14 @@ int help_and_exit(char *argv0)
 		    //fim's
 	#ifndef FIM_NOSCRIPTING
 		    cc.push_scriptfile(optarg);
+	#else
+		    cout << "sorry, no scripting available!\n";
+	#endif
+		    break;
+		case 'p':
+		    //fim's (differing semantics from fbi's)
+	#ifndef FIM_NOSCRIPTING
+		    read_one_script_file_from_stdin=1;
 	#else
 		    cout << "sorry, no scripting available!\n";
 	#endif
@@ -460,8 +489,17 @@ int help_and_exit(char *argv0)
 	
 		lexer=new yyFlexLexer;	//used by YYLEX
 	
-	#ifdef FIM_READ_STDIN
-		
+
+	#ifdef FIM_READ_STDIN	
+		if( read_file_list_from_stdin +
+		#ifdef FIM_READ_STDIN_IMAGE
+		read_one_file_from_stdin+
+		#endif
+		read_one_script_file_from_stdin > 1)
+		{
+			fprintf(stderr,"error : you shouldn't specify more than one standard input reading options among (-, -p, ad -i)!\n\n");
+			help_and_exit(argv[0],-1);
+		}
 		/*
 		 * this is Vim's solution for stdin reading
 		 * */
@@ -480,11 +518,52 @@ int help_and_exit(char *argv0)
 			close(0);
 			dup(2);
 		}
+		#ifdef FIM_READ_STDIN_IMAGE
+		else
+		if(read_one_file_from_stdin)
+		{
+			FILE *tfd=NULL;
+			if( ( tfd=tmpfile() )!=NULL )
+			{	
+				char buf[1024];int rc=0;
+				while( (rc=read(0,buf,1024))>0 ) fwrite(buf,rc,1,tfd);
+				rewind(tfd);
+				/*
+				 * Note that it would be much nicer to do this in another way,
+				 * but it would require to rewrite much of the file loading stuff
+				 * (which is quite fbi's untouched stuff right now)
+				 * */
+				stream_image=new Image("/dev/stdout",tfd);
+
+				// DANGEROUS TRICK!
+				cc.browser.set_default_image(stream_image);
+				cc.browser.push("");
+			}
+			//if(tfd)		fclose(tfd);
+			close(0);
+			dup(2);
+		}
+		#endif
+		else
+		if(read_one_script_file_from_stdin)
+		{
+		    	char* buf;
+			buf=slurp_binary_fd(0,NULL);
+			if(buf) cc.appendPostInitCommand(buf);
+			if(buf) appendedPostInitCommand=true;
+			if(buf) free(buf);
+			close(0);
+			dup(2);
+		}
 	#endif
 	
 	
-		if(cc.browser.empty_file_list() && !cc.with_scriptfile() && !appendedPostInitCommand )
-			help_and_exit(argv[0]);
+		if(cc.browser.empty_file_list() && !cc.with_scriptfile() && !appendedPostInitCommand 
+		#ifdef FIM_READ_STDIN_IMAGE
+		&& !read_one_file_from_stdin
+		#endif
+		)
+			help_and_exit(argv[0],-1);
 	
 		if((g_fim_no_framebuffer)==0)
 		{

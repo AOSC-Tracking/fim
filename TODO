@@ -57,10 +57,7 @@ inspiration.
 20071021	study context-sensitive command completion (so, with pre-parsing.. implying a modified parsing scheme!)
 20071006	implement mechanisms or policies for namespace inheritage on windows split
 20070925	update notices regarding file format compatibilities in the man pages
-20070924	-i option to read an image file from stdin
-		-p option to read a script from stdin
-		a virtual class Context to implement a hierarchical namespace system for variables and maybe functions (to come)
-20070923	someday, a scrollback buffer and related mechanisms
+20070924	a virtual class Context to implement a hierarchical namespace system for variables and maybe functions (to come)
 20070921	argument passing to aliases, bash like ?! or vim-like ? 
 20070920	a command to exit from a script immediately
 20070920	printing support ? :)
@@ -85,7 +82,7 @@ inspiration.
 		cacalib
 		aalib
 		...
-20070812	integrate the freshmeat-announce(freshmeat-submit script
+20070812	integrate the freshmeat-submit script (now seems like the freshmeat api is broken)
 20070810	the time is right for a massive fimrc rewrite and example scripts:
 		you could also write a little cookbook in the documentation, 
 		with examples like :
@@ -148,8 +145,6 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 20070125	fix the string vs variable problem
 20070128	fixa l'argument passing che e' problematico! e fixa i commenti!
 20070129	fix the KEY binding
-20070211	flex and bison parts should be rewritten
-20070212	fix the command evaluation
 20070303	fix rar and zip dependencies in Makefiles and such for fimgs.sh
 20070303	see if while-nesting is a real danger or not!
 20070303	update the while construct documentation and fix the while command execution bugs 
@@ -166,17 +161,12 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 
 	ADD:
 20070401	~= /regexp/ operator
-20070401	<=,>= operators
 20070401	find's -exec '{}' ';' -like predicate syntax
-20070216	create a decent installer
-20070129	dump internal commands function
 20070125	add pipe to other commands and exec and system (screenshot with fbgrab, for example)
-20070126	better key printout to ease configuration
 20070128	add support for command renaming with checks...
 20070130	proper signal handing for while cycle interruption..
 20070201	cwd,ls,pwd,stat,file...
 20070201	--norc, --rc= mechanisms
-20070208	? rewrite the parser in full C++ or traditional, clean C
 
 	MISC IDEAS :
 20070303

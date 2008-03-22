@@ -974,7 +974,7 @@ void FbiStuff::free_image(struct ida_image *img)
 }
 
 /*static struct ida_image**/
-struct ida_image* FbiStuff::read_image(char *filename)
+struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 {
     char command[1024];
     struct ida_loader *loader = NULL;
@@ -988,6 +988,11 @@ struct ida_image* FbiStuff::read_image(char *filename)
     //WARNING
     //new_image = 1;
 
+    // Warning: this fd passing 
+    // is a trick for reading stdin...
+    // ... and it is simpler that rewriting loader stuff.
+    // but much more dirtier :/
+    if(fd==NULL) {
     /* open file */
     if (NULL == (fp = fopen(filename, "r"))) {
 	//comment by dez, temporary
@@ -995,6 +1000,7 @@ struct ida_image* FbiStuff::read_image(char *filename)
 		fprintf(stderr,"open %s: %s\n",filename,strerror(errno));
 	return NULL;
     }
+    } else fp=fd;
     memset(blk,0,sizeof(blk));
     fread(blk,1,sizeof(blk),fp);
     rewind(fp);
@@ -1134,6 +1140,7 @@ struct ida_image* FbiStuff::read_image(char *filename)
     img = (struct ida_image*)malloc(sizeof(*img));
     memset(img,0,sizeof(*img));
     data = loader->init(fp,filename,0,&img->i,0);
+    if(strcmp(filename,"/dev/stdin")==0) { close(0); dup(2);}
     if (NULL == data) {
 	if(ffd.debug)
 		fprintf(stderr,"loading %s [%s] FAILED\n",filename,loader->name);

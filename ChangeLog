@@ -1,3 +1,17 @@
+2008-03-17 15:36  dezperado
+
+	* : Enhanced the new textual console.
+	  Fixed compilation problems under missing FIM_WINDOWS.
+	  Fixed a bug in trec() in common.cpp.
+	  Added some new temporary aliases for handling the new console.
+	  Added some new global variables for handling the new console.
+	  Renamed some options in configure.ac.
+
+2008-03-13 18:07  dezperado
+
+	* : A new debug (textual) console is under building.
+	  This one will bring scroll functionalities and much more.
+
 2008-02-20 17:50  dezperado
 
 	* : This is a release candidate for 0.2.

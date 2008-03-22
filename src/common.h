@@ -42,6 +42,7 @@ void sanitize_string_from_nongraph_except_newline(char *s, int c=0);
 using namespace fim;
 
 fim::string slurp_file(fim::string filename);
+char* slurp_binary_fd(int fd,int *rs);
 void append_to_file(fim::string filename, fim::string lines);
 
 char * dupstr (const char* s);

@@ -69,13 +69,13 @@ namespace fim
 		return img->i.height;
 	}
 
-	Image::Image(const char *fname_):framebufferdevice(fim::ffd)
+	Image::Image(const char *fname_, FILE*fd):framebufferdevice(fim::ffd)
 	{
 		/*
 		 *	an image object is created from an image filename
 		 */
 		reset();	// pointers blank
-		if( !load(fname_) || check_invalid() || (!fimg) ) 
+		if( !load(fname_,fd) || check_invalid() || (!fimg) ) 
 		{
 			cout << "warning : invalid loading ! \n";
 			if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
@@ -96,6 +96,7 @@ namespace fim
                 ascale   = 1.0;
 		setVariable("scale"  ,scale*100);
 		setVariable("ascale" ,ascale);
+		no_file=true;	//reloading allowed
 
                 invalid=0;
                 fimg    = NULL;
@@ -104,7 +105,7 @@ namespace fim
 		setVariable("orientation" ,0);
 	}
 	
-	bool Image::load(const char *fname_)
+	bool Image::load(const char *fname_, FILE* fd)
 	{
 		/*
 		 *	an image is loaded and initializes this image.
@@ -116,7 +117,13 @@ namespace fim
 		if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
 			cc.set_status_bar("please wait while reloading...", "*");
 
-		fimg = FbiStuff::read_image((char*)fname_);
+		fimg = FbiStuff::read_image((char*)fname_,fd);
+    		if(strcmp("/dev/stdin",fname_)==0)
+		{
+			no_file=true;	//no file is associated to this image (to prevent reloading)
+		}
+		else 
+			no_file=false;	//reloading allowed
 
 		img=fimg;	/* no scaling : one copy only */
 	        framebufferdevice.redraw=1;

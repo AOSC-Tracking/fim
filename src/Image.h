@@ -60,7 +60,7 @@ class Image
 	friend class Viewport;		/* don't panic, we are wise people ;) */
 	public:
 
-	Image(const char *fname_);
+	Image(const char *fname_, FILE *fd=NULL);
 	~Image();
 
 	private:
@@ -73,13 +73,14 @@ class Image
 	struct ida_image *fimg    ;     /* master image */
 
 	/* image methods */
-	bool load(const char *fname_);
+	bool load(const char *fname_, FILE *fd=NULL);
 
 	protected:
 	FramebufferDevice	&framebufferdevice;
 	int              orientation;	//aka rotation
 
 	int    invalid;		//the first time the image is loaded it is set to 1
+	int	no_file;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
 
 	string  fname;		/* viewport variable, too */
 
@@ -89,6 +90,7 @@ class Image
 
         int tiny()const;
 	public:
+	bool can_reload()const{return !no_file;}
 	bool update();
 
 	fim::string getInfo();

@@ -92,6 +92,13 @@ namespace fim
 		}
 	}
 
+#ifdef FIM_READ_STDIN_IMAGE
+	void Browser::set_default_image(Image *stdin_image)
+	{
+		default_image=stdin_image;
+	}
+#endif
+
 	Browser::Browser():nofile("")
 	{	
 		/*
@@ -567,7 +574,23 @@ namespace fim
 		if(viewport())viewport()->setImage( cache.useCachedImage(current().c_str()) );
 #else
 		// warning : in this cases exception handling is missing
+	#ifdef FIM_READ_STDIN_IMAGE
+		if(current()!="")
+		{
+			if(viewport())viewport()->setImage( new Image(current().c_str()) );
+		}
+		else
+		{
+			if( viewport() && default_image )
+			{
+				// a one time only image (new, experimental)
+				viewport()->setImage(default_image->getClone());
+				//default_image=NULL;
+			}
+		}
+	#else
 		if(viewport())viewport()->setImage( new Image(current().c_str()) );
+	#endif
 #endif
 		}
 		catch(FimException e)
@@ -605,6 +628,14 @@ namespace fim
 		return "";
 	}
 
+	bool Browser::can_reload()const
+	{
+		const Image *i=NULL;
+		if( cc.current_viewport() && (i=cc.current_viewport()->c_getImage())!=NULL )
+			return i->can_reload();
+		return true;
+	}
+
 	fim::string Browser::reload(const args_t &args)
 	{
 		/*
@@ -618,8 +649,10 @@ namespace fim
 		autocmd_exec("PreReload",c);
 #endif
 		free_current_image();
-
-		loadCurrentImage();
+		if(can_reload())
+		{
+			loadCurrentImage();
+		}
 
 		if(getGlobalIntVariable("_prefetch")) prefetch(args_t());/*this will become an autocommand*/
 
@@ -738,7 +771,8 @@ namespace fim
 		 * FIX ME:
 		 * are we sure we want no repetition!????
 		 * */
-		
+		if(nf!="")
+		{
 #ifdef FIM_CHECK_FILE_EXISTENCE
 		/*
 		 * skip adding the filename in the list if
@@ -768,6 +802,7 @@ namespace fim
 		}
 #endif
 
+		}
 #ifdef FIM_CHECK_DUPLICATES
 		if(present(nf))
 		{
