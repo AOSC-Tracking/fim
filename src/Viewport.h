@@ -49,6 +49,7 @@ class Viewport
 	Window *window;
 #endif
 
+	CommandConsole &commandConsole;
 	public:
         void reset();
 #ifdef FIM_WINDOWS
@@ -56,8 +57,9 @@ class Viewport
 #endif
 
 	Viewport( //yes, horrible
+			CommandConsole &c
 #ifdef FIM_WINDOWS
-			Window *window
+			,Window *window
 #endif
 			);
 

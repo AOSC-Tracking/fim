@@ -511,6 +511,18 @@ AC_ARG_ENABLE(screen, AC_HELP_STRING([--disable-screen], [Fim will try to work u
 
 dnl ==================
 
+fim_cv_resize_optimizations=yes
+AC_ARG_ENABLE(resize-optimizations, AC_HELP_STRING([--disable-resize-optimizations], [Some old (fbi) code is optimized for speedup in fim.]),
+[       if test x$enableval = xno; then
+		fim_cv_resize_optimizations=no
+	else
+                fim_cv_resize_optimizations=yes
+        fi
+],[ fim_cv_resize_optimizations=yes ]
+)
+
+dnl ==================
+
 fim_cv_read_stdin_image=yes
 AC_ARG_ENABLE(stdin-image-reading, AC_HELP_STRING([--disable-stdin-image-reading], [Fim will read an image from stdin with the -i switch. (experimental)]),
 [       if test x$enableval = xno; then
@@ -548,10 +560,19 @@ AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--enable-recursive-dirs], [Fim wil
 dnl ==================
 
 AH_TEMPLATE([FIM_RECURSIVE_DIRS])
+AH_TEMPLATE([FIM_WANTS_SLOW_RESIZE])
 AH_TEMPLATE([FIM_READ_DIRS])
 AH_TEMPLATE([FIM_BOZ_PATCH])
 AH_TEMPLATE([FIM_READ_STDIN])
 AH_TEMPLATE([FIM_READ_STDIN_IMAGE])
+
+dnl ==================
+
+if test x$fim_cv_resize_optimizations != xyes; then
+  AC_DEFINE([FIM_WANTS_SLOW_RESIZE])
+fi
+
+dnl ==================
 
 if test x$fim_cv_read_dirs == xyes; then
   AC_DEFINE([FIM_READ_DIRS])
@@ -563,7 +584,7 @@ fi
 dnl ==================
 
 if test x$fim_cv_screen != xno; then
-        # boz patch is on
+# boz patch is on
 	AC_DEFINE([FIM_BOZ_PATCH])
 fi
 
@@ -835,7 +856,7 @@ AC_SUBST(FIM_LIB_OBJECTS)
 
 #AC_CONFIG_FILES([Makefile],[src/Makefile])
 
-AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile)
+AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile)
 #AC_OUTPUT
 
 AC_MSG_NOTICE([
@@ -845,6 +866,7 @@ AC_MSG_NOTICE([
 	default minimal key bindings        : ${have_default_bindings:-no}
 	default configuration file builtin  : ${have_default_config:-no}
         compile time warnings               : ${fim_cv_warnings:-no} ( ${FIM_CFLAGS} )
+        resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
 	will read directories               : ${fim_cv_read_dirs}
 	will recurse directories            : ${fim_cv_recursive_dirs}

@@ -316,6 +316,7 @@ namespace fim
 	}
 
 	CommandConsole::CommandConsole(FramebufferDevice &_framebufferdevice):framebufferdevice(_framebufferdevice)
+	,browser(*this)
 	{
 		appended_post_init_command=false;
 		fim_uninitialized = 1; // new
@@ -445,7 +446,7 @@ namespace fim
 
 		try
 		{
-			window = new Window( Rect(0,0,xres,yres) );
+			window = new Window( *this, Rect(0,0,xres,yres) );
 
 			if(window)window->setroot();
 		}
@@ -2102,9 +2103,9 @@ namespace fim
 
 	fim::string CommandConsole::print_commands()const
 	{
-		cout << "VARIABLES : "<<fim::cc.get_variables_list()<<"\n";
-		cout << "COMMANDS : "<<fim::cc.get_commands_list()<<"\n";
-		cout << "ALIASES : "<<fim::cc.get_aliases_list()<<"\n";
+		cout << "VARIABLES : "<<get_variables_list()<<"\n";
+		cout << "COMMANDS : "<<get_commands_list()<<"\n";
+		cout << "ALIASES : "<<get_aliases_list()<<"\n";
 		return "";
 	}
 

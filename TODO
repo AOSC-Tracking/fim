@@ -5,21 +5,27 @@ If you are interested into Fim internals, philosophy, and evolution, you
 are welcome to read this file, and subscribe to the fim-devel mailing list, 
 ( fbi-improved-devel@nongnu.org ).
 
+If you would like to contribute to Fim, this file could give you ideas or
+advice, meanwhile if you would like to contribute with an idea, it could 
+contribute to this file, too.
+
 Of course, the BUGS file is a source of constant inspiration (we could say,
 of a maniacal taste ) for further work, too.
 
-If you just intend to learn moare about Fim, please read the program
+If you just intend to learn more about Fim, please read the program
 documentation in the "doc" directory first.
 
-Warning : Stuff in this file could be outdated, but necessary for further
-inspiration.
+Warning : Stuff in this file could be outdated, but necessary for
+further inspiration.
 
 -------------------------------------------------------------------------------
 	Current development directions
 
 
-20080316	i need a class/superclass with the command acception functionality, in a way each object
-		would be directly responsible for a bunch of commands.
+20080324	absolute priority of removing all extern object references in the code
+20080316	i need a class/superclass with the command acception functionality,
+		in a way each object would be directly responsible for its own bunch
+		of commands.
 20080313	make each cpp file include exactly the header files used
 20080228	to download files from a web page with fimgs
 20080223	fine grain the grammar using whitespaces too
@@ -116,8 +122,10 @@ inspiration.
 	structure and converting the odd Fbi code in elegant, or possibly more
 	optimized, (especially the hacked, critical parts concerning mirroring
 	and flipping! ) Fim code.
+
 -------------------------------------------------------------------------------
 Optimization:
+
 20070418	Got ~400% speedup on image display thanks to trivial changes in
 	the drawing code : memset and memcpy instead of assignations, and a less
 	trivial change by swapping RGB channels on loading time instead that on
@@ -129,6 +137,7 @@ Maybe one day me or some contributor will read
 Example 4.14 of the Intel Architecture SW Manual Optimization explains how to
 and find some useful idea.
 use PSHUFLW,PSHUFW,PSHUFD to reverse contiguous words in registers.
+
 -------------------------------------------------------------------------------
 
 This file is often outdated : Fim is far better than it seems here :)
@@ -136,21 +145,21 @@ This file is often outdated : Fim is far better than it seems here :)
 Please read the FIM.TXT file and the fimrc template to discover nice Fim features.
 
 	OPEN   BUGS:
+
+20080323	65535 byte limit for a script size (stored in a fim::string) causes problems
+		( see scripts/tests/maxlenscript.fim for this )
+20070210	fix properly the file parser and max script filelength limit
 20070307	It is not clear which key terminates always loops.
 20070307	config file parsing is still to be checked throughly
 20070129	control 4 crashes the prog ... why ? :)
 
 	MISSING SMALL FIXES:
 20070312	fix dumping of recording in some file!	
-20070125	fix the string vs variable problem
-20070128	fixa l'argument passing che e' problematico! e fixa i commenti!
-20070129	fix the KEY binding
 20070303	fix rar and zip dependencies in Makefiles and such for fimgs.sh
-20070303	see if while-nesting is a real danger or not!
+20070303	see if while-nesting is a real danger combined with interruption handling
 20070303	update the while construct documentation and fix the while command execution bugs 
 20070303	add an interface for setting exitBinding (now Enter!)
 20070306	primary goals : documentation and warning messages!
-20070210	fix properly the file parser (comments problems!) and max script filelength limit
 20070210	add an interface to modify key bindings and keycode bindings.
 20070401	variables : $VARNAME or $(VARNAME) or VARNAME ?
 

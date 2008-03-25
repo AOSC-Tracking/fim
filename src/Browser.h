@@ -58,7 +58,7 @@ class Browser
 	 * */
 	Viewport *only_viewport;
 #endif
-
+	CommandConsole &commandConsole;
 	Image *image()const;
 
 #ifdef FIM_READ_STDIN_IMAGE
@@ -83,7 +83,7 @@ class Browser
 	const Image *c_image()const;	// was private
 	int empty_file_list()const;
 
-	Browser();
+	Browser(CommandConsole &cc);
 	~Browser() { }
 	fim::string current()const;
 	fim::string regexp_goto(const args_t &args);

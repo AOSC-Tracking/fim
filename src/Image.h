@@ -61,6 +61,7 @@ class Image
 	public:
 
 	Image(const char *fname_, FILE *fd=NULL);
+	Image(const char *fname_, Foo& foo, FILE *fd=NULL);
 	~Image();
 
 	private:

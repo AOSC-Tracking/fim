@@ -95,6 +95,7 @@ namespace fim
 	class FramebufferDevice;
 	class CommandConsole;
 	class Command;
+	class Foo;
 	class Image;
 	class Var;
 	class MiniConsole;

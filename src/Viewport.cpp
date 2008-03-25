@@ -35,13 +35,14 @@
 namespace fim
 {
 	extern FramebufferDevice ffd;
-
 	Viewport::Viewport(
+			CommandConsole &c
 #ifdef FIM_WINDOWS
-			Window *window_
+			,Window *window_
 #endif
 			)
 			:framebufferdevice(fim::ffd)
+			,commandConsole(c)
 #ifdef FIM_WINDOWS
 			,window(window_)
 #endif
@@ -53,6 +54,7 @@ namespace fim
 
 	Viewport::Viewport(const Viewport &v)
 		:framebufferdevice(fim::ffd)
+		,commandConsole(v.commandConsole)
 #ifdef FIM_WINDOWS
 		,window(v.window)
 #endif
@@ -63,8 +65,7 @@ namespace fim
 		try
 		{
 #ifndef FIM_BUGGED_CACHE
-			extern CommandConsole cc;
-			if(v.image) image = cc.browser.cache.useCachedImage(v.image->getName());
+			if(v.image) image = commandConsole.browser.cache.useCachedImage(v.image->getName());
 #else
 			if(v.image)image = new Image(*v.image);
 #endif
@@ -155,7 +156,7 @@ namespace fim
 		if(window)return window->width();
 		else return 0;
 #else
-		return ffd.fb_var.xres;
+		return framebufferdevice.fb_var.xres;
 #endif
 	}
 
@@ -167,7 +168,7 @@ namespace fim
 		if(window)return window->height();
 		else return 0;
 #else
-		return ffd.fb_var.yres;
+		return framebufferdevice.fb_var.yres;
 #endif
 	}
 
@@ -330,8 +331,8 @@ namespace fim
 					mirror, flip);
 #else
 			framebufferdevice.svga_display_image_new(image->img, left, top,
-			0,ffd.fb_var.xres,
-			0,ffd.fb_var.yres,
+			0,framebufferdevice.fb_var.xres,
+			0,framebufferdevice.fb_var.yres,
 			mirror, flip);
 #endif					
 			return true;
@@ -447,8 +448,7 @@ namespace fim
 #ifndef FIM_BUGGED_CACHE
 		if(image)
 		{	
-			extern CommandConsole cc;
-			if( !cc.browser.cache.freeCachedImage(image) )
+			if( !commandConsole.browser.cache.freeCachedImage(image) )
 				delete image;	// do it yourself :P
 		}
 #else

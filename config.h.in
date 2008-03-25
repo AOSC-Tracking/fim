@@ -102,6 +102,9 @@
 /* */
 #undef FIM_VERSION
 
+/* */
+#undef FIM_WANTS_SLOW_RESIZE
+
 /* Fim windowing support */
 #undef FIM_WINDOWS
 

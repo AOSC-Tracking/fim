@@ -31,7 +31,6 @@
 
 namespace fim
 {
-	extern CommandConsole cc;
 	extern FramebufferDevice ffd;
         fim::string Window::cmd(const std::vector<fim::string> &args)
         {
@@ -120,7 +119,7 @@ namespace fim
                 return "";
         }
 
-	Window::Window(const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
+	Window::Window(CommandConsole &c,const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false),commandConsole(c)
 	{
 		/*
 		 *  A new leave Window is created with a specified geometry.
@@ -134,7 +133,7 @@ namespace fim
 
 		}
 		else
-			viewport=new Viewport(this);
+			viewport=new Viewport( commandConsole,  this );
 
 		if( viewport == NULL ) throw FIM_E_NO_MEM;
 	}
@@ -355,8 +354,8 @@ namespace fim
 		 * */
 		if(isleaf())
 		{
-			first  = new Window(this->corners.hsplit(Rect::Upper),viewport);
-			second = new Window(this->corners.hsplit(Rect::Lower),viewport);
+			first  = new Window( commandConsole, this->corners.hsplit(Rect::Upper),viewport);
+			second = new Window( commandConsole, this->corners.hsplit(Rect::Lower),viewport);
 			if(viewport && first && second)
 			{
 #define FIM_COOL_WINDOWS_SPLITTING 0
@@ -382,8 +381,8 @@ namespace fim
 		 * */
 		if(isleaf())
 		{
-			first  = new Window(this->corners.vsplit(Rect::Left ),viewport);
-			second = new Window(this->corners.vsplit(Rect::Right),viewport);
+			first  = new Window( commandConsole, this->corners.vsplit(Rect::Left ),viewport);
+			second = new Window( commandConsole, this->corners.vsplit(Rect::Right),viewport);
 			if(viewport && first && second)
 			{
 #if     FIM_COOL_WINDOWS_SPLITTING

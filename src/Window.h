@@ -225,13 +225,14 @@ class Window
 	const Window & c_shadowed()const;
 
 	Viewport & current_viewport()const;
+	CommandConsole &commandConsole;
 
 	public:
 	void setroot();	// only one root window should exist
 
 	/* The only public method launching exceptions is the constructor now.
 	 * */
-	Window(const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
+	Window(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
 
 	Viewport * current_viewportp()const;
         fim::string cmd(const std::vector<fim::string> &args);

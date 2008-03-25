@@ -304,6 +304,10 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
     float *fsrcline;
     unsigned int i,sx,dx;
 
+#ifndef FIM_WANTS_SLOW_RESIZE
+    int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
+#endif
+
     /* scale y */
     memset(h->rowbuf, 0, src->i.width * 3 * sizeof(float));
     outleft = 1/h->yscale;
@@ -331,6 +335,69 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	}
     }
 
+#ifndef FIM_WANTS_SLOW_RESIZE
+	/*
+	 * a little tweaked resize : the following loop takes the most of cpu resources in a typical fim run!
+	 */
+	/* scale x */
+	left = 1.0f;
+	fsrcline = h->rowbuf;
+    	const float c_outleft = 1.0f/h->xscale;
+	const unsigned int Mdx=h->width,msx=src->i.width;
+	if(h->xscale>1.0)//here we handle the case of magnification
+	{
+		float fsx=0.0;
+		unsigned char* srcline=src->data+src->i.width*3*(sr);
+		for (sx=0,dx=0; dx<Mdx; ++dx)
+		{
+	#if 1
+			fsx+=c_outleft;		// += is usually much lighter than a single *
+			sx=((unsigned int)fsx)%src->i.width;// % is essential
+			dst[0] = srcline[3*sx];
+			dst[1] = srcline[3*sx+1]; 
+			dst[2] = srcline[3*sx+2] ;
+			dst += 3;
+	#else
+			fsx+=c_outleft;
+			sx=((unsigned int)fsx)%src->i.width;// % is (maybe) essential
+			dst[0] = (unsigned char) fsrcline[3*sx];
+			dst[1] = (unsigned char) fsrcline[3*sx+1]; 
+			dst[2] = (unsigned char) fsrcline[3*sx+2] ;
+			dst += 3;
+	#endif
+		}
+	}
+#define ZEROF 0.0f
+	else    // image minification
+	for (sx = 0, dx = 0; dx < Mdx; dx++) {
+	d0 = d1 = d2 = ZEROF;
+	outleft = c_outleft;
+	while (outleft > ZEROF &&  sx < msx) {
+	    if (outleft < left) {
+		weight   = outleft * h->xscale;
+		left    -= outleft;
+		outleft  = ZEROF;
+	    } else {
+		weight   = left * h->xscale;
+		outleft -= left;
+		left     = ZEROF;
+	    }
+	    d0 += fsrcline[3*sx] * weight;
+	    d1 += fsrcline[3*sx+1] * weight;
+	    d2 += fsrcline[3*sx+2] * weight;
+	
+	    if (ZEROF == left) {
+		left = 1.0f;
+		sx++;
+	    }
+	}
+	dst[0] = (unsigned char)d0;
+	dst[1] = (unsigned char)d1;
+	dst[2] = (unsigned char)d2;
+	dst += 3;
+    }
+	return ;
+#else
     /* scale x */
     left = 1;
     fsrcline = h->rowbuf;
@@ -365,6 +432,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	dst[2] = (unsigned char)d2;
 	dst += 3;
     }
+#endif
 }
 
 static void

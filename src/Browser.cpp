@@ -27,8 +27,6 @@
 
 namespace fim
 {
-	extern fim::CommandConsole cc;
-	
 	int Browser::current_n()const{ return current_n(cp); }
 	int Browser::current_n(int ccp)const{ return ccp?ccp-1:ccp; }
 
@@ -83,7 +81,7 @@ namespace fim
 				 * viewport().redisplay(); <- and this should be good
 				 * :)
 				 * */
-				if( cc.redisplay() )
+				if( commandConsole.redisplay() )
 					this->display_status(current().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS
@@ -99,7 +97,7 @@ namespace fim
 	}
 #endif
 
-	Browser::Browser():nofile("")
+	Browser::Browser(CommandConsole &cc):nofile(""),commandConsole(cc)
 	{	
 		/*
 		 * we initialize to no file the current file name
@@ -472,7 +470,7 @@ namespace fim
 		 * displays the left text message and a right bracketed one
 		 */
 		if(getGlobalIntVariable("_display_status"))
-			cc.set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
+			commandConsole.set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
 		return "";
 	}
 
@@ -498,17 +496,17 @@ namespace fim
 				/*
 				 * we redraw the whole screen and thus all of the windows
 				 * */
-				if( cc.display() )
+				if( commandConsole.display() )
 					this->display_status(current().c_str(), NULL);
 //				FIXME:
-//				if(cc.window)cc.window->recursive_display();
+//				if(commandConsole.window)commandConsole.window->recursive_display();
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PostDisplay",c);
 #endif
 		}
 		else{ cout << "no image to display, sorry!";
-		cc.set_status_bar("no image loaded.", "*");}
+		commandConsole.set_status_bar("no image loaded.", "*");}
 		return "";
 	}
 
@@ -631,7 +629,7 @@ namespace fim
 	bool Browser::can_reload()const
 	{
 		const Image *i=NULL;
-		if( cc.current_viewport() && (i=cc.current_viewport()->c_getImage())!=NULL )
+		if( commandConsole.current_viewport() && (i=commandConsole.current_viewport()->c_getImage())!=NULL )
 			return i->can_reload();
 		return true;
 	}
@@ -678,7 +676,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		autocmd_exec("PreLoad",c);
 #endif
-		cc.set_status_bar("please wait while loading...", "*");
+		commandConsole.set_status_bar("please wait while loading...", "*");
 
 		loadCurrentImage();
 
@@ -797,7 +795,7 @@ namespace fim
 			 * i am not fully sure this is effective
 			 * */
 			nf+=" is not a regular file!";
-			cc.set_status_bar(nf.c_str(), "*");
+			commandConsole.set_status_bar(nf.c_str(), "*");
 			return false;
 		}
 #endif
@@ -863,7 +861,7 @@ namespace fim
 		{
 			last_regexp=args[0];
 			i=(j+c+1)%s;
-			if(cc.regexp_match(flist[i].c_str(),args[0].c_str()))
+			if(commandConsole.regexp_match(flist[i].c_str(),args[0].c_str()))
 			{	
 				fim::string c=current();
 #ifdef FIM_AUTOCMDS
@@ -872,15 +870,15 @@ namespace fim
 				goto_image(i+1);
 #ifdef FIM_AUTOCMDS
 				autocmd_exec("PostGoto",c);
-				if(!cc.inConsole())
-					cc.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
+				if(!commandConsole.inConsole())
+					commandConsole.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
 				return "";
 #endif
 			}
 		}
 		cout << "sorry, no filename matches \""<<args[0]<<"\"\n";
-		if(!cc.inConsole())
-			cc.set_status_bar((fim::string("sorry, no filename matches \"")+
+		if(!commandConsole.inConsole())
+			commandConsole.set_status_bar((fim::string("sorry, no filename matches \"")+
 						args[0]+
 						fim::string("\"")).c_str(),NULL);
 		
@@ -1279,8 +1277,8 @@ namespace fim
 		 *	a const pointer to the currently loaded image
 		 */
 	#ifdef FIM_WINDOWS
-		if( cc.current_viewport() )
-			return cc.current_viewport()->c_getImage();
+		if( commandConsole.current_viewport() )
+			return commandConsole.current_viewport()->c_getImage();
 		else
 			return NULL;
 	#else
@@ -1295,8 +1293,8 @@ namespace fim
 		 *	the image loaded in the current viewport is returned
 		 */
 	#ifdef FIM_WINDOWS
-		if( cc.current_viewport() )
-			return cc.current_viewport()->getImage();
+		if( commandConsole.current_viewport() )
+			return commandConsole.current_viewport()->getImage();
 		else
 			return NULL;
 	#else
@@ -1315,7 +1313,7 @@ namespace fim
 		 * */
 #ifdef FIM_WINDOWS
 
-		return (cc.current_viewport());
+		return (commandConsole.current_viewport());
 #else
 		return only_viewport;
 #endif
