@@ -41,6 +41,8 @@ void sanitize_string_from_nongraph_except_newline(char *s, int c=0);
 
 using namespace fim;
 
+int int2msbf(int in);
+int int2lsbf(int in);
 fim::string slurp_file(fim::string filename);
 char* slurp_binary_fd(int fd,int *rs);
 void append_to_file(fim::string filename, fim::string lines);

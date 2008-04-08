@@ -1103,6 +1103,7 @@ namespace fim
 			        }
 				if (FD_ISSET(fim_stdin,&set))rc = read(fim_stdin, &c, 4);
 				r=rc;
+				c=int2msbf(c);
 				}
 #else	
 				/*
@@ -1819,6 +1820,10 @@ namespace fim
 		{
 			if(window && !g_fim_no_framebuffer)
 				needed_redisplay=window->recursive_display();
+#if 0
+			else
+				printf("%s : here should go image rendering code.\n",__LINE__);
+#endif
 		}
 		catch	(FimException e)
 		{

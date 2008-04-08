@@ -60,9 +60,10 @@ Introduction to Fim					*ref* *reference*
 3.1. Configuration		|configuration|
 3.2. Keyboard binding		|keyboard|
 3.3. The fimgs script		|fimgs|
-3.4. System integration tips	|tips|
-3.5. The .inputrc file		|inputrc|
-3.6. Environment variables	|env|
+3.4. External scripting		|scripting|
+3.5. System integration tips	|tips|
+3.6. The .inputrc file		|inputrc|
+3.7. Environment variables	|env|
 4. Command Line Mode		|cli|
 5. Command Line Mode Basics	|cli-basics|
 6. Commands Reference		|commands-reference|
@@ -319,7 +320,19 @@ If the file is among the archives file formats listed, it is decompressed in a
 temporary directory and displayed file by file with fim.
 
 ===============================================================================
-3.4. System integration tips				*tips*
+3.4. External scripting					*scripting*
+
+Fim is designed with the primary intent of being as flexible as possible.
+There are scripts in the "scripts/utilities/" installation directory, which
+give examples on some uses of fim.
+
+Take as example the "scripts/utilities/fimscan.sh" shell script: it uses the
+"scanimage" utility to scan images at low resolution, ten shows them to the
+user via fim, asking (inside fim) the user whether to rescan (at higher 
+resolution) the image and save it with a suggested numbered filename scheme.
+
+===============================================================================
+3.5. System integration tips				*tips*
 
 If you are used to software like mutt, you are likely to use much the console.
 Often, when using a console without X, it is necessary to view some attachment
@@ -338,13 +351,13 @@ leaving the 'fimgs' script (included in the Fim distribution) as a replacement
 in all other cases.
 
 ===============================================================================
-3.5. The .inputrc file					*inputrc*
+3.6. The .inputrc file					*inputrc*
 
 Fim is linked with the GNU readline library, therefore it is susceptible to 
 chages in the ~/.inputrc configuration file contents.
 
 ===============================================================================
-3.6. Environment variables				*env*
+3.7. Environment variables				*env*
 
 Some environment variables affect Fim behaviour.
 >

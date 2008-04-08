@@ -210,7 +210,7 @@ potpourri :) .
 For the sake of completeness, Fim is based on the version 1.31 of fbi,
 available from http://dl.bytesex.org/releases/fbida/fbi_1.31.tar.gz .
 
-Useful documents I read during the coding of this patch:
+Useful documents I've read during the coding of this patch:
 
 - Thomas Niemann's tutorial to yacc & lex
 - The yacc & lex HOWTO
@@ -227,11 +227,12 @@ man 3 history
 man readline
 
 Tested platforms :
- - 2.6.17 Linux Kernel, GCC-3.4.6, gentoo
- - 2.6.17 Linux Kernel, GCC-4.1.1, gentoo
- - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 1.875d, gentoo
- - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 2.2   , gentoo
- - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.33,bison 2.2   , gentoo
+ - 2.6.17 Linux Kernel, GCC-3.4.6, gentoo, x86
+ - 2.6.17 Linux Kernel, GCC-4.1.1, gentoo, x86
+ - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 1.875d, gentoo, x86
+ - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 2.2   , gentoo, x86
+ - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.33,bison 2.2   , gentoo, x86
+ - 2.6.19 Linux Kernel, GCC-4.1.1, flex 2.5.33,bison 2.2   , gentoo, powerpc
  - other ones, but non documented here.
 
  -- 

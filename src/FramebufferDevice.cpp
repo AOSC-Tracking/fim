@@ -25,6 +25,7 @@
 
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"
+#include <sys/user.h>	//  for PAGE_MASK (sometimes it is needed to include it here explicitly)
 
 namespace fim
 {

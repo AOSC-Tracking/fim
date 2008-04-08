@@ -250,7 +250,7 @@ int help_and_exit(char *argv0, int code=0)
 		read_one_script_file_from_stdin=0;
 	#endif
 	//	char             *desc,*info;
-		char c;
+		int c;
 		bool appendedPostInitCommand=false;
 		Image* stream_image=NULL;
 		g_fim_no_framebuffer=0;

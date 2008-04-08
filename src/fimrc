@@ -221,6 +221,8 @@ alias 'console_scroll_up'   'if(console_offset<console_lines){console_offset=con
 alias 'console_scroll_down' 'if(console_offset>0){console_offset=console_offset-1;}';
 alias 'cscrollup' 'console_scroll_up';
 alias 'cscrolldown' 'console_scroll_down';
+alias "musicplay"  "mpc play";
+alias "musicpause" "mpc pause";
 
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.

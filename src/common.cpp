@@ -207,7 +207,7 @@ static int pick_word(char *f, unsigned int *w)
 {
 	int fd = open(f,O_RDONLY);
 	if(fd==-1) return -1;
-	if(read(fd,w,4)==4)return 0;
+	if(read(fd,w,sizeof(int))==sizeof(int))return 0;
 	return -1;
 }
 
@@ -384,4 +384,33 @@ int fim_common_test()
 	return 0;
 }
 
+int swap_bytes_in_int(int in)
+{
+	// to Most Significant Byte First
+	// FIXME : this function should be optimized
+	int out=0;
+	int b=sizeof(int),i=-1,nc;
+	while(i++<b/2)
+	{
+	((char*)&out)[i]=((char*)&in)[b-i-1];
+	((char*)&out)[b-i-1]=((char*)&in)[i];
+	}
+	return out;
+}
+
+int int2lsbf(int in)
+{
+	int one=0x01;
+	if( 0x01 & (*(char*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
+		return swap_bytes_in_int(in);
+	return in;
+}
+
+int int2msbf(int in)
+{
+	int one=0x01;
+	if( 0x01 & (*(char*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
+		return in;
+	return swap_bytes_in_int(in);
+}
 

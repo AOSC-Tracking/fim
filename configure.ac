@@ -337,6 +337,10 @@ dnl ============= GNU readline : essential
 
 FIMLIBS="$FIMLIBS -lreadline"
 
+dnl ============= aalib : optional
+
+dnl    AC_CHECK_LIB(aa, aa_getfirst,have_aa=yes,have_aa=no)
+
 dnl ============= GNU gpm, unofficial yet
 
 #    AC_CHECK_LIB(gpm,Gpm_Open,
@@ -637,6 +641,14 @@ fi
 
 dnl ==================
 
+dnl    fim_cv_aalib=no
+dnl    AC_ARG_ENABLE(aalib, AC_HELP_STRING([--enable-aalib], [Turns on aalib support (STILL INCOMPLETE)]),
+dnl    [if test x$enableval = xyes; then
+dnl            fim_cv_aalib=yes
+dnl    fi])
+
+dnl ==================
+
 # This code still awaits for integration ...
 AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CFLAGS], 
 	[Specify a custom CFLAGS append value.  e.g.: -pg
@@ -787,7 +799,13 @@ dnl ==================
 
 dnl ==================
 
+dnl    AH_TEMPLATE([FIM_WITH_AALIB])
+dnl            if test x$fim_cv_aalib = xyes ; then
+dnl    		AC_DEFINE([FIM_WITH_AALIB])
+dnl    		FIMLIBS="$FIMLIBS -laa"
+dnl    	fi
 
+dnl ==================
 
 dnl uhmmmmmm : doesn't seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 
