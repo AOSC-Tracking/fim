@@ -294,6 +294,199 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
     return h;
 }
 
+#if 1
+void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data)
+{
+	float fsx=0.0;
+	struct op_resize_state *h = (struct op_resize_state *)data;
+#ifndef FIM_WANTS_SLOW_RESIZE
+	int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
+#endif
+	unsigned char* srcline=src->data+src->i.width*3*(sr);
+    	const float c_outleft = 1.0f/h->xscale;
+	const unsigned int Mdx=h->width,msx=src->i.width;
+	register unsigned int i,sx,sx1,sx2,sx3,sx4,dx;
+
+	/*
+	 * this gives a ~ 50% gain
+	 * */
+		dx=0;
+		float d0f=0.0,d1f=0.0;
+		int   d0i=0,d1i=0;
+
+		dx=0;
+		if(src->i.width) for (sx=0;sx<src->i.width-1;++sx )
+		{
+			d1f+=h->xscale;
+			d1i=(unsigned int)d1f;
+
+			sx*=3;
+			for (dx=d0i;dx<d1i;++dx )//d1i < Mdx
+			{
+				dst[3*dx+0] = srcline[  sx  ];
+				dst[3*dx+1] = srcline[  sx+1];
+				dst[3*dx+2] = srcline[  sx+2] ;
+			}
+			sx/=3;
+	
+			d0f=d1f;
+			d0i=(unsigned int)d0f;
+		}
+		{
+		// contour fix
+			sx*=3;
+			for (dx=d0i;dx<Mdx;++dx )//d1i < Mdx
+			{
+				dst[3*dx+0] = srcline[  sx  ];
+				dst[3*dx+1] = srcline[  sx+1];
+				dst[3*dx+2] = srcline[  sx+2] ;
+			}
+			sx/=3;
+		}
+		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+}
+
+void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data)
+{
+	float fsx=0.0;
+	struct op_resize_state *h = (struct op_resize_state *)data;
+#ifndef FIM_WANTS_SLOW_RESIZE
+	int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
+#endif
+	unsigned char* srcline=src->data+src->i.width*3*(sr);
+    	const float c_outleft = 1.0f/h->xscale;
+	const unsigned int Mdx=h->width,msx=src->i.width;
+	register unsigned int i,sx,sx1,sx2,sx3,sx4,dx;
+
+	/*
+	 * this gives a ~ 70% gain
+	 * */
+		dx=0;
+		float d0f=0.0,d1f=0.0;
+		int   d0i=0,d1i=0;
+
+		dx=0;
+		if(src->i.width) for (sx=0;sx<src->i.width-1;++sx )
+		{
+			d1f+=h->xscale;
+			d1i=(unsigned int)d1f;
+
+			register unsigned char r,g,b;
+			r=srcline[  3*sx+ 0];
+			g=srcline[  3*sx+ 1];
+			b=srcline[  3*sx+ 2];
+
+			for (dx=d0i;dx<d1i-4;dx+=4 )//d1i < Mdx
+			{
+				dst[3*dx+ 0] = r;
+				dst[3*dx+ 1] = g;
+				dst[3*dx+ 2] = b;
+
+				dst[3*dx+ 3] = r;
+				dst[3*dx+ 4] = g;
+				dst[3*dx+ 5] = b;
+
+				dst[3*dx+ 6] = r;
+				dst[3*dx+ 7] = g;
+				dst[3*dx+ 8] = b;
+
+				dst[3*dx+ 9] = r;
+				dst[3*dx+10] = g;
+				dst[3*dx+11] = b;
+			}
+			for (   ;dx<d1i;++dx )//d1i < Mdx
+			{
+				dst[3*dx+0] = r;
+				dst[3*dx+1] = g;
+				dst[3*dx+2] = b;
+			}
+	
+			d0f=d1f;
+			d0i=(unsigned int)d0f;
+		}
+		{
+		// contour fix
+			sx*=3;
+			for (dx=d0i;dx<Mdx;++dx )//d1i < Mdx
+			{
+				dst[3*dx+0] = srcline[  sx  ];
+				dst[3*dx+1] = srcline[  sx+1];
+				dst[3*dx+2] = srcline[  sx+2] ;
+			}
+			sx/=3;
+		}
+		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+}
+
+void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data)
+{
+	float fsx=0.0;
+	struct op_resize_state *h = (struct op_resize_state *)data;
+#ifndef FIM_WANTS_SLOW_RESIZE
+	int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
+#endif
+	unsigned char* srcline=src->data+src->i.width*3*(sr);
+    	const float c_outleft = 1.0f/h->xscale;
+	const unsigned int Mdx=h->width,msx=src->i.width;
+	register unsigned int i,sx,sx1,sx2,sx3,sx4,dx;
+
+	/*
+	 * this gives a ~ 60% gain
+	 * */
+		dx=0;
+		float d0f=0.0,d1f=0.0;
+		int   d0i=0,d1i=0;
+
+		dx=0;
+		if(src->i.width) for (sx=0;sx<src->i.width-1;++sx )
+		{
+			d1f+=h->xscale;
+			d1i=(unsigned int)d1f;
+
+			register unsigned char r,g,b;
+			r=srcline[  3*sx+ 0];
+			g=srcline[  3*sx+ 1];
+			b=srcline[  3*sx+ 2];
+
+			for (dx=d0i;FIM_LIKELY(dx<d1i-2);dx+=2 )//d1i < Mdx
+			{
+				dst[3*dx+ 0] = r;
+				dst[3*dx+ 1] = g;
+				dst[3*dx+ 2] = b;
+
+				dst[3*dx+ 3] = r;
+				dst[3*dx+ 4] = g;
+				dst[3*dx+ 5] = b;
+			}
+			for (   ;dx<d1i;++dx )//d1i < Mdx
+			{
+				dst[3*dx+0] = r;
+				dst[3*dx+1] = g;
+				dst[3*dx+2] = b;
+			}
+	
+			d0f=d1f;
+			d0i=(unsigned int)d0f;
+		}
+		{
+		// contour fix
+			sx*=3;
+			for (dx=d0i;dx<Mdx;++dx )//d1i < Mdx
+			{
+				dst[3*dx+0] = srcline[  sx  ];
+				dst[3*dx+1] = srcline[  sx+1];
+				dst[3*dx+2] = srcline[  sx+2] ;
+			}
+			sx/=3;
+		}
+		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+}
+
+#endif
+
 static void
 op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	       unsigned char *dst, int line, void *data)
@@ -302,7 +495,8 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
     float outleft,left,weight,d0,d1,d2;
     unsigned char *csrcline;
     float *fsrcline;
-    unsigned int i,sx,dx;
+
+    register unsigned int i,sx,dx;
 
 #ifndef FIM_WANTS_SLOW_RESIZE
     int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
@@ -343,11 +537,26 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	left = 1.0f;
 	fsrcline = h->rowbuf;
     	const float c_outleft = 1.0f/h->xscale;
+	//	cout << "c_outleft : "  << c_outleft << "\n";
+	//	cout << "h->width : "  << (int)h->width << "\n";
 	const unsigned int Mdx=h->width,msx=src->i.width;
 	if(h->xscale>1.0)//here we handle the case of magnification
 	{
 		float fsx=0.0;
 		unsigned char* srcline=src->data+src->i.width*3*(sr);
+
+#if 1
+		if(h->xscale>2.0)
+		{
+			if(h->xscale>4.0)
+				op_resize_work_unrolled4_row_expand( src, rect, dst, line, data);
+			else
+				op_resize_work_unrolled2_row_expand( src, rect, dst, line, data);
+		}
+		else
+			op_resize_work_row_expand( src, rect, dst, line, data);
+
+#else
 		for (sx=0,dx=0; dx<Mdx; ++dx)
 		{
 	#if 1
@@ -366,6 +575,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 			dst += 3;
 	#endif
 		}
+#endif
 	}
 #define ZEROF 0.0f
 	else    // image minification

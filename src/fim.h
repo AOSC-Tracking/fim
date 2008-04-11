@@ -166,4 +166,8 @@ namespace fim
 #define FV_CONSOLE_BUFFER_FREE		"console_buffer_free"
 #define FV_CONSOLE_BUFFER_USED		"console_buffer_used"
 
+/* using GCC builtins */
+#define FIM_UNLIKELY(expr) __builtin_expect(!!(expr),0)
+#define FIM_LIKELY(expr)   __builtin_expect(!!(expr),1)
+
 #endif

@@ -1,3 +1,31 @@
+2008-04-08 14:20  dezperado
+
+	* : Adapted the code to tun on a gentoo Linux powerpc machine.
+	  Fixed a bug using getopt_long causing segmentation fault there in
+	  fim.cpp.
+	  Added a new example script : scripts/utilities/fimscan.sh
+	  Updated a little the documentation regarding external scripting
+	  (like fimscan.sh).
+
+2008-03-25 18:08  dezperado
+
+	* : Some less extern references.
+	  Improved a little the image magnification code: better for big
+	  magnifications.
+
+2008-03-22 16:04  dezperado
+
+	* : Implemented the -i option to read an image file via standard
+	  input.
+	  Implemented the -p option to read a fim script via standard
+	  input.
+	  The option can be turned off by means of the FIM_READ_STDIN_IMAGE
+	  symbol.
+	  Fixed a little the -f option.
+	  Documented the changes in the fim man page and updated the
+	  configure script.
+	  Added an EXAMPLES section to the man page.
+
 2008-03-17 15:36  dezperado
 
 	* : Enhanced the new textual console.
