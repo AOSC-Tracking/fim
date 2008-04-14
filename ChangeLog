@@ -1,3 +1,8 @@
+2008-04-11 19:56  dezperado
+
+	* : Unrolled the magnifying loop in op_resize_work : now we magnify
+	  50% and more faster.
+
 2008-04-08 14:20  dezperado
 
 	* : Adapted the code to tun on a gentoo Linux powerpc machine.

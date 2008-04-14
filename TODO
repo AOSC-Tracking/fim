@@ -22,6 +22,8 @@ further inspiration.
 	Current development directions
 
 
+20080414	to add scripts to check for memory leaks and related bugs and build problems,
+		in a way contributors could run cron scripts with svn export / build capabilities
 20080324	absolute priority of removing all extern object references in the code
 20080316	i need a class/superclass with the command acception functionality,
 		in a way each object would be directly responsible for its own bunch

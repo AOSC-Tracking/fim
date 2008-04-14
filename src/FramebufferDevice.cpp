@@ -335,12 +335,27 @@ void FramebufferDevice::svga_display_image_new(struct ida_image *img, int xoff, 
     int fb_fix_line_length=FB_MEM_LINE_OFFSET;
     if(flip) {	fb_fix_line_length*=-1; video += (min(img->i.height,dheight)-1)*(fb_fix.line_length);}
     /*flip patch*/
+    /* FIXME : COMPLETE ME ... */
+
+#ifndef FIM_IS_SLOWER_THAN_FBI
+    unsigned char *(FramebufferDevice::*convert_line_f)(int , int , int , char unsigned *, char unsigned *, int );
+    if(fb_var.bits_per_pixel==8)
+ 	   convert_line_f=&fim::FramebufferDevice::convert_line_8;
+    else
+ 	   convert_line_f=&fim::FramebufferDevice::convert_line;
+#endif
+
     for (data = 0, y = by;
 	 data < img->i.width * img->i.height * 3
 	     && data / img->i.width / 3 < dheight;
 	 data += img->i.width * 3, video += fb_fix_line_length)
     {
-	convert_line(fb_var.bits_per_pixel, y++, dwidth,
+#ifndef FIM_IS_SLOWER_THAN_FBI
+	(this->*convert_line_f)
+#else
+	convert_line
+#endif
+	(fb_var.bits_per_pixel, y++, dwidth,
 		     fb_mem+video, img->data + data + offset,mirror);/*<- mirror patch*/
     }
 }
@@ -515,7 +530,7 @@ void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
     i |= i << 16;
     len >>= 2;
 #ifdef FIM_IS_SLOWER_THAN_FBI
-    for (p = addr; len--; p++)
+    for (p = (unsigned int*) addr; len--; p++)
 	*p = i;
 #else
     memset(addr, i, len );
@@ -846,6 +861,13 @@ void FramebufferDevice::fb_cleanup(void)
     close(tty);
 }
 
+unsigned char * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror)/*dez's mirror patch*/
+{
+    unsigned char  *ptr  = (unsigned char *)dest;
+	dither_line(buffer, ptr, line, owidth, mirror);
+	ptr += owidth;
+	return ptr;
+}
 
 unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror)/*dez's mirror patch*/
 {
@@ -871,7 +893,7 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
 		lut_blue[buffer[x*3+2]];
 	}
 #else
-	if(!mirror)
+	if(FIM_LIKELY(!mirror))
 	for (x = 0; x < owidth; x++) {
 	    ptr2[x] = lut_red[buffer[x*3+2]] |
 		lut_green[buffer[x*3+1]] |
@@ -897,7 +919,7 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
 	}
 #else
 	/*swapped RGB patch*/
-	if(!mirror)
+	if(FIM_LIKELY(!mirror))
 	{
 		/*
 		 * this code could be faster if using processor specific routines..
@@ -961,9 +983,15 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
 		lut_blue[buffer[x*3]];
 	}
 #else
+	if(FIM_LIKELY(!mirror))
 	for (x = 0; x < owidth; x++) {
-            xm=mirror?owidth-1-x:x;
-	    ptr4[xm] = lut_red[buffer[x*3]] |
+	    ptr4[x] = lut_red[buffer[x*3]] |
+		lut_green[buffer[x*3+1]] |
+		lut_blue[buffer[x*3+2]];
+	}
+	else
+	for (x = 0; x < owidth; x++) {
+	    ptr4[owidth-1-x] = lut_red[buffer[x*3]] |
 		lut_green[buffer[x*3+1]] |
 		lut_blue[buffer[x*3+2]];
 	}
@@ -1124,56 +1152,100 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
 
 void inline FramebufferDevice::dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror)
 {
-    register long   a, b;
+    register long   a, b
+#ifndef FIM_IS_SLOWER_THAN_FBI
+    __attribute((aligned(16)))
+#endif
+    ;
+
     long           *ymod, xmod;
 
     ymod = (long int*) DM[y & DITHER_MASK];
     /*	mirror patch by dez	*/
-    register int inc;inc=mirror?-1:1;
+    register const int inc=mirror?-1:1;
     dest=mirror?dest+width-1:dest;
     /*	mirror patch by dez	*/
-    while (width--) {
-	xmod = width & DITHER_MASK;
+    if(FIM_UNLIKELY(width<1))goto nodither; //who knows
 
-#if 0
-// 20070923 : seems like there is NO NEED OF PATCHING THIS :)
-//#ifndef FIM_IS_SLOWER_THAN_FBI
-	/*RGB swapped patch	*/
-	b = red_dither[*(src++)];
-	if (ymod[xmod] < b)
-	    b >>= 8;
-
-	a = green_dither[*(src++)];
-	if (ymod[xmod] < a)
-	    a >>= 8;
-	b += a;
-
-	a = blue_dither[*(src++)];
-	if (ymod[xmod] < a)
-	    a >>= 8;
-	b += a;
-#else
-	/*original	*/
-	b = blue_dither[*(src++)];
-	if (ymod[xmod] < b)
-	    b >>= 8;
-
-	a = green_dither[*(src++)];
-	if (ymod[xmod] < a)
-	    a >>= 8;
-	b += a;
-
-	a = red_dither[*(src++)];
-	if (ymod[xmod] < a)
-	    a >>= 8;
-	b += a;
+#ifndef FIM_IS_SLOWER_THAN_FBI
+    switch(width%8){
+    	case 0:	goto dither0; break ;
+    	case 1:	goto dither1; break ;
+    	case 2:	goto dither2; break ;
+    	case 3:	goto dither3; break ;
+    	case 4:	goto dither4; break ;
+    	case 5:	goto dither5; break ;
+    	case 6:	goto dither6; break ;
+    	case 7:	goto dither7; break ;
+    }
 #endif
 
-    /*	mirror patch by dez	*/
-	*(dest) = b & 0xff;
+    while (width) {
+
+#if 0
+
+ #define DITHER_CORE \
+	xmod = --width & DITHER_MASK; \
+\
+	b = blue_dither[*(src++)];  \
+	b >>= (ymod[xmod] < b)?8:0; \
+	a = green_dither[*(src++)]; \
+	a >>= (ymod[xmod] < a)?8:0; \
+	b += a; \
+	a = red_dither[*(src++)]; \
+	a >>= (ymod[xmod] < a)?8:0; \
+	*(dest) = b+a & 0xff; \
+    /*	mirror patch by dez	*/ \
 	dest+=inc;
-	/*	*(dest++) = b & 0xff;*/
+
+#else
+ #define DITHER_CORE \
+	{ \
+	width--; \
+	xmod = width & DITHER_MASK; \
+ 	const long ymod_xmod=ymod[xmod]; \
+\
+	b = blue_dither[*(src++)]; \
+	if (ymod_xmod < b) \
+	    b >>= 8; \
+\
+	a = green_dither[*(src++)]; \
+	if (ymod_xmod < a) \
+	    a >>= 8; \
+	b += a; \
+\
+	a = red_dither[*(src++)]; \
+	if (ymod_xmod < a) \
+	    a >>= 8; \
+	b += a; \
+	*(dest) = b & 0xff; \
+    /*	mirror patch by dez	*/ \
+	dest+=inc; \
+	} \
+	/*	*(dest++) = b & 0xff;*/ 
+#endif
+
+#ifndef FIM_IS_SLOWER_THAN_FBI
+dither0:
+	DITHER_CORE
+dither7:
+	DITHER_CORE
+dither6:
+	DITHER_CORE
+dither5:
+	DITHER_CORE
+dither4:
+	DITHER_CORE
+dither3:
+	DITHER_CORE
+dither2:
+	DITHER_CORE
+#endif
+dither1:
+	DITHER_CORE
     }
+nodither:
+	return;
 }
 void FramebufferDevice::dither_line_gray(unsigned char *src, unsigned char *dest, int y, int width)
 {

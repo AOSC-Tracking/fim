@@ -111,6 +111,18 @@ namespace rl
 	void initialize_readline (int with_no_framebuffer);
 }
 
+/* using GCC builtins */
+
+#ifndef FIM_IS_SLOWER_THAN_FBI
+	#define FIM_UNLIKELY(expr) __builtin_expect(!!(expr),0)
+	#define FIM_LIKELY(expr)   __builtin_expect(!!(expr),1)
+	#define FIM_ALIGNED __attribute__((aligned (64)))
+#else
+	#define FIM_UNLIKELY(expr)  (expr)
+	#define FIM_LIKELY(expr)   (expr)
+	#define FIM_ALIGNED
+#endif
+
 #include "string.h"
 #include "Command.h"
 #include "Arg.h"
@@ -165,9 +177,5 @@ namespace fim
 #define FV_CONSOLE_BUFFER_TOTAL		"console_buffer_total"
 #define FV_CONSOLE_BUFFER_FREE		"console_buffer_free"
 #define FV_CONSOLE_BUFFER_USED		"console_buffer_used"
-
-/* using GCC builtins */
-#define FIM_UNLIKELY(expr) __builtin_expect(!!(expr),0)
-#define FIM_LIKELY(expr)   __builtin_expect(!!(expr),1)
 
 #endif

@@ -125,11 +125,12 @@ class FramebufferDevice
 	MiniConsole mc;
 #endif
 
+
 	long     red_mult, green_mult;
-	long     red_dither[256];
-	long     green_dither[256];
-	long     blue_dither[256];
-	long     gray_dither[256];
+	long     red_dither[256]  FIM_ALIGNED;
+	long     green_dither[256]FIM_ALIGNED;
+	long     blue_dither[256] FIM_ALIGNED;
+	long     gray_dither[256] FIM_ALIGNED;
 
 	/*
 	 * 20080106
@@ -355,6 +356,7 @@ void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned i
  */
 inline unsigned char * clear_line(int bpp, int line, int owidth, char unsigned *dest);
 unsigned char * convert_line(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror);/*dez's mirror patch*/
+unsigned char * convert_line_8(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror);/*dez's mirror patch*/
 
 
 

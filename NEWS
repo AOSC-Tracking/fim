@@ -5,7 +5,8 @@
 
  * reading image files (-i) and scripts (-p) from stdin
  * improved the debug console, now buffered and with scrolling
- * speedup in magnifying pictures
+ * 50% and more speedup in magnifying pictures
+ * 20% and more speedup in displaying dithered images
 
         	Version 0.2
  
