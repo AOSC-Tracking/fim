@@ -65,6 +65,9 @@ class Viewport
 
 	Viewport(const Viewport &v);
 	~Viewport(){}
+	private:
+	Viewport& operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
+	public:
 
 	int valid()const;
 

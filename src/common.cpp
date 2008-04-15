@@ -218,6 +218,8 @@ int fim_rand()
 {
 	/*
 	 * Please don't use Fim for cryptographical purposes ;)
+	 * Note that we use /dev/urandom because it will never block on reading.
+	 * Reading from     /dev/random could instead block.
 	 * */
 	unsigned int w;
 	if(pick_word("/dev/urandom",&w)==0) return (w%RAND_MAX);

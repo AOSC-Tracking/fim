@@ -22,6 +22,18 @@ further inspiration.
 	Current development directions
 
 
+20080414	to use mkstemp() in src/FbiStuff.cpp
+20080414	introduce fim_fatal(), fim_warn(), fim_fail(), ...
+20080414	use rand48, and more options on random behaviour
+20080414	follow -Weffc++ g++ flag guidelines, and -Werror
+20080414	instead of malloc() to use calloc() and MALLOC_PERTURB, M_PERTURB on mallopt()
+20080414	use mtrace() sometimes, MALLOC_TRACE=mout
+20080414	use the dmalloc library (DMALLOC_OPTIONS), ElectricFence,
+20080414	use valgrind
+20080414	use mudflap library
+20080414	compile with -D_GLIBCXX_DEBUG for having a bug-aware C++ standard library
+20080414	experiment with libsegfault, <execinfo.h>
+20080414	use lint from time to time
 20080414	to add scripts to check for memory leaks and related bugs and build problems,
 		in a way contributors could run cron scripts with svn export / build capabilities
 20080324	absolute priority of removing all extern object references in the code

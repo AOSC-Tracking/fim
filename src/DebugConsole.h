@@ -57,6 +57,7 @@ namespace fim
 		public:
 
 		MiniConsole(int lw=48, int r=12);
+		virtual ~MiniConsole(){}
 		int dump();	// non const due to user variables reaction
 		int grow();
 		int setRows(int nr);
@@ -64,6 +65,18 @@ namespace fim
 		int reformat(int newlsize);
 
 		private:
+		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignation */}
+		MiniConsole(const MiniConsole &mc)
+			:buffer(NULL),
+			line(NULL),
+			bp(NULL),
+			bsize(0),
+			lsize(0),
+			ccol(0),
+			cline(0),
+			lwidth(0),
+			rows(0)
+			{/* this constructor should not be used */}
 
 		int line_length(int li);
 		int do_dump(int amount)const;

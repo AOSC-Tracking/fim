@@ -868,13 +868,14 @@ dnl AC_SUBST(DEFS)
 AC_SUBST(FIM_DEFS)
 
 AC_SUBST(FIM_LIB_OBJECTS)
+AC_SUBST(FIM_SVN_REPOSITORY,[http://code.autistici.org/svn/fim/])
 
 #CFLAGS="$FIM_CFLAGS"
 #CXXFLAGS="$FIM_CFLAGS"
 
 #AC_CONFIG_FILES([Makefile],[src/Makefile])
 
-AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile)
+AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile scripts/maintenance/cron-build.sh)
 #AC_OUTPUT
 
 AC_MSG_NOTICE([

@@ -75,7 +75,7 @@ class Browser
 	fim::string last_regexp;
 	int current_image()const;
 	int current_images()const{ return n(); }
-	fim::Cache cache;	// was private
+	Cache cache;	// was private
 	public:
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(Image *stdin_image);
@@ -85,6 +85,18 @@ class Browser
 
 	Browser(CommandConsole &cc);
 	~Browser() { }
+	private:
+	Browser& operator= (const Browser &b){return *this;/* a nilpotent assignation */}
+	Browser(const Browser &b):
+		nofile(""),
+		commandConsole(cc),
+		flist(args_t()),
+		cp(0),
+		default_image(NULL),
+		last_regexp(fim::string()),
+		cache(Cache())
+		{}
+	public:
 	fim::string current()const;
 	fim::string regexp_goto(const args_t &args);
 	fim::string prefetch(const args_t &args);

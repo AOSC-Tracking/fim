@@ -119,7 +119,7 @@ namespace fim
                 return "";
         }
 
-	Window::Window(CommandConsole &c,const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false),commandConsole(c)
+	Window::Window(CommandConsole &c,const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false),commandConsole(c),viewport(NULL)
 	{
 		/*
 		 *  A new leave Window is created with a specified geometry.
@@ -138,19 +138,20 @@ namespace fim
 		if( viewport == NULL ) throw FIM_E_NO_MEM;
 	}
 
-#ifdef FIM_UNDEFINED
-	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false)
+//#ifdef FIM_UNDEFINED
+	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false), viewport(NULL),commandConsole(root.commandConsole)
 	{
 		/*
 		 *  A new leave Window is created with a specified geometry.
 		 *  An exception is launched upon memory errors.
+		 *
+		 *  Note : this method is useless, and should be kept private :D
 		 */
-		viewport=NULL;
-		viewport=new Viewport(this);
+		viewport=new Viewport( commandConsole, this );
 
 		if( viewport == NULL ) throw FIM_E_NO_MEM;
 	}
-#endif
+//#endif
 
 	bool Window::issplit()const
 	{

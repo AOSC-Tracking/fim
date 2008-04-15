@@ -29,10 +29,10 @@ class Command
 	public:
 	fim::string cmd,
 		    help ;
-	Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),browserf(bf),browser(b) { type=BrowserT;}
-	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),consolef(cf),console(c) { type=CommandConsoleT;}
+	Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),browserf(bf),browser(b),type(0) { type=BrowserT;}
+	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
 #ifdef FIM_WINDOWS
-	Command(fim::string cmd,fim::string help,Window *w=NULL,fim::string(Window::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),windowf(cf),window(w) { type=WindowT;}
+	Command(fim::string cmd,fim::string help,Window *w=NULL,fim::string(Window::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),windowf(cf),window(w),type(0) { type=WindowT;}
 #endif
 
 	fim::string getHelp()const{return help;}

@@ -1,0 +1,58 @@
+#!/bin/sh
+
+# This script is intended to work on machines connected through the
+# internet to the fim subversion repository and willing to export/build
+# and report in case of errors.
+
+# It should be run as a cron sheduled job.
+
+FIM_SVN_REPOSITORY=@FIM_SVN_REPOSITORY@
+TMPDIR=/tmp/
+
+einfo() { echo  -- "[!]" $@ ; }
+
+info()  { echo  -- "[*]" $@ ; }
+
+die()   { einfo $@ ; return -1; } 
+
+get_fim()
+{
+	if test $HOSTNAME = chip ; then
+		cp -fR /home/dez/fim/ .
+	else
+		svn co $FIM_SVN_REPOSITORY 
+	fi
+}
+
+configure_error()
+{
+	# here should go automatic reporting of the failing configure/config.log ...
+	einfo "please see the config.log file"
+}
+
+make_error()
+{
+	# here should go automatic reporting of the failing make ...
+	einfo "please see the $MAKELOG file"
+}
+
+date_ymd() { date +%Y%m%d ; }
+
+build_fim()
+{
+	sh autogen.sh || die "error generating initial fim scripts"
+	./configure || configure_error "error configuring fim"
+	MAKELOG="make.`date_ymd`.log"
+	make clean 2>&1 | tee $MAKELOG || make_error "error in making clean fim"
+	make       2>&1 | tee $MAKELOG || make_error "error making fim"
+}
+
+[ -z "$FIM_SVN_REPOSITORY" ] && die "no fim repository specified ?"
+[ -z "$TMPDIR" ] && die "no temporary directory specified ?"
+
+cd $TMPDIR || die "error stepping in $TMPDIR"
+get_fim || die "error getting fim sources"
+cd fim || die "error stepping in fim directory"
+build_fim || "error building fim"
+
+

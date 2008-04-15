@@ -31,13 +31,16 @@ namespace fim
 {
 class Var
 {
-	union{float f;
-	int i;
+	union
+	{
+		float f;
+		int i;
 	};
 	fim::string s;
 	int type;
 	public:
 	Var(const Var &v)
+	:type(0),i(0),s(fim::string())
 	{
 		this->type=v.type;
 		if(type=='i')this->i=v.i;
@@ -46,18 +49,21 @@ class Var
 	}
 
 	Var(float v)
+	:type(0),i(0),s(fim::string())
 	{
 		type='f';
 		f=v;
 	}
 
 	Var(int v)
+	:type(0),i(0),s(fim::string())
 	{
 		type='i';
 		i=v;
 	}
 
 	Var()
+	:type(0),i(0),s(fim::string())
 	{
 		type='i';
 		const char *s="0";
@@ -68,12 +74,14 @@ class Var
 	}
 
 	Var(const fim::string s)
+	:type(0),i(0),s(fim::string())
 	{
 		type='s';
 		this->s=s.c_str();
 	}
 
 	Var(const char*s)
+	:type(0),i(0),s(fim::string())
 	{
 		type='s';
 		this->s=s;
@@ -90,9 +98,15 @@ class Var
 */
 /*	void operator= (int   i){if(type=='i')this->i=i;}
 	void operator= (float f){if(type=='f')this->f=f;}*/
+#if 0
 	void operator= (int   i){type='i';this->i=i;}
 	void operator= (float f){setFloat(f);}
 	void operator= (fim::string &s){setString(s);}
+#else
+	const Var& operator= (int   i){type='i';this->i=i;return *this;}
+	const Var& operator= (float f){setFloat(f);return *this;}
+	const Var& operator= (fim::string &s){setString(s);return *this;}
+#endif
 	float setFloat(float f){type='f';return this->f=f;}
 	int   setInt(int i){type='i';return this->i=i;}
 	fim::string setString(fim::string &s){type='s';this->s=s;return this->s;}

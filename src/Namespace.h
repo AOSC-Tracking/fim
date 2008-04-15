@@ -58,6 +58,9 @@ namespace fim
 		float getGlobalFloatVariable(const fim::string &varname);
 		fim::string getGlobalStringVariable(const fim::string &varname);
 		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
+
+		Namespace():variables(variables_t()) {}
+		virtual ~Namespace(){}
 	};
 }
 

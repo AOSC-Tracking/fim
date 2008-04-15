@@ -150,6 +150,9 @@ class CommandConsole
 	const char*get_prompt()const{return prompt;}
 
 	CommandConsole(FramebufferDevice &_framebufferdevice);
+	private:
+	CommandConsole& operator= (const CommandConsole&cc){return *this;/* a nilpotent assignation */}
+	public:
 
 	fim::string markCurrentFile(const args_t& args);
 	bool display();

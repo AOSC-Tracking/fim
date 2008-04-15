@@ -43,24 +43,30 @@ namespace fim
 			)
 			:framebufferdevice(fim::ffd)
 			,commandConsole(c)
+			,steps(0)
+			,left(0)
+			,top(0)
+			,image(NULL)
 #ifdef FIM_WINDOWS
 			,window(window_)
 #endif
 	{
 		// WARNING : this constructor will be filled soon
-		image=NULL;
 		reset();
 	}
 
 	Viewport::Viewport(const Viewport &v)
 		:framebufferdevice(fim::ffd)
 		,commandConsole(v.commandConsole)
+		,steps(v.steps)
+		,left(v.left)
+		,top(v.top)
+		,image(NULL)
 #ifdef FIM_WINDOWS
 		,window(v.window)
 #endif
 	{
 		// WARNING
-		image=NULL;
 		reset();
 		try
 		{

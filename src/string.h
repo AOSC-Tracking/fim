@@ -71,7 +71,7 @@ namespace fim
 
 	bool isempty()const;
 
-	~string();
+	virtual ~string();//virtual, as -Weffc++ suggests
 	string();
 	string(const string& s);
 	string(const char *str);

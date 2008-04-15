@@ -151,6 +151,15 @@ namespace fim
 		}
 
 		MiniConsole::MiniConsole(int lw, int r)
+		:buffer(NULL),
+		line(NULL),
+		bp(NULL),
+		bsize(0),
+		lsize(0),
+		ccol(0),
+		cline(0),
+		lwidth(0),
+		rows(0)
 		{
 			/*
 			 * We initialize the console

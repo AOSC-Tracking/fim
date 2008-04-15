@@ -69,7 +69,18 @@ namespace fim
 		return img->i.height;
 	}
 
-	Image::Image(const char *fname_, FILE*fd):framebufferdevice(fim::ffd)
+	Image::Image(const char *fname_, FILE*fd):
+		framebufferdevice(fim::ffd),
+		scale(0.0),
+		ascale(0.0),
+		newscale(0.0),
+		orientation(0),
+		no_file(true),
+                invalid(0),
+                fimg    (NULL),
+                img     (NULL),
+                fname     (NULL)
+
 	{
 		/*
 		 *	an image object is created from an image filename
@@ -379,7 +390,12 @@ namespace fim
 		ascale(image.ascale),
 		newscale(image.newscale),
 		orientation(image.orientation),
-		framebufferdevice(fim::ffd)
+		framebufferdevice(fim::ffd),
+		no_file(true),
+                invalid(0),
+                fimg    (NULL),
+                img     (NULL),
+                fname     (NULL)
 	{
 		/*
 		 * builds a clone of this image.

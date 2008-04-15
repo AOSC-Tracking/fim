@@ -176,11 +176,15 @@ class Window
 
 
 	private:
-#ifdef FIM_UNDEFINED
-	// seems useless, who knows ?
-	// throws FIM_E_NO_MEM exception
+//#ifdef FIM_UNDEFINED
+	/*
+	 seems useless, who knows ?
+	 throws FIM_E_NO_MEM exception
+	 it is hust defined to make -Weffc++ happy
+	 so keep this private!
+	*/
 	Window(const Window & root);
-#endif
+//#endif
 	bool isleaf()const;
 	bool isvalid()const;
 	bool issplit()const;
@@ -226,6 +230,8 @@ class Window
 
 	Viewport & current_viewport()const;
 	CommandConsole &commandConsole;
+
+	Window & operator= (const Window &w){return *this;/* a nilpotent assignation */}
 
 	public:
 	void setroot();	// only one root window should exist

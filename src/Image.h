@@ -65,6 +65,7 @@ class Image
 	~Image();
 
 	private:
+	Image& operator= (const Image &i){return *this;/* a nilpotent assignation */}
 	float            scale    ;	/* viewport variables */
 	float            ascale   ;
 	float            newscale ;

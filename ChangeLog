@@ -1,3 +1,9 @@
+2008-04-14 18:48  dezperado
+
+	* : Big optimizations and speedup in magnifying pictures through
+	  loop unrollings, and a 20% improvement in dithering handling, in
+	  convert_line().
+
 2008-04-11 19:56  dezperado
 
 	* : Unrolled the magnifying loop in op_resize_work : now we magnify

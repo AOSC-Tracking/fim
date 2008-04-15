@@ -538,8 +538,8 @@ int help_and_exit(char *argv0, int code=0)
 				// DANGEROUS TRICK!
 				cc.browser.set_default_image(stream_image);
 				cc.browser.push("");
+				fclose(tfd);
 			}
-			//if(tfd)		fclose(tfd);
 			close(0);
 			dup(2);
 		}
