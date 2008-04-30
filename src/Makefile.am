@@ -63,12 +63,14 @@ CLEANFILES=$(BUILT_SOURCES) yacc.output
 fim_SOURCES  = $(BUILT_SOURCES) \
 	fim.cpp \
 	fim.h \
+	AADevice.h \
 	Arg.h \
 	Browser.h \
 	Cache.h \
 	Command.h \
 	CommandConsole.h \
 	DebugConsole.h \
+	DisplayDevice.h \
 	Image.h \
 	FbiStuff.h \
 	FbiStuffList.h \
@@ -90,6 +92,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	readline.h \
 	readline.cpp \
 	string.h \
+	AADevice.cpp \
 	Arg.cpp \
 	Browser.cpp \
 	Cache.cpp \

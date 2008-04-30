@@ -525,6 +525,8 @@ int help_and_exit(char *argv0, int code=0)
 			FILE *tfd=NULL;
 			if( ( tfd=tmpfile() )!=NULL )
 			{	
+				/* todo : read errno in case of error and print some report.. */
+
 				char buf[1024];int rc=0;
 				while( (rc=read(0,buf,1024))>0 ) fwrite(buf,rc,1,tfd);
 				rewind(tfd);
@@ -538,7 +540,7 @@ int help_and_exit(char *argv0, int code=0)
 				// DANGEROUS TRICK!
 				cc.browser.set_default_image(stream_image);
 				cc.browser.push("");
-				fclose(tfd);
+				//fclose(tfd);	// uncommenting this will cause a segfault (why ? FIXME)
 			}
 			close(0);
 			dup(2);

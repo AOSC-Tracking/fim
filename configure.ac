@@ -339,7 +339,7 @@ FIMLIBS="$FIMLIBS -lreadline"
 
 dnl ============= aalib : optional
 
-dnl    AC_CHECK_LIB(aa, aa_getfirst,have_aa=yes,have_aa=no)
+AC_CHECK_LIB(aa, aa_getfirst,have_aalib=yes,have_aalib=no)
 
 dnl ============= GNU gpm, unofficial yet
 
@@ -641,11 +641,18 @@ fi
 
 dnl ==================
 
-dnl    fim_cv_aalib=no
-dnl    AC_ARG_ENABLE(aalib, AC_HELP_STRING([--enable-aalib], [Turns on aalib support (STILL INCOMPLETE)]),
-dnl    [if test x$enableval = xyes; then
-dnl            fim_cv_aalib=yes
-dnl    fi])
+fim_cv_aalib=no
+
+AC_ARG_ENABLE(aalib, AC_HELP_STRING([--enable-aalib], [Turns on aalib support (STILL INCOMPLETE)]),
+	[if test x$enableval = xyes; then
+	if test x$have_aalib = xyes; then
+	fim_cv_aalib=yes
+	else
+        AC_MSG_ERROR([Sorry, it doesn't seem like aalib is installed or detectable.
+	Please run --disable-aalib or install aalib in a system-wide directory instead.
+	])
+	fi
+	fi])
 
 dnl ==================
 
@@ -799,11 +806,11 @@ dnl ==================
 
 dnl ==================
 
-dnl    AH_TEMPLATE([FIM_WITH_AALIB])
-dnl            if test x$fim_cv_aalib = xyes ; then
-dnl    		AC_DEFINE([FIM_WITH_AALIB])
-dnl    		FIMLIBS="$FIMLIBS -laa"
-dnl    	fi
+    AH_TEMPLATE([FIM_WITH_AALIB])
+            if test x$fim_cv_aalib = xyes ; then
+    		AC_DEFINE([FIM_WITH_AALIB])
+    		FIMLIBS="$FIMLIBS -laa"
+    	fi
 
 dnl ==================
 
@@ -884,7 +891,7 @@ AC_MSG_NOTICE([
 	default minimal key mapping         : ${have_default_mapping:-no}
 	default minimal key bindings        : ${have_default_bindings:-no}
 	default configuration file builtin  : ${have_default_config:-no}
-        compile time warnings               : ${fim_cv_warnings:-no} ( ${FIM_CFLAGS} )
+        compile time warnings               : ${fim_cv_warnings:-no} (additional CFLAGS: ${FIM_CFLAGS} )
         resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
 	will read directories               : ${fim_cv_read_dirs}
@@ -893,7 +900,7 @@ AC_MSG_NOTICE([
 	jpeg file support                   : ${fim_handle_jpeg:-no}
 	tiff file support                   : ${fim_handle_tiff:-no}
 	gif  file support                   : ${fim_handle_gif:-no}
-	patch for running under screen ?    : ${fim_cv_screen:-no}
+	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 	internal windowing system           : ${have_windows:-no}
@@ -903,6 +910,7 @@ AC_MSG_NOTICE([
 	use 'convert' for unknown files     : ${fim_cv_convert}
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
+	ascii art (aalib) limited support   : ${fim_cv_aalib}
 
 
 	If you are not satisfied with this configuration, please run :

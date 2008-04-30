@@ -63,6 +63,7 @@ namespace fim
 		int setRows(int nr);
 		int add(const char* cs);
 		int reformat(int newlsize);
+		int do_dump(int amount)const;
 
 		private:
 		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignation */}
@@ -79,7 +80,6 @@ namespace fim
 			{/* this constructor should not be used */}
 
 		int line_length(int li);
-		int do_dump(int amount)const;
 		int do_dump(int f, int l)const;
 		int do_dump()const;
 

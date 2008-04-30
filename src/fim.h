@@ -92,6 +92,9 @@ namespace fim
 	class Arg;
 	class Browser;
 	class FontServer;
+#ifdef FIM_WITH_AALIB
+	//class AADevice;
+#endif
 	class FramebufferDevice;
 	class CommandConsole;
 	class Command;
@@ -136,6 +139,9 @@ namespace rl
 #include "Window.h"
 #include "Browser.h"
 #include "DebugConsole.h"
+#ifdef FIM_WITH_AALIB
+#include "AADevice.h"
+#endif
 #include "FramebufferDevice.h"
 #include "CommandConsole.h"
 #include "fim_stream.h"
@@ -177,5 +183,10 @@ namespace fim
 #define FV_CONSOLE_BUFFER_TOTAL		"console_buffer_total"
 #define FV_CONSOLE_BUFFER_FREE		"console_buffer_free"
 #define FV_CONSOLE_BUFFER_USED		"console_buffer_used"
+
+#define FIM_FLAG_MIRROR 1
+#define FIM_FLAG_FLIP 2
+#define FIM_FLAG_RGB2GRAY 4
+#define FIM_FLAG_RGB2GRAYGRAYGRAY 8
 
 #endif

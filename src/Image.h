@@ -71,7 +71,9 @@ class Image
 	float            newscale ;
 
 	/* virtual stuff */
+	public://TMP
         struct ida_image *img     ;     /* local (eventually) copy images */
+	private://TMP
 	struct ida_image *fimg    ;     /* master image */
 
 	/* image methods */

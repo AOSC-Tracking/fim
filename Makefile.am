@@ -41,6 +41,10 @@ sanity-check:	all
 test:	all
 	@./src/fim media/* #~/M*s/*g
 
+# this rule is deprecated, too
+aatest:	all
+	@./src/fim media/* -t #~/M*s/*g
+
 # this rule is old and deprecated
 #tgz:	clean
 #	tar -czf ../fim.`date +%Y%m%d%H%M`.tgz ../fim/*

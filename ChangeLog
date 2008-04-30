@@ -1,3 +1,9 @@
+2008-04-15 16:58  dezperado
+
+	* : Small changes to make the -Weffc++ less dreadful.
+	  Introduced the (unfinished) cron-build.sh.in, to be run on remote
+	  hosts willing to test fim building.
+
 2008-04-14 18:48  dezperado
 
 	* : Big optimizations and speedup in magnifying pictures through

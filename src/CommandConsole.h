@@ -32,6 +32,8 @@ namespace fim
 typedef std::vector<fim::string> args_t;
 class CommandConsole
 {
+
+
 	private:
 	int fim_uninitialized; // new, probably useless
 
@@ -143,7 +145,11 @@ class CommandConsole
 
 	void markCurrentFile();
 	FramebufferDevice &framebufferdevice;
+	#ifdef FIM_WITH_AALIB
+	AADevice * aad;
+	#endif
 	public:
+	DisplayDevice *displaydevice;
 
 	fim::string execute(fim::string cmd, args_t args);
 
@@ -278,7 +284,7 @@ class CommandConsole
 	
 	fim::string print_commands()const;
 
-	void status_screen(const char *desc, char *info);
+	void status_screen(const char *desc);
 	void set_status_bar(fim::string desc, const char *info);
 	void set_status_bar(const char *desc, const char *info);
 };

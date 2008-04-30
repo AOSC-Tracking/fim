@@ -329,17 +329,36 @@ namespace fim
 			 * and avoid image tearing!
 			 */
 #ifdef FIM_WINDOWS
-			framebufferdevice.svga_display_image_new(image->img, left, top,
-					xorigin(),
-					viewport_width(),
+			if(commandConsole.displaydevice )
+			commandConsole.displaydevice->display(
+					image->img,
+					top,
+					left,
+					image->height(),
+					image->width(),
+					image->width(),
 					yorigin(),
+					xorigin(),
 					viewport_height(),
-					mirror, flip);
+					viewport_width(),
+					viewport_width(),
+					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
+					);
 #else
-			framebufferdevice.svga_display_image_new(image->img, left, top,
-			0,framebufferdevice.fb_var.xres,
-			0,framebufferdevice.fb_var.yres,
-			mirror, flip);
+			framebufferdevice.display(
+					image->img,
+					top,
+					left,
+					framebufferdevice.fb_var.yres,
+					framebufferdevice.fb_var.xres,
+					framebufferdevice.fb_var.xres,
+					0,
+					0,
+					framebufferdevice.fb_var.yres,
+					framebufferdevice.fb_var.xres,
+					framebufferdevice.fb_var.xres,
+					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
+					);
 #endif					
 			return true;
 		}

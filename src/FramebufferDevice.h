@@ -35,6 +35,7 @@
 #include "DebugConsole.h"
 #include "fim.h"
 #include "FontServer.h"
+#include "DisplayDevice.h"
 
 //#include "FbiStuff.h"
 //#include "FontServer.h"
@@ -119,7 +120,7 @@ void _fb_switch_signal(int signal);
 
 
 
-class FramebufferDevice
+class FramebufferDevice:public DisplayDevice 
 {
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	MiniConsole mc;
@@ -300,7 +301,7 @@ class FramebufferDevice
 	int  fb_font_width(void);
 	int  fb_font_height(void);
 
-	void fb_status_line(unsigned char *msg);
+	int status_line(unsigned char *msg);
 
 	void fb_edit_line(unsigned char *str, int pos);
 
@@ -317,8 +318,8 @@ class FramebufferDevice
 
 	void fb_clear_rect(int x1, int x2, int y1,int y2);
 
-	void fb_clear_mem(void);
-	void fb_cleanup(void);
+	void clear_screen(void);
+	void cleanup(void);
 	struct fs_font * fb_font_get_current_font(void)
 	{
 	    return f;
@@ -349,7 +350,35 @@ class FramebufferDevice
 
 
 //void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
-void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
+//void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
+
+int display(
+	//struct ida_image *img,
+	void *ida_image_img, // source image structure
+	int yoff,
+	int xoff,
+	int irows,int icols,// rows and columns in the input image
+	int icskip,	// input columns to skip for each line
+	int by,
+	int bx,
+	int bh,
+	int bw,
+	int ocskip,// output columns to skip for each line
+	int flags);
+
+
+void svga_display_image_new(
+	struct ida_image *img,
+	int yoff,
+	int xoff,
+		int irows,int icols,// rows and columns in the input image
+		int icskip,	// input columns to skip for each line
+	unsigned int by,
+	unsigned int bx,
+	unsigned int bh,
+	unsigned int bw,
+		int ocskip,// output columns to skip for each line
+	int flags);
 
 /* ---------------------------------------------------------------------- */
 /* by dez
@@ -467,10 +496,33 @@ void init_one(int32_t *lut, int bits, int shift)
 	    lut[i] = (i >> (8 - bits)) << shift;
 }
 
+	int width()
+	{
+		return fb_var.xres;
+	}
 
-	void fb_status_screen(const char *msg, int draw);
+	int height()
+	{
+		return fb_var.yres;
+	}
+
+	int get_chars_per_line()
+	{
+		return fb_var.xres / fb_font_width();
+	}
+
+	int handle_console_switch()
+	{
+		if (switch_last == fb_switch_state)return false;
+
+		console_switch(1);
+		return 1;
+        }
+
+
+	void status_screen(const char *msg, int draw);
 	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
-	void console_control(int arg);//experimental
+	int console_control(int arg);//experimental
 };
 
 }

@@ -93,7 +93,7 @@ void fb_catch_exit_signals(void)
 	return;
 
     /* cleanup */
-    ffd.fb_cleanup();
+    ffd.cleanup();
 #ifdef HAVE_SYS_SIGLIST
     fprintf(stderr,"Oops: %s\n",sys_siglist[termsig]);
 #endif

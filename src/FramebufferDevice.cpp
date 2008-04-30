@@ -239,7 +239,19 @@ void FramebufferDevice::console_switch(int is_busy)
 	return;
 }
 
-void FramebufferDevice::svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip)
+//void FramebufferDevice::svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip)
+void FramebufferDevice::svga_display_image_new(
+	struct ida_image *img,
+	int yoff,
+	int xoff,
+		int irows,int icols,// rows and columns in the input image
+		int icskip,	// input columns to skip for each line
+	unsigned int by,
+	unsigned int bx,
+	unsigned int bh,
+	unsigned int bw,
+		int ocskip,// output columns to skip for each line
+	int flags)
 {
 /*	bx is the box's x origin
  *	by is the box's y origin
@@ -257,7 +269,7 @@ void FramebufferDevice::svga_display_image_new(struct ida_image *img, int xoff, 
     int xo=(bw-dwidth )/2;
     int cxo=bw-dwidth-xo;
     int cyo=bh-yo;
-
+    int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;
     if (!visible)/*COMMENT THIS IF svga_display_image IS NOT IN A CYCLE*/
 	return;
     /*fb_clear_screen();//EXPERIMENTAL
@@ -517,7 +529,7 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt, int try_boz_pat
     return fb;
 
  err:
-    fb_cleanup();
+    cleanup();
     exit(1);
 }
 
@@ -697,17 +709,18 @@ int FramebufferDevice::fb_activate_current(int tty)
     return 0;
 }
 
-void FramebufferDevice::fb_status_line(unsigned char *msg)
+int FramebufferDevice::status_line(unsigned char *msg)
 {
     int y;
     
     if (!visible)
-	return;
+	return 0;
     y = fb_var.yres - f->height - ys;
     fb_memset(fb_mem + fb_fix.line_length * y, 0,
 	      fb_fix.line_length * (f->height+ys));
     fb_line(0, fb_var.xres, y, y);
     fs_puts(f, 0, y+ys, msg);
+    return 0;
 }
 
 void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
@@ -821,7 +834,7 @@ void FramebufferDevice::fb_clear_rect(int x1, int x2, int y1,int y2)
     }
 }
 
-void FramebufferDevice::fb_clear_mem(void)
+void FramebufferDevice::clear_screen(void)
 {
     if (visible)
 	fb_memset(fb_mem,0,fb_fix.smem_len);
@@ -829,7 +842,7 @@ void FramebufferDevice::fb_clear_mem(void)
 
 
 
-void FramebufferDevice::fb_cleanup(void)
+void FramebufferDevice::cleanup(void)
 {
     /* restore console */
     if (-1 == ioctl(fb,FBIOPUT_VSCREENINFO,&fb_ovar))
@@ -1379,11 +1392,11 @@ int FramebufferDevice::fs_init_fb(int white8)
 
 	dez's
  */
-void FramebufferDevice::fb_status_screen(const char *msg, int draw)
+void FramebufferDevice::status_screen(const char *msg, int draw)
 {	
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	return fb_status_screen_new(msg, draw,0);
-#endif
+#else
 
 	/*	WARNING		*/
 	//noDraw=0;
@@ -1500,20 +1513,35 @@ void FramebufferDevice::fb_status_screen(const char *msg, int draw)
 	    /*
 	     *WARNING : note that columns and columns_data arrays are not freed and should not, as long as they are static.
 	     * */
+#endif
 }
 
-void FramebufferDevice::console_control(int arg)//experimental
+int FramebufferDevice::console_control(int arg)//experimental
 {
 	if(arg==0x01)fb_status_screen_new(NULL,0,arg);//experimental
 	if(arg==0x02)fb_status_screen_new(NULL,0,arg);//experimental
-	return;
+	return 0;
 }
 
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flags)//experimental
 {
-	//printf("ccd\n");
 	int r;
+	
+	if(flags==0x03)
+	{
+		/* clear screen sequence : TODO */
+		mc.dump();
+		return;
+	}
+
+	if(flags==0x02 || flags==0x01)
+	{
+		/* still unised sequence : TODO ...*/
+		return;
+	}
+
+
 	r=mc.add(msg);
 	if(r==-2)
 	{
@@ -1523,15 +1551,8 @@ void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flag
 		if(r==-1)return;
 	}
 
-	// draw e' quasi sempre 0..
 	if(!draw )return;//CONVENTION!
-	//printf("ccc\n");
-//	mc.dump();
 	
-	//fb_clear_rect(0, fb_var.xres-1 ,0,fb_var.yres/2);
-
-//	int y = fb_var.yres - f->height - ys;
-//	int bpp_=(fb_fix.line_length/fb_var.xres);
 	fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
 
 	mc.dump();
@@ -1600,3 +1621,37 @@ void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flag
 	}
 
 }
+
+int FramebufferDevice::display(
+	void *ida_image_img,
+	int yoff,
+	int xoff,
+	int irows,int icols,// rows and columns in the input image
+	int icskip,	// input columns to skip for each line
+	int by,//FIXME : this four arguments should be unsigned !
+	int bx,
+	int bh,
+	int bw,
+	int ocskip,// output columns to skip for each line
+	int flags)
+{
+	if(by<0)return -1;
+	if(bx<0)return -1;
+	if(bw<0)return -1;
+	if(bh<0)return -1;
+
+	svga_display_image_new(
+	(struct ida_image*)ida_image_img,
+	yoff,
+	xoff,
+	irows,icols,// rows and columns in the input image
+	icskip,	// input columns to skip for each line
+	by,
+	bx,
+	bh,
+	bw,
+	ocskip,// output columns to skip for each line
+	flags);
+	return 0;
+}
+

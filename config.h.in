@@ -108,6 +108,9 @@
 /* Fim windowing support */
 #undef FIM_WINDOWS
 
+/* */
+#undef FIM_WITH_AALIB
+
 /* Defined, if libpng support is enabled */
 #undef FIM_WITH_LIBPNG
 

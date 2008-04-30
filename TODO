@@ -22,6 +22,7 @@ further inspiration.
 	Current development directions
 
 
+20080420	phdcomics's phd060303s.gif crashes :  fim *f -c 'toggleAutoScale;322'
 20080414	to use mkstemp() in src/FbiStuff.cpp
 20080414	introduce fim_fatal(), fim_warn(), fim_fail(), ...
 20080414	use rand48, and more options on random behaviour

@@ -2,7 +2,7 @@
 /*
  fim_stream.cpp : Textual output facility
 
- (c) 2007 Michele Martone
+ (c) 2007-2008 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ namespace fim
 		{
 			if(g_fim_no_framebuffer==0)
 			{
-				if(s)cc.status_screen(s,"");
+				if(s)cc.status_screen(s);
 			}
 			else
 				if(s)printf("%s",s);

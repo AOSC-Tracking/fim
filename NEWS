@@ -3,10 +3,12 @@
 
         	Version 0.3-alpha
 
+ * runs on the powerpc architecure
  * reading image files (-i) and scripts (-p) from stdin
  * improved the debug console, now buffered and with scrolling
- * 50% and more speedup in magnifying pictures
- * 20% and more speedup in displaying dithered images
+ * large speedups in magnifying pictures
+ * large speedups in displaying dithered images
+ * introducing support for aalib (ascii art rendering)
 
         	Version 0.2
  

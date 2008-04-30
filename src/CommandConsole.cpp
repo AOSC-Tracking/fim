@@ -427,6 +427,13 @@ namespace fim
 
 	int CommandConsole::init()
 	{
+		
+		displaydevice=&framebufferdevice;
+		#ifdef FIM_WITH_AALIB
+		aad=new AADevice(); if(aad && aad->initialize()!=0){delete aad ; aad=NULL;}
+		if(aad && g_fim_no_framebuffer)displaydevice=aad;
+		#endif
+
 		fim_uninitialized = 0; // new
 		/*
 		 * FIXME : dependencies are very hard to track lately :) !
@@ -437,7 +444,7 @@ namespace fim
 		// THIS SHOULD BE IN THE CONSTRUCTOR, AND SHALL BE SOME DAY :)
 			
 		/* true pixels, as we are in framebuffer mode */
-		int xres=framebufferdevice.fb_var.xres,yres=framebufferdevice.fb_var.yres;
+		int xres=framebufferdevice.width(),yres=framebufferdevice.height();
 		if( g_fim_no_framebuffer )
 			/* fake pixels, as we are in text (er.. less than!) mode */
 			xres=80,yres=48;
@@ -1097,10 +1104,9 @@ namespace fim
 			        limit.tv_usec = 0;
 			        rc = select(fdmax, &set, NULL, NULL,
 			                    (0 != timeout && !paused) ? &limit : NULL);
-			            if (framebufferdevice.switch_last != framebufferdevice.fb_switch_state) {
-			            framebufferdevice.console_switch(1);
-			            continue;
-			        }
+				if(framebufferdevice.handle_console_switch())	/* this may have side effects, though */
+					continue;
+				
 				if (FD_ISSET(fim_stdin,&set))rc = read(fim_stdin, &c, 4);
 				r=rc;
 				c=int2msbf(c);
@@ -1818,7 +1824,8 @@ namespace fim
 		bool needed_redisplay=false;
 		try
 		{
-			if(window && !g_fim_no_framebuffer)
+//			if(window && !g_fim_no_framebuffer)
+			if(window )
 				needed_redisplay=window->recursive_display();
 #if 0
 			else
@@ -2130,7 +2137,19 @@ namespace fim
 
 	fim::string CommandConsole::clear(const args_t& args)
 	{
-		status_screen(NULL,NULL);return "";
+#ifndef FIM_DOESNT_SUCK_ANYMORE
+		cout << "clear command is under rework. sorry!\n";
+		return "";
+#endif
+		/*
+		 * FIXME : unimplemented
+		 * */
+		framebufferdevice.console_control(0x03);//experimental
+		/*
+		 * FIXME: clean down from this..
+		 * status_screen(NULL,NULL);
+		 */
+		return "";
 	}
 
 	/*
@@ -2177,32 +2196,26 @@ namespace fim
 		}
 		else
 		{
-			framebufferdevice.fb_clear_mem();
+			framebufferdevice.clear_screen();
 			tty_restore();
-			framebufferdevice.fb_cleanup();
+			framebufferdevice.cleanup();
 			std::exit(code);
 		}
 	}
 
 	/*
-	 * sets the status bar of the screen to the specified strings:
-	 *  desc on the left corner
-	 *  info on the right corner
-	 *  FIXME : actually, info is ignored
+	 * inserts the desc text into the textual console.
 	 */
-	void CommandConsole::status_screen(const char *desc, char *info)
+	void CommandConsole::status_screen(const char *desc)
 	{
 		if(g_fim_no_framebuffer)return;
 		/*
 		 *	TO FIX
 		 *	NULL,NULL is the clearing combination !!
 		 */
-		framebufferdevice.fb_status_screen(desc,drawOutput());
+		framebufferdevice.status_screen(desc,drawOutput());
 	}
 
-	/*
-	 *	dez's
-	 */
 	void CommandConsole::set_status_bar(fim::string desc, const char *info)
 	{
 		set_status_bar(desc.c_str(), info);
@@ -2215,8 +2228,6 @@ namespace fim
 	 *	pointers are not freed
 	 *
 	 *	TODO: a printf-like general functionality
-	 *
-	 *	dez's
 	 */
 	void CommandConsole::set_status_bar(const char *desc, const char *info)
 	{
@@ -2233,7 +2244,7 @@ namespace fim
 			return;
 	
 		if(!inConsole())prompt=no_prompt;
-		chars = framebufferdevice.fb_var.xres / framebufferdevice.fb_font_width();
+		chars = framebufferdevice.get_chars_per_line();
 		if(chars<48)return;//something strange..
 		str = (char*) malloc(chars+1);//this malloc is free
 		if(!str)return;
@@ -2253,7 +2264,7 @@ namespace fim
 		if( statusline_cursor < chars && inConsole()  ) str[statusline_cursor]='_';
 		p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
 	
-		framebufferdevice.fb_status_line((unsigned char*)str);
+		framebufferdevice.status_line((unsigned char*)str);
 		free(str);
 	}
 
