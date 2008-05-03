@@ -1,3 +1,8 @@
+2008-04-30 14:59  dezperado
+
+	* : Implemented the prodrome of the forthcoming custom output
+	  devices: AADevice, a driver for aalib (ascii art) based output.
+
 2008-04-15 16:58  dezperado
 
 	* : Small changes to make the -Weffc++ less dreadful.

@@ -1358,7 +1358,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
     // Warning: this fd passing 
     // is a trick for reading stdin...
     // ... and it is simpler that rewriting loader stuff.
-    // but much more dirtier :/
+    // but much dirtier :/
     if(fd==NULL) {
     /* open file */
     if (NULL == (fp = fopen(filename, "r"))) {
@@ -1459,7 +1459,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
     //if(regexp_match(filename,".*svg$"))
     {
     	/*
-	 * dez's
+	 * FIXME : use tmpfile() here. DANGER!
 	 * */
 	/* an svg file was found, and we try to use inkscape with it
 	 * note that braindamaged inkscape doesn't export to stdout ...
@@ -1501,13 +1501,16 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 	loader = &ppm_loader;
     }
 #endif
+    /*
+     * no appropriate loader found for this image
+     * */
     if (NULL == loader) return NULL;
 
     /* load image */
     img = (struct ida_image*)malloc(sizeof(*img));
     memset(img,0,sizeof(*img));
     data = loader->init(fp,filename,0,&img->i,0);
-    if(strcmp(filename,"/dev/stdin")==0) { close(0); dup(2);}
+    if(strcmp(filename,"/dev/stdin")==0) { close(0); dup(2);/* if the image is loaded from stdin, we close its stream */}
     if (NULL == data) {
 	if(ffd.debug)
 		fprintf(stderr,"loading %s [%s] FAILED\n",filename,loader->name);

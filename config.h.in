@@ -3,6 +3,9 @@
 /* custom CFLAGS */
 #undef CFLAGS
 
+/* custom CXXFLAGS */
+#undef CXXFLAGS
+
 /* program to use for shell commands */
 #undef EXECSHELL
 
@@ -55,6 +58,9 @@
 #undef FIM_NOFIMRC
 
 /* */
+#undef FIM_PIPE_IMAGE_READ
+
+/* */
 #undef FIM_RANDOM
 
 /* */
@@ -77,6 +83,9 @@
 
 /* */
 #undef FIM_SKIP_KNOWN_FILETYPES
+
+/* */
+#undef FIM_SMART_COMPLETION
 
 /* */
 #undef FIM_SWITCH_FIXUP

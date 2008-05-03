@@ -38,8 +38,14 @@ else { echo "integer variables don't work"; return -1; }
 
 iv=0;
 
-if ( !iv )  { echo "integer variables don't work"; return -1; }
+if ( !iv ) { echo "integer variables work";  }
+else { echo "integer variables don't work"; return -1; }
+
+if ( !!iv ) { echo "integer variables don't work"; return -1; }
 else { echo "integer variables work";  }
+
+if ( !!!iv ) { echo "integer variables work";  }
+else { echo "integer variables don't work"; return -1; }
 
 if ( iv == 0 )  { echo "integer variables work"; }
 else { echo "integer variables don't work"; return -1; }
@@ -61,7 +67,25 @@ fv="2.0";
 if ( fv )  { echo "float variables work"; }
 else { echo "float variables don't work"; return -1; }
 
+if ( !fv ) { echo "float variables don't work"; return -1; }
+else { echo "float variables work"; }
+
+if ( !!fv )  { echo "float variables work"; }
+else { echo "float variables don't work"; return -1; }
+
+if ( !!!fv ) { echo "float variables don't work"; return -1; }
+else { echo "float variables work"; }
+
 if ( fv == "0.0" ) { echo "float variables don't work"; return -1; }
+else { echo "float variables work"; }
+
+if ( ! ( fv != "0.0" ) ) { echo "float variables don't work"; return -1; }
+else { echo "float variables work"; }
+
+if ( !!! ( fv != "0.0" ) ) { echo "float variables don't work"; return -1; }
+else { echo "float variables work"; }
+
+if ( !! ( fv == "0.0" ) ) { echo "float variables don't work"; return -1; }
 else { echo "float variables work"; }
 
 if ( fv == "2.0" )  { echo "float variables work"; }
@@ -87,6 +111,32 @@ else {echo "string collation does not work"; return -1;}
 
 if( "aba"!="a"."sba"."a" ){echo "string collation works";}
 else {echo "string collation does not work"; return -1;}
+
+if( "aba"=~"a.*a" ){echo "regular expressions work";}
+else {echo "regular expressions does not work"; return -1;}
+
+if( !("aba"=~"a.*a") ) {echo "single negations on regular expressions does not work"; return -1;}
+else {echo "single negations on regular expressions work";}
+
+# the following doesn't work in fim 0.3.
+if( !(!("aba"=~"a.*a")) ){echo "double negations on regular expressions work";}
+else {echo "double negations on regular expressions does not work"; }
+
+a=1;
+{a=5}
+if( a==5 ){echo "{command} constructs work";}
+else {echo "{command} constructs don't work";}
+
+{a=10;}
+if( a==10 ){echo "{command;} constructs work";}
+else {echo "{command;} constructs don't work";}
+
+#the following does not work
+#{a=20;;}
+
+if( a==20 ){echo "{command;;} constructs work";}
+else {echo "{command;;} constructs don't work";}
+
 
 rc=0;
 return rc;

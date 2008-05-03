@@ -40,6 +40,13 @@ conf.h:       fimrc
 	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
 	echo '"";' >> conf.h
 
+version.h:	../config.h
+	grep define ../config.h | grep FIM | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
+	echo "\"\n\"" >> version.h
+	grep define ../config.h | grep FIM.*'"' | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> version.h
+	grep undef ../config.h | grep FIM | sed 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]\+\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> version.h
+
+
 # the following sources are built at make time
 BUILT_SOURCES = lex.yy.cc \
 	yacc.tab.cpp conf.h yacc.tab.hpp 
@@ -84,6 +91,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Window.h \
 	common.h \
 	conf.h \
+	version.h \
 	fim.h \
 	fim_stream.h \
 	fim_stream.cpp \
@@ -116,6 +124,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	string.cpp
 
 CommandConsole.o: conf.h
+fim.o: version.h
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \

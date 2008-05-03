@@ -38,6 +38,7 @@
 #include <signal.h>
 #include <linux/fb.h>
 #include <linux/kd.h>
+#include <fstream>
 
 
 extern int yyparse();
@@ -405,6 +406,9 @@ namespace fim
 		addCommand(new Command(fim::string("cd"  ),fim::string("chdir() invocation"),this,&CommandConsole::cd));
 		addCommand(new Command(fim::string("pwd"  ),fim::string("getcwd() invocation"),this,&CommandConsole::pwd));
 		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
+#ifdef FIM_PIPE_IMAGE_READ
+		addCommand(new Command(fim::string("pread"  ),fim::string("executes the arguments as a shell command and reads the input as an image file"),this,&CommandConsole::pread));
+#endif
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string("start_recording"  ),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));
 		addCommand(new Command(fim::string("stop_recording"  ),fim::string("stops recording of commands"),this,&CommandConsole::stop_recording));
@@ -413,7 +417,8 @@ namespace fim
 		addCommand(new Command(fim::string("eval"  ),fim::string("evaluates the arguments as commands, executing them"),this,&CommandConsole::eval));
 		addCommand(new Command(fim::string("repeat_last"  ),fim::string("repeats the last action"),this,&CommandConsole::repeat_last));
 #endif
-		addCommand(new Command(fim::string("variables"  ),fim::string("displayed the associated variables"),this,&CommandConsole::variables_list));
+		addCommand(new Command(fim::string("variables"  ),fim::string("displays the associated variables"),this,&CommandConsole::variables_list));
+		addCommand(new Command(fim::string("commands"  ),fim::string("displays the existing commands"),this,&CommandConsole::commands_list));
 		addCommand(new Command(fim::string("dump_key_codes"  ),fim::string("dumps the key codes"),this,&CommandConsole::dump_key_codes));
 		addCommand(new Command(fim::string("clear"  ),fim::string("clears the virtual console"),this,&CommandConsole::clear));
 //		addCommand(new Command(fim::string("scrollup"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
@@ -424,6 +429,15 @@ namespace fim
 		#include "defaultConfiguration.cpp"
 		setVariable("pwd",pwd(args_t()).c_str());
 	}
+
+        bool CommandConsole::is_file(fim::string nf)const
+        {
+                struct stat stat_s;
+                /*      if the file doesn't exist, return */
+                if(-1==stat(nf.c_str(),&stat_s))return false;
+                if( S_ISDIR(stat_s.st_mode))return false;
+                return true;
+        }
 
 	int CommandConsole::init()
 	{
@@ -506,7 +520,10 @@ namespace fim
 			strcat(rcfile,"/.fimrc");
 			if(getIntVariable("_no_rc_file")==0 )
 			{
-				if(-1==executeFile(rcfile))//if execution fails for some reason
+				if(
+					(!is_file(rcfile) || -1==executeFile(rcfile))
+				&&	(!is_file("/etc/fimrc") || -1==executeFile("/etc/fimrc"))
+				  )
   #endif
 #endif
 				{
@@ -519,7 +536,6 @@ namespace fim
 				}
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
-
 			}
 
 		}
@@ -694,10 +710,12 @@ namespace fim
 					it_buf=it_buf%(m+1);
 				nc=it_buf;
 				if(it_buf>1)
-					nc+="{"+getBoundAction(c)+";}";
+					nc+="{"+getBoundAction(c)+"}";
+					/* adding ; before } can cause problems as long as ;; is not supported by the parser*/
 				else
 					nc = getBoundAction(c);
 					
+				cout << "about to execute " << nc << "\n";
 				execute(nc.c_str(),1,0);
 				it_buf=-1;
 			}
@@ -715,7 +733,7 @@ namespace fim
 		try{
 		/*
 		 *	This method executes a character string containing a script.
-		 *	The second argument specigies whether the command is added or 
+		 *	The second argument specifies whether the command is added or 
 		 *	not to the command history buffer.
 		 *
 		 *	note : the pipe here opened shall be closed in the yyparse()
@@ -1246,6 +1264,29 @@ namespace fim
 			for(std::set<fim::string>::iterator i=marked_files.begin();i!=marked_files.end();++i)
 			std::cout << *i << "\n";
 		}
+		
+		fim::string sof=getStringVariable("_fim_scriptout_file");
+		if(sof!="")
+		{
+        		if(is_file(sof))
+			{
+				std::cerr << "Warning : the "<<sof<<" file exists and will not be overwritten!\n";
+			}
+			else
+			{
+				std::ofstream out(sof.c_str());
+				if(!out)
+				{
+					std::cerr << "Warning : The "<<sof<<" file could not be opened for writing!\n";
+					std::cerr << "check output directory permissions and retry!\n";
+				}
+				else
+				{
+					out << dump_record_buffer(args_t()) << "\n";
+					out.close();
+				}
+			}
+		}
 	}
 
 	int CommandConsole::toggleStatusLine()
@@ -1596,7 +1637,7 @@ namespace fim
 		if(*r=='*')return false;
 
 		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
-		if(regcomp(&regex,r, 0 | REG_EXTENDED | (getIntVariable("ignorecase")==0?0:REG_ICASE) )==-1)
+		if(regcomp(&regex,r, 0 | REG_EXTENDED | (getIntVariable("ignorecase")==0?0:REG_ICASE) )!=0)
 		{
 			/* error calling regcomp (invalid regexp?)! (should we warn the user ?) */
 			//cout << "error calling regcomp (invalid regexp?)!" << "\n";
@@ -1663,6 +1704,50 @@ namespace fim
 		}
 		return "";
 	}
+
+#ifdef FIM_PIPE_IMAGE_READ
+	/*
+	 * FBI/FIM FILE PROBING MECHANISMS ARE NOT THOUGHT WITH PIPES IN MIND!
+	 * THEREFORE WE MUST FIND A SMARTER TRICK TO IMPLEMENT THIS
+	 * */
+	fim::string CommandConsole::pread(const args_t& args)
+	{
+		/*
+		 * we read a whole image file from pipe
+		 * */
+		unsigned int i;
+		FILE* tfd;
+		char buf[1024];int rc=0;
+		for(i=0;i<args.size();++i)
+		if( (tfd=popen(args[i].c_str(),"r")) != NULL )
+		{	
+			/* todo : read errno in case of error and print some report.. */
+	
+			/* pipes are not seekable : this breaks down all the Fim file handling mechanism */
+			/*
+			while( (rc=read(0,buf,1024))>0 ) fwrite(buf,rc,1,tfd);
+			rewind(tfd);
+			*/
+			/*
+			 * Note that it would be much nicer to do this in another way,
+			 * but it would require to rewrite much of the file loading stuff
+			 * (which is quite fbi's untouched stuff right now)
+			 * */
+			Image* stream_image=new Image("/dev/stdin",tfd);
+			// DANGEROUS TRICK!
+			browser.set_default_image(stream_image);
+			browser.push("");
+			//pclose(tfd);
+		}
+		else
+		{
+			/*
+			 * error handling
+			 * */
+		}
+		return "";
+	}
+#endif
 
 	fim::string CommandConsole::cd(const args_t& args)
 	{
@@ -1884,8 +1969,13 @@ namespace fim
 		fim::string res;
 		for(unsigned int i=0;i<recorded_actions.size();++i)
 		{
+			fim::string ss=(int)recorded_actions[i].second;
+			/*
+			 * FIXME : fim::string+=<int> is bugful
+			 * */
 			res+="usleep '";
-			res+=recorded_actions[i].second;
+//			res+=(int)recorded_actions[i].second;
+			res+=ss;
 			res+="';\n";
 			res+=recorded_actions[i].first;
 			res+="\n";

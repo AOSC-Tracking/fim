@@ -357,6 +357,7 @@ Var ex(nodeType *p)
 			}
 			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]);
 			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
+			case '!': return ((int)(ex(p->opr.op[0])))==0?1:0;
 			/* unary minus is still under definition */
 			case UMINUS:
 				return Var(0) - ex(p->opr.op[0]);
@@ -372,6 +373,7 @@ Var ex(nodeType *p)
 			case LE: return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
 			case NE: return ex(p->opr.op[0]) != ex(p->opr.op[1]);
 			case EQ: return ex(p->opr.op[0]) == ex(p->opr.op[1]);
+			case REGEXP_MATCH: return ex(p->opr.op[0]).re_match(ex(p->opr.op[1]));
 			case AND:return ex(p->opr.op[0]) && ex(p->opr.op[1]);
 			case OR :return ex(p->opr.op[0]) || ex(p->opr.op[1]);
 		}

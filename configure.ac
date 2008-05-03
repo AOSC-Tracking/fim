@@ -569,6 +569,8 @@ AH_TEMPLATE([FIM_READ_DIRS])
 AH_TEMPLATE([FIM_BOZ_PATCH])
 AH_TEMPLATE([FIM_READ_STDIN])
 AH_TEMPLATE([FIM_READ_STDIN_IMAGE])
+AH_TEMPLATE([FIM_SMART_COMPLETION])
+
 
 dnl ==================
 
@@ -669,6 +671,8 @@ AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CFLAGS],
 		FIM_CFLAGS="$withval"
 		CFLAGS="$FIM_CFLAGS"
 		CXXFLAGS="$FIM_CFLAGS"
+                AC_DEFINE_UNQUOTED(CXXFLAGS, "$withval",
+                 [custom CXXFLAGS])
 		dnl ...else FIM_CFLAGS="$CFLAGS"
         fi],
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
@@ -685,6 +689,21 @@ AC_ARG_WITH(exec-shell, AC_HELP_STRING([--with-exec-shell=SHELL], [Specify alter
                 AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")
         fi],
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
+
+dnl ==================
+
+AC_ARG_ENABLE(convert, AC_HELP_STRING([--disable-smartautocompletion], [Fim will treat as a proper, unescaped string, nonquoted and nonevaluated strings which happen to match an existing filename.]),
+[       if test x$enableval = xno; then
+		fim_cv_smartautcompletion=no
+	else
+                fim_cv_smartautcompletion=yes
+        fi
+],[ fim_cv_smartautcompletion=yes ]
+)
+
+if test x$fim_cv_smartautcompletion = xyes; then
+	AC_DEFINE([FIM_SMART_COMPLETION])
+fi
 
 dnl ==================
 
@@ -862,7 +881,8 @@ AH_TEMPLATE([FIM_SKIP_KNOWN_FILETYPES])
 AC_DEFINE([FIM_SKIP_KNOWN_FILETYPES])
 AH_TEMPLATE([FIM_KEEP_BROKEN_CONSOLE])
 dnl AC_DEFINE([FIM_KEEP_BROKEN_CONSOLE])
-
+AH_TEMPLATE([FIM_PIPE_IMAGE_READ])
+dnl AC_DEFINE([FIM_PIPE_IMAGE_READ])
 
 
 dnl ==================
@@ -876,6 +896,8 @@ AC_SUBST(FIM_DEFS)
 
 AC_SUBST(FIM_LIB_OBJECTS)
 AC_SUBST(FIM_SVN_REPOSITORY,[http://code.autistici.org/svn/fim/])
+
+AC_SUBST(CXXFLAGS)
 
 #CFLAGS="$FIM_CFLAGS"
 #CXXFLAGS="$FIM_CFLAGS"

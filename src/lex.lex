@@ -115,6 +115,7 @@ STRINGC_DQ {STRINGC}|\'
 ">=" return GE;
 "<=" return LE;
 "==" return EQ;
+"=~" return REGEXP_MATCH;
 "!=" return NE;
 "&&" return AND;
 "||" return OR;
@@ -167,15 +168,46 @@ STRINGC_DQ {STRINGC}|\'
 
 \'((\\\')|[^\'])*\' {
 	//trec(yytext+1,"n\\\'","\n\\\'");
+	/* single quoted strings are not escaped */
 	qastrcpy(yylval.sValue,yytext);;
 	return STRING;
 	}
 
 \"((\\\")|[^\"])*\" {
+	/* double quoted strings unescaping */
 	trec(yytext+1,"n\\\"","\n\\\"");
 	qastrcpy(yylval.sValue,yytext);;
 	return STRING;
 	}
+
+"/"{STRINGC}* {
+	/* FIM_SMART_COMPLETION patch */
+	/* a path */
+	astrcpy(yylval.sValue,yytext);;
+	return FILE_PATH;
+	}
+
+"./"{STRINGC}* {
+	/* FIM_SMART_COMPLETION patch */
+	/* a path */
+	astrcpy(yylval.sValue,yytext);;
+	return FILE_PATH;
+	}
+
+"../"{STRINGC}* {
+	/* FIM_SMART_COMPLETION patch */
+	/* a path */
+	astrcpy(yylval.sValue,yytext);;
+	return FILE_PATH;
+	}
+
+{ID}([.]{ID})+ {
+	/* FIM_SMART_COMPLETION patch */
+	/* a path */
+	astrcpy(yylval.sValue,yytext);;
+	return FILE_PATH;
+	}
+
 
 {SYMBOL} {
 	return *yytext;

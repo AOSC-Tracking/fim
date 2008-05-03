@@ -17,6 +17,10 @@
 #bind 29 "scale_factor_grow";
 #bind 31 "scale_factor_shrink";
 
+# Warning : binding to C-s, C-z and C-c won't make effect, as these
+# codes are catched by the console driver and will have no effect in fim.
+# Moreover, C-z will crash fim and C-c will terminate it.
+
 # some of these variables influence Fim's behaviour (in the sense these are 'internal')
 _display_status=0;
 _max_cached_images=5;
@@ -48,8 +52,8 @@ bind 'q' "quit";
 bind 'Esc' "quit";
 #bind 'f' "file";
 bind 'n' "next;display;";
-bind 'h' "help";
-bind 'H' "help";
+#bind 'h' "help";
+bind 'C-h' "help";
 bind 'x' "echo";
 bind 'e' "echo";
 bind 'p' "prev;display;";
@@ -66,10 +70,12 @@ bind '+' "magnify";
 bind 'a' "auto_scale;";
 bind 'Tab' "toggleVerbosity";
 bind 'C-v' "toggleKeyVerbosity";
-bind 'C-k' "toggleKeyVerbosity";
+#bind 'C-k' "toggleKeyVerbosity";
 bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
 bind 'C-m' "mark";
+
+# Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
 bind 'Enter' "mark;next";
 bind '-' "reduce";
 bind "Up" "panup";
@@ -94,7 +100,7 @@ bind 'Q' "stop_recording";
 bind 'D' "dump_record_buffer;";
 bind 'E' "execute_record_buffer;";
 bind 'C-e' "execute_record_buffer;";
-bind 'C-x' "execute_record_buffer;";
+#bind 'C-x' "execute_record_buffer;";
 bind 'X' "execute_record_buffer;";
 bind '.' "repeat_last;";
 
@@ -154,7 +160,7 @@ autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
 #extra..
 bind 'w' "auto_width_scale";
-bind 'C-h' "auto_height_scale";
+bind 'h' "auto_height_scale";
 alias "diagonal_nw" "pan_nw;";
 alias "diagonal_ne" "pan_ne;";
 alias "diagonal_se" "pan_se;";
@@ -181,7 +187,7 @@ alias "toggleAutoWidth" "autowidth=1-autowidth;auto_scale_v=0;reload;";
 bind 'C-w'   'toggleAutoWidth;';
 bind 'C-a' "toggleAutoScale;";
 bind 'C-c' "toggleAutoScale;";
-bind 'C-l' "clear;";
+#bind 'C-l' "clear;";	# temporarily off : FIXME
 bind 'A'   "toggleAutoScale;";
 #toggleVerbosity;
 #bind 'f' "next;display;";
@@ -199,16 +205,29 @@ alias "wu" "window 'up'";
 alias "wd" "window 'down'";
 alias "wl" "window 'left'";
 alias "wr" "window 'right'";
+bind 'K' "wu";
+# Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
+#bind 'C-j' "wd";
+bind 'J' "wd";
+bind 'H' "wl";
+bind 'L' "wr";
 alias "split" "window 'split'";
 alias "vsplit" "window 'vsplit'";
 alias "swap" "window 'swap'";
 alias "ws " "window 'swap'";
+bind 'T' "split;redisplay;";
+#don't use C-s : it will be usually catched by the console driver, and fim won't get it!
+#bind 'C-s' "split;";
+bind 'V' "vsplit;redisplay;";
+bind 'U' "swap;redisplay;";
 alias 'venlarge' 'window "venlarge"';
 alias 'henlarge' 'window "henlarge"';
+# hmmmm we are out of combinations !
 
 alias 'wnormalize' 'window "normalize"';
 alias 'wclose' 'window "close"';
 alias 'wc' 'window "close"' "closes the current window";
+bind  'C' "wc;redisplay;";
 
 alias 'cache' 'echo _cache_status;';
 bind 'c' 'cache;';

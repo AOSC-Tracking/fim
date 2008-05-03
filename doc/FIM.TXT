@@ -1,10 +1,10 @@
 ------------------------------------------------------------------------------
-*FIM.TXT*	For Fim,  alpha version (pre-versioned distribution release)
+*FIM.TXT*   User documentation for Fim, last updated $Date$
 
 			Fim - main help file
 
-First of all, please view this text file in VIM with ':set syntax=help'.
-if you already know Vim, you will know that in this way you can use this
+First of all, please view this text file in Vim with ':set syntax=help'.
+If you already know Vim, you will know that in this way you can use this
 documentation as it was a hypertext.
 ( or add "autocmd BufReadPost FIM.TXT set syntax=help" into your ~/.vimrc ! )
 If you do not know Vim, you can find it at http://www.vim.org.
@@ -12,39 +12,63 @@ If you do not know Vim, you can find it at http://www.vim.org.
 Thank you for giving a try to this software; one can regard it as a 'hack',in
 the sense it is an elaboration of the passionate work of multiple people.
 >
+Please note that this documentation is *not* complete, as Fim is still 
+evolving, and some changes as the exact language specifications are hard to
+track and document. They will be when a high level of satisfaction of the
+fim capabilities and usability will be achieved.
+Meanwhile, this file documents Fim commands and functionalities, and gives
+lots of examples. For a reference of Fim command line flags, see the man
+pages of Fim and the fimgs script (man fim, man fimgs). The man pages are 
+rich with examples. Enjoy!
+
 ------------------------------------------------------------------------------
 0. Introduction 						*intro*
 
-									 k
+      Fim Startup : to open an image, type
+>
+	fim image.png
+
+in a Linux framebuffer console. You can be sure of being in a Linux framebuffer
+console by issuing successfully:
+>
+	cat /dev/urandom > /deb/fb0
+
+If you have problems here, see the *framebuffer* section.
+
+
       Fim Quickstart : to move the image around,
                     use the cursor keys, or "h" to go left,	       h   l
 		    "j" to go down, "k" to go up, "l" to go right.	 j
    Get out of Fim:  Use ":q<Enter>" (press ':', then 'q', then 'enter').
+                    Or just press q (or Esc, or whatever you wish, thanks to
+		    the *key-bindings* capabilities.
+
 
 Fim stands for Fbi IMproved.
 
 Fbi is a |framebuffer| based image viewer, made by Gerd Knorr, and Fim is
-primarily an interface rework applied roughly as a patch to it, by dezperado.
+primarily an interface rework applied roughly as a patch to it, and is an
+idea an codework of Michele Martone.
 
 The idea of making Fim came after long usage sessions of Vim and Fbi, and a
-science fiction film.
+science fiction film view.
 
 The main purpose of Fim is to boost the features present Fbi and adding new
-ones, to achieve configurability and use flexibility, and use speed.
+ones, to achieve configurability and use flexibility, and usage speed.
 
-Ease of use is a primary concern, too.
+Ease of use and simplicity is a primary concern, too.
 So absolutely no programming language knowledge nor reading this manual is
-needed to use FIM.
+needed to use FIM if you already used once Fbi.
 
-The primary aim of configurability is the complete freedom of the keyboard
-bindings.
+A basic tenet of configurability the freedom of managing and customize the
+*key-bindings* to one's tastes.
 Fim has a mechanism for the creation of a |configuration| file.
 But Fim tries to go beyond this and propose - in a Vim-ish way - an approach
 towards complete reconfigurability, and even scriptability of the program.
 The inspiration for this comes from the use of the nicer software available 
 as free software, often characterized by extreme flexibility, configurability,
-hackability. This concerns mainly text editors, but why can't this apply to an 
-image viewer, too ?
+hackability. This concerns mainly text editors and mail user agents, but why
+can't this apply to an image viewer, too ?
 
 ==============================================================================
 1. Index						*index*
@@ -91,19 +115,27 @@ Introduction to Fim					*ref* *reference*
 ==============================================================================
 2. Fim on the Internet				*internet*
 
-Right now, the official Fim page is 
+The official Fim page is hosted by the nonGNU project :
+	http://savannah.nongnu.org/projects/fbi-improved/
+
+The secondary Fim page is :
 	http://www.autistici.org/dezperado/
 
-Soon the official page, SVN repository and tarball repository will be on
-	http://savannah.nongnu.org/projects/fbi-improved
+Tarball releases are located on
+	http://download.savannah.nongnu.org/releases/fbi-improved/
 
-It contains all the relevant Fim documentation, and the downloadable Fim
-archives.
+Right now the official SVN (subversion) repository is :
+	http://code.autistici.org/svn/fim/
 
-The unofficial page is https://code.autistici.org/project/fim, 
-although it doesn't say much.
+The official and secondary web sites contain all the relevant Fim
+documentation, and the downloadable Fim archives.
 
-You could be able to browse the Fim code on :
+The current SVN repository is kindly hosted by the Autistici/Inventati 
+'code' project: https://code.autistici.org/project/fim .
+You can support Fim supporting the A/I project.
+
+You could be able to browse the Fim code on the repository, pointing your
+browser on :
 	http://code.autistici.org/svn/fim/
 
 and get the latest source code tree issuing :
@@ -113,13 +145,18 @@ or
 
 wget -r http://code.autistici.org/svn/fim/ && cd code.autistici.org/svn/fim 
 
-The documentation is distributed with the software. See the INSTALL file for
+This documentation is distributed with the software. See the INSTALL file for
 installation instructions and issues.
 
 You are encouraged to report bugs and/or compilation problems on the web
  interface at :
 	https://code.autistici.org/trac/fim
  but when encountering bugs, please read |bugs|.
+
+But before posting anything, read the BUGS file, and have a look and subscribe
+to the Fim developement mailing list :
+
+   http://lists.nongnu.org/mailman/listinfo/fbi-improved-devel
 
 ==============================================================================
 2.1. Contact information					*contact*
@@ -138,6 +175,7 @@ Indications about how to improve this documentation are very, very appreciated.
 Suggestions, patches, etc..  about the software are appreciated, too.
 Ideas on the FIM language and potential use are welcome, too.
 The current bunch of ideas and inspiration is put in the TODO file.
+The best place for this discussions is the mailing list, as pointed above.
 
 p.s.: please read the BUGS file when submitting a bug and the |bugs| section 
 to consult the current bug list.
@@ -160,6 +198,7 @@ There are the major (P)roblem areas and the possible (C)ontributions:
    'slow' or choppy sometimes.
 
  C: Yes, the input system should be fixed a little.
+    But be sure you have the right video mode and video driver loaded in the kernel.
     You are welcome to suggest improvements.
 
  P: Build process ( right now it is scary, especially for the part concerning 
@@ -212,7 +251,7 @@ So, if you have picture.jpg and picture.png in the current directory, issuing
 
  $ fim picture.jpg picture.png
 
-should start Fim and display the images.
+should start Fim and display the two specified images.
 
 Like in Fbi or any other reasonable image viewer, you could be able to view 
 the next or previous image by pressing PageUp or PageDown, or to pan the image
@@ -235,12 +274,31 @@ $ touch ~/.fimrc
 
 and then edit the file and filling it only with lines you could write live
 in the fim console or feed to Fim via the -c (pre-execution command) or -F (
-final command) switches.
+final command) switches (see man fim).
 
-Soon fim will have a switch for telling you if it was compiled with configuration
-file support (default enabled) or not.
+If the ~/.fimrc does not exist, the /etc/fimrc file will be sourced, if
+existent.
+
+Since these and other Fim functionalities are switchable on and off at compile
+time, by calling 
+>
+	:fim -V
+
+you will get an output message informative about the compilation details.
+As an example, mine gives:
+
+FIM - Fbi IMproved 0.3-alpha( repository version $Id$ ), by Michele Martone <dezperado _CUT_ autistici _CUT_ org>, built on May  2 2008 ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )
+Compile flags: CXXFLAGS=-O0 -ggdb  CFLAGS=-O0 -ggdb
+Fim options (features included (+) or not (-)):
++FIM_AUTOCMDS  +FIM_AUTOSKIP_FAILED  +FIM_BOZ_PATCH  +FIM_BUGGED_CACHE  +FIM_CACHE_DEBUG  +FIM_CHECK_DUPLICATES  +FIM_CHECK_FILE_EXISTENCE  +FIM_COMMAND_AUTOCOMPLETION  +FIM_DEFAULT_CONFIG  +FIM_DEFAULT_CONFIGURATION  +FIM_DEFAULT_KEY_CONFIG  +FIM_ITERATED_COMMANDS  +FIM_NAMESPACES  +FIM_NOFB  +FIM_RANDOM  +FIM_READ_STDIN  +FIM_READ_STDIN_IMAGE  +FIM_RECORDING  +FIM_REMOVE_FAILED  +FIM_SKIP_KNOWN_FILETYPES  +FIM_SMART_COMPLETION  +FIM_SWITCH_FIXUP  +FIM_TMP_FILENAME  +FIM_TRY_CONVERT  +FIM_TRY_DIA  +FIM_TRY_INKSCAPE  +FIM_TRY_XCFTOPNM  +FIM_TRY_XFIG  +FIM_VERSION  +FIM_WINDOWS  +FIM_WITH_LIBPNG  
+FIM_TMP_FILENAME = "/tmp/__FIM_TEMPORARY_FILE"
+FIM_VERSION = "0.3-alpha"
+-FIM_KEEP_BROKEN_CONSOLE  -FIM_NOFIMRC  -FIM_PIPE_IMAGE_READ  -FIM_READ_DIRS  -FIM_RECURSIVE_DIRS  -FIM_WANTS_SLOW_RESIZE  -FIM_WITH_AALIB  
+
+
 Even if compiled with script support, a default configuration has probably
 built in the program, and all of the interpreting mechanisms are there.
+Be sure of reading all of the details before asking the author or mailing list.
 
 ===============================================================================
 3.2. Keyboard Bindings					*keyboard*
@@ -265,7 +323,7 @@ configuration file (without the heading ':', though! ).
 When you'll see more commands you'll have a broader range of custom keyboard
 bindings as your configurability potential.
 If you are curious, jump to the |commands-reference| section right now.
-
+Or simply type |commands| in Fim.
 
 Interactive mode offers a way of specifying that a (interactive) command should
 be executed more than one time.
@@ -295,9 +353,10 @@ no more than '_max_iterated_commands' times.
 
 Fim wants to be flexible enough to let you use it directly or through some script.
 It comes out of the box with one wrapper script, called fimgs (or fimgs.sh)
-which is capable of converting some file formats in other, which fim understands.
+which is capable of converting some file formats in other ones, which fim
+understands.
 
-The fimgs script is capable of fetching a file from the web from you, displaying
+The fimgs script is capable of fetching a file from the web for you, displaying
 it in the framebuffer using fim, and deleting it from the temporary directory
 where it has been stored.
 
@@ -316,8 +375,8 @@ supported, or one of the following :
 If the file is among the first three categories, it is converted through
 GhostScript ( gs(1) ) in a number of .png files in a temporary directory.
 
-If the file is among the archives file formats listed, it is decompressed in a
-temporary directory and displayed file by file with fim.
+Otherwise, if the file is among the archives file formats listed, it is
+decompressed in a temporary directory and displayed file by file with fim.
 
 ===============================================================================
 3.4. External scripting					*scripting*
@@ -327,9 +386,10 @@ There are scripts in the "scripts/utilities/" installation directory, which
 give examples on some uses of fim.
 
 Take as example the "scripts/utilities/fimscan.sh" shell script: it uses the
-"scanimage" utility to scan images at low resolution, ten shows them to the
-user via fim, asking (inside fim) the user whether to rescan (at higher 
-resolution) the image and save it with a suggested numbered filename scheme.
+"scanimage" utility (distributed with the sane-backends package) to scan
+images at low resolution, ten shows them to the user via fim, asking (inside
+fim) the user whether to rescan (at higher resolution) the image and save it
+with a suggested numbered filename scheme.
 
 ===============================================================================
 3.5. System integration tips				*tips*
@@ -350,11 +410,15 @@ Similarly, the 'acroread' program will be invoked under the X environment,
 leaving the 'fimgs' script (included in the Fim distribution) as a replacement
 in all other cases.
 
+You can customize the lynx, links, and elinks web browsers, too.
+Or the mc (midinight commander) program.
+
 ===============================================================================
 3.6. The .inputrc file					*inputrc*
 
 Fim is linked with the GNU readline library, therefore it is susceptible to 
-chages in the ~/.inputrc configuration file contents.
+chages in the user set ~/.inputrc configuration file contents.
+For details, see (man readline).
 
 ===============================================================================
 3.7. Environment variables				*env*
@@ -362,39 +426,41 @@ chages in the ~/.inputrc configuration file contents.
 Some environment variables affect Fim behaviour.
 >
 	FBGAMMA
-Will affect the gamma value during visualization.
+Will affect the gamma value (a floating point number) during visualization.
 
 >
 	FBFONT
-Will affect the font used internally.
+Will affect the font file used internally in Fbi.
 Both X (X Font Server - xfs) and Linux Console fonts are available
 in the original Fbi. In Fim, xfs support has been disabled.
 Console font stuff is usually documented in 'man setfont', and the usual console
 font path is /usr/share/consolefonts/.
-Even a zipped font will work, like /usr/share/consolefonts/LatArCyrHeb-08.psfu.gz.
+Even a zipped font would work, like /usr/share/consolefonts/LatArCyrHeb-08.psfu.gz.
+X Font support will be back soon in Fim.
 
 >
 	FRAMEBUFFER
 Will affect the default framebuffer device file name used.
-Otherwise, /dev/fb/N and /dev/fbN device files will be probed incrementally.
+Otherwise, /dev/fb/N and /dev/fbN device files will be probed incrementally 
+starting with N=0.
 
 Example:
 >
-
 	FRAMEBUFFER=/dev/fb/1 fim *
-Will display the images in the second frame buffer device (if present).
+Will display the images in the secondary frame buffer device (if present).
 
 ==============================================================================
 4. Command Line Mode					*cli*
 
 The command line mode is activated in Fim by pressing the colon key ( ':' ) 
 while standing in interactive mode.
-A little cursor will appear on the lower left corner of the screen, and 
-subsequent keyboard pressure will reveal that sentences can be written into it.
+A little cursor '_' will appear on the lower left corner of the screen, and 
+subsequent keyboard pressure will reveal that sentences can be written to
+this command line.
 
 In this mode, you can issue the internal commands of Fim in an interactive 
 fashion, consult the (limited) online help provided with the commands, and 
-experiment with the commands.
+experiment with them ( type |commands| in Fim to get a list of them).
 
 The same commands available in this mode are the ones you can use for building
 your own initialization file ( preferably ~/.fimrc ), which will be read and 
@@ -423,7 +489,7 @@ is like jumping on place 20 times, and
 	:$goto
 does not make sense.
 
-If these examples sound confusing to you, please read further.
+If these examples sound confusing to you, please read further or learn Vim :).
 
 ==============================================================================
 5. Commands Line Mode Basics				*cli-basics*
@@ -454,7 +520,7 @@ in detail in the section dedicated to the 'autocmd' command.
 6. Commands Reference				*commands-reference*
 
 The internal Fim commands are lightweight enough to be used as parts of bigger
-commands, that we will call actions.
+macro-commands, that we will call actions.
 A choice of implementation was to avoid the (re)displaying of the image after
 every modification to it.
 For example, issuing 'autoscale;pan_left' would not trigger the displaying of
@@ -509,7 +575,12 @@ commands; the next (or previous) image filenames will be current, but the actual
 triggering of 'reload' or 'display' is left to the script or the autocommand.
 
 'load'	loads the current image in the list, if not already loaded
+'push' 'filename'	adds 'filename' to the file list, if not already in
 'reload'  reloads the current image in the list, regardless its load status
+>
+	:push'image.png'
+	:f='image.png'; push f
+	:push'image.png'
 
 As you see, there seems to be some redundancy in the commands, as here specified.
 The 'load' and 'reload' difference could be useful when programming some script
@@ -1268,15 +1339,21 @@ So, the commands following the loop will be ignored.
 
 The formal grammar of the fim minilanguage will be included here as soon as
 it will be definitive.
-For the current one, take a look to the src/fimrc file to get an idea of 
-the default configuration file, written in the Fim minilanguage.
+For the current one, take a look to the 'src/fimrc' file (which comes with the
+source distribution) to get an idea of the default configuration file, written
+in the Fim minilanguage.
 
-Note that this language is still in an embryonal phase and many functionalities
-are still not implemented...
+Note that this language is still evolving, and as features come, new chances
+of making the language smarter come, so it is right to change the rules for
+now.
 
-Right now comparison makes only sense between integers or integer variables.
-Comparison with strings will convert these in integers and this is not probably
-what you want.
+Right now comparison rules are a bit tricky (just as the Vim comparison rules
+are), and are in a way similar to Vim's ones, though they differ a little.
+
+Please have a look at the 'scripts/tests/sanity.fim' file while a definitive
+language reference is not available.
+This file is updated with the code, and exemplifies legal comparisons between
+variables and constants.
 
 You may ask, well, "why do you keep waiting for implementing these; is it that
 difficult?".
@@ -1295,6 +1372,10 @@ A lot of questions still await for an answer in Fim. Here are few:
  meanwhile these issues are thought of, Fim code will be mainly cleaned up to
  reach a higher level of generality ( an ambitious aim is to invade X some day,
  optionally of course ), and configure/build/compatibility issues solved.
+
+ Right now, please learn to use the *many* features Fim offers you, by reading
+ the examples scattered in this documentation, and in the 'src/fimrc' and the
+ 'scripts/tests/sanity.fim' files.
 
 <UNFINISHED>
  
@@ -1433,8 +1514,8 @@ A lot of questions still await for an answer in Fim. Here are few:
  Fim is a rework of Fbi , which is a framebuffer console image viewer written
  by Gerd Hoffmann.
 
- Fim is an idea of dezperado, who can be |contact|'ed through the email address
- scrambled as dezperado _FOobAr_ autistici _Baz_ org.
+ Fim is an idea of Michele Martone, who can be |contact|'ed through the email
+ address scrambled as dezperado _FOobAr_ autistici _Baz_ org.
 
  In the source archive, there are the doctags.c program and a slightly modified
  vim2html.pl, which were taken from the original source archive of Vim 7.0 
@@ -1501,22 +1582,22 @@ A lot of questions still await for an answer in Fim. Here are few:
     |contact| me for the details of sending me the goods.
 
  Q: I have problems with the framebuffer. Could you help me?
- A: Consider reading |framebuffer| .
+ A: Consider reading the |framebuffer|sections or google around.
 
  Q: Which file formats are supported ?
  A: Fim should display the more common file formats (png, jpeg, gif, bmp).
-    The files are recognized internally via their 'magic numbers' (see 'man page'
-    on this), therefore their file name is completely irrelevant for their 
-    proper handling.
-    Consider reading |fimgs| to learn how to view archives and renderable
-    document files with the help of fim.
-    Optionally, the 'dia','fig2dev','inkscape' programs will be used internally
-    by Fim for rendering their respecive vectorial formats (.dia,.fig,.svg) to 
-    a Fim interally supported format.
+    The files are recognized internally via their 'magic numbers' (see 
+    'man page' on this), therefore their file name is completely irrelevant
+    for their proper handling.
+    Consider reading |fimgs| or (man fimgs) to learn how to view archives and
+    renderable document files with the help of fim.
+    Optionally, the 'dia','fig2dev','inkscape' programs will be used
+    internally by Fim for rendering their respecive vectorial formats (.dia,
+    .fig,.svg) to a Fim interally supported format.
     Gimp's xcftopnm will be tried to read '.xcf' file format files.
-    Moreover, consider that the 'convert' utility (shipped with the ImageMagick
-    package) will be tried to convert unrecognized format files, as a last
-    try.
+    Moreover, consider that the 'convert' utility (shipped with the
+    ImageMagick package) will be tried to convert unrecognized format files,
+    as a last try.
 
 ==============================================================================
 13.BUGS								*bugs*
@@ -1532,9 +1613,6 @@ A lot of questions still await for an answer in Fim. Here are few:
    the background. It will blind your console and allow only blind typing, 
    which is a very dangerous situation!
 
-  - Problems with unusual resolutions (like those on popular laptop wide screens).
-   Although unusual resolutions bugs are welcome.
-
  - GNU Flex version prior to 2.5.4a and GNU Bison version prior 1.875d" are
    known to give compilation problems, so make sure you have newer versions of
    these. Note that Flex 2.5.4a comes after Flex-2.5.4.
@@ -1549,6 +1627,6 @@ COPYING file.
 This is stated too in each source file preamble.
 
 ------------------------------------------------------------------------------
-$Id$
+$Id: FIM.TXT 127 2008-04-08 14:20:31Z dezperado $
 
  vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=help:norl:

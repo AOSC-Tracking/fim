@@ -7,6 +7,12 @@ fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .B fim [ options ] [--] files ...
 .TP
 .B ... | fim [ options ] [--] [ files ] - ...
+.TP
+.B fim  -  [ options ] < file_name_list
+.TP
+.B fim -i [ options ] < file
+.TP
+.B fim -p [ options ] < script_file
 .SH DESCRIPTION
 .B fim
 displays the specified file(s) on the linux console using the
@@ -23,12 +29,46 @@ Please note that the full documentation of
 is in the FIM.TXT file distributed in the source package.
 .SH OPTIONS
 .TP
+.B -a, --autozoom
+Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)
+.TP
+.B -c {commands}, --execute-commands {commands}
+The \fBcommands\fP string will be executed before entering the interactive loop.
+Please note that if your commands are more complicated than a simple 'next' or 'pornview'
+command, they must be quoted and escaped in a manner suitable for your shell!!
+
+For example,
+-c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
+
+(with the single quotes) will tell fim to first double the displayed image 
+size, then pan two times up, then display the image ; and then 
+do an endless loop consisting of bottom and top aligning, alternated.
+.TP
 .c .B -h, --help
 .c print usage info
 .c .TP
 .B -d {device}, --device {device}
-framebuffer device to use.  Default is the one your vc is
-mapped to.
+framebuffer device to use.  Default is the one your vc is mapped to (as in fbi).
+.TP
+.B -D, --dump-default-fimrc
+The default fimrc file (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
+.TP
+.B -E {scriptfile}, --execute-script {scriptfile}
+The \fBscriptfile\fP will be executed right after the default initialization file is executed.
+.TP
+.B -f , --etc-fimrc
+The /etc/fimrc file will be executed prior to any other configuration file.
+If not specified, it is *ignored*.
+.TP
+.B -F {commands}, --final-commands {commands}
+The \fBcommands\fP string will be executed after exiting the interactive loop
+of the program (right before terminating the program).
+.TP
+.B -h, --help
+display help and terminate the program.
+.TP
+.B -i, --image-from-stdin
+Will read one single image from the standard input (yes: the image, not the filename).
 .TP
 .B -m {mode}, --mode {mode}
 name of the video mode to use video mode (must be listed in
@@ -37,14 +77,11 @@ name of the video mode to use video mode (must be listed in
 .c .B -q, --quiet
 .c be quiet: don't print anything.
 .TP
-.B -h, --help
-display help and terminate the program
+.B -N, --no-rc-file
+No initialization file will be read (default is ~/.fimrc) at startup.
 .TP
-.B -V, --version
-display version and terminate the program
-.TP
-.B -v, --verbose
-be verbose: show status bar.
+.B -p, --script-from-stdin
+Will read commands from stdin prior to entering in interactive mode.
 .TP
 .B -P, --text-reading
 Enable textreading mode.  This has the effect that fim will display
@@ -67,37 +104,8 @@ key configuration, of course).
 .B -s {n}, --scroll {n}
 set scroll steps in pixels (default is 50).
 .TP
-.B -c {commands}, --execute-commands {commands}
-The \fBcommands\fP string will be executed before entering the interactive loop.
-Please note that if your commands are more complicated than a simple 'next' or 'pornview'
-command, they must be quoted and escaped in a manner suitable for your shell!!
-
-For example,
--c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
-
-(with the single quotes) will tell fim to first double the displayed image 
-size, then pan two times up, then display the image ; and then 
-do an endless loop consisting of bottom and top aligning, alternated.
-.TP
-.B -F {commands}, --final-commands {commands}
-The \fBcommands\fP string will be executed after exiting the interactive loop
-of the program (right before terminating the program).
-.TP
-.B -f , --etc-fimrc
-The /etc/fimrc file will be executed prior to any other configuration file.
-If not specified, it is *ignored*.
-.TP
 .B -T {terminal}, --vt {terminal}
-The \fBterminal\fP will be used as virtual terminal device file.
-.TP
-.B -E {scriptfile}, --execute-script {scriptfile}
-The \fBscriptfile\fP will be executed right after the default initialization file is executed.
-.TP
-.B -N, --no-rc-file
-No initialization file will be read (default is ~/.fimrc) at startup.
-.TP
-.B -D, --dump-default-fimrc
-The default fimrc file (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
+The \fBterminal\fP will be used as virtual terminal device file (as in fbi).
 .c .TP
 .c .B -f font
 .c Set font.  This can be either a pcf console font file or a X11 font
@@ -106,20 +114,22 @@ The default fimrc file (the one hardcoded in the fim executable) is dumped on st
 .c environment variable is used as default.  If unset, fim will
 .c fallback to 10x20 (X11) / lat1u-16.psf (console).
 .TP
-.B -i, --image-from-stdin
-Will read one single image from the standard input (yes: the image, not the filename).
+.B -v, --verbose
+be verbose: show status bar.
 .TP
-.B -p, --script-from-stdin
-Will read commands from stdin prior to entering in interactive mode.
+.B -V, --version
+display version and compile flags, and then terminate.
 .TP
-.B -a, --autozoom
-Enable autozoom.  fim will automagically pick a reasonable zoom factor
-when loading a new image.
+.B -w, --autowidth
+Will adapt the image size to the screen size.
+.TP
+.B -W {scriptout}, --write-scriptout {scriptout}
+All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
 .TP
 .B -
 Reads file list from stdin.
 
-Note that these three standard input reading functionalities conflict - if two or more of them occur in fim invocation, fim will exit with an error.
+Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
 
 See the section
 .B EXAMPLES
@@ -148,29 +158,62 @@ below to read some useful (and unique) ways of employing fim.
 .c only useful if you added reasonable comments yourself (using wrjpgcom
 .c for example), otherwise you likely just find texts pointing to the
 .c software which created the image.
-.SH COMMON KEYS
+.SH COMMON KEYS AND COMMANDS
 .nf
 cursor keys     scroll large images
 h,j,k,l		scroll large images left,down,up,right
 +, -            zoom in/out
-ESC, Q          quit
+ESC, q          quit
+Tab             toggle output console visualization
 PgUp,p            previous image
-PgDn,n, Space     next image
-Return          next image, write the filename of the current
-                image to stdout on exit from the program.
-m		mirror
-f		flip
-r		rotate by 90  degrees
-d,x,D.X		diagonal scroll
-C-w		scale to the screen width
-C-h		scale to the screen heigth
-m		mark the current file for printing its name when terminating fim
-
+PgDn,n            next image
+Space  	        next image if on bottom, scroll down instead
+Return          next image, write the filename of the current image to stdout on exit from the program.
+m			mirror
+f			flip
+r			rotate by 90  degrees
+d,x,D,X		diagonal scroll
+C-w			scale to the screen width
+H			scale to the screen heigth
+m			mark the current file for printing its name when terminating fim
 .c P               pause the slideshow (if started with -t, toggle)
 .c {number}g    jump to image {number}
+
 :{number}       jump to {number}^th image in the list
+:^	        jump to first image in the list
+:$	        jump to last image in the list
 :*{factor}      scale the image by {factor}
 :{scale}%       scale the image to the desired {scale}
+:+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
+:-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
+
+/regexp		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
+/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
+/png		 a shortcut for /.*png.*
+
+!{cmd}		executes the {cmd} string as a "/bin/sh" shell command
+
+C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename
+C-c		 terminate instantaneously fim
+T		 split horizontally the current window
+V		 split vertically the current window
+C		 close  the currently focused window
+H		 change the currently focused window with the one on the left
+J		 change the currently focused window with the lower
+K		 change the currently focused window with the upper
+L		 change the currently focused window with the one on the right
+U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise  : try V, m,  U and see by yourself :) )
+d		move the image diagonally north-west
+D		move the image diagonally south-east
+x		move the image diagonally north-east
+X		move the image diagonally south-west
+m		mirror
+f		flip
+r		rotate
+
+You can visualize all of the default bindings invoking fim --dump-default-fimrc | grep bind .
+You can visualize all of the default aliases invoking fim  --dump-default-fimrc | grep alias .
+
 .fi
 .P
 The Return vs. Space key thing can be used to create a file list while
@@ -265,7 +308,7 @@ will make fim read the image scanned from a flatbed scanner as soon as it is rea
 .B fim
 * > selection.txt
 .P
-will output the file names marked with 'm' in fim to a file.
+will output the file names marked interactively with 'm' in fim to a file.
 .P
 .P
 
@@ -283,6 +326,24 @@ will output the file names marked with 'm' in fim to a second instance of fim, i
 has bugs. Please read the 
 .B BUGS
 file shipped in the documentation directory to discover the known ones.
+.SH  FILES
+
+.TP 15
+/usr/local/share/doc/fim/FIM.TXT
+The
+.B Fim
+documentation files.
+.TP 15
+.c /usr/local/share/fim/fimrc
+/etc/fimrc
+System wide
+.B Fim
+initialization file (executed on startup if no personal initialization file exist).
+.TP 15
+~/.fimrc
+Your personal
+.B Fim
+initialization file (executed on startup, if existent).
 .SH SEE ALSO
 fimgs(1), fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)
 .c , jpegtran(1)

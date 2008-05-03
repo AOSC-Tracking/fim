@@ -93,6 +93,12 @@ namespace fim
 #ifdef FIM_READ_STDIN_IMAGE
 	void Browser::set_default_image(Image *stdin_image)
 	{
+		/*
+		 * this is used mainly to set image files read from pipe or stdin
+		 * */
+		if(!stdin_image || stdin_image->check_invalid())return;
+
+		if(default_image) delete default_image;
 		default_image=stdin_image;
 	}
 #endif
@@ -1359,7 +1365,21 @@ namespace fim
 		 *	pushes a new image filename on the back of the image list
 		 */
 		for(unsigned int i=0;i<args.size();++i)
+		{
+#ifdef FIM_SMART_COMPLETION
+			/* due to this patch, filenames could arrive here with some trailing space. 
+			 * we trim them here, which is not correct if someone intends to push
+			 * a space-trailing filenme.
+			 * 
+			 * FIXME : regard this as a bug
+			 * */
+			fim::string ss=args[i];
+			ss.substitute(" +$","");
+			push(ss);
+#else
 			push(args[i]);
+#endif
+		}
 		return "";
 	}
 

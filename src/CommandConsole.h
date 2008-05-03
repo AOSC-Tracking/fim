@@ -206,6 +206,9 @@ class CommandConsole
 	fim::string cd(const args_t& args);
 	fim::string pwd(const args_t& args);
 	fim::string sys_popen(const args_t& args);
+#ifdef FIM_PIPE_IMAGE_READ
+	fim::string pread(const args_t& args);
+#endif
 	fim::string set_interactive_mode(const args_t& args);
 	fim::string set_in_console(const args_t& args);
 	fim::string autocmd(const args_t& args);
@@ -219,6 +222,7 @@ class CommandConsole
 	fim::string getAliasesList()const;
 	fim::string dummy(std::vector<Arg> args);
 	fim::string variables_list(const args_t& args){return get_variables_list();}
+	fim::string commands_list(const args_t& args){return get_commands_list();}
 	fim::string set(const args_t &args);
 	fim::string unalias(const args_t& args);
 	char ** tokenize_(const char *s);
@@ -287,6 +291,7 @@ class CommandConsole
 	void status_screen(const char *desc);
 	void set_status_bar(fim::string desc, const char *info);
 	void set_status_bar(const char *desc, const char *info);
+        bool is_file(fim::string nf)const;//FIXME : written unsafely
 };
 }
 

@@ -13,76 +13,37 @@ Of course, the BUGS file is a source of constant inspiration (we could say,
 of a maniacal taste ) for further work, too.
 
 If you just intend to learn more about Fim, please read the program
-documentation in the "doc" directory first.
+documentation in the "doc" directory first along with the man page, of course.
 
 Warning : Stuff in this file could be outdated, but necessary for
-further inspiration.
+ongoing further inspiration.
 
 -------------------------------------------------------------------------------
 	Current development directions
 
 
-20080420	phdcomics's phd060303s.gif crashes :  fim *f -c 'toggleAutoScale;322'
-20080414	to use mkstemp() in src/FbiStuff.cpp
-20080414	introduce fim_fatal(), fim_warn(), fim_fail(), ...
-20080414	use rand48, and more options on random behaviour
-20080414	follow -Weffc++ g++ flag guidelines, and -Werror
-20080414	instead of malloc() to use calloc() and MALLOC_PERTURB, M_PERTURB on mallopt()
-20080414	use mtrace() sometimes, MALLOC_TRACE=mout
-20080414	use the dmalloc library (DMALLOC_OPTIONS), ElectricFence,
-20080414	use valgrind
-20080414	use mudflap library
-20080414	compile with -D_GLIBCXX_DEBUG for having a bug-aware C++ standard library
-20080414	experiment with libsegfault, <execinfo.h>
-20080414	use lint from time to time
-20080414	to add scripts to check for memory leaks and related bugs and build problems,
-		in a way contributors could run cron scripts with svn export / build capabilities
+20080502	variable=`internal_command` behaviour missing
+20080502	reintroduce X custom font support
+20080502	enrich the existing commands by documenting them and giving power to their arguments
+20080430	add support for probing/scanning in byte ranges in file systems/files for known image types
 20080324	absolute priority of removing all extern object references in the code
 20080316	i need a class/superclass with the command acception functionality,
 		in a way each object would be directly responsible for its own bunch
 		of commands.
-20080313	make each cpp file include exactly the header files used
 20080228	to download files from a web page with fimgs
-20080223	fine grain the grammar using whitespaces too
-20080222	merge documentation for lame users
 20080219	fill in a spec file for building rpm packages
-20080216	add a third optional argument to bind : a description
-20080216	add textureview mode
 20080216	resuscitate rotation, inversion and filtering code from fbi
-20080216	hardcode CFLAGS and such variables in a fim executable at compile time
-20080216	add CFLAGS=-march=pentium4 ... and such optimization checks to the configure script
-20080127	to detect exactly if running under screen and run accordingly ;)
 20080127	think about a multi-monitor strategy for a single instance of Fim: note that currently it is possible to specify a framebuffer device (therefore a monitor) via -d (--device)
 20080126	time to think about an /etc/fimrc at installation time
-20080106	add examples/aliases to send emails with attached image from within fim
-20080103	create a script to make a fimrc man page from fimrc
-20071230	UNIX domain sockets communication and multithreaded Fim
-20071230	A decent Features section in the web site, from the top.
-20071127	in-depth study of Vim documentation to uniform languages as much as possible
-20071127	study autodocumentation issues
-20071127	prepare a cookbook
-20071127	possible namespaces : 
-	 w:... window variables
-	 g:... global variables
-	 l:... local  variables
-	 s:... script variables
-	 t:... tab    variables
-	 v:... vim    variables 
-20071127	functions, return status, stdout, stderr ?
-20071127	inspiration : #  vim +':help eval'
+
 20071127	histall, histdell
 20071127	fim -q --quiet, vs warning al primo avvio ?
 20071127	proposal of a 'cropped view' functionality to ease sequent joint pages reading
 20071026	investigate issues related to UTF-8, charset, and mapping stuff vs raw console modes..
-20071025	introduce a namespace : 'e:', to get environment variables!
-20071021	study context-sensitive command completion (so, with pre-parsing.. implying a modified parsing scheme!)
 20071006	implement mechanisms or policies for namespace inheritage on windows split
 20070925	update notices regarding file format compatibilities in the man pages
 20070924	a virtual class Context to implement a hierarchical namespace system for variables and maybe functions (to come)
-20070921	argument passing to aliases, bash like ?! or vim-like ? 
-20070920	a command to exit from a script immediately
 20070920	printing support ? :)
-20070920	as much as possible of Vim's language intuitive syntax
 20070903	these features are currently going to be worked in the near future:
 			- the combined window+viewport subsystem
 			- move as much as possible of Fim to be scriptable. variables in primis!
@@ -108,8 +69,6 @@ further inspiration.
 		you could also write a little cookbook in the documentation, 
 		with examples like :
 			find -name *jpg | fim - | xargs convert -0 
-20070613	sync documentation, website and the whole with VERSION :)
-20070517	automated inline - to txt documentation is a future issue
 20070517	an useless, optional grid, under or over the image
 20070514	There is a growing need to document the target audience of this
 	software and its purposes.
@@ -137,6 +96,89 @@ further inspiration.
 	structure and converting the odd Fbi code in elegant, or possibly more
 	optimized, (especially the hacked, critical parts concerning mirroring
 	and flipping! ) Fim code.
+
+-------------------------------------------------------------------------------
+Major but tricky (time consuming) issues:
+20071021	study context-sensitive command completion (so, with pre-parsing.. implying a modified parsing scheme!)
+
+-------------------------------------------------------------------------------
+Minor but tricky (time consuming) issues:
+
+20080430	find a way to catch the console signal C-s in fim in a way to make C-s bindable
+20080313	make each cpp file include exactly the header files used
+20080216	add textureview mode
+
+-------------------------------------------------------------------------------
+Minor but easy (not time consuming) issues:
+
+20080430	use tmpfile() instead FIM_TMP_FILENAME 
+20080414	to use mkstemp() in src/FbiStuff.cpp
+20080414	introduce fim_fatal(), fim_warn(), fim_fail(), ...
+20080414	use rand48, and more options on random behaviour
+
+
+-------------------------------------------------------------------------------
+Optimization related ideas:
+
+20080216	add CFLAGS=-march=pentium4 ... and such optimization checks to the configure script
+-------------------------------------------------------------------------------
+Documentation related ideas:
+
+20080222	merge documentation for lame users
+20080106	add examples/aliases to send emails with attached image from within fim
+20080103	create a script to make a fimrc man page from fimrc
+20071230	UNIX domain sockets communication and multithreaded Fim
+20071230	A decent Features section in the web site, from the top.
+20071127	in-depth study of Vim documentation to uniform languages as much as possible
+20071127	study autodocumentation issues
+20071127	prepare a cookbook
+20071127	inspiration : #  vim +':help eval'
+20070613	sync documentation, website and the whole with VERSION :)
+20070517	automated inline - to txt documentation is a future issue
+
+-------------------------------------------------------------------------------
+Almost solved problems ideas:
+
+20080430	give the user more control on the debug console
+20080127	to detect exactly if running under screen and run accordingly ;)
+
+-------------------------------------------------------------------------------
+Language related ideas:
+
+20080502	finish implementing pipe reading of images from inside fim with pread (an interactive -i) : FIM_PIPE_IMAGE_READ
+20080502	find a syntactical solution for ;; handling (extra semicolons) in the parser
+20080223	fine grain the grammar using whitespaces too
+20080216	add a third optional argument to bind : a description
+20071127	possible namespaces : 
+	 w:... window variables
+	 g:... global variables
+	 l:... local  variables
+	 s:... script variables
+	 t:... tab    variables
+	 v:... vim    variables 
+20071127	functions, return status, stdout, stderr ?
+20071025	introduce a namespace : 'e:', to get environment variables!
+20070921	argument passing to aliases, bash like ?! or vim-like ? 
+20070920	a command to exit from a script immediately
+20070920	as much as possible of Vim's language intuitive syntax
+
+-------------------------------------------------------------------------------
+Debug related ideas:
+
+20080414	follow -Weffc++ g++ flag guidelines, and -Werror
+20080414	instead of malloc() to use calloc() and MALLOC_PERTURB, M_PERTURB on mallopt()
+20080414	use mtrace() sometimes, MALLOC_TRACE=mout
+20080414	use the dmalloc library (DMALLOC_OPTIONS), ElectricFence,
+20080414	use valgrind
+20080414	use mudflap library
+20080414	compile with -D_GLIBCXX_DEBUG for having a bug-aware C++ standard library
+20080414	experiment with libsegfault, <execinfo.h>
+20080414	use lint from time to time
+20080414	to add scripts to check for memory leaks and related bugs and build problems,
+		in a way contributors could run cron scripts with svn export / build capabilities
+
+-------------------------------------------------------------------------------
+
 
 -------------------------------------------------------------------------------
 Optimization:
@@ -169,7 +211,6 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 20070129	control 4 crashes the prog ... why ? :)
 
 	MISSING SMALL FIXES:
-20070312	fix dumping of recording in some file!	
 20070303	fix rar and zip dependencies in Makefiles and such for fimgs.sh
 20070303	see if while-nesting is a real danger combined with interruption handling
 20070303	update the while construct documentation and fix the while command execution bugs 
@@ -184,7 +225,6 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 20070401	?= /semanticexp/ operator
 
 	ADD:
-20070401	~= /regexp/ operator
 20070401	find's -exec '{}' ';' -like predicate syntax
 20070125	add pipe to other commands and exec and system (screenshot with fbgrab, for example)
 20070128	add support for command renaming with checks...

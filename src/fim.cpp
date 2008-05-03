@@ -102,6 +102,7 @@ struct option fim_options[] = {
     {"text-reading",      no_argument,       NULL, 'P'},
     {"image-from-stdin",      no_argument,       NULL, 'i'},
     {"script-from-stdin",      no_argument,       NULL, 'p'},
+    {"write-scriptout",      required_argument,       NULL, 'W'},
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -123,8 +124,9 @@ class FimInstance
 	#ifdef FIM_VERSION
 			    FIM_VERSION
 	#endif
+	#define FIM_REPOSITORY_VERSION  "$Id$"
 	#ifdef FIM_REPOSITORY_VERSION 
-			    "( repository version "
+			    " ( repository version "
 		FIM_REPOSITORY_VERSION 	    
 			    " )"
 	#endif
@@ -136,7 +138,15 @@ class FimInstance
 			    ", built on %s\n",
 			    __DATE__
 	    		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
-			"Compile flags:\n"
+	#ifdef CXXFLAGS
+			"Compile flags: CXXFLAGS="CXXFLAGS
+	#ifdef CFLAGS
+			"  CFLAGS="CFLAGS
+	#endif
+			"\n"
+	#endif
+			"Fim options (features included (+) or not (-)):\n"
+#if 0
 	#ifdef FIM_WINDOWS
 			"+FIM_WINDOWS"
 	#else
@@ -196,6 +206,9 @@ class FimInstance
 	#else
 			"-FIM_BOZ_PATCH"
 	#endif
+#else
+	#include "version.h"
+#endif
 			    );
 	}
 
@@ -258,7 +271,7 @@ int help_and_exit(char *argv0, int code=0)
 		setlocale(LC_ALL,"");	//uhm..
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tfip",
+		    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:",
 				fim_options, &opt_index);
 		if (c == -1)
 		    break;
@@ -404,6 +417,15 @@ int help_and_exit(char *argv0, int code=0)
 		    cc.appendPostInitCommand(optarg);
 		    appendedPostInitCommand=true;
 		    break;
+		case 'W':
+		    //fim's
+		    cc.setVariable("_fim_scriptout_file",optarg);
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add("start_recording;");
+		    cc.appendPostExecutionCommand("stop_recording");
+	#endif
+
+		    break;
 		case 'F':
 		    //fim's
 		    cc.appendPostExecutionCommand(optarg);
@@ -522,6 +544,9 @@ int help_and_exit(char *argv0, int code=0)
 		else
 		if(read_one_file_from_stdin)
 		{
+			/*
+			 * we read a whole image file from stdin
+			 * */
 			FILE *tfd=NULL;
 			if( ( tfd=tmpfile() )!=NULL )
 			{	
@@ -535,7 +560,7 @@ int help_and_exit(char *argv0, int code=0)
 				 * but it would require to rewrite much of the file loading stuff
 				 * (which is quite fbi's untouched stuff right now)
 				 * */
-				stream_image=new Image("/dev/stdout",tfd);
+				stream_image=new Image("/dev/stdin",tfd);
 
 				// DANGEROUS TRICK!
 				cc.browser.set_default_image(stream_image);

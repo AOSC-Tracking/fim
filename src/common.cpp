@@ -253,8 +253,8 @@ int fim_rand()
 			aux=s;
 		}
 
-		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
-		if(regcomp(&regex,r, 0 | REG_EXTENDED | (ignorecase==0?0:REG_ICASE) )==-1)
+		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )!=0)
+		if(regcomp(&regex,r, 0 | REG_EXTENDED | (ignorecase==0?0:REG_ICASE) )!=0)
 		{
 			/* error calling regcomp (invalid regexp?)! (should we warn the user ?) */
 			//cout << "error calling regcomp (invalid regexp?)!" << "\n";

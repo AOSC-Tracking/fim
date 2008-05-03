@@ -422,7 +422,7 @@ namespace fim
 		if( !r || !*r )
 			return false;
 
-		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE ) ==-1 )
+		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE ) != 0 )
 			return false;
 
 		if(regexec(&regex,c_str(),nmatch,pmatch,0)==0)
@@ -447,7 +447,7 @@ namespace fim
 		if( !r || !*r )
 			return -1;
 
-		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE ) ==-1 )
+		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE ) != 0 )
 			return -1;
 
 		if(regexec(&regex,c_str(),nmatch,pmatch,0)==0)
@@ -477,7 +477,7 @@ namespace fim
 		if( !r || !*r || !s )
 			return;
 
-		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE | flags ) ==-1 )
+		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE | flags ) != 0 )
 			return;
 
 		int off=0;

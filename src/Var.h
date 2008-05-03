@@ -22,8 +22,8 @@
 /*
  * This class is horrible. 
  */
-#ifndef VAR_FBVI_H
-#define VAR_FBVI_H
+#ifndef VAR_FIM_H
+#define VAR_FIM_H
 
 #include "fim.h"
 #include "string.h"
@@ -155,7 +155,7 @@ class Var
 	#define _numeric() (!_some_string())
 	#define _p_t(op) std::cout<<op<<"("<<(char)getType()<<","<<(char)v.getType()<<")\n";
 	Var operator!=(const Var &v)const {
-		_p_t("!=")
+		//_p_t("!=")
 		if(_both('i'))return getInt  () !=v.getInt  (); 
 		if(_both('f'))return getFloat() !=v.getFloat();
 		if(_both('s'))
@@ -200,6 +200,8 @@ class Var
 //	Var operator, (const Var &v)const { return (getString()+v.getString()); }
 	Var operator&&(const Var &v)const { return getInt()&&v.getInt(); }
 	Var operator||(const Var &v)const { return getInt()||v.getInt(); }
+	Var re_match(const Var &v)const { return getString().re_match(v.getString().c_str()); }
+	#undef _p_t
 	#undef _numeric
 	#undef _some_string
 	#undef _both

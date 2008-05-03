@@ -5,10 +5,14 @@
 
  * runs on the powerpc architecure
  * reading image files (-i) and scripts (-p) from stdin
- * improved the debug console, now buffered and with scrolling
+ * rewritten from scratch the debug console, now buffered and with scrolling
  * large speedups in magnifying pictures
  * large speedups in displaying dithered images
  * introducing support for aalib (ascii art rendering)
+ * smarter quoting rules (looser quote checking) when "push"ing files
+ * dumping to file execution logs as executable scripts (-W/--write-scriptout)
+ * regular expressions operator implemented (=~)
+ * new default key bindings for split windows control
 
         	Version 0.2
  

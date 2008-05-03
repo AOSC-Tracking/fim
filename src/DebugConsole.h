@@ -24,6 +24,7 @@
 
 #include <vector>
 #include "fim.h"
+#include "Var.h"
 #include "Namespace.h"
 
 namespace fim
