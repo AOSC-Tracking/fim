@@ -1193,7 +1193,7 @@ void inline FramebufferDevice::dither_line(unsigned char *src, unsigned char *de
     }
 #endif
 
-    while (width) {
+    while (FIM_LIKELY(width)) {
 
 #if 0
 

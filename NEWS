@@ -3,15 +3,15 @@
 
         	Version 0.3-alpha
 
- * runs on the powerpc architecure
+ * experimental support for AAlib (Ascii Art rendering) (-t)
  * reading image files (-i) and scripts (-p) from stdin
+ * runs on the powerpc architecure
  * rewritten from scratch the debug console, now buffered and with scrolling
- * large speedups in magnifying pictures
- * large speedups in displaying dithered images
- * introducing support for aalib (ascii art rendering)
+ * achieved speedup in magnifying pictures
+ * achieved speedup in displaying dithered images
  * smarter quoting rules (looser quote checking) when "push"ing files
  * dumping to file execution logs as executable scripts (-W/--write-scriptout)
- * regular expressions operator implemented (=~)
+ * implemented regular expressions matching operator (=~)
  * new default key bindings for split windows control
 
         	Version 0.2

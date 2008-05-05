@@ -137,7 +137,7 @@ namespace fim
 			no_file=false;	//reloading allowed
 
 		img=fimg;	/* no scaling : one copy only */
-	        framebufferdevice.redraw=1;
+	        {if(cc.displaydevice){cc.displaydevice->redraw=1;}};
 
 		if(! img)
 		{
@@ -343,7 +343,7 @@ namespace fim
 				if( backup_img && backup_img!=fimg ) FbiStuff::free_image(backup_img);
 				scale=newscale;
 				ascale=newascale;
-	        		framebufferdevice.redraw=1;
+	        		{if(cc.displaydevice){cc.displaydevice->redraw=1;}};
 			}
 
 			/*
@@ -355,7 +355,7 @@ namespace fim
 			setGlobalVariable("swidth" ,(int) img->i.width );
 			setGlobalVariable("ascale" , ascale );
 		}
-		else framebufferdevice.redraw=0;
+		else {if(cc.displaydevice){cc.displaydevice->redraw=0;}};
 		orientation=neworientation;
 		return 0;
 	}

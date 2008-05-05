@@ -49,12 +49,29 @@ class AADevice:public DisplayDevice
 	void finalize();
 
 	int get_chars_per_line();
+	int txt_width();
+	int txt_height();
 	int width();
 	int height();
-	int status_line(unsigned char *msg){}
+	int status_line(unsigned char *msg)
+	{
+		aa_printf(ascii_context,0,txt_height()-1,AA_NORMAL,"%s",msg);
+		aa_flush(ascii_context);
+	}
 	void status_screen(int desc,int draw_output){}
 	int console_control(int code){}
 	int handle_console_switch(){}
+	int clear_rect_(
+		void* dst,
+		int oroff,int ocoff,
+		int orows,int ocols,
+		int ocskip);
+	int clear_rect(int x1, int x2, int y1,int y2)
+	{
+		/* FIXME : only if initialized !*/
+		return -1;
+	}
+
 };
 
 

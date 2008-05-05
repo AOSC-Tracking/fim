@@ -1,6 +1,6 @@
 /* $Id$ */
 /*
- AADevice.cpp : aalib device Fim driver file
+ CACADevice.cpp : cacalib device Fim driver file
 
  (c) 2008 Michele Martone
 
@@ -19,15 +19,17 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+/*  20080504 this CACA driver doesn't work yet */
+
 #include "fim.h"
 
-#ifdef FIM_WITH_AALIB
+#ifdef FIM_WITH_CACALIB
 
-#include "AADevice.h"
+#include "CACADevice.h"
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
-	int AADevice::clear_rect_(
+	int CACADevice::clear_rect_(
 		void* dst,	// destination gray array and source rgb array
 		int oroff,int ocoff,	// row  and column  offset of the first output pixel
 		int orows,int ocols,	// rows and columns drawable in the output buffer
@@ -77,7 +79,7 @@
 	}
 
 
-	int matrix_copy_rgb_to_gray(
+	int _matrix_copy_rgb_to_gray(
 		void* dst, void* src,	// destination gray array and source rgb array
 		int iroff,int icoff,	// row  and column  offset of the first input pixel
 		int irows,int icols,	// rows and columns in the input image
@@ -225,7 +227,7 @@
 //#define width() aa_scrwidth(ascii_context)
 //#define height() aa_scrheight(ascii_context)
 
-	int  AADevice::display(
+	int  CACADevice::display(
 		//struct ida_image *img, // source image structure
 		void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
@@ -243,7 +245,7 @@
 		 * */
 		/*
 		 * FIXME : centering mechanisms missing here; an intermediate function
-		 * shareable with FramebufferDevice would be nice, if implemented in AADevice.
+		 * shareable with FramebufferDevice would be nice, if implemented in CACADevice.
 		 * */
 		int i;
 		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
@@ -284,115 +286,63 @@
 //		orows  = min( irows-iroff, height());
 //		ocols  = min( icols-icoff,  width());// rows and columns to draw in output buffer
 //		ocskip = width();// output columns to skip for each line
-//
-		ocskip = aa_scrwidth(ascii_context);// output columns to skip for each line
-		ocskip = aa_imgwidth(ascii_context);// output columns to skip for each line
-
-		/*
-		 * FIXME : since aa_flush() poses requirements to the way single viewports are drawn, 
-		 * AADevice will behave single-windowed until I get a better understanding of aalib.
-		 * Therefore these sanitizing line.
-		 */
-		//oroff  = ocoff = 0;
-		//if(oroff)oroff=min(oroff,40);
-
-		/* we zero the pixel field */
-		//img or scr ?!
-		//bzero(aa_image(ascii_context),aa_imgheight(ascii_context)*ocskip);
-		//bzero(aa_image(ascii_context),width()*height());
-		AADevice::clear_rect_( aa_image(ascii_context), oroff,ocoff, oroff+orows,ocoff+ocols, ocskip); 
-
-	//	cout << iroff << " " << icoff << " " << irows << " " << icols << " " << icskip << "\n";
-/*		cout << oroff << " " << ocoff << " " << orows << " " << ocols << " " << ocskip << "\n";
-		cout << " aa_scrwidth(ascii_context):" << aa_scrwidth(ascii_context) << "  ";
-		cout << "aa_scrheight(ascii_context):" <<aa_scrheight(ascii_context) << "\n";
-		cout << " aa_imgwidth(ascii_context):" << aa_imgwidth(ascii_context) << "  ";
-		cout << "aa_imgheight(ascii_context):" <<aa_imgheight(ascii_context) << "\n";
-		cout << "ocskip " << ocskip << "\n";
-		cout << "ocols "  << ocols  << "\n";*/
-
-		int r;
-		if(r=matrix_copy_rgb_to_gray(
-				aa_image(ascii_context),rgb,
-				iroff,icoff, // row and column offset of the first input pixel
-				irows,icols,// rows and columns in the input image
-				icskip,	// input columns to skip for each line
-				oroff,ocoff,// row and column offset of the first output pixel
-				oroff+orows,ocoff+ocols,// rows and columns to draw in output buffer
-				ocskip,// output columns to skip for each line
-				flags
-			))
-			return r;
-			//return -50;
-
-/*		aa_putpixel(ascii_context,ocols-1,orows-1,0xAA);
-		aa_putpixel(ascii_context,0,orows-1,0xAA);
-		aa_putpixel(ascii_context,ocols-1,0,0xAA);*/
-/*		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+0, aa_scrheight(ascii_context)+0, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+1, aa_scrheight(ascii_context)+1, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+2, aa_scrheight(ascii_context)+2, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+3, aa_scrheight(ascii_context)+3, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+4, aa_scrheight(ascii_context)+4, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+5, aa_scrheight(ascii_context)+5, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+6, aa_scrheight(ascii_context)+6, 0xAA);
-
-		aa_putpixel(ascii_context, aa_imgwidth(ascii_context)-1, aa_imgheight(ascii_context)-1, 0xAA);
-		aa_putpixel(ascii_context, aa_imgwidth(ascii_context)-2, aa_imgheight(ascii_context)-2, 0xAA);*/
-
-	//	((char*)aa_image(ascii_context))[]=;
 		
-//		std::cout << "width() : " << width << "\n"; //		std::cout << "height() : " << height << "\n";
-		aa_render (ascii_context, ascii_rndparms,0, 0, width() , height() );
-		aa_flush(ascii_context);
+		caca_set_window_title("caca-fim");
+		caca_clear();
+		caca_refresh();
+
+		caca_printf(0,0,"foooooooo");
+		caca_putstr(0,0,"foooooooo");
+
+		//caca_draw_bitmap(0, 0, caca_get_width() - 1, caca_get_height() - 1,caca_bitmap, bitmap);
+
+		ocskip = width();// output columns to skip for each line
+		ocskip = width();// output columns to skip for each line
+
 		return 0;
 	}
 
-	int AADevice::initialize()
+	int CACADevice::initialize()
 	{
-		aa_parseoptions (NULL, NULL, NULL, NULL);
+		int rc=0;
 
-		ascii_context = NULL;
+		rc = caca_init();
+		if(rc)return rc;
 
-		memcpy (&ascii_hwparms, &aa_defparams, sizeof (struct aa_hardware_params));
+		XSIZ = caca_get_width() * 2;
+		YSIZ = caca_get_height() * 2 - 4;
 
-		ascii_rndparms = aa_getrenderparams();
-		//aa_parseoptions (&ascii_hwparms, ascii_rndparms, &argc, argv);
+		caca_bitmap = caca_create_bitmap(8, XSIZ, YSIZ - 2, XSIZ, 0, 0, 0, 0);
+		if( !caca_bitmap ) return -1;
+		caca_set_bitmap_palette(caca_bitmap, r, g, b, a);
+		bitmap = (char*)malloc(4 * caca_get_width() * caca_get_height() * sizeof(char));
+		if(!bitmap) return -1;
+		memset(bitmap, 0, 4 * caca_get_width() * caca_get_height());
 
-		char *e;int v;
-//		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms.width  = v-1;
-//		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms.height = v-1;
-//		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms.recwidth  = v;
-//		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms.recheight = v;
-
-//		ascii_hwparms.width  = 80;
-//		ascii_hwparms.height = 56;
-//
-//		ascii_hwparms.width  = 128-1;
-//		ascii_hwparms.height = 48 -1;
-
-		/*ascii_hwparms.width()  = 4;
-		ascii_hwparms.height() = 4;*/
-
-		ascii_save.name = "";
-		ascii_save.format = &aa_text_format;
-		ascii_save.file = NULL;
-
-//		ascii_context = aa_init (&save_d, &ascii_hwparms, &ascii_save);
-		ascii_context = aa_autoinit (&ascii_hwparms);
-		if(!ascii_context)
-		{
-			std::cout << "problem initializing aalib!\n";
-			return -1;
-		}
-		return 0;
+		caca_clear();
+		caca_set_color(CACA_COLOR_BLACK,CACA_COLOR_WHITE);
+		caca_set_color(CACA_COLOR_RED,CACA_COLOR_BLACK);
+		caca_refresh();
+		return rc;
 	}
 
-	void AADevice::finalize() { aa_close(ascii_context); }
-	int AADevice::get_chars_per_line(){return aa_scrwidth(ascii_context);}
-	int AADevice::txt_width() { return aa_scrwidth(ascii_context ) ;}
-	int AADevice::txt_height(){ return aa_scrheight(ascii_context) ;}
-	int AADevice::width() { return aa_imgwidth(ascii_context ) ;}
-	int AADevice::height(){ return aa_imgheight(ascii_context) ;}
+	void CACADevice::finalize()
+	{
+		caca_end();
+	}
+
+	int CACADevice::get_chars_per_line(){return txt_width();}
+	int CACADevice::txt_width() { return width() ;}
+	int CACADevice::txt_height(){ return width() ;}
+	int CACADevice::width() { return caca_get_height();}
+	int CACADevice::height(){ return caca_get_width() ;}
+	int CACADevice::status_line(unsigned char *msg)
+	{
+		caca_printf(0,txt_height()-1,"%s",msg);
+		caca_printf(0,0,"foooooooo");
+		caca_putstr(0,0,"foooooooo");
+		return 0;
+	}
 
 /*
  * This is embryo code and should be used for experimental purposes only!

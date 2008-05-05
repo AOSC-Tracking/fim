@@ -41,10 +41,10 @@ conf.h:       fimrc
 	echo '"";' >> conf.h
 
 version.h:	../config.h
-	grep define ../config.h | grep FIM | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
+	grep define ../config.h | grep FIM | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
 	echo "\"\n\"" >> version.h
-	grep define ../config.h | grep FIM.*'"' | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> version.h
-	grep undef ../config.h | grep FIM | sed 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]\+\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> version.h
+	grep define ../config.h | grep FIM.*'"' | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> version.h
+	grep undef ../config.h | grep FIM | sort | sed 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]\+\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> version.h
 
 
 # the following sources are built at make time
@@ -71,6 +71,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	fim.cpp \
 	fim.h \
 	AADevice.h \
+	CACADevice.h \
 	Arg.h \
 	Browser.h \
 	Cache.h \
@@ -101,6 +102,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	readline.cpp \
 	string.h \
 	AADevice.cpp \
+	CACADevice.cpp \
 	Arg.cpp \
 	Browser.cpp \
 	Cache.cpp \
@@ -123,7 +125,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	interpreter.cpp \
 	string.cpp
 
-CommandConsole.o: conf.h
+CommandConsole.o: conf.h defaultConfiguration.o
 fim.o: version.h
 
 # regex.c is work in progress and awaits for integration

@@ -24,12 +24,13 @@ rich with examples. Enjoy!
 ------------------------------------------------------------------------------
 0. Introduction 						*intro*
 
-      Fim Startup : to open an image, type
+      Fim Startup : to open an image, place yourself in a Linux framebuffer 
+      console and type:
 >
 	fim image.png
 
-in a Linux framebuffer console. You can be sure of being in a Linux framebuffer
-console by issuing successfully:
+You can be sure of being in a Linux framebuffer console by issuing
+successfully:
 >
 	cat /dev/urandom > /deb/fb0
 

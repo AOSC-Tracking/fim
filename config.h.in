@@ -120,6 +120,9 @@
 /* */
 #undef FIM_WITH_AALIB
 
+/* */
+#undef FIM_WITH_CACALIB
+
 /* Defined, if libpng support is enabled */
 #undef FIM_WITH_LIBPNG
 

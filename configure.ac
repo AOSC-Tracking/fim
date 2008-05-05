@@ -341,6 +341,9 @@ dnl ============= aalib : optional
 
 AC_CHECK_LIB(aa, aa_getfirst,have_aalib=yes,have_aalib=no)
 
+dnl ============= cacalib : optional
+AC_CHECK_LIB(caca, caca_init,have_cacalib=yes,have_cacalib=no)
+
 dnl ============= GNU gpm, unofficial yet
 
 #    AC_CHECK_LIB(gpm,Gpm_Open,
@@ -645,7 +648,7 @@ dnl ==================
 
 fim_cv_aalib=no
 
-AC_ARG_ENABLE(aalib, AC_HELP_STRING([--enable-aalib], [Turns on aalib support (STILL INCOMPLETE)]),
+AC_ARG_ENABLE(aalib, AC_HELP_STRING([--enable-aalib], [Turns on aalib support (EXPERIMENTAL)]),
 	[if test x$enableval = xyes; then
 	if test x$have_aalib = xyes; then
 	fim_cv_aalib=yes
@@ -655,6 +658,21 @@ AC_ARG_ENABLE(aalib, AC_HELP_STRING([--enable-aalib], [Turns on aalib support (S
 	])
 	fi
 	fi])
+
+dnl ==================
+
+fim_cv_cacalib=no
+
+dnl AC_ARG_ENABLE(cacalib, AC_HELP_STRING([--enable-cacalib], [Turns on cacalib support (STILL INCOMPLETE)]),
+dnl 	[if test x$enableval = xyes; then
+dnl 	if test x$have_cacalib = xyes; then
+dnl 	fim_cv_cacalib=yes
+dnl 	else
+dnl     AC_MSG_ERROR([Sorry, it doesn't seem like cacalib is installed or detectable.
+dnl 	Please run --disable-cacalib or install cacalib in a system-wide directory instead.
+dnl 	])
+dnl 	fi
+dnl 	fi])
 
 dnl ==================
 
@@ -833,6 +851,14 @@ dnl ==================
 
 dnl ==================
 
+    AH_TEMPLATE([FIM_WITH_CACALIB])
+            if test x$fim_cv_cacalib = xyes ; then
+    		AC_DEFINE([FIM_WITH_CACALIB])
+    		FIMLIBS="$FIMLIBS -lcaca"
+    	fi
+
+dnl ==================
+
 dnl uhmmmmmm : doesn't seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 
 dnl         if test x$enableval = xyes; then
@@ -897,7 +923,9 @@ AC_SUBST(FIM_DEFS)
 AC_SUBST(FIM_LIB_OBJECTS)
 AC_SUBST(FIM_SVN_REPOSITORY,[http://code.autistici.org/svn/fim/])
 
+dnl we want these symbols defined in our code
 AC_SUBST(CXXFLAGS)
+AC_SUBST(CFLAGS)
 
 #CFLAGS="$FIM_CFLAGS"
 #CXXFLAGS="$FIM_CFLAGS"
@@ -932,7 +960,8 @@ AC_MSG_NOTICE([
 	use 'convert' for unknown files     : ${fim_cv_convert}
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
-	ascii art (aalib) limited support   : ${fim_cv_aalib}
+	ascii art (aalib) support           : ${fim_cv_aalib}
+dnl	coloured ascii art (cacalib) support: ${fim_cv_cacalib}
 
 
 	If you are not satisfied with this configuration, please run :

@@ -317,9 +317,17 @@ class FramebufferDevice:public DisplayDevice
 	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
 
 	void fb_clear_rect(int x1, int x2, int y1,int y2);
+	int clear_rect(int x1, int x2, int y1,int y2)
+	{
+		fb_clear_rect(x1, x2, y1,y2);
+		return 0;
+	}
 
 	void clear_screen(void);
 	void cleanup(void);
+
+	int initialize (void){/*still unused : FIXME */ ;return 0;}
+	void finalize (void){/*still unused : FIXME */ ;}
 	struct fs_font * fb_font_get_current_font(void)
 	{
 	    return f;

@@ -601,8 +601,6 @@ int help_and_exit(char *argv0, int code=0)
 			if(ffd.framebuffer_init())cc.cleanup_and_exit(0);
 			cc.tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 		}
-		rl::initialize_readline(g_fim_no_framebuffer);
-	
 		if(cc.init()!=0) return -1;
 	
 	//	ffd.test_drawing();

@@ -169,7 +169,7 @@ static int redisplay_hook()
 /*
  *	initial setup to set the readline library working
  */
-void initialize_readline (int with_no_framebuffer)
+void initialize_readline (int with_no_display_device)
 {
 	//FIX ME
 	/* Allow conditional parsing of the ~/.inputrc file. */
@@ -178,7 +178,7 @@ void initialize_readline (int with_no_framebuffer)
 	rl_attempted_completion_function = fim_completion;
 	rl_completion_display_matches_hook=completion_display_matches_hook;
 
-	if(with_no_framebuffer==0)
+	if(with_no_display_device==0)
 	{
 		rl_catch_signals=0;
 		rl_catch_sigwinch=0;

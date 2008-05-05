@@ -35,13 +35,15 @@
 namespace fim
 {
 	extern FramebufferDevice ffd;
+	extern CommandConsole cc;
+
 	Viewport::Viewport(
 			CommandConsole &c
 #ifdef FIM_WINDOWS
 			,Window *window_
 #endif
 			)
-			:framebufferdevice(fim::ffd)
+			:displaydevice(cc.displaydevice)
 			,commandConsole(c)
 			,steps(0)
 			,left(0)
@@ -56,7 +58,7 @@ namespace fim
 	}
 
 	Viewport::Viewport(const Viewport &v)
-		:framebufferdevice(fim::ffd)
+		:displaydevice(cc.displaydevice)
 		,commandConsole(v.commandConsole)
 		,steps(v.steps)
 		,left(v.left)
@@ -90,7 +92,7 @@ namespace fim
 			if(this->onTop())return;
 			s=(s==0)?steps:s;
 			top -= s;
-		        framebufferdevice.redraw=1;
+		        displaydevice->redraw=1;
 		}
 	}
 
@@ -102,7 +104,7 @@ namespace fim
 			if(this->onBottom())return;
 			s=(s==0)?steps:s;
 			top += s;
-		        framebufferdevice.redraw=1;
+		        displaydevice->redraw=1;
 		}
 	}
 
@@ -114,7 +116,7 @@ namespace fim
 			if(onRight())return;
 			s=(s==0)?steps:s;
 			left+=s;
-		        framebufferdevice.redraw=1;
+		        displaydevice->redraw=1;
 		}
 	}
 
@@ -126,7 +128,7 @@ namespace fim
 			if(onLeft())return;
 			s=(s==0)?steps:s;
 			left-=s;
-	        	framebufferdevice.redraw=1;
+	        	displaydevice->redraw=1;
 		}
 	}
 
@@ -162,7 +164,7 @@ namespace fim
 		if(window)return window->width();
 		else return 0;
 #else
-		return framebufferdevice.fb_var.xres;
+		return displaydevice->fb_var.xres;
 #endif
 	}
 
@@ -174,7 +176,7 @@ namespace fim
 		if(window)return window->height();
 		else return 0;
 #else
-		return framebufferdevice.fb_var.yres;
+		return displaydevice->fb_var.yres;
 #endif
 	}
 
@@ -182,14 +184,14 @@ namespace fim
 	{
 		if(this->onBottom())return;
 		if( check_valid() )top = image->height() - this->viewport_height();
-	        framebufferdevice.redraw=1;
+	        displaydevice->redraw=1;
 	}
 
 	void Viewport::top_align()
 	{
 		if(this->onTop())return;
 		top=0;
-	        framebufferdevice.redraw=1;
+	        displaydevice->redraw=1;
 	}
 
 	bool Viewport::redisplay()
@@ -198,7 +200,7 @@ namespace fim
 		 * we 'force' redraw.
 		 * display() has still the last word :P
 		 * */
-	        framebufferdevice.redraw=1;
+	        displaydevice->redraw=1;
 		return display();
 	}
 
@@ -227,16 +229,33 @@ namespace fim
 		/*
 		 * for recovery purposes. FIXME
 		 * */
-		if(framebufferdevice.redraw==0 )return;
+		if( displaydevice->redraw==0 )return;
 #ifdef FIM_WINDOWS
-		framebufferdevice.fb_clear_rect(
+		/* FIXME : note that fbi's clear_rect() is a buggy function and thus the fs_bpp multiplication need ! */
+		if(displaydevice == &(fim::ffd))
+		{
+			/*
+			 * temporary exception until the fim::ffd.fs_bpp need is fixed for FrameBufferDevice
+			 * */
+			fim::ffd.fb_clear_rect(
 				xorigin(),
-				xorigin()+viewport_width()*framebufferdevice.fs_bpp,
+				xorigin()+viewport_width()*fim::ffd.fs_bpp,
 				yorigin(),
 				yorigin()+viewport_height()
 				);
+		}
+		else
+		{
+			displaydevice->clear_rect(
+				xorigin(),
+				xorigin()+viewport_width(),
+				yorigin(),
+				yorigin()+viewport_height()
+				);
+		}
 #else
-		framebufferdevice.fb_clear_rect( 0, viewport_width()*framebufferdevice.fs_bpp, 0, viewport_height());
+		/* FIXME */
+		displaydevice->clear_rect( 0, viewport_width()*displaydevice->fs_bpp, 0, viewport_height());
 #endif
 	}
 
@@ -249,7 +268,7 @@ namespace fim
 		 *
 		 *	returns true when some drawing occurred.
 		 */
-		if((framebufferdevice.redraw==0) )return false;
+		if((displaydevice->redraw==0) )return false;
 		if( check_invalid() ) null_display();//  NEW
 		if( check_invalid() ) return false;
 		/*
@@ -268,7 +287,7 @@ namespace fim
 
 		image->update();
     
-		if (getGlobalIntVariable("i:new") && framebufferdevice.redraw)
+		if (getGlobalIntVariable("i:new") && displaydevice->redraw)
 		{
 			/*
 			 * If this is the first image display, we have
@@ -287,7 +306,7 @@ namespace fim
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
-//		if (framebufferdevice.redraw  ) 
+//		if (displaydevice->redraw  ) 
 		{
 			/*	
 			 *	20070911
@@ -321,16 +340,16 @@ namespace fim
 		    	}
 		}
 		
-		if(framebufferdevice.redraw)
+		if(displaydevice->redraw)
 		{
-			framebufferdevice.redraw=0;
+			displaydevice->redraw=0;
 			/*
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
 			 */
 #ifdef FIM_WINDOWS
 			if(commandConsole.displaydevice )
-			commandConsole.displaydevice->display(
+			displaydevice->display(
 					image->img,
 					top,
 					left,
@@ -345,18 +364,18 @@ namespace fim
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);
 #else
-			framebufferdevice.display(
+			displaydevice->display(
 					image->img,
 					top,
 					left,
-					framebufferdevice.fb_var.yres,
-					framebufferdevice.fb_var.xres,
-					framebufferdevice.fb_var.xres,
+					displaydevice->fb_var.yres,
+					displaydevice->fb_var.xres,
+					displaydevice->fb_var.xres,
 					0,
 					0,
-					framebufferdevice.fb_var.yres,
-					framebufferdevice.fb_var.xres,
-					framebufferdevice.fb_var.xres,
+					displaydevice->fb_var.yres,
+					displaydevice->fb_var.xres,
+					displaydevice->fb_var.xres,
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);
 #endif					
@@ -371,7 +390,7 @@ namespace fim
 		if( check_invalid() ) return;
 		else
 		{
-			xs = (float)this->viewport_width()  / image->original_width();
+			xs = (float)this->viewport_width()  / (image->original_width()*(image->ascale>0.0?image->ascale:1.0));
 			ys = (float)this->viewport_height() / image->original_height();
 		}
 
@@ -426,7 +445,7 @@ namespace fim
 			image->reset();
 			setGlobalVariable("new",1);
 		}
-                framebufferdevice.redraw=1;
+                displaydevice->redraw=1;
                 top  = 0;
                 left = 0;
 
@@ -460,7 +479,7 @@ namespace fim
 		float newscale;
 		if( check_invalid() ) return;
 
-		newscale = (float)this->viewport_width() / image->original_width();
+		newscale = (float)this->viewport_width() / (image->original_width()*(image->ascale>0.0?image->ascale:1.0));
 
 		image->rescale(newscale);
 	}

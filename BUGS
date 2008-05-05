@@ -78,6 +78,9 @@ with a '@' and _Baz_ with a '.'.
 
 ==== KNOWN BUGS
 
+20080504	Seems like running the aalib driver under screen maps -3072 units down the arrow keys.
+		I do not see this problem in aalib under ssh.
+
 Please refer to the documentation (doc/FIM.TXT) for the rest of known bugs (BUGS section).
 
 -------------------------------------------------------------------------------

@@ -441,13 +441,65 @@ namespace fim
 
 	int CommandConsole::init()
 	{
-		
-		displaydevice=&framebufferdevice;
-		#ifdef FIM_WITH_AALIB
-		aad=new AADevice(); if(aad && aad->initialize()!=0){delete aad ; aad=NULL;}
-		if(aad && g_fim_no_framebuffer)displaydevice=aad;
+
+		displaydevice=NULL;
+		int xres=0,yres=0;
+
+		setVariable("_TERM", getenv("TERM"));
+
+		#ifdef FIM_WITH_CACALIB
+		DisplayDevice *cacad=NULL;
+		cacad=new CACADevice(); if(cacad && cacad->initialize()!=0){delete cacad ; cacad=NULL;}
+		if(cacad && g_fim_no_framebuffer && displaydevice==NULL)
+		{
+			displaydevice=cacad;
+			setVariable("_device_driver", "cacalib");
+		}
 		#endif
 
+		#ifdef FIM_WITH_AALIB
+		aad=new AADevice(); if(aad && aad->initialize()!=0){delete aad ; aad=NULL;}
+		if(aad && g_fim_no_framebuffer && displaydevice==NULL)
+		{
+			displaydevice=aad;
+			setVariable("_device_driver", "aalib");
+
+#if 1
+			/*
+			 * FIXME
+			 *
+			 * seems like the keymaps get shifted when running under screen
+			 * weird, isn't it ?
+			 * Regard this as a weird patch.
+			 * */
+			fim::string term = getenv("TERM");
+			if(term.re_match("screen"))
+			{
+				key_bindings["Left"]-=3072;
+				key_bindings["Right"]-=3072;
+				key_bindings["Up"]-=3072;
+				key_bindings["Down"]-=3072;
+			}
+#endif
+		}
+		#endif
+
+		rl::initialize_readline( !displaydevice && g_fim_no_framebuffer);
+
+		if(!g_fim_no_framebuffer && displaydevice==NULL)
+		{
+			displaydevice=&framebufferdevice;
+			setVariable("_device_driver", "fbdev");
+		}
+
+		if( g_fim_no_framebuffer && displaydevice==NULL)
+		{
+			displaydevice=&dummydisplaydevice;
+			setVariable("_device_driver", "dummy");
+		}
+
+		xres=displaydevice->width(),yres=displaydevice->height();
+	
 		fim_uninitialized = 0; // new
 		/*
 		 * FIXME : dependencies are very hard to track lately :) !
@@ -456,13 +508,9 @@ namespace fim
 #ifdef FIM_WINDOWS
 		// FIXME : DANGER, WARNING
 		// THIS SHOULD BE IN THE CONSTRUCTOR, AND SHALL BE SOME DAY :)
-			
-		/* true pixels, as we are in framebuffer mode */
-		int xres=framebufferdevice.width(),yres=framebufferdevice.height();
-		if( g_fim_no_framebuffer )
-			/* fake pixels, as we are in text (er.. less than!) mode */
-			xres=80,yres=48;
-
+	
+		/* true pixels if we are in framebuffer mode */
+		/* fake pixels if we are in text (er.. less than!) mode */
 		if( xres<=0 || yres<=0 ) return -1;
 
 		try
@@ -2330,11 +2378,11 @@ namespace fim
 		const char *prompt=get_prompt();
 		char no_prompt[1];*no_prompt='\0';
 	
-		if(g_fim_no_framebuffer || fim_uninitialized)
-			return;
+		if( fim_uninitialized ) return;
+		if(!displaydevice ) return;
 	
 		if(!inConsole())prompt=no_prompt;
-		chars = framebufferdevice.get_chars_per_line();
+		chars = displaydevice->get_chars_per_line();
 		if(chars<48)return;//something strange..
 		str = (char*) malloc(chars+1);//this malloc is free
 		if(!str)return;
@@ -2354,7 +2402,7 @@ namespace fim
 		if( statusline_cursor < chars && inConsole()  ) str[statusline_cursor]='_';
 		p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
 	
-		framebufferdevice.status_line((unsigned char*)str);
+		displaydevice->status_line((unsigned char*)str);
 		free(str);
 	}
 

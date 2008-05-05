@@ -149,6 +149,7 @@ class CommandConsole
 	AADevice * aad;
 	#endif
 	public:
+	DummyDisplayDevice dummydisplaydevice;
 	DisplayDevice *displaydevice;
 
 	fim::string execute(fim::string cmd, args_t args);

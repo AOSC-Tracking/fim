@@ -104,6 +104,10 @@ key configuration, of course).
 .B -s {n}, --scroll {n}
 set scroll steps in pixels (default is 50).
 .TP
+.B -t, --no-framebuffer
+Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).
+If aalib was not enabled at tompile time, fim will work without displaying images at all.
+.TP
 .B -T {terminal}, --vt {terminal}
 The \fBterminal\fP will be used as virtual terminal device file (as in fbi).
 .c .TP

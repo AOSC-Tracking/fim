@@ -1,6 +1,6 @@
 /* $Id$ */
 /*
- DisplayDevice.h : virtual device Fim driver header file
+ DummyDisplayDevice.h : virtual device Fim driver header file
 
  (c) 2008 Michele Martone
 
@@ -18,18 +18,18 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef DISPLAY_DEVICE_FIM_H
-#define DISPLAY_DEVICE_FIM_H
+#ifndef DUMMYDISPLAY_DEVICE_FIM_H
+#define DUMMYDISPLAY_DEVICE_FIM_H
 
 
-class DisplayDevice
+class DummyDisplayDevice:public DisplayDevice
 {
 	/*
 	 * The generalization of a Fim output device.
 	 */
 	public:
-	virtual int initialize()=0;
-	virtual void  finalize()=0;
+	virtual int initialize(){return 0;}
+	virtual void  finalize(){}
 
 	virtual int  display(
 		void *ida_image_img, // source image structure
@@ -40,19 +40,18 @@ class DisplayDevice
 		int orows,int ocols,// rows and columns to draw in output buffer
 		int ocskip,// output columns to skip for each line
 		int flags// some flags
-		)=0;
+		){return 0;}
 
-	virtual ~DisplayDevice(){}
+	virtual ~DummyDisplayDevice(){}
 
-	virtual int get_chars_per_line()=0;
-	virtual int width()=0;
-	virtual int height()=0;
-	virtual int status_line(unsigned char *msg)=0;
-	virtual int console_control(int code)=0;
-	virtual int handle_console_switch()=0;
-	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
+	virtual int get_chars_per_line(){return 1;/* 0 would be so cruel */}
+	virtual int width(){return 1;/* 0 would be so cruel */}
+	virtual int height(){return 1;/* 0 would be so cruel */}
+	virtual int status_line(unsigned char *msg){return 0;}
+	virtual int console_control(int code){return 0;}
+	virtual int handle_console_switch(){return 0;}
+	virtual int clear_rect(int x1, int x2, int y1,int y2){return 0;}
 
-	int redraw;
 	private:
 };
 

@@ -92,9 +92,6 @@ namespace fim
 	class Arg;
 	class Browser;
 	class FontServer;
-#ifdef FIM_WITH_AALIB
-	//class AADevice;
-#endif
 	class FramebufferDevice;
 	class CommandConsole;
 	class Command;
@@ -139,6 +136,10 @@ namespace rl
 #include "Window.h"
 #include "Browser.h"
 #include "DebugConsole.h"
+#include "DummyDisplayDevice.h"
+#ifdef FIM_WITH_CACALIB
+#include "CACADevice.h"
+#endif
 #ifdef FIM_WITH_AALIB
 #include "AADevice.h"
 #endif

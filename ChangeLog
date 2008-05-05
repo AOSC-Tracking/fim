@@ -1,3 +1,23 @@
+2008-05-03 16:18  dezperado
+
+	* : Fixed the negation '!' operator behaviour and added tests to
+	  sanity.fim.
+	  Implemented a regular expressions matching operator '=~'.
+	  Now unquoted strings can be passed as arguments to fim commands,
+	  as long as they are quite simple and resemble a simple file name
+	  (FILE_PATH token).
+	  Implemented the --write-scriptout (-W) option and fixed some
+	  broken recording issues.
+	  fim -V will print repository version, too .
+	  Corrected incorrect regcomp() calls, which triggered error only
+	  on -1 return values.
+	  Corrected a bit the rc file sequence: ~.fimrc first, /etc/fimrc
+	  otherwise.
+	  New default key bindings for window handlings.
+	  Updated man page and FIM.TXT.
+	  Corrected a {;; } related problem for the FIM_ITERATED_COMMANDS
+	  functionality.
+
 2008-04-30 14:59  dezperado
 
 	* : Implemented the prodrome of the forthcoming custom output

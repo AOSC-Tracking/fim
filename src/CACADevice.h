@@ -1,6 +1,6 @@
 /* $Id$ */
 /*
- DisplayDevice.h : virtual device Fim driver header file
+ CACADevice.h : cacalib device Fim driver header file
 
  (c) 2008 Michele Martone
 
@@ -18,21 +18,28 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef DISPLAY_DEVICE_FIM_H
-#define DISPLAY_DEVICE_FIM_H
+#ifndef CACADEVICE_FIM_H
+#define CACADEVICE_FIM_H
+#ifdef FIM_WITH_CACALIB
 
+#include "DisplayDevice.h"
+#include <caca.h>
 
-class DisplayDevice
+/*  20080504 this CACA driver doesn't work yet */
+class CACADevice:public DisplayDevice 
 {
-	/*
-	 * The generalization of a Fim output device.
-	 */
-	public:
-	virtual int initialize()=0;
-	virtual void  finalize()=0;
+	private:
+	unsigned int r[256], g[256], b[256], a[256];
 
-	virtual int  display(
-		void *ida_image_img, // source image structure
+	int XSIZ, YSIZ;
+	struct caca_bitmap *caca_bitmap;
+	char *bitmap;
+
+	public:
+
+	int  display(
+		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
+		//void* rgb,// destination gray array and source rgb array
 		int iroff,int icoff, // row and column offset of the first input pixel
 		int irows,int icols,// rows and columns in the input image
 		int icskip,	// input columns to skip for each line
@@ -40,20 +47,32 @@ class DisplayDevice
 		int orows,int ocols,// rows and columns to draw in output buffer
 		int ocskip,// output columns to skip for each line
 		int flags// some flags
-		)=0;
+		);
+	int initialize();
+	void finalize();
 
-	virtual ~DisplayDevice(){}
+	int get_chars_per_line();
+	int txt_width();
+	int txt_height();
+	int width();
+	int height();
+	int status_line(unsigned char *msg);
+	void status_screen(int desc,int draw_output){}
+	int console_control(int code){}
+	int handle_console_switch(){}
+	int clear_rect_(
+		void* dst,
+		int oroff,int ocoff,
+		int orows,int ocols,
+		int ocskip);
+	int clear_rect(int x1, int x2, int y1,int y2)
+	{
+		/* FIXME : only if initialized !*/
+		return -1;
+	}
 
-	virtual int get_chars_per_line()=0;
-	virtual int width()=0;
-	virtual int height()=0;
-	virtual int status_line(unsigned char *msg)=0;
-	virtual int console_control(int code)=0;
-	virtual int handle_console_switch()=0;
-	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
-
-	int redraw;
-	private:
 };
 
+
+#endif
 #endif

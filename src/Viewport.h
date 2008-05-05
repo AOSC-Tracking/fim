@@ -24,6 +24,7 @@
 #define VIEWPORT_FBI_H
 
 #include "fim.h"
+#include "DisplayDevice.h"
 
 namespace fim
 {
@@ -42,7 +43,8 @@ class Viewport
 {
 	protected:
 	int		steps,top,left ;	/* viewport variables */
-	FramebufferDevice	&framebufferdevice;
+        DisplayDevice* displaydevice;
+
 
 	Image  *image;	// !! 
 #ifdef FIM_WINDOWS
