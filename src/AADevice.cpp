@@ -310,6 +310,9 @@
 		cout << "aa_imgheight(ascii_context):" <<aa_imgheight(ascii_context) << "\n";
 		cout << "ocskip " << ocskip << "\n";
 		cout << "ocols "  << ocols  << "\n";*/
+		
+		if(icols<ocols) { ocoff+=(ocols-icols-1)/2; ocols-=(ocols-icols-1)/2; }
+		if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
 
 		int r;
 		if(r=matrix_copy_rgb_to_gray(

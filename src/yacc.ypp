@@ -32,7 +32,8 @@
  * versions older than 1.875 (circa 2003) are known to be not working or give problems with C++
  */
 /* note that some compatible versions fail interpreting this directive ! */
-%require "1.875"
+/* (will be enabled in the future, as some old working versions don't support this ) */
+/*%require "1.875"*/
 
 /*
  * we expect just a 'dangling else' shift/reduce ambiguity
@@ -119,9 +120,10 @@ void yyerror(const char *s);
 %%
 
 /*
- * we explicitly specify the starting nonterminal symbol
+ * we explicitly specify the starting nonterminal symbol 
+ * (will be enabled in the future, as some old working versions don't support this )
  */
-%start program;
+/*%start program;*/
 
 /*
  * a whole program parse tree
@@ -354,13 +356,32 @@ nodeType *scon(char*s)
 
 nodeType *vscon(char*s,int typeHint)
 {
+	/*
+	 * NOTE:
+	 *
+	 * The following code is much more complicated than it could be.
+	 * But I like it in this way :)
+	 */
 #ifdef FIM_RANDOM
+#ifndef FIM_BIG_ENDIAN
+#if ((SIZEOF_INT)>=8)
+	if( *(int*)(s+0) == 0x006d6f646e6172 ) // ..modnar
+#else
 	/*
 	* Warning : this is LSB order, so it is not portable code.
-	FIXME : DANGER : 64 bit unsafe ?!
 	*/
 	if( *(int*)(s+0) == 0x646e6172 // dnar
 	&& (*(int*)(s+4)<<8)== 0x006d6f00    ) // .mo.
+#endif
+#else
+	/* WARNING : UNTESTED */
+#if ((SIZEOF_INT)>=8)
+	if( *(int*)(s+0) == 0x72616e646f6d00 ) // random..
+#else
+	if( *(int*)(s+0) == 0x646e6172 // rand
+	&& (*(int*)(s+4)<<8)== 0x006f6d00    ) // .om.
+#endif
+#endif
 	return con(fim_rand());
 #endif
 	nodeType *p=scon(s);

@@ -13,6 +13,7 @@
  * dumping to file execution logs as executable scripts (-W/--write-scriptout)
  * implemented regular expressions matching operator (=~)
  * new default key bindings for split windows control
+ * could be compiled with no readline library (--disable-readline)
 
         	Version 0.2
  

@@ -22,6 +22,7 @@
 #include <iostream>
 #include "readline.h"
 #include "CommandConsole.h"
+#ifdef FIM_USE_READLINE
 
 #define min(x,y) ((x)<(y)?(x):(y))
 #define max(x,y) ((x)>(y)?(x):(y))
@@ -239,4 +240,4 @@ char * command_generator (const char *text,int state)
 
 }
 
-
+#endif

@@ -31,7 +31,9 @@
 #include <sys/time.h>
 #include <errno.h>
 
+#ifdef FIM_USE_READLINE
 #include "readline.h"
+#endif
 
 #include <sys/ioctl.h>
 
@@ -484,7 +486,9 @@ namespace fim
 		}
 		#endif
 
+#ifdef FIM_USE_READLINE
 		rl::initialize_readline( !displaydevice && g_fim_no_framebuffer);
+#endif
 
 		if(!g_fim_no_framebuffer && displaydevice==NULL)
 		{
@@ -818,7 +822,9 @@ namespace fim
 			else ;	/* ]:-)> */
 		}
 
+#ifdef FIM_USE_READLINE
 		if(add_history_)if(nochars(s)==0)add_history(s);
+#endif
 		free(s);
 
 		}
@@ -1084,8 +1090,10 @@ namespace fim
 			}
 			else;//ic=true;
 
+#ifdef FIM_USE_READLINE
 			if(ic==1)
 			{
+				ic=0;
 				char *rl=readline(":");
 				if(rl==NULL)
 				{
@@ -1121,6 +1129,7 @@ namespace fim
 				if(rl)free(rl);
 			}
 			else
+#endif
 			{
 				int c,r;char buf[64];
 				tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
@@ -1200,6 +1209,10 @@ namespace fim
 						cout << buf ;
 					}
 					tty_restore();
+#ifndef FIM_USE_READLINE
+					if(c==getIntVariable("console_key") || 
+					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
+#else
 					if(c==getIntVariable("console_key"))ic=1;	//should be configurable..
 					else if(c=='/')
 					{
@@ -1211,6 +1224,7 @@ namespace fim
 						rl_inhibit_completion=1;
 						*prompt='/';
 						char *rl=readline("/"); // !!
+						// no readline ? no interactive searches !
 						*prompt=':';
 						rl_inhibit_completion=tmp;
 						ic=0;
@@ -1226,6 +1240,7 @@ namespace fim
 						}
 					}
 					else
+#endif
 					{
 						this->executeBinding(c);
 #ifdef FIM_RECORDING
@@ -1721,13 +1736,17 @@ namespace fim
 		/*
 		 * EXPERIMENTAL !!
 		 * */
+#ifdef FIM_USE_READLINE
 		ic = 1;
+#endif
 		return "";
 	}
 
 	fim::string CommandConsole::set_interactive_mode(const args_t& args)
 	{
+#ifdef FIM_USE_READLINE
 		ic=-1;set_status_bar("",NULL);
+#endif
 		/*
 		 *
 		 * */
@@ -2330,6 +2349,10 @@ namespace fim
 		if(g_fim_no_framebuffer)
 		{
 		//	tty_restore();
+			/*
+			 * the display device should exit cleanly to avoid cluttering the console
+			 * */
+			if(displaydevice) displaydevice->finalize();
 			std::exit(code);
 		}
 		else
@@ -2396,10 +2419,12 @@ namespace fim
 		{
 			sprintf(str, "%s%-*.*s | H - Help",prompt, chars-11, chars-11, desc);
 		}
+#ifdef FIM_USE_READLINE
 		static int statusline_cursor;
 		statusline_cursor=rl_point+1;
 	    
 		if( statusline_cursor < chars && inConsole()  ) str[statusline_cursor]='_';
+#endif
 		p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
 	
 		displaydevice->status_line((unsigned char*)str);
@@ -2411,6 +2436,14 @@ namespace fim
 		markCurrentFile();
 		return "";
 	}
+
+	int  CommandConsole::inConsole()const{
+#ifdef FIM_USE_READLINE
+		return ic==1;
+#else
+		return 0;
+#endif
+		};
 
 }
 

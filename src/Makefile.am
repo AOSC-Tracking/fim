@@ -79,6 +79,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	CommandConsole.h \
 	DebugConsole.h \
 	DisplayDevice.h \
+	DummyDisplayDevice.h \
 	Image.h \
 	FbiStuff.h \
 	FbiStuffList.h \

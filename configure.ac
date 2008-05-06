@@ -171,6 +171,15 @@ AC_CHECK_HEADERS([linux/fb.h], [break], AC_MSG_ERROR([[Cannot find linux/fb.h.  
 AC_CHECK_HEADERS([linux/vt.h], [break], AC_MSG_ERROR([[Cannot find linux/vt.h.  Fim requires it!.]]))
 AC_CHECK_HEADERS([linux/kd.h], [break], AC_MSG_ERROR([[Cannot find linux/kd.h.  Fim requires it!.]]))
 
+AC_CHECK_SIZEOF([int])
+AC_CHECK_SIZEOF([int *])
+AC_C_BIGENDIAN([fim_big_endian=yes],[fim_big_endian=no],[fim_big_endian=hmmm])
+
+if test "x$fim_big_endian" = "xyes" ; then
+	AH_TEMPLATE([FIM_BIG_ENDIAN])
+	AC_DEFINE([FIM_BIG_ENDIAN])
+fi
+
 
 dnl if test "X$ac_cv_header_cstdio" != "Xyes" && test "X$ac_cv_header_stdio_h" != "Xyes"; then
 dnl   AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]])
@@ -329,14 +338,6 @@ fi
 AC_SUBST(LIBTIFF)
 AM_CONDITIONAL(ENABLE_TIFF, test x$have_tiff = xyes)
 
-dnl ============= GNU readline : essential
-
-    AC_CHECK_LIB(readline, rl_replace_line,
-      have_readline=yes,have_readline=no
-      AC_MSG_ERROR(*** GNU readline library headers not found !  please install them ***))
-
-FIMLIBS="$FIMLIBS -lreadline"
-
 dnl ============= aalib : optional
 
 AC_CHECK_LIB(aa, aa_getfirst,have_aalib=yes,have_aalib=no)
@@ -350,6 +351,53 @@ dnl ============= GNU gpm, unofficial yet
 #      ,true,
 #      AC_MSG_ERROR(*** gpm lib not found ... no problem ... ***))
 #FIMLIBS="$FIMLIBS -lgpm"
+
+dnl ============= no readline case handling
+
+fim_want_readline=yes
+AC_ARG_ENABLE(readline, AC_HELP_STRING([--disable-readline], [Disable readline support (EXPERIMENTAL).]),
+[       if test x$enableval = xno ; then
+		fim_want_readline=no
+	else
+		fim_want_readline=yes
+        fi
+])
+
+dnl ============= GNU readline : essential
+
+dnl Please note that when the readline library is compiled with the curses library, this check will fail, because
+dnl we cannot know in advance if it is so.
+AH_TEMPLATE([FIM_USE_READLINE])
+
+have_readline=no
+
+# Sometimes the readline library is linked to the curses library, and we here try to detect this case..
+if test x$have_readline = xno; then
+  if test x$fim_want_readline = xyes ; then
+    AC_CHECK_LIB(readline, rl_replace_line,
+      have_readline=yes
+      FIMLIBS="$FIMLIBS -lreadline"
+      AC_DEFINE([FIM_USE_READLINE])
+      ,have_readline=no
+      AC_MSG_ERROR(*** GNU readline library headers not found !  please install them or run ./configure --disable-readline ***)
+      ,[ -lcurses ]
+      )
+  else
+      have_readline=no
+      AC_MSG_NOTICE(*** Fim will be built withoud GNU readline library headers ! Are you sure ?  ***)
+  fi
+fi
+
+dnl FIXME : we try to detecht curses, although we don't know if the preceding did use it
+if test x$have_readline = xyes; then
+  if test x$fim_want_readline = xyes ; then
+    AC_CHECK_LIB(curses, tputs,
+      have_curses=yes
+      FIMLIBS="$FIMLIBS -lcurses"
+      ,have_curses=no
+      )
+  fi
+fi
 
 dnl ============= jpeg file handling
 
@@ -682,6 +730,7 @@ AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CFLAGS],
 	 You can't call this argument multiple times.
 	 In case you want completely reset CFLAGS use :
 	 CFLAGS='<all that you want>' ./configure ..
+	 Note that Fim is a C++ program, so we set CFLAGS=CXXFLAGS.
 	]),
         [if test "x$withval" != x; then
                 AC_DEFINE_UNQUOTED(CFLAGS, "$withval",
@@ -939,6 +988,7 @@ AC_MSG_NOTICE([
 	Fim v${VERSION} has been configured as follows:
 
 	default minimal key mapping         : ${have_default_mapping:-no}
+	readline library support            : ${fim_want_readline}
 	default minimal key bindings        : ${have_default_bindings:-no}
 	default configuration file builtin  : ${have_default_config:-no}
         compile time warnings               : ${fim_cv_warnings:-no} (additional CFLAGS: ${FIM_CFLAGS} )

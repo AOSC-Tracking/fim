@@ -1,3 +1,11 @@
+2008-05-05 07:34  dezperado
+
+	* : Completed the aalib support.
+	  Started working on a libcaca (Coloured Ascii Art) driver
+	  Implemented a DummyDisplayDevice class.
+	  Discovered weird bugs seemingly related to aalib+screen :)
+	  Added to svn the scripts/benchmark.sh script.
+
 2008-05-03 16:18  dezperado
 
 	* : Fixed the negation '!' operator behaviour and added tests to

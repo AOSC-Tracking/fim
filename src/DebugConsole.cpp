@@ -107,7 +107,7 @@ namespace fim
 			 * we check for room (please note that nl >= the effective new lines introduced , while
 			 * nc amounts to the exact extra room needed )
 			 * */
-			if(nc+1+(bp-buffer)>bsize || nl+1+cline>lsize)return -2;//no room : realloc needed ; 1 is for secur1ty
+			if(nc+1+(int)(bp-buffer)>bsize || nl+1+cline>lsize)return -2;//no room : realloc needed ; 1 is for secur1ty
 
 			// we copy the whole new string in our buffer
 			strcpy(bp,cs);
@@ -317,7 +317,7 @@ namespace fim
 			{
 				// no realloc, no risk
 				fim::string buf=buffer;
-				if(buf.size()==(bp-buffer))
+				if(buf.size()==(int)(bp-buffer))
 				{
 					ccol=0;cline=0;lwidth=newlwidth;*line=buffer;bp=buffer;
 					// the easy way
@@ -340,8 +340,8 @@ namespace fim
 			int lw=getGlobalIntVariable(FV_CONSOLE_LINE_WIDTH );
 			int ls=getGlobalIntVariable(FV_CONSOLE_ROWS       );
 			setGlobalVariable(FV_CONSOLE_BUFFER_TOTAL,bsize);
-			setGlobalVariable(FV_CONSOLE_BUFFER_FREE,bsize-(bp-buffer));
-			setGlobalVariable(FV_CONSOLE_BUFFER_USED,(bp-buffer));
+			setGlobalVariable(FV_CONSOLE_BUFFER_FREE,(int)bsize-(int)(bp-buffer));
+			setGlobalVariable(FV_CONSOLE_BUFFER_USED,(int)(bp-buffer));
 			// we eventually update internal variables now
 			setRows(ls);
 			if( lw > 0 && lw!=lwidth ) reformat(lw);

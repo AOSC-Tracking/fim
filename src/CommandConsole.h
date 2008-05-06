@@ -25,6 +25,7 @@
 //#include <stdio.h>
 #include <sys/resource.h>
 #include "FramebufferDevice.h"
+#include "DummyDisplayDevice.h"
 
 
 namespace fim
@@ -98,7 +99,10 @@ class CommandConsole
 	/*
 	 * flags
 	 */
+#ifdef FIM_USE_READLINE
+	/* no readline ? no console ! */
 	int 	ic;					//in console if 1. not if 0. willing to exit from console mode if -1
+#endif
 	int	cycles;			//FIX ME
 	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
 
@@ -167,7 +171,7 @@ class CommandConsole
 	char * command_generator (const char *text,int state)const;
 	void executionCycle();
 	int init();
-	int  inConsole()const{return ic==1;};
+	int  inConsole()const;
 	~CommandConsole();
 	float getFloatVariable(const fim::string &varname)const;
 	fim::string getStringVariable(const fim::string &varname)const;
