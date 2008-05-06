@@ -31,13 +31,13 @@ namespace fim
 {
 class Var
 {
+	int type;
 	union
 	{
 		float f;
 		int i;
 	};
 	fim::string s;
-	int type;
 	public:
 	Var(const Var &v)
 	:type(0),i(0),s(fim::string())

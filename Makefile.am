@@ -23,10 +23,14 @@ EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL  README README.FIRST TODO \
 srcdir = src
 
 # still unfinished
-signed-dist: $(distdir).tar.gz.sig $(distdir).tar.bz2.sig
+signed-dist: dist
+	make dist-bzip2 && gpg -sbv -u EF1258B8 $(distdir).tar.bz2
+	ls -l $(distdir).tar.bz2 $(distdir).tar.bz2.sig
+	gpg -sbv -u EF1258B8 $(distdir).tar.gz
+	ls -l $(distdir).tar.gz  $(distdir).tar.gz.sig
 
-%.sig: %
-	        gpg -sbv -u EF1258B8 $@ $<
+#%.sig: %
+#	        gpg -sbv -u EF1258B8 $@ $<
 #	        gpg -sbav -u EF1258B8 $@ $<
 
 
@@ -113,7 +117,7 @@ release: upload freshmeat
 
 upload: savannah 
 
-savannah: signed-dist dist dist-bzip2
+savannah: signed-dist
 	echo -en "cd /releases/fbi-improved\nput $(distdir).tar.gz.sig\n put fim-${fim_cv_version}.tar.gz\n put fim-${fim_cv_version}.tar.bz2\n put fim-${fim_cv_version}.tar.bz2.sig"  | sftp "dezperado@dl.sv.gnu.org" -b 
 	lynx -dump dl.sv.gnu.org/releases/fbi-improved
 

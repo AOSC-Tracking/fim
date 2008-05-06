@@ -70,16 +70,16 @@ namespace fim
 	}
 
 	Image::Image(const char *fname_, FILE*fd):
-		framebufferdevice(fim::ffd),
 		scale(0.0),
 		ascale(0.0),
 		newscale(0.0),
 		orientation(0),
-		no_file(true),
                 invalid(0),
                 fimg    (NULL),
+		no_file(true),
                 img     (NULL),
-                fname     (NULL)
+                fname     (""),
+		framebufferdevice(fim::ffd)
 
 	{
 		/*
@@ -395,7 +395,7 @@ namespace fim
                 invalid(0),
                 fimg    (NULL),
                 img     (NULL),
-                fname     (NULL)
+                fname     ("")
 	{
 		/*
 		 * builds a clone of this image.

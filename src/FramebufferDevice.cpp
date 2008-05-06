@@ -99,7 +99,7 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 	}
 #else
 	//sometimes we can gather multiple calls..
-	if(fb_fix.line_length==w)
+	if(fb_fix.line_length==(unsigned int)w)
 	{
 		//contiguous case
 		memset(start,0,w*f->height);
@@ -147,7 +147,7 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 		mc.reformat(fb_var.xres/fb_font_width());
 
 		//initialization of the framebuffer device handlers
-		if(rc=fb_text_init2())return rc;
+		if((rc=fb_text_init2()))return rc;
 	
 			switch (fb_var.bits_per_pixel) {
 		case 8:
@@ -268,7 +268,7 @@ void FramebufferDevice::svga_display_image_new(
     int yo=(bh-dheight)/2;
     int xo=(bw-dwidth )/2;
     int cxo=bw-dwidth-xo;
-    int cyo=bh-yo;
+    //int cyo=bh-yo;
     int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;
     if (!visible)/*COMMENT THIS IF svga_display_image IS NOT IN A CYCLE*/
 	return;
@@ -536,7 +536,7 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt, int try_boz_pat
 void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
 {
 #if 1 /* defined(__powerpc__) */
-    unsigned int i, *p;
+    unsigned int i;
     
     i = (c & 0xff) << 8;
     i |= i << 16;
@@ -1029,7 +1029,9 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
     unsigned short *ptr2 = (unsigned short*)dest;
     unsigned long  *ptr4 = (unsigned long*)dest;
     unsigned ZERO_BYTE=0x00;
+#ifdef FIM_IS_SLOWER_THAN_FBI
     int x;
+#endif
 
     switch (fb_var.bits_per_pixel) {
     case 8:
@@ -1564,32 +1566,32 @@ void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flag
 
 
 	FramebufferDevice::FramebufferDevice():
-	fontname(NULL),
-	visible(1),
-	x11_font("10x20"),
-	ys( 3),
-	xs(10),
-	fb_mem_offset(0),
-	fb_switch_state(FB_ACTIVE),
-	orig_vt_no(0),
-	fbdev(NULL),
-	fbmode(NULL),
-	fbgamma(1.0),
-	vt(0),
-	dither(FALSE),
-	pcd_res(3),
-	steps(50),
-	debug(0),
-	fs_setpixel(NULL),
+	fontname(NULL)
+	,vt(0)
+	,visible(1)
+	,x11_font("10x20")
+	,ys( 3)
+	,xs(10)
+	,fbdev(NULL)
+	,fbgamma(1.0)
+	,fbmode(NULL)
+	,fb_mem_offset(0)
+	,fb_switch_state(FB_ACTIVE)
+	,orig_vt_no(0)
+	,dither(FALSE)
+	,pcd_res(3)
+	,steps(50)
+	,fontserver(*this)
+	,fs_setpixel(NULL)
+	,debug(0)
 #ifdef FIM_BOZ_PATCH
-	with_boz_patch(0),
+	,with_boz_patch(0)
 #endif
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	//mc(48,12),
 //	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
 //	C=(fb_var.xres/fb_font_width());
 #endif
-	fontserver(*this)
 	{
 
 		cmap.start  =  0;

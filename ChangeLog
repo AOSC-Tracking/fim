@@ -1,3 +1,14 @@
+2008-05-06 08:51  dezperado
+
+	* : Fixed some 64 bit compilation issues, though tested only in -t
+	  mode with no aalib.
+	  Added --disable-readline (FIM_USE_READLINE symbol).
+	  Added 64 bit checks and some fixes (although not all probably).
+	  Commented some problematic bison directives (start and require).
+	  Added some endianness checks and fixes.
+	  Added a fix to compile when readline is linked to the curses
+	  library.
+
 2008-05-05 07:34  dezperado
 
 	* : Completed the aalib support.

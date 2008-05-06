@@ -88,10 +88,10 @@ class Browser
 	private:
 	Browser& operator= (const Browser &b){return *this;/* a nilpotent assignation */}
 	Browser(const Browser &b):
-		nofile(""),
-		commandConsole(cc),
 		flist(args_t()),
+		nofile(""),
 		cp(0),
+		commandConsole(cc),
 		default_image(NULL),
 		last_regexp(fim::string()),
 		cache(Cache())

@@ -318,8 +318,9 @@ namespace fim
 		return "usage : help CMD   (use TAB in commandline mode to get a list of commands :) )\n";
 	}
 
-	CommandConsole::CommandConsole(FramebufferDevice &_framebufferdevice):framebufferdevice(_framebufferdevice)
-	,browser(*this)
+	CommandConsole::CommandConsole(FramebufferDevice &_framebufferdevice):
+	browser(*this),
+	framebufferdevice(_framebufferdevice)
 	{
 		appended_post_init_command=false;
 		fim_uninitialized = 1; // new
@@ -2443,7 +2444,7 @@ namespace fim
 #else
 		return 0;
 #endif
-		};
+		}
 
 }
 

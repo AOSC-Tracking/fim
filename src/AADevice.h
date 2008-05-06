@@ -57,10 +57,11 @@ class AADevice:public DisplayDevice
 	{
 		aa_printf(ascii_context,0,txt_height()-1,AA_NORMAL,"%s",msg);
 		aa_flush(ascii_context);
+		return 0;
 	}
 	void status_screen(int desc,int draw_output){}
-	int console_control(int code){}
-	int handle_console_switch(){}
+	int console_control(int code){return 0;}
+	int handle_console_switch(){return 0;}
 	int clear_rect_(
 		void* dst,
 		int oroff,int ocoff,

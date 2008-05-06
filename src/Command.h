@@ -45,7 +45,6 @@ class Command
 #endif
 		CommandConsoleT 
 	};
-	int type;
 	union{
 		fim::string (Browser::*browserf)(const std::vector<fim::string>&) ;
 		fim::string (CommandConsole::*consolef)(const std::vector<fim::string>&) ;
@@ -60,6 +59,7 @@ class Command
 		Window *window;
 #endif
 	};
+	int type;
 
 	public:
 	

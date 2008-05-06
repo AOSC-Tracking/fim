@@ -43,30 +43,31 @@ namespace fim
 			,Window *window_
 #endif
 			)
-			:displaydevice(cc.displaydevice)
-			,commandConsole(c)
-			,steps(0)
-			,left(0)
+			:steps(0)
 			,top(0)
+			,left(0)
+			,displaydevice(cc.displaydevice)
 			,image(NULL)
 #ifdef FIM_WINDOWS
 			,window(window_)
 #endif
+			,commandConsole(c)
 	{
 		// WARNING : this constructor will be filled soon
 		reset();
 	}
 
 	Viewport::Viewport(const Viewport &v)
-		:displaydevice(cc.displaydevice)
-		,commandConsole(v.commandConsole)
-		,steps(v.steps)
-		,left(v.left)
+		:
+		steps(v.steps)
 		,top(v.top)
+		,left(v.left)
+		,displaydevice(cc.displaydevice)
 		,image(NULL)
 #ifdef FIM_WINDOWS
 		,window(v.window)
 #endif
+		,commandConsole(v.commandConsole)
 	{
 		// WARNING
 		reset();

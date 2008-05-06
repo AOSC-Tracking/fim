@@ -41,7 +41,7 @@ namespace fim
 
 enum ida_extype {
     EXTRA_COMMENT = 1,
-    EXTRA_EXIF    = 2,
+    EXTRA_EXIF    = 2
 };
 
 struct ida_extra {

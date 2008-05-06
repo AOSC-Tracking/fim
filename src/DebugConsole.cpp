@@ -54,7 +54,7 @@ namespace fim
 			 * */
 			int i;
 			char *s;
-			int maxcols = ffd.fb_var.xres/ffd.fb_font_width();
+			const int maxcols = ffd.fb_var.xres/ffd.fb_font_width();
 	
 			if(f<0 && l>=0 && f+l<0 && -f<=cline) { f=cline+f; l=cline-l; }
 			else
@@ -64,16 +64,17 @@ namespace fim
 			
 			if(maxcols<1)return -1;
 
-			char buf[maxcols+1]; // ! we work on a stack, don't we ?! Fortran teaches us something here.
+			char *buf = (char*) malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
+			if(!buf)return -1;
 
-			if(*bp)return -1;//if *bp then we could print garbage so we exit before damage is done
+			if(*bp){free(buf);return -1;}//if *bp then we could print garbage so we exit before damage is done
 
 	    		int y = 1*ffd.fb_font_height();
 			l-=f; l%=(rows+1); l+=f;
 	    		for(i=f  ;i<=l   ;++i)
 			{
 				int t = (i<cline?(line[i+1]-line[i]):(ccol))%(min(maxcols,lwidth)+1);
-				if( t<0 )return -1; // hmmm
+				if( t<0 ){free(buf);return -1;} // hmmm
 				strncpy(buf,line[i],t);
 				while(buf[t-1]=='\n' && t>0)--t;
 				buf[maxcols]='\0';
@@ -85,6 +86,7 @@ namespace fim
 				buf[ ffd.fb_var.xres/ffd.fb_font_width() ]='\0';
 				ffd.fs_puts(ffd.fb_font_get_current_font(), 0, y*(i-f), (unsigned char*)buf);
 			}
+			free(buf);
 			return 0;
 		#undef min
 		}
