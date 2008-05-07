@@ -77,7 +77,8 @@ void FontServer::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charIn
 	}
 
 
-
+#if 1
+/* 20080507 unused ? */
 void FontServer::fb_text_init1(char *font, struct fs_font **_f)
 {
     char   *fonts[2] = { font, NULL };
@@ -102,7 +103,7 @@ struct fs_font* FontServer::fs_consolefont(char **filename)
     FILE *fp;
 
     if (NULL == filename)
-	filename = default_font;
+	filename = fim::default_font;
 
     for(i = 0; filename[i] != NULL; i++) {
 	if (-1 == access(filename[i],R_OK))
@@ -163,6 +164,7 @@ struct fs_font* FontServer::fs_consolefont(char **filename)
     }
     return f;
 }
+#endif
 
 
 

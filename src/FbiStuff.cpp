@@ -297,15 +297,13 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
 #if 1
 void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data)
 {
-	float fsx=0.0;
 	struct op_resize_state *h = (struct op_resize_state *)data;
 #ifndef FIM_WANTS_SLOW_RESIZE
        int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
 #endif
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
-    	const float c_outleft = 1.0f/h->xscale;
-	const unsigned int Mdx=h->width,msx=src->i.width;
-	register unsigned int i,sx,sx1,sx2,sx3,sx4,dx;
+	const int Mdx=h->width;
+	register int sx,dx;
 
 	/*
 	 * this gives a ~ 50% gain
@@ -314,13 +312,13 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, uns
 		int   d0i=0,d1i=0;
 
 		dx=0;
-		if(src->i.width) for (sx=0;sx<src->i.width-1;++sx )
+		if(src->i.width) for (sx=0;sx<(int)src->i.width-1;++sx )
 		{
 			d1f+=h->xscale;
 			d1i=(unsigned int)d1f;
 
 			sx*=3;
-			for (dx=d0i;dx<d1i;++dx )//d1i < Mdx
+			for (dx=d0i;dx<(int)d1i;++dx )//d1i < Mdx
 			{
 				dst[3*dx+0] = srcline[  sx  ];
 				dst[3*dx+1] = srcline[  sx+1];
@@ -343,18 +341,16 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, uns
 			sx/=3;
 		}
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
-		if(line==h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
 
 inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
 {
-	float fsx=0.0;
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
-    	const float c_outleft = 1.0f/h->xscale;
-	const unsigned int Mdx=h->width,msx=src->i.width;
-	register unsigned int i,sx,sx1,sx2,sx3,sx4,dx;
+	const int Mdx=h->width;
+	register int sx,dx;
 	/*
 	 * interleaved loop unrolling ..
 	 * this gives a ~ 50% gain
@@ -364,7 +360,7 @@ inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct i
 		dx=0;
 		sx=0;
 		if(src->i.width)
-		for (   ;sx<src->i.width-1-4;sx+=4)
+		for (   ;sx<(int)src->i.width-1-4;sx+=4)
 		{
 			d1f+=h->xscale;
 			d1i=(unsigned int)d1f;
@@ -425,7 +421,7 @@ inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct i
 			d0i=(unsigned int)d0f;
 		}
 
-		for (  ;sx<src->i.width ;++sx)
+		for (  ;sx<(int)src->i.width ;++sx)
 		{
 			d1f+=h->xscale;
 			d1i=(unsigned int)d1f;
@@ -440,17 +436,15 @@ inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct i
 			d0i=(unsigned int)d0f;
 		}
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
-		if(line==h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
 inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
 {
-	float fsx=0.0;
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
-    	const float c_outleft = 1.0f/h->xscale;
-	const unsigned int Mdx=h->width,msx=src->i.width;
-	register unsigned int i,sx,sx1,sx2,sx3,sx4,dx;
+	const int Mdx=h->width;
+	register int sx,dx;
 
 	/*
 	 * this gives a ~ 70% gain
@@ -460,7 +454,7 @@ inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct id
 
 		sx=0;
 		dx=0;
-		if(src->i.width) for (   ;sx<src->i.width;++sx )
+		if(src->i.width) for (   ;sx<(int)src->i.width;++sx )
 		{
 			d1f+=h->xscale;
 			d1i=(unsigned int)d1f;
@@ -507,17 +501,15 @@ inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct id
 			dst[3*dx+2] = srcline[  3*sx+2] ;
 		}
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
-		if(line==h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
 inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
 {
-	float fsx=0.0;
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
-    	const float c_outleft = 1.0f/h->xscale;
-	const unsigned int Mdx=h->width,msx=src->i.width;
-	register unsigned int i,sx,sx1,sx2,sx3,sx4,dx;
+	const int Mdx=h->width;
+	register int sx,dx;
 
 	/*
 	 * this gives a ~ 60% gain
@@ -527,7 +519,7 @@ inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct id
 
 		sx=0;
 		dx=0;
-		if(src->i.width) for (   ;sx<src->i.width-1;++sx )
+		if(src->i.width) for (   ;sx<(int)src->i.width-1;++sx )
 		{
 			d1f+=h->xscale;
 			d1i=(unsigned int)d1f;
@@ -569,7 +561,7 @@ inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct id
 			sx/=3;
 		}
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
-		if(line==h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
 #endif
@@ -629,8 +621,9 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	const unsigned int Mdx=h->width,msx=src->i.width;
 	if(h->xscale>1.0)//here we handle the case of magnification
 	{
-		float fsx=0.0;
+#ifdef FIM_WANTS_SLOW_RESIZE
 		unsigned char* srcline=src->data+src->i.width*3*(sr);
+#endif
 
 #ifndef FIM_WANTS_SLOW_RESIZE
 		if(h->xscale>2.0)
@@ -645,6 +638,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 //			op_resize_work_row_expand( src, rect, dst, line, data);
 
 #else
+		float fsx=0.0;
 		for (sx=0,dx=0; dx<Mdx; ++dx)
 		{
 	#if 1
@@ -775,12 +769,12 @@ op_rotate_init(struct ida_image *src, struct ida_rect *rect,
     h->calc.y2 = (int)(h->cy + diag);
     if (h->calc.x1 < 0)
 	h->calc.x1 = 0;
-    if (h->calc.x2 > src->i.width)
-	h->calc.x2 = src->i.width;
+    if (h->calc.x2 > (int)src->i.width)
+	h->calc.x2 = (int)src->i.width;
     if (h->calc.y1 < 0)
 	h->calc.y1 = 0;
-    if (h->calc.y2 > src->i.height)
-	h->calc.y2 = src->i.height;
+    if (h->calc.y2 > (int)src->i.height)
+	h->calc.y2 = (int)src->i.height;
 
     *i = src->i;
     return h;
@@ -1008,8 +1002,8 @@ static void*
 op_crop_init_(struct ida_image *src, struct ida_rect *rect,
 	     struct ida_image_info *i, void *parm)
 {
-    if (rect->x2 - rect->x1 == src->i.width &&
-	rect->y2 - rect->y1 == src->i.height)
+    if (rect->x2 - rect->x1 == (int)src->i.width &&
+	rect->y2 - rect->y1 == (int)src->i.height)
 	return NULL;
     *i = src->i;
     i->width  = rect->x2 - rect->x1;

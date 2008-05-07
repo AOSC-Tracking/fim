@@ -1566,27 +1566,27 @@ void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flag
 
 
 	FramebufferDevice::FramebufferDevice():
-	fontname(NULL)
+	fontserver(*this)	/* FIXME : should this be moved to the end ? */
+	,fontname(NULL)	
 	,vt(0)
+	,dither(FALSE)
+	,pcd_res(3)
+	,steps(50)
+	,fbgamma(1.0)
 	,visible(1)
 	,x11_font("10x20")
 	,ys( 3)
 	,xs(10)
-	,fbdev(NULL)
-	,fbgamma(1.0)
-	,fbmode(NULL)
-	,fb_mem_offset(0)
-	,fb_switch_state(FB_ACTIVE)
-	,orig_vt_no(0)
-	,dither(FALSE)
-	,pcd_res(3)
-	,steps(50)
-	,fontserver(*this)
 	,fs_setpixel(NULL)
+	,fbdev(NULL)
+	,fbmode(NULL)
 	,debug(0)
 #ifdef FIM_BOZ_PATCH
 	,with_boz_patch(0)
 #endif
+	,fb_mem_offset(0)
+	,fb_switch_state(FB_ACTIVE)
+	,orig_vt_no(0)
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	//mc(48,12),
 //	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */

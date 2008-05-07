@@ -376,7 +376,10 @@ Var ex(nodeType *p)
 			case REGEXP_MATCH: return ex(p->opr.op[0]).re_match(ex(p->opr.op[1]));
 			case AND:return ex(p->opr.op[0]) && ex(p->opr.op[1]);
 			case OR :return ex(p->opr.op[0]) || ex(p->opr.op[1]);
-		}
+		}	
+		case cmdId:/* FIXME : not handled here */
+			return 0;
+
 	}
 	return 0;
 }

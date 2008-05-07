@@ -39,8 +39,7 @@
 			oi,// output image row index
 			oj;// output image columns index
 
-		int gray;
-		int idr,idc,lor,loc;
+		int lor,loc;
     		
 		if( oroff <0 ) return -8;
 		if( ocoff <0 ) return -9;
@@ -245,7 +244,6 @@
 		 * FIXME : centering mechanisms missing here; an intermediate function
 		 * shareable with FramebufferDevice would be nice, if implemented in AADevice.
 		 * */
-		int i;
 		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
 		if ( !rgb ) return -1;
 	
@@ -315,7 +313,7 @@
 		if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
 
 		int r;
-		if(r=matrix_copy_rgb_to_gray(
+		if((r=matrix_copy_rgb_to_gray(
 				aa_image(ascii_context),rgb,
 				iroff,icoff, // row and column offset of the first input pixel
 				irows,icols,// rows and columns in the input image
@@ -324,7 +322,7 @@
 				oroff+orows,ocoff+ocols,// rows and columns to draw in output buffer
 				ocskip,// output columns to skip for each line
 				flags
-			))
+			)))
 			return r;
 			//return -50;
 
@@ -361,7 +359,7 @@
 		ascii_rndparms = aa_getrenderparams();
 		//aa_parseoptions (&ascii_hwparms, ascii_rndparms, &argc, argv);
 
-		char *e;int v;
+//		char *e;int v;
 //		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms.width  = v-1;
 //		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms.height = v-1;
 //		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms.recwidth  = v;

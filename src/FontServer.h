@@ -94,7 +94,9 @@ struct fs_font {
 
 
 
-
+#if 1
+/* 20080507 unused, as fs_consolefont ? */
+/* see src/FontServer.cpp : it is untrue that it is not used ! */
 static char *default_font[] = {
     /* why the heck every f*cking distribution picks another
        location for these fonts ??? */
@@ -112,6 +114,7 @@ static char *default_font[] = {
     "/lib/kbd/consolefonts/lat1-16.psfu.gz",
     NULL
 };
+#endif
 
 
 static const unsigned fs_masktab[] = {
@@ -131,9 +134,12 @@ class FontServer
 public:
 	FontServer( const FramebufferDevice &framebufferdevice_);
 
-
+#if 1
+/* 20080507 unused, as default_font ? */
 static void fb_text_init1(char *font, struct fs_font **_f);
+
 static struct fs_font* fs_consolefont(char **filename);
+#endif
 
 void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
 

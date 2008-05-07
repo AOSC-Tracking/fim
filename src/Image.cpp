@@ -73,13 +73,13 @@ namespace fim
 		scale(0.0),
 		ascale(0.0),
 		newscale(0.0),
+                img     (NULL),
+                fimg    (NULL),
+		framebufferdevice(fim::ffd),
 		orientation(0),
                 invalid(0),
-                fimg    (NULL),
 		no_file(true),
-                img     (NULL),
-                fname     (""),
-		framebufferdevice(fim::ffd)
+                fname     ("")
 
 	{
 		/*
@@ -313,7 +313,7 @@ namespace fim
 			if( img && orientation!=0 && orientation == 2)
 			{	
 				// we make a backup.. who knows!
-				struct ida_image *rbb,*rb;
+				struct ida_image *rbb=NULL,*rb=NULL;
 				// FIXME: should use a faster and memory-smarter method : in-place
 				rb  = FbiStuff::rotate_image(img,0);
 				if(rb)rbb  = FbiStuff::rotate_image(rb,0);
@@ -389,12 +389,12 @@ namespace fim
 		scale(image.scale),
 		ascale(image.ascale),
 		newscale(image.newscale),
-		orientation(image.orientation),
-		framebufferdevice(fim::ffd),
-		no_file(true),
-                invalid(0),
-                fimg    (NULL),
                 img     (NULL),
+                fimg    (NULL),
+		framebufferdevice(fim::ffd),
+		orientation(image.orientation),
+                invalid(0),
+		no_file(true),
                 fname     ("")
 	{
 		/*

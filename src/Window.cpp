@@ -119,7 +119,9 @@ namespace fim
                 return "";
         }
 
-	Window::Window(CommandConsole &c,const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false),commandConsole(c),viewport(NULL)
+	Window::Window(CommandConsole &c,const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false),
+	viewport(NULL),
+	commandConsole(c)
 	{
 		/*
 		 *  A new leave Window is created with a specified geometry.

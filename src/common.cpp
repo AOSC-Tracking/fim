@@ -391,7 +391,7 @@ int swap_bytes_in_int(int in)
 	// to Most Significant Byte First
 	// FIXME : this function should be optimized
 	int out=0;
-	int b=sizeof(int),i=-1,nc;
+	int b=sizeof(int),i=-1;
 	while(i++<b/2)
 	{
 	((char*)&out)[i]=((char*)&in)[b-i-1];

@@ -115,10 +115,12 @@ static void completion_display_matches_hook(char **matches,int num,int max)
  //     status((unsigned char*)"here shall be autocompletions", NULL);
 }
 
+/*
 static void redisplay_no_fb()
 {
 	printf("%s",rl_line_buffer);
 }
+*/
 
 static void redisplay()
 {	
