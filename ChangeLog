@@ -1,3 +1,19 @@
+2008-05-07 14:15  dezperado
+
+	* : Various fixes to contrast -Wall warning messages. Remains a
+	  bogus warning on FontServer.h.
+	  Tested with -pedantic flags too, and the following are the files
+	  which won't compile:
+	  lex.yy.cc FbiStuff.cpp FbiStuffPpm.cpp FbiStuffBmp.cpp
+	  FbiStuffGif.cpp FbiStuffTiff.cpp FbiStuffPng.cpp
+	  The main reason for this being the F*pp files being the quick C++
+	  porting of C fbi stuff
+	  ( error: ISO C++ does not allow designated initializers ).
+
+2008-05-06 20:42  dezperado
+
+	* : This version will be released as fim-0.3-alpha.
+
 2008-05-06 20:41  dezperado
 
 	* : Some -Wall and -pedantic oriented corrections, but much more is

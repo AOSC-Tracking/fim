@@ -128,7 +128,7 @@ int load_add_extra(struct ida_image_info *info, enum ida_extype type,
     extra->next = info->extra;
     info->extra = extra;
     return 0;
-};
+}
 
 struct ida_extra* load_find_extra(struct ida_image_info *info,
 				  enum ida_extype type)

@@ -542,7 +542,7 @@ namespace fim
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
 //		executeFile("/etc/fimrc");	//GLOBAL DEFAULT CONFIGURATION FILE
-		*prompt=':';
+		*prompt='\0';
 		*(prompt+1)='\0';
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
@@ -1077,6 +1077,7 @@ namespace fim
 		autocmd_exec("PreExecutionCycleArgs",initial);
 
 #endif
+		*prompt='\0';
 	 	while(show_must_go_on)
 		{
 			cycles++;
@@ -1096,6 +1097,7 @@ namespace fim
 			{
 				ic=0;
 				char *rl=readline(":");
+				*prompt=':';
 				if(rl==NULL)
 				{
 					/*
@@ -1105,6 +1107,10 @@ namespace fim
 				}
 				else if(rl!="")
 				{
+					/*
+					 * This code gets executed when the user is about to exit console mode, 
+					 * having she pressed the 'Enter' key and expecting result.
+					 * */
 					fim::string cf=current();
 #ifdef FIM_AUTOCMDS
 					autocmd_exec("PreInteractiveCommand",cf);
@@ -1126,12 +1132,21 @@ namespace fim
 					//p.s.:note that current() returns not necessarily the same in 
 					//the two autocmd_exec() calls..
 				}
-				if(rl && *rl=='\0'){ic=0;set_status_bar("",NULL);}
+				/*  else : *rl=="" : doesn't happen :) */
+
+				if(rl && *rl=='\0')
+				{
+					/* happens when no command is issued and Enter key is pressed */
+					ic=0;
+					*(prompt)='\0';
+					set_status_bar("",NULL);
+				}
 				if(rl)free(rl);
 			}
 			else
 #endif
 			{
+				*prompt='\0';
 				int c,r;char buf[64];
 				tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 //				int c=getchar();
@@ -1214,7 +1229,7 @@ namespace fim
 					if(c==getIntVariable("console_key") || 
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
 #else
-					if(c==getIntVariable("console_key"))ic=1;	//should be configurable..
+					if(c==getIntVariable("console_key")){ic=1;*prompt=':';}	//should be configurable..
 					else if(c=='/')
 					{
 						/*
@@ -1226,7 +1241,7 @@ namespace fim
 						*prompt='/';
 						char *rl=readline("/"); // !!
 						// no readline ? no interactive searches !
-						*prompt=':';
+						*prompt='\0';
 						rl_inhibit_completion=tmp;
 						ic=0;
 						if(rl==NULL)
@@ -2399,16 +2414,14 @@ namespace fim
 		//FIX ME : does this function always draw ?
 		int chars, ilen;
 		char *str,*p;
-		const char *prompt=get_prompt();
-		char no_prompt[1];*no_prompt='\0';
+
+		prompt[1]='\0';
 	
 		if( fim_uninitialized ) return;
 		if(!displaydevice ) return;
 	
-		if(!inConsole())prompt=no_prompt;
 		chars = displaydevice->get_chars_per_line();
-		if(chars<48)return;//something strange..
-		str = (char*) malloc(chars+1);//this malloc is free
+		str = (char*) calloc(chars+1,1);//this malloc is free
 		if(!str)return;
 		if (info)
 		{
@@ -2418,7 +2431,8 @@ namespace fim
 		}
 		else
 		{
-			sprintf(str, "%s%-*.*s | H - Help",prompt, chars-11, chars-11, desc);
+			chars-=11+(*prompt=='\0'?0:1);
+			sprintf(str, "%s%-*.*s | H - Help",prompt, chars, chars, desc);
 		}
 #ifdef FIM_USE_READLINE
 		static int statusline_cursor;
