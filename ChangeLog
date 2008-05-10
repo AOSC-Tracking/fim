@@ -1,3 +1,9 @@
+2008-05-08 18:34  dezperado
+
+	* : fim-0.3-alpha introduced a problem with the prompt display (it
+	  missed).
+	  fixed his and corrected the status line printing code.
+
 2008-05-07 14:15  dezperado
 
 	* : Various fixes to contrast -Wall warning messages. Remains a

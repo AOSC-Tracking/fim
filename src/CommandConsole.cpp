@@ -2413,35 +2413,54 @@ namespace fim
 		 */
 		//FIX ME : does this function always draw ?
 		int chars, ilen;
-		char *str,*p;
+		char *str;
 
 		prompt[1]='\0';
 	
 		if( fim_uninitialized ) return;
-		if(!displaydevice ) return;
+		if( ! displaydevice   ) return;
 	
 		chars = displaydevice->get_chars_per_line();
+		if(chars<1)return;
 		str = (char*) calloc(chars+1,1);//this malloc is free
 		if(!str)return;
-		if (info)
+		sprintf(str, "");
+		if (info && desc)
 		{
+			/* non interactive print */
+			/*
+			 * FIXME : and what if chars < 11 ? :)
+			 * */
 			ilen = strlen(info);
-			sprintf(str, "%s%-*.*s [ %s ] H - Help",prompt,
-			chars-14-ilen, chars-14-ilen, desc, info);//here above there is the need of 14+ilen chars
-		}
-		else
-		{
-			chars-=11+(*prompt=='\0'?0:1);
-			sprintf(str, "%s%-*.*s | H - Help",prompt, chars, chars, desc);
+			if(chars-14-ilen>0)
+			{
+				sprintf(str, "%s%-*.*s [ %s ] H - Help",prompt,
+				chars-14-ilen, chars-14-ilen, desc, info);//here above there is the need of 14+ilen chars
+			}
+			else
+			if(chars>5) sprintf(str, "<-!->");
+			else
+			if(chars>0) sprintf(str, "!");	/* :D */
 		}
 #ifdef FIM_USE_READLINE
-		static int statusline_cursor;
-		statusline_cursor=rl_point+1;
-	    
-		if( statusline_cursor < chars && inConsole()  ) str[statusline_cursor]='_';
+		else
+		if(chars>=12 && desc) /* would be a nonsense :) */
+		{
+			/* interactive print */
+			static int statusline_cursor=0;
+			int offset=0,coffset=0;
+			statusline_cursor=rl_point;	/* rl_point is readline stuff */
+			ilen = strlen(desc);
+			chars-=11+(*prompt=='\0'?0:1);	/* displayable, non-service chars  */
+			/* 11 is strlen(" | H - Help")*/
+			offset =(statusline_cursor/(chars))*(chars);
+			coffset=(*prompt!='\0')+(statusline_cursor%(chars));
+		
+			sprintf(str, "%s%-*.*s | H - Help",prompt, chars, chars, desc+offset);
+			str[coffset]='_';
+		}
 #endif
-		p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
-	
+
 		displaydevice->status_line((unsigned char*)str);
 		free(str);
 	}

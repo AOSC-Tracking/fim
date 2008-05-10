@@ -22,6 +22,7 @@ ongoing further inspiration.
 	Current development directions
 
 
+20080509	very long strings in input could cause problems :)
 20080508	an autocommand could scale alignment to borders at scale time, too
 20080505	cleanup up completely the textual driver exiting
 20080505	on 64 bit architectures, problems arise because pointer arithmetics will return long int's instead of ints
