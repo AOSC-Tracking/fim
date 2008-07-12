@@ -32,6 +32,7 @@ class AADevice:public DisplayDevice
 	struct aa_renderparams *ascii_rndparms;
 	struct aa_hardware_params ascii_hwparms;
 	struct aa_savedata ascii_save;
+	char name[2];	/* FIXME */
 	public:
 
 	int  display(

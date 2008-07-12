@@ -93,6 +93,9 @@ do
 #			shift; shift
 #			;;
 		# explicit option passing
+		-t)	fbiopts="$fbiopts --no-framebuffer"
+			shift
+			;;
 		-c)	fbiopts="$fbiopts --execute-commands $2"
 			shift; shift
 			;;

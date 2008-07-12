@@ -30,8 +30,9 @@
 #include "fim.h"
 #include <signal.h>
 #include <getopt.h>
+#ifdef FIM_READLINE_H
 #include "readline.h"	/* readline stuff */
-
+#endif
 /*
  * We use the STL (Standard Template Library)
  */

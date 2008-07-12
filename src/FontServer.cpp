@@ -103,7 +103,7 @@ struct fs_font* FontServer::fs_consolefont(char **filename)
     FILE *fp;
 
     if (NULL == filename)
-	filename = fim::default_font;
+	filename = (char**)fim::default_font;	/* DANGER */
 
     for(i = 0; filename[i] != NULL; i++) {
 	if (-1 == access(filename[i],R_OK))

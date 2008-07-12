@@ -1,3 +1,8 @@
+2008-05-10 21:09  dezperado
+
+	* : now the input command line string will displayed for whole even
+	  if longer than the screen width. fixed a bug in the same code.
+
 2008-05-08 18:34  dezperado
 
 	* : fim-0.3-alpha introduced a problem with the prompt display (it

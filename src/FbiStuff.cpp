@@ -1032,11 +1032,23 @@ static void*
 op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
 		 struct ida_image_info *i, void *parm)
 {
+#ifdef FIM_USE_DESIGNATED_INITIALIZERS
     static struct op_3x3_parm filter = {
 	f1: { -1, -1, -1 },
 	f2: { -1,  8, -1 },
 	f3: { -1, -1, -1 },
     };
+#else
+    /* I have no quick fix for this ! (m.m.) 
+     * However, designated initializers are a a C99 construct
+     * and are usually tolerated by g++.
+     * */
+    static struct op_3x3_parm filter = {
+	f1: { -1, -1, -1 },
+	f2: { -1,  8, -1 },
+	f3: { -1, -1, -1 },
+    };
+#endif
     struct ida_rect rect;
     struct ida_image img;
     int x,y,limit;

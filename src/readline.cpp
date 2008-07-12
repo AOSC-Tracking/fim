@@ -20,7 +20,9 @@
 */
 
 #include <iostream>
+#ifdef FIM_READLINE_H
 #include "readline.h"
+#endif
 #include "CommandConsole.h"
 #ifdef FIM_USE_READLINE
 

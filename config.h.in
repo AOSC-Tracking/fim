@@ -112,6 +112,9 @@
 #undef FIM_TRY_XFIG
 
 /* */
+#undef FIM_USE_DESIGNATED_INITIALIZERS
+
+/* */
 #undef FIM_USE_READLINE
 
 /* */

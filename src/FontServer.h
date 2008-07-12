@@ -97,7 +97,7 @@ struct fs_font {
 #if 1
 /* 20080507 unused, as fs_consolefont ? */
 /* see src/FontServer.cpp : it is untrue that it is not used ! */
-static char *default_font[] = {
+static const char *default_font[] = {
     /* why the heck every f*cking distribution picks another
        location for these fonts ??? */
     "/usr/share/consolefonts/lat1-16.psf",
