@@ -1349,6 +1349,9 @@ void FbiStuff::free_image(struct ida_image *img)
 /*static struct ida_image**/
 struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 {
+    /*
+     * This function is complicated and should be reworked, in some way.
+     * */
     char command[1024];
     struct ida_loader *loader = NULL;
     struct ida_image *img;
@@ -1424,11 +1427,17 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 	sprintf(command,"dia \"%s\" -e \"%s\"",
 		filename,FIM_TMP_FILENAME".png" );
 	if ( (fp = popen(command,"r")) && 0==fclose (fp))
-	if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
-	    return NULL;
-	unlink(FIM_TMP_FILENAME".png");
-	loader = &png_loader;
-    }
+	{
+		if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
+		/* this could happen in case dia was removed from the system */
+			return NULL;
+		else
+		{
+			unlink(FIM_TMP_FILENAME".png");
+			loader = &png_loader;
+		}
+   	}
+   }
 #endif
 #ifdef FIM_TRY_XFIG
     if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))
@@ -1473,11 +1482,18 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 	cc.set_status_bar("please wait while piping through 'inkscape'...", "*");
 	sprintf(command,"inkscape \"%s\" --export-png \"%s\"",
 		filename,FIM_TMP_FILENAME );
+
 	if ( (fp = popen(command,"r")) && 0==fclose (fp))
-	if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
-	    return NULL;
-	unlink(FIM_TMP_FILENAME);
-	loader = &png_loader;
+	{
+		if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
+		/* this could happen in case inkscape was removed from the system */
+			    return NULL;
+		else
+		{
+			unlink(FIM_TMP_FILENAME);
+			loader = &png_loader;
+		}
+	}
     }
 #endif
 #if 0

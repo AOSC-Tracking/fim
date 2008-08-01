@@ -59,6 +59,19 @@
 # include "regex.h"		/*	the GNU (implementation and functionality) readline library	*/
 #endif
 
+ #ifdef HAVE_LIMITS_H
+ /* According to IEEE Std 1003.1-2001, 
+  * this should define _POSIX_PATH_MAX
+  * */
+ #include <limits.h>
+ #else
+  #ifndef _POSIX_PATH_MAX
+ /* I don't know in what case could arise this situation, but this would be the fix :*/
+   #define _POSIX_PATH_MAX 4096
+  #endif
+ #endif
+
+#if 0
 #ifdef HAVE_UNIX_H
 # include <unix.h>
 # ifndef _POSIX_PATH_MAX
@@ -68,6 +81,8 @@
 #   define _POSIX_PATH_MAX 4096
 #  endif
 # endif
+#else
+#endif
 #endif
 
 //

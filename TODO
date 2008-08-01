@@ -22,6 +22,7 @@ ongoing further inspiration.
 	Current development directions
 
 
+20080721	what if 'inkscape' gets removed after fim installation ? fim should prevent these stupid situations: fim needs usability.
 20080525	see if porting to 16 bits integers is possible (with maybe no image file format library at all)
 20080525	maintain a list of existing fim re-implementation and people happing using it
 20080509	very long strings in input could cause problems :)

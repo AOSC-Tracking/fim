@@ -19,11 +19,11 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "CommandConsole.h"
 #include <iostream>
-#ifdef FIM_READLINE_H
+#ifdef FIM_USE_READLINE
 #include "readline.h"
 #endif
-#include "CommandConsole.h"
 #ifdef FIM_USE_READLINE
 
 #define min(x,y) ((x)<(y)?(x):(y))

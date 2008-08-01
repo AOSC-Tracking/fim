@@ -153,6 +153,9 @@
 /* We have libjpeg */
 #undef HAVE_LIBJPEG
 
+/* Define to 1 if you have the <limits.h> header file. */
+#undef HAVE_LIMITS_H
+
 /* Define to 1 if you have the <linux/fb.h> header file. */
 #undef HAVE_LINUX_FB_H
 

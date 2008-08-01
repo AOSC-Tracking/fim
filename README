@@ -227,6 +227,7 @@ man 3 history
 man readline
 
 Tested platforms :
+ - 2.6.25-2-686 Linux Kernel, GCC-4.3.1, flex 2.5.35, bison 2.3, Debian Lenny, x86
  - 2.6.17 Linux Kernel, GCC-3.4.6, gentoo, x86
  - 2.6.17 Linux Kernel, GCC-4.1.1, gentoo, x86
  - 2.6.17 Linux Kernel, GCC-3.3.6, flex 2.5.4, bison 1.875d, gentoo, x86
