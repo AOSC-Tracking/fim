@@ -74,10 +74,10 @@ struct ida_rect {
 
 /* load image files */
 struct ida_loader {
-    char  *magic;
+    const char  *magic;
     int   moff;
     int   mlen;
-    char  *name;
+    const char  *name;
     void* (*init)(FILE *fp, char *filename, unsigned int page,
 		  struct ida_image_info *i, int thumbnail);
     void  (*read)(unsigned char *dst, unsigned int line, void *data);

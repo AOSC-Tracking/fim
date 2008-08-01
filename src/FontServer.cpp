@@ -95,6 +95,29 @@ void FontServer::fb_text_init1(char *font, struct fs_font **_f)
     }
 }
 
+#if 1
+/* 20080507 unused, as fs_consolefont ? */
+/* see src/FontServer.cpp : it is untrue that it is not used ! */
+static const char *default_font[] = {
+    /* why the heck every f*cking distribution picks another
+       location for these fonts ??? (GK) */
+    "/usr/share/consolefonts/lat1-16.psf",
+    "/usr/share/consolefonts/lat1-16.psf.gz",
+    "/usr/share/consolefonts/lat1-16.psfu.gz",
+    "/usr/share/kbd/consolefonts/lat1-16.psf",
+    "/usr/share/kbd/consolefonts/lat1-16.psf.gz",
+    "/usr/share/kbd/consolefonts/lat1-16.psfu.gz",
+    "/usr/lib/kbd/consolefonts/lat1-16.psf",
+    "/usr/lib/kbd/consolefonts/lat1-16.psf.gz",
+    "/usr/lib/kbd/consolefonts/lat1-16.psfu.gz",
+    "/lib/kbd/consolefonts/lat1-16.psf",
+    "/lib/kbd/consolefonts/lat1-16.psf.gz",
+    "/lib/kbd/consolefonts/lat1-16.psfu.gz",
+    NULL
+};
+#endif
+
+
 struct fs_font* FontServer::fs_consolefont(char **filename)
 {
     int  i;

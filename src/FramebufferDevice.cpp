@@ -372,8 +372,15 @@ void FramebufferDevice::svga_display_image_new(
     }
 }
 
-int FramebufferDevice::fb_init(char *device, char *mode, int vt, int try_boz_patch)
+int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_boz_patch)
 {
+    /*
+     * This method will probe for a valid framebuffer device.
+     *
+     * The try_boz_patch will make fim go straight ahead ignoring lots of errors.
+     * Like the ones when running fim under screen.
+     * Like the ones when running fim under X. :)
+     * */
     char   fbdev[16];
     struct vt_stat vts;
 
@@ -392,8 +399,10 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt, int try_boz_pat
 //	exit(1);
     }
     
+    /* no device supplied ? we will probe for one */
     if (NULL == device) {
 	device = getenv("FRAMEBUFFER");
+	/* no environment - supplied device ? */
 	if (NULL == device) {
 	    struct fb_con2fbmap c2m;
 	    if (-1 == (fb = open(devices->fb0,O_RDWR /* O_WRONLY */,0))) {
@@ -498,8 +507,11 @@ int FramebufferDevice::fb_init(char *device, char *mode, int vt, int try_boz_pat
     fb_mem_offset = (unsigned long)(fb_fix.smem_start) & (~PAGE_MASK);
     fb_mem = (unsigned char*) mmap(NULL,fb_fix.smem_len+fb_mem_offset,
 		  PROT_READ|PROT_WRITE,MAP_SHARED,fb,0);
+    /*
+     * FIXME : this is not 64 bits safe
+     * */
     if (-1L == (long)fb_mem) {
-	perror("mmap");
+	perror("mmap failed");
 	goto err;
     }
     /* move viewport to upper left corner */

@@ -1105,7 +1105,7 @@ namespace fim
 					 * */
 					this->quit();
 				}
-				else if(rl!="")
+				else if(rl!=fim::string(""))
 				{
 					/*
 					 * This code gets executed when the user is about to exit console mode, 
@@ -1248,7 +1248,10 @@ namespace fim
 						{
 							//quit();
 						}
-						else if(rl!="")
+						/* 
+						 * if using "" instead string("")
+						 * warning: comparison with string literal results in unspecified behaviour */
+						else if(rl!=string(""))
 						{
 							args_t args;
 							args.push_back(rl);
@@ -2424,7 +2427,8 @@ namespace fim
 		if(chars<1)return;
 		str = (char*) calloc(chars+1,1);//this malloc is free
 		if(!str)return;
-		sprintf(str, "");
+		//sprintf(str, "");
+		*str='\0';
 		if (info && desc)
 		{
 			/* non interactive print */

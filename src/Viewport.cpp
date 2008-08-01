@@ -280,11 +280,11 @@ namespace fim
 		int autotop=getGlobalIntVariable("autotop")   | image->getIntVariable("autotop") | getIntVariable("autotop");
 		//int flip   =getGlobalIntVariable("autoflip")  | image->getIntVariable("flipped") | getIntVariable("flipped");
 		int flip   =
-		((getGlobalIntVariable("autoflip")== 1|image->getIntVariable("flipped")== 1|getIntVariable("flipped")== 1)&&
-		!(getGlobalIntVariable("autoflip")==-1|image->getIntVariable("flipped")==-1|getIntVariable("flipped")==-1));
+		((getGlobalIntVariable("autoflip")== 1)|(image->getIntVariable("flipped")== 1)|(getIntVariable("flipped")== 1)&&
+		!((getGlobalIntVariable("autoflip")==-1)|(image->getIntVariable("flipped")==-1)|(getIntVariable("flipped")==-1)));
 		int mirror   =
-		((getGlobalIntVariable("automirror")== 1|image->getIntVariable("mirrored")== 1|getIntVariable("mirrored")== 1)&&
-		!(getGlobalIntVariable("automirror")==-1|image->getIntVariable("mirrored")==-1|getIntVariable("mirrored")==-1));
+		(((getGlobalIntVariable("automirror")== 1)|(image->getIntVariable("mirrored")== 1)|(getIntVariable("mirrored")== 1))&&
+		!((getGlobalIntVariable("automirror")==-1)|(image->getIntVariable("mirrored")==-1)|(getIntVariable("mirrored")==-1)));
 
 		image->update();
     

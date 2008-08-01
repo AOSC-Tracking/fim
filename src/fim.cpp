@@ -595,10 +595,10 @@ int help_and_exit(char *argv0, int code=0)
 	
 		if((g_fim_no_framebuffer)==0)
 		{
-			if(default_fbdev)ffd.fbdev = default_fbdev;
-			if(default_fbmode)ffd.fbmode = default_fbmode;
-			if(default_vt!=-1)ffd.vt = default_vt;
-			if(default_fbgamma!=-1.0)ffd.fbgamma = default_fbgamma ;
+			if(default_fbdev)ffd.set_fbdev(default_fbdev);
+			if(default_fbmode)ffd.set_fbmode(default_fbmode);
+			if(default_vt!=-1)ffd.set_default_vt(default_vt);
+			if(default_fbgamma!=-1.0)ffd.set_default_fbgamma(default_fbgamma);
 			if(ffd.framebuffer_init())cc.cleanup_and_exit(0);
 			cc.tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 		}

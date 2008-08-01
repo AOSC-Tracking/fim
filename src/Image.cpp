@@ -444,11 +444,11 @@ fim::string Image::getInfo()
 
 	// should flip ? should mirror ?
 	int flip   =
-	((getGlobalIntVariable("autoflip")== 1|getGlobalIntVariable("v:flipped")== 1|getIntVariable("flipped")== 1)&&
-	!(getGlobalIntVariable("autoflip")==-1|getGlobalIntVariable("v:flipped")==-1|getIntVariable("flipped")==-1));
+	(((getGlobalIntVariable("autoflip")== 1)|(getGlobalIntVariable("v:flipped")== 1)|(getIntVariable("flipped")== 1))&&
+	!((getGlobalIntVariable("autoflip")==-1)|(getGlobalIntVariable("v:flipped")==-1)|(getIntVariable("flipped")==-1)));
 	int mirror   =
-	((getGlobalIntVariable("automirror")== 1|getGlobalIntVariable("v:mirrored")== 1|getIntVariable("mirrored")== 1)&&
-	!(getGlobalIntVariable("automirror")==-1|getGlobalIntVariable("v:mirrored")==-1|getIntVariable("mirrored")==-1));
+	(((getGlobalIntVariable("automirror")== 1)|(getGlobalIntVariable("v:mirrored")== 1)|(getIntVariable("mirrored")== 1))&&
+	!((getGlobalIntVariable("automirror")==-1)|(getGlobalIntVariable("v:mirrored")==-1)|(getIntVariable("mirrored")==-1)));
 
 	if(flip  )*(imp++)='F';
 	if(mirror)*(imp++)='M';
