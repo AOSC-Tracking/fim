@@ -203,7 +203,7 @@ char * dupstr (const char* s)
 	return (r);
 }
 
-static int pick_word(char *f, unsigned int *w)
+static int pick_word(const char *f, unsigned int *w)
 {
 	int fd = open(f,O_RDONLY);
 	if(fd==-1) return -1;

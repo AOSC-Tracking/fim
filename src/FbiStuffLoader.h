@@ -87,7 +87,7 @@ struct ida_loader {
 
 /* filter + operations */
 struct ida_op {
-    char  *name;
+    const char  *name;
     void* (*init)(struct ida_image *src, struct ida_rect *rect,
 		  struct ida_image_info *i, void *parm);
     void  (*work)(struct ida_image *src, struct ida_rect *rect,
@@ -104,8 +104,8 @@ void  op_free_done(void *data);
 #ifdef USE_X11
 /* save image files */
 struct ida_writer {
-    char  *label;
-    char  *ext[8];
+    const char  *label;
+    const char  *ext[8];
     int   (*write)(FILE *fp, struct ida_image *img);
     int   (*conf)(Widget widget, struct ida_image *img);
     struct list_head list;

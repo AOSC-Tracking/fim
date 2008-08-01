@@ -36,7 +36,7 @@ FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 #		lex.lex 
 
 conf.h:       fimrc
-	echo 'char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > conf.h
+	echo 'const char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > conf.h
 	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
 	echo '"";' >> conf.h
 
