@@ -126,6 +126,12 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 		int rc=0;
 		//initialization of the framebuffer text
 		FontServer::fb_text_init1(fontname,&f);
+		/*
+		 * will initialized with the user set (or default ones)
+		 *  - framebuffer device
+		 *  - framebuffer mode
+		 *  - virtual terminal
+		 * */
 		fd = fb_init(fbdev, fbmode, vt);
 		if(fd==-1)
 			fd = fb_init(fbdev, fbmode, vt,0xbabebabe==0xbabebabe);//maybe we are under screen..
@@ -467,7 +473,19 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
     tcgetattr(tty, &term);
     
     /* switch mode */
-    fb_setmode(mode);
+    if(-1 == fb_setmode(mode)){
+	/* 
+	 * FIXME:
+	 * mm's strict mode ckecking (right now, this function triggers an exit() but things should change) */
+#ifdef FIM_BOZ_PATCH
+    	if(!try_boz_patch)
+#endif
+	{
+		perror("failed setting mode");
+		exit(1);
+	}
+    }
+
     
     /* checks & initialisation */
     if (-1 == ioctl(fb,FBIOGET_FSCREENINFO,&fb_fix)) {
@@ -624,7 +642,7 @@ int FramebufferDevice::fb_setmode(char *name)
     FILE *fp;
     char line[80],label[32],value[16];
     int  geometry=0, timings=0;
-    
+ 
     /* load current values */
     if (-1 == ioctl(fb,FBIOGET_VSCREENINFO,&fb_var)) {
 	perror("ioctl FBIOGET_VSCREENINFO");
@@ -679,8 +697,17 @@ int FramebufferDevice::fb_setmode(char *name)
 	    /* set */
 	    fb_var.xoffset = 0;
 	    fb_var.yoffset = 0;
+
 	    if (-1 == ioctl(fb,FBIOPUT_VSCREENINFO,&fb_var))
 		perror("ioctl FBIOPUT_VSCREENINFO");
+	    /*
+	     * FIXME
+	     * mm : this should be placed here and uncommented : */
+	    /*
+	    if (-1 == ioctl(fb,FBIOGET_FSCREENINFO,&fb_fix)) {
+		perror("ioctl FBIOGET_VSCREENINFO");
+		exit(1);
+	    }*/
 	    /* look what we have now ... */
 	    if (-1 == ioctl(fb,FBIOGET_VSCREENINFO,&fb_var)) {
 		perror("ioctl FBIOGET_VSCREENINFO");

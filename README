@@ -220,11 +220,24 @@ Useful documents I've read during the coding of this patch:
 man console_codes
 man fb.modes
 man fbi
+man console_ioctl
+man resizecons
 
 Useful documents I could read later on:
 vim -c ':help'
 man 3 history
 man readline
+
+Useful URLs:
+http://www.tldp.org/HOWTO/Framebuffer-HOWTO.html
+and mirrors
+http://www.linux.org/docs/ldp/howto/Framebuffer-HOWTO.html
+http://www.pluto.it/files/ildp/HOWTO/Framebuffer-HOWTO/Framebuffer-HOWTO.html
+
+and
+http://bisqwit.iki.fi/source/fbmodes.html
+http://asm.sourceforge.net/articles/fb.html
+http://www.linuxjournal.com/article/2783
 
 Tested platforms :
  - 2.6.25-2-686 Linux Kernel, GCC-4.3.1, flex 2.5.35, bison 2.3, Debian Lenny, x86

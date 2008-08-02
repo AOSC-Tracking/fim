@@ -224,6 +224,9 @@ class FramebufferDevice:public DisplayDevice
 	char                       *fbmode;
 
 	public:
+	/*
+	 * FIXME : should be a static string, or trouble will come!
+	 * */
 	int set_fbdev(char *fbdev)
 	{
 		/* only possible before init() */
@@ -234,6 +237,9 @@ class FramebufferDevice:public DisplayDevice
 		return 0;
 	}
 
+	/*
+	 * FIXME : should be a static string, or trouble will come!
+	 * */
 	int set_fbmode(char *fbmode)
 	{
 		/* only possible before init() */
@@ -254,7 +260,7 @@ class FramebufferDevice:public DisplayDevice
 		return 0;
 	}
 
-	int set_default_fbgamma(int fbgamma)
+	int set_default_fbgamma(float fbgamma)
 	{
 		/* only possible before init() */
 		if(fb_mem)
