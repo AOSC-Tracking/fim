@@ -474,6 +474,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
     
     /* switch mode */
     if(-1 == fb_setmode(mode)){
+#if 0
 	/* 
 	 * FIXME:
 	 * mm's strict mode ckecking (right now, this function triggers an exit() but things should change) */
@@ -484,6 +485,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 		perror("failed setting mode");
 		exit(1);
 	}
+#endif
     }
 
     
