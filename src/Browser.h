@@ -125,6 +125,7 @@ class Browser
 	fim::string magnify(const args_t &args);
 	fim::string scale_factor_increase(const args_t &args);
 	fim::string scale_factor_decrease(const args_t &args);
+	fim::string rotate(const args_t &args);/* FIXME : UNFINISHED */
 	fim::string scale_factor_grow(const args_t &args);
 	fim::string scale_factor_shrink(const args_t &args);
 	fim::string display(const args_t &args);

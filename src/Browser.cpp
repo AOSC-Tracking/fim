@@ -1182,6 +1182,38 @@ namespace fim
 		return "";
 	}
 
+	fim::string Browser::rotate(const args_t &args)
+	{
+		/*
+		 * rotates the displayed image a specified amount of degrees
+		 */ 
+		double angle;
+		if(args.size()==0)angle=1.0;
+		else angle=atof(args[0].c_str());
+		if(angle==0.0)return "";
+
+		if(c_image())
+		{
+			//angle = (double)getGlobalFloatVariable("angle");
+			fim::string c=current();
+#ifdef FIM_AUTOCMDS
+//			autocmd_exec("PreRotate",c);//FIXME
+			autocmd_exec("PreScale",c);//FIXME
+#endif
+			if(c_image())
+			{
+				if(angle)
+					{if(image())image()->rotate((float)angle);}
+				else	
+					{if(image())image()->rotate();}
+			}
+#ifdef FIM_AUTOCMDS
+//			autocmd_exec("PostRotate",c);//FIXME
+			autocmd_exec("PostScale",c);//FIXME
+#endif
+		}
+		return "";
+	}
 
 	fim::string Browser::magnify(const args_t &args)
 	{
@@ -1198,9 +1230,15 @@ namespace fim
 			if(c_image())
 			{
 				if(factor)
-					{if(image())image()->magnify(factor);}
+					{
+						if(image())image()->magnify(factor);
+						if(viewport())viewport()->scale_position_magnify(factor);
+					}
 				else	
-					{if(image())image()->magnify();}
+					{
+						if(image())image()->magnify();
+						if(viewport())viewport()->scale_position_magnify();
+					}
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PostScale",c);
@@ -1223,8 +1261,16 @@ namespace fim
 #endif
 			if(c_image())
 			{
-				if(factor) {if(image())image()->reduce(factor);}
-				else	{if(image())image()->reduce();}
+				if(factor)
+					{
+						if(image())image()->reduce(factor);
+						if(viewport())viewport()->scale_position_reduce(factor);
+					}
+				else	
+					{
+						if(image())image()->reduce();
+						if(viewport())viewport()->scale_position_reduce();
+					}
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PostScale",c);

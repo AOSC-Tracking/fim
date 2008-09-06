@@ -46,6 +46,7 @@ namespace fim
 			:steps(0)
 			,top(0)
 			,left(0)
+			,panned(0x0)
 			,displaydevice(cc.displaydevice)
 			,image(NULL)
 #ifdef FIM_WINDOWS
@@ -62,6 +63,7 @@ namespace fim
 		steps(v.steps)
 		,top(v.top)
 		,left(v.left)
+		,panned(v.panned)
 		,displaydevice(cc.displaydevice)
 		,image(NULL)
 #ifdef FIM_WINDOWS
@@ -87,6 +89,7 @@ namespace fim
 
 	void Viewport::pan_up(int s)
 	{
+		panned |= 0x1;
 		if(s<0)pan_down(-s);
 		else
 		{
@@ -99,6 +102,7 @@ namespace fim
 
 	void Viewport::pan_down(int s)
 	{
+		panned |= 0x1;
 		if(s<0)pan_up(-s);
 		else
 		{
@@ -111,6 +115,7 @@ namespace fim
 
 	void Viewport::pan_right(int s)
 	{
+		panned |= 0x2;
 		if(s<0)pan_left(s);
 		else
 		{
@@ -123,6 +128,7 @@ namespace fim
 
 	void Viewport::pan_left(int s)
 	{
+		panned |= 0x2;
 		if(s<0)pan_right(s);
 		else
 		{
@@ -527,5 +533,47 @@ namespace fim
 		window = w;
 	}
 #endif
+	void Viewport::scale_position_magnify(float factor)
+	{
+		/*
+		 * scale image positioning variables by adjusting by a multiplying factor
+		 * */
+		if(factor<=0.0)return;
+		left *= factor;
+		top  *= factor;
+		/*
+		 * should the following be controlled by some optional variable ?
+		 * */
+		//if(!panned  /* && we_want_centering */ )
+			this->recenter();
+	}
+
+	void Viewport::scale_position_reduce(float factor)
+	{
+		/*
+		 * scale image positioning variables by adjusting by a multiplying factor
+		 * */
+		if(factor<=0.0)return;
+		left /= factor;
+		top  /= factor;
+		//if(!panned  /* && we_want_centering */ )
+			this->recenter();
+	}
+
+	void Viewport::recenter_horizontally()
+	{
+		left = (image->width() - this->viewport_width()) / 2;
+	}
+
+	void Viewport::recenter_vertically()
+	{
+		top = (image->height() - this->viewport_height()) / 2;
+	}
+
+	void Viewport::recenter()
+	{
+		if(!(panned & 0x02))recenter_horizontally();
+		if(!(panned & 0x01))recenter_vertically();
+	}
 }
 

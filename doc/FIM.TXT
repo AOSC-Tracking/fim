@@ -955,9 +955,18 @@ Read the TODO file to discover when and why this will be reworked.
 ==============================================================================
 6.7.Variables	 						*variables*
 
-FIM has defined, and keeps updated, the following internal variables.
-No mechanism enforces them to be read only, but beware that FIM will change them
-as soon as this is necessary.
+FIM has defined, and keeps updated, several internal variables.
+they could change as side effect of come FIM command or explicit setting.
+To set variable 'foo''s value to "12.5": >
+	:foo="12.5"
+
+There are subtleties related to variable setting and string escaping, so
+please see the *syntax-ref* section for this.
+
+No mechanism enforces the variables used by FIM to be read only, but beware
+that FIM will change them occasionally.
+Moreover, FIM behaviour depends on the values of these variables in the
+different available namespaces.
 
  'swidth'	: the current scaled image width
  'sheight'	: the current scaled image height
@@ -975,6 +984,8 @@ as soon as this is necessary.
  'random'	: a random number, between 0 and RAND_MAX (see "man 3 rand").
  		  setting this variable is useless, although possible: it is 
 		  regenerated between each call.
+
+ 'angle'	: the current image rotation angle
 
  'console_key'	: the key used to enter in command line mode (WARNING:experimental)
 
@@ -1001,7 +1012,8 @@ Note : there is still much to do about variables.
 Prepending with "i:" a variable name, you will access to a variable which is 
 defined only on the current image.
 
-The following variables should be accessed prepended with 'i:' :
+The following variables should be accessed prepended with 'i:' to take 
+effect on the current image:
 
  'i:swidth'	: the currently selected image scaled width
  'i:sheight'	: the currently selected image scaled height
@@ -1010,6 +1022,16 @@ The following variables should be accessed prepended with 'i:' :
  'i:height'	: the currently selected image height
 
  'i:scale'	: the currently selected image scale (percent size)
+ 'i:angle'	: the current image rotation angle
+
+So, >
+	:angle=45.0
+will set the global namespace 'angle' variable.
+Setting : >
+	:i:angle=45.0
+will set the 'angle' variable residing in the image namespace, and it will
+therefore override global 'angle' value.
+
 
 						*viewport-variable* *v:var*
 Prepending with "v:" a variable name, you will access to a variable which is 

@@ -46,6 +46,9 @@
 #undef FIM_DEFAULT_KEY_CONFIG
 
 /* */
+#undef FIM_EXPERIMENTAL_ROTATION
+
+/* */
 #undef FIM_ITERATED_COMMANDS
 
 /* */

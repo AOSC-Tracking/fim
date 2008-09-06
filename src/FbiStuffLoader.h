@@ -58,6 +58,9 @@ struct ida_image_info {
     unsigned int      dpi;
     unsigned int      npages;
     struct ida_extra  *extra;
+#ifdef FIM_EXPERIMENTAL_ROTATION
+    unsigned int      fim_extra_flags;/* FIXME : unclean: regard this as a hack (flag set on a rotated image) */
+#endif
 
     int               thumbnail;
     unsigned int      real_width;

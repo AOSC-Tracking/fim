@@ -10,7 +10,7 @@ fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .TP
 .B fim  -  [ options ] < file_name_list
 .TP
-.B fim -i [ options ] < file
+.B fim -i [ options ] < image_file
 .TP
 .B fim -p [ options ] < script_file
 .SH DESCRIPTION

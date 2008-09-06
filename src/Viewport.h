@@ -26,6 +26,8 @@
 #include "fim.h"
 #include "DisplayDevice.h"
 
+#define FIM_SCALE_FACTOR 1.322	/* move this outta here ! */
+
 namespace fim
 {
 	/*
@@ -42,7 +44,7 @@ class Viewport
 #endif
 {
 	protected:
-	int		steps,top,left ;	/* viewport variables */
+	int		steps,top,left,panned ;	/* viewport variables */
         DisplayDevice* displaydevice;
 
 
@@ -118,6 +120,11 @@ class Viewport
         bool check_valid();
 	int valid();
 	bool scrollforward();
+	void scale_position_magnify(float factor=FIM_SCALE_FACTOR );
+	void scale_position_reduce(float factor=FIM_SCALE_FACTOR );
+	void recenter_horizontally();
+	void recenter_vertically();
+	void recenter();
 };
 }
 #endif

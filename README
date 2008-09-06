@@ -144,13 +144,14 @@ Yet unimplemented features :
  - GNU flex  (NOT any lex ) ( http://directory.fsf.org/flex.html  )
  - GNU bison (NOT any yacc) ( http://directory.fsf.org/bison.html )
  - the GCC ( Gnu Compiler Collection ) ( http://directory.fsf.org/gcc.html )
- - header files for :
+ - optionally, header files for :
 	libpng		  ( http://directory.fsf.org/libpng.html )
 	libjpeg		  ( http://www.ijg.org/ )
  	libungif	  ( http://sourceforge.net/projects/libungif/ )
 	libtiff 	  ( http://www.libtiff.org/ )
 
- Libraries originally required by Fbi but removed from Fim : libFS, libCURL, libLIRC
+ Libraries originally required by Fbi but removed from Fim :
+ 	libFS, libCURL, libLIRC
 
 ================================================================================
 	5		Run Time Requirements
@@ -175,12 +176,14 @@ An idea of the concept was settled when developing a small 'vim-like fbi patch'
 for fbi back in 2005:
 http://dezperado.altervista.org/coding.html#vim-like-fbi,%20and%20the%20wrapper%20fbgs.sh%20script%20modified%20for%20handling%20of%20ps,dvi%20and%20pdf%20files
 
-The code is applied as a patch an the existing fbi source tree, but it is by 
-any means near to what is now Fim.
+The code is applied as a patch an the existing fbi source tree, but it is not by
+any means near to what is Fim today.
 
 Fim aims at a complete reorganization of the Fbi code, and ideally towards an
 implementation of the most scriptable and configurable image viewer ever - not
 tied to the framebuffer device and to a sole keyboard input.
+
+Gimme only some time :)
 
 ================================================================================
 	7		Technical overview (important for patch writers)
@@ -210,7 +213,7 @@ potpourri :) .
 For the sake of completeness, Fim is based on the version 1.31 of fbi,
 available from http://dl.bytesex.org/releases/fbida/fbi_1.31.tar.gz .
 
-Useful documents I've read during the coding of this patch:
+Useful documents I've read and consulted during the coding of Fim:
 
 - Thomas Niemann's tutorial to yacc & lex
 - The yacc & lex HOWTO

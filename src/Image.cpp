@@ -73,6 +73,7 @@ namespace fim
 		scale(0.0),
 		ascale(0.0),
 		newscale(0.0),
+		angle(0.0),
                 img     (NULL),
                 fimg    (NULL),
 		framebufferdevice(fim::ffd),
@@ -105,8 +106,10 @@ namespace fim
                 scale    = 1.0;
                 newscale = 1.0;
                 ascale   = 1.0;
+                angle   = 0.0;
 		setVariable("scale"  ,scale*100);
 		setVariable("ascale" ,ascale);
+		setVariable("angle" ,angle);
 		no_file=true;	//reloading allowed
 
                 invalid=0;
@@ -153,6 +156,7 @@ namespace fim
 		setVariable("_fim_bpp" ,(int) framebufferdevice.fb_var.bits_per_pixel );
 		setVariable("scale"  ,newscale*100);
 		setVariable("ascale" ,ascale);
+		setVariable("angle" , angle);
 #endif
 
 		setGlobalVariable("height" ,(int)fimg->i.height);
@@ -263,7 +267,19 @@ namespace fim
 		newascale=(newascale>0.0 && newascale!=1.0)?newascale:((gascale>0.0 && gascale!=1.0)?gascale:1.0);
 		
 		//float newascale=getFloatVariable("ascale"); if(newascale<=0.0) newascale=1.0;
-		if(newscale == scale && newascale == ascale && neworientation == orientation){return 0;/*no need to rescale*/}
+		/*
+		 * The global angle variable value will override the local if not 0 and the local unset
+		 * */
+		float	gangle  =getGlobalFloatVariable("angle"),
+			newangle=getFloatVariable("angle");
+		newangle=angle?newangle:((gangle!=0.0)?gangle:newangle);
+
+		if(	newscale == scale
+			&& newascale == ascale
+			&& neworientation == orientation
+			//&& newangle == angle
+			&& ( !newangle  && !angle )
+		){return 0;/*no need to rescale*/}
 		orientation=((neworientation%4)+4)%4; // fix this
 
 		setGlobalVariable("scale",newscale*100);
@@ -303,7 +319,7 @@ namespace fim
 				// we make a backup.. who knows!
 				// FIXME: should use a faster and memory-smarter method : in-place
 				struct ida_image *rb=img;
-				rb  = FbiStuff::rotate_image(rb,orientation==1?0:1);
+				rb  = FbiStuff::rotate_image90(rb,orientation==1?0:1);
 				if(rb)
 				{
 					FbiStuff::free_image(img);
@@ -315,7 +331,27 @@ namespace fim
 				// we make a backup.. who knows!
 				struct ida_image *rbb=NULL,*rb=NULL;
 				// FIXME: should use a faster and memory-smarter method : in-place
-				rb  = FbiStuff::rotate_image(img,0);
+				rb  = FbiStuff::rotate_image90(img,0);
+				if(rb)rbb  = FbiStuff::rotate_image90(rb,0);
+				if(rbb)
+				{
+					FbiStuff::free_image(img);
+					FbiStuff::free_image(rb);
+					img=rbb;
+				}
+				else
+				{
+					if(rbb)FbiStuff::free_image(rbb);
+					if(rb )FbiStuff::free_image(rb);
+				}
+			}
+
+			/* we rotate only in case there is the need to do so */
+			if( img && ( angle != newangle || newangle) )
+			{	
+				// we make a backup.. who knows!
+				struct ida_image *rbb=NULL,*rb=NULL;
+				rb  = FbiStuff::rotate_image(img,newangle);
 				if(rb)rbb  = FbiStuff::rotate_image(rb,0);
 				if(rbb)
 				{
@@ -343,6 +379,7 @@ namespace fim
 				if( backup_img && backup_img!=fimg ) FbiStuff::free_image(backup_img);
 				scale=newscale;
 				ascale=newascale;
+				angle =newangle;
 	        		{if(cc.displaydevice){cc.displaydevice->redraw=1;}};
 			}
 
@@ -354,6 +391,7 @@ namespace fim
 			setGlobalVariable("sheight",(int) img->i.height);
 			setGlobalVariable("swidth" ,(int) img->i.width );
 			setGlobalVariable("ascale" , ascale );
+			//setGlobalVariable("angle"  ,  angle );
 		}
 		else {if(cc.displaydevice){cc.displaydevice->redraw=0;}};
 		orientation=neworientation;
@@ -389,6 +427,8 @@ namespace fim
 		scale(image.scale),
 		ascale(image.ascale),
 		newscale(image.newscale),
+		angle(image.angle),
+		newangle(image.newangle),
                 img     (NULL),
                 fimg    (NULL),
 		framebufferdevice(fim::ffd),
@@ -501,5 +541,16 @@ fim::string Image::getInfo()
 		+getGlobalIntVariable("orientation")
 		)
 		%4)+4)%4;
+	}
+
+	int Image::rotate( float angle )
+	{
+		/*
+		 * rotates the image the specified amount of degrees
+		 * */
+		float newangle=this->angle+angle;
+		if( check_invalid() ) return -1;
+		setVariable("angle",newangle);
+		return rescale();	// FIXME : necessary *only* for image update and display
 	}
 }
