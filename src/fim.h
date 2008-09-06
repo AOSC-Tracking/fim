@@ -59,17 +59,25 @@
 # include "regex.h"		/*	the GNU (implementation and functionality) readline library	*/
 #endif
 
+#ifdef HAVE_CLIMITS
+ #include <climits>
+ /* From:
+  * ISO C++ 14882: 18.2.2  Implementation properties: C library 
+  * we get some more stuff than limits.h. */
+#else
  #ifdef HAVE_LIMITS_H
  /* According to IEEE Std 1003.1-2001, 
   * this should define _POSIX_PATH_MAX
   * */
- #include <limits.h>
- #else
-  #ifndef _POSIX_PATH_MAX
- /* I don't know in what case could arise this situation, but this would be the fix :*/
-   #define _POSIX_PATH_MAX 4096
-  #endif
+  #include <limits.h>
  #endif
+#endif
+#ifndef _POSIX_PATH_MAX
+ /* I don't know in what case could arise this situation 
+  * (no limits.h nor climits : i guess a badly configured system),
+  * but this would be the fix :*/
+ #define _POSIX_PATH_MAX 4096
+#endif
 
 #if 0
 #ifdef HAVE_UNIX_H

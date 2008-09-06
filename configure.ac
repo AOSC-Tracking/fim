@@ -171,7 +171,7 @@ AC_CHECK_HEADERS([linux/fb.h], [break], AC_MSG_ERROR([[Cannot find linux/fb.h.  
 AC_CHECK_HEADERS([linux/vt.h], [break], AC_MSG_ERROR([[Cannot find linux/vt.h.  Fim requires it!.]]))
 AC_CHECK_HEADERS([linux/kd.h], [break], AC_MSG_ERROR([[Cannot find linux/kd.h.  Fim requires it!.]]))
 
-AC_CHECK_HEADERS([limits.h], [break], AC_MSG_ERROR([[Cannot find limits.h.  Fim requires it!.]]))
+AC_CHECK_HEADERS([climits limits.h], [break], AC_MSG_ERROR([[Cannot find limits.h nor climits.  Fim requires it!.]]))
 
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([int *])

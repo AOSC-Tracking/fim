@@ -138,6 +138,9 @@
 /* Defined, if libpng support is enabled */
 #undef FIM_WITH_LIBPNG
 
+/* Define to 1 if you have the <climits> header file. */
+#undef HAVE_CLIMITS
+
 /* Define to 1 if you have the <cstdio> header file. */
 #undef HAVE_CSTDIO
 
