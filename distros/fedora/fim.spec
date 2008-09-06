@@ -11,7 +11,7 @@ Patch:		fim-0.3-beta-FontServer.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	readline-devel giflib-devel libpng-devel libjpeg-devel libtiff-devel
 BuildRequires:	flex bison autoconf automake m4
-Requires:	Imagemagick gimp inkscape
+Requires:	ImageMagick gimp inkscape
 
 %description
 FIM aims to be a highly customizable and scriptable image
