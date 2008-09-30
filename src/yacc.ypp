@@ -1,0 +1,469 @@
+/* $Id$ */
+/*
+ yacc.ypp : Parser source file template
+
+ (c) 2007-2008 Michele Martone
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
+/*
+ * There are conflicts in this grammar.
+ * Some of them are harmless (like the shift/reduce IF conflict), but some other can be a problem.
+ *
+ * Right now the problems is related to the unsuitability of strict Vim compliance to
+ * Fim's purposes.
+ * Therefore, a Bash-like grammar, with Vim-like terminal symbols operators seems to be the best mix right now.
+ */
+
+/*
+ * versions older than 1.875 (circa 2003) are known to be not working or give problems with C++
+ */
+/* note that some compatible versions fail interpreting this directive ! */
+/* (will be enabled in the future, as some old working versions don't support this ) */
+/*%require "1.875"*/
+
+/*
+ * we expect just a 'dangling else' shift/reduce ambiguity
+ */
+//%expect 1
+
+/*
+ * A GLR (Generalized Left Recursive) parser could be useful to deal better with disambiguation.
+
+%glr-parser
+%expect-rr 2
+
+ *
+ */
+
+%{
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include "common.h"
+#include "lex.h"
+#include "fim.h"
+
+#ifndef yylex
+#define  yylex lexer->yylex
+#endif
+
+/* prototypes */
+nodeType *opr(int oper, int nops, ...);
+nodeType *fid(float f);
+nodeType *con(int value);
+nodeType *fcon(float fValue);
+nodeType *scon(char* s);
+nodeType *vscon(char*s,int typeHint);
+void freeNode(nodeType *p);
+Var ex(nodeType *p);
+
+void yyerror(const char *s);
+
+%}
+
+%union {
+	int   iValue; /* integer value */
+	float fValue; /* float   value */
+	char* sValue;
+	nodeType *nPtr; /* node pointer */
+};
+
+%token <iValue> INTEGER
+//%token <sValue> PIPE
+%token <sValue> STRING
+%token <sValue> REGEXP
+%token <fValue> FLOAT
+%token <sValue> IDENTIFIER
+%token <sValue> FILE_PATH
+//%token <sValue> NEWLINE
+%token <sValue> COMMAND		//unimplemented yet
+%token WHILE IF DO ELSE SYSTEM AND OR NOT
+//%token NEWLINE
+//%nonassoc IFX
+//%nonassoc FI
+//%nonassoc ELSE
+//%left '$'
+//lower priority
+%left ';'
+%nonassoc '}' '{'
+%left OR
+%left AND 
+%left GE LE EQ REGEXP_MATCH NE '>' '<'
+%left '.'
+%nonassoc '(' ')'
+%left '%'
+%left '+'
+%left '-'
+%left '*' '/'
+%left NOT
+//%nonassoc UMINUS
+%left UMINUS
+//higher priority
+%type <nPtr> stmt expr stmt_list stmt_block args cond_stmt if_stmt loop_stmt atomic_stmt_block non_atomic_stmt_block
+// func_dec
+
+%%
+
+/*
+ * we explicitly specify the starting nonterminal symbol 
+ * (will be enabled in the future, as some old working versions don't support this )
+ */
+/*%start program;*/
+
+/*
+ * a whole program parse tree
+ */
+program:
+	//function { ; /*exit(0);*/ }
+	//stmt { ex($1); freeNode($1); }
+	  {}
+	| stmt_list { ex($1); freeNode($1); }//conflict
+	| func_dec {  }
+	;
+
+/*
+ * function declaration
+ */
+func_dec:
+	"function"  IDENTIFIER '(' /*TODO: ARG_DECS */ ')' stmt_block { ; }
+	;
+
+/*
+ * function:
+ */
+	//function stmt { ex($2); freeNode($2); }
+	//function stmt_list { ex($2); freeNode($2); }
+//	function stmt{ ex($2); freeNode($2); }
+//	| /* NULL */
+//	;
+
+/*
+ * a simple statement
+ */
+stmt:
+	// ! 'shell-cmd'
+	   NOT args        { $$ = opr('x',2,scon(dupstr("system")),$2); }
+//	|  SYSTEM args        { $$ = opr('x',2,scon(dupstr("system")),$2); }
+	// [n]cmd
+	| INTEGER IDENTIFIER { if($1>0){$$ = opr('r',2,opr('x',1,scon($2)),con($1)); }}
+	// goto
+	| REGEXP { $$ = opr('x',2,scon(dupstr("regexp_goto")),opr('a',1,opr('a',1,scon($1)))); }
+	// magnification
+	| '+' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| '*' FLOAT   { $$ = opr('x',2,scon(dupstr("scale_multiply")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
+	| '*' INTEGER { $$ = opr('x',2,scon(dupstr("scale_multiply")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
+	| FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
+	| INTEGER'%'{{$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}}
+	// minification (yes, minification)
+	| '-' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+	// $ and ^ work too (see lex.lex)
+	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
+	// cmd ..
+	| IDENTIFIER      { $$ = opr('x',1,scon($1));     }
+	| IDENTIFIER FILE_PATH {
+#ifdef	FIM_SMART_COMPLETION
+		/*
+		  This patch was thought with filename completion in mind, in a way
+		  the user is not obligated to quote the filename if it is assured its existence.
+		 */
+		 /*
+		  FIXME : are we sure $2 should not be freed here ?
+		 */
+		$$ = opr('x',2,scon($1),opr('a',1,scon(dupstr($2))));
+		free($2);
+#else
+		$$ = opr('x',2,scon("echo"),opr('a',1,scon("Please quote or double-quote your argument or enable FIM_SMART_COMPLETION at compile time\n")));
+#endif
+		}
+	| IDENTIFIER args { $$ = opr('x',2,scon($1),$2);  /* here I would like to use FIM_SMART_COMPLETION but for now it works with the FILE_PATH trick above. */ }
+	| INTEGER IDENTIFIER args { if($1>0){$$ = opr('r',2,opr('x',2,scon($2),$3),con($1)); }}
+	// assignment
+	| IDENTIFIER '=' expr { $$ = opr('=', 2, vscon($1,'a'), $3); }
+	// semicolons can be added arbitrarily with no harm (not so Vim'ish, though)
+//	| stmt ';' { $$ = $1; } // new
+//	| NEWLINE { /* this still doesn't work as we would like to */ }
+//	| error { yyerrok ;  /* can be evil */ }
+	;
+
+/*
+ * command arguments are separated args
+ *
+ * Here a reduce/reduce problem arise:
+ * IDENTIFIER STRING '-' STRING -> IDENTIFIER ARG ARG -> IDENTIFIER ARGS or
+ * IDENTIFIER STRING '-' STRING -> IDENTIFIER ARG ARG -> IDENTIFIER ARGS ?
+ *
+ * should be interpeted as a a single expr or as two args ?
+ *
+ * the same for :
+ *
+ * IDENTIFIER INTEGER '-' INTEGER -> IDENTIFIER ARG ARG -> IDENTIFIER ARGS or
+ * IDENTIFIER INTEGER '-' INTEGER -> IDENTIFIER EXPR -> IDENTIFIER ARGS ?
+ *
+ * Vim seems to handle this in a context (command) dependent way:
+ *
+ * :echo -1 -1
+ *  -2
+ *       vs
+ *
+ * :imap <C-e> <Esc>
+ */
+args:
+	  expr { $$ = opr('a',1, $1 ); }
+	| expr args { $$ = opr('a', 2, $1, $2); }
+	;
+
+/*
+ * a command argument is an expression or a concatenation of expressions
+ */
+//arg:
+//	  expr { $$ = opr('a',1,  $1 ); }
+//	| expr '.' expr { $$ = opr('.', 2, $1, $3); }
+//	;
+
+/*
+ * a conditional statement
+ */
+cond_stmt:
+	  if_stmt   { $$ = $1; }
+	| loop_stmt { $$ = $1; }
+	;
+
+/* 
+ * a loop statement
+ */
+loop_stmt:
+	  WHILE '(' expr ')' stmt_block { $$ = opr(WHILE, 2, $3, $5); }
+	| DO stmt_block WHILE '(' expr ')' { $$ = opr(WHILE, 2, $5, $2); }
+	;
+
+/*
+ * if statements
+ */
+/*
+ * here follows a 'dangling else' ambiguity ( dates back to Algol 60 :) )
+ */
+if_stmt:
+	  IF '(' expr ')' stmt_block { $$ = opr(IF, 2, $3, $5); }
+	| IF '(' expr ')' stmt_block ELSE stmt_block { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
+//	| IF '(' expr ')' stmt ';' ELSE stmt_block { $$ = opr(IF, 3, $3, $5, $8); } //<- causes shift-reduce conflict..
+//	| IF '(' expr ')' stmt_block ELSE stmt ';' { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
+	;
+
+/*
+ * a stmt_block is a block of one or more statements/statement lists
+ */
+stmt_block:
+	  atomic_stmt_block { $$ = $1; }
+	| non_atomic_stmt_block { $$ = $1; }
+	;
+
+atomic_stmt_block:
+	stmt ';' { $$ = opr(';', 2, $1, NULL); }
+	| stmt ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
+	| stmt ';' ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
+	;
+
+non_atomic_stmt_block:
+	  '{' stmt_list '}' { $$ = opr(';', 2, $2, NULL); }
+	| INTEGER '{' stmt_list '}' { if($1>0){$$ = opr('r',2,opr(';', 2, $3, NULL) ,con($1)); }}
+	| cond_stmt { $$ = $1; }
+	;
+	
+/*
+ * a stmt_list is a list of two or more statements concatenated by the ';' operator or separated by brackets or newlines
+ */
+stmt_list:
+	  stmt { $$ = $1; }
+	| stmt ';' stmt_list { $$ = opr(';', 2, $1, $3); }
+	| non_atomic_stmt_block stmt_list{ $$ = opr(';', 2, $1, $2); }
+	| stmt_block { $$ = $1; }
+	;
+
+/*
+ * expressions (mostly numerical: strings are not well supported right now)
+ */
+expr:
+	  '(' expr ')' { $$ = $2; }
+	| expr '.' expr { $$ = opr('.', 2, $1, $3); }
+	| NOT expr { $$ = opr('!', 1, $2); }
+	| expr '%' expr { $$ = opr('%', 2, $1, $3); }
+	| expr '+' expr { $$ = opr('+', 2, $1, $3); }
+	| expr '-' expr { $$ = opr('-', 2, $1, $3); }
+	| expr '*' expr { $$ = opr('*', 2, $1, $3); }
+	| expr '/' expr { $$ = opr('/', 2, $1, $3); }
+	| expr '<' expr { $$ = opr('<', 2, $1, $3); }
+	| expr '>' expr { $$ = opr('>', 2, $1, $3); }
+	| expr OR expr  { $$ = opr( OR , 2, $1, $3); }
+	| expr AND expr { $$ = opr( AND, 2, $1, $3); }
+	| expr GE expr { $$ = opr(GE, 2, $1, $3); }
+	| expr LE expr { $$ = opr(LE, 2, $1, $3); }
+	| expr NE expr { $$ = opr(NE, 2, $1, $3); }
+	| expr EQ expr { $$ = opr(EQ, 2, $1, $3); }
+	| expr REGEXP_MATCH expr { $$ = opr(REGEXP_MATCH, 2, $1, $3); }
+	/*
+	 * writing the same next rule with '-' instead UMINUS
+	 * would cause lots of conflicts, because UMINUS gets
+	 * caught by the lexer, contrarily to the lone '-' string.
+	 */
+//	| UMINUS expr { $$ = opr('-', 1, $2); } // conflict
+//	| UMINUS expr { $$ = opr('-', 1, $2); } // conflict
+	| '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } //conflicts
+//	| '(' '-' expr ')' %prec UMINUS { $$ = opr('-', 1, $3); } // conflict
+//	| '`' IDENTIFIER '`' { $$ = opr('x',1,scon($2)); }
+	| IDENTIFIER { $$ = vscon($1,'v');  }
+	| INTEGER { $$ =  con($1); }
+	| FLOAT   { $$ = fcon($1); }
+	| STRING  { $$ = scon($1); }
+	;
+
+%%
+#define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)
+
+/*
+ * string constant handling
+ */
+nodeType *scon(char*s)
+{
+	if(s==NULL)yyerror("TOKEN NULL!\n");
+	nodeType *p;
+	size_t nodeSize;
+	/* allocate node */
+	nodeSize = SIZEOF_NODETYPE + sizeof(stringNodeType);
+	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
+		yyerror("out of memory");
+	/* copy information */
+	p->type = stringCon; 
+	p->scon.s=s;
+	return p;
+}
+
+nodeType *vscon(char*s,int typeHint)
+{
+	/*
+	 * NOTE:
+	 *
+	 * The following code is much more complicated than it could be.
+	 * But I like it in this way :)
+	 */
+#ifdef FIM_RANDOM
+#ifndef FIM_BIG_ENDIAN
+#if ((SIZEOF_INT)>=8)
+	if( *(int*)(s+0) == 0x006d6f646e6172 ) // ..modnar
+#else
+	/*
+	* Warning : this is LSB order, so it is not portable code.
+	*/
+	if( *(int*)(s+0) == 0x646e6172 // dnar
+	&& (*(int*)(s+4)<<8)== 0x006d6f00    ) // .mo.
+#endif
+#else
+	/* WARNING : UNTESTED */
+#if ((SIZEOF_INT)>=8)
+	if( *(int*)(s+0) == 0x72616e646f6d00 ) // random..
+#else
+	if( *(int*)(s+0) == 0x646e6172 // rand
+	&& (*(int*)(s+4)<<8)== 0x006f6d00    ) // .om.
+#endif
+#endif
+	return con(fim_rand());
+#endif
+	nodeType *p=scon(s);
+	if(p)p->type = vId; 
+	if(p)p->typeHint = typeHint; 
+	return p;
+}
+
+
+nodeType *fcon(float fValue)
+{
+	nodeType *p;
+	size_t nodeSize;
+	/* allocate node */
+	nodeSize = SIZEOF_NODETYPE + sizeof(fidNodeType);
+	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
+	yyerror("out of memory");
+	/* copy information */
+	p->type = floatCon;
+	p->fid.f = fValue;
+	return p;
+}
+
+
+
+nodeType *con(int value)
+{
+	nodeType *p;
+	size_t nodeSize;
+	/* allocate node */
+	nodeSize = SIZEOF_NODETYPE + sizeof(conNodeType);
+	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
+	yyerror("out of memory");
+	/* copy information */
+	p->type = intCon;
+	p->con.value = value;
+	return p;
+}
+
+
+
+
+nodeType *opr(int oper, int nops, ...)
+{
+	va_list ap;
+	nodeType *p;
+	size_t nodeSize;
+	int i;
+	/* allocate node */
+	nodeSize = SIZEOF_NODETYPE + sizeof(oprNodeType) +
+	(nops - 1) * sizeof(nodeType*);
+	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
+	yyerror("out of memory");
+	/* copy information */
+	p->type = typeOpr;
+	p->opr.oper = oper;
+	p->opr.nops = nops;
+	va_start(ap, nops);
+	for (i = 0; i < nops; i++)
+	p->opr.op[i] = va_arg(ap, nodeType*);
+	va_end(ap);
+	return p;
+}
+
+void freeNode(nodeType *p)
+{
+	int i;
+	if (!p) return;
+	if (p->type == stringCon)
+		free(p->scon.s);
+	if (p->type == typeOpr)
+	{
+		for (i = 0; i < p->opr.nops; i++)
+		freeNode(p->opr.op[i]);
+	}
+	free (p);
+}
+
+void yyerror(const char *s)
+{
+	//fprintf(stdout, "%s \n", s);
+	cout << s << "\n";
+}
+
+

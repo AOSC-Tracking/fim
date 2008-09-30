@@ -1,0 +1,384 @@
+.c $Id$
+.TH fim 1 "(c) 2007-2008 Michele Martone"
+.c .TH fim 1
+.SH NAME
+fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
+.SH SYNOPSIS
+.B fim [ options ] [--] files ...
+.TP
+.B ... | fim [ options ] [--] [ files ] - ...
+.TP
+.B fim  -  [ options ] < file_name_list
+.TP
+.B fim -i [ options ] < image_file
+.TP
+.B fim -p [ options ] < script_file
+.SH DESCRIPTION
+.B fim
+displays the specified file(s) on the linux console using the
+framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png
+are supported directly.  
+For 'xcf' (Gimp's) images, fim will try to use 'xcftopnm'.
+For '.fig' vectorial images, fim will try to use 'fig2dev'.
+For '.dia' vectorial images, fim will try to use 'dia'.
+For '.svg' vectorial images, fim will try to use 'inkscape'.
+For other formats fim will try to use ImageMagick's 'convert'.
+
+Please note that the full documentation of
+.B fim
+is in the FIM.TXT file distributed in the source package.
+.SH OPTIONS
+.TP
+.B -a, --autozoom
+Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)
+.TP
+.B -c {commands}, --execute-commands {commands}
+The \fBcommands\fP string will be executed before entering the interactive loop.
+Please note that if your commands are more complicated than a simple 'next' or 'pornview'
+command, they must be quoted and escaped in a manner suitable for your shell!!
+
+For example,
+-c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
+
+(with the single quotes) will tell fim to first double the displayed image 
+size, then pan two times up, then display the image ; and then 
+do an endless loop consisting of bottom and top aligning, alternated.
+.TP
+.c .B -h, --help
+.c print usage info
+.c .TP
+.B -d {device}, --device {device}
+framebuffer device to use.  Default is the one your vc is mapped to (as in fbi).
+.TP
+.B -D, --dump-default-fimrc
+The default fimrc file (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
+.TP
+.B -E {scriptfile}, --execute-script {scriptfile}
+The \fBscriptfile\fP will be executed right after the default initialization file is executed.
+.TP
+.B -f , --etc-fimrc
+The /etc/fimrc file will be executed prior to any other configuration file.
+If not specified, it is *ignored*.
+.TP
+.B -F {commands}, --final-commands {commands}
+The \fBcommands\fP string will be executed after exiting the interactive loop
+of the program (right before terminating the program).
+.TP
+.B -h, --help
+display help and terminate the program.
+.TP
+.B -i, --image-from-stdin
+Will read one single image from the standard input (yes: the image, not the filename).
+.TP
+.B -m {mode}, --mode {mode}
+name of the video mode to use video mode (must be listed in
+/etc/fb.modes).  Default is not to change the video mode.
+In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline 
+information, which could be fed to the modeline2fb perl script (distributed with fbset).
+On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.
+So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.
+An unsupported mode should make fim exit with failure.
+But it is possible the kernel could trick fim and set a supported mode automatically, thus
+ignoring the user set mode.
+.c .TP
+.c .B -q, --quiet
+.c be quiet: don't print anything.
+.TP
+.B -N, --no-rc-file
+No initialization file will be read (default is ~/.fimrc) at startup.
+.TP
+.B -p, --script-from-stdin
+Will read commands from stdin prior to entering in interactive mode.
+.TP
+.B -P, --text-reading
+Enable textreading mode.  This has the effect that fim will display
+images scaled to the width of the screen, and aligned to the top.
+Useful if the images you are watching text pages, all you have to do
+to get the next piece of text is to press space (in the default
+key configuration, of course).
+.c .TP
+.c .B -t sec
+.c timeout: load next image after >sec< seconds without any keypress
+.c .TP
+.c .B -g {gamma}, --gamma {gamma}
+.c gamma correction.  Can also be put into the FBGAMMA environment
+.c variable.  Default is 1.0.  Requires Pseudocolor or Directcolor
+.c visual, doesn't work for Truecolor.
+.c .TP
+.c .B -r n, --resolution {n}
+.c select resolution.  PhotoCD only, n = 1..5.
+.TP
+.B -s {n}, --scroll {n}
+set scroll steps in pixels (default is 50).
+.TP
+.B -t, --no-framebuffer
+Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).
+If aalib was not enabled at tompile time, fim will work without displaying images at all.
+.TP
+.B -T {terminal}, --vt {terminal}
+The \fBterminal\fP will be used as virtual terminal device file (as in fbi).
+See (chvt (1)), (openvt (1)) for more info about this.
+Use (con2fb (1)) to map a terminal to a framebuffer device.
+.c .TP
+.c .B -f font
+.c Set font.  This can be either a pcf console font file or a X11 font
+.c spec.  Using X11 fonts requires a font server (The one specified in
+.c the environment variable FONTSERVER or on localhost).  The FBFONT
+.c environment variable is used as default.  If unset, fim will
+.c fallback to 10x20 (X11) / lat1u-16.psf (console).
+.TP
+.B -v, --verbose
+be verbose: show status bar.
+.TP
+.B -V, --version
+display version and compile flags, and then terminate.
+.TP
+.B -w, --autowidth
+Will adapt the image size to the screen size.
+.TP
+.B -W {scriptout}, --write-scriptout {scriptout}
+All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
+.TP
+.B -
+Reads file list from stdin.
+
+Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
+
+See the section
+.B EXAMPLES
+below to read some useful (and unique) ways of employing fim.
+.c .TP
+.c .B --autoup
+.c Like autozoom, but scale up only.
+.c .TP
+.c .B --autodown
+.c Like autozoom, but scale down only.
+.c .TP
+.c .B -u
+.c Randomize the order of the filenames.
+.c .TP
+.c .B -e
+.c Enable editing commands.
+.c .TP
+.c .B -b
+.c create backup files (when editing images).
+.c .TP
+.c .B -p
+.c preserve timestamps (when editing images).
+.c .TP
+.c .B --comments
+.c Display comment tags (if present) instead of the filename.  Probaby
+.c only useful if you added reasonable comments yourself (using wrjpgcom
+.c for example), otherwise you likely just find texts pointing to the
+.c software which created the image.
+.SH COMMON KEYS AND COMMANDS
+.nf
+cursor keys     scroll large images
+h,j,k,l		scroll large images left,down,up,right
++, -            zoom in/out
+ESC, q          quit
+Tab             toggle output console visualization
+PgUp,p            previous image
+PgDn,n            next image
+Space  	        next image if on bottom, scroll down instead
+Return          next image, write the filename of the current image to stdout on exit from the program.
+m			mirror
+f			flip
+r			rotate by 90  degrees
+d,x,D,X		diagonal scroll
+C-w			scale to the screen width
+H			scale to the screen heigth
+m			mark the current file for printing its name when terminating fim
+.c P               pause the slideshow (if started with -t, toggle)
+.c {number}g    jump to image {number}
+
+:{number}       jump to {number}^th image in the list
+:^	        jump to first image in the list
+:$	        jump to last image in the list
+:*{factor}      scale the image by {factor}
+:{scale}%       scale the image to the desired {scale}
+:+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
+:-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
+
+/regexp		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
+/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
+/png		 a shortcut for /.*png.*
+
+!{cmd}		executes the {cmd} string as a "/bin/sh" shell command
+
+C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename
+C-c		 terminate instantaneously fim
+T		 split horizontally the current window
+V		 split vertically the current window
+C		 close  the currently focused window
+H		 change the currently focused window with the one on the left
+J		 change the currently focused window with the lower
+K		 change the currently focused window with the upper
+L		 change the currently focused window with the one on the right
+U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise  : try V, m,  U and see by yourself :) )
+d		move the image diagonally north-west
+D		move the image diagonally south-east
+x		move the image diagonally north-east
+X		move the image diagonally south-west
+m		mirror
+f		flip
+r		rotate
+
+You can visualize all of the default bindings invoking fim --dump-default-fimrc | grep bind .
+You can visualize all of the default aliases invoking fim  --dump-default-fimrc | grep alias .
+
+.fi
+.P
+The Return vs. Space key thing can be used to create a file list while
+reviewing the images and use the list for batch processing later on.
+
+All of the key bindings are reconfigurable; please see the default 
+.B fimrc
+file for examples on this, or read the complete manual: the FIM.TXT file
+distributed with fim.
+.c .SH EDIT IMAGE
+.c fim also provides some very basic image editing facilities.  You have
+.c to start fim with the -e switch to use them.
+.c .P
+.c .nf
+.c Shift+D         delete image
+.c R               rotate 90° clockwise
+.c L               rotate 90° counter-clock wise
+.c .fi
+.c .P
+.c The delete function actually wants a capital letter 'D', thus you have
+.c to type Shift+D.  This is done to avoid deleting images by mistake
+.c because there are no safety bells:  If you ask fim to delete the image,
+.c it will be deleted without questions asked.
+.c .P
+.c The rotate function actually works for JPEG images only because it
+.c calls the jpegtran command to perform a lossless rotation if the image.
+.c It is especially useful if you review the images of your digital
+.c camera.
+.SH AFFECTING ENVIRONMENT VARIABLES
+.nf
+FBFONT		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.
+			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psfu.gz is a Linux console file.
+			Consult 'man setfont' for your current font paths.
+			NOTE : Currently xfs is disabled.
+FBGAMMA		(just like in fbi) gamma correction.
+FRAMEBUFFER	(just like in fbi) if set, will override user set framebuffer device file.
+.SH COMMON PROBLEMS
+.B fim
+needs read-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
+your admin) have to make sure fim can open the devices in rw mode.
+The IMHO most elegant way is to use pam_console (see
+/etc/security/console.perms) to chown the devices to the user logged
+in on the console.  Another way is to create some group, chown the
+special files to that group and put the users which are allowed to use
+the framebuffer device into the group.  You can also make the special
+files world writable, but be aware of the security implications this
+has.  On a private box it might be fine to handle it this way
+through.
+
+If using udev, you can edit :
+/etc/udev/permissions.d/50-udev.permissions
+and set these lines like here :
+ # fb devices
+ fb:root:root:0600
+ fb[0-9]*:root:root:0600
+ fb/*:root:root:0600
+.P
+
+.B fim
+also needs access to the linux console (i.e. /dev/ttyN) for sane
+console switch handling.  That is obviously no problem for console
+logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
+.B not
+work.
+.SH EXAMPLES
+find /mnt/media/ -name *.jpg | 
+.B fim
+-
+.P
+will make fim read the file list from standard input.
+.P
+.P
+
+cat script.fim | 
+.B fim
+-p images/*
+.P
+will make fim read the script file
+.B script.fim
+from standard input prior to displaying files in the directory
+.B images
+.P
+.P
+
+scanimage ... | tee scan.ppm | 
+.B fim -i
+.P
+will make fim read the image scanned from a flatbed scanner as soon as it is read 
+.P
+.P
+
+.B fim
+* > selection.txt
+.P
+will output the file names marked interactively with 'm' in fim to a file.
+.P
+.P
+
+.B fim 
+* |
+.B fim
+-
+.P
+will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
+.P
+.P
+
+.SH BUGS
+.B fim
+has bugs. Please read the 
+.B BUGS
+file shipped in the documentation directory to discover the known ones.
+.SH  FILES
+
+.TP 15
+/usr/local/share/doc/fim/FIM.TXT
+The
+.B Fim
+documentation files.
+.TP 15
+.c /usr/local/share/fim/fimrc
+/etc/fimrc
+System wide
+.B Fim
+initialization file (executed on startup if no personal initialization file exist).
+.TP 15
+~/.fimrc
+Your personal
+.B Fim
+initialization file (executed on startup, if existent).
+.SH SEE ALSO
+fimgs(1), fbset(1), con2fb(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)
+.c , jpegtran(1)
+.SH AUTHOR
+.nf
+Michele Martone <dezperado _ GUESS _ autistici.org> is the author of fim, "fbi improved". 
+Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based. 
+.SH COPYRIGHT
+.nf
+Copyright (C) 2007-2008 Michele Martone <dezperado _ GUESS _ autistici.org>
+Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>
+.P
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+.P
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+.P
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software Foundation,
+ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.

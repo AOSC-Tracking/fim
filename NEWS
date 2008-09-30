@@ -1,0 +1,41 @@
+	
+	FIM NEWS -- history of user-visible changes in FIM.
+
+        	Version 0.3-alpha
+
+ * experimental support for AAlib (Ascii Art rendering) (-t)
+ * reading image files (-i) and scripts (-p) from stdin
+ * runs on the powerpc architecure
+ * rewritten from scratch the debug console, now buffered and with scrolling
+ * achieved speedup in magnifying pictures
+ * achieved speedup in displaying dithered images
+ * smarter quoting rules (looser quote checking) when "push"ing files
+ * dumping to file execution logs as executable scripts (-W/--write-scriptout)
+ * implemented regular expressions matching operator (=~)
+ * new default key bindings for split windows control
+ * could be compiled with no readline library (--disable-readline)
+
+        	Version 0.2
+ 
+ * internal windowing (with splitting, resizing, swapping) support
+ * .xcf, .fig, .dia, .svg files now viewable via wrapper calls
+ * introduced interactive command iteration ( in the [n]<command key> form )
+ * fim will try to run under screen and over ssh now
+ * custom framebuffer device, fonts and gamma are supported
+ * enriched compile-time options via the ./configure script
+ * vim-styled variable scoping g:,i:,v:,w: (local variables)
+ * eradicated some bugs
+ * introduced new variables, commands
+
+        	Version 0.2-alpha
+ 
+ * first windowing functionalities
+ * bugs and subtle flaws handling
+ * introduced new variables, commands
+
+            	Version 0.1
+
+ * <retrieve me>!
+ Initial release info :
+About:
+FIM (Fbi IMproved) aims to be a highly customizable and scriptable image viewer targeted at the users who are confortable with software like the Vim text editor or the Mutt mail user agent. It is based on the Fbi image viewer and works in the Linux framebuffer console (it is not an X program). It features the ability to filter the list of images with regular expressions, Vim-like autocommands, command line autocompletion and history, completely customizable key bindings, external/internal scriptability, and much more.
