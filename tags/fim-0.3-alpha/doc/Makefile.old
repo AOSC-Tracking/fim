@@ -1,0 +1,21 @@
+# $Id$
+
+docsdir := doc
+
+docs:	$(docsdir)/FIM.html
+
+$(docsdir)/FIM.html: $(docsdir)/doctags
+	cd $(docsdir); ./doctags FIM.TXT > tags ; ./vim2html.pl tags FIM.TXT
+	
+alldocs:	docs man
+
+man:
+	cd $(docsdir); man2html fim.man >  fim.man.html
+		
+
+$(docsdir)/doctags:	$(docsdir)/doctags.o
+	$(CC) -o $(docsdir)/doctags $(docsdir)/doctags.o
+
+docsclean:
+	cd $(docsdir); rm -f  doctags.o doctags FIM.html tags fim-stylesheet.css fim.man.html
+	
