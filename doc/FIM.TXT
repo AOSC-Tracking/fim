@@ -137,14 +137,14 @@ You can support Fim supporting the A/I project.
 
 You could be able to browse the Fim code on the repository, pointing your
 browser on :
-	http://code.autistici.org/svn/fim/
+	http://code.autistici.org/svn/fim/trunk/
 
 and get the latest source code tree issuing :
- 	svn export http://code.autistici.org/svn/fim
+ 	svn export http://code.autistici.org/svn/fim/trunk/
 
 or
 
-wget -r http://code.autistici.org/svn/fim/ && cd code.autistici.org/svn/fim 
+wget -r http://code.autistici.org/svn/fim/trunk/ && cd code.autistici.org/svn/fim/trunk
 
 This documentation is distributed with the software. See the INSTALL file for
 installation instructions and issues.
