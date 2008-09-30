@@ -754,20 +754,15 @@ op_rotate_init(struct ida_image *src, struct ida_rect *rect,
     float  diag;
 
     h = (struct op_rotate_state *)malloc(sizeof(*h));
-    /* dez's : FIXME : NULL check missing */
     h->angle = args->angle * 2 * M_PI / 360;
     h->sina  = sin(h->angle);
     h->cosa  = cos(h->angle);
-    /* dez's : cX means source center's X */
     h->cx    = (rect->x2 - rect->x1) / 2 + rect->x1;
     h->cy    = (rect->y2 - rect->y1) / 2 + rect->y1;
 
     /* the area we have to process (worst case: 45°) */
     diag     = sqrt((rect->x2 - rect->x1)*(rect->x2 - rect->x1) +
 		    (rect->y2 - rect->y1)*(rect->y2 - rect->y1))/2;
-    /* dez's : diag is a half diagonal */
-    /* dez's : calc is the source input rectangle bounded
-     * by source image valid coordinates ... */
     h->calc.x1 = (int)(h->cx - diag);
     h->calc.x2 = (int)(h->cx + diag);
     h->calc.y1 = (int)(h->cy - diag);
@@ -781,10 +776,7 @@ op_rotate_init(struct ida_image *src, struct ida_rect *rect,
     if (h->calc.y2 > (int)src->i.height)
 	h->calc.y2 = (int)src->i.height;
 
-     *i = src->i;
-     /* TODO : it would be nice to expand and contract
-      * the whole canvas just to fit the rotated image in !
-      * */
+    *i = src->i;
     return h;
 }
 
@@ -793,27 +785,13 @@ unsigned char* op_rotate_getpixel(struct ida_image *src, struct ida_rect *rect,
 				  int sx, int sy, int dx, int dy)
 {
     static unsigned char black[] = { 0, 0, 0};
-#if 0
-    int xdiff  =   rect->x2 - rect->x1;
-    int ydiff  =   rect->y2 - rect->y1;
-#endif
+
     if (sx < rect->x1 || sx >= rect->x2 ||
 	sy < rect->y1 || sy >= rect->y2) {
-#if 0
-	/* experimental : textured rotation (i.e.: with wrapping) */
-	while(sx <  rect->x1)sx+=xdiff;
-	while(sx >= rect->x2)sx-=xdiff;
-	while(sy <  rect->y1)sy+=ydiff;
-	while(sy >= rect->y2)sy-=ydiff;
-	return src->data + sy * src->i.width * 3 + sx * 3;
-#else
-	/* original */
 	if (dx < rect->x1 || dx >= rect->x2 ||
 	    dy < rect->y1 || dy >= rect->y2)
-	    /* dez's : FIXME : i can't understand what this code stands for ! */
 	    return src->data + dy * src->i.width * 3 + dx * 3;
 	return black;
-#endif
     }
     return src->data + sy * src->i.width * 3 + sx * 3;
 }
@@ -828,19 +806,13 @@ op_rotate_work(struct ida_image *src, struct ida_rect *rect,
     int x,sx,sy;
 
     pix = src->data + y * src->i.width * 3;
-    /*
-     * useless (dez)
-     * memcpy(dst,pix,src->i.width * 3);
-     */
+    memcpy(dst,pix,src->i.width * 3);
     if (y < h->calc.y1 || y >= h->calc.y2)
 	return;
-/*
-    fx = h->cosa * (0 - h->cx) - h->sina * (y - h->cy) + h->cx;
-    sx = (int)fx;
-    sx *= 0;
-    dst += 3*(h->calc.x1+sx);*/
+
+    dst += 3*h->calc.x1;
     memset(dst, 0, (h->calc.x2-h->calc.x1) * 3);
-   for (x = h->calc.x1; x < h->calc.x2; x++, dst+=3) {
+    for (x = h->calc.x1; x < h->calc.x2; x++, dst+=3) {
 	fx = h->cosa * (x - h->cx) - h->sina * (y - h->cy) + h->cx;
 	fy = h->sina * (x - h->cx) + h->cosa * (y - h->cy) + h->cy;
 	sx = (int)fx;
@@ -1060,23 +1032,11 @@ static void*
 op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
 		 struct ida_image_info *i, void *parm)
 {
-#ifdef FIM_USE_DESIGNATED_INITIALIZERS
     static struct op_3x3_parm filter = {
 	f1: { -1, -1, -1 },
 	f2: { -1,  8, -1 },
 	f3: { -1, -1, -1 },
     };
-#else
-    /* I have no quick fix for this ! (m.m.) 
-     * However, designated initializers are a a C99 construct
-     * and are usually tolerated by g++.
-     * */
-    static struct op_3x3_parm filter = {
-	f1: { -1, -1, -1 },
-	f2: { -1,  8, -1 },
-	f3: { -1, -1, -1 },
-    };
-#endif
     struct ida_rect rect;
     struct ida_image img;
     int x,y,limit;
@@ -1241,7 +1201,79 @@ struct ida_op desc_autocrop = {
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
 
+struct ppm_state {
+    FILE          *infile;
+    int           width,height;
+    unsigned char *row;
+};
 
+static void*
+pnm_init(FILE *fp, char *filename, unsigned int page,
+	 struct ida_image_info *i, int thumbnail)
+{
+    struct ppm_state *h;
+    char line[1024];
+
+    h = (struct ppm_state*)malloc(sizeof(*h));
+    memset(h,0,sizeof(*h));
+
+    h->infile = fp;
+    fgets(line,sizeof(line),fp); /* Px */
+    fgets(line,sizeof(line),fp); /* width height */
+    while ('#' == line[0])
+	fgets(line,sizeof(line),fp); /* skip comments */
+    sscanf(line,"%d %d",&h->width,&h->height);
+    fgets(line,sizeof(line),fp); /* ??? */
+    if (0 == h->width || 0 == h->height)
+	goto oops;
+    i->width  = h->width;
+    i->height = h->height;
+    i->npages = 1;
+    h->row = (unsigned char*)malloc(h->width*3);
+
+    return h;
+
+ oops:
+    fclose(fp);
+    free(h);
+    return NULL;
+}
+
+static void
+ppm_read(unsigned char *dst, unsigned int line, void *data)
+{
+    struct ppm_state *h =(struct ppm_state*) data;
+
+    fread(dst,h->width,3,h->infile);
+}
+
+static void
+pgm_read(unsigned char *dst, unsigned int line, void *data)
+{
+    struct ppm_state *h =(struct ppm_state*) data;
+    unsigned char *src;
+    int x;
+
+    fread(h->row,h->width,1,h->infile);
+    src = h->row;
+    for (x = 0; x < h->width; x++) {
+	dst[0] = src[0];
+	dst[1] = src[0];
+	dst[2] = src[0];
+	dst += 3;
+	src += 1;
+    }
+}
+
+static void
+pnm_done(void *data)
+{
+    struct ppm_state *h = (struct ppm_state *)data;
+
+    fclose(h->infile);
+    free(h->row);
+    free(h);
+}
 #ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 
 	extern struct ida_loader png_loader ;
@@ -1252,13 +1284,12 @@ extern struct ida_loader ppm_loader ;
 extern struct ida_loader pgm_loader ;
 
 // 20080108 WARNING
-// 20080801 removed the loader functions from this file, as init_rd was not __init : did I break something ?
 //static void __init init_rd(void)
-/*static void init_rd(void)
+static void init_rd(void)
 {
     load_register(&ppm_loader);
     load_register(&pgm_loader);
-}*/
+}
 
 #ifdef USE_X11
 /* ---------------------------------------------------------------------- */
@@ -1306,9 +1337,6 @@ void FbiStuff::free_image(struct ida_image *img)
 /*static struct ida_image**/
 struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 {
-    /*
-     * This function is complicated and should be reworked, in some way.
-     * */
     char command[1024];
     struct ida_loader *loader = NULL;
     struct ida_image *img;
@@ -1384,17 +1412,11 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 	sprintf(command,"dia \"%s\" -e \"%s\"",
 		filename,FIM_TMP_FILENAME".png" );
 	if ( (fp = popen(command,"r")) && 0==fclose (fp))
-	{
-		if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
-		/* this could happen in case dia was removed from the system */
-			return NULL;
-		else
-		{
-			unlink(FIM_TMP_FILENAME".png");
-			loader = &png_loader;
-		}
-   	}
-   }
+	if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
+	    return NULL;
+	unlink(FIM_TMP_FILENAME".png");
+	loader = &png_loader;
+    }
 #endif
 #ifdef FIM_TRY_XFIG
     if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))
@@ -1439,18 +1461,11 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 	cc.set_status_bar("please wait while piping through 'inkscape'...", "*");
 	sprintf(command,"inkscape \"%s\" --export-png \"%s\"",
 		filename,FIM_TMP_FILENAME );
-
 	if ( (fp = popen(command,"r")) && 0==fclose (fp))
-	{
-		if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
-		/* this could happen in case inkscape was removed from the system */
-			    return NULL;
-		else
-		{
-			unlink(FIM_TMP_FILENAME);
-			loader = &png_loader;
-		}
-	}
+	if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
+	    return NULL;
+	unlink(FIM_TMP_FILENAME);
+	loader = &png_loader;
     }
 #endif
 #if 0
@@ -1488,12 +1503,6 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
     /* load image */
     img = (struct ida_image*)malloc(sizeof(*img));
     memset(img,0,sizeof(*img));
-#ifdef FIM_EXPERIMENTAL_ROTATION
-    /* 
-     * warning : there is a new field in ida_image_info (fim_extra_flags) 
-     * which gets cleared to 0 (default) in this way.
-     * */
-#endif
     data = loader->init(fp,filename,0,&img->i,0);
     if(strcmp(filename,"/dev/stdin")==0) { close(0); dup(2);/* if the image is loaded from stdin, we close its stream */}
     if (NULL == data) {
@@ -1537,12 +1546,9 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
     return img;
 }
 
-/*all dez's
- *
- * rotate the image 90 degrees (M_PI/2) at a time
- * */
+/*all dez's*/
 struct ida_image*
-FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
+FbiStuff::rotate_image(struct ida_image *src, unsigned int rotation)
 {
     struct op_resize_parm p;
     struct ida_rect  rect;
@@ -1581,94 +1587,6 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     desc_p->done(data);
     return dest;
 }
-
-struct ida_image*	
-FbiStuff::rotate_image(struct ida_image *src, float angle)
-{
-    /*
-     * dez's:
-     * this whole code was written for a fixed canvas rotation,
-     * not allowing any canvas adaptation at all ... urgh
-     * */
-    struct op_rotate_parm p;
-    /* dez's 20080831 */
-    struct ida_rect  rect;
-    struct ida_image *dest;
-    void *data;
-    unsigned int y;
-
-    dest = (ida_image*)malloc(sizeof(*dest));
-    /* dez: */ if(!dest)return NULL;
-    memset(dest,0,sizeof(*dest));
-    memset(&rect,0,sizeof(rect));
-    memset(&p,0,sizeof(p));
-
-    /* source rectangle */
-    rect.x1=0;
-    rect.x2=src->i.width;
-    rect.y1=0;
-    rect.y2=src->i.height;
-    
-#ifdef FIM_EXPERIMENTAL_ROTATION
-    if(! src->i.fim_extra_flags)
-    {
-    /*
-     * this is code for a preliminary 'canvas' enlargement prior to image rotation.
-     * experimental code.
-     *
-     * WARNING : this code seems buggy!
-     * */   
-    int diagonal = ceilf( sqrtf( ( src->i.width * src->i.width  +  src->i.height * src->i.height) ) + 1.0f );
-    int n_extra  = (diagonal - src->i.height  )/2;
-    int s_extra  = (diagonal - src->i.height - n_extra     );
-    int w_extra  = (diagonal - src->i.width      )/2;
-    int e_extra  = (diagonal - src->i.width - w_extra  );
-    /* we allocate a new, larger canvas */
-    unsigned char * larger_data = (unsigned char*)calloc(diagonal * diagonal * 3,1);
-    if(larger_data)
-    {
-	    for(y = n_extra; y < diagonal - s_extra; ++y )
-	    	memcpy(larger_data + (y * diagonal + w_extra )*3 , src->data + (y-n_extra) * src->i.width * 3 , src->i.width*3);
-	    src->i.width = diagonal;
-	    src->i.height = diagonal;
-	    /* source rectangle fix */
-	    rect.x1+=w_extra;
-	    rect.x2+=e_extra;
-	    rect.y1+=n_extra;
-	    rect.y2+=s_extra;
-	    free(src->data);
-	    src->data=larger_data;
-    	    src->i.fim_extra_flags=1;	/* to avoid this operation to repeat on square images or already rotated images */
-    }
-    /* on allocation failure (e.g.: a very long and thin image) we cannot do more.
-     * uh, maybe we could tell the user about the allocation failure..*/
-    else
-    	cc.set_status_bar( "rescaling failed (insufficient memory?!)", "*");
-    }
-#endif
-
-    p.angle    = angle;
-    data = desc_rotate.init(src,&rect,&dest->i,&p);
-    dest->data = (unsigned char*)calloc(dest->i.width * dest->i.height * 3,1);
-    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
-    for (y = 0; y < dest->i.height; y++) {
-	ffd.switch_if_needed();
-	desc_rotate.work(src,&rect,
-			 dest->data + 3 * dest->i.width * y,
-			 y, data);
-    }
-
-
-    desc_rotate.done(data);
-
-
-    //std::cout << "diagonal     : " << diagonal << "\n";
-   // std::cout << "src->i.width : " << src->i.width << "\n";
-
-    return dest;
-}
-
-
 struct ida_image*	
 FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
 {

@@ -58,9 +58,6 @@ struct ida_image_info {
     unsigned int      dpi;
     unsigned int      npages;
     struct ida_extra  *extra;
-#ifdef FIM_EXPERIMENTAL_ROTATION
-    unsigned int      fim_extra_flags;/* FIXME : unclean: regard this as a hack (flag set on a rotated image) */
-#endif
 
     int               thumbnail;
     unsigned int      real_width;
@@ -77,10 +74,10 @@ struct ida_rect {
 
 /* load image files */
 struct ida_loader {
-    const char  *magic;
+    char  *magic;
     int   moff;
     int   mlen;
-    const char  *name;
+    char  *name;
     void* (*init)(FILE *fp, char *filename, unsigned int page,
 		  struct ida_image_info *i, int thumbnail);
     void  (*read)(unsigned char *dst, unsigned int line, void *data);
@@ -90,7 +87,7 @@ struct ida_loader {
 
 /* filter + operations */
 struct ida_op {
-    const char  *name;
+    char  *name;
     void* (*init)(struct ida_image *src, struct ida_rect *rect,
 		  struct ida_image_info *i, void *parm);
     void  (*work)(struct ida_image *src, struct ida_rect *rect,
@@ -107,8 +104,8 @@ void  op_free_done(void *data);
 #ifdef USE_X11
 /* save image files */
 struct ida_writer {
-    const char  *label;
-    const char  *ext[8];
+    char  *label;
+    char  *ext[8];
     int   (*write)(FILE *fp, struct ida_image *img);
     int   (*conf)(Widget widget, struct ida_image *img);
     struct list_head list;

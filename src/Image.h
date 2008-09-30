@@ -69,8 +69,6 @@ class Image
 	float            scale    ;	/* viewport variables */
 	float            ascale   ;
 	float            newscale ;
-	float            angle	  ;
-	float            newangle ;
 
 	/* virtual stuff */
 	public://TMP
@@ -103,7 +101,6 @@ class Image
 	Image(const Image& image); // yes, a private constructor (was)
 
 	int rescale( float ns=0.0 );
-	int rotate( float angle=1.0 );
 
 	const char* getName(){return fname.c_str();}
 

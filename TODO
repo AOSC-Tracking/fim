@@ -22,11 +22,6 @@ ongoing further inspiration.
 	Current development directions
 
 
-20080908	pdflib would be a nice try to view pdf files from within fim, but multiple anonymous images should be supported
-20080903	introduce a variable for handling centering style : sticky, proportional, smart, ... (see Viewport)
-20080826	refine and optimize the rotation mechanism into a smarter, smoother, rendering based one
-20080525	see if porting to 16 bits integers is possible (with maybe no image file format library at all)
-20080525	maintain a list of existing fim re-implementation and people happing using it
 20080509	very long strings in input could cause problems :)
 20080508	an autocommand could scale alignment to borders at scale time, too
 20080505	cleanup up completely the textual driver exiting

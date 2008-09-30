@@ -164,14 +164,13 @@ class FramebufferDevice:public DisplayDevice
 	FontServer fontserver;
 	char* fontname;
 
-	int             vt ;
-	float fbgamma ;
 	public:
+	int             vt ;
 	int32_t         lut_red[256], lut_green[256], lut_blue[256];
 	int             dither , pcd_res , steps ;
 
 	/*static float fbgamma = 1;*/
-	public:
+	float fbgamma ;
 
 
 	// FS.C
@@ -220,56 +219,9 @@ class FramebufferDevice:public DisplayDevice
 
 	// FBI.C
 	/* framebuffer */
+	public:
 	char                       *fbdev;
 	char                       *fbmode;
-
-	public:
-	/*
-	 * FIXME : should be a static string, or trouble will come!
-	 * */
-	int set_fbdev(char *fbdev)
-	{
-		/* only possible before init() */
-		if(fb_mem)
-			return -1;
-		if(fbdev)
-			this->fbdev=fbdev;
-		return 0;
-	}
-
-	/*
-	 * FIXME : should be a static string, or trouble will come!
-	 * */
-	int set_fbmode(char *fbmode)
-	{
-		/* only possible before init() */
-		if(fb_mem)
-			return -1;
-		if(fbmode)
-			this->fbmode=fbmode;
-		return 0;
-	}
-
-	int set_default_vt(int default_vt)
-	{
-		/* only possible before init() */
-		if(fb_mem)
-			return -1;
-		if(default_vt)
-			this->vt=default_vt;
-		return 0;
-	}
-
-	int set_default_fbgamma(float fbgamma)
-	{
-		/* only possible before init() */
-		if(fb_mem)
-			return -1;
-		if(fbgamma)
-			this->fbgamma=fbgamma;
-		return 0;
-	}
-
 	//private:
 	int                        fd, switch_last, debug;
 	int                        redraw;
@@ -330,7 +282,7 @@ class FramebufferDevice:public DisplayDevice
 
 	void dev_init(void);
 	private:
-	int fb_init(const char *device, char *mode, int vt
+	int fb_init(char *device, char *mode, int vt
 			, int try_boz_patch=0
 			);
 	public:

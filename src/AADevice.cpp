@@ -373,10 +373,8 @@
 
 		/*ascii_hwparms.width()  = 4;
 		ascii_hwparms.height() = 4;*/
-		
-		name[0]='\0';
-		name[1]='\0';
-		ascii_save.name = name;
+
+		ascii_save.name = "";
 		ascii_save.format = &aa_text_format;
 		ascii_save.file = NULL;
 
