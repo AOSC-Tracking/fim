@@ -77,8 +77,7 @@ void FontServer::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charIn
 	}
 
 
-#if 1
-/* 20080507 unused ? */
+
 void FontServer::fb_text_init1(char *font, struct fs_font **_f)
 {
     char   *fonts[2] = { font, NULL };
@@ -95,29 +94,6 @@ void FontServer::fb_text_init1(char *font, struct fs_font **_f)
     }
 }
 
-#if 1
-/* 20080507 unused, as fs_consolefont ? */
-/* see src/FontServer.cpp : it is untrue that it is not used ! */
-static const char *default_font[] = {
-    /* why the heck every f*cking distribution picks another
-       location for these fonts ??? (GK) */
-    "/usr/share/consolefonts/lat1-16.psf",
-    "/usr/share/consolefonts/lat1-16.psf.gz",
-    "/usr/share/consolefonts/lat1-16.psfu.gz",
-    "/usr/share/kbd/consolefonts/lat1-16.psf",
-    "/usr/share/kbd/consolefonts/lat1-16.psf.gz",
-    "/usr/share/kbd/consolefonts/lat1-16.psfu.gz",
-    "/usr/lib/kbd/consolefonts/lat1-16.psf",
-    "/usr/lib/kbd/consolefonts/lat1-16.psf.gz",
-    "/usr/lib/kbd/consolefonts/lat1-16.psfu.gz",
-    "/lib/kbd/consolefonts/lat1-16.psf",
-    "/lib/kbd/consolefonts/lat1-16.psf.gz",
-    "/lib/kbd/consolefonts/lat1-16.psfu.gz",
-    NULL
-};
-#endif
-
-
 struct fs_font* FontServer::fs_consolefont(char **filename)
 {
     int  i;
@@ -126,7 +102,7 @@ struct fs_font* FontServer::fs_consolefont(char **filename)
     FILE *fp;
 
     if (NULL == filename)
-	filename = (char**)fim::default_font;	/* DANGER */
+	filename = default_font;
 
     for(i = 0; filename[i] != NULL; i++) {
 	if (-1 == access(filename[i],R_OK))
@@ -187,7 +163,6 @@ struct fs_font* FontServer::fs_consolefont(char **filename)
     }
     return f;
 }
-#endif
 
 
 

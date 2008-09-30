@@ -203,7 +203,7 @@ char * dupstr (const char* s)
 	return (r);
 }
 
-static int pick_word(const char *f, unsigned int *w)
+static int pick_word(char *f, unsigned int *w)
 {
 	int fd = open(f,O_RDONLY);
 	if(fd==-1) return -1;
@@ -391,7 +391,7 @@ int swap_bytes_in_int(int in)
 	// to Most Significant Byte First
 	// FIXME : this function should be optimized
 	int out=0;
-	int b=sizeof(int),i=-1;
+	int b=sizeof(int),i=-1,nc;
 	while(i++<b/2)
 	{
 	((char*)&out)[i]=((char*)&in)[b-i-1];

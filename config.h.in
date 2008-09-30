@@ -46,9 +46,6 @@
 #undef FIM_DEFAULT_KEY_CONFIG
 
 /* */
-#undef FIM_EXPERIMENTAL_ROTATION
-
-/* */
 #undef FIM_ITERATED_COMMANDS
 
 /* */
@@ -115,9 +112,6 @@
 #undef FIM_TRY_XFIG
 
 /* */
-#undef FIM_USE_DESIGNATED_INITIALIZERS
-
-/* */
 #undef FIM_USE_READLINE
 
 /* */
@@ -138,9 +132,6 @@
 /* Defined, if libpng support is enabled */
 #undef FIM_WITH_LIBPNG
 
-/* Define to 1 if you have the <climits> header file. */
-#undef HAVE_CLIMITS
-
 /* Define to 1 if you have the <cstdio> header file. */
 #undef HAVE_CSTDIO
 
@@ -158,9 +149,6 @@
 
 /* We have libjpeg */
 #undef HAVE_LIBJPEG
-
-/* Define to 1 if you have the <limits.h> header file. */
-#undef HAVE_LIMITS_H
 
 /* Define to 1 if you have the <linux/fb.h> header file. */
 #undef HAVE_LINUX_FB_H

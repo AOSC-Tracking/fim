@@ -10,7 +10,7 @@ fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .TP
 .B fim  -  [ options ] < file_name_list
 .TP
-.B fim -i [ options ] < image_file
+.B fim -i [ options ] < file
 .TP
 .B fim -p [ options ] < script_file
 .SH DESCRIPTION
@@ -73,13 +73,6 @@ Will read one single image from the standard input (yes: the image, not the file
 .B -m {mode}, --mode {mode}
 name of the video mode to use video mode (must be listed in
 /etc/fb.modes).  Default is not to change the video mode.
-In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline 
-information, which could be fed to the modeline2fb perl script (distributed with fbset).
-On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.
-So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.
-An unsupported mode should make fim exit with failure.
-But it is possible the kernel could trick fim and set a supported mode automatically, thus
-ignoring the user set mode.
 .c .TP
 .c .B -q, --quiet
 .c be quiet: don't print anything.
@@ -117,8 +110,6 @@ If aalib was not enabled at tompile time, fim will work without displaying image
 .TP
 .B -T {terminal}, --vt {terminal}
 The \fBterminal\fP will be used as virtual terminal device file (as in fbi).
-See (chvt (1)), (openvt (1)) for more info about this.
-Use (con2fb (1)) to map a terminal to a framebuffer device.
 .c .TP
 .c .B -f font
 .c Set font.  This can be either a pcf console font file or a X11 font
@@ -358,7 +349,7 @@ Your personal
 .B Fim
 initialization file (executed on startup, if existent).
 .SH SEE ALSO
-fimgs(1), fbset(1), con2fb(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)
+fimgs(1), fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)
 .c , jpegtran(1)
 .SH AUTHOR
 .nf

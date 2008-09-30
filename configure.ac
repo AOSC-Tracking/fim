@@ -171,8 +171,6 @@ AC_CHECK_HEADERS([linux/fb.h], [break], AC_MSG_ERROR([[Cannot find linux/fb.h.  
 AC_CHECK_HEADERS([linux/vt.h], [break], AC_MSG_ERROR([[Cannot find linux/vt.h.  Fim requires it!.]]))
 AC_CHECK_HEADERS([linux/kd.h], [break], AC_MSG_ERROR([[Cannot find linux/kd.h.  Fim requires it!.]]))
 
-AC_CHECK_HEADERS([climits limits.h], [break], AC_MSG_ERROR([[Cannot find limits.h nor climits.  Fim requires it!.]]))
-
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([int *])
 AC_C_BIGENDIAN([fim_big_endian=yes],[fim_big_endian=no],[fim_big_endian=hmmm])
@@ -956,16 +954,10 @@ AH_TEMPLATE([FIM_ITERATED_COMMANDS])
 AC_DEFINE([FIM_ITERATED_COMMANDS])
 AH_TEMPLATE([FIM_SKIP_KNOWN_FILETYPES])
 AC_DEFINE([FIM_SKIP_KNOWN_FILETYPES])
-AH_TEMPLATE([FIM_EXPERIMENTAL_ROTATION])
-AC_DEFINE([FIM_EXPERIMENTAL_ROTATION])
 AH_TEMPLATE([FIM_KEEP_BROKEN_CONSOLE])
 dnl AC_DEFINE([FIM_KEEP_BROKEN_CONSOLE])
 AH_TEMPLATE([FIM_PIPE_IMAGE_READ])
 dnl AC_DEFINE([FIM_PIPE_IMAGE_READ])
-AH_TEMPLATE([FIM_USE_DESIGNATED_INITIALIZERS])
-dnl AC_DEFINE([FIM_USE_DESIGNATED_INITIALIZERS])
-dnl AH_TEMPLATE([FIM_IS_SLOWER_THAN_FBI])
-dnl AC_DEFINE([FIM_IS_SLOWER_THAN_FBI])
 
 
 dnl ==================

@@ -481,7 +481,7 @@ namespace fim
 			return;
 
 		int off=0;
-		//const int s_len=strlen(s);
+		const int s_len=strlen(s);
 		while(regexec(&regex,off+c_str(),nmatch,pmatch,0)==0)
 		{
 			/*

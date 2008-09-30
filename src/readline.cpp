@@ -19,11 +19,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "CommandConsole.h"
 #include <iostream>
-#ifdef FIM_USE_READLINE
 #include "readline.h"
-#endif
+#include "CommandConsole.h"
 #ifdef FIM_USE_READLINE
 
 #define min(x,y) ((x)<(y)?(x):(y))
@@ -117,12 +115,10 @@ static void completion_display_matches_hook(char **matches,int num,int max)
  //     status((unsigned char*)"here shall be autocompletions", NULL);
 }
 
-/*
 static void redisplay_no_fb()
 {
 	printf("%s",rl_line_buffer);
 }
-*/
 
 static void redisplay()
 {	

@@ -126,12 +126,6 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 		int rc=0;
 		//initialization of the framebuffer text
 		FontServer::fb_text_init1(fontname,&f);
-		/*
-		 * will initialized with the user set (or default ones)
-		 *  - framebuffer device
-		 *  - framebuffer mode
-		 *  - virtual terminal
-		 * */
 		fd = fb_init(fbdev, fbmode, vt);
 		if(fd==-1)
 			fd = fb_init(fbdev, fbmode, vt,0xbabebabe==0xbabebabe);//maybe we are under screen..
@@ -378,15 +372,8 @@ void FramebufferDevice::svga_display_image_new(
     }
 }
 
-int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_boz_patch)
+int FramebufferDevice::fb_init(char *device, char *mode, int vt, int try_boz_patch)
 {
-    /*
-     * This method will probe for a valid framebuffer device.
-     *
-     * The try_boz_patch will make fim go straight ahead ignoring lots of errors.
-     * Like the ones when running fim under screen.
-     * Like the ones when running fim under X. :)
-     * */
     char   fbdev[16];
     struct vt_stat vts;
 
@@ -405,10 +392,8 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 //	exit(1);
     }
     
-    /* no device supplied ? we will probe for one */
     if (NULL == device) {
 	device = getenv("FRAMEBUFFER");
-	/* no environment - supplied device ? */
 	if (NULL == device) {
 	    struct fb_con2fbmap c2m;
 	    if (-1 == (fb = open(devices->fb0,O_RDWR /* O_WRONLY */,0))) {
@@ -473,21 +458,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
     tcgetattr(tty, &term);
     
     /* switch mode */
-    if(-1 == fb_setmode(mode)){
-#if 0
-	/* 
-	 * FIXME:
-	 * mm's strict mode ckecking (right now, this function triggers an exit() but things should change) */
-#ifdef FIM_BOZ_PATCH
-    	if(!try_boz_patch)
-#endif
-	{
-		perror("failed setting mode");
-		exit(1);
-	}
-#endif
-    }
-
+    fb_setmode(mode);
     
     /* checks & initialisation */
     if (-1 == ioctl(fb,FBIOGET_FSCREENINFO,&fb_fix)) {
@@ -527,11 +498,8 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
     fb_mem_offset = (unsigned long)(fb_fix.smem_start) & (~PAGE_MASK);
     fb_mem = (unsigned char*) mmap(NULL,fb_fix.smem_len+fb_mem_offset,
 		  PROT_READ|PROT_WRITE,MAP_SHARED,fb,0);
-    /*
-     * FIXME : this is not 64 bits safe
-     * */
     if (-1L == (long)fb_mem) {
-	perror("mmap failed");
+	perror("mmap");
 	goto err;
     }
     /* move viewport to upper left corner */
@@ -574,7 +542,6 @@ void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
     i |= i << 16;
     len >>= 2;
 #ifdef FIM_IS_SLOWER_THAN_FBI
-    unsigned int *p;
     for (p = (unsigned int*) addr; len--; p++)
 	*p = i;
 #else
@@ -645,7 +612,7 @@ int FramebufferDevice::fb_setmode(char *name)
     FILE *fp;
     char line[80],label[32],value[16];
     int  geometry=0, timings=0;
- 
+    
     /* load current values */
     if (-1 == ioctl(fb,FBIOGET_VSCREENINFO,&fb_var)) {
 	perror("ioctl FBIOGET_VSCREENINFO");
@@ -700,17 +667,8 @@ int FramebufferDevice::fb_setmode(char *name)
 	    /* set */
 	    fb_var.xoffset = 0;
 	    fb_var.yoffset = 0;
-
 	    if (-1 == ioctl(fb,FBIOPUT_VSCREENINFO,&fb_var))
 		perror("ioctl FBIOPUT_VSCREENINFO");
-	    /*
-	     * FIXME
-	     * mm : this should be placed here and uncommented : */
-	    /*
-	    if (-1 == ioctl(fb,FBIOGET_FSCREENINFO,&fb_fix)) {
-		perror("ioctl FBIOGET_VSCREENINFO");
-		exit(1);
-	    }*/
 	    /* look what we have now ... */
 	    if (-1 == ioctl(fb,FBIOGET_VSCREENINFO,&fb_var)) {
 		perror("ioctl FBIOGET_VSCREENINFO");
@@ -1608,27 +1566,27 @@ void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flag
 
 
 	FramebufferDevice::FramebufferDevice():
-	fontserver(*this)	/* FIXME : should this be moved to the end ? */
-	,fontname(NULL)	
+	fontname(NULL)
 	,vt(0)
-	,dither(FALSE)
-	,pcd_res(3)
-	,steps(50)
-	,fbgamma(1.0)
 	,visible(1)
 	,x11_font("10x20")
 	,ys( 3)
 	,xs(10)
-	,fs_setpixel(NULL)
 	,fbdev(NULL)
+	,fbgamma(1.0)
 	,fbmode(NULL)
+	,fb_mem_offset(0)
+	,fb_switch_state(FB_ACTIVE)
+	,orig_vt_no(0)
+	,dither(FALSE)
+	,pcd_res(3)
+	,steps(50)
+	,fontserver(*this)
+	,fs_setpixel(NULL)
 	,debug(0)
 #ifdef FIM_BOZ_PATCH
 	,with_boz_patch(0)
 #endif
-	,fb_mem_offset(0)
-	,fb_switch_state(FB_ACTIVE)
-	,orig_vt_no(0)
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	//mc(48,12),
 //	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */

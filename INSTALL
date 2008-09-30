@@ -82,8 +82,6 @@ apt-get install flex
 apt-get install bison
 ...
 
-Note: it is not necessary to install these libraries versions (i.e.: libreadline5-dev), but the right packages.
-
 To use the full Fim potential, you could also install GhostScript, Inkscape, Dia, Xfig, Gimp.
 
 If you could give me some help with this, I would be very grateful to you.

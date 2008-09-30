@@ -53,6 +53,7 @@ namespace fim
 			 * FIXME : this function returns often with -1 !
 			 * */
 			int i;
+			char *s;
 			const int maxcols = ffd.fb_var.xres/ffd.fb_font_width();
 	
 			if(f<0 && l>=0 && f+l<0 && -f<=cline) { f=cline+f; l=cline-l; }
@@ -232,7 +233,7 @@ namespace fim
 			/* TEST ME AND FINISH ME */
 			if(glines< 0)return -1;
 			if(glines==0)return  0;
-			char **p;
+			char **p;int i;
 			p=line;
 			line=(char**)realloc(line,bsize+glines*sizeof(char*));
 			if(!line){line=p;return -1;/* no change */}
@@ -318,7 +319,7 @@ namespace fim
 			{
 				// no realloc, no risk
 				fim::string buf=buffer;
-				if(((int)buf.size())==((int)(bp-buffer)))
+				if(buf.size()==(int)(bp-buffer))
 				{
 					ccol=0;cline=0;lwidth=newlwidth;*line=buffer;bp=buffer;
 					// the easy way

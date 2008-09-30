@@ -85,13 +85,10 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     TIFFGetField(h->tif, TIFFTAG_PHOTOMETRIC,     &h->photometric);
     h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
     if (FbiStuff::fim_filereading_debug())
-#ifndef PRId32
-#define PRId32 "x"
-#endif
-	fprintf(stderr,"tiff: %" PRId32 "x%" PRId32 ", planar=%d, "
-		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" PRId32 "\n",
-//	fprintf(stderr,"tiff: %" "%d" "x%" "%d" ", planar=%d, "
-//		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" "%d" "\n",
+	fprintf(stderr,"tiff: %" "%d" "x%" "%d" ", planar=%d, "
+//	fprintf(stderr,"tiff: %" PRId32 "x%" PRId32 ", planar=%d, "
+		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" "%d" "\n",
+//		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" PRId32 "\n",
 		h->width,h->height,h->config,h->nsamples,h->depth,
 		h->fillorder,h->photometric,
 		TIFFScanlineSize(h->tif));

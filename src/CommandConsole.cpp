@@ -367,7 +367,6 @@ namespace fim
 		addCommand(new Command(fim::string("scale_factor_shrink" ),fim::string("divide the scale factors reduce_factor and magnify_facto by scale_factor_multiplier"),&browser,&Browser::scale_factor_decrease));
 		addCommand(new Command(fim::string("scale_factor_increase" ),fim::string("add scale_factor_delta to the scale factors reduce_factor and magnify_facto" ),&browser,&Browser::scale_factor_increase));
 		addCommand(new Command(fim::string("scale_factor_decrease" ),fim::string( "subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor" ),&browser,&Browser::scale_factor_decrease));
-		addCommand(new Command(fim::string("rotate" ),fim::string( "rotate the image the specified amount of degrees" ),&browser,&Browser::rotate));
 		addCommand(new Command(fim::string("magnify" ),fim::string("magnifies the displayed image" ),&browser,&Browser::magnify));
 		addCommand(new Command(fim::string("reduce"),fim::string("reduces the displayed image" ),&browser,&Browser::reduce));
 		addCommand(new Command(fim::string("return"),fim::string("returns from the program with a status code"),this,&CommandConsole::do_return));
@@ -543,7 +542,7 @@ namespace fim
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
 //		executeFile("/etc/fimrc");	//GLOBAL DEFAULT CONFIGURATION FILE
-		*prompt='\0';
+		*prompt=':';
 		*(prompt+1)='\0';
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
@@ -1078,7 +1077,6 @@ namespace fim
 		autocmd_exec("PreExecutionCycleArgs",initial);
 
 #endif
-		*prompt='\0';
 	 	while(show_must_go_on)
 		{
 			cycles++;
@@ -1098,7 +1096,6 @@ namespace fim
 			{
 				ic=0;
 				char *rl=readline(":");
-				*prompt=':';
 				if(rl==NULL)
 				{
 					/*
@@ -1106,12 +1103,8 @@ namespace fim
 					 * */
 					this->quit();
 				}
-				else if(rl!=fim::string(""))
+				else if(rl!="")
 				{
-					/*
-					 * This code gets executed when the user is about to exit console mode, 
-					 * having she pressed the 'Enter' key and expecting result.
-					 * */
 					fim::string cf=current();
 #ifdef FIM_AUTOCMDS
 					autocmd_exec("PreInteractiveCommand",cf);
@@ -1133,21 +1126,12 @@ namespace fim
 					//p.s.:note that current() returns not necessarily the same in 
 					//the two autocmd_exec() calls..
 				}
-				/*  else : *rl=="" : doesn't happen :) */
-
-				if(rl && *rl=='\0')
-				{
-					/* happens when no command is issued and Enter key is pressed */
-					ic=0;
-					*(prompt)='\0';
-					set_status_bar("",NULL);
-				}
+				if(rl && *rl=='\0'){ic=0;set_status_bar("",NULL);}
 				if(rl)free(rl);
 			}
 			else
 #endif
 			{
-				*prompt='\0';
 				int c,r;char buf[64];
 				tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 //				int c=getchar();
@@ -1230,7 +1214,7 @@ namespace fim
 					if(c==getIntVariable("console_key") || 
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
 #else
-					if(c==getIntVariable("console_key")){ic=1;*prompt=':';}	//should be configurable..
+					if(c==getIntVariable("console_key"))ic=1;	//should be configurable..
 					else if(c=='/')
 					{
 						/*
@@ -1242,17 +1226,14 @@ namespace fim
 						*prompt='/';
 						char *rl=readline("/"); // !!
 						// no readline ? no interactive searches !
-						*prompt='\0';
+						*prompt=':';
 						rl_inhibit_completion=tmp;
 						ic=0;
 						if(rl==NULL)
 						{
 							//quit();
 						}
-						/* 
-						 * if using "" instead string("")
-						 * warning: comparison with string literal results in unspecified behaviour */
-						else if(rl!=string(""))
+						else if(rl!="")
 						{
 							args_t args;
 							args.push_back(rl);
@@ -2417,55 +2398,36 @@ namespace fim
 		 */
 		//FIX ME : does this function always draw ?
 		int chars, ilen;
-		char *str;
-
-		prompt[1]='\0';
+		char *str,*p;
+		const char *prompt=get_prompt();
+		char no_prompt[1];*no_prompt='\0';
 	
 		if( fim_uninitialized ) return;
-		if( ! displaydevice   ) return;
+		if(!displaydevice ) return;
 	
+		if(!inConsole())prompt=no_prompt;
 		chars = displaydevice->get_chars_per_line();
-		if(chars<1)return;
-		str = (char*) calloc(chars+1,1);//this malloc is free
+		if(chars<48)return;//something strange..
+		str = (char*) malloc(chars+1);//this malloc is free
 		if(!str)return;
-		//sprintf(str, "");
-		*str='\0';
-		if (info && desc)
+		if (info)
 		{
-			/* non interactive print */
-			/*
-			 * FIXME : and what if chars < 11 ? :)
-			 * */
 			ilen = strlen(info);
-			if(chars-14-ilen>0)
-			{
-				sprintf(str, "%s%-*.*s [ %s ] H - Help",prompt,
-				chars-14-ilen, chars-14-ilen, desc, info);//here above there is the need of 14+ilen chars
-			}
-			else
-			if(chars>5) sprintf(str, "<-!->");
-			else
-			if(chars>0) sprintf(str, "!");	/* :D */
+			sprintf(str, "%s%-*.*s [ %s ] H - Help",prompt,
+			chars-14-ilen, chars-14-ilen, desc, info);//here above there is the need of 14+ilen chars
+		}
+		else
+		{
+			sprintf(str, "%s%-*.*s | H - Help",prompt, chars-11, chars-11, desc);
 		}
 #ifdef FIM_USE_READLINE
-		else
-		if(chars>=12 && desc) /* would be a nonsense :) */
-		{
-			/* interactive print */
-			static int statusline_cursor=0;
-			int offset=0,coffset=0;
-			statusline_cursor=rl_point;	/* rl_point is readline stuff */
-			ilen = strlen(desc);
-			chars-=11+(*prompt=='\0'?0:1);	/* displayable, non-service chars  */
-			/* 11 is strlen(" | H - Help")*/
-			offset =(statusline_cursor/(chars))*(chars);
-			coffset=(*prompt!='\0')+(statusline_cursor%(chars));
-		
-			sprintf(str, "%s%-*.*s | H - Help",prompt, chars, chars, desc+offset);
-			str[coffset]='_';
-		}
+		static int statusline_cursor;
+		statusline_cursor=rl_point+1;
+	    
+		if( statusline_cursor < chars && inConsole()  ) str[statusline_cursor]='_';
 #endif
-
+		p=str-1;while(++p && *p)if(*p=='\n')*p=' ';
+	
 		displaydevice->status_line((unsigned char*)str);
 		free(str);
 	}
