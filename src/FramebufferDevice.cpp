@@ -574,6 +574,7 @@ void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
     i |= i << 16;
     len >>= 2;
 #ifdef FIM_IS_SLOWER_THAN_FBI
+    unsigned int *p;
     for (p = (unsigned int*) addr; len--; p++)
 	*p = i;
 #else
