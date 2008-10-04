@@ -160,6 +160,9 @@ namespace rl
 #include "Browser.h"
 #include "DebugConsole.h"
 #include "DummyDisplayDevice.h"
+#ifdef FIM_WITH_LIBSDL
+#include "SDLDevice.h"
+#endif
 #ifdef FIM_WITH_CACALIB
 #include "CACADevice.h"
 #endif

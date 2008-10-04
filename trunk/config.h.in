@@ -138,6 +138,9 @@
 /* Defined, if libpng support is enabled */
 #undef FIM_WITH_LIBPNG
 
+/* Defined, if libsdl support is enabled */
+#undef FIM_WITH_LIBSDL
+
 /* Define to 1 if you have the <climits> header file. */
 #undef HAVE_CLIMITS
 
