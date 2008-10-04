@@ -1,6 +1,6 @@
 /* $Id$ */
 /*
- DisplayDevice.h : virtual device Fim driver header file
+ SDLDevice.h : sdllib device Fim driver header file
 
  (c) 2008 Michele Martone
 
@@ -18,21 +18,30 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef DISPLAY_DEVICE_FIM_H
-#define DISPLAY_DEVICE_FIM_H
+#ifndef SDLDEVICE_FIM_H
+#define SDLDEVICE_FIM_H
+#ifdef FIM_WITH_LIBSDL
 
+#include "DisplayDevice.h"
+#include <SDL.h>
 
-class DisplayDevice
+class SDLDevice:public DisplayDevice 
 {
-	/*
-	 * The generalization of a Fim output device.
-	 */
-	public:
-	virtual int initialize()=0;
-	virtual void  finalize()=0;
+	private:
 
-	virtual int  display(
-		void *ida_image_img, // source image structure
+	SDL_Surface *screen;
+	SDL_Event event;
+
+	int keypress ;
+	int h;
+
+	public:
+
+	SDLDevice();
+
+	int  display(
+		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
+		//void* rgb,// destination gray array and source rgb array
 		int iroff,int icoff, // row and column offset of the first input pixel
 		int irows,int icols,// rows and columns in the input image
 		int icskip,	// input columns to skip for each line
@@ -40,21 +49,34 @@ class DisplayDevice
 		int orows,int ocols,// rows and columns to draw in output buffer
 		int ocskip,// output columns to skip for each line
 		int flags// some flags
-		)=0;
+		);
 
-	virtual ~DisplayDevice(){}
+	int initialize();
+	void finalize() ;
 
-	virtual int get_chars_per_line()=0;
-	virtual int width()=0;
-	virtual int height()=0;
-	virtual int status_line(unsigned char *msg)=0;
-	virtual int console_control(int code)=0;
-	virtual int handle_console_switch()=0;
-	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
-	virtual int get_input(int * c);
+	int get_chars_per_line() ;
+	int txt_width() ;
+	int txt_height() ;
+	int width() ;
+	int height() ;
+	int status_line(unsigned char *msg) { return 0; }
+	void status_screen(int desc,int draw_output){ return ; }
+	int console_control(int code){return 0;}
+	int handle_console_switch(){return 0;}
+	int clear_rect_(
+		void* dst,
+		int oroff,int ocoff,
+		int orows,int ocols,
+		int ocskip);
+	int clear_rect(int x1, int x2, int y1,int y2);
 
-	int redraw;
-	private:
+
+	/* TEMPORARY */
+	void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
+
+	int get_input(int * c);
 };
 
+
+#endif
 #endif

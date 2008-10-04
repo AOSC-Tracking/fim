@@ -143,8 +143,11 @@ AC_ARG_ENABLE(default_config, AC_HELP_STRING([--disable-default-config], [Builti
 	fi
 
 #CPPFLAGS=$DEPS
-AC_SUBST(LIBPNG_CFLAGS)
-AC_SUBST(LIBPNG_LIBS)
+#AC_SUBST(LIBSDL_CFLAGS)
+#AC_SUBST(LIBPNG_CFLAGS)
+#AC_SUBST(LIBSDL_CXXFLAGS)
+#AC_SUBST(LIBPNG_CXXFLAGS)
+#AC_SUBST(LIBPNG_LIBS)
 AC_SUBST(FIM_CFLAGS)
 AC_SUBST(FIM_CXXFLAGS)
 
@@ -484,6 +487,7 @@ if test x$fim_handle_png = xyes; then
                 AC_MSG_ERROR([LIBPNG not found])
         else
                 LIBPNG_CFLAGS=`$LIBPNG_CONFIG --cflags`
+                LIBPNG_CXXFLAGS=`$LIBPNG_CONFIG --cflags`
                 LIBPNG_LIBS=`$LIBPNG_CONFIG --libs`
 		# finish this !
                 FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPng.o"
@@ -493,6 +497,50 @@ if test x$fim_handle_png = xyes; then
 fi
 
 #AM_CONDITIONAL(BUILD_PNG, test x$fim_handle_png = xyes)
+
+dnl ================================================================================
+
+## sdl driver
+
+AC_ARG_WITH(sdl-prefix, AC_HELP_STRING([--with-sdl-prefix=PFX], [prefix where libsdl is installed (optional)]),
+libsdl_config_prefix="$withval", libsdl_config_prefix="")
+
+fim_handle_sdl=no
+
+dnl AC_ARG_ENABLE(sdl, AC_HELP_STRING([--disable-sdl], [Disable libsdl support.]),
+dnl [       if test x$enableval = xno ; then
+dnl 		fim_handle_sdl=no
+dnl         fi
+dnl ])
+
+AC_ARG_ENABLE(sdl, AC_HELP_STRING([--enable-sdl], [Enable libsdl support.]),
+[       if test x$enableval = xyes ; then
+		fim_handle_sdl=yes
+        fi
+])
+
+# tested with sdl 1.2
+if test x$fim_handle_sdl = xyes; then
+	# support for custom library configurator path
+        if test x$libsdl_config_prefix != x; then
+                LIBSDL_CONFIG="$libsdl_config_prefix/bin/sdl-config"
+        else
+		# default path configurator
+                AC_PATH_PROG(LIBSDL_CONFIG, sdl-config, no)
+        fi
+        if test "x$LIBSDL_CONFIG" = "xno"; then
+                AC_MSG_ERROR([LIBSDL not found])
+        else
+                LIBSDL_CFLAGS=`$LIBSDL_CONFIG --cflags`
+                FIM_CXXFLAGS="$FIM_CXXFLAGS $LIBSDL_CFLAGS"
+                LIBSDL_LIBS=`$LIBSDL_CONFIG --libs`
+		# finish this !
+                #FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS SDLDevice.o"
+                FIMLIBS="$FIMLIBS $LIBSDL_LIBS"
+                AC_DEFINE(FIM_WITH_LIBSDL, 1, [Defined, if libsdl support is enabled])
+        fi
+fi
+
 
 
 #AC_DEFINE([FIM_DEFAULT_KEY_CONFIG]   ,1, [Defined, if GPGME support is enabled])
@@ -966,6 +1014,8 @@ AH_TEMPLATE([FIM_USE_DESIGNATED_INITIALIZERS])
 dnl AC_DEFINE([FIM_USE_DESIGNATED_INITIALIZERS])
 dnl AH_TEMPLATE([FIM_IS_SLOWER_THAN_FBI])
 dnl AC_DEFINE([FIM_IS_SLOWER_THAN_FBI])
+dnl AH_TEMPLATE([FIM_WITH_LIBSDL])
+dnl AC_DEFINE([FIM_WITH_LIBSDL])
 
 
 dnl ==================
@@ -1019,6 +1069,7 @@ AC_MSG_NOTICE([
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
 	ascii art (aalib) support           : ${fim_cv_aalib}
+	X (sdllib) experimental support     : ${fim_handle_sdl}
 dnl	coloured ascii art (cacalib) support: ${fim_cv_cacalib}
 
 

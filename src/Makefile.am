@@ -72,6 +72,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	fim.h \
 	AADevice.h \
 	CACADevice.h \
+	SDLDevice.h \
 	Arg.h \
 	Browser.h \
 	Cache.h \
@@ -104,12 +105,14 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	string.h \
 	AADevice.cpp \
 	CACADevice.cpp \
+	SDLDevice.cpp \
 	Arg.cpp \
 	Browser.cpp \
 	Cache.cpp \
 	Command.cpp \
 	CommandConsole.cpp \
 	DebugConsole.cpp \
+	DisplayDevice.cpp \
 	FbiStuff.cpp \
 	FbiStuffFbtools.cpp \
 	FbiStuffLoader.cpp \
@@ -182,6 +185,7 @@ EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
 #AM_CPPFLAGS=${DEFINES} # ${FIM_CFLAGS} @FIM_DEFS@
 AM_CPPFLAGS=
 #AM_CXXFLAGS=-I . -I ..
+AM_CXXFLAGS=$(FIM_CXXFLAGS)
 #AM_LDFLAGS=${FIM_CFLAGS}
 
 fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)

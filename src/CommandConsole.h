@@ -140,7 +140,9 @@ class CommandConsole
 	void record_action(const fim::string &cmd);
 #endif
 
+	public:
 	int fim_stdin;	// the standard input file descriptor
+	private:
 	char prompt[2];
 
 #ifndef FIM_NOSCRIPTING

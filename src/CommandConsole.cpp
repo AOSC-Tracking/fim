@@ -451,6 +451,20 @@ namespace fim
 
 		setVariable("_TERM", getenv("TERM"));
 
+		#ifdef FIM_WITH_LIBSDL
+		/* EXPERIMENTAL */
+		if(getenv("DISPLAY") && g_fim_no_framebuffer )
+		{	/* check to see if we are under X */
+			DisplayDevice *sdld=NULL;
+			sdld=new SDLDevice(); if(sdld && sdld->initialize()!=0){delete sdld ; sdld=NULL;}
+			if(sdld && g_fim_no_framebuffer && displaydevice==NULL)
+			{
+				displaydevice=sdld;
+				setVariable("_device_driver", "sdl");
+			}
+		}
+		#endif
+
 		#ifdef FIM_WITH_CACALIB
 		DisplayDevice *cacad=NULL;
 		cacad=new CACADevice(); if(cacad && cacad->initialize()!=0){delete cacad ; cacad=NULL;}
@@ -1169,11 +1183,9 @@ namespace fim
 				 * so the next code shoul circumvent this behaviour!
 				 */
 				
+				r=displaydevice->get_input(&c);
 #ifdef  FIM_SWITCH_FIXUP
-				/*
-				 * this way the console switches the right way :
-				 * the following code taken live from the original fbi.c
-				 */
+#if 0
 				{
 				fd_set set;
 				int fdmax;
@@ -1181,7 +1193,7 @@ namespace fim
 				int timeout=1,rc,paused=0;
 	
 			        FD_ZERO(&set);
-			        FD_SET(fim_stdin, &set);
+			        FD_SET(cc.fim_stdin, &set);
 			        fdmax = 1;
 #ifdef FBI_HAVE_LIBLIRC
 				/*
@@ -1199,16 +1211,19 @@ namespace fim
 				if(framebufferdevice.handle_console_switch())	/* this may have side effects, though */
 					continue;
 				
-				if (FD_ISSET(fim_stdin,&set))rc = read(fim_stdin, &c, 4);
+				if (FD_ISSET(cc.fim_stdin,&set))rc = read(cc.fim_stdin, &c, 4);
 				r=rc;
 				c=int2msbf(c);
 				}
+
+#endif
 #else	
 				/*
 				 * this way the console switches the wrong way
 				 */
 				r=read(fim_stdin,&c,4);	//up to four chars should suffice
 #endif
+
 #ifdef	FIM_USE_GPM
 /*
 				Gpm_Event *EVENT;
