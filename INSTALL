@@ -79,7 +79,8 @@ apt-get install libpng-dev
 apt-get install libjpeg-dev
 apt-get install libtiff-dev
 apt-get install flex
-apt-get install bison
+# apt-get install autoconf
+
 ...
 
 Note: it is not necessary to install these libraries versions (i.e.: libreadline5-dev), but the right packages.
