@@ -104,33 +104,36 @@ Yet unimplemented features :
 
  ______________________________________________________________________________
 
- \ Program :            kuickshow eog [xz]gv    fbi   FIM GQview dfbsee
+ \ Program :            kuickshow eog [xz]gv    fbi   FIM GQview dfbsee	pv
  ______________________________________________________________________________
  Features :
 
- status:(a)lpha/(m)ature   m       m   m         a     m     m    m
- environment(f=framebuffer)X      X  X,svga      f     f     X    f
- linux specific                        ?         *     *          *
- key rebindings            *                           *     *
- external scriptability(bash,..)                 ~     *
- internal scriptability                                *
- internal scriptability minilanguage                   * 
- printing support          *       *   ?                     *
- slideshow                 *       *             *     *     *    *
- caching                   *       ?                   *     *
- preview browser           *                                 *
- EXIF tag display          *                     *           *
- internal windowing                                    *
- internal image search                                 *
- external image search                                       *
- 'pan views' ('rich' views)                                  *
- system interaction        *                           *     *
- system interaction safe   *
- remote commands                                             *
- saves last folder         *                                 *
- runs under screen                                     *
- standard input file list read                         *
+ status:(a)lpha/(m)ature   m       m   m         a     m     m    m	m
+ environment(f=framebuffer)X      X  X,svga      f     f     X    f	X
+ linux specific                        ?         *     *          *	*
+ key rebindings            *                           *     *		
+ external scriptability(bash,..)                 ~     *		~
+ internal scriptability                                *		
+ internal scriptability minilanguage                   * 		
+ printing support          *       *   ?                     *		
+ slideshow                 *       *             *     *     *    *	*
+ caching                   *       ?                   *     *		
+ preview browser           *                                 *		
+ EXIF tag display          *                     *           *		
+ internal windowing                                    *		
+ internal image search                                 *		
+ external image search                                       *		
+ 'pan views' ('rich' views)                                  *		
+ system interaction        *                           *     *		
+ system interaction safe   *						
+ remote commands                                             *		
+ saves last folder         *                                 *		
+ runs under screen                                     *		
+ standard input file list read                         *		
+ rotation		   *	?    ?           ?     *     ?    ?     *
  mirroring                 ....
+
+Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/) ...
 
  ______________________________________________________________________________
  
