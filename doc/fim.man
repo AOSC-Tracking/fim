@@ -90,6 +90,12 @@ No initialization file will be read (default is ~/.fimrc) at startup.
 .B -p, --script-from-stdin
 Will read commands from stdin prior to entering in interactive mode.
 .TP
+.B -o {device}, --output-device {device}
+Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.
+The available devices depend on the original configuration/compilation options, so you should
+get the list of available output devices issuing \fBfim --version\fP.
+It will probably be a subset  of {\fBsdl\fP, \fBfb\fP, \fBaa\fP, \fBcaca\fP, \fBdumb\fP}.
+.TP
 .B -P, --text-reading
 Enable textreading mode.  This has the effect that fim will display
 images scaled to the width of the screen, and aligned to the top.
