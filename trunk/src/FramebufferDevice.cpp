@@ -1699,3 +1699,9 @@ int FramebufferDevice::display(
 	return 0;
 }
 
+void FramebufferDevice::finalize (void)
+{
+	clear_screen();
+	cc.tty_restore();
+	cleanup();
+}

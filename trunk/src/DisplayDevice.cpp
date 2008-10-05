@@ -24,12 +24,27 @@
 
 	int DisplayDevice::get_input(int * c)
 	{
+		/*
+		 * It is sad to place this functionality here, but often the input subsystem 
+		 * is tightly bound to the output device.
+		 * */
 			int r=0;
-				/*
-				 * this way the console switches the right way :
-				 * the following code taken live from the original fbi.c
-				 */
-				{
+#ifdef  FIM_SWITCH_FIXUP
+			/*
+			 * this way the console switches the right way :
+			 * the following code taken live from the original fbi.c
+			 */
+
+			/*
+			 * patch: the following read blocks the program even when switching console
+			 */
+			//r=read(fim_stdin,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
+			/*
+			 * so the next coded shoul circumvent this behaviour!
+			 */
+			{
+				cc.tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
+
 				fd_set set;
 				int fdmax;
 				struct timeval  limit;
@@ -57,8 +72,55 @@
 				if (FD_ISSET(cc.fim_stdin,&set))rc = read(cc.fim_stdin, c, 4);
 				r=rc;
 				*c=int2msbf(*c);
-				}
+			}
+#else	
+			/*
+			 * this way the console switches the wrong way
+			 */
+			r=read(fim_stdin,&c,4);	//up to four chars should suffice
+#endif
 
-				return r;
+
+			return r;
+	}
+
+	int DisplayDevice::catchInteractiveCommand(int seconds)const
+	{
+		/*	
+		 *
+		 *	THIS DOES NOT WORK, BECAUSE IT IS A BLOCKING READ.
+		 *	MAKE THIS READ UNBLOCKING AN UNCOMMENT. <- ?
+		 *	
+		 *	FIX ME
+		 *
+		 *	NOTE : this call should 'steal' circa 1/10 of second..
+		 */
+		fd_set          set;
+		FD_SET(0, &set);
+
+		struct termios tattr;
+		struct termios sattr;
+		//we set the terminal in raw mode.
+		    
+	//	fcntl(0,F_GETFL,&saved_fl);
+		tcgetattr (0, &sattr);
+
+		//fcntl(0,F_SETFL,O_BLOCK);
+		memcpy(&tattr,&sattr,sizeof(struct termios));
+		tattr.c_lflag &= ~(ICANON|ECHO);
+		tattr.c_cc[VMIN]  = 0;
+		tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
+		tcsetattr (0, TCSAFLUSH, &tattr);
+		
+		int c,r;//char buf[64];
+		//r=read(fim_stdin,&c,4);
+		r=read(cc.fim_stdin,&c,1); if(r>0&&c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
+
+		//we restore the previous console attributes
+		tcsetattr (0, TCSAFLUSH, &sattr);
+
+		if( r<=0 ) return -1;	/*	-1 means 'no character pressed	*/
+
+		return c;		/*	we return the read key		*/
 	}
 

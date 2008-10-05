@@ -375,7 +375,7 @@ class FramebufferDevice:public DisplayDevice
 	void cleanup(void);
 
 	int initialize (void){/*still unused : FIXME */ ;return 0;}
-	void finalize (void){/*still unused : FIXME */ ;}
+	void finalize (void);
 	struct fs_font * fb_font_get_current_font(void)
 	{
 	    return f;

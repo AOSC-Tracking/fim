@@ -390,7 +390,11 @@
 		return 0;
 	}
 
-	void AADevice::finalize() { aa_close(ascii_context); }
+	void AADevice::finalize() 
+	{
+		aa_close(ascii_context);
+		cc.tty_restore();		/* somehow necessary to unclutter the terminal (yes, a bug) */
+	}
 	int AADevice::get_chars_per_line(){return aa_scrwidth(ascii_context);}
 	int AADevice::txt_width() { return aa_scrwidth(ascii_context ) ;}
 	int AADevice::txt_height(){ return aa_scrheight(ascii_context) ;}

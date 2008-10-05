@@ -32,7 +32,7 @@
 #define BPP 4
 #define DEPTH 32
 
-	SDLDevice::SDLDevice()
+	SDLDevice::SDLDevice():vi(NULL)
 	{
 		keypress = 0;
 		h=0;
@@ -204,22 +204,34 @@
 		 *
 		 * */
 		if (SDL_Init(SDL_INIT_VIDEO) < 0 ) return 1;
-		if (!(screen = SDL_SetVideoMode(width(), height(), DEPTH, SDL_FULLSCREEN|SDL_HWSURFACE)))
+		//if (!(screen = SDL_SetVideoMode(width(), height(), DEPTH, SDL_FULLSCREEN|SDL_HWSURFACE)))
+		if (!(screen = SDL_SetVideoMode(0, 0, 0, SDL_FULLSCREEN|SDL_HWSURFACE)))
 		{
 			std::cout << "width()  " << width ()<< " .. \n";
 			std::cout << "height() " << height()<< " .. \n";
 			std::cout << "problems initializing sdl .. \n";
 			SDL_Quit();
-			return 1;
+			return -1;
+		}
+		else
+		{
+			vi = SDL_GetVideoInfo();
+			
+			if(!vi)
+				return -1;
 		}
 
 		return 0;
 	}
 
-	void SDLDevice::finalize() { SDL_Quit(); }
-	int SDLDevice::get_chars_per_line(){return 10 ;}
-	int SDLDevice::width() { return 1024 ;}
-	int SDLDevice::height(){ return 768 ;}
+	void SDLDevice::finalize()
+	{
+		//tty_restore();
+		SDL_Quit();
+	}
+	int SDLDevice::get_chars_per_line(){return 10 ;/* FIXME */}
+	int SDLDevice::width()  { return vi?vi->current_w:0 ;}
+	int SDLDevice::height() { return vi?vi->current_h:0 ;}
 
 	void SDLDevice::setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b)
 	{
@@ -240,25 +252,28 @@
 		int keypress=0;
 
 //		while(SDL_PollEvent(&event))
-
 		if(SDL_PollEvent(&event))
 		{
 			*c=event.key.keysym.sym;
-			return 1;
 
 			switch (event.type)
 			{
 				case SDL_QUIT:
 				keypress = 1;
+
 				break;
 				case SDL_KEYDOWN:
-				keypress = 1;
-				if(event.key.keysym.sym == SDLK_UP )
-				keypress = 2;
+				if(event.key.keysym.mod == KMOD_SHIFT )
+				{
+					*c=event.key.keysym.sym;
+					*c -= 's'-'S';	/* *c -= 0x20 */
+				}
 				break;
 			}
+			return 1;
 		}
-		return keypress;
+
+		return 0;
 	}
 
 
@@ -271,12 +286,12 @@
 			if(SDL_LockSurface(screen) < 0) return -1;
 		}
 
+		/*
+		 * This could be optimized
+		 * */
 		for(y=y1;y<y2;++y)
 		{
-			ytimesw = (y)*screen->pitch/BPP;
-			for(x=x1;x<x2;++x)
-				setpixel(screen, x, ytimesw,0,0,0);
-
+			bzero(((Uint32*)(screen->pixels)) + y*screen->pitch/BPP + x, (x2-x1)* sizeof(Uint32));
 		}
 			
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);

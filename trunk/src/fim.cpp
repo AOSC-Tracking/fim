@@ -49,6 +49,7 @@ using std :: vector;
  * Global variables.
  * */
 	int g_fim_no_framebuffer=1;
+	fim::string g_fim_output_device;
 	FlexLexer *lexer;
 
 /*
@@ -104,6 +105,7 @@ struct option fim_options[] = {
     {"image-from-stdin",      no_argument,       NULL, 'i'},
     {"script-from-stdin",      no_argument,       NULL, 'p'},
     {"write-scriptout",      required_argument,       NULL, 'W'},
+    {"output-device",      required_argument,       NULL, 'o'},
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -210,6 +212,24 @@ class FimInstance
 #else
 	#include "version.h"
 #endif
+	/* i think some flags are missing .. */
+		"\n\nAvailable output devices (for --output-device) : "
+	#ifdef FIM_WITH_AALIB
+		" aa"
+	#endif
+	#ifdef FIM_WITH_CACALIB
+		" caca"
+	#endif
+	#ifdef FIM_WITH_LIBSDL
+		" sdl"
+	#endif
+	#if 1
+		" fb"
+	#endif
+	#if 1
+		" dumb"
+	#endif
+		"\n"
 			    );
 	}
 
@@ -268,11 +288,12 @@ int help_and_exit(char *argv0, int code=0)
 		bool appendedPostInitCommand=false;
 		Image* stream_image=NULL;
 		g_fim_no_framebuffer=0;
+	    	g_fim_output_device="";
 	
 		setlocale(LC_ALL,"");	//uhm..
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:",
+		    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:",
 				fim_options, &opt_index);
 		if (c == -1)
 		    break;
@@ -461,6 +482,10 @@ int help_and_exit(char *argv0, int code=0)
 		    //fim's
 		    	g_fim_no_framebuffer=1;
 		    break;
+		case 'o':
+		    //fim's
+		    	g_fim_output_device=optarg;
+		    break;
 	#ifdef FIM_READ_STDIN
 		case '-':
 		    //fim's
@@ -593,7 +618,33 @@ int help_and_exit(char *argv0, int code=0)
 		)
 			help_and_exit(argv[0],-1);
 	
-		if((g_fim_no_framebuffer)==0)
+
+		/* output device guess */
+		if( g_fim_output_device=="" )
+			#ifdef FIM_WITH_LIBSDL
+			/* check to see if we are under X */
+			if(getenv("DISPLAY") && g_fim_no_framebuffer )
+			{
+				g_fim_output_device="sdl";
+			}
+			else
+			#endif
+			if( g_fim_no_framebuffer )
+			{
+				#ifdef FIM_WITH_AALIB
+				g_fim_output_device="aa";
+				#else
+				#ifdef FIM_WITH_CACALIB
+				g_fim_output_device="caca";
+				#else
+				g_fim_output_device="dumb";
+				#endif
+				#endif
+			}
+			else
+				g_fim_output_device="fb";
+
+		if((g_fim_no_framebuffer)==0 && g_fim_output_device=="fb")
 		{
 			if(default_fbdev)ffd.set_fbdev(default_fbdev);
 			if(default_fbmode)ffd.set_fbmode(default_fbmode);
@@ -602,7 +653,8 @@ int help_and_exit(char *argv0, int code=0)
 			if(ffd.framebuffer_init())cc.cleanup_and_exit(0);
 			cc.tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 		}
-		if(cc.init()!=0) return -1;
+
+		if(cc.init(g_fim_output_device)!=0) return -1;
 	
 	//	ffd.test_drawing();
 		//while(1);

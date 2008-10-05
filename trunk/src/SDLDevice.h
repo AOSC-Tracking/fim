@@ -31,6 +31,7 @@ class SDLDevice:public DisplayDevice
 
 	SDL_Surface *screen;
 	SDL_Event event;
+	const SDL_VideoInfo* vi;
 
 	int keypress ;
 	int h;
@@ -75,6 +76,7 @@ class SDLDevice:public DisplayDevice
 	void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
 
 	int get_input(int * c);
+	int catchInteractiveCommand(int seconds)const{}
 };
 
 

@@ -443,21 +443,22 @@ namespace fim
                 return true;
         }
 
-	int CommandConsole::init()
+	int CommandConsole::init(string device)
 	{
 
 		displaydevice=NULL;
 		int xres=0,yres=0;
 
+		/*  */
 		setVariable("_TERM", getenv("TERM"));
 
 		#ifdef FIM_WITH_LIBSDL
-		/* EXPERIMENTAL */
-		if(getenv("DISPLAY") && g_fim_no_framebuffer )
-		{	/* check to see if we are under X */
+		if(device=="sdl")
+		{
+			/* EXPERIMENTAL */
 			DisplayDevice *sdld=NULL;
 			sdld=new SDLDevice(); if(sdld && sdld->initialize()!=0){delete sdld ; sdld=NULL;}
-			if(sdld && g_fim_no_framebuffer && displaydevice==NULL)
+			if(sdld && displaydevice==NULL)
 			{
 				displaydevice=sdld;
 				setVariable("_device_driver", "sdl");
@@ -466,18 +467,23 @@ namespace fim
 		#endif
 
 		#ifdef FIM_WITH_CACALIB
-		DisplayDevice *cacad=NULL;
-		cacad=new CACADevice(); if(cacad && cacad->initialize()!=0){delete cacad ; cacad=NULL;}
-		if(cacad && g_fim_no_framebuffer && displaydevice==NULL)
+		if(device=="caca")
 		{
-			displaydevice=cacad;
-			setVariable("_device_driver", "cacalib");
+			DisplayDevice *cacad=NULL;
+			cacad=new CACADevice(); if(cacad && cacad->initialize()!=0){delete cacad ; cacad=NULL;}
+			if(cacad && displaydevice==NULL)
+			{
+				displaydevice=cacad;
+				setVariable("_device_driver", "cacalib");
+			}
 		}
 		#endif
 
 		#ifdef FIM_WITH_AALIB
+		if(device=="aa")
+		{
 		aad=new AADevice(); if(aad && aad->initialize()!=0){delete aad ; aad=NULL;}
-		if(aad && g_fim_no_framebuffer && displaydevice==NULL)
+		if(aad && displaydevice==NULL)
 		{
 			displaydevice=aad;
 			setVariable("_device_driver", "aalib");
@@ -500,13 +506,15 @@ namespace fim
 			}
 #endif
 		}
+		}
 		#endif
 
 #ifdef FIM_USE_READLINE
 		rl::initialize_readline( !displaydevice && g_fim_no_framebuffer);
 #endif
 
-		if(!g_fim_no_framebuffer && displaydevice==NULL)
+		//if(!g_fim_no_framebuffer && displaydevice==NULL)
+		if( device=="fb" && displaydevice==NULL)
 		{
 			displaydevice=&framebufferdevice;
 			setVariable("_device_driver", "fbdev");
@@ -997,8 +1005,8 @@ namespace fim
 		//exitBinding = 10;
 		if ( exitBinding == 0 ) return 1;	/* any key triggers an exit */
 
-		c = catchInteractiveCommand(seconds);
-	//	while((c = catchInteractiveCommand(seconds))!=-1)
+		c = displaydevice->catchInteractiveCommand(seconds);
+	//	while((c = displaydevice.catchInteractiveCommand(seconds))!=-1)
 		while(c!=-1)
 		{
 			/* while characters read */
@@ -1012,7 +1020,7 @@ namespace fim
 				 * is it a desirable behaviour ?
 				 */
 				executeBinding(c);
-				c = catchInteractiveCommand(1);
+				c = displaydevice->catchInteractiveCommand(1);
 //				return 0;/* could be a command key */
 			}
 			if(c==exitBinding) return 1; 		/* the user hit the exitBinding key */
@@ -1026,45 +1034,6 @@ namespace fim
 
 	}
 		
-	int CommandConsole::catchInteractiveCommand(int seconds)const
-	{
-		/*	
-		 *
-		 *	THIS DOES NOT WORK, BECAUSE IT IS A BLOCKING READ.
-		 *	MAKE THIS READ UNBLOCKING AN UNCOMMENT. <- ?
-		 *	
-		 *	FIX ME
-		 *
-		 *	NOTE : this call should 'steal' circa 1/10 of second..
-		 */
-		fd_set          set;
-		FD_SET(0, &set);
-
-		struct termios tattr;
-		struct termios sattr;
-		//we set the terminal in raw mode.
-		    
-	//	fcntl(0,F_GETFL,&saved_fl);
-		tcgetattr (0, &sattr);
-
-		//fcntl(0,F_SETFL,O_BLOCK);
-		memcpy(&tattr,&sattr,sizeof(struct termios));
-		tattr.c_lflag &= ~(ICANON|ECHO);
-		tattr.c_cc[VMIN]  = 0;
-		tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
-		tcsetattr (0, TCSAFLUSH, &tattr);
-		
-		int c,r;//char buf[64];
-		//r=read(fim_stdin,&c,4);
-		r=read(fim_stdin,&c,1); if(r>0&&c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
-
-		//we restore the previous console attributes
-		tcsetattr (0, TCSAFLUSH, &sattr);
-
-		if( r<=0 ) return -1;	/*	-1 means 'no character pressed	*/
-
-		return c;		/*	we return the read key		*/
-	}
 
 #ifdef	FIM_USE_GPM
 /*
@@ -1163,7 +1132,6 @@ namespace fim
 			{
 				*prompt='\0';
 				int c,r;char buf[64];
-				tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 //				int c=getchar();
 //				int c=fgetc(stdin);
 				/*
@@ -1175,55 +1143,8 @@ namespace fim
 				 *	the keyboard is needed!.
 				 */
 				c=0;
-				/*
-				 * patch: the following read blocks the program even when switching console
-				 */
-				//r=read(fim_stdin,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
-				/*
-				 * so the next code shoul circumvent this behaviour!
-				 */
 				
 				r=displaydevice->get_input(&c);
-#ifdef  FIM_SWITCH_FIXUP
-#if 0
-				{
-				fd_set set;
-				int fdmax;
-				struct timeval  limit;
-				int timeout=1,rc,paused=0;
-	
-			        FD_ZERO(&set);
-			        FD_SET(cc.fim_stdin, &set);
-			        fdmax = 1;
-#ifdef FBI_HAVE_LIBLIRC
-				/*
-				 * expansion code :)
-				 */
-			        if (-1 != lirc) {
-			            FD_SET(lirc,&set);
-			            fdmax = lirc+1;
-			        }
-#endif
-			        limit.tv_sec = timeout;
-			        limit.tv_usec = 0;
-			        rc = select(fdmax, &set, NULL, NULL,
-			                    (0 != timeout && !paused) ? &limit : NULL);
-				if(framebufferdevice.handle_console_switch())	/* this may have side effects, though */
-					continue;
-				
-				if (FD_ISSET(cc.fim_stdin,&set))rc = read(cc.fim_stdin, &c, 4);
-				r=rc;
-				c=int2msbf(c);
-				}
-
-#endif
-#else	
-				/*
-				 * this way the console switches the wrong way
-				 */
-				r=read(fim_stdin,&c,4);	//up to four chars should suffice
-#endif
-
 #ifdef	FIM_USE_GPM
 /*
 				Gpm_Event *EVENT;
@@ -1240,7 +1161,7 @@ namespace fim
 						sprintf(buf,"got : %x (%d)\n",c,c);
 						cout << buf ;
 					}
-					tty_restore();
+					//tty_restore();	/*commented 20081005 : seems useless, but i'm not sure */
 #ifndef FIM_USE_READLINE
 					if(c==getIntVariable("console_key") || 
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
@@ -2381,22 +2302,12 @@ namespace fim
 	 */
 	void CommandConsole::cleanup_and_exit(int code)
 	{
-		if(g_fim_no_framebuffer)
-		{
-		//	tty_restore();
-			/*
-			 * the display device should exit cleanly to avoid cluttering the console
-			 * */
-			if(displaydevice) displaydevice->finalize();
-			std::exit(code);
-		}
-		else
-		{
-			framebufferdevice.clear_screen();
-			tty_restore();
-			framebufferdevice.cleanup();
-			std::exit(code);
-		}
+		/*
+		 * the display device should exit cleanly to avoid cluttering the console
+		 * ... or the window system
+		 * */
+		if(displaydevice) displaydevice->finalize();
+		std::exit(code);
 	}
 
 	/*
