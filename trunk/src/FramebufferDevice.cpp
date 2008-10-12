@@ -113,13 +113,61 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 #endif
 	/* draw char */
 	start = pos + x*fs_bpp + fb_fix.line_length * (f->height-f->eindex[c]->ascent);
-	fontserver.fs_render_fb(start,fb_fix.line_length,f->eindex[c],f->gindex[c]);
+	fs_render_fb(start,fb_fix.line_length,f->eindex[c],f->gindex[c]);
 	x += f->eindex[c]->width;
 	if (x > fb_var.xres - f->width)
 	    return -1;
     }
     return x;
 }
+
+void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data)
+{
+
+/* 
+ * These preprocessor macros should serve *only* for font handling purposes.
+ * */
+#define BIT_ORDER       BitmapFormatBitOrderMSB
+#ifdef BYTE_ORDER
+#undef BYTE_ORDER
+#endif
+#define BYTE_ORDER      BitmapFormatByteOrderMSB
+#define SCANLINE_UNIT   BitmapFormatScanlineUnit8
+#define SCANLINE_PAD    BitmapFormatScanlinePad8
+#define EXTENTS         BitmapFormatImageRectMin
+
+#define SCANLINE_PAD_BYTES 1
+#define GLWIDTHBYTESPADDED(bits, nBytes)                                    \
+        ((nBytes) == 1 ? (((bits)  +  7) >> 3)          /* pad to 1 byte  */\
+        :(nBytes) == 2 ? ((((bits) + 15) >> 3) & ~1)    /* pad to 2 bytes */\
+        :(nBytes) == 4 ? ((((bits) + 31) >> 3) & ~3)    /* pad to 4 bytes */\
+        :(nBytes) == 8 ? ((((bits) + 63) >> 3) & ~7)    /* pad to 8 bytes */\
+        : 0)
+
+    int row,bit,bpr,x;
+
+    bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left),
+			     SCANLINE_PAD_BYTES);
+    for (row = 0; row < (charInfo->ascent + charInfo->descent); row++) {
+	for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++) {
+	    if (data[bit>>3] & fs_masktab[bit&7])
+		// WARNING !
+		fs_setpixel(ptr+x,fs_white);
+	    x += fs_bpp;
+	}
+	data += bpr;
+	ptr += pitch;
+    }
+
+#undef BIT_ORDER
+#undef BYTE_ORDER
+#undef SCANLINE_UNIT
+#undef SCANLINE_PAD
+#undef EXTENTS
+#undef SCANLINE_PAD_BYTES
+#undef GLWIDTHBYTESPADDED
+}
+
 
 	int FramebufferDevice::framebuffer_init()
 	{
