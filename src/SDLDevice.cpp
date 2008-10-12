@@ -261,7 +261,6 @@
 //		while(SDL_PollEvent(&event))
 		if(SDL_PollEvent(&event))
 		{
-			*c=event.key.keysym.sym;
 
 			switch (event.type)
 			{
@@ -270,7 +269,12 @@
 
 				break;
 				case SDL_KEYDOWN:
-				if(event.key.keysym.mod == KMOD_SHIFT )
+				*c=event.key.keysym.sym;
+
+				if(event.key.keysym.mod == KMOD_SHIFT 
+				&&
+				event.key.keysym.sym!=':'
+				)
 				{
 					/*
 					 * Warning : 
@@ -282,12 +286,37 @@
 					*c=event.key.keysym.sym;
 					*c -= 's'-'S';	/* *c -= 0x20 */
 				}
+				return 1;
 				break;
 			}
-			return 1;
+			return 0;
 		}
 
 		return 0;
+	}
+
+
+	int SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
+	{
+		/* FIXME ! WON'T WORK FOR NON 322 BIT MODES*/
+		int x,y,ytimesw;
+
+		if(SDL_MUSTLOCK(screen))
+		{
+			if(SDL_LockSurface(screen) < 0) return -1;
+		}
+
+		/*
+		 * This could be optimized
+		 * */
+		for(y=y1;y<y2;++y)
+		{
+			memset(((Uint32*)(screen->pixels)) + y*screen->pitch/BPP + x,color, (x2-x1)* sizeof(Uint32));
+		}
+			
+		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+
+		SDL_Flip(screen);
 	}
 
 
@@ -348,7 +377,6 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char
 	    if (data[bit>>3] & fs_masktab[bit&7])
 	{	// WARNING !
 		setpixel(screen,x_+x,(y+row)*screen->pitch/BPP,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
-		std::cout << x_+x << " " << y+row << "\n";
 		}
 	    x += BPP/BPP;/* FIXME */
 	}
@@ -420,8 +448,8 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 		//if (!visible) return 0;
 		y = height() - f->height - ys;
 		clear_rect(0, width()-1, y+1,y+f->height+ys);
-		clear_rect(0, width()-1, y,y);	// FIXME : SHOULD GO WHITE
 		fs_puts(f, 0, y+ys, msg);
+		fill_rect(0,width()-1, y, y+1, 0xFF);	// FIXME : NO 1!
 
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
 		SDL_Flip(screen);

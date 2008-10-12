@@ -38,6 +38,11 @@ namespace fim
 	extern CommandConsole cc;
 }
 
+/*
+ * in fim.cpp
+ * */
+extern fim::string g_fim_output_device;
+
 namespace rl
 {
 /* 
@@ -147,6 +152,30 @@ static int redisplay_hook_no_fb()
 	return 0;
 }*/
 
+#ifdef FIM_WITH_LIBSDL
+int rl_sdl_getc_hook()
+{
+	int c;
+	c=0;
+	if(cc.displaydevice->get_input(&c)==1)
+	{
+		std::cout << "char in : "<< (char)c <<" !\n";
+		rl_stuff_char(c);
+		return 1;
+	}
+	//return cc.displaydevice->getc(fd);
+	return 0;	
+}
+
+
+int rl_sdl_getc(FILE * fd)
+{
+	return 0;/* yes, a dummy function instead of getc() */
+}
+#endif
+
+
+
 static int redisplay_hook()
 {
 	redisplay();
@@ -171,6 +200,7 @@ static int redisplay_hook()
 	return 0;
 }*/
 
+
 /*
  *	initial setup to set the readline library working
  */
@@ -185,11 +215,19 @@ void initialize_readline (int with_no_display_device)
 
 	if(with_no_display_device==0)
 	{
+
 		rl_catch_signals=0;
 		rl_catch_sigwinch=0;
 		rl_redisplay_function=redisplay;
 	        rl_event_hook=redisplay_hook;
 	        rl_pre_input_hook=redisplay_hook;
+	#ifdef FIM_WITH_LIBSDL
+		if((g_fim_no_framebuffer)==0 && g_fim_output_device=="sdl")
+		{
+			rl_getc_function=rl_sdl_getc;
+			rl_event_hook   =rl_sdl_getc_hook;
+		}
+	#endif
 	}
 	//rl_completion_entry_function=NULL;
 	/*

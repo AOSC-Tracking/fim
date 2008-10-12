@@ -80,6 +80,7 @@ class SDLDevice:public DisplayDevice
 	
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
 	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
+	int fill_rect(int x1, int x2, int y1,int y2, int color);
 };
 
 
