@@ -28,6 +28,10 @@ class DisplayDevice
 	 * The generalization of a Fim output device.
 	 */
 	public:
+	struct fs_font *f;
+	char* fontname;
+	public:
+	DisplayDevice();
 	virtual int initialize()=0;
 	virtual void  finalize()=0;
 
@@ -56,6 +60,7 @@ class DisplayDevice
 
 	int redraw;
 	private:
+	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
 };
 
 #endif

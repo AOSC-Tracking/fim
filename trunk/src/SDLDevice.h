@@ -60,7 +60,7 @@ class SDLDevice:public DisplayDevice
 	int txt_height() ;
 	int width() ;
 	int height() ;
-	int status_line(unsigned char *msg) { return 0; }
+	int status_line(unsigned char *msg);
 	void status_screen(int desc,int draw_output){ return ; }
 	int console_control(int code){return 0;}
 	int handle_console_switch(){return 0;}
@@ -77,6 +77,9 @@ class SDLDevice:public DisplayDevice
 
 	int get_input(int * c);
 	int catchInteractiveCommand(int seconds)const{}
+	
+	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
+	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
 };
 
 
