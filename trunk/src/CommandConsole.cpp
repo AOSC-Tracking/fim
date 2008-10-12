@@ -1166,7 +1166,9 @@ namespace fim
 					if(c==getIntVariable("console_key") || 
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
 #else
-					if(c==getIntVariable("console_key")){ic=1;*prompt=':';}	//should be configurable..
+					if(c==getIntVariable("console_key")
+					||c=='.'	/* FIXME : TEMPORARY */
+					){ic=1;*prompt=':';}	//should be configurable..
 					else if(c=='/')
 					{
 						/*
