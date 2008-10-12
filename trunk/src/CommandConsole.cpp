@@ -520,7 +520,7 @@ namespace fim
 			setVariable("_device_driver", "fbdev");
 		}
 
-		if( g_fim_no_framebuffer && displaydevice==NULL)
+		if( /* g_fim_no_framebuffer && */ displaydevice==NULL)
 		{
 			displaydevice=&dummydisplaydevice;
 			setVariable("_device_driver", "dummy");

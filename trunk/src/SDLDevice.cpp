@@ -241,7 +241,7 @@
 		Uint32 *pixmem32;
 		Uint32 colour;
 
-		colour = SDL_MapRGB( screen->format, r, g, b );
+		colour = SDL_MapRGB( screen->format, b, g, r );
 
 		pixmem32 = (Uint32*) screen->pixels  + y + x;
 		*pixmem32 = colour;
@@ -265,6 +265,13 @@
 				case SDL_KEYDOWN:
 				if(event.key.keysym.mod == KMOD_SHIFT )
 				{
+					/*
+					 * Warning : 
+					 *
+					 * We assume that the SDLK_* values are the same as the corresponding
+					 * kernel key codes.
+					 *
+					 * */
 					*c=event.key.keysym.sym;
 					*c -= 's'-'S';	/* *c -= 0x20 */
 				}
