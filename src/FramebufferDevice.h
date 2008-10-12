@@ -162,7 +162,6 @@ class FramebufferDevice:public DisplayDevice
 #endif
 	private:
 	FontServer fontserver;
-	char* fontname;
 
 	int             vt ;
 	float fbgamma ;
@@ -182,7 +181,6 @@ class FramebufferDevice:public DisplayDevice
 	int visible ;
 
 	/* private */
-	struct fs_font *f;
 	char *x11_font ;
 
 	int ys ;
@@ -361,7 +359,6 @@ class FramebufferDevice:public DisplayDevice
 	void fb_rect(int x1, int x2, int y1,int y2);
 
 	void fb_setpixel(int x, int y, unsigned int color);
-
 	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
 
 	void fb_clear_rect(int x1, int x2, int y1,int y2);

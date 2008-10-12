@@ -620,7 +620,7 @@ void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
     
     i = (c & 0xff) << 8;
     i |= i << 16;
-    len >>= 2;
+    len >>= 2;	/* FIXME : WHY ? */
 #ifdef FIM_IS_SLOWER_THAN_FBI
     unsigned int *p;
     for (p = (unsigned int*) addr; len--; p++)
@@ -806,8 +806,9 @@ int FramebufferDevice::status_line(unsigned char *msg)
     if (!visible)
 	return 0;
     y = fb_var.yres - f->height - ys;
-    fb_memset(fb_mem + fb_fix.line_length * y, 0,
-	      fb_fix.line_length * (f->height+ys));
+//    fb_memset(fb_mem + fb_fix.line_length * y, 0, fb_fix.line_length * (f->height+ys));
+    fb_clear_rect(0, fb_var.xres-1, y+1,y+f->height+ys);
+
     fb_line(0, fb_var.xres, y, y);
     fs_puts(f, 0, y+ys, msg);
     return 0;
@@ -919,7 +920,7 @@ void FramebufferDevice::fb_clear_rect(int x1, int x2, int y1,int y2)
     ptr += x1 * fs_bpp;
 
     for (y = y1; y <= y2; y++) {
-	fb_memset(ptr, 0, (x2 - x1 + 1) * fs_bpp);
+	fb_memset(ptr, 0, (x2 - x1 + 1) * fs_bpp * 4 /* FIXME : 4 */);
 	ptr += fb_fix.line_length;
     }
 }
@@ -1657,7 +1658,6 @@ void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flag
 
 	FramebufferDevice::FramebufferDevice():
 	fontserver(*this)	/* FIXME : should this be moved to the end ? */
-	,fontname(NULL)	
 	,vt(0)
 	,dither(FALSE)
 	,pcd_res(3)

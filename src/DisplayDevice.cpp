@@ -22,6 +22,8 @@
 #include "fim.h"
 #include "DisplayDevice.h"
 
+	DisplayDevice::DisplayDevice():fontname(NULL){}
+
 	int DisplayDevice::get_input(int * c)
 	{
 		/*

@@ -34,6 +34,7 @@
 
 	SDLDevice::SDLDevice():vi(NULL)
 	{
+		FontServer::fb_text_init1(fontname,&f);
 		keypress = 0;
 		h=0;
 	}
@@ -180,6 +181,8 @@
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
 		{
+
+			ytimesw = (oi)*screen->pitch/BPP;
 			/* UNFINISHED : FIX ME */
 			ii    = oi + idr;
 			ij    = oj + idc;
@@ -229,7 +232,11 @@
 		//tty_restore();
 		SDL_Quit();
 	}
-	int SDLDevice::get_chars_per_line(){return 10 ;/* FIXME */}
+	int SDLDevice::get_chars_per_line()
+	{
+		return width() / f->width;
+	}
+
 	int SDLDevice::width()  { return vi?vi->current_w:0 ;}
 	int SDLDevice::height() { return vi?vi->current_h:0 ;}
 
@@ -307,4 +314,117 @@
 	}
 
 #endif
+
+
+void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char *data)
+{
+
+/* 
+ * These preprocessor macros should serve *only* for font handling purposes.
+ * */
+#define BIT_ORDER       BitmapFormatBitOrderMSB
+#ifdef BYTE_ORDER
+#undef BYTE_ORDER
+#endif
+#define BYTE_ORDER      BitmapFormatByteOrderMSB
+#define SCANLINE_UNIT   BitmapFormatScanlineUnit8
+#define SCANLINE_PAD    BitmapFormatScanlinePad8
+#define EXTENTS         BitmapFormatImageRectMin
+
+#define SCANLINE_PAD_BYTES 1
+#define GLWIDTHBYTESPADDED(bits, nBytes)                                    \
+        ((nBytes) == 1 ? (((bits)  +  7) >> 3)          /* pad to 1 byte  */\
+        :(nBytes) == 2 ? ((((bits) + 15) >> 3) & ~1)    /* pad to 2 bytes */\
+        :(nBytes) == 4 ? ((((bits) + 31) >> 3) & ~3)    /* pad to 4 bytes */\
+        :(nBytes) == 8 ? ((((bits) + 63) >> 3) & ~7)    /* pad to 8 bytes */\
+        : 0)
+
+    int row,bit,bpr,x;
+
+    bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left),
+			     SCANLINE_PAD_BYTES);
+    for (row = 0; row < (charInfo->ascent + charInfo->descent); row++) {
+	for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++) {
+	    if (data[bit>>3] & fs_masktab[bit&7])
+	{	// WARNING !
+		setpixel(screen,x_+x,(y+row)*screen->pitch/BPP,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
+		std::cout << x_+x << " " << y+row << "\n";
+		}
+	    x += BPP/BPP;/* FIXME */
+	}
+	data += bpr;
+    }
+
+#undef BIT_ORDER
+#undef BYTE_ORDER
+#undef SCANLINE_UNIT
+#undef SCANLINE_PAD
+#undef EXTENTS
+#undef SCANLINE_PAD_BYTES
+#undef GLWIDTHBYTESPADDED
+}
+
+int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
+{
+    int i,c,j/*,w*/;
+
+    for (i = 0; str[i] != '\0'; i++) {
+	c = str[i];
+	if (NULL == f->eindex[c])
+	    continue;
+	/* clear with bg color */
+//	w = (f->eindex[c]->width+1)*BPP;
+#if 0
+#ifdef FIM_IS_SLOWER_THAN_FBI
+	for (j = 0; j < f->height; j++) {
+/////	    memset_combine(start,0x20,w);
+	    memset(start,0,w);
+	    start += fb_fix.line_length;
+	}
+#else
+	//sometimes we can gather multiple calls..
+	if(fb_fix.line_length==(unsigned int)w)
+	{
+		//contiguous case
+		memset(start,0,w*f->height);
+	    	start += fb_fix.line_length*f->height;
+	}
+	else
+	for (j = 0; j < f->height; j++) {
+	    memset(start,0,w);
+	    start += fb_fix.line_length;
+	}
+#endif
+#endif
+	/* draw char */
+	//fs_render_fb(fb_fix.line_length,f->eindex[c],f->gindex[c]);
+	fs_render_fb(x,y,f->eindex[c],f->gindex[c]);
+	x += f->eindex[c]->width;
+	/* FIXME : SLOW ! */
+	if (x > width() - f->width)
+	    return -1;
+    }
+    return x;
+}
+
+	int SDLDevice::status_line(unsigned char *msg)
+	{
+		if(SDL_MUSTLOCK(screen))
+		{
+			if(SDL_LockSurface(screen) < 0) return -1;
+		}
+
+		int y;
+		int ys=3;// FIXME
+
+		//if (!visible) return 0;
+		y = height() - f->height - ys;
+		clear_rect(0, width()-1, y+1,y+f->height+ys);
+		clear_rect(0, width()-1, y,y);	// FIXME : SHOULD GO WHITE
+		fs_puts(f, 0, y+ys, msg);
+
+		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+		SDL_Flip(screen);
+		return 0;
+	}
 
