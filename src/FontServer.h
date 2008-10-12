@@ -120,8 +120,6 @@ static void fb_text_init1(char *font, struct fs_font **_f);
 static struct fs_font* fs_consolefont(char **filename);
 #endif
 
-void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
-
 
 
 };

@@ -579,6 +579,7 @@ void init_one(int32_t *lut, int bits, int shift)
 	void status_screen(const char *msg, int draw);
 	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
 	int console_control(int arg);//experimental
+	void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
 };
 
 }
