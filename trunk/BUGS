@@ -48,12 +48,14 @@ with a '@' and _Baz_ with a '.'.
 
 ==== ISSUES UNDER REWORK
 
-20081018	segfaults if running under SDL and compiled with -pg
-20081018	for SDL mode : console is to be fixed, and arrows and some symbols missing.
+20081018	SDL mode : segfaults if running under SDL and compiled with -pg -O0, no if -O2
+20081018	SDL mode : console is to be fixed, and arrows and some symbols missing.
+20081018	output device should be probed as well as should be overridden, if user specified
 20080220	the string operators and generally the Fim language are under rework
 
 ==== KNOWN ISSUES
 
+20081018	the SDL driver in fim is extremely inefficient
 20080127	Under screen, Fim behaves well but it doesn't handle well console switching:
 		after a console switch, it doesn't redraw the image if not triggered to do so.
 

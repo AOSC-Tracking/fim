@@ -650,7 +650,11 @@ int help_and_exit(char *argv0, int code=0)
 			if(default_fbmode)ffd.set_fbmode(default_fbmode);
 			if(default_vt!=-1)ffd.set_default_vt(default_vt);
 			if(default_fbgamma!=-1.0)ffd.set_default_fbgamma(default_fbgamma);
+
+			cc.displaydevice=&ffd;	/* FIXME : THIS IS A HORRIBLE HACK : DANGER */
 			if(ffd.framebuffer_init())cc.cleanup_and_exit(0);
+			cc.displaydevice=NULL;	/* FIXME : THIS IS A HORRIBLE HACK : DANGER */
+
 			cc.tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 		}
 

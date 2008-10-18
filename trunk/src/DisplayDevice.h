@@ -59,8 +59,8 @@ class DisplayDevice
 	virtual int catchInteractiveCommand(int seconds)const;
 
 	int redraw;
+	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)=0;
 	private:
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
 };
 
 #endif
