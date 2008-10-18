@@ -24,7 +24,7 @@
 
 	DisplayDevice::DisplayDevice():fontname(NULL){}
 
-	int DisplayDevice::get_input(int * c)
+	int DisplayDevice::get_input(unsigned int * c)
 	{
 		/*
 		 * It is sad to place this functionality here, but often the input subsystem 

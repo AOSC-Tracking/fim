@@ -48,6 +48,7 @@ with a '@' and _Baz_ with a '.'.
 
 ==== ISSUES UNDER REWORK
 
+20081018	for SDL mode : console is to be fixed, and arrows and some symbols missing.
 20080220	the string operators and generally the Fim language are under rework
 
 ==== KNOWN ISSUES

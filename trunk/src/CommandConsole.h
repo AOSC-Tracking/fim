@@ -77,7 +77,6 @@ class CommandConsole
 	/*
 	 * mapping of key name to key code
 	 */
-	typedef std::map<fim::string,int > key_bindings_t;	//symbol->code
 	key_bindings_t	key_bindings;	//symbol->code
 
 	typedef std::map<int, fim::string> inverse_key_bindings_t;//code->symbol

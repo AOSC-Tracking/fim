@@ -201,7 +201,7 @@
 		return 0;
 	}
 
-	int SDLDevice::initialize()
+	int SDLDevice::initialize(key_bindings_t &key_bindings)
 	{
 		/*
 		 *
@@ -223,6 +223,13 @@
 			if(!vi)
 				return -1;
 		}
+		/* Enable Unicode translation */
+	        SDL_EnableUNICODE( 1 );
+
+		key_bindings["Left" ]=SDLK_LEFT;
+		key_bindings["Right"]=SDLK_RIGHT;
+		key_bindings["Up"   ]=SDLK_UP;
+		key_bindings["Down" ]=SDLK_DOWN;
 
 		return 0;
 	}
@@ -254,14 +261,17 @@
 		*pixmem32 = colour;
 	}
 
-	int SDLDevice::get_input(int * c )
+	int SDLDevice::get_input(unsigned int * c )
 	{
 		int keypress=0;
+		bool ctrl_on=0;
+		bool alt_on=0;
+		bool shift_on=0;
+		*c = 0x0;	/* blank */
 
 //		while(SDL_PollEvent(&event))
 		if(SDL_PollEvent(&event))
 		{
-
 			switch (event.type)
 			{
 				case SDL_QUIT:
@@ -269,24 +279,79 @@
 
 				break;
 				case SDL_KEYDOWN:
-				*c=event.key.keysym.sym;
 
-				if(event.key.keysym.mod == KMOD_SHIFT 
-				&&
-				event.key.keysym.sym!=':'
-				)
+				if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) ctrl_on=true;
+				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  )  alt_on=true;
+				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )  shift_on=true;
+
+
+//				std::cout << "sym : " << (int)event.key.keysym.sym << "\n" ;
+//				std::cout << "uni : " << (int)event.key.keysym.unicode<< "\n" ;
+
+				if( event.key.keysym.unicode == 0x0 )
 				{
-					/*
-					 * Warning : 
-					 *
-					 * We assume that the SDLK_* values are the same as the corresponding
-					 * kernel key codes.
-					 *
-					 * */
-					*c=event.key.keysym.sym;
-					*c -= 's'-'S';	/* *c -= 0x20 */
+					/* arrows and stuff */
+					if(event.key.keysym.sym<256)
+					{
+						*c=event.key.keysym.sym;
+						return 1;
+					}
+					else
+					{
+						/* arrows .. */
+						*c=event.key.keysym.sym;
+						return 1;
+					}
 				}
-				return 1;
+
+				if(alt_on)
+				{
+					*c=(unsigned char)event.key.keysym.unicode;
+					*c|=(1<<31);	/* FIXME : a dirty trick */
+					return 1;
+				}
+
+				if( 	event.key.keysym.unicode < 0x80)
+				{
+					/* 
+					 * SDL documentation 1.2.12 about unicode:
+					 * It is useful to note that unicode values < 0x80 translate directly
+					 * a characters ASCII value.
+					 * */
+			//		if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) std::cout << "ctrl ! \n";
+					*c=(unsigned char)event.key.keysym.unicode;
+
+					if(ctrl_on)
+					{
+						// if(*c-1+'a'=='c')std::exit(-1);//works 
+						if(*c-1+'a'<='z')
+						{
+							//std::cout << "with control : " << *c+'a'-1 << "\n";
+						}
+						else
+						{
+							/* other chars */
+							*c-='a';
+							*c+= 1 ;
+						}
+					}
+					if(*c)	/* !iscntrl(c) */
+						return 1;
+					else	/*  iscntrl(c) */
+					{
+						return 0;
+					}
+					/*
+					 * p.s.: note that we get 0 in some cases (e.g.: KMOD_RSHIFT, ...).
+					 * */
+				}
+				else
+				{
+					/*  no support for wide chars in fim */
+					return 0;
+				}
+				return 0;
+
 				break;
 			}
 			return 0;
@@ -342,7 +407,6 @@
 		SDL_Flip(screen);
 	}
 
-#endif
 
 
 void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char *data)
@@ -456,3 +520,4 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 		return 0;
 	}
 
+#endif

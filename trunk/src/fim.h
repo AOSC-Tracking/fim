@@ -109,6 +109,7 @@ extern int g_fim_no_framebuffer;
 
 namespace fim
 {
+	typedef std::map<fim::string,int > key_bindings_t;	//symbol->code
 	void status(const char *desc, const char *info);
 	void _fb_switch_signal(int signal);
 
