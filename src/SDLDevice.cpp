@@ -460,6 +460,11 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 {
     int i,c,j/*,w*/;
 
+		if(SDL_MUSTLOCK(screen))
+		{
+			if(SDL_LockSurface(screen) < 0) return -1;
+		}
+
     for (i = 0; str[i] != '\0'; i++) {
 	c = str[i];
 	if (NULL == f->eindex[c])
@@ -494,9 +499,15 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 	x += f->eindex[c]->width;
 	/* FIXME : SLOW ! */
 	if (x > width() - f->width)
-	    return -1;
+		goto err;
     }
-    return x;
+	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+	SDL_Flip(screen);
+	return x;
+err:
+	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+	SDL_Flip(screen);
+	return -1;
 }
 
 	int SDLDevice::status_line(unsigned char *msg)

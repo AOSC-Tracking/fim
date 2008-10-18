@@ -71,7 +71,7 @@ ongoing further inspiration.
 20070812	examine fbi's weak points like http://freshmeat.net/articles/view/2203/ and fix them in Fim, if present.
 20070812	study the benefits of integration with libraries like:
 		DirectFB : for a simpler driver and display mechanism
-		SDL : to use X
+		SDL : to use X ( 20081018 : enable it at configure time with ./configure --enable-sdl )
 		MXK : for fancy input devices and capabilities
 		BOOST
 		cacalib

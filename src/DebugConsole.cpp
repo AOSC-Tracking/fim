@@ -53,7 +53,7 @@ namespace fim
 			 * FIXME : this function returns often with -1 !
 			 * */
 			int i;
-			const int maxcols = ffd.fb_var.xres/ffd.fb_font_width();
+			const int maxcols = cc.displaydevice->get_chars_per_line();
 	
 			if(f<0 && l>=0 && f+l<0 && -f<=cline) { f=cline+f; l=cline-l; }
 			else
@@ -68,8 +68,12 @@ namespace fim
 
 			if(*bp){free(buf);return -1;}//if *bp then we could print garbage so we exit before damage is done
 
-	    		int y = 1*ffd.fb_font_height();
+	    		int y = 1*cc.displaydevice->f->height;
 			l-=f; l%=(rows+1); l+=f;
+
+			/* FIXME : the following line is redundant in fb, but not in SDL */
+			cc.displaydevice->clear_rect(0, cc.displaydevice->width()-1, 0 ,cc.displaydevice->f->height*(l-f+1) );
+
 	    		for(i=f  ;i<=l   ;++i)
 			{
 				int t = (i<cline?(line[i+1]-line[i]):(ccol))%(min(maxcols,lwidth)+1);
@@ -82,8 +86,9 @@ namespace fim
 				 * Since the user is free to set any value > 0 for the line width,
 				 * we truncate the line for the interval exceeding the screen width.
 				 * */
-				buf[ ffd.fb_var.xres/ffd.fb_font_width() ]='\0';
-				ffd.fs_puts(ffd.fb_font_get_current_font(), 0, y*(i-f), (unsigned char*)buf);
+				buf[ maxcols ]='\0';
+
+				cc.displaydevice->fs_puts(cc.displaydevice->f, 0, y*(i-f), (unsigned char*)buf);
 			}
 			free(buf);
 			return 0;
@@ -142,7 +147,7 @@ namespace fim
 			/*
 			 * We update the displayed rows, if this is physically possible
 			 * */
-			int maxrows = ffd.fb_var.yres/ffd.fb_font_height();
+			int maxrows = cc.displaydevice->height()/cc.displaydevice->f->height;
 			if(nr>0 && nr<=maxrows)
 			{
 				rows=nr;

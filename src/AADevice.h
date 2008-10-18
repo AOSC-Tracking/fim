@@ -73,6 +73,7 @@ class AADevice:public DisplayDevice
 		/* FIXME : only if initialized !*/
 		return -1;
 	}
+	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str){return 0;}
 
 };
 
