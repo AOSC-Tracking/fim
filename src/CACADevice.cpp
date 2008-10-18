@@ -302,7 +302,7 @@
 		return 0;
 	}
 
-	int CACADevice::initialize()
+	int CACADevice::initialize(key_bindings_t &key_bindings)
 	{
 		int rc=0;
 

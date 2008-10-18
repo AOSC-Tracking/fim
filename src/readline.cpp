@@ -155,15 +155,29 @@ static int redisplay_hook_no_fb()
 #ifdef FIM_WITH_LIBSDL
 int rl_sdl_getc_hook()
 {
-	int c;
+	unsigned int c;
 	c=0;
+
 	if(cc.displaydevice->get_input(&c)==1)
 	{
-		std::cout << "char in : "<< (char)c <<" !\n";
-		rl_stuff_char(c);
-		return 1;
+
+		if(c&(1<<31))
+		{
+			rl_set_keymap(rl_get_keymap_by_name("emacs-meta"));	/* FIXME : this is a dirty trick : */
+			//c&=!(1<<31);		/* FIXME : a dirty trick */
+			c&=0xFFFFFF^(1<<31);	/* FIXME : a dirty trick */
+			//std::cout << "alt!  : "<< (unsigned char)c <<" !\n";
+			//rl_stuff_char(c);	/* warning : this may fail */
+			rl_stuff_char(c);	/* warning : this may fail */
+		}
+		else
+		{
+			rl_set_keymap(rl_get_keymap_by_name("emacs"));		/* FIXME : this is a dirty trick : */
+			//std::cout << "char in : "<< (unsigned char)c <<" !\n";
+			rl_stuff_char(c);	/* warning : this may fail */
+		}
+		return 1;	
 	}
-	//return cc.displaydevice->getc(fd);
 	return 0;	
 }
 

@@ -32,7 +32,7 @@ class DisplayDevice
 	char* fontname;
 	public:
 	DisplayDevice();
-	virtual int initialize()=0;
+	virtual int initialize(key_bindings_t &key_bindings)=0;
 	virtual void  finalize()=0;
 
 	virtual int  display(
@@ -55,7 +55,7 @@ class DisplayDevice
 	virtual int console_control(int code)=0;
 	virtual int handle_console_switch()=0;
 	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
-	virtual int get_input(int * c);
+	virtual int get_input(unsigned int * c);
 	virtual int catchInteractiveCommand(int seconds)const;
 
 	int redraw;

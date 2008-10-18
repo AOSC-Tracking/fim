@@ -348,7 +348,7 @@
 		return 0;
 	}
 
-	int AADevice::initialize()
+	int AADevice::initialize(key_bindings_t &kb)
 	{
 		aa_parseoptions (NULL, NULL, NULL, NULL);
 

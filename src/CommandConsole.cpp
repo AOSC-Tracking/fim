@@ -457,7 +457,7 @@ namespace fim
 		{
 			/* EXPERIMENTAL */
 			DisplayDevice *sdld=NULL;
-			sdld=new SDLDevice(); if(sdld && sdld->initialize()!=0){delete sdld ; sdld=NULL;}
+			sdld=new SDLDevice(); if(sdld && sdld->initialize(key_bindings)!=0){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice==NULL)
 			{
 				displaydevice=sdld;
@@ -470,7 +470,7 @@ namespace fim
 		if(device=="caca")
 		{
 			DisplayDevice *cacad=NULL;
-			cacad=new CACADevice(); if(cacad && cacad->initialize()!=0){delete cacad ; cacad=NULL;}
+			cacad=new CACADevice(); if(cacad && cacad->initialize(key_bindings)!=0){delete cacad ; cacad=NULL;}
 			if(cacad && displaydevice==NULL)
 			{
 				displaydevice=cacad;
@@ -482,7 +482,7 @@ namespace fim
 		#ifdef FIM_WITH_AALIB
 		if(device=="aa")
 		{
-		aad=new AADevice(); if(aad && aad->initialize()!=0){delete aad ; aad=NULL;}
+		aad=new AADevice(); if(aad && aad->initialize(key_bindings)!=0){delete aad ; aad=NULL;}
 		if(aad && displaydevice==NULL)
 		{
 			displaydevice=aad;
@@ -1131,7 +1131,8 @@ namespace fim
 #endif
 			{
 				*prompt='\0';
-				int c,r;char buf[64];
+				unsigned int c;
+				int r;char buf[64];
 //				int c=getchar();
 //				int c=fgetc(stdin);
 				/*
@@ -1167,7 +1168,6 @@ namespace fim
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
 #else
 					if(c==getIntVariable("console_key")
-					||c=='.'	/* FIXME : TEMPORARY */
 					){ic=1;*prompt=':';}	//should be configurable..
 					else if(c=='/')
 					{
@@ -1200,6 +1200,7 @@ namespace fim
 					else
 #endif
 					{
+
 						this->executeBinding(c);
 #ifdef FIM_RECORDING
 						if(recordMode) record_action(getBoundAction(c));

@@ -52,7 +52,7 @@ class SDLDevice:public DisplayDevice
 		int flags// some flags
 		);
 
-	int initialize();
+	int initialize(key_bindings_t &key_bindings);
 	void finalize() ;
 
 	int get_chars_per_line() ;
@@ -75,7 +75,7 @@ class SDLDevice:public DisplayDevice
 	/* TEMPORARY */
 	void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
 
-	int get_input(int * c);
+	int get_input(unsigned int * c);
 	int catchInteractiveCommand(int seconds)const{}
 	
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);

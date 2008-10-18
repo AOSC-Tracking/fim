@@ -28,7 +28,7 @@ class DummyDisplayDevice:public DisplayDevice
 	 * The generalization of a Fim output device.
 	 */
 	public:
-	virtual int initialize(){return 0;}
+	virtual int initialize(key_bindings_t &key_bindings){return 0;}
 	virtual void  finalize(){}
 
 	virtual int  display(
