@@ -73,7 +73,7 @@ class AADevice:public DisplayDevice
 		return -1;
 	}
 	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str){return 0;}
-
+	int init_console();
 };
 
 

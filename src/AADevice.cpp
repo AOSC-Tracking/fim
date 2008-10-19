@@ -401,6 +401,14 @@
 	int AADevice::width() { return aa_imgwidth(ascii_context ) ;}
 	int AADevice::height(){ return aa_imgheight(ascii_context) ;}
 
+	int AADevice::init_console()
+	{
+		mc.setRows ( -height()/2);
+		mc.reformat(  width()   );
+		return 0;
+	}
+
+
 /*
  * This is embryo code and should be used for experimental purposes only!
  */
