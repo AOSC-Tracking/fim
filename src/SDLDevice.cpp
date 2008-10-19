@@ -240,7 +240,9 @@
 		key_bindings["Right"]=SDLK_RIGHT;
 		key_bindings["Up"   ]=SDLK_UP;
 		key_bindings["Down" ]=SDLK_DOWN;
-		key_bindings["Space" ]=SDLK_SPACE;
+		key_bindings["Space"]=SDLK_SPACE;
+		key_bindings["End"  ]=SDLK_END;
+		key_bindings["Home" ]=SDLK_HOME;
 		key_bindings["F1" ]=SDLK_F1;
 		key_bindings["F2" ]=SDLK_F2;
 		key_bindings["F3" ]=SDLK_F3;
@@ -255,7 +257,7 @@
 		key_bindings["F12"]=SDLK_F12;
 
 		// textual console reformatting
-		mc.setRows ( - height( )/ (2*f->height) );	/* FIXME : DIRTY HACK ! */
+		mc.setGlobalVariable(FV_CONSOLE_ROWS,height()/(2*f->height));
 		mc.reformat(    width() /    f->width   );
 
 		return 0;
@@ -318,9 +320,9 @@
 				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  )  alt_on=true;
 				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )  shift_on=true;
 
-
-//				std::cout << "sym : " << (int)event.key.keysym.sym << "\n" ;
-//				std::cout << "uni : " << (int)event.key.keysym.unicode<< "\n" ;
+			//	std::cout << "sym : " << (int)event.key.keysym.sym << "\n" ;
+			//	std::cout << "uni : " << (int)event.key.keysym.unicode<< "\n" ;
+			//	if(shift_on)std::cout << "shift_on\n";
 
 				if( event.key.keysym.unicode == 0x0 )
 				{
@@ -331,10 +333,23 @@
 						return 1;
 					}
 					else
+					if(
+						event.key.keysym.sym!=SDLK_LSHIFT
+					&&	event.key.keysym.sym!=SDLK_RSHIFT
+					&&	event.key.keysym.sym!=SDLK_LALT
+					&&	event.key.keysym.sym!=SDLK_RALT
+					&&	event.key.keysym.sym!=SDLK_LCTRL
+					&&	event.key.keysym.sym!=SDLK_RCTRL
+					)
 					{
-						/* arrows .. */
+						/* arrows, or lone shift.. .. */
 						*c=event.key.keysym.sym;
 						return 1;
+					}
+					else
+					{
+						/* we ignore lone shift or alt .. */
+						return 0;
 					}
 				}
 

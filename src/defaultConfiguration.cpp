@@ -202,10 +202,11 @@
 		key_bindings["PageDown"]=2117425947;
 		key_bindings["Enter"]=10;
 		key_bindings["BackSpace"]=127;
+		key_bindings["Backspace"]=127;
 		key_bindings["Del"]=2117294875;
 		key_bindings["Ins"]=2117229339;
-		key_bindings["First"]=2117163803;
-		key_bindings["Last"] =2117360411;
+		key_bindings["Home"]=2117163803;
+		key_bindings["End"] =2117360411;
 		key_bindings["Tab"] =9;
 		key_bindings["Any"] =0;	/*	EXPERIMENTAL	*/
 		key_bindings["Esc"] =27;

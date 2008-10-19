@@ -27,6 +27,7 @@
 
 	int DisplayDevice::get_input(unsigned int * c)
 	{
+		*c=0;
 		/*
 		 * It is sad to place this functionality here, but often the input subsystem 
 		 * is tightly bound to the output device.
@@ -82,7 +83,7 @@
 			 */
 			r=read(fim_stdin,&c,4);	//up to four chars should suffice
 #endif
-
+			std::cout << (int)*c<<"\n";
 
 			return r;
 	}

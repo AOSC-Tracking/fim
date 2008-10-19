@@ -50,9 +50,9 @@ build_fim()
 [ -z "$FIM_SVN_REPOSITORY" ] && die "no fim repository specified ?"
 [ -z "$TMPDIR" ] && die "no temporary directory specified ?"
 
-cd $TMPDIR || die "error stepping in $TMPDIR"
-get_fim || die "error getting fim sources"
-cd fim || die "error stepping in fim directory"
-build_fim || "error building fim"
+cd $TMPDIR   || die "error stepping in $TMPDIR"
+get_fim      || die "error getting fim sources"
+cd fim/trunk || die "error stepping in fim directory"
+build_fim    || "error building fim"
 
 

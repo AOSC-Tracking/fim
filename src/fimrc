@@ -256,6 +256,10 @@ alias 'cscrolldown' 'console_scroll_down';
 alias "musicplay"  "mpc play";
 alias "musicpause" "mpc pause";
 
+bind "Home" "0;";
+bind "End" "$;";
+bind "Backspace" "prev";
+
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So feel free to modify it, but with caution! FIM is still alpha! 
