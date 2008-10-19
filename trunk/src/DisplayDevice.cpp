@@ -22,7 +22,8 @@
 #include "fim.h"
 #include "DisplayDevice.h"
 
-	DisplayDevice::DisplayDevice():fontname(NULL){}
+	DisplayDevice::DisplayDevice():fontname(NULL)
+	{}
 
 	int DisplayDevice::get_input(unsigned int * c)
 	{
@@ -125,4 +126,49 @@
 
 		return c;		/*	we return the read key		*/
 	}
+
+#ifndef FIM_KEEP_BROKEN_CONSOLE
+void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//experimental
+{
+	int r;
+	
+	if(flags==0x03)
+	{
+		/* clear screen sequence : TODO */
+		mc.dump();
+		return;
+	}
+
+	if(flags==0x02 || flags==0x01)
+	{
+		/* still unised sequence : TODO ...*/
+		return;
+	}
+
+	r=mc.add(msg);
+	if(r==-2)
+	{
+		r=mc.grow();
+		if(r==-1)return;
+		r=mc.add(msg);
+		if(r==-1)return;
+	}
+
+	if(!draw )return;//CONVENTION!
+	
+	//fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
+	clear_rect(0, width()-1, 0,height()/2);
+
+	mc.dump();
+//	mc.dump(0,1000000);
+	return;
+}
+#endif
+
+int DisplayDevice::console_control(int arg)//experimental
+{
+	if(arg==0x01)fb_status_screen_new(NULL,0,arg);//experimental
+	if(arg==0x02)fb_status_screen_new(NULL,0,arg);//experimental
+	return 0;
+}
 

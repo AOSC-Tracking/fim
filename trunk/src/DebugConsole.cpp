@@ -146,8 +146,16 @@ namespace fim
 		{
 			/*
 			 * We update the displayed rows, if this is physically possible
+			 * If nr is negative, no correctness checks will occur.
+			 * ( useful if calling this routine with NULL displaydevice.. )
 			 * */
-			int maxrows = cc.displaydevice->height()/cc.displaydevice->f->height;
+			int maxrows;
+			if(nr<0)
+			{
+				rows=-nr;
+				return 0;
+			}
+			maxrows = cc.displaydevice->height()/cc.displaydevice->f->height;
 			if(nr>0 && nr<=maxrows)
 			{
 				rows=nr;

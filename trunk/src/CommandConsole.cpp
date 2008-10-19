@@ -535,6 +535,10 @@ namespace fim
 		}
 
 		xres=displaydevice->width(),yres=displaydevice->height();
+
+		// textual console reformatting (should go to displaydevice some day)
+		displaydevice->mc.setRows ((yres/displaydevice->f->height)/2);
+		displaydevice->mc.reformat( xres/displaydevice->f->width    );
 	
 		fim_uninitialized = 0; // new
 		/*

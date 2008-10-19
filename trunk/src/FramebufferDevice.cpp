@@ -196,10 +196,6 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 		//signal(SIGSEGV,cleanup_and_exit);
 		//set text color to white ?
 		
-		// textual console reformatting
-		mc.setRows ((fb_var.yres/fb_font_height())/2);
-		mc.reformat(fb_var.xres/fb_font_width());
-
 		//initialization of the framebuffer device handlers
 		if((rc=fb_text_init2()))return rc;
 	
@@ -327,7 +323,7 @@ void FramebufferDevice::svga_display_image_new(
     if (!visible)/*COMMENT THIS IF svga_display_image IS NOT IN A CYCLE*/
 	return;
     /*fb_clear_screen();//EXPERIMENTAL
-    if(xoff&&yoff)fb_clear_rect(0,xoff,0,yoff);*/
+    if(xoff&&yoff)clear_rect(0,xoff,0,yoff);*/
 
     bytes = FB_BPP;
 
@@ -807,7 +803,7 @@ int FramebufferDevice::status_line(unsigned char *msg)
 	return 0;
     y = fb_var.yres - f->height - ys;
 //    fb_memset(fb_mem + fb_fix.line_length * y, 0, fb_fix.line_length * (f->height+ys));
-    fb_clear_rect(0, fb_var.xres-1, y+1,y+f->height+ys);
+    clear_rect(0, fb_var.xres-1, y+1,y+f->height+ys);
 
     fb_line(0, fb_var.xres, y, y);
     fs_puts(f, 0, y+ys, msg);
@@ -851,7 +847,7 @@ void FramebufferDevice::fb_text_box(int x, int y, char *lines[], unsigned int co
     x += xs; x2 += 2*xs;
     y += ys; y2 += 2*ys;
     
-    fb_clear_rect(x1, x2, y1, y2);
+    clear_rect(x1, x2, y1, y2);
     fb_rect(x1, x2, y1, y2);
     for (i = 0; i < count; i++) {
 	fs_puts(f,x,y,(unsigned char*)lines[i]);
@@ -1477,12 +1473,8 @@ int FramebufferDevice::fs_init_fb(int white8)
  *	So it prints all the contents of its buffer on screen..
  *	if noDraw is set, the screen will be not refreshed.
 	 *	NULL,NULL is the clearing combination !!
-	//FIX ME
-	20070628 now this function adapts to the screen resolution. yet there happens 
-	something strange for a number of lines filling more than half of the screen.. 
 
 	//FIX ME : move this functionality to some new class and add ways to scroll and manipulate it
-
 	dez's
  */
 void FramebufferDevice::status_screen(const char *msg, int draw)
@@ -1608,52 +1600,6 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	     * */
 #endif
 }
-
-int FramebufferDevice::console_control(int arg)//experimental
-{
-	if(arg==0x01)fb_status_screen_new(NULL,0,arg);//experimental
-	if(arg==0x02)fb_status_screen_new(NULL,0,arg);//experimental
-	return 0;
-}
-
-#ifndef FIM_KEEP_BROKEN_CONSOLE
-void FramebufferDevice::fb_status_screen_new(const char *msg, int draw, int flags)//experimental
-{
-	int r;
-	
-	if(flags==0x03)
-	{
-		/* clear screen sequence : TODO */
-		mc.dump();
-		return;
-	}
-
-	if(flags==0x02 || flags==0x01)
-	{
-		/* still unised sequence : TODO ...*/
-		return;
-	}
-
-
-	r=mc.add(msg);
-	if(r==-2)
-	{
-		r=mc.grow();
-		if(r==-1)return;
-		r=mc.add(msg);
-		if(r==-1)return;
-	}
-
-	if(!draw )return;//CONVENTION!
-	
-	fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
-
-	mc.dump();
-//	mc.dump(0,1000000);
-	return;
-}
-#endif
-
 
 
 	FramebufferDevice::FramebufferDevice():
