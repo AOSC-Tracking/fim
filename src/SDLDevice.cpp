@@ -531,4 +531,13 @@ err:
 		return 0;
 	}
 
+	int SDLDevice::catchInteractiveCommand(int seconds)
+	{
+		/*
+		 * Whether there is some input in the input queue.
+		 * Note that in this way the event will be lost.
+		 * */
+		return (SDL_PollEvent(&event));
+	}
+
 #endif
