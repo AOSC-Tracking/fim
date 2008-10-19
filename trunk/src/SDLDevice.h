@@ -76,7 +76,7 @@ class SDLDevice:public DisplayDevice
 	void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
 
 	int get_input(unsigned int * c);
-	int catchInteractiveCommand(int seconds)const{return 0;}
+	int catchInteractiveCommand(int seconds);
 	
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
 	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
