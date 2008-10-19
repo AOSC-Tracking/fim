@@ -63,6 +63,7 @@ class DisplayDevice
 	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
 	virtual int get_input(unsigned int * c);
 	virtual int catchInteractiveCommand(int seconds)const;
+	virtual int init_console();
 
 	int redraw;
 	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)=0;

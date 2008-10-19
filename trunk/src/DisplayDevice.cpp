@@ -172,3 +172,11 @@ int DisplayDevice::console_control(int arg)//experimental
 	return 0;
 }
 
+int DisplayDevice::init_console()
+{
+	mc.setRows ((height()/f->height)/2);
+	mc.reformat( width() /f->width    );
+	return 0;
+}
+
+
