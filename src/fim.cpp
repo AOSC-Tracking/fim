@@ -77,7 +77,7 @@ struct option fim_options[] = {
     {"quiet",      no_argument,       NULL, 'q'},  /* quiet */
     {"verbose",    no_argument,       NULL, 'v'},  /* verbose */
     {"scroll",     required_argument, NULL, 's'},  /* set scrool */
-/*    {"timeout",    required_argument, NULL, 't'},*/  /* timeout value */
+/*    {"timeout",    required_argument, NULL, 't'},*/  /* timeout value */	/* fbi's */
 /*    {"once",       no_argument,       NULL, '1'},*/  /* loop only once */
     {"resolution", required_argument, NULL, 'r'},  /* select resolution */
     {"random",     no_argument,       NULL, 'u'},  /* randomize images */
@@ -86,11 +86,10 @@ struct option fim_options[] = {
     {"autozoom",   no_argument,       NULL, 'a'},
     {"autotop",   no_argument,       NULL, 'A'},
     {"autowidth",   no_argument,       NULL, 'w'},
-/*    {"edit",       no_argument,       NULL, 'e'},*/  /* enable editing */
+/*    {"edit",       no_argument,       NULL, 'e'},*/  /* enable editing */	/* fbi's */
 /*    {"list",       required_argument, NULL, 'l'},*/
     {"vt",         required_argument, NULL, 'T'},
-//    {"backup",     no_argument,       NULL, 'b'},
-//    {"preserve",   no_argument,       NULL, 'p'},
+//    {"backup",     no_argument,       NULL, 'b'},	/* fbi's */
     {"execute-script",   required_argument,       NULL, 'E'},
     {"execute-commands", required_argument,       NULL, 'c'},
     {"final-commands",   required_argument,       NULL, 'F'},
@@ -102,7 +101,10 @@ struct option fim_options[] = {
 #endif
     {"no-framebuffer",      no_argument,       NULL, 't'},
     {"text-reading",      no_argument,       NULL, 'P'},
+#ifdef FIM_READ_STDIN_IMAGE
     {"image-from-stdin",      no_argument,       NULL, 'i'},
+#endif
+//    {"preserve",   no_argument,       NULL, 'p'},	/* fbi's */
     {"script-from-stdin",      no_argument,       NULL, 'p'},
     {"write-scriptout",      required_argument,       NULL, 'W'},
     {"output-device",      required_argument,       NULL, 'o'},
@@ -198,6 +200,12 @@ class FimInstance
 			"-FIM_AUTOSKIP_FAILED"
 	#endif
 			" "
+	#ifdef FIM_READ_STDIN_IMAGE
+			"+FIM_READ_STDIN_IMAGE"
+	#else
+			"-FIM_READ_STDIN_IMAGE"
+	#endif
+			" "
 	#ifdef FIM_READ_STDIN
 			"+FIM_READ_STDIN"
 	#else
@@ -270,7 +278,7 @@ int help_and_exit(char *argv0, int code=0)
 		 * an adapted version of the main function
 		 * of the original version of the fbi program
 		 */
-	// 	int              timeout = -1;
+	// 	int              timeout = -1;	// fbi's
 		int              opt_index = 0;
 		int              i;
 	#ifdef FIM_READ_STDIN
@@ -499,29 +507,6 @@ int help_and_exit(char *argv0, int code=0)
 		default:
 		case 'h':
 		    help_and_exit(argv[0]);
-	#if 0
-		    cc.printHelpMessage(argv[0]);
-		    std::cout << " where OPTIONS are taken from :\n";
-		    for(i=0;((unsigned int)i)<(sizeof(fim_options)/sizeof(struct option))-1;++i)
-		    {	
-		   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
-		   	else std::cout << "\t-";
-			std::cout << "\t\t";
-		    	std::cout << "--"<<fim_options[i].name ;
-			switch(fim_options[i].has_arg){
-			case no_argument:
-			break;
-			case required_argument:
-			std::cout << " <arg>";
-			break;
-			default:
-			;
-			};
-			std::cout << "\n";
-			}
-			std::cout << " ( Please read the documentation distributed with the program, too, in FIM.TXT)\n";
-		    std::exit(0);
-	#endif
 		}
 	    }
 		for (i = optind; i < argc; i++)
@@ -623,7 +608,8 @@ int help_and_exit(char *argv0, int code=0)
 		if( g_fim_output_device=="" )
 			#ifdef FIM_WITH_LIBSDL
 			/* check to see if we are under X */
-			if(getenv("DISPLAY") && g_fim_no_framebuffer )
+			//if(getenv("DISPLAY") && g_fim_no_framebuffer )
+			if( getenv("DISPLAY") )
 			{
 				g_fim_output_device="sdl";
 			}
@@ -650,21 +636,9 @@ int help_and_exit(char *argv0, int code=0)
 			if(default_fbmode)ffd.set_fbmode(default_fbmode);
 			if(default_vt!=-1)ffd.set_default_vt(default_vt);
 			if(default_fbgamma!=-1.0)ffd.set_default_fbgamma(default_fbgamma);
-
-			cc.displaydevice=&ffd;	/* FIXME : THIS IS A HORRIBLE HACK : DANGER */
-			if(ffd.framebuffer_init())cc.cleanup_and_exit(0);
-			cc.displaydevice=NULL;	/* FIXME : THIS IS A HORRIBLE HACK : DANGER */
-
-			cc.tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 		}
 
 		if(cc.init(g_fim_output_device)!=0) return -1;
-	
-	//	ffd.test_drawing();
-		//while(1);
-		//while(1){int i;for(i=0;i<500000;++i)ffd.fb_mem[i]=200;}
-		//while(1)ffd.fb_rect(1,100,1,100);
-		//cleanup_and_exit(0);
 	
 		cc.executionCycle();
 		return 0;
