@@ -32,7 +32,6 @@
 
 
 
-#include "DebugConsole.h"
 #include "fim.h"
 #include "FontServer.h"
 #include "DisplayDevice.h"
@@ -122,9 +121,6 @@ void _fb_switch_signal(int signal);
 
 class FramebufferDevice:public DisplayDevice 
 {
-#ifndef FIM_KEEP_BROKEN_CONSOLE
-	MiniConsole mc;
-#endif
 
 
 	long     red_mult, green_mult;
@@ -574,8 +570,6 @@ void init_one(int32_t *lut, int bits, int shift)
 
 
 	void status_screen(const char *msg, int draw);
-	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
-	int console_control(int arg);//experimental
 	void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
 };
 

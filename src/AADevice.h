@@ -61,7 +61,6 @@ class AADevice:public DisplayDevice
 		return 0;
 	}
 	void status_screen(int desc,int draw_output){}
-	int console_control(int code){return 0;}
 	int handle_console_switch(){return 0;}
 	int clear_rect_(
 		void* dst,

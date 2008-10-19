@@ -19,6 +19,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+/*
+ * NOTES : The SDL support is INCOMPLETE:
+ *
+ *  - missing non 32 bits per pixel color modes support
+ *  - inefficient
+ */
 #include "fim.h"
 
 #ifdef FIM_WITH_LIBSDL
@@ -29,14 +35,13 @@
 
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
-#define BPP 4
-#define DEPTH 32
 
 	SDLDevice::SDLDevice():vi(NULL)
 	{
 		FontServer::fb_text_init1(fontname,&f);
 		keypress = 0;
 		h=0;
+		current_w=current_h=0;
 	}
 
 	int SDLDevice::clear_rect_(
@@ -163,13 +168,13 @@
 		// FIXME : temporary
 //		clear_rect(  ocoff, ocoff+ocols, oroff, oroff+orows); 
 //		clear_rect(  0, ocols, 0, orows); 
-		clear_rect(  0, width(), 0, height()); 
+		clear_rect(  0, width()-1, 0, height()-1); 
 
 		if(!mirror && !flip)
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
 		{
-			ytimesw = (oi)*screen->pitch/BPP;
+			ytimesw = (oi)*screen->pitch/Bpp;
 
 			ii    = oi + idr;
 			ij    = oj + idc;
@@ -182,7 +187,7 @@
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
 		{
 
-			ytimesw = (oi)*screen->pitch/BPP;
+			ytimesw = (oi)*screen->pitch/Bpp;
 			/* UNFINISHED : FIX ME */
 			ii    = oi + idr;
 			ij    = oj + idc;
@@ -207,11 +212,12 @@
 		 *
 		 * */
 		if (SDL_Init(SDL_INIT_VIDEO) < 0 ) return 1;
-		//if (!(screen = SDL_SetVideoMode(width(), height(), DEPTH, SDL_FULLSCREEN|SDL_HWSURFACE)))
-		if (!(screen = SDL_SetVideoMode(0, 0, 0, SDL_FULLSCREEN|SDL_HWSURFACE)))
+		/* automatic selection of video mode (the current one) */
+		if (!(screen = SDL_SetVideoMode(0,	/* width  */
+						0,	/* height */
+						0,	/* depth (bits per pixel) */
+						SDL_FULLSCREEN|SDL_HWSURFACE)))
 		{
-			std::cout << "width()  " << width ()<< " .. \n";
-			std::cout << "height() " << height()<< " .. \n";
 			std::cout << "problems initializing sdl .. \n";
 			SDL_Quit();
 			return -1;
@@ -219,17 +225,38 @@
 		else
 		{
 			vi = SDL_GetVideoInfo();
-			
 			if(!vi)
 				return -1;
+
+			current_w=vi->current_w;
+			current_h=vi->current_h;
+			bpp      =vi->vfmt->BitsPerPixel;
+			Bpp      =vi->vfmt->BytesPerPixel;
 		}
-		/* Enable Unicode translation */
+		/* Enable Unicode translation ( for a more flexible input handling ) */
 	        SDL_EnableUNICODE( 1 );
 
 		key_bindings["Left" ]=SDLK_LEFT;
 		key_bindings["Right"]=SDLK_RIGHT;
 		key_bindings["Up"   ]=SDLK_UP;
 		key_bindings["Down" ]=SDLK_DOWN;
+		key_bindings["Space" ]=SDLK_SPACE;
+		key_bindings["F1" ]=SDLK_F1;
+		key_bindings["F2" ]=SDLK_F2;
+		key_bindings["F3" ]=SDLK_F3;
+		key_bindings["F4" ]=SDLK_F4;
+		key_bindings["F5" ]=SDLK_F5;
+		key_bindings["F6" ]=SDLK_F6;
+		key_bindings["F7" ]=SDLK_F7;
+		key_bindings["F8" ]=SDLK_F8;
+		key_bindings["F9" ]=SDLK_F9;
+		key_bindings["F10"]=SDLK_F10;
+		key_bindings["F11"]=SDLK_F11;
+		key_bindings["F12"]=SDLK_F12;
+
+		// textual console reformatting
+		mc.setRows ( - height( )/ (2*f->height) );	/* FIXME : DIRTY HACK ! */
+		mc.reformat(    width() /    f->width   );
 
 		return 0;
 	}
@@ -244,10 +271,17 @@
 		return width() / f->width;
 	}
 
-	int SDLDevice::width()  { return vi?vi->current_w:0 ;}
-	int SDLDevice::height() { return vi?vi->current_h:0 ;}
+	int SDLDevice::width()
+	{
+		return current_w;
+	}
 
-	void SDLDevice::setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b)
+	int SDLDevice::height()
+	{
+		return current_h;
+	}
+
+	inline void SDLDevice::setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b)
 	{
 		/*
 		 * this function is taken straight from the sdl documentation: there are smarter ways to do this.
@@ -376,7 +410,7 @@
 		 * */
 		for(y=y1;y<y2;++y)
 		{
-			memset(((Uint32*)(screen->pixels)) + y*screen->pitch/BPP + x,color, (x2-x1)* sizeof(Uint32));
+			memset(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x,color, (x2-x1)* sizeof(Uint32));
 		}
 			
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
@@ -397,9 +431,9 @@
 		/*
 		 * This could be optimized
 		 * */
-		for(y=y1;y<y2;++y)
+		for(y=y1;y<=y2;++y)
 		{
-			bzero(((Uint32*)(screen->pixels)) + y*screen->pitch/BPP + x, (x2-x1)* sizeof(Uint32));
+			bzero(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x, (x2-x1+1)* sizeof(Uint32));
 		}
 			
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
@@ -440,9 +474,9 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char
 	for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++) {
 	    if (data[bit>>3] & fs_masktab[bit&7])
 	{	// WARNING !
-		setpixel(screen,x_+x,(y+row)*screen->pitch/BPP,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
+		setpixel(screen,x_+x,(y+row)*screen->pitch/Bpp,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
 		}
-	    x += BPP/BPP;/* FIXME */
+	    x += Bpp/Bpp;/* FIXME */
 	}
 	data += bpr;
     }
@@ -470,7 +504,7 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 	if (NULL == f->eindex[c])
 	    continue;
 	/* clear with bg color */
-//	w = (f->eindex[c]->width+1)*BPP;
+//	w = (f->eindex[c]->width+1)*Bpp;
 #if 0
 #ifdef FIM_IS_SLOWER_THAN_FBI
 	for (j = 0; j < f->height; j++) {
@@ -522,7 +556,7 @@ err:
 
 		//if (!visible) return 0;
 		y = height() - f->height - ys;
-		clear_rect(0, width()-1, y+1,y+f->height+ys);
+		clear_rect(0, width()-1, y+1,y+f->height+ys-1);
 		fs_puts(f, 0, y+ys, msg);
 		fill_rect(0,width()-1, y, y+1, 0xFF);	// FIXME : NO 1!
 

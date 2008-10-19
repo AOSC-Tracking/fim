@@ -36,6 +36,10 @@ class SDLDevice:public DisplayDevice
 	int keypress ;
 	int h;
 
+	int current_w;
+	int current_h;
+	int Bpp,bpp;
+
 	public:
 
 	SDLDevice();
@@ -58,11 +62,10 @@ class SDLDevice:public DisplayDevice
 	int get_chars_per_line() ;
 	int txt_width() ;
 	int txt_height() ;
-	int width() ;
-	int height() ;
+	int width();
+	int height();
 	int status_line(unsigned char *msg);
 	void status_screen(int desc,int draw_output){ return ; }
-	int console_control(int code){return 0;}
 	int handle_console_switch(){return 0;}
 	int clear_rect_(
 		void* dst,
@@ -73,7 +76,7 @@ class SDLDevice:public DisplayDevice
 
 
 	/* TEMPORARY */
-	void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
+	inline void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
 
 	int get_input(unsigned int * c);
 	int catchInteractiveCommand(int seconds);

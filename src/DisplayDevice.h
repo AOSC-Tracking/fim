@@ -21,9 +21,15 @@
 #ifndef DISPLAY_DEVICE_FIM_H
 #define DISPLAY_DEVICE_FIM_H
 
+#include "DebugConsole.h"
 
 class DisplayDevice
 {
+	protected:
+#ifndef FIM_KEEP_BROKEN_CONSOLE
+	public:
+	MiniConsole mc;
+#endif
 	/*
 	 * The generalization of a Fim output device.
 	 */
@@ -52,7 +58,7 @@ class DisplayDevice
 	virtual int width()=0;
 	virtual int height()=0;
 	virtual int status_line(unsigned char *msg)=0;
-	virtual int console_control(int code)=0;
+	int console_control(int code);
 	virtual int handle_console_switch()=0;
 	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
 	virtual int get_input(unsigned int * c);
@@ -60,6 +66,7 @@ class DisplayDevice
 
 	int redraw;
 	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)=0;
+	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
 	private:
 };
 

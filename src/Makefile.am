@@ -40,11 +40,13 @@ conf.h:       fimrc
 	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
 	echo '"";' >> conf.h
 
+fim.cpp  :	version.h
 version.h:	../config.h
 	grep define ../config.h | grep FIM | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
 	echo "\"\n\"" >> version.h
 	grep define ../config.h | grep FIM.*'"' | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> version.h
 	grep undef ../config.h | grep FIM | sort | sed 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]\+\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> version.h
+	echo  '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> version.h
 
 
 # the following sources are built at make time

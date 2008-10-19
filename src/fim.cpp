@@ -151,77 +151,9 @@ class FimInstance
 			"\n"
 	#endif
 			"Fim options (features included (+) or not (-)):\n"
-#if 0
-	#ifdef FIM_WINDOWS
-			"+FIM_WINDOWS"
-	#else
-			"-FIM_WINDOWS"
-	#endif
-			" "
-	#ifdef FIM_DEFAULT_KEY_CONFIG  
-			"+FIM_DEFAULT_KEY_CONFIG"
-	#else
-			"-FIM_DEFAULT_KEY_CONFIG"
-	#endif
-			" "
-	#ifdef FIM_DEFAULT_CONFIG      
-			"+FIM_DEFAULT_CONFIG"
-	#else
-			"-FIM_DEFAULT_CONFIG"
-	#endif
-			" "
-	#ifdef FIM_DEFAULT_CONFIGURATION 
-			"+FIM_DEFAULT_CONFIGURATION"
-	#else
-			"-FIM_DEFAULT_CONFIGURATION"
-	#endif
-			" "
-	#ifdef FIM_NOFIMRC
-			"+FIM_NOFIMRC"
-	#else
-			"-FIM_NOFIMRC"
-	#endif
-			" "
-	#ifdef FIM_AUTOCMDS
-			"+FIM_AUTOCMDS"
-	#else
-			"-FIM_AUTOCMDS"
-	#endif
-			" "
-	#ifdef FIM_BUGGED_CACHE
-			"+FIM_BUGGED_CACHE"
-	#else
-			"-FIM_BUGGED_CACHE"
-	#endif
-			" "
-	#ifdef FIM_AUTOSKIP_FAILED
-			"+FIM_AUTOSKIP_FAILED"
-	#else
-			"-FIM_AUTOSKIP_FAILED"
-	#endif
-			" "
-	#ifdef FIM_READ_STDIN_IMAGE
-			"+FIM_READ_STDIN_IMAGE"
-	#else
-			"-FIM_READ_STDIN_IMAGE"
-	#endif
-			" "
-	#ifdef FIM_READ_STDIN
-			"+FIM_READ_STDIN"
-	#else
-			"-FIM_READ_STDIN"
-	#endif
-			" "
-	#ifdef FIM_BOZ_PATCH
-			"+FIM_BOZ_PATCH"
-	#else
-			"-FIM_BOZ_PATCH"
-	#endif
-#else
 	#include "version.h"
-#endif
 	/* i think some flags are missing .. */
-		"\n\nAvailable output devices (for --output-device) : "
+		"\nAvailable output devices (for --output-device) : "
 	#ifdef FIM_WITH_AALIB
 		" aa"
 	#endif
