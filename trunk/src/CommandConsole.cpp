@@ -452,6 +452,15 @@ namespace fim
 		/*  */
 		setVariable("_TERM", getenv("TERM"));
 
+		if( device=="fb" )
+		{
+			extern fim::FramebufferDevice ffd; 
+			displaydevice=&ffd;	/* FIXME : THIS IS A HORRIBLE HACK : DANGER */
+			if(ffd.framebuffer_init())cleanup_and_exit(0);
+			tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
+		}
+
+
 		#ifdef FIM_WITH_LIBSDL
 		if(device=="sdl")
 		{
@@ -510,17 +519,16 @@ namespace fim
 		#endif
 
 #ifdef FIM_USE_READLINE
-		rl::initialize_readline( !displaydevice && g_fim_no_framebuffer);
+		rl::initialize_readline( !displaydevice );
 #endif
 
-		//if(!g_fim_no_framebuffer && displaydevice==NULL)
 		if( device=="fb" && displaydevice==NULL)
 		{
 			displaydevice=&framebufferdevice;
 			setVariable("_device_driver", "fbdev");
 		}
 
-		if( /* g_fim_no_framebuffer && */ displaydevice==NULL)
+		if( displaydevice==NULL)
 		{
 			displaydevice=&dummydisplaydevice;
 			setVariable("_device_driver", "dummy");
@@ -828,6 +836,7 @@ namespace fim
 		if(r!=0)
 		{
 			ferror("pipe error\n");
+    			cleanup_and_exit(-1);
 		}
 		//we write there our script or commands
 		r=write(pipedesc[1],s,strlen(s));
@@ -835,6 +844,7 @@ namespace fim
 		if(r!=(int)strlen(s))
 		{
 			ferror("write error");
+    			cleanup_and_exit(-1);
 		} 
 		for(char*p=s;*p;++p)
 			if(*p=='\n')*p=' ';
@@ -1935,7 +1945,6 @@ namespace fim
 		bool needed_redisplay=false;
 		try
 		{
-//			if(window && !g_fim_no_framebuffer)
 			if(window )
 				needed_redisplay=window->recursive_display();
 #if 0

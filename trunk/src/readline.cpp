@@ -235,14 +235,14 @@ void initialize_readline (int with_no_display_device)
 		rl_redisplay_function=redisplay;
 	        rl_event_hook=redisplay_hook;
 	        rl_pre_input_hook=redisplay_hook;
-	#ifdef FIM_WITH_LIBSDL
-		if((g_fim_no_framebuffer)==0 && g_fim_output_device=="sdl")
-		{
-			rl_getc_function=rl_sdl_getc;
-			rl_event_hook   =rl_sdl_getc_hook;
-		}
-	#endif
 	}
+	#ifdef FIM_WITH_LIBSDL
+	if( g_fim_output_device=="sdl" )
+	{
+		rl_getc_function=rl_sdl_getc;
+		rl_event_hook   =rl_sdl_getc_hook;
+	}
+	#endif
 	//rl_completion_entry_function=NULL;
 	/*
 	 * to do:

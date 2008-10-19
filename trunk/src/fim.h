@@ -132,7 +132,7 @@ namespace fim
 
 namespace rl
 {
-	void initialize_readline (int with_no_framebuffer);
+	void initialize_readline (int with_no_display_device);
 }
 
 /* using GCC builtins */
