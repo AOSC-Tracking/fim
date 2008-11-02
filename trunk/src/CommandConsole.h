@@ -218,9 +218,10 @@ class CommandConsole
 	fim::string set_interactive_mode(const args_t& args);
 	fim::string set_in_console(const args_t& args);
 	fim::string autocmd(const args_t& args);
-	fim::string autocmd_del(const fim::string &event,const fim::string &pat){return "";}
+	fim::string autocmd_del(const fim::string event, const fim::string pattern, const fim::string action);
+	fim::string autocmd_del(const args_t& args);
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
-	fim::string autocmds_list()const;
+	fim::string autocmds_list(const fim::string event, const fim::string pattern)const;
 	typedef std::pair<fim::string,fim::string> autocmds_frame_t;
 	typedef std::set<autocmds_frame_t> autocmds_stack_t;
 	autocmds_stack_t autocmds_stack;

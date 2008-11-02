@@ -83,7 +83,7 @@
 			 */
 			r=read(fim_stdin,&c,4);	//up to four chars should suffice
 #endif
-			std::cout << (int)*c<<"\n";
+			//std::cout << (int)*c<<"\n";
 
 			return r;
 	}

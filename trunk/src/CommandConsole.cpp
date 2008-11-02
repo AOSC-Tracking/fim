@@ -400,7 +400,8 @@ namespace fim
 		addCommand(new Command(fim::string("mark" ),fim::string("marks the current file"),this,&CommandConsole::markCurrentFile));
 		addCommand(new Command(fim::string("help"  ),fim::string("provides online help"),this,&CommandConsole::help));
 #ifdef FIM_AUTOCMDS
-		addCommand(new Command(fim::string("autocmd"  ),fim::string("autocommands"),this,&CommandConsole::autocmd));
+		addCommand(new Command(fim::string("autocmd"  ),fim::string("usage: autocmd [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd));
+		addCommand(new Command(fim::string("autocmd_del"  ),fim::string("usage: autocmd_del [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
 #endif
 		addCommand(new Command(fim::string("set_interactive_mode"  ),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
 		addCommand(new Command(fim::string("set_console_mode"  ),fim::string("sets console mode"),this,&CommandConsole::set_in_console));
@@ -1492,7 +1493,7 @@ namespace fim
 	}
 
 #ifdef FIM_AUTOCMDS
-	fim::string CommandConsole::autocmds_list()const
+	fim::string CommandConsole::autocmds_list(const fim::string event, const fim::string pattern)const
 	{
 		/*
 		 * as of now, lists the events for which an autocmd could be assigned.
@@ -1502,6 +1503,7 @@ namespace fim
 		fim::string acl;
 //		std::map<fim::string,std::map<fim::string,fim::string> >  autocmds;
 		autocmds_t::const_iterator ai;
+		if(event=="" && pattern=="")
 		//for each autocommand event registered
 		for( ai=autocmds.begin();ai!=autocmds.end();++ai )
 		//for each file pattern registered, display the list..
@@ -1519,8 +1521,94 @@ namespace fim
 			acl+=(*aui); 
 			acl+="\"\n"; 
 		}
+		else
+		if(pattern==""){
+		autocmds_t::const_iterator ai=autocmds.find(event);
+		//for each autocommand event registered
+		//for each file pattern registered, display the list..
+		if(ai!=autocmds.end())
+		for(	autocmds_p_t::const_iterator api=(*ai).second.begin();
+				api!=(*ai).second.end();++api )
+		//.. display the list of autocommands...
+		for(	args_t::const_iterator aui=((*api)).second.begin();
+				aui!=((*api)).second.end();++aui )
+		{
+			acl+="autocmd \""; 
+			acl+=(*ai).first; 
+			acl+="\" \""; 
+			acl+=(*api).first; 
+			acl+="\" \""; 
+			acl+=(*aui); 
+			acl+="\"\n"; 
+		}}
+		else
+		{
+		autocmds_t::const_iterator ai=autocmds.find(event);
+		//for each autocommand event registered
+		//for each file pattern registered, display the list..
+		if(ai!=autocmds.end())
+		{
+		autocmds_p_t::const_iterator api=(*ai).second.find(pattern);
+		//.. display the list of autocommands...
+		if(api!=(*ai).second.end())
+		{
+		for(	args_t::const_iterator aui=((*api)).second.begin();
+				aui!=((*api)).second.end();++aui )
+		{
+			acl+="autocmd \""; 
+			acl+=(*ai).first; 
+			acl+="\" \""; 
+			acl+=(*api).first; 
+			acl+="\" \""; 
+			acl+=(*aui); 
+			acl+="\"\n"; 
+		}}}}
+		
 		if(acl=="")acl="no autocommands loaded\n";
 		return acl;
+	}
+
+	fim::string CommandConsole::autocmd_del(const fim::string event, const fim::string pattern, const fim::string action)
+	{
+		/*
+		 */
+		autocmds_t::iterator ai;
+		size_t n = 0;
+
+		if(event=="" && pattern=="" && action == "" )
+		{
+			/* deletion of all autocmd's */
+			n = autocmds.size();
+			for( ai=autocmds.begin();ai!=autocmds.end();++ai )
+				autocmds.erase(ai);
+		}
+		else
+		if(action=="" && pattern=="" )
+		{
+			/* deletion of all autocmd's for given event */
+			ai=autocmds.find(event);
+			if(ai==autocmds.end())return "";
+			n = (*ai).second.size();
+			for(	autocmds_p_t::iterator api=((*ai)).second.begin();
+				api!=((*ai)).second.end();++api )
+				(*ai).second.erase(api);
+		}
+		else
+		if(action=="" )
+		{
+			/* deletion of all autocmd's for given event and pattern */
+			ai=autocmds.find(event);
+			if(ai==autocmds.end())return "";
+			autocmds_p_t::iterator api=((*ai)).second.find(pattern);
+			n = (*api).second.size();
+			for(	args_t::iterator aui=((*api)).second.begin();
+					aui!=((*api)).second.end();++aui )
+						(*api).second.erase(aui);
+		}
+		if(n)
+			return n+" autocmd's removed\n";
+		else
+			return "no autocmd's removed\n";
 	}
 
 	fim::string CommandConsole::autocmd(const args_t& args)
@@ -1528,24 +1616,53 @@ namespace fim
 		/*
 		 * associates an action to a certain event in certain circumstances
 		 */
-		fim::string usage="usage: autocmd Event Pattern Commands\n";
 		//cout << "autocmd '"<<args[0]<<"' '"<<args[1]<<"' '"<<args[2]<<"' added..\n";
 		if(args.size()==0)
 		{
-			return autocmds_list();
+			/* no args, returns autocmd's list */
+			return autocmds_list("","");
 		}
 		if(args.size()==1 || args.size()>3)
 		{
-			return usage;
+			/* autocmd Event : should list all autocmds for the given Event */
+			return autocmds_list(args[0],"");
 		}
 		if(args.size()==2)
 		{
-			return autocmd_del(args[0],args[1]);
+			/* autocmd Event Pattern : should list all autocmds for the given Event Pattern */
+			return autocmds_list(args[0],args[1]);
 		}
 		if(args.size()==3)
 		{
 //			cout << "autocmd '"<<args[0]<<"' '"<<args[1]<<"' '"<<args[2]<<"' added..\n";
 			return autocmd_add(args[0],args[1],args[2]);
+		}
+		return "";
+	}
+
+	fim::string CommandConsole::autocmd_del(const args_t& args)
+	{
+		/*
+		 * deletes one or more autocommands
+		 */
+		if(args.size()==0)
+		{
+			/* no args, returns autocmd's list */
+			return autocmd_del("","","");
+		}
+		if(args.size()==1 || args.size()>3)
+		{
+			/* autocmd Event : should delete all autocmds for the given Event */
+			return autocmd_del(args[0],"","");
+		}
+		if(args.size()==2)
+		{
+			/* autocmd Event Pattern : should delete all autocmds for the given Event Pattern */
+			return autocmd_del(args[0],args[1],"");
+		}
+		if(args.size()==3)
+		{
+			return autocmd_del(args[0],args[1],args[2]);
 		}
 		return "";
 	}
