@@ -1622,7 +1622,7 @@ namespace fim
 			/* no args, returns autocmd's list */
 			return autocmds_list("","");
 		}
-		if(args.size()==1 || args.size()>3)
+		if(args.size()==1)
 		{
 			/* autocmd Event : should list all autocmds for the given Event */
 			return autocmds_list(args[0],"");
@@ -1634,7 +1634,6 @@ namespace fim
 		}
 		if(args.size()==3)
 		{
-//			cout << "autocmd '"<<args[0]<<"' '"<<args[1]<<"' '"<<args[2]<<"' added..\n";
 			return autocmd_add(args[0],args[1],args[2]);
 		}
 		return "";
@@ -1650,7 +1649,7 @@ namespace fim
 			/* no args, returns autocmd's list */
 			return autocmd_del("","","");
 		}
-		if(args.size()==1 || args.size()>3)
+		if(args.size()==1)
 		{
 			/* autocmd Event : should delete all autocmds for the given Event */
 			return autocmd_del(args[0],"","");

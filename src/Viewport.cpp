@@ -72,13 +72,17 @@ namespace fim
 		,commandConsole(v.commandConsole)
 	{
 		// WARNING
-		reset();
+		//reset();
 		try
 		{
 #ifndef FIM_BUGGED_CACHE
-			if(v.image) image = commandConsole.browser.cache.useCachedImage(v.image->getName());
+	#ifdef FIM_CACHE_DEBUG
+			if(v.image) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image->getName() << "\" from "<<v.image<<"\n" ;
+			else std::cout << "no image to cache..\n";
+	#endif
+			if(v.image) setImage( commandConsole.browser.cache.useCachedImage(v.image->getName()) );
 #else
-			if(v.image)image = new Image(*v.image);
+			if(v.image) setImage ( new Image(*v.image) ) ;
 #endif
 		}
 		catch(FimException e)
@@ -356,6 +360,10 @@ namespace fim
 			 */
 #ifdef FIM_WINDOWS
 			if(commandConsole.displaydevice )
+			{
+			// FIXME : we need a mechanism for keeping the image pointer valid during multiple viewport usage
+			//std::cout << "display " << " ( " << yorigin() << "," << xorigin() << " ) ";
+			//std::cout << " " << " ( " << viewport_height() << "," << viewport_width() << " )\n";
 			displaydevice->display(
 					image->img,
 					top,
@@ -369,7 +377,7 @@ namespace fim
 					viewport_width(),
 					viewport_width(),
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
-					);
+					);}
 #else
 			displaydevice->display(
 					image->img,
@@ -434,6 +442,9 @@ namespace fim
 		 *
 		 * FIXME
 		 */
+#ifdef FIM_CACHE_DEBUG
+		std::cout << "setting image \""<<ni->getName()<<"\" in viewport: "<< ni << "\n\n";
+#endif
 
 		image = NULL;
 		reset();

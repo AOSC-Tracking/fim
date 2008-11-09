@@ -75,8 +75,8 @@ class Browser
 	fim::string last_regexp;
 	int current_image()const;
 	int current_images()const{ return n(); }
-	Cache cache;	// was private
 	public:
+	Cache cache;	// was private
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(Image *stdin_image);
 #endif
