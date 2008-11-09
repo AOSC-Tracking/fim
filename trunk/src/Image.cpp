@@ -174,6 +174,7 @@ namespace fim
 		/*
 		 * buffers are freed
 		 * */
+		std::cout << "freeing Image " << this << "\n";
 		this->free();
 	}
 
@@ -435,7 +436,7 @@ namespace fim
 		orientation(image.orientation),
                 invalid(0),
 		no_file(true),
-                fname     ("")
+                fname     (image.fname)
 	{
 		/*
 		 * builds a clone of this image.

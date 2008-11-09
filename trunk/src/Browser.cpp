@@ -575,6 +575,9 @@ namespace fim
 		try
 		{
 #ifndef FIM_BUGGED_CACHE
+	#ifdef FIM_CACHE_DEBUG
+		if(viewport())std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
+	#endif
 		if(viewport())viewport()->setImage( cache.useCachedImage(current().c_str()) );
 #else
 		// warning : in this cases exception handling is missing

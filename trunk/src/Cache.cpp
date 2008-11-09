@@ -198,6 +198,9 @@ namespace fim
 		{
 		if( ( ni = new Image(fname) ) )
 		{	
+#ifdef FIM_CACHE_DEBUG
+			std::cout << "loadNewImage("<<fname<<")\n";
+#endif
 			if( cacheNewImage( ni ) ) return ni;
 		}
 		}
@@ -231,6 +234,11 @@ namespace fim
 
 	bool Cache::cacheNewImage( fim::Image* ni )
 	{
+
+#ifdef FIM_CACHE_DEBUG
+					std::cout << "going to cache: "<< ni << "\n";
+#endif
+
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!ni)return ni;
 
@@ -261,6 +269,7 @@ namespace fim
 			reverseCache.erase(oi);
 //			delete imageCache[reverseCache[oi]];
 #ifdef FIM_CACHE_DEBUG
+			std::cout << "will erase  "<< oi << "\n";
 			cout << "deleting " << oi->getName() << "\n";
 #endif
 			delete oi; // NEW !!
@@ -335,6 +344,9 @@ namespace fim
 		 *
 		 * so, if there is no such image, NULL is returned
 		 * */
+#ifdef FIM_CACHE_DEBUG
+		std::cout << "  useCachedImage(\""<<fname<<"\")\n";
+#endif
 		Image * image=NULL;
 		if(!fname) return NULL;
 		if(!is_in_cache(fname)) 
@@ -370,7 +382,12 @@ namespace fim
 //				image = image->getClone(); // EVIL !!
 				try
 				{
+					Image * oi=image;
 					image = new Image(*image); // cloning
+#ifdef FIM_CACHE_DEBUG
+					std::cout << "  cloned image: \"" <<image->getName()<< "\" "<< image << " from \""<<oi->getName() <<"\" " << oi << "\n";
+#endif
+
 				}
 				catch(FimException e)
 				{
