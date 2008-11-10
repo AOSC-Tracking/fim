@@ -270,7 +270,7 @@ void FramebufferDevice::console_switch(int is_busy)
 		visible = 1;	///////////
 		ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
 		redraw = 1;
-		cc.setVariable("fresh",1);	//!!
+		//cc.setVariable("i:fresh",1);	//20081109 : FIXME : commented as it seems useless under the fb
 	/*
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched! 

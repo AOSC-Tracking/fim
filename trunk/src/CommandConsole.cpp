@@ -411,6 +411,7 @@ namespace fim
 		addCommand(new Command(fim::string("cd"  ),fim::string("chdir() invocation"),this,&CommandConsole::cd));
 		addCommand(new Command(fim::string("pwd"  ),fim::string("getcwd() invocation"),this,&CommandConsole::pwd));
 		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
+		addCommand(new Command(fim::string("stdout"  ),fim::string("writes to stdout"),this,&CommandConsole::stdout));
 #ifdef FIM_PIPE_IMAGE_READ
 		addCommand(new Command(fim::string("pread"  ),fim::string("executes the arguments as a shell command and reads the input as an image file"),this,&CommandConsole::pread));
 #endif
@@ -1411,6 +1412,21 @@ namespace fim
 		if(args.size()==0)fim::cout<<"echo command\n";
 		for(unsigned int i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
 		return "";
+	}
+
+	fim::string CommandConsole::do_stdout(const args_t &args)const
+	{
+		/*
+		 * a command to echo to stdout arguments, for debug and learning purposes
+		 */
+		if(args.size()==0)std::cout<<"echo command\n";
+		for(unsigned int i=0;i<args.size();++i)std::cout << (args[i].c_str()) << "\n";
+		return "";
+	}
+
+	fim::string CommandConsole::stdout(const args_t &args)
+	{
+		return do_stdout(args);
 	}
 
 	int CommandConsole::getVariableType(const fim::string &varname)const

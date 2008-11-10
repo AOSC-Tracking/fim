@@ -110,12 +110,12 @@ bind '.' "repeat_last;";
 #_display_status=1;
 #display;
 alias 'A' "'autotop=1-autotop;'";
-alias "toggleVerbosity" "_display_console=1-_display_console;fresh=1;reload;";
+alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;reload;";
 
 # key echo
 alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;";
 
-auto_scale_v=1;
+v:auto_scale_v=1;
 _verbose_keys=0;
 _display_busy=1;
 _display_status=1;
@@ -129,27 +129,27 @@ _display_status=1;
 autocmd "PostGoto" "" "reload;";
 autocmd "PostNext" "" "reload;";
 autocmd "PostPrev" "" "reload;";
-#autocmd "PostDisplay"   "" "fresh=1" ;
+#autocmd "PostDisplay"   "" "i:fresh=1" ;
 #autocmd "PreWindow"   "" "";
 autocmd "PostWindow"   "" "display;";
-autocmd "PreRedisplay"   ".*/fbps-.*" "if(fresh){fresh=0;auto_width_scale;fresh=0;}";
-autocmd "PreRedisplay"   "" "if(autowidth*fresh){fresh=0;auto_width_scale;fresh=0;}";
-autocmd "PreRedisplay"   "" "if(auto_scale_v *fresh){fresh=0;auto_scale       ;fresh=0;}";
-autocmd "PreRedisplay"   "" "if(auto_width_v *fresh){fresh=0;auto_scale_width ;fresh=0;}";
-autocmd "PreRedisplay"   "" "if(auto_height_v*fresh){fresh=0;auto_scale_height;fresh=0;}";
+autocmd "PreRedisplay"   ".*/fbps-.*" "if(i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(autowidth*i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(v:auto_scale_v *i:fresh){i:fresh=0;auto_scale       ;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(auto_width_v *i:fresh){i:fresh=0;auto_scale_width ;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(auto_height_v*i:fresh){i:fresh=0;auto_scale_height;i:fresh=0;}";
 
 # the aalib library has often problems with proportions, and this is a temporary fix
-alias "aalib_fix_do" "{ascale='2.0';fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}";
+alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}";
 alias "aalib_fix" "if(_device_driver=='aalib'){aalib_fix_do;auto_scale;}";
 autocmd "PostReload"   "" "aalib_fix;";
 autocmd "PostLoad"   "" "aalib_fix;";
 
 
-autocmd "PostReload"  "" "fresh=1" ;
-autocmd "PostScale"   "" "{fresh=1;display;}" ;
-autocmd "PostPan"     "" "{fresh=1;display;}" ;
-autocmd "PostReload"   "" "if(fresh){redisplay;}";
-#autocmd "PostInteractiveCommand"   "" "if(fresh){display;}";
+autocmd "PostReload"  "" "i:fresh=1" ;
+autocmd "PostScale"   "" "{i:fresh=1;display;}" ;
+autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
+autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
+#autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;}";
 
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};";
 bind 'N' 'next10';
@@ -164,10 +164,10 @@ alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless
 bind  "C-p" "pornview";
 bind  "C-b" "bookview";
 autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0;" ;
-autocmd "PreExecutionCycle" "" "fresh=1;reload;";
+autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
 autocmd "PreExecutionCycle" "" "redisplay;";
-autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "fresh=1;redisplay;";
-#autocmd "PostInteractiveCommand" "" "fresh=0;";
+autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
+#autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
 #extra..
 bind 'w' "auto_width_scale";
@@ -193,8 +193,8 @@ alias "toggleDisplayBusy" "_display_busy=1-_display_busy;";
 #push "media/image.jpg";
 #push "media/icon_smile.gif";
 echo "WELCOME : to switch to the command line interface press ':' ";
-alias "toggleAutoScale" "auto_scale_v=1-auto_scale_v;autowidth=0;reload;";
-alias "toggleAutoWidth" "autowidth=1-autowidth;auto_scale_v=0;reload;";
+alias "toggleAutoScale" "v:auto_scale_v=1-v:auto_scale_v;autowidth=0;reload;";
+alias "toggleAutoWidth" "autowidth=1-autowidth;v:auto_scale_v=0;reload;";
 bind 'C-w'   'toggleAutoWidth;';
 bind 'C-a' "toggleAutoScale;";
 bind 'C-c' "toggleAutoScale;";
@@ -207,8 +207,8 @@ bind 'B' "toggleDisplayBusy";
 alias "plisten" 'popen "nc -l -p 9999 "';
 alias "wlisten" "while(1){sleep;plisten;}";
 alias "random_slideshow" "while(1){goto random;}";
-alias "rotate90_ccw" "i:orientation=i:orientation+1;fresh=1;i:fresh=1;redisplay;";
-alias "rotate90_cw"  "i:orientation=i:orientation+3;fresh=1;i:fresh=1;redisplay;";
+alias "rotate90_ccw" "i:orientation=i:orientation+1;i:fresh=1;i:i:fresh=1;redisplay;";
+alias "rotate90_cw"  "i:orientation=i:orientation+3;i:fresh=1;i:i:fresh=1;redisplay;";
 alias "rotate90" "rotate90_cw;display;";
 alias "rotate10"     "rotate  '10';display;";
 alias "rotate10_ccw" "rotate '-10';display;";

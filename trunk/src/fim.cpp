@@ -251,7 +251,7 @@ int help_and_exit(char *argv0, int code=0)
 		    //cc.setVariable("autotop",1);
 		    //FIXME: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("auto_scale_v=1;");
+		    cc.pre_autocmd_add("FV_AUTO_SCALE_V=1;");
 	#endif
 		    break;
 		case 'A':

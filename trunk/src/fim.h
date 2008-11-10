@@ -192,7 +192,7 @@ namespace fim
 #define FV__LOAD_DEFAULT_ETC_FIMRC 	"_load_default_etc_fimrc"
 #define FV__NO_RC_FILE			"_no_rc_file"
 #define FV__STATUS_LINE 		"_status_line"
-#define FV_AUTO_SCALE_V			"auto_scale_v"
+#define FV_AUTO_SCALE_V			"auto_scale_v"	/* fixme : should be moved to fimrc's scope only */
 #define FV_AUTOTOP			"autotop"
 #define FV_AUTOWIDTH			"autowidth"
 #define FV_FILEINDEX			"fileindex"
