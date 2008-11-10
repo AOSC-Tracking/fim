@@ -71,6 +71,7 @@ class Viewport
 	~Viewport(){}
 	private:
 	Viewport& operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
+	void should_redraw()const;
 	public:
 
 	int valid()const;
@@ -116,8 +117,8 @@ class Viewport
 	void auto_scale();
 
 	void free();
-        bool check_invalid();
-        bool check_valid();
+        bool check_invalid()const;
+        bool check_valid()const;
 	int valid();
 	bool scrollforward();
 	void scale_position_magnify(float factor=FIM_SCALE_FACTOR );

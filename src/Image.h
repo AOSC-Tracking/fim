@@ -80,6 +80,7 @@ class Image
 
 	/* image methods */
 	bool load(const char *fname_, FILE *fd=NULL);
+	void should_redraw()const;
 
 	protected:
 	FramebufferDevice	&framebufferdevice;

@@ -196,6 +196,8 @@ class CommandConsole
 //	fim::string get_expr_type(const args_t &args);
 	fim::string help(const args_t &args);
 	fim::string quit(const args_t &args);
+	fim::string stdout(const args_t &args);
+	fim::string do_stdout(const args_t &args)const;
 	fim::string foo (const args_t &args);
 	fim::string do_return(const args_t &args);
 	fim::string status(const args_t &args);

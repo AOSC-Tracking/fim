@@ -100,7 +100,7 @@ namespace fim
 			if(this->onTop())return;
 			s=(s==0)?steps:s;
 			top -= s;
-		        displaydevice->redraw=1;
+			should_redraw();
 		}
 	}
 
@@ -113,7 +113,7 @@ namespace fim
 			if(this->onBottom())return;
 			s=(s==0)?steps:s;
 			top += s;
-		        displaydevice->redraw=1;
+			should_redraw();
 		}
 	}
 
@@ -126,7 +126,7 @@ namespace fim
 			if(onRight())return;
 			s=(s==0)?steps:s;
 			left+=s;
-		        displaydevice->redraw=1;
+			should_redraw();
 		}
 	}
 
@@ -139,7 +139,7 @@ namespace fim
 			if(onLeft())return;
 			s=(s==0)?steps:s;
 			left-=s;
-	        	displaydevice->redraw=1;
+			should_redraw();
 		}
 	}
 
@@ -195,14 +195,14 @@ namespace fim
 	{
 		if(this->onBottom())return;
 		if( check_valid() )top = image->height() - this->viewport_height();
-	        displaydevice->redraw=1;
+		should_redraw();
 	}
 
 	void Viewport::top_align()
 	{
 		if(this->onTop())return;
 		top=0;
-	        displaydevice->redraw=1;
+		should_redraw();
 	}
 
 	bool Viewport::redisplay()
@@ -211,7 +211,7 @@ namespace fim
 		 * we 'force' redraw.
 		 * display() has still the last word :P
 		 * */
-	        displaydevice->redraw=1;
+		should_redraw();
 		return display();
 	}
 
@@ -243,6 +243,7 @@ namespace fim
 		if( displaydevice->redraw==0 )return;
 #ifdef FIM_WINDOWS
 		/* FIXME : note that fbi's clear_rect() is a buggy function and thus the fs_bpp multiplication need ! */
+#if 0
 		if(displaydevice == &(fim::ffd))
 		{
 			/*
@@ -256,17 +257,18 @@ namespace fim
 				);
 		}
 		else
+#endif
 		{
 			displaydevice->clear_rect(
 				xorigin(),
-				xorigin()+viewport_width(),
+				xorigin()+viewport_width()-1,
 				yorigin(),
-				yorigin()+viewport_height()
+				yorigin()+viewport_height()-1
 				);
 		}
 #else
 		/* FIXME */
-		displaydevice->clear_rect( 0, viewport_width()*displaydevice->fs_bpp, 0, viewport_height());
+		displaydevice->clear_rect( 0, (viewport_width()-1)*displaydevice->fs_bpp, 0, (viewport_height()-1));
 #endif
 	}
 
@@ -297,8 +299,8 @@ namespace fim
 		!((getGlobalIntVariable("automirror")==-1)|(image->getIntVariable("mirrored")==-1)|(getIntVariable("mirrored")==-1)));
 
 		image->update();
-    
-		if (getGlobalIntVariable("i:new") && displaydevice->redraw)
+
+		if (getGlobalIntVariable("i:want_autocenter") && displaydevice->redraw)
 		{
 			/*
 			 * If this is the first image display, we have
@@ -313,7 +315,7 @@ namespace fim
 				left = (image->width() - this->viewport_width()) / 2;
 			if (image->height() > this->viewport_height() &&  autotop==0)
 				top = (image->height() - this->viewport_height()) / 2;
-			setGlobalVariable("i:new",0);
+                       setGlobalVariable("i:want_autocenter",0);
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
@@ -422,8 +424,10 @@ namespace fim
 	{
 		/*
 		 * returns the image pointer, regardless its use! 
+		 *
+		 * FIXME : this check is heavy.. move it downwards the call tree!
 		 * */
-		return image;
+		return check_valid() ? image : NULL;
 	}
 
         Image* Viewport::getImage()const
@@ -461,9 +465,9 @@ namespace fim
 		if(image)
 		{
 			image->reset();
-			setGlobalVariable("new",1);
+			setGlobalVariable("i:want_autocenter",1);
 		}
-                displaydevice->redraw=1;
+		should_redraw();
                 top  = 0;
                 left = 0;
 
@@ -520,7 +524,7 @@ namespace fim
 		image = NULL;
 	}
 
-        bool Viewport::check_valid()
+        bool Viewport::check_valid()const
 	{
 		/*
 		 * yes :)
@@ -528,7 +532,7 @@ namespace fim
 		return ! check_invalid();
 	}
 
-        bool Viewport::check_invalid()
+        bool Viewport::check_invalid()const
 	{
 		/*
 		 * this should not happen! (and probably doesn't happen :) )
@@ -585,6 +589,15 @@ namespace fim
 	{
 		if(!(panned & 0x02))recenter_horizontally();
 		if(!(panned & 0x01))recenter_vertically();
+	}
+
+	void Viewport::should_redraw()const
+	{
+		/* FIXME */
+		if(image)
+			image->should_redraw();
+		else
+	        	displaydevice->redraw=1;
 	}
 }
 

@@ -140,7 +140,7 @@ namespace fim
 			no_file=false;	//reloading allowed
 
 		img=fimg;	/* no scaling : one copy only */
-	        {if(cc.displaydevice){cc.displaydevice->redraw=1;}};
+	        {if(cc.displaydevice){should_redraw();}};
 
 		if(! img)
 		{
@@ -174,7 +174,9 @@ namespace fim
 		/*
 		 * buffers are freed
 		 * */
+#ifdef FIM_CACHE_DEBUG
 		std::cout << "freeing Image " << this << "\n";
+#endif
 		this->free();
 	}
 
@@ -381,7 +383,7 @@ namespace fim
 				scale=newscale;
 				ascale=newascale;
 				angle =newangle;
-	        		{if(cc.displaydevice){cc.displaydevice->redraw=1;}};
+	        		{if(cc.displaydevice){should_redraw();}};
 			}
 
 			/*
@@ -553,5 +555,10 @@ fim::string Image::getInfo()
 		if( check_invalid() ) return -1;
 		setVariable("angle",newangle);
 		return rescale();	// FIXME : necessary *only* for image update and display
+	}
+
+	void Image::should_redraw()const
+	{
+	        cc.displaydevice->redraw=1;
 	}
 }
