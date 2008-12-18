@@ -407,12 +407,90 @@ application/pdf;( [ "$DISPLAY" != "" ] && acroread %s ) || ( ( ( tty | grep tty 
 
 This will tell mutt to use kuickshow to display images under the X environment,
 and Fim otherwise.
+
 Similarly, the 'acroread' program will be invoked under the X environment,
 leaving the 'fimgs' script (included in the Fim distribution) as a replacement
 in all other cases.
 
-You can customize the lynx, links, and elinks web browsers, too.
-Or the mc (midinight commander) program.
+
+But if you built mutt with X (via --enable-sdl) support, you can use :
+
+image/*; %s
+image/png; %s
+image/jpeg; %s
+application/pdf; fim %s
+
+to use seamlessly fim as you cross-device picture viewer of choice, inside and outside the framebuffer!
+
+
+The 'elinks' web browser will use the ~/.mailcap file by default, similarly to mutt.
+
+
+You can customize the lynx and links web browsers, too.
+
+
+For the links (version 2) program, use the menus or edit ~/.links2/links.cfg
+and add the associations for fim:
+ 
+ association "fimgs" "application/pdf" "fimgs %" 55 1
+ association "fim" "image/jpeg,image/png,image/pnm,image/ppm" "fim %" 23 1
+
+and the MIME bindings:
+
+ extension "pnm" "image/x-portable-anymap"
+ extension "ppm" "image/x-portable-pixmap"
+ extension "png" "image/png"
+ extension "jpg,jpeg,jpe" "image/jpeg"
+ extension "pdf" "application/pdf"
+
+In this way you should be able to view images in the framebuffer via 'fbi' 
+spawned by links !
+
+
+
+Or the mc (midinight commander) program, editing ~/.mc/bindings (or configuring
+via the menus!):
+
+### Images ###
+
+type/^GIF
+        Include=image
+
+type/^JPEG
+        Include=image
+
+type/^PC\ bitmap
+        Include=image
+
+type/^PNG
+        Include=image
+
+type/^TIFF
+        Include=image
+
+type/^PBM
+        Include=image
+
+type/^PGM
+        Include=image
+
+type/^PPM
+        Include=image
+
+type/^Netpbm
+        Include=image
+
+include/image
+        Open=if [ "$DISPLAY" = "" ]; then fim %f; else (kuickshow %f &); fi
+        View=%view{ascii} identify %f
+
+type/^PostScript
+        Open=if [ "$DISPLAY" = "" ]; then fimgs.sh %f; else (acroread %f &); fi
+
+type/^PDF
+        Open=if [ "$DISPLAY" = "" ]; then fimgs.sh %f; else (acroread %f &); fi
+        View=%view{ascii} pdftotext %f -
+
 
 ===============================================================================
 3.6. The .inputrc file					*inputrc*

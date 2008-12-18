@@ -51,7 +51,7 @@ bind 'M' "mirroronce;";
 bind 'q' "quit";
 bind 'Esc' "quit";
 #bind 'f' "file";
-bind 'n' "next;display;";
+bind 'n' "next;";
 #bind 'h' "help";
 bind 'C-h' "help";
 bind 'x' "echo";
@@ -132,11 +132,14 @@ autocmd "PostPrev" "" "reload;";
 #autocmd "PostDisplay"   "" "i:fresh=1" ;
 #autocmd "PreWindow"   "" "";
 autocmd "PostWindow"   "" "display;";
+autocmd "PreRedisplay"   "" "i:_will_display=1;";
 autocmd "PreRedisplay"   ".*/fbps-.*" "if(i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
 autocmd "PreRedisplay"   "" "if(autowidth*i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
 autocmd "PreRedisplay"   "" "if(v:auto_scale_v *i:fresh){i:fresh=0;auto_scale       ;i:fresh=0;}";
 autocmd "PreRedisplay"   "" "if(auto_width_v *i:fresh){i:fresh=0;auto_scale_width ;i:fresh=0;}";
 autocmd "PreRedisplay"   "" "if(auto_height_v*i:fresh){i:fresh=0;auto_scale_height;i:fresh=0;}";
+autocmd "PostRedisplay" ""   "i:_will_display=0;";
+
 
 # the aalib library has often problems with proportions, and this is a temporary fix
 alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}";
@@ -146,7 +149,9 @@ autocmd "PostLoad"   "" "aalib_fix;";
 
 
 autocmd "PostReload"  "" "i:fresh=1" ;
-autocmd "PostScale"   "" "{i:fresh=1;display;}" ;
+autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
+#autocmd "PostScale"   "" "{i:fresh=1;display;}" ;
+autocmd "PostScale"   "" "_wd=i:_will_display;" ;
 autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
 autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
 #autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;}";
@@ -165,7 +170,7 @@ bind  "C-p" "pornview";
 bind  "C-b" "bookview";
 autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0;" ;
 autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
-autocmd "PreExecutionCycle" "" "redisplay;";
+#autocmd "PreExecutionCycle" "" "redisplay;";
 autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";

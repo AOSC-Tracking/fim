@@ -1765,13 +1765,29 @@ namespace fim
 	void CommandConsole::autocmd_push_stack(const autocmds_frame_t& frame)
 	{
 		//WARNING : ERROR DETECTION IS MISSING
-		autocmds_stack.insert(frame);
+		//autocmds_stack.insert(frame);
+		autocmds_stack.push_back(frame);
 	}
 
 	void CommandConsole::autocmd_pop_stack(const autocmds_frame_t& frame)
 	{
 		//WARNING : ERROR DETECTION IS MISSING
-		autocmds_stack.erase(frame);
+		//autocmds_stack.erase(frame);
+		autocmds_stack.pop_back();
+	}
+	
+	void CommandConsole::autocmd_trace_stack()
+	{
+		//this is mainly a debug function
+		unsigned int indent=0,i;
+		for(
+			autocmds_stack_t::const_iterator citer=autocmds_stack.begin();
+			citer!=autocmds_stack.end();++citer,++indent )
+			{
+				for(i=0;i<indent;++i) std::cout << " ";
+				std::cout << citer->first << " "
+					<< citer->second << "\n";
+			}
 	}
 	
 	int CommandConsole::autocmd_in_stack(const autocmds_frame_t& frame)const
@@ -1780,7 +1796,8 @@ namespace fim
 		 * this function prevents a second autocommand triggered against 
 		 * the same file to execute
 		 */
-		return  autocmds_stack.find(frame)!=autocmds_stack.end();
+		//return  autocmds_stack.find(frame)!=autocmds_stack.end();
+		return  find(autocmds_stack.begin(),autocmds_stack.end(),frame)!=autocmds_stack.end();
 	}
 #endif
 	
