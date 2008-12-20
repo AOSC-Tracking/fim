@@ -477,9 +477,9 @@ int help_and_exit(char *argv0, int code=0)
 				chomp(lineptr);
 				cc.push(lineptr);
 				//printf("%s\n",lineptr);
-				free(lineptr);
 				lineptr=NULL;
 			}
+			if(lineptr)free(lineptr);
 			close(0);
 			dup(2);
 		}
