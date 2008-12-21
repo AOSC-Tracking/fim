@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This script is intended to work on machines connected through the
 # internet to the fim subversion repository and willing to export/build
