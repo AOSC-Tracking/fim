@@ -84,6 +84,9 @@ class CommandConsole
 
 	private:
 
+	int save_history();
+	int load_history();
+
 	/*
 	 * the identifier->variable binding
 	 */

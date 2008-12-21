@@ -31,6 +31,8 @@ autowidth=1;
 ignorecase=1;
 ascale="1.0";
 console_offset=0;
+_save_fim_history=1;
+_load_fim_history=1;
 
 # useful aliases
 alias "toggleautoflip" "autoflip=1-autoflip;";

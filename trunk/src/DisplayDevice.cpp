@@ -47,8 +47,6 @@
 			 * so the next coded shoul circumvent this behaviour!
 			 */
 			{
-				cc.tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
-
 				fd_set set;
 				int fdmax;
 				struct timeval  limit;
@@ -71,7 +69,9 @@
 			        rc = select(fdmax, &set, NULL, NULL,
 			                    (0 != timeout && !paused) ? &limit : NULL);
 				if(handle_console_switch())	/* this may have side effects, though */
+				{
 					return 0;	/* warning : originally a 'continue' in a loop ! */
+				}
 				
 				if (FD_ISSET(cc.fim_stdin,&set))rc = read(cc.fim_stdin, c, 4);
 				r=rc;

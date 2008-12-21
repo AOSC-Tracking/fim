@@ -31,12 +31,10 @@ ongoing further inspiration.
 20080525	maintain a list of existing fim re-implementation and people happing using it
 20080509	very long strings in input could cause problems :)
 20080508	an autocommand could scale alignment to borders at scale time, too
-20080505	cleanup up completely the textual driver exiting
 20080505	on 64 bit architectures, problems arise because pointer arithmetics will return long int's instead of ints
 20080504	add an interface to modify key_bindings from within fim
 20080504	document and promote the advantages of adaptive 'steps' variable
 20080504	the ascale + resize + rotation combination could be messy
-20080504	the 'autocmd' hooks are not perfect
 20080502	variable=`internal_command` behaviour missing
 20080502	reintroduce X custom font support
 20080502	enrich the existing commands by documenting them and giving power to their arguments
@@ -52,7 +50,7 @@ ongoing further inspiration.
 20080126	time to think about an /etc/fimrc at installation time
 
 20071127	histall, histdell
-20071127	fim -q --quiet, vs warning al primo avvio ?
+20071127	fim -q --quiet, vs warning on first run ?
 20071127	proposal of a 'cropped view' functionality to ease sequent joint pages reading
 20071026	investigate issues related to UTF-8, charset, and mapping stuff vs raw console modes..
 20071006	implement mechanisms or policies for namespace inheritage on windows split
@@ -60,8 +58,6 @@ ongoing further inspiration.
 20070924	a virtual class Context to implement a hierarchical namespace system for variables and maybe functions (to come)
 20070920	printing support ? :)
 20070903	these features are currently going to be worked in the near future:
-			- the combined window+viewport subsystem
-			- move as much as possible of Fim to be scriptable. variables in primis!
 			- arbitrary long key sequence bindings (mutt-like)
 			- shortcuts algebra for commands
 			- parameter passing to commands 
@@ -78,13 +74,9 @@ ongoing further inspiration.
 		BOOST
 		cacalib
 		aalib
+		libdjvulibre-dev
 		...
 20070812	integrate the freshmeat-submit script (now seems like the freshmeat api is broken)
-20070810	the time is right for a massive fimrc rewrite and example scripts:
-		you could also write a little cookbook in the documentation, 
-		with examples like :
-			find -name *jpg | fim - | xargs convert -0 
-20070517	an useless, optional grid, under or over the image
 20070514	There is a growing need to document the target audience of this
 	software and its purposes.
 	Then:
@@ -154,7 +146,6 @@ Documentation related ideas:
 -------------------------------------------------------------------------------
 Almost solved problems ideas:
 
-20080430	give the user more control on the debug console
 20080127	to detect exactly if running under screen and run accordingly ;)
 
 -------------------------------------------------------------------------------
@@ -174,7 +165,6 @@ Language related ideas:
 20071127	functions, return status, stdout, stderr ?
 20071025	introduce a namespace : 'e:', to get environment variables!
 20070921	argument passing to aliases, bash like ?! or vim-like ? 
-20070920	a command to exit from a script immediately
 20070920	as much as possible of Vim's language intuitive syntax
 
 -------------------------------------------------------------------------------
@@ -230,7 +220,6 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 20070303	see if while-nesting is a real danger combined with interruption handling
 20070303	update the while construct documentation and fix the while command execution bugs 
 20070303	add an interface for setting exitBinding (now Enter!)
-20070306	primary goals : documentation and warning messages!
 20070210	add an interface to modify key bindings and keycode bindings.
 20070401	variables : $VARNAME or $(VARNAME) or VARNAME ?
 

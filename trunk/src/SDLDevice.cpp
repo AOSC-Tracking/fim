@@ -265,7 +265,6 @@
 
 	void SDLDevice::finalize()
 	{
-		//tty_restore();
 		SDL_Quit();
 	}
 

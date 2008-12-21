@@ -28,7 +28,7 @@
 /*
  * Debugging only!
  * */
-#define FIM_AALIB_DRIVER_DEBUG 1
+#define FIM_AALIB_DRIVER_DEBUG 0
 
 class AADevice:public DisplayDevice 
 {
