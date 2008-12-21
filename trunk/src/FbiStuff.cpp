@@ -303,7 +303,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, uns
 #endif
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx,dx;
+	register int sx=0,dx;
 
 	/*
 	 * this gives a ~ 50% gain
@@ -1627,7 +1627,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     unsigned char * larger_data = (unsigned char*)calloc(diagonal * diagonal * 3,1);
     if(larger_data)
     {
-	    for(y = n_extra; y < diagonal - s_extra; ++y )
+	    for(y = n_extra; y < (unsigned int) diagonal - s_extra; ++y )
 	    	memcpy(larger_data + (y * diagonal + w_extra )*3 , src->data + (y-n_extra) * src->i.width * 3 , src->i.width*3);
 	    src->i.width = diagonal;
 	    src->i.height = diagonal;

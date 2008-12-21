@@ -431,6 +431,7 @@
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
 
 		SDL_Flip(screen);
+		return 0;
 	}
 
 
@@ -454,6 +455,7 @@
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
 
 		SDL_Flip(screen);
+		return 0;
 	}
 
 
@@ -547,7 +549,7 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 	fs_render_fb(x,y,f->eindex[c],f->gindex[c]);
 	x += f->eindex[c]->width;
 	/* FIXME : SLOW ! */
-	if (x > width() - f->width)
+	if ((int)x > width() - f->width)
 		goto err;
     }
 	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);

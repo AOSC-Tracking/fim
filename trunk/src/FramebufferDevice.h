@@ -160,10 +160,11 @@ class FramebufferDevice:public DisplayDevice
 	FontServer fontserver;
 
 	int             vt ;
-	float fbgamma ;
 	public:
 	int32_t         lut_red[256], lut_green[256], lut_blue[256];
 	int             dither , pcd_res , steps ;
+	private:
+	float fbgamma ;
 
 	/*static float fbgamma = 1;*/
 	public:

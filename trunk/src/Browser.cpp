@@ -36,7 +36,7 @@ namespace fim
 		 * returns a string with the info about the files in list
 		 */
 		fim::string fileslist;
-		for(unsigned int i=0;i<flist.size();++i)fileslist+=flist[i]+fim::string(" ");
+		for(size_t i=0;i<flist.size();++i)fileslist+=flist[i]+fim::string(" ");
 		cout << fileslist.c_str();
 		return fileslist;
 	}
@@ -46,7 +46,7 @@ namespace fim
 		/*
 		 * accessory method
 		 */
-		for(unsigned int i=0;i<flist.size();++i)
+		for(size_t i=0;i<flist.size();++i)
 			os << flist[i] << "\n";
 		return os;
 	}
@@ -714,7 +714,7 @@ namespace fim
 		/* 
 		 * returns whether the file nf is in the files list
 		 */
-		for(unsigned int i=0;i<flist.size();++i)
+		for(size_t i=0;i<flist.size();++i)
 			if(flist[i]==nf)return true;
 		return false;
 	}
@@ -864,7 +864,7 @@ namespace fim
 		/*
 		 * goes to the next filename-matching file
 		 */
-		unsigned int i,j,c=current_n(),s=flist.size();
+		size_t i,j,c=current_n(),s=flist.size();
 		if( args.size() < 1 || s < 1 )return "";
 		for(j=0;j<s;++j)
 		{
@@ -1032,8 +1032,8 @@ namespace fim
 			 * if this software will have success, we will have indices here :)
 			 * sort(rlist.begin(),rlist.end());...
 			 */
-			for(unsigned int r=0;r<rlist.size();++r)
-			for(unsigned int i=0;i<flist.size();++i)
+			for(size_t r=0;r<rlist.size();++r)
+			for(size_t i=0;i<flist.size();++i)
 			if(flist[i]==rlist[r])
 			{
 //				std::cout << "removing" << flist[i]<<"\n";
@@ -1115,7 +1115,7 @@ namespace fim
 		 */
 #if 0
 		string fl;
-		for(unsigned int r=0;r<flist.size();++r)
+		for(size_t r=0;r<flist.size();++r)
 		{
 			fl+=flist[r];
 			fl+="\n";
@@ -1413,7 +1413,7 @@ namespace fim
 		/*
 		 *	pushes a new image filename on the back of the image list
 		 */
-		for(unsigned int i=0;i<args.size();++i)
+		for(size_t i=0;i<args.size();++i)
 		{
 #ifdef FIM_SMART_COMPLETION
 			/* due to this patch, filenames could arrive here with some trailing space. 
