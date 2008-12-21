@@ -114,6 +114,7 @@ namespace fim
 			 * nc amounts to the exact extra room needed )
 			 * */
 			if(nc+1+(int)(bp-buffer)>bsize || nl+1+cline>lsize)return -2;//no room : realloc needed ; 1 is for secur1ty
+			scroll=scroll-nl<0?0:scroll-nl;
 
 			// we copy the whole new string in our buffer
 			strcpy(bp,cs);
@@ -360,7 +361,13 @@ namespace fim
 			setRows(ls);
 			if( lw > 0 && lw!=lwidth ) reformat(lw);
 			if(co>=0)
-				return do_dump((cline-rows+1-co)>=0?(cline-rows+1-co):0,cline-co);
+			{
+				scroll=scroll%(rows+1);
+				if(scroll>0)
+					return do_dump((cline-rows+1-co)>=0?(cline-(rows-scroll)+1-co):0,cline-co);
+				else
+					return do_dump((cline-rows+1-co)>=0?(cline-rows+1-co):0,cline-co);
+			}
 			else
 				return do_dump(-co-1,cline);
 			return -1;
@@ -373,5 +380,20 @@ namespace fim
 			 * */
 			return do_dump((cline-rows+1)>=0?(cline-rows+1):0,cline);
 		}
+
+		int MiniConsole::clear()
+		{
+			scroll=rows;
+		};
+
+		int MiniConsole::scroll_down()
+		{
+			scroll=scroll<1?0:--scroll;
+		};
+
+		int MiniConsole::scroll_up()
+		{
+			scroll=scroll<rows?++scroll:scroll;
+		};
 }
 

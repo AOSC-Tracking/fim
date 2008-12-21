@@ -54,6 +54,7 @@ namespace fim
 		
 		int  lwidth;
 		int  rows;
+		int  scroll;
 
 		public:
 
@@ -65,6 +66,9 @@ namespace fim
 		int add(const char* cs);
 		int reformat(int newlsize);
 		int do_dump(int amount)const;
+		int clear();
+		int scroll_down();
+		int scroll_up();
 
 		private:
 		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignation */}
@@ -77,7 +81,8 @@ namespace fim
 			ccol(0),
 			cline(0),
 			lwidth(0),
-			rows(0)
+			rows(0),
+			scroll(0)
 			{/* this constructor should not be used */}
 
 		int line_length(int li);

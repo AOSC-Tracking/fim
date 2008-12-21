@@ -135,16 +135,13 @@ void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//
 	
 	if(flags==0x03)
 	{
-		/* clear screen sequence : TODO */
-		mc.dump();
+		/* clear screen sequence */
+		mc.clear();
 		return;
 	}
 
-	if(flags==0x02 || flags==0x01)
-	{
-		/* still unised sequence : TODO ...*/
-		return;
-	}
+	if( flags==0x01 ) { mc.scroll_down(); return; }
+	if( flags==0x02 ) { mc.scroll_up(); return; }
 
 	r=mc.add(msg);
 	if(r==-2)
@@ -167,8 +164,9 @@ void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//
 
 int DisplayDevice::console_control(int arg)//experimental
 {
-	if(arg==0x01)fb_status_screen_new(NULL,0,arg);//experimental
-	if(arg==0x02)fb_status_screen_new(NULL,0,arg);//experimental
+	if(arg==0x01)fb_status_screen_new(NULL,0,arg);
+	if(arg==0x02)fb_status_screen_new(NULL,0,arg);
+	if(arg==0x03)fb_status_screen_new(NULL,0,arg);
 	return 0;
 }
 
