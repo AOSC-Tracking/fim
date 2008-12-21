@@ -313,6 +313,7 @@
 		if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
 
 		int r;
+#if (!FIM_AALIB_DRIVER_DEBUG)
 		if((r=matrix_copy_rgb_to_gray(
 				aa_image(ascii_context),rgb,
 				iroff,icoff, // row and column offset of the first input pixel
@@ -324,6 +325,7 @@
 				flags
 			)))
 			return r;
+#endif
 			//return -50;
 
 /*		aa_putpixel(ascii_context,ocols-1,orows-1,0xAA);
@@ -412,11 +414,13 @@
 
 	int AADevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
 	{
+#if (!FIM_AALIB_DRIVER_DEBUG)
 		aa_puts(ascii_context,x,y,
 			//AA_REVERSE,
 			AA_NORMAL,
 			//AA_SPECIAL,
 			(const char*)str);
+#endif
 		return 0;
 	}
 
@@ -436,7 +440,9 @@
 
 	int AADevice::status_line(unsigned char *msg)
 	{
+#if (!FIM_AALIB_DRIVER_DEBUG)
 		aa_printf(ascii_context,0,txt_height()-1,AA_NORMAL,"%s",msg);
+#endif
 		aa_flush(ascii_context);
 		return 0;
 	}

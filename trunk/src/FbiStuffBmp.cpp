@@ -123,7 +123,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 #endif
 
     if (FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"bmp: hdr=%d size=%dx%d planes=%d"
+	FIM_FBI_PRINTF("bmp: hdr=%d size=%dx%d planes=%d"
 		" bits=%d size=%d res=%dx%d colors=%d/%d | %d\n",
 		h->hdr.size,h->hdr.width,h->hdr.height,
 		h->hdr.planes,h->hdr.bit_cnt,h->hdr.image_size,
@@ -134,13 +134,13 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 	h->hdr.bit_cnt != 8  &&
 	h->hdr.bit_cnt != 24) {
 	if(FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"bmp: can't handle depth [%d]\n",h->hdr.bit_cnt);
+	FIM_FBI_PRINTF("bmp: can't handle depth [%d]\n",h->hdr.bit_cnt);
 	goto oops;
     }
     if (h->hdr.compression[0] || h->hdr.compression[1] ||
 	h->hdr.compression[2] || h->hdr.compression[3]) {
 	if(FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"bmp: can't handle compressed bitmaps [%c%c%c%c]\n",
+	FIM_FBI_PRINTF("bmp: can't handle compressed bitmaps [%c%c%c%c]\n",
 		h->hdr.compression[0],
 		h->hdr.compression[1],
 		h->hdr.compression[2],

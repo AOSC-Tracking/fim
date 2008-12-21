@@ -56,24 +56,24 @@ gif_fileread(struct gif_state *h)
     for (;;) {
 	if (GIF_ERROR == DGifGetRecordType(h->gif,&RecordType)) {
 	    if (FbiStuff::fim_filereading_debug())
-		fprintf(stderr,"gif: DGifGetRecordType failed\n");
+		FIM_FBI_PRINTF("gif: DGifGetRecordType failed\n");
 	    PrintGifError();
 	    return (GifRecordType)-1;
 	}
 	switch (RecordType) {
 	case IMAGE_DESC_RECORD_TYPE:
 	    if (FbiStuff::fim_filereading_debug())
-		fprintf(stderr,"gif: IMAGE_DESC_RECORD_TYPE found\n");
+		FIM_FBI_PRINTF("gif: IMAGE_DESC_RECORD_TYPE found\n");
 	    return RecordType;
 	case EXTENSION_RECORD_TYPE:
 	    if (FbiStuff::fim_filereading_debug())
-		fprintf(stderr,"gif: EXTENSION_RECORD_TYPE found\n");
+		FIM_FBI_PRINTF("gif: EXTENSION_RECORD_TYPE found\n");
 	    for (rc = DGifGetExtension(h->gif,&ExtCode,&Extension);
 		 NULL != Extension;
 		 rc = DGifGetExtensionNext(h->gif,&Extension)) {
 		if (rc == GIF_ERROR) {
 		    if (FbiStuff::fim_filereading_debug())
-			fprintf(stderr,"gif: DGifGetExtension failed\n");
+			FIM_FBI_PRINTF("gif: DGifGetExtension failed\n");
 		    PrintGifError();
 		    return (GifRecordType)-1;
 		}
@@ -85,17 +85,17 @@ gif_fileread(struct gif_state *h)
 		    case APPLICATION_EXT_FUNC_CODE: type="appl";      break;
 		    default:                        type="???";       break;
 		    }
-		    fprintf(stderr,"gif: extcode=0x%x [%s]\n",ExtCode,type);
+		    FIM_FBI_PRINTF("gif: extcode=0x%x [%s]\n",ExtCode,type);
 		}
 	    }
 	    break;
 	case TERMINATE_RECORD_TYPE:
 	    if (FbiStuff::fim_filereading_debug())
-		fprintf(stderr,"gif: TERMINATE_RECORD_TYPE found\n");
+		FIM_FBI_PRINTF("gif: TERMINATE_RECORD_TYPE found\n");
 	    return RecordType;
 	default:
 	    if (FbiStuff::fim_filereading_debug())
-		fprintf(stderr,"gif: unknown record type [%d]\n",RecordType);
+		FIM_FBI_PRINTF("gif: unknown record type [%d]\n",RecordType);
 	    return (GifRecordType)-1;
 	}
     }
@@ -109,7 +109,7 @@ gif_skipimage(struct gif_state *h)
     int i;
 
     if (FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"gif: skipping image record ...\n");
+	FIM_FBI_PRINTF("gif: skipping image record ...\n");
     DGifGetImageDesc(h->gif);
     line = malloc(h->gif->SWidth);
     for (i = 0; i < h->gif->SHeight; i++)
@@ -139,13 +139,13 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 	case IMAGE_DESC_RECORD_TYPE:
 	    if (GIF_ERROR == DGifGetImageDesc(h->gif)) {
 		if (FbiStuff::fim_filereading_debug())
-		    fprintf(stderr,"gif: DGifGetImageDesc failed\n");
+		    FIM_FBI_PRINTF("gif: DGifGetImageDesc failed\n");
 		PrintGifError();
 	    }
 	    if (NULL == h->gif->SColorMap &&
 		NULL == h->gif->Image.ColorMap) {
 		if (FbiStuff::fim_filereading_debug())
-		    fprintf(stderr,"gif: oops: no colormap found\n");
+		    FIM_FBI_PRINTF("gif: oops: no colormap found\n");
 		goto oops;
 	    }
 #if 0
@@ -158,10 +158,10 @@ gif_init(FILE *fp, char *filename, unsigned int page,
             info->npages = 1;
 	    image = 1;
 	    if (FbiStuff::fim_filereading_debug())
-		fprintf(stderr,"gif: reading image record ...\n");
+		FIM_FBI_PRINTF("gif: reading image record ...\n");
 	    if (h->gif->Image.Interlace) {
 		if (FbiStuff::fim_filereading_debug())
-		    fprintf(stderr,"gif: interlaced\n");
+		    FIM_FBI_PRINTF("gif: interlaced\n");
 		h->il = (GifPixelType*)malloc(h->w * h->h * sizeof(GifPixelType));
 		for (i = 0; i < h->h; i += 8)
 		    DGifGetLine(h->gif, h->il + h->w*i,h->w);
@@ -180,14 +180,14 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 	goto oops;
 
     if (FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"gif: s=%dx%d i=%dx%d\n",
+	FIM_FBI_PRINTF("gif: s=%dx%d i=%dx%d\n",
 		h->gif->SWidth,h->gif->SHeight,
 		h->gif->Image.Width,h->gif->Image.Height);
     return h;
 
  oops:
     if (FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"gif: fatal error, aborting\n");
+	FIM_FBI_PRINTF("gif: fatal error, aborting\n");
     DGifCloseFile(h->gif);
     fclose(h->infile);
     free(h->row);
@@ -227,7 +227,7 @@ gif_done(void *data)
     struct gif_state *h = (struct gif_state *) data;
 
     if (FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"gif: done, cleaning up\n");
+	FIM_FBI_PRINTF("gif: done, cleaning up\n");
     DGifCloseFile(h->gif);
     fclose(h->infile);
     if (h->il)

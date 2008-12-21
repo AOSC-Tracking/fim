@@ -596,7 +596,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	}
 #if 0
 	if (ffd.debug)
-	    fprintf(stderr,"y:  %6.2f%%: %d/%d => %d/%d\n",
+	    FIM_FBI_PRINTF("y:  %6.2f%%: %d/%d => %d/%d\n",
 		    weight*100,h->srcrow,src->height,line,h->height);
 #endif
 	csrcline = src->data + h->srcrow * src->i.width * 3;
@@ -709,7 +709,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	    }
 #if 0
 	    if (ffd.debug)
-		fprintf(stderr," x: %6.2f%%: %d/%d => %d/%d\n",
+		FIM_FBI_PRINTF(" x: %6.2f%%: %d/%d => %d/%d\n",
 			weight*100,sx,src->width,dx,h->width);
 #endif
 	    d0 += fsrcline[3*sx+0] * weight;
@@ -1148,7 +1148,7 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
 
     free(img.data);
     if (ffd.debug)
-	fprintf(stderr,"y: %d-%d/%d  --  x: %d-%d/%d\n",
+	FIM_FBI_PRINTF("y: %d-%d/%d  --  x: %d-%d/%d\n",
 		rect.y1, rect.y2, img.i.height,
 		rect.x1, rect.x2, img.i.width);
 
@@ -1330,7 +1330,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
     if (NULL == (fp = fopen(filename, "r"))) {
 	//comment by dez, temporary
 	if(ffd.debug)
-		fprintf(stderr,"open %s: %s\n",filename,strerror(errno));
+		FIM_FBI_PRINTF("open %s: %s\n",filename,strerror(errno));
 	return NULL;
     }
     } else fp=fd;
@@ -1498,7 +1498,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
     if(strcmp(filename,"/dev/stdin")==0) { close(0); dup(2);/* if the image is loaded from stdin, we close its stream */}
     if (NULL == data) {
 	if(ffd.debug)
-		fprintf(stderr,"loading %s [%s] FAILED\n",filename,loader->name);
+		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);
 	return NULL;
     }
