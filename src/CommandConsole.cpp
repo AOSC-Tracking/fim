@@ -460,12 +460,13 @@ namespace fim
 		/*  */
 		setVariable("_TERM", getenv("TERM"));
 
+		// NOTE : for the dumb device, it could be better ...
+		tty_raw();// this, here, inhibits unwanted key printout (raw mode), and saves the current tty state
 		if( device=="fb" )
 		{
 			extern fim::FramebufferDevice ffd; 
 			displaydevice=&ffd;	/* FIXME : THIS IS A HORRIBLE HACK : DANGER */
 			if(ffd.framebuffer_init())cleanup_and_exit(0);
-			tty_raw();// this, here, inhibits unwanted key printout (raw mode?!)
 		}
 
 
@@ -525,10 +526,6 @@ namespace fim
 		}
 		}
 		#endif
-
-#ifdef FIM_USE_READLINE
-		rl::initialize_readline( !displaydevice );
-#endif
 
 		if( device=="fb" && displaydevice==NULL)
 		{
@@ -647,6 +644,10 @@ namespace fim
 		/*
 		 *	FIX ME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
 		 * */
+#ifdef FIM_USE_READLINE
+		rl::initialize_readline( !displaydevice );
+		load_history();
+#endif
 		return 0;
 	}
 
@@ -1183,7 +1184,6 @@ namespace fim
 						sprintf(buf,"got : %x (%d)\n",c,c);
 						cout << buf ;
 					}
-					//tty_restore();	/*commented 20081005 : seems useless, but i'm not sure */
 #ifndef FIM_USE_READLINE
 					if(c==(unsigned int)getIntVariable("console_key") || 
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
@@ -2458,6 +2458,51 @@ namespace fim
 		tcsetattr (0, TCSANOW, &saved_attributes);
 	}
 
+
+	int CommandConsole::save_history()
+	{
+#ifndef FIM_NOFIMRC
+  #ifndef FIM_NOSCRIPTING
+    #ifdef FIM_USE_READLINE
+		/* default, hard-coded configuration first */
+		if(getIntVariable("_save_fim_history")==1 )
+		{
+			char hfile[_POSIX_PATH_MAX];
+			char *e = getenv("HOME");
+			if(e && strlen(e)<_POSIX_PATH_MAX-14)//strlen(".fim_history")+2
+			{
+				strcpy(hfile,e);
+				strcat(hfile,"/.fim_history");
+				write_history(hfile);
+			}
+		}
+    #endif
+  #endif
+#endif
+	}
+
+	int CommandConsole::load_history()
+	{
+#ifndef FIM_NOFIMRC
+  #ifndef FIM_NOSCRIPTING
+    #ifdef FIM_USE_READLINE
+		/* default, hard-coded configuration first */
+		if(getIntVariable("_load_fim_history")==1 )
+		{
+			char hfile[_POSIX_PATH_MAX];
+			char *e = getenv("HOME");
+			if(e && strlen(e)<_POSIX_PATH_MAX-14)//strlen(".fim_history")+2
+			{
+				strcpy(hfile,e);
+				strcat(hfile,"/.fim_history");
+				read_history(hfile);
+			}
+		}
+    #endif
+  #endif
+#endif
+	}
+
 	/*
 	 * This routine terminates the program as cleanly as possible.
 	 * It should be used whenever useful.
@@ -2468,7 +2513,12 @@ namespace fim
 		 * the display device should exit cleanly to avoid cluttering the console
 		 * ... or the window system
 		 * */
+
 		if(displaydevice) displaydevice->finalize();
+		tty_restore();	
+#ifdef FIM_USE_READLINE
+		save_history();
+#endif
 		std::exit(code);
 	}
 

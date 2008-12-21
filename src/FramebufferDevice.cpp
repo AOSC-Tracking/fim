@@ -959,8 +959,10 @@ void FramebufferDevice::cleanup(void)
 	perror("ioctl VT_ACTIVATE");
     if (orig_vt_no && -1 == ioctl(tty, VT_WAITACTIVE, orig_vt_no))
 	perror("ioctl VT_WAITACTIVE");
-    tcsetattr(tty, TCSANOW, &term);
-    close(tty);
+
+    // there's no need to restore the tty : this is performed outside ( 20081221 )
+    //tcsetattr(tty, TCSANOW, &term);
+    //close(tty);
 }
 
 unsigned char * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror)/*dez's mirror patch*/
@@ -1698,6 +1700,5 @@ int FramebufferDevice::display(
 void FramebufferDevice::finalize (void)
 {
 	clear_screen();
-	cc.tty_restore();
 	cleanup();
 }
