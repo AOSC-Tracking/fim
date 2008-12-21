@@ -434,4 +434,11 @@
 		return clear_rect_(aa_image(ascii_context),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context));
 	}
 
+	int AADevice::status_line(unsigned char *msg)
+	{
+		aa_printf(ascii_context,0,txt_height()-1,AA_NORMAL,"%s",msg);
+		aa_flush(ascii_context);
+		return 0;
+	}
+
 #endif

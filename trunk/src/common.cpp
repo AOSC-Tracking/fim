@@ -293,7 +293,6 @@ int strchr_count(const char*s, int c)
 	return n;
 }
 
-
 int newlines_count(const char*s)
 {
 	/*
