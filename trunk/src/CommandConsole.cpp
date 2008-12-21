@@ -1724,14 +1724,15 @@ namespace fim
 		 *	we want to prevent from looping autocommands, so this rudimentary
 		 *	mechanism should avoid the majority of them.
 		 */
-		if(! autocmd_in_stack( autocmds_frame_t(event,fname)))
+		autocmds_loop_frame_t frame(event,fname);
+		if(! autocmd_in_stack( frame ))
 		{
-			autocmd_push_stack( autocmds_frame_t(event,fname));
+			autocmd_push_stack( frame );
 			for( api=autocmds[event].begin();api!=autocmds[event].end();++api )
 			{
 				autocmd_exec(event,(*api).first,fname);
 			}
-			autocmd_pop_stack(autocmds_frame_t(event,fname));
+			autocmd_pop_stack( frame );
 		}
 		else
 		{
@@ -1755,49 +1756,56 @@ namespace fim
 		{
 			if(regexp_match(fname.c_str(),pat.c_str()))	//UNFINISHED : if fname matches path pattern.. now matches ALWAYS
 			{
+				autocmds_frame_t frame(autocmds_loop_frame_t(event,fname),(autocmds[event][pat][i]).c_str());
 //				cout << "should exec '"<<event<<"'->'"<<autocmds[event][pat][i]<<"'\n";
+				autocmds_stack.push_back(frame);
 				execute((autocmds[event][pat][i]).c_str(),0,1);
+				autocmds_stack.pop_back();
 			}
 		}
 		return "";
 	}
 
-	void CommandConsole::autocmd_push_stack(const autocmds_frame_t& frame)
+	void CommandConsole::autocmd_push_stack(const autocmds_loop_frame_t& frame)
 	{
 		//WARNING : ERROR DETECTION IS MISSING
-		//autocmds_stack.insert(frame);
-		autocmds_stack.push_back(frame);
+		autocmds_loop_stack.push_back(frame);
 	}
 
-	void CommandConsole::autocmd_pop_stack(const autocmds_frame_t& frame)
+	void CommandConsole::autocmd_pop_stack(const autocmds_loop_frame_t& frame)
 	{
 		//WARNING : ERROR DETECTION IS MISSING
-		//autocmds_stack.erase(frame);
-		autocmds_stack.pop_back();
+		autocmds_loop_stack.pop_back();
 	}
 	
 	void CommandConsole::autocmd_trace_stack()
 	{
-		//this is mainly a debug function
+		/*
+		 * this is mainly a debug function: it will write to stdout
+		 * the current autocommands stack trace.
+		 */
 		size_t indent=0,i;
+		if(autocmds_stack.end()==autocmds_stack.begin()) std::cout << "<>\n";
 		for(
 			autocmds_stack_t::const_iterator citer=autocmds_stack.begin();
 			citer!=autocmds_stack.end();++citer,++indent )
 			{
-				for(i=0;i<indent;++i) std::cout << " ";
-				std::cout << citer->first << " "
+				for(i=0;i<indent+1;++i) std::cout << " ";
+				std::cout
+					<< citer->first.first << " "
+					<< citer->first.second << " "
 					<< citer->second << "\n";
 			}
 	}
 	
-	int CommandConsole::autocmd_in_stack(const autocmds_frame_t& frame)const
+	int CommandConsole::autocmd_in_stack(const autocmds_loop_frame_t& frame)const
 	{
 		/*
 		 * this function prevents a second autocommand triggered against 
 		 * the same file to execute
 		 */
-		//return  autocmds_stack.find(frame)!=autocmds_stack.end();
-		return  find(autocmds_stack.begin(),autocmds_stack.end(),frame)!=autocmds_stack.end();
+		//return  autocmds_loop_stack.find(frame)!=autocmds_loop_stack.end();
+		return  find(autocmds_loop_stack.begin(),autocmds_loop_stack.end(),frame)!=autocmds_loop_stack.end();
 	}
 #endif
 	
