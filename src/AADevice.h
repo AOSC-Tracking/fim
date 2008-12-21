@@ -55,12 +55,7 @@ class AADevice:public DisplayDevice
 	int txt_height();
 	int width();
 	int height();
-	int status_line(unsigned char *msg)
-	{
-		aa_printf(ascii_context,0,txt_height()-1,AA_NORMAL,"%s",msg);
-		aa_flush(ascii_context);
-		return 0;
-	}
+	int status_line(unsigned char *msg);
 	void status_screen(int desc,int draw_output){}
 	int handle_console_switch(){return 0;}
 	int clear_rect_(

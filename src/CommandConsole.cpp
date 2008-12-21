@@ -1087,7 +1087,7 @@ namespace fim
 		{
 			cycles++;
 
-			if(g_fim_no_framebuffer==0)
+		//	if(g_fim_no_framebuffer==0)
 			{
 				fd_set          set;
 				struct timeval  limit;
@@ -1095,7 +1095,7 @@ namespace fim
 				limit.tv_sec = -1;
 				limit.tv_usec = 0;
 			}
-			else;//ic=true;
+		//	else;//ic=true;
 
 #ifdef FIM_USE_READLINE
 			if(ic==1)
@@ -2477,7 +2477,7 @@ namespace fim
 	 */
 	void CommandConsole::status_screen(const char *desc)
 	{
-		if(g_fim_no_framebuffer)return;
+		//if(g_fim_no_framebuffer)return;
 	//	framebufferdevice.status_screen(desc,drawOutput());
 		if(displaydevice)
 			displaydevice->fb_status_screen_new(desc,drawOutput(),0);

@@ -48,7 +48,7 @@ using std :: vector;
 /*
  * Global variables.
  * */
-	int g_fim_no_framebuffer=1;
+//	int g_fim_no_framebuffer=1;
 	fim::string g_fim_output_device;
 	FlexLexer *lexer;
 
@@ -227,7 +227,7 @@ int help_and_exit(char *argv0, int code=0)
 		int c;
 		bool appendedPostInitCommand=false;
 		Image* stream_image=NULL;
-		g_fim_no_framebuffer=0;
+		//g_fim_no_framebuffer=0;
 	    	g_fim_output_device="";
 	
 		setlocale(LC_ALL,"");	//uhm..
@@ -420,7 +420,13 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 't':
 		    //fim's
-		    	g_fim_no_framebuffer=1;
+		    	//g_fim_no_framebuffer=1;
+			#ifdef FIM_WITH_AALIB
+		    	g_fim_output_device="aa";
+			#else
+			std::cerr << "you should recompile fim with aalib support!\n";
+			g_fim_output_device="dumb";
+			#endif
 		    break;
 		case 'o':
 		    //fim's
@@ -535,7 +541,6 @@ int help_and_exit(char *argv0, int code=0)
 		)
 			help_and_exit(argv[0],-1);
 	
-
 		/* output device guess */
 		if( g_fim_output_device=="" )
 		{
@@ -548,8 +553,11 @@ int help_and_exit(char *argv0, int code=0)
 			}
 			else
 			#endif
+			g_fim_output_device="fb";
+			/* TODO : a probing mechanism for all the available output devices */
+#if 0
 			{
-			if( g_fim_no_framebuffer )
+			//if( g_fim_no_framebuffer )
 			{
 				#ifdef FIM_WITH_AALIB
 				g_fim_output_device="aa";
@@ -557,16 +565,16 @@ int help_and_exit(char *argv0, int code=0)
 				#ifdef FIM_WITH_CACALIB
 				g_fim_output_device="caca";
 				#else
-				g_fim_output_device="dumb";
-				#endif
-				#endif
-			}
-			else
+			//	g_fim_output_device="dumb";
 				g_fim_output_device="fb";
+				#endif
+				#endif
 			}
+			}
+#endif
 		}
 
-		if((g_fim_no_framebuffer)==0 && g_fim_output_device=="fb")
+		if(/*(g_fim_no_framebuffer)==0 &&*/ g_fim_output_device=="fb")
 		{
 			if(default_fbdev)ffd.set_fbdev(default_fbdev);
 			if(default_fbmode)ffd.set_fbmode(default_fbmode);

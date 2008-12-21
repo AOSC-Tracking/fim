@@ -147,6 +147,8 @@ namespace rl
 	#define FIM_ALIGNED
 #endif
 
+#define FIM_FBI_PRINTF( ... ) fprintf(stderr, __VA_ARGS__ )
+
 #include "string.h"
 #include "Command.h"
 #include "Arg.h"

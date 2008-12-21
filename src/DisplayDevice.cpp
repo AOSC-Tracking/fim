@@ -172,8 +172,16 @@ int DisplayDevice::console_control(int arg)//experimental
 
 int DisplayDevice::init_console()
 {
-	mc.setRows ((height()/f->height)/2);
-	mc.reformat( width() /f->width    );
+	if(f)
+	{	
+		mc.setRows ((height()/f->height)/2);
+		mc.reformat( width() /f->width    );
+	}
+	else
+	{
+		mc.setRows ( height()   );
+		mc.reformat( width()    );
+	}
 	return 0;
 }
 

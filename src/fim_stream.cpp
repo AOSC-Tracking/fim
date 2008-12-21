@@ -55,12 +55,8 @@ namespace fim
 
 		fim_stream& fim_stream::operator<<(const  char* s)
 		{
-			if(g_fim_no_framebuffer==0)
-			{
-				if(s)cc.status_screen(s);
-			}
-			else
-				if(s)printf("%s",s);
+			if(s)cc.status_screen(s);
+			//else if(s)printf("%s",s);
 
 			return *this;
 		}
