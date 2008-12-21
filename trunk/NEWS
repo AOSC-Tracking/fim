@@ -1,6 +1,11 @@
 	
 	FIM NEWS -- history of user-visible changes in FIM.
 
+        	Version 0.3-beta
+
+ * experimental support for SDLlib (Simple Directmedia Layer) (-o sdl)
+ * full         support for AAlib (Ascii Art rendering) (-o aa)
+
         	Version 0.3-alpha
 
  * experimental support for AAlib (Ascii Art rendering) (-t)

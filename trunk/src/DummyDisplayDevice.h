@@ -45,6 +45,7 @@ class DummyDisplayDevice:public DisplayDevice
 	virtual ~DummyDisplayDevice(){}
 
 	virtual int get_chars_per_line(){return 1;/* 0 would be so cruel */}
+	virtual int get_chars_per_column(){return 1;/* 0 would be so cruel */}
 	virtual int width(){return 1;/* 0 would be so cruel */}
 	virtual int height(){return 1;/* 0 would be so cruel */}
 	virtual int status_line(unsigned char *msg){return 0;}

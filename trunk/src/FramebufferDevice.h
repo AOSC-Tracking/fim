@@ -556,6 +556,11 @@ void init_one(int32_t *lut, int bits, int shift)
 		return fb_var.yres;
 	}
 
+	int get_chars_per_column()
+	{
+		return fb_var.yres / fb_font_height();
+	}
+
 	int get_chars_per_line()
 	{
 		return fb_var.xres / fb_font_width();

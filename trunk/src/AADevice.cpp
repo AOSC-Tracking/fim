@@ -396,6 +396,7 @@
 		cc.tty_restore();		/* somehow necessary to unclutter the terminal (yes, a bug) */
 	}
 	int AADevice::get_chars_per_line(){return aa_scrwidth(ascii_context);}
+	int AADevice::get_chars_per_column(){return aa_scrheight(ascii_context);}
 	int AADevice::txt_width() { return aa_scrwidth(ascii_context ) ;}
 	int AADevice::txt_height(){ return aa_scrheight(ascii_context) ;}
 	int AADevice::width() { return aa_imgwidth(ascii_context ) ;}
@@ -403,14 +404,34 @@
 
 	int AADevice::init_console()
 	{
-		mc.setRows ( -height()/2);
+		//mc.setRows ( -height()/2);
+		mc.setRows ( get_chars_per_column()/2 );
 		mc.reformat(  width()   );
 		return 0;
 	}
 
+	int AADevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
+	{
+		aa_puts(ascii_context,x,y,
+			//AA_REVERSE,
+			AA_NORMAL,
+			//AA_SPECIAL,
+			(const char*)str);
+		return 0;
+	}
 
-/*
- * This is embryo code and should be used for experimental purposes only!
- */
+	void AADevice::flush()
+	{
+		aa_flush(ascii_context);
+	}
+
+	int AADevice::clear_rect(int x1, int x2, int y1, int y2)
+	{
+		/* FIXME : only if initialized !
+		 * TODO : define the exact conditions to use this method
+		 * */
+		
+		return clear_rect_(aa_image(ascii_context),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context));
+	}
 
 #endif
