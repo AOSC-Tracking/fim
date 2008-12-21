@@ -427,8 +427,8 @@ namespace fim
 		addCommand(new Command(fim::string("commands"  ),fim::string("displays the existing commands"),this,&CommandConsole::commands_list));
 		addCommand(new Command(fim::string("dump_key_codes"  ),fim::string("dumps the key codes"),this,&CommandConsole::dump_key_codes));
 		addCommand(new Command(fim::string("clear"  ),fim::string("clears the virtual console"),this,&CommandConsole::clear));
-//		addCommand(new Command(fim::string("scrollup"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
-//		addCommand(new Command(fim::string("scrolldown"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
+		addCommand(new Command(fim::string("scroll_console_up"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
+		addCommand(new Command(fim::string("scroll_console_down"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
 		/*
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */
@@ -438,6 +438,12 @@ namespace fim
 
         bool CommandConsole::is_file(fim::string nf)const
         {
+		/*
+		 * note:
+		 * this function is written a little bit unsafely,
+		 * because the file could change between calls.
+		 * improvements are possible.
+		 */
                 struct stat stat_s;
                 /*      if the file doesn't exist, return */
                 if(-1==stat(nf.c_str(),&stat_s))return false;
@@ -541,14 +547,12 @@ namespace fim
 		// textual console reformatting (should go to displaydevice some day)
 		displaydevice->init_console();
 	
-		fim_uninitialized = 0; // new
-		/*
-		 * FIXME : dependencies are very hard to track lately :) !
-		 * */
+		fim_uninitialized = 0; 
 
 #ifdef FIM_WINDOWS
-		// FIXME : DANGER, WARNING
-		// THIS SHOULD BE IN THE CONSTRUCTOR, AND SHALL BE SOME DAY :)
+		/*
+		 * TODO : move this to the constructor, some day.
+		 */
 	
 		/* true pixels if we are in framebuffer mode */
 		/* fake pixels if we are in text (er.. less than!) mode */
@@ -566,7 +570,7 @@ namespace fim
 		}
 
 		/*
-		 * FIXME : exceptions should be launched here in case ...
+		 * TODO: exceptions should be launched here in case ...
 		 * */
 		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"), window,&Window::cmd));
 #endif
@@ -588,8 +592,8 @@ namespace fim
 		/* default, hard-coded configuration first */
 		if(getIntVariable("_load_default_etc_fimrc")==1 )
 		{
-			// FIXME : MISSING CHECK OF EXISTENCE
-			if(-1==executeFile("/etc/fimrc"));//FIXME
+			if(is_file("/etc/fimrc"))
+				if(-1==executeFile("/etc/fimrc"));
 		}
 		
 		/* default, hard-coded configuration first */
@@ -817,7 +821,7 @@ namespace fim
 		}
 	}
 
-	void CommandConsole::execute(const char *ss, int add_history_, int suppress_output_)
+	int CommandConsole::execute(const char *ss, int add_history_, int suppress_output_)
 	{
 		try{
 		/*
@@ -834,7 +838,8 @@ namespace fim
 			//if(s==NULL){ferror("null command");return;}
 			//assert(s);
 			//this shouldn't happen
-			this->quit(0);
+			//this->quit(0);
+			return -1;
 		}
 		//we open a pipe with the lexer/parser
 		int r = pipe(pipedesc);
@@ -846,7 +851,7 @@ namespace fim
 		//we write there our script or commands
 		r=write(pipedesc[1],s,strlen(s));
 		//we are done!
-		if(r!=(int)strlen(s))
+		if((size_t)r!=strlen(s))
 		{
 			ferror("write error");
     			cleanup_and_exit(-1);
@@ -872,6 +877,7 @@ namespace fim
 			if( e == FIM_E_TRAGIC || true ) this->quit( FIM_E_TRAGIC );
 		}
 		//we add to history only meaningful commands/aliases.
+		return 0;
 	}
 
         fim::string CommandConsole::execute(fim::string cmd, args_t args)
@@ -1273,7 +1279,7 @@ namespace fim
 	fim::string CommandConsole::executeFile(const args_t &args)
 	{
 		/*
-		 * FIXME : catched all ?
+		 * TODO : catch exceptions
 		 * */
 		for(size_t i=0;i<args.size();++i)executeFile(args[i].c_str());
 		return "";
@@ -1342,13 +1348,11 @@ namespace fim
 	fim::string CommandConsole::readStdFileDescriptor(FILE* fd)
 	{
 		/*
-		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
-		 *
-		 * FIXME : catched all ?
+		 * TODO : catch exceptions
 		 */
 
 		int r;
-		char buf[4096];
+		char buf[4096];	// TODO : buffer too small
 		fim::string cmds;
 		if(fd==NULL)return -1;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
@@ -1362,7 +1366,7 @@ namespace fim
 		/*
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
 		 *
-		 * FIXME : catched all ?
+		 * TODO : catch exceptions
 		 */
 
 		int r;
@@ -1380,7 +1384,7 @@ namespace fim
 		/*
 		 * executes a file denoted by filename
 		 *
-		 * FIXME : catched all ?
+		 * TODO : catch exceptions
 		 * */
 		execute(slurp_file(s).c_str(),0,1);
 		return 0;
@@ -1447,10 +1451,7 @@ namespace fim
 		 *
 		 * FIXME
 		 * */
-		//if(getVariableType(varname))
-		//cout<<getIntVariable(varname);
-//		else
-		cout<<getStringVariable(varname);
+		fim::cout<<getStringVariable(varname);
 		return 0;
 	}
 
@@ -1460,7 +1461,6 @@ namespace fim
 		/*
 		 *
 		 * */
-		//return inConsole() || this->getIntVariable("_display_status");
 		return (inConsole() || this->getIntVariable("_display_console"));
 	}
 
@@ -2087,7 +2087,7 @@ namespace fim
 		}
 		catch	(FimException e)
 		{
-			//FIXME
+			// well, we should to something : FIXME
 		}
 		return needed_redisplay;
 #else
@@ -2114,7 +2114,7 @@ namespace fim
 		}
 		catch	(FimException e)
 		{
-			//FIXME
+			// well, we should to something : FIXME
 		}
 		return needed_redisplay;
 #else
@@ -2200,11 +2200,12 @@ namespace fim
 	{
 		/*
 		 * all of the commands given as arguments are executed.
-		 *
-		 * FIXME : return value should make more sense..
 		 * */
 		for(size_t i=0;i<args.size();++i)
-			execute(args[i].c_str(),0,0);
+		{
+			if(execute(args[i].c_str(),0,0))
+				return fim::string("problems executing ")+args[i]+fim::string("\n");
+		}
 		return "";
 	}
 #endif
@@ -2330,7 +2331,7 @@ namespace fim
 		/*
 		 * returns a reference to the current viewport.
 		 *
-		 * FIXME : and catch ?
+		 * TODO : did we catch all exceptions ?
 		 * */
 		return current_window().current_viewportp();
 	}
@@ -2386,7 +2387,7 @@ namespace fim
 		 * with one identifier as argument, prints out its value.
 		 * with two arguments, sets the first argument's value.
 		 *
-		 * FIXME : THIS IS NOT EXACTLY VIM'S BEHAVIOUR
+		 * NOTE : THIS IS NOT EXACTLY VIM'S BEHAVIOUR (FIXME)
 		 * */
 		if( ! args.size())return get_variables_list();
 		if(1==args.size())return getStringVariable(args[0]);
@@ -2406,34 +2407,23 @@ namespace fim
 		return "";
 	}
 
-/*	fim::string CommandConsole::scroll_up(const args_t& args)
+	fim::string CommandConsole::scroll_up(const args_t& args)
 	{
-		if(g_fim_no_framebuffer) { } else
-			framebufferdevice.console_control(0x01);//experimental
+		if(!displaydevice) { } else
+			displaydevice->console_control(0x01);
 		return "";
 	}
 
 	fim::string CommandConsole::scroll_down(const args_t& args)
 	{
-		if(g_fim_no_framebuffer) { } else
-			framebufferdevice.console_control(0x02);//experimental
+		if(!displaydevice) { } else
+			displaydevice->console_control(0x02);
 		return "";
-	}*/
+	}
 
 	fim::string CommandConsole::clear(const args_t& args)
 	{
-#ifndef FIM_DOESNT_SUCK_ANYMORE
-		cout << "clear command is under rework. sorry!\n";
-		return "";
-#endif
-		/*
-		 * FIXME : unimplemented
-		 * */
-		framebufferdevice.console_control(0x03);//experimental
-		/*
-		 * FIXME: clean down from this..
-		 * status_screen(NULL,NULL);
-		 */
+		displaydevice->console_control(0x03);//experimental
 		return "";
 	}
 
@@ -2488,11 +2478,9 @@ namespace fim
 	void CommandConsole::status_screen(const char *desc)
 	{
 		if(g_fim_no_framebuffer)return;
-		/*
-		 *	TO FIX
-		 *	NULL,NULL is the clearing combination !!
-		 */
-		framebufferdevice.status_screen(desc,drawOutput());
+	//	framebufferdevice.status_screen(desc,drawOutput());
+		if(displaydevice)
+			displaydevice->fb_status_screen_new(desc,drawOutput(),0);
 	}
 
 	void CommandConsole::set_status_bar(fim::string desc, const char *info)

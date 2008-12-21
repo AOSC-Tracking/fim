@@ -202,7 +202,7 @@ class CommandConsole
 	fim::string do_return(const args_t &args);
 	fim::string status(const args_t &args);
 	int  executeFile(const char *s);
-	void execute(const char *ss, int add_history_, int suppress_output_);
+	int execute(const char *ss, int add_history_, int suppress_output_);
 
 	int  toggleStatusLine();
 	int  addCommand(Command *c);
@@ -252,8 +252,8 @@ class CommandConsole
 	fim::string dump_key_codes(const args_t& args);
 	fim::string do_dump_key_codes(const args_t& args)const;
 	fim::string clear(const args_t& args);
-//	fim::string scroll_up(const args_t& args);
-//	fim::string scroll_down(const args_t& args);
+	fim::string scroll_up(const args_t& args);
+	fim::string scroll_down(const args_t& args);
 	void quit(int i=0);
 	public:
 
@@ -307,7 +307,7 @@ class CommandConsole
 	void status_screen(const char *desc);
 	void set_status_bar(fim::string desc, const char *info);
 	void set_status_bar(const char *desc, const char *info);
-        bool is_file(fim::string nf)const;//FIXME : written unsafely
+        bool is_file(fim::string nf)const;
 };
 }
 
