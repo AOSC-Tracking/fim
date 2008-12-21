@@ -177,7 +177,7 @@ int help_and_exit(char *argv0, int code=0)
 {
 	    cc.printHelpMessage(argv0);
 	    std::cout << " where OPTIONS are taken from :\n";
-	    for(int i=0;((unsigned int)i)<(sizeof(fim_options)/sizeof(struct option))-1;++i)
+	    for(size_t i=0;i<(sizeof(fim_options)/sizeof(struct option))-1;++i)
 	    {	
 	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
 	   	else std::cout << "\t-";
@@ -495,7 +495,7 @@ int help_and_exit(char *argv0, int code=0)
 			{	
 				/* todo : read errno in case of error and print some report.. */
 
-				char buf[1024];int rc=0;
+				char buf[1024];ssize_t rc=0;
 				while( (rc=read(0,buf,1024))>0 ) fwrite(buf,rc,1,tfd);
 				rewind(tfd);
 				/*
@@ -538,6 +538,7 @@ int help_and_exit(char *argv0, int code=0)
 
 		/* output device guess */
 		if( g_fim_output_device=="" )
+		{
 			#ifdef FIM_WITH_LIBSDL
 			/* check to see if we are under X */
 			//if(getenv("DISPLAY") && g_fim_no_framebuffer )
@@ -547,6 +548,7 @@ int help_and_exit(char *argv0, int code=0)
 			}
 			else
 			#endif
+			{
 			if( g_fim_no_framebuffer )
 			{
 				#ifdef FIM_WITH_AALIB
@@ -561,6 +563,8 @@ int help_and_exit(char *argv0, int code=0)
 			}
 			else
 				g_fim_output_device="fb";
+			}
+		}
 
 		if((g_fim_no_framebuffer)==0 && g_fim_output_device=="fb")
 		{

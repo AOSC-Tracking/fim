@@ -63,7 +63,7 @@ namespace fim
 		/*
 		 * is cmd a valid internal (registered) Fim command ?
 		 */
-		for(unsigned int i=0;i<commands.size();++i) 
+		for(size_t i=0;i<commands.size();++i) 
 			if(commands[i] && commands[i]->cmd==cmd)
 				return commands[i];
 		return NULL;
@@ -262,7 +262,7 @@ namespace fim
 		{
 			return get_alias_info(args[0].val);
 		}
-		//for(unsigned int i=1;i<args.size();++i) cmdlist+=args[i].val;
+		//for(size_t i=1;i<args.size();++i) cmdlist+=args[i].val;
 		if(args.size()>=2)cmdlist+=args[1].val;
 		if(args.size()>=3)desc   +=args[2].val;
 		if(aliases[args[0].val].first!="")
@@ -631,7 +631,7 @@ namespace fim
   #endif		
 #endif		
 #ifndef FIM_NOSCRIPTING
-		for(unsigned int i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
+		for(size_t i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
 #endif		
 #ifdef FIM_AUTOCMDS
 		// WARNING
@@ -682,7 +682,7 @@ namespace fim
 		 *
 		 *	DANGER : this method allocates memory
 		 */
-		static int list_index=0;
+		static size_t list_index=0;
 		if(state==0)list_index=0;
 		while(isdigit(*text))text++;	//initial  repeat match
 		const fim::string cmd(text);
@@ -690,7 +690,7 @@ namespace fim
 		args_t completions;
 		aliases_t::const_iterator ai;
 		variables_t::const_iterator vi;
-		for(unsigned int i=0;i<commands.size();++i)
+		for(size_t i=0;i<commands.size();++i)
 		{
 			if(commands[i]->cmd.find(cmd)==0)
 			completions.push_back(commands[i]->cmd);
@@ -712,9 +712,9 @@ namespace fim
 		sort(completions.begin(),completions.end());
 #endif 
 		
-/*		for(unsigned int i=list_index;i<completions.size();++i)
+/*		for(size_t i=list_index;i<completions.size();++i)
 				cout << cmd << " matches with " << completions[i].c_str()<<  "\n";*/
-		for(unsigned int i=list_index;i<completions.size();++i)
+		for(size_t i=list_index;i<completions.size();++i)
 		{
 			if(completions[i].find(cmd)==0)
 			{
@@ -898,7 +898,7 @@ namespace fim
 			int r = pipe(pipedesc),sl;
 			if(r!=0){ferror("pipe error\n");exit(-1);}
 #ifndef			FIM_ALIASES_WITHOUT_ARGUMENTS
-			for(unsigned int i=0;i<args.size();++i)
+			for(size_t i=0;i<args.size();++i)
 			{
 				ex+=fim::string(" \""); ex+=args[i];
 				ex+=fim::string("\""); 
@@ -955,7 +955,7 @@ namespace fim
 		{
 			//assignment of an alias
 			std::vector<Arg> aargs;	//Arg args :P
-			for(unsigned int i=0;i<args.size();++i)
+			for(size_t i=0;i<args.size();++i)
 			{
 				aargs.push_back(Arg(args[i]));
 			}
@@ -1179,10 +1179,10 @@ namespace fim
 					}
 					//tty_restore();	/*commented 20081005 : seems useless, but i'm not sure */
 #ifndef FIM_USE_READLINE
-					if(c==getIntVariable("console_key") || 
+					if(c==(unsigned int)getIntVariable("console_key") || 
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
 #else
-					if(c==getIntVariable("console_key")
+					if(c==(unsigned int)getIntVariable("console_key")
 					){ic=1;*prompt=':';}	//should be configurable..
 					else if(c=='/')
 					{
@@ -1275,7 +1275,7 @@ namespace fim
 		/*
 		 * FIXME : catched all ?
 		 * */
-		for(unsigned int i=0;i<args.size();++i)executeFile(args[i].c_str());
+		for(size_t i=0;i<args.size();++i)executeFile(args[i].c_str());
 		return "";
 	}
 #endif
@@ -1393,7 +1393,7 @@ namespace fim
 		 * a command to echo arguments types, for debug and learning purposes
 		 */
 		if(args.size()==0)fim::cout<<"type command\n";
-		for(unsigned int i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
+		for(size_t i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
 		return "";
 
 	}
@@ -1410,7 +1410,7 @@ namespace fim
 		 * a command to echo arguments, for debug and learning purposes
 		 */
 		if(args.size()==0)fim::cout<<"echo command\n";
-		for(unsigned int i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
+		for(size_t i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
 		return "";
 	}
 
@@ -1420,7 +1420,7 @@ namespace fim
 		 * a command to echo to stdout arguments, for debug and learning purposes
 		 */
 		if(args.size()==0)std::cout<<"echo command\n";
-		for(unsigned int i=0;i<args.size();++i)std::cout << (args[i].c_str()) << "\n";
+		for(size_t i=0;i<args.size();++i)std::cout << (args[i].c_str()) << "\n";
 		return "";
 	}
 
@@ -1485,7 +1485,7 @@ namespace fim
 		 * returns the list of registered commands
 		 */
 		fim::string commands_list;
-		for(unsigned int i=0;i<commands.size();++i)
+		for(size_t i=0;i<commands.size();++i)
 		{
 			if(i)commands_list+=" ";
 			commands_list+=(commands[i]->cmd);
@@ -1693,7 +1693,7 @@ namespace fim
 		{
 			cout << "can't add empty autocommand\n";return "";
 		}
-		for(unsigned int i=0;i<autocmds[event][pat].size();++i)
+		for(size_t i=0;i<autocmds[event][pat].size();++i)
 		if((autocmds[event][pat][i])==cmd)
 		{
 			cout << "autocommand "<<cmd<<" already specified for event \""<<event<<"\" and pattern \""<<pat<<"\"\n";
@@ -1751,7 +1751,7 @@ namespace fim
 		 */
 //		cout << "autocmd_exec_cmd...\n";
 //		cout << "autocmd_exec_cmd. for pat '" << fname <<  "'\n";
-		for (unsigned int i=0;i<autocmds[event][pat].size();++i)
+		for (size_t i=0;i<autocmds[event][pat].size();++i)
 		{
 			if(regexp_match(fname.c_str(),pat.c_str()))	//UNFINISHED : if fname matches path pattern.. now matches ALWAYS
 			{
@@ -1779,7 +1779,7 @@ namespace fim
 	void CommandConsole::autocmd_trace_stack()
 	{
 		//this is mainly a debug function
-		unsigned int indent=0,i;
+		size_t indent=0,i;
 		for(
 			autocmds_stack_t::const_iterator citer=autocmds_stack.begin();
 			citer!=autocmds_stack.end();++citer,++indent )
@@ -1879,7 +1879,7 @@ namespace fim
 		/*
 		 *
 		 * */
-		for(unsigned int i=0;i<args.size();++i)
+		for(size_t i=0;i<args.size();++i)
 		{
 			FILE* fd=popen(args[i].c_str(),"r");
 			/*
@@ -1903,7 +1903,7 @@ namespace fim
 		/*
 		 * we read a whole image file from pipe
 		 * */
-		unsigned int i;
+		size_t i;
 		FILE* tfd;
 		char buf[1024];int rc=0;
 		for(i=0;i<args.size();++i)
@@ -1943,7 +1943,7 @@ namespace fim
 		 * change working directory
 		 * */
 		static fim::string oldpwd=pwd(args_t());
-		for(unsigned int i=0;i<args.size();++i)
+		for(size_t i=0;i<args.size();++i)
 		{
 			fim::string dir=args[i];
 			if(dir=="-")dir=oldpwd;
@@ -1981,7 +1981,7 @@ namespace fim
 		 * executes the shell commands given in the arguments,
 		 * one by one, and returns the (collated) standard output
 		 * */
-		for(unsigned int i=0;i<args.size();++i)
+		for(size_t i=0;i<args.size();++i)
 		{
 			FILE* fd=popen(args[i].c_str(),"r");
 			/*
@@ -1993,7 +1993,7 @@ namespace fim
 			pclose(fd);
 		}
 #if 0
-		for(unsigned int i=0;i<args.size();++i)
+		for(size_t i=0;i<args.size();++i)
 		{
 			std::system(args[i].c_str());
 		}
@@ -2019,7 +2019,7 @@ namespace fim
 		 *
 		 * FIXME
 		 * */
-		for(unsigned int i=0;i<args.size();++i)
+		for(size_t i=0;i<args.size();++i)
 		{
 			browser.display_status(args[i].c_str(),NULL);
 		}
@@ -2032,7 +2032,7 @@ namespace fim
 		 * removes the actions assigned to the specified aliases,
 		 */
 		if(args.size()<1)return "unalias : please specify an alias to remove!\n";
-		for(unsigned int i=0;i<args.size();++i)
+		for(size_t i=0;i<args.size();++i)
 		if(aliases[args[i]].first!="")
 		{
 			aliases.erase(args[i]);
@@ -2154,7 +2154,7 @@ namespace fim
 		 * the recorded commands are dumped in the console
 		 * */
 		fim::string res;
-		for(unsigned int i=0;i<recorded_actions.size();++i)
+		for(size_t i=0;i<recorded_actions.size();++i)
 		{
 			fim::string ss=(int)recorded_actions[i].second;
 			/*
@@ -2180,7 +2180,7 @@ namespace fim
 		 * but the present (above) doesn't support interruptions ...
 		 * */
 /*		fim::string res;
-		for(unsigned int i=0;i<recorded_actions.size();++i)
+		for(size_t i=0;i<recorded_actions.size();++i)
 		{
 			res=recorded_actions[i].first+(fim::string)recorded_actions[i].second;
 			execute(res.c_str(),0,1);
@@ -2195,7 +2195,7 @@ namespace fim
 		 *
 		 * FIXME : return value should make more sense..
 		 * */
-		for(unsigned int i=0;i<args.size();++i)
+		for(size_t i=0;i<args.size();++i)
 			execute(args[i].c_str(),0,0);
 		return "";
 	}

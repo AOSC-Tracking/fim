@@ -48,7 +48,7 @@ namespace fim
 	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
 	{
 		os<<"{";
-		for(unsigned int i=0;i<v.size();++i)
+		for(size_t i=0;i<v.size();++i)
 			os<<v[i]<<",";
 		os<<"}";
 		return os;
@@ -370,7 +370,7 @@ namespace fim
 	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
 	{
 		std::cout<<"{";
-		for(unsigned int i=0;i<v.size();++i)
+		for(size_t i=0;i<v.size();++i)
 			std::cout<<v[i]<<",";
 		std::cout<<"}";
 		return os;
@@ -439,9 +439,10 @@ namespace fim
 		 * each occurrence of regular expression r will be substituted with t
 		 *
 		 * FIXME : return values could be more informative
+		 * NOTE: mbuf is int, but pmatch->rm_so and pmatch->rm_eo are regoff_t from regex.h
 		 * */
 		regex_t regex;
-		const int nmatch=1;
+		const size_t nmatch=1;
 		regmatch_t pmatch[nmatch];
 
 		if( !r || !*r )
@@ -497,13 +498,13 @@ namespace fim
 		return;
 	}
 
-	int string::lines()const
+	size_t string::lines()const
 	{
 		/*
 		 * each empty line will be counted unless it is the last and not only.
 		 * */
 		const char*s=c_str(),*f=s;
-		int c=0;
+		size_t c=0;
 		if(!s)return 0;
 		while((s=strchr(s,'\n'))!=NULL){++c;f=++s;}
 		return c+(strlen(f)>0);

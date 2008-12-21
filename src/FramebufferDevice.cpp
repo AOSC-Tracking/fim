@@ -708,12 +708,14 @@ int FramebufferDevice::fb_setmode(char *name)
 	    fb_var.vmode = 0;
 	    while (NULL != fgets(line,79,fp) &&
 		   NULL == strstr(line,"endmode")) {
-		if (5 == sscanf(line," geometry %d %d %d %d %d",
+//		if (5 == sscanf(line," geometry %d %d %d %d %d",
+		if (5 == sscanf(line," geometry %u %u %u %u %u",
 				&fb_var.xres,&fb_var.yres,
 				&fb_var.xres_virtual,&fb_var.yres_virtual,
 				&fb_var.bits_per_pixel))
 		    geometry = 1;
-		if (7 == sscanf(line," timings %d %d %d %d %d %d %d",
+//		if (7 == sscanf(line," timings %d %d %d %d %d %d %d",
+		if (7 == sscanf(line," timings %u %u %u %u %u %u %u",
 				&fb_var.pixclock,
 				&fb_var.left_margin,  &fb_var.right_margin,
 				&fb_var.upper_margin, &fb_var.lower_margin,

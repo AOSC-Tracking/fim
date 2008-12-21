@@ -126,7 +126,7 @@ std::vector<fim::string> var(nodeType *p)
 		if(np->type == typeOpr && np->opr.oper=='a' )
 		{
 		  	std::vector<fim::string> vargs=var(np);
-			for(unsigned int j=0;j<vargs.size();++j) args.push_back(vargs[j]);
+			for(size_t j=0;j<vargs.size();++j) args.push_back(vargs[j]);
 		}
 		else
 		args.push_back(cvar(np));
@@ -139,7 +139,7 @@ std::vector<fim::string> var(nodeType *p)
 		if(np->type == typeOpr && np->opr.oper=='.' )
 		{
 		  	std::vector<fim::string> vargs=var(np);
-			for(unsigned int j=0;j<vargs.size();++j) args.push_back(vargs[j]);
+			for(size_t j=0;j<vargs.size();++j) args.push_back(vargs[j]);
 		}
 	}
 	else
