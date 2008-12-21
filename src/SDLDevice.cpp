@@ -412,7 +412,7 @@
 
 	int SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
 	{
-		/* FIXME ! WON'T WORK FOR NON 322 BIT MODES*/
+		/* FIXME ! WON'T WORK FOR NON 32 BIT MODES*/
 		int x,y,ytimesw;
 
 		if(SDL_MUSTLOCK(screen))
@@ -425,7 +425,7 @@
 		 * */
 		for(y=y1;y<y2;++y)
 		{
-			memset(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x,color, (x2-x1)* sizeof(Uint32));
+			memset(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x1,color, (x2-x1)* sizeof(Uint32));
 		}
 			
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
@@ -449,7 +449,7 @@
 		 * */
 		for(y=y1;y<=y2;++y)
 		{
-			bzero(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x, (x2-x1+1)* sizeof(Uint32));
+			bzero(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x1, (x2-x1+1)* sizeof(Uint32));
 		}
 			
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);

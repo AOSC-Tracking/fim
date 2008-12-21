@@ -159,7 +159,6 @@ void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//
 	
 	//fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
 	clear_rect(0, width()-1, 0,height()/2);
-
 	mc.dump();
 //	mc.dump(0,1000000);
 	return;

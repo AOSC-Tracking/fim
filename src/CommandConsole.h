@@ -224,9 +224,12 @@ class CommandConsole
 	fim::string autocmd_del(const args_t& args);
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
 	fim::string autocmds_list(const fim::string event, const fim::string pattern)const;
-	typedef std::pair<fim::string,fim::string> autocmds_frame_t;
+	typedef std::pair<fim::string,fim::string> autocmds_loop_frame_t;
+	typedef std::pair<autocmds_loop_frame_t,fim::string> autocmds_frame_t;
+	typedef std::vector<autocmds_loop_frame_t > autocmds_stack__t;
 	typedef std::vector<autocmds_frame_t > autocmds_stack_t;
 	//typedef std::set<autocmds_frame_t> autocmds_stack_t;
+	autocmds_stack__t autocmds_loop_stack;
 	autocmds_stack_t autocmds_stack;
 	fim::string bind(const args_t& args);
 	fim::string getAliasesList()const;
@@ -266,12 +269,12 @@ class CommandConsole
 	int catchInteractiveCommand(int seconds=0)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname);
-	void autocmd_push_stack(const autocmds_frame_t& frame);
-	void autocmd_pop_stack(const autocmds_frame_t& frame);
+	void autocmd_push_stack(const autocmds_loop_frame_t& frame);
+	void autocmd_pop_stack(const autocmds_loop_frame_t& frame);
 	public:
 	void autocmd_trace_stack();
 	private:
-	int  autocmd_in_stack(const autocmds_frame_t& frame)const;
+	int  autocmd_in_stack(const autocmds_loop_frame_t& frame)const;
 #endif
 	fim::string current()const{ return browser.current();}
 
