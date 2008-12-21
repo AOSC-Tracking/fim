@@ -68,11 +68,13 @@ namespace fim
 
 			if(*bp){free(buf);return -1;}//if *bp then we could print garbage so we exit before damage is done
 
-	    		int y = 1*cc.displaydevice->f->height;
+			int fh=cc.displaydevice->f ? cc.displaydevice->f->height:1; // FIXME : this is not clean
 			l-=f; l%=(rows+1); l+=f;
 
-			/* FIXME : the following line is redundant in fb, but not in SDL */
-			cc.displaydevice->clear_rect(0, cc.displaydevice->width()-1, 0 ,cc.displaydevice->f->height*(l-f+1) );
+			/* FIXME : the following line is redundant in fb, but not in SDL 
+			 * moreover, it seems useless in AA (could be a bug)
+			 * */
+			cc.displaydevice->clear_rect(0, cc.displaydevice->width()-1, 0 ,fh*(l-f+1) );
 
 	    		for(i=f  ;i<=l   ;++i)
 			{
@@ -87,9 +89,18 @@ namespace fim
 				 * we truncate the line for the interval exceeding the screen width.
 				 * */
 				buf[ maxcols ]='\0';
-
-				cc.displaydevice->fs_puts(cc.displaydevice->f, 0, y*(i-f), (unsigned char*)buf);
+				cc.displaydevice->fs_puts(cc.displaydevice->f, 0, fh*(i-f), (unsigned char*)buf);
 			}
+
+			/* FIXME : THE FOLLOWING IS A FIXUP FOR AA!  */
+	    		for(i=0  ;i<scroll ;++i)
+			{
+				int t = (min(maxcols,lwidth)+1);
+				memset(buf,' ',t);
+				buf[t-1]='\0';
+				cc.displaydevice->fs_puts(cc.displaydevice->f, 0, fh*((l-f+1)+i), (unsigned char*)buf);
+			}
+			cc.displaydevice->flush();
 			free(buf);
 			return 0;
 		#undef min
@@ -156,7 +167,7 @@ namespace fim
 				rows=-nr;
 				return 0;
 			}
-			maxrows = cc.displaydevice->height()/cc.displaydevice->f->height;
+			maxrows = cc.displaydevice->get_chars_per_column();
 			if(nr>0 && nr<=maxrows)
 			{
 				rows=nr;

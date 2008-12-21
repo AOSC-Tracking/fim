@@ -50,6 +50,7 @@ class AADevice:public DisplayDevice
 	void finalize();
 
 	int get_chars_per_line();
+	int get_chars_per_column();
 	int txt_width();
 	int txt_height();
 	int width();
@@ -67,12 +68,10 @@ class AADevice:public DisplayDevice
 		int oroff,int ocoff,
 		int orows,int ocols,
 		int ocskip);
-	int clear_rect(int x1, int x2, int y1,int y2)
-	{
-		/* FIXME : only if initialized !*/
-		return -1;
-	}
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str){return 0;}
+
+	int clear_rect(int x1, int x2, int y1, int y2);
+	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
+	void flush();
 	int init_console();
 };
 

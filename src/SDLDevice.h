@@ -60,6 +60,7 @@ class SDLDevice:public DisplayDevice
 	void finalize() ;
 
 	int get_chars_per_line() ;
+	int get_chars_per_column();
 	int txt_width() ;
 	int txt_height() ;
 	int width();

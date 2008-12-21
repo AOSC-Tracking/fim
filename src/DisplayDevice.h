@@ -54,7 +54,9 @@ class DisplayDevice
 
 	virtual ~DisplayDevice(){}
 
+	virtual void flush(){};
 	virtual int get_chars_per_line()=0;
+	virtual int get_chars_per_column()=0;
 	virtual int width()=0;
 	virtual int height()=0;
 	virtual int status_line(unsigned char *msg)=0;

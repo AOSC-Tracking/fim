@@ -268,6 +268,12 @@
 		//tty_restore();
 		SDL_Quit();
 	}
+
+	int SDLDevice::get_chars_per_column()
+	{
+		return height() / f->height;
+	}
+
 	int SDLDevice::get_chars_per_line()
 	{
 		return width() / f->width;
