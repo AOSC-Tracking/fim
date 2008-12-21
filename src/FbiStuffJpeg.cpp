@@ -111,7 +111,7 @@ static void thumbnail_src_init(struct jpeg_decompress_struct *cinfo)
 
 static int thumbnail_src_fill(struct jpeg_decompress_struct *cinfo)
 {
-    fprintf(stderr,"jpeg: panic: no more thumbnail input data\n");
+    FIM_FBI_PRINTF("jpeg: panic: no more thumbnail input data\n");
     exit(1);
 }
 
@@ -165,13 +165,13 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 	switch (mark->marker) {
 	case JPEG_COM:
 	    if (FbiStuff::fim_filereading_debug())
-		fprintf(stderr,"jpeg: comment found (COM marker) [%.*s]\n",
+		FIM_FBI_PRINTF("jpeg: comment found (COM marker) [%.*s]\n",
 			(int)mark->data_length, mark->data);
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 	    break;
 	case JPEG_APP0 +1:
 	    if (FbiStuff::fim_filereading_debug())
-		fprintf(stderr,"jpeg: exif data found (APP1 marker)\n");
+		FIM_FBI_PRINTF("jpeg: exif data found (APP1 marker)\n");
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 
 #ifdef HAVE_LIBEXIF
@@ -183,7 +183,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 		    ed->data[0] == 0xff &&
 		    ed->data[1] == 0xd8) {
 		    if (FbiStuff::fim_filereading_debug())
-			fprintf(stderr,"jpeg: exif thumbnail found\n");
+			FIM_FBI_PRINTF("jpeg: exif thumbnail found\n");
 
 		    /* save away thumbnail data */
 		    h->thumbnail = malloc(ed->size);

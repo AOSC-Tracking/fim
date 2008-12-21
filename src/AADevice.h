@@ -25,6 +25,11 @@
 #include "DisplayDevice.h"
 #include <aalib.h>
 
+/*
+ * Debugging only!
+ * */
+#define FIM_AALIB_DRIVER_DEBUG 1
+
 class AADevice:public DisplayDevice 
 {
 	private:

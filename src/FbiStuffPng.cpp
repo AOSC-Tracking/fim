@@ -99,7 +99,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
     if (PNG_RESOLUTION_METER == unit)
 	i->dpi = res_m_to_inch(resx);
     if (FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"png: color_type=%s #1\n",ct[h->color_type]);
+	FIM_FBI_PRINTF("png: color_type=%s #1\n",ct[h->color_type]);
     i->npages = 1;
     
     png_set_packing(h->png);
@@ -121,13 +121,13 @@ png_init(FILE *fp, char *filename, unsigned int page,
 
     h->color_type = png_get_color_type(h->png, h->info);
     if (FbiStuff::fim_filereading_debug())
-	fprintf(stderr,"png: color_type=%s #2\n",ct[h->color_type]);
+	FIM_FBI_PRINTF("png: color_type=%s #2\n",ct[h->color_type]);
     
     h->image = (png_byte*)malloc(i->width * i->height * 4);
     
     for (pass = 0; pass < number_passes-1; pass++) {
 	if (FbiStuff::fim_filereading_debug())
-	    fprintf(stderr,"png: pass #%d\n",pass);
+	    FIM_FBI_PRINTF("png: pass #%d\n",pass);
 	for (y = 0; y < i->height; y++) {
 	    png_bytep row = h->image + y * i->width * 4;
 	    png_read_rows(h->png, &row, NULL, 1);
@@ -171,7 +171,7 @@ png_read(unsigned char *dst, unsigned int line, void *data)
 	break;
     default:
 	/* shouldn't happen */
-	fprintf(stderr,"Oops: %s:%d\n",__FILE__,__LINE__);
+	FIM_FBI_PRINTF("Oops: %s:%d\n",__FILE__,__LINE__);
 	exit(1);
     }
 }
@@ -260,7 +260,7 @@ png_write(FILE *fp, struct ida_image *img)
    return 0;
 
  oops:
-   fprintf(stderr,"can't save image: libpng error\n");
+   FIM_FBI_PRINTF("can't save image: libpng error\n");
    if (png_ptr)
        png_destroy_write_struct(&png_ptr,  (png_infopp)NULL);
    return -1;
