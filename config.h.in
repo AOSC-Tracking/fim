@@ -159,6 +159,9 @@
 /* Define to 1 if you have the <ioctl.h> header file. */
 #undef HAVE_IOCTL_H
 
+/* We have libdjvulibre */
+#undef HAVE_LIBDJVU
+
 /* We have libjpeg */
 #undef HAVE_LIBJPEG
 

@@ -460,6 +460,62 @@ fi
 AC_SUBST(LIBJPEG)
 AM_CONDITIONAL(ENABLE_JPEG, test x$have_jpeg = xyes)
 
+dnl ============= djvu file handling
+
+AC_ARG_ENABLE(djvu, AC_HELP_STRING([--disable-djvu], [Disable djvu support.]),
+[       if test x$enableval = xno ; then
+		fim_handle_djvu=no
+        fi
+])
+if test x$fim_handle_djvu != xno ; then
+  fim_handle_djvu=yes
+  have_djvu=yes
+  if test x$with_libdjvu != xno && test -z "$LIBDJVU"; then
+    AC_CHECK_LIB(djvulibre, ddjvu_page_create_by_pageno,
+      have_djvu=yes,
+      have_djvu=no
+      AC_MSG_WARN(*** DJVU loader will not be built (DJVU library not found) ***))
+    if test x"$have_djvu" = xyes; then
+      AC_MSG_CHECKING([for libdjvu/ddjvuapi.h])
+      AC_TRY_CPP(
+[#include <stdio.h>
+#undef PACKAGE
+#undef VERSION
+#undef HAVE_STDLIB_H
+#include <libdjvu/ddjvuapi.h>],
+        have_djvu=yes,
+        have_djvu=no)
+      AC_MSG_RESULT($have_djvu)
+      if test x"$have_djvu" = xyes; then
+        LIBDJVU='-ldjvulibre'
+      else
+          AC_MSG_WARN(*** DJVU loader will not be built (DJVU header file not found) ***)
+      fi
+    fi
+  fi
+
+# the following needs thorough testing
+  if test x"$have_djvu" == xyes ; then
+  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffDjvu.o"
+  FIMLIBS="$FIMLIBS $LIBDJVU"
+  AC_DEFINE([HAVE_LIBDJVU],[1],[We have libdjvulibre])
+  else
+    fim_handle_djvu=no
+  fi
+
+#  if test x$with_libdjvu != xno && test -z "$LIBDJVU"; then
+#     AC_MSG_ERROR([
+#     Checks for DJVU loader failed. You can build without it by passing
+#    --disable-djvu to ./configure. ])
+#  fi
+else
+  fim_handle_djvu=no
+fi
+AC_SUBST(LIBDJVU)
+AM_CONDITIONAL(ENABLE_DJVU, test x$have_djvu = xyes)
+
+
+
 dnl ================================================================================
 
 ## png file handling
@@ -1058,6 +1114,7 @@ AC_MSG_NOTICE([
 	jpeg file support                   : ${fim_handle_jpeg:-no}
 	tiff file support                   : ${fim_handle_tiff:-no}
 	gif  file support                   : ${fim_handle_gif:-no}
+	djvu file support                   : ${fim_handle_djvu:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 	autocommands enabled                : ${have_autocommands:-no}
