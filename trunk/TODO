@@ -22,6 +22,8 @@ ongoing further inspiration.
 	Current development directions
 
 
+20081224	history file should be deconfigurable at compile time
+20081224	page flipping should be in but optional
 20081221	get rid of designated initializers (-pedantic) for ISO-C++
 20081019	consider using docbook for building lots of docs, like in mutt
 20080908	pdflib would be a nice try to view pdf files from within fim, but multiple anonymous images should be supported
