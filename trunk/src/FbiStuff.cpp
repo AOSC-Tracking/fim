@@ -1351,12 +1351,14 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 	cc.set_status_bar("skipping 'gz'...", "*");
 	return NULL;
     }*/
+#ifndef HAVE_LIBPOPPLER
     if (NULL == loader && (*blk==0x25) && (*(unsigned char*)(blk+1)==0x50 )
      && NULL == loader && (*(unsigned char*)(blk+2)==0x44) && (*(unsigned char*)(blk+3)==0x46))
     {
 	cc.set_status_bar("skipping 'pdf' (use fimgs for this)...", "*");
 	return NULL;
     }
+#endif
     if (NULL == loader && (*blk==0x25) && (*(unsigned char*)(blk+1)==0x21 )
      && NULL == loader && (*(unsigned char*)(blk+2)==0x50) && (*(unsigned char*)(blk+3)==0x53))
     {

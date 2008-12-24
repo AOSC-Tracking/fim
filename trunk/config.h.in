@@ -6,6 +6,9 @@
 /* custom CXXFLAGS */
 #undef CXXFLAGS
 
+/* Enable pdf support. */
+#undef ENABLE_PDF
+
 /* program to use for shell commands */
 #undef EXECSHELL
 
@@ -164,6 +167,9 @@
 
 /* We have libjpeg */
 #undef HAVE_LIBJPEG
+
+/* We have libpopplerlibre */
+#undef HAVE_LIBPOPPLER
 
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H

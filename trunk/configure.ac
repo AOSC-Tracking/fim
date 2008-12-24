@@ -515,6 +515,94 @@ AC_SUBST(LIBDJVU)
 AM_CONDITIONAL(ENABLE_DJVU, test x$have_djvu = xyes)
 
 
+dnl ============= pdf file handling with libpoppler 
+
+AC_ARG_ENABLE(poppler, AC_HELP_STRING([--disable-poppler], [Disable poppler (PDF rendering) support.]),
+[       if test x$enableval = xno ; then
+		fim_handle_pdf=no
+        fi
+])
+dnl FIXME : checking only for libpoppler-glib, should also check for libpoppler !
+if test x$fim_handle_pdf != xno ; then
+  fim_handle_pdf=yes
+  have_poppler=yes
+        if test x$with_libpoppler != xno && test -z "$LIBPOPPLER"; then
+dnl FIXME : the following is a dirty hack
+          AC_CHECK_LIB(poppler, gfree,
+            have_poppler=yes,
+            have_poppler=no
+      AC_MSG_WARN(*** POPPLER loader will not be built (POPPLER library not found) ***))
+    if test x"$have_poppler" = xyes; then
+      AC_MSG_CHECKING([for poppler/poppler-config.h])
+       AC_TRY_CPP(
+       [#include <stdio.h>
+       #undef PACKAGE
+       #undef VERSION
+       #undef HAVE_STDLIB_H
+       #include <poppler/poppler-config.h>
+       #include <poppler/splash/Splash.h>],
+               have_poppler=yes,
+               have_poppler=no)
+      have_poppler=yes
+      AC_MSG_RESULT($have_poppler)
+      if test x"$have_poppler" = xyes; then
+        LIBPOPPLER='-lpoppler'
+	# FIXME: the following is a dirty hack!
+        LIBPOPPLER_CFLAGS="-I/usr/include/poppler/"
+        FIM_CXXFLAGS="$FIM_CXXFLAGS $LIBPOPPLER_CFLAGS"
+dnl	are we sure poppler doesn't have something like the following ?
+dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
+      else
+          AC_MSG_WARN(*** POPPLER/PDF loader will not be built (POPPLER header file not found) ***)
+      fi
+    fi
+  fi
+
+# the following needs thorough testing
+  if test x"$have_poppler" == xyes ; then
+  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPdf.o"
+  FIMLIBS="$FIMLIBS $LIBPOPPLER"
+  AC_DEFINE([HAVE_LIBPOPPLER],[1],[We have libpopplerlibre])
+  else
+    fim_handle_pdf=no
+  fi
+
+#  if test x$with_libpoppler != xno && test -z "$LIBPOPPLER"; then
+#     AC_MSG_ERROR([
+#     Checks for POPPLER loader failed. You can build without it by passing
+#    --disable-poppler to ./configure. ])
+#  fi
+else
+  fim_handle_pdf=no
+fi
+AC_SUBST(LIBPOPPLER)
+AM_CONDITIONAL(ENABLE_POPPLER, test x$have_poppler = xyes)
+
+dnl FIXME : we have two libpoppler checks ... :
+dnl ================== pdf checks ===================================================
+AC_ARG_ENABLE(pdf,
+              [AC_HELP_STRING([--enable-pdf], [Compile with pdf support])],enable_pdf="$enableval",enable_pdf=yes)
+
+if test "x$enable_pdf" = "xyes"; then
+    POPPLER_REQUIRED=0.8.0
+    PKG_CHECK_MODULES(POPPLER, poppler >= $POPPLER_REQUIRED,enable_pdf=yes,enable_pdf=no)
+
+    if test "x$enable_pdf" = "xyes"; then
+            AC_DEFINE([ENABLE_PDF], [1], [Enable pdf support.])
+            SHELL_LIBS="$SHELL_LIBS $POPPLER_LIBS"
+            SHELL_CFLAGS="$SHELL_CFLAGS $POPPLER_CFLAGS"
+
+            fim_save_LIBS=$LIBS
+            LIBS="$LIBS $POPPLER_LIBS"
+            LIBS=$fim_save_LIBS
+
+    else
+            AC_MSG_WARN("PDF support is disabled since poppler library version $POPPLER_REQUIRED or newer not found")
+    fi
+fi
+
+AM_CONDITIONAL(ENABLE_PDF, test x$enable_pdf = xyes)
+dnl ================== end of pdf checks ============================================
 
 dnl ================================================================================
 
@@ -1115,6 +1203,7 @@ AC_MSG_NOTICE([
 	tiff file support                   : ${fim_handle_tiff:-no}
 	gif  file support                   : ${fim_handle_gif:-no}
 	djvu file support                   : ${fim_handle_djvu:-no}
+	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 	autocommands enabled                : ${have_autocommands:-no}
