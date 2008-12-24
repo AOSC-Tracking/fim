@@ -78,7 +78,11 @@ apt-get install libungif4-dev
 apt-get install libpng-dev
 apt-get install libjpeg-dev
 apt-get install libtiff-dev
+apt-get install libdjvulibre-dev
 apt-get install flex
+apt-get install bison
+apt-get install libaa1-dev
+apt-get install libsdl1.2-dev
 # apt-get install autoconf
 
 ...
@@ -149,6 +153,8 @@ Optional Features:
   --enable-debug          Turns on debug options (recommended, for debugging)
   --enable-warnings       Turns on compiler warnings (recommended, for
                           debugging)
+  --enable-aalib          Enable aalib (ascii art output) support.
+  --enable-sdl            Enable sdl (X) support.
 
 These are options to the configure script shipped with tarball, and 
 serves ot hard-code various configuration options prior to building fim.
