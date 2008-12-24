@@ -63,6 +63,7 @@ EXTRA_fim_SOURCES =
 #
 EXTRA_fim_SOURCES += FbiStuffGif.cpp
 EXTRA_fim_SOURCES += FbiStuffJpeg.cpp
+EXTRA_fim_SOURCES += FbiStuffDjvu.cpp
 EXTRA_fim_SOURCES += FbiStuffTiff.cpp
 EXTRA_fim_SOURCES += FbiStuffPng.cpp
 
