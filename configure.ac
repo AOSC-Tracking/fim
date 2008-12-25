@@ -460,6 +460,59 @@ fi
 AC_SUBST(LIBJPEG)
 AM_CONDITIONAL(ENABLE_JPEG, test x$have_jpeg = xyes)
 
+dnl ============= dvi file handling (via TeX-Guy)
+dnl 
+dnl AC_ARG_ENABLE(dvi, AC_HELP_STRING([--disable-dvi], [Disable dvi support.]),
+dnl [       if test x$enableval = xno ; then
+dnl 		fim_handle_dvi=no
+dnl         fi
+dnl ])
+dnl if test x$fim_handle_dvi != xno ; then
+dnl   fim_handle_dvi=yes
+dnl   have_dvi=yes
+dnl   if test x$with_libdvi != xno && test -z "$LIBDVI"; then
+dnl     AC_CHECK_LIB(dvilib2, DVI_init,
+dnl       have_dvi=yes,
+dnl       have_dvi=no
+dnl       AC_MSG_WARN(*** DVI loader will not be built (libdvi29 library not found) ***))
+dnl     if test x"$have_dvi" = xyes; then
+dnl       AC_MSG_CHECKING([for libdvi29.h])
+dnl       AC_TRY_CPP(
+dnl [#include <stdio.h>
+dnl #undef PACKAGE
+dnl #undef VERSION
+dnl #undef HAVE_STDLIB_H
+dnl #include <libdvi29.h>],
+dnl         have_dvi=yes,
+dnl         have_dvi=no)
+dnl       AC_MSG_RESULT($have_dvi)
+dnl       if test x"$have_dvi" = xyes; then
+dnl         LIBDVI='-ldvilib2'
+dnl       else
+dnl           AC_MSG_WARN(*** DVI loader will not be built (libdvi29.h header file not found) ***)
+dnl       fi
+dnl     fi
+dnl   fi
+dnl 
+dnl # the following needs thorough testing
+dnl   if test x"$have_dvi" == xyes ; then
+dnl   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffDvi.o"
+dnl   FIMLIBS="$FIMLIBS $LIBDVI"
+dnl   AC_DEFINE([HAVE_LIBSPECTRE],[1],[We have libdvilib2])
+dnl   else
+dnl     fim_handle_dvi=no
+dnl   fi
+dnl 
+dnl #  if test x$with_libdvi != xno && test -z "$LIBDVI"; then
+dnl #     AC_MSG_ERROR([
+dnl #     Checks for DVI loader failed. You can build without it by passing
+dnl #    --disable-dvi to ./configure. ])
+dnl #  fi
+dnl else
+dnl   fim_handle_dvi=no
+dnl fi
+dnl AC_SUBST(LIBDVI)
+dnl AM_CONDITIONAL(ENABLE_DVI, test x$have_dvi = xyes)
 
 dnl ============= ps file handling
 
@@ -1261,6 +1314,8 @@ AC_MSG_NOTICE([
 	gif  file support                   : ${fim_handle_gif:-no}
 	djvu file support                   : ${fim_handle_djvu:-no}
 	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
+	ps   file support (libspectre)      : ${fim_handle_ps:-no}
+dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 	autocommands enabled                : ${have_autocommands:-no}

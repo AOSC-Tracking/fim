@@ -20,61 +20,48 @@
 */
 
 /*
- * FIXME : this code is NOT meant to be correct : in particular, memory 
- * leaks are possible in case of errors.
+ * this code should be fairly correct, although unfinished
  * */
 
 #include <cstdio>
 #include <cstdlib>
-
-
-
 #include <cstring>
-//#include <stddef.h>
-//#include <errno.h>
 
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 
 extern "C"
 {
-// we require C linkage for these symbols
 #include <libdjvu/ddjvuapi.h>
 }
-
-
 
 /*								*/
 
 namespace fim
 {
 
-
-
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
 
 struct djvu_state_t {
-//    FILE *fp;
     DDJVUAPI ddjvu_context_t  * dc;
     DDJVUAPI ddjvu_document_t * dd;
     ddjvu_page_t *dp;
     ddjvu_page_rotation_t rotation;
     ddjvu_rect_t rrect;
     ddjvu_rect_t prect;
-    ddjvu_format_t * pixelformat;
+    ddjvu_format_t * pf;
     int row_stride;    /* physical row width in output buffer */
 
     unsigned char * first_row_dst;
 };
 
-
 /* ---------------------------------------------------------------------- */
 /* djvu loader                                                            */
 
+   /* straight out from the DJVU API doc : */
    void handle_ddjvu_messages(ddjvu_context_t *ctx, int wait)
    {
-	/* straight out from the DJVU API doc */
      const ddjvu_message_t *msg;
      if (wait)
        ddjvu_message_wait(ctx);
@@ -92,15 +79,17 @@ struct djvu_state_t {
      }
    }
 
-
 static void*
 djvu_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
 	struct djvu_state_t * ds=NULL;
+        static unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
+	if(fp) fclose(fp);
+
 	ds = (struct djvu_state_t*)calloc(sizeof(struct djvu_state_t),1);
 	if(!ds) return NULL;
-	if(fp) fclose(fp);
+
         ds->dc = ddjvu_context_create("fim");
 	if(!ds->dc)goto err;
 	ds->dd = ddjvu_document_create_by_filename(ds->dc, filename, 0);
@@ -111,7 +100,7 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
         ds->dp = ddjvu_page_create_by_pageno (ds->dd, /*32*/0);/* the first page */
         if(!ds->dp) goto err;
 
-        while (!ddjvu_page_decoding_done (ds->dp)){1;/* we just kill time (FIXME) */}
+        while (!ddjvu_page_decoding_done (ds->dp)){1;/* we just kill time (FIXME : inefficient) */}
 
         ds->prect.w = ddjvu_page_get_width  (ds->dp) ;
 	ds->prect.h = ddjvu_page_get_height (ds->dp) ;
@@ -134,13 +123,20 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 	i->npages = 1;
 	i->dpi    = 72; /* FIXME */
 
+//        ds->pf = ddjvu_format_create (DDJVU_FORMAT_RGBMASK32, 4, masks);
+	ds->pf = ddjvu_format_create (DDJVU_FORMAT_RGB24, 0, 0);
+	ddjvu_format_set_row_order (ds->pf, 1);
+        if(!ds->pf) goto err;
+
 	return ds;
 
 	err:
 
-	if(ds && ds->dc)free(ds->dc);
-	if(ds && ds->dd)free(ds->dd);
-	if(ds)free(ds);
+	if(ds->dp)ddjvu_page_release(ds->dp);
+	if(ds->dd)ddjvu_document_release(ds->dd);
+	if(ds->dc)ddjvu_context_release(ds->dc);
+	if(ds->pf)ddjvu_format_release(ds->pf);
+
 	return NULL;
 }
 
@@ -151,40 +147,32 @@ djvu_read(unsigned char *dst, unsigned int line, void *data)
 
 	if(!ds)return;
 
-
     	if(ds->first_row_dst == NULL)
     		ds->first_row_dst = dst;
 	else return;
 
-        static unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
-        ds->pixelformat = ddjvu_format_create (DDJVU_FORMAT_RGBMASK32, 4, masks);
-	ds->pixelformat = ddjvu_format_create (DDJVU_FORMAT_RGB24, 0, 0);
-	ddjvu_format_set_row_order (ds->pixelformat, 1);
-        if(!ds->pixelformat) return ;
 
         int rs=ddjvu_page_render (ds->dp, DDJVU_RENDER_COLOR,
                            & (ds->prect),
                            & (ds->rrect),
-                           ds->pixelformat,
+                           ds->pf,
                            ds->row_stride,
                            (char*)dst);
-        ddjvu_page_release (ds->dp);
         return ;
 }
-
 
 static void
 djvu_done(void *data)
 {
     	struct djvu_state_t *ds = (struct djvu_state_t*)data;
 
-	ddjvu_document_release(ds->dd);
-	ddjvu_context_release(ds->dc);
-	ddjvu_format_release(ds->pixelformat);
+	if(ds->dp)ddjvu_page_release(ds->dp);
+	if(ds->dd)ddjvu_document_release(ds->dd);
+	if(ds->dc)ddjvu_context_release(ds->dc);
+	if(ds->pf)ddjvu_format_release(ds->pf);
 
 	free(ds);
 }
-
 
 /*
 0000000: 4154 2654 464f 524d 0070 ca79 444a 564d  AT&TFORM.p.yDJVM

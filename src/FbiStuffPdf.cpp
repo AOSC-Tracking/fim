@@ -20,27 +20,16 @@
 */
 
 /*
- * FIXME : this code is NOT meant to be correct : in particular, memory 
- * leaks are possible in case of errors.
+ * this code should be fairly correct, although unfinished
  * */
 
 #include <cstdio>
 #include <cstdlib>
-
-
-
 #include <cstring>
-//#include <stddef.h>
-//#include <errno.h>
 
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 
-//extern "C"
-
-// we require C linkage for these symbols
-//#include <poppler/goo/gtypes.h>
-//#include <poppler/goo/GooString.h>
 #include <poppler/poppler-config.h>
 #include <poppler/PDFDoc.h>
 #include <poppler/OutputDev.h>
@@ -49,8 +38,6 @@
 #include <poppler/splash/SplashTypes.h>
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
-
-
 
 
 /*								*/
@@ -62,9 +49,9 @@ namespace fim
 /* load                                                                   */
 
 struct pdf_state_t {
-	SplashBitmap* bmp ;
-	PDFDoc *            _pdfDoc ;
-	SplashOutputDev *   _outputDev ;
+	SplashBitmap*	    bmp ;
+	PDFDoc *            pd ;
+	SplashOutputDev *   od ;
 	int row_stride;    /* physical row width in output buffer */
 	unsigned char * first_row_dst;
 };
@@ -119,77 +106,82 @@ static void*
 pdf_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
+	char _[1];
+	_[0]='\0';
 	struct pdf_state_t * ds=NULL;
+	int rotation=0,pageNo=1;
+	double zoomReal=250.0*2;
+	double hDPI;
+	double vDPI;
+	GBool  useMediaBox ;
+	GBool  crop        ;
+	GBool  doLinks     ;
+	if(fp) fclose(fp);
+
 	ds = (struct pdf_state_t*)calloc(sizeof(struct pdf_state_t),1);
 
 	if(!ds)
 		return NULL;
 
+	ds->bmp = NULL;
+	ds->pd = NULL;
+	ds->od = NULL;
+
     	ds->first_row_dst = NULL;
 	SplashColorsInit();
-
-
-	GooString *fileNameStr = new GooString(filename);
-
-	 if(!fileNameStr) return NULL;
-
-	ds->bmp = NULL;
-	ds->_pdfDoc = NULL;
-	ds->_outputDev = NULL;
 
 	// WARNING : a global variable from libpoppler! damn!!
 	globalParams = new GlobalParams();
 	if (!globalParams)
-		return NULL;
+		goto err;
 
 	globalParams->setErrQuiet(gFalse);
-	char _[1];_[0]='\0';
 	globalParams->setBaseDir(_);
 
 
-	ds->_pdfDoc = new PDFDoc(fileNameStr, NULL, NULL, (void*)NULL);
-	if (!ds->_pdfDoc)
-        	return NULL;
-	if (!ds->_pdfDoc->isOk())
-		return NULL;
+	ds->pd = new PDFDoc(new GooString(filename), NULL, NULL, (void*)NULL);
+	if (!ds->pd)
+        	goto err;
 
-	if (!ds->_outputDev)
+	if (!ds->pd->isOk())
+		goto err;
+
+	if (!ds->od)
 	{
         	GBool bitmapTopDown = gTrue;
-        	ds->_outputDev = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown,gFalse/*antialias*/);
-	        if (ds->_outputDev)
-			ds->_outputDev->startDoc(ds->_pdfDoc->getXRef());
+        	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown,gFalse/*antialias*/);
+	        if (ds->od)
+			ds->od->startDoc(ds->pd->getXRef());
     	}
-        if (!ds->_outputDev)
-	return NULL;
+        if (!ds->od)
+		goto err;
 
 	i->dpi    = 72; /* FIXME */
-	int rotation=0,pageNo=1;
-	double zoomReal=250.0*2;
+	hDPI = (double)i->dpi* zoomReal * 0.01;
+	vDPI = (double)i->dpi* zoomReal * 0.01;
 
-	int PDF_FILE_DPI = i->dpi;
-	double hDPI = (double)PDF_FILE_DPI * zoomReal * 0.01;
-	double vDPI = (double)PDF_FILE_DPI * zoomReal * 0.01;
-	GBool  useMediaBox = gFalse;
-	GBool  crop        = gTrue;
-	GBool  doLinks     = gTrue;
+	useMediaBox = gFalse;
+	crop        = gTrue;
+	doLinks     = gTrue;
 
-	ds->_pdfDoc->displayPage(ds->_outputDev, pageNo, hDPI, vDPI, rotation, useMediaBox, crop, doLinks, NULL, NULL);
+	ds->pd->displayPage(ds->od, pageNo, hDPI, vDPI, rotation, useMediaBox, crop, doLinks, NULL, NULL);
 
-	if(!ds->_pdfDoc)		return NULL;
+	if(!ds->pd) goto err;
 
-	ds->bmp = ds->_outputDev->takeBitmap();
-	if(!ds->bmp) return NULL;
+	ds->bmp = ds->od->takeBitmap();
+	if(!ds->bmp) goto err;
 
 	i->width  = ds->bmp->getWidth();
 	i->height = ds->bmp->getHeight();
-	i->npages = ds->_pdfDoc->getNumPages();
-
-	if(!ds) return NULL;
-	if(fp) fclose(fp);
+	i->npages = ds->pd->getNumPages();
 
 	return ds;
-	err:
+err:
+
+	if(ds->pd)		delete ds->pd ;
+	if(ds->od)	delete ds->od ;
+	if (globalParams)	delete globalParams;
+	globalParams = NULL;
 	if(ds)free(ds);
 	return NULL;
 }
@@ -213,6 +205,10 @@ pdf_done(void *data)
     	struct pdf_state_t *ds = (struct pdf_state_t*)data;
 	if(!ds) return;
 
+	if(ds->pd)		delete ds->pd ;
+	if(ds->od)	delete ds->od ;
+	if (globalParams)	delete globalParams;
+	globalParams = NULL;
 
 	free(ds);
 }

@@ -20,8 +20,7 @@
 */
 
 /*
- * FIXME : this code is NOT meant to be correct : in particular, memory 
- * leaks are possible in case of errors.
+ * this code should be fairly correct, although unfinished
  * */
 
 #include <cstdio>
@@ -36,7 +35,6 @@ extern "C"
 // we require C linkage for these symbols
 #include <libspectre/spectre.h>
 }
-
 
 /*								*/
 
@@ -59,12 +57,17 @@ struct ps_state_t {
 
 /* ---------------------------------------------------------------------- */
 
-
 static void*
 ps_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
+	double scale = 1.5;
+	double rcscale = scale;
+
 	struct ps_state_t * ds=NULL;
+
+	if(fp) fclose(fp);
+
 	ds = (struct ps_state_t*)calloc(sizeof(struct ps_state_t),1);
 
 	if(!ds)
@@ -76,19 +79,19 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 	ds->ss = SPECTRE_STATUS_SUCCESS;
 
 	ds->sd = spectre_document_new();
-	if(!ds->sd)return NULL;
+	if(!ds->sd)
+		goto err;
 
 	spectre_document_load(ds->sd,filename);
 
 	ds->ss = spectre_document_status(ds->sd);
 	if(ds->ss != SPECTRE_STATUS_SUCCESS)
-		return NULL;
+		goto err;
 
 	ds->src = spectre_render_context_new();
 	if(!ds->src)
-		return NULL;
+		goto err;
 
-	double scale = 1.5;
 	i->dpi    = 1.0*72; /* FIXME */
 
 	spectre_render_context_set_scale(ds->src,scale,scale);
@@ -97,10 +100,10 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 
 	ds->sp = spectre_document_get_page(ds->sd,0);
 	if(!ds->sp)
-		return NULL;
+		goto err;
 	ds->ss = spectre_page_status(ds->sp);
 	if(ds->ss != SPECTRE_STATUS_SUCCESS)
-		return NULL;
+		goto err;
 
 	spectre_page_get_size(ds->sp, (int*)(&i->width), (int*)(&i->height));
 //	spectre_render_context_get_page_size(ds->src, (int*)(&i->width), (int*)(&i->height));
@@ -109,7 +112,6 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 	i->width  *= scale;
 	i->height *= scale;
 
-	double rcscale = scale;
 
 	spectre_render_context_set_page_size(ds->src, (int)(i->width), (int)(i->height));
 	spectre_render_context_set_scale(ds->src,rcscale,rcscale);
@@ -117,14 +119,18 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 	i->npages = spectre_document_get_n_pages(ds->sd);
 
 	if(i->width<1 || i->height<1)
-		return NULL;
+		goto err;
 
 	ds->w=i->width;
 	ds->h=i->height;
 
-	if(fp) fclose(fp);
 	return ds;
-	err:
+
+err:
+
+	if(ds->sd )spectre_document_free(ds->sd);
+	if(ds->sp )spectre_page_free(ds->sp);
+	if(ds->src)spectre_render_context_free(ds->src);
 	if(ds)free(ds);
 	return NULL;
 }
@@ -157,6 +163,7 @@ ps_read(unsigned char *dst, unsigned int line, void *data)
 			dst[ds->w*i*3+3*j+1]=page_data[ds->row_stride*i+4*j+1];
 			dst[ds->w*i*3+3*j+2]=page_data[ds->row_stride*i+4*j+2];
 		}
+	free(page_data);
 }
 
 static void
