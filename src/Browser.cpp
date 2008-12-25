@@ -1432,6 +1432,44 @@ namespace fim
 		return "";
 	}
 
+	fim::string Browser::next_page(const args_t &args)
+	{
+		/*
+		 * jumps one page forward in the current multipage image
+		 */
+		fim::string c=current();
+#ifdef FIM_AUTOCMDS
+		autocmd_exec("PreNext",c);
+#endif
+		if(c_image())
+		{
+			if(image())image()->next_page();
+		}
+#ifdef FIM_AUTOCMDS
+		autocmd_exec("PostNext",c);
+#endif
+		return "";
+	}
+
+	fim::string Browser::prev_page(const args_t &args)
+	{
+		/*
+		 * jumps one page backward in the current multipage image
+		 */
+		fim::string c=current();
+#ifdef FIM_AUTOCMDS
+		autocmd_exec("PreNext",c);
+#endif
+		if(c_image())
+		{
+			if(image())image()->prev_page();
+		}
+#ifdef FIM_AUTOCMDS
+		autocmd_exec("PostNext",c);
+#endif
+		return "";
+	}
+
 	fim::string Browser::next(const args_t &args)
 	{
 		/*

@@ -72,7 +72,8 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 
 	if(!ds)
 		return NULL;
-	
+
+    	ds->first_row_dst = NULL;
 	ds->sd = NULL;
 	ds->sp = NULL;
 	ds->src = NULL;
@@ -98,7 +99,10 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 	spectre_render_context_set_rotation(ds->src,0);
 	spectre_render_context_set_resolution(ds->src,i->dpi,i->dpi);
 
-	ds->sp = spectre_document_get_page(ds->sd,0);
+	i->npages = spectre_document_get_n_pages(ds->sd);
+	if(page>=i->npages || page<0)goto err;
+
+	ds->sp = spectre_document_get_page(ds->sd,page);/* pages, from 0 */
 	if(!ds->sp)
 		goto err;
 	ds->ss = spectre_page_status(ds->sp);
@@ -115,8 +119,6 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 
 	spectre_render_context_set_page_size(ds->src, (int)(i->width), (int)(i->height));
 	spectre_render_context_set_scale(ds->src,rcscale,rcscale);
-    	ds->first_row_dst = NULL;
-	i->npages = spectre_document_get_n_pages(ds->sd);
 
 	if(i->width<1 || i->height<1)
 		goto err;

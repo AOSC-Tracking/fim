@@ -85,10 +85,12 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 {
 	struct djvu_state_t * ds=NULL;
         static unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
+
 	if(fp) fclose(fp);
 
 	ds = (struct djvu_state_t*)calloc(sizeof(struct djvu_state_t),1);
 	if(!ds) return NULL;
+    	ds->first_row_dst = NULL;
 
         ds->dc = ddjvu_context_create("fim");
 	if(!ds->dc)goto err;
@@ -97,7 +99,9 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 
 	handle_ddjvu_messages(ds->dc,0x1/*0x0*/);
 
-        ds->dp = ddjvu_page_create_by_pageno (ds->dd, /*32*/0);/* the first page */
+	i->npages = ddjvu_document_get_pagenum(ds->dd);
+	if(page>=i->npages || page<0)goto err;
+        ds->dp = ddjvu_page_create_by_pageno (ds->dd, page);/* pages, from 0 */
         if(!ds->dp) goto err;
 
         while (!ddjvu_page_decoding_done (ds->dp)){1;/* we just kill time (FIXME : inefficient) */}
@@ -120,7 +124,6 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 	
 	i->width  = ds->prect.w;
 	i->height = ds->prect.h;
-	i->npages = 1;
 	i->dpi    = 72; /* FIXME */
 
 //        ds->pf = ddjvu_format_create (DDJVU_FORMAT_RGBMASK32, 4, masks);
@@ -129,9 +132,7 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
         if(!ds->pf) goto err;
 
 	return ds;
-
-	err:
-
+err:
 	if(ds->dp)ddjvu_page_release(ds->dp);
 	if(ds->dd)ddjvu_document_release(ds->dd);
 	if(ds->dc)ddjvu_context_release(ds->dc);
@@ -150,7 +151,6 @@ djvu_read(unsigned char *dst, unsigned int line, void *data)
     	if(ds->first_row_dst == NULL)
     		ds->first_row_dst = dst;
 	else return;
-
 
         int rs=ddjvu_page_render (ds->dp, DDJVU_RENDER_COLOR,
                            & (ds->prect),

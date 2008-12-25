@@ -339,6 +339,8 @@ namespace fim
 		addCommand(new Command(fim::string("no_image" ),fim::string("displays no image at all"),&browser,&Browser::no_image));
 		addCommand(new Command(fim::string("next" ),fim::string("displays the next picture in the list"),&browser,&Browser::next));
 		addCommand(new Command(fim::string("prev" ),fim::string("displays the previous picture in the list"),&browser,&Browser::prev));
+		addCommand(new Command(fim::string("next_page" ),fim::string("displays the next page"),&browser,&Browser::next_page));
+		addCommand(new Command(fim::string("prev_page" ),fim::string("displays the previous page"),&browser,&Browser::prev_page));
 		addCommand(new Command(fim::string("push" ),fim::string("pushes a file in the files list"),&browser,&Browser::push));
 		addCommand(new Command(fim::string("display" ),fim::string("displays the current file"),&browser,&Browser::display));
 		addCommand(new Command(fim::string("redisplay" ),fim::string("re-displays the current file"),&browser,&Browser::redisplay));

@@ -109,7 +109,7 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	char _[1];
 	_[0]='\0';
 	struct pdf_state_t * ds=NULL;
-	int rotation=0,pageNo=1;
+	int rotation=0,pageNo=page+1;
 	double zoomReal=250.0*2;
 	double hDPI;
 	double vDPI;
@@ -123,11 +123,11 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	if(!ds)
 		return NULL;
 
+    	ds->first_row_dst = NULL;
 	ds->bmp = NULL;
 	ds->pd = NULL;
 	ds->od = NULL;
 
-    	ds->first_row_dst = NULL;
 	SplashColorsInit();
 
 	// WARNING : a global variable from libpoppler! damn!!
@@ -164,6 +164,9 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	crop        = gTrue;
 	doLinks     = gTrue;
 
+	i->npages = ds->pd->getNumPages();
+	if(page>=i->npages || page<0)goto err;
+	
 	ds->pd->displayPage(ds->od, pageNo, hDPI, vDPI, rotation, useMediaBox, crop, doLinks, NULL, NULL);
 
 	if(!ds->pd) goto err;
@@ -173,7 +176,6 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 
 	i->width  = ds->bmp->getWidth();
 	i->height = ds->bmp->getHeight();
-	i->npages = ds->pd->getNumPages();
 
 	return ds;
 err:

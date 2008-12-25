@@ -74,6 +74,8 @@ namespace fim
 		ascale(0.0),
 		newscale(0.0),
 		angle(0.0),
+		newangle(0.0),
+		page(0),
                 img     (NULL),
                 fimg    (NULL),
 		framebufferdevice(fim::ffd),
@@ -87,7 +89,7 @@ namespace fim
 		 *	an image object is created from an image filename
 		 */
 		reset();	// pointers blank
-		if( !load(fname_,fd) || check_invalid() || (!fimg) ) 
+		if( !load(fname_,fd,0) || check_invalid() || (!fimg) ) 
 		{
 			cout << "warning : invalid loading ! \n";
 			if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
@@ -119,19 +121,19 @@ namespace fim
 		setVariable("orientation" ,0);
 	}
 	
-	bool Image::load(const char *fname_, FILE* fd)
+	bool Image::load(const char *fname_, FILE* fd, int want_page)
 	{
 		/*
 		 *	an image is loaded and initializes this image.
 		 *	returns false if the image does not load
 		 */
-		if(fname_==NULL){return false;}//no loading = no state change
+		if(fname_==NULL && fname==""){return false;}//no loading = no state change
 		this->free();
 		fname=fname_;
 		if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
 			cc.set_status_bar("please wait while reloading...", "*");
 
-		fimg = FbiStuff::read_image((char*)fname_,fd);
+		fimg = FbiStuff::read_image((char*)fname_,fd,want_page);
     		if(strcmp("/dev/stdin",fname_)==0)
 		{
 			no_file=true;	//no file is associated to this image (to prevent reloading)
@@ -146,6 +148,7 @@ namespace fim
 		{
 			cout<<"warning : image loading error!\n"   ;invalid=1;return false;
 		}
+		else page=want_page;
 
 
 #ifdef FIM_NAMESPACES
@@ -432,6 +435,7 @@ namespace fim
 		newscale(image.newscale),
 		angle(image.angle),
 		newangle(image.newangle),
+		page(0),
                 img     (NULL),
                 fimg    (NULL),
 		framebufferdevice(fim::ffd),
@@ -561,4 +565,17 @@ fim::string Image::getInfo()
 	{
 	        cc.displaydevice->redraw=1;
 	}
+
+	bool Image::prev_page()
+	{
+		string s=fname;
+		return load(s.c_str(),NULL,page-1);
+	} 
+
+	bool Image::next_page()
+	{
+		string s=fname;
+		return load(s.c_str(),NULL,page+1);
+	} 
 }
+

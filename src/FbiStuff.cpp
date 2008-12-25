@@ -1304,7 +1304,7 @@ void FbiStuff::free_image(struct ida_image *img)
 }
 
 /*static struct ida_image**/
-struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
+struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 {
     /*
      * This function is complicated and should be reworked, in some way.
@@ -1498,7 +1498,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
      * which gets cleared to 0 (default) in this way.
      * */
 #endif
-    data = loader->init(fp,filename,0,&img->i,0);
+    data = loader->init(fp,filename,page,&img->i,0);
     if(strcmp(filename,"/dev/stdin")==0) { close(0); dup(2);/* if the image is loaded from stdin, we close its stream */}
     if (NULL == data) {
 	if(ffd.debug)
