@@ -171,6 +171,9 @@
 /* We have libpopplerlibre */
 #undef HAVE_LIBPOPPLER
 
+/* We have libspectre */
+#undef HAVE_LIBSPECTRE
+
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 

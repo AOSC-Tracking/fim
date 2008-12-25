@@ -460,6 +460,63 @@ fi
 AC_SUBST(LIBJPEG)
 AM_CONDITIONAL(ENABLE_JPEG, test x$have_jpeg = xyes)
 
+
+dnl ============= ps file handling
+
+AC_ARG_ENABLE(ps, AC_HELP_STRING([--disable-ps], [Disable ps support.]),
+[       if test x$enableval = xno ; then
+		fim_handle_ps=no
+        fi
+])
+if test x$fim_handle_ps != xno ; then
+  fim_handle_ps=yes
+  have_ps=yes
+  if test x$with_libps != xno && test -z "$LIBPS"; then
+    AC_CHECK_LIB(spectre, spectre_page_render,
+      have_ps=yes,
+      have_ps=no
+      AC_MSG_WARN(*** PS loader will not be built (spectre library not found) ***))
+    if test x"$have_ps" = xyes; then
+      AC_MSG_CHECKING([for libspectre/spectre.h])
+      AC_TRY_CPP(
+[#include <stdio.h>
+#undef PACKAGE
+#undef VERSION
+#undef HAVE_STDLIB_H
+#include <libspectre/spectre.h>],
+        have_ps=yes,
+        have_ps=no)
+      AC_MSG_RESULT($have_ps)
+      if test x"$have_ps" = xyes; then
+        LIBPS='-lspectre'
+      else
+          AC_MSG_WARN(*** PS loader will not be built (PS header file not found) ***)
+      fi
+    fi
+  fi
+
+# the following needs thorough testing
+  if test x"$have_ps" == xyes ; then
+  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPs.o"
+  FIMLIBS="$FIMLIBS $LIBPS"
+  AC_DEFINE([HAVE_LIBSPECTRE],[1],[We have libspectre])
+  else
+    fim_handle_ps=no
+  fi
+
+#  if test x$with_libps != xno && test -z "$LIBPS"; then
+#     AC_MSG_ERROR([
+#     Checks for PS loader failed. You can build without it by passing
+#    --disable-ps to ./configure. ])
+#  fi
+else
+  fim_handle_ps=no
+fi
+AC_SUBST(LIBPS)
+AM_CONDITIONAL(ENABLE_PS, test x$have_ps = xyes)
+
+
+
 dnl ============= djvu file handling
 
 AC_ARG_ENABLE(djvu, AC_HELP_STRING([--disable-djvu], [Disable djvu support.]),
