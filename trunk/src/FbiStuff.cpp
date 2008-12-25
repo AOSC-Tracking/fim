@@ -1359,12 +1359,14 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd)
 	return NULL;
     }
 #endif
+#ifndef HAVE_LIBSPECTRE
     if (NULL == loader && (*blk==0x25) && (*(unsigned char*)(blk+1)==0x21 )
      && NULL == loader && (*(unsigned char*)(blk+2)==0x50) && (*(unsigned char*)(blk+3)==0x53))
     {
 	cc.set_status_bar("skipping 'ps' (use fimgs for this)...", "*");
 	return NULL;
     }
+#endif
 #endif
     list_for_each(item,&loaders) {
         loader = list_entry(item, struct ida_loader, list);

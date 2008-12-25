@@ -79,10 +79,12 @@ apt-get install libpng-dev
 apt-get install libjpeg-dev
 apt-get install libtiff-dev
 apt-get install libdjvulibre-dev
+apt-get install libpoppler-dev
 apt-get install flex
 apt-get install bison
 apt-get install libaa1-dev
 apt-get install libsdl1.2-dev
+apt-get install libspectre-dev
 # apt-get install autoconf
 
 ...
