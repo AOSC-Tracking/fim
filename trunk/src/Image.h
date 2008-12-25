@@ -64,6 +64,9 @@ class Image
 	Image(const char *fname_, Foo& foo, FILE *fd=NULL);
 	~Image();
 
+	bool prev_page();
+	bool next_page();
+
 	private:
 	Image& operator= (const Image &i){return *this;/* a nilpotent assignation */}
 	float            scale    ;	/* viewport variables */
@@ -71,6 +74,7 @@ class Image
 	float            newscale ;
 	float            angle	  ;
 	float            newangle ;
+	int		 page ;
 
 	/* virtual stuff */
 	public://TMP
@@ -79,7 +83,7 @@ class Image
 	struct ida_image *fimg    ;     /* master image */
 
 	/* image methods */
-	bool load(const char *fname_, FILE *fd=NULL);
+	bool load(const char *fname_, FILE *fd, int want_page);
 	void should_redraw()const;
 
 	protected:
