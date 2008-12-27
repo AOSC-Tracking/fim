@@ -318,9 +318,9 @@ namespace fim
 		return "usage : help CMD   (use TAB in commandline mode to get a list of commands :) )\n";
 	}
 
-	CommandConsole::CommandConsole(FramebufferDevice &_framebufferdevice):
-	browser(*this),
-	framebufferdevice(_framebufferdevice)
+	CommandConsole::CommandConsole(/*FramebufferDevice &_framebufferdevice*/):
+	browser(*this)
+	//,framebufferdevice(_framebufferdevice)
 	{
 		appended_post_init_command=false;
 		fim_uninitialized = 1; // new
@@ -464,12 +464,24 @@ namespace fim
 
 		// NOTE : for the dumb device, it could be better ...
 		tty_raw();// this, here, inhibits unwanted key printout (raw mode), and saves the current tty state
+#ifndef FIM_WITH_NO_FRAMEBUFFER
 		if( device=="fb" )
 		{
-			extern fim::FramebufferDevice ffd; 
-			displaydevice=&ffd;	/* FIXME : THIS IS A HORRIBLE HACK : DANGER */
-			if(ffd.framebuffer_init())cleanup_and_exit(0);
+			extern char *default_fbdev,*default_fbmode;
+			extern int default_vt;
+			extern float default_fbgamma;
+			FramebufferDevice * ffdp=NULL;
+
+			displaydevice=new FramebufferDevice();
+			if(!displaydevice || ((FramebufferDevice*)displaydevice)->framebuffer_init())cleanup_and_exit(0);
+			ffdp=((FramebufferDevice*)displaydevice);
+			setVariable("_device_driver", "fbdev");
+			if(default_fbdev)ffdp->set_fbdev(default_fbdev);
+			if(default_fbmode)ffdp->set_fbmode(default_fbmode);
+			if(default_vt!=-1)ffdp->set_default_vt(default_vt);
+			if(default_fbgamma!=-1.0)ffdp->set_default_fbgamma(default_fbgamma);
 		}
+#endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
 
 
 		#ifdef FIM_WITH_LIBSDL
@@ -528,12 +540,6 @@ namespace fim
 		}
 		}
 		#endif
-
-		if( device=="fb" && displaydevice==NULL)
-		{
-			displaydevice=&framebufferdevice;
-			setVariable("_device_driver", "fbdev");
-		}
 
 		if( displaydevice==NULL)
 		{

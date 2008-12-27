@@ -54,8 +54,6 @@
 namespace fim
 {
 
-extern FramebufferDevice ffd;
-
 
 
 
@@ -93,7 +91,7 @@ void fb_catch_exit_signals(void)
 	return;
 
     /* cleanup */
-    ffd.cleanup();
+    cc.displaydevice->cleanup();
 #ifdef HAVE_SYS_SIGLIST
     FIM_FBI_PRINTF("Oops: %s\n",sys_siglist[termsig]);
 #endif

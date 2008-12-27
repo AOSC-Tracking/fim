@@ -25,7 +25,11 @@
 
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"
+
+#ifndef FIM_WITH_NO_FRAMEBUFFER
+
 #include <sys/user.h>	//  for PAGE_MASK (sometimes it is needed to include it here explicitly)
+
 
 namespace fim
 {
@@ -71,10 +75,13 @@ static matrix   DM =
 
 extern fim::CommandConsole cc;
 
-void _fb_switch_signal(int signal)
+static FramebufferDevice *ffdp;
+
+static void _fb_switch_signal(int signal)
 {
-	extern FramebufferDevice ffd;
-	ffd.fb_switch_signal(signal);
+	// WARNING : THIS IS A DIRTY HACK 
+	// necessary to enable framebuffer console switching
+	ffdp->fb_switch_signal(signal);
 }
 
 int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
@@ -1389,6 +1396,8 @@ int FramebufferDevice::fb_switch_init()
     struct sigaction act,old;
 
     memset(&act,0,sizeof(act));
+    
+    ffdp=this;// WARNING : A DIRTY HACK
     act.sa_handler  = _fb_switch_signal;
     sigemptyset(&act.sa_mask);
     sigaction(SIGUSR1,&act,&old);
@@ -1620,7 +1629,6 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	,fs_setpixel(NULL)
 	,fbdev(NULL)
 	,fbmode(NULL)
-	,debug(0)
 #ifdef FIM_BOZ_PATCH
 	,with_boz_patch(0)
 #endif
@@ -1702,3 +1710,7 @@ void FramebufferDevice::finalize (void)
 	clear_screen();
 	cleanup();
 }
+#else
+static void foo(){} /* let's make our compiler happy */
+#endif  //ifndef FIM_WITH_NO_FRAMEBUFFER
+

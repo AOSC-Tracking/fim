@@ -144,6 +144,9 @@
 /* Defined, if libsdl support is enabled */
 #undef FIM_WITH_LIBSDL
 
+/* Defined when framebuffer device support is turned off. */
+#undef FIM_WITH_NO_FRAMEBUFFER
+
 /* Define to 1 if you have the <climits> header file. */
 #undef HAVE_CLIMITS
 

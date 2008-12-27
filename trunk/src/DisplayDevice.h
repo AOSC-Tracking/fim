@@ -36,6 +36,7 @@ class DisplayDevice
 	public:
 	struct fs_font *f;
 	char* fontname;
+	int                        debug;// really, only for making happy fbdev
 	public:
 	DisplayDevice();
 	virtual int initialize(key_bindings_t &key_bindings)=0;
@@ -60,6 +61,7 @@ class DisplayDevice
 	virtual int get_chars_per_line()=0;
 	virtual int get_chars_per_column()=0;
 	virtual int width()=0;
+	virtual int get_bpp()=0;
 	virtual int height()=0;
 	virtual int status_line(unsigned char *msg)=0;
 	int console_control(int code);
@@ -68,6 +70,9 @@ class DisplayDevice
 	virtual int get_input(unsigned int * c);
 	virtual int catchInteractiveCommand(int seconds)const;
 	virtual int init_console();
+	virtual void console_switch(int is_busy){}// really, only for making happy fbdev
+	virtual void switch_if_needed(){}// really, only for making happy fbdev
+	virtual void cleanup(){}// really, only for making happy fbdev
 
 	int redraw;
 	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)=0;

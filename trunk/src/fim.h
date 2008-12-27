@@ -111,7 +111,6 @@ namespace fim
 {
 	typedef std::map<fim::string,int > key_bindings_t;	//symbol->code
 	void status(const char *desc, const char *info);
-	void _fb_switch_signal(int signal);
 
 	class Arg;
 	class Browser;

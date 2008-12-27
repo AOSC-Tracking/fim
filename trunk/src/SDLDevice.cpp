@@ -315,10 +315,10 @@
 		{
 			switch (event.type)
 			{
-//				case SDL_QUIT:
-//				keypress = 1;
+				case SDL_QUIT:
+				keypress = 1;
 				
-//				break;
+				break;
 				case SDL_KEYDOWN:
 
 				if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) ctrl_on=true;

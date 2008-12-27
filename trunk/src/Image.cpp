@@ -35,7 +35,6 @@
  */
 namespace fim
 {
-	extern FramebufferDevice ffd;
 /*
  *	There is a general rule here:
  *	 Public functions should be safe when called in 
@@ -78,7 +77,6 @@ namespace fim
 		page(0),
                 img     (NULL),
                 fimg    (NULL),
-		framebufferdevice(fim::ffd),
 		orientation(0),
                 invalid(0),
 		no_file(true),
@@ -156,7 +154,7 @@ namespace fim
 		setVariable("width"  ,(int)fimg->i.width );
 		setVariable("sheight",(int) img->i.height);
 		setVariable("swidth" ,(int) img->i.width );
-		setVariable("_fim_bpp" ,(int) framebufferdevice.fb_var.bits_per_pixel );
+		setVariable("_fim_bpp" ,(int) cc.displaydevice->get_bpp());
 		setVariable("scale"  ,newscale*100);
 		setVariable("ascale" ,ascale);
 		setVariable("angle" , angle);
@@ -166,7 +164,7 @@ namespace fim
 		setGlobalVariable("width"  ,(int)fimg->i.width );
 		setGlobalVariable("sheight",(int) img->i.height);
 		setGlobalVariable("swidth" ,(int) img->i.width );
-		setGlobalVariable("_fim_bpp" ,(int) framebufferdevice.fb_var.bits_per_pixel );
+		setGlobalVariable("_fim_bpp" ,(int) cc.displaydevice->get_bpp());
 		//setGlobalVariable("scale"  ,newscale*100);
 		//setGlobalVariable("ascale" ,ascale);
 		return true;
@@ -438,7 +436,6 @@ namespace fim
 		page(0),
                 img     (NULL),
                 fimg    (NULL),
-		framebufferdevice(fim::ffd),
 		orientation(image.orientation),
                 invalid(0),
 		no_file(true),

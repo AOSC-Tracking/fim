@@ -23,6 +23,8 @@
 #include "DisplayDevice.h"
 
 	DisplayDevice::DisplayDevice():fontname(NULL)
+	,debug(0)
+	,redraw(0)
 	{}
 
 	int DisplayDevice::get_input(unsigned int * c)

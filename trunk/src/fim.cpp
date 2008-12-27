@@ -60,8 +60,10 @@ namespace fim
 	/*
 	 * Globals : should be encapsulated.
 	 * */
-	fim::FramebufferDevice ffd; 
-	fim::CommandConsole cc(ffd);
+	fim::CommandConsole cc;
+	char *default_fbdev=NULL,*default_fbmode=NULL;
+	int default_vt=-1;
+	float default_fbgamma=-1.0;
 }
 
 /*
@@ -163,9 +165,9 @@ class FimInstance
 	#ifdef FIM_WITH_LIBSDL
 		" sdl"
 	#endif
-	#if 1
+#ifndef FIM_WITH_NO_FRAMEBUFFER
 		" fb"
-	#endif
+#endif //#ifndef FIM_WITH_NO_FRAMEBUFFER
 	#if 1
 		" dumb"
 	#endif
@@ -553,34 +555,18 @@ int help_and_exit(char *argv0, int code=0)
 			}
 			else
 			#endif
+#ifndef FIM_WITH_NO_FRAMEBUFFER
 			g_fim_output_device="fb";
-			/* TODO : a probing mechanism for all the available output devices */
-#if 0
-			{
-			//if( g_fim_no_framebuffer )
-			{
-				#ifdef FIM_WITH_AALIB
-				g_fim_output_device="aa";
-				#else
-				#ifdef FIM_WITH_CACALIB
-				g_fim_output_device="caca";
-				#else
-			//	g_fim_output_device="dumb";
-				g_fim_output_device="fb";
-				#endif
-				#endif
-			}
-			}
-#endif
+#else
+	#ifdef FIM_WITH_AALIB
+			g_fim_output_device="aa";
+	#else
+			g_fim_output_device="dummy";
+	#endif
+#endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
 		}
 
-		if(/*(g_fim_no_framebuffer)==0 &&*/ g_fim_output_device=="fb")
-		{
-			if(default_fbdev)ffd.set_fbdev(default_fbdev);
-			if(default_fbmode)ffd.set_fbmode(default_fbmode);
-			if(default_vt!=-1)ffd.set_default_vt(default_vt);
-			if(default_fbgamma!=-1.0)ffd.set_default_fbgamma(default_fbgamma);
-		}
+		// TODO : we still need a good output device probing mechanism
 
 		if(cc.init(g_fim_output_device)!=0) return -1;
 	
