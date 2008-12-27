@@ -304,7 +304,7 @@
 
 	int SDLDevice::get_input(unsigned int * c )
 	{
-		int keypress=0;
+//		int keypress=0;
 		bool ctrl_on=0;
 		bool alt_on=0;
 		bool shift_on=0;
@@ -315,10 +315,10 @@
 		{
 			switch (event.type)
 			{
-				case SDL_QUIT:
-				keypress = 1;
-
-				break;
+//				case SDL_QUIT:
+//				keypress = 1;
+				
+//				break;
 				case SDL_KEYDOWN:
 
 				if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) ctrl_on=true;
@@ -420,10 +420,10 @@
 		/* FIXME ! WON'T WORK FOR NON 32 BIT MODES*/
 		int x,y,ytimesw;
 
-		if(SDL_MUSTLOCK(screen))
-		{
-			if(SDL_LockSurface(screen) < 0) return -1;
-		}
+//		if(SDL_MUSTLOCK(screen))
+//		{
+//			if(SDL_LockSurface(screen) < 0) return -1;
+//		}
 
 		/*
 		 * This could be optimized
@@ -433,9 +433,9 @@
 			memset(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x1,color, (x2-x1)* sizeof(Uint32));
 		}
 			
-		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+//		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
 
-		SDL_Flip(screen);
+//		SDL_Flip(screen);
 		return 0;
 	}
 
@@ -444,10 +444,10 @@
 	{
 		int x,y,ytimesw;
 
-		if(SDL_MUSTLOCK(screen))
-		{
-			if(SDL_LockSurface(screen) < 0) return -1;
-		}
+//		if(SDL_MUSTLOCK(screen))
+//		{
+//			if(SDL_LockSurface(screen) < 0) return -1;
+//		}
 
 		/*
 		 * This could be optimized
@@ -457,9 +457,9 @@
 			bzero(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x1, (x2-x1+1)* sizeof(Uint32));
 		}
 			
-		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+//		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
 
-		SDL_Flip(screen);
+//		SDL_Flip(screen);
 		return 0;
 	}
 
@@ -516,10 +516,10 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 {
     int i,c,j/*,w*/;
 
-		if(SDL_MUSTLOCK(screen))
+/*		if(SDL_MUSTLOCK(screen))
 		{
 			if(SDL_LockSurface(screen) < 0) return -1;
-		}
+		}*/
 
     for (i = 0; str[i] != '\0'; i++) {
 	c = str[i];
@@ -557,12 +557,12 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 	if ((int)x > width() - f->width)
 		goto err;
     }
-	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-	SDL_Flip(screen);
+//	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+//	SDL_Flip(screen);
 	return x;
 err:
-	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-	SDL_Flip(screen);
+//	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+//	SDL_Flip(screen);
 	return -1;
 }
 
@@ -594,6 +594,25 @@ err:
 		 * Note that in this way the event will be lost.
 		 * */
 		return (SDL_PollEvent(&event));
+	}
+
+	void SDLDevice::flush()
+	{
+	}
+
+	void SDLDevice::lock()
+	{
+		if(SDL_MUSTLOCK(screen))
+		{
+			if(SDL_LockSurface(screen) < 0) return;
+		}
+	}
+
+	void SDLDevice::unlock()
+	{
+		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+		SDL_Flip(screen);
+		
 	}
 
 #endif

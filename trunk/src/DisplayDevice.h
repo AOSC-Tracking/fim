@@ -55,6 +55,8 @@ class DisplayDevice
 	virtual ~DisplayDevice(){}
 
 	virtual void flush(){};
+	virtual void lock(){}
+	virtual void unlock(){}
 	virtual int get_chars_per_line()=0;
 	virtual int get_chars_per_column()=0;
 	virtual int width()=0;

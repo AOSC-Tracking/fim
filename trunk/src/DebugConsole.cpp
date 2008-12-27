@@ -76,6 +76,9 @@ namespace fim
 			 * */
 			cc.displaydevice->clear_rect(0, cc.displaydevice->width()-1, 0 ,fh*(l-f+1) );
 
+			// fs_puts alone won't draw on screen, but in the back plance, so unlock/flip will be necessary
+			cc.displaydevice->lock();
+
 	    		for(i=f  ;i<=l   ;++i)
 			{
 				int t = (i<cline?(line[i+1]-line[i]):(ccol))%(min(maxcols,lwidth)+1);
@@ -100,6 +103,8 @@ namespace fim
 				buf[t-1]='\0';
 				cc.displaydevice->fs_puts(cc.displaydevice->f, 0, fh*((l-f+1)+i), (unsigned char*)buf);
 			}
+			cc.displaydevice->unlock();
+
 			cc.displaydevice->flush();
 			free(buf);
 			return 0;

@@ -482,6 +482,7 @@ fim::string Image::getInfo()
 	if(!fimg)return "";
 
 	static char linebuffer[128];
+	char pagesinfobuffer[128];
 	char imagemode[3],*imp;
 	int n=getGlobalIntVariable("fileindex");
 	imp=imagemode;
@@ -503,12 +504,18 @@ fim::string Image::getInfo()
 
 
 	*imp='\0';
+	if(fimg->i.npages>1)
+		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",page+1,fimg->i.npages);
+	else
+		*pagesinfobuffer='\0';
+		
 	snprintf(linebuffer, sizeof(linebuffer),
-	     "%s%.0f%% %dx%d%s %d/%d",
+	     "%s%.0f%% %dx%d%s%s %d/%d",
 	     /*fcurrent->tag*/ 0 ? "* " : "",
 	     scale*100,
 	     this->width(), this->height(),
 	     imagemode,
+	     pagesinfobuffer,
 	     n?n:1, /* ... */
 	     (getGlobalIntVariable("filelistlen"))
 	     );
