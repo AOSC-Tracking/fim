@@ -162,6 +162,14 @@ AC_ARG_ENABLE(system, AC_HELP_STRING([--disable-system], [Disable system() and p
         fi
 ])
 
+dnl new: 
+AC_ARG_ENABLE(framebuffer, AC_HELP_STRING([--disable-framebuffer], [Disable the framebuffer device driver.]),
+[       if test x$enableval = xno ; then
+                fim_handle_framebuffer=no
+                AC_DEFINE(FIM_WITH_NO_FRAMEBUFFER, 1, [Defined when framebuffer device support is turned off.])
+        fi
+])
+
 
 AC_HEADER_STDC
 AC_FUNC_MMAP
@@ -1328,6 +1336,7 @@ dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
 	ascii art (aalib) support           : ${fim_cv_aalib}
 	X (sdllib) experimental support     : ${fim_handle_sdl}
+        framebuffer support                 : ${fim_handle_framebuffer:-yes}
 dnl	coloured ascii art (cacalib) support: ${fim_cv_cacalib}
 
 

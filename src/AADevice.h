@@ -73,6 +73,7 @@ class AADevice:public DisplayDevice
 	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
 	void flush();
 	int init_console();
+	int get_bpp(){return 1; /* :) */ };
 };
 
 

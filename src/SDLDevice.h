@@ -88,6 +88,7 @@ class SDLDevice:public DisplayDevice
 	void flush();
 	void lock();
 	void unlock();
+	int get_bpp(){return bpp; };
 };
 
 

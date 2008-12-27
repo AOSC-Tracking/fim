@@ -22,9 +22,6 @@
 #ifndef CC_FBI_H
 #define CC_FBI_H
 #include "fim.h"
-//#include <stdio.h>
-#include <sys/resource.h>
-#include "FramebufferDevice.h"
 #include "DummyDisplayDevice.h"
 
 
@@ -33,7 +30,7 @@ namespace fim
 typedef std::vector<fim::string> args_t;
 class CommandConsole
 {
-
+	friend class FbiStuff;
 
 	private:
 	int fim_uninitialized; // new, probably useless
@@ -152,7 +149,6 @@ class CommandConsole
 #endif
 
 	void markCurrentFile();
-	FramebufferDevice &framebufferdevice;
 	#ifdef FIM_WITH_AALIB
 	AADevice * aad;
 	#endif
@@ -164,7 +160,7 @@ class CommandConsole
 
 	const char*get_prompt()const{return prompt;}
 
-	CommandConsole(FramebufferDevice &_framebufferdevice);
+	CommandConsole();
 	private:
 	CommandConsole& operator= (const CommandConsole&cc){return *this;/* a nilpotent assignation */}
 	public:

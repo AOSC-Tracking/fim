@@ -34,7 +34,6 @@
  */
 namespace fim
 {
-	extern FramebufferDevice ffd;
 	extern CommandConsole cc;
 
 	Viewport::Viewport(
@@ -243,21 +242,6 @@ namespace fim
 		if( displaydevice->redraw==0 )return;
 #ifdef FIM_WINDOWS
 		/* FIXME : note that fbi's clear_rect() is a buggy function and thus the fs_bpp multiplication need ! */
-#if 0
-		if(displaydevice == &(fim::ffd))
-		{
-			/*
-			 * temporary exception until the fim::ffd.fs_bpp need is fixed for FrameBufferDevice
-			 * */
-			fim::ffd.fb_clear_rect(
-				xorigin(),
-				xorigin()+viewport_width()*fim::ffd.fs_bpp,
-				yorigin(),
-				yorigin()+viewport_height()
-				);
-		}
-		else
-#endif
 		{
 			displaydevice->clear_rect(
 				xorigin(),

@@ -87,7 +87,6 @@ class Image
 	void should_redraw()const;
 
 	protected:
-	FramebufferDevice	&framebufferdevice;
 	int              orientation;	//aka rotation
 
 	int    invalid;		//the first time the image is loaded it is set to 1

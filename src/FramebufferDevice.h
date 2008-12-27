@@ -36,6 +36,8 @@
 #include "FontServer.h"
 #include "DisplayDevice.h"
 
+#ifndef FIM_WITH_NO_FRAMEBUFFER
+
 //#include "FbiStuff.h"
 //#include "FontServer.h"
 //#include "FbiStuffFbtools.h"
@@ -110,7 +112,7 @@ struct DEVS {
 
 
 
-void _fb_switch_signal(int signal);
+//void _fb_switch_signal(int signal);
 
 
 
@@ -266,8 +268,7 @@ class FramebufferDevice:public DisplayDevice
 	}
 
 	//private:
-	int                        fd, switch_last, debug;
-	int                        redraw;
+	int                        fd, switch_last;
 
 	unsigned short red[256],  green[256],  blue[256];
 	struct fb_cmap cmap;
@@ -577,6 +578,7 @@ void init_one(int32_t *lut, int bits, int shift)
 
 	void status_screen(const char *msg, int draw);
 	void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
+	int get_bpp(){return fb_var.bits_per_pixel; };
 };
 
 }
@@ -584,4 +586,5 @@ void init_one(int32_t *lut, int bits, int shift)
 
 
 #endif
+#endif  //ifndef FIM_WITH_NO_FRAMEBUFFER
 

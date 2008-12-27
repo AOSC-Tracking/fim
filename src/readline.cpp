@@ -95,13 +95,10 @@ static char ** fim_completion (const char *text, int start,int end)
  */
 static void completion_display_matches_hook(char **matches,int num,int max)
 {
-	//FIX ME
-	//rl_display_match_list(matches,num,max);
 	char buffer[256];
 	int w,f,l;w=0;f=sizeof(buffer)-1;l=0;
 	buffer[0]='\0';
 	if(!matches)return;
-	//return;
 	for(int i=0;i<num && matches[i] && f>0;++i)
 	{
 		w=min(strlen(matches[i])+1,(size_t)f);
@@ -113,10 +110,6 @@ static void completion_display_matches_hook(char **matches,int num,int max)
 //		strcpy(buffer+strlen(buffer),matches[i]);
 //		strcpy(buffer+strlen(buffer)," ");
 	}
-	//      status_screen((unsigned char*)buffer, NULL);
-	
-//	fb_status_screen(buffer);
-
 
 //	std::cout << buffer << "\n" ;
  //     status((unsigned char*)"here shall be autocompletions", NULL);
@@ -131,15 +124,7 @@ static void redisplay_no_fb()
 
 static void redisplay()
 {	
-	/*
-	 * DANGER
-	 *  buffer overflow awaiting
-	 */
-	//static int c=100;
-//	fb_setcolor(c=~c);//sleep(1);
 	cc.set_status_bar(( char*)rl_line_buffer,NULL);
-//	fprintf(stderr,"::%s\n",rl_line_buffer);
-//	fprintf(stdout,"::%s\n",rl_line_buffer);
 }
 
 /*
@@ -157,7 +142,7 @@ int rl_sdl_getc_hook()
 {
 	unsigned int c;
 	c=0;
-
+	
 	if(cc.displaydevice->get_input(&c)==1)
 	{
 
@@ -229,7 +214,6 @@ void initialize_readline (int with_no_display_device)
 
 	if(with_no_display_device==0)
 	{
-
 		rl_catch_signals=0;
 		rl_catch_sigwinch=0;
 		rl_redisplay_function=redisplay;

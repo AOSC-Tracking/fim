@@ -53,6 +53,7 @@ class DummyDisplayDevice:public DisplayDevice
 	virtual int handle_console_switch(){return 0;}
 	virtual int clear_rect(int x1, int x2, int y1,int y2){return 0;}
 	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str){return 0;}
+	virtual int get_bpp(){return 0;};
 
 	private:
 };
