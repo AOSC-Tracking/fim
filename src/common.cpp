@@ -28,6 +28,7 @@
 #include "common.h"
 #include <string>
 #include <fstream>
+#include <sys/time.h>
 
 void trec(char *str,const char *f,const char*t)
 {
@@ -413,5 +414,19 @@ int int2msbf(int in)
 	if( 0x01 & (*(char*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
 		return in;
 	return swap_bytes_in_int(in);
+}
+
+double getmilliseconds()
+{
+	// for internal usage
+	int err;//t,pt in ms; d in us
+	double dt=0.0;
+        struct timeval tv;
+        err=gettimeofday(&tv, NULL);
+	dt+=tv.tv_usec/1000;
+	//dt+=tv.tv_sec *1000;
+	//dt+=(tv.tv_sec%100) *1000;//secs mod 100
+	// note : we ignore err!
+	return dt;
 }
 

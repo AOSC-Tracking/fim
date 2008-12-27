@@ -59,6 +59,9 @@ int lines_count(const char*s, int cols);
 int newlines_count(const char*s);
 const char* next_row(const char*s, int cols);
 int fim_common_test();
+
+double getmilliseconds();
+
 /* exceptions */
 typedef int FimException;
 #define FIM_E_NO_IMAGE 1

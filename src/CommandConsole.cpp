@@ -2475,8 +2475,12 @@ namespace fim
 			{
 				strcpy(hfile,e);
 				strcat(hfile,"/.fim_history");
+				bool need_chmod=!is_file(hfile);		// will try to chmod if already non existent
 				write_history(hfile);
+				if(need_chmod)chmod(hfile,S_IRUSR|S_IWUSR);	// we write the first .fim_history in mode -rw------- (600)
 			}
+			/* else : /home/useeeeeeeeeeeeeeeeeeeeeee.....eeeeeeeer ? :) */
+			
 		}
     #endif
   #endif
