@@ -38,7 +38,7 @@
 
 	SDLDevice::SDLDevice():vi(NULL)
 	{
-		FontServer::fb_text_init1(fontname,&f);
+		FontServer::fb_text_init1(fontname,&f);	// FIXME : move this outta here
 		keypress = 0;
 		h=0;
 		current_w=current_h=0;

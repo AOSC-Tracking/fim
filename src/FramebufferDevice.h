@@ -159,7 +159,6 @@ class FramebufferDevice:public DisplayDevice
 	}
 #endif
 	private:
-	FontServer fontserver;
 
 	int             vt ;
 	public:

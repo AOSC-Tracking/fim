@@ -104,14 +104,12 @@ static const unsigned fs_masktab[] = {
 
 
 
-class FramebufferDevice;
 class FontServer
 {
 
 
-	const FramebufferDevice &framebufferdevice;
 public:
-	FontServer( const FramebufferDevice &framebufferdevice_);
+	FontServer( );
 
 #if 1
 /* 20080507 unused, as default_font ? */

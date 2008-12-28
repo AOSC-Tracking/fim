@@ -180,7 +180,7 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 	{
 		int rc=0;
 		//initialization of the framebuffer text
-		FontServer::fb_text_init1(fontname,&f);
+		FontServer::fb_text_init1(fontname,&f);	// FIXME : move this outta here
 		/*
 		 * will initialized with the user set (or default ones)
 		 *  - framebuffer device
@@ -1444,7 +1444,6 @@ void FramebufferDevice::fb_switch_signal(int signal)
 int FramebufferDevice::fb_text_init2(void)
 {
     return fs_init_fb(255);
-//    return fontserver.fs_init_fb(255);
 }
 	int  FramebufferDevice::fb_font_width(void) { return f->width; }
 	int  FramebufferDevice::fb_font_height(void) { return f->height; }
@@ -1616,8 +1615,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 
 
 	FramebufferDevice::FramebufferDevice():
-	fontserver(*this)	/* FIXME : should this be moved to the end ? */
-	,vt(0)
+	vt(0)
 	,dither(FALSE)
 	,pcd_res(3)
 	,steps(50)
@@ -1635,6 +1633,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	,fb_mem_offset(0)
 	,fb_switch_state(FB_ACTIVE)
 	,orig_vt_no(0)
+	,devices(NULL)
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	//mc(48,12),
 //	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */

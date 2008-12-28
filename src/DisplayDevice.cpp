@@ -23,6 +23,7 @@
 #include "DisplayDevice.h"
 
 	DisplayDevice::DisplayDevice():fontname(NULL)
+	,f(NULL)
 	,debug(0)
 	,redraw(0)
 	{}
