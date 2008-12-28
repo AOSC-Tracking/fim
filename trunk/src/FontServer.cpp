@@ -30,8 +30,7 @@
 namespace fim
 {
 
-	FontServer::FontServer( const FramebufferDevice &framebufferdevice_):
-		framebufferdevice(framebufferdevice_)
+	FontServer::FontServer( )
 	{
 	}
 

@@ -33,6 +33,7 @@ class CommandConsole
 	friend class FbiStuff;
 
 	private:
+	FontServer fontserver;
 	int fim_uninitialized; // new, probably useless
 
 	fim::string postInitCommand;

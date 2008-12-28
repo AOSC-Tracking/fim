@@ -400,16 +400,16 @@ namespace fim
 		int MiniConsole::clear()
 		{
 			scroll=rows;
-		};
+		}
 
 		int MiniConsole::scroll_down()
 		{
 			scroll=scroll<1?0:--scroll;
-		};
+		}
 
 		int MiniConsole::scroll_up()
 		{
 			scroll=scroll<rows?++scroll:scroll;
-		};
+		}
 }
 

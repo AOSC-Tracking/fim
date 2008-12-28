@@ -319,6 +319,7 @@ namespace fim
 	}
 
 	CommandConsole::CommandConsole(/*FramebufferDevice &_framebufferdevice*/):
+	fontserver(),
 	browser(*this)
 	//,framebufferdevice(_framebufferdevice)
 	{

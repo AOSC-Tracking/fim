@@ -147,6 +147,7 @@ namespace rl
 #endif
 
 //#define FIM_FBI_PRINTF( ... ) fprintf(stderr, __VA_ARGS__ )
+/* " warning: anonymous variadic macros were introduced in C99" (here and elsewhere) */
 #define FIM_FBI_PRINTF( ... ) 1
 
 #include "string.h"
