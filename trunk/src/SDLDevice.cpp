@@ -36,7 +36,7 @@
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 
-	SDLDevice::SDLDevice():vi(NULL)
+	SDLDevice::SDLDevice(MiniConsole & mc_):DisplayDevice(mc_),vi(NULL)
 	{
 		FontServer::fb_text_init1(fontname,&f);	// FIXME : move this outta here
 		keypress = 0;
@@ -52,9 +52,9 @@
 	)
 	{
 		/* output screen variables */
-		int 
-			oi,// output image row index
-			oj;// output image columns index
+//		int 
+//			oi,// output image row index
+//			oj;// output image columns index
 
 		int lor,loc;
     		
@@ -144,8 +144,9 @@
 		if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
 
 
-		int h=1;
-		int x, y, ytimesw;
+//		int h=1;
+//		int x, y;
+		int ytimesw;
 
 		if(SDL_MUSTLOCK(screen))
 		{
@@ -418,7 +419,8 @@
 	int SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
 	{
 		/* FIXME ! WON'T WORK FOR NON 32 BIT MODES*/
-		int x,y,ytimesw;
+//		int x,ytimesw;
+		int y;
 
 //		if(SDL_MUSTLOCK(screen))
 //		{
@@ -442,7 +444,8 @@
 
 	int SDLDevice::clear_rect(int x1, int x2, int y1,int y2)
 	{
-		int x,y,ytimesw;
+//		int x,ytimesw;
+		int y;
 
 //		if(SDL_MUSTLOCK(screen))
 //		{
@@ -514,7 +517,7 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char
 
 int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
 {
-    int i,c,j/*,w*/;
+    int i,c/*,j,w*/;
 
 /*		if(SDL_MUSTLOCK(screen))
 		{

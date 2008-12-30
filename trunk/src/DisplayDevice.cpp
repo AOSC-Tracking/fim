@@ -22,7 +22,8 @@
 #include "fim.h"
 #include "DisplayDevice.h"
 
-	DisplayDevice::DisplayDevice():fontname(NULL)
+	DisplayDevice::DisplayDevice(MiniConsole & mc_):fontname(NULL)
+	,mc(mc_)
 	,f(NULL)
 	,debug(0)
 	,redraw(0)

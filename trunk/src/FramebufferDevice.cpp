@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008 Michele Martone
+ (c) 2007-2008 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -73,7 +73,6 @@ static matrix   DM =
 
 
 
-extern fim::CommandConsole cc;
 
 static FramebufferDevice *ffdp;
 
@@ -277,12 +276,12 @@ void FramebufferDevice::console_switch(int is_busy)
 		visible = 1;	///////////
 		ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
 		redraw = 1;
-		//cc.setVariable("i:fresh",1);	//20081109 : FIXME : commented as it seems useless under the fb
+		//mc.cc.setVariable("i:fresh",1);	//20081109 : FIXME : commented as it seems useless under the fb
 	/*
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched! 
 	 */
-		cc.redisplay();
+		mc.cc.redisplay();
 		/*
 		 * PROBLEMS : image tearing (also in actual fbi..)
 		 */
@@ -1601,7 +1600,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	    p=s;
 	}
 
-	//if(!cc.drawOutput() || noDraw)return;//CONVENTION!
+	//if(!mc.cc.drawOutput() || noDraw)return;//CONVENTION!
 	if(!draw )return;//CONVENTION!
 
 	    y = 1*fb_font_height();
@@ -1614,8 +1613,9 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 }
 
 
-	FramebufferDevice::FramebufferDevice():
-	vt(0)
+	FramebufferDevice::FramebufferDevice(MiniConsole & mc_):	
+	DisplayDevice(mc_)
+	,vt(0)
 	,dither(FALSE)
 	,pcd_res(3)
 	,steps(50)

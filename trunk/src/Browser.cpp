@@ -578,11 +578,11 @@ namespace fim
 	#ifdef FIM_CACHE_DEBUG
 		if(viewport())std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif
-		if(viewport())viewport()->setImage( cache.useCachedImage(current().c_str()) );
+		if(viewport())viewport()->setImage( cache.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
 #else
 		// warning : in this cases exception handling is missing
 	#ifdef FIM_READ_STDIN_IMAGE
-		if(current()!="")
+		if(current()!=FIM_STDIN_IMAGE_NAME)
 		{
 			if(viewport())viewport()->setImage( new Image(current().c_str()) );
 		}
@@ -631,16 +631,8 @@ namespace fim
 #endif
 
 		if( args.size() > 0 )return "";
-		cache.prefetch(get_next_filename(1).c_str());
+		cache.prefetch(cache_key_t(get_next_filename(1).c_str(),FIM_E_FILE));// FIXME
 		return "";
-	}
-
-	bool Browser::can_reload()const
-	{
-		const Image *i=NULL;
-		if( commandConsole.current_viewport() && (i=commandConsole.current_viewport()->c_getImage())!=NULL )
-			return i->can_reload();
-		return true;
 	}
 
 	fim::string Browser::reload(const args_t &args)
@@ -656,10 +648,7 @@ namespace fim
 		autocmd_exec("PreReload",c);
 #endif
 		free_current_image();
-		if(can_reload())
-		{
-			loadCurrentImage();
-		}
+		loadCurrentImage();
 
 		if(getGlobalIntVariable("_prefetch")) prefetch(args_t());/*this will become an autocommand*/
 
@@ -778,7 +767,7 @@ namespace fim
 		 * FIX ME:
 		 * are we sure we want no repetition!????
 		 * */
-		if(nf!="")
+		if(nf!=FIM_STDIN_IMAGE_NAME)
 		{
 #ifdef FIM_CHECK_FILE_EXISTENCE
 		/*

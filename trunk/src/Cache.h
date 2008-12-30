@@ -21,6 +21,7 @@
 #ifndef CACHE_FBVI_H
 #define CACHE_FBVI_H
 #include "fim.h"
+
 namespace fim
 {
 #ifdef FIM_NAMESPACES
@@ -30,10 +31,10 @@ class Cache
 #endif
 {	
 	typedef std::map<fim::Image*,time_t> 	   lru_t;	//filename - last usage time
-	typedef std::map<fim::string,fim::Image*>  cachels_t;	//filename - image
-	typedef std::map<fim::Image*,fim::string>  rcachels_t;	//image - filename
-	typedef std::map<fim::string,int >        ccachels_t;	//filename - counter
-	typedef std::map<fim::string,std::vector<fim::Image*> > cloned_cachels_t;	//filename - cloned images??
+	typedef std::map<cache_key_t,fim::Image*>  cachels_t;	//filename - image
+	typedef std::map<fim::Image*,cache_key_t>  rcachels_t;	//image - filename
+	typedef std::map<cache_key_t,int >        ccachels_t;	//filename - counter
+	typedef std::map<cache_key_t,std::vector<fim::Image*> > cloned_cachels_t;	//filename - cloned images??
 	typedef std::map<fim::Image*,int >  	   cuc_t;	//image - filename
 
 	cachels_t 	imageCache;
@@ -52,17 +53,17 @@ class Cache
 	bool need_free()const;
 
 	/**/
-	int mark_used(const char *fname);
+	int mark_used(cache_key_t key);
 
 	bool is_in_cache(fim::Image* oi);
-	bool is_in_cache(const char* fname);
+	bool is_in_cache(cache_key_t key);
 	bool is_in_clone_cache(fim::Image* oi);
 
 	bool cacheNewImage( fim::Image* ni );
-	Image * loadNewImage(const char *fname);
+	Image * loadNewImage(cache_key_t key);
 
 	/*	returns an image from the cache or loads it from disk marking it as used in the LRU (internal) */
-	Image *getCachedImage(const char *fname);
+	Image * getCachedImage(cache_key_t key);
 
 	/*	the caller declares this image as free	*/
 //	int free(fim::Image* oi);
@@ -83,7 +84,7 @@ class Cache
 	/*	returns whether a file is already cached */
 //	bool haveLoadedImage(const char *fname);
 
-	int used_image(const char* fname);
+	int used_image(cache_key_t key);
 	public:
 	Cache();
 
@@ -91,10 +92,13 @@ class Cache
 	bool freeCachedImage(Image *image);
 
 	/*	getCachedImage() and counter update */
-	Image * useCachedImage(const char *fname);
+	Image * useCachedImage(cache_key_t key);
+	
+	/* FIXME */
+	Image * setAndCacheStdinCachedImage(Image * image);
 
 	/**/
-	int prefetch(const char *fname);
+	int prefetch(cache_key_t key);
 
 	fim::string getReport();
 

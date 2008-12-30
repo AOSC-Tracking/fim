@@ -57,8 +57,9 @@ namespace fim
 		int  scroll;
 
 		public:
+		CommandConsole & cc;	// temporarily
 
-		MiniConsole(int lw=48, int r=12);
+		MiniConsole(CommandConsole & cc_,int lw=48, int r=12);
 		virtual ~MiniConsole(){}
 		int dump();	// non const due to user variables reaction
 		int grow();
@@ -72,8 +73,8 @@ namespace fim
 
 		private:
 		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignation */}
-		MiniConsole(const MiniConsole &mc)
-			:buffer(NULL),
+		MiniConsole(const MiniConsole &mc) :
+			buffer(NULL),
 			line(NULL),
 			bp(NULL),
 			bsize(0),
@@ -82,7 +83,8 @@ namespace fim
 			cline(0),
 			lwidth(0),
 			rows(0),
-			scroll(0)
+			scroll(0),
+			cc(mc.cc)
 			{/* this constructor should not be used */}
 
 		int line_length(int li);

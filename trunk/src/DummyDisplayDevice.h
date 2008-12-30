@@ -42,6 +42,7 @@ class DummyDisplayDevice:public DisplayDevice
 		int flags// some flags
 		){return 0;}
 
+	DummyDisplayDevice(MiniConsole & mc_):DisplayDevice(mc_){}
 	virtual ~DummyDisplayDevice(){}
 
 	virtual int get_chars_per_line(){return 1;/* 0 would be so cruel */}

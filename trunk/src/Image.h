@@ -56,8 +56,9 @@ class Image
 #endif
 {
 
-
 	friend class Viewport;		/* don't panic, we are wise people ;) */
+
+
 	public:
 
 	Image(const char *fname_, FILE *fd=NULL);
@@ -84,13 +85,14 @@ class Image
 
 	/* image methods */
 	bool load(const char *fname_, FILE *fd, int want_page);
-	void should_redraw()const;
+	void should_redraw(int should=1)const;
 
 	protected:
 	int              orientation;	//aka rotation
 
 	int    invalid;		//the first time the image is loaded it is set to 1
 	int	no_file;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
+	fim_image_source_t fis;
 
 	string  fname;		/* viewport variable, too */
 
@@ -109,7 +111,8 @@ class Image
 	int rescale( float ns=0.0 );
 	int rotate( float angle=1.0 );
 
-	const char* getName(){return fname.c_str();}
+	const char* getName()const{return fname.c_str();}
+	cache_key_t getKey()const;
 
 	/* viewport methods */
 

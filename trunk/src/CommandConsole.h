@@ -33,6 +33,10 @@ class CommandConsole
 	friend class FbiStuff;
 
 	private:
+#ifndef FIM_KEEP_BROKEN_CONSOLE
+	public:
+	MiniConsole mc;
+#endif
 	FontServer fontserver;
 	int fim_uninitialized; // new, probably useless
 

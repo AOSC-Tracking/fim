@@ -42,7 +42,7 @@ class SDLDevice:public DisplayDevice
 
 	public:
 
-	SDLDevice();
+	SDLDevice(MiniConsole & mc_);
 
 	int  display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)

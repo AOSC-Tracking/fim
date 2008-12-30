@@ -285,8 +285,7 @@ class FramebufferDevice:public DisplayDevice
 	int with_boz_patch;
 #endif
 
-	// FBTOOLS.C
-	FramebufferDevice();
+	FramebufferDevice(MiniConsole & mc_);
 
 
 /* -------------------------------------------------------------------- */

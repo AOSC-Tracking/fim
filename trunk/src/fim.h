@@ -150,6 +150,12 @@ namespace rl
 /* " warning: anonymous variadic macros were introduced in C99" (here and elsewhere) */
 #define FIM_FBI_PRINTF( ... ) 1
 
+namespace fim{
+enum fim_image_source_t { FIM_E_FILE=-11, FIM_E_STDIN=-22};	/* these */
+typedef std::pair<fim::string,fim_image_source_t > 	   cache_key_t;	//the current cache key
+};
+#define FIM_STDIN_IMAGE_NAME "<STDIN>"	/* should belong to a namespace different from the file name space ! */
+
 #include "string.h"
 #include "Command.h"
 #include "Arg.h"
