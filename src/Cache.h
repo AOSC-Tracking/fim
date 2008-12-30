@@ -30,9 +30,9 @@ class Cache:public Namespace
 class Cache
 #endif
 {	
-	typedef std::map<fim::Image*,time_t> 	   lru_t;	//filename - last usage time
-	typedef std::map<cache_key_t,fim::Image*>  cachels_t;	//filename - image
-	typedef std::map<fim::Image*,cache_key_t>  rcachels_t;	//image - filename
+	typedef std::map<fim::Image*,time_t > 	   lru_t;	//filename - last usage time
+	typedef std::map<cache_key_t,fim::Image* >  cachels_t;	//filename - image
+	typedef std::map<fim::Image*,cache_key_t >  rcachels_t;	//image - filename
 	typedef std::map<cache_key_t,int >        ccachels_t;	//filename - counter
 	typedef std::map<cache_key_t,std::vector<fim::Image*> > cloned_cachels_t;	//filename - cloned images??
 	typedef std::map<fim::Image*,int >  	   cuc_t;	//image - filename
@@ -53,11 +53,12 @@ class Cache
 	bool need_free()const;
 
 	/**/
-	int mark_used(cache_key_t key);
+	int lru_touch(cache_key_t key);
 
-	bool is_in_cache(fim::Image* oi);
-	bool is_in_cache(cache_key_t key);
-	bool is_in_clone_cache(fim::Image* oi);
+	bool is_in_cache(fim::Image* oi)const;
+	bool is_in_cache(cache_key_t key)const;
+	bool is_in_clone_cache(fim::Image* oi)const;
+	time_t last_used(cache_key_t key)const;
 
 	bool cacheNewImage( fim::Image* ni );
 	Image * loadNewImage(cache_key_t key);
@@ -75,16 +76,13 @@ class Cache
 	int erase_clone(fim::Image* oi);
 
 	/* get the lru element. if unused is true, only an unused image will be returned, _if any_*/
-	Image* get_lru( bool unused = false );
+	Image* get_lru( bool unused = false )const;
 
 	int free_some_lru();
 
 	bool free_all();
 	
-	/*	returns whether a file is already cached */
-//	bool haveLoadedImage(const char *fname);
-
-	int used_image(cache_key_t key);
+	int used_image(cache_key_t key)const;
 	public:
 	Cache();
 

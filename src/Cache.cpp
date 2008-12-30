@@ -20,6 +20,7 @@
 */
 #include "fim.h"
 /*	#include <malloc.h>	*/
+	#include <time.h>
 namespace fim
 {
 	Cache::Cache()
@@ -30,15 +31,16 @@ namespace fim
 
 	int Cache::cached_elements()const
 	{
-		int count=0;
-		cachels_t::const_iterator ci;
+		//int count=0;
+		//cachels_t::const_iterator ci;
 
 		// FIXME : :)
-		for( ci=imageCache.begin();ci!=imageCache.end();++ci)++count;
-		return count;
+		//for( ci=imageCache.begin();ci!=imageCache.end();++ci)++count;
+		//return count;
+		return imageCache.size();
 	}
 
-	Image* Cache::get_lru( bool unused )
+	Image* Cache::get_lru( bool unused )const
 	{
 		lru_t::const_iterator lrui;
 
@@ -50,10 +52,11 @@ namespace fim
 		if ( cached_elements() < 1 ) return NULL;
 		cachels_t::const_iterator ci;
 		for( ci=imageCache.begin();ci!=imageCache.end();++ci)
-		if( lru[ci->second] < m_time  && ( ! unused || usageCounter[ci->first]<=0  ) )
+		if( ci->second /* <- so we can call this function in some intermediate states .. */
+			 && last_used(ci->first) < m_time  &&  (  (! unused) || (used_image(ci->first)<=0)  ) )
 		{
-			m_time = lru[ci->second];
 			l_img  = ci->second;
+			m_time = last_used(ci->first);
 		}
 		return l_img;
 	}
@@ -109,31 +112,41 @@ namespace fim
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
 
-	int Cache::used_image(cache_key_t key)
+	int Cache::used_image(cache_key_t key)const
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
-		return usageCounter[key] ;
+		//return usageCounter[key] ;
+		return ( usageCounter.find(key)!=usageCounter.end() ) ?  (*(usageCounter.find(key))).second : 0;
 	}
 
-	bool Cache::is_in_clone_cache(fim::Image* oi)
+	bool Cache::is_in_clone_cache(fim::Image* oi)const
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!oi)return -1;
-		return *(clone_pool.find(oi))==oi;
+		//return *(clone_pool.find(oi))==oi;
+		return ( clone_pool.find(oi)!=clone_pool.end() )	
+			&&
+			((*clone_pool.find(oi)) == oi );
 	}
 
-	bool Cache::is_in_cache(cache_key_t key)
+	bool Cache::is_in_cache(cache_key_t key)const
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
-		//if(!fname)return -1;
-		return imageCache[key]!=NULL;
+		//return imageCache[key]!=NULL;
+		return ( imageCache.find(key)!=imageCache.end() )
+			&&
+			((*(imageCache.find(key))).second!=NULL) ;
 	}
 
-	bool Cache::is_in_cache(fim::Image* oi)
+	bool Cache::is_in_cache(fim::Image* oi)const
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!oi)return -1;
-		return reverseCache[oi]!=cache_key_t("",FIM_E_FILE);// FIXME
+		//return reverseCache[oi]!=cache_key_t("",FIM_E_FILE);// FIXME
+		return ( reverseCache.find(oi)!=reverseCache.end() )	
+			&&
+			( (*(reverseCache.find(oi))).second.first.c_str()== oi->getKey().first );
+			
 	}
 
 #if 0
@@ -173,22 +186,18 @@ namespace fim
 
 	int Cache::prefetch(cache_key_t key)
 	{
-		if(need_free())free_some_lru();
-		return getCachedImage(key)?0:-1;
+//		if(need_free())
+//			free_some_lru();
+		if(key.first == FIM_STDIN_IMAGE_NAME)
+			return 0;// just a fix in the case the browser is still lame
+		if(is_in_cache(key))
+			return 0;
+		loadNewImage(key);
+		setGlobalVariable("_cached_images",cached_elements());
+		setGlobalVariable("_cache_status",getReport().c_str());
+		return 0;
+//		return getCachedImage(key)?0:-1;
 	}
-
-	/*
-	 * is this image already in cache ?
-	 * */
-#if 0
-	bool Cache::haveLoadedImage(const char *fname)
-	{
-		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!fname)return false;
-
-		return ( this->imageCache[cache_key_t(fname)] != NULL );
-	}
-#endif
 
 	Image * Cache::loadNewImage(cache_key_t key)
 	{
@@ -223,10 +232,10 @@ namespace fim
 		//if(!key.first)return ni;
 
 		/*	cache lookup */
-		this->cached_elements();
+		//this->cached_elements();
 		if( ( ni = this->imageCache[key]) )
 		{
-			this->mark_used(key);
+			this->lru_touch(key);
 			return ni;
 		}
 		return ni;//could be NULL
@@ -244,7 +253,7 @@ namespace fim
 
 		this->imageCache[ni->getKey()]=ni;
 		this->reverseCache[ni]= ni->getKey();
-		mark_used( ni->getKey() );
+		lru_touch( ni->getKey() );
 		usageCounter[ ni->getKey()]=0; // we yet don't assume any usage
 		setGlobalVariable("_cached_images",cached_elements());
 		return true;
@@ -264,6 +273,7 @@ namespace fim
 		if(is_in_cache(oi) )
 		{
 			usageCounter[oi->getKey()]=0;
+			/* NOTE : the user should call usageCounter.erase(key) after this ! */
 			lru.erase(oi);
 			imageCache.erase(reverseCache[oi]);
 			reverseCache.erase(oi);
@@ -279,7 +289,15 @@ namespace fim
 		return -1;
 	}
 
-	int Cache::mark_used(cache_key_t key)
+	time_t Cache::last_used(cache_key_t key)const
+	{
+		if(imageCache.find(key)==imageCache.end())return 0;
+		if(lru.find(imageCache.find(key)->second )==lru.end())return 0;
+		return lru.find(imageCache.find(key)->second )->second;
+		//return lru[imageCache[key]]=time(NULL);
+	}
+
+	int Cache::lru_touch(cache_key_t key)
 	{
 		/*
 		 * if the specified file is cached, in this way it is marked as used, too
@@ -318,8 +336,27 @@ namespace fim
 				image->getKey().second!=FIM_E_STDIN 
 				)
 			{
-				usageCounter.erase(image->getKey());
-				if( need_free() && image->getKey().second!=FIM_E_STDIN )this->erase( image );
+#if 0
+				if( need_free() && image->getKey().second!=FIM_E_STDIN )
+				{
+					cache_key_t key = image->getKey();
+					this->erase( image );
+					usageCounter.erase(key);
+				}
+#else
+				/* doing it here is dangerous : */
+				if( need_free() )
+				{
+					Image * lrui = get_lru(true);
+					if(lrui && ( lrui->getKey().second!=FIM_E_STDIN ))
+					{	
+						cache_key_t key = lrui->getKey();
+						this->erase( lrui );
+						usageCounter.erase(key);
+					}
+						// missing usageCounter.erase()..
+				}
+#endif
 			}
 			setGlobalVariable("_cache_status",getReport().c_str());
 			return true;
@@ -347,7 +384,6 @@ namespace fim
 		std::cout << "  useCachedImage(\""<<key.first<<","<<key.second<<"\")\n";
 #endif
 		Image * image=NULL;
-	//	if(!fname) return NULL;
 		if(!is_in_cache(key)) 
 		{
 			/*
@@ -401,6 +437,7 @@ namespace fim
 				clone_pool.insert(image); // we have a clone
 				cloneUsageCounter[image]=1;
 			}
+			lru_touch( key );
 			// if loading and eventual cloning succeeded, we count the image as used of course
 			usageCounter[key]++;
 			setGlobalVariable("_cache_status",getReport().c_str());

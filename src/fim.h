@@ -154,7 +154,9 @@ namespace fim{
 enum fim_image_source_t { FIM_E_FILE=-11, FIM_E_STDIN=-22};	/* these */
 typedef std::pair<fim::string,fim_image_source_t > 	   cache_key_t;	//the current cache key
 };
-#define FIM_STDIN_IMAGE_NAME "<STDIN>"	/* should belong to a namespace different from the file name space ! */
+typedef std::vector<fim::string> args_t;
+#define FIM_STDIN_IMAGE_NAME "<STDIN>"
+/* should belong to a namespace different from the file name space, and possibly figuring alphabetically as the first one */
 
 #include "string.h"
 #include "Command.h"
@@ -201,6 +203,7 @@ namespace fim
 #define FV__LOAD_DEFAULT_ETC_FIMRC 	"_load_default_etc_fimrc"
 #define FV__NO_RC_FILE			"_no_rc_file"
 #define FV__STATUS_LINE 		"_status_line"
+#define FV__WANT_PREFETCH 		"_want_prefetch"
 #define FV_AUTO_SCALE_V			"auto_scale_v"	/* fixme : should be moved to fimrc's scope only */
 #define FV_AUTOTOP			"autotop"
 #define FV_AUTOWIDTH			"autowidth"

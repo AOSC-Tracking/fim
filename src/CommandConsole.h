@@ -27,7 +27,6 @@
 
 namespace fim
 {
-typedef std::vector<fim::string> args_t;
 class CommandConsole
 {
 	friend class FbiStuff;
