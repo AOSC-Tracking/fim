@@ -116,6 +116,8 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	GBool  useMediaBox ;
 	GBool  crop        ;
 	GBool  doLinks     ;
+	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
+
 	if(fp) fclose(fp);
 
 	ds = (struct pdf_state_t*)calloc(sizeof(struct pdf_state_t),1);
