@@ -381,7 +381,8 @@ namespace fim
 		return os;
 	}
 
-	string::string(const string& s):std::string(s.c_str())
+	//string::string(const string& s):std::string(s.c_str())
+	string::string(const string& s):std::string(s)
 	{
 	}
 

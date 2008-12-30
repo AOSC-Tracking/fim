@@ -28,7 +28,7 @@ class DisplayDevice
 	protected:
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
-	MiniConsole mc;
+	MiniConsole & mc;
 #endif
 	/*
 	 * The generalization of a Fim output device.
@@ -38,7 +38,7 @@ class DisplayDevice
 	char* fontname;
 	int                        debug;// really, only for making happy fbdev
 	public:
-	DisplayDevice();
+	DisplayDevice(MiniConsole &mc_);
 	virtual int initialize(key_bindings_t &key_bindings)=0;
 	virtual void  finalize()=0;
 
@@ -70,7 +70,6 @@ class DisplayDevice
 	virtual int get_input(unsigned int * c);
 	virtual int catchInteractiveCommand(int seconds)const;
 	virtual int init_console();
-	virtual void console_switch(int is_busy){}// really, only for making happy fbdev
 	virtual void switch_if_needed(){}// really, only for making happy fbdev
 	virtual void cleanup(){}// really, only for making happy fbdev
 
@@ -78,6 +77,7 @@ class DisplayDevice
 	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)=0;
 	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
 	private:
+	virtual void console_switch(int is_busy){}// really, only for making happy fbdev
 };
 
 #endif

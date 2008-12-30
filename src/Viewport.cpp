@@ -34,7 +34,6 @@
  */
 namespace fim
 {
-	extern CommandConsole cc;
 
 	Viewport::Viewport(
 			CommandConsole &c
@@ -46,7 +45,7 @@ namespace fim
 			,top(0)
 			,left(0)
 			,panned(0x0)
-			,displaydevice(cc.displaydevice)
+			,displaydevice(c.displaydevice)
 			,image(NULL)
 #ifdef FIM_WINDOWS
 			,window(window_)
@@ -63,7 +62,7 @@ namespace fim
 		,top(v.top)
 		,left(v.left)
 		,panned(v.panned)
-		,displaydevice(cc.displaydevice)
+		,displaydevice(v.displaydevice)
 		,image(NULL)
 #ifdef FIM_WINDOWS
 		,window(v.window)
@@ -79,7 +78,7 @@ namespace fim
 			if(v.image) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image->getName() << "\" from "<<v.image<<"\n" ;
 			else std::cout << "no image to cache..\n";
 	#endif
-			if(v.image) setImage( commandConsole.browser.cache.useCachedImage(v.image->getName()) );
+			if(v.image) setImage( commandConsole.browser.cache.useCachedImage(v.image->getKey()) );
 #else
 			if(v.image) setImage ( new Image(*v.image) ) ;
 #endif
@@ -87,6 +86,7 @@ namespace fim
 		catch(FimException e)
 		{
 			image=NULL;
+			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 		}
 	}
 
@@ -434,7 +434,8 @@ namespace fim
 		std::cout << "setting image \""<<ni->getName()<<"\" in viewport: "<< ni << "\n\n";
 #endif
 
-		image = NULL;
+		//image = NULL;
+		if(ni)free();
 		reset();
 		image = ni;
 	}
@@ -582,6 +583,12 @@ namespace fim
 			image->should_redraw();
 		else
 	        	displaydevice->redraw=1;
+	}
+
+	Viewport::~Viewport()
+	{
+		// FIXME : we need a revival for free()
+		free();
 	}
 }
 

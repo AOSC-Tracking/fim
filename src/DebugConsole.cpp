@@ -24,9 +24,6 @@
 namespace fim
 {
 
-	extern fim::FramebufferDevice ffd;
-	extern fim::CommandConsole cc;
-
 		#define min(x,y) ((x)<(y)?(x):(y))
 		int MiniConsole::line_length(int li)
 		{
@@ -181,8 +178,10 @@ namespace fim
 			return -1;
 		}
 
-		MiniConsole::MiniConsole(int lw, int r)
-		:buffer(NULL),
+		MiniConsole::MiniConsole(CommandConsole & cc_,int lw, int r)
+		:
+		cc(cc_),
+		buffer(NULL),
 		line(NULL),
 		bp(NULL),
 		bsize(0),
@@ -400,16 +399,19 @@ namespace fim
 		int MiniConsole::clear()
 		{
 			scroll=rows;
+			return 0;
 		}
 
 		int MiniConsole::scroll_down()
 		{
 			scroll=scroll<1?0:--scroll;
+			return 0;
 		}
 
 		int MiniConsole::scroll_up()
 		{
 			scroll=scroll<rows?++scroll:scroll;
+			return 0;
 		}
 }
 

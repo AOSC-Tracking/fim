@@ -131,7 +131,6 @@ class Browser
 	fim::string display(const args_t &args);
 	fim::string display_status(const char *l,const char*r);
 
-	bool can_reload()const;
 	fim::string reload(const args_t &args);
 	fim::string list(const args_t &args){return list();}
 	fim::string push(const args_t &args);

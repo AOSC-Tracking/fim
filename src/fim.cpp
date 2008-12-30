@@ -511,11 +511,13 @@ int help_and_exit(char *argv0, int code=0)
 				 * but it would require to rewrite much of the file loading stuff
 				 * (which is quite fbi's untouched stuff right now)
 				 * */
-				stream_image=new Image("/dev/stdin",tfd);
-
+				stream_image=new Image(FIM_STDIN_IMAGE_NAME,tfd);
 				// DANGEROUS TRICK!
 				cc.browser.set_default_image(stream_image);
-				cc.browser.push("");
+				if(!cc.browser.cache.setAndCacheStdinCachedImage(stream_image))
+					std::cerr << "problems caching standard input image!\n";// FIXME
+
+				cc.browser.push(FIM_STDIN_IMAGE_NAME);
 				//fclose(tfd);	// uncommenting this will cause a segfault (why ? FIXME)
 			}
 			close(0);

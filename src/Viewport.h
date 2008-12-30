@@ -68,7 +68,7 @@ class Viewport
 			);
 
 	Viewport(const Viewport &v);
-	~Viewport(){}
+	~Viewport();
 	private:
 	Viewport& operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
 	void should_redraw()const;

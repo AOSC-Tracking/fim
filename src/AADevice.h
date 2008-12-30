@@ -39,6 +39,7 @@ class AADevice:public DisplayDevice
 	struct aa_savedata ascii_save;
 	char name[2];	/* FIXME */
 	public:
+	AADevice(MiniConsole & mc_):DisplayDevice(mc_){}
 
 	int  display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)

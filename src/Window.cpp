@@ -31,7 +31,6 @@
 
 namespace fim
 {
-	extern FramebufferDevice ffd;
         fim::string Window::cmd(const std::vector<fim::string> &args)
         {
 		unsigned int i=0;

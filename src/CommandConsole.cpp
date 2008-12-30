@@ -319,9 +319,14 @@ namespace fim
 	}
 
 	CommandConsole::CommandConsole(/*FramebufferDevice &_framebufferdevice*/):
+#ifndef FIM_KEEP_BROKEN_CONSOLE
+	mc(*this),
+#endif
 	fontserver(),
 	browser(*this)
 	//,framebufferdevice(_framebufferdevice)
+	,dummydisplaydevice(this->mc)
+	,displaydevice(displaydevice)
 	{
 		appended_post_init_command=false;
 		fim_uninitialized = 1; // new
@@ -473,7 +478,7 @@ namespace fim
 			extern float default_fbgamma;
 			FramebufferDevice * ffdp=NULL;
 
-			displaydevice=new FramebufferDevice();
+			displaydevice=new FramebufferDevice(mc);
 			if(!displaydevice || ((FramebufferDevice*)displaydevice)->framebuffer_init())cleanup_and_exit(0);
 			ffdp=((FramebufferDevice*)displaydevice);
 			setVariable("_device_driver", "fbdev");
@@ -490,7 +495,7 @@ namespace fim
 		{
 			/* EXPERIMENTAL */
 			DisplayDevice *sdld=NULL;
-			sdld=new SDLDevice(); if(sdld && sdld->initialize(key_bindings)!=0){delete sdld ; sdld=NULL;}
+			sdld=new SDLDevice(mc); if(sdld && sdld->initialize(key_bindings)!=0){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice==NULL)
 			{
 				displaydevice=sdld;
@@ -503,7 +508,7 @@ namespace fim
 		if(device=="caca")
 		{
 			DisplayDevice *cacad=NULL;
-			cacad=new CACADevice(); if(cacad && cacad->initialize(key_bindings)!=0){delete cacad ; cacad=NULL;}
+			cacad=new CACADevice(mc); if(cacad && cacad->initialize(key_bindings)!=0){delete cacad ; cacad=NULL;}
 			if(cacad && displaydevice==NULL)
 			{
 				displaydevice=cacad;
@@ -515,7 +520,7 @@ namespace fim
 		#ifdef FIM_WITH_AALIB
 		if(device=="aa")
 		{
-		aad=new AADevice(); if(aad && aad->initialize(key_bindings)!=0){delete aad ; aad=NULL;}
+		aad=new AADevice(mc); if(aad && aad->initialize(key_bindings)!=0){delete aad ; aad=NULL;}
 		if(aad && displaydevice==NULL)
 		{
 			displaydevice=aad;
@@ -2097,6 +2102,7 @@ namespace fim
 		catch	(FimException e)
 		{
 			// well, we should to something : FIXME
+			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 		}
 		return needed_redisplay;
 #else
@@ -2124,6 +2130,7 @@ namespace fim
 		catch	(FimException e)
 		{
 			// well, we should to something : FIXME
+			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 		}
 		return needed_redisplay;
 #else
@@ -2224,7 +2231,7 @@ namespace fim
 		 * the current file will be added to the list of filenames
 		 * which will be printed upon the program termination.
 		 * */
-		if(browser.current()!="")
+		if(browser.current()!=FIM_STDIN_IMAGE_NAME)
 		{
 			marked_files.insert(browser.current());
 			cout<<"Marked file \""<<browser.current()<<"\"\n";
@@ -2492,6 +2499,7 @@ namespace fim
     #endif
   #endif
 #endif
+		return 0;
 	}
 
 	int CommandConsole::load_history()
@@ -2514,6 +2522,7 @@ namespace fim
     #endif
   #endif
 #endif
+		return 1;
 	}
 
 	/*

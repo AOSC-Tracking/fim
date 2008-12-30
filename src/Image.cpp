@@ -80,6 +80,7 @@ namespace fim
 		orientation(0),
                 invalid(0),
 		no_file(true),
+		fis(fim::string(fname_)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
                 fname     ("")
 
 	{
@@ -132,15 +133,16 @@ namespace fim
 			cc.set_status_bar("please wait while reloading...", "*");
 
 		fimg = FbiStuff::read_image((char*)fname_,fd,want_page);
-    		if(strcmp("/dev/stdin",fname_)==0)
+    		if(strcmp(FIM_STDIN_IMAGE_NAME,fname_)==0)
 		{
 			no_file=true;	//no file is associated to this image (to prevent reloading)
+			fis = FIM_E_STDIN; // yes, it seems redundant but it is necessary
 		}
 		else 
 			no_file=false;	//reloading allowed
 
 		img=fimg;	/* no scaling : one copy only */
-	        {if(cc.displaydevice){should_redraw();}};
+		should_redraw();
 
 		if(! img)
 		{
@@ -154,6 +156,7 @@ namespace fim
 		setVariable("width"  ,(int)fimg->i.width );
 		setVariable("sheight",(int) img->i.height);
 		setVariable("swidth" ,(int) img->i.width );
+		if(cc.displaydevice)
 		setVariable("_fim_bpp" ,(int) cc.displaydevice->get_bpp());
 		setVariable("scale"  ,newscale*100);
 		setVariable("ascale" ,ascale);
@@ -164,6 +167,7 @@ namespace fim
 		setGlobalVariable("width"  ,(int)fimg->i.width );
 		setGlobalVariable("sheight",(int) img->i.height);
 		setGlobalVariable("swidth" ,(int) img->i.width );
+		if(cc.displaydevice)
 		setGlobalVariable("_fim_bpp" ,(int) cc.displaydevice->get_bpp());
 		//setGlobalVariable("scale"  ,newscale*100);
 		//setGlobalVariable("ascale" ,ascale);
@@ -384,7 +388,7 @@ namespace fim
 				scale=newscale;
 				ascale=newascale;
 				angle =newangle;
-	        		{if(cc.displaydevice){should_redraw();}};
+	        		should_redraw();
 			}
 
 			/*
@@ -397,7 +401,7 @@ namespace fim
 			setGlobalVariable("ascale" , ascale );
 			//setGlobalVariable("angle"  ,  angle );
 		}
-		else {if(cc.displaydevice){cc.displaydevice->redraw=0;}};
+		else should_redraw(0);
 		orientation=neworientation;
 		return 0;
 	}
@@ -439,6 +443,7 @@ namespace fim
 		orientation(image.orientation),
                 invalid(0),
 		no_file(true),
+		fis(image.fis),
                 fname     (image.fname)
 	{
 		/*
@@ -451,7 +456,12 @@ namespace fim
 
 		/* an exception is launched immediately */
 		if(!img || !fimg)
-			/* temporarily, for security reasons :  throw FIM_E_NO_IMAGE*/;
+			///* temporarily, for security reasons :  throw FIM_E_NO_IMAGE*/;
+		{
+			std::cerr << "fatal error : " << __FILE__ << ":" << __LINE__ << "( are you sure you gave an image file in standard input, uh ?)\n";
+			throw FimException();
+			std::exit(*(int*)NULL);// FIXME
+		}
 	}
 
 	Image * Image::getClone()
@@ -565,9 +575,11 @@ fim::string Image::getInfo()
 		return rescale();	// FIXME : necessary *only* for image update and display
 	}
 
-	void Image::should_redraw()const
+	void Image::should_redraw(int should)const
 	{
-	        cc.displaydevice->redraw=1;
+		/* FIXME : this is BAD style ! */
+	        if(cc.displaydevice)
+		        cc.displaydevice->redraw=1;
 	}
 
 	bool Image::prev_page()
@@ -581,5 +593,11 @@ fim::string Image::getInfo()
 		string s=fname;
 		return load(s.c_str(),NULL,page+1);
 	} 
+
+	cache_key_t Image::getKey()const
+	{
+		return cache_key_t(fname.c_str(),fis);
+	}
+
 }
 

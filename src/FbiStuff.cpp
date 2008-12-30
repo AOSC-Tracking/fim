@@ -1498,7 +1498,9 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
      * */
 #endif
     data = loader->init(fp,filename,page,&img->i,0);
-    if(strcmp(filename,"/dev/stdin")==0) { close(0); dup(2);/* if the image is loaded from stdin, we close its stream */}
+#ifdef FIM_READ_STDIN_IMAGE
+    if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); dup(2);/* if the image is loaded from stdin, we close its stream */}
+#endif
     if (NULL == data) {
 	if(cc.displaydevice->debug)
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
@@ -1734,8 +1736,9 @@ struct ida_image * fbi_image_clone(struct ida_image *img)
 
 	int FbiStuff::fim_filereading_debug()
 	{
-		extern FramebufferDevice ffd;
-		return cc.displaydevice->debug;
+		return cc.displaydevice ?
+			cc.displaydevice->debug:
+			0;
 	}
 
 }
