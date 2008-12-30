@@ -86,6 +86,8 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 	struct djvu_state_t * ds=NULL;
         static unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
 
+	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
+
 	if(fp) fclose(fp);
 
 	ds = (struct djvu_state_t*)calloc(sizeof(struct djvu_state_t),1);
