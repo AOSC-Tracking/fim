@@ -502,9 +502,9 @@ int help_and_exit(char *argv0, int code=0)
 			if( ( tfd=tmpfile() )!=NULL )
 			{	
 				/* todo : read errno in case of error and print some report.. */
-
-				char buf[1024];ssize_t rc=0;
-				while( (rc=read(0,buf,1024))>0 ) fwrite(buf,rc,1,tfd);
+				const size_t buf_size=4096;
+				char buf[buf_size];ssize_t rc=0;
+				while( (rc=read(0,buf,buf_size))>0 ) fwrite(buf,rc,1,tfd);
 				rewind(tfd);
 				/*
 				 * Note that it would be much nicer to do this in another way,

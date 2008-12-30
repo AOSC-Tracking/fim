@@ -93,6 +93,8 @@ namespace fim
 			cout << "warning : invalid loading ! \n";
 			if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
 				cc.set_status_bar( fim::string("error while loading \"")+ fim::string(fname_)+ fim::string("\"") , "*");
+			invalid = 1;
+			throw FimException();
 		}
 		else
 		{
@@ -130,7 +132,12 @@ namespace fim
 		this->free();
 		fname=fname_;
 		if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
-			cc.set_status_bar("please wait while reloading...", "*");
+		{
+			if( getGlobalIntVariable(FV__WANT_PREFETCH) == 1)
+				cc.set_status_bar("please wait while prefetching...", "*");
+			else
+				cc.set_status_bar("please wait while reloading...", "*");
+		}
 
 		fimg = FbiStuff::read_image((char*)fname_,fd,want_page);
     		if(strcmp(FIM_STDIN_IMAGE_NAME,fname_)==0)
@@ -302,7 +309,12 @@ namespace fim
 			 */
 			struct ida_image *backup_img=img;
 			if(getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
-				cc.set_status_bar("please wait while rescaling...", getInfo().c_str());
+			{
+				if( getGlobalIntVariable(FV__WANT_PREFETCH) == 1)
+					cc.set_status_bar("please wait while prefetching...", "*");
+				else
+					cc.set_status_bar("please wait while rescaling...", "*");
+			}
 
 #define FIM_PROGRESSIVE_RESCALING 0
 #if FIM_PROGRESSIVE_RESCALING
@@ -441,7 +453,8 @@ namespace fim
                 img     (NULL),
                 fimg    (NULL),
 		orientation(image.orientation),
-                invalid(0),
+                //invalid(0),
+                invalid(image.invalid),
 		no_file(true),
 		fis(image.fis),
                 fname     (image.fname)

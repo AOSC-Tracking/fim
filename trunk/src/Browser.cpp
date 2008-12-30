@@ -132,7 +132,7 @@ namespace fim
 		return s;
 	}
 
-	const fim::string Browser::pop()
+	const fim::string Browser::pop(fim::string filename)
 	{	
 		/*
 		 * pops the last image filename from the filenames list
@@ -141,9 +141,18 @@ namespace fim
 		fim::string s;
 		if(flist.size()<=0)return nofile;
 		assert(cp);
-		if(current_n()==(int)flist.size())cp--;
-		s=flist[flist.size()-1];
-		flist.erase(flist.begin()+current_n());
+		if(filename=="")
+		{
+			if(current_n()==(int)flist.size())cp--;
+			s=flist[flist.size()-1];
+			flist.erase(flist.begin()+current_n());
+		}
+		else
+		{
+			for(size_t i=0;i<flist.size();++i)
+				if(flist[i]==filename)
+					flist.erase(flist.begin()+i);
+		}
 		setGlobalVariable("filelistlen",current_images());
 		return s;
 	}
@@ -533,20 +542,18 @@ namespace fim
 		 * FIXME : this behaviour is BUGGY, because recursion will be killed off 
 		 *         by the autocommand loop prevention mechanism.
 		 * */
-		if(image() && viewport() && ! (viewport()->check_valid()))
+		if(/*image() &&*/ viewport() && ! (viewport()->check_valid()))
 		{
 			free_current_image();
 #ifdef FIM_REMOVE_FAILED
-			if(current()!="")
-			{
-				pop_current();	//removes the current file from the list.
+				pop(c);	//removes the currently specified file from the list.
 #ifdef FIM_AUTOSKIP_FAILED
-#ifdef FIM_ALWAYS_UNDEFINED
-				if(n_files())next(1);
-				reload(); /* this will not be effective ! */
+				if(n_files())
+				{
+					//next(1);
+					reload(); /* this will not be effective ! */
+				}
 #endif
-#endif
-			}
 #endif
 			return 1;
 		}
@@ -631,7 +638,10 @@ namespace fim
 #endif
 
 		if( args.size() > 0 )return "";
-		cache.prefetch(cache_key_t(get_next_filename(1).c_str(),FIM_E_FILE));// FIXME
+		setGlobalVariable(FV__WANT_PREFETCH,0);
+		cache.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE));// we prefetch 1 file forward
+		cache.prefetch(cache_key_t(get_next_filename(-1).c_str(),FIM_E_FILE));// we prefetch 1 file backward
+		setGlobalVariable(FV__WANT_PREFETCH,1);
 		return "";
 	}
 
@@ -650,9 +660,10 @@ namespace fim
 		free_current_image();
 		loadCurrentImage();
 
-		if(getGlobalIntVariable("_prefetch")) prefetch(args_t());/*this will become an autocommand*/
+		//if(getGlobalIntVariable("_prefetch")) prefetch(args_t());/*this will become an autocommand*/
 
-		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
+//		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
+		load_error_handle(c);
 
 #ifdef FIM_AUTOCMDS
 		autocmd_exec("PostReload",c);
@@ -666,10 +677,13 @@ namespace fim
 		 * loads the current file, if not already loaded
 		 */
 		fim::string c=current();
+		std::cout <<"SGAMM "<<c<<"\n";
 		if(image() && ( image()->getName() == current()) )
 		{
+		std::cout <<"SGAMM "<<c<<"\n";
 			return "image already loaded\n";		//warning
 		}
+		std::cout <<"SGAMM "<<c<<"\n";
 		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
 		autocmd_exec("PreLoad",c);
@@ -678,9 +692,9 @@ namespace fim
 
 		loadCurrentImage();
 
-		if(getGlobalIntVariable("_prefetch")) prefetch(args_t());
+		//if(getGlobalIntVariable("_prefetch")) prefetch(args_t());
 
-//		if(image() && ! (viewport().check_valid()))return load_error_handle(c);
+		load_error_handle(c);
 #ifdef FIM_AUTOCMDS
 		autocmd_exec("PostLoad",c);
 #endif
@@ -808,6 +822,7 @@ namespace fim
 		}
 #endif
 		flist.push_back(nf);
+
 		setGlobalVariable("filelistlen",current_images());
 		if(cp==0)++cp;
 		return false;
@@ -953,7 +968,6 @@ namespace fim
 		if(!ccp)ccp=N;
 		return flist[current_n(ccp)];
 	}
-
 
 	fim::string Browser::do_next(int n)
 	{

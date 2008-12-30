@@ -26,7 +26,7 @@ _display_status=0;
 _max_cached_images=5;
 _max_cached_memory=80000000;	# not yet functional
 _max_iterated_commands=100;
-_prefetch=1;
+_want_prefetch=1;
 autowidth=1;
 ignorecase=1;
 ascale="1.0";
@@ -157,6 +157,7 @@ autocmd "PostScale"   "" "_wd=i:_will_display;" ;
 autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
 autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
 autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
+autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";	# new : for smoother browsing of big images 
 autocmd "PostInteractiveCommand"   "" "if(_display_console==0){redisplay;i:fresh=0;}"; # a fixup
 
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};";

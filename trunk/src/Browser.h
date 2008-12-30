@@ -23,7 +23,6 @@
 #include "fim.h"
 namespace fim
 {
-typedef std::vector<fim::string> args_t;
 /*
  * A Browser object oversees image browsing.
  */
@@ -69,7 +68,7 @@ class Browser
 
 	int current_n()const;
 	int current_n(int ccp)const;
-	const fim::string pop();
+	const fim::string pop(fim::string filename="");
 	fim::string get_next_filename(int n)const;
 	
 	fim::string last_regexp;
