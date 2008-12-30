@@ -88,13 +88,19 @@ Implemented features:
  - image flipping, mirroring, rotation, stretching (asymmetric scaling)
  - command iteration ( in the [n]<command key> form )
  - external script file execution
- - system call
+ - system call support
  - image caching (optional)
  - image prefetching (optional)
  - pipe commands from some input program
  - many of these features could be enabled or disabled at compile time editing the Makefile
  - runs under screen
  - standard input file list read
+ - standard input whole file read
+ - standard input script file read
+ - history file
+ - full         support for AAlib (Ascii Art rendering) (-o aa)
+ - experimental support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
+ - experimental PDF, PS, DJVU file support
 
 Yet unimplemented features :
 
@@ -136,9 +142,12 @@ Yet unimplemented features :
  remote commands                                             *		
  saves last folder         *                                 *		
  runs under screen                                     *		
- standard input file list read                         *		
+ standard input interaction                            *		
  rotation		   *	?    ?           ?     *     ?    ?     *
- mirroring                 ....
+ history                                               *		
+ multi-device (X/SDL, framebuffer, aalib)              *
+ mirroring                                             *
+ ....
 
 Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/) ...
 
