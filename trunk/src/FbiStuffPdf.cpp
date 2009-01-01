@@ -30,6 +30,8 @@
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 
+#ifdef HAVE_LIBPOPPLER
+
 #include <poppler/poppler-config.h>
 #include <poppler/PDFDoc.h>
 #include <poppler/OutputDev.h>
@@ -236,3 +238,4 @@ static void __init init_rd(void)
 }
 
 }
+#endif // ifdef HAVE_LIBPOPPLER

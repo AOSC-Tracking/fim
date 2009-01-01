@@ -225,6 +225,8 @@ The libraries can be found on their sites (as of 20070312):
  libtiff  : http://www.libtiff.org/
  libdjvulibre : http://sourceforge.net/projects/djvu/
 
+Tested with library SDL-1.2.2.
+
 Note that it is highly likely that you already have these libraries on your
 system, especially on Gentoo Linux.
 

@@ -171,7 +171,8 @@
 /* We have libjpeg */
 #undef HAVE_LIBJPEG
 
-/* We have libpopplerlibre */
+/* We have libpoppler (Warning: the API could still break! (tested with
+   v.0.8.7)) */
 #undef HAVE_LIBPOPPLER
 
 /* We have libspectre */

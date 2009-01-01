@@ -30,6 +30,8 @@
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 
+#ifdef HAVE_LIBSPECTRE
+
 extern "C"
 {
 // we require C linkage for these symbols
@@ -201,3 +203,4 @@ static void __init init_rd(void)
 }
 
 }
+#endif // ifdef HAVE_LIBSPECTRE

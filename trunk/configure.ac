@@ -680,7 +680,7 @@ dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
   if test x"$have_poppler" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPdf.o"
   FIMLIBS="$FIMLIBS $LIBPOPPLER"
-  AC_DEFINE([HAVE_LIBPOPPLER],[1],[We have libpopplerlibre])
+  AC_DEFINE([HAVE_LIBPOPPLER],[1],[We have libpoppler (Warning: the API could still break! (tested with v.0.8.7))])
   else
     fim_handle_pdf=no
   fi
@@ -702,7 +702,7 @@ AC_ARG_ENABLE(pdf,
               [AC_HELP_STRING([--enable-pdf], [Compile with pdf support])],enable_pdf="$enableval",enable_pdf=yes)
 
 if test "x$enable_pdf" = "xyes"; then
-    POPPLER_REQUIRED=0.8.0
+    POPPLER_REQUIRED=0.8.7
     PKG_CHECK_MODULES(POPPLER, poppler >= $POPPLER_REQUIRED,enable_pdf=yes,enable_pdf=no)
 
     if test "x$enable_pdf" = "xyes"; then

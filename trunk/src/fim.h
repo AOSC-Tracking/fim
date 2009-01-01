@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -195,7 +195,7 @@ namespace fim
 }
 
 /*
- * Fim language variable names.
+ * Fim language variable identifiers.
  * */
 #define FV__CACHE_STATUS 		"_cache_status"
 #define FV__DISPLAY_CONSOLE 		"_display_console"

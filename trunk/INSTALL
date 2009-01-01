@@ -42,6 +42,8 @@ Here it shows how to do it :
  
 ====== BUILDING ON GENTOO LINUX - without overlays
 
+ NOTE : THE GENTOO PACKAGES ARE PROBABLY OBSOLETE, AND SO THESE INSTRUCTIONS
+
 On a gentoo system, you should resolve library dependencies with :
 
  emerge media-libs/giflib media-libs/jpeg media-libs/libpng media-libs/tiff
