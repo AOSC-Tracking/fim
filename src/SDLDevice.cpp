@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,8 @@
  * NOTES : The SDL support is INCOMPLETE:
  *
  *  - missing non 32 bits per pixel color modes support
- *  - inefficient
+ *  - largely inefficient
+ *  - input problems when coupled with readline
  */
 #include "fim.h"
 
@@ -33,6 +34,21 @@
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
+#define FIM_SDL_DEBUG 1
+#undef FIM_SDL_DEBUG
+
+#ifdef FIM_SDL_DEBUG
+#define FIM_SDL_INPUT_DEBUG(C,MSG)  \
+/* i miss sooo much printf() :'( */ \
+std::cout << (size_t)getmilliseconds() << " : "<<MSG<<" : "; \
+std::cout.setf ( std::ios::hex, std::ios::basefield ); \
+std::cout.setf ( std::ios::showbase ); \
+std::cout << *(int*)(C) <<"\n"; \
+std::cout.unsetf ( std::ios::showbase ); \
+std::cout.unsetf ( std::ios::hex );
+#else
+#define FIM_SDL_INPUT_DEBUG(C,MSG) {}
+#endif
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 
@@ -79,8 +95,6 @@
 		
 		return  -1;
 	}
-
-
 
 	int  SDLDevice::display(
 		//struct ida_image *img, // source image structure
@@ -237,6 +251,8 @@
 		/* Enable Unicode translation ( for a more flexible input handling ) */
 	        SDL_EnableUNICODE( 1 );
 
+		key_bindings["PageUp" ]=SDLK_PAGEUP;
+		key_bindings["PageDown" ]=SDLK_PAGEDOWN;
 		key_bindings["Left" ]=SDLK_LEFT;
 		key_bindings["Right"]=SDLK_RIGHT;
 		key_bindings["Up"   ]=SDLK_UP;
@@ -299,7 +315,7 @@
 
 		colour = SDL_MapRGB( screen->format, b, g, r );
 
-		pixmem32 = (Uint32*) screen->pixels  + y + x;
+		pixmem32 = (Uint32*)((char*)( screen->pixels)  + (y + x)*Bpp);
 		*pixmem32 = colour;
 	}
 
@@ -335,6 +351,7 @@
 					/* arrows and stuff */
 					if(event.key.keysym.sym<256)
 					{
+						FIM_SDL_INPUT_DEBUG(c,"uhm");
 						*c=event.key.keysym.sym;
 						return 1;
 					}
@@ -348,12 +365,14 @@
 					&&	event.key.keysym.sym!=SDLK_RCTRL
 					)
 					{
-						/* arrows, or lone shift.. .. */
+						/* arrows.. .. */
 						*c=event.key.keysym.sym;
+						FIM_SDL_INPUT_DEBUG(c,"arrow");
 						return 1;
 					}
 					else
 					{
+						FIM_SDL_INPUT_DEBUG(c,"shift");
 						/* we ignore lone shift or alt .. */
 						return 0;
 					}
@@ -391,9 +410,14 @@
 						}
 					}
 					if(*c)	/* !iscntrl(c) */
+					{
+						/* the usual chars */
+						FIM_SDL_INPUT_DEBUG(c,"keysim");
 						return 1;
+					}
 					else	/*  iscntrl(c) */
 					{
+						FIM_SDL_INPUT_DEBUG(c,"iscntrl");
 						return 0;
 					}
 					/*
@@ -402,6 +426,7 @@
 				}
 				else
 				{
+					cout << "sorry, no support for wide chars in fim\n";
 					/*  no support for wide chars in fim */
 					return 0;
 				}
@@ -415,58 +440,31 @@
 		return 0;
 	}
 
-
 	int SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
 	{
-		/* FIXME ! WON'T WORK FOR NON 32 BIT MODES*/
-//		int x,ytimesw;
 		int y;
-
-//		if(SDL_MUSTLOCK(screen))
-//		{
-//			if(SDL_LockSurface(screen) < 0) return -1;
-//		}
-
 		/*
 		 * This could be optimized
 		 * */
 		for(y=y1;y<y2;++y)
 		{
-			memset(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x1,color, (x2-x1)* sizeof(Uint32));
+			memset(((char*)(screen->pixels)) + y*screen->pitch + x1*Bpp,color, (x2-x1)* Bpp);
 		}
-			
-//		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-
-//		SDL_Flip(screen);
 		return 0;
 	}
 
-
 	int SDLDevice::clear_rect(int x1, int x2, int y1,int y2)
 	{
-//		int x,ytimesw;
 		int y;
-
-//		if(SDL_MUSTLOCK(screen))
-//		{
-//			if(SDL_LockSurface(screen) < 0) return -1;
-//		}
-
 		/*
 		 * This could be optimized
 		 * */
 		for(y=y1;y<=y2;++y)
 		{
-			bzero(((Uint32*)(screen->pixels)) + y*screen->pitch/Bpp + x1, (x2-x1+1)* sizeof(Uint32));
+			bzero(((char*)(screen->pixels)) + y*screen->pitch + x1*Bpp, (x2-x1+1)* Bpp);
 		}
-			
-//		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-
-//		SDL_Flip(screen);
 		return 0;
 	}
-
-
 
 void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char *data)
 {
@@ -519,11 +517,6 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 {
     int i,c/*,j,w*/;
 
-/*		if(SDL_MUSTLOCK(screen))
-		{
-			if(SDL_LockSurface(screen) < 0) return -1;
-		}*/
-
     for (i = 0; str[i] != '\0'; i++) {
 	c = str[i];
 	if (NULL == f->eindex[c])
@@ -560,12 +553,8 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsign
 	if ((int)x > width() - f->width)
 		goto err;
     }
-//	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-//	SDL_Flip(screen);
 	return x;
 err:
-//	if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-//	SDL_Flip(screen);
 	return -1;
 }
 
@@ -579,7 +568,6 @@ err:
 		int y;
 		int ys=3;// FIXME
 
-		//if (!visible) return 0;
 		y = height() - f->height - ys;
 		clear_rect(0, width()-1, y+1,y+f->height+ys-1);
 		fs_puts(f, 0, y+ys, msg);

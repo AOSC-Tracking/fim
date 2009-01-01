@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -418,14 +418,16 @@ int int2msbf(int in)
 
 double getmilliseconds()
 {
-	// for internal usage
+	/*
+         * For internal usage: returns with milliseconds precision the current clock time.
+         * NOTE : this function is NOT essential.
+         */
 	int err;//t,pt in ms; d in us
 	double dt=0.0;
         struct timeval tv;
         err=gettimeofday(&tv, NULL);
 	dt+=tv.tv_usec/1000;
-	//dt+=tv.tv_sec *1000;
-	//dt+=(tv.tv_sec%100) *1000;//secs mod 100
+	dt+=tv.tv_sec *1000;
 	// note : we ignore err!
 	return dt;
 }

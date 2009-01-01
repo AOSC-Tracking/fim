@@ -30,6 +30,8 @@
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 
+#ifdef HAVE_LIBDJVU
+
 extern "C"
 {
 #include <libdjvu/ddjvuapi.h>
@@ -201,3 +203,4 @@ static void __init init_rd(void)
 }
 
 }
+#endif // ifdef HAVE_LIBDJVU

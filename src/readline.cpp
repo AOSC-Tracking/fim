@@ -2,7 +2,7 @@
 /*
  readline.cpp : Code dealing with the GNU readline library.
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -225,6 +225,17 @@ void initialize_readline (int with_no_display_device)
 	{
 		rl_getc_function=rl_sdl_getc;
 		rl_event_hook   =rl_sdl_getc_hook;
+
+		/*
+                 * FIXME : The following hack uses SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT, all -0x100 ..
+                 *         (/usr/include/SDL/SDL_keysym.h)
+                 *
+                 *         Regard this as a problem.
+		 */
+ 		rl_bind_keyseq("\x11", rl_get_previous_history);	// up
+ 		rl_bind_keyseq("\x12", rl_get_next_history);		// down
+ 		rl_bind_keyseq("\x13", rl_forward_char);		// right
+ 		rl_bind_keyseq("\x14", rl_backward_char);		// left
 	}
 	#endif
 	//rl_completion_entry_function=NULL;
