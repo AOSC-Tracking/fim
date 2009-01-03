@@ -192,7 +192,8 @@ namespace fim
 			return 0;// just a fix in the case the browser is still lame
 		if(is_in_cache(key))
 			return 0;
-		loadNewImage(key);
+		if(!loadNewImage(key))
+			return -1;
 		setGlobalVariable("_cached_images",cached_elements());
 		setGlobalVariable("_cache_status",getReport().c_str());
 		return 0;

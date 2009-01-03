@@ -637,10 +637,27 @@ namespace fim
 		return " prefetching disabled";
 #endif
 
+#ifdef FIM_AUTOCMDS
+			autocmd_exec("PrePrefetch",current());
+#endif
 		if( args.size() > 0 )return "";
+
 		setGlobalVariable(FV__WANT_PREFETCH,0);
-		cache.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE));// we prefetch 1 file forward
-		cache.prefetch(cache_key_t(get_next_filename(-1).c_str(),FIM_E_FILE));// we prefetch 1 file backward
+		if(cache.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
+#ifdef FIM_AUTOSKIP_FAILED_
+			pop(get_next_filename( 1));/* if the filename doesn't match a loadable image, we remove it */
+#else
+			{}	/* beware that this could be dangerous and trigger loops */
+#endif
+		if(cache.prefetch(cache_key_t(get_next_filename(-1).c_str(),FIM_E_FILE)))// we prefetch 1 file backward
+#ifdef FIM_AUTOSKIP_FAILED_
+			pop(get_next_filename(-1));/* if the filename doesn't match a loadable image, we remove it */
+#else
+			{}	/* beware that this could be dangerous and trigger loops */
+#endif
+#ifdef FIM_AUTOCMDS
+			autocmd_exec("PostPrefetch",current());
+#endif
 		setGlobalVariable(FV__WANT_PREFETCH,1);
 		return "";
 	}
