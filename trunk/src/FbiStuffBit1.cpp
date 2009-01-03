@@ -1,6 +1,6 @@
 /* $Id$ */
 /*
- FbiStuffBit24.cpp : fbi functions for reading ELF files as they were raw 24 bit per pixel pixelmaps
+ FbiStuffBit1.cpp : fbi functions for reading ELF files as they were raw 1 bit per pixel pixelmaps
 
  (c) 2007-2009 Michele Martone
 
@@ -46,7 +46,7 @@ typedef unsigned short uint16;
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
 
-struct bit24_state {
+struct bit1_state {
     FILE *fp;
     uint32 w;
     uint32 h;
@@ -54,19 +54,19 @@ struct bit24_state {
 };
 
 static void*
-bit24_init(FILE *fp, char *filename, unsigned int page,
+bit1_init(FILE *fp, char *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
-    struct bit24_state *h;
+    struct bit1_state *h;
     
-    h = (struct bit24_state *)calloc(sizeof(*h),1);
+    h = (struct bit1_state *)calloc(sizeof(*h),1);
     memset(h,0,sizeof(*h));
     h->fp = fp;
     struct stat ss;
     lstat(filename,&ss);
     h->flen = ss.st_size ;
-    i->width  = h->w = 1024;
-    i->height = h->h = (h->flen+(h->w*3-1)) / ( h->w*3 ); // should pad
+    i->width  = h->w = 1024;	// must be congruent to 8
+    i->height = h->h = (8*h->flen + h->w-1) / ( i->width ); // should pad
     return h;
  oops:
     free(h);
@@ -74,40 +74,62 @@ bit24_init(FILE *fp, char *filename, unsigned int page,
 }
 
 static void
-bit24_read(unsigned char *dst, unsigned int line, void *data)
+bit1_read(unsigned char *dst, unsigned int line, void *data)
 {
-    struct bit24_state *h = (struct bit24_state *) data;
+    struct bit1_state *h = (struct bit1_state *) data;
     unsigned int ll,y,x,pixel,byte = 0;
     
 	y  = line ;
 	if(y==h->h-1)
-		ll = h->flen - h->w*3 * (h->h-1);
-	else
 	{
-		ll = h->w * 3;
+		ll = h->flen - h->w * (h->h-1) / 8;
 	}
+	else
+		ll = h->w / 8;
 
 	fseek(h->fp,0 + y * ll,SEEK_SET);
 
-	for (x = 0; x < h->w; x++)
+	for (x = 0; x < h->w; x+=8)
 	{
-		*(dst++) = fgetc(h->fp);
-		*(dst++) = fgetc(h->fp);
-		*(dst++) = fgetc(h->fp);
+		unsigned char c = fgetc(h->fp);
+		*(dst++) = (c & 1 << 0)?255:0;
+		*(dst++) = (c & 1 << 0)?255:0;
+		*(dst++) = (c & 1 << 0)?255:0;
+		*(dst++) = (c & 1 << 1)?255:0;
+		*(dst++) = (c & 1 << 1)?255:0;
+		*(dst++) = (c & 1 << 1)?255:0;
+		*(dst++) = (c & 1 << 2)?255:0;
+		*(dst++) = (c & 1 << 2)?255:0;
+		*(dst++) = (c & 1 << 2)?255:0;
+		*(dst++) = (c & 1 << 3)?255:0;
+		*(dst++) = (c & 1 << 3)?255:0;
+		*(dst++) = (c & 1 << 3)?255:0;
+		*(dst++) = (c & 1 << 4)?255:0;
+		*(dst++) = (c & 1 << 4)?255:0;
+		*(dst++) = (c & 1 << 4)?255:0;
+		*(dst++) = (c & 1 << 5)?255:0;
+		*(dst++) = (c & 1 << 5)?255:0;
+		*(dst++) = (c & 1 << 5)?255:0;
+		*(dst++) = (c & 1 << 6)?255:0;
+		*(dst++) = (c & 1 << 6)?255:0;
+		*(dst++) = (c & 1 << 6)?255:0;
+		*(dst++) = (c & 1 << 7)?255:0;
+		*(dst++) = (c & 1 << 7)?255:0;
+		*(dst++) = (c & 1 << 7)?255:0;
 	}
-//	if(y==h->h-1) bzero(dst,h->w*3-3*x);
+//	if(y==h->h-1) bzero(dst,h->w*8-8*x);
 }
 
 static void
-bit24_done(void *data)
+bit1_done(void *data)
 {
-    struct bit24_state *h = (struct bit24_state *) data;
+    struct bit1_state *h = (struct bit1_state *) data;
 
     fclose(h->fp);
     free(h);
 }
 
-struct ida_loader bit24_loader = {
+struct ida_loader bit1_loader = {
 /*
  * 0000000: 7f45 4c46 0101 0100 0000 0000 0000 0000  .ELF............
  */
@@ -115,14 +137,14 @@ struct ida_loader bit24_loader = {
     moff:  1,
     mlen:  3,
     name:  "bmp",
-    init:  bit24_init,
-    read:  bit24_read,
-    done:  bit24_done,
+    init:  bit1_init,
+    read:  bit1_read,
+    done:  bit1_done,
 };
 
 static void __init init_rd(void)
 {
-    load_register(&bit24_loader);
+    load_register(&bit1_loader);
 }
 
 

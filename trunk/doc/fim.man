@@ -32,8 +32,10 @@ is in the FIM.TXT file distributed in the source package.
 .B -a, --autozoom
 Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)
 .TP
-.B -b, --binary
-Display (any filetype) binary files contents as they were raw 24 bits per pixel pixelmaps. Regard this as a toy..
+.B -b, --binary[=24|1]
+Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps. 
+Will pad with zeros.
+Regard this as a toy..
 .TP
 .B -c {commands}, --execute-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.

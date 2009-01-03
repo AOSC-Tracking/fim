@@ -1250,6 +1250,7 @@ struct ida_op desc_autocrop = {
 extern struct ida_loader ppm_loader ;
 extern struct ida_loader pgm_loader ;
 extern struct ida_loader bit24_loader ;
+extern struct ida_loader bit1_loader ;
 
 // 20080108 WARNING
 // 20080801 removed the loader functions from this file, as init_rd was not __init : did I break something ?
@@ -1341,7 +1342,10 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     if(cc.getIntVariable(FV__BINARY_DISPLAY))
     {
         /* a funny feature */
-	loader = &bit24_loader;
+    	if(cc.getIntVariable(FV__BINARY_DISPLAY_BPP)==1)
+		loader = &bit1_loader;
+	else
+		loader = &bit24_loader;
     }
     /* pick loader */
 #ifdef FIM_SKIP_KNOWN_FILETYPES

@@ -75,7 +75,7 @@ struct option fim_options[] = {
     {"help",       no_argument,       NULL, 'h'},  /* help */
     {"device",     required_argument, NULL, 'd'},  /* device */
     {"mode",       required_argument, NULL, 'm'},  /* video mode */
-    {"binary",     no_argument,       NULL, 'b'},  /* binary mode */
+    {"binary",     optional_argument,       NULL, 'b'},  /* binary mode */
     {"gamma",      required_argument, NULL, 'g'},  /* set gamma */
     {"quiet",      no_argument,       NULL, 'q'},  /* quiet */
     {"verbose",    no_argument,       NULL, 'v'},  /* verbose */
@@ -236,7 +236,7 @@ int help_and_exit(char *argv0, int code=0)
 		setlocale(LC_ALL,"");	//uhm..
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Abwc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:",
+		    c = getopt_long(argc, argv, "Ab?wc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:",
 				fim_options, &opt_index);
 		if (c == -1)
 		    break;
@@ -261,6 +261,16 @@ int help_and_exit(char *argv0, int code=0)
 		    //fim's
 		    //FIXME: still needs some tricking .. 
 		    cc.setVariable(FV__BINARY_DISPLAY,1);// necessary for prefetched images (FIXME : dangerous statement ?)
+		    if(optarg && strstr(optarg,"1")==optarg && !optarg[1])
+		    	cc.setVariable(FV__BINARY_DISPLAY_BPP,1);
+		    else
+		    if(optarg && strstr(optarg,"24")==optarg && !optarg[2])
+		    	cc.setVariable(FV__BINARY_DISPLAY_BPP,24);
+                    else
+		    {
+			if(optarg)std::cerr<<"Warning : the --binary option supports 1 or 24 bpp depths. Using 24.\n";
+		    	cc.setVariable(FV__BINARY_DISPLAY_BPP,24);
+                    }
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FV__BINARY_DISPLAY"=1;");
 	#endif
