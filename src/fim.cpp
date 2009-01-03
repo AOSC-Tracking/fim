@@ -75,6 +75,7 @@ struct option fim_options[] = {
     {"help",       no_argument,       NULL, 'h'},  /* help */
     {"device",     required_argument, NULL, 'd'},  /* device */
     {"mode",       required_argument, NULL, 'm'},  /* video mode */
+    {"binary",     no_argument,       NULL, 'b'},  /* binary mode */
     {"gamma",      required_argument, NULL, 'g'},  /* set gamma */
     {"quiet",      no_argument,       NULL, 'q'},  /* quiet */
     {"verbose",    no_argument,       NULL, 'v'},  /* verbose */
@@ -235,7 +236,7 @@ int help_and_exit(char *argv0, int code=0)
 		setlocale(LC_ALL,"");	//uhm..
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Awc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:",
+		    c = getopt_long(argc, argv, "Abwc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:",
 				fim_options, &opt_index);
 		if (c == -1)
 		    break;
@@ -253,7 +254,15 @@ int help_and_exit(char *argv0, int code=0)
 		    //cc.setVariable("autotop",1);
 		    //FIXME: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("FV_AUTO_SCALE_V=1;");
+		    cc.pre_autocmd_add(FV_AUTO_SCALE_V"=1;");
+	#endif
+		    break;
+		case 'b':
+		    //fim's
+		    //FIXME: still needs some tricking .. 
+		    cc.setVariable(FV__BINARY_DISPLAY,1);// necessary for prefetched images (FIXME : dangerous statement ?)
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add(FV__BINARY_DISPLAY"=1;");
 	#endif
 		    break;
 		case 'A':

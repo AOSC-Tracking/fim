@@ -1249,6 +1249,7 @@ struct ida_op desc_autocrop = {
 
 extern struct ida_loader ppm_loader ;
 extern struct ida_loader pgm_loader ;
+extern struct ida_loader bit24_loader ;
 
 // 20080108 WARNING
 // 20080801 removed the loader functions from this file, as init_rd was not __init : did I break something ?
@@ -1337,6 +1338,11 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     fread(blk,1,sizeof(blk),fp);
     rewind(fp);
 
+    if(cc.getIntVariable(FV__BINARY_DISPLAY))
+    {
+        /* a funny feature */
+	loader = &bit24_loader;
+    }
     /* pick loader */
 #ifdef FIM_SKIP_KNOWN_FILETYPES
     if (NULL == loader && (*blk==0x42) && (*(unsigned char*)(blk+1)==0x5a))
@@ -1367,6 +1373,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     }
 #endif
 #endif
+    if(NULL==loader)/* we could have forced one */
     list_for_each(item,&loaders) {
         loader = list_entry(item, struct ida_loader, list);
 	if (NULL == loader->magic)
@@ -1375,6 +1382,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	    break;
 	loader = NULL;
     }
+     
 #ifdef FIM_TRY_DIA
     if (NULL == loader && (*blk==0x1f) && (*(unsigned char*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
@@ -1475,7 +1483,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 //#endif
 #ifdef FIM_TRY_CONVERT
     if (NULL == loader) {
-	cc.set_status_bar("please wait while piping through 'convert'...", "*");
+	cc.set_status_bar(string("please wait while piping ")+string(filename)+string(" through 'convert'..."), "*");
 	/* no loader found, try to use ImageMagick's convert */
 	sprintf(command,"convert \"%s\" ppm:-",filename);
 	if (NULL == (fp = popen(command,"r")))
