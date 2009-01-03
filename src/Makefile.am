@@ -122,6 +122,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	FbiStuffLoader.cpp \
 	FbiStuffPpm.cpp \
 	FbiStuffBmp.cpp \
+	FbiStuffBit1.cpp \
 	FbiStuffBit24.cpp \
 	FontServer.cpp \
 	FramebufferDevice.cpp \
