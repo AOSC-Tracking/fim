@@ -197,6 +197,7 @@ namespace fim
 /*
  * Fim language variable identifiers.
  * */
+#define FV__BINARY_DISPLAY 		"_display_as_binary"
 #define FV__CACHE_STATUS 		"_cache_status"
 #define FV__DISPLAY_CONSOLE 		"_display_console"
 #define FV__DISPLAY_STATUS		"_display_status"

@@ -644,13 +644,13 @@ namespace fim
 
 		setGlobalVariable(FV__WANT_PREFETCH,0);
 		if(cache.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
-#ifdef FIM_AUTOSKIP_FAILED_
+#ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename( 1));/* if the filename doesn't match a loadable image, we remove it */
 #else
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif
 		if(cache.prefetch(cache_key_t(get_next_filename(-1).c_str(),FIM_E_FILE)))// we prefetch 1 file backward
-#ifdef FIM_AUTOSKIP_FAILED_
+#ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename(-1));/* if the filename doesn't match a loadable image, we remove it */
 #else
 			{}	/* beware that this could be dangerous and trigger loops */
