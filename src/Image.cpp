@@ -595,21 +595,28 @@ fim::string Image::getInfo()
 		        cc.displaydevice->redraw=1;
 	}
 
-	bool Image::prev_page()
+	bool Image::prev_page(int j)
 	{
 		string s=fname;
-		return load(s.c_str(),NULL,page-1);
+		return load(s.c_str(),NULL,page-j);
 	} 
 
-	bool Image::next_page()
+	bool Image::next_page(int j)
 	{
 		string s=fname;
-		return load(s.c_str(),NULL,page+1);
+		return load(s.c_str(),NULL,page+j);
 	} 
 
 	cache_key_t Image::getKey()const
 	{
 		return cache_key_t(fname.c_str(),fis);
+	}
+
+	int Image::is_multipage()const
+	{
+		if( fimg && ( fimg->i.npages>1 ) )
+			return fimg->i.npages>1 ;
+		return 0;
 	}
 
 }

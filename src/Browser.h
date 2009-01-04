@@ -137,6 +137,8 @@ class Browser
 	fim::string n(const args_t &args){return n();}
 	fim::string _sort(const args_t &args){return _sort();}
 	fim::string next(const args_t &args);
+	fim::string next_picture(const args_t &args);
+	fim::string prev_picture(const args_t &args);
 	fim::string next_page(const args_t &args);
 	fim::string prev_page(const args_t &args);
 	fim::string prev(int n=1);

@@ -24,7 +24,7 @@ ongoing further inspiration.
 
 20090103	document the PrePrefetch and PostPrefetch autocommand labels
 20081230	EXIF editing
-20081230	multipage caching
+20081230	multipage caching and prefetching support stil missing
 20081230	need of a square angle rotation support
 20081229	write a malloc and calloc wrapper, for the future
 20081228	marked pictures should have at least some asterisk and the user should be able to unmark them.

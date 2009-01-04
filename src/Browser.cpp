@@ -1490,6 +1490,28 @@ namespace fim
 		return "";
 	}
 
+	fim::string Browser::next_picture(const args_t &args)
+	{
+		/*
+		 * FIX ME
+		 * */
+		if(c_image() && c_image()->is_multipage())
+			return next_page(args);
+		else
+			return next(args.size()>0?((int)args[0]):1);
+	}
+
+	fim::string Browser::prev_picture(const args_t &args)
+	{
+		/*
+		 * FIX ME
+		 * */
+		if(c_image() && c_image()->is_multipage())
+			return prev_page(args);
+		else
+			return prev(args.size()>0?((int)args[0]):1);
+	}
+
 	fim::string Browser::next(const args_t &args)
 	{
 		/*
