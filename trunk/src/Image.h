@@ -65,8 +65,9 @@ class Image
 	Image(const char *fname_, Foo& foo, FILE *fd=NULL);
 	~Image();
 
-	bool prev_page();
-	bool next_page();
+	bool prev_page(int j=+1);
+	bool next_page(int j=+1);
+	int is_multipage()const;
 
 	private:
 	Image& operator= (const Image &i){return *this;/* a nilpotent assignation */}

@@ -66,7 +66,8 @@ static SplashColor splashColGreen;
 static SplashColor splashColBlue;
 static SplashColor splashColWhite;
 static SplashColor splashColBlack;
-static SplashColorMode gSplashColorMode = splashModeBGR8;
+//static SplashColorMode gSplashColorMode = splashModeBGR8;
+static SplashColorMode gSplashColorMode = splashModeRGB8;
 #define SPLASH_COL_RED_PTR (SplashColorPtr)&(splashColRed[0])
 #define SPLASH_COL_GREEN_PTR (SplashColorPtr)&(splashColGreen[0])
 #define SPLASH_COL_BLUE_PTR (SplashColorPtr)&(splashColBlue[0])

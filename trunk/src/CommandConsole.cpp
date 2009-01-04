@@ -345,6 +345,8 @@ namespace fim
 		addCommand(new Command(fim::string("prefetch" ),fim::string("prefetches"),&browser,&Browser::prefetch));
 		addCommand(new Command(fim::string("no_image" ),fim::string("displays no image at all"),&browser,&Browser::no_image));
 		addCommand(new Command(fim::string("next" ),fim::string("displays the next picture in the list"),&browser,&Browser::next));
+		addCommand(new Command(fim::string("next_picture" ),fim::string("displays the next page or picture file"),&browser,&Browser::next_picture));
+		addCommand(new Command(fim::string("prev_picture" ),fim::string("displays the previous page or picture file"),&browser,&Browser::prev_picture));
 		addCommand(new Command(fim::string("prev" ),fim::string("displays the previous picture in the list"),&browser,&Browser::prev));
 		addCommand(new Command(fim::string("next_page" ),fim::string("displays the next page"),&browser,&Browser::next_page));
 		addCommand(new Command(fim::string("prev_page" ),fim::string("displays the previous page"),&browser,&Browser::prev_page));
