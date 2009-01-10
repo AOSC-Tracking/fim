@@ -34,9 +34,13 @@ signed-dist: dist
 #	        gpg -sbav -u EF1258B8 $@ $<
 
 
-# this rule is deprecated, too
+# this rule is deprecated, too: testing should be performed with 'make tests'
 sanity-check:	all
 	@./src/fim -E scripts/tests/sanity.fim -t
+
+# this should be the preferred way of testing, now on
+tests:	all
+	@cd ./src/testdir && make
 
 #news-dump:
 #	awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS > f

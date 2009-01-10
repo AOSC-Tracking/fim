@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,11 +18,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef FIM_COMMON_H
+#define FIM_COMMON_H
 #undef yyFlexLexer
 #include <FlexLexer.h>
-#include <linux/fb.h>
 extern int pipedesc[2];
 
 extern FlexLexer *lexer;

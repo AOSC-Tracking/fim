@@ -22,14 +22,16 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090108	write a test for corruct image resilience (testing skip functionalities)
+20090108	write some multi-mode optimizing blitting code generating m4 macro
 20090103	document the PrePrefetch and PostPrefetch autocommand labels
 20081230	EXIF editing
-20081230	multipage caching and prefetching support stil missing
+20081230	multipage caching and prefetching support still missing
 20081230	need of a square angle rotation support
 20081229	write a malloc and calloc wrapper, for the future
 20081228	marked pictures should have at least some asterisk and the user should be able to unmark them.
 20081227	http://www-masu.ist.osaka-u.ac.jp/~kakugawa/TeX-Guy/ for dvi support
-20081224	history file should be deconfigurable at compile time
+20081224	history file should be deconfigurable at compile time and turnable off at invocation
 20081224	page flipping should be in but optional
 20081221	get rid of designated initializers (-pedantic) for ISO-C++
 20081019	consider using docbook for building lots of docs, like in mutt

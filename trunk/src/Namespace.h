@@ -2,7 +2,7 @@
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef NAMESPACE_FBI_H
-#define NAMESPACE_FBI_H
+#ifndef FIM_NAMESPACE_H
+#define FIM_NAMESPACE_H
 
 #include "fim.h"
 

@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -23,8 +23,8 @@
  * This file comes from fbi, and will undergo severe reorganization.
  * */
 
-#ifndef FRAMEBUFFER_DEVICE_FIM_H
-#define FRAMEBUFFER_DEVICE_FIM_H
+#ifndef FIM_FRAMEBUFFER_DEVICE_H
+#define FIM_FRAMEBUFFER_DEVICE_H
 
 /*
  * These are fbi's internals adapted to C++ and adapting to a loose OOP.

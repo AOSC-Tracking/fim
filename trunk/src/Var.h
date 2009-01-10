@@ -2,7 +2,7 @@
 /*
  Var.h : Var class header file
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 /*
  * This class is horrible. 
  */
-#ifndef VAR_FIM_H
-#define VAR_FIM_H
+#ifndef FIM_VAR_H
+#define FIM_VAR_H
 
 #include "fim.h"
 #include "string.h"

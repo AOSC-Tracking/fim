@@ -133,7 +133,7 @@ namespace fim
 		fname=fname_;
 		if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
 		{
-			if( getGlobalIntVariable(FV__WANT_PREFETCH) == 1)
+			if( getGlobalIntVariable(FIM_VID_WANT_PREFETCH) == 1)
 				cc.set_status_bar("please wait while prefetching...", "*");
 			else
 				cc.set_status_bar("please wait while reloading...", "*");
@@ -310,7 +310,7 @@ namespace fim
 			struct ida_image *backup_img=img;
 			if(getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
 			{
-				if( getGlobalIntVariable(FV__WANT_PREFETCH) == 1)
+				if( getGlobalIntVariable(FIM_VID_WANT_PREFETCH) == 1)
 					cc.set_status_bar("please wait while prefetching...", "*");
 				else
 					cc.set_status_bar("please wait while rescaling...", "*");

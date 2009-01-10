@@ -2,7 +2,7 @@
 /*
  Command.h : Fim Command class header file
 
- (c) 2007 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef COMMAND_FBVI_H
-#define COMMAND_FBVI_H
+#ifndef FIM_COMMAND_H
+#define FIM_COMMAND_H
 #include "fim.h"
 namespace fim
 {

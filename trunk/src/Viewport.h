@@ -2,7 +2,7 @@
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
 */
 
 
-#ifndef VIEWPORT_FBI_H
-#define VIEWPORT_FBI_H
+#ifndef FIM_VIEWPORT_H
+#define FIM_VIEWPORT_H
 
 #include "fim.h"
 #include "DisplayDevice.h"

@@ -2,7 +2,7 @@
 /*
  CACADevice.h : cacalib device Fim driver header file
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef CACADEVICE_FIM_H
-#define CACADEVICE_FIM_H
+#ifndef FIM_CACADEVICE_H
+#define FIM_CACADEVICE_H
 #ifdef FIM_WITH_CACALIB
 
 #include "DisplayDevice.h"

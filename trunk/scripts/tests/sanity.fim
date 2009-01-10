@@ -2,6 +2,8 @@
 
 # $Id$
 
+# this script is going to be replaced, or regenerated, from the tests contained in src/testdir.
+
 #!/usr/local/bin/fim -t -E 
 #!/usr/local/bin/fim --no-framebuffer  -E
 #!/usr/bin/env fim -E
