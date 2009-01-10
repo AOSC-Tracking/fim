@@ -18,8 +18,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#ifndef FIM_H
-#define FIM_H
+#ifndef FIM_FIM_H
+#define FIM_FIM_H
 #define NDEBUG 1	/* turns off assert() functionality */
 
 
@@ -93,7 +93,6 @@
 #endif
 #endif
 
-//
 #include <termios.h>	/* general terminal interface (Posix)			*/
 #include <fcntl.h>	/* file descriptor manipulation interface (Posix)	*/
 #include <time.h>	/* time related functionality (Posix)			*/
@@ -197,35 +196,47 @@ namespace fim
 /*
  * Fim language variable identifiers.
  * */
-#define FV__BINARY_DISPLAY 		"_display_as_binary"
-#define FV__BINARY_DISPLAY_BPP 		"_display_as_binary_bpp"
-#define FV__CACHE_STATUS 		"_cache_status"
-#define FV__DISPLAY_CONSOLE 		"_display_console"
-#define FV__DISPLAY_STATUS		"_display_status"
-#define FV__LOAD_DEFAULT_ETC_FIMRC 	"_load_default_etc_fimrc"
-#define FV__NO_RC_FILE			"_no_rc_file"
-#define FV__STATUS_LINE 		"_status_line"
-#define FV__WANT_PREFETCH 		"_want_prefetch"
-#define FV_AUTO_SCALE_V			"auto_scale_v"	/* fixme : should be moved to fimrc's scope only */
-#define FV_AUTOTOP			"autotop"
-#define FV_AUTOWIDTH			"autowidth"
-#define FV_FILEINDEX			"fileindex"
-#define FV_FILELISTLEN			"filelistlen"
-#define FV_FILENAME			"filename"
-#define FV_FIM_DEFAULT_CONFIG_FILE_CONTENTS "FIM_DEFAULT_CONFIG_FILE_CONTENTS"
-#define FV_FRESH			"fresh"
-#define FV_MAGNIFY_FACTOR		"magnify_factor"
-#define FV_PWD				"pwd"
-#define FV_REDUCE_FACTOR		"reduce_factor"
-#define FV_STEPS 			"steps"
-#define FV_CONSOLE_ROWS 		"rows"
-#define FV_CONSOLE_LINE_WIDTH 		"lwidth"
-#define FV_CONSOLE_LINE_OFFSET 		"console_offset"
-#define FV_CONSOLE_BUFFER_LINES		"console_lines"
-#define FV_CONSOLE_BUFFER_TOTAL		"console_buffer_total"
-#define FV_CONSOLE_BUFFER_FREE		"console_buffer_free"
-#define FV_CONSOLE_BUFFER_USED		"console_buffer_used"
+#define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"
+#define FIM_VID_BINARY_DISPLAY_BPP 		"_display_as_binary_bpp"
+#define FIM_VID_CACHE_STATUS 			"_cache_status"
+#define FIM_VID_DISPLAY_CONSOLE 		"_display_console"
+#define FIM_VID_DISPLAY_STATUS			"_display_status"
+#define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"
+#define FIM_VID_NO_RC_FILE			"_no_rc_file"
+#define FIM_VID_STATUS_LINE 			"_status_line"
+#define FIM_VID_WANT_PREFETCH 			"_want_prefetch"
+#define FIM_VID_AUTO_SCALE_V			"auto_scale_v"	/* fixme : should be moved to fimrc's scope only */
+#define FIM_VID_AUTOTOP				"autotop"
+#define FIM_VID_AUTOWIDTH			"autowidth"
+#define FIM_VID_FILEINDEX			"fileindex"
+#define FIM_VID_FILELISTLEN			"filelistlen"
+#define FIM_VID_FILENAME			"filename"
+#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "FIM_DEFAULT_CONFIG_FILE_CONTENTS"
+#define FIM_VID_FRESH				"fresh"
+#define FIM_VID_MAGNIFY_FACTOR			"magnify_factor"
+#define FIM_VID_PWD				"pwd"
+#define FIM_VID_REDUCE_FACTOR			"reduce_factor"
+#define FIM_VID_STEPS 				"steps"
+#define FIM_VID_CONSOLE_ROWS 			"rows"
+#define FIM_VID_CONSOLE_LINE_WIDTH 		"lwidth"
+#define FIM_VID_CONSOLE_LINE_OFFSET 		"console_offset"
+#define FIM_VID_CONSOLE_BUFFER_LINES		"console_lines"
+#define FIM_VID_CONSOLE_BUFFER_TOTAL		"console_buffer_total"
+#define FIM_VID_CONSOLE_BUFFER_FREE		"console_buffer_free"
+#define FIM_VID_CONSOLE_BUFFER_USED		"console_buffer_used"
 
+/*
+ * Help messages for Fim commands (partial).
+ * One glorious day these macros will serve to build automatically documentation.
+ * */
+#define FIM_CMD_HELP_CD			"cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last \":cd {path} command\")"
+#define FIM_CMD_PWD_CD			"print the current directory name."
+#define FIM_CMD_EVAL_CD			"evaluates the arguments as commands, executing them."
+#define FIM_CMD_SYSTEM_CD		"system {expr}: get the output of the shell command {expr}."
+
+/*
+ * Some Fim internals flags.
+ */
 #define FIM_FLAG_MIRROR 1
 #define FIM_FLAG_FLIP 2
 #define FIM_FLAG_RGB2GRAY 4

@@ -32,6 +32,12 @@
 
 #ifdef HAVE_LIBPOPPLER
 
+/*
+ * Note : at the time of writing this, the poppler API is unstable,
+ * and subject to change.
+ * So when changing these headers here, take care of changing them
+ * in the configure script, too.
+ */
 #include <poppler/poppler-config.h>
 #include <poppler/PDFDoc.h>
 #include <poppler/OutputDev.h>

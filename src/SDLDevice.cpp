@@ -274,7 +274,7 @@ std::cout.unsetf ( std::ios::hex );
 		key_bindings["F12"]=SDLK_F12;
 
 		// textual console reformatting
-		mc.setGlobalVariable(FV_CONSOLE_ROWS,height()/(2*f->height));
+		mc.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f->height));
 		mc.reformat(    width() /    f->width   );
 
 		return 0;

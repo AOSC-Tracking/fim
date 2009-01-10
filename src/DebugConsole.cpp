@@ -366,12 +366,12 @@ namespace fim
 			 * We dump on screen the textual console contents.
 			 * We care about user set variables.
 			 * */
-			int co=getGlobalIntVariable(FV_CONSOLE_LINE_OFFSET);
-			int lw=getGlobalIntVariable(FV_CONSOLE_LINE_WIDTH );
-			int ls=getGlobalIntVariable(FV_CONSOLE_ROWS       );
-			setGlobalVariable(FV_CONSOLE_BUFFER_TOTAL,bsize);
-			setGlobalVariable(FV_CONSOLE_BUFFER_FREE,(int)bsize-(int)(bp-buffer));
-			setGlobalVariable(FV_CONSOLE_BUFFER_USED,(int)(bp-buffer));
+			int co=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_OFFSET);
+			int lw=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_WIDTH );
+			int ls=getGlobalIntVariable(FIM_VID_CONSOLE_ROWS       );
+			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_TOTAL,bsize);
+			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_FREE,(int)bsize-(int)(bp-buffer));
+			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_USED,(int)(bp-buffer));
 			// we eventually update internal variables now
 			setRows(ls);
 			if( lw > 0 && lw!=lwidth ) reformat(lw);

@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -702,6 +702,29 @@ int FramebufferDevice::fb_setmode(char *name)
 	exit(1);
     }
     
+
+#if 0
+#ifdef FIM_WANTS_DOUBLE_BUFFERING
+            /* FIXME : the page flipping mechanisms missing (unfinished)
+             * please note that in addition to this code, we should also
+             * specify timing parameters.
+             * The following is experimental code only.
+             * Note that on the developement machine neither fbset does work!
+	     */
+            fb_var.xres_virtual = fb_var.xres ;
+            fb_var.yres_virtual = fb_var.yres ;
+            fb_var.yres_virtual = fb_var.yres * 2;
+	    //printf("%d %d %d %d\n", fb_var.xres_virtual,fb_var.xres, fb_var.yres_virtual,fb_var.yres);
+	    fb_var.activate = FB_ACTIVATE_NOW;
+            fb_var.accel_flags = 0;
+            /* ... */
+	    if (-1 == ioctl(fb,FBIOPUT_VSCREENINFO,&fb_var))
+		perror("ioctl FBIOPUT_VSCREENINFO"),printf("!failed\n");
+	    printf("%d %d %d %d\n", fb_var.xres_virtual,fb_var.xres, fb_var.yres_virtual,fb_var.yres);
+#endif
+#endif
+    /* name="640x480-72"; */
+
     if (NULL == name)
 	return -1;
     if (NULL == (fp = fopen("/etc/fb.modes","r")))
@@ -753,8 +776,17 @@ int FramebufferDevice::fb_setmode(char *name)
 	    fb_var.xoffset = 0;
 	    fb_var.yoffset = 0;
 
+#if 0
+#ifdef FIM_WANTS_DOUBLE_BUFFERING
+            // FIXME : the page flipping mechanisms missing (unfinished)
+            fb_var.xres_virtual = fb_var.xres;
+            fb_var.yres_virtual = fb_var.yres * 2;
+#endif
+#endif
+
 	    if (-1 == ioctl(fb,FBIOPUT_VSCREENINFO,&fb_var))
 		perror("ioctl FBIOPUT_VSCREENINFO");
+
 	    /*
 	     * FIXME
 	     * mm : this should be placed here and uncommented : */

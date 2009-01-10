@@ -657,8 +657,16 @@ dnl FIXME : the following is a dirty hack
        #undef PACKAGE
        #undef VERSION
        #undef HAVE_STDLIB_H
+       /* fim uses these headers. let's hope poppler will stabilize soon!*/
        #include <poppler/poppler-config.h>
-       #include <poppler/splash/Splash.h>],
+       #include <poppler/PDFDoc.h>
+       #include <poppler/OutputDev.h>
+       #include <poppler/SplashOutputDev.h>
+       #include <poppler/splash/SplashBitmap.h>
+       #include <poppler/splash/SplashTypes.h>
+       #include <poppler/Page.h>
+       #include <poppler/GlobalParams.h>	/* globalParams lives here */
+       ],
                have_poppler=yes,
                have_poppler=no)
       have_poppler=yes

@@ -2,7 +2,7 @@
 /*
  FbiStuffFbtools.cpp : fbi functions from fbtools.c, modified for fim
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,6 @@
 
 #include <linux/kd.h>
 #include <linux/vt.h>
-#include <linux/fb.h>
 
 /*#include <asm/page.h>*/ /* seems like this gives problems */
 #include <sys/user.h>	  /* this should be a safer replacement */
@@ -47,7 +46,6 @@
 #include <asm/signal.h>	  /* added by dez. missing when compiling with -ansi */
 #endif
 
-//#include "fbtools.h"
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"
 

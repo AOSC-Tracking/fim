@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,8 +38,6 @@
 #include <sys/ioctl.h>
 
 #include <signal.h>
-#include <linux/fb.h>
-#include <linux/kd.h>
 #include <fstream>
 
 
@@ -417,10 +415,10 @@ namespace fim
 		addCommand(new Command(fim::string("set_interactive_mode"  ),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
 		addCommand(new Command(fim::string("set_console_mode"  ),fim::string("sets console mode"),this,&CommandConsole::set_in_console));
 #ifndef FIM_NO_SYSTEM
-		addCommand(new Command(fim::string("system"  ),fim::string("system() invocation"),this,&CommandConsole::system));
+		addCommand(new Command(fim::string("system"  ),fim::string(FIM_CMD_SYSTEM_CD),this,&CommandConsole::system));
 #endif
-		addCommand(new Command(fim::string("cd"  ),fim::string("chdir() invocation"),this,&CommandConsole::cd));
-		addCommand(new Command(fim::string("pwd"  ),fim::string("getcwd() invocation"),this,&CommandConsole::pwd));
+		addCommand(new Command(fim::string("cd"      ),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::cd));
+		addCommand(new Command(fim::string("pwd"     ),fim::string(FIM_CMD_PWD_CD   ),this,&CommandConsole::pwd));
 		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
 		addCommand(new Command(fim::string("stdout"  ),fim::string("writes to stdout"),this,&CommandConsole::stdout));
 #ifdef FIM_PIPE_IMAGE_READ
@@ -431,7 +429,7 @@ namespace fim
 		addCommand(new Command(fim::string("stop_recording"  ),fim::string("stops recording of commands"),this,&CommandConsole::stop_recording));
 		addCommand(new Command(fim::string("dump_record_buffer"  ),fim::string("dumps on screen record buffer"),this,&CommandConsole::dump_record_buffer));
 		addCommand(new Command(fim::string("execute_record_buffer"  ),fim::string("executes the record buffer"),this,&CommandConsole::execute_record_buffer));
-		addCommand(new Command(fim::string("eval"  ),fim::string("evaluates the arguments as commands, executing them"),this,&CommandConsole::eval));
+		addCommand(new Command(fim::string("eval"),fim::string(FIM_CMD_EVAL_CD),this,&CommandConsole::eval));
 		addCommand(new Command(fim::string("repeat_last"  ),fim::string("repeats the last action"),this,&CommandConsole::repeat_last));
 #endif
 		addCommand(new Command(fim::string("variables"  ),fim::string("displays the associated variables"),this,&CommandConsole::variables_list));

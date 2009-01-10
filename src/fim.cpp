@@ -192,6 +192,9 @@ int help_and_exit(char *argv0, int code=0)
 		case required_argument:
 		std::cout << " <arg>";
 		break;
+		case optional_argument:
+		std::cout << " [=arg]";
+		break;
 		default:
 		;
 		};
@@ -254,25 +257,25 @@ int help_and_exit(char *argv0, int code=0)
 		    //cc.setVariable("autotop",1);
 		    //FIXME: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FV_AUTO_SCALE_V"=1;");
+		    cc.pre_autocmd_add(FIM_VID_AUTO_SCALE_V"=1;");
 	#endif
 		    break;
 		case 'b':
 		    //fim's
 		    //FIXME: still needs some tricking .. 
-		    cc.setVariable(FV__BINARY_DISPLAY,1);// necessary for prefetched images (FIXME : dangerous statement ?)
+		    cc.setVariable(FIM_VID_BINARY_DISPLAY,1);// necessary for prefetched images (FIXME : dangerous statement ?)
 		    if(optarg && strstr(optarg,"1")==optarg && !optarg[1])
-		    	cc.setVariable(FV__BINARY_DISPLAY_BPP,1);
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY_BPP,1);
 		    else
 		    if(optarg && strstr(optarg,"24")==optarg && !optarg[2])
-		    	cc.setVariable(FV__BINARY_DISPLAY_BPP,24);
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY_BPP,24);
                     else
 		    {
 			if(optarg)std::cerr<<"Warning : the --binary option supports 1 or 24 bpp depths. Using 24.\n";
-		    	cc.setVariable(FV__BINARY_DISPLAY_BPP,24);
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY_BPP,24);
                     }
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FV__BINARY_DISPLAY"=1;");
+		    cc.pre_autocmd_add(FIM_VID_BINARY_DISPLAY"=1;");
 	#endif
 		    break;
 		case 'A':

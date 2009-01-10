@@ -2,7 +2,7 @@
 /*
  FontServer.h : Font Server code from fbi, adapted for fim.
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -24,8 +24,8 @@
  * */
 
 
-#ifndef FONT_SERVER_FIM_H
-#define FONT_SERVER_FIM_H
+#ifndef FIM_FONT_SERVER_H
+#define FIM_FONT_SERVER_H
 
 #include "fim.h"
 

@@ -1339,10 +1339,10 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     fread(blk,1,sizeof(blk),fp);
     rewind(fp);
 
-    if(cc.getIntVariable(FV__BINARY_DISPLAY))
+    if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY))
     {
         /* a funny feature */
-    	if(cc.getIntVariable(FV__BINARY_DISPLAY_BPP)==1)
+    	if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY_BPP)==1)
 		loader = &bit1_loader;
 	else
 		loader = &bit24_loader;
