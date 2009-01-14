@@ -198,8 +198,8 @@
 		key_bindings["Right"]=4414235;
 		key_bindings["Up"]=4283163;
 		key_bindings["Down"]=4348699;
-		key_bindings["PageUp"]=2117491483;
-		key_bindings["PageDown"]=2117425947;
+		key_bindings["PageDown"]=2117491483;
+		key_bindings["PageUp"]=2117425947;
 		key_bindings["Enter"]=10;
 		key_bindings["BackSpace"]=127;
 		key_bindings["Backspace"]=127;
