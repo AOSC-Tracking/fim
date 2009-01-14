@@ -22,7 +22,9 @@ ongoing further inspiration.
 	Current development directions
 
 
-20090108	write a test for corruct image resilience (testing skip functionalities)
+20090112	if there is no convert, fim should notice it.
+20090110	write a test case with memory constraints (in a way to stress say, failing mallocs)
+20090108	write a test for corrupt image resilience (testing skip functionalities)
 20090108	write some multi-mode optimizing blitting code generating m4 macro
 20090103	document the PrePrefetch and PostPrefetch autocommand labels
 20081230	EXIF editing
