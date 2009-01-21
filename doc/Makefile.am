@@ -12,18 +12,20 @@ htmldir = $(docdir)
 html_DATA = $(HTMLDOCS)
 doc_DATA = FIM.TXT
 
-all:	docs
+all:	docs $(EXTRA_DIST)
 
 docs:        $(HTMLDOCS)
 
-FIM.html: doctags FIM.TXT
+FIM.html fim-stylesheet.css: doctags FIM.TXT
 	./doctags FIM.TXT > tags ; ./vim2html.pl tags FIM.TXT
 
 fim.man.html: fim.man
-	man2html fim.man >  fim.man.html
+	man2html fim.man >  fim.man.html || echo "$(ERRMSG) man2html fim.man >  fim.man.html"
+
+ERRMSG="no man2html at build time : pelase install man2html and reissue :"
 
 fimgs.man.html: fimgs.man
-	man2html fimgs.man >  fimgs.man.html
+	man2html fimgs.man >  fimgs.man.html || echo "$(ERRMSG) man2html fimgs.man >  fimgs.man.html"
 
 doctags:
 	        $(CC) -o doctags doctags.c
