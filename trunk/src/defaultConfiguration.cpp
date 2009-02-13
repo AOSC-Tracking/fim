@@ -67,16 +67,16 @@
 		alias("toggleVerbosity","verbose=1-verbose;display;");
 		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");*/
 	
-		setVariable("console_key",':');
-/*		setVariable("autowidth",1);
-		setVariable("_verbose_keys",0);*/
-		setVariable("magnify_factor",1.322f);
-		setVariable("scale_factor_multiplier",1.1f);
-		setVariable("scale_factor_delta",0.01f);
-		setVariable("reduce_factor",1.322f);
+		setVariable(FIM_VID_CONSOLE_KEY,':');
+/*		setVariable(FIM_VID_AUTOWIDTH,1);
+		setVariable(FIM_VID_VERBOSE_KEYS,0);*/
+		setVariable(FIM_VID_MAGNIFY_FACTOR,1.322f);
+		setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,1.1f);
+		setVariable(FIM_VID_SCALE_FACTOR_DELTA,0.01f);
+		setVariable(FIM_VID_REDUCE_FACTOR,1.322f);
 /*		autocmd_add("Next","*","echo 'rendering next image..'");
 		autocmd_add("Prev","*","echo 'rendering prev image..'");
-		setVariable("autowidth",1);
+		setVariable(FIM_VID_AUTOWIDTH,1);
 		autocmd_add("PostNext","*","reload;");		//BUGFUL!
 		autocmd_add("PostPrev","*","reload;");		//BUGFUL!
 */

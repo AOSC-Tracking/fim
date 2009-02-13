@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -102,12 +102,12 @@ namespace fim
 		/*
 		struct mallinfo mi = mallinfo();
 		cout << "allocated : " <<  mi.uordblks << "\n";
-		if( mi.uordblks > getIntGlobalVariable("_max_cached_memory") )return true;
+		if( mi.uordblks > getIntGlobalVariable(FIM_VID_MAX_CACHED_MEMORY) )return true;
 
 		these are not the values we want ..
 		*/
 
-		int mci = getGlobalIntVariable("_max_cached_images");
+		int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
 		if(mci==-1)return false;
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
@@ -194,8 +194,8 @@ namespace fim
 			return 0;
 		if(!loadNewImage(key))
 			return -1;
-		setGlobalVariable("_cached_images",cached_elements());
-		setGlobalVariable("_cache_status",getReport().c_str());
+		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
+		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 		return 0;
 //		return getCachedImage(key)?0:-1;
 	}
@@ -256,7 +256,7 @@ namespace fim
 		this->reverseCache[ni]= ni->getKey();
 		lru_touch( ni->getKey() );
 		usageCounter[ ni->getKey()]=0; // we yet don't assume any usage
-		setGlobalVariable("_cached_images",cached_elements());
+		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 		return true;
 	}
 	
@@ -284,7 +284,7 @@ namespace fim
 			cout << "deleting " << oi->getName() << "\n";
 #endif
 			delete oi; // NEW !!
-			setGlobalVariable("_cached_images",cached_elements());
+			setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 			return 0;
 		}
 		return -1;
@@ -325,7 +325,7 @@ namespace fim
 		{
 			usageCounter[image->getKey()]--;
 			erase_clone(image);	// we _always_ immediately delete clones
-			setGlobalVariable("_cache_status",getReport().c_str());
+			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 			return true;
 		}
 		else
@@ -359,7 +359,7 @@ namespace fim
 				}
 #endif
 			}
-			setGlobalVariable("_cache_status",getReport().c_str());
+			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 			return true;
 		}
 		return false;
@@ -393,7 +393,7 @@ namespace fim
 			image = loadNewImage(key);
 			if(!image)return NULL; // bad luck!
 			usageCounter[key]=1;
-			setGlobalVariable("_cache_status",getReport().c_str());
+			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 			return image;
 //			usageCounter[key]=0;
 		}
@@ -409,7 +409,7 @@ namespace fim
 #ifdef FIM_CACHE_DEBUG
 				cout << "critical internal cache error!\n";
 #endif
-				setGlobalVariable("_cache_status",getReport().c_str());
+				setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 				return NULL;
 			}
 			if( used_image( key ) )
@@ -441,7 +441,7 @@ namespace fim
 			lru_touch( key );
 			// if loading and eventual cloning succeeded, we count the image as used of course
 			usageCounter[key]++;
-			setGlobalVariable("_cache_status",getReport().c_str());
+			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 			return image;	//so, it could be a clone..
 		}
 	}
@@ -471,7 +471,7 @@ namespace fim
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
 		if(!image)return NULL; //means that cloning failed.
-		setGlobalVariable("_cache_status",getReport().c_str());
+		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 		return image;	//so, it could be a clone..
 	}
 

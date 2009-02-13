@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ namespace fim
 		if(flist.size()<=0)return nofile;
 		assert(cp);
 		flist.erase(flist.begin()+current_n());
-		setGlobalVariable("filelistlen",current_images());
+		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
 		return s;
 	}
 
@@ -153,7 +153,7 @@ namespace fim
 				if(flist[i]==filename)
 					flist.erase(flist.begin()+i);
 		}
-		setGlobalVariable("filelistlen",current_images());
+		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
 		return s;
 	}
 
@@ -484,7 +484,7 @@ namespace fim
 		/*
 		 * displays the left text message and a right bracketed one
 		 */
-		if(getGlobalIntVariable("_display_status"))
+		if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS))
 			commandConsole.set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
 		return "";
 	}
@@ -503,7 +503,7 @@ namespace fim
 			/*
 			 * the following is a trick to override redisplaying..
 			 */
-			if(image() && getGlobalIntVariable("_override_display")==0)
+			if(image() && getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)==0)
 			//	if(c_image())
 			{
 				//fb_clear_screen();
@@ -623,7 +623,7 @@ namespace fim
 		 * only cleans up the internal data structures
 		 * */
 		if(viewport())viewport()->free();
-		setGlobalVariable("_cache_status",cache.getReport().c_str());
+		setGlobalVariable(FIM_VID_CACHE_STATUS,cache.getReport().c_str());
 	}
 
 	fim::string Browser::prefetch(const args_t &args)
@@ -677,8 +677,6 @@ namespace fim
 		free_current_image();
 		loadCurrentImage();
 
-		//if(getGlobalIntVariable("_prefetch")) prefetch(args_t());/*this will become an autocommand*/
-
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(c);
 
@@ -694,13 +692,10 @@ namespace fim
 		 * loads the current file, if not already loaded
 		 */
 		fim::string c=current();
-		std::cout <<"SGAMM "<<c<<"\n";
 		if(image() && ( image()->getName() == current()) )
 		{
-		std::cout <<"SGAMM "<<c<<"\n";
 			return "image already loaded\n";		//warning
 		}
-		std::cout <<"SGAMM "<<c<<"\n";
 		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
 		autocmd_exec("PreLoad",c);
@@ -708,8 +703,6 @@ namespace fim
 		commandConsole.set_status_bar("please wait while loading...", "*");
 
 		loadCurrentImage();
-
-		//if(getGlobalIntVariable("_prefetch")) prefetch(args_t());
 
 		load_error_handle(c);
 #ifdef FIM_AUTOCMDS
@@ -840,7 +833,7 @@ namespace fim
 #endif
 		flist.push_back(nf);
 
-		setGlobalVariable("filelistlen",current_images());
+		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
 		if(cp==0)++cp;
 		return false;
 	}
@@ -926,8 +919,8 @@ namespace fim
 		if(cp<0)cp=(cp%N)+N+1;//+1 added lately
 		if(cp>N) cp=1+(n%N);
 		if(!cp)++cp;
-		setGlobalVariable("fileindex",current_image());
-		setGlobalVariable("filename", current().c_str());
+		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
+		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
 		fim::string result = n_files()?(flist[current_n()]):nofile;
 		return result;
 	}
@@ -999,8 +992,8 @@ namespace fim
 		cp+=N;
 		cp%=N;
 		if(!cp)cp=N;
-		setGlobalVariable("fileindex",current_image());
-		setGlobalVariable("filename", current().c_str());
+		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
+		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
 		fim::string result = n_files()?(flist[current_n()]):nofile;
 		return "";
 	}
@@ -1165,9 +1158,9 @@ namespace fim
 		/*
 		 *	ALIAS AND DELETE ME!
 		 */
-		float sfm=getGlobalFloatVariable("scale_factor_multiplier");if(sfm<=1.0f)sfm=1.1f;
-		setGlobalVariable("reduce_factor",getGlobalFloatVariable("reduce_factor")*sfm);
-		setGlobalVariable("magnify_factor",getGlobalFloatVariable("magnify_factor")*sfm);
+		float sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=1.0f)sfm=1.1f;
+		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)*sfm);
+		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)*sfm);
 		return "";
 	}
 
@@ -1176,9 +1169,9 @@ namespace fim
 		/*
 		 *	ALIAS AND DELETE ME!
 		 */
-		float sfm=getGlobalFloatVariable("scale_factor_multiplier");if(sfm<=1.0f)sfm=1.1f;
-		setGlobalVariable("reduce_factor",getGlobalFloatVariable("reduce_factor")/sfm);
-		setGlobalVariable("magnify_factor",getGlobalFloatVariable("magnify_factor")/sfm);
+		float sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=1.0f)sfm=1.1f;
+		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)/sfm);
+		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)/sfm);
 		return "";
 	}
 
@@ -1187,9 +1180,9 @@ namespace fim
 		/*
 		 *	ALIAS AND DELETE ME!
 		 */
-		float sfd=getGlobalFloatVariable("scale_factor_delta");if(sfd<=0.0f)sfd=0.1f;
-		setGlobalVariable("reduce_factor",getGlobalFloatVariable("reduce_factor")+sfd);
-		setGlobalVariable("magnify_factor",getGlobalFloatVariable("magnify_factor")+sfd);
+		float sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=0.0f)sfd=0.1f;
+		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)+sfd);
+		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)+sfd);
 		return "";
 	}
 
@@ -1198,10 +1191,9 @@ namespace fim
 		/*
 		 *	ALIAS AND DELETE ME!
 		 */
-		float sfd=getGlobalFloatVariable("scale_factor_delta");if(sfd<=0.0f)sfd=0.1f;
-//		setGlobalVariable("scale_factor",getGlobalFloatVariable("scale_factor")/1.1f);
-		setGlobalVariable("reduce_factor",getGlobalFloatVariable("reduce_factor")-sfd);
-		setGlobalVariable("magnify_factor",getGlobalFloatVariable("magnify_factor")-sfd);
+		float sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=0.0f)sfd=0.1f;
+		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)-sfd);
+		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)-sfd);
 		return "";
 	}
 
@@ -1217,7 +1209,7 @@ namespace fim
 
 		if(c_image())
 		{
-			//angle = (double)getGlobalFloatVariable("angle");
+			//angle = (double)getGlobalFloatVariable(FIM_VID_ANGLE);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 //			autocmd_exec("PreRotate",c);//FIXME
@@ -1245,7 +1237,7 @@ namespace fim
 		 */ 
 		if(c_image())
 		{
-			float factor = (float)getGlobalFloatVariable("magnify_factor");
+			float factor = (float)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PreScale",c);
@@ -1277,7 +1269,7 @@ namespace fim
 		 */ 
 		if(c_image())
 		{
-			float factor = (float)getGlobalFloatVariable("reduce_factor");
+			float factor = (float)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PreScale",c);
