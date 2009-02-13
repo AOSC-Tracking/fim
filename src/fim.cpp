@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -254,7 +254,7 @@ int help_and_exit(char *argv0, int code=0)
 	//	    break;
 		case 'a':
 		    //fbi's
-		    //cc.setVariable("autotop",1);
+		    //cc.setVariable(FIM_VID_AUTOTOP,1);
 		    //FIXME: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_AUTO_SCALE_V"=1;");
@@ -303,23 +303,23 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'v':
 		    //fbi's
-		    //cc.setVariable("FIM_VID_DISPLAY_STATUS",1);
+		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,1);
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=1;");
 	#endif
 		    break;
 		case 'w':
 		    //fbi's
-		    //cc.setVariable("autowidth",1);
+		    //cc.setVariable(FIM_VID_AUTOWIDTH,1);
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("autowidth=1;");
+		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=1;");
 	#endif
 		    break;
 		case 'P':
 		    //fbi's
 		    //FIXME
-	//	    cc.setVariable("autowidth",1);
-	//	    cc.setVariable("autotop",1);
+	//	    cc.setVariable(FIM_VID_AUTOWIDTH,1);
+	//	    cc.setVariable(FIM_VID_AUTOTOP,1);
 	//	    strange : if the assignations occur in two pre_autocmd_add calls, it triggers a bug via fimgs:
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=1;"FIM_VID_AUTOTOP"=1;");
@@ -334,7 +334,7 @@ int help_and_exit(char *argv0, int code=0)
 	//	    pcd_res = atoi(optarg);
 		    break;
 		case 's':
-	//	    if(atoi(optarg)>0) cc.setVariable("steps",atoi(optarg));
+	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,atoi(optarg));
 		    if(atoi(optarg)>0)
 		    {
 		    	// fixme : still buggy

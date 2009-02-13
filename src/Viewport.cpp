@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -273,18 +273,18 @@ namespace fim
 		 *
 		 * global or inner (not i: !) or local (v:) marker
 		 * */
-		int autotop=getGlobalIntVariable("autotop")   | image->getIntVariable("autotop") | getIntVariable("autotop");
-		//int flip   =getGlobalIntVariable("autoflip")  | image->getIntVariable("flipped") | getIntVariable("flipped");
+		int autotop=getGlobalIntVariable(FIM_VID_AUTOTOP)   | image->getIntVariable(FIM_VID_AUTOTOP) | getIntVariable(FIM_VID_AUTOTOP);
+		//int flip   =getGlobalIntVariable(FIM_VID_AUTOFLIP)  | image->getIntVariable(FIM_VID_FLIPPED) | getIntVariable(FIM_VID_FLIPPED);
 		int flip   =
-		((getGlobalIntVariable("autoflip")== 1)|(image->getIntVariable("flipped")== 1)|(getIntVariable("flipped")== 1)&&
-		!((getGlobalIntVariable("autoflip")==-1)|(image->getIntVariable("flipped")==-1)|(getIntVariable("flipped")==-1)));
+		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image->getIntVariable(FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1)&&
+		!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(image->getIntVariable(FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
 		int mirror   =
-		(((getGlobalIntVariable("automirror")== 1)|(image->getIntVariable("mirrored")== 1)|(getIntVariable("mirrored")== 1))&&
-		!((getGlobalIntVariable("automirror")==-1)|(image->getIntVariable("mirrored")==-1)|(getIntVariable("mirrored")==-1)));
+		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image->getIntVariable(FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
+		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image->getIntVariable(FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 
 		image->update();
 
-		if (getGlobalIntVariable("i:want_autocenter") && displaydevice->redraw)
+		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER) && displaydevice->redraw)
 		{
 			/*
 			 * If this is the first image display, we have
@@ -299,7 +299,7 @@ namespace fim
 				left = (image->width() - this->viewport_width()) / 2;
 			if (image->height() > this->viewport_height() &&  autotop==0)
 				top = (image->height() - this->viewport_height()) / 2;
-                       setGlobalVariable("i:want_autocenter",0);
+                       setGlobalVariable("i:"FIM_VID_WANT_AUTOCENTER,0);
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
@@ -450,14 +450,14 @@ namespace fim
 		if(image)
 		{
 			image->reset();
-			setGlobalVariable("i:want_autocenter",1);
+			setGlobalVariable("i:"FIM_VID_WANT_AUTOCENTER,1);
 		}
 		should_redraw();
                 top  = 0;
                 left = 0;
 
 #ifdef FIM_WINDOWS
-		steps = getGlobalIntVariable("steps");
+		steps = getGlobalIntVariable(FIM_VID_STEPS);
 		if(steps<1)steps = 50;
 #else 
 		// WARNING : FIXME, TEMPORARY

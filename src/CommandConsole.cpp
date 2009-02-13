@@ -320,7 +320,7 @@ namespace fim
 			}
 
 		}
-		this->setVariable("_display_console",1);
+		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
 		return "usage : help CMD   (use TAB in commandline mode to get a list of commands :) )\n";
 	}
 
@@ -346,7 +346,7 @@ namespace fim
 #endif
 		fim_stdin=0;
 		cycles=0;
-		setVariable("steps",50);
+		setVariable(FIM_VID_STEPS,50);
 //		addCommand(new Command(fim::string("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
 		addCommand(new Command(fim::string("prefetch" ),fim::string("prefetches"),&browser,&Browser::prefetch));
 		addCommand(new Command(fim::string("no_image" ),fim::string("displays no image at all"),&browser,&Browser::no_image));
@@ -451,7 +451,7 @@ namespace fim
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */
 		#include "defaultConfiguration.cpp"
-		setVariable("pwd",pwd(args_t()).c_str());
+		setVariable(FIM_VID_PWD,pwd(args_t()).c_str());
 	}
 
         bool CommandConsole::is_file(fim::string nf)const
@@ -476,7 +476,7 @@ namespace fim
 		int xres=0,yres=0;
 
 		/* We read an environment variable */
-		setVariable("_TERM", fim_getenv("TERM"));
+		setVariable(FIM_VID_TERM, fim_getenv("TERM"));
 
 		// NOTE : for the dumb device, it could be better ...
 		tty_raw();// this, here, inhibits unwanted key printout (raw mode), and saves the current tty state
@@ -611,18 +611,18 @@ namespace fim
 		const char *e = fim_getenv("HOME");
 
 		/* default, hard-coded configuration first */
-		if(getIntVariable("_load_default_etc_fimrc")==1 )
+		if(getIntVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC)==1 )
 		{
 			if(is_file("/etc/fimrc"))
 				if(-1==executeFile("/etc/fimrc"));
 		}
 		
 		/* default, hard-coded configuration first */
-		if(getIntVariable("_no_default_configuration")==0 )
+		if(getIntVariable(FIM_VID_NO_DEFAULT_CONFIGURATION)==0 )
 		{
     #ifdef FIM_DEFAULT_CONFIGURATION
 			/* so the user could inspect what goes in the default configuration */
-			setVariable("FIM_DEFAULT_CONFIG_FILE_CONTENTS",FIM_DEFAULT_CONFIG_FILE_CONTENTS);
+			setVariable(FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_DEFAULT_CONFIG_FILE_CONTENTS);
 
 			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
     #endif		
@@ -632,7 +632,7 @@ namespace fim
 		{
 			strcpy(rcfile,e);
 			strcat(rcfile,"/.fimrc");
-			if(getIntVariable("_no_rc_file")==0 )
+			if(getIntVariable(FIM_VID_NO_RC_FILE)==0 )
 			{
 				if(
 					(!is_file(rcfile) || -1==executeFile(rcfile))
@@ -816,7 +816,7 @@ namespace fim
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
 			{
-				int m = getIntVariable("_max_iterated_commands");
+				int m = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
 				fim::string nc;
 				/*
 				 *  A non positive value of  _max_iterated_commands
@@ -1200,7 +1200,7 @@ namespace fim
 #endif
 				if(r>0)
 				{
-					if(getIntVariable("_verbose_keys"))
+					if(getIntVariable(FIM_VID_VERBOSE_KEYS))
 					{
 						/*
 						 * <0x20 ? print ^ 0x40+..
@@ -1209,10 +1209,10 @@ namespace fim
 						cout << buf ;
 					}
 #ifndef FIM_USE_READLINE
-					if(c==(unsigned int)getIntVariable("console_key") || 
+					if(c==(unsigned int)getIntVariable(FIM_VID_CONSOLE_KEY) || 
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
 #else
-					if(c==(unsigned int)getIntVariable("console_key")
+					if(c==(unsigned int)getIntVariable(FIM_VID_CONSOLE_KEY)
 					){ic=1;*prompt=':';}	//should be configurable..
 					else if(c=='/')
 					{
@@ -1363,8 +1363,8 @@ namespace fim
 		 *
 		 * FIX ME
 		 */
-		int sl=getIntVariable("_status_line")?0:1;
-		setVariable("_status_line",sl);
+		int sl=getIntVariable(FIM_VID_STATUS_LINE)?0:1;
+		setVariable(FIM_VID_STATUS_LINE,sl);
 		return 0;
 	}
 
@@ -1492,7 +1492,7 @@ namespace fim
 		/*
 		 *
 		 * */
-		return (inConsole() || this->getIntVariable("_display_console"));
+		return (inConsole() || this->getIntVariable(FIM_VID_DISPLAY_CONSOLE));
 	}
 
 	fim::string CommandConsole::get_aliases_list()const
@@ -1860,7 +1860,7 @@ namespace fim
 		if(*r=='*')return false;
 
 		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
-		if(regcomp(&regex,r, 0 | REG_EXTENDED | (getIntVariable("ignorecase")==0?0:REG_ICASE) )!=0)
+		if(regcomp(&regex,r, 0 | REG_EXTENDED | (getIntVariable(FIM_VID_IGNORECASE)==0?0:REG_ICASE) )!=0)
 		{
 			/* error calling regcomp (invalid regexp?)! (should we warn the user ?) */
 			//cout << "error calling regcomp (invalid regexp?)!" << "\n";
@@ -2498,7 +2498,7 @@ namespace fim
   #ifndef FIM_NOSCRIPTING
     #ifdef FIM_USE_READLINE
 		/* default, hard-coded configuration first */
-		if(getIntVariable("_save_fim_history")==1 )
+		if(getIntVariable(FIM_VID_SAVE_FIM_HISTORY)==1 )
 		{
 			char hfile[_POSIX_PATH_MAX];
 			const char *e = fim_getenv("HOME");
@@ -2525,7 +2525,7 @@ namespace fim
   #ifndef FIM_NOSCRIPTING
     #ifdef FIM_USE_READLINE
 		/* default, hard-coded configuration first */
-		if(getIntVariable("_load_fim_history")==1 )
+		if(getIntVariable(FIM_VID_LOAD_FIM_HISTORY)==1 )
 		{
 			char hfile[_POSIX_PATH_MAX];
 			const char *e = fim_getenv("HOME");

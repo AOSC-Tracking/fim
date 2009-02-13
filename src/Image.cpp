@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ namespace fim
 		if( !load(fname_,fd,0) || check_invalid() || (!fimg) ) 
 		{
 			cout << "warning : invalid loading ! \n";
-			if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
+			if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 				cc.set_status_bar( fim::string("error while loading \"")+ fim::string(fname_)+ fim::string("\"") , "*");
 			invalid = 1;
 			throw FimException();
@@ -110,16 +110,16 @@ namespace fim
                 newscale = 1.0;
                 ascale   = 1.0;
                 angle   = 0.0;
-		setVariable("scale"  ,scale*100);
-		setVariable("ascale" ,ascale);
-		setVariable("angle" ,angle);
+		setVariable(FIM_VID_SCALE  ,scale*100);
+		setVariable(FIM_VID_ASCALE ,ascale);
+		setVariable(FIM_VID_ANGLE ,angle);
 		no_file=true;	//reloading allowed
 
                 invalid=0;
                 fimg    = NULL;
                 img     = NULL;
                 orientation=0;
-		setVariable("orientation" ,0);
+		setVariable(FIM_VID_ORIENTATION ,0);
 	}
 	
 	bool Image::load(const char *fname_, FILE* fd, int want_page)
@@ -131,7 +131,7 @@ namespace fim
 		if(fname_==NULL && fname==""){return false;}//no loading = no state change
 		this->free();
 		fname=fname_;
-		if( getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
+		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 		{
 			if( getGlobalIntVariable(FIM_VID_WANT_PREFETCH) == 1)
 				cc.set_status_bar("please wait while prefetching...", "*");
@@ -159,25 +159,25 @@ namespace fim
 
 
 #ifdef FIM_NAMESPACES
-		setVariable("height" ,(int)fimg->i.height);
-		setVariable("width"  ,(int)fimg->i.width );
-		setVariable("sheight",(int) img->i.height);
-		setVariable("swidth" ,(int) img->i.width );
+		setVariable(FIM_VID_HEIGHT ,(int)fimg->i.height);
+		setVariable(FIM_VID_WIDTH ,(int)fimg->i.width );
+		setVariable(FIM_VID_SHEIGHT,(int) img->i.height);
+		setVariable(FIM_VID_SWIDTH,(int) img->i.width );
 		if(cc.displaydevice)
-		setVariable("_fim_bpp" ,(int) cc.displaydevice->get_bpp());
-		setVariable("scale"  ,newscale*100);
-		setVariable("ascale" ,ascale);
-		setVariable("angle" , angle);
+		setVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice->get_bpp());
+		setVariable(FIM_VID_SCALE  ,newscale*100);
+		setVariable(FIM_VID_ASCALE,ascale);
+		setVariable(FIM_VID_ANGLE , angle);
 #endif
 
-		setGlobalVariable("height" ,(int)fimg->i.height);
-		setGlobalVariable("width"  ,(int)fimg->i.width );
-		setGlobalVariable("sheight",(int) img->i.height);
-		setGlobalVariable("swidth" ,(int) img->i.width );
+		setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg->i.height);
+		setGlobalVariable(FIM_VID_WIDTH  ,(int)fimg->i.width );
+		setGlobalVariable(FIM_VID_SHEIGHT,(int) img->i.height);
+		setGlobalVariable(FIM_VID_SWIDTH ,(int) img->i.width );
 		if(cc.displaydevice)
-		setGlobalVariable("_fim_bpp" ,(int) cc.displaydevice->get_bpp());
-		//setGlobalVariable("scale"  ,newscale*100);
-		//setGlobalVariable("ascale" ,ascale);
+		setGlobalVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice->get_bpp());
+		//setGlobalVariable(FIM_VID_SCALE  ,newscale*100);
+		//setGlobalVariable(FIM_VID_ASCALE ,ascale);
 		return true;
 	}
 
@@ -277,16 +277,16 @@ namespace fim
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
 
 		int neworientation=getOrientation();
-		float	gascale=getGlobalFloatVariable("ascale"),
-			newascale=getFloatVariable("ascale");
+		float	gascale=getGlobalFloatVariable(FIM_VID_ASCALE),
+			newascale=getFloatVariable(FIM_VID_ASCALE);
 		newascale=(newascale>0.0 && newascale!=1.0)?newascale:((gascale>0.0 && gascale!=1.0)?gascale:1.0);
 		
-		//float newascale=getFloatVariable("ascale"); if(newascale<=0.0) newascale=1.0;
+		//float newascale=getFloatVariable(FIM_VID_ASCALE); if(newascale<=0.0) newascale=1.0;
 		/*
 		 * The global angle variable value will override the local if not 0 and the local unset
 		 * */
-		float	gangle  =getGlobalFloatVariable("angle"),
-			newangle=getFloatVariable("angle");
+		float	gangle  =getGlobalFloatVariable(FIM_VID_ANGLE),
+			newangle=getFloatVariable(FIM_VID_ANGLE);
 		newangle=angle?newangle:((gangle!=0.0)?gangle:newangle);
 
 		if(	newscale == scale
@@ -297,7 +297,7 @@ namespace fim
 		){return 0;/*no need to rescale*/}
 		orientation=((neworientation%4)+4)%4; // fix this
 
-		setGlobalVariable("scale",newscale*100);
+		setGlobalVariable(FIM_VID_SCALE,newscale*100);
 		if(fimg)
 		{
 			/*
@@ -308,7 +308,7 @@ namespace fim
 			 * keeping score of copies and ... too complicated ...
 			 */
 			struct ida_image *backup_img=img;
-			if(getGlobalIntVariable("_display_status_bar")||getGlobalIntVariable("_display_busy"))
+			if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 			{
 				if( getGlobalIntVariable(FIM_VID_WANT_PREFETCH) == 1)
 					cc.set_status_bar("please wait while prefetching...", "*");
@@ -389,7 +389,7 @@ namespace fim
 			if(!img)
 			{
 				img=backup_img;
-				if(getGlobalIntVariable("_display_busy"))
+				if(getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 					cc.set_status_bar( "rescaling failed (insufficient memory?!)", getInfo().c_str());
 				sleep(1);	//just to give a glimpse..
 			}
@@ -406,12 +406,12 @@ namespace fim
 			/*
 			 * it is important to set these values after rotation, too!
 			 * */
-			setGlobalVariable("height" ,(int)fimg->i.height);
-			setGlobalVariable("width"  ,(int)fimg->i.width );
-			setGlobalVariable("sheight",(int) img->i.height);
-			setGlobalVariable("swidth" ,(int) img->i.width );
-			setGlobalVariable("ascale" , ascale );
-			//setGlobalVariable("angle"  ,  angle );
+			setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg->i.height);
+			setGlobalVariable(FIM_VID_WIDTH  ,(int)fimg->i.width );
+			setGlobalVariable(FIM_VID_SHEIGHT,(int) img->i.height);
+			setGlobalVariable(FIM_VID_SWIDTH ,(int) img->i.width );
+			setGlobalVariable(FIM_VID_ASCALE , ascale );
+			//setGlobalVariable(FIM_VID_ANGLE  ,  angle );
 		}
 		else should_redraw(0);
 		orientation=neworientation;
@@ -504,19 +504,19 @@ fim::string Image::getInfo()
 	static char linebuffer[128];
 	char pagesinfobuffer[128];
 	char imagemode[3],*imp;
-	int n=getGlobalIntVariable("fileindex");
+	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 	imp=imagemode;
 
-	//if(getGlobalIntVariable("autoflip"))*(imp++)='F';
-	//if(getGlobalIntVariable("automirror"))*(imp++)='M';
+	//if(getGlobalIntVariable(FIM_VID_AUTOFLIP))*(imp++)='F';
+	//if(getGlobalIntVariable(FIM_VID_AUTOMIRROR))*(imp++)='M';
 
 	// should flip ? should mirror ?
 	int flip   =
-	(((getGlobalIntVariable("autoflip")== 1)|(getGlobalIntVariable("v:flipped")== 1)|(getIntVariable("flipped")== 1))&&
-	!((getGlobalIntVariable("autoflip")==-1)|(getGlobalIntVariable("v:flipped")==-1)|(getIntVariable("flipped")==-1)));
+	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:"FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:"FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
 	int mirror   =
-	(((getGlobalIntVariable("automirror")== 1)|(getGlobalIntVariable("v:mirrored")== 1)|(getIntVariable("mirrored")== 1))&&
-	!((getGlobalIntVariable("automirror")==-1)|(getGlobalIntVariable("v:mirrored")==-1)|(getIntVariable("mirrored")==-1)));
+	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 
 	if(flip  )*(imp++)='F';
 	if(mirror)*(imp++)='M';
@@ -537,7 +537,7 @@ fim::string Image::getInfo()
 	     imagemode,
 	     pagesinfobuffer,
 	     n?n:1, /* ... */
-	     (getGlobalIntVariable("filelistlen"))
+	     (getGlobalIntVariable(FIM_VID_FILELISTLEN))
 	     );
 	return fim::string(linebuffer);
 }
@@ -549,7 +549,7 @@ fim::string Image::getInfo()
 		 *
 		 * FIXME: a temporary method
 		 * */
-		setVariable("fresh",0);
+		setVariable(FIM_VID_FRESH,0);
 
 		/*
 		 * rotation dispatch
@@ -570,9 +570,9 @@ fim::string Image::getInfo()
 		 * warning : this should work more intuitively
 		 * */
 		return ((
-		(  getIntVariable("orientation")
-		+getGlobalIntVariable("v:orientation")
-		+getGlobalIntVariable("orientation")
+		(  getIntVariable(FIM_VID_ORIENTATION)
+		+getGlobalIntVariable("v:"FIM_VID_ORIENTATION)
+		+getGlobalIntVariable(FIM_VID_ORIENTATION)
 		)
 		%4)+4)%4;
 	}
@@ -584,7 +584,7 @@ fim::string Image::getInfo()
 		 * */
 		float newangle=this->angle+angle;
 		if( check_invalid() ) return -1;
-		setVariable("angle",newangle);
+		setVariable(FIM_VID_ANGLE,newangle);
 		return rescale();	// FIXME : necessary *only* for image update and display
 	}
 

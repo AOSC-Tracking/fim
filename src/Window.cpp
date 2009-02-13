@@ -2,7 +2,7 @@
 /*
  Window.cpp : Fim's own windowing system
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ namespace fim
 		unsigned int i=0;
 		int rc=0;/*return code*/
 #ifdef FIM_AUTOCMDS
-		fim::string c=getGlobalIntVariable("filename");
+		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal
 		if(amroot)autocmd_exec("PreWindow",c);
 #endif
