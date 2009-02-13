@@ -544,8 +544,8 @@ namespace fim
 			 * weird, isn't it ?
 			 * Regard this as a weird patch.
 			 * */
-			fim::string term = fim_getenv("TERM");
-			if(term.re_match("screen"))
+			const char * term = fim_getenv("TERM");
+			if(term && string(term).re_match("screen"))
 			{
 				key_bindings["Left"]-=3072;
 				key_bindings["Right"]-=3072;
@@ -2655,15 +2655,20 @@ namespace fim
 	{
 		string help="usage : getenv IDENTIFIER  will create a fim variable named IDENTIFIER with value $IDENTIFIER (if nonempty), from the current shell."
 #ifndef HAVE_GETENV
-		" (note that getenv call was not available at build time, so it won't work)"
+		" (note that getenv call was not available at build time, so it won't work)\n"
 #endif
 		;
 		if( ! args.size())return help;
 #ifdef HAVE_GETENV
-		if(1==args.size() && *fim_getenv(args[0].c_str()))return setVariable( fim::string("ENV_")+args[0], fim_getenv(args[0].c_str()) );
+		if(1==args.size())
+		{
+			if(fim_getenv(args[0].c_str()))
+				return setVariable( fim::string("ENV_")+args[0], fim_getenv(args[0].c_str()) );
+			else
+				return "";
+		}
 		else
 			return help;
-		return "";
 #else
 		return help;
 #endif
