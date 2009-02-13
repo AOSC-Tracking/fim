@@ -274,6 +274,7 @@ FBFONT		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font fil
 			NOTE : Currently xfs is disabled.
 FBGAMMA		(just like in fbi) gamma correction.
 FRAMEBUFFER	(just like in fbi) if set, will override user set framebuffer device file.
+TERM		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $TERM=="screen"
 .SH COMMON PROBLEMS
 .B fim
 needs read-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
@@ -377,7 +378,7 @@ Michele Martone <dezperado _ GUESS _ autistici.org> is the author of fim, "fbi i
 Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2008 Michele Martone <dezperado _ GUESS _ autistici.org>
+Copyright (C) 2007-2009 Michele Martone <dezperado _ GUESS _ autistici.org>
 Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>
 .P
 This program is free software; you can redistribute it and/or modify

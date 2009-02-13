@@ -304,13 +304,21 @@ namespace fim
 		{
 			cmd=findCommand(args[0]);
 			if(cmd)
-				return  cmd->getHelp()+fim::string("\n");
+				return  cmd->getHelp()+string("\n");
 			else
 			if(aliasRecall(fim::string(args[0]))!="")
 				return
-					(args[0]+fim::string(" is an alias, and was declared:\n"))+
+					string("\"")+(args[0]+string("\" is an alias, and was declared:\n"))+
 					get_alias_info(args[0]);
-			else cout << args[0] << " : no such command\n";
+			else
+			{
+				if(isVariable(args[0]))
+					return string("\"")+( args[0] + string( "\" is a variable, with value:\n" )+
+					getStringVariable(args[0]));
+				else
+					cout << args[0] << " : no such command\n";
+			}
+
 		}
 		this->setVariable("_display_console",1);
 		return "usage : help CMD   (use TAB in commandline mode to get a list of commands :) )\n";
@@ -403,6 +411,7 @@ namespace fim
 		addCommand(new Command(fim::string("else"    ),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("while" ),fim::string("while(expression){action;}"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("alias" ),fim::string("alias ALIAS ACTION"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string("getenv" ),fim::string("getenv IDENTIFIER"),this,&CommandConsole::do_getenv));
 		addCommand(new Command(fim::string("unalias" ),fim::string("unalias ALIAS .."),this,&CommandConsole::unalias));
 		addCommand(new Command(fim::string("unbind"),fim::string("unbinds the action associated to KEYCODE"),this,&CommandConsole::unbind));
 		addCommand(new Command(fim::string("sleep" ),fim::string("sleeps for n (default 1) seconds"),this,&CommandConsole::foo));
@@ -466,8 +475,8 @@ namespace fim
 		displaydevice=NULL;
 		int xres=0,yres=0;
 
-		/*  */
-		setVariable("_TERM", getenv("TERM"));
+		/* We read an environment variable */
+		setVariable("_TERM", fim_getenv("TERM"));
 
 		// NOTE : for the dumb device, it could be better ...
 		tty_raw();// this, here, inhibits unwanted key printout (raw mode), and saves the current tty state
@@ -482,7 +491,7 @@ namespace fim
 			displaydevice=new FramebufferDevice(mc);
 			if(!displaydevice || ((FramebufferDevice*)displaydevice)->framebuffer_init())cleanup_and_exit(0);
 			ffdp=((FramebufferDevice*)displaydevice);
-			setVariable("_device_driver", "fbdev");
+			setVariable(FIM_VID_DEVICE_DRIVER, "fbdev");
 			if(default_fbdev)ffdp->set_fbdev(default_fbdev);
 			if(default_fbmode)ffdp->set_fbmode(default_fbmode);
 			if(default_vt!=-1)ffdp->set_default_vt(default_vt);
@@ -500,7 +509,7 @@ namespace fim
 			if(sdld && displaydevice==NULL)
 			{
 				displaydevice=sdld;
-				setVariable("_device_driver", "sdl");
+				setVariable(FIM_VID_DEVICE_DRIVER, "sdl");
 			}
 		}
 		#endif
@@ -513,7 +522,7 @@ namespace fim
 			if(cacad && displaydevice==NULL)
 			{
 				displaydevice=cacad;
-				setVariable("_device_driver", "cacalib");
+				setVariable(FIM_VID_DEVICE_DRIVER, "cacalib");
 			}
 		}
 		#endif
@@ -525,7 +534,7 @@ namespace fim
 		if(aad && displaydevice==NULL)
 		{
 			displaydevice=aad;
-			setVariable("_device_driver", "aalib");
+			setVariable(FIM_VID_DEVICE_DRIVER, "aalib");
 
 #if 1
 			/*
@@ -535,7 +544,7 @@ namespace fim
 			 * weird, isn't it ?
 			 * Regard this as a weird patch.
 			 * */
-			fim::string term = getenv("TERM");
+			fim::string term = fim_getenv("TERM");
 			if(term.re_match("screen"))
 			{
 				key_bindings["Left"]-=3072;
@@ -551,7 +560,7 @@ namespace fim
 		if( displaydevice==NULL)
 		{
 			displaydevice=&dummydisplaydevice;
-			setVariable("_device_driver", "dummy");
+			setVariable(FIM_VID_DEVICE_DRIVER, "dummy");
 		}
 
 		xres=displaydevice->width(),yres=displaydevice->height();
@@ -599,7 +608,7 @@ namespace fim
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
 		char rcfile[_POSIX_PATH_MAX];
-		char *e = getenv("HOME");
+		const char *e = fim_getenv("HOME");
 
 		/* default, hard-coded configuration first */
 		if(getIntVariable("_load_default_etc_fimrc")==1 )
@@ -1142,7 +1151,7 @@ namespace fim
 					//ic=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
 					execute(rl,1,0);	//execution of the command line with history
 					ic=(ic==-1)?0:1; //a command could change the mode !
-//					this->setVariable("_display_console",1);	//!!
+//					this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);	//!!
 //					execute("redisplay;",0,0);	//execution of the command line with history
 #ifdef FIM_AUTOCMDS
 					autocmd_exec("PostInteractiveCommand",cf);
@@ -1323,7 +1332,7 @@ namespace fim
 			std::cout << *i << "\n";
 		}
 		
-		fim::string sof=getStringVariable("_fim_scriptout_file");
+		fim::string sof=getStringVariable(FIM_VID_SCRIPTOUT_FILE);
 		if(sof!="")
 		{
         		if(is_file(sof))
@@ -1457,6 +1466,13 @@ namespace fim
 		variables_t::const_iterator vi=variables.find(varname);
 		if(vi!=variables.end()) return vi->second.getType();
 		else return 0;
+	}
+
+	bool CommandConsole::isVariable(const fim::string &varname)const
+	{
+		const char * s;
+		s = getStringVariable(varname).c_str();
+		return (s && *s);
 	}
 
 	int CommandConsole::printVariable(const fim::string &varname)const
@@ -2485,7 +2501,7 @@ namespace fim
 		if(getIntVariable("_save_fim_history")==1 )
 		{
 			char hfile[_POSIX_PATH_MAX];
-			char *e = getenv("HOME");
+			const char *e = fim_getenv("HOME");
 			if(e && strlen(e)<_POSIX_PATH_MAX-14)//strlen(".fim_history")+2
 			{
 				strcpy(hfile,e);
@@ -2512,7 +2528,7 @@ namespace fim
 		if(getIntVariable("_load_fim_history")==1 )
 		{
 			char hfile[_POSIX_PATH_MAX];
-			char *e = getenv("HOME");
+			const char *e = fim_getenv("HOME");
 			if(e && strlen(e)<_POSIX_PATH_MAX-14)//strlen(".fim_history")+2
 			{
 				strcpy(hfile,e);
@@ -2635,13 +2651,32 @@ namespace fim
 		return "";
 	}
 
-	int  CommandConsole::inConsole()const{
+	fim::string CommandConsole::do_getenv(const args_t& args)
+	{
+		string help="usage : getenv IDENTIFIER  will create a fim variable named IDENTIFIER with value $IDENTIFIER (if nonempty), from the current shell."
+#ifndef HAVE_GETENV
+		" (note that getenv call was not available at build time, so it won't work)"
+#endif
+		;
+		if( ! args.size())return help;
+#ifdef HAVE_GETENV
+		if(1==args.size() && *fim_getenv(args[0].c_str()))return setVariable( fim::string("ENV_")+args[0], fim_getenv(args[0].c_str()) );
+		else
+			return help;
+		return "";
+#else
+		return help;
+#endif
+	}
+
+	int  CommandConsole::inConsole()const
+	{
 #ifdef FIM_USE_READLINE
 		return ic==1;
 #else
 		return 0;
 #endif
-		}
+	}
 
 }
 

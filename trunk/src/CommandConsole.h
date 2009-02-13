@@ -106,7 +106,7 @@ class CommandConsole
 	/* no readline ? no console ! */
 	int 	ic;					//in console if 1. not if 0. willing to exit from console mode if -1
 #endif
-	int	cycles;			//FIX ME
+	int	cycles;			//FIXME
 	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
 
 #ifdef FIM_AUTOCMDS
@@ -311,6 +311,8 @@ class CommandConsole
 	void set_status_bar(fim::string desc, const char *info);
 	void set_status_bar(const char *desc, const char *info);
         bool is_file(fim::string nf)const;
+	fim::string do_getenv(const args_t& args);
+	bool isVariable(const fim::string &varname)const;
 };
 }
 

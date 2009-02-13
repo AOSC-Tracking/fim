@@ -280,22 +280,22 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'A':
 		    //fbi's
-		    //cc.setVariable("autotop",1);
+		    //cc.setVariable(FIM_VID_AUTOTOP,1);
 		    //FIXME: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("autotop=1;");
+		    cc.pre_autocmd_add(FIM_VID_AUTOTOP"=1;");
 	#endif
 		    break;
 		case 'q':
 		    //fbi's
 		    //fprintf(stderr,"sorry, this feature will be implemented soon\n");
-		    //cc.setVariable("_display_status",0);
+		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,0);
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("_display_status=0;");
+		    cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=0;");
 	#endif
 		    break;
 		case 'f':
-		    cc.setVariable("_load_default_etc_fimrc",0);
+		    cc.setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,0);
 		    /*
 		     * note that this solution is temporary, because it clashes with -E (should have precedence, instead)
 		     * */
@@ -303,9 +303,9 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'v':
 		    //fbi's
-		    //cc.setVariable("_display_status",1);
+		    //cc.setVariable("FIM_VID_DISPLAY_STATUS",1);
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("_display_status=1;");
+		    cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=1;");
 	#endif
 		    break;
 		case 'w':
@@ -322,7 +322,7 @@ int help_and_exit(char *argv0, int code=0)
 	//	    cc.setVariable("autotop",1);
 	//	    strange : if the assignations occur in two pre_autocmd_add calls, it triggers a bug via fimgs:
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("autowidth=1;autotop=1;");
+		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=1;"FIM_VID_AUTOTOP"=1;");
 	#endif
 		    break;
 		case 'g':
@@ -405,7 +405,7 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'W':
 		    //fim's
-		    cc.setVariable("_fim_scriptout_file",optarg);
+		    cc.setVariable(FIM_VID_SCRIPTOUT_FILE,optarg);
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add("start_recording;");
 		    cc.appendPostExecutionCommand("stop_recording");
@@ -440,7 +440,7 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'N':
 		    //fim's
-			cc.setVariable("_no_rc_file",1);
+			cc.setVariable(FIM_VID_NO_RC_FILE,1);
 		    break;
 		case 't':
 		    //fim's
@@ -572,8 +572,7 @@ int help_and_exit(char *argv0, int code=0)
 		{
 			#ifdef FIM_WITH_LIBSDL
 			/* check to see if we are under X */
-			//if(getenv("DISPLAY") && g_fim_no_framebuffer )
-			if( getenv("DISPLAY") )
+			if( fim_getenv("DISPLAY") )
 			{
 				g_fim_output_device="sdl";
 			}

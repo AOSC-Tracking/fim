@@ -156,6 +156,10 @@
 /* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
 #undef HAVE_FSEEKO
 
+/* If present, the getenv function allows fim to read environment variables.
+   */
+#undef HAVE_GETENV
+
 /* Define to 1 if you have the `getpagesize' function. */
 #undef HAVE_GETPAGESIZE
 

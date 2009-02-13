@@ -238,11 +238,14 @@ available from http://dl.bytesex.org/releases/fbida/fbi_1.31.tar.gz .
 
 Useful documents I've read and consulted during the coding of Fim:
 
-- Thomas Niemann's tutorial to yacc & lex
-- The yacc & lex HOWTO
-- GNU readline manual
-- Ray Lischner, STL Pocket Reference, O'Reilly, 2004 
-- Herbert Schildt's C++, Complete Reference, Third Edition, Osborne McGraw-Hill, 1999
+Thomas Niemann's tutorial to yacc & lex
+The yacc & lex HOWTO
+GNU readline manual
+Ray Lischner, STL Pocket Reference, O'Reilly, 2004 
+Herbert Schildt's C++, Complete Reference, Third Edition, Osborne McGraw-Hill, 1999
+http://www.gnu.org/software/m4/manual/
+http://www.gnu.org/software/autoconf/manual/
+http://www.gnu.org/software/automake/manual/
 man console_codes
 man fb.modes
 man fbi

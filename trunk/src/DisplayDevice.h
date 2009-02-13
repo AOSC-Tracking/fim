@@ -35,7 +35,7 @@ class DisplayDevice
 	 */
 	public:
 	struct fs_font *f;
-	char* fontname;
+	const char* fontname;
 	int                        debug;// really, only for making happy fbdev
 	public:
 	DisplayDevice(MiniConsole &mc_);

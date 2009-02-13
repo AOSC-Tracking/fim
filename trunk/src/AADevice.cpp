@@ -361,6 +361,7 @@
 		ascii_rndparms = aa_getrenderparams();
 		//aa_parseoptions (&ascii_hwparms, ascii_rndparms, &argc, argv);
 
+//		NOTE: if uncommenting this, remember to #ifdef HAVE_GETENV
 //		char *e;int v;
 //		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms.width  = v-1;
 //		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms.height = v-1;

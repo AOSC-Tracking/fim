@@ -60,6 +60,7 @@ const char* next_row(const char*s, int cols);
 int fim_common_test();
 
 double getmilliseconds();
+const char * fim_getenv(const char * name);
 
 /* exceptions */
 typedef int FimException;

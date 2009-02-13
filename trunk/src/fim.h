@@ -200,9 +200,11 @@ namespace fim
 #define FIM_VID_BINARY_DISPLAY_BPP 		"_display_as_binary_bpp"
 #define FIM_VID_CACHE_STATUS 			"_cache_status"
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"
+#define FIM_VID_DEVICE_DRIVER 			"_device_driver"
 #define FIM_VID_DISPLAY_STATUS			"_display_status"
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"
+#define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"
 #define FIM_VID_STATUS_LINE 			"_status_line"
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"
 #define FIM_VID_AUTO_SCALE_V			"auto_scale_v"	/* fixme : should be moved to fimrc's scope only */

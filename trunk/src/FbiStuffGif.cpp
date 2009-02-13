@@ -2,7 +2,7 @@
 /*
  FbiStuffGif.cpp : fbi functions for GIF files, modified for fim
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -51,7 +51,7 @@ gif_fileread(struct gif_state *h)
     GifRecordType RecordType;
     GifByteType *Extension;
     int ExtCode, rc;
-    char *type;
+    const char *type;
 
     for (;;) {
 	if (GIF_ERROR == DGifGetRecordType(h->gif,&RecordType)) {
