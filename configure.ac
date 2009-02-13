@@ -96,6 +96,8 @@ AC_SYS_LARGEFILE
 AC_FUNC_FSEEKO
 AC_CHECK_SIZEOF(off_t)
 
+AH_TEMPLATE([HAVE_GETENV])
+AC_CHECK_FUNC([getenv], AC_DEFINE([HAVE_GETENV], [1], [If present, the getenv function allows fim to read environment variables.]))
 
 
 have_default_bindings=yes
@@ -634,10 +636,13 @@ AM_CONDITIONAL(ENABLE_DJVU, test x$have_djvu = xyes)
 
 
 dnl ============= pdf file handling with libpoppler 
-
-AC_ARG_ENABLE(poppler, AC_HELP_STRING([--disable-poppler], [Disable poppler (PDF rendering) support.]),
-[       if test x$enableval = xno ; then
-		fim_handle_pdf=no
+dnl
+dnl By default, we disable poppler : its API is still immature.
+dnl
+fim_handle_pdf=no
+AC_ARG_ENABLE(poppler, AC_HELP_STRING([--enable-poppler], [Enable poppler (PDF rendering) support.]),
+[       if test x$enableval = xyes ; then
+		fim_handle_pdf=yes
         fi
 ])
 dnl FIXME : checking only for libpoppler-glib, should also check for libpoppler !
@@ -1016,13 +1021,13 @@ dnl ==================
 
 fim_cv_aalib=no
 
-AC_ARG_ENABLE(aalib, AC_HELP_STRING([--enable-aalib], [Turns on aalib support (EXPERIMENTAL)]),
+AC_ARG_ENABLE(aa, AC_HELP_STRING([--enable-aa], [Turns on aalib support (EXPERIMENTAL)]),
 	[if test x$enableval = xyes; then
 	if test x$have_aalib = xyes; then
 	fim_cv_aalib=yes
 	else
         AC_MSG_ERROR([Sorry, it doesn't seem like aalib is installed or detectable.
-	Please run --disable-aalib or install aalib in a system-wide directory instead.
+	Please run --disable-aa or install aalib in a system-wide directory instead.
 	])
 	fi
 	fi])
@@ -1309,7 +1314,10 @@ AC_SUBST(CFLAGS)
 
 #AC_CONFIG_FILES([Makefile],[src/Makefile])
 
-AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile scripts/maintenance/cron-build.sh)
+AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile
+	 scripts/maintenance/cron-build.sh
+	 scripts/maintenance/remote-build.sh
+	)
 #AC_OUTPUT
 
 AC_MSG_NOTICE([

@@ -105,9 +105,9 @@
 namespace fim
 {
 struct DEVS {
-    char *fb0;
-    char *fbnr;
-    char *ttynr;
+    const char *fb0;
+    const char *fbnr;
+    const char *ttynr;
 };
 
 

@@ -1635,7 +1635,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
      *
      * WARNING : this code seems buggy!
      * */   
-    int diagonal = ceilf( sqrtf( ( src->i.width * src->i.width  +  src->i.height * src->i.height) ) + 1.0f );
+    int diagonal = (int) ceilf( sqrtf( (float)( src->i.width * src->i.width  +  src->i.height * src->i.height) ) + 1.0f );
     int n_extra  = (diagonal - src->i.height  )/2;
     int s_extra  = (diagonal - src->i.height - n_extra     );
     int w_extra  = (diagonal - src->i.width      )/2;
@@ -1664,7 +1664,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     }
 #endif
 
-    p.angle    = angle;
+    p.angle    = (int) angle;
     data = desc_rotate.init(src,&rect,&dest->i,&p);
     dest->data = (unsigned char*)calloc(dest->i.width * dest->i.height * 3,1);
     /* dez: */ if(!(dest->data)){free(dest);return NULL;}

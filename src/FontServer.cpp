@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -37,9 +37,9 @@ namespace fim
 
 #if 1
 /* 20080507 unused ? */
-void FontServer::fb_text_init1(char *font, struct fs_font **_f)
+void FontServer::fb_text_init1(const char *font, struct fs_font **_f)
 {
-    char   *fonts[2] = { font, NULL };
+    const char   *fonts[2] = { font, NULL };
 
     if (NULL == *_f)
 	*_f = fs_consolefont(font ? fonts : NULL);
@@ -76,15 +76,16 @@ static const char *default_font[] = {
 #endif
 
 
-struct fs_font* FontServer::fs_consolefont(char **filename)
+struct fs_font* FontServer::fs_consolefont(const char **filename)
 {
     int  i;
-    char *h,command[256];
+    const char *h;
+    char command[256];
     struct fs_font *f = NULL;
     FILE *fp;
 
     if (NULL == filename)
-	filename = (char**)fim::default_font;	/* DANGER */
+	filename = fim::default_font;
 
     for(i = 0; filename[i] != NULL; i++) {
 	if (-1 == access(filename[i],R_OK))

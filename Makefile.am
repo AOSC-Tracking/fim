@@ -11,7 +11,7 @@
 AUTOMAKE_OPTIONS = nostdinc no-dependencies
 SUBDIRS = src doc distros scripts
 
-EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL  README README.FIRST TODO \
+EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL INSTALL.TXT  README README.FIRST TODO \
 	Makefile.am configure.ac configure \
 	AUTHORS ChangeLog NEWS aclocal.m4 config.h.in \
 	autogen.sh \

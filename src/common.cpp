@@ -432,3 +432,19 @@ double getmilliseconds()
 	return dt;
 }
 
+const char * fim_getenv(const char * name)
+{
+	/*
+	*  A getenv() wrapper function.
+	*  Won't return NULL for any reason, so it is safe for string constructors.
+	*/
+	const char *evv;
+#ifdef HAVE_GETENV
+	evv=getenv(name);
+	if(!evv)
+		return "";
+#else
+	return "";
+#endif
+	
+}
