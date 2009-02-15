@@ -126,12 +126,14 @@ gif_init(FILE *fp, char *filename, unsigned int page,
     GifRecordType RecordType;
     int i, image = 0;
     
-    h = (gif_state*)malloc(sizeof(*h));
+    h = (gif_state*)calloc(sizeof(*h),1);
+    if(!h)goto oops;
     memset(h,0,sizeof(*h));
 
     h->infile = fp;
     h->gif = DGifOpenFileHandle(fileno(fp));
     h->row = (GifPixelType*)malloc(h->gif->SWidth * sizeof(GifPixelType));
+    if(!h->row)goto oops;
 
     while (0 == image) {
 	RecordType = gif_fileread(h);
@@ -162,7 +164,10 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 	    if (h->gif->Image.Interlace) {
 		if (FbiStuff::fim_filereading_debug())
 		    FIM_FBI_PRINTF("gif: interlaced\n");
-		h->il = (GifPixelType*)malloc(h->w * h->h * sizeof(GifPixelType));
+		{
+			h->il = (GifPixelType*)malloc(h->w * h->h * sizeof(GifPixelType));
+    			if(!h->il)goto oops;
+		}
 		for (i = 0; i < h->h; i += 8)
 		    DGifGetLine(h->gif, h->il + h->w*i,h->w);
 		for (i = 4; i < h->gif->SHeight; i += 8)
@@ -190,8 +195,9 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 	FIM_FBI_PRINTF("gif: fatal error, aborting\n");
     DGifCloseFile(h->gif);
     fclose(h->infile);
-    free(h->row);
-    free(h);
+    if(h && h->il )free(h->il );
+    if(h && h->row)free(h->row);
+    if(h)free(h);
     return NULL;
 }
 

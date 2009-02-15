@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -76,7 +76,8 @@ png_init(FILE *fp, char *filename, unsigned int page,
 	my_bg .gray  = 192;
     int unit;
     
-    h = (struct png_state *) malloc(sizeof(*h));
+    h = (struct png_state *) calloc(sizeof(*h),1);
+    if(!h) goto oops;
     memset(h,0,sizeof(*h));
 
     h->infile = fp;
@@ -124,7 +125,8 @@ png_init(FILE *fp, char *filename, unsigned int page,
 	FIM_FBI_PRINTF("png: color_type=%s #2\n",ct[h->color_type]);
     
     h->image = (png_byte*)malloc(i->width * i->height * 4);
-    
+    if(!h->image) goto oops;
+
     for (pass = 0; pass < number_passes-1; pass++) {
 	if (FbiStuff::fim_filereading_debug())
 	    FIM_FBI_PRINTF("png: pass #%d\n",pass);
@@ -137,12 +139,12 @@ png_init(FILE *fp, char *filename, unsigned int page,
     return h;
 
  oops:
-    if (h->image)
+    if (h && h->image)
 	free(h->image);
     if (h->png)
 	png_destroy_read_struct(&h->png, NULL, NULL);
     fclose(h->infile);
-    free(h);
+    if(h)free(h);
     return NULL;
 }
 

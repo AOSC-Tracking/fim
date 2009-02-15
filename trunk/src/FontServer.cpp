@@ -79,6 +79,7 @@ static const char *default_font[] = {
 struct fs_font* FontServer::fs_consolefont(const char **filename)
 {
     int  i;
+    int  fr;
     const char *h;
     char command[256];
     struct fs_font *f = NULL;
@@ -130,7 +131,8 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 
     f->glyphs  =(unsigned char*) malloc(f->height * 256);
     f->extents = (FSXCharInfo*)malloc(sizeof(FSXCharInfo)*256);
-    fread(f->glyphs, 256, f->height, fp);
+    fr=fread(f->glyphs, 256, f->height, fp);
+    if(!fr)return NULL;/* new */
     fclose(fp);
 
     f->eindex  =(FSXCharInfo**) malloc(sizeof(FSXCharInfo*)   * 256);

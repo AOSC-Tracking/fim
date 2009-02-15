@@ -544,7 +544,7 @@ namespace fim
 		 * */
 		static int lehsof=0;	/* FIXME : BUG : './fim FILE NONFILE' and hitting 'prev' will trigger disaster  */
 
-		if(lehsof)return 0; /* this prevents infinite recursion, but not the subsequent segfault */
+		//if(lehsof)return 0; /* this prevents infinite recursion, but not the subsequent segfault */
 		if(/*image() &&*/ viewport() && ! (viewport()->check_valid()))
 		{
 			free_current_image();
