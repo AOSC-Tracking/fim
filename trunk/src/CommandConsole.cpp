@@ -1324,7 +1324,7 @@ namespace fim
 		 * NOTE:
 		 * as long as this class is a singleton, we couldn't care less about memory freeing :)
 		 */
-		if(!marked_files.empty())
+		if(!marked_files.empty()) /* FIXME : seems like marked_files is always non empty. */
 		{
 			std::cerr << "The following files were marked by the user :\n";
 			std::cout << "\n";

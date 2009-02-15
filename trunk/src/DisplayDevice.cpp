@@ -105,6 +105,7 @@
 		 */
 		fd_set          set;
 		FD_SET(0, &set);
+		size_t rc=0;
 
 		struct termios tattr;
 		struct termios sattr;
@@ -122,7 +123,7 @@
 		
 		int c,r;//char buf[64];
 		//r=read(fim_stdin,&c,4);
-		r=read(cc.fim_stdin,&c,1); if(r>0&&c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
+		r=read(cc.fim_stdin,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);c=(0x1b)+(c<<8);/* we should do something with rc now */}
 
 		//we restore the previous console attributes
 		tcsetattr (0, TCSAFLUSH, &sattr);

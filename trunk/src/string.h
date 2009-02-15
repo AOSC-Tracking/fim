@@ -28,7 +28,7 @@
 #define _FIM_STRING_WRAPPER 1
 
 
-#define FIM_CHARS_FOR_INT 16
+#define FIM_CHARS_FOR_INT 32 /* should fit a pointer address printout */
 
 namespace fim
 {
@@ -114,7 +114,8 @@ namespace fim
 		 * objects with base pointers .. */
 		~string(){}
 		string(const char*s):std::string(s){}
-		string(int i);//:std::string(i)
+		string(int i);
+		string(int * i);
 
 /*
  		the following two operators are very nice to use but pose unexpected problems.		

@@ -55,6 +55,7 @@ with a '@' and _Baz_ with a '.'.
 
 ==== KNOWN ISSUES
 
+20090215	look for 'BUG' in Browser.cpp
 20081018	the SDL driver in fim is extremely inefficient
 20080127	Under screen, Fim behaves well but it doesn't handle well console switching:
 		after a console switch, it doesn't redraw the image if not triggered to do so.
