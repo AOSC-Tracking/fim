@@ -209,7 +209,7 @@ namespace fim
 		if( ( ni = new Image(key.first.c_str()) ) )// FIXME
 		{	
 #ifdef FIM_CACHE_DEBUG
-			std::cout << "loadNewImage("<<fname<<")\n";
+			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
 #endif
 			if( cacheNewImage( ni ) ) return ni;
 		}
@@ -504,7 +504,7 @@ namespace fim
 		{	
 			cache_report+=(*cpi)->getName();
 			cache_report+=" " ; 
-			cache_report+= string((int)(*cpi)) ; 
+			cache_report+= string((int*)(*cpi)) ; 
 			cache_report+=",";
 		}
 		cache_report+="\n";

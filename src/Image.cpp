@@ -598,13 +598,19 @@ fim::string Image::getInfo()
 	bool Image::prev_page(int j)
 	{
 		string s=fname;
-		return load(s.c_str(),NULL,page-j);
+		if(have_prevpage(j))
+			return load(s.c_str(),NULL,page-j);
+		else
+			return false;
 	} 
 
 	bool Image::next_page(int j)
 	{
 		string s=fname;
-		return load(s.c_str(),NULL,page+j);
+		if(have_nextpage(j))
+			return load(s.c_str(),NULL,page+j);
+		else
+			return false;
 	} 
 
 	cache_key_t Image::getKey()const
@@ -618,6 +624,16 @@ fim::string Image::getInfo()
 			return fimg->i.npages>1 ;
 		return 0;
 	}
+
+	bool Image::have_nextpage(int j)const
+	{
+		return (is_multipage() && page+j < fimg->i.npages);
+	} 
+
+	bool Image::have_prevpage(int j)const
+	{
+		return (is_multipage() && page-j >= 0);
+	} 
 
 }
 

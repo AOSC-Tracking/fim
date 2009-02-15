@@ -2,7 +2,7 @@
 /*
  FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -53,24 +53,32 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct ppm_state *h;
-    char line[1024];
+    char line[1024],*fr;
 
     h = (struct ppm_state*) malloc(sizeof(*h));
+    if(!h)return NULL;
     memset(h,0,sizeof(*h));
 
     h->infile = fp;
-    fgets(line,sizeof(line),fp); /* Px */
-    fgets(line,sizeof(line),fp); /* width height */
+    fr=fgets(line,sizeof(line),fp); /* Px */
+    if(!fr)goto oops;
+    fr=fgets(line,sizeof(line),fp); /* width height */
+    if(!fr)goto oops;
     while ('#' == line[0])
+    {
 	fgets(line,sizeof(line),fp); /* skip comments */
+        if(!fr)goto oops;
+    }
     sscanf(line,"%d %d",&h->width,&h->height);
-    fgets(line,sizeof(line),fp); /* ??? */
+    fr=fgets(line,sizeof(line),fp); /* ??? */
+    if(!fr)goto oops;
     if (0 == h->width || 0 == h->height)
 	goto oops;
     i->width  = h->width;
     i->height = h->height;
     i->npages = 1;
     h->row = (unsigned char*)malloc(h->width*3);
+    if(!h->row)goto oops;
 
     return h;
 

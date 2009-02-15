@@ -231,6 +231,7 @@ int help_and_exit(char *argv0, int code=0)
 	#endif
 	//	char             *desc,*info;
 		int c;
+		int ndd;/* FIXME : on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
 		Image* stream_image=NULL;
 		//g_fim_no_framebuffer=0;
@@ -511,7 +512,7 @@ int help_and_exit(char *argv0, int code=0)
 			}
 			if(lineptr)free(lineptr);
 			close(0);
-			dup(2);
+			ndd=dup(2);
 		}
 		#ifdef FIM_READ_STDIN_IMAGE
 		else
@@ -525,8 +526,8 @@ int help_and_exit(char *argv0, int code=0)
 			{	
 				/* todo : read errno in case of error and print some report.. */
 				const size_t buf_size=4096;
-				char buf[buf_size];ssize_t rc=0;
-				while( (rc=read(0,buf,buf_size))>0 ) fwrite(buf,rc,1,tfd);
+				char buf[buf_size];ssize_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
+				while( (rc=read(0,buf,buf_size))>0 ){ wc=fwrite(buf,rc,1,tfd); if(wc!=rc){/* FIXME : this error condition should be handled */}}
 				rewind(tfd);
 				/*
 				 * Note that it would be much nicer to do this in another way,
@@ -543,7 +544,7 @@ int help_and_exit(char *argv0, int code=0)
 				//fclose(tfd);	// uncommenting this will cause a segfault (why ? FIXME)
 			}
 			close(0);
-			dup(2);
+			ndd=dup(2);
 		}
 		#endif
 		else
@@ -555,7 +556,7 @@ int help_and_exit(char *argv0, int code=0)
 			if(buf) appendedPostInitCommand=true;
 			if(buf) free(buf);
 			close(0);
-			dup(2);
+			ndd=dup(2);
 		}
 	#endif
 	

@@ -68,6 +68,8 @@ class Image
 	bool prev_page(int j=+1);
 	bool next_page(int j=+1);
 	int is_multipage()const;
+	bool have_nextpage(int j=1)const;
+	bool have_prevpage(int j=1)const;
 
 	private:
 	Image& operator= (const Image &i){return *this;/* a nilpotent assignation */}

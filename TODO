@@ -22,6 +22,8 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090215	look for 'BUG' in Browser.cpp
+20090213	rewrite the core in a way to avoid convert_line: there is a potentially big performance gain
 20090212	fix problems deriving from missing binaries and stuff
 20090112	if there is no convert, fim should notice it.
 20090110	write a test case with memory constraints (in a way to stress say, failing mallocs)

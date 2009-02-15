@@ -393,6 +393,14 @@ namespace fim
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
 	}
+
+	string::string(int * i)
+	{
+		char buf[FIM_CHARS_FOR_INT];
+		snprintf(buf,FIM_CHARS_FOR_INT-1,"%p",i);
+		buf[FIM_CHARS_FOR_INT-1]='\0';
+		append(buf);
+	}
 	
 	/*
 	 * see the next commented declaration ? it is pure evil, do not use it !

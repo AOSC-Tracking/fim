@@ -540,11 +540,15 @@ namespace fim
 		 * assume there was a load attempt : check and take some action in case of error
 		 *
 		 * FIXME : this behaviour is BUGGY, because recursion will be killed off 
-		 *         by the autocommand loop prevention mechanism.
+		 *         by the autocommand loop prevention mechanism. (this is not true, as 20090215)
 		 * */
+		static int lehsof=0;	/* FIXME : BUG : './fim FILE NONFILE' and hitting 'prev' will trigger disaster  */
+
+		if(lehsof)return 0; /* this prevents infinite recursion, but not the subsequent segfault */
 		if(/*image() &&*/ viewport() && ! (viewport()->check_valid()))
 		{
 			free_current_image();
+			++lehsof;
 #ifdef FIM_REMOVE_FAILED
 				pop(c);	//removes the currently specified file from the list.
 #ifdef FIM_AUTOSKIP_FAILED
@@ -555,6 +559,7 @@ namespace fim
 				}
 #endif
 #endif
+			--lehsof;
 			return 1;
 		}
 		return 0;
@@ -1487,7 +1492,7 @@ namespace fim
 		/*
 		 * FIX ME
 		 * */
-		if(c_image() && c_image()->is_multipage())
+		if(c_image() && c_image()->have_nextpage())
 			return next_page(args);
 		else
 			return next(args.size()>0?((int)args[0]):1);
@@ -1498,7 +1503,7 @@ namespace fim
 		/*
 		 * FIX ME
 		 * */
-		if(c_image() && c_image()->is_multipage())
+		if(c_image() && c_image()->have_prevpage())
 			return prev_page(args);
 		else
 			return prev(args.size()>0?((int)args[0]):1);
