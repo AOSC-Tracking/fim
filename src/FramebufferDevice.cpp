@@ -649,7 +649,10 @@ void FramebufferDevice::fb_setvt(int vtno)
 
     vtno &= 0xff;
     sprintf(vtname, devices->ttynr, vtno);
-    chown(vtname, getuid(), getgid());
+    if ( chown(vtname, getuid(), getgid())){
+	fprintf(stderr,"chown %s: %s\n",vtname,strerror(errno));
+	exit(1);
+    }
     if (-1 == access(vtname, R_OK | W_OK)) {
 	fprintf(stderr,"access %s: %s\n",vtname,strerror(errno));
 	exit(1);
@@ -669,8 +672,9 @@ void FramebufferDevice::fb_setvt(int vtno)
     close(2);
     setsid();
     open(vtname,O_RDWR);
-    dup(0);
-    dup(0);
+    int ndd;/* FIXME : on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
+    ndd=dup(0);
+    ndd=dup(0);
 
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch)
@@ -1413,14 +1417,14 @@ void FramebufferDevice::fb_switch_release()
     ioctl(tty, VT_RELDISP, 1);
     fb_switch_state = FB_INACTIVE;
     if (debug)
-	write(2,"vt: release\n",12);
+	fprintf(stderr,"vt: release\n",12);
 }
 void FramebufferDevice::fb_switch_acquire()
 {
     ioctl(tty, VT_RELDISP, VT_ACKACQ);
     fb_switch_state = FB_ACTIVE;
     if (debug)
-	write(2,"vt: acquire\n",12);
+	fprintf(stderr,"vt: acquire\n",12);
 }
 int FramebufferDevice::fb_switch_init()
 {
@@ -1461,13 +1465,13 @@ void FramebufferDevice::fb_switch_signal(int signal)
 	/* release */
 	fb_switch_state = FB_REL_REQ;
 	if (debug)
-	    write(2,"vt: SIGUSR1\n",12);
+	    fprintf(stderr,"vt: SIGUSR1\n",12);
     }
     if (signal == SIGUSR2) {
 	/* acquisition */
 	fb_switch_state = FB_ACQ_REQ;
 	if (debug)
-	    write(2,"vt: SIGUSR2\n",12);
+	    fprintf(stderr,"vt: SIGUSR2\n",12);
     }
 }
 

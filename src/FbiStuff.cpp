@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -80,11 +80,17 @@ op_3x3_init(struct ida_image *src, struct ida_rect *rect,
     struct op_3x3_handle *h;
 
     h = (struct op_3x3_handle*)malloc(sizeof(*h));
+    if(!h)goto oops;
     memcpy(&h->filter,args,sizeof(*args));
     h->linebuf = (int*)malloc(sizeof(int)*3*(src->i.width));
+    if(!h->linebuf)goto oops;
 
     *i = src->i;
     return h;
+oops:
+    if(h && h->linebuf)free(h->linebuf);
+    if(h)free(h);
+    return NULL;
 }
 
 static int inline
@@ -221,12 +227,18 @@ op_sharpe_init(struct ida_image *src, struct ida_rect *rect,
     struct op_sharpe_parm *args = (struct op_sharpe_parm *)parm;
     struct op_sharpe_handle *h;
 
-    h = (struct op_sharpe_handle *)malloc(sizeof(*h));
+    h = (struct op_sharpe_handle *)calloc(sizeof(*h),1);
+    if(!h)goto oops;
     h->factor  = args->factor;
     h->linebuf = (int *)malloc(sizeof(int)*3*(src->i.width));
+    if(!h->linebuf)goto oops;
 
     *i = src->i;
     return h;
+oops:
+    if(h && h->linebuf)free(h->linebuf);
+    if(h)free(h);
+    return NULL;
 }
 
 static void
@@ -277,12 +289,14 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
     struct op_resize_parm *args = (struct op_resize_parm *)parm;
     struct op_resize_state *h;
 
-    h = (struct op_resize_state *)malloc(sizeof(*h));
+    h = (struct op_resize_state *)calloc(sizeof(*h),1);
+    if(!h)goto oops;
     h->width  = args->width;
     h->height = args->height;
     h->xscale = (float)args->width/src->i.width;
     h->yscale = (float)args->height/src->i.height;
     h->rowbuf = (float*)malloc(src->i.width * 3 * sizeof(float));
+    if(!h->rowbuf)goto oops;
     h->srcrow = 0;
     h->inleft = 1;
 
@@ -291,6 +305,9 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
     i->height = args->height;
     i->dpi    = args->dpi;
     return h;
+    oops:
+    if(h)free(h);
+    return NULL;
 }
 
 #if 1
@@ -753,6 +770,7 @@ op_rotate_init(struct ida_image *src, struct ida_rect *rect,
     float  diag;
 
     h = (struct op_rotate_state *)malloc(sizeof(*h));
+    if(!h)return NULL;
     /* dez's : FIXME : NULL check missing */
     h->angle = args->angle * 2 * M_PI / 360;
     h->sina  = sin(h->angle);
@@ -1090,6 +1108,8 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
     data = desc_3x3.init(src, &rect, &img.i, &filter);
 
     img.data   = (unsigned char*)malloc(img.i.width * img.i.height * 3);
+    if(!img.data)return NULL;
+
     for (y = 0; y < (int)img.i.height; y++)
 	desc_3x3.work(src, &rect, img.data+3*img.i.width*y, y, data);
     desc_3x3.done(data);
@@ -1309,6 +1329,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 {
     /*
      * This function is complicated and should be reworked, in some way.
+     * FIXME : many memory allocations are not checked for failure: DANGER
      * */
     char command[1024];
     struct ida_loader *loader = NULL;
@@ -1336,7 +1357,10 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     }
     } else fp=fd;
     memset(blk,0,sizeof(blk));
-    fread(blk,1,sizeof(blk),fp);
+    if(fread(blk,1,sizeof(blk),fp)<0)
+    {
+      return NULL;	/* new */
+    }
     rewind(fp);
 
     if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY))
@@ -1511,7 +1535,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 #endif
     data = loader->init(fp,filename,page,&img->i,0);
 #ifdef FIM_READ_STDIN_IMAGE
-    if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); dup(2);/* if the image is loaded from stdin, we close its stream */}
+    if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
 #endif
     if (NULL == data) {
 	if(cc.displaydevice->debug)
@@ -1633,7 +1657,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
      * this is code for a preliminary 'canvas' enlargement prior to image rotation.
      * experimental code.
      *
-     * WARNING : this code seems buggy!
+     * WARNING : this code seems buggy! (it is a horrible hack)
      * */   
     int diagonal = (int) ceilf( sqrtf( (float)( src->i.width * src->i.width  +  src->i.height * src->i.height) ) + 1.0f );
     int n_extra  = (diagonal - src->i.height  )/2;

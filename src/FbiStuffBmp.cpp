@@ -2,7 +2,7 @@
 /*
  FbiStuffBmp.cpp : fbi functions for BMP files, modified for fim
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -98,13 +98,16 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct bmp_state *h;
-    
-    h = (struct bmp_state *)malloc(sizeof(*h));
+    int fr;
+
+    h = (struct bmp_state *)calloc(sizeof(*h),1);
+    if(!h)goto oops;
     memset(h,0,sizeof(*h));
     h->fp = fp;
 
     fseek(fp,10,SEEK_SET);
-    fread(&h->hdr,sizeof(struct bmp_hdr),1,fp);
+    fr=fread(&h->hdr,sizeof(struct bmp_hdr),1,fp);
+    if(!fr)goto oops;
 
 #if BYTE_ORDER == BIG_ENDIAN
     h->hdr.foobar      = le32_to_cpu(h->hdr.foobar);
@@ -154,7 +157,8 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 	h->hdr.num_colors = 256;
     if (h->hdr.num_colors) {
 	fseek(fp,14+h->hdr.size,SEEK_SET);
-	fread(&h->cmap,sizeof(struct bmp_cmap),h->hdr.num_colors,fp);
+	fr=fread(&h->cmap,sizeof(struct bmp_cmap),h->hdr.num_colors,fp);
+        if(!fr)goto oops;
     }
     
     i->width  = h->hdr.width;
@@ -165,7 +169,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
     return h;
 
  oops:
-    free(h);
+    if(h)free(h);
     return NULL;
 }
 

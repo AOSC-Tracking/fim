@@ -55,7 +55,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
     struct ppm_state *h;
     char line[1024],*fr;
 
-    h = (struct ppm_state*) malloc(sizeof(*h));
+    h = (struct ppm_state*) calloc(sizeof(*h),1);
     if(!h)return NULL;
     memset(h,0,sizeof(*h));
 
@@ -66,7 +66,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
     if(!fr)goto oops;
     while ('#' == line[0])
     {
-	fgets(line,sizeof(line),fp); /* skip comments */
+	fr=fgets(line,sizeof(line),fp); /* skip comments */
         if(!fr)goto oops;
     }
     sscanf(line,"%d %d",&h->width,&h->height);
@@ -84,7 +84,8 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
 
  oops:
     fclose(fp);
-    free(h);
+    if(h->row)free(h->row);
+    if(h)free(h);
     return NULL;
 }
 
@@ -92,8 +93,9 @@ static void
 ppm_read(unsigned char *dst, unsigned int line, void *data)
 {
     struct ppm_state *h = (struct ppm_state *) data;
-
-    fread(dst,h->width,3,h->infile);
+    int fr;
+    fr=fread(dst,h->width,3,h->infile);
+    if(fr){/* FIXME : there should be error handling */}
 }
 
 static void
@@ -101,9 +103,10 @@ pgm_read(unsigned char *dst, unsigned int line, void *data)
 {
     struct ppm_state *h = (struct ppm_state *) data;
     unsigned char *src;
-    int x;
+    int x,fr;
 
-    fread(h->row,h->width,1,h->infile);
+    fr=fread(h->row,h->width,1,h->infile);
+    if(!fr){/* FIXME : there should be error handling */ return ; }
     src = h->row;
     for (x = 0; x < h->width; x++) {
 	dst[0] = src[0];

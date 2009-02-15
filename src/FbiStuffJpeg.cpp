@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -150,7 +150,9 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     struct jpeg_state *h;
     jpeg_saved_marker_ptr mark;
     
-    h = (struct jpeg_state *)malloc(sizeof(*h));
+    h = (struct jpeg_state *)calloc(sizeof(*h),1);
+    if(!h) goto oops;
+
     memset(h,0,sizeof(*h));
     h->infile = fp;
 
@@ -187,6 +189,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 
 		    /* save away thumbnail data */
 		    h->thumbnail = malloc(ed->size);
+    		    if(!h->thumbnail) goto oops;
 		    h->tsize = ed->size;
 		    memcpy(h->thumbnail,ed->data,ed->size);
 		}
@@ -237,6 +240,9 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     }
 
     return h;
+oops:
+    if( h && h->thumbnail) free(h->thumbnail);
+    if( h ) free(h);
 }
 
 static void

@@ -60,6 +60,7 @@ bit24_init(FILE *fp, char *filename, unsigned int page,
     struct bit24_state *h;
     
     h = (struct bit24_state *)calloc(sizeof(*h),1);
+    if(!h)goto oops;
     memset(h,0,sizeof(*h));
     h->fp = fp;
     struct stat ss;
@@ -69,7 +70,7 @@ bit24_init(FILE *fp, char *filename, unsigned int page,
     i->height = h->h = (h->flen+(h->w*3-1)) / ( h->w*3 ); // should pad
     return h;
  oops:
-    free(h);
+    if(h)free(h);
     return NULL;
 }
 
