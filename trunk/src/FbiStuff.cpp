@@ -1339,6 +1339,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     FILE *fp;
     unsigned int y;
     void *data;
+    int fr=0;
     
     //WARNING
     //new_image = 1;
@@ -1357,8 +1358,9 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     }
     } else fp=fd;
     memset(blk,0,sizeof(blk));
-    if(fread(blk,1,sizeof(blk),fp)<0)
+    if((fr=fread(blk,1,sizeof(blk),fp))<0)
     {
+      /* should we care about the error code ? */
       return NULL;	/* new */
     }
     rewind(fp);

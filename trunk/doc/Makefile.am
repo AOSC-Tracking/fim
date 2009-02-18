@@ -3,7 +3,8 @@
 
 CLEANFILES= doctags *.o  tags
 
-EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man $(HTMLDOCS)
+HTMLDOCS=FIM.html fim.man.html  fimgs.man.html
+EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man
 
 man1_MANS = fim.man fimgs.man
 
@@ -12,9 +13,10 @@ htmldir = $(docdir)
 html_DATA = $(HTMLDOCS)
 doc_DATA = FIM.TXT
 
-all:	docs $(EXTRA_DIST)
+all:	$(EXTRA_DIST)
 
-docs:        $(HTMLDOCS)
+htmldocs:        $(HTMLDOCS)
+#docs:        $(HTMLDOCS)
 
 FIM.html fim-stylesheet.css: doctags FIM.TXT
 	./doctags FIM.TXT > tags ; ./vim2html.pl tags FIM.TXT

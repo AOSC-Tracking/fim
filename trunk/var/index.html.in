@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="generator" content="vim">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="keywords" content="fim, fbi improved, framebuffer image viewer, ascii art image viewer, aalib, sdl image viewer, framebuffer console image viewer">
+<meta name="description" content="">
+<title>fim : fbi improved home page</title>
+
+<link rel="stylesheet" type="text/css" href="fim.css">
+</head>
+
+<body bgcolor="#ffeedd" link="#AA6600" vlink="#884400">
+
+
+<table align="center" cellspacing="15pt" border="0" width="90%" >
+
+<!--
+<tr>
+<center>
+<a href="#welcome">welcome to the Fim homepage</a>
+<a href="#get">get Fim, get documentation</a>
+<a href="#misc">more documentation, misc info</a>
+</center>
+</tr>
+-->
+<tr>
+<td>
+
+<h5>
+
+&nbsp;<br>
+<br>
+
+<h3><a name="welcome">welcome to the FIM (Fbi IMproved) image viewer homepage </a></h3>
+<!-- We have not much to offer, if not a humble, little computer program, called Fim. -->
+
+FIM aims to be a highly customizable and scriptable
+image viewer targeted at users who are confortable with software
+
+<br>
+&nbsp;<br>
+
+
+
+<!-- <br> &nbsp;<br>
+Fim is <a href="http://www.fsf.org">free software</a>, and was brought to you for the sole purpose of enjoying the love of computing and sharing experience, feelings, passion.
+<br> &nbsp;<br>
+Of course, it can be useful, too. 
+<br> &nbsp;<br>
+ Read on to understand how and why.
+
+-->
+
+<br> &nbsp;<br>
+
+  It is based on the <a href="http://www.bytesex.org">Fbi</a> image viewer, by Gerd Hoffmann, 
+  and works in the
+   <a href="http://www.linux.org">Linux</a>
+   <a href="http://www.kernelhq.cc/browse-view.py?fv_nr=200556">framebuffer
+   console (so, it is not an <a href="http://www.x.org">X/Xorg</a> program! ).
+
+<br>
+&nbsp;<br>
+
+   <a href="http://www.autistici.org/dezperado/">FIM</a> is
+   <a href="http://www.fsf.org">free software</a>, and it ships under the
+   <a hreg="http://www.fsf.org/licensing">GPL</a>
+   software license, complete with
+   documentation, in form of a
+   <a href="FIM.html">doc/FIM.TXT</a>
+   documentation file,  man pages
+   <a href="fim.man.html">for fim</a> the 
+   <a href="fimgs.man.html">fimgs script</a>
+   ,lots
+   of comments in the <a href="http://code.autistici.org/svn/fim">code</a>, and some text files.
+<br> &nbsp;<br>
+
+
+Fim's official web page is located on Savannah:<a href="HOMEPAGE">HOMEPAGE</a>
+<br> &nbsp;<br>
+<br> &nbsp;<br>
+
+Fim is an idea by
+<!-- <a href="http://www.autistici.org/dezperado">dezperado</a> -->
+dezperado, although this software
+was inspired by the other, forementioned marvelous programs, and some science fiction movies.
+&nbsp;<br>
+
+
+<br> &nbsp;<br>
+<h3><a name="get"> fim documentation  </a></h3>
+
+<br> &nbsp;<br>
+
+Here are fim man pages:
+ <a href="fim.man.html">fim.man.html</a>
+ <a href="fimgs.man.html">fimgs.man.html</a>,
+
+<br> &nbsp;<br>
+README file:
+ <a href="README.html">README.html</a>,
+ <a href="README">README</a>.
+
+<br> &nbsp;<br>
+FIM.TXT file:
+ <a href="FIM.html">FIM.html</a>,
+ <a href="FIM.TXT">FIM.TXT</a>.
+
+
+<h3><a name="get"> get fim  </a></h3>
+
+
+<!--Fim aims towards respecting <a href="http://www.gnu.org">GNU</a> coding and documentation standards and conventions. -->
+
+<br> &nbsp;<br>
+
+
+<br> &nbsp;<br>
+<br> &nbsp;<br>
+You are welcome to download the latest (prerelease, dated DATE) snapshot of Fim here:
+<a href="fim-VERSION.tar.gz">fim-VERSION.tar.gz</a>
+<a href="SIG">SIG</a>
+( SIZE bytes ). 
+
+
+<br> &nbsp;<br>
+If you want to be sure of downloaded files authenticity, you should _at_least_ follow these steps:
+<h6>
+<pre>
+<br>
+wget FWP/TGZ
+wget FWP/SIG
+gpg --search 'dezperado autistici org'
+# import the key from a trusted keyserver by following on screen instructions
+gpg --verify SIG
+</pre>
+</h6>
+
+
+<br> &nbsp;<br>
+The typical sequence of actions to build Fim, which should suffice is :
+<h6>
+<pre>
+<br>
+tar xzf fim-VERSION.tar.gz 
+cd fim-VERSION 
+./configure --help=short 
+./configure 
+make 
+su -c "make install"
+</pre>
+</h6>
+
+
+<br> &nbsp;<br>
+Of course, there is a lot of
+<a href="FIM.html">documentation</a> available
+(here the <a href="README.html">README</a> page)
+.
+You are welcome to <a href="FIM.html#intro">browse</a> it even before downloading Fim.
+
+There are no screenshots of Fim here! Frankly, they would be useless, since Fim runs fullscreen, and the only
+thing of note would be a nice textual console on the bottom of the screen. But there is no need for making
+screenshots of this :)
+
+
+<br> &nbsp;<br>
+If you are interested at the SVN (subversion) <a href="REPOSITORY">repository</a>,
+typing :
+<h6>
+<pre>
+<br>
+svn export REPOSITORY
+</pre>
+</h6>
+at the command prompt will download the freshest (possibly unstable) version of Fim in a directory named 'fim'.
+<h3><a name="misc"> misc</a> </h3>
+
+<br> &nbsp;<br>
+You can support Fim by supporting the <a href="http://www.autistici.org">A/I collective</a>, whom network kindly hosts Fim.
+
+<br> &nbsp;<br>
+<a href="FIM-slides-mohp2007.pdf">Fim introduction (in italian) slides, from ground-up</a>.
+<br> &nbsp;<br>
+
+<br> &nbsp;<br>
+<a href="FIM.html#basics">First steps in Fim</a>.
+<br> &nbsp;<br>
+
+<br> &nbsp;<br>
+More information about <a href="FIM.html#bugs">bug reporting</a>.
+<br> &nbsp;<br>
+
+<br> &nbsp;<br>
+More information about the <a href="FIM.html#framebuffer">Linux Framebuffer</a> in the docs.
+<br> &nbsp;<br>
+
+<br> &nbsp;<br>
+More information about the <a href="FIM.html#syntax-ref">Fim language syntax</a>.
+<br> &nbsp;<br>
+
+<br> &nbsp;<br>
+Alternatively, read the <a href="FIM.html#faq">FAQ</a> in the documentation, and learn how to make Fim better!
+<br> &nbsp;<br>
+
+</h5>
+
+</td></tr></table>
+
+</body>
+
