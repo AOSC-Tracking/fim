@@ -1,0 +1,54 @@
+
+.newclass { }
+.testonormale { background-color: #252525 }
+
+h1 { color: #d2d2d2; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; font-family: "Courier New", Tahoma, Courier, Monaco; text-decoration: none; background: black url(pix/back.gif) repeat scroll; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua; }
+
+h2 { color: #fff; font-weight: bolder; font-size: 30pt; line-height: 30pt; font-family: Courier; background-color: #363636; text-align: center; text-transform: uppercase; text-indent: 0pt; letter-spacing: 15pt; margin: 0pt; padding-top: 0pt; padding-bottom: -2pt; border-bottom: none }
+
+h3 { color: white; font-size: 24pt; line-height: 24pt; font-family: "Courier New", Courier, Monaco; background: #2c2c2c fixed; padding-top: 8pt; padding-bottom: 8pt; padding-left: 50pt }
+
+h4 { color: white; font-style: oblique; font-weight: bolder; font-size: 10pt; line-height: 10pt; font-family: "Courier New", Tahoma, Courier, Monaco; background-color: #000; text-align: right; text-transform: lowercase; margin-top: 0pt; margin-right: 0pt; margin-left: 0pt; padding-top: 0pt; padding-bottom: -5pt }
+
+h5 { color: white; font-weight: lighter; font-size: 14pt; line-height: 11pt; font-family: "MS Sans Serif"; background-color: #000; text-indent: 0pt; margin: 0pt; padding: 10pt 0pt 0pt 10pt; border-width: 40pt 5pt 5pt 100pt }
+
+h6 { color: white; font-weight: lighter; font-size: 12pt; line-height: 12pt; font-family: "MS Sans Serif"; background-color: gray; text-indent: 10pt; margin: 10pt; padding: 10pt; border-width: 0pt 0pt 50pt 0pt }
+
+h7 { color: white; font-weight: lighter; font-size: 12pt; line-height: 12pt; font-family: "MS Sans Serif"; background-color: gray; text-indent: 0pt; margin: 0pt; padding: 0pt; border-width: 0pt 5pt 0pt 5pt }
+
+h8  { color: #2e2e2e; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; font-family: "Courier New", Tahoma, Courier, Monaco; text-decoration: none; background: black url(pix/back.gif) repeat scroll; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua }
+
+A:hover{
+	text-decoration: line-through;
+	background-color: #2e2e2e;
+	color: lime;
+}
+
+A{
+	text-decoration: underline;
+	color: #daffe0;
+}
+A:visited
+{
+}
+
+BODY {
+	scrollbar-face-color: #666666;
+	scrollbar-shadow-color: #333333; 
+	scrollbar-highlight-color: #333333;
+	scrollbar-3dlight-color: #333333; 
+	scrollbar-darkshadow-color: #333333;
+	scrollbar-track-color: #333333; 
+	scrollbar-arrow-color: #FFEB00;
+	link: #b6ffbc;
+	alink: #b6ffbc;
+	vlink: #b6ffbc;
+	background-color: #000000;
+	background-image:;
+	color: white;
+	border:20 pt;
+	margin-left: 200 pt;
+	margin-right: 200 pt;
+	padding:20 pt;
+	font-link:
+}

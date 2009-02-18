@@ -38,10 +38,6 @@
 FIM aims to be a highly customizable and scriptable
 image viewer targeted at users who are confortable with software
 
-<br>
-&nbsp;<br>
-
-
 
 <!-- <br> &nbsp;<br>
 Fim is <a href="http://www.fsf.org">free software</a>, and was brought to you for the sole purpose of enjoying the love of computing and sharing experience, feelings, passion.
@@ -60,8 +56,8 @@ Of course, it can be useful, too.
    <a href="http://www.kernelhq.cc/browse-view.py?fv_nr=200556">framebuffer
    console (so, it is not an <a href="http://www.x.org">X/Xorg</a> program! ).
 
-<br>
-&nbsp;<br>
+<br> &nbsp;<br>
+<br> &nbsp;<br>
 
    <a href="http://www.autistici.org/dezperado/">FIM</a> is
    <a href="http://www.fsf.org">free software</a>, and it ships under the
@@ -75,9 +71,12 @@ Of course, it can be useful, too.
    ,lots
    of comments in the <a href="http://code.autistici.org/svn/fim">code</a>, and some text files.
 <br> &nbsp;<br>
-
+<br> &nbsp;<br>
 
 Fim's official web page is located on Savannah:<a href="HOMEPAGE">HOMEPAGE</a>
+<br> &nbsp;<br>
+
+Fim's official mirror for stable releases is located on Savannah mirror network:<a href="MIRROR">MIRROR</a>
 <br> &nbsp;<br>
 <br> &nbsp;<br>
 
@@ -103,10 +102,14 @@ README file:
  <a href="README">README</a>.
 
 <br> &nbsp;<br>
+NEWS file:
+ <a href="NEWS.html">NEWS.html</a>,
+ <a href="NEWS">NEWS</a>.
+
+<br> &nbsp;<br>
 FIM.TXT file:
  <a href="FIM.html">FIM.html</a>,
  <a href="FIM.TXT">FIM.TXT</a>.
-
 
 <h3><a name="get"> get fim  </a></h3>
 

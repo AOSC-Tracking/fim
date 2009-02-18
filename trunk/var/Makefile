@@ -7,7 +7,9 @@ FIMSITE=html-dezperado
 SITEDIR=./www/
 FTPSCRIPT=./script.lftp
 SRCDIR=./
-URL=$$(cat $(FIMDIR)/README | grep "^Releases  "|sed s/^.*\ :.//g)/"fim-`cat $(FIMDIR)/VERSION`".tar.gz
+MIRROR=$$(cat $(FIMDIR)/README | grep "^Releases  "|sed s/^.*\ :.//g)
+URL=$(MIRROR)/"fim-`cat $(FIMDIR)/VERSION`".tar.gz
+
 TGZ="fim-`cat $(FIMDIR)/VERSION`".tar.gz
 SIG=$(TGZ).sig
 REPOSITORY=`cat $(FIMDIR)/README | grep "^Repository"|sed s/^.*\ :.//g`
@@ -33,6 +35,7 @@ $(SITEDIR)/index.html: index.html.in $(FIMDIR)/VERSION
 	mkdir -p $(SITEDIR)
 	m4 -DVERSION="$(FVERSION)"  \
 	-D REPOSITORY=$(REPOSITORY) \
+	-D MIRROR=$(MIRROR) \
 	-D TGZ=$(TGZ) \
 	-D SIG=$(SIG) \
 	-D URL=$(URL) \
@@ -49,7 +52,9 @@ site:	$(PAGES)
 	cd $(FIMDIR)/doc && make htmldocs
 	for i in $(FIMHTMLDOCS) ; do cp $(FIMDIR)/doc/$$i  $(SITEDIR) ; done
 	txt2html $(FIMDIR)/README > $(SITEDIR)/README.html
+	txt2html $(FIMDIR)/NEWS > $(SITEDIR)/NEWS.html
 	$(CP) $(FIMDIR)/README  $(SITEDIR)/README
+	$(CP) $(FIMDIR)/NEWS  $(SITEDIR)/NEWS
 	$(CP) $(FIMDIR)/doc/FIM.TXT  $(SITEDIR)/FIM.TXT
 	$(CP) ../$(TGZ) $(SITEDIR)
 	$(CP) ../$(SIG) $(SITEDIR)
@@ -73,7 +78,7 @@ up:
 	echo "# generated automatically" > $(FTPSCRIPT)
 	echo "open dezperado@ftp4.autistici.org" >> $(FTPSCRIPT)
 	echo "ls" www/ >> $(FTPSCRIPT)
-	echo "mirror -v --log=./ftp.log -R -n  $(SITEDIR) $(FIMSITE)" >> $(FTPSCRIPT)
+	echo "mirror -v --log=./ftp.log -R -n --exclude '.svn/*'  $(SITEDIR) $(FIMSITE)" >> $(FTPSCRIPT)
 	echo "ls" www/ >> $(FTPSCRIPT)
 	lftp -f $(FTPSCRIPT)
 	cat ftp.log
