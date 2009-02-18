@@ -18,7 +18,8 @@ SUBDIRS =
 
 PREFIX=gentoo/media-gfx/fim
 
-EXTRA_DIST=debian/control $(PREFIX)/fim-$(VERSION).ebuild
+# 20090217 : who cares, anyway ?
+# EXTRA_DIST=debian/control $(PREFIX)/fim-$(VERSION).ebuild
 
 $(PREFIX)/Manifest: $(PREFIX)/fim-$(VERSION).ebuild Makefile
 	cd $(PREFIX)/ && ebuild fim-$(VERSION).ebuild digest

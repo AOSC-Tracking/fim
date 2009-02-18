@@ -8,6 +8,8 @@
  * experimental PDF, PS, DJVU file support
  * history file support (~/.fim_history)
  * seamless caching and prefetching integration
+ * viewing of any type files as bitmaps (unset bits black, set bits white)
+ * viewing of any type files as pixmaps (as RGB triples)
  * framebuffer driver now can be disabled at compile time
 
         	Version 0.3-alpha
