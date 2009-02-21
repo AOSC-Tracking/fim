@@ -1417,14 +1417,14 @@ void FramebufferDevice::fb_switch_release()
     ioctl(tty, VT_RELDISP, 1);
     fb_switch_state = FB_INACTIVE;
     if (debug)
-	fprintf(stderr,"vt: release\n",12);
+	fprintf(stderr,"vt: release\n");
 }
 void FramebufferDevice::fb_switch_acquire()
 {
     ioctl(tty, VT_RELDISP, VT_ACKACQ);
     fb_switch_state = FB_ACTIVE;
     if (debug)
-	fprintf(stderr,"vt: acquire\n",12);
+	fprintf(stderr,"vt: acquire\n");
 }
 int FramebufferDevice::fb_switch_init()
 {
@@ -1465,13 +1465,13 @@ void FramebufferDevice::fb_switch_signal(int signal)
 	/* release */
 	fb_switch_state = FB_REL_REQ;
 	if (debug)
-	    fprintf(stderr,"vt: SIGUSR1\n",12);
+	    fprintf(stderr,"vt: SIGUSR1\n");
     }
     if (signal == SIGUSR2) {
 	/* acquisition */
 	fb_switch_state = FB_ACQ_REQ;
 	if (debug)
-	    fprintf(stderr,"vt: SIGUSR2\n",12);
+	    fprintf(stderr,"vt: SIGUSR2\n");
     }
 }
 

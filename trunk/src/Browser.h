@@ -91,7 +91,9 @@ class Browser
 		nofile(""),
 		cp(0),
 		commandConsole(cc),
+#ifdef FIM_READ_STDIN_IMAGE
 		default_image(NULL),
+#endif
 		last_regexp(fim::string()),
 		cache(Cache())
 		{}

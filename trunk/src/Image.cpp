@@ -627,11 +627,13 @@ fim::string Image::getInfo()
 
 	bool Image::have_nextpage(int j)const
 	{
+		/* FIXME : missing overflow check */
 		return (is_multipage() && page+j < fimg->i.npages);
 	} 
 
 	bool Image::have_prevpage(int j)const
 	{
+		/* FIXME : missing overflow check */
 		return (is_multipage() && page-j >= 0);
 	} 
 

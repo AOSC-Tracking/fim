@@ -2423,7 +2423,9 @@ namespace fim
 
 	void CommandConsole::dumpDefaultFimrc()const
 	{
+#ifdef FIM_DEFAULT_CONFIGURATION
 		std::cout << FIM_DEFAULT_CONFIG_FILE_CONTENTS << "\n";
+#endif
 	}
 
 	fim::string CommandConsole::set(const args_t &args)
@@ -2704,14 +2706,15 @@ namespace fim
 		 * FIXME : absolutely experimental
 		 */
 		fim::string s;
-		variables_t::const_iterator vi;
+		/*variables_t::const_iterator vi;
 		for( vi=variables.begin();vi!=variables.end();++vi)
 		{
 			s+=vi->first;
 			s+=" : ";
-			s+=vi->second.getHelp();
+			s+=Var::var_help_db_query(vi->first);
 			s+="\n";
-		}
+		}*/
+		s+= Var::get_variables_reference();
 		return s;
 	}
 

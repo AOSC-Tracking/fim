@@ -39,7 +39,6 @@ class Var
 	};
 	fim::string s;
 	public:
-	fim::string getHelp()const{return "the help system for variables is still incomplete";}
 	Var(const Var &v)
 	:type(0),i(0),s(fim::string())
 	{
@@ -210,7 +209,11 @@ class Var
 	{
 		return (type==v.getType()) && (i==v.getInt());
 	}*/
+	static fim::string var_help_db_query(const fim::string &id);
+	static fim::string get_variables_reference();
+	static void var_help_db_init();
 };
+
 }
 
 

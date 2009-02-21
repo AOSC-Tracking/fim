@@ -235,7 +235,6 @@ int help_and_exit(char *argv0, int code=0)
 		int c;
 		int ndd;/* FIXME : on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
-		Image* stream_image=NULL;
 		//g_fim_no_framebuffer=0;
 	    	g_fim_output_device="";
 	
@@ -266,20 +265,20 @@ int help_and_exit(char *argv0, int code=0)
 		case 'b':
 		    //fim's
 		    //FIXME: still needs some tricking .. 
-		    cc.setVariable(FIM_VID_BINARY_DISPLAY,1);// necessary for prefetched images (FIXME : dangerous statement ?)
 		    if(optarg && strstr(optarg,"1")==optarg && !optarg[1])
-		    	cc.setVariable(FIM_VID_BINARY_DISPLAY_BPP,1);
+			{
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,1);
+			}
 		    else
 		    if(optarg && strstr(optarg,"24")==optarg && !optarg[2])
-		    	cc.setVariable(FIM_VID_BINARY_DISPLAY_BPP,24);
+			{
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,24);
+			}
                     else
 		    {
 			if(optarg)std::cerr<<"Warning : the --binary option supports 1 or 24 bpp depths. Using 24.\n";
-		    	cc.setVariable(FIM_VID_BINARY_DISPLAY_BPP,24);
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,24);
                     }
-	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FIM_VID_BINARY_DISPLAY"=1;");
-	#endif
 		    break;
 		case 'A':
 		    //fbi's
@@ -531,6 +530,7 @@ int help_and_exit(char *argv0, int code=0)
 			FILE *tfd=NULL;
 			if( ( tfd=fim_fread_tmpfile(stdin) )!=NULL )
 			{	
+				Image* stream_image=NULL;
 				/*
 				 * Note that it would be much nicer to do this in another way,
 				 * but it would require to rewrite much of the file loading stuff
@@ -612,6 +612,7 @@ int main(int argc,char *argv[])
 	 * ...someday.
 	 * */
 	FimInstance fiminstance;
+	Var::var_help_db_init();
 	return fiminstance.main(argc,argv);
 }
 

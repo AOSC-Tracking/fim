@@ -40,13 +40,21 @@ conf.h:       fimrc
 	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
 	echo '"";' >> conf.h
 
-fim.cpp  :	version.h
+fim.cpp  :	version.h help.cpp
+
 version.h:	../config.h
 	grep define ../config.h | grep FIM | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
 	echo "\"\n\"" >> version.h
 	grep define ../config.h | grep FIM.*'"' | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> version.h
 	grep undef ../config.h | grep FIM | sort | sed 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]\+\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> version.h
 	echo  '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> version.h
+
+help.cpp: fim.h
+	echo -e "#ifdef FIM_WANT_INLINE_HELP\n" > help.cpp
+	grep   '^#define FIM_VID' fim.h | sed 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/fim_var_help_db[\1]=\3;/g' >> help.cpp
+	echo '#endif' >> help.cpp
+Var.o : help.cpp
+	
 
 
 # the following sources are built at make time
@@ -99,6 +107,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Window.h \
 	common.h \
 	conf.h \
+	help.cpp \
 	version.h \
 	fim.h \
 	fim_stream.h \
@@ -137,7 +146,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	string.cpp
 
 CommandConsole.o: conf.h defaultConfiguration.o
-fim.o: version.h
+fim.o: version.h help.cpp
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
