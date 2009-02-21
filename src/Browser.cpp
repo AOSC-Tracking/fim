@@ -108,11 +108,6 @@ namespace fim
 		/*
 		 * we initialize to no file the current file name
 		 */
-#ifndef FIM_WINDOWS
-		only_viewport = new Viewport();
-		// DANGER !!
-		// EXCEPTIONS NEEDED
-#endif
 		cp=0;	//and to file index 0 (no file)
 	}
 
@@ -1348,15 +1343,10 @@ namespace fim
 		/*
 		 *	a const pointer to the currently loaded image
 		 */
-	#ifdef FIM_WINDOWS
 		if( commandConsole.current_viewport() )
 			return commandConsole.current_viewport()->c_getImage();
 		else
 			return NULL;
-	#else
-		if(!only_viewport)return NULL;
-		return only_viewport->c_getImage();
-	#endif
 	}
 
 	Image *Browser::image()const
@@ -1364,15 +1354,10 @@ namespace fim
 		/*
 		 *	the image loaded in the current viewport is returned
 		 */
-	#ifdef FIM_WINDOWS
 		if( commandConsole.current_viewport() )
 			return commandConsole.current_viewport()->getImage();
 		else
 			return NULL;
-	#else
-		if(!only_viewport)return NULL;
-		return only_viewport->getImage();
-	#endif
 	}
 
 	Viewport* Browser::viewport()const
@@ -1383,12 +1368,7 @@ namespace fim
 		 *
 		 * NULL is returned in case no viewport is loaded.
 		 * */
-#ifdef FIM_WINDOWS
-
 		return (commandConsole.current_viewport());
-#else
-		return only_viewport;
-#endif
 	}
 
 	fim::string Browser::current()const

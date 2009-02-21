@@ -61,6 +61,7 @@ int fim_common_test();
 
 double getmilliseconds();
 const char * fim_getenv(const char * name);
+FILE * fim_fread_tmpfile(FILE * fp);
 
 /* exceptions */
 typedef int FimException;

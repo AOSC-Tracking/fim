@@ -173,6 +173,12 @@ Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/) ...
  Libraries originally required by Fbi but removed from Fim :
  	libFS, libCURL, libLIRC
 
+
+   GNU Flex version prior to 2.5.4a and GNU Bison version prior 1.875d" are
+   known to give compilation problems, so make sure you have newer versions of
+   these. Note that Flex 2.5.4a comes after Flex-2.5.4.
+   This note is especially precious for Debian/Ubuntu users.
+
 ================================================================================
 	5		Run Time Requirements
 ================================================================================

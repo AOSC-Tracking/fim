@@ -296,8 +296,10 @@ class CommandConsole
 	void appendPostExecutionCommand(const fim::string &c);
 	bool appendedPostInitCommand()const;
 
-#ifdef FIM_WINDOWS
 	Viewport* current_viewport()const;
+#ifdef FIM_WINDOWS
+#else
+	Viewport* viewport;
 #endif
 	void dumpDefaultFimrc()const;
 

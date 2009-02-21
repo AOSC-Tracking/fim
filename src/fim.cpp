@@ -529,13 +529,8 @@ int help_and_exit(char *argv0, int code=0)
 			 * we read a whole image file from stdin
 			 * */
 			FILE *tfd=NULL;
-			if( ( tfd=tmpfile() )!=NULL )
+			if( ( tfd=fim_fread_tmpfile(stdin) )!=NULL )
 			{	
-				/* todo : read errno in case of error and print some report.. */
-				const size_t buf_size=4096;
-				char buf[buf_size];ssize_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
-				while( (rc=read(0,buf,buf_size))>0 ){ wc=fwrite(buf,rc,1,tfd); if(wc!=rc){/* FIXME : this error condition should be handled */}}
-				rewind(tfd);
 				/*
 				 * Note that it would be much nicer to do this in another way,
 				 * but it would require to rewrite much of the file loading stuff

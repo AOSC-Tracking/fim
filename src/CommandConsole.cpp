@@ -332,7 +332,7 @@ namespace fim
 	browser(*this)
 	//,framebufferdevice(_framebufferdevice)
 	,dummydisplaydevice(this->mc)
-	,displaydevice(displaydevice)
+	,displaydevice(displaydevice)	/* the display device could be NULL ! (FIXME) */
 	{
 		appended_post_init_command=false;
 		fim_uninitialized = 1; // new
@@ -594,6 +594,15 @@ namespace fim
 		 * TODO: exceptions should be launched here in case ...
 		 * */
 		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"), window,&Window::cmd));
+#else
+		try
+		{
+			viewport = new Viewport(*this);
+		}
+		catch(FimException e)
+		{
+			if( e == FIM_E_NO_MEM || true ) quit(FIM_E_NO_MEM);
+		}
 #endif
 
 		show_must_go_on=1;
@@ -2358,7 +2367,6 @@ namespace fim
 		return postInitCommand!=fim::string("");
 	}
 
-#ifdef FIM_WINDOWS
 	Viewport* CommandConsole::current_viewport()const
 	{
 		/*
@@ -2366,9 +2374,14 @@ namespace fim
 		 *
 		 * TODO : did we catch all exceptions ?
 		 * */
+#ifdef FIM_WINDOWS
 		return current_window().current_viewportp();
+#else
+		return viewport;
+#endif
 	}
 
+#ifdef FIM_WINDOWS
 	const Window & CommandConsole::current_window()const
 	{
 		/*
@@ -2551,6 +2564,7 @@ namespace fim
 		/*
 		 * the display device should exit cleanly to avoid cluttering the console
 		 * ... or the window system
+		 * used by : fb_catch_exit_signals() : should this matter ?
 		 * */
 
 		if(displaydevice) displaydevice->finalize();
