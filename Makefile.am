@@ -23,6 +23,11 @@ EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL INSTALL.TXT  README README.FI
 srcdir = src
 
 # still unfinished
+signed-tgzdist: dist
+	gpg -sbv -u EF1258B8 $(distdir).tar.gz
+	ls -l $(distdir).tar.gz  $(distdir).tar.gz.sig
+
+# still unfinished
 signed-dist: dist
 	make dist-bzip2 && gpg -sbv -u EF1258B8 $(distdir).tar.bz2
 	ls -l $(distdir).tar.bz2 $(distdir).tar.bz2.sig

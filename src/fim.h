@@ -262,9 +262,9 @@ namespace fim
  * One glorious day these macros will serve to build automatically documentation.
  * */
 #define FIM_CMD_HELP_CD			"cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last \":cd {path} command\")"
-#define FIM_CMD_PWD_CD			"print the current directory name."
-#define FIM_CMD_EVAL_CD			"evaluates the arguments as commands, executing them."
-#define FIM_CMD_SYSTEM_CD		"system {expr}: get the output of the shell command {expr}."
+#define FIM_CMD_HELP_PWD			"print the current directory name."
+#define FIM_CMD_HELP_EVAL			"evaluates the arguments as commands, executing them."
+#define FIM_CMD_HELP_SYSTEM		"system {expr}: get the output of the shell command {expr}. (uses popen()"
 
 /*
  * Some Fim internals flags.

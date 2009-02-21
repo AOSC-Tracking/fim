@@ -111,6 +111,7 @@ struct option fim_options[] = {
     {"script-from-stdin",      no_argument,       NULL, 'p'},
     {"write-scriptout",      required_argument,       NULL, 'W'},
     {"output-device",      required_argument,       NULL, 'o'},
+    {"dump-reference-help",      optional_argument,       NULL, 0xd15cbab3},/* note : still undocumented switch */
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -182,8 +183,9 @@ int help_and_exit(char *argv0, int code=0)
 	    std::cout << " where OPTIONS are taken from :\n";
 	    for(size_t i=0;i<(sizeof(fim_options)/sizeof(struct option))-1;++i)
 	    {	
+		if(isascii(fim_options[i].val)){
 	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
-	   	else std::cout << "\t-";
+	   	else std::cout << "\t-";}else std::cout<<"\t";
 		std::cout << "\t\t";
 	    	std::cout << "--"<<fim_options[i].name ;
 		switch(fim_options[i].has_arg){
@@ -457,6 +459,11 @@ int help_and_exit(char *argv0, int code=0)
 		    //fim's
 		    	g_fim_output_device=optarg;
 		    break;
+		case 0xd15cbab3:
+		    //fim's
+		    cc.dump_reference_manual(args_t());
+	            std::exit(0);
+		    break;
 	#ifdef FIM_READ_STDIN
 		case '-':
 		    //fim's
@@ -534,7 +541,10 @@ int help_and_exit(char *argv0, int code=0)
 				 * but it would require to rewrite much of the file loading stuff
 				 * (which is quite fbi's untouched stuff right now)
 				 * */
-				stream_image=new Image(FIM_STDIN_IMAGE_NAME,tfd);
+				try{
+					stream_image=new Image(FIM_STDIN_IMAGE_NAME,tfd);
+				}catch (FimException e){/* write me */}
+
 				// DANGEROUS TRICK!
 				cc.browser.set_default_image(stream_image);
 				if(!cc.browser.cache.setAndCacheStdinCachedImage(stream_image))

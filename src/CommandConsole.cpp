@@ -424,21 +424,21 @@ namespace fim
 		addCommand(new Command(fim::string("set_interactive_mode"  ),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
 		addCommand(new Command(fim::string("set_console_mode"  ),fim::string("sets console mode"),this,&CommandConsole::set_in_console));
 #ifndef FIM_NO_SYSTEM
-		addCommand(new Command(fim::string("system"  ),fim::string(FIM_CMD_SYSTEM_CD),this,&CommandConsole::system));
+		addCommand(new Command(fim::string("system"  ),fim::string(FIM_CMD_HELP_SYSTEM),this,&CommandConsole::system));
 #endif
 		addCommand(new Command(fim::string("cd"      ),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::cd));
-		addCommand(new Command(fim::string("pwd"     ),fim::string(FIM_CMD_PWD_CD   ),this,&CommandConsole::pwd));
+		addCommand(new Command(fim::string("pwd"     ),fim::string(FIM_CMD_HELP_PWD   ),this,&CommandConsole::pwd));
 		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
 		addCommand(new Command(fim::string("stdout"  ),fim::string("writes to stdout"),this,&CommandConsole::stdout));
 #ifdef FIM_PIPE_IMAGE_READ
-		addCommand(new Command(fim::string("pread"  ),fim::string("executes the arguments as a shell command and reads the input as an image file"),this,&CommandConsole::pread));
+		addCommand(new Command(fim::string("pread"  ),fim::string("executes the arguments as a shell command and reads the input as an image file (uses popen)"),this,&CommandConsole::pread));
 #endif
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string("start_recording"  ),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));
 		addCommand(new Command(fim::string("stop_recording"  ),fim::string("stops recording of commands"),this,&CommandConsole::stop_recording));
 		addCommand(new Command(fim::string("dump_record_buffer"  ),fim::string("dumps on screen record buffer"),this,&CommandConsole::dump_record_buffer));
 		addCommand(new Command(fim::string("execute_record_buffer"  ),fim::string("executes the record buffer"),this,&CommandConsole::execute_record_buffer));
-		addCommand(new Command(fim::string("eval"),fim::string(FIM_CMD_EVAL_CD),this,&CommandConsole::eval));
+		addCommand(new Command(fim::string("eval"),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::eval));
 		addCommand(new Command(fim::string("repeat_last"  ),fim::string("repeats the last action"),this,&CommandConsole::repeat_last));
 #endif
 		addCommand(new Command(fim::string("variables"  ),fim::string("displays the associated variables"),this,&CommandConsole::variables_list));
@@ -2683,5 +2683,62 @@ namespace fim
 #endif
 	}
 
+	fim::string CommandConsole::get_variables_reference()const
+	{
+		/*
+		 * returns the reference of registered functions
+		 * FIXME : absolutely experimental
+		 */
+		fim::string s;
+		variables_t::const_iterator vi;
+		for( vi=variables.begin();vi!=variables.end();++vi)
+		{
+			s+=vi->first;
+			s+=" : ";
+			s+=vi->second.getHelp();
+			s+="\n";
+		}
+		return s;
+	}
+
+	fim::string CommandConsole::get_commands_reference()const
+	{
+		/*
+		 * returns the reference of registered commands
+		 * FIXME : the help messages are quite laconic, right now.. so they should be enriched
+		 * FIXME : absolutely experimental
+		 */
+		fim::string s;
+		for(size_t i=0;i<commands.size();++i)
+		{
+			s+=(commands[i]->cmd);
+			s+=" : ";
+			s+=(commands[i])->getHelp();
+			s+="\n";
+		}
+		return s;
+	}
+
+	fim::string CommandConsole::get_reference_manual(const args_t& args)
+	{
+		/*
+		 * FIXME : absolutely experimental
+		 */
+		return
+		string("commands:\n")+
+		get_commands_reference()+
+		string("variables:\n")+
+		get_variables_reference()/*+
+		get_commands_reference()*/;
+	}
+
+	fim::string CommandConsole::dump_reference_manual(const args_t& args)
+	{
+		/*
+		 * FIXME : absolutely experimental
+		 */
+		std::cout << get_reference_manual(args);
+		return "";
+	}
 }
 

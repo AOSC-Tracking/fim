@@ -22,6 +22,7 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090218	implement a printf() like interface for customizing the status bar information
 20090215	more nightly build scripts and automated regression tests with reporting scripts
 20090215	look for 'BUG' in Browser.cpp
 20090213	rewrite the core in a way to avoid convert_line: there is a potentially big performance gain

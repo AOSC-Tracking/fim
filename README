@@ -15,14 +15,14 @@
 	1		Overview
 ================================================================================
 
-FIM aims to be a highly customizable and scriptable image viewer
- targeted at the users who are confortable with software
- like the Vim text editor or the Mutt mail user agent.
+FIM is a highly customizable and scriptable image viewer targeted at the
+users who are confortable with software like the Vim text editor or the Mutt
+mail user agent (it aims to be a swiss army knife for viewing images).
 
-It is based on the Fbi image viewer, by Gerd Hoffmann, and works in the 
-Linux framebuffer console ( so, it is not specifically an X program! ),
-but it is multidevice : it has X support, too (via the SDL library) and with the
-ascii art (aalib) output device.
+It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
+the Linux framebuffer console.
+It is multidevice : it has X support, too (via the SDL library) and it supports
+ascii art output (via the aalib library).
 
 FIM is free software, and it ships under the GPL software license, complete with
 documentation, in form of a doc/FIM.TXT documentation file, a man page, lots
@@ -32,15 +32,14 @@ of comments in the code, and some text files.
 	2		Description
 ================================================================================
 
-FIM aims to be a highly customizable and scriptable image viewer targeted at the
+FIM is a highly customizable and scriptable image viewer targeted at the
 users who are confortable with software like the Vim text editor or the Mutt
-mail user agent.
+mail user agent (it aims to be a swiss army knife for viewing images).
 
-It is based on the Fbi image viewer, by Gerd Hoffmann, and works in the Linux
-framebuffer console ( so, it is not an X program! ).
-
-However, recently FIM is been reworked to work with different graphical devices,
- like X (so, now it is an X program, too!) and aa (ascii art).
+It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
+the Linux framebuffer console.
+It is multidevice : it has X support, too (via the SDL library) and it supports
+ascii art output (via the aalib library).
 
 It is capable of regular expressions based (on filename) image viewing,vim-like
 autocommands, it offers GNU readline command line autocompletion and history,
@@ -101,6 +100,7 @@ Implemented features:
  - full         support for AAlib (Ascii Art rendering) (-o aa)
  - experimental support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
  - experimental PDF, PS, DJVU file support
+ - viewing any file as a binary/RGB pixelmap
 
 Yet unimplemented features :
 
@@ -326,7 +326,9 @@ which is licensed compatibly with the GPL.
 	10		Contacts, URLs
 ================================================================================
 
-You can contact the Fim author via email: dezperado_FOobAr_autistici_Baz_org, by
+Fim is (C) 2007-2009 Michele Martone.
+
+You can contact me via email: "dezperado_FOobAr_autistici_Baz_org", after
 replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
 
 If it is for a bug report or installation help, be sure of reading the
@@ -336,12 +338,21 @@ the TODO file, too)!
 
 
 Web Page     : http://savannah.nongnu.org/projects/fbi-improved/
+
 Mailing List : http://savannah.nongnu.org/mail/?group=fbi-improved
 	(or http://lists.nongnu.org/mailman/listinfo/fbi-improved-devel)
+
 Releases     : http://download.savannah.nongnu.org/releases/fbi-improved
+
 Repository   : http://code.autistici.org/svn/fim/
+
 Off.  Mirror : http://www.autistici.org/dezperado/fim/
-ChangeLog    : http://code.autistici.org/svn/fim/ChangeLog
+
+ChangeLog    : http://code.autistici.org/svn/fim/trunk/ChangeLog
+
+Bugs(unofficial): http://code.autistici.org/trac/fim/report
+
+Bugs (official) : http://savannah.nongnu.org/bugs/?group=fbi-improved
 
  $Id$
  vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=help:norl:

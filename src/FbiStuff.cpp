@@ -27,10 +27,12 @@
 #include "fim.h"
 #include "common.h"
 
-#include <stdio.h>
+#include <stdio.h>	/* fdopen */
+#include <unistd.h>	/* execlp (popen is dangerous) */
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <stdarg.h>	/* va_start, va_end, ... */
 
 namespace fim
 {
@@ -1324,6 +1326,51 @@ void FbiStuff::free_image(struct ida_image *img)
     }
 }
 
+FILE* FbiStuff::fim_execlp(const char *cmd, ...)
+{
+	/* new */
+	va_list ap;
+        int rc;
+	FILE *fp=NULL;
+	int p[2];
+	#define FIM_SUBPROCESS_MAXARGV 128
+	char * argv[FIM_SUBPROCESS_MAXARGV],*s;	/* FIXME */
+	int argc=0;
+	if(0!=pipe(p))
+		return NULL;
+
+	switch(fork())
+	{
+		case -1:
+		perror("fork");
+		close(p[0]);
+		close(p[1]);
+		return NULL;
+		case 0:/* child */
+		dup2(p[1],1/*stdout*/);
+		close(p[0]);
+		close(p[1]);
+	        va_start(ap,cmd);
+		while(NULL!=(s=va_arg(ap,char*)) && argc<FIM_SUBPROCESS_MAXARGV-1)
+		{
+			argv[argc]=s;
+			argc++;
+		}
+		argv[argc]=NULL;
+
+	        va_end(ap);
+	        rc=execvp(cmd,argv);
+		exit(rc);
+		default:/* parent */
+		close(p[1]);
+		fp = fdopen(p[0],"r");
+		if(NULL==fp)
+			return NULL;
+		return fp;
+	}
+	return NULL;
+}
+
 /*static struct ida_image**/
 struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 {
@@ -1333,8 +1380,8 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
      * */
     char command[1024];
     struct ida_loader *loader = NULL;
-    struct ida_image *img;
-    struct list_head *item;
+    struct ida_image *img=NULL;
+    struct list_head *item=NULL;
     char blk[512];
     FILE *fp;
     unsigned int y;
@@ -1422,9 +1469,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
 	cc.set_status_bar("please wait while piping through 'dia'...", "*");
-	sprintf(command,"dia \"%s\" -e \"%s\"",
-		filename,FIM_TMP_FILENAME".png" );
-	if ( (fp = popen(command,"r")) && 0==fclose (fp))
+	if(NULL!=(fp=fim_execlp("dia","dia",filename,"-e",FIM_TMP_FILENAME".png",NULL))&& 0==fclose (fp))
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
 		/* this could happen in case dia was removed from the system */
@@ -1445,8 +1490,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	 * dez's
 	 * */
 	/* a xfig file was found, and we try to use fig2dev */
-	sprintf(command,"fig2dev -L ppm \"%s\"",filename);
-	if (NULL == (fp = popen(command,"r")))
+	if(NULL==(fp=fim_execlp("fig2dev","fig2dev","-L","ppm",filename,NULL)))
 	    return NULL;
 	loader = &ppm_loader;
     }
@@ -1459,8 +1503,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	 * dez's
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
-	sprintf(command,"xcftopnm \"%s\"",filename);
-	if (NULL == (fp = popen(command,"r")))
+	if(NULL==(fp=fim_execlp("xcftopnm","xcftopnm",filename,NULL)))
 	    return NULL;
 	loader = &ppm_loader;
     }
@@ -1481,7 +1524,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	sprintf(command,"inkscape \"%s\" --export-png \"%s\"",
 		filename,FIM_TMP_FILENAME );
 
-	if ( (fp = popen(command,"r")) && 0==fclose (fp))
+	if(NULL!=(fp=fim_execlp("inkscape","inkscape",filename,"--export-png",FIM_TMP_FILENAME,NULL)) && 0==fclose(fp))
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
 		/* this could happen in case inkscape was removed from the system */
@@ -1515,9 +1558,8 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     if (NULL == loader) {
 	cc.set_status_bar(string("please wait while piping ")+string(filename)+string(" through 'convert'..."), "*");
 	/* no loader found, try to use ImageMagick's convert */
-	sprintf(command,"convert \"%s\" ppm:-",filename);
-	if (NULL == (fp = popen(command,"r")))
-	    return NULL;
+	if(NULL==(fp=fim_execlp("convert","convert",filename,"ppm:-",NULL)))
+		return NULL;
 	loader = &ppm_loader;
     }
 #endif
@@ -1527,7 +1569,8 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     if (NULL == loader) return NULL;
 
     /* load image */
-    img = (struct ida_image*)malloc(sizeof(*img));
+    img = (struct ida_image*)calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
+    if(!img)goto errl;
     memset(img,0,sizeof(*img));
 #ifdef FIM_EXPERIMENTAL_ROTATION
     /* 
@@ -1546,6 +1589,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	return NULL;
     }
     img->data = (unsigned char*)malloc(img->i.width * img->i.height * 3);
+    if(!img->data)goto errl;
 #ifndef FIM_IS_SLOWER_THAN_FBI
     for (y = 0; y < img->i.height; y++) {
 	loader->read(img->data + img->i.width * 3 * y, y, data);
@@ -1578,6 +1622,10 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 #endif
     loader->done(data);
     return img;
+errl:
+    if(img && img->data)free(img->data);
+    if(img )free(img);
+    return NULL;
 }
 
 /*all dez's

@@ -55,6 +55,7 @@ namespace fim
 class FbiStuff{
 public:
 static void free_image(struct ida_image *img);
+static FILE* fim_execlp(const char *arg, ...);/* new */
 static struct ida_image* read_image(char *filename, FILE* fd, int page=0);
 static struct ida_image* rotate_image90(struct ida_image *src, unsigned int rotation);
 static struct ida_image* rotate_image(struct ida_image *src, float angle);
