@@ -45,7 +45,7 @@ namespace fim
 			,top(0)
 			,left(0)
 			,panned(0x0)
-			,displaydevice(c.displaydevice)
+			,displaydevice(c.displaydevice)	/* could be NULL */
 			,image(NULL)
 #ifdef FIM_WINDOWS
 			,window(window_)
@@ -53,6 +53,8 @@ namespace fim
 			,commandConsole(c)
 	{
 		// WARNING : this constructor will be filled soon
+		if(!displaydevice)
+			throw FIM_E_TRAGIC;
 		reset();
 	}
 
@@ -174,7 +176,7 @@ namespace fim
 		if(window)return window->width();
 		else return 0;
 #else
-		return displaydevice->fb_var.xres;
+		return displaydevice->width();
 #endif
 	}
 
@@ -186,7 +188,7 @@ namespace fim
 		if(window)return window->height();
 		else return 0;
 #else
-		return displaydevice->fb_var.yres;
+		return displaydevice->height();
 #endif
 	}
 
@@ -252,7 +254,7 @@ namespace fim
 		}
 #else
 		/* FIXME */
-		displaydevice->clear_rect( 0, (viewport_width()-1)*displaydevice->fs_bpp, 0, (viewport_height()-1));
+		displaydevice->clear_rect( 0, (viewport_width()-1)*displaydevice->get_bpp(), 0, (viewport_height()-1));
 #endif
 	}
 
@@ -369,14 +371,14 @@ namespace fim
 					image->img,
 					top,
 					left,
-					displaydevice->fb_var.yres,
-					displaydevice->fb_var.xres,
-					displaydevice->fb_var.xres,
+					displaydevice->height(),
+					displaydevice->width(),
+					displaydevice->width(),
 					0,
 					0,
-					displaydevice->fb_var.yres,
-					displaydevice->fb_var.xres,
-					displaydevice->fb_var.xres,
+					displaydevice->height(),
+					displaydevice->width(),
+					displaydevice->width(),
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);
 #endif					
@@ -582,7 +584,7 @@ namespace fim
 		if(image)
 			image->should_redraw();
 		else
-	        	displaydevice->redraw=1;
+	        	if(displaydevice)displaydevice->redraw=1;
 	}
 
 	Viewport::~Viewport()

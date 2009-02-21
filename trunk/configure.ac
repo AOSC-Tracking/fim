@@ -927,7 +927,7 @@ AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan
 
 dnl ==================
 
-AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--enable-recursive-dirs], [Fim will try to recurse directories (implies --enable-read-dirs)]),
+AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--enable-recursive-dirs], [Fim will try to recurse directories (implies --enable-read-dirs )]),
 [       if test x$enableval = xno; then
 		fim_cv_recursive_dirs=no
 	else

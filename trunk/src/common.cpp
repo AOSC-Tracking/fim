@@ -444,3 +444,32 @@ const char * fim_getenv(const char * name)
 #endif
 }
 
+FILE * fim_fread_tmpfile(FILE * fp)
+{
+	/*
+	*  We transfer a stream contents in a tmpfile()
+	* NEW
+	*/
+	FILE *tfd=NULL;
+	if( ( tfd=tmpfile() )!=NULL )
+	{	
+		/* todo : read errno in case of error and print some report.. */
+		const size_t buf_size=4096;
+		char buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
+		while( (rc=fread(buf,1,buf_size,fp))>0 )
+		{
+			wc=fwrite(buf,1,rc,tfd);
+			if(wc!=rc)
+			{/* FIXME : this error condition should be handled, as this mechanism is very brittle */}
+		}
+		rewind(tfd);
+		/*
+		 * Note that it would be much nicer to do this in another way,
+		 * but it would require to rewrite much of the file loading stuff
+		 * (which is quite fbi's untouched stuff right now)
+		 * */
+		return tfd;
+	}
+	return NULL;
+}
+

@@ -10,5 +10,6 @@ EXTRA_DIST=tests/sanity.fim tests/maxlenscript.fim \
 	rc/fimrc.kuickshow	\
 	rc/fimrc.lazy		\
 	utilities/screenshot.sh	\
+	scripts/maintenance/configure-brute-check.sh \
 	utilities/fimscan.sh
 

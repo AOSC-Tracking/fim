@@ -1703,21 +1703,10 @@ A lot of questions still await for an answer in Fim. Here are few:
 ==============================================================================
 13.BUGS								*bugs*
 
- The following are known program problems (bugs) which were reported and await
- for a solution.
- Some other are listed in the BUGS file.
+ If you want to know about existing bugs, or report a bug, please consult the
+ BUGS file.
 
- if you want to report a bug, please consult the BUGS file.
  if you want to contribute with help, please read the |contact| information.
-
- - Never, for ANY reason, press C-z (^Z) with the intention of putting fim in
-   the background. It will blind your console and allow only blind typing, 
-   which is a very dangerous situation!
-
- - GNU Flex version prior to 2.5.4a and GNU Bison version prior 1.875d" are
-   known to give compilation problems, so make sure you have newer versions of
-   these. Note that Flex 2.5.4a comes after Flex-2.5.4.
-   This note is especially precious for Debian/Ubuntu users.
 
 ==============================================================================
 14.License 							*license*

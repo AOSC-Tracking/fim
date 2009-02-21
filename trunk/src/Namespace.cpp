@@ -2,7 +2,7 @@
 /*
  Namespace.h : a class for local variables storage
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -494,7 +494,11 @@ namespace fim
 
 		fim::string Namespace::autocmd_exec(const fim::string &event,const fim::string &fname)
 		{
+#ifdef FIM_AUTOCMDS
 			return cc.autocmd_exec(event,fname);
+#else
+			return "";
+#endif
 		}
 }
 

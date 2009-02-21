@@ -2,7 +2,7 @@
 /*
  DisplayDevice.cpp : virtual device Fim driver file
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

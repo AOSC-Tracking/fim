@@ -27,9 +27,9 @@
 #include "fim.h"
 #include "common.h"
 
-#include <stdio.h>	/* fdopen */
+#include <stdio.h>	/* fdopen, tmpfile */
 #include <unistd.h>	/* execlp (popen is dangerous) */
-#include <stdlib.h>
+#include <stdlib.h>	/* mkstemp */
 #include <math.h>
 #include <string.h>
 #include <stdarg.h>	/* va_start, va_end, ... */
@@ -1523,11 +1523,21 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	cc.set_status_bar("please wait while piping through 'inkscape'...", "*");
 	sprintf(command,"inkscape \"%s\" --export-png \"%s\"",
 		filename,FIM_TMP_FILENAME );
-
-	if(NULL!=(fp=fim_execlp("inkscape","inkscape",filename,"--export-png",FIM_TMP_FILENAME,NULL)) && 0==fclose(fp))
+#if 0
+	/* FIXME : the following code should work, but it doesn't */
+	if(NULL!=(fp=fim_execlp("inkscape","inkscape",filename,"--export-png","/dev/stdout",NULL)))
+	{
+		fp=fim_fread_tmpfile(fp);
+		if(fp==NULL) return NULL;
+		else
+		{
+			loader = &png_loader;
+		}
+	}
+#else
+	if(NULL!=(fp=fim_execlp("inkscape","inkscape",filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fclose(fp))
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
-		/* this could happen in case inkscape was removed from the system */
 			    return NULL;
 		else
 		{
@@ -1536,6 +1546,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		}
 	}
     }
+#endif
 #endif
 #if 0
 /*
