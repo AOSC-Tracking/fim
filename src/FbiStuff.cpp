@@ -316,9 +316,9 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
 void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
-#ifndef FIM_WANTS_SLOW_RESIZE
+//#ifndef FIM_WANTS_SLOW_RESIZE	/*uncommenting this triggers failure */
        int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
-#endif
+//#endif
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
 	register int sx=0,dx;
@@ -1263,10 +1263,8 @@ struct ida_op desc_autocrop = {
 /* load                                                                   */
 
 
-#ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 
 	extern struct ida_loader png_loader ;
-#endif
 #endif
 
 extern struct ida_loader ppm_loader ;
@@ -1412,10 +1410,10 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     }
     rewind(fp);
 
-    if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY))
+    if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY)!=0)
     {
         /* a funny feature */
-    	if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY_BPP)==1)
+    	if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY)==1)
 		loader = &bit1_loader;
 	else
 		loader = &bit24_loader;
@@ -1460,6 +1458,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	loader = NULL;
     }
      
+#ifdef FIM_WITH_LIBPNG 
 #ifdef FIM_TRY_DIA
     if (NULL == loader && (*blk==0x1f) && (*(unsigned char*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
@@ -1481,6 +1480,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		}
    	}
    }
+#endif
 #endif
 #ifdef FIM_TRY_XFIG
     if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))

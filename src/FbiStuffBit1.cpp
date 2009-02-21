@@ -77,7 +77,7 @@ static void
 bit1_read(unsigned char *dst, unsigned int line, void *data)
 {
     struct bit1_state *h = (struct bit1_state *) data;
-    unsigned int ll,y,x,pixel,byte = 0;
+    unsigned int ll,y,x = 0;
     
 	y  = line ;
 	if(y==h->h-1)

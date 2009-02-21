@@ -52,6 +52,8 @@ with a '@' and _Baz_ with a '.'.
    intention of putting fim in the background. It will blind your console and
    allow only blind typing, which is a very dangerous situation!
 
+   In windowed aalib setups (that is, when running aalib under X spawns in a separate window), fim is completely unusable.
+
 ==== MINOR ISSUES
 
 20070919	while command suffers from being not interruptible in some cases (when the image is small and not 'panable')

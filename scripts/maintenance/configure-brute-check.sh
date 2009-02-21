@@ -7,6 +7,8 @@ CH="$C --help=short"
 
 FAILED=""
 OK=""
+#CXXFLAGS="-O0"
+CXXFLAGS="-pedantic -Wall"
 
 trap '
 
@@ -28,6 +30,6 @@ done
 )
 for S in $ALL
 do
-	{ $C $S && make clean && make CXXFLAGS=-O0 && { OK="$OK $S" ; } } || { FAILED="$FAILED $S" ; }
+	{ $C $S && make clean && make CXXFLAGS=$CXXFLAGS && { OK="$OK $S" ; } } || { FAILED="$FAILED $S" ; }
 done
 

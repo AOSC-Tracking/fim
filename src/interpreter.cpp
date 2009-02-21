@@ -2,7 +2,7 @@
 /*
  interpreter.cpp : Fim language interpreter
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,11 +29,6 @@
 namespace fim
 {
 	extern CommandConsole cc;
-}
-
-fim::string stringsample()
-{
-	return string("uno stringone!\n");
 }
 
 

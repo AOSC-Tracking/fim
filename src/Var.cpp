@@ -21,4 +21,38 @@
 #include "fim.h"
 namespace fim
 {
+	typedef std::map<fim::string, fim::string> fim_var_help_t;//variable id -> variable help
+	static fim_var_help_t fim_var_help_db;	/* this is the global help db for fim variables */
+
+	void Var::var_help_db_init()
+	{
+		/* The inclusion of the next file is not essential : it serves only to populate the variables help database. */
+		#define FIM_WANT_INLINE_HELP 1
+		#include "help.cpp"
+		#undef  FIM_WANT_INLINE_HELP
+	}
+
+	fim::string Var::var_help_db_query(const fim::string &id)
+	{
+		string hs = fim_var_help_db[id];
+		if(hs=="")
+			return "the help system for variables is still incomplete";
+		else
+			return hs;
+	}
+
+	fim::string Var::get_variables_reference()
+	{
+		string s ="";
+		
+		fim_var_help_t::const_iterator vi;
+		for( vi=fim_var_help_db.begin();vi!=fim_var_help_db.end();++vi)
+		{
+			s+=vi->first;
+			s+=" : ";
+			s+=Var::var_help_db_query(vi->first);
+			s+="\n";
+		}
+		return s;
+	}
 }
