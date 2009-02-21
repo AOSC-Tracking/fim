@@ -9,5 +9,6 @@ EXTRA_DIST=tests/sanity.fim tests/maxlenscript.fim \
 	rc/fimrc.gqview		\
 	rc/fimrc.kuickshow	\
 	rc/fimrc.lazy		\
+	utilities/screenshot.sh	\
 	utilities/fimscan.sh
 

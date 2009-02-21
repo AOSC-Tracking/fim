@@ -63,9 +63,8 @@ bit1_init(FILE *fp, char *filename, unsigned int page,
     if(!h)goto oops;
     memset(h,0,sizeof(*h));
     h->fp = fp;
-    struct stat ss;
-    lstat(filename,&ss);
-    h->flen = ss.st_size ;
+    if(fseek(fp,0,SEEK_END)!=0) goto oops;
+    if((h->flen=ftell(fp))==-1)goto oops;
     i->width  = h->w = 1024;	// must be congruent to 8
     i->height = h->h = (8*h->flen + h->w-1) / ( i->width ); // should pad
     return h;

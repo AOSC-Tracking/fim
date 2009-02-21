@@ -81,7 +81,6 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     int  i;
     int  fr;
     const char *h;
-    char command[256];
     struct fs_font *f = NULL;
     FILE *fp;
 
@@ -100,8 +99,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 
     h = filename[i]+strlen(filename[i])-3;
     if (0 == strcmp(h,".gz")) {
-	sprintf(command,"zcat %s",filename[i]);
-	fp = popen(command,"r");
+	fp = FbiStuff::fim_execlp("zcat","zcat",filename[i],NULL);
     } else {
 	fp = fopen(filename[i], "r");
     }

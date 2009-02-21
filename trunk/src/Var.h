@@ -39,6 +39,7 @@ class Var
 	};
 	fim::string s;
 	public:
+	fim::string getHelp()const{return "the help system for variables is still incomplete";}
 	Var(const Var &v)
 	:type(0),i(0),s(fim::string())
 	{

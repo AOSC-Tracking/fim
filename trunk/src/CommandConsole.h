@@ -313,6 +313,11 @@ class CommandConsole
         bool is_file(fim::string nf)const;
 	fim::string do_getenv(const args_t& args);
 	bool isVariable(const fim::string &varname)const;
+	fim::string dump_reference_manual(const args_t& args);
+	fim::string get_reference_manual(const args_t& args);
+	private:
+	fim::string get_commands_reference()const;
+	fim::string get_variables_reference()const;
 };
 }
 

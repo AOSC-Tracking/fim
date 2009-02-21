@@ -2,9 +2,10 @@
 # $Id$
 
 FWP=http://www.autistici.org/dezperado
+INDEXIN=index.html.in
 FIMDIR=..
 FIMSITE=html-dezperado
-SITEDIR=./www/
+SITEDIR=./www
 FTPSCRIPT=./script.lftp
 SRCDIR=./
 MIRROR=$$(cat $(FIMDIR)/README | grep "^Releases  "|sed s/^.*\ :.//g)
@@ -25,14 +26,16 @@ help:
 	@echo HELP : 'make site | make up | make all'
 	@echo
 
+#tgz: $(SITEDIR)/$(TGZ)
+tgz:
+	cd $(FIMDIR) && make doc && make signed-tgzdist && cd -
+	
 all:	site up
 
 $(FIMHTMLDOCS):
 	cd $(FIMDIR)/doc && make $(FIMHTMLDOCS)
 
-$(SITEDIR)/index.html: index.html.in $(FIMDIR)/VERSION
-	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/index.html.in > $(SITEDIR)/index.html
-	mkdir -p $(SITEDIR)
+$(SITEDIR)/index.html: $(INDEXIN)
 	m4 -DVERSION="$(FVERSION)"  \
 	-D REPOSITORY=$(REPOSITORY) \
 	-D MIRROR=$(MIRROR) \
@@ -40,20 +43,30 @@ $(SITEDIR)/index.html: index.html.in $(FIMDIR)/VERSION
 	-D SIG=$(SIG) \
 	-D URL=$(URL) \
 	-D FWP=$(FWP) \
+	-D NEWSCONTENTS="$$( cat $(FIMDIR)/NEWS  )" \
 	-D DATE="`date +'%d/%m/%Y'`" \
 	-D SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )" \
 	-D HOMEPAGE=$(HOMEPAGE) \
-	$(SRCDIR)/index.html.in \
+	$(SRCDIR)/$(INDEXIN) \
 	 > $(SITEDIR)/index.html 
 
-site:	$(PAGES)
+
+#$(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/VERSION
+
+#site:	$(PAGES) $(SITEDIR)/index.html
+
+site:	$(PAGES) $(SITEDIR)/index.html
+	make tgz
+	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/$(INDEXIN) > $(SITEDIR)/index.html
+	mkdir -p $(SITEDIR)
 	#cd $(FIMDIR) && ./autogen.sh && ./configure && make doc && make dist && cd -
-	cd $(FIMDIR) && make doc && make signed-dist && cd -
 	cd $(FIMDIR)/doc && make htmldocs
 	for i in $(FIMHTMLDOCS) ; do cp $(FIMDIR)/doc/$$i  $(SITEDIR) ; done
 	txt2html $(FIMDIR)/README > $(SITEDIR)/README.html
 	txt2html $(FIMDIR)/NEWS > $(SITEDIR)/NEWS.html
+	txt2html $(FIMDIR)/BUGS > $(SITEDIR)/BUGS.html
 	$(CP) $(FIMDIR)/README  $(SITEDIR)/README
+	$(CP) $(FIMDIR)/BUGS  $(SITEDIR)/BUGS
 	$(CP) $(FIMDIR)/NEWS  $(SITEDIR)/NEWS
 	$(CP) $(FIMDIR)/doc/FIM.TXT  $(SITEDIR)/FIM.TXT
 	$(CP) ../$(TGZ) $(SITEDIR)

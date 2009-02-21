@@ -71,7 +71,9 @@ with a '@' and _Baz_ with a '.'.
 		  or trying to get to some X instance via ALT-F7-like sequences, or even restart the computer),
 		  and blind typing could be dangerous, if you do now know what you are doing!
 
-==== FIXED FBI/FBGS BUGS
+==== FIXED FBI/FBGS ORIGINATING BUGS
+
+ Replaced popen with pipe calls : http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=422034, in rev. 213.
 
  Original typo in fbgsh :  http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-3119 fixed following the 
  patch indicated on http://bugs.gentoo.org/show_bug.cgi?id=141684 :

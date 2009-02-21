@@ -2,7 +2,7 @@
 /*
  AADevice.cpp : aalib device Fim driver file
 
- (c) 2008 Michele Martone
+ (c) 2008-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -408,7 +408,7 @@
 	{
 		//mc.setRows ( -height()/2);
 		mc.setRows ( get_chars_per_column()/2 );
-		mc.reformat(  width()   );
+		mc.reformat(  txt_width()   );
 		return 0;
 	}
 
