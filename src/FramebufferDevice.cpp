@@ -1551,7 +1551,12 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	 * note that we don't deallocate this area until program termination.
 	 * it is because we keep the framebuffer...
 	 * */
-	if(!columns || !columns_data)return;
+	if(!columns || !columns_data)
+	{
+		if(columns)free(columns);
+		if(columns_data)free(columns_data);
+		return;
+	}
 
 	for(i=0;i<R;++i)columns[i]=columns_data+i*(C+1);
 
