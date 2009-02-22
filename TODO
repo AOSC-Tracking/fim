@@ -22,9 +22,9 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090222	high performance compilation flags would be nice now
 20090218	implement a printf() like interface for customizing the status bar information
 20090215	more nightly build scripts and automated regression tests with reporting scripts
-20090215	look for 'BUG' in Browser.cpp
 20090213	rewrite the core in a way to avoid convert_line: there is a potentially big performance gain
 20090212	fix problems deriving from missing binaries and stuff
 20090112	if there is no convert, fim should notice it.

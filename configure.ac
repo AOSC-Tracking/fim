@@ -1160,6 +1160,16 @@ AC_ARG_WITH(docdir, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put 
         [fim_cv_tmpfile="/tmp/__FIM_TEMPORARY_FILE"])
 dnl ==================
 
+AC_ARG_ENABLE(optimizations, AC_HELP_STRING([--enable-optimizations], [Will try to enhance compilation flags (EXPERIMENTAL)]),
+[       if test x$enableval = xno; then
+		fim_cv_optimizations=no
+	else
+                fim_cv_optimizations=yes
+        fi
+],[ fim_cv_optimizations=yes ]
+)
+
+dnl ==================
 
 AH_TEMPLATE([FIM_TRY_XCFTOPNM])
 AH_TEMPLATE([FIM_TRY_CONVERT])
@@ -1192,6 +1202,22 @@ AC_CHECK_PROG(have_inkscape,inkscape,yes,no)
 
 AC_CHECK_PROG(have_xfig,fig2dev,yes,no)
 AC_CHECK_PROG(have_dia,dia,yes,no)
+
+dnl ==================
+
+        if test x$fim_cv_optimizations = xyes ; then
+		uname=`uname`
+        	if test x$uname = xLinux ; then
+dnl			AC_MSG_NOTICE([we run on linux! Good.])
+	     		if grep "^model name.*Pentium(R) 4" /proc/cpuinfo > /dev/null; then
+				CXXFLAGS="$CXXFLAGS -march=native"
+		     	fi
+
+		else
+			AC_MSG_NOTICE([uhm. try to specify your own optimizations..])
+
+		fi
+	fi
 
 dnl ==================
 
