@@ -63,7 +63,6 @@ with a '@' and _Baz_ with a '.'.
 	Linux host 2.6.19-gentoo-r5 #1 SMP Mon Sep 24 15:08:36 CEST 2007 ppc 7447A, altivec supported PowerBook5,4 GNU/Linux
 	and gave problems with the PAGE_MASK macro, originally in /linux/include/asm-i386/page.h :)
 
-20090215	look for 'BUG' in Browser.cpp
 20080504	Seems like running the aalib driver under screen maps -3072 units down the arrow keys.
 		I do not see this problem in aalib under ssh.
 20080127	Under screen, Fim behaves well but it doesn't handle well console switching:
