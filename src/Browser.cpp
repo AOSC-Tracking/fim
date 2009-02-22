@@ -37,7 +37,6 @@ namespace fim
 		 */
 		fim::string fileslist;
 		for(size_t i=0;i<flist.size();++i)fileslist+=flist[i]+fim::string(" ");
-		cout << fileslist.c_str();
 		return fileslist;
 	}
 
@@ -537,20 +536,23 @@ namespace fim
 		 * FIXME : this behaviour is BUGGY, because recursion will be killed off 
 		 *         by the autocommand loop prevention mechanism. (this is not true, as 20090215)
 		 * */
-		static int lehsof=0;	/* FIXME : BUG : './fim FILE NONFILE' and hitting 'prev' will trigger disaster  */
+		static int lehsof=0;	/* './fim FILE NONFILE' and hitting 'prev' will make this necessary  */
 
-		//if(lehsof)return 0; /* this prevents infinite recursion, but not the subsequent segfault */
+		if(lehsof)return 0; /* this prevents infinite recursion */
 		if(/*image() &&*/ viewport() && ! (viewport()->check_valid()))
 		{
 			free_current_image();
 			++lehsof;
 #ifdef FIM_REMOVE_FAILED
-				pop(c);	//removes the currently specified file from the list.
+				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
+				args_t args;
+				args.push_back(c.c_str());
+				remove(args);	// remove is an experimental function
 #ifdef FIM_AUTOSKIP_FAILED
 				if(n_files())
 				{
 					//next(1);
-					reload(); /* this will not be effective ! */
+					reload(); /* this is effective, at least partially */
 				}
 #endif
 #endif
@@ -679,7 +681,6 @@ namespace fim
 
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(c);
-
 #ifdef FIM_AUTOCMDS
 		autocmd_exec("PostReload",c);
 #endif
@@ -1052,6 +1053,8 @@ namespace fim
 //				std::cout << "removing" << flist[i]<<"\n";
 				flist.erase(flist.begin()+i);
 			}
+			cp=cp%(flist.size()+1);// new
+			setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
 			return "";
 		}
 		else
