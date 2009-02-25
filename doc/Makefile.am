@@ -10,8 +10,8 @@ man1_MANS = fim.man fimgs.man
 
 # html stuff is installed in the documentation directories, too
 htmldir = $(docdir)
-html_DATA = $(HTMLDOCS)
-doc_DATA = FIM.TXT
+dist_html_DATA = $(HTMLDOCS)
+dist_doc_DATA = FIM.TXT
 
 all:	$(EXTRA_DIST)
 

@@ -500,7 +500,7 @@ int help_and_exit(char *argv0, int code=0)
 		read_one_script_file_from_stdin > 1)
 		{
 			fprintf(stderr,"error : you shouldn't specify more than one standard input reading options among (-, -p, ad -i)!\n\n");
-			help_and_exit(argv[0],-1);
+			help_and_exit(argv[0],0);/* should return 0 or -1 ? */
 		}
 		/*
 		 * this is Vim's solution for stdin reading

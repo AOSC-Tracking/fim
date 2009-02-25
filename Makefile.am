@@ -11,9 +11,11 @@
 AUTOMAKE_OPTIONS = nostdinc no-dependencies
 SUBDIRS = src doc distros scripts
 
-EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL INSTALL.TXT  README README.FIRST TODO \
+dist_doc_DATA=README README.FIRST TODO VERSION BUGS  FAQ.TXT AUTHORS ChangeLog NEWS
+# no INSTALL INSTALL.TXT is necessary in rules
+EXTRA_DIST=  COPYING  \
 	Makefile.am configure.ac configure \
-	AUTHORS ChangeLog NEWS aclocal.m4 config.h.in \
+	 aclocal.m4 config.h.in \
 	autogen.sh \
 	depcomp missing install-sh
 
