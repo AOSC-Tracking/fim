@@ -11,7 +11,7 @@ AC_PREREQ([2.54])
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
 # WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
-AC_INIT([src/fim.h],[0.0],[dezperado_FOobAr_autistici_Baz_org( by replacing _FOobAr_ with a '@' and _Baz_ with a '.')])
+AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org( by replacing _FOobAr_ with a '@' and _Baz_ with a '.')])
 
 AC_MSG_NOTICE([
         Welcome to the Fim configure script!
@@ -237,15 +237,15 @@ fi
 
 
 AC_MSG_CHECKING(where to put the documentation...)
-AC_ARG_WITH(docdir, AC_HELP_STRING([--with-docdir=PATH], [Specify where to put the documentation]),
-        [fim_cv_docdir=$withval],
-        [fim_cv_docdir='${prefix}/doc/fim-${fim_cv_version}'])
+dnl AC_ARG_WITH(docdir, AC_HELP_STRING([--with-docdir=PATH], [Specify where to put the documentation]),
+dnl         [fim_cv_docdir=$withval],
+dnl        [fim_cv_docdir='${prefix}/doc/fim-${fim_cv_version}'])
 # FIXME : the above line seems troublesome, BUT IT IS NOT (see the muttrc for this trick).
 
 AC_MSG_RESULT($fim_cv_docdir)
 
-docdir=$fim_cv_docdir
-AC_SUBST(docdir)
+dnl docdir=$fim_cv_docdir
+dnl AC_SUBST(docdir)
 AC_SUBST(fim_cv_version)
 
 dnl ============= gif file handling
@@ -1155,7 +1155,7 @@ AC_ARG_ENABLE(dia, AC_HELP_STRING([--disable-dia], [Fim will try to use dia for 
 )
 
 dnl ==================
-AC_ARG_WITH(docdir, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put temporary files created when interacting with external conversion programs (default is "/tmp/__FIM_TEMPORARY_FILE").]),
+AC_ARG_WITH(tmpfile, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put temporary files created when interacting with external conversion programs (default is "/tmp/__FIM_TEMPORARY_FILE").]),
         [fim_cv_tmpfile=$withval],
         [fim_cv_tmpfile="/tmp/__FIM_TEMPORARY_FILE"])
 dnl ==================
@@ -1166,7 +1166,7 @@ AC_ARG_ENABLE(optimizations, AC_HELP_STRING([--enable-optimizations], [Will try 
 	else
                 fim_cv_optimizations=yes
         fi
-],[ fim_cv_optimizations=yes ]
+],[ fim_cv_optimizations=no ]
 )
 
 dnl ==================
