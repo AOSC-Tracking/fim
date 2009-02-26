@@ -255,6 +255,8 @@ namespace fim
 #define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "the maximum number of images allowed in the cache" */
 #define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "the maximum amount of memory allowed for the cache" */
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "the number of images currently cached" */
+#define FIM_VID_SCREEN_WIDTH			"screen_width"		/* "the screen width"  */
+#define FIM_VID_SCREEN_HEIGHT			"screen_height"		/* "the screen height" */
 
 /*
  * Help messages for Fim commands (partial).

@@ -9,7 +9,7 @@ FIMPROG = $(BASE)/src/fim
 # The output goes into a file "valgrind.$PID" (sorry, no test number).
 # VALGRIND = valgrind --tool=memcheck --leak-check=yes --num-callers=15 --logfile=valgrind
 
-SCRIPTS = test1.out test2.out test3.out test4.out test5.out test6.out
+SCRIPTS = test1.out test2.out test3.out test4.out test5.out test6.out test7.out
 
 .SUFFIXES: .in .out
 
