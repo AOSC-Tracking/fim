@@ -604,6 +604,8 @@ namespace fim
 			if( e == FIM_E_NO_MEM || true ) quit(FIM_E_NO_MEM);
 		}
 #endif
+		setVariable(FIM_VID_SCREEN_WIDTH, xres);
+		setVariable(FIM_VID_SCREEN_HEIGHT,yres);
 
 		show_must_go_on=1;
 		/*

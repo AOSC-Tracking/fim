@@ -1343,6 +1343,8 @@ AC_SUBST(CFLAGS)
 AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile
 	 scripts/maintenance/cron-build.sh
 	 scripts/maintenance/remote-build.sh
+	 scripts/maintenance/cron-svndump.pl
+	 scripts/maintenance/cron-rsync.sh
 	)
 #AC_OUTPUT
 

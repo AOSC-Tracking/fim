@@ -22,6 +22,14 @@ ongoing further inspiration.
 	Current development directions
 
 
+
+20090226	dpkg-buildpackage -rfakeroot -k0xEF1258B8
+		http://www.debian.org/doc/maint-guide/ch-build.en.html
+		http://www.debian-administration.org/articles/488
+20090224	to test better, develop some simple string functions and f(){}, a=f(x,y) , f , f x y , in vim style if possible, regexp_search
+20090223	missing overflow checks
+20090223	dput, dupload, svn-autoreleasedeb, devscripts, debsecan
+20090223	http://www.cubewano.org/oink <- use this automated checker, as well as other tools, possibily at least for format string vulnerabilities
 20090222	high performance compilation flags would be nice now
 20090218	implement a printf() like interface for customizing the status bar information
 20090215	more nightly build scripts and automated regression tests with reporting scripts
