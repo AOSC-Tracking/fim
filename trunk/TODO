@@ -22,8 +22,9 @@ ongoing further inspiration.
 	Current development directions
 
 
-
-20090226	dpkg-buildpackage -rfakeroot -k0xEF1258B8
+20090226	debianize:
+		dpkg-buildpackage -rfakeroot -k0xEF1258B8
+ 		fakeroot debian/rules binary
 		http://www.debian.org/doc/maint-guide/ch-build.en.html
 		http://www.debian-administration.org/articles/488
 20090224	to test better, develop some simple string functions and f(){}, a=f(x,y) , f , f x y , in vim style if possible, regexp_search

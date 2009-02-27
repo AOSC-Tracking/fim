@@ -1,0 +1,25 @@
+Source: fim
+Section: graphics
+Priority: extra
+Maintainer: Michele Martone <michele.martone@uniroma2.it>
+Build-Depends: debhelper (>= 7), autotools-dev
+Standards-Version: 3.7.3
+Homepage: http://www.autistici.org/dezperado/
+
+Package: fim
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: a customizable and scriptable frame buffer and ascii art image viewer
+ FIM is a highly customizable and scriptable image viewer targeted at the
+ users who are confortable with software like the Vim text editor or the Mutt
+ mail user agent (it aims to be a swiss army knife for viewing images).
+ It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
+ the Linux framebuffer console.
+ It is multidevice : it has X support, too (via the SDL library) and it supports
+ ascii art output (via the aalib library).
+ It is capable of regular expressions based (on filename) image viewing,vim-like
+ autocommands, it offers GNU readline command line autocompletion and history,
+ completely customizable key bindings, external/internal (if-while based)
+ scriptability (through return codes, standard input/output, and commands given
+ at invocation time, initialization file), internal filename-based image search,
+ and much more features.
