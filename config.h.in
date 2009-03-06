@@ -13,6 +13,9 @@
 #undef EXECSHELL
 
 /* */
+#undef FIM_AUTHOR
+
+/* */
 #undef FIM_AUTOCMDS
 
 /* */

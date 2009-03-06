@@ -262,6 +262,7 @@ Useful documents I could read later on:
 vim -c ':help'
 man 3 history
 man readline
+http://www.gnu.org/prep/standards/
 
 Useful URLs:
 http://www.tldp.org/HOWTO/Framebuffer-HOWTO.html

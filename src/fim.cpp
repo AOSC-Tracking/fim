@@ -111,7 +111,7 @@ struct option fim_options[] = {
     {"script-from-stdin",      no_argument,       NULL, 'p'},
     {"write-scriptout",      required_argument,       NULL, 'W'},
     {"output-device",      required_argument,       NULL, 'o'},
-    {"dump-reference-help",      optional_argument,       NULL, 0xd15cbab3},/* note : still undocumented switch */
+    {"dump-reference-help",      /*optional_argument : FIXME */no_argument,       NULL, 0xd15cbab3},/* note : still undocumented switch */
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -139,7 +139,6 @@ class FimInstance
 		FIM_REPOSITORY_VERSION 	    
 			    " )"
 	#endif
-	#define FIM_AUTHOR "Michele Martone <dezperado _CUT_ autistici _CUT_ org>"
 	#ifdef FIM_AUTHOR 
 			    ", by "
 			    FIM_AUTHOR
@@ -202,7 +201,9 @@ int help_and_exit(char *argv0, int code=0)
 		};
 		std::cout << "\n";
 		}
-		std::cout << " ( Please read the documentation distributed with the program, too, in FIM.TXT)\n";
+		std::cout << "\n Please read the documentation distributed with the program, in FIM.TXT.\n"
+			  << " For further help, consult the online help in fim (:help), and man fim (1).\n"
+			  << " For bug reporting please read the BUGS file.\n";
 	    std::exit(code);
 	    return code;
 }
