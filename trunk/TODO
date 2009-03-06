@@ -22,11 +22,20 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090305	moritz suggests fimgs with :
+		src/fim -c 'autoheight=0;autowidth=0;v:auto_scale_v=0;'\
+			'autocmd "PostRedisplay" "" "g:oscale=scale;";'\
+			'autocmd "PostReload" "" "scale g:oscale.\"%\";";'     *pages*
 20090226	debianize:
 		dpkg-buildpackage -rfakeroot -k0xEF1258B8
  		fakeroot debian/rules binary
+		http://www.debian.org/doc/debian-policy/
 		http://www.debian.org/doc/maint-guide/ch-build.en.html
 		http://www.debian-administration.org/articles/488
+		http://www.debian-administration.org/articles/337
+		debuild -us -uc
+		http://people.debian.org/~codehelp/#sponsor
+		http://dl.bytesex.org/releases/fbida/ida_0.21.dsc
 20090224	to test better, develop some simple string functions and f(){}, a=f(x,y) , f , f x y , in vim style if possible, regexp_search
 20090223	missing overflow checks
 20090223	dput, dupload, svn-autoreleasedeb, devscripts, debsecan

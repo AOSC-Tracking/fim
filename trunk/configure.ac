@@ -1317,6 +1317,8 @@ dnl AH_TEMPLATE([FIM_IS_SLOWER_THAN_FBI])
 dnl AC_DEFINE([FIM_IS_SLOWER_THAN_FBI])
 dnl AH_TEMPLATE([FIM_WITH_LIBSDL])
 dnl AC_DEFINE([FIM_WITH_LIBSDL])
+AH_TEMPLATE([FIM_AUTHOR])
+AC_DEFINE([FIM_AUTHOR],["Michele Martone <dezperado _CUT_ autistici _CUT_ org>"])
 
 
 dnl ==================
