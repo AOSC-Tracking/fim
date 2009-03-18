@@ -1,0 +1,27 @@
+# This script tests auto width scaling capabilities of fim.
+# todo : auto width
+alias "toggleAutoWidth" "i:autowidth=1-iautowidth;v:auto_scale_v=0;reload;";
+load;
+display;
+stdout i:width==i:swidth;
+stdout i:height==i:sheight;
+toggleAutoWidth;
+reload;
+display;
+magnify;
+reload;
+stdout screen_width==i:swidth;
+stdout screen_height==i:sheight;
+#stdout screen_width;
+#stdout i:swidth;
+#stdout "swidth:".i:swidth;
+#stdout "sheight:".i:sheight;
+#stdout i:width;
+
+# auto height scaling missing
+#stdout screen_height==i:sheight;
+
+rc=0;
+if(screen_width!=i:swidth)stdout "PLEASE FINISH WRITING THIS TEST";
+#return rc;
+
