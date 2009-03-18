@@ -406,11 +406,11 @@ namespace fim
 			/*
 			 * it is important to set these values after rotation, too!
 			 * */
-			setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg->i.height);
-			setGlobalVariable(FIM_VID_WIDTH  ,(int)fimg->i.width );
-			setGlobalVariable(FIM_VID_SHEIGHT,(int) img->i.height);
-			setGlobalVariable(FIM_VID_SWIDTH ,(int) img->i.width );
-			setGlobalVariable(FIM_VID_ASCALE , ascale );
+			setVariable(FIM_VID_HEIGHT ,(int)fimg->i.height);
+			setVariable(FIM_VID_WIDTH  ,(int)fimg->i.width );
+			setVariable(FIM_VID_SHEIGHT,(int) img->i.height);
+			setVariable(FIM_VID_SWIDTH ,(int) img->i.width );
+			setVariable(FIM_VID_ASCALE , ascale );
 			//setGlobalVariable(FIM_VID_ANGLE  ,  angle );
 		}
 		else should_redraw(0);
