@@ -49,6 +49,13 @@ sanity-check:	all
 tests:	all
 	@cd ./src/testdir && make
 
+FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
+
+# new target, still not working
+tests-all: tests $(FIMSCRIPTSDIR)/configure-brute-check.sh
+	cd src && which cppcheck && cppcheck *cpp *.h || true
+	$(FIMSCRIPTSDIR)/configure-brute-check.sh
+	
 #news-dump:
 #	awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS > f
 

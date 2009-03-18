@@ -1,0 +1,15 @@
+# This script tests file browsing capabilities.
+alias "sn" "stdout filename;";
+alias "sf" "stdout fileindex;";
+#alias "sf" "stdout fileindex;sn;";
+alias "n" "next 1;";
+n;
+sf;
+n;
+sf;
+goto 1;
+sf;
+goto 2;
+sf;
+goto 3;
+sf;

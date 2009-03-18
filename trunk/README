@@ -5,6 +5,7 @@
 	2		Description
 	3		Features, comparison to other image viewers
 	4		Compilation Requirements
+	4.5		Testing
 	5		Run Time Requirements
 	6		Original Idea
 	7		Technical overview (important for patch writers)
@@ -180,6 +181,25 @@ Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/) ...
    This note is especially precious for Debian/Ubuntu users.
 
 ================================================================================
+	4.5		Testing
+================================================================================
+
+ Testing and coherency facilities are being worked on.
+ For now, just after the  './configure'  and 'make' steps, you can:
+ 
+ # to test if fim works at all on this machine/user
+ make test
+ 
+ # a battery of test scripts, which should validate core fim functionalities
+ # for usage purposes.
+ make tests
+
+ # will test thoroughly all configuration options : it is for developers/hackers
+ # or maintainers only.
+ make tests-all
+
+ 
+================================================================================
 	5		Run Time Requirements
 ================================================================================
 
@@ -242,7 +262,8 @@ potpourri :) .
 For the sake of completeness, Fim is based on the version 1.31 of fbi,
 available from http://dl.bytesex.org/releases/fbida/fbi_1.31.tar.gz .
 
-Useful documents I've read and consulted during the coding of Fim:
+Useful documents I've read and consulted during the coding of Fim, and 
+useful for hacking it :
 
 Thomas Niemann's tutorial to yacc & lex
 The yacc & lex HOWTO
@@ -252,6 +273,10 @@ Herbert Schildt's C++, Complete Reference, Third Edition, Osborne McGraw-Hill, 1
 http://www.gnu.org/software/m4/manual/
 http://www.gnu.org/software/autoconf/manual/
 http://www.gnu.org/software/automake/manual/
+http://www.gnu.org/software/make/manual/
+http://www.gnu.org/software/bash/manual/
+http://www.gnu.org/software/bison/manual/
+flex manual ?
 man console_codes
 man fb.modes
 man fbi
@@ -308,7 +333,7 @@ This should suffice.
 Once these requirements are satisfied, you could proceed with the 
 	./configure ; make ; make install
 sequence.
-Installation details are in the INSTALL file.
+Standard installation details are in the INSTALL file.
 
 BEWARE : THERE COULD BE PROBLEMS WITH FLEX/BISON! 
 
