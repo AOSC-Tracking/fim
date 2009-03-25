@@ -1,15 +1,24 @@
 # This script tests file browsing capabilities.
+autocmd "" "" "";
 alias "sn" "stdout filename;";
 alias "sf" "stdout fileindex;";
+#alias "u" "load;reload;i:fresh=1;display;redisplay;";
+#alias "u" "load;reload;i:fresh=1;display;redisplay;";
+alias "u" "reload;redisplay;magnify;reload;next '1';";
 #alias "sf" "stdout fileindex;sn;";
-alias "n" "next 1;";
+alias "n" "next 1;u;";
+#alias "n" "next 1;sleep 1;";
+stdout "this test is probably flawed";
+stdout "'next' testing:";
 n;
 sf;
 n;
 sf;
-goto 1;
+stdout "'goto' testing:";
+goto 1;u;
 sf;
-goto 2;
+goto 2;u;
 sf;
-goto 3;
+goto 3;u;
 sf;
+
