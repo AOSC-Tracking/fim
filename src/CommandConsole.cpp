@@ -1472,10 +1472,11 @@ namespace fim
 	{
 		/*
 		 * returns the [internal] type of a variable
-		 *
+		 * FIXME : eradicate this cancer
 		 * */
 		variables_t::const_iterator vi=variables.find(varname);
-		if(vi!=variables.end()) return vi->second.getType();
+		if(vi!=variables.end())
+			return vi->second.getType();
 		else return 0;
 	}
 
