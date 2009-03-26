@@ -106,6 +106,7 @@ class Var
 	const Var& operator= (int   i){type='i';this->i=i;return *this;}
 	const Var& operator= (float f){setFloat(f);return *this;}
 	const Var& operator= (fim::string &s){setString(s);return *this;}
+	const Var& operator= (const Var &v){type=v.type;;return *this;}
 #endif
 	float setFloat(float f){type='f';return this->f=f;}
 	int   setInt(int i){type='i';return this->i=i;}

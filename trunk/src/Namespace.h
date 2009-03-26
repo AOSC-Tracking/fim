@@ -45,6 +45,7 @@ namespace fim
 		int setVariable(const fim::string& varname,int value);
 		float setVariable(const fim::string& varname,float value);
 		int setVariable(const fim::string& varname,const char*value);
+		Var setVariable(const fim::string& varname,const Var&value);//NEW
 
 		int getIntVariable(const fim::string &varname)const;
 		float getFloatVariable(const fim::string &varname)const;

@@ -210,6 +210,68 @@ namespace fim
 		return (int)(variables[varname].setString(s));
 	}
 
+	Var CommandConsole::setVariable(const fim::string& varname,const Var&value)
+	{
+		/*
+		 * an internal function to set a user variable
+		 */
+#ifdef FIM_NAMESPACES
+		if( varname[1]==':' )
+		{
+			//a specific namespace was selected!
+			try
+			{
+			char ns = varname[0];
+			fim::string id=varname.c_str()+2;
+#ifdef FIM_WINDOWS
+			if( ns == 'w' )
+			{
+				//window variable
+				if(window)
+					return window->setVariable(id,value);
+				else
+					return 0;
+			}
+			else
+			if( ns == 'v' )
+			{
+				//viewport variable
+				if(window && window->current_viewportp())
+					return window->current_viewportp()->setVariable(id,value);
+				else
+					return 0;
+			}
+			else
+#endif
+			if( ns == 'i' )
+			{
+				//image variable
+				return
+					browser.c_image()?
+					( (Image*) (browser.c_image()))->setVariable(id,value):
+					Var(0);
+			}
+			else
+			if( ns == 'b' )
+			{
+				//browser variable
+				return browser.setVariable(id,value);
+			}
+			else
+			if( ns != 'g' )
+			{
+				//invalid namespace
+				return 0;
+			}
+			}
+			catch(FimException e){}
+		}
+#endif
+		variables[varname]=value;
+		return value;;
+	}
+
+
 	int CommandConsole::getIntVariable(const fim::string &varname)const
 	{
 #ifdef FIM_NAMESPACES
@@ -418,6 +480,14 @@ namespace fim
 			 */
 	//		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
 			return variables[varname].setFloat(value);
+		}
+
+		Var Namespace::setVariable(const fim::string& varname,const Var&value)
+		{
+			/*
+			 * an internal function to set a user variable
+			 */
+			return (int)(variables[varname]=value);
 		}
 
 		int Namespace::setVariable(const fim::string& varname,const char*value)

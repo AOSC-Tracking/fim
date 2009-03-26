@@ -185,6 +185,7 @@ class CommandConsole
 	int  setVariable(const fim::string& varname,int value);
 	float setVariable(const fim::string& varname,float value);
 	int setVariable(const fim::string& varname,const char*value);
+	Var setVariable(const fim::string& varname,const Var&value);//NEW
 	bool push(const fim::string nf);
 	int executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd);

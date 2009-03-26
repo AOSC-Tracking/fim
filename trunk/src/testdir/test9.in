@@ -1,0 +1,11 @@
+stdout "gcd(96,12)";
+p=96;
+p=15;
+q=12;
+stdout p;
+stdout q;
+while(p>q){p=p-q;if(p<q){r=p;p=q;q=r;}}
+stdout "the gcd is:";
+stdout q;
+stdout p; # FIXME: please solve this problem: is a bug
+#

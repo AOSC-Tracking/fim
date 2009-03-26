@@ -92,7 +92,8 @@ Var cvar(nodeType *p)
 #endif
 			arg=fim::cc.getStringVariable(p->scon.s);
 	}
-	else if(p->type == intCon )return p->con.value;
+	else if(p->type == intCon )
+	return Var((int)p->con.value);
 	else if(p->type == floatCon)return p->fid.f;
 	else
 	{
@@ -151,15 +152,16 @@ Var ex(nodeType *p)
 	float fValue;
 	char *s;
 
-	
   	std::vector<fim::string> args;
 	int typeHint;
 	if (!p) return 0;
 	switch(p->type)
 	{
 		case intCon:
+			/* FIXME : are we sure this case executes ? */
 			return p->con.value;
 	        case floatCon:
+			/* FIXME : are we sure this case executes ? */
 			return p->fid.f;
 		case vId:
 		{
@@ -293,7 +295,6 @@ Var ex(nodeType *p)
 				if(p->opr.op[0]->scon.s) result =
 				       	fim::cc.execute(p->opr.op[0]->scon.s,args);
 				/* sometimes there are NULLs  : BAD !!  */
-
 				return atoi(result.c_str());
 			  }
 		}
@@ -343,10 +344,15 @@ Var ex(nodeType *p)
 			}
 			else if(typeHint=='a')
 			{
-				fim::string r=cvar(p->opr.op[1]);
-				iValue=r;
-				fim::cc.setVariable(s,r.c_str());
-			        return fim::cc.getStringVariable(s);
+				//fim::string r=cvar(p->opr.op[1]);
+				Var v=cvar(p->opr.op[1]);
+				//iValue=r;
+				fim::cc.setVariable(s,v);
+				if(/*want_bugs*/0){
+				//fim::cc.setVariable(s,r.c_str());
+				fim::cc.setVariable(s,v);
+			        return fim::cc.getStringVariable(s);}
+				else return v;
 				// 20080220
 				//return iValue;
 			}
@@ -357,7 +363,8 @@ Var ex(nodeType *p)
 			case UMINUS:
 				return Var(0) - ex(p->opr.op[0]);
 			case '-': 
-				if ( 2==p->opr.nops) return ex(p->opr.op[0]) - ex(p->opr.op[1]);
+				
+				if ( 2==p->opr.nops) {Var d= ex(p->opr.op[0]) - ex(p->opr.op[1]);return d;}
 				else return Var(0) - ex(p->opr.op[0]);
 			case '*': return ex(p->opr.op[0]) * ex(p->opr.op[1]);
 			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]);
