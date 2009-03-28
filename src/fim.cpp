@@ -330,7 +330,7 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'g':
 		    //fbi's
-		    default_fbgamma = atof(optarg);
+		    default_fbgamma = fim_atof(optarg);
 		    break;
 		case 'r':
 		    //fbi's

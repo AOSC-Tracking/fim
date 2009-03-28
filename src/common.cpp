@@ -473,3 +473,29 @@ FILE * fim_fread_tmpfile(FILE * fp)
 	return NULL;
 }
 
+double fim_atof(const char *nptr)
+{
+	/* the original atof suffers from locale 'problems', like non dotted radix representations */
+	//setlocale(LC_NUMERIC,"en_US");/* FIXME : should replace atof, instead! */ 
+	//return atof(nptr);
+	double n=0.0;
+	double d=1.0;
+	if(!nptr)return n;
+	while( isdigit(*nptr) )
+	{
+		n+=.1*((double)(*nptr-'0'));
+		n*=10.0;
+		++nptr;
+	}
+	if(*nptr!='.')return n;
+	++nptr;
+	while( isdigit(*nptr) )
+	{
+		d/=10.0;
+		n+=d*((double)(*nptr-'0'));
+		++nptr;
+	}
+	if(*nptr!='.')return n;
+	return n;
+}
+

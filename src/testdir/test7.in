@@ -1,15 +1,33 @@
 # This script tests auto width scaling capabilities of fim.
 # todo : auto width
-alias "toggleAutoWidth" "i:autowidth=1-iautowidth;v:auto_scale_v=0;reload;";
+alias "toggleAutoWidth" "i:autowidth=1-i:autowidth;v:auto_scale_v=0;reload;";
 load;
 display;
+# when loaded, images should have no relationship to screeen width
 stdout i:width==i:swidth;
 stdout i:height==i:sheight;
+i:autowidth=0;
+#stdout "ii";
+#i:autowidth=1;
+#stdout i:autowidth;
+#stdout i:autowidth;
+#stdout "ii";
 toggleAutoWidth;
+#stdout "ia:";
+#toggleAutoWidth;
+#stdout i:autowidth;
 reload;
 display;
-magnify;
+#magnify;
 reload;
+#if(0)
+#{
+#	stdout screen_width;
+#	stdout i:swidth;
+#	stdout screen_height;
+#	stdout i:sheight;
+#};
+#
 stdout screen_width==i:swidth;
 stdout screen_height==i:sheight;
 #stdout screen_width;

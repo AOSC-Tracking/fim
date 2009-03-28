@@ -312,7 +312,7 @@ namespace fim
 		 */
 		double multiscale;
 		if(args.size()==0)return "";
-		multiscale=atof(args[0].c_str());
+		multiscale=fim_atof(args[0].c_str());
 		if(multiscale==0.0)return "";
 		if(c_image())
 		{
@@ -335,7 +335,7 @@ namespace fim
 		 */
 		double deltascale;
 		if(args.size()==0)return "";
-		deltascale=atof(args[0].c_str());
+		deltascale=fim_atof(args[0].c_str());
 		if(deltascale==0.0)return "";
 		if(strstr(args[0].c_str(),"%"))deltascale*=.01;
 		if(c_image())
@@ -359,7 +359,7 @@ namespace fim
 		 */
 		double newscale;
 		if(args.size()==0)return "";
-		newscale=atof(args[0].c_str());
+		newscale=fim_atof(args[0].c_str());
 		if(newscale==0.0)return "";
 		if(strstr(args[0].c_str(),"%"))newscale*=.01;
 		if(c_image())
@@ -1207,7 +1207,7 @@ namespace fim
 		 */ 
 		double angle;
 		if(args.size()==0)angle=1.0;
-		else angle=atof(args[0].c_str());
+		else angle=fim_atof(args[0].c_str());
 		if(angle==0.0)return "";
 
 		if(c_image())
