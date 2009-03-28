@@ -50,6 +50,7 @@ namespace fim
 		int getIntVariable(const fim::string &varname)const;
 		float getFloatVariable(const fim::string &varname)const;
 		fim::string getStringVariable(const fim::string &varname)const;
+		Var getVariable(const fim::string &varname)const;
 
 		int  setGlobalVariable(const fim::string& varname,int value);
 	        float setGlobalVariable(const fim::string& varname,float value);

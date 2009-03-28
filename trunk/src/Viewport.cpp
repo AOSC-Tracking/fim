@@ -475,7 +475,7 @@ namespace fim
 		float newscale;
 		if( check_invalid() ) return;
 
-		newscale = (float)this->viewport_height() / image->original_height();
+		newscale = ((float)this->viewport_height()) / image->original_height();
 
 		image->rescale(newscale);
 	}
@@ -488,7 +488,7 @@ namespace fim
 		float newscale;
 		if( check_invalid() ) return;
 
-		newscale = (float)this->viewport_width() / (image->original_width()*(image->ascale>0.0?image->ascale:1.0));
+		newscale = ((float)this->viewport_width()) / (image->original_width()*(image->ascale>0.0?image->ascale:1.0));
 
 		image->rescale(newscale);
 	}

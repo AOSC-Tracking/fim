@@ -1705,7 +1705,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 		const char *line;
 
 	    	if (NULL != (line = fim_getenv("FBGAMMA")))
-	        	fbgamma = atof(line);
+	        	fbgamma = fim_atof(line);
 	    	if (NULL != (line = fim_getenv("FBFONT")))
 			fontname = line;
 	}

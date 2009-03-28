@@ -27,6 +27,15 @@
 
 #include "fim.h"
 #include "string.h"
+
+#if 0
+#define DBG(X) std::cout<<X;
+#else
+#define DBG(X) 
+#endif
+
+
+
 namespace fim
 {
 class Var
@@ -40,8 +49,20 @@ class Var
 	fim::string s;
 	public:
 	Var(const Var &v)
-	:type(0),i(0),s(fim::string())
+	:type(0),i(0),s(v.s)
 	{
+		this->set(v);// FIXME : new
+/*		this->type=v.type;
+		if(type=='i')this->i=v.i;
+		if(type=='f')this->f=v.f;
+		if(type=='s')this->s=v.s;*/
+	}
+
+	int   set(const Var &v)
+	{
+		/*
+                 * 20090327 introduced for a harmful conversions story..
+		 */
 		this->type=v.type;
 		if(type=='i')this->i=v.i;
 		if(type=='f')this->f=v.f;
@@ -55,9 +76,18 @@ class Var
 		f=v;
 	}
 
+/*	Var(int* v)
+	:type(0),i(0)
+	{
+		DBG("VAR(i:"<<*v<<")\n");
+		type='i';
+		i=*v;
+	}*/
+
 	Var(int v)
 	:type(0),i(0),s(fim::string())
 	{
+		DBG("VAR(i:"<<v<<")\n");
 		type='i';
 		i=v;
 	}
@@ -103,7 +133,7 @@ class Var
 	void operator= (float f){setFloat(f);}
 	void operator= (fim::string &s){setString(s);}
 #else
-	const Var& operator= (int   i){type='i';this->i=i;return *this;}
+	const Var& operator= (int   i){DBG("VAR2i:"<<i<<"\n";type='i');this->i=i;return *this;}
 	const Var& operator= (float f){setFloat(f);return *this;}
 	const Var& operator= (fim::string &s){setString(s);return *this;}
 	const Var& operator= (const Var &v){type=v.type;;return *this;}
@@ -130,6 +160,7 @@ class Var
 	fim::string getString()const
 	{
 		char buf[16];
+		DBG("t:"<<type <<"\n");
 		if(type=='s')return this->s;
 		else
 		{
@@ -140,9 +171,9 @@ class Var
 		
 	}
 
-	operator int()const{return getInt();}
-	operator float()const{return getFloat();}
-	operator string()const{return getString();}
+//	operator int()const{return getInt();}
+///	operator float()const{return getFloat();}
+//	operator string()const{return getString();}
 
 	/*
 	 * These should be refined some day :)
@@ -152,11 +183,13 @@ class Var
 	Var  operator< (const Var &v)const { return getFloat()< v.getFloat(); }
 	Var  operator> (const Var &v)const { return getFloat()> v.getFloat(); }
 	#define _both(t) (((getType()==t) && (v.getType()==t)))
+	#define _types() DBG("t1:"<<(getType())<<",t2:"<<(v.getType())<<"\n");
 	#define _some_string() (getType()=='s' || v.getType()=='s')
 	#define _numeric() (!_some_string())
-	#define _p_t(op) std::cout<<op<<"("<<(char)getType()<<","<<(char)v.getType()<<")\n";
+	#define _p_t(op) DBG(op<<"("<<(char)getType()<<","<<(char)v.getType()<<")\n");
 	Var operator!=(const Var &v)const {
 		//_p_t("!=")
+		_types() 
 		if(_both('i'))return getInt  () !=v.getInt  (); 
 		if(_both('f'))return getFloat() !=v.getFloat();
 		if(_both('s'))
@@ -165,7 +198,7 @@ class Var
 		}
 		return getFloat()!=v.getFloat();
 	}
-	Var operator==(const Var &v)const { return 1-(int)(*this != v); }
+	Var operator==(const Var &v)const {DBG("EQV\n"); return 1-(*this != v).getInt(); }
 	Var operator/ (const Var &v)const
 	{
 		if(_both('i')) return getInt()/(v.getInt()!=0?v.getInt():1); 
@@ -187,6 +220,9 @@ class Var
 	}
 	Var operator- (const Var &v)const
 	{
+		DBG("SUB"<<getType()<<"-"<<v.getType()<<"\n"); 
+		DBG("SUB"<<getFloat()<<"-"<<v.getFloat()<<"\n"); 
+		//std::cout<<"t1:"<<(getType())<<",t2:"<<(v.getType())<<"\n";
 		if(_both('i'))return getInt  ()-v.getInt  (); 
 		if(_both('f'))return getFloat()-v.getFloat();
 		if(_both('s'))return getFloat()-v.getFloat();//yes...
@@ -206,6 +242,7 @@ class Var
 	#undef _numeric
 	#undef _some_string
 	#undef _both
+	#undef _types
 /*	Var operator==(const Var &v)const
 	{
 		return (type==v.getType()) && (i==v.getInt());

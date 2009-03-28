@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -157,12 +157,12 @@ STRINGC_DQ {STRINGC}|\'
 	}
 
 "'"{DIGIT}+"."{DIGIT}*"'" {
-	yylval.fValue = atof(yytext+1);
+	yylval.fValue = fim_atof(yytext+1);
 	return FLOAT;
 	}
 
 "\""{DIGIT}+"."{DIGIT}*"\"" {
-	yylval.fValue = atof(yytext+1);
+	yylval.fValue = fim_atof(yytext+1);
 	return FLOAT;
 	}
 
@@ -180,14 +180,7 @@ STRINGC_DQ {STRINGC}|\'
 	return STRING;
 	}
 
-"/"{STRINGC}* {
-	/* FIM_SMART_COMPLETION patch */
-	/* a path */
-	astrcpy(yylval.sValue,yytext);;
-	return FILE_PATH;
-	}
-
-"./"{STRINGC}* {
+"./"{STRINGC}* {/* FIXME : "/"{STRINGC} - like tokens clashed with lone / operator */
 	/* FIM_SMART_COMPLETION patch */
 	/* a path */
 	astrcpy(yylval.sValue,yytext);;
