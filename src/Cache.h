@@ -99,7 +99,7 @@ class Cache
 	int prefetch(cache_key_t key);
 
 	fim::string getReport();
-
+	~Cache();
 };
 }
 
