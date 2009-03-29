@@ -257,6 +257,7 @@ class Window
 	int width()const;
 	int xorigin()const;
 	int yorigin()const;
+	~Window();
 };
 
 }

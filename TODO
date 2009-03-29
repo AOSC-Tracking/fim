@@ -22,11 +22,14 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090329	use clearenv() to sanitize atof
+20090328	fim has memory leaks . solve them.
 20090318	minicheck to detect wrong permissions on fb file ?!
 20090318	static checkers ?
 		stllint : aszt.inf.elte.hu/~gsd/s/cikkek/concepts/2006/GregorSchuppSPE05.pdf
 		cppcheck : http://sourceforge.net/projects/cppcheck/
 		using astyle for code readability ?
+		could use flawfinder
 20090305	moritz suggests fimgs with :
 		src/fim -c 'autoheight=0;autowidth=0;v:auto_scale_v=0;'\
 			'autocmd "PostRedisplay" "" "g:oscale=scale;";'\

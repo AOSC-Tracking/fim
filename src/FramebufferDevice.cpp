@@ -1754,3 +1754,17 @@ void FramebufferDevice::finalize (void)
 static void foo(){} /* let's make our compiler happy */
 #endif  //ifndef FIM_WITH_NO_FRAMEBUFFER
 
+FramebufferDevice::~FramebufferDevice()
+{
+	/* added in fim : fbi did not have this */
+	if(f)
+	{
+		if(f->eindex) free(f->eindex);
+		if(f->gindex) free(f->gindex);
+		if(f->glyphs) free(f->glyphs);
+		if(f->extents) free(f->extents);
+		free(f);
+	}
+}
+
+

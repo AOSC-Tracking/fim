@@ -331,6 +331,7 @@ namespace fim
 	fontserver(),
 	browser(*this)
 	//,framebufferdevice(_framebufferdevice)
+	,return_code(0)
 	,dummydisplaydevice(this->mc)
 	,displaydevice(displaydevice)	/* the display device could be NULL ! (FIXME) */
 	{
@@ -616,6 +617,7 @@ namespace fim
 //		executeFile("/etc/fimrc");	//GLOBAL DEFAULT CONFIGURATION FILE
 		*prompt='\0';
 		*(prompt+1)='\0';
+
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
 		char rcfile[_POSIX_PATH_MAX];
@@ -1104,7 +1106,7 @@ namespace fim
 */
 #endif
 
-	void CommandConsole::executionCycle()
+	int CommandConsole::executionCycle()
 	{
 		/*
 		 * the cycle with fetches the instruction stream.
@@ -1279,7 +1281,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		autocmd_exec("PostExecutionCycle",initial);
 #endif
-		quit(0);
+		return quit(return_code);
 	}
 
 	void CommandConsole::exit(int i)const
@@ -1291,7 +1293,7 @@ namespace fim
 		std::exit(i);
 	}
 
-	void CommandConsole::quit(int i)
+	int CommandConsole::quit(int i)
 	{
 		/*
 		 * the method to be called to exit from the program safely
@@ -1299,6 +1301,7 @@ namespace fim
     		cleanup_and_exit(i);
 		/* the following command should be ignored */
 		this->exit(0);
+		return i;/* just in case :) */
 	}
 
 	fim::string CommandConsole::quit(const args_t &args)
@@ -1365,6 +1368,22 @@ namespace fim
 				}
 			}
 		}
+		for(size_t i=0;i<commands.size();++i)
+			if(commands[i])
+				delete commands[i];
+
+		if(aad && !displaydevice)
+			delete aad;	/* aad is an alias */
+		else
+		{
+			if(displaydevice)delete displaydevice;
+		}
+
+#ifdef FIM_WINDOWS
+		if(window) delete window;
+#else
+		if(viewport) delete viewport;
+#endif
 	}
 
 	int CommandConsole::toggleStatusLine()
@@ -2058,8 +2077,15 @@ namespace fim
 		/*
 		 * returns immediately the program with an exit code
 		 * */
+/*		this in unclean
 		if( args.size() < 0 ) this->quit(0);
-		else	this->quit( (int) args[0] );
+		else	this->quit( (int) args[0] );*/
+		/* this is clean */
+		if( args.size() < 0 )
+			return_code=0;
+		else
+			return_code=(int)args[0];
+		show_must_go_on=0;
 		return "";/* it shouldn' return, though :) */
 	}
 
