@@ -102,12 +102,12 @@ struct jpeg_state {
 /* ---------------------------------------------------------------------- */
 /* data source manager for thumbnail images                               */
 
-static void thumbnail_src_init(struct jpeg_decompress_struct *cinfo)
+/*static void thumbnail_src_init(struct jpeg_decompress_struct *cinfo)
 {
     struct jpeg_state *h  = container_of(cinfo, struct jpeg_state, cinfo);
     cinfo->src->next_input_byte = h->thumbnail;
     cinfo->src->bytes_in_buffer = h->tsize;
-}
+}*/
 
 static int thumbnail_src_fill(struct jpeg_decompress_struct *cinfo)
 {
@@ -201,7 +201,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     }
 
     // !! 
-    thumbnail_mgr.init_source         = thumbnail_src_init;
+    thumbnail_mgr.init_source         = /*thumbnail_src_init*/ NULL /* it is not useful, and breaks c++98 standard C++ compilation */;
     thumbnail_mgr.fill_input_buffer   = thumbnail_src_fill;
     thumbnail_mgr.skip_input_data     = thumbnail_src_skip;
     thumbnail_mgr.resync_to_restart   = jpeg_resync_to_restart;

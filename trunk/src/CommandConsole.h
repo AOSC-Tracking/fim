@@ -43,6 +43,7 @@ class CommandConsole
 	fim::string postExecutionCommand;
 
 	int show_must_go_on;
+	int return_code;	/* new, to support the 'return' command */
 	public:
 
 	struct termios  saved_attributes;
@@ -173,7 +174,7 @@ class CommandConsole
 	bool display();
 	bool redisplay();
 	char * command_generator (const char *text,int state)const;
-	void executionCycle();
+	int executionCycle();
 	int init(string device);
 	int  inConsole()const;
 	~CommandConsole();
@@ -259,7 +260,7 @@ class CommandConsole
 	fim::string clear(const args_t& args);
 	fim::string scroll_up(const args_t& args);
 	fim::string scroll_down(const args_t& args);
-	void quit(int i=0);
+	int quit(int i=0);
 	public:
 
 	int  drawOutput();

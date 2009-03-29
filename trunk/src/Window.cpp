@@ -1124,6 +1124,11 @@ namespace fim
 			return NULL;
 	}
 
+	Window::~Window()
+	{
+		if(viewport) delete viewport;
+		close();
+	}
 }
 #if 0
 /*

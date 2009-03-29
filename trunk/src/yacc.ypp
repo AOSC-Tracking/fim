@@ -2,7 +2,7 @@
 /*
  yacc.ypp : Parser source file template
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -451,7 +451,9 @@ void freeNode(nodeType *p)
 	int i;
 	if (!p) return;
 	if (p->type == stringCon)
-		free(p->scon.s);
+		{free(p->scon.s);p->scon.s=NULL;}
+	if (p->type == vId)
+		{free(p->scon.s);p->scon.s=NULL;}
 	if (p->type == typeOpr)
 	{
 		for (i = 0; i < p->opr.nops; i++)

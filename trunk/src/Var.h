@@ -67,6 +67,7 @@ class Var
 		if(type=='i')this->i=v.i;
 		if(type=='f')this->f=v.f;
 		if(type=='s')this->s=v.s;
+		return 0;
 	}
 
 	Var(float v)

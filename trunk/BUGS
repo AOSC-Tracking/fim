@@ -56,6 +56,7 @@ with a '@' and _Baz_ with a '.'.
 
 ==== MINOR ISSUES
 
+20090328	problems with --std=c++98 in legacy src/FbiStuffJpeg.cpp code (now commented)
 20070919	while command suffers from being not interruptible in some cases (when the image is small and not 'panable')
 20070912	Debugging it with the framebuffer under gdb hangs the console (even with -p).
 20070904	problems could occur with the commands giving output when no std::cout << "" is returned soon after (see Commandconsole.cpp mehods for this..)

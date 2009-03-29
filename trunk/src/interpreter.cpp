@@ -459,7 +459,7 @@ Var ex(nodeType *p)
 			case AND:return ex(p->opr.op[0]) && ex(p->opr.op[1]);
 			case OR :return ex(p->opr.op[0]) || ex(p->opr.op[1]);
 		}	
-		case cmdId:/* FIXME : not handled here */
+		case cmdId:/* FIXME : cmdId is dead */
 			DBG("cmdId ?!\n");
 			return 0;
 

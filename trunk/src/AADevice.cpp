@@ -357,7 +357,6 @@
 		ascii_context = NULL;
 
 		memcpy (&ascii_hwparms, &aa_defparams, sizeof (struct aa_hardware_params));
-
 		ascii_rndparms = aa_getrenderparams();
 		//aa_parseoptions (&ascii_hwparms, ascii_rndparms, &argc, argv);
 
@@ -448,3 +447,8 @@
 	}
 
 #endif
+
+	AADevice::~AADevice()
+	{
+		//finalize();// finalize should be called explicitly !
+	}

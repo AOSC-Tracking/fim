@@ -577,6 +577,7 @@ void init_one(int32_t *lut, int bits, int shift)
 	void status_screen(const char *msg, int draw);
 	void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
 	int get_bpp(){return fb_var.bits_per_pixel; };
+	virtual ~FramebufferDevice();
 };
 
 }
