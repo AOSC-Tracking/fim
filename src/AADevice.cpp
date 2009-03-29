@@ -345,7 +345,7 @@
 	//	((char*)aa_image(ascii_context))[]=;
 		
 //		std::cout << "width() : " << width << "\n"; //		std::cout << "height() : " << height << "\n";
-		aa_render (ascii_context, ascii_rndparms,0, 0, width() , height() );
+		aa_render (ascii_context, &aa_defrenderparams,0, 0, width() , height() );
 		aa_flush(ascii_context);
 		return 0;
 	}
@@ -357,7 +357,7 @@
 		ascii_context = NULL;
 
 		memcpy (&ascii_hwparms, &aa_defparams, sizeof (struct aa_hardware_params));
-		ascii_rndparms = aa_getrenderparams();
+		//ascii_rndparms = aa_getrenderparams();
 		//aa_parseoptions (&ascii_hwparms, ascii_rndparms, &argc, argv);
 
 //		NOTE: if uncommenting this, remember to #ifdef HAVE_GETENV
@@ -381,7 +381,6 @@
 		ascii_save.name = name;
 		ascii_save.format = &aa_text_format;
 		ascii_save.file = NULL;
-
 //		ascii_context = aa_init (&save_d, &ascii_hwparms, &ascii_save);
 		ascii_context = aa_autoinit (&ascii_hwparms);
 		if(!ascii_context)
@@ -394,6 +393,7 @@
 
 	void AADevice::finalize() 
 	{
+		finalized=true;
 		aa_close(ascii_context);
 	}
 	int AADevice::get_chars_per_line(){return aa_scrwidth(ascii_context);}
@@ -450,5 +450,6 @@
 
 	AADevice::~AADevice()
 	{
-		//finalize();// finalize should be called explicitly !
+		/* FIXME : seems like some aa stuff doesn't get freed. is it possible ? */
+		if(!finalized)finalize();// finalize should be called explicitly !
 	}

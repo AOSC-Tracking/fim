@@ -531,7 +531,9 @@ namespace fim
 		#ifdef FIM_WITH_AALIB
 		if(device=="aa")
 		{
-		aad=new AADevice(mc); if(aad && aad->initialize(key_bindings)!=0){delete aad ; aad=NULL;}
+		aad=new AADevice(mc);
+
+		if(aad && aad->initialize(key_bindings)!=0){delete aad ; aad=NULL;}
 		if(aad && displaydevice==NULL)
 		{
 			displaydevice=aad;

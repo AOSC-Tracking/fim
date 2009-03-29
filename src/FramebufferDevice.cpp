@@ -1747,6 +1747,7 @@ int FramebufferDevice::display(
 
 void FramebufferDevice::finalize (void)
 {
+	finalized=true;
 	clear_screen();
 	cleanup();
 }

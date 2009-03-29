@@ -34,7 +34,7 @@ class AADevice:public DisplayDevice
 {
 	private:
 	aa_context *ascii_context;
-	struct aa_renderparams *ascii_rndparms;
+	//struct aa_renderparams *ascii_rndparms;//we rely on aa_defrenderparams
 	struct aa_hardware_params ascii_hwparms;
 	struct aa_savedata ascii_save;
 	char name[2];	/* FIXME */
