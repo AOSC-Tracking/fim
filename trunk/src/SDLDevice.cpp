@@ -283,6 +283,7 @@ std::cout.unsetf ( std::ios::hex );
 
 	void SDLDevice::finalize()
 	{
+		finalized=true;
 		SDL_Quit();
 	}
 

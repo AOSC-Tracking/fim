@@ -27,6 +27,7 @@
 	,f(NULL)
 	,debug(0)
 	,redraw(0)
+	,finalized(false)
 	{}
 
 	int DisplayDevice::get_input(unsigned int * c)
@@ -192,4 +193,7 @@ int DisplayDevice::init_console()
 	return 0;
 }
 
+DisplayDevice::~DisplayDevice()
+{
+}
 

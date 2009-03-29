@@ -439,6 +439,7 @@ namespace fim
 			regfree(&regex);
 			return true;
 		}
+		regfree(&regex);
 		return false;
 	}
 
@@ -470,6 +471,7 @@ namespace fim
 			}
 			return pmatch->rm_so;
 		}
+		regfree(&regex);
 		return -1;
 	}
 

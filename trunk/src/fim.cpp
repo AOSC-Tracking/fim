@@ -601,7 +601,6 @@ int help_and_exit(char *argv0, int code=0)
 		// TODO : we still need a good output device probing mechanism
 
 		if(cc.init(g_fim_output_device)!=0) return -1;
-	
 		retcode=cc.executionCycle();/* note that this could not return */
 ret:
 		return retcode;

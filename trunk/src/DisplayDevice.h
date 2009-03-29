@@ -26,6 +26,7 @@
 class DisplayDevice
 {
 	protected:
+	bool finalized;
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
 	MiniConsole & mc;
@@ -53,7 +54,7 @@ class DisplayDevice
 		int flags// some flags
 		)=0;
 
-	virtual ~DisplayDevice(){}
+	virtual ~DisplayDevice();
 
 	virtual void flush(){};
 	virtual void lock(){}
