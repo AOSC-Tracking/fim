@@ -511,5 +511,12 @@ namespace fim
 #endif
 		return cache_report;
 	}
+
+	Cache::~Cache()
+	{
+		cachels_t::const_iterator ci;
+		for( ci=imageCache.begin();ci!=imageCache.end();++ci)
+			if(ci->second)delete ci->second;
+	}
 }
 

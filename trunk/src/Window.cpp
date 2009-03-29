@@ -1127,7 +1127,8 @@ namespace fim
 	Window::~Window()
 	{
 		if(viewport) delete viewport;
-		close();
+		if(first)delete first;
+		if(second)delete second; 
 	}
 }
 #if 0

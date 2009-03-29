@@ -1123,6 +1123,7 @@ namespace fim
 
 #endif
 		*prompt='\0';
+
 	 	while(show_must_go_on)
 		{
 			cycles++;
@@ -1291,6 +1292,8 @@ namespace fim
 		/*
 		 *	This method should be called only when there is no
 		 *	potential harm to the console.
+		 *	(note : destructors WILL NOT be called in this way.)
+		 *      FIXME
 		 */
 		std::exit(i);
 	}
@@ -1302,7 +1305,7 @@ namespace fim
 		 */
     		cleanup_and_exit(i);
 		/* the following command should be ignored */
-		this->exit(0);
+		//this->exit(0);
 		return i;/* just in case :) */
 	}
 
@@ -2605,7 +2608,7 @@ namespace fim
 #ifdef FIM_USE_READLINE
 		save_history();
 #endif
-		std::exit(code);
+		//std::exit(code);	FIXME
 	}
 
 	/*
