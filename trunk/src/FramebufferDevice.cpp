@@ -199,7 +199,7 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 		 * C-z is inhibited now (for framebuffer's screen safety!)
 		 */
 		signal(SIGTSTP,SIG_IGN);
-		//signal(SIGSEGV,cleanup_and_exit);
+		//signal(SIGSEGV,cleanup();
 		//set text color to white ?
 		
 		//initialization of the framebuffer device handlers
@@ -1601,7 +1601,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 		    //the last writable column index is C
 	
 #ifdef CERCO_GRANE
-		    if(ccol>=C+1)cleanup_and_exit(-1);	//ehm.. who knows
+		    if(ccol>=C+1){cleanup();return;}	//ehm.. who knows
 #else
 		    if(ccol>=C+1)return;
 #endif

@@ -99,7 +99,7 @@ class Var
 		type='i';
 		const char *s="0";
 		if(type=='i')i=atoi(s);
-		else if(type=='f')f=atof(s);
+		else if(type=='f')f=fim_atof(s);
 		else if(type=='s')this->s=s;
 		else i=0;
 	}
@@ -122,7 +122,7 @@ class Var
 	{
 		type=type_;
 		if(type=='i')i=atoi(s);
-		else if(type=='f')f=atof(s);
+		else if(type=='f')f=fim_atof(s);
 		else if(type=='s')this->s=s;
 		else i=0;
 	}
@@ -154,7 +154,7 @@ class Var
 	return(type=='f')?f:
 		(type=='i'?
 		 	((float)i):
-			((type=='s')?atof(s.c_str()):0.0f)
+			((type=='s')?fim_atof(s.c_str()):0.0f)
 			)
 			;}
 

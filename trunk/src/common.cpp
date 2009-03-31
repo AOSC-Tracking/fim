@@ -476,8 +476,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 double fim_atof(const char *nptr)
 {
 	/* the original atof suffers from locale 'problems', like non dotted radix representations */
-	//setlocale(LC_NUMERIC,"en_US");/* FIXME : should replace atof, instead! */ 
-	//return atof(nptr);
+	/* although, atof can be used if one calls setlocale(LC_ALL,"C");  */
 	double n=0.0;
 	double d=1.0;
 	if(!nptr)return n;

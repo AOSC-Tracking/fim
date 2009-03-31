@@ -1,0 +1,20 @@
+stdout "asymmetric scaling test";
+load;
+
+i:ascale=1;
+i:scale=2;
+magnify;
+reduce;
+display;
+stdout i:swidth==i:width;
+stdout i:swidth==2*i:width;
+
+stdout "";
+
+i:ascale=2;
+i:scale=2;
+magnify;
+reduce;
+display;
+stdout i:swidth==2*i:width;
+stdout i:swidth==i:width;

@@ -386,8 +386,8 @@ namespace fim
 		addCommand(new Command(fim::string("scale_factor_increase" ),fim::string("add scale_factor_delta to the scale factors reduce_factor and magnify_facto" ),&browser,&Browser::scale_factor_increase));
 		addCommand(new Command(fim::string("scale_factor_decrease" ),fim::string( "subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor" ),&browser,&Browser::scale_factor_decrease));
 		addCommand(new Command(fim::string("rotate" ),fim::string( "rotate the image the specified amount of degrees" ),&browser,&Browser::rotate));
-		addCommand(new Command(fim::string("magnify" ),fim::string("magnifies the displayed image" ),&browser,&Browser::magnify));
-		addCommand(new Command(fim::string("reduce"),fim::string("reduces the displayed image" ),&browser,&Browser::reduce));
+		addCommand(new Command(fim::string("magnify" ),fim::string("magnify [ARGS] : magnifies the displayed image by the magnify_factor variable or ARGS" ),&browser,&Browser::magnify));
+		addCommand(new Command(fim::string("reduce"),fim::string("reduce [ARGS] ; reduces the displayed image by reduce_factor or ARGS" ),&browser,&Browser::reduce));
 		addCommand(new Command(fim::string("return"),fim::string("returns from the program with a status code"),this,&CommandConsole::do_return));
 		addCommand(new Command(fim::string("top_align"),fim::string("aligns to the upper side the image" ),&browser,&Browser::top_align));
 		addCommand(new Command(fim::string("bottom_align"),fim::string("aligns to the lower side the image" ),&browser,&Browser::bottom_align));
@@ -472,6 +472,10 @@ namespace fim
 
 	int CommandConsole::init(string device)
 	{
+		/* new : prevents atof, sprintf and such conversion mismatches! */
+		setlocale(LC_ALL,"C");	/* portable (among Linux hosts) : should use dots for numerical radix separator */
+		//setlocale(LC_NUMERIC,"en_US"); /* lame  */
+		//setlocale(LC_ALL,""); /* just lame */
 
 		displaydevice=NULL;
 		int xres=0,yres=0;
@@ -480,7 +484,6 @@ namespace fim
 		setVariable(FIM_VID_TERM, fim_getenv("TERM"));
 
 		// NOTE : for the dumb device, it could be better ...
-		tty_raw();// this, here, inhibits unwanted key printout (raw mode), and saves the current tty state
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 		if( device=="fb" )
 		{
@@ -490,7 +493,7 @@ namespace fim
 			FramebufferDevice * ffdp=NULL;
 
 			displaydevice=new FramebufferDevice(mc);
-			if(!displaydevice || ((FramebufferDevice*)displaydevice)->framebuffer_init())cleanup_and_exit(0);
+			if(!displaydevice || ((FramebufferDevice*)displaydevice)->framebuffer_init()){cleanup();return -1;}
 			ffdp=((FramebufferDevice*)displaydevice);
 			setVariable(FIM_VID_DEVICE_DRIVER, "fbdev");
 			if(default_fbdev)ffdp->set_fbdev(default_fbdev);
@@ -559,6 +562,7 @@ namespace fim
 		}
 		}
 		#endif
+		tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
 
 		if( displaydevice==NULL)
 		{
@@ -886,7 +890,8 @@ namespace fim
 		if(r!=0)
 		{
 			ferror("pipe error\n");
-    			cleanup_and_exit(-1);
+    			cleanup();
+			return -1;
 		}
 		//we write there our script or commands
 		r=write(pipedesc[1],s,strlen(s));
@@ -894,7 +899,8 @@ namespace fim
 		if((size_t)r!=strlen(s))
 		{
 			ferror("write error");
-    			cleanup_and_exit(-1);
+    			cleanup();
+			return -1;
 		} 
 		for(char*p=s;*p;++p)
 			if(*p=='\n')*p=' ';
@@ -1303,7 +1309,7 @@ namespace fim
 		/*
 		 * the method to be called to exit from the program safely
 		 */
-    		cleanup_and_exit(i);
+    		cleanup();
 		/* the following command should be ignored */
 		//this->exit(0);
 		return i;/* just in case :) */
@@ -1403,7 +1409,6 @@ namespace fim
 		return 0;
 	}
 
-	
 	fim::string CommandConsole::readStdFileDescriptor(FILE* fd)
 	{
 		/*
@@ -1418,7 +1423,6 @@ namespace fim
 		if(r==-1)return -1;
 		return cmds;
 	}
-
 	
 	int CommandConsole::executeStdFileDescriptor(FILE* fd)
 	{
@@ -2540,7 +2544,6 @@ namespace fim
 		tcsetattr (0, TCSANOW, &saved_attributes);
 	}
 
-
 	int CommandConsole::save_history()
 	{
 #ifndef FIM_NOFIMRC
@@ -2595,7 +2598,7 @@ namespace fim
 	 * This routine terminates the program as cleanly as possible.
 	 * It should be used whenever useful.
 	 */
-	void CommandConsole::cleanup_and_exit(int code)
+	void CommandConsole::cleanup()
 	{
 		/*
 		 * the display device should exit cleanly to avoid cluttering the console
@@ -2608,7 +2611,6 @@ namespace fim
 #ifdef FIM_USE_READLINE
 		save_history();
 #endif
-		//std::exit(code);	FIXME
 	}
 
 	/*

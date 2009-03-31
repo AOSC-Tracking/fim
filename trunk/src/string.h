@@ -102,7 +102,7 @@ namespace fim
  	std::ostream& print(std::ostream &os)const;
 //	int operator=(int &i,const string& s){i=-1;return i;}
 	operator int()const{return atoi(s);}
-	operator float()const{return atof(s);}
+	operator float()const{return fim_atof(s);}
 	};
 #else
 	class string:public std::string
@@ -121,7 +121,7 @@ namespace fim
  		the following two operators are very nice to use but pose unexpected problems.		
 */
  		operator int  ()const{return atoi(this->c_str());}
-		operator float()const{return atof(this->c_str());}
+		operator float()const{return fim_atof(this->c_str());}
 
 		string operator+(const string s)const;
 		/* copy constructor */
