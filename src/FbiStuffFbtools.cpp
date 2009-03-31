@@ -89,11 +89,11 @@ void fb_catch_exit_signals(void)
 	return;
 
     /* console cleanup should happen here */
-    cc.cleanup_and_exit(42);
+    cc.cleanup();
 #ifdef HAVE_SYS_SIGLIST
     FIM_FBI_PRINTF("Oops: %s\n",sys_siglist[termsig]);
 #endif
-    exit(42);
+    std::exit(42);
 }
 
 

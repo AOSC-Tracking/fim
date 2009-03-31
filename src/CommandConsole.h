@@ -308,7 +308,7 @@ class CommandConsole
 
 	void tty_raw();
 	void tty_restore();
-	void cleanup_and_exit(int code);
+	void cleanup();
 	
 	fim::string print_commands()const;
 

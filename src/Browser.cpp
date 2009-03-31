@@ -20,6 +20,7 @@
 */
 
 #define firstorzero(x) (x.size()?((int)(x[0])):0)
+#define firstforzero(x) (x.size()?((float)(x[0])):0.0)
 
 #include <dirent.h>
 #include <sys/types.h>
@@ -1240,7 +1241,9 @@ namespace fim
 		 */ 
 		if(c_image())
 		{
-			float factor = (float)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
+			float factor;
+			factor = firstforzero(args);
+			if(!factor) factor = (float)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PreScale",c);
@@ -1272,7 +1275,9 @@ namespace fim
 		 */ 
 		if(c_image())
 		{
-			float factor = (float)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
+			float factor;
+			factor = firstforzero(args);
+			if(!factor) factor = (float)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PreScale",c);
