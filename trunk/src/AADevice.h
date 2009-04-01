@@ -76,6 +76,7 @@ class AADevice:public DisplayDevice
 	void flush();
 	int init_console();
 	int get_bpp(){return 1; /* :) */ };
+	int get_input(unsigned int * c);
 };
 
 
