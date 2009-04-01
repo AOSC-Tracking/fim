@@ -22,6 +22,7 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090401	should use aa_getevent
 20090329	use clearenv() to sanitize atof
 20090328	fim has memory leaks . solve them.
 20090318	minicheck to detect wrong permissions on fb file ?!

@@ -137,7 +137,7 @@ static int redisplay_hook_no_fb()
 	return 0;
 }*/
 
-#ifdef FIM_WITH_LIBSDL
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
 int rl_sdl_getc_hook()
 {
 	unsigned int c;
@@ -220,8 +220,8 @@ void initialize_readline (int with_no_display_device)
 	        rl_event_hook=redisplay_hook;
 	        rl_pre_input_hook=redisplay_hook;
 	}
-	#ifdef FIM_WITH_LIBSDL
-	if( g_fim_output_device=="sdl" )
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
+	if( g_fim_output_device=="sdl" || g_fim_output_device=="aa" )
 	{
 		rl_getc_function=rl_sdl_getc;
 		rl_event_hook   =rl_sdl_getc_hook;

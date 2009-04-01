@@ -2606,8 +2606,8 @@ namespace fim
 		 * used by : fb_catch_exit_signals() : should this matter ?
 		 * */
 
-		if(displaydevice) displaydevice->finalize();
 		tty_restore();	
+		if(displaydevice) displaydevice->finalize();
 #ifdef FIM_USE_READLINE
 		save_history();
 #endif

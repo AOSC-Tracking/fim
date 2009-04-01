@@ -388,6 +388,12 @@
 			std::cout << "problem initializing aalib!\n";
 			return -1;
 		}
+		if(!aa_autoinitkbd(ascii_context, 0))
+		{
+			std::cout << "problem initializing aalib keyboard!\n";
+			return -1;
+		}
+		//aa_hidecursor (context);
 		return 0;
 	}
 
@@ -453,3 +459,30 @@
 		/* FIXME : seems like some aa stuff doesn't get freed. is it possible ? */
 		if(!finalized)finalize();// finalize should be called explicitly !
 	}
+
+	int AADevice::get_input(unsigned int * c)
+	{
+		*c = 0x0;	/* blank */
+		if(!c)return 0;
+		*c = aa_getevent(ascii_context,0);
+		if(*c==AA_UNKNOWN)*c=0;
+		if(*c)std::cout << "";/* FIXME : removing this breaks things. console-related problem, I guess */
+		if(!*c)return 0;
+		if(*c==AA_UP   ){*c=272;return 1;}
+		if(*c==AA_DOWN ){*c=274;return 1;}
+		if(*c==AA_LEFT ){*c=276;return 1;}
+		if(*c==AA_RIGHT){*c=275;return 1;}
+		
+		/*
+		 We should handle too:
+
+			AA_RESIZE AA_MOUSE AA_UP AA_DOWN AA_LEFT AA_RIGHT 
+			AA_BACKSPACE AA_ESC AA_UNKNOWN AA_RELEASE 
+		*/
+
+		//std::cout << "event : " << *c << "\n";
+		//if(*c<0x80) return 1;
+		return 1;
+		return 0;
+	}
+
