@@ -1383,9 +1383,11 @@ namespace fim
 			if(commands[i])
 				delete commands[i];
 
+	#ifdef FIM_WITH_AALIB
 		if(aad && !displaydevice)
 			delete aad;	/* aad is an alias */
 		else
+	#endif
 		{
 			if(displaydevice)delete displaydevice;
 		}

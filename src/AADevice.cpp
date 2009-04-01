@@ -24,6 +24,7 @@
 #ifdef FIM_WITH_AALIB
 
 #include "AADevice.h"
+#include <aalib.h>
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
@@ -452,8 +453,6 @@
 		return 0;
 	}
 
-#endif
-
 	AADevice::~AADevice()
 	{
 		/* FIXME : seems like some aa stuff doesn't get freed. is it possible ? */
@@ -483,6 +482,6 @@
 		//std::cout << "event : " << *c << "\n";
 		//if(*c<0x80) return 1;
 		return 1;
-		return 0;
+		//return 0;
 	}
-
+#endif
