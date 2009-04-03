@@ -83,7 +83,7 @@ static void _fb_switch_signal(int signal)
 	ffdp->fb_switch_signal(signal);
 }
 
-int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
+int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)
 {
     unsigned char *pos,*start;
     int i,c,j,w;
@@ -839,7 +839,7 @@ int FramebufferDevice::fb_activate_current(int tty)
     return 0;
 }
 
-int FramebufferDevice::status_line(unsigned char *msg)
+int FramebufferDevice::status_line(const unsigned char *msg)
 {
     int y;
     

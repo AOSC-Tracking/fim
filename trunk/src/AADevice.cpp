@@ -394,7 +394,12 @@
 			std::cout << "problem initializing aalib keyboard!\n";
 			return -1;
 		}
-		//aa_hidecursor (context);
+		/*if(!aa_autoinitmouse(ascii_context, 0))
+		{
+			std::cout << "problem initializing aalib mouse!\n";
+			return -1;
+		}*/
+		aa_hidecursor (ascii_context);
 		return 0;
 	}
 
@@ -418,7 +423,7 @@
 		return 0;
 	}
 
-	int AADevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
+	int AADevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)
 	{
 #if (!FIM_AALIB_DRIVER_DEBUG)
 		aa_puts(ascii_context,x,y,
@@ -444,7 +449,7 @@
 		return clear_rect_(aa_image(ascii_context),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context));
 	}
 
-	int AADevice::status_line(unsigned char *msg)
+	int AADevice::status_line(const unsigned char *msg)
 	{
 #if (!FIM_AALIB_DRIVER_DEBUG)
 		aa_printf(ascii_context,0,txt_height()-1,AA_NORMAL,"%s",msg);
@@ -463,21 +468,64 @@
 	{
 		*c = 0x0;	/* blank */
 		if(!c)return 0;
-		*c = aa_getevent(ascii_context,0);
+		*c = aa_getevent(ascii_context,0);/* 1 if want to receive AA_RELEASE events, too */
 		if(*c==AA_UNKNOWN)*c=0;
 		if(*c)std::cout << "";/* FIXME : removing this breaks things. console-related problem, I guess */
 		if(!*c)return 0;
-		if(*c==AA_UP   ){*c=272;return 1;}
+/*		if(*c==AA_UP   ){*c=272;return 1;}
 		if(*c==AA_DOWN ){*c=274;return 1;}
 		if(*c==AA_LEFT ){*c=276;return 1;}
-		if(*c==AA_RIGHT){*c=275;return 1;}
-		
-		/*
-		 We should handle too:
+		if(*c==AA_RIGHT){*c=275;return 1;}*/
+		/* FIXME : see defaultConfiguration.cpp */
+		if(*c==AA_UP   ){*c=4283163;return 1;}
+		if(*c==AA_DOWN ){*c=4348699;return 1;}
+		if(*c==AA_LEFT ){*c=4479771;return 1;}
+		if(*c==AA_RIGHT){*c=4414235;return 1;}
+		if(*c==AA_BACKSPACE){*c=127;return 1;}
 
-			AA_RESIZE AA_MOUSE AA_UP AA_DOWN AA_LEFT AA_RIGHT 
-			AA_BACKSPACE AA_ESC AA_UNKNOWN AA_RELEASE 
-		*/
+		/* FIXME : these five bindings work only under X .. */
+		if(*c==65765){*c=2117491483;return 1;}/* pageup   (arbitrary) */
+		if(*c==65766){*c=2117425947;return 1;}/* pagedown (arbitrary) */
+		if(*c==65779){*c=2117229339;return 1;}/* ins  (arbitrary) */
+		if(*c==65760){*c=2117163803;return 1;}/* home (arbitrary) */
+		if(*c==65767){*c=2117360411;return 1;}/* end  (arbitrary) */
+
+		if(*c==65907)
+		{
+			status_line((const unsigned char*)"control key not yet supported in aa. sorry!");
+			return 1;
+			/* left ctrl (arbitrary) */
+		}
+		if(*c==65908)
+		{
+			status_line((const unsigned char*)"control key not yet supported in aa. sorry!");
+			return 1;
+			/* right ctrl (arbitrary) */
+		}
+		if(*c==65909)
+		{
+			status_line((const unsigned char*)"lock key not yet supported in aa. sorry!");
+			return 1;
+			/* right ctrl (arbitrary) */
+		}
+		if(*c==65906)
+		{
+			status_line((const unsigned char*)"shift key not yet supported in aa. sorry!");
+			return 1;
+			/* shift (arbitrary) */
+		}
+		if(*c==AA_ESC){*c=27;return 1;}/* esc  */
+		if(*c==AA_MOUSE)
+		{
+			status_line((const unsigned char*)"mouse events not yet supported in aa. sorry!");
+			return 1;
+		}/* esc  */
+		if(*c==AA_RESIZE )
+		{
+			status_line((const unsigned char*)"window resizing not yet supported. sorry!");
+			/*aa_resize(ascii_context);*//*we are not yet ready : the Window and Viewport stuff .. */
+			return 0;
+		}/* esc  */
 
 		//std::cout << "event : " << *c << "\n";
 		//if(*c<0x80) return 1;
