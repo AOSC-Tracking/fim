@@ -64,7 +64,7 @@ class DisplayDevice
 	virtual int width()=0;
 	virtual int get_bpp()=0;
 	virtual int height()=0;
-	virtual int status_line(unsigned char *msg)=0;
+	virtual int status_line(const unsigned char *msg)=0;
 	int console_control(int code);
 	virtual int handle_console_switch()=0;
 	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
@@ -75,7 +75,7 @@ class DisplayDevice
 	virtual void cleanup(){}// really, only for making happy fbdev
 
 	int redraw;
-	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)=0;
+	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)=0;
 	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
 	private:
 	virtual void console_switch(int is_busy){}// really, only for making happy fbdev

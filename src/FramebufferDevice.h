@@ -343,7 +343,7 @@ class FramebufferDevice:public DisplayDevice
 	int  fb_font_width(void);
 	int  fb_font_height(void);
 
-	int status_line(unsigned char *msg);
+	int status_line(const unsigned char *msg);
 
 	void fb_edit_line(unsigned char *str, int pos);
 
@@ -355,7 +355,7 @@ class FramebufferDevice:public DisplayDevice
 	void fb_rect(int x1, int x2, int y1,int y2);
 
 	void fb_setpixel(int x, int y, unsigned int color);
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str);
+	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str);
 
 	void fb_clear_rect(int x1, int x2, int y1,int y2);
 	int clear_rect(int x1, int x2, int y1,int y2)

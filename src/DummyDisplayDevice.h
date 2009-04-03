@@ -49,11 +49,11 @@ class DummyDisplayDevice:public DisplayDevice
 	virtual int get_chars_per_column(){return 1;/* 0 would be so cruel */}
 	virtual int width(){return 1;/* 0 would be so cruel */}
 	virtual int height(){return 1;/* 0 would be so cruel */}
-	virtual int status_line(unsigned char *msg){return 0;}
+	virtual int status_line(const unsigned char *msg){return 0;}
 	virtual int console_control(int code){return 0;}
 	virtual int handle_console_switch(){return 0;}
 	virtual int clear_rect(int x1, int x2, int y1,int y2){return 0;}
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str){return 0;}
+	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str){return 0;}
 	virtual int get_bpp(){return 0;};
 
 	private:

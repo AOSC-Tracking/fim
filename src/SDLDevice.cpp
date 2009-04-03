@@ -515,7 +515,7 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char
 #undef GLWIDTHBYTESPADDED
 }
 
-int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str)
+int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)
 {
     int i,c/*,j,w*/;
 
@@ -560,7 +560,7 @@ err:
 	return -1;
 }
 
-	int SDLDevice::status_line(unsigned char *msg)
+	int SDLDevice::status_line(const unsigned char *msg)
 	{
 		if(SDL_MUSTLOCK(screen))
 		{
