@@ -23,6 +23,7 @@ ongoing further inspiration.
 
 
 20090404	could use dejagnu for interactive (keyboard interaction based) testing
+		http://www.kegel.com/xgcc3/ng1.txt
 20090403	should support aa device resizing and character escaping when exchanging data..
 20090401	should use aa_getevent
 20090318	minicheck to detect wrong permissions on fb file ?!

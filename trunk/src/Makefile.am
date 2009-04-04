@@ -6,9 +6,10 @@
 
 subdir = src
 
-AUTOMAKE_OPTIONS = nostdinc no-dependencies
+AUTOMAKE_OPTIONS = nostdinc no-dependencies dejagnu
 SUBDIRS = 
 
+check_PROGRAMS = fim
 bin_PROGRAMS = fim
 
 bin_SCRIPTS = fimgs
@@ -150,7 +151,12 @@ fim.o: version.h help.cpp
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
+	testdir/* \
+	testsuite/*/* \
 	regex.c
+
+RUNTESTDEFAULTFLAGS = --tool ./fim FIM=$$srcdir/./fim  --srcdir $$srcdir/testsuite
+#RUNTESTDEFAULTFLAGS = --all --tool ./fim FIM=$$srcdir/./fim --tool_opts=$$srcdir/../media/fim.png --srcdir $$srcdir/testsuite
 
 #fim_cpp_CPP_FLAGS=-DFIM_VERSION -DFIM_AUTHOR
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"

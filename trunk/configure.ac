@@ -95,6 +95,7 @@ AC_C_CONST
 AC_SYS_LARGEFILE
 AC_FUNC_FSEEKO
 AC_CHECK_SIZEOF(off_t)
+AM_MAINTAINER_MODE
 
 AH_TEMPLATE([HAVE_GETENV])
 AC_CHECK_FUNC([getenv], AC_DEFINE([HAVE_GETENV], [1], [If present, the getenv function allows fim to read environment variables.]))
