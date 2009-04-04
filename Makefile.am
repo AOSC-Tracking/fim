@@ -8,7 +8,7 @@
 
 # no-dependencies was due to problems with conditional sources
 # nostdinc disables the standard -I. include which breaks a correct string.h include
-AUTOMAKE_OPTIONS = nostdinc no-dependencies
+AUTOMAKE_OPTIONS = nostdinc no-dependencies # dejagnu
 SUBDIRS = src doc distros scripts
 
 dist_doc_DATA=README README.FIRST TODO VERSION BUGS  FAQ.TXT AUTHORS ChangeLog NEWS
