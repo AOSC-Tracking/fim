@@ -333,7 +333,7 @@ namespace fim
 	//,framebufferdevice(_framebufferdevice)
 	,return_code(0)
 	,dummydisplaydevice(this->mc)
-	,displaydevice(displaydevice)	/* the display device could be NULL ! (FIXME) */
+	,displaydevice(NULL)	/* the display device could be NULL ! (FIXME) */
 	{
 		appended_post_init_command=false;
 		fim_uninitialized = 1; // new
@@ -1389,7 +1389,7 @@ namespace fim
 		else
 	#endif
 		{
-			if(displaydevice)delete displaydevice;
+			if(displaydevice && displaydevice != &dummydisplaydevice)delete displaydevice;
 		}
 
 #ifdef FIM_WINDOWS
