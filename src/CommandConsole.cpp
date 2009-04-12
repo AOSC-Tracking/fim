@@ -40,6 +40,12 @@
 #include <signal.h>
 #include <fstream>
 
+#if HAVE_GET_CURRENT_DIR_NAME
+#else
+#ifdef _BSD_SOURCE || _XOPEN_SOURCE >= 500
+#include <unistd.h>		/* getcwd, as replacement for get_current_dir_name */
+#endif
+#endif
 
 extern int yyparse();
 
@@ -430,7 +436,7 @@ namespace fim
 		addCommand(new Command(fim::string("cd"      ),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::cd));
 		addCommand(new Command(fim::string("pwd"     ),fim::string(FIM_CMD_HELP_PWD   ),this,&CommandConsole::pwd));
 		addCommand(new Command(fim::string("popen"  ),fim::string("popen() invocation"),this,&CommandConsole::sys_popen));
-		addCommand(new Command(fim::string("stdout"  ),fim::string("writes to stdout"),this,&CommandConsole::stdout));
+		addCommand(new Command(fim::string("stdout"  ),fim::string("writes to stdout"),this,&CommandConsole::_stdout));
 #ifdef FIM_PIPE_IMAGE_READ
 		addCommand(new Command(fim::string("pread"  ),fim::string("executes the arguments as a shell command and reads the input as an image file (uses popen)"),this,&CommandConsole::pread));
 #endif
@@ -1493,7 +1499,7 @@ namespace fim
 		return "";
 	}
 
-	fim::string CommandConsole::stdout(const args_t &args)
+	fim::string CommandConsole::_stdout(const args_t &args)
 	{
 		return do_stdout(args);
 	}
@@ -2046,11 +2052,22 @@ namespace fim
 		 * yes, print working directory
 		 * */
 		fim::string cwd="";
-#ifdef _GNU_SOURCE
+#if HAVE_GET_CURRENT_DIR_NAME
+		/* default */
 		char *p=get_current_dir_name();
 		if(p)cwd=p;
 		else cwd="";
 		if(p)free(p);
+#else
+#ifdef _BSD_SOURCE || _XOPEN_SOURCE >= 500
+		{
+			/* untested */
+			char *buf[PATH_MAX];
+			getcwd(buf,PATH_MAX-1): 
+			buf[PATH_MAX-1]='\0';
+			cwd=buf;
+		}
+#endif
 #endif
 		return cwd;
 	}

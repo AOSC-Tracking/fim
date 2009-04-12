@@ -512,7 +512,7 @@ int help_and_exit(char *argv0, int code=0)
 		{
 			char *lineptr=NULL;
 			size_t bs=0;
-			while(getline(&lineptr,&bs,stdin)>0)
+			while(fim_getline(&lineptr,&bs,stdin)>0)
 			{
 				chomp(lineptr);
 				cc.push(lineptr);

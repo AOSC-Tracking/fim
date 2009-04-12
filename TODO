@@ -22,6 +22,8 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090412	fbi bugs:
+		http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=fbi
 20090404	could use dejagnu for interactive (keyboard interaction based) testing
 		http://www.kegel.com/xgcc3/ng1.txt, although first tests with expect (http://expect.nist.gov/) showed it
 		doesn't handle well input exchange with fim
@@ -42,6 +44,8 @@ ongoing further inspiration.
  		fakeroot debian/rules binary
 		http://www.debian.org/doc/debian-policy/
 		http://www.debian.org/doc/maint-guide/ch-build.en.html
+		http://pbuilder.alioth.debian.org/#IRCchannel
+		http://www.ibm.com/developerworks/linux/library/l-debpkg.html
 		http://www.debian-administration.org/articles/488
 		http://www.debian-administration.org/articles/337
 		debuild -us -uc

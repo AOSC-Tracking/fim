@@ -156,6 +156,10 @@
 /* Define to 1 if you have the <cstdio> header file. */
 #undef HAVE_CSTDIO
 
+/* If present, fgetln() will be used as a replacement for getline(). (on BSD)
+   */
+#undef HAVE_FGETLN
+
 /* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
 #undef HAVE_FSEEKO
 
@@ -163,8 +167,14 @@
    */
 #undef HAVE_GETENV
 
+/* If present, will be used for stdin reading. (on GNU) */
+#undef HAVE_GETLINE
+
 /* Define to 1 if you have the `getpagesize' function. */
 #undef HAVE_GETPAGESIZE
+
+/* Should live when _GNU_SOURCE, but it could be not the case. */
+#undef HAVE_GET_CURRENT_DIR_NAME
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H

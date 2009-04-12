@@ -465,7 +465,8 @@ void freeNode(nodeType *p)
 void yyerror(const char *s)
 {
 	//fprintf(stdout, "%s \n", s);
-	cout << s << "\n";
+	/* omitting std:: causes error on darwin gcc */
+	std::cout << s << "\n";
 }
 
 

@@ -202,7 +202,16 @@ class CommandConsole
 //	fim::string get_expr_type(const args_t &args);
 	fim::string help(const args_t &args);
 	fim::string quit(const args_t &args);
-	fim::string stdout(const args_t &args);
+	fim::string _stdout(const args_t &args);
+	/* naming this stdout raises problems on some systems 
+	e.g.: 
+	# uname -a
+	Darwin hostname 7.9.0 Darwin Kernel Version 7.9.0: Wed Mar 30 20:11:17 PST 2005; root:xnu/xnu-517.12.7.obj~1/RELEASE
+	# gcc -v
+	Reading specs from /usr/libexec/gcc/darwin/ppc/3.3/specs
+	Thread model: posix
+	gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
+	*/
 	fim::string do_stdout(const args_t &args)const;
 	fim::string foo (const args_t &args);
 	fim::string do_return(const args_t &args);

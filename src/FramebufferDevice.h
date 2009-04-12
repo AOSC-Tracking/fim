@@ -38,58 +38,16 @@
 
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 
-//#include "FbiStuff.h"
-//#include "FontServer.h"
-//#include "FbiStuffFbtools.h"
 #include <stdio.h>
-#include <signal.h>
-#include <sys/ioctl.h>
+#include <errno.h>
+#include <math.h>	//pow
+
+#if HAVE_LINUX_VT_H
 #include <linux/vt.h>
-#include <errno.h>
-#include <sys/mman.h>
-#include <math.h> //powe
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <termios.h>
-#include <signal.h>
-#include <errno.h>
-#include <setjmp.h>
-#include <sys/ioctl.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-*/
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <termios.h>
-#include <signal.h>
-#include <errno.h>
-#include <setjmp.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-
-#include <linux/fb.h>
-
-
-*/
-#include <linux/vt.h>
-#include <sys/user.h>	// PAGE_MASK
-
-#include <linux/kd.h>
+#endif
+#if HAVE_LINUX_FB_H
 #include <linux/fb.h>	// fb_fix_screeninfo
-
-
-
-
+#endif
 
 
 /* from fbtools.h */

@@ -23,7 +23,7 @@
 #define firstforzero(x) (x.size()?((float)(x[0])):0.0)
 
 #include <dirent.h>
-#include <sys/types.h>
+#include <sys/types.h>	/* POSIX Standard: 2.6 Primitive System Data Types (e.g.: ssize_t) */
 #include "fim.h"
 
 namespace fim
