@@ -99,6 +99,9 @@ AM_MAINTAINER_MODE
 
 AH_TEMPLATE([HAVE_GETENV])
 AC_CHECK_FUNC([getenv], AC_DEFINE([HAVE_GETENV], [1], [If present, the getenv function allows fim to read environment variables.]))
+AC_CHECK_FUNC([getline], AC_DEFINE([HAVE_GETLINE], [1], [If present, will be used for stdin reading. (on GNU)]))
+AC_CHECK_FUNC([fgetln], AC_DEFINE([HAVE_FGETLN], [1], [If present, fgetln() will be used as a replacement for getline(). (on BSD)]))
+AC_CHECK_FUNC([get_current_dir_name], AC_DEFINE([HAVE_GET_CURRENT_DIR_NAME], [1], [Should live when _GNU_SOURCE, but it could be not the case.]))
 
 
 have_default_bindings=yes
@@ -169,10 +172,24 @@ dnl new:
 AC_ARG_ENABLE(framebuffer, AC_HELP_STRING([--disable-framebuffer], [Disable the framebuffer device driver.]),
 [       if test x$enableval = xno ; then
                 fim_handle_framebuffer=no
-                AC_DEFINE(FIM_WITH_NO_FRAMEBUFFER, 1, [Defined when framebuffer device support is turned off.])
         fi
 ])
 
+AC_MSG_NOTICE([Checking for headers required by the Linux framebuffer device.])
+AC_CHECK_HEADERS([linux/fb.h], [break], AC_MSG_WARN([[Cannot find linux/fb.h.  Fim Linux framebuffer driver requires it!.]]))
+AC_CHECK_HEADERS([linux/vt.h], [break], AC_MSG_WARN([[Cannot find linux/vt.h.  Fim Linux framebuffer driver requires it!.]]))
+AC_CHECK_HEADERS([linux/kd.h], [break], AC_MSG_WARN([[Cannot find linux/kd.h.  Fim Linux framebuffer driver requires it!.]]))
+
+if test x$ac_cv_header_linux_fb_h != xyes -o  \
+	 x$ac_cv_header_linux_vt_h != xyes -o \
+	 x$ac_cv_header_linux_kd_h != xyes ; then
+	AC_MSG_WARN([Turning off Linux framebuffer support due to missing headers])
+	fim_handle_framebuffer=no 
+fi
+
+if test x$fim_handle_framebuffer = xno ; then
+	AC_DEFINE(FIM_WITH_NO_FRAMEBUFFER, 1, [Defined when framebuffer device support is turned off.])
+fi
 
 AC_HEADER_STDC
 AC_FUNC_MMAP
@@ -181,9 +198,6 @@ AC_CHECK_HEADERS(stdarg.h sys/ioctl.h ioctl.h sysexits.h)
 AC_CHECK_HEADERS(sys/time.h sys/resource.h)
 AC_CHECK_HEADERS(unix.h)
 AC_CHECK_HEADERS([cstdio stdio.h], [break],AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]]))
-AC_CHECK_HEADERS([linux/fb.h], [break], AC_MSG_ERROR([[Cannot find linux/fb.h.  Fim requires it!.]]))
-AC_CHECK_HEADERS([linux/vt.h], [break], AC_MSG_ERROR([[Cannot find linux/vt.h.  Fim requires it!.]]))
-AC_CHECK_HEADERS([linux/kd.h], [break], AC_MSG_ERROR([[Cannot find linux/kd.h.  Fim requires it!.]]))
 
 AC_CHECK_HEADERS([climits limits.h], [break], AC_MSG_ERROR([[Cannot find limits.h nor climits.  Fim requires it!.]]))
 
@@ -760,7 +774,8 @@ if test x$fim_handle_png = xyes; then
                 AC_PATH_PROG(LIBPNG_CONFIG, libpng-config, no)
         fi
         if test "x$LIBPNG_CONFIG" = "xno"; then
-                AC_MSG_ERROR([LIBPNG not found])
+      		AC_MSG_WARN(*** PNG loader will not be built (PNG library not found) ***))
+		fim_handle_png=no
         else
                 LIBPNG_CFLAGS=`$LIBPNG_CONFIG --cflags`
                 LIBPNG_CXXFLAGS=`$LIBPNG_CONFIG --cflags`

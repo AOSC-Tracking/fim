@@ -17,7 +17,6 @@ bin_SCRIPTS = fimgs
 doc_DATA = fimrc
 
 lex.yy.o  : lex.yy.cc
-#lex.yy.cc: lex.lex
 
 lex.yy.cc: lex.lex
 	$(LEX) $(LFLAGS) lex.lex
@@ -43,11 +42,12 @@ conf.h:       fimrc
 
 fim.cpp  :	version.h help.cpp
 
+# in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
-	grep define ../config.h | grep FIM | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
+	grep define ../config.h | grep FIM | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
 	echo "\"\n\"" >> version.h
-	grep define ../config.h | grep FIM.*'"' | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]\+\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> version.h
-	grep undef ../config.h | grep FIM | sort | sed 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]\+\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> version.h
+	grep define ../config.h | grep FIM.*'"' | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> version.h
+	grep undef ../config.h | grep FIM | sort | sed 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]*\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> version.h
 	echo  '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> version.h
 
 help.cpp: fim.h
@@ -59,6 +59,7 @@ Var.o : help.cpp
 
 
 # the following sources are built at make time
+# old bison versions could have problems with this (e.g.: generating yacc.tab.cpp.h instead of yacc.tab.hpp)
 BUILT_SOURCES = lex.yy.cc \
 	yacc.tab.cpp conf.h yacc.tab.hpp 
 

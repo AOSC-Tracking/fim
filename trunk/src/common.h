@@ -63,6 +63,7 @@ double getmilliseconds();
 const char * fim_getenv(const char * name);
 FILE * fim_fread_tmpfile(FILE * fp);
 double fim_atof(const char *nptr);
+ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream);
 
 /* exceptions */
 typedef int FimException;

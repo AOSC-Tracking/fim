@@ -28,7 +28,11 @@
 #include "common.h"
 #include <string>
 #include <fstream>
-#include <sys/time.h>
+#include <sys/time.h>	/* gettimeofday */
+
+#ifdef HAVE_GETLINE
+#include <stdio.h>	/* getline : _GNU_SOURCE  */
+#endif
 
 void trec(char *str,const char *f,const char*t)
 {
@@ -201,6 +205,17 @@ char * dupstr (const char* s)
 	char *r = (char*) malloc (strlen (s) + 1);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	strcpy (r, s);
+	return (r);
+}
+
+/*
+ *	Allocation and duplication of a single string (not necessarily terminating)
+ */
+static char * dupstrn (const char* s, size_t l)
+{
+	char *r = (char*) malloc (l + 1);
+	strncpy(r,s,l);
+	r[l]='\0';
 	return (r);
 }
 
@@ -498,3 +513,25 @@ double fim_atof(const char *nptr)
 	return n;
 }
 
+ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream)
+{
+	/*
+	 * WARNING : untested!
+	 */
+#ifdef HAVE_GETLINE
+	return getline(lineptr,n,stream);
+#endif
+#ifdef HAVE_FGETLN
+	{	
+		/* for BSD (in stdlib.h) */
+		char *s,*ns;
+		size_t len=0;
+		s=fgetln(stream,&len);
+		if(!s)return EINVAL;
+		*lineptr=dupstrn(s,len);
+		*n=len;
+		return len;
+	}
+#endif
+	return EINVAL;
+}

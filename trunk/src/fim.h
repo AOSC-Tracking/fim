@@ -79,6 +79,11 @@
  #define _POSIX_PATH_MAX 4096
 #endif
 
+/* FIXME : should create some fim specific sys.h header, some day */
+#include <sys/types.h>		/* stat */
+#include <sys/stat.h>		/* stat */
+#include <unistd.h>		/* stat */
+
 #if 0
 #ifdef HAVE_UNIX_H
 # include <unix.h>

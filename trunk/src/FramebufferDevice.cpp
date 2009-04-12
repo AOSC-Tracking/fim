@@ -26,9 +26,33 @@
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"
 
-#ifndef FIM_WITH_NO_FRAMEBUFFER
+#ifdef FIM_WITH_NO_FRAMEBUFFER
+static void foo(){} /* let's make our compiler happy */
+#else
 
 #include <sys/user.h>	//  for PAGE_MASK (sometimes it is needed to include it here explicitly)
+#if HAVE_LINUX_KD_H 
+#include <linux/kd.h>	// KDGETMODE, KDSETMODE, KD_GRAPHICS, ...
+#endif
+#if HAVE_LINUX_VT_H 
+#include <linux/vt.h>	// VT_GETSTATE, .. 
+#endif
+#include <sys/user.h>	// PAGE_MASK, ... 
+#include <sys/mman.h>	// PROT_READ, PROT_WRITE, MAP_SHARED
+#include <signal.h>
+#include <sys/ioctl.h>
+
+//#include <errno.h>
+//#include <sys/ioctl.h>
+//#include <sys/mman.h>
+//#include <sys/wait.h>
+//#include <sys/stat.h>
+
+/*#include <asm/page.h>*/ /* seems like this gives problems */
+#if 0
+#include <signal.h>	  /* added by dez. missing when compiling with -ansi */
+#include <asm/signal.h>	  /* added by dez. missing when compiling with -ansi */
+#endif
 
 
 namespace fim
@@ -1751,9 +1775,6 @@ void FramebufferDevice::finalize (void)
 	clear_screen();
 	cleanup();
 }
-#else
-static void foo(){} /* let's make our compiler happy */
-#endif  //ifndef FIM_WITH_NO_FRAMEBUFFER
 
 FramebufferDevice::~FramebufferDevice()
 {
@@ -1767,5 +1788,7 @@ FramebufferDevice::~FramebufferDevice()
 		free(f);
 	}
 }
+
+#endif  //ifdef FIM_WITH_NO_FRAMEBUFFER, else
 
 

@@ -28,23 +28,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
-#include <signal.h>
-#include <errno.h>
+#include <signal.h>	// sigaction, ...
 #include <setjmp.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-
-#include <linux/kd.h>
-#include <linux/vt.h>
-
-/*#include <asm/page.h>*/ /* seems like this gives problems */
 #include <sys/user.h>	  /* this should be a safer replacement */
-#if 0
-#include <signal.h>	  /* added by dez. missing when compiling with -ansi */
-#include <asm/signal.h>	  /* added by dez. missing when compiling with -ansi */
-#endif
 
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"
