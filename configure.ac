@@ -277,7 +277,7 @@ if test x$fim_handle_gif != xno ; then
     AC_CHECK_LIB(gif,DGifOpenFileHandle ,
       have_gif=yes,
       have_gif=no
-      AC_MSG_WARN(*** GIF loader will not be built (GIF library not found) ***))
+      AC_MSG_WARN([*** GIF loader will not be built (GIF library not found) ***]))
     if test "$have_gif" = yes; then
       AC_MSG_CHECKING([for gif.h])
       AC_TRY_CPP(
@@ -292,7 +292,7 @@ if test x$fim_handle_gif != xno ; then
       if test "$have_gif" = yes; then
         LIBGIF='-lgif'
       else
-          AC_MSG_WARN(*** GIF loader will not be built (GIF header file not found) ***)
+          AC_MSG_WARN([*** GIF loader will not be built (GIF header file not found) ***])
       fi
     fi
   fi
@@ -330,7 +330,7 @@ if test x$fim_handle_tiff != xno ; then
     AC_CHECK_LIB(tiff,TIFFOpen ,
       have_tiff=yes,
       have_tiff=no
-      AC_MSG_WARN(*** TIFF loader will not be built (TIFF library not found) ***))
+      AC_MSG_WARN([*** TIFF loader will not be built (TIFF library not found) ***]))
     if test x"$have_tiff" = xyes; then
       AC_MSG_CHECKING([for tiff.h])
       AC_TRY_CPP(
@@ -345,7 +345,7 @@ if test x$fim_handle_tiff != xno ; then
       if test x"$have_tiff" = xyes; then
         LIBTIFF='-ltiff'
       else
-          AC_MSG_WARN(*** TIFF loader will not be built (TIFF header file not found) ***)
+          AC_MSG_WARN([*** TIFF loader will not be built (TIFF header file not found) ***])
       fi
     fi
   fi
@@ -444,7 +444,7 @@ if test x$fim_handle_jpeg != xno ; then
     AC_CHECK_LIB(jpeg, jpeg_destroy_decompress,
       have_jpeg=yes,
       have_jpeg=no
-      AC_MSG_WARN(*** JPEG loader will not be built (JPEG library not found) ***))
+      AC_MSG_WARN([*** JPEG loader will not be built (JPEG library not found) ***]))
     if test x"$have_jpeg" = xyes; then
       AC_MSG_CHECKING([for jpeglib.h])
       AC_TRY_CPP(
@@ -459,7 +459,7 @@ if test x$fim_handle_jpeg != xno ; then
       if test x"$have_jpeg" = xyes; then
         LIBJPEG='-ljpeg'
       else
-          AC_MSG_WARN(*** JPEG loader will not be built (JPEG header file not found) ***)
+          AC_MSG_WARN([*** JPEG loader will not be built (JPEG header file not found) ***])
       fi
     fi
   fi
@@ -499,7 +499,7 @@ dnl   if test x$with_libdvi != xno && test -z "$LIBDVI"; then
 dnl     AC_CHECK_LIB(dvilib2, DVI_init,
 dnl       have_dvi=yes,
 dnl       have_dvi=no
-dnl       AC_MSG_WARN(*** DVI loader will not be built (libdvi29 library not found) ***))
+dnl       AC_MSG_WARN([*** DVI loader will not be built (libdvi29 library not found) ***]))
 dnl     if test x"$have_dvi" = xyes; then
 dnl       AC_MSG_CHECKING([for libdvi29.h])
 dnl       AC_TRY_CPP(
@@ -514,7 +514,7 @@ dnl       AC_MSG_RESULT($have_dvi)
 dnl       if test x"$have_dvi" = xyes; then
 dnl         LIBDVI='-ldvilib2'
 dnl       else
-dnl           AC_MSG_WARN(*** DVI loader will not be built (libdvi29.h header file not found) ***)
+dnl           AC_MSG_WARN([*** DVI loader will not be built (libdvi29.h header file not found) ***])
 dnl       fi
 dnl     fi
 dnl   fi
@@ -553,7 +553,7 @@ if test x$fim_handle_ps != xno ; then
     AC_CHECK_LIB(spectre, spectre_page_render,
       have_ps=yes,
       have_ps=no
-      AC_MSG_WARN(*** PS loader will not be built (spectre library not found) ***))
+      AC_MSG_WARN([*** PS loader will not be built (spectre library not found) ***]))
     if test x"$have_ps" = xyes; then
       AC_MSG_CHECKING([for libspectre/spectre.h])
       AC_TRY_CPP(
@@ -568,7 +568,7 @@ if test x$fim_handle_ps != xno ; then
       if test x"$have_ps" = xyes; then
         LIBPS='-lspectre'
       else
-          AC_MSG_WARN(*** PS loader will not be built (PS header file not found) ***)
+          AC_MSG_WARN([*** PS loader will not be built (PS header file not found) ***])
       fi
     fi
   fi
@@ -609,7 +609,7 @@ if test x$fim_handle_djvu != xno ; then
     AC_CHECK_LIB(djvulibre, ddjvu_page_create_by_pageno,
       have_djvu=yes,
       have_djvu=no
-      AC_MSG_WARN(*** DJVU loader will not be built (DJVU library not found) ***))
+      AC_MSG_WARN([*** DJVU loader will not be built (DJVU library not found) ***]))
     if test x"$have_djvu" = xyes; then
       AC_MSG_CHECKING([for libdjvu/ddjvuapi.h])
       AC_TRY_CPP(
@@ -624,7 +624,7 @@ if test x$fim_handle_djvu != xno ; then
       if test x"$have_djvu" = xyes; then
         LIBDJVU='-ldjvulibre'
       else
-          AC_MSG_WARN(*** DJVU loader will not be built (DJVU header file not found) ***)
+          AC_MSG_WARN([*** DJVU loader will not be built (DJVU header file not found) ***])
       fi
     fi
   fi
@@ -669,7 +669,7 @@ dnl FIXME : the following is a dirty hack
           AC_CHECK_LIB(poppler, gfree,
             have_poppler=yes,
             have_poppler=no
-      AC_MSG_WARN(*** POPPLER loader will not be built (POPPLER library not found) ***))
+      AC_MSG_WARN([*** POPPLER loader will not be built (POPPLER library not found) ***]) )
     if test x"$have_poppler" = xyes; then
       AC_MSG_CHECKING([for poppler/poppler-config.h])
        AC_TRY_CPP(
@@ -699,7 +699,7 @@ dnl FIXME : the following is a dirty hack
 dnl	are we sure poppler doesn't have something like the following ?
 dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
       else
-          AC_MSG_WARN(*** POPPLER/PDF loader will not be built (POPPLER header file not found) ***)
+          AC_MSG_WARN([*** POPPLER/PDF loader will not be built (POPPLER header file not found) ***])
       fi
     fi
   fi
@@ -731,6 +731,7 @@ AC_ARG_ENABLE(pdf,
 
 if test "x$enable_pdf" = "xyes"; then
     POPPLER_REQUIRED=0.8.7
+    # dear fim hackers, you should install pkg-config to get this macro expanded
     PKG_CHECK_MODULES(POPPLER, poppler >= $POPPLER_REQUIRED,enable_pdf=yes,enable_pdf=no)
 
     if test "x$enable_pdf" = "xyes"; then
@@ -743,7 +744,7 @@ if test "x$enable_pdf" = "xyes"; then
             LIBS=$fim_save_LIBS
 
     else
-            AC_MSG_WARN("PDF support is disabled since poppler library version $POPPLER_REQUIRED or newer not found")
+            AC_MSG_WARN(["PDF support is disabled since poppler library version $POPPLER_REQUIRED or newer not found"])
     fi
 fi
 
@@ -774,7 +775,7 @@ if test x$fim_handle_png = xyes; then
                 AC_PATH_PROG(LIBPNG_CONFIG, libpng-config, no)
         fi
         if test "x$LIBPNG_CONFIG" = "xno"; then
-      		AC_MSG_WARN(*** PNG loader will not be built (PNG library not found) ***))
+      		AC_MSG_WARN([*** PNG loader will not be built (PNG library not found) ***])
 		fim_handle_png=no
         else
                 LIBPNG_CFLAGS=`$LIBPNG_CONFIG --cflags`
