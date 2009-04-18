@@ -272,7 +272,7 @@ class CommandConsole
 	int quit(int i=0);
 	public:
 
-	int  drawOutput();
+	int  drawOutput(const char*s=NULL)const;
 	bool regexp_match(const char*s, const char*r)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);

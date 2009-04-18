@@ -48,7 +48,6 @@ using std :: vector;
 /*
  * Global variables.
  * */
-//	int g_fim_no_framebuffer=1;
 	fim::string g_fim_output_device;
 	FlexLexer *lexer;
 
@@ -237,7 +236,6 @@ int help_and_exit(char *argv0, int code=0)
 		int c;
 		int ndd;/* FIXME : on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
-		//g_fim_no_framebuffer=0;
 	    	g_fim_output_device="";
 	
 		setlocale(LC_ALL,"");	//uhm..
@@ -448,7 +446,6 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 't':
 		    //fim's
-		    	//g_fim_no_framebuffer=1;
 			#ifdef FIM_WITH_AALIB
 		    	g_fim_output_device="aa";
 			#else

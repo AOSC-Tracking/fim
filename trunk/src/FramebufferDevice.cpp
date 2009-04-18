@@ -286,30 +286,25 @@ void FramebufferDevice::dev_init(void)
 
 void FramebufferDevice::console_switch(int is_busy)
 {
-	//FIX ME
+	//FIXME
 	switch (fb_switch_state) {
 	case FB_REL_REQ:
 		fb_switch_release();
 	case FB_INACTIVE:
-		visible = 0;///////
+		visible = 0;
 	break;
 	case FB_ACQ_REQ:
 		fb_switch_acquire();
 	case FB_ACTIVE:
 		//when stepping in console..
-		visible = 1;	///////////
+		visible = 1;
 		ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
 		redraw = 1;
-		//mc.cc.setVariable("i:"FIM_VID_FRESH,1);	//20081109 : FIXME : commented as it seems useless under the fb
 	/*
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched! 
 	 */
 		mc.cc.redisplay();
-		/*
-		 * PROBLEMS : image tearing (also in actual fbi..)
-		 */
-		//fb_clear_screen();
 	//if (is_busy) status("busy, please wait ...", NULL);		
 	break;
 	default:
@@ -1548,11 +1543,17 @@ int FramebufferDevice::fs_init_fb(int white8)
 	//FIX ME : move this functionality to some new class and add ways to scroll and manipulate it
 	dez's
  */
+#if 0
+#ifndef FIM_KEEP_BROKEN_CONSOLE
 void FramebufferDevice::status_screen(const char *msg, int draw)
 {	
-#ifndef FIM_KEEP_BROKEN_CONSOLE
+	/* current code */
 	return fb_status_screen_new(msg, draw,0);
+}
 #else
+void FramebufferDevice::status_screen(const char *msg, int draw)
+{
+	/* dead code */
 
 	/*	WARNING		*/
 	//noDraw=0;
@@ -1676,6 +1677,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	     * */
 #endif
 }
+#endif
 
 
 	FramebufferDevice::FramebufferDevice(MiniConsole & mc_):	
