@@ -1022,34 +1022,38 @@ namespace fim
 		}
 		else
 		{
-			if((c=findCommand(cmd))!=NULL)
+			c=findCommand(cmd);
+
+#ifdef FIM_COMMAND_AUTOCOMPLETION
+			/*
+			 * in case command autocompletion is enabled
+			 */
+			if(c==NULL)
 			{
-				cout << c->execute(args);
-				return "";//this is patch code for broken console..
+				char *match = this->command_generator(cmd.c_str(),0);
+				if(match)
+				{
+					//cout << "but found :`"<<match<<"...\n";
+					c=findCommand(match);
+					free(match);
+				}
+			}
+#endif
+			if(c==NULL)
+			{
+				/* FIXME : should stringify here and elsewhere
+				 * see also http://gcc.gnu.org/onlinedocs/cpp/index.html
+				 */
+				cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
+				return "";
 			}
 			else
 			{
-#ifdef FIM_COMMAND_AUTOCOMPLETION
-				char *match = this->command_generator(cmd.c_str(),0);
-				if(!match)
-#endif
-				cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
-#ifdef FIM_COMMAND_AUTOCOMPLETION
-				else
-				{
-					/*
-					 * in case command autocompletion is enabled
-					 */
-					//cout << "but found :`"<<match<<"...\n";
-					if((c=findCommand(match))!=NULL)
-					{	
-						free(match);
-						return c->execute(args);
-					}
-					else cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
-					free(match);
-				}
-#endif
+				if(getIntVariable(FIM_VID_DBG_COMMANDS)!=0)
+					std::cout << "in " << cmd << ":\n";
+				
+				cout << c->execute(args);
+
 				return "";
 			}
 		}
@@ -1150,7 +1154,8 @@ namespace fim
 #ifdef FIM_USE_READLINE
 			if(ic==1)
 			{
-				ic=0;
+				//ic=0;
+				ic=1;
 				char *rl=readline(":");
 				*prompt=':';
 				if(rl==NULL)
@@ -1160,7 +1165,8 @@ namespace fim
 					 * */
 					this->quit();
 				}
-				else if(rl!=fim::string(""))
+				//else if(rl!=fim::string(""))
+				else if(*rl!='\0')
 				{
 					/*
 					 * This code gets executed when the user is about to exit console mode, 
@@ -1536,7 +1542,12 @@ namespace fim
 		/*
 		 * whether the console should draw or not itself upon the arrival of textual output
 		 * */
-		return ((this->inConsole() /*&& (s&&*s)*/ ) || this->getIntVariable(FIM_VID_DISPLAY_CONSOLE));
+		//std::cout << s << " : " << (this->inConsole() )<< ( (s&&*s) ) << "\n";
+		return(	(	this->inConsole()	/* in the command line */
+				&& (s&&*s) 		/* actually some text to add */
+			) 
+			|| this->getIntVariable(FIM_VID_DISPLAY_CONSOLE)	/* or user requested for showing console */
+			);
 	}
 
 	fim::string CommandConsole::get_aliases_list()const
@@ -1827,6 +1838,10 @@ namespace fim
 		 */
 //		cout << "autocmd_exec_cmd...\n";
 //		cout << "autocmd_exec_cmd. for pat '" << fname <<  "'\n";
+
+		if(getIntVariable(FIM_VID_DBG_AUTOCMD_TRACE_STACK)!=0)
+			autocmd_trace_stack();
+			
 		for (size_t i=0;i<autocmds[event][pat].size();++i)
 		{
 			if(regexp_match(fname.c_str(),pat.c_str()))	//UNFINISHED : if fname matches path pattern.. now matches ALWAYS
@@ -1858,6 +1873,7 @@ namespace fim
 		/*
 		 * this is mainly a debug function: it will write to stdout
 		 * the current autocommands stack trace.
+		 * set the FIM_VID_DBG_AUTOCMD_TRACE_STACK variable
 		 */
 		size_t indent=0,i;
 		if(autocmds_stack.end()==autocmds_stack.begin()) std::cout << "<>\n";

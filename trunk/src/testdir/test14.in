@@ -1,0 +1,6 @@
+# this should test fim internals
+stdout "this test will break if user configuration breaks in.";
+stdout "so it is temporary :)";
+_debug_commands=1;
+echo "ciao";
+next;

@@ -1,3 +1,4 @@
+# $Id$
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation to discover how to change this default hardcoded file 
 # and how to make your own.
@@ -112,7 +113,7 @@ bind '.' "repeat_last;";
 #_display_status=1;
 #display;
 alias 'A' "'autotop=1-autotop;'";
-alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;";
+alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;";
 
 # key echo
 alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;";
@@ -156,9 +157,10 @@ autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
 autocmd "PostScale"   "" "_wd=i:_will_display;" ;
 autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
 autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
+# FIXME : seems like the following automcd's can be commented
 autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
 autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";	# new : for smoother browsing of big images 
-autocmd "PostInteractiveCommand"   "" "if(_display_console==0){redisplay;i:fresh=0;}"; # a fixup
+autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}"; # a fixup
 
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};";
 bind 'N' 'next10';
