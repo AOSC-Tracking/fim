@@ -147,6 +147,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	interpreter.cpp \
 	string.cpp
 
+Command.o: Command.h
 CommandConsole.o: conf.h defaultConfiguration.o
 fim.o: version.h help.cpp
 

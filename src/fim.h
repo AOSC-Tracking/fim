@@ -260,6 +260,8 @@ namespace fim
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "the number of images currently cached" */
 #define FIM_VID_SCREEN_WIDTH			"screen_width"		/* "the screen width"  */
 #define FIM_VID_SCREEN_HEIGHT			"screen_height"		/* "the screen height" */
+#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "(INTERNAL) dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
+#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "(INTERNAL) each executed command (for debugging purposes)" */
 
 /*
  * Help messages for Fim commands (partial).

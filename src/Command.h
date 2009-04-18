@@ -65,25 +65,19 @@ class Command
 	
 	~Command() { }
 	
-/*	fim::string execute(const std::vector<Arg> &args)
-	{
-//		assert(browser && browserf);
-//		(browser->*browserf)(args);	
-		assert(0);
-//		std::cout<<"ddddaaaaaah\n";
-		return "not ok.";
-	}*/
-
 	fim::string execute(const std::vector<fim::string> &args)
 	{
-	//	assert(browser && browserf);
-		assert(browser);//!!!!!!!!!!!!!!!!!!
+		/*
+		 * FIXME 
+		 */
+		assert(browser && browserf);
+
 		//std::cerr <<  "about to execute '"<<cmd.c_str();for(int i=0;i<args.size();++i)std::cerr << " " << args[i].c_str(); std::cerr << "'\n";
-		if(!browser || !browserf)
+/*		if(!browser || !browserf)
 		{
 			//std::cout << cmd.c_str() << " : "<< "\n";
 			return fim::string("problems executing command..");
-		}else
+		}else*/
 		return (browser->*browserf)(args);
 	}
 
