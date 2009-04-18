@@ -1140,15 +1140,12 @@ namespace fim
 		{
 			cycles++;
 
-		//	if(g_fim_no_framebuffer==0)
-			{
-				fd_set          set;
-				struct timeval  limit;
-				FD_SET(0, &set);
-				limit.tv_sec = -1;
-				limit.tv_usec = 0;
-			}
-		//	else;//ic=true;
+			// FIXME : document this
+			fd_set          set;
+			struct timeval  limit;
+			FD_SET(0, &set);
+			limit.tv_sec = -1;
+			limit.tv_usec = 0;
 
 #ifdef FIM_USE_READLINE
 			if(ic==1)
@@ -1302,10 +1299,10 @@ namespace fim
 	void CommandConsole::exit(int i)const
 	{
 		/*
-		 *	This method should be called only when there is no
-		 *	potential harm to the console.
-		 *	(note : destructors WILL NOT be called in this way.)
-		 *      FIXME
+		 *	This method will exit the program as a whole.
+		 *      If various object destructors are set to destroy device
+		 *	contexts, it should do no harm to the console.
+		 *      (it will call statically declared object's destructors )
 		 */
 		std::exit(i);
 	}
@@ -1534,13 +1531,12 @@ namespace fim
 		return 0;
 	}
 
-
-	int CommandConsole::drawOutput()
+	int CommandConsole::drawOutput(const char *s)const
 	{
 		/*
-		 *
+		 * whether the console should draw or not itself upon the arrival of textual output
 		 * */
-		return (inConsole() || this->getIntVariable(FIM_VID_DISPLAY_CONSOLE));
+		return ((this->inConsole() /*&& (s&&*s)*/ ) || this->getIntVariable(FIM_VID_DISPLAY_CONSOLE));
 	}
 
 	fim::string CommandConsole::get_aliases_list()const
@@ -2633,14 +2629,15 @@ namespace fim
 	}
 
 	/*
-	 * inserts the desc text into the textual console.
+	 * inserts the desc text into the textual console,
+	 * and eventually displays it
 	 */
 	void CommandConsole::status_screen(const char *desc)
 	{
-		//if(g_fim_no_framebuffer)return;
-	//	framebufferdevice.status_screen(desc,drawOutput());
-		if(displaydevice)
-			displaydevice->fb_status_screen_new(desc,drawOutput(),0);
+		if(!displaydevice)
+			return;
+
+		displaydevice->fb_status_screen_new(desc,drawOutput(desc),0);
 	}
 
 	void CommandConsole::set_status_bar(fim::string desc, const char *info)
