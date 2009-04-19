@@ -51,7 +51,7 @@ $(SITEDIR)/index.html: $(INDEXIN)
 	 > $(SITEDIR)/index.html 
 
 
-#$(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/VERSION
+$(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/VERSION
 
 #site:	$(PAGES) $(SITEDIR)/index.html
 

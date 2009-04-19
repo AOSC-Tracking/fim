@@ -17,6 +17,9 @@ EXTRA_DIST=  COPYING  \
 	Makefile.am configure.ac configure \
 	 aclocal.m4 config.h.in \
 	autogen.sh \
+	media/image.jpg \
+	media/image.png \
+	media/fim.png \
 	depcomp missing install-sh
 
 # mhmhmhm 
@@ -61,11 +64,11 @@ tests-all: tests $(FIMSCRIPTSDIR)/configure-brute-check.sh
 
 # this rule is deprecated, too
 test:	all
-	@./src/fim media/* #~/M*s/*g
+	@./src/fim -N media/* #~/M*s/*g
 
 # this rule is deprecated, too
 aatest:	all
-	@./src/fim media/* -t #~/M*s/*g
+	@./src/fim -N media/* -o aa #~/M*s/*g
 
 # this rule is old and deprecated
 #tgz:	clean
