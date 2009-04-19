@@ -153,7 +153,7 @@ fim.o: version.h help.cpp
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
-	testdir/* \
+	testdir/*ok testdir/*in testdir/Makefile \
 	testsuite/*/* \
 	regex.c
 

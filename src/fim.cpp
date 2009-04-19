@@ -110,7 +110,7 @@ struct option fim_options[] = {
     {"script-from-stdin",      no_argument,       NULL, 'p'},
     {"write-scriptout",      required_argument,       NULL, 'W'},
     {"output-device",      required_argument,       NULL, 'o'},
-    {"dump-reference-help",      /*optional_argument : FIXME */no_argument,       NULL, 0xd15cbab3},/* note : still undocumented switch */
+    {"dump-reference-help",      /*optional_argument : TODO */no_argument,       NULL, 0xd15cbab3},/* note : still undocumented switch */
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -234,7 +234,7 @@ int help_and_exit(char *argv0, int code=0)
 	#endif
 	//	char             *desc,*info;
 		int c;
-		int ndd;/* FIXME : on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
+		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
 	    	g_fim_output_device="";
 	
@@ -257,14 +257,14 @@ int help_and_exit(char *argv0, int code=0)
 		case 'a':
 		    //fbi's
 		    //cc.setVariable(FIM_VID_AUTOTOP,1);
-		    //FIXME: still needs some tricking .. 
+		    //TODO: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FIM_VID_AUTO_SCALE_V"=1;");
+		    cc.pre_autocmd_add("v:"FIM_VID_AUTO_SCALE_V"=1;");
+		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=0;");/*  these mutual interactions are annoying */
 	#endif
 		    break;
 		case 'b':
 		    //fim's
-		    //FIXME: still needs some tricking .. 
 		    if(optarg && strstr(optarg,"1")==optarg && !optarg[1])
 			{
 		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,1);
@@ -319,10 +319,6 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'P':
 		    //fbi's
-		    //FIXME
-	//	    cc.setVariable(FIM_VID_AUTOWIDTH,1);
-	//	    cc.setVariable(FIM_VID_AUTOTOP,1);
-	//	    strange : if the assignations occur in two pre_autocmd_add calls, it triggers a bug via fimgs:
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=1;"FIM_VID_AUTOTOP"=1;");
 	#endif
@@ -333,6 +329,7 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'r':
 		    //fbi's
+	// TODO
 	//	    pcd_res = atoi(optarg);
 		    break;
 		case 's':
@@ -564,7 +561,9 @@ int help_and_exit(char *argv0, int code=0)
 			ndd=dup(2);
 		}
 	#endif
-	
+
+		if(ndd==-1)
+			perror(NULL);
 	
 		if(cc.browser.empty_file_list() && !cc.with_scriptfile() && !appendedPostInitCommand 
 		#ifdef FIM_READ_STDIN_IMAGE

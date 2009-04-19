@@ -125,7 +125,7 @@ namespace fim
 			return binding_expanded;
 		}
 		/*
-		 * FIXME: there will be room for the binding comment by the user
+		 * TODO: there will be room for the binding comment by the user
 		 * */
 		if(args.size()<2) return kerr;
 		const char*key=(args[0].c_str());
@@ -339,21 +339,15 @@ namespace fim
 	//,framebufferdevice(_framebufferdevice)
 	,return_code(0)
 	,dummydisplaydevice(this->mc)
-	,displaydevice(NULL)	/* the display device could be NULL ! (FIXME) */
-	{
-		appended_post_init_command=false;
-		fim_uninitialized = 1; // new
-		/*
-		 * FIXME : dependencies.. argh !
-		 * */
-
+	,displaydevice(NULL)			/* the display device could be NULL ! (FIXME) */
 #ifdef FIM_RECORDING
-		dont_record_last_action=false;		/* this variable is only useful in record mode */
-		recordMode=false;			/* we start not recording anything */
+	,dont_record_last_action(false)		/* this variable is only useful in record mode */
+	,recordMode(false)			/* we start not recording anything */
 #endif
-		fim_stdin=0;
-		cycles=0;
-		setVariable(FIM_VID_STEPS,50);
+	,fim_stdin(0)
+	,cycles(0)
+	,show_must_go_on(1)
+	{
 //		addCommand(new Command(fim::string("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
 		addCommand(new Command(fim::string("prefetch" ),fim::string("prefetches"),&browser,&Browser::prefetch));
 		addCommand(new Command(fim::string("no_image" ),fim::string("displays no image at all"),&browser,&Browser::no_image));
@@ -398,7 +392,7 @@ namespace fim
 		addCommand(new Command(fim::string("top_align"),fim::string("aligns to the upper side the image" ),&browser,&Browser::top_align));
 		addCommand(new Command(fim::string("bottom_align"),fim::string("aligns to the lower side the image" ),&browser,&Browser::bottom_align));
 		addCommand(new Command(fim::string("goto"),fim::string("goes to the index image" ),&browser,&Browser::goto_image));
-		addCommand(new Command(fim::string("status"),fim::string("sets the status line"),this,&CommandConsole::status));
+		addCommand(new Command(fim::string("status"),fim::string("sets the status line to the collation of the given arguments"),this,&CommandConsole::status));
 		addCommand(new Command(fim::string("scrolldown" ),fim::string("scrolls down the image, going next if at bottom" ),&browser,&Browser::scrolldown));
 		addCommand(new Command(fim::string("scrollforward" ),fim::string("scrolls the image as it were reading it :)" ),&browser,&Browser::scrollforward));
 		addCommand(new Command(fim::string("scale" ),fim::string("scales the image according to a scale (ex.: 0.5,40%,..)" ),&browser,&Browser::scale));
@@ -459,6 +453,11 @@ namespace fim
 		 */
 		#include "defaultConfiguration.cpp"
 		setVariable(FIM_VID_PWD,pwd(args_t()).c_str());
+		setVariable(FIM_VID_STEPS,50);
+		setVariable(FIM_VID_TERM, fim_getenv("TERM"));		/* We read an environment variable */
+
+		*prompt='\0';
+		*(prompt+1)='\0';
 	}
 
         bool CommandConsole::is_file(fim::string nf)const
@@ -478,18 +477,18 @@ namespace fim
 
 	int CommandConsole::init(string device)
 	{
+		/*
+		 * TODO : move most of this stuff to the constructor, some day.
+		 */
+
 		/* new : prevents atof, sprintf and such conversion mismatches! */
 		setlocale(LC_ALL,"C");	/* portable (among Linux hosts) : should use dots for numerical radix separator */
 		//setlocale(LC_NUMERIC,"en_US"); /* lame  */
 		//setlocale(LC_ALL,""); /* just lame */
 
-		displaydevice=NULL;
+		displaydevice=NULL;	/* TODO : is this really necessary ? */
 		int xres=0,yres=0;
 
-		/* We read an environment variable */
-		setVariable(FIM_VID_TERM, fim_getenv("TERM"));
-
-		// NOTE : for the dumb device, it could be better ...
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 		if( device=="fb" )
 		{
@@ -513,7 +512,6 @@ namespace fim
 		#ifdef FIM_WITH_LIBSDL
 		if(device=="sdl")
 		{
-			/* EXPERIMENTAL */
 			DisplayDevice *sdld=NULL;
 			sdld=new SDLDevice(mc); if(sdld && sdld->initialize(key_bindings)!=0){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice==NULL)
@@ -581,12 +579,8 @@ namespace fim
 		// textual console reformatting (should go to displaydevice some day)
 		displaydevice->init_console();
 	
-		fim_uninitialized = 0; 
 
 #ifdef FIM_WINDOWS
-		/*
-		 * TODO : move this to the constructor, some day.
-		 */
 	
 		/* true pixels if we are in framebuffer mode */
 		/* fake pixels if we are in text (er.. less than!) mode */
@@ -620,15 +614,12 @@ namespace fim
 		setVariable(FIM_VID_SCREEN_WIDTH, xres);
 		setVariable(FIM_VID_SCREEN_HEIGHT,yres);
 
-		show_must_go_on=1;
 		/*
 		 *	Here the program loads initialization scripts :
 		 * 	the default configuration file, and user invoked scripts.
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
 //		executeFile("/etc/fimrc");	//GLOBAL DEFAULT CONFIGURATION FILE
-		*prompt='\0';
-		*(prompt+1)='\0';
 
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
@@ -684,14 +675,13 @@ namespace fim
 		for(size_t i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
 #endif		
 #ifdef FIM_AUTOCMDS
-		// WARNING
 		if(postInitCommand!=fim::string(""))
 			autocmd_add("PreExecutionCycle","",postInitCommand.c_str());
 		if(postExecutionCommand!=fim::string(""))
 			autocmd_add("PostExecutionCycle","",postExecutionCommand.c_str());
 #endif
 		/*
-		 *	FIX ME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
+		 *	FIXME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
 		 * */
 #ifdef FIM_USE_READLINE
 		rl::initialize_readline( !displaydevice );
@@ -951,7 +941,7 @@ namespace fim
 			cmd=ocmd;
 			ex=ocmd;
 			/*
-			 * WARNING : i am not sure this is harmless
+			 * WARNING : i am not sure this is the best choice
 			 */
 			int r = pipe(pipedesc),sl;
 			if(r!=0){ferror("pipe error\n");exit(-1);}
@@ -999,10 +989,7 @@ namespace fim
 				sleep(seconds);
 #else
 				/*
-				 * WARNING : if the user press some key, we want this 
-				 * to trigger some command.
-				 * But beware, because this forces the sleep to reoccur!
-				 * FIXME
+				 * FIXME : we would like interruptible sleep.
 				 */
 				//while(seconds>0 && catchLoopBreakingCommand(seconds--))sleep(1);
 				catchLoopBreakingCommand(seconds);
@@ -1144,28 +1131,28 @@ namespace fim
 		{
 			cycles++;
 
+#if 0
+			/* dead code */
 			// FIXME : document this
 			fd_set          set;
 			struct timeval  limit;
 			FD_SET(0, &set);
 			limit.tv_sec = -1;
 			limit.tv_usec = 0;
+#endif
 
 #ifdef FIM_USE_READLINE
 			if(ic==1)
 			{
-				//ic=0;
 				ic=1;
 				char *rl=readline(":");
 				*prompt=':';
 				if(rl==NULL)
 				{
-					/*
-					 * error handling needed
-					 * */
+					/* FIXME : should exit ? */
 					this->quit();
+					/* empty line */
 				}
-				//else if(rl!=fim::string(""))
 				else if(*rl!='\0')
 				{
 					/*
@@ -1261,7 +1248,9 @@ namespace fim
 						ic=0;
 						if(rl==NULL)
 						{
-							//quit();
+							/* FIXME : should exit ? */
+							this->quit();
+							/* empty line */
 						}
 						/* 
 						 * if using "" instead string("")
@@ -1316,12 +1305,12 @@ namespace fim
 	int CommandConsole::quit(int i)
 	{
 		/*
-		 * the method to be called to exit from the program safely
+		 * the method to be called to exit from the program safely.
+		 * it is used mainly for safe and exit after severe errors.
+		 * TODO : get rid of it.
 		 */
     		cleanup();
-		/* the following command should be ignored */
-		//this->exit(0);
-		return i;/* just in case :) */
+		return i;/* is should be used in return */
 	}
 
 	fim::string CommandConsole::quit(const args_t &args)
@@ -1358,7 +1347,7 @@ namespace fim
 		 * NOTE:
 		 * as long as this class is a singleton, we couldn't care less about memory freeing :)
 		 */
-		if(!marked_files.empty()) /* FIXME : seems like marked_files is always non empty. */
+		if(!marked_files.empty())
 		{
 			std::cerr << "The following files were marked by the user :\n";
 			std::cout << "\n";
@@ -1531,7 +1520,7 @@ namespace fim
 		/*
 		 * a variable is taken and converted to a string and printed
 		 *
-		 * FIXME
+		 * FIXME: should stringify ?
 		 * */
 		fim::cout<<getStringVariable(varname);
 		return 0;
@@ -1833,8 +1822,6 @@ namespace fim
 		/*
 		 * executes all the actions associated to the current event, if the current 
 		 * file name matches the individual patterns
-		 *
-		 * FIX ME : REGEXP MATCHING SHOULD BE MOVED BEFORE !
 		 */
 //		cout << "autocmd_exec_cmd...\n";
 //		cout << "autocmd_exec_cmd. for pat '" << fname <<  "'\n";
@@ -1842,9 +1829,9 @@ namespace fim
 		if(getIntVariable(FIM_VID_DBG_AUTOCMD_TRACE_STACK)!=0)
 			autocmd_trace_stack();
 			
-		for (size_t i=0;i<autocmds[event][pat].size();++i)
+		if(regexp_match(fname.c_str(),pat.c_str()))
 		{
-			if(regexp_match(fname.c_str(),pat.c_str()))	//UNFINISHED : if fname matches path pattern.. now matches ALWAYS
+			for (size_t i=0;i<autocmds[event][pat].size();++i)
 			{
 				autocmds_frame_t frame(autocmds_loop_frame_t(event,fname),(autocmds[event][pat][i]).c_str());
 //				cout << "should exec '"<<event<<"'->'"<<autocmds[event][pat][i]<<"'\n";
@@ -2132,14 +2119,12 @@ namespace fim
 	fim::string CommandConsole::status(const args_t &args)
 	{
 		/*
-		 * the status bar is updated.
-		 *
-		 * FIXME
+		 * the status bar is updated with the given arguments collated.
 		 * */
+		fim::string s;
 		for(size_t i=0;i<args.size();++i)
-		{
-			browser.display_status(args[i].c_str(),NULL);
-		}
+			s+=args[i].c_str();
+		browser.display_status(s.c_str(),NULL);
 		return "";
 	}
 
@@ -2251,6 +2236,9 @@ namespace fim
 		 * asctime(),ctime() give time in seconds..
 		 *
 		 * gettimeofday was suggested by antani, instantaneously (thx antani)
+		 *
+		 * NOTE: recording the start_recording command itself is not harmful,
+		 * as it only sets a flag.
 		 * */
 		static int pt=0;int t,d,err;//t,pt in ms; d in us
 	        struct timeval tv;
@@ -2345,7 +2333,6 @@ namespace fim
 #ifdef FIM_RECORDING
 	fim::string CommandConsole::memorize_last(const fim::string &cmd)
 	{
-		//WARNING : DANGER
 		/*
 		 * the last executed command is appended in the buffer.
 		 * of course, there are exceptions to these.
@@ -2415,7 +2402,6 @@ namespace fim
 		 * the supplied command is applied right before a normal execution of Fim
 		 * but after the configuration file loading
 		 * */
-		appended_post_init_command=true;
 		postInitCommand+=c;
 	}
 
@@ -2432,7 +2418,6 @@ namespace fim
 		/*
 		 * whether some command will be executed right after initialization
 		 * */
-//		return appended_post_init_command;
 		return postInitCommand!=fim::string("");
 	}
 
@@ -2680,7 +2665,6 @@ namespace fim
 
 		prompt[1]='\0';
 	
-		if( fim_uninitialized ) return;
 		if( ! displaydevice   ) return;
 	
 		chars = displaydevice->get_chars_per_line();
@@ -2771,7 +2755,6 @@ namespace fim
 	{
 		/*
 		 * returns the reference of registered functions
-		 * FIXME : absolutely experimental
 		 */
 		fim::string s;
 		/*variables_t::const_iterator vi;
@@ -2790,8 +2773,7 @@ namespace fim
 	{
 		/*
 		 * returns the reference of registered commands
-		 * FIXME : the help messages are quite laconic, right now.. so they should be enriched
-		 * FIXME : absolutely experimental
+		 * TODO : should write better help messages
 		 */
 		fim::string s;
 		for(size_t i=0;i<commands.size();++i)
@@ -2807,20 +2789,20 @@ namespace fim
 	fim::string CommandConsole::get_reference_manual(const args_t& args)
 	{
 		/*
-		 * FIXME : absolutely experimental
+		 * dump textually a reference manual from all the available fim language features.
 		 */
 		return
-		string("commands:\n")+
-		get_commands_reference()+
-		string("variables:\n")+
-		get_variables_reference()/*+
-		get_commands_reference()*/;
+			string("commands:\n")+
+			get_commands_reference()+
+			string("variables:\n")+
+			get_variables_reference()/*+
+			get_commands_reference()*/;
 	}
 
 	fim::string CommandConsole::dump_reference_manual(const args_t& args)
 	{
 		/*
-		 * FIXME : absolutely experimental
+		 * dump textually a reference manual from all the available fim language features.
 		 */
 		std::cout << get_reference_manual(args);
 		return "";

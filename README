@@ -184,18 +184,20 @@ Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/) ...
 	4.5		Testing
 ================================================================================
 
- Testing and coherency facilities are being worked on.
- For now, just after the  './configure'  and 'make' steps, you can:
+ Just after the  './configure'  and 'make' steps, you should:
  
- # to test if fim works at all on this machine/user
+ # test if fim works at all on this machine/user
  make test
+
+ # test if fim works at all on this machine/user (if you compiled aa support)
+ make aatest
  
- # a battery of test scripts, which should validate core fim functionalities
- # for usage purposes.
+ # run a pool of test scripts, which should validate most fim functionalities
+ # for common usage.
  make tests
 
- # will test thoroughly all configuration options : it is for developers/hackers
- # or maintainers only.
+ # if you are a fim developer/hacker, test thoroughly all configure options 
+ # (a long test)
  make tests-all
 
  

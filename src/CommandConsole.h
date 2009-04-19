@@ -37,7 +37,6 @@ class CommandConsole
 	MiniConsole mc;
 #endif
 	FontServer fontserver;
-	int fim_uninitialized; // new, probably useless
 
 	fim::string postInitCommand;
 	fim::string postExecutionCommand;
@@ -107,7 +106,7 @@ class CommandConsole
 	/* no readline ? no console ! */
 	int 	ic;					//in console if 1. not if 0. willing to exit from console mode if -1
 #endif
-	int	cycles;			//FIXME
+	int	cycles;					//fim execution cycles counter (quite useless)
 	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
 
 #ifdef FIM_AUTOCMDS
@@ -125,12 +124,11 @@ class CommandConsole
 	fim::string last_action;
 	
 #ifdef FIM_RECORDING
-	bool recordMode;//WORKON...
+	bool recordMode;
 	typedef std::pair<fim::string,int> recorded_action_t;
 	typedef std::vector<recorded_action_t > recorded_actions_t;
 	recorded_actions_t recorded_actions;
 
-	void clearRecordBuffer(){}//?
 	bool dont_record_last_action;
 	fim::string memorize_last(const fim::string &cmd);
 	fim::string repeat_last(const args_t &args);
@@ -302,7 +300,6 @@ class CommandConsole
 	fim::string get_commands_list()const;
 	public:
 
-	bool appended_post_init_command;
 	void printHelpMessage(char *pn="fim")const;
 	void appendPostInitCommand(const char* c);
 	void appendPostExecutionCommand(const fim::string &c);
