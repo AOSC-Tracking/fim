@@ -1,8 +1,5 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
-/* custom CFLAGS */
-#undef CFLAGS
-
 /* custom CXXFLAGS */
 #undef CXXFLAGS
 
@@ -185,8 +182,14 @@
 /* We have libdjvulibre */
 #undef HAVE_LIBDJVU
 
+/* Define to 1 if you have the `fl' library (-lfl). */
+#undef HAVE_LIBFL
+
 /* We have libjpeg */
 #undef HAVE_LIBJPEG
+
+/* Define to 1 if you have the `m' library (-lm). */
+#undef HAVE_LIBM
 
 /* We have libpoppler (Warning: the API could still break! (tested with
    v.0.8.7)) */

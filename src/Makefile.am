@@ -2,45 +2,32 @@
 #
 # $Id$
 #
-# inspired by mutt's Makefile.am 
+# originally inspired by mutt's Makefile.am 
 
 subdir = src
-
 AUTOMAKE_OPTIONS = nostdinc no-dependencies dejagnu
 SUBDIRS = 
-
 check_PROGRAMS = fim
 bin_PROGRAMS = fim
-
 bin_SCRIPTS = fimgs
-
 doc_DATA = fimrc
-
-lex.yy.o  : lex.yy.cc
-
-lex.yy.cc: lex.lex
-	$(LEX) $(LFLAGS) lex.lex
 
 LFLAGS = -+
 YFLAGS = -v -d
+
+#lex.yy.cc : lex.lex
+lex.yy.cc: lex.lex
+	$(LEX) $(LFLAGS) lex.lex
 
 yacc.tab.cpp: yacc.ypp lex.lex
 	$(YACC) $(YFLAGS) yacc.ypp -o yacc.tab.cpp
 
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
-#lex.yy.cc : lex.lex
-
-#lex.yy.o : lex.yy.cc yacc.tab.cpp
-
-#		lex.lex 
-
 conf.h:       fimrc
 	echo 'const char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > conf.h
 	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
 	echo '"";' >> conf.h
-
-fim.cpp  :	version.h help.cpp
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
@@ -54,23 +41,17 @@ help.cpp: fim.h
 	echo -e "#ifdef FIM_WANT_INLINE_HELP\n" > help.cpp
 	grep   '^#define FIM_VID' fim.h | sed 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/fim_var_help_db[\1]=\3;/g' >> help.cpp
 	echo '#endif' >> help.cpp
-Var.o : help.cpp
 	
-
-
 # the following sources are built at make time
 # old bison versions could have problems with this (e.g.: generating yacc.tab.cpp.h instead of yacc.tab.hpp)
-BUILT_SOURCES = lex.yy.cc \
-	yacc.tab.cpp conf.h yacc.tab.hpp 
+BUILT_SOURCES = lex.yy.cc yacc.tab.cpp conf.h yacc.tab.hpp 
 
 # this hook triggers on 'make dist'
 dist-hook:
 	-for file in $(BUILT_SOURCES) ; do rm -f $(distdir)/$$file ; done
 
 EXTRA_fim_SOURCES = 
-# The following files are indicated as source files by configure.ac
-# ( they are optional and are built via @FIM_LIB_OBJECTS@ )
-#
+# The following files are marked as source files by configure.ac
 EXTRA_fim_SOURCES += FbiStuffGif.cpp
 EXTRA_fim_SOURCES += FbiStuffJpeg.cpp
 EXTRA_fim_SOURCES += FbiStuffTiff.cpp
@@ -81,7 +62,10 @@ EXTRA_fim_SOURCES += FbiStuffPs.cpp
 
 CLEANFILES=$(BUILT_SOURCES) yacc.output 
 
-
+#CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
+AM_CPPFLAGS=
+fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
+fim_LDADD = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(FIMLIBS) $(LEXLIB)
 fim_SOURCES  = $(BUILT_SOURCES) \
 	fim.cpp \
 	fim.h \
@@ -150,6 +134,9 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 Command.o: Command.h
 CommandConsole.o: conf.h defaultConfiguration.o
 fim.o: version.h help.cpp
+Var.o: help.cpp
+fim.cpp: version.h help.cpp
+lex.yy.o: lex.yy.cc
 
 # regex.c is work in progress and awaits for integration
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
@@ -160,77 +147,4 @@ EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
 RUNTESTDEFAULTFLAGS = --tool ./fim FIM=$$srcdir/./fim  --srcdir $$srcdir/testsuite
 #RUNTESTDEFAULTFLAGS = --all --tool ./fim FIM=$$srcdir/./fim --tool_opts=$$srcdir/../media/fim.png --srcdir $$srcdir/testsuite
 
-#fim_cpp_CPP_FLAGS=-DFIM_VERSION -DFIM_AUTHOR
-#CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
-
- DEFINES  =
-# The following defines already migrated outta here...
-
-# The following defines should migrate outta here!
-#DEFINES  += -D FIM_NOFIMRC             # with ~/.fimrc loading disabled
-#DEFINES  += -D FIM_NOSCRIPTING         # any script loading disabled
-#DEFINES  += -D FIM_AUTOCMDS            # autocommands : they are enabled externally now
-#DEFINES  += -D FIM_ALIASES_WITHOUT_ARGUMENTS	# if defined, aliases are much more prosaic
-#DEFINES  += -D FIM_WINDOWS		# Fim own's window system. EXPERIMENTAL!
-#DEFINES  += -D FIM_BOZ_PATCH		 # added from configure..
-#DEFINES  += -D FIM_NO_SYSTEM           # An evil feature for the unware
-#DEFINES  += -D FIM_PROFILING           # Turns off compiler optimizations
-#DEFINES  += -D FIM_IS_SLOWER_THAN_FBI     # If off, turns speedup patches to original Fbi code (experimental)
-#DEFINES  += -D FIM_NO_UNSAFE_CMDS		# Some unsafe commands are temporarily hidden
-#DEFINES  += -D FIM_FASTER_CLEARLINES	# We save mmapped memset() calls in this way (a very small gain, though)
-#DEFINES  += -D FIM_DEFAULT_KEY_CONFIG  # with a builtin default key mapping (advised)
-#DEFINES  += -D FIM_DEFAULT_CONFIGURATION # with a builtin default alias, autocommand, and binding set (complete)
-
-# Moved to configure.ac (and thus to config.h) :
-#DEFINES  += -D FIM_DEFAULT_CONFIG      # with a builtin default (minimal) key binding
-#DEFINES  += -D FIM_NOFB                # disable the framebuffer (for debug mostly)
-#DEFINES  += -D FIM_RECORDING           # command recording
-#DEFINES  += -D FIM_SWITCH_FIXUP        # still bugful
-#DEFINES  += -D FIM_CHECK_DUPLICATES    # if enabled, no duplicates will be allowed in the filename list
-#DEFINES  += -D FIM_CHECK_FILE_EXISTENCE # when a filename is added in the list, a verification occurs
-#DEFINES  += -D FIM_REMOVE_FAILED       # a file which failed loading is removed from the list
-#DEFINES  += -D FIM_AUTOSKIP_FAILED     # if (FIM_REMOVE_FAILED) after the file is removed, the next is tried
-#DEFINES  += -D FIM_COMMAND_AUTOCOMPLETION  # An evil feature, right now
-#DEFINES  += -D FIM_NAMESPACES		# Each object among {Image,Browser,Viewport,Window} will also be a namespace
-#DEFINES  += -D FIM_READ_STDIN           # Stdin as a source of input filenames
-#DEFINES  += -D FIM_RANDOM           # 'random' is a fake variable
-#DEFINES  += -D FIM_CACHE_DEBUG		# Debug info on cache available
-#DEFINES  += -D FIM_BUGGED_CACHE	# Sometimes something breaks and we want to isolate mechanisms
-#DEFINES  += -D X_DISPLAY_MISSING
-
-# DEFINES  += @DEFS@ 
-
-#FIM_VERSION= $(VERSION)
-# FIM_AUTHOR = '"Michele Martone <dezperado _CUT_ autistici _CUT_ org>"'
-
-#DEFINES  += -D FIM_VERSION="\"$(FIM_VERSION)\""
-# DEFINES  += -D FIM_AUTHOR=$(FIM_AUTHOR)
-
-#AM_CPPFLAGS=${DEFINES} # ${FIM_CFLAGS} @FIM_DEFS@
-AM_CPPFLAGS=
-#AM_CXXFLAGS=-I . -I ..
-AM_CXXFLAGS=$(FIM_CXXFLAGS)
-#AM_LDFLAGS=${FIM_CFLAGS}
-
-fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
-
-#FIMLIBS+=-ljpeg
-#FIMLIBS+=-lreadline
-FIMLIBS+= -lm  -lfl
-#FIMLIBS+=-lpng
-#FIMLIBS+=-lz
-#FIMLIBS+=-ltiff
-#FIMLIBS+=-lgpm
-FIMLIBS+=-L/lib
-#FIMLIBS+=-lungif
-#FIMLIBS+=-lgif
-
-
-#O=-O3 -funroll-loops
-
- 
-fim_LDADD = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(FIMLIBS) \
-        $(INTLLIBS) $(LIBICONV)  $(LIBGPGME_LIBS)
-
-#AM_CPPFLAGS=''
 

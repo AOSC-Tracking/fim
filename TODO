@@ -22,6 +22,7 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090420	rhgb (red hat graphical boot) seems to force an unsupported video format
 20090419	once for all, should set an enumeration type for auto scaling policy
 20090419	serious exception handling for out of memory conditions for push_back's and stuff
 20090418	fimtutor :)

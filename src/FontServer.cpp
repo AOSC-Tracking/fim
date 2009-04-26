@@ -54,11 +54,10 @@ void FontServer::fb_text_init1(const char *font, struct fs_font **_f)
 }
 
 #if 1
-/* 20080507 unused, as fs_consolefont ? */
-/* see src/FontServer.cpp : it is untrue that it is not used ! */
 static const char *default_font[] = {
     /* why the heck every f*cking distribution picks another
-       location for these fonts ??? (GK) */
+       location for these fonts ??? (GK)
+       +1 (MM) */
     "/usr/share/consolefonts/lat1-16.psf",
     "/usr/share/consolefonts/lat1-16.psf.gz",
     "/usr/share/consolefonts/lat1-16.psfu.gz",
@@ -71,10 +70,15 @@ static const char *default_font[] = {
     "/lib/kbd/consolefonts/lat1-16.psf",
     "/lib/kbd/consolefonts/lat1-16.psf.gz",
     "/lib/kbd/consolefonts/lat1-16.psfu.gz",
+    /* added for Ubuntu 10, but a search mechanism or a fim user variable would be wiser */
+    "/lib/kbd/consolefonts/Lat2-VGA14.psf.gz",
+    "/lib/kbd/consolefonts/Lat2-VGA16.psf.gz",
+    "/lib/kbd/consolefonts/Lat2-VGA8.psf.gz",
+    "/lib/kbd/consolefonts/Uni2-VGA16.psf.gz",
+    /* end ubuntu add */
     NULL
 };
 #endif
-
 
 struct fs_font* FontServer::fs_consolefont(const char **filename)
 {
