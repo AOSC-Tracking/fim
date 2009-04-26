@@ -103,6 +103,8 @@ AC_CHECK_FUNC([getline], AC_DEFINE([HAVE_GETLINE], [1], [If present, will be use
 AC_CHECK_FUNC([fgetln], AC_DEFINE([HAVE_FGETLN], [1], [If present, fgetln() will be used as a replacement for getline(). (on BSD)]))
 AC_CHECK_FUNC([get_current_dir_name], AC_DEFINE([HAVE_GET_CURRENT_DIR_NAME], [1], [Should live when _GNU_SOURCE, but it could be not the case.]))
 
+AC_CHECK_LIB([m],[pow])
+AC_CHECK_LIB([fl],[yylex])
 
 have_default_bindings=yes
 have_default_mapping=yes
@@ -149,18 +151,11 @@ AC_ARG_ENABLE(default_config, AC_HELP_STRING([--disable-default-config], [Builti
 	fi
 
 #CPPFLAGS=$DEPS
-#AC_SUBST(LIBSDL_CFLAGS)
-#AC_SUBST(LIBPNG_CFLAGS)
+#AC_SUBST(LIBSDL_CXXFLAGS)
+#AC_SUBST(LIBPNG_CXXFLAGS)
 #AC_SUBST(LIBSDL_CXXFLAGS)
 #AC_SUBST(LIBPNG_CXXFLAGS)
 #AC_SUBST(LIBPNG_LIBS)
-AC_SUBST(FIM_CFLAGS)
-AC_SUBST(FIM_CXXFLAGS)
-
-# if the wollowing are commented, system defaults will be used
-#FIM_CFLAGS="-g -O2"
-#FIM_CXXFLAGS="-g -O2"
-
 
 AC_ARG_ENABLE(system, AC_HELP_STRING([--disable-system], [Disable system() and pipe() calls.]),
 [       if test x$enableval = xno ; then
@@ -210,6 +205,9 @@ if test "x$fim_big_endian" = "xyes" ; then
 	AC_DEFINE([FIM_BIG_ENDIAN])
 fi
 
+
+dnl ============= begin misc external programs detection
+dnl ============= end misc external programs detection
 
 dnl if test "X$ac_cv_header_cstdio" != "Xyes" && test "X$ac_cv_header_stdio_h" != "Xyes"; then
 dnl   AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]])
@@ -694,8 +692,8 @@ dnl FIXME : the following is a dirty hack
       if test x"$have_poppler" = xyes; then
         LIBPOPPLER='-lpoppler'
 	# FIXME: the following is a dirty hack!
-        LIBPOPPLER_CFLAGS="-I/usr/include/poppler/"
-        FIM_CXXFLAGS="$FIM_CXXFLAGS $LIBPOPPLER_CFLAGS"
+        LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/"
+        CXXFLAGS="$CXXFLAGS $LIBPOPPLER_CXXFLAGS"
 dnl	are we sure poppler doesn't have something like the following ?
 dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
       else
@@ -737,7 +735,7 @@ if test "x$enable_pdf" = "xyes"; then
     if test "x$enable_pdf" = "xyes"; then
             AC_DEFINE([ENABLE_PDF], [1], [Enable pdf support.])
             SHELL_LIBS="$SHELL_LIBS $POPPLER_LIBS"
-            SHELL_CFLAGS="$SHELL_CFLAGS $POPPLER_CFLAGS"
+            SHELL_CXXFLAGS="$SHELL_CXXFLAGS $POPPLER_CXXFLAGS"
 
             fim_save_LIBS=$LIBS
             LIBS="$LIBS $POPPLER_LIBS"
@@ -778,7 +776,7 @@ if test x$fim_handle_png = xyes; then
       		AC_MSG_WARN([*** PNG loader will not be built (PNG library not found) ***])
 		fim_handle_png=no
         else
-                LIBPNG_CFLAGS=`$LIBPNG_CONFIG --cflags`
+                LIBPNG_CXXFLAGS=`$LIBPNG_CONFIG --cflags`
                 LIBPNG_CXXFLAGS=`$LIBPNG_CONFIG --cflags`
                 LIBPNG_LIBS=`$LIBPNG_CONFIG --libs`
 		# finish this !
@@ -823,8 +821,8 @@ if test x$fim_handle_sdl = xyes; then
         if test "x$LIBSDL_CONFIG" = "xno"; then
                 AC_MSG_ERROR([LIBSDL not found])
         else
-                LIBSDL_CFLAGS=`$LIBSDL_CONFIG --cflags`
-                FIM_CXXFLAGS="$FIM_CXXFLAGS $LIBSDL_CFLAGS"
+                LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
+                CXXFLAGS="$CXXFLAGS $LIBSDL_CXXFLAGS"
                 LIBSDL_LIBS=`$LIBSDL_CONFIG --libs`
 		# finish this !
                 #FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS SDLDevice.o"
@@ -1023,14 +1021,14 @@ fi])
 
 if test x$GCC = xyes ; then
 	if test x$fim_cv_debug = xyes; then
-        # CFLAGS are resetted
-        CFLAGS="-g"
+        # CXXFLAGS are resetted
+        CXXFLAGS="-g"
 	fi
 fi
 
 if test x$GCC = xyes ; then
 	if test x$fim_cv_warnings = xyes ; then
-        CFLAGS="-Wall -pedantic $CFLAGS"
+        CXXFLAGS="-Wall -pedantic $CXXFLAGS"
 	fi
 fi
 
@@ -1067,22 +1065,22 @@ dnl 	fi])
 dnl ==================
 
 # This code still awaits for integration ...
-AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CFLAGS], 
-	[Specify a custom CFLAGS append value.  e.g.: -pg
+AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CXXFLAGS], 
+	[Specify a custom CXXFLAGS append value.  e.g.: -pg
 	 You can't call this argument multiple times.
-	 In case you want completely reset CFLAGS use :
-	 CFLAGS='<all that you want>' ./configure ..
-	 Note that Fim is a C++ program, so we set CFLAGS=CXXFLAGS.
+	 In case you want completely reset CXXFLAGS use :
+	 CXXFLAGS='<all that you want>' ./configure ..
+	 Note that Fim is a C++ program, so we set CXXFLAGS=CXXFLAGS.
 	]),
         [if test "x$withval" != x; then
-                AC_DEFINE_UNQUOTED(CFLAGS, "$withval",
-                 [custom CFLAGS])
-		FIM_CFLAGS="$withval"
-		CFLAGS="$FIM_CFLAGS"
-		CXXFLAGS="$FIM_CFLAGS"
                 AC_DEFINE_UNQUOTED(CXXFLAGS, "$withval",
                  [custom CXXFLAGS])
-		dnl ...else FIM_CFLAGS="$CFLAGS"
+		CXXFLAGS="$withval"
+		CXXFLAGS="$CXXFLAGS"
+		CXXFLAGS="$CXXFLAGS"
+                AC_DEFINE_UNQUOTED(CXXFLAGS, "$withval",
+                 [custom CXXFLAGS])
+		dnl ...else CXXFLAGS="$CXXFLAGS"
         fi],
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
 
@@ -1140,6 +1138,7 @@ AC_ARG_ENABLE(xcftopnm, AC_HELP_STRING([--disable-xcftopnm], [Fim will try to us
 
 dnl ==================
 
+fim_cv_inkscape=yes
 AC_ARG_ENABLE(inkscape, AC_HELP_STRING([--disable-inkscape], [Fim will try to use Inkscape for opening SVG format files.]),
 [       if test x$enableval = xno; then
 		fim_cv_inkscape=no
@@ -1203,22 +1202,44 @@ AC_CHECK_PROG(have_man2html,man2html,yes,no)
 	fi
 
 AC_CHECK_PROG(have_convert,convert,yes,no)
-        if test x$have_convert = xno -a x$fim_cv_convert = xyes ; then
-      		AC_MSG_WARN([Fim will try to invoke 'convert' to handle unknown format files, even if no 'convert' is currently in the program path: please install the Imagemagick package to obviate the problem or re-configure with --disable-convert.])
+        if test x$have_convert = xyes -a x$fim_cv_convert = xyes ; then
+		true
+dnl      		AC_MSG_WARN([Fim will try to invoke 'convert' to handle unknown format files, even if no 'convert' is currently in the program path: please install the Imagemagick package to obviate the problem or re-configure with --disable-convert.])
+	else
+		fim_cv_convert=no
 	fi
 
 AC_CHECK_PROG(have_xcftopnm,xcftopnm,yes,no)
-        if test x$have_xcftopnm = xno -a x$fim_cv_xcftopnm = xyes ; then
-      		AC_MSG_WARN([Fim will try to invoke 'xcftopnm' to handle XCF format files, even if no 'xcftopnm' is currently in the program path: please install the Gimp package to obviate the problem or re-configure with --disable-xcftopnm.])
+        if test x$have_xcftopnm = xyes -a x$fim_cv_xcftopnm = xyes ; then
+		true
+dnl      		AC_MSG_WARN([Fim will try to invoke 'xcftopnm' to handle XCF format files, even if no 'xcftopnm' is currently in the program path: please install the Gimp package to obviate the problem or re-configure with --disable-xcftopnm.])
+	else
+		fim_cv_xcftopnm=no
 	fi
 
 AC_CHECK_PROG(have_inkscape,inkscape,yes,no)
-        if test x$have_inkscape = xno -a x$fim_cv_inkscape = xyes ; then
-      		AC_MSG_WARN([Fim will try to invoke 'inkscape' to handle SVG format files, even if no 'inkscape' is currently in the program path: please install the Inkscape package to obviate the problem or re-configure with --disable-inkscape.])
+        if test x$have_inkscape = xyes -a x$fim_cv_inkscape = xyes ; then
+		true
+dnl      		AC_MSG_WARN([Fim will try to invoke 'inkscape' to handle SVG format files, even if no 'inkscape' is currently in the program path: please install the Inkscape package to obviate the problem or re-configure with --disable-inkscape.])
+	else
+		fim_cv_inkscape=no
 	fi
 
 AC_CHECK_PROG(have_xfig,fig2dev,yes,no)
+        if test x$have_xfig = xyes -a x$fim_cv_xfig = xyes ; then
+		true
+dnl      		AC_MSG_WARN([Fim will try to invoke 'xfig' to handle FIG format files, even if no 'fig2dev' is currently in the program path: please install the Xfig package to obviate the problem or re-configure with --disable-xfig.])
+	else
+		fim_cv_xfig=no
+	fi
+
 AC_CHECK_PROG(have_dia,dia,yes,no)
+        if test x$have_dia = xyes -a x$fim_cv_dia = xyes ; then
+		true
+dnl      		AC_MSG_WARN([Fim will try to invoke 'dia' to handle DIA format files, even if no 'dia' is currently in the program path: please install the Dia package to obviate the problem or re-configure with --disable-dia.])
+	else
+		fim_cv_dia=no
+	fi
 
 dnl ==================
 
@@ -1250,11 +1271,11 @@ dnl ==================
 		AC_DEFINE([FIM_TRY_INKSCAPE])
 	fi
 
-        if test x$have_xfig = xyes -a x$fim_cv_xfig = xyes ; then
+        if test x$have_xfig = xyes ; then
 		AC_DEFINE([FIM_TRY_XFIG])
 	fi
 
-        if test x$have_dia = xyes -a x$fim_cv_dia = xyes ; then
+        if test x$have_dia = xyes ; then
 		AC_DEFINE([FIM_TRY_DIA])
 	fi
 
@@ -1344,7 +1365,6 @@ AC_SUBST(LIBIMAP)
 AC_SUBST(LIBIMAPDEPS)
 
 AC_SUBST(FIMLIBS)
-dnl AC_SUBST(DEFS)
 AC_SUBST(FIM_DEFS)
 
 AC_SUBST(FIM_LIB_OBJECTS)
@@ -1352,10 +1372,6 @@ AC_SUBST(FIM_SVN_REPOSITORY,[http://code.autistici.org/svn/fim/])
 
 dnl we want these symbols defined in our code
 AC_SUBST(CXXFLAGS)
-AC_SUBST(CFLAGS)
-
-#CFLAGS="$FIM_CFLAGS"
-#CXXFLAGS="$FIM_CFLAGS"
 
 #AC_CONFIG_FILES([Makefile],[src/Makefile])
 
@@ -1374,7 +1390,7 @@ AC_MSG_NOTICE([
 	readline library support            : ${fim_want_readline}
 	default minimal key bindings        : ${have_default_bindings:-no}
 	default configuration file builtin  : ${have_default_config:-no}
-        compile time warnings               : ${fim_cv_warnings:-no} (additional CFLAGS: ${FIM_CFLAGS} )
+        compile time warnings               : ${fim_cv_warnings:-no} (additional CXXFLAGS: ${CXXFLAGS} )
         resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
 	will read directories               : ${fim_cv_read_dirs}
