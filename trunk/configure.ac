@@ -276,7 +276,7 @@ if test x$fim_handle_gif != xno ; then
       have_gif=yes,
       have_gif=no
       AC_MSG_WARN([*** GIF loader will not be built (GIF library not found) ***]))
-    if test "$have_gif" = yes; then
+    if test x"$have_gif" = xyes; then
       AC_MSG_CHECKING([for gif.h])
       AC_TRY_CPP(
 [#include <stdio.h>
@@ -287,7 +287,7 @@ if test x$fim_handle_gif != xno ; then
         have_gif=yes,
         have_gif=no)
       AC_MSG_RESULT($have_gif)
-      if test "$have_gif" = yes; then
+      if test x"$have_gif" = xyes; then
         LIBGIF='-lgif'
       else
           AC_MSG_WARN([*** GIF loader will not be built (GIF header file not found) ***])
@@ -299,7 +299,7 @@ if test x$fim_handle_gif != xno ; then
 # the following needs thorough testing
   if test x"$have_gif" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffGif.o"
-  FIMLIBS="$FIMLIBS $LIBGIF"
+  LIBS="$LIBS $LIBGIF"
   else
     fim_handle_gif=no
   fi
@@ -352,7 +352,7 @@ if test x$fim_handle_tiff != xno ; then
 # the following needs thorough testing
   if test x"$have_tiff" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffTiff.o"
-  FIMLIBS="$FIMLIBS $LIBTIFF"
+  LIBS="$LIBS $LIBTIFF"
   else
     fim_handle_tiff=no
   fi
@@ -366,9 +366,6 @@ fi
 AC_SUBST(LIBTIFF)
 AM_CONDITIONAL(ENABLE_TIFF, test x$have_tiff = xyes)
 
-dnl ============= aalib : optional
-
-AC_CHECK_LIB(aa, aa_getfirst,have_aalib=yes,have_aalib=no)
 
 dnl ============= cacalib : optional
 AC_CHECK_LIB(caca, caca_init,have_cacalib=yes,have_cacalib=no)
@@ -378,7 +375,7 @@ dnl ============= GNU gpm, unofficial yet
 #    AC_CHECK_LIB(gpm,Gpm_Open,
 #      ,true,
 #      AC_MSG_ERROR(*** gpm lib not found ... no problem ... ***))
-#FIMLIBS="$FIMLIBS -lgpm"
+#LIBS="$LIBS -lgpm"
 
 dnl ============= no readline case handling
 
@@ -404,7 +401,7 @@ if test x$have_readline = xno; then
   if test x$fim_want_readline = xyes ; then
     AC_CHECK_LIB(readline, rl_replace_line,
       have_readline=yes
-      FIMLIBS="$FIMLIBS -lreadline"
+      LIBS="$LIBS -lreadline"
       AC_DEFINE([FIM_USE_READLINE])
       ,have_readline=no
       AC_MSG_ERROR(*** GNU readline library headers not found !  please install them or run ./configure --disable-readline ***)
@@ -421,7 +418,7 @@ if test x$have_readline = xyes; then
   if test x$fim_want_readline = xyes ; then
     AC_CHECK_LIB(curses, tputs,
       have_curses=yes
-      FIMLIBS="$FIMLIBS -lcurses"
+      LIBS="$LIBS -lcurses"
       ,have_curses=no
       )
   fi
@@ -466,7 +463,7 @@ if test x$fim_handle_jpeg != xno ; then
 # the following needs thorough testing
   if test x"$have_jpeg" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffJpeg.o"
-  FIMLIBS="$FIMLIBS $LIBJPEG"
+  LIBS="$LIBS $LIBJPEG"
   AC_DEFINE([HAVE_LIBJPEG],[1],[We have libjpeg])
   else
     fim_handle_jpeg=no
@@ -520,7 +517,7 @@ dnl
 dnl # the following needs thorough testing
 dnl   if test x"$have_dvi" == xyes ; then
 dnl   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffDvi.o"
-dnl   FIMLIBS="$FIMLIBS $LIBDVI"
+dnl   LIBS="$LIBS $LIBDVI"
 dnl   AC_DEFINE([HAVE_LIBSPECTRE],[1],[We have libdvilib2])
 dnl   else
 dnl     fim_handle_dvi=no
@@ -574,7 +571,7 @@ if test x$fim_handle_ps != xno ; then
 # the following needs thorough testing
   if test x"$have_ps" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPs.o"
-  FIMLIBS="$FIMLIBS $LIBPS"
+  LIBS="$LIBS $LIBPS"
   AC_DEFINE([HAVE_LIBSPECTRE],[1],[We have libspectre])
   else
     fim_handle_ps=no
@@ -630,7 +627,7 @@ if test x$fim_handle_djvu != xno ; then
 # the following needs thorough testing
   if test x"$have_djvu" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffDjvu.o"
-  FIMLIBS="$FIMLIBS $LIBDJVU"
+  LIBS="$LIBS $LIBDJVU"
   AC_DEFINE([HAVE_LIBDJVU],[1],[We have libdjvulibre])
   else
     fim_handle_djvu=no
@@ -705,7 +702,7 @@ dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
 # the following needs thorough testing
   if test x"$have_poppler" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPdf.o"
-  FIMLIBS="$FIMLIBS $LIBPOPPLER"
+  LIBS="$LIBS $LIBPOPPLER"
   AC_DEFINE([HAVE_LIBPOPPLER],[1],[We have libpoppler (Warning: the API could still break! (tested with v.0.8.7))])
   else
     fim_handle_pdf=no
@@ -776,17 +773,47 @@ if test x$fim_handle_png = xyes; then
       		AC_MSG_WARN([*** PNG loader will not be built (PNG library not found) ***])
 		fim_handle_png=no
         else
-                LIBPNG_CXXFLAGS=`$LIBPNG_CONFIG --cflags`
-                LIBPNG_CXXFLAGS=`$LIBPNG_CONFIG --cflags`
-                LIBPNG_LIBS=`$LIBPNG_CONFIG --libs`
+                CXXFLAGS="$CXXFLAGS `$LIBPNG_CONFIG --cflags`"
+                LIBS="$LIBS `$LIBPNG_CONFIG --libs`"
 		# finish this !
                 FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPng.o"
-                FIMLIBS="$FIMLIBS -lpng"
                 AC_DEFINE(FIM_WITH_LIBPNG, 1, [Defined, if libpng support is enabled])
         fi
 fi
 
 #AM_CONDITIONAL(BUILD_PNG, test x$fim_handle_png = xyes)
+
+dnl ================================================================================
+
+AC_ARG_ENABLE(aa, AC_HELP_STRING([--enable-aa], [Turns on aalib support (EXPERIMENTAL)]),
+	[if test x$enableval = xyes; then
+		fim_cv_aalib=yes
+	        if test x$libaa_config_prefix != x; then
+			LIBAA_CONFIG="$libaa_config_prefix/bin/aalib-config"
+		else
+			# default path configurator
+			AC_PATH_PROG(LIBAA_CONFIG, aalib-config, no)
+		fi
+		if test "x$LIBAA_CONFIG" = "xno"; then
+			# uhm
+	      		AC_MSG_WARN([***  no aalib-config ? ***])
+			fim_handle_png=no
+			fim_cv_aalib=no
+		else
+			CXXFLAGS="$CXXFLAGS `$LIBAA_CONFIG --cflags`"
+			LIBS="$LIBS `$LIBAA_CONFIG --libs`"
+			# finish this !
+		fi
+		AC_CHECK_LIB(aa, aa_getfirst,have_aalib=yes,have_aalib=no)
+		if test x$have_aalib = xyes; then
+      			AC_MSG_NOTICE([Enabling aalib driver.])
+		else
+			fim_cv_aalib=no
+		        AC_MSG_ERROR([Sorry, it doesn't seem like aalib is installed or detectable.
+			Please run --disable-aa or install aalib in a system-wide directory instead.
+			])
+		fi
+	fi],[fim_cv_aalib=no])
 
 dnl ================================================================================
 
@@ -823,10 +850,9 @@ if test x$fim_handle_sdl = xyes; then
         else
                 LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
                 CXXFLAGS="$CXXFLAGS $LIBSDL_CXXFLAGS"
-                LIBSDL_LIBS=`$LIBSDL_CONFIG --libs`
+                LIBS="$LIBS `$LIBSDL_CONFIG --libs`"
 		# finish this !
                 #FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS SDLDevice.o"
-                FIMLIBS="$FIMLIBS $LIBSDL_LIBS"
                 AC_DEFINE(FIM_WITH_LIBSDL, 1, [Defined, if libsdl support is enabled])
         fi
 fi
@@ -1033,19 +1059,6 @@ if test x$GCC = xyes ; then
 fi
 
 dnl ==================
-
-fim_cv_aalib=no
-
-AC_ARG_ENABLE(aa, AC_HELP_STRING([--enable-aa], [Turns on aalib support (EXPERIMENTAL)]),
-	[if test x$enableval = xyes; then
-	if test x$have_aalib = xyes; then
-	fim_cv_aalib=yes
-	else
-        AC_MSG_ERROR([Sorry, it doesn't seem like aalib is installed or detectable.
-	Please run --disable-aa or install aalib in a system-wide directory instead.
-	])
-	fi
-	fi])
 
 dnl ==================
 
@@ -1284,7 +1297,6 @@ dnl ==================
     AH_TEMPLATE([FIM_WITH_AALIB])
             if test x$fim_cv_aalib = xyes ; then
     		AC_DEFINE([FIM_WITH_AALIB])
-    		FIMLIBS="$FIMLIBS -laa"
     	fi
 
 dnl ==================
@@ -1292,7 +1304,7 @@ dnl ==================
     AH_TEMPLATE([FIM_WITH_CACALIB])
             if test x$fim_cv_cacalib = xyes ; then
     		AC_DEFINE([FIM_WITH_CACALIB])
-    		FIMLIBS="$FIMLIBS -lcaca"
+    		LIBS="$LIBS -lcaca"
     	fi
 
 dnl ==================
@@ -1364,7 +1376,7 @@ dnl ==================
 AC_SUBST(LIBIMAP)
 AC_SUBST(LIBIMAPDEPS)
 
-AC_SUBST(FIMLIBS)
+AC_SUBST(LIBS)
 AC_SUBST(FIM_DEFS)
 
 AC_SUBST(FIM_LIB_OBJECTS)

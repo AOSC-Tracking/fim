@@ -24,7 +24,7 @@ FIM.html fim-stylesheet.css: doctags FIM.TXT
 fim.man.html: fim.man
 	man2html fim.man >  fim.man.html || echo "$(ERRMSG) man2html fim.man >  fim.man.html"
 
-ERRMSG="no man2html at build time : pelase install man2html and reissue :"
+ERRMSG="no man2html at build time : please install man2html and reissue :"
 
 fimgs.man.html: fimgs.man
 	man2html fimgs.man >  fimgs.man.html || echo "$(ERRMSG) man2html fimgs.man >  fimgs.man.html"
@@ -32,6 +32,6 @@ fimgs.man.html: fimgs.man
 doctags:
 	        $(CC) -o doctags doctags.c
 
-clean:
-	        rm -f  doctags.o doctags FIM.html tags fim-stylesheet.css fim.man.html fimgs.man.html
+#clean:
+#	        rm -f  doctags.o doctags FIM.html tags fim-stylesheet.css fim.man.html fimgs.man.html
 
