@@ -189,7 +189,7 @@ freshmeat-submit:
 	@ awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
 
 freshmeat:
-	@ echo "are you sure ? (any key to abort, yes to continue)"  && read yes && [[ "$${yes}" == "yes" ]] && \
+	@ echo "are you sure you want to freshmeat-submit ? (any key to abort, yes to continue)"  && read yes && [[ "$${yes}" == "yes" ]] && \
 	make freshmeat-submit | grep -v '^make\[' | freshmeat-submit
 
 commit: log
