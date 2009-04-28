@@ -44,7 +44,8 @@ namespace fim
 /* -------------------------------------------------------------------- */
 /* handle fatal errors                                                  */
 
-static jmp_buf fb_fatal_cleanup;
+//static jmp_buf fb_fatal_cleanup;	/* old, broken */
+static sigjmp_buf fb_fatal_cleanup;	/* posix */
 
 static void
 fb_catch_exit_signal(int signal)

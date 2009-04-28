@@ -44,12 +44,21 @@ struct list_head {
 	struct list_head *next, *prev;
 };
 
-#define LIST_HEAD_INIT(name) { &(name), &(name) }
+/* beware that LIST_HEAD is defined in freebsd's <sys/queue.h> */
+#ifdef FIM_LIST_HEAD_INIT
+#undef FIM_LIST_HEAD_INIT
+#endif
 
-#define LIST_HEAD(name) \
-	struct list_head name = LIST_HEAD_INIT(name)
+#ifdef FIM_LIST_HEAD
+#undef FIM_LIST_HEAD
+#endif
 
-#define INIT_LIST_HEAD(ptr) do { \
+#define FIM_LIST_HEAD_INIT(name) { &(name), &(name) }
+
+#define FIM_LIST_HEAD(name) \
+	struct list_head name = FIM_LIST_HEAD_INIT(name)
+
+#define FIM_INIT_LIST_HEAD(ptr) do { \
 	(ptr)->next = (ptr); (ptr)->prev = (ptr); \
 } while (0)
 
@@ -126,7 +135,7 @@ static __inline__ void list_del(struct list_head *entry)
 static __inline__ void list_del_init(struct list_head *entry)
 {
 	__list_del(entry->prev, entry->next);
-	INIT_LIST_HEAD(entry); 
+	FIM_INIT_LIST_HEAD(entry); 
 }
 
 /**

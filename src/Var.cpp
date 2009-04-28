@@ -2,7 +2,7 @@
 /*
  Var.cpp : 
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2009 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ namespace fim
 		#define FIM_WANT_INLINE_HELP 1
 		#include "help.cpp"
 		#undef  FIM_WANT_INLINE_HELP
+		;/* freebsd 7.2 cc dies without */
 	}
 
 	fim::string Var::var_help_db_query(const fim::string &id)

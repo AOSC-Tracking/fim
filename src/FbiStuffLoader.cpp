@@ -156,8 +156,8 @@ int load_free_extras(struct ida_image_info *info)
 
 /* ----------------------------------------------------------------------- */
 
-LIST_HEAD(loaders);
-LIST_HEAD(writers);
+FIM_LIST_HEAD(loaders);
+FIM_LIST_HEAD(writers);
 
 void load_register(struct ida_loader *loader)
 {
