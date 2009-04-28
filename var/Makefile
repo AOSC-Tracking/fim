@@ -7,6 +7,7 @@ FIMDIR=..
 FIMSITE=html-dezperado
 SITEDIR=./www
 FTPSCRIPT=./script.lftp
+FTPURL=dezperado@ftp4.autistici.org
 SRCDIR=./
 MIRROR=$$(cat $(FIMDIR)/README | grep "^Releases  "|sed s/^.*\ :.//g)
 URL=$(MIRROR)/"fim-`cat $(FIMDIR)/VERSION`".tar.gz
@@ -35,7 +36,7 @@ all:	site up
 $(FIMHTMLDOCS):
 	cd $(FIMDIR)/doc && make $(FIMHTMLDOCS)
 
-$(SITEDIR)/index.html: $(INDEXIN)
+$(SITEDIR)/index.html:
 	m4 -DVERSION="$(FVERSION)"  \
 	-D REPOSITORY=$(REPOSITORY) \
 	-D MIRROR=$(MIRROR) \
@@ -51,7 +52,7 @@ $(SITEDIR)/index.html: $(INDEXIN)
 	 > $(SITEDIR)/index.html 
 
 
-$(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/VERSION
+#$(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/VERSION
 
 #site:	$(PAGES) $(SITEDIR)/index.html
 
@@ -65,6 +66,8 @@ site:	$(PAGES) $(SITEDIR)/index.html
 	txt2html $(FIMDIR)/README > $(SITEDIR)/README.html
 	txt2html $(FIMDIR)/NEWS > $(SITEDIR)/NEWS.html
 	txt2html $(FIMDIR)/BUGS > $(SITEDIR)/BUGS.html
+	rm -f $(SITEDIR)/index.html
+	make $(SITEDIR)/index.html
 	$(CP) $(FIMDIR)/README  $(SITEDIR)/README
 	$(CP) $(FIMDIR)/BUGS  $(SITEDIR)/BUGS
 	$(CP) $(FIMDIR)/NEWS  $(SITEDIR)/NEWS
@@ -88,8 +91,8 @@ site:	$(PAGES) $(SITEDIR)/index.html
 # If both directories are omitted, current local and remote directories are used.
  
 up:
-	echo "# generated automatically" > $(FTPSCRIPT)
-	echo "open dezperado@ftp4.autistici.org" >> $(FTPSCRIPT)
+	echo "# generated automatically ftp session to $(FTPURL)" > $(FTPSCRIPT)
+	echo "open $(FTPURL)" >> $(FTPSCRIPT)
 	echo "ls" www/ >> $(FTPSCRIPT)
 	echo "mirror -v --log=./ftp.log -R -n --exclude '.svn/*'  $(SITEDIR) $(FIMSITE)" >> $(FTPSCRIPT)
 	echo "ls" www/ >> $(FTPSCRIPT)
