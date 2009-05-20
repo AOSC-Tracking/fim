@@ -42,7 +42,7 @@
 
 #if HAVE_GET_CURRENT_DIR_NAME
 #else
-#ifdef _BSD_SOURCE || _XOPEN_SOURCE >= 500
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 #include <unistd.h>		/* getcwd, as replacement for get_current_dir_name */
 #endif
 #endif
@@ -304,6 +304,7 @@ namespace fim
 		/*
 		 *	FIX ME:
 		 *	the online help system still needs rework
+	 	 * 	TODO : implement a regexp-based search, to give the user hints. (20090512) (like vim's helpgrep)
 		 */
 		Command *cmd;
 		if(!args.empty())
@@ -2058,7 +2059,7 @@ namespace fim
 		else cwd="";
 		if(p)free(p);
 #else
-#ifdef _BSD_SOURCE || _XOPEN_SOURCE >= 500
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 		{
 			/* untested */
 			char *buf[PATH_MAX];

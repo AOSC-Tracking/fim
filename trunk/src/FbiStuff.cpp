@@ -1369,6 +1369,63 @@ FILE* FbiStuff::fim_execlp(const char *cmd, ...)
 	return NULL;
 }
 
+static long find_regexp_offset(FILE *fp, const char *byte_stream, size_t base_offset)
+{
+	/*
+		FIXME : EXPERIMENTAL, UNFINISHED
+		should merge this code with read_fd_chunk_something..
+		note  : won't find zeros..
+	*/
+	/*size_t*/
+	/*l ong*/
+	int  read_offset=0,rb,sl,off,goff=0;
+	char buf[FIM_FILE_BUF_SIZE];
+	int rs;/* FIXME : could overflow */
+
+	if(!byte_stream)
+		return 0;/* bad argument */
+
+	sl=strlen(byte_stream);
+
+	if(sl>FIM_FILE_BUF_SIZE-1)
+		return 0;/* FIXME : a limitation */
+
+	if(base_offset)
+	{
+    		if(fseek(fp,base_offset,SEEK_SET)!=0);// NEW
+		{
+    			// fseek(fp,0,SEEK_SET);
+			// should handle in some better way..
+			return 0;
+		}
+		goff=base_offset;
+	}
+	else
+		goff+=ftell(fp);
+
+	/* we read in a good chunk of the file */
+	while((rb=fread(buf,1,FIM_FILE_BUF_SIZE,fp))>0)
+	{
+		bzero(buf,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
+		off=rb-sl;
+		while( off > 0 )
+		{
+
+			if( 0==bcmp( buf+off, byte_stream, sl ) )
+			{
+				/* hit */
+				std::cout << "hit!" << off << "\n";
+				return goff+off;
+//				return ftell(fp);
+			}
+			--off;
+		}
+		goff+=off;
+		goff+=rb;
+	}
+	return 0;
+}
+
 /*static struct ida_image**/
 struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 {
@@ -1402,6 +1459,29 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	return NULL;
     }
     } else fp=fd;
+
+    //size_t read_offset=cc.getIntVariable("g:"FIM_VID_OPEN_OFFSET);
+    size_t read_offset=0;
+    read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
+
+    if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
+
+#ifdef FIM_WANT_SEEK_MAGIC
+	/* FIXME : EXPERIMENTAL */
+	string sm;
+   	sm=cc.getStringVariable(FIM_VID_SEEK_MAGIC);
+	/*
+		the user should specify a magix string like:
+		sm="\xFF\xD8\xFF\xE0";
+	*/
+   	if(sm!="")
+	{
+		read_offset=find_regexp_offset(fp, sm.c_str() , read_offset);
+		if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
+		cc.setVariable(FIM_VID_OPEN_OFFSET ,(int)read_offset);
+	}
+#endif
+
     memset(blk,0,sizeof(blk));
     if((fr=fread(blk,1,sizeof(blk),fp))<0)
     {
@@ -1409,6 +1489,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
       return NULL;	/* new */
     }
     rewind(fp);
+    if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
 
     if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY)!=0)
     {

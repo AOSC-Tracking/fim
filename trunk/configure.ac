@@ -956,6 +956,18 @@ AC_ARG_ENABLE(stdin-image-reading, AC_HELP_STRING([--disable-stdin-image-reading
 
 dnl ==================
 
+fim_cv_seek_magic=yes
+AC_ARG_ENABLE(seek-magic, AC_HELP_STRING([--enable-seek-magic], [Fim will be capable to seek on a specified magic string. (experimental)]),
+[       if test x$enableval = xyes; then
+		fim_cv_seek_magic=yes
+	else
+                fim_cv_seek_magic=no
+        fi
+],[ fim_cv_seek_magic=no ]
+)
+
+dnl ==================
+
 
 AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan directories for files.]),
 [       if test x$enableval = xno; then
@@ -1308,6 +1320,12 @@ dnl ==================
     	fi
 
 dnl ==================
+    AH_TEMPLATE([FIM_WANT_SEEK_MAGIC])
+            if test x$fim_cv_seek_magic = xyes ; then
+    		AC_DEFINE([FIM_WANT_SEEK_MAGIC])
+    	fi
+
+dnl ==================
 
 dnl uhmmmmmm : doesn't seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 
@@ -1428,6 +1446,7 @@ dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	ascii art (aalib) support           : ${fim_cv_aalib}
 	X (sdllib) experimental support     : ${fim_handle_sdl}
         framebuffer support                 : ${fim_handle_framebuffer:-yes}
+        seek magic signatures               : ${fim_cv_seek_magic:-no}
 dnl	coloured ascii art (cacalib) support: ${fim_cv_cacalib}
 
 

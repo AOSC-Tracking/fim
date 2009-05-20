@@ -109,6 +109,7 @@ struct option fim_options[] = {
 //    {"preserve",   no_argument,       NULL, 'p'},	/* fbi's */
     {"script-from-stdin",      no_argument,       NULL, 'p'},
     {"write-scriptout",      required_argument,       NULL, 'W'},
+    {"offset",      required_argument,       NULL,  0xFFD8FFE0},/* NEW */
     {"output-device",      required_argument,       NULL, 'o'},
     {"dump-reference-help",      /*optional_argument : TODO */no_argument,       NULL, 0xd15cbab3},/* note : still undocumented switch */
 
@@ -321,6 +322,32 @@ int help_and_exit(char *argv0, int code=0)
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=1;"FIM_VID_AUTOTOP"=1;");
+	#endif
+		    break;
+		case 0xFFD8FFE0:
+		    //fbi's
+	 	    // NEW
+	#ifdef FIM_AUTOCMDS
+		{
+			int ipeppe_offset;
+
+			ipeppe_offset=(int)atoi(optarg);
+			if(ipeppe_offset<0)
+				std::cerr<< "warning: ignoring user set negative offset value.\n";
+			else
+			if(ipeppe_offset>0)
+			{
+				string tmp;
+				size_t peppe_offset=0;
+				peppe_offset =(size_t)ipeppe_offset;
+				tmp=FIM_VID_OPEN_OFFSET;
+				tmp+="=";
+				tmp+=string((int)peppe_offset);/* FIXME */
+				tmp+=";";
+				cc.pre_autocmd_add(tmp);
+				//std::cout << "peppe_offset" << peppe_offset<< "\n";
+			}
+		}
 	#endif
 		    break;
 		case 'g':

@@ -197,6 +197,11 @@ namespace fim
 }
 
 /*
+ * NEW : FIXME 
+ */
+#define FIM_FILE_BUF_SIZE 	(1024*256)
+
+/*
  * Fim language variable identifiers.
  * */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "if nonzero : if 1, will force loading of images as pixelmaps of bits; if 24, will force loading of images as 24 bit pixelmaps" */
@@ -262,6 +267,8 @@ namespace fim
 #define FIM_VID_SCREEN_HEIGHT			"screen_height"		/* "the screen height" */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "(INTERNAL) dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "(INTERNAL) each executed command (for debugging purposes)" */
+#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "(INTERNAL) offset used when opening files" */
+#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "(INTERNAL) will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
 
 /*
  * Help messages for Fim commands (partial).
