@@ -122,6 +122,21 @@ namespace fim
 		setVariable(FIM_VID_ORIENTATION ,0);
 	}
 	
+	bool Image::reload()
+	{
+		/*
+			reloads the file (no hope for streams, therefore)
+			FIXME : still unused
+		*/
+		bool b=false;
+		FILE *fd=fopen(fname.c_str(),"r");
+		if(!fd)
+			return b;
+		b=load(fname.c_str(),fd,page);
+		fclose(fd);// FIXME : the fd could already be closed !
+		return b;
+	}
+	
 	bool Image::load(const char *fname_, FILE* fd, int want_page)
 	{
 		/*
@@ -140,6 +155,7 @@ namespace fim
 		}
 
 		fimg = FbiStuff::read_image((char*)fname_,fd,want_page);
+
     		if(strcmp(FIM_STDIN_IMAGE_NAME,fname_)==0)
 		{
 			no_file=true;	//no file is associated to this image (to prevent reloading)

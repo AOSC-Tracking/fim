@@ -22,6 +22,17 @@ ongoing further inspiration.
 	Current development directions
 
 
+20090521	add a THANKS section somewhere
+20090513	_seek_magic : if set, this pattern will be searched before going to the next image
+		or seek_next {pattern} ?, associando ad Image l'offset .. (a' la multipage)
+20090512	a wrapper perl script to find image magic numbers in files
+20090512	argument to aliases
+20090512	implement printf
+20090512	need a mechanism to pop all images
+20090512	sync the website info with the appropriate README section
+20090512	help string support for aliases
+20090512 TODO : implement a regexp-based search, to give the user hints. (20090512) (like vim's helpgrep)
+20090430	is 'for' inline-documented ?
 20090420	rhgb (red hat graphical boot) seems to force an unsupported video format
 20090419	once for all, should set an enumeration type for auto scaling policy
 20090419	serious exception handling for out of memory conditions for push_back's and stuff

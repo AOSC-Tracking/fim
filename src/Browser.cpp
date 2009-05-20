@@ -673,12 +673,14 @@ namespace fim
 		 * tries to load a new one from the current filename
 		 */
 		fim::string c=current();
+		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if(empty_file_list())return "sorry, no image to reload\n";
 #ifdef FIM_AUTOCMDS
 		autocmd_exec("PreReload",c);
 #endif
 		free_current_image();
 		loadCurrentImage();
+		//if(image())image()->reload();
 
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(c);
@@ -694,6 +696,7 @@ namespace fim
 		 * loads the current file, if not already loaded
 		 */
 		fim::string c=current();
+		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if(image() && ( image()->getName() == current()) )
 		{
 			return "image already loaded\n";		//warning
@@ -813,7 +816,13 @@ namespace fim
 		if(  S_ISDIR(stat_s.st_mode))return push_dir(nf);
 #endif
 		/*	we want a regular file .. */
-		if(! S_ISREG(stat_s.st_mode))
+		if(
+			! S_ISREG(stat_s.st_mode) 
+#define FIM_READ_BLK_DEVICES 1
+#ifdef FIM_READ_BLK_DEVICES
+			&& ! S_ISBLK(stat_s.st_mode)  // NEW
+#endif
+		)
 		{
 			/*
 			 * i am not fully sure this is effective

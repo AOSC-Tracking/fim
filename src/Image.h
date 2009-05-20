@@ -83,6 +83,7 @@ class Image
 	/* virtual stuff */
 	public://TMP
         struct ida_image *img     ;     /* local (eventually) copy images */
+	bool reload();
 	private://TMP
 	struct ida_image *fimg    ;     /* master image */
 

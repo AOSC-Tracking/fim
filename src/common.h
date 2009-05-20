@@ -34,6 +34,7 @@ namespace fim
 
 
 void trec(char *str,const char *f,const char*t);
+void trhex(char *str);
 void chomp(char *s);
 void sanitize_string_from_nongraph(char *s, int c=0);
 void sanitize_string_from_nongraph_except_newline(char *s, int c=0);
@@ -44,6 +45,7 @@ int int2msbf(int in);
 int int2lsbf(int in);
 fim::string slurp_file(fim::string filename);
 char* slurp_binary_fd(int fd,int *rs);
+char* slurp_binary_FD(FILE* fd,int *rs);
 void append_to_file(fim::string filename, fim::string lines);
 
 char * dupstr (const char* s);

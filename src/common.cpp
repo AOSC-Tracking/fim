@@ -34,6 +34,49 @@
 #include <stdio.h>	/* getline : _GNU_SOURCE  */
 #endif
 
+void trhex(char *str)
+{
+	/*	
+	 * 	translates C-like hexcodes (e.g.: \xFF) to chars, in place.
+	 * 	if \x is not followed by two hexadecimal values, it is ignored and silently copied.
+	 * 
+	 *
+	 *	this function could be optimized.
+	 *
+	 * 	FIXME : UNUSED
+	 */
+	const char *fp;//fast pointer
+	char *sp;//slow pointer
+	char hb[3];
+	if(!str)return;
+
+	hb[2]=0;
+	fp=sp=str;
+	while(*fp)
+	{
+			if(
+				    fp[0] =='\\'
+				 && fp[1] && fp[1]=='x'
+				 && fp[2] && isxdigit(toupper(fp[2])) 
+				 && fp[3] && isxdigit(toupper(fp[3]))  )
+			{
+				unsigned int hc;
+				hb[0]=toupper(fp[2]);
+				hb[1]=toupper(fp[3]);
+				hc=(unsigned char)strtol(hb,NULL,16);
+				*sp=hc;
+				fp+=3;
+			}
+			else
+				*sp=*fp;
+			++fp;
+			++sp;
+	}
+	*sp=0;
+ret:
+	return;
+}
+
 void trec(char *str,const char *f,const char*t)
 {
 	/*	this function translates escaped characters at index i in 
@@ -42,6 +85,7 @@ void trec(char *str,const char *f,const char*t)
 	 *	order is not important for the final effect.
 	 * 
 	 *	this function could be optimized.
+	 *	20090520 hex translation in
 	 */
 	if(!str || !f || !t || strlen(f)-strlen(t))return;
 	int tl=strlen(f);//table length
@@ -52,6 +96,33 @@ void trec(char *str,const char *f,const char*t)
 	{
 		fp=f;
 		tp=t;
+
+#if 1
+		// NEW
+		if(
+			    _p[0] =='\\'
+			 && _p[1] && _p[1]=='x'
+			 && _p[2] && isxdigit(toupper(_p[2])) 
+			 && _p[3] && isxdigit(toupper(_p[3]))  )
+		{
+			unsigned int hc;
+			char hb[3];
+			char *pp;
+			hb[2]=0;
+			hb[0]=toupper(_p[2]);
+			hb[1]=toupper(_p[3]);
+			hc=(unsigned char)strtol(hb,NULL,16);
+			*_p=hc;
+			/*	
+				\xFF
+				^-_p^-_p+4
+			*/
+			pp=_p+4;
+			while(*pp){pp[-3]=*pp;++pp;}
+			pp[-3]='\0';
+		}
+		else
+#endif
 		while(*fp)
 		{
 			//  if the following char is backslash-escaped and is in our from-list ..
@@ -74,9 +145,32 @@ void trec(char *str,const char *f,const char*t)
 		}
 		++_p;
 	} 
-
-
 }
+
+	char* slurp_binary_FD(FILE* fd,int *rs)
+	{
+			/*
+			 * ripped off quickly from slurp_binary_fd
+			 * FIXME : it is not throughly tested
+			 * */
+			char	*buf=NULL;
+			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
+			buf=(char*)calloc(inc,1);
+			if(!buf) return buf;
+			while((nrb=fread(buf+rb,1,inc,fd))>0)
+			{
+				char *tb;
+				// if(nrb==inc) a full read. let's try again
+				// else we assume this is the last read (could not be true, of course)
+				tb=(char*)realloc(buf,rb+=nrb);
+				if(tb!=NULL)
+					buf=tb;
+				else
+					{rb-=nrb;continue;}
+			}
+			if(rs){*rs=rb;}
+			return buf;
+	}
 
 	char* slurp_binary_fd(int fd,int *rs)
 	{
@@ -89,7 +183,7 @@ void trec(char *str,const char *f,const char*t)
 			 * FIXME : it is not throughly tested
 			 * */
 			char	*buf=NULL;
-			int	inc=1024*256,rb=0,nrb=0;
+			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
 			buf=(char*)calloc(inc,1);
 			if(!buf) return buf;
 			while((nrb=read(fd,buf+rb,inc))>0)
@@ -221,6 +315,9 @@ static char * dupstrn (const char* s, size_t l)
 
 static int pick_word(const char *f, unsigned int *w)
 {
+	/*
+		FIXME : what is this ? :)
+	*/
 	int fd = open(f,O_RDONLY);
 	if(fd==-1) return -1;
 	if(read(fd,w,sizeof(int))==sizeof(int))return 0;
@@ -494,6 +591,8 @@ double fim_atof(const char *nptr)
 	/* although, atof can be used if one calls setlocale(LC_ALL,"C");  */
 	double n=0.0;
 	double d=1.0;
+	bool sign=false;
+	while( *nptr == '-' ){++nptr;sign=!sign;}
 	if(!nptr)return n;
 	while( isdigit(*nptr) )
 	{
@@ -501,7 +600,7 @@ double fim_atof(const char *nptr)
 		n*=10.0;
 		++nptr;
 	}
-	if(*nptr!='.')return n;
+	if(*nptr!='.')return sign?-n:n;
 	++nptr;
 	while( isdigit(*nptr) )
 	{
@@ -509,8 +608,7 @@ double fim_atof(const char *nptr)
 		n+=d*((double)(*nptr-'0'));
 		++nptr;
 	}
-	if(*nptr!='.')return n;
-	return n;
+	return sign?-n:n;
 }
 
 ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream)

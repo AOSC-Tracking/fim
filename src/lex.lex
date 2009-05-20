@@ -176,6 +176,7 @@ STRINGC_DQ {STRINGC}|\'
 \"((\\\")|[^\"])*\" {
 	/* double quoted strings unescaping */
 	trec(yytext+1,"n\\\"","\n\\\"");
+	//trhex(yytext+1); // hex escaping already perfomed in trec.
 	qastrcpy(yylval.sValue,yytext);;
 	return STRING;
 	}

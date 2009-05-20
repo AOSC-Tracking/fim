@@ -81,6 +81,7 @@ namespace fim
 {
 
 
+   int fim_jerr=0;
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -140,6 +141,26 @@ static void thumbnail_src_term(struct jpeg_decompress_struct *cinfo)
 */
 //!!
 
+
+static void fim_error_exit (j_common_ptr cinfo)
+{
+	/*
+		FIM : NEW, UNFINISHED (if used now, it would break things)
+		read jpeglib's docs to finish this :)
+	*/
+  /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
+//  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+
+  /* Always display the message. */
+  /* We could postpone this until after returning, if we chose. */
+  (*cinfo->err->output_message) (cinfo);
+
+  /* Return control to the setjmp point */
+//  longjmp(myerr->setjmp_buffer, 1);
+   fim_jerr=1;
+}
+
+
 /* ---------------------------------------------------------------------- */
 /* jpeg loader                                                            */
 
@@ -149,6 +170,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 {
     struct jpeg_state *h;
     jpeg_saved_marker_ptr mark;
+    fim_jerr=0;
     
     h = (struct jpeg_state *)calloc(sizeof(*h),1);
     if(!h) goto oops;
@@ -156,12 +178,22 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     memset(h,0,sizeof(*h));
     h->infile = fp;
 
-    h->cinfo.err = jpeg_std_error(&h->jerr);
+    h->jerr.error_exit=NULL; // ?
+    h->cinfo.err = jpeg_std_error(&h->jerr);	/* FIXME : should use an error manager of ours (this one exits the program!) */
+//    h->jerr.error_exit = fim_error_exit;	/* FIXME : should use an error manager of ours (this one exits the program!) */
+    h->jerr.error_exit = NULL ;	/* FIXME : should use an error manager of ours (this one exits the program!) */
+//    if(h->jerr.msg_code)goto oops;
     jpeg_create_decompress(&h->cinfo);
+//    if(h->jerr.msg_code)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_COM,    0xffff); /* comment */
+//    if(h->jerr.msg_code)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_APP0+1, 0xffff); /* EXIF */
+//    if(h->jerr.msg_code)goto oops;
     jpeg_stdio_src(&h->cinfo, h->infile);
+//    if(h->jerr.msg_code)goto oops;
+//    if(jpeg_read_header(&h->cinfo, TRUE)==0)	goto oops;
     jpeg_read_header(&h->cinfo, TRUE);
+//    if(h->jerr.msg_code)goto oops;	// this triggers with apparently good file
 
     for (mark = h->cinfo.marker_list; NULL != mark; mark = mark->next) {
 	switch (mark->marker) {
@@ -216,15 +248,19 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 
 	/* re-setup jpeg */
 	jpeg_destroy_decompress(&h->cinfo);
+    //    if(h->jerr.msg_code)goto oops; // this triggers with apparently good files 
 	fclose(h->infile);
 	h->infile = NULL;
 	jpeg_create_decompress(&h->cinfo);
+  //      if(h->jerr.msg_code)goto oops;
 	h->cinfo.src = &thumbnail_mgr;
 	jpeg_read_header(&h->cinfo, TRUE);
+//        if(h->jerr.msg_code)goto oops;
     }
 
     h->cinfo.out_color_space = JCS_RGB;
     jpeg_start_decompress(&h->cinfo);
+//    if(h->jerr.msg_code)goto oops;
     i->width  = h->cinfo.image_width;
     i->height = h->cinfo.image_height;
     i->npages = 1;
@@ -241,8 +277,10 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 
     return h;
 oops:
+std::cerr << "OOPS: problems decoding "<< filename <<"...\n";
     if( h && h->thumbnail) free(h->thumbnail);
     if( h ) free(h);
+    return NULL;
 }
 
 static void
@@ -250,7 +288,10 @@ jpeg_read(unsigned char *dst, unsigned int line, void *data)
 {
     struct jpeg_state *h = (struct jpeg_state*)data;
     JSAMPROW row = dst;
+//    if(h->jerr.msg_code)goto oops;
     jpeg_read_scanlines(&h->cinfo, &row, 1);
+    oops:
+    return;
 }
 
 static void

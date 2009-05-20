@@ -67,7 +67,7 @@ bind 'S' "toggleDisplayStatus";
 #bind 'R' "reload";
 #bind 'R' "redisplay";
 #bind 'r' "rotate90";
-bind 'R' "rotate10";
+bind 'R' "rotate10;display;";
 bind 'r' "rotate10_ccw;display;";
 #bind 'C-d' "display";
 bind '+' "magnify";
@@ -222,7 +222,7 @@ alias "rotate90_ccw" "i:orientation=i:orientation+1;i:fresh=1;i:i:fresh=1;redisp
 alias "rotate90_cw"  "i:orientation=i:orientation+3;i:fresh=1;i:i:fresh=1;redisplay;";
 alias "rotate90" "rotate90_cw;display;";
 alias "rotate10"     "rotate  '10';display;";
-alias "rotate10_ccw" "rotate '-10';display;";
+alias "rotate10_ccw" "rotate -10;display;";
 
 # window related aliases and commands
 alias "wu" "window 'up'";
@@ -271,6 +271,9 @@ bind "Home" "0;";
 bind "End" "$;";
 bind "Backspace" "prev";
 
+# offsetscan usage : need a mechanism for popping all images before.
+#alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}"; # NEW
+alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}"; # NEW
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So feel free to modify it, but with caution! FIM is still alpha! 

@@ -55,6 +55,9 @@ do an endless loop consisting of bottom and top aligning, alternated.
 .B -d {device}, --device {device}
 framebuffer device to use.  Default is the one your vc is mapped to (as in fbi).
 .TP
+.B --dump-reference-help
+Will dump to stdout the reference help.
+.TP
 .B -D, --dump-default-fimrc
 The default fimrc file (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
 .TP
@@ -100,6 +103,9 @@ Will use the specified \fBdevice\fP as fim video output device, overriding autom
 The available devices depend on the original configuration/compilation options, so you should
 get the list of available output devices issuing \fBfim --version\fP.
 It will probably be a subset  of {\fBsdl\fP, \fBfb\fP, \fBaa\fP, \fBcaca\fP, \fBdumb\fP}.
+.TP
+.B --offset {offset}
+Will use the specified \fBoffset\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems).
 .TP
 .B -P, --text-reading
 Enable textreading mode.  This has the effect that fim will display

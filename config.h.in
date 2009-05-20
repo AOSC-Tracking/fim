@@ -129,6 +129,9 @@
 /* */
 #undef FIM_WANTS_SLOW_RESIZE
 
+/* */
+#undef FIM_WANT_SEEK_MAGIC
+
 /* Fim windowing support */
 #undef FIM_WINDOWS
 
