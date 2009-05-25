@@ -20,6 +20,7 @@
 */
 
 #include "Viewport.h"
+#include <math.h>	// ceilf
 /*
  * TODO :
  *	Windowing related problems:
@@ -393,8 +394,8 @@ namespace fim
 		if( check_invalid() ) return;
 		else
 		{
-			xs = (float)this->viewport_width()  / (image->original_width()*(image->ascale>0.0?image->ascale:1.0));
-			ys = (float)this->viewport_height() / image->original_height();
+			xs = (float)this->viewport_width()  / (float)(image->original_width()*(image->ascale>0.0?image->ascale:1.0));
+			ys = (float)this->viewport_height() / (float)image->original_height();
 		}
 
 		image->rescale( (xs < ys) ? xs : ys );
@@ -475,7 +476,7 @@ namespace fim
 		float newscale;
 		if( check_invalid() ) return;
 
-		newscale = ((float)this->viewport_height()) / image->original_height();
+		newscale = ((float)this->viewport_height()) / (float)image->original_height();
 
 		image->rescale(newscale);
 	}
@@ -488,7 +489,7 @@ namespace fim
 		float newscale;
 		if( check_invalid() ) return;
 
-		newscale = ((float)this->viewport_width()) / (image->original_width()*(image->ascale>0.0?image->ascale:1.0));
+		newscale = ((float)this->viewport_width()) / ((float)image->original_width()*(image->ascale>0.0?image->ascale:1.0));
 
 		image->rescale(newscale);
 	}
@@ -541,8 +542,8 @@ namespace fim
 		 * scale image positioning variables by adjusting by a multiplying factor
 		 * */
 		if(factor<=0.0)return;
-		left *= factor;
-		top  *= factor;
+		left = (int)ceilf(((float)left)*factor);
+		top  = (int)ceilf(((float)top )*factor);
 		/*
 		 * should the following be controlled by some optional variable ?
 		 * */
@@ -556,8 +557,8 @@ namespace fim
 		 * scale image positioning variables by adjusting by a multiplying factor
 		 * */
 		if(factor<=0.0)return;
-		left /= factor;
-		top  /= factor;
+		left = (int)ceilf(((float)left)/factor);
+		top  = (int)ceilf(((float)top )/factor);
 		//if(!panned  /* && we_want_centering */ )
 			this->recenter();
 	}

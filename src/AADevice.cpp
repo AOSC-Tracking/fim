@@ -26,6 +26,10 @@
 #include "AADevice.h"
 #include <aalib.h>
 
+/*
+  FIXME : aalib has two resolutions : an input one, and a screen one.
+  	  this is not well handled by our code, as we expect a 1:1 mapping.
+ */
 #define min(x,y) ((x)<(y)?(x):(y))
 
 	int AADevice::clear_rect_(
