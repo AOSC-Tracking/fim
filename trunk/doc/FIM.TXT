@@ -1521,6 +1521,9 @@ A lot of questions still await for an answer in Fim. Here are few:
  preceded by a backslash (\).
  A string enclosed by double quotes cannot contain a double quote (") if not
  preceded by a backslash (\).
+ If a \x<XX> sequence is encountered, <XX> will be interpreted as two
+ hexadecimal characters, and the resulting byte will be substituted to the 
+ \x<XX> sequence.
 
  With 'command' we referred to Fim commands, as explained in the reference
  documentation section, or aliases.

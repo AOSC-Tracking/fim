@@ -1868,8 +1868,11 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
     memset(&rect,0,sizeof(rect));
     memset(&p,0,sizeof(p));
     
-    p.width  = (int)(src->i.width  * scale * ascale);
-    p.height = (int)(src->i.height * scale);
+//    p.width  = (int)(src->i.width  * scale * ascale);
+//    p.height = (int)(src->i.height * scale);
+    // ceil() : new
+    p.width  = (int)ceilf((float)src->i.width  * scale * ascale);
+    p.height = (int)ceilf((float)src->i.height * scale);
     p.dpi    = (int)(src->i.dpi);
     if (0 == p.width)
 	p.width = 1;

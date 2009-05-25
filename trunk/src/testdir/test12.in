@@ -1,3 +1,6 @@
+autocmd "" "" "";
+alias "aalib_fix" ""; # FIXME : autocmd "" "" "" should suffice, but it does not!
+#_autocmd_trace_stack=1;
 stdout "asymmetric scaling test";
 load;
 
@@ -6,6 +9,8 @@ i:scale=2;
 magnify;
 reduce;
 display;
+#stdout i:width;
+#stdout i:swidth;
 stdout i:swidth==i:width;
 stdout i:swidth==2*i:width;
 
@@ -13,6 +18,8 @@ stdout "";
 
 i:ascale=2;
 i:scale=2;
+# FIXME : workaround
+if(_device_driver=="aalib") { ascale=ascale*2; }
 magnify;
 reduce;
 display;
