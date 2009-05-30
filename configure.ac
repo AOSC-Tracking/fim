@@ -1387,6 +1387,14 @@ dnl AH_TEMPLATE([FIM_WITH_LIBSDL])
 dnl AC_DEFINE([FIM_WITH_LIBSDL])
 AH_TEMPLATE([FIM_AUTHOR])
 AC_DEFINE([FIM_AUTHOR],["Michele Martone <dezperado _CUT_ autistici _CUT_ org>"])
+dnl ###############################################################################
+dnl this is experimental stuff
+dnl ###############################################################################
+dnl AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
+dnl AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
+dnl CXXFLAGS="$CXXFLAGS -I${HOME}/src/libmmvbr/"
+dnl LIBS="$LIBS -L${HOME}/src/libmmvbr/ -lmmvbr -lmmvbr_unrolled"
+dnl ###############################################################################
 
 
 dnl ==================

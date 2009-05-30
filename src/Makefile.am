@@ -120,6 +120,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	FbiStuffBmp.cpp \
 	FbiStuffBit1.cpp \
 	FbiStuffBit24.cpp \
+	FbiStuffMatrixMarket.cpp \
 	FontServer.cpp \
 	FramebufferDevice.cpp \
 	Image.cpp \
