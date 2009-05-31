@@ -93,7 +93,7 @@ mm_read(unsigned char *dst, unsigned int line, void *data)
 	else
 		return;
 
-	if(vbr_get_pixmap_RGBA_from_matrix(h->filename, dst))
+	if(vbr_get_pixmap_RGB_from_matrix(h->filename, dst))
 		goto err;
 err:
 	return;

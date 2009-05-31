@@ -113,7 +113,14 @@ namespace fim
 		/* a virtual destructor will behave correctly when destroying this class
 		 * objects with base pointers .. */
 		~string(){}
-		string(const char*s):std::string(s){}
+
+		/*
+			 if not, exception:
+			 terminate called after throwing an instance of 'std::logic_error'
+			 what():  basic_string::_S_construct NULL not valid
+		*/
+		string(const char*s):std::string(s?s:""){}
+
 		string(int i);
 		string(int * i);
 
