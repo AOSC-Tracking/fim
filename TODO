@@ -31,7 +31,7 @@ ongoing further inspiration.
 		or seek_next {pattern} ?, associando ad Image l'offset .. (a' la multipage)
 20090512	a wrapper perl script to find image magic numbers in files
 20090512	argument to aliases
-20090512	implement printf
+20090218	implement a printf() like interface for customizing the status bar information
 20090512	need a mechanism to pop all images
 20090512	sync the website info with the appropriate README section
 20090512	help string support for aliases
@@ -75,7 +75,6 @@ ongoing further inspiration.
 20090223	dput, dupload, svn-autoreleasedeb, devscripts, debsecan
 20090223	http://www.cubewano.org/oink <- use this automated checker, as well as other tools, possibily at least for format string vulnerabilities
 20090222	high performance compilation flags would be nice now
-20090218	implement a printf() like interface for customizing the status bar information
 20090215	more nightly build scripts and automated regression tests with reporting scripts
 20090213	rewrite the core in a way to avoid convert_line: there is a potentially big performance gain
 20090212	fix problems deriving from missing binaries and stuff

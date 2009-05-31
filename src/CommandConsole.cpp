@@ -414,7 +414,7 @@ namespace fim
 		addCommand(new Command(fim::string("while" ),fim::string("while(expression){action;}"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("alias" ),fim::string("alias ALIAS ACTION"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("getenv" ),fim::string("getenv IDENTIFIER"),this,&CommandConsole::do_getenv));
-		addCommand(new Command(fim::string("unalias" ),fim::string("unalias ALIAS .."),this,&CommandConsole::unalias));
+		addCommand(new Command(fim::string("unalias" ),fim::string("unalias {alias} | -a : deletes the alias {alias} or all aliases (use \"-a\", not -a)"),this,&CommandConsole::unalias));
 		addCommand(new Command(fim::string("unbind"),fim::string("unbinds the action associated to KEYCODE"),this,&CommandConsole::unbind));
 		addCommand(new Command(fim::string("sleep" ),fim::string("sleeps for n (default 1) seconds"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("mark" ),fim::string("marks the current file"),this,&CommandConsole::markCurrentFile));
@@ -812,6 +812,7 @@ namespace fim
 		 *	If the binding is inexistent, ignores silently the error.
 		 */
 		bindings_t::const_iterator bi=bindings.find(c);
+		int status=0;
 #define KEY_OFFSET 48
 
 #ifdef FIM_ITERATED_COMMANDS
@@ -850,15 +851,21 @@ namespace fim
 					nc = getBoundAction(c);
 					
 				cout << "about to execute " << nc << "\n";
-				execute(nc.c_str(),1,0);
+				status=execute(nc.c_str(),1,0);
 				it_buf=-1;
 			}
 			else
 #endif
-				execute(getBoundAction(c).c_str(),0,0);
+				status=execute(getBoundAction(c).c_str(),0,0);
 #ifdef FIM_AUTOCMDS
 			autocmd_exec("PostInteractiveCommand",cf);
 #endif
+		}
+
+		if(status)
+		{
+			std::cerr << "error performing execute()\n";
+			//show_must_go_on=0;	/* we terminate interactive execution */
 		}
 	}
 
@@ -876,6 +883,7 @@ namespace fim
 		char *s=dupstr(ss);//this malloc is free
 		if(s==NULL)
 		{
+			std::cerr << "allocation problem!\n";
 			//if(s==NULL){ferror("null command");return;}
 			//assert(s);
 			//this shouldn't happen
@@ -886,8 +894,13 @@ namespace fim
 		int r = pipe(pipedesc);
 		if(r!=0)
 		{
-			ferror("pipe error\n");
-    			cleanup();
+			//strerror(errno);
+			std::cerr << "error piping with the command interpreter ( pipe() gave "<< r<< " )\n";
+			std::cerr << "the command was:\"" << ss << "\"\n";
+			std::cerr << "we had : "<< aliases.size()<< " aliases\n";
+//			std::exit(-1);
+//			ferror("pipe error\n");
+//   			cleanup();
 			return -1;
 		}
 		//we write there our script or commands
@@ -2134,7 +2147,16 @@ namespace fim
 		/*
 		 * removes the actions assigned to the specified aliases,
 		 */
-		if(args.size()<1)return "unalias : please specify an alias to remove!\n";
+		if(args.size()<1)
+			return "unalias : please specify an alias to remove or all (-a)!\n";
+
+		if(args[0]==string("-a"))
+		{
+			/* FIXME : the lexer/parser is bugged and it takes -a as an expression if not between double quotes ("-a") */
+			aliases.clear();
+			return "";
+		}
+
 		for(size_t i=0;i<args.size();++i)
 		if(aliases[args[i]].first!="")
 		{

@@ -4,7 +4,6 @@
 # This creates buildbot slaves for fim to be used in the gcc compile farm.
 # To set a fim bot, it is necessary to set up a master bot server name and port,
 # so have the slave bot name and password.
-# beware: this script should be used on a single-user system.
 
 #host=
 #port=9999
@@ -25,6 +24,7 @@ for h in gcc12.fsffrance.org gcc41 gcc40 gcc54
 #for h in gcc12$D gcc40$D
 
 do
+echo "...."
 	un=fimbot-`echo $h | sed 's/\..*$//g'`
 	bd=fim-build-slave-$un
 	m=$host:$port
@@ -37,8 +37,11 @@ do
 	cl="if test -d $bd ; then $kb ; $rd ; fi"
 	cs="$bb create-slave $bd $m $un $up"
 	sb="$bb start $bd"
-	wi="echo $USER@`hostname` ($h) > $bd/info/admin"
-	wi="$wi && uname -a > $bd/info/host"
+	wi=""
+	wi="$wi && echo $USER@`hostname` on $h > $bd/info/admin"
+	wi="$wi && buildbot --version > $bd/info/host"
+	wi="$wi && uname -a >> $bd/info/host"
 	$e ssh $h "$cl ; $cs && $wi &&$sb "
+echo "...!"
 done
 
