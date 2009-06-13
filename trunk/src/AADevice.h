@@ -53,7 +53,7 @@ class AADevice:public DisplayDevice
 		int ocskip,// output columns to skip for each line
 		int flags// some flags
 		);
-	int initialize(key_bindings_t &kb);
+	int initialize(key_bindings_t &key_bindings);
 	void finalize();
 
 	int get_chars_per_line();

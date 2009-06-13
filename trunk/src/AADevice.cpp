@@ -355,7 +355,7 @@
 		return 0;
 	}
 
-	int AADevice::initialize(key_bindings_t &kb)
+	int AADevice::initialize(key_bindings_t &key_bindings)
 	{
 		aa_parseoptions (NULL, NULL, NULL, NULL);
 
@@ -404,6 +404,16 @@
 			return -1;
 		}*/
 		aa_hidecursor (ascii_context);
+
+#if 0
+		/* won't help in the ill X11-windowed aalib shipped with many distros case */
+		key_bindings["Left" ]=AA_LEFT;
+		key_bindings["Right"]=AA_RIGHT;
+		key_bindings["Up"   ]=AA_UP;
+		key_bindings["Down" ]=AA_DOWN;
+		key_bindings["Esc"  ]=AA_ESC;
+#endif
+
 		return 0;
 	}
 
@@ -476,10 +486,17 @@
 		if(*c==AA_UNKNOWN)*c=0;
 		if(*c)std::cout << "";/* FIXME : removing this breaks things. console-related problem, I guess */
 		if(!*c)return 0;
-/*		if(*c==AA_UP   ){*c=272;return 1;}
+#if 0
+		if(*c==AA_UP   ){*c=272;return 1;}
 		if(*c==AA_DOWN ){*c=274;return 1;}
 		if(*c==AA_LEFT ){*c=276;return 1;}
-		if(*c==AA_RIGHT){*c=275;return 1;}*/
+		if(*c==AA_RIGHT){*c=275;return 1;}
+#else
+		if(*c==AA_UP   ){*c=AA_UP;return 1;}
+		if(*c==AA_DOWN ){*c=AA_DOWN;return 1;}
+		if(*c==AA_LEFT ){*c=AA_LEFT;return 1;}
+		if(*c==AA_RIGHT){*c=AA_RIGHT;return 1;}
+#endif
 		/* FIXME : see defaultConfiguration.cpp */
 		if(*c==AA_UP   ){*c=4283163;return 1;}
 		if(*c==AA_DOWN ){*c=4348699;return 1;}
