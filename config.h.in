@@ -150,11 +150,27 @@
 /* Defined when framebuffer device support is turned off. */
 #undef FIM_WITH_NO_FRAMEBUFFER
 
+/* Define to 1 if you have the `bcmp' function. */
+#undef HAVE_BCMP
+
+/* Define to 1 if you have the `bcopy' function. */
+#undef HAVE_BCOPY
+
+/* Define to 1 if you have the `bzero' function. */
+#undef HAVE_BZERO
+
 /* Define to 1 if you have the <climits> header file. */
 #undef HAVE_CLIMITS
 
 /* Define to 1 if you have the <cstdio> header file. */
 #undef HAVE_CSTDIO
+
+/* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
+   */
+#undef HAVE_DIRENT_H
+
+/* Define to 1 if you have the `drand48' function. */
+#undef HAVE_DRAND48
 
 /* If present, fgetln() will be used as a replacement for getline(). (on BSD)
    */
@@ -213,11 +229,29 @@
 /* Define to 1 if you have the <linux/vt.h> header file. */
 #undef HAVE_LINUX_VT_H
 
+/* */
+#undef HAVE_MATRIX_MARKET_DECODER
+
+/* Define to 1 if you have the `memcmp' function. */
+#undef HAVE_MEMCMP
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Define to 1 if you have the `memset' function. */
+#undef HAVE_MEMSET
+
 /* Define to 1 if you have a working `mmap' system call. */
 #undef HAVE_MMAP
+
+/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
+#undef HAVE_NDIR_H
+
+/* Define to 1 if you have the `rand' function. */
+#undef HAVE_RAND
+
+/* Define to 1 if you have the `random' function. */
+#undef HAVE_RANDOM
 
 /* Define to 1 if you have the `regcomp' function. */
 #undef HAVE_REGCOMP
@@ -234,17 +268,31 @@
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
 
+/* Define to 1 if you have the `strcpy' function. */
+#undef HAVE_STRCPY
+
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
+/* Define to 1 if you have the `strncmp' function. */
+#undef HAVE_STRNCMP
+
 /* Define to 1 if you have the <sysexits.h> header file. */
 #undef HAVE_SYSEXITS_H
 
+/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
+   */
+#undef HAVE_SYS_DIR_H
+
 /* Define to 1 if you have the <sys/ioctl.h> header file. */
 #undef HAVE_SYS_IOCTL_H
+
+/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
+   */
+#undef HAVE_SYS_NDIR_H
 
 /* Define to 1 if you have the <sys/resource.h> header file. */
 #undef HAVE_SYS_RESOURCE_H
@@ -299,6 +347,9 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* SVN REVISION */
+#undef SVN_REVISION
 
 /* Define if you want to use the included (GNU) regex.c. */
 #undef USE_GNU_REGEX

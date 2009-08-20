@@ -46,6 +46,8 @@ namespace fim
 struct mm_state_t {
 	char * filename;
 	unsigned char * first_row_dst;
+	int width  ;
+	int height ;
 };
 
 
@@ -58,6 +60,9 @@ mm_init(FILE *fp, char *filename, unsigned int page,
 	size_t rows,cols;
 	struct mm_state_t *h;
 	h = (struct mm_state_t *)calloc(sizeof(*h),1);
+	int rows_max=1024,cols_max=1024;
+//	int rows_max=2048,cols_max=2048;
+
 	if(!h)goto err;
     	h->first_row_dst=NULL;
 
@@ -68,8 +73,17 @@ mm_init(FILE *fp, char *filename, unsigned int page,
 	if(vbr_util_get_matrix_dimensions(filename, &cols, &rows))
 		goto err;
 
+#if 1
+	if(cols>cols_max)
+		cols=cols_max;
+	if(rows>rows_max)
+		rows=rows_max;
+#endif
+
 	i->width  = cols;
 	i->height = rows;
+	h->width  = cols;
+	h->height = rows;
 
 	h->filename=dupstr(filename);
 
@@ -93,7 +107,7 @@ mm_read(unsigned char *dst, unsigned int line, void *data)
 	else
 		return;
 
-	if(vbr_get_pixmap_RGB_from_matrix(h->filename, dst))
+	if(vbr_get_pixmap_RGB_from_matrix(h->filename, dst, h->width, h->height))
 		goto err;
 err:
 	return;
