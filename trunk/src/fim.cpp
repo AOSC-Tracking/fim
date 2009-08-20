@@ -133,11 +133,18 @@ class FimInstance
 	#ifdef FIM_VERSION
 			    FIM_VERSION
 	#endif
-	#define FIM_REPOSITORY_VERSION  "$Id$"
-	#ifdef FIM_REPOSITORY_VERSION 
+	#ifdef SVN_REVISION
+			    " ( repository version "
+		SVN_REVISION
+			    " )"
+	#else
+	/* obsolete */
+	# define FIM_REPOSITORY_VERSION  "$Id$"
+	# ifdef FIM_REPOSITORY_VERSION 
 			    " ( repository version "
 		FIM_REPOSITORY_VERSION 	    
 			    " )"
+	# endif
 	#endif
 	#ifdef FIM_AUTHOR 
 			    ", by "

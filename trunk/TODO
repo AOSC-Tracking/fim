@@ -21,7 +21,11 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-
+20090820	should offer EXIF data to fim displaying
+20090820	should add a quick sanity check flag ( e.g.: --sanity-check )
+20090813	is fim compatible with libjpeg 7 ? write this somewhere
+20090810	:|ocr -
+20090711	should develop some quick benchmark to evaluate some drawing operations (e.g.: blanking, color fill, etc)
 20090603	fix Adobe CS3 created jpg files opening
 20090530	        crop        = gTrue; // fix this
 20090525	fimgs : should use -o option to rename files to a known filename before loading them, in the temporary directory.

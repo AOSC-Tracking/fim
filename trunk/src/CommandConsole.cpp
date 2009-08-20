@@ -688,6 +688,8 @@ namespace fim
 		rl::initialize_readline( !displaydevice );
 		load_history();
 #endif
+		if(0)	/* experimental */
+			displaydevice->quickbench();
 		return 0;
 	}
 

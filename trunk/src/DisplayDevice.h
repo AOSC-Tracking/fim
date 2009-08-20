@@ -77,6 +77,7 @@ class DisplayDevice
 	int redraw;
 	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)=0;
 	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
+	void quickbench();
 	private:
 	virtual void console_switch(int is_busy){}// really, only for making happy fbdev
 };

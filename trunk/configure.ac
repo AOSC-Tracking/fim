@@ -10,8 +10,11 @@ AC_PREREQ([2.54])
 #AC_PROG_CC(cc gcc)
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
+define([svnversion],esyscmd([sh -c "svnversion | tr -d '\n'"]))dnl
 # WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
 AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org( by replacing _FOobAr_ with a '@' and _Baz_ with a '.')])
+
+AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
 
 AC_MSG_NOTICE([
         Welcome to the Fim configure script!
@@ -189,9 +192,19 @@ fi
 AC_HEADER_STDC
 AC_FUNC_MMAP
 
-AC_CHECK_HEADERS(stdarg.h sys/ioctl.h ioctl.h sysexits.h)
-AC_CHECK_HEADERS(sys/time.h sys/resource.h)
-AC_CHECK_HEADERS(unix.h)
+AC_CHECK_FUNCS([bzero memset memcmp strncmp strcpy])
+AC_CHECK_FUNCS([bcopy bcmp])
+AC_CHECK_FUNCS([drand48 random rand])
+dnl AC_FUNC_REALLOC()	dnl triggers error in automake 1.10.1
+
+#AC_CHECK_HEADERS([stddef.h])
+#AC_CHECK_HEADERS([stdlib.h])
+AC_CHECK_HEADERS([string.h strings.h])
+
+AC_HEADER_DIRENT()
+AC_CHECK_HEADERS([stdarg.h sys/ioctl.h ioctl.h sysexits.h])
+AC_CHECK_HEADERS([sys/time.h sys/resource.h])
+AC_CHECK_HEADERS([unix.h])
 AC_CHECK_HEADERS([cstdio stdio.h], [break],AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]]))
 
 AC_CHECK_HEADERS([climits limits.h], [break], AC_MSG_ERROR([[Cannot find limits.h nor climits.  Fim requires it!.]]))
@@ -1390,10 +1403,10 @@ AC_DEFINE([FIM_AUTHOR],["Michele Martone <dezperado _CUT_ autistici _CUT_ org>"]
 dnl ###############################################################################
 dnl this is experimental stuff
 dnl ###############################################################################
-dnl AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
-dnl AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
-dnl CXXFLAGS="$CXXFLAGS -I${HOME}/src/libmmvbr/"
-dnl LIBS="$LIBS -L${HOME}/src/libmmvbr/ -lmmvbr -lmmvbr_unrolled"
+AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
+AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
+CXXFLAGS="$CXXFLAGS -I${HOME}/src/libmmvbr/"
+LIBS="$LIBS -L${HOME}/src/libmmvbr/ -lmmvbr"
 dnl ###############################################################################
 
 

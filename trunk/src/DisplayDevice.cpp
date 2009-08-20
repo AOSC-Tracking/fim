@@ -197,3 +197,27 @@ DisplayDevice::~DisplayDevice()
 {
 }
 
+void DisplayDevice::quickbench()
+{
+	/*
+		a quick draw benchmark.
+		currently performs only the clear function.
+	*/
+	double tbtime=1000.0,btime=0.0;// ms
+	size_t times=1;
+
+	do
+	{
+		btime=-getmilliseconds();
+		clear_rect(0, width()-1, 0,height()/2);
+		btime+=getmilliseconds();
+		++times;
+		tbtime-=btime;
+	}
+	while(btime>=0.0 && tbtime>0.0 && times>0);
+	--times;
+	tbtime=1000.0-tbtime;
+
+	std::cerr << "fim bench: " << ((double)times)/((tbtime)*1.e-3) << " clears/s\n";
+}
+
