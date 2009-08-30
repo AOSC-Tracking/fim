@@ -688,8 +688,13 @@ namespace fim
 		rl::initialize_readline( !displaydevice );
 		load_history();
 #endif
-		if(0)	/* experimental */
+		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
+		{
+			/* experimental */
 			displaydevice->quickbench();
+			quit(return_code);
+			exit(return_code);
+		}
 		return 0;
 	}
 

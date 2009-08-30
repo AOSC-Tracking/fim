@@ -200,11 +200,14 @@ DisplayDevice::~DisplayDevice()
 void DisplayDevice::quickbench()
 {
 	/*
-		a quick draw benchmark.
+		a quick draw benchmark and sanity check.
 		currently performs only the clear function.
 	*/
 	double tbtime=1000.0,btime=0.0;// ms
 	size_t times=1;
+	string msg="fim check";
+
+	std::cout << msg << " : " << "please be patient\n";
 
 	do
 	{
@@ -218,6 +221,6 @@ void DisplayDevice::quickbench()
 	--times;
 	tbtime=1000.0-tbtime;
 
-	std::cerr << "fim bench: " << ((double)times)/((tbtime)*1.e-3) << " clears/s\n";
+	std::cout << msg << " : " << ((double)times)/((tbtime)*1.e-3) << " clears/s\n";
 }
 
