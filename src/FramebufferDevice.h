@@ -90,15 +90,12 @@ class FramebufferDevice:public DisplayDevice
 	long     gray_dither[256] FIM_ALIGNED;
 
 	/*
-	 * 20080106
-	 * An UNFINISHED class providing access to a single framebuffer device.
-	 *
+	 * A class providing access to a single framebuffer device.
 	 *
 	 * Let's say in future we want to be able to manage multiple framebuffer devices.
 	 * Then framebuffer variables should be incapsulated well in separate objects.
-	 * We are heading forward on this road.
+	 * We are heading forward on this road, slowly.
 	 * */
-
 #if 0
 	void fb_text_init1(char *font)
 	{
@@ -172,14 +169,13 @@ class FramebufferDevice:public DisplayDevice
 	    *p = color;
 	}
 
-	// FBI.C
 	/* framebuffer */
 	char                       *fbdev;
 	char                       *fbmode;
 
 	public:
 	/*
-	 * FIXME : should be a static string, or trouble will come!
+	 * FIXME : should be a static string, or troubles will come!
 	 * */
 	int set_fbdev(char *fbdev)
 	{
@@ -192,7 +188,7 @@ class FramebufferDevice:public DisplayDevice
 	}
 
 	/*
-	 * FIXME : should be a static string, or trouble will come!
+	 * FIXME : should be a static string, or troubles will come!
 	 * */
 	int set_fbmode(char *fbmode)
 	{
@@ -272,7 +268,6 @@ class FramebufferDevice:public DisplayDevice
 	struct fb_var_screeninfo  fb_ovar;
 
 
-	/////////////////
 	public:
 	int framebuffer_init();
 
@@ -406,7 +401,6 @@ inline void dither_line(unsigned char *src, unsigned char *dest, int y, int widt
 void dither_line_gray(unsigned char *src, unsigned char *dest, int y, int width);
 
 
-//////////////////////////
 void fb_switch_release();
 
 void fb_switch_acquire();
@@ -415,10 +409,7 @@ int fb_switch_init();
 
 void fb_switch_signal(int signal);
 
- // FB-GUI
 int fb_text_init2(void);
-
- // end FB-GUI
 
 
 /*static void*/

@@ -999,6 +999,9 @@ void FramebufferDevice::cleanup(void)
 	perror("ioctl FBIOPUT_VSCREENINFO");
     if (-1 == ioctl(fb,FBIOGET_FSCREENINFO,&fb_fix))
 	perror("ioctl FBIOGET_FSCREENINFO");
+#if 0
+    printf("id:%s\t%ld\t%ld\t%ld\t\n",fb_fix.id,fb_fix.accel,fb_fix.xpanstep,fb_fix.xpanstep);
+#endif
     if (fb_ovar.bits_per_pixel == 8 ||
 	fb_fix.visual == FB_VISUAL_DIRECTCOLOR) {
 	if (-1 == ioctl(fb,FBIOPUTCMAP,&ocmap))

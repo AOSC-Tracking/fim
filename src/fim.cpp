@@ -108,6 +108,7 @@ struct option fim_options[] = {
 #endif
 //    {"preserve",   no_argument,       NULL, 'p'},	/* fbi's */
     {"script-from-stdin",      no_argument,       NULL, 'p'},
+    {"sanity-check",      no_argument,       NULL, 'S'},	/* NEW */
     {"write-scriptout",      required_argument,       NULL, 'W'},
     {"offset",      required_argument,       NULL,  0xFFD8FFE0},/* NEW */
     {"output-device",      required_argument,       NULL, 'o'},
@@ -239,6 +240,7 @@ int help_and_exit(char *argv0, int code=0)
 		#endif
 		int		 read_one_script_file_from_stdin;
 		read_one_script_file_from_stdin=0;
+		int perform_sanity_check=0;
 	#endif
 	//	char             *desc,*info;
 		int c;
@@ -249,7 +251,7 @@ int help_and_exit(char *argv0, int code=0)
 		setlocale(LC_ALL,"");	//uhm..
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Ab?wc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:",
+		    c = getopt_long(argc, argv, "Ab?wc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:S",
 				fim_options, &opt_index);
 		if (c == -1)
 		    break;
@@ -310,6 +312,13 @@ int help_and_exit(char *argv0, int code=0)
 		     * note that this solution is temporary, because it clashes with -E (should have precedence, instead)
 		     * */
 		    cc.push_scriptfile(optarg);
+		    break;
+		case 'S':
+		    //fim's
+	#ifdef FIM_AUTOCMDS
+		    cc.setVariable(FIM_VID_SANITY_CHECK,1);
+		    perform_sanity_check=1;
+	#endif
 		    break;
 		case 'v':
 		    //fbi's
@@ -603,6 +612,7 @@ int help_and_exit(char *argv0, int code=0)
 		#ifdef FIM_READ_STDIN_IMAGE
 		&& !read_one_file_from_stdin
 		#endif
+		&& !perform_sanity_check
 		)
 		{retcode=help_and_exit(argv[0],-1);goto ret;}
 	
