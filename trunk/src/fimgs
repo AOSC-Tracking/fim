@@ -13,6 +13,7 @@
 # this directory is named after the process ID
 
 # 20070925	regular expressions failed on some configurations, so were 'cut'.. :-(
+# 20090917	TODO: should work with no rar or no unzip
 
 DIR="${TMPDIR-/var/tmp}/fbps-$$"
 
@@ -54,6 +55,7 @@ function die() { einfo "ERROR : "$@ 1>&2 ; exit -1 ; }
 FBI=fim
 
 check_in_path $FBI  || die "no fim in \$PATH"
+check_in_path sort  || die "no sort in \$PATH"
 check_in_path echo  || die "no echo in \$PATH"
 check_in_path find  || die "no find in \$PATH"
 check_in_path wget  || die "no wget in \$PATH"
@@ -61,6 +63,8 @@ check_in_path gs    || die "no gs (ghostscript) in \$PATH"
 check_in_path tar   || die "no tar in \$PATH"
 check_in_path basename   || die "no basename in \$PATH"
 check_in_path md5sum   || die "no md5sum in \$PATH"
+#check_in_path rar   || die "no rar in \$PATH"
+#check_in_path unzip || die "no unzip in \$PATH"
 
 
 # parse options
@@ -207,7 +211,7 @@ gs	-dSAFER -dNOPAUSE -dBATCH			\
 #	echo
 #	exit 1
 #elif ( ( [[ "$f" =~ \\.cbr$  ]] || [[ "$f" =~ \\.cbz$  ]] ) || ( [[ "$f" =~ \\.rar$  ]] || [[ "$f" =~ \\.zip$  ]] ) || ( [[ "$f" =~ \\.tgz$  ]] || [[ "$f" =~ \\.tar.gz$  ]] ) || ( [[ "$f" =~ \\.tar$  ]] || [[ "$f" =~ \\.tar.bz2$  ]] ) )  && ! [[ "$f" =~ '^http://' ]]
-elif ( ( [[ "$f" =~ .cbr$  ]] || [[ "$f" =~ .cbz$  ]] ) || ( [[ "$f" =~ .rar$  ]] || [[ "$f" =~ .zip$  ]] ) || ( [[ "$f" =~ .tgz$  ]] || [[ "$f" =~ .tar.gz$  ]] ) || ( [[ "$f" =~ .tar$  ]] || [[ "$f" =~ .tar.bz2$  ]] ) )  && ! [[ "$f" =~ 'http://' ]]
+elif ( ( [[ "$f" =~ .CBR$  ]] || [[ "$f" =~ .CBZ$  ]] || [[ "$f" =~ .cbr$  ]] || [[ "$f" =~ .cbz$  ]] ) || ( [[ "$f" =~ .rar$  ]] || [[ "$f" =~ .zip$  ]] ) || ( [[ "$f" =~ .tgz$  ]] || [[ "$f" =~ .tar.gz$  ]] ) || ( [[ "$f" =~ .tar$  ]] || [[ "$f" =~ .tar.bz2$  ]] ) )  && ! [[ "$f" =~ 'http://' ]]
 then
 # in the case of an archive ...
 # an ideal fimgs script would unpack recursively in search for interesting files..
@@ -215,8 +219,10 @@ then
 
 # 20070925 there were problems with '\\.' so i put '.' only :/
 [[ "$f" =~ .cbr$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
+[[ "$f" =~ .CBR$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
 [[ "$f" =~ .rar$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
 [[ "$f" =~ .cbz$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+[[ "$f" =~ .CBZ$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
 [[ "$f" =~ .zip$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
 [[ "$f" =~ .tgz$    ]] && ( $UNTGZ "$f" -C "$DIR" ) 
 [[ "$f" =~ .tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
@@ -238,7 +244,7 @@ done
 #echo "options are $fbiopts"
 
 # there should be some filter to avoid feed garbage to fim ... 
-find $DIR/ -type f -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.gif' -or -iname '*.bmp' -or -iname '*.tiff' | $FBI $fbiopts  -- -
+find $DIR/ -type f -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.gif' -or -iname '*.bmp' -or -iname '*.tiff' | sort -n | $FBI $fbiopts  -- -
 
 # when no framebuffer device is available, we could invoke another console viewer, couldn't we ?
 # cacaview $DIR/*

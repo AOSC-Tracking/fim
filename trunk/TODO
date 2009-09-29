@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20090917	testing with http://lists.debian.org/debian-devel/2009/09/msg00549.html
 20090820	should offer EXIF data to fim displaying
 20090820	should add a quick sanity check flag ( e.g.: --sanity-check )
 20090813	is fim compatible with libjpeg 7 ? write this somewhere
