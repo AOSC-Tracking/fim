@@ -256,7 +256,9 @@ namespace fim
 #define FIM_VID_SWIDTH				"swidth"		/* "the current image scaled width" */
 #define FIM_VID_SHEIGHT				"sheight"		/* "the current image scaled height" */
 #define FIM_VID_AUTOFLIP			"autoflip"		/* "(INTERNAL)" */
+#define FIM_VID_AUTONEGATE			"autonegate"		/* "(INTERNAL) (EXPERIMENTAL)" */
 #define FIM_VID_FLIPPED				"flipped"		/* "(INTERNAL)" */
+#define FIM_VID_NEGATED				"negated"		/* "(INTERNAL) (EXPERIMENTAL)" */
 #define FIM_VID_FIM_BPP				"_fim_bpp"		/* "the bits per pixel count" */
 #define FIM_VID_AUTOMIRROR			"automirror"		/* "(INTERNAL)" */
 #define FIM_VID_MIRRORED			"mirrored"		/* "(INTERNAL)" */

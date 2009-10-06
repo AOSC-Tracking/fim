@@ -393,6 +393,7 @@ namespace fim
 		addCommand(new Command(fim::string("top_align"),fim::string("aligns to the upper side the image" ),&browser,&Browser::top_align));
 		addCommand(new Command(fim::string("bottom_align"),fim::string("aligns to the lower side the image" ),&browser,&Browser::bottom_align));
 		addCommand(new Command(fim::string("goto"),fim::string("goes to the index image" ),&browser,&Browser::goto_image));
+		addCommand(new Command(fim::string("negate"),fim::string("negates the displayed image colors" ),&browser,&Browser::negate));
 		addCommand(new Command(fim::string("status"),fim::string("sets the status line to the collation of the given arguments"),this,&CommandConsole::status));
 		addCommand(new Command(fim::string("scrolldown" ),fim::string("scrolls down the image, going next if at bottom" ),&browser,&Browser::scrolldown));
 		addCommand(new Command(fim::string("scrollforward" ),fim::string("scrolls the image as it were reading it :)" ),&browser,&Browser::scrollforward));

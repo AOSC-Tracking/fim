@@ -129,6 +129,8 @@ class Image
 	/* viewport methods ? */
 	int scale_increment(double ds);
 	int scale_multiply (double sm);
+	bool negate ();/* let's read e-books by consuming less power :) */
+	bool gray_negate();
 
 	bool check_invalid();
 	bool check_valid();
@@ -137,6 +139,7 @@ class Image
 	int original_width();
 	int height();
 	int original_height();
+	bool goto_page(int j);
 
 	Image * getClone();
 //	void resize(int nw, int nh);

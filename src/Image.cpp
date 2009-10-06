@@ -184,6 +184,7 @@ namespace fim
 		setVariable(FIM_VID_SCALE  ,newscale*100);
 		setVariable(FIM_VID_ASCALE,ascale);
 		setVariable(FIM_VID_ANGLE , angle);
+		setVariable(FIM_VID_NEGATED , 0);
 #endif
 
 		setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg->i.height);
@@ -620,6 +621,19 @@ fim::string Image::getInfo()
 			return false;
 	} 
 
+	bool Image::goto_page(int j)
+	{
+		string s=fname;
+		if( j>0 )--j;
+		if( !fimg )
+			return false;
+		if( j<0 )j=fimg->i.npages-1;
+		if( j>page ? have_nextpage(j-page) : have_prevpage(page-j) )
+			return load(s.c_str(),NULL,j);
+		else
+			return false;
+	} 
+
 	bool Image::next_page(int j)
 	{
 		string s=fname;
@@ -651,7 +665,83 @@ fim::string Image::getInfo()
 	{
 		/* FIXME : missing overflow check */
 		return (is_multipage() && page-j >= 0);
+	}
+ 
+	bool Image::gray_negate()
+	{
+		/* FIXME : NEW, but unused */
+		int n;
+		int th=1;/* 0 ... 256 * 3 * 3 */
+
+		if(!img || !img->data)
+			return false;
+
+		if(!fimg || !fimg->data)
+			return false;
+	
+		for( n=0; n< 3*fimg->i.width*fimg->i.height ; n+=3 )
+		{
+			int r,g,b,s,d;
+			r=fimg->data[n+0];
+			g=fimg->data[n+1];
+			b=fimg->data[n+2];
+			s=r+g+b;
+			d=( s - 3 * r ) * ( s - 3 * g ) * ( s - 3 * b );
+			d=d<0?-d:d;
+			if( d < th )
+			{
+				fimg->data[n+0]=~fimg->data[n+0];
+				fimg->data[n+1]=~fimg->data[n+1];
+				fimg->data[n+2]=~fimg->data[n+2];
+			}
+		}
+
+		for( n=0; n< 3*img->i.width*img->i.height ; n+=3 )
+		{
+			int r,g,b,s,d;
+			r=img->data[n+0];
+			g=img->data[n+1];
+			b=img->data[n+2];
+			s=r+g+b;
+			d=d<0?-d:d;
+			if( d < th )
+			{
+				img->data[n+0]=~img->data[n+0];
+				img->data[n+1]=~img->data[n+1];
+				img->data[n+2]=~img->data[n+2];
+			}
+		}
+
+		setGlobalVariable("i:"FIM_VID_NEGATED,1-getGlobalIntVariable("i:"FIM_VID_NEGATED));
+
+       		should_redraw();
+
+		return true;
 	} 
 
+	bool Image::negate()
+	{
+		/* NEW */
+
+		/* FIXME */
+		/*return gray_negate();*/
+
+		if(! img || ! img->data)
+			return false;
+		if(!fimg || !fimg->data)
+			return false;
+
+		for( unsigned char * p = fimg->data; p < fimg->data + 3*fimg->i.width*fimg->i.height ;++p)
+			*p = ~ *p;
+
+		for( unsigned char * p = img->data; p < img->data + 3*img->i.width*img->i.height ;++p)
+			*p = ~ *p;
+
+		setGlobalVariable("i:"FIM_VID_NEGATED,1-getGlobalIntVariable("i:"FIM_VID_NEGATED));
+
+       		should_redraw();
+
+		return true;
+	} 
 }
 
