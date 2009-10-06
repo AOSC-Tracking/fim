@@ -11,6 +11,7 @@
  * viewing of any type files as bitmaps (unset bits black, set bits white)
  * viewing of any type files as pixmaps (as RGB triples)
  * framebuffer driver now can be disabled at compile time
+ * colors inversion: saves a significant fraction of power when viewing documents 
 
         	Version 0.3-alpha
 

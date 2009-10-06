@@ -21,6 +21,12 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20091004	pdf picture viewing is memory greedy - be it a leak ?
+20091004	scroll amount should be a string. e.g.: "20%","20",".2"
+20091004	fim -V should state capability of djvu, ps, pdf, ...
+20091004	in book viewing mode (and a single loaded file), typing :N should jump to the N'th inner page : DOCUMENT THIS FEATURE
+20091004	PostLoad -> PostFileRead
+20091004	should deny sick things as 'alias "n" "n"'
 20090917	testing with http://lists.debian.org/debian-devel/2009/09/msg00549.html
 20090820	should offer EXIF data to fim displaying
 20090820	should add a quick sanity check flag ( e.g.: --sanity-check )

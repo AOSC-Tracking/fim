@@ -284,8 +284,12 @@ namespace fim
 		int mirror   =
 		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image->getIntVariable(FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
 		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image->getIntVariable(FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
-
+		int negate   =	/* FIXME : temporarily here */
+		((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image->getIntVariable(FIM_VID_NEGATED)==0));
 		image->update();
+
+		if(negate)
+			image->negate();
 
 		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER) && displaydevice->redraw)
 		{

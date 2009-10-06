@@ -131,6 +131,7 @@ class Browser
 	fim::string scale_factor_shrink(const args_t &args);
 	fim::string display(const args_t &args);
 	fim::string display_status(const char *l,const char*r);
+	fim::string negate(const args_t &args);
 
 	fim::string reload(const args_t &args);
 	fim::string list(const args_t &args){return list();}

@@ -474,6 +474,17 @@ namespace fim
 		return "";
 	}
 
+	fim::string Browser::negate(const args_t &args)
+	{
+		/*
+		 */
+		if(!image() )
+			return "";
+
+		if(image() && image()->negate())
+			return "";
+	}
+
 	fim::string Browser::display_status(const char *l,const char *r)
 	{
 		/*
@@ -926,6 +937,13 @@ namespace fim
 		 */
 		int N=flist.size();
 		if(!N)return "";
+
+		if( N==1 && c_image() && c_image()->is_multipage())
+		{
+			image()->goto_page(n);
+			return N;
+		}
+
 		cp=n;
 		if(cp<0)cp=(cp%N)+N+1;//+1 added lately
 		if(cp>N) cp=1+(n%N);

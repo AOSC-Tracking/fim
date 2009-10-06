@@ -37,6 +37,7 @@ _load_fim_history=1;
 
 # useful aliases
 alias "toggleautoflip" "autoflip=1-autoflip;";
+alias "toggleautonegate" "autonegate=1-autonegate;";
 alias "toggleflip" "i:flipped=1-i:flipped;";
 alias "flip" "toggleflip;redisplay;";
 alias "fliponce" "flip;toggleflip;";
@@ -59,11 +60,13 @@ bind 'n' "next_picture;";
 bind 'C-h' "help";
 bind 'x' "echo";
 bind 'e' "echo";
-bind 'p' "prev;display;";
+#bind 'p' "prev;display;";
+bind 'p' "prev_picture;";
 bind 'P' "pop";
 bind 's' "sort";
 bind 'C-s' "swap;redisplay;";
 bind 'S' "toggleDisplayStatus";
+bind 'I' "toggleautonegate";
 #bind 'R' "reload";
 #bind 'R' "redisplay";
 #bind 'r' "rotate90";
