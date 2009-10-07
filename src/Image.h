@@ -67,18 +67,18 @@ class Image
 
 	bool prev_page(int j=+1);
 	bool next_page(int j=+1);
-	int is_multipage()const;
+	bool is_multipage()const;
 	bool have_nextpage(int j=1)const;
 	bool have_prevpage(int j=1)const;
 
 	private:
 	Image& operator= (const Image &i){return *this;/* a nilpotent assignation */}
-	float            scale    ;	/* viewport variables */
-	float            ascale   ;
-	float            newscale ;
-	float            angle	  ;
-	float            newangle ;
-	int		 page ;
+	fim_scale_t            scale;	/* viewport variables */
+	fim_scale_t            ascale;
+	fim_scale_t            newscale;
+	fim_scale_t            angle;
+	fim_scale_t            newangle;
+	fim_page_t		 page;
 
 	/* virtual stuff */
 	public://TMP
