@@ -280,7 +280,7 @@ namespace fim
 // if the image rescaling mechanism is suspected of bugs, this will inhibit its use.
 #define FIM_BUGGED_RESCALE 0
 
-	int Image::rescale( float ns )
+	int Image::rescale( fim_scale_t ns )
 	{
 		/*
 		 * effective image rescaling
@@ -294,15 +294,15 @@ namespace fim
 		if(tiny() && newscale<scale){newscale=scale;return 0;}
 
 		int neworientation=getOrientation();
-		float	gascale=getGlobalFloatVariable(FIM_VID_ASCALE),
-			newascale=getFloatVariable(FIM_VID_ASCALE);
+		fim_angle_t	gascale=getGlobalFloatVariable(FIM_VID_ASCALE);
+		fim_scale_t	newascale=getFloatVariable(FIM_VID_ASCALE);
 		newascale=(newascale>0.0 && newascale!=1.0)?newascale:((gascale>0.0 && gascale!=1.0)?gascale:1.0);
 		
 		//float newascale=getFloatVariable(FIM_VID_ASCALE); if(newascale<=0.0) newascale=1.0;
 		/*
 		 * The global angle variable value will override the local if not 0 and the local unset
 		 * */
-		float	gangle  =getGlobalFloatVariable(FIM_VID_ANGLE),
+		fim_angle_t	gangle  =getGlobalFloatVariable(FIM_VID_ANGLE),
 			newangle=getFloatVariable(FIM_VID_ANGLE);
 		newangle=angle?newangle:((gangle!=0.0)?gangle:newangle);
 
@@ -311,7 +311,10 @@ namespace fim
 			&& neworientation == orientation
 			//&& newangle == angle
 			&& ( !newangle  && !angle )
-		){return 0;/*no need to rescale*/}
+		)
+		{
+			return 0;/*no need to rescale*/
+		}
 		orientation=((neworientation%4)+4)%4; // fix this
 
 		setGlobalVariable(FIM_VID_SCALE,newscale*100);
@@ -648,7 +651,7 @@ fim::string Image::getInfo()
 		return cache_key_t(fname.c_str(),fis);
 	}
 
-	int Image::is_multipage()const
+	bool Image::is_multipage()const
 	{
 		if( fimg && ( fimg->i.npages>1 ) )
 			return fimg->i.npages>1 ;

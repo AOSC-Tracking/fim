@@ -111,6 +111,9 @@
  
 namespace fim
 {
+	typedef float fim_scale_t;	/* a type for image scaling */
+	typedef float fim_angle_t;	/* a type for angles */
+	typedef int   fim_page_t;	/* a type for multipage document pages */
 	typedef std::map<fim::string,int > key_bindings_t;	//symbol->code
 	void status(const char *desc, const char *info);
 
