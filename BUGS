@@ -18,7 +18,9 @@ When submitting a bug report, please follow the following rules:
    ( make ; make report ) 2>&1 | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
   and send me the created .tgz file
  - please give me information about the exact way you experienced the problem
- - please give me information about the resolution you are running on
+ - please give me information about the resolution/video mode you are working with;
+   from the bash shell, execute the following and send me the output:
+   ( for f in  /sys/class/graphics/fb0/* ; do echo $f ; cat $f ; done )
  - please send me the config.log file, too (especially if it is a build bug).
    it is of vital importance!
    (the config.log file is created by the configure script when you run the ./configure script)

@@ -129,7 +129,7 @@ class FimInstance
 
 	static void version()
 	{
-	    fprintf(stderr,
+	    FIM_FPRINTF(stderr, 
 			    "FIM - Fbi IMproved "
 	#ifdef FIM_VERSION
 			    FIM_VERSION
@@ -261,7 +261,7 @@ int help_and_exit(char *argv0, int code=0)
 		    break;*/
 	//	case '1':
 		    //fbi's
-	//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	//	    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 	//	    once = 1;
 	//	    break;
 		case 'a':
@@ -300,7 +300,7 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'q':
 		    //fbi's
-		    //fprintf(stderr,"sorry, this feature will be implemented soon\n");
+		    //FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,0);
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=0;");
@@ -391,11 +391,11 @@ int help_and_exit(char *argv0, int code=0)
 	//	case 't':
 		    //fbi's
 	//	    timeout = atoi(optarg);
-	//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	//	    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 	//	    break;
 		case 'u':
 		    //fbi's
-		    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+		    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 	//	    randomize = 1;
 		    break;
 		case 'd':
@@ -407,7 +407,7 @@ int help_and_exit(char *argv0, int code=0)
 #ifdef FIM_READ_STDIN_IMAGE
 		    read_one_file_from_stdin=1;
 #else
-		    fprintf(stderr,"sorry, the reading of images from stdin was disabled at compile time\n");
+		    FIM_FPRINTF(stderr, "sorry, the reading of images from stdin was disabled at compile time\n");
 #endif
 		    break;
 		case 'm':
@@ -430,7 +430,7 @@ int help_and_exit(char *argv0, int code=0)
 	//	case 'l':
 		    //fbi's
 	//	    flist_add_list(optarg);
-	//	    fprintf(stderr,"sorry, this feature will be implemented soon\n");
+	//	    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 	//	    break;
 		case 'T':
 		    //fbi's virtual terminal
@@ -538,7 +538,7 @@ int help_and_exit(char *argv0, int code=0)
 		#endif
 		read_one_script_file_from_stdin > 1)
 		{
-			fprintf(stderr,"error : you shouldn't specify more than one standard input reading options among (-, -p, ad -i)!\n\n");
+			FIM_FPRINTF(stderr, "error : you shouldn't specify more than one standard input reading options among (-, -p, ad -i)!\n\n");
 			retcode=help_and_exit(argv[0],0);/* should return 0 or -1 ? */
 			goto ret;
 		}

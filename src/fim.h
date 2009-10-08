@@ -293,4 +293,7 @@ namespace fim
 #define FIM_FLAG_RGB2GRAY 4
 #define FIM_FLAG_RGB2GRAYGRAYGRAY 8
 
+/* we wait for variadic macros support in standard C++ */
+#define FIM_FPRINTF fprintf
+
 #endif
