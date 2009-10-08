@@ -57,6 +57,62 @@ static void foo(){} /* let's make our compiler happy */
 
 namespace fim
 {
+
+#define	FIM_DEBUGGING_FOR_ARM_WITH_VITALY 1
+/*
+   this code will be enabled by default if we can make sure it
+   won't break often with kernel updates */
+#if	FIM_DEBUGGING_FOR_ARM_WITH_VITALY
+
+static void print_vinfo(struct fb_var_screeninfo *vinfo)
+{
+	FIM_FPRINTF(stderr,  "Printing vinfo:\n");
+	FIM_FPRINTF(stderr,  "\txres: %d\n", vinfo->xres);
+	FIM_FPRINTF(stderr,  "\tyres: %d\n", vinfo->yres);
+	FIM_FPRINTF(stderr,  "\txres_virtual: %d\n", vinfo->xres_virtual);
+	FIM_FPRINTF(stderr,  "\tyres_virtual: %d\n", vinfo->yres_virtual);
+	FIM_FPRINTF(stderr,  "\txoffset: %d\n", vinfo->xoffset);
+	FIM_FPRINTF(stderr,  "\tyoffset: %d\n", vinfo->yoffset);
+	FIM_FPRINTF(stderr,  "\tbits_per_pixel: %d\n", vinfo->bits_per_pixel);
+	FIM_FPRINTF(stderr,  "\tgrayscale: %d\n", vinfo->grayscale);
+	FIM_FPRINTF(stderr,  "\tnonstd: %d\n", vinfo->nonstd);
+	FIM_FPRINTF(stderr,  "\tactivate: %d\n", vinfo->activate);
+	FIM_FPRINTF(stderr,  "\theight: %d\n", vinfo->height);
+	FIM_FPRINTF(stderr,  "\twidth: %d\n", vinfo->width);
+	FIM_FPRINTF(stderr,  "\taccel_flags: %d\n", vinfo->accel_flags);
+	FIM_FPRINTF(stderr,  "\tpixclock: %d\n", vinfo->pixclock);
+	FIM_FPRINTF(stderr,  "\tleft_margin: %d\n", vinfo->left_margin);
+	FIM_FPRINTF(stderr,  "\tright_margin: %d\n", vinfo->right_margin);
+	FIM_FPRINTF(stderr,  "\tupper_margin: %d\n", vinfo->upper_margin);
+	FIM_FPRINTF(stderr,  "\tlower_margin: %d\n", vinfo->lower_margin);
+	FIM_FPRINTF(stderr,  "\thsync_len: %d\n", vinfo->hsync_len);
+	FIM_FPRINTF(stderr,  "\tvsync_len: %d\n", vinfo->vsync_len);
+	FIM_FPRINTF(stderr,  "\tsync: %d\n", vinfo->sync);
+	FIM_FPRINTF(stderr,  "\tvmode: %d\n", vinfo->vmode);
+	FIM_FPRINTF(stderr,  "\tred: %d/%d\n", vinfo->red.length, vinfo->red.offset);
+	FIM_FPRINTF(stderr,  "\tgreen: %d/%d\n", vinfo->green.length, vinfo->green.offset);
+	FIM_FPRINTF(stderr,  "\tblue: %d/%d\n", vinfo->blue.length, vinfo->blue.offset);
+	FIM_FPRINTF(stderr,  "\talpha: %d/%d\n", vinfo->transp.length, vinfo->transp.offset);
+}
+
+static void print_finfo(struct fb_fix_screeninfo *finfo)
+{
+	FIM_FPRINTF(stderr,  "Printing finfo:\n");
+	FIM_FPRINTF(stderr,  "\tsmem_start = %p\n", (char *)finfo->smem_start);
+	FIM_FPRINTF(stderr,  "\tsmem_len = %d\n", finfo->smem_len);
+	FIM_FPRINTF(stderr,  "\ttype = %d\n", finfo->type);
+	FIM_FPRINTF(stderr,  "\ttype_aux = %d\n", finfo->type_aux);
+	FIM_FPRINTF(stderr,  "\tvisual = %d\n", finfo->visual);
+	FIM_FPRINTF(stderr,  "\txpanstep = %d\n", finfo->xpanstep);
+	FIM_FPRINTF(stderr,  "\typanstep = %d\n", finfo->ypanstep);
+	FIM_FPRINTF(stderr,  "\tywrapstep = %d\n", finfo->ywrapstep);
+	FIM_FPRINTF(stderr,  "\tline_length = %d\n", finfo->line_length);
+	FIM_FPRINTF(stderr,  "\tmmio_start = %p\n", (char *)finfo->mmio_start);
+	FIM_FPRINTF(stderr,  "\tmmio_len = %d\n", finfo->mmio_len);
+	FIM_FPRINTF(stderr,  "\taccel = %d\n", finfo->accel);
+}
+#endif
+
 #define DITHER_LEVEL 8
 
 typedef unsigned long vector[DITHER_LEVEL];
@@ -255,7 +311,7 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 			lut_init(24);
 			break;
 		default:
-			fprintf(stderr, "Oops: %i bit/pixel ???\n",
+			FIM_FPRINTF(stderr,  "Oops: %i bit/pixel ???\n",
 				fb_var.bits_per_pixel);
 			std::exit(1);
 	    	}
@@ -468,7 +524,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
     if(!try_boz_patch)
 #endif
     if (-1 == ioctl(tty,VT_GETSTATE, &vts)) {
-	fprintf(stderr,"ioctl VT_GETSTATE: %s (not a linux console?)\n",
+	FIM_FPRINTF(stderr, "ioctl VT_GETSTATE: %s (not a linux console?)\n",
 		strerror(errno));
 	return -1;
 //	exit(1);
@@ -481,7 +537,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 	if (NULL == device) {
 	    struct fb_con2fbmap c2m;
 	    if (-1 == (fb = open(devices->fb0,O_RDWR /* O_WRONLY */,0))) {
-		fprintf(stderr,"open %s: %s\n",devices->fb0,strerror(errno));
+		FIM_FPRINTF(stderr, "open %s: %s\n",devices->fb0,strerror(errno));
 		exit(1);
 	    }
 	    c2m.console = vts.v_active;
@@ -493,7 +549,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 		exit(1);
 	    }
 	    close(fb);
-/*	    fprintf(stderr,"map: vt%02d => fb%d\n",
+/*	    FIM_FPRINTF(stderr, "map: vt%02d => fb%d\n",
 		    c2m.console,c2m.framebuffer);*/
 	    sprintf(fbdev,devices->fbnr,c2m.framebuffer);
 	    device = fbdev;
@@ -507,17 +563,23 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 
     /* get current settings (which we have to restore) */
     if (-1 == (fb = open(device,O_RDWR /* O_WRONLY */))) {
-	fprintf(stderr,"open %s: %s\n",device,strerror(errno));
+	FIM_FPRINTF(stderr, "open %s: %s\n",device,strerror(errno));
 	exit(1);
     }
     if (-1 == ioctl(fb,FBIOGET_VSCREENINFO,&fb_ovar)) {
 	perror("ioctl FBIOGET_VSCREENINFO");
 	exit(1);
     }
+#if	FIM_DEBUGGING_FOR_ARM_WITH_VITALY
+	print_vinfo(&fb_ovar);
+#endif
     if (-1 == ioctl(fb,FBIOGET_FSCREENINFO,&fb_fix)) {
 	perror("ioctl FBIOGET_FSCREENINFO");
 	exit(1);
     }
+#if	FIM_DEBUGGING_FOR_ARM_WITH_VITALY
+	print_finfo(&fb_fix);
+#endif
     if (fb_ovar.bits_per_pixel == 8 ||
 	fb_fix.visual == FB_VISUAL_DIRECTCOLOR) {
 	if (-1 == ioctl(fb,FBIOGETCMAP,&ocmap)) {
@@ -564,7 +626,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 	exit(1);
     }
     if (fb_fix.type != FB_TYPE_PACKED_PIXELS) {
-	fprintf(stderr,"can handle only packed pixel frame buffers\n");
+	FIM_FPRINTF(stderr, "can handle only packed pixel frame buffers\n");
 	goto err;
     }
 #if 0
@@ -588,7 +650,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 	fb_setpixels = fb_setpixels4;
 	break;
     default:
-	fprintf(stderr, "Oops: %i bit/pixel ???\n",
+	FIM_FPRINTF(stderr,  "Oops: %i bit/pixel ???\n",
 		fb_var.bits_per_pixel);
 	goto err;
     }
@@ -669,11 +731,11 @@ void FramebufferDevice::fb_setvt(int vtno)
     vtno &= 0xff;
     sprintf(vtname, devices->ttynr, vtno);
     if ( chown(vtname, getuid(), getgid())){
-	fprintf(stderr,"chown %s: %s\n",vtname,strerror(errno));
+	FIM_FPRINTF(stderr, "chown %s: %s\n",vtname,strerror(errno));
 	exit(1);
     }
     if (-1 == access(vtname, R_OK | W_OK)) {
-	fprintf(stderr,"access %s: %s\n",vtname,strerror(errno));
+	FIM_FPRINTF(stderr, "access %s: %s\n",vtname,strerror(errno));
 	exit(1);
     }
     switch (fork()) {
@@ -831,7 +893,7 @@ int FramebufferDevice::fb_setmode(char *name)
 
 int FramebufferDevice::fb_activate_current(int tty)
 {
-/* Hmm. radeonfb needs this. matroxfb doesn't. */
+/* Hmm. radeonfb needs this. matroxfb doesn't. (<- fbi comment) */
     struct vt_stat vts;
     
 #ifdef FIM_BOZ_PATCH
@@ -989,8 +1051,6 @@ void FramebufferDevice::clear_screen(void)
     if (visible)
 	fb_memset(fb_mem,0,fb_fix.smem_len);
 }
-
-
 
 void FramebufferDevice::cleanup(void)
 {
@@ -1439,14 +1499,14 @@ void FramebufferDevice::fb_switch_release()
     ioctl(tty, VT_RELDISP, 1);
     fb_switch_state = FB_INACTIVE;
     if (debug)
-	fprintf(stderr,"vt: release\n");
+	FIM_FPRINTF(stderr, "vt: release\n");
 }
 void FramebufferDevice::fb_switch_acquire()
 {
     ioctl(tty, VT_RELDISP, VT_ACKACQ);
     fb_switch_state = FB_ACTIVE;
     if (debug)
-	fprintf(stderr,"vt: acquire\n");
+	FIM_FPRINTF(stderr, "vt: acquire\n");
 }
 int FramebufferDevice::fb_switch_init()
 {
@@ -1487,13 +1547,13 @@ void FramebufferDevice::fb_switch_signal(int signal)
 	/* release */
 	fb_switch_state = FB_REL_REQ;
 	if (debug)
-	    fprintf(stderr,"vt: SIGUSR1\n");
+	    FIM_FPRINTF(stderr, "vt: SIGUSR1\n");
     }
     if (signal == SIGUSR2) {
 	/* acquisition */
 	fb_switch_state = FB_ACQ_REQ;
 	if (debug)
-	    fprintf(stderr,"vt: SIGUSR2\n");
+	    FIM_FPRINTF(stderr, "vt: SIGUSR2\n");
     }
 }
 
@@ -1530,7 +1590,7 @@ int FramebufferDevice::fs_init_fb(int white8)
 	fs_setpixel = setpixel4;
 	break;
     default:
-	fprintf(stderr, "Oops: %i bit/pixel ???\n",
+	FIM_FPRINTF(stderr,  "Oops: %i bit/pixel ???\n",
 		fb_var.bits_per_pixel);
 	return -1;
     }

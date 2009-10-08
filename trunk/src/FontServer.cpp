@@ -48,7 +48,7 @@ void FontServer::fb_text_init1(const char *font, struct fs_font **_f)
 	*_f = fs_open(font ? font : x11_font);
 #endif
     if (NULL == *_f) {
-	fprintf(stderr,"font \"%s\" is not available\n",font);
+	FIM_FPRINTF(stderr, "font \"%s\" is not available\n",font);
 	exit(1);
     }
 }
@@ -97,7 +97,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 	break;
     }
     if (NULL == filename[i]) {
-	fprintf(stderr,"can't find console font file\n");
+	FIM_FPRINTF(stderr, "can't find console font file\n");
 	return NULL;
     }
 
@@ -108,16 +108,16 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 	fp = fopen(filename[i], "r");
     }
     if (NULL == fp) {
-	fprintf(stderr,"can't open %s: %s\n",filename[i],strerror(errno));
+	FIM_FPRINTF(stderr, "can't open %s: %s\n",filename[i],strerror(errno));
 	return NULL;
     }
 
     if (fgetc(fp) != 0x36 ||
 	fgetc(fp) != 0x04) {
-	fprintf(stderr,"can't use font %s\n",filename[i]);
+	FIM_FPRINTF(stderr, "can't use font %s\n",filename[i]);
 	return NULL;
     }
-//    fprintf(stderr,"using linux console font \"%s\"\n",filename[i]);
+//    FIM_FPRINTF(stderr, "using linux console font \"%s\"\n",filename[i]);
 
     f =(struct fs_font*) calloc(sizeof(*f),1);
     if(!f)goto oops;
