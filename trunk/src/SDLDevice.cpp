@@ -24,7 +24,7 @@
  * NOTES : The SDL support is INCOMPLETE:
  *
  *  - missing non 32 bits per pixel color modes support
- *  - largely inefficient
+ *  - largely inefficient, please do not be surprised
  *  - input problems when coupled with readline
  */
 #include "fim.h"
@@ -312,13 +312,48 @@ std::cout.unsetf ( std::ios::hex );
 		/*
 		 * this function is taken straight from the sdl documentation: there are smarter ways to do this.
 		 * */
-		Uint32 *pixmem32;
-		Uint32 colour;
 
-		colour = SDL_MapRGB( screen->format, b, g, r );
+		switch (bpp)
+		{
+		case  8:
+		{
+			Uint8 *pixmem8;
+			Uint8 colour;
+			colour = SDL_MapRGB( screen->format, b, g, r );
+			pixmem8 = (Uint8*)((char*)( screen->pixels)  + (y + x)*Bpp);
+			*pixmem8 = colour;
+		}
+		case 15:
+		case 16:
+		{
+			Uint16 *pixmem16;
+			Uint16 colour;
+			colour = SDL_MapRGB( screen->format, b, g, r );
+			pixmem16 = (Uint16*)((char*)( screen->pixels)  + (y + x)*Bpp);
+			*pixmem16 = colour;
+		}
+		case 24:
+		{
+			Uint32 *pixmem32;
+			Uint32 colour;
+			colour = SDL_MapRGB( screen->format, b, g, r );
+			pixmem32 = (Uint32*)((char*)( screen->pixels)  + (y + x)*Bpp);
+			*pixmem32 = colour;
+		}
+		case 32:
+		{
+			Uint32 *pixmem32;
+			Uint32 colour;
+			colour = SDL_MapRGBA( screen->format, b, g, r, 255 );
+			pixmem32 = (Uint32*)((char*)( screen->pixels)  + (y + x)*Bpp);
+			*pixmem32 = colour;
+		}
+		default:
+		{
+			/* 1,2,4 modes unsupported for NOW */
+		}
+		}
 
-		pixmem32 = (Uint32*)((char*)( screen->pixels)  + (y + x)*Bpp);
-		*pixmem32 = colour;
 	}
 
 	int SDLDevice::get_input(unsigned int * c )
@@ -491,20 +526,21 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char
         :(nBytes) == 8 ? ((((bits) + 63) >> 3) & ~7)    /* pad to 8 bytes */\
         : 0)
 
-    int row,bit,bpr,x;
+	int row,bit,bpr,x;
 
-    bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left),
-			     SCANLINE_PAD_BYTES);
-    for (row = 0; row < (charInfo->ascent + charInfo->descent); row++) {
-	for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++) {
-	    if (data[bit>>3] & fs_masktab[bit&7])
-	{	// WARNING !
-		setpixel(screen,x_+x,(y+row)*screen->pitch/Bpp,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
+	bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left), SCANLINE_PAD_BYTES);
+	for (row = 0; row < (charInfo->ascent + charInfo->descent); row++)
+	{
+		for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++) 
+		{
+			if (data[bit>>3] & fs_masktab[bit&7])
+			{	// WARNING !
+				setpixel(screen,x_+x,(y+row)*screen->pitch/Bpp,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
+			}
+			x += Bpp/Bpp;/* FIXME */
 		}
-	    x += Bpp/Bpp;/* FIXME */
+		data += bpr;
 	}
-	data += bpr;
-    }
 
 #undef BIT_ORDER
 #undef BYTE_ORDER
