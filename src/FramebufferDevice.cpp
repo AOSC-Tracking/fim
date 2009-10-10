@@ -655,7 +655,13 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 	goto err;
     }
 #endif
+#ifdef PAGE_MASK
     fb_mem_offset = (unsigned long)(fb_fix.smem_start) & (~PAGE_MASK);
+#else
+    /* some systems don't have this symbol outside their kernel headers - will do any harm ? */
+    /* FIXME : what are the wider implications of this ? */
+    fb_mem_offset = 0;
+#endif
     fb_mem = (unsigned char*) mmap(NULL,fb_fix.smem_len+fb_mem_offset,
 		  PROT_READ|PROT_WRITE,MAP_SHARED,fb,0);
     /*
