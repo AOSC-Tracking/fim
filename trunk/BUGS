@@ -58,6 +58,7 @@ with a '@' and _Baz_ with a '.'.
 
 ==== MINOR ISSUES
 
+20091009	on dual screen, SDL will occupy both screens even if we don't want it to do so
 20091009	we do not support 1,2,4 bit modes
 20090601	under X11, some aalib implementations open a window. well, this breaks readline functionality, when fim is run via aalib under X11 in such an implementation.
 20090404	the aalib key binding is not complete and may not be fully portable
