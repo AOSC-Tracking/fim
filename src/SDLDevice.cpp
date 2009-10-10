@@ -323,6 +323,7 @@ std::cout.unsetf ( std::ios::hex );
 			pixmem8 = (Uint8*)((char*)( screen->pixels)  + (y + x)*Bpp);
 			*pixmem8 = colour;
 		}
+		break;
 		case 15:
 		case 16:
 		{
@@ -332,6 +333,7 @@ std::cout.unsetf ( std::ios::hex );
 			pixmem16 = (Uint16*)((char*)( screen->pixels)  + (y + x)*Bpp);
 			*pixmem16 = colour;
 		}
+		break;
 		case 24:
 		{
 			Uint32 *pixmem32;
@@ -340,6 +342,7 @@ std::cout.unsetf ( std::ios::hex );
 			pixmem32 = (Uint32*)((char*)( screen->pixels)  + (y + x)*Bpp);
 			*pixmem32 = colour;
 		}
+		break;
 		case 32:
 		{
 			Uint32 *pixmem32;
@@ -348,6 +351,7 @@ std::cout.unsetf ( std::ios::hex );
 			pixmem32 = (Uint32*)((char*)( screen->pixels)  + (y + x)*Bpp);
 			*pixmem32 = colour;
 		}
+		break;
 		default:
 		{
 			/* 1,2,4 modes unsupported for NOW */
