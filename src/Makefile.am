@@ -111,6 +111,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Cache.cpp \
 	Command.cpp \
 	CommandConsole.cpp \
+	CommandConsole-cmd.cpp \
 	DebugConsole.cpp \
 	DisplayDevice.cpp \
 	FbiStuff.cpp \
