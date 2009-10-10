@@ -229,9 +229,6 @@
 /* Define to 1 if you have the <linux/vt.h> header file. */
 #undef HAVE_LINUX_VT_H
 
-/* */
-#undef HAVE_MATRIX_MARKET_DECODER
-
 /* Define to 1 if you have the `memcmp' function. */
 #undef HAVE_MEMCMP
 

@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20091010	split CommandConsole.cpp in pieces : it sucks more than 64MB on PDA's while compiing, and thats bad
 20091004	pdf picture viewing is memory greedy - be it a leak ?
 20091004	scroll amount should be a string. e.g.: "20%","20",".2"
 20091004	fim -V should state capability of djvu, ps, pdf, ...
