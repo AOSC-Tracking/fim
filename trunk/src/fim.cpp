@@ -164,7 +164,7 @@ class FimInstance
 			"Fim options (features included (+) or not (-)):\n"
 	#include "version.h"
 	/* i think some flags are missing .. */
-		"\nAvailable output devices (for --output-device) : "
+		"\nSupported output devices (for --output-device) : "
 	#ifdef FIM_WITH_AALIB
 		" aa"
 	#endif
@@ -180,6 +180,34 @@ class FimInstance
 	#if 1
 		" dumb"
 	#endif
+		"\n"
+		"\nSupported file formats : "
+#ifdef ENABLE_PDF
+		" pdf"
+#endif
+#ifdef HAVE_LIBSPECTRE
+		" ps"
+#endif
+#ifdef HAVE_LIBDJVU
+		" djvu"
+#endif
+#ifdef HAVE_LIBJPEG
+		" jpeg"
+#endif
+#ifdef FIM_HANDLE_TIFF
+		" tiff"
+#endif
+#ifdef FIM_HANDLE_GIF
+		" gif"
+#endif
+#ifdef FIM_WITH_LIBPNG
+		" png"
+#endif
+		" ppm"	/* no library is needed for these */
+		" bmp"
+#ifdef HAVE_MATRIX_MARKET_DECODER
+		" mtx (Matrix Market)"
+#endif
 		"\n"
 			    );
 	}

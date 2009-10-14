@@ -44,12 +44,13 @@ signed-dist: dist
 #	        gpg -sbav -u EF1258B8 $@ $<
 
 
-# this rule is deprecated, too: testing should be performed with 'make tests'
+# this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 sanity-check:	all
 	@./src/fim -E scripts/tests/sanity.fim -t
 
-# this should be the preferred way of testing, now on
+# this is the official way of testing fim
 tests:	all
+	@./scripts/tests/version.sh
 	@cd ./src/testdir && make
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/

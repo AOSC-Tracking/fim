@@ -313,6 +313,7 @@ if test x$fim_handle_gif != xno ; then
   if test x"$have_gif" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffGif.o"
   LIBS="$LIBS $LIBGIF"
+  AC_DEFINE([FIM_HANDLE_GIF])
   else
     fim_handle_gif=no
   fi
@@ -366,6 +367,7 @@ if test x$fim_handle_tiff != xno ; then
   if test x"$have_tiff" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffTiff.o"
   LIBS="$LIBS $LIBTIFF"
+  AC_DEFINE([FIM_HANDLE_TIFF])
   else
     fim_handle_tiff=no
   fi
@@ -406,6 +408,8 @@ dnl ============= GNU readline : essential
 dnl Please note that when the readline library is compiled with the curses library, this check will fail, because
 dnl we cannot know in advance if it is so.
 AH_TEMPLATE([FIM_USE_READLINE])
+AH_TEMPLATE([FIM_HANDLE_GIF])
+AH_TEMPLATE([FIM_HANDLE_TIFF])
 
 have_readline=no
 

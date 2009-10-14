@@ -108,6 +108,7 @@ Introduction to Fim					*ref* *reference*
 10. Technicalia			|technicalia|
 10.1. Syntax Reference		|syntax-ref|
 10.2. Framebuffer mini how to	|framebuffer|
+10.3. Hacking			|hacking|
 11. Credits			|credits|
 12. FAQs			|faq|
 13. BUGS			|bugs|
@@ -1611,6 +1612,10 @@ A lot of questions still await for an answer in Fim. Here are few:
  fbset(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4)
 
  Or the file /usr/src/linux/Documentation/fb/vesafb.txt
+==============================================================================
+10.3.Hacking							*hacking*
+ 
+ See the guidelines in the Hacking sections in the README file.
 
 ==============================================================================
 11.Credits 							*credits*
