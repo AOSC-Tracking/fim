@@ -8,11 +8,12 @@ fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .TP
 .B ... | fim [ options ] [--] [ files ] - ...
 .TP
-.B fim  -  [ options ] < file_name_list
+.B fim  -  [ options ] < file_name_list_text_file
+. # in most shells, in this case < will redirect file_name_list output to fim, which will interpret it as newline separated file list
 .TP
-.B fim -i [ options ] < image_file
+.B fim -i [ options ] < image_file_name
 .TP
-.B fim -p [ options ] < script_file
+.B fim -p [ options ] < fim_script_file_name
 .SH DESCRIPTION
 .B fim
 displays the specified file(s) on the linux console using the
@@ -27,7 +28,21 @@ For other formats fim will try to use ImageMagick's 'convert'.
 Please note that the full documentation of
 .B fim
 is in the FIM.TXT file distributed in the source package.
+This man page only describes the
+.B fim
+command line switches.
 .SH OPTIONS
+.TP
+.B --
+The arguments before
+.B --
+beginning with 
+.B -
+will be treated as command line switches.
+All arguments after
+.B --
+will be treated as filenames regardlessly.
+.
 .TP
 .B -a, --autozoom
 Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)
@@ -77,6 +92,7 @@ display help and terminate the program.
 .TP
 .B -i, --image-from-stdin
 Will read one single image from the standard input (yes: the image, not the filename).
+May not work with all supported file formats.
 .TP
 .B -m {mode}, --mode {mode}
 name of the video mode to use video mode (must be listed in

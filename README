@@ -7,9 +7,12 @@
 	4		Compilation Requirements
 	4.5		Testing
 	5		Run Time Requirements
+	5.5		Hacking, maintenance guidelines
 	6		Original Idea
 	7		Technical overview (important for patch writers)
-	8		Gentoo Installation Tips
+	8		Availability in Linux distributions
+	8.1		Debian
+	8.2		Gentoo Installation Tips
 	9		License
 	10		Contacts, mailing lists, URLs
 ================================================================================
@@ -60,7 +63,7 @@ of comments in the (sometimes still dirty) code, and some text files.
 Implemented features: 
 
  - interactive (default) and command line modes
- - all of the functionality is scripted in an internal language
+ - all of the functionality is scripted in an internal domain specific language
  - on-screen debug and information console in command mode
  - multiple internal windows with indipendent images displayed at once
  - per-image variables (e.g.: i:var="value")
@@ -180,9 +183,8 @@ Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/) ...
    these. Note that Flex 2.5.4a comes after Flex-2.5.4.
    This note is especially precious for Debian/Ubuntu users.
 
-================================================================================
+--------------------------------------------------------------------------------
 	4.5		Testing
-================================================================================
 
  Just after the  './configure'  and 'make' steps, you should:
  
@@ -212,6 +214,23 @@ Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/) ...
  - shared library files for : libpng, libjpeg, libungif, libtiff, libreadline
 
 ================================================================================
+	5.5		Hacking, maintenance guidelines
+================================================================================
+
+If you hack fim in an interesting way, consider submitting your changes as a
+patch.
+
+There is a number of informal rules to follow when maintaining or hacking and
+contributing to Fim.
+
+ - If you intend to support a new file format, remember that `fim -V` should 
+   list the supported file types list. So you should update it.
+ - If you intend to support a new output device, remember that `fim -V` should 
+   list the supported output devices. So you should update it.
+ - Fim should continue passing the tests after your patch, and your patch should
+   be robust, too. Consider writing a new test case.
+
+================================================================================
 	6		Original Idea
 ================================================================================
 
@@ -230,8 +249,6 @@ any means near to what is Fim today.
 Fim aims at a complete reorganization of the Fbi code, and ideally towards an
 implementation of the most scriptable and configurable image viewer ever - not
 tied to the framebuffer device and to a sole keyboard input.
-
-Gimme only some time :)
 
 ================================================================================
 	7		Technical overview (important for patch writers)
@@ -253,7 +270,7 @@ The libraries can be found on their sites (as of 20070312):
  libtiff  : http://www.libtiff.org/
  libdjvulibre : http://sourceforge.net/projects/djvu/
 
-Tested with library SDL-1.2.2.
+Tested and working with library SDL-1.2.12.
 
 Note that it is highly likely that you already have these libraries on your
 system, especially on Gentoo Linux.
@@ -271,7 +288,7 @@ Thomas Niemann's tutorial to yacc & lex
 The yacc & lex HOWTO
 GNU readline manual
 Ray Lischner, STL Pocket Reference, O'Reilly, 2004 
-Herbert Schildt's C++, Complete Reference, Third Edition, Osborne McGraw-Hill, 1999
+Herbert Schildt, C++- Complete Reference, Third Edition, Osborne McGraw-Hill, 1999
 http://www.gnu.org/software/m4/manual/
 http://www.gnu.org/software/autoconf/manual/
 http://www.gnu.org/software/automake/manual/
@@ -321,8 +338,18 @@ Tested platforms :
  The code is much complicated and is very susceptible.
 
 ================================================================================
-	8		Gentoo Installation Tips
+	8		Availability in Linux distributions
 ================================================================================
+
+--------------------------------------------------------------------------------
+	8.1		Debian
+ 
+ You should find fim in debian, and install it like:
+
+ apt-get install fim
+ 
+--------------------------------------------------------------------------------
+	8.2		Gentoo Installation Tips (obsolete)
 
 On the Gentoo Linux distribution , you should not have problems building Fim by
 first installing some libraries :
