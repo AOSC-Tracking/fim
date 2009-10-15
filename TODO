@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20091015	text files reading (via font rendering) plugin :)
 20091013	get_commands_list() should sort before returning, or better
 		to re-sort these containers after each push/remove
 20091010	split CommandConsole.cpp in pieces : it sucks more than 64MB on PDA's while compiing, and thats bad
