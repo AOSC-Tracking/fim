@@ -58,7 +58,7 @@ static void foo(){} /* let's make our compiler happy */
 namespace fim
 {
 
-#define	FIM_DEBUGGING_FOR_ARM_WITH_VITALY 1
+#define	FIM_DEBUGGING_FOR_ARM_WITH_VITALY 0
 /*
    this code will be enabled by default if we can make sure it
    won't break often with kernel updates */
@@ -704,7 +704,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 
 void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
 {
-#if 1 /* defined(__powerpc__) */
+#if 0 /* defined(__powerpc__) */
     unsigned int i;
     
     i = (c & 0xff) << 8;
@@ -931,14 +931,22 @@ int FramebufferDevice::status_line(const unsigned char *msg)
     int y;
     
     if (!visible)
-	return 0;
-    y = fb_var.yres - f->height - ys;
+	goto ret;
+
+    if(fb_var.yres< 1 + f->height + ys)
+	/* we need enough pixels, and have no assumptions on weird visualization devices */
+	goto rerr;
+
+    y = fb_var.yres -1 - f->height - ys;
 //    fb_memset(fb_mem + fb_fix.line_length * y, 0, fb_fix.line_length * (f->height+ys));
     clear_rect(0, fb_var.xres-1, y+1,y+f->height+ys);
 
     fb_line(0, fb_var.xres, y, y);
     fs_puts(f, 0, y+ys, msg);
+ret:
     return 0;
+rerr:
+    return -1;
 }
 
 void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
@@ -947,6 +955,7 @@ void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
     
     if (!visible)
 	return;
+
     y = fb_var.yres - f->height - ys;
     x = pos * f->width;
     fb_memset(fb_mem + fb_fix.line_length * y, 0,

@@ -333,15 +333,24 @@ find /mnt/media/ -name *.jpg |
 .B fim
 -
 .P
-will make fim read the file list from standard input.
+#will make fim read the file list from standard input.
 .P
 .P
 
+find /mnt/media/ -name *.jpg | shuf | 
+.B fim
+-
+.P
+#will make fim read the file list from standard input, randomly permuted.
+.P
+.P
+
+c
 cat script.fim | 
 .B fim
 -p images/*
 .P
-will make fim read the script file
+#will make fim read the script file
 .B script.fim
 from standard input prior to displaying files in the directory
 .B images
@@ -351,14 +360,14 @@ from standard input prior to displaying files in the directory
 scanimage ... | tee scan.ppm | 
 .B fim -i
 .P
-will make fim read the image scanned from a flatbed scanner as soon as it is read 
+#will make fim read the image scanned from a flatbed scanner as soon as it is read 
 .P
 .P
 
 .B fim
 * > selection.txt
 .P
-will output the file names marked interactively with 'm' in fim to a file.
+#will output the file names marked interactively with 'm' in fim to a file.
 .P
 .P
 
@@ -367,7 +376,7 @@ will output the file names marked interactively with 'm' in fim to a file.
 .B fim
 -
 .P
-will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
+#will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
 .P
 .P
 
