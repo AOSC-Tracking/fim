@@ -704,7 +704,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
 
 void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
 {
-#if 0 /* defined(__powerpc__) */
+#if 1 /* defined(__powerpc__) */
     unsigned int i;
     
     i = (c & 0xff) << 8;
