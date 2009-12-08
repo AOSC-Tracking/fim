@@ -36,8 +36,6 @@ namespace fim
 
 #define fim_free(x) {free(x);}
 //#define fim_free(x) {std::cout<<"freeing "<<(int*)x<<"\n";free(x);x=NULL;std::cout<<"freeed!\n";}
-#define fim_calloc(x) calloc((x),1)
-#define fim_malloc(x) malloc(x)
 #define fim_realloc(x,n) realloc((x),(n))
 #define fim_empty_string(s) (!(s) || !(*(s)))
 

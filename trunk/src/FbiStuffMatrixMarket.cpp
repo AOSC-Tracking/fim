@@ -59,7 +59,7 @@ mm_init(FILE *fp, char *filename, unsigned int page,
 {
 	size_t rows,cols;
 	struct mm_state_t *h;
-	h = (struct mm_state_t *)calloc(sizeof(*h),1);
+	h = (struct mm_state_t *)fim_calloc(sizeof(*h),1);
 	int rows_max=1024,cols_max=1024;
 //	int rows_max=2048,cols_max=2048;
 
@@ -92,7 +92,7 @@ mm_init(FILE *fp, char *filename, unsigned int page,
 
 	return h;
 err:
-	if( h ) free(h);
+	if( h ) fim_free(h);
 	return NULL;
 }
 
@@ -120,7 +120,7 @@ mm_done(void *data)
 	if(!data)
 		goto err;
 	if(h->filename)
-		free(h->filename);
+		fim_free(h->filename);
 err:
 	return;
 }

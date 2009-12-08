@@ -76,7 +76,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
 	my_bg .gray  = 192;
     int unit;
     
-    h = (struct png_state *) calloc(sizeof(*h),1);
+    h = (struct png_state *) fim_calloc(sizeof(*h),1);
     if(!h) goto oops;
     memset(h,0,sizeof(*h));
 
@@ -124,7 +124,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
     if (FbiStuff::fim_filereading_debug())
 	FIM_FBI_PRINTF("png: color_type=%s #2\n",ct[h->color_type]);
     
-    h->image = (png_byte*)malloc(i->width * i->height * 4);
+    h->image = (png_byte*)fim_malloc(i->width * i->height * 4);
     if(!h->image) goto oops;
 
     for (pass = 0; pass < number_passes-1; pass++) {
@@ -140,11 +140,11 @@ png_init(FILE *fp, char *filename, unsigned int page,
 
  oops:
     if (h && h->image)
-	free(h->image);
+	fim_free(h->image);
     if (h->png)
 	png_destroy_read_struct(&h->png, NULL, NULL);
     fclose(h->infile);
-    if(h)free(h);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -183,10 +183,10 @@ png_done(void *data)
 {
     struct png_state *h =(struct png_state *) data;
 
-    free(h->image);
+    fim_free(h->image);
     png_destroy_read_struct(&h->png, &h->info, NULL);
     fclose(h->infile);
-    free(h);
+    fim_free(h);
 }
 
 //used in FbiStuff.cpp

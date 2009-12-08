@@ -60,10 +60,10 @@ namespace fim
 			
 			if(maxcols<1)return -1;
 
-			char *buf = (char*) malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
+			char *buf = (char*) fim_malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
 			if(!buf)return -1;
 
-			if(*bp){free(buf);return -1;}//if *bp then we could print garbage so we exit before damage is done
+			if(*bp){fim_free(buf);return -1;}//if *bp then we could print garbage so we exit before damage is done
 
 			int fh=cc.displaydevice->f ? cc.displaydevice->f->height:1; // FIXME : this is not clean
 			l-=f; l%=(rows+1); l+=f;
@@ -79,7 +79,7 @@ namespace fim
 	    		for(i=f  ;i<=l   ;++i)
 			{
 				int t = (i<cline?(line[i+1]-line[i]):(ccol))%(min(maxcols,lwidth)+1);
-				if( t<0 ){free(buf);return -1;} // hmmm
+				if( t<0 ){fim_free(buf);return -1;} // hmmm
 				strncpy(buf,line[i],t);
 				while(buf[t-1]=='\n' && t>0)--t;
 				buf[maxcols]='\0';
@@ -103,7 +103,7 @@ namespace fim
 			cc.displaydevice->unlock();
 
 			cc.displaydevice->flush();
-			free(buf);
+			fim_free(buf);
 			return 0;
 		#undef min
 		}
@@ -134,7 +134,7 @@ namespace fim
 
 			// we copy the whole new string in our buffer
 			strcpy(bp,cs);
-			free(cs); cs=NULL;
+			fim_free(cs); cs=NULL;
 			sanitize_string_from_nongraph_except_newline(bp,0);
 			s=bp-ccol;// we will work in our buffer space now on
 			b=s;
@@ -159,7 +159,7 @@ namespace fim
 			}
 			return 0;
 rerr:
-			free(cs);
+			fim_free(cs);
 			return -1;
 		}
 
@@ -211,15 +211,15 @@ rerr:
 
 			cline =0;
 			ccol  =0;
-			buffer=(char*) calloc(bsize,sizeof(char ));
-			line  =(char**)calloc(lsize,sizeof(char*));
+			buffer=(char*) fim_calloc(bsize,sizeof(char ));
+			line  =(char**)fim_calloc(lsize,sizeof(char*));
 			bp    =buffer;
 			if(!buffer || !line)
 			{
 				bsize=0;
 				lsize=0;
-				if(buffer)free(buffer);
-				if(line  )free(line);
+				if(buffer)fim_free(buffer);
+				if(line  )fim_free(line);
 			}
 			else
 			{

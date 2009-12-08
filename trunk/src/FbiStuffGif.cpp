@@ -111,10 +111,10 @@ gif_skipimage(struct gif_state *h)
     if (FbiStuff::fim_filereading_debug())
 	FIM_FBI_PRINTF("gif: skipping image record ...\n");
     DGifGetImageDesc(h->gif);
-    line = malloc(h->gif->SWidth);
+    line = fim_malloc(h->gif->SWidth);
     for (i = 0; i < h->gif->SHeight; i++)
 	DGifGetLine(h->gif, line, h->gif->SWidth);
-    free(line);
+    fim_free(line);
 }
 #endif
 
@@ -126,13 +126,13 @@ gif_init(FILE *fp, char *filename, unsigned int page,
     GifRecordType RecordType;
     int i, image = 0;
     
-    h = (gif_state*)calloc(sizeof(*h),1);
+    h = (gif_state*)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     memset(h,0,sizeof(*h));
 
     h->infile = fp;
     h->gif = DGifOpenFileHandle(fileno(fp));
-    h->row = (GifPixelType*)malloc(h->gif->SWidth * sizeof(GifPixelType));
+    h->row = (GifPixelType*)fim_malloc(h->gif->SWidth * sizeof(GifPixelType));
     if(!h->row)goto oops;
 
     while (0 == image) {
@@ -165,7 +165,7 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 		if (FbiStuff::fim_filereading_debug())
 		    FIM_FBI_PRINTF("gif: interlaced\n");
 		{
-			h->il = (GifPixelType*)malloc(h->w * h->h * sizeof(GifPixelType));
+			h->il = (GifPixelType*)fim_malloc(h->w * h->h * sizeof(GifPixelType));
     			if(!h->il)goto oops;
 		}
 		for (i = 0; i < h->h; i += 8)
@@ -195,9 +195,9 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 	FIM_FBI_PRINTF("gif: fatal error, aborting\n");
     DGifCloseFile(h->gif);
     fclose(h->infile);
-    if(h && h->il )free(h->il );
-    if(h && h->row)free(h->row);
-    if(h)free(h);
+    if(h && h->il )fim_free(h->il );
+    if(h && h->row)fim_free(h->row);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -237,9 +237,9 @@ gif_done(void *data)
     DGifCloseFile(h->gif);
     fclose(h->infile);
     if (h->il)
-	free(h->il);
-    free(h->row);
-    free(h);
+	fim_free(h->il);
+    fim_free(h->row);
+    fim_free(h);
 }
 
 static struct ida_loader gif_loader = {

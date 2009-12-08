@@ -29,6 +29,7 @@
 #include "lex.h"
 #include "yacc.tab.hpp"
 #include "common.h"
+#include "fim.h"	/* fim_calloc, ... */
 void yyerror(const char *);
 #if 0
 /* we use %option noyywrap now ! */
@@ -64,7 +65,7 @@ int pipedesc[2];
 #define astrcpy(dst,src) \
 { \
 	if((src)==NULL)yyerror("null pointer given!\n"); \
-	if(((dst)=(char*)calloc(1+strlen(src),1))==NULL) \
+	if(((dst)=(char*)fim_calloc(1+strlen(src),1))==NULL) \
 		yyerror("out of memory\n"); \
 	strcpy((dst),(src)); \
 }

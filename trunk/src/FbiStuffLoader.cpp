@@ -119,7 +119,7 @@ int load_add_extra(struct ida_image_info *info, enum ida_extype type,
     memset(extra,0,sizeof(*extra));
     extra->data = (unsigned char*)malloc(size);
     if (NULL == extra->data) {
-	free(extra);
+	fim_free(extra);
 	return -1;
     }
     extra->type = type;
@@ -147,8 +147,8 @@ int load_free_extras(struct ida_image_info *info)
 
     while (NULL != info->extra) {
 	next = info->extra->next;
-	free(info->extra->data);
-	free(info->extra);
+	fim_free(info->extra->data);
+	fim_free(info->extra);
 	info->extra = next;
     }
     return 0;

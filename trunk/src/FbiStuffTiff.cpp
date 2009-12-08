@@ -60,7 +60,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     struct tiff_state *h;
 
     fclose(fp);
-    h = (struct tiff_state *) calloc(sizeof(*h),1);
+    h = (struct tiff_state *) fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     memset(h,0,sizeof(*h));
 
@@ -84,7 +84,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     TIFFGetField(h->tif, TIFFTAG_BITSPERSAMPLE,   &h->depth);
     TIFFGetField(h->tif, TIFFTAG_FILLORDER,       &h->fillorder);
     TIFFGetField(h->tif, TIFFTAG_PHOTOMETRIC,     &h->photometric);
-    h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
+    h->row = (uint32*)fim_malloc(TIFFScanlineSize(h->tif));
     if(!h->row)goto oops;
     if (FbiStuff::fim_filereading_debug())
 #ifndef PRId32
@@ -108,13 +108,13 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
 	 * progressive loading and decode everything here */
 	if (FbiStuff::fim_filereading_debug())
 	    FIM_FBI_PRINTF("tiff: reading whole image [TIFFReadRGBAImage]\n");
-	h->image=(uint32*)malloc(4*h->width*h->height);
+	h->image=(uint32*)fim_malloc(4*h->width*h->height);
         if(!h->image)goto oops;
 	TIFFReadRGBAImage(h->tif, h->width, h->height, h->image, 0);
     } else {
 	if (FbiStuff::fim_filereading_debug())
 	    FIM_FBI_PRINTF("tiff: reading scanline by scanline\n");
-	h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
+	h->row = (uint32*)fim_malloc(TIFFScanlineSize(h->tif));
         if(!h->row)goto oops;
     }
 
@@ -141,9 +141,9 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
  oops:
     if (h && h->tif)
 	TIFFClose(h->tif);
-    if(h && h->row)free(h->row);
-    if(h && h->image)free(h->image);
-    if(h)free(h);
+    if(h && h->row)fim_free(h->row);
+    if(h && h->image)fim_free(h->image);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -208,10 +208,10 @@ tiff_done(void *data)
 
     TIFFClose(h->tif);
     if (h->row)
-	free(h->row);
+	fim_free(h->row);
     if (h->image)
-	free(h->image);
-    free(h);
+	fim_free(h->image);
+    fim_free(h);
 }
 
 static struct ida_loader tiff1_loader = {

@@ -93,7 +93,7 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 
 	if(fp) fclose(fp);
 
-	ds = (struct djvu_state_t*)calloc(sizeof(struct djvu_state_t),1);
+	ds = (struct djvu_state_t*)fim_calloc(sizeof(struct djvu_state_t),1);
 	if(!ds) return NULL;
     	ds->first_row_dst = NULL;
 
@@ -176,7 +176,7 @@ djvu_done(void *data)
 	if(ds->dc)ddjvu_context_release(ds->dc);
 	if(ds->pf)ddjvu_format_release(ds->pf);
 
-	free(ds);
+	fim_free(ds);
 }
 
 /*

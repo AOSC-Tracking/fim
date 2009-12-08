@@ -155,7 +155,7 @@ void trec(char *str,const char *f,const char*t)
 			 * */
 			char	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
-			buf=(char*)calloc(inc,1);
+			buf=(char*)fim_calloc(inc,1);
 			if(!buf) return buf;
 			while((nrb=fread(buf+rb,1,inc,fd))>0)
 			{
@@ -184,7 +184,7 @@ void trec(char *str,const char *f,const char*t)
 			 * */
 			char	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
-			buf=(char*)calloc(inc,1);
+			buf=(char*)fim_calloc(inc,1);
 			if(!buf) return buf;
 			while((nrb=read(fd,buf+rb,inc))>0)
 			{
@@ -273,7 +273,7 @@ void sanitize_string_from_nongraph(char *s, int c)
 char * dupnstr (double n)
 {
 	//allocation of a single string
-	char *r = (char*) malloc (16);
+	char *r = (char*) fim_malloc (16);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%f",n);
 	return (r);
@@ -285,7 +285,7 @@ char * dupnstr (double n)
 char * dupnstr (int n)
 {
 	//allocation of a single string
-	char *r = (char*) malloc (16);
+	char *r = (char*) fim_malloc (16);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%d",n);
 	return (r);
@@ -296,7 +296,7 @@ char * dupnstr (int n)
  */
 char * dupstr (const char* s)
 {
-	char *r = (char*) malloc (strlen (s) + 1);
+	char *r = (char*) fim_malloc (strlen (s) + 1);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	strcpy (r, s);
 	return (r);
@@ -307,7 +307,7 @@ char * dupstr (const char* s)
  */
 static char * dupstrn (const char* s, size_t l)
 {
-	char *r = (char*) malloc (l + 1);
+	char *r = (char*) fim_malloc (l + 1);
 	strncpy(r,s,l);
 	r[l]='\0';
 	return (r);

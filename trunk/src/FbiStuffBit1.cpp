@@ -60,7 +60,7 @@ bit1_init(FILE *fp, char *filename, unsigned int page,
 {
     struct bit1_state *h;
     
-    h = (struct bit1_state *)calloc(sizeof(*h),1);
+    h = (struct bit1_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     memset(h,0,sizeof(*h));
     h->fp = fp;
@@ -70,7 +70,7 @@ bit1_init(FILE *fp, char *filename, unsigned int page,
     i->height = h->h = (8*h->flen + h->w-1) / ( i->width ); // should pad
     return h;
  oops:
-    if(h)free(h);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -127,7 +127,7 @@ bit1_done(void *data)
     struct bit1_state *h = (struct bit1_state *) data;
 
     fclose(h->fp);
-    free(h);
+    fim_free(h);
 }
 
 struct ida_loader bit1_loader = {

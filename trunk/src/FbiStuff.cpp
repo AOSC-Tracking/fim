@@ -81,17 +81,17 @@ op_3x3_init(struct ida_image *src, struct ida_rect *rect,
     struct op_3x3_parm *args = (struct op_3x3_parm*)parm;
     struct op_3x3_handle *h;
 
-    h = (struct op_3x3_handle*)malloc(sizeof(*h));
+    h = (struct op_3x3_handle*)fim_malloc(sizeof(*h));
     if(!h)goto oops;
     memcpy(&h->filter,args,sizeof(*args));
-    h->linebuf = (int*)malloc(sizeof(int)*3*(src->i.width));
+    h->linebuf = (int*)fim_malloc(sizeof(int)*3*(src->i.width));
     if(!h->linebuf)goto oops;
 
     *i = src->i;
     return h;
 oops:
-    if(h && h->linebuf)free(h->linebuf);
-    if(h)free(h);
+    if(h && h->linebuf)fim_free(h->linebuf);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -211,8 +211,8 @@ op_3x3_free(void *data)
 {
     struct op_3x3_handle *h = (struct op_3x3_handle *)data;
 
-    free(h->linebuf);
-    free(h);
+    fim_free(h->linebuf);
+    fim_free(h);
 }
 	    
 /* ----------------------------------------------------------------------- */
@@ -229,17 +229,17 @@ op_sharpe_init(struct ida_image *src, struct ida_rect *rect,
     struct op_sharpe_parm *args = (struct op_sharpe_parm *)parm;
     struct op_sharpe_handle *h;
 
-    h = (struct op_sharpe_handle *)calloc(sizeof(*h),1);
+    h = (struct op_sharpe_handle *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     h->factor  = args->factor;
-    h->linebuf = (int *)malloc(sizeof(int)*3*(src->i.width));
+    h->linebuf = (int *)fim_malloc(sizeof(int)*3*(src->i.width));
     if(!h->linebuf)goto oops;
 
     *i = src->i;
     return h;
 oops:
-    if(h && h->linebuf)free(h->linebuf);
-    if(h)free(h);
+    if(h && h->linebuf)fim_free(h->linebuf);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -272,8 +272,8 @@ op_sharpe_free(void *data)
 {
     struct op_sharpe_handle *h = (struct op_sharpe_handle *)data;
 
-    free(h->linebuf);
-    free(h);
+    fim_free(h->linebuf);
+    fim_free(h);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -291,13 +291,13 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
     struct op_resize_parm *args = (struct op_resize_parm *)parm;
     struct op_resize_state *h;
 
-    h = (struct op_resize_state *)calloc(sizeof(*h),1);
+    h = (struct op_resize_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     h->width  = args->width;
     h->height = args->height;
     h->xscale = (float)args->width/src->i.width;
     h->yscale = (float)args->height/src->i.height;
-    h->rowbuf = (float*)malloc(src->i.width * 3 * sizeof(float));
+    h->rowbuf = (float*)fim_malloc(src->i.width * 3 * sizeof(float));
     if(!h->rowbuf)goto oops;
     h->srcrow = 0;
     h->inleft = 1;
@@ -308,7 +308,7 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
     i->dpi    = args->dpi;
     return h;
     oops:
-    if(h)free(h);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -751,8 +751,8 @@ op_resize_done(void *data)
 {
     struct op_resize_state *h = (struct op_resize_state *)data;
 
-    free(h->rowbuf);
-    free(h);
+    fim_free(h->rowbuf);
+    fim_free(h);
 }
     
 /* ----------------------------------------------------------------------- */
@@ -771,7 +771,7 @@ op_rotate_init(struct ida_image *src, struct ida_rect *rect,
     struct op_rotate_state *h;
     float  diag;
 
-    h = (struct op_rotate_state *)malloc(sizeof(*h));
+    h = (struct op_rotate_state *)fim_malloc(sizeof(*h));
     if(!h)return NULL;
     /* dez's : FIXME : NULL check missing */
     h->angle = args->angle * 2 * M_PI / 360;
@@ -899,7 +899,7 @@ op_rotate_done(void *data)
 {
     struct op_rotate_state *h = (struct op_rotate_state *)data;
 
-    free(h);
+    fim_free(h);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1109,7 +1109,7 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
     rect.y2 = src->i.height;
     data = desc_3x3.init(src, &rect, &img.i, &filter);
 
-    img.data   = (unsigned char*)malloc(img.i.width * img.i.height * 3);
+    img.data   = (unsigned char*)fim_malloc(img.i.width * img.i.height * 3);
     if(!img.data)return NULL;
 
     for (y = 0; y < (int)img.i.height; y++)
@@ -1167,7 +1167,7 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
     }
     rect.x2 = x+1;
 
-    free(img.data);
+    fim_free(img.data);
     if (cc.displaydevice->debug)
 	FIM_FBI_PRINTF("y: %d-%d/%d  --  x: %d-%d/%d\n",
 		rect.y1, rect.y2, img.i.height,
@@ -1195,7 +1195,7 @@ void* op_none_init(struct ida_image *src,  struct ida_rect *sel,
 }
 
 void  op_none_done(void *data) {}
-void  op_free_done(void *data) { free(data); }
+void  op_free_done(void *data) { fim_free(data); }
 
 /* ----------------------------------------------------------------------- */
 
@@ -1319,8 +1319,8 @@ void FbiStuff::free_image(struct ida_image *img)
 {
     if (img) {
 	if (img->data)
-	    free(img->data);
-	free(img);
+	    fim_free(img->data);
+	fim_free(img);
     }
 }
 
@@ -1661,7 +1661,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     if (NULL == loader) return NULL;
 
     /* load image */
-    img = (struct ida_image*)calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
+    img = (struct ida_image*)fim_calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
     if(!img)goto errl;
     memset(img,0,sizeof(*img));
 #ifdef FIM_EXPERIMENTAL_ROTATION
@@ -1680,7 +1680,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	free_image(img);
 	return NULL;
     }
-    img->data = (unsigned char*)malloc(img->i.width * img->i.height * 3);
+    img->data = (unsigned char*)fim_malloc(img->i.width * img->i.height * 3);
     if(!img->data)goto errl;
 #ifndef FIM_IS_SLOWER_THAN_FBI
     for (y = 0; y < img->i.height; y++) {
@@ -1715,8 +1715,8 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     loader->done(data);
     return img;
 errl:
-    if(img && img->data)free(img->data);
-    if(img )free(img);
+    if(img && img->data)fim_free(img->data);
+    if(img )fim_free(img);
     return NULL;
 }
 
@@ -1734,7 +1734,7 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     unsigned int y;
     struct ida_op *desc_p;
 
-    dest =(ida_image*) malloc(sizeof(*dest));
+    dest =(ida_image*) fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
     memset(dest,0,sizeof(*dest));
     memset(&rect,0,sizeof(rect));
@@ -1753,8 +1753,8 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     else	   {desc_p=&desc_rotate_cw ;}
 
     data = desc_p->init(src,&rect,&dest->i,&p);
-    dest->data = (unsigned char*)malloc(dest->i.width * dest->i.height * 3);
-    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    dest->data = (unsigned char*)fim_malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice->switch_if_needed();
 	desc_p->work(src,&rect,
@@ -1780,7 +1780,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     void *data;
     unsigned int y;
 
-    dest = (ida_image*)malloc(sizeof(*dest));
+    dest = (ida_image*)fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
     memset(dest,0,sizeof(*dest));
     memset(&rect,0,sizeof(rect));
@@ -1807,7 +1807,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     int w_extra  = (diagonal - src->i.width      )/2;
     int e_extra  = (diagonal - src->i.width - w_extra  );
     /* we allocate a new, larger canvas */
-    unsigned char * larger_data = (unsigned char*)calloc(diagonal * diagonal * 3,1);
+    unsigned char * larger_data = (unsigned char*)fim_calloc(diagonal * diagonal * 3,1);
     if(larger_data)
     {
 	    for(y = n_extra; y < (unsigned int) diagonal - s_extra; ++y )
@@ -1819,7 +1819,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 	    rect.x2+=e_extra;
 	    rect.y1+=n_extra;
 	    rect.y2+=s_extra;
-	    free(src->data);
+	    fim_free(src->data);
 	    src->data=larger_data;
     	    src->i.fim_extra_flags=1;	/* to avoid this operation to repeat on square images or already rotated images */
     }
@@ -1832,8 +1832,8 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 
     p.angle    = (int) angle;
     data = desc_rotate.init(src,&rect,&dest->i,&p);
-    dest->data = (unsigned char*)calloc(dest->i.width * dest->i.height * 3,1);
-    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    dest->data = (unsigned char*)fim_calloc(dest->i.width * dest->i.height * 3,1);
+    /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice->switch_if_needed();
 	desc_rotate.work(src,&rect,
@@ -1862,7 +1862,7 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
     unsigned int y;
     /* dez: */ if(ascale<=0.0||ascale>=100.0)ascale=1.0;
 
-    dest = (ida_image*)malloc(sizeof(*dest));
+    dest = (ida_image*)fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
     memset(dest,0,sizeof(*dest));
     memset(&rect,0,sizeof(rect));
@@ -1879,8 +1879,8 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
     if (0 == p.height)
 	p.height = 1;
     data = desc_resize.init(src,&rect,&dest->i,&p);
-    dest->data = (unsigned char*)malloc(dest->i.width * dest->i.height * 3);
-    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    dest->data = (unsigned char*)fim_malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice->switch_if_needed();
 	desc_resize.work(src,&rect,
@@ -1899,15 +1899,15 @@ struct ida_image * fbi_image_clone(struct ida_image *img)
 	if(!img || !img->data)return NULL;
 	struct ida_image *nimg=NULL;
 	int n;
-	if(!(nimg=(ida_image*)calloc(1,sizeof(struct ida_image))))return NULL;
+	if(!(nimg=(ida_image*)fim_calloc(1,sizeof(struct ida_image))))return NULL;
 	memcpy(nimg,img,sizeof(struct ida_image));
 	/*note .. no checks .. :P */
 	n = img->i.width * img->i.height * 3;
 	
-	nimg->data = (unsigned char*)malloc( n );
+	nimg->data = (unsigned char*)fim_malloc( n );
 	if(!(nimg->data))
 	{
-		free(nimg);
+		fim_free(nimg);
 		return NULL;
 	}
 	memcpy(nimg->data, img->data,n);

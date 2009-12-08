@@ -584,7 +584,7 @@ int help_and_exit(char *argv0, int code=0)
 				//printf("%s\n",lineptr);
 				lineptr=NULL;
 			}
-			if(lineptr)free(lineptr);
+			if(lineptr)fim_free(lineptr);
 			close(0);
 			ndd=dup(2);
 		}
@@ -627,7 +627,7 @@ int help_and_exit(char *argv0, int code=0)
 			buf=slurp_binary_fd(0,NULL);
 			if(buf) cc.appendPostInitCommand(buf);
 			if(buf) appendedPostInitCommand=true;
-			if(buf) free(buf);
+			if(buf) fim_free(buf);
 			close(0);
 			ndd=dup(2);
 		}

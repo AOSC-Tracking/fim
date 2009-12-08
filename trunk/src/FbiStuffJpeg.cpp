@@ -172,7 +172,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     jpeg_saved_marker_ptr mark;
     fim_jerr=0;
     
-    h = (struct jpeg_state *)calloc(sizeof(*h),1);
+    h = (struct jpeg_state *)fim_calloc(sizeof(*h),1);
     if(!h) goto oops;
 
     memset(h,0,sizeof(*h));
@@ -220,7 +220,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 			FIM_FBI_PRINTF("jpeg: exif thumbnail found\n");
 
 		    /* save away thumbnail data */
-		    h->thumbnail = malloc(ed->size);
+		    h->thumbnail = fim_malloc(ed->size);
     		    if(!h->thumbnail) goto oops;
 		    h->tsize = ed->size;
 		    memcpy(h->thumbnail,ed->data,ed->size);
@@ -278,8 +278,8 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     return h;
 oops:
 std::cerr << "OOPS: problems decoding "<< filename <<"...\n";
-    if( h && h->thumbnail) free(h->thumbnail);
-    if( h ) free(h);
+    if( h && h->thumbnail) fim_free(h->thumbnail);
+    if( h ) fim_free(h);
     return NULL;
 }
 
@@ -302,8 +302,8 @@ jpeg_done(void *data)
     if (h->infile)
 	fclose(h->infile);
     if (h->thumbnail)
-	free(h->thumbnail);
-    free(h);
+	fim_free(h->thumbnail);
+    fim_free(h);
 }
 
 static struct ida_loader jpeg_loader = {

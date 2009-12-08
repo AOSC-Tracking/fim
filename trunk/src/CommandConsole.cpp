@@ -857,7 +857,7 @@ namespace fim
 #ifdef FIM_USE_READLINE
 		if(add_history_)if(nochars(s)==0)add_history(s);
 #endif
-		free(s);
+		fim_free(s);
 
 		}
 		catch	(FimException e)
@@ -968,7 +968,7 @@ namespace fim
 				{
 					//cout << "but found :`"<<match<<"...\n";
 					c=findCommand(match);
-					free(match);
+					fim_free(match);
 				}
 			}
 #endif
@@ -1135,7 +1135,7 @@ namespace fim
 					*(prompt)='\0';
 					set_status_bar("",NULL);
 				}
-				if(rl)free(rl);
+				if(rl)fim_free(rl);
 			}
 			else
 #endif
@@ -2125,7 +2125,7 @@ namespace fim
 	
 		chars = displaydevice->get_chars_per_line();
 		if(chars<1)return;
-		str = (char*) calloc(chars+1,1);//this malloc is free
+		str = (char*) fim_calloc(chars+1,1);//this malloc is free
 		if(!str)return;
 		//sprintf(str, "");
 		*str='\0';
@@ -2166,7 +2166,7 @@ namespace fim
 #endif
 
 		displaydevice->status_line((unsigned char*)str);
-		free(str);
+		fim_free(str);
 	}
 
 	int  CommandConsole::inConsole()const
