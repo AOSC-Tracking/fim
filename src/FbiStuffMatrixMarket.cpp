@@ -1,6 +1,6 @@
 /* $Id: FbiStuffPdf.cpp 224 2009-03-06 00:12:20Z dezperado $ */
 /*
- FbiStuffPdf.cpp : fim functions for decoding PDF files
+ FbiStuffMatrixMarket.cpp : fim functions for decoding Matrix Market files
 
  (c) 2009 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
@@ -33,7 +33,7 @@
 
 #ifdef HAVE_MATRIX_MARKET_DECODER
 
-/* This is an experimental library of mine */
+/* This is an experimental library of mine, yet unreleased */
 #include <vbr.h>
 #include <util.h>
 

@@ -108,15 +108,18 @@ namespace fim
 		#undef min
 		}
 
-		int MiniConsole::add(const char* cs)
+		int MiniConsole::add(const char* cso)
 		{
-			char *s,*b;
+			char *s=NULL,*b=NULL;
 			int nc;
 			int nl,ol=cline;
+			char *cs=NULL;/* using co would mean provoking the compiler */
 
-			if(!cs)return -1;
+			cs=dupstr(cso);
+
+			if(!cs)goto rerr;
 			nc=strlen(cs);
-			if(!nc)return -1;
+			if(!nc)goto rerr;
 			nl=lines_count(cs,lwidth);
 			// we count exactly the number of new entries needed in the arrays we have
 			if((s=strchr(cs,'\n'))!=NULL && s!=cs)nl+=(ccol+(s-cs-1))/lwidth;// single line with \n or multiline
@@ -131,6 +134,7 @@ namespace fim
 
 			// we copy the whole new string in our buffer
 			strcpy(bp,cs);
+			free(cs); cs=NULL;
 			sanitize_string_from_nongraph_except_newline(bp,0);
 			s=bp-ccol;// we will work in our buffer space now on
 			b=s;
@@ -154,6 +158,9 @@ namespace fim
 				bp+=ccol;	// the buffer points to the current column
 			}
 			return 0;
+rerr:
+			free(cs);
+			return -1;
 		}
 
 		int MiniConsole::setRows(int nr)
