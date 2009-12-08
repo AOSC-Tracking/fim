@@ -55,7 +55,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
     struct ppm_state *h;
     char line[1024],*fr;
 
-    h = (struct ppm_state*) calloc(sizeof(*h),1);
+    h = (struct ppm_state*) fim_calloc(sizeof(*h),1);
     if(!h)return NULL;
     memset(h,0,sizeof(*h));
 
@@ -77,15 +77,15 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
     i->width  = h->width;
     i->height = h->height;
     i->npages = 1;
-    h->row = (unsigned char*)malloc(h->width*3);
+    h->row = (unsigned char*)fim_malloc(h->width*3);
     if(!h->row)goto oops;
 
     return h;
 
  oops:
     fclose(fp);
-    if(h->row)free(h->row);
-    if(h)free(h);
+    if(h->row)fim_free(h->row);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -123,8 +123,8 @@ pnm_done(void *data)
     struct ppm_state *h = (struct ppm_state *) data;
 
     fclose(h->infile);
-    free(h->row);
-    free(h);
+    fim_free(h->row);
+    fim_free(h);
 }
 
 struct ida_loader ppm_loader = {

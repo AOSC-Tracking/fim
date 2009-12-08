@@ -100,7 +100,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
     struct bmp_state *h;
     int fr;
 
-    h = (struct bmp_state *)calloc(sizeof(*h),1);
+    h = (struct bmp_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     memset(h,0,sizeof(*h));
     h->fp = fp;
@@ -169,7 +169,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
     return h;
 
  oops:
-    if(h)free(h);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -235,7 +235,7 @@ bmp_done(void *data)
     struct bmp_state *h = (struct bmp_state *) data;
 
     fclose(h->fp);
-    free(h);
+    fim_free(h);
 }
 
 static struct ida_loader bmp_loader = {

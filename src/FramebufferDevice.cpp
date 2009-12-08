@@ -1645,8 +1645,8 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
 	/* R rows and C columns; the last one for string terminators..
 	 */
-	if(!columns)columns=(char**)calloc(sizeof(char**)*R,1);
-	if(!columns_data)columns_data=(char*)calloc(sizeof(char)*(R*(C+1)),1);
+	if(!columns)columns=(char**)fim_calloc(sizeof(char**)*R,1);
+	if(!columns_data)columns_data=(char*)fim_calloc(sizeof(char)*(R*(C+1)),1);
 	/* 
 	 * seems tricky : we allocate one single buffer and use it as console 
 	 * storage and console pointers storage ...
@@ -1656,8 +1656,8 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	 * */
 	if(!columns || !columns_data)
 	{
-		if(columns)free(columns);
-		if(columns_data)free(columns_data);
+		if(columns)fim_free(columns);
+		if(columns_data)fim_free(columns_data);
 		return;
 	}
 
@@ -1861,11 +1861,11 @@ FramebufferDevice::~FramebufferDevice()
 	/* added in fim : fbi did not have this */
 	if(f)
 	{
-		if(f->eindex) free(f->eindex);
-		if(f->gindex) free(f->gindex);
-		if(f->glyphs) free(f->glyphs);
-		if(f->extents) free(f->extents);
-		free(f);
+		if(f->eindex) fim_free(f->eindex);
+		if(f->gindex) fim_free(f->gindex);
+		if(f->glyphs) fim_free(f->glyphs);
+		if(f->extents) fim_free(f->extents);
+		fim_free(f);
 	}
 }
 

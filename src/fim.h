@@ -296,4 +296,9 @@ namespace fim
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf
 
+/* symbolix wrappers for memory handling calls */
+#define fim_calloc(x,y) calloc((x),(y))
+#define fim_malloc(x) malloc(x)
+#define fim_free(x) free(x)
+
 #endif

@@ -344,7 +344,7 @@ namespace fim
 		char *p=get_current_dir_name();
 		if(p)cwd=p;
 		else cwd="";
-		if(p)free(p);
+		if(p)fim_free(p);
 #else
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 		{

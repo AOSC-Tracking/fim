@@ -130,7 +130,7 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 
 	if(fp) fclose(fp);
 
-	ds = (struct pdf_state_t*)calloc(sizeof(struct pdf_state_t),1);
+	ds = (struct pdf_state_t*)fim_calloc(sizeof(struct pdf_state_t),1);
 
 	if(!ds)
 		return NULL;
@@ -196,7 +196,7 @@ err:
 	if(ds->od)	delete ds->od ;
 	if (globalParams)	delete globalParams;
 	globalParams = NULL;
-	if(ds)free(ds);
+	if(ds)fim_free(ds);
 	return NULL;
 }
 
@@ -224,7 +224,7 @@ pdf_done(void *data)
 	if (globalParams)	delete globalParams;
 	globalParams = NULL;
 
-	free(ds);
+	fim_free(ds);
 }
 
 /*

@@ -119,7 +119,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     }
 //    FIM_FPRINTF(stderr, "using linux console font \"%s\"\n",filename[i]);
 
-    f =(struct fs_font*) calloc(sizeof(*f),1);
+    f =(struct fs_font*) fim_calloc(sizeof(*f),1);
     if(!f)goto oops;
     memset(f,0,sizeof(*f));
 	
@@ -132,17 +132,17 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     f->fontHeader.max_bounds.descent = 0;
     f->fontHeader.max_bounds.ascent  = f->height;
 
-    f->glyphs  =(unsigned char*) malloc(f->height * 256);
+    f->glyphs  =(unsigned char*) fim_malloc(f->height * 256);
     if(!f->glyphs) goto oops;
-    f->extents = (FSXCharInfo*)malloc(sizeof(FSXCharInfo)*256);
+    f->extents = (FSXCharInfo*)fim_malloc(sizeof(FSXCharInfo)*256);
     if(!f->extents) goto oops;
     fr=fread(f->glyphs, 256, f->height, fp);
     if(!fr)return NULL;/* new */
     fclose(fp);
 
-    f->eindex  =(FSXCharInfo**) malloc(sizeof(FSXCharInfo*)   * 256);
+    f->eindex  =(FSXCharInfo**) fim_malloc(sizeof(FSXCharInfo*)   * 256);
     if(!f->eindex) goto oops;
-    f->gindex  = (unsigned char**)malloc(sizeof(unsigned char*) * 256);
+    f->gindex  = (unsigned char**)fim_malloc(sizeof(unsigned char*) * 256);
     if(!f->gindex) goto oops;
     for (i = 0; i < 256; i++) {
 	f->eindex[i] = f->extents +i;
@@ -157,11 +157,11 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 oops:
     if(f)
     {
-    	if(f->eindex) free(f->eindex);
-    	if(f->gindex) free(f->gindex);
-    	if(f->glyphs) free(f->glyphs);
-    	if(f->extents) free(f->extents);
-	free(f);
+    	if(f->eindex) fim_free(f->eindex);
+    	if(f->gindex) fim_free(f->gindex);
+    	if(f->glyphs) fim_free(f->glyphs);
+    	if(f->extents) fim_free(f->extents);
+	fim_free(f);
     }
 }
 #endif

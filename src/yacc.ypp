@@ -187,7 +187,7 @@ stmt:
 		  FIXME : are we sure $2 should not be freed here ?
 		 */
 		$$ = opr('x',2,scon($1),opr('a',1,scon(dupstr($2))));
-		free($2);
+		fim_free($2);
 #else
 		$$ = opr('x',2,scon("echo"),opr('a',1,scon("Please quote or double-quote your argument or enable FIM_SMART_COMPLETION at compile time\n")));
 #endif
@@ -451,9 +451,9 @@ void freeNode(nodeType *p)
 	int i;
 	if (!p) return;
 	if (p->type == stringCon)
-		{free(p->scon.s);p->scon.s=NULL;}
+		{fim_free(p->scon.s);p->scon.s=NULL;}
 	if (p->type == vId)
-		{free(p->scon.s);p->scon.s=NULL;}
+		{fim_free(p->scon.s);p->scon.s=NULL;}
 	if (p->type == typeOpr)
 	{
 		for (i = 0; i < p->opr.nops; i++)

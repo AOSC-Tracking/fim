@@ -63,7 +63,7 @@ static char ** fim_completion (const char *text, int start,int end)
 		char **__s,*_s;
 		_s=dupstr("");
 		if(! _s)return NULL;
-		__s=(char**)calloc(1,sizeof(char*));
+		__s=(char**)fim_calloc(1,sizeof(char*));
 		if(!__s)return NULL;__s[0]=_s;
 		//we print all of the commands, with no completion, though.
 #endif

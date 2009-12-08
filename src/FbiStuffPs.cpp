@@ -72,7 +72,7 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
 	if(fp) fclose(fp);
 
-	ds = (struct ps_state_t*)calloc(sizeof(struct ps_state_t),1);
+	ds = (struct ps_state_t*)fim_calloc(sizeof(struct ps_state_t),1);
 
 	if(!ds)
 		return NULL;
@@ -137,7 +137,7 @@ err:
 	if(ds->sd )spectre_document_free(ds->sd);
 	if(ds->sp )spectre_page_free(ds->sp);
 	if(ds->src)spectre_render_context_free(ds->src);
-	if(ds)free(ds);
+	if(ds)fim_free(ds);
 	return NULL;
 }
 
@@ -169,7 +169,7 @@ ps_read(unsigned char *dst, unsigned int line, void *data)
 			dst[ds->w*i*3+3*j+1]=page_data[ds->row_stride*i+4*j+1];
 			dst[ds->w*i*3+3*j+2]=page_data[ds->row_stride*i+4*j+2];
 		}
-	free(page_data);
+	fim_free(page_data);
 }
 
 static void
@@ -182,7 +182,7 @@ ps_done(void *data)
 	if(ds->sp )spectre_page_free(ds->sp);
 	if(ds->src)spectre_render_context_free(ds->src);
 
-	free(ds);
+	fim_free(ds);
 }
 
 /*
