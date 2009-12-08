@@ -65,6 +65,7 @@ check_in_path basename   || die "no basename in \$PATH"
 check_in_path md5sum   || die "no md5sum in \$PATH"
 #check_in_path rar   || die "no rar in \$PATH"
 #check_in_path unzip || die "no unzip in \$PATH"
+#check_in_path scp  || die "no scp in \$PATH"
 
 
 # parse options
@@ -118,6 +119,7 @@ do
 			echo -e " TAR (.tar) archive"
 			echo -e " BZ2 (.bz2) archive"
 			echo -e " GZIP (.gz) archive"
+			echo -e " https://  resource (web resource)"
 			echo -e " http://  resource (web resource)"
 			echo -e "\nNote that you cannot view files names like the options (no -- meta-option)."
 			echo -e "\n \`man fimgs\`   will give you more info."
@@ -149,8 +151,9 @@ while test "$opt" = "1"
 do
 	f="$1";
 	shift;
-#	[[ "$f" =~ '^http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
+	[[ "$f" =~ 'https://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
 	[[ "$f" =~ 'http://' ]] && { fn="$DIR"/"`basename $f`" && wget "$f" -O "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
+	[[ "$f" =~ 'ssh:' ]] && { bfn="`basename ${f/#ssh:/}`" && fn="$DIR"/"`echo $bfn | sed s/^.*://`" && scp "${f/ssh:/}" "$fn" && trap "rm $fn" EXIT ; f="$fn"; }
 	[[ -z "$f" ]] && break ;
 	#while [[ ! -f "$f" ]] ; do shift ; [[ "$#" -lt 0 ]] && break 2 ; done
 ###############################################################################
@@ -211,7 +214,7 @@ gs	-dSAFER -dNOPAUSE -dBATCH			\
 #	echo
 #	exit 1
 #elif ( ( [[ "$f" =~ \\.cbr$  ]] || [[ "$f" =~ \\.cbz$  ]] ) || ( [[ "$f" =~ \\.rar$  ]] || [[ "$f" =~ \\.zip$  ]] ) || ( [[ "$f" =~ \\.tgz$  ]] || [[ "$f" =~ \\.tar.gz$  ]] ) || ( [[ "$f" =~ \\.tar$  ]] || [[ "$f" =~ \\.tar.bz2$  ]] ) )  && ! [[ "$f" =~ '^http://' ]]
-elif ( ( [[ "$f" =~ .CBR$  ]] || [[ "$f" =~ .CBZ$  ]] || [[ "$f" =~ .cbr$  ]] || [[ "$f" =~ .cbz$  ]] ) || ( [[ "$f" =~ .rar$  ]] || [[ "$f" =~ .zip$  ]] ) || ( [[ "$f" =~ .tgz$  ]] || [[ "$f" =~ .tar.gz$  ]] ) || ( [[ "$f" =~ .tar$  ]] || [[ "$f" =~ .tar.bz2$  ]] ) )  && ! [[ "$f" =~ 'http://' ]]
+elif ( ( [[ "$f" =~ .CBR$  ]] || [[ "$f" =~ .CBZ$  ]] || [[ "$f" =~ .cbr$  ]] || [[ "$f" =~ .cbz$  ]] ) || ( [[ "$f" =~ .rar$  ]] || [[ "$f" =~ .zip$  ]] ) || ( [[ "$f" =~ .tgz$  ]] || [[ "$f" =~ .tar.gz$  ]] ) || ( [[ "$f" =~ .tar$  ]] || [[ "$f" =~ .tar.bz2$  ]] ) )  && ! [[ "$f" =~ 'http://' ]] && ! [[ "$f" =~ 'https://' ]]
 then
 # in the case of an archive ...
 # an ideal fimgs script would unpack recursively in search for interesting files..

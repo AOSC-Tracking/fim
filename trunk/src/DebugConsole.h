@@ -64,7 +64,7 @@ namespace fim
 		int dump();	// non const due to user variables reaction
 		int grow();
 		int setRows(int nr);
-		int add(const char* cs);
+		int add(const char* cso);
 		int reformat(int newlsize);
 		int do_dump(int amount)const;
 		int clear();

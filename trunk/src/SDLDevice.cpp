@@ -23,7 +23,6 @@
 /*
  * NOTES : The SDL support is INCOMPLETE:
  *
- *  - missing non 32 bits per pixel color modes support
  *  - largely inefficient, please do not be surprised
  *  - input problems when coupled with readline
  */
