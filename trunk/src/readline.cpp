@@ -95,12 +95,21 @@ static char ** fim_completion (const char *text, int start,int end)
  */
 static void completion_display_matches_hook(char **matches,int num,int max)
 {
+	/* FIXME : fix the oddities of this code */
 	char buffer[256];
 	int w,f,l;w=0;f=sizeof(buffer)-1;l=0;
 	buffer[0]='\0';
 	if(!matches)return;
-	for(int i=0;i<num && matches[i] && f>0;++i)
+#define FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 1
+#if FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 
+	if(num>1)
+		cout << "possible completions for \""<<matches[0]<<"\":\n" ;
+#endif
+	for(int i=/*0*/1;i<num && matches[i] && f>0;++i)
 	{
+#if FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 
+		cout << matches[i] << "\n";
+#endif
 		w=min(strlen(matches[i])+1,(size_t)f);
 		if(f>0){
 		strncpy(buffer+l,matches[i],w);
