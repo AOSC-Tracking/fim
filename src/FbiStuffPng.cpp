@@ -195,13 +195,13 @@ struct ida_loader png_loader = {
 #else
 static struct ida_loader png_loader = {
 #endif
-    magic: "\x89PNG",
-    moff:  0,
-    mlen:  4,
-    name:  "libpng",
-    init:  png_init,
-    read:  png_read,
-    done:  png_done,
+    /*magic:*/ "\x89PNG",
+    /*moff:*/  0,
+    /*mlen:*/  4,
+    /*name:*/  "libpng",
+    /*init:*/  png_init,
+    /*read:*/  png_read,
+    /*done:*/  png_done,
 };
 
 static void __init init_rd(void)
@@ -267,9 +267,9 @@ png_write(FILE *fp, struct ida_image *img)
 }
 
 static struct ida_writer png_writer = {
-    label:  "PNG",
-    ext:    { "png", NULL},
-    write:  png_write,
+    /*label:*/  "PNG",
+   /* ext:*/    { "png", NULL},
+    /*write:*/  png_write,
 };
 
 static void __init init_wr(void)

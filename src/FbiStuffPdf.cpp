@@ -231,13 +231,13 @@ pdf_done(void *data)
 0000000: 2550 4446 2d31 2e34 0a25 d0d4 c5d8 0a35  %PDF-1.4.%.....5
 */
 static struct ida_loader pdf_loader = {
-    magic: "%PDF-",// FIXME : are sure this is enough ?
-    moff:  0,
-    mlen:  5,
-    name:  "libpoppler",
-    init:  pdf_init,
-    read:  pdf_read,
-    done:  pdf_done,
+    /*magic:*/ "%PDF-",// FI/*XME :*/ are sure this is enough ?
+    /*moff:*/  0,
+    /*mlen:*/  5,
+    /*name:*/  "libpoppler",
+    /*init:*/  pdf_init,
+    /*read:*/  pdf_read,
+    /*done:*/  pdf_done,
 };
 
 static void __init init_rd(void)

@@ -239,13 +239,13 @@ bmp_done(void *data)
 }
 
 static struct ida_loader bmp_loader = {
-    magic: "BM",
-    moff:  0,
-    mlen:  2,
-    name:  "bmp",
-    init:  bmp_init,
-    read:  bmp_read,
-    done:  bmp_done,
+    /*magic:*/ "BM",
+    /*moff:*/  0,
+    /*mlen:*/  2,
+    /*name:*/  "bmp",
+    /*init:*/  bmp_init,
+    /*read:*/  bmp_read,
+    /*done:*/  bmp_done,
 };
 
 static void __init init_rd(void)
