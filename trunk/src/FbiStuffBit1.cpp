@@ -134,13 +134,13 @@ struct ida_loader bit1_loader = {
 /*
  * 0000000: 7f45 4c46 0101 0100 0000 0000 0000 0000  .ELF............
  */
-    magic: "ELF",
-    moff:  1,
-    mlen:  3,
-    name:  "bmp",
-    init:  bit1_init,
-    read:  bit1_read,
-    done:  bit1_done,
+    /*magic:*/ "ELF",
+    /*moff:*/  1,
+    /*mlen:*/  3,
+    /*name:*/  "bmp",
+    /*init:*/  bit1_init,
+    /*read:*/  bit1_read,
+    /*done:*/  bit1_done,
 };
 
 static void __init init_rd(void)

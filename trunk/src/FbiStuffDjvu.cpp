@@ -189,13 +189,13 @@ static struct ida_loader djvu_loader = {
     moff:  12,
     mlen:  3,*/
  
-    magic: "AT&TFORM",// FIXME : are sure this is enough ?
-    moff:  0,
-    mlen:  8,
-    name:  "libdjvu",
-    init:  djvu_init,
-    read:  djvu_read,
-    done:  djvu_done,
+    /*magic:*/ "AT&TFORM",// FI/*XME :*/ are sure this is enough ?
+    /*moff:*/  0,
+    /*mlen:*/  8,
+    /*name:*/  "libdjvu",
+    /*init:*/  djvu_init,
+    /*read:*/  djvu_read,
+    /*done:*/  djvu_done,
 };
 
 static void __init init_rd(void)

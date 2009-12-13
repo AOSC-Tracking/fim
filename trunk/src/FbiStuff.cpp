@@ -248,9 +248,13 @@ op_sharpe_work(struct ida_image *src, struct ida_rect *rect,
 	       unsigned char *dst, int line, void *data)
 {
     static struct op_3x3_parm laplace = {
-	f1: {  1,  1,  1 },
+/*  	f1: {  1,  1,  1 },
 	f2: {  1, -8,  1 },
-	f3: {  1,  1,  1 },
+	f3: {  1,  1,  1 },*/
+  	 {  1,  1,  1 },
+	 {  1, -8,  1 },
+	 {  1,  1,  1 },
+	 0,0,0
     };
     struct op_sharpe_handle *h = (struct op_sharpe_handle *)data;
     unsigned char *scanline;
@@ -905,34 +909,34 @@ op_rotate_done(void *data)
 /* ----------------------------------------------------------------------- */
 
 struct ida_op desc_grayscale = {
-    name:  "grayscale",
-    init:  op_none_init,
-    work:  op_grayscale,
-    done:  op_none_done,
+    /*name:*/  "grayscale",
+    /*init:*/  op_none_init,
+    /*work:*/  op_grayscale,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_3x3 = {
-    name:  "3x3",
-    init:  op_3x3_init,
-    work:  op_3x3_work,
-    done:  op_3x3_free,
+    /*name:*/  "3x3",
+    /*init:*/  op_3x3_init,
+    /*work:*/  op_3x3_work,
+    /*done:*/  op_3x3_free,
 };
 struct ida_op desc_sharpe = {
-    name:  "sharpe",
-    init:  op_sharpe_init,
-    work:  op_sharpe_work,
-    done:  op_sharpe_free,
+    /*name:*/  "sharpe",
+    /*init:*/  op_sharpe_init,
+    /*work:*/  op_sharpe_work,
+    /*done:*/  op_sharpe_free,
 };
 struct ida_op desc_resize = {
-    name:  "resize",
-    init:  op_resize_init,
-    work:  op_resize_work,
-    done:  op_resize_done,
+    /*name:*/  "resize",
+    /*init:*/  op_resize_init,
+    /*work:*/  op_resize_work,
+    /*done:*/  op_resize_done,
 };
 struct ida_op desc_rotate = {
-    name:  "rotate",
-    init:  op_rotate_init,
-    work:  op_rotate_work,
-    done:  op_rotate_done,
+    /*name:*/  "rotate",
+    /*init:*/  op_rotate_init,
+    /*work:*/  op_rotate_work,
+    /*done:*/  op_rotate_done,
 };
 
 // end filter.c
@@ -1081,9 +1085,9 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
 {
 #ifdef FIM_USE_DESIGNATED_INITIALIZERS
     static struct op_3x3_parm filter = {
-	f1: { -1, -1, -1 },
-	f2: { -1,  8, -1 },
-	f3: { -1, -1, -1 },
+	/*f1:*/ { -1, -1, -1 },
+	/*f2:*/ { -1,  8, -1 },
+	/*f3:*/ { -1, -1, -1 },
     };
 #else
     /* I have no quick fix for this ! (m.m.) 
@@ -1091,9 +1095,9 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
      * and are usually tolerated by g++.
      * */
     static struct op_3x3_parm filter = {
-	f1: { -1, -1, -1 },
-	f2: { -1,  8, -1 },
-	f3: { -1, -1, -1 },
+	/*f1:*/ { -1, -1, -1 },
+	/*f2:*/ { -1,  8, -1 },
+	/*f3:*/ { -1, -1, -1 },
     };
 #endif
     struct ida_rect rect;
@@ -1200,46 +1204,46 @@ void  op_free_done(void *data) { fim_free(data); }
 /* ----------------------------------------------------------------------- */
 
 struct ida_op desc_flip_vert = {
-    name:  "flip-vert",
-    init:  op_none_init,
-    work:  op_flip_vert_,
-    done:  op_none_done,
+    /*name:*/  "flip-vert",
+    /*init:*/  op_none_init,
+    /*work:*/  op_flip_vert_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_flip_horz = {
-    name:  "flip-horz",
-    init:  op_none_init,
-    work:  op_flip_horz_,
-    done:  op_none_done,
+    /*name:*/  "flip-horz",
+    /*init:*/  op_none_init,
+    /*work:*/  op_flip_horz_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_rotate_cw = {
-    name:  "rotate-cw",
-    init:  op_rotate_init_,
-    work:  op_rotate_cw_,
-    done:  op_none_done,
+    /*name:*/  "rotate-cw",
+    /*init:*/  op_rotate_init_,
+    /*work:*/  op_rotate_cw_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_rotate_ccw = {
-    name:  "rotate-ccw",
-    init:  op_rotate_init_,
-    work:  op_rotate_ccw_,
-    done:  op_none_done,
+    /*name:*/  "rotate-ccw",
+    /*init:*/  op_rotate_init_,
+    /*work:*/  op_rotate_ccw_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_invert = {
-    name:  "invert",
-    init:  op_none_init,
-    work:  op_invert_,
-    done:  op_none_done,
+    /*name:*/  "invert",
+    /*init:*/  op_none_init,
+    /*work:*/  op_invert_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_crop = {
-    name:  "crop",
-    init:  op_crop_init_,
-    work:  op_crop_work_,
-    done:  op_none_done,
+    /*name:*/  "crop",
+    /*init:*/  op_crop_init_,
+    /*work:*/  op_crop_work_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_autocrop = {
-    name:  "autocrop",
-    init:  op_autocrop_init_,
-    work:  op_crop_work_,
-    done:  op_none_done,
+    /*name:*/  "autocrop",
+    /*init:*/  op_autocrop_init_,
+    /*work:*/  op_crop_work_,
+    /*done:*/  op_none_done,
 };
 
 // end op.c
@@ -1298,9 +1302,10 @@ ppm_write(FILE *fp, struct ida_image *img)
 }
 
 static struct ida_writer ppm_writer = {
-    label:  "PPM",
-    ext:    { "ppm", NULL},
-    write:  ppm_write,
+    /*  label:*/  "PPM",
+    /*  ext:*/    { "ppm", NULL},
+    /*  write:*/  ppm_write,
+    /* FIXME : still missing some struct members */
 };
 
 // 20080108 WARNING

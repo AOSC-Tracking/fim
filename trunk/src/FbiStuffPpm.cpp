@@ -128,23 +128,23 @@ pnm_done(void *data)
 }
 
 struct ida_loader ppm_loader = {
-    magic: "P6",
-    moff:  0,
-    mlen:  2,
-    name:  "ppm parser",
-    init:  pnm_init,
-    read:  ppm_read,
-    done:  pnm_done,
+    /*magic:*/ "P6",
+    /*moff:*/  0,
+    /*mlen:*/  2,
+    /*name:*/  "ppm parser",
+    /*init:*/  pnm_init,
+    /*read:*/  ppm_read,
+    /*done:*/  pnm_done,
 };
 
 struct ida_loader pgm_loader = {
-    magic: "P5",
-    moff:  0,
-    mlen:  2,
-    name:  "pgm parser",
-    init:  pnm_init,
-    read:  pgm_read,
-    done:  pnm_done,
+    /*magic:*/ "P5",
+    /*moff:*/  0,
+    /*mlen:*/  2,
+    /*name:*/  "pgm parser",
+    /*init:*/  pnm_init,
+    /*read:*/  pgm_read,
+    /*done:*/  pnm_done,
 };
 
 static void __init init_rd(void)
@@ -170,9 +170,9 @@ ppm_write(FILE *fp, struct ida_image *img)
 }
 
 static struct ida_writer ppm_writer = {
-    label:  "PPM",
-    ext:    { "ppm", NULL},
-    write:  ppm_write,
+    /*label:*/  "PPM",
+    /*ext:*/    { "ppm", NULL},
+    /*write:*/  ppm_write,
 };
 
 static void __init init_wr(void)

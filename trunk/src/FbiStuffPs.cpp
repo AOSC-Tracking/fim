@@ -189,13 +189,13 @@ ps_done(void *data)
 0000000: 2521 5053 2d41 646f 6265 2d33 2e30 0a25  %!PS-Adobe-3.0.%
 */
 static struct ida_loader ps_loader = {
-    magic: "%!PS-",// FIXME : are sure this is enough ?
-    moff:  0,
-    mlen:  5,
-    name:  "libspectre",
-    init:  ps_init,
-    read:  ps_read,
-    done:  ps_done,
+    /*magic:*/ "%!PS-",// FI/*XME :*/ are sure this is enough ?
+    /*moff:*/  0,
+    /*mlen:*/  5,
+    /*name:*/  "libspectre",
+    /*init:*/  ps_init,
+    /*read:*/  ps_read,
+    /*done:*/  ps_done,
 };
 
 static void __init init_rd(void)

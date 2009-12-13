@@ -112,13 +112,13 @@ struct ida_loader bit24_loader = {
 /*
  * 0000000: 7f45 4c46 0101 0100 0000 0000 0000 0000  .ELF............
  */
-    magic: "ELF",
-    moff:  1,
-    mlen:  3,
-    name:  "bmp",
-    init:  bit24_init,
-    read:  bit24_read,
-    done:  bit24_done,
+    /*magic:*/ "ELF",
+    /*moff:*/  1,
+    /*mlen:*/  3,
+    /*name:*/  "bmp",
+    /*init:*/  bit24_init,
+    /*read:*/  bit24_read,
+    /*done:*/  bit24_done,
 };
 
 static void __init init_rd(void)

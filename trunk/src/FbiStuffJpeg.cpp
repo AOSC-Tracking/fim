@@ -307,13 +307,13 @@ jpeg_done(void *data)
 }
 
 static struct ida_loader jpeg_loader = {
-    magic: "\xff\xd8",
-    moff:  0,
-    mlen:  2,
-    name:  "libjpeg",
-    init:  jpeg_init,
-    read:  jpeg_read,
-    done:  jpeg_done,
+    /*magic:*/ "\xff\xd8",
+    /*moff:*/  0,
+    /*mlen:*/  2,
+    /*name:*/  "libjpeg",
+    /*init:*/  jpeg_init,
+    /*read:*/  jpeg_read,
+    /*done:*/  jpeg_done,
 };
 
 static void __init init_rd(void)
@@ -395,10 +395,10 @@ jpeg_write(FILE *fp, struct ida_image *img)
 }
 
 struct ida_writer jpeg_writer = {
-    label:  "JPEG",
-    ext:    { "jpg", "jpeg", NULL},
-    write:  jpeg_write,
-    conf:   jpeg_conf,
+    /*l/*abel:*/*/  "JPEG",
+   /*/* ext:*/*/    { "jpg", "jpeg", NULL},
+    /*w/*rite:*/*/  jpeg_write,
+    /*/*conf:*/*/   jpeg_conf,
 };
 
 static void __init init_wr(void)

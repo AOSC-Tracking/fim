@@ -215,22 +215,22 @@ tiff_done(void *data)
 }
 
 static struct ida_loader tiff1_loader = {
-    magic: "MM\x00\x2a",
-    moff:  0,
-    mlen:  4,
-    name:  "libtiff",
-    init:  tiff_init,
-    read:  tiff_read,
-    done:  tiff_done,
+    /*magic:*/ "MM\x00\x2a",
+    /*moff:*/  0,
+    /*mlen:*/  4,
+    /*name:*/  "libtiff",
+    /*init:*/  tiff_init,
+    /*read:*/  tiff_read,
+    /*done:*/  tiff_done,
 };
 static struct ida_loader tiff2_loader = {
-    magic: "II\x2a\x00",
-    moff:  0,
-    mlen:  4,
-    name:  "libtiff",
-    init:  tiff_init,
-    read:  tiff_read,
-    done:  tiff_done,
+    /*magic:*/ "II\x2a\x00",
+    /*moff:*/  0,
+    /*mlen:*/  4,
+    /*name:*/  "libtiff",
+    /*init:*/  tiff_init,
+    /*read:*/  tiff_read,
+    /*done:*/  tiff_done,
 };
 
 static void __init init_rd(void)
@@ -281,9 +281,9 @@ tiff_write(FILE *fp, struct ida_image *img)
 }
 
 static struct ida_writer tiff_writer = {
-    label:  "TIFF",
-    ext:    { "tif", "tiff", NULL},
-    write:  tiff_write,
+    /*  label:*/  "TIFF",
+    /*  ext:*/    { "tif", "tiff", NULL},
+    /*  write:*/  tiff_write,
 };
 
 static void __init init_wr(void)

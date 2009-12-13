@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl $Id$
+dnl $Id: configure.ac 265 2009-10-14 21:05:40Z dezperado $
 
 AC_PREREQ([2.54])
 
@@ -15,9 +15,10 @@ define([svnversion],esyscmd([sh -c "svnversion | tr -d '\n'"]))dnl
 AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org( by replacing _FOobAr_ with a '@' and _Baz_ with a '.')])
 
 AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
+AC_SUBST(SVN_REVISION,"svnversion")
 
 AC_MSG_NOTICE([
-        Welcome to the Fim configure script!
+        Welcome to the Fim (revision $SVN_REVISION) configure script!
 	This script will create the right Makefile for building Fim on your system.
 	But first, it will check if your system has the right configuratin for Fim to build.
 
@@ -55,7 +56,7 @@ AC_PROG_LEX
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 
-AC_REVISION([$Revision : ... $])
+AC_REVISION([$Revision$])
 
 AC_PROG_CXX
 #AC_PROG_CXXCPP
