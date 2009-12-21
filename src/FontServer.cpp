@@ -25,6 +25,7 @@
 
 
 
+#include <dirent.h>
 #include "fim.h"
 
 namespace fim
@@ -76,17 +77,55 @@ static const char *default_font[] = {
     "/lib/kbd/consolefonts/Lat2-VGA8.psf.gz",
     "/lib/kbd/consolefonts/Uni2-VGA16.psf.gz",
     /* end ubuntu add */
+    /* begin debian squeeze add */
+    "/usr/share/consolefonts/default8x16.psf.gz",
+    "/usr/share/consolefonts/default8x9.psf.gz",
+    "/usr/share/consolefonts/Lat15-Fixed16.psf.gz",
+    "/usr/share/consolefonts/default.psf.gz",
+    /* end debian squeeze add */
     NULL
 };
 #endif
 
+static int probe_font_file(const char *fontfilename)
+{
+    	FILE *fp=NULL;
+	if ( strlen(fontfilename)>3 && 0 == strcmp(fontfilename+strlen(fontfilename)-3,".gz"))
+	{
+		#ifdef FIM_USE_ZCAT
+		/* FIXME */
+		fp = FbiStuff::fim_execlp("zcat","zcat",fontfilename,NULL);
+		#endif
+	}
+	else
+	{
+		fp = fopen(fontfilename, "r");
+	}
+
+	if (NULL == fp)
+		goto no;
+
+	if (fgetc(fp) != 0x36 || fgetc(fp) != 0x04)
+		goto no;
+ 
+     	/* this is enough */
+	if(fp)fclose(fp);
+ok:
+	return 0;
+no:
+	if(fp)fclose(fp);
+	return -1;
+}
+
 struct fs_font* FontServer::fs_consolefont(const char **filename)
 {
-    int  i;
+    int  i=0;
     int  fr;
-    const char *h;
+    const char *h=NULL;
     struct fs_font *f = NULL;
-    FILE *fp;
+    const char *fontfilename=NULL;
+    FILE *fp=NULL;
+    char fontfilenameb[_POSIX_PATH_MAX];
 
     if (NULL == filename)
 	filename = fim::default_font;
@@ -96,25 +135,62 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 	    continue;
 	break;
     }
-    if (NULL == filename[i]) {
+    fontfilename=filename[i];
+
+#if FIM_LINUX_CONSOLEFONTS_DIR_SCAN 
+    fontfilename=NULL ;
+    if(NULL == fontfilename)
+    {
+	/* will scan FIM_LINUX_CONSOLEFONTS_DIR directory for console fonts */
+	fim::string nf = FIM_LINUX_CONSOLEFONTS_DIR;
+	DIR *dir=NULL;
+	struct dirent *de=NULL;
+
+	if( !is_dir( nf.c_str() ))
+		goto oops;
+	if ( ! ( dir = opendir(nf.c_str() ) ))
+		goto oops;
+
+	while( ( de = readdir(dir) ) != NULL )
+	{
+		if(is_file(de->d_name) && regexp_match(de->d_name,"8x.*\\.psf") && access(de->d_name,R_OK))
+    		{
+			nf = FIM_LINUX_CONSOLEFONTS_DIR;
+			nf+="/";
+			nf+=de->d_name;
+			strncpy(fontfilenameb,nf.c_str(),_POSIX_PATH_MAX-1);
+			fontfilename=fontfilenameb;
+			if(probe_font_file(fontfilename)==0)
+				break;
+			/* FIXME */
+		}
+	}
+	closedir(dir);
+    }
+#endif
+
+    if (NULL == fontfilename) {
 	FIM_FPRINTF(stderr, "can't find console font file\n");
 	return NULL;
     }
 
-    h = filename[i]+strlen(filename[i])-3;
-    if (0 == strcmp(h,".gz")) {
-	fp = FbiStuff::fim_execlp("zcat","zcat",filename[i],NULL);
+    h = fontfilename+strlen(fontfilename)-3;
+    if ( h>fontfilename && 0 == strcmp(h,".gz")) {
+	#ifdef FIM_USE_ZCAT
+	/* FIXME */
+	fp = FbiStuff::fim_execlp("zcat","zcat",fontfilename,NULL);
+	#endif
     } else {
-	fp = fopen(filename[i], "r");
+	fp = fopen(fontfilename, "r");
     }
     if (NULL == fp) {
-	FIM_FPRINTF(stderr, "can't open %s: %s\n",filename[i],strerror(errno));
+	FIM_FPRINTF(stderr, "can't open %s: %s\n",fontfilename,strerror(errno));
 	return NULL;
     }
 
     if (fgetc(fp) != 0x36 ||
 	fgetc(fp) != 0x04) {
-	FIM_FPRINTF(stderr, "can't use font %s\n",filename[i]);
+	FIM_FPRINTF(stderr, "can't use font %s\n",fontfilename);
 	return NULL;
     }
 //    FIM_FPRINTF(stderr, "using linux console font \"%s\"\n",filename[i]);
@@ -125,7 +201,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 	
     fgetc(fp);
     f->maxenc = 256;
-    f->width  = 8;
+    f->width  = 8;	/* FIXME */
     f->height = fgetc(fp);
     f->fontHeader.min_bounds.left    = 0;
     f->fontHeader.max_bounds.right   = f->width;
@@ -149,7 +225,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 	f->gindex[i] = f->glyphs  +i * f->height;
 	f->eindex[i]->left    = 0;
 	f->eindex[i]->right   = 7;
-	f->eindex[i]->width   = 8;
+	f->eindex[i]->width   = 8;/* FIXME */
 	f->eindex[i]->descent = 0;
 	f->eindex[i]->ascent  = f->height;
     }
@@ -163,6 +239,7 @@ oops:
     	if(f->extents) fim_free(f->extents);
 	fim_free(f);
     }
+    return NULL;
 }
 #endif
 

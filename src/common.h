@@ -67,6 +67,9 @@ FILE * fim_fread_tmpfile(FILE * fp);
 double fim_atof(const char *nptr);
 ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream);
 
+bool is_dir(const fim::string nf);
+bool is_file(const fim::string nf);
+
 /* exceptions */
 typedef int FimException;
 #define FIM_E_NO_IMAGE 1

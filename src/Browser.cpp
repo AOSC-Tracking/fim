@@ -790,15 +790,6 @@ namespace fim
 		}
 		return closedir(dir)!=NULL;
 	}
-
-	bool Browser::is_dir(fim::string nf)const
-	{
-		struct stat stat_s;
-		/*	if the directory doesn't exist, return */
-		if(-1==stat(nf.c_str(),&stat_s))return false;
-		if( ! S_ISDIR(stat_s.st_mode))return false;
-		return true;
-	}
 #endif
 
 	bool Browser::push(fim::string nf)

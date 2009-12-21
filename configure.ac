@@ -1235,8 +1235,16 @@ AH_TEMPLATE([FIM_TRY_CONVERT])
 AH_TEMPLATE([FIM_TRY_INKSCAPE])
 AH_TEMPLATE([FIM_TRY_XFIG])
 AH_TEMPLATE([FIM_TRY_DIA])
+AH_TEMPLATE([FIM_USE_ZCAT])
 
 dnl ==================
+
+AC_CHECK_PROG(have_zcat,zcat,yes,no)
+        if test x$have_zcat = xyes ; then
+		# legacy fbi feature : should not rely on this. FIXME
+		AC_MSG_NOTICE([Fim will use 'zcat' to uncompress "gzipped" font files.])
+		AC_DEFINE([FIM_USE_ZCAT])
+	fi
 
 AC_CHECK_PROG(have_man2html,man2html,yes,no)
         if test x$have_man2html = xyes ; then
