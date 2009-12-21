@@ -549,7 +549,7 @@ namespace fim
 
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
-		char rcfile[_POSIX_PATH_MAX];
+		char rcfile[FIM_PATH_MAX];
 		const char *e = fim_getenv("HOME");
 
 		/* default, hard-coded configuration first */
@@ -570,7 +570,7 @@ namespace fim
     #endif		
 		}
 
-		if(e && strlen(e)<_POSIX_PATH_MAX-8)//strlen("/.fimrc")+2
+		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/.fimrc")+2
 		{
 			strcpy(rcfile,e);
 			strcat(rcfile,"/.fimrc");
@@ -2024,9 +2024,9 @@ namespace fim
 		/* default, hard-coded configuration first */
 		if(getIntVariable(FIM_VID_SAVE_FIM_HISTORY)==1 )
 		{
-			char hfile[_POSIX_PATH_MAX];
+			char hfile[FIM_PATH_MAX];
 			const char *e = fim_getenv("HOME");
-			if(e && strlen(e)<_POSIX_PATH_MAX-14)//strlen(".fim_history")+2
+			if(e && strlen(e)<FIM_PATH_MAX-14)//strlen(".fim_history")+2
 			{
 				strcpy(hfile,e);
 				strcat(hfile,"/.fim_history");
@@ -2051,9 +2051,9 @@ namespace fim
 		/* default, hard-coded configuration first */
 		if(getIntVariable(FIM_VID_LOAD_FIM_HISTORY)==1 )
 		{
-			char hfile[_POSIX_PATH_MAX];
+			char hfile[FIM_PATH_MAX];
 			const char *e = fim_getenv("HOME");
-			if(e && strlen(e)<_POSIX_PATH_MAX-14)//strlen(".fim_history")+2
+			if(e && strlen(e)<FIM_PATH_MAX-14)//strlen(".fim_history")+2
 			{
 				strcpy(hfile,e);
 				strcat(hfile,"/.fim_history");

@@ -973,7 +973,16 @@ AC_ARG_ENABLE(stdin-image-reading, AC_HELP_STRING([--disable-stdin-image-reading
 )
 
 dnl ==================
-
+fim_cv_scan_consolefonts=yes
+AC_ARG_ENABLE(scan-consolefonts, AC_HELP_STRING([--enable-scan-consolefonts], [Fim will scan some predefined directory in look for console fonts as a fallback. (experimental)]),
+[       if test x$enableval = xyes; then
+		fim_cv_scan_consolefonts=yes
+	else
+		fim_cv_scan_consolefonts=no
+        fi
+],[ fim_cv_scan_consolefonts=yes ]
+)
+dnl ==================
 fim_cv_seek_magic=yes
 AC_ARG_ENABLE(seek-magic, AC_HELP_STRING([--enable-seek-magic], [Fim will be capable to seek on a specified magic string. (experimental)]),
 [       if test x$enableval = xyes; then
@@ -983,10 +992,7 @@ AC_ARG_ENABLE(seek-magic, AC_HELP_STRING([--enable-seek-magic], [Fim will be cap
         fi
 ],[ fim_cv_seek_magic=no ]
 )
-
 dnl ==================
-
-
 AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan directories for files.]),
 [       if test x$enableval = xno; then
 		fim_cv_read_dirs=no
@@ -995,9 +1001,7 @@ AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan
         fi
 ],[ fim_cv_read_dirs=no ]
 )
-
 dnl ==================
-
 AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--enable-recursive-dirs], [Fim will try to recurse directories (implies --enable-read-dirs )]),
 [       if test x$enableval = xno; then
 		fim_cv_recursive_dirs=no
@@ -1007,7 +1011,6 @@ AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--enable-recursive-dirs], [Fim wil
         fi
 ],[ fim_cv_recursive_dirs=no ]
 )
-
 dnl ==================
 
 AH_TEMPLATE([FIM_RECURSIVE_DIRS])
@@ -1017,8 +1020,7 @@ AH_TEMPLATE([FIM_BOZ_PATCH])
 AH_TEMPLATE([FIM_READ_STDIN])
 AH_TEMPLATE([FIM_READ_STDIN_IMAGE])
 AH_TEMPLATE([FIM_SMART_COMPLETION])
-
-
+AH_TEMPLATE([FIM_LINUX_CONSOLEFONTS_DIR_SCAN])
 dnl ==================
 
 if test x$fim_cv_resize_optimizations != xyes; then
@@ -1141,7 +1143,6 @@ AC_ARG_WITH(exec-shell, AC_HELP_STRING([--with-exec-shell=SHELL], [Specify alter
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
 
 dnl ==================
-
 AC_ARG_ENABLE(convert, AC_HELP_STRING([--disable-smartautocompletion], [Fim will treat as a proper, unescaped string, nonquoted and nonevaluated strings which happen to match an existing filename.]),
 [       if test x$enableval = xno; then
 		fim_cv_smartautcompletion=no
@@ -1150,11 +1151,14 @@ AC_ARG_ENABLE(convert, AC_HELP_STRING([--disable-smartautocompletion], [Fim will
         fi
 ],[ fim_cv_smartautcompletion=yes ]
 )
-
+dnl ==================
 if test x$fim_cv_smartautcompletion = xyes; then
 	AC_DEFINE([FIM_SMART_COMPLETION])
 fi
-
+dnl ==================
+if test x$fim_cv_scan_consolefonts = xyes; then
+	AC_DEFINE([FIM_LINUX_CONSOLEFONTS_DIR_SCAN])
+fi
 dnl ==================
 
 AC_ARG_ENABLE(convert, AC_HELP_STRING([--disable-convert], [Fim will try to use ImageMagick's convert as a last resort for opening unknown format files.]),
