@@ -633,3 +633,20 @@ ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream)
 #endif
 	return EINVAL;
 }
+
+	bool is_dir(const fim::string nf)
+	{
+		struct stat stat_s;
+		/*	if the directory doesn't exist, return */
+		if(-1==stat(nf.c_str(),&stat_s))return false;
+		if( ! S_ISDIR(stat_s.st_mode))return false;
+		return true;
+	}
+
+	bool is_file(const fim::string nf)
+	{
+		/* FIXME */
+		return !is_dir(nf);
+	}
+
+

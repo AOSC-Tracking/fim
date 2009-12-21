@@ -21,6 +21,10 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20091220	consider distributing a font file or simply to embed one in the sources, with an eye on portability
+20091219	man2html missing fix (for developers)
+20091214	consider using libmagic
+20091214	and options to wget, for the fimgs script !?
 20091124	document comma, period, locales and floating numbers parsing in fim.
 20091116	write some miniprogram for debugging keyboard input.
 20091017	actually, postscript header can be optional for postscript rendering. shall we introduce forced ps rendering?

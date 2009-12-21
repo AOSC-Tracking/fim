@@ -203,6 +203,8 @@ namespace fim
  * NEW : FIXME 
  */
 #define FIM_FILE_BUF_SIZE 	(1024*256)
+#define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
+#define FIM_LINUX_CONSOLEFONTS_DIR_SCAN 1 /* new */
 
 /*
  * Fim language variable identifiers.
