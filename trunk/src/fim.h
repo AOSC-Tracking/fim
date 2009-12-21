@@ -97,6 +97,7 @@
 #else
 #endif
 #endif
+#define FIM_PATH_MAX _POSIX_PATH_MAX
 
 #include <termios.h>	/* general terminal interface (Posix)			*/
 #include <fcntl.h>	/* file descriptor manipulation interface (Posix)	*/
@@ -204,7 +205,6 @@ namespace fim
  */
 #define FIM_FILE_BUF_SIZE 	(1024*256)
 #define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
-#define FIM_LINUX_CONSOLEFONTS_DIR_SCAN 1 /* new */
 
 /*
  * Fim language variable identifiers.

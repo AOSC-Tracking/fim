@@ -125,7 +125,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     struct fs_font *f = NULL;
     const char *fontfilename=NULL;
     FILE *fp=NULL;
-    char fontfilenameb[_POSIX_PATH_MAX];
+    char fontfilenameb[FIM_PATH_MAX];
 
     if (NULL == filename)
 	filename = fim::default_font;
@@ -138,7 +138,6 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     fontfilename=filename[i];
 
 #if FIM_LINUX_CONSOLEFONTS_DIR_SCAN 
-    fontfilename=NULL ;
     if(NULL == fontfilename)
     {
 	/* will scan FIM_LINUX_CONSOLEFONTS_DIR directory for console fonts */
@@ -158,7 +157,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 			nf = FIM_LINUX_CONSOLEFONTS_DIR;
 			nf+="/";
 			nf+=de->d_name;
-			strncpy(fontfilenameb,nf.c_str(),_POSIX_PATH_MAX-1);
+			strncpy(fontfilenameb,nf.c_str(),FIM_PATH_MAX-1);
 			fontfilename=fontfilenameb;
 			if(probe_font_file(fontfilename)==0)
 				break;
