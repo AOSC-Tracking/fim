@@ -122,7 +122,7 @@ namespace fim
 			if(!nc)goto rerr;
 			nl=lines_count(cs,lwidth);
 			// we count exactly the number of new entries needed in the arrays we have
-			if((s=strchr(cs,'\n'))!=NULL && s!=cs)nl+=(ccol+(s-cs-1))/lwidth;// single line with \n or multiline
+			if((s=const_cast<char*>(strchr(cs,'\n')))!=NULL && s!=cs)nl+=(ccol+(s-cs-1))/lwidth;// single line with \n or multiline
 			else nl+=(strlen(cs)+ccol)/lwidth;	// single line, with no terminators
 
 			/*
