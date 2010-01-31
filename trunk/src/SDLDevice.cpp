@@ -619,7 +619,7 @@ err:
 		return 0;
 	}
 
-	int SDLDevice::catchInteractiveCommand(int seconds)
+	fim_key_t SDLDevice::catchInteractiveCommand(int seconds)
 	{
 		/*
 		 * Whether there is some input in the input queue.

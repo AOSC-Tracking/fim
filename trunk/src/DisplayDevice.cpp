@@ -30,12 +30,13 @@
 	,finalized(false)
 	{}
 
-	int DisplayDevice::get_input(unsigned int * c)
+	int DisplayDevice::get_input(fim_key_t * c)
 	{
 		*c=0;
 		/*
 		 * It is sad to place this functionality here, but often the input subsystem 
 		 * is tightly bound to the output device.
+		 * FIXME : before, it accepted unsigned int
 		 * */
 			int r=0;
 #ifdef  FIM_SWITCH_FIXUP
@@ -93,7 +94,7 @@
 			return r;
 	}
 
-	int DisplayDevice::catchInteractiveCommand(int seconds)const
+	fim_key_t DisplayDevice::catchInteractiveCommand(fim_ts_t seconds)const
 	{
 		/*	
 		 *
@@ -122,8 +123,9 @@
 		tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		
-		int c,r;//char buf[64];
+		fim_key_t c,r;//char buf[64];
 		//r=read(fim_stdin,&c,4);
+		// FIXME : read(.,.,3) is NOT portable. DANGER
 		r=read(cc.fim_stdin,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);c=(0x1b)+(c<<8);/* we should do something with rc now */}
 
 		//we restore the previous console attributes

@@ -73,7 +73,7 @@ namespace fim
 		return NULL;
 	}
 
-	fim::string CommandConsole::bind(int c,const fim::string binding)
+	fim::string CommandConsole::bind(fim_key_t c,const fim::string binding)
 	{
 		/*
 		 * binds keycode c to the action specified in binding
@@ -134,7 +134,7 @@ namespace fim
 		return unbind(key_bindings[key]);
 	}
 
-	fim::string CommandConsole::unbind(int c)
+	fim::string CommandConsole::unbind(fim_key_t c)
 	{
 		/*
 		 * unbinds the action eventually bound to the key combination code c
@@ -401,7 +401,7 @@ namespace fim
                 return true;
         }
 
-	int CommandConsole::init(string device)
+	fim_err_t CommandConsole::init(string device)
 	{
 		/*
 		 * TODO : move most of this stuff to the constructor, some day.
@@ -610,7 +610,7 @@ namespace fim
 		 *	FIXME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
 		 * */
 #ifdef FIM_USE_READLINE
-		rl::initialize_readline( !displaydevice );
+		rl::initialize_readline( displaydevice==NULL );
 		load_history();
 #endif
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
@@ -623,7 +623,7 @@ namespace fim
 		return 0;
 	}
 
-	int CommandConsole::addCommand(Command *c)
+	fim_err_t CommandConsole::addCommand(Command *c)
 	{
 		/*
 		 * C is added to the commands list
@@ -724,18 +724,18 @@ namespace fim
 #define ferror(s) {/*fatal error*/FIM_FPRINTF(stderr, "%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);}/* temporarily, for security reason : no exceptions launched */
 //#define ferror(s) {/*fatal error*/FIM_FPRINTF(stderr, "%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);throw FIM_E_TRAGIC;}
 
-	fim::string CommandConsole::getBoundAction(const int c)const
+	fim::string CommandConsole::getBoundAction(const fim_key_t c)const
 	{
 		/*
 		 * returns the action assigned to key biding c
 		 * */
 		//return bindings[c];
-		std::map<int,fim::string>::const_iterator bi=bindings.find(c);
+		bindings_t::const_iterator bi=bindings.find(c);
 		if(bi!=bindings.end()) return bi->second;
 		else return "";
 	}
 
-	void CommandConsole::executeBinding(const int c)
+	void CommandConsole::executeBinding(const fim_key_t c)
 	{
 		/*
 		 *	Executes the command eventually bound to c.
@@ -801,7 +801,7 @@ namespace fim
 		}
 	}
 
-	int CommandConsole::execute(const char *ss, int add_history_, int suppress_output_)
+	fim_err_t CommandConsole::execute(const char *ss, fim_bool_t add_history_, fim_bool_t suppress_output_)
 	{
 		try{
 		/*
@@ -918,15 +918,15 @@ namespace fim
 		}
 		if(cmd=="usleep")
 		{
-			unsigned int useconds;
+			fim_tus_t useconds;
 			if(args.size()>0) useconds=atoi(args[0].c_str());
 			else useconds=1;
-			usleep((unsigned long)useconds);
+			usleep(useconds);
 			return "";
 		}else
 		if(cmd=="sleep")
 		{
-			int seconds;
+			fim_ts_t seconds;
 			//sleeping for an amount of time specified in seconds.
 			
 			if(args.size()>0) seconds=atoi(args[0].c_str());
@@ -993,7 +993,7 @@ namespace fim
 		return "If you see this string, please report it to the program maintainer :P\n";
 	}
 
-	int CommandConsole::catchLoopBreakingCommand(int seconds)
+	int CommandConsole::catchLoopBreakingCommand(fim_ts_t seconds)
 	{
 		/*	
 		 *	This method is invoked during non interactive loops to
@@ -1010,7 +1010,7 @@ namespace fim
 		 *
 		 *	returns 0 if no command was received.
 		 */
-		int c;
+		fim_key_t c;
 
 		//exitBinding = 10;
 		if ( exitBinding == 0 ) return 1;	/* any key triggers an exit */
@@ -1057,7 +1057,7 @@ namespace fim
 */
 #endif
 
-	int CommandConsole::executionCycle()
+	fim_err_t CommandConsole::executionCycle()
 	{
 		/*
 		 * the cycle with fetches the instruction stream.
@@ -1141,7 +1141,7 @@ namespace fim
 #endif
 			{
 				*prompt='\0';
-				unsigned int c;
+				fim_key_t c;
 				int r;char buf[64];
 //				int c=getchar();
 //				int c=fgetc(stdin);
@@ -1173,10 +1173,10 @@ namespace fim
 						cout << buf ;
 					}
 #ifndef FIM_USE_READLINE
-					if(c==(unsigned int)getIntVariable(FIM_VID_CONSOLE_KEY) || 
+					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY) || 
 					   c=='/')set_status_bar("compiled with no readline support!\n",NULL);
 #else
-					if(c==(unsigned int)getIntVariable(FIM_VID_CONSOLE_KEY)
+					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY)
 					){ic=1;*prompt=':';}	//should be configurable..
 					else if(c=='/')
 					{
@@ -1315,7 +1315,7 @@ namespace fim
 #endif
 	}
 
-	int CommandConsole::toggleStatusLine()
+	fim_err_t CommandConsole::toggleStatusLine()
 	{
 		/*
 		 * toggles the display of the status line
@@ -1342,7 +1342,7 @@ namespace fim
 		return cmds;
 	}
 	
-	int CommandConsole::executeStdFileDescriptor(FILE* fd)
+	fim_err_t CommandConsole::executeStdFileDescriptor(FILE* fd)
 	{
 		/*
 		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
@@ -1360,7 +1360,7 @@ namespace fim
 		return 0;
 	}
 
-	int CommandConsole::executeFile(const char *s)
+	fim_err_t CommandConsole::executeFile(const char *s)
 	{
 		/*
 		 * executes a file denoted by filename
@@ -1371,7 +1371,7 @@ namespace fim
 		return 0;
 	}
 
-	int CommandConsole::getVariableType(const fim::string &varname)const
+	fim_var_t CommandConsole::getVariableType(const fim::string &varname)const
 	{
 		/*
 		 * returns the [internal] type of a variable
@@ -1390,7 +1390,7 @@ namespace fim
 		return (s && *s);
 	}
 
-	int CommandConsole::printVariable(const fim::string &varname)const
+	fim_err_t CommandConsole::printVariable(const fim::string &varname)const
 	{	
 		/*
 		 * a variable is taken and converted to a string and printed
@@ -1401,7 +1401,7 @@ namespace fim
 		return 0;
 	}
 
-	int CommandConsole::drawOutput(const char *s)const
+	fim_bool_t CommandConsole::drawOutput(const char *s)const
 	{
 		/*
 		 * whether the console should draw or not itself upon the arrival of textual output
@@ -1696,7 +1696,7 @@ namespace fim
 			}
 	}
 	
-	int CommandConsole::autocmd_in_stack(const autocmds_loop_frame_t& frame)const
+	fim_bool_t CommandConsole::autocmd_in_stack(const autocmds_loop_frame_t& frame)const
 	{
 		/*
 		 * this function prevents a second autocommand triggered against 
@@ -1831,7 +1831,7 @@ namespace fim
 		 * NOTE: recording the start_recording command itself is not harmful,
 		 * as it only sets a flag.
 		 * */
-		static int pt=0;int t,d,err;//t,pt in ms; d in us
+		static int pt=0;fim_tms_t t,d,err;//t,pt in ms; d in us
 	        struct timeval tv;
 		if(cmd==""){pt=0;return;}
 	        if(!pt){err=gettimeofday(&tv, NULL);pt=tv.tv_usec/1000+tv.tv_sec*1000;}
@@ -2016,7 +2016,7 @@ namespace fim
 		tcsetattr (0, TCSANOW, &saved_attributes);
 	}
 
-	int CommandConsole::save_history()
+	fim_err_t CommandConsole::save_history()
 	{
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
@@ -2043,7 +2043,7 @@ namespace fim
 		return 0;
 	}
 
-	int CommandConsole::load_history()
+	fim_err_t CommandConsole::load_history()
 	{
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
