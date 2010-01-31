@@ -72,7 +72,7 @@ class CommandConsole
 	/*
 	 * bindings of key codes to actions (compounds of commands)
 	 */
-	typedef std::map<int,fim::string> bindings_t;		//code->commands
+	typedef std::map<fim_key_t,fim::string> bindings_t;		//code->commands
 	bindings_t bindings;		//code->commands
 
 	/*
@@ -80,13 +80,13 @@ class CommandConsole
 	 */
 	key_bindings_t	key_bindings;	//symbol->code
 
-	typedef std::map<int, fim::string> inverse_key_bindings_t;//code->symbol
+	typedef std::map<fim_key_t, fim::string> inverse_key_bindings_t;//code->symbol
 	inverse_key_bindings_t inverse_key_bindings;//code->symbol
 
 	private:
 
-	int save_history();
-	int load_history();
+	fim_err_t save_history();
+	fim_err_t load_history();
 
 	/*
 	 * the identifier->variable binding
@@ -104,10 +104,10 @@ class CommandConsole
 	 */
 #ifdef FIM_USE_READLINE
 	/* no readline ? no console ! */
-	int 	ic;					//in console if 1. not if 0. willing to exit from console mode if -1
+	fim_status_t 	ic;				//in console if 1. not if 0. willing to exit from console mode if -1
 #endif
-	int	cycles;					//fim execution cycles counter (quite useless)
-	int	exitBinding;				//The key bound to exit. If 0, the special "Any" key.
+	fim_cycles_t cycles;					//fim execution cycles counter (quite useless)
+	fim_key_t exitBinding;				//The key bound to exit. If 0, the special "Any" key.
 
 #ifdef FIM_AUTOCMDS
 	/*
@@ -125,7 +125,7 @@ class CommandConsole
 	
 #ifdef FIM_RECORDING
 	bool recordMode;
-	typedef std::pair<fim::string,int> recorded_action_t;
+	typedef std::pair<fim::string,fim_tms_t > recorded_action_t;
 	typedef std::vector<recorded_action_t > recorded_actions_t;
 	recorded_actions_t recorded_actions;
 
@@ -172,22 +172,22 @@ class CommandConsole
 	bool display();
 	bool redisplay();
 	char * command_generator (const char *text,int state)const;
-	int executionCycle();
-	int init(string device);
+	fim_err_t executionCycle();
+	fim_err_t init(string device);
 	int  inConsole()const;
 	~CommandConsole();
 	float getFloatVariable(const fim::string &varname)const;
 	fim::string getStringVariable(const fim::string &varname)const;
-	int  getVariableType(const fim::string &varname)const;
+	fim_var_t getVariableType(const fim::string &varname)const;
 	int  getIntVariable(const fim::string & varname)const;
 	Var  getVariable(const fim::string & varname)const;
-	int  printVariable(const fim::string & varname)const;
+	fim_err_t printVariable(const fim::string & varname)const;
 	int  setVariable(const fim::string& varname,int value);
 	float setVariable(const fim::string& varname,float value);
 	int setVariable(const fim::string& varname,const char*value);
 	Var setVariable(const fim::string varname,const Var&value);//NEW
 	bool push(const fim::string nf);
-	int executeStdFileDescriptor(FILE *fd);
+	fim_err_t executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd);
 #ifndef FIM_NOSCRIPTING
 	bool push_scriptfile(const fim::string ns);
@@ -214,11 +214,11 @@ class CommandConsole
 	fim::string foo (const args_t &args);
 	fim::string do_return(const args_t &args);
 	fim::string status(const args_t &args);
-	int  executeFile(const char *s);
-	int execute(const char *ss, int add_history_, int suppress_output_);
+	fim_err_t executeFile(const char *s);
+	fim_err_t execute(const char *ss, fim_bool_t add_history_, fim_bool_t suppress_output_);
 
-	int  toggleStatusLine();
-	int  addCommand(Command *c);
+	fim_err_t toggleStatusLine();
+	fim_err_t addCommand(Command *c);
 	Command* findCommand(fim::string cmd)const;
 	fim::string alias(std::vector<Arg> args);
 	fim::string alias(const fim::string& a,const fim::string& c);
@@ -252,13 +252,13 @@ class CommandConsole
 	fim::string set(const args_t &args);
 	fim::string unalias(const args_t& args);
 	char ** tokenize_(const char *s);
-	void executeBinding(const int c);
-	fim::string getBoundAction(const int c)const;
+	void executeBinding(const fim_key_t c);
+	fim::string getBoundAction(const fim_key_t c)const;
 //	void execute(fim::string cmd);
 	fim::string eval(const args_t &args);
 	void exit(int i)const;
-	fim::string unbind(int c);
-	fim::string bind(int c,fim::string binding);
+	fim::string unbind(fim_key_t c);
+	fim::string bind(fim_key_t c,fim::string binding);
 	fim::string unbind(const fim::string& key);
 	fim::string unbind(const args_t& args);
 	fim::string getBindingsList()const;
@@ -270,16 +270,16 @@ class CommandConsole
 	int quit(int i=0);
 	public:
 
-	int  drawOutput(const char*s=NULL)const;
+	fim_bool_t drawOutput(const char*s=NULL)const;
 	bool regexp_match(const char*s, const char*r)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	fim::string pre_autocmd_add(const fim::string &cmd);
 #endif
-	int catchLoopBreakingCommand(int seconds=0);
+	int catchLoopBreakingCommand(fim_ts_t seconds=0);
 
 	private:
-	int catchInteractiveCommand(int seconds=0)const;
+	fim_key_t catchInteractiveCommand(fim_ts_t seconds=0)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname);
 	void autocmd_push_stack(const autocmds_loop_frame_t& frame);
@@ -287,7 +287,7 @@ class CommandConsole
 	public:
 	void autocmd_trace_stack();
 	private:
-	int  autocmd_in_stack(const autocmds_loop_frame_t& frame)const;
+	fim_bool_t autocmd_in_stack(const autocmds_loop_frame_t& frame)const;
 #endif
 	fim::string current()const{ return browser.current();}
 

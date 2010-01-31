@@ -59,7 +59,7 @@ class Command
 		Window *window;
 #endif
 	};
-	int type;
+	fim_cmd_type_t type;
 
 	public:
 	

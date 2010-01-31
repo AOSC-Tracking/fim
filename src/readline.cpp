@@ -149,7 +149,8 @@ static int redisplay_hook_no_fb()
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
 int rl_sdl_getc_hook()
 {
-	unsigned int c;
+	//unsigned int c;
+	fim_key_t c;
 	c=0;
 	
 	if(cc.displaydevice->get_input(&c)==1)
@@ -212,7 +213,7 @@ static int redisplay_hook()
 /*
  *	initial setup to set the readline library working
  */
-void initialize_readline (int with_no_display_device)
+void initialize_readline (fim_bool_t with_no_display_device)
 {
 	//FIX ME
 	/* Allow conditional parsing of the ~/.inputrc file. */

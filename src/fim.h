@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2010 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -83,6 +83,9 @@
 #include <sys/types.h>		/* stat */
 #include <sys/stat.h>		/* stat */
 #include <unistd.h>		/* stat */
+#ifdef FIM_WITH_PTHREADS
+#include <pthread.h>		/* */
+#endif
 
 #if 0
 #ifdef HAVE_UNIX_H
@@ -115,7 +118,19 @@ namespace fim
 	typedef float fim_scale_t;	/* a type for image scaling */
 	typedef float fim_angle_t;	/* a type for angles */
 	typedef int   fim_page_t;	/* a type for multipage document pages */
-	typedef std::map<fim::string,int > key_bindings_t;	//symbol->code
+	typedef bool   fim_bool_t;	/* a type for bolean expressions */
+	typedef int fim_key_t;		/* a type for keycodes */
+	typedef int fim_err_t;		/* a type for errors */
+	typedef int fim_status_t;	/* a type for fim's status */
+	typedef int fim_cycles_t;	/* a type for fim's cycles */
+	typedef int fim_cmd_type_t;	/* a type for fim's command types */
+	typedef int fim_var_t;		/* a type for fim's variable types */
+
+	typedef int fim_ts_t;		/* a type for time, in seconds */
+	typedef int fim_tms_t;		/* a type for time, in milliseconds */
+	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
+	typedef std::map<fim::string,fim_key_t > key_bindings_t;	//symbol->code
+
 	void status(const char *desc, const char *info);
 
 	class Arg;
@@ -137,7 +152,7 @@ namespace fim
 
 namespace rl
 {
-	void initialize_readline (int with_no_display_device);
+	void initialize_readline (fim_bool_t with_no_display_device);
 }
 
 /* using GCC builtins (__GNUC__ should be defined by gcc) */

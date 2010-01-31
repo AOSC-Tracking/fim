@@ -68,8 +68,8 @@ class DisplayDevice
 	int console_control(int code);
 	virtual int handle_console_switch()=0;
 	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
-	virtual int get_input(unsigned int * c);
-	virtual int catchInteractiveCommand(int seconds)const;
+	virtual int get_input(fim_key_t * c);
+	virtual fim_key_t catchInteractiveCommand(int seconds)const;
 	virtual int init_console();
 	virtual void switch_if_needed(){}// really, only for making happy fbdev
 	virtual void cleanup(){}// really, only for making happy fbdev
