@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20101007	the use find_key_for_bound_cmd() should be avoided in status line update 
 20091220	consider distributing a font file or simply to embed one in the sources, with an eye on portability
 20091219	man2html missing fix (for developers)
 20091214	consider using libmagic

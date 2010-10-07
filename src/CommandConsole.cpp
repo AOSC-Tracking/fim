@@ -134,6 +134,23 @@ namespace fim
 		return unbind(key_bindings[key]);
 	}
 
+	fim::string CommandConsole::find_key_for_bound_cmd(fim::string binding)
+	{
+		/*
+		 * looks for a binding to 'cmd' and returns a string description for its bound key 
+		 */
+		bindings_t::const_iterator bi;
+		for( bi=bindings.begin();bi!=bindings.end();++bi)
+		{
+			/* FIXME: should move this functionality to an ad-hoc search routine */
+			if(bi->second==binding)
+			{
+				return inverse_key_bindings[bi->first];	
+			}
+		}
+		return "";
+	}
+
 	fim::string CommandConsole::unbind(fim_key_t c)
 	{
 		/*
@@ -2118,10 +2135,22 @@ namespace fim
 		//FIX ME : does this function always draw ?
 		int chars, ilen;
 		char *str;
-
+		fim::string hk="";	/* help key string */
+		int hkl=0;		/* help key string length */
+		const int mhkl=5,eisl=9;
+		const char*hp=" - Help";int hpl=strlen(hp);
 		prompt[1]='\0';
 	
 		if( ! displaydevice   ) return;
+		hk=this->find_key_for_bound_cmd("help");/* FIXME: this is SLOW, and should be replaced */
+		hkl=strlen(hk.c_str());
+		/* FIXME: could we guarantee a bound on its length in some way ? */
+		if(hkl>mhkl){hk="";hkl=0;/* fix */}
+		else
+		{
+			if(hkl>0){hk+=hp;hkl=hpl;/* help message append*/}
+			else {hpl=0;/* no help key ? no message, then */}
+		}
 	
 		chars = displaydevice->get_chars_per_line();
 		if(chars<1)return;
@@ -2136,10 +2165,10 @@ namespace fim
 			 * FIXME : and what if chars < 11 ? :)
 			 * */
 			ilen = strlen(info);
-			if(chars-14-ilen>0)
+			if(chars-eisl-ilen-hkl>0)
 			{
-				sprintf(str, "%s%-*.*s [ %s ] H - Help",prompt,
-				chars-14-ilen, chars-14-ilen, desc, info);//here above there is the need of 14+ilen chars
+				sprintf(str, "%s%-*.*s [ %s ] %s",prompt,
+				chars-eisl-ilen-hkl, chars-eisl-ilen-hkl, desc, info, hk.c_str());//here above there is the need of 14+ilen chars
 			}
 			else
 			if(chars>5) sprintf(str, "<-!->");
@@ -2148,19 +2177,19 @@ namespace fim
 		}
 #ifdef FIM_USE_READLINE
 		else
-		if(chars>=12 && desc) /* would be a nonsense :) */
+		if(chars>=6+hkl && desc) /* would be a nonsense :) */
 		{
 			/* interactive print */
 			static int statusline_cursor=0;
 			int offset=0,coffset=0;
 			statusline_cursor=rl_point;	/* rl_point is readline stuff */
 			ilen = strlen(desc);
-			chars-=11+(*prompt=='\0'?0:1);	/* displayable, non-service chars  */
+			chars-=6+hpl+(*prompt=='\0'?0:1);	/* displayable, non-service chars  */
 			/* 11 is strlen(" | H - Help")*/
 			offset =(statusline_cursor/(chars))*(chars);
 			coffset=(*prompt!='\0')+(statusline_cursor%(chars));
 		
-			sprintf(str, "%s%-*.*s | H - Help",prompt, chars, chars, desc+offset);
+			sprintf(str, "%s%-*.*s | %s",prompt, chars, chars, desc+offset, hk.c_str());
 			str[coffset]='_';
 		}
 #endif

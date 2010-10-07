@@ -97,7 +97,7 @@ namespace fim
 
 		}
 		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
-		return "usage : help CMD   (use TAB in commandline mode to get a list of commands :) )\n";
+		return "usage : help CMD   (use TAB in commandline mode to get a list of commands )\n";
 	}
 
 	fim::string CommandConsole::quit(const args_t &args)
