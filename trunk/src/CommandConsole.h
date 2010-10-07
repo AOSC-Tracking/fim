@@ -259,6 +259,7 @@ class CommandConsole
 	void exit(int i)const;
 	fim::string unbind(fim_key_t c);
 	fim::string bind(fim_key_t c,fim::string binding);
+	fim::string find_key_for_bound_cmd(fim::string binding);
 	fim::string unbind(const fim::string& key);
 	fim::string unbind(const args_t& args);
 	fim::string getBindingsList()const;
