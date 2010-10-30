@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2010 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -40,13 +40,13 @@
 //#include <stddef.h>
 //#include <errno.h>
 
-#ifdef HAVE_LIBEXIF
-# include <libexif/exif-data.h>
-#endif
-
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 //#include "loader.h"
+#ifdef FIM_WITH_LIBEXIF
+#include <libexif/exif-data.h>
+#endif
+
 //
 extern "C"
 {
@@ -161,6 +161,41 @@ static void fim_error_exit (j_common_ptr cinfo)
 }
 
 
+#ifdef FIM_WITH_LIBEXIF
+// FIXME: temporarily here
+static void dump_exif(FILE *out, ExifData *ed)
+{
+    const char *title, *value;
+#ifdef HAVE_NEW_EXIF
+    char buffer[256];
+#endif
+    ExifEntry  *ee;
+    int tag,i;
+/*
+    for (i = 0; i < EXIF_IFD_COUNT; i++) {
+	fprintf(out,"   ifd %s\n", exif_ifd_get_name (i));
+	for (tag = 0; tag < 0xffff; tag++) {
+	    title = exif_tag_get_title(tag);
+	    if (!title)
+		continue;
+	    ee = exif_content_get_entry (ed->ifd[i], tag);
+	    if (NULL == ee)
+		continue;
+#ifdef HAVE_NEW_EXIF
+	    value = exif_entry_get_value(ee, buffer, sizeof(buffer));
+#else
+	    value = exif_entry_get_value(ee);
+#endif
+	    fprintf(out,"      0x%04x  %-30s %s\n", tag, title, value);
+	}
+    }
+    if (ed->data && ed->size)
+	fprintf(out,"   thumbnail\n      %d bytes data\n", ed->size);
+	*/
+}
+#endif
+
+
 /* ---------------------------------------------------------------------- */
 /* jpeg loader                                                            */
 
@@ -171,6 +206,9 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     struct jpeg_state *h;
     jpeg_saved_marker_ptr mark;
     fim_jerr=0;
+#ifdef FIM_WITH_LIBEXIF
+    std::cout << "EXIF is not implemented, really :) \n";
+#endif
     
     h = (struct jpeg_state *)fim_calloc(sizeof(*h),1);
     if(!h) goto oops;
@@ -208,7 +246,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 		FIM_FBI_PRINTF("jpeg: exif data found (APP1 marker)\n");
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 
-#ifdef HAVE_LIBEXIF
+#ifdef FIM_WITH_LIBEXIF_nonono
 	    if (thumbnail) {
 		ExifData *ed;
 		

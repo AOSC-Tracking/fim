@@ -12,7 +12,7 @@ AC_PREREQ([2.54])
 
 define([svnversion],esyscmd([sh -c "svnversion | tr -d '\n'"]))dnl
 # WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
-AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org( by replacing _FOobAr_ with a '@' and _Baz_ with a '.')])
+AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 
 AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
 AC_SUBST(SVN_REVISION,"svnversion")
@@ -243,7 +243,7 @@ AC_ARG_WITH(regex, AC_HELP_STRING([--with-regex], [Use the GNU regex library ins
         [AC_CHECK_FUNCS(regcomp, fim_cv_regex=no, fim_cv_regex=yes)])
 
 if test X$fim_cv_regex = Xno ; then
-AC_CACHE_CHECK([whether your system's regexp library is completely broken],
+AC_CACHE_CHECK([whether your system regexp library is completely broken],
         [fim_cv_regex_broken],
         AC_TRY_RUN([
 #include <unistd.h>
@@ -431,7 +431,7 @@ if test x$have_readline = xno; then
   fi
 fi
 
-dnl FIXME : we try to detecht curses, although we don't know if the preceding did use it
+dnl FIXME : we try to detecht curses, although we do not know if the preceding did use it
 if test x$have_readline = xyes; then
   if test x$fim_want_readline = xyes ; then
     AC_CHECK_LIB(curses, tputs,
@@ -690,7 +690,7 @@ dnl FIXME : the following is a dirty hack
        #undef PACKAGE
        #undef VERSION
        #undef HAVE_STDLIB_H
-       /* fim uses these headers. let's hope poppler will stabilize soon!*/
+       /* fim uses these headers. let us hope poppler will stabilize soon!*/
        #include <poppler/poppler-config.h>
        #include <poppler/PDFDoc.h>
        #include <poppler/OutputDev.h>
@@ -709,7 +709,7 @@ dnl FIXME : the following is a dirty hack
 	# FIXME: the following is a dirty hack!
         LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/"
         CXXFLAGS="$CXXFLAGS $LIBPOPPLER_CXXFLAGS"
-dnl	are we sure poppler doesn't have something like the following ?
+dnl	are we sure poppler does not have something like the following ?
 dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
       else
           AC_MSG_WARN([*** POPPLER/PDF loader will not be built (POPPLER header file not found) ***])
@@ -803,6 +803,24 @@ fi
 
 dnl ================================================================================
 
+AC_ARG_ENABLE(exif, AC_HELP_STRING([--enable-exif], [Turns on libexif support (EXPERIMENTAL)]),
+	[if test x$enableval = xyes; then
+		fim_cv_libexif=yes
+		CXXFLAGS="$CXXFLAGS"
+		LIBS="$LIBS `-lexif`"
+		AC_CHECK_LIB(exif, exif_data_new_from_data,have_libexif=yes,have_libexif=no)
+		if test x$have_libexif = xyes; then
+      			AC_MSG_NOTICE([Enabling libexif usage.])
+		else
+			fim_cv_libexif=no
+		        AC_MSG_ERROR([Sorry, it doesn not seem like libexif is installed or detectable.
+			Please run --disable-exif or install libexif in a system-wide directory instead.
+			])
+		fi
+	fi],[fim_cv_libexif=no])
+
+dnl ================================================================================
+
 AC_ARG_ENABLE(aa, AC_HELP_STRING([--enable-aa], [Turns on aalib support (EXPERIMENTAL)]),
 	[if test x$enableval = xyes; then
 		fim_cv_aalib=yes
@@ -827,7 +845,7 @@ AC_ARG_ENABLE(aa, AC_HELP_STRING([--enable-aa], [Turns on aalib support (EXPERIM
       			AC_MSG_NOTICE([Enabling aalib driver.])
 		else
 			fim_cv_aalib=no
-		        AC_MSG_ERROR([Sorry, it doesn't seem like aalib is installed or detectable.
+		        AC_MSG_ERROR([Sorry, it does not seem like aalib is installed or detectable.
 			Please run --disable-aa or install aalib in a system-wide directory instead.
 			])
 		fi
@@ -906,7 +924,7 @@ dnl ==================
 
 fim_cv_windows=yes
 
-AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Disable Fim's own windowing system. (deprecated)]),
+AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Disable windowing system in Fim. (deprecated)]),
 [if test x$enableval = xno; then
         fim_cv_windows=no
 fi])
@@ -1101,7 +1119,7 @@ dnl 	[if test x$enableval = xyes; then
 dnl 	if test x$have_cacalib = xyes; then
 dnl 	fim_cv_cacalib=yes
 dnl 	else
-dnl     AC_MSG_ERROR([Sorry, it doesn't seem like cacalib is installed or detectable.
+dnl     AC_MSG_ERROR([Sorry, it does not seem like cacalib is installed or detectable.
 dnl 	Please run --disable-cacalib or install cacalib in a system-wide directory instead.
 dnl 	])
 dnl 	fi
@@ -1112,7 +1130,7 @@ dnl ==================
 # This code still awaits for integration ...
 AC_ARG_WITH(cflags, AC_HELP_STRING([--with-cflags=CXXFLAGS], 
 	[Specify a custom CXXFLAGS append value.  e.g.: -pg
-	 You can't call this argument multiple times.
+	 You cannot call this argument multiple times.
 	 In case you want completely reset CXXFLAGS use :
 	 CXXFLAGS='<all that you want>' ./configure ..
 	 Note that Fim is a C++ program, so we set CXXFLAGS=CXXFLAGS.
@@ -1161,7 +1179,7 @@ if test x$fim_cv_scan_consolefonts = xyes; then
 fi
 dnl ==================
 
-AC_ARG_ENABLE(convert, AC_HELP_STRING([--disable-convert], [Fim will try to use ImageMagick's convert as a last resort for opening unknown format files.]),
+AC_ARG_ENABLE(convert, AC_HELP_STRING([--disable-convert], [Fim will try to use convert (ImageMagick) as a last resort for opening unknown format files.]),
 [       if test x$enableval = xno; then
 		fim_cv_convert=no
 	else
@@ -1174,7 +1192,7 @@ AC_ARG_ENABLE(convert, AC_HELP_STRING([--disable-convert], [Fim will try to use 
 
 dnl ==================
 
-AC_ARG_ENABLE(xcftopnm, AC_HELP_STRING([--disable-xcftopnm], [Fim will try to use Gimp's xcftopnm for opening XCF format files.]),
+AC_ARG_ENABLE(xcftopnm, AC_HELP_STRING([--disable-xcftopnm], [Fim will try to use xcftopnm (Gimp) for opening XCF format files.]),
 [       if test x$enableval = xno; then
 		fim_cv_xcftopnm=no
 	else
@@ -1336,6 +1354,12 @@ dnl ==================
 
 dnl ==================
 
+    AH_TEMPLATE([FIM_WITH_LIBEXIF])
+            if test x$fim_cv_libexif = xyes ; then
+    		AC_DEFINE([FIM_WITH_LIBEXIF])
+    	fi
+dnl ==================
+
     AH_TEMPLATE([FIM_WITH_AALIB])
             if test x$fim_cv_aalib = xyes ; then
     		AC_DEFINE([FIM_WITH_AALIB])
@@ -1357,7 +1381,7 @@ dnl ==================
 
 dnl ==================
 
-dnl uhmmmmmm : doesn't seem to work
+dnl uhmmmmmm : does not seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 
 dnl         if test x$enableval = xyes; then
 dnl		AC_SUBST(DEFS)
@@ -1476,12 +1500,13 @@ dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 	internal windowing system           : ${have_windows:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
-	GNU regexp's (default is Posix)     : ${fim_cv_regex:-no}
+	GNU regexps (default is Posix)      : ${fim_cv_regex:-no}
 	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
 	use 'convert' for unknown files     : ${fim_cv_convert}
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
 	ascii art (aalib) support           : ${fim_cv_aalib}
+dnl	exif (libexif) support           : ${fim_cv_libexif}
 	X (sdllib) experimental support     : ${fim_handle_sdl}
         framebuffer support                 : ${fim_handle_framebuffer:-yes}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
