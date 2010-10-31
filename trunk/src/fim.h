@@ -250,6 +250,7 @@ namespace fim
 #define FIM_VID_REDUCE_FACTOR			"reduce_factor"		/* "the image scale multiplier used when reducing images size" */
 #define FIM_VID_SCALE_FACTOR_MULTIPLIER		"scale_factor_multiplier"	/* "(INTERNAL)" */
 #define FIM_VID_SCALE_FACTOR_DELTA		"scale_factor_delta"		/* "(INTERNAL)" */
+#define FIM_VID_COMMENT 				"comment"				/* "the image comment, stored in the image file" */
 #define FIM_VID_STEPS 				"steps"				/* "the steps, in pixels, when panning images" */
 #define FIM_VID_CONSOLE_ROWS 			"rows"			/* "(INTERNAL)" */
 #define FIM_VID_CONSOLE_LINE_WIDTH 		"lwidth"		/* "(INTERNAL)" */

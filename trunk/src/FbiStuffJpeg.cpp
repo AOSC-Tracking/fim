@@ -205,9 +205,10 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 {
     struct jpeg_state *h;
     jpeg_saved_marker_ptr mark;
+    fim_bool_t ferr=false;/* fatal errors ? */
     fim_jerr=0;
 #ifdef FIM_WITH_LIBEXIF
-    std::cout << "EXIF is not implemented, really :) \n";
+    //std::cout << "EXIF is not implemented, really :) \n";
 #endif
     
     h = (struct jpeg_state *)fim_calloc(sizeof(*h),1);
@@ -220,15 +221,15 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     h->cinfo.err = jpeg_std_error(&h->jerr);	/* FIXME : should use an error manager of ours (this one exits the program!) */
 //    h->jerr.error_exit = fim_error_exit;	/* FIXME : should use an error manager of ours (this one exits the program!) */
     h->jerr.error_exit = NULL ;	/* FIXME : should use an error manager of ours (this one exits the program!) */
-//    if(h->jerr.msg_code)goto oops;
+    if(ferr && h->jerr.msg_code)goto oops;
     jpeg_create_decompress(&h->cinfo);
-//    if(h->jerr.msg_code)goto oops;
+    if(h->jerr.msg_code)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_COM,    0xffff); /* comment */
-//    if(h->jerr.msg_code)goto oops;
+    if(ferr && h->jerr.msg_code)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_APP0+1, 0xffff); /* EXIF */
-//    if(h->jerr.msg_code)goto oops;
+    if(ferr && h->jerr.msg_code)goto oops;
     jpeg_stdio_src(&h->cinfo, h->infile);
-//    if(h->jerr.msg_code)goto oops;
+    if(ferr && h->jerr.msg_code)goto oops;
 //    if(jpeg_read_header(&h->cinfo, TRUE)==0)	goto oops;
     jpeg_read_header(&h->cinfo, TRUE);
 //    if(h->jerr.msg_code)goto oops;	// this triggers with apparently good file
