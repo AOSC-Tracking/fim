@@ -98,6 +98,9 @@ namespace fim
 		}
 		else
 		{
+
+			struct ida_extra* ie=load_find_extra(&(img->i),EXTRA_COMMENT);
+			setVariable(FIM_VID_COMMENT,(char*)(ie->data));
 		}
 	}
 
