@@ -112,6 +112,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Command.cpp \
 	CommandConsole.cpp \
 	CommandConsole-cmd.cpp \
+	CommandConsole-init.cpp \
 	DebugConsole.cpp \
 	DisplayDevice.cpp \
 	FbiStuff.cpp \
@@ -134,7 +135,8 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	string.cpp
 
 Command.o: Command.h
-CommandConsole.o: conf.h defaultConfiguration.o
+CommandConsole-init.o: conf.h defaultConfiguration.o
+help.o: conf.h defaultConfiguration.o
 fim.o: version.h help.cpp
 Var.o: help.cpp
 fim.cpp: version.h help.cpp
