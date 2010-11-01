@@ -36,16 +36,16 @@ _save_fim_history=1;
 _load_fim_history=1;
 
 # useful aliases
-alias "toggleautoflip" "autoflip=1-autoflip;";
-alias "toggleautonegate" "autonegate=1-autonegate;";
-alias "toggleflip" "i:flipped=1-i:flipped;";
-alias "flip" "toggleflip;redisplay;";
-alias "fliponce" "flip;toggleflip;";
-alias "toggleautomirror" "automirror=1-automirror;";
-alias "togglemirror" "i:mirrored=1-i:mirrored;";
-alias "mirror" "togglemirror;redisplay;";
-alias "mirroronce" "mirror;togglemirror;";
-alias "q" "quit;";
+alias "toggleautoflip" "autoflip=1-autoflip;" "";
+alias "toggleautonegate" "autonegate=1-autonegate;" "";
+alias "toggleflip" "i:flipped=1-i:flipped;" "";
+alias "flip" "toggleflip;redisplay;" "flip the current image along the horizontal axis";
+alias "fliponce" "flip;toggleflip;" "";
+alias "toggleautomirror" "automirror=1-automirror;" "";
+alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
+alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
+alias "mirroronce" "mirror;togglemirror;" "";
+alias "q" "quit;" "quits the fim program";
 
 # default bindings (binding is dynamical, so you can rebind keys even during program's execution)
 bind 'f' "flip;";
@@ -115,11 +115,11 @@ bind '.' "repeat_last;";
 #reload;
 #_display_status=1;
 #display;
-alias 'A' "'autotop=1-autotop;'";
-alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;";
+alias 'A' "'autotop=1-autotop;'" "";
+alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;" "";
 
 # key echo
-alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;";
+alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 
 v:auto_scale_v=1;
 _verbose_keys=0;
@@ -148,8 +148,8 @@ autocmd "PostRedisplay" ""   "i:_will_display=0;";
 
 
 # the aalib library has often problems with proportions, and this is a temporary fix
-alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}";
-alias "aalib_fix" "if(_device_driver=='aalib'){aalib_fix_do;auto_scale;}";
+alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
+alias "aalib_fix" "if(_device_driver=='aalib'){aalib_fix_do;auto_scale;}" "";
 autocmd "PostReload"   "" "aalib_fix;";
 autocmd "PostLoad"   "" "aalib_fix;";
 
@@ -165,16 +165,16 @@ autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
 autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";	# new : for smoother browsing of big images 
 autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}"; # a fixup
 
-alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};";
+alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 10 images";
 bind 'N' 'next10';
 bind 'C-n' "regexp_goto_next";
-alias "endless_slideshow" "while(1){display;sleep '1';next;};";
-alias "bookview"          "while(1){display;sleep '2';scrolldown;};";
-alias "comicview"         "while(1){display;sleep '1';scrolldown;};";
-alias "read"              "while(1){display;sleep '1';scrollforward;};";
-alias "slowread"          "while(1){display;sleep '2';scrollforward;};";
-alias "fastread"          "while(1){display;scrollforward;};";
-alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow;";
+alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
+alias "bookview"          "while(1){display;sleep '2';scrolldown;};" "";
+alias "comicview"         "while(1){display;sleep '1';scrolldown;};" "";
+alias "read"              "while(1){display;sleep '1';scrollforward;};" "";
+alias "slowread"          "while(1){display;sleep '2';scrollforward;};" "";
+alias "fastread"          "while(1){display;scrollforward;};" "";
+alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow;" "";
 bind  "C-p" "pornview";
 bind  "C-b" "bookview";
 autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0;" ;
@@ -186,16 +186,16 @@ autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
 #extra..
 bind 'w' "auto_width_scale";
 bind 'h' "auto_height_scale";
-alias "diagonal_nw" "pan_nw;";
-alias "diagonal_ne" "pan_ne;";
-alias "diagonal_se" "pan_se;";
-alias "diagonal_sw" "pan_sw;";
+alias "diagonal_nw" "pan_nw;" "pans the image to the upper left";
+alias "diagonal_ne" "pan_ne;" "pans the image to the upper right";
+alias "diagonal_se" "pan_se;" "pans the image to the lower left";
+alias "diagonal_sw" "pan_sw;" "pans the image to the lower right";
 bind 'd' "diagonal_nw;";
 bind 'D' "diagonal_se;";
 bind 'x' "diagonal_ne;";
 bind 'X' "diagonal_sw;";
-alias "toggleDisplayStatus" "_display_status=1-_display_status;";
-alias "toggleDisplayBusy" "_display_busy=1-_display_busy;";
+alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
+alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
 #bind 'C-a' "auto_scale";
 #autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n';";
 #autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
@@ -207,8 +207,8 @@ alias "toggleDisplayBusy" "_display_busy=1-_display_busy;";
 #push "media/image.jpg";
 #push "media/icon_smile.gif";
 echo "WELCOME : to switch to the command line interface press ':' ";
-alias "toggleAutoScale" "v:auto_scale_v=1-v:auto_scale_v;autowidth=0;reload;";
-alias "toggleAutoWidth" "autowidth=1-autowidth;v:auto_scale_v=0;reload;";
+alias "toggleAutoScale" "v:auto_scale_v=1-v:auto_scale_v;autowidth=0;reload;" "";
+alias "toggleAutoWidth" "autowidth=1-autowidth;v:auto_scale_v=0;reload;" "";
 bind 'C-w'   'toggleAutoWidth;';
 bind 'C-a' "toggleAutoScale;";
 bind 'C-c' "toggleAutoScale;";
@@ -218,57 +218,57 @@ bind 'A'   "toggleAutoScale;";
 #bind 'f' "next;display;";
 bind 'b' "prev;display;";
 bind 'B' "toggleDisplayBusy";
-alias "plisten" 'popen "nc -l -p 9999 "';
-alias "wlisten" "while(1){sleep;plisten;}";
-alias "random_slideshow" "while(1){goto random;}";
-alias "rotate90_ccw" "i:orientation=i:orientation+1;i:fresh=1;i:i:fresh=1;redisplay;";
-alias "rotate90_cw"  "i:orientation=i:orientation+3;i:fresh=1;i:i:fresh=1;redisplay;";
-alias "rotate90" "rotate90_cw;display;";
-alias "rotate10"     "rotate  '10';display;";
-alias "rotate10_ccw" "rotate -10;display;";
+alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
+alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
+alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
+alias "rotate90_ccw" "i:orientation=i:orientation+1;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90_cw"  "i:orientation=i:orientation+3;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90" "rotate90_cw;display;" "";
+alias "rotate10"     "rotate  '10';display;" "";
+alias "rotate10_ccw" "rotate -10;display;" "";
 
 # window related aliases and commands
-alias "wu" "window 'up'";
-alias "wd" "window 'down'";
-alias "wl" "window 'left'";
-alias "wr" "window 'right'";
+alias "wu" "window 'up'" "selects the window upwards the current";
+alias "wd" "window 'down'" "selects the window under the current";
+alias "wl" "window 'left'" "selects the window at left of the current";
+alias "wr" "window 'right'" "selects the window at right of the current";
 bind 'K' "wu";
 # Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
 #bind 'C-j' "wd";
 bind 'J' "wd";
 bind 'H' "wl";
 bind 'L' "wr";
-alias "split" "window 'split'";
-alias "vsplit" "window 'vsplit'";
-alias "swap" "window 'swap'";
-alias "ws " "window 'swap'";
+alias "split" "window 'split'" "split the current window horizontally";
+alias "vsplit" "window 'vsplit'" "split the current window vertically";
+alias "swap" "window 'swap'" "swap the enclosing window subwindows";
+alias "ws " "window 'swap'" "see swap";
 bind 'T' "split;redisplay;";
 #don't use C-s : it will be usually catched by the console driver, and fim won't get it!
 #bind 'C-s' "split;";
 bind 'V' "vsplit;redisplay;";
 bind 'U' "swap;redisplay;";
-alias 'venlarge' 'window "venlarge"';
-alias 'henlarge' 'window "henlarge"';
+alias 'venlarge' 'window "venlarge"' "";
+alias 'henlarge' 'window "henlarge"' "";
 # hmmmm we are out of combinations !
 
-alias 'wnormalize' 'window "normalize"';
-alias 'wclose' 'window "close"';
+alias 'wnormalize' 'window "normalize"' "";
+alias 'wclose' 'window "close"' "";
 alias 'wc' 'window "close"' "closes the current window";
 bind  'C' "wc;redisplay;";
 
-alias 'cache' 'echo _cache_status;';
+alias 'cache' 'echo _cache_status;' "displays cached images status";
 bind 'c' 'cache;';
 
-alias 'widen'  'i:ascale=i:ascale*"1.1";*1.0;';
-alias 'narrow' 'i:ascale=i:ascale/"1.1";*1.0;';
+alias 'widen'  'i:ascale=i:ascale*"1.1";*1.0;' "widen the current image";
+alias 'narrow' 'i:ascale=i:ascale/"1.1";*1.0;' "narrow the current image";
 bind  'y' "widen" "widens horizontally the image";
 bind  'Y' "narrow" "shrinks horizontally the image";
-alias 'scu'   'scroll_console_up;'   ;
-alias 'scd'   'scroll_console_down;';
+alias 'scu'   'scroll_console_up;'   "";
+alias 'scd'   'scroll_console_down;' "";
 #alias 'console_scroll_up'   'if(console_offset<console_lines){console_offset=console_offset+1;}';
 #alias 'console_scroll_down' 'if(console_offset>0){console_offset=console_offset-1;}';
-alias "musicplay"  "system 'mpc play'";
-alias "musicpause" "system 'mpc pause'";
+alias "musicplay"  "system 'mpc play'" "";
+alias "musicpause" "system 'mpc pause'" "";
 
 bind "Home" "0;";
 bind "End" "$;";
@@ -279,4 +279,4 @@ bind "Backspace" "prev";
 alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}"; # NEW
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
-#So feel free to modify it, but with caution! FIM is still alpha! 
+#So feel free to modify it, but with caution! 
