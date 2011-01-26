@@ -807,7 +807,7 @@ AC_ARG_ENABLE(exif, AC_HELP_STRING([--enable-exif], [Turns on libexif support (E
 	[if test x$enableval = xyes; then
 		fim_cv_libexif=yes
 		CXXFLAGS="$CXXFLAGS"
-		LIBS="$LIBS `-lexif`"
+		LIBS="$LIBS -lexif"
 		AC_CHECK_LIB(exif, exif_data_new_from_data,have_libexif=yes,have_libexif=no)
 		if test x$have_libexif = xyes; then
       			AC_MSG_NOTICE([Enabling libexif usage.])
