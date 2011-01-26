@@ -192,7 +192,7 @@ namespace fim
 		{
 #if 0
 			if(ai->second.first == "")continue;//FIX THIS : THIS SHOULD NOT OCCUR
-			aliases_expanded+="alias ";
+			aliases_expanded+=FIM_FLT_ALIAS" ";
 			aliases_expanded+=((*ai).first);
 			aliases_expanded+="=\"";
 			aliases_expanded+=((*ai).second.first);
@@ -206,7 +206,7 @@ namespace fim
 	fim::string CommandConsole::get_alias_info(const fim::string aname)const
 	{
 			string  r;
-				r+=fim::string("alias \"");
+				r+=fim::string(FIM_FLT_ALIAS" \"");
 				r+=aname;
 				r+=fim::string("\" \"");
 				aliases_t::const_iterator ai=aliases.find(aname);
@@ -243,7 +243,7 @@ namespace fim
 		{
 			aliases[args[0].val]=std::pair<fim::string,fim::string>(cmdlist,desc);
 			string r;
-			r+=fim::string("alias ");
+			r+=fim::string(FIM_FLT_ALIAS" ");
 			r+=args[0].val;
 			r+=fim::string(" successfully replaced.\n");
 			return r;
@@ -253,7 +253,7 @@ namespace fim
 			aliases[args[0].val].first=cmdlist;
 			aliases[args[0].val].second=desc;
 			string r;
-			r+=fim::string("alias ");
+			r+=fim::string(FIM_FLT_ALIAS" ");
 			r+=args[0].val;
 			r+=fim::string(" successfully added.\n");
 			return r;
@@ -330,7 +330,7 @@ namespace fim
 		addCommand(new Command(fim::string("return"),fim::string("returns from the program with a status code"),this,&CommandConsole::do_return));
 		addCommand(new Command(fim::string("top_align"),fim::string("aligns to the upper side the image" ),&browser,&Browser::top_align));
 		addCommand(new Command(fim::string("bottom_align"),fim::string("aligns to the lower side the image" ),&browser,&Browser::bottom_align));
-		addCommand(new Command(fim::string("goto"),fim::string("goes to the index image" ),&browser,&Browser::goto_image));
+		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string("goes to the index image" ),&browser,&Browser::goto_image));
 		addCommand(new Command(fim::string("negate"),fim::string("negates the displayed image colors" ),&browser,&Browser::negate));
 		addCommand(new Command(fim::string("status"),fim::string("sets the status line to the collation of the given arguments"),this,&CommandConsole::status));
 		addCommand(new Command(fim::string("scrolldown" ),fim::string("scrolls down the image, going next if at bottom" ),&browser,&Browser::scrolldown));
@@ -340,18 +340,18 @@ namespace fim
 		addCommand(new Command(fim::string("auto_scale" ),fim::string("" ),&browser,&Browser::auto_scale));
 		addCommand(new Command(fim::string("auto_width_scale" ),fim::string("scale the image so that it fits horizontally in the screen" ),&browser,&Browser::auto_width_scale));
 		addCommand(new Command(fim::string("auto_height_scale" ),fim::string("scale the image so that it fits vertically in the screen" ),&browser,&Browser::auto_height_scale));
-		addCommand(new Command(fim::string("bind" ),fim::string("binds some keyboard shortcut to an action"),this,&CommandConsole::bind));
-		addCommand(new Command(fim::string("quit"  ),fim::string("terminates the program"),this,&CommandConsole::quit));
+		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string("binds some keyboard shortcut to an action"),this,&CommandConsole::bind));
+		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string("terminates the program"),this,&CommandConsole::quit));
 #ifndef FIM_NOSCRIPTING
 		addCommand(new Command(fim::string("exec"  ),fim::string("executes script files"),this,&CommandConsole::executeFile));
 #endif
-		addCommand(new Command(fim::string("echo"  ),fim::string("echoes its arguments"),this,&CommandConsole::echo));
+		addCommand(new Command(fim::string(FIM_FLT_ECHO),fim::string("echoes its arguments"),this,&CommandConsole::echo));
 		//addCommand(new Command(fim::string("foo"   ),fim::string("a dummy command"),this,&CommandConsole::foo));
 		//addCommand(new Command(fim::string("print"   ),fim::string("displays the value of a variable"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string("if"    ),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string("else"    ),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string("while" ),fim::string("while(expression){action;}"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string("alias" ),fim::string("alias [ALIASNAME [ACTIONS [DESCRIPTION]]]"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string(FIM_FLT_IF),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string(FIM_FLT_ELSE),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string(FIM_FLT_WHILE),fim::string("while(expression){action;}"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS" [ALIASNAME [ACTIONS [DESCRIPTION]]]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string("getenv" ),fim::string("getenv IDENTIFIER"),this,&CommandConsole::do_getenv));
 		addCommand(new Command(fim::string("unalias" ),fim::string("unalias {alias} | -a : deletes the alias {alias} or all aliases (use \"-a\", not -a)"),this,&CommandConsole::unalias));
 		addCommand(new Command(fim::string("unbind"),fim::string("unbinds the action associated to KEYCODE"),this,&CommandConsole::unbind));
@@ -734,7 +734,7 @@ namespace fim
 #endif
 			return "";
 		}else
-		if(cmd=="alias")
+		if(cmd==FIM_FLT_ALIAS)
 		{
 			//assignment of an alias
 			std::vector<Arg> aargs;	//Arg args :P

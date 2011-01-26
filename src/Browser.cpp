@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ namespace fim
 		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreRedisplay",c);
+			autocmd_exec(FIM_ACM_PREREDISPLAY,c);
 #endif
 			if(c_image())
 			{
@@ -85,7 +85,7 @@ namespace fim
 					this->display_status(current().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostRedisplay",c);
+			autocmd_exec(FIM_ACM_POSTREDISPLAY,c);
 #endif
 		}
 	}
@@ -166,11 +166,11 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())viewport()->pan_up(firstorzero(args));
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		else prev();
@@ -191,11 +191,11 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())viewport()->pan_down(firstorzero(args));
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		else next(1);
@@ -216,12 +216,12 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())viewport()->pan_up();
 			if(c_image() && viewport())viewport()->pan_right();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		//else prev();
@@ -242,12 +242,12 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())viewport()->pan_up();
 			if(c_image() && viewport())viewport()->pan_left();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		else prev();
@@ -268,12 +268,12 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())viewport()->pan_down();
 			if(c_image() && viewport())viewport()->pan_left();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		//else next(0);
@@ -294,12 +294,12 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())viewport()->pan_down();
 			if(c_image() && viewport())viewport()->pan_right();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		else next(0);
@@ -319,11 +319,11 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreScale",c);
+			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image())image()->scale_multiply(multiscale);
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostScale",c);
+			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
 		return "";
@@ -343,11 +343,11 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreScale",c);
+			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image())image()->scale_increment(deltascale);
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostScale",c);
+			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
 		return "";
@@ -367,11 +367,11 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreScale",c);
+			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image())image()->setscale(newscale);
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostScale",c);
+			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
 		return "";
@@ -386,11 +386,11 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreScale",c);
+			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image() && viewport())viewport()->auto_height_scale();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostScale",c);
+			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
 		return "";
@@ -405,11 +405,11 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			fim::string c=current();
-			autocmd_exec("PreScale",c);
+			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image() && viewport())viewport()->auto_width_scale();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostScale",c);
+			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
 		return "";
@@ -424,11 +424,11 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreScale",c);
+			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image() && viewport())viewport()->auto_scale();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostScale",c);
+			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
 		return "";
@@ -443,11 +443,11 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image())viewport()->pan_right(firstorzero(args));
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		else next(1);
@@ -463,11 +463,11 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())viewport()->pan_left(firstorzero(args));
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		else prev();
@@ -504,7 +504,7 @@ namespace fim
 		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreDisplay",c);
+			autocmd_exec(FIM_ACM_PREDISPLAY,c);
 #endif
 			/*
 			 * the following is a trick to override redisplaying..
@@ -523,7 +523,7 @@ namespace fim
 //				if(commandConsole.window)commandConsole.window->recursive_display();
 			}
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostDisplay",c);
+			autocmd_exec(FIM_ACM_POSTDISPLAY,c);
 #endif
 		}
 		else{ cout << "no image to display, sorry!";
@@ -652,7 +652,7 @@ namespace fim
 #endif
 
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PrePrefetch",current());
+			autocmd_exec(FIM_ACM_PREPREFETCH,current());
 #endif
 		if( args.size() > 0 )return "";
 
@@ -670,7 +670,7 @@ namespace fim
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPrefetch",current());
+			autocmd_exec(FIM_ACM_POSTPREFETCH,current());
 #endif
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,1);
 		return "";
@@ -687,7 +687,7 @@ namespace fim
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if(empty_file_list())return "sorry, no image to reload\n";
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PreReload",c);
+		autocmd_exec(FIM_ACM_PRERELOAD,c);
 #endif
 		free_current_image();
 		loadCurrentImage();
@@ -696,7 +696,7 @@ namespace fim
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(c);
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PostReload",c);
+		autocmd_exec(FIM_ACM_POSTRELOAD,c);
 #endif
 		return "";
 	}
@@ -714,7 +714,7 @@ namespace fim
 		}
 		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PreLoad",c);
+		autocmd_exec(FIM_ACM_PRELOAD,c);
 #endif
 		commandConsole.set_status_bar("please wait while loading...", "*");
 
@@ -722,7 +722,7 @@ namespace fim
 
 		load_error_handle(c);
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PostLoad",c);
+		autocmd_exec(FIM_ACM_POSTLOAD,c);
 #endif
 		return "";
 	}
@@ -901,11 +901,11 @@ namespace fim
 			{	
 				fim::string c=current();
 #ifdef FIM_AUTOCMDS
-				autocmd_exec("PreGoto",c);
+				autocmd_exec(FIM_ACM_PREGOTO,c);
 #endif
 				goto_image(i+1);
 #ifdef FIM_AUTOCMDS
-				autocmd_exec("PostGoto",c);
+				autocmd_exec(FIM_ACM_POSTGOTO,c);
 				if(!commandConsole.inConsole())
 					commandConsole.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
 				return "";
@@ -952,11 +952,11 @@ namespace fim
 		 */
 		fim::string c=current();
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PreNext",c);
+		autocmd_exec(FIM_ACM_PRENEXT,c);
 #endif
 		fim::string result=do_next(n);
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PostNext",c);
+		autocmd_exec(FIM_ACM_POSTNEXT,c);
 #endif
 		return "";
 	}
@@ -968,11 +968,11 @@ namespace fim
 		 */
 		fim::string c=current();
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PrePrev",c);
+		autocmd_exec(FIM_ACM_PREPREV,c);
 #endif
 		fim::string result=do_next(-n);
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PostPrev",c);
+		autocmd_exec(FIM_ACM_POSTPREV,c);
 #endif
 		return "";
 	}
@@ -1038,11 +1038,11 @@ namespace fim
 			{	
 				fim::string c=current();
 #ifdef FIM_AUTOCMDS
-				autocmd_exec("PreGoto",c);
+				autocmd_exec(FIM_ACM_PREGOTO,c);
 #endif
 				goto_image(g);
 #ifdef FIM_AUTOCMDS
-				autocmd_exec("PostGoto",c);
+				autocmd_exec(FIM_ACM_POSTGOTO,c);
 #endif
 			}
 		}
@@ -1099,7 +1099,7 @@ namespace fim
 		 */
 		fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 		if(c_image() && viewport())
 		{
@@ -1115,7 +1115,7 @@ namespace fim
 		}
 		else next(1);
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		return "";
 	}
@@ -1129,7 +1129,7 @@ namespace fim
 		 */
 		fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 		if(c_image() && viewport())
 		{
@@ -1138,7 +1138,7 @@ namespace fim
 		}
 		else next(1);
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		return "";
 	}
@@ -1234,8 +1234,8 @@ namespace fim
 			//angle = (double)getGlobalFloatVariable(FIM_VID_ANGLE);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-//			autocmd_exec("PreRotate",c);//FIXME
-			autocmd_exec("PreScale",c);//FIXME
+//			autocmd_exec(FIM_ACM_PREROTATE,c);//FIXME
+			autocmd_exec(FIM_ACM_PRESCALE,c); //FIXME
 #endif
 			if(c_image())
 			{
@@ -1245,8 +1245,8 @@ namespace fim
 					{if(image())image()->rotate();}
 			}
 #ifdef FIM_AUTOCMDS
-//			autocmd_exec("PostRotate",c);//FIXME
-			autocmd_exec("PostScale",c);//FIXME
+//			autocmd_exec(FIM_ACM_POSTROTATE,c);//FIXME
+			autocmd_exec(FIM_ACM_POSTSCALE,c); //FIXME
 #endif
 		}
 		return "";
@@ -1264,7 +1264,7 @@ namespace fim
 			if(!factor) factor = (float)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreScale",c);
+			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image())
 			{
@@ -1280,7 +1280,7 @@ namespace fim
 					}
 			}
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostScale",c);
+			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
 		return "";
@@ -1298,7 +1298,7 @@ namespace fim
 			if(!factor) factor = (float)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PreScale",c);
+			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image())
 			{
@@ -1314,7 +1314,7 @@ namespace fim
 					}
 			}
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostScale",c);
+			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
 		return "";
@@ -1329,14 +1329,14 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())
 			{
 				viewport()->top_align();
 			}
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		return "";
@@ -1351,14 +1351,14 @@ namespace fim
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PrePan",c);
+			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
 			if(c_image() && viewport())
 			{
 				viewport()->bottom_align();
 			}
 #ifdef FIM_AUTOCMDS
-			autocmd_exec("PostPan",c);
+			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
 		return "";
@@ -1462,14 +1462,14 @@ namespace fim
 		 */
 		fim::string c=current();
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PreNext",c);
+		autocmd_exec(FIM_ACM_PRENEXT,c);
 #endif
 		if(c_image())
 		{
 			if(image())image()->next_page();
 		}
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PostNext",c);
+		autocmd_exec(FIM_ACM_POSTNEXT,c);
 #endif
 		return "";
 	}
@@ -1481,14 +1481,14 @@ namespace fim
 		 */
 		fim::string c=current();
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PreNext",c);
+		autocmd_exec(FIM_ACM_PRENEXT,c);
 #endif
 		if(c_image())
 		{
 			if(image())image()->prev_page();
 		}
 #ifdef FIM_AUTOCMDS
-		autocmd_exec("PostNext",c);
+		autocmd_exec(FIM_ACM_POSTNEXT,c);
 #endif
 		return "";
 	}

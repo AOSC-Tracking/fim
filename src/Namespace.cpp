@@ -34,7 +34,7 @@ namespace fim
 		 * an internal function to set a user variable
 		 */
 #ifdef FIM_NAMESPACES
-		if( varname[1]==':' )
+		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
 			try
 			{
@@ -95,7 +95,7 @@ namespace fim
 		 */
 //		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
 #ifdef FIM_NAMESPACES
-		if( varname[1]==':' )
+		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
 			try
 			{
@@ -156,7 +156,7 @@ namespace fim
 		 */
 		fim::string s(value);
 #ifdef FIM_NAMESPACES
-		if( varname[1]==':' )
+		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
 			//a specific namespace was selected!
 			try
@@ -217,7 +217,7 @@ namespace fim
 		 */
 //		std::cout << "CCSV\n";
 #ifdef FIM_NAMESPACES
-		if( varname[1]==':' )
+		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
 			//a specific namespace was selected!
 			try
@@ -281,7 +281,7 @@ namespace fim
 	int CommandConsole::getIntVariable(const fim::string &varname)const
 	{
 #ifdef FIM_NAMESPACES
-		if( varname[1]==':' )
+		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
 			try
 			{
@@ -355,7 +355,7 @@ namespace fim
 //		cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
 //		cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
 #ifdef FIM_NAMESPACES
-		if( varname[1]==':' )
+		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
 			try{	
 			//a specific namespace was selected!
@@ -368,7 +368,7 @@ namespace fim
 				if(window)
 					return window->getFloatVariable(id);
 				else
-					return 0.0;
+					return FIM_CNS_EMPTY_FP_VAL;
 			}
 			else
 			if( ns == 'v' )
@@ -377,7 +377,7 @@ namespace fim
 				if(window && window->current_viewportp())
 					return window->current_viewportp()->getFloatVariable(id);
 				else
-					return 0.0;
+					return FIM_CNS_EMPTY_FP_VAL;
 			}
 			else
 #endif
@@ -387,7 +387,7 @@ namespace fim
 				return
 					browser.c_image()?
 					( (Image*) (browser.c_image()))->getFloatVariable(id):
-					0.0;
+					FIM_CNS_EMPTY_FP_VAL;
 			}
 			else
 			if( ns == 'b' )
@@ -399,7 +399,7 @@ namespace fim
 			if( ns != 'g' )
 			{
 				//invalid namespace
-				return 0.0;
+				return FIM_CNS_EMPTY_FP_VAL;
 			}
 			}
 			catch(FimException e){}
@@ -407,7 +407,7 @@ namespace fim
 #endif
 		variables_t::const_iterator vi=variables.find(varname);
 		if(vi!=variables.end()) return vi->second.getFloat();
-		else return 0.0;
+		else return FIM_CNS_EMPTY_FP_VAL;
 //		return variables[varname].getFloat();
 	}
 
@@ -417,7 +417,7 @@ namespace fim
 		 * the variable name supplied is used as a key to the variables hash
 		 * */
 #ifdef FIM_NAMESPACES
-		if( varname[1]==':' )
+		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
 			try
 			{
@@ -604,7 +604,7 @@ namespace fim
 //			return variables[varname].getFloat();
 			variables_t::const_iterator vi=variables.find(varname);
 			if(vi!=variables.end()) return vi->second.getString();
-			else return 0.0;
+			else return FIM_CNS_EMPTY_FP_VAL;
 		}
 
 		fim::string Namespace::getStringVariable(const fim::string &varname)const
