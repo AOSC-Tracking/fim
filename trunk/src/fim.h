@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2010 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -222,7 +222,7 @@ namespace fim
 #define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
 
 /*
- * Fim language variable identifiers.
+ * Fim language variable identifiers, with their help strings.
  * */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "if nonzero : if 1, will force loading of images as pixelmaps of bits; if 24, will force loading of images as 24 bit pixelmaps" */
 #define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "informations on current cache status" */
@@ -293,6 +293,80 @@ namespace fim
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "(INTERNAL) each executed command (for debugging purposes)" */
 #define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "(INTERNAL) offset used when opening files" */
 #define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "(INTERNAL) will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
+
+/*
+ * Fim Keyboard Descriptions
+ * */
+#define FIM_KBD_TAB			"Tab"
+#define FIM_KBD_ENTER			"Enter"
+#define FIM_KBD_BACKSPACE		"BackSpace"
+#define FIM_KBD_BACKSPACE_		"Backspace"
+#define FIM_KBD_DEL			"Del"
+#define FIM_KBD_INS			"Ins"
+#define FIM_KBD_HOME			"Home"
+#define FIM_KBD_END			"End"
+#define FIM_KBD_ANY			"Any"
+#define FIM_KBD_ESC			"Esc"
+#define FIM_KBD_LEFT			"Left"
+#define FIM_KBD_RIGHT			"Right"
+#define FIM_KBD_UP			"Up"
+#define FIM_KBD_DOWN			"Down"
+#define FIM_KBD_PAGEUP			"PageUp"
+#define FIM_KBD_PAGEDOWN			"PageDown"
+
+/*
+ * Fim Constants
+ * */
+#define FIM_CNS_SCALEFACTOR	 1.322f
+#define FIM_CNS_SCALEDELTA	 0.01f
+#define FIM_CNS_EMPTY_STRING	""
+#define FIM_CNS_FP_ZERO		0.0
+#define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
+
+/*
+ * Fim Symbols
+ * */
+#define FIM_SYM_CONSOLE_KEY	':'
+#define FIM_SYM_NAMESPACE_SEP	':'
+
+/*
+ * Fim Autocommands
+ * */
+#define FIM_ACM_POSTSCALE	"PostScale"
+#define FIM_ACM_PRESCALE	"PreScale"
+#define FIM_ACM_PREPAN	"PrePan"
+#define FIM_ACM_POSTPAN	"PostPan"
+#define FIM_ACM_PREREDISPLAY	"PreRedisplay"
+#define FIM_ACM_POSTREDISPLAY	"PostRedisplay"
+#define FIM_ACM_PREDISPLAY	"PreDisplay"
+#define FIM_ACM_POSTDISPLAY	"PostDisplay"
+#define FIM_ACM_PREPREFETCH	"PrePrefetch"
+#define FIM_ACM_POSTPREFETCH	"PostPrefetch"
+#define FIM_ACM_POSTRELOAD	"PostReload"
+#define FIM_ACM_PRERELOAD	"PreReload"
+#define FIM_ACM_POSTLOAD	"PostLoad"
+#define FIM_ACM_PRELOAD	"PreLoad"
+#define FIM_ACM_POSTGOTO	"PostGoto"
+#define FIM_ACM_PREGOTO	"PreGoto"
+#define FIM_ACM_PRENEXT	"PreNext"
+#define FIM_ACM_POSTNEXT	"PostNext"
+#define FIM_ACM_PREPREV	"PrePrev"
+#define FIM_ACM_POSTPREV	"PostPrev"
+//#define FIM_ACM_PREROTATE	"PreRotate"
+//#define FIM_ACM_POSTROTATE	"PostRotate"
+
+/*
+ * Fim Language Tokens
+ * */
+#define FIM_FLT_ALIAS			"alias"
+#define FIM_FLT_BIND			"bind"
+#define FIM_FLT_ECHO			"echo"
+#define FIM_FLT_ELSE			"else"
+#define FIM_FLT_GOTO			"goto"
+#define FIM_FLT_HELP			"help"
+#define FIM_FLT_IF			"if"
+#define FIM_FLT_QUIT			"quit"
+#define FIM_FLT_WHILE			"while"
 
 /*
  * Help messages for Fim commands (partial).
