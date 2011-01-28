@@ -566,7 +566,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 	if( ( tfd=tmpfile() )!=NULL )
 	{	
 		/* todo : read errno in case of error and print some report.. */
-		const size_t buf_size=4096;
+		const size_t buf_size=FIM_STREAM_BUFSIZE;
 		char buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
 		while( (rc=fread(buf,1,buf_size,fp))>0 )
 		{

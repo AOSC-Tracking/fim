@@ -216,12 +216,6 @@ namespace fim
 }
 
 /*
- * NEW : FIXME 
- */
-#define FIM_FILE_BUF_SIZE 	(1024*256)
-#define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
-
-/*
  * Fim language variable identifiers, with their help strings.
  * */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "if nonzero : if 1, will force loading of images as pixelmaps of bits; if 24, will force loading of images as 24 bit pixelmaps" */
@@ -313,21 +307,47 @@ namespace fim
 #define FIM_KBD_DOWN			"Down"
 #define FIM_KBD_PAGEUP			"PageUp"
 #define FIM_KBD_PAGEDOWN			"PageDown"
+#define FIM_KBD_COLON			":"
 
 /*
  * Fim Constants
  * */
+#define FIM_CNS_TERM_VAR	 "TERM"
+#define FIM_CNS_HOME_VAR	 "HOME"
+#define FIM_CNS_HIST_FILENAME	 ".fim_history"
+#define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
+#define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
 #define FIM_CNS_SCALEFACTOR	 1.322f
 #define FIM_CNS_SCALEDELTA	 0.01f
 #define FIM_CNS_EMPTY_STRING	""
+#define FIM_CNS_SLASH_STRING	"/"
 #define FIM_CNS_FP_ZERO		0.0
 #define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
+
+/*
+ * Fim Display Driver Names
+ * */
+#define FIM_DDN_INN_FB	 "fb"
+#define FIM_DDN_VAR_FB	 "fbdev"
+#define FIM_DDN_INN_SDL	 "sdl"
+#define FIM_DDN_VAR_SDL	 "sdl"
+#define FIM_DDN_INN_AA	 "aa"
+#define FIM_DDN_VAR_AA	 "aalib"
+#define FIM_DDN_INN_CACA	 "caca"
+#define FIM_DDN_VAR_CACA	 "cacalib"
+#define FIM_DDN_INN_DUMB	 "dumb"
+#define FIM_DDN_VAR_DUMB	 "dummy"
 
 /*
  * Fim Symbols
  * */
 #define FIM_SYM_CONSOLE_KEY	':'
+#define FIM_SYM_SEARCH_KEY	'/'
 #define FIM_SYM_NAMESPACE_SEP	':'
+#define FIM_SYM_PROMPT_CHAR	':'
+#define FIM_SYM_PROMPT_SLASH	'/'
+#define FIM_SYM_PROMPT_NUL	'\0'
+#define FIM_SYM_CHAR_NUL	'\0'
 
 /*
  * Fim Autocommands
@@ -352,21 +372,66 @@ namespace fim
 #define FIM_ACM_POSTNEXT	"PostNext"
 #define FIM_ACM_PREPREV	"PrePrev"
 #define FIM_ACM_POSTPREV	"PostPrev"
+#define FIM_ACM_PREINTERACTIVECOMMAND	"PreInteractiveCommand"
+#define FIM_ACM_POSTINTERACTIVECOMMAND	"PostInteractiveCommand"
+#define FIM_ACM_PREEXECUTIONCYCLE	"PreExecutionCycle"
+#define FIM_ACM_PREEXECUTIONCYCLEARGS	"PreExecutionCycleArgs"
+#define FIM_ACM_POSTEXECUTIONCYCLE	"PostExecutionCycle"
 //#define FIM_ACM_PREROTATE	"PreRotate"
 //#define FIM_ACM_POSTROTATE	"PostRotate"
 
 /*
  * Fim Language Tokens
  * */
-#define FIM_FLT_ALIAS			"alias"
-#define FIM_FLT_BIND			"bind"
-#define FIM_FLT_ECHO			"echo"
-#define FIM_FLT_ELSE			"else"
-#define FIM_FLT_GOTO			"goto"
-#define FIM_FLT_HELP			"help"
-#define FIM_FLT_IF			"if"
-#define FIM_FLT_QUIT			"quit"
-#define FIM_FLT_WHILE			"while"
+#define FIM_FLT_ALIAS			"alias"	/* not in vim */
+#define FIM_FLT_AUTOCMD			"autocmd" /* in vim */
+#define FIM_FLT_AUTOCMD_DEL			"autocmd_del"	/* not in vim */
+#define FIM_FLT_BIND			"bind" /* not in vim */
+#define FIM_FLT_CD			"cd" /* in vim */
+#define FIM_FLT_CLEAR			"clear" /* not in vim */
+#define FIM_FLT_DISPLAY			"display" /* in vim, with another meaning) */
+#define FIM_FLT_ECHO			"echo" /* in vim */
+#define FIM_FLT_ELSE			"else" /* in vim */
+#define FIM_FLT_EXEC			"exec" /* not in vim */
+#define FIM_FLT_FILE			"file" /* in vim */
+#define FIM_FLT_GETENV			"getenv" /* not in vim */
+#define FIM_FLT_GOTO			"goto" /* in vim */
+#define FIM_FLT_HELP			"help" /* not in vim */
+#define FIM_FLT_IF			"if" /* in vim */
+#define FIM_FLT_INFO			"info" /* not in vim */
+#define FIM_FLT_LOAD			"load" /* not in vim */
+#define FIM_FLT_MAGNIFY			"magnify" /* not in vim */
+#define FIM_FLT_MARK			"mark" /* in vim */
+#define FIM_FLT_NEXT			"next" /* in vim */
+#define FIM_FLT_NEGATE			"negate" /* not in vim */
+#define FIM_FLT_NEXT_PAGE			"next_page" /* not in vim */
+#define FIM_FLT_NEXT_PIC			"next_picture" /* not in vim */
+#define FIM_FLT_POPEN			"popen" /* not in vim */
+#define FIM_FLT_PREFETCH			"prefetch" /* in vim */
+#define FIM_FLT_PREV			"prev" /* in vim */
+#define FIM_FLT_PREV_PAGE			"prev_page" /* not in vim */
+#define FIM_FLT_PREV_PIC			"prev_picture" /* not in vim */
+#define FIM_FLT_PUSH			"push" /* not in vim */
+#define FIM_FLT_PWD			"pwd" /* in vim */
+#define FIM_FLT_REDISPLAY			"redisplay" /* not in vim */
+#define FIM_FLT_REDUCE			"reduce" /* not in vim */
+#define FIM_FLT_RETURN			"return" /* in vim */
+#define FIM_FLT_REXP_GOTO		"regexp_goto" /* not in vim */
+#define FIM_FLT_REXP_GOTO_NEXT		"regexp_goto_next" /* not in vim */
+#define FIM_FLT_RELOAD		"reload" /* not in vim */
+#define FIM_FLT_REMOVE		"remove" /* not in vim */
+#define FIM_FLT_ROTATE		"rotate" /* not in vim */
+#define FIM_FLT_SCALE		"scale" /* not in vim */
+#define FIM_FLT_SET		"set" /* in vim */
+#define FIM_FLT_STATUS		"status" /* not in vim */
+#define FIM_FLT_QUIT			"quit" /* in vim */
+#define FIM_FLT_SORT			"sort" /* in vim */
+#define FIM_FLT_SYSTEM			"system" /* not in vim */
+#define FIM_FLT_SLEEP			"sleep" /* in vim */
+#define FIM_FLT_UNALIAS			"unalias" /* not in vim */
+#define FIM_FLT_UNBIND			"unbind" /* not in vim */
+#define FIM_FLT_WHILE			"while" /* in vim */
+#define FIM_FLT_WINDOW			"window" /* not in vim */
 
 /*
  * Help messages for Fim commands (partial).
@@ -376,6 +441,15 @@ namespace fim
 #define FIM_CMD_HELP_PWD			"print the current directory name."
 #define FIM_CMD_HELP_EVAL			"evaluates the arguments as commands, executing them."
 #define FIM_CMD_HELP_SYSTEM		"system {expr}: get the output of the shell command {expr}. (uses popen()"
+
+/*
+ * Some Fim compilation defaults
+ */
+#define FIM_WANT_SCREEN_KEY_REMAPPING_PATCH 1
+#define FIM_STREAM_BUFSIZE	4096
+#define FIM_FILE_BUF_SIZE 	(1024*256)
+#define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
+
 
 /*
  * Some Fim internals flags.

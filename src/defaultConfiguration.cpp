@@ -4,7 +4,7 @@
   The following code contains key bindings and aliases definitions
   which make up a first usable configuration for FIM.
  
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,15 +21,15 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #if FIM_DEFAULT_CONFIG
-		alias("q","quit");
+		alias("q",FIM_FLT_QUIT);
 		bind('f',"files");
-		bind('q',"quit");
+		bind('q',FIM_FLT_QUIT);
 		bind('f',"file");
 		//bind('n',"next;display;");
 		bind('n',"next");
-		bind('h',"help");
-		bind('x',"echo");
-		bind('e',"echo");
+		bind('h',FIM_FLT_HELP);
+		bind('x',FIM_FLT_ECHO);
+		bind('e',FIM_FLT_ECHO);
 		//bind('p',"prev;display;");
 		bind('p',"prev");
 		bind('P',"pop");
@@ -67,13 +67,13 @@
 		alias("toggleVerbosity","verbose=1-verbose;display;");
 		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");*/
 	
-		setVariable(FIM_VID_CONSOLE_KEY,':');
+		setVariable(FIM_VID_CONSOLE_KEY,FIM_SYM_CONSOLE_KEY);
 /*		setVariable(FIM_VID_AUTOWIDTH,1);
 		setVariable(FIM_VID_VERBOSE_KEYS,0);*/
-		setVariable(FIM_VID_MAGNIFY_FACTOR,1.322f);
-		setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,1.1f);
-		setVariable(FIM_VID_SCALE_FACTOR_DELTA,0.01f);
-		setVariable(FIM_VID_REDUCE_FACTOR,1.322f);
+		setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
+		setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,FIM_CNS_SCALEDELTA);
+		setVariable(FIM_VID_SCALE_FACTOR_DELTA,FIM_CNS_SCALEDELTA);
+		setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);
 /*		autocmd_add("Next","*","echo 'rendering next image..'");
 		autocmd_add("Prev","*","echo 'rendering prev image..'");
 		setVariable(FIM_VID_AUTOWIDTH,1);
@@ -193,25 +193,25 @@
 		 * The following means that when a decimal 4479771 will be read from
 		 * the keyboard, it will be interpreted as a Left pressure.
 		 */
-		key_bindings["Left"]=4479771;
+		key_bindings[FIM_KBD_LEFT]=4479771;
 		// and so on..
-		key_bindings["Right"]=4414235;
-		key_bindings["Up"]=4283163;
-		key_bindings["Down"]=4348699;
-		key_bindings["PageDown"]=2117491483;
-		key_bindings["PageUp"]=2117425947;
-		key_bindings["Enter"]=10;
-		key_bindings["BackSpace"]=127;
-		key_bindings["Backspace"]=127;
-		key_bindings["Del"]=2117294875;
-		key_bindings["Ins"]=2117229339;
-		key_bindings["Home"]=2117163803;
-		key_bindings["End"] =2117360411;
-		key_bindings["Tab"] =9;
-		key_bindings["Any"] =0;	/*	EXPERIMENTAL	*/
-		key_bindings["Esc"] =27;
+		key_bindings[FIM_KBD_RIGHT]=4414235;
+		key_bindings[FIM_KBD_UP]=4283163;
+		key_bindings[FIM_KBD_DOWN]=4348699;
+		key_bindings[FIM_KBD_PAGEDOWN]=2117491483;
+		key_bindings[FIM_KBD_PAGEUP]=2117425947;
+		key_bindings[FIM_KBD_ENTER]=10;
+		key_bindings[FIM_KBD_BACKSPACE_]=127;
+		key_bindings[FIM_KBD_BACKSPACE]=127;
+		key_bindings[FIM_KBD_DEL]=2117294875;
+		key_bindings[FIM_KBD_INS]=2117229339;
+		key_bindings[FIM_KBD_HOME]=2117163803;
+		key_bindings[FIM_KBD_END] =2117360411;
+		key_bindings[FIM_KBD_TAB] =9;
+		key_bindings[FIM_KBD_ANY] =0;	/* EXPERIMENTAL */
+		key_bindings[FIM_KBD_ESC] =27;
 
-		exitBinding = key_bindings["Enter"];	/*  Enter will terminate loops */
+		exitBinding = key_bindings[FIM_KBD_ENTER];	/*  Enter will terminate loops */
 //		key_bindings[" "]=' ';
 //		key_bindings["."]='.';
 //		key_bindings[","]=',';
