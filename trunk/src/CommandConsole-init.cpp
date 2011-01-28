@@ -2,7 +2,7 @@
 /*
  CommandConsole-init.cpp : Fim console initialization
 
- (c) 2010-2010 Michele Martone
+ (c) 2010-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ namespace fim
 		int xres=0,yres=0;
 
 #ifndef FIM_WITH_NO_FRAMEBUFFER
-		if( device=="fb" )
+		if( device==FIM_DDN_INN_FB )
 		{
 			extern char *default_fbdev,*default_fbmode;
 			extern int default_vt;
@@ -62,7 +62,7 @@ namespace fim
 			displaydevice=new FramebufferDevice(mc);
 			if(!displaydevice || ((FramebufferDevice*)displaydevice)->framebuffer_init()){cleanup();return -1;}
 			ffdp=((FramebufferDevice*)displaydevice);
-			setVariable(FIM_VID_DEVICE_DRIVER, "fbdev");
+			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_FB);
 			if(default_fbdev)ffdp->set_fbdev(default_fbdev);
 			if(default_fbmode)ffdp->set_fbmode(default_fbmode);
 			if(default_vt!=-1)ffdp->set_default_vt(default_vt);
@@ -72,33 +72,33 @@ namespace fim
 
 
 		#ifdef FIM_WITH_LIBSDL
-		if(device=="sdl")
+		if(device==FIM_DDN_INN_SDL)
 		{
 			DisplayDevice *sdld=NULL;
 			sdld=new SDLDevice(mc); if(sdld && sdld->initialize(key_bindings)!=0){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice==NULL)
 			{
 				displaydevice=sdld;
-				setVariable(FIM_VID_DEVICE_DRIVER, "sdl");
+				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_SDL);
 			}
 		}
 		#endif
 
 		#ifdef FIM_WITH_CACALIB
-		if(device=="caca")
+		if(device==FIM_DDN_INN_CACA)
 		{
 			DisplayDevice *cacad=NULL;
 			cacad=new CACADevice(mc); if(cacad && cacad->initialize(key_bindings)!=0){delete cacad ; cacad=NULL;}
 			if(cacad && displaydevice==NULL)
 			{
 				displaydevice=cacad;
-				setVariable(FIM_VID_DEVICE_DRIVER, "cacalib");
+				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_CACA);
 			}
 		}
 		#endif
 
 		#ifdef FIM_WITH_AALIB
-		if(device=="aa")
+		if(device==FIM_DDN_INN_AA)
 		{
 		aad=new AADevice(mc);
 
@@ -106,9 +106,9 @@ namespace fim
 		if(aad && displaydevice==NULL)
 		{
 			displaydevice=aad;
-			setVariable(FIM_VID_DEVICE_DRIVER, "aalib");
+			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_AA);
 
-#if 1
+#if FIM_WANT_SCREEN_KEY_REMAPPING_PATCH
 			/*
 			 * FIXME
 			 *
@@ -116,13 +116,13 @@ namespace fim
 			 * weird, isn't it ?
 			 * Regard this as a weird patch.
 			 * */
-			const char * term = fim_getenv("TERM");
+			const char * term = fim_getenv(FIM_CNS_TERM_VAR);
 			if(term && string(term).re_match("screen"))
 			{
-				key_bindings["Left"]-=3072;
-				key_bindings["Right"]-=3072;
-				key_bindings["Up"]-=3072;
-				key_bindings["Down"]-=3072;
+				key_bindings[FIM_KBD_LEFT]-=3072;
+				key_bindings[FIM_KBD_RIGHT]-=3072;
+				key_bindings[FIM_KBD_UP]-=3072;
+				key_bindings[FIM_KBD_DOWN]-=3072;
 			}
 #endif
 		}
@@ -133,7 +133,7 @@ namespace fim
 		if( displaydevice==NULL)
 		{
 			displaydevice=&dummydisplaydevice;
-			setVariable(FIM_VID_DEVICE_DRIVER, "dummy");
+			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_DUMB);
 		}
 
 		xres=displaydevice->width(),yres=displaydevice->height();
@@ -162,7 +162,7 @@ namespace fim
 		/*
 		 * TODO: exceptions should be launched here in case ...
 		 * */
-		addCommand(new Command(fim::string("window" ),fim::string("manipulates the window system windows"), window,&Window::cmd));
+		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string("manipulates the window system windows"), window,&Window::cmd));
 #else
 		try
 		{
@@ -181,18 +181,18 @@ namespace fim
 		 * 	the default configuration file, and user invoked scripts.
 		 */
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
-//		executeFile("/etc/fimrc");	//GLOBAL DEFAULT CONFIGURATION FILE
+//		executeFile(FIM_CNS_SYS_RC_FILEPATH);	//GLOBAL DEFAULT CONFIGURATION FILE
 
 #ifndef FIM_NOFIMRC
   #ifndef FIM_NOSCRIPTING
 		char rcfile[FIM_PATH_MAX];
-		const char *e = fim_getenv("HOME");
+		const char *e = fim_getenv(FIM_CNS_HOME_VAR);
 
 		/* default, hard-coded configuration first */
 		if(getIntVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC)==1 )
 		{
-			if(is_file("/etc/fimrc"))
-				if(-1==executeFile("/etc/fimrc"));
+			if(is_file(FIM_CNS_SYS_RC_FILEPATH))
+				if(-1==executeFile(FIM_CNS_SYS_RC_FILEPATH));
 		}
 		
 		/* default, hard-coded configuration first */
@@ -206,15 +206,15 @@ namespace fim
     #endif		
 		}
 
-		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/.fimrc")+2
+		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/"FIM_CNS_USR_RC_FILEPATH)+2
 		{
 			strcpy(rcfile,e);
-			strcat(rcfile,"/.fimrc");
+			strcat(rcfile,"/"FIM_CNS_USR_RC_FILEPATH);
 			if(getIntVariable(FIM_VID_NO_RC_FILE)==0 )
 			{
 				if(
 					(!is_file(rcfile) || -1==executeFile(rcfile))
-				&&	(!is_file("/etc/fimrc") || -1==executeFile("/etc/fimrc"))
+				&&	(!is_file(FIM_CNS_SYS_RC_FILEPATH) || -1==executeFile(FIM_CNS_SYS_RC_FILEPATH))
 				  )
   #endif
 #endif
@@ -238,9 +238,9 @@ namespace fim
 #endif		
 #ifdef FIM_AUTOCMDS
 		if(postInitCommand!=fim::string(""))
-			autocmd_add("PreExecutionCycle","",postInitCommand.c_str());
+			autocmd_add(FIM_ACM_PREEXECUTIONCYCLE,"",postInitCommand.c_str());
 		if(postExecutionCommand!=fim::string(""))
-			autocmd_add("PostExecutionCycle","",postExecutionCommand.c_str());
+			autocmd_add(FIM_ACM_POSTEXECUTIONCYCLE,"",postExecutionCommand.c_str());
 #endif
 		/*
 		 *	FIXME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
