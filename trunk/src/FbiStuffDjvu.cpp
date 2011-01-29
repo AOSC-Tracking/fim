@@ -2,7 +2,7 @@
 /*
  FbiStuffDjvu.cpp : fim functions for decoding DJVU files
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -129,7 +129,7 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 	
 	i->width  = ds->prect.w;
 	i->height = ds->prect.h;
-	i->dpi    = 72; /* FIXME */
+	i->dpi    = FIM_RENDERING_DPI; /* FIXME */
 
 //        ds->pf = ddjvu_format_create (DDJVU_FORMAT_RGBMASK32, 4, masks);
 	ds->pf = ddjvu_format_create (DDJVU_FORMAT_RGB24, 0, 0);

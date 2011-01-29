@@ -2,7 +2,7 @@
 /*
  FbiStuffMatrixMarket.cpp : fim functions for decoding Matrix Market files
 
- (c) 2009 Michele Martone
+ (c) 2009-2011 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -60,14 +60,14 @@ mm_init(FILE *fp, char *filename, unsigned int page,
 	size_t rows,cols;
 	struct mm_state_t *h;
 	h = (struct mm_state_t *)fim_calloc(sizeof(*h),1);
-	int rows_max=1024,cols_max=1024;
+	int rows_max=FIM_RENDERING_MAX_ROWS,cols_max=FIM_RENDERING_MAX_COLS;
 //	int rows_max=2048,cols_max=2048;
 
 	if(!h)goto err;
     	h->first_row_dst=NULL;
 
 	h->filename=NULL;
-	i->dpi    = 72; /* FIXME */
+	i->dpi    = FIM_RENDERING_DPI; /* FIXME */
 	i->npages = 1; // uhm
 
 	if(vbr_util_get_matrix_dimensions(filename, &cols, &rows))

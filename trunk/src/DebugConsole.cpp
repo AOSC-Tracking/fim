@@ -2,7 +2,7 @@
 /*
  DebugConsole.cpp : Fim virtual console display.
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -201,13 +201,13 @@ rerr:
 			/*
 			 * We initialize the console
 			 * */
-			int BS=1024;	//block size of 1k
+			int BS=FIM_CONSOLE_BLOCKSIZE;	//block size of 1k
 
-			bsize = BS * 128;
+			bsize = BS * FIM_CONSOLE_DEF_WIDTH;
 			lsize = BS *   8;
 
-			lwidth=lw<=0?128:lw;
-			rows=r<=0?24:r;
+			lwidth=lw<=0?FIM_CONSOLE_DEF_WIDTH:lw;
+			rows=r<=0?FIM_CONSOLE_DEF_ROWS:r;
 
 			cline =0;
 			ccol  =0;
@@ -304,7 +304,7 @@ rerr:
 			/*
 			 * We grow a specified amount both the line count and the line buffer.
 			 * */
-			return grow(1024,8*1024);
+			return grow(FIM_CONSOLE_BLOCKSIZE,8*FIM_CONSOLE_BLOCKSIZE);
 		}
 
 		int MiniConsole::grow(int glines, int gbuffer)

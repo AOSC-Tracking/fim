@@ -2,7 +2,7 @@
 /*
  CommandConsole-cmd.cpp : Fim console commands
 
- (c) 2009-2009 Michele Martone
+ (c) 2009-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,13 +32,13 @@ namespace fim
 		 *	is associated to the user supplied actin (be it a command, alias, etc..)
 		 *	FIX ME
 		 */
-		const char *kerr="bind : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
+		const char *kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
 		if(args.size()==0)return getBindingsList();
 		if(args.size()==1)
 		{
 			//first arg should be a valid key code
 			fim::string binding_expanded;
-			binding_expanded+="bind '";
+			binding_expanded+=FIM_FLT_BIND" '";
 			binding_expanded+=args[0];
 			binding_expanded+="' '";
 			binding_expanded+=bindings[key_bindings[args[0]]];
@@ -64,7 +64,7 @@ namespace fim
 		 *	IDEAS : multiple unbindings ?
 		 *	maybe you should made surjective the binding_keys mapping..
 		 */
-		if(args.size()!=1)return "unbind : specify the key to unbind\n";
+		if(args.size()!=1)return FIM_FLT_UNBIND" : specify the key to unbind\n";
 		return unbind(args[0]);
 	}
 
@@ -151,7 +151,7 @@ namespace fim
 		/*
 		 * a command to echo arguments, for debug and learning purposes
 		 */
-		if(args.size()==0)fim::cout<<"echo command\n";
+		if(args.size()==0)fim::cout<<FIM_FLT_ECHO" command\n";
 		for(size_t i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
 		return "";
 	}
@@ -279,7 +279,7 @@ namespace fim
 		 * */
 		size_t i;
 		FILE* tfd;
-		char buf[1024];int rc=0;
+		char buf[FIM_PIPE_BUFSIZE];int rc=0;
 		for(i=0;i<args.size();++i)
 		if( (tfd=popen(args[i].c_str(),"r")) != NULL )
 		{	
@@ -287,7 +287,7 @@ namespace fim
 	
 			/* pipes are not seekable : this breaks down all the Fim file handling mechanism */
 			/*
-			while( (rc=read(0,buf,1024))>0 ) fwrite(buf,rc,1,tfd);
+			while( (rc=read(0,buf,FIM_PIPE_BUFSIZE))>0 ) fwrite(buf,rc,1,tfd);
 			rewind(tfd);
 			*/
 			/*
@@ -295,7 +295,7 @@ namespace fim
 			 * but it would require to rewrite much of the file loading stuff
 			 * (which is quite fbi's untouched stuff right now)
 			 * */
-			Image* stream_image=new Image("/dev/stdin",tfd);
+			Image* stream_image=new Image(FIM_LINUX_STDIN_FILE,tfd);
 			// DANGEROUS TRICK!
 			browser.set_default_image(stream_image);
 			browser.push("");
@@ -422,7 +422,7 @@ namespace fim
 		 * removes the actions assigned to the specified aliases,
 		 */
 		if(args.size()<1)
-			return "unalias : please specify an alias to remove or all (-a)!\n";
+			return FIM_FLT_UNALIAS" : please specify an alias to remove or all (-a)!\n";
 
 		if(args[0]==string("-a"))
 		{
@@ -436,9 +436,9 @@ namespace fim
 		{
 			aliases.erase(args[i]);
 			return "";
-			/* fim::string("unalias : \"")+args[i]+fim::string("\" successfully unaliased.\n"); */
+			/* fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" successfully unaliased.\n"); */
 		}
-		else return fim::string("unalias : \"")+args[i]+fim::string("\" there is not such alias.\n");
+		else return fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" there is not such alias.\n");
 		return "";
 	}
 
@@ -482,7 +482,7 @@ namespace fim
 			/*
 			 * FIXME : fim::string+=<int> is bugful
 			 * */
-			res+="usleep '";
+			res+=FIM_FLT_USLEEP" '";
 //			res+=(int)recorded_actions[i].second;
 			res+=ss;
 			res+="';\n";

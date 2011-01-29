@@ -103,7 +103,7 @@ namespace fim
 	}
 #endif
 
-	Browser::Browser(CommandConsole &cc):nofile(""),commandConsole(cc)
+	Browser::Browser(CommandConsole &cc):nofile(FIM_CNS_EMPTY_STRING),commandConsole(cc)
 	{	
 		/*
 		 * we initialize to no file the current file name
@@ -312,9 +312,9 @@ namespace fim
 		 * scales the image by a user specified factor
 		 */
 		double multiscale;
-		if(args.size()==0)return "";
+		if(args.size()==0)goto nop;
 		multiscale=fim_atof(args[0].c_str());
-		if(multiscale==0.0)return "";
+		if(multiscale==0.0)goto nop;
 		if(c_image())
 		{
 			fim::string c=current();
@@ -326,6 +326,7 @@ namespace fim
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
+nop:
 		return "";
 	}
 	
@@ -335,9 +336,9 @@ namespace fim
 		 * increments the scale positively
 		 */
 		double deltascale;
-		if(args.size()==0)return "";
+		if(args.size()==0)goto nop;
 		deltascale=fim_atof(args[0].c_str());
-		if(deltascale==0.0)return "";
+		if(deltascale==0.0)goto nop;
 		if(strstr(args[0].c_str(),"%"))deltascale*=.01;
 		if(c_image())
 		{
@@ -350,6 +351,7 @@ namespace fim
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
+nop:
 		return "";
 	}
 
@@ -359,9 +361,9 @@ namespace fim
 		 * scales the image to a certain scale factor
 		 */
 		double newscale;
-		if(args.size()==0)return "";
+		if(args.size()==0)goto nop;
 		newscale=fim_atof(args[0].c_str());
-		if(newscale==0.0)return "";
+		if(newscale==0.0)goto nop;
 		if(strstr(args[0].c_str(),"%"))newscale*=.01;
 		if(c_image())
 		{
@@ -374,6 +376,7 @@ namespace fim
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
+nop:
 		return "";
 	}
 	
@@ -479,10 +482,12 @@ namespace fim
 		/*
 		 */
 		if(!image() )
-			return "";
+			goto nop;
 
 		if(image() && image()->negate())
-			return "";
+			goto nop;
+nop:
+		return "";
 	}
 
 	fim::string Browser::display_status(const char *l,const char *r)
@@ -582,7 +587,7 @@ namespace fim
 		 * reload the current filename
 		 * */
 		if(n_files())
-		return reload(args_t());
+			return reload(args_t());
 		return "";
 	}
 
@@ -892,7 +897,7 @@ namespace fim
 		 * goes to the next filename-matching file
 		 */
 		size_t i,j,c=current_n(),s=flist.size();
-		if( args.size() < 1 || s < 1 )return "";
+		if( args.size() < 1 || s < 1 )goto nop;
 		for(j=0;j<s;++j)
 		{
 			last_regexp=args[0];
@@ -908,7 +913,7 @@ namespace fim
 				autocmd_exec(FIM_ACM_POSTGOTO,c);
 				if(!commandConsole.inConsole())
 					commandConsole.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
-				return "";
+				goto nop;
 #endif
 			}
 		}
@@ -917,7 +922,7 @@ namespace fim
 			commandConsole.set_status_bar((fim::string("sorry, no filename matches \"")+
 						args[0]+
 						fim::string("\"")).c_str(),NULL);
-		
+nop:
 		return "";
 	}
 
@@ -1006,7 +1011,10 @@ namespace fim
 		 * p.s.: n<>0
 		 */
 		int N=flist.size();
-		if(!N)return "";
+		if(!N)
+			goto nop;
+		else
+		{
 		cp+=n;
 		cp%=N;
 		cp+=N;
@@ -1014,7 +1022,9 @@ namespace fim
 		if(!cp)cp=N;
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
-		fim::string result = n_files()?(flist[current_n()]):nofile;
+		//fim::string result = n_files()?(flist[current_n()]):nofile;
+		}
+nop:
 		return "";
 	}
 	
@@ -1074,7 +1084,7 @@ namespace fim
 			}
 			cp=cp%(flist.size()+1);// new
 			setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
-			return "";
+			goto nop;
 		}
 		else
 		{
@@ -1087,6 +1097,7 @@ namespace fim
 			return "";*/
 			return pop_current();
 		}
+nop:
 		return "";
 	}
 

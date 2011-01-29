@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -512,7 +512,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt, int try_b
      * Like the ones when running fim under screen.
      * Like the ones when running fim under X. :)
      * */
-    char   fbdev[16];
+    char   fbdev[FIM_FBDEV_FILE_MAX_CHARS];
     struct vt_stat vts;
 
     dev_init();

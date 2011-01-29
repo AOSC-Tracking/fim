@@ -706,15 +706,15 @@ namespace fim
 			 */
 			close(pipedesc[1]);
 			yyparse();
-			return "";
+			goto ok;
 		}
-		if(cmd=="usleep")
+		if(cmd==FIM_FLT_USLEEP)
 		{
 			fim_tus_t useconds;
 			if(args.size()>0) useconds=atoi(args[0].c_str());
 			else useconds=1;
 			usleep(useconds);
-			return "";
+			goto ok;
 		}else
 		if(cmd==FIM_FLT_SLEEP)
 		{
@@ -732,7 +732,7 @@ namespace fim
 				//while(seconds>0 && catchLoopBreakingCommand(seconds--))sleep(1);
 				catchLoopBreakingCommand(seconds);
 #endif
-			return "";
+			goto ok;
 		}else
 		if(cmd==FIM_FLT_ALIAS)
 		{
@@ -743,7 +743,7 @@ namespace fim
 				aargs.push_back(Arg(args[i]));
 			}
 			cout << this->alias(aargs) << "\n";
-			return "";
+			goto ok;
 		}
 		else
 		{
@@ -770,7 +770,7 @@ namespace fim
 				 * see also http://gcc.gnu.org/onlinedocs/cpp/index.html
 				 */
 				cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
-				return "";
+				goto ok;
 			}
 			else
 			{
@@ -778,11 +778,12 @@ namespace fim
 					std::cout << "in " << cmd << ":\n";
 				
 				cout << c->execute(args);
-
-				return "";
+				goto ok;
 			}
 		}
 		return "If you see this string, please report it to the program maintainer :P\n";
+ok:
+		return "";
 	}
 
 	int CommandConsole::catchLoopBreakingCommand(fim_ts_t seconds)
@@ -933,7 +934,7 @@ namespace fim
 			{
 				*prompt=FIM_SYM_PROMPT_NUL;
 				fim_key_t c;
-				int r;char buf[64];
+				int r;char buf[FIM_VERBOSE_KEYS_BUFSIZE];
 //				int c=getchar();
 //				int c=fgetc(stdin);
 				/*
@@ -1127,9 +1128,9 @@ namespace fim
 		int r;
 		char buf[FIM_STREAM_BUFSIZE];	// TODO : buffer too small
 		fim::string cmds;
-		if(fd==NULL)return -1;
+		if(fd==NULL)return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
-		if(r==-1)return -1;
+		if(r==-1)return FIM_ERR_GENERIC;
 		return cmds;
 	}
 	
@@ -1144,9 +1145,9 @@ namespace fim
 		int r;
 		char buf[FIM_STREAM_BUFSIZE];
 		fim::string cmds;
-		if(fd==NULL)return -1;
+		if(fd==NULL)return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
-		if(r==-1)return -1;
+		if(r==-1)return FIM_ERR_GENERIC;
 		execute(cmds.c_str(),0,1);
 		return 0;
 	}
@@ -1377,15 +1378,17 @@ namespace fim
 		 */
 		if(cmd==FIM_CNS_EMPTY_STRING)
 		{
-			cout << "can't add empty autocommand\n";return "";
+			cout << "can't add empty autocommand\n";
+			goto ok;
 		}
 		for(size_t i=0;i<autocmds[event][pat].size();++i)
 		if((autocmds[event][pat][i])==cmd)
 		{
 			cout << "autocommand "<<cmd<<" already specified for event \""<<event<<"\" and pattern \""<<pat<<"\"\n";
-			return "";
+			goto ok;
 		}
 		autocmds[event][pat].push_back(cmd);
+ok:
 		return "";
 	}
 
@@ -1546,7 +1549,7 @@ namespace fim
 		};
 		regfree(&regex);
 		return false;
-		return true;
+		//return true;
 	}
 
 	bool CommandConsole::redisplay()

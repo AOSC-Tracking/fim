@@ -320,6 +320,7 @@ namespace fim
 #define FIM_CNS_SCALEFACTOR	 1.322f
 #define FIM_CNS_SCALEDELTA	 0.01f
 #define FIM_CNS_EMPTY_STRING	""
+#define FIM_CNS_DEFAULT_IFNAME	FIM_CNS_EMPTY_STRING
 #define FIM_CNS_SLASH_STRING	"/"
 #define FIM_CNS_FP_ZERO		0.0
 #define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
@@ -348,6 +349,8 @@ namespace fim
 #define FIM_SYM_PROMPT_SLASH	'/'
 #define FIM_SYM_PROMPT_NUL	'\0'
 #define FIM_SYM_CHAR_NUL	'\0'
+#define FIM_SYM_FLIPCHAR	'F'
+#define FIM_SYM_MIRRCHAR	'M'
 
 /*
  * Fim Autocommands
@@ -377,6 +380,8 @@ namespace fim
 #define FIM_ACM_PREEXECUTIONCYCLE	"PreExecutionCycle"
 #define FIM_ACM_PREEXECUTIONCYCLEARGS	"PreExecutionCycleArgs"
 #define FIM_ACM_POSTEXECUTIONCYCLE	"PostExecutionCycle"
+#define FIM_ACM_PREWINDOW	"PreWindow"	// TODO: in Window.cpp
+#define FIM_ACM_POSTWINDOW	"PostWindow"	// TODO: in Window.cpp
 //#define FIM_ACM_PREROTATE	"PreRotate"
 //#define FIM_ACM_POSTROTATE	"PostRotate"
 
@@ -428,6 +433,7 @@ namespace fim
 #define FIM_FLT_SORT			"sort" /* in vim */
 #define FIM_FLT_SYSTEM			"system" /* not in vim */
 #define FIM_FLT_SLEEP			"sleep" /* in vim */
+#define FIM_FLT_USLEEP			"usleep" /* not in vim */
 #define FIM_FLT_UNALIAS			"unalias" /* not in vim */
 #define FIM_FLT_UNBIND			"unbind" /* not in vim */
 #define FIM_FLT_WHILE			"while" /* in vim */
@@ -447,9 +453,23 @@ namespace fim
  */
 #define FIM_WANT_SCREEN_KEY_REMAPPING_PATCH 1
 #define FIM_STREAM_BUFSIZE	4096
+#define FIM_PIPE_BUFSIZE	1024
+#define FIM_CONSOLE_BLOCKSIZE	1024
+#define FIM_CONSOLE_DEF_WIDTH	128
+#define FIM_BITRENDERING_DEF_WIDTH	1024
+#define FIM_RENDERING_DPI	72
+#define FIM_RENDERING_MAX_ROWS	1024
+#define FIM_RENDERING_MAX_COLS	1024
+#define FIM_CONSOLE_DEF_ROWS	24
+#define FIM_VERBOSE_KEYS_BUFSIZE	64
 #define FIM_FILE_BUF_SIZE 	(1024*256)
+#define FIM_ATOX_BUFSIZE 	(32)
+#define FIM_STATUSLINE_BUF_SIZE 	(128)
+#define FIM_FBI_PPM_LINEBUFSIZE 	(1024)
 #define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
-
+#define FIM_LINUX_STDIN_FILE "/dev/stdin"
+#define FIM_LINUX_RAND_FILE "/dev/urandom"
+#define FIM_FBDEV_FILE_MAX_CHARS 16
 
 /*
  * Some Fim internals flags.
@@ -458,6 +478,12 @@ namespace fim
 #define FIM_FLAG_FLIP 2
 #define FIM_FLAG_RGB2GRAY 4
 #define FIM_FLAG_RGB2GRAYGRAYGRAY 8
+
+/*
+ * Some Fim error codes.
+ */
+#define FIM_ERR_NO_ERROR	0
+#define FIM_ERR_GENERIC	-1
 
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf

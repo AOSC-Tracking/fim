@@ -530,7 +530,7 @@ namespace fim
 		 * the variable name supplied is used as a key to the variables hash
 		 * */
 #ifdef FIM_NAMESPACES
-		if( varname[1]==':' )
+		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
 			try{	
 			//a specific namespace was selected!
@@ -588,7 +588,6 @@ namespace fim
 		Var Namespace::getVariable(const fim::string &varname)const
 		{
 			// this scope was selected
-			//return variables[varname];
 			variables_t::const_iterator vi=variables.find(varname);
 			if(vi!=variables.end()) return vi->second;
 			else return Var(0);
@@ -601,7 +600,6 @@ namespace fim
 			 * */
 //			cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
 //			cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
-//			return variables[varname].getFloat();
 			variables_t::const_iterator vi=variables.find(varname);
 			if(vi!=variables.end()) return vi->second.getString();
 			else return FIM_CNS_EMPTY_FP_VAL;
@@ -613,7 +611,6 @@ namespace fim
 			 * the variable name supplied is used as a key to the variables hash
 			 * */
 //			std::cout << "NSGSV:"<<varname<<"\n";
-			//return variables[varname].getString();
 			variables_t::const_iterator vi=variables.find(varname);
 			if(vi!=variables.end())
 			{
@@ -643,12 +640,12 @@ namespace fim
 			return cc.getIntVariable(varname);
 		}
 
-		float Namespace::getGlobalFloatVariable(const fim::string &varname)
+		float Namespace::getGlobalFloatVariable(const fim::string &varname)const
 		{
 			return cc.getFloatVariable(varname);
 		}
 
-		fim::string Namespace::getGlobalStringVariable(const fim::string &varname)
+		fim::string Namespace::getGlobalStringVariable(const fim::string &varname)const
 		{
 			return cc.getStringVariable(varname);
 		}
