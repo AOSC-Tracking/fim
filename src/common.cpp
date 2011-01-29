@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -335,7 +335,7 @@ int fim_rand()
 	 * Reading from     /dev/random could instead block.
 	 * */
 	unsigned int w;
-	if(pick_word("/dev/urandom",&w)==0) return (w%RAND_MAX);
+	if(pick_word(FIM_LINUX_RAND_FILE,&w)==0) return (w%RAND_MAX);// TODO: are we sure that RAND_MAX corresponds to FIM_LINUX_RAND_FILE ?
 	
 	srand(clock()); return rand();
 
@@ -395,7 +395,7 @@ int fim_rand()
 		};
 		regfree(&regex);
 		return false;
-		return true;
+		//return true;
 	}
 
 int strchr_count(const char*s, int c)
@@ -506,8 +506,8 @@ int swap_bytes_in_int(int in)
 	int b=sizeof(int),i=-1;
 	while(i++<b/2)
 	{
-	((char*)&out)[i]=((char*)&in)[b-i-1];
-	((char*)&out)[b-i-1]=((char*)&in)[i];
+		((char*)&out)[i]=((char*)&in)[b-i-1];
+		((char*)&out)[b-i-1]=((char*)&in)[i];
 	}
 	return out;
 }

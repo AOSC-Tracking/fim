@@ -42,7 +42,7 @@ namespace fim
 
 struct tiff_state {
     TIFF*          tif;
-    char           emsg[1024];
+    //char           emsg[1024];
     tdir_t         ndirs;     /* Number of directories                     */
                               /* (could be interpreted as number of pages) */
     uint32         width,height;

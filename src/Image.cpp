@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ namespace fim
                 invalid(0),
 		no_file(true),
 		fis(fim::string(fname_)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
-                fname     ("")
+                fname     (FIM_CNS_DEFAULT_IFNAME)
 
 	{
 		/*
@@ -288,6 +288,7 @@ namespace fim
 	{
 		/*
 		 * effective image rescaling
+		 * TODO: should rather be called "apply"
 		 * */
 #if FIM_BUGGED_RESCALE
 		return 0;
@@ -525,8 +526,8 @@ fim::string Image::getInfo()
 	//FIX ME !
 	if(!fimg)return "";
 
-	static char linebuffer[128];
-	char pagesinfobuffer[128];
+	static char linebuffer[FIM_STATUSLINE_BUF_SIZE];
+	char pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	char imagemode[3],*imp;
 	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 	imp=imagemode;
@@ -542,12 +543,10 @@ fim::string Image::getInfo()
 	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
 	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 
-	if(flip  )*(imp++)='F';
-	if(mirror)*(imp++)='M';
-
-
-
+	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
+	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
 	*imp='\0';
+
 	if(fimg->i.npages>1)
 		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",page+1,fimg->i.npages);
 	else
@@ -710,6 +709,7 @@ fim::string Image::getInfo()
 			g=img->data[n+1];
 			b=img->data[n+2];
 			s=r+g+b;
+			d=( s - 3 * r ) * ( s - 3 * g ) * ( s - 3 * b );
 			d=d<0?-d:d;
 			if( d < th )
 			{

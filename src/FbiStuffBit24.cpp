@@ -2,7 +2,7 @@
 /*
  FbiStuffBit24.cpp : fbi functions for reading ELF files as they were raw 24 bit per pixel pixelmaps
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -66,7 +66,7 @@ bit24_init(FILE *fp, char *filename, unsigned int page,
     h->fp = fp;
     if(fseek(fp,0,SEEK_END)!=0) goto oops;
     if((h->flen=ftell(fp))==-1)goto oops;
-    i->width  = h->w = 1024;
+    i->width  = h->w = FIM_BITRENDERING_DEF_WIDTH;
     i->height = h->h = (h->flen+(h->w*3-1)) / ( h->w*3 ); // should pad
     return h;
  oops:

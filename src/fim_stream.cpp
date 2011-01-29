@@ -2,7 +2,7 @@
 /*
  fim_stream.cpp : Textual output facility
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,14 +41,14 @@ namespace fim
 
 		fim_stream& fim_stream::operator<<(float f)
 		{
-			char s[32];sprintf(s,"%f",f);
+			char s[FIM_ATOX_BUFSIZE];sprintf(s,"%f",f);
 			*this<<(const char*)s;
 			return *this;
 		}
 
 		fim_stream& fim_stream::operator<<(int i)
 		{
-			char s[32];sprintf(s,"%d",i);
+			char s[FIM_ATOX_BUFSIZE];sprintf(s,"%d",i);
 			*this<<s;
 			return *this;
 		}
