@@ -475,7 +475,8 @@ void FramebufferDevice::svga_display_image_new(
 #ifndef min
 #define min(x,y) ((x)<(y)?(x):(y))
 #endif
-    int fb_fix_line_length=FB_MEM_LINE_OFFSET;
+    //int fb_fix_line_length=FB_MEM_LINE_OFFSET;
+    int fb_fix_line_length=fb_fix.line_length;
     if(flip) {	fb_fix_line_length*=-1; video += (min(img->i.height,dheight)-1)*(fb_fix.line_length);}
     /*flip patch*/
     /* FIXME : COMPLETE ME ... */
