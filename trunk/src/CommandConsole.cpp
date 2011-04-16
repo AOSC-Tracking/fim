@@ -1199,11 +1199,12 @@ ok:
 		 * whether the console should draw or not itself upon the arrival of textual output
 		 * */
 		//std::cout << s << " : " << (this->inConsole() )<< ( (s&&*s) ) << "\n";
-		return(	(	this->inConsole()	/* in the command line */
+		fim_bool_t sd=(	(	this->inConsole()	/* in the command line */
 				&& (s&&*s) 		/* actually some text to add */
 			) 
 			|| this->getIntVariable(FIM_VID_DISPLAY_CONSOLE)	/* or user requested for showing console */
 			);
+		return sd;
 	}
 
 	fim::string CommandConsole::get_aliases_list()const

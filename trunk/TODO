@@ -21,6 +21,20 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110202	and DICOM ? see libmdc2-dev / man medcon
+20110129	incongruences in FIM.TXT:
+		the system command is declared to be non active. this is wrong.
+		*0.5 does not work.  *"0.5" works instead. this is wrong.
+20110129	all of the scripts/rc scripts should be tested for compliance
+20110127	consider making the program ready for GNU gettext: http://www.gnu.org/software/hello/manual/gettext/index.html#Top
+20110126	could introduce a string identifying fimrc versions
+20110126	should make clear in the docs that appending commands at the end of .fimrc will not make execute these commands on image loading. (and state as example the autowidth issue).
+20110126	should write whether the fim language is case sensitive or not, or even set up a macro for this.
+20110117	need `man fimrc`
+20110117	could develop a "stack of windows" idea, for zooming or such stuff.
+20110108	use static_cast, for it is not ambiguous with conversions
+20110108	use google's cpplint for a cleaner code: http://google-styleguide.googlecode.com/svn/trunk/cpplint/cpplint.py 
+20110108	apply the 'explicit' keywords to constructors
 20101007	the use find_key_for_bound_cmd() should be avoided in status line update 
 20091220	consider distributing a font file or simply to embed one in the sources, with an eye on portability
 20091219	man2html missing fix (for developers)

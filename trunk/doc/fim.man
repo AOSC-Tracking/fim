@@ -1,5 +1,5 @@
 .\" $Id$
-.TH fim 1 "(c) 2007-2009 Michele Martone"
+.TH fim 1 "(c) 2007-2011 Michele Martone"
 .\" .TH fim 1
 .SH NAME
 fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved

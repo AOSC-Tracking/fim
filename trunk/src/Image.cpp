@@ -189,6 +189,7 @@ namespace fim
 		setVariable(FIM_VID_ASCALE,ascale);
 		setVariable(FIM_VID_ANGLE , angle);
 		setVariable(FIM_VID_NEGATED , 0);
+		setVariable(FIM_VID_FILENAME,fname.c_str());
 #endif
 
 		setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg->i.height);

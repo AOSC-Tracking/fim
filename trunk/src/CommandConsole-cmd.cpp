@@ -366,6 +366,21 @@ namespace fim
 		 * executes the shell commands given in the arguments,
 		 * one by one, and returns the (collated) standard output
 		 * */
+#if FIM_WANT_SINGLE_SYSTEM_INVOCATION
+		/* 20110302 FIXME: inefficient */
+		fim::string cc="";
+		for(size_t i=0;i<args.size();++i)
+		{
+			cc+=args[i];
+			cc+=" ";
+		}
+		if(args.size())
+		{
+			FILE* fd=popen(cc.c_str(),"r");
+			cout << readStdFileDescriptor(fd);
+		       	pclose(fd);
+		}
+#else
 		for(size_t i=0;i<args.size();++i)
 		{
 			FILE* fd=popen(args[i].c_str(),"r");
@@ -377,6 +392,7 @@ namespace fim
 			cout << readStdFileDescriptor(fd);
 			pclose(fd);
 		}
+#endif
 #if 0
 		for(size_t i=0;i<args.size();++i)
 		{
