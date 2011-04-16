@@ -218,6 +218,9 @@ namespace fim
 /*
  * Fim language variable identifiers, with their help strings.
  * */
+//#define FIM_VID_NEWLINE 			"_newline"	/* "" */
+//#define FIM_VID_TAB 				"_tab"	/* "" */
+//#define FIM_VID_RANDOM 				"random"	/* "" */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "if nonzero : if 1, will force loading of images as pixelmaps of bits; if 24, will force loading of images as 24 bit pixelmaps" */
 #define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "informations on current cache status" */
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "if 1, will display the output console" */
@@ -452,6 +455,9 @@ namespace fim
  * Some Fim compilation defaults
  */
 #define FIM_WANT_SCREEN_KEY_REMAPPING_PATCH 1
+#define FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE 0
+#define FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE 1
+#define FIM_WANT_SINGLE_SYSTEM_INVOCATION 1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_PIPE_BUFSIZE	1024
 #define FIM_CONSOLE_BLOCKSIZE	1024

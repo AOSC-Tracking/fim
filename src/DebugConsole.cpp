@@ -58,7 +58,26 @@ namespace fim
 			else
 				return -1;// unsupported combination
 			
-			if(maxcols<1)return -1;
+			if(maxcols<1)
+			{
+#if FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE
+				if(maxcols==0)
+				{
+					// a fixup for the dumb console
+					int n=1+line[l]-line[f];
+					char*buf=NULL;
+					if(n>0 && (buf=(char*)fim_malloc(n))!=NULL)
+					{
+						strncpy(buf,line[f],n);
+						buf[n-1]='\0';
+						cc.displaydevice->fs_puts(cc.displaydevice->f,0,0,(unsigned char*)buf);
+						fim_free(buf);
+					}
+				}
+				else
+#endif
+					return -1;
+			}
 
 			char *buf = (char*) fim_malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
 			if(!buf)return -1;
@@ -115,6 +134,14 @@ namespace fim
 			int nl,ol=cline;
 			char *cs=NULL;/* using co would mean provoking the compiler */
 
+#if FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE
+			if(0==cc.displaydevice->get_chars_per_column())
+			{
+				// we display input as soon as it received.
+				if(this->getGlobalIntVariable(FIM_VID_DISPLAY_CONSOLE))
+					cc.displaydevice->fs_puts(cc.displaydevice->f,0,0,(unsigned char*)cso);
+			}
+#endif
 			cs=dupstr(cso);
 
 			if(!cs)goto rerr;
