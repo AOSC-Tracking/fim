@@ -342,7 +342,7 @@ namespace fim
 		addCommand(new Command(fim::string("auto_height_scale" ),fim::string("scale the image so that it fits vertically in the screen" ),&browser,&Browser::auto_height_scale));
 		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string("binds some keyboard shortcut to an action"),this,&CommandConsole::bind));
 		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string("terminates the program"),this,&CommandConsole::quit));
-#ifndef FIM_NOSCRIPTING
+#ifndef FIM_WANT_NOSCRIPTING
 		addCommand(new Command(fim::string(FIM_FLT_EXEC),fim::string("executes script files"),this,&CommandConsole::executeFile));
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_ECHO),fim::string("echoes its arguments"),this,&CommandConsole::echo));
@@ -1758,7 +1758,7 @@ ok:
 		return browser.push(nf);
 	}
 
-#ifndef FIM_NOSCRIPTING
+#ifndef FIM_WANT_NOSCRIPTING
 	bool CommandConsole::push_scriptfile(const fim::string ns)
 	{
 		/*
@@ -1807,7 +1807,7 @@ ok:
 	fim_err_t CommandConsole::save_history()
 	{
 #ifndef FIM_NOFIMRC
-  #ifndef FIM_NOSCRIPTING
+  #ifndef FIM_WANT_NOSCRIPTING
     #ifdef FIM_USE_READLINE
 		/* default, hard-coded configuration first */
 		if(getIntVariable(FIM_VID_SAVE_FIM_HISTORY)==1 )
@@ -1834,7 +1834,7 @@ ok:
 	fim_err_t CommandConsole::load_history()
 	{
 #ifndef FIM_NOFIMRC
-  #ifndef FIM_NOSCRIPTING
+  #ifndef FIM_WANT_NOSCRIPTING
     #ifdef FIM_USE_READLINE
 		/* default, hard-coded configuration first */
 		if(getIntVariable(FIM_VID_LOAD_FIM_HISTORY)==1 )

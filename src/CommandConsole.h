@@ -149,7 +149,7 @@ class CommandConsole
 	private:
 	char prompt[2];
 
-#ifndef FIM_NOSCRIPTING
+#ifndef FIM_WANT_NOSCRIPTING
 	args_t scripts;		//scripts to execute : FIX ME PRIVATE
 #endif
 
@@ -195,7 +195,7 @@ class CommandConsole
 	bool push(const fim::string nf);
 	fim_err_t executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd);
-#ifndef FIM_NOSCRIPTING
+#ifndef FIM_WANT_NOSCRIPTING
 	bool push_scriptfile(const fim::string ns);
 	bool with_scriptfile()const;
 	fim::string executeFile(const args_t &args);

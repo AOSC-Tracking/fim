@@ -184,7 +184,7 @@ namespace fim
 //		executeFile(FIM_CNS_SYS_RC_FILEPATH);	//GLOBAL DEFAULT CONFIGURATION FILE
 
 #ifndef FIM_NOFIMRC
-  #ifndef FIM_NOSCRIPTING
+  #ifndef FIM_WANT_NOSCRIPTING
 		char rcfile[FIM_PATH_MAX];
 		const char *e = fim_getenv(FIM_CNS_HOME_VAR);
 
@@ -227,13 +227,13 @@ namespace fim
   #endif		
 				}
 #ifndef FIM_NOFIMRC
-  #ifndef FIM_NOSCRIPTING
+  #ifndef FIM_WANT_NOSCRIPTING
 			}
 
 		}
   #endif		
 #endif		
-#ifndef FIM_NOSCRIPTING
+#ifndef FIM_WANT_NOSCRIPTING
 		for(size_t i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
 #endif		
 #ifdef FIM_AUTOCMDS
