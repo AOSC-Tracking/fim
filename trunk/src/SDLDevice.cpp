@@ -273,6 +273,8 @@ std::cout.unsetf ( std::ios::hex );
 		key_bindings["F11"]=SDLK_F11;
 		key_bindings["F12"]=SDLK_F12;
 
+		SDL_ShowCursor(0);
+
 		// textual console reformatting
 		mc.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f->height));
 		mc.reformat(    width() /    f->width   );
@@ -473,6 +475,30 @@ std::cout.unsetf ( std::ios::hex );
 				return 0;
 
 				break;
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
+				//case SDL_MOUSEMOTION:
+				case SDL_MOUSEBUTTONDOWN:
+				//case SDL_MOUSEBUTTONUP:
+				{
+					int x,y;
+					Uint8 ms=SDL_GetMouseState(&x,&y);
+#if 0
+					cout << "mouse clicked at "<<x<<" "<<y<<" : "<< ((x>this->width()/2)?'r':'l') <<"; state: "<<ms<<"\n";
+					if(ms&SDL_BUTTON_RMASK) cout << "rmask\n";
+					if(ms&SDL_BUTTON_LMASK) cout << "lmask\n";
+					if(ms&SDL_BUTTON_MMASK) cout << "mmask\n";
+					if(ms&SDL_BUTTON_X1MASK) cout << "x1mask\n";
+					if(ms&SDL_BUTTON_X2MASK) cout << "x2mask\n";
+#endif
+					if(!mc.cc.inConsole())
+					{
+						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
+						if(ms&SDL_BUTTON_RMASK) { *c='b'; return 1; }
+						if(ms&SDL_BUTTON_MMASK) { *c='q'; return 1; }
+					}
+				}
+				break;
+#endif
 			}
 			return 0;
 		}

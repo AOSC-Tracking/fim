@@ -311,6 +311,8 @@ namespace fim
 #define FIM_KBD_PAGEUP			"PageUp"
 #define FIM_KBD_PAGEDOWN			"PageDown"
 #define FIM_KBD_COLON			":"
+#define FIM_KBD_MOUSE_LEFT			"MouseLeft"
+#define FIM_KBD_MOUSE_RIGHT			"MouseRight"
 
 /*
  * Fim Constants
@@ -454,6 +456,7 @@ namespace fim
 /*
  * Some Fim compilation defaults
  */
+#define FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT 1 /* unfinished, undocumented mouse support in sdl mode */
 #define FIM_WANT_SCREEN_KEY_REMAPPING_PATCH 1
 #define FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE 0
 #define FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE 1
