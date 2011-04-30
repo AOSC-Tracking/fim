@@ -1380,6 +1380,10 @@ dnl ==================
     	fi
 
 dnl ==================
+AH_TEMPLATE([FIM_WANT_FILENAME_MARK_AND_DUMP])
+AC_ARG_ENABLE(mark-and-dump, AC_HELP_STRING([--enable-mark-and-dump], [Fim will be capable of marking files while viewing and outputting their names on exit. (enabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_mark_and_dump=1 ; else fim_cv_want_mark_and_dump=0 ; fi ],[ fim_cv_want_mark_and_dump=1 ])
+AC_DEFINE_UNQUOTED([FIM_WANT_FILENAME_MARK_AND_DUMP], $fim_cv_want_mark_and_dump, [Fim will be capable of marking files while viewing and outputting their names on exit.])
+dnl ==================
 
 dnl uhmmmmmm : does not seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 

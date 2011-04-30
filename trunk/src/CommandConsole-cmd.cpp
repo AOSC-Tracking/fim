@@ -620,11 +620,14 @@ namespace fim
 		return "";
 	}
 
+
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
 	fim::string CommandConsole::markCurrentFile(const args_t& args)
 	{
 		markCurrentFile();
 		return "";
 	}
+#endif
 
 	fim::string CommandConsole::do_getenv(const args_t& args)
 	{
