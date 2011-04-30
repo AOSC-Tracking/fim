@@ -2,7 +2,7 @@
 /*
  SDLDevice.h : sdllib device Fim driver header file
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ class SDLDevice:public DisplayDevice
 	/* TEMPORARY */
 	inline void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
 
-	int get_input(unsigned int * c);
+	int get_input(fim_key_t * c);
 	fim_key_t catchInteractiveCommand(int seconds);
 	
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);

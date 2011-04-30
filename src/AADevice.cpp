@@ -2,7 +2,7 @@
 /*
  AADevice.cpp : aalib device Fim driver file
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -478,7 +478,7 @@
 		if(!finalized)finalize();// finalize should be called explicitly !
 	}
 
-	int AADevice::get_input(unsigned int * c)
+	int AADevice::get_input(fim_key_t * c)
 	{
 		*c = 0x0;	/* blank */
 		if(!c)return 0;
