@@ -135,7 +135,7 @@ namespace fim
 			char *cs=NULL;/* using co would mean provoking the compiler */
 
 #if FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE
-			if(0==cc.displaydevice->get_chars_per_column())
+			if(cc.displaydevice && 0==cc.displaydevice->get_chars_per_column())
 			{
 				// we display input as soon as it received.
 				if(this->getGlobalIntVariable(FIM_VID_DISPLAY_CONSOLE))
