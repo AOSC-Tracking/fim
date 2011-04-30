@@ -356,7 +356,9 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS" {alias} | -a : deletes the alias {alias} or all aliases (use \"-a\", not -a)"),this,&CommandConsole::unalias));
 		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string("unbinds the action associated to KEYCODE"),this,&CommandConsole::unbind));
 		addCommand(new Command(fim::string(FIM_FLT_SLEEP),fim::string("sleeps for n (default 1) seconds"),this,&CommandConsole::foo));
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
 		addCommand(new Command(fim::string(FIM_FLT_MARK),fim::string("marks the current file"),this,&CommandConsole::markCurrentFile));
+#endif
 		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string("provides online help"),this,&CommandConsole::help));
 #ifdef FIM_AUTOCMDS
 		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD),fim::string("usage: "FIM_FLT_AUTOCMD" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd));
@@ -1057,6 +1059,7 @@ ok:
 		 * NOTE:
 		 * as long as this class is a singleton, we couldn't care less about memory freeing :)
 		 */
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
 		if(!marked_files.empty())
 		{
 			std::cerr << "The following files were marked by the user :\n";
@@ -1064,6 +1067,7 @@ ok:
 			for(std::set<fim::string>::iterator i=marked_files.begin();i!=marked_files.end();++i)
 			std::cout << *i << "\n";
 		}
+#endif
 		
 		fim::string sof=getStringVariable(FIM_VID_SCRIPTOUT_FILE);
 		if(sof!=FIM_CNS_EMPTY_STRING)
@@ -1639,6 +1643,7 @@ ok:
 	}
 #endif
 
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
 	void CommandConsole::markCurrentFile()
 	{
 		/*
@@ -1651,6 +1656,7 @@ ok:
 			cout<<"Marked file \""<<browser.current()<<"\"\n";
 		}
 	}
+#endif
 
 	void CommandConsole::printHelpMessage(char *pn)const
 	{

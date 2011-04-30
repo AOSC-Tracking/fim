@@ -94,10 +94,12 @@ class CommandConsole
 	typedef std::map<const fim::string,Var> variables_t;	//id->var
 	variables_t variables;	//id->var
 
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
 	/*
 	 * the buffer of marked files
 	 */
 	std::set<fim::string> marked_files;		//filenames
+#endif
 
 	/*
 	 * flags
@@ -151,7 +153,9 @@ class CommandConsole
 	args_t scripts;		//scripts to execute : FIX ME PRIVATE
 #endif
 
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
 	void markCurrentFile();
+#endif
 	#ifdef FIM_WITH_AALIB
 	AADevice * aad;
 	#endif
@@ -168,7 +172,9 @@ class CommandConsole
 	CommandConsole& operator= (const CommandConsole&cc){return *this;/* a nilpotent assignation */}
 	public:
 
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
 	fim::string markCurrentFile(const args_t& args);
+#endif
 	bool display();
 	bool redisplay();
 	char * command_generator (const char *text,int state)const;
