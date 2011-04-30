@@ -1572,7 +1572,9 @@ ok:
 		}
 		return needed_redisplay;
 #else
-		browser.redisplay();
+		//browser.redisplay();
+		if(cc.viewport)
+			return cc.viewport->redisplay();
 		return true;
 #endif
 	}
