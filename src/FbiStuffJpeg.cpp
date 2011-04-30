@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2010 Michele Martone
+ (c) 2007-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -45,6 +45,7 @@
 //#include "loader.h"
 #ifdef FIM_WITH_LIBEXIF
 #include <libexif/exif-data.h>
+#define HAVE_NEW_EXIF 0
 #endif
 
 //
@@ -80,7 +81,9 @@ extern "C"
 namespace fim
 {
 
-
+#if HAVE_NEW_EXIF
+extern CommandConsole cc;
+#endif
    int fim_jerr=0;
 
 /* ---------------------------------------------------------------------- */
@@ -166,12 +169,98 @@ static void fim_error_exit (j_common_ptr cinfo)
 static void dump_exif(FILE *out, ExifData *ed)
 {
     const char *title, *value;
-#ifdef HAVE_NEW_EXIF
+#if HAVE_NEW_EXIF
     char buffer[256];
 #endif
     ExifEntry  *ee;
     int tag,i;
-/*
+#if HAVE_NEW_EXIF
+    //for (i = 0; i < EXIF_IFD_COUNT; i++) {
+    for (i = 0; i < 1; i++) { // first only
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_ORIENTATION)){
+		// value can be of the form "X - Y", with X and Y in
+		// {top,bottom,left,right}
+		// here we handle only
+		// on: http://sylvana.net/jpegcrop/exif_orientation.html 
+		// we got the following combinations:
+		// Value	0th Row	0th Column
+		// 1	top	left side
+		// 2	top	right side
+		// 3	bottom	right side
+		// 4	bottom	left side
+		// 5	left side	top
+		// 6	right side	top
+		// 7	right side	bottom
+		// 8	left side	bottom
+		//
+		// neatly depicted in an F letter example:
+		//
+		//   1        2       3      4         5            6           7          8
+		//
+		//   888888  888888      88  88      8888888888  88                  88  8888888888
+		//   88          88      88  88      88  88      88  88          88  88      88  88
+		//   8888      8888    8888  8888    88          8888888888  8888888888          88
+		//   88          88      88  88
+		//   88          88  888888  888888
+		//
+		// note that (in this order):
+		// 2,3,5,7 want a mirror transformation
+		// 4,3 want a flip transformation
+		// 7,8 want a cw rotation
+		// 5,6 want a ccw rotation
+		//
+		bool shouldmirror,shouldrotatecw,shouldrotateccw,shouldflip; char r,c;const char *p;char f;
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		if(!value || ((p=strstr(value," - "))==NULL))goto uhmpf;
+		r=tolower(value[0]); c=tolower(p[3]);
+		switch(r)
+		{
+			case 't':
+			switch(c){
+				case 'l':f=1; break;
+				case 'r':f=2; break;
+				default: f=0;
+			} break;
+			case 'b':
+			switch(c){
+				case 'r':f=3; break;
+				case 'l':f=4; break;
+				default: f=0;
+			} break;
+			case 'l':
+			switch(c){
+				case 't':f=5; break;
+				case 'b':f=8; break;
+				default: f=0;
+			} break;
+			case 'r':
+			switch(c){
+				case 't':f=6; break;
+				case 'b':f=7; break;
+				default: f=0;
+			} break;
+			default: f=0;
+		}
+		//if(f==0)goto uhmpf;
+		shouldmirror=(f==2 || f==4 || f==5 || f==7);
+		shouldflip=(f==4 || f==3);
+		shouldrotatecw=(f==5 || f==6);
+		shouldrotateccw=(f==7 || f==8);
+//		std::cout << "EXIF_TAG_ORIENTATION FOUND !\n",
+//		std::cout << "VALUE: " <<(int)f << r<< c<<
+//		shouldmirror<< shouldrotatecw<< shouldrotateccw<< shouldflip,
+//		std::cout << "\n";
+		if(shouldrotateccw)cc.setVariable("exif_orientation",1);
+		if(shouldrotatecw)cc.setVariable("exif_orientation",3);
+		if(shouldmirror)cc.setVariable("exif_mirrored",1);
+		if(shouldflip)cc.setVariable("exif_flipped",1);
+		// FIXME: should complete this code by setting up some mechanism for recovering this rotation/flip info
+uhmpf:
+		1;
+	}
+    }
+#endif
+#if 0
     for (i = 0; i < EXIF_IFD_COUNT; i++) {
 	fprintf(out,"   ifd %s\n", exif_ifd_get_name (i));
 	for (tag = 0; tag < 0xffff; tag++) {
@@ -191,7 +280,7 @@ static void dump_exif(FILE *out, ExifData *ed)
     }
     if (ed->data && ed->size)
 	fprintf(out,"   thumbnail\n      %d bytes data\n", ed->size);
-	*/
+#endif
 }
 #endif
 
@@ -247,6 +336,15 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 		FIM_FBI_PRINTF("jpeg: exif data found (APP1 marker)\n");
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 
+#if HAVE_NEW_EXIF
+#ifdef FIM_WITH_LIBEXIF
+	{
+		ExifData *ed=exif_data_new_from_data(mark->data,mark->data_length);
+    		if(ed)
+			dump_exif(stdout,ed);
+	}
+#endif
+#endif
 #ifdef FIM_WITH_LIBEXIF_nonono
 	    if (thumbnail) {
 		ExifData *ed;
