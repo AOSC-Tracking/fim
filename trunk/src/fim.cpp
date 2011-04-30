@@ -339,7 +339,11 @@ int help_and_exit(char *argv0, int code=0)
 		    /*
 		     * note that this solution is temporary, because it clashes with -E (should have precedence, instead)
 		     * */
+	#ifndef FIM_WANT_NOSCRIPTING
 		    cc.push_scriptfile(optarg);
+	#else
+		    cout << "sorry, no scripting available!\n";
+	#endif
 		    break;
 		case 'S':
 		    //fim's
@@ -488,7 +492,7 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'E':
 		    //fim's
-	#ifndef FIM_NOSCRIPTING
+	#ifndef FIM_WANT_NOSCRIPTING
 		    cc.push_scriptfile(optarg);
 	#else
 		    cout << "sorry, no scripting available!\n";
@@ -496,7 +500,7 @@ int help_and_exit(char *argv0, int code=0)
 		    break;
 		case 'p':
 		    //fim's (differing semantics from fbi's)
-	#ifndef FIM_NOSCRIPTING
+	#ifndef FIM_WANT_NOSCRIPTING
 		    read_one_script_file_from_stdin=1;
 	#else
 		    cout << "sorry, no scripting available!\n";
@@ -636,7 +640,11 @@ int help_and_exit(char *argv0, int code=0)
 		if(ndd==-1)
 			perror(NULL);
 	
-		if(cc.browser.empty_file_list() && !cc.with_scriptfile() && !appendedPostInitCommand 
+		if(cc.browser.empty_file_list()
+#ifndef FIM_WANT_NOSCRIPTING
+			       	&& !cc.with_scriptfile()
+#endif
+			       	&& !appendedPostInitCommand 
 		#ifdef FIM_READ_STDIN_IMAGE
 		&& !read_one_file_from_stdin
 		#endif

@@ -109,7 +109,7 @@ namespace fim
 		return "";
 	}
 
-#ifndef FIM_NOSCRIPTING
+#ifndef FIM_WANT_NOSCRIPTING
 	fim::string CommandConsole::executeFile(const args_t &args)
 	{
 		/*

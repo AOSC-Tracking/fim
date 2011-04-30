@@ -454,9 +454,6 @@ namespace fim
 /*
  * Some Fim compilation defaults
  */
-#ifdef FIM_NOSCRIPTING
-#undef FIM_NOSCRIPTING
-#endif
 #define FIM_WANT_SCREEN_KEY_REMAPPING_PATCH 1
 #define FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE 0
 #define FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE 1
