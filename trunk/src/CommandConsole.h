@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2010 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -232,11 +232,13 @@ class CommandConsole
 #endif
 	fim::string set_interactive_mode(const args_t& args);
 	fim::string set_in_console(const args_t& args);
+#ifdef FIM_AUTOCMDS
 	fim::string autocmd(const args_t& args);
 	fim::string autocmd_del(const fim::string event, const fim::string pattern, const fim::string action);
 	fim::string autocmd_del(const args_t& args);
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
 	fim::string autocmds_list(const fim::string event, const fim::string pattern)const;
+#endif
 	typedef std::pair<fim::string,fim::string> autocmds_loop_frame_t;
 	typedef std::pair<autocmds_loop_frame_t,fim::string> autocmds_frame_t;
 	typedef std::vector<autocmds_loop_frame_t > autocmds_stack__t;

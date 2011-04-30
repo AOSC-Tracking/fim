@@ -171,6 +171,7 @@ namespace fim
 		return do_stdout(args);
 	}
 
+#ifdef FIM_AUTOCMDS
 	fim::string CommandConsole::autocmd(const args_t& args)
 	{
 		/*
@@ -225,6 +226,7 @@ namespace fim
 		}
 		return "";
 	}
+#endif
 
 	fim::string CommandConsole::set_in_console(const args_t& args)
 	{
