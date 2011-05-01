@@ -254,6 +254,7 @@ rerr:
 			
 				line[cline]=buffer;
 			}
+			add(FIM_MSG_CONSOLE_FIRST_LINE_BANNER);
 		}
 
 		int MiniConsole::do_dump(int amount)const
