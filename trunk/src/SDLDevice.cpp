@@ -34,6 +34,12 @@
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
+namespace fim
+{
+	extern CommandConsole cc;
+}
+
+
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 
@@ -361,12 +367,13 @@ std::cout.unsetf ( std::ios::hex );
 
 	}
 
-	int SDLDevice::get_input(fim_key_t * c )
+	static int get_input_inner(fim_key_t * c, SDL_Event*eventp, int *keypressp)
 	{
 //		int keypress=0;
 		bool ctrl_on=0;
 		bool alt_on=0;
 		bool shift_on=0;
+		SDL_Event event=*eventp;
 		*c = 0x0;	/* blank */
 
 //		while(SDL_PollEvent(&event))
@@ -375,7 +382,7 @@ std::cout.unsetf ( std::ios::hex );
 			switch (event.type)
 			{
 				case SDL_QUIT:
-				keypress = 1;
+				*keypressp = 1;
 				
 				break;
 				case SDL_KEYDOWN:
@@ -490,7 +497,7 @@ std::cout.unsetf ( std::ios::hex );
 					if(ms&SDL_BUTTON_X1MASK) cout << "x1mask\n";
 					if(ms&SDL_BUTTON_X2MASK) cout << "x2mask\n";
 #endif
-					if(!mc.cc.inConsole())
+					if(!cc.inConsole())
 					{
 						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
 						if(ms&SDL_BUTTON_RMASK) { *c='b'; return 1; }
@@ -504,6 +511,11 @@ std::cout.unsetf ( std::ios::hex );
 		}
 
 		return 0;
+	}
+
+	int SDLDevice::get_input(fim_key_t * c )
+	{
+		return get_input_inner(c,&event,&keypress);
 	}
 
 	int SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
@@ -645,13 +657,25 @@ err:
 		return 0;
 	}
 
-	fim_key_t SDLDevice::catchInteractiveCommand(int seconds)
+	fim_key_t SDLDevice::catchInteractiveCommand(fim_ts_t seconds)const
 	{
 		/*
 		 * Whether there is some input in the input queue.
 		 * Note that in this way the event will be lost.
 		 * */
-		return (SDL_PollEvent(&event));
+		fim_key_t c=0;
+		SDL_Event levent;
+		int lkeypress=0;
+
+		for(;seconds>0;--seconds)
+			sleep(1);
+		if(!get_input_inner(&c,&levent,&lkeypress))
+		{
+			//std::cout << "input:" << c << "\n";
+			return c;
+		}
+		else
+			return -1;
 	}
 
 	void SDLDevice::flush()
