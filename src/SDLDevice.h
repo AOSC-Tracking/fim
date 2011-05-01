@@ -42,7 +42,11 @@ class SDLDevice:public DisplayDevice
 
 	public:
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	SDLDevice(MiniConsole & mc_);
+#else
+	SDLDevice();
+#endif
 
 	virtual int  display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)

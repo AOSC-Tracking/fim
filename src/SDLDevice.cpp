@@ -58,7 +58,11 @@ std::cout.unsetf ( std::ios::hex );
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	SDLDevice::SDLDevice(MiniConsole & mc_):DisplayDevice(mc_),vi(NULL)
+#else
+	SDLDevice::SDLDevice():DisplayDevice(),vi(NULL)
+#endif
 	{
 		FontServer::fb_text_init1(fontname,&f);	// FIXME : move this outta here
 		keypress = 0;
@@ -282,9 +286,10 @@ std::cout.unsetf ( std::ios::hex );
 		SDL_ShowCursor(0);
 
 		// textual console reformatting
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		mc.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f->height));
 		mc.reformat(    width() /    f->width   );
-
+#endif
 		return 0;
 	}
 

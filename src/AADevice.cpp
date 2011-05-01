@@ -431,9 +431,11 @@
 
 	int AADevice::init_console()
 	{
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		//mc.setRows ( -height()/2);
 		mc.setRows ( get_chars_per_column()/2 );
 		mc.reformat(  txt_width()   );
+#endif
 		return 0;
 	}
 

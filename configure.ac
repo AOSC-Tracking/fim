@@ -1390,6 +1390,12 @@ if test x$fim_cv_want_noscripting == x1 ; then
 AC_DEFINE_UNQUOTED([FIM_WANT_NOSCRIPTING], $fim_cv_want_noscripting, [Scripting. (enabled by default)])
 fi
 dnl ==================
+AH_TEMPLATE([FIM_WANT_NO_OUTPUT_CONSOLE])
+AC_ARG_ENABLE(output-console, AC_HELP_STRING([--enable-output-console], [Output console. (enabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_no_output_console=0 ; else fim_cv_want_no_output_console=1 ; fi ],[ fim_cv_want_no_output_console=0 ])
+if test x$fim_cv_want_no_output_console == x1 ; then 
+AC_DEFINE_UNQUOTED([FIM_WANT_NO_OUTPUT_CONSOLE], $fim_cv_want_no_output_console, [Output console. (enabled by default)])
+fi
+dnl ==================
 
 dnl uhmmmmmm : does not seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 

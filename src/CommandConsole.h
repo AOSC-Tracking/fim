@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2010 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,9 +32,11 @@ class CommandConsole
 	friend class FbiStuff;
 
 	private:
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
 	MiniConsole mc;
+#endif
 #endif
 	FontServer fontserver;
 
@@ -273,9 +275,11 @@ class CommandConsole
 	fim::string getBindingsList()const;
 	fim::string dump_key_codes(const args_t& args);
 	fim::string do_dump_key_codes(const args_t& args)const;
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	fim::string clear(const args_t& args);
 	fim::string scroll_up(const args_t& args);
 	fim::string scroll_down(const args_t& args);
+#endif
 	int quit(int i=0);
 	public:
 

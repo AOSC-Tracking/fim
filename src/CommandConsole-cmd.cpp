@@ -600,6 +600,7 @@ namespace fim
 		return "usage : set | set IDENTIFIER | set IDENTIFIER VALUE";
 	}
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	fim::string CommandConsole::scroll_up(const args_t& args)
 	{
 		if(!displaydevice) { } else
@@ -619,7 +620,7 @@ namespace fim
 		displaydevice->console_control(0x03);//experimental
 		return "";
 	}
-
+#endif
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	fim::string CommandConsole::markCurrentFile(const args_t& args)

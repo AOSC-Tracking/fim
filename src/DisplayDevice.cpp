@@ -2,7 +2,7 @@
 /*
  DisplayDevice.cpp : virtual device Fim driver file
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,8 +22,12 @@
 #include "fim.h"
 #include "DisplayDevice.h"
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	DisplayDevice::DisplayDevice(MiniConsole & mc_):fontname(NULL)
 	,mc(mc_)
+#else
+	DisplayDevice::DisplayDevice():fontname(NULL)
+#endif
 	,f(NULL)
 	,debug(0)
 	,redraw(0)
@@ -139,6 +143,7 @@
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//experimental
 {
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	int r;
 	
 	if(flags==0x03)
@@ -168,6 +173,7 @@ void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//
 	cc.displaydevice->unlock();
 	mc.dump();
 //	mc.dump(0,1000000);
+#endif
 	return;
 }
 #endif
@@ -182,6 +188,7 @@ int DisplayDevice::console_control(int arg)//experimental
 
 int DisplayDevice::init_console()
 {
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	if(f)
 	{	
 		mc.setRows ((height()/f->height)/2);
@@ -192,6 +199,7 @@ int DisplayDevice::init_console()
 		mc.setRows ( height()   );
 		mc.reformat( width()    );
 	}
+#endif
 	return 0;
 }
 

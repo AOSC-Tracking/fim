@@ -42,7 +42,11 @@ class DummyDisplayDevice:public DisplayDevice
 		int flags// some flags
 		){return 0;}
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	DummyDisplayDevice(MiniConsole & mc_):DisplayDevice(mc_){}
+#else
+	DummyDisplayDevice(){}
+#endif
 	virtual ~DummyDisplayDevice(){}
 
 	virtual int get_chars_per_line(){return 0;/* this is a special value */}

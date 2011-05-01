@@ -39,7 +39,11 @@ class AADevice:public DisplayDevice
 	struct aa_savedata ascii_save;
 	char name[2];	/* FIXME */
 	public:
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	AADevice(MiniConsole & mc_):DisplayDevice(mc_){}
+#else
+	AADevice():DisplayDevice(){}
+#endif
 	virtual ~AADevice();
 
 	virtual int  display(
