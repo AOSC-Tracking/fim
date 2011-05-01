@@ -44,7 +44,7 @@ class SDLDevice:public DisplayDevice
 
 	SDLDevice(MiniConsole & mc_);
 
-	int  display(
+	virtual int  display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
 		//void* rgb,// destination gray array and source rgb array
 		int iroff,int icoff, // row and column offset of the first input pixel
@@ -80,7 +80,7 @@ class SDLDevice:public DisplayDevice
 	inline void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
 
 	int get_input(fim_key_t * c);
-	fim_key_t catchInteractiveCommand(int seconds);
+	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
 	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str);

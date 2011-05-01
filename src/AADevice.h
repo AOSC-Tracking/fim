@@ -42,7 +42,7 @@ class AADevice:public DisplayDevice
 	AADevice(MiniConsole & mc_):DisplayDevice(mc_){}
 	virtual ~AADevice();
 
-	int  display(
+	virtual int  display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
 		//void* rgb,// destination gray array and source rgb array
 		int iroff,int icoff, // row and column offset of the first input pixel
