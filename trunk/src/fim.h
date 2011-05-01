@@ -227,6 +227,7 @@ namespace fim
 #define FIM_VID_DEVICE_DRIVER 			"_device_driver"	/* "a string with the current output driver name" */
 #define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "if 1, will display the status bar" */
 #define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "if 1, will execute a sanity check on startup (experimental)" */
+#define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "FIXME: undocumented(experimental)" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "if 1 at startup, will load /etc/fimrc, or equivalent system startup file" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "if !=0, the ~/.fimrc file will not be executed" */
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "the name of the file to write to when recording sessions" */

@@ -379,7 +379,9 @@ namespace fim
 		if(args.size())
 		{
 			FILE* fd=popen(cc.c_str(),"r");
-			cout << readStdFileDescriptor(fd);
+		//	cout << readStdFileDescriptor(fd);
+			setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,readStdFileDescriptor(fd).c_str());
+			cout << getStringVariable(FIM_VID_LAST_SYSTEM_OUTPUT);
 		       	pclose(fd);
 		}
 #else
@@ -391,7 +393,8 @@ namespace fim
 			 *
 			 * int fd=(int)popen("/bin/echo quit","r");
 			 */
-			cout << readStdFileDescriptor(fd);
+			//cout << readStdFileDescriptor(fd);
+			setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,readStdFileDescriptor(fd).c_str());
 			pclose(fd);
 		}
 #endif
