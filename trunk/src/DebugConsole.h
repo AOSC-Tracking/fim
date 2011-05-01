@@ -2,7 +2,7 @@
 /*
  DebugConsole.h : Fim virtual console display.
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include "Var.h"
 #include "Namespace.h"
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 namespace fim
 {
 	class FimConsole
@@ -96,6 +97,7 @@ namespace fim
 		int grow(int glines, int gbuffer);
 	};
 }
+#endif
 
 #endif
 

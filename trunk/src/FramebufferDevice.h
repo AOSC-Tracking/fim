@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -239,7 +239,11 @@ class FramebufferDevice:public DisplayDevice
 	int with_boz_patch;
 #endif
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	FramebufferDevice(MiniConsole & mc_);
+#else
+	FramebufferDevice();
+#endif
 
 
 /* -------------------------------------------------------------------- */

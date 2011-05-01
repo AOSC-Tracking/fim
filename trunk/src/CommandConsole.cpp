@@ -270,14 +270,20 @@ namespace fim
 	}
 
 	CommandConsole::CommandConsole(/*FramebufferDevice &_framebufferdevice*/):
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	mc(*this),
+#endif
 #endif
 	fontserver(),
 	browser(*this)
 	//,framebufferdevice(_framebufferdevice)
 	,return_code(0)
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	,dummydisplaydevice(this->mc)
+#else
+	,dummydisplaydevice()
+#endif
 	,displaydevice(NULL)			/* the display device could be NULL ! (FIXME) */
 #ifdef FIM_RECORDING
 	,dont_record_last_action(false)		/* this variable is only useful in record mode */
@@ -387,9 +393,11 @@ namespace fim
 		addCommand(new Command(fim::string("variables"  ),fim::string("displays the associated variables"),this,&CommandConsole::variables_list));
 		addCommand(new Command(fim::string("commands"  ),fim::string("displays the existing commands"),this,&CommandConsole::commands_list));
 		addCommand(new Command(fim::string("dump_key_codes"  ),fim::string("dumps the key codes"),this,&CommandConsole::dump_key_codes));
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		addCommand(new Command(fim::string(FIM_FLT_CLEAR),fim::string("clears the virtual console"),this,&CommandConsole::clear));
 		addCommand(new Command(fim::string("scroll_console_up"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
 		addCommand(new Command(fim::string("scroll_console_down"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
+#endif
 		/*
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */

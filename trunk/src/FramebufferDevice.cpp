@@ -360,7 +360,9 @@ void FramebufferDevice::console_switch(int is_busy)
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched! 
 	 */
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		mc.cc.redisplay();
+#endif
 	//if (is_busy) status("busy, please wait ...", NULL);		
 	break;
 	default:
@@ -1759,8 +1761,13 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 #endif
 
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	FramebufferDevice::FramebufferDevice(MiniConsole & mc_):	
 	DisplayDevice(mc_)
+#else
+	FramebufferDevice::FramebufferDevice():	
+	DisplayDevice()
+#endif
 	,vt(0)
 	,dither(FALSE)
 	,pcd_res(3)

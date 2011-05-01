@@ -21,6 +21,7 @@
 
 #include "fim.h"
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 namespace fim
 {
 
@@ -448,4 +449,4 @@ rerr:
 			return 0;
 		}
 }
-
+#endif
