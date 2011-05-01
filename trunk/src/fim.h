@@ -481,6 +481,11 @@ namespace fim
 #define FIM_FBDEV_FILE_MAX_CHARS 16
 
 /*
+ * Various  Fim messages.
+ */
+#define FIM_MSG_CONSOLE_FIRST_LINE_BANNER "=== This is the fim output console. You can scroll it up and down. ===\n"
+
+/*
  * Some Fim internals flags.
  */
 #define FIM_FLAG_MIRROR 1
