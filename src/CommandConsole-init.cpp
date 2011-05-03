@@ -83,7 +83,7 @@ namespace fim
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_
 #endif
-					); if(sdld && sdld->initialize(key_bindings)!=0){delete sdld ; sdld=NULL;}
+					); if(sdld && sdld->initialize(key_bindings_)!=0){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice_==NULL)
 			{
 				displaydevice_=sdld;
@@ -100,7 +100,7 @@ namespace fim
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_
 #endif
-					); if(cacad && cacad->initialize(key_bindings)!=0){delete cacad ; cacad=NULL;}
+					); if(cacad && cacad->initialize(key_bindings_)!=0){delete cacad ; cacad=NULL;}
 			if(cacad && displaydevice_==NULL)
 			{
 				displaydevice_=cacad;
@@ -112,16 +112,16 @@ namespace fim
 		#ifdef FIM_WITH_AALIB
 		if(device==FIM_DDN_INN_AA)
 		{
-		aad=new AADevice(
+		aad_=new AADevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 				mc_
 #endif
 				);
 
-		if(aad && aad->initialize(key_bindings)!=0){delete aad ; aad=NULL;}
-		if(aad && displaydevice_==NULL)
+		if(aad_ && aad_->initialize(key_bindings_)!=0){delete aad_ ; aad_=NULL;}
+		if(aad_ && displaydevice_==NULL)
 		{
-			displaydevice_=aad;
+			displaydevice_=aad_;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_AA);
 
 #if FIM_WANT_SCREEN_KEY_REMAPPING_PATCH
@@ -135,10 +135,10 @@ namespace fim
 			const char * term = fim_getenv(FIM_CNS_TERM_VAR);
 			if(term && string(term).re_match("screen"))
 			{
-				key_bindings[FIM_KBD_LEFT]-=3072;
-				key_bindings[FIM_KBD_RIGHT]-=3072;
-				key_bindings[FIM_KBD_UP]-=3072;
-				key_bindings[FIM_KBD_DOWN]-=3072;
+				key_bindings_[FIM_KBD_LEFT]-=3072;
+				key_bindings_[FIM_KBD_RIGHT]-=3072;
+				key_bindings_[FIM_KBD_UP]-=3072;
+				key_bindings_[FIM_KBD_DOWN]-=3072;
 			}
 #endif
 		}
@@ -148,7 +148,7 @@ namespace fim
 
 		if( displaydevice_==NULL)
 		{
-			displaydevice_=&dummydisplaydevice;
+			displaydevice_=&dummydisplaydevice_;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_DUMB);
 		}
 
@@ -166,9 +166,9 @@ namespace fim
 
 		try
 		{
-			window = new Window( *this, Rect(0,0,xres,yres) );
+			window_ = new Window( *this, Rect(0,0,xres,yres) );
 
-			if(window)window->setroot();
+			if(window_)window_->setroot();
 		}
 		catch(FimException e)
 		{
@@ -178,7 +178,7 @@ namespace fim
 		/*
 		 * TODO: exceptions should be launched here in case ...
 		 * */
-		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string("manipulates the window system windows"), window,&Window::cmd));
+		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string("manipulates the window system windows"), window_,&Window::cmd));
 #else
 		try
 		{
@@ -250,13 +250,13 @@ namespace fim
   #endif		
 #endif		
 #ifndef FIM_WANT_NOSCRIPTING
-		for(size_t i=0;i<scripts.size();++i) executeFile(scripts[i].c_str());
+		for(size_t i=0;i<scripts_.size();++i) executeFile(scripts_[i].c_str());
 #endif		
 #ifdef FIM_AUTOCMDS
-		if(postInitCommand!=fim::string(""))
-			autocmd_add(FIM_ACM_PREEXECUTIONCYCLE,"",postInitCommand.c_str());
-		if(postExecutionCommand!=fim::string(""))
-			autocmd_add(FIM_ACM_POSTEXECUTIONCYCLE,"",postExecutionCommand.c_str());
+		if(postInitCommand_!=fim::string(""))
+			autocmd_add(FIM_ACM_PREEXECUTIONCYCLE,"",postInitCommand_.c_str());
+		if(postExecutionCommand_!=fim::string(""))
+			autocmd_add(FIM_ACM_POSTEXECUTIONCYCLE,"",postExecutionCommand_.c_str());
 #endif
 		/*
 		 *	FIXME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
@@ -269,8 +269,8 @@ namespace fim
 		{
 			/* experimental */
 			displaydevice_->quickbench();
-			quit(return_code);
-			exit(return_code);
+			quit(return_code_);
+			exit(return_code_);
 		}
 		return 0;
 	}

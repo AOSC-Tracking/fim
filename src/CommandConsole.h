@@ -38,52 +38,52 @@ class CommandConsole
 	MiniConsole mc_;
 #endif
 #endif
-	FontServer fontserver;
+	FontServer fontserver_;
 
-	fim::string postInitCommand;
-	fim::string postExecutionCommand;
+	fim::string postInitCommand_;
+	fim::string postExecutionCommand_;
 
-	int show_must_go_on;
-	int return_code;	/* new, to support the 'return' command */
+	int show_must_go_on_;
+	int return_code_;	/* new, to support the 'return' command */
 	public:
 
-	struct termios  saved_attributes;
-	int             saved_fl;
+	struct termios  saved_attributes_;
+	int             saved_fl_;
 
 	/*
-	 * the image browser logic
+	 * the image browser_ logic
 	 */
-	Browser browser;
+	Browser browser_;
 	private:
 
 #ifdef FIM_WINDOWS
-	fim::Window * window;
+	fim::Window * window_;
 #endif
 	/*
 	 * the registered command methods and objects
 	 */
-	std::vector<Command*> commands;			//command->method
+	std::vector<Command*> commands_;			//command->method
 
 	/*
 	 * the aliases to actions (compounds of commands)
 	 */
 	typedef std::map<fim::string,std::pair<fim::string,fim::string> > aliases_t;	//alias->[commands,description]
 	//typedef std::map<fim::string,fim::string> aliases_t;	//alias->commands
-	aliases_t aliases;	//alias->commands
+	aliases_t aliases_;	//alias->commands
 	
 	/*
 	 * bindings of key codes to actions (compounds of commands)
 	 */
 	typedef std::map<fim_key_t,fim::string> bindings_t;		//code->commands
-	bindings_t bindings;		//code->commands
+	bindings_t bindings_;		//code->commands
 
 	/*
 	 * mapping of key name to key code
 	 */
-	key_bindings_t	key_bindings;	//symbol->code
+	key_bindings_t	key_bindings_;	//symbol->code
 
 	typedef std::map<fim_key_t, fim::string> inverse_key_bindings_t;//code->symbol
-	inverse_key_bindings_t inverse_key_bindings;//code->symbol
+	inverse_key_bindings_t inverse_key_bindings_;//code->symbol
 
 	private:
 
@@ -100,7 +100,7 @@ class CommandConsole
 	/*
 	 * the buffer of marked files
 	 */
-	std::set<fim::string> marked_files;		//filenames
+	std::set<fim::string> marked_files_;		//filenames
 #endif
 
 	/*
@@ -108,10 +108,10 @@ class CommandConsole
 	 */
 #ifdef FIM_USE_READLINE
 	/* no readline ? no console ! */
-	fim_status_t 	ic;				//in console if 1. not if 0. willing to exit from console mode if -1
+	fim_status_t 	ic_;				//in console if 1. not if 0. willing to exit from console mode if -1
 #endif
-	fim_cycles_t cycles;					//fim execution cycles counter (quite useless)
-	fim_key_t exitBinding;				//The key bound to exit. If 0, the special "Any" key.
+	fim_cycles_t cycles_;					//fim execution cycles_ counter (quite useless)
+	fim_key_t exitBinding_;				//The key bound to exit. If 0, the special "Any" key.
 
 #ifdef FIM_AUTOCMDS
 	/*
@@ -119,21 +119,21 @@ class CommandConsole
 	 */
 	typedef std::map<fim::string,args_t >  autocmds_p_t;	//pattern - commands
 	typedef std::map<fim::string,autocmds_p_t >  autocmds_t;		//autocommand - pattern - commands
-	autocmds_t autocmds;
+	autocmds_t autocmds_;
 #endif
 	
 	/*
 	 * the last executed action (being a command line or key bounded command issued)
 	 */
-	fim::string last_action;
+	fim::string last_action_;
 	
 #ifdef FIM_RECORDING
-	bool recordMode;
+	bool recordMode_;
 	typedef std::pair<fim::string,fim_tms_t > recorded_action_t;
 	typedef std::vector<recorded_action_t > recorded_actions_t;
-	recorded_actions_t recorded_actions;
+	recorded_actions_t recorded_actions_;
 
-	bool dont_record_last_action;
+	bool dont_record_last_action_;
 	fim::string memorize_last(const fim::string &cmd);
 	fim::string repeat_last(const args_t &args);
 	fim::string dump_record_buffer(const args_t &args);
@@ -147,27 +147,27 @@ class CommandConsole
 #endif
 
 	public:
-	int fim_stdin;	// the standard input file descriptor
+	int fim_stdin_;	// the standard input file descriptor
 	private:
-	char prompt[2];
+	char prompt_[2];
 
 #ifndef FIM_WANT_NOSCRIPTING
-	args_t scripts;		//scripts to execute : FIX ME PRIVATE
+	args_t scripts_;		//scripts to execute : FIX ME PRIVATE
 #endif
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	void markCurrentFile();
 #endif
-	#ifdef FIM_WITH_AALIB
-	AADevice * aad;
-	#endif
+#ifdef FIM_WITH_AALIB
+	AADevice * aad_;
+#endif
 	public:
-	DummyDisplayDevice dummydisplaydevice;
+	DummyDisplayDevice dummydisplaydevice_;
 	DisplayDevice *displaydevice_;
 
 	fim::string execute(fim::string cmd, args_t args);
 
-	const char*get_prompt()const{return prompt;}
+	const char*get_prompt()const{return prompt_;}
 
 	CommandConsole();
 	private:
@@ -205,19 +205,19 @@ class CommandConsole
 	private:
 	fim::string echo(const args_t &args);
 	fim::string do_echo(const args_t &args)const;
-//	fim::string get_expr_type(const args_t &args);
+	//	fim::string get_expr_type(const args_t &args);
 	fim::string help(const args_t &args);
 	fim::string quit(const args_t &args);
 	fim::string _stdout(const args_t &args);
 	/* naming this stdout raises problems on some systems 
-	e.g.: 
-	# uname -a
-	Darwin hostname 7.9.0 Darwin Kernel Version 7.9.0: Wed Mar 30 20:11:17 PST 2005; root:xnu/xnu-517.12.7.obj~1/RELEASE
-	# gcc -v
-	Reading specs from /usr/libexec/gcc/darwin/ppc/3.3/specs
-	Thread model: posix
-	gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
-	*/
+	   e.g.: 
+# uname -a
+Darwin hostname 7.9.0 Darwin Kernel Version 7.9.0: Wed Mar 30 20:11:17 PST 2005; root:xnu/xnu-517.12.7.obj~1/RELEASE
+# gcc -v
+Reading specs from /usr/libexec/gcc/darwin/ppc/3.3/specs
+Thread model: posix
+gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
+*/
 	fim::string do_stdout(const args_t &args)const;
 	fim::string foo (const args_t &args);
 	fim::string do_return(const args_t &args);
@@ -264,7 +264,7 @@ class CommandConsole
 	char ** tokenize_(const char *s);
 	void executeBinding(const fim_key_t c);
 	fim::string getBoundAction(const fim_key_t c)const;
-//	void execute(fim::string cmd);
+	//	void execute(fim::string cmd);
 	fim::string eval(const args_t &args);
 	void exit(int i)const;
 	fim::string unbind(fim_key_t c);
@@ -302,7 +302,7 @@ class CommandConsole
 	private:
 	fim_bool_t autocmd_in_stack(const autocmds_loop_frame_t& frame)const;
 #endif
-	fim::string current()const{ return browser.current();}
+	fim::string current()const{ return browser_.current();}
 
 	fim::string get_alias_info(const fim::string aname)const;
 #ifdef FIM_WINDOWS
@@ -321,7 +321,7 @@ class CommandConsole
 	Viewport* current_viewport()const;
 #ifdef FIM_WINDOWS
 #else
-	Viewport* viewport;
+	Viewport* viewport_;
 #endif
 	void dumpDefaultFimrc()const;
 
