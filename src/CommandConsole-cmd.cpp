@@ -606,21 +606,21 @@ namespace fim
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	fim::string CommandConsole::scroll_up(const args_t& args)
 	{
-		if(!displaydevice) { } else
-			displaydevice->console_control(0x01);
+		if(!displaydevice_) { } else
+			displaydevice_->console_control(0x01);
 		return "";
 	}
 
 	fim::string CommandConsole::scroll_down(const args_t& args)
 	{
-		if(!displaydevice) { } else
-			displaydevice->console_control(0x02);
+		if(!displaydevice_) { } else
+			displaydevice_->console_control(0x02);
 		return "";
 	}
 
 	fim::string CommandConsole::clear(const args_t& args)
 	{
-		displaydevice->console_control(0x03);//experimental
+		displaydevice_->console_control(0x03);//experimental
 		return "";
 	}
 #endif

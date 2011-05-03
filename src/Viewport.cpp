@@ -39,17 +39,17 @@ namespace fim
 	Viewport::Viewport(
 			CommandConsole &c
 #ifdef FIM_WINDOWS
-			,Window *window_
+			,Window *window
 #endif
 			)
-			:steps(0)
-			,top(0)
-			,left(0)
-			,panned(0x0)
-			,displaydevice(c.displaydevice)	/* could be NULL */
-			,image(NULL)
+			:steps_(0)
+			,top_(0)
+			,left_(0)
+			,panned_(0x0)
+			,displaydevice_(c.displaydevice_)	/* could be NULL */
+			,image_(NULL)
 #ifdef FIM_WINDOWS
-			,window(window_)
+			,window_(window)
 #endif
 #ifdef FIM_NAMESPACES
 			,Namespace(FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
@@ -57,21 +57,21 @@ namespace fim
 			,commandConsole(c)
 	{
 		// WARNING : this constructor will be filled soon
-		if(!displaydevice)
+		if(!displaydevice_)
 			throw FIM_E_TRAGIC;
 		reset();
 	}
 
 	Viewport::Viewport(const Viewport &v)
 		:
-		steps(v.steps)
-		,top(v.top)
-		,left(v.left)
-		,panned(v.panned)
-		,displaydevice(v.displaydevice)
-		,image(NULL)
+		steps_(v.steps_)
+		,top_(v.top_)
+		,left_(v.left_)
+		,panned_(v.panned_)
+		,displaydevice_(v.displaydevice_)
+		,image_(NULL)
 #ifdef FIM_WINDOWS
-		,window(v.window)
+		,window_(v.window_)
 #endif
 #ifdef FIM_NAMESPACES
 		,Namespace(FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
@@ -84,69 +84,69 @@ namespace fim
 		{
 #ifndef FIM_BUGGED_CACHE
 	#ifdef FIM_CACHE_DEBUG
-			if(v.image) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image->getName() << "\" from "<<v.image<<"\n" ;
-			else std::cout << "no image to cache..\n";
+			if(v.image_) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image_->getName() << "\" from "<<v.image_<<"\n" ;
+			else std::cout << "no image_ to cache..\n";
 	#endif
-			if(v.image && !v.image->check_invalid()) setImage( commandConsole.browser.cache_.useCachedImage(v.image->getKey()) );
+			if(v.image_ && !v.image_->check_invalid()) setImage( commandConsole.browser.cache_.useCachedImage(v.image_->getKey()) );
 #else
-			if(v.image) setImage ( new Image(*v.image) ) ;
+			if(v.image_) setImage ( new Image(*v.image_) ) ;
 #endif
 		}
 		catch(FimException e)
 		{
-			image=NULL;
+			image_=NULL;
 			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 		}
 	}
 
 	void Viewport::pan_up(int s)
 	{
-		panned |= 0x1;
+		panned_ |= 0x1;
 		if(s<0)pan_down(-s);
 		else
 		{
 			if(this->onTop())return;
-			s=(s==0)?steps:s;
-			top -= s;
+			s=(s==0)?steps_:s;
+			top_ -= s;
 			should_redraw();
 		}
 	}
 
 	void Viewport::pan_down(int s)
 	{
-		panned |= 0x1;
+		panned_ |= 0x1;
 		if(s<0)pan_up(-s);
 		else
 		{
 			if(this->onBottom())return;
-			s=(s==0)?steps:s;
-			top += s;
+			s=(s==0)?steps_:s;
+			top_ += s;
 			should_redraw();
 		}
 	}
 
 	void Viewport::pan_right(int s)
 	{
-		panned |= 0x2;
+		panned_ |= 0x2;
 		if(s<0)pan_left(s);
 		else
 		{
 			if(onRight())return;
-			s=(s==0)?steps:s;
-			left+=s;
+			s=(s==0)?steps_:s;
+			left_+=s;
 			should_redraw();
 		}
 	}
 
 	void Viewport::pan_left(int s)
 	{
-		panned |= 0x2;
+		panned_ |= 0x2;
 		if(s<0)pan_right(s);
 		else
 		{
 			if(onLeft())return;
-			s=(s==0)?steps:s;
-			left-=s;
+			s=(s==0)?steps_:s;
+			left_-=s;
 			should_redraw();
 		}
 	}
@@ -154,25 +154,25 @@ namespace fim
 	int Viewport::onBottom()
 	{
 		if( check_invalid() )return 0;
-		return (top + viewport_height() >= image->height());
+		return (top_ + viewport_height() >= image_->height());
 	}
 
 	int Viewport::onRight()
 	{
 		if( check_invalid() )return 0;
-		return (left + viewport_width() >= image->width());
+		return (left_ + viewport_width() >= image_->width());
 	}
 
 	int Viewport::onLeft()
 	{
 		if( check_invalid() )return 0;
-		return (left <= 0 );
+		return (left_ <= 0 );
 	}
 
 	int Viewport::onTop()
 	{
 		if( check_invalid() )return 0;
-		return (top <= 0 );
+		return (top_ <= 0 );
 	}
 
 	int Viewport::viewport_width()
@@ -180,10 +180,10 @@ namespace fim
 		/*
 		 * */
 #ifdef FIM_WINDOWS
-		if(window)return window->width();
+		if(window_)return window_->width();
 		else return 0;
 #else
-		return displaydevice->width();
+		return displaydevice_->width();
 #endif
 	}
 
@@ -192,24 +192,24 @@ namespace fim
 		/*
 		 * */
 #ifdef FIM_WINDOWS
-		if(window)return window->height();
+		if(window_)return window_->height();
 		else return 0;
 #else
-		return displaydevice->height();
+		return displaydevice_->height();
 #endif
 	}
 
 	void Viewport::bottom_align()
 	{
 		if(this->onBottom())return;
-		if( check_valid() )top = image->height() - this->viewport_height();
+		if( check_valid() )top_ = image_->height() - this->viewport_height();
 		should_redraw();
 	}
 
 	void Viewport::top_align()
 	{
 		if(this->onTop())return;
-		top=0;
+		top_=0;
 		should_redraw();
 	}
 
@@ -227,7 +227,7 @@ namespace fim
 	{
 		// horizontal origin coordinate (upper)
 #ifdef FIM_WINDOWS
-		return window->xorigin();
+		return window_->xorigin();
 #else
 		return 0;
 #endif
@@ -237,7 +237,7 @@ namespace fim
 	{
 		// vertical origin coordinate (upper)
 #ifdef FIM_WINDOWS
-		return window->yorigin();
+		return window_->yorigin();
 #else
 		return 0;
 #endif
@@ -248,11 +248,11 @@ namespace fim
 		/*
 		 * for recovery purposes. FIXME
 		 * */
-		if( displaydevice->redraw==0 )return;
+		if( displaydevice_->redraw==0 )return;
 #ifdef FIM_WINDOWS
 		/* FIXME : note that fbi's clear_rect() is a buggy function and thus the fs_bpp multiplication need ! */
 		{
-			displaydevice->clear_rect(
+			displaydevice_->clear_rect(
 				xorigin(),
 				xorigin()+viewport_width()-1,
 				yorigin(),
@@ -261,7 +261,7 @@ namespace fim
 		}
 #else
 		/* FIXME */
-		displaydevice->clear_rect( 0, (viewport_width()-1)*displaydevice->get_bpp(), 0, (viewport_height()-1));
+		displaydevice_->clear_rect( 0, (viewport_width()-1)*displaydevice_->get_bpp(), 0, (viewport_height()-1));
 #endif
 	}
 
@@ -274,7 +274,7 @@ namespace fim
 		 *
 		 *	returns true when some drawing occurred.
 		 */
-		if((displaydevice->redraw==0) )return false;
+		if((displaydevice_->redraw==0) )return false;
 		if( check_invalid() ) null_display();//  NEW
 		if( check_invalid() ) return false;
 		/*
@@ -282,94 +282,94 @@ namespace fim
 		 *
 		 * global or inner (not i: !) or local (v:) marker
 		 * */
-		int autotop=getGlobalIntVariable(FIM_VID_AUTOTOP)   | image->getIntVariable(FIM_VID_AUTOTOP) | getIntVariable(FIM_VID_AUTOTOP);
-		//int flip   =getGlobalIntVariable(FIM_VID_AUTOFLIP)  | image->getIntVariable(FIM_VID_FLIPPED) | getIntVariable(FIM_VID_FLIPPED);
+		int autotop=getGlobalIntVariable(FIM_VID_AUTOTOP)   | image_->getIntVariable(FIM_VID_AUTOTOP) | getIntVariable(FIM_VID_AUTOTOP);
+		//int flip   =getGlobalIntVariable(FIM_VID_AUTOFLIP)  | image_->getIntVariable(FIM_VID_FLIPPED) | getIntVariable(FIM_VID_FLIPPED);
 		int flip   =
-		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image->getIntVariable(FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1)&&
-		!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(image->getIntVariable(FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
+		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image_->getIntVariable(FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1)&&
+		!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(image_->getIntVariable(FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
 		int mirror   =
-		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image->getIntVariable(FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
-		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image->getIntVariable(FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
+		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image_->getIntVariable(FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
+		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image_->getIntVariable(FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 		int negate   =	/* FIXME : temporarily here */
-		((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image->getIntVariable(FIM_VID_NEGATED)==0));
-		image->update();
+		((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->getIntVariable(FIM_VID_NEGATED)==0));
+		image_->update();
 
 		if(negate)
-			image->negate();
+			image_->negate();
 
-		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER) && displaydevice->redraw)
+		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER) && displaydevice_->redraw)
 		{
 			/*
 			 * If this is the first image display, we have
 			 * the right to rescale the image.
 			 * */
-			if(autotop && image->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
+			if(autotop && image_->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
 		  	{
-			    top=autotop>0?0:image->height()-this->viewport_height();
+			    top_=autotop>0?0:image_->height()-this->viewport_height();
 			}
 			/* start with centered image, if larger than screen */
-			if (image->width()  > this->viewport_width() )
-				left = (image->width() - this->viewport_width()) / 2;
-			if (image->height() > this->viewport_height() &&  autotop==0)
-				top = (image->height() - this->viewport_height()) / 2;
+			if (image_->width()  > this->viewport_width() )
+				left_ = (image_->width() - this->viewport_width()) / 2;
+			if (image_->height() > this->viewport_height() &&  autotop==0)
+				top_ = (image_->height() - this->viewport_height()) / 2;
                        setGlobalVariable("i:"FIM_VID_WANT_AUTOCENTER,0);
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
-//		if (displaydevice->redraw  ) 
+//		if (displaydevice_->redraw  ) 
 		{
 			/*	
 			 *	20070911
-			 *	this code is essential in order to protect from bad left and top values.
+			 *	this code is essential in order to protect from bad left_ and top_ values.
 			 * */
 			/*
 			 * This code should be studied in detail..
 			 * as it is is straight from fbi.
 			 */
-	    		if (image->height() <= this->viewport_height())
+	    		if (image_->height() <= this->viewport_height())
 	    		{
-				top = 0;
+				top_ = 0;
 	    		}
 			else 
 			{
-				if (top < 0)
-					top = 0;
-				if (top + this->viewport_height() > image->height())
-		    			top = image->height() - this->viewport_height();
+				if (top_ < 0)
+					top_ = 0;
+				if (top_ + this->viewport_height() > image_->height())
+		    			top_ = image_->height() - this->viewport_height();
 	    		}
-			if (image->width() <= this->viewport_width())
+			if (image_->width() <= this->viewport_width())
 			{
-				left = 0;
+				left_ = 0;
 	    		}
 			else
 			{
-				if (left < 0)
-				    left = 0;
-				if (left + this->viewport_width() > image->width())
-			    		left = image->width() - this->viewport_width();
+				if (left_ < 0)
+				    left_ = 0;
+				if (left_ + this->viewport_width() > image_->width())
+			    		left_ = image_->width() - this->viewport_width();
 		    	}
 		}
 		
-		if(displaydevice->redraw)
+		if(displaydevice_->redraw)
 		{
-			displaydevice->redraw=0;
+			displaydevice_->redraw=0;
 			/*
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
 			 */
 #ifdef FIM_WINDOWS
-			if(commandConsole.displaydevice )
+			if(commandConsole.displaydevice_ )
 			{
 			// FIXME : we need a mechanism for keeping the image pointer valid during multiple viewport usage
 			//std::cout << "display " << " ( " << yorigin() << "," << xorigin() << " ) ";
 			//std::cout << " " << " ( " << viewport_height() << "," << viewport_width() << " )\n";
-			displaydevice->display(
-					image->img,
-					top,
-					left,
-					image->height(),
-					image->width(),
-					image->width(),
+			displaydevice_->display(
+					image_->img,
+					top_,
+					left_,
+					image_->height(),
+					image_->width(),
+					image_->width(),
 					yorigin(),
 					xorigin(),
 					viewport_height(),
@@ -378,18 +378,18 @@ namespace fim
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);}
 #else
-			displaydevice->display(
-					image->img,
-					top,
-					left,
-					displaydevice->height(),
-					displaydevice->width(),
-					displaydevice->width(),
+			displaydevice_->display(
+					image_->img,
+					top_,
+					left_,
+					displaydevice_->height(),
+					displaydevice_->width(),
+					displaydevice_->width(),
 					0,
 					0,
-					displaydevice->height(),
-					displaydevice->width(),
-					displaydevice->width(),
+					displaydevice_->height(),
+					displaydevice_->width(),
+					displaydevice_->width(),
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);
 #endif					
@@ -404,11 +404,11 @@ namespace fim
 		if( check_invalid() ) return;
 		else
 		{
-			xs = (float)this->viewport_width()  / (float)(image->original_width()*(image->ascale>0.0?image->ascale:1.0));
-			ys = (float)this->viewport_height() / (float)image->original_height();
+			xs = (float)this->viewport_width()  / (float)(image_->original_width()*(image_->ascale>0.0?image_->ascale:1.0));
+			ys = (float)this->viewport_height() / (float)image_->original_height();
 		}
 
-		image->rescale( (xs < ys) ? xs : ys );
+		image_->rescale( (xs < ys) ? xs : ys );
 	}
 
 	int Viewport::valid()
@@ -424,7 +424,7 @@ namespace fim
 		 *
 		 * FIXME : this check is heavy.. move it downwards the call tree!
 		 * */
-		return check_valid() ? image : NULL;
+		return check_valid() ? image_ : NULL;
 	}
 
         Image* Viewport::getImage()const
@@ -432,7 +432,7 @@ namespace fim
 		/*
 		 * returns the image pointer, regardless its use! 
 		 * */
-		return image;
+		return image_;
 	}
 
         void Viewport::setImage(fim::Image* ni)
@@ -447,10 +447,10 @@ namespace fim
 		std::cout << "setting image \""<<ni->getName()<<"\" in viewport: "<< ni << "\n\n";
 #endif
 
-		//image = NULL;
+		//image_ = NULL;
 		if(ni)free();
 		reset();
-		image = ni;
+		image_ = ni;
 	}
 
         void Viewport::reset()
@@ -460,21 +460,21 @@ namespace fim
 		 *
 		 * FIXME
 		 * */
-		if(image)
+		if(image_)
 		{
-			image->reset();
+			image_->reset();
 			setGlobalVariable("i:"FIM_VID_WANT_AUTOCENTER,1);
 		}
 		should_redraw();
-                top  = 0;
-                left = 0;
+                top_  = 0;
+                left_ = 0;
 
 #ifdef FIM_WINDOWS
-		steps = getGlobalIntVariable(FIM_VID_STEPS);
-		if(steps<1)steps = 50;
+		steps_ = getGlobalIntVariable(FIM_VID_STEPS);
+		if(steps_<1)steps_ = 50;
 #else 
 		// WARNING : FIXME, TEMPORARY
-		steps = 50;
+		steps_ = 50;
 #endif
         }
 
@@ -486,9 +486,9 @@ namespace fim
 		float newscale;
 		if( check_invalid() ) return;
 
-		newscale = ((float)this->viewport_height()) / (float)image->original_height();
+		newscale = ((float)this->viewport_height()) / (float)image_->original_height();
 
-		image->rescale(newscale);
+		image_->rescale(newscale);
 	}
 
 	void Viewport::auto_width_scale()
@@ -499,9 +499,9 @@ namespace fim
 		float newscale;
 		if( check_invalid() ) return;
 
-		newscale = ((float)this->viewport_width()) / ((float)image->original_width()*(image->ascale>0.0?image->ascale:1.0));
+		newscale = ((float)this->viewport_width()) / ((float)image_->original_width()*(image_->ascale>0.0?image_->ascale:1.0));
 
-		image->rescale(newscale);
+		image_->rescale(newscale);
 	}
 
 	void Viewport::free()
@@ -510,16 +510,16 @@ namespace fim
 		 * frees the currently loaded image, if any
 		 */
 #ifndef FIM_BUGGED_CACHE
-		if(image)
+		if(image_)
 		{	
-			if( !commandConsole.browser.cache_.freeCachedImage(image) )
-				delete image;	// do it yourself :P
+			if( !commandConsole.browser.cache_.freeCachedImage(image_) )
+				delete image_;	// do it yourself :P
 		}
 #else
 		// warning : in this cases exception handling is missing
-		if(image)delete image;
+		if(image_)delete image_;
 #endif
-		image = NULL;
+		image_ = NULL;
 	}
 
         bool Viewport::check_valid()const
@@ -535,15 +535,15 @@ namespace fim
 		/*
 		 * this should not happen! (and probably doesn't happen :) )
 		 * */
-		if(!image)return true;
-		if( image)return image->check_invalid();
+		if(!image_)return true;
+		if( image_)return image_->check_invalid();
 		return true;
 	}
 
 #ifdef FIM_WINDOWS
         void Viewport::reassignWindow(Window *w)
 	{
-		window = w;
+		window_ = w;
 	}
 #endif
 	void Viewport::scale_position_magnify(float factor)
@@ -552,12 +552,12 @@ namespace fim
 		 * scale image positioning variables by adjusting by a multiplying factor
 		 * */
 		if(factor<=0.0)return;
-		left = (int)ceilf(((float)left)*factor);
-		top  = (int)ceilf(((float)top )*factor);
+		left_ = (int)ceilf(((float)left_)*factor);
+		top_  = (int)ceilf(((float)top_ )*factor);
 		/*
 		 * should the following be controlled by some optional variable ?
 		 * */
-		//if(!panned  /* && we_want_centering */ )
+		//if(!panned_  /* && we_want_centering */ )
 			this->recenter();
 	}
 
@@ -567,35 +567,35 @@ namespace fim
 		 * scale image positioning variables by adjusting by a multiplying factor
 		 * */
 		if(factor<=0.0)return;
-		left = (int)ceilf(((float)left)/factor);
-		top  = (int)ceilf(((float)top )/factor);
-		//if(!panned  /* && we_want_centering */ )
+		left_ = (int)ceilf(((float)left_)/factor);
+		top_  = (int)ceilf(((float)top_ )/factor);
+		//if(!panned_  /* && we_want_centering */ )
 			this->recenter();
 	}
 
 	void Viewport::recenter_horizontally()
 	{
-		left = (image->width() - this->viewport_width()) / 2;
+		left_ = (image_->width() - this->viewport_width()) / 2;
 	}
 
 	void Viewport::recenter_vertically()
 	{
-		top = (image->height() - this->viewport_height()) / 2;
+		top_ = (image_->height() - this->viewport_height()) / 2;
 	}
 
 	void Viewport::recenter()
 	{
-		if(!(panned & 0x02))recenter_horizontally();
-		if(!(panned & 0x01))recenter_vertically();
+		if(!(panned_ & 0x02))recenter_horizontally();
+		if(!(panned_ & 0x01))recenter_vertically();
 	}
 
 	void Viewport::should_redraw()const
 	{
 		/* FIXME */
-		if(image)
-			image->should_redraw();
+		if(image_)
+			image_->should_redraw();
 		else
-	        	if(displaydevice)displaydevice->redraw=1;
+	        	if(displaydevice_)displaydevice_->redraw=1;
 	}
 
 	Viewport::~Viewport()

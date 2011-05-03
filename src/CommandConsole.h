@@ -163,7 +163,7 @@ class CommandConsole
 	#endif
 	public:
 	DummyDisplayDevice dummydisplaydevice;
-	DisplayDevice *displaydevice;
+	DisplayDevice *displaydevice_;
 
 	fim::string execute(fim::string cmd, args_t args);
 

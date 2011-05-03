@@ -284,7 +284,7 @@ namespace fim
 #else
 	,dummydisplaydevice()
 #endif
-	,displaydevice(NULL)			/* the display device could be NULL ! (FIXME) */
+	,displaydevice_(NULL)			/* the display device could be NULL ! (FIXME) */
 #ifdef FIM_RECORDING
 	,dont_record_last_action(false)		/* this variable is only useful in record mode */
 	,recordMode(false)			/* we start not recording anything */
@@ -818,8 +818,8 @@ ok:
 		//exitBinding = 10;
 		if ( exitBinding == 0 ) return 1;	/* any key triggers an exit */
 
-		c = displaydevice->catchInteractiveCommand(seconds);
-	//	while((c = displaydevice.catchInteractiveCommand(seconds))!=-1)
+		c = displaydevice_->catchInteractiveCommand(seconds);
+	//	while((c = displaydevice_.catchInteractiveCommand(seconds))!=-1)
 		while(c!=-1)
 		{
 			/* while characters read */
@@ -833,7 +833,7 @@ ok:
 				 * is it a desirable behaviour ?
 				 */
 				executeBinding(c);
-				c = displaydevice->catchInteractiveCommand(1);
+				c = displaydevice_->catchInteractiveCommand(1);
 //				return 0;/* could be a command key */
 			}
 			if(c==exitBinding) return 1; 		/* the user hit the exitBinding key */
@@ -957,7 +957,7 @@ ok:
 				 */
 				c=0;
 				
-				r=displaydevice->get_input(&c);
+				r=displaydevice_->get_input(&c);
 #ifdef	FIM_USE_GPM
 /*
 				Gpm_Event *EVENT;
@@ -1104,12 +1104,12 @@ ok:
 				delete commands[i];
 
 	#ifdef FIM_WITH_AALIB
-		if(aad && !displaydevice)
+		if(aad && !displaydevice_)
 			delete aad;	/* aad is an alias */
 		else
 	#endif
 		{
-			if(displaydevice && displaydevice != &dummydisplaydevice)delete displaydevice;
+			if(displaydevice_ && displaydevice_ != &dummydisplaydevice)delete displaydevice_;
 		}
 
 #ifdef FIM_WINDOWS
@@ -1897,7 +1897,7 @@ ok:
 		 * */
 
 		tty_restore();	
-		if(displaydevice) displaydevice->finalize();
+		if(displaydevice_) displaydevice_->finalize();
 #ifdef FIM_USE_READLINE
 		save_history();
 #endif
@@ -1909,10 +1909,10 @@ ok:
 	 */
 	void CommandConsole::status_screen(const char *desc)
 	{
-		if(!displaydevice)
+		if(!displaydevice_)
 			return;
 
-		displaydevice->fb_status_screen_new(desc,drawOutput(desc),0);
+		displaydevice_->fb_status_screen_new(desc,drawOutput(desc),0);
 	}
 
 	void CommandConsole::set_status_bar(fim::string desc, const char *info)
@@ -1942,7 +1942,7 @@ ok:
 		const char*hp=" - Help";int hpl=strlen(hp);
 		prompt[1]='\0';
 	
-		if( ! displaydevice   ) return;
+		if( ! displaydevice_   ) return;
 		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP);/* FIXME: this is SLOW, and should be replaced */
 		hkl=strlen(hk.c_str());
 		/* FIXME: could we guarantee a bound on its length in some way ? */
@@ -1953,7 +1953,7 @@ ok:
 			else {hpl=0;/* no help key ? no message, then */}
 		}
 	
-		chars = displaydevice->get_chars_per_line();
+		chars = displaydevice_->get_chars_per_line();
 		if(chars<1)return;
 		str = (char*) fim_calloc(chars+1,1);//this malloc is free
 		if(!str)return;
@@ -1995,7 +1995,7 @@ ok:
 		}
 #endif
 
-		displaydevice->status_line((unsigned char*)str);
+		displaydevice_->status_line((unsigned char*)str);
 		fim_free(str);
 	}
 
