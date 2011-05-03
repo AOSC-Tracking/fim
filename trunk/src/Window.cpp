@@ -2,7 +2,7 @@
 /*
  Window.cpp : Fim's own windowing system
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -118,8 +118,11 @@ namespace fim
                 return "";
         }
 
-	Window::Window(CommandConsole &c,const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false),
-	viewport(NULL),
+	Window::Window(CommandConsole &c,const Rect& corners_, Viewport* vp):corners(corners_),focus(0),first(NULL),second(NULL),amroot(false)
+#ifdef FIM_NAMESPACES
+	,Namespace(FIM_SYM_NAMESPACE_WINDOW_CHAR)
+#endif
+	,viewport(NULL),
 	commandConsole(c)
 	{
 		/*
@@ -141,6 +144,9 @@ namespace fim
 
 //#ifdef FIM_UNDEFINED
 	Window::Window(const Window & root):corners(root.corners),focus(root.focus),first(root.first),second(root.second),amroot(false), viewport(NULL),commandConsole(root.commandConsole)
+#ifdef FIM_NAMESPACES
+			,Namespace(FIM_SYM_NAMESPACE_WINDOW_CHAR)
+#endif
 	{
 		/*
 		 *  A new leave Window is created with a specified geometry.

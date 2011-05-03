@@ -2,7 +2,7 @@
 /*
  Namespace.h : a class for local variables storage
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -657,6 +657,27 @@ namespace fim
 #else
 			return "";
 #endif
+		}
+
+		fim::string Namespace::get_variables_list()const
+		{
+			/*
+			 * returns the list of set variables
+			 * TODO: to accept an optional argument as separator.
+			 */
+			fim::string acl;
+			variables_t::const_iterator vi;
+			for( vi=variables.begin();vi!=variables.end();++vi)
+			{
+				if(ns_char_!=FIM_SYM_NULL_NAMESPACE_CHAR)
+				{
+					acl+=ns_char_;
+					acl+=FIM_SYM_NAMESPACE_SEP;
+				}
+				acl+=((*vi).first);
+				acl+=" ";
+			}
+			return acl;
 		}
 }
 

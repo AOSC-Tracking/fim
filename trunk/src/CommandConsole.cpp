@@ -1253,13 +1253,35 @@ ok:
 		/*
 		 * returns the list of set variables
 		 */
-		fim::string acl;
+		fim::string acl,sep=" ";
 		variables_t::const_iterator vi;
 		for( vi=variables.begin();vi!=variables.end();++vi)
 		{
 			acl+=((*vi).first);
 			acl+=" ";
 		}
+
+#ifdef FIM_NAMESPACES
+		acl+=browser.get_variables_list();
+		acl+=sep;
+		if(browser.c_image())
+		{
+			acl+=browser.c_image()->get_variables_list();
+			acl+=sep;
+		}
+#endif
+#ifdef FIM_WINDOWS
+		if(window)
+		{
+			acl+=window->get_variables_list();
+			acl+=sep;
+		}
+		if(current_viewport())
+		{
+			acl+=current_viewport()->get_variables_list();
+			acl+=sep;
+		}
+#endif
 		return acl;
 	}
 
