@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -614,7 +614,7 @@ int help_and_exit(char *argv0, int code=0)
 
 				// DANGEROUS TRICK!
 				cc.browser.set_default_image(stream_image);
-				if(!cc.browser.cache.setAndCacheStdinCachedImage(stream_image))
+				if(!cc.browser.cache_.setAndCacheStdinCachedImage(stream_image))
 					std::cerr << "problems caching standard input image!\n";// FIXME
 
 				cc.browser.push(FIM_STDIN_IMAGE_NAME);
