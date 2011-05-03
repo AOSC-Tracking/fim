@@ -156,20 +156,20 @@
 		char k[4];k[1]='\0';
 
 		/*	97=0x61 to 122=0x7A	*/
-		for(char i='a';i<='z';++i,*k=i) key_bindings[k]=i;
+		for(char i='a';i<='z';++i,*k=i) key_bindings_[k]=i;
 
 		
 		/*	65=0x41 to 90=0x5A (shifted keys)	*/
-		for(char i='A';i<='Z';++i,*k=i) key_bindings[k]=i;
+		for(char i='A';i<='Z';++i,*k=i) key_bindings_[k]=i;
 		
 		/*	32=0x20 to 65=0x40	*/
-		for(char i=' ';i<='@';++i,*k=i) key_bindings[k]=i;
+		for(char i=' ';i<='@';++i,*k=i) key_bindings_[k]=i;
 
 		/*	91=0x5B to 96=0x60	*/
-		for(char i='[';i<'a';++i,*k=i) key_bindings[k]=i;
+		for(char i='[';i<'a';++i,*k=i) key_bindings_[k]=i;
 
 		/*	123=0x7B to 127=0x7F (DEL)	*/
-		for(int i='{';i<=127;++i,*k=(char)i) key_bindings[k]=(char)i;
+		for(int i='{';i<=127;++i,*k=(char)i) key_bindings_[k]=(char)i;
 		// A note : DEL is not captured by the above configuration.
 		
 		/*
@@ -177,51 +177,51 @@
 		 */
 		k[0]='C'; k[1]='-'; k[3]='\0';
 		//problem : no uppercase with control.sorry.
-		for(char i='b';i<='j';++i,k[2]=i) key_bindings[k]=((i+1)-'a');
-		for(char i='k';i<='z';++i,k[2]=i) key_bindings[k]=((i+1)-'a');
-		for(char i=' ';i<='?';++i,k[2]=i) key_bindings[k]=( i+1)-'a' ;
-		key_bindings["C-a"]=1;//to circumvent a mysterious arithmetical bug..
+		for(char i='b';i<='j';++i,k[2]=i) key_bindings_[k]=((i+1)-'a');
+		for(char i='k';i<='z';++i,k[2]=i) key_bindings_[k]=((i+1)-'a');
+		for(char i=' ';i<='?';++i,k[2]=i) key_bindings_[k]=( i+1)-'a' ;
+		key_bindings_["C-a"]=1;//to circumvent a mysterious arithmetical bug..
 		/*
 		 * The following bindings are known to be useless or bugful.
 		*/
 		/*
-		for(char i='[';i<'a';++i,k[2]=i) key_bindings[k]=(i+1);
-		for(int i='{';i<=127;++i,k[2]=(char)i) key_bindings[k]=(i+1)(char)i;
+		for(char i='[';i<'a';++i,k[2]=i) key_bindings_[k]=(i+1);
+		for(int i='{';i<=127;++i,k[2]=(char)i) key_bindings_[k]=(i+1)(char)i;
 		*/
 		
 		/*
 		 * The following means that when a decimal 4479771 will be read from
 		 * the keyboard, it will be interpreted as a Left pressure.
 		 */
-		key_bindings[FIM_KBD_LEFT]=4479771;
+		key_bindings_[FIM_KBD_LEFT]=4479771;
 		// and so on..
-		key_bindings[FIM_KBD_RIGHT]=4414235;
-		key_bindings[FIM_KBD_UP]=4283163;
-		key_bindings[FIM_KBD_DOWN]=4348699;
-		key_bindings[FIM_KBD_PAGEDOWN]=2117491483;
-		key_bindings[FIM_KBD_PAGEUP]=2117425947;
-		key_bindings[FIM_KBD_ENTER]=10;
-		key_bindings[FIM_KBD_BACKSPACE_]=127;
-		key_bindings[FIM_KBD_BACKSPACE]=127;
-		key_bindings[FIM_KBD_DEL]=2117294875;
-		key_bindings[FIM_KBD_INS]=2117229339;
-		key_bindings[FIM_KBD_HOME]=2117163803;
-		key_bindings[FIM_KBD_END] =2117360411;
-		key_bindings[FIM_KBD_TAB] =9;
-		key_bindings[FIM_KBD_ANY] =0;	/* EXPERIMENTAL */
-		key_bindings[FIM_KBD_ESC] =27;
+		key_bindings_[FIM_KBD_RIGHT]=4414235;
+		key_bindings_[FIM_KBD_UP]=4283163;
+		key_bindings_[FIM_KBD_DOWN]=4348699;
+		key_bindings_[FIM_KBD_PAGEDOWN]=2117491483;
+		key_bindings_[FIM_KBD_PAGEUP]=2117425947;
+		key_bindings_[FIM_KBD_ENTER]=10;
+		key_bindings_[FIM_KBD_BACKSPACE_]=127;
+		key_bindings_[FIM_KBD_BACKSPACE]=127;
+		key_bindings_[FIM_KBD_DEL]=2117294875;
+		key_bindings_[FIM_KBD_INS]=2117229339;
+		key_bindings_[FIM_KBD_HOME]=2117163803;
+		key_bindings_[FIM_KBD_END] =2117360411;
+		key_bindings_[FIM_KBD_TAB] =9;
+		key_bindings_[FIM_KBD_ANY] =0;	/* EXPERIMENTAL */
+		key_bindings_[FIM_KBD_ESC] =27;
 
-		exitBinding = key_bindings[FIM_KBD_ENTER];	/*  Enter will terminate loops */
-//		key_bindings[" "]=' ';
-//		key_bindings["."]='.';
-//		key_bindings[","]=',';
+		exitBinding_ = key_bindings_[FIM_KBD_ENTER];	/*  Enter will terminate loops */
+//		key_bindings_[" "]=' ';
+//		key_bindings_["."]='.';
+//		key_bindings_[","]=',';
 //
 {
 		std::map<fim::string,int>::const_iterator ki;
-		for( ki=key_bindings.begin();ki!=key_bindings.end();++ki)
+		for( ki=key_bindings_.begin();ki!=key_bindings_.end();++ki)
 		{
-			inverse_key_bindings[(((*ki).second))]=((*ki).first);
-			//inverse_key_bindings[10]="ciao";//((*ki).first);
+			inverse_key_bindings_[(((*ki).second))]=((*ki).first);
+			//inverse_key_bindings_[10]="ciao";//((*ki).first);
 		}
 }
 #endif
