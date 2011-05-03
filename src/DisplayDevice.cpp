@@ -52,7 +52,7 @@
 			/*
 			 * patch: the following read blocks the program even when switching console
 			 */
-			//r=read(fim_stdin,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
+			//r=read(fim_stdin_,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
 			/*
 			 * so the next coded shoul circumvent this behaviour!
 			 */
@@ -63,7 +63,7 @@
 				int timeout=1,rc,paused=0;
 	
 			        FD_ZERO(&set);
-			        FD_SET(cc.fim_stdin, &set);
+			        FD_SET(cc.fim_stdin_, &set);
 			        fdmax = 1;
 #ifdef FBI_HAVE_LIBLIRC
 				/*
@@ -83,7 +83,7 @@
 					return 0;	/* warning : originally a 'continue' in a loop ! */
 				}
 				
-				if (FD_ISSET(cc.fim_stdin,&set))rc = read(cc.fim_stdin, c, 4);
+				if (FD_ISSET(cc.fim_stdin_,&set))rc = read(cc.fim_stdin_, c, 4);
 				r=rc;
 				*c=int2msbf(*c);
 			}
@@ -91,7 +91,7 @@
 			/*
 			 * this way the console switches the wrong way
 			 */
-			r=read(fim_stdin,&c,4);	//up to four chars should suffice
+			r=read(fim_stdin_,&c,4);	//up to four chars should suffice
 #endif
 			//std::cout << (int)*c<<"\n";
 
@@ -128,9 +128,9 @@
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		
 		fim_key_t c,r;//char buf[64];
-		//r=read(fim_stdin,&c,4);
+		//r=read(fim_stdin_,&c,4);
 		// FIXME : read(.,.,3) is NOT portable. DANGER
-		r=read(cc.fim_stdin,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);c=(0x1b)+(c<<8);/* we should do something with rc now */}
+		r=read(cc.fim_stdin_,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);c=(0x1b)+(c<<8);/* we should do something with rc now */}
 
 		//we restore the previous console attributes
 		tcsetattr (0, TCSAFLUSH, &sattr);

@@ -41,7 +41,7 @@ namespace fim
 			binding_expanded+=FIM_FLT_BIND" '";
 			binding_expanded+=args[0];
 			binding_expanded+="' '";
-			binding_expanded+=bindings[key_bindings[args[0]]];
+			binding_expanded+=bindings_[key_bindings_[args[0]]];
 			binding_expanded+="'\n";
 			return binding_expanded;
 		}
@@ -54,7 +54,7 @@ namespace fim
 		int l=strlen(key);
 		if(!l)return kerr;
 		if(args[1]=="") return unbind(args[0]);
-		return bind(key_bindings[args[0]],args[1]);
+		return bind(key_bindings_[args[0]],args[1]);
 	}
 
 	fim::string CommandConsole::unbind(const args_t& args)
@@ -105,7 +105,7 @@ namespace fim
 		/*
 		 * now the postcycle execution autocommands are enabled !
 		 * */
-		show_must_go_on=0;
+		show_must_go_on_=0;
 		return "";
 	}
 
@@ -234,7 +234,7 @@ namespace fim
 		 * EXPERIMENTAL !!
 		 * */
 #ifdef FIM_USE_READLINE
-		ic = 1;
+		ic_ = 1;
 #endif
 		return "";
 	}
@@ -242,7 +242,7 @@ namespace fim
 	fim::string CommandConsole::set_interactive_mode(const args_t& args)
 	{
 #ifdef FIM_USE_READLINE
-		ic=-1;set_status_bar("",NULL);
+		ic_=-1;set_status_bar("",NULL);
 #endif
 		/*
 		 *
@@ -299,8 +299,8 @@ namespace fim
 			 * */
 			Image* stream_image=new Image(FIM_LINUX_STDIN_FILE,tfd);
 			// DANGEROUS TRICK!
-			browser.set_default_image(stream_image);
-			browser.push("");
+			browser_.set_default_image(stream_image);
+			browser_.push("");
 			//pclose(tfd);
 		}
 		else
@@ -418,10 +418,10 @@ namespace fim
 		else	this->quit( (int) args[0] );*/
 		/* this is clean */
 		if( args.size() < 0 )
-			return_code=0;
+			return_code_=0;
 		else
-			return_code=(int)args[0];
-		show_must_go_on=0;
+			return_code_=(int)args[0];
+		show_must_go_on_=0;
 		return "";/* it shouldn' return, though :) */
 	}
 
@@ -433,7 +433,7 @@ namespace fim
 		fim::string s;
 		for(size_t i=0;i<args.size();++i)
 			s+=args[i].c_str();
-		browser.display_status(s.c_str(),NULL);
+		browser_.display_status(s.c_str(),NULL);
 		return "";
 	}
 
@@ -448,14 +448,14 @@ namespace fim
 		if(args[0]==string("-a"))
 		{
 			/* FIXME : the lexer/parser is bugged and it takes -a as an expression if not between double quotes ("-a") */
-			aliases.clear();
+			aliases_.clear();
 			return "";
 		}
 
 		for(size_t i=0;i<args.size();++i)
-		if(aliases[args[i]].first!="")
+		if(aliases_[args[i]].first!="")
 		{
-			aliases.erase(args[i]);
+			aliases_.erase(args[i]);
 			return "";
 			/* fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" successfully unaliased.\n"); */
 		}
@@ -475,7 +475,7 @@ namespace fim
 		 * */
 		fim::string acl;
 		key_bindings_t::const_iterator ki;
-		for( ki=key_bindings.begin();ki!=key_bindings.end();++ki)
+		for( ki=key_bindings_.begin();ki!=key_bindings_.end();++ki)
 		{
 			acl+=((*ki).first);
 			acl+=" -> ";
@@ -497,17 +497,17 @@ namespace fim
 		 * the recorded commands are dumped in the console
 		 * */
 		fim::string res;
-		for(size_t i=0;i<recorded_actions.size();++i)
+		for(size_t i=0;i<recorded_actions_.size();++i)
 		{
-			fim::string ss=(int)recorded_actions[i].second;
+			fim::string ss=(int)recorded_actions_[i].second;
 			/*
 			 * FIXME : fim::string+=<int> is bugful
 			 * */
 			res+=FIM_FLT_USLEEP" '";
-//			res+=(int)recorded_actions[i].second;
+//			res+=(int)recorded_actions_[i].second;
 			res+=ss;
 			res+="';\n";
-			res+=recorded_actions[i].first;
+			res+=recorded_actions_[i].first;
 			res+="\n";
 		}
 		return res;
@@ -523,9 +523,9 @@ namespace fim
 		 * but the present (above) doesn't support interruptions ...
 		 * */
 /*		fim::string res;
-		for(size_t i=0;i<recorded_actions.size();++i)
+		for(size_t i=0;i<recorded_actions_.size();++i)
 		{
-			res=recorded_actions[i].first+(fim::string)recorded_actions[i].second;
+			res=recorded_actions_[i].first+(fim::string)recorded_actions_[i].second;
 			execute(res.c_str(),0,1);
 		}*/
 		return "";
@@ -556,11 +556,11 @@ namespace fim
 		 *   but this would be a lot sorrowful too, and requires the non-registration 
 		 *   of the 'repeat_last;' issuing..
 		 * - So, since the recording is made AFTER the command was executed, we set
-		 *   a dont_record_last_action flag after each detection of repeat_last, so we do not 
+		 *   a dont_record_last_action_ flag after each detection of repeat_last, so we do not 
 		 *   record the containing string.
 		 */
-		execute(last_action.c_str(),0,0);
-		dont_record_last_action=true;	//the issuing action will not be recorded
+		execute(last_action_.c_str(),0,0);
+		dont_record_last_action_=true;	//the issuing action will not be recorded
 		return "";
 	}
 
@@ -569,8 +569,8 @@ namespace fim
 		/*
 		 * recording of commands starts here
 		 * */
-		recorded_actions.clear();
-		recordMode=true;
+		recorded_actions_.clear();
+		recordMode_=true;
 		return "";
 	}
 
@@ -579,8 +579,8 @@ namespace fim
 		/*
 		 * since the last recorded action was stop_recording, we pop out the last command
 		 */
-		if(recorded_actions.size()>0)recorded_actions.pop_back();
-		recordMode=false;
+		if(recorded_actions_.size()>0)recorded_actions_.pop_back();
+		recordMode_=false;
 		return "";
 	}
 
