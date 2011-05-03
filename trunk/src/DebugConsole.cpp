@@ -51,7 +51,7 @@ namespace fim
 			 * FIXME : this function returns often with -1 !
 			 * */
 			int i;
-			const int maxcols = cc.displaydevice->get_chars_per_line();
+			const int maxcols = cc.displaydevice_->get_chars_per_line();
 	
 			if(f<0 && l>=0 && f+l<0 && -f<=cline) { f=cline+f; l=cline-l; }
 			else
@@ -71,7 +71,7 @@ namespace fim
 					{
 						strncpy(buf,line[f],n);
 						buf[n-1]='\0';
-						cc.displaydevice->fs_puts(cc.displaydevice->f,0,0,(unsigned char*)buf);
+						cc.displaydevice_->fs_puts(cc.displaydevice_->f,0,0,(unsigned char*)buf);
 						fim_free(buf);
 					}
 				}
@@ -85,16 +85,16 @@ namespace fim
 
 			if(*bp){fim_free(buf);return -1;}//if *bp then we could print garbage so we exit before damage is done
 
-			int fh=cc.displaydevice->f ? cc.displaydevice->f->height:1; // FIXME : this is not clean
+			int fh=cc.displaydevice_->f ? cc.displaydevice_->f->height:1; // FIXME : this is not clean
 			l-=f; l%=(rows+1); l+=f;
 
 			/* FIXME : the following line is redundant in fb, but not in SDL 
 			 * moreover, it seems useless in AA (could be a bug)
 			 * */
-			cc.displaydevice->clear_rect(0, cc.displaydevice->width()-1, 0 ,fh*(l-f+1) );
+			cc.displaydevice_->clear_rect(0, cc.displaydevice_->width()-1, 0 ,fh*(l-f+1) );
 
 			// fs_puts alone won't draw on screen, but in the back plance, so unlock/flip will be necessary
-			cc.displaydevice->lock();
+			cc.displaydevice_->lock();
 
 	    		for(i=f  ;i<=l   ;++i)
 			{
@@ -109,7 +109,7 @@ namespace fim
 				 * we truncate the line for the interval exceeding the screen width.
 				 * */
 				buf[ maxcols ]='\0';
-				cc.displaydevice->fs_puts(cc.displaydevice->f, 0, fh*(i-f), (unsigned char*)buf);
+				cc.displaydevice_->fs_puts(cc.displaydevice_->f, 0, fh*(i-f), (unsigned char*)buf);
 			}
 
 			/* FIXME : THE FOLLOWING IS A FIXUP FOR AA!  */
@@ -118,11 +118,11 @@ namespace fim
 				int t = (min(maxcols,lwidth)+1);
 				memset(buf,' ',t);
 				buf[t-1]='\0';
-				cc.displaydevice->fs_puts(cc.displaydevice->f, 0, fh*((l-f+1)+i), (unsigned char*)buf);
+				cc.displaydevice_->fs_puts(cc.displaydevice_->f, 0, fh*((l-f+1)+i), (unsigned char*)buf);
 			}
-			cc.displaydevice->unlock();
+			cc.displaydevice_->unlock();
 
-			cc.displaydevice->flush();
+			cc.displaydevice_->flush();
 			fim_free(buf);
 			return 0;
 		#undef min
@@ -136,11 +136,11 @@ namespace fim
 			char *cs=NULL;/* using co would mean provoking the compiler */
 
 #if FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE
-			if(cc.displaydevice && 0==cc.displaydevice->get_chars_per_column())
+			if(cc.displaydevice_ && 0==cc.displaydevice_->get_chars_per_column())
 			{
 				// we display input as soon as it received.
 				if(this->getGlobalIntVariable(FIM_VID_DISPLAY_CONSOLE))
-					cc.displaydevice->fs_puts(cc.displaydevice->f,0,0,(unsigned char*)cso);
+					cc.displaydevice_->fs_puts(cc.displaydevice_->f,0,0,(unsigned char*)cso);
 			}
 #endif
 			cs=dupstr(cso);
@@ -204,7 +204,7 @@ rerr:
 				rows=-nr;
 				return 0;
 			}
-			maxrows = cc.displaydevice->get_chars_per_column();
+			maxrows = cc.displaydevice_->get_chars_per_column();
 			if(nr>0 && nr<=maxrows)
 			{
 				rows=nr;

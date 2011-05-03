@@ -48,7 +48,7 @@ namespace fim
 		//setlocale(LC_NUMERIC,"en_US"); /* lame  */
 		//setlocale(LC_ALL,""); /* just lame */
 
-		displaydevice=NULL;	/* TODO : is this really necessary ? */
+		displaydevice_=NULL;	/* TODO : is this really necessary ? */
 		int xres=0,yres=0;
 
 #ifndef FIM_WITH_NO_FRAMEBUFFER
@@ -59,13 +59,13 @@ namespace fim
 			extern float default_fbgamma;
 			FramebufferDevice * ffdp=NULL;
 
-			displaydevice=new FramebufferDevice(
+			displaydevice_=new FramebufferDevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc
 #endif
 					);
-			if(!displaydevice || ((FramebufferDevice*)displaydevice)->framebuffer_init()){cleanup();return -1;}
-			ffdp=((FramebufferDevice*)displaydevice);
+			if(!displaydevice_ || ((FramebufferDevice*)displaydevice_)->framebuffer_init()){cleanup();return -1;}
+			ffdp=((FramebufferDevice*)displaydevice_);
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_FB);
 			if(default_fbdev)ffdp->set_fbdev(default_fbdev);
 			if(default_fbmode)ffdp->set_fbmode(default_fbmode);
@@ -84,9 +84,9 @@ namespace fim
 					mc
 #endif
 					); if(sdld && sdld->initialize(key_bindings)!=0){delete sdld ; sdld=NULL;}
-			if(sdld && displaydevice==NULL)
+			if(sdld && displaydevice_==NULL)
 			{
-				displaydevice=sdld;
+				displaydevice_=sdld;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_SDL);
 			}
 		}
@@ -101,9 +101,9 @@ namespace fim
 					mc
 #endif
 					); if(cacad && cacad->initialize(key_bindings)!=0){delete cacad ; cacad=NULL;}
-			if(cacad && displaydevice==NULL)
+			if(cacad && displaydevice_==NULL)
 			{
-				displaydevice=cacad;
+				displaydevice_=cacad;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_CACA);
 			}
 		}
@@ -119,9 +119,9 @@ namespace fim
 				);
 
 		if(aad && aad->initialize(key_bindings)!=0){delete aad ; aad=NULL;}
-		if(aad && displaydevice==NULL)
+		if(aad && displaydevice_==NULL)
 		{
-			displaydevice=aad;
+			displaydevice_=aad;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_AA);
 
 #if FIM_WANT_SCREEN_KEY_REMAPPING_PATCH
@@ -146,16 +146,16 @@ namespace fim
 		#endif
 		tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
 
-		if( displaydevice==NULL)
+		if( displaydevice_==NULL)
 		{
-			displaydevice=&dummydisplaydevice;
+			displaydevice_=&dummydisplaydevice;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_DUMB);
 		}
 
-		xres=displaydevice->width(),yres=displaydevice->height();
+		xres=displaydevice_->width(),yres=displaydevice_->height();
 
 		// textual console reformatting (should go to displaydevice some day)
-		displaydevice->init_console();
+		displaydevice_->init_console();
 	
 
 #ifdef FIM_WINDOWS
@@ -262,13 +262,13 @@ namespace fim
 		 *	FIXME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
 		 * */
 #ifdef FIM_USE_READLINE
-		rl::initialize_readline( displaydevice==NULL );
+		rl::initialize_readline( displaydevice_==NULL );
 		load_history();
 #endif
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
 			/* experimental */
-			displaydevice->quickbench();
+			displaydevice_->quickbench();
 			quit(return_code);
 			exit(return_code);
 		}

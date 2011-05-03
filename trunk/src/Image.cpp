@@ -186,8 +186,8 @@ namespace fim
 		setVariable(FIM_VID_WIDTH ,(int)fimg->i.width );
 		setVariable(FIM_VID_SHEIGHT,(int) img->i.height);
 		setVariable(FIM_VID_SWIDTH,(int) img->i.width );
-		if(cc.displaydevice)
-		setVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice->get_bpp());
+		if(cc.displaydevice_)
+		setVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice_->get_bpp());
 		setVariable(FIM_VID_SCALE  ,newscale*100);
 		setVariable(FIM_VID_ASCALE,ascale);
 		setVariable(FIM_VID_ANGLE , angle);
@@ -199,8 +199,8 @@ namespace fim
 		setGlobalVariable(FIM_VID_WIDTH  ,(int)fimg->i.width );
 		setGlobalVariable(FIM_VID_SHEIGHT,(int) img->i.height);
 		setGlobalVariable(FIM_VID_SWIDTH ,(int) img->i.width );
-		if(cc.displaydevice)
-		setGlobalVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice->get_bpp());
+		if(cc.displaydevice_)
+		setGlobalVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice_->get_bpp());
 		//setGlobalVariable(FIM_VID_SCALE  ,newscale*100);
 		//setGlobalVariable(FIM_VID_ASCALE ,ascale);
 		return true;
@@ -618,8 +618,8 @@ fim::string Image::getInfo()
 	void Image::should_redraw(int should)const
 	{
 		/* FIXME : this is BAD style ! */
-	        if(cc.displaydevice)
-		        cc.displaydevice->redraw=1;
+	        if(cc.displaydevice_)
+		        cc.displaydevice_->redraw=1;
 	}
 
 	bool Image::prev_page(int j)

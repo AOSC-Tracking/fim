@@ -2,7 +2,7 @@
 /*
  readline.cpp : Code dealing with the GNU readline library.
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -153,7 +153,7 @@ int rl_sdl_getc_hook()
 	fim_key_t c;
 	c=0;
 	
-	if(cc.displaydevice->get_input(&c)==1)
+	if(cc.displaydevice_->get_input(&c)==1)
 	{
 
 		if(c&(1<<31))

@@ -617,7 +617,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	    h->inleft  = 0;
 	}
 #if 0
-	if (cc.displaydevice->debug)
+	if (cc.displaydevice_->debug)
 	    FIM_FBI_PRINTF("y:  %6.2f%%: %d/%d => %d/%d\n",
 		    weight*100,h->srcrow,src->height,line,h->height);
 #endif
@@ -730,7 +730,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 		left     = 0;
 	    }
 #if 0
-	    if (cc.displaydevice->debug)
+	    if (cc.displaydevice_->debug)
 		FIM_FBI_PRINTF(" x: %6.2f%%: %d/%d => %d/%d\n",
 			weight*100,sx,src->width,dx,h->width);
 #endif
@@ -1172,7 +1172,7 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
     rect.x2 = x+1;
 
     fim_free(img.data);
-    if (cc.displaydevice->debug)
+    if (cc.displaydevice_->debug)
 	FIM_FBI_PRINTF("y: %d-%d/%d  --  x: %d-%d/%d\n",
 		rect.y1, rect.y2, img.i.height,
 		rect.x1, rect.x2, img.i.width);
@@ -1459,7 +1459,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     /* open file */
     if (NULL == (fp = fopen(filename, "r"))) {
 	//comment by dez, temporary
-	if(cc.displaydevice->debug)
+	if(cc.displaydevice_->debug)
 		FIM_FBI_PRINTF("open %s: %s\n",filename,strerror(errno));
 	return NULL;
     }
@@ -1680,7 +1680,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
 #endif
     if (NULL == data) {
-	if(cc.displaydevice->debug)
+	if(cc.displaydevice_->debug)
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);
 	return NULL;
@@ -1693,7 +1693,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     }
 #else
     for (y = 0; y < img->i.height; y++) {
-	cc.displaydevice->switch_if_needed();
+	cc.displaydevice_->switch_if_needed();
 	loader->read(img->data + img->i.width * 3 * y, y, data);
     }
 #endif
@@ -1761,7 +1761,7 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     dest->data = (unsigned char*)fim_malloc(dest->i.width * dest->i.height * 3);
     /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice->switch_if_needed();
+	cc.displaydevice_->switch_if_needed();
 	desc_p->work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -1840,7 +1840,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     dest->data = (unsigned char*)fim_calloc(dest->i.width * dest->i.height * 3,1);
     /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice->switch_if_needed();
+	cc.displaydevice_->switch_if_needed();
 	desc_rotate.work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -1887,7 +1887,7 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
     dest->data = (unsigned char*)fim_malloc(dest->i.width * dest->i.height * 3);
     /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice->switch_if_needed();
+	cc.displaydevice_->switch_if_needed();
 	desc_resize.work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -1922,8 +1922,8 @@ struct ida_image * fbi_image_clone(struct ida_image *img)
 
 	int FbiStuff::fim_filereading_debug()
 	{
-		return cc.displaydevice ?
-			cc.displaydevice->debug:
+		return cc.displaydevice_ ?
+			cc.displaydevice_->debug:
 			0;
 	}
 
