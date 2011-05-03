@@ -87,7 +87,7 @@ class SDLDevice:public DisplayDevice
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str);
+	int fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const unsigned char *str);
 	int fill_rect(int x1, int x2, int y1,int y2, int color);
 	void flush();
 	void lock();

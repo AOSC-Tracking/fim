@@ -61,7 +61,7 @@ namespace fim
 
 			displaydevice_=new FramebufferDevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-					mc
+					mc_
 #endif
 					);
 			if(!displaydevice_ || ((FramebufferDevice*)displaydevice_)->framebuffer_init()){cleanup();return -1;}
@@ -81,7 +81,7 @@ namespace fim
 			DisplayDevice *sdld=NULL;
 			sdld=new SDLDevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-					mc
+					mc_
 #endif
 					); if(sdld && sdld->initialize(key_bindings)!=0){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice_==NULL)
@@ -98,7 +98,7 @@ namespace fim
 			DisplayDevice *cacad=NULL;
 			cacad=new CACADevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-					mc
+					mc_
 #endif
 					); if(cacad && cacad->initialize(key_bindings)!=0){delete cacad ; cacad=NULL;}
 			if(cacad && displaydevice_==NULL)
@@ -114,7 +114,7 @@ namespace fim
 		{
 		aad=new AADevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-				mc
+				mc_
 #endif
 				);
 

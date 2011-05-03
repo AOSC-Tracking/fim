@@ -419,7 +419,7 @@
 
 	void AADevice::finalize() 
 	{
-		finalized=true;
+		finalized_=true;
 		aa_close(ascii_context);
 	}
 	int AADevice::get_chars_per_line(){return aa_scrwidth(ascii_context);}
@@ -432,9 +432,9 @@
 	int AADevice::init_console()
 	{
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-		//mc.setRows ( -height()/2);
-		mc.setRows ( get_chars_per_column()/2 );
-		mc.reformat(  txt_width()   );
+		//mc_.setRows ( -height()/2);
+		mc_.setRows ( get_chars_per_column()/2 );
+		mc_.reformat(  txt_width()   );
 #endif
 		return 0;
 	}
@@ -477,7 +477,7 @@
 	AADevice::~AADevice()
 	{
 		/* FIXME : seems like some aa stuff doesn't get freed. is it possible ? */
-		if(!finalized)finalize();// finalize should be called explicitly !
+		if(!finalized_)finalize();// finalize should be called explicitly !
 	}
 
 	int AADevice::get_input(fim_key_t * c)

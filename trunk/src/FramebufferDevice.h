@@ -101,13 +101,13 @@ class FramebufferDevice:public DisplayDevice
 	{
 	    char   *fonts[2] = { font, NULL };
 	
-	    if (NULL == f)
-		f = fs_consolefont(font ? fonts : NULL);
+	    if (NULL == f_)
+		f_ = fs_consolefont(font ? fonts : NULL);
 	#ifndef X_DISPLAY_MISSING
-	    if (NULL == f && 0 == fs_connect(NULL))
-		f = fs_open(font ? font : x11_font);
+	    if (NULL == f_ && 0 == fs_connect(NULL))
+		f_ = fs_open(font ? font : x11_font);
 	#endif
-	    if (NULL == f) {
+	    if (NULL == f_) {
 		fprintf(stderr,"font \"%s\" is not available\n",font);
 		exit(1);
 	    }
@@ -328,7 +328,7 @@ class FramebufferDevice:public DisplayDevice
 	void finalize (void);
 	struct fs_font * fb_font_get_current_font(void)
 	{
-	    return f;
+	    return f_;
 	}
 
 	void switch_if_needed()

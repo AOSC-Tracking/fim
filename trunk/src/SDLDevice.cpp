@@ -64,7 +64,7 @@ std::cout.unsetf ( std::ios::hex );
 	SDLDevice::SDLDevice():DisplayDevice(),vi(NULL)
 #endif
 	{
-		FontServer::fb_text_init1(fontname,&f);	// FIXME : move this outta here
+		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		keypress = 0;
 		h=0;
 		current_w=current_h=0;
@@ -287,26 +287,26 @@ std::cout.unsetf ( std::ios::hex );
 
 		// textual console reformatting
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-		mc.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f->height));
-		mc.reformat(    width() /    f->width   );
+		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f_->height));
+		mc_.reformat(    width() /    f_->width   );
 #endif
 		return 0;
 	}
 
 	void SDLDevice::finalize()
 	{
-		finalized=true;
+		finalized_=true;
 		SDL_Quit();
 	}
 
 	int SDLDevice::get_chars_per_column()
 	{
-		return height() / f->height;
+		return height() / f_->height;
 	}
 
 	int SDLDevice::get_chars_per_line()
 	{
-		return width() / f->width;
+		return width() / f_->width;
 	}
 
 	int SDLDevice::width()
@@ -597,19 +597,19 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char
 #undef GLWIDTHBYTESPADDED
 }
 
-int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)
+int SDLDevice::fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const unsigned char *str)
 {
     int i,c/*,j,w*/;
 
     for (i = 0; str[i] != '\0'; i++) {
 	c = str[i];
-	if (NULL == f->eindex[c])
+	if (NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
-//	w = (f->eindex[c]->width+1)*Bpp;
+//	w = (f_->eindex[c]->width+1)*Bpp;
 #if 0
 #ifdef FIM_IS_SLOWER_THAN_FBI
-	for (j = 0; j < f->height; j++) {
+	for (j = 0; j < f_->height; j++) {
 /////	    memset_combine(start,0x20,w);
 	    memset(start,0,w);
 	    start += fb_fix.line_length;
@@ -619,22 +619,22 @@ int SDLDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const 
 	if(fb_fix.line_length==(unsigned int)w)
 	{
 		//contiguous case
-		memset(start,0,w*f->height);
-	    	start += fb_fix.line_length*f->height;
+		memset(start,0,w*f_->height);
+	    	start += fb_fix.line_length*f_->height;
 	}
 	else
-	for (j = 0; j < f->height; j++) {
+	for (j = 0; j < f_->height; j++) {
 	    memset(start,0,w);
 	    start += fb_fix.line_length;
 	}
 #endif
 #endif
 	/* draw char */
-	//fs_render_fb(fb_fix.line_length,f->eindex[c],f->gindex[c]);
-	fs_render_fb(x,y,f->eindex[c],f->gindex[c]);
-	x += f->eindex[c]->width;
+	//fs_render_fb(fb_fix.line_length,f_->eindex[c],f_->gindex[c]);
+	fs_render_fb(x,y,f_->eindex[c],f_->gindex[c]);
+	x += f_->eindex[c]->width;
 	/* FIXME : SLOW ! */
-	if ((int)x > width() - f->width)
+	if ((int)x > width() - f_->width)
 		goto err;
     }
 	return x;
@@ -652,9 +652,9 @@ err:
 		int y;
 		int ys=3;// FIXME
 
-		y = height() - f->height - ys;
-		clear_rect(0, width()-1, y+1,y+f->height+ys-1);
-		fs_puts(f, 0, y+ys, msg);
+		y = height() - f_->height - ys;
+		clear_rect(0, width()-1, y+1,y+f_->height+ys-1);
+		fs_puts(f_, 0, y+ys, msg);
 		fill_rect(0,width()-1, y, y+1, 0xFF);	// FIXME : NO 1!
 
 		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);

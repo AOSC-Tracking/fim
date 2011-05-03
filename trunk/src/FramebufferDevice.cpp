@@ -163,7 +163,7 @@ static void _fb_switch_signal(int signal)
 	ffdp->fb_switch_signal(signal);
 }
 
-int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)
+int FramebufferDevice::fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const unsigned char *str)
 {
     unsigned char *pos,*start;
     int i,c,j,w;
@@ -172,13 +172,13 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
     pos += fb_fix.line_length * y;
     for (i = 0; str[i] != '\0'; i++) {
 	c = str[i];
-	if (NULL == f->eindex[c])
+	if (NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
-	start = pos + x*fs_bpp + f->fontHeader.max_bounds.descent * fb_fix.line_length;
-	w = (f->eindex[c]->width+1)*fs_bpp;
+	start = pos + x*fs_bpp + f_->fontHeader.max_bounds.descent * fb_fix.line_length;
+	w = (f_->eindex[c]->width+1)*fs_bpp;
 #ifdef FIM_IS_SLOWER_THAN_FBI
-	for (j = 0; j < f->height; j++) {
+	for (j = 0; j < f_->height; j++) {
 /////	    memset_combine(start,0x20,w);
 	    memset(start,0,w);
 	    start += fb_fix.line_length;
@@ -188,20 +188,20 @@ int FramebufferDevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y
 	if(fb_fix.line_length==(unsigned int)w)
 	{
 		//contiguous case
-		memset(start,0,w*f->height);
-	    	start += fb_fix.line_length*f->height;
+		memset(start,0,w*f_->height);
+	    	start += fb_fix.line_length*f_->height;
 	}
 	else
-	for (j = 0; j < f->height; j++) {
+	for (j = 0; j < f_->height; j++) {
 	    memset(start,0,w);
 	    start += fb_fix.line_length;
 	}
 #endif
 	/* draw char */
-	start = pos + x*fs_bpp + fb_fix.line_length * (f->height-f->eindex[c]->ascent);
-	fs_render_fb(start,fb_fix.line_length,f->eindex[c],f->gindex[c]);
-	x += f->eindex[c]->width;
-	if (x > fb_var.xres - f->width)
+	start = pos + x*fs_bpp + fb_fix.line_length * (f_->height-f_->eindex[c]->ascent);
+	fs_render_fb(start,fb_fix.line_length,f_->eindex[c],f_->gindex[c]);
+	x += f_->eindex[c]->width;
+	if (x > fb_var.xres - f_->width)
 	    return -1;
     }
     return x;
@@ -259,7 +259,7 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 	{
 		int rc=0;
 		//initialization of the framebuffer text
-		FontServer::fb_text_init1(fontname,&f);	// FIXME : move this outta here
+		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		/*
 		 * will initialized with the user set (or default ones)
 		 *  - framebuffer device
@@ -355,13 +355,13 @@ void FramebufferDevice::console_switch(int is_busy)
 		//when stepping in console..
 		visible = 1;
 		ioctl(fd,FBIOPAN_DISPLAY,&fb_var);
-		redraw = 1;
+		redraw_ = 1;
 	/*
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched! 
 	 */
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-		mc.cc.redisplay();
+		mc_.cc.redisplay();
 #endif
 	//if (is_busy) status("busy, please wait ...", NULL);		
 	break;
@@ -936,16 +936,16 @@ int FramebufferDevice::status_line(const unsigned char *msg)
     if (!visible)
 	goto ret;
 
-    if(fb_var.yres< 1 + f->height + ys)
+    if(fb_var.yres< 1 + f_->height + ys)
 	/* we need enough pixels, and have no assumptions on weird visualization devices */
 	goto rerr;
 
-    y = fb_var.yres -1 - f->height - ys;
-//    fb_memset(fb_mem + fb_fix.line_length * y, 0, fb_fix.line_length * (f->height+ys));
-    clear_rect(0, fb_var.xres-1, y+1,y+f->height+ys);
+    y = fb_var.yres -1 - f_->height - ys;
+//    fb_memset(fb_mem + fb_fix.line_length * y, 0, fb_fix.line_length * (f_->height+ys));
+    clear_rect(0, fb_var.xres-1, y+1,y+f_->height+ys);
 
     fb_line(0, fb_var.xres, y, y);
-    fs_puts(f, 0, y+ys, msg);
+    fs_puts(f_, 0, y+ys, msg);
 ret:
     return 0;
 rerr:
@@ -959,14 +959,14 @@ void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
     if (!visible)
 	return;
 
-    y = fb_var.yres - f->height - ys;
-    x = pos * f->width;
+    y = fb_var.yres - f_->height - ys;
+    x = pos * f_->width;
     fb_memset(fb_mem + fb_fix.line_length * y, 0,
-	      fb_fix.line_length * (f->height+ys));
+	      fb_fix.line_length * (f_->height+ys));
     fb_line(0, fb_var.xres, y, y);
-    fs_puts(f, 0, y+ys, str);
-    fb_line(x, x + f->width, fb_var.yres-1, fb_var.yres-1);
-    fb_line(x, x + f->width, fb_var.yres-2, fb_var.yres-2);
+    fs_puts(f_, 0, y+ys, str);
+    fb_line(x, x + f_->width, fb_var.yres-1, fb_var.yres-1);
+    fb_line(x, x + f_->width, fb_var.yres-2, fb_var.yres-2);
 }
 
 void FramebufferDevice::fb_text_box(int x, int y, char *lines[], unsigned int count)
@@ -983,9 +983,9 @@ void FramebufferDevice::fb_text_box(int x, int y, char *lines[], unsigned int co
 	    max = len;
     }
     x1 = x;
-    x2 = x + max * f->width;
+    x2 = x + max * f_->width;
     y1 = y;
-    y2 = y + count * f->height;
+    y2 = y + count * f_->height;
 
     x += xs; x2 += 2*xs;
     y += ys; y2 += 2*ys;
@@ -993,8 +993,8 @@ void FramebufferDevice::fb_text_box(int x, int y, char *lines[], unsigned int co
     clear_rect(x1, x2, y1, y2);
     fb_rect(x1, x2, y1, y2);
     for (i = 0; i < count; i++) {
-	fs_puts(f,x,y,(unsigned char*)lines[i]);
-	y += f->height;
+	fs_puts(f_,x,y,(unsigned char*)lines[i]);
+	y += f_->height;
     }
 }
 
@@ -1516,14 +1516,14 @@ void FramebufferDevice::fb_switch_release()
 {
     ioctl(tty, VT_RELDISP, 1);
     fb_switch_state = FB_INACTIVE;
-    if (debug)
+    if (debug_)
 	FIM_FPRINTF(stderr, "vt: release\n");
 }
 void FramebufferDevice::fb_switch_acquire()
 {
     ioctl(tty, VT_RELDISP, VT_ACKACQ);
     fb_switch_state = FB_ACTIVE;
-    if (debug)
+    if (debug_)
 	FIM_FPRINTF(stderr, "vt: acquire\n");
 }
 int FramebufferDevice::fb_switch_init()
@@ -1564,13 +1564,13 @@ void FramebufferDevice::fb_switch_signal(int signal)
     if (signal == SIGUSR1) {
 	/* release */
 	fb_switch_state = FB_REL_REQ;
-	if (debug)
+	if (debug_)
 	    FIM_FPRINTF(stderr, "vt: SIGUSR1\n");
     }
     if (signal == SIGUSR2) {
 	/* acquisition */
 	fb_switch_state = FB_ACQ_REQ;
-	if (debug)
+	if (debug_)
 	    FIM_FPRINTF(stderr, "vt: SIGUSR2\n");
     }
 }
@@ -1580,8 +1580,8 @@ int FramebufferDevice::fb_text_init2(void)
 {
     return fs_init_fb(255);
 }
-	int  FramebufferDevice::fb_font_width(void) { return f->width; }
-	int  FramebufferDevice::fb_font_height(void) { return f->height; }
+	int  FramebufferDevice::fb_font_width(void) { return f_->width; }
+	int  FramebufferDevice::fb_font_height(void) { return f_->height; }
 
 int FramebufferDevice::fs_init_fb(int white8)
 {
@@ -1747,7 +1747,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	    p=s;
 	}
 
-	//if(!mc.cc.drawOutput() || noDraw)return;//CONVENTION!
+	//if(!mc_.cc.drawOutput() || noDraw)return;//CONVENTION!
 	if(!draw )return;//CONVENTION!
 
 	    y = 1*fb_font_height();
@@ -1762,8 +1762,8 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	FramebufferDevice::FramebufferDevice(MiniConsole & mc_):	
-	DisplayDevice(mc_)
+	FramebufferDevice::FramebufferDevice(MiniConsole & mc):	
+	DisplayDevice(mc)
 #else
 	FramebufferDevice::FramebufferDevice():	
 	DisplayDevice()
@@ -1788,7 +1788,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	,orig_vt_no(0)
 	,devices(NULL)
 #ifndef FIM_KEEP_BROKEN_CONSOLE
-	//mc(48,12),
+	//mc_(48,12),
 //	int R=(fb_var.yres/fb_font_height())/2,/* half screen : more seems evil */
 //	C=(fb_var.xres/fb_font_width());
 #endif
@@ -1812,14 +1812,14 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 		ocmap.green=ogreen;
 		ocmap.blue=oblue;
 		/*
-		 * fbgamma and fontname are fbi - defined variables.
+		 * fbgamma and fontname_ are fbi - defined variables.
 		 * */
 		const char *line;
 
 	    	if (NULL != (line = fim_getenv("FBGAMMA")))
 	        	fbgamma = fim_atof(line);
 	    	if (NULL != (line = fim_getenv("FBFONT")))
-			fontname = line;
+			fontname_ = line;
 	}
 
 }
@@ -1859,7 +1859,7 @@ int FramebufferDevice::display(
 
 void FramebufferDevice::finalize (void)
 {
-	finalized=true;
+	finalized_=true;
 	clear_screen();
 	cleanup();
 }
@@ -1867,13 +1867,13 @@ void FramebufferDevice::finalize (void)
 FramebufferDevice::~FramebufferDevice()
 {
 	/* added in fim : fbi did not have this */
-	if(f)
+	if(f_)
 	{
-		if(f->eindex) fim_free(f->eindex);
-		if(f->gindex) fim_free(f->gindex);
-		if(f->glyphs) fim_free(f->glyphs);
-		if(f->extents) fim_free(f->extents);
-		fim_free(f);
+		if(f_->eindex) fim_free(f_->eindex);
+		if(f_->gindex) fim_free(f_->gindex);
+		if(f_->glyphs) fim_free(f_->glyphs);
+		if(f_->extents) fim_free(f_->extents);
+		fim_free(f_);
 	}
 }
 

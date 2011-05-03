@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -122,7 +122,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     int  i=0;
     int  fr;
     const char *h=NULL;
-    struct fs_font *f = NULL;
+    struct fs_font *f_ = NULL;
     const char *fontfilename=NULL;
     FILE *fp=NULL;
     char fontfilenameb[FIM_PATH_MAX];
@@ -194,49 +194,49 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     }
 //    FIM_FPRINTF(stderr, "using linux console font \"%s\"\n",filename[i]);
 
-    f =(struct fs_font*) fim_calloc(sizeof(*f),1);
-    if(!f)goto oops;
-    memset(f,0,sizeof(*f));
+    f_ =(struct fs_font*) fim_calloc(sizeof(*f_),1);
+    if(!f_)goto oops;
+    memset(f_,0,sizeof(*f_));
 	
     fgetc(fp);
-    f->maxenc = 256;
-    f->width  = 8;	/* FIXME */
-    f->height = fgetc(fp);
-    f->fontHeader.min_bounds.left    = 0;
-    f->fontHeader.max_bounds.right   = f->width;
-    f->fontHeader.max_bounds.descent = 0;
-    f->fontHeader.max_bounds.ascent  = f->height;
+    f_->maxenc = 256;
+    f_->width  = 8;	/* FIXME */
+    f_->height = fgetc(fp);
+    f_->fontHeader.min_bounds.left    = 0;
+    f_->fontHeader.max_bounds.right   = f_->width;
+    f_->fontHeader.max_bounds.descent = 0;
+    f_->fontHeader.max_bounds.ascent  = f_->height;
 
-    f->glyphs  =(unsigned char*) fim_malloc(f->height * 256);
-    if(!f->glyphs) goto oops;
-    f->extents = (FSXCharInfo*)fim_malloc(sizeof(FSXCharInfo)*256);
-    if(!f->extents) goto oops;
-    fr=fread(f->glyphs, 256, f->height, fp);
+    f_->glyphs  =(unsigned char*) fim_malloc(f_->height * 256);
+    if(!f_->glyphs) goto oops;
+    f_->extents = (FSXCharInfo*)fim_malloc(sizeof(FSXCharInfo)*256);
+    if(!f_->extents) goto oops;
+    fr=fread(f_->glyphs, 256, f_->height, fp);
     if(!fr)return NULL;/* new */
     fclose(fp);
 
-    f->eindex  =(FSXCharInfo**) fim_malloc(sizeof(FSXCharInfo*)   * 256);
-    if(!f->eindex) goto oops;
-    f->gindex  = (unsigned char**)fim_malloc(sizeof(unsigned char*) * 256);
-    if(!f->gindex) goto oops;
+    f_->eindex  =(FSXCharInfo**) fim_malloc(sizeof(FSXCharInfo*)   * 256);
+    if(!f_->eindex) goto oops;
+    f_->gindex  = (unsigned char**)fim_malloc(sizeof(unsigned char*) * 256);
+    if(!f_->gindex) goto oops;
     for (i = 0; i < 256; i++) {
-	f->eindex[i] = f->extents +i;
-	f->gindex[i] = f->glyphs  +i * f->height;
-	f->eindex[i]->left    = 0;
-	f->eindex[i]->right   = 7;
-	f->eindex[i]->width   = 8;/* FIXME */
-	f->eindex[i]->descent = 0;
-	f->eindex[i]->ascent  = f->height;
+	f_->eindex[i] = f_->extents +i;
+	f_->gindex[i] = f_->glyphs  +i * f_->height;
+	f_->eindex[i]->left    = 0;
+	f_->eindex[i]->right   = 7;
+	f_->eindex[i]->width   = 8;/* FIXME */
+	f_->eindex[i]->descent = 0;
+	f_->eindex[i]->ascent  = f_->height;
     }
-    return f;
+    return f_;
 oops:
-    if(f)
+    if(f_)
     {
-    	if(f->eindex) fim_free(f->eindex);
-    	if(f->gindex) fim_free(f->gindex);
-    	if(f->glyphs) fim_free(f->glyphs);
-    	if(f->extents) fim_free(f->extents);
-	fim_free(f);
+    	if(f_->eindex) fim_free(f_->eindex);
+    	if(f_->gindex) fim_free(f_->gindex);
+    	if(f_->glyphs) fim_free(f_->glyphs);
+    	if(f_->extents) fim_free(f_->extents);
+	fim_free(f_);
     }
     return NULL;
 }

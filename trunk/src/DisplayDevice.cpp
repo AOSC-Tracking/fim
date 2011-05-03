@@ -23,15 +23,15 @@
 #include "DisplayDevice.h"
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	DisplayDevice::DisplayDevice(MiniConsole & mc_):fontname(NULL)
-	,mc(mc_)
+	DisplayDevice::DisplayDevice(MiniConsole & mc):fontname_(NULL)
+	,mc_(mc)
 #else
-	DisplayDevice::DisplayDevice():fontname(NULL)
+	DisplayDevice::DisplayDevice():fontname_(NULL)
 #endif
-	,f(NULL)
-	,debug(0)
-	,redraw(0)
-	,finalized(false)
+	,f_(NULL)
+	,debug_(0)
+	,redraw_(0)
+	,finalized_(false)
 	{}
 
 	int DisplayDevice::get_input(fim_key_t * c)
@@ -149,19 +149,19 @@ void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//
 	if(flags==0x03)
 	{
 		/* clear screen sequence */
-		mc.clear();
+		mc_.clear();
 		return;
 	}
 
-	if( flags==0x01 ) { mc.scroll_down(); return; }
-	if( flags==0x02 ) { mc.scroll_up(); return; }
+	if( flags==0x01 ) { mc_.scroll_down(); return; }
+	if( flags==0x02 ) { mc_.scroll_up(); return; }
 
-	r=mc.add(msg);
+	r=mc_.add(msg);
 	if(r==-2)
 	{
-		r=mc.grow();
+		r=mc_.grow();
 		if(r==-1)return;
-		r=mc.add(msg);
+		r=mc_.add(msg);
 		if(r==-1)return;
 	}
 
@@ -171,8 +171,8 @@ void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//
 	cc.displaydevice_->lock();
 	clear_rect(0, width()-1, 0,height()/2);
 	cc.displaydevice_->unlock();
-	mc.dump();
-//	mc.dump(0,1000000);
+	mc_.dump();
+//	mc_.dump(0,1000000);
 #endif
 	return;
 }
@@ -189,15 +189,15 @@ int DisplayDevice::console_control(int arg)//experimental
 int DisplayDevice::init_console()
 {
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	if(f)
+	if(f_)
 	{	
-		mc.setRows ((height()/f->height)/2);
-		mc.reformat( width() /f->width    );
+		mc_.setRows ((height()/f_->height)/2);
+		mc_.reformat( width() /f_->width    );
 	}
 	else
 	{
-		mc.setRows ( height()   );
-		mc.reformat( width()    );
+		mc_.setRows ( height()   );
+		mc_.reformat( width()    );
 	}
 #endif
 	return 0;

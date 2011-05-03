@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -617,7 +617,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	    h->inleft  = 0;
 	}
 #if 0
-	if (cc.displaydevice_->debug)
+	if (cc.displaydevice_->debug_)
 	    FIM_FBI_PRINTF("y:  %6.2f%%: %d/%d => %d/%d\n",
 		    weight*100,h->srcrow,src->height,line,h->height);
 #endif
@@ -730,7 +730,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 		left     = 0;
 	    }
 #if 0
-	    if (cc.displaydevice_->debug)
+	    if (cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF(" x: %6.2f%%: %d/%d => %d/%d\n",
 			weight*100,sx,src->width,dx,h->width);
 #endif
@@ -1172,7 +1172,7 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
     rect.x2 = x+1;
 
     fim_free(img.data);
-    if (cc.displaydevice_->debug)
+    if (cc.displaydevice_->debug_)
 	FIM_FBI_PRINTF("y: %d-%d/%d  --  x: %d-%d/%d\n",
 		rect.y1, rect.y2, img.i.height,
 		rect.x1, rect.x2, img.i.width);
@@ -1459,7 +1459,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     /* open file */
     if (NULL == (fp = fopen(filename, "r"))) {
 	//comment by dez, temporary
-	if(cc.displaydevice_->debug)
+	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("open %s: %s\n",filename,strerror(errno));
 	return NULL;
     }
@@ -1680,7 +1680,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
 #endif
     if (NULL == data) {
-	if(cc.displaydevice_->debug)
+	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);
 	return NULL;
@@ -1923,7 +1923,7 @@ struct ida_image * fbi_image_clone(struct ida_image *img)
 	int FbiStuff::fim_filereading_debug()
 	{
 		return cc.displaydevice_ ?
-			cc.displaydevice_->debug:
+			cc.displaydevice_->debug_:
 			0;
 	}
 
