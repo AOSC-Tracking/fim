@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,32 +36,32 @@ class Browser
 	/*
 	 * A file browser holds the names of files in the slideshow.
 	 */
-	args_t flist;
+	args_t flist_;
 
 	/*
 	 * It has a dummy empty filename for technical reasons
 	 */
-	const fim::string nofile;
+	const fim::string nofile_;
 
 	/*
 	 * And it keeps a numerical index of the current file, too.
 	 *
-	 * cp is zero only when there are no files in the list.
+	 * cp_ is zero only when there are no files in the list.
 	 * the current file index is in current_n()
 	 */
-	int cp;
+	int cp_;
 
 #ifndef FIM_WINDOWS
 	/*
 	 * When compiled with no multiple windowing support, one viewport only will last.
 	 * */
-	Viewport *only_viewport;
+	Viewport *only_viewport_;
 #endif
-	CommandConsole &commandConsole;
+	CommandConsole &commandConsole_;
 	Image *image()const;
 
 #ifdef FIM_READ_STDIN_IMAGE
-	Image *default_image;	// experimental
+	Image *default_image_;	// experimental
 #endif
 
 	Viewport* viewport()const;
@@ -75,7 +75,7 @@ class Browser
 	int current_image()const;
 	int current_images()const{ return n(); }
 	public:
-	Cache cache;	// was private
+	Cache cache_;	// was private
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(Image *stdin_image);
 #endif
@@ -87,15 +87,15 @@ class Browser
 	private:
 	Browser& operator= (const Browser &b){return *this;/* a nilpotent assignation */}
 	Browser(const Browser &b):
-		flist(args_t()),
-		nofile(""),
-		cp(0),
-		commandConsole(cc),
+		flist_(args_t()),
+		nofile_(""),
+		cp_(0),
+		commandConsole_(cc),
 #ifdef FIM_READ_STDIN_IMAGE
-		default_image(NULL),
+		default_image_(NULL),
 #endif
 		last_regexp(fim::string()),
-		cache(Cache())
+		cache_(Cache())
 		{}
 	public:
 	fim::string current()const;

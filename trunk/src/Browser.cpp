@@ -28,7 +28,7 @@
 
 namespace fim
 {
-	int Browser::current_n()const{ return current_n(cp); }
+	int Browser::current_n()const{ return current_n(cp_); }
 	int Browser::current_n(int ccp)const{ return ccp?ccp-1:ccp; }
 
 	fim::string Browser::list()const
@@ -37,7 +37,7 @@ namespace fim
 		 * returns a string with the info about the files in list
 		 */
 		fim::string fileslist;
-		for(size_t i=0;i<flist.size();++i)fileslist+=flist[i]+fim::string(" ");
+		for(size_t i=0;i<flist_.size();++i)fileslist+=flist_[i]+fim::string(" ");
 		return fileslist;
 	}
 
@@ -46,8 +46,8 @@ namespace fim
 		/*
 		 * accessory method
 		 */
-		for(size_t i=0;i<flist.size();++i)
-			os << flist[i] << "\n";
+		for(size_t i=0;i<flist_.size();++i)
+			os << flist_[i] << "\n";
 		return os;
 	}
 
@@ -81,7 +81,7 @@ namespace fim
 				 * viewport().redisplay(); <- and this should be good
 				 * :)
 				 * */
-				if( commandConsole.redisplay() )
+				if( commandConsole_.redisplay() )
 					this->display_status(current().c_str(), NULL);
 			}
 #ifdef FIM_AUTOCMDS
@@ -98,12 +98,12 @@ namespace fim
 		 * */
 		if(!stdin_image || stdin_image->check_invalid())return;
 
-		if(default_image) delete default_image;
-		default_image=stdin_image;
+		if(default_image_) delete default_image_;
+		default_image_=stdin_image;
 	}
 #endif
 
-	Browser::Browser(CommandConsole &cc):nofile(FIM_CNS_EMPTY_STRING),commandConsole(cc)
+	Browser::Browser(CommandConsole &cc):nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
 #ifdef FIM_NAMESPACES
 		,Namespace(FIM_SYM_NAMESPACE_BROWSER_CHAR)
 #endif
@@ -111,7 +111,7 @@ namespace fim
 		/*
 		 * we initialize to no file the current file name
 		 */
-		cp=0;	//and to file index 0 (no file)
+		cp_=0;	//and to file index 0 (no file)
 	}
 
 	const fim::string Browser::pop_current()
@@ -123,9 +123,9 @@ namespace fim
 		 * WARNING : SAME AS ERASE !
 		 */
 		fim::string s;
-		if(flist.size()<=0)return nofile;
-		assert(cp);
-		flist.erase(flist.begin()+current_n());
+		if(flist_.size()<=0)return nofile_;
+		assert(cp_);
+		flist_.erase(flist_.begin()+current_n());
 		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
 		return s;
 	}
@@ -137,19 +137,19 @@ namespace fim
 		 * ( note that it doesn't refresh the image in any way ! )
 		 */
 		fim::string s;
-		if(flist.size()<=0)return nofile;
-		assert(cp);
+		if(flist_.size()<=0)return nofile_;
+		assert(cp_);
 		if(filename=="")
 		{
-			if(current_n()==(int)flist.size())cp--;
-			s=flist[flist.size()-1];
-			flist.erase(flist.begin()+current_n());
+			if(current_n()==(int)flist_.size())cp_--;
+			s=flist_[flist_.size()-1];
+			flist_.erase(flist_.begin()+current_n());
 		}
 		else
 		{
-			for(size_t i=0;i<flist.size();++i)
-				if(flist[i]==filename)
-					flist.erase(flist.begin()+i);
+			for(size_t i=0;i<flist_.size();++i)
+				if(flist_[i]==filename)
+					flist_.erase(flist_.begin()+i);
 		}
 		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
 		return s;
@@ -499,7 +499,7 @@ nop:
 		 * displays the left text message and a right bracketed one
 		 */
 		if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS))
-			commandConsole.set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
+			commandConsole_.set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
 		return "";
 	}
 
@@ -525,17 +525,17 @@ nop:
 				/*
 				 * we redraw the whole screen and thus all of the windows
 				 * */
-				if( commandConsole.display() )
+				if( commandConsole_.display() )
 					this->display_status(current().c_str(), NULL);
 //				FIXME:
-//				if(commandConsole.window)commandConsole.window->recursive_display();
+//				if(commandConsole_.window)commandConsole_.window->recursive_display();
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTDISPLAY,c);
 #endif
 		}
 		else{ cout << "no image to display, sorry!";
-		commandConsole.set_status_bar("no image loaded.", "*");}
+		commandConsole_.set_status_bar("no image loaded.", "*");}
 		return "";
 	}
 
@@ -607,7 +607,7 @@ nop:
 	#ifdef FIM_CACHE_DEBUG
 		if(viewport())std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif
-		if(viewport())viewport()->setImage( cache.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
+		if(viewport())viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
 #else
 		// warning : in this cases exception handling is missing
 	#ifdef FIM_READ_STDIN_IMAGE
@@ -617,11 +617,11 @@ nop:
 		}
 		else
 		{
-			if( viewport() && default_image )
+			if( viewport() && default_image_ )
 			{
 				// a one time only image (new, experimental)
-				viewport()->setImage(default_image->getClone());
-				//default_image=NULL;
+				viewport()->setImage(default_image_->getClone());
+				//default_image_=NULL;
 			}
 		}
 	#else
@@ -645,13 +645,13 @@ nop:
 		 * only cleans up the internal data structures
 		 * */
 		if(viewport())viewport()->free();
-		setGlobalVariable(FIM_VID_CACHE_STATUS,cache.getReport().c_str());
+		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport().c_str());
 	}
 
 	fim::string Browser::prefetch(const args_t &args)
 	{
 		/*
-		 * fetches in the cache the next image..
+		 * fetches in the cache_ the next image..
 		 *
 		 * FIX ME : enrich this behaviour
 		 * */
@@ -665,13 +665,13 @@ nop:
 		if( args.size() > 0 )return "";
 
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,0);
-		if(cache.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
+		if(cache_.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
 #ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename( 1));/* if the filename doesn't match a loadable image, we remove it */
 #else
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif
-		if(cache.prefetch(cache_key_t(get_next_filename(-1).c_str(),FIM_E_FILE)))// we prefetch 1 file backward
+		if(cache_.prefetch(cache_key_t(get_next_filename(-1).c_str(),FIM_E_FILE)))// we prefetch 1 file backward
 #ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename(-1));/* if the filename doesn't match a loadable image, we remove it */
 #else
@@ -724,7 +724,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_PRELOAD,c);
 #endif
-		commandConsole.set_status_bar("please wait while loading...", "*");
+		commandConsole_.set_status_bar("please wait while loading...", "*");
 
 		loadCurrentImage();
 
@@ -751,8 +751,8 @@ nop:
 		/* 
 		 * returns whether the file nf is in the files list
 		 */
-		for(size_t i=0;i<flist.size();++i)
-			if(flist[i]==nf)return true;
+		for(size_t i=0;i<flist_.size();++i)
+			if(flist_[i]==nf)return true;
 		return false;
 	}
 
@@ -838,7 +838,7 @@ nop:
 			 * i am not fully sure this is effective
 			 * */
 			nf+=" is not a regular file!";
-			commandConsole.set_status_bar(nf.c_str(), "*");
+			commandConsole_.set_status_bar(nf.c_str(), "*");
 			return false;
 		}
 #endif
@@ -852,10 +852,10 @@ nop:
 			return false;
 		}
 #endif
-		flist.push_back(nf);
+		flist_.push_back(nf);
 
 		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
-		if(cp==0)++cp;
+		if(cp_==0)++cp_;
 		return false;
 	}
 	
@@ -864,7 +864,7 @@ nop:
 		/*
 		 * the number of files in the filenames list
 		 */
-		return flist.size();
+		return flist_.size();
 	}
 
 	const fim::string Browser::n()const
@@ -880,8 +880,8 @@ nop:
 		/*
 		 *	sorts the image filenames list
 		 */
-		sort(flist.begin(),flist.end());
-		return n_files()?(flist[current_n()]):nofile;
+		sort(flist_.begin(),flist_.end());
+		return n_files()?(flist_[current_n()]):nofile_;
 	}
 
 	fim::string Browser::regexp_goto_next(const args_t &args)
@@ -899,13 +899,13 @@ nop:
 		/*
 		 * goes to the next filename-matching file
 		 */
-		size_t i,j,c=current_n(),s=flist.size();
+		size_t i,j,c=current_n(),s=flist_.size();
 		if( args.size() < 1 || s < 1 )goto nop;
 		for(j=0;j<s;++j)
 		{
 			last_regexp=args[0];
 			i=(j+c+1)%s;
-			if(commandConsole.regexp_match(flist[i].c_str(),args[0].c_str()))
+			if(commandConsole_.regexp_match(flist_[i].c_str(),args[0].c_str()))
 			{	
 				fim::string c=current();
 #ifdef FIM_AUTOCMDS
@@ -914,15 +914,15 @@ nop:
 				goto_image(i+1);
 #ifdef FIM_AUTOCMDS
 				autocmd_exec(FIM_ACM_POSTGOTO,c);
-				if(!commandConsole.inConsole())
-					commandConsole.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
+				if(!commandConsole_.inConsole())
+					commandConsole_.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
 				goto nop;
 #endif
 			}
 		}
 		cout << "sorry, no filename matches \""<<args[0]<<"\"\n";
-		if(!commandConsole.inConsole())
-			commandConsole.set_status_bar((fim::string("sorry, no filename matches \"")+
+		if(!commandConsole_.inConsole())
+			commandConsole_.set_status_bar((fim::string("sorry, no filename matches \"")+
 						args[0]+
 						fim::string("\"")).c_str(),NULL);
 nop:
@@ -934,7 +934,7 @@ nop:
 		/*
 		 *	FIX ME
 		 */
-		int N=flist.size();
+		int N=flist_.size();
 		if(!N)return "";
 
 		if( N==1 && c_image() && c_image()->is_multipage())
@@ -943,13 +943,13 @@ nop:
 			return N;
 		}
 
-		cp=n;
-		if(cp<0)cp=(cp%N)+N+1;//+1 added lately
-		if(cp>N) cp=1+(n%N);
-		if(!cp)++cp;
+		cp_=n;
+		if(cp_<0)cp_=(cp_%N)+N+1;//+1 added lately
+		if(cp_>N) cp_=1+(n%N);
+		if(!cp_)++cp_;
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
-		fim::string result = n_files()?(flist[current_n()]):nofile;
+		fim::string result = n_files()?(flist_[current_n()]):nofile_;
 		return result;
 	}
 
@@ -996,15 +996,15 @@ nop:
 		 * returns to the next image in the list, the mechanism
 		 * p.s.: n<>0
 		 */
-		int ccp=cp;
-		int N=flist.size();
+		int ccp=cp_;
+		int N=flist_.size();
 		if(!N)return "";
 		ccp+=n;
 		ccp%=N;
 		ccp+=N;
 		ccp%=N;
 		if(!ccp)ccp=N;
-		return flist[current_n(ccp)];
+		return flist_[current_n(ccp)];
 	}
 
 	fim::string Browser::do_next(int n)
@@ -1013,19 +1013,19 @@ nop:
 		 * jumps to the next n'th image in the list.
 		 * p.s.: n<>0
 		 */
-		int N=flist.size();
+		int N=flist_.size();
 		if(!N)
 			goto nop;
 		else
 		{
-		cp+=n;
-		cp%=N;
-		cp+=N;
-		cp%=N;
-		if(!cp)cp=N;
+		cp_+=n;
+		cp_%=N;
+		cp_+=N;
+		cp_%=N;
+		if(!cp_)cp_=N;
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
-		//fim::string result = n_files()?(flist[current_n()]):nofile;
+		//fim::string result = n_files()?(flist_[current_n()]):nofile_;
 		}
 nop:
 		return "";
@@ -1069,7 +1069,7 @@ nop:
 		 *
 		 *	FIXME : dangerous!
 		 */
-		if(flist.size()<1)return "the files list is empty\n";
+		if(flist_.size()<1)return "the files list is empty\n";
 		args_t rlist=args;	//the remove list
 		if(rlist.size()>0)
 		{
@@ -1079,13 +1079,13 @@ nop:
 			 * sort(rlist.begin(),rlist.end());...
 			 */
 			for(size_t r=0;r<rlist.size();++r)
-			for(size_t i=0;i<flist.size();++i)
-			if(flist[i]==rlist[r])
+			for(size_t i=0;i<flist_.size();++i)
+			if(flist_[i]==rlist[r])
 			{
-//				std::cout << "removing" << flist[i]<<"\n";
-				flist.erase(flist.begin()+i);
+//				std::cout << "removing" << flist_[i]<<"\n";
+				flist_.erase(flist_.begin()+i);
 			}
-			cp=cp%(flist.size()+1);// new
+			cp_=cp_%(flist_.size()+1);// new
 			setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
 			goto nop;
 		}
@@ -1094,9 +1094,9 @@ nop:
 			/*
 			 * removes the current file from the list
 			 */
-/*			if(cp-1==current_n())--cp;
-			flist.erase(flist.begin()+current_n());
-			if(cp==0 && n_files()) ++cp;
+/*			if(cp_-1==current_n())--cp_;
+			flist_.erase(flist_.begin()+current_n());
+			if(cp_==0 && n_files()) ++cp_;
 			return "";*/
 			return pop_current();
 		}
@@ -1164,9 +1164,9 @@ nop:
 		 */
 #if 0
 		string fl;
-		for(size_t r=0;r<flist.size();++r)
+		for(size_t r=0;r<flist_.size();++r)
 		{
-			fl+=flist[r];
+			fl+=flist_[r];
 			fl+="\n";
 		}
 		return fl;
@@ -1383,8 +1383,8 @@ nop:
 		/*
 		 *	a const pointer to the currently loaded image
 		 */
-		if( commandConsole.current_viewport() )
-			return commandConsole.current_viewport()->c_getImage();
+		if( commandConsole_.current_viewport() )
+			return commandConsole_.current_viewport()->c_getImage();
 		else
 			return NULL;
 	}
@@ -1394,8 +1394,8 @@ nop:
 		/*
 		 *	the image loaded in the current viewport is returned
 		 */
-		if( commandConsole.current_viewport() )
-			return commandConsole.current_viewport()->getImage();
+		if( commandConsole_.current_viewport() )
+			return commandConsole_.current_viewport()->getImage();
 		else
 			return NULL;
 	}
@@ -1408,7 +1408,7 @@ nop:
 		 *
 		 * NULL is returned in case no viewport is loaded.
 		 * */
-		return (commandConsole.current_viewport());
+		return (commandConsole_.current_viewport());
 	}
 
 	fim::string Browser::current()const
@@ -1417,8 +1417,8 @@ nop:
 		 * dilemma : should the current() filename and next() operations
 		 * be relative to viewport's own current's ?
 		 * */
-		if(empty_file_list())return nofile; // FIXME: patch!
-	       	return cp?flist[current_n()]:nofile;
+		if(empty_file_list())return nofile_; // FIXME: patch!
+	       	return cp_?flist_[current_n()]:nofile_;
 	}
 
 	int Browser::empty_file_list()const
@@ -1426,7 +1426,7 @@ nop:
 		/*
 		 *	is the filename list empty ?
 		 */
-		return flist.size()==0;
+		return flist_.size()==0;
 	}
 
 	fim::string Browser::display()
@@ -1542,7 +1542,7 @@ nop:
 		/*
 		 * FIX ME
 		 */
-		return cp;
+		return cp_;
 	}
 }
 

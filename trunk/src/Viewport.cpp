@@ -87,7 +87,7 @@ namespace fim
 			if(v.image) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image->getName() << "\" from "<<v.image<<"\n" ;
 			else std::cout << "no image to cache..\n";
 	#endif
-			if(v.image && !v.image->check_invalid()) setImage( commandConsole.browser.cache.useCachedImage(v.image->getKey()) );
+			if(v.image && !v.image->check_invalid()) setImage( commandConsole.browser.cache_.useCachedImage(v.image->getKey()) );
 #else
 			if(v.image) setImage ( new Image(*v.image) ) ;
 #endif
@@ -512,7 +512,7 @@ namespace fim
 #ifndef FIM_BUGGED_CACHE
 		if(image)
 		{	
-			if( !commandConsole.browser.cache.freeCachedImage(image) )
+			if( !commandConsole.browser.cache_.freeCachedImage(image) )
 				delete image;	// do it yourself :P
 		}
 #else
