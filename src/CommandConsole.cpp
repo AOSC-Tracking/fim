@@ -65,7 +65,7 @@ namespace fim
 		 * is cmd a valid internal (registered) Fim command ?
 		 */
 		for(size_t i=0;i<commands.size();++i) 
-			if(commands[i] && commands[i]->cmd==cmd)
+			if(commands[i] && commands[i]->cmd_==cmd)
 				return commands[i];
 		return NULL;
 	}
@@ -471,8 +471,8 @@ namespace fim
 		variables_t::const_iterator vi;
 		for(size_t i=0;i<commands.size();++i)
 		{
-			if(commands[i]->cmd.find(cmd)==0)
-			completions.push_back(commands[i]->cmd);
+			if(commands[i]->cmd_.find(cmd)==0)
+			completions.push_back(commands[i]->cmd_);
 		}
 		for( ai=aliases.begin();ai!=aliases.end();++ai)
 		{	
@@ -502,21 +502,21 @@ namespace fim
 				return dupstr(completions[i].c_str());// is this malloc free ?
 			}
 			else
-				;//std::cout << cmd << " no matches with " << commands[i]->cmd<<  "\n";
+				;//std::cout << cmd << " no matches with " << commands[i]->cmd_<<  "\n";
 		}
 
 /*		for(int i=list_index;i<aliases_keys.size();++i)
 		{
 			if(!commands[i])continue;
-			if(commands[i]->cmd.find(cmd)==0)
+			if(commands[i]->cmd_.find(cmd)==0)
 			{
 				list_index++;
-				//std::cout << cmd << " matches with " << commands[i]->cmd<<  "\n";
+				//std::cout << cmd << " matches with " << commands[i]->cmd_<<  "\n";
 				//readline will free this strings..
-				return dupstr(commands[i]->cmd.c_str());
+				return dupstr(commands[i]->cmd_.c_str());
 			}
 			else
-				;//std::cout << cmd << " no matches with " << commands[i]->cmd<<  "\n";
+				;//std::cout << cmd << " no matches with " << commands[i]->cmd_<<  "\n";
 		}*/
 		//TO DO : ADD VARIABLE AND ALIAS EXPANSION..
 		return NULL;
@@ -1243,7 +1243,7 @@ ok:
 		for(size_t i=0;i<commands.size();++i)
 		{
 			if(i)commands_list+=" ";
-			commands_list+=(commands[i]->cmd);
+			commands_list+=(commands[i]->cmd_);
 		}
 		return commands_list;
 	}
@@ -2035,7 +2035,7 @@ ok:
 		fim::string s;
 		for(size_t i=0;i<commands.size();++i)
 		{
-			s+=(commands[i]->cmd);
+			s+=(commands[i]->cmd_);
 			s+=" : ";
 			s+=(commands[i])->getHelp();
 			s+="\n";
