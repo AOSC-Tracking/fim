@@ -619,7 +619,7 @@ fim::string Image::getInfo()
 	{
 		/* FIXME : this is BAD style ! */
 	        if(cc.displaydevice_)
-		        cc.displaydevice_->redraw=1;
+		        cc.displaydevice_->redraw_=1;
 	}
 
 	bool Image::prev_page(int j)

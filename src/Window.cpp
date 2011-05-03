@@ -903,7 +903,7 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-				if(viewport_)commandConsole_.displaydevice_->redraw=1;// no effect
+				if(viewport_)commandConsole_.displaydevice_->redraw_=1;// no effect
 				return 0;
 			}
 
@@ -950,7 +950,7 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-				if(viewport_)commandConsole_.displaydevice_->redraw=1;// no effect
+				if(viewport_)commandConsole_.displaydevice_->redraw_=1;// no effect
 				return 0;
 			}
 

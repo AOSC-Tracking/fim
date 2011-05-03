@@ -272,7 +272,7 @@ namespace fim
 	CommandConsole::CommandConsole(/*FramebufferDevice &_framebufferdevice*/):
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
-	mc(*this),
+	mc_(*this),
 #endif
 #endif
 	fontserver(),
@@ -280,7 +280,7 @@ namespace fim
 	//,framebufferdevice(_framebufferdevice)
 	,return_code(0)
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	,dummydisplaydevice(this->mc)
+	,dummydisplaydevice(this->mc_)
 #else
 	,dummydisplaydevice()
 #endif

@@ -248,7 +248,7 @@ namespace fim
 		/*
 		 * for recovery purposes. FIXME
 		 * */
-		if( displaydevice_->redraw==0 )return;
+		if( displaydevice_->redraw_==0 )return;
 #ifdef FIM_WINDOWS
 		/* FIXME : note that fbi's clear_rect() is a buggy function and thus the fs_bpp multiplication need ! */
 		{
@@ -274,7 +274,7 @@ namespace fim
 		 *
 		 *	returns true when some drawing occurred.
 		 */
-		if((displaydevice_->redraw==0) )return false;
+		if((displaydevice_->redraw_==0) )return false;
 		if( check_invalid() ) null_display();//  NEW
 		if( check_invalid() ) return false;
 		/*
@@ -297,7 +297,7 @@ namespace fim
 		if(negate)
 			image_->negate();
 
-		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER) && displaydevice_->redraw)
+		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER) && displaydevice_->redraw_)
 		{
 			/*
 			 * If this is the first image display, we have
@@ -316,7 +316,7 @@ namespace fim
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
-//		if (displaydevice_->redraw  ) 
+//		if (displaydevice_->redraw_  ) 
 		{
 			/*	
 			 *	20070911
@@ -350,9 +350,9 @@ namespace fim
 		    	}
 		}
 		
-		if(displaydevice_->redraw)
+		if(displaydevice_->redraw_)
 		{
-			displaydevice_->redraw=0;
+			displaydevice_->redraw_=0;
 			/*
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
@@ -595,7 +595,7 @@ namespace fim
 		if(image_)
 			image_->should_redraw();
 		else
-	        	if(displaydevice_)displaydevice_->redraw=1;
+	        	if(displaydevice_)displaydevice_->redraw_=1;
 	}
 
 	Viewport::~Viewport()

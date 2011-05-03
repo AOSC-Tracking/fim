@@ -2,7 +2,7 @@
 /*
  FbiStuffLoader.h : fbi functions for loading files, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -142,7 +142,7 @@ int load_free_extras(struct ida_image_info *info);
 /* ----------------------------------------------------------------------- */
 
 /* other */
-extern int debug;
+//extern int debug;
 extern struct ida_loader ppm_loader;
 extern struct ida_loader sane_loader;
 extern struct ida_writer ps_writer;

@@ -38,24 +38,24 @@ namespace fim
 			return ccol;
 		}
 
-		int MiniConsole::do_dump(int f, int l)const
+		int MiniConsole::do_dump(int f_, int l)const
 		{
 			/*
 			 *
-			 * if f <= l and f>= 0 
-			 * lines from min(f,cline) to min(l,cline) will be dumped
+			 * if f_ <= l and f_>= 0 
+			 * lines from min(f_,cline) to min(l,cline) will be dumped
 			 *
-			 * if f<0 and l>=0 and f+l<0 and -f<=cline,
-			 * lines from cline+f to cline-l will be dumped
+			 * if f_<0 and l>=0 and f_+l<0 and -f_<=cline,
+			 * lines from cline+f_ to cline-l will be dumped
 			 *
 			 * FIXME : this function returns often with -1 !
 			 * */
 			int i;
 			const int maxcols = cc.displaydevice_->get_chars_per_line();
 	
-			if(f<0 && l>=0 && f+l<0 && -f<=cline) { f=cline+f; l=cline-l; }
+			if(f_<0 && l>=0 && f_+l<0 && -f_<=cline) { f_=cline+f_; l=cline-l; }
 			else
-				if(f<=l && f>=0){f=f>cline?cline:f;l=l>cline?cline:l;}
+				if(f_<=l && f_>=0){f_=f_>cline?cline:f_;l=l>cline?cline:l;}
 			else
 				return -1;// unsupported combination
 			
@@ -65,13 +65,13 @@ namespace fim
 				if(maxcols==0)
 				{
 					// a fixup for the dumb console
-					int n=1+line[l]-line[f];
+					int n=1+line[l]-line[f_];
 					char*buf=NULL;
 					if(n>0 && (buf=(char*)fim_malloc(n))!=NULL)
 					{
-						strncpy(buf,line[f],n);
+						strncpy(buf,line[f_],n);
 						buf[n-1]='\0';
-						cc.displaydevice_->fs_puts(cc.displaydevice_->f,0,0,(unsigned char*)buf);
+						cc.displaydevice_->fs_puts(cc.displaydevice_->f_,0,0,(unsigned char*)buf);
 						fim_free(buf);
 					}
 				}
@@ -85,18 +85,18 @@ namespace fim
 
 			if(*bp){fim_free(buf);return -1;}//if *bp then we could print garbage so we exit before damage is done
 
-			int fh=cc.displaydevice_->f ? cc.displaydevice_->f->height:1; // FIXME : this is not clean
-			l-=f; l%=(rows+1); l+=f;
+			int fh=cc.displaydevice_->f_ ? cc.displaydevice_->f_->height:1; // FIXME : this is not clean
+			l-=f_; l%=(rows+1); l+=f_;
 
 			/* FIXME : the following line is redundant in fb, but not in SDL 
 			 * moreover, it seems useless in AA (could be a bug)
 			 * */
-			cc.displaydevice_->clear_rect(0, cc.displaydevice_->width()-1, 0 ,fh*(l-f+1) );
+			cc.displaydevice_->clear_rect(0, cc.displaydevice_->width()-1, 0 ,fh*(l-f_+1) );
 
 			// fs_puts alone won't draw on screen, but in the back plance, so unlock/flip will be necessary
 			cc.displaydevice_->lock();
 
-	    		for(i=f  ;i<=l   ;++i)
+	    		for(i=f_  ;i<=l   ;++i)
 			{
 				int t = (i<cline?(line[i+1]-line[i]):(ccol))%(min(maxcols,lwidth)+1);
 				if( t<0 ){fim_free(buf);return -1;} // hmmm
@@ -109,7 +109,7 @@ namespace fim
 				 * we truncate the line for the interval exceeding the screen width.
 				 * */
 				buf[ maxcols ]='\0';
-				cc.displaydevice_->fs_puts(cc.displaydevice_->f, 0, fh*(i-f), (unsigned char*)buf);
+				cc.displaydevice_->fs_puts(cc.displaydevice_->f_, 0, fh*(i-f_), (unsigned char*)buf);
 			}
 
 			/* FIXME : THE FOLLOWING IS A FIXUP FOR AA!  */
@@ -118,7 +118,7 @@ namespace fim
 				int t = (min(maxcols,lwidth)+1);
 				memset(buf,' ',t);
 				buf[t-1]='\0';
-				cc.displaydevice_->fs_puts(cc.displaydevice_->f, 0, fh*((l-f+1)+i), (unsigned char*)buf);
+				cc.displaydevice_->fs_puts(cc.displaydevice_->f_, 0, fh*((l-f_+1)+i), (unsigned char*)buf);
 			}
 			cc.displaydevice_->unlock();
 
@@ -140,7 +140,7 @@ namespace fim
 			{
 				// we display input as soon as it received.
 				if(this->getGlobalIntVariable(FIM_VID_DISPLAY_CONSOLE))
-					cc.displaydevice_->fs_puts(cc.displaydevice_->f,0,0,(unsigned char*)cso);
+					cc.displaydevice_->fs_puts(cc.displaydevice_->f_,0,0,(unsigned char*)cso);
 			}
 #endif
 			cs=dupstr(cso);

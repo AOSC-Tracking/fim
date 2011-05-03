@@ -35,7 +35,7 @@ class CommandConsole
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
-	MiniConsole mc;
+	MiniConsole mc_;
 #endif
 #endif
 	FontServer fontserver;
