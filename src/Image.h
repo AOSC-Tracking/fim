@@ -61,8 +61,8 @@ class Image
 
 	public:
 
-	Image(const char *fname_, FILE *fd=NULL);
-	Image(const char *fname_, Foo& foo, FILE *fd=NULL);
+	Image(const char *fname, FILE *fd=NULL);
+	Image(const char *fname, Foo& foo, FILE *fd=NULL);
 	~Image();
 
 	bool prev_page(int j=+1);
@@ -73,32 +73,32 @@ class Image
 
 	private:
 	Image& operator= (const Image &i){return *this;/* a nilpotent assignation */}
-	fim_scale_t            scale;	/* viewport variables */
-	fim_scale_t            ascale;
-	fim_scale_t            newscale;
-	fim_scale_t            angle;
-	fim_scale_t            newangle;
-	fim_page_t		 page;
+	fim_scale_t            scale_;	/* viewport variables */
+	fim_scale_t            ascale_;
+	fim_scale_t            newscale_;
+	fim_scale_t            angle_;
+	fim_scale_t            newangle_;
+	fim_page_t		 page_;
 
 	/* virtual stuff */
 	public://TMP
-        struct ida_image *img     ;     /* local (eventually) copy images */
+        struct ida_image *img_     ;     /* local (eventually) copy images */
 	bool reload();
 	private://TMP
-	struct ida_image *fimg    ;     /* master image */
+	struct ida_image *fimg_    ;     /* master image */
 
 	/* image methods */
-	bool load(const char *fname_, FILE *fd, int want_page);
+	bool load(const char *fname, FILE *fd, int want_page);
 	void should_redraw(int should=1)const;
 
 	protected:
-	int              orientation;	//aka rotation
+	int              orientation_;	//aka rotation
 
-	int    invalid;		//the first time the image is loaded it is set to 1
-	int	no_file;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
-	fim_image_source_t fis;
+	int    invalid_;		//the first time the image is loaded it is set to 1
+	int	no_file_;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
+	fim_image_source_t fis_;
 
-	string  fname;		/* viewport variable, too */
+	string  fname_;		/* viewport variable, too */
 
         void free();
 	void reset();
@@ -106,16 +106,16 @@ class Image
 
         int tiny()const;
 	public:
-	bool can_reload()const{return !no_file;}
+	bool can_reload()const{return !no_file_;}
 	bool update();
 
 	fim::string getInfo();
 	Image(const Image& image); // yes, a private constructor (was)
 
 	int rescale( float ns=0.0 );
-	int rotate( float angle=1.0 );
+	int rotate( float angle_=1.0 );
 
-	const char* getName()const{return fname.c_str();}
+	const char* getName()const{return fname_.c_str();}
 	cache_key_t getKey()const;
 
 	/* viewport methods */
