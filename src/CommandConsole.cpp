@@ -234,27 +234,27 @@ namespace fim
 		}
 		if(args.size()<2)
 		{
-			return get_alias_info(args[0].val);
+			return get_alias_info(args[0].val_);
 		}
-		//for(size_t i=1;i<args.size();++i) cmdlist+=args[i].val;
-		if(args.size()>=2)cmdlist+=args[1].val;
-		if(args.size()>=3)desc   +=args[2].val;
-		if(aliases[args[0].val].first!="")
+		//for(size_t i=1;i<args.size();++i) cmdlist+=args[i].val_;
+		if(args.size()>=2)cmdlist+=args[1].val_;
+		if(args.size()>=3)desc   +=args[2].val_;
+		if(aliases[args[0].val_].first!="")
 		{
-			aliases[args[0].val]=std::pair<fim::string,fim::string>(cmdlist,desc);
+			aliases[args[0].val_]=std::pair<fim::string,fim::string>(cmdlist,desc);
 			string r;
 			r+=fim::string(FIM_FLT_ALIAS" ");
-			r+=args[0].val;
+			r+=args[0].val_;
 			r+=fim::string(" successfully replaced.\n");
 			return r;
 		}
 		else
 		{
-			aliases[args[0].val].first=cmdlist;
-			aliases[args[0].val].second=desc;
+			aliases[args[0].val_].first=cmdlist;
+			aliases[args[0].val_].second=desc;
 			string r;
 			r+=fim::string(FIM_FLT_ALIAS" ");
-			r+=args[0].val;
+			r+=args[0].val_;
 			r+=fim::string(" successfully added.\n");
 			return r;
 		}
