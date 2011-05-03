@@ -29,16 +29,16 @@ class SDLDevice:public DisplayDevice
 {
 	private:
 
-	SDL_Surface *screen;
-	SDL_Event event;
-	const SDL_VideoInfo* vi;
+	SDL_Surface *screen_;
+	SDL_Event event_;
+	const SDL_VideoInfo* vi_;
 
-	int keypress ;
-	int h;
+	int keypress_ ;
+	int h_;
 
-	int current_w;
-	int current_h;
-	int Bpp,bpp;
+	int current_w_;
+	int current_h_;
+	int Bpp_,bpp_;
 
 	public:
 
@@ -70,7 +70,7 @@ class SDLDevice:public DisplayDevice
 	int width();
 	int height();
 	int status_line(const unsigned char *msg);
-	void status_screen(int desc,int draw_output){ return ; }
+	void status_screen_(int desc,int draw_output){ return ; }
 	int handle_console_switch(){return 0;}
 	int clear_rect_(
 		void* dst,
@@ -81,7 +81,7 @@ class SDLDevice:public DisplayDevice
 
 
 	/* TEMPORARY */
-	inline void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
+	inline void setpixel(SDL_Surface *screen_, int x, int y, Uint8 r, Uint8 g, Uint8 b);
 
 	int get_input(fim_key_t * c);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
@@ -92,7 +92,7 @@ class SDLDevice:public DisplayDevice
 	void flush();
 	void lock();
 	void unlock();
-	int get_bpp(){return bpp; };
+	int get_bpp(){return bpp_; };
 };
 
 

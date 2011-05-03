@@ -59,15 +59,15 @@ std::cout.unsetf ( std::ios::hex );
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	SDLDevice::SDLDevice(MiniConsole & mc_):DisplayDevice(mc_),vi(NULL)
+	SDLDevice::SDLDevice(MiniConsole & mc_):DisplayDevice(mc_),vi_(NULL)
 #else
-	SDLDevice::SDLDevice():DisplayDevice(),vi(NULL)
+	SDLDevice::SDLDevice():DisplayDevice(),vi_(NULL)
 #endif
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
-		keypress = 0;
-		h=0;
-		current_w=current_h=0;
+		keypress_ = 0;
+		h_=0;
+		current_w_=current_h_=0;
 	}
 
 	int SDLDevice::clear_rect_(
@@ -168,13 +168,13 @@ std::cout.unsetf ( std::ios::hex );
 		if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
 
 
-//		int h=1;
+//		int h_=1;
 //		int x, y;
 		int ytimesw;
 
-		if(SDL_MUSTLOCK(screen))
+		if(SDL_MUSTLOCK(screen_))
 		{
-			if(SDL_LockSurface(screen) < 0) return -1;
+			if(SDL_LockSurface(screen_) < 0) return -1;
 		}
 
 		int idr,idc,lor,loc;
@@ -199,20 +199,20 @@ std::cout.unsetf ( std::ios::hex );
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
 		{
-			ytimesw = (oi)*screen->pitch/Bpp;
+			ytimesw = (oi)*screen_->pitch/Bpp_;
 
 			ii    = oi + idr;
 			ij    = oj + idc;
 			srcp  = ((unsigned char*)rgb)+(3*(ii*icskip+ij));
 
-			setpixel(screen, oj, ytimesw, (int)srcp[0], (int)srcp[1], (int)srcp[2]);
+			setpixel(screen_, oj, ytimesw, (int)srcp[0], (int)srcp[1], (int)srcp[2]);
 		}
 		else
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
 		{
 
-			ytimesw = (oi)*screen->pitch/Bpp;
+			ytimesw = (oi)*screen_->pitch/Bpp_;
 			/* UNFINISHED : FIX ME */
 			ii    = oi + idr;
 			ij    = oj + idc;
@@ -221,12 +221,12 @@ std::cout.unsetf ( std::ios::hex );
 			if( flip )ii=((irows-1)-ii);
 			srcp  = ((unsigned char*)rgb)+(3*(ii*icskip+ij));
 
-			setpixel(screen, oj, ytimesw, (int)srcp[0], (int)srcp[1], (int)srcp[2]);
+			setpixel(screen_, oj, ytimesw, (int)srcp[0], (int)srcp[1], (int)srcp[2]);
 		}
 
-		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
+		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 
-		SDL_Flip(screen);
+		SDL_Flip(screen_);
 
 		return 0;
 	}
@@ -238,7 +238,7 @@ std::cout.unsetf ( std::ios::hex );
 		 * */
 		if (SDL_Init(SDL_INIT_VIDEO) < 0 ) return 1;
 		/* automatic selection of video mode (the current one) */
-		if (!(screen = SDL_SetVideoMode(0,	/* width  */
+		if (!(screen_ = SDL_SetVideoMode(0,	/* width  */
 						0,	/* height */
 						0,	/* depth (bits per pixel) */
 						SDL_FULLSCREEN|SDL_HWSURFACE)))
@@ -249,14 +249,14 @@ std::cout.unsetf ( std::ios::hex );
 		}
 		else
 		{
-			vi = SDL_GetVideoInfo();
-			if(!vi)
+			vi_ = SDL_GetVideoInfo();
+			if(!vi_)
 				return -1;
 
-			current_w=vi->current_w;
-			current_h=vi->current_h;
-			bpp      =vi->vfmt->BitsPerPixel;
-			Bpp      =vi->vfmt->BytesPerPixel;
+			current_w_=vi_->current_w;
+			current_h_=vi_->current_h;
+			bpp_      =vi_->vfmt->BitsPerPixel;
+			Bpp_      =vi_->vfmt->BytesPerPixel;
 		}
 		/* Enable Unicode translation ( for a more flexible input handling ) */
 	        SDL_EnableUNICODE( 1 );
@@ -311,28 +311,28 @@ std::cout.unsetf ( std::ios::hex );
 
 	int SDLDevice::width()
 	{
-		return current_w;
+		return current_w_;
 	}
 
 	int SDLDevice::height()
 	{
-		return current_h;
+		return current_h_;
 	}
 
-	inline void SDLDevice::setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b)
+	inline void SDLDevice::setpixel(SDL_Surface *screen_, int x, int y, Uint8 r, Uint8 g, Uint8 b)
 	{
 		/*
 		 * this function is taken straight from the sdl documentation: there are smarter ways to do this.
 		 * */
 
-		switch (bpp)
+		switch (bpp_)
 		{
 		case  8:
 		{
 			Uint8 *pixmem8;
 			Uint8 colour;
-			colour = SDL_MapRGB( screen->format, b, g, r );
-			pixmem8 = (Uint8*)((char*)( screen->pixels)  + (y + x)*Bpp);
+			colour = SDL_MapRGB( screen_->format, b, g, r );
+			pixmem8 = (Uint8*)((char*)( screen_->pixels)  + (y + x)*Bpp_);
 			*pixmem8 = colour;
 		}
 		break;
@@ -341,8 +341,8 @@ std::cout.unsetf ( std::ios::hex );
 		{
 			Uint16 *pixmem16;
 			Uint16 colour;
-			colour = SDL_MapRGB( screen->format, b, g, r );
-			pixmem16 = (Uint16*)((char*)( screen->pixels)  + (y + x)*Bpp);
+			colour = SDL_MapRGB( screen_->format, b, g, r );
+			pixmem16 = (Uint16*)((char*)( screen_->pixels)  + (y + x)*Bpp_);
 			*pixmem16 = colour;
 		}
 		break;
@@ -350,8 +350,8 @@ std::cout.unsetf ( std::ios::hex );
 		{
 			Uint32 *pixmem32;
 			Uint32 colour;
-			colour = SDL_MapRGB( screen->format, b, g, r );
-			pixmem32 = (Uint32*)((char*)( screen->pixels)  + (y + x)*Bpp);
+			colour = SDL_MapRGB( screen_->format, b, g, r );
+			pixmem32 = (Uint32*)((char*)( screen_->pixels)  + (y + x)*Bpp_);
 			*pixmem32 = colour;
 		}
 		break;
@@ -359,8 +359,8 @@ std::cout.unsetf ( std::ios::hex );
 		{
 			Uint32 *pixmem32;
 			Uint32 colour;
-			colour = SDL_MapRGBA( screen->format, b, g, r, 255 );
-			pixmem32 = (Uint32*)((char*)( screen->pixels)  + (y + x)*Bpp);
+			colour = SDL_MapRGBA( screen_->format, b, g, r, 255 );
+			pixmem32 = (Uint32*)((char*)( screen_->pixels)  + (y + x)*Bpp_);
 			*pixmem32 = colour;
 		}
 		break;
@@ -374,17 +374,17 @@ std::cout.unsetf ( std::ios::hex );
 
 	static int get_input_inner(fim_key_t * c, SDL_Event*eventp, int *keypressp)
 	{
-//		int keypress=0;
+//		int keypress_=0;
 		bool ctrl_on=0;
 		bool alt_on=0;
 		bool shift_on=0;
-		SDL_Event event=*eventp;
+		SDL_Event event_=*eventp;
 		*c = 0x0;	/* blank */
 
-//		while(SDL_PollEvent(&event))
-		if(SDL_PollEvent(&event))
+//		while(SDL_PollEvent(&event_))
+		if(SDL_PollEvent(&event_))
 		{
-			switch (event.type)
+			switch (event_.type)
 			{
 				case SDL_QUIT:
 				*keypressp = 1;
@@ -392,35 +392,35 @@ std::cout.unsetf ( std::ios::hex );
 				break;
 				case SDL_KEYDOWN:
 
-				if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) ctrl_on=true;
-				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  )  alt_on=true;
-				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )  shift_on=true;
+				if(event_.key.keysym.mod == KMOD_RCTRL || event_.key.keysym.mod == KMOD_LCTRL ) ctrl_on=true;
+				if(event_.key.keysym.mod == KMOD_RALT  || event_.key.keysym.mod == KMOD_LALT  )  alt_on=true;
+				if(event_.key.keysym.mod == KMOD_RSHIFT  || event_.key.keysym.mod == KMOD_LSHIFT  )  shift_on=true;
 
-			//	std::cout << "sym : " << (int)event.key.keysym.sym << "\n" ;
-			//	std::cout << "uni : " << (int)event.key.keysym.unicode<< "\n" ;
+			//	std::cout << "sym : " << (int)event_.key.keysym.sym << "\n" ;
+			//	std::cout << "uni : " << (int)event_.key.keysym.unicode<< "\n" ;
 			//	if(shift_on)std::cout << "shift_on\n";
 
-				if( event.key.keysym.unicode == 0x0 )
+				if( event_.key.keysym.unicode == 0x0 )
 				{
 					/* arrows and stuff */
-					if(event.key.keysym.sym<256)
+					if(event_.key.keysym.sym<256)
 					{
 						FIM_SDL_INPUT_DEBUG(c,"uhm");
-						*c=event.key.keysym.sym;
+						*c=event_.key.keysym.sym;
 						return 1;
 					}
 					else
 					if(
-						event.key.keysym.sym!=SDLK_LSHIFT
-					&&	event.key.keysym.sym!=SDLK_RSHIFT
-					&&	event.key.keysym.sym!=SDLK_LALT
-					&&	event.key.keysym.sym!=SDLK_RALT
-					&&	event.key.keysym.sym!=SDLK_LCTRL
-					&&	event.key.keysym.sym!=SDLK_RCTRL
+						event_.key.keysym.sym!=SDLK_LSHIFT
+					&&	event_.key.keysym.sym!=SDLK_RSHIFT
+					&&	event_.key.keysym.sym!=SDLK_LALT
+					&&	event_.key.keysym.sym!=SDLK_RALT
+					&&	event_.key.keysym.sym!=SDLK_LCTRL
+					&&	event_.key.keysym.sym!=SDLK_RCTRL
 					)
 					{
 						/* arrows.. .. */
-						*c=event.key.keysym.sym;
+						*c=event_.key.keysym.sym;
 						FIM_SDL_INPUT_DEBUG(c,"arrow");
 						return 1;
 					}
@@ -434,20 +434,20 @@ std::cout.unsetf ( std::ios::hex );
 
 				if(alt_on)
 				{
-					*c=(unsigned char)event.key.keysym.unicode;
+					*c=(unsigned char)event_.key.keysym.unicode;
 					*c|=(1<<31);	/* FIXME : a dirty trick */
 					return 1;
 				}
 
-				if( 	event.key.keysym.unicode < 0x80)
+				if( 	event_.key.keysym.unicode < 0x80)
 				{
 					/* 
 					 * SDL documentation 1.2.12 about unicode:
 					 * It is useful to note that unicode values < 0x80 translate directly
 					 * a characters ASCII value.
 					 * */
-			//		if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) std::cout << "ctrl ! \n";
-					*c=(unsigned char)event.key.keysym.unicode;
+			//		if(event_.key.keysym.mod == KMOD_RCTRL || event_.key.keysym.mod == KMOD_LCTRL ) std::cout << "ctrl ! \n";
+					*c=(unsigned char)event_.key.keysym.unicode;
 
 					if(ctrl_on)
 					{
@@ -520,7 +520,7 @@ std::cout.unsetf ( std::ios::hex );
 
 	int SDLDevice::get_input(fim_key_t * c )
 	{
-		return get_input_inner(c,&event,&keypress);
+		return get_input_inner(c,&event_,&keypress_);
 	}
 
 	int SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
@@ -531,7 +531,7 @@ std::cout.unsetf ( std::ios::hex );
 		 * */
 		for(y=y1;y<y2;++y)
 		{
-			memset(((char*)(screen->pixels)) + y*screen->pitch + x1*Bpp,color, (x2-x1)* Bpp);
+			memset(((char*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1)* Bpp_);
 		}
 		return 0;
 	}
@@ -544,7 +544,7 @@ std::cout.unsetf ( std::ios::hex );
 		 * */
 		for(y=y1;y<=y2;++y)
 		{
-			bzero(((char*)(screen->pixels)) + y*screen->pitch + x1*Bpp, (x2-x1+1)* Bpp);
+			bzero(((char*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_, (x2-x1+1)* Bpp_);
 		}
 		return 0;
 	}
@@ -581,9 +581,9 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char
 		{
 			if (data[bit>>3] & fs_masktab[bit&7])
 			{	// WARNING !
-				setpixel(screen,x_+x,(y+row)*screen->pitch/Bpp,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
+				setpixel(screen_,x_+x,(y+row)*screen_->pitch/Bpp_,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
 			}
-			x += Bpp/Bpp;/* FIXME */
+			x += Bpp_/Bpp_;/* FIXME */
 		}
 		data += bpr;
 	}
@@ -606,7 +606,7 @@ int SDLDevice::fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const
 	if (NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
-//	w = (f_->eindex[c]->width+1)*Bpp;
+//	w = (f_->eindex[c]->width+1)*Bpp_;
 #if 0
 #ifdef FIM_IS_SLOWER_THAN_FBI
 	for (j = 0; j < f_->height; j++) {
@@ -644,9 +644,9 @@ err:
 
 	int SDLDevice::status_line(const unsigned char *msg)
 	{
-		if(SDL_MUSTLOCK(screen))
+		if(SDL_MUSTLOCK(screen_))
 		{
-			if(SDL_LockSurface(screen) < 0) return -1;
+			if(SDL_LockSurface(screen_) < 0) return -1;
 		}
 
 		int y;
@@ -657,8 +657,8 @@ err:
 		fs_puts(f_, 0, y+ys, msg);
 		fill_rect(0,width()-1, y, y+1, 0xFF);	// FIXME : NO 1!
 
-		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-		SDL_Flip(screen);
+		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
+		SDL_Flip(screen_);
 		return 0;
 	}
 
@@ -666,7 +666,7 @@ err:
 	{
 		/*
 		 * Whether there is some input in the input queue.
-		 * Note that in this way the event will be lost.
+		 * Note that in this way the event_ will be lost.
 		 * */
 		fim_key_t c=0;
 		SDL_Event levent;
@@ -689,16 +689,16 @@ err:
 
 	void SDLDevice::lock()
 	{
-		if(SDL_MUSTLOCK(screen))
+		if(SDL_MUSTLOCK(screen_))
 		{
-			if(SDL_LockSurface(screen) < 0) return;
+			if(SDL_LockSurface(screen_) < 0) return;
 		}
 	}
 
 	void SDLDevice::unlock()
 	{
-		if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-		SDL_Flip(screen);
+		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
+		SDL_Flip(screen_);
 		
 	}
 
