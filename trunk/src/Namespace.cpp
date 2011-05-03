@@ -45,8 +45,8 @@ namespace fim
 #ifdef FIM_WINDOWS
 			{
 				//window variable
-				if(window)
-					return window->setVariable(id,value);
+				if(window_)
+					return window_->setVariable(id,value);
 				else
 					return 0;
 			}
@@ -54,8 +54,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window && window->current_viewportp())
-					return window->current_viewportp()->setVariable(id,value);
+				if(window_ && window_->current_viewportp())
+					return window_->current_viewportp()->setVariable(id,value);
 				else
 					return 0;
 			}
@@ -65,15 +65,15 @@ namespace fim
 			{
 				//image variable
 				return
-					browser.c_image()?
-					( (Image*) (browser.c_image()))->setVariable(id,value):
+					browser_.c_image()?
+					( (Image*) (browser_.c_image()))->setVariable(id,value):
 					0;
 			}
 			else
 			if( ns == 'b' )
 			{
 				//browser variable
-				return browser.setVariable(id,value);
+				return browser_.setVariable(id,value);
 			}
 			else
 			if( ns != 'g' )
@@ -106,8 +106,8 @@ namespace fim
 			if( ns == 'w' )
 			{
 				//window variable
-				if(window)
-					return window->setVariable(id,value);
+				if(window_)
+					return window_->setVariable(id,value);
 				else
 					return 0;
 			}
@@ -115,8 +115,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window && window->current_viewportp())
-					return window->current_viewportp()->setVariable(id,value);
+				if(window_ && window_->current_viewportp())
+					return window_->current_viewportp()->setVariable(id,value);
 				else
 					return 0;
 			}
@@ -126,15 +126,15 @@ namespace fim
 			{
 				//image variable
 				return
-					browser.c_image()?
-					( (Image*) (browser.c_image()))->setVariable(id,value):
+					browser_.c_image()?
+					( (Image*) (browser_.c_image()))->setVariable(id,value):
 					0;
 			}
 			else
 			if( ns == 'b' )
 			{
 				//browser variable
-				return browser.setVariable(id,value);
+				return browser_.setVariable(id,value);
 			}
 			else
 			if( ns != 'g' )
@@ -167,8 +167,8 @@ namespace fim
 			if( ns == 'w' )
 			{
 				//window variable
-				if(window)
-					return window->setVariable(id,s.c_str());
+				if(window_)
+					return window_->setVariable(id,s.c_str());
 				else
 					return 0;
 			}
@@ -176,8 +176,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window && window->current_viewportp())
-					return window->current_viewportp()->setVariable(id,s.c_str());
+				if(window_ && window_->current_viewportp())
+					return window_->current_viewportp()->setVariable(id,s.c_str());
 				else
 					return 0;
 			}
@@ -187,15 +187,15 @@ namespace fim
 			{
 				//image variable
 				return
-					browser.c_image()?
-					( (Image*) (browser.c_image()))->setVariable(id,s.c_str()):
+					browser_.c_image()?
+					( (Image*) (browser_.c_image()))->setVariable(id,s.c_str()):
 					0;
 			}
 			else
 			if( ns == 'b' )
 			{
 				//browser variable
-				return browser.setVariable(id,s.c_str());
+				return browser_.setVariable(id,s.c_str());
 			}
 			else
 			if( ns != 'g' )
@@ -228,8 +228,8 @@ namespace fim
 			if( ns == 'w' )
 			{
 				//window variable
-				if(window)
-					return window->setVariable(id,value);
+				if(window_)
+					return window_->setVariable(id,value);
 				else
 					return 0;
 			}
@@ -237,8 +237,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window && window->current_viewportp())
-					return window->current_viewportp()->setVariable(id,value);
+				if(window_ && window_->current_viewportp())
+					return window_->current_viewportp()->setVariable(id,value);
 				else
 					return 0;
 			}
@@ -247,18 +247,18 @@ namespace fim
 			if( ns == 'i' )
 			{
 				//image variable
-				if(browser.c_image())
+				if(browser_.c_image())
 				DBG(varname<<" : "<<value.getType()<<"\n");
 				return
-					browser.c_image()?
-					( (Image*) (browser.c_image()))->setVariable(id,value):
+					browser_.c_image()?
+					( (Image*) (browser_.c_image()))->setVariable(id,value):
 					Var(0);
 			}
 			else
 			if( ns == 'b' )
 			{
 				//browser variable
-				return browser.setVariable(id,value);
+				return browser_.setVariable(id,value);
 			}
 			else
 			if( ns != 'g' )
@@ -292,8 +292,8 @@ namespace fim
 			if( ns == 'w' )
 			{
 				//window variable
-				if(window)
-					return window->getIntVariable(id);
+				if(window_)
+					return window_->getIntVariable(id);
 				else
 					return 0;
 			}
@@ -301,8 +301,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window && window->current_viewportp())
-					return window->current_viewportp()->getIntVariable(id);
+				if(window_ && window_->current_viewportp())
+					return window_->current_viewportp()->getIntVariable(id);
 				else
 					return 0;
 			}
@@ -312,15 +312,15 @@ namespace fim
 			{
 				//image variable
 				return
-					browser.c_image()?
-					( (Image*) (browser.c_image()))->getIntVariable(id):
+					browser_.c_image()?
+					( (Image*) (browser_.c_image()))->getIntVariable(id):
 					0;
 			}
 			else
 			if( ns == 'b' )
 			{
 				//browser variable
-				return browser.getIntVariable(id);
+				return browser_.getIntVariable(id);
 			}
 			else
 			if( ns != 'g' )
@@ -365,8 +365,8 @@ namespace fim
 			if( ns == 'w' )
 			{
 				//window variable
-				if(window)
-					return window->getFloatVariable(id);
+				if(window_)
+					return window_->getFloatVariable(id);
 				else
 					return FIM_CNS_EMPTY_FP_VAL;
 			}
@@ -374,8 +374,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window && window->current_viewportp())
-					return window->current_viewportp()->getFloatVariable(id);
+				if(window_ && window_->current_viewportp())
+					return window_->current_viewportp()->getFloatVariable(id);
 				else
 					return FIM_CNS_EMPTY_FP_VAL;
 			}
@@ -385,15 +385,15 @@ namespace fim
 			{
 				//image variable
 				return
-					browser.c_image()?
-					( (Image*) (browser.c_image()))->getFloatVariable(id):
+					browser_.c_image()?
+					( (Image*) (browser_.c_image()))->getFloatVariable(id):
 					FIM_CNS_EMPTY_FP_VAL;
 			}
 			else
 			if( ns == 'b' )
 			{
 				//browser variable
-				return browser.getFloatVariable(id);
+				return browser_.getFloatVariable(id);
 			}
 			else
 			if( ns != 'g' )
@@ -428,8 +428,8 @@ namespace fim
 			if( ns == 'w' )
 			{
 				//window variable
-				if(window)
-					return window->getStringVariable(id);
+				if(window_)
+					return window_->getStringVariable(id);
 				else
 					return "";
 			}
@@ -437,8 +437,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window && window->current_viewportp())
-					return window->current_viewportp()->getStringVariable(id);
+				if(window_ && window_->current_viewportp())
+					return window_->current_viewportp()->getStringVariable(id);
 				else
 					return "";
 			}
@@ -448,8 +448,8 @@ namespace fim
 			{
 				//image variable
 				return
-					browser.c_image()?
-					( (Image*) (browser.c_image()))->getStringVariable(id):
+					browser_.c_image()?
+					( (Image*) (browser_.c_image()))->getStringVariable(id):
 					"";
 			}
 			else
@@ -457,7 +457,7 @@ namespace fim
 			{
 				//browser variable
 //				std::cout << "brbbbr\n";
-				return browser.getStringVariable(id);
+				return browser_.getStringVariable(id);
 			}
 			else
 			if( ns != 'g' )
@@ -540,8 +540,8 @@ namespace fim
 			if( ns == 'w' )
 			{
 				//window variable
-				if(window)
-					return window->getVariable(id);
+				if(window_)
+					return window_->getVariable(id);
 				else
 					return Var();
 			}
@@ -549,8 +549,8 @@ namespace fim
 			if( ns == 'v' )
 			{
 				//viewport variable
-				if(window && window->current_viewportp())
-					return window->current_viewportp()->getVariable(id);
+				if(window_ && window_->current_viewportp())
+					return window_->current_viewportp()->getVariable(id);
 				else
 					return Var();
 			}
@@ -560,15 +560,15 @@ namespace fim
 			{
 				//image variable
 				return
-					browser.c_image()?
-					( (Image*) (browser.c_image()))->getVariable(id):
+					browser_.c_image()?
+					( (Image*) (browser_.c_image()))->getVariable(id):
 					Var();
 			}
 			else
 			if( ns == 'b' )
 			{
 				//browser variable
-				return browser.getVariable(id);
+				return browser_.getVariable(id);
 			}
 			else
 			if( ns != 'g' )

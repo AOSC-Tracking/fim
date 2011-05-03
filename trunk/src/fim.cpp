@@ -613,11 +613,11 @@ int help_and_exit(char *argv0, int code=0)
 				}catch (FimException e){/* write me */}
 
 				// DANGEROUS TRICK!
-				cc.browser.set_default_image(stream_image);
-				if(!cc.browser.cache_.setAndCacheStdinCachedImage(stream_image))
+				cc.browser_.set_default_image(stream_image);
+				if(!cc.browser_.cache_.setAndCacheStdinCachedImage(stream_image))
 					std::cerr << "problems caching standard input image!\n";// FIXME
 
-				cc.browser.push(FIM_STDIN_IMAGE_NAME);
+				cc.browser_.push(FIM_STDIN_IMAGE_NAME);
 				//fclose(tfd);	// uncommenting this will cause a segfault (why ? FIXME)
 			}
 			close(0);
@@ -640,7 +640,7 @@ int help_and_exit(char *argv0, int code=0)
 		if(ndd==-1)
 			perror(NULL);
 	
-		if(cc.browser.empty_file_list()
+		if(cc.browser_.empty_file_list()
 #ifndef FIM_WANT_NOSCRIPTING
 			       	&& !cc.with_scriptfile()
 #endif
