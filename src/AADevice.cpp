@@ -223,11 +223,11 @@
 		return  0;
 	}
 
-//#define width() aa_imgwidth(ascii_context)
-//#define height() aa_imgheight(ascii_context)
+//#define width() aa_imgwidth(ascii_context_)
+//#define height() aa_imgheight(ascii_context_)
 
-//#define width() aa_scrwidth(ascii_context)
-//#define height() aa_scrheight(ascii_context)
+//#define width() aa_scrwidth(ascii_context_)
+//#define height() aa_scrheight(ascii_context_)
 
 	int  AADevice::display(
 		//struct ida_image *img, // source image structure
@@ -288,8 +288,8 @@
 //		ocols  = min( icols-icoff,  width());// rows and columns to draw in output buffer
 //		ocskip = width();// output columns to skip for each line
 //
-		ocskip = aa_scrwidth(ascii_context);// output columns to skip for each line
-		ocskip = aa_imgwidth(ascii_context);// output columns to skip for each line
+		ocskip = aa_scrwidth(ascii_context_);// output columns to skip for each line
+		ocskip = aa_imgwidth(ascii_context_);// output columns to skip for each line
 
 		/*
 		 * FIXME : since aa_flush() poses requirements to the way single viewports are drawn, 
@@ -301,16 +301,16 @@
 
 		/* we zero the pixel field */
 		//img or scr ?!
-		//bzero(aa_image(ascii_context),aa_imgheight(ascii_context)*ocskip);
-		//bzero(aa_image(ascii_context),width()*height());
-		AADevice::clear_rect_( aa_image(ascii_context), oroff,ocoff, oroff+orows,ocoff+ocols, ocskip); 
+		//bzero(aa_image(ascii_context_),aa_imgheight(ascii_context_)*ocskip);
+		//bzero(aa_image(ascii_context_),width()*height());
+		AADevice::clear_rect_( aa_image(ascii_context_), oroff,ocoff, oroff+orows,ocoff+ocols, ocskip); 
 
 	//	cout << iroff << " " << icoff << " " << irows << " " << icols << " " << icskip << "\n";
 /*		cout << oroff << " " << ocoff << " " << orows << " " << ocols << " " << ocskip << "\n";
-		cout << " aa_scrwidth(ascii_context):" << aa_scrwidth(ascii_context) << "  ";
-		cout << "aa_scrheight(ascii_context):" <<aa_scrheight(ascii_context) << "\n";
-		cout << " aa_imgwidth(ascii_context):" << aa_imgwidth(ascii_context) << "  ";
-		cout << "aa_imgheight(ascii_context):" <<aa_imgheight(ascii_context) << "\n";
+		cout << " aa_scrwidth(ascii_context_):" << aa_scrwidth(ascii_context_) << "  ";
+		cout << "aa_scrheight(ascii_context_):" <<aa_scrheight(ascii_context_) << "\n";
+		cout << " aa_imgwidth(ascii_context_):" << aa_imgwidth(ascii_context_) << "  ";
+		cout << "aa_imgheight(ascii_context_):" <<aa_imgheight(ascii_context_) << "\n";
 		cout << "ocskip " << ocskip << "\n";
 		cout << "ocols "  << ocols  << "\n";*/
 		
@@ -320,7 +320,7 @@
 		int r;
 #if (!FIM_AALIB_DRIVER_DEBUG)
 		if((r=matrix_copy_rgb_to_gray(
-				aa_image(ascii_context),rgb,
+				aa_image(ascii_context_),rgb,
 				iroff,icoff, // row and column offset of the first input pixel
 				irows,icols,// rows and columns in the input image
 				icskip,	// input columns to skip for each line
@@ -333,25 +333,25 @@
 #endif
 			//return -50;
 
-/*		aa_putpixel(ascii_context,ocols-1,orows-1,0xAA);
-		aa_putpixel(ascii_context,0,orows-1,0xAA);
-		aa_putpixel(ascii_context,ocols-1,0,0xAA);*/
-/*		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+0, aa_scrheight(ascii_context)+0, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+1, aa_scrheight(ascii_context)+1, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+2, aa_scrheight(ascii_context)+2, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+3, aa_scrheight(ascii_context)+3, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+4, aa_scrheight(ascii_context)+4, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+5, aa_scrheight(ascii_context)+5, 0xAA);
-		aa_putpixel(ascii_context, aa_scrwidth(ascii_context)+6, aa_scrheight(ascii_context)+6, 0xAA);
+/*		aa_putpixel(ascii_context_,ocols-1,orows-1,0xAA);
+		aa_putpixel(ascii_context_,0,orows-1,0xAA);
+		aa_putpixel(ascii_context_,ocols-1,0,0xAA);*/
+/*		aa_putpixel(ascii_context_, aa_scrwidth(ascii_context_)+0, aa_scrheight(ascii_context_)+0, 0xAA);
+		aa_putpixel(ascii_context_, aa_scrwidth(ascii_context_)+1, aa_scrheight(ascii_context_)+1, 0xAA);
+		aa_putpixel(ascii_context_, aa_scrwidth(ascii_context_)+2, aa_scrheight(ascii_context_)+2, 0xAA);
+		aa_putpixel(ascii_context_, aa_scrwidth(ascii_context_)+3, aa_scrheight(ascii_context_)+3, 0xAA);
+		aa_putpixel(ascii_context_, aa_scrwidth(ascii_context_)+4, aa_scrheight(ascii_context_)+4, 0xAA);
+		aa_putpixel(ascii_context_, aa_scrwidth(ascii_context_)+5, aa_scrheight(ascii_context_)+5, 0xAA);
+		aa_putpixel(ascii_context_, aa_scrwidth(ascii_context_)+6, aa_scrheight(ascii_context_)+6, 0xAA);
 
-		aa_putpixel(ascii_context, aa_imgwidth(ascii_context)-1, aa_imgheight(ascii_context)-1, 0xAA);
-		aa_putpixel(ascii_context, aa_imgwidth(ascii_context)-2, aa_imgheight(ascii_context)-2, 0xAA);*/
+		aa_putpixel(ascii_context_, aa_imgwidth(ascii_context_)-1, aa_imgheight(ascii_context_)-1, 0xAA);
+		aa_putpixel(ascii_context_, aa_imgwidth(ascii_context_)-2, aa_imgheight(ascii_context_)-2, 0xAA);*/
 
-	//	((char*)aa_image(ascii_context))[]=;
+	//	((char*)aa_image(ascii_context_))[]=;
 		
 //		std::cout << "width() : " << width << "\n"; //		std::cout << "height() : " << height << "\n";
-		aa_render (ascii_context, &aa_defrenderparams,0, 0, width() , height() );
-		aa_flush(ascii_context);
+		aa_render (ascii_context_, &aa_defrenderparams,0, 0, width() , height() );
+		aa_flush(ascii_context_);
 		return 0;
 	}
 
@@ -359,51 +359,51 @@
 	{
 		aa_parseoptions (NULL, NULL, NULL, NULL);
 
-		ascii_context = NULL;
+		ascii_context_ = NULL;
 
-		memcpy (&ascii_hwparms, &aa_defparams, sizeof (struct aa_hardware_params));
+		memcpy (&ascii_hwparms_, &aa_defparams, sizeof (struct aa_hardware_params));
 		//ascii_rndparms = aa_getrenderparams();
-		//aa_parseoptions (&ascii_hwparms, ascii_rndparms, &argc, argv);
+		//aa_parseoptions (&ascii_hwparms_, ascii_rndparms, &argc, argv);
 
 //		NOTE: if uncommenting this, remember to #ifdef HAVE_GETENV
 //		char *e;int v;
-//		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms.width  = v-1;
-//		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms.height = v-1;
-//		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms.recwidth  = v;
-//		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms.recheight = v;
+//		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms_.width  = v-1;
+//		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms_.height = v-1;
+//		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms_.recwidth  = v;
+//		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms_.recheight = v;
 
-//		ascii_hwparms.width  = 80;
-//		ascii_hwparms.height = 56;
+//		ascii_hwparms_.width  = 80;
+//		ascii_hwparms_.height = 56;
 //
-//		ascii_hwparms.width  = 128-1;
-//		ascii_hwparms.height = 48 -1;
+//		ascii_hwparms_.width  = 128-1;
+//		ascii_hwparms_.height = 48 -1;
 
-		/*ascii_hwparms.width()  = 4;
-		ascii_hwparms.height() = 4;*/
+		/*ascii_hwparms_.width()  = 4;
+		ascii_hwparms_.height() = 4;*/
 		
-		name[0]='\0';
-		name[1]='\0';
-		ascii_save.name = name;
-		ascii_save.format = &aa_text_format;
-		ascii_save.file = NULL;
-//		ascii_context = aa_init (&save_d, &ascii_hwparms, &ascii_save);
-		ascii_context = aa_autoinit (&ascii_hwparms);
-		if(!ascii_context)
+		name_[0]='\0';
+		name_[1]='\0';
+		ascii_save_.name = name_;
+		ascii_save_.format = &aa_text_format;
+		ascii_save_.file = NULL;
+//		ascii_context_ = aa_init (&save_d, &ascii_hwparms_, &ascii_save_);
+		ascii_context_ = aa_autoinit (&ascii_hwparms_);
+		if(!ascii_context_)
 		{
 			std::cout << "problem initializing aalib!\n";
 			return -1;
 		}
-		if(!aa_autoinitkbd(ascii_context, 0))
+		if(!aa_autoinitkbd(ascii_context_, 0))
 		{
 			std::cout << "problem initializing aalib keyboard!\n";
 			return -1;
 		}
-		/*if(!aa_autoinitmouse(ascii_context, 0))
+		/*if(!aa_autoinitmouse(ascii_context_, 0))
 		{
 			std::cout << "problem initializing aalib mouse!\n";
 			return -1;
 		}*/
-		aa_hidecursor (ascii_context);
+		aa_hidecursor (ascii_context_);
 
 #if 0
 		/* won't help in the ill X11-windowed aalib shipped with many distros case */
@@ -420,14 +420,14 @@
 	void AADevice::finalize() 
 	{
 		finalized_=true;
-		aa_close(ascii_context);
+		aa_close(ascii_context_);
 	}
-	int AADevice::get_chars_per_line(){return aa_scrwidth(ascii_context);}
-	int AADevice::get_chars_per_column(){return aa_scrheight(ascii_context);}
-	int AADevice::txt_width() { return aa_scrwidth(ascii_context ) ;}
-	int AADevice::txt_height(){ return aa_scrheight(ascii_context) ;}
-	int AADevice::width() { return aa_imgwidth(ascii_context ) ;}
-	int AADevice::height(){ return aa_imgheight(ascii_context) ;}
+	int AADevice::get_chars_per_line(){return aa_scrwidth(ascii_context_);}
+	int AADevice::get_chars_per_column(){return aa_scrheight(ascii_context_);}
+	int AADevice::txt_width() { return aa_scrwidth(ascii_context_ ) ;}
+	int AADevice::txt_height(){ return aa_scrheight(ascii_context_) ;}
+	int AADevice::width() { return aa_imgwidth(ascii_context_ ) ;}
+	int AADevice::height(){ return aa_imgheight(ascii_context_) ;}
 
 	int AADevice::init_console()
 	{
@@ -442,7 +442,7 @@
 	int AADevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)
 	{
 #if (!FIM_AALIB_DRIVER_DEBUG)
-		aa_puts(ascii_context,x,y,
+		aa_puts(ascii_context_,x,y,
 			//AA_REVERSE,
 			AA_NORMAL,
 			//AA_SPECIAL,
@@ -453,7 +453,7 @@
 
 	void AADevice::flush()
 	{
-		aa_flush(ascii_context);
+		aa_flush(ascii_context_);
 	}
 
 	int AADevice::clear_rect(int x1, int x2, int y1, int y2)
@@ -462,15 +462,15 @@
 		 * TODO : define the exact conditions to use this method
 		 * */
 		
-		return clear_rect_(aa_image(ascii_context),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context));
+		return clear_rect_(aa_image(ascii_context_),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context_));
 	}
 
 	int AADevice::status_line(const unsigned char *msg)
 	{
 #if (!FIM_AALIB_DRIVER_DEBUG)
-		aa_printf(ascii_context,0,txt_height()-1,AA_NORMAL,"%s",msg);
+		aa_printf(ascii_context_,0,txt_height()-1,AA_NORMAL,"%s",msg);
 #endif
-		aa_flush(ascii_context);
+		aa_flush(ascii_context_);
 		return 0;
 	}
 
@@ -484,7 +484,7 @@
 	{
 		*c = 0x0;	/* blank */
 		if(!c)return 0;
-		*c = aa_getevent(ascii_context,0);/* 1 if want to receive AA_RELEASE events, too */
+		*c = aa_getevent(ascii_context_,0);/* 1 if want to receive AA_RELEASE events, too */
 		if(*c==AA_UNKNOWN)*c=0;
 		if(*c)std::cout << "";/* FIXME : removing this breaks things. console-related problem, I guess */
 		if(!*c)return 0;
@@ -546,7 +546,7 @@
 		if(*c==AA_RESIZE )
 		{
 			status_line((const unsigned char*)"window resizing not yet supported. sorry!");
-			/*aa_resize(ascii_context);*//*we are not yet ready : the Window and Viewport stuff .. */
+			/*aa_resize(ascii_context_);*//*we are not yet ready : the Window and Viewport stuff .. */
 			return 0;
 		}/* esc  */
 
