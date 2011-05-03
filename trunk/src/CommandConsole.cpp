@@ -480,7 +480,7 @@ namespace fim
 //			cout << ".." << ai->first << ".." << " matches " << cmd << "\n";
 			completions.push_back((*ai).first);}
 		}
-		for( vi=variables.begin();vi!=variables.end();++vi)
+		for( vi=variables_.begin();vi!=variables_.end();++vi)
 		{
 			if((vi->first).find(cmd)==0)
 			completions.push_back((*vi).first);
@@ -1181,8 +1181,8 @@ ok:
 		 * returns the [internal] type of a variable
 		 * FIXME : eradicate this cancer
 		 * */
-		variables_t::const_iterator vi=variables.find(varname);
-		if(vi!=variables.end())
+		variables_t::const_iterator vi=variables_.find(varname);
+		if(vi!=variables_.end())
 			return vi->second.getType();
 		else return 0;
 	}
@@ -1255,7 +1255,7 @@ ok:
 		 */
 		fim::string acl,sep=" ";
 		variables_t::const_iterator vi;
-		for( vi=variables.begin();vi!=variables.end();++vi)
+		for( vi=variables_.begin();vi!=variables_.end();++vi)
 		{
 			acl+=((*vi).first);
 			acl+=" ";
@@ -2015,7 +2015,7 @@ ok:
 		 */
 		fim::string s;
 		/*variables_t::const_iterator vi;
-		for( vi=variables.begin();vi!=variables.end();++vi)
+		for( vi=variables_.begin();vi!=variables_.end();++vi)
 		{
 			s+=vi->first;
 			s+=" : ";

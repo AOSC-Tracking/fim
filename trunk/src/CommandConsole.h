@@ -94,7 +94,7 @@ class CommandConsole
 	 * the identifier->variable binding
 	 */
 	typedef std::map<const fim::string,Var> variables_t;	//id->var
-	variables_t variables;	//id->var
+	variables_t variables_;	//id->var
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	/*

@@ -85,7 +85,7 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		return variables[varname].setInt(value);
+		return variables_[varname].setInt(value);
 	}
 
 	float CommandConsole::setVariable(const fim::string& varname,float value)
@@ -93,7 +93,7 @@ namespace fim
 		/*
 		 * an internal function to set a user variable
 		 */
-//		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
+//		cout << "setVariable " << variables_[varname].setFloat(value) << "\n"; 
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -146,7 +146,7 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		return variables[varname].setFloat(value);
+		return variables_[varname].setFloat(value);
 	}
 
 	int CommandConsole::setVariable(const fim::string& varname,const char*value)
@@ -207,7 +207,7 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		return (int)(variables[varname].setString(s));
+		return (int)(variables_[varname].setString(s));
 	}
 
 	Var CommandConsole::setVariable(const fim::string varname,const Var&value)
@@ -270,9 +270,9 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		variables[varname]=value;	/* FIXME : this does not work */
-		variables[varname].set(value);	/* FIXME : this works */
-		//std::cout <<"CCGS["<<varname<<"]"<<variables[varname].getString()<<"\n";
+		variables_[varname]=value;	/* FIXME : this does not work */
+		variables_[varname].set(value);	/* FIXME : this works */
+		//std::cout <<"CCGS["<<varname<<"]"<<variables_[varname].getString()<<"\n";
 		//std::cout <<"CCGS["<<varname<<"]"<<value.getString()<<"\n";
 		return value;;
 	}
@@ -341,10 +341,10 @@ namespace fim
 		 *
 		 * BEWARE!
 		 * */
-		variables_t::const_iterator vi=variables.find(varname);
-		if(vi!=variables.end()) return vi->second.getInt();
+		variables_t::const_iterator vi=variables_.find(varname);
+		if(vi!=variables_.end()) return vi->second.getInt();
 		else return 0;
-		//return ((c_variables_t)(variables))[varname].getInt();
+		//return ((c_variables_t)(variables_))[varname].getInt();
 	}
 
 	float CommandConsole::getFloatVariable(const fim::string &varname)const
@@ -352,8 +352,8 @@ namespace fim
 		/*
 		 * the variable name supplied is used as a key to the variables hash
 		 * */
-//		cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
-//		cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
+//		cout << "getVariable " << varname  << " : " << variables_[varname].getFloat()<< "\n";
+//		cout << "getVariable " << varname  << ", type : " << variables_[varname].getType()<< "\n";
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -405,10 +405,10 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		variables_t::const_iterator vi=variables.find(varname);
-		if(vi!=variables.end()) return vi->second.getFloat();
+		variables_t::const_iterator vi=variables_.find(varname);
+		if(vi!=variables_.end()) return vi->second.getFloat();
 		else return FIM_CNS_EMPTY_FP_VAL;
-//		return variables[varname].getFloat();
+//		return variables_[varname].getFloat();
 	}
 
 	fim::string CommandConsole::getStringVariable(const fim::string &varname)const
@@ -469,9 +469,9 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-//		return variables[varname].getString();
-		variables_t::const_iterator vi=variables.find(varname);
-		if(vi!=variables.end()) 
+//		return variables_[varname].getString();
+		variables_t::const_iterator vi=variables_.find(varname);
+		if(vi!=variables_.end()) 
 		{
 			return vi->second.getString();
 		}
@@ -480,7 +480,7 @@ namespace fim
 
 		int Namespace::setVariable(const fim::string& varname,int value)
 		{
-			return variables[varname].setInt(value);
+			return variables_[varname].setInt(value);
 		}
 
 		float Namespace::setVariable(const fim::string& varname,float value)
@@ -488,8 +488,8 @@ namespace fim
 			/*
 			 * an internal function to set a user variable
 			 */
-	//		cout << "setVariable " << variables[varname].setFloat(value) << "\n"; 
-			return variables[varname].setFloat(value);
+	//		cout << "setVariable " << variables_[varname].setFloat(value) << "\n"; 
+			return variables_[varname].setFloat(value);
 		}
 
 		Var Namespace::setVariable(const fim::string& varname,const Var&value)
@@ -500,10 +500,10 @@ namespace fim
 			/* FIXME ! */
 //			std::cout << "NSSV:"<<varname<<"\n";
 //			std::cout << __FILE__<<":"<<__LINE__<<"\n";
-			variables[varname]=Var(value);
-			variables[varname].set(value);/* FIXME : it seems necessary (see tests) */
-//			std::cout << "NSSV:"<<variables[varname].getString()<<"\n";
-			return variables[varname].getString();
+			variables_[varname]=Var(value);
+			variables_[varname].set(value);/* FIXME : it seems necessary (see tests) */
+//			std::cout << "NSSV:"<<variables_[varname].getString()<<"\n";
+			return variables_[varname].getString();
 		}
 
 		int Namespace::setVariable(const fim::string& varname,const char*value)
@@ -512,15 +512,15 @@ namespace fim
 			 * an internal function to set a user variable
 			 */
 			fim::string s(value);
-			return (int)(variables[varname].setString(s));
+			return (int)(variables_[varname].setString(s));
 		}
 	
 		int Namespace::getIntVariable(const fim::string &varname)const
 		{
 			// this scope was selected
-			//return variables[varname];
-			variables_t::const_iterator vi=variables.find(varname);
-			if(vi!=variables.end()) return vi->second.getInt();
+			//return variables_[varname];
+			variables_t::const_iterator vi=variables_.find(varname);
+			if(vi!=variables_.end()) return vi->second.getInt();
 			else return 0;
 		}
 
@@ -580,16 +580,16 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		variables_t::const_iterator vi=variables.find(varname);
-		if(vi!=variables.end()) return vi->second;
+		variables_t::const_iterator vi=variables_.find(varname);
+		if(vi!=variables_.end()) return vi->second;
 		else return Var();
 		}
 
 		Var Namespace::getVariable(const fim::string &varname)const
 		{
 			// this scope was selected
-			variables_t::const_iterator vi=variables.find(varname);
-			if(vi!=variables.end()) return vi->second;
+			variables_t::const_iterator vi=variables_.find(varname);
+			if(vi!=variables_.end()) return vi->second;
 			else return Var(0);
 		}
 
@@ -598,10 +598,10 @@ namespace fim
 			/*
 			 * the variable name supplied is used as a key to the variables hash
 			 * */
-//			cout << "getVariable " << varname  << " : " << variables[varname].getFloat()<< "\n";
-//			cout << "getVariable " << varname  << ", type : " << variables[varname].getType()<< "\n";
-			variables_t::const_iterator vi=variables.find(varname);
-			if(vi!=variables.end()) return vi->second.getString();
+//			cout << "getVariable " << varname  << " : " << variables_[varname].getFloat()<< "\n";
+//			cout << "getVariable " << varname  << ", type : " << variables_[varname].getType()<< "\n";
+			variables_t::const_iterator vi=variables_.find(varname);
+			if(vi!=variables_.end()) return vi->second.getString();
 			else return FIM_CNS_EMPTY_FP_VAL;
 		}
 
@@ -611,8 +611,8 @@ namespace fim
 			 * the variable name supplied is used as a key to the variables hash
 			 * */
 //			std::cout << "NSGSV:"<<varname<<"\n";
-			variables_t::const_iterator vi=variables.find(varname);
-			if(vi!=variables.end())
+			variables_t::const_iterator vi=variables_.find(varname);
+			if(vi!=variables_.end())
 			{
 //				std::cout << "NSGSV:"<<vi->second.getString()<<"\n";
 				return vi->second.getString();
@@ -667,7 +667,7 @@ namespace fim
 			 */
 			fim::string acl;
 			variables_t::const_iterator vi;
-			for( vi=variables.begin();vi!=variables.end();++vi)
+			for( vi=variables_.begin();vi!=variables_.end();++vi)
 			{
 				if(ns_char_!=FIM_SYM_NULL_NAMESPACE_CHAR)
 				{

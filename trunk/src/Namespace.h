@@ -38,7 +38,8 @@ namespace fim
 		 *
 		 * the identifier->variable binding
 		 */
-		variables_t variables;	//id->var
+		private:
+		variables_t variables_;	//id->var
 		fim_char_t ns_char_; // ns_char_ ':' varname
 	
 		public:
@@ -63,7 +64,7 @@ namespace fim
 		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 		fim::string get_variables_list()const;
 
-		Namespace(const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables(variables_t()),ns_char_(ns_char) {}
+		Namespace(const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char) {}
 		virtual ~Namespace(){}
 	};
 }
