@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110503	it would be cool to allow bindings valid in consolemode
 20110416	configure shall check for yacc/bison
 20110202	and DICOM ? see libmdc2-dev / man medcon
 20110129	incongruences in FIM.TXT:
