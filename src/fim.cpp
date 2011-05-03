@@ -235,7 +235,7 @@ int help_and_exit(char *argv0, int code=0)
 		default:
 		;
 		};
-		std::cout << "\n";
+		std::cout << FIM_SYM_ENDL;
 		}
 		std::cout << "\n Please read the documentation distributed with the program, in FIM.TXT.\n"
 			  << " For further help, consult the online help in fim (:help), and man fim (1).\n"

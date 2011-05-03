@@ -1719,8 +1719,8 @@ ok:
 		 * the purpose of this method is to sanitize the action token
 		 * in order to gain a dumpable and self standing action
 		 */
-		if(cmd.c_str()[strlen(cmd.c_str())-1]!=';')
-			return cmd+fim::string(";");
+		if(cmd.c_str()[strlen(cmd.c_str())-1]!=FIM_SYM_SEMICOLON)
+			return cmd+fim::string(FIM_SYM_SEMICOLON_STRING);
 		return cmd;
 	}
 #endif
