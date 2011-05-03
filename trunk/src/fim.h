@@ -199,6 +199,12 @@ typedef std::vector<fim::string> args_t;
 #define FIM_SYM_CHAR_NUL	'\0'
 #define FIM_SYM_FLIPCHAR	'F'
 #define FIM_SYM_MIRRCHAR	'M'
+#define FIM_SYM_TYPE_FLOAT	'f'
+#define FIM_SYM_TYPE_INT	'i'
+#define FIM_SYM_STRING_CONCAT	'.'
+#define FIM_SYM_SEMICOLON	';'
+#define FIM_SYM_SEMICOLON_STRING	";"
+#define FIM_SYM_ENDL	"\n"
 
 
 

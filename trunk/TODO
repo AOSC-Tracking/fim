@@ -21,10 +21,6 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110503	shall replace "\n" with FIM_ENDL
-20110503	shall use FIM_SYM_NAMESPACE_*_CHAR
-20110503	all member variables names shall be underscore-ended  
-20110503	shall print out also current image variables
 20110416	configure shall check for yacc/bison
 20110202	and DICOM ? see libmdc2-dev / man medcon
 20110129	incongruences in FIM.TXT:

@@ -41,7 +41,7 @@ namespace fim
 			//a specific namespace was selected!
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
-			if( ns == 'w' )
+			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 #ifdef FIM_WINDOWS
 			{
 				//window variable
@@ -51,7 +51,7 @@ namespace fim
 					return 0;
 			}
 			else
-			if( ns == 'v' )
+			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
@@ -61,7 +61,7 @@ namespace fim
 			}
 			else
 #endif
-			if( ns == 'i' )
+			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
 				return
@@ -70,13 +70,13 @@ namespace fim
 					0;
 			}
 			else
-			if( ns == 'b' )
+			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
 				return browser_.setVariable(id,value);
 			}
 			else
-			if( ns != 'g' )
+			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
 				return 0;
@@ -103,7 +103,7 @@ namespace fim
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
-			if( ns == 'w' )
+			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 			{
 				//window variable
 				if(window_)
@@ -112,7 +112,7 @@ namespace fim
 					return 0;
 			}
 			else
-			if( ns == 'v' )
+			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
@@ -122,7 +122,7 @@ namespace fim
 			}
 			else
 #endif
-			if( ns == 'i' )
+			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
 				return
@@ -131,13 +131,13 @@ namespace fim
 					0;
 			}
 			else
-			if( ns == 'b' )
+			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
 				return browser_.setVariable(id,value);
 			}
 			else
-			if( ns != 'g' )
+			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
 				return 0;
@@ -164,7 +164,7 @@ namespace fim
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
-			if( ns == 'w' )
+			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 			{
 				//window variable
 				if(window_)
@@ -173,7 +173,7 @@ namespace fim
 					return 0;
 			}
 			else
-			if( ns == 'v' )
+			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
@@ -183,7 +183,7 @@ namespace fim
 			}
 			else
 #endif
-			if( ns == 'i' )
+			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
 				return
@@ -192,13 +192,13 @@ namespace fim
 					0;
 			}
 			else
-			if( ns == 'b' )
+			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
 				return browser_.setVariable(id,s.c_str());
 			}
 			else
-			if( ns != 'g' )
+			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
 				return 0;
@@ -225,7 +225,7 @@ namespace fim
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
-			if( ns == 'w' )
+			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 			{
 				//window variable
 				if(window_)
@@ -234,7 +234,7 @@ namespace fim
 					return 0;
 			}
 			else
-			if( ns == 'v' )
+			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
@@ -244,7 +244,7 @@ namespace fim
 			}
 			else
 #endif
-			if( ns == 'i' )
+			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
 				if(browser_.c_image())
@@ -255,13 +255,13 @@ namespace fim
 					Var(0);
 			}
 			else
-			if( ns == 'b' )
+			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
 				return browser_.setVariable(id,value);
 			}
 			else
-			if( ns != 'g' )
+			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
 				return 0;
@@ -289,7 +289,7 @@ namespace fim
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
-			if( ns == 'w' )
+			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 			{
 				//window variable
 				if(window_)
@@ -298,7 +298,7 @@ namespace fim
 					return 0;
 			}
 			else
-			if( ns == 'v' )
+			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
@@ -308,7 +308,7 @@ namespace fim
 			}
 			else
 #endif
-			if( ns == 'i' )
+			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
 				return
@@ -317,13 +317,13 @@ namespace fim
 					0;
 			}
 			else
-			if( ns == 'b' )
+			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
 				return browser_.getIntVariable(id);
 			}
 			else
-			if( ns != 'g' )
+			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
 				return 0;
@@ -362,7 +362,7 @@ namespace fim
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
-			if( ns == 'w' )
+			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 			{
 				//window variable
 				if(window_)
@@ -371,7 +371,7 @@ namespace fim
 					return FIM_CNS_EMPTY_FP_VAL;
 			}
 			else
-			if( ns == 'v' )
+			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
@@ -381,7 +381,7 @@ namespace fim
 			}
 			else
 #endif
-			if( ns == 'i' )
+			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
 				return
@@ -390,13 +390,13 @@ namespace fim
 					FIM_CNS_EMPTY_FP_VAL;
 			}
 			else
-			if( ns == 'b' )
+			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
 				return browser_.getFloatVariable(id);
 			}
 			else
-			if( ns != 'g' )
+			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
 				return FIM_CNS_EMPTY_FP_VAL;
@@ -425,7 +425,7 @@ namespace fim
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
-			if( ns == 'w' )
+			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 			{
 				//window variable
 				if(window_)
@@ -434,7 +434,7 @@ namespace fim
 					return "";
 			}
 			else
-			if( ns == 'v' )
+			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
@@ -444,7 +444,7 @@ namespace fim
 			}
 			else
 #endif
-			if( ns == 'i' )
+			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
 				return
@@ -453,14 +453,14 @@ namespace fim
 					"";
 			}
 			else
-			if( ns == 'b' )
+			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
 //				std::cout << "brbbbr\n";
 				return browser_.getStringVariable(id);
 			}
 			else
-			if( ns != 'g' )
+			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
 				return "";
@@ -537,7 +537,7 @@ namespace fim
 			char ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
-			if( ns == 'w' )
+			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 			{
 				//window variable
 				if(window_)
@@ -546,7 +546,7 @@ namespace fim
 					return Var();
 			}
 			else
-			if( ns == 'v' )
+			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
@@ -556,7 +556,7 @@ namespace fim
 			}
 			else
 #endif
-			if( ns == 'i' )
+			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
 				return
@@ -565,13 +565,13 @@ namespace fim
 					Var();
 			}
 			else
-			if( ns == 'b' )
+			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
 				return browser_.getVariable(id);
 			}
 			else
-			if( ns != 'g' )
+			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
 				return Var();
