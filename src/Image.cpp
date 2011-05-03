@@ -80,6 +80,9 @@ namespace fim
 		orientation(0),
                 invalid(0),
 		no_file(true),
+#ifdef FIM_NAMESPACES
+		Namespace(FIM_SYM_NAMESPACE_IMAGE_CHAR),
+#endif
 		fis(fim::string(fname_)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
                 fname     (FIM_CNS_DEFAULT_IFNAME)
 

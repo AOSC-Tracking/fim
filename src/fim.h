@@ -130,6 +130,7 @@ namespace fim
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
 	typedef std::map<fim::string,fim_key_t > key_bindings_t;	//symbol->code
+	typedef char fim_char_t;	/* a type for chars */
 
 	void status(const char *desc, const char *info);
 
@@ -178,6 +179,28 @@ typedef std::pair<fim::string,fim_image_source_t > 	   cache_key_t;	//the curren
 typedef std::vector<fim::string> args_t;
 #define FIM_STDIN_IMAGE_NAME "<STDIN>"
 /* should belong to a namespace different from the file name space, and possibly figuring alphabetically as the first one */
+
+
+/*
+ * Fim Symbols
+ * */
+#define FIM_SYM_CONSOLE_KEY	':'
+#define FIM_SYM_SEARCH_KEY	'/'
+#define FIM_SYM_NAMESPACE_SEP	':'
+#define FIM_SYM_NULL_NAMESPACE_CHAR	'\0'
+#define FIM_SYM_NAMESPACE_BROWSER_CHAR	'b'
+#define FIM_SYM_NAMESPACE_IMAGE_CHAR	'i'
+#define FIM_SYM_NAMESPACE_GLOBAL_CHAR	'g'
+#define FIM_SYM_NAMESPACE_WINDOW_CHAR	'w'
+#define FIM_SYM_NAMESPACE_VIEWPORT_CHAR	'v'
+#define FIM_SYM_PROMPT_CHAR	':'
+#define FIM_SYM_PROMPT_SLASH	'/'
+#define FIM_SYM_PROMPT_NUL	'\0'
+#define FIM_SYM_CHAR_NUL	'\0'
+#define FIM_SYM_FLIPCHAR	'F'
+#define FIM_SYM_MIRRCHAR	'M'
+
+
 
 #include "string.h"
 #include "Command.h"
@@ -344,19 +367,6 @@ namespace fim
 #define FIM_DDN_VAR_CACA	 "cacalib"
 #define FIM_DDN_INN_DUMB	 "dumb"
 #define FIM_DDN_VAR_DUMB	 "dummy"
-
-/*
- * Fim Symbols
- * */
-#define FIM_SYM_CONSOLE_KEY	':'
-#define FIM_SYM_SEARCH_KEY	'/'
-#define FIM_SYM_NAMESPACE_SEP	':'
-#define FIM_SYM_PROMPT_CHAR	':'
-#define FIM_SYM_PROMPT_SLASH	'/'
-#define FIM_SYM_PROMPT_NUL	'\0'
-#define FIM_SYM_CHAR_NUL	'\0'
-#define FIM_SYM_FLIPCHAR	'F'
-#define FIM_SYM_MIRRCHAR	'M'
 
 /*
  * Fim Autocommands

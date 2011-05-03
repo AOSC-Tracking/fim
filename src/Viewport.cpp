@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -51,6 +51,9 @@ namespace fim
 #ifdef FIM_WINDOWS
 			,window(window_)
 #endif
+#ifdef FIM_NAMESPACES
+			,Namespace(FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
+#endif
 			,commandConsole(c)
 	{
 		// WARNING : this constructor will be filled soon
@@ -69,6 +72,9 @@ namespace fim
 		,image(NULL)
 #ifdef FIM_WINDOWS
 		,window(v.window)
+#endif
+#ifdef FIM_NAMESPACES
+		,Namespace(FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
 #endif
 		,commandConsole(v.commandConsole)
 	{

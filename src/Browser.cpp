@@ -104,6 +104,9 @@ namespace fim
 #endif
 
 	Browser::Browser(CommandConsole &cc):nofile(FIM_CNS_EMPTY_STRING),commandConsole(cc)
+#ifdef FIM_NAMESPACES
+		,Namespace(FIM_SYM_NAMESPACE_BROWSER_CHAR)
+#endif
 	{	
 		/*
 		 * we initialize to no file the current file name
