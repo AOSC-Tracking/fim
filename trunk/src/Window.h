@@ -2,7 +2,7 @@
 /*
  Window.h : Fim's own windowing system header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -150,11 +150,11 @@ class Window
  * not in the corners box coordinate system.
  *
  * */
-	Rect corners;//,status,canvas;
-	int focus;	// if 0 left/up ; otherwise right/lower
+	Rect corners_;//,status,canvas;
+	int focus_;	// if 0 left/up ; otherwise right/lower
 
-	Window *first,*second;
-	bool amroot;
+	Window *first_,*second_;
+	bool amroot_;
 	
 	void split();
 	void hsplit();
@@ -220,7 +220,7 @@ class Window
 
 	bool operator==(const Window&window)const;
 
-	Viewport *viewport;
+	Viewport *viewport_;
 
 	/*
 	 * DANGER : nearly each of these methods launches some exception!
@@ -229,7 +229,7 @@ class Window
 	const Window & c_shadowed()const;
 
 	Viewport & current_viewport()const;
-	CommandConsole &commandConsole;
+	CommandConsole &commandConsole_;
 
 	Window & operator= (const Window &w){return *this;/* a nilpotent assignation */}
 
