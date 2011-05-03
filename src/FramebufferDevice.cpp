@@ -361,7 +361,7 @@ void FramebufferDevice::console_switch(int is_busy)
 	 * the console is switched! 
 	 */
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-		mc_.cc.redisplay();
+		mc_.cc_.redisplay();
 #endif
 	//if (is_busy) status("busy, please wait ...", NULL);		
 	break;
@@ -1747,7 +1747,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	    p=s;
 	}
 
-	//if(!mc_.cc.drawOutput() || noDraw)return;//CONVENTION!
+	//if(!mc_.cc_.drawOutput() || noDraw)return;//CONVENTION!
 	if(!draw )return;//CONVENTION!
 
 	    y = 1*fb_font_height();

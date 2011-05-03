@@ -42,25 +42,25 @@ namespace fim
 	:public Namespace
 #endif
 	{
-		char *buffer;	// the raw console buffer
-		char **line;	// the (displayed) line pointers array
+		char *buffer_;	// the raw console buffer
+		char **line_;	// the (displayed) line_ pointers array
 
-		char *bp;	// pointer to the top of the buffer
+		char *bp_;	// pointer to the top of the buffer
 
-		int  bsize;	// the buffer size
-		int  lsize;	// the lines array size
+		int  bsize_;	// the buffer size
+		int  lsize_;	// the lines array size
 
-		int  ccol;	// the currently pointed column
-		int  cline;	// the line on the top of the buffer
+		int  ccol_;	// the currently pointed column
+		int  cline_;	// the line_ on the top of the buffer
 		
-		int  lwidth;
-		int  rows;
-		int  scroll;
+		int  lwidth_;
+		int  rows_;
+		int  scroll_;
 
 		public:
-		CommandConsole & cc;	// temporarily
+		CommandConsole & cc_;	// temporarily
 
-		MiniConsole(CommandConsole & cc_,int lw=48, int r=12);
+		MiniConsole(CommandConsole & cc,int lw=48, int r=12);
 		virtual ~MiniConsole(){}
 		int dump();	// non const due to user variables reaction
 		int grow();
@@ -73,19 +73,19 @@ namespace fim
 		int scroll_up();
 
 		private:
-		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignation */}
+		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignment */}
 		MiniConsole(const MiniConsole &mc) :
-			buffer(NULL),
-			line(NULL),
-			bp(NULL),
-			bsize(0),
-			lsize(0),
-			ccol(0),
-			cline(0),
-			lwidth(0),
-			rows(0),
-			scroll(0),
-			cc(mc.cc)
+			buffer_(NULL),
+			line_(NULL),
+			bp_(NULL),
+			bsize_(0),
+			lsize_(0),
+			ccol_(0),
+			cline_(0),
+			lwidth_(0),
+			rows_(0),
+			scroll_(0),
+			cc_(mc.cc_)
 			{/* this constructor should not be used */}
 
 		int line_length(int li);
