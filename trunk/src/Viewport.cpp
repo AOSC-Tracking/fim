@@ -364,7 +364,7 @@ namespace fim
 			//std::cout << "display " << " ( " << yorigin() << "," << xorigin() << " ) ";
 			//std::cout << " " << " ( " << viewport_height() << "," << viewport_width() << " )\n";
 			displaydevice_->display(
-					image_->img,
+					image_->img_,
 					top_,
 					left_,
 					image_->height(),
@@ -379,7 +379,7 @@ namespace fim
 					);}
 #else
 			displaydevice_->display(
-					image_->img,
+					image_->img_,
 					top_,
 					left_,
 					displaydevice_->height(),
@@ -404,7 +404,7 @@ namespace fim
 		if( check_invalid() ) return;
 		else
 		{
-			xs = (float)this->viewport_width()  / (float)(image_->original_width()*(image_->ascale>0.0?image_->ascale:1.0));
+			xs = (float)this->viewport_width()  / (float)(image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
 			ys = (float)this->viewport_height() / (float)image_->original_height();
 		}
 
@@ -499,7 +499,7 @@ namespace fim
 		float newscale;
 		if( check_invalid() ) return;
 
-		newscale = ((float)this->viewport_width()) / ((float)image_->original_width()*(image_->ascale>0.0?image_->ascale:1.0));
+		newscale = ((float)this->viewport_width()) / ((float)image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
 
 		image_->rescale(newscale);
 	}
