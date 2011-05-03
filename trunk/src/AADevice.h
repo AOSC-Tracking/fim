@@ -33,11 +33,11 @@
 class AADevice:public DisplayDevice 
 {
 	private:
-	aa_context *ascii_context;
+	aa_context *ascii_context_;
 	//struct aa_renderparams *ascii_rndparms;//we rely on aa_defrenderparams
-	struct aa_hardware_params ascii_hwparms;
-	struct aa_savedata ascii_save;
-	char name[2];	/* FIXME */
+	struct aa_hardware_params ascii_hwparms_;
+	struct aa_savedata ascii_save_;
+	char name_[2];	/* FIXME */
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	AADevice(MiniConsole & mc_):DisplayDevice(mc_){}
