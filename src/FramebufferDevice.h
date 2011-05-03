@@ -83,11 +83,11 @@ class FramebufferDevice:public DisplayDevice
 {
 
 
-	long     red_mult, green_mult;
-	long     red_dither[256]  FIM_ALIGNED;
-	long     green_dither[256]FIM_ALIGNED;
-	long     blue_dither[256] FIM_ALIGNED;
-	long     gray_dither[256] FIM_ALIGNED;
+	long     red_mult_, green_mult_;
+	long     red_dither_[256]  FIM_ALIGNED;
+	long     green_dither_[256]FIM_ALIGNED;
+	long     blue_dither_[256] FIM_ALIGNED;
+	long     gray_dither_[256] FIM_ALIGNED;
 
 	/*
 	 * A class providing access to a single framebuffer device.
@@ -105,7 +105,7 @@ class FramebufferDevice:public DisplayDevice
 		f_ = fs_consolefont(font ? fonts : NULL);
 	#ifndef X_DISPLAY_MISSING
 	    if (NULL == f_ && 0 == fs_connect(NULL))
-		f_ = fs_open(font ? font : x11_font);
+		f_ = fs_open(font ? font : x11_font_);
 	#endif
 	    if (NULL == f_) {
 		fprintf(stderr,"font \"%s\" is not available\n",font);
@@ -115,29 +115,29 @@ class FramebufferDevice:public DisplayDevice
 #endif
 	private:
 
-	int             vt ;
+	int             vt_ ;
 	public:
-	int32_t         lut_red[256], lut_green[256], lut_blue[256];
-	int             dither , pcd_res , steps ;
+	int32_t         lut_red_[256], lut_green_[256], lut_blue_[256];
+	int             dither_ , pcd_res_ , steps_ ;
 	private:
-	float fbgamma ;
+	float fbgamma_ ;
 
-	/*static float fbgamma = 1;*/
+	/*static float fbgamma_ = 1;*/
 	public:
 
 
 	// FS.C
-	unsigned int       fs_bpp, fs_black, fs_white;//STILL UNINITIALIZED
+	unsigned int       fs_bpp_, fs_black_, fs_white_;//STILL UNINITIALIZED
 	int fs_init_fb(int white8);
 	private:
 	/* public */
-	int visible ;
+	int visible_ ;
 
 	/* private */
-	char *x11_font ;
+	char *x11_font_ ;
 
-	int ys ;
-	int xs ;
+	int ys_ ;
+	int xs_ ;
 
 	public:
 	void (*fs_setpixel)(void *ptr, unsigned int color);
@@ -170,73 +170,73 @@ class FramebufferDevice:public DisplayDevice
 	}
 
 	/* framebuffer */
-	char                       *fbdev;
-	char                       *fbmode;
+	char                       *fbdev_;
+	char                       *fbmode_;
 
 	public:
 	/*
 	 * FIXME : should be a static string, or troubles will come!
 	 * */
-	int set_fbdev(char *fbdev)
+	int set_fbdev(char *fbdev_)
 	{
 		/* only possible before init() */
-		if(fb_mem)
+		if(fb_mem_)
 			return -1;
-		if(fbdev)
-			this->fbdev=fbdev;
+		if(fbdev_)
+			this->fbdev_=fbdev_;
 		return 0;
 	}
 
 	/*
 	 * FIXME : should be a static string, or troubles will come!
 	 * */
-	int set_fbmode(char *fbmode)
+	int set_fbmode(char *fbmode_)
 	{
 		/* only possible before init() */
-		if(fb_mem)
+		if(fb_mem_)
 			return -1;
-		if(fbmode)
-			this->fbmode=fbmode;
+		if(fbmode_)
+			this->fbmode_=fbmode_;
 		return 0;
 	}
 
 	int set_default_vt(int default_vt)
 	{
 		/* only possible before init() */
-		if(fb_mem)
+		if(fb_mem_)
 			return -1;
 		if(default_vt)
-			this->vt=default_vt;
+			this->vt_=default_vt;
 		return 0;
 	}
 
-	int set_default_fbgamma(float fbgamma)
+	int set_default_fbgamma(float fbgamma_)
 	{
 		/* only possible before init() */
-		if(fb_mem)
+		if(fb_mem_)
 			return -1;
-		if(fbgamma)
-			this->fbgamma=fbgamma;
+		if(fbgamma_)
+			this->fbgamma_=fbgamma_;
 		return 0;
 	}
 
 	//private:
-	int                        fd, switch_last;
+	int                        fd_, switch_last_;
 
-	unsigned short red[256],  green[256],  blue[256];
-	struct fb_cmap cmap;
+	unsigned short red_[256],  green_[256],  blue_[256];
+	struct fb_cmap cmap_;
 
 
 	//were static ..
-	struct fb_cmap            ocmap;
-	unsigned short            ored[256], ogreen[256], oblue[256];
+	struct fb_cmap            ocmap_;
+	unsigned short            ored_[256], ogreen_[256], oblue_[256];
 
 
-	struct DEVS devs_default;
-	struct DEVS devs_devfs;
+	struct DEVS devs_default_;
+	struct DEVS devs_devfs_;
 
 #ifdef FIM_BOZ_PATCH
-	int with_boz_patch;
+	int with_boz_patch_;
 #endif
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -249,51 +249,51 @@ class FramebufferDevice:public DisplayDevice
 /* -------------------------------------------------------------------- */
 	/* exported stuff                                                       */
 	public:
-	struct fb_fix_screeninfo   fb_fix;
-	struct fb_var_screeninfo   fb_var;
+	struct fb_fix_screeninfo   fb_fix_;
+	struct fb_var_screeninfo   fb_var_;
 	//private:
-	unsigned char             *fb_mem;
-	int			   fb_mem_offset;
-	int                        fb_switch_state;
+	unsigned char             *fb_mem_;
+	int			   fb_mem_offset_;
+	int                        fb_switch_state_;
 
 /* -------------------------------------------------------------------- */
 	/* internal variables                                                   */
 
-	int                       fb,tty;
+	int                       fb_,tty_;
 	#if 0
 	static int                       bpp,black,white;
 	#endif
 
-	int                       orig_vt_no;
-	struct vt_mode            vt_mode;
-	int                       kd_mode;
-	struct vt_mode            vt_omode;
-	struct termios            term;
-	struct fb_var_screeninfo  fb_ovar;
+	int                       orig_vt_no_;
+	struct vt_mode            vt_mode_;
+	int                       kd_mode_;
+	struct vt_mode            vt_omode_;
+	struct termios            term_;
+	struct fb_var_screeninfo  fb_ovar_;
 
 
 	public:
 	int framebuffer_init();
 
-	struct DEVS *devices;
+	struct DEVS *devices_;
 
 
 
 	void dev_init(void);
 	private:
-	int fb_init(const char *device, char *mode, int vt
+	int fb_init(const char *device, char *mode, int vt_
 			, int try_boz_patch=0
 			);
 	public:
 
 	void fb_memset (void *addr, int c, size_t len);
-	void fb_setcolor(int c) { fb_memset(fb_mem+fb_mem_offset,c,fb_fix.smem_len); }
+	void fb_setcolor(int c) { fb_memset(fb_mem_+fb_mem_offset_,c,fb_fix_.smem_len); }
 
 
 
 	void fb_setvt(int vtno);
 	int fb_setmode(char *name);
-	int fb_activate_current(int tty);
+	int fb_activate_current(int tty_);
 
 	void console_switch(int is_busy);
 
@@ -334,7 +334,7 @@ class FramebufferDevice:public DisplayDevice
 	void switch_if_needed()
 	{
 		//fim's
-		if (switch_last != fb_switch_state)
+		if (switch_last_ != fb_switch_state_)
 		    console_switch(1);
 	}
 
@@ -348,10 +348,10 @@ class FramebufferDevice:public DisplayDevice
  * framebuffer memory offset for x pixels left and y right from the screen
  * (by dez)
  */
-#define FB_BPP  (((fb_var.bits_per_pixel+7)/8))
-#define FB_MEM_LINE_OFFSET  ((FB_BPP*fb_var.xres))
+#define FB_BPP  (((fb_var_.bits_per_pixel+7)/8))
+#define FB_MEM_LINE_OFFSET  ((FB_BPP*fb_var_.xres))
 #define FB_MEM_OFFSET(x,y)  (( FB_BPP*(x) + FB_MEM_LINE_OFFSET * (y) ))
-#define FB_MEM(x,y) ((fb_mem+FB_MEM_OFFSET((x),(y))))
+#define FB_MEM(x,y) ((fb_mem_+FB_MEM_OFFSET((x),(y))))
 
 
 
@@ -425,16 +425,16 @@ void svga_dither_palette(int r, int g, int b)
     gs = 256 / (g - 1);
     bs = 256 / (b - 1);
     for (i = 0; i < 256; i++) {
-	red[i]   = calc_gamma(rs * ((i / (g * b)) % r), 255);
-	green[i] = calc_gamma(gs * ((i / b) % g),       255);
-	blue[i]  = calc_gamma(bs * ((i) % b),           255);
+	red_[i]   = calc_gamma(rs * ((i / (g * b)) % r), 255);
+	green_[i] = calc_gamma(gs * ((i / b) % g),       255);
+	blue_[i]  = calc_gamma(bs * ((i) % b),           255);
     }
 }
 
 
 unsigned short calc_gamma(int n, int max)
 {
-    int ret =(int)(65535.0 * pow((float)n/(max), 1 / fbgamma)); 
+    int ret =(int)(65535.0 * pow((float)n/(max), 1 / fbgamma_)); 
     if (ret > 65535) ret = 65535;
     if (ret <     0) ret =     0;
     return ret;
@@ -445,41 +445,41 @@ void linear_palette(int bit)
     int i, size = 256 >> (8 - bit);
     
     for (i = 0; i < size; i++)
-        red[i] = green[i] = blue[i] = calc_gamma(i,size);
+        red_[i] = green_[i] = blue_[i] = calc_gamma(i,size);
 }
 
 void lut_init(int depth)
 {
-    if (fb_var.red.length   &&
-	fb_var.green.length &&
-	fb_var.blue.length) {
-	/* fb_var.{red|green|blue} looks sane, use it */
-	init_one(lut_red,   fb_var.red.length,   fb_var.red.offset);
-	init_one(lut_green, fb_var.green.length, fb_var.green.offset);
-	init_one(lut_blue,  fb_var.blue.length,  fb_var.blue.offset);
+    if (fb_var_.red.length   &&
+	fb_var_.green.length &&
+	fb_var_.blue.length) {
+	/* fb_var_.{red|green|blue} looks sane, use it */
+	init_one(lut_red_,   fb_var_.red.length,   fb_var_.red.offset);
+	init_one(lut_green_, fb_var_.green.length, fb_var_.green.offset);
+	init_one(lut_blue_,  fb_var_.blue.length,  fb_var_.blue.offset);
     } else {
 	/* fallback */
 	int i;
 	switch (depth) {
 	case 15:
 	    for (i = 0; i < 256; i++) {
-		lut_red[i]   = (i & 0xf8) << 7;	/* bits -rrrrr-- -------- */
-		lut_green[i] = (i & 0xf8) << 2;	/* bits ------gg ggg----- */
-		lut_blue[i]  = (i & 0xf8) >> 3;	/* bits -------- ---bbbbb */
+		lut_red_[i]   = (i & 0xf8) << 7;	/* bits -rrrrr-- -------- */
+		lut_green_[i] = (i & 0xf8) << 2;	/* bits ------gg ggg----- */
+		lut_blue_[i]  = (i & 0xf8) >> 3;	/* bits -------- ---bbbbb */
 	    }
 	    break;
 	case 16:
 	    for (i = 0; i < 256; i++) {
-		lut_red[i]   = (i & 0xf8) << 8;	/* bits rrrrr--- -------- */
-		lut_green[i] = (i & 0xfc) << 3;	/* bits -----ggg ggg----- */
-		lut_blue[i]  = (i & 0xf8) >> 3;	/* bits -------- ---bbbbb */
+		lut_red_[i]   = (i & 0xf8) << 8;	/* bits rrrrr--- -------- */
+		lut_green_[i] = (i & 0xfc) << 3;	/* bits -----ggg ggg----- */
+		lut_blue_[i]  = (i & 0xf8) >> 3;	/* bits -------- ---bbbbb */
 	    }
 	    break;
 	case 24:
 	    for (i = 0; i < 256; i++) {
-		lut_red[i]   = i << 16;	/* byte -r-- */
-		lut_green[i] = i << 8;	/* byte --g- */
-		lut_blue[i]  = i;		/* byte ---b */
+		lut_red_[i]   = i << 16;	/* byte -r-- */
+		lut_green_[i] = i << 8;	/* byte --g- */
+		lut_blue_[i]  = i;		/* byte ---b */
 	    }
 	    break;
 	}
@@ -500,27 +500,27 @@ void init_one(int32_t *lut, int bits, int shift)
 
 	int width()
 	{
-		return fb_var.xres;
+		return fb_var_.xres;
 	}
 
 	int height()
 	{
-		return fb_var.yres;
+		return fb_var_.yres;
 	}
 
 	int get_chars_per_column()
 	{
-		return fb_var.yres / fb_font_height();
+		return fb_var_.yres / fb_font_height();
 	}
 
 	int get_chars_per_line()
 	{
-		return fb_var.xres / fb_font_width();
+		return fb_var_.xres / fb_font_width();
 	}
 
 	int handle_console_switch()
 	{
-		if (switch_last == fb_switch_state)return false;
+		if (switch_last_ == fb_switch_state_)return false;
 
 		console_switch(1);
 		return 1;
@@ -528,7 +528,7 @@ void init_one(int32_t *lut, int bits, int shift)
 
 	//void status_screen(const char *msg, int draw);
 	void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
-	int get_bpp(){return fb_var.bits_per_pixel; };
+	int get_bpp(){return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice();
 };
 
