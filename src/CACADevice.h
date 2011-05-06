@@ -40,13 +40,13 @@ class CACADevice:public DisplayDevice
 	fim_err_t display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
 		//void* rgb,// destination gray array and source rgb array
-		int iroff,int icoff, // row and column offset of the first input pixel
-		int irows,int icols,// rows and columns in the input image
-		int icskip,	// input columns to skip for each line
-		int oroff,int ocoff,// row and column offset of the first output pixel
-		int orows,int ocols,// rows and columns to draw in output buffer
-		int ocskip,// output columns to skip for each line
-		int flags// some flags
+		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
+		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
+		fim_coo_t icskip,	// input columns to skip for each line
+		fim_coo_t oroff,fim_coo_t ocoff,// row and column offset of the first output pixel
+		fim_coo_t orows,fim_coo_t ocols,// rows and columns to draw in output buffer
+		fim_coo_t ocskip,// output columns to skip for each line
+		fim_flags_t flags// some flags
 		);
 	int initialize(key_bindings_t &key_bindings);
 	void finalize();
@@ -58,17 +58,17 @@ class CACADevice:public DisplayDevice
 	int height();
 	fim_err_t status_line(const fim_char_t *msg);
 	void status_screen(int desc,int draw_output){}
-	int console_control(int code){}
-	int handle_console_switch(){}
+	fim_err_t console_control(fim_cc_t code){return FIM_ERR_GENERIC;}
+	fim_bool_t handle_console_switch(){return true;}
 	int clear_rect_(
 		void* dst,
 		int oroff,int ocoff,
 		int orows,int ocols,
 		int ocskip);
-	int clear_rect(int x1, int x2, int y1,int y2)
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)
 	{
 		/* FIXME : only if initialized !*/
-		return -1;
+		return FIM_ERR_GENERIC;
 	}
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str){return FIM_ERR_NO_ERROR;}
 

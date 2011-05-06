@@ -64,9 +64,9 @@ namespace fim
 		virtual ~MiniConsole(){}
 		int dump();	// non const due to user variables reaction
 		int grow();
-		int setRows(int nr);
-		int add(const char * cso);
-		int add(const unsigned char* cso){return add((const char*)cso);}
+		fim_err_t setRows(int nr);
+		fim_err_t add(const char * cso);
+		fim_err_t add(const unsigned char* cso){return add((const char*)cso);}
 		int reformat(int newlsize);
 		int do_dump(int amount)const;
 		int clear();

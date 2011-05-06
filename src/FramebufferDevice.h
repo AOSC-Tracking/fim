@@ -116,14 +116,14 @@ class FramebufferDevice:public DisplayDevice
 	private:
 
 	int             vt_ ;
-	public:
+	//public:
 	int32_t         lut_red_[256], lut_green_[256], lut_blue_[256];
 	int             dither_ , pcd_res_ , steps_ ;
 	private:
 	float fbgamma_ ;
 
 	/*static float fbgamma_ = 1;*/
-	public:
+	//public:
 
 
 	// FS.C
@@ -139,7 +139,7 @@ class FramebufferDevice:public DisplayDevice
 	int ys_ ;
 	int xs_ ;
 
-	public:
+	//public:
 	void (*fs_setpixel)(void *ptr, unsigned int color);
 	private:
 
@@ -177,47 +177,47 @@ class FramebufferDevice:public DisplayDevice
 	/*
 	 * FIXME : should be a static string, or troubles will come!
 	 * */
-	int set_fbdev(char *fbdev_)
+	fim_err_t set_fbdev(char *fbdev_)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
-			return -1;
+			return FIM_ERR_GENERIC;
 		if(fbdev_)
 			this->fbdev_=fbdev_;
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	/*
 	 * FIXME : should be a static string, or troubles will come!
 	 * */
-	int set_fbmode(char *fbmode_)
+	fim_err_t set_fbmode(char *fbmode_)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
-			return -1;
+			return FIM_ERR_GENERIC;
 		if(fbmode_)
 			this->fbmode_=fbmode_;
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	int set_default_vt(int default_vt)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
-			return -1;
+			return FIM_ERR_GENERIC;
 		if(default_vt)
 			this->vt_=default_vt;
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	int set_default_fbgamma(float fbgamma_)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
-			return -1;
+			return FIM_ERR_GENERIC;
 		if(fbgamma_)
 			this->fbgamma_=fbgamma_;
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	//private:
@@ -263,6 +263,7 @@ class FramebufferDevice:public DisplayDevice
 	#if 0
 	static int                       bpp,black,white;
 	#endif
+	private:
 
 	int                       orig_vt_no_;
 	struct vt_mode            vt_mode_;
@@ -273,7 +274,7 @@ class FramebufferDevice:public DisplayDevice
 
 
 	public:
-	int framebuffer_init();
+	fim_err_t framebuffer_init();
 
 	struct DEVS *devices_;
 
@@ -295,7 +296,7 @@ class FramebufferDevice:public DisplayDevice
 	int fb_setmode(char *name);
 	int fb_activate_current(int tty_);
 
-	void console_switch(int is_busy);
+	void console_switch(fim_bool_t is_busy);
 
 	int  fb_font_width(void);
 	int  fb_font_height(void);
@@ -315,7 +316,7 @@ class FramebufferDevice:public DisplayDevice
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 
 	void fb_clear_rect(int x1, int x2, int y1,int y2);
-	int clear_rect(int x1, int x2, int y1,int y2)
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)
 	{
 		fb_clear_rect(x1, x2, y1,y2);
 		return 0;
@@ -335,7 +336,7 @@ class FramebufferDevice:public DisplayDevice
 	{
 		//fim's
 		if (switch_last_ != fb_switch_state_)
-		    console_switch(1);
+		    console_switch(true);
 	}
 
 #define TRUE            1
@@ -361,16 +362,16 @@ class FramebufferDevice:public DisplayDevice
 fim_err_t display(
 	//struct ida_image *img,
 	void *ida_image_img, // source image structure
-	int yoff,
-	int xoff,
-	int irows,int icols,// rows and columns in the input image
-	int icskip,	// input columns to skip for each line
-	int by,
-	int bx,
-	int bh,
-	int bw,
-	int ocskip,// output columns to skip for each line
-	int flags);
+	fim_coo_t yoff,
+	fim_coo_t xoff,
+	fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
+	fim_coo_t icskip,	// input columns to skip for each line
+	fim_coo_t by,
+	fim_coo_t bx,
+	fim_coo_t bh,
+	fim_coo_t bw,
+	fim_coo_t ocskip,// output columns to skip for each line
+	fim_flags_t flags);
 
 
 void svga_display_image_new(
@@ -518,17 +519,17 @@ void init_one(int32_t *lut, int bits, int shift)
 		return fb_var_.xres / fb_font_width();
 	}
 
-	int handle_console_switch()
+	fim_bool_t handle_console_switch()
 	{
 		if (switch_last_ == fb_switch_state_)return false;
 
-		console_switch(1);
-		return 1;
+		console_switch(true);
+		return true;
         }
 
 	//void status_screen(const char *msg, int draw);
 	void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
-	int get_bpp(){return fb_var_.bits_per_pixel; };
+	fim_bpp_t get_bpp(){return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice();
 };
 

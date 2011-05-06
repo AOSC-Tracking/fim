@@ -128,7 +128,7 @@ namespace fim
 		#undef min
 		}
 
-		int MiniConsole::add(const char* cso_)
+		fim_err_t MiniConsole::add(const char* cso_)
 		{
 			char *s=NULL,*b=NULL;
 			int nc;
@@ -158,7 +158,7 @@ namespace fim
 			 * we check for room (please note that nl >= the effective new lines introduced , while
 			 * nc amounts to the exact extra room needed )
 			 * */
-			if(nc+1+(int)(bp_-buffer_)>bsize_ || nl+1+cline_>lsize_)return -2;//no room : realloc needed ; 1 is for secur1ty
+			if(nc+1+(int)(bp_-buffer_)>bsize_ || nl+1+cline_>lsize_)return FIM_ERR_BUFFER_FULL;//no room : realloc needed ; 1 is for secur1ty
 			scroll_=scroll_-nl<0?0:scroll_-nl;
 
 			// we copy the whole new string in our buffer_
@@ -186,13 +186,13 @@ namespace fim
 				ccol_=strlen(bp_);	// we update the current (right after last) column
 				bp_+=ccol_;	// the buffer_ points to the current column
 			}
-			return 0;
+			return FIM_ERR_NO_ERROR;
 rerr:
 			fim_free(cs);
-			return -1;
+			return FIM_ERR_GENERIC;
 		}
 
-		int MiniConsole::setRows(int nr)
+		fim_err_t MiniConsole::setRows(int nr)
 		{
 			/*
 			 * We update the displayed rows_, if this is physically possible
@@ -203,15 +203,15 @@ rerr:
 			if(nr<0)
 			{
 				rows_=-nr;
-				return 0;
+				return FIM_ERR_NO_ERROR;
 			}
 			maxrows = cc_.displaydevice_->get_chars_per_column();
 			if(nr>0 && nr<=maxrows)
 			{
 				rows_=nr;
-				return 0;
+				return FIM_ERR_NO_ERROR;
 			}
-			return -1;
+			return FIM_ERR_GENERIC;
 		}
 
 		MiniConsole::MiniConsole(CommandConsole & cc,int lw, int r)

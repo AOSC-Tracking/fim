@@ -256,7 +256,7 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 }
 
 
-	int FramebufferDevice::framebuffer_init()
+	fim_err_t FramebufferDevice::framebuffer_init()
 	{
 		int rc=0;
 		//initialization of the framebuffer text
@@ -271,7 +271,7 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 		if(fd_==-1)
 			fd_ = fb_init(fbdev_, fbmode_, vt_,0xbabebabe==0xbabebabe);//maybe we are under screen..
 		if(fd_==-1)
-			if(fd_==-1)exit(1);
+			exit(1);
 			//return -1;//this is a TEMPORARY and DEAF,DUMB, AND BLIND bug noted by iam
 		//setting signals to handle in the right ways signals
 		fb_catch_exit_signals();
@@ -324,7 +324,7 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 			    std::exit(1);
 			}
 		}
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 void FramebufferDevice::dev_init(void)
@@ -341,7 +341,7 @@ void FramebufferDevice::dev_init(void)
 }
 
 
-void FramebufferDevice::console_switch(int is_busy)
+void FramebufferDevice::console_switch(fim_bool_t is_busy)
 {
 	//FIXME
 	switch (fb_switch_state_) {
@@ -542,6 +542,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
 	    struct fb_con2fbmap c2m;
 	    if (-1 == (fb_ = open(devices_->fb0,O_RDWR /* O_WRONLY */,0))) {
 		FIM_FPRINTF(stderr, "open %s: %s\n",devices_->fb0,strerror(errno));
+	        fim_perror(NULL);
 		exit(1);
 	    }
 	    c2m.console = vts.v_active;
@@ -568,6 +569,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     /* get current settings (which we have to restore) */
     if (-1 == (fb_ = open(device,O_RDWR /* O_WRONLY */))) {
 	FIM_FPRINTF(stderr, "open %s: %s\n",device,strerror(errno));
+	fim_perror(NULL);
 	exit(1);
     }
     if (-1 == ioctl(fb_,FBIOGET_VSCREENINFO,&fb_ovar_)) {
@@ -704,6 +706,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
  err:
     cleanup();
     exit(1);
+    return -1;
 }
 
 void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
@@ -762,7 +765,10 @@ void FramebufferDevice::fb_setvt(int vtno)
     close(1);
     close(2);
     setsid();
-    open(vtname,O_RDWR);
+    if(-1==open(vtname,O_RDWR))
+    {
+	fim_perror(NULL);
+    }
     int ndd;/* FIXME : on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
     ndd=dup(0);
     ndd=dup(0);
@@ -821,9 +827,13 @@ int FramebufferDevice::fb_setmode(char *name)
     /* name="640x480-72"; */
 
     if (NULL == name)
+    {
 	return -1;
+    }
     if (NULL == (fp = fopen("/etc/fb.modes","r")))
+    {
 	return -1;
+    }
     while (NULL != fgets(line,79,fp)) {
 	if (1 == sscanf(line, "mode \"%31[^\"]\"",label) &&
 	    0 == strcmp(label,name)) {
@@ -1630,7 +1640,7 @@ int FramebufferDevice::fs_init_fb(int white8)
 void FramebufferDevice::status_screen(const char *msg, int draw)
 {	
 	/* current code */
-	return fb_status_screen_new(msg, draw,0);
+	return fb_status_screen_new(msg, (fim_bool_t)draw,0);
 }
 #else
 void FramebufferDevice::status_screen(const char *msg, int draw)
@@ -1827,21 +1837,21 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 
 fim_err_t FramebufferDevice::display(
 	void *ida_image_img,
-	int yoff,
-	int xoff,
-	int irows,int icols,// rows and columns in the input image
-	int icskip,	// input columns to skip for each line
-	int by,//FIXME : this four arguments should be unsigned !
-	int bx,
-	int bh,
-	int bw,
-	int ocskip,// output columns to skip for each line
-	int flags)
+	fim_coo_t yoff,
+	fim_coo_t xoff,
+	fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
+	fim_coo_t icskip,	// input columns to skip for each line
+	fim_coo_t by,//FIXME : this four arguments should be unsigned !
+	fim_coo_t bx,
+	fim_coo_t bh,
+	fim_coo_t bw,
+	fim_coo_t ocskip,// output columns to skip for each line
+	fim_flags_t flags)
 {
-	if(by<0)return -1;
-	if(bx<0)return -1;
-	if(bw<0)return -1;
-	if(bh<0)return -1;
+	if(by<0)return FIM_ERR_GENERIC;
+	if(bx<0)return FIM_ERR_GENERIC;
+	if(bw<0)return FIM_ERR_GENERIC;
+	if(bh<0)return FIM_ERR_GENERIC;
 
 	svga_display_image_new(
 	(struct ida_image*)ida_image_img,
@@ -1855,7 +1865,7 @@ fim_err_t FramebufferDevice::display(
 	bw,
 	ocskip,// output columns to skip for each line
 	flags);
-	return 0;
+	return FIM_ERR_NO_ERROR;
 }
 
 void FramebufferDevice::finalize (void)

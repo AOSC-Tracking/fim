@@ -120,6 +120,8 @@ namespace fim
 	typedef int   fim_page_t;	/* a type for multipage document pages */
 	typedef bool   fim_bool_t;	/* a type for bolean expressions */
 	typedef unsigned int fim_coo_t;		/* a type for coordinates */
+	typedef int fim_cc_t;		/* a type for console control */
+	typedef int fim_flags_t;	/* a type for display flags */
 	typedef int fim_bpp_t;		/* a type for bits Per Pixel */
 	typedef int fim_key_t;		/* a type for keycodes */
 	typedef int fim_err_t;		/* a type for errors */
@@ -213,6 +215,7 @@ typedef std::vector<fim::string> args_t;
  */
 #define FIM_ERR_NO_ERROR	0
 #define FIM_ERR_GENERIC	-1
+#define FIM_ERR_BUFFER_FULL	-1024 // FIXME: -2 seems in use
 
 
 
