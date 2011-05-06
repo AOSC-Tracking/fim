@@ -26,8 +26,6 @@
 #include "fim.h"
 #include "DisplayDevice.h"
 
-#define FIM_SCALE_FACTOR 1.322	/* move this outta here ! */
-
 namespace fim
 {
 	/*
@@ -44,7 +42,7 @@ class Viewport
 #endif
 {
 	protected:
-	int		steps_,top_,left_,panned_ ;	/* viewport variables */
+	fim_off_t		steps_,top_,left_,panned_ ;	/* viewport variables */
         DisplayDevice* displaydevice_;
 
 
@@ -74,18 +72,19 @@ class Viewport
 	void should_redraw()const;
 	public:
 
+#if 0
 	int valid()const;
-
+#endif
 
 	/* viewport methods */
-	void pan_up   (int s=0);
-	void pan_down (int s=0);
-	void pan_right(int s=0);
-	void pan_left (int s=0);
-	int onBottom();
-	int onRight();
-	int onLeft();
-	int onTop();
+	void pan_up   (fim_pan_t s=0);
+	void pan_down (fim_pan_t s=0);
+	void pan_right(fim_pan_t s=0);
+	void pan_left (fim_pan_t s=0);
+	bool onBottom();
+	bool onRight();
+	bool onLeft();
+	bool onTop();
 
 	int xorigin();
 	int yorigin();
@@ -119,10 +118,12 @@ class Viewport
 	void free();
         bool check_invalid()const;
         bool check_valid()const;
+#if 0
 	int valid();
+#endif
 	bool scrollforward();
-	void scale_position_magnify(float factor=FIM_SCALE_FACTOR );
-	void scale_position_reduce(float factor=FIM_SCALE_FACTOR );
+	void scale_position_magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
+	void scale_position_reduce(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	void recenter_horizontally();
 	void recenter_vertically();
 	void recenter();

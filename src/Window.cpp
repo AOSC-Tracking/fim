@@ -38,13 +38,14 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal
-		if(amroot_)autocmd_exec("PreWindow",c);
+		if(amroot_)autocmd_exec(FIM_ACM_PREWINDOW,c);
 #endif
 		try
 		{
 		while(i<args.size())
                 {
 			string cmd=args[i];
+			const int es=FIM_CNS_WENLARGE_STEPS_DEFAULT;
 			if(cmd == "split" || cmd == "hsplit")
 			{
 				hsplit();
@@ -68,7 +69,7 @@ namespace fim
 				/*
 				 * NOTE : this is not yet RECURSIVE !
 				 * */
-				enlarge(10);
+				enlarge(es);
 				return "\n";
 			}
 			else if(cmd == "venlarge")
@@ -76,12 +77,12 @@ namespace fim
 				/*
 				 * NOTE : this is not yet RECURSIVE !
 				 * */
-				venlarge(10);
+				venlarge(es);
 				return "\n";
 			}
 			else if(cmd == "henlarge")
 			{
-				henlarge(10);
+				henlarge(es);
 				return "\n";
 			}
 			else if(cmd == "up"   ) { move_focus(Up   ); }
@@ -113,7 +114,7 @@ namespace fim
 		}
 #ifdef FIM_AUTOCMDS
 		// note that an autocommand on a transient object is lethal
-		if(amroot_)autocmd_exec("PostWindow",c);
+		if(amroot_)autocmd_exec(FIM_ACM_POSTWINDOW,c);
 #endif
                 return "";
         }
@@ -883,7 +884,7 @@ namespace fim
 		}
 	}
 
-	int Window::venlarge(int units=1)
+	int Window::venlarge(int units=FIM_CNS_WGROW_STEPS_DEFAULT)
 	{
 #if FIM_BUGGED_ENLARGE
 		return -1;
@@ -929,7 +930,7 @@ namespace fim
 			return 0;
 	}
 
-	int Window::henlarge(int units=1)
+	int Window::henlarge(int units=FIM_CNS_WGROW_STEPS_DEFAULT)
 	{
 		/*
 		 * SEEMS BUGGY:
@@ -977,7 +978,7 @@ namespace fim
 			return 0;
 	}
 
-	int Window::enlarge(int units=1)
+	int Window::enlarge(int units=FIM_CNS_WGROW_STEPS_DEFAULT)
 	{
 		/*
 		 * FIXME : ???
@@ -1002,15 +1003,15 @@ namespace fim
 	}
 
 
-	int Window::vlgrow(int units=1)   {  return corners_.vlgrow(  units); } 
-	int Window::vlshrink(int units=1) {  return corners_.vlshrink(units); }
-	int Window::vugrow(int units=1)   {  return corners_.vugrow(  units); } 
-	int Window::vushrink(int units=1) {  return corners_.vushrink(units); }
+	int Window::vlgrow(int units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.vlgrow(  units); } 
+	int Window::vlshrink(int units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.vlshrink(units); }
+	int Window::vugrow(int units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.vugrow(  units); } 
+	int Window::vushrink(int units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.vushrink(units); }
 
-	int Window::hlgrow(int units=1)   {  return corners_.hlgrow(  units); } 
-	int Window::hlshrink(int units=1) {  return corners_.hlshrink(units); }
-	int Window::hrgrow(int units=1)   {  return corners_.hrgrow(  units); } 
-	int Window::hrshrink(int units=1) {  return corners_.hrshrink(units); }
+	int Window::hlgrow(int units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.hlgrow(  units); } 
+	int Window::hlshrink(int units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hlshrink(units); }
+	int Window::hrgrow(int units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.hrgrow(  units); } 
+	int Window::hrshrink(int units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hrshrink(units); }
 
 #if 0
 	void Window::draw()const

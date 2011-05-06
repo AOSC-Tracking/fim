@@ -99,7 +99,7 @@ namespace fim
 		}
 	}
 
-	void Viewport::pan_up(int s)
+	void Viewport::pan_up(fim_pan_t s)
 	{
 		panned_ |= 0x1;
 		if(s<0)pan_down(-s);
@@ -112,7 +112,7 @@ namespace fim
 		}
 	}
 
-	void Viewport::pan_down(int s)
+	void Viewport::pan_down(fim_pan_t s)
 	{
 		panned_ |= 0x1;
 		if(s<0)pan_up(-s);
@@ -125,7 +125,7 @@ namespace fim
 		}
 	}
 
-	void Viewport::pan_right(int s)
+	void Viewport::pan_right(fim_pan_t s)
 	{
 		panned_ |= 0x2;
 		if(s<0)pan_left(s);
@@ -138,7 +138,7 @@ namespace fim
 		}
 	}
 
-	void Viewport::pan_left(int s)
+	void Viewport::pan_left(fim_pan_t s)
 	{
 		panned_ |= 0x2;
 		if(s<0)pan_right(s);
@@ -151,27 +151,27 @@ namespace fim
 		}
 	}
 
-	int Viewport::onBottom()
+	bool Viewport::onBottom()
 	{
-		if( check_invalid() )return 0;
+		if( check_invalid() )return false;
 		return (top_ + viewport_height() >= image_->height());
 	}
 
-	int Viewport::onRight()
+	bool Viewport::onRight()
 	{
-		if( check_invalid() )return 0;
+		if( check_invalid() )return false;
 		return (left_ + viewport_width() >= image_->width());
 	}
 
-	int Viewport::onLeft()
+	bool Viewport::onLeft()
 	{
-		if( check_invalid() )return 0;
+		if( check_invalid() )return false;
 		return (left_ <= 0 );
 	}
 
-	int Viewport::onTop()
+	bool Viewport::onTop()
 	{
-		if( check_invalid() )return 0;
+		if( check_invalid() )return false;
 		return (top_ <= 0 );
 	}
 
@@ -400,22 +400,24 @@ namespace fim
 
 	void Viewport::auto_scale()
 	{
-		float xs,ys;
+		fim_scale_t xs,ys;
 		if( check_invalid() ) return;
 		else
 		{
-			xs = (float)this->viewport_width()  / (float)(image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
-			ys = (float)this->viewport_height() / (float)image_->original_height();
+			xs = (fim_scale_t)this->viewport_width()  / (fim_scale_t)(image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
+			ys = (fim_scale_t)this->viewport_height() / (fim_scale_t)image_->original_height();
 		}
 
 		image_->rescale( (xs < ys) ? xs : ys );
 	}
 
+#if 0
 	int Viewport::valid()
 	{
 		// int instead of bool
 		return check_valid();
 	}
+#endif
 
         const Image* Viewport::c_getImage()const
 	{
@@ -471,10 +473,9 @@ namespace fim
 
 #ifdef FIM_WINDOWS
 		steps_ = getGlobalIntVariable(FIM_VID_STEPS);
-		if(steps_<1)steps_ = 50;
+		if(steps_<FIM_CNS_STEPS_MIN)steps_ = FIM_CNS_STEPS_DEFAULT;
 #else 
-		// WARNING : FIXME, TEMPORARY
-		steps_ = 50;
+		steps_ = FIM_CNS_STEPS_DEFAULT;
 #endif
         }
 
@@ -483,10 +484,10 @@ namespace fim
 		/*
 		 * scales the image in a way to fit in the viewport height
 		 * */
-		float newscale;
+		fim_scale_t newscale;
 		if( check_invalid() ) return;
 
-		newscale = ((float)this->viewport_height()) / (float)image_->original_height();
+		newscale = ((fim_scale_t)this->viewport_height()) / (fim_scale_t)image_->original_height();
 
 		image_->rescale(newscale);
 	}
@@ -496,10 +497,10 @@ namespace fim
 		/*
 		 * scales the image in a way to fit in the viewport width
 		 * */
-		float newscale;
+		fim_scale_t newscale;
 		if( check_invalid() ) return;
 
-		newscale = ((float)this->viewport_width()) / ((float)image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
+		newscale = ((fim_scale_t)this->viewport_width()) / ((fim_scale_t)image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
 
 		image_->rescale(newscale);
 	}
@@ -537,7 +538,7 @@ namespace fim
 		 * */
 		if(!image_)return true;
 		if( image_)return image_->check_invalid();
-		return true;
+		//return true;
 	}
 
 #ifdef FIM_WINDOWS
@@ -546,14 +547,14 @@ namespace fim
 		window_ = w;
 	}
 #endif
-	void Viewport::scale_position_magnify(float factor)
+	void Viewport::scale_position_magnify(fim_scale_t factor)
 	{
 		/*
 		 * scale image positioning variables by adjusting by a multiplying factor
 		 * */
 		if(factor<=0.0)return;
-		left_ = (int)ceilf(((float)left_)*factor);
-		top_  = (int)ceilf(((float)top_ )*factor);
+		left_ = (fim_off_t)ceilf(((fim_scale_t)left_)*factor);
+		top_  = (fim_off_t)ceilf(((fim_scale_t)top_ )*factor);
 		/*
 		 * should the following be controlled by some optional variable ?
 		 * */
@@ -561,14 +562,14 @@ namespace fim
 			this->recenter();
 	}
 
-	void Viewport::scale_position_reduce(float factor)
+	void Viewport::scale_position_reduce(fim_scale_t factor)
 	{
 		/*
 		 * scale image positioning variables by adjusting by a multiplying factor
 		 * */
 		if(factor<=0.0)return;
-		left_ = (int)ceilf(((float)left_)/factor);
-		top_  = (int)ceilf(((float)top_ )/factor);
+		left_ = (fim_off_t)ceilf(((fim_scale_t)left_)/factor);
+		top_  = (fim_off_t)ceilf(((fim_scale_t)top_ )/factor);
 		//if(!panned_  /* && we_want_centering */ )
 			this->recenter();
 	}

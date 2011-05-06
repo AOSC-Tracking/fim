@@ -115,9 +115,12 @@
  
 namespace fim
 {
+	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
+	typedef int fim_off_t;		/* a type for pixel offsets (positive)  */
 	typedef float fim_scale_t;	/* a type for image scaling */
 	typedef float fim_angle_t;	/* a type for angles */
 	typedef int   fim_page_t;	/* a type for multipage document pages */
+	typedef int   fim_pgor_t;	/* a type for page orientation */
 	typedef bool   fim_bool_t;	/* a type for bolean expressions */
 	typedef int fim_coo_t;		/* a type for coordinates */
 	typedef int fim_cc_t;		/* a type for console control */
@@ -216,6 +219,26 @@ typedef std::vector<fim::string> args_t;
 #define FIM_ERR_NO_ERROR	0
 #define FIM_ERR_GENERIC	-1
 #define FIM_ERR_BUFFER_FULL	-1024 // FIXME: -2 seems in use
+
+/*
+ * Fim Constants
+ * */
+#define FIM_CNS_TERM_VAR	 "TERM"
+#define FIM_CNS_HOME_VAR	 "HOME"
+#define FIM_CNS_HIST_FILENAME	 ".fim_history"
+#define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
+#define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
+#define FIM_CNS_SCALEFACTOR	 1.322f
+#define FIM_CNS_STEPS_DEFAULT	 	50
+#define FIM_CNS_STEPS_MIN	 1
+#define FIM_CNS_WGROW_STEPS_DEFAULT	 1
+#define FIM_CNS_WENLARGE_STEPS_DEFAULT	 10
+#define FIM_CNS_SCALEDELTA	 0.01f
+#define FIM_CNS_EMPTY_STRING	""
+#define FIM_CNS_DEFAULT_IFNAME	FIM_CNS_EMPTY_STRING
+#define FIM_CNS_SLASH_STRING	"/"
+#define FIM_CNS_FP_ZERO		0.0
+#define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
 
 
 
@@ -355,22 +378,6 @@ namespace fim
 #define FIM_KBD_COLON			":"
 #define FIM_KBD_MOUSE_LEFT			"MouseLeft"
 #define FIM_KBD_MOUSE_RIGHT			"MouseRight"
-
-/*
- * Fim Constants
- * */
-#define FIM_CNS_TERM_VAR	 "TERM"
-#define FIM_CNS_HOME_VAR	 "HOME"
-#define FIM_CNS_HIST_FILENAME	 ".fim_history"
-#define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
-#define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
-#define FIM_CNS_SCALEFACTOR	 1.322f
-#define FIM_CNS_SCALEDELTA	 0.01f
-#define FIM_CNS_EMPTY_STRING	""
-#define FIM_CNS_DEFAULT_IFNAME	FIM_CNS_EMPTY_STRING
-#define FIM_CNS_SLASH_STRING	"/"
-#define FIM_CNS_FP_ZERO		0.0
-#define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
 
 /*
  * Fim Display Driver Names
