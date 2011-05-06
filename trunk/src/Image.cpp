@@ -42,14 +42,14 @@ namespace fim
  *	 Private ones are stricter.
  * 
  */
-	int Image::original_width()
+	fim_coo_t Image::original_width()
 	{
 		//WARNING : assumes the image is valid
 		if(orientation_%2) return fimg_->i.height;
 		return fimg_->i.width;
 	}
 
-	int Image::original_height()
+	fim_coo_t Image::original_height()
 	{
 		//WARNING : assumes the image is valid
 		if(orientation_%2) return fimg_->i.width;
@@ -78,7 +78,7 @@ namespace fim
                 img_     (NULL),
                 fimg_    (NULL),
 		orientation_(0),
-                invalid_(0),
+                invalid_(false),
 		no_file_(true),
 #ifdef FIM_NAMESPACES
 		Namespace(FIM_SYM_NAMESPACE_IMAGE_CHAR),
@@ -96,7 +96,7 @@ namespace fim
 			cout << "warning : invalid_ loading ! \n";
 			if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 				cc.set_status_bar( fim::string("error while loading \"")+ fim::string(fname)+ fim::string("\"") , "*");
-			invalid_ = 1;
+			invalid_ = true;
 			throw FimException();
 		}
 		else
@@ -122,7 +122,7 @@ namespace fim
 		setVariable(FIM_VID_ANGLE ,angle_);
 		no_file_=true;	//reloading allowed
 
-                invalid_=0;
+                invalid_=false;
                 fimg_    = NULL;
                 img_     = NULL;
                 orientation_=0;
@@ -176,7 +176,7 @@ namespace fim
 
 		if(! img_)
 		{
-			cout<<"warning : image loading error!\n"   ;invalid_=1;return false;
+			cout<<"warning : image loading error!\n"   ;invalid_=true;return false;
 		}
 		else page_=want_page;
 
@@ -217,37 +217,37 @@ namespace fim
 		this->free();
 	}
 
-        int Image::tiny()const
+        bool Image::tiny()const
 	{
 		/*
 		 * image width or height is <= 1
 		 * */
-		if(!img_)return 1; return ( img_->i.width<=1 || img_->i.height<=1 );
+		if(!img_)return true; return ( img_->i.width<=1 || img_->i.height<=1 )?true:false;
 	}
 
-	int Image::scale_multiply(double  sm)
+	fim_err_t Image::scale_multiply(double  sm)
 	{
 		/*
 		 * current scale_ is multiplied by a factor
 		 * */
-		if(scale_*sm>0.0)newscale_=scale_*sm;rescale();return 0;
+		if(scale_*sm>0.0)newscale_=scale_*sm;rescale();return FIM_ERR_NO_ERROR;
 	}
 
-	int Image::scale_increment(double ds)
+	fim_err_t Image::scale_increment(double ds)
 	{
 		/*
 		 * current scale_ is multiplied by a factor
 		 * */
-		if(scale_+ds>0.0)newscale_=scale_+ds;rescale();return 0;
+		if(scale_+ds>0.0)newscale_=scale_+ds;rescale();return FIM_ERR_NO_ERROR;
 	}
 
-	int Image::setscale(double ns)
+	fim_err_t Image::setscale(double ns)
 	{
 		/*
 		 * a new scale_ is set
 		 * */
 		newscale_=ns;rescale();
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
         bool Image::check_valid()
@@ -268,10 +268,10 @@ namespace fim
 		if(!img_ ){img_=fimg_;}
                 if(!img_)
                 {
-                        invalid_=1;
+                        invalid_=true;
                         return true;
                 }
-		invalid_=0;
+		invalid_=false;
                 return false;
         }
 
@@ -288,21 +288,21 @@ namespace fim
 // if the image rescaling mechanism is suspected of bugs, this will inhibit its use.
 #define FIM_BUGGED_RESCALE 0
 
-	int Image::rescale( fim_scale_t ns )
+	fim_err_t Image::rescale( fim_scale_t ns )
 	{
 		/*
 		 * effective image rescaling
 		 * TODO: should rather be called "apply"
 		 * */
 #if FIM_BUGGED_RESCALE
-		return 0;
+		return FIM_ERR_NO_ERROR;
 #endif
 		if(ns>0.0)newscale_=ns;//patch
 
-		if( check_invalid() ) return - 1;
-		if(tiny() && newscale_<scale_){newscale_=scale_;return 0;}
+		if( check_invalid() ) return FIM_ERR_GENERIC;
+		if(tiny() && newscale_<scale_){newscale_=scale_;return FIM_ERR_NO_ERROR;}
 
-		int neworientation=getOrientation();
+		fim_pgor_t neworientation=getOrientation();
 		fim_angle_t	gascale=getGlobalFloatVariable(FIM_VID_ASCALE);
 		fim_scale_t	newascale=getFloatVariable(FIM_VID_ASCALE);
 		newascale=(newascale>0.0 && newascale!=1.0)?newascale:((gascale>0.0 && gascale!=1.0)?gascale:1.0);
@@ -322,7 +322,7 @@ namespace fim
 			&& ( !newangle_  && !angle_ )
 		)
 		{
-			return 0;/*no need to rescale*/
+			return FIM_ERR_NO_ERROR;/*no need to rescale*/
 		}
 		orientation_=((neworientation%4)+4)%4; // fix this
 
@@ -444,10 +444,10 @@ namespace fim
 		}
 		else should_redraw(0);
 		orientation_=neworientation;
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
-	void Image::reduce(float factor)
+	void Image::reduce(fim_scale_t factor)
 	{
 		/*
 		 * scale_ is adjusted by a dividing factor
@@ -456,7 +456,7 @@ namespace fim
 		rescale();
 	}
 
-	void Image::magnify(float factor)
+	void Image::magnify(fim_scale_t factor)
 	{
 		/*
 		 * scale_ is adjusted by a multiplying factor
@@ -581,7 +581,7 @@ fim::string Image::getInfo()
 		/*
 		 * rotation dispatch
 		 * */
-                int neworientation=getOrientation();
+                fim_pgor_t neworientation=getOrientation();
 		if( neworientation!=orientation_)
 		{
 			rescale();
@@ -591,7 +591,7 @@ fim::string Image::getInfo()
 		return false;
 	}
 
-	int Image::getOrientation()
+	fim_pgor_t Image::getOrientation()const
 	{
 		/*
 		 * warning : this should work more intuitively
@@ -604,13 +604,13 @@ fim::string Image::getInfo()
 		%4)+4)%4;
 	}
 
-	int Image::rotate( float angle_ )
+	fim_err_t Image::rotate( fim_scale_t angle_ )
 	{
 		/*
 		 * rotates the image the specified amount of degrees
 		 * */
 		float newangle_=this->angle_+angle_;
-		if( check_invalid() ) return -1;
+		if( check_invalid() ) return FIM_ERR_GENERIC;
 		setVariable(FIM_VID_ANGLE,newangle_);
 		return rescale();	// FIXME : necessary *only* for image update and display
 	}
@@ -631,7 +631,7 @@ fim::string Image::getInfo()
 			return false;
 	} 
 
-	bool Image::goto_page(int j)
+	bool Image::goto_page(fim_page_t j)
 	{
 		string s=fname_;
 		if( j>0 )--j;
@@ -662,7 +662,7 @@ fim::string Image::getInfo()
 	{
 		if( fimg_ && ( fimg_->i.npages>1 ) )
 			return fimg_->i.npages>1 ;
-		return 0;
+		return false;
 	}
 
 	bool Image::have_nextpage(int j)const

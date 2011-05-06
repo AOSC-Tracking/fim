@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,8 +47,6 @@ namespace fim
  *	TODO : rename framebufferdevice.redraw -> this.need_redraw
  */
 
-#define FIM_SCALE_FACTOR 1.322
-
 #ifdef FIM_NAMESPACES
 class Image:public Namespace
 #else
@@ -92,10 +90,10 @@ class Image
 	void should_redraw(int should=1)const;
 
 	protected:
-	int              orientation_;	//aka rotation
+	fim_pgor_t              orientation_;	//aka rotation
 
-	int    invalid_;		//the first time the image is loaded it is set to 1
-	int	no_file_;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
+	fim_bool_t invalid_;		//the first time the image is loaded it is set to 1
+	fim_bool_t no_file_;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
 	fim_image_source_t fis_;
 
 	string  fname_;		/* viewport variable, too */
@@ -104,7 +102,7 @@ class Image
 	void reset();
 
 
-        int tiny()const;
+        bool tiny()const;
 	public:
 	bool can_reload()const{return !no_file_;}
 	bool update();
@@ -112,23 +110,23 @@ class Image
 	fim::string getInfo();
 	Image(const Image& image); // yes, a private constructor (was)
 
-	int rescale( float ns=0.0 );
-	int rotate( float angle_=1.0 );
+	fim_err_t rescale( fim_scale_t ns=0.0 );
+	fim_err_t rotate( fim_scale_t angle_=1.0 );
 
 	const char* getName()const{return fname_.c_str();}
 	cache_key_t getKey()const;
 
 	/* viewport methods */
 
-	void reduce( float factor=FIM_SCALE_FACTOR );
-	void magnify(float factor=FIM_SCALE_FACTOR );
+	void reduce( fim_scale_t factor=FIM_CNS_SCALEFACTOR);
+	void magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	
-	int getOrientation();
+	fim_pgor_t getOrientation()const;
 
-	int setscale(double ns);
+	fim_err_t setscale(double ns);
 	/* viewport methods ? */
-	int scale_increment(double ds);
-	int scale_multiply (double sm);
+	fim_err_t scale_increment(double ds);
+	fim_err_t scale_multiply (double sm);
 	bool negate ();/* let's read e-books by consuming less power :) */
 	bool gray_negate();
 
@@ -136,10 +134,10 @@ class Image
 	bool check_valid();
 
 	int width();
-	int original_width();
+	fim_coo_t original_width();
 	int height();
-	int original_height();
-	bool goto_page(int j);
+	fim_coo_t original_height();
+	bool goto_page(fim_page_t j);
 
 	Image * getClone();
 //	void resize(int nw, int nh);
