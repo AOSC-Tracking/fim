@@ -33,6 +33,27 @@
 #ifdef HAVE_GETLINE
 #include <stdio.h>	/* getline : _GNU_SOURCE  */
 #endif
+#ifdef HAVE_WCHAR_H
+#include <wchar.h>
+#endif
+
+void fim_perror(const char *s)
+{
+#if 1
+	if(errno)
+	{
+		if(s)
+			perror(s);
+		errno=0; // shall reset the error status
+	}
+#endif
+}
+
+size_t fim_strlen(const char *str)
+{
+	return strlen(str);
+}
+
 
 void trhex(char *str)
 {

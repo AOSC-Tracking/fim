@@ -202,6 +202,10 @@ dnl AC_FUNC_REALLOC()	dnl triggers error in automake 1.10.1
 #AC_CHECK_HEADERS([stdlib.h])
 AC_CHECK_HEADERS([string.h strings.h])
 
+AC_CHECK_HEADERS([wchar.h])
+AC_CHECK_HEADERS([fontconfig/fontconfig.h])
+AC_CHECK_HEADERS([fontconfig/fcfreetype.h])
+
 AC_HEADER_DIRENT()
 AC_CHECK_HEADERS([stdarg.h sys/ioctl.h ioctl.h sysexits.h])
 AC_CHECK_HEADERS([sys/time.h sys/resource.h])
@@ -1394,6 +1398,14 @@ AH_TEMPLATE([FIM_WANT_NO_OUTPUT_CONSOLE])
 AC_ARG_ENABLE(output-console, AC_HELP_STRING([--enable-output-console], [Output console. (enabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_no_output_console=0 ; else fim_cv_want_no_output_console=1 ; fi ],[ fim_cv_want_no_output_console=0 ])
 if test x$fim_cv_want_no_output_console == x1 ; then 
 AC_DEFINE_UNQUOTED([FIM_WANT_NO_OUTPUT_CONSOLE], $fim_cv_want_no_output_console, [Output console. (enabled by default)])
+fi
+dnl ==================
+AH_TEMPLATE([FIM_WANT_UNICODE])
+AC_ARG_ENABLE(unicode, AC_HELP_STRING([--enable-unicode], [Unicode. (disabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_unicode=1 ; else fim_cv_want_unicode=0 ; fi ],[ fim_cv_want_unicode=0 ])
+if test x$fim_cv_want_unicode == x1 ; then 
+	CXXFLAGS="$CXXFLAGS `freetype-config --cflags`"
+	LIBS="$LIBS `freetype-config --libs`"
+	AC_DEFINE_UNQUOTED([FIM_WANT_UNICODE], $fim_cv_want_unicode, [Unicode. (disabled by default)])
 fi
 dnl ==================
 

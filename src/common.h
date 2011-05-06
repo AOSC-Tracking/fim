@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #define FIM_COMMON_H
 #undef yyFlexLexer
 #include <FlexLexer.h>
-extern int pipedesc[2];
+extern int fim_pipedesc[2];
 
 extern FlexLexer *lexer;
 //#define YYLEX lexer->yylex()
@@ -33,6 +33,8 @@ namespace fim
 }
 
 
+void fim_perror(const char *s);
+size_t fim_strlen(const char *str);
 void trec(char *str,const char *f,const char*t);
 void trhex(char *str);
 void chomp(char *s);

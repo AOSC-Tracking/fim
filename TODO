@@ -21,6 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110506	shall see libicu http://userguide.icu-project.org/
+20110504	aa driver swaps pageup/pagedown ?
 20110503	it would be cool to allow bindings valid in consolemode
 20110416	configure shall check for yacc/bison
 20110202	and DICOM ? see libmdc2-dev / man medcon

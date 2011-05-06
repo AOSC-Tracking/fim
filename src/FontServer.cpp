@@ -132,7 +132,10 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 
     for(i = 0; filename[i] != NULL; i++) {
 	if (-1 == access(filename[i],R_OK))
+	{
+	fim_perror(NULL);
 	    continue;
+	}
 	break;
     }
     fontfilename=filename[i];

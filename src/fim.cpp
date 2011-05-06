@@ -638,7 +638,7 @@ int help_and_exit(char *argv0, int code=0)
 	#endif
 
 		if(ndd==-1)
-			perror(NULL);
+			fim_perror(NULL);
 	
 		if(cc.browser_.empty_file_list()
 #ifndef FIM_WANT_NOSCRIPTING

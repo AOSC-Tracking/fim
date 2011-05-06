@@ -615,6 +615,8 @@ namespace fim
 		 *	call, by the YY_INPUT macro (defined by me in lex.lex)
 		 */
 		char *s=dupstr(ss);//this malloc is free
+		int iret=0;
+		int r =0;
 		if(s==NULL)
 		{
 			std::cerr << "allocation problem!\n";
@@ -622,10 +624,16 @@ namespace fim
 			//assert(s);
 			//this shouldn't happen
 			//this->quit(0);
-			return -1;
+			return FIM_ERR_GENERIC;
+		}
+		if(errno)
+		{
+			//fim_perror("before pipe(fim_pipedesc)");
+			//goto ret;
+			fim_perror(NULL);// we need to clear errno
 		}
 		//we open a pipe with the lexer/parser
-		int r = pipe(pipedesc);
+		r = pipe(fim_pipedesc);
 		if(r!=0)
 		{
 			//strerror(errno);
@@ -635,30 +643,61 @@ namespace fim
 //			std::exit(-1);
 //			ferror("pipe error\n");
 //   			cleanup();
-			return -1;
+			if(errno)
+			{
+				fim_perror("in pipe(fim_pipedesc)");
+				goto ret;
+			}
+			return FIM_ERR_GENERIC;
 		}
 		//we write there our script or commands_
-		r=write(pipedesc[1],s,strlen(s));
+		r=write(fim_pipedesc[1],s,strlen(s));
+		if(errno)
+		{
+			fim_perror("in write(fim_pipedesc[1])");
+			goto ret;
+		}
 		//we are done!
 		if((size_t)r!=strlen(s))
 		{
 			ferror("write error");
     			cleanup();
-			return -1;
+			return FIM_ERR_GENERIC;
 		} 
 		for(char*p=s;*p;++p)
 			if(*p=='\n')*p=' ';
-		close(pipedesc[1]);
-		try	{	yyparse();		}
+		iret=close(fim_pipedesc[1]);
+		if(iret || errno)
+		{
+			fim_perror("in close(fim_pipedesc[1])");
+			goto ret;
+		}
+		try	{	iret=yyparse();		}
 		catch	(FimException e)
 		{
 			if( e == FIM_E_TRAGIC || e == FIM_E_NO_MEM ) this->quit( FIM_E_NO_MEM );
 			else ;	/* ]:-)> */
 		}
+		if(iret!=0 || errno!=0)
+		{
+			//if(getIntVariable(FIM_VID_VERBOSE_ERRORS))
+			if(0)
+			{
+				// FIXME; the pipe descriptor is used in a bad way.
+				std::cout << "When parsing: " << FIM_MSG_CONSOLE_LONG_LINE   << s << FIM_MSG_CONSOLE_LONG_LINE  << "\n";
+				fim_perror("in yyparse()");
+			}
+			else
+				fim_perror(NULL);
+			// ignoring yyparse's errno: it may originate from any command!
+			//goto ret;
+		}
+
 
 #ifdef FIM_USE_READLINE
 		if(add_history_)if(nochars(s)==0)add_history(s);
 #endif
+ret:
 		fim_free(s);
 
 		}
@@ -667,7 +706,7 @@ namespace fim
 			if( e == FIM_E_TRAGIC || true ) this->quit( FIM_E_TRAGIC );
 		}
 		//we add to history only meaningful commands_/aliases_.
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
         fim::string CommandConsole::execute(fim::string cmd, args_t args)
@@ -691,7 +730,7 @@ namespace fim
 			/*
 			 * WARNING : i am not sure this is the best choice
 			 */
-			int r = pipe(pipedesc),sl;
+			int r = pipe(fim_pipedesc),sl;
 			if(r!=0){ferror("pipe error\n");exit(-1);}
 #ifndef			FIM_ALIASES_WITHOUT_ARGUMENTS
 			for(size_t i=0;i<args.size();++i)
@@ -701,21 +740,23 @@ namespace fim
 			}
 #endif
 			sl=strlen(ex.c_str());
-			r=write(pipedesc[1],ex.c_str(),sl);
+			r=write(fim_pipedesc[1],ex.c_str(),sl);
 			if(r!=sl){ferror("pipe write error");exit(-1);} 
 			
 			/*
 			 * now the yyparse macro YY_INPUT itself handles the closing of the pipe.
 			 *
 			 * in this way nested commands_ could not cause harm, because the pipe
-			 * is terminated BEFORE executing the command, and reusing pipedesc
+			 * is terminated BEFORE executing the command, and reusing fim_pipedesc
 			 * is harmless.
 			 *
 			 * before occurred multiple pipe creations, on the same descriptor buffer,
 			 * resulting in a loss of the original descriptors on openings..
 			 */
-			close(pipedesc[1]);
+			close(fim_pipedesc[1]);
+			fim_perror(NULL);//FIXME: shall use only one yyparse-calling function!
 			yyparse();
+			fim_perror(NULL);//FIXME: shall use only one yyparse-calling function!
 			goto ok;
 		}
 		if(cmd==FIM_FLT_USLEEP)
@@ -1939,12 +1980,12 @@ ok:
 		fim::string hk=FIM_CNS_EMPTY_STRING;	/* help key string */
 		int hkl=0;		/* help key string length */
 		const int mhkl=5,eisl=9;
-		const char*hp=" - Help";int hpl=strlen(hp);
+		const char*hp=" - Help";int hpl=fim_strlen(hp);
 		prompt_[1]='\0';
 	
 		if( ! displaydevice_   ) return;
 		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP);/* FIXME: this is SLOW, and should be replaced */
-		hkl=strlen(hk.c_str());
+		hkl=fim_strlen(hk.c_str());
 		/* FIXME: could we guarantee a bound on its length in some way ? */
 		if(hkl>mhkl){hk=FIM_CNS_EMPTY_STRING;hkl=0;/* fix */}
 		else
@@ -1965,7 +2006,7 @@ ok:
 			/*
 			 * FIXME : and what if chars < 11 ? :)
 			 * */
-			ilen = strlen(info);
+			ilen = fim_strlen(info);
 			if(chars-eisl-ilen-hkl>0)
 			{
 				sprintf(str, "%s%-*.*s [ %s ] %s",prompt_,
@@ -1984,7 +2025,7 @@ ok:
 			static int statusline_cursor=0;
 			int offset=0,coffset=0;
 			statusline_cursor=rl_point;	/* rl_point is readline stuff */
-			ilen = strlen(desc);
+			ilen = fim_strlen(desc);
 			chars-=6+hpl+(*prompt_=='\0'?0:1);	/* displayable, non-service chars  */
 			/* 11 is strlen(" | H - Help")*/
 			offset =(statusline_cursor/(chars))*(chars);

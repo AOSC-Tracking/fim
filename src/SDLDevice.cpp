@@ -236,14 +236,20 @@ std::cout.unsetf ( std::ios::hex );
 		/*
 		 *
 		 * */
-		if (SDL_Init(SDL_INIT_VIDEO) < 0 ) return 1;
+		if (SDL_Init(SDL_INIT_VIDEO) < 0 )
+		{
+			std::cout << "problems initializing SDL (SDL_Init)\n";
+			return 1;
+		}
+		fim_perror(NULL);
+		/* TODO: shall allow the user to specify width/height, if desired */
 		/* automatic selection of video mode (the current one) */
 		if (!(screen_ = SDL_SetVideoMode(0,	/* width  */
 						0,	/* height */
 						0,	/* depth (bits per pixel) */
 						SDL_FULLSCREEN|SDL_HWSURFACE)))
 		{
-			std::cout << "problems initializing sdl .. \n";
+			std::cout << "problems initializing SDL (SDL_SetVideoMode)\n";
 			SDL_Quit();
 			return -1;
 		}
@@ -251,13 +257,18 @@ std::cout.unsetf ( std::ios::hex );
 		{
 			vi_ = SDL_GetVideoInfo();
 			if(!vi_)
+			{
+				std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
 				return -1;
+			}
 
 			current_w_=vi_->current_w;
 			current_h_=vi_->current_h;
 			bpp_      =vi_->vfmt->BitsPerPixel;
 			Bpp_      =vi_->vfmt->BytesPerPixel;
 		}
+		fim_perror(NULL);
+
 		/* Enable Unicode translation ( for a more flexible input handling ) */
 	        SDL_EnableUNICODE( 1 );
 
@@ -284,6 +295,7 @@ std::cout.unsetf ( std::ios::hex );
 		key_bindings["F12"]=SDLK_F12;
 
 		SDL_ShowCursor(0);
+		fim_perror(NULL);
 
 		// textual console reformatting
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
