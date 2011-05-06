@@ -65,34 +65,27 @@ class SDLDevice:public DisplayDevice
 
 	int get_chars_per_line() ;
 	int get_chars_per_column();
-	int txt_width() ;
-	int txt_height() ;
 	int width();
 	int height();
 	fim_err_t status_line(const fim_char_t *msg);
-	void status_screen_(int desc,int draw_output){ return ; }
 	fim_bool_t handle_console_switch(){return false;}
-	int clear_rect_(
-		void* dst,
-		int oroff,int ocoff,
-		int orows,int ocols,
-		int ocskip);
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
-
-
-	/* TEMPORARY */
-	inline void setpixel(SDL_Surface *screen_, int x, int y, Uint8 r, Uint8 g, Uint8 b);
-
 	int get_input(fim_key_t * c);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
-	
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
-	fim_err_t fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const fim_char_t *str);
-	int fill_rect(int x1, int x2, int y1,int y2, int color);
+	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 	void flush();
 	void lock();
 	void unlock();
 	fim_bpp_t get_bpp(){return bpp_; };
+	private:
+	int clear_rect_( void* dst, int oroff,int ocoff, int orows,int ocols, int ocskip);
+	/* TEMPORARY */
+	inline void setpixel(SDL_Surface *screen_, int x, int y, Uint8 r, Uint8 g, Uint8 b);
+	void status_screen_(int desc,int draw_output){ return ; }
+	int fill_rect(int x1, int x2, int y1,int y2, int color);
+	int txt_width() ;
+	int txt_height() ;
 };
 
 

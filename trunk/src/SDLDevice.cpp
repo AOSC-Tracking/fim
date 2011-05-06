@@ -614,7 +614,7 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
     int i,c/*,j,w*/;
 
     for (i = 0; str[i] != '\0'; i++) {
-	c = str[i];
+	c = (unsigned char)str[i];
 	if (NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
