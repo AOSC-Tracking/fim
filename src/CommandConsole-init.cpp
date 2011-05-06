@@ -83,7 +83,7 @@ namespace fim
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_
 #endif
-					); if(sdld && sdld->initialize(key_bindings_)!=0){delete sdld ; sdld=NULL;}
+					); if(sdld && sdld->initialize(key_bindings_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice_==NULL)
 			{
 				displaydevice_=sdld;
@@ -100,7 +100,7 @@ namespace fim
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_
 #endif
-					); if(cacad && cacad->initialize(key_bindings_)!=0){delete cacad ; cacad=NULL;}
+					); if(cacad && cacad->initialize(key_bindings_)!=FIM_ERR_NO_ERROR){delete cacad ; cacad=NULL;}
 			if(cacad && displaydevice_==NULL)
 			{
 				displaydevice_=cacad;
@@ -118,7 +118,7 @@ namespace fim
 #endif
 				);
 
-		if(aad_ && aad_->initialize(key_bindings_)!=0){delete aad_ ; aad_=NULL;}
+		if(aad_ && aad_->initialize(key_bindings_)!=FIM_ERR_NO_ERROR){delete aad_ ; aad_=NULL;}
 		if(aad_ && displaydevice_==NULL)
 		{
 			displaydevice_=aad_;
@@ -156,7 +156,7 @@ namespace fim
 
 		// textual console reformatting (should go to displaydevice some day)
 		displaydevice_->init_console();
-	
+		// FIXME: shall check the error result
 
 #ifdef FIM_WINDOWS
 	

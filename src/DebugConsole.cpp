@@ -109,7 +109,7 @@ namespace fim
 				 * we truncate the line_ for the interval exceeding the screen width.
 				 * */
 				buf[ maxcols ]='\0';
-				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*(i-f_), (unsigned char*)buf);
+				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*(i-f_), (const fim_char_t*)buf);
 			}
 
 			/* FIXME : THE FOLLOWING IS A FIXUP FOR AA!  */
@@ -118,7 +118,7 @@ namespace fim
 				int t = (min(maxcols,lwidth_)+1);
 				memset(buf,' ',t);
 				buf[t-1]='\0';
-				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*((l-f_+1)+i), (unsigned char*)buf);
+				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*((l-f_+1)+i), (const fim_char_t*)buf);
 			}
 			cc_.displaydevice_->unlock();
 
@@ -128,19 +128,20 @@ namespace fim
 		#undef min
 		}
 
-		int MiniConsole::add(const char* cso)
+		int MiniConsole::add(const char* cso_)
 		{
 			char *s=NULL,*b=NULL;
 			int nc;
 			int nl,ol=cline_;
 			char *cs=NULL;/* using co would mean provoking the compiler */
+			char*cso=(char*)cso_;// FIXME
 
 #if FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE
 			if(cc_.displaydevice_ && 0==cc_.displaydevice_->get_chars_per_column())
 			{
 				// we display input as soon as it received.
 				if(this->getGlobalIntVariable(FIM_VID_DISPLAY_CONSOLE))
-					cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,(unsigned char*)cso);
+					cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,(const fim_char_t*)cso);
 			}
 #endif
 			cs=dupstr(cso);

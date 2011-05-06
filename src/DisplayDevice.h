@@ -38,7 +38,7 @@ class DisplayDevice
 	 */
 	public:
 	struct fs_font *f_;
-	const char* fontname_;
+	const fim_char_t* fontname_;
 	int                        debug_;// really, only for making happy fbdev
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -46,10 +46,10 @@ class DisplayDevice
 #else
 	DisplayDevice();
 #endif
-	virtual int initialize(key_bindings_t &key_bindings)=0;
+	virtual fim_err_t initialize(key_bindings_t &key_bindings)=0;
 	virtual void  finalize()=0;
 
-	virtual int  display(
+	virtual fim_err_t display(
 		void *ida_image_img, // source image structure
 		int iroff,int icoff, // row and column offset of the first input pixel
 		int irows,int icols,// rows and columns in the input image
@@ -70,19 +70,19 @@ class DisplayDevice
 	virtual int width()=0;
 	virtual int get_bpp()=0;
 	virtual int height()=0;
-	virtual int status_line(const unsigned char *msg)=0;
+	virtual fim_err_t status_line(const fim_char_t *msg)=0;
 	int console_control(int code);
 	virtual int handle_console_switch()=0;
 	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
 	virtual int get_input(fim_key_t * c);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
-	virtual int init_console();
+	virtual fim_err_t init_console();
 	virtual void switch_if_needed(){}// really, only for making happy fbdev
 	virtual void cleanup(){}// really, only for making happy fbdev
 
 	int redraw_;
-	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)=0;
-	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
+	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
+	void fb_status_screen_new(const fim_char_t *msg, int draw, int flags);//experimental
 	void quickbench();
 	private:
 	virtual void console_switch(int is_busy){}// really, only for making happy fbdev

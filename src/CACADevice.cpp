@@ -2,7 +2,7 @@
 /*
  CACADevice.cpp : cacalib device Fim driver file
 
- (c) 2008 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@
     		
 		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
 
-		if ( !src ) return -1;
+		if ( !src ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -3;
 		if( icoff <0 ) return -4;
@@ -201,7 +201,7 @@
 
 			if(mirror)ij    = (loc-oj) + idc;
 			else      ij    = oj + idc;
-			if(ij<0)return -1;*/
+			if(ij<0)return FIM_ERR_GENERIC;*/
 
 			ii    = oi + idr;
 			ij    = oj + idc;
@@ -227,7 +227,7 @@
 //#define width() aa_scrwidth(ascii_context)
 //#define height() aa_scrheight(ascii_context)
 
-	int  CACADevice::display(
+	fim_err_t CACADevice::display(
 		//struct ida_image *img, // source image structure
 		void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
@@ -249,7 +249,7 @@
 		 * */
 		int i;
 		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
-		if ( !rgb ) return -1;
+		if ( !rgb ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -2;
 		if( icoff <0 ) return -3;
@@ -299,10 +299,10 @@
 		ocskip = width();// output columns to skip for each line
 		ocskip = width();// output columns to skip for each line
 
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
-	int CACADevice::initialize(key_bindings_t &key_bindings)
+	fim_err_t CACADevice::initialize(key_bindings_t &key_bindings)
 	{
 		int rc=0;
 
@@ -313,17 +313,17 @@
 		YSIZ = caca_get_height() * 2 - 4;
 
 		caca_bitmap = caca_create_bitmap(8, XSIZ, YSIZ - 2, XSIZ, 0, 0, 0, 0);
-		if( !caca_bitmap ) return -1;
+		if( !caca_bitmap ) return FIM_ERR_GENERIC;
 		caca_set_bitmap_palette(caca_bitmap, r, g, b, a);
 		bitmap = (char*)malloc(4 * caca_get_width() * caca_get_height() * sizeof(char));
-		if(!bitmap) return -1;
+		if(!bitmap) return FIM_ERR_GENERIC;
 		memset(bitmap, 0, 4 * caca_get_width() * caca_get_height());
 
 		caca_clear();
 		caca_set_color(CACA_COLOR_BLACK,CACA_COLOR_WHITE);
 		caca_set_color(CACA_COLOR_RED,CACA_COLOR_BLACK);
 		caca_refresh();
-		return rc;
+		return rc?FIM_ERR_GENERIC:FIM_ERR_NO_ERROR;
 	}
 
 	void CACADevice::finalize()
@@ -336,12 +336,12 @@
 	int CACADevice::txt_height(){ return width() ;}
 	int CACADevice::width() { return caca_get_height();}
 	int CACADevice::height(){ return caca_get_width() ;}
-	int CACADevice::status_line(unsigned char *msg)
+	fim_err_t CACADevice::status_line(const fim_char_t *msg)
 	{
 		caca_printf(0,txt_height()-1,"%s",msg);
 		caca_printf(0,0,"foooooooo");
 		caca_putstr(0,0,"foooooooo");
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 /*

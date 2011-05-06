@@ -2,7 +2,7 @@
 /*
  CACADevice.h : cacalib device Fim driver header file
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class CACADevice:public DisplayDevice
 
 	public:
 
-	int  display(
+	fim_err_t display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
 		//void* rgb,// destination gray array and source rgb array
 		int iroff,int icoff, // row and column offset of the first input pixel
@@ -56,7 +56,7 @@ class CACADevice:public DisplayDevice
 	int txt_height();
 	int width();
 	int height();
-	int status_line(unsigned char *msg);
+	fim_err_t status_line(const fim_char_t *msg);
 	void status_screen(int desc,int draw_output){}
 	int console_control(int code){}
 	int handle_console_switch(){}
@@ -70,7 +70,7 @@ class CACADevice:public DisplayDevice
 		/* FIXME : only if initialized !*/
 		return -1;
 	}
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, unsigned char *str){return 0;}
+	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str){return FIM_ERR_NO_ERROR;}
 
 };
 

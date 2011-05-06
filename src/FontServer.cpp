@@ -38,9 +38,10 @@ namespace fim
 
 #if 1
 /* 20080507 unused ? */
-void FontServer::fb_text_init1(const char *font, struct fs_font **_f)
-{
-    const char   *fonts[2] = { font, NULL };
+void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
+{ 
+    const char*font=(char*)font_;
+    const char *fonts[2] = { font, NULL };
 
     if (NULL == *_f)
 	*_f = fs_consolefont(font ? fonts : NULL);

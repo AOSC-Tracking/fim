@@ -69,7 +69,7 @@ class SDLDevice:public DisplayDevice
 	int txt_height() ;
 	int width();
 	int height();
-	int status_line(const unsigned char *msg);
+	fim_err_t status_line(const fim_char_t *msg);
 	void status_screen_(int desc,int draw_output){ return ; }
 	int handle_console_switch(){return 0;}
 	int clear_rect_(
@@ -87,7 +87,7 @@ class SDLDevice:public DisplayDevice
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
-	int fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const unsigned char *str);
+	fim_err_t fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const fim_char_t *str);
 	int fill_rect(int x1, int x2, int y1,int y2, int color);
 	void flush();
 	void lock();

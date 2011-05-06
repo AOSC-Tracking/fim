@@ -28,10 +28,10 @@ class DummyDisplayDevice:public DisplayDevice
 	 * The generalization of a Fim output device.
 	 */
 	public:
-	virtual int initialize(key_bindings_t &key_bindings){return 0;}
+	virtual fim_err_t initialize(key_bindings_t &key_bindings){return FIM_ERR_NO_ERROR;}
 	virtual void  finalize(){}
 
-	virtual int  display(
+	virtual fim_err_t display(
 		void *ida_image_img, // source image structure
 		int iroff,int icoff, // row and column offset of the first input pixel
 		int irows,int icols,// rows and columns in the input image
@@ -40,7 +40,7 @@ class DummyDisplayDevice:public DisplayDevice
 		int orows,int ocols,// rows and columns to draw in output buffer
 		int ocskip,// output columns to skip for each line
 		int flags// some flags
-		){return 0;}
+		){return FIM_ERR_NO_ERROR;}
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	DummyDisplayDevice(MiniConsole & mc_):DisplayDevice(mc_){}
@@ -53,11 +53,11 @@ class DummyDisplayDevice:public DisplayDevice
 	virtual int get_chars_per_column(){return 0;/* */}
 	virtual int width(){return 1;/* 0 would be so cruel */}
 	virtual int height(){return 1;/* 0 would be so cruel */}
-	virtual int status_line(const unsigned char *msg){return 0;}
+	virtual fim_err_t status_line(const fim_char_t *msg){return FIM_ERR_NO_ERROR;}
 	virtual int console_control(int code){return 0;}
 	virtual int handle_console_switch(){return 0;}
 	virtual int clear_rect(int x1, int x2, int y1,int y2){return 0;}
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str){return 0;}
+	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str){return FIM_ERR_NO_ERROR;}
 	virtual int get_bpp(){return 0;};
 
 	private:

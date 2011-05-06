@@ -1953,7 +1953,7 @@ ok:
 		if(!displaydevice_)
 			return;
 
-		displaydevice_->fb_status_screen_new(desc,drawOutput(desc),0);
+		displaydevice_->fb_status_screen_new((fim_char_t*)desc,drawOutput(desc),0);
 	}
 
 	void CommandConsole::set_status_bar(fim::string desc, const char *info)
@@ -2036,7 +2036,7 @@ ok:
 		}
 #endif
 
-		displaydevice_->status_line((unsigned char*)str);
+		displaydevice_->status_line((const fim_char_t*)str);
 		fim_free(str);
 	}
 
