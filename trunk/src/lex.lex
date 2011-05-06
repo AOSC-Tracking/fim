@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,10 +42,10 @@ int yywrap (){return 1;}
 #endif
 #endif
 
-int pipedesc[2];
+int fim_pipedesc[2];
 /*#define YY_INPUT(buf,result,max_size) \
 { \
-	int r=read(pipedesc[0],buf,1); \
+	int r=read(fim_pipedesc[0],buf,1); \
 	printf("letti in input : %d\n",r); \
 	result = (buf[0]==EOF||r<1)?YY_NULL:1; \
 	return; \
@@ -53,10 +53,10 @@ int pipedesc[2];
 
 #define YY_INPUT(buf,result,max_size) \
 { \
-	int r=read(pipedesc[0],buf,1); \
+	int r=read(fim_pipedesc[0],buf,1); \
 	result = (buf[0]==EOF||r<1)?EOB_ACT_END_OF_FILE:EOB_ACT_CONTINUE_SCAN; \
 	result = (buf[0]==EOF||r<1)?0:1; \
-	if(result<=0) {close(pipedesc[0]);close(pipedesc[1]);} \
+	if(result<=0) {close(fim_pipedesc[0]);close(fim_pipedesc[1]);} \
 	if(r==0)number_to_move == YY_MORE_ADJ; \
 }
 

@@ -119,6 +119,8 @@ namespace fim
 	typedef float fim_angle_t;	/* a type for angles */
 	typedef int   fim_page_t;	/* a type for multipage document pages */
 	typedef bool   fim_bool_t;	/* a type for bolean expressions */
+	typedef int fim_coo_t;		/* a type for coordinates */
+	typedef int fim_bpp_t;		/* a type for bits Per Pixel */
 	typedef int fim_key_t;		/* a type for keycodes */
 	typedef int fim_err_t;		/* a type for errors */
 	typedef int fim_status_t;	/* a type for fim's status */
@@ -130,7 +132,7 @@ namespace fim
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
 	typedef std::map<fim::string,fim_key_t > key_bindings_t;	//symbol->code
-	typedef char fim_char_t;	/* a type for chars */
+	typedef unsigned char fim_char_t;	/* a type for chars */
 
 	void status(const char *desc, const char *info);
 
@@ -287,6 +289,7 @@ namespace fim
 #define FIM_VID_CONSOLE_BUFFER_FREE		"console_buffer_free"		/* "(INTERNAL)" */
 #define FIM_VID_CONSOLE_BUFFER_USED		"console_buffer_used"		/* "(INTERNAL)" */
 #define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "(INTERNAL)" */
+#define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "(INTERNAL)" */
 #define FIM_VID_CONSOLE_KEY			"console_key"		/* "the key binding for spawning the command line (INTERNAL)" */
 #define FIM_VID_IGNORECASE			"ignorecase"		/* "if 1, will allow for case insensitive regexp searches" */
 #define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "if 1 on exit, will save the ~/fim_history file on exit" */
@@ -479,6 +482,8 @@ namespace fim
 #define FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE 1
 #define FIM_WANT_SINGLE_SYSTEM_INVOCATION 1
 #define FIM_STREAM_BUFSIZE	4096
+#define FIM_MAXLINE_BUFSIZE	1024
+#define FIM_STRING_BUFSIZE	4096
 #define FIM_PIPE_BUFSIZE	1024
 #define FIM_CONSOLE_BLOCKSIZE	1024
 #define FIM_CONSOLE_DEF_WIDTH	128
@@ -501,6 +506,7 @@ namespace fim
  * Various  Fim messages.
  */
 #define FIM_MSG_CONSOLE_FIRST_LINE_BANNER "=== This is the fim output console. You can scroll it up and down. ===\n"
+#define FIM_MSG_CONSOLE_LONG_LINE "\n============================================================\n"
 
 /*
  * Some Fim internals flags.

@@ -1345,7 +1345,7 @@ FILE* FbiStuff::fim_execlp(const char *cmd, ...)
 	switch(fork())
 	{
 		case -1:
-		perror("fork");
+		fim_perror("fork");
 		close(p[0]);
 		close(p[1]);
 		return NULL;

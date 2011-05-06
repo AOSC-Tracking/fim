@@ -319,7 +319,7 @@ void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo 
 			fb_var_.bits_per_pixel == 8)
 		{
 			if (-1 == ioctl(fd_,FBIOPUTCMAP,&cmap_)) {
-		    		perror("ioctl FBIOPUTCMAP");
+		    		fim_perror("ioctl FBIOPUTCMAP");
 			    std::exit(1);
 			}
 		}
@@ -548,7 +548,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     if(!try_boz_patch){
 #endif
 	    if (-1 == ioctl(fb_, FBIOGET_CON2FBMAP, &c2m)) {
-		perror("ioctl FBIOGET_CON2FBMAP");
+		fim_perror("ioctl FBIOGET_CON2FBMAP");
 		exit(1);
 	    }
 	    close(fb_);
@@ -570,14 +570,14 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
 	exit(1);
     }
     if (-1 == ioctl(fb_,FBIOGET_VSCREENINFO,&fb_ovar_)) {
-	perror("ioctl FBIOGET_VSCREENINFO");
+	fim_perror("ioctl FBIOGET_VSCREENINFO");
 	exit(1);
     }
 #if	FIM_DEBUGGING_FOR_ARM_WITH_VITALY
 	print_vinfo(&fb_ovar_);
 #endif
     if (-1 == ioctl(fb_,FBIOGET_FSCREENINFO,&fb_fix_)) {
-	perror("ioctl FBIOGET_FSCREENINFO");
+	fim_perror("ioctl FBIOGET_FSCREENINFO");
 	exit(1);
     }
 #if	FIM_DEBUGGING_FOR_ARM_WITH_VITALY
@@ -586,7 +586,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     if (fb_ovar_.bits_per_pixel == 8 ||
 	fb_fix_.visual == FB_VISUAL_DIRECTCOLOR) {
 	if (-1 == ioctl(fb_,FBIOGETCMAP,&ocmap_)) {
-	    perror("ioctl FBIOGETCMAP");
+	    fim_perror("ioctl FBIOGETCMAP");
 	    exit(1);
 	}
     }
@@ -594,14 +594,14 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     if(!try_boz_patch)
 #endif
     if (-1 == ioctl(tty_,KDGETMODE, &kd_mode_)) {
-	perror("ioctl KDGETMODE");
+	fim_perror("ioctl KDGETMODE");
 	exit(1);
     }
 #ifdef FIM_BOZ_PATCH
     if(!try_boz_patch)
 #endif
     if (-1 == ioctl(tty_,VT_GETMODE, &vt_omode_)) {
-	perror("ioctl VT_GETMODE");
+	fim_perror("ioctl VT_GETMODE");
 	exit(1);
     }
     tcgetattr(tty_, &term_);
@@ -616,7 +616,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     	if(!try_boz_patch)
 #endif
 	{
-		perror("failed setting mode");
+		fim_perror("failed setting mode");
 		exit(1);
 	}
 #endif
@@ -625,7 +625,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     
     /* checks & initialisation */
     if (-1 == ioctl(fb_,FBIOGET_FSCREENINFO,&fb_fix_)) {
-	perror("ioctl FBIOGET_FSCREENINFO");
+	fim_perror("ioctl FBIOGET_FSCREENINFO");
 	exit(1);
     }
     if (fb_fix_.type != FB_TYPE_PACKED_PIXELS) {
@@ -671,7 +671,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
      * FIXME : this is not 64 bits safe
      * */
     if (-1L == (long)fb_mem_) {
-	perror("mmap failed");
+	fim_perror("mmap failed");
 	goto err;
     }
     /* move viewport to upper left corner */
@@ -679,7 +679,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
 	fb_var_.xoffset = 0;
 	fb_var_.yoffset = 0;
 	if (-1 == ioctl(fb_,FBIOPAN_DISPLAY,&fb_var_)) {
-	    perror("ioctl FBIOPAN_DISPLAY");
+	    fim_perror("ioctl FBIOPAN_DISPLAY");
 	    goto err;
 	}
     }
@@ -687,7 +687,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     if(!try_boz_patch)
 #endif
     if (-1 == ioctl(tty_,KDSETMODE, KD_GRAPHICS)) {
-	perror("ioctl KDSETMODE");
+	fim_perror("ioctl KDSETMODE");
 	goto err;
     }
     fb_activate_current(tty_);
@@ -732,7 +732,7 @@ void FramebufferDevice::fb_setvt(int vtno)
     
     if (vtno < 0) {
 	if (-1 == ioctl(tty_,VT_OPENQRY, &vtno) || vtno == -1) {
-	    perror("ioctl VT_OPENQRY");
+	    fim_perror("ioctl VT_OPENQRY");
 	    exit(1);
 	}
     }
@@ -751,7 +751,7 @@ void FramebufferDevice::fb_setvt(int vtno)
     case 0:
 	break;
     case -1:
-	perror("fork");
+	fim_perror("fork");
 	exit(1);
     default:
 	exit(0);
@@ -770,16 +770,16 @@ void FramebufferDevice::fb_setvt(int vtno)
     if(!with_boz_patch_)
 #endif
     if (-1 == ioctl(tty_,VT_GETSTATE, &vts)) {
-	perror("ioctl VT_GETSTATE");
+	fim_perror("ioctl VT_GETSTATE");
 	exit(1);
     }
     orig_vt_no_ = vts.v_active;
     if (-1 == ioctl(tty_,VT_ACTIVATE, vtno)) {
-	perror("ioctl VT_ACTIVATE");
+	fim_perror("ioctl VT_ACTIVATE");
 	exit(1);
     }
     if (-1 == ioctl(tty_,VT_WAITACTIVE, vtno)) {
-	perror("ioctl VT_WAITACTIVE");
+	fim_perror("ioctl VT_WAITACTIVE");
 	exit(1);
     }
 }
@@ -792,7 +792,7 @@ int FramebufferDevice::fb_setmode(char *name)
  
     /* load current values */
     if (-1 == ioctl(fb_,FBIOGET_VSCREENINFO,&fb_var_)) {
-	perror("ioctl FBIOGET_VSCREENINFO");
+	fim_perror("ioctl FBIOGET_VSCREENINFO");
 	exit(1);
     }
     
@@ -813,7 +813,7 @@ int FramebufferDevice::fb_setmode(char *name)
             fb_var_.accel_flags = 0;
             /* ... */
 	    if (-1 == ioctl(fb_,FBIOPUT_VSCREENINFO,&fb_var_))
-		perror("ioctl FBIOPUT_VSCREENINFO"),printf("!failed\n");
+		fim_perror("ioctl FBIOPUT_VSCREENINFO"),printf("!failed\n");
 	    printf("%d %d %d %d\n", fb_var_.xres_virtual,fb_var_.xres, fb_var_.yres_virtual,fb_var_.yres);
 #endif
 #endif
@@ -879,19 +879,19 @@ int FramebufferDevice::fb_setmode(char *name)
 #endif
 
 	    if (-1 == ioctl(fb_,FBIOPUT_VSCREENINFO,&fb_var_))
-		perror("ioctl FBIOPUT_VSCREENINFO");
+		fim_perror("ioctl FBIOPUT_VSCREENINFO");
 
 	    /*
 	     * FIXME
 	     * mm : this should be placed here and uncommented : */
 	    /*
 	    if (-1 == ioctl(fb_,FBIOGET_FSCREENINFO,&fb_fix_)) {
-		perror("ioctl FBIOGET_VSCREENINFO");
+		fim_perror("ioctl FBIOGET_VSCREENINFO");
 		exit(1);
 	    }*/
 	    /* look what we have now ... */
 	    if (-1 == ioctl(fb_,FBIOGET_VSCREENINFO,&fb_var_)) {
-		perror("ioctl FBIOGET_VSCREENINFO");
+		fim_perror("ioctl FBIOGET_VSCREENINFO");
 		exit(1);
 	    }
 	    return 0;
@@ -909,21 +909,21 @@ int FramebufferDevice::fb_activate_current(int tty_)
     if(!with_boz_patch_)
 #endif
     if (-1 == ioctl(tty_,VT_GETSTATE, &vts)) {
-	perror("ioctl VT_GETSTATE");
+	fim_perror("ioctl VT_GETSTATE");
 	return -1;
     }
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
 #endif
     if (-1 == ioctl(tty_,VT_ACTIVATE, vts.v_active)) {
-	perror("ioctl VT_ACTIVATE");
+	fim_perror("ioctl VT_ACTIVATE");
 	return -1;
     }
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
 #endif
     if (-1 == ioctl(tty_,VT_WAITACTIVE, vts.v_active)) {
-	perror("ioctl VT_WAITACTIVE");
+	fim_perror("ioctl VT_WAITACTIVE");
 	return -1;
     }
     return 0;
@@ -1074,16 +1074,16 @@ void FramebufferDevice::cleanup(void)
 {
     /* restore console */
     if (-1 == ioctl(fb_,FBIOPUT_VSCREENINFO,&fb_ovar_))
-	perror("ioctl FBIOPUT_VSCREENINFO");
+	fim_perror("ioctl FBIOPUT_VSCREENINFO");
     if (-1 == ioctl(fb_,FBIOGET_FSCREENINFO,&fb_fix_))
-	perror("ioctl FBIOGET_FSCREENINFO");
+	fim_perror("ioctl FBIOGET_FSCREENINFO");
 #if 0
     printf("id:%s\t%ld\t%ld\t%ld\t\n",fb_fix_.id,fb_fix_.accel,fb_fix_.xpanstep,fb_fix_.xpanstep);
 #endif
     if (fb_ovar_.bits_per_pixel == 8 ||
 	fb_fix_.visual == FB_VISUAL_DIRECTCOLOR) {
 	if (-1 == ioctl(fb_,FBIOPUTCMAP,&ocmap_))
-	    perror("ioctl FBIOPUTCMAP");
+	    fim_perror("ioctl FBIOPUTCMAP");
     }
     close(fb_);
 
@@ -1091,16 +1091,16 @@ void FramebufferDevice::cleanup(void)
     if(!with_boz_patch_)
 #endif
     if (-1 == ioctl(tty_,KDSETMODE, kd_mode_))
-	perror("ioctl KDSETMODE");
+	fim_perror("ioctl KDSETMODE");
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
 #endif
     if (-1 == ioctl(tty_,VT_SETMODE, &vt_omode_))
-	perror("ioctl VT_SETMODE");
+	fim_perror("ioctl VT_SETMODE");
     if (orig_vt_no_ && -1 == ioctl(tty_, VT_ACTIVATE, orig_vt_no_))
-	perror("ioctl VT_ACTIVATE");
+	fim_perror("ioctl VT_ACTIVATE");
     if (orig_vt_no_ && -1 == ioctl(tty_, VT_WAITACTIVE, orig_vt_no_))
-	perror("ioctl VT_WAITACTIVE");
+	fim_perror("ioctl VT_WAITACTIVE");
 
     // there's no need to restore the tty : this is performed outside ( 20081221 )
     //tcsetattr(tty_, TCSANOW, &term_);
@@ -1541,7 +1541,7 @@ int FramebufferDevice::fb_switch_init()
     if(!with_boz_patch_)
 #endif
     if (-1 == ioctl(tty_,VT_GETMODE, &vt_mode_)) {
-	perror("ioctl VT_GETMODE");
+	fim_perror("ioctl VT_GETMODE");
 	exit(1);
     }
     vt_mode_.mode   = VT_PROCESS;
@@ -1553,7 +1553,7 @@ int FramebufferDevice::fb_switch_init()
     if(!with_boz_patch_)
 #endif
     if (-1 == ioctl(tty_,VT_SETMODE, &vt_mode_)) {
-	perror("ioctl VT_SETMODE");
+	fim_perror("ioctl VT_SETMODE");
 	exit(1);
     }
     return 0;
