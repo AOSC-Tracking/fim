@@ -119,7 +119,7 @@ namespace fim
 	typedef float fim_angle_t;	/* a type for angles */
 	typedef int   fim_page_t;	/* a type for multipage document pages */
 	typedef bool   fim_bool_t;	/* a type for bolean expressions */
-	typedef unsigned int fim_coo_t;		/* a type for coordinates */
+	typedef int fim_coo_t;		/* a type for coordinates */
 	typedef int fim_cc_t;		/* a type for console control */
 	typedef int fim_flags_t;	/* a type for display flags */
 	typedef int fim_bpp_t;		/* a type for bits Per Pixel */

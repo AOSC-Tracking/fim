@@ -171,7 +171,7 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
     pos  = fb_mem_+fb_mem_offset_;
     pos += fb_fix_.line_length * y;
     for (i = 0; str[i] != '\0'; i++) {
-	c = str[i];
+	c = (unsigned char)str[i];
 	if (NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
