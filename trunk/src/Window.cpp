@@ -34,7 +34,7 @@ namespace fim
         fim::string Window::cmd(const std::vector<fim::string> &args)
         {
 		unsigned int i=0;
-		int rc=0;/*return code*/
+		fim_err_t rc=0;/*return code*/
 #ifdef FIM_AUTOCMDS
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal
@@ -45,7 +45,7 @@ namespace fim
 		while(i<args.size())
                 {
 			string cmd=args[i];
-			const int es=FIM_CNS_WENLARGE_STEPS_DEFAULT;
+			const fim_coo_t es=FIM_CNS_WENLARGE_STEPS_DEFAULT;
 			if(cmd == "split" || cmd == "hsplit")
 			{
 				hsplit();
@@ -119,7 +119,7 @@ namespace fim
                 return "";
         }
 
-	Window::Window(CommandConsole &c,const Rect& corners, Viewport* vp):corners_(corners),focus_(0),first_(NULL),second_(NULL),amroot_(false)
+	Window::Window(CommandConsole &c,const Rect& corners, Viewport* vp):corners_(corners),focus_(false),first_(NULL),second_(NULL),amroot_(false)
 #ifdef FIM_NAMESPACES
 	,Namespace(FIM_SYM_NAMESPACE_WINDOW_CHAR)
 #endif
@@ -130,7 +130,7 @@ namespace fim
 		 *  A new leave Window is created with a specified geometry.
 		 *  An exception is launched upon memory errors.
 		 */
-		focus_=0;
+		focus_=false;
 		if(vp)
 		{
 			viewport_=new Viewport(*vp );
@@ -233,7 +233,7 @@ namespace fim
 		 * */
 		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
-		if(focus_==0)return first_->c_focused();
+		if(focus_==false)return first_->c_focused();
 		else return second_->c_focused();
 	}
 
@@ -245,7 +245,7 @@ namespace fim
 		 * */
 		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
-		if(focus_==0)return *first_;
+		if(focus_==false)return *first_;
 		else return *second_;
 	}
 
@@ -297,7 +297,7 @@ namespace fim
 		 * */		
 		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
-		if(focus_!=0)return *first_;
+		if(focus_!=false)return *first_;
 		else return *second_;
 	}
 
@@ -309,7 +309,7 @@ namespace fim
 		 * */		
 		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
-		if(focus_!=0)return first_->c_shadowed();
+		if(focus_!=false)return first_->c_shadowed();
 		else return second_->c_shadowed();
 	}
 
@@ -607,7 +607,7 @@ namespace fim
 		return move;
 	}
 
-	int Window::chfocus()
+	bool Window::chfocus()
 	{
 		/*
 		 * this makes sense if issplit().
@@ -621,10 +621,10 @@ namespace fim
 		 * |    |    |   |    |    |
 		 * +----+----+   +----+----+
 		 */
-		return focus_ = ~focus_;
+		return focus_ = !focus_;
 	}
 
-	int Window::height()const
+	fim_coo_t Window::height()const
 	{
 		/*
 		 * +---+ +
@@ -634,7 +634,7 @@ namespace fim
 		return corners_.h ;
 	}
 
-	int Window::setwidth(int w)
+	fim_coo_t Window::setwidth(fim_coo_t w)
 	{
 		/*
 		 * +---+
@@ -645,7 +645,7 @@ namespace fim
 		return corners_.w=w;
 	}
 
-	int Window::setheight(int h)
+	fim_coo_t Window::setheight(fim_coo_t h)
 	{
 		/*
 		 * +---+ +
@@ -655,7 +655,7 @@ namespace fim
 		return corners_.h=h;
 	}
 
-	int Window::width()const
+	fim_coo_t Window::width()const
 	{
 		/*
 		 * +---+
@@ -666,7 +666,7 @@ namespace fim
 		return corners_.w ;
 	}
 
-	int Window::setxorigin(int x)
+	fim_coo_t Window::setxorigin(fim_coo_t x)
 	{
 		/*
 		 * o---+
@@ -676,7 +676,7 @@ namespace fim
 		return corners_.x=x ;
 	}
 
-	int Window::setyorigin(int y)
+	fim_coo_t Window::setyorigin(fim_coo_t y)
 	{
 		/*
 		 * o---+
@@ -686,7 +686,7 @@ namespace fim
 		return corners_.y=y ;
 	}
 
-	int Window::xorigin()const
+	fim_coo_t Window::xorigin()const
 	{
 		/*
 		 * o---+
@@ -696,7 +696,7 @@ namespace fim
 		return corners_.x ;
 	}
 
-	int Window::yorigin()const
+	fim_coo_t Window::yorigin()const
 	{
 		/*
 		 * o---+
@@ -706,7 +706,7 @@ namespace fim
 		return corners_.y ;
 	}
 
-	bool Window::can_vgrow(const Window & window, int howmuch)
+	bool Window::can_vgrow(const Window & window, fim_coo_t howmuch)
 	{
 		/*
 		 * Assuming that the argument window is a contained one, 
@@ -722,7 +722,7 @@ namespace fim
 		return window.height() + howmuch + vspacing  < height();
 	}
 
-	bool Window::can_hgrow(const Window & window, int howmuch)
+	bool Window::can_hgrow(const Window & window, fim_coo_t howmuch)
 	{
 		/*
 		 * Assuming that the argument window is a contained one, 
@@ -771,7 +771,7 @@ namespace fim
 		return (isleaf()|| !isvsplit())?1: first_->count_vdivs()+ second_->count_vdivs();
 	}
 
-	int Window::normalize()
+	bool Window::normalize()
 	{
 		/*
 		 * FIXME vs balance
@@ -790,7 +790,7 @@ namespace fim
 		(vnormalize(yorigin(), height())!= -1);
 	}
 
-	int Window::vnormalize(int y, int h)
+	fim_err_t Window::vnormalize(fim_coo_t y, fim_coo_t h)
 	{
 		/*
 		 * balances the horizontal divisions height
@@ -809,7 +809,7 @@ namespace fim
 		{
 			setyorigin(y);
 			setheight(h);
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 		else
 		{
@@ -818,7 +818,8 @@ namespace fim
 			shdivs=second_->count_hdivs();
 			hdivs=count_hdivs();
 			upd=h/hdivs;
-			if(hdivs>h)return -1;// no space left
+			if(hdivs>h)// no space left
+				return FIM_ERR_GENERIC;
 			//...
 			setyorigin(y);
 			setheight(h);
@@ -833,11 +834,11 @@ namespace fim
 				first_-> vnormalize(y,h);
 				second_->vnormalize(y,h);
 			}
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 	}
 
-	int Window::hnormalize(int x, int w)
+	fim_err_t Window::hnormalize(fim_coo_t x, fim_coo_t w)
 	{
 		/*
 		 * balances the vertical divisions width
@@ -856,7 +857,7 @@ namespace fim
 		{
 			setxorigin(x);
 			setwidth(w);
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 		else
 		{
@@ -865,7 +866,8 @@ namespace fim
 			svdivs=second_->count_vdivs();
 			vdivs=count_vdivs();
 			upd=w/vdivs;
-			if(vdivs>w)return -1;// no space left
+			if(vdivs>w)// no space left
+				return FIM_ERR_GENERIC;
 			//...
 			setxorigin(x);
 			setwidth(w);
@@ -880,14 +882,14 @@ namespace fim
 				first_-> hnormalize(x,w);
 				second_->hnormalize(x,w);
 			}
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 	}
 
-	int Window::venlarge(int units=FIM_CNS_WGROW_STEPS_DEFAULT)
+	fim_err_t Window::venlarge(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)
 	{
 #if FIM_BUGGED_ENLARGE
-		return -1;
+		return FIM_ERR_GENERIC;
 #endif
 		/*
 		 * SEEMS BUGGY:
@@ -905,7 +907,7 @@ namespace fim
 			if( isleaf() )
 			{
 				if(viewport_)commandConsole_.displaydevice_->redraw_=1;// no effect
-				return 0;
+				return FIM_ERR_NO_ERROR;
 			}
 
 			if(isvsplit())
@@ -927,17 +929,17 @@ namespace fim
 				if(focused()==right()) shadowed().hrshrink(units);
 				shadowed().normalize(); 
 			}
-			return 0;
+			return FIM_ERR_NO_ERROR;
 	}
 
-	int Window::henlarge(int units=FIM_CNS_WGROW_STEPS_DEFAULT)
+	fim_err_t Window::henlarge(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)
 	{
 		/*
 		 * SEEMS BUGGY:
 		 * */
 		 // make && src/fim media/* -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge'
 #if FIM_BUGGED_ENLARGE
-		return -1;
+		return FIM_ERR_GENERIC;
 #endif
 			/*
 			 * this operation doesn't change the outer bounds of the called window
@@ -952,7 +954,7 @@ namespace fim
 			if( isleaf() )
 			{
 				if(viewport_)commandConsole_.displaydevice_->redraw_=1;// no effect
-				return 0;
+				return FIM_ERR_NO_ERROR;
 			}
 
 			if(ishsplit())
@@ -975,16 +977,16 @@ namespace fim
 
 				shadowed().normalize(); 
 			}
-			return 0;
+			return FIM_ERR_NO_ERROR;
 	}
 
-	int Window::enlarge(int units=FIM_CNS_WGROW_STEPS_DEFAULT)
+	fim_err_t Window::enlarge(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)
 	{
 		/*
 		 * FIXME : ???
 		 */
 #if FIM_BUGGED_ENLARGE
-			return -1;
+			return FIM_ERR_GENERIC;
 #endif
 		/*
 		 * complicato ...
@@ -999,19 +1001,19 @@ namespace fim
 				return venlarge(units);
 			}else
 			// isleaf()
-			return 0;
+			return FIM_ERR_NO_ERROR;
 	}
 
 
-	int Window::vlgrow(int units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.vlgrow(  units); } 
-	int Window::vlshrink(int units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.vlshrink(units); }
-	int Window::vugrow(int units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.vugrow(  units); } 
-	int Window::vushrink(int units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.vushrink(units); }
+	fim_err_t Window::vlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.vlgrow(  units); } 
+	fim_err_t Window::vlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.vlshrink(units); }
+	fim_err_t Window::vugrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.vugrow(  units); } 
+	fim_err_t Window::vushrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.vushrink(units); }
 
-	int Window::hlgrow(int units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.hlgrow(  units); } 
-	int Window::hlshrink(int units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hlshrink(units); }
-	int Window::hrgrow(int units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.hrgrow(  units); } 
-	int Window::hrshrink(int units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hrshrink(units); }
+	fim_err_t Window::hlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.hlgrow(  units); } 
+	fim_err_t Window::hlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hlshrink(units); }
+	fim_err_t Window::hrgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   {  return corners_.hrgrow(  units); } 
+	fim_err_t Window::hrshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hrshrink(units); }
 
 #if 0
 	void Window::draw()const
