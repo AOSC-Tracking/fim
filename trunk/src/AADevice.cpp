@@ -233,13 +233,13 @@
 		//struct ida_image *img, // source image structure
 		void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
-		int iroff,int icoff, // row and column offset of the first input pixel
-		int irows,int icols,// rows and columns in the input image
-		int icskip,	// input columns to skip for each line
-		int oroff,int ocoff,// row and column offset of the first output pixel
-		int orows,int ocols,// rows and columns to draw in output buffer
-		int ocskip,// output columns to skip for each line
-		int flags// some flags
+		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
+		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
+		fim_coo_t icskip,	// input columns to skip for each line
+		fim_coo_t oroff,fim_coo_t ocoff,// row and column offset of the first output pixel
+		fim_coo_t orows,fim_coo_t ocols,// rows and columns to draw in output buffer
+		fim_coo_t ocskip,// output columns to skip for each line
+		fim_flags_t flags// some flags
 	)
 	{
 		/*
@@ -456,7 +456,7 @@
 		aa_flush(ascii_context_);
 	}
 
-	int AADevice::clear_rect(int x1, int x2, int y1, int y2)
+	fim_err_t AADevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1, fim_coo_t y2)
 	{
 		/* FIXME : only if initialized !
 		 * TODO : define the exact conditions to use this method

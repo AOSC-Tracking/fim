@@ -231,13 +231,13 @@
 		//struct ida_image *img, // source image structure
 		void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
-		int iroff,int icoff, // row and column offset of the first input pixel
-		int irows,int icols,// rows and columns in the input image
-		int icskip,	// input columns to skip for each line
-		int oroff,int ocoff,// row and column offset of the first output pixel
-		int orows,int ocols,// rows and columns to draw in output buffer
-		int ocskip,// output columns to skip for each line
-		int flags// some flags
+		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
+		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
+		fim_coo_t icskip,	// input columns to skip for each line
+		fim_coo_t oroff,fim_coo_t ocoff,// row and column offset of the first output pixel
+		fim_coo_t orows,fim_coo_t ocols,// rows and columns to draw in output buffer
+		fim_coo_t ocskip,// output columns to skip for each line
+		fim_flags_t flags// some flags
 	)
 	{
 		/*

@@ -29,7 +29,7 @@
 	DisplayDevice::DisplayDevice():fontname_(NULL)
 #endif
 	,f_(NULL)
-	,debug_(0)
+	,debug_(false)
 	,redraw_(0)
 	,finalized_(false)
 	{}
@@ -141,7 +141,7 @@
 	}
 
 #ifndef FIM_KEEP_BROKEN_CONSOLE
-void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, int draw, int flags)//experimental
+void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags)//experimental
 {
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	int r;
@@ -157,12 +157,12 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, int draw, int fl
 	if( flags==0x02 ) { mc_.scroll_up(); return; }
 
 	r=mc_.add(msg);
-	if(r==-2)
+	if(r==FIM_ERR_BUFFER_FULL)
 	{
 		r=mc_.grow();
-		if(r==-1)return;
+		if(r==FIM_ERR_GENERIC)return;
 		r=mc_.add(msg);
-		if(r==-1)return;
+		if(r==FIM_ERR_GENERIC)return;
 	}
 
 	if(!draw )return;//CONVENTION!
@@ -178,12 +178,12 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, int draw, int fl
 }
 #endif
 
-int DisplayDevice::console_control(int arg)//experimental
+fim_err_t DisplayDevice::console_control(fim_cc_t arg)//experimental
 {
-	if(arg==0x01)fb_status_screen_new(NULL,0,arg);
-	if(arg==0x02)fb_status_screen_new(NULL,0,arg);
-	if(arg==0x03)fb_status_screen_new(NULL,0,arg);
-	return 0;
+	if(arg==0x01)fb_status_screen_new(NULL,false,arg);
+	if(arg==0x02)fb_status_screen_new(NULL,false,arg);
+	if(arg==0x03)fb_status_screen_new(NULL,false,arg);
+	return FIM_ERR_NO_ERROR;
 }
 
 fim_err_t DisplayDevice::init_console()
