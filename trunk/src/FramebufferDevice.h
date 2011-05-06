@@ -300,7 +300,7 @@ class FramebufferDevice:public DisplayDevice
 	int  fb_font_width(void);
 	int  fb_font_height(void);
 
-	int status_line(const unsigned char *msg);
+	int status_line(const fim_char_t *msg);
 
 	void fb_edit_line(unsigned char *str, int pos);
 
@@ -312,7 +312,7 @@ class FramebufferDevice:public DisplayDevice
 	void fb_rect(int x1, int x2, int y1,int y2);
 
 	void fb_setpixel(int x, int y, unsigned int color);
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str);
+	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 
 	void fb_clear_rect(int x1, int x2, int y1,int y2);
 	int clear_rect(int x1, int x2, int y1,int y2)
@@ -324,7 +324,7 @@ class FramebufferDevice:public DisplayDevice
 	void clear_screen(void);
 	void cleanup(void);
 
-	int initialize (key_bindings_t &key_bindings){/*still unused : FIXME */ ;return 0;}
+	fim_err_t initialize (key_bindings_t &key_bindings){/*still unused : FIXME */ ;return FIM_ERR_NO_ERROR;}
 	void finalize (void);
 	struct fs_font * fb_font_get_current_font(void)
 	{
@@ -358,7 +358,7 @@ class FramebufferDevice:public DisplayDevice
 //void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
 //void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
 
-int display(
+fim_err_t display(
 	//struct ida_image *img,
 	void *ida_image_img, // source image structure
 	int yoff,

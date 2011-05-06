@@ -141,7 +141,7 @@
 	}
 
 #ifndef FIM_KEEP_BROKEN_CONSOLE
-void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//experimental
+void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, int draw, int flags)//experimental
 {
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	int r;
@@ -186,7 +186,7 @@ int DisplayDevice::console_control(int arg)//experimental
 	return 0;
 }
 
-int DisplayDevice::init_console()
+fim_err_t DisplayDevice::init_console()
 {
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	if(f_)
@@ -200,7 +200,7 @@ int DisplayDevice::init_console()
 		mc_.reformat( width()    );
 	}
 #endif
-	return 0;
+	return FIM_ERR_NO_ERROR;
 }
 
 DisplayDevice::~DisplayDevice()

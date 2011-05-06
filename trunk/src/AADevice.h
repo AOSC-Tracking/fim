@@ -37,7 +37,7 @@ class AADevice:public DisplayDevice
 	//struct aa_renderparams *ascii_rndparms;//we rely on aa_defrenderparams
 	struct aa_hardware_params ascii_hwparms_;
 	struct aa_savedata ascii_save_;
-	char name_[2];	/* FIXME */
+	fim_char_t name_[2];	/* FIXME */
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	AADevice(MiniConsole & mc_):DisplayDevice(mc_){}
@@ -66,7 +66,7 @@ class AADevice:public DisplayDevice
 	int txt_height();
 	int width();
 	int height();
-	int status_line(const unsigned char *msg);
+	fim_err_t status_line(const fim_char_t *msg);
 	void status_screen(int desc,int draw_output){}
 	int handle_console_switch(){return 0;}
 	int clear_rect_(
@@ -76,9 +76,9 @@ class AADevice:public DisplayDevice
 		int ocskip);
 
 	int clear_rect(int x1, int x2, int y1, int y2);
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str);
+	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 	void flush();
-	int init_console();
+	fim_err_t init_console();
 	int get_bpp(){return 1; /* :) */ };
 	int get_input(fim_key_t * c);
 };

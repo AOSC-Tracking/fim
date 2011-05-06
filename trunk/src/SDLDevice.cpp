@@ -106,7 +106,7 @@ std::cout.unsetf ( std::ios::hex );
 		return  -1;
 	}
 
-	int  SDLDevice::display(
+	fim_err_t SDLDevice::display(
 		//struct ida_image *img, // source image structure
 		void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
@@ -228,10 +228,10 @@ std::cout.unsetf ( std::ios::hex );
 
 		SDL_Flip(screen_);
 
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
-	int SDLDevice::initialize(key_bindings_t &key_bindings)
+	fim_err_t SDLDevice::initialize(key_bindings_t &key_bindings)
 	{
 		/*
 		 *
@@ -251,7 +251,7 @@ std::cout.unsetf ( std::ios::hex );
 		{
 			std::cout << "problems initializing SDL (SDL_SetVideoMode)\n";
 			SDL_Quit();
-			return -1;
+			return FIM_ERR_GENERIC;
 		}
 		else
 		{
@@ -259,7 +259,7 @@ std::cout.unsetf ( std::ios::hex );
 			if(!vi_)
 			{
 				std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
-				return -1;
+				return FIM_ERR_GENERIC;
 			}
 
 			current_w_=vi_->current_w;
@@ -302,7 +302,7 @@ std::cout.unsetf ( std::ios::hex );
 		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f_->height));
 		mc_.reformat(    width() /    f_->width   );
 #endif
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	void SDLDevice::finalize()
@@ -609,7 +609,7 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char
 #undef GLWIDTHBYTESPADDED
 }
 
-int SDLDevice::fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const unsigned char *str)
+fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
 {
     int i,c/*,j,w*/;
 
@@ -649,16 +649,18 @@ int SDLDevice::fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const
 	if ((int)x > width() - f_->width)
 		goto err;
     }
-	return x;
+    // FIXME
+//	return x;
+	return FIM_ERR_NO_ERROR;
 err:
-	return -1;
+	return FIM_ERR_GENERIC;
 }
 
-	int SDLDevice::status_line(const unsigned char *msg)
+	fim_err_t SDLDevice::status_line(const fim_char_t *msg)
 	{
 		if(SDL_MUSTLOCK(screen_))
 		{
-			if(SDL_LockSurface(screen_) < 0) return -1;
+			if(SDL_LockSurface(screen_) < 0) return FIM_ERR_GENERIC;
 		}
 
 		int y;
@@ -671,7 +673,7 @@ err:
 
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 		SDL_Flip(screen_);
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_key_t SDLDevice::catchInteractiveCommand(fim_ts_t seconds)const

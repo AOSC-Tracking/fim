@@ -135,7 +135,7 @@
     		
 		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
 
-		if ( !src ) return -1;
+		if ( !src ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -3;
 		if( icoff <0 ) return -4;
@@ -203,7 +203,7 @@
 
 			if(mirror)ij    = (loc-oj) + idc;
 			else      ij    = oj + idc;
-			if(ij<0)return -1;*/
+			if(ij<0)return FIM_ERR_GENERIC;*/
 
 			ii    = oi + idr;
 			ij    = oj + idc;
@@ -229,7 +229,7 @@
 //#define width() aa_scrwidth(ascii_context_)
 //#define height() aa_scrheight(ascii_context_)
 
-	int  AADevice::display(
+	fim_err_t AADevice::display(
 		//struct ida_image *img, // source image structure
 		void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
@@ -250,7 +250,7 @@
 		 * shareable with FramebufferDevice would be nice, if implemented in AADevice.
 		 * */
 		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
-		if ( !rgb ) return -1;
+		if ( !rgb ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -2;
 		if( icoff <0 ) return -3;
@@ -352,10 +352,10 @@
 //		std::cout << "width() : " << width << "\n"; //		std::cout << "height() : " << height << "\n";
 		aa_render (ascii_context_, &aa_defrenderparams,0, 0, width() , height() );
 		aa_flush(ascii_context_);
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
-	int AADevice::initialize(key_bindings_t &key_bindings)
+	fim_err_t AADevice::initialize(key_bindings_t &key_bindings)
 	{
 		aa_parseoptions (NULL, NULL, NULL, NULL);
 
@@ -383,7 +383,7 @@
 		
 		name_[0]='\0';
 		name_[1]='\0';
-		ascii_save_.name = name_;
+		ascii_save_.name = (char*)name_;
 		ascii_save_.format = &aa_text_format;
 		ascii_save_.file = NULL;
 //		ascii_context_ = aa_init (&save_d, &ascii_hwparms_, &ascii_save_);
@@ -391,17 +391,17 @@
 		if(!ascii_context_)
 		{
 			std::cout << "problem initializing aalib!\n";
-			return -1;
+			return FIM_ERR_GENERIC;
 		}
 		if(!aa_autoinitkbd(ascii_context_, 0))
 		{
 			std::cout << "problem initializing aalib keyboard!\n";
-			return -1;
+			return FIM_ERR_GENERIC;
 		}
 		/*if(!aa_autoinitmouse(ascii_context_, 0))
 		{
 			std::cout << "problem initializing aalib mouse!\n";
-			return -1;
+			return FIM_ERR_GENERIC;
 		}*/
 		aa_hidecursor (ascii_context_);
 
@@ -414,7 +414,7 @@
 		key_bindings["Esc"  ]=AA_ESC;
 #endif
 
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	void AADevice::finalize() 
@@ -429,17 +429,17 @@
 	int AADevice::width() { return aa_imgwidth(ascii_context_ ) ;}
 	int AADevice::height(){ return aa_imgheight(ascii_context_) ;}
 
-	int AADevice::init_console()
+	fim_err_t AADevice::init_console()
 	{
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		//mc_.setRows ( -height()/2);
 		mc_.setRows ( get_chars_per_column()/2 );
 		mc_.reformat(  txt_width()   );
 #endif
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
-	int AADevice::fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)
+	fim_err_t AADevice::fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
 	{
 #if (!FIM_AALIB_DRIVER_DEBUG)
 		aa_puts(ascii_context_,x,y,
@@ -448,7 +448,7 @@
 			//AA_SPECIAL,
 			(const char*)str);
 #endif
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	void AADevice::flush()
@@ -465,13 +465,13 @@
 		return clear_rect_(aa_image(ascii_context_),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context_));
 	}
 
-	int AADevice::status_line(const unsigned char *msg)
+	fim_err_t AADevice::status_line(const fim_char_t *msg)
 	{
 #if (!FIM_AALIB_DRIVER_DEBUG)
 		aa_printf(ascii_context_,0,txt_height()-1,AA_NORMAL,"%s",msg);
 #endif
 		aa_flush(ascii_context_);
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	AADevice::~AADevice()
@@ -515,37 +515,37 @@
 
 		if(*c==65907)
 		{
-			status_line((const unsigned char*)"control key not yet supported in aa. sorry!");
+			status_line((const fim_char_t*)"control key not yet supported in aa. sorry!");
 			return 1;
 			/* left ctrl (arbitrary) */
 		}
 		if(*c==65908)
 		{
-			status_line((const unsigned char*)"control key not yet supported in aa. sorry!");
+			status_line((const fim_char_t*)"control key not yet supported in aa. sorry!");
 			return 1;
 			/* right ctrl (arbitrary) */
 		}
 		if(*c==65909)
 		{
-			status_line((const unsigned char*)"lock key not yet supported in aa. sorry!");
+			status_line((const fim_char_t*)"lock key not yet supported in aa. sorry!");
 			return 1;
 			/* right ctrl (arbitrary) */
 		}
 		if(*c==65906)
 		{
-			status_line((const unsigned char*)"shift key not yet supported in aa. sorry!");
+			status_line((const fim_char_t*)"shift key not yet supported in aa. sorry!");
 			return 1;
 			/* shift (arbitrary) */
 		}
 		if(*c==AA_ESC){*c=27;return 1;}/* esc  */
 		if(*c==AA_MOUSE)
 		{
-			status_line((const unsigned char*)"mouse events not yet supported in aa. sorry!");
+			status_line((const fim_char_t *)"mouse events not yet supported in aa. sorry!");
 			return 1;
 		}/* esc  */
 		if(*c==AA_RESIZE )
 		{
-			status_line((const unsigned char*)"window resizing not yet supported. sorry!");
+			status_line((const fim_char_t *)"window resizing not yet supported. sorry!");
 			/*aa_resize(ascii_context_);*//*we are not yet ready : the Window and Viewport stuff .. */
 			return 0;
 		}/* esc  */

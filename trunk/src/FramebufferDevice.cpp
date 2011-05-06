@@ -163,7 +163,7 @@ static void _fb_switch_signal(int signal)
 	ffdp->fb_switch_signal(signal);
 }
 
-int FramebufferDevice::fs_puts(struct fs_font *f_, unsigned int x, unsigned int y, const unsigned char *str)
+fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
 {
     unsigned char *pos,*start;
     int i,c,j,w;
@@ -202,9 +202,10 @@ int FramebufferDevice::fs_puts(struct fs_font *f_, unsigned int x, unsigned int 
 	fs_render_fb(start,fb_fix_.line_length,f_->eindex[c],f_->gindex[c]);
 	x += f_->eindex[c]->width;
 	if (x > fb_var_.xres - f_->width)
-	    return -1;
+	    return FIM_ERR_GENERIC;
     }
-    return x;
+    //return x;//FIXME
+	return FIM_ERR_NO_ERROR;
 }
 
 void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data)
@@ -929,7 +930,7 @@ int FramebufferDevice::fb_activate_current(int tty_)
     return 0;
 }
 
-int FramebufferDevice::status_line(const unsigned char *msg)
+fim_err_t FramebufferDevice::status_line(const fim_char_t *msg)
 {
     int y;
     
@@ -947,9 +948,9 @@ int FramebufferDevice::status_line(const unsigned char *msg)
     fb_line(0, fb_var_.xres, y, y);
     fs_puts(f_, 0, y+ys_, msg);
 ret:
-    return 0;
+    return FIM_ERR_NO_ERROR;
 rerr:
-    return -1;
+    return FIM_ERR_GENERIC;
 }
 
 void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
@@ -964,7 +965,7 @@ void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
     fb_memset(fb_mem_ + fb_fix_.line_length * y, 0,
 	      fb_fix_.line_length * (f_->height+ys_));
     fb_line(0, fb_var_.xres, y, y);
-    fs_puts(f_, 0, y+ys_, str);
+    fs_puts(f_, 0, y+ys_, (const fim_char_t*)str);
     fb_line(x, x + f_->width, fb_var_.yres-1, fb_var_.yres-1);
     fb_line(x, x + f_->width, fb_var_.yres-2, fb_var_.yres-2);
 }
@@ -993,7 +994,7 @@ void FramebufferDevice::fb_text_box(int x, int y, char *lines[], unsigned int co
     clear_rect(x1, x2, y1, y2);
     fb_rect(x1, x2, y1, y2);
     for (i = 0; i < count; i++) {
-	fs_puts(f_,x,y,(unsigned char*)lines[i]);
+	fs_puts(f_,x,y,(const fim_char_t*)lines[i]);
 	y += f_->height;
     }
 }
@@ -1824,7 +1825,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 
 }
 
-int FramebufferDevice::display(
+fim_err_t FramebufferDevice::display(
 	void *ida_image_img,
 	int yoff,
 	int xoff,

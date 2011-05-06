@@ -119,7 +119,7 @@ namespace fim
 	typedef float fim_angle_t;	/* a type for angles */
 	typedef int   fim_page_t;	/* a type for multipage document pages */
 	typedef bool   fim_bool_t;	/* a type for bolean expressions */
-	typedef int fim_coo_t;		/* a type for coordinates */
+	typedef unsigned int fim_coo_t;		/* a type for coordinates */
 	typedef int fim_bpp_t;		/* a type for bits Per Pixel */
 	typedef int fim_key_t;		/* a type for keycodes */
 	typedef int fim_err_t;		/* a type for errors */
@@ -132,7 +132,7 @@ namespace fim
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
 	typedef std::map<fim::string,fim_key_t > key_bindings_t;	//symbol->code
-	typedef unsigned char fim_char_t;	/* a type for chars */
+	typedef char fim_char_t;	/* a type for chars */
 
 	void status(const char *desc, const char *info);
 
@@ -207,6 +207,12 @@ typedef std::vector<fim::string> args_t;
 #define FIM_SYM_SEMICOLON	';'
 #define FIM_SYM_SEMICOLON_STRING	";"
 #define FIM_SYM_ENDL	"\n"
+
+/*
+ * Some Fim error codes.
+ */
+#define FIM_ERR_NO_ERROR	0
+#define FIM_ERR_GENERIC	-1
 
 
 
@@ -515,12 +521,6 @@ namespace fim
 #define FIM_FLAG_FLIP 2
 #define FIM_FLAG_RGB2GRAY 4
 #define FIM_FLAG_RGB2GRAYGRAYGRAY 8
-
-/*
- * Some Fim error codes.
- */
-#define FIM_ERR_NO_ERROR	0
-#define FIM_ERR_GENERIC	-1
 
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf
