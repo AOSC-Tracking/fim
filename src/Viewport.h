@@ -86,16 +86,16 @@ class Viewport
 	bool onLeft();
 	bool onTop();
 
-	int xorigin();
-	int yorigin();
+	fim_coo_t xorigin();
+	fim_coo_t yorigin();
 	protected:
 
 //	int redraw;	// there is already an external one!
 	/* viewport methods */
 
 	public:
-	int viewport_width();
-	int viewport_height();
+	fim_coo_t viewport_width();
+	fim_coo_t viewport_height();
 	/* viewport methods */
 	void top_align();
 	void bottom_align();

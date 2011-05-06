@@ -175,7 +175,7 @@ namespace fim
 		return (top_ <= 0 );
 	}
 
-	int Viewport::viewport_width()
+	fim_coo_t Viewport::viewport_width()
 	{
 		/*
 		 * */
@@ -187,7 +187,7 @@ namespace fim
 #endif
 	}
 
-	int Viewport::viewport_height()
+	fim_coo_t Viewport::viewport_height()
 	{
 		/*
 		 * */
@@ -223,7 +223,7 @@ namespace fim
 		return display();
 	}
 
-	int Viewport::xorigin()
+	fim_coo_t Viewport::xorigin()
 	{
 		// horizontal origin coordinate (upper)
 #ifdef FIM_WINDOWS
@@ -233,7 +233,7 @@ namespace fim
 #endif
 	}
 
-	int Viewport::yorigin()
+	fim_coo_t Viewport::yorigin()
 	{
 		// vertical origin coordinate (upper)
 #ifdef FIM_WINDOWS
