@@ -21,6 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110507	the generated man output shall print out examples which are also a correctness test
+20110507	the generated man output shall document i: and w: and .. variables
 20110507	auto-generate a man page, providing both short and long descriptions for each option switch 
 20110506	shall see libicu http://userguide.icu-project.org/
 20110504	aa driver swaps pageup/pagedown ?

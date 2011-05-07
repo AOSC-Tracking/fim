@@ -1,0 +1,674 @@
+.\"
+.\" $Id$
+.\"
+.TH fimrc 1 "(c) 2011-2011 Michele Martone"
+.SH NAME
+fimrc - \fB fim \fP configuration file and language reference
+
+.SH SYNOPSIS
+.B ~/fimrc
+.fi
+.B /etc/fimrc
+.fi
+.B fim -p [ options ] < fim_script_file_name
+.fi
+.B fim --execute-commands {commands} [ options ]
+.fi
+
+.SH DESCRIPTION
+This page explains the 
+.B fim
+language, which is used for the 
+.B fimrc
+configuration files, scripts, or commands passed via command line options.
+
+
+.SH FIM LANGUAGE
+Incomplete section.
+
+.SH COMMANDS REFERENCE
+
+.B
+prefetch
+prefetches an image, for a faster subsequent opening
+.fi
+.B
+no_image
+displays no image at all (BROKEN)
+.fi
+.B
+next
+displays the next picture in the list
+.fi
+.B
+next_picture
+displays the next page or picture file
+.fi
+.B
+prev_picture
+displays the previous page or picture file
+.fi
+.B
+prev
+displays the previous picture in the list
+.fi
+.B
+next_page
+displays the next page
+.fi
+.B
+prev_page
+displays the previous page
+.fi
+.B
+push
+pushes a file in the files list
+.fi
+.B
+display
+displays the current file
+.fi
+.B
+redisplay
+re-displays the current file
+.fi
+.B
+list
+displays the files list
+.fi
+.B
+pop
+pop the last file from the files list
+.fi
+.B
+file
+displays the current file's name (UNFINISHED)
+.fi
+.B
+pan_ne
+pans the image north east
+.fi
+.B
+pan_nw
+pans the image north west
+.fi
+.B
+pan_sw
+pans the image south west
+.fi
+.B
+pan_se
+pans the image south east
+.fi
+.B
+panup
+pans the image up
+.fi
+.B
+pandown
+pans the image down
+.fi
+.B
+panleft
+pans the image left
+.fi
+.B
+panright
+pans the image right
+.fi
+.B
+load
+load the image, if not yet loaded
+.fi
+.B
+reload
+loads the image into memory
+.fi
+.B
+files
+displays the number of files in the file list
+.fi
+.B
+sort
+sorts the file list
+.fi
+.B
+random_shuffle
+randomly shuffles the file list
+.fi
+.B
+reverse
+reverses the file list
+.fi
+.B
+remove
+remove the current file or the selected ones from the list
+.fi
+.B
+info
+info about the current file
+.fi
+.B
+regexp_goto
+jumps to the first image matching the given pattern
+.fi
+.B
+regexp_goto_next
+jumps to the next image matching the last given pattern
+.fi
+.B
+scale_increment
+increments the scale by a percentual amount
+.fi
+.B
+scale_multiply
+multiplies the scale by the specified amount
+.fi
+.B
+scale_factor_grow
+multiply the scale factors reduce_factor and magnify_factor by scale_factor_multiplier
+.fi
+.B
+scale_factor_shrink
+divide the scale factors reduce_factor and magnify_facto by scale_factor_multiplier
+.fi
+.B
+scale_factor_increase
+add scale_factor_delta to the scale factors reduce_factor and magnify_facto
+.fi
+.B
+scale_factor_decrease
+subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor
+.fi
+.B
+rotate
+rotate the image the specified amount of degrees
+.fi
+.B
+magnify
+magnify [ARGS] : magnifies the displayed image by the magnify_factor variable or ARGS
+.fi
+.B
+reduce
+reduce [ARGS] ; reduces the displayed image by reduce_factor or ARGS
+.fi
+.B
+return
+returns from the program with a status code
+.fi
+.B
+align_top
+aligns to the upper side the image
+.fi
+.B
+align_bottom
+aligns to the lower side the image
+.fi
+.B
+goto
+goes to the index image
+.fi
+.B
+negate
+negates the displayed image colors
+.fi
+.B
+status
+sets the status line to the collation of the given arguments
+.fi
+.B
+scrolldown
+scrolls down the image, going next if at bottom
+.fi
+.B
+scrollforward
+scrolls the image as it were reading it
+.fi
+.B
+scale
+scales the image according to a scale (ex.: 0.5,40%,..)
+.fi
+.B
+set
+manipulates the internal variables
+.fi
+.B
+auto_scale
+sets auto scale mode
+.fi
+.B
+auto_width_scale
+scale the image so that it fits horizontally in the screen
+.fi
+.B
+auto_height_scale
+scale the image so that it fits vertically in the screen
+.fi
+.B
+bind
+binds some keyboard shortcut to an action
+.fi
+.B
+quit
+terminates the program
+.fi
+.B
+exec
+executes script files
+.fi
+.B
+echo
+echoes its arguments
+.fi
+.B
+if
+if(expression){action;}[else{action;}]
+.fi
+.B
+else
+if(expression){action;}[else{action;}]
+.fi
+.B
+while
+while(expression){action;}
+.fi
+.B
+alias
+alias [ALIASNAME [ACTIONS [DESCRIPTION]]]
+.fi
+.B
+getenv
+getenv IDENTIFIER
+.fi
+.B
+unalias
+unalias {alias} | -a : deletes the alias {alias} or all aliases_ (use "-a", not -a)
+.fi
+.B
+unbind
+unbinds the action associated to KEYCODE
+.fi
+.B
+sleep
+sleeps for n (default 1) seconds
+.fi
+.B
+mark
+marks the current file
+.fi
+.B
+help
+provides online help
+.fi
+.B
+autocmd
+usage: autocmd [Event] [Pattern] [Commands]
+.fi
+.B
+autocmd_del
+usage: autocmd_del [Event] [Pattern] [Commands]
+.fi
+.B
+set_interactive_mode
+sets interactive mode
+.fi
+.B
+set_console_mode
+sets console mode
+.fi
+.B
+system
+system {expr}: get the output of the shell command {expr}. (uses popen()
+.fi
+.B
+cd
+cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last ":cd {path} command")
+.fi
+.B
+pwd
+print the current directory name.
+.fi
+.B
+popen
+popen COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands the output of COMMAND
+.fi
+.B
+stdout
+writes to stdout its arguments
+.fi
+.B
+start_recording
+starts recording of commands
+.fi
+.B
+stop_recording
+stops recording of commands
+.fi
+.B
+dump_record_buffer
+dumps on screen record buffer
+.fi
+.B
+execute_record_buffer
+executes the record buffer
+.fi
+.B
+eval
+evaluates the arguments as commands, executing them.
+.fi
+.B
+repeat_last
+repeats the last action
+.fi
+.B
+variables
+displays the associated variables
+.fi
+.B
+commands
+displays the existing commands
+.fi
+.B
+dump_key_codes
+dumps the active key codes
+.fi
+.B
+clear
+clears the virtual console
+.fi
+.SH VARIABLES REFERENCE
+
+.B
+FIM_DEFAULT_CONFIG_FILE_CONTENTS
+the contents of the default (hardcoded) config file
+.fi
+.B
+_TERM
+the environment TERM variable
+.fi
+.B
+_autocmd_trace_stack
+(INTERNAL) dump to stdout autocommands stack trace during their execution (for debugging purposes)
+.fi
+.B
+_cache_status
+informations on current cache status
+.fi
+.B
+_cached_images
+the number of images currently cached
+.fi
+.B
+_debug_commands
+(INTERNAL) each executed command (for debugging purposes)
+.fi
+.B
+_device_driver
+a string with the current output driver name
+.fi
+.B
+_display_as_binary
+if nonzero : if 1, will force loading of images as pixelmaps of bits; if 24, will force loading of images as 24 bit pixelmaps
+.fi
+.B
+_display_busy
+if 1, will display a message on the status bar when processing
+.fi
+.B
+_display_console
+if 1, will display the output console
+.fi
+.B
+_display_status
+if 1, will display the status bar
+.fi
+.B
+_display_status_bar
+if 1, will display the status bar
+.fi
+.B
+_do_sanity_check
+if 1, will execute a sanity check on startup (experimental)
+.fi
+.B
+_fim_bpp
+the bits per pixel count
+.fi
+.B
+_fim_scriptout_file
+the name of the file to write to when recording sessions
+.fi
+.B
+_last_system_output
+FIXME: undocumented(experimental)
+.fi
+.B
+_load_default_etc_fimrc
+if 1 at startup, will load /etc/fimrc, or equivalent system startup file
+.fi
+.B
+_load_fim_history
+if 1 on startup, will load the ~/fim_history file on startup
+.fi
+.B
+_max_cached_images
+the maximum number of images allowed in the cache
+.fi
+.B
+_max_cached_memory
+the maximum amount of memory allowed for the cache
+.fi
+.B
+_max_iterated_commands
+the iteration limit for N in "N[commandname]" iterated command invocations
+.fi
+.B
+_no_default_configuration
+(INTERNAL)
+.fi
+.B
+_no_rc_file
+if !=0, the ~/.fimrc file will not be executed
+.fi
+.B
+_open_offset
+(INTERNAL) offset used when opening files
+.fi
+.B
+_override_display
+INTERNAL
+.fi
+.B
+_save_fim_history
+if 1 on exit, will save the ~/fim_history file on exit
+.fi
+.B
+_seek_magic
+(INTERNAL) will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
+.fi
+.B
+_status_line
+if 1, will display the status bar (!)
+.fi
+.B
+_verbose_errors
+(INTERNAL)
+.fi
+.B
+_verbose_keys
+(INTERNAL)
+.fi
+.B
+_want_prefetch
+if 1, will prefetch files
+.fi
+.B
+angle
+(INTERNAL)
+.fi
+.B
+ascale
+the asymmetric scaling of the current image
+.fi
+.B
+auto_scale_v
+FIXME : unused ? (fixme : should be moved to fimrc's scope only)
+.fi
+.B
+autoflip
+(INTERNAL)
+.fi
+.B
+automirror
+(INTERNAL)
+.fi
+.B
+autonegate
+(INTERNAL) (EXPERIMENTAL)
+.fi
+.B
+autotop
+if 1, will align to the top freshly loaded images
+.fi
+.B
+autowidth
+if 1, will scale freshly loaded images to fit width
+.fi
+.B
+comment
+the image comment, stored in the image file
+.fi
+.B
+console_buffer_free
+(INTERNAL)
+.fi
+.B
+console_buffer_total
+(INTERNAL)
+.fi
+.B
+console_buffer_used
+(INTERNAL)
+.fi
+.B
+console_key
+the key binding for spawning the command line (INTERNAL)
+.fi
+.B
+console_lines
+(INTERNAL)
+.fi
+.B
+console_offset
+(INTERNAL)
+.fi
+.B
+fileindex
+the current image numeric index
+.fi
+.B
+filelistlen
+the length of the current image list
+.fi
+.B
+filename
+the current file name
+.fi
+.B
+flipped
+(INTERNAL)
+.fi
+.B
+fresh
+1 if the image was loaded, before all autocommands execution (INTERNAL)
+.fi
+.B
+height
+the current image original height
+.fi
+.B
+ignorecase
+if 1, will allow for case insensitive regexp searches
+.fi
+.B
+lwidth
+(INTERNAL)
+.fi
+.B
+magnify_factor
+the image scale multiplier used when magnifying images size
+.fi
+.B
+mirrored
+(INTERNAL)
+.fi
+.B
+negated
+(INTERNAL) (EXPERIMENTAL)
+.fi
+.B
+orientation
+(INTERNAL)
+.fi
+.B
+pwd
+the current working directory
+.fi
+.B
+reduce_factor
+the image scale multiplier used when reducing images size
+.fi
+.B
+rows
+(INTERNAL)
+.fi
+.B
+scale
+the scale of the current image
+.fi
+.B
+scale_factor_delta
+(INTERNAL)
+.fi
+.B
+scale_factor_multiplier
+(INTERNAL)
+.fi
+.B
+screen_height
+the screen height
+.fi
+.B
+screen_width
+the screen width
+.fi
+.B
+sheight
+the current image scaled height
+.fi
+.B
+steps
+the steps, in pixels, when panning images
+.fi
+.B
+swidth
+the current image scaled width
+.fi
+.B
+want_autocenter
+(INTERNAL)
+.fi
+.B
+width
+the current image original width
+.fi
+.SH EXAMPLES
+Incomplete section.
+.SH SEE ALSO
+fim(1).
+.SH AUTHOR
+Michele Martone <dezperado _CUT_ autistici _CUT_ org>
+.SH COPYRIGHT
+See fim(1)
+
+

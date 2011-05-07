@@ -3,10 +3,10 @@
 
 CLEANFILES= doctags *.o  tags
 
-HTMLDOCS=FIM.html fim.man.html  fimgs.man.html
-EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man
+HTMLDOCS=FIM.html fim.man.html  fimgs.man.html fimrc.man.html
+EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man fimrc.man
 
-man1_MANS = fim.man fimgs.man
+man1_MANS = fim.man fimgs.man fimrc.man
 
 # html stuff is installed in the documentation directories, too
 htmldir = $(docdir)
@@ -23,6 +23,9 @@ FIM.html fim-stylesheet.css: doctags FIM.TXT
 
 fim.man.html: fim.man
 	man2html fim.man >  fim.man.html || echo "$(ERRMSG) man2html fim.man >  fim.man.html"
+
+fimrc.man.html: fimrc.man
+	man2html fimrc.man >  fimrc.man.html || echo "$(ERRMSG) man2html fimrc.man >  fimrc.man.html"
 
 ERRMSG="no man2html at build time : please install man2html and reissue :"
 

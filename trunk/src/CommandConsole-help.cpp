@@ -94,13 +94,37 @@ manmode:
 			string(".\\\" $Id$\n")+
 			string(".\\\"\n")+
 			string(".TH fimrc 1 \"(c) 2011-2011 Michele Martone\"\n")+
+			string(".SH NAME\n")+
+			string("fimrc - \\fB fim \\fP configuration file and language reference\n")+
+			string("\n")+
+			string(".SH SYNOPSIS\n")+
+			string(".B ~/fimrc\n.fi\n.B /etc/fimrc\n.fi\n.B fim -p [ options ] < fim_script_file_name\n.fi\n.B fim --execute-commands {commands} [ options ]\n.fi\n")+
+			string("\n")+
+			string(".SH DESCRIPTION\n")+
+			string("This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, scripts, or commands passed via command line options.\n")+
+			string("\n")+
+			string("\n")+
+			string(".SH FIM LANGUAGE\n")+
+			string("Incomplete section.\n")+
 			string("\n")+
 			string(".SH COMMANDS REFERENCE\n")+
 			string("\n")+
 			get_commands_reference(refmode)+
 			string(".SH VARIABLES REFERENCE\n")+
 			string("\n")+
-		       	get_variables_reference(refmode);
+		       	get_variables_reference(refmode)+
+			string(".SH EXAMPLES\n")+
+			string("Incomplete section.\n")+
+			string(".SH SEE ALSO\n")+
+			string("fim(1).\n")+
+			string(".SH AUTHOR\n")+
+			string(FIM_AUTHOR)+
+			string("\n")+
+			string(".SH COPYRIGHT\n")+
+			string("See fim(1)\n")+
+			string("\n")+
+			string("\n")
+			;
 		}
 		else
 		return

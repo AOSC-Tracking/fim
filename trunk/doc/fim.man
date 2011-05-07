@@ -1,4 +1,6 @@
+.\" 
 .\" $Id$
+.\" 
 .TH fim 1 "(c) 2007-2011 Michele Martone"
 .\" .TH fim 1
 .SH NAME
@@ -329,54 +331,45 @@ logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
 .SH EXAMPLES
-find /mnt/media/ -name *.jpg | 
-.B fim
--
-.P
-#will make fim read the file list from standard input.
+.B find /mnt/media/ -name *.jpg | fim - .
+.fi 
+# Will make fim read the file list from standard input.
 .P
 .P
 
-find /mnt/media/ -name *.jpg | shuf | 
-.B fim
--
-.P
-#will make fim read the file list from standard input, randomly permuted.
+.B
+find /mnt/media/ -name *.jpg | shuf | fim -
+.fi
+# will make fim read the file list from standard input, randomly permuted.
 .P
 .P
 
-c
-cat script.fim | 
-.B fim
--p images/*
-.P
-#will make fim read the script file
+.B
+cat script.fim | fim -p images/*
+.fi
+# Will make fim read the script file
 .B script.fim
 from standard input prior to displaying files in the directory
 .B images
 .P
 .P
 
-scanimage ... | tee scan.ppm | 
-.B fim -i
-.P
-#will make fim read the image scanned from a flatbed scanner as soon as it is read 
-.P
-.P
-
-.B fim
-* > selection.txt
-.P
-#will output the file names marked interactively with 'm' in fim to a file.
+.B 
+scanimage ... | tee scan.ppm | fim -i
+.fi
+# Will make fim read the image scanned from a flatbed scanner as soon as it is read 
 .P
 .P
 
-.B fim 
-* |
-.B fim
--
+.B fim * > selection.txt
+.fi
+# Will output the file names marked interactively with 'm' in fim to a file.
 .P
-#will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
+.P
+
+.B fim * | fim -
+.fi
+# will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
 .P
 .P
 
@@ -388,43 +381,41 @@ file shipped in the documentation directory to discover the known ones.
 .SH  FILES
 
 .TP 15
-/usr/local/share/doc/fim/FIM.TXT
+.B /usr/local/share/doc/fim/FIM.TXT
 The
 .B Fim
 documentation files.
 .TP 15
 .\" /usr/local/share/fim/fimrc
-/etc/fimrc
+.B /etc/fimrc
 System wide
 .B Fim
 initialization file (executed on startup if no personal initialization file exist).
 .TP 15
-~/.fimrc
+.B ~/.fimrc
 Your personal
 .B Fim
 initialization file (executed on startup, if existent).
 .SH SEE ALSO
-fimgs(1), fbset(1), con2fb(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)
+Other 
+.B Fim 
+man pages: fimgs(1), fimrc(1).
+.fi
+Or related programs: fbset(1), con2fb(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)
 .\" , jpegtran(1)
 .SH AUTHOR
 .nf
 Michele Martone <dezperado _ GUESS _ autistici.org> is the author of fim, "fbi improved". 
+.fi
 Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2009 Michele Martone <dezperado _ GUESS _ autistici.org>
+Copyright (C) 2007-2011 Michele Martone <dezperado _ GUESS _ autistici.org>
+.fi
 Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>
 .P
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 .P
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 .P
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software Foundation,
- Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
