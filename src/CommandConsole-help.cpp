@@ -111,7 +111,7 @@ manmode:
 			refmode=Man;
 			return
 			string(".\\\"\n")+
-			string(".\\\" $Id$\n")+
+			string(".\\\" $Id""$\n")+
 			string(".\\\"\n")+
 			string(".TH fimrc 1 \"(c) 2011-2011 Michele Martone\"\n")+
 			string(".SH NAME\n")+

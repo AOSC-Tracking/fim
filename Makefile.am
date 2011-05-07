@@ -126,6 +126,10 @@ up: upload news
 
 news: freshmeat mail-announce
 
+dox: src/fim
+	src/fim --help=m > doc/fim.man
+	src/fim --dump-reference-help=man  > doc/fimrc.man
+
 # fixme : missing integration with ChangeLog file
 mail-announce:
 	@ figlet fim | mutt -s "fim-`cat VERSION` release" "fbi-improved-devel@nongnu.org"  -i -
