@@ -295,7 +295,7 @@ namespace fim
 	{
 //		addCommand(new Command(fim::string("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
 		addCommand(new Command(fim::string(FIM_FLT_PREFETCH),fim::string("prefetches an image, for a faster subsequent opening"),&browser_,&Browser::prefetch));
-		addCommand(new Command(fim::string("no_image" ),fim::string("displays no image at all"),&browser_,&Browser::no_image));/* FIXME: broken */
+		addCommand(new Command(fim::string(FIM_FLT_NO_IMAGE),fim::string("displays no image at all (BROKEN)"),&browser_,&Browser::no_image));/* FIXME: broken */
 		addCommand(new Command(fim::string(FIM_FLT_NEXT),fim::string("displays the next picture in the list"),&browser_,&Browser::next));
 		addCommand(new Command(fim::string(FIM_FLT_NEXT_PIC),fim::string("displays the next page or picture file"),&browser_,&Browser::next_picture));
 		addCommand(new Command(fim::string(FIM_FLT_PREV_PIC),fim::string("displays the previous page or picture file"),&browser_,&Browser::prev_picture));
@@ -305,8 +305,8 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_PUSH),fim::string("pushes a file in the files list"),&browser_,&Browser::push));
 		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string("displays the current file"),&browser_,&Browser::display));
 		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string("re-displays the current file"),&browser_,&Browser::redisplay));
-		addCommand(new Command(fim::string("list" ),fim::string("displays the files list"),&browser_,&Browser::list));
-		addCommand(new Command(fim::string("pop"  ),fim::string("pop the last file from the files list"),&browser_,&Browser::pop));
+		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string("displays the files list"),&browser_,&Browser::list));
+		addCommand(new Command(fim::string(FIM_FLT_POP),fim::string("pop the last file from the files list"),&browser_,&Browser::pop));
 		addCommand(new Command(fim::string(FIM_FLT_FILE),fim::string("displays the current file's name (UNFINISHED)"),&browser_,&Browser::info));
 		addCommand(new Command(fim::string("pan_ne" ),fim::string("pans the image north east"),&browser_,&Browser::pan_ne));
 		addCommand(new Command(fim::string("pan_nw" ),fim::string("pans the image north west"),&browser_,&Browser::pan_nw));
@@ -318,7 +318,7 @@ namespace fim
 		addCommand(new Command(fim::string("panright" ),fim::string("pans the image right"),&browser_,&Browser::pan_right));
 		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string("load the image, if not yet loaded"),&browser_,&Browser::load));
 		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string("loads the image into memory"),&browser_,&Browser::reload));
-		addCommand(new Command(fim::string("files"),fim::string("displays the number of files in the file list" ),&browser_,&Browser::n));
+		addCommand(new Command(fim::string(FIM_FLT_FILES),fim::string("displays the number of files in the file list" ),&browser_,&Browser::n));
 		addCommand(new Command(fim::string(FIM_FLT_SORT),fim::string("sorts the file list" ),&browser_,&Browser::_sort));
 		addCommand(new Command(fim::string(FIM_FLT_RANDOM_SHUFFLE),fim::string("randomly shuffles the file list" ),&browser_,&Browser::_random_shuffle));
 		addCommand(new Command(fim::string(FIM_FLT_REVERSE),fim::string("reverses the file list" ),&browser_,&Browser::_reverse));
@@ -336,18 +336,18 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_MAGNIFY),fim::string(FIM_FLT_MAGNIFY" [ARGS] : magnifies the displayed image by the magnify_factor variable or ARGS" ),&browser_,&Browser::magnify));
 		addCommand(new Command(fim::string(FIM_FLT_REDUCE),fim::string(FIM_FLT_REDUCE" [ARGS] ; reduces the displayed image by reduce_factor or ARGS" ),&browser_,&Browser::reduce));
 		addCommand(new Command(fim::string(FIM_FLT_RETURN),fim::string("returns from the program with a status code"),this,&CommandConsole::do_return));
-		addCommand(new Command(fim::string("top_align"),fim::string("aligns to the upper side the image" ),&browser_,&Browser::top_align));
-		addCommand(new Command(fim::string("bottom_align"),fim::string("aligns to the lower side the image" ),&browser_,&Browser::bottom_align));
+		addCommand(new Command(fim::string(FIM_FLT_ALIGN_TOP),fim::string("aligns to the upper side the image" ),&browser_,&Browser::top_align));
+		addCommand(new Command(fim::string(FIM_FLT_ALIGN_BOTTOM),fim::string("aligns to the lower side the image" ),&browser_,&Browser::bottom_align));
 		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string("goes to the index image" ),&browser_,&Browser::goto_image));
 		addCommand(new Command(fim::string(FIM_FLT_NEGATE),fim::string("negates the displayed image colors" ),&browser_,&Browser::negate));
 		addCommand(new Command(fim::string(FIM_FLT_STATUS),fim::string("sets the status line to the collation of the given arguments"),this,&CommandConsole::status));
-		addCommand(new Command(fim::string("scrolldown" ),fim::string("scrolls down the image, going next if at bottom" ),&browser_,&Browser::scrolldown));
-		addCommand(new Command(fim::string("scrollforward" ),fim::string("scrolls the image as it were reading it :)" ),&browser_,&Browser::scrollforward));
+		addCommand(new Command(fim::string(FIM_FLT_SCROLLDOWN),fim::string("scrolls down the image, going next if at bottom" ),&browser_,&Browser::scrolldown));
+		addCommand(new Command(fim::string(FIM_FLT_SCROLLFORWARD),fim::string("scrolls the image as it were reading it" ),&browser_,&Browser::scrollforward));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE),fim::string("scales the image according to a scale (ex.: 0.5,40%,..)" ),&browser_,&Browser::scale));
 		addCommand(new Command(fim::string(FIM_FLT_SET),fim::string("manipulates the internal variables" ),this,&CommandConsole::set));
-		addCommand(new Command(fim::string("auto_scale" ),fim::string("" ),&browser_,&Browser::auto_scale));
-		addCommand(new Command(fim::string("auto_width_scale" ),fim::string("scale the image so that it fits horizontally in the screen" ),&browser_,&Browser::auto_width_scale));
-		addCommand(new Command(fim::string("auto_height_scale" ),fim::string("scale the image so that it fits vertically in the screen" ),&browser_,&Browser::auto_height_scale));
+		addCommand(new Command(fim::string(FIM_FLT_AUTO_SCALE),fim::string("sets auto scale mode" ),&browser_,&Browser::auto_scale));
+		addCommand(new Command(fim::string(FIM_FLT_AUTO_WIDTH_SCALE),fim::string("scale the image so that it fits horizontally in the screen" ),&browser_,&Browser::auto_width_scale));
+		addCommand(new Command(fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE),fim::string("scale the image so that it fits vertically in the screen" ),&browser_,&Browser::auto_height_scale));
 		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string("binds some keyboard shortcut to an action"),this,&CommandConsole::bind));
 		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string("terminates the program"),this,&CommandConsole::quit));
 #ifndef FIM_WANT_NOSCRIPTING
@@ -372,40 +372,41 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD),fim::string("usage: "FIM_FLT_AUTOCMD" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd));
 		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD_DEL),fim::string("usage: "FIM_FLT_AUTOCMD_DEL" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
 #endif
-		addCommand(new Command(fim::string("set_interactive_mode"  ),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
-		addCommand(new Command(fim::string("set_console_mode"  ),fim::string("sets console mode"),this,&CommandConsole::set_in_console));
+		addCommand(new Command(fim::string(FIM_FLT_SET_INTERACTIVE_MODE),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
+		addCommand(new Command(fim::string(FIM_FLT_SET_CONSOLE_MODE),fim::string("sets console mode"),this,&CommandConsole::set_in_console));
 #ifndef FIM_NO_SYSTEM
 		addCommand(new Command(fim::string(FIM_FLT_SYSTEM),fim::string(FIM_CMD_HELP_SYSTEM),this,&CommandConsole::system));
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_CD),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::cd));
 		addCommand(new Command(fim::string(FIM_FLT_PWD),fim::string(FIM_CMD_HELP_PWD   ),this,&CommandConsole::pwd));
-		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string(FIM_FLT_POPEN" COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands_ the output of COMMAND"),this,&CommandConsole::sys_popen));
-		addCommand(new Command(fim::string("stdout"  ),fim::string("writes to stdout"),this,&CommandConsole::_stdout));
+		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string(FIM_FLT_POPEN" COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands the output of COMMAND"),this,&CommandConsole::sys_popen));
+		addCommand(new Command(fim::string(FIM_FLT_STDOUT),fim::string("writes to stdout its arguments"),this,&CommandConsole::_stdout));
 #ifdef FIM_PIPE_IMAGE_READ
-		addCommand(new Command(fim::string("pread"  ),fim::string("executes the arguments as a shell command and reads the input as an image file (uses "FIM_FLT_POPEN")"),this,&CommandConsole::pread));
+		addCommand(new Command(fim::string(FIM_FLT_PREAD),fim::string("executes the arguments as a shell command and reads the input as an image file (uses "FIM_FLT_POPEN")"),this,&CommandConsole::pread));
 #endif
 #ifdef FIM_RECORDING
-		addCommand(new Command(fim::string("start_recording"  ),fim::string("starts recording of commands_"),this,&CommandConsole::start_recording));
-		addCommand(new Command(fim::string("stop_recording"  ),fim::string("stops recording of commands_"),this,&CommandConsole::stop_recording));
-		addCommand(new Command(fim::string("dump_record_buffer"  ),fim::string("dumps on screen record buffer"),this,&CommandConsole::dump_record_buffer));
-		addCommand(new Command(fim::string("execute_record_buffer"  ),fim::string("executes the record buffer"),this,&CommandConsole::execute_record_buffer));
-		addCommand(new Command(fim::string("eval"),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::eval));
-		addCommand(new Command(fim::string("repeat_last"  ),fim::string("repeats the last action"),this,&CommandConsole::repeat_last));
+		addCommand(new Command(fim::string(FIM_FLT_START_RECORDING),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));
+		addCommand(new Command(fim::string(FIM_FLT_STOP_RECORDING),fim::string("stops recording of commands"),this,&CommandConsole::stop_recording));
+		addCommand(new Command(fim::string(FIM_FLT_DUMP_RECORD_BUFFER),fim::string("dumps on screen record buffer"),this,&CommandConsole::dump_record_buffer));
+		addCommand(new Command(fim::string(FIM_FLT_EXECUTE_RECORD_BUFFER),fim::string("executes the record buffer"),this,&CommandConsole::execute_record_buffer));
+		addCommand(new Command(fim::string(FIM_FLT_EVAL),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::eval));
+		addCommand(new Command(fim::string(FIM_FLT_REPEAT_LAST),fim::string("repeats the last action"),this,&CommandConsole::repeat_last));
 #endif
-		addCommand(new Command(fim::string("variables"  ),fim::string("displays the associated variables"),this,&CommandConsole::variables_list));
-		addCommand(new Command(fim::string("commands_"  ),fim::string("displays the existing commands_"),this,&CommandConsole::commands_list));
-		addCommand(new Command(fim::string("dump_key_codes"  ),fim::string("dumps the key codes"),this,&CommandConsole::dump_key_codes));
+		addCommand(new Command(fim::string(FIM_FLT_VARIABLES),fim::string("displays the associated variables"),this,&CommandConsole::variables_list));
+		addCommand(new Command(fim::string(FIM_FLT_COMMANDS),fim::string("displays the existing commands"),this,&CommandConsole::commands_list));
+		addCommand(new Command(fim::string(FIM_FLT_DUMP_KEY_CODES),fim::string("dumps the active key codes"),this,&CommandConsole::dump_key_codes));
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		addCommand(new Command(fim::string(FIM_FLT_CLEAR),fim::string("clears the virtual console"),this,&CommandConsole::clear));
-		addCommand(new Command(fim::string("scroll_console_up"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
-		addCommand(new Command(fim::string("scroll_console_down"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
+		// 20110507 we other means for scrolling the console, now
+		//addCommand(new Command(fim::string("scroll_console_up"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
+		//addCommand(new Command(fim::string("scroll_console_down"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
 #endif
 		/*
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */
 		#include "defaultConfiguration.cpp"
 		setVariable(FIM_VID_PWD,pwd(args_t()).c_str());
-		setVariable(FIM_VID_STEPS,50);
+		setVariable(FIM_VID_STEPS,FIM_CNS_STEPS_DEFAULT);
 		setVariable(FIM_VID_TERM, fim_getenv(FIM_CNS_TERM_VAR));		/* We read an environment variable */
 
 		*prompt_='\0';
@@ -430,7 +431,7 @@ namespace fim
 	fim_err_t CommandConsole::addCommand(Command *c)
 	{
 		/*
-		 * C is added to the commands_ list
+		 * C is added to the commands list
 		 */
 		assert(c);	//FIXME : see the macro NDEBUG for this
 		commands_.push_back(c);
@@ -454,7 +455,7 @@ namespace fim
 	char * CommandConsole::command_generator (const char *text,int state)const
 	{
 		/*
-		 *	This is the reason why the commands_ should be kept
+		 *	This is the reason why the commands should be kept
 		 *	in a list or vector, rather than a map...  :(
 		 *
 		 *	TODO : INSTEAD OF USING commands_[], make a new vector 
@@ -652,7 +653,7 @@ namespace fim
 			}
 			return FIM_ERR_GENERIC;
 		}
-		//we write there our script or commands_
+		//we write there our script or commands
 		r=write(fim_pipedesc[1],s,strlen(s));
 		if(errno)
 		{
@@ -707,15 +708,15 @@ ret:
 		{
 			if( e == FIM_E_TRAGIC || true ) this->quit( FIM_E_TRAGIC );
 		}
-		//we add to history only meaningful commands_/aliases_.
+		//we add to history only meaningful commands/aliases.
 		return FIM_ERR_NO_ERROR;
 	}
 
         fim::string CommandConsole::execute(fim::string cmd, args_t args)
 	{
 		/*
-		 *	This is the method where the tokenized commands_ are executed.
-		 *	This method executes single commands_ with arguments.
+		 *	This is the method where the tokenized commands are executed.
+		 *	This method executes single commands with arguments.
 		 */
 		Command *c=NULL;
 		/*
@@ -748,7 +749,7 @@ ret:
 			/*
 			 * now the yyparse macro YY_INPUT itself handles the closing of the pipe.
 			 *
-			 * in this way nested commands_ could not cause harm, because the pipe
+			 * in this way nested commands could not cause harm, because the pipe
 			 * is terminated BEFORE executing the command, and reusing fim_pipedesc
 			 * is harmless.
 			 *
@@ -870,7 +871,7 @@ ok:
 			if( c != exitBinding_ )  /* some char read */
 			{
 				/*
-				 * we give the user chance to issue commands_
+				 * we give the user chance to issue commands
 				 * and some times to realize this.
 				 *
 				 * is it a desirable behaviour ?
@@ -1280,7 +1281,7 @@ ok:
 	fim::string CommandConsole::get_commands_list()const
 	{
 		/*
-		 * returns the list of registered commands_
+		 * returns the list of registered commands
 		 */
 		fim::string commands_list;
 		for(size_t i=0;i<commands_.size();++i)

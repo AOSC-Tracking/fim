@@ -536,7 +536,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     
     /* no device supplied ? we will probe for one */
     if (NULL == device) {
-	device = fim_getenv("FRAMEBUFFER");
+	device = fim_getenv(FIM_ENV_FRAMEBUFFER);
 	/* no environment - supplied device ? */
 	if (NULL == device) {
 	    struct fb_con2fbmap c2m;
@@ -1827,9 +1827,9 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 		 * */
 		const char *line;
 
-	    	if (NULL != (line = fim_getenv("FBGAMMA")))
+	    	if (NULL != (line = fim_getenv(FIM_ENV_FBGAMMA)))
 	        	fbgamma_ = fim_atof(line);
-	    	if (NULL != (line = fim_getenv("FBFONT")))
+	    	if (NULL != (line = fim_getenv(FIM_ENV_FBFONT)))
 			fontname_ = line;
 	}
 
