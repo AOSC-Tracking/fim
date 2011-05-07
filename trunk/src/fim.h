@@ -223,8 +223,30 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_ERR_BUFFER_FULL	-1024 // FIXME: -2 seems in use
 
 /*
+ * Some Fim error messages.
+ */
+#define FIM_EMSG_NO_SCRIPTING	"sorry, no scripting available!\n"
+#define FIM_EMSG_NO_READ_STDIN_IMAGE	"sorry, the reading of images from stdin was disabled at compile time\n"
+#define FIM_EMSG_CACHING_STDIN	"problems caching standard input image!\n"
+
+/*
+ * Some environment variables used by Fim.
+ */
+#define FIM_ENV_DISPLAY "DISPLAY"
+#define FIM_ENV_FRAMEBUFFER "FRAMEBUFFER"
+#define FIM_ENV_FBGAMMA "FBGAMMA"
+#define FIM_ENV_FBFONT "FBFONT"
+
+/*
+ * Fim Option (long) Switches
+ * */
+#define FIM_OSW_OUTPUT_DEVICE	"output-device"
+#define FIM_OSW_BINARY	"binary"
+
+/*
  * Fim Constants
  * */
+#define FIM_CNS_FIM	 "FIM - Fbi IMproved"
 #define FIM_CNS_TERM_VAR	 "TERM"
 #define FIM_CNS_HOME_VAR	 "HOME"
 #define FIM_CNS_HIST_FILENAME	 ".fim_history"
@@ -401,7 +423,8 @@ namespace fim
 #define FIM_DDN_INN_CACA	 "caca"
 #define FIM_DDN_VAR_CACA	 "cacalib"
 #define FIM_DDN_INN_DUMB	 "dumb"
-#define FIM_DDN_VAR_DUMB	 "dummy"
+//#define FIM_DDN_VAR_DUMB	 "dummy"
+#define FIM_DDN_VAR_DUMB	 "dumb"
 
 /*
  * Fim Autocommands
@@ -440,35 +463,51 @@ namespace fim
  * Fim Language Tokens
  * */
 #define FIM_FLT_ALIAS			"alias"	/* not in vim */
+#define FIM_FLT_ALIGN_BOTTOM		"align_bottom"	/* not in vim */
+#define FIM_FLT_ALIGN_TOP		"align_top"	/* not in vim */
+#define FIM_FLT_AUTO_SCALE		"auto_scale" /* not in vim */
+#define FIM_FLT_AUTO_WIDTH_SCALE	"auto_width_scale" /* not in vim */
+#define FIM_FLT_AUTO_HEIGHTH_SCALE	"auto_height_scale" /* not in vim */
 #define FIM_FLT_AUTOCMD			"autocmd" /* in vim */
 #define FIM_FLT_AUTOCMD_DEL			"autocmd_del"	/* not in vim */
 #define FIM_FLT_BIND			"bind" /* not in vim */
 #define FIM_FLT_CD			"cd" /* in vim */
 #define FIM_FLT_CLEAR			"clear" /* not in vim */
+#define FIM_FLT_COMMANDS		"commands" /* not in vim */
 #define FIM_FLT_DISPLAY			"display" /* in vim, with another meaning) */
+#define FIM_FLT_DUMP_RECORD_BUFFER	"dump_record_buffer" /* not in vim */
+#define FIM_FLT_DUMP_KEY_CODES		"dump_key_codes" /* not in vim */
 #define FIM_FLT_ECHO			"echo" /* in vim */
 #define FIM_FLT_ELSE			"else" /* in vim */
+#define FIM_FLT_EXECUTE_RECORD_BUFFER	"execute_record_buffer" /* not in vim */
 #define FIM_FLT_EXEC			"exec" /* not in vim */
+#define FIM_FLT_EVAL			"eval" /* not in vim */
 #define FIM_FLT_FILE			"file" /* in vim */
+#define FIM_FLT_FILES			"files" /* not in vim */
 #define FIM_FLT_GETENV			"getenv" /* not in vim */
 #define FIM_FLT_GOTO			"goto" /* in vim */
 #define FIM_FLT_HELP			"help" /* not in vim */
 #define FIM_FLT_IF			"if" /* in vim */
 #define FIM_FLT_INFO			"info" /* not in vim */
 #define FIM_FLT_LOAD			"load" /* not in vim */
+#define FIM_FLT_LIST			"list" /* not in vim */
 #define FIM_FLT_MAGNIFY			"magnify" /* not in vim */
 #define FIM_FLT_MARK			"mark" /* in vim */
 #define FIM_FLT_NEXT			"next" /* in vim */
 #define FIM_FLT_NEGATE			"negate" /* not in vim */
 #define FIM_FLT_NEXT_PAGE			"next_page" /* not in vim */
 #define FIM_FLT_NEXT_PIC			"next_picture" /* not in vim */
+#define FIM_FLT_NO_IMAGE			"no_image" /* not in vim */
+#define FIM_FLT_POP			"pop" /* not in vim */
 #define FIM_FLT_POPEN			"popen" /* not in vim */
+#define FIM_FLT_PREAD			"pread" /* not in vim */
 #define FIM_FLT_PREFETCH			"prefetch" /* in vim */
 #define FIM_FLT_PREV			"prev" /* in vim */
 #define FIM_FLT_PREV_PAGE			"prev_page" /* not in vim */
 #define FIM_FLT_PREV_PIC			"prev_picture" /* not in vim */
 #define FIM_FLT_PUSH			"push" /* not in vim */
 #define FIM_FLT_PWD			"pwd" /* in vim */
+#define FIM_FLT_REPEAT_LAST		"repeat_last" /* not in vim */
 #define FIM_FLT_REDISPLAY			"redisplay" /* not in vim */
 #define FIM_FLT_REDUCE			"reduce" /* not in vim */
 #define FIM_FLT_RETURN			"return" /* in vim */
@@ -478,17 +517,25 @@ namespace fim
 #define FIM_FLT_REMOVE		"remove" /* not in vim */
 #define FIM_FLT_ROTATE		"rotate" /* not in vim */
 #define FIM_FLT_SCALE		"scale" /* not in vim */
+#define FIM_FLT_SCROLLDOWN	"scrolldown" /* not in vim */
+#define FIM_FLT_SCROLLFORWARD	"scrollforward" /* not in vim */
 #define FIM_FLT_SET		"set" /* in vim */
+#define FIM_FLT_SET_INTERACTIVE_MODE		"set_interactive_mode" /* not in vim */
+#define FIM_FLT_SET_CONSOLE_MODE		"set_console_mode" /* not in vim */
 #define FIM_FLT_STATUS		"status" /* not in vim */
+#define FIM_FLT_STDOUT		"stdout" /* not in vim */
 #define FIM_FLT_QUIT			"quit" /* in vim */
 #define FIM_FLT_RANDOM_SHUFFLE			"random_shuffle" /* not in vim */
 #define FIM_FLT_REVERSE			"reverse" /* not in vim */
 #define FIM_FLT_SORT			"sort" /* in vim */
+#define FIM_FLT_START_RECORDING			"start_recording" /* not in vim */
+#define FIM_FLT_STOP_RECORDING			"stop_recording" /* not in vim */
 #define FIM_FLT_SYSTEM			"system" /* not in vim */
 #define FIM_FLT_SLEEP			"sleep" /* in vim */
 #define FIM_FLT_USLEEP			"usleep" /* not in vim */
 #define FIM_FLT_UNALIAS			"unalias" /* not in vim */
 #define FIM_FLT_UNBIND			"unbind" /* not in vim */
+#define FIM_FLT_VARIABLES		"variables" /* not in vim */
 #define FIM_FLT_WHILE			"while" /* in vim */
 #define FIM_FLT_WINDOW			"window" /* not in vim */
 

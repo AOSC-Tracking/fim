@@ -95,7 +95,7 @@ bind 'j' "pandown";
 bind "Left" "panleft";
 bind 'h' "panleft";
 bind ' ' "scrolldown";
-bind 't' "top_align;";
+bind 't' "align_top;";
 #bind "PageUp" "prev_picture;";
 #bind "PageDown" "next_picture;";
 bind 'i' "info";

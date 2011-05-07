@@ -834,8 +834,8 @@ border is reached before panning down.
 Moreover, there are too commands for aligning the image on the top or on the
 bottom of the screen:
 
-'top_align'
-'bottom_align'
+'align_top'
+'align_bottom'
 
 As every command, these commands can be executed with the repeated syntax:
 >

@@ -83,7 +83,7 @@ struct fim_options_t fim_options[] = {
     {"help",       optional_argument,       NULL, 'h',"print short (or long) program invocation help","[=s|l]"},
     {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}"},
     {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}"},
-    {"binary",     optional_argument,       NULL, 'b',"view any file as either a 1 or 24 bpp bitmap","[=24|1]"},
+    {FIM_OSW_BINARY,     optional_argument,       NULL, 'b',"view any file as either a 1 or 24 bpp bitmap","[=24|1]"},
     {"gamma",      required_argument, NULL, 'g',"set gamma","{gamma}"},
     {"quiet",      no_argument,       NULL, 'q',"quiet mode",NULL},
     {"verbose",    no_argument,       NULL, 'v',"verbose mode",NULL},
@@ -120,7 +120,7 @@ struct fim_options_t fim_options[] = {
     {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check",NULL},	/* NEW */
     {"write-scriptout",      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}"},
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}"},/* NEW */
-    {"output-device",      required_argument,       NULL, 'o',"specify using a specific output driver (if supported)","[fb|sdl|aa|dumb]"},
+    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       NULL, 'o',"specify using a specific output driver (if supported)","[fb|sdl|aa|dumb]"},
     {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0xd15cbab3,"dump reference info","[=man]"},
 
     /* long-only options */
@@ -141,7 +141,7 @@ class FimInstance
 	static void version()
 	{
 	    FIM_FPRINTF(stderr, 
-			    "FIM - Fbi IMproved "
+			    FIM_CNS_FIM" "
 	#ifdef FIM_VERSION
 			    FIM_VERSION
 	#endif
@@ -175,21 +175,21 @@ class FimInstance
 			"Fim options (features included (+) or not (-)):\n"
 	#include "version.h"
 	/* i think some flags are missing .. */
-		"\nSupported output devices (for --output-device) : "
+		"\nSupported output devices (for --"FIM_OSW_OUTPUT_DEVICE") : "
 	#ifdef FIM_WITH_AALIB
-		" aa"
+		" "FIM_DDN_INN_AA
 	#endif
 	#ifdef FIM_WITH_CACALIB
-		" caca"
+		" "FIM_DDN_INN_CACA
 	#endif
 	#ifdef FIM_WITH_LIBSDL
-		" sdl"
+		" "FIM_DDN_INN_SDL
 	#endif
 #ifndef FIM_WITH_NO_FRAMEBUFFER
-		" fb"
+		" "FIM_DDN_INN_FB
 #endif //#ifndef FIM_WITH_NO_FRAMEBUFFER
 	#if 1
-		" dumb"
+		" "FIM_DDN_INN_DUMB
 	#endif
 		"\n"
 		"\nSupported file formats : "
@@ -341,7 +341,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 			}
                     else
 		    {
-			if(optarg)std::cerr<<"Warning : the --binary option supports 1 or 24 bpp depths. Using 24.\n";
+			if(optarg)std::cerr<<"Warning : the --"FIM_OSW_BINARY" option supports 1 or 24 bpp depths. Using 24.\n";
 		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,24);
                     }
 		    break;
@@ -369,7 +369,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 	#ifndef FIM_WANT_NOSCRIPTING
 		    cc.push_scriptfile(optarg);
 	#else
-		    cout << "sorry, no scripting available!\n";
+		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif
 		    break;
 		case 'S':
@@ -439,7 +439,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		    if(atoi(optarg)>0)
 		    {
 		    	// fixme : still buggy
-		    	fim::string s="steps=";
+		    	fim::string s=FIM_VID_STEPS;
 			s+=fim::string((int)atoi(optarg));
 			s+=";";
 	#ifdef FIM_AUTOCMDS
@@ -467,7 +467,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 #ifdef FIM_READ_STDIN_IMAGE
 		    read_one_file_from_stdin=1;
 #else
-		    FIM_FPRINTF(stderr, "sorry, the reading of images from stdin was disabled at compile time\n");
+		    FIM_FPRINTF(stderr, FIM_EMSG_NO_READ_STDIN_IMAGE);
 #endif
 		    break;
 		case 'm':
@@ -509,8 +509,8 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		    //fim's
 		    cc.setVariable(FIM_VID_SCRIPTOUT_FILE,optarg);
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("start_recording;");
-		    cc.appendPostExecutionCommand("stop_recording");
+		    cc.pre_autocmd_add(FIM_FLT_START_RECORDING";");
+		    cc.appendPostExecutionCommand(FIM_FLT_STOP_RECORDING";");
 	#endif
 
 		    break;
@@ -523,7 +523,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 	#ifndef FIM_WANT_NOSCRIPTING
 		    cc.push_scriptfile(optarg);
 	#else
-		    cout << "sorry, no scripting available!\n";
+		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif
 		    break;
 		case 'p':
@@ -531,7 +531,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 	#ifndef FIM_WANT_NOSCRIPTING
 		    read_one_script_file_from_stdin=1;
 	#else
-		    cout << "sorry, no scripting available!\n";
+		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif
 		    break;
 		case 'D':
@@ -547,10 +547,10 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		case 't':
 		    //fim's
 			#ifdef FIM_WITH_AALIB
-		    	g_fim_output_device="aa";
+		    	g_fim_output_device=FIM_DDN_INN_AA;
 			#else
 			std::cerr << "you should recompile fim with aalib support!\n";
-			g_fim_output_device="dumb";
+			g_fim_output_device=FIM_DDN_INN_DUMB;
 			#endif
 		    break;
 		case 'o':
@@ -647,7 +647,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 				// DANGEROUS TRICK!
 				cc.browser_.set_default_image(stream_image);
 				if(!cc.browser_.cache_.setAndCacheStdinCachedImage(stream_image))
-					std::cerr << "problems caching standard input image!\n";// FIXME
+					std::cerr << FIM_EMSG_CACHING_STDIN;// FIXME
 
 				cc.browser_.push(FIM_STDIN_IMAGE_NAME);
 				//fclose(tfd);	// uncommenting this will cause a segfault (why ? FIXME)
@@ -689,19 +689,19 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		{
 			#ifdef FIM_WITH_LIBSDL
 			/* check to see if we are under X */
-			if( fim_getenv("DISPLAY") )
+			if( fim_getenv(FIM_ENV_DISPLAY) )
 			{
-				g_fim_output_device="sdl";
+				g_fim_output_device=FIM_DDN_INN_SDL;
 			}
 			else
 			#endif
 #ifndef FIM_WITH_NO_FRAMEBUFFER
-			g_fim_output_device="fb";
+			g_fim_output_device=FIM_DDN_INN_FB;
 #else
 	#ifdef FIM_WITH_AALIB
-			g_fim_output_device="aa";
+			g_fim_output_device=FIM_DDN_INN_AA;
 	#else
-			g_fim_output_device="dummy";
+			g_fim_output_device=FIM_DDN_INN_DUMB ;
 	#endif
 #endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
 		}
