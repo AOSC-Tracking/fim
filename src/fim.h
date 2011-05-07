@@ -209,6 +209,7 @@ typedef std::vector<fim::string> args_t;
 #define FIM_SYM_TYPE_FLOAT	'f'
 #define FIM_SYM_TYPE_INT	'i'
 #define FIM_SYM_STRING_CONCAT	'.'
+#define FIM_SYM_DOT_CHAR	'.'
 #define FIM_SYM_SEMICOLON	';'
 #define FIM_SYM_SEMICOLON_STRING	";"
 #define FIM_SYM_ENDL	"\n"
@@ -229,6 +230,12 @@ typedef std::vector<fim::string> args_t;
 #define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
 #define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
 #define FIM_CNS_SCALEFACTOR	 1.322f
+#define FIM_CNS_SCALEFACTOR_ONE 1.0f
+#define FIM_CNS_ANGLE_ONE 1.0f
+#define FIM_CNS_ANGLE_ZERO 0.0f
+#define FIM_CNS_SCALEFACTOR_MULTIPLIER 1.1f
+#define FIM_CNS_SCALEFACTOR_DELTA 0.1f
+#define FIM_CNS_SCALEFACTOR_ZERO 0.0f
 #define FIM_CNS_STEPS_DEFAULT	 	50
 #define FIM_CNS_STEPS_MIN	 1
 #define FIM_CNS_WGROW_STEPS_DEFAULT	 1
@@ -237,8 +244,10 @@ typedef std::vector<fim::string> args_t;
 #define FIM_CNS_EMPTY_STRING	""
 #define FIM_CNS_DEFAULT_IFNAME	FIM_CNS_EMPTY_STRING
 #define FIM_CNS_SLASH_STRING	"/"
+#define FIM_CNS_DIRSEP_STRING	FIM_CNS_SLASH_STRING
 #define FIM_CNS_FP_ZERO		0.0
 #define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
+#define FIM_CNS_ERR_QUIT	0
 
 
 

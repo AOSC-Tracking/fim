@@ -149,7 +149,7 @@ class CommandConsole
 	public:
 	int fim_stdin_;	// the standard input file descriptor
 	private:
-	char prompt_[2];
+	fim_char_t prompt_[2];
 
 #ifndef FIM_WANT_NOSCRIPTING
 	args_t scripts_;		//scripts to execute : FIX ME PRIVATE
@@ -266,7 +266,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string getBoundAction(const fim_key_t c)const;
 	//	void execute(fim::string cmd);
 	fim::string eval(const args_t &args);
-	void exit(int i)const;
+	void exit(int i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
 	fim::string bind(fim_key_t c,fim::string binding);
 	fim::string find_key_for_bound_cmd(fim::string binding);
@@ -280,7 +280,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string scroll_up(const args_t& args);
 	fim::string scroll_down(const args_t& args);
 #endif
-	int quit(int i=0);
+	int quit(int i=FIM_CNS_ERR_QUIT);
 	public:
 
 	fim_bool_t drawOutput(const char*s=NULL)const;

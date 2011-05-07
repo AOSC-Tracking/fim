@@ -225,7 +225,7 @@ namespace fim
 		if(!img_)return true; return ( img_->i.width<=1 || img_->i.height<=1 )?true:false;
 	}
 
-	fim_err_t Image::scale_multiply(double  sm)
+	fim_err_t Image::scale_multiply(fim_scale_t sm)
 	{
 		/*
 		 * current scale_ is multiplied by a factor
@@ -233,7 +233,7 @@ namespace fim
 		if(scale_*sm>0.0)newscale_=scale_*sm;rescale();return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t Image::scale_increment(double ds)
+	fim_err_t Image::scale_increment(fim_scale_t ds)
 	{
 		/*
 		 * current scale_ is multiplied by a factor
@@ -241,7 +241,7 @@ namespace fim
 		if(scale_+ds>0.0)newscale_=scale_+ds;rescale();return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t Image::setscale(double ns)
+	fim_err_t Image::setscale(fim_scale_t ns)
 	{
 		/*
 		 * a new scale_ is set

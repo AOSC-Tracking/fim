@@ -147,6 +147,7 @@ namespace fim
 		}
 		else
 		{
+			// FIXME: shall use a search method/function
 			for(size_t i=0;i<flist_.size();++i)
 				if(flist_[i]==filename)
 					flist_.erase(flist_.begin()+i);
@@ -314,7 +315,7 @@ namespace fim
 		/*
 		 * scales the image by a user specified factor
 		 */
-		double multiscale;
+		fim_scale_t multiscale;
 		if(args.size()==0)goto nop;
 		multiscale=fim_atof(args[0].c_str());
 		if(multiscale==0.0)goto nop;
@@ -338,7 +339,7 @@ nop:
 		/*
 		 * increments the scale positively
 		 */
-		double deltascale;
+		fim_scale_t deltascale;
 		if(args.size()==0)goto nop;
 		deltascale=fim_atof(args[0].c_str());
 		if(deltascale==0.0)goto nop;
@@ -363,7 +364,7 @@ nop:
 		/*
 		 * scales the image to a certain scale factor
 		 */
-		double newscale;
+		fim_scale_t newscale;
 		if(args.size()==0)goto nop;
 		newscale=fim_atof(args[0].c_str());
 		if(newscale==0.0)goto nop;
@@ -771,7 +772,7 @@ nop:
 			return false;
 
 		f+=nf;
-		f+="/";
+		f+=FIM_CNS_DIRSEP_STRING;
 		//are we sure -1 is not paranoid ?
 		while( ( de = readdir(dir) ) != NULL )
 		{
@@ -1194,7 +1195,7 @@ nop:
 		/*
 		 *	ALIAS AND DELETE ME!
 		 */
-		float sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=1.0f)sfm=1.1f;
+		fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)*sfm);
 		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)*sfm);
 		return "";
@@ -1205,7 +1206,7 @@ nop:
 		/*
 		 *	ALIAS AND DELETE ME!
 		 */
-		float sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=1.0f)sfm=1.1f;
+		fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)/sfm);
 		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)/sfm);
 		return "";
@@ -1216,7 +1217,7 @@ nop:
 		/*
 		 *	ALIAS AND DELETE ME!
 		 */
-		float sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=0.0f)sfd=0.1f;
+		fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)+sfd);
 		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)+sfd);
 		return "";
@@ -1227,7 +1228,7 @@ nop:
 		/*
 		 *	ALIAS AND DELETE ME!
 		 */
-		float sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=0.0f)sfd=0.1f;
+		fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)-sfd);
 		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)-sfd);
 		return "";
@@ -1238,10 +1239,10 @@ nop:
 		/*
 		 * rotates the displayed image a specified amount of degrees
 		 */ 
-		double angle;
-		if(args.size()==0)angle=1.0;
+		fim_angle_t angle;
+		if(args.size()==0)angle=FIM_CNS_ANGLE_ONE;
 		else angle=fim_atof(args[0].c_str());
-		if(angle==0.0)return "";
+		if(angle==FIM_CNS_ANGLE_ZERO)return "";
 
 		if(c_image())
 		{
@@ -1254,7 +1255,7 @@ nop:
 			if(c_image())
 			{
 				if(angle)
-					{if(image())image()->rotate((float)angle);}
+					{if(image())image()->rotate(angle);}
 				else	
 					{if(image())image()->rotate();}
 			}
@@ -1273,9 +1274,9 @@ nop:
 		 */ 
 		if(c_image())
 		{
-			float factor;
+			fim_scale_t factor;
 			factor = firstforzero(args);
-			if(!factor) factor = (float)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
+			if(!factor) factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PRESCALE,c);
@@ -1307,9 +1308,9 @@ nop:
 		 */ 
 		if(c_image())
 		{
-			float factor;
+			fim_scale_t factor;
 			factor = firstforzero(args);
-			if(!factor) factor = (float)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
+			if(!factor) factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PRESCALE,c);

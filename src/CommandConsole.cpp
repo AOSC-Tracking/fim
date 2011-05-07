@@ -40,7 +40,7 @@
 #if HAVE_GET_CURRENT_DIR_NAME
 #else
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
-#include <unistd.h>		/* getcwd, as replacement for get_current_dir_name */
+#include <unistd.h>		/* getcwd, as replacement for get_current_dir_name */ /* STDIN_FILENO */
 #endif
 #endif
 
@@ -241,8 +241,8 @@ namespace fim
 		if(args.size()>=3)desc   +=args[2].val_;
 		if(aliases_[args[0].val_].first!="")
 		{
-			aliases_[args[0].val_]=std::pair<fim::string,fim::string>(cmdlist,desc);
 			string r;
+			aliases_[args[0].val_]=std::pair<fim::string,fim::string>(cmdlist,desc);
 			r+=fim::string(FIM_FLT_ALIAS" ");
 			r+=args[0].val_;
 			r+=fim::string(" successfully replaced.\n");
@@ -250,9 +250,9 @@ namespace fim
 		}
 		else
 		{
+			string r;
 			aliases_[args[0].val_].first=cmdlist;
 			aliases_[args[0].val_].second=desc;
-			string r;
 			r+=fim::string(FIM_FLT_ALIAS" ");
 			r+=args[0].val_;
 			r+=fim::string(" successfully added.\n");
@@ -289,7 +289,7 @@ namespace fim
 	,dont_record_last_action_(false)		/* this variable is only useful in record mode */
 	,recordMode_(false)			/* we start not recording anything */
 #endif
-	,fim_stdin_(0)
+	,fim_stdin_(STDIN_FILENO)
 	,cycles_(0)
 	,show_must_go_on_(1)
 	{
