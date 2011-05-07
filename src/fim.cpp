@@ -80,7 +80,7 @@ struct fim_options_t{
  */
 struct fim_options_t fim_options[] = {
     {"version",    no_argument,       NULL, 'V',"print program version",NULL},
-    {"help",       optional_argument,       NULL, 'h',"print short (or long) program invocation help","[=s|l]"},
+    {"help",       optional_argument,       NULL, 'h',"print short (or descriptive, or long) program invocation help","[=s|d|l]"},
     {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}"},
     {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}"},
     {FIM_OSW_BINARY,     optional_argument,       NULL, 'b',"view any file as either a 1 or 24 bpp bitmap","[=24|1]"},
@@ -101,9 +101,9 @@ struct fim_options_t fim_options[] = {
 /*    {"list",       required_argument, NULL, 'l',"",NULL},*/
     {"vt",         required_argument, NULL, 'T',"specify a virtual terminal for the framebufer","{terminal}"},
 //    {"backup",     no_argument,       NULL, 'b',"",NULL},	/* fbi's */
-    {"execute-script",   required_argument,       NULL, 'E',"execute {scriptfile} after initialization","{scriptfile}"},
-    {"execute-commands", required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}"},
-    {"final-commands",   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}"},
+    {FIM_OSW_EXECUTE_SCRIPT,   required_argument,       NULL, 'E',"execute {scriptfile} after initialization","{scriptfile}"},
+    {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}"},
+    {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}"},
 //    {"debug",      no_argument,       NULL, 'D',"",NULL},
     {"no-rc-file",      no_argument,       NULL, 'N',"do not read any configuration file at startup",NULL},
     {"dump-default-fimrc",      no_argument,       NULL, 'D',"dump on standard output the embedded configuration",NULL},
@@ -116,9 +116,9 @@ struct fim_options_t fim_options[] = {
     {"image-from-stdin",      no_argument,       NULL, 'i',"read an image file from standard input",""},
 #endif
 //    {"preserve",   no_argument,       NULL, 'p',"",NULL},	/* fbi's */
-    {"script-from-stdin",      no_argument,       NULL, 'p',"read commands from standard input",NULL},
+    {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL},
     {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check",NULL},	/* NEW */
-    {"write-scriptout",      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}"},
+    {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}"},
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}"},/* NEW */
     {FIM_OSW_OUTPUT_DEVICE,      required_argument,       NULL, 'o',"specify using a specific output driver (if supported)","[fb|sdl|aa|dumb]"},
     {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0xd15cbab3,"dump reference info","[=man]"},
@@ -248,12 +248,12 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		default:
 		;
 		};
-		std::cout << "\t\t " << fim_options[i].desc;
+		if(helparg&&*helparg=='d')std::cout << "\t\t " << fim_options[i].desc;
 		std::cout << FIM_SYM_ENDL;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 		}
 		std::cout << "\n Please read the documentation distributed with the program, in FIM.TXT.\n"
-			  << " For further help, consult the online help in fim (:help), and man fim (1).\n"
+			  << " For further help, consult the online help in fim (:help), and man fim (1), fimrc (1).\n"
 			  << " For bug reporting please read the BUGS file.\n";
 	    std::exit(code);
 	    return code;
@@ -274,6 +274,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 	// 	int              timeout = -1;	// fbi's
 		int              opt_index = 0;
 		int              i;
+		int		 want_random_shuffle=0;
 	#ifdef FIM_READ_STDIN
 		int              read_file_list_from_stdin;
 		read_file_list_from_stdin=0;
@@ -455,8 +456,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		case 'u':
 		    //FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 		    //fim's
-		    cc.appendPostInitCommand(FIM_FLT_RANDOM_SHUFFLE);
-		    appendedPostInitCommand=true;
+		    want_random_shuffle=1;
 		    break;
 		case 'd':
 		    //fbi's
@@ -668,6 +668,8 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 			ndd=dup(2);
 		}
 	#endif
+		if(want_random_shuffle)
+			cc.browser_._random_shuffle();
 
 		if(ndd==-1)
 			fim_perror(NULL);

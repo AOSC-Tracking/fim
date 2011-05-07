@@ -193,6 +193,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  * Fim Symbols
  * */
 #define FIM_SYM_CONSOLE_KEY	':'
+#define FIM_SYM_CONSOLE_KEY_STR	":"
 #define FIM_SYM_SEARCH_KEY	'/'
 #define FIM_SYM_NAMESPACE_SEP	':'
 #define FIM_SYM_NULL_NAMESPACE_CHAR	'\0'
@@ -242,6 +243,11 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  * */
 #define FIM_OSW_OUTPUT_DEVICE	"output-device"
 #define FIM_OSW_BINARY	"binary"
+#define FIM_OSW_EXECUTE_COMMANDS	"execute-commands"
+#define FIM_OSW_EXECUTE_SCRIPT	"execute-script"
+#define FIM_OSW_FINAL_COMMANDS	"final-commands"
+#define FIM_OSW_SCRIPT_FROM_STDIN	"script-from-stdin"
+#define FIM_OSW_DUMP_SCRIPTOUT "write-scriptout"
 
 /*
  * Fim Constants
@@ -574,6 +580,7 @@ namespace fim
 #define FIM_FBI_PPM_LINEBUFSIZE 	(1024)
 #define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
 #define FIM_LINUX_STDIN_FILE "/dev/stdin"
+#define FIM_LINUX_STDOUT_FILE "/dev/stdout"
 #define FIM_LINUX_RAND_FILE "/dev/urandom"
 #define FIM_FBDEV_FILE_MAX_CHARS 16
 
