@@ -168,6 +168,7 @@ class Browser
 	bool push(fim::string nf);
 
 	fim::string display();
+	fim::string _random_shuffle();
 	private:
 	fim::string loadCurrentImage();
 	fim::string reload();
@@ -176,7 +177,6 @@ class Browser
 	int n_files()const;
 	const fim::string n()const;
 	fim::string _sort();
-	fim::string _random_shuffle();
 	fim::string _reverse();
 	fim::string next(int n);
 	fim::string do_next(int n);

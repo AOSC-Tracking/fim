@@ -10,9 +10,17 @@ fimrc - \fB fim \fP configuration file and language reference
 .fi
 .B /etc/fimrc
 .fi
-.B fim -p [ options ] < fim_script_file_name
+.B fim --script-from-stdin [ options ] < {scriptfile}
+.fi
+.B fim --execute-script {scriptfile} [ options ]
 .fi
 .B fim --execute-commands {commands} [ options ]
+.fi
+.B fim --final-commands {commands} [ options ]
+.fi
+.B fim --write-scriptout {scriptfile} [ options ]  
+.fi
+.B fim --write-scriptout /dev/stdout [ options ]
 .fi
 
 .SH DESCRIPTION
@@ -20,13 +28,15 @@ This page explains the
 .B fim
 language, which is used for the 
 .B fimrc
-configuration files, scripts, or commands passed via command line options.
+configuration files, {scriptfile}s, or {commands} passed via command line options.
+This language can be used to issue commands from the internal program command line accessed interactively through the : key.
 
 
 .SH FIM LANGUAGE
 Incomplete section.
 
 .SH COMMANDS REFERENCE
+Incomplete section.
 
 .B
 prefetch
@@ -377,6 +387,7 @@ clear
 clears the virtual console
 .fi
 .SH VARIABLES REFERENCE
+Incomplete section.
 
 .B
 FIM_DEFAULT_CONFIG_FILE_CONTENTS

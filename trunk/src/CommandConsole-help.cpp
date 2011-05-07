@@ -29,15 +29,35 @@ namespace fim
 		 * returns the reference of registered functions
 		 */
 		fim::string s;
-		/*variables_t::const_iterator vi;
-		for( vi=variables_.begin();vi!=variables_.end();++vi)
-		{
-			s+=vi->first;
-			s+=" : ";
-			s+=Var::var_help_db_query(vi->first);
-			s+="\n";
-		}*/
+		fim::string sep=" ";
 		s+= Var::get_variables_reference(refmode);
+
+		// FIXME: shall fix the following to work
+#if 0
+#ifdef FIM_NAMESPACES
+		s+=browser_.get_variables_list();
+		s+=sep;
+		if(browser_.c_image())
+		{
+			s+=browser_.c_image()->get_variables_list();
+			s+=sep;
+		}
+#endif
+#endif
+#if 0
+#ifdef FIM_WINDOWS
+		if(window_)
+		{
+			s+=window_->get_variables_list();
+			s+=sep;
+		}
+		if(current_viewport())
+		{
+			s+=current_viewport()->get_variables_list();
+			s+=sep;
+		}
+#endif
+#endif
 		// FIXME: incomplete
 		return s;
 	}
@@ -98,19 +118,29 @@ manmode:
 			string("fimrc - \\fB fim \\fP configuration file and language reference\n")+
 			string("\n")+
 			string(".SH SYNOPSIS\n")+
-			string(".B ~/fimrc\n.fi\n.B /etc/fimrc\n.fi\n.B fim -p [ options ] < fim_script_file_name\n.fi\n.B fim --execute-commands {commands} [ options ]\n.fi\n")+
+			string(".B ~/fimrc\n.fi\n")+
+			string(".B /etc/fimrc\n.fi\n")+
+			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [ options ] < {scriptfile}\n.fi\n")+
+			string(".B fim --"FIM_OSW_EXECUTE_SCRIPT" {scriptfile} [ options ]\n.fi\n")+
+			string(".B fim --"FIM_OSW_EXECUTE_COMMANDS" {commands} [ options ]\n.fi\n")+
+			string(".B fim --"FIM_OSW_FINAL_COMMANDS" {commands} [ options ]\n.fi\n")+
+			string(".B fim --"FIM_OSW_DUMP_SCRIPTOUT" {scriptfile} [ options ]  \n.fi\n")+
+			string(".B fim --"FIM_OSW_DUMP_SCRIPTOUT" "FIM_LINUX_STDOUT_FILE" [ options ]\n.fi\n")+
 			string("\n")+
 			string(".SH DESCRIPTION\n")+
-			string("This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, scripts, or commands passed via command line options.\n")+
+			string("This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line options.\n")+
+			string("This language can be used to issue commands from the internal program command line accessed interactively through the "FIM_SYM_CONSOLE_KEY_STR" key.\n")+
 			string("\n")+
 			string("\n")+
 			string(".SH FIM LANGUAGE\n")+
 			string("Incomplete section.\n")+
 			string("\n")+
 			string(".SH COMMANDS REFERENCE\n")+
+			string("Incomplete section.\n")+
 			string("\n")+
 			get_commands_reference(refmode)+
 			string(".SH VARIABLES REFERENCE\n")+
+			string("Incomplete section.\n")+
 			string("\n")+
 		       	get_variables_reference(refmode)+
 			string(".SH EXAMPLES\n")+

@@ -165,6 +165,9 @@ Use (con2fb (1)) to map a terminal to a framebuffer device.
 .\" environment variable is used as default.  If unset, fim will
 .\" fallback to 10x20 (X11) / lat1u-16.psf (console).
 .TP
+.B -u, --random
+randomly shuffle the files list before browsing.
+.TP
 .B -v, --verbose
 be verbose: show status bar.
 .TP
@@ -340,7 +343,7 @@ work.
 .B
 find /mnt/media/ -name *.jpg | shuf | fim -
 .fi
-# will make fim read the file list from standard input, randomly permuted.
+# will make fim read the file list from standard input, randomly shuffled.
 .P
 .P
 
