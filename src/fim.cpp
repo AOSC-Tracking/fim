@@ -64,6 +64,7 @@ struct fim_options_t{
   int val;
   const char *desc;/* this is fim specific */
   const char *optdesc;/* this is fim specific */
+  const char *mandesc;/* this is fim specific */
 };
 
 /*
@@ -71,41 +72,127 @@ struct fim_options_t{
  * This structure keeps hold of Fim's options flags.
  */
 struct fim_options_t fim_options[] = {
-    {"autozoom",   no_argument,       NULL, 'a',"scale according to a best fit",NULL},
-    {FIM_OSW_BINARY,     optional_argument,       NULL, 'b',"view any file as either a 1 or 24 bpp bitmap","[=24|1]"},
-    {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}"},
-    {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}"},
-    {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0xd15cbab3,"dump reference info","[=man]"},
-    {"dump-default-fimrc",      no_argument,       NULL, 'D',"dump on standard output the embedded configuration",NULL},
-    {FIM_OSW_EXECUTE_SCRIPT,   required_argument,       NULL, 'E',"execute {scriptfile} after initialization","{scriptfile}"},
-    {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read (experimental)","{fimrc}"},
-    {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}"},
-    {"help",       optional_argument,       NULL, 'h',"print short (or descriptive, or long, or complete man) program invocation help","[=s|d|l|m]"},
+    {"autozoom",   no_argument,       NULL, 'a',"scale according to a best fit",NULL,
+"Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)"
+    },
+    {FIM_OSW_BINARY,     optional_argument,       NULL, 'b',"view any file as either a 1 or 24 bpp bitmap","[=24|1]",
+"Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.\n" 
+"Will pad with zeros.\n"
+"Regard this as a toy..\n"
+    },
+    {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}",
+"The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
+"Please note that if your commands are more complicated than a simple 'next' or 'pornview'\n"
+"command, they must be quoted and escaped in a manner suitable for your shell!!\n"
+"\n"
+"For example,\n"
+"-c '*2;2pan_up;display;while(1){bottom_align;sleep \"1\" ; top_align}'\n"
+"\n"
+"(with the single quotes) will tell fim to first double the displayed image \n"
+"size, then pan two times up, then display the image ; and then \n"
+"do an endless loop consisting of bottom and top aligning, alternated.\n"
+    },
+    {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}",
+"framebuffer device to use.  Default is the one your vc is mapped to (as in fbi)."
+    },
+    {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0xd15cbab3,"dump reference info","[=man]",
+"Will dump to stdout the language reference help."
+    },
+    {"dump-default-fimrc",      no_argument,       NULL, 'D',"dump on standard output the embedded configuration",NULL,
+"The default fimrc file (the one hardcoded in the fim executable) is dumped on standard output and fim exits."
+    },
+    {FIM_OSW_EXECUTE_SCRIPT,   required_argument,       NULL, 'E',"execute {scriptfile} after initialization","{scriptfile}",
+"The \\fBscriptfile\\fP will be executed right after the default initialization file is executed."
+    },
+    {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read (experimental)","{fimrc}",
+"The /etc/fimrc file will be executed prior to any other configuration file.\n"
+"If not specified, it is *ignored*."
+    },
+    {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}",
+"The \\fBcommands\\fP string will be executed after exiting the interactive loop of the program (right before terminating the program)."
+    },
+    {"help",       optional_argument,       NULL, 'h',"print short (or descriptive, or long, or complete man) program invocation help","[=s|d|l|m]",
+"display help and terminate the program."
+    },
 #ifdef FIM_READ_STDIN_IMAGE
-    {FIM_OSW_IMAGE_FROM_STDIN,      no_argument,       NULL, 'i',"read an image file from standard input",NULL},
+    {FIM_OSW_IMAGE_FROM_STDIN,      no_argument,       NULL, 'i',"read an image file from standard input",NULL,
+"Will read one single image from the standard input (yes: the image, not the filename).  May not work with all supported file formats."
+    },
 #endif
-    {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}"},
-    {"no-rc-file",      no_argument,       NULL, 'N',"do not read any configuration file at startup",NULL},
-    {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL},
-    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       NULL, 'o',"specify using a specific output driver (if supported)","[fb|sdl|aa|dumb]"},
-    {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}"},/* NEW */
-    {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document",NULL},
-    {"scroll",     required_argument, NULL, 's',"set scroll value (in pixels)","{value}"},
-    {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check",NULL},	/* NEW */
-    {"no-framebuffer",      no_argument,       NULL, 't',"display images in text mode (as -o aa)",NULL},
-    {"vt",         required_argument, NULL, 'T',"specify a virtual terminal for the framebufer","{terminal}"},
-    {"random",     no_argument,       NULL, 'u',"randomize images order",NULL},
-    {"verbose",    no_argument,       NULL, 'v',"verbose mode",NULL},
-    {"version",    no_argument,       NULL, 'V',"print program version",NULL},
-    {"autowidth",   no_argument,       NULL, 'w',"scale according to width",NULL},
-    {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}"},
+    {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}",
+"name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
+    },
+    {"no-rc-file",      no_argument,       NULL, 'N',"do not read any configuration file at startup",NULL,
+"No initialization file will be read (default is ~/.fimrc) at startup."
+    },
+    {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
+"Will read commands from stdin prior to entering in interactive mode."
+    },
+    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       NULL, 'o',"specify using a specific output driver (if supported)","[fb|sdl|aa|dumb]",
+"Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks."
+"The available devices depend on the original configuration/compilation options, so you should\n"
+"get the list of available output devices issuing \\fBfim --version\\fP.\n"
+"It will probably be a subset  of {\\fBsdl\\fP, \\fBfb\\fP, \\fBaa\\fP, \\fBcaca\\fP, \\fBdumb\\fP}."
+    },
+    {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
+"Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems)."
+    },/* NEW */
+    {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document",NULL,
+"Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
+    },
+    {"scroll",     required_argument, NULL, 's',"set scroll value (in pixels)","{value}",
+"set scroll steps in pixels (default is 50)."
+    },
+    {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check",NULL,
+"a quick sanity check before starting fim."
+    },	/* NEW */
+    {"no-framebuffer",      no_argument,       NULL, 't',"display images in text mode (as -o aa)",NULL,
+"Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).\n"
+"If aalib was not enabled at tompile time, fim will work without displaying images at all."
+    },
+    {"vt",         required_argument, NULL, 'T',"specify a virtual terminal for the framebufer","{terminal}",
+"The \\fBterminal\\fP will be used as virtual terminal device file (as in fbi).\n"
+"See (chvt (1)), (openvt (1)) for more info about this.\n"
+"Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
+    },
+    {"random",     no_argument,       NULL, 'u',"randomize images order",NULL,
+"randomly shuffle the files list before browsing."
+    },
+    {"verbose",    no_argument,       NULL, 'v',"verbose mode",NULL,
+"be verbose: show status bar."
+    },
+    {"version",    no_argument,       NULL, 'V',"print program version",NULL,
+"display version and compile flags, and then terminate."
+    },
+    {"autowidth",   no_argument,       NULL, 'w',"scale according to width",NULL,
+"Will adapt the image size to the screen size."
+    },
+    {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}",
+"All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
+    },
 #ifdef FIM_READ_STDIN
-    {"read-from-stdin",      no_argument,       NULL, '-',"read an image list from standard input",NULL},
+    {"read-from-stdin",      no_argument,       NULL, '-',"read an image list from standard input",NULL,
+"Reads file list from stdin.\n"
+"\n"
+"Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.\n"
+"\n"
+"See the section\n"
+".B EXAMPLES\n"
+"below to read some useful (and unique) ways of employing fim.\n"
+    },
 #endif
-    {"autotop",   no_argument,       NULL, 'A',"align images to the top (UNFINISHED)",NULL},
-    {"gamma",      required_argument, NULL, 'g',"set gamma (UNFINISHED)","{gamma}"},
-    {"quiet",      no_argument,       NULL, 'q',"quiet mode (UNFINISHED)",NULL},
-    {"resolution", required_argument, NULL, 'r',"set resolution (UNFINISHED)","{resolution}"},
+    {"autotop",   no_argument,       NULL, 'A',"align images to the top (UNFINISHED)",NULL,
+	    NULL
+    },
+//    {"gamma",      required_argument, NULL, 'g',"set gamma (UNFINISHED)","{gamma}",
+//" gamma correction.  Can also be put into the FBGAMMA environment variable.  Default is 1.0.  Requires Pseudocolor or Directcolor visual, doesn't work for Truecolor."
+//    },
+    {"quiet",      no_argument,       NULL, 'q',"quiet mode (UNFINISHED)",NULL,
+	    NULL
+    },
+    {"resolution", required_argument, NULL, 'r',"set resolution (UNFINISHED)","{resolution}",
+	    NULL
+    },
 /*    {"timeout",    required_argument, NULL, 't',"",NULL},*/  /* timeout value */	/* fbi's */
 /*    {"once",       no_argument,       NULL, '1',"",NULL},*/  /* loop only once */
 /*    {"font",       required_argument, NULL, 'f',"",NULL},*/  /* font */
@@ -121,6 +208,62 @@ struct fim_options_t fim_options[] = {
 //    {"comments",   no_argument,       &comments, 1 },
     {0,0,0,0,0,0}
 };
+
+#if 0
+// leftovers from the old man file; shall adapt these using .\"
+ .TP
+ .B -f font
+ Set font.  This can be either a pcf console font file or a X11 font
+ spec.  Using X11 fonts requires a font server (The one specified in
+ the environment variable FONTSERVER or on localhost).  The FBFONT
+ environment variable is used as default.  If unset, fim will
+ fallback to 10x20 (X11) / lat1u-16.psf (console).
+ .TP
+ .B --autoup
+ Like autozoom, but scale up only.
+ .TP
+ .B --autodown
+ Like autozoom, but scale down only.
+ .TP
+ .B -u
+ Randomize the order of the filenames.
+ .TP
+ .B -e
+ Enable editing commands.
+ .TP
+ .B -b
+ create backup files (when editing images).
+ .TP
+ .B -p
+ preserve timestamps (when editing images).
+ .TP
+ .B --comments
+ Display comment tags (if present) instead of the filename.  Probaby
+ only useful if you added reasonable comments yourself (using wrjpgcom
+ for example), otherwise you likely just find texts pointing to the
+ software which created the image.
+ P               pause the slideshow (if started with -t, toggle)
+ {number}g    jump to image {number}
+ .SH EDIT IMAGE
+ fim also provides some very basic image editing facilities.  You have
+ to start fim with the -e switch to use them.
+ .P
+ .nf
+ Shift+D         delete image
+ R               rotate 90° clockwise
+ L               rotate 90° counter-clock wise
+ .fi
+ .P
+ The delete function actually wants a capital letter 'D', thus you have
+ to type Shift+D.  This is done to avoid deleting images by mistake
+ because there are no safety bells:  If you ask fim to delete the image,
+ it will be deleted without questions asked.
+ .P
+ The rotate function actually works for JPEG images only because it
+ calls the jpegtran command to perform a lossless rotation if the image.
+ It is especially useful if you review the images of your digital
+ camera.
+#endif
 
 const int fim_options_count=sizeof(fim_options)/sizeof(fim_options_t);
 struct option options[fim_options_count];
@@ -252,9 +395,20 @@ string fim_dump_man_page_snippets()
 	}
 	for(size_t i=0;i<fim_options_count-1;++i)
 	{	
-		if(isascii(fim_options[i].val)){
-	   	if((fim_options[i].val)!='-')ms+=slol,ms+="-",ms+=string((char)(fim_options[i].val)),ms+=",";
-	   	else ms+=slol,ms+=" -, ";}else ms+=".TP\n.B \t";
+		if(isascii(fim_options[i].val))
+		{
+	   		if((fim_options[i].val)!='-')
+			{
+				ms+=slol,ms+="-",ms+=string((char)(fim_options[i].val));
+				if(fim_options[i].has_arg==required_argument)
+				{
+					if(fim_options[i].optdesc) ms+=" ",ms+=fim_options[i].optdesc;
+				}
+				ms+=",";
+			}
+	 	  	else ms+=slol,ms+=" -, ";
+		}
+		else ms+=".TP\n.B \t";
 		ms+=slob;
 		ms+=fim_options[i].name ;
 		switch(fim_options[i].has_arg){
@@ -265,14 +419,24 @@ string fim_dump_man_page_snippets()
 		if(fim_options[i].optdesc) ms+=" ",ms+=fim_options[i].optdesc; else ms+=" <arg>";
 		break;
 		case optional_argument:
-		if(fim_options[i].optdesc) ms+=" ",ms+=fim_options[i].optdesc; else ms+="[=arg]";
+		if(fim_options[i].optdesc) ms+=fim_options[i].optdesc; else ms+="[=arg]";
 		break;
 		default:
 		;
 		};
 		ms+=slom;
 		if(helparg&&*helparg=='d')ms+="\t\t ",ms+=fim_options[i].desc;
-		if(helparg&&*helparg=='m')ms+="\t\t ",ms+=fim_options[i].desc;
+		if(helparg&&*helparg=='m')
+		{
+			if(fim_options[i].mandesc)
+				ms+=fim_options[i].mandesc;
+			else
+			{
+				ms+="\t\t ";
+				if(fim_options[i].desc)
+					ms+=fim_options[i].desc;
+			}
+		}
 		//if(helparg||*helparg!='m') ms+=FIM_SYM_ENDL;
 		ms+=sloe;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
@@ -285,11 +449,11 @@ int fim_dump_man_page()
 {
 	string mp=
 			string(".\\\"\n")+
-			string(".\\\" $Id$\n")+
+			string(".\\\" $Id""$\n")+
 			string(".\\\"\n")+
 			string(".TH fim 1 \"(c) 2007-2011 Michele Martone\"\n")+
 			string(".SH NAME\n")+
-			string("fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved \n")+
+			string("fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n")+
 			string(".SH SYNOPSIS\n")+
 			string(".B fim [{options}] [--] {imagefile} [{imagefiles}]\n.fi\n")+
 			string(".B ... | fim [{options}] [--] [{imagefiles}] -\n.fi\n")+
@@ -298,9 +462,9 @@ int fim_dump_man_page()
 			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [{options}] < {scriptfile}\n.fi\n")+
 			string("\n")+
 			string(".SH DESCRIPTION\n")+
-			string(".B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.  For 'xcf' (Gimp's) images, fim will try to use 'xcftopnm'.  For '.fig' vectorial images, fim will try to use 'fig2dev'.  For '.dia' vectorial images, fim will try to use 'dia'.  For '.svg' vectorial images, fim will try to use 'inkscape'.  For other formats fim will try to use ImageMagick's 'convert'.\n")+
+			string(".B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use 'xcftopnm'.\nFor '.fig' vectorial images, fim will try to use 'fig2dev'.\nFor '.dia' vectorial images, fim will try to use 'dia'.\nFor '.svg' vectorial images, fim will try to use 'inkscape'.\nFor other formats fim will try to use ImageMagick's 'convert'.\n")+
 			string("\n")+
-			string("Please note that the full documentation of \n.B fim\nis in the FIM.TXT file distributed in the source package.  This man page only describes the .B fim command line switches.\n")+
+			string("Please note that the full documentation of \n.B fim\nis in the FIM.TXT file distributed in the source package.  This man page only describes the\n.B fim\ncommand line switches.\n")+
 			string(".SH OPTIONS\n");
 			mp+=fim_dump_man_page_snippets();
 			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
