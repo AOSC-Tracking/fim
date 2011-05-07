@@ -2,7 +2,7 @@
 /*
  FbiStuffTiff.cpp : fbi functions for TIFF files, modified for fim
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -148,7 +148,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
 }
 
 static void
-tiff_read(unsigned char *dst, unsigned int line, void *data)
+tiff_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct tiff_state *h = (struct tiff_state *) data;
     int s,on,off;
@@ -235,8 +235,8 @@ static struct ida_loader tiff2_loader = {
 
 static void __init init_rd(void)
 {
-    load_register(&tiff1_loader);
-    load_register(&tiff2_loader);
+    fim_load_register(&tiff1_loader);
+    fim_load_register(&tiff2_loader);
 }
 
 #ifdef USE_X11
@@ -288,7 +288,7 @@ static struct ida_writer tiff_writer = {
 
 static void __init init_wr(void)
 {
-    write_register(&tiff_writer);
+    fim_write_register(&tiff_writer);
 }
 
 #endif

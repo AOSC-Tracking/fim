@@ -138,6 +138,7 @@ namespace fim
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
 	typedef std::map<fim::string,fim_key_t > key_bindings_t;	//symbol->code
 	typedef char fim_char_t;	/* a type for chars */
+	typedef unsigned char fim_byte_t;	/* a type for bytes */
 
 	void status(const char *desc, const char *info);
 

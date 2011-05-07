@@ -1118,19 +1118,19 @@ void FramebufferDevice::cleanup(void)
     //close(tty_);
 }
 
-unsigned char * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror)/*dez's mirror patch*/
+unsigned char * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror)/*dez's mirror patch*/
 {
-    unsigned char  *ptr  = (unsigned char *)dest;
+    unsigned char  *ptr  = (unsigned char *)dst;
 	dither_line(buffer, ptr, line, owidth, mirror);
 	ptr += owidth;
 	return ptr;
 }
 
-unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror)/*dez's mirror patch*/
+unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror)/*dez's mirror patch*/
 {
-    unsigned char  *ptr  = (unsigned char *)dest;
-    unsigned short *ptr2 = (unsigned short*)dest;
-    unsigned long  *ptr4 = (unsigned long *)dest;
+    unsigned char  *ptr  = (unsigned char *)dst;
+    unsigned short *ptr2 = (unsigned short*)dst;
+    unsigned long  *ptr4 = (unsigned long *)dst;
     int x;
     int xm;/*mirror patch*/
 
@@ -1262,16 +1262,16 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
 }
 
 /*dez's*/
-/*unsigned char * FramebufferDevice::clear_lines(int bpp, int lines, int owidth, char unsigned *dest)
+/*unsigned char * FramebufferDevice::clear_lines(int bpp, int lines, int owidth, char unsigned *dst)
 {
 
 }*/
 
-unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, char unsigned *dest)
+unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, char unsigned *dst)
 {
-    unsigned char  *ptr  = (unsigned char*)dest;
-    unsigned short *ptr2 = (unsigned short*)dest;
-    unsigned long  *ptr4 = (unsigned long*)dest;
+    unsigned char  *ptr  = (unsigned char*)dst;
+    unsigned short *ptr2 = (unsigned short*)dst;
+    unsigned long  *ptr4 = (unsigned long*)dst;
     unsigned ZERO_BYTE=0x00;
 #ifdef FIM_IS_SLOWER_THAN_FBI
     int x;
@@ -1409,7 +1409,7 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
     }
 }
 
-void inline FramebufferDevice::dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror)
+void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int mirror)
 {
     register long   a, b
 #ifndef FIM_IS_SLOWER_THAN_FBI
@@ -1422,7 +1422,7 @@ void inline FramebufferDevice::dither_line(unsigned char *src, unsigned char *de
     ymod = (long int*) DM[y & DITHER_MASK];
     /*	mirror patch by dez	*/
     register const int inc=mirror?-1:1;
-    dest=mirror?dest+width-1:dest;
+    dst=mirror?dst+width-1:dst;
     /*	mirror patch by dez	*/
     if(FIM_UNLIKELY(width<1))goto nodither; //who knows
 
@@ -1453,9 +1453,9 @@ void inline FramebufferDevice::dither_line(unsigned char *src, unsigned char *de
 	b += a; \
 	a = red_dither_[*(src++)]; \
 	a >>= (ymod[xmod] < a)?8:0; \
-	*(dest) = b+a & 0xff; \
+	*(dst) = b+a & 0xff; \
     /*	mirror patch by dez	*/ \
-	dest+=inc;
+	dst+=inc;
 
 #else
  #define DITHER_CORE \
@@ -1477,11 +1477,11 @@ void inline FramebufferDevice::dither_line(unsigned char *src, unsigned char *de
 	if (ymod_xmod < a) \
 	    a >>= 8; \
 	b += a; \
-	*(dest) = b & 0xff; \
+	*(dst) = b & 0xff; \
     /*	mirror patch by dez	*/ \
-	dest+=inc; \
+	dst+=inc; \
 	} \
-	/*	*(dest++) = b & 0xff;*/ 
+	/*	*(dst++) = b & 0xff;*/ 
 #endif
 
 #ifndef FIM_IS_SLOWER_THAN_FBI
@@ -1506,7 +1506,7 @@ dither1:
 nodither:
 	return;
 }
-void FramebufferDevice::dither_line_gray(unsigned char *src, unsigned char *dest, int y, int width)
+void FramebufferDevice::dither_line_gray(fim_byte_t *src, fim_byte_t *dst, int y, int width)
 {
     long           *ymod, xmod;
     register long   a;
@@ -1520,7 +1520,7 @@ void FramebufferDevice::dither_line_gray(unsigned char *src, unsigned char *dest
 	if (ymod[xmod] < a)
 	    a >>= 8;
 
-	*(dest++) = a & 0xff;
+	*(dst++) = a & 0xff;
     }
 }
 void FramebufferDevice::fb_switch_release()

@@ -421,7 +421,7 @@ std::cerr << "OOPS: problems decoding "<< filename <<"...\n";
 }
 
 static void
-jpeg_read(unsigned char *dst, unsigned int line, void *data)
+jpeg_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct jpeg_state *h = (struct jpeg_state*)data;
     JSAMPROW row = dst;
@@ -455,7 +455,7 @@ static struct ida_loader jpeg_loader = {
 
 static void __init init_rd(void)
 {
-    load_register(&jpeg_loader);
+    fim_load_register(&jpeg_loader);
 }
 
 #ifdef USE_X11
@@ -540,7 +540,7 @@ struct ida_writer jpeg_writer = {
 
 static void __init init_wr(void)
 {
-    write_register(&jpeg_writer);
+    fim_write_register(&jpeg_writer);
 }
 
 

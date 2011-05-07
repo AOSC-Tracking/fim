@@ -147,7 +147,7 @@ err:
 }
 
 static void
-djvu_read(unsigned char *dst, unsigned int line, void *data)
+djvu_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     	struct djvu_state_t *ds = (struct djvu_state_t*)data;
 
@@ -200,7 +200,7 @@ static struct ida_loader djvu_loader = {
 
 static void __init init_rd(void)
 {
-    load_register(&djvu_loader);
+    fim_load_register(&djvu_loader);
 }
 
 }

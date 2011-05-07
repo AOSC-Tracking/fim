@@ -83,7 +83,7 @@ struct ida_loader {
     const char  *name;
     void* (*init)(FILE *fp, char *filename, unsigned int page,
 		  struct ida_image_info *i, int thumbnail);
-    void  (*read)(unsigned char *dst, unsigned int line, void *data);
+    void  (*read)(fim_byte_t *dst, unsigned int line, void *data);
     void  (*done)(void *data);
     struct list_head list;
 };
@@ -94,7 +94,7 @@ struct ida_op {
     void* (*init)(struct ida_image *src, struct ida_rect *rect,
 		  struct ida_image_info *i, void *parm);
     void  (*work)(struct ida_image *src, struct ida_rect *rect,
-		  unsigned char *dst, int line,
+		  fim_byte_t *dst, int line,
 		  void *data);
     void  (*done)(void *data);
 };
@@ -125,13 +125,13 @@ struct ida_writer {
 /* ----------------------------------------------------------------------- */
 
 /* helpers */
-void load_bits_lsb(unsigned char *dst, unsigned char *src, int width,
+void load_bits_lsb(fim_byte_t *dst, fim_byte_t *src, int width,
 		   int on, int off);
-void load_bits_msb(unsigned char *dst, unsigned char *src, int width,
+void load_bits_msb(fim_byte_t *dst, fim_byte_t *src, int width,
 		   int on, int off);
-void load_gray(unsigned char *dst, unsigned char *src, int width);
-void load_graya(unsigned char *dst, unsigned char *src, int width);
-void load_rgba(unsigned char *dst, unsigned char *src, int width);
+void load_gray(fim_byte_t *dst, fim_byte_t *src, int width);
+void load_graya(fim_byte_t *dst, fim_byte_t *src, int width);
+void load_rgba(fim_byte_t *dst, fim_byte_t *src, int width);
 
 int load_add_extra(struct ida_image_info *info, enum ida_extype type,
 		   unsigned char *data, unsigned int size);
@@ -155,8 +155,8 @@ extern struct ida_writer jpeg_writer;
 extern struct list_head loaders;
 extern struct list_head writers;
 
-void load_register(struct ida_loader *loader);
-void write_register(struct ida_writer *writer);
+void fim_load_register(struct ida_loader *loader);
+void fim_write_register(struct ida_writer *writer);
 
 }
 #endif

@@ -19,14 +19,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-/*
- * This file contains mainly the code that couldn't fit in any of the existing classes.
- * When the fbi->fim transition will be complete, it will be probably very very small, 
- * as then all lone functions will be encapsulated.
- *
- * p.s.: it will be also _much_ cleaner ...
- * */
-
 #include "fim.h"
 #include <signal.h>
 #include <getopt.h>
@@ -263,10 +255,10 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 	public:
 	int main(int argc,char *argv[])
 	{
-		char *default_fbdev=NULL,*default_fbmode=NULL;
-		int default_vt=-1;
+		//char *default_fbdev=NULL,*default_fbmode=NULL;
+		//int default_vt=-1;
 		int retcode=0;
-		float default_fbgamma=-1.0;
+		//float default_fbgamma=-1.0;
 		/*
 		 * an adapted version of the main function
 		 * of the original version of the fbi program
