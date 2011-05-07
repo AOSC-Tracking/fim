@@ -248,6 +248,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_OSW_EXECUTE_SCRIPT	"execute-script"
 #define FIM_OSW_FINAL_COMMANDS	"final-commands"
 #define FIM_OSW_SCRIPT_FROM_STDIN	"script-from-stdin"
+#define FIM_OSW_IMAGE_FROM_STDIN	"image-from-stdin"
 #define FIM_OSW_DUMP_SCRIPTOUT "write-scriptout"
 
 /*
