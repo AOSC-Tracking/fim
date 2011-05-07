@@ -123,10 +123,10 @@ class Image
 	
 	fim_pgor_t getOrientation()const;
 
-	fim_err_t setscale(double ns);
+	fim_err_t setscale(fim_scale_t ns);
 	/* viewport methods ? */
-	fim_err_t scale_increment(double ds);
-	fim_err_t scale_multiply (double sm);
+	fim_err_t scale_increment(fim_scale_t ds);
+	fim_err_t scale_multiply (fim_scale_t sm);
 	bool negate ();/* let's read e-books by consuming less power :) */
 	bool gray_negate();
 
