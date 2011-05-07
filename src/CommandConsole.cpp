@@ -145,7 +145,7 @@ namespace fim
 				return inverse_key_bindings_[bi->first];	
 			}
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::unbind(fim_key_t c)
@@ -178,7 +178,7 @@ namespace fim
 		 */
 		aliases_t::const_iterator ai=aliases_.find(cmd);
 		if(ai!=aliases_.end()) return ai->second.first;
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::getAliasesList()const
@@ -537,7 +537,7 @@ namespace fim
 		//return bindings_[c];
 		bindings_t::const_iterator bi=bindings_.find(c);
 		if(bi!=bindings_.end()) return bi->second;
-		else return "";
+		else return FIM_CNS_EMPTY_RESULT;
 	}
 
 	void CommandConsole::executeBinding(const fim_key_t c)
@@ -837,7 +837,7 @@ ret:
 		}
 		return "If you see this string, please report it to the program maintainer :P\n";
 ok:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	int CommandConsole::catchLoopBreakingCommand(fim_ts_t seconds)
@@ -1424,7 +1424,7 @@ ok:
 		{
 			/* deletion of all autocmd's for given event */
 			ai=autocmds_.find(event);
-			if(ai==autocmds_.end())return "";
+			if(ai==autocmds_.end())return FIM_CNS_EMPTY_RESULT;
 			n = (*ai).second.size();
 			for(	autocmds_p_t::iterator api=((*ai)).second.begin();
 				api!=((*ai)).second.end();++api )
@@ -1435,7 +1435,7 @@ ok:
 		{
 			/* deletion of all autocmd's for given event and pattern */
 			ai=autocmds_.find(event);
-			if(ai==autocmds_.end())return "";
+			if(ai==autocmds_.end())return FIM_CNS_EMPTY_RESULT;
 			autocmds_p_t::iterator api=((*ai)).second.find(pattern);
 			n = (*api).second.size();
 			for(	args_t::iterator aui=((*api)).second.begin();
@@ -1468,7 +1468,7 @@ ok:
 		}
 		autocmds_[event][pat].push_back(cmd);
 ok:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::pre_autocmd_add(const fim::string &cmd)
@@ -1507,7 +1507,7 @@ ok:
 			cout << "WARNING : there is a loop for "
 			     << "(event:" << event << ",filename:" << fname << ")";
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname)
@@ -1533,7 +1533,7 @@ ok:
 				autocmds_stack.pop_back();
 			}
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	void CommandConsole::autocmd_push_stack(const autocmds_loop_frame_t& frame)
@@ -1754,7 +1754,7 @@ ok:
 			last_action_=cmd;
 		}
 		dont_record_last_action_=false;	//from now on we can memorize again
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::sanitize_action(const fim::string &cmd)const

@@ -106,7 +106,7 @@ namespace fim
 		 * now the postcycle execution autocommands are enabled !
 		 * */
 		show_must_go_on_=0;
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 #ifndef FIM_WANT_NOSCRIPTING
@@ -116,7 +116,7 @@ namespace fim
 		 * TODO : catch exceptions
 		 * */
 		for(size_t i=0;i<args.size();++i)executeFile(args[i].c_str());
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
 	
@@ -125,7 +125,7 @@ namespace fim
 		/*
 		 * useful function for bogus commands, but autocompletable (like language constructs)
 		 * */
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 #if 0
@@ -136,7 +136,7 @@ namespace fim
 		 */
 		if(args.size()==0)fim::cout<<"type command\n";
 		for(size_t i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 
 	}
 #endif
@@ -153,7 +153,7 @@ namespace fim
 		 */
 		if(args.size()==0)fim::cout<<FIM_FLT_ECHO" command\n";
 		for(size_t i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::do_stdout(const args_t &args)const
@@ -163,7 +163,7 @@ namespace fim
 		 */
 		if(args.size()==0)std::cout<<"echo command\n";
 		for(size_t i=0;i<args.size();++i)std::cout << (args[i].c_str()) << "\n";
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::_stdout(const args_t &args)
@@ -197,7 +197,7 @@ namespace fim
 		{
 			return autocmd_add(args[0],args[1],args[2]);
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::autocmd_del(const args_t& args)
@@ -224,7 +224,7 @@ namespace fim
 		{
 			return autocmd_del(args[0],args[1],args[2]);
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
 
@@ -236,7 +236,7 @@ namespace fim
 #ifdef FIM_USE_READLINE
 		ic_ = 1;
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::set_interactive_mode(const args_t& args)
@@ -247,7 +247,7 @@ namespace fim
 		/*
 		 *
 		 * */
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::sys_popen(const args_t& args)
@@ -266,7 +266,7 @@ namespace fim
 			executeStdFileDescriptor(fd);
 			pclose(fd);
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 #ifdef FIM_PIPE_IMAGE_READ
@@ -309,7 +309,7 @@ namespace fim
 			 * error handling
 			 * */
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
 
@@ -332,7 +332,7 @@ namespace fim
 			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::pwd(const args_t& args)
@@ -404,7 +404,7 @@ namespace fim
 			std::system(args[i].c_str());
 		}
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
 	
@@ -422,7 +422,7 @@ namespace fim
 		else
 			return_code_=(int)args[0];
 		show_must_go_on_=0;
-		return "";/* it shouldn' return, though :) */
+		return FIM_CNS_EMPTY_RESULT;/* it shouldn' return, though :) */
 	}
 
 	fim::string CommandConsole::status(const args_t &args)
@@ -434,7 +434,7 @@ namespace fim
 		for(size_t i=0;i<args.size();++i)
 			s+=args[i].c_str();
 		browser_.display_status(s.c_str(),NULL);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::unalias(const args_t& args)
@@ -449,18 +449,18 @@ namespace fim
 		{
 			/* FIXME : the lexer/parser is bugged and it takes -a as an expression if not between double quotes ("-a") */
 			aliases_.clear();
-			return "";
+			return FIM_CNS_EMPTY_RESULT;
 		}
 
 		for(size_t i=0;i<args.size();++i)
 		if(aliases_[args[i]].first!="")
 		{
 			aliases_.erase(args[i]);
-			return "";
+			return FIM_CNS_EMPTY_RESULT;
 			/* fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" successfully unaliased.\n"); */
 		}
 		else return fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" there is not such alias.\n");
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::dump_key_codes(const args_t& args)
@@ -528,7 +528,7 @@ namespace fim
 			res=recorded_actions_[i].first+(fim::string)recorded_actions_[i].second;
 			execute(res.c_str(),0,1);
 		}*/
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::eval(const args_t &args)
@@ -541,7 +541,7 @@ namespace fim
 			if(execute(args[i].c_str(),0,0))
 				return fim::string("problems executing ")+args[i]+fim::string("\n");
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
 
@@ -561,7 +561,7 @@ namespace fim
 		 */
 		execute(last_action_.c_str(),0,0);
 		dont_record_last_action_=true;	//the issuing action will not be recorded
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::start_recording(const args_t &args)
@@ -571,7 +571,7 @@ namespace fim
 		 * */
 		recorded_actions_.clear();
 		recordMode_=true;
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::stop_recording(const args_t &args)
@@ -581,7 +581,7 @@ namespace fim
 		 */
 		if(recorded_actions_.size()>0)recorded_actions_.pop_back();
 		recordMode_=false;
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::set(const args_t &args)
@@ -608,20 +608,20 @@ namespace fim
 	{
 		if(!displaydevice_) { } else
 			displaydevice_->console_control(0x01);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::scroll_down(const args_t& args)
 	{
 		if(!displaydevice_) { } else
 			displaydevice_->console_control(0x02);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::clear(const args_t& args)
 	{
 		displaydevice_->console_control(0x03);//experimental
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
 
@@ -629,7 +629,7 @@ namespace fim
 	fim::string CommandConsole::markCurrentFile(const args_t& args)
 	{
 		markCurrentFile();
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
 
@@ -647,7 +647,7 @@ namespace fim
 			if(fim_getenv(args[0].c_str()))
 				return setVariable( fim::string("ENV_")+args[0], fim_getenv(args[0].c_str()) );
 			else
-				return "";
+				return FIM_CNS_EMPTY_RESULT;
 		}
 		else
 			return help;

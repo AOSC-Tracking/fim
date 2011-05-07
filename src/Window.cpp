@@ -116,7 +116,7 @@ namespace fim
 		// note that an autocommand on a transient object is lethal
 		if(amroot_)autocmd_exec(FIM_ACM_POSTWINDOW,c);
 #endif
-                return "";
+                return FIM_CNS_EMPTY_RESULT;
         }
 
 	Window::Window(CommandConsole &c,const Rect& corners, Viewport* vp):corners_(corners),focus_(false),first_(NULL),second_(NULL),amroot_(false)

@@ -105,7 +105,7 @@ struct fim_options_t fim_options[] = {
     {"no-framebuffer",      no_argument,       NULL, 't',"display images in text mode (as -o aa)",NULL},
     {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document",NULL},
 #ifdef FIM_READ_STDIN_IMAGE
-    {"image-from-stdin",      no_argument,       NULL, 'i',"read an image file from standard input",""},
+    {"image-from-stdin",      no_argument,       NULL, 'i',"read an image file from standard input",NULL},
 #endif
 //    {"preserve",   no_argument,       NULL, 'p',"",NULL},	/* fbi's */
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL},
@@ -282,7 +282,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		int c;
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
-	    	g_fim_output_device="";
+	    	g_fim_output_device=FIM_CNS_EMPTY_STRING;
 	
 		setlocale(LC_ALL,"");	//uhm..
 
@@ -679,7 +679,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		{retcode=help_and_exit(argv[0],-1);goto ret;}
 	
 		/* output device guess */
-		if( g_fim_output_device=="" )
+		if( g_fim_output_device==FIM_CNS_EMPTY_STRING )
 		{
 			#ifdef FIM_WITH_LIBSDL
 			/* check to see if we are under X */

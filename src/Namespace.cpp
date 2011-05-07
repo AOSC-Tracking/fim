@@ -431,7 +431,7 @@ namespace fim
 				if(window_)
 					return window_->getStringVariable(id);
 				else
-					return "";
+					return FIM_CNS_EMPTY_RESULT;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
@@ -440,7 +440,7 @@ namespace fim
 				if(window_ && window_->current_viewportp())
 					return window_->current_viewportp()->getStringVariable(id);
 				else
-					return "";
+					return FIM_CNS_EMPTY_RESULT;
 			}
 			else
 #endif
@@ -450,7 +450,7 @@ namespace fim
 				return
 					browser_.c_image()?
 					( (Image*) (browser_.c_image()))->getStringVariable(id):
-					"";
+					FIM_CNS_EMPTY_RESULT;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
@@ -463,7 +463,7 @@ namespace fim
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
-				return "";
+				return FIM_CNS_EMPTY_RESULT;
 			}
 			}
 			catch(FimException e){}
@@ -475,7 +475,7 @@ namespace fim
 		{
 			return vi->second.getString();
 		}
-		else return "";
+		else return FIM_CNS_EMPTY_RESULT;
 	}
 
 		int Namespace::setVariable(const fim::string& varname,int value)
@@ -617,7 +617,7 @@ namespace fim
 //				std::cout << "NSGSV:"<<vi->second.getString()<<"\n";
 				return vi->second.getString();
 			}
-			else return "";
+			else return FIM_CNS_EMPTY_RESULT;
 		}
 
 	        float Namespace::setGlobalVariable(const fim::string& varname,float value)
@@ -655,7 +655,7 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 			return cc.autocmd_exec(event,fname);
 #else
-			return "";
+			return FIM_CNS_EMPTY_RESULT;
 #endif
 		}
 
