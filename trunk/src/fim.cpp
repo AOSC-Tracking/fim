@@ -91,7 +91,7 @@ struct fim_options_t fim_options[] = {
 /*    {"timeout",    required_argument, NULL, 't',"",NULL},*/  /* timeout value */	/* fbi's */
 /*    {"once",       no_argument,       NULL, '1',"",NULL},*/  /* loop only once */
     {"resolution", required_argument, NULL, 'r',"set resolution (may not always work)","{resolution}"},
-    {"random",     no_argument,       NULL, 'u',"randomize images order",NULL},// FIXME: unimplemented
+    {"random",     no_argument,       NULL, 'u',"randomize images order",NULL},
 /*    {"font",       required_argument, NULL, 'f',"",NULL},*/  /* font */
     {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read (experimental)","{fimrc}"},
     {"autozoom",   no_argument,       NULL, 'a',"scale according to a best fit",NULL},
@@ -453,9 +453,10 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 	//	    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 	//	    break;
 		case 'u':
-		    //fbi's
-		    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
-	//	    randomize = 1;
+		    //FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
+		    //fim's
+		    cc.appendPostInitCommand(FIM_FLT_RANDOM_SHUFFLE);
+		    appendedPostInitCommand=true;
 		    break;
 		case 'd':
 		    //fbi's

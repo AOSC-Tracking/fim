@@ -881,7 +881,25 @@ nop:
 		/*
 		 *	sorts the image filenames list
 		 */
-		sort(flist_.begin(),flist_.end());
+		std::sort(flist_.begin(),flist_.end());
+		return n_files()?(flist_[current_n()]):nofile_;
+	}
+
+	fim::string Browser::_random_shuffle()
+	{
+		/*
+		 *	sorts the image filenames list
+		 */
+		std::random_shuffle(flist_.begin(),flist_.end());
+		return n_files()?(flist_[current_n()]):nofile_;
+	}
+
+	fim::string Browser::_reverse()
+	{
+		/*
+		 *	sorts the image filenames list
+		 */
+		std::reverse(flist_.begin(),flist_.end());
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 

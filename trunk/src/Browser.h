@@ -139,6 +139,8 @@ class Browser
 
 	fim::string n(const args_t &args){return n();}
 	fim::string _sort(const args_t &args){return _sort();}
+	fim::string _random_shuffle(const args_t &args){return _random_shuffle();}
+	fim::string _reverse(const args_t &args){return _reverse();}
 	fim::string next(const args_t &args);
 	fim::string next_picture(const args_t &args);
 	fim::string prev_picture(const args_t &args);
@@ -174,6 +176,8 @@ class Browser
 	int n_files()const;
 	const fim::string n()const;
 	fim::string _sort();
+	fim::string _random_shuffle();
+	fim::string _reverse();
 	fim::string next(int n);
 	fim::string do_next(int n);
 

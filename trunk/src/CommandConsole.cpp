@@ -320,6 +320,8 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string("loads the image into memory"),&browser_,&Browser::reload));
 		addCommand(new Command(fim::string("files"),fim::string("displays the number of files in the file list" ),&browser_,&Browser::n));
 		addCommand(new Command(fim::string(FIM_FLT_SORT),fim::string("sorts the file list" ),&browser_,&Browser::_sort));
+		addCommand(new Command(fim::string(FIM_FLT_RANDOM_SHUFFLE),fim::string("randomly shuffles the file list" ),&browser_,&Browser::_random_shuffle));
+		addCommand(new Command(fim::string(FIM_FLT_REVERSE),fim::string("reverses the file list" ),&browser_,&Browser::_reverse));
 		addCommand(new Command(fim::string(FIM_FLT_REMOVE),fim::string("remove the current file or the selected ones from the list" ),&browser_,&Browser::remove));
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string("info about the current file" ),&browser_,&Browser::info));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO),fim::string("jumps to the first image matching the given pattern"),&browser_,&Browser::regexp_goto));

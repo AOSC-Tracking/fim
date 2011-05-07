@@ -481,6 +481,8 @@ namespace fim
 #define FIM_FLT_SET		"set" /* in vim */
 #define FIM_FLT_STATUS		"status" /* not in vim */
 #define FIM_FLT_QUIT			"quit" /* in vim */
+#define FIM_FLT_RANDOM_SHUFFLE			"random_shuffle" /* not in vim */
+#define FIM_FLT_REVERSE			"reverse" /* not in vim */
 #define FIM_FLT_SORT			"sort" /* in vim */
 #define FIM_FLT_SYSTEM			"system" /* not in vim */
 #define FIM_FLT_SLEEP			"sleep" /* in vim */
