@@ -2,7 +2,7 @@
 /*
  string.cpp : A reimplementation of string class
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -384,6 +384,14 @@ namespace fim
 	//string::string(const string& s):std::string(s.c_str())
 	string::string(const string& s):std::string(s)
 	{
+	}
+
+	string::string(char c)
+	{
+		char buf[2];
+		buf[0]=c;
+		buf[1]='\0';
+		append(buf);
 	}
 
 	string::string(int i)
