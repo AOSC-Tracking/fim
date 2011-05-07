@@ -2049,48 +2049,6 @@ ok:
 #endif
 	}
 
-	fim::string CommandConsole::get_variables_reference()const
-	{
-		/*
-		 * returns the reference of registered functions
-		 */
-		fim::string s;
-		/*variables_t::const_iterator vi;
-		for( vi=variables_.begin();vi!=variables_.end();++vi)
-		{
-			s+=vi->first;
-			s+=" : ";
-			s+=Var::var_help_db_query(vi->first);
-			s+="\n";
-		}*/
-		s+= Var::get_variables_reference();
-		return s;
-	}
-
-	fim::string CommandConsole::get_commands_reference()const
-	{
-		/*
-		 * returns the reference of registered commands_
-		 * TODO : should write better help messages
-		 */
-		fim::string s;
-		for(size_t i=0;i<commands_.size();++i)
-		{
-			s+=(commands_[i]->cmd_);
-			s+=" : ";
-			s+=(commands_[i])->getHelp();
-			s+="\n";
-		}
-		return s;
-	}
-
-	fim::string CommandConsole::print_commands()const
-	{
-		cout << "VARIABLES : "<<get_variables_list()<<"\n";
-		cout << "COMMANDS : "<<get_commands_list()<<"\n";
-		cout << "ALIASES : "<<get_aliases_list()<<"\n";
-		return "";
-	}
 
 }
 

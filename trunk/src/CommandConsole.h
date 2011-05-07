@@ -340,8 +340,8 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string dump_reference_manual(const args_t& args);
 	fim::string get_reference_manual(const args_t& args);
 	private:
-	fim::string get_commands_reference()const;
-	fim::string get_variables_reference()const;
+	fim::string get_commands_reference(FimDocRefMode refmode=DefRefMode)const;
+	fim::string get_variables_reference(FimDocRefMode refmode=DefRefMode)const;
 };
 }
 

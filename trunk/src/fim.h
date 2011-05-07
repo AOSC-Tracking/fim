@@ -187,6 +187,7 @@ typedef std::vector<fim::string> args_t;
 #define FIM_STDIN_IMAGE_NAME "<STDIN>"
 /* should belong to a namespace different from the file name space, and possibly figuring alphabetically as the first one */
 
+enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 
 /*
  * Fim Symbols
