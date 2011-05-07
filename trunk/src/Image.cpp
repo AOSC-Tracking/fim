@@ -528,7 +528,7 @@ fim::string Image::getInfo()
 	 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
 	 */
 	//FIX ME !
-	if(!fimg_)return "";
+	if(!fimg_)return FIM_CNS_EMPTY_RESULT;
 
 	static char linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	char pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];

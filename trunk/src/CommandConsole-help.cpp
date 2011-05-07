@@ -97,7 +97,7 @@ manmode:
 		cout << "VARIABLES : "<<get_variables_list()<<"\n";
 		cout << "COMMANDS : "<<get_commands_list()<<"\n";
 		cout << "ALIASES : "<<get_aliases_list()<<"\n";
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::get_reference_manual(const args_t& args)
@@ -170,7 +170,7 @@ manmode:
 		 * dump textually a reference manual from all the available fim language features.
 		 */
 		std::cout << get_reference_manual(args);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 }
 

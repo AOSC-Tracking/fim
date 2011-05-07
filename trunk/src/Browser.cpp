@@ -58,7 +58,7 @@ namespace fim
 		 * for now redisplaying is optionless
 		 */
 		redisplay();
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	void Browser::redisplay()
@@ -178,7 +178,7 @@ namespace fim
 #endif
 		}
 		else prev();
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 	
 	fim::string Browser::pan_down(const args_t &args)
@@ -203,7 +203,7 @@ namespace fim
 #endif
 		}
 		else next(1);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::pan_ne(const args_t &args)
@@ -229,7 +229,7 @@ namespace fim
 #endif
 		}
 		//else prev();
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::pan_nw(const args_t &args)
@@ -255,7 +255,7 @@ namespace fim
 #endif
 		}
 		else prev();
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::pan_sw(const args_t &args)
@@ -281,7 +281,7 @@ namespace fim
 #endif
 		}
 		//else next(0);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::pan_se(const args_t &args)
@@ -307,7 +307,7 @@ namespace fim
 #endif
 		}
 		else next(0);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::scale_multiply(const args_t &args)
@@ -331,7 +331,7 @@ namespace fim
 #endif
 		}
 nop:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 	
 	fim::string Browser::scale_increment(const args_t &args)
@@ -356,7 +356,7 @@ nop:
 #endif
 		}
 nop:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::scale(const args_t &args)
@@ -381,7 +381,7 @@ nop:
 #endif
 		}
 nop:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 	
 	fim::string Browser::auto_height_scale(const args_t &args)
@@ -400,7 +400,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 	
 	fim::string Browser::auto_width_scale(const args_t &args)
@@ -419,7 +419,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::auto_scale(const args_t &args)
@@ -438,7 +438,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::pan_right(const args_t &args)
@@ -458,7 +458,7 @@ nop:
 #endif
 		}
 		else next(1);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::pan_left(const args_t &args)
@@ -478,7 +478,7 @@ nop:
 #endif
 		}
 		else prev();
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::negate(const args_t &args)
@@ -491,7 +491,7 @@ nop:
 		if(image() && image()->negate())
 			goto nop;
 nop:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::display_status(const char *l,const char *r)
@@ -501,7 +501,7 @@ nop:
 		 */
 		if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS))
 			commandConsole_.set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::display(const args_t &args)
@@ -537,7 +537,7 @@ nop:
 		}
 		else{ cout << "no image to display, sorry!";
 		commandConsole_.set_status_bar("no image loaded.", "*");}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::no_image(const args_t &args)
@@ -546,7 +546,7 @@ nop:
 		 * sets no image as the current one
 		 * */
 		free_current_image();
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	int Browser::load_error_handle(fim::string c)
@@ -592,7 +592,7 @@ nop:
 		 * */
 		if(n_files())
 			return reload(args_t());
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::loadCurrentImage()
@@ -636,7 +636,7 @@ nop:
 //		commented temporarily for safety reasons
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	void Browser::free_current_image()
@@ -663,7 +663,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PREPREFETCH,current());
 #endif
-		if( args.size() > 0 )return "";
+		if( args.size() > 0 )return FIM_CNS_EMPTY_RESULT;
 
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,0);
 		if(cache_.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
@@ -682,7 +682,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTPREFETCH,current());
 #endif
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,1);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::reload(const args_t &args)
@@ -707,7 +707,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_POSTRELOAD,c);
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::load(const args_t &args)
@@ -733,7 +733,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_POSTLOAD,c);
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::pop(const args_t &args)
@@ -818,11 +818,11 @@ nop:
 		/*	if the file doesn't exist, return */
 		if(-1==stat(nf.c_str(),&stat_s))return false;
 		/*	if it is a char device , return */
-		//if(  S_ISCHR(stat_s.st_mode))return "";
+		//if(  S_ISCHR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 		/*	if it is a block device , return */
-		//if(  S_ISBLK(stat_s.st_mode))return "";
+		//if(  S_ISBLK(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 		/*	if it is a directory , return */
-		//if(  S_ISDIR(stat_s.st_mode))return "";
+		//if(  S_ISDIR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 #ifdef FIM_READ_DIRS
 		if(  S_ISDIR(stat_s.st_mode))return push_dir(nf);
 #endif
@@ -945,7 +945,7 @@ nop:
 						args[0]+
 						fim::string("\"")).c_str(),NULL);
 nop:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::goto_image(int n)
@@ -954,7 +954,7 @@ nop:
 		 *	FIX ME
 		 */
 		int N=flist_.size();
-		if(!N)return "";
+		if(!N)return FIM_CNS_EMPTY_RESULT;
 
 		if( N==1 && c_image() && c_image()->is_multipage())
 		{
@@ -985,7 +985,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_POSTNEXT,c);
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::prev(int n)
@@ -1001,7 +1001,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_POSTPREV,c);
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::prev(const args_t &args)
@@ -1017,7 +1017,7 @@ nop:
 		 */
 		int ccp=cp_;
 		int N=flist_.size();
-		if(!N)return "";
+		if(!N)return FIM_CNS_EMPTY_RESULT;
 		ccp+=n;
 		ccp%=N;
 		ccp+=N;
@@ -1047,7 +1047,7 @@ nop:
 		//fim::string result = n_files()?(flist_[current_n()]):nofile_;
 		}
 nop:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 	
 	fim::string Browser::goto_image(const args_t &args)
@@ -1078,7 +1078,7 @@ nop:
 #endif
 			}
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::remove(const args_t &args)
@@ -1116,11 +1116,11 @@ nop:
 /*			if(cp_-1==current_n())--cp_;
 			flist_.erase(flist_.begin()+current_n());
 			if(cp_==0 && n_files()) ++cp_;
-			return "";*/
+			return FIM_CNS_EMPTY_RESULT;*/
 			return pop_current();
 		}
 nop:
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::scrollforward(const args_t &args)
@@ -1150,7 +1150,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::scrolldown(const args_t &args)
@@ -1173,7 +1173,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::info(const args_t &args)
@@ -1216,7 +1216,7 @@ nop:
 		fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)*sfm);
 		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)*sfm);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::scale_factor_shrink(const args_t &args)
@@ -1227,7 +1227,7 @@ nop:
 		fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)/sfm);
 		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)/sfm);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::scale_factor_increase(const args_t &args)
@@ -1238,7 +1238,7 @@ nop:
 		fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)+sfd);
 		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)+sfd);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::scale_factor_decrease(const args_t &args)
@@ -1249,7 +1249,7 @@ nop:
 		fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)-sfd);
 		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)-sfd);
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::rotate(const args_t &args)
@@ -1260,7 +1260,7 @@ nop:
 		fim_angle_t angle;
 		if(args.size()==0)angle=FIM_CNS_ANGLE_ONE;
 		else angle=fim_atof(args[0].c_str());
-		if(angle==FIM_CNS_ANGLE_ZERO)return "";
+		if(angle==FIM_CNS_ANGLE_ZERO)return FIM_CNS_EMPTY_RESULT;
 
 		if(c_image())
 		{
@@ -1282,7 +1282,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTSCALE,c); //FIXME
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::magnify(const args_t &args)
@@ -1316,7 +1316,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::reduce(const args_t &args)
@@ -1350,7 +1350,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::top_align(const args_t &args)
@@ -1372,7 +1372,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::bottom_align(const args_t &args)
@@ -1394,7 +1394,7 @@ nop:
 			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	const Image *Browser::c_image()const
@@ -1485,7 +1485,7 @@ nop:
 			push(args[i]);
 #endif
 		}
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::next_page(const args_t &args)
@@ -1504,7 +1504,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_POSTNEXT,c);
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::prev_page(const args_t &args)
@@ -1523,7 +1523,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_POSTNEXT,c);
 #endif
-		return "";
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::next_picture(const args_t &args)
