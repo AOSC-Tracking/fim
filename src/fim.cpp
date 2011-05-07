@@ -558,8 +558,12 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		    break;
 		case 0xd15cbab3:
 		    //fim's
-		    cc.dump_reference_manual(args_t());
-	            std::exit(0);
+		{
+			args_t args;
+			if(optarg)args.push_back(optarg);
+			cc.dump_reference_manual(args);
+			std::exit(0);
+		}
 		    break;
 	#ifdef FIM_READ_STDIN
 		case '-':

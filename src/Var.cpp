@@ -42,17 +42,29 @@ namespace fim
 			return hs;
 	}
 
-	fim::string Var::get_variables_reference()
+	fim::string Var::get_variables_reference(FimDocRefMode refmode)
 	{
 		string s ="";
-		
 		fim_var_help_t::const_iterator vi;
+		if(refmode==Man)
+			goto manmode;
 		for( vi=fim_var_help_db.begin();vi!=fim_var_help_db.end();++vi)
 		{
 			s+=vi->first;
 			s+=" : ";
 			s+=Var::var_help_db_query(vi->first);
 			s+="\n";
+		}
+		return s;
+manmode:
+		for( vi=fim_var_help_db.begin();vi!=fim_var_help_db.end();++vi)
+		{
+			s+=".B\n";
+			s+=vi->first;
+			s+="\n";
+			s+=Var::var_help_db_query(vi->first);
+			s+="\n";
+			s+=".fi\n";
 		}
 		return s;
 	}

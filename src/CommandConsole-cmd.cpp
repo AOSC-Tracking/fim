@@ -656,26 +656,4 @@ namespace fim
 #endif
 	}
 
-	fim::string CommandConsole::get_reference_manual(const args_t& args)
-	{
-		/*
-		 * dump textually a reference manual from all the available fim language features.
-		 */
-		return
-			string("commands:\n")+
-			get_commands_reference()+
-			string("variables:\n")+
-			get_variables_reference()/*+
-			get_commands_reference()*/;
-	}
-
-	fim::string CommandConsole::dump_reference_manual(const args_t& args)
-	{
-		/*
-		 * dump textually a reference manual from all the available fim language features.
-		 */
-		std::cout << get_reference_manual(args);
-		return "";
-	}
-
 }

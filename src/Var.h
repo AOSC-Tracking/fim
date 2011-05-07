@@ -249,7 +249,7 @@ class Var
 		return (type==v.getType()) && (i==v.getInt());
 	}*/
 	static fim::string var_help_db_query(const fim::string &id);
-	static fim::string get_variables_reference();
+	static fim::string get_variables_reference(FimDocRefMode refmode);
 	static void var_help_db_init();
 };
 

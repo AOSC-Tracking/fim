@@ -113,6 +113,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	CommandConsole.cpp \
 	CommandConsole-cmd.cpp \
 	CommandConsole-init.cpp \
+	CommandConsole-help.cpp \
 	DebugConsole.cpp \
 	DisplayDevice.cpp \
 	FbiStuff.cpp \
