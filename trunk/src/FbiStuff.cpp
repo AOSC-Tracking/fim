@@ -46,7 +46,7 @@ extern CommandConsole cc;
 
 static void
 op_grayscale(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     unsigned char *scanline;
     int i,g;
@@ -174,7 +174,7 @@ op_3x3_calc_line(struct ida_image *src, struct ida_rect *rect,
 }
 
 static void
-op_3x3_clip_line(unsigned char *dst, int *src, int left, int right)
+op_3x3_clip_line(fim_byte_t *dst, int *src, int left, int right)
 {
     int i,val;
 
@@ -192,7 +192,7 @@ op_3x3_clip_line(unsigned char *dst, int *src, int left, int right)
 
 static void
 op_3x3_work(struct ida_image *src, struct ida_rect *rect,
-	    unsigned char *dst, int line, void *data)
+	    fim_byte_t *dst, int line, void *data)
 {
     struct op_3x3_handle *h = (struct op_3x3_handle *)data;
     unsigned char *scanline;
@@ -245,7 +245,7 @@ oops:
 
 static void
 op_sharpe_work(struct ida_image *src, struct ida_rect *rect,
-	       unsigned char *dst, int line, void *data)
+	       fim_byte_t *dst, int line, void *data)
 {
     static struct op_3x3_parm laplace = {
 /*  	f1: {  1,  1,  1 },
@@ -317,7 +317,7 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
 }
 
 #if 1
-void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data)
+void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 //#ifndef FIM_WANTS_SLOW_RESIZE	/*uncommenting this triggers failure */
@@ -367,7 +367,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, uns
 }
 
 
-inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
+inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
@@ -461,7 +461,7 @@ inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct i
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
-inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
+inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
@@ -526,7 +526,7 @@ inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct id
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
-inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
+inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
@@ -590,7 +590,7 @@ inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct id
 
 static void
 op_resize_work(struct ida_image *src, struct ida_rect *rect,
-	       unsigned char *dst, int line, void *data)
+	       fim_byte_t *dst, int line, void *data)
 {
     struct op_resize_state *h = (struct op_resize_state *)data;
     float outleft,left,weight,d0,d1,d2;
@@ -843,7 +843,7 @@ unsigned char* op_rotate_getpixel(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_rotate_work(struct ida_image *src, struct ida_rect *rect,
-	       unsigned char *dst, int y, void *data)
+	       fim_byte_t *dst, int y, void *data)
 {
     struct op_rotate_state *h = (struct op_rotate_state *) data;
     unsigned char *pix;
@@ -957,7 +957,7 @@ static char op_none_data_;
 
 static void
 op_flip_vert_(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     char *scanline;
 
@@ -967,7 +967,7 @@ op_flip_vert_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_flip_horz_(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     char *scanline;
     unsigned int i;
@@ -995,7 +995,7 @@ op_rotate_init_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_rotate_cw_(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     char *pix;
     unsigned int i;
@@ -1012,7 +1012,7 @@ op_rotate_cw_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_rotate_ccw_(struct ida_image *src, struct ida_rect *rect,
-	      unsigned char *dst, int line, void *data)
+	      fim_byte_t *dst, int line, void *data)
 {
     char *pix;
     unsigned int i;
@@ -1029,7 +1029,7 @@ op_rotate_ccw_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_invert_(struct ida_image *src, struct ida_rect *rect,
-	  unsigned char *dst, int line, void *data)
+	  fim_byte_t *dst, int line, void *data)
 {
     unsigned char *scanline;
     int i;
@@ -1064,7 +1064,7 @@ op_crop_init_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_crop_work_(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     unsigned char *scanline;
     int i;
@@ -1281,8 +1281,8 @@ extern struct ida_loader bit1_loader ;
 //static void __init init_rd(void)
 /*static void init_rd(void)
 {
-    load_register(&ppm_loader);
-    load_register(&pgm_loader);
+    fim_load_register(&ppm_loader);
+    fim_load_register(&pgm_loader);
 }*/
 
 #ifdef USE_X11
@@ -1312,7 +1312,7 @@ static struct ida_writer ppm_writer = {
 //static void __init init_wr(void)
 static void init_wr(void)
 {
-    write_register(&ppm_writer);
+    fim_write_register(&ppm_writer);
 }
 #endif
 

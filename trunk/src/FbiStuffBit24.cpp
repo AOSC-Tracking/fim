@@ -75,7 +75,7 @@ bit24_init(FILE *fp, char *filename, unsigned int page,
 }
 
 static void
-bit24_read(unsigned char *dst, unsigned int line, void *data)
+bit24_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct bit24_state *h = (struct bit24_state *) data;
     unsigned int ll,y,x,pixel,byte = 0;
@@ -123,7 +123,7 @@ struct ida_loader bit24_loader = {
 
 static void __init init_rd(void)
 {
-    load_register(&bit24_loader);
+    fim_load_register(&bit24_loader);
 }
 
 

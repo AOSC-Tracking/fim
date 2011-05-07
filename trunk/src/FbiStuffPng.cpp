@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ static const char *ct[] = {
     "graya", "X5", "rgba", "X7",
 };
 
-struct png_state {
+struct fim_png_state {
     FILE         *infile;
     png_structp  png;
     png_infop    info;
@@ -57,7 +57,7 @@ static void*
 png_init(FILE *fp, char *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
-    struct png_state *h;
+    struct fim_png_state *h;
     int bit_depth, interlace_type;
     int pass, number_passes;
     unsigned int y;
@@ -76,7 +76,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
 	my_bg .gray  = 192;
     int unit;
     
-    h = (struct png_state *) fim_calloc(sizeof(*h),1);
+    h = (struct fim_png_state *) fim_calloc(sizeof(*h),1);
     if(!h) goto oops;
     memset(h,0,sizeof(*h));
 
@@ -157,9 +157,9 @@ png_init(FILE *fp, char *filename, unsigned int page,
 }
 
 static void
-png_read(unsigned char *dst, unsigned int line, void *data)
+png_read(fim_byte_t *dst, unsigned int line, void *data)
 {
-    struct png_state *h = (struct png_state *) data;
+    struct fim_png_state *h = (struct fim_png_state *) data;
 
     png_bytep row = h->image + line * h->w * 4;
     switch (h->color_type) {
@@ -189,7 +189,7 @@ png_read(unsigned char *dst, unsigned int line, void *data)
 static void
 png_done(void *data)
 {
-    struct png_state *h =(struct png_state *) data;
+    struct fim_png_state *h =(struct fim_png_state *) data;
 
     fim_free(h->image);
     png_destroy_read_struct(&h->png, &h->info, NULL);
@@ -214,7 +214,7 @@ static struct ida_loader png_loader = {
 
 static void __init init_rd(void)
 {
-    load_register(&png_loader);
+    fim_load_register(&png_loader);
 }
 
 #ifdef USE_X11
@@ -282,7 +282,7 @@ static struct ida_writer png_writer = {
 
 static void __init init_wr(void)
 {
-    write_register(&png_writer);
+    fim_write_register(&png_writer);
 }
 
 

@@ -390,9 +390,9 @@ void svga_display_image_new(
 /* ---------------------------------------------------------------------- */
 /* by dez
  */
-inline unsigned char * clear_line(int bpp, int line, int owidth, char unsigned *dest);
-unsigned char * convert_line(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror);/*dez's mirror patch*/
-unsigned char * convert_line_8(int bpp, int line, int owidth, char unsigned *dest, char unsigned *buffer, int mirror);/*dez's mirror patch*/
+inline unsigned char * clear_line(int bpp, int line, int owidth, char unsigned *dst);
+unsigned char * convert_line(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror);/*dez's mirror patch*/
+unsigned char * convert_line_8(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror);/*dez's mirror patch*/
 
 
 
@@ -401,9 +401,9 @@ unsigned char * convert_line_8(int bpp, int line, int owidth, char unsigned *des
 
 
 void init_dither(int shades_r, int shades_g, int shades_b, int shades_gray);
-inline void dither_line(unsigned char *src, unsigned char *dest, int y, int width,int mirror);
+inline void dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int mirror);
 
-void dither_line_gray(unsigned char *src, unsigned char *dest, int y, int width);
+void dither_line_gray(fim_byte_t *src, fim_byte_t *dst, int y, int width);
 
 
 void fb_switch_release();

@@ -97,7 +97,7 @@ err:
 }
 
 static void
-mm_read(unsigned char *dst, unsigned int line, void *data)
+mm_read(fim_byte_t *dst, unsigned int line, void *data)
 {
 	struct mm_state_t *h = (struct mm_state_t*)data;
 
@@ -140,7 +140,7 @@ static struct ida_loader mm_loader = {
 
 static void __init init_rd(void)
 {
-    load_register(&mm_loader);
+    fim_load_register(&mm_loader);
 }
 
 }

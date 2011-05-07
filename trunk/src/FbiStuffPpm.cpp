@@ -90,7 +90,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
 }
 
 static void
-ppm_read(unsigned char *dst, unsigned int line, void *data)
+ppm_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct ppm_state *h = (struct ppm_state *) data;
     int fr;
@@ -99,10 +99,10 @@ ppm_read(unsigned char *dst, unsigned int line, void *data)
 }
 
 static void
-pgm_read(unsigned char *dst, unsigned int line, void *data)
+pgm_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct ppm_state *h = (struct ppm_state *) data;
-    unsigned char *src;
+    fim_byte_t *src;
     int x,fr;
 
     fr=fread(h->row,h->width,1,h->infile);
@@ -149,8 +149,8 @@ struct ida_loader pgm_loader = {
 
 static void __init init_rd(void)
 {
-    load_register(&ppm_loader);
-    load_register(&pgm_loader);
+    fim_load_register(&ppm_loader);
+    fim_load_register(&pgm_loader);
 }
 
 #ifdef USE_X11
@@ -177,7 +177,7 @@ static struct ida_writer ppm_writer = {
 
 static void __init init_wr(void)
 {
-    write_register(&ppm_writer);
+    fim_write_register(&ppm_writer);
 }
 #endif
 
