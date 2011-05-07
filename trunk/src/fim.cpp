@@ -65,62 +65,73 @@ namespace fim
 	float default_fbgamma=-1.0;
 }
 
+struct fim_options_t{
+  const char *name;
+  int has_arg;
+  int *flag;
+  int val;
+  const char *desc;/* this is fim specific */
+  const char *optdesc;/* this is fim specific */
+};
+
 /*
  * Yet unfinished. 
  * This structure keeps hold of Fim's options flags.
  */
-struct option fim_options[] = {
-    {"version",    no_argument,       NULL, 'V'},  /* version */
-    {"help",       no_argument,       NULL, 'h'},  /* help */
-    {"device",     required_argument, NULL, 'd'},  /* device */
-    {"mode",       required_argument, NULL, 'm'},  /* video mode */
-    {"binary",     optional_argument,       NULL, 'b'},  /* binary mode */
-    {"gamma",      required_argument, NULL, 'g'},  /* set gamma */
-    {"quiet",      no_argument,       NULL, 'q'},  /* quiet */
-    {"verbose",    no_argument,       NULL, 'v'},  /* verbose */
-    {"scroll",     required_argument, NULL, 's'},  /* set scrool */
-/*    {"timeout",    required_argument, NULL, 't'},*/  /* timeout value */	/* fbi's */
-/*    {"once",       no_argument,       NULL, '1'},*/  /* loop only once */
-    {"resolution", required_argument, NULL, 'r'},  /* select resolution */
-    {"random",     no_argument,       NULL, 'u'},  /* randomize images */
-/*    {"font",       required_argument, NULL, 'f'},*/  /* font */
-    {"etc-fimrc",       required_argument, NULL, 'f'},  /* etc-fimrc read (experimental) */
-    {"autozoom",   no_argument,       NULL, 'a'},
-    {"autotop",   no_argument,       NULL, 'A'},
-    {"autowidth",   no_argument,       NULL, 'w'},
-/*    {"edit",       no_argument,       NULL, 'e'},*/  /* enable editing */	/* fbi's */
-/*    {"list",       required_argument, NULL, 'l'},*/
-    {"vt",         required_argument, NULL, 'T'},
-//    {"backup",     no_argument,       NULL, 'b'},	/* fbi's */
-    {"execute-script",   required_argument,       NULL, 'E'},
-    {"execute-commands", required_argument,       NULL, 'c'},
-    {"final-commands",   required_argument,       NULL, 'F'},
-//    {"debug",      no_argument,       NULL, 'D'},
-    {"no-rc-file",      no_argument,       NULL, 'N'},
-    {"dump-default-fimrc",      no_argument,       NULL, 'D'},
+struct fim_options_t fim_options[] = {
+    {"version",    no_argument,       NULL, 'V',"print program version",NULL},
+    {"help",       optional_argument,       NULL, 'h',"print short (or long) program invocation help","[=s|l]"},
+    {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}"},
+    {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}"},
+    {"binary",     optional_argument,       NULL, 'b',"view any file as either a 1 or 24 bpp bitmap","[=24|1]"},
+    {"gamma",      required_argument, NULL, 'g',"set gamma","{gamma}"},
+    {"quiet",      no_argument,       NULL, 'q',"quiet mode",NULL},
+    {"verbose",    no_argument,       NULL, 'v',"verbose mode",NULL},
+    {"scroll",     required_argument, NULL, 's',"set scroll value (in pixels)","{value}"},
+/*    {"timeout",    required_argument, NULL, 't',"",NULL},*/  /* timeout value */	/* fbi's */
+/*    {"once",       no_argument,       NULL, '1',"",NULL},*/  /* loop only once */
+    {"resolution", required_argument, NULL, 'r',"set resolution (may not always work)","{resolution}"},
+    {"random",     no_argument,       NULL, 'u',"randomize images order",NULL},// FIXME: unimplemented
+/*    {"font",       required_argument, NULL, 'f',"",NULL},*/  /* font */
+    {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read (experimental)","{fimrc}"},
+    {"autozoom",   no_argument,       NULL, 'a',"scale according to a best fit",NULL},
+    {"autotop",   no_argument,       NULL, 'A',"align images to the top",NULL},
+    {"autowidth",   no_argument,       NULL, 'w',"scale according to width",NULL},
+/*    {"edit",       no_argument,       NULL, 'e',"",NULL},*/  /* enable editing */	/* fbi's */
+/*    {"list",       required_argument, NULL, 'l',"",NULL},*/
+    {"vt",         required_argument, NULL, 'T',"specify a virtual terminal for the framebufer","{terminal}"},
+//    {"backup",     no_argument,       NULL, 'b',"",NULL},	/* fbi's */
+    {"execute-script",   required_argument,       NULL, 'E',"execute {scriptfile} after initialization","{scriptfile}"},
+    {"execute-commands", required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}"},
+    {"final-commands",   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}"},
+//    {"debug",      no_argument,       NULL, 'D',"",NULL},
+    {"no-rc-file",      no_argument,       NULL, 'N',"do not read any configuration file at startup",NULL},
+    {"dump-default-fimrc",      no_argument,       NULL, 'D',"dump on standard output the embedded configuration",NULL},
 #ifdef FIM_READ_STDIN
-    {"read-from-stdin",      no_argument,       NULL, '-'},
+    {"read-from-stdin",      no_argument,       NULL, '-',"read an image list from standard input",NULL},
 #endif
-    {"no-framebuffer",      no_argument,       NULL, 't'},
-    {"text-reading",      no_argument,       NULL, 'P'},
+    {"no-framebuffer",      no_argument,       NULL, 't',"display images in text mode (as -o aa)",NULL},
+    {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document",NULL},
 #ifdef FIM_READ_STDIN_IMAGE
-    {"image-from-stdin",      no_argument,       NULL, 'i'},
+    {"image-from-stdin",      no_argument,       NULL, 'i',"read an image file from standard input",""},
 #endif
-//    {"preserve",   no_argument,       NULL, 'p'},	/* fbi's */
-    {"script-from-stdin",      no_argument,       NULL, 'p'},
-    {"sanity-check",      no_argument,       NULL, 'S'},	/* NEW */
-    {"write-scriptout",      required_argument,       NULL, 'W'},
-    {"offset",      required_argument,       NULL,  0xFFD8FFE0},/* NEW */
-    {"output-device",      required_argument,       NULL, 'o'},
-    {"dump-reference-help",      /*optional_argument : TODO */no_argument,       NULL, 0xd15cbab3},/* note : still undocumented switch */
+//    {"preserve",   no_argument,       NULL, 'p',"",NULL},	/* fbi's */
+    {"script-from-stdin",      no_argument,       NULL, 'p',"read commands from standard input",NULL},
+    {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check",NULL},	/* NEW */
+    {"write-scriptout",      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}"},
+    {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}"},/* NEW */
+    {"output-device",      required_argument,       NULL, 'o',"specify using a specific output driver (if supported)","[fb|sdl|aa|dumb]"},
+    {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0xd15cbab3,"dump reference info","[=man]"},
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
 //    {"autodown",   no_argument,       &autodown, 1 },
 //    {"comments",   no_argument,       &comments, 1 },
-    {0,0,0,0}
+    {0,0,0,0,0,0}
 };
 
+const int fim_options_count=sizeof(fim_options)/sizeof(fim_options_t);
+struct option options[fim_options_count];
 
 
 class FimInstance
@@ -212,11 +223,12 @@ class FimInstance
 			    );
 	}
 
-int help_and_exit(char *argv0, int code=0)
+int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 {
 	    cc.printHelpMessage(argv0);
 	    std::cout << " where OPTIONS are taken from :\n";
-	    for(size_t i=0;i<(sizeof(fim_options)/sizeof(struct option))-1;++i)
+	    if(helparg&&*helparg=='l') std::cout << "(EXPERIMENTAL: long help printout still unsupported)\n";
+	    for(size_t i=0;i<fim_options_count-1;++i)
 	    {	
 		if(isascii(fim_options[i].val)){
 	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
@@ -227,15 +239,18 @@ int help_and_exit(char *argv0, int code=0)
 		case no_argument:
 		break;
 		case required_argument:
-		std::cout << " <arg>";
+		//std::cout << " <arg>";
+		if(fim_options[i].optdesc) std::cout << " =" << fim_options[i].optdesc; else std::cout << " =<arg>";
 		break;
 		case optional_argument:
-		std::cout << " [=arg]";
+		if(fim_options[i].optdesc) std::cout << " " << fim_options[i].optdesc; else std::cout << "[=arg]";
 		break;
 		default:
 		;
 		};
+		std::cout << "\t\t " << fim_options[i].desc;
 		std::cout << FIM_SYM_ENDL;
+		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 		}
 		std::cout << "\n Please read the documentation distributed with the program, in FIM.TXT.\n"
 			  << " For further help, consult the online help in fim (:help), and man fim (1).\n"
@@ -277,10 +292,22 @@ int help_and_exit(char *argv0, int code=0)
 	    	g_fim_output_device="";
 	
 		setlocale(LC_ALL,"");	//uhm..
+
+		{
+			int foi;
+			for(foi=0;foi<fim_options_count;++foi)
+			{
+				options[foi].name=fim_options[foi].name;
+				options[foi].has_arg=fim_options[foi].has_arg;
+				options[foi].flag=fim_options[foi].flag;
+				options[foi].val=fim_options[foi].val;
+			}
+		}
+
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
 		    c = getopt_long(argc, argv, "Ab?wc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:S",
-				fim_options, &opt_index);
+				options, &opt_index);
 		if (c == -1)
 		    break;
 		switch (c) {
@@ -546,7 +573,7 @@ int help_and_exit(char *argv0, int code=0)
 	#endif
 		default:
 		case 'h':
-		    help_and_exit(argv[0]);
+		    help_and_exit(argv[0],0,optarg);
 		}
 	    }
 		for (i = optind; i < argc; i++)
