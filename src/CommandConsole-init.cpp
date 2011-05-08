@@ -182,7 +182,7 @@ namespace fim
 #else
 		try
 		{
-			viewport = new Viewport(*this);
+			viewport_ = new Viewport(*this);
 		}
 		catch(FimException e)
 		{
