@@ -6,7 +6,7 @@
 fimrc - \fB fim \fP configuration file and language reference
 
 .SH SYNOPSIS
-.B ~/fimrc
+.B ~/.fimrc
 .fi
 .B /etc/fimrc
 .fi

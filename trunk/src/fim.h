@@ -260,6 +260,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_HIST_FILENAME	 ".fim_history"
 #define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
 #define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
+#define FIM_CNS_USR_RC_COMPLETE_FILEPATH	 "~/.fimrc"
 #define FIM_CNS_SCALEFACTOR	 1.322f
 #define FIM_CNS_SCALEFACTOR_ONE 1.0f
 #define FIM_CNS_ANGLE_ONE 1.0f

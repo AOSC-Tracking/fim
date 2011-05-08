@@ -118,8 +118,8 @@ manmode:
 			string("fimrc - \\fB fim \\fP configuration file and language reference\n")+
 			string("\n")+
 			string(".SH SYNOPSIS\n")+
-			string(".B ~/fimrc\n.fi\n")+
-			string(".B /etc/fimrc\n.fi\n")+
+			string(".B "FIM_CNS_USR_RC_COMPLETE_FILEPATH"\n.fi\n")+
+			string(".B "FIM_CNS_SYS_RC_FILEPATH"\n.fi\n")+
 			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [ options ] < {scriptfile}\n.fi\n")+
 			string(".B fim --"FIM_OSW_EXECUTE_SCRIPT" {scriptfile} [ options ]\n.fi\n")+
 			string(".B fim --"FIM_OSW_EXECUTE_COMMANDS" {commands} [ options ]\n.fi\n")+
