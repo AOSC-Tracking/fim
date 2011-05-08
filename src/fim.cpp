@@ -105,7 +105,7 @@ struct fim_options_t fim_options[] = {
 "The \\fBscriptfile\\fP will be executed right after the default initialization file is executed."
     },
     {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read (experimental)","{fimrc}",
-"The /etc/fimrc file will be executed prior to any other configuration file.\n"
+"The "FIM_CNS_SYS_RC_FILEPATH" file will be executed prior to any other configuration file.\n"
 "If not specified, it is *ignored*."
     },
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}",
@@ -123,7 +123,7 @@ struct fim_options_t fim_options[] = {
 "name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
     {"no-rc-file",      no_argument,       NULL, 'N',"do not read any configuration file at startup",NULL,
-"No initialization file will be read (default is ~/.fimrc) at startup."
+"No initialization file will be read (default is "FIM_CNS_USR_RC_COMPLETE_FILEPATH") at startup."
     },
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
 "Will read commands from stdin prior to entering in interactive mode."
@@ -625,12 +625,12 @@ int fim_dump_man_page()
 ".B Fim\n"
 "documentation files.\n"
 ".TP 15\n"
-".B /etc/fimrc\n"
+".B "FIM_CNS_SYS_RC_FILEPATH"\n"
 "System wide\n"
 ".B Fim\n"
 "initialization file (executed on startup if no personal initialization file exist).\n"
 ".TP 15\n"
-".B ~/.fimrc\n"
+".B "FIM_CNS_USR_RC_COMPLETE_FILEPATH"\n"
 "Your personal\n"
 ".B Fim\n"
 "initialization file (executed on startup, if existent).\n"
