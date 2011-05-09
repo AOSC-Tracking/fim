@@ -241,6 +241,22 @@ dnl AC_CHECK_FUNCS(setrlimit getsid)
 
 AC_TYPE_SIGNAL
 
+dnl ==================
+AH_TEMPLATE([FIM_WANT_STATIC_BINARY])
+AC_ARG_ENABLE(static, AC_HELP_STRING([--enable-static], [Want a static binary. (disabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_static=1 ; else fim_cv_want_static=0 ; fi ],[ fim_cv_want_static=0 ])
+if test x$fim_cv_want_static == x1 ; then 
+	LIBS="$LIBS --static"
+        LIBDJVU_STATIC_EXTRA="-lpthread"
+	# too many dependencies for the following!
+        LIBPOPPLER_STATIC_EXTRA=""
+        LIBSPECTRE_STATIC_EXTRA=""
+        #LIBPOPPLER_STATIC_EXTRA="-lfreetype -llcms"
+        #LIBSPECTRE_STATIC_EXTRA="-Wl,--start-group -lgs -lfontconfig -ldl -ljbig2dec -ljasper -lpthread -lpng -lppd -lpaper -lavahi-common -lavahi-client -lexpat -lfreetype -lgnutls -ldbus-1 -ltasn1 -lcupsimage -lcups -lgcrypt -Wl,--end-group "
+	LIBTIFF_STATIC_EXTRA="-ljpeg -lz"
+	AC_DEFINE_UNQUOTED([FIM_WANT_STATIC_BINARY], $fim_cv_want_static [Want a static binary. (disabled by default)])
+fi
+dnl ==================
+
 
 AC_ARG_WITH(regex, AC_HELP_STRING([--with-regex], [Use the GNU regex library insteat of the POSIX one]),
         [fim_cv_regex=yes],
@@ -347,7 +363,7 @@ if test x$fim_handle_tiff != xno ; then
     AC_CHECK_LIB(tiff,TIFFOpen ,
       have_tiff=yes,
       have_tiff=no
-      AC_MSG_WARN([*** TIFF loader will not be built (TIFF library not found) ***]))
+      AC_MSG_WARN([*** TIFF loader will not be built (TIFF library not found) ***]) , [$LIBTIFF_STATIC_EXTRA])
     if test x"$have_tiff" = xyes; then
       AC_MSG_CHECKING([for tiff.h])
       AC_TRY_CPP(
@@ -360,7 +376,7 @@ if test x$fim_handle_tiff != xno ; then
         have_tiff=no)
       AC_MSG_RESULT($have_tiff)
       if test x"$have_tiff" = xyes; then
-        LIBTIFF='-ltiff'
+        LIBTIFF="-ltiff $LIBTIFF_STATIC_EXTRA"
       else
           AC_MSG_WARN([*** TIFF loader will not be built (TIFF header file not found) ***])
       fi
@@ -570,7 +586,7 @@ if test x$fim_handle_ps != xno ; then
     AC_CHECK_LIB(spectre, spectre_page_render,
       have_ps=yes,
       have_ps=no
-      AC_MSG_WARN([*** PS loader will not be built (spectre library not found) ***]))
+      AC_MSG_WARN([*** PS loader will not be built (spectre library not found) ***]) , [$LIBSPECTRE_STATIC_EXTRA])
     if test x"$have_ps" = xyes; then
       AC_MSG_CHECKING([for libspectre/spectre.h])
       AC_TRY_CPP(
@@ -583,7 +599,7 @@ if test x$fim_handle_ps != xno ; then
         have_ps=no)
       AC_MSG_RESULT($have_ps)
       if test x"$have_ps" = xyes; then
-        LIBPS='-lspectre'
+        LIBPS="-lspectre $LIBSPECTRE_STATIC_EXTRA"
       else
           AC_MSG_WARN([*** PS loader will not be built (PS header file not found) ***])
       fi
@@ -626,7 +642,7 @@ if test x$fim_handle_djvu != xno ; then
     AC_CHECK_LIB(djvulibre, ddjvu_page_create_by_pageno,
       have_djvu=yes,
       have_djvu=no
-      AC_MSG_WARN([*** DJVU loader will not be built (DJVU library not found) ***]))
+      AC_MSG_WARN([*** DJVU loader will not be built (DJVU library not found) ***]), [$LIBDJVU_STATIC_EXTRA])
     if test x"$have_djvu" = xyes; then
       AC_MSG_CHECKING([for libdjvu/ddjvuapi.h])
       AC_TRY_CPP(
@@ -639,7 +655,7 @@ if test x$fim_handle_djvu != xno ; then
         have_djvu=no)
       AC_MSG_RESULT($have_djvu)
       if test x"$have_djvu" = xyes; then
-        LIBDJVU='-ldjvulibre'
+        LIBDJVU="-ldjvulibre $LIBDJVU_STATIC_EXTRA"
       else
           AC_MSG_WARN([*** DJVU loader will not be built (DJVU header file not found) ***])
       fi
@@ -676,7 +692,7 @@ AC_ARG_ENABLE(poppler, AC_HELP_STRING([--enable-poppler], [Enable poppler (PDF r
 [       if test x$enableval = xyes ; then
 		fim_handle_pdf=yes
         fi
-])
+], [$LIBPOPPLER_STATIC_EXTRA])
 dnl FIXME : checking only for libpoppler-glib, should also check for libpoppler !
 if test x$fim_handle_pdf != xno ; then
   fim_handle_pdf=yes
@@ -709,7 +725,7 @@ dnl FIXME : the following is a dirty hack
       have_poppler=yes
       AC_MSG_RESULT($have_poppler)
       if test x"$have_poppler" = xyes; then
-        LIBPOPPLER='-lpoppler'
+        LIBPOPPLER="-lpoppler $LIBPOPPLER_STATIC_EXTRA"
 	# FIXME: the following is a dirty hack!
         LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/"
         CXXFLAGS="$CXXFLAGS $LIBPOPPLER_CXXFLAGS"
@@ -796,7 +812,11 @@ if test x$fim_handle_png = xyes; then
 		fim_handle_png=no
         else
                 CXXFLAGS="$CXXFLAGS `$LIBPNG_CONFIG --cflags`"
+		if test x$fim_cv_want_static == x1 ; then 
+                LIBS="$LIBS `$LIBPNG_CONFIG --static --libs`"
+		else
                 LIBS="$LIBS `$LIBPNG_CONFIG --libs`"
+		fi
 		# finish this !
                 FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPng.o"
                 AC_DEFINE(FIM_WITH_LIBPNG, 1, [Defined, if libpng support is enabled])
