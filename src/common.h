@@ -33,6 +33,7 @@ namespace fim
 }
 
 
+fim::string fim_shell_arg_escape(const fim::string & arg);
 void fim_perror(const char *s);
 size_t fim_strlen(const char *str);
 void trec(char *str,const char *f,const char*t);

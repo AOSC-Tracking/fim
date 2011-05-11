@@ -37,6 +37,18 @@
 #include <wchar.h>
 #endif
 
+	fim::string fim_shell_arg_escape(const fim::string & arg)
+	{
+		// FIXME: this escaping function is NOT safe; it shall only serve as a basis.
+		fim::string ear=arg;
+		fim::string res;
+		res+="'";
+		ear.substitute("'","\\'");
+		res+=ear;
+		res+="'";
+		return res;
+	}
+
 void fim_perror(const char *s)
 {
 #if 1

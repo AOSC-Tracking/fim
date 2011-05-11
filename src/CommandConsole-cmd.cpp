@@ -373,7 +373,13 @@ namespace fim
 		fim::string cc="";
 		for(size_t i=0;i<args.size();++i)
 		{
+			// FIXME: escaping the command (first argument) actually requires more than this
+#define FIM_WANT_SIMPLE_SHELL_ESCAPING 1
+#if FIM_WANT_SIMPLE_SHELL_ESCAPING
+			cc+=fim_shell_arg_escape(args[i]);
+#else
 			cc+=args[i];
+#endif
 			cc+=" ";
 		}
 		if(args.size())
