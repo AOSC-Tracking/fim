@@ -169,7 +169,16 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw,
 	
 	//fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
 	cc.displaydevice_->lock();
-	clear_rect(0, width()-1, 0,height()/2);
+#if 1
+	// FIXME: this is temporary
+	{
+		int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
+		int fh=f_?f_->height:1;
+		clear_rect(0, width()-1, 0,fh*ls);
+	}
+#else
+	clear_rect(0, width()-1, 0,ls);
+#endif
 	cc.displaydevice_->unlock();
 	mc_.dump();
 //	mc_.dump(0,1000000);
