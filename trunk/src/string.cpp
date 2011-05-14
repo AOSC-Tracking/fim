@@ -493,6 +493,7 @@ namespace fim
 		regex_t regex;
 		const int nmatch=1;
 		regmatch_t pmatch[nmatch];
+		int off=0,sl=0;
 
 		if( !r || !*r || !s )
 			return;
@@ -500,18 +501,19 @@ namespace fim
 		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE | flags ) != 0 )
 			return;
 
-		int off=0;
+		sl=strlen(s);
 		//const int s_len=strlen(s);
 		while(regexec(&regex,off+c_str(),nmatch,pmatch,0)==0)
 		{
 			/*
 			 * please note that this is not an efficient subsitution implementation.
 			 * */
+			int ts=this->size();
 			std::string ss = substr(0,pmatch->rm_so);
 			ss+=s;
-			ss+=substr(pmatch->rm_eo,this->size());
+			ss+=substr(pmatch->rm_eo,ts);
 			*this=ss.c_str();
-
+			off=(ts-pmatch->rm_eo)+sl+pmatch->rm_so;
 		}
 		regfree(&regex);
 		return;
