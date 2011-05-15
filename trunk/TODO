@@ -21,6 +21,9 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110515	shall preprocessor-conditionally catch std::exception's and cout'ing this info or activate some debug channel.
+20110515	shall use clear() resize(0) instead of clear() alone (which does not resize arrays)
+20110515	shall check against end() after each erase() operation on vectors
 20110507	need a macro to avoid X == "" comparisons
 20110507	need a special mention for special variables, in the documentation
 20110507	the generated man output shall print out examples which are also a correctness test
