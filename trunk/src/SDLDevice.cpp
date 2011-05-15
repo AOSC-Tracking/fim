@@ -40,6 +40,7 @@ namespace fim
 }
 
 
+#define FIM_SDL_WANT_KEYREPEAT 1
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 
@@ -236,18 +237,43 @@ std::cout.unsetf ( std::ios::hex );
 		/*
 		 *
 		 * */
+		int want_width=0, want_height=0, want_bpp=0;
+		int want_flags=SDL_FULLSCREEN|SDL_HWSURFACE;
+		int delay=0,interval=0;
+		bool want_windowed=false;
+		if(want_windowed)
+			want_flags&=~SDL_FULLSCREEN;
+		//want_flags|=SDL_DOUBLEBUF;
+
+
 		if (SDL_Init(SDL_INIT_VIDEO) < 0 )
 		{
 			std::cout << "problems initializing SDL (SDL_Init)\n";
 			return 1;
 		}
 		fim_perror(NULL);
+		
+		if(FIM_SDL_WANT_KEYREPEAT)
+		{
+		//	std::cout<<"interval:"<<interval<<"\n"; std::cout<<"delay :"<<delay <<"\n";
+			delay=SDL_DEFAULT_REPEAT_DELAY;
+			interval=SDL_DEFAULT_REPEAT_INTERVAL;
+			if(SDL_EnableKeyRepeat(delay,interval)<0)
+			{
+			}
+			else
+			{
+				SDL_GetKeyRepeat(&delay,&interval);
+		//		std::cout<<"interval:"<<interval<<"\n"; std::cout<<"delay :"<<delay <<"\n";
+			}
+			fim_perror(NULL);
+		}
 		/* TODO: shall allow the user to specify width/height, if desired */
 		/* automatic selection of video mode (the current one) */
-		if (!(screen_ = SDL_SetVideoMode(0,	/* width  */
-						0,	/* height */
-						0,	/* depth (bits per pixel) */
-						SDL_FULLSCREEN|SDL_HWSURFACE)))
+		if (!(screen_ = SDL_SetVideoMode(want_width,	/* width  */
+						want_height,	/* height */
+						want_bpp,	/* depth (bits per pixel) */
+						want_flags)))
 		{
 			std::cout << "problems initializing SDL (SDL_SetVideoMode)\n";
 			SDL_Quit();
@@ -396,6 +422,10 @@ std::cout.unsetf ( std::ios::hex );
 //		while(SDL_PollEvent(&event_))
 		if(SDL_PollEvent(&event_))
 		{
+			if(event_.type==SDL_KEYUP)
+				if(!SDL_PollEvent(&event_))
+					goto done;
+
 			switch (event_.type)
 			{
 				case SDL_QUIT:
@@ -492,10 +522,12 @@ std::cout.unsetf ( std::ios::hex );
 				}
 				else
 				{
+					FIM_SDL_INPUT_DEBUG(c,"wchar");
 					cout << "sorry, no support for wide chars in fim\n";
 					/*  no support for wide chars in fim */
 					return 0;
 				}
+				FIM_SDL_INPUT_DEBUG(c,"unknown");
 				return 0;
 
 				break;
@@ -523,10 +555,15 @@ std::cout.unsetf ( std::ios::hex );
 				}
 				break;
 #endif
+				case SDL_KEYUP:
+				return 0;
+				default:
+				FIM_SDL_INPUT_DEBUG(c,"default-unknown");
 			}
 			return 0;
 		}
-
+done:
+		FIM_SDL_INPUT_DEBUG(c,"no key");
 		return 0;
 	}
 
@@ -685,7 +722,8 @@ err:
 		fim_key_t c=0;
 		SDL_Event levent;
 		int lkeypress=0;
-
+		fim_tms_t sms=10,ms=seconds*1000;// sms: sleep ms
+#if 0
 		for(;seconds>0;--seconds)
 			sleep(1);
 		if(!get_input_inner(&c,&levent,&lkeypress))
@@ -695,6 +733,20 @@ err:
 		}
 		else
 			return -1;
+#else
+		do
+		{
+			if(ms>0)
+				usleep((int)(sms*1000)),ms-=sms;
+			// we read input twice: it seems we have a number of "spurious" inputs. 
+			if(1==get_input_inner(&c,&levent,&lkeypress)) goto done;
+		}
+		while(ms>0);
+		return -1;
+done:
+		usleep((int)(sms*1000)),ms-=sms;
+		return c;
+#endif
 	}
 
 	void SDLDevice::flush()

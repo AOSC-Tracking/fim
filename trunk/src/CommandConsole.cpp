@@ -872,6 +872,11 @@ ok:
 		{
 			/* while characters read */
 			//if( c == -1 ) return 0;	/* no chars read */
+			key_bindings_t::const_iterator ki;
+//			if(c==key_bindings_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
+//			if(c==key_bindings_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
+			if((ki=key_bindings_.find(FIM_KBD_ESC))!=key_bindings_.end() && c==ki->second)return 1;
+			if((ki=key_bindings_.find(FIM_KBD_COLON))!=key_bindings_.end() && c==ki->second)return 1;
 			if( c != exitBinding_ )  /* some char read */
 			{
 				/*
@@ -881,15 +886,12 @@ ok:
 				 * is it a desirable behaviour ?
 				 */
 				executeBinding(c);
+				if(!show_must_go_on_)
+					return 1;
 				c = displaydevice_->catchInteractiveCommand(1);
 //				return 0;/* could be a command key */
 			}
 			if(c==exitBinding_) return 1; 		/* the user hit the exitBinding_ key */
-			key_bindings_t::const_iterator ki;
-//			if(c==key_bindings_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
-//			if(c==key_bindings_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
-			if((ki=key_bindings_.find(FIM_KBD_ESC))!=key_bindings_.end() && c==ki->second)return 1;
-			if((ki=key_bindings_.find(FIM_KBD_COLON))!=key_bindings_.end() && c==ki->second)return 1;
 		}
 		return 0; 		/* no chars read  */
 
