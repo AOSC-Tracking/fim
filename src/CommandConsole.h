@@ -181,7 +181,7 @@ class CommandConsole
 	bool redisplay();
 	char * command_generator (const char *text,int state)const;
 	fim_err_t executionCycle();
-	fim_err_t init(string device);
+	fim_err_t init(fim::string device);
 	int  inConsole()const;
 	~CommandConsole();
 	float getFloatVariable(const fim::string &varname)const;
@@ -282,6 +282,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 #endif
 	int quit(int i=FIM_CNS_ERR_QUIT);
 	public:
+	fim_key_t find_keycode_for_bound_cmd(fim::string binding);
 
 	fim_bool_t drawOutput(const char*s=NULL)const;
 	bool regexp_match(const char*s, const char*r)const;

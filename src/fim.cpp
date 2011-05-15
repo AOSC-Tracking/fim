@@ -134,7 +134,10 @@ struct fim_options_t fim_options[] = {
 "Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks."
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
-"It will probably be a subset  of {\\fBsdl\\fP, \\fBfb\\fP, \\fBaa\\fP, \\fBcaca\\fP, \\fBdumb\\fP}."
+"It will probably be a subset  of {\\fBsdl\\fP, \\fBfb\\fP, \\fBaa\\fP, \\fBcaca\\fP, \\fBdumb\\fP}.\n"
+#if FIM_WANT_SDL_OPTIONS_STRING 
+"The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution, and the \\fB'w'\\fP character requests windowed mode (experimental feature)."
+#endif
     },
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
 "Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems)."

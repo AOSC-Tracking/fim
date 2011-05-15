@@ -37,7 +37,7 @@
 
 namespace fim
 {
-	fim_err_t CommandConsole::init(string device)
+	fim_err_t CommandConsole::init(fim::string device)
 	{
 		/*
 		 * TODO : move most of this stuff to the constructor, some day.
@@ -76,13 +76,28 @@ namespace fim
 
 
 		#ifdef FIM_WITH_LIBSDL
-		if(device==FIM_DDN_INN_SDL)
+		if(device.find(FIM_DDN_INN_SDL)==0)
 		{
 			DisplayDevice *sdld=NULL;
+			fim::string fopts;
+#if FIM_WANT_SDL_OPTIONS_STRING 
+			int dsl=strlen(FIM_DDN_INN_SDL);
+			int ssl=strlen(FIM_SYM_DEVOPTS_SEP_STR);
+			std::string opts;
+
+			if(device.find(FIM_DDN_INN_SDL FIM_SYM_DEVOPTS_SEP_STR)==0)
+			if(device.length()>dsl+ssl)
+			{
+				opts=device.substr(dsl+ssl,device.length());
+				fopts=opts.c_str();//FIXME
+			}
+#else
+#endif
 			sdld=new SDLDevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-					mc_
+					mc_,
 #endif
+					fopts
 					); if(sdld && sdld->initialize(key_bindings_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice_==NULL)
 			{

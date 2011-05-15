@@ -341,8 +341,6 @@ class FramebufferDevice:public DisplayDevice
 
 #define TRUE            1
 #define FALSE           0
-#define MAX(x,y)        ((x)>(y)?(x):(y))
-#define MIN(x,y)        ((x)<(y)?(x):(y))
 #define ARRAY_SIZE(x)   (sizeof(x)/sizeof(x[0]))
 
 /*

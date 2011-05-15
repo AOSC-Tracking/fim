@@ -113,6 +113,9 @@
 /*#include <sys/stat.h> */
 /*#include <sys/types.h>*/
  
+#define FIM_LINE_CERR std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
+#define FIM_LINE_COUT std::cout << "in " <<__func__ << " # " << __FILE__ << ":" << __LINE__ << "\n";
+
 namespace fim
 {
 	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
@@ -198,6 +201,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_SEARCH_KEY	'/'
 #define FIM_SYM_NULL_KEY	0
 #define FIM_SYM_NAMESPACE_SEP	':'
+#define FIM_SYM_DEVOPTS_SEP	'='
+#define FIM_SYM_DEVOPTS_SEP_STR	"="
 #define FIM_SYM_NULL_NAMESPACE_CHAR	'\0'
 #define FIM_SYM_NAMESPACE_BROWSER_CHAR	'b'
 #define FIM_SYM_NAMESPACE_IMAGE_CHAR	'i'
@@ -283,6 +288,11 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
 #define FIM_CNS_ERR_QUIT	0
 #define FIM_CNS_EMPTY_RESULT	FIM_CNS_EMPTY_STRING
+
+
+
+#define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
+#define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
 
 
 
@@ -570,6 +580,7 @@ namespace fim
 #define FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE 0
 #define FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE 1
 #define FIM_WANT_SINGLE_SYSTEM_INVOCATION 1
+#define FIM_WANT_SDL_OPTIONS_STRING 1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_STRING_BUFSIZE	4096

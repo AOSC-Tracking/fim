@@ -39,14 +39,18 @@ class SDLDevice:public DisplayDevice
 	int current_w_;
 	int current_h_;
 	int Bpp_,bpp_;
+	fim::string opts_;
+	bool want_windowed_;
 
 	public:
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	SDLDevice(MiniConsole & mc_);
+	SDLDevice(MiniConsole & mc_,
 #else
-	SDLDevice();
+	SDLDevice(
 #endif
+			fim::string opts
+		);
 
 	virtual fim_err_t  display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
@@ -78,6 +82,7 @@ class SDLDevice:public DisplayDevice
 	void lock();
 	void unlock();
 	fim_bpp_t get_bpp(){return bpp_; };
+	bool sdl_window_update();
 	private:
 	int clear_rect_( void* dst, int oroff,int ocoff, int orows,int ocols, int ocskip);
 	/* TEMPORARY */

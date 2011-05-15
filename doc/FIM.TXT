@@ -1707,6 +1707,10 @@ A lot of questions still await for an answer in Fim. Here are few:
     ImageMagick package) will be tried to convert unrecognized format files,
     as a last try.
 
+ Q: Does Fim support animated gif images ?
+ A: Currently no. Although animated gif support may be easily added with the
+    multi-page images feature (now used for pdf and djvu extensions).
+
 ==============================================================================
 13.BUGS								*bugs*
 

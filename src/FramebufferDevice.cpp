@@ -396,8 +396,8 @@ void FramebufferDevice::svga_display_image_new(
 	/*
 	 * WARNING : SHOULD ASSeRT BX+BW < FB_VAR.XReS ..!!
 	 * */
-    unsigned int     dwidth  = MIN(img->i.width,  bw);
-    unsigned int     dheight = MIN(img->i.height, bh);
+    unsigned int     dwidth  = FIM_MIN(img->i.width,  bw);
+    unsigned int     dheight = FIM_MIN(img->i.height, bh);
     unsigned int     data, video, bank, offset, bytes, y;
     int yo=(bh-dheight)/2;
     int xo=(bw-dwidth )/2;
