@@ -131,6 +131,23 @@ namespace fim
 		return unbind(key_bindings_[key]);
 	}
 
+	fim_key_t CommandConsole::find_keycode_for_bound_cmd(fim::string binding)
+	{
+		/*
+		 * looks for a binding to 'cmd' and returns a string description for its bound key 
+		 */
+		bindings_t::const_iterator bi;
+		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
+		{
+			/* FIXME: should move this functionality to an ad-hoc search routine */
+			if(bi->second==binding)
+			{
+				return bi->first;	
+			}
+		}
+		return FIM_SYM_NULL_KEY;
+	}
+
 	fim::string CommandConsole::find_key_for_bound_cmd(fim::string binding)
 	{
 		/*

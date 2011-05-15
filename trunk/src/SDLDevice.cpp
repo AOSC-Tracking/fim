@@ -40,7 +40,9 @@ namespace fim
 }
 
 
+#define FIM_SDL_ALLOW_QUIT 1
 #define FIM_SDL_WANT_KEYREPEAT 1
+#define FIM_SDL_WANT_RESIZE 0
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 
@@ -60,15 +62,41 @@ std::cout.unsetf ( std::ios::hex );
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	SDLDevice::SDLDevice(MiniConsole & mc_):DisplayDevice(mc_),vi_(NULL)
+	SDLDevice::SDLDevice(MiniConsole & mc_, fim::string opts):DisplayDevice(mc_),
 #else
-	SDLDevice::SDLDevice():DisplayDevice(),vi_(NULL)
+	SDLDevice::SDLDevice(
+			fim::string opts
+			):DisplayDevice(),
 #endif
+	current_w_(0), current_h_(0),
+	opts_(opts),
+	want_windowed_(false),
+	vi_(NULL)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		keypress_ = 0;
 		h_=0;
-		current_w_=current_h_=0;
+#if FIM_WANT_SDL_OPTIONS_STRING 
+		const char*os=opts_.c_str();
+		if(os)
+		{
+			if(*os=='w')
+			{
+				want_windowed_=true;
+				++os;
+			}
+		if(*os)
+		if(2==sscanf(os,"%d:%d",&current_w_,&current_h_))
+
+		{
+		//	std::cout << w << " : "<< h<<"\n";
+			current_w_=FIM_MAX(current_w_,0);
+			current_h_=FIM_MAX(current_h_,0);
+		}
+		}
+#endif
+
+		//current_w_=current_h_=0;
 	}
 
 	int SDLDevice::clear_rect_(
@@ -232,16 +260,38 @@ std::cout.unsetf ( std::ios::hex );
 		return FIM_ERR_NO_ERROR;
 	}
 
+	bool SDLDevice::sdl_window_update()
+	{
+		vi_ = SDL_GetVideoInfo();
+		if(!vi_)
+			return false;
+		current_w_=vi_->current_w;
+		current_h_=vi_->current_h;
+		bpp_      =vi_->vfmt->BitsPerPixel;
+		Bpp_      =vi_->vfmt->BytesPerPixel;
+		return true;
+	}
+
 	fim_err_t SDLDevice::initialize(key_bindings_t &key_bindings)
 	{
 		/*
 		 *
 		 * */
-		int want_width=0, want_height=0, want_bpp=0;
+		//int want_width=0, want_height=0, want_bpp=0;
+		int want_width=current_w_, want_height=current_h_, want_bpp=0;
 		int want_flags=SDL_FULLSCREEN|SDL_HWSURFACE;
 		int delay=0,interval=0;
-		bool want_windowed=false;
-		if(want_windowed)
+		//want_flags|=SDL_NOFRAME;
+		//std::cout << want_width << " : "<< want_height<<"\n";
+#if 0
+		//want_windowed_=true;
+		want_height=480;
+		want_width=480;
+#if FIM_SDL_WANT_RESIZE 
+		want_flags|=SDL_RESIZABLE;
+#endif
+#endif
+		if(want_windowed_)
 			want_flags&=~SDL_FULLSCREEN;
 		//want_flags|=SDL_DOUBLEBUF;
 
@@ -281,17 +331,11 @@ std::cout.unsetf ( std::ios::hex );
 		}
 		else
 		{
-			vi_ = SDL_GetVideoInfo();
-			if(!vi_)
+			if(!sdl_window_update())
 			{
 				std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
 				return FIM_ERR_GENERIC;
 			}
-
-			current_w_=vi_->current_w;
-			current_h_=vi_->current_h;
-			bpp_      =vi_->vfmt->BitsPerPixel;
-			Bpp_      =vi_->vfmt->BytesPerPixel;
 		}
 		fim_perror(NULL);
 
@@ -428,7 +472,17 @@ std::cout.unsetf ( std::ios::hex );
 
 			switch (event_.type)
 			{
+#if FIM_SDL_WANT_RESIZE 
+				case SDL_RESIZABLE:
+					std::cout << "resizing to " << event_.resize.w << " "<< event_.resize.h << "\n";
+				break;
+#endif
 				case SDL_QUIT:
+#if FIM_SDL_ALLOW_QUIT
+				*c=cc.find_keycode_for_bound_cmd(FIM_FLT_QUIT);
+				return 1;
+				//cc.quit();
+#endif	
 				*keypressp = 1;
 				
 				break;
