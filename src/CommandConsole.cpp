@@ -326,8 +326,8 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string("info about the current file" ),&browser_,&Browser::info));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO),fim::string("jumps to the first image matching the given pattern"),&browser_,&Browser::regexp_goto));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO_NEXT),fim::string("jumps to the next image matching the last given pattern"),&browser_,&Browser::regexp_goto_next));
-		addCommand(new Command(fim::string("scale_increment" ),fim::string("increments the scale by a percentual amount"),&browser_,&Browser::scale_increment));
-		addCommand(new Command(fim::string("scale_multiply" ),fim::string("multiplies the scale by the specified amount"),&browser_,&Browser::scale_multiply));
+		addCommand(new Command(fim::string(FIM_FLT_SCALE_INCREMENT),fim::string("increments the scale by a percentual amount"),&browser_,&Browser::scale_increment));
+		addCommand(new Command(fim::string(FIM_FLT_SCALE_MULTIPLY),fim::string("multiplies the scale by the specified amount"),&browser_,&Browser::scale_multiply));
 		addCommand(new Command(fim::string("scale_factor_grow" ),fim::string("multiply the scale factors reduce_factor and magnify_factor by scale_factor_multiplier"),&browser_,&Browser::scale_factor_increase));
 		addCommand(new Command(fim::string("scale_factor_shrink" ),fim::string("divide the scale factors reduce_factor and magnify_facto by scale_factor_multiplier"),&browser_,&Browser::scale_factor_decrease));
 		addCommand(new Command(fim::string("scale_factor_increase" ),fim::string("add scale_factor_delta to the scale factors reduce_factor and magnify_facto" ),&browser_,&Browser::scale_factor_increase));

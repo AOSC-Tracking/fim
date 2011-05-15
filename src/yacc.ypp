@@ -2,7 +2,7 @@
 /*
  yacc.ypp : Parser source file template
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -158,28 +158,28 @@ func_dec:
  */
 stmt:
 	// ! 'shell-cmd'
-	   NOT args        { $$ = opr('x',2,scon(dupstr("system")),$2); }
-//	|  SYSTEM args        { $$ = opr('x',2,scon(dupstr("system")),$2); }
+	   NOT args        { $$ = opr('x',2,scon(dupstr(FIM_FLT_SYSTEM)),$2); }
+//	|  SYSTEM args        { $$ = opr('x',2,scon(dupstr(FIM_FLT_SYSTEM)),$2); }
 	// [n]cmd
 	| INTEGER IDENTIFIER { if($1>0){$$ = opr('r',2,opr('x',1,scon($2)),con($1)); }}
 	// goto
-	| REGEXP { $$ = opr('x',2,scon(dupstr("regexp_goto")),opr('a',1,opr('a',1,scon($1)))); }
+	| REGEXP { $$ = opr('x',2,scon(dupstr(FIM_FLT_REXP_GOTO)),opr('a',1,opr('a',1,scon($1)))); }
 	// magnification
-	| '+' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
-	| '+' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
-	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
-	| '*' UNQUOTED_FLOAT { $$ = opr('x',2,scon(dupstr("scale_multiply")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
-	| '*' FLOAT { $$ = opr('x',2,scon(dupstr("scale_multiply")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
-	| '*' INTEGER { $$ = opr('x',2,scon(dupstr("scale_multiply")),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
-	| UNQUOTED_FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
-	| FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
-	| INTEGER'%'{{$$=opr('x',2,scon(dupstr("scale")),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}}
+	| '+' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| '+' FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| '*' UNQUOTED_FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
+	| '*' FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
+	| '*' INTEGER { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
+	| UNQUOTED_FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
+	| FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
+	| INTEGER'%'{{$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}}
 	// minification (yes, minification)
-	| '-' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
-	| '-' FLOAT   '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
-	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr("scale_increment")),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+	| '-' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+	| '-' FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
 	// $ and ^ work too (see lex.lex)
-	| INTEGER         { $$ = opr('x',2,scon(dupstr("goto")),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
+	| INTEGER         { $$ = opr('x',2,scon(dupstr(FIM_FLT_GOTO)),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
 	// cmd ..
 	| IDENTIFIER      { $$ = opr('x',1,scon($1));     }
 	| IDENTIFIER FILE_PATH {
@@ -194,7 +194,7 @@ stmt:
 		$$ = opr('x',2,scon($1),opr('a',1,scon(dupstr($2))));
 		fim_free($2);
 #else
-		$$ = opr('x',2,scon("echo"),opr('a',1,scon("Please quote or double-quote your argument or enable FIM_SMART_COMPLETION at compile time\n")));
+		$$ = opr('x',2,scon(FIM_FLT_ECHO),opr('a',1,scon("Please quote or double-quote your argument or enable FIM_SMART_COMPLETION at compile time\n")));
 #endif
 		}
 	| IDENTIFIER args { $$ = opr('x',2,scon($1),$2);  /* here I would like to use FIM_SMART_COMPLETION but for now it works with the FILE_PATH trick above. */ }
@@ -335,6 +335,7 @@ expr:
 	| IDENTIFIER { $$ = vscon($1,'v');  }
 	| INTEGER { $$ =  con($1); }
 	| FLOAT   { $$ = fcon($1); }
+	| UNQUOTED_FLOAT   { $$ = fcon($1); }
 	| STRING  { $$ = scon($1); }
 	;
 
@@ -352,7 +353,7 @@ nodeType *scon(char*s)
 	/* allocate node */
 	nodeSize = SIZEOF_NODETYPE + sizeof(stringNodeType);
 	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
-		yyerror("out of memory");
+		yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = stringCon; 
 	p->scon.s=s;
@@ -403,7 +404,7 @@ nodeType *fcon(float fValue)
 	/* allocate node */
 	nodeSize = SIZEOF_NODETYPE + sizeof(fidNodeType);
 	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
-	yyerror("out of memory");
+	yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = floatCon;
 	p->fid.f = fValue;
@@ -419,7 +420,7 @@ nodeType *con(int value)
 	/* allocate node */
 	nodeSize = SIZEOF_NODETYPE + sizeof(conNodeType);
 	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
-	yyerror("out of memory");
+	yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = intCon;
 	p->con.value = value;
@@ -439,7 +440,7 @@ nodeType *opr(int oper, int nops, ...)
 	nodeSize = SIZEOF_NODETYPE + sizeof(oprNodeType) +
 	(nops - 1) * sizeof(nodeType*);
 	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
-	yyerror("out of memory");
+	yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = typeOpr;
 	p->opr.oper = oper;
@@ -471,7 +472,8 @@ void yyerror(const char *s)
 {
 	//fprintf(stdout, "%s \n", s);
 	/* omitting std:: causes error on darwin gcc */
-	std::cout << s << "\n";
+	//std::cout << s << "\n";
+	fim::cout << s << FIM_SYM_ENDL;
 }
 
 

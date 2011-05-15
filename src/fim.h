@@ -231,6 +231,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_EMSG_NO_SCRIPTING	"sorry, no scripting available!\n"
 #define FIM_EMSG_NO_READ_STDIN_IMAGE	"sorry, the reading of images from stdin was disabled at compile time\n"
 #define FIM_EMSG_CACHING_STDIN	"problems caching standard input image!\n"
+#define FIM_EMSG_OUT_OF_MEM	"out of memory\n"
 
 /*
  * Some environment variables used by Fim.
@@ -528,6 +529,8 @@ namespace fim
 #define FIM_FLT_REMOVE		"remove" /* not in vim */
 #define FIM_FLT_ROTATE		"rotate" /* not in vim */
 #define FIM_FLT_SCALE		"scale" /* not in vim */
+#define FIM_FLT_SCALE_MULTIPLY		"scale_multiply" /* not in vim */ /* FIXME: delete this command */
+#define FIM_FLT_SCALE_INCREMENT		"scale_increment" /* not in vim */ /* FIXME: delete this command */
 #define FIM_FLT_SCROLLDOWN	"scrolldown" /* not in vim */
 #define FIM_FLT_SCROLLFORWARD	"scrollforward" /* not in vim */
 #define FIM_FLT_SET		"set" /* in vim */
