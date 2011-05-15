@@ -32,8 +32,9 @@ namespace fim
 
 	class fim_stream
 	{
+		int fd_;
 		public:
-		fim_stream(){}
+		fim_stream(int fd=-1);
 
 		fim_stream& operator<<(const  char* s);
 

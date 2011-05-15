@@ -25,6 +25,10 @@
 
 namespace fim
 {
+		fim_stream::fim_stream(int fd):fd_(fd)
+		{
+		}
+
 		fim_stream& fim_stream::operator<<(const unsigned char* s)
 		{
 			*this<<(const char*)s;
@@ -55,7 +59,13 @@ namespace fim
 
 		fim_stream& fim_stream::operator<<(const  char* s)
 		{
-			if(s)cc.status_screen(s);
+			if(s)
+			{
+				if(fd_==-1)
+					cc.status_screen(s);
+				else
+					std::cerr << s ;
+			}
 			//else if(s)printf("%s",s);
 
 			return *this;
