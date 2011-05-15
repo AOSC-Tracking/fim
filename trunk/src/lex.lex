@@ -213,6 +213,11 @@ STRINGC_DQ {STRINGC}|\'
 	return REGEXP;
 	}
 
+{DIGIT}+"."{DIGIT}* {
+	yylval.fValue = fim_atof(yytext+0);
+	return UNQUOTED_FLOAT;
+	}
+
 [ \t]+ { /* we ignore whitespace */ ; }
 
 
