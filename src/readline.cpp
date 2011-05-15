@@ -25,6 +25,7 @@
 #include "readline.h"
 #endif
 #ifdef FIM_USE_READLINE
+#include "fim.h"
 
 #define min(x,y) ((x)<(y)?(x):(y))
 #define max(x,y) ((x)>(y)?(x):(y))
@@ -103,12 +104,12 @@ static void completion_display_matches_hook(char **matches,int num,int max)
 #define FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 1
 #if FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 
 	if(num>1)
-		cout << "possible completions for \""<<matches[0]<<"\":\n" ;
+		fim::cout << "possible completions for \""<<matches[0]<<"\":\n" ;
 #endif
 	for(int i=/*0*/1;i<num && matches[i] && f>0;++i)
 	{
 #if FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 
-		cout << matches[i] << "\n";
+		fim::cout << matches[i] << "\n";
 #endif
 		w=min(strlen(matches[i])+1,(size_t)f);
 		if(f>0){

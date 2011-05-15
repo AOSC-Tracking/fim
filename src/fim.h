@@ -316,8 +316,8 @@ namespace fim
 {
 	class Browser;
 	class CommandConsole;
-
-	static fim_stream cout;	// this will be moved
+	extern fim_stream cout;
+	extern fim_stream cerr;
 	std::ostream& operator<<(std::ostream &os,const string& s);
 }
 
