@@ -36,7 +36,6 @@ ongoing further inspiration.
 20110202	and DICOM ? see libmdc2-dev / man medcon
 20110129	incongruences in FIM.TXT:
 		the system command is declared to be non active. this is wrong.
-		*0.5 does not work.  *"0.5" works instead. this is wrong.
 20110129	all of the scripts/rc scripts should be tested for compliance
 20110127	consider making the program ready for GNU gettext: http://www.gnu.org/software/hello/manual/gettext/index.html#Top
 20110126	could introduce a string identifying fimrc versions
