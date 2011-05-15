@@ -550,15 +550,19 @@ namespace fim
 		 */
 		bindings_t::const_iterator bi=bindings_.find(c);
 		int status=0;
-#define KEY_OFFSET 48
+#define KEY_OFFSET '0'
 
 #ifdef FIM_ITERATED_COMMANDS
 		static int it_buf=-1;
-		if( c>=48 && c <=57 && (bi==bindings_.end() || bi->second==FIM_CNS_EMPTY_STRING))//a number, not bound
+		if( c>='0' && c <='9' && (bi==bindings_.end() || bi->second==FIM_CNS_EMPTY_STRING))//a number, not bound
 		{
 			if(it_buf>0){it_buf*=10;it_buf+=c - KEY_OFFSET;}
 			else it_buf=c - KEY_OFFSET;
+			return;
 		}
+		/* FIXME 20110515 this prevents infinite recursion on iterated commands in SDL mode. this is probably a bug in the sdl input handling code and shall be solved */
+		if(c==FIM_SYM_NULL_KEY)
+			return;
 #endif
 
 		if(bi!=bindings_.end() && bi->second!=FIM_CNS_EMPTY_STRING)

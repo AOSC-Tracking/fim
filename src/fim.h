@@ -196,6 +196,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_CONSOLE_KEY	':'
 #define FIM_SYM_CONSOLE_KEY_STR	":"
 #define FIM_SYM_SEARCH_KEY	'/'
+#define FIM_SYM_NULL_KEY	0
 #define FIM_SYM_NAMESPACE_SEP	':'
 #define FIM_SYM_NULL_NAMESPACE_CHAR	'\0'
 #define FIM_SYM_NAMESPACE_BROWSER_CHAR	'b'
