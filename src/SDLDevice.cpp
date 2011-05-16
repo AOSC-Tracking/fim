@@ -71,6 +71,7 @@ std::cout.unsetf ( std::ios::hex );
 	current_w_(0), current_h_(0),
 	opts_(opts),
 	want_windowed_(false),
+	want_mouse_display_(false),
 	vi_(NULL)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
@@ -80,9 +81,13 @@ std::cout.unsetf ( std::ios::hex );
 		const char*os=opts_.c_str();
 		if(os)
 		{
-			if(*os=='w')
+			while(*os&&!isdigit(*os))
 			{
-				want_windowed_=true;
+				switch(tolower(*os)){
+				case 'w': want_windowed_=true; break;
+				case 'm': want_mouse_display_=true; break;
+				default: std::cerr<<"unrecognized specifier character \""<<*os<<"\"\n";
+				}
 				++os;
 			}
 		if(*os)
@@ -92,6 +97,10 @@ std::cout.unsetf ( std::ios::hex );
 		//	std::cout << w << " : "<< h<<"\n";
 			current_w_=FIM_MAX(current_w_,0);
 			current_h_=FIM_MAX(current_h_,0);
+		}
+		else
+		{
+			// TODO: invaling string message needed here
 		}
 		}
 #endif
@@ -365,8 +374,8 @@ std::cout.unsetf ( std::ios::hex );
 		key_bindings["F10"]=SDLK_F10;
 		key_bindings["F11"]=SDLK_F11;
 		key_bindings["F12"]=SDLK_F12;
-
-		SDL_ShowCursor(0);
+		
+		SDL_ShowCursor(want_mouse_display_?1:0);
 		fim_perror(NULL);
 
 		// textual console reformatting

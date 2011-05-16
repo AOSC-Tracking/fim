@@ -41,6 +41,7 @@ class SDLDevice:public DisplayDevice
 	int Bpp_,bpp_;
 	fim::string opts_;
 	bool want_windowed_;
+	bool want_mouse_display_;
 
 	public:
 

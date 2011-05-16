@@ -130,13 +130,16 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
 "Will read commands from stdin prior to entering in interactive mode."
     },
-    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       NULL, 'o',"specify using a specific output driver (if supported)","[fb|sdl|aa|dumb]",
+    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       NULL, 'o',"specify using a specific output driver (if supported)",FIM_DDN_VARS,
 "Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks."
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
 "It will probably be a subset  of {\\fBsdl\\fP, \\fBfb\\fP, \\fBaa\\fP, \\fBcaca\\fP, \\fBdumb\\fP}.\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
-"The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution, and the \\fB'w'\\fP character requests windowed mode (experimental feature)."
+"The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']['m']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution, and the \\fB'w'\\fP character requests windowed mode, and the \\fB'm'\\fP character requests mouse pointer display (experimental features).\n"
+#endif
+#if FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE
+"You can use upper and lower case characters indifferently in the specification string (comparisons are case insensitive).\n"
 #endif
     },
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
@@ -1012,6 +1015,9 @@ done:
 		case 'o':
 		    //fim's
 		    	g_fim_output_device=optarg;
+#if FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE
+			transform(g_fim_output_device.begin(), g_fim_output_device.end(), g_fim_output_device.begin(),(int (*)(int))tolower);
+#endif
 		    break;
 		case 0xd15cbab3:
 		    //fim's
