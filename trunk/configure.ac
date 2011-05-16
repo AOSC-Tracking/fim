@@ -1488,6 +1488,10 @@ dnl AC_DEFINE([FIM_IS_SLOWER_THAN_FBI])
 dnl AH_TEMPLATE([FIM_WITH_LIBSDL])
 dnl AC_DEFINE([FIM_WITH_LIBSDL])
 AH_TEMPLATE([FIM_AUTHOR])
+AH_TEMPLATE([FIM_AUTHOR_NAME])
+AH_TEMPLATE([FIM_AUTHOR_EMAIL])
+AC_DEFINE([FIM_AUTHOR_NAME],["Michele Martone"])
+AC_DEFINE([FIM_AUTHOR_EMAIL],["<dezperado _CUT_ autistici _CUT_ org>"])
 AC_DEFINE([FIM_AUTHOR],["Michele Martone <dezperado _CUT_ autistici _CUT_ org>"])
 dnl ###############################################################################
 dnl this is experimental stuff

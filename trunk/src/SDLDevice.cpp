@@ -32,7 +32,7 @@
 
 #include "SDLDevice.h"
 
-#define min(x,y) ((x)<(y)?(x):(y))
+#define FIM_SDL_ICONPATH ""
 
 namespace fim
 {
@@ -182,8 +182,8 @@ std::cout.unsetf ( std::ios::hex );
 		if( icskip<icols ) return -6-5*100;
 		if( ocskip<ocols ) return -11-10*100;
 	
-		orows  = min( orows, height());
-		ocols  = min( ocols,  width()); 
+		orows  = FIM_MIN( orows, height());
+		ocols  = FIM_MIN( ocols,  width()); 
 		ocskip = width(); 	//FIXME maybe this is not enough and should be commented or rewritten!
 
 		if( orows  > height() ) return -9 -99*100;
@@ -211,8 +211,8 @@ std::cout.unsetf ( std::ios::hex );
 		idr = iroff-oroff;
 		idc = icoff-ocoff;
 
-		lor = (min(orows-1,irows-1-iroff+oroff));
-		loc = (min(ocols-1,icols-1-icoff+ocoff));
+		lor = (FIM_MIN(orows-1,irows-1-iroff+oroff));
+		loc = (FIM_MIN(ocols-1,icols-1-icoff+ocoff));
 
 		int ii,ij;
 		int oi,oj;
@@ -341,6 +341,8 @@ std::cout.unsetf ( std::ios::hex );
 
 		/* Enable Unicode translation ( for a more flexible input handling ) */
 	        SDL_EnableUNICODE( 1 );
+		SDL_WM_SetCaption(FIM_CNS_FIM_APPTITLE,FIM_SDL_ICONPATH);
+		fim_perror(NULL);
 
 		key_bindings["PageUp" ]=SDLK_PAGEUP;
 		key_bindings["PageDown" ]=SDLK_PAGEDOWN;

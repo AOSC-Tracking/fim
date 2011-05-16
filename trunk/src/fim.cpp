@@ -456,7 +456,7 @@ int fim_dump_man_page()
 			string(".\\\"\n")+
 			string(".\\\" $Id""$\n")+
 			string(".\\\"\n")+
-			string(".TH fim 1 \"(c) 2007-2011 Michele Martone\"\n")+
+			string(".TH fim 1 \"(c) 2007-2011 "FIM_AUTHOR_NAME"\"\n")+
 			string(".SH NAME\n")+
 			string("fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n")+
 			string(".SH SYNOPSIS\n")+
@@ -467,9 +467,9 @@ int fim_dump_man_page()
 			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [{options}] < {scriptfile}\n.fi\n")+
 			string("\n")+
 			string(".SH DESCRIPTION\n")+
-			string(".B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use 'xcftopnm'.\nFor '.fig' vectorial images, fim will try to use 'fig2dev'.\nFor '.dia' vectorial images, fim will try to use 'dia'.\nFor '.svg' vectorial images, fim will try to use 'inkscape'.\nFor other formats fim will try to use ImageMagick's 'convert'.\n")+
+			string(".B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '"FIM_EPR_XCFTOPNM"'.\nFor '.fig' vectorial images, fim will try to use '"FIM_EPR_FIG2DEV"'.\nFor '.dia' vectorial images, fim will try to use '"FIM_EPR_DIA"'.\nFor '.svg' vectorial images, fim will try to use '"FIM_EPR_INKSCAPE"'.\nFor other formats fim will try to use ImageMagick's '"FIM_EPR_CONVERT"' executable.\n")+
 			string("\n")+
-			string("Please note that the full documentation of \n.B fim\nis in the FIM.TXT file distributed in the source package.  This man page only describes the\n.B fim\ncommand line switches.\n")+
+			string("Please note that the full documentation of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.  This man page only describes the\n.B fim\ncommand line switches.\n")+
 			string(".SH OPTIONS\n");
 			mp+=fim_dump_man_page_snippets();
 			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
@@ -539,13 +539,16 @@ int fim_dump_man_page()
 			string(
 ".SH AFFECTING ENVIRONMENT VARIABLES\n"
 ".nf\n"
-"FBFONT		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.\n"
+""FIM_ENV_FBFONT"		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.\n"
 "			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psfu.gz is a Linux console file.\n"
 "			Consult 'man setfont' for your current font paths.\n"
 "			NOTE : Currently xfs is disabled.\n"
-"FBGAMMA		(just like in fbi) gamma correction.\n"
-"FRAMEBUFFER	(just like in fbi) if set, will override user set framebuffer device file.\n"
-"TERM		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $TERM==\"screen\"\n"
+""FIM_ENV_FBGAMMA"		(just like in fbi) gamma correction.\n"
+""FIM_ENV_FRAMEBUFFER"	(just like in fbi) if set, will override user set framebuffer device file.\n"
+""FIM_CNS_TERM_VAR"		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $"FIM_CNS_TERM_VAR"==\"screen\"\n"
+#ifdef FIM_WITH_LIBSDL
+""FIM_ENV_DISPLAY"	If this variable is set, then the "FIM_DDN_INN_SDL" driver will be tried by default.\n"
+#endif
 ".SH COMMON PROBLEMS\n"
 ".B fim\n"
 "needs read-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our\n"
@@ -650,12 +653,12 @@ string(
 "Or related programs: fbset(1), con2fb(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)\n"
 ".SH AUTHOR\n"
 ".nf\n"
-"Michele Martone <dezperado _ GUESS _ autistici.org> is the author of fim, \"fbi improved\". \n"
+FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
 ".fi\n"
 "Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based. \n"
 ".SH COPYRIGHT\n"
 ".nf\n"
-"Copyright (C) 2007-2011 Michele Martone <dezperado _ GUESS _ autistici.org>\n"
+"Copyright (C) 2007-2011 "FIM_AUTHOR"\n"
 ".fi\n"
 "Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>\n"
 ".P\n"
@@ -704,9 +707,9 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		std::cout << FIM_SYM_ENDL;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 		}
-		std::cout << "\n Please read the documentation distributed with the program, in FIM.TXT.\n"
-			  << " For further help, consult the online help in fim (:help), and man fim (1), fimrc (1).\n"
-			  << " For bug reporting please read the BUGS file.\n";
+		std::cout << "\n Please read the documentation distributed with the program, in "FIM_CNS_FIM_TXT".\n"
+			  << " For further help, consult the online help in fim (:"FIM_FLT_HELP"), and man fim (1), fimrc (1).\n"
+			  << " For bug reporting please read the "FIM_CNS_BUGS_FILE" file.\n";
 done:
 	    std::exit(code);
 	    return code;

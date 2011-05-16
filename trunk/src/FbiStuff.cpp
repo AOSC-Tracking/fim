@@ -1548,13 +1548,13 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 #ifdef FIM_TRY_DIA
     if (NULL == loader && (*blk==0x1f) && (*(unsigned char*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
-	cc.set_status_bar("please wait while piping through 'dia'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_DIA"'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
-	cc.set_status_bar("please wait while piping through 'dia'...", "*");
-	if(NULL!=(fp=fim_execlp("dia","dia",filename,"-e",FIM_TMP_FILENAME".png",NULL))&& 0==fclose (fp))
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_DIA"'...", "*");
+	if(NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME".png",NULL))&& 0==fclose (fp))
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
 		/* this could happen in case dia was removed from the system */
@@ -1571,12 +1571,12 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 #ifdef FIM_TRY_XFIG
     if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))
     {
-	cc.set_status_bar("please wait while piping through 'fig2dev'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_FIG2DEV"'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a xfig file was found, and we try to use fig2dev */
-	if(NULL==(fp=fim_execlp("fig2dev","fig2dev","-L","ppm",filename,NULL)))
+	if(NULL==(fp=fim_execlp(FIM_EPR_FIG2DEV,FIM_EPR_FIG2DEV,"-L","ppm",filename,NULL)))
 	    return NULL;
 	loader = &ppm_loader;
     }
@@ -1584,12 +1584,12 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 #ifdef FIM_TRY_XCFTOPNM
     if (NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
     {
-	cc.set_status_bar("please wait while piping through 'xcftopnm'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_XCFTOPNM"'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
-	if(NULL==(fp=fim_execlp("xcftopnm","xcftopnm",filename,NULL)))
+	if(NULL==(fp=fim_execlp(FIM_EPR_XCFTOPNM,FIM_EPR_XCFTOPNM,filename,NULL)))
 	    return NULL;
 	loader = &ppm_loader;
     }
@@ -1606,12 +1606,12 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	/* an svg file was found, and we try to use inkscape with it
 	 * note that braindamaged inkscape doesn't export to stdout ...
 	 * */
-	cc.set_status_bar("please wait while piping through 'inkscape'...", "*");
-	sprintf(command,"inkscape \"%s\" --export-png \"%s\"",
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_INKSCAPE"'...", "*");
+	sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"",
 		filename,FIM_TMP_FILENAME );
 #if 0
 	/* FIXME : the following code should work, but it doesn't */
-	if(NULL!=(fp=fim_execlp("inkscape","inkscape",filename,"--export-png","/dev/stdout",NULL)))
+	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png","/dev/stdout",NULL)))
 	{
 		fp=fim_fread_tmpfile(fp);
 		if(fp==NULL) return NULL;
@@ -1621,7 +1621,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		}
 	}
 #else
-	if(NULL!=(fp=fim_execlp("inkscape","inkscape",filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fclose(fp))
+	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fclose(fp))
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
 			    return NULL;
@@ -1653,9 +1653,9 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 //#endif
 #ifdef FIM_TRY_CONVERT
     if (NULL == loader) {
-	cc.set_status_bar(string("please wait while piping ")+string(filename)+string(" through 'convert'..."), "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" through '"FIM_EPR_CONVERT"'...", "*");
 	/* no loader found, try to use ImageMagick's convert */
-	if(NULL==(fp=fim_execlp("convert","convert",filename,"ppm:-",NULL)))
+	if(NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",NULL)))
 		return NULL;
 	loader = &ppm_loader;
     }
