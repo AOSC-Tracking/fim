@@ -165,6 +165,8 @@ namespace fim
 		{
 			displaydevice_=&dummydisplaydevice_;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_DUMB);
+			std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are "FIM_DDN_VARS")!\n";
+			std::cerr << "Using the default \""<<FIM_DDN_INN_DUMB<<"\" display device!\n";
 		}
 
 		xres=displaydevice_->width(),yres=displaydevice_->height();
