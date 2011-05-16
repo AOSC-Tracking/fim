@@ -50,6 +50,7 @@ namespace fim
 
 		displaydevice_=NULL;	/* TODO : is this really necessary ? */
 		int xres=0,yres=0;
+		bool device_failure=false;
 
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 		if( device==FIM_DDN_INN_FB )
@@ -104,6 +105,10 @@ namespace fim
 				displaydevice_=sdld;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_SDL);
 			}
+			else
+			{
+				device_failure=true;
+			}
 		}
 		#endif
 
@@ -121,6 +126,8 @@ namespace fim
 				displaydevice_=cacad;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_CACA);
 			}
+			else
+				device_failure=true;
 		}
 		#endif
 
@@ -134,6 +141,7 @@ namespace fim
 				);
 
 		if(aad_ && aad_->initialize(key_bindings_)!=FIM_ERR_NO_ERROR){delete aad_ ; aad_=NULL;}
+		{
 		if(aad_ && displaydevice_==NULL)
 		{
 			displaydevice_=aad_;
@@ -157,6 +165,8 @@ namespace fim
 			}
 #endif
 		}
+		else device_failure=true;
+		}
 		}
 		#endif
 		tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
@@ -165,8 +175,11 @@ namespace fim
 		{
 			displaydevice_=&dummydisplaydevice_;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_DUMB);
-			std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are "FIM_DDN_VARS")!\n";
-			std::cerr << "Using the default \""<<FIM_DDN_INN_DUMB<<"\" display device!\n";
+			if(device_failure)
+				std::cerr << "Failure using the \""<<device<<"\" display device driver string.!\n";
+			else
+				std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are "FIM_DDN_VARS")!\n";
+			std::cerr << "Using the default \""<<FIM_DDN_INN_DUMB<<"\" display device instead.\n";
 		}
 
 		xres=displaydevice_->width(),yres=displaydevice_->height();
