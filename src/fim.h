@@ -224,6 +224,15 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_ENDL	"\n"
 
 /*
+ * External programs used by fim.
+ */
+#define FIM_EPR_FIG2DEV		"fig2dev"
+#define FIM_EPR_XCFTOPNM	"xcftopnm"
+#define FIM_EPR_DIA		"dia"
+#define FIM_EPR_INKSCAPE	"inkscape"
+#define FIM_EPR_CONVERT		"convert"
+
+/*
  * Some Fim error codes.
  */
 #define FIM_ERR_NO_ERROR	0
@@ -262,6 +271,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  * Fim Constants
  * */
 #define FIM_CNS_FIM	 "FIM - Fbi IMproved"
+#define FIM_CNS_FIM_TXT	 "FIM.TXT"
+#define FIM_CNS_BUGS_FILE	 "BUGS"
 #define FIM_CNS_TERM_VAR	 "TERM"
 #define FIM_CNS_HOME_VAR	 "HOME"
 #define FIM_CNS_HIST_FILENAME	 ".fim_history"
@@ -288,7 +299,11 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
 #define FIM_CNS_ERR_QUIT	0
 #define FIM_CNS_EMPTY_RESULT	FIM_CNS_EMPTY_STRING
-
+#ifdef SVN_REVISION
+#define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION" (r."SVN_REVISION")"
+#else
+#define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION""
+#endif
 
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
@@ -608,6 +623,7 @@ namespace fim
  */
 #define FIM_MSG_CONSOLE_FIRST_LINE_BANNER "=== This is the fim output console. You can scroll it up and down. ===\n"
 #define FIM_MSG_CONSOLE_LONG_LINE "\n============================================================\n"
+#define FIM_MSG_WAIT_PIPING "please wait while piping through"
 
 /*
  * Some Fim internals flags.
