@@ -29,90 +29,111 @@ This page explains the
 language, which is used for the 
 .B fimrc
 configuration files, {scriptfile}s, or {commands} passed via command line options.
-This language can be used to issue commands from the internal program command line accessed interactively through the : key.
+This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the : key.
+The general form of a fim command/program is shown in the next section.
 
 
 .SH FIM LANGUAGE GRAMMAR
-Incomplete section.
+A specification of 
+.B fim
+accepted commands grammar follows.
+
+Language elements surrounded by a single quote ("'") are literals.
+
+Warning: at the present state, this grammar has conflicts. A next release shall fix these problems.
+
   program:
-         | stmt_list
-         | func_dec
+         | statement_list
 
-  func_dec: "function" IDENTIFIER '(' ')' stmt_block
+  statement: '!' arguments
+           | INTEGER IDENTIFIER
+           | SLASH_AND_REGEXP
+           | '+' UNQUOTED_FLOAT '%'
+           | '+' QUOTED_FLOAT '%'
+           | '+' INTEGER '%'
+           | '*' UNQUOTED_FLOAT
+           | '*' QUOTED_FLOAT
+           | '*' INTEGER
+           | UNQUOTED_FLOAT '%'
+           | QUOTED_FLOAT '%'
+           | INTEGER '%'
+           | '-' UNQUOTED_FLOAT '%'
+           | '-' QUOTED_FLOAT '%'
+           | '-' INTEGER '%'
+           | INTEGER
+           | IDENTIFIER
+           | IDENTIFIER FILE_PATH
+           | IDENTIFIER arguments
+           | INTEGER IDENTIFIER arguments
+           | IDENTIFIER '=' expression
 
-  stmt: '!' args
-      | INTEGER IDENTIFIER
-      | REGEXP
-      | '+' UNQUOTED_FLOAT '%'
-      | '+' FLOAT '%'
-      | '+' INTEGER '%'
-      | '*' UNQUOTED_FLOAT
-      | '*' FLOAT
-      | '*' INTEGER
-      | UNQUOTED_FLOAT '%'
-      | FLOAT '%'
-      | INTEGER '%'
-      | '-' UNQUOTED_FLOAT '%'
-      | '-' FLOAT '%'
-      | '-' INTEGER '%'
-      | INTEGER
-      | IDENTIFIER
-      | IDENTIFIER FILE_PATH
-      | IDENTIFIER args
-      | INTEGER IDENTIFIER args
-      | IDENTIFIER '=' expr
+  arguments: expression
+           | expression arguments
 
-  args: expr
-      | expr args
+  conditional_statement: if_statement
+                       | loop_statement
 
-  cond_stmt: if_stmt
-           | loop_stmt
+  loop_statement: 'while' '(' expression ')' statements_block
+                | 'do' statements_block 'while' '(' expression ')'
 
-  loop_stmt: 'while' '(' expr ')' stmt_block
-           | 'do' stmt_block 'while' '(' expr ')'
+  if_statement: 'if' '(' expression ')' statements_block
+              | 'if' '(' expression ')' statements_block 'else' statements_block
 
-  if_stmt: 'if' '(' expr ')' stmt_block
-         | 'if' '(' expr ')' stmt_block 'else' stmt_block
+  statements_block: atomic_statements_block
+                  | non_atomic_statements_block
 
-  stmt_block: atomic_stmt_block
-            | non_atomic_stmt_block
+  atomic_statements_block: statement ';'
+                         | statement ';' ';'
+                         | statement ';' ';' ';'
 
-  atomic_stmt_block: stmt ';'
-                   | stmt ';' ';'
-                   | stmt ';' ';' ';'
+  non_atomic_statements_block: '{' statement_list '}'
+                             | INTEGER '{' statement_list '}'
+                             | conditional_statement
 
-  non_atomic_stmt_block: '{' stmt_list '}'
-                       | INTEGER '{' stmt_list '}'
-                       | cond_stmt
+  statement_list: statement
+                | statement ';' statement_list
+                | non_atomic_statements_block statement_list
+                | statements_block
 
-  stmt_list: stmt
-           | stmt ';' stmt_list
-           | non_atomic_stmt_block stmt_list
-           | stmt_block
+  expression: '(' expression ')'
+            | expression '.' expression
+            | '!' expression
+            | expression '%' expression
+            | expression '+' expression
+            | expression '-' expression
+            | expression '*' expression
+            | expression '/' expression
+            | expression '<' expression
+            | expression '>' expression
+            | expression '||' expression
+            | expression '&&' expression
+            | expression '>=' expression
+            | expression '<=' expression
+            | expression '!=' expression
+            | expression '==' expression
+            | expression '=~' expression
+            | '-' expression
+            | IDENTIFIER
+            | INTEGER
+            | QUOTED_FLOAT
+            | UNQUOTED_FLOAT
+            | STRING
 
-  expr: '(' expr ')'
-      | expr '.' expr
-      | '!' expr
-      | expr '%' expr
-      | expr '+' expr
-      | expr '-' expr
-      | expr '*' expr
-      | expr '/' expr
-      | expr '<' expr
-      | expr '>' expr
-      | expr '||' expr
-      | expr '&&' expr
-      | expr '>=' expr
-      | expr '<=' expr
-      | expr '!=' expr
-      | expr '==' expr
-      | expr '=~' expr
-      | '-' expr
-      | IDENTIFIER
-      | INTEGER
-      | FLOAT
-      | UNQUOTED_FLOAT
-      | STRING
+A STRING can be either a single quoted string or a double quoted string.
+A FLOAT is a floating point number.
+A QUOTED_FLOAT is a floating point number, either single ("'") or double (""") quoted.
+An INTEGER shall be an unsigned integer number.
+An IDENTIFIER shall be one of the valid fim commands (see 
+.B COMMANDS REFERENCE
+) or a valid alias.
+A VARIABLE shall be an already declared or undeclared variable identifier (see 
+.B VARIABLES REFERENCE
+) or a valid alias, created using the 
+.B alias
+command.
+The "=~" operator treats the right expression as a STRING, and uses is as a regular expression for matching purposes.
+The SLASH_AND_REGEXP is a slash ("/") followed by a STRING, interpreted as a regular expression.
+See regex(1) for regular expression syntax.
 
 .SH COMMANDS REFERENCE
 Incomplete section.
@@ -754,11 +775,13 @@ the current image original width
 .fi
 .SH EXAMPLES
 Incomplete section.
+.SH NOTES
+This manual page is incomplete: a number of topics, as type conversions, or operator precedence is left unspecified.
 .SH SEE ALSO
-fim(1).
+fim(1), regex(1).
 .SH AUTHOR
 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 .SH COPYRIGHT
-See fim(1)
+See fim(1).
 
 

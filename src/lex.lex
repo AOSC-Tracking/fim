@@ -159,12 +159,12 @@ STRINGC_DQ {STRINGC}|\'
 
 "'"{DIGIT}+"."{DIGIT}*"'" {
 	yylval.fValue = fim_atof(yytext+1);
-	return FLOAT;
+	return QUOTED_FLOAT;
 	}
 
 "\""{DIGIT}+"."{DIGIT}*"\"" {
 	yylval.fValue = fim_atof(yytext+1);
-	return FLOAT;
+	return QUOTED_FLOAT;
 	}
 
 \'((\\\')|[^\'])*\' {
@@ -210,7 +210,7 @@ STRINGC_DQ {STRINGC}|\'
 
 ^"/".+  {  
 	astrcpy(yylval.sValue,yytext+1);;
-	return REGEXP;
+	return SLASH_AND_REGEXP;
 	}
 
 {DIGIT}+"."{DIGIT}* {

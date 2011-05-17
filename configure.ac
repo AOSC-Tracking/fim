@@ -258,7 +258,7 @@ fi
 dnl ==================
 
 
-AC_ARG_WITH(regex, AC_HELP_STRING([--with-regex], [Use the GNU regex library insteat of the POSIX one]),
+AC_ARG_WITH(regex, AC_HELP_STRING([--with-regex], [Use the GNU regex library instead of the POSIX one]),
         [fim_cv_regex=yes],
         [AC_CHECK_FUNCS(regcomp, fim_cv_regex=no, fim_cv_regex=yes)])
 

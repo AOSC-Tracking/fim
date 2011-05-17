@@ -130,12 +130,31 @@ manmode:
 			string("\n")+
 			string(".SH DESCRIPTION\n")+
 			string("This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line options.\n")+
-			string("This language can be used to issue commands from the internal program command line accessed interactively through the "FIM_SYM_CONSOLE_KEY_STR" key.\n")+
+			string("This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the "FIM_SYM_CONSOLE_KEY_STR" key.\n")+
+			string("The general form of a fim command/program is shown in the next section.\n")+
 			string("\n")+
 			string("\n")+
 			string(".SH FIM LANGUAGE GRAMMAR\n")+
-			string("Incomplete section.\n")+
+//			string("Incomplete section.\n")+
+			string("A specification of \n.B fim\naccepted commands grammar follows.\n\n")+
+			string("Language elements surrounded by a single quote (\"'\") are literals.\n\n")+
+			string("Warning: at the present state, this grammar has conflicts. A next release shall fix these problems.\n")+
+			string("\n")+
 			string(FIM_DEFAULT_GRAMMAR_FILE_CONTENTS)+
+			string("\n")+
+			string("A STRING can be either a single quoted string or a double quoted string.\n")+
+			string("A FLOAT is a floating point number.\n")+
+			string("A QUOTED_FLOAT is a floating point number, either single (\"'\") or double (\"\"\") quoted.\n")+
+			string("An INTEGER shall be an unsigned integer number.\n")+
+			string("An IDENTIFIER shall be one of the valid fim commands (see \n.B COMMANDS REFERENCE\n) or a valid alias.\n")+
+			string("A VARIABLE shall be an already declared or undeclared variable identifier (see \n.B VARIABLES REFERENCE\n) or a valid alias, created using the \n.B alias\ncommand.\n")+
+			string("The \"=~\" operator treats the right expression as a STRING, and uses is as a regular expression for matching purposes.\n")+
+			string("The SLASH_AND_REGEXP is a slash (\"/\") followed by a STRING, interpreted as a regular expression.\n")+
+			string("See regex(1) for regular expression syntax.\n")+
+			// TODO: shall specify the identifier form
+			// TODO: shall specify min and max ranges, signedness
+			// TODO: place some working example here.
+			// TODO: shall write about the conversion rules.
 			string("\n")+
 			string(".SH COMMANDS REFERENCE\n")+
 			string("Incomplete section.\n")+
@@ -147,13 +166,15 @@ manmode:
 		       	get_variables_reference(refmode)+
 			string(".SH EXAMPLES\n")+
 			string("Incomplete section.\n")+
+			string(".SH NOTES\n")+
+			string("This manual page is incomplete: a number of topics, as type conversions, or operator precedence is left unspecified.\n")+
 			string(".SH SEE ALSO\n")+
-			string("fim(1).\n")+
+			string("fim(1), regex(1).\n")+
 			string(".SH AUTHOR\n")+
 			string(FIM_AUTHOR)+
 			string("\n")+
 			string(".SH COPYRIGHT\n")+
-			string("See fim(1)\n")+
+			string("See fim(1).\n")+
 			string("\n")+
 			string("\n")
 			;

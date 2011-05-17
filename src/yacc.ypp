@@ -86,8 +86,8 @@ void yyerror(const char *s);
 %token <iValue> INTEGER
 //%token <sValue> PIPE
 %token <sValue> STRING
-%token <sValue> REGEXP
-%token <fValue> FLOAT
+%token <sValue> SLASH_AND_REGEXP
+%token <fValue> QUOTED_FLOAT
 %token <fValue> UNQUOTED_FLOAT
 %token <sValue> IDENTIFIER
 %token <sValue> FILE_PATH
@@ -115,7 +115,7 @@ void yyerror(const char *s);
 //%nonassoc UMINUS
 %left UMINUS
 //higher priority
-%type <nPtr> stmt expr stmt_list stmt_block args cond_stmt if_stmt loop_stmt atomic_stmt_block non_atomic_stmt_block
+%type <nPtr> statement expression statement_list statements_block arguments conditional_statement if_statement loop_statement atomic_statements_block non_atomic_statements_block
 // func_dec
 
 %%
@@ -131,52 +131,52 @@ void yyerror(const char *s);
  */
 program:
 	//function { ; /*exit(0);*/ }
-	//stmt { ex($1); freeNode($1); }
+	//statement { ex($1); freeNode($1); }
 	  {}
-	| stmt_list { ex($1); freeNode($1); }//conflict
-	| func_dec {  }
+	| statement_list { ex($1); freeNode($1); }//conflict
+//	| func_dec {  }
 	;
 
 /*
  * function declaration
  */
-func_dec:
-	"function"  IDENTIFIER '(' /*TODO: ARG_DECS */ ')' stmt_block { ; }
-	;
+//func_dec:
+//	"function"  IDENTIFIER '(' /*TODO: ARG_DECS */ ')' statements_block { ; }
+//	;
 
 /*
  * function:
  */
-	//function stmt { ex($2); freeNode($2); }
-	//function stmt_list { ex($2); freeNode($2); }
-//	function stmt{ ex($2); freeNode($2); }
+	//function statement { ex($2); freeNode($2); }
+	//function statement_list { ex($2); freeNode($2); }
+//	function statement{ ex($2); freeNode($2); }
 //	| /* NULL */
 //	;
 
 /*
  * a simple statement
  */
-stmt:
+statement:
 	// ! 'shell-cmd'
-	   NOT args        { $$ = opr('x',2,scon(dupstr(FIM_FLT_SYSTEM)),$2); }
-//	|  SYSTEM args        { $$ = opr('x',2,scon(dupstr(FIM_FLT_SYSTEM)),$2); }
+	   NOT arguments        { $$ = opr('x',2,scon(dupstr(FIM_FLT_SYSTEM)),$2); }
+//	|  SYSTEM arguments        { $$ = opr('x',2,scon(dupstr(FIM_FLT_SYSTEM)),$2); }
 	// [n]cmd
 	| INTEGER IDENTIFIER { if($1>0){$$ = opr('r',2,opr('x',1,scon($2)),con($1)); }}
 	// goto
-	| REGEXP { $$ = opr('x',2,scon(dupstr(FIM_FLT_REXP_GOTO)),opr('a',1,opr('a',1,scon($1)))); }
+	| SLASH_AND_REGEXP { $$ = opr('x',2,scon(dupstr(FIM_FLT_REXP_GOTO)),opr('a',1,opr('a',1,scon($1)))); }
 	// magnification
 	| '+' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
-	| '+' FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
+	| '+' QUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
 	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
 	| '*' UNQUOTED_FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
-	| '*' FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
+	| '*' QUOTED_FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
 	| '*' INTEGER { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
 	| UNQUOTED_FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
-	| FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
+	| QUOTED_FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
 	| INTEGER'%'{{$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}}
 	// minification (yes, minification)
 	| '-' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
-	| '-' FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+	| '-' QUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
 	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
 	// $ and ^ work too (see lex.lex)
 	| INTEGER         { $$ = opr('x',2,scon(dupstr(FIM_FLT_GOTO)),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
@@ -197,24 +197,24 @@ stmt:
 		$$ = opr('x',2,scon(FIM_FLT_ECHO),opr('a',1,scon("Please quote or double-quote your argument or enable FIM_SMART_COMPLETION at compile time\n")));
 #endif
 		}
-	| IDENTIFIER args { $$ = opr('x',2,scon($1),$2);  /* here I would like to use FIM_SMART_COMPLETION but for now it works with the FILE_PATH trick above. */ }
-	| INTEGER IDENTIFIER args { if($1>0){$$ = opr('r',2,opr('x',2,scon($2),$3),con($1)); }}
+	| IDENTIFIER arguments { $$ = opr('x',2,scon($1),$2);  /* here I would like to use FIM_SMART_COMPLETION but for now it works with the FILE_PATH trick above. */ }
+	| INTEGER IDENTIFIER arguments { if($1>0){$$ = opr('r',2,opr('x',2,scon($2),$3),con($1)); }}
 	// assignment
-	| IDENTIFIER '=' expr { $$ = opr('=', 2, vscon($1,'a'), $3); }
+	| IDENTIFIER '=' expression { $$ = opr('=', 2, vscon($1,'a'), $3); }
 	// semicolons can be added arbitrarily with no harm (not so Vim'ish, though)
-//	| stmt ';' { $$ = $1; } // new
+//	| statement ';' { $$ = $1; } // new
 //	| NEWLINE { /* this still doesn't work as we would like to */ }
 //	| error { yyerrok ;  /* can be evil */ }
 	;
 
 /*
- * command arguments are separated args
+ * command arguments are separated arguments
  *
  * Here a reduce/reduce problem arise:
  * IDENTIFIER STRING '-' STRING -> IDENTIFIER ARG ARG -> IDENTIFIER ARGS or
  * IDENTIFIER STRING '-' STRING -> IDENTIFIER ARG ARG -> IDENTIFIER ARGS ?
  *
- * should be interpeted as a a single expr or as two args ?
+ * should be interpeted as a a single expression or as two arguments ?
  *
  * the same for :
  *
@@ -229,33 +229,33 @@ stmt:
  *
  * :imap <C-e> <Esc>
  */
-args:
-	  expr { $$ = opr('a',1, $1 ); }
-	| expr args { $$ = opr('a', 2, $1, $2); }
+arguments:
+	  expression { $$ = opr('a',1, $1 ); }
+	| expression arguments { $$ = opr('a', 2, $1, $2); }
 	;
 
 /*
- * a command argument is an expression or a concatenation of expressions
+ * a command argument is an expressionession or a concatenation of expressionessions
  */
 //arg:
-//	  expr { $$ = opr('a',1,  $1 ); }
-//	| expr '.' expr { $$ = opr('.', 2, $1, $3); }
+//	  expression { $$ = opr('a',1,  $1 ); }
+//	| expression '.' expression { $$ = opr('.', 2, $1, $3); }
 //	;
 
 /*
  * a conditional statement
  */
-cond_stmt:
-	  if_stmt   { $$ = $1; }
-	| loop_stmt { $$ = $1; }
+conditional_statement:
+	  if_statement   { $$ = $1; }
+	| loop_statement { $$ = $1; }
 	;
 
 /* 
  * a loop statement
  */
-loop_stmt:
-	  WHILE '(' expr ')' stmt_block { $$ = opr(WHILE, 2, $3, $5); }
-	| DO stmt_block WHILE '(' expr ')' { $$ = opr(WHILE, 2, $5, $2); }
+loop_statement:
+	  WHILE '(' expression ')' statements_block { $$ = opr(WHILE, 2, $3, $5); }
+	| DO statements_block WHILE '(' expression ')' { $$ = opr(WHILE, 2, $5, $2); }
 	;
 
 /*
@@ -264,77 +264,77 @@ loop_stmt:
 /*
  * here follows a 'dangling else' ambiguity ( dates back to Algol 60 :) )
  */
-if_stmt:
-	  IF '(' expr ')' stmt_block { $$ = opr(IF, 2, $3, $5); }
-	| IF '(' expr ')' stmt_block ELSE stmt_block { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
-//	| IF '(' expr ')' stmt ';' ELSE stmt_block { $$ = opr(IF, 3, $3, $5, $8); } //<- causes shift-reduce conflict..
-//	| IF '(' expr ')' stmt_block ELSE stmt ';' { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
+if_statement:
+	  IF '(' expression ')' statements_block { $$ = opr(IF, 2, $3, $5); }
+	| IF '(' expression ')' statements_block ELSE statements_block { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
+//	| IF '(' expression ')' statement ';' ELSE statements_block { $$ = opr(IF, 3, $3, $5, $8); } //<- causes shift-reduce conflict..
+//	| IF '(' expression ')' statements_block ELSE statement ';' { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
 	;
 
 /*
- * a stmt_block is a block of one or more statements/statement lists
+ * a statements_block is a block of one or more statements/statement lists
  */
-stmt_block:
-	  atomic_stmt_block { $$ = $1; }
-	| non_atomic_stmt_block { $$ = $1; }
+statements_block:
+	  atomic_statements_block { $$ = $1; }
+	| non_atomic_statements_block { $$ = $1; }
 	;
 
-atomic_stmt_block:
-	stmt ';' { $$ = opr(';', 2, $1, NULL); }
-	| stmt ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
-	| stmt ';' ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
+atomic_statements_block:
+	statement ';' { $$ = opr(';', 2, $1, NULL); }
+	| statement ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
+	| statement ';' ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
 	;
 
-non_atomic_stmt_block:
-	  '{' stmt_list '}' { $$ = opr(';', 2, $2, NULL); }
-	| INTEGER '{' stmt_list '}' { if($1>0){$$ = opr('r',2,opr(';', 2, $3, NULL) ,con($1)); }}
-	| cond_stmt { $$ = $1; }
+non_atomic_statements_block:
+	  '{' statement_list '}' { $$ = opr(';', 2, $2, NULL); }
+	| INTEGER '{' statement_list '}' { if($1>0){$$ = opr('r',2,opr(';', 2, $3, NULL) ,con($1)); }}
+	| conditional_statement { $$ = $1; }
 	;
 	
 /*
- * a stmt_list is a list of two or more statements concatenated by the ';' operator or separated by brackets or newlines
+ * a statement_list is a list of two or more statements concatenated by the ';' operator or separated by brackets or newlines
  */
-stmt_list:
-	  stmt { $$ = $1; }
-	| stmt ';' stmt_list { $$ = opr(';', 2, $1, $3); }
-	| non_atomic_stmt_block stmt_list{ $$ = opr(';', 2, $1, $2); }
-	| stmt_block { $$ = $1; }
+statement_list:
+	  statement { $$ = $1; }
+	| statement ';' statement_list { $$ = opr(';', 2, $1, $3); }
+	| non_atomic_statements_block statement_list{ $$ = opr(';', 2, $1, $2); }
+	| statements_block { $$ = $1; }
 	;
 
 /*
- * expressions (mostly numerical: strings are not well supported right now)
+ * expressionessions (mostly numerical: strings are not well supported right now)
  */
-expr:
-	  '(' expr ')' { $$ = $2; }
-	| expr '.' expr { $$ = opr('.', 2, $1, $3); }
-	| NOT expr { $$ = opr('!', 1, $2); }
-	| expr '%' expr { $$ = opr('%', 2, $1, $3); }
-	| expr '+' expr { $$ = opr('+', 2, $1, $3); }
-	| expr '-' expr { $$ = opr('-', 2, $1, $3); }
-	| expr '*' expr { $$ = opr('*', 2, $1, $3); }
-	| expr '/' expr { $$ = opr('/', 2, $1, $3); }
-	| expr '<' expr { $$ = opr('<', 2, $1, $3); }
-	| expr '>' expr { $$ = opr('>', 2, $1, $3); }
-	| expr OR expr  { $$ = opr( OR , 2, $1, $3); }
-	| expr AND expr { $$ = opr( AND, 2, $1, $3); }
-	| expr GE expr { $$ = opr(GE, 2, $1, $3); }
-	| expr LE expr { $$ = opr(LE, 2, $1, $3); }
-	| expr NE expr { $$ = opr(NE, 2, $1, $3); }
-	| expr EQ expr { $$ = opr(EQ, 2, $1, $3); }
-	| expr REGEXP_MATCH expr { $$ = opr(REGEXP_MATCH, 2, $1, $3); }
+expression:
+	  '(' expression ')' { $$ = $2; }
+	| expression '.' expression { $$ = opr('.', 2, $1, $3); }
+	| NOT expression { $$ = opr('!', 1, $2); }
+	| expression '%' expression { $$ = opr('%', 2, $1, $3); }
+	| expression '+' expression { $$ = opr('+', 2, $1, $3); }
+	| expression '-' expression { $$ = opr('-', 2, $1, $3); }
+	| expression '*' expression { $$ = opr('*', 2, $1, $3); }
+	| expression '/' expression { $$ = opr('/', 2, $1, $3); }
+	| expression '<' expression { $$ = opr('<', 2, $1, $3); }
+	| expression '>' expression { $$ = opr('>', 2, $1, $3); }
+	| expression OR expression  { $$ = opr( OR , 2, $1, $3); }
+	| expression AND expression { $$ = opr( AND, 2, $1, $3); }
+	| expression GE expression { $$ = opr(GE, 2, $1, $3); }
+	| expression LE expression { $$ = opr(LE, 2, $1, $3); }
+	| expression NE expression { $$ = opr(NE, 2, $1, $3); }
+	| expression EQ expression { $$ = opr(EQ, 2, $1, $3); }
+	| expression REGEXP_MATCH expression { $$ = opr(REGEXP_MATCH, 2, $1, $3); }
 	/*
 	 * writing the same next rule with '-' instead UMINUS
 	 * would cause lots of conflicts, because UMINUS gets
 	 * caught by the lexer, contrarily to the lone '-' string.
 	 */
-//	| UMINUS expr { $$ = opr('-', 1, $2); } // conflict
-//	| UMINUS expr { $$ = opr('-', 1, $2); } // conflict
-	| '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } //conflicts
-//	| '(' '-' expr ')' %prec UMINUS { $$ = opr('-', 1, $3); } // conflict
+//	| UMINUS expression { $$ = opr('-', 1, $2); } // conflict
+//	| UMINUS expression { $$ = opr('-', 1, $2); } // conflict
+	| '-' expression %prec UMINUS { $$ = opr(UMINUS, 1, $2); } //conflicts
+//	| '(' '-' expression ')' %prec UMINUS { $$ = opr('-', 1, $3); } // conflict
 //	| '`' IDENTIFIER '`' { $$ = opr('x',1,scon($2)); }
 	| IDENTIFIER { $$ = vscon($1,'v');  }
 	| INTEGER { $$ =  con($1); }
-	| FLOAT   { $$ = fcon($1); }
+	| QUOTED_FLOAT   { $$ = fcon($1); }
 	| UNQUOTED_FLOAT   { $$ = fcon($1); }
 	| STRING  { $$ = scon($1); }
 	;
