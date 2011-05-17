@@ -105,6 +105,7 @@ manmode:
 		/*
 		 * dump textually a reference manual from all the available fim language features.
 		 */
+#include "grammar.h"
 		FimDocRefMode refmode=DefRefMode;
 		if(args.size()==1 && args[0]=="man")
 		{
@@ -113,7 +114,7 @@ manmode:
 			string(".\\\"\n")+
 			string(".\\\" $Id""$\n")+
 			string(".\\\"\n")+
-			string(".TH fimrc 1 \"(c) 2011-2011 Michele Martone\"\n")+
+			string(".TH fimrc 1 \"(c) 2011-2011 "FIM_AUTHOR_NAME"\"\n")+
 			string(".SH NAME\n")+
 			string("fimrc - \\fB fim \\fP configuration file and language reference\n")+
 			string("\n")+
@@ -132,8 +133,9 @@ manmode:
 			string("This language can be used to issue commands from the internal program command line accessed interactively through the "FIM_SYM_CONSOLE_KEY_STR" key.\n")+
 			string("\n")+
 			string("\n")+
-			string(".SH FIM LANGUAGE\n")+
+			string(".SH FIM LANGUAGE GRAMMAR\n")+
 			string("Incomplete section.\n")+
+			string(FIM_DEFAULT_GRAMMAR_FILE_CONTENTS)+
 			string("\n")+
 			string(".SH COMMANDS REFERENCE\n")+
 			string("Incomplete section.\n")+

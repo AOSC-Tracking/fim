@@ -29,6 +29,11 @@ conf.h:       fimrc
 	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
 	echo '"";' >> conf.h
 
+grammar.h: yacc.tab.cpp yacc.output
+	echo 'const char * FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =' > grammar.h
+	cat yacc.output | ../scripts/maintenance/yacc2grammar.awk  | cpp -include ../scripts/maintenance/yacc2grammar.h  | grep -v '^#' | sed 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> grammar.h
+	echo '"";' >> grammar.h
+
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
 	grep define ../config.h | grep FIM | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
@@ -95,6 +100,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	conf.h \
 	help.cpp \
 	version.h \
+	grammar.h \
 	fim.h \
 	fim_stream.h \
 	fim_stream.cpp \
@@ -138,9 +144,9 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 Command.o: Command.h
 CommandConsole-init.o: conf.h defaultConfiguration.o
 help.o: conf.h defaultConfiguration.o
-fim.o: version.h help.cpp
+fim.o: version.h help.cpp grammar.h
 Var.o: help.cpp
-fim.cpp: version.h help.cpp
+fim.cpp: version.h help.cpp grammar.h
 lex.yy.o: lex.yy.cc
 
 # regex.c is work in progress and awaits for integration
