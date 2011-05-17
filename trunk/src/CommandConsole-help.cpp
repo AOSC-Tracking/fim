@@ -138,7 +138,7 @@ manmode:
 //			string("Incomplete section.\n")+
 			string("A specification of \n.B fim\naccepted commands grammar follows.\n\n")+
 			string("Language elements surrounded by a single quote (\"'\") are literals.\n\n")+
-			string("Warning: at the present state, this grammar has conflicts. A next release shall fix these problems.\n")+
+			string("Warning: at the present state, this grammar has conflicts. A next release shall fix them.\n")+
 			string("\n")+
 			string(FIM_DEFAULT_GRAMMAR_FILE_CONTENTS)+
 			string("\n")+
@@ -168,6 +168,7 @@ manmode:
 			string("Incomplete section.\n")+
 			string(".SH NOTES\n")+
 			string("This manual page is incomplete: a number of topics, as type conversions, or operator precedence is left unspecified.\n")+
+			string("Also a formal description of the various one-line commands is needed.\n")+
 			string(".SH SEE ALSO\n")+
 			string("fim(1), regex(1).\n")+
 			string(".SH AUTHOR\n")+

@@ -40,10 +40,35 @@ accepted commands grammar follows.
 
 Language elements surrounded by a single quote ("'") are literals.
 
-Warning: at the present state, this grammar has conflicts. A next release shall fix these problems.
+Warning: at the present state, this grammar has conflicts. A next release shall fix them.
 
   program:
          | statement_list
+
+  statement_list: statement
+                | statement ';' statement_list
+                | non_atomic_statements_block statement_list
+                | statements_block
+
+  non_atomic_statements_block: '{' statement_list '}'
+                             | INTEGER '{' statement_list '}'
+                             | conditional_statement
+
+  statements_block: atomic_statements_block
+                  | non_atomic_statements_block
+
+  conditional_statement: if_statement
+                       | loop_statement
+
+  if_statement: 'if' '(' expression ')' statements_block
+              | 'if' '(' expression ')' statements_block 'else' statements_block
+
+  loop_statement: 'while' '(' expression ')' statements_block
+                | 'do' statements_block 'while' '(' expression ')'
+
+  atomic_statements_block: statement ';'
+                         | statement ';' ';'
+                         | statement ';' ';' ';'
 
   statement: '!' arguments
            | INTEGER IDENTIFIER
@@ -69,31 +94,6 @@ Warning: at the present state, this grammar has conflicts. A next release shall 
 
   arguments: expression
            | expression arguments
-
-  conditional_statement: if_statement
-                       | loop_statement
-
-  loop_statement: 'while' '(' expression ')' statements_block
-                | 'do' statements_block 'while' '(' expression ')'
-
-  if_statement: 'if' '(' expression ')' statements_block
-              | 'if' '(' expression ')' statements_block 'else' statements_block
-
-  statements_block: atomic_statements_block
-                  | non_atomic_statements_block
-
-  atomic_statements_block: statement ';'
-                         | statement ';' ';'
-                         | statement ';' ';' ';'
-
-  non_atomic_statements_block: '{' statement_list '}'
-                             | INTEGER '{' statement_list '}'
-                             | conditional_statement
-
-  statement_list: statement
-                | statement ';' statement_list
-                | non_atomic_statements_block statement_list
-                | statements_block
 
   expression: '(' expression ')'
             | expression '.' expression
@@ -777,6 +777,7 @@ the current image original width
 Incomplete section.
 .SH NOTES
 This manual page is incomplete: a number of topics, as type conversions, or operator precedence is left unspecified.
+Also a formal description of the various one-line commands is needed.
 .SH SEE ALSO
 fim(1), regex(1).
 .SH AUTHOR
