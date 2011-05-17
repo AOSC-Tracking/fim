@@ -32,8 +32,87 @@ configuration files, {scriptfile}s, or {commands} passed via command line option
 This language can be used to issue commands from the internal program command line accessed interactively through the : key.
 
 
-.SH FIM LANGUAGE
+.SH FIM LANGUAGE GRAMMAR
 Incomplete section.
+  program:
+         | stmt_list
+         | func_dec
+
+  func_dec: "function" IDENTIFIER '(' ')' stmt_block
+
+  stmt: '!' args
+      | INTEGER IDENTIFIER
+      | REGEXP
+      | '+' UNQUOTED_FLOAT '%'
+      | '+' FLOAT '%'
+      | '+' INTEGER '%'
+      | '*' UNQUOTED_FLOAT
+      | '*' FLOAT
+      | '*' INTEGER
+      | UNQUOTED_FLOAT '%'
+      | FLOAT '%'
+      | INTEGER '%'
+      | '-' UNQUOTED_FLOAT '%'
+      | '-' FLOAT '%'
+      | '-' INTEGER '%'
+      | INTEGER
+      | IDENTIFIER
+      | IDENTIFIER FILE_PATH
+      | IDENTIFIER args
+      | INTEGER IDENTIFIER args
+      | IDENTIFIER '=' expr
+
+  args: expr
+      | expr args
+
+  cond_stmt: if_stmt
+           | loop_stmt
+
+  loop_stmt: 'while' '(' expr ')' stmt_block
+           | 'do' stmt_block 'while' '(' expr ')'
+
+  if_stmt: 'if' '(' expr ')' stmt_block
+         | 'if' '(' expr ')' stmt_block 'else' stmt_block
+
+  stmt_block: atomic_stmt_block
+            | non_atomic_stmt_block
+
+  atomic_stmt_block: stmt ';'
+                   | stmt ';' ';'
+                   | stmt ';' ';' ';'
+
+  non_atomic_stmt_block: '{' stmt_list '}'
+                       | INTEGER '{' stmt_list '}'
+                       | cond_stmt
+
+  stmt_list: stmt
+           | stmt ';' stmt_list
+           | non_atomic_stmt_block stmt_list
+           | stmt_block
+
+  expr: '(' expr ')'
+      | expr '.' expr
+      | '!' expr
+      | expr '%' expr
+      | expr '+' expr
+      | expr '-' expr
+      | expr '*' expr
+      | expr '/' expr
+      | expr '<' expr
+      | expr '>' expr
+      | expr '||' expr
+      | expr '&&' expr
+      | expr '>=' expr
+      | expr '<=' expr
+      | expr '!=' expr
+      | expr '==' expr
+      | expr '=~' expr
+      | '-' expr
+      | IDENTIFIER
+      | INTEGER
+      | FLOAT
+      | UNQUOTED_FLOAT
+      | STRING
 
 .SH COMMANDS REFERENCE
 Incomplete section.

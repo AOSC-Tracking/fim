@@ -685,7 +685,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 	}
 	    cc.printHelpMessage(argv0);
 	    std::cout << " where OPTIONS are taken from :\n";
-	    if(helparg&&*helparg=='l') std::cout << "(EXPERIMENTAL: long help printout still unsupported)\n";
+	    if(helparg&&*helparg=='l') std::cout << "(EXPERIMENTAL: long help ('l') printout still unsupported)\n";
 	    for(size_t i=0;i<fim_options_count-1;++i)
 	    {	
 		if(isascii(fim_options[i].val)){
