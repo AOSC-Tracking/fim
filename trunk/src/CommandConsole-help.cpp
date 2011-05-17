@@ -107,6 +107,7 @@ manmode:
 		 */
 #include "grammar.h"
 #include "examples.h"
+#include "conf.h"
 		FimDocRefMode refmode=DefRefMode;
 		if(args.size()==1 && args[0]=="man")
 		{
@@ -162,7 +163,7 @@ manmode:
 			// TODO: shall write about the conversion rules.
 			string("\n")+
 			string(".SH COMMANDS REFERENCE\n")+
-			string("Incomplete section.\n")+
+	//		string("Incomplete section.\n")+
 			string("\n")+
 			get_commands_reference(refmode)+
 			string(".SH VARIABLES REFERENCE\n")+
@@ -171,13 +172,18 @@ manmode:
 			string("In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n")+
 			string("\n")+
 		       	get_variables_reference(refmode)+
-			string(".SH EXAMPLES\n")+
+			string(".SH USAGE EXAMPLES\n")+
 			string(".nf\n")+
 			string(FIM_DEFAULT_EXAMPLE_FILE_CONTENTS)+
 			string("\n")+
+			string(".SH CONFIGURATION EXAMPLES\n")+
+			string("This is the default configuration, as contained in the "FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS" variable.\n")+
+			string("\n.nf\n")+
+			string(FIM_DEFAULT_CONFIG_FILE_CONTENTS)+
+			string("\n")+
 //			string("Incomplete section.\n")+
 			string(".SH NOTES\n")+
-			string("This manual page is incomplete: a number of topics, as type conversions, or operator precedence is left unspecified.\n")+
+			string("This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.\n")+
 			string("Also a formal description of the various one-line commands, as well as an extensive example list is needed.\n")+
 			string(".SH SEE ALSO\n")+
 			string("fim(1), regex(1).\n")+

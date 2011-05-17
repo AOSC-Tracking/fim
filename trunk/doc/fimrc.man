@@ -154,15 +154,10 @@ The way some one-line statements are evaluated:
 
 
 .SH COMMANDS REFERENCE
-Incomplete section.
 
 .B
 prefetch
 prefetches an image, for a faster subsequent opening
-.fi
-.B
-no_image
-displays no image at all (BROKEN)
 .fi
 .B
 next
@@ -210,7 +205,7 @@ pop the last file from the files list
 .fi
 .B
 file
-displays the current file's name (UNFINISHED)
+displays the current file's name in the console
 .fi
 .B
 pan_ne
@@ -270,11 +265,11 @@ reverses the file list
 .fi
 .B
 remove
-remove the current file or the selected ones from the list
+remove the current file or the given ones from the list
 .fi
 .B
 info
-info about the current file
+displays information about the current file
 .fi
 .B
 regexp_goto
@@ -306,7 +301,7 @@ add scale_factor_delta to the scale factors reduce_factor and magnify_facto
 .fi
 .B
 scale_factor_decrease
-subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor
+subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor 
 .fi
 .B
 rotate
@@ -314,11 +309,11 @@ rotate the image the specified amount of degrees
 .fi
 .B
 magnify
-magnify [ARGS] : magnifies the displayed image by the magnify_factor variable or ARGS
+magnifies the displayed image by the magnify_factor variable or ARGS
 .fi
 .B
 reduce
-reduce [ARGS] ; reduces the displayed image by reduce_factor or ARGS
+reduces the displayed image by reduce_factor or ARGS
 .fi
 .B
 return
@@ -406,7 +401,7 @@ alias [ALIASNAME [ACTIONS [DESCRIPTION]]]
 .fi
 .B
 getenv
-getenv IDENTIFIER
+invokes getenv on the specified environment variable identifier
 .fi
 .B
 unalias
@@ -414,11 +409,11 @@ unalias {alias} | -a : deletes the alias {alias} or all aliases_ (use "-a", not 
 .fi
 .B
 unbind
-unbinds the action associated to KEYCODE
+unbinds the action associated to a specified KEYCODE
 .fi
 .B
 sleep
-sleeps for n (default 1) seconds
+sleeps for the specified (default 1) number of seconds
 .fi
 .B
 mark
@@ -430,11 +425,11 @@ provides online help
 .fi
 .B
 autocmd
-usage: autocmd [Event] [Pattern] [Commands]
+manipulate auto commands. usage: autocmd [Event] [Pattern] [Commands]
 .fi
 .B
 autocmd_del
-usage: autocmd_del [Event] [Pattern] [Commands]
+manipulate auto commands. usage: autocmd_del [Event] [Pattern] [Commands]
 .fi
 .B
 set_interactive_mode
@@ -458,7 +453,7 @@ print the current directory name.
 .fi
 .B
 popen
-popen COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands the output of COMMAND
+pipe a command. usage: popen COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands the output of COMMAND
 .fi
 .B
 stdout
@@ -466,15 +461,15 @@ writes to stdout its arguments
 .fi
 .B
 start_recording
-starts recording of commands
+starts recording of executed commands
 .fi
 .B
 stop_recording
-stops recording of commands
+stops recording of executed commands
 .fi
 .B
 dump_record_buffer
-dumps on screen record buffer
+dumps in the console the record buffer
 .fi
 .B
 execute_record_buffer
@@ -486,11 +481,11 @@ evaluates the arguments as commands, executing them.
 .fi
 .B
 repeat_last
-repeats the last action
+repeats the last performed action
 .fi
 .B
 variables
-displays the associated variables
+displays the existing variables
 .fi
 .B
 commands
@@ -792,7 +787,7 @@ want_autocenter
 width
 [internal,out] the current image original width
 .fi
-.SH EXAMPLES
+.SH USAGE EXAMPLES
 .nf
 # jump to the third image:
 3;
@@ -813,8 +808,311 @@ $;
 # executes the "date" system command
 !"date";
 
+.SH CONFIGURATION EXAMPLES
+This is the default configuration, as contained in the FIM_DEFAULT_CONFIG_FILE_CONTENTS variable.
+
+.nf
+# $Id$
+# Contents of the default 'fimrc' file, hardcoded in the fim executable.
+# Read the documentation to discover how to change this default hardcoded file 
+# and how to make your own.
+# Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
+# Lines begining with a pound (#) are ignored by fim (they are treated as comments).
+
+#autocmd "Prev" ""  "echo 'PREV'" ;
+#autocmd "Prev" "1"  "echo 'PREV1'" ;
+#autocmd "Prev" "2"  "echo 'PREV2'" ;
+#autocmd "Next" ""  "echo 'NEXT'" ;
+#quit;
+#info;
+#next;
+#autocmd;
+#bind 29 "scale_factor_increase";
+#bind 31 "scale_factor_decrease";
+#bind 29 "scale_factor_grow";
+#bind 31 "scale_factor_shrink";
+
+# Warning : binding to C-s, C-z and C-c won't make effect, as these
+# codes are catched by the console driver and will have no effect in fim.
+# Moreover, C-z will crash fim and C-c will terminate it.
+
+# some of these variables influence Fim's behaviour (in the sense these are 'internal')
+_display_status=0;
+_max_cached_images=5;
+_max_cached_memory=80000000;	# not yet functional
+_max_iterated_commands=100;
+_want_prefetch=1;
+autowidth=1;
+ignorecase=1;
+ascale="1.0";
+console_offset=0;
+_save_fim_history=1;
+_load_fim_history=1;
+
+# useful aliases
+alias "toggleautoflip" "autoflip=1-autoflip;" "";
+alias "toggleautonegate" "autonegate=1-autonegate;" "";
+alias "toggleflip" "i:flipped=1-i:flipped;" "";
+alias "flip" "toggleflip;redisplay;" "flip the current image along the horizontal axis";
+alias "fliponce" "flip;toggleflip;" "";
+alias "toggleautomirror" "automirror=1-automirror;" "";
+alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
+alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
+alias "mirroronce" "mirror;togglemirror;" "";
+alias "q" "quit;" "quits the fim program";
+
+# default bindings (binding is dynamical, so you can rebind keys even during program's execution)
+bind 'f' "flip;";
+bind 'F' "fliponce;";
+bind 'm' "mirror;";
+bind 'M' "mirroronce;";
+bind 'q' "quit";
+bind 'Esc' "quit";
+#bind 'f' "file";
+bind 'n' "next_picture;";
+#bind 'h' "help";
+bind 'C-h' "help";
+bind 'x' "echo";
+bind 'e' "echo";
+#bind 'p' "prev;display;";
+bind 'p' "prev_picture;";
+bind 'P' "pop";
+bind 's' "sort";
+bind 'C-s' "swap;redisplay;";
+bind 'S' "toggleDisplayStatus";
+bind 'I' "toggleautonegate";
+#bind 'R' "reload";
+#bind 'R' "redisplay";
+#bind 'r' "rotate90";
+bind 'R' "rotate10;display;";
+bind 'r' "rotate10_ccw;display;";
+#bind 'C-d' "display";
+bind '+' "magnify";
+#bind 'C-+' "angle=angle+10.0;display;";
+bind 'a' "auto_scale;";
+bind 'Tab' "toggleVerbosity";
+bind 'C-v' "toggleKeyVerbosity";
+#bind 'C-k' "toggleKeyVerbosity";
+bind 'v' "toggleDisplayStatus";
+bind 'A' "A";
+bind 'C-m' "mark";
+
+# Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
+bind 'Enter' "mark;next";
+bind '-' "reduce";
+bind "Up" "panup";
+bind 'k' "panup";
+bind "Right" "panright";
+bind 'l' "panright";
+bind "Down" "pandown";
+bind 'j' "pandown";
+bind "Left" "panleft";
+bind 'h' "panleft";
+bind ' ' "scrolldown";
+bind 't' "align_top;";
+#bind "PageUp" "prev_picture;";
+#bind "PageDown" "next_picture;";
+bind 'i' "info";
+bind 'P' "f=`files`/2;prev  --f";
+bind 'N' "f=`files`/2;next  --f";
+
+bind 'C-g' "system 'fbgrab fim.png'";
+bind 'C-r' "start_recording;";
+bind 'Q' "stop_recording";
+bind 'D' "dump_record_buffer;";
+bind 'E' "execute_record_buffer;";
+bind 'C-e' "execute_record_buffer;";
+#bind 'C-x' "execute_record_buffer;";
+bind 'X' "execute_record_buffer;";
+bind '.' "repeat_last;";
+
+#reload;
+#_display_status=1;
+#display;
+alias 'A' "'autotop=1-autotop;'" "";
+alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;" "";
+
+# key echo
+alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
+
+v:auto_scale_v=1;
+_verbose_keys=0;
+_display_busy=1;
+_display_status=1;
+#_verbose_keys=1;
+
+# autocommands are essential to Fim's automated behaviour
+#autocmd "Next"     "" "echo 'rendering next image..'";
+#autocmd "Prev"     "" "echo 'rendering prev image..'";
+#autocmd "PostDisplay" "" "echo '\nthis is a file\n'";
+#autocmd "PostGoto"   "" "set_interactive_mode;";
+autocmd "PostGoto" "" "reload;";
+autocmd "PostNext" "" "reload;";
+autocmd "PostPrev" "" "reload;";
+#autocmd "PostDisplay"   "" "i:fresh=1" ;
+#autocmd "PreWindow"   "" "";
+autocmd "PostWindow"   "" "display;";
+autocmd "PreRedisplay"   "" "i:_will_display=1;";
+autocmd "PreRedisplay"   ".*/fbps-.*" "if(i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(autowidth*i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(v:auto_scale_v *i:fresh){i:fresh=0;auto_scale       ;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(auto_width_v *i:fresh){i:fresh=0;auto_scale_width ;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(auto_height_v*i:fresh){i:fresh=0;auto_scale_height;i:fresh=0;}";
+autocmd "PostRedisplay" ""   "i:_will_display=0;";
+
+
+# the aalib library has often problems with proportions, and this is a temporary fix
+alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
+alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;auto_scale;}" "";
+#alias "exif_fix" "i:orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
+#autocmd "PostReload"   "" "aalib_fix;exif_fix;";
+#autocmd "PostLoad"   "" "aalib_fix;exif_fix;";
+autocmd "PostReload"   "" "aalib_fix;";
+autocmd "PostLoad"   "" "aalib_fix;";
+
+
+autocmd "PostReload"  "" "i:fresh=1" ;
+autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
+#autocmd "PostScale"   "" "{i:fresh=1;display;}" ;
+autocmd "PostScale"   "" "_wd=i:_will_display;" ;
+autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
+autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
+# FIXME : seems like the following automcd's can be commented
+autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
+autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";	# new : for smoother browsing of big images 
+autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}"; # a fixup
+
+alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 10 images";
+bind 'N' 'next10';
+bind 'C-n' "regexp_goto_next";
+alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
+alias "bookview"          "while(1){display;sleep '2';scrolldown;};" "";
+alias "comicview"         "while(1){display;sleep '1';scrolldown;};" "";
+alias "read"              "while(1){display;sleep '1';scrollforward;};" "";
+alias "slowread"          "while(1){display;sleep '2';scrollforward;};" "";
+alias "fastread"          "while(1){display;scrollforward;};" "";
+alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow;" "";
+bind  "C-p" "pornview";
+bind  "C-b" "bookview";
+autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0;" ;
+autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
+#autocmd "PreExecutionCycle" "" "redisplay;";
+autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
+#autocmd "PostInteractiveCommand" "" "i:fresh=0;";
+#autocmd "PostInteractiveCommand" "" "prefetch;";
+#extra..
+bind 'w' "auto_width_scale";
+bind 'h' "auto_height_scale";
+alias "diagonal_nw" "pan_nw;" "pans the image to the upper left";
+alias "diagonal_ne" "pan_ne;" "pans the image to the upper right";
+alias "diagonal_se" "pan_se;" "pans the image to the lower left";
+alias "diagonal_sw" "pan_sw;" "pans the image to the lower right";
+bind 'd' "diagonal_nw;";
+bind 'D' "diagonal_se;";
+bind 'x' "diagonal_ne;";
+bind 'X' "diagonal_sw;";
+alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
+alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
+#bind 'C-a' "auto_scale";
+#autocmd "PostInteractiveCommand" "fim.png" "echo '\nmatched an interactive command on fim.png\n';";
+#autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
+#autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
+#autocmd "PostDisplay" ".*gif" "echo 'this is a gif file';";
+####_display_status=1;
+#push "media/fim.png";
+#push "media/image.png";
+#push "media/image.jpg";
+#push "media/icon_smile.gif";
+echo "WELCOME : to switch to the command line interface press ':' ";
+alias "toggleAutoScale" "v:auto_scale_v=1-v:auto_scale_v;autowidth=0;reload;" "";
+alias "toggleAutoWidth" "autowidth=1-autowidth;v:auto_scale_v=0;reload;" "";
+bind 'C-w'   'toggleAutoWidth;';
+bind 'C-a' "toggleAutoScale;";
+bind 'C-c' "toggleAutoScale;";
+#bind 'C-l' "clear;";	# temporarily off : FIXME
+bind 'A'   "toggleAutoScale;";
+#toggleVerbosity;
+#bind 'f' "next;display;";
+bind 'b' "prev;display;";
+bind 'B' "toggleDisplayBusy";
+alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
+alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
+alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
+alias "rotate90_ccw" "i:orientation=i:orientation+1;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90_cw"  "i:orientation=i:orientation+3;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90" "rotate90_cw;display;" "";
+alias "rotate10"     "rotate  '10';display;" "";
+alias "rotate10_ccw" "rotate -10;display;" "";
+
+# window related aliases and commands
+alias "wu" "window 'up'" "selects the window upwards the current";
+alias "wd" "window 'down'" "selects the window under the current";
+alias "wl" "window 'left'" "selects the window at left of the current";
+alias "wr" "window 'right'" "selects the window at right of the current";
+bind 'K' "wu";
+# Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
+#bind 'C-j' "wd";
+bind 'J' "wd";
+bind 'H' "wl";
+bind 'L' "wr";
+alias "split" "window 'split'" "split the current window horizontally";
+alias "vsplit" "window 'vsplit'" "split the current window vertically";
+alias "swap" "window 'swap'" "swap the enclosing window subwindows";
+alias "ws " "window 'swap'" "see swap";
+bind 'T' "split;redisplay;";
+#don't use C-s : it will be usually catched by the console driver, and fim won't get it!
+#bind 'C-s' "split;";
+bind 'V' "vsplit;redisplay;";
+bind 'U' "swap;redisplay;";
+alias 'venlarge' 'window "venlarge"' "";
+alias 'henlarge' 'window "henlarge"' "";
+# hmmmm we are out of combinations !
+
+alias 'wnormalize' 'window "normalize"' "";
+alias 'wclose' 'window "close"' "";
+alias 'wc' 'window "close"' "closes the current window";
+bind  'C' "wc;redisplay;";
+
+alias 'cache' 'echo _cache_status;' "displays cached images status";
+bind 'c' 'cache;';
+
+alias 'widen'  'i:ascale=i:ascale*"1.1";*1.0;' "widen the current image";
+alias 'narrow' 'i:ascale=i:ascale/"1.1";*1.0;' "narrow the current image";
+bind  'y' "widen" "widens horizontally the image";
+bind  'Y' "narrow" "shrinks horizontally the image";
+#alias 'scu'   'scroll_console_up;'   "";
+#alias 'scd'   'scroll_console_down;' "";
+#alias 'console_scroll_up'   'if(console_offset<console_lines){console_offset=console_offset+1;}';
+#alias 'console_scroll_down' 'if(console_offset>0){console_offset=console_offset-1;}';
+alias 'console_scroll_up' 'if(console_offset<console_lines+__console_scroll_n-rows){console_offset=console_offset+__console_scroll_n;}';
+#__console_scroll_n=rows;
+__console_scroll_n=3;
+__allow_round_scroll=0;
+alias 'console_scroll_down' 'if(__allow_round_scroll || (console_offset>=__console_scroll_n)){console_offset=console_offset-__console_scroll_n;}';
+alias 'console_scroll_reset' '{console_offset=0;}';
+alias 'scu'   'console_scroll_up;'   "";
+alias 'scd'   'console_scroll_down;' "";
+alias 'scz'   'console_scroll_reset;' "";
+bind "PageUp" "if(_display_console==0){prev_picture;}else{scu;}";
+bind "PageDown" "if(_display_console==0){next_picture;}else{scd;}";
+alias "musicplay"  "system 'mpc play'" "";
+alias "musicpause" "system 'mpc pause'" "";
+
+bind "Home" "0;";
+bind "End" "$;";
+bind "Backspace" "prev";
+
+#alias "rdjpgcom" 'system "rdjpgcom" i:filename';
+
+# offsetscan usage : need a mechanism for popping all images before.
+#alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}"; # NEW
+alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}"; # NEW
+#This is a FIM initialization file. 
+#Without one of these FIM is nothing.
+#So feel free to modify it, but with caution! 
+
 .SH NOTES
-This manual page is incomplete: a number of topics, as type conversions, or operator precedence is left unspecified.
+This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.
 Also a formal description of the various one-line commands, as well as an extensive example list is needed.
 .SH SEE ALSO
 fim(1), regex(1).

@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110517	dump_key_codes seems broken
 20110517	may consider separating "options" from "variables", as vim does
 20110516	invoking fim in sdl mode with very low resolutions/window sizes is crashy. this is bad.
 20110516	the user needs mor efont size control

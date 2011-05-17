@@ -58,6 +58,7 @@ with a '@' and _Baz_ with a '.'.
 
 ==== MINOR ISSUES
 
+20110517	dump_key_codes seems broken
 20091208	if fim is configured to take input from piped xfig (as xfig-3.2.5b), it could be - passively - subject to
 		xfig's buffer overflow on files like:
  0 1 2 3
@@ -66,7 +67,7 @@ with a '@' and _Baz_ with a '.'.
 		( see http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=559274
 		  and http://bugs.debian.org/cgi-bin/bugreport.cgi?msg=5;filename=xfig_poc.f;att=1;bug=559274)
 		As long as xfig (fig2dev) is accessed through the popen() system call, there will be no harm to fim from xfig crash.
-20091015	In 16 bit mode, some lines which should be white actually look blue (seems not fim' fault; happens on both on ARM and x86)
+20091015	In 16 bit graphics mode, some lines which should be white actually look blue (seems not fim' fault; happens on both on ARM and x86)
 20091013	fim -i < file.pdf # does not work
 20091009	on dual screen, SDL will occupy both screens even if we don't want it to do so
 20091009	we do not support 1,2,4 bit modes
