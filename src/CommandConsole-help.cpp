@@ -106,6 +106,7 @@ manmode:
 		 * dump textually a reference manual from all the available fim language features.
 		 */
 #include "grammar.h"
+#include "examples.h"
 		FimDocRefMode refmode=DefRefMode;
 		if(args.size()==1 && args[0]=="man")
 		{
@@ -130,13 +131,13 @@ manmode:
 			string("\n")+
 			string(".SH DESCRIPTION\n")+
 			string("This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line options.\n")+
-			string("This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the "FIM_SYM_CONSOLE_KEY_STR" key.\n")+
+			string("This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \""FIM_SYM_CONSOLE_KEY_STR"\" key.\n")+
 			string("The general form of a fim command/program is shown in the next section.\n")+
 			string("\n")+
 			string("\n")+
 			string(".SH FIM LANGUAGE GRAMMAR\n")+
 //			string("Incomplete section.\n")+
-			string("A specification of \n.B fim\naccepted commands grammar follows.\n\n")+
+			string("This section specifies the grammar of the \n.B fim\nlanguage.\n\n")+
 			string("Language elements surrounded by a single quote (\"'\") are literals.\n\n")+
 			string("Warning: at the present state, this grammar has conflicts. A next release shall fix them.\n")+
 			string("\n")+
@@ -151,6 +152,10 @@ manmode:
 			string("The \"=~\" operator treats the right expression as a STRING, and uses is as a regular expression for matching purposes.\n")+
 			string("The SLASH_AND_REGEXP is a slash (\"/\") followed by a STRING, interpreted as a regular expression.\n")+
 			string("See regex(1) for regular expression syntax.\n")+
+			string("\n")+
+			string("The way some one-line statements are evaluated:\n\n")+
+			string(FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP)+
+			string("\n")+
 			// TODO: shall specify the identifier form
 			// TODO: shall specify min and max ranges, signedness
 			// TODO: place some working example here.
@@ -161,14 +166,19 @@ manmode:
 			string("\n")+
 			get_commands_reference(refmode)+
 			string(".SH VARIABLES REFERENCE\n")+
-			string("Incomplete section.\n")+
+	//		string("Incomplete section.\n")+
+			string("If undeclared, a variable will evaluate to 0.\n")+
+			string("In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n")+
 			string("\n")+
 		       	get_variables_reference(refmode)+
 			string(".SH EXAMPLES\n")+
-			string("Incomplete section.\n")+
+			string(".nf\n")+
+			string(FIM_DEFAULT_EXAMPLE_FILE_CONTENTS)+
+			string("\n")+
+//			string("Incomplete section.\n")+
 			string(".SH NOTES\n")+
 			string("This manual page is incomplete: a number of topics, as type conversions, or operator precedence is left unspecified.\n")+
-			string("Also a formal description of the various one-line commands is needed.\n")+
+			string("Also a formal description of the various one-line commands, as well as an extensive example list is needed.\n")+
 			string(".SH SEE ALSO\n")+
 			string("fim(1), regex(1).\n")+
 			string(".SH AUTHOR\n")+

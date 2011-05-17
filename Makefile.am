@@ -52,6 +52,7 @@ sanity-check:	all
 tests:	all
 	@./scripts/tests/version.sh
 	@cd ./src/testdir && make
+	@./src/fim -o dumb -E scripts/example/oneline.fim -c quit 
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
