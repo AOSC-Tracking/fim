@@ -3,7 +3,7 @@
 # Read the documentation to discover how to change this default hardcoded file 
 # and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
-# Lines begining with a pound (#) are ignored by fim.
+# Lines begining with a pound (#) are ignored by fim (they are treated as comments).
 
 #autocmd "Prev" ""  "echo 'PREV'" ;
 #autocmd "Prev" "1"  "echo 'PREV1'" ;

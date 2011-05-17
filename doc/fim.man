@@ -26,11 +26,19 @@ For '.dia' vectorial images, fim will try to use 'dia'.
 For '.svg' vectorial images, fim will try to use 'inkscape'.
 For other formats fim will try to use ImageMagick's 'convert' executable.
 
-Please note that the full documentation of 
+
+If configured at build time, fim will be capable of using SDL or aalib output.
+
+Please note that a user guide of 
 .B fim
 is in the FIM.TXT file distributed in the source package.  This man page only describes the
 .B fim
 command line switches.
+
+See man fimrc for a full specification of the 
+.B fim
+language, commands, and variables.
+
 .SH OPTIONS
 .TP
 .B --

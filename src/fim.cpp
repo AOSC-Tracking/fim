@@ -472,8 +472,10 @@ int fim_dump_man_page()
 			string(".SH DESCRIPTION\n")+
 			string(".B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '"FIM_EPR_XCFTOPNM"'.\nFor '.fig' vectorial images, fim will try to use '"FIM_EPR_FIG2DEV"'.\nFor '.dia' vectorial images, fim will try to use '"FIM_EPR_DIA"'.\nFor '.svg' vectorial images, fim will try to use '"FIM_EPR_INKSCAPE"'.\nFor other formats fim will try to use ImageMagick's '"FIM_EPR_CONVERT"' executable.\n")+
 			string("\n")+
-			string("Please note that the full documentation of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.  This man page only describes the\n.B fim\ncommand line switches.\n")+
-			string(".SH OPTIONS\n");
+			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
+			string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.  This man page only describes the\n.B fim\ncommand line switches.\n\n")+
+			string("See man fimrc for a full specification of the \n.B fim\nlanguage, commands, and variables.\n")+
+			string("\n.SH OPTIONS\n");
 			mp+=fim_dump_man_page_snippets();
 			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
 ".nf\n"

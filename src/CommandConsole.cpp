@@ -312,7 +312,7 @@ namespace fim
 	{
 //		addCommand(new Command(fim::string("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
 		addCommand(new Command(fim::string(FIM_FLT_PREFETCH),fim::string("prefetches an image, for a faster subsequent opening"),&browser_,&Browser::prefetch));
-		addCommand(new Command(fim::string(FIM_FLT_NO_IMAGE),fim::string("displays no image at all (BROKEN)"),&browser_,&Browser::no_image));/* FIXME: broken */
+//		addCommand(new Command(fim::string(FIM_FLT_NO_IMAGE),fim::string("displays no image at all (BROKEN)"),&browser_,&Browser::no_image));/* FIXME: broken */
 		addCommand(new Command(fim::string(FIM_FLT_NEXT),fim::string("displays the next picture in the list"),&browser_,&Browser::next));
 		addCommand(new Command(fim::string(FIM_FLT_NEXT_PIC),fim::string("displays the next page or picture file"),&browser_,&Browser::next_picture));
 		addCommand(new Command(fim::string(FIM_FLT_PREV_PIC),fim::string("displays the previous page or picture file"),&browser_,&Browser::prev_picture));
@@ -324,7 +324,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string("re-displays the current file"),&browser_,&Browser::redisplay));
 		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string("displays the files list"),&browser_,&Browser::list));
 		addCommand(new Command(fim::string(FIM_FLT_POP),fim::string("pop the last file from the files list"),&browser_,&Browser::pop));
-		addCommand(new Command(fim::string(FIM_FLT_FILE),fim::string("displays the current file's name (UNFINISHED)"),&browser_,&Browser::info));
+		addCommand(new Command(fim::string(FIM_FLT_FILE),fim::string("displays the current file's name in the console"),&browser_,&Browser::info));// FIXME: useless!
 		addCommand(new Command(fim::string("pan_ne" ),fim::string("pans the image north east"),&browser_,&Browser::pan_ne));
 		addCommand(new Command(fim::string("pan_nw" ),fim::string("pans the image north west"),&browser_,&Browser::pan_nw));
 		addCommand(new Command(fim::string("pan_sw" ),fim::string("pans the image south west"),&browser_,&Browser::pan_sw));
@@ -339,19 +339,19 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_SORT),fim::string("sorts the file list" ),&browser_,&Browser::_sort));
 		addCommand(new Command(fim::string(FIM_FLT_RANDOM_SHUFFLE),fim::string("randomly shuffles the file list" ),&browser_,&Browser::_random_shuffle));
 		addCommand(new Command(fim::string(FIM_FLT_REVERSE),fim::string("reverses the file list" ),&browser_,&Browser::_reverse));
-		addCommand(new Command(fim::string(FIM_FLT_REMOVE),fim::string("remove the current file or the selected ones from the list" ),&browser_,&Browser::remove));
-		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string("info about the current file" ),&browser_,&Browser::info));
+		addCommand(new Command(fim::string(FIM_FLT_REMOVE),fim::string("remove the current file or the given ones from the list" ),&browser_,&Browser::remove));
+		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string("displays information about the current file" ),&browser_,&Browser::info));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO),fim::string("jumps to the first image matching the given pattern"),&browser_,&Browser::regexp_goto));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO_NEXT),fim::string("jumps to the next image matching the last given pattern"),&browser_,&Browser::regexp_goto_next));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE_INCREMENT),fim::string("increments the scale by a percentual amount"),&browser_,&Browser::scale_increment));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE_MULTIPLY),fim::string("multiplies the scale by the specified amount"),&browser_,&Browser::scale_multiply));
-		addCommand(new Command(fim::string("scale_factor_grow" ),fim::string("multiply the scale factors reduce_factor and magnify_factor by scale_factor_multiplier"),&browser_,&Browser::scale_factor_increase));
-		addCommand(new Command(fim::string("scale_factor_shrink" ),fim::string("divide the scale factors reduce_factor and magnify_facto by scale_factor_multiplier"),&browser_,&Browser::scale_factor_decrease));
-		addCommand(new Command(fim::string("scale_factor_increase" ),fim::string("add scale_factor_delta to the scale factors reduce_factor and magnify_facto" ),&browser_,&Browser::scale_factor_increase));
-		addCommand(new Command(fim::string("scale_factor_decrease" ),fim::string( "subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor" ),&browser_,&Browser::scale_factor_decrease));
+		addCommand(new Command(fim::string("scale_factor_grow" ),fim::string("multiply the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by scale_factor_multiplier"),&browser_,&Browser::scale_factor_increase));
+		addCommand(new Command(fim::string("scale_factor_shrink" ),fim::string("divide the scale factors "FIM_VID_REDUCE_FACTOR" and magnify_facto by scale_factor_multiplier"),&browser_,&Browser::scale_factor_decrease));
+		addCommand(new Command(fim::string("scale_factor_increase" ),fim::string("add "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and magnify_facto" ),&browser_,&Browser::scale_factor_increase));
+		addCommand(new Command(fim::string("scale_factor_decrease" ),fim::string( "subtract "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" " ),&browser_,&Browser::scale_factor_decrease));
 		addCommand(new Command(fim::string(FIM_FLT_ROTATE),fim::string( "rotate the image the specified amount of degrees" ),&browser_,&Browser::rotate));
-		addCommand(new Command(fim::string(FIM_FLT_MAGNIFY),fim::string(FIM_FLT_MAGNIFY" [ARGS] : magnifies the displayed image by the magnify_factor variable or ARGS" ),&browser_,&Browser::magnify));
-		addCommand(new Command(fim::string(FIM_FLT_REDUCE),fim::string(FIM_FLT_REDUCE" [ARGS] ; reduces the displayed image by reduce_factor or ARGS" ),&browser_,&Browser::reduce));
+		addCommand(new Command(fim::string(FIM_FLT_MAGNIFY),fim::string("magnifies the displayed image by the "FIM_VID_MAGNIFY_FACTOR" variable or ARGS" ),&browser_,&Browser::magnify));
+		addCommand(new Command(fim::string(FIM_FLT_REDUCE),fim::string("reduces the displayed image by "FIM_VID_REDUCE_FACTOR" or ARGS" ),&browser_,&Browser::reduce));
 		addCommand(new Command(fim::string(FIM_FLT_RETURN),fim::string("returns from the program with a status code"),this,&CommandConsole::do_return));
 		addCommand(new Command(fim::string(FIM_FLT_ALIGN_TOP),fim::string("aligns to the upper side the image" ),&browser_,&Browser::top_align));
 		addCommand(new Command(fim::string(FIM_FLT_ALIGN_BOTTOM),fim::string("aligns to the lower side the image" ),&browser_,&Browser::bottom_align));
@@ -373,21 +373,23 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_ECHO),fim::string("echoes its arguments"),this,&CommandConsole::echo));
 		//addCommand(new Command(fim::string("foo"   ),fim::string("a dummy command"),this,&CommandConsole::foo));
 		//addCommand(new Command(fim::string("print"   ),fim::string("displays the value of a variable"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string(FIM_FLT_IF),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string(FIM_FLT_ELSE),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string(FIM_FLT_WHILE),fim::string("while(expression){action;}"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string(FIM_FLT_IF),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));// FIXME: need a special "help grammar" command !
+		addCommand(new Command(fim::string(FIM_FLT_ELSE),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));// FIXME: need a special "help grammar" command !
+
+		addCommand(new Command(fim::string(FIM_FLT_WHILE),fim::string("while(expression){action;}"),this,&CommandConsole::foo));// FIXME: need a special "help grammar" command !
+
 		addCommand(new Command(fim::string(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS" [ALIASNAME [ACTIONS [DESCRIPTION]]]"),this,&CommandConsole::foo));
-		addCommand(new Command(fim::string(FIM_FLT_GETENV),fim::string(FIM_FLT_GETENV" IDENTIFIER"),this,&CommandConsole::do_getenv));
+		addCommand(new Command(fim::string(FIM_FLT_GETENV),fim::string("invokes "FIM_FLT_GETENV" on the specified environment variable identifier"),this,&CommandConsole::do_getenv));
 		addCommand(new Command(fim::string(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS" {alias} | -a : deletes the alias {alias} or all aliases_ (use \"-a\", not -a)"),this,&CommandConsole::unalias));
-		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string("unbinds the action associated to KEYCODE"),this,&CommandConsole::unbind));
-		addCommand(new Command(fim::string(FIM_FLT_SLEEP),fim::string("sleeps for n (default 1) seconds"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string("unbinds the action associated to a specified KEYCODE"),this,&CommandConsole::unbind));
+		addCommand(new Command(fim::string(FIM_FLT_SLEEP),fim::string("sleeps for the specified (default 1) number of seconds"),this,&CommandConsole::foo));
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		addCommand(new Command(fim::string(FIM_FLT_MARK),fim::string("marks the current file"),this,&CommandConsole::markCurrentFile));
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string("provides online help"),this,&CommandConsole::help));
 #ifdef FIM_AUTOCMDS
-		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD),fim::string("usage: "FIM_FLT_AUTOCMD" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd));
-		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD_DEL),fim::string("usage: "FIM_FLT_AUTOCMD_DEL" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
+		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD),fim::string("manipulate auto commands. usage: "FIM_FLT_AUTOCMD" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd));
+		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD_DEL),fim::string("manipulate auto commands. usage: "FIM_FLT_AUTOCMD_DEL" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_SET_INTERACTIVE_MODE),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
 		addCommand(new Command(fim::string(FIM_FLT_SET_CONSOLE_MODE),fim::string("sets console mode"),this,&CommandConsole::set_in_console));
@@ -396,20 +398,20 @@ namespace fim
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_CD),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::cd));
 		addCommand(new Command(fim::string(FIM_FLT_PWD),fim::string(FIM_CMD_HELP_PWD   ),this,&CommandConsole::pwd));
-		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string(FIM_FLT_POPEN" COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands the output of COMMAND"),this,&CommandConsole::sys_popen));
+		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string("pipe a command. usage: "FIM_FLT_POPEN" COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands the output of COMMAND"),this,&CommandConsole::sys_popen));
 		addCommand(new Command(fim::string(FIM_FLT_STDOUT),fim::string("writes to stdout its arguments"),this,&CommandConsole::_stdout));
 #ifdef FIM_PIPE_IMAGE_READ
 		addCommand(new Command(fim::string(FIM_FLT_PREAD),fim::string("executes the arguments as a shell command and reads the input as an image file (uses "FIM_FLT_POPEN")"),this,&CommandConsole::pread));
 #endif
 #ifdef FIM_RECORDING
-		addCommand(new Command(fim::string(FIM_FLT_START_RECORDING),fim::string("starts recording of commands"),this,&CommandConsole::start_recording));
-		addCommand(new Command(fim::string(FIM_FLT_STOP_RECORDING),fim::string("stops recording of commands"),this,&CommandConsole::stop_recording));
-		addCommand(new Command(fim::string(FIM_FLT_DUMP_RECORD_BUFFER),fim::string("dumps on screen record buffer"),this,&CommandConsole::dump_record_buffer));
+		addCommand(new Command(fim::string(FIM_FLT_START_RECORDING),fim::string("starts recording of executed commands"),this,&CommandConsole::start_recording));
+		addCommand(new Command(fim::string(FIM_FLT_STOP_RECORDING),fim::string("stops recording of executed commands"),this,&CommandConsole::stop_recording));
+		addCommand(new Command(fim::string(FIM_FLT_DUMP_RECORD_BUFFER),fim::string("dumps in the console the record buffer"),this,&CommandConsole::dump_record_buffer));
 		addCommand(new Command(fim::string(FIM_FLT_EXECUTE_RECORD_BUFFER),fim::string("executes the record buffer"),this,&CommandConsole::execute_record_buffer));
 		addCommand(new Command(fim::string(FIM_FLT_EVAL),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::eval));
-		addCommand(new Command(fim::string(FIM_FLT_REPEAT_LAST),fim::string("repeats the last action"),this,&CommandConsole::repeat_last));
+		addCommand(new Command(fim::string(FIM_FLT_REPEAT_LAST),fim::string("repeats the last performed action"),this,&CommandConsole::repeat_last));
 #endif
-		addCommand(new Command(fim::string(FIM_FLT_VARIABLES),fim::string("displays the associated variables"),this,&CommandConsole::variables_list));
+		addCommand(new Command(fim::string(FIM_FLT_VARIABLES),fim::string("displays the existing variables"),this,&CommandConsole::variables_list));
 		addCommand(new Command(fim::string(FIM_FLT_COMMANDS),fim::string("displays the existing commands"),this,&CommandConsole::commands_list));
 		addCommand(new Command(fim::string(FIM_FLT_DUMP_KEY_CODES),fim::string("dumps the active key codes"),this,&CommandConsole::dump_key_codes));
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -452,7 +454,8 @@ namespace fim
 		 */
 		assert(c);	//FIXME : see the macro NDEBUG for this
 		commands_.push_back(c);
-		return 0;
+		//sort(commands_.begin(),commands_.end()); // 20110517 FIXME: shall sort pointers by inspecting pointed data.
+		//based on actual 
 	}
 
 	fim::string CommandConsole::alias(const fim::string& a,const fim::string& c)
