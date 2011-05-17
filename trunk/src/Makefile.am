@@ -34,6 +34,8 @@ grammar.h: yacc.tab.cpp yacc.output
 	cat yacc.output | ../scripts/maintenance/yacc2grammar.awk  | cpp -include ../scripts/maintenance/yacc2grammar.h  | grep -v '^#' | sed 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> grammar.h
 	echo '"";' >> grammar.h
 
+CommandConsole-help.o: CommandConsole-help.cpp grammar.h
+
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
 	grep define ../config.h | grep FIM | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
