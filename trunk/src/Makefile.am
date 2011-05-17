@@ -34,7 +34,13 @@ grammar.h: yacc.tab.cpp yacc.output
 	cat yacc.output | ../scripts/maintenance/yacc2grammar.awk  | cpp -include ../scripts/maintenance/yacc2grammar.h  | grep -v '^#' | sed 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> grammar.h
 	echo '"";' >> grammar.h
 
+examples.h: ../scripts/example/oneline.fim
+	echo 'const char * FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =' > examples.h
+	cat ../scripts/example/oneline.fim | sed 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> examples.h
+	echo '"";' >> examples.h
+
 CommandConsole-help.o: CommandConsole-help.cpp grammar.h
+CommandConsole-help.o: CommandConsole-help.cpp examples.h
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
@@ -103,6 +109,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	help.cpp \
 	version.h \
 	grammar.h \
+	examples.h \
 	fim.h \
 	fim_stream.h \
 	fim_stream.cpp \
@@ -146,9 +153,9 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 Command.o: Command.h
 CommandConsole-init.o: conf.h defaultConfiguration.o
 help.o: conf.h defaultConfiguration.o
-fim.o: version.h help.cpp grammar.h
+fim.o: version.h help.cpp grammar.h examples.h
 Var.o: help.cpp
-fim.cpp: version.h help.cpp grammar.h
+fim.cpp: version.h help.cpp grammar.h examples.h
 lex.yy.o: lex.yy.cc
 
 # regex.c is work in progress and awaits for integration

@@ -178,7 +178,8 @@ namespace fim
 			if(device_failure)
 				std::cerr << "Failure using the \""<<device<<"\" display device driver string.!\n";
 			else
-				std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are "FIM_DDN_VARS")!\n";
+			if(device!=FIM_DDN_VAR_DUMB)
+				std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are "FIM_DDN_VARS")!\n",
 			std::cerr << "Using the default \""<<FIM_DDN_INN_DUMB<<"\" display device instead.\n";
 		}
 

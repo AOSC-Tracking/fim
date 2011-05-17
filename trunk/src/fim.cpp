@@ -107,7 +107,7 @@ struct fim_options_t fim_options[] = {
 "The \\fBscriptfile\\fP will be executed right after the default initialization file is executed."
     },
     {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read (experimental)","{fimrc}",
-"The "FIM_CNS_SYS_RC_FILEPATH" file will be executed prior to any other configuration file.\n"
+"The "FIM_CNS_SYS_RC_FILEPATH" file (the system startup) will be executed prior to any other configuration file.\n"
 "If not specified, it is *ignored*."
     },
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}",
@@ -494,19 +494,7 @@ int fim_dump_man_page()
 "H			scale to the screen heigth\n"
 "m			mark the current file for printing its name when terminating fim\n"
 "\n"
-":{number}       jump to {number}^th image in the list\n"
-":^	        jump to first image in the list\n"
-":$	        jump to last image in the list\n"
-":*{factor}      scale the image by {factor}\n"
-":{scale}%       scale the image to the desired {scale}\n"
-":+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)\n"
-":-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)\n"
-"\n"
-"/regexp		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}\n"
-"/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'\n"
-"/png		 a shortcut for /.*png.*\n"
-"\n"
-"!{cmd}		executes the {cmd} string as a \"/bin/sh\" shell command\n"
+FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 "\n"
 "C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename\n"
 "C-c		 terminate instantaneously fim\n"

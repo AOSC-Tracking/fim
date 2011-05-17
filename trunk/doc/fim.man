@@ -79,7 +79,7 @@ The default fimrc file (the one hardcoded in the fim executable) is dumped on st
 The \fBscriptfile\fP will be executed right after the default initialization file is executed.
 .TP
 .B -f {fimrc}, --etc-fimrc {fimrc}
-The /etc/fimrc file will be executed prior to any other configuration file.
+The /etc/fimrc file (the system startup) will be executed prior to any other configuration file.
 If not specified, it is *ignored*.
 .TP
 .B -F {commands}, --final-commands {commands}
@@ -183,6 +183,7 @@ C-w			scale to the screen width
 H			scale to the screen heigth
 m			mark the current file for printing its name when terminating fim
 
+.nf
 :{number}       jump to {number}^th image in the list
 :^	        jump to first image in the list
 :$	        jump to last image in the list
@@ -195,7 +196,7 @@ m			mark the current file for printing its name when terminating fim
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
 /png		 a shortcut for /.*png.*
 
-!{cmd}		executes the {cmd} string as a "/bin/sh" shell command
+!{cmd}		executes the {cmd} quoted string as a "/bin/sh" shell command
 
 C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename
 C-c		 terminate instantaneously fim

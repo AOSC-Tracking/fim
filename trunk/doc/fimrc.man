@@ -29,14 +29,14 @@ This page explains the
 language, which is used for the 
 .B fimrc
 configuration files, {scriptfile}s, or {commands} passed via command line options.
-This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the : key.
+This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key.
 The general form of a fim command/program is shown in the next section.
 
 
 .SH FIM LANGUAGE GRAMMAR
-A specification of 
+This section specifies the grammar of the 
 .B fim
-accepted commands grammar follows.
+language.
 
 Language elements surrounded by a single quote ("'") are literals.
 
@@ -134,6 +134,24 @@ command.
 The "=~" operator treats the right expression as a STRING, and uses is as a regular expression for matching purposes.
 The SLASH_AND_REGEXP is a slash ("/") followed by a STRING, interpreted as a regular expression.
 See regex(1) for regular expression syntax.
+
+The way some one-line statements are evaluated:
+
+.nf
+:{number}       jump to {number}^th image in the list
+:^	        jump to first image in the list
+:$	        jump to last image in the list
+:*{factor}      scale the image by {factor}
+:{scale}%       scale the image to the desired {scale}
+:+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
+:-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
+
+/regexp		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
+/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
+/png		 a shortcut for /.*png.*
+
+!{cmd}		executes the {cmd} quoted string as a "/bin/sh" shell command
+
 
 .SH COMMANDS REFERENCE
 Incomplete section.
@@ -487,297 +505,317 @@ clear
 clears the virtual console
 .fi
 .SH VARIABLES REFERENCE
-Incomplete section.
+If undeclared, a variable will evaluate to 0.
+In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
 
 .B
 FIM_DEFAULT_CONFIG_FILE_CONTENTS
-the contents of the default (hardcoded) config file
+[internal,out] the contents of the default (hardcoded) configuration file
 .fi
 .B
 _TERM
-the environment TERM variable
+[internal,out] the environment TERM variable
 .fi
 .B
 _autocmd_trace_stack
-(INTERNAL) dump to stdout autocommands stack trace during their execution (for debugging purposes)
+[internal] dump to stdout autocommands stack trace during their execution (for debugging purposes)
 .fi
 .B
 _cache_status
-informations on current cache status
+[internal,out] current information on cache status
 .fi
 .B
 _cached_images
-the number of images currently cached
+[internal,out] the number of images currently cached
 .fi
 .B
 _debug_commands
-(INTERNAL) each executed command (for debugging purposes)
+[internal] each executed command (for debugging purposes)
 .fi
 .B
-_device_driver
-a string with the current output driver name
+_device_string
+[internal,out] the current device string
 .fi
 .B
 _display_as_binary
-if nonzero : if 1, will force loading of images as pixelmaps of bits; if 24, will force loading of images as 24 bit pixelmaps
+[internal,in] if nonzero, will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual
 .fi
 .B
 _display_busy
-if 1, will display a message on the status bar when processing
+[internal,in]if 1, will display a message on the status bar when processing
 .fi
 .B
 _display_console
-if 1, will display the output console
+[internal,in] if 1, will display the output console
 .fi
 .B
 _display_status
-if 1, will display the status bar
+[internal,in] if 1, will display the status bar
 .fi
 .B
 _display_status_bar
-if 1, will display the status bar
+[internal,in] if 1, will display the status bar
 .fi
 .B
 _do_sanity_check
-if 1, will execute a sanity check on startup (experimental)
+[internal,in,experimental] if 1, will execute a sanity check on startup
 .fi
 .B
 _fim_bpp
-the bits per pixel count
+[internal,out] the bits per pixel count
 .fi
 .B
 _fim_scriptout_file
-the name of the file to write to when recording sessions
+[internal,in] the name of the file to write to when recording sessions
 .fi
 .B
 _last_system_output
-FIXME: undocumented(experimental)
+[internal,out,experimental] the standard output of the last call to the system command
 .fi
 .B
 _load_default_etc_fimrc
-if 1 at startup, will load /etc/fimrc, or equivalent system startup file
+[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file
 .fi
 .B
 _load_fim_history
-if 1 on startup, will load the ~/fim_history file on startup
+[internal,in] if 1 on startup, will load the ~/fim_history file on startup
 .fi
 .B
 _max_cached_images
-the maximum number of images allowed in the cache
+[internal,in] the maximum number of images allowed in the cache
 .fi
 .B
 _max_cached_memory
-the maximum amount of memory allowed for the cache
+[internal,in] the maximum amount of memory allowed for the cache
 .fi
 .B
 _max_iterated_commands
-the iteration limit for N in "N[commandname]" iterated command invocations
+[internal,experimental] the iteration limit for N in "N[commandname]" iterated command invocations
 .fi
 .B
 _no_default_configuration
-(INTERNAL)
+[internal,in]
 .fi
 .B
 _no_rc_file
-if !=0, the ~/.fimrc file will not be executed
+[internal,in] if not 0, the ~/.fimrc file will not be loaded at startup
 .fi
 .B
 _open_offset
-(INTERNAL) offset used when opening files
+[internal] offset used when opening files
 .fi
 .B
 _override_display
-INTERNAL
+[internal,undocumented]
 .fi
 .B
 _save_fim_history
-if 1 on exit, will save the ~/fim_history file on exit
+[internal,in] if 1 on exit, will save the ~/fim_history file on exit
 .fi
 .B
 _seek_magic
-(INTERNAL) will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
+[internal] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
 .fi
 .B
 _status_line
-if 1, will display the status bar (!)
+[internal,in] if 1, will display the status bar
 .fi
 .B
 _verbose_errors
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 _verbose_keys
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 _want_prefetch
-if 1, will prefetch files
+[internal,in] if 1, will prefetch further files just after display of the first file
 .fi
 .B
 angle
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 ascale
-the asymmetric scaling of the current image
+[internal,in]the asymmetric scaling of the current image
 .fi
 .B
 auto_scale_v
-FIXME : unused ? (fixme : should be moved to fimrc's scope only)
+[experimental, undocumented]
 .fi
 .B
 autoflip
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 automirror
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 autonegate
-(INTERNAL) (EXPERIMENTAL)
+[internal,undocumented]
 .fi
 .B
 autotop
-if 1, will align to the top freshly loaded images
+[internal,in] if 1, will align to the top freshly loaded images
 .fi
 .B
 autowidth
-if 1, will scale freshly loaded images to fit width
+[internal,in] if 1, will scale freshly loaded images to fit width
 .fi
 .B
 comment
-the image comment, stored in the image file
+[internal,out] the image comment, stored in the image file
 .fi
 .B
 console_buffer_free
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 console_buffer_total
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 console_buffer_used
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 console_key
-the key binding for spawning the command line (INTERNAL)
+[internal,in] the key binding for spawning the command line [internal]
 .fi
 .B
 console_lines
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 console_offset
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 fileindex
-the current image numeric index
+[internal,out] the current image numeric index
 .fi
 .B
 filelistlen
-the length of the current image list
+[internal,out] the length of the current image list
 .fi
 .B
 filename
-the current file name
+[internal,out] the current file name
 .fi
 .B
 flipped
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 fresh
-1 if the image was loaded, before all autocommands execution (INTERNAL)
+[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution
 .fi
 .B
 height
-the current image original height
+[internal,out] the current image original height
 .fi
 .B
 ignorecase
-if 1, will allow for case insensitive regexp searches
+[internal,in] if 1, will allow for case insensitive regexp searches
 .fi
 .B
 lwidth
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 magnify_factor
-the image scale multiplier used when magnifying images size
+[internal,in] the image scale multiplier used when magnifying images size
 .fi
 .B
 mirrored
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 negated
-(INTERNAL) (EXPERIMENTAL)
+[internal,undocumented]
 .fi
 .B
 orientation
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 pwd
-the current working directory
+[internal,out] the current working directory
 .fi
 .B
 reduce_factor
-the image scale multiplier used when reducing images size
+[internal,in] the image scale multiplier used when reducing images size
 .fi
 .B
 rows
-(INTERNAL)
+[internal,in,undocumented]
 .fi
 .B
 scale
-the scale of the current image
+[internal,in]the scale of the current image
 .fi
 .B
 scale_factor_delta
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 scale_factor_multiplier
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 screen_height
-the screen height
+[internal,out] the screen height
 .fi
 .B
 screen_width
-the screen width
+[internal,out] the screen width
 .fi
 .B
 sheight
-the current image scaled height
+[internal,out] the current image scaled height
 .fi
 .B
 steps
-the steps, in pixels, when panning images
+[internal,in] the steps, in pixels, when panning images
 .fi
 .B
 swidth
-the current image scaled width
+[internal,out] the current image scaled width
 .fi
 .B
 want_autocenter
-(INTERNAL)
+[internal,undocumented]
 .fi
 .B
 width
-the current image original width
+[internal,out] the current image original width
 .fi
 .SH EXAMPLES
-Incomplete section.
+.nf
+# jump to the third image:
+3;
+# jump to first image:
+^;
+# jump to last image:
+$;
+# magnify the image two times:
+*2;
+# scale the image to the 30% of the original:
+30%;
+# scale the image up by 30%:
++30%;
+# scale the image down by 30%:
+-30%;
+# jump to the next image whose filename matches the ".*jpg" regular expression:
+/.*jpg;
+# executes the "date" system command
+!"date";
+
 .SH NOTES
 This manual page is incomplete: a number of topics, as type conversions, or operator precedence is left unspecified.
-Also a formal description of the various one-line commands is needed.
+Also a formal description of the various one-line commands, as well as an extensive example list is needed.
 .SH SEE ALSO
 fim(1), regex(1).
 .SH AUTHOR

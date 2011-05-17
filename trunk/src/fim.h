@@ -309,6 +309,23 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
 
+#define FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP \
+".nf\n"\
+":{number}       jump to {number}^th image in the list\n"\
+":^	        jump to first image in the list\n"\
+":$	        jump to last image in the list\n"\
+":*{factor}      scale the image by {factor}\n"\
+":{scale}%       scale the image to the desired {scale}\n"\
+":+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)\n"\
+":-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)\n"\
+"\n"\
+"/regexp		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}\n"\
+"/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'\n"\
+"/png		 a shortcut for /.*png.*\n"\
+"\n"\
+"!{cmd}		executes the {cmd} quoted string as a \"/bin/sh\" shell command\n"\
+""
+
 
 
 #include "string.h"
@@ -349,81 +366,82 @@ namespace fim
 
 /*
  * Fim language variable identifiers, with their help strings.
+ * TODO: shall specify more information about these variables
  * */
 //#define FIM_VID_NEWLINE 			"_newline"	/* "" */
 //#define FIM_VID_TAB 				"_tab"	/* "" */
 //#define FIM_VID_RANDOM 				"random"	/* "" */
-#define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "if nonzero : if 1, will force loading of images as pixelmaps of bits; if 24, will force loading of images as 24 bit pixelmaps" */
-#define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "informations on current cache status" */
-#define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "if 1, will display the output console" */
-#define FIM_VID_DEVICE_DRIVER 			"_device_driver"	/* "a string with the current output driver name" */
-#define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "if 1, will display the status bar" */
-#define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "if 1, will execute a sanity check on startup (experimental)" */
-#define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "FIXME: undocumented(experimental)" */
-#define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "if 1 at startup, will load /etc/fimrc, or equivalent system startup file" */
-#define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "if !=0, the ~/.fimrc file will not be executed" */
-#define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "the name of the file to write to when recording sessions" */
-#define FIM_VID_STATUS_LINE 			"_status_line"		/* "if 1, will display the status bar (!)" */
-#define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "if 1, will prefetch files" */
-#define FIM_VID_AUTO_SCALE_V			"auto_scale_v"	/* "FIXME : unused ? (fixme : should be moved to fimrc's scope only)" */
-#define FIM_VID_AUTOTOP				"autotop"		/* "if 1, will align to the top freshly loaded images" */
-#define FIM_VID_AUTOWIDTH			"autowidth"		/* "if 1, will scale freshly loaded images to fit width" */
-#define FIM_VID_FILEINDEX			"fileindex"		/* "the current image numeric index" */
-#define FIM_VID_FILELISTLEN			"filelistlen"		/* "the length of the current image list" */
-#define FIM_VID_FILENAME			"filename"		/* "the current file name" */
-#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "FIM_DEFAULT_CONFIG_FILE_CONTENTS"/* "the contents of the default (hardcoded) config file" */
-#define FIM_VID_FRESH				"fresh"			/* "1 if the image was loaded, before all autocommands execution (INTERNAL)" */
-#define FIM_VID_OVERRIDE_DISPLAY		"_override_display"	/* "INTERNAL" */
-#define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "the iteration limit for N in \"N[commandname]\" iterated command invocations" */
-#define FIM_VID_MAGNIFY_FACTOR			"magnify_factor"	/* "the image scale multiplier used when magnifying images size" */
-#define FIM_VID_PWD				"pwd"			/* "the current working directory" */
-#define FIM_VID_REDUCE_FACTOR			"reduce_factor"		/* "the image scale multiplier used when reducing images size" */
-#define FIM_VID_SCALE_FACTOR_MULTIPLIER		"scale_factor_multiplier"	/* "(INTERNAL)" */
-#define FIM_VID_SCALE_FACTOR_DELTA		"scale_factor_delta"		/* "(INTERNAL)" */
-#define FIM_VID_COMMENT 				"comment"				/* "the image comment, stored in the image file" */
-#define FIM_VID_STEPS 				"steps"				/* "the steps, in pixels, when panning images" */
-#define FIM_VID_CONSOLE_ROWS 			"rows"			/* "(INTERNAL)" */
-#define FIM_VID_CONSOLE_LINE_WIDTH 		"lwidth"		/* "(INTERNAL)" */
-#define FIM_VID_CONSOLE_LINE_OFFSET 		"console_offset"	/* "(INTERNAL)" */
-#define FIM_VID_CONSOLE_BUFFER_LINES		"console_lines"		/* "(INTERNAL)" */
-#define FIM_VID_CONSOLE_BUFFER_TOTAL		"console_buffer_total"		/* "(INTERNAL)" */
-#define FIM_VID_CONSOLE_BUFFER_FREE		"console_buffer_free"		/* "(INTERNAL)" */
-#define FIM_VID_CONSOLE_BUFFER_USED		"console_buffer_used"		/* "(INTERNAL)" */
-#define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "(INTERNAL)" */
-#define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "(INTERNAL)" */
-#define FIM_VID_CONSOLE_KEY			"console_key"		/* "the key binding for spawning the command line (INTERNAL)" */
-#define FIM_VID_IGNORECASE			"ignorecase"		/* "if 1, will allow for case insensitive regexp searches" */
-#define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "if 1 on exit, will save the ~/fim_history file on exit" */
-#define FIM_VID_LOAD_FIM_HISTORY		"_load_fim_history"	/* "if 1 on startup, will load the ~/fim_history file on startup" */
-#define FIM_VID_TERM				"_TERM"			/* "the environment TERM variable" */
-#define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "(INTERNAL)" */
-#define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "if 1, will display the status bar" */
-#define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "if 1, will display a message on the status bar when processing" */
-#define FIM_VID_SCALE				"scale"				/* "the scale of the current image" */
-#define FIM_VID_ASCALE				"ascale"			/* "the asymmetric scaling of the current image" */
-#define FIM_VID_ANGLE				"angle"				/* "(INTERNAL)" */
-#define FIM_VID_ORIENTATION			"orientation"		/* "(INTERNAL)" */
-#define FIM_VID_WIDTH				"width"			/* "the current image original width" */
-#define FIM_VID_HEIGHT				"height"		/* "the current image original height" */
-#define FIM_VID_SWIDTH				"swidth"		/* "the current image scaled width" */
-#define FIM_VID_SHEIGHT				"sheight"		/* "the current image scaled height" */
-#define FIM_VID_AUTOFLIP			"autoflip"		/* "(INTERNAL)" */
-#define FIM_VID_AUTONEGATE			"autonegate"		/* "(INTERNAL) (EXPERIMENTAL)" */
-#define FIM_VID_FLIPPED				"flipped"		/* "(INTERNAL)" */
-#define FIM_VID_NEGATED				"negated"		/* "(INTERNAL) (EXPERIMENTAL)" */
-#define FIM_VID_FIM_BPP				"_fim_bpp"		/* "the bits per pixel count" */
-#define FIM_VID_AUTOMIRROR			"automirror"		/* "(INTERNAL)" */
-#define FIM_VID_MIRRORED			"mirrored"		/* "(INTERNAL)" */
-#define FIM_VID_WANT_AUTOCENTER			"want_autocenter"	/* "(INTERNAL)" */
-#define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "the maximum number of images allowed in the cache" */
-#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "the maximum amount of memory allowed for the cache" */
-#define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "the number of images currently cached" */
-#define FIM_VID_SCREEN_WIDTH			"screen_width"		/* "the screen width"  */
-#define FIM_VID_SCREEN_HEIGHT			"screen_height"		/* "the screen height" */
-#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "(INTERNAL) dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
-#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "(INTERNAL) each executed command (for debugging purposes)" */
-#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "(INTERNAL) offset used when opening files" */
-#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "(INTERNAL) will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
+#define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[internal,in] if nonzero, will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
+#define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[internal,out] current information on cache status" */
+#define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[internal,in] if 1, will display the output console" */
+#define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[internal,out] the current device string" */
+#define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "[internal,in] if 1, will display the status bar" */
+#define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[internal,in,experimental] if 1, will execute a sanity check on startup" */
+#define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
+#define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file" */
+#define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if not 0, the ~/.fimrc file will not be loaded at startup" */
+#define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
+#define FIM_VID_STATUS_LINE 			"_status_line"		/* "[internal,in] if 1, will display the status bar" */
+#define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[internal,in] if 1, will prefetch further files just after display of the first file" */
+#define FIM_VID_AUTO_SCALE_V			"auto_scale_v"	/* "[experimental, undocumented]" */
+#define FIM_VID_AUTOTOP				"autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
+#define FIM_VID_AUTOWIDTH			"autowidth"		/* "[internal,in] if 1, will scale freshly loaded images to fit width" */
+#define FIM_VID_FILEINDEX			"fileindex"		/* "[internal,out] the current image numeric index" */
+#define FIM_VID_FILELISTLEN			"filelistlen"		/* "[internal,out] the length of the current image list" */
+#define FIM_VID_FILENAME			"filename"		/* "[internal,out] the current file name" */
+#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "FIM_DEFAULT_CONFIG_FILE_CONTENTS"/* "[internal,out] the contents of the default (hardcoded) configuration file" */
+#define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
+#define FIM_VID_OVERRIDE_DISPLAY		"_override_display"	/* "[internal,undocumented]" */
+#define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
+#define FIM_VID_MAGNIFY_FACTOR			"magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
+#define FIM_VID_PWD				"pwd"			/* "[internal,out] the current working directory" */
+#define FIM_VID_REDUCE_FACTOR			"reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */
+#define FIM_VID_SCALE_FACTOR_MULTIPLIER		"scale_factor_multiplier"	/* "[internal,undocumented]" */
+#define FIM_VID_SCALE_FACTOR_DELTA		"scale_factor_delta"		/* "[internal,undocumented]" */
+#define FIM_VID_COMMENT 				"comment"				/* "[internal,out] the image comment, stored in the image file" */
+#define FIM_VID_STEPS 				"steps"				/* "[internal,in] the steps, in pixels, when panning images" */
+#define FIM_VID_CONSOLE_ROWS 			"rows"			/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_LINE_WIDTH 		"lwidth"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_LINE_OFFSET 		"console_offset"	/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_BUFFER_LINES		"console_lines"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_BUFFER_TOTAL		"console_buffer_total"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_BUFFER_FREE		"console_buffer_free"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_BUFFER_USED		"console_buffer_used"		/* "[internal,in,undocumented]" */
+#define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[internal,in,undocumented]" */
+#define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_KEY			"console_key"		/* "[internal,in] the key binding for spawning the command line [internal]" */
+#define FIM_VID_IGNORECASE			"ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp searches" */
+#define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[internal,in] if 1 on exit, will save the ~/fim_history file on exit" */
+#define FIM_VID_LOAD_FIM_HISTORY		"_load_fim_history"	/* "[internal,in] if 1 on startup, will load the ~/fim_history file on startup" */
+#define FIM_VID_TERM				"_TERM"			/* "[internal,out] the environment TERM variable" */
+#define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[internal,in]" */
+#define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
+#define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in]if 1, will display a message on the status bar when processing" */
+#define FIM_VID_SCALE				"scale"				/* "[internal,in]the scale of the current image" */
+#define FIM_VID_ASCALE				"ascale"			/* "[internal,in]the asymmetric scaling of the current image" */
+#define FIM_VID_ANGLE				"angle"				/* "[internal,undocumented]" */
+#define FIM_VID_ORIENTATION			"orientation"		/* "[internal,undocumented]" */
+#define FIM_VID_WIDTH				"width"			/* "[internal,out] the current image original width" */
+#define FIM_VID_HEIGHT				"height"		/* "[internal,out] the current image original height" */
+#define FIM_VID_SWIDTH				"swidth"		/* "[internal,out] the current image scaled width" */
+#define FIM_VID_SHEIGHT				"sheight"		/* "[internal,out] the current image scaled height" */
+#define FIM_VID_AUTOFLIP			"autoflip"		/* "[internal,undocumented]" */
+#define FIM_VID_AUTONEGATE			"autonegate"		/* "[internal,undocumented]" */
+#define FIM_VID_FLIPPED				"flipped"		/* "[internal,undocumented]" */
+#define FIM_VID_NEGATED				"negated"		/* "[internal,undocumented]" */
+#define FIM_VID_FIM_BPP				"_fim_bpp"		/* "[internal,out] the bits per pixel count" */
+#define FIM_VID_AUTOMIRROR			"automirror"		/* "[internal,undocumented]" */
+#define FIM_VID_MIRRORED			"mirrored"		/* "[internal,undocumented]" */
+#define FIM_VID_WANT_AUTOCENTER			"want_autocenter"	/* "[internal,undocumented]" */
+#define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in] the maximum number of images allowed in the cache" */
+#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in] the maximum amount of memory allowed for the cache" */
+#define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached" */
+#define FIM_VID_SCREEN_WIDTH			"screen_width"		/* "[internal,out] the screen width"  */
+#define FIM_VID_SCREEN_HEIGHT			"screen_height"		/* "[internal,out] the screen height" */
+#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[internal] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
+#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[internal] each executed command (for debugging purposes)" */
+#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal] offset used when opening files" */
+#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
 
 /*
  * Fim Keyboard Descriptions
