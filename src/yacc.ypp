@@ -138,6 +138,65 @@ program:
 	;
 
 /*
+ * a statement_list is a list of two or more statements concatenated by the ';' operator or separated by brackets or newlines
+ */
+statement_list:
+	  statement { $$ = $1; }
+	| statement ';' statement_list { $$ = opr(';', 2, $1, $3); }
+	| non_atomic_statements_block statement_list{ $$ = opr(';', 2, $1, $2); }
+	| statements_block { $$ = $1; }
+	;
+
+non_atomic_statements_block:
+	  '{' statement_list '}' { $$ = opr(';', 2, $2, NULL); }
+	| INTEGER '{' statement_list '}' { if($1>0){$$ = opr('r',2,opr(';', 2, $3, NULL) ,con($1)); }}
+	| conditional_statement { $$ = $1; }
+	;
+/*
+ * a statements_block is a block of one or more statements/statement lists
+ */
+statements_block:
+	  atomic_statements_block { $$ = $1; }
+	| non_atomic_statements_block { $$ = $1; }
+	;
+
+/*
+ * a conditional statement
+ */
+conditional_statement:
+	  if_statement   { $$ = $1; }
+	| loop_statement { $$ = $1; }
+	;
+
+/*
+ * if statements
+ */
+/*
+ * here follows a 'dangling else' ambiguity ( dates back to Algol 60 :) )
+ */
+if_statement:
+	  IF '(' expression ')' statements_block { $$ = opr(IF, 2, $3, $5); }
+	| IF '(' expression ')' statements_block ELSE statements_block { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
+//	| IF '(' expression ')' statement ';' ELSE statements_block { $$ = opr(IF, 3, $3, $5, $8); } //<- causes shift-reduce conflict..
+//	| IF '(' expression ')' statements_block ELSE statement ';' { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
+	;
+
+/* 
+ * a loop statement
+ */
+loop_statement:
+	  WHILE '(' expression ')' statements_block { $$ = opr(WHILE, 2, $3, $5); }
+	| DO statements_block WHILE '(' expression ')' { $$ = opr(WHILE, 2, $5, $2); }
+	;
+
+atomic_statements_block:
+	statement ';' { $$ = opr(';', 2, $1, NULL); }
+	| statement ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
+	| statement ';' ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
+	;
+
+
+/*
  * function declaration
  */
 //func_dec:
@@ -241,65 +300,6 @@ arguments:
 //	  expression { $$ = opr('a',1,  $1 ); }
 //	| expression '.' expression { $$ = opr('.', 2, $1, $3); }
 //	;
-
-/*
- * a conditional statement
- */
-conditional_statement:
-	  if_statement   { $$ = $1; }
-	| loop_statement { $$ = $1; }
-	;
-
-/* 
- * a loop statement
- */
-loop_statement:
-	  WHILE '(' expression ')' statements_block { $$ = opr(WHILE, 2, $3, $5); }
-	| DO statements_block WHILE '(' expression ')' { $$ = opr(WHILE, 2, $5, $2); }
-	;
-
-/*
- * if statements
- */
-/*
- * here follows a 'dangling else' ambiguity ( dates back to Algol 60 :) )
- */
-if_statement:
-	  IF '(' expression ')' statements_block { $$ = opr(IF, 2, $3, $5); }
-	| IF '(' expression ')' statements_block ELSE statements_block { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
-//	| IF '(' expression ')' statement ';' ELSE statements_block { $$ = opr(IF, 3, $3, $5, $8); } //<- causes shift-reduce conflict..
-//	| IF '(' expression ')' statements_block ELSE statement ';' { $$ = opr(IF, 3, $3, $5, $7); } //<- causes shift-reduce conflict..
-	;
-
-/*
- * a statements_block is a block of one or more statements/statement lists
- */
-statements_block:
-	  atomic_statements_block { $$ = $1; }
-	| non_atomic_statements_block { $$ = $1; }
-	;
-
-atomic_statements_block:
-	statement ';' { $$ = opr(';', 2, $1, NULL); }
-	| statement ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
-	| statement ';' ';' ';' { $$ = opr(';', 2, $1, NULL); /*a hack for handling redundancy */ }
-	;
-
-non_atomic_statements_block:
-	  '{' statement_list '}' { $$ = opr(';', 2, $2, NULL); }
-	| INTEGER '{' statement_list '}' { if($1>0){$$ = opr('r',2,opr(';', 2, $3, NULL) ,con($1)); }}
-	| conditional_statement { $$ = $1; }
-	;
-	
-/*
- * a statement_list is a list of two or more statements concatenated by the ';' operator or separated by brackets or newlines
- */
-statement_list:
-	  statement { $$ = $1; }
-	| statement ';' statement_list { $$ = opr(';', 2, $1, $3); }
-	| non_atomic_statements_block statement_list{ $$ = opr(';', 2, $1, $2); }
-	| statements_block { $$ = $1; }
-	;
 
 /*
  * expressionessions (mostly numerical: strings are not well supported right now)
