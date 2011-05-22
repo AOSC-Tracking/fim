@@ -209,6 +209,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_NAMESPACE_GLOBAL_CHAR	'g'
 #define FIM_SYM_NAMESPACE_WINDOW_CHAR	'w'
 #define FIM_SYM_NAMESPACE_VIEWPORT_CHAR	'v'
+#define FIM_SYM_NAMESPACE_PREFIXES	"i:, b:, w:, v:, g:"
 #define FIM_SYM_PROMPT_CHAR	':'
 #define FIM_SYM_PROMPT_SLASH	'/'
 #define FIM_SYM_PROMPT_NUL	'\0'
@@ -279,6 +280,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
 #define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
 #define FIM_CNS_USR_RC_COMPLETE_FILEPATH	 "~/.fimrc"
+#define FIM_CNS_EXAMPLE_FILENAME	 "file.jpg"
 #define FIM_CNS_SCALEFACTOR	 1.322f
 #define FIM_CNS_SCALEFACTOR_ONE 1.0f
 #define FIM_CNS_ANGLE_ONE 1.0f

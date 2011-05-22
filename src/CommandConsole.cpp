@@ -486,10 +486,17 @@ namespace fim
 		 *	DANGER : this method allocates memory
 		 */
 		static size_t list_index=0;
+		char nschar='\0';
 		if(state==0)list_index=0;
 		while(isdigit(*text))text++;	//initial  repeat match
-		const fim::string cmd(text);
+		/*const*/ fim::string cmd(text);
 		if(cmd=="")return NULL;
+		if(cmd.re_match("^[givbw]:")==true)
+		{
+			mask=4,
+			nschar=cmd[0],
+			cmd=cmd.substr(2,cmd.size());
+		}
 		args_t completions;
 		aliases_t::const_iterator ai;
 		variables_t::const_iterator vi;
@@ -507,10 +514,25 @@ namespace fim
 			completions.push_back((*ai).first);}
 		}
 		if(mask==0 || (mask&4))
-		for( vi=variables_.begin();vi!=variables_.end();++vi)
 		{
-			if((vi->first).find(cmd)==0)
-			completions.push_back((*vi).first);
+			if(nschar=='\0' || nschar=='g')
+			for( vi=variables_.begin();vi!=variables_.end();++vi)
+			{
+				if((vi->first).find(cmd)==0)
+				completions.push_back((*vi).first);
+			}
+#if 1
+			if(browser_.c_image())
+			if(nschar=='\0' || nschar=='i')
+				browser_.c_image()->find_matching_list(cmd,completions,true);
+			if(!nschar || nschar=='b')
+				browser_.find_matching_list(cmd,completions,true);
+			if(current_window().current_viewportp())
+			if(!nschar || nschar=='v')
+				current_window().current_viewportp()->find_matching_list(cmd,completions,true);
+			if(!nschar || nschar=='w')
+				current_window().find_matching_list(cmd,completions,true);
+#endif
 		}
 #ifndef FIM_COMMAND_AUTOCOMPLETION
 		/* THIS DIRECTIVE IS MOTIVATED BY SOME STRANGE BUG!
@@ -522,7 +544,8 @@ namespace fim
 				cout << cmd << " matches with " << completions[i].c_str()<<  "\n";*/
 		for(size_t i=list_index;i<completions.size();++i)
 		{
-			if(completions[i].find(cmd)==0)
+			//if(completions[i].find(cmd)==0)
+			if(1)
 			{
 				list_index++;
 				//readline will free this string..

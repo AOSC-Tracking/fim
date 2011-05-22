@@ -130,11 +130,15 @@ static char ** fim_completion (const char *text, int start,int end)
 				sp[0]=dupstr("\"");
 				sp[1]=NULL;
 				rl_completion_append_character = '\0';
+				fim::cout << "you can type double quoted string (e.g.: \""FIM_CNS_EXAMPLE_FILENAME"\"), or a variable name (e.g.:"FIM_VID_FILELISTLEN"). some variables need a prefix (one of "FIM_SYM_NAMESPACE_PREFIXES")\n" ;
 				return sp;
 			}
 #endif
 			if(start<end)
+			{
 				matches = rl_completion_matches (text, varname_generator);
+				return matches;
+			}
 #if FIM_COMPLETE_ONLY_IF_QUOTED
 			rl_attempted_completion_over = 1;
 #endif

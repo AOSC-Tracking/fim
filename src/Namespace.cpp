@@ -679,5 +679,21 @@ namespace fim
 			}
 			return acl;
 		}
+
+		fim_err_t Namespace::find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const
+		{
+			for(variables_t::const_iterator vi=variables_.begin();vi!=variables_.end();++vi)
+			{
+				if((vi->first).find(cmd)==0)
+				{
+					fim::string res;
+					if(prepend_ns)
+						res+=ns_char_,res+=FIM_SYM_NAMESPACE_SEP;
+					res+=(*vi).first;
+					completions.push_back(res);
+				}
+			}
+			return FIM_ERR_NO_ERROR;
+		}
 }
 
