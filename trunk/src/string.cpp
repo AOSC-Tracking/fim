@@ -20,6 +20,8 @@
 */
 #include "fim.h"
 
+#define FIM_WANT_DEBUG_REGEXP 0
+
 namespace fim
 {
 #ifndef _FIM_STRING_WRAPPER
@@ -486,14 +488,17 @@ namespace fim
 	void string::substitute(const char*r, const char* s, int flags)
 	{
 		/*
-		 * each occurrence of regular expression r will be substituted with t
+		 * each occurrence of regular expression r will be substituted with s
 		 *
 		 * FIXME : return values could be more informative
+		 * FIXME : not efficient
 		 * */
 		regex_t regex;
 		const int nmatch=1;
 		regmatch_t pmatch[nmatch];
 		int off=0,sl=0;
+		std::string rs = "";
+		int ts=this->size();
 
 		if( !r || !*r || !s )
 			return;
@@ -503,18 +508,27 @@ namespace fim
 
 		sl=strlen(s);
 		//const int s_len=strlen(s);
-		while(regexec(&regex,off+c_str(),nmatch,pmatch,0)==0)
+		while(regexec(&regex,off+c_str(),nmatch,pmatch,REG_NOTBOL)==0)
 		{
 			/*
 			 * please note that this is not an efficient subsitution implementation.
 			 * */
-			int ts=this->size();
-			std::string ss = substr(0,pmatch->rm_so);
-			ss+=s;
-			ss+=substr(pmatch->rm_eo,ts);
-			*this=ss.c_str();
-			off=(ts-pmatch->rm_eo)+sl+pmatch->rm_so;
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "pasting "<<off<< ":"<<off+pmatch->rm_so<<"\n";
+			if(pmatch->rm_so>0)
+			rs+=substr(off,off+pmatch->rm_so-1);
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "forward to "<<rs<<"\n";
+			rs+=s;
+			//rs+=substr(pmatch->rm_eo,ts);
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "match at "<<c_str() << " from " << off+pmatch->rm_so << " to " << off+pmatch->rm_eo<< ", off="<<off<<"\n";
+			off+=pmatch->rm_eo;
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "forward to "<<rs<<"\n";
 		}
+		if(FIM_WANT_DEBUG_REGEXP)std::cerr << "forward no more\n";
+		if(ts>off)
+			rs+=substr(off,ts);
+		if(FIM_WANT_DEBUG_REGEXP)std::cerr << "res is "<<rs<<", off= "<<off<<"\n";
+		if(rs!=*this)
+			*this=rs.c_str();
 		regfree(&regex);
 		return;
 	}
