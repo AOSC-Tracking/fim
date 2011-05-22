@@ -66,6 +66,7 @@ namespace fim
 
 		Namespace(const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char) {}
 		virtual ~Namespace(){}
+		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
 	};
 }
 
