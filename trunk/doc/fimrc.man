@@ -309,7 +309,7 @@ rotate the image the specified amount of degrees
 .fi
 .B
 magnify
-magnifies the displayed image by the magnify_factor variable or ARGS
+magnifies the displayed image by the magnify_factor variable or {args}
 .fi
 .B
 reduce
@@ -397,7 +397,7 @@ while(expression){action;}
 .fi
 .B
 alias
-alias [ALIASNAME [ACTIONS [DESCRIPTION]]]
+alias [{identifier} [{commands} [{description}]]]
 .fi
 .B
 getenv
@@ -405,11 +405,11 @@ invokes getenv on the specified environment variable identifier
 .fi
 .B
 unalias
-unalias {alias} | -a : deletes the alias {alias} or all aliases_ (use "-a", not -a)
+unalias {identifier} | -a : deletes the alias {identifier} or all aliases (use "-a", not -a)
 .fi
 .B
 unbind
-unbinds the action associated to a specified KEYCODE
+unbinds the action associated to a specified {keycode}
 .fi
 .B
 sleep
@@ -425,11 +425,11 @@ provides online help
 .fi
 .B
 autocmd
-manipulate auto commands. usage: autocmd [Event] [Pattern] [Commands]
+manipulate auto commands. usage: autocmd {event} {pattern} {commands}
 .fi
 .B
 autocmd_del
-manipulate auto commands. usage: autocmd_del [Event] [Pattern] [Commands]
+manipulate auto commands. usage: autocmd_del {event} {pattern} {commands}
 .fi
 .B
 set_interactive_mode
@@ -453,7 +453,7 @@ print the current directory name.
 .fi
 .B
 popen
-pipe a command. usage: popen COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands the output of COMMAND
+pipe a command. usage: popen {command}: popen() invocation; spawns a shell, invoking {command} and executing as fim commands the output of {command}
 .fi
 .B
 stdout
@@ -506,6 +506,10 @@ In the following, the [internal] variables are the ones referenced in the source
 .B
 FIM_DEFAULT_CONFIG_FILE_CONTENTS
 [internal,out] the contents of the default (hardcoded) configuration file
+.fi
+.B
+FIM_DEFAULT_GRAMMAR_FILE_CONTENTS
+[internal,out] the contents of the default (hardcoded) grammar file
 .fi
 .B
 _TERM

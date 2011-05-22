@@ -201,7 +201,7 @@ namespace fim
 	fim::string CommandConsole::getAliasesList()const
 	{
 		/*
-		 * collates all registered action aliases_ together in a single string
+		 * collates all registered action aliases together in a single string
 		 * */
 		fim::string aliases_expanded;
 		aliases_t::const_iterator ai;
@@ -350,7 +350,7 @@ namespace fim
 		addCommand(new Command(fim::string("scale_factor_increase" ),fim::string("add "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and magnify_facto" ),&browser_,&Browser::scale_factor_increase));
 		addCommand(new Command(fim::string("scale_factor_decrease" ),fim::string( "subtract "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" " ),&browser_,&Browser::scale_factor_decrease));
 		addCommand(new Command(fim::string(FIM_FLT_ROTATE),fim::string( "rotate the image the specified amount of degrees" ),&browser_,&Browser::rotate));
-		addCommand(new Command(fim::string(FIM_FLT_MAGNIFY),fim::string("magnifies the displayed image by the "FIM_VID_MAGNIFY_FACTOR" variable or ARGS" ),&browser_,&Browser::magnify));
+		addCommand(new Command(fim::string(FIM_FLT_MAGNIFY),fim::string("magnifies the displayed image by the "FIM_VID_MAGNIFY_FACTOR" variable or "FIM_CNS_EX_ARGS_STRING),&browser_,&Browser::magnify));
 		addCommand(new Command(fim::string(FIM_FLT_REDUCE),fim::string("reduces the displayed image by "FIM_VID_REDUCE_FACTOR" or ARGS" ),&browser_,&Browser::reduce));
 		addCommand(new Command(fim::string(FIM_FLT_RETURN),fim::string("returns from the program with a status code"),this,&CommandConsole::do_return));
 		addCommand(new Command(fim::string(FIM_FLT_ALIGN_TOP),fim::string("aligns to the upper side the image" ),&browser_,&Browser::top_align));
@@ -378,18 +378,18 @@ namespace fim
 
 		addCommand(new Command(fim::string(FIM_FLT_WHILE),fim::string("while(expression){action;}"),this,&CommandConsole::foo));// FIXME: need a special "help grammar" command !
 
-		addCommand(new Command(fim::string(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS" [ALIASNAME [ACTIONS [DESCRIPTION]]]"),this,&CommandConsole::foo));
+		addCommand(new Command(fim::string(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS" ["FIM_CNS_EX_ID_STRING" ["FIM_CNS_EX_CMDS_STRING" ["FIM_CNS_EX_DSC_STRING"]]]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string(FIM_FLT_GETENV),fim::string("invokes "FIM_FLT_GETENV" on the specified environment variable identifier"),this,&CommandConsole::do_getenv));
-		addCommand(new Command(fim::string(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS" {alias} | -a : deletes the alias {alias} or all aliases_ (use \"-a\", not -a)"),this,&CommandConsole::unalias));
-		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string("unbinds the action associated to a specified KEYCODE"),this,&CommandConsole::unbind));
+		addCommand(new Command(fim::string(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS" "FIM_CNS_EX_ID_STRING" | -a : deletes the alias "FIM_CNS_EX_ID_STRING" or all aliases (use \"-a\", not -a)"),this,&CommandConsole::unalias));
+		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string("unbinds the action associated to a specified "FIM_CNS_EX_KC_STRING),this,&CommandConsole::unbind));
 		addCommand(new Command(fim::string(FIM_FLT_SLEEP),fim::string("sleeps for the specified (default 1) number of seconds"),this,&CommandConsole::foo));
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		addCommand(new Command(fim::string(FIM_FLT_MARK),fim::string("marks the current file"),this,&CommandConsole::markCurrentFile));
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string("provides online help"),this,&CommandConsole::help));
 #ifdef FIM_AUTOCMDS
-		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD),fim::string("manipulate auto commands. usage: "FIM_FLT_AUTOCMD" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd));
-		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD_DEL),fim::string("manipulate auto commands. usage: "FIM_FLT_AUTOCMD_DEL" [Event] [Pattern] [Commands]"),this,&CommandConsole::autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
+		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD),fim::string("manipulate auto commands. usage: "FIM_FLT_AUTOCMD" "FIM_CNS_EX_EVT_STRING" "FIM_CNS_EX_PAT_STRING" "FIM_CNS_EX_CMDS_STRING),this,&CommandConsole::autocmd));
+		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD_DEL),fim::string("manipulate auto commands. usage: "FIM_FLT_AUTOCMD_DEL" "FIM_CNS_EX_EVT_STRING" "FIM_CNS_EX_PAT_STRING" "FIM_CNS_EX_CMDS_STRING),this,&CommandConsole::autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_SET_INTERACTIVE_MODE),fim::string("sets interactive mode"),this,&CommandConsole::set_interactive_mode));
 		addCommand(new Command(fim::string(FIM_FLT_SET_CONSOLE_MODE),fim::string("sets console mode"),this,&CommandConsole::set_in_console));
@@ -398,7 +398,7 @@ namespace fim
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_CD),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::cd));
 		addCommand(new Command(fim::string(FIM_FLT_PWD),fim::string(FIM_CMD_HELP_PWD   ),this,&CommandConsole::pwd));
-		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string("pipe a command. usage: "FIM_FLT_POPEN" COMMAND: popen() invocation; spawns a shell, invoking COMMAND and executing as fim commands the output of COMMAND"),this,&CommandConsole::sys_popen));
+		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string("pipe a command. usage: "FIM_FLT_POPEN" "FIM_CNS_EX_CMD_STRING": popen() invocation; spawns a shell, invoking "FIM_CNS_EX_CMD_STRING" and executing as fim commands the output of "FIM_CNS_EX_CMD_STRING),this,&CommandConsole::sys_popen));
 		addCommand(new Command(fim::string(FIM_FLT_STDOUT),fim::string("writes to stdout its arguments"),this,&CommandConsole::_stdout));
 #ifdef FIM_PIPE_IMAGE_READ
 		addCommand(new Command(fim::string(FIM_FLT_PREAD),fim::string("executes the arguments as a shell command and reads the input as an image file (uses "FIM_FLT_POPEN")"),this,&CommandConsole::pread));
@@ -1319,7 +1319,7 @@ ok:
 	fim::string CommandConsole::get_aliases_list()const
 	{
 		/*
-		 * returns the list of set action aliases_
+		 * returns the list of set action aliases
 		 */
 		fim::string aliases_list;
 		aliases_t::const_iterator ai;

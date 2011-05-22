@@ -306,6 +306,14 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #else
 #define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION""
 #endif
+#define FIM_CNS_EX_CMD_STRING	"{command}"
+#define FIM_CNS_EX_KC_STRING	"{keycode}"
+#define FIM_CNS_EX_ID_STRING	"{identifier}"
+#define FIM_CNS_EX_PAT_STRING	"{pattern}"
+#define FIM_CNS_EX_CMDS_STRING	"{commands}"
+#define FIM_CNS_EX_EVT_STRING	"{event}"
+#define FIM_CNS_EX_ARGS_STRING	"{args}"
+#define FIM_CNS_EX_DSC_STRING	"{description}"
 
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
@@ -391,7 +399,9 @@ namespace fim
 #define FIM_VID_FILEINDEX			"fileindex"		/* "[internal,out] the current image numeric index" */
 #define FIM_VID_FILELISTLEN			"filelistlen"		/* "[internal,out] the length of the current image list" */
 #define FIM_VID_FILENAME			"filename"		/* "[internal,out] the current file name" */
+#define FIM_VID_FILENAME			"filename"		/* "[internal,out] the current file name" */
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "FIM_DEFAULT_CONFIG_FILE_CONTENTS"/* "[internal,out] the contents of the default (hardcoded) configuration file" */
+#define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "FIM_DEFAULT_GRAMMAR_FILE_CONTENTS" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
 #define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_override_display"	/* "[internal,undocumented]" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
