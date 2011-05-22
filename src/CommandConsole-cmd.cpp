@@ -83,7 +83,9 @@ namespace fim
 		{
 			cmd=findCommand(args[0]);
 			if(cmd)
-				return  cmd->getHelp()+string("\n");
+				return
+					string("\"")+(args[0]+string("\" is a command, documented:\n"))+
+				      	cmd->getHelp()+string("\n");
 			else
 			if(aliasRecall(fim::string(args[0]))!="")
 				return
@@ -92,15 +94,23 @@ namespace fim
 			else
 			{
 				if(isVariable(args[0]))
-					return string("\"")+( args[0] + string( "\" is a variable, with value:\n" )+
-					getStringVariable(args[0]));
+				{
+					fim::string hs;
+					hs+=fim::string("\"");
+					hs+=args[0] + fim::string( "\" is a variable, with value:\n" );
+					hs+=getStringVariable(args[0]);
+					hs+=fim::string("\nand description:\n");
+					hs+=Var::var_help_db_query(args[0]);
+					hs+=fim::string("\n");
+					return hs;
+				}
 				else
 					cout << args[0] << " : no such command\n";
 			}
 
 		}
 		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
-		return "usage : "FIM_FLT_HELP" CMD   (use "FIM_KBD_TAB" in commandline mode to get a list of commands )\n";
+		return ""FIM_FLT_HELP" "FIM_CNS_EX_ID_STRING": provides help for "FIM_CNS_EX_ID_STRING", if it is a variable, alias, or command. Use "FIM_KBD_TAB" in commandline mode to get a list of commands. Command line mode can be entered with the default key '"FIM_SYM_CONSOLE_KEY_STR"', and left pressing "FIM_KBD_ENTER".\n";
 	}
 
 	fim::string CommandConsole::quit(const args_t &args)

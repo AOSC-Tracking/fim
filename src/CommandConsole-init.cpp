@@ -252,6 +252,8 @@ namespace fim
 			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
     #endif		
 		}
+#include "grammar.h"
+		setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
 
 		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/"FIM_CNS_USR_RC_FILEPATH)+2
 		{
