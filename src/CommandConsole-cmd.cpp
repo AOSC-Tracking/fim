@@ -22,6 +22,9 @@
 
 
 #include "fim.h"
+
+#define FIM_WANT_SYSTEM_CALL_DEBUG 0
+
 namespace fim
 {
 	fim::string CommandConsole::bind(const args_t& args)
@@ -368,6 +371,9 @@ namespace fim
 		 * executes the shell commands given in the arguments,
 		 * one by one, and returns the (collated) standard output
 		 * */
+#if FIM_WANT_SYSTEM_CALL_DEBUG
+		fim::string is="";
+#endif
 #if FIM_WANT_SINGLE_SYSTEM_INVOCATION
 		/* 20110302 FIXME: inefficient */
 		fim::string cc="";
@@ -381,7 +387,15 @@ namespace fim
 			cc+=args[i];
 #endif
 			cc+=" ";
+#if FIM_WANT_SYSTEM_CALL_DEBUG
+			is+=args[i];
+			is+=" ";
+#endif
 		}
+#if FIM_WANT_SYSTEM_CALL_DEBUG
+		std::cerr << "received string: " << is << FIM_SYM_ENDL;	
+		std::cerr << "about to call popen on string: " << cc << FIM_SYM_ENDL;	
+#endif
 		if(args.size())
 		{
 			FILE* fd=popen(cc.c_str(),"r");

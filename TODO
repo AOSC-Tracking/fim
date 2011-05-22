@@ -21,6 +21,10 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110522	shall use/print out RL_READLINE_VERSION
+20110521	autocompletion shall be escaped (for opening filenames containing quoting chars)
+20110520	shall unify "100%" and other scaling styles into one single command. 
+20110520	string escaping does not work.
 20110517	dump_key_codes seems broken
 20110517	may consider separating "options" from "variables", as vim does
 20110516	invoking fim in sdl mode with very low resolutions/window sizes is crashy. this is bad.

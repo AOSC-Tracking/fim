@@ -30,6 +30,9 @@
 #define min(x,y) ((x)<(y)?(x):(y))
 #define max(x,y) ((x)>(y)?(x):(y))
 
+#define FIM_COMPLETE_ONLY_IF_QUOTED  1
+#define FIM_COMPLETE_INSERTING_DOUBLE_QUOTE  1
+
 /*
  * This file is severely messed up :).
  * */
@@ -43,6 +46,38 @@ namespace fim
  * in fim.cpp
  * */
 extern fim::string g_fim_output_device;
+
+/* Generator function for command completion.  STATE lets us
+ *    know whether to start from scratch; without any state
+ *       (i.e. STATE == 0), then we start at the top of the list. */
+static char * command_generator (const char *text,int state)
+{
+//	static int list_index, len;
+//	char *name;
+	/* If this is a new word to complete, initialize now.  This
+	 *      includes saving the length of TEXT for efficiency, and
+	 *	initializing the index variable to 0. 
+	 */
+	return cc.command_generator(text,state,0);
+
+		
+//	if (!state) { list_index = 0; len = strlen (text); }
+
+        /* Return the next name which partially matches from the
+	 * command list.
+	 */
+
+//	while (name = commands[list_index].name)
+//	{ list_index++; if (strncmp (name, text, len) == 0) return (dupstr(name)); }
+	/* If no names matched, then return NULL. */
+//	return ((char *)NULL);
+}
+
+static char * varname_generator (const char *text,int state)
+{
+	return cc.command_generator(text,state,4);
+}
+
 
 namespace rl
 {
@@ -73,12 +108,11 @@ static char ** fim_completion (const char *text, int start,int end)
 		/* this could be set only here :) */
 		return NULL;
 	}
-	
 
-            /* If this word is at the start of the line, then it is a command
-	     *  to complete.  Otherwise it is the name of a file in the current
-	     *  directory.
-	     */
+        /* If this word is at the start of the line, then it is a command
+	*  to complete.  Otherwise it is the name of a file in the current
+	*  directory.
+	*/
         if (start == 0)
 	{
 		//std::cout << "completion for word " << start << "\n";
@@ -86,6 +120,25 @@ static char ** fim_completion (const char *text, int start,int end)
 	}
 	else 
 	{
+		if(start>0 && !fim_isquote(rl_line_buffer[start-1]) )
+		{
+#if FIM_COMPLETE_INSERTING_DOUBLE_QUOTE  
+			// FIXME: this is NEW
+			if(start==end && fim_isspace(rl_line_buffer[start-1]))
+			{
+				char**sp=(char**)malloc(2*sizeof(char*));
+				sp[0]=dupstr("\"");
+				sp[1]=NULL;
+				rl_completion_append_character = '\0';
+				return sp;
+			}
+#endif
+			if(start<end)
+				matches = rl_completion_matches (text, varname_generator);
+#if FIM_COMPLETE_ONLY_IF_QUOTED
+			rl_attempted_completion_over = 1;
+#endif
+		}
 		//std::cout << "sorry, no completion for word " << start << "\n";
 	}
         return (matches);
@@ -274,32 +327,6 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	rl_hook_func_t *rl_event_hook=redisplay_hook;
 	rl_hook_func_t *rl_pre_input_hook=redisplay_hook;*/
 	//std::cout << "readline initialized\n";
-}
-
-/* Generator function for command completion.  STATE lets us
- *    know whether to start from scratch; without any state
- *       (i.e. STATE == 0), then we start at the top of the list. */
-char * command_generator (const char *text,int state)
-{
-//	static int list_index, len;
-//	char *name;
-	/* If this is a new word to complete, initialize now.  This
-	 *      includes saving the length of TEXT for efficiency, and
-	 *	initializing the index variable to 0. 
-	 */
-	return cc.command_generator(text,state);
-
-		
-//	if (!state) { list_index = 0; len = strlen (text); }
-
-        /* Return the next name which partially matches from the
-	 * command list.
-	 */
-
-//	while (name = commands[list_index].name)
-//	{ list_index++; if (strncmp (name, text, len) == 0) return (dupstr(name)); }
-	/* If no names matched, then return NULL. */
-//	return ((char *)NULL);
 }
 
 
