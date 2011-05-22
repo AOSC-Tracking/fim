@@ -32,6 +32,8 @@ namespace fim
 	class string;
 }
 
+int fim_isspace(int c);
+int fim_isquote(int c);
 
 fim::string fim_shell_arg_escape(const fim::string & arg);
 void fim_perror(const char *s);

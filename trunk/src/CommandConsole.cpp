@@ -472,13 +472,14 @@ namespace fim
 		return alias(args);
 	}
 
-	char * CommandConsole::command_generator (const char *text,int state)const
+	char * CommandConsole::command_generator (const char *text,int state,int mask)const
 	{
 		/*
 		 *	This is the reason why the commands should be kept
 		 *	in a list or vector, rather than a map...  :(
 		 *
 		 *	TODO : INSTEAD OF USING commands_[], make a new vector 
+		 *	TODO : the 'mask' mechanism is still a quick hack; it shall be adjusted more properly 
 		 *	with completions!
 		 *	FIX ME
 		 *
@@ -492,17 +493,20 @@ namespace fim
 		args_t completions;
 		aliases_t::const_iterator ai;
 		variables_t::const_iterator vi;
+		if(mask==0 || (mask&1))
 		for(size_t i=0;i<commands_.size();++i)
 		{
 			if(commands_[i]->cmd_.find(cmd)==0)
 			completions.push_back(commands_[i]->cmd_);
 		}
+		if(mask==0 || (mask&2))
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
 		{	
 			if((ai->first).find(cmd)==0){
 //			cout << ".." << ai->first << ".." << " matches " << cmd << "\n";
 			completions.push_back((*ai).first);}
 		}
+		if(mask==0 || (mask&4))
 		for( vi=variables_.begin();vi!=variables_.end();++vi)
 		{
 			if((vi->first).find(cmd)==0)
@@ -521,7 +525,7 @@ namespace fim
 			if(completions[i].find(cmd)==0)
 			{
 				list_index++;
-				//readline will free this strings..
+				//readline will free this string..
 				return dupstr(completions[i].c_str());// is this malloc free ?
 			}
 			else
@@ -833,7 +837,7 @@ ret:
 			 */
 			if(c==NULL)
 			{
-				char *match = this->command_generator(cmd.c_str(),0);
+				char *match = this->command_generator(cmd.c_str(),0,0);
 				if(match)
 				{
 					//cout << "but found :`"<<match<<"...\n";

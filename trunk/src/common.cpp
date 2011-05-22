@@ -682,4 +682,5 @@ ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream)
 		return !is_dir(nf);
 	}
 
-
+int fim_isspace(int c){return isspace(c);}
+int fim_isquote(int c){return c=='\'' || c=='\"';}

@@ -179,7 +179,7 @@ class CommandConsole
 #endif
 	bool display();
 	bool redisplay();
-	char * command_generator (const char *text,int state)const;
+	char * command_generator (const char *text,int state,int mask)const;
 	fim_err_t executionCycle();
 	fim_err_t init(fim::string device);
 	int  inConsole()const;
