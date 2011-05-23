@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FontServer.h : Font Server code from fbi, adapted for fim.
 

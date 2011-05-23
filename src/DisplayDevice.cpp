@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  DisplayDevice.cpp : virtual device Fim driver file
 

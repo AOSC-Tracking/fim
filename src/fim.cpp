@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  fim.cpp : Fim main program and accessory functions
 
@@ -294,7 +294,7 @@ class FimInstance
 			    " )"
 	#else
 	/* obsolete */
-	# define FIM_REPOSITORY_VERSION  "$Id$"
+	# define FIM_REPOSITORY_VERSION  "$LastChangedDate$"
 	# ifdef FIM_REPOSITORY_VERSION 
 			    " ( repository version "
 		FIM_REPOSITORY_VERSION 	    

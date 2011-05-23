@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffTiff.cpp : fbi functions for TIFF files, modified for fim
 

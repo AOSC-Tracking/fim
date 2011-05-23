@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 #ifndef FIM_STRING_H
 #define FIM_STRING_H
 /*

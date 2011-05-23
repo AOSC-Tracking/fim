@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  DebugConsole.h : Fim virtual console display.
 

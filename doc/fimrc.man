@@ -1,5 +1,5 @@
 .\"
-.\" $Id$
+.\" $LastChangedDate$
 .\"
 .TH fimrc 1 "(c) 2011-2011 Michele Martone"
 .SH NAME
@@ -992,7 +992,7 @@ $;
 This is the default configuration, as contained in the FIM_DEFAULT_CONFIG_FILE_CONTENTS variable.
 
 .nf
-# $Id$
+# $LastChangedDate$
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation to discover how to change this default hardcoded file 
 # and how to make your own.

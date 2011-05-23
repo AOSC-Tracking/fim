@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuff.h : Misc fbi functionality routines, modified for fim
 

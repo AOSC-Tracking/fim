@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help methods
 

@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffFbtools.cpp : fbi functions from fbtools.c, modified for fim
 

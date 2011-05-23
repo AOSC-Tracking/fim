@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 

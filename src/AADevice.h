@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  AADevice.h : aalib device Fim driver header file
 

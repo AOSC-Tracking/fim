@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  CACADevice.h : cacalib device Fim driver header file
 

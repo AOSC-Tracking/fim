@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  AADevice.cpp : aalib device Fim driver file
 

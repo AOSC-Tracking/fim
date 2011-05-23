@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  defaultConfiguration.cpp :
   The following code contains key bindings and aliases definitions

@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 

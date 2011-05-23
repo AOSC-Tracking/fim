@@ -1,4 +1,4 @@
-/* $Id: FbiStuffPdf.cpp 224 2009-03-06 00:12:20Z dezperado $ */
+/* $LastChangedDate$ */
 /*
  FbiStuffMatrixMarket.cpp : fim functions for decoding Matrix Market files
 

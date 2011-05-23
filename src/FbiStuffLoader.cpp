@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffLoader.cpp : fbi functions for loading files, modified for fim
 

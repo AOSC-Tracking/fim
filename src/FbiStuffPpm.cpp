@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
 
