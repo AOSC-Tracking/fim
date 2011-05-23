@@ -1,5 +1,5 @@
 .\"
-.\" $LastChangedDate$
+.\" $Id$
 .\"
 .TH fimrc 1 "(c) 2011-2011 Michele Martone"
 .SH NAME
@@ -146,7 +146,7 @@ The way some one-line statements are evaluated:
 :+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
 :-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
 
-/regexp		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
+/{regexp}		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
 /png		 a shortcut for /.*png.*
 
@@ -669,6 +669,12 @@ dump_key_codes : dump the active key codes
 clear
 .fi
 clear : clear the virtual console
+.fi
+
+.B
+window
+.fi
+window [ split | hsplit | vsplit | normalize | enlarge | venlarge | henlarge | up | down | left | right | close | swap ] : manipulates the window system windows
 .fi
 
 .SH VARIABLES REFERENCE

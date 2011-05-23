@@ -420,6 +420,10 @@ namespace fim
 		//addCommand(new Command(fim::string("scroll_console_up"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
 		//addCommand(new Command(fim::string("scroll_console_down"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
 #endif
+#ifdef FIM_WINDOWS
+		/* this is a stub for the manual generation (actually, the Window object gets built later) */
+		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW),this,&CommandConsole::foo));
+#endif
 		/*
 		 * This is not a nice choice, but it is clean regarding this file.
 		 */
