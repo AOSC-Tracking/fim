@@ -150,355 +150,527 @@ The way some one-line statements are evaluated:
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
 /png		 a shortcut for /.*png.*
 
-!{cmd}		executes the {cmd} quoted string as a "/bin/sh" shell command
+!{syscmd}		executes the {syscmd} quoted string as a "/bin/sh" shell command
 
 
 .SH COMMANDS REFERENCE
 
 .B
 prefetch
-prefetches an image, for a faster subsequent opening
 .fi
+prefetch : prefetch two nearby image files, for a faster subsequent opening
+.fi
+
 .B
 next
-displays the next picture in the list
 .fi
+next [{number}=1] : go to the next picture in the list
+.fi
+
 .B
 next_picture
-displays the next page or picture file
 .fi
+next_picture [{number}=1] : go to the next page or picture file
+.fi
+
 .B
 prev_picture
-displays the previous page or picture file
 .fi
+prev_picture [{number}=1] : go to the previous page or picture file
+.fi
+
 .B
 prev
-displays the previous picture in the list
 .fi
+prev [{number}=1] : go to the previous picture in the list
+.fi
+
 .B
 next_page
-displays the next page
 .fi
+next_page [{number}=1] : go to the next page
+.fi
+
 .B
 prev_page
-displays the previous page
 .fi
+prev_page [{number}=1] : go to the previous page
+.fi
+
 .B
 push
-pushes a file in the files list
 .fi
+push {filename(s)} : push {filename(s)} to the back of the files list
+.fi
+
 .B
 display
-displays the current file
 .fi
+display : display the current file contents
+.fi
+
 .B
 redisplay
-re-displays the current file
 .fi
+redisplay : re-display the current file contents
+.fi
+
 .B
 list
-displays the files list
 .fi
+list : display the files list
+.fi
+
 .B
 pop
-pop the last file from the files list
 .fi
+pop : pop the last file from the files list
+.fi
+
 .B
 file
-displays the current file's name in the console
 .fi
+file : display the current file's name in the console
+.fi
+
 .B
 pan_ne
-pans the image north east
 .fi
+pan the image north east [undocumented]
+.fi
+
 .B
 pan_nw
-pans the image north west
 .fi
+pan the image north west [undocumented]
+.fi
+
 .B
 pan_sw
-pans the image south west
 .fi
+pan the image south west [undocumented]
+.fi
+
 .B
 pan_se
-pans the image south east
 .fi
+pan the image south east [undocumented]
+.fi
+
 .B
 panup
-pans the image up
 .fi
+pan the image up [undocumented]
+.fi
+
 .B
 pandown
-pans the image down
 .fi
+pan the image down [undocumented]
+.fi
+
 .B
 panleft
-pans the image left
 .fi
+pan the image left [undocumented]
+.fi
+
 .B
 panright
-pans the image right
 .fi
+pan the image right [undocumented]
+.fi
+
 .B
 load
-load the image, if not yet loaded
 .fi
+load : load the image, if not yet loaded
+.fi
+
 .B
 reload
-loads the image into memory
 .fi
+reload : load the image into memory
+.fi
+
 .B
 files
-displays the number of files in the file list
 .fi
+files : display the number of files in the file list
+.fi
+
 .B
 sort
-sorts the file list
 .fi
+sort : sort the file list
+.fi
+
 .B
 random_shuffle
-randomly shuffles the file list
 .fi
+random_shuffle : randomly shuffle the file list
+.fi
+
 .B
 reverse
-reverses the file list
 .fi
+reverse : reverse the file list
+.fi
+
 .B
 remove
-remove the current file or the given ones from the list
 .fi
+remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified
+.fi
+
 .B
 info
-displays information about the current file
 .fi
+info : display information about the current file
+.fi
+
 .B
 regexp_goto
-jumps to the first image matching the given pattern
 .fi
+regexp_goto {regexp} : jump to the first image matching the given {regexp} pattern
+.fi
+
 .B
 regexp_goto_next
-jumps to the next image matching the last given pattern
 .fi
+regexp_goto_next : jump to the next image matching the last given pattern
+.fi
+
 .B
 scale_increment
-increments the scale by a percentual amount
 .fi
+scale_increment : increment the scale by a percentual amount [undocumented]
+.fi
+
 .B
 scale_multiply
-multiplies the scale by the specified amount
 .fi
+scale_multiply : multiply the scale by the specified amount [undocumented]
+.fi
+
 .B
 scale_factor_grow
-multiply the scale factors reduce_factor and magnify_factor by scale_factor_multiplier
 .fi
+multiply the scale factors reduce_factor and magnify_factor by scale_factor_multiplier [undocumented]
+.fi
+
 .B
 scale_factor_shrink
-divide the scale factors reduce_factor and magnify_facto by scale_factor_multiplier
 .fi
+divide the scale factors reduce_factor and magnify_factor by scale_factor_multiplier [undocumented]
+.fi
+
 .B
 scale_factor_increase
-add scale_factor_delta to the scale factors reduce_factor and magnify_facto
 .fi
+add scale_factor_delta to the scale factors reduce_factor and magnify_factor [undocumented]
+.fi
+
 .B
 scale_factor_decrease
-subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor 
 .fi
+subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor  [undocumented]
+.fi
+
 .B
 rotate
-rotate the image the specified amount of degrees
 .fi
+rotate {number}: rotate the image the specified amount of degrees [undocumented]
+.fi
+
 .B
 magnify
-magnifies the displayed image by the magnify_factor variable or {args}
 .fi
+magnify : magnify the displayed image by the magnify_factor variable or {args} [undocumented]
+.fi
+
 .B
 reduce
-reduces the displayed image by reduce_factor or ARGS
 .fi
+reduce : reduce the displayed image by reduce_factor or {args} [undocumented]
+.fi
+
 .B
 return
-returns from the program with a status code
 .fi
+return {number} : return from the program with a specified status code
+.fi
+
 .B
 align_top
-aligns to the upper side the image
 .fi
+align_top : align to the upper side the current image
+.fi
+
 .B
 align_bottom
-aligns to the lower side the image
 .fi
+align_bottom : align to the lower side the current image
+.fi
+
 .B
 goto
-goes to the index image
 .fi
+goto {number} : go to the image specified by index {number}
+.fi
+
 .B
 negate
-negates the displayed image colors
 .fi
+negate : negate the displayed image colors
+.fi
+
 .B
 status
-sets the status line to the collation of the given arguments
 .fi
+status : set the status line to the collation of the given arguments
+.fi
+
 .B
 scrolldown
-scrolls down the image, going next if at bottom
 .fi
+scrolldown : scroll down the image, going next if at bottom
+.fi
+
 .B
 scrollforward
-scrolls the image as it were reading it
 .fi
+scrollforward : scroll the image as it were reading it
+.fi
+
 .B
 scale
-scales the image according to a scale (ex.: 0.5,40%,..)
 .fi
+scale : scale the image according to a scale (ex.: 0.5,40%,..) [undocumented]
+.fi
+
 .B
 set
-manipulates the internal variables
 .fi
+set : manipulate the internal variables [undocumented]
+.fi
+
 .B
 auto_scale
-sets auto scale mode
 .fi
+auto_scale : set auto scale mode
+.fi
+
 .B
 auto_width_scale
-scale the image so that it fits horizontally in the screen
 .fi
+auto_width_scale : scale the image so that it fits horizontally in the screen
+.fi
+
 .B
 auto_height_scale
-scale the image so that it fits vertically in the screen
 .fi
+auto_height_scale : scale the image so that it fits vertically in the screen
+.fi
+
 .B
 bind
-binds some keyboard shortcut to an action
 .fi
+bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands}
+.fi
+
 .B
 quit
-terminates the program
 .fi
+quit : terminate the program
+.fi
+
 .B
 exec
-executes script files
 .fi
+exec {filename(s)} : execute script {filename(s)}
+.fi
+
 .B
 echo
-echoes its arguments
 .fi
+echo {args}: print the {args} on console
+.fi
+
 .B
 if
+.fi
 if(expression){action;}[else{action;}]
 .fi
+
 .B
 else
+.fi
 if(expression){action;}[else{action;}]
 .fi
+
 .B
 while
+.fi
 while(expression){action;}
 .fi
+
 .B
 alias
+.fi
 alias [{identifier} [{commands} [{description}]]]
 .fi
+
 .B
 getenv
-invokes getenv on the specified environment variable identifier
 .fi
+getenv {identifier} : display the value of the {identifier} environment variable
+.fi
+
 .B
 unalias
-unalias {identifier} | -a : deletes the alias {identifier} or all aliases (use "-a", not -a)
 .fi
+unalias {identifier} | "-a" : delete the alias {identifier} or all aliases (use "-a", not -a)
+.fi
+
 .B
 unbind
-unbinds the action associated to a specified {keycode}
 .fi
+unbind {keysym} : unbind the action associated to a specified {keysym}
+.fi
+
 .B
 sleep
-sleeps for the specified (default 1) number of seconds
 .fi
+sleep [{number}=1] : sleep for the specified (default 1) number of seconds
+.fi
+
 .B
 mark
-marks the current file
 .fi
+mark : mark the current file
+.fi
+
 .B
 help
-provides online help
 .fi
+help [{identifier}] : provide online help, if {identifier} is some variable, alias, or command identifier
+.fi
+
 .B
 autocmd
-manipulate auto commands. usage: autocmd {event} {pattern} {commands}
 .fi
+autocmd {event} {pattern} {commands} : manipulate auto commands
+.fi
+
 .B
 autocmd_del
-manipulate auto commands. usage: autocmd_del {event} {pattern} {commands}
 .fi
+autocmd_del : manipulate auto commands. usage: autocmd_del {event} {pattern} {commands}
+.fi
+
 .B
 set_interactive_mode
-sets interactive mode
 .fi
+set_interactive_mode : set interactive mode
+.fi
+
 .B
 set_console_mode
-sets console mode
 .fi
+set_console_mode : set console mode
+.fi
+
 .B
 system
-system {expr}: get the output of the shell command {expr}. (uses popen()
 .fi
+system {syscmd}: get the output of the shell command {syscmd}. (uses popen()
+.fi
+
 .B
 cd
-cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last ":cd {path} command")
 .fi
+cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last ":cd {path}" command)
+.fi
+
 .B
 pwd
-print the current directory name.
 .fi
+pwd : print the current directory name.
+.fi
+
 .B
 popen
-pipe a command. usage: popen {command}: popen() invocation; spawns a shell, invoking {command} and executing as fim commands the output of {command}
 .fi
+popen {syscmd} : pipe a command, invoking popen(): spawns a shell, invoking {syscmd} and executing as fim commands the output of {syscmd}
+.fi
+
 .B
 stdout
-writes to stdout its arguments
 .fi
+stdout {args} : writes to stdout its arguments {args}
+.fi
+
 .B
 start_recording
-starts recording of executed commands
 .fi
+start_recording : start recording the executed commands
+.fi
+
 .B
 stop_recording
-stops recording of executed commands
 .fi
+stop_recording : stops recording the executed commands
+.fi
+
 .B
 dump_record_buffer
-dumps in the console the record buffer
 .fi
+dump_record_buffer : dump in the console the record buffer
+.fi
+
 .B
 execute_record_buffer
-executes the record buffer
 .fi
+execute_record_buffer : execute the record buffer
+.fi
+
 .B
 eval
-evaluates the arguments as commands, executing them.
 .fi
+eval {args} : evaluate {args} as commands, executing them.
+.fi
+
 .B
 repeat_last
-repeats the last performed action
 .fi
+repeat_last : repeat the last performed action
+.fi
+
 .B
 variables
-displays the existing variables
 .fi
+variables : display the existing variables
+.fi
+
 .B
 commands
-displays the existing commands
 .fi
+commands : display the existing commands
+.fi
+
 .B
 dump_key_codes
-dumps the active key codes
 .fi
+dump_key_codes : dump the active key codes
+.fi
+
 .B
 clear
-clears the virtual console
 .fi
+clear : clear the virtual console
+.fi
+
 .SH VARIABLES REFERENCE
 If undeclared, a variable will evaluate to 0.
 In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
@@ -541,7 +713,7 @@ _display_as_binary
 .fi
 .B
 _display_busy
-[internal,in]if 1, will display a message on the status bar when processing
+[internal,in] if 1, will display a message on the status bar when processing
 .fi
 .B
 _display_console
@@ -637,7 +809,7 @@ angle
 .fi
 .B
 ascale
-[internal,in]the asymmetric scaling of the current image
+[internal,in] the asymmetric scaling of the current image
 .fi
 .B
 auto_scale_v
@@ -744,6 +916,10 @@ pwd
 [internal,out] the current working directory
 .fi
 .B
+random
+[internal,out] a pseudorandom number
+.fi
+.B
 reduce_factor
 [internal,in] the image scale multiplier used when reducing images size
 .fi
@@ -753,7 +929,7 @@ rows
 .fi
 .B
 scale
-[internal,in]the scale of the current image
+[internal,in] the scale of the current image
 .fi
 .B
 scale_factor_delta

@@ -21,8 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110523	shall use autocommands for printing out status messages on loading,prefetching,etc 
 20110523	shall unify various fimrc notational conventions
-20110522	shall unify the {command}, {pattern}, ... example strings
 20110522	shall use/print out RL_READLINE_VERSION
 20110521	autocompletion shall be escaped (for opening filenames containing quoting chars)
 20110520	shall unify "100%" and other scaling styles into one single command. 

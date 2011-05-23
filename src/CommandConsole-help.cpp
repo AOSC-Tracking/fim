@@ -84,10 +84,11 @@ manmode:
 		{
 			s+=".B\n";
 			s+=(commands_[i]->cmd_);
-			s+="\n";
+			s+="\n.fi\n";
 			s+=(commands_[i])->getHelp();
 			s+="\n";
 			s+=".fi\n";
+			s+="\n";
 		}
 		return s;
 	}
