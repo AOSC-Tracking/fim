@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  Window.cpp : Fim's own windowing system
 

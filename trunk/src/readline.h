@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  readline.h : Code dealing with the GNU readline library.
 

@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  Arg.h : Argument class
 

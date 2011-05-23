@@ -1225,7 +1225,7 @@
 2007-03-03 06:16  dezperado
 
 	* Worked on command interpretation inside while cycles.
-	  Set $Id$ keyword in file headers.
+	  Set $LastChangedDate$ keyword in file headers.
 	  Introduced bugs, too.
 
 2007-02-27 14:07  dezperado

@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffBmp.cpp : fbi functions for BMP files, modified for fim
 

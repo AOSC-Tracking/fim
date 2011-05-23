@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffBit1.cpp : fbi functions for reading ELF files as they were raw 1 bit per pixel pixelmaps
 

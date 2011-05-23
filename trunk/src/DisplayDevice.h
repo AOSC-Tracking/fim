@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  DisplayDevice.h : virtual device Fim driver header file
 

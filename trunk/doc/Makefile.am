@@ -1,5 +1,5 @@
 
-# $Id$
+# $LastChangedDate$
 
 CLEANFILES= doctags *.o  tags
 

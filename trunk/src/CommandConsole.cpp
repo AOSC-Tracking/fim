@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  CommandConsole.cpp : Fim console dispatcher
 

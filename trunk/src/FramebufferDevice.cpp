@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 

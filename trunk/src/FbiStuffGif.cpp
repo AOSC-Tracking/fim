@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffGif.cpp : fbi functions for GIF files, modified for fim
 

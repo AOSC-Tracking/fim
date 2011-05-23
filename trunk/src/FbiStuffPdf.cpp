@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 

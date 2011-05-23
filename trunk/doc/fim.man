@@ -1,5 +1,5 @@
 .\"
-.\" $Id$
+.\" $LastChangedDate$
 .\"
 .TH fim 1 "(c) 2007-2011 Michele Martone"
 .SH NAME

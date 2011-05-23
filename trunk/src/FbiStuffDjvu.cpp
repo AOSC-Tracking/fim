@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffDjvu.cpp : fim functions for decoding DJVU files
 

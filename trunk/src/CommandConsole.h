@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  CommandConsole.h : Fim console dispatcher header file
 

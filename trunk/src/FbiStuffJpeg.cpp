@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 

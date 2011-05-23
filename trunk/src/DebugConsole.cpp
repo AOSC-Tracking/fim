@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  DebugConsole.cpp : Fim virtual console display.
 

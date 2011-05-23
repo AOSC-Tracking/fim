@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  readline.cpp : Code dealing with the GNU readline library.
 

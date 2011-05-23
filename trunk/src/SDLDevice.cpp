@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 

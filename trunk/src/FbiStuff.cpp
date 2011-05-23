@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 

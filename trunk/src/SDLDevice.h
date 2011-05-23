@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  SDLDevice.h : sdllib device Fim driver header file
 

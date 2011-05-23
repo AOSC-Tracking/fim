@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate$ */
 /*
  CommandConsole-cmd.cpp : Fim console commands
 

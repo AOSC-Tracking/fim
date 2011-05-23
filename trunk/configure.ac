@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl $Id: configure.ac 265 2009-10-14 21:05:40Z dezperado $
+dnl $LastChangedDate$
 
 AC_PREREQ([2.54])
 
