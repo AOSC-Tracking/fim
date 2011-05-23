@@ -200,11 +200,11 @@ m			mark the current file for printing its name when terminating fim
 :+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
 :-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
 
-/regexp		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
+/{regexp}		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
 /png		 a shortcut for /.*png.*
 
-!{cmd}		executes the {cmd} quoted string as a "/bin/sh" shell command
+!{syscmd}		executes the {syscmd} quoted string as a "/bin/sh" shell command
 
 C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename
 C-c		 terminate instantaneously fim
@@ -328,7 +328,7 @@ file shipped in the documentation directory to discover the known ones.
 .B /usr/local/share/doc/fim/FIM.TXT
 The
 .B Fim
-documentation files.
+documentation files (may have been installed in a different location than /usr/local/share/doc/fim, in a custom install).
 .TP 15
 .B /etc/fimrc
 System wide

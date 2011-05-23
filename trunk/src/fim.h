@@ -210,6 +210,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_NAMESPACE_WINDOW_CHAR	'w'
 #define FIM_SYM_NAMESPACE_VIEWPORT_CHAR	'v'
 #define FIM_SYM_NAMESPACE_PREFIXES	"i:, b:, w:, v:, g:"
+#define FIM_SYM_NAMESPACE_REGEX	"^[givbw]:"
 #define FIM_SYM_PROMPT_CHAR	':'
 #define FIM_SYM_PROMPT_SLASH	'/'
 #define FIM_SYM_PROMPT_NUL	'\0'
@@ -278,6 +279,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_HOME_VAR	 "HOME"
 #define FIM_CNS_HIST_FILENAME	 ".fim_history"
 #define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
+#define FIM_CNS_DOC_PATH	 "/usr/local/share/doc/fim"	/* FIXME: shall depend on config.h */
 #define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
 #define FIM_CNS_USR_RC_COMPLETE_FILEPATH	 "~/.fimrc"
 #define FIM_CNS_EXAMPLE_FILENAME	 "file.jpg"
@@ -306,14 +308,26 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #else
 #define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION""
 #endif
+#define FIM_CNS_EX_KSY_STRING	"{keysym}"
 #define FIM_CNS_EX_CMD_STRING	"{command}"
+#define FIM_CNS_EX_FN_STRING	"{filename}"
+#define FIM_CNS_EX_FNS_STRING	"{filename(s)}"
 #define FIM_CNS_EX_KC_STRING	"{keycode}"
 #define FIM_CNS_EX_ID_STRING	"{identifier}"
+#define FIM_CNS_EX_EXP_STRING	"{expression}"
 #define FIM_CNS_EX_PAT_STRING	"{pattern}"
 #define FIM_CNS_EX_CMDS_STRING	"{commands}"
 #define FIM_CNS_EX_EVT_STRING	"{event}"
 #define FIM_CNS_EX_ARGS_STRING	"{args}"
 #define FIM_CNS_EX_DSC_STRING	"{description}"
+#define FIM_CNS_EX_PATH_STRING	"{path}"
+#define FIM_CNS_EX_SYSC_STRING	"{syscmd}"
+#define FIM_CNS_EX_FCT_STRING	"{factor}"
+#define FIM_CNS_EX_RE_STRING	"{regexp}"
+#define FIM_CNS_EX_RES_STRING	"{regexp(s)}"
+#define FIM_CNS_EX_NUM_STRING	"{number}"
+#define FIM_CNS_EX_SCALE_STRING	"{scale}"
+#define FIM_CNS_SHELL	"/bin/sh"
 
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
@@ -321,19 +335,19 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 
 #define FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP \
 ".nf\n"\
-":{number}       jump to {number}^th image in the list\n"\
+":"FIM_CNS_EX_NUM_STRING"       jump to "FIM_CNS_EX_NUM_STRING"^th image in the list\n"\
 ":^	        jump to first image in the list\n"\
 ":$	        jump to last image in the list\n"\
-":*{factor}      scale the image by {factor}\n"\
-":{scale}%       scale the image to the desired {scale}\n"\
-":+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)\n"\
-":-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)\n"\
+":*"FIM_CNS_EX_FCT_STRING"      scale the image by "FIM_CNS_EX_FCT_STRING"\n"\
+":"FIM_CNS_EX_SCALE_STRING"%       scale the image to the desired "FIM_CNS_EX_SCALE_STRING"\n"\
+":+"FIM_CNS_EX_SCALE_STRING"%       scale the image up to the desired percentage "FIM_CNS_EX_SCALE_STRING" (relatively to the original)\n"\
+":-"FIM_CNS_EX_SCALE_STRING"%       scale the image down to the desired percentage "FIM_CNS_EX_SCALE_STRING" (relatively to the original)\n"\
 "\n"\
-"/regexp		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}\n"\
+"/"FIM_CNS_EX_RE_STRING"		 entering the pattern "FIM_CNS_EX_RE_STRING" (with /) makes fim jump to the next image whose filename matches "FIM_CNS_EX_RE_STRING"\n"\
 "/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'\n"\
 "/png		 a shortcut for /.*png.*\n"\
 "\n"\
-"!{cmd}		executes the {cmd} quoted string as a \"/bin/sh\" shell command\n"\
+"!"FIM_CNS_EX_SYSC_STRING"		executes the "FIM_CNS_EX_SYSC_STRING" quoted string as a \""FIM_CNS_SHELL"\" shell command\n"\
 ""
 
 
@@ -380,7 +394,7 @@ namespace fim
  * */
 //#define FIM_VID_NEWLINE 			"_newline"	/* "" */
 //#define FIM_VID_TAB 				"_tab"	/* "" */
-//#define FIM_VID_RANDOM 				"random"	/* "" */
+#define FIM_VID_RANDOM 				"random"	/* "[internal,out] a pseudorandom number" */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[internal,in] if nonzero, will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
 #define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[internal,out] current information on cache status" */
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[internal,in] if 1, will display the output console" */
@@ -428,9 +442,9 @@ namespace fim
 #define FIM_VID_TERM				"_TERM"			/* "[internal,out] the environment TERM variable" */
 #define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[internal,in]" */
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
-#define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in]if 1, will display a message on the status bar when processing" */
-#define FIM_VID_SCALE				"scale"				/* "[internal,in]the scale of the current image" */
-#define FIM_VID_ASCALE				"ascale"			/* "[internal,in]the asymmetric scaling of the current image" */
+#define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in] if 1, will display a message on the status bar when processing" */
+#define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
+#define FIM_VID_ASCALE				"ascale"			/* "[internal,in] the asymmetric scaling of the current image" */
 #define FIM_VID_ANGLE				"angle"				/* "[internal,undocumented]" */
 #define FIM_VID_ORIENTATION			"orientation"		/* "[internal,undocumented]" */
 #define FIM_VID_WIDTH				"width"			/* "[internal,out] the current image original width" */
@@ -614,10 +628,10 @@ namespace fim
  * Help messages for Fim commands (partial).
  * One glorious day these macros will serve to build automatically documentation.
  * */
-#define FIM_CMD_HELP_CD			"cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last \":cd {path} command\")"
-#define FIM_CMD_HELP_PWD			"print the current directory name."
-#define FIM_CMD_HELP_EVAL			"evaluates the arguments as commands, executing them."
-#define FIM_CMD_HELP_SYSTEM		"system {expr}: get the output of the shell command {expr}. (uses popen()"
+#define FIM_CMD_HELP_CD			FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING": change the current directory to "FIM_CNS_EX_PATH_STRING". "FIM_FLT_CD" - will change to the previous current directory (before the last \":"FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING"\" command)"
+#define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name."
+#define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL" "FIM_CNS_EX_ARGS_STRING" : evaluate "FIM_CNS_EX_ARGS_STRING" as commands, executing them."
+#define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen()"
 
 /*
  * Some Fim compilation defaults

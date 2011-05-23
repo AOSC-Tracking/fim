@@ -630,7 +630,7 @@ namespace fim
 		 * */
 		if(2==args.size())return setVariable(args[0],args [1].c_str());
 		else
-		return "usage : set | set IDENTIFIER | set IDENTIFIER VALUE";
+		return "usage : "FIM_FLT_SET" ["FIM_CNS_EX_ID_STRING" ["FIM_CNS_EX_EXP_STRING"]]";
 	}
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -665,7 +665,7 @@ namespace fim
 
 	fim::string CommandConsole::do_getenv(const args_t& args)
 	{
-		string help="usage : getenv IDENTIFIER  will create a fim variable named IDENTIFIER with value $IDENTIFIER (if nonempty), from the current shell."
+		string help="usage : "FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" will create a fim variable named "FIM_CNS_EX_ID_STRING" with value $"FIM_CNS_EX_ID_STRING" (if nonempty), from the current shell."
 #ifndef HAVE_GETENV
 		" (note that getenv call was not available at build time, so it won't work)\n"
 #endif
