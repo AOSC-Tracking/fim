@@ -632,6 +632,7 @@ namespace fim
 #define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name."
 #define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL" "FIM_CNS_EX_ARGS_STRING" : evaluate "FIM_CNS_EX_ARGS_STRING" as commands, executing them."
 #define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen()"
+#define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of [ split | hsplit | vsplit | normalize | enlarge | venlarge | henlarge | up | down | left | right | close | swap ]"
 
 /*
  * Some Fim compilation defaults
@@ -687,5 +688,9 @@ namespace fim
 #define fim_calloc(x,y) calloc((x),(y))
 #define fim_malloc(x) malloc(x)
 #define fim_free(x) free(x)
+
+
+#define FIM_XSTRINGIFY(X) FIM_STRINGIFY(X)
+#define FIM_STRINGIFY(X) #X
 
 #endif

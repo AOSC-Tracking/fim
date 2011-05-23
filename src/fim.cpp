@@ -279,92 +279,7 @@ struct option options[fim_options_count];
 
 class FimInstance
 {
-
-
-	static void version()
-	{
-	    FIM_FPRINTF(stderr, 
-			    FIM_CNS_FIM" "
-	#ifdef FIM_VERSION
-			    FIM_VERSION
-	#endif
-	#ifdef SVN_REVISION
-			    " ( repository version "
-		SVN_REVISION
-			    " )"
-	#else
-	/* obsolete */
-	# define FIM_REPOSITORY_VERSION  "$LastChangedDate$"
-	# ifdef FIM_REPOSITORY_VERSION 
-			    " ( repository version "
-		FIM_REPOSITORY_VERSION 	    
-			    " )"
-	# endif
-	#endif
-	#ifdef FIM_AUTHOR 
-			    ", by "
-			    FIM_AUTHOR
-	#endif
-			    ", built on %s\n",
-			    __DATE__
-	    		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
-	#ifdef CXXFLAGS
-			"Compile flags: CXXFLAGS="CXXFLAGS
-	#ifdef CFLAGS
-			"  CFLAGS="CFLAGS
-	#endif
-			"\n"
-	#endif
-			"Fim options (features included (+) or not (-)):\n"
-	#include "version.h"
-	/* i think some flags are missing .. */
-		"\nSupported output devices (for --"FIM_OSW_OUTPUT_DEVICE") : "
-	#ifdef FIM_WITH_AALIB
-		" "FIM_DDN_INN_AA
-	#endif
-	#ifdef FIM_WITH_CACALIB
-		" "FIM_DDN_INN_CACA
-	#endif
-	#ifdef FIM_WITH_LIBSDL
-		" "FIM_DDN_INN_SDL
-	#endif
-#ifndef FIM_WITH_NO_FRAMEBUFFER
-		" "FIM_DDN_INN_FB
-#endif //#ifndef FIM_WITH_NO_FRAMEBUFFER
-	#if 1
-		" "FIM_DDN_INN_DUMB
-	#endif
-		"\n"
-		"\nSupported file formats : "
-#ifdef ENABLE_PDF
-		" pdf"
-#endif
-#ifdef HAVE_LIBSPECTRE
-		" ps"
-#endif
-#ifdef HAVE_LIBDJVU
-		" djvu"
-#endif
-#ifdef HAVE_LIBJPEG
-		" jpeg"
-#endif
-#ifdef FIM_HANDLE_TIFF
-		" tiff"
-#endif
-#ifdef FIM_HANDLE_GIF
-		" gif"
-#endif
-#ifdef FIM_WITH_LIBPNG
-		" png"
-#endif
-		" ppm"	/* no library is needed for these */
-		" bmp"
-#ifdef HAVE_MATRIX_MARKET_DECODER
-		" mtx (Matrix Market)"
-#endif
-		"\n"
-			    );
-	}
+	static void version();
 
 string fim_dump_man_page_snippets()
 {
@@ -1181,4 +1096,123 @@ int main(int argc,char *argv[])
 	return fiminstance.main(argc,argv);
 }
 
+		/* FIXME: we are including files here.
+		 * this is a horrible programming practice and shall be fixed. */
+#ifdef FIM_WITH_LIBPNG
+#include <png.h>
+#endif
+#ifdef HAVE_LIBJPEG
+#include <jpeglib.h>
+#endif
+#ifdef FIM_HANDLE_TIFF
+#include <tiffio.h>
+#endif
+#ifdef FIM_HANDLE_GIF
+#include <gif_lib.h>
+#endif
+//#ifdef HAVE_LIBPOPPLER
+//#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
+//#endif
+
+	void FimInstance::version()
+	{
+	    FIM_FPRINTF(stderr, 
+			    FIM_CNS_FIM" "
+	#ifdef FIM_VERSION
+			    FIM_VERSION
+	#endif
+	#ifdef SVN_REVISION
+			    " ( repository version "
+		SVN_REVISION
+			    " )"
+	#else
+	/* obsolete */
+	# define FIM_REPOSITORY_VERSION  "$LastChangedDate$"
+	# ifdef FIM_REPOSITORY_VERSION 
+			    " ( repository version "
+		FIM_REPOSITORY_VERSION 	    
+			    " )"
+	# endif
+	#endif
+	#ifdef FIM_AUTHOR 
+			    ", by "
+			    FIM_AUTHOR
+	#endif
+			    ", built on %s\n",
+			    __DATE__
+	    		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
+	#ifdef FIM_WITH_LIBPNG
+	#ifdef PNG_HEADER_VERSION_STRING 
+	"Compiled with "PNG_HEADER_VERSION_STRING""
+	#endif 
+	#endif 
+	#ifdef FIM_HANDLE_GIF
+	#ifdef GIF_LIB_VERSION
+	"Compiled with libgif, "GIF_LIB_VERSION".\n"
+	#endif 
+	#endif 
+	#ifdef HAVE_LIBJPEG
+	#ifdef JPEG_LIB_VERSION
+	"Compiled with libjpeg, v."FIM_XSTRINGIFY(JPEG_LIB_VERSION)".\n"
+	#endif 
+	#endif 
+	// for TIFF need TIFFGetVersion
+	#ifdef CXXFLAGS
+			"Compile flags: CXXFLAGS="CXXFLAGS
+	#ifdef CFLAGS
+			"  CFLAGS="CFLAGS
+	#endif
+			"\n"
+	#endif
+			"Fim options (features included (+) or not (-)):\n"
+	#include "version.h"
+	/* i think some flags are missing .. */
+		"\nSupported output devices (for --"FIM_OSW_OUTPUT_DEVICE") : "
+	#ifdef FIM_WITH_AALIB
+		" "FIM_DDN_INN_AA
+	#endif
+	#ifdef FIM_WITH_CACALIB
+		" "FIM_DDN_INN_CACA
+	#endif
+	#ifdef FIM_WITH_LIBSDL
+		" "FIM_DDN_INN_SDL
+	#endif
+#ifndef FIM_WITH_NO_FRAMEBUFFER
+		" "FIM_DDN_INN_FB
+#endif //#ifndef FIM_WITH_NO_FRAMEBUFFER
+	#if 1
+		" "FIM_DDN_INN_DUMB
+	#endif
+		"\n"
+		"\nSupported file formats : "
+#ifdef ENABLE_PDF
+		" pdf"
+#endif
+#ifdef HAVE_LIBSPECTRE
+		" ps"
+#endif
+#ifdef HAVE_LIBDJVU
+		" djvu"
+#endif
+#ifdef HAVE_LIBJPEG
+		" jpeg"
+#endif
+#ifdef FIM_HANDLE_TIFF
+		" tiff"
+#endif
+#ifdef FIM_HANDLE_GIF
+		" gif"
+#endif
+#ifdef FIM_WITH_LIBPNG
+		" png"
+#endif
+		" ppm"	/* no library is needed for these */
+		" bmp"
+#ifdef HAVE_MATRIX_MARKET_DECODER
+		" mtx (Matrix Market)"
+#endif
+		"\n"
+			    );
+	}
+	/* WARNING: PLEASE DO NOT WRITE ANY MORE CODE AFTER THIS DECLARATION (RIGHT ABOVE, AN UNCLEAN CODING PRACTICE WAS USED) */
 

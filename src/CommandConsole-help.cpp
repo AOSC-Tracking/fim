@@ -185,6 +185,7 @@ manmode:
 //			string("Incomplete section.\n")+
 			string(".SH NOTES\n")+
 			string("This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.\n")+
+			string("Moreover, the conditions for autocommands execution are not fully specified.\n")+
 			string("Also a formal description of the various one-line commands, as well as an extensive example list is needed.\n")+
 			string(".SH SEE ALSO\n")+
 			string("fim(1), regex(1).\n")+
