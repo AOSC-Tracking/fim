@@ -404,6 +404,7 @@ namespace fim
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if not 0, the ~/.fimrc file will not be loaded at startup" */
+#define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if not 0, no external loading programs will be tried for piping in an unsupported type image file" */
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
 #define FIM_VID_STATUS_LINE 			"_status_line"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[internal,in] if 1, will prefetch further files just after display of the first file" */

@@ -93,7 +93,8 @@ namespace fim
 		reset();	// pointers blank
 		if( !load(fname,fd,0) || check_invalid() || (!fimg_) ) 
 		{
-			cout << "warning : invalid_ loading ! \n";
+			// FIXME: sometimes load() intentionally skips a file. an appropriate message shall be printed out
+			cout << "warning : invalid loading "<<fname<<" ! \n";
 			if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 				cc.set_status_bar( fim::string("error while loading \"")+ fim::string(fname)+ fim::string("\"") , "*");
 			invalid_ = true;
@@ -261,7 +262,7 @@ namespace fim
         bool Image::check_invalid()
         {
                 /*
-		 * the image is declared invalid_ if the image structures are not loaded.
+		 * the image is declared invalid if the image structures are not loaded.
                  */
 
 		//ACHTUNG! 

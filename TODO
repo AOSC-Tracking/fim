@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110528	may introduce a push/pop mechanism for the status bar
 20110526	shall verify if it is possible instant-next-cached image access
 20110528	mark and unmark would be unnecessary if I set up an array type
 20110523	shall use autocommands for printing out status messages on loading,prefetching,etc 

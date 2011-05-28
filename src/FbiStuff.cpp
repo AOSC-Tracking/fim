@@ -1509,7 +1509,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     if (NULL == loader && (*blk==0x42) && (*(unsigned char*)(blk+1)==0x5a))
     {
 	cc.set_status_bar("skipping 'bz2'...", "*");
-	return NULL;
+	goto shall_skip_header;
     }
 /* gz is another ! */
 /*    if (NULL == loader && (*blk==0x30) && (*(unsigned char*)(blk+1)==0x30))
@@ -1522,7 +1522,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
      && NULL == loader && (*(unsigned char*)(blk+2)==0x44) && (*(unsigned char*)(blk+3)==0x46))
     {
 	cc.set_status_bar("skipping 'pdf' (use fimgs for this)...", "*");
-	return NULL;
+	goto shall_skip_header;
     }
 #endif
 #ifndef HAVE_LIBSPECTRE
@@ -1530,7 +1530,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
      && NULL == loader && (*(unsigned char*)(blk+2)==0x50) && (*(unsigned char*)(blk+3)==0x53))
     {
 	cc.set_status_bar("skipping 'ps' (use fimgs for this)...", "*");
-	return NULL;
+	goto shall_skip_header;
     }
 #endif
 #endif
@@ -1543,7 +1543,13 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	    break;
 	loader = NULL;
     }
-     
+    if(loader!=NULL)
+    {
+		goto found_a_loader;
+    }
+    if(loader==NULL && cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)!=0)
+		goto head_not_found;
+
 #ifdef FIM_WITH_LIBPNG 
 #ifdef FIM_TRY_DIA
     if (NULL == loader && (*blk==0x1f) && (*(unsigned char*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
@@ -1558,7 +1564,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
 		/* this could happen in case dia was removed from the system */
-			return NULL;
+			goto shall_skip_header;
 		else
 		{
 			unlink(FIM_TMP_FILENAME".png");
@@ -1577,7 +1583,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	 * */
 	/* a xfig file was found, and we try to use fig2dev */
 	if(NULL==(fp=fim_execlp(FIM_EPR_FIG2DEV,FIM_EPR_FIG2DEV,"-L","ppm",filename,NULL)))
-	    return NULL;
+		goto shall_skip_header;
 	loader = &ppm_loader;
     }
 #endif
@@ -1590,7 +1596,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
 	if(NULL==(fp=fim_execlp(FIM_EPR_XCFTOPNM,FIM_EPR_XCFTOPNM,filename,NULL)))
-	    return NULL;
+		goto shall_skip_header;
 	loader = &ppm_loader;
     }
 #endif
@@ -1624,7 +1630,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fclose(fp))
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
-			    return NULL;
+			goto shall_skip_header;
 		else
 		{
 			unlink(FIM_TMP_FILENAME);
@@ -1656,14 +1662,15 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" through '"FIM_EPR_CONVERT"'...", "*");
 	/* no loader found, try to use ImageMagick's convert */
 	if(NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",NULL)))
-		return NULL;
+		goto shall_skip_header;
 	loader = &ppm_loader;
     }
 #endif
-    /*
-     * no appropriate loader found for this image
-     * */
-    if (NULL == loader) return NULL;
+
+    if (NULL == loader)
+	    goto head_not_found;
+
+found_a_loader:	/* we have a loader */
 
     /* load image */
     img = (struct ida_image*)fim_calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
@@ -1683,7 +1690,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);
-	return NULL;
+	goto shall_skip_header;
     }
     img->data = (unsigned char*)fim_malloc(img->i.width * img->i.height * 3);
     if(!img->data)goto errl;
@@ -1722,6 +1729,10 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 errl:
     if(img && img->data)fim_free(img->data);
     if(img )fim_free(img);
+    return NULL;
+
+shall_skip_header:
+head_not_found: /* no appropriate loader found for this image */
     return NULL;
 }
 
