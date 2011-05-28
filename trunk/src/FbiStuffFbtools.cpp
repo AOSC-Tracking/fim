@@ -2,7 +2,7 @@
 /*
  FbiStuffFbtools.cpp : fbi functions from fbtools.c, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,9 @@
 #include <termios.h>
 #include <signal.h>	// sigaction, ...
 #include <setjmp.h>
+#ifdef HAVE_SYS_USER_H
 #include <sys/user.h>	  /* this should be a safer replacement */
+#endif
 
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"

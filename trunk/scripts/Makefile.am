@@ -4,7 +4,11 @@ AUTOMAKE_OPTIONS = nostdinc no-dependencies
 
 SUBDIRS = 
 
-EXTRA_DIST=tests/sanity.fim tests/maxlenscript.fim \
+EXTRA_DIST= \
+	tests/sanity.fim  \
+	tests/maxlenscript.fim \
+	tests/version.sh \
+	example/oneline.fim		\
 	rc/fimrc.eog		\
 	rc/fimrc.gqview		\
 	rc/fimrc.kuickshow	\

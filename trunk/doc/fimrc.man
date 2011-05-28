@@ -548,7 +548,13 @@ sleep [{number}=1] : sleep for the specified (default 1) number of seconds
 .B
 mark
 .fi
-mark : mark the current file
+mark : mark the current file for stdout printing at exit
+.fi
+
+.B
+unmark
+.fi
+unmark : unmark the current file for stdout printing at exit
 .fi
 
 .B
@@ -674,7 +680,7 @@ clear : clear the virtual console
 .B
 window
 .fi
-window [ split | hsplit | vsplit | normalize | enlarge | venlarge | henlarge | up | down | left | right | close | swap ] : manipulates the window system windows
+window {args} : manipulates the window system windows; each value of {args} shall be one of [ split | hsplit | vsplit | normalize | enlarge | venlarge | henlarge | up | down | left | right | close | swap ]
 .fi
 
 .SH VARIABLES REFERENCE
@@ -1299,6 +1305,7 @@ alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_of
 
 .SH NOTES
 This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.
+Moreover, the conditions for autocommands execution are not fully specified.
 Also a formal description of the various one-line commands, as well as an extensive example list is needed.
 .SH SEE ALSO
 fim(1), regex(1).

@@ -210,6 +210,8 @@ AC_HEADER_DIRENT()
 AC_CHECK_HEADERS([stdarg.h sys/ioctl.h ioctl.h sysexits.h])
 AC_CHECK_HEADERS([sys/time.h sys/resource.h])
 AC_CHECK_HEADERS([unix.h])
+AC_CHECK_HEADERS([sys/user.h])
+AC_CHECK_HEADERS([sys/mman.h])
 AC_CHECK_HEADERS([cstdio stdio.h], [break],AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]]))
 
 AC_CHECK_HEADERS([climits limits.h], [break], AC_MSG_ERROR([[Cannot find limits.h nor climits.  Fim requires it!.]]))

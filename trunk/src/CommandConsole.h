@@ -100,7 +100,8 @@ class CommandConsole
 	/*
 	 * the buffer of marked files
 	 */
-	std::set<fim::string> marked_files_;		//filenames
+	typedef std::set<fim::string> marked_files_t;	//
+	marked_files_t marked_files_;		//filenames
 #endif
 
 	/*
@@ -157,6 +158,7 @@ class CommandConsole
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	void markCurrentFile();
+	void unmarkCurrentFile();
 #endif
 #ifdef FIM_WITH_AALIB
 	AADevice * aad_;
@@ -176,6 +178,7 @@ class CommandConsole
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	fim::string markCurrentFile(const args_t& args);
+	fim::string unmarkCurrentFile(const args_t& args);
 #endif
 	bool display();
 	bool redisplay();
