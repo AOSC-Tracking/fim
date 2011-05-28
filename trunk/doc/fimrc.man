@@ -476,7 +476,7 @@ auto_height_scale : scale the image so that it fits vertically in the screen
 .B
 bind
 .fi
-bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands}
+bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.
 .fi
 
 .B
@@ -536,7 +536,7 @@ unalias {identifier} | "-a" : delete the alias {identifier} or all aliases (use 
 .B
 unbind
 .fi
-unbind {keysym} : unbind the action associated to a specified {keysym}
+unbind {keysym} : unbind the action associated to a specified {keysym}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.
 .fi
 
 .B
@@ -668,7 +668,7 @@ commands : display the existing commands
 .B
 dump_key_codes
 .fi
-dump_key_codes : dump the active key codes
+dump_key_codes : dump the active key codes (unescaped, for inspection)
 .fi
 
 .B
@@ -813,7 +813,7 @@ _verbose_errors
 .fi
 .B
 _verbose_keys
-[internal,in,undocumented]
+[internal,in] if non zero, after each interactive mode key hit, the console will display the hit key raw keycode
 .fi
 .B
 _want_prefetch
@@ -1008,7 +1008,7 @@ $;
 This is the default configuration, as contained in the FIM_DEFAULT_CONFIG_FILE_CONTENTS variable.
 
 .nf
-# $LastChangedDate$
+# $Id: fimrc 364 2011-05-28 09:57:03Z dezperado $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation to discover how to change this default hardcoded file 
 # and how to make your own.
@@ -1038,6 +1038,7 @@ _max_cached_images=5;
 _max_cached_memory=80000000;	# not yet functional
 _max_iterated_commands=100;
 _want_prefetch=1;
+_no_external_loader_programs=0;
 autowidth=1;
 ignorecase=1;
 ascale="1.0";
@@ -1092,6 +1093,7 @@ bind 'C-v' "toggleKeyVerbosity";
 bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
 bind 'C-m' "mark";
+bind 'u' "unmark";
 
 # Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
 bind 'Enter' "mark;next";

@@ -36,7 +36,37 @@ namespace fim
 		 *	FIX ME
 		 */
 		const char *kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
+		const char*kstr=NULL;
+		int l;
+		fim_key_t key=FIM_SYM_NULL_KEY;
 		if(args.size()==0)return getBindingsList();
+
+		kstr=(args[0].c_str());
+		if(!kstr)return kerr;
+		l=strlen(kstr);
+		if(!l)return kerr;
+
+#ifdef FIM_WANT_RAW_KEYS_BINDING
+		if(l>=2 && isdigit(kstr[0]) && isdigit(kstr[1]))
+		{
+			/* special syntax for raw keys */
+			key=atoi(kstr+1);
+		}
+#endif
+		else
+		{
+			if(key_bindings_.find(kstr)!= key_bindings_.end())
+				key=key_bindings_[args[0]];
+		}
+		if(key==FIM_SYM_NULL_KEY)
+		{
+			return "supplied key "+args[0]+" is invalid.\n";
+		}
+		if(args.size()==1 && bindings_.find(key)==bindings_.end())
+		{
+			return "no command bound to keycode "+string(key)+".\n";
+		}
+
 		if(args.size()==1)
 		{
 			//first arg should be a valid key code
@@ -44,7 +74,7 @@ namespace fim
 			binding_expanded+=FIM_FLT_BIND" '";
 			binding_expanded+=args[0];
 			binding_expanded+="' '";
-			binding_expanded+=bindings_[key_bindings_[args[0]]];
+			binding_expanded+=bindings_[key];
 			binding_expanded+="'\n";
 			return binding_expanded;
 		}
@@ -52,12 +82,8 @@ namespace fim
 		 * TODO: there will be room for the binding comment by the user
 		 * */
 		if(args.size()<2) return kerr;
-		const char*key=(args[0].c_str());
-		if(!key)return kerr;
-		int l=strlen(key);
-		if(!l)return kerr;
 		if(args[1]=="") return unbind(args[0]);
-		return bind(key_bindings_[args[0]],args[1]);
+		return bind(key,args[1]);
 	}
 
 	fim::string CommandConsole::unbind(const args_t& args)
@@ -505,13 +531,17 @@ namespace fim
 		 * */
 		fim::string acl;
 		key_bindings_t::const_iterator ki;
+		acl+="There are ";
+		acl+=fim::string((int)(key_bindings_.size()));
+		acl+=" bindings (dumping them here, unescaped).\n";
 		for( ki=key_bindings_.begin();ki!=key_bindings_.end();++ki)
 		{
 			acl+=((*ki).first);
 			acl+=" -> ";
-			acl+=(unsigned int)(((*ki).second));
-			acl+=", ";
+			acl+=fim::string((int)(((*ki).second)));
+			acl+="  ";
 		}
+		acl+="\n";
 		return acl;
 	}
 

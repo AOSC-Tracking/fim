@@ -39,8 +39,7 @@ examples.h: ../scripts/example/oneline.fim
 	cat ../scripts/example/oneline.fim | sed 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> examples.h
 	echo '"";' >> examples.h
 
-CommandConsole-help.o: CommandConsole-help.cpp grammar.h
-CommandConsole-help.o: CommandConsole-help.cpp examples.h
+CommandConsole-help.o: CommandConsole-help.cpp help.cpp examples.h grammar.h
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
