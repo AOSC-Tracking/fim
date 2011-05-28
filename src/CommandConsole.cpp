@@ -44,6 +44,12 @@
 #endif
 #endif
 
+#if FIM_WANT_RAW_KEYS_BINDING
+#define FIM_CNS_RAW_KEYS_MESG "; if "FIM_CNS_EX_KSY_STRING" is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified "FIM_CNS_EX_KSY_STRING" to. activate the "FIM_VID_VERBOSE_KEYS" variable to discover (display device dependent) raw keys." 
+#else
+#define FIM_CNS_RAW_KEYS_MESG 
+#endif
+						
 extern int yyparse();
 
 namespace fim
@@ -78,7 +84,8 @@ namespace fim
 		 * note : the binding translation map is used as a necessary
 		 * indirection...
 		 */
-		if(bindings_[c]!=FIM_CNS_EMPTY_STRING)
+		bindings_t::const_iterator bi=bindings_.find(c);
+		if(bi!=bindings_.end())
 		{
 			bindings_[c]=binding;
 			fim::string rs("keycode ");
@@ -121,14 +128,28 @@ namespace fim
 	}
 
 
-	fim::string CommandConsole::unbind(const fim::string& key)
+	fim::string CommandConsole::unbind(const fim::string& kfstr)
 	{
 		/*
 		 * 	unbinds the action eventually bound to the first key name specified in args..
 		 *	IDEAS : multiple unbindings ?
 		 *	maybe you should made surjective the binding_keys mapping..
 		 */
-		return unbind(key_bindings_[key]);
+		fim_key_t key=FIM_SYM_NULL_KEY;
+#ifdef FIM_WANT_RAW_KEYS_BINDING
+		const char*kstr=kfstr.c_str();
+		if(strlen(kstr)>=2 && isdigit(kstr[0]) && isdigit(kstr[1]))
+		{
+			key=atoi(kstr+1);
+		}
+		else
+#endif
+		{
+			key_bindings_t::const_iterator kbi=key_bindings_.find(kfstr);
+			if(kbi!=key_bindings_.end())
+				key=key_bindings_[kfstr];
+		}
+		return unbind(key);
 	}
 
 	fim_key_t CommandConsole::find_keycode_for_bound_cmd(fim::string binding)
@@ -171,16 +192,17 @@ namespace fim
 		 * unbinds the action eventually bound to the key combination code c
 		 */
 		fim::string rs(FIM_FLT_UNBIND" ");
-		if(bindings_[c]!="")
+		bindings_t::const_iterator bi=bindings_.find(c);
+		if(bi!=bindings_.end())
 		{
 			bindings_.erase(c);
 			rs+=c;
-			rs+=": successfully unbinded.\n";
+			rs+=": successfully unbound.\n";
 		}
 		else
 		{
 			rs+=c;
-			rs+=": there were not such binding.\n";
+			rs+=": there is not such binding.\n";
 		}
 		return rs;
 	}
@@ -365,7 +387,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_SCALE),fim::string(FIM_FLT_AUTO_SCALE" : set auto scale mode" ),&browser_,&Browser::auto_scale));
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_WIDTH_SCALE),fim::string(FIM_FLT_AUTO_WIDTH_SCALE" : scale the image so that it fits horizontally in the screen" ),&browser_,&Browser::auto_width_scale));
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE),fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE" : scale the image so that it fits vertically in the screen" ),&browser_,&Browser::auto_height_scale));
-		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" ["FIM_CNS_EX_KSY_STRING" ["FIM_CNS_EX_CMDS_STRING"]] : bind some keyboard shortcut "FIM_CNS_EX_KSY_STRING" to "FIM_CNS_EX_CMDS_STRING""),this,&CommandConsole::bind));
+		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" ["FIM_CNS_EX_KSY_STRING" ["FIM_CNS_EX_CMDS_STRING"]] : bind some keyboard shortcut "FIM_CNS_EX_KSY_STRING" to "FIM_CNS_EX_CMDS_STRING""FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::bind));
 		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string(FIM_FLT_QUIT" : terminate the program"),this,&CommandConsole::quit));
 #ifndef FIM_WANT_NOSCRIPTING
 		addCommand(new Command(fim::string(FIM_FLT_EXEC),fim::string(FIM_FLT_EXEC" "FIM_CNS_EX_FNS_STRING" : execute script "FIM_CNS_EX_FNS_STRING""),this,&CommandConsole::executeFile));
@@ -381,7 +403,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS" ["FIM_CNS_EX_ID_STRING" ["FIM_CNS_EX_CMDS_STRING" ["FIM_CNS_EX_DSC_STRING"]]]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string(FIM_FLT_GETENV),fim::string(FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" : display the value of the "FIM_CNS_EX_ID_STRING" environment variable"),this,&CommandConsole::do_getenv));
 		addCommand(new Command(fim::string(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS" "FIM_CNS_EX_ID_STRING" | \"-a\" : delete the alias "FIM_CNS_EX_ID_STRING" or all aliases (use \"-a\", not -a)"),this,&CommandConsole::unalias));
-		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND" "FIM_CNS_EX_KSY_STRING" : unbind the action associated to a specified "FIM_CNS_EX_KSY_STRING),this,&CommandConsole::unbind));
+		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND" "FIM_CNS_EX_KSY_STRING" : unbind the action associated to a specified "FIM_CNS_EX_KSY_STRING FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::unbind));
 		addCommand(new Command(fim::string(FIM_FLT_SLEEP),fim::string(FIM_FLT_SLEEP" ["FIM_CNS_EX_NUM_STRING"=1] : sleep for the specified (default 1) number of seconds"),this,&CommandConsole::foo));
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		addCommand(new Command(fim::string(FIM_FLT_MARK),fim::string(FIM_FLT_MARK" : mark the current file for stdout printing at exit"),this,&CommandConsole::markCurrentFile));
@@ -414,7 +436,7 @@ namespace fim
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_VARIABLES),fim::string(FIM_FLT_VARIABLES" : display the existing variables"),this,&CommandConsole::variables_list));
 		addCommand(new Command(fim::string(FIM_FLT_COMMANDS),fim::string(FIM_FLT_COMMANDS" : display the existing commands"),this,&CommandConsole::commands_list));
-		addCommand(new Command(fim::string(FIM_FLT_DUMP_KEY_CODES),fim::string(FIM_FLT_DUMP_KEY_CODES" : dump the active key codes"),this,&CommandConsole::dump_key_codes));
+		addCommand(new Command(fim::string(FIM_FLT_DUMP_KEY_CODES),fim::string(FIM_FLT_DUMP_KEY_CODES" : dump the active key codes (unescaped, for inspection)"),this,&CommandConsole::dump_key_codes));
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		addCommand(new Command(fim::string(FIM_FLT_CLEAR),fim::string(FIM_FLT_CLEAR" : clear the virtual console"),this,&CommandConsole::clear));
 		// 20110507 we other means for scrolling the console, now

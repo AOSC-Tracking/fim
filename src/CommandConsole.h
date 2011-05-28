@@ -24,6 +24,7 @@
 #include "fim.h"
 #include "DummyDisplayDevice.h"
 
+#define FIM_WANT_RAW_KEYS_BINDING 1
 
 namespace fim
 {

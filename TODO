@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110528	are we sure that raw keys are dumped out in the correct way, for inspection ?
 20110528	may introduce a push/pop mechanism for the status bar
 20110526	shall verify if it is possible instant-next-cached image access
 20110528	mark and unmark would be unnecessary if I set up an array type
@@ -30,8 +31,7 @@ ongoing further inspiration.
 20110521	autocompletion shall be escaped (for opening filenames containing quoting chars)
 20110520	shall unify "100%" and other scaling styles into one single command. 
 20110520	string escaping does not work.
-20110517	dump_key_codes seems broken
-20110517	may consider separating "options" from "variables", as vim does
+20110517	may consider distinguishing "options" from "variables", as vim does
 20110516	invoking fim in sdl mode with very low resolutions/window sizes is crashy. this is bad.
 20110516	the user needs mor efont size control
 20110516	shall enable building with SDL only, without using Unix syscalls.
