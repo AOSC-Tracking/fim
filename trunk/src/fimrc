@@ -28,6 +28,7 @@ _max_cached_images=5;
 _max_cached_memory=80000000;	# not yet functional
 _max_iterated_commands=100;
 _want_prefetch=1;
+_no_external_loader_programs=0;
 autowidth=1;
 ignorecase=1;
 ascale="1.0";

@@ -780,6 +780,10 @@ _no_default_configuration
 [internal,in]
 .fi
 .B
+_no_external_loader_programs
+[internal,in] if not 0, no external loading programs will be tried for piping in an unsupported type image file
+.fi
+.B
 _no_rc_file
 [internal,in] if not 0, the ~/.fimrc file will not be loaded at startup
 .fi
