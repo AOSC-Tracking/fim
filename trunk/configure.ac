@@ -1498,10 +1498,16 @@ AC_DEFINE([FIM_AUTHOR],["Michele Martone <dezperado _CUT_ autistici _CUT_ org>"]
 dnl ###############################################################################
 dnl this is experimental stuff
 dnl ###############################################################################
-dnl AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
-dnl AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
-dnl CXXFLAGS="$CXXFLAGS -I${HOME}/src/libmmvbr/"
-dnl LIBS="$LIBS -L${HOME}/src/libmmvbr/ -lmmvbr"
+AC_ARG_ENABLE(matrices-rendering, AC_HELP_STRING([--enable-matrices-rendering], [Experimental, Unfinished]),
+[       if test x$enableval = xyes; then
+AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
+AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
+CXXFLAGS="$CXXFLAGS `librsb-config  --cflags`"
+LIBS="$LIBS `librsb-config  --ldflags`"
+	else
+		true;
+        fi
+])
 dnl ###############################################################################
 
 
