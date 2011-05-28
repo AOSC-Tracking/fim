@@ -82,6 +82,7 @@ bind 'C-v' "toggleKeyVerbosity";
 bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
 bind 'C-m' "mark";
+bind 'u' "unmark";
 
 # Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
 bind 'Enter' "mark;next";

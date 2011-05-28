@@ -384,7 +384,8 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND" "FIM_CNS_EX_KSY_STRING" : unbind the action associated to a specified "FIM_CNS_EX_KSY_STRING),this,&CommandConsole::unbind));
 		addCommand(new Command(fim::string(FIM_FLT_SLEEP),fim::string(FIM_FLT_SLEEP" ["FIM_CNS_EX_NUM_STRING"=1] : sleep for the specified (default 1) number of seconds"),this,&CommandConsole::foo));
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-		addCommand(new Command(fim::string(FIM_FLT_MARK),fim::string(FIM_FLT_MARK" : mark the current file"),this,&CommandConsole::markCurrentFile));
+		addCommand(new Command(fim::string(FIM_FLT_MARK),fim::string(FIM_FLT_MARK" : mark the current file for stdout printing at exit"),this,&CommandConsole::markCurrentFile));
+		addCommand(new Command(fim::string(FIM_FLT_UNMARK),fim::string(FIM_FLT_UNMARK" : unmark the current file for stdout printing at exit"),this,&CommandConsole::unmarkCurrentFile));
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string(FIM_FLT_HELP" ["FIM_CNS_EX_ID_STRING"] : provide online help, if "FIM_CNS_EX_ID_STRING" is some variable, alias, or command identifier"),this,&CommandConsole::help));
 #ifdef FIM_AUTOCMDS
@@ -1783,8 +1784,33 @@ ok:
 		 * */
 		if(browser_.current()!=FIM_STDIN_IMAGE_NAME)
 		{
-			marked_files_.insert(browser_.current());
-			cout<<"Marked file \""<<browser_.current()<<"\"\n";
+			marked_files_t::iterator mfi=marked_files_.find(browser_.current());
+			if(mfi==marked_files_.end())
+			{
+				marked_files_.insert(browser_.current());
+				cout<<"Marked file \""<<browser_.current()<<"\"\n";
+			}
+			else
+				cout<<"File \""<<browser_.current()<<"\" was already marked\n";
+		}
+	}
+
+	void CommandConsole::unmarkCurrentFile()
+	{
+		/*
+		 * the current file will be added to the list of filenames
+		 * which will be printed upon the program termination.
+		 * */
+		if(browser_.current()!=FIM_STDIN_IMAGE_NAME)
+		{
+			marked_files_t::iterator mfi=marked_files_.find(browser_.current());
+			if(mfi!=marked_files_.end())
+			{
+				marked_files_.erase(mfi);
+				cout<<"Unmarked file \""<<browser_.current()<<"\"\n";
+			}
+			else
+				cout<<"File \""<<browser_.current()<<"\" was not marked\n";
 		}
 	}
 #endif

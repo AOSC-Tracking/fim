@@ -661,6 +661,12 @@ namespace fim
 		markCurrentFile();
 		return FIM_CNS_EMPTY_RESULT;
 	}
+
+	fim::string CommandConsole::unmarkCurrentFile(const args_t& args)
+	{
+		unmarkCurrentFile();
+		return FIM_CNS_EMPTY_RESULT;
+	}
 #endif
 
 	fim::string CommandConsole::do_getenv(const args_t& args)

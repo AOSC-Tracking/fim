@@ -30,17 +30,31 @@
 static void foo(){} /* let's make our compiler happy */
 #else
 
+#ifdef HAVE_SYS_USER_H
 #include <sys/user.h>	//  for PAGE_MASK (sometimes it is needed to include it here explicitly)
+#endif
 #if HAVE_LINUX_KD_H 
 #include <linux/kd.h>	// KDGETMODE, KDSETMODE, KD_GRAPHICS, ...
 #endif
 #if HAVE_LINUX_VT_H 
 #include <linux/vt.h>	// VT_GETSTATE, .. 
 #endif
+#ifdef HAVE_SYS_USER_H
 #include <sys/user.h>	// PAGE_MASK, ... 
+#else
+#error missing <sys/user.h> !
+#endif
+#ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>	// PROT_READ, PROT_WRITE, MAP_SHARED
+#else
+#error missing <sys/mman.h> !
+#endif
 #include <signal.h>
+#ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
+#else
+#error missing <sys/ioctl.h> !
+#endif
 
 //#include <errno.h>
 //#include <sys/ioctl.h>

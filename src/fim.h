@@ -620,6 +620,7 @@ namespace fim
 #define FIM_FLT_USLEEP			"usleep" /* not in vim */
 #define FIM_FLT_UNALIAS			"unalias" /* not in vim */
 #define FIM_FLT_UNBIND			"unbind" /* not in vim */
+#define FIM_FLT_UNMARK			"unmark" /* in vim */
 #define FIM_FLT_VARIABLES		"variables" /* not in vim */
 #define FIM_FLT_WHILE			"while" /* in vim */
 #define FIM_FLT_WINDOW			"window" /* not in vim */
