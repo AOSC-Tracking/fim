@@ -34,8 +34,7 @@
 #ifdef HAVE_MATRIX_MARKET_DECODER
 
 /* This is an experimental library of mine, yet unreleased */
-#include <vbr.h>
-#include <util.h>
+#include <rsb.h>
 
 namespace fim
 {
@@ -57,7 +56,7 @@ static void*
 mm_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-	size_t rows,cols;
+	rsb_coo_index_t rows,cols;
 	struct mm_state_t *h;
 	h = (struct mm_state_t *)fim_calloc(sizeof(*h),1);
 	int rows_max=FIM_RENDERING_MAX_ROWS,cols_max=FIM_RENDERING_MAX_COLS;
@@ -70,7 +69,10 @@ mm_init(FILE *fp, char *filename, unsigned int page,
 	i->dpi    = FIM_RENDERING_DPI; /* FIXME */
 	i->npages = 1; // uhm
 
-	if(vbr_util_get_matrix_dimensions(filename, &cols, &rows))
+	if(rsb_init(RSB_NULL_INIT_OPTIONS))
+		goto err;
+
+	if(rsb_util_get_matrix_dimensions(filename, &cols, &rows))
 		goto err;
 
 #if 1
@@ -107,7 +109,7 @@ mm_read(fim_byte_t *dst, unsigned int line, void *data)
 	else
 		return;
 
-	if(vbr_get_pixmap_RGB_from_matrix(h->filename, dst, h->width, h->height))
+	if(rsb_get_pixmap_RGB_from_matrix(h->filename, dst, h->width, h->height))
 		goto err;
 err:
 	return;
@@ -121,6 +123,9 @@ mm_done(void *data)
 		goto err;
 	if(h->filename)
 		fim_free(h->filename);
+
+	if(rsb_exit())
+		goto err;
 err:
 	return;
 }
