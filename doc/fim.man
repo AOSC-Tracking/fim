@@ -117,7 +117,7 @@ You can use upper and lower case characters indifferently in the specification s
 
 .TP
 .B 	 --offset {bytes-offset}
-Will use the specified \fBoffset\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems).
+Will use the specified \fBoffset\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation).
 .TP
 .B -P, --text-reading
 Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course).
@@ -339,7 +339,7 @@ scanimage ... | tee scan.ppm | fim -i
 .P
 
 .SH NOTES
-This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately.
+This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.
 .SH BUGS
 .B fim
 has bugs. Please read the 

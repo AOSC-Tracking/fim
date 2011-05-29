@@ -143,7 +143,7 @@ struct fim_options_t fim_options[] = {
 #endif
     },
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
-"Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems)."
+"Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation)."
     },/* NEW */
     {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document",NULL,
 "Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
@@ -535,7 +535,7 @@ mp+=string(
 ".P\n"
 "\n"
 ".SH NOTES\n"
-"This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately.\n"
+"This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.\n"
 ".SH BUGS\n"
 ".B fim\n"
 "has bugs. Please read the \n"

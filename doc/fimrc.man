@@ -789,7 +789,7 @@ _no_rc_file
 .fi
 .B
 _open_offset
-[internal] offset used when opening files
+[internal,undocumented] offset used when opening files
 .fi
 .B
 _override_display
@@ -801,7 +801,7 @@ _save_fim_history
 .fi
 .B
 _seek_magic
-[internal] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
+[internal,undocumented] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
 .fi
 .B
 _status_line

@@ -1486,7 +1486,6 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		cc.setVariable(FIM_VID_OPEN_OFFSET ,(int)read_offset);
 	}
 #endif
-
     memset(blk,0,sizeof(blk));
     if((fr=fread(blk,1,sizeof(blk),fp))<0)
     {
