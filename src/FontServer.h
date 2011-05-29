@@ -103,6 +103,7 @@ static const unsigned fs_masktab[] = {
 
 
 
+fim::string get_default_font_list();
 
 class FontServer
 {
