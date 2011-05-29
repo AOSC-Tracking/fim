@@ -470,8 +470,8 @@ namespace fim
 #define FIM_VID_SCREEN_HEIGHT			"screen_height"		/* "[internal,out] the screen height" */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[internal] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[internal] each executed command (for debugging purposes)" */
-#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal] offset used when opening files" */
-#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
+#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal,undocumented] offset used when opening files" */
+#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal,undocumented] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
 
 /*
  * Fim Keyboard Descriptions
@@ -515,6 +515,7 @@ namespace fim
 
 /*
  * Fim Autocommands
+ * FIXME: need autodocumentation for these.
  * */
 #define FIM_ACM_POSTSCALE	"PostScale"
 #define FIM_ACM_PRESCALE	"PreScale"
@@ -536,6 +537,8 @@ namespace fim
 #define FIM_ACM_POSTNEXT	"PostNext"
 #define FIM_ACM_PREPREV	"PrePrev"
 #define FIM_ACM_POSTPREV	"PostPrev"
+#define FIM_ACM_PREFIMRC	"PreConfigLoading"	// FIXME: new
+#define FIM_ACM_POSTFIMRC	"PostConfigLoading"	// FIXME: new
 #define FIM_ACM_PREINTERACTIVECOMMAND	"PreInteractiveCommand"
 #define FIM_ACM_POSTINTERACTIVECOMMAND	"PostInteractiveCommand"
 #define FIM_ACM_PREEXECUTIONCYCLE	"PreExecutionCycle"

@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110529	shall set a number of new autocommand keys (each for each fim initialization phase)
 20110528	are we sure that raw keys are dumped out in the correct way, for inspection ?
 20110528	may introduce a push/pop mechanism for the status bar
 20110526	shall verify if it is possible instant-next-cached image access

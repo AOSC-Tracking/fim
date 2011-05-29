@@ -1556,7 +1556,15 @@ ok:
 		/*
 		 * this autocommand will take argument related autocommands
 		 */
-	    	return autocmd_add(FIM_ACM_PREEXECUTIONCYCLEARGS,"",cmd);
+	    	//return autocmd_add(FIM_ACM_PREEXECUTIONCYCLEARGS,"",cmd);
+	    	return autocmd_add(FIM_ACM_POSTFIMRC,"",cmd);
+	}
+
+	fim::string CommandConsole::pre_autocmd_exec()
+	{
+		/*
+		 */
+	    	return autocmd_exec(FIM_ACM_POSTFIMRC,"");
 	}
 
 	fim::string CommandConsole::autocmd_exec(const fim::string &event,const fim::string &fname)

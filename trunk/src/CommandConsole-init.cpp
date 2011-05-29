@@ -230,6 +230,9 @@ namespace fim
 //		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
 //		executeFile(FIM_CNS_SYS_RC_FILEPATH);	//GLOBAL DEFAULT CONFIGURATION FILE
 
+#ifdef FIM_AUTOCMDS
+	    	autocmd_exec(FIM_ACM_PREFIMRC,"");
+#endif
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
 		char rcfile[FIM_PATH_MAX];
@@ -252,6 +255,10 @@ namespace fim
 			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
     #endif		
 		}
+#ifdef FIM_AUTOCMDS
+		/* execution of command line-set autocommands */
+		pre_autocmd_exec();
+#endif		
 #include "grammar.h"
 		setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
 
@@ -305,7 +312,7 @@ namespace fim
 			quit(return_code_);
 			exit(return_code_);
 		}
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	void CommandConsole::dumpDefaultFimrc()const

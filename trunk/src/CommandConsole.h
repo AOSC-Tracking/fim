@@ -293,6 +293,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	fim::string pre_autocmd_add(const fim::string &cmd);
+	fim::string pre_autocmd_exec();
 #endif
 	int catchLoopBreakingCommand(fim_ts_t seconds=0);
 
