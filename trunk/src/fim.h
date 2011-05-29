@@ -249,6 +249,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_EMSG_NO_READ_STDIN_IMAGE	"sorry, the reading of images from stdin was disabled at compile time\n"
 #define FIM_EMSG_CACHING_STDIN	"problems caching standard input image!\n"
 #define FIM_EMSG_OUT_OF_MEM	"out of memory\n"
+#define FIM_EMSG_UNFINISHED	"sorry, feature incomplete!\n"
 
 /*
  * Some environment variables used by Fim.
@@ -406,6 +407,7 @@ namespace fim
 #define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[internal,in,experimental] if 1, will execute a sanity check on startup" */
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file" */
+#define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] the global configuration file" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if not 0, the ~/.fimrc file will not be loaded at startup" */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if not 0, no external loading programs will be tried for piping in an unsupported type image file" */
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
@@ -517,8 +519,8 @@ namespace fim
  * Fim Autocommands
  * FIXME: need autodocumentation for these.
  * */
-#define FIM_ACM_POSTSCALE	"PostScale"
-#define FIM_ACM_PRESCALE	"PreScale"
+#define FIM_ACM_POSTSCALE	"PostScale"		// after  a scaling operation
+#define FIM_ACM_PRESCALE	"PreScale"		// before a scaling operation
 #define FIM_ACM_PREPAN	"PrePan"
 #define FIM_ACM_POSTPAN	"PostPan"
 #define FIM_ACM_PREREDISPLAY	"PreRedisplay"
@@ -537,8 +539,14 @@ namespace fim
 #define FIM_ACM_POSTNEXT	"PostNext"
 #define FIM_ACM_PREPREV	"PrePrev"
 #define FIM_ACM_POSTPREV	"PostPrev"
-#define FIM_ACM_PREFIMRC	"PreConfigLoading"	// FIXME: new
-#define FIM_ACM_POSTFIMRC	"PostConfigLoading"	// FIXME: new
+#define FIM_ACM_PRECONF		"PreConfigLoading"	// before loading any configuration file
+#define FIM_ACM_POSTCONF	"PostConfigLoading"	// after  loading any configuration file
+#define FIM_ACM_PREHFIMRC	"PreHardcodedConfigLoading"	// before loading hardcoded configuration
+#define FIM_ACM_POSTHFIMRC	"PostHardcodedConfigLoading"	// after  loading hardcoded configuration
+#define FIM_ACM_PREUFIMRC	"PreUserConfigLoading"	// before loading user configuration file
+#define FIM_ACM_POSTUFIMRC	"PostUserConfigLoading"	// after  loading user configuration file
+#define FIM_ACM_PREGFIMRC	"PreGlobalConfigLoading"	// before loading global configuration file
+#define FIM_ACM_POSTGFIMRC	"PostGlobalConfigLoading"	// after  loading global configuration file
 #define FIM_ACM_PREINTERACTIVECOMMAND	"PreInteractiveCommand"
 #define FIM_ACM_POSTINTERACTIVECOMMAND	"PostInteractiveCommand"
 #define FIM_ACM_PREEXECUTIONCYCLE	"PreExecutionCycle"
@@ -674,6 +682,7 @@ namespace fim
 #define FIM_LINUX_RAND_FILE "/dev/urandom"
 #define FIM_FBDEV_FILE_MAX_CHARS 16
 #define FIM_DEFAULT_FB_FILE "/dev/fb0"
+#define FIM_DEFAULT_AS_BINARY_BPP 24
 
 /*
  * Various  Fim messages.

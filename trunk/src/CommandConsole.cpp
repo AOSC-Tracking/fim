@@ -447,16 +447,14 @@ namespace fim
 		/* this is a stub for the manual generation (actually, the Window object gets built later) */
 		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW),this,&CommandConsole::foo));
 #endif
-		/*
-		 * This is not a nice choice, but it is clean regarding this file.
-		 */
+		/* #including a file not a clean practice, but it is clean regarding this file. */
 		#include "defaultConfiguration.cpp"
-		setVariable(FIM_VID_PWD,pwd(args_t()).c_str());
+		cd(args_t());
 		setVariable(FIM_VID_STEPS,FIM_CNS_STEPS_DEFAULT);
-		setVariable(FIM_VID_TERM, fim_getenv(FIM_CNS_TERM_VAR));		/* We read an environment variable */
-
-		*prompt_='\0';
-		*(prompt_+1)='\0';
+		setVariable(FIM_VID_TERM, fim_getenv(FIM_CNS_TERM_VAR));
+		setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,1);
+		setVariable(FIM_VID_DEFAULT_ETC_FIMRC,FIM_CNS_SYS_RC_FILEPATH);
+		*prompt_=*(prompt_+1)=FIM_SYM_CHAR_NUL;
 	}
 
         bool CommandConsole::is_file(fim::string nf)const
@@ -466,6 +464,7 @@ namespace fim
 		 * this function is written a little bit unsafely,
 		 * because the file could change between calls.
 		 * improvements are possible.
+		 * TODO: maybe access() should be used too (it checks file permissions, too)
 		 */
                 struct stat stat_s;
                 /*      if the file doesn't exist, return */
@@ -1557,14 +1556,17 @@ ok:
 		 * this autocommand will take argument related autocommands
 		 */
 	    	//return autocmd_add(FIM_ACM_PREEXECUTIONCYCLEARGS,"",cmd);
-	    	return autocmd_add(FIM_ACM_POSTFIMRC,"",cmd);
+	    	//return autocmd_add(FIM_ACM_POSTFIMRC,"",cmd);
+	    	return autocmd_add(FIM_ACM_POSTHFIMRC,"",cmd);
 	}
 
 	fim::string CommandConsole::pre_autocmd_exec()
 	{
 		/*
 		 */
-	    	return autocmd_exec(FIM_ACM_POSTFIMRC,"");
+	    	//return autocmd_exec(FIM_ACM_POSTFIMRC,"");
+	    	return autocmd_exec(FIM_ACM_POSTHFIMRC,"");
+
 	}
 
 	fim::string CommandConsole::autocmd_exec(const fim::string &event,const fim::string &fname)

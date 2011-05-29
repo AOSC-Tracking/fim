@@ -1503,7 +1503,7 @@ AC_ARG_ENABLE(matrices-rendering, AC_HELP_STRING([--enable-matrices-rendering], 
 AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
 AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
 CXXFLAGS="$CXXFLAGS `librsb-config  --cflags`"
-LIBS="$LIBS `librsb-config  --ldflags`"
+LIBS="$LIBS `librsb-config --static --ldflags | sed s/-static//g`"
 	else
 		true;
         fi

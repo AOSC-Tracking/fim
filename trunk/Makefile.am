@@ -44,15 +44,17 @@ signed-dist: dist
 #	        gpg -sbav -u EF1258B8 $@ $<
 
 
+FIMNORCOPTS=-N --no-etc-rc-file
+
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 sanity-check:	all
-	@./src/fim -E scripts/tests/sanity.fim -t
+	@./src/fim $(FIMNORCOPTS) -E scripts/tests/sanity.fim -t
 
 # this is the official way of testing fim
 tests:	all
 	@./scripts/tests/version.sh
 	@cd ./src/testdir && make
-	@./src/fim -o dumb -E scripts/example/oneline.fim -c quit 
+	@./src/fim $(FIMNORCOPTS) -o dumb -E scripts/example/oneline.fim -c quit 
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
@@ -66,11 +68,11 @@ tests-all: tests $(FIMSCRIPTSDIR)/configure-brute-check.sh
 
 # this rule is deprecated, too
 test:	all
-	@./src/fim -N media/* #~/M*s/*g
+	@./src/fim $(FIMNORCOPTS) media/* #~/M*s/*g
 
 # this rule is deprecated, too
 aatest:	all
-	@./src/fim -N media/* -o aa #~/M*s/*g
+	@./src/fim $(FIMNORCOPTS) media/* -o aa #~/M*s/*g
 
 # this rule is old and deprecated
 #tgz:	clean

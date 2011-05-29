@@ -190,7 +190,6 @@ namespace fim
 		// FIXME: shall check the error result
 
 #ifdef FIM_WINDOWS
-	
 		/* true pixels if we are in framebuffer mode */
 		/* fake pixels if we are in text (er.. less than!) mode */
 		if( xres<=0 || yres<=0 ) return -1;
@@ -223,44 +222,48 @@ namespace fim
 		setVariable(FIM_VID_SCREEN_WIDTH, xres);
 		setVariable(FIM_VID_SCREEN_HEIGHT,yres);
 
-		/*
-		 *	Here the program loads initialization scripts :
-		 * 	the default configuration file, and user invoked scripts.
-		 */
-//		executeFile("/etc/fim.conf");	//GLOBAL DEFAULT CONFIGURATION FILE
-//		executeFile(FIM_CNS_SYS_RC_FILEPATH);	//GLOBAL DEFAULT CONFIGURATION FILE
-
+		/* Here the program loads initialization scripts */
 #ifdef FIM_AUTOCMDS
-	    	autocmd_exec(FIM_ACM_PREFIMRC,"");
+	    	autocmd_exec(FIM_ACM_PRECONF,"");
+	    	autocmd_exec(FIM_ACM_PREHFIMRC,"");
 #endif
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
 		char rcfile[FIM_PATH_MAX];
 		const char *e = fim_getenv(FIM_CNS_HOME_VAR);
 
-		/* default, hard-coded configuration first */
-		if(getIntVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC)==1 )
-		{
-			if(is_file(FIM_CNS_SYS_RC_FILEPATH))
-				if(-1==executeFile(FIM_CNS_SYS_RC_FILEPATH));
-		}
-		
-		/* default, hard-coded configuration first */
 		if(getIntVariable(FIM_VID_NO_DEFAULT_CONFIGURATION)==0 )
 		{
     #ifdef FIM_DEFAULT_CONFIGURATION
 			/* so the user could inspect what goes in the default configuration */
 			setVariable(FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_DEFAULT_CONFIG_FILE_CONTENTS);
-
 			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
     #endif		
 		}
+
+#ifdef FIM_AUTOCMDS
+	    	autocmd_exec(FIM_ACM_POSTHFIMRC,""); 
+	    	autocmd_exec(FIM_ACM_PREGFIMRC,""); 
+#endif
+
+		if((getIntVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC)==1 )
+		&& (getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC)!="")
+				)
+		{
+			string ef=getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC);
+			if(is_file(ef.c_str()))
+				if(-1==executeFile(ef.c_str()));
+		}
+		
 #ifdef FIM_AUTOCMDS
 		/* execution of command line-set autocommands */
-		pre_autocmd_exec();
+	    	autocmd_exec(FIM_ACM_POSTGFIMRC,""); 
+	    	autocmd_exec(FIM_ACM_PREUFIMRC,""); 
 #endif		
-#include "grammar.h"
-		setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
+		{
+			#include "grammar.h"
+			setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
+		}
 
 		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/"FIM_CNS_USR_RC_FILEPATH)+2
 		{
@@ -270,7 +273,7 @@ namespace fim
 			{
 				if(
 					(!is_file(rcfile) || -1==executeFile(rcfile))
-				&&	(!is_file(FIM_CNS_SYS_RC_FILEPATH) || -1==executeFile(FIM_CNS_SYS_RC_FILEPATH))
+	//			&&	(!is_file(FIM_CNS_SYS_RC_FILEPATH) || -1==executeFile(FIM_CNS_SYS_RC_FILEPATH))
 				  )
   #endif
 #endif
@@ -279,16 +282,20 @@ namespace fim
 					 if no configuration file is present, or fails loading,
 					 we use the default configuration (raccomended !)  !	*/
   #ifdef FIM_DEFAULT_CONFIGURATION
-					execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
+					// 20110529 commented the following, as it is a (harmful) duplicate execution 
+					//execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
   #endif		
 				}
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
 			}
-
 		}
   #endif		
 #endif		
+#ifdef FIM_AUTOCMDS
+	    	autocmd_exec(FIM_ACM_POSTUFIMRC,""); 
+	    	autocmd_exec(FIM_ACM_POSTCONF,"");
+#endif
 #ifndef FIM_WANT_NOSCRIPTING
 		for(size_t i=0;i<scripts_.size();++i) executeFile(scripts_[i].c_str());
 #endif		

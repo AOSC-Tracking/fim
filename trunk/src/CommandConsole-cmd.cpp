@@ -371,6 +371,7 @@ namespace fim
 			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
 #endif
 		}
+		setVariable(FIM_VID_PWD,pwd(args_t()).c_str());
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
