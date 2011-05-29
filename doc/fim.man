@@ -64,7 +64,7 @@ Regard this as a toy..
 .B -c {commands}, --execute-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.
 Please note that if your commands are more complicated than a simple 'next' or 'pornview'
-command, they must be quoted and escaped in a manner suitable for your shell!!
+command, they must be quoted and escaped in a manner suitable for your shell!
 
 For example,
 -c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
@@ -87,8 +87,8 @@ The default fimrc file (the one hardcoded in the fim executable) is dumped on st
 The \fBscriptfile\fP will be executed right after the default initialization file is executed.
 .TP
 .B -f {fimrc}, --etc-fimrc {fimrc}
-The /etc/fimrc file (the system startup) will be executed prior to any other configuration file.
-If not specified, it is *ignored*.
+Specify explicitly the system startup file (default: /etc/fimrc), which will be executed prior to any other configuration file.
+
 .TP
 .B -F {commands}, --final-commands {commands}
 The \fBcommands\fP string will be executed after exiting the interactive loop of the program (right before terminating the program).
@@ -103,7 +103,10 @@ Will read one single image from the standard input (yes: the image, not the file
 name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
 .TP
 .B -N, --no-rc-file
-No initialization file will be read (default is ~/.fimrc) at startup.
+No user initialization file will be read (default is ~/.fimrc) at startup.
+.TP
+.B 	 --no-etc-rc-file
+No global initialization file will be read (default is /etc/fimrc) at startup.
 .TP
 .B -p, --script-from-stdin
 Will read commands from stdin prior to entering in interactive mode.

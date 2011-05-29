@@ -1546,7 +1546,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     {
 		goto found_a_loader;
     }
-    if(loader==NULL && cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)!=0)
+    if((loader==NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)!=0))
 		goto head_not_found;
 
 #ifdef FIM_WITH_LIBPNG 

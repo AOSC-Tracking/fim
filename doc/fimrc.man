@@ -808,6 +808,10 @@ _status_line
 [internal,in] if 1, will display the status bar
 .fi
 .B
+_sys_rc_file
+[internal,in] the global configuration file
+.fi
+.B
 _verbose_errors
 [internal,in,undocumented]
 .fi
@@ -1008,7 +1012,7 @@ $;
 This is the default configuration, as contained in the FIM_DEFAULT_CONFIG_FILE_CONTENTS variable.
 
 .nf
-# $Id: fimrc 364 2011-05-28 09:57:03Z dezperado $
+# $LastChangedDate$
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation to discover how to change this default hardcoded file 
 # and how to make your own.
@@ -1032,10 +1036,11 @@ This is the default configuration, as contained in the FIM_DEFAULT_CONFIG_FILE_C
 # codes are catched by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
 
-# some of these variables influence Fim's behaviour (in the sense these are 'internal')
+# Some of these variables influence Fim's behaviour (in the sense these are 'internal')
+# It is wise they are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
 _display_status=0;
 _max_cached_images=5;
-_max_cached_memory=80000000;	# not yet functional
+_max_cached_memory=80000000;
 _max_iterated_commands=100;
 _want_prefetch=1;
 _no_external_loader_programs=0;
@@ -1304,7 +1309,7 @@ bind "Backspace" "prev";
 
 # offsetscan usage : need a mechanism for popping all images before.
 #alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}"; # NEW
-alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}"; # NEW
+alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So feel free to modify it, but with caution! 

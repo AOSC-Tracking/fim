@@ -85,7 +85,7 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
 "Please note that if your commands are more complicated than a simple 'next' or 'pornview'\n"
-"command, they must be quoted and escaped in a manner suitable for your shell!!\n"
+"command, they must be quoted and escaped in a manner suitable for your shell!\n"
 "\n"
 "For example,\n"
 "-c '*2;2pan_up;display;while(1){bottom_align;sleep \"1\" ; top_align}'\n"
@@ -107,8 +107,7 @@ struct fim_options_t fim_options[] = {
 "The \\fBscriptfile\\fP will be executed right after the default initialization file is executed."
     },
     {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read (experimental)","{fimrc}",
-"The "FIM_CNS_SYS_RC_FILEPATH" file (the system startup) will be executed prior to any other configuration file.\n"
-"If not specified, it is *ignored*."
+"Specify explicitly the system startup file (default: "FIM_CNS_SYS_RC_FILEPATH"), which will be executed prior to any other configuration file.\n"
     },
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}",
 "The \\fBcommands\\fP string will be executed after exiting the interactive loop of the program (right before terminating the program)."
@@ -124,8 +123,11 @@ struct fim_options_t fim_options[] = {
     {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}",
 "name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
-    {"no-rc-file",      no_argument,       NULL, 'N',"do not read any configuration file at startup",NULL,
-"No initialization file will be read (default is "FIM_CNS_USR_RC_COMPLETE_FILEPATH") at startup."
+    {"no-rc-file",      no_argument,       NULL, 'N',"do not read the user configuration file at startup",NULL,
+"No user initialization file will be read (default is "FIM_CNS_USR_RC_COMPLETE_FILEPATH") at startup."
+    },
+    {"no-etc-rc-file",      no_argument,       NULL, 0x4E4E,"do not read the global configuration file at startup",NULL,
+"No global initialization file will be read (default is "FIM_CNS_SYS_RC_FILEPATH") at startup."
     },
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
 "Will read commands from stdin prior to entering in interactive mode."
@@ -679,7 +681,7 @@ done:
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Ab?wc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:S",
+		    c = getopt_long(argc, argv, "Ab?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:S",
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -699,6 +701,8 @@ done:
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add("v:"FIM_VID_AUTO_SCALE_V"=1;");
 		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=0;");/*  these mutual interactions are annoying */
+	#else
+		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif
 		    break;
 		case 'b':
@@ -714,8 +718,8 @@ done:
 			}
                     else
 		    {
-			if(optarg)std::cerr<<"Warning : the --"FIM_OSW_BINARY" option supports 1 or 24 bpp depths. Using 24.\n";
-		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,24);
+			if(optarg)std::cerr<<"Warning : the --"FIM_OSW_BINARY" option supports 1 or 24 bpp depths. Using "<<FIM_DEFAULT_AS_BINARY_BPP<<".\n";
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,FIM_DEFAULT_AS_BINARY_BPP);
                     }
 		    break;
 		case 'A':
@@ -735,12 +739,8 @@ done:
 	#endif
 		    break;
 		case 'f':
-		    cc.setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,0);
-		    /*
-		     * note that this solution is temporary, because it clashes with -E (should have precedence, instead)
-		     * */
 	#ifndef FIM_WANT_NOSCRIPTING
-		    cc.push_scriptfile(optarg);
+		    cc.setVariable(FIM_VID_DEFAULT_ETC_FIMRC,optarg);
 	#else
 		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif
@@ -803,6 +803,7 @@ done:
 		    default_fbgamma = fim_atof(optarg);
 		    break;
 		case 'r':
+		    cout << FIM_EMSG_UNFINISHED;
 		    //fbi's
 	// TODO
 	//	    pcd_res = atoi(optarg);
@@ -916,6 +917,10 @@ done:
 		    //fim's
 			cc.setVariable(FIM_VID_NO_RC_FILE,1);
 		    break;
+		case 0x4E4E:// NN
+		    //fim's
+		    	cc.setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,0);
+		    break;
 		case 't':
 		    //fim's
 			#ifdef FIM_WITH_AALIB
@@ -968,7 +973,12 @@ done:
 		}
 	
 		lexer=new yyFlexLexer;	//used by YYLEX
-	
+		if(!lexer)
+		{
+			FIM_FPRINTF(stderr, "error while allocating the lexer!\n\n");
+			retcode=-1;
+			goto ret;
+		}
 
 	#ifdef FIM_READ_STDIN	
 		if( read_file_list_from_stdin +
@@ -1085,7 +1095,7 @@ done:
 
 		// TODO : we still need a good output device probing mechanism
 
-		if(cc.init(g_fim_output_device)!=0) return -1;
+		if(cc.init(g_fim_output_device)!=0) {retcode=-1;goto ret;};
 		retcode=cc.executionCycle();/* note that this could not return */
 ret:
 		return retcode;
