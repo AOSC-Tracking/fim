@@ -86,6 +86,18 @@ static const char *default_font[] = {
     /* end debian squeeze add */
     NULL
 };
+
+fim::string get_default_font_list()
+{
+	fim::string dfl;
+	const char ** filename=default_font;
+	for(int i = 0; filename[i] != NULL; i++)
+       	{
+		dfl+=filename[i];
+		dfl+="\n";
+	}
+	return dfl;
+}
 #endif
 
 static int probe_font_file(const char *fontfilename)
@@ -95,7 +107,7 @@ static int probe_font_file(const char *fontfilename)
 	{
 		#ifdef FIM_USE_ZCAT
 		/* FIXME */
-		fp = FbiStuff::fim_execlp("zcat","zcat",fontfilename,NULL);
+		fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,NULL);
 		#endif
 	}
 	else
@@ -181,7 +193,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     if ( h>fontfilename && 0 == strcmp(h,".gz")) {
 	#ifdef FIM_USE_ZCAT
 	/* FIXME */
-	fp = FbiStuff::fim_execlp("zcat","zcat",fontfilename,NULL);
+	fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,NULL);
 	#endif
     } else {
 	fp = fopen(fontfilename, "r");

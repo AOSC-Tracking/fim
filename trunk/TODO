@@ -33,7 +33,7 @@ ongoing further inspiration.
 20110520	string escaping does not work.
 20110517	may consider distinguishing "options" from "variables", as vim does
 20110516	invoking fim in sdl mode with very low resolutions/window sizes is crashy. this is bad.
-20110516	the user needs mor efont size control
+20110516	the user needs more font size control
 20110516	shall enable building with SDL only, without using Unix syscalls.
 20110516	shall foresee a mechanism for `stacked decoding'of `container' files (e.g.: gz,tar,tar.gz,bz,...)
 20110516	shall foresee support for dynamically lodaded modules, for a number of operations (e.g.: file decoding/loading using custom external programs or libraries); see also http://tldp.org/HOWTO/Program-Library-HOWTO/dl-libraries.html

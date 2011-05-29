@@ -238,13 +238,34 @@ file for examples on this, or read the complete manual: the FIM.TXT file
 distributed with fim.
 .SH AFFECTING ENVIRONMENT VARIABLES
 .nf
-FBFONT		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.
-			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psfu.gz is a Linux console file.
-			Consult 'man setfont' for your current font paths.
-			NOTE : Currently xfs is disabled.
-FBGAMMA		(just like in fbi) gamma correction.
-FRAMEBUFFER	(just like in fbi) if set, will override user set framebuffer device file.
-TERM		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $TERM=="screen"
+FBFONT		(just like in fbi) a Linux consolefont font file.
+If not specified, the following files will be probed and the first existing will be selected:
+
+/usr/share/consolefonts/lat1-16.psf
+/usr/share/consolefonts/lat1-16.psf.gz
+/usr/share/consolefonts/lat1-16.psfu.gz
+/usr/share/kbd/consolefonts/lat1-16.psf
+/usr/share/kbd/consolefonts/lat1-16.psf.gz
+/usr/share/kbd/consolefonts/lat1-16.psfu.gz
+/usr/lib/kbd/consolefonts/lat1-16.psf
+/usr/lib/kbd/consolefonts/lat1-16.psf.gz
+/usr/lib/kbd/consolefonts/lat1-16.psfu.gz
+/lib/kbd/consolefonts/lat1-16.psf
+/lib/kbd/consolefonts/lat1-16.psf.gz
+/lib/kbd/consolefonts/lat1-16.psfu.gz
+/lib/kbd/consolefonts/Lat2-VGA14.psf.gz
+/lib/kbd/consolefonts/Lat2-VGA16.psf.gz
+/lib/kbd/consolefonts/Lat2-VGA8.psf.gz
+/lib/kbd/consolefonts/Uni2-VGA16.psf.gz
+/usr/share/consolefonts/default8x16.psf.gz
+/usr/share/consolefonts/default8x9.psf.gz
+/usr/share/consolefonts/Lat15-Fixed16.psf.gz
+/usr/share/consolefonts/default.psf.gz
+
+FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode only). Default is 1.0.
+FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
+If unset, fim will probe for /dev/fb0.
+TERM		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $TERM=="screen".
 DISPLAY	If this variable is set, then the sdl driver will be tried by default.
 .SH COMMON PROBLEMS
 .B fim
@@ -317,6 +338,8 @@ scanimage ... | tee scan.ppm | fim -i
 .P
 .P
 
+.SH NOTES
+This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately.
 .SH BUGS
 .B fim
 has bugs. Please read the 

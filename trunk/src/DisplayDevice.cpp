@@ -32,7 +32,11 @@
 	,debug_(false)
 	,redraw_(0)
 	,finalized_(false)
-	{}
+	{
+		const char *line;
+	    	if (NULL != (line = fim_getenv(FIM_ENV_FBFONT)))
+			fontname_ = line;
+	}
 
 	int DisplayDevice::get_input(fim_key_t * c)
 	{

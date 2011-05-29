@@ -447,13 +447,19 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 			string(
 ".SH AFFECTING ENVIRONMENT VARIABLES\n"
 ".nf\n"
-""FIM_ENV_FBFONT"		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.\n"
-"			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psfu.gz is a Linux console file.\n"
-"			Consult 'man setfont' for your current font paths.\n"
-"			NOTE : Currently xfs is disabled.\n"
-""FIM_ENV_FBGAMMA"		(just like in fbi) gamma correction.\n"
-""FIM_ENV_FRAMEBUFFER"	(just like in fbi) if set, will override user set framebuffer device file.\n"
-""FIM_CNS_TERM_VAR"		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $"FIM_CNS_TERM_VAR"==\"screen\"\n"
+//""FIM_ENV_FBFONT"		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.\n"
+""FIM_ENV_FBFONT"		(just like in fbi) a Linux consolefont font file.\n"
+"If not specified, the following files will be probed and the first existing will be selected:\n\n");
+mp+=get_default_font_list();
+mp+="\n";
+mp+=string(
+//"			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psf.gz is a Linux console file.\n"
+//"			Consult 'man setfont' for your current font paths.\n"
+//"			NOTE : Currently xfs is disabled.\n"
+""FIM_ENV_FBGAMMA"		(just like in fbi) gamma correction (applies to dithered 8 bit mode only). Default is "FIM_CNS_GAMMA_DEFAULT_STR".\n"
+""FIM_ENV_FRAMEBUFFER"	(just like in fbi) user set framebuffer device file (applies only to the "FIM_DDN_INN_FB" mode).\n"
+"If unset, fim will probe for "FIM_DEFAULT_FB_FILE".\n"
+""FIM_CNS_TERM_VAR"		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $"FIM_CNS_TERM_VAR"==\"screen\".\n"
 #ifdef FIM_WITH_LIBSDL
 ""FIM_ENV_DISPLAY"	If this variable is set, then the "FIM_DDN_INN_SDL" driver will be tried by default.\n"
 #endif
@@ -528,6 +534,8 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 ".P\n"
 ".P\n"
 "\n"
+".SH NOTES\n"
+"This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately.\n"
 ".SH BUGS\n"
 ".B fim\n"
 "has bugs. Please read the \n"

@@ -233,6 +233,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_EPR_DIA		"dia"
 #define FIM_EPR_INKSCAPE	"inkscape"
 #define FIM_EPR_CONVERT		"convert"
+#define FIM_EPR_ZCAT		"zcat"
 
 /*
  * Some Fim error codes.
@@ -287,6 +288,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_SCALEFACTOR_ONE 1.0f
 #define FIM_CNS_ANGLE_ONE 1.0f
 #define FIM_CNS_ANGLE_ZERO 0.0f
+#define FIM_CNS_GAMMA_DEFAULT 1.0
+#define FIM_CNS_GAMMA_DEFAULT_STR FIM_XSTRINGIFY(FIM_CNS_GAMMA_DEFAULT)
 #define FIM_CNS_SCALEFACTOR_MULTIPLIER 1.1f
 #define FIM_CNS_SCALEFACTOR_DELTA 0.1f
 #define FIM_CNS_SCALEFACTOR_ZERO 0.0f
@@ -667,6 +670,7 @@ namespace fim
 #define FIM_LINUX_STDOUT_FILE "/dev/stdout"
 #define FIM_LINUX_RAND_FILE "/dev/urandom"
 #define FIM_FBDEV_FILE_MAX_CHARS 16
+#define FIM_DEFAULT_FB_FILE "/dev/fb0"
 
 /*
  * Various  Fim messages.

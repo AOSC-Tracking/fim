@@ -1796,8 +1796,8 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	,vt_(0)
 	,dither_(FALSE)
 	,pcd_res_(3)
-	,steps_(50)
-	,fbgamma_(1.0)
+	,steps_(FIM_CNS_STEPS_DEFAULT)
+	,fbgamma_(FIM_CNS_GAMMA_DEFAULT)
 	,visible_(1)
 	,x11_font_("10x20")
 	,ys_( 3)
@@ -1818,6 +1818,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 //	C=(fb_var_.xres/fb_font_width());
 #endif
 	{
+		const char *line;
 
 		cmap_.start  =  0;
 		cmap_.len    =  256;
@@ -1825,7 +1826,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 		cmap_.green  =  green_;
 		cmap_.blue  =  blue_;
 		//! transp!
-		devs_default_.fb0=   "/dev/fb0";
+		devs_default_.fb0=   FIM_DEFAULT_FB_FILE;
 		devs_default_.fbnr=  "/dev/fb%d";
 		devs_default_.ttynr= "/dev/tty%d";
 		devs_devfs_.fb0=   "/dev/fb/0";
@@ -1836,15 +1837,9 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 		ocmap_.red=ored_;
 		ocmap_.green=ogreen_;
 		ocmap_.blue=oblue_;
-		/*
-		 * fbgamma_ and fontname_ are fbi - defined variables.
-		 * */
-		const char *line;
 
 	    	if (NULL != (line = fim_getenv(FIM_ENV_FBGAMMA)))
 	        	fbgamma_ = fim_atof(line);
-	    	if (NULL != (line = fim_getenv(FIM_ENV_FBFONT)))
-			fontname_ = line;
 	}
 
 }
