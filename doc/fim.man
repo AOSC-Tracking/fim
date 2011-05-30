@@ -19,6 +19,12 @@ fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH DESCRIPTION
 .B
 fim
+is a `swiss army knife` for displaying image files.
+It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim-like autocommands, and much more.
+
+As a default,
+.B
+fim
 displays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.
 For 'xcf' (Gimp's) images, fim will try to use 'xcftopnm'.
 For '.fig' vectorial images, fim will try to use 'fig2dev'.
@@ -81,13 +87,13 @@ framebuffer device to use.  Default is the one your vc is mapped to (as in fbi).
 Will dump to stdout the language reference help.
 .TP
 .B -D, --dump-default-fimrc
-The default fimrc file (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
+The default configuration (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
 .TP
 .B -E {scriptfile}, --execute-script {scriptfile}
 The \fBscriptfile\fP will be executed right after the default initialization file is executed.
 .TP
 .B -f {fimrc}, --etc-fimrc {fimrc}
-Specify explicitly the system startup file (default: /etc/fimrc), which will be executed prior to any other configuration file.
+Specify an alternative system wide initialization file (default: /etc/fimrc), which will be executed prior to any other configuration file.
 
 .TP
 .B -F {commands}, --final-commands {commands}
@@ -103,10 +109,10 @@ Will read one single image from the standard input (yes: the image, not the file
 name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
 .TP
 .B -N, --no-rc-file
-No user initialization file will be read (default is ~/.fimrc) at startup.
+No personal initialization file will be read (default is ~/.fimrc) at startup.
 .TP
 .B 	 --no-etc-rc-file
-No global initialization file will be read (default is /etc/fimrc) at startup.
+No system wide initialization file will be read (default is /etc/fimrc) at startup.
 .TP
 .B -p, --script-from-stdin
 Will read commands from stdin prior to entering in interactive mode.
@@ -129,7 +135,7 @@ Enable textreading mode.  This has the effect that fim will display images scale
 set scroll steps in pixels (default is 50).
 .TP
 .B -S, --sanity-check
-a quick sanity check before starting fim.
+a quick sanity check before starting the interactive fim execution, but after the initialization.
 .TP
 .B -t, --no-framebuffer
 Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).
@@ -268,7 +274,7 @@ If not specified, the following files will be probed and the first existing will
 FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode only). Default is 1.0.
 FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
 If unset, fim will probe for /dev/fb0.
-TERM		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $TERM=="screen".
+TERM		(only in fim) will influence the output device selection algorithm, especially if $TERM=="screen".
 DISPLAY	If this variable is set, then the sdl driver will be tried by default.
 .SH COMMON PROBLEMS
 .B fim
@@ -357,14 +363,14 @@ The
 documentation files (may have been installed in a different location than /usr/local/share/doc/fim, in a custom install).
 .TP 15
 .B /etc/fimrc
-System wide
+The system wide
 .B Fim
-initialization file (executed on startup if no personal initialization file exist).
+initialization file (executed at startup, after executing the hardcoded configuration).
 .TP 15
 .B ~/.fimrc
-Your personal
+The personal
 .B Fim
-initialization file (executed on startup, if existent).
+initialization file (executed at startup, after the system wide initialization file).
 .SH SEE ALSO
 Other 
 .B Fim 
@@ -375,12 +381,14 @@ Or related programs: fbset(1), con2fb(1), convert(1), vim(1), fb.modes(8), fbset
 .nf
 Michele Martone <dezperado _CUT_ autistici _CUT_ org> is the author of fim, "fbi improved". 
 .fi
-Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based. 
+Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
+.B fim
+was originally based. 
 .SH COPYRIGHT
 .nf
 Copyright (C) 2007-2011 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 .fi
-Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>
+Copyright (C) 1999-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org>
 .P
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 .P

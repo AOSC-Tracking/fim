@@ -1489,12 +1489,17 @@ dnl AH_TEMPLATE([FIM_IS_SLOWER_THAN_FBI])
 dnl AC_DEFINE([FIM_IS_SLOWER_THAN_FBI])
 dnl AH_TEMPLATE([FIM_WITH_LIBSDL])
 dnl AC_DEFINE([FIM_WITH_LIBSDL])
+AH_TEMPLATE([FBI_AUTHOR])
+AH_TEMPLATE([FBI_AUTHOR_NAME])
 AH_TEMPLATE([FIM_AUTHOR])
 AH_TEMPLATE([FIM_AUTHOR_NAME])
 AH_TEMPLATE([FIM_AUTHOR_EMAIL])
 AC_DEFINE([FIM_AUTHOR_NAME],["Michele Martone"])
 AC_DEFINE([FIM_AUTHOR_EMAIL],["<dezperado _CUT_ autistici _CUT_ org>"])
 AC_DEFINE([FIM_AUTHOR],["Michele Martone <dezperado _CUT_ autistici _CUT_ org>"])
+# Note: Gerd changed his surname from Knorr to Hoffmann, so I report here his actual surname
+AC_DEFINE([FBI_AUTHOR_NAME],["Gerd Hoffmann"])
+AC_DEFINE([FBI_AUTHOR],["Gerd Hoffmann <kraxel _CUT_ bytesex.org>"])
 dnl ###############################################################################
 dnl this is experimental stuff
 dnl ###############################################################################
