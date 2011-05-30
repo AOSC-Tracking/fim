@@ -9,7 +9,7 @@ documentation as it was a hypertext.
 ( or add "autocmd BufReadPost FIM.TXT set syntax=help" into your ~/.vimrc ! )
 If you do not know Vim, you can find it at http://www.vim.org.
 
-Thank you for giving a try to this software; one can regard it as a 'hack',in
+Thank you for using this software; one can regard it as a 'hack',in
 the sense it is an elaboration of the passionate work of multiple people.
 >
 Please note that this documentation is *not* complete, as Fim is still 
@@ -18,8 +18,12 @@ track and document. They will be when a high level of satisfaction of the
 fim capabilities and usability will be achieved.
 Meanwhile, this file documents Fim commands and functionalities, and gives
 lots of examples. For a reference of Fim command line flags, see the man
-pages of Fim and the fimgs script (man fim, man fimgs). The man pages are 
-rich with examples. Enjoy!
+pages of Fim and the fimgs script (man fim, man fimrc, man fimgs).
+The man pages are rich with examples.
+Note: this document will be eliminated once all the relevant information will
+be made available in the man pages, so it will be probably outdated during the
+transition.
+Enjoy!
 
 ------------------------------------------------------------------------------
 0. Introduction 						*intro*

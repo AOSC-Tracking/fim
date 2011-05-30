@@ -100,14 +100,14 @@ struct fim_options_t fim_options[] = {
     {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0xd15cbab3,"dump reference info","[=man]",
 "Will dump to stdout the language reference help."
     },
-    {"dump-default-fimrc",      no_argument,       NULL, 'D',"dump on standard output the embedded configuration",NULL,
-"The default fimrc file (the one hardcoded in the fim executable) is dumped on standard output and fim exits."
+    {"dump-default-fimrc",      no_argument,       NULL, 'D',"dump on standard output the default configuration",NULL,
+"The default configuration (the one hardcoded in the fim executable) is dumped on standard output and fim exits."
     },
     {FIM_OSW_EXECUTE_SCRIPT,   required_argument,       NULL, 'E',"execute {scriptfile} after initialization","{scriptfile}",
 "The \\fBscriptfile\\fP will be executed right after the default initialization file is executed."
     },
     {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read (experimental)","{fimrc}",
-"Specify explicitly the system startup file (default: "FIM_CNS_SYS_RC_FILEPATH"), which will be executed prior to any other configuration file.\n"
+"Specify an alternative system wide initialization file (default: "FIM_CNS_SYS_RC_FILEPATH"), which will be executed prior to any other configuration file.\n"
     },
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}",
 "The \\fBcommands\\fP string will be executed after exiting the interactive loop of the program (right before terminating the program)."
@@ -123,11 +123,11 @@ struct fim_options_t fim_options[] = {
     {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}",
 "name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
-    {"no-rc-file",      no_argument,       NULL, 'N',"do not read the user configuration file at startup",NULL,
-"No user initialization file will be read (default is "FIM_CNS_USR_RC_COMPLETE_FILEPATH") at startup."
+    {"no-rc-file",      no_argument,       NULL, 'N',"do not read the personal initialization file at startup",NULL,
+"No personal initialization file will be read (default is "FIM_CNS_USR_RC_COMPLETE_FILEPATH") at startup."
     },
-    {"no-etc-rc-file",      no_argument,       NULL, 0x4E4E,"do not read the global configuration file at startup",NULL,
-"No global initialization file will be read (default is "FIM_CNS_SYS_RC_FILEPATH") at startup."
+    {"no-etc-rc-file",      no_argument,       NULL, 0x4E4E,"do not read the system wide initialization file at startup",NULL,
+"No system wide initialization file will be read (default is "FIM_CNS_SYS_RC_FILEPATH") at startup."
     },
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
 "Will read commands from stdin prior to entering in interactive mode."
@@ -154,7 +154,7 @@ struct fim_options_t fim_options[] = {
 "set scroll steps in pixels (default is 50)."
     },
     {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check",NULL,
-"a quick sanity check before starting fim."
+"a quick sanity check before starting the interactive fim execution, but after the initialization."
     },	/* NEW */
     {"no-framebuffer",      no_argument,       NULL, 't',"display images in text mode (as -o aa)",NULL,
 "Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).\n"
@@ -387,7 +387,9 @@ int fim_dump_man_page()
 			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [{options}] < {scriptfile}\n.fi\n")+
 			string("\n")+
 			string(".SH DESCRIPTION\n")+
-			string(".B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '"FIM_EPR_XCFTOPNM"'.\nFor '.fig' vectorial images, fim will try to use '"FIM_EPR_FIG2DEV"'.\nFor '.dia' vectorial images, fim will try to use '"FIM_EPR_DIA"'.\nFor '.svg' vectorial images, fim will try to use '"FIM_EPR_INKSCAPE"'.\nFor other formats fim will try to use ImageMagick's '"FIM_EPR_CONVERT"' executable.\n")+
+			string(".B\nfim\nis a `swiss army knife` for displaying image files.\n")+
+			string("It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim-like autocommands, and much more.\n\n")+
+			string("As a default,\n.B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '"FIM_EPR_XCFTOPNM"'.\nFor '.fig' vectorial images, fim will try to use '"FIM_EPR_FIG2DEV"'.\nFor '.dia' vectorial images, fim will try to use '"FIM_EPR_DIA"'.\nFor '.svg' vectorial images, fim will try to use '"FIM_EPR_INKSCAPE"'.\nFor other formats fim will try to use ImageMagick's '"FIM_EPR_CONVERT"' executable.\n")+
 			string("\n")+
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
 			string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.  This man page only describes the\n.B fim\ncommand line switches.\n\n")+
@@ -461,7 +463,7 @@ mp+=string(
 ""FIM_ENV_FBGAMMA"		(just like in fbi) gamma correction (applies to dithered 8 bit mode only). Default is "FIM_CNS_GAMMA_DEFAULT_STR".\n"
 ""FIM_ENV_FRAMEBUFFER"	(just like in fbi) user set framebuffer device file (applies only to the "FIM_DDN_INN_FB" mode).\n"
 "If unset, fim will probe for "FIM_DEFAULT_FB_FILE".\n"
-""FIM_CNS_TERM_VAR"		(only in fim: see the default fimrc) will influence the output device selection algorithm, especially if $"FIM_CNS_TERM_VAR"==\"screen\".\n"
+""FIM_CNS_TERM_VAR"		(only in fim) will influence the output device selection algorithm, especially if $"FIM_CNS_TERM_VAR"==\"screen\".\n"
 #ifdef FIM_WITH_LIBSDL
 ""FIM_ENV_DISPLAY"	If this variable is set, then the "FIM_DDN_INN_SDL" driver will be tried by default.\n"
 #endif
@@ -552,14 +554,14 @@ mp+=string(
 "documentation files (may have been installed in a different location than "FIM_CNS_DOC_PATH", in a custom install).\n"
 ".TP 15\n"
 ".B "FIM_CNS_SYS_RC_FILEPATH"\n"
-"System wide\n"
+"The system wide\n"
 ".B Fim\n"
-"initialization file (executed on startup if no personal initialization file exist).\n"
+"initialization file (executed at startup, after executing the hardcoded configuration).\n"
 ".TP 15\n"
 ".B "FIM_CNS_USR_RC_COMPLETE_FILEPATH"\n"
-"Your personal\n"
+"The personal\n"
 ".B Fim\n"
-"initialization file (executed on startup, if existent).\n"
+"initialization file (executed at startup, after the system wide initialization file).\n"
 
 			      )+
 string(
@@ -573,12 +575,12 @@ string(
 ".nf\n"
 FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
 ".fi\n"
-"Gerd Knorr <kraxel _ GUESS _ bytesex.org> is the original author of fbi, upon which this code is based. \n"
+FBI_AUTHOR" is the author of \"fbi\", upon which\n.B fim\nwas originally based. \n"
 ".SH COPYRIGHT\n"
 ".nf\n"
 "Copyright (C) 2007-2011 "FIM_AUTHOR"\n"
 ".fi\n"
-"Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>\n"
+"Copyright (C) 1999-2004 "FBI_AUTHOR"\n"
 ".P\n"
 "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
 ".P\n"
@@ -1158,7 +1160,7 @@ int main(int argc,char *argv[])
 	#endif
 			    ", built on %s\n",
 			    __DATE__
-	    		    " ( based on fbi version 1.31 (c) by 1999-2003 Gerd Hoffmann )\n"
+	    		    " ( based on fbi version 1.31 (c) by 1999-2004 "FBI_AUTHOR_NAME" )\n"
 	#ifdef FIM_WITH_LIBPNG
 	#ifdef PNG_HEADER_VERSION_STRING 
 	"Compiled with "PNG_HEADER_VERSION_STRING""
