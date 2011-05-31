@@ -413,6 +413,7 @@ namespace fim
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
 #define FIM_VID_STATUS_LINE 			"_status_line"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[internal,in] if 1, will prefetch further files just after display of the first file" */
+#define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[internal,in] number of seconds sleep during slideshow mode" */
 #define FIM_VID_AUTO_SCALE_V			"auto_scale_v"	/* "[experimental, undocumented]" */
 #define FIM_VID_AUTOTOP				"autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
 #define FIM_VID_AUTOWIDTH			"autowidth"		/* "[internal,in] if 1, will scale freshly loaded images to fit width" */
@@ -649,6 +650,7 @@ namespace fim
 #define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL" "FIM_CNS_EX_ARGS_STRING" : evaluate "FIM_CNS_EX_ARGS_STRING" as commands, executing them."
 #define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen()"
 #define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of [ split | hsplit | vsplit | normalize | enlarge | venlarge | henlarge | up | down | left | right | close | swap ]"
+#define FIM_CNS_SLIDESHOW_CMD "while("FIM_VID_FILEINDEX"<"FIM_VID_FILELISTLEN"){sleep "FIM_VID_WANT_SLEEPS"; next;}"
 
 /*
  * Some Fim compilation defaults

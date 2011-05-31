@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110601	filelistlen and other vars should be set coherently
 20110530	in some contexts, using libsvga may be interesting 
 20110530	need some "emergency" command and/or mechanism for freeing/reclaiming memory (e.g.:caches, buffers)
 20110528	may introduce a push/pop mechanism for the status bar

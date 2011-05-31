@@ -512,7 +512,7 @@ if(expression){action;}[else{action;}]
 .B
 while
 .fi
-while(expression){action;}
+while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key.
 .fi
 
 .B
@@ -822,6 +822,10 @@ _verbose_keys
 .B
 _want_prefetch
 [internal,in] if 1, will prefetch further files just after display of the first file
+.fi
+.B
+_want_sleep_seconds
+[internal,in] number of seconds sleep during slideshow mode
 .fi
 .B
 angle

@@ -248,7 +248,9 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string autocmd(const args_t& args);
 	fim::string autocmd_del(const fim::string event, const fim::string pattern, const fim::string action);
 	fim::string autocmd_del(const args_t& args);
+	public:// 20110601
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
+	private:
 	fim::string autocmds_list(const fim::string event, const fim::string pattern)const;
 #endif
 	typedef std::pair<fim::string,fim::string> autocmds_loop_frame_t;
