@@ -134,7 +134,7 @@ class FramebufferDevice:public DisplayDevice
 	int visible_ ;
 
 	/* private */
-	char *x11_font_ ;
+	//char *x11_font_ ;
 
 	int ys_ ;
 	int xs_ ;
