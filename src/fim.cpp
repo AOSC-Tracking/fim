@@ -153,6 +153,9 @@ struct fim_options_t fim_options[] = {
     {"scroll",     required_argument, NULL, 's',"set scroll value (in pixels)","{value}",
 "set scroll steps in pixels (default is 50)."
     },
+    {"slideshow",     required_argument, NULL, 0x7373,"interruptible slideshow mode",FIM_CNS_EX_NUM_STRING,
+"interruptible slideshow mode; will wait for "FIM_CNS_EX_NUM_STRING" of seconds (assigned to the "FIM_VID_WANT_SLEEPS" variable after each loading; implemented by executing "FIM_CNS_SLIDESHOW_CMD" as a first command."
+    },
     {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check",NULL,
 "a quick sanity check before starting the interactive fim execution, but after the initialization."
     },	/* NEW */
@@ -639,15 +642,11 @@ done:
 	public:
 	int main(int argc,char *argv[])
 	{
-		//char *default_fbdev=NULL,*default_fbmode=NULL;
-		//int default_vt=-1;
 		int retcode=0;
-		//float default_fbgamma=-1.0;
 		/*
 		 * an adapted version of the main function
 		 * of the original version of the fbi program
 		 */
-	// 	int              timeout = -1;	// fbi's
 		int              opt_index = 0;
 		int              i;
 		int		 want_random_shuffle=0;
@@ -662,7 +661,6 @@ done:
 		read_one_script_file_from_stdin=0;
 		int perform_sanity_check=0;
 	#endif
-	//	char             *desc,*info;
 		int c;
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
@@ -743,6 +741,14 @@ done:
 		case 'f':
 	#ifndef FIM_WANT_NOSCRIPTING
 		    cc.setVariable(FIM_VID_DEFAULT_ETC_FIMRC,optarg);
+	#else
+		    cout << FIM_EMSG_NO_SCRIPTING;
+	#endif
+		    break;
+		case 0x7373:
+	#ifndef FIM_WANT_NOSCRIPTING
+		    	cc.setVariable(FIM_VID_WANT_SLEEPS,optarg);
+	    		cc.autocmd_add(FIM_ACM_PREEXECUTIONCYCLE,"",FIM_CNS_SLIDESHOW_CMD);
 	#else
 		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif

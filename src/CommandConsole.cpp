@@ -398,7 +398,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_IF),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));// FIXME: need a special "help grammar" command !
 		addCommand(new Command(fim::string(FIM_FLT_ELSE),fim::string("if(expression){action;}[else{action;}]"),this,&CommandConsole::foo));// FIXME: need a special "help grammar" command !
 
-		addCommand(new Command(fim::string(FIM_FLT_WHILE),fim::string("while(expression){action;}"),this,&CommandConsole::foo));// FIXME: need a special "help grammar" command !
+		addCommand(new Command(fim::string(FIM_FLT_WHILE),fim::string("while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the "FIM_KBD_ESC" or the "FIM_KBD_COLON" key."),this,&CommandConsole::foo));// FIXME: need a special "help grammar" command !
 
 		addCommand(new Command(fim::string(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS" ["FIM_CNS_EX_ID_STRING" ["FIM_CNS_EX_CMDS_STRING" ["FIM_CNS_EX_DSC_STRING"]]]"),this,&CommandConsole::foo));
 		addCommand(new Command(fim::string(FIM_FLT_GETENV),fim::string(FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" : display the value of the "FIM_CNS_EX_ID_STRING" environment variable"),this,&CommandConsole::do_getenv));
@@ -948,6 +948,7 @@ ok:
 			key_bindings_t::const_iterator ki;
 //			if(c==key_bindings_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
 //			if(c==key_bindings_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
+//			// 20110601 need some string variable with these two keys (see while() interruption documentation) 
 			if((ki=key_bindings_.find(FIM_KBD_ESC))!=key_bindings_.end() && c==ki->second)return 1;
 			if((ki=key_bindings_.find(FIM_KBD_COLON))!=key_bindings_.end() && c==ki->second)return 1;
 			if( c != exitBinding_ )  /* some char read */
