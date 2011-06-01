@@ -1027,23 +1027,7 @@ done:
 			FILE *tfd=NULL;
 			if( ( tfd=fim_fread_tmpfile(stdin) )!=NULL )
 			{	
-				Image* stream_image=NULL;
-				/*
-				 * Note that it would be much nicer to do this in another way,
-				 * but it would require to rewrite much of the file loading stuff
-				 * (which is quite fbi's untouched stuff right now)
-				 * */
-				try{
-					stream_image=new Image(FIM_STDIN_IMAGE_NAME,tfd);
-				}catch (FimException e){/* write me */}
-
-				// DANGEROUS TRICK!
-				cc.browser_.set_default_image(stream_image);
-				if(!cc.browser_.cache_.setAndCacheStdinCachedImage(stream_image))
-					std::cerr << FIM_EMSG_CACHING_STDIN;// FIXME
-
-				cc.browser_.push(FIM_STDIN_IMAGE_NAME);
-				//fclose(tfd);	// uncommenting this will cause a segfault (why ? FIXME)
+				cc.fpush(tfd);
 			}
 			close(0);
 			ndd=dup(2);

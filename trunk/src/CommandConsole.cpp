@@ -424,7 +424,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string(FIM_FLT_POPEN" "FIM_CNS_EX_SYSC_STRING" : pipe a command, invoking popen(): spawns a shell, invoking "FIM_CNS_EX_SYSC_STRING" and executing as fim commands the output of "FIM_CNS_EX_SYSC_STRING),this,&CommandConsole::sys_popen));
 		addCommand(new Command(fim::string(FIM_FLT_STDOUT),fim::string(FIM_FLT_STDOUT" "FIM_CNS_EX_ARGS_STRING" : writes to stdout its arguments "FIM_CNS_EX_ARGS_STRING""),this,&CommandConsole::_stdout));
 #ifdef FIM_PIPE_IMAGE_READ
-		addCommand(new Command(fim::string(FIM_FLT_PREAD),fim::string(FIM_FLT_PREAD" "FIM_CNS_EX_ARGS_STRING" : execute "FIM_CNS_EX_ARGS_STRING" as a shell command and read the input as an image file (using "FIM_FLT_POPEN")"),this,&CommandConsole::pread));
+		addCommand(new Command(fim::string(FIM_FLT_PREAD),fim::string(FIM_FLT_PREAD" "FIM_CNS_EX_ARGS_STRING" : execute "FIM_CNS_EX_ARGS_STRING" as a shell command and read the output as an image file (using "FIM_FLT_POPEN")"),this,&CommandConsole::pread));
 #endif
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string(FIM_FLT_START_RECORDING),fim::string(FIM_FLT_START_RECORDING" : start recording the executed commands"),this,&CommandConsole::start_recording));

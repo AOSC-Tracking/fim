@@ -21,6 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110602	in the documentation, shall write about FIM_STDIN_IMAGE_NAME
+20110602	need a test for the goodness of the 'random' variable numbers.
 20110601	shall use fim_byte_t instead of unsigned char's
 20110601	filelistlen and other vars should be set coherently
 20110530	in some contexts, using libsvga may be interesting 

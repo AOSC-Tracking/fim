@@ -242,6 +242,9 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 #ifdef FIM_PIPE_IMAGE_READ
 	fim::string pread(const args_t& args);
 #endif
+	public:// 20110601
+	fim_err_t fpush(FILE *tfd);
+	private:
 	fim::string set_interactive_mode(const args_t& args);
 	fim::string set_in_console(const args_t& args);
 #ifdef FIM_AUTOCMDS

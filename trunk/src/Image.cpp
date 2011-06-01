@@ -501,7 +501,7 @@ namespace fim
 		if(!img_ || !fimg_)
 			///* temporarily, for security reasons :  throw FIM_E_NO_IMAGE*/;
 		{
-			std::cerr << "fatal error : " << __FILE__ << ":" << __LINE__ << "( are you sure you gave an image file in standard input, uh ?)\n";
+			std::cerr << "fatal error : " << __FILE__ << ":" << __LINE__ << " ( are you sure you gave an image file in standard input, uh ?)\n";
 			throw FimException();
 			std::exit(*(int*)NULL);// FIXME
 		}
