@@ -676,7 +676,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     }
 #endif
 #ifdef PAGE_MASK
-    fb_mem_offset_ = (unsigned long)(fb_fix_.smem_start) & (~PAGE_MASK);
+    fb_mem_offset_ = (unsigned int)(fb_fix_.smem_start) & (~PAGE_MASK);
 #else
     /* some systems don't have this symbol outside their kernel headers - will do any harm ? */
     /* FIXME : what are the wider implications of this ? */
@@ -1144,7 +1144,7 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
 {
     unsigned char  *ptr  = (unsigned char *)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
-    unsigned long  *ptr4 = (unsigned long *)dst;
+    unsigned int  *ptr4 = (unsigned int *)dst;
     int x;
     int xm;/*mirror patch*/
 
@@ -1285,7 +1285,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 {
     unsigned char  *ptr  = (unsigned char*)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
-    unsigned long  *ptr4 = (unsigned long*)dst;
+    unsigned int  *ptr4 = (unsigned int*)dst;
     unsigned ZERO_BYTE=0x00;
 #ifdef FIM_IS_SLOWER_THAN_FBI
     int x;

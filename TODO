@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110601	shall use fim_byte_t instead of unsigned char's
 20110601	filelistlen and other vars should be set coherently
 20110530	in some contexts, using libsvga may be interesting 
 20110530	need some "emergency" command and/or mechanism for freeing/reclaiming memory (e.g.:caches, buffers)
