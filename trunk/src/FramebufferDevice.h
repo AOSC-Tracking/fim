@@ -165,7 +165,7 @@ class FramebufferDevice:public DisplayDevice
 
 	static void setpixel4(void *ptr, unsigned int color)
 	{
-	    unsigned long *p = (unsigned long*) ptr;
+	    unsigned int *p = (unsigned int*) ptr;
 	    *p = color;
 	}
 
