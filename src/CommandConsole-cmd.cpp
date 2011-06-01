@@ -308,6 +308,37 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
+	fim_err_t CommandConsole::fpush(FILE *tfd)
+	{
+			/* todo : read errno in case of error and print some report.. */
+	
+			/* pipes are not seekable : this breaks down all the Fim file handling mechanism */
+			/*
+			while( (rc=read(0,buf,FIM_PIPE_BUFSIZE))>0 ) fwrite(buf,rc,1,tfd);
+			rewind(tfd);
+			*/
+			/*
+			 * Note that it would be much nicer to do this in another way,
+			 * but it would require to rewrite much of the file loading stuff
+			 * (which is quite fbi's untouched stuff right now)
+			 * */
+			Image* stream_image=NULL;
+			if(!tfd)
+				return FIM_ERR_GENERIC;
+			try{ stream_image=new Image(FIM_STDIN_IMAGE_NAME,fim_fread_tmpfile(tfd)); }
+			catch (FimException e){/* write me */}
+			// DANGEROUS TRICK!
+			if(stream_image)
+			{
+				browser_.set_default_image(stream_image);
+					if(!cc.browser_.cache_.setAndCacheStdinCachedImage(stream_image))
+						std::cerr << FIM_EMSG_CACHING_STDIN;// FIXME
+				browser_.push(FIM_STDIN_IMAGE_NAME);
+			}
+			return FIM_ERR_NO_ERROR;
+			//pclose(tfd);
+	}
+
 #ifdef FIM_PIPE_IMAGE_READ
 	/*
 	 * FBI/FIM FILE PROBING MECHANISMS ARE NOT THOUGHT WITH PIPES IN MIND!
@@ -324,23 +355,7 @@ namespace fim
 		for(i=0;i<args.size();++i)
 		if( (tfd=popen(args[i].c_str(),"r")) != NULL )
 		{	
-			/* todo : read errno in case of error and print some report.. */
-	
-			/* pipes are not seekable : this breaks down all the Fim file handling mechanism */
-			/*
-			while( (rc=read(0,buf,FIM_PIPE_BUFSIZE))>0 ) fwrite(buf,rc,1,tfd);
-			rewind(tfd);
-			*/
-			/*
-			 * Note that it would be much nicer to do this in another way,
-			 * but it would require to rewrite much of the file loading stuff
-			 * (which is quite fbi's untouched stuff right now)
-			 * */
-			Image* stream_image=new Image(FIM_LINUX_STDIN_FILE,tfd);
-			// DANGEROUS TRICK!
-			browser_.set_default_image(stream_image);
-			browser_.push("");
-			//pclose(tfd);
+			fpush(tfd);
 		}
 		else
 		{

@@ -25,7 +25,7 @@ mail user agent (it aims to be a swiss army knife for viewing images).
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux framebuffer console.
-It is multidevice : it has X support, too (via the SDL library) and it supports
+It is multidevice: it has X support, too (via the SDL library) and it supports
 ascii art output (via the aalib library).
 
 FIM is free software, and it ships under the GPL software license, complete with
@@ -202,6 +202,18 @@ Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/), zgv
  # (a long test)
  make tests-all
 
+--------------------------------------------------------------------------------
+	4.6		Example: compiling Fim from repository on Ubuntu 11.04
+
+ sudo apt-get install subversion
+ sudo apt-get install automake autoconf libtool libreadline6-dev
+ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libgif-dev
+ sudo apt-get install libsdl-dev libaa1-dev 
+ sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
+ svn co http://code.autistici.org/svn/fim/trunk/ fim
+ cd fim
+ ./configure --enable-poppler --enable-aa --enable-sdl
+ make
  
 ================================================================================
 	5		Run Time Requirements
@@ -342,11 +354,11 @@ Tested platforms :
 ================================================================================
 
 --------------------------------------------------------------------------------
-	8.1		Debian
+	8.1		Debian, Ubuntu
  
- You should find fim in debian, and install it like:
+ You should find fim in Debian and Ubuntu,  and install it with:
 
- apt-get install fim
+ sudo apt-get install fim
  
 --------------------------------------------------------------------------------
 	8.2		Gentoo Installation Tips (obsolete)

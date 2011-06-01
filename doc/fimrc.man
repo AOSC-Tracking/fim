@@ -618,6 +618,12 @@ stdout {args} : writes to stdout its arguments {args}
 .fi
 
 .B
+pread
+.fi
+pread {args} : execute {args} as a shell command and read the input as an image file (using popen)
+.fi
+
+.B
 start_recording
 .fi
 start_recording : start recording the executed commands
