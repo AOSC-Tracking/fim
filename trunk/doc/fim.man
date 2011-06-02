@@ -340,13 +340,34 @@ scanimage ... | tee scan.ppm | fim -i
 
 .B fim * > selection.txt
 .fi
-# Will output the file names marked interactively with 'm' in fim to a file.
+# Will output the file names marked interactively with the 'mark' command in fim to a file.
 .P
 .P
 
 .B fim * | fim -
 .fi
 # will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
+.P
+.P
+
+.B fim
+-c 'pread "vgrabbj -d /dev/video0 -o png";reload'
+.fi
+# will display an image grabbed from a webcam.
+.P
+.P
+
+.B fim
+-o aa -c 'pread "vgrabbj -d /dev/video0 -o png";reload;system "fbgrab" "asciime.png"'
+.fi
+# if running in framebuffer mode, will save a png screenshot with an ascii rendering of an image grabbed from a webcam.
+.P
+.P
+
+.B fim
+-c 'while(1){pread "vgrabbj -d /dev/video0 -o png";reload;sleep 1;};'
+.fi
+# will display a sequence of images grabbed from a webcam; circa 1 per second.
 .P
 .P
 
@@ -374,6 +395,11 @@ initialization file (executed at startup, after executing the hardcoded configur
 The personal
 .B Fim
 initialization file (executed at startup, after the system wide initialization file).
+.TP 15
+.B ~/.inputrc
+If
+.B Fim
+is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man readline).
 .SH SEE ALSO
 Other 
 .B Fim 

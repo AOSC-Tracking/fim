@@ -1,5 +1,5 @@
 
-h1 { color: #d2d2d2; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; font-family: "Courier New", Tahoma, Courier, Monaco; text-decoration: none; background: black url(pix/back.gif) repeat scroll; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua; }
+h1 { color: #d2d2d2; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; font-family: "Courier New", Tahoma, Courier, Monaco; text-decoration: none; background: black ; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua; }
 
 h2 { color: #fff; font-weight: bolder; font-size: 30pt; line-height: 30pt; font-family: Courier; background-color: #363636; text-align: center; text-transform: uppercase; text-indent: 0pt; letter-spacing: 15pt; margin: 0pt; padding-top: 0pt; padding-bottom: -2pt; border-bottom: none }
 
@@ -13,7 +13,7 @@ h6 { color: white; font-weight: lighter; font-size: 11pt; line-height: 12pt; fon
 
 h7 { color: white; font-weight: lighter; font-size: 12pt; line-height: 12pt; font-family: "MS Sans Serif"; background-color: gray; text-indent: 0pt; margin: 0pt; padding: 0pt; }
 
-h8  { color: #2e2e2e; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; font-family: "Courier New", Tahoma, Courier, Monaco; text-decoration: none; background: black url(pix/back.gif) repeat scroll; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua }
+h8  { color: #2e2e2e; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; font-family: "Courier New", Tahoma, Courier, Monaco; text-decoration: none; background: black ; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua }
 
 A:hover
 {

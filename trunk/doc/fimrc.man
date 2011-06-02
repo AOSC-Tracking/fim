@@ -620,7 +620,7 @@ stdout {args} : writes to stdout its arguments {args}
 .B
 pread
 .fi
-pread {args} : execute {args} as a shell command and read the input as an image file (using popen)
+pread {args} : execute {args} as a shell command and read the output as an image file (using popen)
 .fi
 
 .B
@@ -939,7 +939,7 @@ negated
 .fi
 .B
 orientation
-[internal,undocumented]
+[internal] Rotation is controlled by: 'i:orientation', 'v:orientation', 'g:orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:orientation=1" and ":i:orientation=5" will do the same thing: rotate the image one time by 90'.
 .fi
 .B
 pwd
@@ -1315,11 +1315,13 @@ bind "Home" "0;";
 bind "End" "$;";
 bind "Backspace" "prev";
 
+# Some more examples:
 #alias "rdjpgcom" 'system "rdjpgcom" i:filename';
-
 # offsetscan usage : need a mechanism for popping all images before.
 #alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}"; # NEW
-alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
+#alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
+#alias "webcam" "pread 'vgrabbj -d /dev/video0';";
+#alias "webcam_cycle" "while(1){webcam;reload;sleep 1;};";
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So feel free to modify it, but with caution! 
