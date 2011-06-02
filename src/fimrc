@@ -291,11 +291,13 @@ bind "Home" "0;";
 bind "End" "$;";
 bind "Backspace" "prev";
 
+# Some more examples:
 #alias "rdjpgcom" 'system "rdjpgcom" i:filename';
-
 # offsetscan usage : need a mechanism for popping all images before.
 #alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}"; # NEW
-alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
+#alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
+#alias "webcam" "pread 'vgrabbj -d /dev/video0';";
+#alias "webcam_cycle" "while(1){webcam;reload;sleep 1;};";
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
 #So feel free to modify it, but with caution! 

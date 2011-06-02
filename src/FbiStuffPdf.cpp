@@ -48,6 +48,11 @@
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
 
+#if HAVE_FILENO
+#define FIM_PDF_USE_FILENO 1
+#else
+#define FIM_PDF_USE_FILENO 0
+#endif
 
 /*								*/
 
@@ -128,7 +133,21 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	GBool  doLinks     ;
 	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
 
+#if !FIM_PDF_USE_FILENO
 	if(fp) fclose(fp);
+#else
+	if(fp)
+	{
+		// FIXME: this hack will only work on Linux.
+		static char linkname[64];
+		sprintf(linkname,"/proc/self/fd/%d",fileno(fp));
+		//printf("%s\n",linkname);
+		filename=linkname;
+		if(-1==access(filename,R_OK))
+			return NULL;
+	}
+#endif
+
 
 	ds = (struct pdf_state_t*)fim_calloc(sizeof(struct pdf_state_t),1);
 
