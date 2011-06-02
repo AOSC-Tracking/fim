@@ -1,1286 +1,1637 @@
+2011-06-01 23:33  dezperado
+
+	* README, TODO, configure.ac, doc/fimrc.man,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/Image.cpp, src/fim.cpp: enabling back
+	  the 'pread' command, which reads images from a piped descriptor.
+	  docfixes.
+
+2011-06-01 21:33  dezperado
+
+	* TODO, src/FramebufferDevice.cpp, src/FramebufferDevice.h: fix to
+	  a serious bug: 32 bit framebuffer mode used to segfault on 64 bit
+	  builds.
+
+2011-05-31 22:43  dezperado
+
+	* TODO, doc/fim.man, doc/fimrc.man, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/fim.cpp, src/fim.h: implemented a
+	  trivial slideshow command switch.
+	  doc fies.
+
+2011-05-31 22:07  dezperado
+
+	* README, TODO, src/FramebufferDevice.cpp, src/FramebufferDevice.h:
+	  removed a spurios class member, thus eliminating an useless
+	  compilation warning.
+
+2011-05-30 00:31  dezperado
+
+	* TODO, configure.ac, doc/FIM.TXT, doc/fim.man, src/fim.cpp:
+	  documentation oriented updates.
+
+2011-05-29 23:32  dezperado
+
+	* Makefile.am, configure.ac, doc/fim.man, doc/fimrc.man,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/FbiStuff.cpp, src/fim.cpp, src/fim.h,
+	  src/fimrc, src/testdir/Makefile: honouring /etc/fimrc loading.
+	  cd implies pwd and update of the PWD variable.
+	  introduced new autocommands.
+	  updating the no-configuration command switches (an applying in
+	  the test suite).
+	  the hardcoded config now comes first, before the /etc/fimrc file.
+	  the ~/.fimrc config file now comes after /etc/fimrc.
+	  avoiding double loading of the hardcoded config.
+	  fixed the getopt string: the 'f:' option was missing.
+	  added a --no-etc-rc-file switch.
+	  corrected the semantics of the -f option.
+	  checking for failure after the lexer allocation.
+	  doc update.
+	  configure update, in the matrix marked switch handling.
+
+2011-05-29 13:01  dezperado
+
+	* TODO, doc/fim.man, doc/fimrc.man, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/FbiStuff.cpp,
+	  src/fim.cpp, src/fim.h: set up a autocommand keywords, to
+	  correctly handle command line options which imply autocommands
+	  (e.g.: --offset).
+
+2011-05-29 11:38  dezperado
+
+	* TODO, doc/fim.man, src/DisplayDevice.cpp, src/FontServer.cpp,
+	  src/FontServer.h, src/FramebufferDevice.cpp, src/fim.cpp,
+	  src/fim.h: the SDL driver will now be fully affected by font
+	  selection mechanism, just as the framebuffer driver does.
+	  auto-documenting the font search path.
+	  doc/man fixes.
+
+2011-05-28 12:48  dezperado
+
+	* configure.ac, src/FbiStuffMatrixMarket.cpp: the matrix market
+	  renderer is active again (if `configure`d).
+
+2011-05-28 11:50  dezperado
+
+	* TODO, doc/fimrc.man, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/Makefile.am,
+	  src/fim.h, src/fimrc: fixed the bound keys dumpout problem.
+	  added functionality to allow binding commands to raw keys.
+
+2011-05-28 09:57  dezperado
+
+	* TODO, doc/fimrc.man, src/FbiStuff.cpp, src/Image.cpp, src/fim.h,
+	  src/fimrc: introduced a variable, so the user may turn off
+	  external decoding of an unknown image file by piping it through
+	  an external program.
+
+2011-05-28 09:30  dezperado
+
+	* TODO, configure.ac, doc/fimrc.man, scripts/Makefile.am,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/FbiStuffFbtools.cpp,
+	  src/FramebufferDevice.cpp, src/fim.h, src/fimrc: small makefile
+	  (distributing some more files) and configure (checking for some
+	  headers) fixes.
+	  added an 'unmark' command.
+
+2011-05-23 18:39  dezperado
+
+	* doc/fim.man, doc/fimrc.man, src/CommandConsole-help.cpp,
+	  src/CommandConsole-init.cpp, src/CommandConsole.cpp, src/fim.cpp,
+	  src/fim.h: set up a hack for producing man documention for the
+	  "window" command.
+	  the -V version string will print also versions of jpg,png,gif
+	  libraries, as declared in their headers.
+	  doc updates.
+
+2011-05-23 12:51  dezperado
+
+	* AUTHORS, BUGS, COPYING, ChangeLog, autogen.sh, configure.ac,
+	  debian/watch, doc/FIM.TXT, doc/Makefile.am, doc/Makefile.old,
+	  doc/doctags.c, doc/fim.man, doc/fimgs.man, doc/fimrc.man,
+	  doc/vim2html.pl, scripts/benchmark.sh, src/AADevice.cpp,
+	  src/AADevice.h, src/Arg.cpp, src/Arg.h, src/Browser.cpp,
+	  src/Browser.h, src/CACADevice.cpp, src/CACADevice.h,
+	  src/Cache.cpp, src/Cache.h, src/Command.cpp, src/Command.h,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole-help.cpp,
+	  src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/DebugConsole.cpp, src/DebugConsole.h,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FbiStuff.cpp, src/FbiStuff.h,
+	  src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp, src/FbiStuffBmp.cpp,
+	  src/FbiStuffDjvu.cpp, src/FbiStuffFbtools.cpp,
+	  src/FbiStuffFbtools.h, src/FbiStuffGif.cpp, src/FbiStuffJpeg.cpp,
+	  src/FbiStuffList.h, src/FbiStuffLoader.cpp, src/FbiStuffLoader.h,
+	  src/FbiStuffMatrixMarket.cpp, src/FbiStuffPdf.cpp,
+	  src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp, src/FbiStuffPs.cpp,
+	  src/FbiStuffTiff.cpp, src/FontServer.cpp, src/FontServer.h,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/Image.cpp, src/Image.h, src/Namespace.cpp, src/Namespace.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/Var.cpp, src/Var.h,
+	  src/Viewport.cpp, src/Viewport.h, src/Window.cpp, src/Window.h,
+	  src/common.cpp, src/common.h, src/defaultConfiguration.cpp,
+	  src/fim.cpp, src/fim.h, src/fim_stream.cpp, src/fim_stream.h,
+	  src/grammar.h, src/interpreter.cpp, src/lex.h, src/readline.cpp,
+	  src/readline.h, src/string.cpp, src/string.h: substituting svn
+	  property LastChangedDate with property Id.
+
+2011-05-23 11:46  dezperado
+
+	* TODO, doc/fim.man, doc/fimrc.man, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-help.cpp, src/CommandConsole.cpp, src/fim.cpp,
+	  src/fim.h: fixing many documentation strings, also using
+	  preprocessor substring symbols.
+	  man update.
+
+2011-05-22 22:47  dezperado
+
+	* TODO, doc/fimrc.man, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-init.cpp, src/CommandConsole.cpp, src/fim.h:
+	  making variables accessible from within the help system.
+
+2011-05-22 17:56  dezperado
+
+	* src/CommandConsole.cpp, src/Namespace.cpp, src/Namespace.h,
+	  src/fim.h, src/readline.cpp, src/string.h: enabling
+	  autocompletion of individual namespace-prefixed variables.
+	  std::string -> fim::string constructor compatibility.
+
+2011-05-22 14:39  dezperado
+
+	* TODO, src/CommandConsole-cmd.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/common.cpp, src/common.h,
+	  src/readline.cpp, src/readline.h: the autocompletion mechanism
+	  won't autocomplete strings with filename proposals unless double
+	  quoted.
+	  on the other hand, a double quote will be proposed for
+	  autocompletion, when autocompleting the empty string.
+
+2011-05-22 13:35  dezperado
+
+	* src/string.cpp: bugfix to the regexp substitution function.
+
+2011-05-17 16:48  dezperado
+
+	* BUGS, TODO, doc/fim.man, doc/fimrc.man,
+	  src/CommandConsole-help.cpp, src/CommandConsole.cpp, src/fim.cpp,
+	  src/fimrc: documenting fim commands.
+	  adding the default hardcoded fimrc inline in fimrc.man.
+	  updated the short fim description in fim.man.
+
+2011-05-17 15:53  dezperado
+
+	* src/fimrc, src/testdir/test12.in, src/testdir/test7.in: fix to
+	  the failing tests: the test cases had to be updated to use a now
+	  renamed variable.
+
+2011-05-17 15:34  dezperado
+
+	* Makefile.am, TODO, doc/fim.man, doc/fimrc.man, scripts/example,
+	  scripts/example/oneline.fim, src/CommandConsole-help.cpp,
+	  src/CommandConsole-init.cpp, src/Makefile.am, src/fim.cpp,
+	  src/fim.h, src/grammar.h: documenting the internal variables.
+	  misc documentation fixes.
+	  seems like a bug was introduced, inducing test 7 to fail. shall
+	  fix this soon.
+
+2011-05-17 13:17  dezperado
+
+	* doc/fimrc.man, src/CommandConsole-help.cpp, src/yacc.ypp: did
+	  some swaps in the grammar specification, in order to make grammar
+	  documentation more understandable.
+	  doc updates.
+
+2011-05-17 12:59  dezperado
+
+	* configure.ac, doc/fimrc.man, src/CommandConsole-help.cpp,
+	  src/Makefile.am, src/lex.lex, src/yacc.ypp: renamed a number of
+	  grammar elements to be more understandable in plain english.
+	  more textual descriptions of the fim language.
+
+2011-05-17 09:49  dezperado
+
+	* doc/fimrc.man, scripts/maintenance/yacc2grammar.awk,
+	  scripts/maintenance/yacc2grammar.h, src/CommandConsole-help.cpp,
+	  src/Makefile.am, src/fim.cpp: set up a dirty hack to document the
+	  fim grammar in fimrc.man.
+
+2011-05-16 13:16  dezperado
+
+	* src/CommandConsole-init.cpp: smarter error reporting on failed
+	  video device initialization.
+
+2011-05-16 13:08  dezperado
+
+	* TODO, doc/fim.man, src/CommandConsole-init.cpp,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/fim.cpp, src/fim.h:
+	  enabling case insensitive device string specification.
+	  allowing the user to specify mouse hide/show in sdl mode.
+	  doc updates.
+
+2011-05-16 12:16  dezperado
+
+	* TODO, configure.ac, doc/fim.man, src/FbiStuff.cpp,
+	  src/SDLDevice.cpp, src/fim.cpp, src/fim.h: using more macro
+	  constants in the man generation code.
+	  the SDL driver will print program version in the window title.
+	  doc/notes fixes.
+
+2011-05-15 20:53  dezperado
+
+	* doc/FIM.TXT, doc/fim.man, src/Cache.cpp,
+	  src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/SDLDevice.cpp, src/SDLDevice.h,
+	  src/fim.cpp, src/fim.h: added an extension for specifying
+	  resolution in sdl mode.
+	  added some support for debugging in the cache code.
+	  support for the quit button in windowed sdl mode.
+	  docs update.
+
+2011-05-15 17:53  dezperado
+
+	* src/CommandConsole.cpp, src/SDLDevice.cpp: enabling key repeat in
+	  sdl mode.
+	  fixing interruption of iterated commands in sdl mode.
+
+2011-05-15 13:17  dezperado
+
+	* src/CommandConsole.cpp, src/fim.h, src/yacc.ypp: fix to the
+	  expression parsing code: forgot to include the unquoted float as
+	  a case.
+	  using symbols for commands in the yacc.ypp file.
+
+2011-05-15 12:38  dezperado
+
+	* TODO, src/lex.lex, src/yacc.ypp: fixed the broken [+-*]{number}
+	  syntax.
+
+2011-05-15 11:21  dezperado
+
+	* src/fim.cpp, src/fim.h, src/fim_stream.cpp, src/fim_stream.h,
+	  src/readline.cpp: avoiding the redeclaration of a fim_stream in
+	  each source file.
+	  on the way of enhancing fim_stream by adding state to it.
+
+2011-05-15 10:20  dezperado
+
+	* TODO, src/CommandConsole.cpp, src/fim.h: fix to a problem
+	  occurring in sdl mode when iterating commands.
+
+2011-05-14 22:17  dezperado
+
+	* src/common.cpp, src/string.cpp: fix to the regexp-based
+	  substitution code (it had a severe bug).
+	  fix to the escaping code (for /bin/sh) when handling the
+	  apostrophe.
+
+2011-05-11 13:17  dezperado
+
+	* src/DisplayDevice.cpp: the console rows variable will now affect
+	  also the console background clearing code.
+
+2011-05-11 12:50  dezperado
+
+	* src/CommandConsole-cmd.cpp, src/common.cpp, src/common.h: in a
+	  basic shell escaping of strings passed to popen().
+
+2011-05-09 00:47  dezperado
+
+	* configure.ac: in an initial configure switch to ease static
+	  compilation.
+
+2011-05-08 00:26  dezperado
+
+	* doc/fimrc.man, src/CommandConsole-help.cpp, src/fim.cpp,
+	  src/fim.h: typo fix in the manual generation code; using more
+	  defined constants now.
+
+2011-05-08 00:21  dezperado
+
+	* src/CommandConsole-init.cpp: typo fix for the no-scripting case.
+
+2011-05-07 23:53  dezperado
+
+	* Makefile.am, doc/fim.man, src/CommandConsole-help.cpp: in a
+	  makefile rule for regenerating both the fim/fimrc man pages.
+	  updated doc/fim.man accordingly.
+
+2011-05-07 23:46  dezperado
+
+	* src/fim.cpp: fim is now able to print its own man page with
+	  complete and up-to-date information.
+
+2011-05-07 22:52  dezperado
+
+	* src/fim.cpp, src/fim.h, src/string.cpp, src/string.h: fim is now
+	  able to print its own man page with almost complete information.
+	  added a from-char constructor to our string class.
+
+2011-05-07 20:21  dezperado
+
+	* TODO, src/Browser.cpp, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-help.cpp, src/CommandConsole.cpp,
+	  src/Image.cpp, src/Namespace.cpp, src/Window.cpp, src/fim.cpp,
+	  src/fim.h: instead of "", returning FIM_CNS_EMPTY_RESULT in many
+	  string returning functions.
+
+2011-05-07 19:33  dezperado
+
+	* src/FbiStuff.cpp, src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp,
+	  src/FbiStuffBmp.cpp, src/FbiStuffDjvu.cpp, src/FbiStuffGif.cpp,
+	  src/FbiStuffJpeg.cpp, src/FbiStuffLoader.cpp,
+	  src/FbiStuffLoader.h, src/FbiStuffMatrixMarket.cpp,
+	  src/FbiStuffPdf.cpp, src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp,
+	  src/FbiStuffPs.cpp, src/FbiStuffTiff.cpp,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h, src/fim.cpp,
+	  src/fim.h: prepended 'fim_' to some global labels.
+	  using fim_char_t in place of unsigned char in a number of places.
+
+2011-05-07 15:50  dezperado
+
+	* TODO, doc/fim.man, doc/fimrc.man, src/Browser.h,
+	  src/CommandConsole-help.cpp, src/fim.cpp, src/fim.h: the random
+	  shuffle switch will now trigger right after filelist loading.
+	  the default -h mode is now 'short'; added a --help=d
+	  (descriptive) mode for the short info version.
+
+2011-05-07 14:52  dezperado
+
+	* TODO, doc/Makefile.am, doc/fim.man, doc/fimrc.man,
+	  src/CommandConsole-help.cpp: man pages update.
+	  in a new man page: fimrc.man, which is auto-generated.
+
+2011-05-07 14:21  dezperado
+
+	* doc/FIM.TXT, src/CommandConsole.cpp, src/FramebufferDevice.cpp,
+	  src/fim.cpp, src/fim.h, src/fimrc: introducing some more symbols
+	  for built-in commands.
+	  renamed bottom_align and top_align respectively to align_bottom
+	  and align_top.
+
+2011-05-07 13:34  dezperado
+
+	* src/Browser.cpp, src/Browser.h, src/CommandConsole.cpp,
+	  src/fim.cpp, src/fim.h: implemented "reverse" and "shuffle"
+	  commands.
+	  enabled the -u/--random switch.
+
+2011-05-07 13:14  dezperado
+
+	* src/CommandConsole-cmd.cpp, src/CommandConsole-help.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/Makefile.am,
+	  src/Var.cpp, src/Var.h, src/fim.cpp, src/fim.h: introducing troff
+	  output with the --dump-reference-help=man switch.
+	  moving help-related dumping methods to a separate file.
+
+2011-05-07 12:16  dezperado
+
+	* TODO, src/fim.cpp: introducing self-documented fim command
+	  switches.
+
+2011-05-07 00:01  dezperado
+
+	* src/Browser.cpp, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/Image.cpp, src/Image.h, src/fim.h: some further fix with
+	  proper type declarations.
+
+2011-05-06 23:14  dezperado
+
+	* src/Viewport.cpp, src/Viewport.h, src/Window.cpp, src/Window.h:
+	  introducing the use of specific types further in classes
+	  Viewport, Window.
+
+2011-05-06 17:51  dezperado
+
+	* src/Image.cpp, src/Image.h, src/Viewport.cpp, src/Viewport.h,
+	  src/Window.cpp, src/fim.h: introducing the use of specific types
+	  in classes Image, Viewport, Window.
+
+2011-05-06 17:06  dezperado
+
+	* src/FramebufferDevice.cpp, src/SDLDevice.cpp, src/SDLDevice.h,
+	  src/fim.h: bugfix: signed values were read where unsigned were
+	  needed.
+	  privatized some members of the SDLDevice class.
+	  fim_coo_t is signed again now (for no particular reason, though).
+
+2011-05-06 16:17  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h, src/CACADevice.cpp,
+	  src/CACADevice.h, src/DebugConsole.cpp, src/DebugConsole.h,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/SDLDevice.cpp, src/SDLDevice.h,
+	  src/fim.h: adopting usage of fim_char_t and fim_err_t in more
+	  methods of DisplayDevice classes.
+
+2011-05-06 14:45  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h, src/CACADevice.cpp,
+	  src/CACADevice.h, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/DebugConsole.cpp, src/DebugConsole.h,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FontServer.cpp, src/FontServer.h,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/fim.h: adopting usage of
+	  fim_char_t and fim_err_t in a number of DisplayDevice classes
+	  methods.
+
+2011-05-06 13:24  dezperado
+
+	* TODO, configure.ac, src/CommandConsole.cpp, src/FbiStuff.cpp,
+	  src/FontServer.cpp, src/FramebufferDevice.cpp, src/SDLDevice.cpp,
+	  src/common.cpp, src/common.h, src/fim.cpp, src/fim.h,
+	  src/lex.lex: introduced fim_perror, and reacting to errno status.
+
+2011-05-03 16:39  dezperado
+
+	* TODO, src/DebugConsole.cpp, src/fimrc: scrolling the console
+	  won't cycle around.
+
+2011-05-03 16:13  dezperado
+
+	* TODO, src/CommandConsole.cpp, src/Namespace.cpp, src/fim.cpp,
+	  src/fim.h, src/interpreter.cpp: introducing and using
+	  FIM_SYM_ENDL and some other symbols.
+
+2011-05-03 15:49  dezperado
+
+	* src/CommandConsole-cmd.cpp, src/DisplayDevice.cpp,
+	  src/Namespace.cpp, src/Viewport.cpp, src/fim.cpp: fix to the
+	  previous commit.
+
+2011-05-03 15:24  dezperado
+
+	* src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/defaultConfiguration.cpp: enforcing the
+	  new member variable name rule in class CommandConsole.
+
+2011-05-03 15:01  dezperado
+
+	* src/Command.h, src/CommandConsole.cpp: enforcing the new member
+	  variable name rule in class Command.
+
+2011-05-03 14:48  dezperado
+
+	* src/Arg.h, src/Cache.cpp, src/Cache.h, src/CommandConsole.cpp:
+	  enforcing the new member variable name rule in class Var.
+	  comments in Cache.cpp/Cache.h.
+
+2011-05-03 14:45  dezperado
+
+	* src/Cache.cpp, src/Cache.h: enforcing the new member variable
+	  name rule in class Cache.
+
+2011-05-03 14:41  dezperado
+
+	* src/DebugConsole.cpp, src/DebugConsole.h,
+	  src/FramebufferDevice.cpp: enforcing the new member variable name
+	  rule in class DebugConsole.
+
+2011-05-03 14:29  dezperado
+
+	* src/SDLDevice.cpp, src/SDLDevice.h: enforcing the new member
+	  variable name rule in class SDLDevice.
+
+2011-05-03 14:18  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h: enforcing the new member
+	  variable name rule in class AADevice.
+
+2011-05-03 14:05  dezperado
+
+	* src/FramebufferDevice.cpp, src/FramebufferDevice.h: enforcing the
+	  new member variable name rule in class FramebufferDevice.
+
+2011-05-03 13:24  dezperado
+
+	* src/AADevice.cpp, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/FbiStuff.cpp, src/FbiStuffLoader.h, src/FontServer.cpp,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/Image.cpp, src/SDLDevice.cpp, src/SDLDevice.h,
+	  src/Viewport.cpp, src/Window.cpp: enforcing the new member
+	  variable name rule in class DisplayDevice and nearby.
+
+2011-05-03 12:44  dezperado
+
+	* src/Window.cpp, src/Window.h: enforcing the new member variable
+	  name rule in class Window.
+
+2011-05-03 12:31  dezperado
+
+	* src/Image.cpp, src/Image.h, src/Viewport.cpp: enforcing the new
+	  member variable name rule in class Image.
+
+2011-05-03 12:10  dezperado
+
+	* src/CommandConsole-cmd.cpp, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/DisplayDevice.cpp, src/FbiStuff.cpp,
+	  src/Image.cpp, src/Viewport.cpp, src/Viewport.h, src/Window.cpp,
+	  src/readline.cpp: enforcing the new member variable name rule in
+	  classes Viewport and partially for CommandConsole.
+
+2011-05-03 11:49  dezperado
+
+	* src/Browser.cpp, src/Browser.h, src/Viewport.cpp, src/fim.cpp:
+	  enforcing the new member variable name rule in class Browser.
+
+2011-05-03 11:29  dezperado
+
+	* src/CommandConsole.cpp, src/CommandConsole.h, src/Namespace.cpp,
+	  src/Namespace.h: enforcing the new member variable name rule in
+	  classes Namespace and partially for CommandConsole.
+
+2011-05-03 11:06  dezperado
+
+	* TODO, src/Browser.cpp, src/CommandConsole.cpp, src/Image.cpp,
+	  src/Namespace.cpp, src/Namespace.h, src/Viewport.cpp,
+	  src/Window.cpp, src/fim.h: the help will now include a variables
+	  list comprehending scoped variables.
+
+2011-05-01 14:40  dezperado
+
+	* src/CommandConsole-cmd.cpp, src/fim.h: an internal variable will
+	  hold the output of each system() execution.
+
+2011-05-01 13:46  dezperado
+
+	* src/DebugConsole.cpp, src/fim.h, src/fimrc: the first logged
+	  output console line is a specific banner, now.
+	  when the output console is active, PageUp/PageDown keys will
+	  scroll it, instead of advancing images (fimrc fix for this).
+
+2011-05-01 11:25  dezperado
+
+	* configure.ac, scripts/maintenance/configure-noscripting.sh,
+	  src/AADevice.cpp, src/AADevice.h, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/DebugConsole.cpp, src/DebugConsole.h,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/SDLDevice.cpp, src/SDLDevice.h: in a
+	  configure switch for enabling/disabling the output console
+	  feature.
+
+2011-05-01 00:46  dezperado
+
+	* src/AADevice.h, src/DisplayDevice.h, src/SDLDevice.cpp,
+	  src/SDLDevice.h: fixing some signatures. did not solve the ctrl-p
+	  problem in sdl.
+
+2011-04-30 22:49  dezperado
+
+	* src/SDLDevice.cpp, src/fim.h: in sdl mode, set up an experimental
+	  functionality of n/b/q keys triggered by left/right/middle mouse
+	  keys.
+
+2011-04-30 21:07  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h, src/DebugConsole.cpp,
+	  src/SDLDevice.cpp, src/SDLDevice.h: bugfix: the sdl/aa get_input
+	  function had a wrong signature, resulting in using the wrong
+	  input function when in sdl/aa mode.
+
+2011-04-30 17:19  dezperado
+
+	* configure.ac, scripts/maintenance/configure-noscripting.sh,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/fim.cpp,
+	  src/fim.h: in a configure switch for disabling scripting
+	  (--disable-scripting).
+	  disabling even more code for this case (still not functional).
+
+2011-04-30 16:50  dezperado
+
+	* configure.ac, src/CommandConsole-cmd.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/fim.h: in a configure switch for
+	  enabling/disabling the mark-and-dump feature.
+
+2011-04-30 16:22  dezperado
+
+	* scripts/maintenance/configure-noscripting.sh,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/fim.h: in a script for the
+	  configure/build of fim with scripting disabled.
+	  fixing codes for segfault in this case.
+	  the code is not fully functional in this way, though.
+
+2011-04-30 11:53  dezperado
+
+	* scripts/maintenance/configure-live.sh,
+	  scripts/maintenance/live-test.sh: two maintenance scripts to
+	  configure, build, and test fim for live systems.
+
+2011-04-30 11:40  dezperado
+
+	* TODO, src/FbiStuffJpeg.cpp, src/fimrc: some ongoing work on exif
+	  support (not active now, though).
+
+2011-04-16 14:02  dezperado
+
+	* src/FramebufferDevice.cpp: fix for the cases when using the
+	  framebuffer and the fix line length value does not coincide with
+	  the length of the current line.
+
+2011-04-16 13:06  dezperado
+
+	* TODO, doc/FIM.TXT, doc/fim.man, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole.cpp, src/DebugConsole.cpp,
+	  src/DummyDisplayDevice.h, src/Image.cpp, src/fim.h: introduced
+	  the FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE and
+	  FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE inner features and dumb
+	  console fixes.
+	  'system' fim command will execute a single popen() invocation,
+	  now.
+	  setting the i:filename inner variable.
+	  documentation fixes and notes.
+
+2011-01-29 02:41  dezperado
+
+	* src/Browser.cpp, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole.cpp, src/DebugConsole.cpp,
+	  src/FbiStuffBit24.cpp, src/FbiStuffDjvu.cpp,
+	  src/FbiStuffMatrixMarket.cpp, src/FbiStuffPpm.cpp,
+	  src/FbiStuffTiff.cpp, src/FramebufferDevice.cpp, src/Image.cpp,
+	  src/Namespace.cpp, src/Namespace.h, src/common.cpp,
+	  src/defaultConfiguration.cpp, src/fim.h, src/fim_stream.cpp:
+	  producing more symbols for handling strings and constants, and
+	  applying throughout the code, again.
+	  introducing some "goto" instead of returning too often.
+	  fixed some duplicate return case.
+	  removed an old, useless array allocation in the tiff driver.
+
+2011-01-28 20:09  dezperado
+
+	* src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/common.cpp, src/defaultConfiguration.cpp, src/fim.h:
+	  producing more symbols for handling strings and constants, and
+	  applying throughout the code.
+
+2011-01-26 18:33  dezperado
+
+	* src/Browser.cpp, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole.cpp, src/Namespace.cpp: using the autocommand
+	  tokens, language keywords, and constants throughout the code.
+
+2011-01-26 18:31  dezperado
+
+	* configure.ac, src/fim.h: configure: fix of a wrong check (for
+	  libexif).
+	  the fim.h now lists tokens, constants, values for many
+	  autocommands, variables, key names, etc.
+
+2010-12-11 14:44  dezperado
+
+	* src/FbiStuffPng.cpp: using png_set_expand_gray_1_2_4_to_8 if
+	  PNG_LIBPNG_VER>=10209, instead of png_set_gray_1_2_4_to_8.
+	  thanks to mark g. for pointing our the related compilation
+	  problem.
+
+2010-11-01 12:57  dezperado
+
+	* src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/Image.cpp, src/Makefile.am, src/fimrc: bugfix to the previous
+	  possible NULL pointer in Image.cpp.
+	  moved the default fimrc inclusion to a new file, for faster
+	  build-and-fix cycles.
+	  setting the third field of alias declarations (help string) in
+	  the fimrc.
+
+2010-10-31 17:24  dezperado
+
+	* src/FbiStuffJpeg.cpp, src/FbiStuffLoader.cpp, src/Image.cpp,
+	  src/fim.h: now on, the i:comment variable will get set if a
+	  comment field is found in an image file.
+
+2010-10-30 14:26  dezperado
+
+	* configure.ac, src/FbiStuffJpeg.cpp: detecting libexif in the
+	  configure, and waking up some exif-reading routine.
+
+2010-10-07 16:18  dezperado
+
+	* TODO, src/CommandConsole-cmd.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h: fixed the bug/flaw noticed by Jakub Wilk.
+	  bug description: "fim shows "H - Help" in the status line.
+	  However, as far as I can see, the H key is not bound to
+	  anything.". in Debian, nkown as Bug#599337.
+	  removed a smiley from a help message.
+
+2010-01-31 13:07  dezperado
+
+	* src/Command.h, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h, src/SDLDevice.cpp,
+	  src/SDLDevice.h, src/fim.h, src/readline.cpp: applying the use of
+	  the typedef keyword in place of int's, whenever possible.
+
+2010-01-21 02:11  dezperado
+
+	* src/DebugConsole.cpp: George Danchev's patch for
+	  http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=564233.
+	  damn strchr.
+
+2009-12-21 17:26  dezperado
+
+	* configure.ac, src/CommandConsole.cpp, src/FontServer.cpp,
+	  src/fim.h: added a configure switch for
+	  --enable-scan-consolefonts.
+	  fixed a typo in FontServer.cpp from the previous commit.
+	  s/_POSIX_PATH_MAX/FIM_PATH_MAX
+
+2009-12-21 17:10  dezperado
+
+	* TODO, configure.ac, src/Browser.cpp, src/Browser.h,
+	  src/FontServer.cpp, src/common.cpp, src/common.h, src/fim.h: in a
+	  mechanism for consolefont search.
+
+2009-12-13 00:03  dezperado
+
+	* configure.ac, debian/control, debian/fim.substvars,
+	  debian/substvars, src/FbiStuff.cpp, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBit24.cpp, src/FbiStuffBmp.cpp, src/FbiStuffDjvu.cpp,
+	  src/FbiStuffGif.cpp, src/FbiStuffJpeg.cpp, src/FbiStuffPdf.cpp,
+	  src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp, src/FbiStuffPs.cpp,
+	  src/FbiStuffTiff.cpp: commented static initializers, as they are
+	  an invalid construct for -pedantic switch, with g++-4.4.
+
+2009-12-09 00:19  dezperado
+
+	* src/readline.cpp: when pressing TAB after typing something at the
+	  prompt, the console will print some suggestions.
+
+2009-12-08 23:45  dezperado
+
+	* src/CommandConsole-cmd.cpp, src/CommandConsole.cpp,
+	  src/DebugConsole.cpp, src/FbiStuff.cpp, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBit24.cpp, src/FbiStuffBmp.cpp, src/FbiStuffDjvu.cpp,
+	  src/FbiStuffGif.cpp, src/FbiStuffJpeg.cpp,
+	  src/FbiStuffLoader.cpp, src/FbiStuffMatrixMarket.cpp,
+	  src/FbiStuffPdf.cpp, src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp,
+	  src/FbiStuffPs.cpp, src/FbiStuffTiff.cpp, src/FontServer.cpp,
+	  src/FramebufferDevice.cpp, src/common.cpp, src/fim.cpp,
+	  src/fim.h, src/lex.lex, src/readline.cpp, src/string.h,
+	  src/yacc.ypp: s/calloc/fim_calloc
+	  s/malloc/fim_malloc
+	  s/free/fim_free
+	  some day we may decide to wrap more around these symbols.
+
+2009-12-08 23:05  dezperado
+
+	* BUGS, INSTALL, TODO, src/DebugConsole.cpp, src/DebugConsole.h,
+	  src/FbiStuffMatrixMarket.cpp, src/SDLDevice.cpp, src/fimgs: fimgs
+	  will get files with https:// and ssh: schema.
+	  a compiler happiness fix.
+	  mentioned a xfig bug (not impacting on fim :-), and TODO.
+
+2009-10-15 19:34  dezperado
+
+	* src/FramebufferDevice.cpp: typo
+
+2009-10-15 17:32  dezperado
+
+	* BUGS, TODO, doc/fim.man, src/FramebufferDevice.cpp: fixed what it
+	  seemed a bad off-boundaries array write.
+	  doc fixes.
+	  16 bpp blue bug reported.
+
+2009-10-14 21:05  dezperado
+
+	* BUGS, Makefile.am, README, TODO, config.h.in, configure.ac,
+	  doc/FIM.TXT, doc/fim.man, scripts/tests/version.sh, src/fim.cpp:
+	  a new (hopefully temporary) testing script.
+	  supported input file formats dumped with --version.
+	  doc updates and fixes.
+	  man page fixes.
+	  removed config.h.in from svn.
+
+2009-10-10 23:09  dezperado
+
+	* src/FramebufferDevice.cpp: minipatch for systems with no
+	  PAGE_MASK in standard headers.
+
+2009-10-10 11:57  dezperado
+
+	* TODO, config.h.in, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole.cpp, src/Makefile.am: split a piece of
+	  CommandConsole.cpp - this file is way too big for compilation on
+	  PDA's.
+
+2009-10-10 09:24  dezperado
+
+	* BUGS, src/SDLDevice.cpp: lame programming error in the previous
+	  commit
+
+2009-10-09 00:17  dezperado
+
+	* BUGS, src/SDLDevice.cpp: 8,16,24,32 bit support for SDL driver.
+
+2009-10-08 17:53  dezperado
+
+	* BUGS, THANKS, src/CommandConsole.cpp, src/DisplayDevice.cpp,
+	  src/FontServer.cpp, src/FramebufferDevice.cpp, src/fim.cpp,
+	  src/fim.h: in a THANKS file (finally!).
+	  small fixes.
+
+2009-10-07 15:08  dezperado
+
+	* configure.ac, src/Image.cpp, src/Image.h, src/fim.h: configure
+	  fix.
+	  introducing some typedef's.
+
+2009-10-06 07:11  dezperado
+
+	* NEWS, TODO, src/Browser.cpp, src/Browser.h,
+	  src/CommandConsole.cpp, src/Image.cpp, src/Image.h,
+	  src/Viewport.cpp, src/fim.h, src/fimrc: introduced the
+	  experimental 'negate' feature, to view ebooks with less monitor
+	  power (white on black)
+
+2009-09-29 17:42  dezperado
+
+	* TODO, src/fimgs: the scriptfimgs needs some adjustment.
+
+2009-08-30 10:15  dezperado
+
+	* doc/fim.man, src/CommandConsole.cpp, src/DisplayDevice.cpp,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h, src/fim.cpp,
+	  src/fim.h: in a -S option for sanity-check.
+
+2009-08-20 14:18  dezperado
+
+	* TODO, config.h.in, configure.ac, src/CommandConsole.cpp,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/FbiStuffMatrixMarket.cpp, src/fim.cpp: in a minibenchmark.
+	  configure fixes.
+	  notes.
+	  shorter svn revision info.
+
+2009-06-13 18:51  dezperado
+
+	* BUGS, TODO, debian/changelog, debian/menu.ex, src/AADevice.cpp,
+	  src/AADevice.h, src/readline.cpp: this version is currently under
+	  review at http://ftp-master.debian.org/
+
+2009-05-31 21:07  dezperado
+
+	* TODO, scripts/maintenance/mkfimbuildbots.sh,
+	  src/CommandConsole.cpp, src/FbiStuffMatrixMarket.cpp,
+	  src/string.h, src/testdir/test9.in: fixing borderline cases.
+	  unalias "-a" added.
+	  safe NULL string construction.
+
+2009-05-30 21:55  dezperado
+
+	* scripts/maintenance/buildbot-master.cfg.sample,
+	  scripts/maintenance/mkfimbuildbots.sh: in a script for buildbot
+	  slaves creation on a compile farm.
+	  in a sample buildbot master config file.
+
+2009-05-30 21:20  dezperado
+
+	* TODO, configure.ac, src/FbiStuffMatrixMarket.cpp,
+	  src/Makefile.am: it is possible to view matrix market files
+	  (experimentally)
+
+2009-05-27 17:30  dezperado
+
+	* TODO, src/testdir/Makefile: the tests shall perform under the
+	  dumb interface now.
+
+2009-05-25 00:13  dezperado
+
+	* TODO, doc/FIM.TXT, src/AADevice.cpp, src/FbiStuff.cpp,
+	  src/Viewport.cpp, src/testdir/test12.in, src/testdir/test14.in,
+	  src/testdir/test7.in, src/testdir/test7.ok: fixing fim integrity
+	  testing with aalib and dumb (for compile farms).
+
+2009-05-20 22:04  dezperado
+
+	* TODO, config.h.in, configure.ac, doc/fim.man, src/Browser.cpp,
+	  src/CommandConsole.cpp, src/FbiStuff.cpp, src/FbiStuffJpeg.cpp,
+	  src/Image.cpp, src/Image.h, src/common.cpp, src/common.h,
+	  src/fim.cpp, src/fim.h, src/fimrc, src/lex.lex: fim will read
+	  block devices, too.
+	  corrected some preprocessor checks.
+	  in FIM_VID_OPEN_OFFSET and FIM_VID_SEEK_MAGIC variables for
+	  seeking files prior to probing/opening them.
+	  hex interpretation in strings now.
+	  --offset option in.
+	  fixes in the jpeg loader.
+	  fim_atof did not manage negative numbers. now it does.
+	  some unused functions in.
+
+2009-04-28 22:15  dezperado
+
+	* Makefile.am, var/Makefile: makefile fixes for site and info
+	  uploading.
+
+2009-04-28 21:28  dezperado
+
+	* configure.ac, doc/Makefile.am, src/FbiStuffFbtools.cpp,
+	  src/FbiStuffList.h, src/FbiStuffLoader.cpp, src/Var.cpp,
+	  src/string.cpp: fixes in the configure script.
+	  fixes in the code, for portability.
+
+2009-04-26 14:34  dezperado
+
+	* TODO, config.h.in, configure.ac, src/FontServer.cpp,
+	  src/Makefile.am: cleaning up the Makefile.am file.
+	  added some console fonts for ubuntu 10.
+
+2009-04-19 11:22  dezperado
+
+	* Makefile.am, README, TODO, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/Makefile.am, src/fim.cpp,
+	  src/testdir/Makefile, src/testdir/test15.in,
+	  src/testdir/test15.ok, var/Makefile,
+	  var/www/fim-shot-aa-mini.png, var/www/fim-shot-aa.png,
+	  var/www/fim-shot-fb-mini.png, var/www/fim-shot-fb.png: in four
+	  web page screenshots.
+	  in a recording test stub.
+	  many small fixes.
+
+2009-04-18 21:09  dezperado
+
+	* src/Command.h, src/CommandConsole.cpp, src/Makefile.am,
+	  src/fim.h, src/fimrc, src/testdir/Makefile,
+	  src/testdir/test14.in, src/testdir/test14.ok: two fim internals
+	  debugging variables in.
+	  a new test in.
+	  fixing console displaying control.
+
+2009-04-18 15:16  dezperado
+
+	* TODO, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h, src/fim.cpp,
+	  src/fim.h: almost nothing
+
+2009-04-17 16:22  dezperado
+
+	* configure.ac: sam's configure suggestions
+
+2009-04-12 20:38  dezperado
+
+	* TODO, config.h.in, configure.ac, src/Browser.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/FbiStuffFbtools.cpp,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/Makefile.am, src/common.cpp, src/common.h, src/fim.cpp,
+	  src/fim.h, src/yacc.ypp: tweaks to build the beast on darwin and
+	  bsd
+
+2009-04-04 13:33  dezperado
+
+	* TODO, src/CommandConsole.cpp: fix with dummy device
+
+2009-04-04 09:29  dezperado
+
+	* Makefile.am, TODO, configure.ac, src/Makefile.am, src/testsuite,
+	  src/testsuite/config, src/testsuite/config/unix.exp,
+	  src/testsuite/fim.test, src/testsuite/fim.test/fim.exp: in stubs
+	  for dejagnu
+
+2009-04-03 22:26  dezperado
+
+	* BUGS, README, TODO, src/AADevice.cpp, src/AADevice.h,
+	  src/DisplayDevice.h, src/DummyDisplayDevice.h,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/readline.cpp: improved
+	  the aalib input
+
+2009-04-01 11:37  dezperado
+
+	* src/AADevice.cpp, src/CommandConsole.cpp: fixes.
+
+2009-04-01 07:58  dezperado
+
+	* TODO, src/AADevice.cpp, src/AADevice.h, src/CommandConsole.cpp,
+	  src/readline.cpp: putting in fim aa native input, (although aa
+	  interface is somewhat poor compared to sdl)
+
+2009-03-31 21:39  dezperado
+
+	* src/Browser.cpp, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/FbiStuffFbtools.cpp, src/FramebufferDevice.cpp, src/Var.h,
+	  src/common.cpp, src/string.h, src/testdir/Makefile,
+	  src/testdir/test12.in, src/testdir/test12.ok,
+	  src/testdir/test13.in, src/testdir/test13.ok: asymmetric scaling
+	  test in.
+	  browser test in.
+	  enforcing "C" locale now (so, preventing locale-related bugs).
+	  failed device initializations won't block the terminal echo
+	  state.
+
+2009-03-29 17:32  dezperado
+
+	* BUGS, src/Cache.cpp, src/Cache.h, src/CommandConsole.cpp,
+	  src/Window.cpp: finalization fixes: the tests perform with no
+	  memory leak at all.
+
+2009-03-29 15:36  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h, src/CommandConsole.cpp,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/FramebufferDevice.cpp, src/SDLDevice.cpp, src/fim.cpp,
+	  src/string.cpp: got rid of some more small memory leaks.
+
+2009-03-29 13:48  dezperado
+
+	* BUGS, TODO, src/AADevice.cpp, src/AADevice.h,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/FbiStuffJpeg.cpp, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/Var.h, src/Window.cpp, src/Window.h,
+	  src/fim.cpp, src/interpreter.cpp, src/lex.h,
+	  src/testdir/Makefile, src/yacc.ypp: fixed memory leak in legacy
+	  fbi code (font handling).
+	  fixed memory leak in parser code.
+	  fixing other small memory leaks (initalization/finalization
+	  related)
+
+2009-03-28 15:31  dezperado
+
+	* src/Browser.cpp, src/CommandConsole.h, src/FramebufferDevice.cpp,
+	  src/Namespace.cpp, src/Namespace.h, src/Var.h, src/Viewport.cpp,
+	  src/common.cpp, src/common.h, src/fim.cpp, src/interpreter.cpp,
+	  src/lex.lex, src/testdir/Makefile, src/testdir/test10.in,
+	  src/testdir/test10.ok, src/testdir/test11.in,
+	  src/testdir/test11.ok, src/testdir/test2.in,
+	  src/testdir/test2.ok, src/testdir/test3.in, src/testdir/test3.ok,
+	  src/testdir/test4.in, src/testdir/test7.in, src/testdir/test9.in,
+	  src/testdir/test9.ok: debugging the guts of fim's language.
+	  implemented the gcd and babylonian sqrt as test programs.
+	  replaced atof with a locale clean function.
+
+2009-03-26 21:48  dezperado
+
+	* src/CommandConsole.cpp, src/CommandConsole.h, src/Namespace.cpp,
+	  src/Namespace.h, src/Var.h, src/interpreter.cpp,
+	  src/testdir/Makefile, src/testdir/test9.in, src/testdir/test9.ok:
+	  debugging the language core with the radioactive rabbit : IT
+	  WORKS!
+
+2009-03-25 22:09  dezperado
+
+	* README, src/testdir/Makefile, src/testdir/test8.in,
+	  src/testdir/test8.ok: in a new image viewer info and a new test
+	  script.
+
+2009-03-18 10:51  dezperado
+
+	* Makefile.am, README, TODO, src/testdir/Makefile,
+	  src/testdir/test8.in, src/testdir/test8.ok: in a new test for
+	  file browsing.
+
+2009-03-18 00:24  dezperado
+
+	* src/Image.cpp, src/testdir/test7.in, src/testdir/test7.ok: in a
+	  new small test. tried pork and oink. urgh!
+
+2009-03-06 00:12  dezperado
+
+	* README, TODO, config.h.in, configure.ac, debian/README.Debian,
+	  debian/control, debian/copyright, debian/fim.doc-base.EX,
+	  debian/postinst.ex, debian/postrm.ex, debian/preinst.ex,
+	  debian/prerm.ex, debian/watch, debian/watch.ex,
+	  src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp,
+	  src/FbiStuffDjvu.cpp, src/FbiStuffPdf.cpp, src/FbiStuffPs.cpp,
+	  src/SDLDevice.cpp, src/fim.cpp: debinizing fixes.
+
+2009-02-27 20:54  dezperado
+
+	* debian/.control.swo, debian/.rules.swo: ups
+
+2009-02-27 20:53  dezperado
+
+	* TODO, debian, debian/.control.swo, debian/.rules.swo,
+	  debian/README.Debian, debian/changelog, debian/compat,
+	  debian/control, debian/copyright, debian/dirs, debian/docs,
+	  debian/files, debian/fim.doc-base.EX, debian/fim.substvars,
+	  debian/menu.ex, debian/postinst.ex, debian/postrm.ex,
+	  debian/preinst.ex, debian/prerm.ex, debian/rules,
+	  debian/substvars, debian/watch.ex: debianizing
+
+2009-02-26 21:23  dezperado
+
+	* TODO, configure.ac, scripts/maintenance/cron-build.sh.in,
+	  scripts/maintenance/cron-rsync.sh.in,
+	  scripts/maintenance/cron-svndump.pl.in,
+	  scripts/maintenance/remote-build.sh.in, src/CommandConsole.cpp,
+	  src/fim.h, src/testdir/Makefile: in some maintenance backup
+	  scripts.
+	  in two new variables and a failing test.
+
+2009-02-25 02:47  dezperado
+
+	* Makefile.am, VERSION, configure.ac, doc/Makefile.am, doc/fim.man,
+	  doc/fimgs.man, src/fim.cpp: debianizing fim through lintian.
+
+2009-02-22 23:12  dezperado
+
+	* src/FontServer.cpp, src/FramebufferDevice.cpp: fixed legacy fbi
+	  missing malloc checks
+
+2009-02-22 22:56  dezperado
+
+	* TODO, configure.ac: pentium4 optimization at configure time.
+
+2009-02-22 21:40  dezperado
+
+	* BUGS, src/Browser.cpp, var/index.html.in: solved the FILE NONFILE
+	  prev loop bug.
+
+2009-02-21 23:39  dezperado
+
+	* BUGS, scripts/maintenance/configure-brute-check.sh,
+	  src/Browser.h, src/CommandConsole.cpp, src/FbiStuff.cpp,
+	  src/FbiStuffBit1.cpp, src/FbiStuffPng.cpp,
+	  src/FramebufferDevice.cpp, src/Image.cpp, src/Makefile.am,
+	  src/Var.cpp, src/Var.h, src/defaultConfiguration.cpp,
+	  src/fim.cpp, src/fim.h, src/interpreter.cpp: fixes for pedantic
+	  and obscure ./configure setups compilation.
+	  enriched the --dump-reference-help output with a variables
+	  description..
+
+2009-02-21 14:59  dezperado
+
+	* scripts/Makefile.am: typo
+
+2009-02-21 14:56  dezperado
+
+	* BUGS, README, configure.ac, doc/FIM.TXT, scripts/Makefile.am,
+	  scripts/maintenance/configure-brute-check.sh, src/Browser.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DisplayDevice.cpp, src/FbiStuff.cpp, src/FbiStuffFbtools.cpp,
+	  src/Namespace.cpp, src/Viewport.cpp, src/common.cpp,
+	  src/common.h, src/fim.cpp: in a script to brute-check the
+	  ./configure script.
+	  documented.
+	  fied nonwindowed fim for compilation.
+
+2009-02-21 01:15  dezperado
+
+	* BUGS, Makefile.am, NEWS, README, TODO, scripts/Makefile.am,
+	  scripts/utilities/screenshot.sh, src/AADevice.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/FbiStuff.cpp,
+	  src/FbiStuff.h, src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp,
+	  src/FontServer.cpp, src/Makefile.am, src/Var.h, src/fim.cpp,
+	  src/fim.h, var/Makefile, var/index.html.in, var/www/fim.css:
+	  started working on the --dump-reference-help switch.
+	  replaced popen with execlp calls when opening files (solves a fbi
+	  vuln.).
+	  fixed typos in macro names.
+	  replaced stat calls with fseek.
+	  fixed aa driver wrong textual console line width.
+	  introduced a shell script for coordinated reference fim
+	  screenshots.
+	  restyled the fim web page.
+
+2009-02-18 00:42  dezperado
+
+	* var/Makefile, var/index.html.in, var/www, var/www/fim.css:
+	  pedantry
+
+2009-02-18 00:14  dezperado
+
+	* ChangeLog, Makefile.am, NEWS, TODO, VERSION, distros/Makefile.am,
+	  doc/Makefile.am, doc/fim.man, src/FbiStuff.cpp, var,
+	  var/Makefile, var/index.html.in: changelog mangling, fim website
+	  generation and update machinery.
+
+2009-02-15 17:53  dezperado
+
+	* src/Browser.cpp, src/FbiStuff.cpp, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBit24.cpp, src/FbiStuffBmp.cpp, src/FbiStuffGif.cpp,
+	  src/FbiStuffJpeg.cpp, src/FbiStuffLoader.cpp,
+	  src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp, src/FbiStuffTiff.cpp,
+	  src/FontServer.cpp, src/FramebufferDevice.cpp: A safing malloc
+	  and calloc's raid in FbiStuff*pp.
+
+2009-02-15 16:56  dezperado
+
+	* BUGS, TODO, media/multipage, media/multipage/Makefile,
+	  media/multipage/sample.tex, src/Browser.cpp, src/Cache.cpp,
+	  src/CommandConsole.cpp, src/DisplayDevice.cpp,
+	  src/FbiStuffPpm.cpp, src/Image.cpp, src/Image.h, src/fim.cpp,
+	  src/string.cpp, src/string.h: fixed some 64 bit related issues.
+	  added multipage test documents.
+	  new bug identified (unsolved).
+	  solved a multipage browsing related bug.
+
+2009-02-13 21:07  dezperado
+
+	* src/Browser.cpp, src/Cache.cpp, src/CommandConsole.cpp,
+	  src/FramebufferDevice.cpp, src/Image.cpp, src/Viewport.cpp,
+	  src/Window.cpp, src/defaultConfiguration.cpp, src/fim.cpp,
+	  src/fim.h: massive replace of strings with preprocessor symbols
+	  for fim language variables identifiers.
+	  soon documentation for each variable will be declared along with
+	  its symbol definition.
+
+2009-02-13 20:16  dezperado
+
+	* src/CommandConsole.cpp, src/common.cpp: fixes
+
+2009-02-13 00:52  dezperado
+
+	* INSTALL, INSTALL.TXT, Makefile.am, README, TODO, config.h.in,
+	  configure.ac, doc/fim.man,
+	  scripts/maintenance/remote-build.sh.in, src/AADevice.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DisplayDevice.h, src/FbiStuff.cpp, src/FbiStuffGif.cpp,
+	  src/FontServer.cpp, src/FontServer.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/common.cpp, src/common.h,
+	  src/fim.cpp, src/fim.h: Cleaned up some fim vars access.
+	  introduced fim_getenv, and constantized some dangerous char*
+	  legacy pointers.
+	  introduced the simple remote-build.sh script.
+	  the non standard INSTALL file was replaced by the GNU INSTALL.
+
 2009-01-21 12:38  dezperado
 
-	* manhtml will not be absolutely necessary to build docs..
+	* distros/gentoo/media-gfx/fim/fim-0.3-beta.ebuild,
+	  doc/Makefile.am: manhtml will not be absolutely necessary to
+	  build docs..
 
 2009-01-14 14:39  dezperado
 
-	* swapped PageDown and PageUp key codes for the framebuffer/console
-	  driver.
+	* TODO, src/defaultConfiguration.cpp: swapped PageDown and PageUp
+	  key codes for the framebuffer/console driver.
 
 2009-01-10 11:13  dezperado
 
-	* Introduced vim-like language testing.
+	* Makefile.am, README, TODO, configure.ac,
+	  scripts/tests/sanity.fim, src/AADevice.h, src/Arg.h,
+	  src/Browser.cpp, src/Browser.h, src/CACADevice.h, src/Cache.h,
+	  src/Command.h, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/DebugConsole.h, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FbiStuff.cpp, src/FbiStuff.h,
+	  src/FbiStuffFbtools.cpp, src/FbiStuffFbtools.h,
+	  src/FbiStuffList.h, src/FbiStuffLoader.h, src/FbiStuffPdf.cpp,
+	  src/FontServer.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/Image.cpp, src/Image.h,
+	  src/Namespace.h, src/SDLDevice.cpp, src/SDLDevice.h, src/Var.h,
+	  src/Viewport.h, src/Window.h, src/common.h, src/fim.cpp,
+	  src/fim.h, src/fim_stream.h, src/fimrc, src/string.h,
+	  src/testdir, src/testdir/Makefile, src/testdir/test1.in,
+	  src/testdir/test1.ok, src/testdir/test2.in, src/testdir/test2.ok,
+	  src/testdir/test3.in, src/testdir/test3.ok, src/testdir/test4.in,
+	  src/testdir/test4.ok, src/testdir/test5.in, src/testdir/test5.ok,
+	  src/testdir/test6.in, src/testdir/test6.ok: Introduced vim-like
+	  language testing.
 	  Renamed a bunch of preprocessor symbols.
 
 2009-01-04 00:11  dezperado
 
-	* A little smarter multipage document browsing.
+	* TODO, src/Browser.cpp, src/Browser.h, src/CommandConsole.cpp,
+	  src/FbiStuffPdf.cpp, src/Image.cpp, src/Image.h, src/fimrc: A
+	  little smarter multipage document browsing.
 	  Fixed rgb swap in pdf renderer.
 
 2009-01-03 23:42  dezperado
 
-	* Adapted the --binary option switch to let the user specify 1
+	* doc/fim.man, src/FbiStuff.cpp, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBit24.cpp, src/Makefile.am, src/fim.cpp, src/fim.h:
+	  Adapted the --binary option switch to let the user specify 1
 	  pixel per bit binary file display.
 
 2009-01-03 14:45  dezperado
 
-	* Added the -b (--binary) option to view as a 24 bpp pixelmap any
+	* TODO, doc/fim.man, src/Browser.cpp, src/FbiStuff.cpp,
+	  src/FbiStuffBit24.cpp, src/Makefile.am, src/fim.cpp, src/fim.h:
+	  Added the -b (--binary) option to view as a 24 bpp pixelmap any
 	  input file.
 	  Trimmed two extra _ in Browser.cpp.
 
 2009-01-03 13:13  dezperado
 
-	* images filenames failing prefetching wil be removed from the
-	  image list now. the prefetch is autocommand-capable
+	* src/Browser.cpp, src/Cache.cpp: images filenames failing
+	  prefetching wil be removed from the image list now. the prefetch
+	  is autocommand-capable
 
 2009-01-01 16:34  dezperado
 
-	* introduced a hack to make work arrow keys in the sdl/readline
-	  driver.
+	* INSTALL, README, config.h.in, configure.ac, src/FbiStuffDjvu.cpp,
+	  src/FbiStuffPdf.cpp, src/FbiStuffPs.cpp, src/SDLDevice.cpp,
+	  src/common.cpp, src/fim.h, src/readline.cpp: introduced a hack to
+	  make work arrow keys in the sdl/readline driver.
 	  doc fixes.
 
 2008-12-30 17:10  dezperado
 
-	* docs update
+	* NEWS, README, TODO: docs update
 
 2008-12-30 16:57  dezperado
 
-	* inhibited stdin multipage document reading (for libraries
+	* src/FbiStuffDjvu.cpp, src/FbiStuffPdf.cpp, src/FbiStuffPs.cpp:
+	  inhibited stdin multipage document reading (for libraries
 	  intrinsic inabilities to handle this, and the need of a
 	  workaround).
 
 2008-12-30 16:37  dezperado
 
-	* fixes for cache behaviour and prefetching.
+	* src/Browser.cpp, src/Browser.h, src/Cache.cpp, src/Cache.h,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/Image.cpp,
+	  src/Viewport.cpp, src/fim.cpp, src/fim.h, src/fimrc: fixes for
+	  cache behaviour and prefetching.
 
 2008-12-30 01:47  dezperado
 
-	* pushing code cleanup and fixes : trimmed out some troublesome
-	  extern declarators (not all, though).
+	* TODO, src/AADevice.h, src/Arg.cpp, src/Browser.cpp,
+	  src/Browser.h, src/Cache.cpp, src/Cache.h, src/Command.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/DebugConsole.h, src/DisplayDevice.cpp,
+	  src/DisplayDevice.h, src/DummyDisplayDevice.h, src/FbiStuff.cpp,
+	  src/FbiStuffTiff.cpp, src/FontServer.cpp,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/Image.cpp, src/Image.h, src/SDLDevice.cpp, src/SDLDevice.h,
+	  src/Viewport.cpp, src/Viewport.h, src/Window.cpp,
+	  src/defaultConfiguration.cpp, src/fim.cpp, src/fim.h,
+	  src/string.cpp: pushing code cleanup and fixes : trimmed out some
+	  troublesome extern declarators (not all, though).
 
 2008-12-28 16:58  dezperado
 
-	* housekeeping, -pedantic fixes.
+	* TODO, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/DisplayDevice.cpp, src/FontServer.cpp,
+	  src/FontServer.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/SDLDevice.cpp, src/fim.h:
+	  housekeeping, -pedantic fixes.
 
 2008-12-27 15:01  dezperado
 
-	* now, with --disable-framebuffer fim will work without framebuffer
+	* TODO, config.h.in, configure.ac, src/AADevice.h,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FbiStuff.cpp,
+	  src/FbiStuffFbtools.cpp, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/Image.cpp, src/Image.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/Viewport.cpp,
+	  src/Window.cpp, src/fim.cpp, src/fim.h, src/readline.cpp: now,
+	  with --disable-framebuffer fim will work without framebuffer
 	  support.
 
 2008-12-27 00:07  dezperado
 
-	* wiser way of rendering the console under SDL.
+	* src/CommandConsole.cpp, src/DebugConsole.cpp,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h, src/Image.cpp,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/common.cpp, src/common.h:
+	  wiser way of rendering the console under SDL.
 	  .fim_history mode will be set to 0600 on creation.
 
 2008-12-25 18:10  dezperado
 
-	* introduced next-page and prev-page commands, to view multipage
-	  djvu, pdf, ps documents.
+	* src/Browser.cpp, src/Browser.h, src/CommandConsole.cpp,
+	  src/FbiStuff.cpp, src/FbiStuff.h, src/FbiStuffDjvu.cpp,
+	  src/FbiStuffPdf.cpp, src/FbiStuffPs.cpp, src/Image.cpp,
+	  src/Image.h: introduced next-page and prev-page commands, to view
+	  multipage djvu, pdf, ps documents.
 
 2008-12-25 15:30  dezperado
 
-	* correctness fixes for the djvu, pdf, ps prototypal drivers.
+	* configure.ac, src/FbiStuffDjvu.cpp, src/FbiStuffPdf.cpp,
+	  src/FbiStuffPs.cpp: correctness fixes for the djvu, pdf, ps
+	  prototypal drivers.
 
 2008-12-25 12:17  dezperado
 
-	* Implemented a first form of PS file format support
-	  (single-paged).
+	* INSTALL, config.h.in, configure.ac, src/FbiStuff.cpp,
+	  src/FbiStuffPs.cpp: Implemented a first form of PS file format
+	  support (single-paged).
 
 2008-12-24 18:23  dezperado
 
-	* Implemented a first form of PDF file format support
-	  (single-paged).
+	* config.h.in, configure.ac, src/FbiStuff.cpp, src/FbiStuffPdf.cpp,
+	  src/Makefile.am: Implemented a first form of PDF file format
+	  support (single-paged).
 
 2008-12-24 12:04  dezperado
 
-	* doc comments
+	* INSTALL, README, TODO: doc comments
 
 2008-12-24 00:55  dezperado
 
-	* forgot this stuff in the last commit..
+	* config.h.in, configure.ac: forgot this stuff in the last commit..
 
 2008-12-24 00:55  dezperado
 
-	* Implemented a first form of Dejavu file format support
-	  (single-paged).
+	* src/FbiStuffDjvu.cpp, src/Makefile.am: Implemented a first form
+	  of Dejavu file format support (single-paged).
 
 2008-12-21 21:58  dezperado
 
-	* ...bashism!
+	* scripts/maintenance/cron-build.sh.in: ...bashism!
 
 2008-12-21 21:39  dezperado
 
-	* updated the crontab export-build-and-mail script
+	* scripts/maintenance/cron-build.sh.in: updated the crontab
+	  export-build-and-mail script
 
 2008-12-21 18:13  dezperado
 
-	* fixed the console echo problems.
+	* TODO, src/AADevice.cpp, src/AADevice.h, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/DisplayDevice.cpp,
+	  src/FramebufferDevice.cpp, src/SDLDevice.cpp, src/fimrc: fixed
+	  the console echo problems.
 	  implemented saving/loading of a ~/.fim_history file.
 
 2008-12-21 17:02  dezperado
 
-	* s/printf/FIM_FBI_PRINTF/g in ex fbi stuff.
+	* src/AADevice.cpp, src/AADevice.h, src/FbiStuff.cpp,
+	  src/FbiStuffBmp.cpp, src/FbiStuffFbtools.cpp,
+	  src/FbiStuffGif.cpp, src/FbiStuffJpeg.cpp, src/FbiStuffPng.cpp,
+	  src/FbiStuffTiff.cpp, src/fim.h: s/printf/FIM_FBI_PRINTF/g in ex
+	  fbi stuff.
 
 2008-12-21 16:40  dezperado
 
-	* no more need for g_fim_no_framebuffer global variable.
+	* src/AADevice.cpp, src/AADevice.h, src/CommandConsole.cpp,
+	  src/DisplayDevice.cpp, src/common.cpp, src/fim.cpp, src/fim.h,
+	  src/fim_stream.cpp: no more need for g_fim_no_framebuffer global
+	  variable.
 
 2008-12-21 15:43  dezperado
 
-	* set up the console for the aa driver, too. sadly, there are
-	  problems with aalib console under screen.
+	* NEWS, src/AADevice.cpp, src/AADevice.h, src/DebugConsole.cpp,
+	  src/DisplayDevice.h, src/DummyDisplayDevice.h,
+	  src/FramebufferDevice.h, src/SDLDevice.cpp, src/SDLDevice.h,
+	  src/fimrc: set up the console for the aa driver, too. sadly,
+	  there are problems with aalib console under screen.
 
 2008-12-21 13:40  dezperado
 
-	* the console is capable of scrolling, now.
+	* src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/DebugConsole.h, src/DisplayDevice.cpp,
+	  src/fimrc: the console is capable of scrolling, now.
 
 2008-12-21 11:10  dezperado
 
-	* typos in SDLDevice.cpp. retouched the loop prevention stack
-	  machinery. improved the fimrc.
+	* src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DisplayDevice.cpp, src/SDLDevice.cpp, src/fimrc: typos in
+	  SDLDevice.cpp. retouched the loop prevention stack machinery.
+	  improved the fimrc.
 
 2008-12-21 09:20  dezperado
 
-	* switched to size_t where needed; wall and pedantic fixes;
+	* TODO, src/Browser.cpp, src/CommandConsole.cpp, src/FbiStuff.cpp,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/SDLDevice.cpp, src/fim.cpp, src/interpreter.cpp,
+	  src/string.cpp, src/string.h: switched to size_t where needed;
+	  wall and pedantic fixes;
 
 2008-12-20 18:25  dezperado
 
-	* workaround for a stdin file list reading bug (i did not understnd
-	  why, sincerely).
+	* src/fim.cpp: workaround for a stdin file list reading bug (i did
+	  not understnd why, sincerely).
 
 2008-12-18 01:18  dezperado
 
-	* Added the autocmd_trace_stack debug method; optimized the default
-	  fimrc ; documented the system integration of fim.
+	* doc/FIM.TXT, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/fimrc: Added the autocmd_trace_stack debug method; optimized
+	  the default fimrc ; documented the system integration of fim.
 
 2008-11-10 00:01  dezperado
 
-	* Added the 'stdout' fim command.
+	* scripts/Makefile.am, scripts/rc/fimrc.lazy,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/FramebufferDevice.cpp, src/Image.cpp, src/Image.h,
+	  src/Viewport.cpp, src/Viewport.h, src/fim.cpp, src/fim.h,
+	  src/fimrc: Added the 'stdout' fim command.
 	  Introduced a 'lazy' fimrc example configuration file.
 	  Now the fimrc's are dist-archived, too.
 
 2008-11-09 19:52  dezperado
 
-	* cache is back into the game
+	* configure.ac, src/Browser.cpp, src/Browser.h, src/Cache.cpp,
+	  src/CommandConsole.cpp, src/Image.cpp, src/Viewport.cpp: cache is
+	  back into the game
 
 2008-11-02 21:49  dezperado
 
-	* autocmd_del command in.
+	* src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DisplayDevice.cpp: autocmd_del command in.
 
 2008-10-19 12:58  dezperado
 
-	* Added the scripts/rc/ directory to store fim configuration file
-	  to emulate other image viewers.
+	* TODO, scripts/maintenance/cron-build.sh.in, scripts/rc,
+	  scripts/rc/fimrc.eog, scripts/rc/fimrc.gqview,
+	  scripts/rc/fimrc.kuickshow, src/DisplayDevice.cpp,
+	  src/SDLDevice.cpp, src/defaultConfiguration.cpp, src/fimrc: Added
+	  the scripts/rc/ directory to store fim configuration file to
+	  emulate other image viewers.
 	  Renamed First and Last key names to End and Home.
 
 2008-10-19 09:54  dezperado
 
-	* console fixup for aa
+	* src/AADevice.cpp, src/AADevice.h, src/CommandConsole.cpp,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h: console fixup for aa
 
 2008-10-19 09:38  dezperado
 
-	* Console and display devices code reorganization.
+	* src/AADevice.h, src/CommandConsole.cpp, src/DebugConsole.cpp,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/Makefile.am, src/SDLDevice.cpp, src/SDLDevice.h, src/fim.cpp:
+	  Console and display devices code reorganization.
 	  Some more sdl bpp independence.
 	  CXXFLAGS is part of --version output now.
 
 2008-10-19 07:42  dezperado
 
-	* Corrected the behaviour of SDLDevice::catchInteractiveCommand()
-	  (caused pipe overflow before).
+	* src/SDLDevice.cpp, src/SDLDevice.h: Corrected the behaviour of
+	  SDLDevice::catchInteractiveCommand() (caused pipe overflow
+	  before).
 
 2008-10-19 07:38  dezperado
 
-	* Some adjustments of device selection and initialization code.
+	* FAQ.TXT, src/CommandConsole.cpp, src/fim.cpp, src/fim.h,
+	  src/readline.cpp: Some adjustments of device selection and
+	  initialization code.
 
 2008-10-18 15:11  dezperado
 
-	* The debug console was convinced to work, too. With a dirty hack
-	  in fim.cpp.
+	* BUGS, README, TODO, src/AADevice.h, src/CACADevice.h,
+	  src/DebugConsole.cpp, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/SDLDevice.cpp, src/fim.cpp: The
+	  debug console was convinced to work, too. With a dirty hack in
+	  fim.cpp.
 	  It's time for a cleanup of output device
 	  probing/selection/initialization code.
 
 2008-10-18 13:49  dezperado
 
-	* fixed a missing mandatory return value in an inherited function,
-	  causing randomly neverending loops.
+	* BUGS, src/SDLDevice.h: fixed a missing mandatory return value in
+	  an inherited function, causing randomly neverending loops.
 
 2008-10-18 13:36  dezperado
 
-	* SDL : support for arrows and control key, and some dirty hacks
+	* BUGS, src/AADevice.cpp, src/AADevice.h, src/CACADevice.cpp,
+	  src/CACADevice.h, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FramebufferDevice.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/fim.h, src/readline.cpp:
+	  SDL : support for arrows and control key, and some dirty hacks
 	  with the readline keymaps in order to support meta (alt)
 	  bindings.
 
 2008-10-12 23:24  dezperado
 
-	* readline integration with the SDL driver
+	* src/CommandConsole.cpp, src/SDLDevice.cpp, src/SDLDevice.h,
+	  src/readline.cpp: readline integration with the SDL driver
 
 2008-10-12 21:05  dezperado
 
-	* The Linux consolefont is rendered under the SDL driver too, now.
+	* src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h: The Linux consolefont is
+	  rendered under the SDL driver too, now.
 
 2008-10-12 17:50  dezperado
 
-	* FontServer::fs_render_fb -> FramebufferDevice::fs_render_fb
+	* src/FontServer.cpp, src/FontServer.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h: FontServer::fs_render_fb ->
+	  FramebufferDevice::fs_render_fb
 
 2008-10-12 17:37  dezperado
 
-	* Fixed a x+screen null pointer, swapped r and b in sdl code.
+	* src/CommandConsole.cpp, src/SDLDevice.cpp: Fixed a x+screen null
+	  pointer, swapped r and b in sdl code.
 
 2008-10-05 20:00  dezperado
 
-	* Worked further on the SDL support, added the -o (--output-device)
-	  program switch to select the output device among the supported
-	  ones.
+	* doc/fim.man, src/AADevice.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/fim.cpp: Worked further
+	  on the SDL support, added the -o (--output-device) program switch
+	  to select the output device among the supported ones.
 	  Updated the man page accordingly.
 
 2008-10-04 19:26  dezperado
 
-	* Small doc updates with mention about the pv picture viewer.
+	* INSTALL, README: Small doc updates with mention about the pv
+	  picture viewer.
 
 2008-10-04 17:27  dezperado
 
-	* A primordial and incomplete SDL (X) support is in now.
-
-2008-09-30 14:23  dezperado
-
-	* tagged release 0.3-alpha, released in May 2008
-
-2008-09-30 14:22  dezperado
-
-	* tagged release 0.3-beta, released in May 2008
-
-2008-09-30 14:21  dezperado
-
-	* branches and tags directories in
+	* config.h.in, configure.ac, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/Makefile.am, src/SDLDevice.cpp, src/SDLDevice.h, src/fim.h: A
+	  primordial and incomplete SDL (X) support is in now.
 
 2008-09-30 13:58  dezperado
 
-	* updated some doc with the trunk info
+	* doc/FIM.TXT: updated some doc with the trunk info
 
 2008-09-30 13:53  dezperado
 
-	* created a 'trunk' directory, after all.
-
-2008-09-30 11:28  dezperado
-
-	* fixed a compilation problem for defined FIM_IS_SLOWER_THAN_FBI
-
-2008-09-06 13:31  dezperado
-
-	* s/Imagemagick/ImageMagick ...
-
-2008-09-06 13:27  dezperado
-
-	* Added a spec file as suggested by jeff.
-	  Replaced <limits.h> inclusion with <climits> if possible.
-
-2008-09-06 12:37  dezperado
-
-	* implemented smooth rotation (FIM_EXPERIMENTAL_ROTATION) with ad
-	  hoc canvas enlargement.
-	  therefore, added a 'rotate' command (removing the old alias, used
-	  for 90 degrees at a time 'orientation').
-	  a smarter centering mechanism, but a policy and some more
-	  machinery is needed.
-	  some new documentation.
-
-2008-08-03 12:24  dezperado
-
-	* Reverting back, removing the fb_setmode check, as it is
-	  troublesome.
-
-2008-08-02 12:07  dezperado
-
-	* A little stricter framebuffer mode setting checking and some more
-	  documentation on the matter.
-
-2008-08-01 18:04  dezperado
-
-	* Removed some redundant ppm related code which seemed dead in
-	  FbiStuff.cpp.
-	  Fixed warnings here and there.
-
-2008-08-01 17:38  dezperado
-
-	* Some Debian gcc-4.3.1 -Wall compilation issues solved.
-	  Accessor functions introduced for some FramebufferDevice
-	  variables.
-
-2008-08-01 16:45  dezperado
-
-	* Fixed a bug in src/FbiStuff.cpp : NULL pipe reads would cause
-	  tmpfile unlinking or file loader setup.
-
-2008-07-12 08:35  dezperado
-
-	* Some work and thoughts on the designated initializers problems: a
-	  C99
-	  feature which is not supported by C++.
-	  Fixed missing ifdefs on FIM_READLINE_H.
-
-2008-05-10 21:09  dezperado
-
-	* now the input command line string will displayed for whole even
-	  if longer than the screen width. fixed a bug in the same code.
-
-2008-05-08 18:34  dezperado
-
-	* fim-0.3-alpha introduced a problem with the prompt display (it
-	  missed).
-	  fixed his and corrected the status line printing code.
-
-2008-05-07 14:15  dezperado
-
-	* Various fixes to contrast -Wall warning messages. Remains a bogus
-	  warning on FontServer.h.
-	  Tested with -pedantic flags too, and the following are the files
-	  which won't compile:
-	  lex.yy.cc FbiStuff.cpp FbiStuffPpm.cpp FbiStuffBmp.cpp
-	  FbiStuffGif.cpp FbiStuffTiff.cpp FbiStuffPng.cpp
-	  The main reason for this being the F*pp files being the quick C++
-	  porting of C fbi stuff
-	  ( error: ISO C++ does not allow designated initializers ).
-
-2008-05-06 20:42  dezperado
-
-	* This version will be released as fim-0.3-alpha.
-
-2008-05-06 20:41  dezperado
-
-	* Some -Wall and -pedantic oriented corrections, but much more is
-	  needed to adapt fbi's C code to correct C++.
-	  Fixed the signed-dist rules in Makefile.am.
-
-2008-05-06 08:51  dezperado
-
-	* Fixed some 64 bit compilation issues, though tested only in -t
-	  mode with no aalib.
-	  Added --disable-readline (FIM_USE_READLINE symbol).
-	  Added 64 bit checks and some fixes (although not all probably).
-	  Commented some problematic bison directives (start and require).
-	  Added some endianness checks and fixes.
-	  Added a fix to compile when readline is linked to the curses
-	  library.
-
-2008-05-05 07:34  dezperado
-
-	* Completed the aalib support.
-	  Started working on a libcaca (Coloured Ascii Art) driver
-	  Implemented a DummyDisplayDevice class.
-	  Discovered weird bugs seemingly related to aalib+screen :)
-	  Added to svn the scripts/benchmark.sh script.
-
-2008-05-03 16:18  dezperado
-
-	* Fixed the negation '!' operator behaviour and added tests to
-	  sanity.fim.
-	  Implemented a regular expressions matching operator '=~'.
-	  Now unquoted strings can be passed as arguments to fim commands,
-	  as long as they are quite simple and resemble a simple file name
-	  (FILE_PATH token).
-	  Implemented the --write-scriptout (-W) option and fixed some
-	  broken recording issues.
-	  fim -V will print repository version, too .
-	  Corrected incorrect regcomp() calls, which triggered error only
-	  on -1 return values.
-	  Corrected a bit the rc file sequence: ~.fimrc first, /etc/fimrc
-	  otherwise.
-	  New default key bindings for window handlings.
-	  Updated man page and FIM.TXT.
-	  Corrected a {;; } related problem for the FIM_ITERATED_COMMANDS
-	  functionality.
-
-2008-04-30 14:59  dezperado
-
-	* Implemented the prodrome of the forthcoming custom output
-	  devices: AADevice, a driver for aalib (ascii art) based output.
-
-2008-04-15 16:58  dezperado
-
-	* Small changes to make the -Weffc++ less dreadful.
-	  Introduced the (unfinished) cron-build.sh.in, to be run on remote
-	  hosts willing to test fim building.
-
-2008-04-14 18:48  dezperado
-
-	* Big optimizations and speedup in magnifying pictures through loop
-	  unrollings, and a 20% improvement in dithering handling, in
-	  convert_line().
-
-2008-04-11 19:56  dezperado
-
-	* Unrolled the magnifying loop in op_resize_work : now we magnify
-	  50% and more faster.
-
-2008-04-08 14:20  dezperado
-
-	* Adapted the code to tun on a gentoo Linux powerpc machine.
-	  Fixed a bug using getopt_long causing segmentation fault there in
-	  fim.cpp.
-	  Added a new example script : scripts/utilities/fimscan.sh
-	  Updated a little the documentation regarding external scripting
-	  (like fimscan.sh).
-
-2008-03-25 18:08  dezperado
-
-	* Some less extern references.
-	  Improved a little the image magnification code: better for big
-	  magnifications.
-
-2008-03-22 16:04  dezperado
-
-	* Implemented the -i option to read an image file via standard
-	  input.
-	  Implemented the -p option to read a fim script via standard
-	  input.
-	  The option can be turned off by means of the FIM_READ_STDIN_IMAGE
-	  symbol.
-	  Fixed a little the -f option.
-	  Documented the changes in the fim man page and updated the
-	  configure script.
-	  Added an EXAMPLES section to the man page.
-
-2008-03-17 15:36  dezperado
-
-	* Enhanced the new textual console.
-	  Fixed compilation problems under missing FIM_WINDOWS.
-	  Fixed a bug in trec() in common.cpp.
-	  Added some new temporary aliases for handling the new console.
-	  Added some new global variables for handling the new console.
-	  Renamed some options in configure.ac.
-
-2008-03-13 18:07  dezperado
-
-	* A new debug (textual) console is under building.
-	  This one will bring scroll functionalities and much more.
-
-2008-02-20 17:50  dezperado
-
-	* This is a release candidate for 0.2.
-	  Minimal language def changes. The substantial ones will come in a
-	  future release.
-	  ChangeLog is now prettier, thanks to _ale.
-	  Makefile.am freshmeat stuff updated.
-
-2008-02-19 18:11  dezperado
-
-	* Broke down a little more and commented the language grammar.
-
-2008-02-19 17:13  dezperado
-
-	* Worked on cleaning up the parser.
-	  Fixed a little mixed type operators (float - integer - int).
-	  Marked conflicting parser rules.
-
-2008-02-18 15:23  dezperado
-
-	* Updated string and float representations and operators.
-	  Removed some parser conflicts.
-	  Octal and hexadecimal integer constant representation now
-	  supported.
-	  Moved int ex() to Var ex() for this.
-	  Changed the policy of -E (no files should be in list prior to
-	  early Fim exit).
-	  Fixed some -Wall warning-triggering stuff.
-	  Asymmetric scaling aliases introduced.
-	  Directory read feature introduced
-	  (FIM_READ_DIRS,FIM_RECURSIVE_DIRS) (though disabld by default).
-	  Random numbers pour out of /dev/urandom now.
-	  Regexp substitution and matching into the string class
-	  introduced.
-	  Var class has higher dignity now and so was updated.
-	  Help optional argument added to command aliases.
-	  Introduced FIM_SKIP_KNOWN_FILETYPES feature (disabled by
-	  default).
-	  Introduced sanity check script : scripts/tests/sanity.fim.
-	  Retouched man pages and docs (which still awaits some
-	  formalization).
-
-2008-02-14 15:58  dezperado
-
-	* Added and documented a functionality for numerically specifying
-	  the iteration of a command, in interactive mode.
-	  Documented the external converting programs compatibility.
-	  Set the ChangeLog as the subversion log.
-
-2008-02-03 18:46  dezperado
-
-	* Added const specifiers to many methods in many classes, and
-	  adopted more typedefs.
-	  Added (non native) support to : dia files, xfig files, gimp (xcf)
-	  files, svg files.
-	  Updated configure.ac to fine tune these new functionalities.
-
-2008-02-02 13:39  dezperado
-
-	* Reduced further the impact of global variables, encapsulating
-	  more functions in the right classes.
-	  Namespace::GetIntVariable is now const.
-	  The make process doesn't show defined symbols, as these are
-	  pushed in config.h (we will use autoheader, now on).
-	  Removed extern.h : no need to use it.
-
-2008-01-31 16:39  dezperado
-
-	* Moved readline related stuff to readline.cpp.
-	  Packing the most into the fim namespace.
-	  Introduced a FimInstance class.
-	  Moved general purpose functions from fim.cpp to common.cpp.
-	  Generally, minimized references to global variables.
-
-2008-01-27 13:35  dezperado
-
-	* Massive code removal : the adapted fbi code now is 'master'.
-	  So, the FIM_NO_FBI macro was removed, too.
-	  Now fim works by default under screen (with some problems, of
-	  course), unless compiled with --disable-screen.
-	  Fixed a typo in (the adapted) setpixel4 causing a bug.
-
-2008-01-26 16:46  dezperado
-
-	* Massive code adaption : (nearly) original fbi code in the
-	  src/fbi_src/ directory was adapted to C++ and moved in .cpp files
-	  in the src/ directory.
-	  In this way, further code evolution should proceed more smoothly,
-	  as some class for framebuffer stuff and such will be created.
-	  Implementation of new functionalities should be less error-prone
-	  than now, although much work is going to be done in reorganizing
-	  in the best way all the existing fbi code in fim first.
-	  The FIM_NO_FBI symbol, now default in Makefile.am, inhibits the
-	  fbi_src/ code being compiled via the preprocessor.
-	  Fixed a console cluttering issue (a 'wild' printf() of the
-	  configuration file).
-	  Also subordinated some wild stderr-fprintf to a debug condition.
-
-2008-01-03 20:03  dezperado
-
-	* Flip and mirror variables and mechanisms are now documented and
-	  stabile.
-	  Cleaned up Image by removing some variables in favor of script
-	  variables.
-	  Fixed help printout on no-option invocation.
-	  Fixed some image loading messages.
-	  Orientation-related memory leak catched and fixed.
-	  Some documentation comments and some freshmeat-announce
-	  integration.
-
-2008-01-02 18:33  dezperado
-
-	* Introduced and documented Fbi environment variables for gamma,
-	  font and framebuffer device handling.
-	  Enriched a little configure.ac.
-	  Started tokenizing Fim language variable names in fim.h.
-
-2007-11-28 22:47  dezperado
-
-	* This is fim-0.2-alpha.
-
-2007-11-27 21:26  dezperado
-
-	* Mainly a future revisions proposal release: comments, ideas,
-	  thoughts on flaws.
-
-2007-10-16 22:30  dezperado
-
-	* Added the 'set' command, not yet fully Vim compliant.
-	  Introduced the 'pwd' variable.
-	  Introduced the 'ignorecase' variable.
-
-2007-10-10 16:07  dezperado
-
-	* Window resizing is back into the game.
-
-2007-10-10 13:37  dezperado
-
-	* The terrible bugs haunting Fim were just bad programming practice
-	  :
-	  memcpy(this,... in a constructor !
-	  Cache seems sane, but still should be validated thoroughly.
-	  It is time to think about the vim-like variable policies.
-
-2007-10-10 00:10  dezperado
-
-	* Right now the cache is again disabled, and again there are bad
-	  bugs.
-	  I trigger them with such simple statements as
-	  '4next;split;7next'.
-
-2007-10-09 21:12  dezperado
-
-	* Debugging. There was a big memory leak in the chache mechanism.
-	  Still to refine.
-	  Implemented new documentation (and fim.cpp) suggestions from iam.
-
-2007-10-09 14:55  dezperado
-
-	* AUTHORS notice update and helpful documentation corrections by
-	  iam.
-
-2007-10-06 12:33  dezperado
-
-	* Introduced namespaces for variables: {b,i,g,v,w}.
-	  The coherence, policy, and mechanisms to react to variable
-	  changes
-	  or update them are still to define (just like mechanisms for
-	  namespace
-	  inheritance among window objects...).
-
-2007-10-05 22:04  dezperado
-
-	* Added the --etc-fimrc option.
-	  Updated a little the BUGS and TODO files.
-	  Began thinking about namespaces stuff.
-	  I am not sure it is stable.
-
-2007-09-26 21:18  dezperado
-
-	* Fixed image rotation and flipping related bugs.
-	  Fimgs script was found invalid on a bash configuration. Now the
-	  script should be more general.
-	  Warning : 'random' variable handling is ENDIAN SENSITIVE!
-	  'random' token detection early at parse time.
-	  Introduced CommandConsole::redisplay(), --autotop.
-	  Introduced the '_fim_bpp' variable.
-	  Arbitrary number of ';' ending Fim commands.
-	  Window::swap functionality added.
-	  Fixes in Viewport and Window.
-	  Removed a spurious line in lex.lex.
-
-2007-09-21 18:50  dezperado
-
-	* Fixed a subtle bug in Cache.
-	  Fixed the broken random hook, and rotation.
-
-2007-09-21 13:24  dezperado
-
-	* Variable update fixes.
-
-2007-09-21 12:24  dezperado
-
-	* Now upon splitting windows, the image is redrawn immediately.
-	  The split also occurs in a cool fashion.
-
-2007-09-21 11:48  dezperado
-
-	* Added function to dump on stdout the default hardcoded config.
-	  Updated the man page and FIM.TXT with window usage info.
-
-2007-09-20 21:10  dezperado
-
-	* Comments und delikatessen.
-
-2007-09-20 20:09  dezperado
-
-	* Now the hardcoded configuration is executed before any command,
-	  and the fimrc after it.
-	  Commented a lot Image.cpp.
-	  Added some const functions and removed the 'nofb' redundant flag
-	  from CommandConsole.
-	  Updated a little the documentation about this and configure
-	  options.
-
-2007-09-20 16:59  dezperado
-
-	* Added a comparative table in the README file.
-	  Added notes to the BUGS and TODO files, too.
-
-2007-09-20 15:36  dezperado
-
-	* Started using exceptions: CommandConsole::quit() is private now.
-	  Cleaned out comments in string implementation.
-	  Cleaned out Window methods, with fancy ASCII art and exceptions.
-	  Commented out cc.quit() from intepreter.cpp.
-	  Exception throwing or catching code in most of the modified
-	  files.
-
-2007-09-19 11:59  dezperado
-
-	* Cache is back in game, too. It seems bugless.
-
-2007-09-19 11:05  dezperado
-
-	* Fixed the 'rescale bug' : it was a Viewport::display() bug : bad
-	  alignment values (left,top,..) for big new images.
-
-2007-09-18 23:22  dezperado
-
-	* Moved Window construction outta CommandConsole constructor, after
-	  driver initialization. Added preambles for method descriptions.
-
-2007-09-18 22:52  dezperado
-
-	* Fixed the missing keyword echo bug; Maintenance stuff.
-
-2007-09-12 13:47  dezperado
-
-	* Fixed the but in Image.rescale(), though some bug still remains.
-	  Added a fancy N{stmt_list;} syntax, with N positive integer.
-
-2007-09-12 13:12  dezperado
-
-	* Window close proper action implemented.
-
-2007-09-12 12:46  dezperado
-
-	* Code cleanup. The bugs are in the Image.rescale() mechanism and
-	  somewhere in Cache.
-
-2007-09-12 09:42  dezperado
-
-	* Cleaning cache subsystem. Still bugged.
-
-2007-09-11 22:50  dezperado
-
-	* Fully functional multiwindow environment. Still to fix
-	  cache/image loading interactions, and windowing flaws.
-
-2007-09-11 14:20  dezperado
-
-	* Restored image scaling, only with FIM_WINDOWS enabled.
-
-2007-09-11 13:26  dezperado
-
-	* Restored image browsing and panning, only with FIM_WINDOWS
-	  enabled.
-
-2007-09-11 09:31  dezperado
-
-	* Working on throwaway (for now) cloning support in Cache.
-
-2007-09-10 23:56  dezperado
-
-	* Restoring robustness and functionality method by method.
-
-2007-09-10 13:55  dezperado
-
-	* Restored old style yacc.ypp and lex.lex.
-	  Moved FIM_WINDOWS and FIM_AUTOCMDS to configure.ac.
-	  More functionality still awaits being restored.
-
-2007-09-10 10:37  dezperado
-
-	* Basic functionalities restored, though the overall state is
-	  inconsistent.
-
-2007-09-10 08:39  dezperado
-
-	* Now it is time to make Viewport not subclass of Image.
-	  Solved a flaw with the --with-cflags configure option.
-
-2007-09-09 20:38  dezperado
-
-	* Further modifications towards the full windowing support. Though
-	  right now the program is severely bugful.
-
-2007-09-09 18:16  dezperado
-
-	* Cuts and pastes towards full Viewport deployment. TEMPORARY
-	  STATE:inconsistent.
-
-2007-09-09 14:33  dezperado
-
-	* Adapted the cache to cache clones.
-	  More cloning support, and an image revert method.
-
-2007-09-08 13:53  dezperado
-
-	* Various little fixes:
-	  FIM_READ_STDIN compile flag added.
-	  Some comments in Cache.h
-	  No rc file behaviour corrected : now ~/.fimrc is executed by
-	  default (so be warned, it is not sandboxed!).
-	  Window and Viewport corrections.
-	  A struct ida_image cloning function added.
-	  Comment in Browser.h
-	  FIM_WINDOWS is enabled by default now on, even if still
-	  incomplete.
-
-2007-09-05 22:44  dezperado
-
-	* Updated the Free Software Foundation address in COPYING and
-	  fim.man.
-
-2007-09-04 19:53  dezperado
-
-	* Migrated lots of code from Image to Viewport, on the way to
-	  Viewport concept expansion.
-	  Browser impacted and generalized a small epsilon.
-
-2007-09-03 22:12  dezperado
-
-	* Fixed (rather patched) a bug regarding console output.
-
-2007-09-03 21:30  dezperado
-
-	* Removed useless member variables, raised the code level, and
-	  commented a little the headers regarding viewport stuff.
-	  Const'ed two methods in the Cache class.
-	  Added info about the asymmetric scaling in the manual.
-
-2007-09-02 21:19  dezperado
-
-	* Implemented a preliminary windowing mechanism.
-	  Now there is to decide a correct policy regarding the viewport
-	  management (windows owned by images or viceversa or in another
-	  way?).
-
-2007-09-02 08:28  dezperado
-
-	* Copyright notice added in the original and modified fbi files.
-	  To comply with (non)GNU coding standards and submit fim to
-	  savannah.gnu.org.
-
-2007-08-15 18:47  dezperado
-
-	* Copyright notice added in the files added to the original fbi.
-	  To comply with (non)GNU coding standards and submit fim to
-	  savannah.
-
-2007-08-12 22:41  dezperado
-
-	* Changes to information files about flaws, installation, and
-	  documentation (with a tips minisection).
-
-2007-08-11 13:32  dezperado
-
-	* Tested on CentOS 5.0 and Debian 3.0, found strict dependance from
-	  automake 1.10.
-	  Fixed conditional compiling issues regarding image decoding
-	  libraries.
-	  Now on, HAVE_.. macros should be used much more.
-
-2007-08-10 23:15  dezperado
-
-	* Corrected bugs in configure.ac introduced yesterday in hurry.
-	  Introduced a 'return' command, relative documentation, and some
-	  example uses.
-	  Found a BUG : automake stuff will work only on automake 1.10!
-
-2007-08-09 15:00  dezperado
-
-	* Added the ebuild proposed by the good folks of the gentoo-sunrise
-	  project.
-	  Adjusted some flaws in the configure.ac template.
-
-2007-08-08 10:33  dezperado
-
-	* Added a Gentoo ebuild.
-	  Placed licensing info in lex.lex and yacc.ypp.
-	  Updated INSTALL and README regarding the Gentoo install.
-	  Now it will need coordination with the website.
-
-2007-08-07 22:06  dezperado
-
-	* Updated the FSF address in the files preamble license.
-	  Updated a little the README file.
-
-2007-08-07 17:37  dezperado
-
-	* Comments and -ansi and -pedantic aimed corrections.
-
-2007-08-07 16:35  dezperado
-
-	* Fixed a big bug in fb_status_screen.
-	  The dynamic string implementation is fully working and enabled by
-	  default.
-
-2007-08-07 01:18  dezperado
-
-	* The std::string wrapper is almost complete.
-	  Now it is time to adapt the rest of the code to the dynamical
-	  strings presence.
-	  Found problems with the --with-cflags=.. switch to configure.
-	  Small fixes here and there.
-
-2007-07-30 21:06  dezperado
-
-	* Now the --no-framebuffer runtime option will select a debug run
-	  with the
-	  framebuffer device 'disabled'; that is, a limited fim run, for
-	  debug purposes.
-	  In fact, i am working on the dynamical length string handling.
-	  Buggy for now.
-
-2007-07-16 08:02  dezperado
-
-	* Made fim --help work, finally.
-	  Fixed and commented the fimgs script.
-	  Fixed a Classname::Methodname problem.
-
-2007-07-14 05:28  dezperado
-
-	* Enabled caching of 5 images and prefetching policy in the default
-	  fimrc.
-
-2007-07-14 05:20  dezperado
-
-	* Implemented a cache mechanism, and a prefetch (read-ahead)
-	  mechanisms,
-	  for speeding up large image browsing.
-	  Now there is the need of implementing some memory statistics.
-
-2007-07-08 14:40  dezperado
-
-	* Implemented the FIM_BOZ_PATCH macro, which disables lots of
-	  actions
-	  in the framebuffer initialization code, allowing the of fim under
-	  the screen utility, at a cost of some little problems.
-	  Investigations will continue there.
-	  Enriched the configure script.
-
-2007-06-30 01:38  dezperado
-
-	* Fixed a problem with small flex versions incompatibilities. What
-	  a hassle!
-	  Now -lfl is reintroduced. This could be a problem on some
-	  configurations (maybe).
-
-2007-06-28 05:14  dezperado
-
-	* Now the console drawing function, fb_status_screen, adapts to the
-	  screen width.
-	  Fixed a bug in the fimgs.sh script, which used to pass postscript
-	  files to fim.
-	  Documented a little more.
-
-2007-06-13 10:36  dezperado
-
-	* Added a missing script.
-	  Fixed documentation.
-
-2007-06-13 10:17  dezperado
-
-	* Finally automake and autoconf are integrated in Fim!
-	  Enhanced install scripts.
-	  Some fbi code is marked as old and dead now, but still could be
-	  saved.
-
-2007-05-31 13:05  dezperado
-
-	* Began deploying the GNU build system to fim. Beginning from the
-	  skeleton.
-
-2007-05-23 00:29  dezperado
-
-	* Documented the fimgs script, in FIM.TXT and in fimgs.man.
-	  Introduced a Help Wanted section.
-	  Patched a little #include <asm/page.h > -> #include <sys/user.h>
-	  potential problem.
-
-2007-05-21 10:23  dezperado
-
-	* Some documentation added, and began working on boolean-like
-	  operators in expressions.
-
-2007-05-17 08:24  dezperado
-
-	* String/variable/expression concatenation is now possible with the
-	  '.' operator!!
-	  The ! operator allows system command execution and results
-	  display.
-	  'cd','pwd' commands introduced (still partially inconsistent
-	  'cd').
-
-2007-05-15 01:43  dezperado
-
-	* Corrected most shift/reduce conflicts in the parser. One remains.
-	  Variable concatenation (with evaluation) is possible now, but
-	  still experimental.
-
-2007-05-13 04:36  dezperado
-
-	* Now 'bind' alone will display the key bindings, and 'bind KEY'
-	  will display the action bound to KEY.
-
-2007-05-07 13:13  dezperado
-
-	* Fixed a repeat_last bug.
-	  Enriched the language syntax by [n]command args.
-	  Enriched the panning functions of Image.
-	  Now the wrapper script manages http:// files, too.
-	  Fiesta.
-
-2007-05-01 11:22  dezperado
-
-	* Forgot to set the executable flag to doc/vim2html.pl.
-
-2007-05-01 11:14  dezperado
-
-	* Reorganization of files and documentaton refinement.
-
-2007-04-30 06:53  dezperado
-
-	* Wrote a very nice manual page (no more need for the original
-	  fbi's own man page).
-	  Implemented the --read-from-stdin (-) option.
-	  Implemented top_align, bottom_align commands.
-
-2007-04-25 12:59  dezperado
-
-	* Deleted the Fbi makefile, as it is useless now.
-	  Improved a little the Makefile.
-	  Introduced asymmetric image scaling and image orientation
-	  variables and aliases.
-
-2007-04-18 10:12  dezperado
-
-	* Small fixes and corrections of trivial bugs introduced before.
-
-2007-04-18 09:31  dezperado
-
-	* Dramatic speed improvement on image drawing (convert_line) by
-	  swapping
-	  RGB bytes on load time rather than when drawing. Now the drawing
-	  code itself
-	  draws many times faster than before.
-	  Now the profiler indicates the image resize code as the slower
-	  one, and this
-	  will be a wicked beast, maybe :). Here is the gang of the new top
-	  seven :
-	  % cumulative self self total
-	  time seconds seconds calls ms/call ms/call name
-	  92.98 1.06 1.06 8157 0.13 0.13 op_resize_work
-	  3.51 1.10 0.04 45 0.89 0.89 fs_puts
-	  1.75 1.12 0.02 12 1.67 1.67 read_image
-	  0.88 1.13 0.01 59 0.17 0.17
-	  fim::CommandConsole::autocmd_exec(fim::string const&, fim::string
-	  const&,
-	  fim::string const&)
-	  0.88 1.14 0.01 12 0.83 0.83 svga_display_image
-	  0.00 1.14 0.00 96651 0.00 0.00 setpixel3
-	  Thorough testing with non 24 bit modes has still to come.
-
-2007-04-17 12:40  dezperado
-
-	* Added some thoughts about future development efforts to the TODO
-	  file.
-	  Gained a 20% global speedup (according to gprof) employing memset
-	  in fb_memset and clear_line.
-	  Now (according to gprof) most of the time is consumed in : ~50%
-	  in convert_line and ~20% in op_resize_work.
-	  
-	  % cumulative self self total
-	  time seconds seconds calls s/call s/call name
-	  Old profile:
-	  52.39 4.82 4.82 10460 0.00 0.00 convert_line
-	  23.48 6.98 2.16 10761 0.00 0.00 op_resize_work
-	  15.87 8.44 1.46 17188 0.00 0.00 clear_line
-	  6.30 9.02 0.58 58 0.01 0.01 fb_memset
-	  1.41 9.15 0.13 56 0.00 0.00 fs_puts
-	  New one:
-	  66.57 15.77 15.77 34873 0.00 0.00 convert_line
-	  30.10 22.90 7.13 34847 0.00 0.00 op_resize_work
-	  1.31 23.21 0.31 214 0.00 0.00 fs_puts
-	  0.51 23.33 0.12 27392 0.00 0.00 fs_render_fb
-	  0.42 23.43 0.10 59 0.00 0.27 svga_display_image
-	  0.30 23.50 0.07 79559 0.00 0.00 clear_line
-
-2007-04-13 13:27  dezperado
-
-	* Circumvented the "../" bug of gs in th e wrapper script.
-	  Multiple files can be handled by the wrapper, now. Still lacking
-	  a proper help message.
-
-2007-04-13 11:07  dezperado
-
-	* Fixed the mysterious crash bug : it was due to the missing pipe
-	  stacking mechanism, and missing pipe closings.
-	  Fixed string quoting in lex. Now any string can be passed.
-	  Added documentation.
-	  Added the GPL preamble to each source file, with a short
-	  description
-	  Still problems with the console display fine-grain control.
-	  Added vim-like -c COMMAND switch..
-	  Added -F postcycle command support.
-	  Documented.
-
-2007-04-01 14:16  dezperado
-
-	* Documentation written and small fixes done.
-
-2007-03-31 16:31  dezperado
-
-	* Finally fixed the missing proper console switching flaw. Now the
-	  console switches nicely.
-	  Removed dead code, recommented a little, sanitized a little.
-
-2007-03-31 07:21  dezperado
-
-	* Added flip and mirror capabilities, variables, aliases and
-	  bindings.
-	  Quickened image loading by inhibiting a first, duplicated
-	  display.
-
-2007-03-29 06:09  dezperado
-
-	* Finally added the easy-o-use '/' binding to regexp-search files,
-	  and related 'regexp_goto_next' command.
-	  Added a command to exit from command line mode
-	  (set_interactive_mode).
-	  Updated the TODO file (it is lighter now!).
-
-2007-03-28 13:16  dezperado
-
-	* Fixed recording and time related issues.
-	  Fixed command line prompt display.
-	  Documented a little.
-	  Implemented special variables
-	  width,swidth,random,findex,filelistlen,...
-	  Introduced FIM_NO_SYSTEM build flag.
-	  Introduced the % (remainder) operation in the .ypp file.
-	  Still need to fix the parser to handle properly expressions (as
-	  'goto random').
-
-2007-03-24 07:59  dezperado
-
-	* Implemented a popen command (and related plisten,wlisten
-	  aliases).
-	  Introduced usleep and fixed recording.
-	  NOTE: still need a way to measure elapsed time with precision..
-
-2007-03-24 03:05  dezperado
-
-	* Fixed lots of usability issues, concerning nonexistent files,
-	  command line, and the virtual screen.
-	  Commented code.
-
-2007-03-18 14:02  dezperado
-
-	* Updated documentation and fixed a compilation bug pertaining
-	  flex-2.5.4 vs flex-2.5.33.
-	  Added 'diagonal' key bindings to D. Seems that panning can cause
-	  problems. Strange.
-
-2007-03-07 14:43  dezperado
-
-	* Introduced : FIM_NOFIMRC, FIM_NOSCRIPTING,
-	  FIM_DEFAULT_CONFIGURATION, FIM_AUTOSKIP_FAILED flags.
-	  Improved default configuration (builtin at compile time by
-	  default).
-	  Added .tar ,.tgz archive extraction to fbgs.sh (fimgs once
-	  installed).
-
-2007-03-07 01:18  dezperado
-
-	* No more X11 (X Window System) nor libFS (Font Server) libraries
-	  dependencies.
-	  Tuned the Makefile for the lexer/parser subsystem. Now behaves
-	  nicely.
-
-2007-03-06 16:04  dezperado
-
-	* Added a minifeature : FIM_COMMAND_AUTOCOMPLETION and a little
-	  related bug.
-	  Now typing 'ne' will suffice to trigger 'next', if no other
-	  command or alias matches.
-	  
-	  Commented some useless std::cout's.
-
-2007-03-06 04:24  dezperado
-
-	* Default builtin configuration added (FIM_DEFAULT_CONFIGURATION)
-	  if no configuration file exists.
-	  Now the program will exit if no input image is provided.
-	  Fixed further the makefile regarding the lexer rule.
-
-2007-03-05 13:45  dezperado
-
-	* Finally implemented regexp-based goto command (aka regular
-	  expression on filename file search)!
-
-2007-03-05 12:27  dezperado
-
-	* Fixed maximum rescaling behaviour.
-	  Added nice statusbar messages while reloading or rescaling.
-	  Added *N multiplier styled rescaing syntax.
-	  Added quit-on NUL read, from the command line.
-	  Implemented the 'scrollforward' functionality, which 'reads'
-	  files :)
-	  Fixed a little the fbgsh.sh script in the previous revision.
-
-2007-03-05 09:30  dezperado
-
-	* Added functionality to skip the loading of directories and non
-	  existent files.
-	  Added functionality to remove from the list files which fail to
-	  load.
-
-2007-03-04 10:36  dezperado
-
-	* Added N% absolute scaling syntax.
-	  Added (+|-)N% relative scaling syntax.
-
-2007-03-03 12:24  dezperado
-
-	* Commented out -pedantic -Wall in Makefile for ease of compilation
-	  of public releases.
-
-2007-03-03 10:19  dezperado
-
-	* Fixed a big memory problem (destructor missing :P).
-	  
-	  Added conditional compilation flags : FIM_AUTOCMDS,
-	  FIM_RECORDING, FIM_SWITCH_FIXUP
-
-2007-03-03 06:16  dezperado
-
-	* Worked on command interpretation inside while cycles.
-	  Set $LastChangedDate$ keyword in file headers.
-	  Introduced bugs, too.
-
-2007-02-27 14:07  dezperado
-
-	* -Wall -pedantic compliance on GCC
-	  i686-pc-linux-gnu-3.3.6,i686-pc-linux-gnu-3.4.6,i686-pc-linux-gnu-4.1.1
-
-2007-02-26 15:30  dezperado
-
-	* fixed the png transparency bug. it was fixed manipulating the
-	  Makefile (png.o,jpeg.o,tiff.o).
-
-2007-02-17 16:56  dezperado
-
-	* Fixed command line GOTO in vim-style. Documented it.
-
-2007-02-17 01:38  dezperado
-
-	* Now there is a mechanism for installing FIM.
-
-2007-02-16 15:50  dezperado
-
-	* These files are useless now, and common.c -> common.cpp
-
-2007-02-16 15:31  dezperado
-
-	* Fixed a rudimentary configure mechanism and sanitized the
-	  Makefile.
-	  Introduced a bug with png transparency while eliminating CURL
-	  LIRC and EXIF dependencies.
-	  Documented the slideshow function.
-
-2007-02-16 03:38  dezperado
-
-	* No more image tearing. Smarter background clearing. Still status
-	  tearing.
-	  Now there's a need of a decent installer.
-
-2007-02-12 10:47  dezperado
-
-	* Adjusted the float variable handling (yet not usable in
-	  arithmetics but assignments work).
-	  Documented while and if constructs.
-
-2007-02-12 08:02  dezperado
-
-	* Documentation written. More to come, and to be converted with
-	  vim2html.pl.
-
-2007-02-11 17:25  dezperado
-
-	* Documentation written. More to come, and to be converted with
-	  vim2html.pl-
-
-2007-02-11 09:10  dezperado
-
-	* A pre-alpha public version.
+	* ., AUTHORS, BUGS, COPYING, ChangeLog, FAQ.TXT, INSTALL,
+	  Makefile.am, Makefile.old, NEWS, README, README.FIRST, TODO,
+	  VERSION, autogen.sh, config.h.in, configure.ac, depcomp, distros,
+	  doc, media, scripts, src: created a 'trunk' directory, after all.
 

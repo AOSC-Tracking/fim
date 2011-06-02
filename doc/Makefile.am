@@ -1,10 +1,13 @@
 
 # $LastChangedDate$
 
-CLEANFILES= doctags *.o  tags
-
 HTMLDOCS=FIM.html fim.man.html  fimgs.man.html fimrc.man.html
+
+CLEANFILES= doctags *.o  tags $(HTMLDOCS)
+
 EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man fimrc.man
+#MAN2HTML=man2html
+MAN2HTML=man --html=cat
 
 man1_MANS = fim.man fimgs.man fimrc.man
 
@@ -13,7 +16,7 @@ htmldir = $(docdir)
 dist_html_DATA = $(HTMLDOCS)
 dist_doc_DATA = FIM.TXT
 
-all:	$(EXTRA_DIST)
+all:	htmldocs  $(EXTRA_DIST)
 
 htmldocs:        $(HTMLDOCS)
 #docs:        $(HTMLDOCS)
@@ -22,15 +25,15 @@ FIM.html fim-stylesheet.css: doctags FIM.TXT
 	./doctags FIM.TXT > tags ; ./vim2html.pl tags FIM.TXT
 
 fim.man.html: fim.man
-	man2html fim.man >  fim.man.html || echo "$(ERRMSG) man2html fim.man >  fim.man.html"
+	$(MAN2HTML) ./fim.man >  fim.man.html || echo "$(ERRMSG) $(MAN2HTML) ./fim.man >  fim.man.html"
 
 fimrc.man.html: fimrc.man
-	man2html fimrc.man >  fimrc.man.html || echo "$(ERRMSG) man2html fimrc.man >  fimrc.man.html"
+	$(MAN2HTML) ./fimrc.man >  fimrc.man.html || echo "$(ERRMSG) $(MAN2HTML) ./fimrc.man >  fimrc.man.html"
 
-ERRMSG="no man2html at build time : please install man2html and reissue :"
+ERRMSG="no $(MAN2HTML) at build time : please install $(MAN2HTML) and reissue :"
 
 fimgs.man.html: fimgs.man
-	man2html fimgs.man >  fimgs.man.html || echo "$(ERRMSG) man2html fimgs.man >  fimgs.man.html"
+	$(MAN2HTML) ./fimgs.man >  fimgs.man.html || echo "$(ERRMSG) $(MAN2HTML) ./fimgs.man >  fimgs.man.html"
 
 doctags:
 	        $(CC) -o doctags doctags.c

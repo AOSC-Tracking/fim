@@ -11,7 +11,7 @@
 	6		Original Idea
 	7		Technical overview (important for patch writers)
 	8		Availability in Linux distributions
-	8.1		Debian
+	8.1		Debian, Ubuntu
 	8.2		Gentoo Installation Tips
 	9		License
 	10		Contacts, mailing lists, URLs
@@ -21,7 +21,8 @@
 
 FIM is a highly customizable and scriptable image viewer targeted at the
 users who are confortable with software like the Vim text editor or the Mutt
-mail user agent (it aims to be a swiss army knife for viewing images).
+mail user agent.
+FIM it aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux framebuffer console.
@@ -38,15 +39,16 @@ of comments in the code, and some text files.
 
 FIM is a highly customizable and scriptable image viewer targeted at the
 users who are confortable with software like the Vim text editor or the Mutt
-mail user agent (it aims to be a swiss army knife for viewing images).
+mail user agent.
+FIM it aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux framebuffer console.
-It is multidevice : it has X support, too (via the SDL library) and it supports
+It is multidevice: it has X support too (via the SDL library) and it supports
 ascii art output (via the aalib library).
 
-It is capable of regular expressions based (on filename) image viewing,vim-like
-autocommands, it offers GNU readline command line autocompletion and history,
+It is capable of regular expressions based (on filename) vim-like autocommands.
+It offers GNU readline command line autocompletion and history,
 completely customizable key bindings, external/internal (if-while based)
 scriptability (through return codes, standard input/output, and commands given
 at invocation time, initialization file), internal filename-based image search,
@@ -106,7 +108,7 @@ Implemented features:
  - experimental PDF, PS, DJVU file support
  - viewing any file as a binary/RGB pixelmap
 
-Yet unimplemented features :
+Yet unimplemented features:
 
  - autodocumentation, in gdb style!
  - mutt-like patterns ~p, ~r ...
@@ -121,9 +123,9 @@ Yet unimplemented features :
 
  ______________________________________________________________________________
 
- \ Program :            kuickshow eog [xz]gv    fbi   FIM GQview dfbsee	pv qiv
+ \ Program:            kuickshow eog [xz]gv    fbi   FIM GQview dfbsee	pv qiv
  ______________________________________________________________________________
- Features :
+ Features:
 
  status:(a)lpha/(m)ature   m       m   m         a     m     m    m	m   m
  environment(f=framebuffer)X      X  X,svga      f     f     X    f	X   X
@@ -153,7 +155,7 @@ Yet unimplemented features :
  mirroring                                             *                    *
  ....
 
-Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/), zgv, ...
+Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/), zgv, ...
 
  ______________________________________________________________________________
  
@@ -167,14 +169,14 @@ Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/), zgv
  - GNU flex  (NOT any lex ) ( http://directory.fsf.org/flex.html  )
  - GNU bison (NOT any yacc) ( http://directory.fsf.org/bison.html )
  - the GCC ( Gnu Compiler Collection ) ( http://directory.fsf.org/gcc.html )
- - optionally, header files for :
+ - optionally, header files for:
 	libpng		  ( http://directory.fsf.org/libpng.html )
 	libjpeg		  ( http://www.ijg.org/ )
  	libungif	  ( http://sourceforge.net/projects/libungif/ )
 	libtiff 	  ( http://www.libtiff.org/ )
 	libdjvulibre	  ( http://sourceforge.net/projects/djvu/  )
 
- Libraries originally required by Fbi but removed from Fim :
+ Libraries originally required by Fbi but removed from Fim:
  	libFS, libCURL, libLIRC
 
 
@@ -223,7 +225,7 @@ Some nice command line picture viewers :  pv (http://www.trashmail.net/pv/), zgv
  - The framebuffer device ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
    ( and usually found in "/usr/src/linux/Documentation/fb" in the kernel source
     code tree ).
- - shared library files for : libpng, libjpeg, libungif, libtiff, libreadline
+ - shared library files for: libpng, libjpeg, libungif, libtiff, libreadline
 
 ================================================================================
 	5.5		Hacking, maintenance guidelines
@@ -252,15 +254,14 @@ Gerd Hoffmann/Knorr: ( Fbi can be obtained at http://linux.bytesex.org/fbida/ ).
 The idea was to enrich Fbi with a command line and configurability features.
 
 An idea of the concept was settled when developing a small 'vim-like fbi patch'
-for fbi back in 2005:
-http://dezperado.altervista.org/coding.html#vim-like-fbi,%20and%20the%20wrapper%20fbgs.sh%20script%20modified%20for%20handling%20of%20ps,dvi%20and%20pdf%20files
+back in 2005.
 
-The code is applied as a patch an the existing fbi source tree, but it is not by
+The code was applied as a patch an the existing fbi source tree, but was not by
 any means near to what is Fim today.
 
 Fim aims at a complete reorganization of the Fbi code, and ideally towards an
 implementation of the most scriptable and configurable image viewer ever - not
-tied to the framebuffer device and to a sole keyboard input.
+tied to the framebuffer device and to a single keyboard input.
 
 ================================================================================
 	7		Technical overview (important for patch writers)
@@ -294,7 +295,7 @@ For the sake of completeness, Fim is based on the version 1.31 of fbi,
 available from http://dl.bytesex.org/releases/fbida/fbi_1.31.tar.gz .
 
 Useful documents I've read and consulted during the coding of Fim, and 
-useful for hacking it :
+useful for hacking it:
 
 Thomas Niemann's tutorial to yacc & lex
 The yacc & lex HOWTO
@@ -331,7 +332,7 @@ http://bisqwit.iki.fi/source/fbmodes.html
 http://asm.sourceforge.net/articles/fb.html
 http://www.linuxjournal.com/article/2783
 
-Tested platforms :
+Tested platforms:
  - 2.6.25-2-686 Linux Kernel, GCC-4.3.1, flex 2.5.35, bison 2.3, Debian Lenny, x86
  - 2.6.17 Linux Kernel, GCC-3.4.6, gentoo, x86
  - 2.6.17 Linux Kernel, GCC-4.1.1, gentoo, x86
@@ -359,15 +360,17 @@ Tested platforms :
  You should find fim in Debian and Ubuntu,  and install it with:
 
  sudo apt-get install fim
+
+ But beware: the deb packages are often outdated.
  
 --------------------------------------------------------------------------------
 	8.2		Gentoo Installation Tips (obsolete)
 
 On the Gentoo Linux distribution , you should not have problems building Fim by
-first installing some libraries :
+first installing some libraries:
 
  $ emerge media-libs/giflib media-libs/jpeg media-libs/libpng media-libs/tiff
-and Bison (from 1.875d on) and Flex :
+and Bison (from 1.875d on) and Flex:
  $ emerge flex bison
 
 This should suffice.
@@ -376,9 +379,9 @@ Once these requirements are satisfied, you could proceed with the
 sequence.
 Standard installation details are in the INSTALL file.
 
-BEWARE : THERE COULD BE PROBLEMS WITH FLEX/BISON! 
+BEWARE: THERE COULD BE PROBLEMS WITH FLEX/BISON! 
 
-WARNING : the gentoo linux fim package version (<=0.2) is obsolete!
+WARNING: the gentoo linux fim package version (<=0.2) is obsolete!
 
 "flex version 2.5.4" and "bison (GNU Bison) 1.875d" are known to work.
 
@@ -399,7 +402,7 @@ which is licensed compatibly with the GPL.
 	10		Contacts, URLs
 ================================================================================
 
-Fim is (C) 2007-2009 Michele Martone.
+Fim is (C) 2007-2011 Michele Martone.
 
 You can contact me via email: "dezperado_FOobAr_autistici_Baz_org", after
 replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
@@ -408,7 +411,7 @@ If it is for a bug report or installation help, be sure of reading the
 documentation and the BUGS file first, and then you're welcome.
 If it is for other suggestions or ideas, you are welcome, too (and don't miss
 the TODO file, too)!
-Fim is not perfect : a number of weaknesses are summarized in TODO and BUGS.
+Fim is not perfect: a number of weaknesses are summarized in TODO and BUGS.
 
 
 Web Page     : http://savannah.nongnu.org/projects/fbi-improved/

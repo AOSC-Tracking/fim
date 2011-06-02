@@ -125,6 +125,9 @@ help:
 	@echo
 	@echo
 
+ai:
+	make site up -C var/
+
 up: upload news
 
 news: freshmeat mail-announce

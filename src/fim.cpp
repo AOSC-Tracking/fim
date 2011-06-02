@@ -579,11 +579,18 @@ mp+=string(
 "The system wide\n"
 ".B Fim\n"
 "initialization file (executed at startup, after executing the hardcoded configuration).\n"
+
 ".TP 15\n"
 ".B "FIM_CNS_USR_RC_COMPLETE_FILEPATH"\n"
 "The personal\n"
 ".B Fim\n"
 "initialization file (executed at startup, after the system wide initialization file).\n"
+
+".TP 15\n"
+".B ~/.inputrc\n"
+"If\n.B Fim\n"
+"is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man readline)."
+"\n"
 
 			      )+
 string(
