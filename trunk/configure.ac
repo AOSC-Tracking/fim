@@ -73,7 +73,7 @@ CPPFLAGS=''
 AC_SUBST(FIM_LIBS)
 AC_SUBST(FIM_LIB_OBJECTS)
 AC_SUBST(VERSION)
-AC_SUBST(HTMLDOCS)
+dnl AC_SUBST(HTMLDOCS)
 #AC_LANG_POP([C++])
 
 fim="fim"
@@ -196,6 +196,7 @@ AC_FUNC_MMAP
 AC_CHECK_FUNCS([bzero memset memcmp strncmp strcpy])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([drand48 random rand])
+AC_CHECK_FUNCS([fileno])
 dnl AC_FUNC_REALLOC()	dnl triggers error in automake 1.10.1
 
 #AC_CHECK_HEADERS([stddef.h])
@@ -1294,11 +1295,12 @@ AC_CHECK_PROG(have_zcat,zcat,yes,no)
 		AC_DEFINE([FIM_USE_ZCAT])
 	fi
 
-AC_CHECK_PROG(have_man2html,man2html,yes,no)
-        if test x$have_man2html = xyes ; then
-      		AC_MSG_NOTICE([The installer will try to invoke 'man2html' to build html versions of the man pages.])
-		HTMLDOCS="FIM.html fim.man.html fimgs.man.html"
-	fi
+dnl 20110602 will use man --html-cat instead of obsolete man2html 
+dnl AC_CHECK_PROG(have_man2html,man2html,yes,no)
+dnl        if test x$have_man2html = xyes ; then
+dnl      		AC_MSG_NOTICE([The installer will try to invoke 'man2html' to build html versions of the man pages.])
+dnl		HTMLDOCS="FIM.html fim.man.html fimgs.man.html"
+dnl	fi
 
 AC_CHECK_PROG(have_convert,convert,yes,no)
         if test x$have_convert = xyes -a x$fim_cv_convert = xyes ; then
