@@ -11,6 +11,7 @@
  * more control (resolution, windowed mode) for the sdl mode
  * new commands (pread,reverse,shuffle,...) 
  * several minor and major bugfixes
+ * (temporarily) disabled internal windows splitting 
 
         	Version 0.3-beta
 

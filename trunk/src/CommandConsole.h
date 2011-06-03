@@ -232,6 +232,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_err_t toggleStatusLine();
 	fim_err_t addCommand(Command *c);
 	Command* findCommand(fim::string cmd)const;
+	int findCommandIdx(fim::string cmd)const;
 	fim::string alias(std::vector<Arg> args);
 	fim::string alias(const fim::string& a,const fim::string& c);
 	fim::string aliasRecall(fim::string cmd)const;

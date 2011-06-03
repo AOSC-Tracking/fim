@@ -56,6 +56,9 @@ with a '@' and _Baz_ with a '.'.
 
    In windowed aalib setups (that is, when running aalib under X spawns in a separate window), fim is completely unusable.
 
+
+20110603	Window splitting is temporarily disabled.
+
 ==== MINOR ISSUES
 
 20091208	if fim is configured to take input from piped xfig (as xfig-3.2.5b), it could be - passively - subject to

@@ -35,6 +35,9 @@ namespace fim
         {
 		unsigned int i=0;
 		fim_err_t rc=0;/*return code*/
+#if FIM_DISABLE_WINDOW_SPLITTING
+		return "Warning: window splitting is temporarily disabled. It shall fixed in a soon-to-come version.\n";
+#endif
 #ifdef FIM_AUTOCMDS
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal
