@@ -65,14 +65,25 @@ namespace fim
 		return *s=='\0'?1:0;
 	}
 
-	Command* CommandConsole::findCommand(fim::string cmd)const
+	int CommandConsole::findCommandIdx(fim::string cmd)const
 	{
 		/*
 		 * is cmd a valid internal (registered) Fim command ?
 		 */
 		for(size_t i=0;i<commands_.size();++i) 
 			if(commands_[i] && commands_[i]->cmd_==cmd)
-				return commands_[i];
+				return i;
+		return -1;
+	}
+
+	Command* CommandConsole::findCommand(fim::string cmd)const
+	{
+		/*
+		 * is cmd a valid internal (registered) Fim command ?
+		 */
+		int idx=findCommandIdx(cmd);
+		if(idx!=-1)
+			return commands_[idx];
 		return NULL;
 	}
 
@@ -479,7 +490,16 @@ namespace fim
 		 * C is added to the commands list
 		 */
 		assert(c);	//FIXME : see the macro NDEBUG for this
-		commands_.push_back(c);
+		int idx=findCommandIdx(c->cmd_);
+
+		if(idx!=-1)
+		{
+			// we replace rather than add
+			delete commands_[idx];
+			commands_[idx]=c;
+		}
+		else
+			commands_.push_back(c);
 		//sort(commands_.begin(),commands_.end()); // 20110517 FIXME: shall sort pointers by inspecting pointed data.
 		//based on actual 
 	}

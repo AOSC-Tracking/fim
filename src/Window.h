@@ -33,6 +33,7 @@
 #ifndef NULL
 	#define NULL 0
 #endif
+#define FIM_DISABLE_WINDOW_SPLITTING 1
 
 /*
  *	This code is still experimental and programmed in great hurry.
