@@ -388,7 +388,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_RETURN),fim::string(FIM_FLT_RETURN" "FIM_CNS_EX_NUM_STRING" : return from the program with a specified status code"),this,&CommandConsole::do_return));
 		addCommand(new Command(fim::string(FIM_FLT_ALIGN_TOP),fim::string(FIM_FLT_ALIGN_TOP" : align to the upper side the current image" ),&browser_,&Browser::top_align));
 		addCommand(new Command(fim::string(FIM_FLT_ALIGN_BOTTOM),fim::string(FIM_FLT_ALIGN_BOTTOM" : align to the lower side the current image" ),&browser_,&Browser::bottom_align));
-		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string(FIM_FLT_GOTO" "FIM_CNS_EX_NUM_STRING" : go to the image specified by index "FIM_CNS_EX_NUM_STRING ),&browser_,&Browser::goto_image));
+		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string(FIM_FLT_GOTO" "FIM_CNS_EX_NUM_STRING" : go to the image specified by index "FIM_CNS_EX_NUM_STRING"; if terminated by '%', the effective index will be computed as a percentage of the current files list length; if prepended by '-' or '+', the jump will be relative to the current image index." ),&browser_,&Browser::goto_image));
 		addCommand(new Command(fim::string(FIM_FLT_NEGATE),fim::string(FIM_FLT_NEGATE" : negate the displayed image colors" ),&browser_,&Browser::negate));
 		addCommand(new Command(fim::string(FIM_FLT_STATUS),fim::string(FIM_FLT_STATUS" : set the status line to the collation of the given arguments"),this,&CommandConsole::status));
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLDOWN),fim::string(FIM_FLT_SCROLLDOWN" : scroll down the image, going next if at bottom" ),&browser_,&Browser::scrolldown));

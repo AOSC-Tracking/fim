@@ -1056,16 +1056,28 @@ nop:
 		 *	FIX ME
 		 *	there should be a way to have an interactive goto
 		 */
-		if(n_files()==0)return "no image to go to!";
-		int g=current_n()+1;
-		if(args.size()<1)return "please specify a file to view ( a number or ^ or $ ) \n";
+		const char*errmsg="";
+		int cn=0,g=0;
+		if(n_files()==0){errmsg="no image to go to!";goto err;}
+		cn=g=current_n()+1;
+		if(args.size()<1){errmsg="please specify a file to view ( a number or ^ or $ ) \n";goto err;}
 		else
 		{
-			char c=*(args[0].c_str());
-			if(isdigit(c)  || c=='-')g=atoi(args[0].c_str());
+			const char*s=args[0].c_str();
+			char c=FIM_SYM_CHAR_NUL;
+			int sl=0;
+			bool pcnt=false;
+			if(!s)goto ret;
+			sl=strlen(s);
+			if(sl<1)goto ret;
+			c=*s;
+			pcnt=(s[sl-1]=='%');
+			if(isdigit(c)  || c=='-' || c=='+')g=atoi(s);
 			else if(c=='^' || c=='f')g=1;
 			else if(c=='$' || c=='l')g=n();
 			else cout << " please specify a number or ^ or $\n";
+			if(pcnt)g=(g*n_files())/100;//FIXME: gross errors may occur here
+			if(c=='+' || c=='-')g=cn+g; // FIXME: what if g g<1 ? pity :)
 			//if(g!=-1)
 			{	
 				fim::string c=current();
@@ -1078,7 +1090,10 @@ nop:
 #endif
 			}
 		}
+ret:
 		return FIM_CNS_EMPTY_RESULT;
+err:
+		return errmsg;
 	}
 
 	fim::string Browser::remove(const args_t &args)
