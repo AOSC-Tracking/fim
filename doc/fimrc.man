@@ -416,7 +416,7 @@ align_bottom : align to the lower side the current image
 .B
 goto
 .fi
-goto {number} : go to the image specified by index {number}
+goto {number} : go to the image specified by index {number}; if terminated by '%', the effective index will be computed as a percentage of the current files list length; if prepended by '-' or '+', the jump will be relative to the current image index.
 .fi
 
 .B

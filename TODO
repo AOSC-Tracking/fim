@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110609	need to collapse together the pan_* functions; first via a wrapper; then de facto; then introduce the optional % specifier 
 20110609	.ps crashes (try that matrix!) ?
 20110604	shall fix systematically stdin reading switches conflict (if any)
 20110604	may consider usage of ffmpeg's libswscale for image scaling
