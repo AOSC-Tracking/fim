@@ -117,7 +117,8 @@ struct fim_options_t fim_options[] = {
     },
 #ifdef FIM_READ_STDIN_IMAGE
     {FIM_OSW_IMAGE_FROM_STDIN,      no_argument,       NULL, 'i',"read an image file from standard input",NULL,
-"Will read one single image from the standard input (yes: the image, not the filename).  May not work with all supported file formats."
+"Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats."
+"\nIn the image list, this image will be displayed as \""FIM_STDIN_IMAGE_NAME"\".\n"
     },
 #endif
     {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}",
@@ -186,6 +187,7 @@ struct fim_options_t fim_options[] = {
 #ifdef FIM_READ_STDIN
     {"read-from-stdin",      no_argument,       NULL, '-',"read an image list from standard input",NULL,
 "Reads file list from stdin.\n"
+
 "\n"
 "Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.\n"
 "\n"
@@ -383,11 +385,17 @@ int fim_dump_man_page()
 			string(".SH NAME\n")+
 			string("fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n")+
 			string(".SH SYNOPSIS\n")+
+#ifdef FIM_READ_STDIN
 			string(".B fim [{options}] [--] {imagefile} [{imagefiles}]\n.fi\n")+
 			string(".B ... | fim [{options}] [--] [{imagefiles}] -\n.fi\n")+
 			string(".B fim [{options}] [--] [{files}] - < {file_name_list_text_file}\n.fi\n")+
+#endif
+#ifdef FIM_READ_STDIN_IMAGE
 			string(".B fim --"FIM_OSW_IMAGE_FROM_STDIN" [{options}] < {imagefile}\n.fi\n")+
+#endif
+#ifdef FIM_READ_STDIN
 			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [{options}] < {scriptfile}\n.fi\n")+
+#endif
 			string("\n")+
 			string(".SH DESCRIPTION\n")+
 			string(".B\nfim\nis a `swiss army knife` for displaying image files.\n")+
@@ -521,6 +529,7 @@ mp+=string(
 ".B images\n"
 ".P\n"
 ".P\n"
+#ifdef FIM_READ_STDIN_IMAGE
 "\n"
 ".B \n"
 "scanimage ... | tee scan.ppm | fim -i\n"
@@ -528,6 +537,7 @@ mp+=string(
 "# Will make fim read the image scanned from a flatbed scanner as soon as it is read \n"
 ".P\n"
 ".P\n"
+#endif
 "\n"
 ".B fim * > selection.txt\n"
 ".fi\n"
@@ -562,6 +572,9 @@ mp+=string(
 "\n"
 ".SH NOTES\n"
 "This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.\n"
+#ifdef FIM_READ_STDIN_IMAGE
+"The filename \""FIM_STDIN_IMAGE_NAME"\" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.\n"
+#endif
 ".SH BUGS\n"
 ".B fim\n"
 "has bugs. Please read the \n"
@@ -1021,7 +1034,11 @@ done:
 		#endif
 		read_one_script_file_from_stdin > 1)
 		{
-			FIM_FPRINTF(stderr, "error : you shouldn't specify more than one standard input reading options among (-, -p, ad -i)!\n\n");
+			FIM_FPRINTF(stderr, "error : you shouldn't specify more than one standard input reading options among (-, -p"
+#ifdef FIM_READ_STDIN_IMAGE
+					", -i"
+#endif
+					")!\n\n");
 			retcode=help_and_exit(argv[0],0);/* should return 0 or -1 ? */
 			goto ret;
 		}
@@ -1193,6 +1210,9 @@ int main(int argc,char *argv[])
 	#endif 
 	#endif 
 	// for TIFF need TIFFGetVersion
+	#ifdef FIM_CONFIGURATION
+			"Configuration invocation: "FIM_CONFIGURATION"\n" 
+	#endif
 	#ifdef CXXFLAGS
 			"Compile flags: CXXFLAGS="CXXFLAGS
 	#ifdef CFLAGS

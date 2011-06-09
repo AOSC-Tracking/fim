@@ -103,7 +103,9 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 display help and terminate the program.
 .TP
 .B -i, --image-from-stdin
-Will read one single image from the standard input (yes: the image, not the filename).  May not work with all supported file formats.
+Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats.
+In the image list, this image will be displayed as "<STDIN>".
+
 .TP
 .B -m {vmode}, --mode {vmode}
 name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
@@ -373,6 +375,7 @@ scanimage ... | tee scan.ppm | fim -i
 
 .SH NOTES
 This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.
+The filename "<STDIN>" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.
 .SH BUGS
 .B fim
 has bugs. Please read the 

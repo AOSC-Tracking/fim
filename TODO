@@ -21,11 +21,14 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110609	.ps crashes (try that matrix!) ?
+20110604	shall fix systematically stdin reading switches conflict (if any)
+20110604	may consider usage of ffmpeg's libswscale for image scaling
 20110602	in the documentation, shall write about FIM_STDIN_IMAGE_NAME
 20110602	need a test for the goodness of the 'random' variable numbers.
 20110601	shall use fim_byte_t instead of unsigned char's
 20110601	filelistlen and other vars should be set coherently
-20110530	in some contexts, using libsvga may be interesting 
+20110530	in some contexts, using libsvga (see http://www.svgalib.org/jay/beginners_guide/beginners_guide.html) may be interesting 
 20110530	need some "emergency" command and/or mechanism for freeing/reclaiming memory (e.g.:caches, buffers)
 20110528	may introduce a push/pop mechanism for the status bar
 20110526	shall verify if it is possible instant-next-cached image access

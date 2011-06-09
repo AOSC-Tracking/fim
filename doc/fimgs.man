@@ -1,5 +1,5 @@
 .\" $LastChangedDate$
-.TH fimgs 1 "(c) 2007-2009 Michele Martone"
+.TH fimgs 1 "(c) 2007-2011 Michele Martone"
 .SH NAME
 fimgs - poor man's [http://]PostScript/pdf/dvi/cbr/rar/cbz/zip viewer for the linux
 framebuffer console
@@ -31,6 +31,6 @@ to get help on its options.
 You can
 use option -p <password> if your PDF file requires password.
 .SH SEE ALSO
-fim(1), gs(1), fbi(1), fbgs(1), bash(1)
+fim(1), fimrc(1), gs(1), fbi(1), fbgs(1), bash(1)
 .SH AUTHOR
 Michele Martone <dezperado _ GUESS _ autistici.org>. 

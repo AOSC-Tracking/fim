@@ -17,6 +17,11 @@ AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ w
 AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
 AC_SUBST(SVN_REVISION,"svnversion")
 
+AH_TEMPLATE([FIM_CONFIGURATION])
+FIM_CONFIGURATION="$0 $@"
+AC_SUBST(FIM_CONFIGURATION)
+AC_DEFINE_UNQUOTED([FIM_CONFIGURATION],"$FIM_CONFIGURATION")
+
 AC_MSG_NOTICE([
         Welcome to the Fim (revision $SVN_REVISION) configure script!
 	This script will create the right Makefile for building Fim on your system.
