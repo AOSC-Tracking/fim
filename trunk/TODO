@@ -21,6 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110610	what if the user wants no scaling at all ?
+20110610	shall unify the scaling-control variables
 20110610	get rid of 'next' via 'goto +1'
 20110609	need to collapse together the pan_* functions; first via a wrapper; then de facto; then introduce the optional % specifier 
 20110609	.ps crashes (try that matrix!) ?

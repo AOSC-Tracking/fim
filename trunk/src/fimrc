@@ -60,12 +60,13 @@ bind 'Esc' "quit";
 bind 'n' "next_picture;";
 #bind 'h' "help";
 bind 'C-h' "help";
-bind 'x' "echo";
-bind 'e' "echo";
+#bind 'x' "echo";
+#bind 'e' "echo";
 #bind 'p' "prev;display;";
 bind 'p' "prev_picture;";
 bind 'P' "pop";
-bind 's' "sort";
+#bind 's' "sort";
+bind 's' "scrollforward";
 bind 'C-s' "swap;redisplay;";
 bind 'S' "toggleDisplayStatus";
 bind 'I' "toggleautonegate";
@@ -86,7 +87,7 @@ bind 'A' "A";
 bind 'C-m' "mark";
 bind 'u' "unmark";
 
-# Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
+# Note : on many consoles C-j is by default equivalent to Enter.. so this may not work :)
 bind 'Enter' "mark;next";
 bind '-' "reduce";
 bind "Up" "panup";
@@ -151,14 +152,14 @@ autocmd "PostRedisplay" ""   "i:_will_display=0;";
 
 
 # the aalib library has often problems with proportions, and this is a temporary fix
-alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
-alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;auto_scale;}" "";
+#alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
+#alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;auto_scale;}" "";
 #alias "exif_fix" "i:orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
 #autocmd "PostReload"   "" "aalib_fix;exif_fix;";
 #autocmd "PostLoad"   "" "aalib_fix;exif_fix;";
-autocmd "PostReload"   "" "aalib_fix;";
-autocmd "PostLoad"   "" "aalib_fix;";
-
+#autocmd "PostReload"   "" "aalib_fix;";
+#autocmd "PostLoad"   "" "aalib_fix;";
+# 20110610 with the viewport percentage based scaling mechanism enabled by default, the aalib fix does not seem necessary anymore
 
 autocmd "PostReload"  "" "i:fresh=1" ;
 autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
@@ -239,7 +240,7 @@ alias "wd" "window 'down'" "selects the window under the current";
 alias "wl" "window 'left'" "selects the window at left of the current";
 alias "wr" "window 'right'" "selects the window at right of the current";
 bind 'K' "wu";
-# Note : on many consoles C-j is by default equivalent to Enter.. so this could not work :)
+# Note : on many consoles C-j is by default equivalent to Enter.. so this may not work :)
 #bind 'C-j' "wd";
 bind 'J' "wd";
 bind 'H' "wl";

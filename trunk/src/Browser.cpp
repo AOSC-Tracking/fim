@@ -156,6 +156,7 @@ namespace fim
 		return s;
 	}
 
+#if !FIM_WANT_SINGLE_PAN_COMMAND
 	fim::string Browser::pan_up(const args_t &args)
 	{
 		/*
@@ -310,6 +311,77 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
+	fim::string Browser::pan_right(const args_t &args)
+	{
+		/*
+		 * pans the image right
+		 */
+		if(c_image())
+		{
+			fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			autocmd_exec(FIM_ACM_PREPAN,c);
+#endif
+			if(c_image())viewport()->pan_right(firstorzero(args));
+#ifdef FIM_AUTOCMDS
+			autocmd_exec(FIM_ACM_POSTPAN,c);
+#endif
+		}
+		else next(1);
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
+	fim::string Browser::pan_left(const args_t &args)
+	{
+		/*
+		 * pans the image left
+		 */
+		if(c_image())
+		{
+			fim::string c=current();
+#ifdef FIM_AUTOCMDS
+			autocmd_exec(FIM_ACM_PREPAN,c);
+#endif
+			if(c_image() && viewport())viewport()->pan_left(firstorzero(args));
+#ifdef FIM_AUTOCMDS
+			autocmd_exec(FIM_ACM_POSTPAN,c);
+#endif
+		}
+		else prev();
+		return FIM_CNS_EMPTY_RESULT;
+	}
+#endif
+
+#if FIM_WANT_SINGLE_PAN_COMMAND
+	fim::string Browser::pan(const args_t &args)
+	{
+		/*
+		 * pans the image left
+		 * FIXME: unfinished
+		 */
+		if(args.size()<1 || (!args[0].c_str()))goto nop;
+		if(c_image())
+		{
+			fim::string c=current();
+			char f=tolower(*args[0].c_str());
+			if(f)
+			{
+#ifdef FIM_AUTOCMDS
+			autocmd_exec(FIM_ACM_PREPAN,c);
+#endif
+			if(c_image() && viewport())
+				viewport()->pan(args);
+#ifdef FIM_AUTOCMDS
+			autocmd_exec(FIM_ACM_POSTPAN,c);
+#endif
+			}
+		}
+		else prev();
+nop:
+		return FIM_CNS_EMPTY_RESULT;
+	}
+#endif
+
 	fim::string Browser::scale_multiply(const args_t &args)
 	{
 		/*
@@ -440,75 +512,6 @@ nop:
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
-
-	fim::string Browser::pan_right(const args_t &args)
-	{
-		/*
-		 * pans the image right
-		 */
-		if(c_image())
-		{
-			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPAN,c);
-#endif
-			if(c_image())viewport()->pan_right(firstorzero(args));
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPAN,c);
-#endif
-		}
-		else next(1);
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::pan_left(const args_t &args)
-	{
-		/*
-		 * pans the image left
-		 */
-		if(c_image())
-		{
-			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPAN,c);
-#endif
-			if(c_image() && viewport())viewport()->pan_left(firstorzero(args));
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPAN,c);
-#endif
-		}
-		else prev();
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::pan(const args_t &args)
-	{
-		/*
-		 * pans the image left
-		 * FIXME: unfinished
-		 */
-		if(args.size()<1 || (!args[0].c_str()))goto nop;
-		if(c_image())
-		{
-			fim::string c=current();
-			char f=tolower(*args[0].c_str());
-			if(f)
-			{
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPAN,c);
-#endif
-			if(c_image() && viewport())
-				viewport()->pan(args);
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPAN,c);
-#endif
-			}
-		}
-		else prev();
-nop:
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
 	fim::string Browser::negate(const args_t &args)
 	{
 		/*
@@ -1182,12 +1185,21 @@ nop:
 			if(viewport()->onRight() && viewport()->onBottom())
 				next();
 			else
+#if FIM_WANT_SINGLE_PAN_COMMAND
+			if(viewport()->onRight())
+			{
+				viewport()->pan("down",FIM_CNS_SCROLL_DEFAULT);
+				while(!(viewport()->onLeft()))viewport()->pan("left",FIM_CNS_SCROLL_DEFAULT);
+			}
+			else viewport()->pan("right",FIM_CNS_SCROLL_DEFAULT);
+#else
 			if(viewport()->onRight())
 			{
 				viewport()->pan_down();
 				while(!(viewport()->onLeft()))viewport()->pan_left();
 			}
 			else viewport()->pan_right();
+#endif
 		}
 		else next(1);
 #ifdef FIM_AUTOCMDS
@@ -1210,7 +1222,12 @@ nop:
 		if(c_image() && viewport())
 		{
 			if(viewport()->onBottom()) next();
-			else pan_down(args_t());
+			else
+#if FIM_WANT_SINGLE_PAN_COMMAND
+				viewport()->pan("down",FIM_CNS_SCROLL_DEFAULT);
+#else
+				pan_down(args_t());
+#endif
 		}
 		else next(1);
 #ifdef FIM_AUTOCMDS

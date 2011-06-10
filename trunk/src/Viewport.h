@@ -80,6 +80,7 @@ class Viewport
 
 	/* viewport methods */
 	fim::string pan(const args_t &args);
+	fim::string pan(const char*a1, const char*a2);
 	void pan_up   (fim_pan_t s=0);
 	void pan_down (fim_pan_t s=0);
 	void pan_right(fim_pan_t s=0);

@@ -295,6 +295,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_SCALEFACTOR_DELTA 0.1f
 #define FIM_CNS_SCALEFACTOR_ZERO 0.0f
 //#define FIM_CNS_STEPS_DEFAULT	 	50
+#define FIM_CNS_SCROLL_DEFAULT	 	"90%"
 #define FIM_CNS_STEPS_DEFAULT_N	 	50
 #define FIM_CNS_STEPS_DEFAULT	 	"20%"
 #define FIM_CNS_STEPS_MIN	 1
@@ -356,6 +357,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 "!"FIM_CNS_EX_SYSC_STRING"		executes the "FIM_CNS_EX_SYSC_STRING" quoted string as a \""FIM_CNS_SHELL"\" shell command\n"\
 ""
 
+#define FIM_WANT_SINGLE_PAN_COMMAND 1	/* TODO: when confident, this shall be the default (and alternative code shall be deleted)*/
 
 
 #include "string.h"
@@ -667,7 +669,6 @@ namespace fim
 #define FIM_WANT_SINGLE_SYSTEM_INVOCATION 1
 #define FIM_WANT_SDL_OPTIONS_STRING 1
 #define FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE 1
-#define FIM_WANT_SINGLE_PAN_COMMAND 1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_STRING_BUFSIZE	4096
