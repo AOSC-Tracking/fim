@@ -419,9 +419,8 @@ namespace fim
 #define FIM_VID_STATUS_LINE 			"_status_line"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[internal,in] if 1, will prefetch further files just after display of the first file" */
 #define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[internal,in] number of seconds sleep during slideshow mode" */
-#define FIM_VID_AUTO_SCALE_V			"auto_scale_v"	/* "[experimental, undocumented]" */
-#define FIM_VID_AUTOTOP				"autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
-#define FIM_VID_AUTOWIDTH			"autowidth"		/* "[internal,in] if 1, will scale freshly loaded images to fit width" */
+#define FIM_VID_AUTOTOP				"_autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
+#define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if set, will be fed to the scale command" */
 #define FIM_VID_FILEINDEX			"fileindex"		/* "[internal,out] the current image numeric index" */
 #define FIM_VID_FILELISTLEN			"filelistlen"		/* "[internal,out] the length of the current image list" */
 #define FIM_VID_FILENAME			"filename"		/* "[internal,out] the current file name" */

@@ -1,4 +1,5 @@
 # $LastChangedDate$
+#
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation to discover how to change this default hardcoded file 
 # and how to make your own.
@@ -30,7 +31,7 @@ _max_cached_memory=80000000;
 _max_iterated_commands=100;
 _want_prefetch=1;
 _no_external_loader_programs=0;
-autowidth=1;
+_scale_style='a';
 ignorecase=1;
 ascale="1.0";
 console_offset=0;
@@ -119,13 +120,11 @@ bind '.' "repeat_last;";
 #reload;
 #_display_status=1;
 #display;
-alias 'A' "'autotop=1-autotop;'" "";
 alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;" "";
 
 # key echo
 alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 
-v:auto_scale_v=1;
 _verbose_keys=0;
 _display_busy=1;
 _display_status=1;
@@ -143,34 +142,27 @@ autocmd "PostPrev" "" "reload;";
 #autocmd "PreWindow"   "" "";
 autocmd "PostWindow"   "" "display;";
 autocmd "PreRedisplay"   "" "i:_will_display=1;";
-autocmd "PreRedisplay"   ".*/fbps-.*" "if(i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
-autocmd "PreRedisplay"   "" "if(autowidth*i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
-autocmd "PreRedisplay"   "" "if(v:auto_scale_v *i:fresh){i:fresh=0;auto_scale       ;i:fresh=0;}";
-autocmd "PreRedisplay"   "" "if(auto_width_v *i:fresh){i:fresh=0;auto_scale_width ;i:fresh=0;}";
-autocmd "PreRedisplay"   "" "if(auto_height_v*i:fresh){i:fresh=0;auto_scale_height;i:fresh=0;}";
+#autocmd "PreRedisplay"   ".*/fbps-.*" "if(i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
+autocmd "PreRedisplay"   "" "if(_scale_style!='' && i:fresh){i:fresh=0;scale _scale_style ;i:fresh=0;}";
 autocmd "PostRedisplay" ""   "i:_will_display=0;";
 
-
 # the aalib library has often problems with proportions, and this is a temporary fix
-#alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;steps=5;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
-#alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;auto_scale;}" "";
+alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
+alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;auto_scale;}" "";
 #alias "exif_fix" "i:orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
 #autocmd "PostReload"   "" "aalib_fix;exif_fix;";
 #autocmd "PostLoad"   "" "aalib_fix;exif_fix;";
-#autocmd "PostReload"   "" "aalib_fix;";
-#autocmd "PostLoad"   "" "aalib_fix;";
-# 20110610 with the viewport percentage based scaling mechanism enabled by default, the aalib fix does not seem necessary anymore
+autocmd "PostReload"   "" "aalib_fix;";
+autocmd "PostLoad"   "" "aalib_fix;";
 
 autocmd "PostReload"  "" "i:fresh=1" ;
 autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
 #autocmd "PostScale"   "" "{i:fresh=1;display;}" ;
-autocmd "PostScale"   "" "_wd=i:_will_display;" ;
 autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
 autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
-# FIXME : seems like the following automcd's can be commented
 autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
-autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";	# new : for smoother browsing of big images 
-autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}"; # a fixup
+autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";
+autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}";
 
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 10 images";
 bind 'N' 'next10';
@@ -203,7 +195,6 @@ bind 'x' "diagonal_ne;";
 bind 'X' "diagonal_sw;";
 alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
 alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
-#bind 'C-a' "auto_scale";
 #autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n';";
 #autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
 #autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
@@ -214,13 +205,7 @@ alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
 #push "media/image.jpg";
 #push "media/icon_smile.gif";
 echo "WELCOME : to switch to the command line interface press ':' ";
-alias "toggleAutoScale" "v:auto_scale_v=1-v:auto_scale_v;autowidth=0;reload;" "";
-alias "toggleAutoWidth" "autowidth=1-autowidth;v:auto_scale_v=0;reload;" "";
-bind 'C-w'   'toggleAutoWidth;';
-bind 'C-a' "toggleAutoScale;";
-bind 'C-c' "toggleAutoScale;";
 #bind 'C-l' "clear;";	# temporarily off : FIXME
-bind 'A'   "toggleAutoScale;";
 #toggleVerbosity;
 #bind 'f' "next;display;";
 bind 'b' "prev;display;";
@@ -285,14 +270,13 @@ alias 'scd'   'console_scroll_down;' "";
 alias 'scz'   'console_scroll_reset;' "";
 bind "PageUp" "if(_display_console==0){prev_picture;}else{scu;}";
 bind "PageDown" "if(_display_console==0){next_picture;}else{scd;}";
-alias "musicplay"  "system 'mpc play'" "";
-alias "musicpause" "system 'mpc pause'" "";
-
 bind "Home" "0;";
 bind "End" "$;";
 bind "Backspace" "prev";
 
 # Some more examples:
+#alias "musicplay"  "system 'mpc play'" "";
+#alias "musicpause" "system 'mpc pause'" "";
 #alias "rdjpgcom" 'system "rdjpgcom" i:filename';
 # offsetscan usage : need a mechanism for popping all images before.
 #alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}"; # NEW
