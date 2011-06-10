@@ -4,8 +4,8 @@ in echo:
 in next:
 in reload:
 in redisplay:
-in auto_width_scale:
+in scale:
 in reload:
 in redisplay:
-in auto_width_scale:
+in scale:
 in quit:

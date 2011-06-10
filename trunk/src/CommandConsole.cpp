@@ -409,11 +409,17 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_STATUS),fim::string(FIM_FLT_STATUS" : set the status line to the collation of the given arguments"),this,&CommandConsole::status));
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLDOWN),fim::string(FIM_FLT_SCROLLDOWN" : scroll down the image, going next if at bottom" ),&browser_,&Browser::scrolldown));
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLFORWARD),fim::string(FIM_FLT_SCROLLFORWARD" : scroll the image as it were reading it" ),&browser_,&Browser::scrollforward));
-		addCommand(new Command(fim::string(FIM_FLT_SCALE),fim::string(FIM_FLT_SCALE" : scale the image according to a scale (ex.: 0.5,40%,..) [undocumented]" ),&browser_,&Browser::scale));
+		addCommand(new Command(fim::string(FIM_FLT_SCALE),fim::string(FIM_FLT_SCALE" {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,w,h,a); if the first character of {value} is 'w', will scale according to the screen width; if it is 'h', to the screen height; if it is 'a', to the minimum of 'w' and 'h'; otherwise if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale" ),&browser_,&Browser::scale));
 		addCommand(new Command(fim::string(FIM_FLT_SET),fim::string(FIM_FLT_SET" : manipulate the internal variables [undocumented]" ),this,&CommandConsole::set));
+#if !FIM_WANT_SINGLE_SCALE_COMMAND
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_SCALE),fim::string(FIM_FLT_AUTO_SCALE" : set auto scale mode" ),&browser_,&Browser::auto_scale));
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_WIDTH_SCALE),fim::string(FIM_FLT_AUTO_WIDTH_SCALE" : scale the image so that it fits horizontally in the screen" ),&browser_,&Browser::auto_width_scale));
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE),fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE" : scale the image so that it fits vertically in the screen" ),&browser_,&Browser::auto_height_scale));
+#else
+		alias(FIM_FLT_AUTO_SCALE,FIM_FLT_SCALE" \"a\"");
+		alias(FIM_FLT_AUTO_WIDTH_SCALE,FIM_FLT_SCALE" \"w\"");
+		alias(FIM_FLT_AUTO_HEIGHTH_SCALE,FIM_FLT_SCALE" \"h\"");
+#endif
 		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" ["FIM_CNS_EX_KSY_STRING" ["FIM_CNS_EX_CMDS_STRING"]] : bind some keyboard shortcut "FIM_CNS_EX_KSY_STRING" to "FIM_CNS_EX_CMDS_STRING""FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::bind));
 		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string(FIM_FLT_QUIT" : terminate the program"),this,&CommandConsole::quit));
 #ifndef FIM_WANT_NOSCRIPTING
