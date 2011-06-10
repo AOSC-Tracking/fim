@@ -135,6 +135,7 @@ news: freshmeat mail-announce
 dox: src/fim
 	src/fim --help=m > doc/fim.man
 	src/fim --dump-reference-help=man  > doc/fimrc.man
+	src/fimgs -m  > doc/fimgs.man
 
 # fixme : missing integration with ChangeLog file
 mail-announce:
