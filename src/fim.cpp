@@ -179,7 +179,10 @@ struct fim_options_t fim_options[] = {
 "display version and compile flags, and then terminate."
     },
     {"autowidth",   no_argument,       NULL, 'w',"scale according to width",NULL,
-"Will scale the image according to the screen size."
+"Will scale the image according to the screen width."
+    },
+    {"autoheight",   no_argument,       NULL, 'H',"scale according to height",NULL,
+"Will scale the image according to the screen height."
     },
     {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}",
 "All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
@@ -720,7 +723,7 @@ done:
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Ab?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:S",
+		    c = getopt_long(argc, argv, "HAb?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:S",
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -738,8 +741,7 @@ done:
 		    //cc.setVariable(FIM_VID_AUTOTOP,1);
 		    //TODO: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add("v:"FIM_VID_AUTO_SCALE_V"=1;");
-		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=0;");/*  these mutual interactions are annoying */
+		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='a';");
 	#else
 		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif
@@ -808,15 +810,20 @@ done:
 		    break;
 		case 'w':
 		    //fbi's
-		    //cc.setVariable(FIM_VID_AUTOWIDTH,1);
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=1;");
+		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='w';");
+	#endif
+		    break;
+		case 'H':
+		    //fbi's
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='h';");
 	#endif
 		    break;
 		case 'P':
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=1;"FIM_VID_AUTOTOP"=1;");
+		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='w';"FIM_VID_AUTOTOP"=1;");
 	#endif
 		    break;
 		case 0xFFD8FFE0:
