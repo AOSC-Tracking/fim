@@ -363,7 +363,7 @@ namespace fim
 		if(c_image())
 		{
 			fim::string c=current();
-			char f=tolower(*args[0].c_str());
+			fim_char_t f=tolower(*args[0].c_str());
 			if(f)
 			{
 #ifdef FIM_AUTOCMDS
@@ -435,19 +435,50 @@ nop:
 	{
 		/*
 		 * scales the image to a certain scale factor
+		 * FIXME: no user error checking -- poor error reporting for the user
+		 * TODO: wxh syntax needed
 		 */
 		fim_scale_t newscale;
-		if(args.size()==0)goto nop;
-		newscale=fim_atof(args[0].c_str());
-		if(newscale==0.0)goto nop;
-		if(strstr(args[0].c_str(),"%"))newscale*=.01;
+		fim_char_t fc=FIM_SYM_CHAR_NUL;
+		const fim_char_t*ss=NULL;
+		if(args.size()<1 || !(ss=args[0].c_str()))goto nop;
+		fc=tolower(*ss);
+		if(isalpha(fc))
+		{
+			if( !(fc=='w'||fc=='h'||fc=='a'))
+				goto nop;
+		}
+		else
+		{
+			newscale=fim_atof(ss);
+			if(newscale==FIM_CNS_SCALEFACTOR_ZERO)
+			{
+				goto nop;
+			}
+			if(strstr(ss,"%"))
+				newscale*=.01;
+		}
 		if(c_image())
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
-			if(c_image())image()->setscale(newscale);
+			if(c_image())
+			switch(fc)
+			{
+				case('w'):
+				if(viewport())viewport()->auto_width_scale();
+				break;
+				case('h'):
+				if(viewport())viewport()->auto_height_scale();
+				break;
+				case('a'):
+				if(viewport())viewport()->auto_scale();
+				break;
+				default:
+				image()->setscale(newscale);
+			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
 #endif
@@ -456,6 +487,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
+#if !FIM_WANT_SINGLE_SCALE_COMMAND
 	fim::string Browser::auto_height_scale(const args_t &args)
 	{
 		/*
@@ -512,6 +544,8 @@ nop:
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
+#endif
+
 	fim::string Browser::negate(const args_t &args)
 	{
 		/*
@@ -1087,15 +1121,15 @@ nop:
 		 *	FIX ME
 		 *	there should be a way to have an interactive goto
 		 */
-		const char*errmsg="";
+		const fim_char_t*errmsg="";
 		int cn=0,g=0;
 		if(n_files()==0){errmsg="no image to go to!";goto err;}
 		cn=g=current_n()+1;
 		if(args.size()<1){errmsg="please specify a file to view ( a number or ^ or $ ) \n";goto err;}
 		else
 		{
-			const char*s=args[0].c_str();
-			char c=FIM_SYM_CHAR_NUL;
+			const fim_char_t*s=args[0].c_str();
+			fim_char_t c=FIM_SYM_CHAR_NUL;
 			int sl=0;
 			bool pcnt=false;
 			if(!s)goto ret;

@@ -404,31 +404,13 @@ scrollforward : scroll the image as it were reading it
 .B
 scale
 .fi
-scale : scale the image according to a scale (ex.: 0.5,40%,..) [undocumented]
+scale {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,w,h,a); if the first character of {value} is 'w', will scale according to the screen width; if it is 'h', to the screen height; if it is 'a', to the minimum of 'w' and 'h'; otherwise if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale
 .fi
 
 .B
 set
 .fi
 set : manipulate the internal variables [undocumented]
-.fi
-
-.B
-auto_scale
-.fi
-auto_scale : set auto scale mode
-.fi
-
-.B
-auto_width_scale
-.fi
-auto_width_scale : scale the image so that it fits horizontally in the screen
-.fi
-
-.B
-auto_height_scale
-.fi
-auto_height_scale : scale the image so that it fits vertically in the screen
 .fi
 
 .B

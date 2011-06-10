@@ -122,10 +122,12 @@ class Browser
 	fim::string scrollforward(const args_t &args);
 	fim::string scale_increment(const args_t &args);
 	fim::string scale_multiply(const args_t &args);
-	fim::string auto_scale(const args_t &args);
-	fim::string auto_width_scale(const args_t &args);
 	fim::string scale(const args_t &args);
+#if !FIM_WANT_SINGLE_SCALE_COMMAND
 	fim::string auto_height_scale(const args_t &args);
+	fim::string auto_width_scale(const args_t &args);
+	fim::string auto_scale(const args_t &args);
+#endif
 	fim::string reduce(const args_t &args);
 	fim::string magnify(const args_t &args);
 	fim::string scale_factor_increase(const args_t &args);

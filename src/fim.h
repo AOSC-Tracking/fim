@@ -358,6 +358,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 ""
 
 #define FIM_WANT_SINGLE_PAN_COMMAND 1	/* TODO: when confident, this shall be the default (and alternative code shall be deleted)*/
+#define FIM_WANT_SINGLE_SCALE_COMMAND 1	/* TODO: when confident, this shall be the default (and alternative code shall be deleted)*/
 
 
 #include "string.h"
