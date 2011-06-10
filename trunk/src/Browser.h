@@ -106,6 +106,9 @@ class Browser
 	fim::string goto_image(int n);
 	fim::string top_align(const args_t &args);
 	fim::string bottom_align(const args_t &args);
+//#if FIM_WANT_SINGLE_PAN_COMMAND
+	fim::string pan(const args_t &args);
+//#else
 	fim::string pan_ne(const args_t &args);
 	fim::string pan_nw(const args_t &args);
 	fim::string pan_sw(const args_t &args);
@@ -114,6 +117,7 @@ class Browser
 	fim::string pan_down(const args_t &args);
 	fim::string pan_right(const args_t &args);
 	fim::string pan_left(const args_t &args);
+//#endif
 	fim::string scrolldown(const args_t &args);
 	fim::string scrollforward(const args_t &args);
 	fim::string scale_increment(const args_t &args);

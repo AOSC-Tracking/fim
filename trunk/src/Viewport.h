@@ -42,7 +42,8 @@ class Viewport
 #endif
 {
 	protected:
-	fim_off_t		steps_,top_,left_,panned_ ;	/* viewport variables */
+	fim_off_t	hsteps_,vsteps_,steps_,top_,left_,panned_ ;	/* viewport variables */
+	fim_bool_t	psteps_;
         DisplayDevice* displaydevice_;
 
 
@@ -54,6 +55,7 @@ class Viewport
 	CommandConsole &commandConsole;
 	public:
         void reset();
+        void steps_reset();
 #ifdef FIM_WINDOWS
         void reassignWindow(Window *w);
 #endif
@@ -77,6 +79,7 @@ class Viewport
 #endif
 
 	/* viewport methods */
+	fim::string pan(const args_t &args);
 	void pan_up   (fim_pan_t s=0);
 	void pan_down (fim_pan_t s=0);
 	void pan_right(fim_pan_t s=0);

@@ -481,6 +481,34 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
+	fim::string Browser::pan(const args_t &args)
+	{
+		/*
+		 * pans the image left
+		 * FIXME: unfinished
+		 */
+		if(args.size()<1 || (!args[0].c_str()))goto nop;
+		if(c_image())
+		{
+			fim::string c=current();
+			char f=tolower(*args[0].c_str());
+			if(f)
+			{
+#ifdef FIM_AUTOCMDS
+			autocmd_exec(FIM_ACM_PREPAN,c);
+#endif
+			if(c_image() && viewport())
+				viewport()->pan(args);
+#ifdef FIM_AUTOCMDS
+			autocmd_exec(FIM_ACM_POSTPAN,c);
+#endif
+			}
+		}
+		else prev();
+nop:
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
 	fim::string Browser::negate(const args_t &args)
 	{
 		/*
