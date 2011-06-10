@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110610	the 'info' command is useless. shall get rid of it.
 20110610	shall remove the redundant aliases declared in CommandConsole.cpp, also from the fimrc
 20110610	what if the user wants no scaling at all ?
 20110610	shall unify the scaling-control variables

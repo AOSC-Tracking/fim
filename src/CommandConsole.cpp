@@ -359,28 +359,33 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_POP),fim::string(FIM_FLT_POP" : pop the last file from the files list"),&browser_,&Browser::pop));
 		addCommand(new Command(fim::string(FIM_FLT_FILE),fim::string(FIM_FLT_FILE" : display the current file's name in the console"),&browser_,&Browser::info));// FIXME: useless!
 #if FIM_WANT_SINGLE_PAN_COMMAND
-		addCommand(new Command(fim::string(FIM_FLT_PAN),fim::string(FIM_FLT_PAN" {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction; if the \'%\' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the \""FIM_VID_STEPS"\" variable will be used;"
+		addCommand(new Command(fim::string(FIM_FLT_PAN),fim::string(
+		FIM_FLT_PAN" {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction;"
+		" if the \'%\' specifier is present, {steps} will be treated as a percentage of current screen dimensions;"
+		" if {steps} is not specified, the \""FIM_VID_STEPS"\" variable will be used;"
 		" if present, the \""FIM_VID_HSTEPS"\" variable will be considered for horizontal panning;"
 		" if present, the \""FIM_VID_VSTEPS"\" variable will be considered for vertical panning;"
 		" the variables may be terminated by the \'%\' specifier"
-		"  [undocumented]"),&browser_,&Browser::pan));
+		" "),&browser_,&Browser::pan));
+#if 0
 		alias("pan_ne",FIM_FLT_PAN" \"ne\"");
 		alias("pan_nw",FIM_FLT_PAN" \"nw\"");
 		alias("pan_se",FIM_FLT_PAN" \"se\"");
 		alias("pan_sw",FIM_FLT_PAN" \"sw\"");
-		alias("pandown",FIM_FLT_PAN" \"down\"");
-		alias("panup",FIM_FLT_PAN" \"up\"");
-		alias("panleft",FIM_FLT_PAN" \"left\"");
-		alias("panright",FIM_FLT_PAN" \"right\"");
+		alias("pand_own",FIM_FLT_PAN" \"down\"");
+		alias("pan_up",FIM_FLT_PAN" \"up\"");
+		alias("pan_left",FIM_FLT_PAN" \"left\"");
+		alias("pan_right",FIM_FLT_PAN" \"right\"");
+#endif
 #else
 		addCommand(new Command(fim::string("pan_ne" ),fim::string("pan the image north east [undocumented]"),&browser_,&Browser::pan_ne));
 		addCommand(new Command(fim::string("pan_nw" ),fim::string("pan the image north west [undocumented]"),&browser_,&Browser::pan_nw));
 		addCommand(new Command(fim::string("pan_sw" ),fim::string("pan the image south west [undocumented]"),&browser_,&Browser::pan_sw));
 		addCommand(new Command(fim::string("pan_se" ),fim::string("pan the image south east [undocumented]"),&browser_,&Browser::pan_se));
-		addCommand(new Command(fim::string("panup" ),fim::string("pan the image up [undocumented]"),&browser_,&Browser::pan_up));
-		addCommand(new Command("pandown" ,"pan the image down [undocumented]",&browser_,&Browser::pan_down));
-		addCommand(new Command(fim::string("panleft" ),fim::string("pan the image left [undocumented]"),&browser_,&Browser::pan_left));
-		addCommand(new Command(fim::string("panright" ),fim::string("pan the image right [undocumented]"),&browser_,&Browser::pan_right));
+		addCommand(new Command(fim::string("pan_up" ),fim::string("pan the image up [undocumented]"),&browser_,&Browser::pan_up));
+		addCommand(new Command("pan_down" ,"pan the image down [undocumented]",&browser_,&Browser::pan_down));
+		addCommand(new Command(fim::string("pan_left" ),fim::string("pan the image left [undocumented]"),&browser_,&Browser::pan_left));
+		addCommand(new Command(fim::string("pan_right" ),fim::string("pan the image right [undocumented]"),&browser_,&Browser::pan_right));
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded"),&browser_,&Browser::load));
 		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string(FIM_FLT_RELOAD" : load the image into memory"),&browser_,&Browser::reload));
@@ -416,11 +421,13 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_WIDTH_SCALE),fim::string(FIM_FLT_AUTO_WIDTH_SCALE" : scale the image so that it fits horizontally in the screen" ),&browser_,&Browser::auto_width_scale));
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE),fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE" : scale the image so that it fits vertically in the screen" ),&browser_,&Browser::auto_height_scale));
 #else
+#if 0
 		alias(FIM_FLT_AUTO_SCALE,FIM_FLT_SCALE" \"a\"");
 		alias(FIM_FLT_AUTO_WIDTH_SCALE,FIM_FLT_SCALE" \"w\"");
 		alias(FIM_FLT_AUTO_HEIGHTH_SCALE,FIM_FLT_SCALE" \"h\"");
 #endif
-		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" ["FIM_CNS_EX_KSY_STRING" ["FIM_CNS_EX_CMDS_STRING"]] : bind some keyboard shortcut "FIM_CNS_EX_KSY_STRING" to "FIM_CNS_EX_CMDS_STRING""FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::bind));
+#endif
+		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" ["FIM_CNS_EX_KSY_STRING" ["FIM_CNS_EX_CMDS_STRING"]] : bind some keyboard shortcut "FIM_CNS_EX_KSY_STRING" to "FIM_CNS_EX_CMDS_STRING""FIM_CNS_RAW_KEYS_MESG"; binding is dynamical, so you can rebind keys even during program's execution"),this,&CommandConsole::bind));
 		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string(FIM_FLT_QUIT" : terminate the program"),this,&CommandConsole::quit));
 #ifndef FIM_WANT_NOSCRIPTING
 		addCommand(new Command(fim::string(FIM_FLT_EXEC),fim::string(FIM_FLT_EXEC" "FIM_CNS_EX_FNS_STRING" : execute script "FIM_CNS_EX_FNS_STRING""),this,&CommandConsole::executeFile));
