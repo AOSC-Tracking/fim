@@ -22,14 +22,14 @@
 */
 #if FIM_DEFAULT_CONFIG
 		alias("q",FIM_FLT_QUIT);
-		bind('f',"files");
+//		bind('f',"files");
 		bind('q',FIM_FLT_QUIT);
-		bind('f',FIM_FLT_FILE);
+//		bind('f',FIM_FLT_FILE);
 		//bind('n',"next;display;");
 		bind('n',FIM_FLT_NEXT);
-		bind('h',FIM_FLT_HELP);
-		bind('x',FIM_FLT_ECHO);
-		bind('e',FIM_FLT_ECHO);
+//		bind('h',FIM_FLT_HELP);
+//		bind('x',FIM_FLT_ECHO);
+//		bind('e',FIM_FLT_ECHO);
 		//bind('p',"prev;display;");
 		bind('p',FIM_FLT_PREV);
 		bind('P',"pop");
@@ -60,8 +60,8 @@
 		bind(29,"scale_factor_grow");
 		bind(31,"scale_factor_shrink");
 		bind('i',FIM_FLT_INFO);
-		bind('P',"f=`files`/2;prev (--$f);\n");
-		bind('N',"f=`files`/2;next (--$f);\n");
+//		bind('P',"f=`files`/2;prev (--$f);\n");
+//		bind('N',"f=`files`/2;next (--$f);\n");
 
 /*		alias('A',"'autotop=1-autotop;'");
 		alias("toggleVerbosity","verbose=1-verbose;display;");

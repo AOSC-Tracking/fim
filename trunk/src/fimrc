@@ -1,8 +1,7 @@
 # $LastChangedDate$
 #
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
-# Read the documentation to discover how to change this default hardcoded file 
-# and how to make your own.
+# Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
 # Lines begining with a pound (#) are ignored by fim (they are treated as comments).
 
@@ -23,8 +22,8 @@
 # codes are catched by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
 
-# Some of these variables influence Fim's behaviour (in the sense these are 'internal')
-# It is wise they are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
+# Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
+# It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
 _display_status=0;
 _max_cached_images=5;
 _max_cached_memory=80000000;
@@ -38,7 +37,6 @@ console_offset=0;
 _save_fim_history=1;
 _load_fim_history=1;
 
-# useful aliases
 alias "toggleautoflip" "autoflip=1-autoflip;" "";
 alias "toggleautonegate" "autonegate=1-autonegate;" "";
 alias "toggleflip" "i:flipped=1-i:flipped;" "";
@@ -50,22 +48,16 @@ alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical ax
 alias "mirroronce" "mirror;togglemirror;" "";
 alias "q" "quit;" "quits the fim program";
 
-# default bindings (binding is dynamical, so you can rebind keys even during program's execution)
 bind 'f' "flip;";
 bind 'F' "fliponce;";
 bind 'm' "mirror;";
 bind 'M' "mirroronce;";
 bind 'q' "quit";
 bind 'Esc' "quit";
-#bind 'f' "file";
 bind 'n' "next_picture;";
-#bind 'h' "help";
 bind 'C-h' "help";
-#bind 'x' "echo";
-#bind 'e' "echo";
-#bind 'p' "prev;display;";
 bind 'p' "prev_picture;";
-bind 'P' "pop";
+#bind 'P' "pop";
 #bind 's' "sort";
 bind 's' "scrollforward";
 bind 'C-s' "swap;redisplay;";
@@ -79,33 +71,26 @@ bind 'r' "rotate10_ccw;display;";
 #bind 'C-d' "display";
 bind '+' "magnify";
 #bind 'C-+' "angle=angle+10.0;display;";
-bind 'a' "auto_scale;";
+bind 'a' "scale 'a';";
 bind 'Tab' "toggleVerbosity";
-bind 'C-v' "toggleKeyVerbosity";
-#bind 'C-k' "toggleKeyVerbosity";
+bind 'C-k' "toggleKeyVerbosity";
 bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
 bind 'C-m' "mark";
 bind 'u' "unmark";
-
-# Note : on many consoles C-j is by default equivalent to Enter.. so this may not work :)
 bind 'Enter' "mark;next";
 bind '-' "reduce";
-bind "Up" "panup";
-bind 'k' "panup";
-bind "Right" "panright";
-bind 'l' "panright";
-bind "Down" "pandown";
-bind 'j' "pandown";
-bind "Left" "panleft";
-bind 'h' "panleft";
+bind "Up" "pan_up";
+bind 'k' "pan_up";
+bind "Right" "pan_right";
+bind 'l' "pan_right";
+bind "Down" "pan_down";
+bind 'j' "pan_down";
+bind "Left" "pan_left";
+bind 'h' "pan_left";
 bind ' ' "scrolldown";
 bind 't' "align_top;";
-#bind "PageUp" "prev_picture;";
-#bind "PageDown" "next_picture;";
 bind 'i' "info";
-bind 'P' "f=`files`/2;prev  --f";
-bind 'N' "f=`files`/2;next  --f";
 
 bind 'C-g' "system 'fbgrab fim.png'";
 bind 'C-r' "start_recording;";
@@ -142,13 +127,12 @@ autocmd "PostPrev" "" "reload;";
 #autocmd "PreWindow"   "" "";
 autocmd "PostWindow"   "" "display;";
 autocmd "PreRedisplay"   "" "i:_will_display=1;";
-#autocmd "PreRedisplay"   ".*/fbps-.*" "if(i:fresh){i:fresh=0;auto_width_scale;i:fresh=0;}";
 autocmd "PreRedisplay"   "" "if(_scale_style!='' && i:fresh){i:fresh=0;scale _scale_style ;i:fresh=0;}";
 autocmd "PostRedisplay" ""   "i:_will_display=0;";
 
 # the aalib library has often problems with proportions, and this is a temporary fix
 alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
-alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;auto_scale;}" "";
+alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;scale 'a';}" "";
 #alias "exif_fix" "i:orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
 #autocmd "PostReload"   "" "aalib_fix;exif_fix;";
 #autocmd "PostLoad"   "" "aalib_fix;exif_fix;";
@@ -166,6 +150,7 @@ autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisp
 
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 10 images";
 bind 'N' 'next10';
+bind 'P' 'prev10';
 bind 'C-n' "regexp_goto_next";
 alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
 alias "bookview"          "while(1){display;sleep '2';scrolldown;};" "";
@@ -183,8 +168,18 @@ autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
 #extra..
-bind 'w' "auto_width_scale";
-bind 'h' "auto_height_scale";
+bind 'w' "scale 'w'";
+bind 'h' "scale 'h'";
+#
+alias "pan_nw" "pan 'nw';" "pans the image to the upper left";
+alias "pan_ne" "pan 'ne';" "pans the image to the upper right";
+alias "pan_se" "pan 'se';" "pans the image to the lower left";
+alias "pan_sw" "pan 'sw';" "pans the image to the lower right";
+alias "pan_down" "pan 'down';" "pans the image down";
+alias "pan_up" "pan 'up';" "pans the image up";
+alias "pan_left" "pan 'left';" "pans the image left";
+alias "pan_right" "pan 'right';" "pans the image right";
+#
 alias "diagonal_nw" "pan_nw;" "pans the image to the upper left";
 alias "diagonal_ne" "pan_ne;" "pans the image to the upper right";
 alias "diagonal_se" "pan_se;" "pans the image to the lower left";
@@ -200,10 +195,6 @@ alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
 #autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
 #autocmd "PostDisplay" ".*gif" "echo 'this is a gif file';";
 ####_display_status=1;
-#push "media/fim.png";
-#push "media/image.png";
-#push "media/image.jpg";
-#push "media/icon_smile.gif";
 echo "WELCOME : to switch to the command line interface press ':' ";
 #bind 'C-l' "clear;";	# temporarily off : FIXME
 #toggleVerbosity;
@@ -259,11 +250,10 @@ bind  'Y' "narrow" "shrinks horizontally the image";
 #alias 'scd'   'scroll_console_down;' "";
 #alias 'console_scroll_up'   'if(console_offset<console_lines){console_offset=console_offset+1;}';
 #alias 'console_scroll_down' 'if(console_offset>0){console_offset=console_offset-1;}';
-alias 'console_scroll_up' 'if(console_offset<console_lines+__console_scroll_n-rows){console_offset=console_offset+__console_scroll_n;}';
-#__console_scroll_n=rows;
-__console_scroll_n=3;
-__allow_round_scroll=0;
-alias 'console_scroll_down' 'if(__allow_round_scroll || (console_offset>=__console_scroll_n)){console_offset=console_offset-__console_scroll_n;}';
+alias 'console_scroll_up' 'if(console_offset<console_lines+console_scroll_n-rows){console_offset=console_offset+console_scroll_n;}';
+console_scroll_n=3;
+allow_round_scroll=0;
+alias 'console_scroll_down' 'if(allow_round_scroll || (console_offset>=console_scroll_n)){console_offset=console_offset-console_scroll_n;}';
 alias 'console_scroll_reset' '{console_offset=0;}';
 alias 'scu'   'console_scroll_up;'   "";
 alias 'scd'   'console_scroll_down;' "";
