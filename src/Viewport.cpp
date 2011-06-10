@@ -625,6 +625,15 @@ namespace fim
 		free();
 	}
 
+	fim::string Viewport::pan(const char*a1, const char*a2)
+	{
+		// FIXME: a quick hack
+		args_t args;
+		if(a1)args.push_back(a1);
+		if(a2)args.push_back(a2);
+		return pan(args);
+	}
+
 	fim::string Viewport::pan(const args_t &args)
 	{
 		fim_pan_t hs=0,vs=0;
@@ -641,7 +650,7 @@ namespace fim
 		if(args.size()>=2)
 		{
 			ps=((ss=args[1].c_str()) && *ss && ((ss[strlen(ss)-1])=='%'));
-			vs=hs=(int)(args[1].c_str());
+			vs=hs=(int)(args[1]);
 		}
 		else
 		{
@@ -655,6 +664,8 @@ namespace fim
 			vs=(viewport_height()*vs)/100;
 			hs=(viewport_width()*hs)/100;
 		}
+
+		//std::cout << vs << " " << hs << " " << ps << "\n";
 
 		switch(f)
 		{

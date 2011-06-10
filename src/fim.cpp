@@ -179,7 +179,7 @@ struct fim_options_t fim_options[] = {
 "display version and compile flags, and then terminate."
     },
     {"autowidth",   no_argument,       NULL, 'w',"scale according to width",NULL,
-"Will adapt the image size to the screen size."
+"Will scale the image according to the screen size."
     },
     {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}",
 "All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "

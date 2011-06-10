@@ -162,7 +162,7 @@ be verbose: show status bar.
 display version and compile flags, and then terminate.
 .TP
 .B -w, --autowidth
-Will adapt the image size to the screen size.
+Will scale the image according to the screen size.
 .TP
 .B -W {scriptfile}, --write-scriptout {scriptfile}
 All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
