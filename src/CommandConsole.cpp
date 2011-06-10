@@ -358,6 +358,21 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_FLT_LIST" : display the files list"),&browser_,&Browser::list));
 		addCommand(new Command(fim::string(FIM_FLT_POP),fim::string(FIM_FLT_POP" : pop the last file from the files list"),&browser_,&Browser::pop));
 		addCommand(new Command(fim::string(FIM_FLT_FILE),fim::string(FIM_FLT_FILE" : display the current file's name in the console"),&browser_,&Browser::info));// FIXME: useless!
+#if FIM_WANT_SINGLE_PAN_COMMAND
+		addCommand(new Command(fim::string(FIM_FLT_PAN),fim::string(FIM_FLT_PAN" {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction; if the \'%\' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the \""FIM_VID_STEPS"\" variable will be used;"
+		" if present, the \""FIM_VID_HSTEPS"\" variable will be considered for horizontal panning;"
+		" if present, the \""FIM_VID_VSTEPS"\" variable will be considered for vertical panning;"
+		" the variables may be terminated by the \'%\' specifier"
+		"  [undocumented]"),&browser_,&Browser::pan));
+		alias("pan_ne",FIM_FLT_PAN" \"ne\"");
+		alias("pan_nw",FIM_FLT_PAN" \"nw\"");
+		alias("pan_se",FIM_FLT_PAN" \"se\"");
+		alias("pan_sw",FIM_FLT_PAN" \"sw\"");
+		alias("pandown",FIM_FLT_PAN" \"down\"");
+		alias("panup",FIM_FLT_PAN" \"up\"");
+		alias("panleft",FIM_FLT_PAN" \"left\"");
+		alias("panright",FIM_FLT_PAN" \"right\"");
+#else
 		addCommand(new Command(fim::string("pan_ne" ),fim::string("pan the image north east [undocumented]"),&browser_,&Browser::pan_ne));
 		addCommand(new Command(fim::string("pan_nw" ),fim::string("pan the image north west [undocumented]"),&browser_,&Browser::pan_nw));
 		addCommand(new Command(fim::string("pan_sw" ),fim::string("pan the image south west [undocumented]"),&browser_,&Browser::pan_sw));
@@ -366,6 +381,7 @@ namespace fim
 		addCommand(new Command("pandown" ,"pan the image down [undocumented]",&browser_,&Browser::pan_down));
 		addCommand(new Command(fim::string("panleft" ),fim::string("pan the image left [undocumented]"),&browser_,&Browser::pan_left));
 		addCommand(new Command(fim::string("panright" ),fim::string("pan the image right [undocumented]"),&browser_,&Browser::pan_right));
+#endif
 		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded"),&browser_,&Browser::load));
 		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string(FIM_FLT_RELOAD" : load the image into memory"),&browser_,&Browser::reload));
 		addCommand(new Command(fim::string(FIM_FLT_FILES),fim::string(FIM_FLT_FILES" : display the number of files in the file list" ),&browser_,&Browser::n));

@@ -118,7 +118,7 @@ class FramebufferDevice:public DisplayDevice
 	int             vt_ ;
 	//public:
 	int32_t         lut_red_[256], lut_green_[256], lut_blue_[256];
-	int             dither_ , pcd_res_ , steps_ ;
+	int             dither_ , pcd_res_ /*, steps_*/ ;
 	private:
 	float fbgamma_ ;
 

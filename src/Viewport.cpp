@@ -43,6 +43,9 @@ namespace fim
 #endif
 			)
 			:steps_(0)
+			,hsteps_(0)
+			,vsteps_(0)
+			,psteps_(false)
 			,top_(0)
 			,left_(0)
 			,panned_(0x0)
@@ -65,6 +68,9 @@ namespace fim
 	Viewport::Viewport(const Viewport &v)
 		:
 		steps_(v.steps_)
+		,hsteps_(v.hsteps_)
+		,vsteps_(v.vsteps_)
+		,psteps_(v.psteps_)
 		,top_(v.top_)
 		,left_(v.left_)
 		,panned_(v.panned_)
@@ -455,6 +461,26 @@ namespace fim
 		image_ = ni;
 	}
 
+        void Viewport::steps_reset()
+	{
+#ifdef FIM_WINDOWS
+		steps_ = getGlobalIntVariable(FIM_VID_STEPS);
+		if(steps_<FIM_CNS_STEPS_MIN)steps_ = FIM_CNS_STEPS_DEFAULT_N;
+		else psteps_=(getGlobalStringVariable(FIM_VID_STEPS).re_match("%$"));
+
+		hsteps_ = getGlobalIntVariable(FIM_VID_HSTEPS);
+		if(hsteps_<FIM_CNS_STEPS_MIN)hsteps_ = steps_;
+		else psteps_=(getGlobalStringVariable(FIM_VID_HSTEPS).re_match("%$"));
+
+		vsteps_ = getGlobalIntVariable(FIM_VID_VSTEPS);
+		if(vsteps_<FIM_CNS_STEPS_MIN)vsteps_ = steps_;
+		else psteps_=(getGlobalStringVariable(FIM_VID_VSTEPS).re_match("%$"));
+#else 
+		hsteps_ = vsteps_ = steps_ = FIM_CNS_STEPS_DEFAULT_N;
+		psteps_ = FIM_CNS_STEPS_DEFAULT_P;
+#endif
+	}
+
         void Viewport::reset()
         {
 		/*
@@ -470,13 +496,7 @@ namespace fim
 		should_redraw();
                 top_  = 0;
                 left_ = 0;
-
-#ifdef FIM_WINDOWS
-		steps_ = getGlobalIntVariable(FIM_VID_STEPS);
-		if(steps_<FIM_CNS_STEPS_MIN)steps_ = FIM_CNS_STEPS_DEFAULT;
-#else 
-		steps_ = FIM_CNS_STEPS_DEFAULT;
-#endif
+        	steps_reset();
         }
 
 	void Viewport::auto_height_scale()
@@ -603,6 +623,77 @@ namespace fim
 	{
 		// FIXME : we need a revival for free()
 		free();
+	}
+
+	fim::string Viewport::pan(const args_t &args)
+	{
+		fim_pan_t hs=0,vs=0;
+		fim_bool_t ps=false;
+		char f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
+		const char*fs=args[0].c_str();
+		const char*ss=NULL;
+		if(args.size()<1 || (!fs))goto nop;
+		f=tolower(*fs);
+		if(!fs[0])goto nop;
+		s=tolower(fs[1]);
+        	steps_reset();
+		// FIXME: write me
+		if(args.size()>=2)
+		{
+			ps=((ss=args[1].c_str()) && *ss && ((ss[strlen(ss)-1])=='%'));
+			vs=hs=(int)(args[1].c_str());
+		}
+		else
+		{
+			ps=psteps_;
+			vs=vsteps_;
+			hs=hsteps_;
+		}
+		if(ps)
+		{
+			// FIXME: new, brittle
+			vs=(viewport_height()*vs)/100;
+			hs=(viewport_width()*hs)/100;
+		}
+
+		switch(f)
+		{
+			case('u'):
+				pan_up(vs);
+			break;
+			case('d'):
+				pan_down(vs);
+			break;
+			case('r'):
+				pan_right(hs);
+			break;
+			case('l'):
+				pan_left(hs);
+			break;
+			case('n'):
+			case('s'):
+			if(f=='n') pan_up(vs);
+			if(f=='s') pan_down(vs);
+			switch(s)
+			{
+				case('e'):
+					pan_left(hs);
+				break;
+				case('w'):
+					pan_right(hs);
+				break;
+				default:
+					goto err;
+			}
+			break;
+			default:
+			goto err;
+		}
+		// ...
+nop:
+		return FIM_CNS_EMPTY_RESULT;
+err:
+		return FIM_CNS_EMPTY_RESULT;
 	}
 }
 

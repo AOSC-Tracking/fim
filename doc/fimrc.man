@@ -234,51 +234,9 @@ file : display the current file's name in the console
 .fi
 
 .B
-pan_ne
+pan
 .fi
-pan the image north east [undocumented]
-.fi
-
-.B
-pan_nw
-.fi
-pan the image north west [undocumented]
-.fi
-
-.B
-pan_sw
-.fi
-pan the image south west [undocumented]
-.fi
-
-.B
-pan_se
-.fi
-pan the image south east [undocumented]
-.fi
-
-.B
-panup
-.fi
-pan the image up [undocumented]
-.fi
-
-.B
-pandown
-.fi
-pan the image down [undocumented]
-.fi
-
-.B
-panleft
-.fi
-pan the image left [undocumented]
-.fi
-
-.B
-panright
-.fi
-pan the image right [undocumented]
+pan {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "steps" variable will be used; if present, the "hsteps" variable will be considered for horizontal panning; if present, the "vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier  [undocumented]
 .fi
 
 .B
@@ -918,6 +876,10 @@ height
 [internal,out] the current image original height
 .fi
 .B
+hsteps
+[internal,in] the steps, in pixels, when panning images horizontally (overrides steps)
+.fi
+.B
 ignorecase
 [internal,in] if 1, will allow for case insensitive regexp searches
 .fi
@@ -988,6 +950,10 @@ steps
 .B
 swidth
 [internal,out] the current image scaled width
+.fi
+.B
+vsteps
+[internal,in] the steps, in pixels, when panning images vertically (overrides steps)
 .fi
 .B
 want_autocenter

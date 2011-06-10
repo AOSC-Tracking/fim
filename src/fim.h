@@ -294,7 +294,9 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_SCALEFACTOR_MULTIPLIER 1.1f
 #define FIM_CNS_SCALEFACTOR_DELTA 0.1f
 #define FIM_CNS_SCALEFACTOR_ZERO 0.0f
-#define FIM_CNS_STEPS_DEFAULT	 	50
+//#define FIM_CNS_STEPS_DEFAULT	 	50
+#define FIM_CNS_STEPS_DEFAULT_N	 	50
+#define FIM_CNS_STEPS_DEFAULT	 	"20%"
 #define FIM_CNS_STEPS_MIN	 1
 #define FIM_CNS_WGROW_STEPS_DEFAULT	 1
 #define FIM_CNS_WENLARGE_STEPS_DEFAULT	 10
@@ -433,6 +435,8 @@ namespace fim
 #define FIM_VID_SCALE_FACTOR_DELTA		"scale_factor_delta"		/* "[internal,undocumented]" */
 #define FIM_VID_COMMENT 				"comment"				/* "[internal,out] the image comment, stored in the image file" */
 #define FIM_VID_STEPS 				"steps"				/* "[internal,in] the steps, in pixels, when panning images" */
+#define FIM_VID_HSTEPS 				"hsteps"				/* "[internal,in] the steps, in pixels, when panning images horizontally (overrides steps)" */
+#define FIM_VID_VSTEPS 				"vsteps"				/* "[internal,in] the steps, in pixels, when panning images vertically (overrides steps)" */
 #define FIM_VID_CONSOLE_ROWS 			"rows"			/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_LINE_WIDTH 		"lwidth"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_LINE_OFFSET 		"console_offset"	/* "[internal,in,undocumented]" */
@@ -597,6 +601,7 @@ namespace fim
 #define FIM_FLT_NEXT_PAGE			"next_page" /* not in vim */
 #define FIM_FLT_NEXT_PIC			"next_picture" /* not in vim */
 #define FIM_FLT_NO_IMAGE			"no_image" /* not in vim */
+#define FIM_FLT_PAN			"pan" /* not in vim */
 #define FIM_FLT_POP			"pop" /* not in vim */
 #define FIM_FLT_POPEN			"popen" /* not in vim */
 #define FIM_FLT_PREAD			"pread" /* not in vim */
@@ -662,6 +667,7 @@ namespace fim
 #define FIM_WANT_SINGLE_SYSTEM_INVOCATION 1
 #define FIM_WANT_SDL_OPTIONS_STRING 1
 #define FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE 1
+#define FIM_WANT_SINGLE_PAN_COMMAND 1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_STRING_BUFSIZE	4096
