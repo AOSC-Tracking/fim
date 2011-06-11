@@ -236,7 +236,7 @@ file : display the current file's name in the console
 .B
 pan
 .fi
-pan {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "steps" variable will be used; if present, the "hsteps" variable will be considered for horizontal panning; if present, the "vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
+pan {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
 .fi
 
 .B
@@ -314,25 +314,25 @@ scale_multiply : multiply the scale by the specified amount [undocumented]
 .B
 scale_factor_grow
 .fi
-multiply the scale factors reduce_factor and magnify_factor by scale_factor_multiplier [undocumented]
+multiply the scale factors _reduce_factor and _magnify_factor by scale_factor_multiplier [undocumented]
 .fi
 
 .B
 scale_factor_shrink
 .fi
-divide the scale factors reduce_factor and magnify_factor by scale_factor_multiplier [undocumented]
+divide the scale factors _reduce_factor and magnify_factor by scale_factor_multiplier [undocumented]
 .fi
 
 .B
 scale_factor_increase
 .fi
-add scale_factor_delta to the scale factors reduce_factor and magnify_factor [undocumented]
+add _scale_factor_delta to the scale factors _reduce_factor and magnify_factor [undocumented]
 .fi
 
 .B
 scale_factor_decrease
 .fi
-subtract scale_factor_delta to the scale factors reduce_factor and magnify_factor  [undocumented]
+subtract _scale_factor_delta to the scale factors _reduce_factor and _magnify_factor  [undocumented]
 .fi
 
 .B
@@ -344,13 +344,13 @@ rotate {number}: rotate the image the specified amount of degrees [undocumented]
 .B
 magnify
 .fi
-magnify : magnify the displayed image by the magnify_factor variable or {args} [undocumented]
+magnify : magnify the displayed image by the _magnify_factor variable or {args} [undocumented]
 .fi
 
 .B
 reduce
 .fi
-reduce : reduce the displayed image by reduce_factor or {args} [undocumented]
+reduce : reduce the displayed image by _reduce_factor or {args} [undocumented]
 .fi
 
 .B
@@ -647,7 +647,19 @@ _TERM
 .fi
 .B
 _autocmd_trace_stack
-[internal] dump to stdout autocommands stack trace during their execution (for debugging purposes)
+[internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)
+.fi
+.B
+_autoflip
+[internal,in,undocumented]
+.fi
+.B
+_automirror
+[internal,in,undocumented]
+.fi
+.B
+_autonegate
+[internal,in,undocumented]
 .fi
 .B
 _autotop
@@ -662,12 +674,36 @@ _cached_images
 [internal,out] the number of images currently cached
 .fi
 .B
+_comment
+[internal,out] the image comment, stored in the image file
+.fi
+.B
+_console_buffer_free
+[internal,in,undocumented]
+.fi
+.B
+_console_buffer_total
+[internal,in,undocumented]
+.fi
+.B
+_console_buffer_used
+[internal,in,undocumented]
+.fi
+.B
+_console_key
+[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding
+.fi
+.B
+_console_lines
+[internal,in,undocumented]
+.fi
+.B
 _console_offset
 [internal,in,undocumented]
 .fi
 .B
 _debug_commands
-[internal] each executed command (for debugging purposes)
+[internal,in] print out each command before its execution (for debugging purposes)
 .fi
 .B
 _device_string
@@ -706,6 +742,14 @@ _fim_scriptout_file
 [internal,in] the name of the file to write to when recording sessions
 .fi
 .B
+_hsteps
+[internal,in] the steps, in pixels, when panning images horizontally (overrides steps)
+.fi
+.B
+_ignorecase
+[internal,in] if 1, will allow for case insensitive regexp-based searches
+.fi
+.B
 _last_system_output
 [internal,out,experimental] the standard output of the last call to the system command
 .fi
@@ -716,6 +760,14 @@ _load_default_etc_fimrc
 .B
 _load_fim_history
 [internal,in] if 1 on startup, will load the ~/fim_history file on startup
+.fi
+.B
+_lwidth
+[internal,in,undocumented]
+.fi
+.B
+_magnify_factor
+[internal,in] the image scale multiplier used when magnifying images size
 .fi
 .B
 _max_cached_images
@@ -743,15 +795,39 @@ _no_rc_file
 .fi
 .B
 _open_offset
-[internal,undocumented] offset used when opening files
+[internal,in,optional] offset (specified in bytes) used when opening a file 
+.fi
+.B
+_orientation
+[internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" will do the same thing: rotate the image one time by 90'.
 .fi
 .B
 _override_display
 [internal,undocumented]
 .fi
 .B
+_pwd
+[internal,out] the current working directory
+.fi
+.B
+_reduce_factor
+[internal,in] the image scale multiplier used when reducing images size
+.fi
+.B
+_rows
+[internal,in,undocumented]
+.fi
+.B
 _save_fim_history
 [internal,in] if 1 on exit, will save the ~/fim_history file on exit
+.fi
+.B
+_scale_factor_delta
+[internal,undocumented]
+.fi
+.B
+_scale_factor_multiplier
+[internal,undocumented]
 .fi
 .B
 _scale_style
@@ -759,11 +835,15 @@ _scale_style
 .fi
 .B
 _seek_magic
-[internal,undocumented] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
+[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
 .fi
 .B
 _status_line
 [internal,in] if 1, will display the status bar
+.fi
+.B
+_steps
+[internal,in] the steps, in pixels, when panning images
 .fi
 .B
 _sys_rc_file
@@ -776,6 +856,14 @@ _verbose_errors
 .B
 _verbose_keys
 [internal,in] if non zero, after each interactive mode key hit, the console will display the hit key raw keycode
+.fi
+.B
+_vsteps
+[internal,in] the steps, in pixels, when panning images vertically (overrides steps)
+.fi
+.B
+_want_autocenter
+[internal,in,undocumented]
 .fi
 .B
 _want_prefetch
@@ -792,42 +880,6 @@ angle
 .B
 ascale
 [internal,in] the asymmetric scaling of the current image
-.fi
-.B
-autoflip
-[internal,undocumented]
-.fi
-.B
-automirror
-[internal,undocumented]
-.fi
-.B
-autonegate
-[internal,undocumented]
-.fi
-.B
-comment
-[internal,out] the image comment, stored in the image file
-.fi
-.B
-console_buffer_free
-[internal,in,undocumented]
-.fi
-.B
-console_buffer_total
-[internal,in,undocumented]
-.fi
-.B
-console_buffer_used
-[internal,in,undocumented]
-.fi
-.B
-console_key
-[internal,in] the key binding for spawning the command line [internal]
-.fi
-.B
-console_lines
-[internal,in,undocumented]
 .fi
 .B
 fileindex
@@ -854,22 +906,6 @@ height
 [internal,out] the current image original height
 .fi
 .B
-hsteps
-[internal,in] the steps, in pixels, when panning images horizontally (overrides steps)
-.fi
-.B
-ignorecase
-[internal,in] if 1, will allow for case insensitive regexp searches
-.fi
-.B
-lwidth
-[internal,in,undocumented]
-.fi
-.B
-magnify_factor
-[internal,in] the image scale multiplier used when magnifying images size
-.fi
-.B
 mirrored
 [internal,undocumented]
 .fi
@@ -878,36 +914,12 @@ negated
 [internal,undocumented]
 .fi
 .B
-orientation
-[internal] Rotation is controlled by: 'i:orientation', 'v:orientation', 'g:orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:orientation=1" and ":i:orientation=5" will do the same thing: rotate the image one time by 90'.
-.fi
-.B
-pwd
-[internal,out] the current working directory
-.fi
-.B
 random
 [internal,out] a pseudorandom number
 .fi
 .B
-reduce_factor
-[internal,in] the image scale multiplier used when reducing images size
-.fi
-.B
-rows
-[internal,in,undocumented]
-.fi
-.B
 scale
 [internal,in] the scale of the current image
-.fi
-.B
-scale_factor_delta
-[internal,undocumented]
-.fi
-.B
-scale_factor_multiplier
-[internal,undocumented]
 .fi
 .B
 screen_height
@@ -922,20 +934,8 @@ sheight
 [internal,out] the current image scaled height
 .fi
 .B
-steps
-[internal,in] the steps, in pixels, when panning images
-.fi
-.B
 swidth
 [internal,out] the current image scaled width
-.fi
-.B
-vsteps
-[internal,in] the steps, in pixels, when panning images vertically (overrides steps)
-.fi
-.B
-want_autocenter
-[internal,undocumented]
 .fi
 .B
 width
@@ -1004,20 +1004,21 @@ if(_save_fim_history==''){_save_fim_history=1;}
 if(_load_fim_history==''){_load_fim_history=1;}
 if(_verbose_keys==''){_verbose_keys=0;}
 if(_display_busy==''){_display_busy=1;}
-if(console_scroll_n==''){console_scroll_n=3;}
-if(ignorecase==''){ignorecase=1;}
-if(ascale==''){ascale="1.0";}
+if(_ignorecase==''){_ignorecase=1;}
 if(_console_offset==''){_console_offset=0;}
+if(_console_key==''){_console_key=58;}
+if(ascale==''){ascale="1.0";}
 
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}
+if(console_scroll_n==''){console_scroll_n=3;}
 
-alias "toggleautoflip" "autoflip=1-autoflip;" "";
-alias "toggleautonegate" "autonegate=1-autonegate;" "";
+alias "toggleautoflip" "_autoflip=1-_autoflip;" "";
+alias "toggleautonegate" "_autonegate=1-_autonegate;" "";
 alias "toggleflip" "i:flipped=1-i:flipped;" "";
 alias "flip" "toggleflip;redisplay;" "flip the current image along the horizontal axis";
 alias "fliponce" "flip;toggleflip;" "";
-alias "toggleautomirror" "automirror=1-automirror;" "";
+alias "toggleautomirror" "_automirror=1-_automirror;" "";
 alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
@@ -1099,7 +1100,7 @@ autocmd "PostRedisplay" ""   "i:_will_display=0;";
 # the aalib library has often problems with proportions, and this is a temporary fix
 alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
 alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;scale 'a';}" "";
-#alias "exif_fix" "i:orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
+#alias "exif_fix" "i:_orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
 #autocmd "PostReload"   "" "aalib_fix;exif_fix;";
 #autocmd "PostLoad"   "" "aalib_fix;exif_fix;";
 autocmd "PostReload"   "" "aalib_fix;";
@@ -1170,8 +1171,8 @@ bind 'B' "toggleDisplayBusy";
 alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
 alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
 alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
-alias "rotate90_ccw" "i:orientation=i:orientation+1;i:fresh=1;i:i:fresh=1;redisplay;" "";
-alias "rotate90_cw"  "i:orientation=i:orientation+3;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90_ccw" "i:_orientation=i:_orientation+1;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90_cw"  "i:_orientation=i:_orientation+3;i:fresh=1;i:i:fresh=1;redisplay;" "";
 alias "rotate90" "rotate90_cw;display;" "";
 alias "rotate10"     "rotate  '10';display;" "";
 alias "rotate10_ccw" "rotate -10;display;" "";
@@ -1214,9 +1215,9 @@ bind  'y' "widen" "widens horizontally the image";
 bind  'Y' "narrow" "shrinks horizontally the image";
 #alias 'scu'   'scroll_console_up;'   "";
 #alias 'scd'   'scroll_console_down;' "";
-#alias 'console_scroll_up'   'if(_console_offset<console_lines){_console_offset=_console_offset+1;}';
+#alias 'console_scroll_up'   'if(_console_offset<_console_lines){_console_offset=_console_offset+1;}';
 #alias 'console_scroll_down' 'if(_console_offset>0){_console_offset=_console_offset-1;}';
-alias 'console_scroll_up' 'if(_console_offset<console_lines+console_scroll_n-rows){_console_offset=_console_offset+console_scroll_n;}';
+alias 'console_scroll_up' 'if(_console_offset<_console_lines+console_scroll_n-_rows){_console_offset=_console_offset+console_scroll_n;}';
 alias 'console_scroll_down' 'if(allow_round_scroll || (_console_offset>=console_scroll_n)){_console_offset=_console_offset-console_scroll_n;}';
 alias 'console_scroll_reset' '{_console_offset=0;}';
 alias 'scu'   'console_scroll_up;'   "";

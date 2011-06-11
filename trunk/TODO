@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110612	shall rename from _varname to v:varname, whenever this has sense.
 20110611	CommandConsole::regexp_match may be flawed (why we don'y use string's mechanism ? shall unify this !)
 20110611	the default fimrc shall not set any variable which was set by default
 20110611	shall change execute(cmd, int, int) -> execute(cmd, fim_exec_flags). for instance, I may set a flag for disabling system/popen () calls, or caling any other external program

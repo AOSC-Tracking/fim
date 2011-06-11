@@ -425,32 +425,31 @@ namespace fim
 #define FIM_VID_FILEINDEX			"fileindex"		/* "[internal,out] the current image numeric index" */
 #define FIM_VID_FILELISTLEN			"filelistlen"		/* "[internal,out] the length of the current image list" */
 #define FIM_VID_FILENAME			"filename"		/* "[internal,out] the current file name" */
-#define FIM_VID_FILENAME			"filename"		/* "[internal,out] the current file name" */
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "FIM_DEFAULT_CONFIG_FILE_CONTENTS"/* "[internal,out] the contents of the default (hardcoded) configuration file" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "FIM_DEFAULT_GRAMMAR_FILE_CONTENTS" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
 #define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_override_display"	/* "[internal,undocumented]" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
-#define FIM_VID_MAGNIFY_FACTOR			"magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
-#define FIM_VID_PWD				"pwd"			/* "[internal,out] the current working directory" */
-#define FIM_VID_REDUCE_FACTOR			"reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */
-#define FIM_VID_SCALE_FACTOR_MULTIPLIER		"scale_factor_multiplier"	/* "[internal,undocumented]" */
-#define FIM_VID_SCALE_FACTOR_DELTA		"scale_factor_delta"		/* "[internal,undocumented]" */
-#define FIM_VID_COMMENT 				"comment"				/* "[internal,out] the image comment, stored in the image file" */
-#define FIM_VID_STEPS 				"steps"				/* "[internal,in] the steps, in pixels, when panning images" */
-#define FIM_VID_HSTEPS 				"hsteps"				/* "[internal,in] the steps, in pixels, when panning images horizontally (overrides steps)" */
-#define FIM_VID_VSTEPS 				"vsteps"				/* "[internal,in] the steps, in pixels, when panning images vertically (overrides steps)" */
-#define FIM_VID_CONSOLE_ROWS 			"rows"			/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_LINE_WIDTH 		"lwidth"		/* "[internal,in,undocumented]" */
+#define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
+#define FIM_VID_PWD				"_pwd"			/* "[internal,out] the current working directory" */
+#define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */
+#define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[internal,undocumented]" */
+#define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[internal,undocumented]" */
+#define FIM_VID_COMMENT 				"_comment"				/* "[internal,out] the image comment, stored in the image file" */
+#define FIM_VID_STEPS 				"_steps"				/* "[internal,in] the steps, in pixels, when panning images" */
+#define FIM_VID_HSTEPS 				"_hsteps"				/* "[internal,in] the steps, in pixels, when panning images horizontally (overrides steps)" */
+#define FIM_VID_VSTEPS 				"_vsteps"				/* "[internal,in] the steps, in pixels, when panning images vertically (overrides steps)" */
+#define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_LINE_WIDTH 		"_lwidth"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_LINE_OFFSET 		"_console_offset"	/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_BUFFER_LINES		"console_lines"		/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_BUFFER_TOTAL		"console_buffer_total"		/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_BUFFER_FREE		"console_buffer_free"		/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_BUFFER_USED		"console_buffer_used"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_BUFFER_LINES		"_console_lines"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_BUFFER_TOTAL		"_console_buffer_total"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_BUFFER_FREE		"_console_buffer_free"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_BUFFER_USED		"_console_buffer_used"		/* "[internal,in,undocumented]" */
 #define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[internal,in] if non zero, after each interactive mode key hit, the console will display the hit key raw keycode" */
 #define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_KEY			"console_key"		/* "[internal,in] the key binding for spawning the command line [internal]" */
-#define FIM_VID_IGNORECASE			"ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp searches" */
+#define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
+#define FIM_VID_IGNORECASE			"_ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp-based searches" */
 #define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[internal,in] if 1 on exit, will save the ~/fim_history file on exit" */
 #define FIM_VID_LOAD_FIM_HISTORY		"_load_fim_history"	/* "[internal,in] if 1 on startup, will load the ~/fim_history file on startup" */
 #define FIM_VID_TERM				"_TERM"			/* "[internal,out] the environment TERM variable" */
@@ -460,28 +459,28 @@ namespace fim
 #define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
 #define FIM_VID_ASCALE				"ascale"			/* "[internal,in] the asymmetric scaling of the current image" */
 #define FIM_VID_ANGLE				"angle"				/* "[internal,undocumented]" */
-#define FIM_VID_ORIENTATION			"orientation"		/* "[internal] Rotation is controlled by: 'i:orientation', 'v:orientation', 'g:orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, \":i:orientation=1\" and \":i:orientation=5\" will do the same thing: rotate the image one time by 90'." */
+#define FIM_VID_ORIENTATION			"_orientation"		/* "[internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, \":i:_orientation=1\" and \":i:_orientation=5\" will do the same thing: rotate the image one time by 90'." */
 #define FIM_VID_WIDTH				"width"			/* "[internal,out] the current image original width" */
 #define FIM_VID_HEIGHT				"height"		/* "[internal,out] the current image original height" */
 #define FIM_VID_SWIDTH				"swidth"		/* "[internal,out] the current image scaled width" */
 #define FIM_VID_SHEIGHT				"sheight"		/* "[internal,out] the current image scaled height" */
-#define FIM_VID_AUTOFLIP			"autoflip"		/* "[internal,undocumented]" */
-#define FIM_VID_AUTONEGATE			"autonegate"		/* "[internal,undocumented]" */
+#define FIM_VID_AUTOFLIP			"_autoflip"		/* "[internal,in,undocumented]" */
+#define FIM_VID_AUTONEGATE			"_autonegate"		/* "[internal,in,undocumented]" */
 #define FIM_VID_FLIPPED				"flipped"		/* "[internal,undocumented]" */
 #define FIM_VID_NEGATED				"negated"		/* "[internal,undocumented]" */
 #define FIM_VID_FIM_BPP				"_fim_bpp"		/* "[internal,out] the bits per pixel count" */
-#define FIM_VID_AUTOMIRROR			"automirror"		/* "[internal,undocumented]" */
+#define FIM_VID_AUTOMIRROR			"_automirror"		/* "[internal,in,undocumented]" */
 #define FIM_VID_MIRRORED			"mirrored"		/* "[internal,undocumented]" */
-#define FIM_VID_WANT_AUTOCENTER			"want_autocenter"	/* "[internal,undocumented]" */
+#define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[internal,in,undocumented]" */
 #define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in] the maximum number of images allowed in the cache" */
 #define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in] the maximum amount of memory allowed for the cache" */
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached" */
 #define FIM_VID_SCREEN_WIDTH			"screen_width"		/* "[internal,out] the screen width"  */
 #define FIM_VID_SCREEN_HEIGHT			"screen_height"		/* "[internal,out] the screen height" */
-#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[internal] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
-#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[internal] each executed command (for debugging purposes)" */
-#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal,undocumented] offset used when opening files" */
-#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal,undocumented] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
+#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
+#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[internal,in] print out each command before its execution (for debugging purposes)" */
+#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal,in,optional] offset (specified in bytes) used when opening a file " */
+#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
 
 /*
  * Fim Keyboard Descriptions
