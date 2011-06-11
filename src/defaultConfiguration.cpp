@@ -69,10 +69,10 @@
 	
 		setVariable(FIM_VID_CONSOLE_KEY,FIM_SYM_CONSOLE_KEY);
 /*		setVariable(FIM_VID_VERBOSE_KEYS,0);*/
-		setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
-		setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,FIM_CNS_SCALEDELTA);
-		setVariable(FIM_VID_SCALE_FACTOR_DELTA,FIM_CNS_SCALEDELTA);
-		setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);
+		//setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
+		//setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,FIM_CNS_SCALEFACTOR_MULTIPLIER);
+		//setVariable(FIM_VID_SCALE_FACTOR_DELTA,FIM_CNS_SCALEFACTOR_DELTA);
+		//setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);
 /*		autocmd_add("Next","*","echo 'rendering next image..'");
 		autocmd_add("Prev","*","echo 'rendering prev image..'");
 		autocmd_add("PostNext","*","reload;");		//BUGFUL!

@@ -36,20 +36,21 @@ if(_save_fim_history==''){_save_fim_history=1;}
 if(_load_fim_history==''){_load_fim_history=1;}
 if(_verbose_keys==''){_verbose_keys=0;}
 if(_display_busy==''){_display_busy=1;}
-if(console_scroll_n==''){console_scroll_n=3;}
-if(ignorecase==''){ignorecase=1;}
-if(ascale==''){ascale="1.0";}
+if(_ignorecase==''){_ignorecase=1;}
 if(_console_offset==''){_console_offset=0;}
+if(_console_key==''){_console_key=58;}
+if(ascale==''){ascale="1.0";}
 
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}
+if(console_scroll_n==''){console_scroll_n=3;}
 
-alias "toggleautoflip" "autoflip=1-autoflip;" "";
-alias "toggleautonegate" "autonegate=1-autonegate;" "";
+alias "toggleautoflip" "_autoflip=1-_autoflip;" "";
+alias "toggleautonegate" "_autonegate=1-_autonegate;" "";
 alias "toggleflip" "i:flipped=1-i:flipped;" "";
 alias "flip" "toggleflip;redisplay;" "flip the current image along the horizontal axis";
 alias "fliponce" "flip;toggleflip;" "";
-alias "toggleautomirror" "automirror=1-automirror;" "";
+alias "toggleautomirror" "_automirror=1-_automirror;" "";
 alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
@@ -131,7 +132,7 @@ autocmd "PostRedisplay" ""   "i:_will_display=0;";
 # the aalib library has often problems with proportions, and this is a temporary fix
 alias "aalib_fix_do" "{ascale='2.0';i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "";
 alias "aalib_fix" "if(_device_string=='aalib'){aalib_fix_do;scale 'a';}" "";
-#alias "exif_fix" "i:orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
+#alias "exif_fix" "i:_orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
 #autocmd "PostReload"   "" "aalib_fix;exif_fix;";
 #autocmd "PostLoad"   "" "aalib_fix;exif_fix;";
 autocmd "PostReload"   "" "aalib_fix;";
@@ -202,8 +203,8 @@ bind 'B' "toggleDisplayBusy";
 alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
 alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
 alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
-alias "rotate90_ccw" "i:orientation=i:orientation+1;i:fresh=1;i:i:fresh=1;redisplay;" "";
-alias "rotate90_cw"  "i:orientation=i:orientation+3;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90_ccw" "i:_orientation=i:_orientation+1;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90_cw"  "i:_orientation=i:_orientation+3;i:fresh=1;i:i:fresh=1;redisplay;" "";
 alias "rotate90" "rotate90_cw;display;" "";
 alias "rotate10"     "rotate  '10';display;" "";
 alias "rotate10_ccw" "rotate -10;display;" "";
@@ -246,9 +247,9 @@ bind  'y' "widen" "widens horizontally the image";
 bind  'Y' "narrow" "shrinks horizontally the image";
 #alias 'scu'   'scroll_console_up;'   "";
 #alias 'scd'   'scroll_console_down;' "";
-#alias 'console_scroll_up'   'if(_console_offset<console_lines){_console_offset=_console_offset+1;}';
+#alias 'console_scroll_up'   'if(_console_offset<_console_lines){_console_offset=_console_offset+1;}';
 #alias 'console_scroll_down' 'if(_console_offset>0){_console_offset=_console_offset-1;}';
-alias 'console_scroll_up' 'if(_console_offset<console_lines+console_scroll_n-rows){_console_offset=_console_offset+console_scroll_n;}';
+alias 'console_scroll_up' 'if(_console_offset<_console_lines+console_scroll_n-_rows){_console_offset=_console_offset+console_scroll_n;}';
 alias 'console_scroll_down' 'if(allow_round_scroll || (_console_offset>=console_scroll_n)){_console_offset=_console_offset-console_scroll_n;}';
 alias 'console_scroll_reset' '{_console_offset=0;}';
 alias 'scu'   'console_scroll_up;'   "";
