@@ -359,7 +359,6 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 ""
 
 #define FIM_WANT_SINGLE_PAN_COMMAND 1	/* TODO: when confident, this shall be the default (and alternative code shall be deleted)*/
-#define FIM_WANT_SINGLE_SCALE_COMMAND 1	/* TODO: when confident, this shall be the default (and alternative code shall be deleted)*/
 
 
 #include "string.h"
@@ -570,9 +569,6 @@ namespace fim
 #define FIM_FLT_ALIAS			"alias"	/* not in vim */
 #define FIM_FLT_ALIGN_BOTTOM		"align_bottom"	/* not in vim */
 #define FIM_FLT_ALIGN_TOP		"align_top"	/* not in vim */
-//#define FIM_FLT_AUTO_SCALE		"auto_scale" /* not in vim */
-//#define FIM_FLT_AUTO_WIDTH_SCALE	"auto_width_scale" /* not in vim */
-//#define FIM_FLT_AUTO_HEIGHTH_SCALE	"auto_height_scale" /* not in vim */
 #define FIM_FLT_AUTOCMD			"autocmd" /* in vim */
 #define FIM_FLT_AUTOCMD_DEL			"autocmd_del"	/* not in vim */
 #define FIM_FLT_BIND			"bind" /* not in vim */

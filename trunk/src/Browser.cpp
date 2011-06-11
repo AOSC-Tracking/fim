@@ -436,7 +436,7 @@ nop:
 		/*
 		 * scales the image to a certain scale factor
 		 * FIXME: no user error checking -- poor error reporting for the user
-		 * TODO: wxh syntax needed
+		 * TODO: wxh / w:h syntax needed
 		 */
 		fim_scale_t newscale;
 		fim_char_t fc=FIM_SYM_CHAR_NUL;
@@ -487,65 +487,6 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
-#if !FIM_WANT_SINGLE_SCALE_COMMAND
-	fim::string Browser::auto_height_scale(const args_t &args)
-	{
-		/*
-		 * scales this image to fit in the screen in the vertical dimension
-		 */
-		if(c_image())
-		{
-			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PRESCALE,c);
-#endif
-			if(c_image() && viewport())viewport()->auto_height_scale();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTSCALE,c);
-#endif
-		}
-		return FIM_CNS_EMPTY_RESULT;
-	}
-	
-	fim::string Browser::auto_width_scale(const args_t &args)
-	{
-		/*
-		 * scales this image to fit in the screen in the horizontal dimension
-		 */
-		if(c_image())
-		{
-#ifdef FIM_AUTOCMDS
-			fim::string c=current();
-			autocmd_exec(FIM_ACM_PRESCALE,c);
-#endif
-			if(c_image() && viewport())viewport()->auto_width_scale();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTSCALE,c);
-#endif
-		}
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::auto_scale(const args_t &args)
-	{
-		/*
-		 * auto scale the image accordingly to the *default* settings !
-		 */
-		if(c_image())
-		{
-			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PRESCALE,c);
-#endif
-			if(c_image() && viewport())viewport()->auto_scale();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTSCALE,c);
-#endif
-		}
-		return FIM_CNS_EMPTY_RESULT;
-	}
-#endif
-
 	fim::string Browser::negate(const args_t &args)
 	{
 		/*

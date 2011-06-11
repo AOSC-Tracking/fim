@@ -366,16 +366,6 @@ namespace fim
 		" if present, the \""FIM_VID_VSTEPS"\" variable will be considered for vertical panning;"
 		" the variables may be terminated by the \'%\' specifier"
 		" "),&browser_,&Browser::pan));
-#if 0
-		alias("pan_ne",FIM_FLT_PAN" \"ne\"");
-		alias("pan_nw",FIM_FLT_PAN" \"nw\"");
-		alias("pan_se",FIM_FLT_PAN" \"se\"");
-		alias("pan_sw",FIM_FLT_PAN" \"sw\"");
-		alias("pand_own",FIM_FLT_PAN" \"down\"");
-		alias("pan_up",FIM_FLT_PAN" \"up\"");
-		alias("pan_left",FIM_FLT_PAN" \"left\"");
-		alias("pan_right",FIM_FLT_PAN" \"right\"");
-#endif
 #else
 		addCommand(new Command(fim::string("pan_ne" ),fim::string("pan the image north east [undocumented]"),&browser_,&Browser::pan_ne));
 		addCommand(new Command(fim::string("pan_nw" ),fim::string("pan the image north west [undocumented]"),&browser_,&Browser::pan_nw));
@@ -415,17 +405,6 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLFORWARD),fim::string(FIM_FLT_SCROLLFORWARD" : scroll the image as it were reading it" ),&browser_,&Browser::scrollforward));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE),fim::string(FIM_FLT_SCALE" {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,w,h,a); if the first character of {value} is 'w', will scale according to the screen width; if it is 'h', to the screen height; if it is 'a', to the minimum of 'w' and 'h'; otherwise if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale" ),&browser_,&Browser::scale));
 		addCommand(new Command(fim::string(FIM_FLT_SET),fim::string(FIM_CMD_HELP_SET),this,&CommandConsole::set));
-#if !FIM_WANT_SINGLE_SCALE_COMMAND
-		addCommand(new Command(fim::string(FIM_FLT_AUTO_SCALE),fim::string(FIM_FLT_AUTO_SCALE" : set auto scale mode" ),&browser_,&Browser::auto_scale));
-		addCommand(new Command(fim::string(FIM_FLT_AUTO_WIDTH_SCALE),fim::string(FIM_FLT_AUTO_WIDTH_SCALE" : scale the image so that it fits horizontally in the screen" ),&browser_,&Browser::auto_width_scale));
-		addCommand(new Command(fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE),fim::string(FIM_FLT_AUTO_HEIGHTH_SCALE" : scale the image so that it fits vertically in the screen" ),&browser_,&Browser::auto_height_scale));
-#else
-#if 0
-		alias(FIM_FLT_AUTO_SCALE,FIM_FLT_SCALE" \"a\"");
-		alias(FIM_FLT_AUTO_WIDTH_SCALE,FIM_FLT_SCALE" \"w\"");
-		alias(FIM_FLT_AUTO_HEIGHTH_SCALE,FIM_FLT_SCALE" \"h\"");
-#endif
-#endif
 		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" ["FIM_CNS_EX_KSY_STRING" ["FIM_CNS_EX_CMDS_STRING"]] : bind some keyboard shortcut "FIM_CNS_EX_KSY_STRING" to "FIM_CNS_EX_CMDS_STRING""FIM_CNS_RAW_KEYS_MESG"; binding is dynamical, so you can rebind keys even during program's execution"),this,&CommandConsole::bind));
 		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string(FIM_FLT_QUIT" : terminate the program"),this,&CommandConsole::quit));
 #ifndef FIM_WANT_NOSCRIPTING
