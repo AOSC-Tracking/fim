@@ -22,20 +22,27 @@
 # codes are catched by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
 
+# Internal variables.
 # Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
 # It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
-_display_status=0;
-_max_cached_images=5;
-_max_cached_memory=80000000;
-_max_iterated_commands=100;
-_want_prefetch=1;
-_no_external_loader_programs=0;
-_scale_style='a';
-ignorecase=1;
-ascale="1.0";
-console_offset=0;
-_save_fim_history=1;
-_load_fim_history=1;
+if(_display_status==''){_display_status=0;}
+if(_max_cached_images==''){_max_cached_images=5;}
+if(_max_cached_memory==''){_max_cached_memory=80000000;}
+if(_max_iterated_commands==''){_max_iterated_commands=100;}
+if(_want_prefetch==''){_want_prefetch=1;}
+if(_no_external_loader_programs==''){_no_external_loader_programs=0;}
+if(_scale_style==''){_scale_style='a';}
+if(_save_fim_history==''){_save_fim_history=1;}
+if(_load_fim_history==''){_load_fim_history=1;}
+if(_verbose_keys==''){_verbose_keys=0;}
+if(_display_busy==''){_display_busy=1;}
+if(console_scroll_n==''){console_scroll_n=3;}
+if(ignorecase==''){ignorecase=1;}
+if(ascale==''){ascale="1.0";}
+if(_console_offset==''){_console_offset=0;}
+
+# External variables (not used internally).
+if(allow_round_scroll==''){allow_round_scroll=0;}
 
 alias "toggleautoflip" "autoflip=1-autoflip;" "";
 alias "toggleautonegate" "autonegate=1-autonegate;" "";
@@ -101,19 +108,10 @@ bind 'C-e' "execute_record_buffer;";
 #bind 'C-x' "execute_record_buffer;";
 bind 'X' "execute_record_buffer;";
 bind '.' "repeat_last;";
-
-#reload;
-#_display_status=1;
-#display;
 alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;" "";
-
-# key echo
 alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 
-_verbose_keys=0;
-_display_busy=1;
 _display_status=1;
-#_verbose_keys=1;
 
 # autocommands are essential to Fim's automated behaviour
 #autocmd "Next"     "" "echo 'rendering next image..'";
@@ -248,13 +246,11 @@ bind  'y' "widen" "widens horizontally the image";
 bind  'Y' "narrow" "shrinks horizontally the image";
 #alias 'scu'   'scroll_console_up;'   "";
 #alias 'scd'   'scroll_console_down;' "";
-#alias 'console_scroll_up'   'if(console_offset<console_lines){console_offset=console_offset+1;}';
-#alias 'console_scroll_down' 'if(console_offset>0){console_offset=console_offset-1;}';
-alias 'console_scroll_up' 'if(console_offset<console_lines+console_scroll_n-rows){console_offset=console_offset+console_scroll_n;}';
-console_scroll_n=3;
-allow_round_scroll=0;
-alias 'console_scroll_down' 'if(allow_round_scroll || (console_offset>=console_scroll_n)){console_offset=console_offset-console_scroll_n;}';
-alias 'console_scroll_reset' '{console_offset=0;}';
+#alias 'console_scroll_up'   'if(_console_offset<console_lines){_console_offset=_console_offset+1;}';
+#alias 'console_scroll_down' 'if(_console_offset>0){_console_offset=_console_offset-1;}';
+alias 'console_scroll_up' 'if(_console_offset<console_lines+console_scroll_n-rows){_console_offset=_console_offset+console_scroll_n;}';
+alias 'console_scroll_down' 'if(allow_round_scroll || (_console_offset>=console_scroll_n)){_console_offset=_console_offset-console_scroll_n;}';
+alias 'console_scroll_reset' '{_console_offset=0;}';
 alias 'scu'   'console_scroll_up;'   "";
 alias 'scd'   'console_scroll_down;' "";
 alias 'scz'   'console_scroll_reset;' "";

@@ -80,6 +80,14 @@ size, then pan two times up, then display the image ; and then
 do an endless loop consisting of bottom and top aligning, alternated.
 
 .TP
+.B -C {commands}, --execute-commands-early {commands}
+Just as the --execute-commands switch, but commands will be executed before the loading of any config file.
+
+For example,
+-c '_scale_style=""' will make fim start with no auto-scaling.
+
+
+.TP
 .B -d {framebuffer device}, --device {framebuffer device}
 framebuffer device to use.  Default is the one your vc is mapped to (as in fbi).
 .TP

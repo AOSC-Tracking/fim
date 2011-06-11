@@ -94,6 +94,13 @@ struct fim_options_t fim_options[] = {
 "size, then pan two times up, then display the image ; and then \n"
 "do an endless loop consisting of bottom and top aligning, alternated.\n"
     },
+    {FIM_OSW_EXECUTE_COMMANDS_EARLY, required_argument,       NULL, 'C',"execute {commands} after initialization, before any config loading","{commands}",
+"Just as the --"FIM_OSW_EXECUTE_COMMANDS" switch, but commands will be executed before the loading of any config file.\n"
+"\n"
+"For example,\n"
+"-c '"FIM_VID_SCALE_STYLE"=\"\"' will make fim start with no auto-scaling.\n"
+"\n"
+    },
     {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}",
 "framebuffer device to use.  Default is the one your vc is mapped to (as in fbi)."
     },
@@ -706,6 +713,8 @@ done:
 		int c;
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
+		bool appendedPreConfigCommand=false;
+
 	    	g_fim_output_device=FIM_CNS_EMPTY_STRING;
 	
 		setlocale(LC_ALL,"");	//uhm..
@@ -723,7 +732,7 @@ done:
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "HAb?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:S",
+		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:S",
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -932,6 +941,11 @@ done:
 		    cc.appendPostInitCommand(optarg);
 		    appendedPostInitCommand=true;
 		    break;
+		case 'C':
+		    //fim's
+		    cc.appendPreConfigCommand(optarg);
+		    appendedPreConfigCommand=true;
+		    break;
 		case 'W':
 		    //fim's
 		    cc.setVariable(FIM_VID_SCRIPTOUT_FILE,optarg);
@@ -1090,6 +1104,7 @@ done:
 			buf=slurp_binary_fd(0,NULL);
 			if(buf) cc.appendPostInitCommand(buf);
 			if(buf) appendedPostInitCommand=true;
+	//		if(buf) appendedPreConfigCommand=true;
 			if(buf) fim_free(buf);
 			close(0);
 			ndd=dup(2);
@@ -1106,6 +1121,7 @@ done:
 			       	&& !cc.with_scriptfile()
 #endif
 			       	&& !appendedPostInitCommand 
+			       	&& !appendedPreConfigCommand 
 		#ifdef FIM_READ_STDIN_IMAGE
 		&& !read_one_file_from_stdin
 		#endif

@@ -232,6 +232,9 @@ namespace fim
 		char rcfile[FIM_PATH_MAX];
 		const char *e = fim_getenv(FIM_CNS_HOME_VAR);
 
+		if(preConfigCommand_!=fim::string(""))
+			execute(preConfigCommand_.c_str(),1,0);
+
 		if(getIntVariable(FIM_VID_NO_DEFAULT_CONFIGURATION)==0 )
 		{
     #ifdef FIM_DEFAULT_CONFIGURATION

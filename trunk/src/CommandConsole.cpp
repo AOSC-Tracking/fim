@@ -1942,6 +1942,13 @@ ok:
 		postInitCommand_+=c;
 	}
 
+	void CommandConsole::appendPreConfigCommand(const char* c)
+	{
+		/*
+		 * */
+		preConfigCommand_+=c;
+	}
+
 	void CommandConsole::appendPostExecutionCommand(const fim::string &c)
 	{
 		/*
@@ -1956,6 +1963,13 @@ ok:
 		 * whether some command will be executed right after initialization
 		 * */
 		return postInitCommand_!=fim::string("");
+	}
+
+	bool CommandConsole::appendedPreConfigCommand()const
+	{
+		/*
+		 * */
+		return preConfigCommand_!=fim::string("");
 	}
 
 	Viewport* CommandConsole::current_viewport()const

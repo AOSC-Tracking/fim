@@ -42,6 +42,7 @@ class CommandConsole
 	FontServer fontserver_;
 
 	fim::string postInitCommand_;
+	fim::string preConfigCommand_;
 	fim::string postExecutionCommand_;
 
 	int show_must_go_on_;
@@ -327,8 +328,10 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 
 	void printHelpMessage(char *pn="fim")const;
 	void appendPostInitCommand(const char* c);
+	void appendPreConfigCommand(const char* c);
 	void appendPostExecutionCommand(const fim::string &c);
 	bool appendedPostInitCommand()const;
+	bool appendedPreConfigCommand()const;
 
 	Viewport* current_viewport()const;
 #ifdef FIM_WINDOWS
