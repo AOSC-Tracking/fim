@@ -265,6 +265,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_OSW_OUTPUT_DEVICE	"output-device"
 #define FIM_OSW_BINARY	"binary"
 #define FIM_OSW_EXECUTE_COMMANDS	"execute-commands"
+#define FIM_OSW_EXECUTE_COMMANDS_EARLY	"execute-commands-early"
 #define FIM_OSW_EXECUTE_SCRIPT	"execute-script"
 #define FIM_OSW_FINAL_COMMANDS	"final-commands"
 #define FIM_OSW_SCRIPT_FROM_STDIN	"script-from-stdin"
@@ -441,7 +442,7 @@ namespace fim
 #define FIM_VID_VSTEPS 				"vsteps"				/* "[internal,in] the steps, in pixels, when panning images vertically (overrides steps)" */
 #define FIM_VID_CONSOLE_ROWS 			"rows"			/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_LINE_WIDTH 		"lwidth"		/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_LINE_OFFSET 		"console_offset"	/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_LINE_OFFSET 		"_console_offset"	/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_BUFFER_LINES		"console_lines"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_BUFFER_TOTAL		"console_buffer_total"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_BUFFER_FREE		"console_buffer_free"		/* "[internal,in,undocumented]" */

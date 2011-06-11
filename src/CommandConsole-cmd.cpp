@@ -489,7 +489,7 @@ namespace fim
 		if( args.size() < 0 ) this->quit(0);
 		else	this->quit( (int) args[0] );*/
 		/* this is clean */
-		if( args.size() < 0 )
+		if( args.size() < 1 )
 			return_code_=0;
 		else
 			return_code_=(int)args[0];
