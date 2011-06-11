@@ -676,7 +676,7 @@ namespace fim
 		 * */
 		if(2==args.size())return setVariable(args[0],args [1].c_str());
 		else
-		return "usage : "FIM_FLT_SET" ["FIM_CNS_EX_ID_STRING" ["FIM_CNS_EX_EXP_STRING"]]";
+		return FIM_CMD_HELP_SET;
 	}
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
