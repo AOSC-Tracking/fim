@@ -357,7 +357,6 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string(FIM_FLT_REDISPLAY" : re-display the current file contents"),&browser_,&Browser::redisplay));
 		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_FLT_LIST" : display the files list"),&browser_,&Browser::list));
 		addCommand(new Command(fim::string(FIM_FLT_POP),fim::string(FIM_FLT_POP" : pop the last file from the files list"),&browser_,&Browser::pop));
-		addCommand(new Command(fim::string(FIM_FLT_FILE),fim::string(FIM_FLT_FILE" : display the current file's name in the console"),&browser_,&Browser::info));// FIXME: useless!
 #if FIM_WANT_SINGLE_PAN_COMMAND
 		addCommand(new Command(fim::string(FIM_FLT_PAN),fim::string(
 		FIM_FLT_PAN" {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction;"
@@ -415,7 +414,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLDOWN),fim::string(FIM_FLT_SCROLLDOWN" : scroll down the image, going next if at bottom" ),&browser_,&Browser::scrolldown));
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLFORWARD),fim::string(FIM_FLT_SCROLLFORWARD" : scroll the image as it were reading it" ),&browser_,&Browser::scrollforward));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE),fim::string(FIM_FLT_SCALE" {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,w,h,a); if the first character of {value} is 'w', will scale according to the screen width; if it is 'h', to the screen height; if it is 'a', to the minimum of 'w' and 'h'; otherwise if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale" ),&browser_,&Browser::scale));
-		addCommand(new Command(fim::string(FIM_FLT_SET),fim::string(FIM_FLT_SET" : manipulate the internal variables [undocumented]" ),this,&CommandConsole::set));
+		addCommand(new Command(fim::string(FIM_FLT_SET),fim::string(FIM_CMD_HELP_SET),this,&CommandConsole::set));
 #if !FIM_WANT_SINGLE_SCALE_COMMAND
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_SCALE),fim::string(FIM_FLT_AUTO_SCALE" : set auto scale mode" ),&browser_,&Browser::auto_scale));
 		addCommand(new Command(fim::string(FIM_FLT_AUTO_WIDTH_SCALE),fim::string(FIM_FLT_AUTO_WIDTH_SCALE" : scale the image so that it fits horizontally in the screen" ),&browser_,&Browser::auto_width_scale));

@@ -410,7 +410,7 @@ scale {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,w,h,
 .B
 set
 .fi
-set : manipulate the internal variables [undocumented]
+set: returns a set variables list; set {identifier}: returns the value of variable {identifier}; set {identifier} {commands}: sets variable {identifier} to {commands};
 .fi
 
 .B
