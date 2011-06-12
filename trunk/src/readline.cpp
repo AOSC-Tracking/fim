@@ -241,7 +241,16 @@ int rl_sdl_getc(FILE * fd)
 }
 #endif
 
-
+int fim_search_rl_startup_hook()
+{
+	const char * hs=cc.browser_.last_regexp_.c_str();
+	if(hs)
+	{
+		rl_replace_line(hs,0);
+		rl_point=strlen(hs);
+	}
+	return 0;
+}
 
 static int redisplay_hook()
 {
@@ -289,9 +298,9 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	        rl_pre_input_hook=redisplay_hook;
 	}
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
-	if( g_fim_output_device=="sdl" 
+	if( g_fim_output_device==FIM_DDN_INN_SDL 
 		/* only useful to bypass X11-windowed aalib (but sadly, breaks plain aalib input)  */ 
-		/*|| g_fim_output_device=="aa" */ 
+		/*|| g_fim_output_device==FIM_DDN_INN_AA */ 
 	)
 	{
 		rl_getc_function=rl_sdl_getc;

@@ -240,18 +240,6 @@ info : display information about the current file
 .fi
 
 .B
-regexp_goto
-.fi
-regexp_goto {regexp} : jump to the first image matching the given {regexp} pattern
-.fi
-
-.B
-regexp_goto_next
-.fi
-regexp_goto_next : jump to the next image matching the last given pattern
-.fi
-
-.B
 scale_increment
 .fi
 scale_increment : increment the scale by a percentual amount [undocumented]
@@ -320,7 +308,7 @@ align bottom : align to the lower side the current image; align top : align to t
 .B
 goto
 .fi
-goto {number} : go to the image specified by index {number}; if terminated by '%', the effective index will be computed as a percentage of the current files list length; if prepended by '-' or '+', the jump will be relative to the current image index.
+goto {number} : go to the image specified by index {number}; if terminated by '%', the effective index will be computed as a percentage of the current files list length; if prepended by '-' or '+', the jump will be relative to the current image index; goto /{regexp}/ : jump to the first image matching the given {regexp} pattern; goto +/{regexp}/ jump to the next image matching the last given pattern
 .fi
 
 .B
@@ -1016,7 +1004,7 @@ autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisp
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 10 images";
 bind 'N' 'next10';
 bind 'P' 'prev10';
-bind 'C-n' "regexp_goto_next";
+bind 'C-n' "goto '+//'";
 alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
 alias "bookview"          "while(1){display;sleep '2';scrolldown;};" "";
 alias "comicview"         "while(1){display;sleep '1';scrolldown;};" "";

@@ -28,6 +28,7 @@
 namespace rl
 {
 	void initialize_readline ();
+	int fim_search_rl_startup_hook();
 }
 
 #endif

@@ -71,10 +71,10 @@ class Browser
 	const fim::string pop(fim::string filename=FIM_CNS_EMPTY_STRING);
 	fim::string get_next_filename(int n)const;
 	
-	fim::string last_regexp;
 	int current_image()const;
 	int current_images()const{ return n(); }
 	public:
+	fim::string last_regexp_; // was private
 	Cache cache_;	// was private
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(Image *stdin_image);
@@ -94,14 +94,14 @@ class Browser
 #ifdef FIM_READ_STDIN_IMAGE
 		default_image_(NULL),
 #endif
-		last_regexp(fim::string()),
+		last_regexp_(fim::string()),
 		cache_(Cache())
 		{}
 	public:
 	fim::string current()const;
-	fim::string fcmd_regexp_goto(const args_t &args);
+	fim::string regexp_goto(const args_t &args);
 	fim::string fcmd_prefetch(const args_t &args);
-	fim::string fcmd_regexp_goto_next(const args_t &args);
+	fim::string regexp_goto_next(const args_t &args);
 	fim::string fcmd_goto_image(const args_t &args);
 	fim::string goto_image(int n);
 	fim::string fcmd_align(const args_t &args);

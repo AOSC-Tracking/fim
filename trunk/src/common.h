@@ -56,6 +56,7 @@ void append_to_file(fim::string filename, fim::string lines);
 char * dupstr (const char* s);
 char * dupnstr (double n);
 char * dupnstr (int n);
+char * dupsqstr (const char* s);
 int fim_rand();
 
 bool regexp_match(const char*s, const char*r, int ignorecase=1, int ignorenewlines=0);

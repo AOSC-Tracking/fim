@@ -336,6 +336,23 @@ char * dupstr (const char* s)
 }
 
 /*
+ *	Allocation and duplication of a single string, slash-quoted
+ */
+char * dupsqstr (const char* s)
+{
+	int l=0;
+	char *r = (char*) fim_malloc ((l=strlen (s)) + 3);
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
+	else
+	{
+		r[0]='/';
+		strcpy (r+1  , s);
+		strcat (r+1+l,"/");
+	}
+	return (r);
+}
+
+/*
  *	Allocation and duplication of a single string (not necessarily terminating)
  */
 static char * dupstrn (const char* s, size_t l)
