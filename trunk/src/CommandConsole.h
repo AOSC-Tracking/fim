@@ -269,7 +269,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string dummy(std::vector<Arg> args);
 	fim::string fcmd_variables_list(const args_t& args){return get_variables_list();}
 	fim::string fcmd_commands_list(const args_t& args){return get_commands_list();}
-	fim::string set(const args_t &args);
+	fim::string fcmd_set(const args_t &args);
 	fim::string fcmd_unalias(const args_t& args);
 	char ** tokenize_(const char *s);
 	void executeBinding(const fim_key_t c);

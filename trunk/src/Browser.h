@@ -99,55 +99,55 @@ class Browser
 		{}
 	public:
 	fim::string current()const;
-	fim::string regexp_goto(const args_t &args);
-	fim::string prefetch(const args_t &args);
-	fim::string regexp_goto_next(const args_t &args);
-	fim::string goto_image(const args_t &args);
+	fim::string fcmd_regexp_goto(const args_t &args);
+	fim::string fcmd_prefetch(const args_t &args);
+	fim::string fcmd_regexp_goto_next(const args_t &args);
+	fim::string fcmd_goto_image(const args_t &args);
 	fim::string goto_image(int n);
-	fim::string top_align(const args_t &args);
-	fim::string bottom_align(const args_t &args);
+	fim::string fcmd_top_align(const args_t &args);
+	fim::string fcmd_bottom_align(const args_t &args);
 	fim::string pan(const args_t &args);
-	fim::string scrolldown(const args_t &args);
-	fim::string scrollforward(const args_t &args);
-	fim::string scale_increment(const args_t &args);
-	fim::string scale_multiply(const args_t &args);
-	fim::string scale(const args_t &args);
-	fim::string reduce(const args_t &args);
-	fim::string magnify(const args_t &args);
-	fim::string scale_factor_increase(const args_t &args);
-	fim::string scale_factor_decrease(const args_t &args);
-	fim::string rotate(const args_t &args);/* FIXME : UNFINISHED */
-	fim::string scale_factor_grow(const args_t &args);
-	fim::string scale_factor_shrink(const args_t &args);
-	fim::string display(const args_t &args);
+	fim::string fcmd_scrolldown(const args_t &args);
+	fim::string fcmd_scrollforward(const args_t &args);
+	fim::string fcmd_scale_increment(const args_t &args);
+	fim::string fcmd_scale_multiply(const args_t &args);
+	fim::string fcmd_scale(const args_t &args);
+	fim::string fcmd_reduce(const args_t &args);
+	fim::string fcmd_magnify(const args_t &args);
+	fim::string fcmd_scale_factor_increase(const args_t &args);
+	fim::string fcmd_scale_factor_decrease(const args_t &args);
+	fim::string fcmd_rotate(const args_t &args);/* FIXME : UNFINISHED */
+	fim::string fcmd_scale_factor_grow(const args_t &args);
+	fim::string fcmd_scale_factor_shrink(const args_t &args);
+	fim::string fcmd_display(const args_t &args);
 	fim::string display_status(const char *l,const char*r);
-	fim::string negate(const args_t &args);
+	fim::string fcmd_negate(const args_t &args);
 
-	fim::string reload(const args_t &args);
-	fim::string list(const args_t &args);
-	fim::string push(const args_t &args);
+	fim::string fcmd_reload(const args_t &args);
+	fim::string fcmd_list(const args_t &args);
+	fim::string fcmd_push(const args_t &args);
 
-	fim::string n(const args_t &args){return n();}
-	fim::string next(const args_t &args);
-	fim::string next_picture(const args_t &args);
-	fim::string prev_picture(const args_t &args);
-	fim::string next_page(const args_t &args);
-	fim::string prev_page(const args_t &args);
+	fim::string fcmd_n(const args_t &args){return n();}
+	fim::string fcmd_next(const args_t &args);
+	fim::string fcmd_next_picture(const args_t &args);
+	fim::string fcmd_prev_picture(const args_t &args);
+	fim::string fcmd_next_page(const args_t &args);
+	fim::string fcmd_prev_page(const args_t &args);
 	fim::string prev(int n=1);
-	fim::string prev(const args_t &args);
-	fim::string remove(const args_t &args);
-	fim::string info(const args_t &args);
+	fim::string fcmd_prev(const args_t &args);
+	fim::string fcmd_remove(const args_t &args);
+	fim::string fcmd_info(const args_t &args);
 	fim::string info();
 	std::ostream& print(std::ostream &os)const;
 	void redisplay();
-	fim::string redisplay(const args_t &args);
+	fim::string fcmd_redisplay(const args_t &args);
 
 
-	fim::string load(const args_t &args);
-	fim::string pop(const args_t &args);
+	fim::string fcmd_load(const args_t &args);
+	fim::string fcmd_pop(const args_t &args);
 	const fim::string pop_current();
 	fim::string pop_current(const args_t &args);
-	fim::string no_image(const args_t &args);
+	fim::string fcmd_no_image(const args_t &args);
 	bool present(const fim::string nf);
 #ifdef FIM_READ_DIRS
 	bool push_dir(fim::string nf);

@@ -31,7 +31,7 @@
 
 namespace fim
 {
-        fim::string Window::cmd(const std::vector<fim::string> &args)
+        fim::string Window::fcmd_cmd(const std::vector<fim::string> &args)
         {
 		unsigned int i=0;
 		fim_err_t rc=0;/*return code*/

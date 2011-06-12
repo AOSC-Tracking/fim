@@ -21,7 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110612	prepend fim command methods names with cmd_
+20110612	collapse pop,remove,push commands to the list command
 20110612	shall introduce goto_page
 20110612	need a runtime method for diverting stdout ? may ease debugging.
 20110612	shall rename from _varname to v:varname, whenever this has sense.
