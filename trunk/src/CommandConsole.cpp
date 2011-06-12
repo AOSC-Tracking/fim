@@ -365,7 +365,6 @@ namespace fim
 		" "),&browser_,&Browser::pan));
 		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded"),&browser_,&Browser::fcmd_load));
 		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string(FIM_FLT_RELOAD" : load the image into memory"),&browser_,&Browser::fcmd_reload));
-		addCommand(new Command(fim::string(FIM_FLT_FILES),fim::string(FIM_FLT_FILES" : display the number of files in the file list" ),&browser_,&Browser::fcmd_n));
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string(FIM_FLT_INFO" : display information about the current file" ),&browser_,&Browser::fcmd_info));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO),fim::string(FIM_FLT_REXP_GOTO" "FIM_CNS_EX_RE_STRING" : jump to the first image matching the given "FIM_CNS_EX_RE_STRING" pattern"),&browser_,&Browser::fcmd_regexp_goto));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO_NEXT),fim::string(FIM_FLT_REXP_GOTO_NEXT" : jump to the next image matching the last given pattern"),&browser_,&Browser::fcmd_regexp_goto_next));
@@ -404,10 +403,6 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS" "FIM_CNS_EX_ID_STRING" | \"-a\" : delete the alias "FIM_CNS_EX_ID_STRING" or all aliases (use \"-a\", not -a)"),this,&CommandConsole::fcmd_unalias));
 		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND" "FIM_CNS_EX_KSY_STRING" : unbind the action associated to a specified "FIM_CNS_EX_KSY_STRING FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::fcmd_unbind));
 		addCommand(new Command(fim::string(FIM_FLT_SLEEP),fim::string(FIM_FLT_SLEEP" ["FIM_CNS_EX_NUM_STRING"=1] : sleep for the specified (default 1) number of seconds"),this,&CommandConsole::fcmd_foo));
-#if FIM_WANT_FILENAME_MARK_AND_DUMP
-		addCommand(new Command(fim::string(FIM_FLT_MARK),fim::string(FIM_FLT_MARK" : mark the current file for stdout printing at exit"),this,&CommandConsole::fcmd_markCurrentFile));
-		addCommand(new Command(fim::string(FIM_FLT_UNMARK),fim::string(FIM_FLT_UNMARK" : unmark the current file for stdout printing at exit"),this,&CommandConsole::fcmd_unmarkCurrentFile));
-#endif
 		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string(FIM_FLT_HELP" ["FIM_CNS_EX_ID_STRING"] : provide online help, if "FIM_CNS_EX_ID_STRING" is some variable, alias, or command identifier"),this,&CommandConsole::fcmd_help));
 #ifdef FIM_AUTOCMDS
 		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD),fim::string(FIM_FLT_AUTOCMD" "FIM_CNS_EX_EVT_STRING" "FIM_CNS_EX_PAT_STRING" "FIM_CNS_EX_CMDS_STRING" : manipulate auto commands"),this,&CommandConsole::fcmd_autocmd));

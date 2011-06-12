@@ -25,7 +25,6 @@ ongoing further inspiration.
 20110612	reduce,magnify -> scale
 20110612	scale_* -> to aliases	
 20110612	regexp_goto -> goto /regexp/     regexp_goto_next -> goto /regexp/+ ?
-20110612	files -> list files
 20110612	dump_key_codes -> dump key_codes|variables|commands|aliases
 20110612	clear -> console clear
 20110612	collapse the recording commands

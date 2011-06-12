@@ -731,20 +731,6 @@ nop:
 	}
 #endif
 
-#if FIM_WANT_FILENAME_MARK_AND_DUMP
-	fim::string CommandConsole::fcmd_markCurrentFile(const args_t& args)
-	{
-		markCurrentFile();
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string CommandConsole::fcmd_unmarkCurrentFile(const args_t& args)
-	{
-		unmarkCurrentFile();
-		return FIM_CNS_EMPTY_RESULT;
-	}
-#endif
-
 	fim::string CommandConsole::fcmd_do_getenv(const args_t& args)
 	{
 		string help="usage : "FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" will create a fim variable named "FIM_CNS_EX_ID_STRING" with value $"FIM_CNS_EX_ID_STRING" (if nonempty), from the current shell."

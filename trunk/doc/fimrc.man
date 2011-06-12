@@ -212,7 +212,7 @@ redisplay : re-display the current file contents
 .B
 list
 .fi
-list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list; list pop : pop the last file from the files list; list remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; push {filename(s)} : push {filename(s)} to the back of the files list
+list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list; list pop : pop the last file from the files list; list remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; push {filename(s)} : push {filename(s)} to the back of the files list; list filesnum : display the number of files in the files list; list mark : mark the current file for stdout printing at exit; list unmark : unmark the current file, preventing from stdout printing at exit
 .fi
 
 .B
@@ -231,12 +231,6 @@ load : load the image, if not yet loaded
 reload
 .fi
 reload : load the image into memory
-.fi
-
-.B
-files
-.fi
-files : display the number of files in the file list
 .fi
 
 .B
@@ -435,18 +429,6 @@ unbind {keysym} : unbind the action associated to a specified {keysym}; if {keys
 sleep
 .fi
 sleep [{number}=1] : sleep for the specified (default 1) number of seconds
-.fi
-
-.B
-mark
-.fi
-mark : mark the current file for stdout printing at exit
-.fi
-
-.B
-unmark
-.fi
-unmark : unmark the current file for stdout printing at exit
 .fi
 
 .B
@@ -938,8 +920,6 @@ alias "toggleautomirror" "_automirror=1-_automirror;" "";
 alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
-#alias "q" "quit;" "quits the fim program";
-#
 # Warning : binding to C-s, C-z and C-c won't make effect, as these
 # codes are catched by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
@@ -972,9 +952,9 @@ bind 'Tab' "toggleVerbosity";
 bind 'C-k' "toggleKeyVerbosity";
 bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
-bind 'C-m' "mark";
-bind 'u' "unmark";
-bind 'Enter' "mark;next";
+bind 'C-m' "list 'mark'";
+bind 'u' "list 'unmark'";
+bind 'Enter' "list 'mark';next";
 bind '-' "reduce";
 bind "Up" "pan_up";
 bind 'k' "pan_up";
@@ -1003,7 +983,6 @@ alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 #autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
 #autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
 #autocmd "PostDisplay" ".*gif" "echo 'this is a gif file';";
-
 #autocmd "PostDisplay" "" "echo '\nthis is a file\n'";
 #autocmd "PostGoto"   "" "set_interactive_mode;";
 autocmd "PostGoto" "" "reload;";
