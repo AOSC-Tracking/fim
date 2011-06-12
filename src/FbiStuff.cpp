@@ -1479,7 +1479,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		the user should specify a magix string like:
 		sm="\xFF\xD8\xFF\xE0";
 	*/
-   	if(sm!="")
+   	if(sm!=FIM_CNS_EMPTY_STRING)
 	{
 		read_offset=find_regexp_offset(fp, sm.c_str() , read_offset);
 		if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW

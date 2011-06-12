@@ -41,7 +41,7 @@
 	{
 		// FIXME: this escaping function is NOT safe; it shall only serve as a basis.
 		fim::string ear=arg;
-		fim::string res="";
+		fim::string res=FIM_CNS_EMPTY_STRING;
 		res+="'";
 		ear.substitute("'","'\\''");
 		res+=ear;

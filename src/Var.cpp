@@ -36,7 +36,7 @@ namespace fim
 	fim::string Var::var_help_db_query(const fim::string &id)
 	{
 		string hs = fim_var_help_db[id];
-		if(hs=="")
+		if(hs==FIM_CNS_EMPTY_STRING)
 			return "the help system for variables is still incomplete";
 		else
 			return hs;
@@ -44,7 +44,7 @@ namespace fim
 
 	fim::string Var::get_variables_reference(FimDocRefMode refmode)
 	{
-		string s ="";
+		string s =FIM_CNS_EMPTY_STRING;
 		fim_var_help_t::const_iterator vi;
 		if(refmode==Man)
 			goto manmode;

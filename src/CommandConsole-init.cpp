@@ -250,7 +250,7 @@ namespace fim
 #endif
 
 		if((getIntVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC)==1 )
-		&& (getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC)!="")
+		&& (getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC)!=FIM_CNS_EMPTY_STRING)
 				)
 		{
 			string ef=getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC);

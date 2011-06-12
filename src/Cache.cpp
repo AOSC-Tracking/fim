@@ -329,7 +329,7 @@ namespace fim
 		 * */
 		//if(!fname) return -1;
 		//if(!imageCache_[key])return -1;
-		//if(fim::string(fname)=="")return -1;
+		//if(fim::string(fname)==FIM_CNS_EMPTY_STRING)return -1;
 		FIM_LOUD_CACHE_STUFF;
 		lru_[imageCache_[key]]=time(NULL);
 		return 0;
