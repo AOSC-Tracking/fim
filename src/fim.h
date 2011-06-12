@@ -358,9 +358,6 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 "!"FIM_CNS_EX_SYSC_STRING"		executes the "FIM_CNS_EX_SYSC_STRING" quoted string as a \""FIM_CNS_SHELL"\" shell command\n"\
 ""
 
-#define FIM_WANT_SINGLE_PAN_COMMAND 1	/* TODO: when confident, this shall be the default (and alternative code shall be deleted)*/
-
-
 #include "string.h"
 #include "Command.h"
 #include "Arg.h"
