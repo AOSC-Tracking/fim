@@ -160,8 +160,10 @@ class CommandConsole
 #endif
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
+	public:
 	void markCurrentFile();
 	void unmarkCurrentFile();
+	private:
 #endif
 #ifdef FIM_WITH_AALIB
 	AADevice * aad_;
@@ -178,11 +180,6 @@ class CommandConsole
 	private:
 	CommandConsole& operator= (const CommandConsole&cc){return *this;/* a nilpotent assignation */}
 	public:
-
-#if FIM_WANT_FILENAME_MARK_AND_DUMP
-	fim::string fcmd_markCurrentFile(const args_t& args);
-	fim::string fcmd_unmarkCurrentFile(const args_t& args);
-#endif
 	bool display();
 	bool redisplay();
 	char * command_generator (const char *text,int state,int mask)const;

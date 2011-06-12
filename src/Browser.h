@@ -125,8 +125,6 @@ class Browser
 	fim::string fcmd_reload(const args_t &args);
 	fim::string fcmd_list(const args_t &args);
 	fim::string do_push(const args_t &args);
-
-	fim::string fcmd_n(const args_t &args){return n();}
 	fim::string fcmd_next(const args_t &args);
 	fim::string fcmd_next_picture(const args_t &args);
 	fim::string fcmd_prev_picture(const args_t &args);

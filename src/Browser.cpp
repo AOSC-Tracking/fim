@@ -80,6 +80,21 @@ namespace fim
 				argsc.erase(argsc.begin());
 				return do_push(argsc);
 			}
+			if(args[0]=="filesnum")
+			{
+				return n();
+			}
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
+			if(args[0]=="mark")
+			{ cc.markCurrentFile(); goto nop; } 
+			if(args[0]=="unmark")
+			{ cc.unmarkCurrentFile(); goto nop; } 
+#else
+			if(args[0]=="mark")
+				return "sorry, mark functionality was opted out.";
+			if(args[0]=="unmark")
+				return "sorry, mark functionality was opted out.";
+#endif
 			return FIM_CMD_HELP_LIST;
 		}
 nop:

@@ -568,19 +568,18 @@ namespace fim
 #define FIM_FLT_ALIAS			"alias"	/* not in vim */
 #define FIM_FLT_ALIGN			"align"	/* not in vim */
 #define FIM_FLT_AUTOCMD			"autocmd" /* in vim */
-#define FIM_FLT_AUTOCMD_DEL			"autocmd_del"	/* not in vim */
+#define FIM_FLT_AUTOCMD_DEL		"autocmd_del"	/* not in vim */
 #define FIM_FLT_BIND			"bind" /* not in vim */
 #define FIM_FLT_CD			"cd" /* in vim */
 #define FIM_FLT_CLEAR			"clear" /* not in vim */
 #define FIM_FLT_COMMANDS		"commands" /* not in vim */
-#define FIM_FLT_DISPLAY			"display" /* in vim, with another meaning) */
+#define FIM_FLT_DISPLAY			"display" /* in vim, with another meaning */
 #define FIM_FLT_DUMP_KEY_CODES		"dump_key_codes" /* not in vim */
 #define FIM_FLT_ECHO			"echo" /* in vim */
 #define FIM_FLT_ELSE			"else" /* in vim */
 #define FIM_FLT_EXEC			"exec" /* not in vim */
 #define FIM_FLT_EVAL			"eval" /* not in vim */
 #define FIM_FLT_FILE			"file" /* in vim */
-#define FIM_FLT_FILES			"files" /* not in vim */
 #define FIM_FLT_GETENV			"getenv" /* not in vim */
 #define FIM_FLT_GOTO			"goto" /* in vim */
 #define FIM_FLT_HELP			"help" /* not in vim */
@@ -592,36 +591,36 @@ namespace fim
 #define FIM_FLT_MARK			"mark" /* in vim */
 #define FIM_FLT_NEXT			"next" /* in vim */
 #define FIM_FLT_NEGATE			"negate" /* not in vim */
-#define FIM_FLT_NEXT_PAGE			"next_page" /* not in vim */
-#define FIM_FLT_NEXT_PIC			"next_picture" /* not in vim */
-#define FIM_FLT_NO_IMAGE			"no_image" /* not in vim */
+#define FIM_FLT_NEXT_PAGE		"next_page" /* not in vim */
+#define FIM_FLT_NEXT_PIC		"next_picture" /* not in vim */
+#define FIM_FLT_NO_IMAGE		"no_image" /* not in vim */
 #define FIM_FLT_PAN			"pan" /* not in vim */
 #define FIM_FLT_POPEN			"popen" /* not in vim */
 #define FIM_FLT_PREAD			"pread" /* not in vim */
-#define FIM_FLT_PREFETCH			"prefetch" /* in vim */
+#define FIM_FLT_PREFETCH		"prefetch" /* in vim */
 #define FIM_FLT_PREV			"prev" /* in vim */
-#define FIM_FLT_PREV_PAGE			"prev_page" /* not in vim */
-#define FIM_FLT_PREV_PIC			"prev_picture" /* not in vim */
+#define FIM_FLT_PREV_PAGE		"prev_page" /* not in vim */
+#define FIM_FLT_PREV_PIC		"prev_picture" /* not in vim */
 #define FIM_FLT_PWD			"pwd" /* in vim */
-#define FIM_FLT_REDISPLAY			"redisplay" /* not in vim */
+#define FIM_FLT_REDISPLAY		"redisplay" /* not in vim */
 #define FIM_FLT_REDUCE			"reduce" /* not in vim */
 #define FIM_FLT_RETURN			"return" /* in vim */
 #define FIM_FLT_REXP_GOTO		"regexp_goto" /* not in vim */
 #define FIM_FLT_REXP_GOTO_NEXT		"regexp_goto_next" /* not in vim */
-#define FIM_FLT_RELOAD		"reload" /* not in vim */
-#define FIM_FLT_ROTATE		"rotate" /* not in vim */
-#define FIM_FLT_SCALE		"scale" /* not in vim */
+#define FIM_FLT_RELOAD			"reload" /* not in vim */
+#define FIM_FLT_ROTATE			"rotate" /* not in vim */
+#define FIM_FLT_SCALE			"scale" /* not in vim */
 #define FIM_FLT_SCALE_MULTIPLY		"scale_multiply" /* not in vim */ /* FIXME: delete this command */
 #define FIM_FLT_SCALE_INCREMENT		"scale_increment" /* not in vim */ /* FIXME: delete this command */
-#define FIM_FLT_SCROLLDOWN	"scrolldown" /* not in vim */
-#define FIM_FLT_SCROLLFORWARD	"scrollforward" /* not in vim */
-#define FIM_FLT_SET		"set" /* in vim */
-#define FIM_FLT_SET_INTERACTIVE_MODE		"set_interactive_mode" /* not in vim */
-#define FIM_FLT_SET_CONSOLE_MODE		"set_console_mode" /* not in vim */
-#define FIM_FLT_STATUS		"status" /* not in vim */
-#define FIM_FLT_STDOUT		"stdout" /* not in vim */
+#define FIM_FLT_SCROLLDOWN		"scrolldown" /* not in vim */
+#define FIM_FLT_SCROLLFORWARD		"scrollforward" /* not in vim */
+#define FIM_FLT_SET			"set" /* in vim */
+#define FIM_FLT_SET_INTERACTIVE_MODE	"set_interactive_mode" /* not in vim */
+#define FIM_FLT_SET_CONSOLE_MODE	"set_console_mode" /* not in vim */
+#define FIM_FLT_STATUS			"status" /* not in vim */
+#define FIM_FLT_STDOUT			"stdout" /* not in vim */
 #define FIM_FLT_QUIT			"quit" /* in vim */
-#define FIM_FLT_RECORDING			"recording" /* not in vim */
+#define FIM_FLT_RECORDING		"recording" /* not in vim */
 #define FIM_FLT_SYSTEM			"system" /* not in vim */
 #define FIM_FLT_SLEEP			"sleep" /* in vim */
 #define FIM_FLT_USLEEP			"usleep" /* not in vim */
@@ -637,7 +636,7 @@ namespace fim
  * One glorious day these macros will serve to build automatically documentation.
  * */
 #define FIM_CMD_HELP_ALIGN FIM_FLT_ALIGN" bottom : align to the lower side the current image; " FIM_FLT_ALIGN" top : align to the upper side the current image; "
-#define FIM_CMD_HELP_LIST	FIM_FLT_LIST" : display the files list; "FIM_FLT_LIST" random_shuffle: randomly shuffle the file list; "FIM_FLT_LIST" reverse: reverse the file list; "FIM_FLT_LIST" sort: sort the file list; "FIM_FLT_LIST" pop : pop the last file from the files list; " FIM_FLT_LIST" remove ["FIM_CNS_EX_FNS_STRING"] : remove the current file, or the "FIM_CNS_EX_FNS_STRING", if specified " "; push "FIM_CNS_EX_FNS_STRING" : push "FIM_CNS_EX_FNS_STRING" to the back of the files list"
+#define FIM_CMD_HELP_LIST	FIM_FLT_LIST" : display the files list; "FIM_FLT_LIST" random_shuffle: randomly shuffle the file list; "FIM_FLT_LIST" reverse: reverse the file list; "FIM_FLT_LIST" sort: sort the file list; "FIM_FLT_LIST" pop : pop the last file from the files list; " FIM_FLT_LIST" remove ["FIM_CNS_EX_FNS_STRING"] : remove the current file, or the "FIM_CNS_EX_FNS_STRING", if specified " "; push "FIM_CNS_EX_FNS_STRING" : push "FIM_CNS_EX_FNS_STRING" to the back of the files list; "FIM_FLT_LIST" filesnum : display the number of files in the files list; "FIM_FLT_LIST" mark : mark the current file for stdout printing at exit; "FIM_FLT_LIST" unmark : unmark the current file, preventing from stdout printing at exit"
 #define FIM_CMD_HELP_CD			FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING": change the current directory to "FIM_CNS_EX_PATH_STRING". "FIM_FLT_CD" - will change to the previous current directory (before the last \":"FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING"\" command)"
 #define FIM_CMD_HELP_SET			FIM_FLT_SET": returns a list of variables which are set; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING": returns the value of variable "FIM_CNS_EX_ID_STRING"; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING" "FIM_CNS_EX_CMDS_STRING": sets variable "FIM_CNS_EX_ID_STRING" to value "FIM_CNS_EX_CMDS_STRING"; " 
 #define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the "FIM_VID_PWD" variable."
