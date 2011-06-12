@@ -208,7 +208,7 @@ namespace fim
 		/*
 		 * TODO: exceptions should be launched here in case ...
 		 * */
-		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&Window::cmd));
+		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&Window::fcmd_cmd));
 #else
 		try
 		{

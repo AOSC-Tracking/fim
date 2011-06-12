@@ -242,7 +242,7 @@ class Window
 	Window(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
 
 	Viewport * current_viewportp()const;
-        fim::string cmd(const std::vector<fim::string> &args);
+        fim::string fcmd_cmd(const std::vector<fim::string> &args);
 	bool recursive_redisplay()const;	//exception safe
 	bool recursive_display()const;		//exception safe
 

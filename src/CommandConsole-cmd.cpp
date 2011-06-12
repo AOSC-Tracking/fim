@@ -655,7 +655,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::set(const args_t &args)
+	fim::string CommandConsole::fcmd_set(const args_t &args)
 	{
 		/*
 		 * with no arguments, prints out the variable names.

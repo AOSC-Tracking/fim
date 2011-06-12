@@ -41,7 +41,7 @@ namespace fim
 		return fileslist;
 	}
 
-	fim::string Browser::list(const args_t &args)
+	fim::string Browser::fcmd_list(const args_t &args)
 	{
 		/*
 		 */
@@ -75,7 +75,7 @@ nop:
 	}
 
 
-	fim::string Browser::redisplay(const args_t &args)
+	fim::string Browser::fcmd_redisplay(const args_t &args)
 	{
 		/*
 		 * for now redisplaying is optionless
@@ -207,7 +207,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::scale_multiply(const args_t &args)
+	fim::string Browser::fcmd_scale_multiply(const args_t &args)
 	{
 		/*
 		 * scales the image by a user specified factor
@@ -231,7 +231,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
-	fim::string Browser::scale_increment(const args_t &args)
+	fim::string Browser::fcmd_scale_increment(const args_t &args)
 	{
 		/*
 		 * increments the scale positively
@@ -256,7 +256,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::scale(const args_t &args)
+	fim::string Browser::fcmd_scale(const args_t &args)
 	{
 		/*
 		 * scales the image to a certain scale factor
@@ -312,7 +312,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
-	fim::string Browser::negate(const args_t &args)
+	fim::string Browser::fcmd_negate(const args_t &args)
 	{
 		/*
 		 */
@@ -335,7 +335,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::display(const args_t &args)
+	fim::string Browser::fcmd_display(const args_t &args)
 	{
 		/*
 		 * displays the current image, (if already loaded), on screen
@@ -371,7 +371,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::no_image(const args_t &args)
+	fim::string Browser::fcmd_no_image(const args_t &args)
 	{
 		/*
 		 * sets no image as the current one
@@ -399,7 +399,7 @@ nop:
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
 				args_t args;
 				args.push_back(c.c_str());
-				remove(args);	// remove is an experimental function
+				fcmd_remove(args);	// remove is an experimental function
 #ifdef FIM_AUTOSKIP_FAILED
 				if(n_files())
 				{
@@ -422,7 +422,7 @@ nop:
 		 * reload the current filename
 		 * */
 		if(n_files())
-			return reload(args_t());
+			return fcmd_reload(args_t());
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -480,7 +480,7 @@ nop:
 		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport().c_str());
 	}
 
-	fim::string Browser::prefetch(const args_t &args)
+	fim::string Browser::fcmd_prefetch(const args_t &args)
 	{
 		/*
 		 * fetches in the cache_ the next image..
@@ -516,7 +516,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::reload(const args_t &args)
+	fim::string Browser::fcmd_reload(const args_t &args)
 	{
 		/*
 		 * deletes the structures associated to the present image
@@ -541,7 +541,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::load(const args_t &args)
+	fim::string Browser::fcmd_load(const args_t &args)
 	{
 		/*
 		 * loads the current file, if not already loaded
@@ -567,7 +567,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::pop(const args_t &args)
+	fim::string Browser::fcmd_pop(const args_t &args)
 	{
 		/*
 		 * deletes the last image from the files list
@@ -735,17 +735,17 @@ nop:
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 
-	fim::string Browser::regexp_goto_next(const args_t &args)
+	fim::string Browser::fcmd_regexp_goto_next(const args_t &args)
 	{
 		/*
 		 * goes to the next filename-matching file
 		 */
 		args_t arg;
 		arg.push_back(last_regexp);
-		return regexp_goto(arg);
+		return fcmd_regexp_goto(arg);
 	}
 
-	fim::string Browser::regexp_goto(const args_t &args)
+	fim::string Browser::fcmd_regexp_goto(const args_t &args)
 	{
 		/*
 		 * goes to the next filename-matching file
@@ -836,7 +836,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::prev(const args_t &args)
+	fim::string Browser::fcmd_prev(const args_t &args)
 	{
 		return prev(args.size()>0?((int)args[0]):1);
 	}
@@ -882,7 +882,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
-	fim::string Browser::goto_image(const args_t &args)
+	fim::string Browser::fcmd_goto_image(const args_t &args)
 	{
 		/*
 		 *	FIX ME
@@ -928,7 +928,7 @@ err:
 		return errmsg;
 	}
 
-	fim::string Browser::remove(const args_t &args)
+	fim::string Browser::fcmd_remove(const args_t &args)
 	{
 		/*
 		 *	ONLY if the image filename exists and matches EXACTLY,
@@ -970,7 +970,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::scrollforward(const args_t &args)
+	fim::string Browser::fcmd_scrollforward(const args_t &args)
 	{
 		/*
 		 * scrolls the image as it were a book :)
@@ -1000,7 +1000,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::scrolldown(const args_t &args)
+	fim::string Browser::fcmd_scrolldown(const args_t &args)
 	{
 		/*
 		 * scrolls the image down 
@@ -1024,7 +1024,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::info(const args_t &args)
+	fim::string Browser::fcmd_info(const args_t &args)
 	{
 		/*
 		 *	short information in status-line format
@@ -1053,10 +1053,10 @@ nop:
 		/*
 		 *	short information in status-line format
 		 */
-		return info(args_t(0));
+		return fcmd_info(args_t(0));
 	}
 
-	fim::string Browser::scale_factor_grow(const args_t &args)
+	fim::string Browser::fcmd_scale_factor_grow(const args_t &args)
 	{
 		/*
 		 *	ALIAS AND DELETE ME!
@@ -1067,7 +1067,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::scale_factor_shrink(const args_t &args)
+	fim::string Browser::fcmd_scale_factor_shrink(const args_t &args)
 	{
 		/*
 		 *	ALIAS AND DELETE ME!
@@ -1078,7 +1078,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::scale_factor_increase(const args_t &args)
+	fim::string Browser::fcmd_scale_factor_increase(const args_t &args)
 	{
 		/*
 		 *	ALIAS AND DELETE ME!
@@ -1089,7 +1089,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::scale_factor_decrease(const args_t &args)
+	fim::string Browser::fcmd_scale_factor_decrease(const args_t &args)
 	{
 		/*
 		 *	ALIAS AND DELETE ME!
@@ -1100,7 +1100,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::rotate(const args_t &args)
+	fim::string Browser::fcmd_rotate(const args_t &args)
 	{
 		/*
 		 * rotates the displayed image a specified amount of degrees
@@ -1133,7 +1133,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::magnify(const args_t &args)
+	fim::string Browser::fcmd_magnify(const args_t &args)
 	{
 		/*
 		 * magnifies the displayed image
@@ -1167,7 +1167,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::reduce(const args_t &args)
+	fim::string Browser::fcmd_reduce(const args_t &args)
 	{
 		/*
 		 * reduces the displayed image size
@@ -1201,7 +1201,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::top_align(const args_t &args)
+	fim::string Browser::fcmd_top_align(const args_t &args)
 	{
 		/*
 		 * aligns to top the displayed image
@@ -1223,7 +1223,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::bottom_align(const args_t &args)
+	fim::string Browser::fcmd_bottom_align(const args_t &args)
 	{
 		/*
 		 * aligns to the bottom the displayed image
@@ -1301,7 +1301,7 @@ nop:
 		/*
 		 *	display the current image
 		 */
-		return display(args_t());
+		return fcmd_display(args_t());
 	}
 
 	fim::string Browser::pop_current(const args_t &args)
@@ -1312,7 +1312,7 @@ nop:
 		return pop_current();
 	}
 
-	fim::string Browser::push(const args_t &args)
+	fim::string Browser::fcmd_push(const args_t &args)
 	{
 		/*
 		 *	pushes a new image filename on the back of the image list
@@ -1336,7 +1336,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::next_page(const args_t &args)
+	fim::string Browser::fcmd_next_page(const args_t &args)
 	{
 		/*
 		 * jumps one page forward in the current multipage image
@@ -1355,7 +1355,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::prev_page(const args_t &args)
+	fim::string Browser::fcmd_prev_page(const args_t &args)
 	{
 		/*
 		 * jumps one page backward in the current multipage image
@@ -1374,29 +1374,29 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::next_picture(const args_t &args)
+	fim::string Browser::fcmd_next_picture(const args_t &args)
 	{
 		/*
 		 * FIX ME
 		 * */
 		if(c_image() && c_image()->have_nextpage())
-			return next_page(args);
+			return fcmd_next_page(args);
 		else
 			return next(args.size()>0?((int)args[0]):1);
 	}
 
-	fim::string Browser::prev_picture(const args_t &args)
+	fim::string Browser::fcmd_prev_picture(const args_t &args)
 	{
 		/*
 		 * FIX ME
 		 * */
 		if(c_image() && c_image()->have_prevpage())
-			return prev_page(args);
+			return fcmd_prev_page(args);
 		else
 			return prev(args.size()>0?((int)args[0]):1);
 	}
 
-	fim::string Browser::next(const args_t &args)
+	fim::string Browser::fcmd_next(const args_t &args)
 	{
 		/*
 		 * FIX ME
