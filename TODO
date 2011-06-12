@@ -21,12 +21,12 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110612	collapse pop,remove,push commands to the list command
-20110612	shall introduce goto_page
+20110612	clear -> console clear
+20110612	collapse the recording commands
 20110612	need a runtime method for diverting stdout ? may ease debugging.
 20110612	shall rename from _varname to v:varname, whenever this has sense.
 20110610	shall unify the scaling-control variables
-20110610	get rid of 'next' via 'goto +1'
+20110610	get rid of 'next' via 'goto +1'; get rid of 'next_page' via 'goto_page'
 20110609	.ps crashes (try that matrix!) ?
 20110604	shall fix systematically stdin reading switches conflict (if any)
 20110604	may consider usage of ffmpeg's libswscale for image scaling
@@ -110,11 +110,8 @@ ongoing further inspiration.
 20090512	a wrapper perl script to find image magic numbers in files
 20090512	argument to aliases
 20090218	implement a printf() like interface for customizing the status bar information
-20090512	need a mechanism to pop all images
 20090512	sync the website info with the appropriate README section
-20090512	help string support for aliases
 20090512 TODO : implement a regexp-based search, to give the user hints. (20090512) (like vim's helpgrep)
-20090430	is 'for' inline-documented ?
 20090420	rhgb (red hat graphical boot) seems to force an unsupported video format
 20090419	once for all, should set an enumeration type for auto scaling policy
 20090419	serious exception handling for out of memory conditions for push_back's and stuff
@@ -182,17 +179,14 @@ ongoing further inspiration.
 20080504	add an interface to modify key_bindings from within fim
 20080504	document and promote the advantages of adaptive 'steps' variable
 20080504	the ascale + resize + rotation combination could be messy
-20080502	variable=`internal_command` behaviour missing
 20080502	reintroduce X custom font support
 20080502	enrich the existing commands by documenting them and giving power to their arguments
 20080430	add support for probing/scanning in byte ranges in file systems/files for known image types
-20080324	absolute priority of removing all extern object references in the code
 20080316	i need a class/superclass with the command acception functionality,
 		in a way each object would be directly responsible for its own bunch
 		of commands.
 20080228	to download files from a web page with fimgs
 20080219	fill in a spec file for building rpm packages
-20080216	resuscitate rotation, inversion and filtering code from fbi
 20080127	think about a multi-monitor strategy for a single instance of Fim: note that currently it is possible to specify a framebuffer device (therefore a monitor) via -d (--device)
 20080126	time to think about an /etc/fimrc at installation time
 
@@ -252,18 +246,17 @@ ongoing further inspiration.
 	and flipping! ) Fim code.
 
 -------------------------------------------------------------------------------
-Major but tricky (time consuming) issues:
-20071021	study context-sensitive command completion (so, with pre-parsing.. implying a modified parsing scheme!)
+Major but tricky (time consuming) features:
 
 -------------------------------------------------------------------------------
-Minor but tricky (time consuming) issues:
+Minor but tricky (time consuming) features:
 
 20080430	find a way to catch the console signal C-s in fim in a way to make C-s bindable
 20080313	make each cpp file include exactly the header files used
 20080216	add textureview mode
 
 -------------------------------------------------------------------------------
-Minor but easy (not time consuming) issues:
+Minor but easy (not time consuming) feature:
 
 20080430	use tmpfile() instead FIM_TMP_FILENAME 
 20080414	to use mkstemp() in src/FbiStuff.cpp
@@ -274,31 +267,19 @@ Minor but easy (not time consuming) issues:
 -------------------------------------------------------------------------------
 Optimization related ideas:
 
-20080216	add CFLAGS=-march=pentium4 ... and such optimization checks to the configure script
 -------------------------------------------------------------------------------
 Documentation related ideas:
 
-20080222	merge documentation for lame users
-20080106	add examples/aliases to send emails with attached image from within fim
-20080103	create a script to make a fimrc man page from fimrc
 20071230	UNIX domain sockets communication and multithreaded Fim
 20071230	A decent Features section in the web site, from the top.
 20071127	in-depth study of Vim documentation to uniform languages as much as possible
-20071127	study autodocumentation issues
 20071127	prepare a cookbook
 20071127	inspiration : #  vim +':help eval'
-20070613	sync documentation, website and the whole with VERSION :)
-20070517	automated inline - to txt documentation is a future issue
 
--------------------------------------------------------------------------------
-Almost solved problems ideas:
-
-20080127	to detect exactly if running under screen and run accordingly ;)
 
 -------------------------------------------------------------------------------
 Language related ideas:
 
-20080502	finish implementing pipe reading of images from inside fim with pread (an interactive -i) : FIM_PIPE_IMAGE_READ
 20080502	find a syntactical solution for ;; handling (extra semicolons) in the parser
 20080223	fine grain the grammar using whitespaces too
 20080216	add a third optional argument to bind : a description
@@ -358,9 +339,7 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 20080323	65535 byte limit for a script size (stored in a fim::string) causes problems
 		( see scripts/tests/maxlenscript.fim for this )
 20070210	fix properly the file parser and max script filelength limit
-20070307	It is not clear which key terminates always loops.
-20070307	config file parsing is still to be checked throughly
-20070129	control 4 crashes the prog ... why ? :)
+20070129	control 4 crashes the prog with code 42 ... why ? :)
 
 	MISSING SMALL FIXES:
 20070303	fix rar and zip dependencies in Makefiles and such for fimgs.sh
@@ -381,7 +360,6 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 20070128	add support for command renaming with checks...
 20070130	proper signal handing for while cycle interruption..
 20070201	cwd,ls,pwd,stat,file...
-20070201	--norc, --rc= mechanisms
 
 	MISC IDEAS :
 20070303
@@ -416,5 +394,4 @@ Please read the FIM.TXT file and the fimrc template to discover nice Fim feature
 		repeat_last N ?!
 	TIPS
 20070302	use __FUNCTION__ : is not ANSI, but GCC
-20070303	realtime clock... -lrt cannot  be used with Fim
 

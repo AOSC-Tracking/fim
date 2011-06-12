@@ -198,12 +198,6 @@ prev_page [{number}=1] : go to the previous page
 .fi
 
 .B
-push
-.fi
-push {filename(s)} : push {filename(s)} to the back of the files list
-.fi
-
-.B
 display
 .fi
 display : display the current file contents
@@ -218,13 +212,7 @@ redisplay : re-display the current file contents
 .B
 list
 .fi
-list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list
-.fi
-
-.B
-pop
-.fi
-pop : pop the last file from the files list
+list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list; list pop : pop the last file from the files list; list remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; push {filename(s)} : push {filename(s)} to the back of the files list
 .fi
 
 .B
@@ -249,12 +237,6 @@ reload : load the image into memory
 files
 .fi
 files : display the number of files in the file list
-.fi
-
-.B
-remove
-.fi
-remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified
 .fi
 
 .B
@@ -1001,7 +983,7 @@ bind 'Esc' "quit";
 bind 'n' "next_picture;";
 bind 'C-h' "help";
 bind 'p' "prev_picture;";
-#bind 'P' "pop";
+#bind 'P' "list 'pop'";
 #bind 's' "list 'sort'";
 bind 's' "scrollforward";
 bind 'C-s' "swap;redisplay;";
@@ -1192,8 +1174,8 @@ echo "WELCOME : to switch to the command line interface press ':' ";
 #alias "musicpause" "system 'mpc pause'" "";
 #alias "rdjpgcom" 'system "rdjpgcom" i:_filename';
 # offsetscan usage : need a mechanism for popping all images before.
-#alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}";
-#alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
+#alias "offsetscan" "while(i:width<1){list 'push' offimage;_open_offset=_open_offset+1;reload;}";
+#alias "offsetscan" "while(i:width<1){list 'push' '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
 #alias "webcam" "pread 'vgrabbj -d /dev/video0';";
 #alias "webcam_cycle" "while(1){webcam;reload;sleep 1;};";
 #This is a FIM initialization file. 

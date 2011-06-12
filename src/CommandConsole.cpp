@@ -352,11 +352,9 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_PREV),fim::string(FIM_FLT_PREV" ["FIM_CNS_EX_NUM_STRING"=1] : go to the previous picture in the list"),&browser_,&Browser::fcmd_prev));
 		addCommand(new Command(fim::string(FIM_FLT_NEXT_PAGE),fim::string(FIM_FLT_NEXT_PAGE" ["FIM_CNS_EX_NUM_STRING"=1] : go to the next page"),&browser_,&Browser::fcmd_next_page));
 		addCommand(new Command(fim::string(FIM_FLT_PREV_PAGE),fim::string(FIM_FLT_PREV_PAGE" ["FIM_CNS_EX_NUM_STRING"=1] : go to the previous page"),&browser_,&Browser::fcmd_prev_page));
-		addCommand(new Command(fim::string(FIM_FLT_PUSH),fim::string(FIM_FLT_PUSH" "FIM_CNS_EX_FNS_STRING" : push "FIM_CNS_EX_FNS_STRING" to the back of the files list"),&browser_,&Browser::fcmd_push));
 		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string(FIM_FLT_DISPLAY" : display the current file contents"),&browser_,&Browser::fcmd_display));
 		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string(FIM_FLT_REDISPLAY" : re-display the current file contents"),&browser_,&Browser::fcmd_redisplay));
 		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_CMD_HELP_LIST),&browser_,&Browser::fcmd_list));
-		addCommand(new Command(fim::string(FIM_FLT_POP),fim::string(FIM_FLT_POP" : pop the last file from the files list"),&browser_,&Browser::fcmd_pop));
 		addCommand(new Command(fim::string(FIM_FLT_PAN),fim::string(
 		FIM_FLT_PAN" {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction;"
 		" if the \'%\' specifier is present, {steps} will be treated as a percentage of current screen dimensions;"
@@ -368,14 +366,13 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded"),&browser_,&Browser::fcmd_load));
 		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string(FIM_FLT_RELOAD" : load the image into memory"),&browser_,&Browser::fcmd_reload));
 		addCommand(new Command(fim::string(FIM_FLT_FILES),fim::string(FIM_FLT_FILES" : display the number of files in the file list" ),&browser_,&Browser::fcmd_n));
-		addCommand(new Command(fim::string(FIM_FLT_REMOVE),fim::string(FIM_FLT_REMOVE" ["FIM_CNS_EX_FNS_STRING"] : remove the current file, or the "FIM_CNS_EX_FNS_STRING", if specified" ),&browser_,&Browser::fcmd_remove));
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string(FIM_FLT_INFO" : display information about the current file" ),&browser_,&Browser::fcmd_info));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO),fim::string(FIM_FLT_REXP_GOTO" "FIM_CNS_EX_RE_STRING" : jump to the first image matching the given "FIM_CNS_EX_RE_STRING" pattern"),&browser_,&Browser::fcmd_regexp_goto));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO_NEXT),fim::string(FIM_FLT_REXP_GOTO_NEXT" : jump to the next image matching the last given pattern"),&browser_,&Browser::fcmd_regexp_goto_next));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE_INCREMENT),fim::string(FIM_FLT_SCALE_INCREMENT" : increment the scale by a percentual amount [undocumented]"),&browser_,&Browser::fcmd_scale_increment));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE_MULTIPLY),fim::string(FIM_FLT_SCALE_MULTIPLY" : multiply the scale by the specified amount [undocumented]"),&browser_,&Browser::fcmd_scale_multiply));
 		addCommand(new Command(fim::string("scale_factor_grow" ),fim::string("multiply the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by scale_factor_multiplier [undocumented]"),&browser_,&Browser::fcmd_scale_factor_grow));
-		//addCommand(new Command(fim::string("scale_factor_shrink" ),fim::string("divide the scale factors "FIM_VID_REDUCE_FACTOR" and magnify_factor by scale_factor_multiplier [undocumented]"),&browser_,&Browser::fcmd_scale_factor_shrink));
+		addCommand(new Command(fim::string("scale_factor_shrink" ),fim::string("divide the scale factors "FIM_VID_REDUCE_FACTOR" and magnify_factor by scale_factor_multiplier [undocumented]"),&browser_,&Browser::fcmd_scale_factor_shrink));
 		addCommand(new Command(fim::string("scale_factor_increase" ),fim::string("add "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and magnify_factor [undocumented]" ),&browser_,&Browser::fcmd_scale_factor_increase));
 		addCommand(new Command(fim::string("scale_factor_decrease" ),fim::string( "subtract "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR"  [undocumented]" ),&browser_,&Browser::fcmd_scale_factor_decrease));
 		addCommand(new Command(fim::string(FIM_FLT_ROTATE),fim::string(FIM_FLT_ROTATE" "FIM_CNS_EX_NUM_STRING": rotate the image the specified amount of degrees [undocumented]" ),&browser_,&Browser::fcmd_rotate));
