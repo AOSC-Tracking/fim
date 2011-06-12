@@ -84,7 +84,7 @@ do an endless loop consisting of bottom and top aligning, alternated.
 Just as the --execute-commands switch, but commands will be executed before the loading of any config file.
 
 For example,
--c '_scale_style=""' will make fim start with no auto-scaling.
+-C '_scale_style=""' will make fim start with no auto-scaling.
 
 
 .TP

@@ -443,6 +443,7 @@ namespace fim
 #define FIM_VID_CONSOLE_BUFFER_FREE		"_console_buffer_free"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_BUFFER_USED		"_console_buffer_used"		/* "[internal,in,undocumented]" */
 #define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[internal,in] if non zero, after each interactive mode key hit, the console will display the hit key raw keycode" */
+#define FIM_VID_CMD_EXPANSION			"_command_expansion"			/* "[internal,in] if non zero, will enable autocompletion (on execution) of alias and command strings" */
 #define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
 #define FIM_VID_IGNORECASE			"_ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp-based searches" */

@@ -900,6 +900,7 @@ ret:
 			/*
 			 * in case command autocompletion is enabled
 			 */
+			if(getIntVariable(FIM_VID_CMD_EXPANSION))
 			if(c==NULL)
 			{
 				char *match = this->command_generator(cmd.c_str(),0,0);
