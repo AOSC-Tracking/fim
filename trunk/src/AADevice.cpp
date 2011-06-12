@@ -355,7 +355,7 @@
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t AADevice::initialize(key_bindings_t &key_bindings)
+	fim_err_t AADevice::initialize(sym_keys_t &sym_keys)
 	{
 		aa_parseoptions (NULL, NULL, NULL, NULL);
 
@@ -407,11 +407,11 @@
 
 #if 0
 		/* won't help in the ill X11-windowed aalib shipped with many distros case */
-		key_bindings["Left" ]=AA_LEFT;
-		key_bindings["Right"]=AA_RIGHT;
-		key_bindings["Up"   ]=AA_UP;
-		key_bindings["Down" ]=AA_DOWN;
-		key_bindings["Esc"  ]=AA_ESC;
+		sym_keys["Left" ]=AA_LEFT;
+		sym_keys["Right"]=AA_RIGHT;
+		sym_keys["Up"   ]=AA_UP;
+		sym_keys["Down" ]=AA_DOWN;
+		sym_keys["Esc"  ]=AA_ESC;
 #endif
 
 		return FIM_ERR_NO_ERROR;

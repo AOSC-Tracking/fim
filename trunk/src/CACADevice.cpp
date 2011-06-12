@@ -302,7 +302,7 @@
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t CACADevice::initialize(key_bindings_t &key_bindings)
+	fim_err_t CACADevice::initialize(sym_keys_t &sym_keys)
 	{
 		int rc=0;
 

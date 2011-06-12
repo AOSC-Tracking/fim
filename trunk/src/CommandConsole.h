@@ -82,10 +82,10 @@ class CommandConsole
 	/*
 	 * mapping of key name to key code
 	 */
-	key_bindings_t	key_bindings_;	//symbol->code
+	sym_keys_t	sym_keys_;	//symbol->code
 
-	typedef std::map<fim_key_t, fim::string> inverse_key_bindings_t;//code->symbol
-	inverse_key_bindings_t inverse_key_bindings_;//code->symbol
+	typedef std::map<fim_key_t, fim::string> key_syms_t;//code->symbol
+	key_syms_t key_syms_;//code->symbol
 
 	private:
 

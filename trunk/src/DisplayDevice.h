@@ -46,7 +46,7 @@ class DisplayDevice
 #else
 	DisplayDevice();
 #endif
-	virtual fim_err_t initialize(key_bindings_t &key_bindings)=0;
+	virtual fim_err_t initialize(sym_keys_t &sym_keys)=0;
 	virtual void  finalize()=0;
 
 	virtual fim_err_t display(

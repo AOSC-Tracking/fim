@@ -551,7 +551,7 @@ mp+=string(
 "\n"
 ".B fim * > selection.txt\n"
 ".fi\n"
-"# Will output the file names marked interactively with the '"FIM_FLT_MARK"' command in fim to a file.\n"
+"# Will output the file names marked interactively with the '"FIM_FLT_LIST" \"mark\"' command in fim to a file.\n"
 ".P\n"
 ".P\n"
 "\n"

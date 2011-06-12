@@ -65,7 +65,7 @@ class SDLDevice:public DisplayDevice
 		fim_flags_t flags// some flags
 		);
 
-	int initialize(key_bindings_t &key_bindings);
+	int initialize(sym_keys_t &sym_keys);
 	void finalize() ;
 
 	int get_chars_per_line() ;
