@@ -318,15 +318,9 @@ return {number} : return from the program with a specified status code
 .fi
 
 .B
-align_top
+align
 .fi
-align_top : align to the upper side the current image
-.fi
-
-.B
-align_bottom
-.fi
-align_bottom : align to the lower side the current image
+align bottom : align to the lower side the current image; align top : align to the upper side the current image; 
 .fi
 
 .B
@@ -991,7 +985,7 @@ bind 'j' "pan_down";
 bind "Left" "pan_left";
 bind 'h' "pan_left";
 bind ' ' "scrolldown";
-bind 't' "align_top;";
+bind 't' "align 'top';";
 bind 'C-g' "system 'fbgrab fim.png'";
 bind 'C-r' "recording 'start';";
 bind 'Q' "recording 'stop'";

@@ -104,8 +104,7 @@ class Browser
 	fim::string fcmd_regexp_goto_next(const args_t &args);
 	fim::string fcmd_goto_image(const args_t &args);
 	fim::string goto_image(int n);
-	fim::string fcmd_top_align(const args_t &args);
-	fim::string fcmd_bottom_align(const args_t &args);
+	fim::string fcmd_align(const args_t &args);
 	fim::string pan(const args_t &args);
 	fim::string fcmd_scrolldown(const args_t &args);
 	fim::string fcmd_scrollforward(const args_t &args);
