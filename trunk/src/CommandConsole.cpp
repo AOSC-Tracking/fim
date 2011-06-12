@@ -427,12 +427,14 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_PREAD),fim::string(FIM_FLT_PREAD" "FIM_CNS_EX_ARGS_STRING" : execute "FIM_CNS_EX_ARGS_STRING" as a shell command and read the output as an image file (using "FIM_FLT_POPEN")"),this,&CommandConsole::fcmd_pread));
 #endif
 #ifdef FIM_RECORDING
-		addCommand(new Command(fim::string(FIM_FLT_START_RECORDING),fim::string(FIM_FLT_START_RECORDING" : start recording the executed commands"),this,&CommandConsole::fcmd_start_recording));
-		addCommand(new Command(fim::string(FIM_FLT_STOP_RECORDING),fim::string(FIM_FLT_STOP_RECORDING" : stops recording the executed commands"),this,&CommandConsole::fcmd_stop_recording));
-		addCommand(new Command(fim::string(FIM_FLT_DUMP_RECORD_BUFFER),fim::string(FIM_FLT_DUMP_RECORD_BUFFER" : dump in the console the record buffer"),this,&CommandConsole::fcmd_dump_record_buffer));
-		addCommand(new Command(fim::string(FIM_FLT_EXECUTE_RECORD_BUFFER),fim::string(FIM_FLT_EXECUTE_RECORD_BUFFER" : execute the record buffer"),this,&CommandConsole::fcmd_execute_record_buffer));
+		addCommand(new Command(fim::string(FIM_FLT_RECORDING),fim::string(
+FIM_FLT_RECORDING " start : start recording the executed commands; "
+FIM_FLT_RECORDING " stop : stop  recording the executed commands; "
+FIM_FLT_RECORDING " dump : dump in the console the record buffer; "
+FIM_FLT_RECORDING " execute : execute the record buffer; "
+FIM_FLT_RECORDING " repeat_last : repeat the last performed action; "
+),this,&CommandConsole::fcmd_recording));
 		addCommand(new Command(fim::string(FIM_FLT_EVAL),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::fcmd_eval));
-		addCommand(new Command(fim::string(FIM_FLT_REPEAT_LAST),fim::string(FIM_FLT_REPEAT_LAST" : repeat the last performed action"),this,&CommandConsole::fcmd_repeat_last));
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_VARIABLES),fim::string(FIM_FLT_VARIABLES" : display the existing variables"),this,&CommandConsole::fcmd_variables_list));
 		addCommand(new Command(fim::string(FIM_FLT_COMMANDS),fim::string(FIM_FLT_COMMANDS" : display the existing commands"),this,&CommandConsole::fcmd_commands_list));
@@ -1230,7 +1232,7 @@ ok:
 				}
 				else
 				{
-					out << fcmd_dump_record_buffer(args_t()) << "\n";
+					out << dump_record_buffer(args_t()) << "\n";
 					out.close();
 				}
 			}

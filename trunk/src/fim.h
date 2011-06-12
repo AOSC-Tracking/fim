@@ -575,11 +575,9 @@ namespace fim
 #define FIM_FLT_CLEAR			"clear" /* not in vim */
 #define FIM_FLT_COMMANDS		"commands" /* not in vim */
 #define FIM_FLT_DISPLAY			"display" /* in vim, with another meaning) */
-#define FIM_FLT_DUMP_RECORD_BUFFER	"dump_record_buffer" /* not in vim */
 #define FIM_FLT_DUMP_KEY_CODES		"dump_key_codes" /* not in vim */
 #define FIM_FLT_ECHO			"echo" /* in vim */
 #define FIM_FLT_ELSE			"else" /* in vim */
-#define FIM_FLT_EXECUTE_RECORD_BUFFER	"execute_record_buffer" /* not in vim */
 #define FIM_FLT_EXEC			"exec" /* not in vim */
 #define FIM_FLT_EVAL			"eval" /* not in vim */
 #define FIM_FLT_FILE			"file" /* in vim */
@@ -606,7 +604,6 @@ namespace fim
 #define FIM_FLT_PREV_PAGE			"prev_page" /* not in vim */
 #define FIM_FLT_PREV_PIC			"prev_picture" /* not in vim */
 #define FIM_FLT_PWD			"pwd" /* in vim */
-#define FIM_FLT_REPEAT_LAST		"repeat_last" /* not in vim */
 #define FIM_FLT_REDISPLAY			"redisplay" /* not in vim */
 #define FIM_FLT_REDUCE			"reduce" /* not in vim */
 #define FIM_FLT_RETURN			"return" /* in vim */
@@ -625,8 +622,7 @@ namespace fim
 #define FIM_FLT_STATUS		"status" /* not in vim */
 #define FIM_FLT_STDOUT		"stdout" /* not in vim */
 #define FIM_FLT_QUIT			"quit" /* in vim */
-#define FIM_FLT_START_RECORDING			"start_recording" /* not in vim */
-#define FIM_FLT_STOP_RECORDING			"stop_recording" /* not in vim */
+#define FIM_FLT_RECORDING			"recording" /* not in vim */
 #define FIM_FLT_SYSTEM			"system" /* not in vim */
 #define FIM_FLT_SLEEP			"sleep" /* in vim */
 #define FIM_FLT_USLEEP			"usleep" /* not in vim */

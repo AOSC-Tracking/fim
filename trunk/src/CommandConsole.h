@@ -138,12 +138,13 @@ class CommandConsole
 
 	bool dont_record_last_action_;
 	fim::string memorize_last(const fim::string &cmd);
-	fim::string fcmd_repeat_last(const args_t &args);
-	fim::string fcmd_dump_record_buffer(const args_t &args);
-	fim::string fcmd_do_dump_record_buffer(const args_t &args)const;
-	fim::string fcmd_execute_record_buffer(const args_t &args);
-	fim::string fcmd_start_recording(const args_t &args);
-	fim::string fcmd_stop_recording(const args_t &args);
+	fim::string repeat_last(const args_t &args);
+	fim::string dump_record_buffer(const args_t &args);
+	fim::string do_dump_record_buffer(const args_t &args)const;
+	fim::string execute_record_buffer(const args_t &args);
+	fim::string start_recording();
+	fim::string fcmd_recording(const args_t &args);
+	fim::string stop_recording();
 	fim::string sanitize_action(const fim::string &cmd)const;
 
 	void record_action(const fim::string &cmd);
