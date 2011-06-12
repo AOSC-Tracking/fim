@@ -41,6 +41,29 @@ namespace fim
 		return fileslist;
 	}
 
+	fim::string Browser::list(const args_t &args)
+	{
+		/*
+		 */
+		if(args.size()<1)
+		{
+			return list();
+			goto nop;
+		}
+		else
+		{
+			if(args[0]=="random_shuffle")
+				return _random_shuffle();
+			if(args[0]=="sort")
+				return _sort();
+			if(args[0]=="reverse")
+				return _reverse();
+			return FIM_CMD_HELP_LIST;
+		}
+nop:
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
 	std::ostream& Browser::print(std::ostream &os)const
 	{
 		/*
@@ -697,6 +720,7 @@ nop:
 	{
 		/*
 		 *	sorts the image filenames list
+		 *	TODO: it would be cool to support a user supplied seed value
 		 */
 		std::random_shuffle(flist_.begin(),flist_.end());
 		return n_files()?(flist_[current_n()]):nofile_;

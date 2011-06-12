@@ -627,9 +627,6 @@ namespace fim
 #define FIM_FLT_STATUS		"status" /* not in vim */
 #define FIM_FLT_STDOUT		"stdout" /* not in vim */
 #define FIM_FLT_QUIT			"quit" /* in vim */
-#define FIM_FLT_RANDOM_SHUFFLE			"random_shuffle" /* not in vim */
-#define FIM_FLT_REVERSE			"reverse" /* not in vim */
-#define FIM_FLT_SORT			"sort" /* in vim */
 #define FIM_FLT_START_RECORDING			"start_recording" /* not in vim */
 #define FIM_FLT_STOP_RECORDING			"stop_recording" /* not in vim */
 #define FIM_FLT_SYSTEM			"system" /* not in vim */
@@ -646,6 +643,7 @@ namespace fim
  * Help messages for Fim commands (partial).
  * One glorious day these macros will serve to build automatically documentation.
  * */
+#define FIM_CMD_HELP_LIST	FIM_FLT_LIST" : display the files list; "FIM_FLT_LIST" random_shuffle: randomly shuffle the file list; "FIM_FLT_LIST" reverse: reverse the file list; "FIM_FLT_LIST" sort: sort the file list"
 #define FIM_CMD_HELP_CD			FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING": change the current directory to "FIM_CNS_EX_PATH_STRING". "FIM_FLT_CD" - will change to the previous current directory (before the last \":"FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING"\" command)"
 #define FIM_CMD_HELP_SET			FIM_FLT_SET": returns a list of variables which are set; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING": returns the value of variable "FIM_CNS_EX_ID_STRING"; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING" "FIM_CNS_EX_CMDS_STRING": sets variable "FIM_CNS_EX_ID_STRING" to value "FIM_CNS_EX_CMDS_STRING"; " 
 #define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the "FIM_VID_PWD" variable."

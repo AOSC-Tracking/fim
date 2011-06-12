@@ -54,7 +54,7 @@ bind 'n' "next_picture;";
 bind 'C-h' "help";
 bind 'p' "prev_picture;";
 #bind 'P' "pop";
-#bind 's' "sort";
+#bind 's' "list 'sort'";
 bind 's' "scrollforward";
 bind 'C-s' "swap;redisplay;";
 bind 'S' "toggleDisplayStatus";

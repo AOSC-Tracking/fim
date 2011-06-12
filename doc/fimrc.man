@@ -218,7 +218,7 @@ redisplay : re-display the current file contents
 .B
 list
 .fi
-list : display the files list
+list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list
 .fi
 
 .B
@@ -249,24 +249,6 @@ reload : load the image into memory
 files
 .fi
 files : display the number of files in the file list
-.fi
-
-.B
-sort
-.fi
-sort : sort the file list
-.fi
-
-.B
-random_shuffle
-.fi
-random_shuffle : randomly shuffle the file list
-.fi
-
-.B
-reverse
-.fi
-reverse : reverse the file list
 .fi
 
 .B
@@ -1020,7 +1002,7 @@ bind 'n' "next_picture;";
 bind 'C-h' "help";
 bind 'p' "prev_picture;";
 #bind 'P' "pop";
-#bind 's' "sort";
+#bind 's' "list 'sort'";
 bind 's' "scrollforward";
 bind 'C-s' "swap;redisplay;";
 bind 'S' "toggleDisplayStatus";
