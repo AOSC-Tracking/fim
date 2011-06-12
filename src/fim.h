@@ -605,8 +605,6 @@ namespace fim
 #define FIM_FLT_REDISPLAY		"redisplay" /* not in vim */
 #define FIM_FLT_REDUCE			"reduce" /* not in vim */
 #define FIM_FLT_RETURN			"return" /* in vim */
-#define FIM_FLT_REXP_GOTO		"regexp_goto" /* not in vim */
-#define FIM_FLT_REXP_GOTO_NEXT		"regexp_goto_next" /* not in vim */
 #define FIM_FLT_RELOAD			"reload" /* not in vim */
 #define FIM_FLT_ROTATE			"rotate" /* not in vim */
 #define FIM_FLT_SCALE			"scale" /* not in vim */

@@ -366,8 +366,6 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded"),&browser_,&Browser::fcmd_load));
 		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string(FIM_FLT_RELOAD" : load the image into memory"),&browser_,&Browser::fcmd_reload));
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string(FIM_FLT_INFO" : display information about the current file" ),&browser_,&Browser::fcmd_info));
-		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO),fim::string(FIM_FLT_REXP_GOTO" "FIM_CNS_EX_RE_STRING" : jump to the first image matching the given "FIM_CNS_EX_RE_STRING" pattern"),&browser_,&Browser::fcmd_regexp_goto));
-		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO_NEXT),fim::string(FIM_FLT_REXP_GOTO_NEXT" : jump to the next image matching the last given pattern"),&browser_,&Browser::fcmd_regexp_goto_next));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE_INCREMENT),fim::string(FIM_FLT_SCALE_INCREMENT" : increment the scale by a percentual amount [undocumented]"),&browser_,&Browser::fcmd_scale_increment));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE_MULTIPLY),fim::string(FIM_FLT_SCALE_MULTIPLY" : multiply the scale by the specified amount [undocumented]"),&browser_,&Browser::fcmd_scale_multiply));
 		addCommand(new Command(fim::string("scale_factor_grow" ),fim::string("multiply the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by scale_factor_multiplier [undocumented]"),&browser_,&Browser::fcmd_scale_factor_grow));
@@ -379,7 +377,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_REDUCE),fim::string(FIM_FLT_REDUCE " : reduce the displayed image by "FIM_VID_REDUCE_FACTOR" or "FIM_CNS_EX_ARGS_STRING" [undocumented]" ),&browser_,&Browser::fcmd_reduce));
 		addCommand(new Command(fim::string(FIM_FLT_RETURN),fim::string(FIM_FLT_RETURN" "FIM_CNS_EX_NUM_STRING" : return from the program with a specified status code"),this,&CommandConsole::fcmd_do_return));
 		addCommand(new Command(fim::string(FIM_FLT_ALIGN),fim::string(FIM_CMD_HELP_ALIGN),&browser_,&Browser::fcmd_align));
-		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string(FIM_FLT_GOTO" "FIM_CNS_EX_NUM_STRING" : go to the image specified by index "FIM_CNS_EX_NUM_STRING"; if terminated by '%', the effective index will be computed as a percentage of the current files list length; if prepended by '-' or '+', the jump will be relative to the current image index." ),&browser_,&Browser::fcmd_goto_image));
+		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string(FIM_FLT_GOTO" "FIM_CNS_EX_NUM_STRING" : go to the image specified by index "FIM_CNS_EX_NUM_STRING"; if terminated by '%', the effective index will be computed as a percentage of the current files list length; if prepended by '-' or '+', the jump will be relative to the current image index; "FIM_FLT_GOTO" /"FIM_CNS_EX_RE_STRING"/ : jump to the first image matching the given "FIM_CNS_EX_RE_STRING" pattern; "FIM_FLT_GOTO" +/"FIM_CNS_EX_RE_STRING"/ jump to the next image matching the last given pattern"),&browser_,&Browser::fcmd_goto_image));
 		addCommand(new Command(fim::string(FIM_FLT_NEGATE),fim::string(FIM_FLT_NEGATE" : negate the displayed image colors" ),&browser_,&Browser::fcmd_negate));
 		addCommand(new Command(fim::string(FIM_FLT_STATUS),fim::string(FIM_FLT_STATUS" : set the status line to the collation of the given arguments"),this,&CommandConsole::fcmd_status));
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLDOWN),fim::string(FIM_FLT_SCROLLDOWN" : scroll down the image, going next if at bottom" ),&browser_,&Browser::fcmd_scrolldown));
@@ -1121,7 +1119,10 @@ ok:
 						int tmp=rl_filename_completion_desired;
 						rl_inhibit_completion=1;
 						*prompt_=FIM_SYM_PROMPT_SLASH;
+						rl_hook_func_t *osh=rl_startup_hook;
+						rl_startup_hook=rl::fim_search_rl_startup_hook;
 						char *rl=readline(FIM_CNS_SLASH_STRING); // !!
+						rl_startup_hook=osh;
 						// no readline ? no interactive searches !
 						*prompt_=FIM_SYM_PROMPT_NUL;
 						rl_inhibit_completion=tmp;
@@ -1138,8 +1139,11 @@ ok:
 						else if(rl!=string(FIM_CNS_EMPTY_STRING))
 						{
 							args_t args;
-							args.push_back(rl);
-							execute(FIM_FLT_REXP_GOTO,args);
+							std::string rls("/");
+							rls+=rl;
+							rls+="/";
+							args.push_back(rls);
+							execute(FIM_FLT_GOTO,args);
 						}
 					}
 					else

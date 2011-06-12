@@ -761,17 +761,17 @@ nop:
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 
-	fim::string Browser::fcmd_regexp_goto_next(const args_t &args)
+	fim::string Browser::regexp_goto_next(const args_t &args)
 	{
 		/*
 		 * goes to the next filename-matching file
 		 */
 		args_t arg;
-		arg.push_back(last_regexp);
-		return fcmd_regexp_goto(arg);
+		arg.push_back(last_regexp_);
+		return regexp_goto(arg);
 	}
 
-	fim::string Browser::fcmd_regexp_goto(const args_t &args)
+	fim::string Browser::regexp_goto(const args_t &args)
 	{
 		/*
 		 * goes to the next filename-matching file
@@ -780,7 +780,7 @@ nop:
 		if( args.size() < 1 || s < 1 )goto nop;
 		for(j=0;j<s;++j)
 		{
-			last_regexp=args[0];
+			last_regexp_=args[0];
 			i=(j+c+1)%s;
 			if(commandConsole_.regexp_match(flist_[i].c_str(),args[0].c_str()))
 			{	
@@ -925,17 +925,31 @@ nop:
 			fim_char_t c=FIM_SYM_CHAR_NUL;
 			int sl=0;
 			bool pcnt=false;
+			bool isre=false;
 			if(!s)goto ret;
 			sl=strlen(s);
 			if(sl<1)goto ret;
 			c=*s;
 			pcnt=(s[sl-1]=='%');
+			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+') && s[1]=='/') ||( c=='/')));
 			if(isdigit(c)  || c=='-' || c=='+')g=atoi(s);
 			else if(c=='^' || c=='f')g=1;
 			else if(c=='$' || c=='l')g=n();
+			else if(isre){;}
 			else cout << " please specify a number or ^ or $\n";
 			if(pcnt)g=(g*n_files())/100;//FIXME: gross errors may occur here
 			if(c=='+' || c=='-')g=cn+g; // FIXME: what if g g<1 ? pity :)
+			if(isre)
+			{
+				args_t argsc;
+				if(c=='+')
+					return regexp_goto_next(argsc);/* no args needed */
+				else
+				{
+					argsc.push_back(args[0].substr(1,sl-2));
+					return regexp_goto(argsc);
+				}
+			}
 			//if(g!=-1)
 			{	
 				fim::string c=current();

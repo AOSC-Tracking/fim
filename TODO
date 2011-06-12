@@ -21,10 +21,11 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110612	the parser should be strictly checked for leaks
+20110612	using up and down keys in / mode seems to recall general history, not search history (even in old fim revisions)!
 20110612	scrolldown,scrollforward -> [pan|scroll] forward|read
 20110612	reduce,magnify -> scale
 20110612	scale_* -> to aliases	
-20110612	regexp_goto -> goto /regexp/     regexp_goto_next -> goto /regexp/+ ?
 20110612	dump_key_codes -> dump key_codes|variables|commands|aliases
 20110612	clear -> console clear
 20110612	collapse the recording commands
