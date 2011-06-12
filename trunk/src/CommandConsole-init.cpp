@@ -233,14 +233,14 @@ namespace fim
 		const char *e = fim_getenv(FIM_CNS_HOME_VAR);
 
 		if(preConfigCommand_!=fim::string(""))
-			execute(preConfigCommand_.c_str(),1,0);
+			execute_internal(preConfigCommand_.c_str(),FIM_X_HISTORY);
 
 		if(getIntVariable(FIM_VID_NO_DEFAULT_CONFIGURATION)==0 )
 		{
     #ifdef FIM_DEFAULT_CONFIGURATION
 			/* so the user could inspect what goes in the default configuration */
 			setVariable(FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_DEFAULT_CONFIG_FILE_CONTENTS);
-			execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
+			execute_internal(FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_X_QUIET);
     #endif		
 		}
 
@@ -286,7 +286,7 @@ namespace fim
 					 we use the default configuration (raccomended !)  !	*/
   #ifdef FIM_DEFAULT_CONFIGURATION
 					// 20110529 commented the following, as it is a (harmful) duplicate execution 
-					//execute(FIM_DEFAULT_CONFIG_FILE_CONTENTS,0,1);
+					//execute_internal(FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_X_QUIET);
   #endif		
 				}
 #ifndef FIM_NOFIMRC

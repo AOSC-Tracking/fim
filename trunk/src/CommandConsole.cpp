@@ -678,12 +678,12 @@ namespace fim
 					nc = getBoundAction(c);
 					
 				cout << "about to execute " << nc << "\n";
-				status=execute(nc.c_str(),1,0);
+				status=execute_internal(nc.c_str(),FIM_X_HISTORY);
 				it_buf=-1;
 			}
 			else
 #endif
-				status=execute(getBoundAction(c).c_str(),0,0);
+				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
 #endif
@@ -696,7 +696,7 @@ namespace fim
 		}
 	}
 
-	fim_err_t CommandConsole::execute(const char *ss, fim_bool_t add_history_, fim_bool_t suppress_output_)
+	fim_err_t CommandConsole::execute_internal(const char *ss, fim_xflags_t xflags)
 	{
 		try{
 		/*
@@ -707,6 +707,8 @@ namespace fim
 		 *	note : the pipe here opened shall be closed in the yyparse()
 		 *	call, by the YY_INPUT macro (defined by me in lex.lex)
 		 */
+		fim_bool_t add_history_=(xflags&FIM_X_HISTORY)?true:false;
+		fim_bool_t suppress_output_=(xflags&FIM_X_QUIET)?true:false;
 		char *s=dupstr(ss);//this malloc is free
 		int iret=0;
 		int r =0;
@@ -1053,10 +1055,10 @@ ok:
 					if(recordMode_)record_action(fim::string(rl));
 #endif					
 					//ic_=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
-					execute(rl,1,0);	//execution of the command line with history
+					execute_internal(rl,FIM_X_HISTORY);	//execution of the command line with history
 					ic_=(ic_==-1)?0:1; //a command could change the mode !
 //					this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);	//!!
-//					execute("redisplay;",0,0);	//execution of the command line with history
+//					execute_internal("redisplay;",FIM_X_NULL);	//execution of the command line with history
 #ifdef FIM_AUTOCMDS
 					autocmd_exec(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
 #endif
@@ -1298,7 +1300,7 @@ ok:
 		if(fd==NULL)return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
 		if(r==-1)return FIM_ERR_GENERIC;
-		execute(cmds.c_str(),0,1);
+		execute_internal(cmds.c_str(),FIM_X_QUIET);
 		return 0;
 	}
 
@@ -1309,7 +1311,7 @@ ok:
 		 *
 		 * TODO : catch exceptions
 		 * */
-		execute(slurp_file(s).c_str(),0,1);
+		execute_internal(slurp_file(s).c_str(),FIM_X_QUIET);
 		return 0;
 	}
 
@@ -1634,7 +1636,7 @@ ok:
 				autocmds_frame_t frame(autocmds_loop_frame_t(event,fname),(autocmds_[event][pat][i]).c_str());
 //				cout << "should exec '"<<event<<"'->'"<<autocmds_[event][pat][i]<<"'\n";
 				autocmds_stack.push_back(frame);
-				execute((autocmds_[event][pat][i]).c_str(),0,1);
+				execute_internal((autocmds_[event][pat][i]).c_str(),FIM_X_QUIET);
 				autocmds_stack.pop_back();
 			}
 		}

@@ -228,7 +228,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string do_return(const args_t &args);
 	fim::string status(const args_t &args);
 	fim_err_t executeFile(const char *s);
-	fim_err_t execute(const char *ss, fim_bool_t add_history_, fim_bool_t suppress_output_);
+	fim_err_t execute_internal(const char *ss, fim_xflags_t xflags);
 
 	fim_err_t toggleStatusLine();
 	fim_err_t addCommand(Command *c);
