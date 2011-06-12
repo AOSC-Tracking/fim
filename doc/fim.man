@@ -353,7 +353,7 @@ scanimage ... | tee scan.ppm | fim -i
 
 .B fim * > selection.txt
 .fi
-# Will output the file names marked interactively with the 'mark' command in fim to a file.
+# Will output the file names marked interactively with the 'list "mark"' command in fim to a file.
 .P
 .P
 

@@ -99,7 +99,7 @@ namespace fim
 					mc_,
 #endif
 					fopts
-					); if(sdld && sdld->initialize(key_bindings_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=NULL;}
+					); if(sdld && sdld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice_==NULL)
 			{
 				displaydevice_=sdld;
@@ -120,7 +120,7 @@ namespace fim
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_
 #endif
-					); if(cacad && cacad->initialize(key_bindings_)!=FIM_ERR_NO_ERROR){delete cacad ; cacad=NULL;}
+					); if(cacad && cacad->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete cacad ; cacad=NULL;}
 			if(cacad && displaydevice_==NULL)
 			{
 				displaydevice_=cacad;
@@ -140,7 +140,7 @@ namespace fim
 #endif
 				);
 
-		if(aad_ && aad_->initialize(key_bindings_)!=FIM_ERR_NO_ERROR){delete aad_ ; aad_=NULL;}
+		if(aad_ && aad_->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete aad_ ; aad_=NULL;}
 		{
 		if(aad_ && displaydevice_==NULL)
 		{
@@ -158,10 +158,10 @@ namespace fim
 			const char * term = fim_getenv(FIM_CNS_TERM_VAR);
 			if(term && string(term).re_match("screen"))
 			{
-				key_bindings_[FIM_KBD_LEFT]-=3072;
-				key_bindings_[FIM_KBD_RIGHT]-=3072;
-				key_bindings_[FIM_KBD_UP]-=3072;
-				key_bindings_[FIM_KBD_DOWN]-=3072;
+				sym_keys_[FIM_KBD_LEFT]-=3072;
+				sym_keys_[FIM_KBD_RIGHT]-=3072;
+				sym_keys_[FIM_KBD_UP]-=3072;
+				sym_keys_[FIM_KBD_DOWN]-=3072;
 			}
 #endif
 		}

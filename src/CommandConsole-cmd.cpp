@@ -55,8 +55,8 @@ namespace fim
 #endif
 		else
 		{
-			if(key_bindings_.find(kstr)!= key_bindings_.end())
-				key=key_bindings_[args[0]];
+			if(sym_keys_.find(kstr)!= sym_keys_.end())
+				key=sym_keys_[args[0]];
 		}
 		if(key==FIM_SYM_NULL_KEY)
 		{
@@ -541,11 +541,11 @@ namespace fim
 		 * all keyboard codes are dumped in the console.
 		 * */
 		fim::string acl;
-		key_bindings_t::const_iterator ki;
+		sym_keys_t::const_iterator ki;
 		acl+="There are ";
-		acl+=fim::string((int)(key_bindings_.size()));
+		acl+=fim::string((int)(sym_keys_.size()));
 		acl+=" bindings (dumping them here, unescaped).\n";
-		for( ki=key_bindings_.begin();ki!=key_bindings_.end();++ki)
+		for( ki=sym_keys_.begin();ki!=sym_keys_.end();++ki)
 		{
 			acl+=((*ki).first);
 			acl+=" -> ";

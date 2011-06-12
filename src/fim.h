@@ -139,7 +139,7 @@ namespace fim
 	typedef int fim_ts_t;		/* a type for time, in seconds */
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
-	typedef std::map<fim::string,fim_key_t > key_bindings_t;	//symbol->code
+	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code
 	typedef char fim_char_t;	/* a type for chars */
 	typedef unsigned char fim_byte_t;	/* a type for bytes */
 
@@ -588,7 +588,6 @@ namespace fim
 #define FIM_FLT_LOAD			"load" /* not in vim */
 #define FIM_FLT_LIST			"list" /* not in vim */
 #define FIM_FLT_MAGNIFY			"magnify" /* not in vim */
-#define FIM_FLT_MARK			"mark" /* in vim */
 #define FIM_FLT_NEXT			"next" /* in vim */
 #define FIM_FLT_NEGATE			"negate" /* not in vim */
 #define FIM_FLT_NEXT_PAGE		"next_page" /* not in vim */
@@ -624,7 +623,6 @@ namespace fim
 #define FIM_FLT_USLEEP			"usleep" /* not in vim */
 #define FIM_FLT_UNALIAS			"unalias" /* not in vim */
 #define FIM_FLT_UNBIND			"unbind" /* not in vim */
-#define FIM_FLT_UNMARK			"unmark" /* in vim */
 #define FIM_FLT_VARIABLES		"variables" /* not in vim */
 #define FIM_FLT_WHILE			"while" /* in vim */
 #define FIM_FLT_WINDOW			"window" /* not in vim */

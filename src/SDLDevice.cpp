@@ -281,7 +281,7 @@ std::cout.unsetf ( std::ios::hex );
 		return true;
 	}
 
-	fim_err_t SDLDevice::initialize(key_bindings_t &key_bindings)
+	fim_err_t SDLDevice::initialize(sym_keys_t &sym_keys)
 	{
 		/*
 		 *
@@ -353,27 +353,27 @@ std::cout.unsetf ( std::ios::hex );
 		SDL_WM_SetCaption(FIM_CNS_FIM_APPTITLE,FIM_SDL_ICONPATH);
 		fim_perror(NULL);
 
-		key_bindings["PageUp" ]=SDLK_PAGEUP;
-		key_bindings["PageDown" ]=SDLK_PAGEDOWN;
-		key_bindings["Left" ]=SDLK_LEFT;
-		key_bindings["Right"]=SDLK_RIGHT;
-		key_bindings["Up"   ]=SDLK_UP;
-		key_bindings["Down" ]=SDLK_DOWN;
-		key_bindings["Space"]=SDLK_SPACE;
-		key_bindings["End"  ]=SDLK_END;
-		key_bindings["Home" ]=SDLK_HOME;
-		key_bindings["F1" ]=SDLK_F1;
-		key_bindings["F2" ]=SDLK_F2;
-		key_bindings["F3" ]=SDLK_F3;
-		key_bindings["F4" ]=SDLK_F4;
-		key_bindings["F5" ]=SDLK_F5;
-		key_bindings["F6" ]=SDLK_F6;
-		key_bindings["F7" ]=SDLK_F7;
-		key_bindings["F8" ]=SDLK_F8;
-		key_bindings["F9" ]=SDLK_F9;
-		key_bindings["F10"]=SDLK_F10;
-		key_bindings["F11"]=SDLK_F11;
-		key_bindings["F12"]=SDLK_F12;
+		sym_keys["PageUp" ]=SDLK_PAGEUP;
+		sym_keys["PageDown" ]=SDLK_PAGEDOWN;
+		sym_keys["Left" ]=SDLK_LEFT;
+		sym_keys["Right"]=SDLK_RIGHT;
+		sym_keys["Up"   ]=SDLK_UP;
+		sym_keys["Down" ]=SDLK_DOWN;
+		sym_keys["Space"]=SDLK_SPACE;
+		sym_keys["End"  ]=SDLK_END;
+		sym_keys["Home" ]=SDLK_HOME;
+		sym_keys["F1" ]=SDLK_F1;
+		sym_keys["F2" ]=SDLK_F2;
+		sym_keys["F3" ]=SDLK_F3;
+		sym_keys["F4" ]=SDLK_F4;
+		sym_keys["F5" ]=SDLK_F5;
+		sym_keys["F6" ]=SDLK_F6;
+		sym_keys["F7" ]=SDLK_F7;
+		sym_keys["F8" ]=SDLK_F8;
+		sym_keys["F9" ]=SDLK_F9;
+		sym_keys["F10"]=SDLK_F10;
+		sym_keys["F11"]=SDLK_F11;
+		sym_keys["F12"]=SDLK_F12;
 		
 		SDL_ShowCursor(want_mouse_display_?1:0);
 		fim_perror(NULL);

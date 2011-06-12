@@ -129,8 +129,8 @@ namespace fim
 		{
 			//if(bi->second == FIM_CNS_EMPTY_STRING)continue;//FIX : THIS SHOULD NOT OCCUR
 			bindings_expanded+=FIM_FLT_BIND" \"";
-			inverse_key_bindings_t::const_iterator ikbi=inverse_key_bindings_.find(((*bi).first));
-			if(ikbi!=inverse_key_bindings_.end()) bindings_expanded+=ikbi->second;
+			key_syms_t::const_iterator ikbi=key_syms_.find(((*bi).first));
+			if(ikbi!=key_syms_.end()) bindings_expanded+=ikbi->second;
 			bindings_expanded+="\" \"";
 			bindings_expanded+=((*bi).second);
 			bindings_expanded+="\"\n";
@@ -156,9 +156,9 @@ namespace fim
 		else
 #endif
 		{
-			key_bindings_t::const_iterator kbi=key_bindings_.find(kfstr);
-			if(kbi!=key_bindings_.end())
-				key=key_bindings_[kfstr];
+			sym_keys_t::const_iterator kbi=sym_keys_.find(kfstr);
+			if(kbi!=sym_keys_.end())
+				key=sym_keys_[kfstr];
 		}
 		return unbind(key);
 	}
@@ -191,7 +191,7 @@ namespace fim
 			/* FIXME: should move this functionality to an ad-hoc search routine */
 			if(bi->second==binding)
 			{
-				return inverse_key_bindings_[bi->first];	
+				return key_syms_[bi->first];	
 			}
 		}
 		return FIM_CNS_EMPTY_RESULT;
@@ -951,12 +951,12 @@ ok:
 		{
 			/* while characters read */
 			//if( c == -1 ) return 0;	/* no chars read */
-			key_bindings_t::const_iterator ki;
-//			if(c==key_bindings_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
-//			if(c==key_bindings_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
+			sym_keys_t::const_iterator ki;
+//			if(c==sym_keys_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
+//			if(c==sym_keys_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
 //			// 20110601 need some string variable with these two keys (see while() interruption documentation) 
-			if((ki=key_bindings_.find(FIM_KBD_ESC))!=key_bindings_.end() && c==ki->second)return 1;
-			if((ki=key_bindings_.find(FIM_KBD_COLON))!=key_bindings_.end() && c==ki->second)return 1;
+			if((ki=sym_keys_.find(FIM_KBD_ESC))!=sym_keys_.end() && c==ki->second)return 1;
+			if((ki=sym_keys_.find(FIM_KBD_COLON))!=sym_keys_.end() && c==ki->second)return 1;
 			if( c != exitBinding_ )  /* some char read */
 			{
 				/*
