@@ -557,12 +557,12 @@ namespace fim
 	}
 
 #ifdef FIM_RECORDING
-	fim::string CommandConsole::fcmd_dump_record_buffer(const args_t &args)
+	fim::string CommandConsole::dump_record_buffer(const args_t &args)
 	{
-		return fcmd_do_dump_record_buffer(args);
+		return do_dump_record_buffer(args);
 	}
 
-	fim::string CommandConsole::fcmd_do_dump_record_buffer(const args_t &args)const
+	fim::string CommandConsole::do_dump_record_buffer(const args_t &args)const
 	{
 		/*
 		 * the recorded commands are dumped in the console
@@ -584,12 +584,12 @@ namespace fim
 		return res;
 	}
 
-	fim::string CommandConsole::fcmd_execute_record_buffer(const args_t &args)
+	fim::string CommandConsole::execute_record_buffer(const args_t &args)
 	{
 		/*
 		 * all of the commands in the record buffer are re-executed.
 		 * */
-		execute_internal(fcmd_dump_record_buffer(args).c_str(),FIM_X_NULL);
+		execute_internal(dump_record_buffer(args).c_str(),FIM_X_NULL);
 		/* for unknown reasons, the following code gives problems : image resizes don't work..
 		 * but the present (above) doesn't support interruptions ...
 		 * */
@@ -616,7 +616,7 @@ namespace fim
 	}
 #endif
 
-	fim::string CommandConsole::fcmd_repeat_last(const args_t &args)
+	fim::string CommandConsole::repeat_last(const args_t &args)
 	{
 		/*
 		 * WARNING : there is an intricacy concerning the semantics of this command :
@@ -635,7 +635,42 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_start_recording(const args_t &args)
+	fim::string CommandConsole::fcmd_recording(const args_t &args)
+	{
+		if(args.size()<1)
+		{
+			goto nop;
+		}
+		else
+		{
+			if(args[0]=="start")
+				return start_recording();
+			if(args[0]=="stop")
+				return stop_recording();
+			if(args[0]=="dump")
+			{
+				args_t argsc(args);
+				argsc.erase(argsc.begin());
+				return dump_record_buffer(argsc);
+			}
+			if(args[0]=="execute")
+			{
+				args_t argsc(args);
+				argsc.erase(argsc.begin());
+				return execute_record_buffer(argsc);
+			}
+			if(args[0]=="repeat_last")
+			{
+				args_t argsc(args);
+				argsc.erase(argsc.begin());
+				return repeat_last(argsc);
+			}
+		}
+nop:
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
+	fim::string CommandConsole::start_recording()
 	{
 		/*
 		 * recording of commands starts here
@@ -645,7 +680,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_stop_recording(const args_t &args)
+	fim::string CommandConsole::stop_recording()
 	{
 		/*
 		 * since the last recorded action was stop_recording, we pop out the last command

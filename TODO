@@ -21,12 +21,19 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110612	scrolldown,scrollforward -> [pan|scroll] forward|read
+20110612	reduce,magnify -> scale
+20110612	align_top,align_bottom
+20110612	scale_* -> to aliases	
+20110612	regexp_goto -> goto /regexp/     regexp_goto_next -> goto /regexp/+ ?
+20110612	files -> list files
+20110612	dump_key_codes -> dump key_codes|variables|commands|aliases
 20110612	clear -> console clear
 20110612	collapse the recording commands
 20110612	need a runtime method for diverting stdout ? may ease debugging.
 20110612	shall rename from _varname to v:varname, whenever this has sense.
 20110610	shall unify the scaling-control variables
-20110610	get rid of 'next' via 'goto +1'; get rid of 'next_page' via 'goto_page'
+20110610	get rid of 'next' via 'goto +1'; get rid of 'next_page' via 'goto_page'; get rid also of next_picture
 20110609	.ps crashes (try that matrix!) ?
 20110604	shall fix systematically stdin reading switches conflict (if any)
 20110604	may consider usage of ffmpeg's libswscale for image scaling

@@ -950,10 +950,9 @@ done:
 		    //fim's
 		    cc.setVariable(FIM_VID_SCRIPTOUT_FILE,optarg);
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FIM_FLT_START_RECORDING";");
-		    cc.appendPostExecutionCommand(FIM_FLT_STOP_RECORDING";");
+		    cc.pre_autocmd_add(FIM_FLT_RECORDING" 'start';");
+		    cc.appendPostExecutionCommand(FIM_FLT_RECORDING" 'stop';");
 	#endif
-
 		    break;
 		case 'F':
 		    //fim's
