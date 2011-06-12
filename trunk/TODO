@@ -23,7 +23,6 @@ ongoing further inspiration.
 
 20110612	scrolldown,scrollforward -> [pan|scroll] forward|read
 20110612	reduce,magnify -> scale
-20110612	align_top,align_bottom
 20110612	scale_* -> to aliases	
 20110612	regexp_goto -> goto /regexp/     regexp_goto_next -> goto /regexp/+ ?
 20110612	files -> list files

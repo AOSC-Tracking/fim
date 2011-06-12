@@ -38,8 +38,6 @@ alias "toggleautomirror" "_automirror=1-_automirror;" "";
 alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
-#alias "q" "quit;" "quits the fim program";
-#
 # Warning : binding to C-s, C-z and C-c won't make effect, as these
 # codes are catched by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
@@ -85,7 +83,7 @@ bind 'j' "pan_down";
 bind "Left" "pan_left";
 bind 'h' "pan_left";
 bind ' ' "scrolldown";
-bind 't' "align_top;";
+bind 't' "align 'top';";
 bind 'C-g' "system 'fbgrab fim.png'";
 bind 'C-r' "recording 'start';";
 bind 'Q' "recording 'stop'";
@@ -103,7 +101,6 @@ alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 #autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
 #autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
 #autocmd "PostDisplay" ".*gif" "echo 'this is a gif file';";
-
 #autocmd "PostDisplay" "" "echo '\\nthis is a file\\n'";
 #autocmd "PostGoto"   "" "set_interactive_mode;";
 autocmd "PostGoto" "" "reload;";

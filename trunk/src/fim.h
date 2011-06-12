@@ -566,8 +566,7 @@ namespace fim
  * Fim Language Tokens
  * */
 #define FIM_FLT_ALIAS			"alias"	/* not in vim */
-#define FIM_FLT_ALIGN_BOTTOM		"align_bottom"	/* not in vim */
-#define FIM_FLT_ALIGN_TOP		"align_top"	/* not in vim */
+#define FIM_FLT_ALIGN			"align"	/* not in vim */
 #define FIM_FLT_AUTOCMD			"autocmd" /* in vim */
 #define FIM_FLT_AUTOCMD_DEL			"autocmd_del"	/* not in vim */
 #define FIM_FLT_BIND			"bind" /* not in vim */
@@ -637,6 +636,7 @@ namespace fim
  * Help messages for Fim commands (partial).
  * One glorious day these macros will serve to build automatically documentation.
  * */
+#define FIM_CMD_HELP_ALIGN FIM_FLT_ALIGN" bottom : align to the lower side the current image; " FIM_FLT_ALIGN" top : align to the upper side the current image; "
 #define FIM_CMD_HELP_LIST	FIM_FLT_LIST" : display the files list; "FIM_FLT_LIST" random_shuffle: randomly shuffle the file list; "FIM_FLT_LIST" reverse: reverse the file list; "FIM_FLT_LIST" sort: sort the file list; "FIM_FLT_LIST" pop : pop the last file from the files list; " FIM_FLT_LIST" remove ["FIM_CNS_EX_FNS_STRING"] : remove the current file, or the "FIM_CNS_EX_FNS_STRING", if specified " "; push "FIM_CNS_EX_FNS_STRING" : push "FIM_CNS_EX_FNS_STRING" to the back of the files list"
 #define FIM_CMD_HELP_CD			FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING": change the current directory to "FIM_CNS_EX_PATH_STRING". "FIM_FLT_CD" - will change to the previous current directory (before the last \":"FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING"\" command)"
 #define FIM_CMD_HELP_SET			FIM_FLT_SET": returns a list of variables which are set; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING": returns the value of variable "FIM_CNS_EX_ID_STRING"; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING" "FIM_CNS_EX_CMDS_STRING": sets variable "FIM_CNS_EX_ID_STRING" to value "FIM_CNS_EX_CMDS_STRING"; " 

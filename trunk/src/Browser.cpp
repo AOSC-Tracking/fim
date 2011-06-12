@@ -1212,11 +1212,14 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_top_align(const args_t &args)
+	fim::string Browser::fcmd_align(const args_t &args)
 	{
 		/*
-		 * aligns to top the displayed image
+		 * aligns to top/bottom the displayed image
+		 * TODO: incomplete
 		 */ 
+		if(args.size()<1)goto err;
+		if(!args[0].c_str() || !args[0].re_match("^(bottom|top)"))goto err;
 		if(c_image())
 		{
 			fim::string c=current();
@@ -1225,35 +1228,19 @@ nop:
 #endif
 			if(c_image() && viewport())
 			{
-				viewport()->top_align();
+				if(args[0].re_match("top"))
+					viewport()->top_align();
+				if(args[0].re_match("bottom"))
+					viewport()->bottom_align();
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
+nop:
 		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::fcmd_bottom_align(const args_t &args)
-	{
-		/*
-		 * aligns to the bottom the displayed image
-		 */ 
-		if(c_image())
-		{
-			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPAN,c);
-#endif
-			if(c_image() && viewport())
-			{
-				viewport()->bottom_align();
-			}
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPAN,c);
-#endif
-		}
-		return FIM_CNS_EMPTY_RESULT;
+err:
+		return FIM_CMD_HELP_ALIGN;
 	}
 
 	const Image *Browser::c_image()const
