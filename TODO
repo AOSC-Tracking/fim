@@ -23,10 +23,8 @@ ongoing further inspiration.
 
 20110612	prepend fim command methods names with cmd_
 20110612	shall introduce goto_page
-20110612	execute(string, int) -> execute_inner
 20110612	need a runtime method for diverting stdout ? may ease debugging.
 20110612	shall rename from _varname to v:varname, whenever this has sense.
-20110611	shall change execute(cmd, int, int) -> execute(cmd, fim_exec_flags). for instance, I may set a flag for disabling system/popen () calls, or caling any other external program
 20110610	shall unify the scaling-control variables
 20110610	get rid of 'next' via 'goto +1'
 20110609	.ps crashes (try that matrix!) ?

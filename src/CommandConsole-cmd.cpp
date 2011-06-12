@@ -594,7 +594,7 @@ namespace fim
 		/*
 		 * all of the commands in the record buffer are re-executed.
 		 * */
-		execute(dump_record_buffer(args).c_str(),0,0);
+		execute_internal(dump_record_buffer(args).c_str(),FIM_X_NULL);
 		/* for unknown reasons, the following code gives problems : image resizes don't work..
 		 * but the present (above) doesn't support interruptions ...
 		 * */
@@ -602,7 +602,7 @@ namespace fim
 		for(size_t i=0;i<recorded_actions_.size();++i)
 		{
 			res=recorded_actions_[i].first+(fim::string)recorded_actions_[i].second;
-			execute(res.c_str(),0,1);
+			execute_internal(res.c_str(),FIM_X_QUIET);
 		}*/
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -614,7 +614,7 @@ namespace fim
 		 * */
 		for(size_t i=0;i<args.size();++i)
 		{
-			if(execute(args[i].c_str(),0,0))
+			if(execute_internal(args[i].c_str(),FIM_X_NULL))
 				return fim::string("problems executing ")+args[i]+fim::string("\n");
 		}
 		return FIM_CNS_EMPTY_RESULT;
@@ -635,7 +635,7 @@ namespace fim
 		 *   a dont_record_last_action_ flag after each detection of repeat_last, so we do not 
 		 *   record the containing string.
 		 */
-		execute(last_action_.c_str(),0,0);
+		execute_internal(last_action_.c_str(),FIM_X_NULL);
 		dont_record_last_action_=true;	//the issuing action will not be recorded
 		return FIM_CNS_EMPTY_RESULT;
 	}
