@@ -138,12 +138,12 @@ class CommandConsole
 
 	bool dont_record_last_action_;
 	fim::string memorize_last(const fim::string &cmd);
-	fim::string repeat_last(const args_t &args);
-	fim::string dump_record_buffer(const args_t &args);
-	fim::string do_dump_record_buffer(const args_t &args)const;
-	fim::string execute_record_buffer(const args_t &args);
-	fim::string start_recording(const args_t &args);
-	fim::string stop_recording(const args_t &args);
+	fim::string fcmd_repeat_last(const args_t &args);
+	fim::string fcmd_dump_record_buffer(const args_t &args);
+	fim::string fcmd_do_dump_record_buffer(const args_t &args)const;
+	fim::string fcmd_execute_record_buffer(const args_t &args);
+	fim::string fcmd_start_recording(const args_t &args);
+	fim::string fcmd_stop_recording(const args_t &args);
 	fim::string sanitize_action(const fim::string &cmd)const;
 
 	void record_action(const fim::string &cmd);
@@ -179,8 +179,8 @@ class CommandConsole
 	public:
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-	fim::string markCurrentFile(const args_t& args);
-	fim::string unmarkCurrentFile(const args_t& args);
+	fim::string fcmd_markCurrentFile(const args_t& args);
+	fim::string fcmd_unmarkCurrentFile(const args_t& args);
 #endif
 	bool display();
 	bool redisplay();
@@ -205,15 +205,15 @@ class CommandConsole
 #ifndef FIM_WANT_NOSCRIPTING
 	bool push_scriptfile(const fim::string ns);
 	bool with_scriptfile()const;
-	fim::string executeFile(const args_t &args);
+	fim::string fcmd_executeFile(const args_t &args);
 #endif
 	private:
-	fim::string echo(const args_t &args);
+	fim::string fcmd_echo(const args_t &args);
 	fim::string do_echo(const args_t &args)const;
 	//	fim::string get_expr_type(const args_t &args);
-	fim::string help(const args_t &args);
-	fim::string quit(const args_t &args);
-	fim::string _stdout(const args_t &args);
+	fim::string fcmd_help(const args_t &args);
+	fim::string fcmd_quit(const args_t &args);
+	fim::string fcmd__stdout(const args_t &args);
 	/* naming this stdout raises problems on some systems 
 	   e.g.: 
 # uname -a
@@ -223,10 +223,9 @@ Reading specs from /usr/libexec/gcc/darwin/ppc/3.3/specs
 Thread model: posix
 gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 */
-	fim::string do_stdout(const args_t &args)const;
-	fim::string foo (const args_t &args);
-	fim::string do_return(const args_t &args);
-	fim::string status(const args_t &args);
+	fim::string fcmd_foo (const args_t &args);
+	fim::string fcmd_do_return(const args_t &args);
+	fim::string fcmd_status(const args_t &args);
 	fim_err_t executeFile(const char *s);
 	fim_err_t execute_internal(const char *ss, fim_xflags_t xflags);
 
@@ -237,22 +236,22 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string alias(std::vector<Arg> args);
 	fim::string alias(const fim::string& a,const fim::string& c);
 	fim::string aliasRecall(fim::string cmd)const;
-	fim::string system(const args_t& args);
-	fim::string cd(const args_t& args);
-	fim::string pwd(const args_t& args);
-	fim::string sys_popen(const args_t& args);
+	fim::string fcmd_system(const args_t& args);
+	fim::string fcmd_cd(const args_t& args);
+	fim::string fcmd_pwd(const args_t& args);
+	fim::string fcmd_sys_popen(const args_t& args);
 #ifdef FIM_PIPE_IMAGE_READ
-	fim::string pread(const args_t& args);
+	fim::string fcmd_pread(const args_t& args);
 #endif
 	public:// 20110601
 	fim_err_t fpush(FILE *tfd);
 	private:
-	fim::string set_interactive_mode(const args_t& args);
-	fim::string set_in_console(const args_t& args);
+	fim::string fcmd_set_interactive_mode(const args_t& args);
+	fim::string fcmd_set_in_console(const args_t& args);
 #ifdef FIM_AUTOCMDS
-	fim::string autocmd(const args_t& args);
+	fim::string fcmd_autocmd(const args_t& args);
 	fim::string autocmd_del(const fim::string event, const fim::string pattern, const fim::string action);
-	fim::string autocmd_del(const args_t& args);
+	fim::string fcmd_autocmd_del(const args_t& args);
 	public:// 20110601
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
 	private:
@@ -265,29 +264,29 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	//typedef std::set<autocmds_frame_t> autocmds_stack_t;
 	autocmds_stack__t autocmds_loop_stack;
 	autocmds_stack_t autocmds_stack;
-	fim::string bind(const args_t& args);
+	fim::string fcmd_bind(const args_t& args);
 	fim::string getAliasesList()const;
 	fim::string dummy(std::vector<Arg> args);
-	fim::string variables_list(const args_t& args){return get_variables_list();}
-	fim::string commands_list(const args_t& args){return get_commands_list();}
+	fim::string fcmd_variables_list(const args_t& args){return get_variables_list();}
+	fim::string fcmd_commands_list(const args_t& args){return get_commands_list();}
 	fim::string set(const args_t &args);
-	fim::string unalias(const args_t& args);
+	fim::string fcmd_unalias(const args_t& args);
 	char ** tokenize_(const char *s);
 	void executeBinding(const fim_key_t c);
 	fim::string getBoundAction(const fim_key_t c)const;
 	//	void execute(fim::string cmd);
-	fim::string eval(const args_t &args);
+	fim::string fcmd_eval(const args_t &args);
 	void exit(int i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
 	fim::string bind(fim_key_t c,fim::string binding);
 	fim::string find_key_for_bound_cmd(fim::string binding);
 	fim::string unbind(const fim::string& key);
-	fim::string unbind(const args_t& args);
+	fim::string fcmd_unbind(const args_t& args);
 	fim::string getBindingsList()const;
-	fim::string dump_key_codes(const args_t& args);
+	fim::string fcmd_dump_key_codes(const args_t& args);
 	fim::string do_dump_key_codes(const args_t& args)const;
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	fim::string clear(const args_t& args);
+	fim::string fcmd_clear(const args_t& args);
 	fim::string scroll_up(const args_t& args);
 	fim::string scroll_down(const args_t& args);
 #endif
@@ -350,7 +349,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	void set_status_bar(fim::string desc, const char *info);
 	void set_status_bar(const char *desc, const char *info);
         bool is_file(fim::string nf)const;
-	fim::string do_getenv(const args_t& args);
+	fim::string fcmd_do_getenv(const args_t& args);
 	bool isVariable(const fim::string &varname)const;
 	fim::string dump_reference_manual(const args_t& args);
 	fim::string get_reference_manual(const args_t& args);

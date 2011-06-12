@@ -27,7 +27,7 @@
 
 namespace fim
 {
-	fim::string CommandConsole::bind(const args_t& args)
+	fim::string CommandConsole::fcmd_bind(const args_t& args)
 	{
 		/*
 		 *	this is the interactive bind command
@@ -86,7 +86,7 @@ namespace fim
 		return bind(key,args[1]);
 	}
 
-	fim::string CommandConsole::unbind(const args_t& args)
+	fim::string CommandConsole::fcmd_unbind(const args_t& args)
 	{
 		/*
 		 * 	unbinds the action eventually bound to the first key name specified in args..
@@ -97,7 +97,7 @@ namespace fim
 		return unbind(args[0]);
 	}
 
-	fim::string CommandConsole::help(const args_t &args)
+	fim::string CommandConsole::fcmd_help(const args_t &args)
 	{	
 		/*
 		 *	FIX ME:
@@ -139,7 +139,7 @@ namespace fim
 		return ""FIM_FLT_HELP" "FIM_CNS_EX_ID_STRING": provides help for "FIM_CNS_EX_ID_STRING", if it is a variable, alias, or command. Use "FIM_KBD_TAB" in commandline mode to get a list of commands. Command line mode can be entered with the default key '"FIM_SYM_CONSOLE_KEY_STR"', and left pressing "FIM_KBD_ENTER".\n";
 	}
 
-	fim::string CommandConsole::quit(const args_t &args)
+	fim::string CommandConsole::fcmd_quit(const args_t &args)
 	{
 		/*
 		 * now the postcycle execution autocommands are enabled !
@@ -149,7 +149,7 @@ namespace fim
 	}
 
 #ifndef FIM_WANT_NOSCRIPTING
-	fim::string CommandConsole::executeFile(const args_t &args)
+	fim::string CommandConsole::fcmd_executeFile(const args_t &args)
 	{
 		/*
 		 * TODO : catch exceptions
@@ -159,7 +159,7 @@ namespace fim
 	}
 #endif
 	
-	fim::string CommandConsole::foo(const args_t &args)
+	fim::string CommandConsole::fcmd_foo(const args_t &args)
 	{
 		/*
 		 * useful function for bogus commands, but autocompletable (like language constructs)
@@ -180,7 +180,7 @@ namespace fim
 	}
 #endif
 
-	fim::string CommandConsole::echo(const args_t &args)
+	fim::string CommandConsole::fcmd_echo(const args_t &args)
 	{
 		return do_echo(args);
 	}
@@ -195,7 +195,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::do_stdout(const args_t &args)const
+	fim::string CommandConsole::fcmd__stdout(const args_t &args)
 	{
 		/*
 		 * a command to echo to stdout arguments, for debug and learning purposes
@@ -205,13 +205,8 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::_stdout(const args_t &args)
-	{
-		return do_stdout(args);
-	}
-
 #ifdef FIM_AUTOCMDS
-	fim::string CommandConsole::autocmd(const args_t& args)
+	fim::string CommandConsole::fcmd_autocmd(const args_t& args)
 	{
 		/*
 		 * associates an action to a certain event in certain circumstances
@@ -239,7 +234,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::autocmd_del(const args_t& args)
+	fim::string CommandConsole::fcmd_autocmd_del(const args_t& args)
 	{
 		/*
 		 * deletes one or more autocommands
@@ -267,7 +262,7 @@ namespace fim
 	}
 #endif
 
-	fim::string CommandConsole::set_in_console(const args_t& args)
+	fim::string CommandConsole::fcmd_set_in_console(const args_t& args)
 	{
 		/*
 		 * EXPERIMENTAL !!
@@ -278,7 +273,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::set_interactive_mode(const args_t& args)
+	fim::string CommandConsole::fcmd_set_interactive_mode(const args_t& args)
 	{
 #ifdef FIM_USE_READLINE
 		ic_=-1;set_status_bar("",NULL);
@@ -289,7 +284,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::sys_popen(const args_t& args)
+	fim::string CommandConsole::fcmd_sys_popen(const args_t& args)
 	{
 		/*
 		 *
@@ -344,7 +339,7 @@ namespace fim
 	 * FBI/FIM FILE PROBING MECHANISMS ARE NOT THOUGHT WITH PIPES IN MIND!
 	 * THEREFORE WE MUST FIND A SMARTER TRICK TO IMPLEMENT THIS
 	 * */
-	fim::string CommandConsole::pread(const args_t& args)
+	fim::string CommandConsole::fcmd_pread(const args_t& args)
 	{
 		/*
 		 * we read a whole image file from pipe
@@ -367,17 +362,17 @@ namespace fim
 	}
 #endif
 
-	fim::string CommandConsole::cd(const args_t& args)
+	fim::string CommandConsole::fcmd_cd(const args_t& args)
 	{
 		/*
 		 * change working directory
 		 * */
-		static fim::string oldpwd=pwd(args_t());
+		static fim::string oldpwd=fcmd_pwd(args_t());
 		for(size_t i=0;i<args.size();++i)
 		{
 			fim::string dir=args[i];
 			if(dir=="-")dir=oldpwd;
-			oldpwd=pwd(args_t());
+			oldpwd=fcmd_pwd(args_t());
 			int ret = chdir(dir.c_str());
 #if 1
 			if(ret) return (fim::string("cd error : ")+fim::string(strerror(errno)));
@@ -386,11 +381,11 @@ namespace fim
 			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
 #endif
 		}
-		setVariable(FIM_VID_PWD,pwd(args_t()).c_str());
+		setVariable(FIM_VID_PWD,fcmd_pwd(args_t()).c_str());
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::pwd(const args_t& args)
+	fim::string CommandConsole::fcmd_pwd(const args_t& args)
 	{
 		/*
 		 * yes, print working directory
@@ -417,7 +412,7 @@ namespace fim
 	}
 
 #ifndef FIM_NO_SYSTEM
-	fim::string CommandConsole::system(const args_t& args)
+	fim::string CommandConsole::fcmd_system(const args_t& args)
 	{
 		/*
 		 * executes the shell commands given in the arguments,
@@ -480,7 +475,7 @@ namespace fim
 	}
 #endif
 	
-	fim::string CommandConsole::do_return(const args_t &args)
+	fim::string CommandConsole::fcmd_do_return(const args_t &args)
 	{
 		/*
 		 * returns immediately the program with an exit code
@@ -497,7 +492,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;/* it shouldn' return, though :) */
 	}
 
-	fim::string CommandConsole::status(const args_t &args)
+	fim::string CommandConsole::fcmd_status(const args_t &args)
 	{
 		/*
 		 * the status bar is updated with the given arguments collated.
@@ -509,7 +504,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::unalias(const args_t& args)
+	fim::string CommandConsole::fcmd_unalias(const args_t& args)
 	{
 		/*
 		 * removes the actions assigned to the specified aliases,
@@ -535,7 +530,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::dump_key_codes(const args_t& args)
+	fim::string CommandConsole::fcmd_dump_key_codes(const args_t& args)
 	{
 		return do_dump_key_codes(args);
 	}
@@ -562,12 +557,12 @@ namespace fim
 	}
 
 #ifdef FIM_RECORDING
-	fim::string CommandConsole::dump_record_buffer(const args_t &args)
+	fim::string CommandConsole::fcmd_dump_record_buffer(const args_t &args)
 	{
-		return do_dump_record_buffer(args);
+		return fcmd_do_dump_record_buffer(args);
 	}
 
-	fim::string CommandConsole::do_dump_record_buffer(const args_t &args)const
+	fim::string CommandConsole::fcmd_do_dump_record_buffer(const args_t &args)const
 	{
 		/*
 		 * the recorded commands are dumped in the console
@@ -589,12 +584,12 @@ namespace fim
 		return res;
 	}
 
-	fim::string CommandConsole::execute_record_buffer(const args_t &args)
+	fim::string CommandConsole::fcmd_execute_record_buffer(const args_t &args)
 	{
 		/*
 		 * all of the commands in the record buffer are re-executed.
 		 * */
-		execute_internal(dump_record_buffer(args).c_str(),FIM_X_NULL);
+		execute_internal(fcmd_dump_record_buffer(args).c_str(),FIM_X_NULL);
 		/* for unknown reasons, the following code gives problems : image resizes don't work..
 		 * but the present (above) doesn't support interruptions ...
 		 * */
@@ -607,7 +602,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::eval(const args_t &args)
+	fim::string CommandConsole::fcmd_eval(const args_t &args)
 	{
 		/*
 		 * all of the commands given as arguments are executed.
@@ -621,7 +616,7 @@ namespace fim
 	}
 #endif
 
-	fim::string CommandConsole::repeat_last(const args_t &args)
+	fim::string CommandConsole::fcmd_repeat_last(const args_t &args)
 	{
 		/*
 		 * WARNING : there is an intricacy concerning the semantics of this command :
@@ -640,7 +635,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::start_recording(const args_t &args)
+	fim::string CommandConsole::fcmd_start_recording(const args_t &args)
 	{
 		/*
 		 * recording of commands starts here
@@ -650,7 +645,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::stop_recording(const args_t &args)
+	fim::string CommandConsole::fcmd_stop_recording(const args_t &args)
 	{
 		/*
 		 * since the last recorded action was stop_recording, we pop out the last command
@@ -694,7 +689,7 @@ namespace fim
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::clear(const args_t& args)
+	fim::string CommandConsole::fcmd_clear(const args_t& args)
 	{
 		displaydevice_->console_control(0x03);//experimental
 		return FIM_CNS_EMPTY_RESULT;
@@ -702,20 +697,20 @@ namespace fim
 #endif
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-	fim::string CommandConsole::markCurrentFile(const args_t& args)
+	fim::string CommandConsole::fcmd_markCurrentFile(const args_t& args)
 	{
 		markCurrentFile();
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::unmarkCurrentFile(const args_t& args)
+	fim::string CommandConsole::fcmd_unmarkCurrentFile(const args_t& args)
 	{
 		unmarkCurrentFile();
 		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
 
-	fim::string CommandConsole::do_getenv(const args_t& args)
+	fim::string CommandConsole::fcmd_do_getenv(const args_t& args)
 	{
 		string help="usage : "FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" will create a fim variable named "FIM_CNS_EX_ID_STRING" with value $"FIM_CNS_EX_ID_STRING" (if nonempty), from the current shell."
 #ifndef HAVE_GETENV
