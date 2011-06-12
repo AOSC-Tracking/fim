@@ -127,7 +127,7 @@ namespace fim
 		bindings_t::const_iterator bi;
 		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
 		{
-			//if(bi->second == "")continue;//FIX : THIS SHOULD NOT OCCUR
+			//if(bi->second == FIM_CNS_EMPTY_STRING)continue;//FIX : THIS SHOULD NOT OCCUR
 			bindings_expanded+=FIM_FLT_BIND" \"";
 			inverse_key_bindings_t::const_iterator ikbi=inverse_key_bindings_.find(((*bi).first));
 			if(ikbi!=inverse_key_bindings_.end()) bindings_expanded+=ikbi->second;
@@ -241,7 +241,7 @@ namespace fim
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
 		{
 #if 0
-			if(ai->second.first == "")continue;//FIX THIS : THIS SHOULD NOT OCCUR
+			if(ai->second.first == FIM_CNS_EMPTY_STRING)continue;//FIX THIS : THIS SHOULD NOT OCCUR
 			aliases_expanded+=FIM_FLT_ALIAS" ";
 			aliases_expanded+=((*ai).first);
 			aliases_expanded+="=\"";
@@ -263,7 +263,7 @@ namespace fim
 				if(ai!=aliases_.end())r+=ai->second.first;
 				r+=fim::string("\"");
 				if(ai!=aliases_.end())
-				if(ai->second.second!="")
+				if(ai->second.second!=FIM_CNS_EMPTY_STRING)
 				{
 					r+=" # ";
 					r+=ai->second.second;
@@ -289,7 +289,7 @@ namespace fim
 		//for(size_t i=1;i<args.size();++i) cmdlist+=args[i].val_;
 		if(args.size()>=2)cmdlist+=args[1].val_;
 		if(args.size()>=3)desc   +=args[2].val_;
-		if(aliases_[args[0].val_].first!="")
+		if(aliases_[args[0].val_].first!=FIM_CNS_EMPTY_STRING)
 		{
 			string r;
 			aliases_[args[0].val_]=std::pair<fim::string,fim::string>(cmdlist,desc);

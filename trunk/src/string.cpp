@@ -497,7 +497,7 @@ namespace fim
 		const int nmatch=1;
 		regmatch_t pmatch[nmatch];
 		int off=0,sl=0;
-		std::string rs = "";
+		std::string rs =FIM_CNS_EMPTY_STRING;
 		int ts=this->size();
 
 		if( !r || !*r || !s )

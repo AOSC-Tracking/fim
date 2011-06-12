@@ -151,7 +151,7 @@ namespace fim
 		 *	an image is loaded and initializes this image.
 		 *	returns false if the image does not load
 		 */
-		if(fname==NULL && fname_==""){return false;}//no loading = no state change
+		if(fname==NULL && fname_==FIM_CNS_EMPTY_STRING){return false;}//no loading = no state change
 		this->free();
 		fname_=fname;
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))

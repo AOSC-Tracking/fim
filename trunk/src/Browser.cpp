@@ -162,7 +162,7 @@ nop:
 		fim::string s;
 		if(flist_.size()<=0)return nofile_;
 		assert(cp_);
-		if(filename=="")
+		if(filename==FIM_CNS_EMPTY_STRING)
 		{
 			if(current_n()==(int)flist_.size())cp_--;
 			s=flist_[flist_.size()-1];
@@ -888,7 +888,7 @@ nop:
 		 *	FIX ME
 		 *	there should be a way to have an interactive goto
 		 */
-		const fim_char_t*errmsg="";
+		const fim_char_t*errmsg=FIM_CNS_EMPTY_STRING;
 		int cn=0,g=0;
 		if(n_files()==0){errmsg="no image to go to!";goto err;}
 		cn=g=current_n()+1;

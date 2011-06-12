@@ -82,7 +82,7 @@ namespace fim
 		 * TODO: there will be room for the binding comment by the user
 		 * */
 		if(args.size()<2) return kerr;
-		if(args[1]=="") return unbind(args[0]);
+		if(args[1]==FIM_CNS_EMPTY_STRING) return unbind(args[0]);
 		return bind(key,args[1]);
 	}
 
@@ -113,7 +113,7 @@ namespace fim
 					string("\"")+(args[0]+string("\" is a command, documented:\n"))+
 				      	cmd->getHelp()+string("\n");
 			else
-			if(aliasRecall(fim::string(args[0]))!="")
+			if(aliasRecall(fim::string(args[0]))!=FIM_CNS_EMPTY_STRING)
 				return
 					string("\"")+(args[0]+string("\" is an alias, and was declared:\n"))+
 					get_alias_info(args[0]);
@@ -395,12 +395,12 @@ namespace fim
 		/*
 		 * yes, print working directory
 		 * */
-		fim::string cwd="";
+		fim::string cwd=FIM_CNS_EMPTY_STRING;
 #if HAVE_GET_CURRENT_DIR_NAME
 		/* default */
 		char *p=get_current_dir_name();
 		if(p)cwd=p;
-		else cwd="";
+		else cwd=FIM_CNS_EMPTY_STRING;
 		if(p)fim_free(p);
 #else
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
@@ -424,11 +424,11 @@ namespace fim
 		 * one by one, and returns the (collated) standard output
 		 * */
 #if FIM_WANT_SYSTEM_CALL_DEBUG
-		fim::string is="";
+		fim::string is=FIM_CNS_EMPTY_STRING;
 #endif
 #if FIM_WANT_SINGLE_SYSTEM_INVOCATION
 		/* 20110302 FIXME: inefficient */
-		fim::string cc="";
+		fim::string cc=FIM_CNS_EMPTY_STRING;
 		for(size_t i=0;i<args.size();++i)
 		{
 			// FIXME: escaping the command (first argument) actually requires more than this
@@ -525,7 +525,7 @@ namespace fim
 		}
 
 		for(size_t i=0;i<args.size();++i)
-		if(aliases_[args[i]].first!="")
+		if(aliases_[args[i]].first!=FIM_CNS_EMPTY_STRING)
 		{
 			aliases_.erase(args[i]);
 			return FIM_CNS_EMPTY_RESULT;

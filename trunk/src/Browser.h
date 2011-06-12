@@ -68,7 +68,7 @@ class Browser
 
 	int current_n()const;
 	int current_n(int ccp)const;
-	const fim::string pop(fim::string filename="");
+	const fim::string pop(fim::string filename=FIM_CNS_EMPTY_STRING);
 	fim::string get_next_filename(int n)const;
 	
 	fim::string last_regexp;

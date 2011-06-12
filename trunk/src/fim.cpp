@@ -330,7 +330,7 @@ string fim_dump_man_page_snippets()
 	{
 		slol="\t-";
 		slob="\t\t--";
-		slom="";
+		slom=FIM_CNS_EMPTY_STRING;
 		sloe="\n";
 	}
 	for(size_t i=0;i<fim_options_count-1;++i)
