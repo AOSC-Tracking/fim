@@ -418,16 +418,16 @@ namespace fim
 #define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[internal,in] number of seconds sleep during slideshow mode" */
 #define FIM_VID_AUTOTOP				"_autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
 #define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if set, will be fed to the scale command" */
-#define FIM_VID_FILEINDEX			"fileindex"		/* "[internal,out] the current image numeric index" */
-#define FIM_VID_FILELISTLEN			"filelistlen"		/* "[internal,out] the length of the current image list" */
-#define FIM_VID_FILENAME			"filename"		/* "[internal,out] the current file name" */
-#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "FIM_DEFAULT_CONFIG_FILE_CONTENTS"/* "[internal,out] the contents of the default (hardcoded) configuration file" */
-#define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "FIM_DEFAULT_GRAMMAR_FILE_CONTENTS" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
+#define FIM_VID_FILEINDEX			"_fileindex"		/* "[internal,out] the current image numeric index" */
+#define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[internal,out] the length of the current image list" */
+#define FIM_VID_FILENAME			"_filename"		/* "[internal,out] the current file name" */
+#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[internal,out] the contents of the default (hardcoded) configuration file" */
+#define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
 #define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_override_display"	/* "[internal,undocumented]" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
-#define FIM_VID_PWD				"_pwd"			/* "[internal,out] the current working directory" */
+#define FIM_VID_PWD				"_pwd"			/* "[internal,out] the current working directory; will be updated at startup and whenever the working directory changes" */
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */
 #define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[internal,undocumented]" */
 #define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[internal,undocumented]" */
@@ -471,8 +471,8 @@ namespace fim
 #define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in] the maximum number of images allowed in the cache" */
 #define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in] the maximum amount of memory allowed for the cache" */
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached" */
-#define FIM_VID_SCREEN_WIDTH			"screen_width"		/* "[internal,out] the screen width"  */
-#define FIM_VID_SCREEN_HEIGHT			"screen_height"		/* "[internal,out] the screen height" */
+#define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[internal,out] the screen width"  */
+#define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[internal,out] the screen height" */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[internal,in] print out each command before its execution (for debugging purposes)" */
 #define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal,in,optional] offset (specified in bytes) used when opening a file " */
@@ -646,8 +646,8 @@ namespace fim
  * One glorious day these macros will serve to build automatically documentation.
  * */
 #define FIM_CMD_HELP_CD			FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING": change the current directory to "FIM_CNS_EX_PATH_STRING". "FIM_FLT_CD" - will change to the previous current directory (before the last \":"FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING"\" command)"
-#define FIM_CMD_HELP_SET			FIM_FLT_SET": returns a set variables list; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING": returns the value of variable "FIM_CNS_EX_ID_STRING"; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING" "FIM_CNS_EX_CMDS_STRING": sets variable "FIM_CNS_EX_ID_STRING" to value "FIM_CNS_EX_CMDS_STRING"; " 
-#define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name."
+#define FIM_CMD_HELP_SET			FIM_FLT_SET": returns a list of variables which are set; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING": returns the value of variable "FIM_CNS_EX_ID_STRING"; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING" "FIM_CNS_EX_CMDS_STRING": sets variable "FIM_CNS_EX_ID_STRING" to value "FIM_CNS_EX_CMDS_STRING"; " 
+#define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the "FIM_VID_PWD" variable."
 #define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL" "FIM_CNS_EX_ARGS_STRING" : evaluate "FIM_CNS_EX_ARGS_STRING" as commands, executing them."
 #define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen()"
 #define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of [ split | hsplit | vsplit | normalize | enlarge | venlarge | henlarge | up | down | left | right | close | swap ]"

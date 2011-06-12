@@ -404,7 +404,7 @@ scale {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,w,h,
 .B
 set
 .fi
-set: returns a set variables list; set {identifier}: returns the value of variable {identifier}; set {identifier} {commands}: sets variable {identifier} to value {commands}; 
+set: returns a list of variables which are set; set {identifier}: returns the value of variable {identifier}; set {identifier} {commands}: sets variable {identifier} to value {commands}; 
 .fi
 
 .B
@@ -536,7 +536,7 @@ cd {path}: change the current directory to {path}. cd - will change to the previ
 .B
 pwd
 .fi
-pwd : print the current directory name.
+pwd : print the current directory name, and updates the _pwd variable.
 .fi
 
 .B
@@ -627,14 +627,6 @@ window {args} : manipulates the window system windows; each value of {args} shal
 If undeclared, a variable will evaluate to 0.
 In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
 
-.B
-FIM_DEFAULT_CONFIG_FILE_CONTENTS
-[internal,out] the contents of the default (hardcoded) configuration file
-.fi
-.B
-FIM_DEFAULT_GRAMMAR_FILE_CONTENTS
-[internal,out] the contents of the default (hardcoded) grammar file
-.fi
 .B
 _TERM
 [internal,out] the environment TERM variable
@@ -728,8 +720,28 @@ _do_sanity_check
 [internal,in,experimental] if 1, will execute a sanity check on startup
 .fi
 .B
+_fileindex
+[internal,out] the current image numeric index
+.fi
+.B
+_filelistlen
+[internal,out] the length of the current image list
+.fi
+.B
+_filename
+[internal,out] the current file name
+.fi
+.B
 _fim_bpp
 [internal,out] the bits per pixel count
+.fi
+.B
+_fim_default_config_file_contents
+[internal,out] the contents of the default (hardcoded) configuration file
+.fi
+.B
+_fim_default_grammar_file_contents
+[internal,out] the contents of the default (hardcoded) grammar file
 .fi
 .B
 _fim_scriptout_file
@@ -801,7 +813,7 @@ _override_display
 .fi
 .B
 _pwd
-[internal,out] the current working directory
+[internal,out] the current working directory; will be updated at startup and whenever the working directory changes
 .fi
 .B
 _reduce_factor
@@ -826,6 +838,14 @@ _scale_factor_multiplier
 .B
 _scale_style
 [internal,in] if set, will be fed to the scale command
+.fi
+.B
+_screen_height
+[internal,out] the screen height
+.fi
+.B
+_screen_width
+[internal,out] the screen width
 .fi
 .B
 _seek_magic
@@ -876,18 +896,6 @@ ascale
 [internal,in] the asymmetric scaling of the current image
 .fi
 .B
-fileindex
-[internal,out] the current image numeric index
-.fi
-.B
-filelistlen
-[internal,out] the length of the current image list
-.fi
-.B
-filename
-[internal,out] the current file name
-.fi
-.B
 flipped
 [internal,undocumented]
 .fi
@@ -914,14 +922,6 @@ random
 .B
 scale
 [internal,in] the scale of the current image
-.fi
-.B
-screen_height
-[internal,out] the screen height
-.fi
-.B
-screen_width
-[internal,out] the screen width
 .fi
 .B
 sheight
@@ -957,7 +957,7 @@ $;
 !"date";
 
 .SH CONFIGURATION EXAMPLES
-This is the default configuration, as contained in the FIM_DEFAULT_CONFIG_FILE_CONTENTS variable.
+This is the default configuration, as contained in the _fim_default_config_file_contents variable.
 
 .nf
 # $LastChangedDate$
@@ -969,6 +969,7 @@ This is the default configuration, as contained in the FIM_DEFAULT_CONFIG_FILE_C
 # Internal variables.
 # Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
 # It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
+if(_debug_commands==''){_debug_commands=0;}
 if(_display_status==''){_display_status=0;}
 if(_max_cached_images==''){_max_cached_images=5;}
 if(_max_cached_memory==''){_max_cached_memory=80000000;}
@@ -998,11 +999,12 @@ alias "toggleautomirror" "_automirror=1-_automirror;" "";
 alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
-alias "q" "quit;" "quits the fim program";
+#alias "q" "quit;" "quits the fim program";
 #
 # Warning : binding to C-s, C-z and C-c won't make effect, as these
 # codes are catched by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
+# Some other combinations (e.g.:C-l) may have similar problems in your console.
 bind 'f' "flip;";
 bind 'F' "fliponce;";
 bind 'm' "mirror;";
@@ -1135,7 +1137,6 @@ bind 'x' "diagonal_ne;";
 bind 'X' "diagonal_sw;";
 alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
 alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
-#bind 'C-l' "clear;";	# temporarily off : FIXME
 #toggleVerbosity;
 #bind 'f' "next;display;";
 bind 'b' "prev;display;";
@@ -1202,9 +1203,9 @@ echo "WELCOME : to switch to the command line interface press ':' ";
 #alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
 #alias "musicplay"  "system 'mpc play'" "";
 #alias "musicpause" "system 'mpc pause'" "";
-#alias "rdjpgcom" 'system "rdjpgcom" i:filename';
+#alias "rdjpgcom" 'system "rdjpgcom" i:_filename';
 # offsetscan usage : need a mechanism for popping all images before.
-#alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}"; # NEW
+#alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}";
 #alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
 #alias "webcam" "pread 'vgrabbj -d /dev/video0';";
 #alias "webcam_cycle" "while(1){webcam;reload;sleep 1;};";

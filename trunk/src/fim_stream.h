@@ -28,6 +28,7 @@ namespace fim
 	 *
 	 * TODO: error and to file dump. maybe, some day.
 	 *	 move here the console handling functionalities.
+	 * TODO: introduce an enum for output selection
 	 * */
 
 	class fim_stream

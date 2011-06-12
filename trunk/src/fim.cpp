@@ -55,8 +55,8 @@ namespace fim
 	char *default_fbdev=NULL,*default_fbmode=NULL;
 	int default_vt=-1;
 	float default_fbgamma=-1.0;
-	fim_stream cout;
-	fim_stream cerr(1);
+	fim_stream cout/*(1)*/;
+	fim_stream cerr(2);
 }
 
 struct fim_options_t{
