@@ -8,6 +8,7 @@
 # Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
 # It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
 if(_debug_commands==''){_debug_commands=0;}
+if(_command_expansion==''){_command_expansion=1;}
 if(_display_status==''){_display_status=0;}
 if(_max_cached_images==''){_max_cached_images=5;}
 if(_max_cached_memory==''){_max_cached_memory=80000000;}

@@ -98,7 +98,7 @@ struct fim_options_t fim_options[] = {
 "Just as the --"FIM_OSW_EXECUTE_COMMANDS" switch, but commands will be executed before the loading of any config file.\n"
 "\n"
 "For example,\n"
-"-c '"FIM_VID_SCALE_STYLE"=\"\"' will make fim start with no auto-scaling.\n"
+"-C '"FIM_VID_SCALE_STYLE"=\"\"' will make fim start with no auto-scaling.\n"
 "\n"
     },
     {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}",

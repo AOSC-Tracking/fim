@@ -21,8 +21,11 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110612	why the heck fim quits when typing 'q', if no 'q' alias exists ? :)
-20110612	a runtime method for diverting stdout ? may ease debugging.
+20110612	reverse, random_shuffle, and sort shall be sub-commands options of the 'list' command
+20110612	shall introduce goto_page
+20110612	shall use FIM_CNS_EMPTY_STRING always
+20110612	execute(string, int) -> execute_inner
+20110612	need a runtime method for diverting stdout ? may ease debugging.
 20110612	shall rename from _varname to v:varname, whenever this has sense.
 20110611	shall change execute(cmd, int, int) -> execute(cmd, fim_exec_flags). for instance, I may set a flag for disabling system/popen () calls, or caling any other external program
 20110610	shall remove the redundant aliases declared in CommandConsole.cpp, also from the fimrc
