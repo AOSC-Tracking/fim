@@ -21,10 +21,9 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110612	'set' shall display variables which are set. does it do so ?
+20110612	why the heck fim quits when typing 'q', if no 'q' alias exists ? :)
+20110612	a runtime method for diverting stdout ? may ease debugging.
 20110612	shall rename from _varname to v:varname, whenever this has sense.
-20110611	CommandConsole::regexp_match may be flawed (why we don'y use string's mechanism ? shall unify this !)
-20110611	the default fimrc shall not set any variable which was set by default
 20110611	shall change execute(cmd, int, int) -> execute(cmd, fim_exec_flags). for instance, I may set a flag for disabling system/popen () calls, or caling any other external program
 20110610	shall remove the redundant aliases declared in CommandConsole.cpp, also from the fimrc
 20110610	what if the user wants no scaling at all ?

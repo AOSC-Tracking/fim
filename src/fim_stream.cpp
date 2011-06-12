@@ -61,10 +61,19 @@ namespace fim
 		{
 			if(s)
 			{
-				if(fd_==-1)
+				if(fd_<=-1)
 					cc.status_screen(s);
 				else
-					std::cerr << s ;
+				{
+					// 0 == dumb (no output)
+					if(fd_==1)
+						std::cout << s ;
+					else
+					{
+						if(fd_>=2)
+							std::cerr << s ;
+					}
+				}
 			}
 			//else if(s)printf("%s",s);
 

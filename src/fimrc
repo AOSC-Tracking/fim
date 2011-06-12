@@ -7,6 +7,7 @@
 # Internal variables.
 # Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
 # It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
+if(_debug_commands==''){_debug_commands=0;}
 if(_display_status==''){_display_status=0;}
 if(_max_cached_images==''){_max_cached_images=5;}
 if(_max_cached_memory==''){_max_cached_memory=80000000;}
@@ -36,11 +37,12 @@ alias "toggleautomirror" "_automirror=1-_automirror;" "";
 alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
-alias "q" "quit;" "quits the fim program";
+#alias "q" "quit;" "quits the fim program";
 #
 # Warning : binding to C-s, C-z and C-c won't make effect, as these
 # codes are catched by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
+# Some other combinations (e.g.:C-l) may have similar problems in your console.
 bind 'f' "flip;";
 bind 'F' "fliponce;";
 bind 'm' "mirror;";
@@ -173,7 +175,6 @@ bind 'x' "diagonal_ne;";
 bind 'X' "diagonal_sw;";
 alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
 alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
-#bind 'C-l' "clear;";	# temporarily off : FIXME
 #toggleVerbosity;
 #bind 'f' "next;display;";
 bind 'b' "prev;display;";
@@ -240,9 +241,9 @@ echo "WELCOME : to switch to the command line interface press ':' ";
 #alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
 #alias "musicplay"  "system 'mpc play'" "";
 #alias "musicpause" "system 'mpc pause'" "";
-#alias "rdjpgcom" 'system "rdjpgcom" i:filename';
+#alias "rdjpgcom" 'system "rdjpgcom" i:_filename';
 # offsetscan usage : need a mechanism for popping all images before.
-#alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}"; # NEW
+#alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}";
 #alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
 #alias "webcam" "pread 'vgrabbj -d /dev/video0';";
 #alias "webcam_cycle" "while(1){webcam;reload;sleep 1;};";
