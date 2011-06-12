@@ -21,7 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110612	reverse, random_shuffle, and sort shall be sub-commands options of the 'list' command
+20110612	prepend fim command methods names with cmd_
 20110612	shall introduce goto_page
 20110612	shall use FIM_CNS_EMPTY_STRING always
 20110612	execute(string, int) -> execute_inner

@@ -355,7 +355,7 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_PUSH),fim::string(FIM_FLT_PUSH" "FIM_CNS_EX_FNS_STRING" : push "FIM_CNS_EX_FNS_STRING" to the back of the files list"),&browser_,&Browser::push));
 		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string(FIM_FLT_DISPLAY" : display the current file contents"),&browser_,&Browser::display));
 		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string(FIM_FLT_REDISPLAY" : re-display the current file contents"),&browser_,&Browser::redisplay));
-		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_FLT_LIST" : display the files list"),&browser_,&Browser::list));
+		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_CMD_HELP_LIST),&browser_,&Browser::list));
 		addCommand(new Command(fim::string(FIM_FLT_POP),fim::string(FIM_FLT_POP" : pop the last file from the files list"),&browser_,&Browser::pop));
 		addCommand(new Command(fim::string(FIM_FLT_PAN),fim::string(
 		FIM_FLT_PAN" {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction;"
@@ -368,9 +368,6 @@ namespace fim
 		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded"),&browser_,&Browser::load));
 		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string(FIM_FLT_RELOAD" : load the image into memory"),&browser_,&Browser::reload));
 		addCommand(new Command(fim::string(FIM_FLT_FILES),fim::string(FIM_FLT_FILES" : display the number of files in the file list" ),&browser_,&Browser::n));
-		addCommand(new Command(fim::string(FIM_FLT_SORT),fim::string(FIM_FLT_SORT" : sort the file list" ),&browser_,&Browser::_sort));
-		addCommand(new Command(fim::string(FIM_FLT_RANDOM_SHUFFLE),fim::string(FIM_FLT_RANDOM_SHUFFLE" : randomly shuffle the file list" ),&browser_,&Browser::_random_shuffle));
-		addCommand(new Command(fim::string(FIM_FLT_REVERSE),fim::string(FIM_FLT_REVERSE" : reverse the file list" ),&browser_,&Browser::_reverse));
 		addCommand(new Command(fim::string(FIM_FLT_REMOVE),fim::string(FIM_FLT_REMOVE" ["FIM_CNS_EX_FNS_STRING"] : remove the current file, or the "FIM_CNS_EX_FNS_STRING", if specified" ),&browser_,&Browser::remove));
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string(FIM_FLT_INFO" : display information about the current file" ),&browser_,&Browser::info));
 		addCommand(new Command(fim::string(FIM_FLT_REXP_GOTO),fim::string(FIM_FLT_REXP_GOTO" "FIM_CNS_EX_RE_STRING" : jump to the first image matching the given "FIM_CNS_EX_RE_STRING" pattern"),&browser_,&Browser::regexp_goto));
