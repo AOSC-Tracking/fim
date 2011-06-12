@@ -599,14 +599,12 @@ namespace fim
 #define FIM_FLT_NEXT_PIC			"next_picture" /* not in vim */
 #define FIM_FLT_NO_IMAGE			"no_image" /* not in vim */
 #define FIM_FLT_PAN			"pan" /* not in vim */
-#define FIM_FLT_POP			"pop" /* not in vim */
 #define FIM_FLT_POPEN			"popen" /* not in vim */
 #define FIM_FLT_PREAD			"pread" /* not in vim */
 #define FIM_FLT_PREFETCH			"prefetch" /* in vim */
 #define FIM_FLT_PREV			"prev" /* in vim */
 #define FIM_FLT_PREV_PAGE			"prev_page" /* not in vim */
 #define FIM_FLT_PREV_PIC			"prev_picture" /* not in vim */
-#define FIM_FLT_PUSH			"push" /* not in vim */
 #define FIM_FLT_PWD			"pwd" /* in vim */
 #define FIM_FLT_REPEAT_LAST		"repeat_last" /* not in vim */
 #define FIM_FLT_REDISPLAY			"redisplay" /* not in vim */
@@ -615,7 +613,6 @@ namespace fim
 #define FIM_FLT_REXP_GOTO		"regexp_goto" /* not in vim */
 #define FIM_FLT_REXP_GOTO_NEXT		"regexp_goto_next" /* not in vim */
 #define FIM_FLT_RELOAD		"reload" /* not in vim */
-#define FIM_FLT_REMOVE		"remove" /* not in vim */
 #define FIM_FLT_ROTATE		"rotate" /* not in vim */
 #define FIM_FLT_SCALE		"scale" /* not in vim */
 #define FIM_FLT_SCALE_MULTIPLY		"scale_multiply" /* not in vim */ /* FIXME: delete this command */
@@ -644,7 +641,7 @@ namespace fim
  * Help messages for Fim commands (partial).
  * One glorious day these macros will serve to build automatically documentation.
  * */
-#define FIM_CMD_HELP_LIST	FIM_FLT_LIST" : display the files list; "FIM_FLT_LIST" random_shuffle: randomly shuffle the file list; "FIM_FLT_LIST" reverse: reverse the file list; "FIM_FLT_LIST" sort: sort the file list"
+#define FIM_CMD_HELP_LIST	FIM_FLT_LIST" : display the files list; "FIM_FLT_LIST" random_shuffle: randomly shuffle the file list; "FIM_FLT_LIST" reverse: reverse the file list; "FIM_FLT_LIST" sort: sort the file list; "FIM_FLT_LIST" pop : pop the last file from the files list; " FIM_FLT_LIST" remove ["FIM_CNS_EX_FNS_STRING"] : remove the current file, or the "FIM_CNS_EX_FNS_STRING", if specified " "; push "FIM_CNS_EX_FNS_STRING" : push "FIM_CNS_EX_FNS_STRING" to the back of the files list"
 #define FIM_CMD_HELP_CD			FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING": change the current directory to "FIM_CNS_EX_PATH_STRING". "FIM_FLT_CD" - will change to the previous current directory (before the last \":"FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING"\" command)"
 #define FIM_CMD_HELP_SET			FIM_FLT_SET": returns a list of variables which are set; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING": returns the value of variable "FIM_CNS_EX_ID_STRING"; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING" "FIM_CNS_EX_CMDS_STRING": sets variable "FIM_CNS_EX_ID_STRING" to value "FIM_CNS_EX_CMDS_STRING"; " 
 #define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the "FIM_VID_PWD" variable."

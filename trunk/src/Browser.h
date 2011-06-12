@@ -125,7 +125,7 @@ class Browser
 
 	fim::string fcmd_reload(const args_t &args);
 	fim::string fcmd_list(const args_t &args);
-	fim::string fcmd_push(const args_t &args);
+	fim::string do_push(const args_t &args);
 
 	fim::string fcmd_n(const args_t &args){return n();}
 	fim::string fcmd_next(const args_t &args);
@@ -135,7 +135,7 @@ class Browser
 	fim::string fcmd_prev_page(const args_t &args);
 	fim::string prev(int n=1);
 	fim::string fcmd_prev(const args_t &args);
-	fim::string fcmd_remove(const args_t &args);
+	fim::string do_remove(const args_t &args);
 	fim::string fcmd_info(const args_t &args);
 	fim::string info();
 	std::ostream& print(std::ostream &os)const;
@@ -144,7 +144,6 @@ class Browser
 
 
 	fim::string fcmd_load(const args_t &args);
-	fim::string fcmd_pop(const args_t &args);
 	const fim::string pop_current();
 	fim::string pop_current(const args_t &args);
 	fim::string fcmd_no_image(const args_t &args);

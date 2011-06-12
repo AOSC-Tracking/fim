@@ -53,7 +53,7 @@ bind 'Esc' "quit";
 bind 'n' "next_picture;";
 bind 'C-h' "help";
 bind 'p' "prev_picture;";
-#bind 'P' "pop";
+#bind 'P' "list 'pop'";
 #bind 's' "list 'sort'";
 bind 's' "scrollforward";
 bind 'C-s' "swap;redisplay;";
@@ -244,8 +244,8 @@ echo "WELCOME : to switch to the command line interface press ':' ";
 #alias "musicpause" "system 'mpc pause'" "";
 #alias "rdjpgcom" 'system "rdjpgcom" i:_filename';
 # offsetscan usage : need a mechanism for popping all images before.
-#alias "offsetscan" "while(i:width<1){push offimage;_open_offset=_open_offset+1;reload;}";
-#alias "offsetscan" "while(i:width<1){push '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
+#alias "offsetscan" "while(i:width<1){list 'push' offimage;_open_offset=_open_offset+1;reload;}";
+#alias "offsetscan" "while(i:width<1){list 'push' '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
 #alias "webcam" "pread 'vgrabbj -d /dev/video0';";
 #alias "webcam_cycle" "while(1){webcam;reload;sleep 1;};";
 #This is a FIM initialization file. 

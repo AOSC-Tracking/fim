@@ -58,6 +58,28 @@ namespace fim
 				return _sort();
 			if(args[0]=="reverse")
 				return _reverse();
+			if(args[0]=="pop")
+			{
+				/*
+				 * deletes the last image from the files list
+				 * FIX ME :
+				 * filename matching based remove..
+		 		*/
+				pop();
+				return this->n();
+			}
+			if(args[0]=="remove")
+			{
+				args_t argsc(args);
+				argsc.erase(argsc.begin());
+				return do_remove(argsc);
+			}
+			if(args[0]=="push")
+			{
+				args_t argsc(args);
+				argsc.erase(argsc.begin());
+				return do_push(argsc);
+			}
 			return FIM_CMD_HELP_LIST;
 		}
 nop:
@@ -399,7 +421,7 @@ nop:
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
 				args_t args;
 				args.push_back(c.c_str());
-				fcmd_remove(args);	// remove is an experimental function
+				do_remove(args);	// remove is an experimental function
 #ifdef FIM_AUTOSKIP_FAILED
 				if(n_files())
 				{
@@ -567,17 +589,6 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_pop(const args_t &args)
-	{
-		/*
-		 * deletes the last image from the files list
-		 * FIX ME :
-		 * filename matching based remove..
-		 */
-		pop();
-		return this->n();
-	}
-	
 	bool Browser::present(const fim::string nf)
 	{
 		/* 
@@ -928,7 +939,7 @@ err:
 		return errmsg;
 	}
 
-	fim::string Browser::fcmd_remove(const args_t &args)
+	fim::string Browser::do_remove(const args_t &args)
 	{
 		/*
 		 *	ONLY if the image filename exists and matches EXACTLY,
@@ -1312,7 +1323,7 @@ nop:
 		return pop_current();
 	}
 
-	fim::string Browser::fcmd_push(const args_t &args)
+	fim::string Browser::do_push(const args_t &args)
 	{
 		/*
 		 *	pushes a new image filename on the back of the image list
