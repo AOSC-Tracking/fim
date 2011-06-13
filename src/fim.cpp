@@ -137,6 +137,9 @@ struct fim_options_t fim_options[] = {
     {"no-etc-rc-file",      no_argument,       NULL, 0x4E4E,"do not read the system wide initialization file at startup",NULL,
 "No system wide initialization file will be read (default is "FIM_CNS_SYS_RC_FILEPATH") at startup."
     },
+    {"no-internal-config",      no_argument,       NULL, 0x4E4E4E,"do not execute the internal default configuration at startup",NULL,
+"No internal default configuration at startup (see internal variable "FIM_VID_NO_DEFAULT_CONFIGURATION"). Will only provide a minimal working configuration. "
+    },
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
 "Will read commands from stdin prior to entering in interactive mode."
     },
@@ -419,42 +422,57 @@ int fim_dump_man_page()
 			mp+=fim_dump_man_page_snippets();
 			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
 ".nf\n"
-"cursor keys     scroll large images\n"
-"h,j,k,l		scroll large images left,down,up,right\n"
-"+, -            zoom in/out\n"
-"ESC, q          quit\n"
-"Tab             toggle output console visualization\n"
-"PgUp,p            previous image\n"
-"PgDn,n            next image\n"
-"Space  	        next image if on bottom, scroll down instead\n"
-"Return          next image, write the filename of the current image to stdout on exit from the program.\n"
-"m			mirror\n"
-"f			flip\n"
-"r			rotate by 90  degrees\n"
-"d,x,D,X		diagonal scroll\n"
-"C-w			scale to the screen width\n"
-"H			scale to the screen heigth\n"
-"m			mark the current file for printing its name when terminating fim\n"
+"The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable "FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS").\n\n"
+//"cursor keys     scroll large images\n"
+//"h,j,k,l		scroll large images left,down,up,right\n"
+//"+, -            zoom in/out\n"
+//"ESC, q          quit\n"
+//"Tab             toggle output console visualization\n"
+//"PgUp,p            previous image\n"
+//"PgDn,n            next image\n"
+//"Space  	        next image if on bottom, scroll down instead\n"
+//"Return          next image, write the filename of the current image to stdout on exit from the program.\n"
+);
+
+#define FIM_ADD_DOCLINE_FOR_CMD(CMD) if(cc.find_key_for_bound_cmd(CMD)!=""){mp+=cc.find_key_for_bound_cmd(CMD);mp+="    ";mp+=CMD;mp+="\n";}
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_NEXT);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_PREV);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_MAGNIFY);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_REDUCE);
+			//FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_MIRROR);
+			//FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_FLIP);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_PAN_LEFT);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_PAN_RIGHT);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_PAN_UP);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_PAN_DOWN);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_ROTATE);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_LIST);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_SCROLLDOWN);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_QUIT);
+			mp+=string(
+//"d,x,D,X		diagonal scroll\n"
+//"C-w			scale to the screen width\n"
+//"H			scale to the screen heigth\n"
 "\n"
 FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 "\n"
-"C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename\n"
-"C-c		 terminate instantaneously fim\n"
-"T		 split horizontally the current window\n"
-"V		 split vertically the current window\n"
-"C		 close  the currently focused window\n"
-"H		 change the currently focused window with the one on the left\n"
-"J		 change the currently focused window with the lower\n"
-"K		 change the currently focused window with the upper\n"
-"L		 change the currently focused window with the one on the right\n"
-"U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise  : try V, m,  U and see by yourself :) )\n"
-"d		move the image diagonally north-west\n"
-"D		move the image diagonally south-east\n"
-"x		move the image diagonally north-east\n"
-"X		move the image diagonally south-west\n"
-"m		mirror\n"
-"f		flip\n"
-"r		rotate\n"
+//"C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename\n"
+//"C-c		 terminate instantaneously fim\n"
+//"T		 split horizontally the current window\n"
+//"V		 split vertically the current window\n"
+//"C		 close  the currently focused window\n"
+//"H		 change the currently focused window with the one on the left\n"
+//"J		 change the currently focused window with the lower\n"
+//"K		 change the currently focused window with the upper\n"
+//"L		 change the currently focused window with the one on the right\n"
+//"U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise  : try V, m,  U and see by yourself :) )\n"
+//"d		move the image diagonally north-west\n"
+//"D		move the image diagonally south-east\n"
+//"x		move the image diagonally north-east\n"
+//"X		move the image diagonally south-west\n"
+//"m		mirror\n"
+//"f		flip\n"
+//"r		rotate\n"
 "\n"
 "You can visualize all of the default bindings invoking fim --dump-default-fimrc | grep bind .\n"
 "You can visualize all of the default aliases invoking fim  --dump-default-fimrc | grep alias .\n"
@@ -464,7 +482,7 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 "The Return vs. Space key thing can be used to create a file list while\n"
 "reviewing the images and use the list for batch processing later on.\n"
 "\n"
-"All of the key bindings are reconfigurable; please see the default \n"
+"All of the key bindings are reconfigurable; see the default \n"
 ".B fimrc\n"
 "file for examples on this, or read the complete manual: the FIM.TXT file\n"
 "distributed with fim.\n"
@@ -681,7 +699,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		}
 		std::cout << "\n Please read the documentation distributed with the program, in "FIM_CNS_FIM_TXT".\n"
 			  << " For further help, consult the online help in fim (:"FIM_FLT_HELP"), and man fim (1), fimrc (1).\n"
-			  << " For bug reporting please read the "FIM_CNS_BUGS_FILE" file.\n";
+			  << " For bug reporting read the "FIM_CNS_BUGS_FILE" file.\n";
 done:
 	    std::exit(code);
 	    return code;
@@ -983,6 +1001,10 @@ done:
 		case 'N':
 		    //fim's
 			cc.setVariable(FIM_VID_NO_RC_FILE,1);
+		    break;
+		case 0x4E4E4E:// NNN
+		    //fim's
+		    	cc.setVariable(FIM_VID_NO_DEFAULT_CONFIGURATION,1);
 		    break;
 		case 0x4E4E:// NN
 		    //fim's

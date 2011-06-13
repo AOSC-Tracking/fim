@@ -422,7 +422,7 @@ namespace fim
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[internal,out] the current image numeric index" */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[internal,out] the length of the current image list" */
 #define FIM_VID_FILENAME			"_filename"		/* "[internal,out] the current file name" */
-#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[internal,out] the contents of the default (hardcoded) configuration file" */
+#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
 #define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_override_display"	/* "[internal,undocumented]" */
@@ -451,7 +451,7 @@ namespace fim
 #define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[internal,in] if 1 on exit, will save the ~/fim_history file on exit" */
 #define FIM_VID_LOAD_FIM_HISTORY		"_load_fim_history"	/* "[internal,in] if 1 on startup, will load the ~/fim_history file on startup" */
 #define FIM_VID_TERM				"_TERM"			/* "[internal,out] the environment TERM variable" */
-#define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[internal,in]" */
+#define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[internal,in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. " */
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in] if 1, will display a message on the status bar when processing" */
 #define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
@@ -626,6 +626,13 @@ namespace fim
 #define FIM_FLT_VARIABLES		"variables" /* not in vim */
 #define FIM_FLT_WHILE			"while" /* in vim */
 #define FIM_FLT_WINDOW			"window" /* not in vim */
+
+#define FIM_FLC_MIRROR			"mirror" /* not in vim */
+#define FIM_FLC_FLIP			"flip" /* not in vim */
+#define FIM_FLC_PAN_UP			"pan 'up'" /* not in vim */
+#define FIM_FLC_PAN_DOWN		"pan 'down'" /* not in vim */
+#define FIM_FLC_PAN_LEFT		"pan 'left'" /* not in vim */
+#define FIM_FLC_PAN_RIGHT		"pan 'right'" /* not in vim */
 
 /*
  * Help messages for Fim commands (partial).

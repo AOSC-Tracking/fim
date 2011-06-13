@@ -645,7 +645,7 @@ _fim_bpp
 .fi
 .B
 _fim_default_config_file_contents
-[internal,out] the contents of the default (hardcoded) configuration file
+[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)
 .fi
 .B
 _fim_default_grammar_file_contents
@@ -697,7 +697,7 @@ _max_iterated_commands
 .fi
 .B
 _no_default_configuration
-[internal,in]
+[internal,in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. 
 .fi
 .B
 _no_external_loader_programs

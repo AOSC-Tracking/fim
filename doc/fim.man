@@ -124,6 +124,9 @@ No personal initialization file will be read (default is ~/.fimrc) at startup.
 .B 	 --no-etc-rc-file
 No system wide initialization file will be read (default is /etc/fimrc) at startup.
 .TP
+.B 	 --no-internal-config
+No internal default configuration at startup (see internal variable _no_default_configuration). Will only provide a minimal working configuration. 
+.TP
 .B -p, --script-from-stdin
 Will read commands from stdin prior to entering in interactive mode.
 .TP
@@ -199,22 +202,17 @@ below to read some useful (and unique) ways of employing fim.
 
 .SH COMMON KEYS AND COMMANDS
 .nf
-cursor keys     scroll large images
-h,j,k,l		scroll large images left,down,up,right
-+, -            zoom in/out
-ESC, q          quit
-Tab             toggle output console visualization
-PgUp,p            previous image
-PgDn,n            next image
-Space  	        next image if on bottom, scroll down instead
-Return          next image, write the filename of the current image to stdout on exit from the program.
-m			mirror
-f			flip
-r			rotate by 90  degrees
-d,x,D,X		diagonal scroll
-C-w			scale to the screen width
-H			scale to the screen heigth
-m			mark the current file for printing its name when terminating fim
+The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable _fim_default_config_file_contents).
+
+n    next
+p    prev
++    magnify
+-    reduce
+h    pan 'left'
+l    pan 'right'
+k    pan 'up'
+j    pan 'down'
+q    quit
 
 .nf
 :{number}       jump to {number}^th image in the list
@@ -231,23 +229,6 @@ m			mark the current file for printing its name when terminating fim
 
 !{syscmd}		executes the {syscmd} quoted string as a "/bin/sh" shell command
 
-C-n		 after entering in search mode (/) and submitting a pattern, C-n (pressing the Control and the n key together) will jump to the next matching filename
-C-c		 terminate instantaneously fim
-T		 split horizontally the current window
-V		 split vertically the current window
-C		 close  the currently focused window
-H		 change the currently focused window with the one on the left
-J		 change the currently focused window with the lower
-K		 change the currently focused window with the upper
-L		 change the currently focused window with the one on the right
-U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise  : try V, m,  U and see by yourself :) )
-d		move the image diagonally north-west
-D		move the image diagonally south-east
-x		move the image diagonally north-east
-X		move the image diagonally south-west
-m		mirror
-f		flip
-r		rotate
 
 You can visualize all of the default bindings invoking fim --dump-default-fimrc | grep bind .
 You can visualize all of the default aliases invoking fim  --dump-default-fimrc | grep alias .
@@ -257,7 +238,7 @@ You can visualize all of the default aliases invoking fim  --dump-default-fimrc 
 The Return vs. Space key thing can be used to create a file list while
 reviewing the images and use the list for batch processing later on.
 
-All of the key bindings are reconfigurable; please see the default 
+All of the key bindings are reconfigurable; see the default 
 .B fimrc
 file for examples on this, or read the complete manual: the FIM.TXT file
 distributed with fim.
