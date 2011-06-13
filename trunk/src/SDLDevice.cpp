@@ -100,7 +100,9 @@ std::cout.unsetf ( std::ios::hex );
 		}
 		else
 		{
-			// TODO: invaling string message needed here
+			current_w_=current_h_=0;
+			std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
+			// TODO: a better invaling string message needed here
 		}
 		}
 #endif
