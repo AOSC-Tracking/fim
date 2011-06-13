@@ -44,7 +44,7 @@ class Var
 	union
 	{
 		float f;
-		int i;
+		fim_int i;
 	};
 	fim::string s;
 	public:

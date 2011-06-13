@@ -10,12 +10,14 @@ AC_PREREQ([2.54])
 #AC_PROG_CC(cc gcc)
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
-define([svnversion],esyscmd([sh -c "svnversion | tr -d '\n'"]))dnl
+define([svnversion],esyscmd([sh -c "svnversion | tr -d 'M\n'"]))dnl
 # WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
 AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 
 AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
 AC_SUBST(SVN_REVISION,"svnversion")
+AC_DEFINE(SVN_REVISION_NUMBER,svnversion,[SVN REVISION NUMBER])
+AC_SUBST(SVN_REVISION_NUMBER,svnversion)
 
 AH_TEMPLATE([FIM_CONFIGURATION])
 FIM_CONFIGURATION="$0 $@"
@@ -114,6 +116,9 @@ AC_CHECK_FUNC([get_current_dir_name], AC_DEFINE([HAVE_GET_CURRENT_DIR_NAME], [1]
 
 AC_CHECK_LIB([m],[pow])
 AC_CHECK_LIB([fl],[yylex])
+
+AC_CHECK_PROG([HAVE_YACC],[yacc],[yes],[no])
+AC_CHECK_PROG([HAVE_BISON],[bison],[yes],[no])
 
 have_default_bindings=yes
 have_default_mapping=yes

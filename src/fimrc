@@ -23,6 +23,7 @@ if(_display_busy==''){_display_busy=1;}
 if(_ignorecase==''){_ignorecase=1;}
 if(_console_offset==''){_console_offset=0;}
 if(_console_key==''){_console_key=58;}
+if(_display_as_binary==''){_display_as_binary=0;}
 if(ascale==''){ascale="1.0";}
 #
 # External variables (not used internally).
@@ -151,7 +152,7 @@ autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
 bind 'w' "scale 'w'";
-bind 'h' "scale 'h'";
+#bind 'h' "scale 'h'";
 #
 alias "pan_nw" "pan 'nw';" "pans the image to the upper left";
 alias "pan_ne" "pan 'ne';" "pans the image to the upper right";

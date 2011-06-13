@@ -1495,13 +1495,21 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     rewind(fp);
     if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
 
-    if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY)!=0)
+    {
+    fim_int bd=cc.getIntVariable(FIM_VID_BINARY_DISPLAY);
+    if(bd!=0)
     {
         /* a funny feature */
-    	if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY)==1)
+    	if(bd==1)
 		loader = &bit1_loader;
 	else
-		loader = &bit24_loader;
+	{
+    		if(bd==24)
+			loader = &bit24_loader;
+		else
+			;// FIXME: need some error 	
+	}
+    }
     }
     /* pick loader */
 #ifdef FIM_SKIP_KNOWN_FILETYPES
@@ -1546,7 +1554,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     {
 		goto found_a_loader;
     }
-    if((loader==NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)!=0))
+    if((loader==NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
 		goto head_not_found;
 
 #ifdef FIM_WITH_LIBPNG 

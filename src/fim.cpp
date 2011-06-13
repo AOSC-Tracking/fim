@@ -138,8 +138,18 @@ struct fim_options_t fim_options[] = {
 "No system wide initialization file will be read (default is "FIM_CNS_SYS_RC_FILEPATH") at startup."
     },
     {"no-internal-config",      no_argument,       NULL, 0x4E4E4E,"do not execute the internal default configuration at startup",NULL,
-"No internal default configuration at startup (see internal variable "FIM_VID_NO_DEFAULT_CONFIGURATION"). Will only provide a minimal working configuration. "
+"No internal default configuration at startup (uses internal variable "FIM_VID_NO_DEFAULT_CONFIGURATION"). Will only provide a minimal working configuration. "
     },
+#if FIM_WANT_HISTORY
+    {"no-history-save",      no_argument,       NULL, 0x4E4853,"do not save execution history",NULL,
+"Do not save execution history at finalization (uses internal variable "FIM_VID_SAVE_FIM_HISTORY"). "
+    },
+    {"no-history-load",      no_argument,       NULL, 0x4E484C,"do not load execution history",NULL,
+    },
+    {"no-history",      no_argument,       NULL, 0x4E48,"do not load/save execution history",NULL,
+"Do not load or save execution history at startup). "
+    },
+#endif
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
 "Will read commands from stdin prior to entering in interactive mode."
     },
@@ -190,6 +200,9 @@ struct fim_options_t fim_options[] = {
     },
     {"autowidth",   no_argument,       NULL, 'w',"scale according to width",NULL,
 "Will scale the image according to the screen width."
+    },
+    {"no-auto-scale",   no_argument,   NULL,0x4E4053,"do not use any auto-scaling",NULL,
+"Will not scale the images after loading."
     },
     {"autoheight",   no_argument,       NULL, 'H',"scale according to height",NULL,
 "Will scale the image according to the screen height."
@@ -841,6 +854,12 @@ done:
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='w';");
 	#endif
 		    break;
+		case 0x4E4053:
+		    //fbi's
+	#ifdef FIM_AUTOCMDS
+		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"=' ';");// FIXME: shall document the allowed scaling char/options
+	#endif
+		    break;
 		case 'H':
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
@@ -1010,6 +1029,21 @@ done:
 		    //fim's
 		    	cc.setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,0);
 		    break;
+#if FIM_WANT_HISTORY
+		case 0x4E484C:// NHL
+		    //fim's
+		    	cc.setVariable(FIM_VID_LOAD_FIM_HISTORY,-1);
+		    break;
+		case 0x4E4853:// NHS
+		    //fim's
+		    	cc.setVariable(FIM_VID_SAVE_FIM_HISTORY,-1);
+		    break;
+		case 0x4E48:// NH
+		    //fim's
+		    	cc.setVariable(FIM_VID_SAVE_FIM_HISTORY,-1);
+		    	cc.setVariable(FIM_VID_LOAD_FIM_HISTORY,-1);
+		    break;
+#endif
 		case 't':
 		    //fim's
 			#ifdef FIM_WITH_AALIB
@@ -1207,6 +1241,9 @@ int main(int argc,char *argv[])
 #ifdef FIM_HANDLE_GIF
 #include <gif_lib.h>
 #endif
+#ifdef FIM_USE_READLINE
+#include "readline.h"
+#endif
 //#ifdef HAVE_LIBPOPPLER
 //#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
 //#endif
@@ -1251,6 +1288,14 @@ int main(int argc,char *argv[])
 	#ifdef HAVE_LIBJPEG
 	#ifdef JPEG_LIB_VERSION
 	"Compiled with libjpeg, v."FIM_XSTRINGIFY(JPEG_LIB_VERSION)".\n"
+	#endif 
+	#endif 
+	#ifdef FIM_USE_READLINE
+	// TODO: shall use RL_READLINE_VERSION instead
+	#if defined(RL_VERSION_MINOR) && defined(RL_VERSION_MAJOR) && ((RL_VERSION_MAJOR)>=6)
+	"Compiled with readline, v."FIM_XSTRINGIFY(RL_VERSION_MAJOR)"."FIM_XSTRINGIFY(RL_VERSION_MINOR)".\n"
+	#else
+	"Compiled with readline, version unknown.\n"
 	#endif 
 	#endif 
 	// for TIFF need TIFFGetVersion
