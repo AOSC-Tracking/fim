@@ -244,6 +244,7 @@ Major and tricky (time consuming) features:
 -------------------------------------------------------------------------------
 Minor but tricky (time consuming) features:
 
+20110613	the sdl output is very inefficient (uses continuout polling for user input, to allow readline to work)	
 20110530	need some "emergency" command and/or mechanism for freeing/reclaiming memory (e.g.:caches, buffers)
 20110507	the generated man output shall print out examples which are also a correctness test
 20110202	DICOM integration ? see libmdc2-dev / man medcon
