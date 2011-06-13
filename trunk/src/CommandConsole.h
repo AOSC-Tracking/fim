@@ -277,7 +277,10 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	void exit(int i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
 	fim::string bind(fim_key_t c,fim::string binding);
+	public:
 	fim::string find_key_for_bound_cmd(fim::string binding);
+	fim_err_t execDefaultConfiguration();
+	private:
 	fim::string unbind(const fim::string& key);
 	fim::string fcmd_unbind(const args_t& args);
 	fim::string getBindingsList()const;

@@ -441,14 +441,20 @@ FIM_FLT_RECORDING " repeat_last : repeat the last performed action; "
 		/* this is a stub for the manual generation (actually, the Window object gets built later) */
 		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW),this,&CommandConsole::fcmd_foo));
 #endif
-		/* #including a file not a clean practice, but it is clean regarding this file. */
-		#include "defaultConfiguration.cpp"
+		execDefaultConfiguration();
 		fcmd_cd(args_t());
 		setVariable(FIM_VID_STEPS,FIM_CNS_STEPS_DEFAULT);
 		setVariable(FIM_VID_TERM, fim_getenv(FIM_CNS_TERM_VAR));
 		setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,1);
 		setVariable(FIM_VID_DEFAULT_ETC_FIMRC,FIM_CNS_SYS_RC_FILEPATH);
 		*prompt_=*(prompt_+1)=FIM_SYM_CHAR_NUL;
+	}
+
+	fim_err_t CommandConsole::execDefaultConfiguration()
+	{
+		/* #including a file not a clean practice, but it is clean regarding this file. */
+		#include "defaultConfiguration.cpp"
+		return 0; 
 	}
 
         bool CommandConsole::is_file(fim::string nf)const
@@ -485,6 +491,7 @@ FIM_FLT_RECORDING " repeat_last : repeat the last performed action; "
 			commands_.push_back(c);
 		//sort(commands_.begin(),commands_.end()); // 20110517 FIXME: shall sort pointers by inspecting pointed data.
 		//based on actual 
+		return 0;
 	}
 
 	fim::string CommandConsole::alias(const fim::string& a,const fim::string& c)
