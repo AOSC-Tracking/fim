@@ -272,7 +272,7 @@ namespace fim
 		{
 			strcpy(rcfile,e);
 			strcat(rcfile,"/"FIM_CNS_USR_RC_FILEPATH);
-			if(getIntVariable(FIM_VID_NO_RC_FILE)==0 )
+			if(getIntVariable(FIM_VID_NO_RC_FILE)!=1 )
 			{
 				if(
 					(!is_file(rcfile) || -1==executeFile(rcfile))
@@ -308,9 +308,7 @@ namespace fim
 		if(postExecutionCommand_!=fim::string(""))
 			autocmd_add(FIM_ACM_POSTEXECUTIONCYCLE,"",postExecutionCommand_.c_str());
 #endif
-		/*
-		 *	FIXME : A TRADITIONAL /etc/fimrc LOADING WOULDN'T BE BAD..
-		 * */
+
 #ifdef FIM_USE_READLINE
 		rl::initialize_readline( displaydevice_==NULL );
 		load_history();

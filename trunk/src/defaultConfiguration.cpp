@@ -57,7 +57,7 @@
 		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");*/
 	
 		setVariable(FIM_VID_CONSOLE_KEY,FIM_SYM_CONSOLE_KEY);
-/*		setVariable(FIM_VID_VERBOSE_KEYS,0);*/
+/*		setVariable(FIM_VID_VERBOSE_KEYS,-1);*/
 		//setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
 		//setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,FIM_CNS_SCALEFACTOR_MULTIPLIER);
 		//setVariable(FIM_VID_SCALE_FACTOR_DELTA,FIM_CNS_SCALEFACTOR_DELTA);

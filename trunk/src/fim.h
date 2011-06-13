@@ -135,6 +135,7 @@ namespace fim
 	typedef int fim_cycles_t;	/* a type for fim's cycles */
 	typedef int fim_cmd_type_t;	/* a type for fim's command types */
 	typedef int fim_var_t;		/* a type for fim's variable types */
+	typedef int fim_int;		/* a type for fim's internal integer type (TODO: shall extend its use!) */
 
 	typedef int fim_ts_t;		/* a type for time, in seconds */
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */
@@ -317,6 +318,11 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #else
 #define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION""
 #endif
+#ifdef SVN_REVISION_NUMBER
+#define FIM_REVISION_NUMBER SVN_REVISION_NUMBER
+#else
+#define FIM_REVISION_NUMBER -1
+#endif
 #define FIM_CNS_EX_KSY_STRING	"{keysym}"
 #define FIM_CNS_EX_CMD_STRING	"{command}"
 #define FIM_CNS_EX_FN_STRING	"{filename}"
@@ -402,26 +408,26 @@ namespace fim
 //#define FIM_VID_NEWLINE 			"_newline"	/* "" */
 //#define FIM_VID_TAB 				"_tab"	/* "" */
 #define FIM_VID_RANDOM 				"random"	/* "[internal,out] a pseudorandom number" */
-#define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[internal,in] if nonzero, will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
-#define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[internal,out] current information on cache status" */
+#define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
+#define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[internal,out] string with current information on cache status" */
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[internal,in] if 1, will display the output console" */
-#define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[internal,out] the current device string" */
+#define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[internal,out] the current display device string" */
 #define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[internal,in,experimental] if 1, will execute a sanity check on startup" */
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file" */
-#define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] the global configuration file" */
-#define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if not 0, the ~/.fimrc file will not be loaded at startup" */
-#define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if not 0, no external loading programs will be tried for piping in an unsupported type image file" */
+#define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] string with the global configuration file name" */
+#define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" */
+#define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
 #define FIM_VID_STATUS_LINE 			"_status_line"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[internal,in] if 1, will prefetch further files just after display of the first file" */
-#define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[internal,in] number of seconds sleep during slideshow mode" */
+#define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[internal,in] number of seconds of sleep during slideshow mode" */
 #define FIM_VID_AUTOTOP				"_autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
-#define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if set, will be fed to the scale command" */
+#define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if non empty, this string will be fed to the scale command" */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[internal,out] the current image numeric index" */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[internal,out] the length of the current image list" */
-#define FIM_VID_FILENAME			"_filename"		/* "[internal,out] the current file name" */
+#define FIM_VID_FILENAME			"_filename"		/* "[internal,out] the current file name string" */
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
 #define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
@@ -432,19 +438,20 @@ namespace fim
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */
 #define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[internal,undocumented]" */
 #define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[internal,undocumented]" */
-#define FIM_VID_COMMENT 				"_comment"				/* "[internal,out] the image comment, stored in the image file" */
-#define FIM_VID_STEPS 				"_steps"				/* "[internal,in] the steps, in pixels, when panning images" */
-#define FIM_VID_HSTEPS 				"_hsteps"				/* "[internal,in] the steps, in pixels, when panning images horizontally (overrides steps)" */
-#define FIM_VID_VSTEPS 				"_vsteps"				/* "[internal,in] the steps, in pixels, when panning images vertically (overrides steps)" */
-#define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[internal,in,undocumented]" */
+#define FIM_VID_COMMENT 				"_comment"				/* "[internal,out] the image comment, extracted from the image file (if any)" */
+#define FIM_VID_STEPS 				"_steps"				/* "[internal,in] the default steps, in pixels, when panning images" */
+#define FIM_VID_VERSION				"_fim_version"	/* "[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
+#define FIM_VID_HSTEPS 				"_hsteps"				/* "[internal,in] the default steps, in pixels, when panning images horizontally (overrides steps)" */
+#define FIM_VID_VSTEPS 				"_vsteps"				/* "[internal,in] the default steps, in pixels, when panning images vertically (overrides steps)" */
+#define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[internal,in] if >0, will set the number of displayed text lines in the console" */
 #define FIM_VID_CONSOLE_LINE_WIDTH 		"_lwidth"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_LINE_OFFSET 		"_console_offset"	/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_BUFFER_LINES		"_console_lines"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_BUFFER_TOTAL		"_console_buffer_total"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_BUFFER_FREE		"_console_buffer_free"		/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_BUFFER_USED		"_console_buffer_used"		/* "[internal,in,undocumented]" */
-#define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[internal,in] if non zero, after each interactive mode key hit, the console will display the hit key raw keycode" */
-#define FIM_VID_CMD_EXPANSION			"_command_expansion"			/* "[internal,in] if non zero, will enable autocompletion (on execution) of alias and command strings" */
+#define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[internal,in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode" */
+#define FIM_VID_CMD_EXPANSION			"_command_expansion"			/* "[internal,in] if 1, will enable autocompletion (on execution) of alias and command strings" */
 #define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[internal,in,undocumented]" */
 #define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
 #define FIM_VID_IGNORECASE			"_ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp-based searches" */
@@ -658,6 +665,7 @@ namespace fim
 #define FIM_WANT_SINGLE_SYSTEM_INVOCATION 1
 #define FIM_WANT_SDL_OPTIONS_STRING 1
 #define FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE 1
+#define FIM_WANT_HISTORY 1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_STRING_BUFSIZE	4096

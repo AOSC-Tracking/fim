@@ -367,7 +367,7 @@ nop:
 		/*
 		 * displays the left text message and a right bracketed one
 		 */
-		if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS))
+		if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1)
 			commandConsole_.set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
 		return FIM_CNS_EMPTY_RESULT;
 	}

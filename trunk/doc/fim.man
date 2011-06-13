@@ -125,7 +125,16 @@ No personal initialization file will be read (default is ~/.fimrc) at startup.
 No system wide initialization file will be read (default is /etc/fimrc) at startup.
 .TP
 .B 	 --no-internal-config
-No internal default configuration at startup (see internal variable _no_default_configuration). Will only provide a minimal working configuration. 
+No internal default configuration at startup (uses internal variable _no_default_configuration). Will only provide a minimal working configuration. 
+.TP
+.B 	 --no-history-save
+Do not save execution history at finalization (uses internal variable _save_fim_history). 
+.TP
+.B 	 --no-history-load
+		 do not load execution history
+.TP
+.B 	 --no-history
+Do not load or save execution history at startup). 
 .TP
 .B -p, --script-from-stdin
 Will read commands from stdin prior to entering in interactive mode.
@@ -174,6 +183,9 @@ display version and compile flags, and then terminate.
 .TP
 .B -w, --autowidth
 Will scale the image according to the screen width.
+.TP
+.B 	 --no-auto-scale
+Will not scale the images after loading.
 .TP
 .B -H, --autoheight
 Will scale the image according to the screen height.

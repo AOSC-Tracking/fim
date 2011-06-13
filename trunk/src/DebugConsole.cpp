@@ -403,9 +403,9 @@ rerr:
 			 * We dump on screen the textual console contents.
 			 * We care about user set variables.
 			 * */
-			int co=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_OFFSET);
-			int lw=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_WIDTH );
-			int ls=getGlobalIntVariable(FIM_VID_CONSOLE_ROWS       );
+			fim_int co=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_OFFSET);
+			fim_int lw=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_WIDTH );
+			fim_int ls=getGlobalIntVariable(FIM_VID_CONSOLE_ROWS       );
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_TOTAL,bsize_);
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_FREE,(int)bsize_-(int)(bp_-buffer_));
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_USED,(int)(bp_-buffer_));

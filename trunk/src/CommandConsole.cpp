@@ -443,6 +443,7 @@ FIM_FLT_RECORDING " repeat_last : repeat the last performed action; "
 #endif
 		execDefaultConfiguration();
 		fcmd_cd(args_t());
+		setVariable(FIM_VID_VERSION,FIM_REVISION_NUMBER);
 		setVariable(FIM_VID_STEPS,FIM_CNS_STEPS_DEFAULT);
 		setVariable(FIM_VID_TERM, fim_getenv(FIM_CNS_TERM_VAR));
 		setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,1);
@@ -896,7 +897,7 @@ ret:
 			/*
 			 * in case command autocompletion is enabled
 			 */
-			if(getIntVariable(FIM_VID_CMD_EXPANSION))
+			if(getIntVariable(FIM_VID_CMD_EXPANSION)==1)
 			if(c==NULL)
 			{
 				char *match = this->command_generator(cmd.c_str(),0,0);
@@ -1103,7 +1104,7 @@ ok:
 #endif
 				if(r>0)
 				{
-					if(getIntVariable(FIM_VID_VERBOSE_KEYS))
+					if(getIntVariable(FIM_VID_VERBOSE_KEYS)==1)
 					{
 						/*
 						 * <0x20 ? print ^ 0x40+..
@@ -2029,6 +2030,7 @@ ok:
 
 	fim_err_t CommandConsole::save_history()
 	{
+#if FIM_WANT_HISTORY
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
     #ifdef FIM_USE_READLINE
@@ -2048,14 +2050,17 @@ ok:
 			/* else : /home/useeeeeeeeeeeeeeeeeeeeeee.....eeeeeeeer ? :) */
 			
 		}
+		return 0;
     #endif
   #endif
 #endif
-		return 0;
+#endif
+		return -1;
 	}
 
 	fim_err_t CommandConsole::load_history()
 	{
+#if FIM_WANT_HISTORY
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
     #ifdef FIM_USE_READLINE
@@ -2071,10 +2076,12 @@ ok:
 				read_history(hfile);
 			}
 		}
+		return 1;
     #endif
   #endif
 #endif
-		return 1;
+#endif
+		return -1;
 	}
 
 	/*

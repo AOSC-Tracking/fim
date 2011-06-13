@@ -557,7 +557,7 @@ _autotop
 .fi
 .B
 _cache_status
-[internal,out] current information on cache status
+[internal,out] string with current information on cache status
 .fi
 .B
 _cached_images
@@ -565,11 +565,11 @@ _cached_images
 .fi
 .B
 _command_expansion
-[internal,in] if non zero, will enable autocompletion (on execution) of alias and command strings
+[internal,in] if 1, will enable autocompletion (on execution) of alias and command strings
 .fi
 .B
 _comment
-[internal,out] the image comment, stored in the image file
+[internal,out] the image comment, extracted from the image file (if any)
 .fi
 .B
 _console_buffer_free
@@ -601,11 +601,11 @@ _debug_commands
 .fi
 .B
 _device_string
-[internal,out] the current device string
+[internal,out] the current display device string
 .fi
 .B
 _display_as_binary
-[internal,in] if nonzero, will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual
+[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual
 .fi
 .B
 _display_busy
@@ -637,7 +637,7 @@ _filelistlen
 .fi
 .B
 _filename
-[internal,out] the current file name
+[internal,out] the current file name string
 .fi
 .B
 _fim_bpp
@@ -656,8 +656,12 @@ _fim_scriptout_file
 [internal,in] the name of the file to write to when recording sessions
 .fi
 .B
+_fim_version
+[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions.
+.fi
+.B
 _hsteps
-[internal,in] the steps, in pixels, when panning images horizontally (overrides steps)
+[internal,in] the default steps, in pixels, when panning images horizontally (overrides steps)
 .fi
 .B
 _ignorecase
@@ -701,11 +705,11 @@ _no_default_configuration
 .fi
 .B
 _no_external_loader_programs
-[internal,in] if not 0, no external loading programs will be tried for piping in an unsupported type image file
+[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file
 .fi
 .B
 _no_rc_file
-[internal,in] if not 0, the ~/.fimrc file will not be loaded at startup
+[internal,in] if 1, the ~/.fimrc file will not be loaded at startup
 .fi
 .B
 _open_offset
@@ -729,7 +733,7 @@ _reduce_factor
 .fi
 .B
 _rows
-[internal,in,undocumented]
+[internal,in] if >0, will set the number of displayed text lines in the console
 .fi
 .B
 _save_fim_history
@@ -745,7 +749,7 @@ _scale_factor_multiplier
 .fi
 .B
 _scale_style
-[internal,in] if set, will be fed to the scale command
+[internal,in] if non empty, this string will be fed to the scale command
 .fi
 .B
 _screen_height
@@ -765,11 +769,11 @@ _status_line
 .fi
 .B
 _steps
-[internal,in] the steps, in pixels, when panning images
+[internal,in] the default steps, in pixels, when panning images
 .fi
 .B
 _sys_rc_file
-[internal,in] the global configuration file
+[internal,in] string with the global configuration file name
 .fi
 .B
 _verbose_errors
@@ -777,11 +781,11 @@ _verbose_errors
 .fi
 .B
 _verbose_keys
-[internal,in] if non zero, after each interactive mode key hit, the console will display the hit key raw keycode
+[internal,in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode
 .fi
 .B
 _vsteps
-[internal,in] the steps, in pixels, when panning images vertically (overrides steps)
+[internal,in] the default steps, in pixels, when panning images vertically (overrides steps)
 .fi
 .B
 _want_autocenter
@@ -793,7 +797,7 @@ _want_prefetch
 .fi
 .B
 _want_sleep_seconds
-[internal,in] number of seconds sleep during slideshow mode
+[internal,in] number of seconds of sleep during slideshow mode
 .fi
 .B
 angle
@@ -893,6 +897,7 @@ if(_display_busy==''){_display_busy=1;}
 if(_ignorecase==''){_ignorecase=1;}
 if(_console_offset==''){_console_offset=0;}
 if(_console_key==''){_console_key=58;}
+if(_display_as_binary==''){_display_as_binary=0;}
 if(ascale==''){ascale="1.0";}
 #
 # External variables (not used internally).
@@ -1021,7 +1026,7 @@ autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
 bind 'w' "scale 'w'";
-bind 'h' "scale 'h'";
+#bind 'h' "scale 'h'";
 #
 alias "pan_nw" "pan 'nw';" "pans the image to the upper left";
 alias "pan_ne" "pan 'ne';" "pans the image to the upper right";

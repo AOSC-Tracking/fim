@@ -23,7 +23,6 @@ ongoing further inspiration.
 
 20110613	need a single variable for flip,mirror, and eventually rotation (e.g.:fmr90)
 20110613	shall reintroduce many composite commands tokens (e.g.: "pan 'up'")
-20110613	COMMON KEYS AND COMMANDS is updated; it shall be eliminated; or maybe rationalized using find_key_for_bound_cmd.
 20110612	the parser should be strictly checked for leaks
 20110612	using up and down keys in / mode seems to recall general history, not search history (even in old fim revisions)!
 20110612	scrolldown,scrollforward -> [pan|scroll] forward|read
@@ -31,7 +30,6 @@ ongoing further inspiration.
 20110612	scale_* -> to aliases	
 20110612	dump_key_codes -> dump key_codes|variables|commands|aliases
 20110612	clear -> console clear
-20110612	collapse the recording commands
 20110612	need a runtime method for diverting stdout ? may ease debugging.
 20110612	shall rename from _varname to v:varname, whenever this has sense.
 20110610	shall unify the scaling-control variables
@@ -39,43 +37,23 @@ ongoing further inspiration.
 20110609	.ps crashes (try that matrix!) ?
 20110604	shall fix systematically stdin reading switches conflict (if any)
 20110604	may consider usage of ffmpeg's libswscale for image scaling
-20110602	in the documentation, shall write about FIM_STDIN_IMAGE_NAME
 20110602	need a test for the goodness of the 'random' variable numbers.
 20110601	shall use fim_byte_t instead of unsigned char's
-20110601	filelistlen and other vars should be set coherently
-20110530	in some contexts, using libsvga (see http://www.svgalib.org/jay/beginners_guide/beginners_guide.html) may be interesting 
-20110530	need some "emergency" command and/or mechanism for freeing/reclaiming memory (e.g.:caches, buffers)
-20110528	may introduce a push/pop mechanism for the status bar
-20110526	shall verify if it is possible instant-next-cached image access
-20110528	mark and unmark would be unnecessary if I set up an array type
 20110523	shall use autocommands for printing out status messages on loading,prefetching,etc 
-20110523	shall unify various fimrc notational conventions
-20110522	shall use/print out RL_READLINE_VERSION
 20110521	autocompletion shall be escaped (for opening filenames containing quoting chars)
 20110520	shall unify "100%" and other scaling styles into one single command. 
-20110520	string escaping does not work.
 20110517	may consider distinguishing "options" from "variables", as vim does
 20110516	invoking fim in sdl mode with very low resolutions/window sizes is crashy. this is bad.
-20110516	shall enable building with SDL only, without using Unix syscalls.
-20110516	shall foresee a mechanism for `stacked decoding'of `container' files (e.g.: gz,tar,tar.gz,bz,...)
-20110516	shall foresee support for dynamically lodaded modules, for a number of operations (e.g.: file decoding/loading using custom external programs or libraries); see also http://tldp.org/HOWTO/Program-Library-HOWTO/dl-libraries.html
 20110515	shall preprocessor-conditionally catch std::exception's and cout'ing this info or activate some debug channel.
 20110515	shall use clear() resize(0) instead of clear() alone (which does not resize arrays)
 20110515	shall check against end() after each erase() operation on vectors
 20110507	need a macro to avoid X == "" comparisons
 20110507	need a special mention for special variables, in the documentation
-20110507	the generated man output shall print out examples which are also a correctness test
 20110507	the generated man output shall document i: and w: and .. variables
-20110507	auto-generate a man page, providing both short and long descriptions for each option switch 
-20110506	shall see libicu http://userguide.icu-project.org/
 20110504	aa driver swaps pageup/pagedown ?
-20110503	it would be cool to allow bindings valid in consolemode
-20110416	configure shall check for yacc/bison
-20110202	and DICOM ? see libmdc2-dev / man medcon
 20110129	incongruences in FIM.TXT:
 		the system command is declared to be non active. this is wrong.
 20110129	all of the scripts/rc scripts should be tested for compliance
-20110127	consider making the program ready for GNU gettext: http://www.gnu.org/software/hello/manual/gettext/index.html#Top
 20110126	could introduce a string identifying fimrc versions
 20110126	should make clear in the docs that appending commands at the end of .fimrc will not make execute these commands on image loading. (and state as example the autowidth issue).
 20110126	should write whether the fim language is case sensitive or not, or even set up a macro for this.
@@ -255,24 +233,38 @@ ongoing further inspiration.
 	and flipping! ) Fim code.
 
 -------------------------------------------------------------------------------
-Major but tricky (time consuming) features:
+Major and tricky (time consuming) features:
+
+20110530	in some contexts, using libsvga (see http://www.svgalib.org/jay/beginners_guide/beginners_guide.html) may be interesting 
+20110516	shall foresee a mechanism for `stacked decoding'of `container' files (e.g.: gz,tar,tar.gz,bz,...)
+20110516	shall foresee support for dynamically lodaded modules, for a number of operations (e.g.: file decoding/loading using custom external programs or libraries); see also http://tldp.org/HOWTO/Program-Library-HOWTO/dl-libraries.html
+20110506	shall see libicu http://userguide.icu-project.org/, for internationalization/unicode
+20110127	consider making the program ready for GNU gettext: http://www.gnu.org/software/hello/manual/gettext/index.html#Top
 
 -------------------------------------------------------------------------------
 Minor but tricky (time consuming) features:
 
+20110530	need some "emergency" command and/or mechanism for freeing/reclaiming memory (e.g.:caches, buffers)
+20110507	the generated man output shall print out examples which are also a correctness test
+20110202	DICOM integration ? see libmdc2-dev / man medcon
+20110503	it would be cool to allow bindings valid in consolemode
 20080430	find a way to catch the console signal C-s in fim in a way to make C-s bindable
 20080313	make each cpp file include exactly the header files used
 20080216	add textureview mode
 
 -------------------------------------------------------------------------------
-Minor but easy (not time consuming) feature:
+Minor and easy (not time consuming) feature:
 
+20110528	may introduce a push/pop mechanism for the status bar
 20080430	use tmpfile() instead FIM_TMP_FILENAME 
 20080414	to use mkstemp() in src/FbiStuff.cpp
 20080414	introduce fim_fatal(), fim_warn(), fim_fail(), ...
 20080414	use rand48, and more options on random behaviour
 
+-------------------------------------------------------------------------------
+Minor but not easy (time consuming) features:
 
+20110516	shall enable building with SDL only, without using Unix syscalls.
 -------------------------------------------------------------------------------
 Optimization related ideas:
 
