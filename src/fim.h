@@ -186,7 +186,7 @@ namespace rl
 
 namespace fim{
 enum fim_image_source_t { FIM_E_FILE=-11, FIM_E_STDIN=-22};	/* these */
-enum fim_xflags_t { FIM_X_NULL=0,FIM_X_HISTORY=1,FIM_X_QUIET=2};	/* TODO: may introduce 'sandbox' like flags, here (for instance, for no-system/pipe-interacting executions) */
+enum fim_xflags_t { FIM_X_NULL=0,FIM_X_HISTORY=1,FIM_X_QUIET=2,FIM_X_NOAUTOCMD=4};	/* TODO: may introduce 'sandbox' like flags, here (for instance, for no-system/pipe-interacting executions) */
 typedef std::pair<fim::string,fim_image_source_t > 	   cache_key_t;	//the current cache key
 }
 typedef std::vector<fim::string> args_t;
@@ -347,6 +347,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
+#define FIM_MOD(X,C)        ((((X)%(C))+(C))%(C))
 
 #define FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP \
 ".nf\n"\

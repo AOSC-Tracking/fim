@@ -1,6 +1,6 @@
 # This script tests file browsing capabilities.
 autocmd "" "" "";
-alias "sn" "stdout _filaname;";
+alias "sn" "stdout _filename;";
 alias "sf" "stdout _fileindex;";
 #alias "u" "load;reload;i:fresh=1;display;redisplay;";
 #alias "u" "load;reload;i:fresh=1;display;redisplay;";

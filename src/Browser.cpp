@@ -19,8 +19,10 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#define firstorzero(x) (x.size()?((int)(x[0])):0)
-#define firstforzero(x) (x.size()?((float)(x[0])):0.0)
+#define firstorval(x,v)  ((x.size()>0)?((int)(x[0])):(v))
+#define firstorzero(x)    firstorval((x),(0))
+#define firstorone(x)     firstorval((x),(1))
+#define firstforzero(x)   (x.size()>0?((float)(x[0])):0.0)
 
 #include <dirent.h>
 #include <sys/types.h>	/* POSIX Standard: 2.6 Primitive System Data Types (e.g.: ssize_t) */
@@ -28,8 +30,9 @@
 
 namespace fim
 {
-	int Browser::current_n()const{ return current_n(cp_); }
-	int Browser::current_n(int ccp)const{ return ccp?ccp-1:ccp; }
+	//int Browser::current_n()const{ return current_n(cp_); }
+	int Browser::current_n()const{ return cp_; }
+	//int Browser::current_n(int ccp)const{ return ccp?ccp-1:ccp; }
 
 	fim::string Browser::list()const
 	{
@@ -66,7 +69,7 @@ namespace fim
 				 * filename matching based remove..
 		 		*/
 				pop();
-				return this->n();
+				return this->n_files();
 			}
 			if(args[0]=="remove")
 			{
@@ -82,7 +85,7 @@ namespace fim
 			}
 			if(args[0]=="filesnum")
 			{
-				return n();
+				return n_files();
 			}
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 			if(args[0]=="mark")
@@ -186,7 +189,7 @@ nop:
 		if(flist_.size()<=0)return nofile_;
 		assert(cp_);
 		flist_.erase(flist_.begin()+current_n());
-		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
+		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return s;
 	}
 
@@ -212,7 +215,7 @@ nop:
 				if(flist_[i]==filename)
 					flist_.erase(flist_.begin()+i);
 		}
-		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
+		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return s;
 	}
 
@@ -712,8 +715,7 @@ nop:
 #endif
 		flist_.push_back(nf);
 
-		setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
-		if(cp_==0)++cp_;
+		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return false;
 	}
 	
@@ -723,14 +725,6 @@ nop:
 		 * the number of files in the filenames list
 		 */
 		return flist_.size();
-	}
-
-	const fim::string Browser::n()const
-	{
-		/*
-		 * the number of files in the filenames list
-		 */
-		return fim::string(n_files());
 	}
 
 	fim::string Browser::_sort()
@@ -788,7 +782,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 				autocmd_exec(FIM_ACM_PREGOTO,c);
 #endif
-				goto_image(i+1);
+				goto_image(i);
 #ifdef FIM_AUTOCMDS
 				autocmd_exec(FIM_ACM_POSTGOTO,c);
 				if(!commandConsole_.inConsole())
@@ -819,11 +813,8 @@ nop:
 			image()->goto_page(n);
 			return N;
 		}
-
 		cp_=n;
-		if(cp_<0)cp_=(cp_%N)+N+1;//+1 added lately
-		if(cp_>N) cp_=1+(n%N);
-		if(!cp_)++cp_;
+		cp_=FIM_MOD(cp_,N);
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
 		fim::string result = n_files()?(flist_[current_n()]):nofile_;
@@ -873,15 +864,11 @@ nop:
 		 * returns to the next image in the list, the mechanism
 		 * p.s.: n<>0
 		 */
-		int ccp=cp_;
+		int ccp=cp_+n;
 		int N=flist_.size();
 		if(!N)return FIM_CNS_EMPTY_RESULT;
-		ccp+=n;
-		ccp%=N;
-		ccp+=N;
-		ccp%=N;
-		if(!ccp)ccp=N;
-		return flist_[current_n(ccp)];
+		ccp=FIM_MOD(ccp,N);
+		return flist_[ccp];
 	}
 
 	fim::string Browser::do_next(int n)
@@ -894,15 +881,13 @@ nop:
 		if(!N)
 			goto nop;
 		else
+		//if(n)
 		{
-		cp_+=n;
-		cp_%=N;
-		cp_+=N;
-		cp_%=N;
-		if(!cp_)cp_=N;
-		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
-		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
-		//fim::string result = n_files()?(flist_[current_n()]):nofile_;
+			cp_+=n;
+			cp_=FIM_MOD(cp_,N);
+			setGlobalVariable(FIM_VID_FILEINDEX,current_image());
+			setGlobalVariable(FIM_VID_FILENAME, current().c_str());
+			//fim::string result = n_files()?(flist_[current_n()]):nofile_;
 		}
 nop:
 		return FIM_CNS_EMPTY_RESULT;
@@ -910,35 +895,75 @@ nop:
 	
 	fim::string Browser::fcmd_goto_image(const args_t &args)
 	{
+		return goto_image_internal(args,FIM_X_NULL);
+	}
+
+	fim::string Browser::goto_image_internal(const args_t &args, fim_xflags_t xflags)
+	{
 		/*
-		 *	FIX ME
-		 *	there should be a way to have an interactive goto
 		 */
 		const fim_char_t*errmsg=FIM_CNS_EMPTY_STRING;
-		int cn=0,g=0;
+		int cn=0,g=0,nn=0,mn=0;
 		if(n_files()==0){errmsg="no image to go to!";goto err;}
-		cn=g=current_n()+1;
+		//cn=g=current_n();
+		cn=g=cp_;
+		//cn=g=current_n();
 		if(args.size()<1){errmsg="please specify a file to view ( a number or ^ or $ ) \n";goto err;}
 		else
 		{
 			const fim_char_t*s=args[0].c_str();
 			fim_char_t c=FIM_SYM_CHAR_NUL;
-			int sl=0;
+			fim_char_t l=FIM_SYM_CHAR_NUL;
+			int sl=0,li=0;
 			bool pcnt=false;
 			bool isre=false;
+			bool ispg=false;
+			bool isfg=false;
+			bool isrj=false;
 			if(!s)goto ret;
 			sl=strlen(s);
 			if(sl<1)goto ret;
 			c=*s;
-			pcnt=(s[sl-1]=='%');
+			//for(li=sl-2;li<sl;++li) { l=tolower(s[li]); pcnt=(l=='%'); ispg=(l=='p'); }
+			l=tolower(s[li=sl-1]);
+			pcnt=(l=='%'); 
+			ispg=(l=='p');
+			isfg=(l=='f');
+			if(li>0 && ( isfg || pcnt || ispg ))
+			{
+				l=tolower(s[li=sl-2]);
+				if(l=='%')pcnt=true;
+				if(l=='p')ispg=true;
+				if(l=='f')isfg=true;
+			}
+			if(isfg && ispg)goto err;
 			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+') && s[1]=='/') ||( c=='/')));
+			isrj=(c=='+' || c=='-');
 			if(isdigit(c)  || c=='-' || c=='+')g=atoi(s);
-			else if(c=='^' || c=='f')g=1;
-			else if(c=='$' || c=='l')g=n();
+			else if(c=='^' || c=='f')nn=1;
+			else if(c=='$' || c=='l')nn=n_files();
 			else if(isre){;}
 			else cout << " please specify a number or ^ or $\n";
-			if(pcnt)g=(g*n_files())/100;//FIXME: gross errors may occur here
-			if(c=='+' || c=='-')g=cn+g; // FIXME: what if g g<1 ? pity :)
+			//if((!isre) && (!isrj))nn=g;
+			if(ispg)
+				mn=n_pages();
+			else
+				mn=n_files();
+			if(!mn)
+			       	goto ret; 
+			if(pcnt)
+				g=(g*mn)/100;//FIXME: gross errors may occur here
+			//if(isrj && g<0 && cn==1){cn=0;}//TODO: this is a bugfix
+			if((!isrj) && g>0)
+				g=g-1;// user input is interpreted as 1-based 
+			g=FIM_MOD(g,mn);
+			//cout << "at " << cn <<", g="<<g <<", mod="<<mn<<"\n";
+			if(isrj)
+				{nn=cn+g;}// FIXME: what if g g<1 ? pity :)
+			else
+				nn=g;
+			g=FIM_MOD(g,mn);
+			//bcout << "goto " << cn << " " << nn << "\n";
 			if(isre)
 			{
 				args_t argsc;
@@ -950,15 +975,22 @@ nop:
 					return regexp_goto(argsc);
 				}
 			}
-			//if(g!=-1)
+			if(nn!=cn)
 			{	
 				fim::string c=current();
 #ifdef FIM_AUTOCMDS
-				autocmd_exec(FIM_ACM_PREGOTO,c);
+				if(!(xflags&FIM_X_NOAUTOCMD))autocmd_exec(FIM_ACM_PREGOTO,c);
 #endif
-				goto_image(g);
+#if 0
+				cout << (char)l<<"\n";
+				if(ispg)std::cerr << "page goto!\n";
+				if(ispg)cout      << "page goto!\n";
+				if(pcnt)cout      << "pcnt goto!\n";
+				if(pcnt)std::cerr << "pcnt goto!\n";
+#endif
+				goto_image(nn);
 #ifdef FIM_AUTOCMDS
-				autocmd_exec(FIM_ACM_POSTGOTO,c);
+				if(!(xflags&FIM_X_NOAUTOCMD))autocmd_exec(FIM_ACM_POSTGOTO,c);
 #endif
 			}
 		}
@@ -991,8 +1023,11 @@ err:
 //				std::cout << "removing" << flist_[i]<<"\n";
 				flist_.erase(flist_.begin()+i);
 			}
-			cp_=cp_%(flist_.size()+1);// new
-			setGlobalVariable(FIM_VID_FILELISTLEN,current_images());
+			int N=flist_.size();
+			if(N<=0)cp_=0;
+			else cp_=FIM_MIN(cp_,N-1);
+			setGlobalVariable(FIM_VID_FILEINDEX,current_image());
+			setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 			goto nop;
 		}
 		else
@@ -1312,7 +1347,8 @@ err:
 		 * be relative to viewport's own current's ?
 		 * */
 		if(empty_file_list())return nofile_; // FIXME: patch!
-	       	return cp_?flist_[current_n()]:nofile_;
+	       	//return cp_?flist_[current_n()]:nofile_;
+	       	return cp_>=0?flist_[cp_]:nofile_;
 	}
 
 	int Browser::empty_file_list()const
@@ -1409,7 +1445,7 @@ err:
 		if(c_image() && c_image()->have_nextpage())
 			return fcmd_next_page(args);
 		else
-			return next(args.size()>0?((int)args[0]):1);
+			return next(firstorone(args));
 	}
 
 	fim::string Browser::fcmd_prev_picture(const args_t &args)
@@ -1420,7 +1456,7 @@ err:
 		if(c_image() && c_image()->have_prevpage())
 			return fcmd_prev_page(args);
 		else
-			return prev(args.size()>0?((int)args[0]):1);
+			return prev(firstorone(args));
 	}
 
 	fim::string Browser::fcmd_next(const args_t &args)
@@ -1428,15 +1464,15 @@ err:
 		/*
 		 * FIX ME
 		 * */
-		return next(args.size()>0?((int)args[0]):1);
+		return next(firstorone(args));
 	}
 
 	int Browser::current_image()const
 	{
-		/*
-		 * FIX ME
-		 */
-		return cp_;
+		/* counting from 1 */
+		return cp_+1;
 	}
+	int Browser::n_pages()const
+	{if(c_image())return c_image()->n_pages(); else return 0;};
 }
 
