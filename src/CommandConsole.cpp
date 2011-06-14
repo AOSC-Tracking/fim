@@ -346,10 +346,10 @@ namespace fim
 //		addCommand(new Command(fim::string("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
 		addCommand(new Command(fim::string(FIM_FLT_PREFETCH),fim::string(FIM_FLT_PREFETCH" : prefetch two nearby image files, for a faster subsequent opening"),&browser_,&Browser::fcmd_prefetch));
 //		addCommand(new Command(fim::string(FIM_FLT_NO_IMAGE),fim::string(FIM_FLT_NO_IMAGE" : displays no image at all (BROKEN)"),&browser_,&Browser::fcmd_no_image));/* FIXME: broken */
-		addCommand(new Command(fim::string(FIM_FLT_NEXT),fim::string(FIM_FLT_NEXT" ["FIM_CNS_EX_NUM_STRING"=1] : go to the next picture in the list"),&browser_,&Browser::fcmd_next));
+//		addCommand(new Command(fim::string(FIM_FLT_NEXT),fim::string(FIM_FLT_NEXT" ["FIM_CNS_EX_NUM_STRING"=1] : go to the next picture in the list"),&browser_,&Browser::fcmd_next));
 		addCommand(new Command(fim::string(FIM_FLT_NEXT_PIC),fim::string(FIM_FLT_NEXT_PIC" ["FIM_CNS_EX_NUM_STRING"=1] : go to the next page or picture file"),&browser_,&Browser::fcmd_next_picture));
 		addCommand(new Command(fim::string(FIM_FLT_PREV_PIC),fim::string(FIM_FLT_PREV_PIC" ["FIM_CNS_EX_NUM_STRING"=1] : go to the previous page or picture file"),&browser_,&Browser::fcmd_prev_picture));
-		addCommand(new Command(fim::string(FIM_FLT_PREV),fim::string(FIM_FLT_PREV" ["FIM_CNS_EX_NUM_STRING"=1] : go to the previous picture in the list"),&browser_,&Browser::fcmd_prev));
+//		addCommand(new Command(fim::string(FIM_FLT_PREV),fim::string(FIM_FLT_PREV" ["FIM_CNS_EX_NUM_STRING"=1] : go to the previous picture in the list"),&browser_,&Browser::fcmd_prev));
 		addCommand(new Command(fim::string(FIM_FLT_NEXT_PAGE),fim::string(FIM_FLT_NEXT_PAGE" ["FIM_CNS_EX_NUM_STRING"=1] : go to the next page"),&browser_,&Browser::fcmd_next_page));
 		addCommand(new Command(fim::string(FIM_FLT_PREV_PAGE),fim::string(FIM_FLT_PREV_PAGE" ["FIM_CNS_EX_NUM_STRING"=1] : go to the previous page"),&browser_,&Browser::fcmd_prev_page));
 		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string(FIM_FLT_DISPLAY" : display the current file contents"),&browser_,&Browser::fcmd_display));

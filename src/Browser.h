@@ -33,24 +33,18 @@ class Browser
 #endif
 {
 	private:
-	/* the names of files in the slideshow.  */
-	args_t flist_;
+	args_t flist_; /* the names of files in the slideshow.  */
 
-	/* a dummy empty filename */
-	const fim::string nofile_;
+	const fim::string nofile_; /* a dummy empty filename */
 
 	/*
-	 * And it keeps a numerical index of the current file, too.
-	 *
 	 * cp_ is zero only when there are no files in the list.
 	 * the current file index is in current_n()
 	 */
 	int cp_;
 
 #ifndef FIM_WINDOWS
-	/*
-	 * When compiled with no multiple windowing support, one viewport only will last.
-	 * */
+	/* when compiled with no multiple windowing support, one viewport only will last. */
 	Viewport *only_viewport_;
 #endif
 	CommandConsole &commandConsole_;
@@ -98,7 +92,7 @@ class Browser
 	fim::string fcmd_prefetch(const args_t &args);
 	fim::string regexp_goto_next(const args_t &args);
 	fim::string fcmd_goto_image(const args_t &args);
-	fim::string goto_image_internal(const args_t &args, fim_xflags_t xflags);
+	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
 	fim::string goto_image(int n);
 	fim::string fcmd_align(const args_t &args);
 	fim::string pan(const args_t &args);
@@ -157,7 +151,7 @@ class Browser
 	int n_pages()const;
 	fim::string _sort();
 	fim::string _reverse();
-	fim::string next(int n);
+	fim::string next(int n=1);
 	fim::string do_next(int n);
 
 	void free_current_image();

@@ -52,7 +52,10 @@
 //		bind('P',"f=`files`/2;prev (--$f);\n");
 //		bind('N',"f=`files`/2;next (--$f);\n");
 
-/*		alias('A',"'autotop=1-autotop;'");
+ 		alias("next","goto '+1'");
+ 		alias("prev","goto '-1'");
+/*		
+ 		alias('A',"'autotop=1-autotop;'");
 		alias("toggleVerbosity","verbose=1-verbose;display;");
 		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");*/
 	
