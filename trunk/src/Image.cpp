@@ -754,6 +754,8 @@ fim::string Image::getInfo()
        		should_redraw();
 
 		return true;
-	} 
+	}
+
+	int Image::n_pages()const{return (fimg_?fimg_->i.npages:0);};
 }
 

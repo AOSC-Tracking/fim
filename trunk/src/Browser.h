@@ -33,14 +33,10 @@ class Browser
 #endif
 {
 	private:
-	/*
-	 * A file browser holds the names of files in the slideshow.
-	 */
+	/* the names of files in the slideshow.  */
 	args_t flist_;
 
-	/*
-	 * It has a dummy empty filename for technical reasons
-	 */
+	/* a dummy empty filename */
 	const fim::string nofile_;
 
 	/*
@@ -72,7 +68,6 @@ class Browser
 	fim::string get_next_filename(int n)const;
 	
 	int current_image()const;
-	int current_images()const{ return n(); }
 	public:
 	fim::string last_regexp_; // was private
 	Cache cache_;	// was private
@@ -103,6 +98,7 @@ class Browser
 	fim::string fcmd_prefetch(const args_t &args);
 	fim::string regexp_goto_next(const args_t &args);
 	fim::string fcmd_goto_image(const args_t &args);
+	fim::string goto_image_internal(const args_t &args, fim_xflags_t xflags);
 	fim::string goto_image(int n);
 	fim::string fcmd_align(const args_t &args);
 	fim::string pan(const args_t &args);
@@ -158,7 +154,7 @@ class Browser
 	fim::string list()const;
 
 	int n_files()const;
-	const fim::string n()const;
+	int n_pages()const;
 	fim::string _sort();
 	fim::string _reverse();
 	fim::string next(int n);
