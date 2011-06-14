@@ -22,10 +22,10 @@
 */
 #if FIM_DEFAULT_CONFIG
 		bind('q',FIM_FLT_QUIT);
-		bind('n',FIM_FLT_NEXT);
+		bind('n',FIM_FLC_NEXT);
 //		bind('h',FIM_FLT_HELP);
 		//bind('p',"prev;display;");
-		bind('p',FIM_FLT_PREV);
+		bind('p',FIM_FLC_PREV);
 		//bind('r',FIM_FLT_RELOAD);
 		//bind('R',FIM_FLT_REDISPLAY);
 		bind('d',FIM_FLT_DISPLAY);
@@ -52,8 +52,12 @@
 //		bind('P',"f=`files`/2;prev (--$f);\n");
 //		bind('N',"f=`files`/2;next (--$f);\n");
 
- 		alias("next","goto '+1'");
- 		alias("prev","goto '-1'");
+ 		alias(FIM_FLC_NEXT,"goto '+1'");
+ 		alias(FIM_FLC_PREV,"goto '-1'");
+ 		alias(FIM_FLC_NEXT_PAGE,"goto '+1p'");
+ 		alias(FIM_FLC_PREV_PAGE,"goto '-1p'");
+ 		alias(FIM_FLC_NEXT_FILE,"goto '+1f'");
+ 		alias(FIM_FLC_PREV_FILE,"goto '-1f'");
 /*		
  		alias('A',"'autotop=1-autotop;'");
 		alias("toggleVerbosity","verbose=1-verbose;display;");

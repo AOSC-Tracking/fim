@@ -448,8 +448,8 @@ int fim_dump_man_page()
 );
 
 #define FIM_ADD_DOCLINE_FOR_CMD(CMD) if(cc.find_key_for_bound_cmd(CMD)!=""){mp+=cc.find_key_for_bound_cmd(CMD);mp+="    ";mp+=CMD;mp+="\n";}
-			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_NEXT);
-			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_PREV);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_NEXT);
+			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_PREV);
 			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_MAGNIFY);
 			FIM_ADD_DOCLINE_FOR_CMD(FIM_FLT_REDUCE);
 			//FIM_ADD_DOCLINE_FOR_CMD(FIM_FLC_MIRROR);

@@ -800,7 +800,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::goto_image(int n)
+	fim::string Browser::goto_image(int n, bool isfg)
 	{
 		/*
 		 *	FIX ME
@@ -808,6 +808,7 @@ nop:
 		int N=flist_.size();
 		if(!N)return FIM_CNS_EMPTY_RESULT;
 
+		if(!isfg)
 		if( N==1 && c_image() && c_image()->is_multipage())
 		{
 			image()->goto_page(n);
@@ -967,7 +968,11 @@ nop:
 				if(pcnt)cout      << "pcnt goto!\n";
 				if(pcnt)std::cerr << "pcnt goto!\n";
 #endif
-				goto_image(nn);
+
+				if(ispg)
+					image()->goto_page(nn);
+				else
+					goto_image(nn,isfg?true:false);
 #ifdef FIM_AUTOCMDS
 				if(!(xflags&FIM_X_NOAUTOCMD))autocmd_exec(FIM_ACM_POSTGOTO,c);
 #endif
