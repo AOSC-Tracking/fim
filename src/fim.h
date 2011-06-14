@@ -592,18 +592,12 @@ namespace fim
 #define FIM_FLT_LOAD			"load" /* not in vim */
 #define FIM_FLT_LIST			"list" /* not in vim */
 #define FIM_FLT_MAGNIFY			"magnify" /* not in vim */
-#define FIM_FLT_NEXT			"next" /* in vim */
 #define FIM_FLT_NEGATE			"negate" /* not in vim */
-#define FIM_FLT_NEXT_PAGE		"next_page" /* not in vim */
-#define FIM_FLT_NEXT_PIC		"next_picture" /* not in vim */
 #define FIM_FLT_NO_IMAGE		"no_image" /* not in vim */
 #define FIM_FLT_PAN			"pan" /* not in vim */
 #define FIM_FLT_POPEN			"popen" /* not in vim */
 #define FIM_FLT_PREAD			"pread" /* not in vim */
 #define FIM_FLT_PREFETCH		"prefetch" /* in vim */
-#define FIM_FLT_PREV			"prev" /* in vim */
-#define FIM_FLT_PREV_PAGE		"prev_page" /* not in vim */
-#define FIM_FLT_PREV_PIC		"prev_picture" /* not in vim */
 #define FIM_FLT_PWD			"pwd" /* in vim */
 #define FIM_FLT_REDISPLAY		"redisplay" /* not in vim */
 #define FIM_FLT_REDUCE			"reduce" /* not in vim */
@@ -631,6 +625,13 @@ namespace fim
 #define FIM_FLT_WHILE			"while" /* in vim */
 #define FIM_FLT_WINDOW			"window" /* not in vim */
 
+/* composite commands or hardcoded aliases */
+#define FIM_FLC_NEXT_FILE		"next_file" /* not in vim */ // WAS: FIM_FLT_NEXT_PIC
+#define FIM_FLC_PREV_FILE		"prev_file" /* not in vim */ // WAS: FIM_FLT_PREC_PIC
+#define FIM_FLC_NEXT_PAGE		"next_page" /* not in vim */
+#define FIM_FLC_PREV_PAGE		"prev_page" /* not in vim */
+#define FIM_FLC_NEXT			"next" /* in vim */
+#define FIM_FLC_PREV			"prev" /* in vim */
 #define FIM_FLC_MIRROR			"mirror" /* not in vim */
 #define FIM_FLC_FLIP			"flip" /* not in vim */
 #define FIM_FLC_PAN_UP			"pan 'up'" /* not in vim */

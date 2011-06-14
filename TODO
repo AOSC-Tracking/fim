@@ -21,6 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
+20110614	shall document all of the goto variants, as well as its aliases
+20110614	page based goto/next needs a test case
 20110614	shall set i:_pagecount
 20110614	need grepping for all autocommands, and documentation extraction
 20110613	need a single variable for flip,mirror, and eventually rotation (e.g.:fmr90)
