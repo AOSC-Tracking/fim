@@ -87,5 +87,5 @@ else
 
 rc=0;
 if(_screen_width!=i:swidth)stdout "PLEASE FINISH WRITING THIS TEST";
-#return rc;
+#quit rc;
 

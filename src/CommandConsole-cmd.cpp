@@ -145,7 +145,11 @@ namespace fim
 		 * now the postcycle execution autocommands are enabled !
 		 * */
 		show_must_go_on_=0;
-		return FIM_CNS_EMPTY_RESULT;
+		if( args.size() < 1 )
+			return_code_=0;
+		else
+			return_code_=(int)args[0];
+	return FIM_CNS_EMPTY_RESULT;
 	}
 
 #ifndef FIM_WANT_NOSCRIPTING
@@ -475,23 +479,6 @@ namespace fim
 	}
 #endif
 	
-	fim::string CommandConsole::fcmd_do_return(const args_t &args)
-	{
-		/*
-		 * returns immediately the program with an exit code
-		 * */
-/*		this in unclean
-		if( args.size() < 0 ) this->quit(0);
-		else	this->quit( (int) args[0] );*/
-		/* this is clean */
-		if( args.size() < 1 )
-			return_code_=0;
-		else
-			return_code_=(int)args[0];
-		show_must_go_on_=0;
-		return FIM_CNS_EMPTY_RESULT;/* it shouldn' return, though :) */
-	}
-
 	fim::string CommandConsole::fcmd_status(const args_t &args)
 	{
 		/*

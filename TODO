@@ -21,7 +21,14 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110614	shall document all of the goto variants, as well as its aliases
+20110615	shall develop a shell based tester for 'quit $CODE'
+20110614	shall document all of the goto variants, as well as its (next*) aliases
+20110615	old 'return' docs shall be merged to 'quit' ones, and tokens deleted 
+20110615	set_console_mode -> cmdline on ; set_interactive_mode -> cmdline off ; clear -> console [clear|info]
+20110615	color [negate|gray]
+20110615	scale_increment & co -> in the "default aliases" section 
+20110615	redisplay = display 'force' ; reload = load 'force'
+20110615	info [size|width|...]
 20110614	page based goto/next needs a test case
 20110614	shall set i:_pagecount
 20110614	need grepping for all autocommands, and documentation extraction
