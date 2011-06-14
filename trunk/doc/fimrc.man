@@ -162,42 +162,6 @@ prefetch : prefetch two nearby image files, for a faster subsequent opening
 .fi
 
 .B
-next
-.fi
-next [{number}=1] : go to the next picture in the list
-.fi
-
-.B
-next_picture
-.fi
-next_picture [{number}=1] : go to the next page or picture file
-.fi
-
-.B
-prev_picture
-.fi
-prev_picture [{number}=1] : go to the previous page or picture file
-.fi
-
-.B
-prev
-.fi
-prev [{number}=1] : go to the previous picture in the list
-.fi
-
-.B
-next_page
-.fi
-next_page [{number}=1] : go to the next page
-.fi
-
-.B
-prev_page
-.fi
-prev_page [{number}=1] : go to the previous page
-.fi
-
-.B
 display
 .fi
 display : display the current file contents
@@ -291,12 +255,6 @@ magnify : magnify the displayed image by the _magnify_factor variable or {args} 
 reduce
 .fi
 reduce : reduce the displayed image by _reduce_factor or {args} [undocumented]
-.fi
-
-.B
-return
-.fi
-return {number} : return from the program with a specified status code
 .fi
 
 .B
@@ -923,9 +881,9 @@ bind 'm' "mirror;";
 bind 'M' "mirroronce;";
 bind 'q' "quit";
 bind 'Esc' "quit";
-bind 'n' "next_picture;";
+bind 'n' "next_file;";
 bind 'C-h' "help";
-bind 'p' "prev_picture;";
+bind 'p' "prev_file;";
 #bind 'P' "list 'pop'";
 #bind 's' "list 'sort'";
 bind 's' "scrollforward";
@@ -979,8 +937,6 @@ alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 #autocmd "PostDisplay" "" "echo '\nthis is a file\n'";
 #autocmd "PostGoto"   "" "set_interactive_mode;";
 autocmd "PostGoto" "" "reload;";
-autocmd "PostNext" "" "reload;";
-autocmd "PostPrev" "" "reload;";
 #autocmd "PostDisplay"   "" "i:fresh=1" ;
 #autocmd "PreWindow"   "" "";
 autocmd "PostWindow"   "" "display;";
@@ -1100,8 +1056,8 @@ alias 'console_scroll_reset' '{_console_offset=0;}';
 alias 'scu'   'console_scroll_up;'   "";
 alias 'scd'   'console_scroll_down;' "";
 alias 'scz'   'console_scroll_reset;' "";
-bind "PageUp" "if(_display_console==0){prev_picture;}else{scu;}";
-bind "PageDown" "if(_display_console==0){next_picture;}else{scd;}";
+bind "PageUp" "if(_display_console==0){prev_file;}else{scu;}";
+bind "PageDown" "if(_display_console==0){next_file;}else{scd;}";
 bind "Home" "0;";
 bind "End" "$;";
 bind "Backspace" "prev";

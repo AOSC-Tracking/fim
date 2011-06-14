@@ -222,7 +222,6 @@ Thread model: posix
 gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 */
 	fim::string fcmd_foo (const args_t &args);
-	fim::string fcmd_do_return(const args_t &args);
 	fim::string fcmd_status(const args_t &args);
 	fim_err_t executeFile(const char *s);
 	fim_err_t execute_internal(const char *ss, fim_xflags_t xflags);
