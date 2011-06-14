@@ -821,43 +821,6 @@ nop:
 		return result;
 	}
 
-	fim::string Browser::next(int n=1)
-	{
-		/*
-		 * jumps n images forward in the image list
-		 */
-		fim::string c=current();
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_PRENEXT,c);
-#endif
-		fim::string result=do_next(n);
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_POSTNEXT,c);
-#endif
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::prev(int n)
-	{
-		/*
-		 * jumps n images backwards in the image list
-		 */
-		fim::string c=current();
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_PREPREV,c);
-#endif
-		fim::string result=do_next(-n);
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_POSTPREV,c);
-#endif
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::fcmd_prev(const args_t &args)
-	{
-		return prev(args.size()>0?((int)args[0]):1);
-	}
-
 	fim::string Browser::get_next_filename(int n)const
 	{
 		/*
@@ -871,6 +834,20 @@ nop:
 		return flist_[ccp];
 	}
 
+	fim::string Browser::next(int n)
+	{
+		fim::string gs="+";
+		gs+=fim::string(n);
+		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
+	}
+
+	fim::string Browser::prev(int n)
+	{
+		fim::string gs="-";
+		gs+=fim::string(n);
+		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
+	}
+	
 	fim::string Browser::do_next(int n)
 	{
 		/*
@@ -895,23 +872,25 @@ nop:
 	
 	fim::string Browser::fcmd_goto_image(const args_t &args)
 	{
-		return goto_image_internal(args,FIM_X_NULL);
+		if(args.size()>0)
+			return goto_image_internal(args[0].c_str(),FIM_X_NULL);
+		else
+			return goto_image_internal(NULL,FIM_X_NULL);
 	}
 
-	fim::string Browser::goto_image_internal(const args_t &args, fim_xflags_t xflags)
+	fim::string Browser::goto_image_internal(const fim_char_t *s, fim_xflags_t xflags)
 	{
 		/*
 		 */
 		const fim_char_t*errmsg=FIM_CNS_EMPTY_STRING;
 		int cn=0,g=0,nn=0,mn=0;
-		if(n_files()==0){errmsg="no image to go to!";goto err;}
+		if(n_files()==0 || !s){errmsg="no image to go to!";goto err;}
 		//cn=g=current_n();
 		cn=g=cp_;
 		//cn=g=current_n();
-		if(args.size()<1){errmsg="please specify a file to view ( a number or ^ or $ ) \n";goto err;}
+		if(!s){errmsg="please specify a file to view ( a number or ^ or $ ) \n";goto err;}
 		else
 		{
-			const fim_char_t*s=args[0].c_str();
 			fim_char_t c=FIM_SYM_CHAR_NUL;
 			fim_char_t l=FIM_SYM_CHAR_NUL;
 			int sl=0,li=0;
@@ -971,7 +950,7 @@ nop:
 					return regexp_goto_next(argsc);/* no args needed */
 				else
 				{
-					argsc.push_back(args[0].substr(1,sl-2));
+					argsc.push_back(string(s).substr(1,sl-2));
 					return regexp_goto(argsc);
 				}
 			}
@@ -1401,40 +1380,20 @@ err:
 
 	fim::string Browser::fcmd_next_page(const args_t &args)
 	{
-		/*
-		 * jumps one page forward in the current multipage image
-		 */
-		fim::string c=current();
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_PRENEXT,c);
-#endif
-		if(c_image())
-		{
-			if(image())image()->next_page();
-		}
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_POSTNEXT,c);
-#endif
-		return FIM_CNS_EMPTY_RESULT;
+		/* jumps one page forward in the current multipage image */
+		fim::string gs="+";
+		gs+=fim::string(1);
+		gs+="p";
+		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
 
 	fim::string Browser::fcmd_prev_page(const args_t &args)
 	{
-		/*
-		 * jumps one page backward in the current multipage image
-		 */
-		fim::string c=current();
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_PRENEXT,c);
-#endif
-		if(c_image())
-		{
-			if(image())image()->prev_page();
-		}
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_POSTNEXT,c);
-#endif
-		return FIM_CNS_EMPTY_RESULT;
+		/* jumps one page backward in the current multipage image */
+		fim::string gs="-";
+		gs+=fim::string(1);
+		gs+="p";
+		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
 
 	fim::string Browser::fcmd_next_picture(const args_t &args)
@@ -1457,14 +1416,6 @@ err:
 			return fcmd_prev_page(args);
 		else
 			return prev(firstorone(args));
-	}
-
-	fim::string Browser::fcmd_next(const args_t &args)
-	{
-		/*
-		 * FIX ME
-		 * */
-		return next(firstorone(args));
 	}
 
 	int Browser::current_image()const

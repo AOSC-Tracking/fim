@@ -548,10 +548,6 @@ namespace fim
 #define FIM_ACM_PRELOAD	"PreLoad"
 #define FIM_ACM_POSTGOTO	"PostGoto"
 #define FIM_ACM_PREGOTO	"PreGoto"
-#define FIM_ACM_PRENEXT	"PreNext"
-#define FIM_ACM_POSTNEXT	"PostNext"
-#define FIM_ACM_PREPREV	"PrePrev"
-#define FIM_ACM_POSTPREV	"PostPrev"
 #define FIM_ACM_PRECONF		"PreConfigLoading"	// before loading any configuration file
 #define FIM_ACM_POSTCONF	"PostConfigLoading"	// after  loading any configuration file
 #define FIM_ACM_PREHFIMRC	"PreHardcodedConfigLoading"	// before loading hardcoded configuration

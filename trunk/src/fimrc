@@ -105,8 +105,6 @@ alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 #autocmd "PostDisplay" "" "echo '\\nthis is a file\\n'";
 #autocmd "PostGoto"   "" "set_interactive_mode;";
 autocmd "PostGoto" "" "reload;";
-autocmd "PostNext" "" "reload;";
-autocmd "PostPrev" "" "reload;";
 #autocmd "PostDisplay"   "" "i:fresh=1" ;
 #autocmd "PreWindow"   "" "";
 autocmd "PostWindow"   "" "display;";
