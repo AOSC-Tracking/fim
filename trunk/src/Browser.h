@@ -98,16 +98,10 @@ class Browser
 	fim::string pan(const args_t &args);
 	fim::string fcmd_scrolldown(const args_t &args);
 	fim::string fcmd_scrollforward(const args_t &args);
-	fim::string fcmd_scale_increment(const args_t &args);
-	fim::string fcmd_scale_multiply(const args_t &args);
 	fim::string fcmd_scale(const args_t &args);
 	fim::string fcmd_reduce(const args_t &args);
 	fim::string fcmd_magnify(const args_t &args);
-	fim::string fcmd_scale_factor_increase(const args_t &args);
-	fim::string fcmd_scale_factor_decrease(const args_t &args);
 	fim::string fcmd_rotate(const args_t &args);/* FIXME : UNFINISHED */
-	fim::string fcmd_scale_factor_grow(const args_t &args);
-	fim::string fcmd_scale_factor_shrink(const args_t &args);
 	fim::string fcmd_display(const args_t &args);
 	fim::string display_status(const char *l,const char*r);
 	fim::string fcmd_negate(const args_t &args);
@@ -124,8 +118,6 @@ class Browser
 	std::ostream& print(std::ostream &os)const;
 	void redisplay();
 	fim::string fcmd_redisplay(const args_t &args);
-
-
 	fim::string fcmd_load(const args_t &args);
 	const fim::string pop_current();
 	fim::string pop_current(const args_t &args);

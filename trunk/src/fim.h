@@ -603,13 +603,11 @@ namespace fim
 #define FIM_FLT_RELOAD			"reload" /* not in vim */
 #define FIM_FLT_ROTATE			"rotate" /* not in vim */
 #define FIM_FLT_SCALE			"scale" /* not in vim */
-#define FIM_FLT_SCALE_MULTIPLY		"scale_multiply" /* not in vim */ /* FIXME: delete this command */
-#define FIM_FLT_SCALE_INCREMENT		"scale_increment" /* not in vim */ /* FIXME: delete this command */
 #define FIM_FLT_SCROLLDOWN		"scrolldown" /* not in vim */
 #define FIM_FLT_SCROLLFORWARD		"scrollforward" /* not in vim */
 #define FIM_FLT_SET			"set" /* in vim */
 #define FIM_FLT_SET_INTERACTIVE_MODE	"set_interactive_mode" /* not in vim */
-#define FIM_FLT_SET_CONSOLE_MODE	"set_console_mode" /* not in vim */
+#define FIM_FLT_SET_CONSOLE_MODE	"set_commandline_mode" /* not in vim */
 #define FIM_FLT_STATUS			"status" /* not in vim */
 #define FIM_FLT_STDOUT			"stdout" /* not in vim */
 #define FIM_FLT_QUIT			"quit" /* in vim */
@@ -660,9 +658,10 @@ namespace fim
 #define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen())"
 #define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of ['split'|'hsplit'|'vsplit'|'normalize'|'enlarge'|'venlarge'|'henlarge'|'up'|'down'|'left'|'right'|'close'|'swap']"
 #define FIM_CMD_HELP_GOTO 	FIM_FLT_GOTO" {['+'|'-']"FIM_CNS_EX_NUM_STRING"['%']['f'|'p']} | {/"FIM_CNS_EX_RE_STRING"/} | {'+//'}: jump to an image; if "FIM_CNS_EX_NUM_STRING" is given, and not surrounded by any specifier, will go to image at index "FIM_CNS_EX_NUM_STRING" ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /"FIM_CNS_EX_RE_STRING"/ is given, will jump to the first image matching the given /"FIM_CNS_EX_RE_STRING"/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern"
+#define FIM_CMD_HELP_SCALE	FIM_FLT_SCALE" {['+'|'-']{value}['%']|'w'|'h'|'a'|'++'|'+-'|'+*'|'+/'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a'); if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; " "if given '++'('+-'), will increment (decrement) the \""FIM_VID_MAGNIFY_FACTOR"\", \""FIM_VID_REDUCE_FACTOR"\" variables by \""FIM_VID_SCALE_FACTOR_DELTA"\"; " "if given '+*'('+/'), will multiply (divide) the \""FIM_VID_MAGNIFY_FACTOR"\", \""FIM_VID_REDUCE_FACTOR"\" variables by \""FIM_VID_SCALE_FACTOR_MULTIPLIER"\"; "
+
 
 #define FIM_CNS_SLIDESHOW_CMD "while("FIM_VID_FILEINDEX"<"FIM_VID_FILELISTLEN"){sleep "FIM_VID_WANT_SLEEPS"; next;}"
-
 
 /*
  * Some Fim compilation defaults

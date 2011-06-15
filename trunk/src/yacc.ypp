@@ -224,19 +224,19 @@ statement:
 	// goto
 	| SLASH_AND_REGEXP { $$ = opr('x',2,scon(dupstr(FIM_FLT_GOTO)),opr('a',1,opr('a',1,scon(dupsqstr ($1))))); }
 	// magnification
-	| '+' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
-	| '+' QUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
-	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)/100.0f))))); }
-	| '*' UNQUOTED_FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
-	| '*' QUOTED_FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
-	| '*' INTEGER { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_MULTIPLY)),opr('a',1,opr('a',1,scon(dupnstr(((double)$2)))))); }
-	| UNQUOTED_FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
-	| QUOTED_FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f))))); } }
-	| INTEGER'%'{{$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((double)$1)/100.0f)))));}}
+	| '+' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('+',((float)$2),'%'))))); }
+	| '+' QUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('+',((float)$2),'%'))))); }
+	| '+' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('+',((double)$2),'%'))))); }
+	| '*' UNQUOTED_FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('*',((float)$2)))))); }
+	| '*' QUOTED_FLOAT { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('*',((float)$2)))))); }
+	| '*' INTEGER { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('*',((float)$2)))))); }
+	| UNQUOTED_FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((float)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('-',-((float)$1),'%'))))); } }
+	| QUOTED_FLOAT  '%'{if($1>0.0){$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((float)$1)/100.0f)))));}else { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('-',-((float)$1),'%'))))); } }
+	| INTEGER'%'{{$$=opr('x',2,scon(dupstr(FIM_VID_SCALE)),opr('a',1,opr('a',1,scon(dupnstr(((float)$1),'%')))));}}
 	// minification (yes, minification)
-	| '-' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
-	| '-' QUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
-	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE_INCREMENT)),opr('a',1,opr('a',1,scon(dupnstr(-((double)$2)/100.0f))))); }
+	| '-' UNQUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('-',((float)$2),'%'))))); }
+	| '-' QUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('-',((float)$2),'%'))))); }
+	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('-',((float)$2),'%'))))); }
 	// $ and ^ work too (see lex.lex)
 	| INTEGER         { $$ = opr('x',2,scon(dupstr(FIM_FLT_GOTO)),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
 	// cmd ..
