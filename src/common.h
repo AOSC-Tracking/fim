@@ -54,7 +54,8 @@ char* slurp_binary_FD(FILE* fd,int *rs);
 void append_to_file(fim::string filename, fim::string lines);
 
 char * dupstr (const char* s);
-char * dupnstr (double n);
+char * dupnstr (float n, const char c='\0');
+char * dupnstr (const char c1, double n, const char c2='\0');
 char * dupnstr (int n);
 char * dupsqstr (const char* s);
 int fim_rand();

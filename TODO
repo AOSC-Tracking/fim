@@ -21,17 +21,15 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110615	shall update 'scale' command documentation, as well as thorough test cases for options 
+20110615	shall prepare thorough test cases for scale and page goto subcases
 20110615	'3g'-like interactive command ? right now, it will repeat 3 times 'g', but we may internally switch the while to a special argument
 20110615	collate/permute args in aliases (for ensuring primitive recursive computability, with some other features) ?
 20110614	shall document all of the goto variants, as well as its (next*) aliases
-20110615	old 'return' docs shall be merged to 'quit' ones, and tokens deleted 
-20110615	set_console_mode -> cmdline on ; set_interactive_mode -> cmdline off ; clear -> console [clear|info]
+20110615	set_commandline_mode -> cmdline on ; set_interactive_mode -> cmdline off ; clear -> console [clear|info]
 20110615	color [negate|gray]
 20110615	scale_increment & co -> in the "default aliases" section (by overloading with doc string first) 
 20110615	redisplay = display 'force' ; reload = load 'force'
 20110615	info [size|width|...]
-20110614	page based goto/next needs a test case
 20110614	need grepping for all autocommands, and documentation extraction
 20110613	need a single variable for flip,mirror, and eventually rotation (e.g.:fmr90)
 20110613	shall reintroduce many composite commands tokens (e.g.: "pan 'up'")

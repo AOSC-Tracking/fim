@@ -247,55 +247,6 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_scale_multiply(const args_t &args)
-	{
-		/*
-		 * scales the image by a user specified factor
-		 */
-		fim_scale_t multiscale;
-		if(args.size()==0)goto nop;
-		multiscale=fim_atof(args[0].c_str());
-		if(multiscale==0.0)goto nop;
-		if(c_image())
-		{
-			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PRESCALE,c);
-#endif
-			if(c_image())image()->scale_multiply(multiscale);
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTSCALE,c);
-#endif
-		}
-nop:
-		return FIM_CNS_EMPTY_RESULT;
-	}
-	
-	fim::string Browser::fcmd_scale_increment(const args_t &args)
-	{
-		/*
-		 * increments the scale positively
-		 */
-		fim_scale_t deltascale;
-		if(args.size()==0)goto nop;
-		deltascale=fim_atof(args[0].c_str());
-		if(deltascale==0.0)goto nop;
-		if(strstr(args[0].c_str(),"%"))deltascale*=.01;
-		if(c_image())
-		{
-			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PRESCALE,c);
-#endif
-			if(c_image())image()->scale_increment(deltascale);
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTSCALE,c);
-#endif
-		}
-nop:
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
 	fim::string Browser::fcmd_scale(const args_t &args)
 	{
 		/*
@@ -307,6 +258,7 @@ nop:
 		fim_char_t fc=FIM_SYM_CHAR_NUL;
 		const fim_char_t*ss=NULL;
 		int sl=0;
+		bool pcsc=false;
 		if(args.size()<1 || !(ss=args[0].c_str()))goto nop;
 		fc=tolower(*ss);
 		sl=strlen(ss);
@@ -327,10 +279,9 @@ nop:
 			}
 			if(sl>=2 && (fc=='+'||fc=='-'))
 			{
-				fim_char_t sc=FIM_SYM_CHAR_NUL;
+				fim_char_t sc=ss[1];
 				if(fc=='+' && sc=='+')
 				{
-					//fcmd_scale_factor_increase
 					fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
 					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)+sfd);
@@ -339,7 +290,6 @@ nop:
 				}
 				if(fc=='+' && sc=='-')
 				{
-					//fcmd_scale_factor_decrease
 					fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
 					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)-sfd);
@@ -348,7 +298,6 @@ nop:
 				}
 				if(fc=='+' && sc=='*')
 				{
-					//fcmd_scale_factor_grow
 					fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
 					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)*sfm);
@@ -357,20 +306,23 @@ nop:
 				}
 				if(fc=='+' && sc=='/')
 				{
-					//fcmd_scale_factor_shrink
 					fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
 					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)/sfm);
 					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)/sfm);
 					goto nop;
 				}
-				if(fc=='+' || sc=='-')
+				if(fc=='+' || fc=='-')
 				{
 					newscale=fim_atof(ss+1);
-					if(strstr(ss,"%"))newscale*=.01;
+					pcsc=(strstr(ss,"%")!=NULL);
+					if(pcsc)newscale*=.01;
 					if(!newscale)goto nop;
+#if 1
 					if(fc=='+')newscale=1.0+newscale;
 					if(fc=='-')newscale=1.0-newscale;
+					fc=FIM_SYM_CHAR_NUL;
+#endif
 					goto comeon;
 				}
 				goto nop;
@@ -378,11 +330,11 @@ nop:
 			if(sl)
 			{
 				newscale=fim_atof(ss);
-				if(newscale==FIM_CNS_SCALEFACTOR_ZERO)
-				{
-					goto nop;
-				}
-				if(strstr(ss,"%"))newscale*=.01;
+				pcsc=(strstr(ss,"%")!=NULL);
+				if(pcsc)newscale*=.01;
+				if(newscale==FIM_CNS_SCALEFACTOR_ZERO) goto nop;
+				pcsc=false;
+				goto comeon;
 			}
 			goto nop;
 		}
@@ -435,7 +387,10 @@ comeon:
 				}
 				break;
 				default:
-				image()->setscale(newscale);
+				if(pcsc)
+					image()->scale_multiply(newscale);
+				else
+					image()->setscale(newscale);
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
@@ -1174,50 +1129,6 @@ nop:
 		 *	short information in status-line format
 		 */
 		return fcmd_info(args_t(0));
-	}
-
-	fim::string Browser::fcmd_scale_factor_grow(const args_t &args)
-	{
-		/*
-		 *	ALIAS AND DELETE ME!
-		 */
-		fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
-		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)*sfm);
-		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)*sfm);
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::fcmd_scale_factor_shrink(const args_t &args)
-	{
-		/*
-		 *	ALIAS AND DELETE ME!
-		 */
-		fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
-		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)/sfm);
-		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)/sfm);
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::fcmd_scale_factor_increase(const args_t &args)
-	{
-		/*
-		 *	ALIAS AND DELETE ME!
-		 */
-		fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
-		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)+sfd);
-		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)+sfd);
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim::string Browser::fcmd_scale_factor_decrease(const args_t &args)
-	{
-		/*
-		 *	ALIAS AND DELETE ME!
-		 */
-		fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
-		setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)-sfd);
-		setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)-sfd);
-		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::fcmd_rotate(const args_t &args)

@@ -303,12 +303,21 @@ void sanitize_string_from_nongraph(char *s, int c)
  *	Allocation of a small string for storing the 
  *	representation of a double.
  */
-char * dupnstr (double n)
+char * dupnstr (float n, const char c)
 {
 	//allocation of a single string
-	char *r = (char*) fim_malloc (16);
+	char *r = (char*) fim_malloc (32);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
-	sprintf(r,"%f",n);
+	sprintf(r,"%f%c",n,c);
+	return (r);
+}
+
+char * dupnstr (const char c1, double n, const char c2)
+{
+	//allocation of a single string
+	char *r = (char*) fim_malloc (32);
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
+	sprintf(r,"%c%f%c",c1,n,c2);
 	return (r);
 }
 
