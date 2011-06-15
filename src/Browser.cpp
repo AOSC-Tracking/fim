@@ -303,11 +303,13 @@ nop:
 		 * FIXME: no user error checking -- poor error reporting for the user
 		 * TODO: wxh / w:h syntax needed
 		 */
-		fim_scale_t newscale;
+		fim_scale_t newscale=FIM_CNS_SCALEFACTOR_ZERO;
 		fim_char_t fc=FIM_SYM_CHAR_NUL;
 		const fim_char_t*ss=NULL;
+		int sl=0;
 		if(args.size()<1 || !(ss=args[0].c_str()))goto nop;
 		fc=tolower(*ss);
+		sl=strlen(ss);
 		if(isalpha(fc))
 		{
 			if( !(fc=='w'||fc=='h'||fc=='a'))
@@ -315,14 +317,77 @@ nop:
 		}
 		else
 		{
-			newscale=fim_atof(ss);
-			if(newscale==FIM_CNS_SCALEFACTOR_ZERO)
+			if(sl==1 && (fc=='+'||fc=='-'))
 			{
+				if(fc=='+')
+					newscale=(fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
+				if(fc=='-')
+					newscale=(fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
+				goto comeon;
+			}
+			if(sl>=2 && (fc=='+'||fc=='-'))
+			{
+				fim_char_t sc=FIM_SYM_CHAR_NUL;
+				if(fc=='+' && sc=='+')
+				{
+					//fcmd_scale_factor_increase
+					fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
+					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
+					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)+sfd);
+					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)+sfd);
+					goto nop;
+				}
+				if(fc=='+' && sc=='-')
+				{
+					//fcmd_scale_factor_decrease
+					fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
+					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
+					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)-sfd);
+					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)-sfd);
+					goto nop;
+				}
+				if(fc=='+' && sc=='*')
+				{
+					//fcmd_scale_factor_grow
+					fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
+					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
+					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)*sfm);
+					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)*sfm);
+					goto nop;
+				}
+				if(fc=='+' && sc=='/')
+				{
+					//fcmd_scale_factor_shrink
+					fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
+					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
+					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)/sfm);
+					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)/sfm);
+					goto nop;
+				}
+				if(fc=='+' || sc=='-')
+				{
+					newscale=fim_atof(ss+1);
+					if(strstr(ss,"%"))newscale*=.01;
+					if(!newscale)goto nop;
+					cout << "morte "<<newscale<<"\n";
+					if(fc=='+')newscale=1.0+newscale;
+					if(fc=='-')newscale=1.0-newscale;
+					goto comeon;
+				}
 				goto nop;
 			}
-			if(strstr(ss,"%"))
-				newscale*=.01;
+			if(sl)
+			{
+				newscale=fim_atof(ss);
+				if(newscale==FIM_CNS_SCALEFACTOR_ZERO)
+				{
+					goto nop;
+				}
+				if(strstr(ss,"%"))newscale*=.01;
+			}
+			goto nop;
 		}
+comeon:
 		if(c_image())
 		{
 			fim::string c=current();
@@ -340,6 +405,35 @@ nop:
 				break;
 				case('a'):
 				if(viewport())viewport()->auto_scale();
+				break;
+				case('-'):
+				{
+				if(newscale)
+					{
+						if(image())image()->reduce(newscale);
+						if(viewport())viewport()->scale_position_reduce(newscale);
+					}
+				else	
+					{
+						if(image())image()->reduce();
+						if(viewport())viewport()->scale_position_reduce();
+					}
+				}
+				break;
+				case('+'):
+				{
+				if(newscale)
+					{
+						if(image())image()->magnify(newscale);
+						if(viewport())viewport()->scale_position_magnify(newscale);
+					}
+				else	
+					{
+						if(image())image()->magnify();
+						if(viewport())viewport()->scale_position_magnify();
+					}
+
+				}
 				break;
 				default:
 				image()->setscale(newscale);
