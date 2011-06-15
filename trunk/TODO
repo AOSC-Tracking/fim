@@ -21,7 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Current development directions
 
-20110615	shall change the order of commands when registering them, so the man page gets ordered accordingly
+20110615	shall update 'scale' command documentation 
 20110615	'3g'-like interactive command ? right now, it will repeat 3 times 'g', but we may internally switch the while to a special argument
 20110615	collate/permute args in aliases (for ensuring primitive recursive computability, with some other features) ?
 20110614	shall document all of the goto variants, as well as its (next*) aliases

@@ -29,10 +29,12 @@
 		//bind('r',FIM_FLT_RELOAD);
 		//bind('R',FIM_FLT_REDISPLAY);
 		bind('d',FIM_FLT_DISPLAY);
-		bind('+',FIM_FLT_MAGNIFY);
 		//bind('m',FIM_FLC_MIRROR);
 		//bind('f',FIM_FLC_FLIP);
-		bind('-',FIM_FLT_REDUCE);
+		bind('+',FIM_FLC_MAGNIFY);
+		bind('-',FIM_FLC_REDUCE);
+		alias(FIM_FLA_MAGNIFY,FIM_FLC_MAGNIFY,"undocumented");
+		alias(FIM_FLA_REDUCE ,FIM_FLC_REDUCE,"undocumented");
 //		bind(4283163,"pan 'up'");
 		bind('k',FIM_FLC_PAN_UP);
 //		bind(4414235,"pan 'right'");
@@ -66,11 +68,14 @@
 	
 		setVariable(FIM_VID_CONSOLE_KEY,FIM_SYM_CONSOLE_KEY);
 #if 0
+		setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);
+		setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
+		setVariable(FIM_VID_SCALE_FACTOR_DELTA,FIM_CNS_SCALEFACTOR_DELTA);
+#endif
+#if 0
 		setVariable(FIM_VID_VERBOSE_KEYS,-1);
 		//setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
 		//setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,FIM_CNS_SCALEFACTOR_MULTIPLIER);
-		//setVariable(FIM_VID_SCALE_FACTOR_DELTA,FIM_CNS_SCALEFACTOR_DELTA);
-		//setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);
 		autocmd_add("Next","*","echo 'rendering next image..'");
 		autocmd_add("Prev","*","echo 'rendering prev image..'");
 		autocmd_add("PostNext","*","reload;");		//BUGFUL!

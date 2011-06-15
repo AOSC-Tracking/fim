@@ -592,7 +592,6 @@ namespace fim
 #define FIM_FLT_INFO			"info" /* not in vim */
 #define FIM_FLT_LOAD			"load" /* not in vim */
 #define FIM_FLT_LIST			"list" /* not in vim */
-#define FIM_FLT_MAGNIFY			"magnify" /* not in vim */
 #define FIM_FLT_NEGATE			"negate" /* not in vim */
 #define FIM_FLT_NO_IMAGE		"no_image" /* not in vim */
 #define FIM_FLT_PAN			"pan" /* not in vim */
@@ -601,7 +600,6 @@ namespace fim
 #define FIM_FLT_PREFETCH		"prefetch" /* in vim */
 #define FIM_FLT_PWD			"pwd" /* in vim */
 #define FIM_FLT_REDISPLAY		"redisplay" /* not in vim */
-#define FIM_FLT_REDUCE			"reduce" /* not in vim */
 #define FIM_FLT_RELOAD			"reload" /* not in vim */
 #define FIM_FLT_ROTATE			"rotate" /* not in vim */
 #define FIM_FLT_SCALE			"scale" /* not in vim */
@@ -632,6 +630,8 @@ namespace fim
 #define FIM_FLA_PREV_PAGE		"prev_page" /* not in vim */
 #define FIM_FLA_NEXT			"next" /* in vim */
 #define FIM_FLA_PREV			"prev" /* in vim */
+#define FIM_FLA_MAGNIFY			"magnify" /* not in vim */
+#define FIM_FLA_REDUCE			"reduce" /* not in vim */
 #define FIM_FLC_NEXT			"goto '+1'" /* in vim */
 #define FIM_FLC_PREV			"goto '-1'" /* in vim */
 #define FIM_FLC_MIRROR			"mirror" /* not in vim */
@@ -644,6 +644,8 @@ namespace fim
 #define FIM_FLC_PREV_FILE		"goto '-1f'" /* not in vim */ // WAS: FIM_FLT_PREC_PIC
 #define FIM_FLC_NEXT_PAGE		"goto '+1p'" /* not in vim */
 #define FIM_FLC_PREV_PAGE		"goto '-1p'" /* not in vim */
+#define FIM_FLC_MAGNIFY			"scale '+'" /* not in vim */
+#define FIM_FLC_REDUCE			"scale '-'" /* not in vim */
 
 /*
  * Help messages for Fim commands (partial).
