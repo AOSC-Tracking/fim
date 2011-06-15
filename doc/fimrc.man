@@ -156,9 +156,51 @@ The way some one-line statements are evaluated:
 .SH COMMANDS REFERENCE
 
 .B
-prefetch
+alias
 .fi
-prefetch : prefetch two nearby image files, for a faster subsequent opening
+alias [{identifier} [{commands} [{description}]]]
+.fi
+
+.B
+align
+.fi
+align bottom : align to the lower side the current image; align top : align to the upper side the current image; 
+.fi
+
+.B
+autocmd
+.fi
+autocmd {event} {pattern} {commands} : manipulate auto commands
+.fi
+
+.B
+autocmd_del
+.fi
+autocmd_del : manipulate auto commands. usage: autocmd_del {event} {pattern} {commands}
+.fi
+
+.B
+bind
+.fi
+bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.; binding is dynamical, so you can rebind keys even during program's execution
+.fi
+
+.B
+cd
+.fi
+cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last ":cd {path}" command)
+.fi
+
+.B
+clear
+.fi
+clear : clear the virtual console
+.fi
+
+.B
+commands
+.fi
+commands : display the existing commands
 .fi
 
 .B
@@ -168,21 +210,75 @@ display : display the current file contents
 .fi
 
 .B
+dump_key_codes
+.fi
+dump_key_codes : dump the active key codes (unescaped, for inspection)
+.fi
+
+.B
+echo
+.fi
+echo {args}: print the {args} on console
+.fi
+
+.B
 redisplay
 .fi
 redisplay : re-display the current file contents
 .fi
 
 .B
-list
+exec
 .fi
-list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list; list pop : pop the last file from the files list; list remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; push {filename(s)} : push {filename(s)} to the back of the files list; list filesnum : display the number of files in the files list; list mark : mark the current file for stdout printing at exit; list unmark : unmark the current file, preventing from stdout printing at exit
+exec {filename(s)} : execute script {filename(s)}
 .fi
 
 .B
-pan
+getenv
 .fi
-pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
+getenv {identifier} : display the value of the {identifier} environment variable
+.fi
+
+.B
+goto
+.fi
+goto {['+'|'-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern
+.fi
+
+.B
+help
+.fi
+help [{identifier}] : provide online help, if {identifier} is some variable, alias, or command identifier
+.fi
+
+.B
+if
+.fi
+if(expression){action;}['else'{action;}]
+.fi
+
+.B
+else
+.fi
+if(expression){action;}['else'{action;}]
+.fi
+
+.B
+eval
+.fi
+eval {args} : evaluate {args} as commands, executing them.
+.fi
+
+.B
+info
+.fi
+info : display information about the current file
+.fi
+
+.B
+list
+.fi
+list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list; list pop : pop the last file from the files list; list remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; push {filename(s)} : push {filename(s)} to the back of the files list; list filesnum : display the number of files in the files list; list mark : mark the current file for stdout printing at exit; list unmark : unmark the current file, preventing from stdout printing at exit
 .fi
 
 .B
@@ -198,9 +294,63 @@ reload : load the image into memory
 .fi
 
 .B
-info
+negate
 .fi
-info : display information about the current file
+negate : negate the displayed image colors
+.fi
+
+.B
+pan
+.fi
+pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
+.fi
+
+.B
+popen
+.fi
+popen {syscmd} : pipe a command, invoking popen(): spawns a shell, invoking {syscmd} and executing as fim commands the output of {syscmd}
+.fi
+
+.B
+pread
+.fi
+pread {args} : execute {args} as a shell command and read the output as an image file (using popen)
+.fi
+
+.B
+pwd
+.fi
+pwd : print the current directory name, and updates the _pwd variable.
+.fi
+
+.B
+quit
+.fi
+quit [{number}] : terminate the program; if specified {number}, will use it as the program return code
+.fi
+
+.B
+prefetch
+.fi
+prefetch : prefetch two nearby image files, for a faster subsequent opening
+.fi
+
+.B
+recording
+.fi
+recording 'start' : start recording the executed commands; recording 'stop' : stop  recording the executed commands; recording 'dump' : dump in the console the record buffer; recording 'execute' : execute the record buffer; recording 'repeat_last' : repeat the last performed action; 
+.fi
+
+.B
+rotate
+.fi
+rotate {number}: rotate the image the specified amount of degrees [undocumented]
+.fi
+
+.B
+scale
+.fi
+scale {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a'); if the first character of {value} is 'w', will scale according to the screen width; if it is 'h', to the screen height; if it is 'a', to the minimum of 'w' and 'h'; otherwise if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale
 .fi
 
 .B
@@ -240,12 +390,6 @@ subtract _scale_factor_delta to the scale factors _reduce_factor and _magnify_fa
 .fi
 
 .B
-rotate
-.fi
-rotate {number}: rotate the image the specified amount of degrees [undocumented]
-.fi
-
-.B
 magnify
 .fi
 magnify : magnify the displayed image by the _magnify_factor variable or {args} [undocumented]
@@ -255,30 +399,6 @@ magnify : magnify the displayed image by the _magnify_factor variable or {args} 
 reduce
 .fi
 reduce : reduce the displayed image by _reduce_factor or {args} [undocumented]
-.fi
-
-.B
-align
-.fi
-align bottom : align to the lower side the current image; align top : align to the upper side the current image; 
-.fi
-
-.B
-goto
-.fi
-goto {['+'|'-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern
-.fi
-
-.B
-negate
-.fi
-negate : negate the displayed image colors
-.fi
-
-.B
-status
-.fi
-status : set the status line to the collation of the given arguments
 .fi
 
 .B
@@ -294,69 +414,51 @@ scrollforward : scroll the image as it were reading it
 .fi
 
 .B
-scale
-.fi
-scale {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a'); if the first character of {value} is 'w', will scale according to the screen width; if it is 'h', to the screen height; if it is 'a', to the minimum of 'w' and 'h'; otherwise if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale
-.fi
-
-.B
 set
 .fi
 set: returns a list of variables which are set; set {identifier}: returns the value of variable {identifier}; set {identifier} {commands}: sets variable {identifier} to value {commands}; 
 .fi
 
 .B
-bind
+set_console_mode
 .fi
-bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.; binding is dynamical, so you can rebind keys even during program's execution
-.fi
-
-.B
-quit
-.fi
-quit [{number}] : terminate the program; if specified {number}, will use it as the program return code
+set_console_mode : set console mode
 .fi
 
 .B
-exec
+set_interactive_mode
 .fi
-exec {filename(s)} : execute script {filename(s)}
-.fi
-
-.B
-echo
-.fi
-echo {args}: print the {args} on console
+set_interactive_mode : set interactive mode
 .fi
 
 .B
-if
+sleep
 .fi
-if(expression){action;}['else'{action;}]
-.fi
-
-.B
-else
-.fi
-if(expression){action;}['else'{action;}]
+sleep [{number}=1] : sleep for the specified (default 1) number of seconds
 .fi
 
 .B
-while
+status
 .fi
-while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key.
-.fi
-
-.B
-alias
-.fi
-alias [{identifier} [{commands} [{description}]]]
+status : set the status line to the collation of the given arguments
 .fi
 
 .B
-getenv
+stdout
 .fi
-getenv {identifier} : display the value of the {identifier} environment variable
+stdout {args} : writes to stdout its arguments {args}
+.fi
+
+.B
+system
+.fi
+system {syscmd}: get the output of the shell command {syscmd}. (uses popen() )
+.fi
+
+.B
+variables
+.fi
+variables : display the existing variables
 .fi
 
 .B
@@ -372,117 +474,15 @@ unbind {keysym} : unbind the action associated to a specified {keysym}; if {keys
 .fi
 
 .B
-sleep
+while
 .fi
-sleep [{number}=1] : sleep for the specified (default 1) number of seconds
-.fi
-
-.B
-help
-.fi
-help [{identifier}] : provide online help, if {identifier} is some variable, alias, or command identifier
-.fi
-
-.B
-autocmd
-.fi
-autocmd {event} {pattern} {commands} : manipulate auto commands
-.fi
-
-.B
-autocmd_del
-.fi
-autocmd_del : manipulate auto commands. usage: autocmd_del {event} {pattern} {commands}
-.fi
-
-.B
-set_interactive_mode
-.fi
-set_interactive_mode : set interactive mode
-.fi
-
-.B
-set_console_mode
-.fi
-set_console_mode : set console mode
-.fi
-
-.B
-system
-.fi
-system {syscmd}: get the output of the shell command {syscmd}. (uses popen() )
-.fi
-
-.B
-cd
-.fi
-cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last ":cd {path}" command)
-.fi
-
-.B
-pwd
-.fi
-pwd : print the current directory name, and updates the _pwd variable.
-.fi
-
-.B
-popen
-.fi
-popen {syscmd} : pipe a command, invoking popen(): spawns a shell, invoking {syscmd} and executing as fim commands the output of {syscmd}
-.fi
-
-.B
-stdout
-.fi
-stdout {args} : writes to stdout its arguments {args}
-.fi
-
-.B
-pread
-.fi
-pread {args} : execute {args} as a shell command and read the output as an image file (using popen)
-.fi
-
-.B
-recording
-.fi
-recording 'start' : start recording the executed commands; recording 'stop' : stop  recording the executed commands; recording 'dump' : dump in the console the record buffer; recording 'execute' : execute the record buffer; recording 'repeat_last' : repeat the last performed action; 
-.fi
-
-.B
-eval
-.fi
-eval {args} : evaluate {args} as commands, executing them.
-.fi
-
-.B
-variables
-.fi
-variables : display the existing variables
-.fi
-
-.B
-commands
-.fi
-commands : display the existing commands
-.fi
-
-.B
-dump_key_codes
-.fi
-dump_key_codes : dump the active key codes (unescaped, for inspection)
-.fi
-
-.B
-clear
-.fi
-clear : clear the virtual console
+while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key.
 .fi
 
 .B
 window
 .fi
-window {args} : manipulates the window system windows; each value of {args} shall be one of [ 'split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap' ]
+window {args} : manipulates the window system windows; each value of {args} shall be one of ['split'|'hsplit'|'vsplit'|'normalize'|'enlarge'|'venlarge'|'henlarge'|'up'|'down'|'left'|'right'|'close'|'swap']
 .fi
 
 .SH VARIABLES REFERENCE
