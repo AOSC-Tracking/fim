@@ -210,6 +210,12 @@ display : display the current file contents
 .fi
 
 .B
+redisplay
+.fi
+redisplay : re-display the current file contents
+.fi
+
+.B
 dump_key_codes
 .fi
 dump_key_codes : dump the active key codes (unescaped, for inspection)
@@ -219,12 +225,6 @@ dump_key_codes : dump the active key codes (unescaped, for inspection)
 echo
 .fi
 echo {args}: print the {args} on console
-.fi
-
-.B
-redisplay
-.fi
-redisplay : re-display the current file contents
 .fi
 
 .B
@@ -266,7 +266,7 @@ if(expression){action;}['else'{action;}]
 .B
 eval
 .fi
-eval {args} : evaluate {args} as commands, executing them.
+eval {args} : evaluate {args} as commands, executing them
 .fi
 
 .B
@@ -320,19 +320,19 @@ pread {args} : execute {args} as a shell command and read the output as an image
 .B
 pwd
 .fi
-pwd : print the current directory name, and updates the _pwd variable.
-.fi
-
-.B
-quit
-.fi
-quit [{number}] : terminate the program; if specified {number}, will use it as the program return code
+pwd : print the current directory name, and updates the _pwd variable
 .fi
 
 .B
 prefetch
 .fi
 prefetch : prefetch two nearby image files, for a faster subsequent opening
+.fi
+
+.B
+quit
+.fi
+quit [{number}] : terminate the program; if specified {number}, will use it as the program return code
 .fi
 
 .B
@@ -363,42 +363,6 @@ scale_increment : increment the scale by a percentual amount [undocumented]
 scale_multiply
 .fi
 scale_multiply : multiply the scale by the specified amount [undocumented]
-.fi
-
-.B
-scale_factor_grow
-.fi
-multiply the scale factors _reduce_factor and _magnify_factor by scale_factor_multiplier [undocumented]
-.fi
-
-.B
-scale_factor_shrink
-.fi
-divide the scale factors _reduce_factor and magnify_factor by scale_factor_multiplier [undocumented]
-.fi
-
-.B
-scale_factor_increase
-.fi
-add _scale_factor_delta to the scale factors _reduce_factor and magnify_factor [undocumented]
-.fi
-
-.B
-scale_factor_decrease
-.fi
-subtract _scale_factor_delta to the scale factors _reduce_factor and _magnify_factor  [undocumented]
-.fi
-
-.B
-magnify
-.fi
-magnify : magnify the displayed image by the _magnify_factor variable or {args} [undocumented]
-.fi
-
-.B
-reduce
-.fi
-reduce : reduce the displayed image by _reduce_factor or {args} [undocumented]
 .fi
 
 .B
@@ -452,7 +416,7 @@ stdout {args} : writes to stdout its arguments {args}
 .B
 system
 .fi
-system {syscmd}: get the output of the shell command {syscmd}. (uses popen() )
+system {syscmd}: get the output of the shell command {syscmd}. (uses popen())
 .fi
 
 .B
@@ -476,7 +440,7 @@ unbind {keysym} : unbind the action associated to a specified {keysym}; if {keys
 .B
 while
 .fi
-while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key.
+while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key
 .fi
 
 .B

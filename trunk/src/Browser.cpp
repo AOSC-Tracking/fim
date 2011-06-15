@@ -369,7 +369,6 @@ nop:
 					newscale=fim_atof(ss+1);
 					if(strstr(ss,"%"))newscale*=.01;
 					if(!newscale)goto nop;
-					cout << "morte "<<newscale<<"\n";
 					if(fc=='+')newscale=1.0+newscale;
 					if(fc=='-')newscale=1.0-newscale;
 					goto comeon;
