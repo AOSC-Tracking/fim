@@ -230,8 +230,8 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_err_t addCommand(Command *c);
 	Command* findCommand(fim::string cmd)const;
 	int findCommandIdx(fim::string cmd)const;
-	fim::string alias(std::vector<Arg> args);
-	fim::string alias(const fim::string& a,const fim::string& c);
+	fim::string fcmd_alias(std::vector<Arg> args);
+	fim::string alias(const fim::string& a,const fim::string& c, const fim::string& d="");
 	fim::string aliasRecall(fim::string cmd)const;
 	fim::string fcmd_system(const args_t& args);
 	fim::string fcmd_cd(const args_t& args);

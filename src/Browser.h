@@ -116,10 +116,6 @@ class Browser
 	fim::string fcmd_list(const args_t &args);
 	fim::string do_push(const args_t &args);
 	fim::string fcmd_next(const args_t &args);
-	fim::string fcmd_next_picture(const args_t &args);
-	fim::string fcmd_prev_picture(const args_t &args);
-	fim::string fcmd_next_page(const args_t &args);
-	fim::string fcmd_prev_page(const args_t &args);
 	fim::string prev(int n=1);
 	fim::string fcmd_prev(const args_t &args);
 	fim::string do_remove(const args_t &args);
@@ -152,7 +148,6 @@ class Browser
 	fim::string _sort();
 	fim::string _reverse();
 	fim::string next(int n=1);
-	fim::string do_next(int n);
 
 	void free_current_image();
 	int load_error_handle(fim::string c);

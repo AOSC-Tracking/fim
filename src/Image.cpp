@@ -577,7 +577,9 @@ fim::string Image::getInfo()
 		 *
 		 * FIXME: a temporary method
 		 * */
-		setVariable(FIM_VID_FRESH,0);
+		setVariable(FIM_VID_FRESH,(fim_int)0);
+		if(fimg_)
+			setVariable(FIM_VID_PAGECOUNT,(fim_int)fimg_->i.npages);
 
 		/*
 		 * rotation dispatch

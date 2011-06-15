@@ -432,6 +432,7 @@ namespace fim
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
 #define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
+#define FIM_VID_PAGECOUNT			"pagecount"			/* "[internal,out,experimental] the page count for a given image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_override_display"	/* "[internal,undocumented]" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
@@ -625,18 +626,24 @@ namespace fim
 #define FIM_FLT_WINDOW			"window" /* not in vim */
 
 /* composite commands or hardcoded aliases */
-#define FIM_FLC_NEXT_FILE		"next_file" /* not in vim */ // WAS: FIM_FLT_NEXT_PIC
-#define FIM_FLC_PREV_FILE		"prev_file" /* not in vim */ // WAS: FIM_FLT_PREC_PIC
-#define FIM_FLC_NEXT_PAGE		"next_page" /* not in vim */
-#define FIM_FLC_PREV_PAGE		"prev_page" /* not in vim */
-#define FIM_FLC_NEXT			"next" /* in vim */
-#define FIM_FLC_PREV			"prev" /* in vim */
+#define FIM_FLA_NEXT_FILE		"next_file" /* not in vim */ // WAS: FIM_FLT_NEXT_PIC
+#define FIM_FLA_PREV_FILE		"prev_file" /* not in vim */ // WAS: FIM_FLT_PREC_PIC
+#define FIM_FLA_NEXT_PAGE		"next_page" /* not in vim */
+#define FIM_FLA_PREV_PAGE		"prev_page" /* not in vim */
+#define FIM_FLA_NEXT			"next" /* in vim */
+#define FIM_FLA_PREV			"prev" /* in vim */
+#define FIM_FLC_NEXT			"goto '+1'" /* in vim */
+#define FIM_FLC_PREV			"goto '-1'" /* in vim */
 #define FIM_FLC_MIRROR			"mirror" /* not in vim */
 #define FIM_FLC_FLIP			"flip" /* not in vim */
 #define FIM_FLC_PAN_UP			"pan 'up'" /* not in vim */
 #define FIM_FLC_PAN_DOWN		"pan 'down'" /* not in vim */
 #define FIM_FLC_PAN_LEFT		"pan 'left'" /* not in vim */
 #define FIM_FLC_PAN_RIGHT		"pan 'right'" /* not in vim */
+#define FIM_FLC_NEXT_FILE		"goto '+1f'" /* not in vim */ // WAS: FIM_FLT_NEXT_PIC
+#define FIM_FLC_PREV_FILE		"goto '-1f'" /* not in vim */ // WAS: FIM_FLT_PREC_PIC
+#define FIM_FLC_NEXT_PAGE		"goto '+1p'" /* not in vim */
+#define FIM_FLC_PREV_PAGE		"goto '-1p'" /* not in vim */
 
 /*
  * Help messages for Fim commands (partial).
@@ -648,9 +655,12 @@ namespace fim
 #define FIM_CMD_HELP_SET			FIM_FLT_SET": returns a list of variables which are set; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING": returns the value of variable "FIM_CNS_EX_ID_STRING"; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING" "FIM_CNS_EX_CMDS_STRING": sets variable "FIM_CNS_EX_ID_STRING" to value "FIM_CNS_EX_CMDS_STRING"; " 
 #define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the "FIM_VID_PWD" variable."
 #define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL" "FIM_CNS_EX_ARGS_STRING" : evaluate "FIM_CNS_EX_ARGS_STRING" as commands, executing them."
-#define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen()"
-#define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of [ split | hsplit | vsplit | normalize | enlarge | venlarge | henlarge | up | down | left | right | close | swap ]"
+#define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen() )"
+#define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of [ 'split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap' ]"
+#define FIM_CMD_HELP_GOTO 	FIM_FLT_GOTO" {['+'|'-']"FIM_CNS_EX_NUM_STRING"['%']['f'|'p']} | {/"FIM_CNS_EX_RE_STRING"/} | {'+//'}: jump to an image; if "FIM_CNS_EX_NUM_STRING" is given, and not surrounded by any specifier, will go to image at index "FIM_CNS_EX_NUM_STRING" ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /"FIM_CNS_EX_RE_STRING"/ is given, will jump to the first image matching the given /"FIM_CNS_EX_RE_STRING"/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern"
+
 #define FIM_CNS_SLIDESHOW_CMD "while("FIM_VID_FILEINDEX"<"FIM_VID_FILELISTLEN"){sleep "FIM_VID_WANT_SLEEPS"; next;}"
+
 
 /*
  * Some Fim compilation defaults

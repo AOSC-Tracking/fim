@@ -52,28 +52,30 @@
 //		bind('P',"f=`files`/2;prev (--$f);\n");
 //		bind('N',"f=`files`/2;next (--$f);\n");
 
- 		alias(FIM_FLC_NEXT,"goto '+1'");
- 		alias(FIM_FLC_PREV,"goto '-1'");
- 		alias(FIM_FLC_NEXT_PAGE,"goto '+1p'");
- 		alias(FIM_FLC_PREV_PAGE,"goto '-1p'");
- 		alias(FIM_FLC_NEXT_FILE,"goto '+1f'");
- 		alias(FIM_FLC_PREV_FILE,"goto '-1f'");
-/*		
+ 		alias(FIM_FLA_NEXT,FIM_FLC_NEXT,"go to the next page or picture file");
+ 		alias(FIM_FLA_PREV,FIM_FLC_PREV,"go to the previous page or picture file");
+ 		alias(FIM_FLA_NEXT_PAGE,FIM_FLC_NEXT_PAGE,"go to the next page in the file");
+ 		alias(FIM_FLA_PREV_PAGE,FIM_FLC_PREV_PAGE,"go to the previous page in the file");
+ 		alias(FIM_FLA_NEXT_FILE,FIM_FLC_NEXT_FILE,"go to the next file in the list");
+ 		alias(FIM_FLA_PREV_FILE,FIM_FLC_PREV_FILE,"go to the previous file in the list");
+#if 0
  		alias('A',"'autotop=1-autotop;'");
 		alias("toggleVerbosity","verbose=1-verbose;display;");
-		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");*/
+		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");
+#endif
 	
 		setVariable(FIM_VID_CONSOLE_KEY,FIM_SYM_CONSOLE_KEY);
-/*		setVariable(FIM_VID_VERBOSE_KEYS,-1);*/
+#if 0
+		setVariable(FIM_VID_VERBOSE_KEYS,-1);
 		//setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
 		//setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,FIM_CNS_SCALEFACTOR_MULTIPLIER);
 		//setVariable(FIM_VID_SCALE_FACTOR_DELTA,FIM_CNS_SCALEFACTOR_DELTA);
 		//setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);
-/*		autocmd_add("Next","*","echo 'rendering next image..'");
+		autocmd_add("Next","*","echo 'rendering next image..'");
 		autocmd_add("Prev","*","echo 'rendering prev image..'");
 		autocmd_add("PostNext","*","reload;");		//BUGFUL!
 		autocmd_add("PostPrev","*","reload;");		//BUGFUL!
-*/
+#endif
 
 //		autocmd_add("PreRedisplay","*","echo 'there should go autoscale'");		//NOT BUGFUL
 //		autocmd_add("PreRedisplay","*","2magnify;");		//NOT BUGFUL!! WHY??? (8 too is ok)

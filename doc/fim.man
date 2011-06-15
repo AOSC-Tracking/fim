@@ -216,8 +216,8 @@ below to read some useful (and unique) ways of employing fim.
 .nf
 The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable _fim_default_config_file_contents).
 
-n    next
-p    prev
+n    goto '+1'
+p    goto '-1'
 +    magnify
 -    reduce
 h    pan 'left'
