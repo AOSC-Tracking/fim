@@ -31,10 +31,10 @@
 		bind('d',FIM_FLT_DISPLAY);
 		//bind('m',FIM_FLC_MIRROR);
 		//bind('f',FIM_FLC_FLIP);
-		bind('+',FIM_FLC_MAGNIFY);
-		bind('-',FIM_FLC_REDUCE);
-		alias(FIM_FLA_MAGNIFY,FIM_FLC_MAGNIFY,"undocumented");
-		alias(FIM_FLA_REDUCE ,FIM_FLC_REDUCE,"undocumented");
+		alias(FIM_FLA_MAGNIFY,FIM_FLC_MAGNIFY,"magnify the displayed image by the "FIM_VID_MAGNIFY_FACTOR" variable or "FIM_CNS_EX_ARGS_STRING"");
+		alias(FIM_FLA_REDUCE ,FIM_FLC_REDUCE,"reduce the displayed image by "FIM_VID_REDUCE_FACTOR" or "FIM_CNS_EX_ARGS_STRING"");
+		bind('+',FIM_FLA_MAGNIFY);
+		bind('-',FIM_FLA_REDUCE);
 //		bind(4283163,"pan 'up'");
 		bind('k',FIM_FLC_PAN_UP);
 //		bind(4414235,"pan 'right'");
@@ -60,6 +60,10 @@
  		alias(FIM_FLA_PREV_PAGE,FIM_FLC_PREV_PAGE,"go to the previous page in the file");
  		alias(FIM_FLA_NEXT_FILE,FIM_FLC_NEXT_FILE,"go to the next file in the list");
  		alias(FIM_FLA_PREV_FILE,FIM_FLC_PREV_FILE,"go to the previous file in the list");
+ 		alias("scale_factor_grow","scale '+*'","multiply the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by "FIM_VID_SCALE_FACTOR_MULTIPLIER"");
+ 		alias("scale_factor_shrink","scale '+/'","divide the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by "FIM_VID_SCALE_FACTOR_MULTIPLIER"");
+ 		alias("scale_factor_decrease","scale '+-'","subtract "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR"");
+ 		alias("scale_factor_increase","scale '++'","add "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR"");
 #if 0
  		alias('A',"'autotop=1-autotop;'");
 		alias("toggleVerbosity","verbose=1-verbose;display;");
