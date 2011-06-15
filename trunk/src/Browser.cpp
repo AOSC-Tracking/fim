@@ -849,28 +849,6 @@ nop:
 		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
 	
-	fim::string Browser::do_next(int n)
-	{
-		/*
-		 * jumps to the next n'th image in the list.
-		 * p.s.: n<>0
-		 */
-		int N=flist_.size();
-		if(!N)
-			goto nop;
-		else
-		//if(n)
-		{
-			cp_+=n;
-			cp_=FIM_MOD(cp_,N);
-			setGlobalVariable(FIM_VID_FILEINDEX,current_image());
-			setGlobalVariable(FIM_VID_FILENAME, current().c_str());
-			//fim::string result = n_files()?(flist_[current_n()]):nofile_;
-		}
-nop:
-		return FIM_CNS_EMPTY_RESULT;
-	}
-	
 	fim::string Browser::fcmd_goto_image(const args_t &args)
 	{
 		if(args.size()>0)
@@ -886,9 +864,7 @@ nop:
 		const fim_char_t*errmsg=FIM_CNS_EMPTY_STRING;
 		int cn=0,g=0,nn=0,mn=0;
 		if(n_files()==0 || !s){errmsg="no image to go to!";goto err;}
-		//cn=g=current_n();
 		cn=g=cp_;
-		//cn=g=current_n();
 		if(!s){errmsg="please specify a file to view ( a number or ^ or $ ) \n";goto err;}
 		else
 		{
@@ -961,14 +937,6 @@ nop:
 #ifdef FIM_AUTOCMDS
 				if(!(xflags&FIM_X_NOAUTOCMD))autocmd_exec(FIM_ACM_PREGOTO,c);
 #endif
-#if 0
-				cout << (char)l<<"\n";
-				if(ispg)std::cerr << "page goto!\n";
-				if(ispg)cout      << "page goto!\n";
-				if(pcnt)cout      << "pcnt goto!\n";
-				if(pcnt)std::cerr << "pcnt goto!\n";
-#endif
-
 				if(ispg)
 					image()->goto_page(nn);
 				else
@@ -1383,52 +1351,15 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_next_page(const args_t &args)
-	{
-		/* jumps one page forward in the current multipage image */
-		fim::string gs="+";
-		gs+=fim::string(1);
-		gs+="p";
-		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
-	}
-
-	fim::string Browser::fcmd_prev_page(const args_t &args)
-	{
-		/* jumps one page backward in the current multipage image */
-		fim::string gs="-";
-		gs+=fim::string(1);
-		gs+="p";
-		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
-	}
-
-	fim::string Browser::fcmd_next_picture(const args_t &args)
-	{
-		/*
-		 * FIX ME
-		 * */
-		if(c_image() && c_image()->have_nextpage())
-			return fcmd_next_page(args);
-		else
-			return next(firstorone(args));
-	}
-
-	fim::string Browser::fcmd_prev_picture(const args_t &args)
-	{
-		/*
-		 * FIX ME
-		 * */
-		if(c_image() && c_image()->have_prevpage())
-			return fcmd_prev_page(args);
-		else
-			return prev(firstorone(args));
-	}
-
 	int Browser::current_image()const
 	{
 		/* counting from 1 */
 		return cp_+1;
 	}
+
 	int Browser::n_pages()const
-	{if(c_image())return c_image()->n_pages(); else return 0;};
+	{
+		if(c_image())return c_image()->n_pages(); else return 0;
+	};
 }
 

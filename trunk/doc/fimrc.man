@@ -182,7 +182,7 @@ list : display the files list; list random_shuffle: randomly shuffle the file li
 .B
 pan
 .fi
-pan {down|up|left|right|ne|nw|se|sw} [{steps}[%]] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
+pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
 .fi
 
 .B
@@ -266,7 +266,7 @@ align bottom : align to the lower side the current image; align top : align to t
 .B
 goto
 .fi
-goto {number} : go to the image specified by index {number}; if terminated by '%', the effective index will be computed as a percentage of the current files list length; if prepended by '-' or '+', the jump will be relative to the current image index; goto /{regexp}/ : jump to the first image matching the given {regexp} pattern; goto +/{regexp}/ jump to the next image matching the last given pattern
+goto {['+'|'-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern
 .fi
 
 .B
@@ -296,7 +296,7 @@ scrollforward : scroll the image as it were reading it
 .B
 scale
 .fi
-scale {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,w,h,a); if the first character of {value} is 'w', will scale according to the screen width; if it is 'h', to the screen height; if it is 'a', to the minimum of 'w' and 'h'; otherwise if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale
+scale {value} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a'); if the first character of {value} is 'w', will scale according to the screen width; if it is 'h', to the screen height; if it is 'a', to the minimum of 'w' and 'h'; otherwise if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale
 .fi
 
 .B
@@ -314,7 +314,7 @@ bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands
 .B
 quit
 .fi
-quit : terminate the program
+quit [{number}] : terminate the program; if specified {number}, will use it as the program return code
 .fi
 
 .B
@@ -332,13 +332,13 @@ echo {args}: print the {args} on console
 .B
 if
 .fi
-if(expression){action;}[else{action;}]
+if(expression){action;}['else'{action;}]
 .fi
 
 .B
 else
 .fi
-if(expression){action;}[else{action;}]
+if(expression){action;}['else'{action;}]
 .fi
 
 .B
@@ -362,7 +362,7 @@ getenv {identifier} : display the value of the {identifier} environment variable
 .B
 unalias
 .fi
-unalias {identifier} | "-a" : delete the alias {identifier} or all aliases (use "-a", not -a)
+unalias {identifier} | '-a' : delete the alias {identifier} or all aliases (use '-a', not -a)
 .fi
 
 .B
@@ -410,7 +410,7 @@ set_console_mode : set console mode
 .B
 system
 .fi
-system {syscmd}: get the output of the shell command {syscmd}. (uses popen()
+system {syscmd}: get the output of the shell command {syscmd}. (uses popen() )
 .fi
 
 .B
@@ -446,7 +446,7 @@ pread {args} : execute {args} as a shell command and read the output as an image
 .B
 recording
 .fi
-recording start : start recording the executed commands; recording stop : stop  recording the executed commands; recording dump : dump in the console the record buffer; recording execute : execute the record buffer; recording repeat_last : repeat the last performed action; 
+recording 'start' : start recording the executed commands; recording 'stop' : stop  recording the executed commands; recording 'dump' : dump in the console the record buffer; recording 'execute' : execute the record buffer; recording 'repeat_last' : repeat the last performed action; 
 .fi
 
 .B
@@ -482,7 +482,7 @@ clear : clear the virtual console
 .B
 window
 .fi
-window {args} : manipulates the window system windows; each value of {args} shall be one of [ split | hsplit | vsplit | normalize | enlarge | venlarge | henlarge | up | down | left | right | close | swap ]
+window {args} : manipulates the window system windows; each value of {args} shall be one of [ 'split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap' ]
 .fi
 
 .SH VARIABLES REFERENCE
@@ -784,6 +784,10 @@ mirrored
 .B
 negated
 [internal,undocumented]
+.fi
+.B
+pagecount
+[internal,out,experimental] the page count for a given image
 .fi
 .B
 random

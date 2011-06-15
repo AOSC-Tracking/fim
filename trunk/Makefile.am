@@ -53,8 +53,9 @@ sanity-check:	all
 # this is the official way of testing fim
 tests:	all
 	@./scripts/tests/version.sh
-	@cd ./src/testdir && make
 	@./src/fim $(FIMNORCOPTS) -o dumb -E scripts/example/oneline.fim -c quit 
+	@./src/fim $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo 'Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
+	@cd ./src/testdir && make
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
