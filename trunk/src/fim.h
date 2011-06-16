@@ -533,39 +533,39 @@ namespace fim
  * Fim Autocommands
  * FIXME: need autodocumentation for these.
  * */
-#define FIM_ACM_POSTSCALE	"PostScale"		// after  a scaling operation
-#define FIM_ACM_PRESCALE	"PreScale"		// before a scaling operation
-#define FIM_ACM_PREPAN	"PrePan"
-#define FIM_ACM_POSTPAN	"PostPan"
-#define FIM_ACM_PREREDISPLAY	"PreRedisplay"
-#define FIM_ACM_POSTREDISPLAY	"PostRedisplay"
-#define FIM_ACM_PREDISPLAY	"PreDisplay"
-#define FIM_ACM_POSTDISPLAY	"PostDisplay"
-#define FIM_ACM_PREPREFETCH	"PrePrefetch"
-#define FIM_ACM_POSTPREFETCH	"PostPrefetch"
-#define FIM_ACM_POSTRELOAD	"PostReload"
-#define FIM_ACM_PRERELOAD	"PreReload"
-#define FIM_ACM_POSTLOAD	"PostLoad"
-#define FIM_ACM_PRELOAD	"PreLoad"
-#define FIM_ACM_POSTGOTO	"PostGoto"
-#define FIM_ACM_PREGOTO	"PreGoto"
-#define FIM_ACM_PRECONF		"PreConfigLoading"	// before loading any configuration file
-#define FIM_ACM_POSTCONF	"PostConfigLoading"	// after  loading any configuration file
-#define FIM_ACM_PREHFIMRC	"PreHardcodedConfigLoading"	// before loading hardcoded configuration
-#define FIM_ACM_POSTHFIMRC	"PostHardcodedConfigLoading"	// after  loading hardcoded configuration
-#define FIM_ACM_PREUFIMRC	"PreUserConfigLoading"	// before loading user configuration file
-#define FIM_ACM_POSTUFIMRC	"PostUserConfigLoading"	// after  loading user configuration file
-#define FIM_ACM_PREGFIMRC	"PreGlobalConfigLoading"	// before loading global configuration file
-#define FIM_ACM_POSTGFIMRC	"PostGlobalConfigLoading"	// after  loading global configuration file
-#define FIM_ACM_PREINTERACTIVECOMMAND	"PreInteractiveCommand"
-#define FIM_ACM_POSTINTERACTIVECOMMAND	"PostInteractiveCommand"
-#define FIM_ACM_PREEXECUTIONCYCLE	"PreExecutionCycle"
-#define FIM_ACM_PREEXECUTIONCYCLEARGS	"PreExecutionCycleArgs"
-#define FIM_ACM_POSTEXECUTIONCYCLE	"PostExecutionCycle"
-#define FIM_ACM_PREWINDOW	"PreWindow"	// TODO: in Window.cpp
-#define FIM_ACM_POSTWINDOW	"PostWindow"	// TODO: in Window.cpp
-//#define FIM_ACM_PREROTATE	"PreRotate"
-//#define FIM_ACM_POSTROTATE	"PostRotate"
+#define FIM_ACM_POSTSCALE	"PostScale"		/* "" */
+#define FIM_ACM_PRESCALE	"PreScale"		/* "" */
+#define FIM_ACM_PREPAN		"PrePan"		/* "" */
+#define FIM_ACM_POSTPAN		"PostPan"		/* "" */
+#define FIM_ACM_PREREDISPLAY	"PreRedisplay"		/* "" */
+#define FIM_ACM_POSTREDISPLAY	"PostRedisplay"		/* "" */
+#define FIM_ACM_PREDISPLAY	"PreDisplay"		/* "" */
+#define FIM_ACM_POSTDISPLAY	"PostDisplay"		/* "" */
+#define FIM_ACM_PREPREFETCH	"PrePrefetch"		/* "" */
+#define FIM_ACM_POSTPREFETCH	"PostPrefetch"		/* "" */
+#define FIM_ACM_POSTRELOAD	"PostReload"		/* "" */
+#define FIM_ACM_PRERELOAD	"PreReload"		/* "" */
+#define FIM_ACM_POSTLOAD	"PostLoad"		/* "" */
+#define FIM_ACM_PRELOAD		"PreLoad"		/* "" */
+#define FIM_ACM_POSTGOTO	"PostGoto"		/* "" */
+#define FIM_ACM_PREGOTO		"PreGoto"		/* "" */
+#define FIM_ACM_PRECONF		"PreConfigLoading"	/* "before loading any configuration file" */
+#define FIM_ACM_POSTCONF	"PostConfigLoading"	/* "after  loading any configuration file" */
+#define FIM_ACM_PREHFIMRC	"PreHardcodedConfigLoading"	/* "before loading hardcoded configuration" */
+#define FIM_ACM_POSTHFIMRC	"PostHardcodedConfigLoading"	/* "after  loading hardcoded configuration" */
+#define FIM_ACM_PREUFIMRC	"PreUserConfigLoading"		/* "before loading user configuration file" */
+#define FIM_ACM_POSTUFIMRC	"PostUserConfigLoading"		/* "after  loading user configuration file" */
+#define FIM_ACM_PREGFIMRC	"PreGlobalConfigLoading"	/* "before loading global configuration file" */
+#define FIM_ACM_POSTGFIMRC	"PostGlobalConfigLoading"	/* "after  loading global configuration file" */
+#define FIM_ACM_PREINTERACTIVECOMMAND	"PreInteractiveCommand"		/* "" */
+#define FIM_ACM_POSTINTERACTIVECOMMAND	"PostInteractiveCommand"	/* "" */
+#define FIM_ACM_PREEXECUTIONCYCLE	"PreExecutionCycle"		/* "" */
+#define FIM_ACM_PREEXECUTIONCYCLEARGS	"PreExecutionCycleArgs"		/* "" */
+#define FIM_ACM_POSTEXECUTIONCYCLE	"PostExecutionCycle"		/* "" */
+#define FIM_ACM_PREWINDOW	"PreWindow"	/* "" */
+#define FIM_ACM_POSTWINDOW	"PostWindow"	/* "" */
+//#define FIM_ACM_PREROTATE	"PreRotate"	/* "" */
+//#define FIM_ACM_POSTROTATE	"PostRotate"	/* "" */
 
 /*
  * Fim Language Tokens

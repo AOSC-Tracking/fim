@@ -437,6 +437,8 @@ window
 window {args} : manipulates the window system windows; each value of {args} shall be one of ['split'|'hsplit'|'vsplit'|'normalize'|'enlarge'|'venlarge'|'henlarge'|'up'|'down'|'left'|'right'|'close'|'swap']
 .fi
 
+.SH AUTOCOMMANDS REFERENCE
+Available autocommands are: PostScale, PreScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PostReload, PreReload, PostLoad, PreLoad, PostGoto, PreGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PreExecutionCycleArgs, PostExecutionCycle, PreWindow, PostWindow,  and they are triggered on actions as indicated by their name.
 .SH VARIABLES REFERENCE
 If undeclared, a variable will evaluate to 0.
 In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).

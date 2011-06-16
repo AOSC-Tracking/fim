@@ -109,6 +109,7 @@ manmode:
 #include "grammar.h"
 #include "examples.h"
 #include "conf.h"
+#include "help-acm.cpp"
 		FimDocRefMode refmode=DefRefMode;
 		if(args.size()==1 && args[0]=="man")
 		{
@@ -167,11 +168,13 @@ manmode:
 			// TODO: shall write about the conversion rules.
 			string("\n")+
 			string(".SH COMMANDS REFERENCE\n")+
-	//		string("Incomplete section.\n")+
 			string("\n")+
 			get_commands_reference(refmode)+
+			string(".SH AUTOCOMMANDS REFERENCE\n")+
+			string("Available autocommands are: ")+
+			string(FIM_AUTOCOMMANDS_LIST)+
+			string(" and they are triggered on actions as indicated by their name.\n")+
 			string(".SH VARIABLES REFERENCE\n")+
-	//		string("Incomplete section.\n")+
 			string("If undeclared, a variable will evaluate to 0.\n")+
 			string("In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n")+
 			string("\n")+
