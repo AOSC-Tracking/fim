@@ -303,7 +303,7 @@ namespace fim
 		if(negate)
 			image_->negate();
 
-		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER) && displaydevice_->redraw_)
+		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER)==1 && displaydevice_->redraw_)
 		{
 			/*
 			 * If this is the first image display, we have

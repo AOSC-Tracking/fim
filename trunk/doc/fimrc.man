@@ -10,17 +10,17 @@ fimrc - \fB fim \fP configuration file and language reference
 .fi
 .B /etc/fimrc
 .fi
-.B fim --script-from-stdin [ options ] < {scriptfile}
+.B fim --script-from-stdin [ {options} ] < {scriptfile}
 .fi
-.B fim --execute-script {scriptfile} [ options ]
+.B fim --execute-script {scriptfile} [ {options} ]
 .fi
-.B fim --execute-commands {commands} [ options ]
+.B fim --execute-commands {commands} [ {options} ]
 .fi
-.B fim --final-commands {commands} [ options ]
+.B fim --final-commands {commands} [ {options} ]
 .fi
-.B fim --write-scriptout {scriptfile} [ options ]  
+.B fim --write-scriptout {scriptfile} [ {options} ]  
 .fi
-.B fim --write-scriptout /dev/stdout [ options ]
+.B fim --write-scriptout /dev/stdout [ {options} ]
 .fi
 
 .SH DESCRIPTION
@@ -28,8 +28,8 @@ This page explains the
 .B fim
 language, which is used for the 
 .B fimrc
-configuration files, {scriptfile}s, or {commands} passed via command line options.
-This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key.
+configuration files, {scriptfile}s, or {commands} passed via command line {options}.
+This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key (or rather, the key code specified by the "_console_key" variable).
 The general form of a fim command/program is shown in the next section.
 
 
@@ -40,7 +40,7 @@ language.
 
 Language elements surrounded by a single quote ("'") are literals.
 
-Warning: at the present state, this grammar has conflicts. A next release shall fix them.
+Warning: at the present state, this grammar has conflicts. A future release shall fix them.
 
   program:
          | statement_list
@@ -434,13 +434,16 @@ while(expression){action;}  A conditional cycle construct. May be interrupted by
 .B
 window
 .fi
-window {args} : manipulates the window system windows; each value of {args} shall be one of ['split'|'hsplit'|'vsplit'|'normalize'|'enlarge'|'venlarge'|'henlarge'|'up'|'down'|'left'|'right'|'close'|'swap']
+window {args} : manipulates the window system windows; each value of {args} shall be one of ['split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap']
 .fi
 
 .SH AUTOCOMMANDS REFERENCE
 Available autocommands are: PostScale, PreScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PostReload, PreReload, PostLoad, PreLoad, PostGoto, PreGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PreExecutionCycleArgs, PostExecutionCycle, PreWindow, PostWindow,  and they are triggered on actions as indicated by their name.
 .SH VARIABLES REFERENCE
 If undeclared, a variable will evaluate to 0.
+
+There are multiple namespaces in which variables may exist: current image, browser, window, viewport, global. A namespace is specified by a prefix, which is one of: 'i:', 'b:', 'w:', 'v:', 'g:', which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''.
+
 In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
 
 .B
@@ -453,15 +456,15 @@ _autocmd_trace_stack
 .fi
 .B
 _autoflip
-[internal,in,undocumented]
+[internal,in] if 1, will flip images by default
 .fi
 .B
 _automirror
-[internal,in,undocumented]
+[internal,in] if 1, will mirror images by default
 .fi
 .B
 _autonegate
-[internal,in,undocumented]
+[internal,in] if 1, will negate images by default
 .fi
 .B
 _autotop
@@ -485,15 +488,15 @@ _comment
 .fi
 .B
 _console_buffer_free
-[internal,in,undocumented]
+[internal,out] amount of unused memory in the output console buffer
 .fi
 .B
 _console_buffer_total
-[internal,in,undocumented]
+[internal,out] amount of memory allocated for the output console buffer
 .fi
 .B
 _console_buffer_used
-[internal,in,undocumented]
+[internal,out] amount of used memory in the output console buffer
 .fi
 .B
 _console_key
@@ -501,11 +504,11 @@ _console_key
 .fi
 .B
 _console_lines
-[internal,in,undocumented]
+[internal,out] the number of buffered output console text lines
 .fi
 .B
 _console_offset
-[internal,in,undocumented]
+[internal,in,out] position of the text beginning in the output console, expressed in lines
 .fi
 .B
 _debug_commands
@@ -580,6 +583,10 @@ _ignorecase
 [internal,in] if 1, will allow for case insensitive regexp-based searches
 .fi
 .B
+_inhibit_display
+[internal] if 1, will inhibit display
+.fi
+.B
 _last_system_output
 [internal,out,experimental] the standard output of the last call to the system command
 .fi
@@ -593,7 +600,7 @@ _load_fim_history
 .fi
 .B
 _lwidth
-[internal,in,undocumented]
+[internal,in] if>0, will force the output console text width
 .fi
 .B
 _magnify_factor
@@ -632,10 +639,6 @@ _orientation
 [internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" will do the same thing: rotate the image one time by 90'.
 .fi
 .B
-_override_display
-[internal,undocumented]
-.fi
-.B
 _pwd
 [internal,out] the current working directory; will be updated at startup and whenever the working directory changes
 .fi
@@ -653,11 +656,11 @@ _save_fim_history
 .fi
 .B
 _scale_factor_delta
-[internal,undocumented]
+[internal,in] value used for incrementing/decrementing the scaling factors
 .fi
 .B
 _scale_factor_multiplier
-[internal,undocumented]
+[internal,in] value used for scaling up/down the scaling factors
 .fi
 .B
 _scale_style
@@ -689,7 +692,7 @@ _sys_rc_file
 .fi
 .B
 _verbose_errors
-[internal,in,undocumented]
+[internal,in] if 1, will display on stdout internal errors, while parsing commands
 .fi
 .B
 _verbose_keys
@@ -701,7 +704,7 @@ _vsteps
 .fi
 .B
 _want_autocenter
-[internal,in,undocumented]
+[internal,in] if 1, the image will be displayed centered 
 .fi
 .B
 _want_prefetch
@@ -713,15 +716,15 @@ _want_sleep_seconds
 .fi
 .B
 angle
-[internal,undocumented]
+[internal,in,out] a floating point number specifying the rotation angle, in degrees
 .fi
 .B
 ascale
-[internal,in] the asymmetric scaling of the current image
+[internal,in,out] the asymmetric scaling of the current image
 .fi
 .B
 flipped
-[internal,undocumented]
+[internal,out] 1, if the image is flipped
 .fi
 .B
 fresh
@@ -733,11 +736,11 @@ height
 .fi
 .B
 mirrored
-[internal,undocumented]
+[internal,out] 1, if the image is mirrored 
 .fi
 .B
 negated
-[internal,undocumented]
+[internal,out] 1, if the image is negated
 .fi
 .B
 pagecount
@@ -1038,8 +1041,13 @@ echo "WELCOME : to switch to the command line interface press ':' ";
 
 .SH NOTES
 This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.
-Moreover, the conditions for autocommands execution are not fully specified.
-Also a formal description of the various one-line commands, as well as an extensive example list is needed.
+The conditions for autocommands triggering are not specified as they should.
+A formal description of the various one-line commands, as well a more extensive example list is needed.
+Many of the listed variables are only valid within a namespace, and this shall be documented clearly.
+.SH BUGS
+The
+.B fim
+language has a number of problems that shall be first documented, then fixed.
 .SH SEE ALSO
 fim(1), regex(1).
 .SH AUTHOR

@@ -211,7 +211,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_NAMESPACE_GLOBAL_CHAR	'g'
 #define FIM_SYM_NAMESPACE_WINDOW_CHAR	'w'
 #define FIM_SYM_NAMESPACE_VIEWPORT_CHAR	'v'
-#define FIM_SYM_NAMESPACE_PREFIXES	"i:, b:, w:, v:, g:"
+#define FIM_SYM_NAMESPACE_PREFIXES	"'i:', 'b:', 'w:', 'v:', 'g:'"
+#define FIM_SYM_NAMESPACE_PREFIXES_DSC	"current image, browser, window, viewport, global"
 #define FIM_SYM_NAMESPACE_REGEX	"^[givbw]:"
 #define FIM_SYM_PROMPT_CHAR	':'
 #define FIM_SYM_PROMPT_SLASH	'/'
@@ -433,28 +434,28 @@ namespace fim
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
 #define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
 #define FIM_VID_PAGECOUNT			"pagecount"			/* "[internal,out,experimental] the page count for a given image" */
-#define FIM_VID_OVERRIDE_DISPLAY		"_override_display"	/* "[internal,undocumented]" */
+#define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal] if 1, will inhibit display" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
 #define FIM_VID_PWD				"_pwd"			/* "[internal,out] the current working directory; will be updated at startup and whenever the working directory changes" */
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */
-#define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[internal,undocumented]" */
-#define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[internal,undocumented]" */
+#define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[internal,in] value used for scaling up/down the scaling factors" */
+#define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[internal,in] value used for incrementing/decrementing the scaling factors" */
 #define FIM_VID_COMMENT 				"_comment"				/* "[internal,out] the image comment, extracted from the image file (if any)" */
 #define FIM_VID_STEPS 				"_steps"				/* "[internal,in] the default steps, in pixels, when panning images" */
 #define FIM_VID_VERSION				"_fim_version"	/* "[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
 #define FIM_VID_HSTEPS 				"_hsteps"				/* "[internal,in] the default steps, in pixels, when panning images horizontally (overrides steps)" */
 #define FIM_VID_VSTEPS 				"_vsteps"				/* "[internal,in] the default steps, in pixels, when panning images vertically (overrides steps)" */
 #define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[internal,in] if >0, will set the number of displayed text lines in the console" */
-#define FIM_VID_CONSOLE_LINE_WIDTH 		"_lwidth"		/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_LINE_OFFSET 		"_console_offset"	/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_BUFFER_LINES		"_console_lines"		/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_BUFFER_TOTAL		"_console_buffer_total"		/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_BUFFER_FREE		"_console_buffer_free"		/* "[internal,in,undocumented]" */
-#define FIM_VID_CONSOLE_BUFFER_USED		"_console_buffer_used"		/* "[internal,in,undocumented]" */
+#define FIM_VID_CONSOLE_LINE_WIDTH 		"_lwidth"		/* "[internal,in] if>0, will force the output console text width" */
+#define FIM_VID_CONSOLE_LINE_OFFSET 		"_console_offset"	/* "[internal,in,out] position of the text beginning in the output console, expressed in lines" */
+#define FIM_VID_CONSOLE_BUFFER_LINES		"_console_lines"		/* "[internal,out] the number of buffered output console text lines" */
+#define FIM_VID_CONSOLE_BUFFER_TOTAL		"_console_buffer_total"		/* "[internal,out] amount of memory allocated for the output console buffer" */
+#define FIM_VID_CONSOLE_BUFFER_FREE		"_console_buffer_free"		/* "[internal,out] amount of unused memory in the output console buffer" */
+#define FIM_VID_CONSOLE_BUFFER_USED		"_console_buffer_used"		/* "[internal,out] amount of used memory in the output console buffer" */
 #define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[internal,in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode" */
 #define FIM_VID_CMD_EXPANSION			"_command_expansion"			/* "[internal,in] if 1, will enable autocompletion (on execution) of alias and command strings" */
-#define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[internal,in,undocumented]" */
+#define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[internal,in] if 1, will display on stdout internal errors, while parsing commands" */
 #define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
 #define FIM_VID_IGNORECASE			"_ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp-based searches" */
 #define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[internal,in] if 1 on exit, will save the ~/fim_history file on exit" */
@@ -464,21 +465,21 @@ namespace fim
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in] if 1, will display a message on the status bar when processing" */
 #define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
-#define FIM_VID_ASCALE				"ascale"			/* "[internal,in] the asymmetric scaling of the current image" */
-#define FIM_VID_ANGLE				"angle"				/* "[internal,undocumented]" */
+#define FIM_VID_ASCALE				"ascale"			/* "[internal,in,out] the asymmetric scaling of the current image" */
+#define FIM_VID_ANGLE				"angle"				/* "[internal,in,out] a floating point number specifying the rotation angle, in degrees" */
 #define FIM_VID_ORIENTATION			"_orientation"		/* "[internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, \":i:_orientation=1\" and \":i:_orientation=5\" will do the same thing: rotate the image one time by 90'." */
 #define FIM_VID_WIDTH				"width"			/* "[internal,out] the current image original width" */
 #define FIM_VID_HEIGHT				"height"		/* "[internal,out] the current image original height" */
 #define FIM_VID_SWIDTH				"swidth"		/* "[internal,out] the current image scaled width" */
 #define FIM_VID_SHEIGHT				"sheight"		/* "[internal,out] the current image scaled height" */
-#define FIM_VID_AUTOFLIP			"_autoflip"		/* "[internal,in,undocumented]" */
-#define FIM_VID_AUTONEGATE			"_autonegate"		/* "[internal,in,undocumented]" */
-#define FIM_VID_FLIPPED				"flipped"		/* "[internal,undocumented]" */
-#define FIM_VID_NEGATED				"negated"		/* "[internal,undocumented]" */
+#define FIM_VID_AUTOFLIP			"_autoflip"		/* "[internal,in] if 1, will flip images by default" */
+#define FIM_VID_AUTONEGATE			"_autonegate"		/* "[internal,in] if 1, will negate images by default" */
+#define FIM_VID_FLIPPED				"flipped"		/* "[internal,out] 1, if the image is flipped" */
+#define FIM_VID_NEGATED				"negated"		/* "[internal,out] 1, if the image is negated" */
 #define FIM_VID_FIM_BPP				"_fim_bpp"		/* "[internal,out] the bits per pixel count" */
-#define FIM_VID_AUTOMIRROR			"_automirror"		/* "[internal,in,undocumented]" */
-#define FIM_VID_MIRRORED			"mirrored"		/* "[internal,undocumented]" */
-#define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[internal,in,undocumented]" */
+#define FIM_VID_AUTOMIRROR			"_automirror"		/* "[internal,in] if 1, will mirror images by default" */
+#define FIM_VID_MIRRORED			"mirrored"		/* "[internal,out] 1, if the image is mirrored " */
+#define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[internal,in] if 1, the image will be displayed centered " */
 #define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in] the maximum number of images allowed in the cache" */
 #define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in] the maximum amount of memory allowed for the cache" */
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached" */
@@ -656,9 +657,10 @@ namespace fim
 #define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the "FIM_VID_PWD" variable"
 #define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL" "FIM_CNS_EX_ARGS_STRING" : evaluate "FIM_CNS_EX_ARGS_STRING" as commands, executing them"
 #define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen())"
-#define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of ['split'|'hsplit'|'vsplit'|'normalize'|'enlarge'|'venlarge'|'henlarge'|'up'|'down'|'left'|'right'|'close'|'swap']"
+#define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of ['split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap']"
 #define FIM_CMD_HELP_GOTO 	FIM_FLT_GOTO" {['+'|'-']"FIM_CNS_EX_NUM_STRING"['%']['f'|'p']} | {/"FIM_CNS_EX_RE_STRING"/} | {'+//'}: jump to an image; if "FIM_CNS_EX_NUM_STRING" is given, and not surrounded by any specifier, will go to image at index "FIM_CNS_EX_NUM_STRING" ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /"FIM_CNS_EX_RE_STRING"/ is given, will jump to the first image matching the given /"FIM_CNS_EX_RE_STRING"/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern"
 #define FIM_CMD_HELP_SCALE	FIM_FLT_SCALE" {['+'|'-']{value}['%']|'w'|'h'|'a'|'++'|'+-'|'+*'|'+/'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a'); if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; " "if given '++'('+-'), will increment (decrement) the \""FIM_VID_MAGNIFY_FACTOR"\", \""FIM_VID_REDUCE_FACTOR"\" variables by \""FIM_VID_SCALE_FACTOR_DELTA"\"; " "if given '+*'('+/'), will multiply (divide) the \""FIM_VID_MAGNIFY_FACTOR"\", \""FIM_VID_REDUCE_FACTOR"\" variables by \""FIM_VID_SCALE_FACTOR_MULTIPLIER"\"; "
+#define FIM_CMD_HELP_HELP	FIM_FLT_HELP" ["FIM_CNS_EX_ID_STRING"] : provide online help, if "FIM_CNS_EX_ID_STRING" is some variable, alias, or command identifier"
 
 
 #define FIM_CNS_SLIDESHOW_CMD "while("FIM_VID_FILEINDEX"<"FIM_VID_FILELISTLEN"){sleep "FIM_VID_WANT_SLEEPS"; next;}"
@@ -666,7 +668,7 @@ namespace fim
 /*
  * Some Fim compilation defaults
  */
-#define FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT 1 /* unfinished, undocumented mouse support in sdl mode */
+#define FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT 1 /* experimental mouse support in sdl mode */
 #define FIM_WANT_SCREEN_KEY_REMAPPING_PATCH 1
 #define FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE 0
 #define FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE 1
