@@ -30,20 +30,17 @@ ongoing further inspiration.
 20110615	scale_increment & co -> in the "default aliases" section (by overloading with doc string first) 
 20110615	redisplay = display 'force' ; reload = load 'force'
 20110615	info [size|width|...]
-20110614	need grepping for all autocommands, and documentation extraction
 20110613	need a single variable for flip,mirror, and eventually rotation (e.g.:fmr90)
 20110613	shall reintroduce many composite commands tokens (e.g.: "pan 'up'")
 20110612	the parser should be strictly checked for leaks
 20110612	using up and down keys in / mode seems to recall general history, not search history (even in old fim revisions)!
 20110612	scrolldown,scrollforward -> [pan|scroll] forward|read
-20110612	reduce,magnify -> scale
 20110612	scale_* -> to aliases	
 20110612	dump_key_codes -> dump key_codes|variables|commands|aliases
 20110612	clear -> console clear
 20110612	need a runtime method for diverting stdout ? may ease debugging.
 20110612	shall rename from _varname to v:varname, whenever this has sense.
 20110610	shall unify the scaling-control variables
-20110610	get rid of 'next' via 'goto +1'; get rid of 'next_page' via 'goto_page'; get rid also of next_picture
 20110609	.ps crashes (try that matrix!) ?
 20110604	shall fix systematically stdin reading switches conflict (if any)
 20110604	may consider usage of ffmpeg's libswscale for image scaling
