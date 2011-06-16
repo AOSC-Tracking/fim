@@ -14,6 +14,8 @@
 
 # 20070925	regular expressions failed on some configurations, so were 'cut'.. :-(
 # 20090917	TODO: should work with no rar or no unzip
+# 20091214	TODO: and options to wget ?
+# 20090525	should use -o option to rename files to a known filename before loading them, in the temporary directory.
 
 DIR="${TMPDIR-/var/tmp}/fbps-$$"
 #GSRESOLUTION=""

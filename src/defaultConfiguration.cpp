@@ -21,137 +21,79 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #if FIM_DEFAULT_CONFIG
-		bind('q',FIM_FLT_QUIT);
-		bind('n',FIM_FLC_NEXT);
-//		bind('h',FIM_FLT_HELP);
-		//bind('p',"prev;display;");
-		bind('p',FIM_FLC_PREV);
-		//bind('r',FIM_FLT_RELOAD);
-		//bind('R',FIM_FLT_REDISPLAY);
-		bind('d',FIM_FLT_DISPLAY);
-		//bind('m',FIM_FLC_MIRROR);
-		//bind('f',FIM_FLC_FLIP);
+#if 1
 		alias(FIM_FLA_MAGNIFY,FIM_FLC_MAGNIFY,"magnify the displayed image by the "FIM_VID_MAGNIFY_FACTOR" variable or "FIM_CNS_EX_ARGS_STRING"");
 		alias(FIM_FLA_REDUCE ,FIM_FLC_REDUCE,"reduce the displayed image by "FIM_VID_REDUCE_FACTOR" or "FIM_CNS_EX_ARGS_STRING"");
-		bind('+',FIM_FLA_MAGNIFY);
-		bind('-',FIM_FLA_REDUCE);
-//		bind(4283163,"pan 'up'");
-		bind('k',FIM_FLC_PAN_UP);
-//		bind(4414235,"pan 'right'");
-		bind('l',FIM_FLC_PAN_RIGHT);
-//		bind(4348699,"pan 'down'");
-		bind('j',FIM_FLC_PAN_DOWN);
-//		bind(4479771,"pan 'left'");
-		bind('h',FIM_FLC_PAN_LEFT);
-//		bind(' ',FIM_FLT_SCROLLDOWN);
-//		bind(2117491483,"next");
-//		bind(2117425947,"prev");
-		bind(29,"scale_factor_increase");
-		bind(31,"scale_factor_decrease");
-		bind(29,"scale_factor_grow");
-		bind(31,"scale_factor_shrink");
-//		bind('i',FIM_FLT_INFO);
-//		bind('P',"f=`files`/2;prev (--$f);\n");
-//		bind('N',"f=`files`/2;next (--$f);\n");
-
  		alias(FIM_FLA_NEXT,FIM_FLC_NEXT,"go to the next page or picture file");
  		alias(FIM_FLA_PREV,FIM_FLC_PREV,"go to the previous page or picture file");
  		alias(FIM_FLA_NEXT_PAGE,FIM_FLC_NEXT_PAGE,"go to the next page in the file");
  		alias(FIM_FLA_PREV_PAGE,FIM_FLC_PREV_PAGE,"go to the previous page in the file");
  		alias(FIM_FLA_NEXT_FILE,FIM_FLC_NEXT_FILE,"go to the next file in the list");
  		alias(FIM_FLA_PREV_FILE,FIM_FLC_PREV_FILE,"go to the previous file in the list");
+#endif
+#if 1
  		alias("scale_factor_grow","scale '+*'","multiply the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by "FIM_VID_SCALE_FACTOR_MULTIPLIER"");
  		alias("scale_factor_shrink","scale '+/'","divide the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by "FIM_VID_SCALE_FACTOR_MULTIPLIER"");
  		alias("scale_factor_decrease","scale '+-'","subtract "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR"");
  		alias("scale_factor_increase","scale '++'","add "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR"");
+ 		alias('A',"'"FIM_VID_AUTOTOP"=1-"FIM_VID_AUTOTOP";'");
+#endif
 #if 0
  		alias('A',"'autotop=1-autotop;'");
 		alias("toggleVerbosity","verbose=1-verbose;display;");
 		alias("toggleKeyVerbosity","_verbose_keys=1-_verbose_keys;display;");
 #endif
-	
+#if 0
+		bind('h',FIM_FLT_HELP);
+		bind('p',"prev;display;");
+		bind('r',FIM_FLT_RELOAD);
+		bind('R',FIM_FLT_REDISPLAY);
+		bind('m',FIM_FLC_MIRROR);
+		bind('f',FIM_FLC_FLIP);
+		bind(4283163,"pan 'up'");
+		bind(4414235,"pan 'right'");
+		bind(4348699,"pan 'down'");
+		bind(4479771,"pan 'left'");
+		bind(' ',FIM_FLT_SCROLLDOWN);
+		bind(2117491483,"next");
+		bind(2117425947,"prev");
+		bind('i',FIM_FLT_INFO);
+#endif
+#if 1
+		bind('q',FIM_FLT_QUIT);
+		bind('n',FIM_FLC_NEXT);
+		bind('p',FIM_FLC_PREV);
+		bind('d',FIM_FLT_DISPLAY);
+		bind('+',FIM_FLA_MAGNIFY);
+		bind('-',FIM_FLA_REDUCE);
+		bind('k',FIM_FLC_PAN_UP);
+		bind('l',FIM_FLC_PAN_RIGHT);
+		bind('j',FIM_FLC_PAN_DOWN);
+		bind('h',FIM_FLC_PAN_LEFT);
+		bind(29,"scale_factor_increase");
+		bind(31,"scale_factor_decrease");
+		bind(29,"scale_factor_grow");
+		bind(31,"scale_factor_shrink");
+#endif
+#if 1
 		setVariable(FIM_VID_CONSOLE_KEY,FIM_SYM_CONSOLE_KEY);
+#endif
 #if 0
 		setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);
 		setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
 		setVariable(FIM_VID_SCALE_FACTOR_DELTA,FIM_CNS_SCALEFACTOR_DELTA);
-#endif
-#if 0
 		setVariable(FIM_VID_VERBOSE_KEYS,-1);
-		//setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
-		//setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,FIM_CNS_SCALEFACTOR_MULTIPLIER);
-		autocmd_add("Next","*","echo 'rendering next image..'");
-		autocmd_add("Prev","*","echo 'rendering prev image..'");
-		autocmd_add("PostNext","*","reload;");		//BUGFUL!
-		autocmd_add("PostPrev","*","reload;");		//BUGFUL!
+		setVariable(FIM_VID_MAGNIFY_FACTOR,FIM_CNS_SCALEFACTOR);
+		setVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER,FIM_CNS_SCALEFACTOR_MULTIPLIER);
 #endif
-
-//		autocmd_add("PreRedisplay","*","echo 'there should go autoscale'");		//NOT BUGFUL
-//		autocmd_add("PreRedisplay","*","2magnify;");		//NOT BUGFUL!! WHY??? (8 too is ok)
-//		autocmd_add("PreRedisplay","*","auto_scale_;");		//BUGFUL! (contains 1 magnify call..)
-//		autocmd_add("PostReload","*","fresh=1;");		//BUGFUL! (contains 1 magnify call..)
-	//	autocmd_add("PostRedisplay","*","fresh=1;");		//BUGFUL! (contains 1 magnify call..)
-//		autocmd_add("PostDisplay","*","fresh=0;");		//BUGFUL! (contains 1 magnify call..)
-//		autocmd_add("PreRedisplay","*","auto_scale;");		//BUGFUL!
-//		autocmd_add("PostReload","*","redisplay;");		//BUGFUL!
-//		autocmd_add("PostLoad","*","redisplay;");		//BUGFUL!
-//		autocmd_add("PostNext","*","fresh=1;");		//BUGFUL! (contains 1 magnify call..)
-//		autocmd_add("PostPrev","*","fresh=1;");		//BUGFUL! (contains 1 magnify call..)
-
-//		autocmd_add("PostReload","*","echo 'scaled..';sleep 1;auto_scale;display;");		//BUGFUL!?! SHOULD NOT!
-//		autocmd_add("PostReload","*","redisplay;");		//BUGFUL!?
-//		autocmd_add("PostLoad"  ,"*","echo 'scaled..';sleep 1;auto_scale;display;");		//BUGFUL!?! SHOULD NOT!
-/*		autocmd_add("PostLoad"  ,"*","fresh=1");		//BUGFUL!?! SHOULD NOT!
-		autocmd_add("PostReload","*","fresh=1");		//BUGFUL!?! SHOULD NOT!
-		autocmd_add("PostLoad"  ,"*","if(autowidth*fresh){auto_width_scale;}");		//BUGFUL!?! SHOULD NOT!
-		autocmd_add("PostReload","*","if(autowidth*fresh){auto_width_scale;}");		//BUGFUL!?! SHOULD NOT!
-		autocmd_add("PostLoad"  ,"*","fresh=0");		//BUGFUL!?! SHOULD NOT!
-		autocmd_add("PostReload","*","fresh=0");		//BUGFUL!?! SHOULD NOT!
-//		autocmd_add("PostLoad"  ,"*","redisplay;");		//BUGFUL!?
-*/
-/*		autocmd_add("PreExecutionCycle","*","reload;");	
-		autocmd_add("PreExecutionCycle","*","redisplay;");	*/
-
-//		autocmd_add("PreExecutionCycle","*","reload;auto_scale;display;");	
-
-//		autocmd_add("PreRedisplay","*","auto_width_scale;");//BUGFUL!
-//
-//		autocmd_add("PostDisplay","*","auto_width_scale;");//BUGFUL!
-//		autocmd_add("PostScale","*","display;");
-//		autocmd_add("PostInteractiveCommand","*","display;");
-//		autocmd_add("PostInteractiveCommand","*","auto_scale;");
-//		autocmd_add("PostInteractiveCommand","*","redisplay;");	//necessary? altrimenti si blocca..
-//
-
-//		autocmd_add("PreExecutionCycle","*","fresh=1;");
-//		autocmd_add("PreExecutionCycle","*","if(autowidth*fresh==1){auto_scale;redisplay;}");
-//		autocmd_add("PreExecutionCycle","*","if(autowidth*fresh==0){redisplay;}");
-
-		
-//		autocmd_add("PreExecutionCycle","*","auto_scale;display;");
-/*		autocmd_add("PreExecutionCycle","*","redisplay;");
-		autocmd_add("PreExecutionCycle","*","fresh=0;");*/
-
-/*		autocmd_add("PostInteractiveCommand","*","if(autowidth*fresh==1){auto_width_scale;redisplay;};");//ok ma non e' cio che voglio
-		autocmd_add("PostInteractiveCommand","*","if(autowidth*fresh==0){redisplay;};");//ok ma non e' cio che voglio
-		autocmd_add("PostInteractiveCommand","*","if(autowidth*fresh==0){redisplay;};");//ok ma non e' cio che voglio
-		autocmd_add("PostInteractiveCommand","*","fresh=0;");//ok ma non e' cio che voglio
-		*/
-//		yyparse("next ( 4 );\n");
-//		((browser)->)(*Browser::next)(std::vector)
-		//SORTING IS A PROBLEM!
-//		for(int i=0;i<commands.size();++i) if(commands[i]) commands[i]->execute(std::vector<Arg>());
-//		init();
 #endif
 /*
  * The following code binds key codes to key symbols.
  * In this way the user can write a configuration file
  * and associate actions to key configurations..
  *
- * Note : certain key bindings (especially Control key with arrows 
- * or other non letter keys ) are known to be non working.
- *
- * But by modifying this file one can experiment!
+ * Note : certain key bindings (especially Control key with arrows or other non letter keys ) are known to be non working.
+ * But by modifying this file one may experiment!
  */
 #if FIM_DEFAULT_KEY_CONFIG
 		/*

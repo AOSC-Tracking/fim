@@ -125,16 +125,16 @@ manmode:
 			string(".SH SYNOPSIS\n")+
 			string(".B "FIM_CNS_USR_RC_COMPLETE_FILEPATH"\n.fi\n")+
 			string(".B "FIM_CNS_SYS_RC_FILEPATH"\n.fi\n")+
-			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [ options ] < {scriptfile}\n.fi\n")+
-			string(".B fim --"FIM_OSW_EXECUTE_SCRIPT" {scriptfile} [ options ]\n.fi\n")+
-			string(".B fim --"FIM_OSW_EXECUTE_COMMANDS" {commands} [ options ]\n.fi\n")+
-			string(".B fim --"FIM_OSW_FINAL_COMMANDS" {commands} [ options ]\n.fi\n")+
-			string(".B fim --"FIM_OSW_DUMP_SCRIPTOUT" {scriptfile} [ options ]  \n.fi\n")+
-			string(".B fim --"FIM_OSW_DUMP_SCRIPTOUT" "FIM_LINUX_STDOUT_FILE" [ options ]\n.fi\n")+
+			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [ {options} ] < {scriptfile}\n.fi\n")+
+			string(".B fim --"FIM_OSW_EXECUTE_SCRIPT" {scriptfile} [ {options} ]\n.fi\n")+
+			string(".B fim --"FIM_OSW_EXECUTE_COMMANDS" {commands} [ {options} ]\n.fi\n")+
+			string(".B fim --"FIM_OSW_FINAL_COMMANDS" {commands} [ {options} ]\n.fi\n")+
+			string(".B fim --"FIM_OSW_DUMP_SCRIPTOUT" {scriptfile} [ {options} ]  \n.fi\n")+
+			string(".B fim --"FIM_OSW_DUMP_SCRIPTOUT" "FIM_LINUX_STDOUT_FILE" [ {options} ]\n.fi\n")+
 			string("\n")+
 			string(".SH DESCRIPTION\n")+
-			string("This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line options.\n")+
-			string("This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \""FIM_SYM_CONSOLE_KEY_STR"\" key.\n")+
+			string("This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line {options}.\n")+
+			string("This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \""FIM_SYM_CONSOLE_KEY_STR"\" key (or rather, the key code specified by the \""FIM_VID_CONSOLE_KEY"\" variable).\n")+
 			string("The general form of a fim command/program is shown in the next section.\n")+
 #ifndef FIM_COMMAND_AUTOCOMPLETION
 			string("\nInterpretation of commands or aliases may use autocompletion (if enabled; see the "FIM_VID_CMD_EXPANSION" variable description), in a way to allow the user to type only the beginning of the command of interest.\n")+
@@ -145,7 +145,7 @@ manmode:
 //			string("Incomplete section.\n")+
 			string("This section specifies the grammar of the \n.B fim\nlanguage.\n\n")+
 			string("Language elements surrounded by a single quote (\"'\") are literals.\n\n")+
-			string("Warning: at the present state, this grammar has conflicts. A next release shall fix them.\n")+
+			string("Warning: at the present state, this grammar has conflicts. A future release shall fix them.\n")+
 			string("\n")+
 			string(FIM_DEFAULT_GRAMMAR_FILE_CONTENTS)+
 			string("\n")+
@@ -175,8 +175,9 @@ manmode:
 			string(FIM_AUTOCOMMANDS_LIST)+
 			string(" and they are triggered on actions as indicated by their name.\n")+
 			string(".SH VARIABLES REFERENCE\n")+
-			string("If undeclared, a variable will evaluate to 0.\n")+
-			string("In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n")+
+			string("If undeclared, a variable will evaluate to 0.\n\n")+
+			string("There are multiple namespaces in which variables may exist: "FIM_SYM_NAMESPACE_PREFIXES_DSC". A namespace is specified by a prefix, which is one of: "FIM_SYM_NAMESPACE_PREFIXES", which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''.\n")+
+			string("\nIn the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n")+
 			string("\n")+
 		       	get_variables_reference(refmode)+
 			string(".SH USAGE EXAMPLES\n")+
@@ -191,8 +192,11 @@ manmode:
 //			string("Incomplete section.\n")+
 			string(".SH NOTES\n")+
 			string("This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.\n")+
-			string("Moreover, the conditions for autocommands execution are not fully specified.\n")+
-			string("Also a formal description of the various one-line commands, as well as an extensive example list is needed.\n")+
+			string("The conditions for autocommands triggering are not specified as they should.\n")+
+			string("A formal description of the various one-line commands, as well a more extensive example list is needed.\n")+
+			string("Many of the listed variables are only valid within a namespace, and this shall be documented clearly.\n")+
+			string(".SH BUGS\n"
+"The\n.B fim\nlanguage has a number of problems that shall be first documented, then fixed.\n")+
 			string(".SH SEE ALSO\n")+
 			string("fim(1), regex(1).\n")+
 			string(".SH AUTHOR\n")+

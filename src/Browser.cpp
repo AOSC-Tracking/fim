@@ -437,7 +437,7 @@ nop:
 			/*
 			 * the following is a trick to override redisplaying..
 			 */
-			if(image() && getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)==0)
+			if(image() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
 			//	if(c_image())
 			{
 				//fb_clear_screen();

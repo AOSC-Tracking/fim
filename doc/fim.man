@@ -39,20 +39,38 @@ Please note that a user guide of
 .B fim
 is in the FIM.TXT file distributed in the source package.  This man page only describes the
 .B fim
-command line switches.
+command line options.
 
-See man fimrc for a full specification of the 
-.B fim
-language, commands, and variables.
+.SH USAGE
+You may invoke
+.B
+fim
+from an interactive shell and control it with the keyboard, as you would do with any reasonable image viewer.
+
+.B
+fim
+is keyboard oriented: there are no user menus or buttons available.
+If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need a custom command. For these, you can use the internal command and configuration language.
+The full specification for these is available at runtime using the internal help system.
+
+Alternatively, see man fimrc for a full specification of the 
+.B
+fim
+language, commands, variables, and an example configuration file.
+
 
 .SH OPTIONS
+Accepted command line 
+.B
+{options}
+:
 .TP
 .B --
 The arguments before
 .B --
 beginning with 
 .B -
-will be treated as command line switches.
+will be treated as command line options.
 All arguments after
 .B --
 will be treated as filenames regardlessly.
@@ -81,7 +99,7 @@ do an endless loop consisting of bottom and top aligning, alternated.
 
 .TP
 .B -C {commands}, --execute-commands-early {commands}
-Just as the --execute-commands switch, but commands will be executed before the loading of any config file.
+Just as the --execute-commands option, but commands will be executed before the loading of any config file.
 
 For example,
 -C '_scale_style=""' will make fim start with no auto-scaling.

@@ -133,7 +133,9 @@ up: upload news
 
 news: freshmeat mail-announce
 
-dox: src/fim
+dox: doc/fim.man doc/fimrc.man doc/fimgs.man
+
+doc/fim.man doc/fimrc.man doc/fimgs.man: src/fim
 	src/fim $(FIMNORCOPTS) --help=m                   > doc/fim.man
 	src/fim $(FIMNORCOPTS) --dump-reference-help=man  > doc/fimrc.man
 	src/fimgs -m -- $(FIMNORCOPTS)                    > doc/fimgs.man

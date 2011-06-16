@@ -95,7 +95,7 @@ struct fim_options_t fim_options[] = {
 "do an endless loop consisting of bottom and top aligning, alternated.\n"
     },
     {FIM_OSW_EXECUTE_COMMANDS_EARLY, required_argument,       NULL, 'C',"execute {commands} after initialization, before any config loading","{commands}",
-"Just as the --"FIM_OSW_EXECUTE_COMMANDS" switch, but commands will be executed before the loading of any config file.\n"
+"Just as the --"FIM_OSW_EXECUTE_COMMANDS" option, but commands will be executed before the loading of any config file.\n"
 "\n"
 "For example,\n"
 "-C '"FIM_VID_SCALE_STYLE"=\"\"' will make fim start with no auto-scaling.\n"
@@ -329,7 +329,7 @@ string fim_dump_man_page_snippets()
 ".B --\n"
 "beginning with \n"
 ".B -\n"
-"will be treated as command line switches.\n"
+"will be treated as command line options.\n"
 "All arguments after\n"
 ".B --\n"
 "will be treated as filenames regardlessly.\n"
@@ -429,9 +429,16 @@ int fim_dump_man_page()
 			string("As a default,\n.B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '"FIM_EPR_XCFTOPNM"'.\nFor '.fig' vectorial images, fim will try to use '"FIM_EPR_FIG2DEV"'.\nFor '.dia' vectorial images, fim will try to use '"FIM_EPR_DIA"'.\nFor '.svg' vectorial images, fim will try to use '"FIM_EPR_INKSCAPE"'.\nFor other formats fim will try to use ImageMagick's '"FIM_EPR_CONVERT"' executable.\n")+
 			string("\n")+
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
-			string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.  This man page only describes the\n.B fim\ncommand line switches.\n\n")+
-			string("See man fimrc for a full specification of the \n.B fim\nlanguage, commands, and variables.\n")+
-			string("\n.SH OPTIONS\n");
+			string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.  This man page only describes the\n.B fim\ncommand line options.\n\n")+
+			string(".SH USAGE\n")+
+			string("You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any reasonable image viewer.\n")+
+			string("\n.B\nfim\nis keyboard oriented: there are no user menus or buttons available.\n")+
+			string("If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need a custom command. For these, you can use the internal command and configuration language.\n")+
+			string("The full specification for these is available at runtime using the internal help system.\n")+
+			string("\nAlternatively, see man fimrc for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n")+
+			string("\n")+
+			string("\n.SH OPTIONS\n")+
+			string("Accepted command line \n.B\n{options}\n:\n")+
 			mp+=fim_dump_man_page_snippets();
 			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
 ".nf\n"

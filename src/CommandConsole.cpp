@@ -368,7 +368,7 @@ namespace fim
 #endif
 		addCommand(new Command(fim::string(FIM_FLT_GETENV),fim::string(FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" : display the value of the "FIM_CNS_EX_ID_STRING" environment variable"),this,&CommandConsole::fcmd_do_getenv));
 		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string(FIM_CMD_HELP_GOTO),&browser_,&Browser::fcmd_goto_image));
-		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string(FIM_FLT_HELP" ["FIM_CNS_EX_ID_STRING"] : provide online help, if "FIM_CNS_EX_ID_STRING" is some variable, alias, or command identifier"),this,&CommandConsole::fcmd_help));
+		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string(FIM_CMD_HELP_HELP),this,&CommandConsole::fcmd_help));
 		addCommand(new Command(fim::string(FIM_FLT_IF),fim::string("if(expression){action;}['else'{action;}]"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
 		addCommand(new Command(fim::string(FIM_FLT_ELSE),fim::string("if(expression){action;}['else'{action;}]"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
 #ifdef FIM_RECORDING
@@ -744,8 +744,8 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		}
 		if(iret!=0 || errno!=0)
 		{
-			//if(getIntVariable(FIM_VID_VERBOSE_ERRORS))
-			if(0)
+			if(getIntVariable(FIM_VID_VERBOSE_ERRORS)==1)
+			if(1)
 			{
 				// FIXME; the pipe descriptor is used in a bad way.
 				std::cout << "When parsing: " << FIM_MSG_CONSOLE_LONG_LINE   << s << FIM_MSG_CONSOLE_LONG_LINE  << "\n";
