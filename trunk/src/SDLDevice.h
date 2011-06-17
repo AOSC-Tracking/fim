@@ -42,6 +42,7 @@ class SDLDevice:public DisplayDevice
 	fim::string opts_;
 	bool want_windowed_;
 	bool want_mouse_display_;
+	bool want_resize_;
 
 	public:
 
@@ -92,6 +93,7 @@ class SDLDevice:public DisplayDevice
 	int fill_rect(int x1, int x2, int y1,int y2, int color);
 	int txt_width() ;
 	int txt_height() ;
+	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
 };
 
 

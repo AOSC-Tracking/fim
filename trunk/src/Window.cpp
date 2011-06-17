@@ -1142,6 +1142,12 @@ namespace fim
 		if(first_)delete first_;
 		if(second_)delete second_; 
 	}
+
+	fim_err_t Window::update(const Rect& corners)
+	{
+		corners_=corners;
+		if(viewport_ && commandConsole_.displaydevice_)commandConsole_.displaydevice_->redraw_=1;// FIXME
+	}
 }
 #if 0
 /*
