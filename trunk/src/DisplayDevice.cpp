@@ -178,7 +178,7 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw,
 	{
 		int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
 		int fh=f_?f_->height:1;
-		ls=FIM_MIN(ls,height()/f_->height);
+		ls=FIM_MIN(ls,height()/fh);
 		clear_rect(0, width()-1, 0,fh*ls);
 	}
 #else

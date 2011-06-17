@@ -81,6 +81,7 @@ class AADevice:public DisplayDevice
 	fim_err_t init_console();
 	fim_bpp_t get_bpp(){return 1; /* :) */ };
 	int get_input(fim_key_t * c);
+	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 };
 
 
