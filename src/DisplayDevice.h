@@ -86,6 +86,8 @@ class DisplayDevice
 	void quickbench();
 	private:
 	virtual void console_switch(fim_bool_t is_busy){}// really, only for making happy fbdev
+	public:
+	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h){}
 };
 
 #endif

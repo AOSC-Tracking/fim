@@ -534,6 +534,8 @@ namespace fim
  * Fim Autocommands
  * FIXME: need autodocumentation for these.
  * */
+//#define FIM_ACM_POSTSCREENRESIZE	"PostScreenResize"	/* "" */
+//#define FIM_ACM_PRESCREENRESIZE		"PreScreenResize"	/* "" */
 #define FIM_ACM_POSTSCALE	"PostScale"		/* "" */
 #define FIM_ACM_PRESCALE	"PreScale"		/* "" */
 #define FIM_ACM_PREPAN		"PrePan"		/* "" */

@@ -42,7 +42,7 @@ namespace fim
 
 #define FIM_SDL_ALLOW_QUIT 1
 #define FIM_SDL_WANT_KEYREPEAT 1
-#define FIM_SDL_WANT_RESIZE 0
+#define FIM_SDL_WANT_RESIZE 1
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 
@@ -72,6 +72,7 @@ std::cout.unsetf ( std::ios::hex );
 	opts_(opts),
 	want_windowed_(false),
 	want_mouse_display_(false),
+	want_resize_(false),
 	vi_(NULL)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
@@ -86,6 +87,7 @@ std::cout.unsetf ( std::ios::hex );
 				switch(tolower(*os)){
 				case 'w': want_windowed_=true; break;
 				case 'm': want_mouse_display_=true; break;
+				case 'r': want_resize_=true; break;
 				default: std::cerr<<"unrecognized specifier character \""<<*os<<"\"\n";
 				}
 				++os;
@@ -298,9 +300,10 @@ std::cout.unsetf ( std::ios::hex );
 		//want_windowed_=true;
 		want_height=480;
 		want_width=480;
-#if FIM_SDL_WANT_RESIZE 
-		want_flags|=SDL_RESIZABLE;
 #endif
+#if FIM_SDL_WANT_RESIZE 
+		if(want_resize_)
+			want_flags|=SDL_RESIZABLE;
 #endif
 		if(want_windowed_)
 			want_flags&=~SDL_FULLSCREEN;
@@ -487,7 +490,8 @@ std::cout.unsetf ( std::ios::hex );
 			{
 #if FIM_SDL_WANT_RESIZE 
 				case SDL_RESIZABLE:
-					std::cout << "resizing to " << event_.resize.w << " "<< event_.resize.h << "\n";
+					if(cc.displaydevice_)
+						cc.displaydevice_->resize(event_.resize.w,event_.resize.h);
 				break;
 #endif
 				case SDL_QUIT:
@@ -832,7 +836,35 @@ done:
 	{
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 		SDL_Flip(screen_);
-		
 	}
 
+	fim_err_t SDLDevice::resize(fim_coo_t w, fim_coo_t h)
+	{
+		SDL_Surface *nscreen_=NULL;
+		if(!want_resize_)
+			return FIM_ERR_GENERIC;
+		//std::cout << "resizing to " << w << " "<< h << "\n";
+		if(cc.window_) { Rect nr(0,0,w,h);cc.window_->update(nr);}
+		//screen_=SDL_ConvertSurface(screen_,vi_->vfmt,screen_->flags);
+		if (NULL==(nscreen_ = SDL_SetVideoMode(w,	/* width  */
+						h,	/* height */
+						bpp_,	/* depth (bits per pixel) */
+						screen_->flags)))
+		{
+			///std::cout << "resizing to " << w << " "<< h << " FAILED!\n";
+			return FIM_ERR_GENERIC;
+		}
+		//std::cout << "resizing to " << w << " "<< h << " SUCCESS!\n";
+		screen_=nscreen_;
+		sdl_window_update();
+		init_console();
+		if(cc.window_)
+			cc.window_->recursive_redisplay();
+		fim::string msg="successfully resized window to ";
+		msg+=fim::string(w);
+		msg+=" x ";
+		msg+=fim::string(h);
+		cc.set_status_bar(msg.c_str(),NULL);
+		return FIM_ERR_NO_ERROR;
+	}
 #endif

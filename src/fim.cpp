@@ -159,7 +159,7 @@ struct fim_options_t fim_options[] = {
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
 "It will probably be a subset  of {\\fBsdl\\fP, \\fBfb\\fP, \\fBaa\\fP, \\fBcaca\\fP, \\fBdumb\\fP}.\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
-"The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']['m']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution, and the \\fB'w'\\fP character requests windowed mode, and the \\fB'm'\\fP character requests mouse pointer display (experimental features).\n"
+"The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']['m']['r']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the \\fB'w'\\fP character requests windowed mode; the \\fB'm'\\fP character requests mouse pointer display; the \\fB'r'\\fP character requests support for window resize (experimental features).\n"
 #endif
 #if FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE
 "You can use upper and lower case characters indifferently in the specification string (comparisons are case insensitive).\n"

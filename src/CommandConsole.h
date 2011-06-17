@@ -59,7 +59,9 @@ class CommandConsole
 	private:
 
 #ifdef FIM_WINDOWS
+	public:// 20110617 this is terrible, I know
 	fim::Window * window_;
+	private:
 #endif
 	/*
 	 * the registered command methods and objects

@@ -240,6 +240,7 @@ class Window
 	/* The only public method launching exceptions is the constructor now.
 	 * */
 	Window(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
+	fim_err_t update(const Rect& corners);
 
 	Viewport * current_viewportp()const;
         fim::string fcmd_cmd(const std::vector<fim::string> &args);
