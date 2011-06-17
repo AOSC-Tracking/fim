@@ -490,8 +490,7 @@ std::cout.unsetf ( std::ios::hex );
 			{
 #if FIM_SDL_WANT_RESIZE 
 				case SDL_RESIZABLE:
-					if(cc.displaydevice_)
-						cc.displaydevice_->resize(event_.resize.w,event_.resize.h);
+						cc.resize(event_.resize.w,event_.resize.h);
 				break;
 #endif
 				case SDL_QUIT:
@@ -844,7 +843,6 @@ done:
 		if(!want_resize_)
 			return FIM_ERR_GENERIC;
 		//std::cout << "resizing to " << w << " "<< h << "\n";
-		if(cc.window_) { Rect nr(0,0,w,h);cc.window_->update(nr);}
 		//screen_=SDL_ConvertSurface(screen_,vi_->vfmt,screen_->flags);
 		if (NULL==(nscreen_ = SDL_SetVideoMode(w,	/* width  */
 						h,	/* height */
@@ -857,14 +855,6 @@ done:
 		//std::cout << "resizing to " << w << " "<< h << " SUCCESS!\n";
 		screen_=nscreen_;
 		sdl_window_update();
-		init_console();
-		if(cc.window_)
-			cc.window_->recursive_redisplay();
-		fim::string msg="successfully resized window to ";
-		msg+=fim::string(w);
-		msg+=" x ";
-		msg+=fim::string(h);
-		cc.set_status_bar(msg.c_str(),NULL);
 		return FIM_ERR_NO_ERROR;
 	}
 #endif

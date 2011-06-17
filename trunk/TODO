@@ -21,7 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
-20110617	the new resizing feature in aa and sdl shall handle errors in some way; as well as code should be reused in both implementations (for consistency and maintainability reasons)
+20110617	the new resizing feature in aa and sdl shall handle errors in some way
 20110617	may honour command line options parsing features of aalib 
 -------------------------------------------------------------------------------
 Documentation features/fixes:

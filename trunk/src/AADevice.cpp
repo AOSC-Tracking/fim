@@ -553,11 +553,7 @@
 		if(*c==AA_RESIZE )
 		{
 			//status_line((const fim_char_t *)"window resizing not yet supported. sorry!");
-			if(cc.displaydevice_ && 1==aa_resize(ascii_context_))
-			{
-				//cc.displaydevice_->resize(event_.resize.w,event_.resize.h);
-				cc.displaydevice_->resize(width(),height());
-			}
+			cc.resize(0,0);
 			/*aa_resize(ascii_context_);*//*we are not yet ready : the Window and Viewport stuff .. */
 			return 0;
 		}/* esc  */
@@ -570,19 +566,13 @@
 
 	fim_err_t AADevice::resize(fim_coo_t w, fim_coo_t h)
 	{
+		/* resize is handled by aalib */
 		const bool want_resize_=true;
 		if(!want_resize_)
 			return FIM_ERR_GENERIC;
-
-		if(cc.window_) { Rect nr(0,0,w,h);cc.window_->update(nr);}
-
-		init_console();
-		if(cc.window_)
-			cc.window_->recursive_redisplay();
-		fim::string msg="successfully resized window to ";
-		msg+=fim::string(w); msg+=" x "; msg+=fim::string(h);
-		cc.set_status_bar(msg.c_str(),NULL);
-		return FIM_ERR_NO_ERROR;
+		if(1==aa_resize(ascii_context_))
+			return FIM_ERR_NO_ERROR;
+		return FIM_ERR_GENERIC;
 	}
 
 

@@ -2179,6 +2179,30 @@ ok:
 #endif
 	}
 
+	fim_err_t CommandConsole::resize(fim_coo_t w, fim_coo_t h)
+	{
+		if(!displaydevice_)
+			return FIM_ERR_GENERIC;
 
+		if(FIM_ERR_NO_ERROR!=displaydevice_->resize(w,h))
+			return FIM_ERR_GENERIC;
+
+		w=displaydevice_->width();
+		h=displaydevice_->height();
+
+		if(window_) { Rect nr(0,0,w,h);cc.window_->update(nr);}
+
+		displaydevice_->init_console();
+		if(window_)
+			window_->recursive_redisplay();
+
+		fim::string msg="resized window to ";
+		msg+=fim::string(w);
+	       	msg+=" x ";
+	       	msg+=fim::string(h);
+		cc.set_status_bar(msg.c_str(),NULL);
+
+		return FIM_ERR_NO_ERROR;
+	}
 }
 
