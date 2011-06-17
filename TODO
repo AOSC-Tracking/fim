@@ -21,7 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
-
+20110617	may honour command line options parsing features of aalib 
+20110617	shall use aa_context mulx/muly 
 -------------------------------------------------------------------------------
 Documentation features/fixes:
 
