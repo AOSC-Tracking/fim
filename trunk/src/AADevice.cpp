@@ -414,6 +414,13 @@
 		sym_keys["Esc"  ]=AA_ESC;
 #endif
 
+	//	The mulx and muly often fail!
+#if 0
+		if(ascii_context_->mulx>0 && ascii_context_->muly>0)
+			cc.setVariable("aascale",(((fim_scale_t)ascii_context_->muly)/((fim_scale_t)ascii_context_->mulx)));
+		cc.setVariable("aamuly",((fim_int)(ascii_context_->muly)));
+		cc.setVariable("aamulx",((fim_int)(ascii_context_->mulx)));
+#endif
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -568,7 +575,7 @@
 			return FIM_ERR_GENERIC;
 
 		if(cc.window_) { Rect nr(0,0,w,h);cc.window_->update(nr);}
-		
+
 		init_console();
 		if(cc.window_)
 			cc.window_->recursive_redisplay();
