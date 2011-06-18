@@ -32,6 +32,8 @@
  */
 #define min(x,y) ((x)<(y)?(x):(y))
 
+static bool aainvalid;
+
 	int AADevice::clear_rect_(
 		void* dst,	// destination gray array and source rgb array
 		int oroff,int ocoff,	// row  and column  offset of the first output pixel
@@ -359,9 +361,11 @@
 	{
 		aa_parseoptions (NULL, NULL, NULL, NULL);
 
+		aainvalid=false;
 		ascii_context_ = NULL;
 
 		memcpy (&ascii_hwparms_, &aa_defparams, sizeof (struct aa_hardware_params));
+
 		//ascii_rndparms = aa_getrenderparams();
 		//aa_parseoptions (&ascii_hwparms_, ascii_rndparms, &argc, argv);
 
@@ -474,10 +478,14 @@
 
 	fim_err_t AADevice::status_line(const fim_char_t *msg)
 	{
+		int th=txt_height();
+		if(th<1)
+			goto err;
 #if (!FIM_AALIB_DRIVER_DEBUG)
-		aa_printf(ascii_context_,0,txt_height()-1,AA_NORMAL,"%s",msg);
+		aa_printf(ascii_context_,0,th-1,AA_NORMAL,"%s",msg);
 #endif
 		aa_flush(ascii_context_);
+err:
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -568,8 +576,29 @@
 	{
 		/* resize is handled by aalib */
 		const bool want_resize_=true;
+#if AA_LIB_VERSIONCODE>=104000
+		/* aalib version 104000 calls exit(-1) on zero-width/height contexts. this is simply stupid.
+		   the code we have here is not completely clean, but it catches the situation and proposes
+ 		   a fallback solution, by reinitializing the library video mode to reasonable defaults. */
+		{
+			int width=0, height=0;
+			ascii_context_->driver->getsize(ascii_context_, &width, &height);
+			if (width <= 0 || height <= 0)
+			{
+				/* this is a fix to avoid a segfault in aalib following to-zero window resize */
+				aa_close(ascii_context_);
+				memcpy (&ascii_hwparms_, &aa_defparams, sizeof (struct aa_hardware_params));
+				ascii_context_ = aa_autoinit (&ascii_hwparms_);
+				if(!aa_autoinitkbd(ascii_context_, 0));
+				return FIM_ERR_NO_ERROR;
+			}
+		}
+#else
+/* FIXME: shall track back the first evil aalib version */
+#endif
 		if(!want_resize_)
 			return FIM_ERR_GENERIC;
+
 		if(1==aa_resize(ascii_context_))
 			return FIM_ERR_NO_ERROR;
 		return FIM_ERR_GENERIC;

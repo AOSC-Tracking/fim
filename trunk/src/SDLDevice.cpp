@@ -773,13 +773,18 @@ err:
 		int y;
 		int ys=3;// FIXME
 
+		if(get_chars_per_column()<1)
+			goto done;
 		y = height() - f_->height - ys;
+		if(y<0 )
+			goto done;
 		clear_rect(0, width()-1, y+1,y+f_->height+ys-1);
 		fs_puts(f_, 0, y+ys, msg);
 		fill_rect(0,width()-1, y, y+1, 0xFF);	// FIXME : NO 1!
 
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 		SDL_Flip(screen_);
+done:
 		return FIM_ERR_NO_ERROR;
 	}
 

@@ -20,9 +20,7 @@ ongoing further inspiration.
 
 -------------------------------------------------------------------------------
 	Misc Current development directions
-
-20110617	the new resizing feature in aa and sdl shall handle errors in some way
-20110617	may honour command line options parsing features of aalib 
+	
 -------------------------------------------------------------------------------
 Documentation features/fixes:
 
@@ -103,6 +101,8 @@ Major and tricky (time consuming) features:
 -------------------------------------------------------------------------------
 Minor but tricky (time consuming) features/issues:
 
+20110618	when started really tiny in sdl mode, the console does not show even when resizing up
+20110617	may honour command line options parsing features of aalib 
 20110521	autocompletion shall be escaped (for opening filenames containing quoting chars)
 20110612	using up and down keys in / mode seems to recall general history, not search history (even in old fim revisions)!
 20110615	'3g'-like interactive command ? right now, it will repeat 3 times 'g', but we may internally switch the while to a special argument

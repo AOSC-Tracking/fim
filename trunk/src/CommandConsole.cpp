@@ -2157,6 +2157,8 @@ ok:
 			statusline_cursor=rl_point;	/* rl_point is readline stuff */
 			ilen = fim_strlen(desc);
 			chars-=6+hpl+(*prompt_=='\0'?0:1);	/* displayable, non-service chars  */
+			if(!chars)
+				goto done;
 			/* 11 is strlen(" | H - Help")*/
 			offset =(statusline_cursor/(chars))*(chars);
 			coffset=(*prompt_!='\0')+(statusline_cursor%(chars));
@@ -2167,6 +2169,7 @@ ok:
 #endif
 
 		displaydevice_->status_line((const fim_char_t*)str);
+done:
 		fim_free(str);
 	}
 
