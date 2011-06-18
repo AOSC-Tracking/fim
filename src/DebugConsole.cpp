@@ -150,6 +150,8 @@ namespace fim
 			nc=strlen(cs);
 			if(!nc)goto rerr;
 			nl=lines_count(cs,lwidth_);
+			if(lwidth_<1)goto rerr;
+			nl=lines_count(cs,lwidth_);
 			// we count exactly the number of new entries needed in the arrays we have
 			if((s=const_cast<char*>(strchr(cs,'\n')))!=NULL && s!=cs)nl+=(ccol_+(s-cs-1))/lwidth_;// single line_ with \n or multiline
 			else nl+=(strlen(cs)+ccol_)/lwidth_;	// single line_, with no terminators
