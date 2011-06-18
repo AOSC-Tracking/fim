@@ -433,7 +433,7 @@ int fim_dump_man_page()
 			string(".SH USAGE\n")+
 			string("You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any reasonable image viewer.\n")+
 			string("\n.B\nfim\nis keyboard oriented: there are no user menus or buttons available.\n")+
-			string("If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need a custom command. For these, you can use the internal command and configuration language.\n")+
+			string("If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need to type a custom command. For these, you can use the internal command and configuration language.\n")+
 			string("The full specification for these is available at runtime using the internal help system.\n")+
 			string("\nAlternatively, see man fimrc for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n")+
 			string("\n")+

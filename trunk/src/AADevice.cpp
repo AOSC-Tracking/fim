@@ -26,6 +26,8 @@
 #include "AADevice.h"
 #include <aalib.h>
 
+#define FIM_AA_MINWIDTH 2
+#define FIM_AA_MINHEIGHT 2
 /*
   FIXME : aalib has two resolutions : an input one, and a screen one.
   	  this is not well handled by our code, as we expect a 1:1 mapping.
@@ -583,7 +585,7 @@ err:
 		{
 			int width=0, height=0;
 			ascii_context_->driver->getsize(ascii_context_, &width, &height);
-			if (width <= 0 || height <= 0)
+			if (width < FIM_AA_MINWIDTH || height < FIM_AA_MINHEIGHT )
 			{
 				/* this is a fix to avoid a segfault in aalib following to-zero window resize */
 				aa_close(ascii_context_);

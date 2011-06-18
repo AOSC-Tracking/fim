@@ -91,9 +91,11 @@ namespace fim
 			/* FIXME : the following line_ is redundant in fb, but not in SDL 
 			 * moreover, it seems useless in AA (could be a bug)
 			 * */
+			if(fh*(l-f_+1)>=cc_.displaydevice_->height())
+				goto done;
 			cc_.displaydevice_->clear_rect(0, cc_.displaydevice_->width()-1, 0 ,fh*(l-f_+1) );
 
-			// fs_puts alone won't draw on screen, but in the back plance, so unlock/flip will be necessary
+			// fs_puts alone won't draw on screen, but in the back plane, so unlock/flip will be necessary
 			cc_.displaydevice_->lock();
 
 	    		for(i=f_  ;i<=l   ;++i)
@@ -123,6 +125,7 @@ namespace fim
 			cc_.displaydevice_->unlock();
 
 			cc_.displaydevice_->flush();
+done:
 			fim_free(buf);
 			return 0;
 		#undef min
