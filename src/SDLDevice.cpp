@@ -39,6 +39,8 @@ namespace fim
 	extern CommandConsole cc;
 }
 
+#define FIM_SDL_MINWIDTH 2
+#define FIM_SDL_MINHEIGHT 2
 
 #define FIM_SDL_ALLOW_QUIT 1
 #define FIM_SDL_WANT_KEYREPEAT 1
@@ -308,7 +310,12 @@ std::cout.unsetf ( std::ios::hex );
 		if(want_windowed_)
 			want_flags&=~SDL_FULLSCREEN;
 		//want_flags|=SDL_DOUBLEBUF;
-
+		
+		if(!allowed_resolution(want_width,want_height))
+		{
+			std::cout << "requested window size ("<<want_width<<":"<<want_height<<") smaller than the smallest allowed.\n";
+			return FIM_ERR_GENERIC;
+		}
 
 		if (SDL_Init(SDL_INIT_VIDEO) < 0 )
 		{
@@ -842,17 +849,27 @@ done:
 		SDL_Flip(screen_);
 	}
 
+	bool SDLDevice::allowed_resolution(fim_coo_t w, fim_coo_t h)
+	{
+		if(w<FIM_SDL_MINWIDTH || h<FIM_SDL_MINHEIGHT)
+			return false;
+		if(w<f_->width || h<f_->height)
+			return false;
+		return true;
+	}
+
 	fim_err_t SDLDevice::resize(fim_coo_t w, fim_coo_t h)
 	{
 		SDL_Surface *nscreen_=NULL;
 		if(!want_resize_)
 			return FIM_ERR_GENERIC;
+
+		if(!allowed_resolution(w,h))
+			return FIM_ERR_GENERIC;
+
 		//std::cout << "resizing to " << w << " "<< h << "\n";
 		//screen_=SDL_ConvertSurface(screen_,vi_->vfmt,screen_->flags);
-		if (NULL==(nscreen_ = SDL_SetVideoMode(w,	/* width  */
-						h,	/* height */
-						bpp_,	/* depth (bits per pixel) */
-						screen_->flags)))
+		if (NULL==(nscreen_ = SDL_SetVideoMode(w, h, bpp_, screen_->flags)))
 		{
 			///std::cout << "resizing to " << w << " "<< h << " FAILED!\n";
 			return FIM_ERR_GENERIC;

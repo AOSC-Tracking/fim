@@ -101,7 +101,7 @@ Major and tricky (time consuming) features:
 -------------------------------------------------------------------------------
 Minor but tricky (time consuming) features/issues:
 
-20110618	when started really tiny in sdl mode, the console does not show even when resizing up
+20110618	cd dir ; push /regexp/
 20110617	may honour command line options parsing features of aalib 
 20110521	autocompletion shall be escaped (for opening filenames containing quoting chars)
 20110612	using up and down keys in / mode seems to recall general history, not search history (even in old fim revisions)!

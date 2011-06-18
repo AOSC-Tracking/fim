@@ -170,13 +170,18 @@ namespace fim
 		}
 		#endif
 		tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
+		// FIXME: an error here on, leaves the terminal in raw mode, and this is not cool
 
 		if( displaydevice_==NULL)
 		{
 			displaydevice_=&dummydisplaydevice_;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_DUMB);
 			if(device_failure)
-				std::cerr << "Failure using the \""<<device<<"\" display device driver string.!\n";
+			{
+				std::cerr << "Failure using the \""<<device<<"\" display device driver string (wrong options?)!\n";
+				tty_restore();
+				return -1;
+			}
 			else
 			if(device!=FIM_DDN_VAR_DUMB)
 				std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are "FIM_DDN_VARS")!\n",

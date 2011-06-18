@@ -50,7 +50,7 @@ from an interactive shell and control it with the keyboard, as you would do with
 .B
 fim
 is keyboard oriented: there are no user menus or buttons available.
-If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need a custom command. For these, you can use the internal command and configuration language.
+If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need to type a custom command. For these, you can use the internal command and configuration language.
 The full specification for these is available at runtime using the internal help system.
 
 Alternatively, see man fimrc for a full specification of the 
