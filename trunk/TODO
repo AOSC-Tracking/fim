@@ -21,8 +21,6 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
-20110619	windowed sdl exposes some readline problems
-20110619	need resize on fimrc (window "resize"), and don't want continuous polling in sdl mode
 -------------------------------------------------------------------------------
 Documentation features/fixes:
 
@@ -103,12 +101,12 @@ Major and tricky (time consuming) features:
 -------------------------------------------------------------------------------
 Minor but tricky (time consuming) features/issues:
 
+20110619	the sdl output is very inefficient (uses continuout polling for user input, to allow readline to work)	
 20110618	cd dir ; push /regexp/
 20110617	may honour command line options parsing features of aalib 
 20110521	autocompletion shall be escaped (for opening filenames containing quoting chars)
 20110612	using up and down keys in / mode seems to recall general history, not search history (even in old fim revisions)!
 20110615	'3g'-like interactive command ? right now, it will repeat 3 times 'g', but we may internally switch the while to a special argument
-20110613	the sdl output is very inefficient (uses continuout polling for user input, to allow readline to work)	
 20110530	need some "emergency" command and/or mechanism for freeing/reclaiming memory (e.g.:caches, buffers)
 20110507	the generated man output shall print out examples which are also a correctness test
 20110202	DICOM integration ? see libmdc2-dev / man medcon
