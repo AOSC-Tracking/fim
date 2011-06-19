@@ -298,7 +298,8 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	        rl_pre_input_hook=redisplay_hook;
 	}
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
-	if( g_fim_output_device==FIM_DDN_INN_SDL 
+	//if( g_fim_output_device==FIM_DDN_INN_SDL 
+	if(g_fim_output_device.find(FIM_DDN_INN_SDL)==0
 		/* only useful to bypass X11-windowed aalib (but sadly, breaks plain aalib input)  */ 
 		/*|| g_fim_output_device==FIM_DDN_INN_AA */ 
 	)
