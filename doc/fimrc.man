@@ -206,7 +206,7 @@ commands : display the existing commands
 .B
 display
 .fi
-display : display the current file contents
+display ['reinit' {string}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the --output-device command line switch for allowed values of {string};
 .fi
 
 .B

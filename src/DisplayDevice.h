@@ -88,6 +88,7 @@ class DisplayDevice
 	virtual void console_switch(fim_bool_t is_busy){}// really, only for making happy fbdev
 	public:
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h){}
+	virtual fim_err_t reinit(const fim_char_t *rs){}
 };
 
 #endif

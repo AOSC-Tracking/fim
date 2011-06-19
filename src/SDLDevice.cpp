@@ -63,6 +63,62 @@ std::cout.unsetf ( std::ios::hex );
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 
+
+fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
+{
+	bool want_windowed=want_windowed_;
+	bool want_mouse_display=want_mouse_display_;
+	bool want_resize=want_resize_;
+	fim_coo_t current_w=current_w_;
+	fim_coo_t current_h=current_h_;
+
+		if(os)
+		{
+			while(*os&&!isdigit(*os))
+			{
+				bool tv=true;
+				if(isupper(*os))
+					tv=false;
+				switch(tolower(*os)){
+					case 'w': want_windowed=tv; break;
+					case 'm': want_mouse_display=tv; break;
+					case 'r': want_resize=tv; break;
+					default: std::cerr<<"unrecognized specifier character \""<<*os<<"\"\n";goto err;
+				}
+				++os;
+			}
+		if(*os)
+		if(2==sscanf(os,"%d:%d",&current_w,&current_h))
+
+		{
+		//	std::cout << w << " : "<< h<<"\n";
+			current_w=FIM_MAX(current_w,0);
+			current_h=FIM_MAX(current_h,0);
+			if(!allowed_resolution(current_w,current_h))
+				goto err;
+		}
+		else
+		{
+			current_w=current_h=0;
+			std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
+			// TODO: a better invaling string message needed here
+		}
+		}
+		// commit
+		want_windowed_=want_windowed;
+		want_mouse_display_=want_mouse_display;
+#if FIM_SDL_WANT_RESIZE 
+		want_resize_=want_resize;
+#else
+		want_resize_=false;
+#endif
+		current_w_=current_w;
+		current_h_=current_h;
+		return FIM_ERR_NO_ERROR;
+err:
+		return FIM_ERR_GENERIC;
+}
+
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	SDLDevice::SDLDevice(MiniConsole & mc_, fim::string opts):DisplayDevice(mc_),
 #else
@@ -75,6 +131,9 @@ std::cout.unsetf ( std::ios::hex );
 	want_windowed_(false),
 	want_mouse_display_(false),
 	want_resize_(false),
+	Bpp_(NULL),
+	bpp_(NULL),
+	screen_(NULL),
 	vi_(NULL)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
@@ -82,35 +141,8 @@ std::cout.unsetf ( std::ios::hex );
 		h_=0;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		const char*os=opts_.c_str();
-		if(os)
-		{
-			while(*os&&!isdigit(*os))
-			{
-				switch(tolower(*os)){
-				case 'w': want_windowed_=true; break;
-				case 'm': want_mouse_display_=true; break;
-				case 'r': want_resize_=true; break;
-				default: std::cerr<<"unrecognized specifier character \""<<*os<<"\"\n";
-				}
-				++os;
-			}
-		if(*os)
-		if(2==sscanf(os,"%d:%d",&current_w_,&current_h_))
-
-		{
-		//	std::cout << w << " : "<< h<<"\n";
-			current_w_=FIM_MAX(current_w_,0);
-			current_h_=FIM_MAX(current_h_,0);
-		}
-		else
-		{
-			current_w_=current_h_=0;
-			std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
-			// TODO: a better invaling string message needed here
-		}
-		}
+		parse_optstring(os);
 #endif
-
 		//current_w_=current_h_=0;
 	}
 
@@ -339,24 +371,12 @@ std::cout.unsetf ( std::ios::hex );
 			}
 			fim_perror(NULL);
 		}
-		/* TODO: shall allow the user to specify width/height, if desired */
-		/* automatic selection of video mode (the current one) */
-		if (!(screen_ = SDL_SetVideoMode(want_width,	/* width  */
-						want_height,	/* height */
-						want_bpp,	/* depth (bits per pixel) */
-						want_flags)))
+
+		if(resize(want_width,want_height))
 		{
 			std::cout << "problems initializing SDL (SDL_SetVideoMode)\n";
 			SDL_Quit();
 			return FIM_ERR_GENERIC;
-		}
-		else
-		{
-			if(!sdl_window_update())
-			{
-				std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
-				return FIM_ERR_GENERIC;
-			}
 		}
 		fim_perror(NULL);
 
@@ -496,7 +516,7 @@ std::cout.unsetf ( std::ios::hex );
 			switch (event_.type)
 			{
 #if FIM_SDL_WANT_RESIZE 
-				case SDL_RESIZABLE:
+				case SDL_VIDEORESIZE:
 						cc.resize(event_.resize.w,event_.resize.h);
 				break;
 #endif
@@ -585,7 +605,7 @@ std::cout.unsetf ( std::ios::hex );
 					if(*c)	/* !iscntrl(c) */
 					{
 						/* the usual chars */
-						FIM_SDL_INPUT_DEBUG(c,"keysim");
+						FIM_SDL_INPUT_DEBUG(c,"keysym");
 						return 1;
 					}
 					else	/*  iscntrl(c) */
@@ -851,32 +871,63 @@ done:
 
 	bool SDLDevice::allowed_resolution(fim_coo_t w, fim_coo_t h)
 	{
+		if(w==0 || h==0)
+			goto ok;
 		if(w<FIM_SDL_MINWIDTH || h<FIM_SDL_MINHEIGHT)
 			return false;
 		if(w<f_->width || h<f_->height)
 			return false;
+ok:
 		return true;
 	}
 
 	fim_err_t SDLDevice::resize(fim_coo_t w, fim_coo_t h)
 	{
 		SDL_Surface *nscreen_=NULL;
-		if(!want_resize_)
-			return FIM_ERR_GENERIC;
+		int want_flags=screen_?screen_->flags:SDL_FULLSCREEN|SDL_HWSURFACE;
+
+		if(want_resize_)
+			want_flags|=SDL_RESIZABLE;
+		else
+			want_flags&=~SDL_RESIZABLE;
+
+		if(want_windowed_)
+			want_flags&=~SDL_FULLSCREEN;
+		else
+			want_flags|=SDL_FULLSCREEN;
 
 		if(!allowed_resolution(w,h))
 			return FIM_ERR_GENERIC;
 
 		//std::cout << "resizing to " << w << " "<< h << "\n";
-		//screen_=SDL_ConvertSurface(screen_,vi_->vfmt,screen_->flags);
-		if (NULL==(nscreen_ = SDL_SetVideoMode(w, h, bpp_, screen_->flags)))
+		if (NULL==(nscreen_ = SDL_SetVideoMode(w, h, bpp_, want_flags)))
 		{
 			///std::cout << "resizing to " << w << " "<< h << " FAILED!\n";
 			return FIM_ERR_GENERIC;
 		}
 		//std::cout << "resizing to " << w << " "<< h << " SUCCESS!\n";
 		screen_=nscreen_;
-		sdl_window_update();
+		if(!sdl_window_update())
+		{
+			std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
+			return FIM_ERR_GENERIC;
+		}
 		return FIM_ERR_NO_ERROR;
+	}
+
+	fim_err_t SDLDevice::reinit(const fim_char_t *rs)
+	{
+#if FIM_SDL_WANT_RESIZE 
+#else
+		cout << "reinit not allowed\n";
+		goto err;
+#endif
+		// FIXME: a wrong command string shall be ignored!
+		if(parse_optstring(rs)!=FIM_ERR_NO_ERROR)
+			goto err;
+		return cc.resize(current_w_,current_h_);
+	err:
+		//std::cerr<<"problems!\n";
+		return FIM_ERR_GENERIC;
 	}
 #endif

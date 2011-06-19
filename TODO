@@ -20,7 +20,9 @@ ongoing further inspiration.
 
 -------------------------------------------------------------------------------
 	Misc Current development directions
-	
+
+20110619	windowed sdl exposes some readline problems
+20110619	need resize on fimrc (window "resize"), and don't want continuous polling in sdl mode
 -------------------------------------------------------------------------------
 Documentation features/fixes:
 

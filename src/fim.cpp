@@ -159,10 +159,7 @@ struct fim_options_t fim_options[] = {
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
 "It will probably be a subset  of {\\fBsdl\\fP, \\fBfb\\fP, \\fBaa\\fP, \\fBcaca\\fP, \\fBdumb\\fP}.\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
-"The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']['m']['r']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the \\fB'w'\\fP character requests windowed mode; the \\fB'm'\\fP character requests mouse pointer display; the \\fB'r'\\fP character requests support for window resize (experimental features).\n"
-#endif
-#if FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE
-"You can use upper and lower case characters indifferently in the specification string (comparisons are case insensitive).\n"
+"The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the \\fB'w'\\fP character requests windowed mode; the \\fB'm'\\fP character requests mouse pointer display; the \\fB'r'\\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
 #endif
     },
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
@@ -438,7 +435,7 @@ int fim_dump_man_page()
 			string("\nAlternatively, see man fimrc for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n")+
 			string("\n")+
 			string("\n.SH OPTIONS\n")+
-			string("Accepted command line \n.B\n{options}\n:\n")+
+			string("Accepted command line \n.B\n{options}\n:\n");
 			mp+=fim_dump_man_page_snippets();
 			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
 ".nf\n"
@@ -622,6 +619,9 @@ mp+=string(
 "This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.\n"
 #ifdef FIM_READ_STDIN_IMAGE
 "The filename \""FIM_STDIN_IMAGE_NAME"\" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.\n"
+#endif
+#ifdef FIM_WITH_LIBSDL
+"The SDL driver is very inefficient, for a variety of reasons. This shall be fixed.\n"
 #endif
 ".SH BUGS\n"
 ".B fim\n"
@@ -1064,7 +1064,11 @@ done:
 		    //fim's
 		    	g_fim_output_device=optarg;
 #if FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE
-			transform(g_fim_output_device.begin(), g_fim_output_device.end(), g_fim_output_device.begin(),(int (*)(int))tolower);
+			{
+				int si=g_fim_output_device.find(FIM_SYM_DEVOPTS_SEP_STR);
+				if(si>0);else si=g_fim_output_device.end()-g_fim_output_device.begin();
+				transform(g_fim_output_device.begin(), si+g_fim_output_device.begin(), g_fim_output_device.begin(),(int (*)(int))tolower);
+			}
 #endif
 		    break;
 		case 0xd15cbab3:
