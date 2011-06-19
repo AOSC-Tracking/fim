@@ -437,6 +437,11 @@ nop:
 			/*
 			 * the following is a trick to override redisplaying..
 			 */
+			if(args.size()>0 && args[0] == "reinit")
+			{
+				string arg=args.size()>1?args[1]:"";
+				commandConsole_.display_reinit(arg.c_str());
+			}
 			if(image() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
 			//	if(c_image())
 			{
@@ -450,6 +455,7 @@ nop:
 //				FIXME:
 //				if(commandConsole_.window)commandConsole_.window->recursive_display();
 			}
+ddone:
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTDISPLAY,c);
 #endif

@@ -96,6 +96,8 @@ class SDLDevice:public DisplayDevice
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	private:
 	bool allowed_resolution(fim_coo_t w, fim_coo_t h);
+	virtual fim_err_t reinit(const fim_char_t *rs);
+	fim_err_t parse_optstring(const fim_char_t *os);
 };
 
 
