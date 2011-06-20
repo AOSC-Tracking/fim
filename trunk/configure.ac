@@ -221,6 +221,7 @@ AC_HEADER_DIRENT()
 AC_CHECK_HEADERS([stdarg.h sys/ioctl.h ioctl.h sysexits.h])
 AC_CHECK_HEADERS([sys/time.h sys/resource.h])
 AC_CHECK_HEADERS([unix.h])
+AC_CHECK_HEADERS([libgen.h])
 AC_CHECK_HEADERS([sys/user.h])
 AC_CHECK_HEADERS([sys/mman.h])
 AC_CHECK_HEADERS([cstdio stdio.h], [break],AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]]))
@@ -1054,7 +1055,7 @@ AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan
 	else
                 fim_cv_read_dirs=yes
         fi
-],[ fim_cv_read_dirs=no ]
+],[ fim_cv_read_dirs=yes ]
 )
 dnl ==================
 AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--enable-recursive-dirs], [Fim will try to recurse directories (implies --enable-read-dirs )]),

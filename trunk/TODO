@@ -21,6 +21,13 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110620	tab based files autocompletion has problems (may show only partial results)
+20110620	need a --cd-and-readdir command switch, for usage from within graphical shells
+20110620	need to unify _device_string and the command line switch string
+20110620	init feature-check routine with some regexp functionality testing
+20110619	by default, sdl-fim should resize the image on system window resize, if autoscaling is on 
+20110619	need a switch to enable directory browsing, and an internal variable to set the rules (e.g.: filename extension filter, no filter at all)
+
 -------------------------------------------------------------------------------
 Documentation features/fixes:
 
@@ -31,6 +38,7 @@ Documentation features/fixes:
 -------------------------------------------------------------------------------
 Major language clarity features/fixes:
 
+20110620	many commands shall be documented conditionally
 20110517	may consider distinguishing "options" from "variables", as vim does
 20110507	need a special mention for special variables (and their namespaces), in the documentation
 20070417	It has come the time to decide the future developments of Fim.
@@ -136,6 +144,7 @@ Minor but tricky (time consuming) features/issues:
 -------------------------------------------------------------------------------
 Minor and easy (not time consuming) feature:
 
+20110620	need an option for displaying the filename as a relative path	
 20110601	shall use fim_byte_t instead of unsigned char's
 20110523	shall use autocommands for printing out status messages on loading,prefetching,etc 
 20110615	shall prepare thorough test cases for scale and page goto subcases
@@ -158,6 +167,7 @@ Minor and easy (not time consuming) feature:
 -------------------------------------------------------------------------------
 Test & correctness oriented features:
 
+20110620	use cpp instead of grep when autogenerating doc files
 20110612	the parser should be strictly checked for leaks
 20110612	need a runtime method for diverting stdout ? may ease debugging.
 20110602	need a test for the goodness of the 'random' variable numbers.

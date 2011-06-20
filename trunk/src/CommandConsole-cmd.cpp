@@ -22,6 +22,9 @@
 
 
 #include "fim.h"
+#ifdef HAVE_LIBGEN_H
+#include <libgen.h>
+#endif
 
 #define FIM_WANT_SYSTEM_CALL_DEBUG 0
 
@@ -377,6 +380,10 @@ namespace fim
 			fim::string dir=args[i];
 			if(dir=="-")dir=oldpwd;
 			oldpwd=fcmd_pwd(args_t());
+#ifdef HAVE_LIBGEN_H
+			if(!is_dir(dir))
+				dir=dirname((char*)dir.c_str());// FIXME
+#endif
 			int ret = chdir(dir.c_str());
 #if 1
 			if(ret) return (fim::string("cd error : ")+fim::string(strerror(errno)));

@@ -278,7 +278,7 @@ info : display information about the current file
 .B
 list
 .fi
-list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list; list pop : pop the last file from the files list; list remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; push {filename(s)} : push {filename(s)} to the back of the files list; list filesnum : display the number of files in the files list; list mark : mark the current file for stdout printing at exit; list unmark : unmark the current file, preventing from stdout printing at exit
+list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list; list pop : pop the last file from the files list; list remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; push {filename(s)} : push {filename(s)} to the back of the files list; list filesnum : display the number of files in the files list; list mark : mark the current file for stdout printing at exit; list unmark : unmark the current file, preventing from stdout printing at exit; list pushdir {dirname} : will push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression \.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.JPEG$|\.JFIF$|\.PPM$ 
 .fi
 
 .B
@@ -637,6 +637,14 @@ _open_offset
 .B
 _orientation
 [internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" will do the same thing: rotate the image one time by 90'.
+.fi
+.B
+_push_pushes_dirs
+[internal,in] if 1, the push command will also accept and push directories (using pushdir)
+.fi
+.B
+_pushdir_re
+[internal,in] regular expression to match against when pushing files from a directory
 .fi
 .B
 _pwd
