@@ -27,6 +27,9 @@
 #include <dirent.h>
 #include <sys/types.h>	/* POSIX Standard: 2.6 Primitive System Data Types (e.g.: ssize_t) */
 #include "fim.h"
+#ifdef HAVE_LIBGEN_H
+#include <libgen.h>
+#endif
 
 namespace fim
 {
@@ -83,6 +86,16 @@ namespace fim
 				argsc.erase(argsc.begin());
 				return do_push(argsc);
 			}
+#ifdef FIM_READ_DIRS
+			if(args[0]=="pushdir")
+			{
+				if(args.size()>=2)
+					push_dir(args[1]);
+				else
+					push_dir(".");
+				return  "";
+			}
+#endif
 			if(args[0]=="filesnum")
 			{
 				return n_files();
@@ -673,15 +686,21 @@ ddone:
 
 #ifdef FIM_READ_DIRS
 	bool Browser::push_dir(fim::string nf)
-	{	
+	{
+		// TODO: may introduce some more variable to control recursive push 	
 		int d_n;
-		DIR *dir;
-		struct dirent *de;
+		DIR *dir=NULL;
+		struct dirent *de=NULL;
 		fim::string f;
 
 		/*	we want a dir .. */
+#ifdef HAVE_LIBGEN_H
+		if(!is_dir(nf.c_str()))
+			nf=dirname((char*)nf.c_str());// FIXME
+#else
 		if( !is_dir( nf ))return false;
-		
+#endif
+
 		if ( ! ( dir = opendir(nf.c_str() ) ))
 			return false;
 
@@ -700,7 +719,7 @@ ddone:
 #endif
 			
 			/*
-			 * Warning : this is dangeous, as following circualr links could cause memory exhaustion.
+			 * Warning : this is dangerous, as following circular links may cause memory exhaustion.
 			 * */
 			if(is_dir( f+fim::string(de->d_name)))
 #ifdef FIM_RECURSIVE_DIRS
@@ -709,9 +728,16 @@ ddone:
 				continue;
 #endif
 			else 
-				push(f+fim::string(de->d_name));
+			{
+				fim::string re=getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
+				fim::string fn=f+fim::string(de->d_name);
+				if(re==FIM_CNS_EMPTY_STRING)
+					re=FIM_CNS_PUSHDIR_RE;
+				if(fn.re_match(re.c_str()))
+					push(f+fim::string(de->d_name));
+			}
 		}
-		return closedir(dir)!=NULL;
+		return (closedir(dir)==0);
 	}
 #endif
 
@@ -738,7 +764,9 @@ ddone:
 		/*	if it is a directory , return */
 		//if(  S_ISDIR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 #ifdef FIM_READ_DIRS
-		if(  S_ISDIR(stat_s.st_mode))return push_dir(nf);
+		if(  S_ISDIR(stat_s.st_mode))
+			if(getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS)==1)
+				return push_dir(nf);
 #endif
 		/*	we want a regular file .. */
 		if(

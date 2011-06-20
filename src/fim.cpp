@@ -408,9 +408,9 @@ int fim_dump_man_page()
 			string(".SH NAME\n")+
 			string("fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n")+
 			string(".SH SYNOPSIS\n")+
-#ifdef FIM_READ_STDIN
 			string(".B fim [{options}] [--] {imagefile} [{imagefiles}]\n.fi\n")+
 			string(".B ... | fim [{options}] [--] [{imagefiles}] -\n.fi\n")+
+#ifdef FIM_READ_STDIN
 			string(".B fim [{options}] [--] [{files}] - < {file_name_list_text_file}\n.fi\n")+
 #endif
 #ifdef FIM_READ_STDIN_IMAGE
@@ -425,6 +425,10 @@ int fim_dump_man_page()
 			string("It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim-like autocommands, and much more.\n\n")+
 			string("As a default,\n.B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '"FIM_EPR_XCFTOPNM"'.\nFor '.fig' vectorial images, fim will try to use '"FIM_EPR_FIG2DEV"'.\nFor '.dia' vectorial images, fim will try to use '"FIM_EPR_DIA"'.\nFor '.svg' vectorial images, fim will try to use '"FIM_EPR_INKSCAPE"'.\nFor other formats fim will try to use ImageMagick's '"FIM_EPR_CONVERT"' executable.\n")+
 			string("\n")+
+#ifdef FIM_READ_DIRS
+			string("\n""If configured at build time,\n.B\n{imagefile}\nmay be as well a directory containing files in supported formats.""\n\n")+
+#endif
+
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
 			string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.  This man page only describes the\n.B fim\ncommand line options.\n\n")+
 			string(".SH USAGE\n")+

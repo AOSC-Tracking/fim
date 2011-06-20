@@ -33,6 +33,12 @@ For '.svg' vectorial images, fim will try to use 'inkscape'.
 For other formats fim will try to use ImageMagick's 'convert' executable.
 
 
+If configured at build time,
+.B
+{imagefile}
+may be as well a directory containing files in supported formats.
+
+
 If configured at build time, fim will be capable of using SDL or aalib output.
 
 Please note that a user guide of 
