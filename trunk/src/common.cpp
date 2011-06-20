@@ -36,7 +36,21 @@
 #ifdef HAVE_WCHAR_H
 #include <wchar.h>
 #endif
+#ifdef HAVE_LIBGEN_H
+#include <libgen.h>
+#endif
 
+fim::string fim_dirname(const fim::string & arg)
+{
+#ifdef HAVE_LIBGEN_H
+	char buf[FIM_PATH_MAX];
+	strncpy(buf,arg.c_str(),FIM_PATH_MAX-1);
+	buf[FIM_PATH_MAX-1]='\0';
+	return dirname(buf);
+#else
+	return "";//FIXME
+#endif
+}
 	fim::string fim_shell_arg_escape(const fim::string & arg)
 	{
 		// FIXME: this escaping function is NOT safe; it shall only serve as a basis.

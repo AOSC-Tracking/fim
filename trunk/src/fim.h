@@ -580,6 +580,7 @@ namespace fim
 #define FIM_FLT_AUTOCMD			"autocmd" /* in vim */
 #define FIM_FLT_AUTOCMD_DEL		"autocmd_del"	/* not in vim */
 #define FIM_FLT_BIND			"bind" /* not in vim */
+#define FIM_FLT_BASENAME		"basename" /* not in vim */
 #define FIM_FLT_CD			"cd" /* in vim */
 #define FIM_FLT_CLEAR			"clear" /* not in vim */
 #define FIM_FLT_COMMANDS		"commands" /* not in vim */

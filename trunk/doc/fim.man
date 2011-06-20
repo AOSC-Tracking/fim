@@ -91,6 +91,9 @@ Will pad with zeros.
 Regard this as a toy..
 
 .TP
+.B 	 --cd-and-readdir
+step into the first loaded file directory and push other files
+.TP
 .B -c {commands}, --execute-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.
 Please note that if your commands are more complicated than a simple 'next' or 'pornview'
