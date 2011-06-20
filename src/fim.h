@@ -519,13 +519,13 @@ namespace fim
  * Fim Display Driver Names
  * */
 #define FIM_DDN_INN_FB	 "fb"
-#define FIM_DDN_VAR_FB	 "fbdev"
+#define FIM_DDN_VAR_FB	 "fb"
 #define FIM_DDN_INN_SDL	 "sdl"
 #define FIM_DDN_VAR_SDL	 "sdl"
 #define FIM_DDN_INN_AA	 "aa"
-#define FIM_DDN_VAR_AA	 "aalib"
+#define FIM_DDN_VAR_AA	 "aa"
 #define FIM_DDN_INN_CACA	 "caca"
-#define FIM_DDN_VAR_CACA	 "cacalib"
+#define FIM_DDN_VAR_CACA	 "caca"
 #define FIM_DDN_INN_DUMB	 "dumb"
 //#define FIM_DDN_VAR_DUMB	 "dummy"
 #define FIM_DDN_VAR_DUMB	 "dumb"
