@@ -82,6 +82,7 @@ struct fim_options_t fim_options[] = {
 "Will pad with zeros.\n"
 "Regard this as a toy..\n"
     },
+    {"cd-and-readdir", no_argument,       NULL, 0x4352,"step into the first loaded file directory and push other files",NULL,"step into the first loaded file directory and push other files"},
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
 "Please note that if your commands are more complicated than a simple 'next' or 'pornview'\n"
@@ -983,6 +984,11 @@ done:
 		case 'V':
 		    version();
 		    return 0;
+		    break;
+		case 0x4352:
+		    //fim's
+		    cc.appendPostInitCommand( "if(_filelistlen==1){_ffn=i:_filename;cd i:_filename;list 'remove' i:_filename;basename _ffn;_bfn='./'._last_system_output;list 'pushdir' '.';list 'sort';goto '?'._bfn;reload;redisplay;}");
+		    appendedPostInitCommand=true;
 		    break;
 		case 'c':
 		    //fim's

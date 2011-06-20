@@ -123,6 +123,7 @@ class Browser
 	fim::string pop_current(const args_t &args);
 	fim::string fcmd_no_image(const args_t &args);
 	bool present(const fim::string nf);
+	fim_int find_file_index(const fim::string nf);
 #ifdef FIM_READ_DIRS
 	bool push_dir(fim::string nf);
 #endif

@@ -382,7 +382,9 @@ namespace fim
 			oldpwd=fcmd_pwd(args_t());
 #ifdef HAVE_LIBGEN_H
 			if(!is_dir(dir))
-				dir=dirname((char*)dir.c_str());// FIXME
+			{
+				dir=fim_dirname(dir);
+			}
 #endif
 			int ret = chdir(dir.c_str());
 #if 1
@@ -394,6 +396,20 @@ namespace fim
 		}
 		setVariable(FIM_VID_PWD,fcmd_pwd(args_t()).c_str());
 		return FIM_CNS_EMPTY_RESULT;
+	}
+
+	fim::string CommandConsole::fcmd_basename(const args_t& args)
+	{
+		/*
+		 * */
+		static fim::string res="";
+		for(size_t i=0;i<args.size();++i)
+		{
+			fim::string arg=args[i];
+			res+=basename((char*)arg.c_str());//FIXME
+		}
+		setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,res.c_str());
+		return res;
 	}
 
 	fim::string CommandConsole::fcmd_pwd(const args_t& args)

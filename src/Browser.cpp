@@ -674,14 +674,26 @@ ddone:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
+	fim_int Browser::find_file_index(const fim::string nf)
+	{
+		/* 
+		 * returns whether the file nf is in the files list
+		 */
+		for(fim_int i=0;i<flist_.size();++i)
+			if(flist_[i]==nf)return i;
+		return -1;
+	}
+
 	bool Browser::present(const fim::string nf)
 	{
 		/* 
 		 * returns whether the file nf is in the files list
 		 */
-		for(size_t i=0;i<flist_.size();++i)
-			if(flist_[i]==nf)return true;
-		return false;
+		fim_int i=find_file_index(nf);
+		if(i>=0)
+			return true;
+		else
+			return false;
 	}
 
 #ifdef FIM_READ_DIRS
@@ -696,7 +708,7 @@ ddone:
 		/*	we want a dir .. */
 #ifdef HAVE_LIBGEN_H
 		if(!is_dir(nf.c_str()))
-			nf=dirname((char*)nf.c_str());// FIXME
+			nf=fim_dirname(nf);
 #else
 		if( !is_dir( nf ))return false;
 #endif
@@ -978,8 +990,11 @@ nop:
 			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+') && s[1]=='/') ||( c=='/')));
 			isrj=(c=='+' || c=='-');
 			if(isdigit(c)  || c=='-' || c=='+')g=atoi(s);
-			else if(c=='^' || c=='f')nn=1;
-			else if(c=='$' || c=='l')nn=n_files();
+			else if(c=='^' || c=='f')g=1;
+			else if(c=='$' || c=='l')g=n_files();
+			else if(c=='?'){g=find_file_index(string(s).substr(1,sl-1));
+				//std::cout<<string(s).substr(1,sl-1)<<" "<<g<<"\n";
+				if(g<0)goto ret;++g;}
 			else if(isre){;}
 			else cout << " please specify a number or ^ or $\n";
 			//if((!isre) && (!isrj))nn=g;
