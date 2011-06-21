@@ -154,6 +154,9 @@ No system wide initialization file will be read (default is /etc/fimrc) at start
 .B 	 --no-internal-config
 No internal default configuration at startup (uses internal variable _no_default_configuration). Will only provide a minimal working configuration. 
 .TP
+.B 	 --no-commandline
+with internal command line mode disabled
+.TP
 .B 	 --no-history-save
 Do not save execution history at finalization (uses internal variable _save_fim_history). 
 .TP

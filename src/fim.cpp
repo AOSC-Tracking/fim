@@ -141,6 +141,7 @@ struct fim_options_t fim_options[] = {
     {"no-internal-config",      no_argument,       NULL, 0x4E4E4E,"do not execute the internal default configuration at startup",NULL,
 "No internal default configuration at startup (uses internal variable "FIM_VID_NO_DEFAULT_CONFIGURATION"). Will only provide a minimal working configuration. "
     },
+    {"no-commandline",      no_argument,       NULL, 0x4E434C,"with internal command line mode disabled",NULL, "with internal command line mode disabled"},
 #if FIM_WANT_HISTORY
     {"no-history-save",      no_argument,       NULL, 0x4E4853,"do not save execution history",NULL,
 "Do not save execution history at finalization (uses internal variable "FIM_VID_SAVE_FIM_HISTORY"). "
@@ -1045,6 +1046,10 @@ done:
 		case 0x4E4E:// NN
 		    //fim's
 		    	cc.setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,0);
+		    break;
+		case 0x4E434C:// NCL
+		    //fim's
+		    	cc.setVariable(FIM_VID_CONSOLE_KEY,-1);
 		    break;
 #if FIM_WANT_HISTORY
 		case 0x4E484C:// NHL
