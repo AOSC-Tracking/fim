@@ -602,7 +602,11 @@ err:
 			return FIM_ERR_GENERIC;
 
 		if(1==aa_resize(ascii_context_))
+		{
+			cc.setVariable(FIM_VID_SCREEN_WIDTH,width() );
+			cc.setVariable(FIM_VID_SCREEN_HEIGHT,height());
 			return FIM_ERR_NO_ERROR;
+		}
 		return FIM_ERR_GENERIC;
 	}
 
