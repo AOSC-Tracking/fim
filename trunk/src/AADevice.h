@@ -80,7 +80,7 @@ class AADevice:public DisplayDevice
 	void flush();
 	fim_err_t init_console();
 	fim_bpp_t get_bpp(){return 1; /* :) */ };
-	int get_input(fim_key_t * c);
+	int get_input(fim_key_t * c, bool want_poll=false);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 };
 

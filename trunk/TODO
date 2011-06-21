@@ -21,13 +21,12 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
-20110620	sdl is still flawed without an interactive shell underneath; there is probably some terminal clogging code
+20110620	sdl is still flawed without an interactive shell underneath; there is probably some terminal clogging code (verify this by running from within nautilus scripts)
 20110620	need a user friendly, self-uninstalling warning message on empty files list, on startup
 20110620	shall use command tokens for the hardcoded --cd-and-readdir switch 
 20110620	tab based files autocompletion has problems (may show only partial results)
 20110620	init feature-check routine with some regexp/regsubst functionality testing
 20110621	shall expose a regexp substition command
-20110619	by default, sdl-fim should resize the image on system window resize, if autoscaling is on 
 20110619	need an option for non-name-based, but loader-based directory scanning
 
 -------------------------------------------------------------------------------
@@ -111,7 +110,6 @@ Major and tricky (time consuming) features:
 -------------------------------------------------------------------------------
 Minor but tricky (time consuming) features/issues:
 
-20110619	the sdl output is very inefficient (uses continuout polling for user input, to allow readline to work)	
 20110618	cd dir ; push /regexp/
 20110617	may honour command line options parsing features of aalib 
 20110521	autocompletion shall be escaped (for opening filenames containing quoting chars)
@@ -127,7 +125,6 @@ Minor but tricky (time consuming) features/issues:
 20091214	consider using libmagic
 20090810	:|ocr -
 20090218	implement a printf() like interface for customizing the status bar information
-20090403	should support aa/sdl device resizing
 20090401	should use aa_getevent
 20081230	need of a square angle rotation support
 20081230	multipage caching and prefetching support still missing

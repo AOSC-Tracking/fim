@@ -143,6 +143,7 @@ err:
 		const char*os=opts_.c_str();
 		parse_optstring(os);
 #endif
+		bzero(&bvi_,sizeof(bvi_));
 		//current_w_=current_h_=0;
 	}
 
@@ -354,6 +355,10 @@ err:
 			std::cout << "problems initializing SDL (SDL_Init)\n";
 			return 1;
 		}
+		{
+			const SDL_VideoInfo*bvip=SDL_GetVideoInfo();
+			if(bvip)bvi_=*bvip;
+		}
 		fim_perror(NULL);
 		
 		if(FIM_SDL_WANT_KEYREPEAT)
@@ -497,17 +502,22 @@ err:
 
 	}
 
-	static int get_input_inner(fim_key_t * c, SDL_Event*eventp, int *keypressp)
+	static int get_input_inner(fim_key_t * c, SDL_Event*eventp, int *keypressp, bool want_poll)
 	{
 //		int keypress_=0;
 		bool ctrl_on=0;
 		bool alt_on=0;
 		bool shift_on=0;
+		int ret=0;
 		SDL_Event event=*eventp;
 		*c = 0x0;	/* blank */
 
 //		while(SDL_PollEvent(&event))
-		if(SDL_PollEvent(&event))
+		if(want_poll)
+			ret=SDL_PollEvent(&event);
+		else
+			ret=SDL_WaitEvent(&event);
+		if(ret)
 		{
 			if(event.type==SDL_KEYUP)
 				if(!SDL_PollEvent(&event))
@@ -542,9 +552,17 @@ err:
 				if( event.key.keysym.unicode == 0x0 )
 				{
 					/* arrows and stuff */
+					FIM_SDL_INPUT_DEBUG(c,"no unicode");
 					if(event.key.keysym.sym<256)
 					{
 						FIM_SDL_INPUT_DEBUG(c,"uhm");
+						*c=event.key.keysym.sym;
+						return 1;
+					}
+					else
+					if(event.key.keysym.sym>=SDLK_F1 && event.key.keysym.sym<=SDLK_F12)
+					{
+						FIM_SDL_INPUT_DEBUG(c,"FXX?");
 						*c=event.key.keysym.sym;
 						return 1;
 					}
@@ -664,9 +682,9 @@ done:
 		return 0;
 	}
 
-	int SDLDevice::get_input(fim_key_t * c )
+	int SDLDevice::get_input(fim_key_t * c, bool want_poll)
 	{
-		return get_input_inner(c,&event_,&keypress_);
+		return get_input_inner(c,&event_,&keypress_,want_poll);
 	}
 
 	int SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
@@ -841,7 +859,7 @@ done:
 			if(ms>0)
 				usleep((int)(sms*1000)),ms-=sms;
 			// we read input twice: it seems we have a number of "spurious" inputs. 
-			if(1==get_input_inner(&c,&levent,&lkeypress)) goto done;
+			if(1==get_input_inner(&c,&levent,&lkeypress,true)) goto done;
 		}
 		while(ms>0);
 		return -1;
@@ -899,6 +917,8 @@ ok:
 		if(!allowed_resolution(w,h))
 			return FIM_ERR_GENERIC;
 
+		if(w==0 && h==0)
+			w=bvi_.current_w, h=bvi_.current_h; // best video mode, as suggested by SDL
 		//std::cout << "resizing to " << w << " "<< h << "\n";
 		if (NULL==(nscreen_ = SDL_SetVideoMode(w, h, bpp_, want_flags)))
 		{

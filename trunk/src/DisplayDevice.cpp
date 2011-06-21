@@ -38,7 +38,7 @@
 			fontname_ = line;
 	}
 
-	int DisplayDevice::get_input(fim_key_t * c)
+	int DisplayDevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		*c=0;
 		/*

@@ -211,7 +211,7 @@ int rl_sdl_getc_hook()
 	fim_key_t c;
 	c=0;
 	
-	if(cc.displaydevice_->get_input(&c)==1)
+	if(cc.displaydevice_->get_input(&c,true)==1)
 	{
 
 		if(c&(1<<31))
