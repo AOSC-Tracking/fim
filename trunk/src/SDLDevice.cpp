@@ -412,7 +412,6 @@ err:
 		sym_keys["F11"]=SDLK_F11;
 		sym_keys["F12"]=SDLK_F12;
 		
-		SDL_ShowCursor(want_mouse_display_?1:0);
 		fim_perror(NULL);
 
 		// textual console reformatting
@@ -609,6 +608,7 @@ err:
 					if(ctrl_on)
 					{
 						// if(*c-1+'a'=='c')std::exit(-1);//works 
+#if 0
 						if(*c-1+'a'<='z')
 						{
 							//std::cout << "with control : " << *c+'a'-1 << "\n";
@@ -619,6 +619,9 @@ err:
 							*c-='a';
 							*c+= 1 ;
 						}
+#else
+#endif
+						FIM_SDL_INPUT_DEBUG(c,"ctrl is on");
 					}
 					if(*c)	/* !iscntrl(c) */
 					{
@@ -917,6 +920,8 @@ ok:
 		if(!allowed_resolution(w,h))
 			return FIM_ERR_GENERIC;
 
+		SDL_ShowCursor(want_mouse_display_?1:0);
+
 		if(w==0 && h==0)
 			w=bvi_.current_w, h=bvi_.current_h; // best video mode, as suggested by SDL
 		//std::cout << "resizing to " << w << " "<< h << "\n";
@@ -932,6 +937,8 @@ ok:
 			std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
 			return FIM_ERR_GENERIC;
 		}
+		cc.setVariable(FIM_VID_SCREEN_WIDTH, current_w_);
+		cc.setVariable(FIM_VID_SCREEN_HEIGHT,current_h_);
 		return FIM_ERR_NO_ERROR;
 	}
 

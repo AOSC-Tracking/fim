@@ -8,7 +8,7 @@
  * internal commands  reference man page, in man fimrc
  * internal variables reference man page, in man fimrc
  * better internal help mechanisms
- * more control (resolution, windowed mode, resize) in sdl mode
+ * more control (resolution change,windowed mode) in experimental sdl mode
  * new commands (pread,reverse,shuffle,...) 
  * (temporarily) disabled internal windows splitting 
  * pushing files from a directory
