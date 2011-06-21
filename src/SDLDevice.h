@@ -32,6 +32,7 @@ class SDLDevice:public DisplayDevice
 	SDL_Surface *screen_;
 	SDL_Event event_;
 	const SDL_VideoInfo* vi_;
+	SDL_VideoInfo bvi_;
 
 	int keypress_ ;
 	int h_;
@@ -76,7 +77,7 @@ class SDLDevice:public DisplayDevice
 	fim_err_t status_line(const fim_char_t *msg);
 	fim_bool_t handle_console_switch(){return false;}
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
-	int get_input(fim_key_t * c);
+	int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
 	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str);

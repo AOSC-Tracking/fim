@@ -918,7 +918,7 @@ autocmd "PostWindow"   "" "display;";
 autocmd "PreRedisplay"   "" "i:_will_display=1;";
 autocmd "PreRedisplay"   "" "if(_scale_style!='' && i:fresh){i:fresh=0;scale _scale_style ;i:fresh=0;}";
 autocmd "PostRedisplay" ""   "i:_will_display=0;";
-#
+# Display device specific config
 alias "aalib_fix_do" "{if(aascale==''){ascale='2.0';}else{ascale=aascale;} i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "See aalib_fix.";
 alias "aalib_fix" "if(_device_string=='aa'){aalib_fix_do;scale 'a';}" "When using the aalib (ascii art) library we face a problem: glyph proportions are seldom square (as pixels are), and are tricky to detect; for this reason, we need to reshape the image with respect to the font ratio, but we have to make a guess in the scaling factor to compensate. If at runtime a better value is known for the terminal font height/with ratio, it may be fed in the 'aascale' variable for an accurate scaling.";
 #alias "exif_fix" "i:_orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
@@ -926,6 +926,8 @@ alias "aalib_fix" "if(_device_string=='aa'){aalib_fix_do;scale 'a';}" "When usin
 #autocmd "PostLoad"   "" "aalib_fix;exif_fix;";
 autocmd "PostReload"   "" "aalib_fix;";
 autocmd "PostLoad"   "" "aalib_fix;";
+bind "F10" "if(_device_string=='sdl' && _old_sw*_old_sh*_fullscreen){display 'reinit' 'w'._old_sw.':'._old_sh;_fullscreen=0;}";
+bind "F11" "if(_device_string=='sdl' && !_fullscreen){_old_sw=_screen_width;_old_sh=_screen_height;display 'reinit' 'W0:0';_fullscreen=1;}";
 
 autocmd "PostReload"  "" "i:fresh=1" ;
 autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;

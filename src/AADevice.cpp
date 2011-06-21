@@ -497,7 +497,7 @@ err:
 		if(!finalized_)finalize();// finalize should be called explicitly !
 	}
 
-	int AADevice::get_input(fim_key_t * c)
+	int AADevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		*c = 0x0;	/* blank */
 		if(!c)return 0;
