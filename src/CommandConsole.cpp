@@ -329,6 +329,7 @@ namespace fim
 	browser_(*this)
 	//,framebufferdevice(_framebufferdevice)
 	,return_code_(0)
+	,mangle_tcattr_(false)
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	,dummydisplaydevice_(this->mc_)
 #else
@@ -1008,7 +1009,8 @@ ok:
 				if(rl==NULL)
 				{
 					/* FIXME : should exit ? */
-					this->quit();
+					//this->quit();
+					goto rlnull;// FIXME: this is horrible and shall be fixed
 					/* empty line */
 				}
 				else if(*rl!=FIM_SYM_CHAR_NUL)
@@ -1149,6 +1151,7 @@ ok:
 				}
 			}
 		}
+rlnull:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_POSTEXECUTIONCYCLE,initial);
 #endif
@@ -2068,7 +2071,7 @@ ok:
 		 * used by : fb_catch_exit_signals() : should this matter ?
 		 * */
 
-		tty_restore();	
+		if(mangle_tcattr_)tty_restore();	
 		if(displaydevice_) displaydevice_->finalize();
 #ifdef FIM_USE_READLINE
 		save_history();

@@ -47,6 +47,7 @@ class CommandConsole
 
 	int show_must_go_on_;
 	int return_code_;	/* new, to support the 'return' command */
+	bool mangle_tcattr_;
 	public:
 
 	struct termios  saved_attributes_;

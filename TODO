@@ -21,9 +21,9 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
-20110620	sdl is still flawed without an interactive shell underneath; there is probably some terminal clogging code (verify this by running from within nautilus scripts)
+20110620	the lock/unlock usage style in the SDL case may not be correct in many situations, leading to system lock errors
+20110620	sdl is still flawed without an interactive shell underneath; libreadline used in non-callback mode uses the terminal, and this is bad (verify this by running from within nautilus scripts)
 20110620	need a user friendly, self-uninstalling warning message on empty files list, on startup
-20110620	shall use command tokens for the hardcoded --cd-and-readdir switch 
 20110620	tab based files autocompletion has problems (may show only partial results)
 20110620	init feature-check routine with some regexp/regsubst functionality testing
 20110621	shall expose a regexp substition command
