@@ -627,7 +627,7 @@ mp+=string(
 "The filename \""FIM_STDIN_IMAGE_NAME"\" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.\n"
 #endif
 #ifdef FIM_WITH_LIBSDL
-"The SDL driver is very inefficient, for a variety of reasons. This shall be fixed.\n"
+"The SDL driver is very inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.\n"
 #endif
 ".SH BUGS\n"
 ".B fim\n"
@@ -988,7 +988,7 @@ done:
 		    break;
 		case 0x4352:
 		    //fim's
-		    cc.appendPostInitCommand( "if(_filelistlen==1){_ffn=i:_filename;cd i:_filename;list 'remove' i:_filename;basename _ffn;_bfn='./'._last_system_output;list 'pushdir' '.';list 'sort';goto '?'._bfn;reload;redisplay;}");
+		    cc.appendPostInitCommand( "if("FIM_VID_FILELISTLEN"==1){_ffn=i:"FIM_VID_FILENAME";"FIM_FLT_CD" i:"FIM_VID_FILENAME";"FIM_FLT_LIST" 'remove' i:"FIM_VID_FILENAME";"FIM_FLT_BASENAME" _ffn;_bfn='./'."FIM_VID_LAST_SYSTEM_OUTPUT";"FIM_FLT_LIST" 'pushdir' '.';"FIM_FLT_LIST" 'sort';"FIM_FLT_GOTO" '?'._bfn;"FIM_FLT_RELOAD";"FIM_FLT_REDISPLAY";}");
 		    appendedPostInitCommand=true;
 		    break;
 		case 'c':

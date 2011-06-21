@@ -31,6 +31,7 @@
 #ifdef FIM_WITH_LIBSDL
 
 #include "SDLDevice.h"
+#define FIM_SDL_FLAGS SDL_FULLSCREEN|SDL_HWSURFACE
 
 #define FIM_SDL_ICONPATH ""
 
@@ -327,7 +328,7 @@ err:
 		 * */
 		//int want_width=0, want_height=0, want_bpp=0;
 		int want_width=current_w_, want_height=current_h_, want_bpp=0;
-		int want_flags=SDL_FULLSCREEN|SDL_HWSURFACE;
+		int want_flags=FIM_SDL_FLAGS;
 		int delay=0,interval=0;
 		//want_flags|=SDL_NOFRAME;
 		//std::cout << want_width << " : "<< want_height<<"\n";
@@ -905,7 +906,7 @@ ok:
 	fim_err_t SDLDevice::resize(fim_coo_t w, fim_coo_t h)
 	{
 		SDL_Surface *nscreen_=NULL;
-		int want_flags=screen_?screen_->flags:SDL_FULLSCREEN|SDL_HWSURFACE;
+		int want_flags=screen_?screen_->flags:FIM_SDL_FLAGS;
 
 		if(want_resize_)
 			want_flags|=SDL_RESIZABLE;

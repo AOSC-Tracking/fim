@@ -152,7 +152,7 @@ namespace fim
 			return_code_=0;
 		else
 			return_code_=(int)args[0];
-	return FIM_CNS_EMPTY_RESULT;
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 #ifndef FIM_WANT_NOSCRIPTING

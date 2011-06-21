@@ -72,6 +72,7 @@ namespace fim
 			if(default_fbmode)ffdp->set_fbmode(default_fbmode);
 			if(default_vt!=-1)ffdp->set_default_vt(default_vt);
 			if(default_fbgamma!=-1.0)ffdp->set_default_fbgamma(default_fbgamma);
+			mangle_tcattr_=true;
 		}
 #endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
 
@@ -104,6 +105,7 @@ namespace fim
 			{
 				displaydevice_=sdld;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_SDL);
+				mangle_tcattr_=false;
 			}
 			else
 			{
@@ -125,6 +127,7 @@ namespace fim
 			{
 				displaydevice_=cacad;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_CACA);
+				mangle_tcattr_=false;
 			}
 			else
 				device_failure=true;
@@ -146,7 +149,6 @@ namespace fim
 		{
 			displaydevice_=aad_;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_AA);
-
 #if FIM_WANT_SCREEN_KEY_REMAPPING_PATCH
 			/*
 			 * FIXME
@@ -163,13 +165,14 @@ namespace fim
 				sym_keys_[FIM_KBD_UP]-=3072;
 				sym_keys_[FIM_KBD_DOWN]-=3072;
 			}
+			mangle_tcattr_=false;
 #endif
 		}
 		else device_failure=true;
 		}
 		}
 		#endif
-		tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
+		if(mangle_tcattr_)tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
 		// FIXME: an error here on, leaves the terminal in raw mode, and this is not cool
 
 		if( displaydevice_==NULL)
@@ -179,7 +182,7 @@ namespace fim
 			if(device_failure)
 			{
 				std::cerr << "Failure using the \""<<device<<"\" display device driver string (wrong options?)!\n";
-				tty_restore();
+				cleanup();
 				return -1;
 			}
 			else

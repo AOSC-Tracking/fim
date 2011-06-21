@@ -234,6 +234,8 @@ int rl_sdl_getc_hook()
 	return 0;	
 }
 
+//void fim_rl_prep_dummy(int meta_flag){}
+//void fim_rl_deprep_dummy(void){}
 
 int rl_sdl_getc(FILE * fd)
 {
@@ -306,6 +308,8 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	{
 		rl_getc_function=rl_sdl_getc;
 		rl_event_hook   =rl_sdl_getc_hook;
+//		rl_prep_term_function=fim_rl_prep_dummy;
+//		rl_deprep_term_function=fim_rl_deprep_dummy;
 
 		/*
                  * FIXME : The following hack uses SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT, all -0x100 ..
