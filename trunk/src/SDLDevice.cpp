@@ -503,21 +503,21 @@ err:
 		bool ctrl_on=0;
 		bool alt_on=0;
 		bool shift_on=0;
-		SDL_Event event_=*eventp;
+		SDL_Event event=*eventp;
 		*c = 0x0;	/* blank */
 
-//		while(SDL_PollEvent(&event_))
-		if(SDL_PollEvent(&event_))
+//		while(SDL_PollEvent(&event))
+		if(SDL_PollEvent(&event))
 		{
-			if(event_.type==SDL_KEYUP)
-				if(!SDL_PollEvent(&event_))
+			if(event.type==SDL_KEYUP)
+				if(!SDL_PollEvent(&event))
 					goto done;
 
-			switch (event_.type)
+			switch (event.type)
 			{
 #if FIM_SDL_WANT_RESIZE 
 				case SDL_VIDEORESIZE:
-						cc.resize(event_.resize.w,event_.resize.h);
+						cc.resize(event.resize.w,event.resize.h);
 				break;
 #endif
 				case SDL_QUIT:
@@ -531,35 +531,35 @@ err:
 				break;
 				case SDL_KEYDOWN:
 
-				if(event_.key.keysym.mod == KMOD_RCTRL || event_.key.keysym.mod == KMOD_LCTRL ) ctrl_on=true;
-				if(event_.key.keysym.mod == KMOD_RALT  || event_.key.keysym.mod == KMOD_LALT  )  alt_on=true;
-				if(event_.key.keysym.mod == KMOD_RSHIFT  || event_.key.keysym.mod == KMOD_LSHIFT  )  shift_on=true;
+				if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) ctrl_on=true;
+				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  )  alt_on=true;
+				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )  shift_on=true;
 
-			//	std::cout << "sym : " << (int)event_.key.keysym.sym << "\n" ;
-			//	std::cout << "uni : " << (int)event_.key.keysym.unicode<< "\n" ;
+			//	std::cout << "sym : " << (int)event.key.keysym.sym << "\n" ;
+			//	std::cout << "uni : " << (int)event.key.keysym.unicode<< "\n" ;
 			//	if(shift_on)std::cout << "shift_on\n";
 
-				if( event_.key.keysym.unicode == 0x0 )
+				if( event.key.keysym.unicode == 0x0 )
 				{
 					/* arrows and stuff */
-					if(event_.key.keysym.sym<256)
+					if(event.key.keysym.sym<256)
 					{
 						FIM_SDL_INPUT_DEBUG(c,"uhm");
-						*c=event_.key.keysym.sym;
+						*c=event.key.keysym.sym;
 						return 1;
 					}
 					else
 					if(
-						event_.key.keysym.sym!=SDLK_LSHIFT
-					&&	event_.key.keysym.sym!=SDLK_RSHIFT
-					&&	event_.key.keysym.sym!=SDLK_LALT
-					&&	event_.key.keysym.sym!=SDLK_RALT
-					&&	event_.key.keysym.sym!=SDLK_LCTRL
-					&&	event_.key.keysym.sym!=SDLK_RCTRL
+						event.key.keysym.sym!=SDLK_LSHIFT
+					&&	event.key.keysym.sym!=SDLK_RSHIFT
+					&&	event.key.keysym.sym!=SDLK_LALT
+					&&	event.key.keysym.sym!=SDLK_RALT
+					&&	event.key.keysym.sym!=SDLK_LCTRL
+					&&	event.key.keysym.sym!=SDLK_RCTRL
 					)
 					{
 						/* arrows.. .. */
-						*c=event_.key.keysym.sym;
+						*c=event.key.keysym.sym;
 						FIM_SDL_INPUT_DEBUG(c,"arrow");
 						return 1;
 					}
@@ -573,20 +573,20 @@ err:
 
 				if(alt_on)
 				{
-					*c=(unsigned char)event_.key.keysym.unicode;
+					*c=(unsigned char)event.key.keysym.unicode;
 					*c|=(1<<31);	/* FIXME : a dirty trick */
 					return 1;
 				}
 
-				if( 	event_.key.keysym.unicode < 0x80)
+				if( 	event.key.keysym.unicode < 0x80)
 				{
 					/* 
 					 * SDL documentation 1.2.12 about unicode:
 					 * It is useful to note that unicode values < 0x80 translate directly
 					 * a characters ASCII value.
 					 * */
-			//		if(event_.key.keysym.mod == KMOD_RCTRL || event_.key.keysym.mod == KMOD_LCTRL ) std::cout << "ctrl ! \n";
-					*c=(unsigned char)event_.key.keysym.unicode;
+			//		if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) std::cout << "ctrl ! \n";
+					*c=(unsigned char)event.key.keysym.unicode;
 
 					if(ctrl_on)
 					{

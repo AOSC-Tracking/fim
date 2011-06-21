@@ -2197,8 +2197,10 @@ done:
 		if(window_) { Rect nr(0,0,w,h);cc.window_->update(nr);}
 
 		displaydevice_->init_console();
-		if(window_)
-			window_->recursive_redisplay();
+
+		// FIXME: this is a hack
+		setVariable("i:"FIM_VID_FRESH,(fim_int)1);//FIXME: bad practice
+		browser_.fcmd_redisplay(args_t());
 
 		fim::string msg="resized window to ";
 		msg+=fim::string(w);
