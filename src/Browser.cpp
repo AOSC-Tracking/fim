@@ -23,6 +23,7 @@
 #define firstorzero(x)    firstorval((x),(0))
 #define firstorone(x)     firstorval((x),(1))
 #define firstforzero(x)   (x.size()>0?((float)(x[0])):0.0)
+#define FIM_HORRIBLE_CACHE_INVALIDATING_HACK 1
 
 #include <dirent.h>
 #include <sys/types.h>	/* POSIX Standard: 2.6 Primitive System Data Types (e.g.: ssize_t) */
@@ -33,8 +34,8 @@
 
 namespace fim
 {
-	//int Browser::current_n()const{ return current_n(cp_); }
-	int Browser::current_n()const{ return cp_; }
+	//int Browser::current_n()const{ return current_n(cf_); }
+	int Browser::current_n()const{ return cf_; }
 	//int Browser::current_n(int ccp)const{ return ccp?ccp-1:ccp; }
 
 	fim::string Browser::list()const
@@ -187,7 +188,7 @@ nop:
 		/*
 		 * we initialize to no file the current file name
 		 */
-		cp_=0;	//and to file index 0 (no file)
+		cf_=0;	//and to file index 0 (no file)
 	}
 
 	const fim::string Browser::pop_current()
@@ -200,7 +201,7 @@ nop:
 		 */
 		fim::string s;
 		if(flist_.size()<=0)return nofile_;
-		assert(cp_);
+		assert(cf_);
 		flist_.erase(flist_.begin()+current_n());
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return s;
@@ -214,10 +215,10 @@ nop:
 		 */
 		fim::string s;
 		if(flist_.size()<=0)return nofile_;
-		assert(cp_);
+		assert(cf_);
 		if(filename==FIM_CNS_EMPTY_STRING)
 		{
-			if(current_n()==(int)flist_.size())cp_--;
+			if(current_n()==(int)flist_.size())cf_--;
 			s=flist_[flist_.size()-1];
 			flist_.erase(flist_.begin()+current_n());
 		}
@@ -636,7 +637,17 @@ ddone:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_PRERELOAD,c);
 #endif
+#if FIM_HORRIBLE_CACHE_INVALIDATING_HACK
+		if(args.size()>0)
+		{
+			int mci=getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,0);
+			free_current_image();
+			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,mci);
+		}
+#else
 		free_current_image();
+#endif
 		loadCurrentImage();
 		//if(image())image()->reload();
 
@@ -905,11 +916,13 @@ nop:
 		if(!isfg)
 		if( N==1 && c_image() && c_image()->is_multipage())
 		{
+			if(0)std::cout<<"goto page "<<n<<"\n";
 			image()->goto_page(n);
 			return N;
 		}
-		cp_=n;
-		cp_=FIM_MOD(cp_,N);
+		cf_=n;
+		cf_=FIM_MOD(cf_,N);
+		setGlobalVariable(FIM_VID_PAGE ,(fim_int)0);
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
 		fim::string result = n_files()?(flist_[current_n()]):nofile_;
@@ -922,7 +935,7 @@ nop:
 		 * returns to the next image in the list, the mechanism
 		 * p.s.: n<>0
 		 */
-		int ccp=cp_+n;
+		int ccp=cf_+n;
 		int N=flist_.size();
 		if(!N)return FIM_CNS_EMPTY_RESULT;
 		ccp=FIM_MOD(ccp,N);
@@ -956,10 +969,11 @@ nop:
 		/*
 		 */
 		const fim_char_t*errmsg=FIM_CNS_EMPTY_STRING;
-		int cn=0,g=0,nn=0,mn=0;
-		if(n_files()==0 || !s){errmsg="no image to go to!";goto err;}
-		cn=g=cp_;
-		if(!s){errmsg="please specify a file to view ( a number or ^ or $ ) \n";goto err;}
+		//const int cf=cf_,cp=c_page(),pc=n_pages(),fc=n_files();
+		const int cf=cf_,cp=getGlobalIntVariable(FIM_VID_PAGE),pc=FIM_MAX(1,n_pages()),fc=n_files();
+		int gv=0,nf=cf,mv=0,np=cp;
+		if(n_files()==0 || !s){errmsg=FIM_CMD_HELP_GOTO;goto err;}
+		if(!s){errmsg=FIM_CMD_HELP_GOTO;goto err;}
 		else
 		{
 			fim_char_t c=FIM_SYM_CHAR_NUL;
@@ -979,6 +993,27 @@ nop:
 			pcnt=(l=='%'); 
 			ispg=(l=='p');
 			isfg=(l=='f');
+			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+') && s[1]=='/') ||( c=='/')));
+			isrj=(c=='+' || c=='-');
+			if(isdigit(c)  || c=='-' || c=='+')gv=atoi(s);
+			else if(c=='^' || c=='f')gv=1;
+			else if(c=='$' || c=='l')gv=mv;
+			else if(c=='?')
+			{
+				gv=find_file_index(string(s).substr(1,sl-1));
+				//std::cout<<string(s).substr(1,sl-1)<<" "<<gv<<"\n";
+				if(gv<0)
+				{
+					goto ret;
+				}
+				++gv;
+				goto go_jump;
+			}
+			else if(isre){;}
+			else
+			{
+				cout << " please specify a number or ^ or $\n";
+			}
 			if(li>0 && ( isfg || pcnt || ispg ))
 			{
 				l=tolower(s[li=sl-2]);
@@ -986,37 +1021,65 @@ nop:
 				if(l=='p')ispg=true;
 				if(l=='f')isfg=true;
 			}
-			if(isfg && ispg)goto err;
-			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+') && s[1]=='/') ||( c=='/')));
-			isrj=(c=='+' || c=='-');
-			if(isdigit(c)  || c=='-' || c=='+')g=atoi(s);
-			else if(c=='^' || c=='f')g=1;
-			else if(c=='$' || c=='l')g=n_files();
-			else if(c=='?'){g=find_file_index(string(s).substr(1,sl-1));
-				//std::cout<<string(s).substr(1,sl-1)<<" "<<g<<"\n";
-				if(g<0)goto ret;++g;}
-			else if(isre){;}
-			else cout << " please specify a number or ^ or $\n";
-			//if((!isre) && (!isrj))nn=g;
-			if(ispg)
-				mn=n_pages();
-			else
-				mn=n_files();
-			if(!mn)
-			       	goto ret; 
 			if(pcnt)
-				g=(g*mn)/100;//FIXME: gross errors may occur here
-			//if(isrj && g<0 && cn==1){cn=0;}//TODO: this is a bugfix
-			if((!isrj) && g>0)
-				g=g-1;// user input is interpreted as 1-based 
-			g=FIM_MOD(g,mn);
-			//cout << "at " << cn <<", g="<<g <<", mod="<<mn<<"\n";
-			if(isrj)
-				{nn=cn+g;}// FIXME: what if g g<1 ? pity :)
+				gv=(gv*mv)/100;//FIXME: gross errors may occur here
+			if((!isfg) && (!ispg) && pc>1)
+			{
+				if((cp==0 && gv<0) || (cp==pc-1 && gv>0))
+					isfg=true;
+				else
+					ispg=true;
+			}
+			if(ispg)
+				mv=pc;
 			else
-				nn=g;
-			g=FIM_MOD(g,mn);
-			//bcout << "goto " << cn << " " << nn << "\n";
+				mv=fc;
+			if(!mv)
+			{
+			       	goto ret; 
+			}
+			if(isfg && ispg)
+			{
+				goto err;
+			}
+			//if((!isre) && (!isrj))nf=gv;
+			//if(isrj && gv<0 && cf==1){cf=0;}//TODO: this is a bugfix
+			if((!isrj) && gv>0)
+				gv=gv-1;// user input is interpreted as 1-based 
+			gv=FIM_MOD(gv,mv);
+			//cout << "at " << cf <<", gv="<<gv <<", mod="<<mv<<"\n";
+			if(ispg)
+			{
+			if(isrj)
+				{np=cp+gv;}// FIXME: what if gv gv<1 ? pity :)
+			else
+				np=gv;
+			}
+			else
+			{
+			if(isrj)
+				{nf=cf+gv;}// FIXME: what if gv gv<1 ? pity :)
+			else
+				nf=gv;
+			}
+			gv=FIM_MOD(gv,mv);
+			nf=FIM_MOD(nf,fc);
+			np=FIM_MOD(np,pc);
+	//			nf++;
+			if(0)
+			cout << "goto: "
+				<<" s:" << s
+				<<" cf:" << cf 
+				<<" cp:" << cp 
+				<< " nf:" << nf 
+				<< " np:" << np 
+				<< " gv:" << gv 
+				<< " isrj:"<<isrj
+				<< " ispg:"<<ispg
+				<< " isfg:"<<isfg
+				<< " pcnt:"<<pcnt
+				<< " max[pf]:"<<mv
+				<<"\n";
 			if(isre)
 			{
 				args_t argsc;
@@ -1028,16 +1091,17 @@ nop:
 					return regexp_goto(argsc);
 				}
 			}
-			if(nn!=cn)
+go_jump:
+			if((nf!=cf) || (np!=cp) )
 			{	
 				fim::string c=current();
 #ifdef FIM_AUTOCMDS
 				if(!(xflags&FIM_X_NOAUTOCMD))autocmd_exec(FIM_ACM_PREGOTO,c);
 #endif
 				if(ispg)
-					image()->goto_page(nn);
+					image()->goto_page(np);
 				else
-					goto_image(nn,isfg?true:false);
+					goto_image(nf,isfg?true:false);
 #ifdef FIM_AUTOCMDS
 				if(!(xflags&FIM_X_NOAUTOCMD))autocmd_exec(FIM_ACM_POSTGOTO,c);
 #endif
@@ -1073,8 +1137,8 @@ err:
 				flist_.erase(flist_.begin()+i);
 			}
 			int N=flist_.size();
-			if(N<=0)cp_=0;
-			else cp_=FIM_MIN(cp_,N-1);
+			if(N<=0)cf_=0;
+			else cf_=FIM_MIN(cf_,N-1);
 			setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 			setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 			goto nop;
@@ -1084,9 +1148,9 @@ err:
 			/*
 			 * removes the current file from the list
 			 */
-/*			if(cp_-1==current_n())--cp_;
+/*			if(cf_-1==current_n())--cf_;
 			flist_.erase(flist_.begin()+current_n());
-			if(cp_==0 && n_files()) ++cp_;
+			if(cf_==0 && n_files()) ++cf_;
 			return FIM_CNS_EMPTY_RESULT;*/
 			return pop_current();
 		}
@@ -1352,8 +1416,8 @@ err:
 		 * be relative to viewport's own current's ?
 		 * */
 		if(empty_file_list())return nofile_; // FIXME: patch!
-	       	//return cp_?flist_[current_n()]:nofile_;
-	       	return cp_>=0?flist_[cp_]:nofile_;
+	       	//return cf_?flist_[current_n()]:nofile_;
+	       	return cf_>=0?flist_[cf_]:nofile_;
 	}
 
 	int Browser::empty_file_list()const
@@ -1407,12 +1471,17 @@ err:
 	int Browser::current_image()const
 	{
 		/* counting from 1 */
-		return cp_+1;
+		return cf_+1;
 	}
 
 	int Browser::n_pages()const
 	{
 		if(c_image())return c_image()->n_pages(); else return 0;
+	};
+
+	int Browser::c_page()const
+	{
+		if(c_image())return c_image()->c_page(); else return 0;
 	};
 }
 

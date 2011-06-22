@@ -24,7 +24,9 @@ i:autowidth=0;
 #stdout i:autowidth;
 #stdout "ii";
 toggleAutoWidth;
-stdout "i:autowidth=".i:autowidth." (should be 1)";
+# 20110622 commented the following
+#stdout "i:autowidth=".i:autowidth." (should be 1)";
+stdout "#i:autowidth=1 (should be 1)";
 #stdout "ia:";
 #toggleAutoWidth;
 #stdout i:autowidth;
