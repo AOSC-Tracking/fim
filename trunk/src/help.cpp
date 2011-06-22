@@ -26,6 +26,7 @@ fim_var_help_db[FIM_VID_FILENAME]= "[internal,out] the current file name string"
 fim_var_help_db[FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS]= "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" ;
 fim_var_help_db[FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS]= "[internal,out] the contents of the default (hardcoded) grammar file" ;
 fim_var_help_db[FIM_VID_FRESH]= "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" ;
+fim_var_help_db[FIM_VID_PAGE]= "[internal,out,experimental] the current page" ;
 fim_var_help_db[FIM_VID_PAGECOUNT]= "[internal,out,experimental] the page count for a given image" ;
 fim_var_help_db[FIM_VID_OVERRIDE_DISPLAY]= "[internal] if 1, will inhibit display" ;
 fim_var_help_db[FIM_VID_MAX_ITERATED_COMMANDS]= "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" ;

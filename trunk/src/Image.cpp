@@ -91,7 +91,7 @@ namespace fim
 		 *	an image object is created from an image filename
 		 */
 		reset();	// pointers blank
-		if( !load(fname,fd,0) || check_invalid() || (!fimg_) ) 
+		if( !load(fname,fd,getGlobalIntVariable(FIM_VID_PAGE)) || check_invalid() || (!fimg_) ) 
 		{
 			// FIXME: sometimes load() intentionally skips a file. an appropriate message shall be printed out
 			cout << "warning : invalid loading "<<fname<<" ! \n";
@@ -180,7 +180,7 @@ namespace fim
 			cout<<"warning : image loading error!\n"   ;invalid_=true;return false;
 		}
 		else page_=want_page;
-
+		//cout<<"loaded page "<< want_page<<" to "<<((int*)this)<<"\n";
 
 #ifdef FIM_NAMESPACES
 		setVariable(FIM_VID_HEIGHT ,(int)fimg_->i.height);
@@ -479,7 +479,7 @@ namespace fim
 		newscale_(image.newscale_),
 		angle_(image.angle_),
 		newangle_(image.newangle_),
-		page_(0),
+		page_(page_),//FIXME
                 img_     (NULL),
                 fimg_    (NULL),
 		orientation_(image.orientation_),
@@ -637,12 +637,17 @@ fim::string Image::getInfo()
 	bool Image::goto_page(fim_page_t j)
 	{
 		string s=fname_;
-		if( j>0 )--j;
+	//	if( j>0 )--j;
 		if( !fimg_ )
 			return false;
 		if( j<0 )j=fimg_->i.npages-1;
 		if( j>page_ ? have_nextpage(j-page_) : have_prevpage(page_-j) )
+		{
+			//if(0)cout<<"about to goto page "<<j<<"\n";
+			setGlobalVariable(FIM_VID_PAGE ,(fim_int)j);
 			return load(s.c_str(),NULL,j);
+			//return true;
+		}
 		else
 			return false;
 	} 

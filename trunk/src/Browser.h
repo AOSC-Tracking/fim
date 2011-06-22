@@ -38,10 +38,10 @@ class Browser
 	const fim::string nofile_; /* a dummy empty filename */
 
 	/*
-	 * cp_ is zero only when there are no files in the list.
+	 * cf_ is zero only when there are no files in the list.
 	 * the current file index is in current_n()
 	 */
-	int cp_;
+	int cf_;
 
 #ifndef FIM_WINDOWS
 	/* when compiled with no multiple windowing support, one viewport only will last. */
@@ -78,7 +78,7 @@ class Browser
 	Browser(const Browser &b):
 		flist_(args_t()),
 		nofile_(""),
-		cp_(0),
+		cf_(0),
 		commandConsole_(cc),
 #ifdef FIM_READ_STDIN_IMAGE
 		default_image_(NULL),
@@ -145,6 +145,7 @@ class Browser
 	void free_current_image();
 	int load_error_handle(fim::string c);
 	public:
+	int c_page()const;
 };
 }
 

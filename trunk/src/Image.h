@@ -142,6 +142,7 @@ class Image
 
 	Image * getClone();
 //	void resize(int nw, int nh);
+	int c_page()const{return page_;}
 };
 }
 #endif

@@ -21,6 +21,9 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110622	test7 was modified to work after some horrible page/cache hacks. consider rewriting the test
+20110622	the cache/goto code now is a complete mess (page-wise next interacts with cache)
+20110622	shall fix the FIM_HORRIBLE_CACHE_INVALIDATING_HACK
 20110620	the lock/unlock usage style in the SDL case may not be correct in many situations, leading to system lock errors
 20110620	sdl is still flawed without an interactive shell underneath; libreadline used in non-callback mode uses the terminal, and this is bad (verify this by running from within nautilus scripts)
 20110620	need a user friendly, self-uninstalling warning message on empty files list, on startup

@@ -24,6 +24,7 @@
 
 #if 0
 #define FIM_LOUD_CACHE_STUFF FIM_LINE_COUT
+#define FIM_CACHE_DEBUG 1
 #else
 #define FIM_LOUD_CACHE_STUFF
 #endif
@@ -419,6 +420,9 @@ namespace fim
 			if(!image)return NULL; // bad luck!
 			usageCounter_[key]=1;
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
+					if(image->n_pages()>1)// FIXME: HORRIBLE HACK
+						//image->load(key.first.c_str(),NULL,getGlobalIntVariable(FIM_VID_PAGE));
+						image->goto_page(getGlobalIntVariable(FIM_VID_PAGE));
 			return image;
 //			usageCounter_[key]=0;
 		}
@@ -450,7 +454,10 @@ namespace fim
 #ifdef FIM_CACHE_DEBUG
 					std::cout << "  cloned image: \"" <<image->getName()<< "\" "<< image << " from \""<<oi->getName() <<"\" " << oi << "\n";
 #endif
-
+					if(image)
+					if(image->n_pages()>1 && image->c_page()!=getGlobalIntVariable(FIM_VID_PAGE))// FIXME: HORRIBLE HACK
+						//image->load(key.first.c_str(),NULL,getGlobalIntVariable(FIM_VID_PAGE));
+						image->goto_page(getGlobalIntVariable(FIM_VID_PAGE));
 				}
 				catch(FimException e)
 				{
@@ -488,6 +495,10 @@ namespace fim
 			if(image)
 			{
 				cacheNewImage( image );
+					if(image->n_pages()>1 && image->c_page()!=getGlobalIntVariable(FIM_VID_PAGE))// FIXME: HORRIBLE HACK
+						//image->load(key.first.c_str(),NULL,getGlobalIntVariable(FIM_VID_PAGE));
+						image->goto_page(getGlobalIntVariable(FIM_VID_PAGE));
+
 			}
 		}
 		catch(FimException e)
