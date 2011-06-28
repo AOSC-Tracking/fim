@@ -997,7 +997,7 @@ nop:
 			isrj=(c=='+' || c=='-');
 			if(isdigit(c)  || c=='-' || c=='+')gv=atoi(s);
 			else if(c=='^' || c=='f')gv=1;
-			else if(c=='$' || c=='l')gv=mv;
+			else if(c=='$' || c=='l')gv=-1;// temporarily
 			else if(c=='?')
 			{
 				gv=find_file_index(string(s).substr(1,sl-1));
@@ -1006,7 +1006,7 @@ nop:
 				{
 					goto ret;
 				}
-				++gv;
+				nf=gv;
 				goto go_jump;
 			}
 			else if(isre){;}
@@ -1021,9 +1021,8 @@ nop:
 				if(l=='p')ispg=true;
 				if(l=='f')isfg=true;
 			}
-			if(pcnt)
-				gv=(gv*mv)/100;//FIXME: gross errors may occur here
-			if((!isfg) && (!ispg) && pc>1)
+			if(c=='$' || c=='l')gv=mv-1;
+			if((isrj) && (!isfg) && (!ispg) && pc>1)
 			{
 				if((cp==0 && gv<0) || (cp==pc-1 && gv>0))
 					isfg=true;
@@ -1034,6 +1033,8 @@ nop:
 				mv=pc;
 			else
 				mv=fc;
+			if(pcnt)
+				gv=FIM_INT_PCNT(gv,mv);
 			if(!mv)
 			{
 			       	goto ret; 
