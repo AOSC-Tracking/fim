@@ -21,6 +21,13 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110628	fimgs has some problems
+20110627	./configure --no-history
+20110626	man8 fim; man5 fimrc
+20110624	vedi se e' possibile 'goto last' e se PostNext e' ancora li da qualche parte 
+20110623	2. does not work
+20110623	one may add :{+number} 
+20110623	missing :+//
 20110622	test7 was modified to work after some horrible page/cache hacks. consider rewriting the test
 20110622	the cache/goto code now is a complete mess (page-wise next interacts with cache)
 20110622	shall fix the FIM_HORRIBLE_CACHE_INVALIDATING_HACK

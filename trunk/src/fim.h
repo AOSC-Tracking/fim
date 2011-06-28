@@ -115,6 +115,7 @@
  
 #define FIM_LINE_CERR std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 #define FIM_LINE_COUT std::cout << "in " <<__func__ << " # " << __FILE__ << ":" << __LINE__ << "\n";
+#define FIM_INT_PCNT(P,L) ((fim_int)ceilf((float)((P)*(L))/100.0)) //FIXME: gross errors may occur here
 
 namespace fim
 {
