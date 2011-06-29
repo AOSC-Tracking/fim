@@ -58,6 +58,7 @@
 
 namespace fim
 {
+extern CommandConsole cc;
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -125,12 +126,15 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	_[0]='\0';
 	struct pdf_state_t * ds=NULL;
 	int rotation=0,pageNo=page+1;
-	double zoomReal=250.0*2;
+	double zoomReal=100.0;
 	double hDPI;
 	double vDPI;
 	GBool  useMediaBox ;
 	GBool  crop        ;
 	GBool  doLinks     ;
+	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
+	prd=prd<1?FIM_RENDERING_DPI:prd;
+
 	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
 
 #if !FIM_PDF_USE_FILENO
@@ -187,9 +191,9 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
         if (!ds->od)
 		goto err;
 
-	i->dpi    = 72; /* FIXME */
-	hDPI = (double)i->dpi* zoomReal * 0.01;
-	vDPI = (double)i->dpi* zoomReal * 0.01;
+	i->dpi    = prd;
+	hDPI = (double)i->dpi* (zoomReal * 0.01);
+	vDPI = (double)i->dpi* (zoomReal * 0.01);
 
 	useMediaBox = gFalse;
 	crop        = gTrue;
@@ -199,6 +203,7 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	if(page>=i->npages || page<0)goto err;
 	
 	ds->pd->displayPage(ds->od, pageNo, hDPI, vDPI, rotation, useMediaBox, crop, doLinks, NULL, NULL);
+
 
 	if(!ds->pd) goto err;
 

@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110629	use CHAR_BIT in src/FbiStuffBit1.cpp
 20110628	fimgs has some problems
 20110627	./configure --no-history
 20110626	man8 fim; man5 fimrc

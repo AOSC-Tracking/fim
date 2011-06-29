@@ -43,6 +43,7 @@ extern "C"
 
 namespace fim
 {
+extern CommandConsole cc;
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -59,14 +60,15 @@ struct ps_state_t {
 
 
 /* ---------------------------------------------------------------------- */
-
+#define FIM_SPECTRE_DEFAULT_DPI 72
 static void*
 ps_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-	double scale = 1.5;
+	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
+	prd=prd<1?FIM_RENDERING_DPI:prd;
+	double scale = 1.0* (((double)prd)/((double)FIM_SPECTRE_DEFAULT_DPI)) ;
 	double rcscale = scale;
-
 	struct ps_state_t * ds=NULL;
 
 	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
@@ -97,7 +99,7 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 	if(!ds->src)
 		goto err;
 
-	i->dpi    = 1.0*72; /* FIXME */
+	i->dpi    = FIM_SPECTRE_DEFAULT_DPI; /* FIXME */
 
 	spectre_render_context_set_scale(ds->src,scale,scale);
 	spectre_render_context_set_rotation(ds->src,0);
