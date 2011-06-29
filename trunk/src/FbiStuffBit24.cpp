@@ -38,6 +38,7 @@
 namespace fim
 {
 
+extern CommandConsole cc;
 
 /* ---------------------------------------------------------------------- */
 
@@ -58,7 +59,9 @@ static void*
 bit24_init(FILE *fp, char *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
-    struct bit24_state *h;
+    struct bit24_state *h=NULL;
+    fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
+    prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
     
     h = (struct bit24_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
@@ -66,7 +69,7 @@ bit24_init(FILE *fp, char *filename, unsigned int page,
     h->fp = fp;
     if(fseek(fp,0,SEEK_END)!=0) goto oops;
     if((h->flen=ftell(fp))==-1)goto oops;
-    i->width  = h->w = FIM_BITRENDERING_DEF_WIDTH;
+    i->width  = h->w = prw;
     i->height = h->h = (h->flen+(h->w*3-1)) / ( h->w*3 ); // should pad
     return h;
  oops:

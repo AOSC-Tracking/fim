@@ -43,6 +43,7 @@ extern "C"
 namespace fim
 {
 
+extern CommandConsole cc;
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
 
@@ -88,6 +89,8 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 {
 	struct djvu_state_t * ds=NULL;
         static unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
+	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
+	prd=prd<1?FIM_RENDERING_DPI:prd;
 
 	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
 
@@ -103,16 +106,21 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 	if(!ds->dd)goto err;
 
 	handle_ddjvu_messages(ds->dc,0x1/*0x0*/);
-
 	i->npages = ddjvu_document_get_pagenum(ds->dd);
 	if(page>=i->npages || page<0)goto err;
         ds->dp = ddjvu_page_create_by_pageno (ds->dd, page);/* pages, from 0 */
         if(!ds->dp) goto err;
-
         while (!ddjvu_page_decoding_done (ds->dp)){1;/* we just kill time (FIXME : inefficient) */}
 
         ds->prect.w = ddjvu_page_get_width  (ds->dp) ;
 	ds->prect.h = ddjvu_page_get_height (ds->dp) ;
+#if 1
+	ddjvu_pageinfo_t pi;
+	ddjvu_document_get_pageinfo(ds->dd,page,&pi);
+        ds->prect.w = ((fim_scale_t) (ds->prect.w))* (((fim_scale_t)prd)/((fim_scale_t)pi.dpi));
+        ds->prect.h = ((fim_scale_t) (ds->prect.h))* (((fim_scale_t)prd)/((fim_scale_t)pi.dpi));
+	pi.dpi=prd;
+#endif
 
         if(ds->prect.w<1)goto err;
         if(ds->prect.h<1)goto err;
@@ -129,7 +137,7 @@ djvu_init(FILE *fp, char *filename, unsigned int page,
 	
 	i->width  = ds->prect.w;
 	i->height = ds->prect.h;
-	i->dpi    = FIM_RENDERING_DPI; /* FIXME */
+	i->dpi    = pi.dpi;
 
 //        ds->pf = ddjvu_format_create (DDJVU_FORMAT_RGBMASK32, 4, masks);
 	ds->pf = ddjvu_format_create (DDJVU_FORMAT_RGB24, 0, 0);

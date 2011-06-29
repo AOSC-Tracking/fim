@@ -493,6 +493,8 @@ namespace fim
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[internal,in] print out each command before its execution (for debugging purposes)" */
 #define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal,in,optional] offset (specified in bytes) used when opening a file " */
 #define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
+#define FIM_VID_PREFERRED_RENDERING_WIDTH	"_preferred_rendering_width"		/* "[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " */
+#define FIM_VID_PREFERRED_RENDERING_DPI	"_preferred_rendering_dpi"		/* "[internal,in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " */
 
 /*
  * Fim Keyboard Descriptions
@@ -690,7 +692,7 @@ namespace fim
 #define FIM_CONSOLE_BLOCKSIZE	1024
 #define FIM_CONSOLE_DEF_WIDTH	128
 #define FIM_BITRENDERING_DEF_WIDTH	1024
-#define FIM_RENDERING_DPI	72
+#define FIM_RENDERING_DPI	200
 #define FIM_RENDERING_MAX_ROWS	1024
 #define FIM_RENDERING_MAX_COLS	1024
 #define FIM_CONSOLE_DEF_ROWS	24
