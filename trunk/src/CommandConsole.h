@@ -363,6 +363,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	fim_err_t display_reinit(const fim_char_t *rs);
 	fim::string fcmd_basename(const args_t& args);
+	fim_bool_t key_syms_update();
 };
 }
 

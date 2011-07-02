@@ -163,12 +163,5 @@
 //		sym_keys_["."]='.';
 //		sym_keys_[","]=',';
 //
-{
-		std::map<fim::string,int>::const_iterator ki;
-		for( ki=sym_keys_.begin();ki!=sym_keys_.end();++ki)
-		{
-			key_syms_[(((*ki).second))]=((*ki).first);
-			//key_syms_[10]="ciao";//((*ki).first);
-		}
-}
+		cc.key_syms_update();
 #endif
