@@ -1,3 +1,28 @@
+2011-07-02 08:01  dezperado
+
+	* doc/fimrc.man, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/SDLDevice.cpp, src/defaultConfiguration.cpp: updating the
+	  symbol keys table also after sdl initialization.
+
+2011-07-02 00:20  dezperado
+
+	* ChangeLog, README, TODO, VERSION, configure.ac, doc/FIM.TXT,
+	  src/CommandConsole.cpp, src/FramebufferDevice.cpp,
+	  src/Makefile.am, src/fim.cpp, src/fim.h, src/fimrc,
+	  src/interpreter.cpp, src/readline.cpp, var/Makefile,
+	  var/index.html.in: updated VERSION.
+	  by default, trying to avoid floating point exceptions.
+	  verbose keys will prefix 0x to hex key dump.
+	  indenting ifdefs and removed a double include in
+	  src/FramebufferDevice.cpp.
+	  with cd-and-readdir, will exit on empty dir.
+	  fix to avoid unwanted readline-triggered echoing in sdl mode.
+	  some new default bindings.
+	  hardcoded fimrc will accept backslashes (although the language
+	  has still some problems with them).
+	  changelog update.
+	  doc fix.
+
 2011-06-29 14:19  dezperado
 
 	* TODO, doc/fimrc.man, src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp,
