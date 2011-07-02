@@ -988,7 +988,7 @@ done:
 		    break;
 		case 0x4352:
 		    //fim's
-		    cc.appendPostInitCommand( "if("FIM_VID_FILELISTLEN"==1){_ffn=i:"FIM_VID_FILENAME";"FIM_FLT_CD" i:"FIM_VID_FILENAME";"FIM_FLT_LIST" 'remove' i:"FIM_VID_FILENAME";"FIM_FLT_BASENAME" _ffn;_bfn='./'."FIM_VID_LAST_SYSTEM_OUTPUT";"FIM_FLT_LIST" 'pushdir' '.';"FIM_FLT_LIST" 'sort';"FIM_FLT_GOTO" '?'._bfn;"FIM_FLT_RELOAD";"FIM_FLT_REDISPLAY";}");
+		    cc.appendPostInitCommand( "if("FIM_VID_FILELISTLEN"==1){_ffn=i:"FIM_VID_FILENAME";"FIM_FLT_CD" i:"FIM_VID_FILENAME";"FIM_FLT_LIST" 'remove' i:"FIM_VID_FILENAME";"FIM_FLT_BASENAME" _ffn;_bfn='./'."FIM_VID_LAST_SYSTEM_OUTPUT";"FIM_FLT_LIST" 'pushdir' '.';"FIM_FLT_LIST" 'sort';"FIM_FLT_GOTO" '?'._bfn;"FIM_FLT_RELOAD";"FIM_FLT_REDISPLAY";}if("FIM_VID_FILELISTLEN"==0){"FIM_FLT_STDOUT" 'No files loaded: exiting.';"FIM_FLT_QUIT" 0;}");
 		    appendedPostInitCommand=true;
 		    break;
 		case 'c':

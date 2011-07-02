@@ -63,7 +63,8 @@ site:	$(PAGES) $(SITEDIR)/index.html
 	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/$(INDEXIN) > $(SITEDIR)/index.html
 	mkdir -p $(SITEDIR)
 	#cd $(FIMDIR) && ./autogen.sh && ./configure && make doc && make dist && cd -
-	cd $(FIMDIR)/doc && make htmldocs
+	#cd $(FIMDIR)/doc && make htmldocs
+	cd $(FIMDIR) && make dox
 	for i in $(FIMHTMLDOCS) ; do cp $(FIMDIR)/doc/$$i  $(SITEDIR) ; done
 	txt2html $(FIMDIR)/README > $(SITEDIR)/README.html
 	txt2html $(FIMDIR)/NEWS > $(SITEDIR)/NEWS.html
@@ -99,8 +100,10 @@ up:
 	echo "set ftp:passive-mode true" > $(FTPSCRIPT)
 	echo "open $(FTPURL)" >> $(FTPSCRIPT)
 	echo "ls" www/ >> $(FTPSCRIPT)
+	echo "ls" $(FIMSITE) >> $(FTPSCRIPT)
 	echo "mirror -v --log=./ftp.log -R -n --exclude '.svn/*'  $(SITEDIR) $(FIMSITE)" >> $(FTPSCRIPT)
 	echo "ls" www/ >> $(FTPSCRIPT)
+	echo "ls" $(FIMSITE) >> $(FTPSCRIPT)
 	lftp -f $(FTPSCRIPT)
 	cat ftp.log
 

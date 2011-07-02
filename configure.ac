@@ -10,7 +10,7 @@ AC_PREREQ([2.54])
 #AC_PROG_CC(cc gcc)
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
-define([svnversion],esyscmd([sh -c "svnversion | tr -d 'M\n'"]))dnl
+define([svnversion],esyscmd([sh -c "svnversion | tr -d 'M\n'|sed s/exported/-1/g"]))dnl
 # WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
 AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 
@@ -117,9 +117,14 @@ AC_CHECK_FUNC([get_current_dir_name], AC_DEFINE([HAVE_GET_CURRENT_DIR_NAME], [1]
 AC_CHECK_LIB([m],[pow])
 AC_CHECK_LIB([fl],[yylex])
 
-AC_CHECK_PROG([HAVE_YACC],[yacc],[yes],[no])
+AC_CHECK_PROG([HAVE_FLEX],[flex],[yes],[no])
 AC_CHECK_PROG([HAVE_BISON],[bison],[yes],[no])
-
+if test x$HAVE_FLEX  != x"yes" ; then
+       	AC_MSG_ERROR([No flex (lexical analyser generator) executable detected!]) ;
+fi
+if test x$HAVE_BISON != x"yes" ; then
+       	AC_MSG_ERROR([No bison (parser generator) executable detected!]) ;
+fi
 have_default_bindings=yes
 have_default_mapping=yes
 have_default_config=yes
@@ -896,7 +901,7 @@ dnl ============================================================================
 AC_ARG_WITH(sdl-prefix, AC_HELP_STRING([--with-sdl-prefix=PFX], [prefix where libsdl is installed (optional)]),
 libsdl_config_prefix="$withval", libsdl_config_prefix="")
 
-fim_handle_sdl=no
+fim_handle_sdl=''
 
 dnl AC_ARG_ENABLE(sdl, AC_HELP_STRING([--disable-sdl], [Disable libsdl support.]),
 dnl [       if test x$enableval = xno ; then
@@ -904,14 +909,12 @@ dnl 		fim_handle_sdl=no
 dnl         fi
 dnl ])
 
-AC_ARG_ENABLE(sdl, AC_HELP_STRING([--enable-sdl], [Enable libsdl support.]),
-[       if test x$enableval = xyes ; then
-		fim_handle_sdl=yes
-        fi
-])
+AC_ARG_ENABLE(sdl, AC_HELP_STRING([--disable-sdl], [Disable libsdl support.]),
+[       if test x$enableval = xyes ; then fim_handle_sdl=yes ; fi ]
+[       if test x$enableval = xno  ; then fim_handle_sdl=no  ; fi ])
 
 # tested with sdl 1.2
-if test x$fim_handle_sdl = xyes; then
+if test x$fim_handle_sdl != xno; then
 	# support for custom library configurator path
         if test x$libsdl_config_prefix != x; then
                 LIBSDL_CONFIG="$libsdl_config_prefix/bin/sdl-config"
@@ -920,8 +923,13 @@ if test x$fim_handle_sdl = xyes; then
                 AC_PATH_PROG(LIBSDL_CONFIG, sdl-config, no)
         fi
         if test "x$LIBSDL_CONFIG" = "xno"; then
-                AC_MSG_ERROR([LIBSDL not found])
+		if test x$fim_handle_sdl = xyes; then
+                	AC_MSG_ERROR([LIBSDL not found (failed detecting the sdl-config program)])
+		else
+			fim_handle_sdl='no'
+		fi
         else
+		fim_handle_sdl='yes'
                 LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
                 CXXFLAGS="$CXXFLAGS $LIBSDL_CXXFLAGS"
                 LIBS="$LIBS `$LIBSDL_CONFIG --libs`"

@@ -21,6 +21,10 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110702	exif tags may goto i:exif:* variables
+20110702	bind '\\' 'scale "100%"'; # is not accepted; this is bad
+20110701	shall establish a policy in using #error
+20110701	an easy way for window resize on 'next', in sdl mode
 20110629	use CHAR_BIT in src/FbiStuffBit1.cpp
 20110628	fimgs has some problems
 20110627	./configure --no-history
@@ -135,7 +139,7 @@ Minor but tricky (time consuming) features/issues:
 20080216	add textureview mode
 20091214	consider using libmagic
 20090810	:|ocr -
-20090218	implement a printf() like interface for customizing the status bar information
+20090218	implement a printf() like interface for customizing the status bar information (format specifiers)
 20090401	should use aa_getevent
 20081230	need of a square angle rotation support
 20081230	multipage caching and prefetching support still missing
