@@ -35,9 +35,15 @@ For the documentation of the 'fimgs' script, see
 
 The man pages are rich with examples.
 
-Note: this document will be eliminated/reconverted once all the relevant
+
+
+IMPORTANT NOTE:
+
+This document will be eliminated/reconverted once all the relevant
 information will be made available in the man pages, so it will be probably
-outdated during the transition.
+outdated/obsolete during the transition.
+
+The man pages are the authoritative documentation sources for fim. 
 
 Enjoy!
 

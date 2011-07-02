@@ -55,8 +55,11 @@ like the Vim text editor or the Mutt mail user agent.
   It is based on the <a href="http://www.bytesex.org">Fbi</a> image viewer, by Gerd Hoffmann, 
   and works in the
    <a href="http://www.linux.org">Linux</a>
-   <a href="http://www.kernelhq.cc/browse-view.py?fv_nr=200556">framebuffer
-   console (so, it is not an <a href="http://www.x.org">X/Xorg</a> program! ).
+   <a href="http://www.kernelhq.cc/browse-view.py?fv_nr=200556">framebuffer console</a> mode,
+   as well as under 
+   <a href="http://www.x.org">X/Xorg</a>, using the
+   <a href="http://www.libsdl.org">SDL library</a>.
+  The right video mode gets auto-detected at runtime, and may be configured out at build time, if necessary. 
 
 <br> &nbsp;<br>
 

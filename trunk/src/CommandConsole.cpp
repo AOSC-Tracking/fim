@@ -1083,7 +1083,7 @@ ok:
 						/*
 						 * <0x20 ? print ^ 0x40+..
 						 * */
-						sprintf(buf,"got : %x (%d)\n",c,c);
+						sprintf(buf,"got : 0x%x (%d)\n",c,c);
 						cout << buf ;
 					}
 #ifndef FIM_USE_READLINE

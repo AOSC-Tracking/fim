@@ -436,7 +436,13 @@ Var ex(nodeType *p)
 			{
 				DBG("SV?\n");
 			}
-			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]);
+#if FIM_WANT_AVOID_FP_EXCEPTIONS
+			case '%': {Var v1=ex(p->opr.op[0]),v2=ex(p->opr.op[1]); if(v2.getInt())return v1%v2; else return v2;};
+			case '/': {Var v1=ex(p->opr.op[0]),v2=ex(p->opr.op[1]); if(v2.getInt())return v1/v2; else return v2;};
+#else
+			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]); // FIXME: may generate an exception
+			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]); // FIXME: may generate an exception
+#endif
 			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
 			case '!': return ((ex(p->opr.op[0])).getInt())==0?1:0;
 			/* unary minus is still under definition */
@@ -447,7 +453,6 @@ Var ex(nodeType *p)
 				if ( 2==p->opr.nops) {Var d= ex(p->opr.op[0]) - ex(p->opr.op[1]);return d;}
 				else return Var(0) - ex(p->opr.op[0]);
 			case '*': return ex(p->opr.op[0]) * ex(p->opr.op[1]);
-			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]);
 			case '<': return ex(p->opr.op[0]) < ex(p->opr.op[1]);
 			case '>': return ex(p->opr.op[0]) > ex(p->opr.op[1]);
 			//comparison operators : evaluation to integer..

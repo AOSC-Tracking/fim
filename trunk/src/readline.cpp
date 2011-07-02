@@ -290,6 +290,7 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	/* Tell the completer that we want a crack first. */
 	rl_attempted_completion_function = fim_completion;
 	rl_completion_display_matches_hook=completion_display_matches_hook;
+	rl_erase_empty_line=1; // NEW: 20110630 in sdl mode with no echo disabling, prints newlines, if unset
 
 	if(with_no_display_device==0)
 	{
