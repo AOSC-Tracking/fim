@@ -871,6 +871,8 @@ bind 'Esc' "quit";
 #bind 'n' "next_file;";
 #bind 'n' "next;";
 bind 'C-h' "help";
+bind '?' "help";
+bind '=' "scale '100%'";
 #bind 'p' "prev_file;";
 #bind 'P' "list 'pop'";
 #bind 's' "list 'sort'";
@@ -881,8 +883,9 @@ bind 'I' "toggleautonegate";
 #bind 'R' "reload";
 #bind 'R' "redisplay";
 #bind 'r' "rotate90";
-bind 'R' "rotate10;display;";
-bind 'r' "rotate10_ccw;display;";
+#bind 'R' "rotate10;display;";
+#bind 'r' "rotate10_ccw;display;";
+bind 'r' "reload;";
 #bind 'C-d' "display";
 bind '+' "magnify";
 #bind 'C-+' "angle=angle+10.0;display;";
@@ -918,11 +921,11 @@ alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 #
 # autocommands are essential to Fim's automated behaviour
 # examples:
-#autocmd "PostInteractiveCommand" "fim.png" "echo '\nmatched an interactive command on fim.png\n';";
+#autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n';";
 #autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
 #autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
 #autocmd "PostDisplay" ".*gif" "echo 'this is a gif file';";
-#autocmd "PostDisplay" "" "echo '\nthis is a file\n'";
+#autocmd "PostDisplay" "" "echo '\\nthis is a file\\n'";
 #autocmd "PostGoto"   "" "set_interactive_mode;";
 autocmd "PostGoto" "" "reload;";
 #autocmd "PostGoto" "" "load;";
@@ -970,7 +973,13 @@ autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
 autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
+bind '*' "scale '100%'";
 bind 'w' "scale 'w'";
+bind '<' "rotate10_ccw;display;";
+bind '>' "rotate10;display;";
+bind '_' "_scale_style='';scale '100%';";
+bind ',' "_display_console=1;echo _last_system_output;";
+bind 'C-a' "if(_scale_style!='a'){_scale_style='a';scale 'a';}else{_scale_style='';scale '100%';}";
 #bind 'h' "scale 'h'";
 #
 alias "pan_nw" "pan 'nw';" "pans the image to the upper left";

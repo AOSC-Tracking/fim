@@ -412,8 +412,8 @@ err:
 		sym_keys["F10"]=SDLK_F10;
 		sym_keys["F11"]=SDLK_F11;
 		sym_keys["F12"]=SDLK_F12;
-		
 		fim_perror(NULL);
+		cc.key_syms_update();
 
 		// textual console reformatting
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE

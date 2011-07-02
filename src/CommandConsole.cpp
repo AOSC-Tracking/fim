@@ -2216,11 +2216,20 @@ done:
 
 	fim_err_t CommandConsole::display_reinit(const fim_char_t *rs)
 	{
+
 		if(!displaydevice_)
 			goto err;
 		return displaydevice_->reinit(rs);
 err:
 		return FIM_ERR_GENERIC;
+	}
+
+	fim_bool_t CommandConsole::key_syms_update()
+	{
+		sym_keys_t::const_iterator ki;
+		for( ki=sym_keys_.begin();ki!=sym_keys_.end();++ki)
+			key_syms_[(((*ki).second))]=((*ki).first);
+		return true;
 	}
 }
 
