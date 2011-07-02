@@ -22,15 +22,15 @@ FIM.html fim-stylesheet.css: doctags FIM.TXT
 	./doctags FIM.TXT > tags ; ./vim2html.pl tags FIM.TXT
 
 fim.man.html: fim.man
-	$(MAN2HTML) $< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
 fimrc.man.html: fimrc.man
-	$(MAN2HTML) $< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
 ERRMSG="no $(MAN2HTML) at build time : please install $(MAN2HTML) and reissue :"
 
 fimgs.man.html: fimgs.man
-	$(MAN2HTML) $< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
 doctags:
 	        $(CC) -o doctags doctags.c

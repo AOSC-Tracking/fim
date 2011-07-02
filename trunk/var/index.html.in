@@ -177,16 +177,18 @@ NEWS file:
 <br> &nbsp;<br>
 FIM.TXT file:
  <a href="FIM.html">FIM.html</a>,
- <a href="FIM.TXT">FIM.TXT</a> (the manual).
+ <a href="FIM.TXT">FIM.TXT</a> (an obsolete guide --- man pages are up to date).
 
 <br>
-From the manual:
+From the guide:
 <br> &nbsp;<br>
 information to perform your <a href="FIM.html#basics">first steps in Fim</a>,
 <br> &nbsp;<br>
 information about <a href="FIM.html#bugs">bug reporting</a>,
 <br> &nbsp;<br>
 information about the <a href="FIM.html#framebuffer">Linux Framebuffer</a> in the docs,
+<br> &nbsp;<br>
+From the manual pages:
 <br> &nbsp;<br>
 information about <a href="fim.man.html#EXAMPLES">Fim usage examples</a>, <br> &nbsp;<br>
 dnl information about the <a href="FIM.html#syntax-ref">Fim language syntax</a>, <br> &nbsp;<br>
@@ -195,10 +197,9 @@ information about the <a href="fimrc.man.html#COMMANDS REFERENCE">Fim commands r
 information about the <a href="fimrc.man.html#VARIABLES REFERENCE">Fim variables reference</a>, <br> &nbsp;<br>
 information about <a href="fimrc.man.html#USAGE EXAMPLES">Fim language usage examples</a>, <br> &nbsp;<br>
 the <a href="FIM.html#faq">Frequently Asked Questions (FAQ)</a>.
-<br> &nbsp;<br>
-<a href="FIM-slides-hackit07.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow prepared for the Hackmeeting 2007).
-<br> &nbsp;<br>
-<a href="FIM-slides-mohp2007.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow prepared for the Metro Olografix Hacking Party 2007).
+<br> &nbsp;<br> <a href="FIM-slides-hackit11.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the italian Hackmeeting 2011).
+<br> &nbsp;<br> <a href="FIM-slides-hackit07.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the italian Hackmeeting 2007).
+<br> &nbsp;<br> <a href="FIM-slides-mohp2007.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the Metro Olografix Hacking Party 2007).
 <br> &nbsp;<br>
 
 </h5>
