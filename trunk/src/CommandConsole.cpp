@@ -2116,6 +2116,8 @@ ok:
 		const int mhkl=5,eisl=9;
 		const char*hp=" - Help";int hpl=fim_strlen(hp);
 		prompt_[1]='\0';
+		fim_int style=getIntVariable(FIM_VID_WANT_CAPTION_STATUS);
+		fim_err_t rc=FIM_ERR_NO_ERROR;
 	
 		if( ! displaydevice_   ) return;
 		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP);/* FIXME: this is SLOW, and should be replaced */
@@ -2172,7 +2174,16 @@ ok:
 		}
 #endif
 
-		displaydevice_->status_line((const fim_char_t*)str);
+#if FIM_WANT_CAPTION_CONTROL
+		if(style!=0)
+		{
+			rc=displaydevice_->set_wm_caption(str);
+			if(rc==FIM_ERR_UNSUPPORTED)
+				style=0;
+		}
+		if(style==0)
+#endif
+			rc=displaydevice_->status_line((const fim_char_t*)str);
 done:
 		fim_free(str);
 	}

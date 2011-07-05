@@ -99,6 +99,8 @@ class SDLDevice:public DisplayDevice
 	bool allowed_resolution(fim_coo_t w, fim_coo_t h);
 	virtual fim_err_t reinit(const fim_char_t *rs);
 	fim_err_t parse_optstring(const fim_char_t *os);
+	virtual fim_err_t set_wm_caption(const fim_char_t *msg);
+	fim_err_t reset_wm_caption();
 };
 
 
