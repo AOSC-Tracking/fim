@@ -244,6 +244,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  */
 #define FIM_ERR_NO_ERROR	0
 #define FIM_ERR_GENERIC	-1
+#define FIM_ERR_UNSUPPORTED	-2
 #define FIM_ERR_BUFFER_FULL	-1024 // FIXME: -2 seems in use
 
 /*
@@ -440,6 +441,7 @@ namespace fim
 #define FIM_VID_PAGECOUNT			"pagecount"			/* "[internal,out,experimental] the page count for a given image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal] if 1, will inhibit display" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
+#define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[internal,experimental] if not 0, and if supported by the display device, will show the status (or command) line in the window manager caption" */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
 #define FIM_VID_PWD				"_pwd"			/* "[internal,out] the current working directory; will be updated at startup and whenever the working directory changes" */
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */
@@ -686,6 +688,7 @@ namespace fim
 #define FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE 1
 #define FIM_WANT_HISTORY 1
 #define FIM_WANT_AVOID_FP_EXCEPTIONS 1
+#define FIM_WANT_CAPTION_CONTROL	1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_STRING_BUFSIZE	4096

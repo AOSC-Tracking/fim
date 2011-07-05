@@ -318,6 +318,7 @@ err:
 		current_h_=vi_->current_h;
 		bpp_      =vi_->vfmt->BitsPerPixel;
 		Bpp_      =vi_->vfmt->BytesPerPixel;
+		// FIXME: shall update want_windowed_ with effective flags contents
 		return true;
 	}
 
@@ -388,7 +389,7 @@ err:
 
 		/* Enable Unicode translation ( for a more flexible input handling ) */
 	        SDL_EnableUNICODE( 1 );
-		SDL_WM_SetCaption(FIM_CNS_FIM_APPTITLE,FIM_SDL_ICONPATH);
+		reset_wm_caption();
 		fim_perror(NULL);
 
 		sym_keys["PageUp" ]=SDLK_PAGEUP;
@@ -933,6 +934,8 @@ ok:
 		}
 		//std::cout << "resizing to " << w << " "<< h << " SUCCESS!\n";
 		screen_=nscreen_;
+		if(want_flags&SDL_FULLSCREEN)
+			reset_wm_caption();
 		if(!sdl_window_update())
 		{
 			std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
@@ -957,5 +960,27 @@ ok:
 	err:
 		//std::cerr<<"problems!\n";
 		return FIM_ERR_GENERIC;
+	}
+
+	fim_err_t SDLDevice::set_wm_caption(const fim_char_t *msg)
+	{
+		fim_err_t rc=FIM_ERR_NO_ERROR;
+#if FIM_WANT_CAPTION_CONTROL
+		if(!msg)
+		{ rc=FIM_ERR_UNSUPPORTED; goto err;}
+		if(!want_windowed_)
+		       return FIM_ERR_UNSUPPORTED; 	
+		SDL_WM_SetCaption(msg,FIM_SDL_ICONPATH);
+#else
+		rc=FIM_ERR_UNSUPPORTED;
+#endif
+err:
+		return rc;
+	}
+	
+	fim_err_t SDLDevice::reset_wm_caption()
+	{
+		SDL_WM_SetCaption(FIM_CNS_FIM_APPTITLE,FIM_SDL_ICONPATH);
+		return FIM_ERR_NO_ERROR;
 	}
 #endif

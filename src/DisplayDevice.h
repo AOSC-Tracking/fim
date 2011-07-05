@@ -89,6 +89,7 @@ class DisplayDevice
 	public:
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h){}
 	virtual fim_err_t reinit(const fim_char_t *rs){}
+	virtual fim_err_t set_wm_caption(const fim_char_t *msg){return FIM_ERR_UNSUPPORTED;}
 };
 
 #endif

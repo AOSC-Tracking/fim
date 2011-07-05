@@ -24,7 +24,9 @@ if(_ignorecase==''){_ignorecase=1;}
 if(_console_offset==''){_console_offset=0;}
 if(_console_key==''){_console_key=58;}
 if(_display_as_binary==''){_display_as_binary=0;}
+if(_want_caption_status==''){_want_caption_status=0;}
 if(ascale==''){ascale="1.0";}
+
 #
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}
@@ -72,7 +74,7 @@ bind '+' "magnify";
 #bind 'C-+' "angle=angle+10.0;display;";
 bind 'a' "scale 'a';";
 bind 'Tab' "toggleVerbosity";
-bind 'C-k' "toggleKeyVerbosity";
+bind 'C-k' "_want_caption_status=1-_want_caption_status;status ' '";
 bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
 bind 'C-m' "list 'mark'";
@@ -81,6 +83,7 @@ bind 'Enter' "list 'mark';next";
 bind '-' "reduce";
 bind "Up" "pan_up";
 bind 'k' "pan_up";
+#bind 'C-k' "pan_up";
 bind "Right" "pan_right";
 bind 'l' "pan_right";
 bind "Down" "pan_down";
