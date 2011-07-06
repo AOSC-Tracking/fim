@@ -499,12 +499,16 @@ namespace fim
 
 		/* an exception is launched immediately */
 		if(!img_ || !fimg_)
+#if 0
 			///* temporarily, for security reasons :  throw FIM_E_NO_IMAGE*/;
 		{
 			std::cerr << "fatal error : " << __FILE__ << ":" << __LINE__ << " ( are you sure you gave an image file in standard input, uh ?)\n";
 			throw FimException();
 			std::exit(*(int*)NULL);// FIXME
 		}
+#else
+			invalid_=true;
+#endif
 	}
 
 	Image * Image::getClone()
