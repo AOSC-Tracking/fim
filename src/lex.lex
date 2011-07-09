@@ -26,6 +26,7 @@
 #include <stdio.h>
 
 #include <stdlib.h>
+#include <unistd.h>	/* 20110709 now calling flex --nounistd; this way we have to include it by ourselves; this is good because we overcome the C++ isatty redeclaration from within lex.yy.cc, which often does not match that of unistd.h regarding the thrown exceptions   */ 
 #include "lex.h"
 #include "yacc.tab.hpp"
 #include "common.h"

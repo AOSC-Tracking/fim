@@ -12,7 +12,7 @@ bin_PROGRAMS = fim
 bin_SCRIPTS = fimgs
 doc_DATA = fimrc
 
-LFLAGS = -+
+LFLAGS = -+ --nounistd
 YFLAGS = -v -d
 
 #lex.yy.cc : lex.lex
