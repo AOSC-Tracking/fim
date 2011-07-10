@@ -1,8 +1,4 @@
-# This file should be proces$(SED) with automake to generate Makefile.in
-#
 # $Id$
-#
-# originally inspired by mutt's Makefile.am 
 
 subdir = src
 AUTOMAKE_OPTIONS = nostdinc no-dependencies dejagnu

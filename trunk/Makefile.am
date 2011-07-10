@@ -1,10 +1,4 @@
-# This file should be processed with automake..
-#
 # $Id$
-#
-# inspired by mutt's  Makefile.am 
-#
-# yet not optimal
 
 # no-dependencies was due to problems with conditional sources
 # nostdinc disables the standard -I. include which breaks a correct string.h include
