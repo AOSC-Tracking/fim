@@ -7,7 +7,7 @@ CLEANFILES= doctags *.o  tags $(HTMLDOCS)
 
 EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man fimrc.man
 #MAN2HTML=man2html
-MAN2HTML=man --html=cat
+MAN2HTML=$(MAN) --html=cat
 
 man1_MANS = fim.man fimgs.man fimrc.man
 
@@ -22,19 +22,19 @@ FIM.html fim-stylesheet.css: doctags FIM.TXT
 	./doctags FIM.TXT > tags ; ./vim2html.pl tags FIM.TXT
 
 fim.man.html: fim.man
-	$(MAN2HTML) ./$< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
 fimrc.man.html: fimrc.man
-	$(MAN2HTML) ./$< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
-ERRMSG="no $(MAN2HTML) at build time : please install $(MAN2HTML) and reissue :"
+ERRMSG="No $(MAN2HTML) at build time : please install $(MAN2HTML) and reissue :"
 
 fimgs.man.html: fimgs.man
-	$(MAN2HTML) ./$< >  $@ || echo "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
 doctags:
 	        $(CC) -o doctags doctags.c
 
 #clean:
-#	        rm -f  doctags.o doctags FIM.html tags fim-stylesheet.css fim.man.html fimgs.man.html
+#	        $(RM) -f  doctags.o doctags FIM.html tags fim-stylesheet.css fim.man.html fimgs.man.html
 

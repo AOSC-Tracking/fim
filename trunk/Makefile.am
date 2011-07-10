@@ -21,6 +21,8 @@ EXTRA_DIST=  COPYING  \
 	media/image.png \
 	media/fim.png \
 	depcomp missing install-sh
+FIM_EXE=./src/fim
+
 
 # mhmhmhm 
 # CLEANFILES = autom4te.cache
@@ -48,32 +50,32 @@ FIMNORCOPTS=-N --no-etc-rc-file
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 sanity-check:	all
-	@./src/fim $(FIMNORCOPTS) -E scripts/tests/sanity.fim -t
+	@$(FIM_EXE) $(FIMNORCOPTS) -E scripts/tests/sanity.fim -t
 
 # this is the official way of testing fim
 tests:	all
-	@./scripts/tests/version.sh
-	@./src/fim $(FIMNORCOPTS) -o dumb -E scripts/example/oneline.fim -c quit 
-	@./src/fim $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo 'Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
-	@cd ./src/testdir && make
+	@$(SHELL) ./scripts/tests/version.sh
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -E scripts/example/oneline.fim -c quit 
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo 'Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
+	make -C ./src/testdir
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
 # new target, still not working
 tests-all: tests $(FIMSCRIPTSDIR)/configure-brute-check.sh
 	cd src && which cppcheck && cppcheck *cpp *.h || true
-	$(FIMSCRIPTSDIR)/configure-brute-check.sh
+	$(SHELL) $(FIMSCRIPTSDIR)/configure-brute-check.sh
 	
 #news-dump:
-#	awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS > f
+#	$(AWK)  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS > f
 
 # this rule is deprecated, too
 test:	all
-	@./src/fim $(FIMNORCOPTS) media/* #~/M*s/*g
+	@$(FIM_EXE) $(FIMNORCOPTS) media/* #~/M*s/*g
 
 # this rule is deprecated, too
 aatest:	all
-	@./src/fim $(FIMNORCOPTS) media/* -o aa #~/M*s/*g
+	@$(FIM_EXE) $(FIMNORCOPTS) media/* -o aa #~/M*s/*g
 
 # this rule is old and deprecated
 #tgz:	clean
@@ -135,10 +137,10 @@ news: freshmeat mail-announce
 
 dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 
-doc/fim.man doc/fimrc.man doc/fimgs.man: src/fim
-	src/fim $(FIMNORCOPTS) --help=m                   > doc/fim.man
-	src/fim $(FIMNORCOPTS) --dump-reference-help=man  > doc/fimrc.man
-	src/fimgs -m -- $(FIMNORCOPTS)                    > doc/fimgs.man
+doc/fim.man doc/fimrc.man doc/fimgs.man: $(FIM_EXE)
+	$(FIM_EXE) $(FIMNORCOPTS) --help=m                   > doc/fim.man
+	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man  > doc/fimrc.man
+	$(FIM_EXE)gs -m -- $(FIMNORCOPTS)                    > doc/fimgs.man
 
 # fixme : missing integration with ChangeLog file
 mail-announce:
@@ -163,7 +165,7 @@ savannah-lookup:
 
 # fixme : missing integration with ChangeLog file and such information
 freshmeat_old: 
-	@ awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
+	@ $(AWK)  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
 	@echo freshmeat-submit -v "fbi-`cat VERSION`" \
 	--project fbi-improved \
 	--license GPL \
@@ -174,7 +176,7 @@ freshmeat_old:
 	--mirror-site-url       $$(cat README | grep "^Off.*rror : "|sed s/^.*\ :.//g) \
 	--changelog-url         $$(cat README | grep "^ChangeLog  "|sed s/^.*\ :.//g)
 	@ echo "are you sure ? (any key to abort, yes to continue)"  && read yes && [[ "$${yes}" == "yes" ]] && \
-	awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS | \
+	$(AWK)  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS | \
 	 freshmeat-submit -v "fbi-`cat VERSION`" \
 	--project fbi-improved \
 	--license GPL \
@@ -201,7 +203,7 @@ freshmeat-submit:
 	@echo ChangeLog-URL: $$(cat README | grep "^ChangeLog  "|sed s/^.*\ :.//g)
 	@echo CVS-URL: $$(cat README | grep "^Repository"|sed s/^.*\ :.//g)
 	@echo 
-	@ awk  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
+	@ $(AWK)  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
 
 freshmeat:
 	@ echo "are you sure you want to freshmeat-submit ? (any key to abort, yes to continue)"  && read yes && [[ "$${yes}" == "yes" ]] && \
