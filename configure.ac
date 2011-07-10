@@ -125,6 +125,37 @@ fi
 if test x$HAVE_BISON != x"yes" ; then
        	AC_MSG_ERROR([No bison (parser generator) executable detected!]) ;
 fi
+
+AC_CHECK_PROG([HAVE_ECHO],[echo],[yes],[no])
+AC_CHECK_PROG([HAVE_RM],[rm],[yes],[no])
+AC_CHECK_PROG([HAVE_SED],[sed],[yes],[no])
+AC_CHECK_PROG([HAVE_GREP],[grep],[yes],[no])
+AC_CHECK_PROG([HAVE_SORT],[sort],[yes],[no])
+AC_CHECK_PROG([HAVE_CPP],[cpp],[yes],[no])
+AC_CHECK_PROG([HAVE_AWK],[awk],[yes],[no])
+AC_CHECK_PROG([HAVE_CAT],[cat],[yes],[no])
+AC_CHECK_PROG([HAVE_MAN],[man],[yes],[no])
+#AC_CHECK_PROG([HAVE_WHICH],[which],[yes],[no])
+#AC_CHECK_PROG([HAVE_GPG],[gpg],[yes],[no])
+#AC_CHECK_PROG([HAVE_LS],[ls],[yes],[no])
+#AC_CHECK_PROG([HAVE_CD],[cd],[yes],[no])
+#AC_CHECK_PROG([HAVE_CC],[cc],[yes],[no])
+AC_PATH_PROG([RM],[rm],[no])
+AC_PATH_PROG([SED],[sed],[no])
+AC_PATH_PROG([GREP],[grep],[no])
+AC_PATH_PROG([ECHO],[echo],[no])
+AC_PATH_PROG([SORT],[sort],[no])
+AC_PATH_PROG([CPP],[cpp],[no])
+AC_PATH_PROG([AWK],[awk],[no])
+AC_PATH_PROG([CAT],[cat],[no])
+AC_PATH_PROG([MAN],[man],[no])
+#AC_PATH_PROG([CC],[cc],[no])
+#AC_PATH_PROG([WHICH],[which],[no])
+#AC_PATH_PROG([GPG],[gpg],[no])
+#AC_PATH_PROG([LS],[ls],[no])
+#AC_PATH_PROG([CD],[cd],[no])
+# FIXME: what if we have no grep and/or no sed ?
+# (echo is often a shell builtin)
 have_default_bindings=yes
 have_default_mapping=yes
 have_default_config=yes
