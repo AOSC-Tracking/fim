@@ -392,15 +392,15 @@ err:
 		reset_wm_caption();
 		fim_perror(NULL);
 
-		sym_keys["PageUp" ]=SDLK_PAGEUP;
-		sym_keys["PageDown" ]=SDLK_PAGEDOWN;
-		sym_keys["Left" ]=SDLK_LEFT;
-		sym_keys["Right"]=SDLK_RIGHT;
-		sym_keys["Up"   ]=SDLK_UP;
-		sym_keys["Down" ]=SDLK_DOWN;
-		sym_keys["Space"]=SDLK_SPACE;
-		sym_keys["End"  ]=SDLK_END;
-		sym_keys["Home" ]=SDLK_HOME;
+		sym_keys[FIM_KBD_PAGEUP]=SDLK_PAGEUP;
+		sym_keys[FIM_KBD_PAGEDOWN]=SDLK_PAGEDOWN;
+		sym_keys[FIM_KBD_LEFT]=SDLK_LEFT;
+		sym_keys[FIM_KBD_RIGHT]=SDLK_RIGHT;
+		sym_keys[FIM_KBD_UP]=SDLK_UP;
+		sym_keys[FIM_KBD_DOWN]=SDLK_DOWN;
+		sym_keys[FIM_KBD_SPACE]=SDLK_SPACE;
+		sym_keys[FIM_KBD_END]=SDLK_END;
+		sym_keys[FIM_KBD_HOME]=SDLK_HOME;
 		sym_keys["F1" ]=SDLK_F1;
 		sym_keys["F2" ]=SDLK_F2;
 		sym_keys["F3" ]=SDLK_F3;

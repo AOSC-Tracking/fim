@@ -112,6 +112,7 @@
 /*#include <unistd.h>*/ /* standard Posix symbolic constants and types		*/
 /*#include <sys/stat.h> */
 /*#include <sys/types.h>*/
+#include <math.h>
  
 #define FIM_LINE_CERR std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 #define FIM_LINE_COUT std::cout << "in " <<__func__ << " # " << __FILE__ << ":" << __LINE__ << "\n";
@@ -219,6 +220,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_PROMPT_SLASH	'/'
 #define FIM_SYM_PROMPT_NUL	'\0'
 #define FIM_SYM_CHAR_NUL	'\0'
+//#define FIM_SYM_ESC		0x1B
 #define FIM_SYM_FLIPCHAR	'F'
 #define FIM_SYM_MIRRCHAR	'M'
 #define FIM_SYM_TYPE_FLOAT	'f'
@@ -505,6 +507,7 @@ namespace fim
 #define FIM_KBD_ENTER			"Enter"
 #define FIM_KBD_BACKSPACE		"BackSpace"
 #define FIM_KBD_BACKSPACE_		"Backspace"
+#define FIM_KBD_SPACE			" "
 #define FIM_KBD_DEL			"Del"
 #define FIM_KBD_INS			"Ins"
 #define FIM_KBD_HOME			"Home"

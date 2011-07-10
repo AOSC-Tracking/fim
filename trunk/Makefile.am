@@ -16,6 +16,7 @@ EXTRA_DIST=  COPYING  \
 	media/fim.png \
 	depcomp missing install-sh
 FIM_EXE=./src/fim
+FIMGS_EXE=./src/fimgs
 
 
 # mhmhmhm 
@@ -134,7 +135,7 @@ dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 doc/fim.man doc/fimrc.man doc/fimgs.man: $(FIM_EXE)
 	$(FIM_EXE) $(FIMNORCOPTS) --help=m                   > doc/fim.man
 	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man  > doc/fimrc.man
-	$(FIM_EXE)gs -m -- $(FIMNORCOPTS)                    > doc/fimgs.man
+	$(FIMGS_EXE) -m -- $(FIMNORCOPTS)                    > doc/fimgs.man
 
 # fixme : missing integration with ChangeLog file
 mail-announce:
