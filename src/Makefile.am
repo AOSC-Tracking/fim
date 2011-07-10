@@ -18,6 +18,8 @@ YFLAGS = -v -d
 #lex.yy.cc : lex.lex
 lex.yy.cc: lex.lex
 	$(LEX) $(LFLAGS) lex.lex
+	@echo "applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
+	sed -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
 yacc.tab.cpp: yacc.ypp lex.lex
 	$(YACC) $(YFLAGS) yacc.ypp -o yacc.tab.cpp
