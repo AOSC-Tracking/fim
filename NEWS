@@ -5,8 +5,7 @@
 
  * auto-generated documentation: more consistency 
  * grammar specification, in man fimrc
- * internal commands  reference man page, in man fimrc
- * internal variables reference man page, in man fimrc
+ * internal commands,variables,autocommands  reference man page, in man fimrc
  * better internal help mechanisms
  * more control (resolution change,windowed mode) in experimental sdl mode
  * new commands (pread,reverse,shuffle,...) 

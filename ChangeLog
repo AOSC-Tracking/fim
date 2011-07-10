@@ -1,3 +1,38 @@
+2011-07-10 11:09  dezperado
+
+	* Makefile.am, configure.ac, doc/Makefile.am, doc/fimrc.man,
+	  src/Makefile.am: introducing variables for external utilities's
+	  path used in the makefiles, and configure checks to detect the
+	  proper path.
+
+2011-07-10 10:26  dezperado
+
+	* src/Makefile.am: a horrible hack to bypass the isatty
+	  redeclaration in flex, using sed.
+
+2011-07-09 17:45  dezperado
+
+	* src/DisplayDevice.h, src/Makefile.am, src/lex.lex: trying to
+	  bypass the flex isatty bug.
+
+2011-07-06 00:03  dezperado
+
+	* src/Image.cpp: bypassing a certain error condition throwing an
+	  exception on failed image cloning; instead, setting the image
+	  invalid flag.
+
+2011-07-05 21:12  dezperado
+
+	* doc/fimrc.man, src/CommandConsole.cpp, src/DisplayDevice.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/fim.h, src/fimrc,
+	  src/help.cpp: in a hack to allow control of window caption (and
+	  display there the command/status line).
+
+2011-07-02 08:33  dezperado
+
+	* ChangeLog, doc/Makefile.am, var/index.html.in: www page update.
+	  doc (man -> html) generation fix in the makefile.
+
 2011-07-02 08:01  dezperado
 
 	* doc/fimrc.man, src/CommandConsole.cpp, src/CommandConsole.h,

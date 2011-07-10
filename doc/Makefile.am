@@ -1,4 +1,3 @@
-
 # $LastChangedDate$
 
 HTMLDOCS=FIM.html fim.man.html  fimgs.man.html fimrc.man.html

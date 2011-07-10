@@ -932,7 +932,7 @@ dnl ============================================================================
 AC_ARG_WITH(sdl-prefix, AC_HELP_STRING([--with-sdl-prefix=PFX], [prefix where libsdl is installed (optional)]),
 libsdl_config_prefix="$withval", libsdl_config_prefix="")
 
-fim_handle_sdl=''
+fim_handle_sdl='auto'
 
 dnl AC_ARG_ENABLE(sdl, AC_HELP_STRING([--disable-sdl], [Disable libsdl support.]),
 dnl [       if test x$enableval = xno ; then
@@ -950,7 +950,6 @@ if test x$fim_handle_sdl != xno; then
         if test x$libsdl_config_prefix != x; then
                 LIBSDL_CONFIG="$libsdl_config_prefix/bin/sdl-config"
         else
-		# default path configurator
                 AC_PATH_PROG(LIBSDL_CONFIG, sdl-config, no)
         fi
         if test "x$LIBSDL_CONFIG" = "xno"; then
@@ -960,6 +959,7 @@ if test x$fim_handle_sdl != xno; then
 			fim_handle_sdl='no'
 		fi
         else
+		AC_MSG_NOTICE([Activating LIBSDL.])
 		fim_handle_sdl='yes'
                 LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
                 CXXFLAGS="$CXXFLAGS $LIBSDL_CXXFLAGS"
