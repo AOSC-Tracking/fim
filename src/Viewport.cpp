@@ -414,7 +414,19 @@ namespace fim
 			ys = (fim_scale_t)this->viewport_height() / (fim_scale_t)image_->original_height();
 		}
 
-		image_->rescale( (xs < ys) ? xs : ys );
+		image_->rescale(FIM_MIN(xs,ys));
+	}
+
+	void Viewport::auto_scale_if_bigger()
+	{
+		fim_scale_t xs,ys;
+		if( check_invalid() ) return;
+		else
+		{
+			if((this->viewport_width()<(image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0)))
+			||(this->viewport_height() < image_->original_height()))
+				auto_scale();
+		}
 	}
 
 #if 0

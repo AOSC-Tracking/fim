@@ -278,7 +278,7 @@ nop:
 		sl=strlen(ss);
 		if(isalpha(fc))
 		{
-			if( !(fc=='w'||fc=='h'||fc=='a'))
+			if( !(fc=='w'||fc=='h'||fc=='a'||fc=='b'))
 				goto nop;
 		}
 		else
@@ -370,6 +370,9 @@ comeon:
 				break;
 				case('a'):
 				if(viewport())viewport()->auto_scale();
+				break;
+				case('b'):
+				if(viewport())viewport()->auto_scale_if_bigger();
 				break;
 				case('-'):
 				{
