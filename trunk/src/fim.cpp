@@ -691,6 +691,11 @@ FBI_AUTHOR" is the author of \"fbi\", upon which\n.B fim\nwas originally based. 
 
 int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 {
+	if(helparg&&*helparg=='b')
+	{
+	    	std::cout << "fim - No loadable images specified.\nUse `fim --help' for detailed usage information.\n";
+		goto done;
+	}
 	if(helparg&&*helparg=='m')
 	{
 		fim_dump_man_page(); 
@@ -1141,7 +1146,7 @@ done:
 					", -i"
 #endif
 					")!\n\n");
-			retcode=help_and_exit(argv[0],0);/* should return 0 or -1 ? */
+			retcode=help_and_exit(argv[0],0,"b");/* should return 0 or -1 ? */
 			goto ret;
 		}
 		/*
@@ -1208,7 +1213,9 @@ done:
 		#endif
 		&& !perform_sanity_check
 		)
-		{retcode=help_and_exit(argv[0],-1);goto ret;}
+		{
+			retcode=help_and_exit(argv[0],-1,"b");goto ret;
+		}
 	
 		/* output device guess */
 		if( g_fim_output_device==FIM_CNS_EMPTY_STRING )

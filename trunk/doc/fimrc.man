@@ -356,7 +356,7 @@ rotate {number}: rotate the image the specified amount of degrees [undocumented]
 .B
 scale
 .fi
-scale {['+'|'-']{value}['%']|'w'|'h'|'a'|'++'|'+-'|'+*'|'+/'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a'); if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; 
+scale {['+'|'-']{value}['%']|'w'|'h'|'a'|'b'|'++'|'+-'|'+*'|'+/'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; 
 .fi
 
 .B
@@ -838,7 +838,7 @@ if(_max_cached_memory==''){_max_cached_memory=80000000;}
 if(_max_iterated_commands==''){_max_iterated_commands=100;}
 if(_want_prefetch==''){_want_prefetch=1;}
 if(_no_external_loader_programs==''){_no_external_loader_programs=0;}
-if(_scale_style==''){_scale_style='a';}
+if(_scale_style==''){_scale_style='b';}
 if(_save_fim_history==''){_save_fim_history=1;}
 if(_load_fim_history==''){_load_fim_history=1;}
 if(_verbose_keys==''){_verbose_keys=0;}

@@ -118,6 +118,7 @@ class Viewport
         Image* getImage()const;
 
 	void auto_scale();
+	void auto_scale_if_bigger();
 
 	void free();
         bool check_invalid()const;
