@@ -220,7 +220,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_PROMPT_SLASH	'/'
 #define FIM_SYM_PROMPT_NUL	'\0'
 #define FIM_SYM_CHAR_NUL	'\0'
-//#define FIM_SYM_ESC		0x1B
+#define FIM_SYM_ESC		0x1B
+#define FIM_SYM_ENTER		0x0D
 #define FIM_SYM_FLIPCHAR	'F'
 #define FIM_SYM_MIRRCHAR	'M'
 #define FIM_SYM_TYPE_FLOAT	'f'
@@ -692,6 +693,7 @@ namespace fim
 #define FIM_WANT_HISTORY 1
 #define FIM_WANT_AVOID_FP_EXCEPTIONS 1
 #define FIM_WANT_CAPTION_CONTROL	1
+#define FIM_WANT_READLINE_CLEAR_WITH_ESC	1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_STRING_BUFSIZE	4096

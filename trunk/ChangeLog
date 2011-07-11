@@ -1,3 +1,22 @@
+2011-07-11 00:14  dezperado
+
+	* doc/fimrc.man, src/Browser.cpp, src/Viewport.cpp, src/Viewport.h,
+	  src/fim.cpp, src/fim.h, src/fimrc: added a further scaling style:
+	  'b', scaling like 'a' when image is bigger than screen size.
+	  invoking fim with no options will display a very short, two lines
+	  help message.
+
+2011-07-10 23:21  dezperado
+
+	* Makefile.am, TODO, src/SDLDevice.cpp, src/fim.h: makefile fix.
+	  space binding works again.
+
+2011-07-10 12:39  dezperado
+
+	* ChangeLog, Makefile.am, NEWS, configure.ac, doc/Makefile.am,
+	  src/Makefile.am: some comments fixes in makefiles and
+	  documentation. changelog/news update.
+
 2011-07-10 11:09  dezperado
 
 	* Makefile.am, configure.ac, doc/Makefile.am, doc/fimrc.man,

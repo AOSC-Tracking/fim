@@ -30,6 +30,7 @@ language, which is used for the
 .B fimrc
 configuration files, {scriptfile}s, or {commands} passed via command line {options}.
 This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key (or rather, the key code specified by the "_console_key" variable).
+One may exit from command line mode by pressing the Enter key (submitting the current command line), or the Esc key (clearing the current command line).
 The general form of a fim command/program is shown in the next section.
 
 

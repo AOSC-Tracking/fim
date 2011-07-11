@@ -26,7 +26,6 @@ ongoing further inspiration.
 20110709	grep .. | sed .. | fim_h_autocmds.h
 20110709	grep .. | sed .. | fim_h_error_codes.h
 20110709	grep .. | sed .. | fim_h_variables.h
-20110711	need: fim | fim --help  <- the first prints a very short help; the second will print the switches
 20110711	may use ESC as a readline-exiting key
 20110702	exif tags may goto i:exif:* variables
 20110702	bind '\\' 'scale "100%"'; # is not accepted; this is bad
