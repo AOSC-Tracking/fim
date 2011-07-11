@@ -135,6 +135,7 @@ manmode:
 			string(".SH DESCRIPTION\n")+
 			string("This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line {options}.\n")+
 			string("This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \""FIM_SYM_CONSOLE_KEY_STR"\" key (or rather, the key code specified by the \""FIM_VID_CONSOLE_KEY"\" variable).\n")+
+			string("One may exit from command line mode by pressing the "FIM_KBD_ENTER" key (submitting the current command line), or the "FIM_KBD_ESC" key (clearing the current command line).\n")+
 			string("The general form of a fim command/program is shown in the next section.\n")+
 #ifndef FIM_COMMAND_AUTOCOMPLETION
 			string("\nInterpretation of commands or aliases may use autocompletion (if enabled; see the "FIM_VID_CMD_EXPANSION" variable description), in a way to allow the user to type only the beginning of the command of interest.\n")+

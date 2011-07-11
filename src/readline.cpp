@@ -204,8 +204,24 @@ static int redisplay_hook_no_fb()
 	return 0;
 }*/
 
+static int fim_post_rl_getc(int c)
+{
+#if FIM_WANT_READLINE_CLEAR_WITH_ESC
+	if(c==FIM_SYM_ESC)
+	{
+		if(rl_line_buffer)
+			rl_line_buffer[0]=FIM_SYM_PROMPT_NUL;
+		c=FIM_SYM_ENTER;
+	}
+	else
+	{
+	}
+#endif
+	return c;
+}
+
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
-int rl_sdl_getc_hook()
+static int fim_rl_sdl_aa_getc_hook()
 {
 	//unsigned int c;
 	fim_key_t c;
@@ -213,7 +229,7 @@ int rl_sdl_getc_hook()
 	
 	if(cc.displaydevice_->get_input(&c,true)==1)
 	{
-
+		c=fim_post_rl_getc(c);
 		if(c&(1<<31))
 		{
 			rl_set_keymap(rl_get_keymap_by_name("emacs-meta"));	/* FIXME : this is a dirty trick : */
@@ -237,11 +253,18 @@ int rl_sdl_getc_hook()
 //void fim_rl_prep_dummy(int meta_flag){}
 //void fim_rl_deprep_dummy(void){}
 
-int rl_sdl_getc(FILE * fd)
+int fim_rl_sdl_aa_getc(FILE * fd)
 {
 	return 0;/* yes, a dummy function instead of getc() */
 }
 #endif
+
+int fim_rl_getc(FILE * fd)
+{
+	int c=rl_getc(fd);
+	c=fim_post_rl_getc(c);
+	return c;
+}
 
 int fim_search_rl_startup_hook()
 {
@@ -307,8 +330,8 @@ void initialize_readline (fim_bool_t with_no_display_device)
 		/*|| g_fim_output_device==FIM_DDN_INN_AA */ 
 	)
 	{
-		rl_getc_function=rl_sdl_getc;
-		rl_event_hook   =rl_sdl_getc_hook;
+		rl_getc_function=fim_rl_sdl_aa_getc;
+		rl_event_hook   =fim_rl_sdl_aa_getc_hook;
 //		rl_prep_term_function=fim_rl_prep_dummy;
 //		rl_deprep_term_function=fim_rl_deprep_dummy;
 
@@ -324,6 +347,14 @@ void initialize_readline (fim_bool_t with_no_display_device)
  		rl_bind_keyseq("\x14", rl_backward_char);		// left
 	}
 	#endif
+	if(
+			g_fim_output_device.find(FIM_DDN_INN_FB)==0 ||
+			g_fim_output_device.find(FIM_DDN_INN_AA)==0 ||
+			0
+	  )
+	{
+		rl_getc_function=fim_rl_getc;
+	}
 	//rl_completion_entry_function=NULL;
 	/*
 	 * to do:
