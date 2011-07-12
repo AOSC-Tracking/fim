@@ -31,7 +31,7 @@
 #define max(x,y) ((x)>(y)?(x):(y))
 
 #define FIM_COMPLETE_ONLY_IF_QUOTED  1
-#define FIM_COMPLETE_INSERTING_DOUBLE_QUOTE  1
+#define FIM_COMPLETE_INSERTING_DOUBLE_QUOTE  0
 #define FIM_WANT_RL_KEY_DUMPOUT 0
 
 /*
@@ -92,7 +92,9 @@ static char * varname_generator (const char *text,int state)
 
 namespace rl
 {
+#if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	static int fim_want_rl_cl_with_esc;
+#endif
 /* 
  * Attempt to complete on the contents of TEXT.  START and END
  *     bound the region of rl_line_buffer that contains the word to
@@ -222,7 +224,9 @@ static int fim_post_rl_getc(int c)
 	if(c==FIM_SYM_ESC && fim_want_rl_cl_with_esc)
 	{
 		if(rl_line_buffer)
+			rl_point=0,
 			rl_line_buffer[0]=FIM_SYM_PROMPT_NUL;
+
 		c=FIM_SYM_ENTER;
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER
 		if(fim_want_rl_cl_with_esc==-1)
@@ -285,8 +289,8 @@ int fim_rl_getc(FILE * fd)
 			fim_want_rl_cl_with_esc=-1,
 			fim_rl_pc=c;
 		else
-			fim_rl_pc=c,
-			c=FIM_SYM_CHAR_NUL;
+			fim_rl_pc=c;
+			//c=FIM_SYM_CHAR_NUL;
 	}
 	else
 #endif
@@ -381,7 +385,9 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	rl_attempted_completion_function = fim_completion;
 	rl_completion_display_matches_hook=completion_display_matches_hook;
 	rl_erase_empty_line=1; // NEW: 20110630 in sdl mode with no echo disabling, prints newlines, if unset
+#if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	fim_want_rl_cl_with_esc=1;
+#endif
 
 	if(with_no_display_device==0)
 	{
@@ -420,14 +426,16 @@ void initialize_readline (fim_bool_t with_no_display_device)
 			g_fim_output_device.find(FIM_DDN_INN_AA)==0 ||
 			0
 	  )
+#if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	if(
 		       	g_fim_output_device==FIM_DDN_INN_AA
 		       	|| g_fim_output_device==FIM_DDN_INN_FB
 	  )
-		fim_want_rl_cl_with_esc=0;
 	{
+		fim_want_rl_cl_with_esc=0;
 		rl_getc_function=fim_rl_getc;
 	}
+#endif
 	//rl_completion_entry_function=NULL;
 	/*
 	 * to do:
