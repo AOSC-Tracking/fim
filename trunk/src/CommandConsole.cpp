@@ -572,7 +572,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 			{
 				list_index++;
 				//std::cout << cmd << " matches with " << commands_[i]->cmd_<<  "\n";
-				//readline will free this strings..
+				//fim_readline will free this strings..
 				return dupstr(commands_[i]->cmd_.c_str());
 			}
 			else
@@ -1004,7 +1004,7 @@ ok:
 			if(ic_==1)
 			{
 				ic_=1;
-				char *rl=readline(FIM_KBD_COLON);
+				char *rl=fim_readline(FIM_KBD_COLON);
 				*prompt_=FIM_SYM_PROMPT_CHAR;
 				if(rl==NULL)
 				{
@@ -1103,7 +1103,7 @@ ok:
 						*prompt_=FIM_SYM_PROMPT_SLASH;
 						rl_hook_func_t *osh=rl_startup_hook;
 						rl_startup_hook=rl::fim_search_rl_startup_hook;
-						char *rl=readline(FIM_CNS_SLASH_STRING); // !!
+						char *rl=fim_readline(FIM_CNS_SLASH_STRING); // !!
 						rl_startup_hook=osh;
 						// no readline ? no interactive searches !
 						*prompt_=FIM_SYM_PROMPT_NUL;

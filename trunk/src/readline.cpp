@@ -38,9 +38,19 @@
  * This file is severely messed up :).
  * */
 
+static int fim_rl_pc=FIM_SYM_CHAR_NUL;
+
 namespace fim
 {
 	extern CommandConsole cc;
+char * fim_readline(const char *prompt)
+{
+	char * rc=NULL;
+	fim_rl_pc=FIM_SYM_CHAR_NUL;
+	rc=readline(prompt);
+	fim_rl_pc=FIM_SYM_CHAR_NUL;
+	return rc;
+}
 }
 
 /*
@@ -214,6 +224,10 @@ static int fim_post_rl_getc(int c)
 		if(rl_line_buffer)
 			rl_line_buffer[0]=FIM_SYM_PROMPT_NUL;
 		c=FIM_SYM_ENTER;
+#if FIM_WANT_DOUBLE_ESC_TO_ENTER
+		if(fim_want_rl_cl_with_esc==-1)
+			fim_want_rl_cl_with_esc=0;
+#endif
 	}
 #endif
 	if(FIM_WANT_RL_KEY_DUMPOUT)cout << "got key: " << (int)(c) << " : " << (c==FIM_SYM_ESC)<<"\n";
@@ -264,6 +278,19 @@ int fim_rl_getc(FILE * fd)
 	int c=FIM_SYM_CHAR_NUL;
 #if 1
 	c=rl_getc(fd);
+#if FIM_WANT_DOUBLE_ESC_TO_ENTER
+	if(c==FIM_SYM_ESC)
+	{
+		if(fim_rl_pc==c)
+			fim_want_rl_cl_with_esc=-1,
+			fim_rl_pc=c;
+		else
+			fim_rl_pc=c,
+			c=FIM_SYM_CHAR_NUL;
+	}
+	else
+#endif
+		fim_rl_pc=c;
 #else
 	/* the following code is not complete yet. it needs interpretation of the input sequence */
 	int cc=rl_getc(fd);
