@@ -25,6 +25,11 @@
 #include <readline/history.h> 	/*	the GNU readline library	*/
 #include <readline/keymaps.h> 	/*	the GNU readline library	*/
 
+namespace fim
+{
+	char * fim_readline(const char *prompt);
+}
+
 namespace rl
 {
 	void initialize_readline ();
