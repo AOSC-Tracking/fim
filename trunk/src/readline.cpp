@@ -32,6 +32,7 @@
 
 #define FIM_COMPLETE_ONLY_IF_QUOTED  1
 #define FIM_COMPLETE_INSERTING_DOUBLE_QUOTE  1
+#define FIM_WANT_RL_KEY_DUMPOUT 0
 
 /*
  * This file is severely messed up :).
@@ -81,6 +82,7 @@ static char * varname_generator (const char *text,int state)
 
 namespace rl
 {
+	static int fim_want_rl_cl_with_esc;
 /* 
  * Attempt to complete on the contents of TEXT.  START and END
  *     bound the region of rl_line_buffer that contains the word to
@@ -207,16 +209,14 @@ static int redisplay_hook_no_fb()
 static int fim_post_rl_getc(int c)
 {
 #if FIM_WANT_READLINE_CLEAR_WITH_ESC
-	if(c==FIM_SYM_ESC)
+	if(c==FIM_SYM_ESC && fim_want_rl_cl_with_esc)
 	{
 		if(rl_line_buffer)
 			rl_line_buffer[0]=FIM_SYM_PROMPT_NUL;
 		c=FIM_SYM_ENTER;
 	}
-	else
-	{
-	}
 #endif
+	if(FIM_WANT_RL_KEY_DUMPOUT)cout << "got key: " << (int)(c) << " : " << (c==FIM_SYM_ESC)<<"\n";
 	return c;
 }
 
@@ -261,7 +261,47 @@ int fim_rl_sdl_aa_getc(FILE * fd)
 
 int fim_rl_getc(FILE * fd)
 {
-	int c=rl_getc(fd);
+	int c=FIM_SYM_CHAR_NUL;
+#if 1
+	c=rl_getc(fd);
+#else
+	/* the following code is not complete yet. it needs interpretation of the input sequence */
+	int cc=rl_getc(fd);
+	if(cc==FIM_SYM_ESC)
+	{
+		int tries=0;
+		char cb[4];
+		cb[0]=cb[1]=cb[2]=cb[3]=FIM_SYM_CHAR_NUL;
+		c|=cc;
+		cb[0]=cc;
+		if(FIM_WANT_RL_KEY_DUMPOUT)cout<<"adding: "<<((int)cc)<<"\n";
+		for(tries=1;tries<3;++tries)
+		if((cc=rl_getc(fd))==FIM_SYM_ESC)
+		{
+			ungetc(cc,fd);
+			for(--tries;tries>1;--tries) ungetc(cb[tries],fd);
+			c=cb[0];
+			goto read_ok;
+		}
+		else
+		{
+			if(cc==FIM_SYM_CHAR_NUL)
+			{
+				for(--tries;tries>1;--tries) ungetc(cb[tries],fd);
+				c=cb[0];
+				goto read_ok;
+			}
+			if(FIM_WANT_RL_KEY_DUMPOUT)cout<<"adding: "<<((int)cc)<<"\n";
+			c*=256;
+			c|=cc;
+			cb[tries]=cc;
+			c=*(int*)cb;
+		}
+	}
+	else 
+		c=cc;
+#endif
+read_ok:
 	c=fim_post_rl_getc(c);
 	return c;
 }
@@ -314,6 +354,7 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	rl_attempted_completion_function = fim_completion;
 	rl_completion_display_matches_hook=completion_display_matches_hook;
 	rl_erase_empty_line=1; // NEW: 20110630 in sdl mode with no echo disabling, prints newlines, if unset
+	fim_want_rl_cl_with_esc=1;
 
 	if(with_no_display_device==0)
 	{
@@ -352,6 +393,11 @@ void initialize_readline (fim_bool_t with_no_display_device)
 			g_fim_output_device.find(FIM_DDN_INN_AA)==0 ||
 			0
 	  )
+	if(
+		       	g_fim_output_device==FIM_DDN_INN_AA
+		       	|| g_fim_output_device==FIM_DDN_INN_FB
+	  )
+		fim_want_rl_cl_with_esc=0;
 	{
 		rl_getc_function=fim_rl_getc;
 	}
