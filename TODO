@@ -21,7 +21,10 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
-20110710	make dox dies under cygwin
+20110711	autocompletion of varname = <unescaped variable value>  would be both cool and useful
+20110711	shall give the user chance to specify the position of an autocommand (e.g.: -1, +1, etc) within the current autocommands list
+20110711	shall give the user chance to push dirs contents sorted
+20110710	make dox dies under cygwin (unsupported man options)
 20110709	need to write to fim-users mentioning the ChangeLog and the solved bugs
 20110709	grep .. | sed .. | fim_h_autocmds.h
 20110709	grep .. | sed .. | fim_h_error_codes.h

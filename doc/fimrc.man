@@ -30,7 +30,7 @@ language, which is used for the
 .B fimrc
 configuration files, {scriptfile}s, or {commands} passed via command line {options}.
 This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key (or rather, the key code specified by the "_console_key" variable).
-One may exit from command line mode by pressing the Enter key on an empty line (a non empty command line would be submitted for execution), or the Esc key (clearing the current command line).
+One may exit from command line mode by pressing the Enter key on an empty line (a non empty command line would be submitted for execution), or the Esc key (clearing the current command line (only working in SDL mode, for now)).
 The general form of a fim command/program is shown in the next section.
 
 
@@ -1009,9 +1009,11 @@ bind 'x' "diagonal_ne;";
 bind 'X' "diagonal_sw;";
 alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
 alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
+alias "sort" "list 'sort'" "sorts the files list ordered";
 #toggleVerbosity;
 #bind 'f' "next;display;";
 #bind 'b' "prev;display;";
+bind 'o' "sort";
 bind 'b' "prev;";
 bind 'B' "toggleDisplayBusy";
 alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
