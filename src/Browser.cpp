@@ -59,6 +59,8 @@ namespace fim
 		}
 		else
 		{
+			if(args[0]=="clear")
+				return _clear_list();
 			if(args[0]=="random_shuffle")
 				return _random_shuffle();
 			if(args[0]=="sort")
@@ -852,6 +854,14 @@ ddone:
 		 */
 		std::random_shuffle(flist_.begin(),flist_.end());
 		return n_files()?(flist_[current_n()]):nofile_;
+	}
+
+	fim::string Browser::_clear_list()
+	{
+		/*
+		 */
+		flist_.erase(flist_.begin(),flist_.end());
+		return 0;
 	}
 
 	fim::string Browser::_reverse()

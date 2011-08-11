@@ -2,8 +2,8 @@
 
 This file is a melange of ideas aimed towards further development.
 If you are interested into Fim internals, philosophy, and evolution, you
-are welcome to read this file, and subscribe to the fim-devel mailing list, 
-( fbi-improved-devel@nongnu.org ).
+are welcome to read and help improve this file, and subscribe to the
+fim-devel mailing list ( fbi-improved-devel@nongnu.org ).
 
 If you would like to contribute to Fim, this file may give you ideas or
 advice, meanwhile if you would like to contribute with an idea, it may 
@@ -13,7 +13,8 @@ Of course, the BUGS file is a source of constant inspiration (we may say,
 of a maniacal taste ) for further work, too.
 
 If you just intend to learn more about Fim, please read the program
-documentation in the "doc" directory first along with the man page, of course.
+documentation in the "doc" directory first along with the man pages,
+of course.
 
 Warning : Stuff in this file may be outdated, but necessary for
 ongoing further inspiration.
@@ -21,6 +22,14 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110801	is there a way to make fim load . if no file is specified ?
+20110801	a pensarci bene, bottoni in sdl mode non sono poi cosi' impossibili
+20110724	program 'fimtutor' as 'fim --tutorial'
+20110724	Ctrl-C shall prompt for quitting (or optionally, quit), interrupting any interruptible task
+20110724	allow plugins which can only load metainfo (user variables) from under-loading files  (e.g.: plugins using specialized libraries)
+20110713	semi-colons terminating commands can be misleading 
+20110713	parse errors should be verbose
+20110713	dez@nino:~ $ fim -c 'variables;stdout _last_system_output;quit'
 20110711	autocompletion of varname = <unescaped variable value>  would be both cool and useful
 20110711	shall give the user chance to specify the position of an autocommand (e.g.: -1, +1, etc) within the current autocommands list
 20110711	shall give the user chance to push dirs contents sorted
@@ -57,7 +66,7 @@ ongoing further inspiration.
 Documentation features/fixes:
 
 20110129	incongruences in FIM.TXT: the system command is declared to be non active. this is wrong.
-20090512 	TODO : implement a regexp-based search, to give the user hints. (20090512) (like vim's helpgrep)
+20090512 	TODO : implement a regexp-based search, to give the user hints. (20090512) (like vim's helpgrep, helpfind)
 20090418	fimtutor
 
 -------------------------------------------------------------------------------
@@ -150,7 +159,7 @@ Minor but tricky (time consuming) features/issues:
 20090810	:|ocr -
 20090218	implement a printf() like interface for customizing the status bar information (format specifiers)
 20090401	should use aa_getevent
-20081230	need of a square angle rotation support
+20081230	need of a square angle rotation support, especially for reading text documents
 20081230	multipage caching and prefetching support still missing
 20080502	reintroduce X custom font support
 20071127	fim -q --quiet, vs warning on first run ?

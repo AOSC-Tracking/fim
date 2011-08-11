@@ -211,7 +211,7 @@ Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  sudo apt-get install subversion
  sudo apt-get install automake autoconf libtool libreadline6-dev
  sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libgif-dev
- sudo apt-get install libsdl-dev libaa1-dev 
+ sudo apt-get install libsdl1.2-dev libaa1-dev 
  sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
  svn co http://code.autistici.org/svn/fim/trunk/ fim
  cd fim
