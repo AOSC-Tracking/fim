@@ -131,6 +131,7 @@ class Browser
 
 	fim::string display();
 	fim::string _random_shuffle();
+	fim::string _clear_list();
 	private:
 	fim::string loadCurrentImage();
 	fim::string reload();

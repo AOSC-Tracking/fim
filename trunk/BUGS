@@ -61,6 +61,7 @@ with a '@' and _Baz_ with a '.'.
 
 ==== MINOR ISSUES
 
+20110712	in sdl (x11) mode, when fim is spawned in a non-terminal environment, the readline mode does not work in the proper way. detecting this situation may be helpful to disable the readline mode at all in these cases, until a readline-centric fix is found.  
 20091208	if fim is configured to take input from piped xfig (as xfig-3.2.5b), it could be - passively - subject to
 		xfig's buffer overflow on files like:
  0 1 2 3

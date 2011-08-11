@@ -15,5 +15,7 @@ EXTRA_DIST= \
 	rc/fimrc.lazy		\
 	utilities/screenshot.sh	\
 	maintenance/configure-brute-check.sh \
+	maintenance/yacc2grammar.h \
+	maintenance/yacc2grammar.awk \
 	utilities/fimscan.sh
 
