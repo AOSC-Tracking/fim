@@ -8,7 +8,8 @@ EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.ma
 #MAN2HTML=man2html
 MAN2HTML=$(MAN) --html=cat
 
-man1_MANS = fim.man fimgs.man fimrc.man
+man1_MANS = fim.man fimgs.man
+man5_MANS = fimrc.man
 
 # html stuff is installed in the documentation directories, too
 htmldir = $(docdir)
