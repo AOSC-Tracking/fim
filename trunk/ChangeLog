@@ -1,3 +1,55 @@
+2011-08-11 21:28  dezperado
+
+	* BUGS, README, TODO, VERSION, scripts/Makefile.am,
+	  src/Browser.cpp, src/Browser.h, src/CommandConsole-help.cpp:
+	  setting VERSION again to 0.3-beta.
+	  added the 'list clear' command.
+	  man fimrc goes to man section 5, not 1.
+	  including the yacc -> grammar script and header file.
+	  README update (thanks Marco).
+	  notes
+
+2011-07-12 09:14  dezperado
+
+	* doc/fimrc.man, src/fim.h, src/readline.cpp: the previous fix was
+	  flawed, too, so we restrict the Esc based approach to sdl only.
+
+2011-07-12 08:44  dezperado
+
+	* doc/fimrc.man, src/CommandConsole-help.cpp,
+	  src/CommandConsole.cpp, src/fim.h, src/readline.cpp,
+	  src/readline.h: workaround to the ESC inconvenience in non-sdl
+	  mode: one may press the ESC key twice (introduced a trivial state
+	  machine).
+
+2011-07-12 07:59  dezperado
+
+	* THANKS, TODO, doc/fimrc.man, src/CommandConsole-help.cpp,
+	  src/fimrc, src/readline.cpp: the previos esc-exits-readline
+	  change introduced a problem: in framebuffer mode, arrows (among
+	  others) are emitted as sequence of keys, the first of which is
+	  the ESC char. therefore the arrows did emit an ESC key, exiting
+	  the command line.
+	  fixing limiting the esc-exits-readline do SDL mode only.
+	  a real fix would encompass a state machine and interpretation of
+	  sequences of input chars, but this is a major feature.
+	  changed the order in the THANKS file.
+	  docs update.
+	  minor fimrc changes.
+
+2011-07-11 09:30  dezperado
+
+	* doc/fimrc.man, src/CommandConsole-help.cpp, src/readline.cpp:
+	  re-enabling windowed mode x11 input by using native aalib input
+	  routines.
+	  doc fixes
+
+2011-07-11 09:24  dezperado
+
+	* ChangeLog, TODO, doc/fimrc.man, src/CommandConsole-help.cpp,
+	  src/fim.h, src/readline.cpp: the Esc key will now both clear and
+	  terminate command line mode.
+
 2011-07-11 00:14  dezperado
 
 	* doc/fimrc.man, src/Browser.cpp, src/Viewport.cpp, src/Viewport.h,
