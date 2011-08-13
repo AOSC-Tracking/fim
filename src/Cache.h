@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,13 +37,13 @@ class Cache
 	typedef std::map<cache_key_t,std::vector<fim::Image*> > cloned_cachels_t;	//filename - cloned images??
 	typedef std::map<fim::Image*,int >  	   cuc_t;	//image - filename
 
-	cachels_t 	imageCache;
-	rcachels_t	reverseCache;
-	lru_t		lru;
-	ccachels_t	usageCounter;
-	cloned_cachels_t cloneCache;
-	cuc_t		cloneUsageCounter;
-	std::set< fim::Image* > clone_pool;
+	cachels_t 	imageCache_;
+	rcachels_t	reverseCache_;
+	lru_t		lru_;
+	ccachels_t	usageCounter_;
+	cloned_cachels_t cloneCache_;
+	cuc_t		cloneUsageCounter_;
+	std::set< fim::Image* > clone_pool_;
 //	clone_counter_t cloneCounter;
 
 	/*	the count of cached images	*/
@@ -75,7 +75,7 @@ class Cache
 	/*	erases the image clone from the cache	*/
 	int erase_clone(fim::Image* oi);
 
-	/* get the lru element. if unused is true, only an unused image will be returned, _if any_*/
+	/* get the lru_ element. if unused is true, only an unused image will be returned, _if any_*/
 	Image* get_lru( bool unused = false )const;
 
 	int free_some_lru();

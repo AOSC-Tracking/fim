@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  DebugConsole.h : Fim virtual console display.
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include "Var.h"
 #include "Namespace.h"
 
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 namespace fim
 {
 	class FimConsole
@@ -41,30 +42,31 @@ namespace fim
 	:public Namespace
 #endif
 	{
-		char *buffer;	// the raw console buffer
-		char **line;	// the (displayed) line pointers array
+		char *buffer_;	// the raw console buffer
+		char **line_;	// the (displayed) line_ pointers array
 
-		char *bp;	// pointer to the top of the buffer
+		char *bp_;	// pointer to the top of the buffer
 
-		int  bsize;	// the buffer size
-		int  lsize;	// the lines array size
+		int  bsize_;	// the buffer size
+		int  lsize_;	// the lines array size
 
-		int  ccol;	// the currently pointed column
-		int  cline;	// the line on the top of the buffer
+		int  ccol_;	// the currently pointed column
+		int  cline_;	// the line_ on the top of the buffer
 		
-		int  lwidth;
-		int  rows;
-		int  scroll;
+		int  lwidth_;
+		int  rows_;
+		int  scroll_;
 
 		public:
-		CommandConsole & cc;	// temporarily
+		CommandConsole & cc_;	// temporarily
 
-		MiniConsole(CommandConsole & cc_,int lw=48, int r=12);
+		MiniConsole(CommandConsole & cc,int lw=48, int r=12);
 		virtual ~MiniConsole(){}
 		int dump();	// non const due to user variables reaction
 		int grow();
-		int setRows(int nr);
-		int add(const char* cs);
+		fim_err_t setRows(int nr);
+		fim_err_t add(const char * cso);
+		fim_err_t add(const unsigned char* cso){return add((const char*)cso);}
 		int reformat(int newlsize);
 		int do_dump(int amount)const;
 		int clear();
@@ -72,19 +74,19 @@ namespace fim
 		int scroll_up();
 
 		private:
-		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignation */}
+		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignment */}
 		MiniConsole(const MiniConsole &mc) :
-			buffer(NULL),
-			line(NULL),
-			bp(NULL),
-			bsize(0),
-			lsize(0),
-			ccol(0),
-			cline(0),
-			lwidth(0),
-			rows(0),
-			scroll(0),
-			cc(mc.cc)
+			buffer_(NULL),
+			line_(NULL),
+			bp_(NULL),
+			bsize_(0),
+			lsize_(0),
+			ccol_(0),
+			cline_(0),
+			lwidth_(0),
+			rows_(0),
+			scroll_(0),
+			cc_(mc.cc_)
 			{/* this constructor should not be used */}
 
 		int line_length(int li);
@@ -96,6 +98,7 @@ namespace fim
 		int grow(int glines, int gbuffer);
 	};
 }
+#endif
 
 #endif
 

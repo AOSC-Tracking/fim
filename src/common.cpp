@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-20 18:09:12 +0200 (Mon, 20 Jun 2011) $ */
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,6 +33,53 @@
 #ifdef HAVE_GETLINE
 #include <stdio.h>	/* getline : _GNU_SOURCE  */
 #endif
+#ifdef HAVE_WCHAR_H
+#include <wchar.h>
+#endif
+#ifdef HAVE_LIBGEN_H
+#include <libgen.h>
+#endif
+
+fim::string fim_dirname(const fim::string & arg)
+{
+#ifdef HAVE_LIBGEN_H
+	char buf[FIM_PATH_MAX];
+	strncpy(buf,arg.c_str(),FIM_PATH_MAX-1);
+	buf[FIM_PATH_MAX-1]='\0';
+	return dirname(buf);
+#else
+	return "";//FIXME
+#endif
+}
+	fim::string fim_shell_arg_escape(const fim::string & arg)
+	{
+		// FIXME: this escaping function is NOT safe; it shall only serve as a basis.
+		fim::string ear=arg;
+		fim::string res=FIM_CNS_EMPTY_STRING;
+		res+="'";
+		ear.substitute("'","'\\''");
+		res+=ear;
+		res+="'";
+		return res;
+	}
+
+void fim_perror(const char *s)
+{
+#if 1
+	if(errno)
+	{
+		if(s)
+			perror(s);
+		errno=0; // shall reset the error status
+	}
+#endif
+}
+
+size_t fim_strlen(const char *str)
+{
+	return strlen(str);
+}
+
 
 void trhex(char *str)
 {
@@ -155,7 +202,7 @@ void trec(char *str,const char *f,const char*t)
 			 * */
 			char	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
-			buf=(char*)calloc(inc,1);
+			buf=(char*)fim_calloc(inc,1);
 			if(!buf) return buf;
 			while((nrb=fread(buf+rb,1,inc,fd))>0)
 			{
@@ -184,7 +231,7 @@ void trec(char *str,const char *f,const char*t)
 			 * */
 			char	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
-			buf=(char*)calloc(inc,1);
+			buf=(char*)fim_calloc(inc,1);
 			if(!buf) return buf;
 			while((nrb=read(fd,buf+rb,inc))>0)
 			{
@@ -270,12 +317,21 @@ void sanitize_string_from_nongraph(char *s, int c)
  *	Allocation of a small string for storing the 
  *	representation of a double.
  */
-char * dupnstr (double n)
+char * dupnstr (float n, const char c)
 {
 	//allocation of a single string
-	char *r = (char*) malloc (16);
+	char *r = (char*) fim_malloc (32);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
-	sprintf(r,"%f",n);
+	sprintf(r,"%f%c",n,c);
+	return (r);
+}
+
+char * dupnstr (const char c1, double n, const char c2)
+{
+	//allocation of a single string
+	char *r = (char*) fim_malloc (32);
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
+	sprintf(r,"%c%f%c",c1,n,c2);
 	return (r);
 }
 
@@ -285,7 +341,7 @@ char * dupnstr (double n)
 char * dupnstr (int n)
 {
 	//allocation of a single string
-	char *r = (char*) malloc (16);
+	char *r = (char*) fim_malloc (16);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%d",n);
 	return (r);
@@ -296,9 +352,26 @@ char * dupnstr (int n)
  */
 char * dupstr (const char* s)
 {
-	char *r = (char*) malloc (strlen (s) + 1);
+	char *r = (char*) fim_malloc (strlen (s) + 1);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	strcpy (r, s);
+	return (r);
+}
+
+/*
+ *	Allocation and duplication of a single string, slash-quoted
+ */
+char * dupsqstr (const char* s)
+{
+	int l=0;
+	char *r = (char*) fim_malloc ((l=strlen (s)) + 3);
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
+	else
+	{
+		r[0]='/';
+		strcpy (r+1  , s);
+		strcat (r+1+l,"/");
+	}
 	return (r);
 }
 
@@ -307,7 +380,7 @@ char * dupstr (const char* s)
  */
 static char * dupstrn (const char* s, size_t l)
 {
-	char *r = (char*) malloc (l + 1);
+	char *r = (char*) fim_malloc (l + 1);
 	strncpy(r,s,l);
 	r[l]='\0';
 	return (r);
@@ -335,7 +408,7 @@ int fim_rand()
 	 * Reading from     /dev/random could instead block.
 	 * */
 	unsigned int w;
-	if(pick_word("/dev/urandom",&w)==0) return (w%RAND_MAX);
+	if(pick_word(FIM_LINUX_RAND_FILE,&w)==0) return (w%RAND_MAX);// TODO: are we sure that RAND_MAX corresponds to FIM_LINUX_RAND_FILE ?
 	
 	srand(clock()); return rand();
 
@@ -395,7 +468,7 @@ int fim_rand()
 		};
 		regfree(&regex);
 		return false;
-		return true;
+		//return true;
 	}
 
 int strchr_count(const char*s, int c)
@@ -506,8 +579,8 @@ int swap_bytes_in_int(int in)
 	int b=sizeof(int),i=-1;
 	while(i++<b/2)
 	{
-	((char*)&out)[i]=((char*)&in)[b-i-1];
-	((char*)&out)[b-i-1]=((char*)&in)[i];
+		((char*)&out)[i]=((char*)&in)[b-i-1];
+		((char*)&out)[b-i-1]=((char*)&in)[i];
 	}
 	return out;
 }
@@ -566,7 +639,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 	if( ( tfd=tmpfile() )!=NULL )
 	{	
 		/* todo : read errno in case of error and print some report.. */
-		const size_t buf_size=4096;
+		const size_t buf_size=FIM_STREAM_BUFSIZE;
 		char buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
 		while( (rc=fread(buf,1,buf_size,fp))>0 )
 		{
@@ -633,3 +706,21 @@ ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream)
 #endif
 	return EINVAL;
 }
+
+	bool is_dir(const fim::string nf)
+	{
+		struct stat stat_s;
+		/*	if the directory doesn't exist, return */
+		if(-1==stat(nf.c_str(),&stat_s))return false;
+		if( ! S_ISDIR(stat_s.st_mode))return false;
+		return true;
+	}
+
+	bool is_file(const fim::string nf)
+	{
+		/* FIXME */
+		return !is_dir(nf);
+	}
+
+int fim_isspace(int c){return isspace(c);}
+int fim_isquote(int c){return c=='\'' || c=='\"';}

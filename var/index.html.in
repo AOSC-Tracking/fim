@@ -55,29 +55,37 @@ like the Vim text editor or the Mutt mail user agent.
   It is based on the <a href="http://www.bytesex.org">Fbi</a> image viewer, by Gerd Hoffmann, 
   and works in the
    <a href="http://www.linux.org">Linux</a>
-   <a href="http://www.kernelhq.cc/browse-view.py?fv_nr=200556">framebuffer
-   console (so, it is not an <a href="http://www.x.org">X/Xorg</a> program! ).
+   <a href="http://www.kernelhq.cc/browse-view.py?fv_nr=200556">framebuffer console</a> mode,
+   as well as under 
+   <a href="http://www.x.org">X/Xorg</a>, using the
+   <a href="http://www.libsdl.org">SDL library</a>.
+  The right video mode gets auto-detected at runtime, and may be configured out at build time, if necessary. 
 
 <br> &nbsp;<br>
 
-   <a href="http://www.autistici.org/dezperado/">FIM</a> is
+   <a href="FWP">FIM</a> is
    <a href="http://www.fsf.org">free software</a>, and it ships under the
-   <a hreg="http://www.fsf.org/licensing">GPL</a>
+   <a href="http://www.fsf.org/licensing">GPL</a>
    software license, complete with
    documentation, in form of a
-   <a href="FIM.html">doc/FIM.TXT</a>
-   documentation file,  man pages
-   <a href="fim.man.html">for fim</a> the 
+   <a href="README.html">README.TXT</a> file,
+   <a href="FIM.html">doc/FIM.TXT</a> documentation file,  man pages
+   <a href="fim.man.html">for fim</a>, 
+   <a href="fimrc.man.html">for fim's language</a>, and the 
    <a href="fimgs.man.html">fimgs script</a>
    ,lots
-   of comments in the <a href="http://code.autistici.org/svn/fim">code</a>, and some text files.
+   of comments in the <a href="http://code.autistici.org/svn/fim">code</a>, and <a href="#docs">some</a> text files.
 <br> &nbsp;<br>
 
-Fim's official web page is located on Savannah:<a href="HOMEPAGE">HOMEPAGE</a>
+Fim's official web page is hosted on Savannah:<a href="HOMEPAGE">HOMEPAGE</a>
 <br> &nbsp;<br>
 
 Fim's official mirror for stable releases is located on Savannah mirror network:<a href="MIRROR">MIRROR</a>
 <br> &nbsp;<br>
+
+Fim's official mailing list is at :<a href="MAILINGLIST">MAILINGLIST</a>
+<br> &nbsp;<br>
+
 
 Fim is an idea by
 <!-- <a href="http://www.autistici.org/dezperado">dezperado</a> -->
@@ -87,7 +95,7 @@ was inspired by the other, forementioned marvelous programs, and some science fi
 
 
 <br> &nbsp;<br>
-You can support Fim by supporting the <a href="http://www.autistici.org">A/I collective</a>, whom network kindly hosts Fim.
+You can support Fim by supporting the <a href="http://www.autistici.org">A/I collective</a>, whom network kindly hosts Fim repositories.
 
 <br> &nbsp;<br>
 
@@ -148,27 +156,31 @@ SECTION(documentation,docs)
 <td>
 <h5>
 
-Here are fim man pages:
- <a href="fim.man.html">fim.man.html</a>
- <a href="fimgs.man.html">fimgs.man.html</a>,
-
 <br>
-README file:
+README file (the first document you should read, with compilation info):
  <a href="README.html">README.html</a>,
  <a href="README">README</a>.
 
 <br>
+Fim man pages:
+ <a href="fim.man.html">fim.man.html</a>,
+ <a href="fimrc.man.html">fimrc.man.html</a>,
+ <a href="fimgs.man.html">fimgs.man.html</a>.
+
+<br>
 NEWS file:
  <a href="NEWS.html">NEWS.html</a>,
- <a href="NEWS">NEWS</a>.
+ <a href="NEWS">NEWS</a>,
+ <a href="BUGS.html">BUGS.html</a>,
+ <a href="BUGS">BUGS</a>.
 
 <br> &nbsp;<br>
 FIM.TXT file:
  <a href="FIM.html">FIM.html</a>,
- <a href="FIM.TXT">FIM.TXT</a> (the manual).
+ <a href="FIM.TXT">FIM.TXT</a> (an obsolete guide --- man pages are up to date).
 
 <br>
-From the manual:
+From the guide:
 <br> &nbsp;<br>
 information to perform your <a href="FIM.html#basics">first steps in Fim</a>,
 <br> &nbsp;<br>
@@ -176,13 +188,18 @@ information about <a href="FIM.html#bugs">bug reporting</a>,
 <br> &nbsp;<br>
 information about the <a href="FIM.html#framebuffer">Linux Framebuffer</a> in the docs,
 <br> &nbsp;<br>
-information about the <a href="FIM.html#syntax-ref">Fim language syntax</a>,
+From the manual pages:
 <br> &nbsp;<br>
+information about <a href="fim.man.html#EXAMPLES">Fim usage examples</a>, <br> &nbsp;<br>
+dnl information about the <a href="FIM.html#syntax-ref">Fim language syntax</a>, <br> &nbsp;<br>
+information about the <a href="fimrc.man.html#FIM LANGUAGE GRAMMAR">Fim language grammar</a>, <br> &nbsp;<br>
+information about the <a href="fimrc.man.html#COMMANDS REFERENCE">Fim commands reference</a>, <br> &nbsp;<br>
+information about the <a href="fimrc.man.html#VARIABLES REFERENCE">Fim variables reference</a>, <br> &nbsp;<br>
+information about <a href="fimrc.man.html#USAGE EXAMPLES">Fim language usage examples</a>, <br> &nbsp;<br>
 the <a href="FIM.html#faq">Frequently Asked Questions (FAQ)</a>.
-<br> &nbsp;<br>
-<a href="FIM-slides-hackit07.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow prepared for the Hackmeeting 2007).
-<br> &nbsp;<br>
-<a href="FIM-slides-mohp2007.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow prepared for the Metro Olografix Hacking Party 2007).
+<br> &nbsp;<br> <a href="FIM-slides-hackit11.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the italian Hackmeeting 2011).
+<br> &nbsp;<br> <a href="FIM-slides-hackit07.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the italian Hackmeeting 2007).
+<br> &nbsp;<br> <a href="FIM-slides-mohp2007.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the Metro Olografix Hacking Party 2007).
 <br> &nbsp;<br>
 
 </h5>
@@ -235,16 +252,23 @@ su -c "make install"
 </h6>
 
 
-<h5>
-Of course, there is a lot of
-<a href="FIM.html">documentation</a> available
-(here the <a href="README.html">README</a> page)
-.
-You are welcome to <a href="FIM.html#intro">browse</a> it even before downloading Fim.
-
-
 <br> &nbsp;<br>
-If you are interested at the SVN (subversion) <a href="REPOSITORY">repository</a>,
+<h5>
+Read the <a href="#docs">documentation</a> in order to properly install the dependencies.
+</h5>
+
+
+dnl <h5>
+dnl Of course, there is a lot of
+dnl <a href="FIM.html">documentation</a> available
+dnl (here the <a href="README.html">README</a> page).
+dnl You are welcome to <a href="FIM.html#intro">browse</a> it even before downloading Fim.
+dnl </h5>
+
+
+<h5>
+<br> &nbsp;<br>
+If you are interested in compiling the freshest <a href="REPOSITORY">repository</a> version,
 typing :
 </h5>
 <h6>
@@ -253,7 +277,7 @@ svn export REPOSITORY
 </pre>
 </h6>
 <h5>
-at the command prompt will download the freshest (possibly unstable) version of Fim in a directory named 'fim'.
+at the command prompt will export the freshest (possibly unstable) version of Fim in a directory named 'fim', and ready for compilation (see the <a href="#docs">documentation</a> for details).
 </h5>
 <br> &nbsp;<br>
 

@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  FbiStuffFbtools.h : fbi functions from fbtools.c, modified for fim
 

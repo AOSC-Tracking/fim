@@ -1,10 +1,10 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 #ifndef FIM_STRING_H
 #define FIM_STRING_H
 /*
  string.h : Fim's own string implementation header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,8 +36,6 @@ namespace fim
 
 #define fim_free(x) {free(x);}
 //#define fim_free(x) {std::cout<<"freeing "<<(int*)x<<"\n";free(x);x=NULL;std::cout<<"freeed!\n";}
-#define fim_calloc(x) calloc((x),1)
-#define fim_malloc(x) malloc(x)
 #define fim_realloc(x,n) realloc((x),(n))
 #define fim_empty_string(s) (!(s) || !(*(s)))
 
@@ -119,8 +117,10 @@ namespace fim
 			 terminate called after throwing an instance of 'std::logic_error'
 			 what():  basic_string::_S_construct NULL not valid
 		*/
+		string(const std::string&s):std::string(s){}
 		string(const char*s):std::string(s?s:""){}
 
+		string(char c);
 		string(int i);
 		string(int * i);
 

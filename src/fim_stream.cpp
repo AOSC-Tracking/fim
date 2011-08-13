@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-12 14:40:05 +0200 (Sun, 12 Jun 2011) $ */
 /*
  fim_stream.cpp : Textual output facility
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,6 +25,10 @@
 
 namespace fim
 {
+		fim_stream::fim_stream(int fd):fd_(fd)
+		{
+		}
+
 		fim_stream& fim_stream::operator<<(const unsigned char* s)
 		{
 			*this<<(const char*)s;
@@ -41,21 +45,36 @@ namespace fim
 
 		fim_stream& fim_stream::operator<<(float f)
 		{
-			char s[32];sprintf(s,"%f",f);
+			char s[FIM_ATOX_BUFSIZE];sprintf(s,"%f",f);
 			*this<<(const char*)s;
 			return *this;
 		}
 
 		fim_stream& fim_stream::operator<<(int i)
 		{
-			char s[32];sprintf(s,"%d",i);
+			char s[FIM_ATOX_BUFSIZE];sprintf(s,"%d",i);
 			*this<<s;
 			return *this;
 		}
 
 		fim_stream& fim_stream::operator<<(const  char* s)
 		{
-			if(s)cc.status_screen(s);
+			if(s)
+			{
+				if(fd_<=-1)
+					cc.status_screen(s);
+				else
+				{
+					// 0 == dumb (no output)
+					if(fd_==1)
+						std::cout << s ;
+					else
+					{
+						if(fd_>=2)
+							std::cerr << s ;
+					}
+				}
+			}
 			//else if(s)printf("%s",s);
 
 			return *this;

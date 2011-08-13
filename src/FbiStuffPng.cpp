@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ static const char *ct[] = {
     "graya", "X5", "rgba", "X7",
 };
 
-struct png_state {
+struct fim_png_state {
     FILE         *infile;
     png_structp  png;
     png_infop    info;
@@ -57,7 +57,7 @@ static void*
 png_init(FILE *fp, char *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
-    struct png_state *h;
+    struct fim_png_state *h;
     int bit_depth, interlace_type;
     int pass, number_passes;
     unsigned int y;
@@ -76,7 +76,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
 	my_bg .gray  = 192;
     int unit;
     
-    h = (struct png_state *) calloc(sizeof(*h),1);
+    h = (struct fim_png_state *) fim_calloc(sizeof(*h),1);
     if(!h) goto oops;
     memset(h,0,sizeof(*h));
 
@@ -109,8 +109,16 @@ png_init(FILE *fp, char *filename, unsigned int page,
     if (h->color_type == PNG_COLOR_TYPE_PALETTE)
 	png_set_palette_to_rgb(h->png);
     if (h->color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
+// according to http://www.libpng.org/pub/png/libpng-manual.txt, retrieved 20101129
+#ifdef PNG_LIBPNG_VER
+ #if (PNG_LIBPNG_VER>=10209)
+	png_set_expand_gray_1_2_4_to_8(h->png);
+ #else
 	png_set_gray_1_2_4_to_8(h->png);
-
+ #endif
+#else
+ #error  need a proper function name for png_set_gray_1_2_4_to_8, here.
+#endif
     if (png_get_bKGD(h->png, h->info, &file_bg)) {
 	png_set_background(h->png,file_bg,PNG_BACKGROUND_GAMMA_FILE,1,1.0);
     } else {
@@ -124,7 +132,7 @@ png_init(FILE *fp, char *filename, unsigned int page,
     if (FbiStuff::fim_filereading_debug())
 	FIM_FBI_PRINTF("png: color_type=%s #2\n",ct[h->color_type]);
     
-    h->image = (png_byte*)malloc(i->width * i->height * 4);
+    h->image = (png_byte*)fim_malloc(i->width * i->height * 4);
     if(!h->image) goto oops;
 
     for (pass = 0; pass < number_passes-1; pass++) {
@@ -140,18 +148,18 @@ png_init(FILE *fp, char *filename, unsigned int page,
 
  oops:
     if (h && h->image)
-	free(h->image);
+	fim_free(h->image);
     if (h->png)
 	png_destroy_read_struct(&h->png, NULL, NULL);
     fclose(h->infile);
-    if(h)free(h);
+    if(h)fim_free(h);
     return NULL;
 }
 
 static void
-png_read(unsigned char *dst, unsigned int line, void *data)
+png_read(fim_byte_t *dst, unsigned int line, void *data)
 {
-    struct png_state *h = (struct png_state *) data;
+    struct fim_png_state *h = (struct fim_png_state *) data;
 
     png_bytep row = h->image + line * h->w * 4;
     switch (h->color_type) {
@@ -181,12 +189,12 @@ png_read(unsigned char *dst, unsigned int line, void *data)
 static void
 png_done(void *data)
 {
-    struct png_state *h =(struct png_state *) data;
+    struct fim_png_state *h =(struct fim_png_state *) data;
 
-    free(h->image);
+    fim_free(h->image);
     png_destroy_read_struct(&h->png, &h->info, NULL);
     fclose(h->infile);
-    free(h);
+    fim_free(h);
 }
 
 //used in FbiStuff.cpp
@@ -195,18 +203,18 @@ struct ida_loader png_loader = {
 #else
 static struct ida_loader png_loader = {
 #endif
-    magic: "\x89PNG",
-    moff:  0,
-    mlen:  4,
-    name:  "libpng",
-    init:  png_init,
-    read:  png_read,
-    done:  png_done,
+    /*magic:*/ "\x89PNG",
+    /*moff:*/  0,
+    /*mlen:*/  4,
+    /*name:*/  "libpng",
+    /*init:*/  png_init,
+    /*read:*/  png_read,
+    /*done:*/  png_done,
 };
 
 static void __init init_rd(void)
 {
-    load_register(&png_loader);
+    fim_load_register(&png_loader);
 }
 
 #ifdef USE_X11
@@ -267,14 +275,14 @@ png_write(FILE *fp, struct ida_image *img)
 }
 
 static struct ida_writer png_writer = {
-    label:  "PNG",
-    ext:    { "png", NULL},
-    write:  png_write,
+    /*label:*/  "PNG",
+   /* ext:*/    { "png", NULL},
+    /*write:*/  png_write,
 };
 
 static void __init init_wr(void)
 {
-    write_register(&png_writer);
+    fim_write_register(&png_writer);
 }
 
 

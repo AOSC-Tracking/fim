@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-22 14:06:58 +0200 (Wed, 22 Jun 2011) $ */
 /*
  Image.h : Image class headers
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,8 +47,6 @@ namespace fim
  *	TODO : rename framebufferdevice.redraw -> this.need_redraw
  */
 
-#define FIM_SCALE_FACTOR 1.322
-
 #ifdef FIM_NAMESPACES
 class Image:public Namespace
 #else
@@ -61,85 +59,90 @@ class Image
 
 	public:
 
-	Image(const char *fname_, FILE *fd=NULL);
-	Image(const char *fname_, Foo& foo, FILE *fd=NULL);
+	Image(const char *fname, FILE *fd=NULL);
+	Image(const char *fname, Foo& foo, FILE *fd=NULL);
 	~Image();
 
 	bool prev_page(int j=+1);
 	bool next_page(int j=+1);
-	int is_multipage()const;
+	int n_pages()const;
+	bool is_multipage()const;
 	bool have_nextpage(int j=1)const;
 	bool have_prevpage(int j=1)const;
 
 	private:
 	Image& operator= (const Image &i){return *this;/* a nilpotent assignation */}
-	float            scale    ;	/* viewport variables */
-	float            ascale   ;
-	float            newscale ;
-	float            angle	  ;
-	float            newangle ;
-	int		 page ;
+	fim_scale_t            scale_;	/* viewport variables */
+	fim_scale_t            ascale_;
+	fim_scale_t            newscale_;
+	fim_scale_t            angle_;
+	fim_scale_t            newangle_;
+	fim_page_t		 page_;
 
 	/* virtual stuff */
 	public://TMP
-        struct ida_image *img     ;     /* local (eventually) copy images */
+        struct ida_image *img_     ;     /* local (eventually) copy images */
 	bool reload();
 	private://TMP
-	struct ida_image *fimg    ;     /* master image */
+	struct ida_image *fimg_    ;     /* master image */
 
 	/* image methods */
-	bool load(const char *fname_, FILE *fd, int want_page);
+	bool load(const char *fname, FILE *fd, int want_page);
 	void should_redraw(int should=1)const;
 
 	protected:
-	int              orientation;	//aka rotation
+	fim_pgor_t              orientation_;	//aka rotation
 
-	int    invalid;		//the first time the image is loaded it is set to 1
-	int	no_file;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
-	fim_image_source_t fis;
+	fim_bool_t invalid_;		//the first time the image is loaded it is set to 1
+	fim_bool_t no_file_;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
+	fim_image_source_t fis_;
 
-	string  fname;		/* viewport variable, too */
+	string  fname_;		/* viewport variable, too */
 
         void free();
 	void reset();
 
 
-        int tiny()const;
+        bool tiny()const;
 	public:
-	bool can_reload()const{return !no_file;}
+	bool can_reload()const{return !no_file_;}
 	bool update();
 
 	fim::string getInfo();
 	Image(const Image& image); // yes, a private constructor (was)
 
-	int rescale( float ns=0.0 );
-	int rotate( float angle=1.0 );
+	fim_err_t rescale( fim_scale_t ns=0.0 );
+	fim_err_t rotate( fim_scale_t angle_=1.0 );
 
-	const char* getName()const{return fname.c_str();}
+	const char* getName()const{return fname_.c_str();}
 	cache_key_t getKey()const;
 
 	/* viewport methods */
 
-	void reduce( float factor=FIM_SCALE_FACTOR );
-	void magnify(float factor=FIM_SCALE_FACTOR );
+	void reduce( fim_scale_t factor=FIM_CNS_SCALEFACTOR);
+	void magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	
-	int getOrientation();
+	fim_pgor_t getOrientation()const;
 
-	int setscale(double ns);
+	fim_err_t setscale(fim_scale_t ns);
 	/* viewport methods ? */
-	int scale_increment(double ds);
-	int scale_multiply (double sm);
+	fim_err_t scale_increment(fim_scale_t ds);
+	fim_err_t scale_multiply (fim_scale_t sm);
+	bool negate ();/* let's read e-books by consuming less power :) */
+	bool gray_negate();
 
 	bool check_invalid();
 	bool check_valid();
 
 	int width();
-	int original_width();
+	fim_coo_t original_width();
 	int height();
-	int original_height();
+	fim_coo_t original_height();
+	bool goto_page(fim_page_t j);
 
 	Image * getClone();
 //	void resize(int nw, int nh);
+	int c_page()const{return page_;}
 };
 }
 #endif

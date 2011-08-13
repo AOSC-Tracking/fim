@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-07-09 19:45:53 +0200 (Sat, 09 Jul 2011) $ */
 /*
  DisplayDevice.h : virtual device Fim driver header file
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,32 +26,38 @@
 class DisplayDevice
 {
 	protected:
-	bool finalized;
+	fim_bool_t finalized_;
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
-	MiniConsole & mc;
+	MiniConsole & mc_;
+#endif
 #endif
 	/*
 	 * The generalization of a Fim output device.
 	 */
 	public:
-	struct fs_font *f;
-	const char* fontname;
-	int                        debug;// really, only for making happy fbdev
+	struct fs_font *f_;
+	const fim_char_t* fontname_;
+	fim_bool_t debug_;// really, only for making happy fbdev
 	public:
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	DisplayDevice(MiniConsole &mc_);
-	virtual int initialize(key_bindings_t &key_bindings)=0;
+#else
+	DisplayDevice();
+#endif
+	virtual fim_err_t initialize(sym_keys_t &sym_keys)=0;
 	virtual void  finalize()=0;
 
-	virtual int  display(
+	virtual fim_err_t display(
 		void *ida_image_img, // source image structure
-		int iroff,int icoff, // row and column offset of the first input pixel
-		int irows,int icols,// rows and columns in the input image
-		int icskip,	// input columns to skip for each line
-		int oroff,int ocoff,// row and column offset of the first output pixel
-		int orows,int ocols,// rows and columns to draw in output buffer
-		int ocskip,// output columns to skip for each line
-		int flags// some flags
+		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
+		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
+		fim_coo_t icskip,	// input columns to skip for each line
+		fim_coo_t oroff,fim_coo_t ocoff,// row and column offset of the first output pixel
+		fim_coo_t orows,fim_coo_t ocols,// rows and columns to draw in output buffer
+		fim_coo_t ocskip,// output columns to skip for each line
+		fim_flags_t flags// some flags
 		)=0;
 
 	virtual ~DisplayDevice();
@@ -62,23 +68,28 @@ class DisplayDevice
 	virtual int get_chars_per_line()=0;
 	virtual int get_chars_per_column()=0;
 	virtual int width()=0;
-	virtual int get_bpp()=0;
+	virtual fim_bpp_t get_bpp()=0;
 	virtual int height()=0;
-	virtual int status_line(const unsigned char *msg)=0;
-	int console_control(int code);
-	virtual int handle_console_switch()=0;
-	virtual int clear_rect(int x1, int x2, int y1,int y2)=0;
-	virtual int get_input(unsigned int * c);
-	virtual int catchInteractiveCommand(int seconds)const;
-	virtual int init_console();
+	virtual fim_err_t status_line(const fim_char_t *msg)=0;
+	fim_err_t console_control(fim_cc_t code);
+	virtual fim_bool_t handle_console_switch()=0;
+	virtual fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)=0;
+	virtual int get_input(fim_key_t * c, bool want_poll=false);
+	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
+	virtual fim_err_t init_console();
 	virtual void switch_if_needed(){}// really, only for making happy fbdev
 	virtual void cleanup(){}// really, only for making happy fbdev
 
-	int redraw;
-	virtual int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str)=0;
-	void fb_status_screen_new(const char *msg, int draw, int flags);//experimental
+	int redraw_;
+	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
+	void fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags);//experimental
+	void quickbench();
 	private:
-	virtual void console_switch(int is_busy){}// really, only for making happy fbdev
+	virtual void console_switch(fim_bool_t is_busy){}// really, only for making happy fbdev
+	public:
+	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h){return FIM_ERR_NO_ERROR;}
+	virtual fim_err_t reinit(const fim_char_t *rs){return FIM_ERR_NO_ERROR;}
+	virtual fim_err_t set_wm_caption(const fim_char_t *msg){return FIM_ERR_UNSUPPORTED;}
 };
 
 #endif

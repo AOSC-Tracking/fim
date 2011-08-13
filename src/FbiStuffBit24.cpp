@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-29 16:19:20 +0200 (Wed, 29 Jun 2011) $ */
 /*
  FbiStuffBit24.cpp : fbi functions for reading ELF files as they were raw 24 bit per pixel pixelmaps
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -38,6 +38,7 @@
 namespace fim
 {
 
+extern CommandConsole cc;
 
 /* ---------------------------------------------------------------------- */
 
@@ -58,24 +59,26 @@ static void*
 bit24_init(FILE *fp, char *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
-    struct bit24_state *h;
+    struct bit24_state *h=NULL;
+    fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
+    prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
     
-    h = (struct bit24_state *)calloc(sizeof(*h),1);
+    h = (struct bit24_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     memset(h,0,sizeof(*h));
     h->fp = fp;
     if(fseek(fp,0,SEEK_END)!=0) goto oops;
     if((h->flen=ftell(fp))==-1)goto oops;
-    i->width  = h->w = 1024;
+    i->width  = h->w = prw;
     i->height = h->h = (h->flen+(h->w*3-1)) / ( h->w*3 ); // should pad
     return h;
  oops:
-    if(h)free(h);
+    if(h)fim_free(h);
     return NULL;
 }
 
 static void
-bit24_read(unsigned char *dst, unsigned int line, void *data)
+bit24_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct bit24_state *h = (struct bit24_state *) data;
     unsigned int ll,y,x,pixel,byte = 0;
@@ -105,25 +108,25 @@ bit24_done(void *data)
     struct bit24_state *h = (struct bit24_state *) data;
 
     fclose(h->fp);
-    free(h);
+    fim_free(h);
 }
 
 struct ida_loader bit24_loader = {
 /*
  * 0000000: 7f45 4c46 0101 0100 0000 0000 0000 0000  .ELF............
  */
-    magic: "ELF",
-    moff:  1,
-    mlen:  3,
-    name:  "bmp",
-    init:  bit24_init,
-    read:  bit24_read,
-    done:  bit24_done,
+    /*magic:*/ "ELF",
+    /*moff:*/  1,
+    /*mlen:*/  3,
+    /*name:*/  "bmp",
+    /*init:*/  bit24_init,
+    /*read:*/  bit24_read,
+    /*done:*/  bit24_done,
 };
 
 static void __init init_rd(void)
 {
-    load_register(&bit24_loader);
+    fim_load_register(&bit24_loader);
 }
 
 

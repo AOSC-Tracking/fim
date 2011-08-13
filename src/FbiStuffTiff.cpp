@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  FbiStuffTiff.cpp : fbi functions for TIFF files, modified for fim
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@ namespace fim
 
 struct tiff_state {
     TIFF*          tif;
-    char           emsg[1024];
+    //char           emsg[1024];
     tdir_t         ndirs;     /* Number of directories                     */
                               /* (could be interpreted as number of pages) */
     uint32         width,height;
@@ -60,7 +60,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     struct tiff_state *h;
 
     fclose(fp);
-    h = (struct tiff_state *) calloc(sizeof(*h),1);
+    h = (struct tiff_state *) fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     memset(h,0,sizeof(*h));
 
@@ -84,7 +84,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     TIFFGetField(h->tif, TIFFTAG_BITSPERSAMPLE,   &h->depth);
     TIFFGetField(h->tif, TIFFTAG_FILLORDER,       &h->fillorder);
     TIFFGetField(h->tif, TIFFTAG_PHOTOMETRIC,     &h->photometric);
-    h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
+    h->row = (uint32*)fim_malloc(TIFFScanlineSize(h->tif));
     if(!h->row)goto oops;
     if (FbiStuff::fim_filereading_debug())
 #ifndef PRId32
@@ -108,13 +108,13 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
 	 * progressive loading and decode everything here */
 	if (FbiStuff::fim_filereading_debug())
 	    FIM_FBI_PRINTF("tiff: reading whole image [TIFFReadRGBAImage]\n");
-	h->image=(uint32*)malloc(4*h->width*h->height);
+	h->image=(uint32*)fim_malloc(4*h->width*h->height);
         if(!h->image)goto oops;
 	TIFFReadRGBAImage(h->tif, h->width, h->height, h->image, 0);
     } else {
 	if (FbiStuff::fim_filereading_debug())
 	    FIM_FBI_PRINTF("tiff: reading scanline by scanline\n");
-	h->row = (uint32*)malloc(TIFFScanlineSize(h->tif));
+	h->row = (uint32*)fim_malloc(TIFFScanlineSize(h->tif));
         if(!h->row)goto oops;
     }
 
@@ -141,14 +141,14 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
  oops:
     if (h && h->tif)
 	TIFFClose(h->tif);
-    if(h && h->row)free(h->row);
-    if(h && h->image)free(h->image);
-    if(h)free(h);
+    if(h && h->row)fim_free(h->row);
+    if(h && h->image)fim_free(h->image);
+    if(h)fim_free(h);
     return NULL;
 }
 
 static void
-tiff_read(unsigned char *dst, unsigned int line, void *data)
+tiff_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct tiff_state *h = (struct tiff_state *) data;
     int s,on,off;
@@ -208,35 +208,35 @@ tiff_done(void *data)
 
     TIFFClose(h->tif);
     if (h->row)
-	free(h->row);
+	fim_free(h->row);
     if (h->image)
-	free(h->image);
-    free(h);
+	fim_free(h->image);
+    fim_free(h);
 }
 
 static struct ida_loader tiff1_loader = {
-    magic: "MM\x00\x2a",
-    moff:  0,
-    mlen:  4,
-    name:  "libtiff",
-    init:  tiff_init,
-    read:  tiff_read,
-    done:  tiff_done,
+    /*magic:*/ "MM\x00\x2a",
+    /*moff:*/  0,
+    /*mlen:*/  4,
+    /*name:*/  "libtiff",
+    /*init:*/  tiff_init,
+    /*read:*/  tiff_read,
+    /*done:*/  tiff_done,
 };
 static struct ida_loader tiff2_loader = {
-    magic: "II\x2a\x00",
-    moff:  0,
-    mlen:  4,
-    name:  "libtiff",
-    init:  tiff_init,
-    read:  tiff_read,
-    done:  tiff_done,
+    /*magic:*/ "II\x2a\x00",
+    /*moff:*/  0,
+    /*mlen:*/  4,
+    /*name:*/  "libtiff",
+    /*init:*/  tiff_init,
+    /*read:*/  tiff_read,
+    /*done:*/  tiff_done,
 };
 
 static void __init init_rd(void)
 {
-    load_register(&tiff1_loader);
-    load_register(&tiff2_loader);
+    fim_load_register(&tiff1_loader);
+    fim_load_register(&tiff2_loader);
 }
 
 #ifdef USE_X11
@@ -281,14 +281,14 @@ tiff_write(FILE *fp, struct ida_image *img)
 }
 
 static struct ida_writer tiff_writer = {
-    label:  "TIFF",
-    ext:    { "tif", "tiff", NULL},
-    write:  tiff_write,
+    /*  label:*/  "TIFF",
+    /*  ext:*/    { "tif", "tiff", NULL},
+    /*  write:*/  tiff_write,
 };
 
 static void __init init_wr(void)
 {
-    write_register(&tiff_writer);
+    fim_write_register(&tiff_writer);
 }
 
 #endif

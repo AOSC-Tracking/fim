@@ -1,15 +1,16 @@
 
 # $Id$
 
-FWP=http://www.autistici.org/dezperado
+FWP=http://www.autistici.org/dezperado/fim
 INDEXIN=index.html.in
 FIMDIR=..
-FIMSITE=html-dezperado
+FIMSITE=html-dezperado/fim
 SITEDIR=./www
 FTPSCRIPT=./script.lftp
-FTPURL=dezperado@ftp4.autistici.org
+FTPURL=ftp://dezperado@ftp5.autistici.org
 SRCDIR=./
 MIRROR=$$(cat $(FIMDIR)/README | grep "^Releases  "|sed s/^.*\ :.//g)
+MAILINGLIST=$$(cat $(FIMDIR)/README | grep "^Mailing List "|sed s/^.*\ :.//g)
 URL=$(MIRROR)/"fim-`cat $(FIMDIR)/VERSION`".tar.gz
 
 TGZ="fim-`cat $(FIMDIR)/VERSION`".tar.gz
@@ -18,7 +19,7 @@ REPOSITORY=`cat $(FIMDIR)/README | grep "^Repository"|sed s/^.*\ :.//g`
 FVERSION=`cat $(FIMDIR)/VERSION`
 HOMEPAGE=$$(cat $(FIMDIR)/README | grep "^Web Page  "|sed s/^.*\ :.//g)
 PACKAGE=fim
-FIMHTMLDOCS= FIM.html fim.man.html fimgs.man.html
+FIMHTMLDOCS= FIM.html fimrc.man.html fim.man.html fimgs.man.html
 PAGES= $(SITEDIR)/index.html $(FIMHTMLDOCS)
 CP=cp -p
 
@@ -48,6 +49,7 @@ $(SITEDIR)/index.html:
 	-D DATE="`date +'%d/%m/%Y'`" \
 	-D SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )" \
 	-D HOMEPAGE=$(HOMEPAGE) \
+	-D MAILINGLIST=$(MAILINGLIST) \
 	$(SRCDIR)/$(INDEXIN) \
 	 > $(SITEDIR)/index.html 
 
@@ -61,7 +63,8 @@ site:	$(PAGES) $(SITEDIR)/index.html
 	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/$(INDEXIN) > $(SITEDIR)/index.html
 	mkdir -p $(SITEDIR)
 	#cd $(FIMDIR) && ./autogen.sh && ./configure && make doc && make dist && cd -
-	cd $(FIMDIR)/doc && make htmldocs
+	#cd $(FIMDIR)/doc && make htmldocs
+	cd $(FIMDIR) && make dox
 	for i in $(FIMHTMLDOCS) ; do cp $(FIMDIR)/doc/$$i  $(SITEDIR) ; done
 	txt2html $(FIMDIR)/README > $(SITEDIR)/README.html
 	txt2html $(FIMDIR)/NEWS > $(SITEDIR)/NEWS.html
@@ -74,6 +77,7 @@ site:	$(PAGES) $(SITEDIR)/index.html
 	$(CP) $(FIMDIR)/doc/FIM.TXT  $(SITEDIR)/FIM.TXT
 	$(CP) ../$(TGZ) $(SITEDIR)
 	$(CP) ../$(SIG) $(SITEDIR)
+	#webcheck -a $(SITEDIR)/index.html 
 	ls -ltr $(SITEDIR) 
 
 # lftp :~> help mirror
@@ -92,10 +96,14 @@ site:	$(PAGES) $(SITEDIR)/index.html
  
 up:
 	echo "# generated automatically ftp session to $(FTPURL)" > $(FTPSCRIPT)
+	echo "set ftp:ssl-force true" > $(FTPSCRIPT)
+	echo "set ftp:passive-mode true" > $(FTPSCRIPT)
 	echo "open $(FTPURL)" >> $(FTPSCRIPT)
 	echo "ls" www/ >> $(FTPSCRIPT)
+	echo "ls" $(FIMSITE) >> $(FTPSCRIPT)
 	echo "mirror -v --log=./ftp.log -R -n --exclude '.svn/*'  $(SITEDIR) $(FIMSITE)" >> $(FTPSCRIPT)
 	echo "ls" www/ >> $(FTPSCRIPT)
+	echo "ls" $(FIMSITE) >> $(FTPSCRIPT)
 	lftp -f $(FTPSCRIPT)
 	cat ftp.log
 

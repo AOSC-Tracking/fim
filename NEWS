@@ -1,6 +1,18 @@
 	
 	FIM NEWS -- history of user-visible changes in FIM.
 
+        	Version 0.3-beta-prerelease (still ongoing)
+
+ * auto-generated documentation: more consistency 
+ * grammar specification, in man fimrc
+ * internal commands,variables,autocommands  reference man page, in man fimrc
+ * better internal help mechanisms
+ * more control (resolution change,windowed mode) in experimental sdl mode
+ * new commands (pread,reverse,shuffle,...) 
+ * (temporarily) disabled internal windows splitting 
+ * pushing files from a directory
+ * several minor and major bugfixes
+
         	Version 0.3-beta
 
  * full         support for AAlib (Ascii Art rendering) (-o aa)
@@ -11,6 +23,7 @@
  * viewing of any type files as bitmaps (unset bits black, set bits white)
  * viewing of any type files as pixmaps (as RGB triples)
  * framebuffer driver now can be disabled at compile time
+ * colors inversion: saves a significant fraction of power when viewing documents 
 
         	Version 0.3-alpha
 

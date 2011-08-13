@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  FbiStuffBmp.cpp : fbi functions for BMP files, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -100,7 +100,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
     struct bmp_state *h;
     int fr;
 
-    h = (struct bmp_state *)calloc(sizeof(*h),1);
+    h = (struct bmp_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     memset(h,0,sizeof(*h));
     h->fp = fp;
@@ -169,12 +169,12 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
     return h;
 
  oops:
-    if(h)free(h);
+    if(h)fim_free(h);
     return NULL;
 }
 
 static void
-bmp_read(unsigned char *dst, unsigned int line, void *data)
+bmp_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct bmp_state *h = (struct bmp_state *) data;
     unsigned int ll,y,x,pixel,byte = 0;
@@ -235,22 +235,22 @@ bmp_done(void *data)
     struct bmp_state *h = (struct bmp_state *) data;
 
     fclose(h->fp);
-    free(h);
+    fim_free(h);
 }
 
 static struct ida_loader bmp_loader = {
-    magic: "BM",
-    moff:  0,
-    mlen:  2,
-    name:  "bmp",
-    init:  bmp_init,
-    read:  bmp_read,
-    done:  bmp_done,
+    /*magic:*/ "BM",
+    /*moff:*/  0,
+    /*mlen:*/  2,
+    /*name:*/  "bmp",
+    /*init:*/  bmp_init,
+    /*read:*/  bmp_read,
+    /*done:*/  bmp_done,
 };
 
 static void __init init_rd(void)
 {
-    load_register(&bmp_loader);
+    fim_load_register(&bmp_loader);
 }
 
 

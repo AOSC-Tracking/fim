@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -40,13 +40,14 @@
 //#include <stddef.h>
 //#include <errno.h>
 
-#ifdef HAVE_LIBEXIF
-# include <libexif/exif-data.h>
-#endif
-
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 //#include "loader.h"
+#ifdef FIM_WITH_LIBEXIF
+#include <libexif/exif-data.h>
+#define HAVE_NEW_EXIF 0
+#endif
+
 //
 extern "C"
 {
@@ -80,7 +81,9 @@ extern "C"
 namespace fim
 {
 
-
+#if HAVE_NEW_EXIF
+extern CommandConsole cc;
+#endif
    int fim_jerr=0;
 
 /* ---------------------------------------------------------------------- */
@@ -161,6 +164,127 @@ static void fim_error_exit (j_common_ptr cinfo)
 }
 
 
+#ifdef FIM_WITH_LIBEXIF
+// FIXME: temporarily here
+static void dump_exif(FILE *out, ExifData *ed)
+{
+    const char *title, *value;
+#if HAVE_NEW_EXIF
+    char buffer[256];
+#endif
+    ExifEntry  *ee;
+    int tag,i;
+#if HAVE_NEW_EXIF
+    //for (i = 0; i < EXIF_IFD_COUNT; i++) {
+    for (i = 0; i < 1; i++) { // first only
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_ORIENTATION)){
+		// value can be of the form "X - Y", with X and Y in
+		// {top,bottom,left,right}
+		// here we handle only
+		// on: http://sylvana.net/jpegcrop/exif_orientation.html 
+		// we got the following combinations:
+		// Value	0th Row	0th Column
+		// 1	top	left side
+		// 2	top	right side
+		// 3	bottom	right side
+		// 4	bottom	left side
+		// 5	left side	top
+		// 6	right side	top
+		// 7	right side	bottom
+		// 8	left side	bottom
+		//
+		// neatly depicted in an F letter example:
+		//
+		//   1        2       3      4         5            6           7          8
+		//
+		//   888888  888888      88  88      8888888888  88                  88  8888888888
+		//   88          88      88  88      88  88      88  88          88  88      88  88
+		//   8888      8888    8888  8888    88          8888888888  8888888888          88
+		//   88          88      88  88
+		//   88          88  888888  888888
+		//
+		// note that (in this order):
+		// 2,3,5,7 want a mirror transformation
+		// 4,3 want a flip transformation
+		// 7,8 want a cw rotation
+		// 5,6 want a ccw rotation
+		//
+		bool shouldmirror,shouldrotatecw,shouldrotateccw,shouldflip; char r,c;const char *p;char f;
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		if(!value || ((p=strstr(value," - "))==NULL))goto uhmpf;
+		r=tolower(value[0]); c=tolower(p[3]);
+		switch(r)
+		{
+			case 't':
+			switch(c){
+				case 'l':f=1; break;
+				case 'r':f=2; break;
+				default: f=0;
+			} break;
+			case 'b':
+			switch(c){
+				case 'r':f=3; break;
+				case 'l':f=4; break;
+				default: f=0;
+			} break;
+			case 'l':
+			switch(c){
+				case 't':f=5; break;
+				case 'b':f=8; break;
+				default: f=0;
+			} break;
+			case 'r':
+			switch(c){
+				case 't':f=6; break;
+				case 'b':f=7; break;
+				default: f=0;
+			} break;
+			default: f=0;
+		}
+		//if(f==0)goto uhmpf;
+		shouldmirror=(f==2 || f==4 || f==5 || f==7);
+		shouldflip=(f==4 || f==3);
+		shouldrotatecw=(f==5 || f==6);
+		shouldrotateccw=(f==7 || f==8);
+//		std::cout << "EXIF_TAG_ORIENTATION FOUND !\n",
+//		std::cout << "VALUE: " <<(int)f << r<< c<<
+//		shouldmirror<< shouldrotatecw<< shouldrotateccw<< shouldflip,
+//		std::cout << "\n";
+		if(shouldrotateccw)cc.setVariable("exif_orientation",1);
+		if(shouldrotatecw)cc.setVariable("exif_orientation",3);
+		if(shouldmirror)cc.setVariable("exif_mirrored",1);
+		if(shouldflip)cc.setVariable("exif_flipped",1);
+		// FIXME: should complete this code by setting up some mechanism for recovering this rotation/flip info
+uhmpf:
+		1;
+	}
+    }
+#endif
+#if 0
+    for (i = 0; i < EXIF_IFD_COUNT; i++) {
+	fprintf(out,"   ifd %s\n", exif_ifd_get_name (i));
+	for (tag = 0; tag < 0xffff; tag++) {
+	    title = exif_tag_get_title(tag);
+	    if (!title)
+		continue;
+	    ee = exif_content_get_entry (ed->ifd[i], tag);
+	    if (NULL == ee)
+		continue;
+#ifdef HAVE_NEW_EXIF
+	    value = exif_entry_get_value(ee, buffer, sizeof(buffer));
+#else
+	    value = exif_entry_get_value(ee);
+#endif
+	    fprintf(out,"      0x%04x  %-30s %s\n", tag, title, value);
+	}
+    }
+    if (ed->data && ed->size)
+	fprintf(out,"   thumbnail\n      %d bytes data\n", ed->size);
+#endif
+}
+#endif
+
+
 /* ---------------------------------------------------------------------- */
 /* jpeg loader                                                            */
 
@@ -170,9 +294,13 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 {
     struct jpeg_state *h;
     jpeg_saved_marker_ptr mark;
+    fim_bool_t ferr=false;/* fatal errors ? */
     fim_jerr=0;
+#ifdef FIM_WITH_LIBEXIF
+    //std::cout << "EXIF is not implemented, really :) \n";
+#endif
     
-    h = (struct jpeg_state *)calloc(sizeof(*h),1);
+    h = (struct jpeg_state *)fim_calloc(sizeof(*h),1);
     if(!h) goto oops;
 
     memset(h,0,sizeof(*h));
@@ -182,15 +310,15 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     h->cinfo.err = jpeg_std_error(&h->jerr);	/* FIXME : should use an error manager of ours (this one exits the program!) */
 //    h->jerr.error_exit = fim_error_exit;	/* FIXME : should use an error manager of ours (this one exits the program!) */
     h->jerr.error_exit = NULL ;	/* FIXME : should use an error manager of ours (this one exits the program!) */
-//    if(h->jerr.msg_code)goto oops;
+    if(ferr && h->jerr.msg_code)goto oops;
     jpeg_create_decompress(&h->cinfo);
-//    if(h->jerr.msg_code)goto oops;
+    if(h->jerr.msg_code)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_COM,    0xffff); /* comment */
-//    if(h->jerr.msg_code)goto oops;
+    if(ferr && h->jerr.msg_code)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_APP0+1, 0xffff); /* EXIF */
-//    if(h->jerr.msg_code)goto oops;
+    if(ferr && h->jerr.msg_code)goto oops;
     jpeg_stdio_src(&h->cinfo, h->infile);
-//    if(h->jerr.msg_code)goto oops;
+    if(ferr && h->jerr.msg_code)goto oops;
 //    if(jpeg_read_header(&h->cinfo, TRUE)==0)	goto oops;
     jpeg_read_header(&h->cinfo, TRUE);
 //    if(h->jerr.msg_code)goto oops;	// this triggers with apparently good file
@@ -208,7 +336,16 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 		FIM_FBI_PRINTF("jpeg: exif data found (APP1 marker)\n");
 	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
 
-#ifdef HAVE_LIBEXIF
+#if HAVE_NEW_EXIF
+#ifdef FIM_WITH_LIBEXIF
+	{
+		ExifData *ed=exif_data_new_from_data(mark->data,mark->data_length);
+    		if(ed)
+			dump_exif(stdout,ed);
+	}
+#endif
+#endif
+#ifdef FIM_WITH_LIBEXIF_nonono
 	    if (thumbnail) {
 		ExifData *ed;
 		
@@ -220,7 +357,7 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
 			FIM_FBI_PRINTF("jpeg: exif thumbnail found\n");
 
 		    /* save away thumbnail data */
-		    h->thumbnail = malloc(ed->size);
+		    h->thumbnail = fim_malloc(ed->size);
     		    if(!h->thumbnail) goto oops;
 		    h->tsize = ed->size;
 		    memcpy(h->thumbnail,ed->data,ed->size);
@@ -278,13 +415,13 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     return h;
 oops:
 std::cerr << "OOPS: problems decoding "<< filename <<"...\n";
-    if( h && h->thumbnail) free(h->thumbnail);
-    if( h ) free(h);
+    if( h && h->thumbnail) fim_free(h->thumbnail);
+    if( h ) fim_free(h);
     return NULL;
 }
 
 static void
-jpeg_read(unsigned char *dst, unsigned int line, void *data)
+jpeg_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct jpeg_state *h = (struct jpeg_state*)data;
     JSAMPROW row = dst;
@@ -302,23 +439,23 @@ jpeg_done(void *data)
     if (h->infile)
 	fclose(h->infile);
     if (h->thumbnail)
-	free(h->thumbnail);
-    free(h);
+	fim_free(h->thumbnail);
+    fim_free(h);
 }
 
 static struct ida_loader jpeg_loader = {
-    magic: "\xff\xd8",
-    moff:  0,
-    mlen:  2,
-    name:  "libjpeg",
-    init:  jpeg_init,
-    read:  jpeg_read,
-    done:  jpeg_done,
+    /*magic:*/ "\xff\xd8",
+    /*moff:*/  0,
+    /*mlen:*/  2,
+    /*name:*/  "libjpeg",
+    /*init:*/  jpeg_init,
+    /*read:*/  jpeg_read,
+    /*done:*/  jpeg_done,
 };
 
 static void __init init_rd(void)
 {
-    load_register(&jpeg_loader);
+    fim_load_register(&jpeg_loader);
 }
 
 #ifdef USE_X11
@@ -395,15 +532,15 @@ jpeg_write(FILE *fp, struct ida_image *img)
 }
 
 struct ida_writer jpeg_writer = {
-    label:  "JPEG",
-    ext:    { "jpg", "jpeg", NULL},
-    write:  jpeg_write,
-    conf:   jpeg_conf,
+    /*l/*abel:*/*/  "JPEG",
+   /*/* ext:*/*/    { "jpg", "jpeg", NULL},
+    /*w/*rite:*/*/  jpeg_write,
+    /*/*conf:*/*/   jpeg_conf,
 };
 
 static void __init init_wr(void)
 {
-    write_register(&jpeg_writer);
+    fim_write_register(&jpeg_writer);
 }
 
 

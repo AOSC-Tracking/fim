@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-21 12:32:15 +0200 (Tue, 21 Jun 2011) $ */
 /*
  DisplayDevice.cpp : virtual device Fim driver file
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,20 +22,29 @@
 #include "fim.h"
 #include "DisplayDevice.h"
 
-	DisplayDevice::DisplayDevice(MiniConsole & mc_):fontname(NULL)
-	,mc(mc_)
-	,f(NULL)
-	,debug(0)
-	,redraw(0)
-	,finalized(false)
-	{}
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+	DisplayDevice::DisplayDevice(MiniConsole & mc):fontname_(NULL)
+	,mc_(mc)
+#else
+	DisplayDevice::DisplayDevice():fontname_(NULL)
+#endif
+	,f_(NULL)
+	,debug_(false)
+	,redraw_(0)
+	,finalized_(false)
+	{
+		const char *line;
+	    	if (NULL != (line = fim_getenv(FIM_ENV_FBFONT)))
+			fontname_ = line;
+	}
 
-	int DisplayDevice::get_input(unsigned int * c)
+	int DisplayDevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		*c=0;
 		/*
 		 * It is sad to place this functionality here, but often the input subsystem 
 		 * is tightly bound to the output device.
+		 * FIXME : before, it accepted unsigned int
 		 * */
 			int r=0;
 #ifdef  FIM_SWITCH_FIXUP
@@ -47,7 +56,7 @@
 			/*
 			 * patch: the following read blocks the program even when switching console
 			 */
-			//r=read(fim_stdin,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
+			//r=read(fim_stdin_,&c,1); if(c==0x1b){read(0,&c,3);c=(0x1b)+(c<<8);}
 			/*
 			 * so the next coded shoul circumvent this behaviour!
 			 */
@@ -58,7 +67,7 @@
 				int timeout=1,rc,paused=0;
 	
 			        FD_ZERO(&set);
-			        FD_SET(cc.fim_stdin, &set);
+			        FD_SET(cc.fim_stdin_, &set);
 			        fdmax = 1;
 #ifdef FBI_HAVE_LIBLIRC
 				/*
@@ -78,7 +87,7 @@
 					return 0;	/* warning : originally a 'continue' in a loop ! */
 				}
 				
-				if (FD_ISSET(cc.fim_stdin,&set))rc = read(cc.fim_stdin, c, 4);
+				if (FD_ISSET(cc.fim_stdin_,&set))rc = read(cc.fim_stdin_, c, 4);
 				r=rc;
 				*c=int2msbf(*c);
 			}
@@ -86,14 +95,14 @@
 			/*
 			 * this way the console switches the wrong way
 			 */
-			r=read(fim_stdin,&c,4);	//up to four chars should suffice
+			r=read(fim_stdin_,&c,4);	//up to four chars should suffice
 #endif
 			//std::cout << (int)*c<<"\n";
 
 			return r;
 	}
 
-	int DisplayDevice::catchInteractiveCommand(int seconds)const
+	fim_key_t DisplayDevice::catchInteractiveCommand(fim_ts_t seconds)const
 	{
 		/*	
 		 *
@@ -122,9 +131,10 @@
 		tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		
-		int c,r;//char buf[64];
-		//r=read(fim_stdin,&c,4);
-		r=read(cc.fim_stdin,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);c=(0x1b)+(c<<8);/* we should do something with rc now */}
+		fim_key_t c,r;//char buf[64];
+		//r=read(fim_stdin_,&c,4);
+		// FIXME : read(.,.,3) is NOT portable. DANGER
+		r=read(cc.fim_stdin_,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);c=(0x1b)+(c<<8);/* we should do something with rc now */}
 
 		//we restore the previous console attributes
 		tcsetattr (0, TCSAFLUSH, &sattr);
@@ -135,65 +145,109 @@
 	}
 
 #ifndef FIM_KEEP_BROKEN_CONSOLE
-void DisplayDevice::fb_status_screen_new(const char *msg, int draw, int flags)//experimental
+void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags)//experimental
 {
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	int r;
 	
 	if(flags==0x03)
 	{
 		/* clear screen sequence */
-		mc.clear();
+		mc_.clear();
 		return;
 	}
 
-	if( flags==0x01 ) { mc.scroll_down(); return; }
-	if( flags==0x02 ) { mc.scroll_up(); return; }
+	if( flags==0x01 ) { mc_.scroll_down(); return; }
+	if( flags==0x02 ) { mc_.scroll_up(); return; }
 
-	r=mc.add(msg);
-	if(r==-2)
+	r=mc_.add(msg);
+	if(r==FIM_ERR_BUFFER_FULL)
 	{
-		r=mc.grow();
-		if(r==-1)return;
-		r=mc.add(msg);
-		if(r==-1)return;
+		r=mc_.grow();
+		if(r==FIM_ERR_GENERIC)return;
+		r=mc_.add(msg);
+		if(r==FIM_ERR_GENERIC)return;
 	}
 
 	if(!draw )return;//CONVENTION!
 	
 	//fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
-	cc.displaydevice->lock();
-	clear_rect(0, width()-1, 0,height()/2);
-	cc.displaydevice->unlock();
-	mc.dump();
-//	mc.dump(0,1000000);
+	cc.displaydevice_->lock();
+#if 1
+	// FIXME: this is temporary
+	{
+		int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
+		int fh=f_?f_->height:1;
+		ls=FIM_MIN(ls,height()/fh);
+		clear_rect(0, width()-1, 0,fh*ls);
+	}
+#else
+	clear_rect(0, width()-1, 0,ls);
+#endif
+	cc.displaydevice_->unlock();
+	mc_.dump();
+//	mc_.dump(0,1000000);
+#endif
 	return;
 }
 #endif
 
-int DisplayDevice::console_control(int arg)//experimental
+fim_err_t DisplayDevice::console_control(fim_cc_t arg)//experimental
 {
-	if(arg==0x01)fb_status_screen_new(NULL,0,arg);
-	if(arg==0x02)fb_status_screen_new(NULL,0,arg);
-	if(arg==0x03)fb_status_screen_new(NULL,0,arg);
-	return 0;
+	if(arg==0x01)fb_status_screen_new(NULL,false,arg);
+	if(arg==0x02)fb_status_screen_new(NULL,false,arg);
+	if(arg==0x03)fb_status_screen_new(NULL,false,arg);
+	return FIM_ERR_NO_ERROR;
 }
 
-int DisplayDevice::init_console()
+fim_err_t DisplayDevice::init_console()
 {
-	if(f)
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+	if(f_)
 	{	
-		mc.setRows ((height()/f->height)/2);
-		mc.reformat( width() /f->width    );
+		mc_.setRows ((height()/f_->height)/2);
+		mc_.reformat( width() /f_->width    );
 	}
 	else
 	{
-		mc.setRows ( height()   );
-		mc.reformat( width()    );
+		mc_.setRows ( height()   );
+		mc_.reformat( width()    );
 	}
-	return 0;
+#endif
+	return FIM_ERR_NO_ERROR;
 }
 
 DisplayDevice::~DisplayDevice()
 {
+}
+
+void DisplayDevice::quickbench()
+{
+	/*
+		a quick draw benchmark and sanity check.
+		currently performs only the clear function.
+	*/
+	double tbtime,btime;// ms
+	size_t times=1;
+	string msg="fim check";
+
+	std::cout << msg << " : " << "please be patient\n";
+
+	times=1;
+	tbtime=1000.0,btime=0.0;// ms
+
+	do
+	{
+		btime=-getmilliseconds();
+		clear_rect(0, width()-1, 0,height()/2);
+		btime+=getmilliseconds();
+		++times;
+		tbtime-=btime;
+	}
+	while(btime>=0.0 && tbtime>0.0 && times>0);
+	--times;
+	tbtime=1000.0-tbtime;
+
+	std::cout << msg << " : " << ((double)times)/((tbtime)*1.e-3) << " clears/s\n";
 }
 

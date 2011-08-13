@@ -1,8 +1,4 @@
-# This file should be processed with automake to generate Makefile.in
-#
 # $Id$
-#
-# originally inspired by mutt's Makefile.am 
 
 subdir = src
 AUTOMAKE_OPTIONS = nostdinc no-dependencies dejagnu
@@ -12,12 +8,14 @@ bin_PROGRAMS = fim
 bin_SCRIPTS = fimgs
 doc_DATA = fimrc
 
-LFLAGS = -+
+LFLAGS = -+ --nounistd
 YFLAGS = -v -d
 
 #lex.yy.cc : lex.lex
 lex.yy.cc: lex.lex
 	$(LEX) $(LFLAGS) lex.lex
+	@$(ECHO) "Applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
+	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
 yacc.tab.cpp: yacc.ypp lex.lex
 	$(YACC) $(YFLAGS) yacc.ypp -o yacc.tab.cpp
@@ -25,22 +23,41 @@ yacc.tab.cpp: yacc.ypp lex.lex
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
 conf.h:       fimrc
-	echo 'const char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > conf.h
-	sed  's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' fimrc >> conf.h
-	echo '"";' >> conf.h
+	$(ECHO) 'const char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $@
+	$(SED)  's/\\/\\\\/g;s/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< >> $@
+	$(ECHO) '"";' >> $@
+
+grammar.h: yacc.tab.cpp yacc.output
+	$(ECHO) 'const char * FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =' > $@
+	$(CAT) yacc.output | $(AWK) -f ../scripts/maintenance/yacc2grammar.awk  | $(CPP) -include ../scripts/maintenance/yacc2grammar.h  | $(GREP) -v '^#' | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
+	$(ECHO) '"";' >> $@
+
+examples.h: ../scripts/example/oneline.fim
+	$(ECHO) 'const char * FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =' > $@
+	$(CAT) ../scripts/example/oneline.fim | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
+	$(ECHO) '"";' >> $@
+
+CommandConsole-help.o: CommandConsole-help.cpp help-acm.cpp help.cpp examples.h grammar.h
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
-	grep define ../config.h | grep FIM | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > version.h
-	echo "\"\n\"" >> version.h
-	grep define ../config.h | grep FIM.*'"' | sort | sed 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> version.h
-	grep undef ../config.h | grep FIM | sort | sed 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]*\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> version.h
-	echo  '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> version.h
+	$(GREP) define $< | $(GREP) FIM | $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > $@
+	$(ECHO) "\"\n\"" >> $@
+	$(GREP) define $< | $(GREP) FIM.*'"' | $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> $@
+	$(GREP) undef $< | $(GREP) FIM | $(SORT) | $(SED) 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]*\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> $@
+	$(ECHO)  '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> $@
 
 help.cpp: fim.h
-	echo -e "#ifdef FIM_WANT_INLINE_HELP\n" > help.cpp
-	grep   '^#define FIM_VID' fim.h | sed 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/fim_var_help_db[\1]=\3;/g' >> help.cpp
-	echo '#endif' >> help.cpp
+	$(ECHO) -e "#ifdef FIM_WANT_INLINE_HELP\n" > $@
+	$(GREP)   '^#define FIM_VID' $< | $(SED) 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/fim_var_help_db[\1]=\3;/g' >> $@
+	$(ECHO) '#endif' >> $@
+
+help-acm.cpp: fim.h
+	$(ECHO) -e "//#ifdef FIM_WANT_INLINE_HELP\n" > $@
+	$(ECHO) -e '#define FIM_AUTOCOMMANDS_LIST \' >> $@
+	$(GREP)   '^#define FIM_ACM' $< | $(SED) 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/\1", "/g'|tr '\n' ' ' >> $@
+	$(ECHO)  ' '>> $@
+	$(ECHO) '//#endif' >> $@
 	
 # the following sources are built at make time
 # old bison versions could have problems with this (e.g.: generating yacc.tab.cpp.h instead of yacc.tab.hpp)
@@ -48,7 +65,7 @@ BUILT_SOURCES = lex.yy.cc yacc.tab.cpp conf.h yacc.tab.hpp
 
 # this hook triggers on 'make dist'
 dist-hook:
-	-for file in $(BUILT_SOURCES) ; do rm -f $(distdir)/$$file ; done
+	-for file in $(BUILT_SOURCES) ; do $(RM) -f $(distdir)/$$file ; done
 
 EXTRA_fim_SOURCES = 
 # The following files are marked as source files by configure.ac
@@ -94,7 +111,10 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	common.h \
 	conf.h \
 	help.cpp \
+	help-acm.cpp \
 	version.h \
+	grammar.h \
+	examples.h \
 	fim.h \
 	fim_stream.h \
 	fim_stream.cpp \
@@ -111,6 +131,9 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Cache.cpp \
 	Command.cpp \
 	CommandConsole.cpp \
+	CommandConsole-cmd.cpp \
+	CommandConsole-init.cpp \
+	CommandConsole-help.cpp \
 	DebugConsole.cpp \
 	DisplayDevice.cpp \
 	FbiStuff.cpp \
@@ -133,10 +156,12 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	string.cpp
 
 Command.o: Command.h
-CommandConsole.o: conf.h defaultConfiguration.o
-fim.o: version.h help.cpp
+CommandConsole.o: defaultConfiguration.o
+CommandConsole-init.o: conf.h defaultConfiguration.o
+help.o: conf.h defaultConfiguration.o
+fim.o: version.h help.cpp grammar.h examples.h
 Var.o: help.cpp
-fim.cpp: version.h help.cpp
+fim.cpp: version.h help.cpp grammar.h examples.h
 lex.yy.o: lex.yy.cc
 
 # regex.c is work in progress and awaits for integration

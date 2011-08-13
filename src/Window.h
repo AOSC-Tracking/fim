@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-17 21:44:01 +0200 (Fri, 17 Jun 2011) $ */
 /*
  Window.h : Fim's own windowing system header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #ifndef NULL
 	#define NULL 0
 #endif
+#define FIM_DISABLE_WINDOW_SPLITTING 1
 
 /*
  *	This code is still experimental and programmed in great hurry.
@@ -68,13 +69,13 @@ namespace fim
 class Rect
 {
 	public:
-	int x,y,w,h;	// units, not pixels
+	fim_coo_t x,y,w,h;	// units, not pixels
 	void print()
 	{
 		std::cout << x <<" " << y  << " "<< w << " " << h  << "\n";
 	}
 
-	Rect(int x,int y,int w,int h):
+	Rect(fim_coo_t x,fim_coo_t y,fim_coo_t w,fim_coo_t h):
 	x(x), y(y), w(w), h(h)
 	/* redundant, but not evil */
 	{
@@ -111,15 +112,15 @@ class Rect
 	}
 
 	/* todo : to unsigned integer ! */
-	int vlgrow(int units=1)   { h+=units; return 0; } 
-	int vlshrink(int units=1) { h-=units; return 0; }
-	int vugrow(int units=1)   { y-=units; h+=units ; return 0; } 
-	int vushrink(int units=1) { y+=units; h-=units ; return 0; }
+	fim_err_t vlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   { h+=units; return FIM_ERR_NO_ERROR; } 
+	fim_err_t vlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) { h-=units; return FIM_ERR_NO_ERROR; }
+	fim_err_t vugrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   { y-=units; h+=units ; return FIM_ERR_NO_ERROR; } 
+	fim_err_t vushrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) { y+=units; h-=units ; return FIM_ERR_NO_ERROR; }
 
-	int hlgrow(int units=1)   { x-=units; w+=units ; return 0; } 
-	int hrshrink(int units=1) { w-=units; return 0; }
-	int hrgrow(int units=1)   { w+=units; return 0; } 
-	int hlshrink(int units=1) { x+=units; w-=units ; return 0; }
+	fim_err_t hlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   { x-=units; w+=units ; return FIM_ERR_NO_ERROR; } 
+	fim_err_t hrshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) { w-=units; return FIM_ERR_NO_ERROR; }
+	fim_err_t hrgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   { w+=units; return FIM_ERR_NO_ERROR; } 
+	fim_err_t hlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) { x+=units; w-=units ; return FIM_ERR_NO_ERROR; }
 	bool operator==(const Rect&rect)const
 	{
 		return x==rect.x &&
@@ -150,11 +151,11 @@ class Window
  * not in the corners box coordinate system.
  *
  * */
-	Rect corners;//,status,canvas;
-	int focus;	// if 0 left/up ; otherwise right/lower
+	Rect corners_;//,status,canvas;
+	bool focus_;	// if 0 left/up ; otherwise right/lower
 
-	Window *first,*second;
-	bool amroot;
+	Window *first_,*second_;
+	bool amroot_;
 	
 	void split();
 	void hsplit();
@@ -162,16 +163,16 @@ class Window
 	bool close();
 	bool swap(); // new
 	void balance();
-	int chfocus();
+	bool chfocus();
 	Moves move_focus(Moves move);
 	Moves reverseMove(Moves move);
-	int normalize();
-	int enlarge(int units);
-	int henlarge(int units);
-	int venlarge(int units);
+	bool normalize();
+	fim_err_t enlarge(fim_coo_t units);
+	fim_err_t henlarge(fim_coo_t units);
+	fim_err_t venlarge(fim_coo_t units);
 
-	bool can_vgrow(const Window & window, int howmuch);
-	bool can_hgrow(const Window & window, int howmuch);
+	bool can_vgrow(const Window & window, fim_coo_t howmuch);
+	bool can_hgrow(const Window & window, fim_coo_t howmuch);
 
 
 
@@ -190,20 +191,20 @@ class Window
 	bool issplit()const;
 	bool ishsplit()const;
 	bool isvsplit()const;
-	int hnormalize(int x, int w);
-	int vnormalize(int y, int h);
+	fim_err_t hnormalize(fim_coo_t x, fim_coo_t w);
+	fim_err_t vnormalize(fim_coo_t y, fim_coo_t h);
 	int count_hdivs()const;
 	int count_vdivs()const;
 
-	int vlgrow(int units);
-	int vugrow(int units);
-	int vushrink(int units);
-	int vlshrink(int units);
+	fim_err_t vlgrow(fim_coo_t units);
+	fim_err_t vugrow(fim_coo_t units);
+	fim_err_t vushrink(fim_coo_t units);
+	fim_err_t vlshrink(fim_coo_t units);
 
-	int hlgrow(int units);
-	int hrgrow(int units);
-	int hlshrink(int units);
-	int hrshrink(int units);
+	fim_err_t hlgrow(fim_coo_t units);
+	fim_err_t hrgrow(fim_coo_t units);
+	fim_err_t hlshrink(fim_coo_t units);
+	fim_err_t hrshrink(fim_coo_t units);
 
 	Window & focused()const;
 	Window & shadowed()const;
@@ -213,14 +214,14 @@ class Window
 	Window & left();
 	Window & right();
 
-	int setwidth(int w);
-	int setheight(int h);
-	int setxorigin(int x);
-	int setyorigin(int y);
+	fim_coo_t setwidth(fim_coo_t w);
+	fim_coo_t setheight(fim_coo_t h);
+	fim_coo_t setxorigin(fim_coo_t x);
+	fim_coo_t setyorigin(fim_coo_t y);
 
 	bool operator==(const Window&window)const;
 
-	Viewport *viewport;
+	Viewport *viewport_;
 
 	/*
 	 * DANGER : nearly each of these methods launches some exception!
@@ -229,7 +230,7 @@ class Window
 	const Window & c_shadowed()const;
 
 	Viewport & current_viewport()const;
-	CommandConsole &commandConsole;
+	CommandConsole &commandConsole_;
 
 	Window & operator= (const Window &w){return *this;/* a nilpotent assignation */}
 
@@ -239,9 +240,10 @@ class Window
 	/* The only public method launching exceptions is the constructor now.
 	 * */
 	Window(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
+	fim_err_t update(const Rect& corners);
 
 	Viewport * current_viewportp()const;
-        fim::string cmd(const std::vector<fim::string> &args);
+        fim::string fcmd_cmd(const std::vector<fim::string> &args);
 	bool recursive_redisplay()const;	//exception safe
 	bool recursive_display()const;		//exception safe
 
@@ -253,10 +255,10 @@ class Window
 	void draw()const;
 #endif
 
-	int height()const;
-	int width()const;
-	int xorigin()const;
-	int yorigin()const;
+	fim_coo_t height()const;
+	fim_coo_t width()const;
+	fim_coo_t xorigin()const;
+	fim_coo_t yorigin()const;
 	~Window();
 };
 

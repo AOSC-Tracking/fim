@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-07-05 23:12:29 +0200 (Tue, 05 Jul 2011) $ */
 /*
  SDLDevice.h : sdllib device Fim driver header file
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,66 +29,78 @@ class SDLDevice:public DisplayDevice
 {
 	private:
 
-	SDL_Surface *screen;
-	SDL_Event event;
-	const SDL_VideoInfo* vi;
+	SDL_Surface *screen_;
+	SDL_Event event_;
+	const SDL_VideoInfo* vi_;
+	SDL_VideoInfo bvi_;
 
-	int keypress ;
-	int h;
+	int keypress_ ;
+	int h_;
 
-	int current_w;
-	int current_h;
-	int Bpp,bpp;
+	int current_w_;
+	int current_h_;
+	int Bpp_,bpp_;
+	fim::string opts_;
+	bool want_windowed_;
+	bool want_mouse_display_;
+	bool want_resize_;
 
 	public:
 
-	SDLDevice(MiniConsole & mc_);
-
-	int  display(
-		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
-		//void* rgb,// destination gray array and source rgb array
-		int iroff,int icoff, // row and column offset of the first input pixel
-		int irows,int icols,// rows and columns in the input image
-		int icskip,	// input columns to skip for each line
-		int oroff,int ocoff,// row and column offset of the first output pixel
-		int orows,int ocols,// rows and columns to draw in output buffer
-		int ocskip,// output columns to skip for each line
-		int flags// some flags
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+	SDLDevice(MiniConsole & mc_,
+#else
+	SDLDevice(
+#endif
+			fim::string opts
 		);
 
-	int initialize(key_bindings_t &key_bindings);
+	virtual fim_err_t  display(
+		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
+		//void* rgb,// destination gray array and source rgb array
+		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
+		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
+		fim_coo_t icskip,	// input columns to skip for each line
+		fim_coo_t oroff,fim_coo_t ocoff,// row and column offset of the first output pixel
+		fim_coo_t orows,fim_coo_t ocols,// rows and columns to draw in output buffer
+		fim_coo_t ocskip,// output columns to skip for each line
+		fim_flags_t flags// some flags
+		);
+
+	int initialize(sym_keys_t &sym_keys);
 	void finalize() ;
 
 	int get_chars_per_line() ;
 	int get_chars_per_column();
-	int txt_width() ;
-	int txt_height() ;
 	int width();
 	int height();
-	int status_line(const unsigned char *msg);
-	void status_screen(int desc,int draw_output){ return ; }
-	int handle_console_switch(){return 0;}
-	int clear_rect_(
-		void* dst,
-		int oroff,int ocoff,
-		int orows,int ocols,
-		int ocskip);
-	int clear_rect(int x1, int x2, int y1,int y2);
-
-
-	/* TEMPORARY */
-	inline void setpixel(SDL_Surface *screen, int x, int y, Uint8 r, Uint8 g, Uint8 b);
-
-	int get_input(unsigned int * c);
-	int catchInteractiveCommand(int seconds);
-	
+	fim_err_t status_line(const fim_char_t *msg);
+	fim_bool_t handle_console_switch(){return false;}
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
+	int get_input(fim_key_t * c, bool want_poll=false);
+	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
-	int fs_puts(struct fs_font *f, unsigned int x, unsigned int y, const unsigned char *str);
-	int fill_rect(int x1, int x2, int y1,int y2, int color);
+	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 	void flush();
 	void lock();
 	void unlock();
-	int get_bpp(){return bpp; };
+	fim_bpp_t get_bpp(){return bpp_; };
+	bool sdl_window_update();
+	private:
+	int clear_rect_( void* dst, int oroff,int ocoff, int orows,int ocols, int ocskip);
+	/* TEMPORARY */
+	inline void setpixel(SDL_Surface *screen_, int x, int y, Uint8 r, Uint8 g, Uint8 b);
+	void status_screen_(int desc,int draw_output){ return ; }
+	int fill_rect(int x1, int x2, int y1,int y2, int color);
+	int txt_width() ;
+	int txt_height() ;
+	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
+	private:
+	bool allowed_resolution(fim_coo_t w, fim_coo_t h);
+	virtual fim_err_t reinit(const fim_char_t *rs);
+	fim_err_t parse_optstring(const fim_char_t *os);
+	virtual fim_err_t set_wm_caption(const fim_char_t *msg);
+	fim_err_t reset_wm_caption();
 };
 
 

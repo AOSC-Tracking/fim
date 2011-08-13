@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,9 +26,11 @@
 #include <stdio.h>
 
 #include <stdlib.h>
+#include <unistd.h>	/* 20110709 now calling flex --nounistd; this way we have to include it by ourselves; this is good because we overcome the C++ isatty redeclaration from within lex.yy.cc, which often does not match that of unistd.h regarding the thrown exceptions   */ 
 #include "lex.h"
 #include "yacc.tab.hpp"
 #include "common.h"
+#include "fim.h"	/* fim_calloc, ... */
 void yyerror(const char *);
 #if 0
 /* we use %option noyywrap now ! */
@@ -41,10 +43,10 @@ int yywrap (){return 1;}
 #endif
 #endif
 
-int pipedesc[2];
+int fim_pipedesc[2];
 /*#define YY_INPUT(buf,result,max_size) \
 { \
-	int r=read(pipedesc[0],buf,1); \
+	int r=read(fim_pipedesc[0],buf,1); \
 	printf("letti in input : %d\n",r); \
 	result = (buf[0]==EOF||r<1)?YY_NULL:1; \
 	return; \
@@ -52,10 +54,10 @@ int pipedesc[2];
 
 #define YY_INPUT(buf,result,max_size) \
 { \
-	int r=read(pipedesc[0],buf,1); \
+	int r=read(fim_pipedesc[0],buf,1); \
 	result = (buf[0]==EOF||r<1)?EOB_ACT_END_OF_FILE:EOB_ACT_CONTINUE_SCAN; \
 	result = (buf[0]==EOF||r<1)?0:1; \
-	if(result<=0) {close(pipedesc[0]);close(pipedesc[1]);} \
+	if(result<=0) {close(fim_pipedesc[0]);close(fim_pipedesc[1]);} \
 	if(r==0)number_to_move == YY_MORE_ADJ; \
 }
 
@@ -64,7 +66,7 @@ int pipedesc[2];
 #define astrcpy(dst,src) \
 { \
 	if((src)==NULL)yyerror("null pointer given!\n"); \
-	if(((dst)=(char*)calloc(1+strlen(src),1))==NULL) \
+	if(((dst)=(char*)fim_calloc(1+strlen(src),1))==NULL) \
 		yyerror("out of memory\n"); \
 	strcpy((dst),(src)); \
 }
@@ -158,12 +160,12 @@ STRINGC_DQ {STRINGC}|\'
 
 "'"{DIGIT}+"."{DIGIT}*"'" {
 	yylval.fValue = fim_atof(yytext+1);
-	return FLOAT;
+	return QUOTED_FLOAT;
 	}
 
 "\""{DIGIT}+"."{DIGIT}*"\"" {
 	yylval.fValue = fim_atof(yytext+1);
-	return FLOAT;
+	return QUOTED_FLOAT;
 	}
 
 \'((\\\')|[^\'])*\' {
@@ -209,7 +211,12 @@ STRINGC_DQ {STRINGC}|\'
 
 ^"/".+  {  
 	astrcpy(yylval.sValue,yytext+1);;
-	return REGEXP;
+	return SLASH_AND_REGEXP;
+	}
+
+{DIGIT}+"."{DIGIT}* {
+	yylval.fValue = fim_atof(yytext+0);
+	return UNQUOTED_FLOAT;
 	}
 
 [ \t]+ { /* we ignore whitespace */ ; }

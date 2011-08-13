@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-13 13:02:06 +0200 (Mon, 13 Jun 2011) $ */
 /*
  Var.h : Var class header file
 
@@ -44,7 +44,7 @@ class Var
 	union
 	{
 		float f;
-		int i;
+		fim_int i;
 	};
 	fim::string s;
 	public:
@@ -249,7 +249,7 @@ class Var
 		return (type==v.getType()) && (i==v.getInt());
 	}*/
 	static fim::string var_help_db_query(const fim::string &id);
-	static fim::string get_variables_reference();
+	static fim::string get_variables_reference(FimDocRefMode refmode);
 	static void var_help_db_init();
 };
 
