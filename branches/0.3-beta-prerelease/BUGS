@@ -1,4 +1,4 @@
-$Id$
+$LastChangedDate: 2011-08-11 23:28:41 +0200 (Thu, 11 Aug 2011) $
 
 ==== BUG REPORTING
 
@@ -18,7 +18,9 @@ When submitting a bug report, please follow the following rules:
    ( make ; make report ) 2>&1 | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
   and send me the created .tgz file
  - please give me information about the exact way you experienced the problem
- - please give me information about the resolution you are running on
+ - please give me information about the resolution/video mode you are working with;
+   from the bash shell, execute the following and send me the output:
+   ( for f in  /sys/class/graphics/fb0/* ; do echo $f ; cat $f ; done )
  - please send me the config.log file, too (especially if it is a build bug).
    it is of vital importance!
    (the config.log file is created by the configure script when you run the ./configure script)
@@ -54,10 +56,24 @@ with a '@' and _Baz_ with a '.'.
 
    In windowed aalib setups (that is, when running aalib under X spawns in a separate window), fim is completely unusable.
 
+
+20110603	Window splitting is temporarily disabled.
+
 ==== MINOR ISSUES
 
+20110712	in sdl (x11) mode, when fim is spawned in a non-terminal environment, the readline mode does not work in the proper way. detecting this situation may be helpful to disable the readline mode at all in these cases, until a readline-centric fix is found.  
+20091208	if fim is configured to take input from piped xfig (as xfig-3.2.5b), it could be - passively - subject to
+		xfig's buffer overflow on files like:
+ 0 1 2 3
+ 4
+ 1 2 3 4 5 6 7 ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+		( see http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=559274
+		  and http://bugs.debian.org/cgi-bin/bugreport.cgi?msg=5;filename=xfig_poc.f;att=1;bug=559274)
+		As long as xfig (fig2dev) is accessed through the popen() system call, there will be no harm to fim from xfig crash.
+20091015	In 16 bit graphics mode, some lines which should be white actually look blue (seems not fim' fault; happens on both on ARM and x86)
+20091013	fim -i < file.pdf # does not work
+20091009	fim does not support 1,2,4 bit modes
 20090601	under X11, some aalib implementations open a window. well, this breaks readline functionality, when fim is run via aalib under X11 in such an implementation.
-20090404	the aalib key binding is not complete and may not be fully portable
 20090328	problems with --std=c++98 in legacy src/FbiStuffJpeg.cpp code (now commented)
 20070919	while command suffers from being not interruptible in some cases (when the image is small and not 'panable')
 20070912	Debugging it with the framebuffer under gdb hangs the console (even with -p).
@@ -79,6 +95,10 @@ with a '@' and _Baz_ with a '.'.
 		  and force you to make tricks to get back the terminal (like typing blindly through consoles,
 		  or trying to get to some X instance via ALT-F7-like sequences, or even restart the computer),
 		  and blind typing could be dangerous, if you do now know what you are doing!
+
+==== OUTSTANDING FIXED ISSUES
+
+20110602	fim versions before svn version r373 segfault in 32 bit framebuffer mode, on 64 bit builds
 
 ==== FIXED FBI/FBGS ORIGINATING BUGS
 

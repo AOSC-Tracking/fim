@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  FbiStuffLoader.cpp : fbi functions for loading files, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -37,7 +37,7 @@
 namespace fim
 {
 
-void load_bits_lsb(unsigned char *dst, unsigned char *src, int width,
+void load_bits_lsb(fim_byte_t *dst, fim_byte_t *src, int width,
 		   int on, int off)
 {
     int i,mask,bit;
@@ -52,7 +52,7 @@ void load_bits_lsb(unsigned char *dst, unsigned char *src, int width,
     }
 }
 
-void load_bits_msb(unsigned char *dst, unsigned char *src, int width,
+void load_bits_msb(fim_byte_t *dst, fim_byte_t *src, int width,
 		   int on, int off)
 {
     int i,mask,bit;
@@ -67,7 +67,7 @@ void load_bits_msb(unsigned char *dst, unsigned char *src, int width,
     }
 }
 
-void load_gray(unsigned char *dst, unsigned char *src, int width)
+void load_gray(fim_byte_t *dst, fim_byte_t *src, int width)
 {
     int i;
 
@@ -80,7 +80,7 @@ void load_gray(unsigned char *dst, unsigned char *src, int width)
     }
 }
 
-void load_graya(unsigned char *dst, unsigned char *src, int width)
+void load_graya(fim_byte_t *dst, fim_byte_t *src, int width)
 {
     int i;
 
@@ -93,7 +93,7 @@ void load_graya(unsigned char *dst, unsigned char *src, int width)
     }
 }
 
-void load_rgba(unsigned char *dst, unsigned char *src, int width)
+void load_rgba(fim_byte_t *dst, fim_byte_t *src, int width)
 {
     int i;
 
@@ -116,15 +116,17 @@ int load_add_extra(struct ida_image_info *info, enum ida_extype type,
     extra = (struct ida_extra*)malloc(sizeof(*extra));
     if (NULL == extra)
 	return -1;
+    if(type==EXTRA_COMMENT) ++size;// dez's
     memset(extra,0,sizeof(*extra));
     extra->data = (unsigned char*)malloc(size);
     if (NULL == extra->data) {
-	free(extra);
+	fim_free(extra);
 	return -1;
     }
     extra->type = type;
     extra->size = size;
     memcpy(extra->data,data,size);
+    if(type==EXTRA_COMMENT) extra->data[size-1]='\0';// dez's
     extra->next = info->extra;
     info->extra = extra;
     return 0;
@@ -147,8 +149,8 @@ int load_free_extras(struct ida_image_info *info)
 
     while (NULL != info->extra) {
 	next = info->extra->next;
-	free(info->extra->data);
-	free(info->extra);
+	fim_free(info->extra->data);
+	fim_free(info->extra);
 	info->extra = next;
     }
     return 0;
@@ -159,13 +161,13 @@ int load_free_extras(struct ida_image_info *info)
 FIM_LIST_HEAD(loaders);
 FIM_LIST_HEAD(writers);
 
-void load_register(struct ida_loader *loader)
+void fim_load_register(struct ida_loader *loader)
 {
     list_add_tail(&loader->list, &loaders);
 }
 
 #ifdef USE_X11
-void write_register(struct ida_writer *writer)
+void fim_write_register(struct ida_writer *writer)
 {
     list_add_tail(&writer->list, &writers);
 }

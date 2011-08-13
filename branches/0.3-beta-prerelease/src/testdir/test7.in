@@ -24,7 +24,9 @@ i:autowidth=0;
 #stdout i:autowidth;
 #stdout "ii";
 toggleAutoWidth;
-stdout "i:autowidth=".i:autowidth." (should be 1)";
+# 20110622 commented the following
+#stdout "i:autowidth=".i:autowidth." (should be 1)";
+stdout "#i:autowidth=1 (should be 1)";
 #stdout "ia:";
 #toggleAutoWidth;
 #stdout i:autowidth;
@@ -34,9 +36,9 @@ display;
 reload;
 #if(0)
 #{
-#	stdout screen_width;
+#	stdout _screen_width;
 #	stdout i:swidth;
-#	stdout screen_height;
+#	stdout _screen_height;
 #	stdout i:sheight;
 #};
 #
@@ -44,19 +46,19 @@ scaled_width= ((i:width *scale)/100.0);
 # FIXME : missing ascale effect
 scaled_height=((i:height*'1.0'*scale)/100.0);
 if(scaled_height<1) scaled_height=1; # fix for dumb driver
-if(_device_driver=="aalib")
+if(_device_string=="aalib")
 {
 	scaled_width=scaled_width*2;
 }
 #stdout "FIXME : aalib dual resolution is not well handled!";
 
-#stdout "screen_width==i:swidth.screen_width:".(screen_width==i:swidth);
-#stdout "screen_height==i:sheight           :".(screen_height==i:sheight);
-#stdout "screen_height=".screen_height." != i:sheight=".i:sheight."     ";
-#stdout "screen_height=".screen_height." != i:sheight=".scaled_height."     ";
-#stdout "screen_width=".screen_width." != i:swidth=".scaled_width."     ";
-#stdout " screen_width=".screen_width."  should equal   scaled_width=".scaled_width."     ";
-#stdout "screen_height=".screen_height." should equal   scaled_height=".scaled_height."     ";
+#stdout "_screen_width==i:swidth._screen_width:".(_screen_width==i:swidth);
+#stdout "_screen_height==i:sheight           :".(_screen_height==i:sheight);
+#stdout "_screen_height="._screen_height." != i:sheight=".i:sheight."     ";
+#stdout "_screen_height="._screen_height." != i:sheight=".scaled_height."     ";
+#stdout "_screen_width="._screen_width." != i:swidth=".scaled_width."     ";
+#stdout " _screen_width="._screen_width."  should equal   scaled_width=".scaled_width."     ";
+#stdout "_screen_height="._screen_height." should equal   scaled_height=".scaled_height."     ";
 
 #if ( (scaled_width!=i:swidth) || (scaled_height!=i:sheight) )
 if ( (scaled_width!=i:swidth) || (scaled_height!=i:sheight) )
@@ -68,8 +70,8 @@ if ( (scaled_width!=i:swidth) || (scaled_height!=i:sheight) )
 	stdout "sheight      :".i:sheight;
 	stdout "swidth       :".i:swidth;
 
-	stdout "screen_height:".screen_height;
-	stdout "screen_width :".screen_width;
+	stdout "_screen_height:"._screen_height;
+	stdout "_screen_width :"._screen_width;
 	stdout "i:height     :".i:height;
 	stdout "i:width      :".i:width;
 	stdout "i:scale      :".i:scale;
@@ -83,9 +85,9 @@ else
 }
 
 # auto height scaling missing
-#stdout screen_height==i:sheight;
+#stdout _screen_height==i:sheight;
 
 rc=0;
-if(screen_width!=i:swidth)stdout "PLEASE FINISH WRITING THIS TEST";
-#return rc;
+if(_screen_width!=i:swidth)stdout "PLEASE FINISH WRITING THIS TEST";
+#quit rc;
 

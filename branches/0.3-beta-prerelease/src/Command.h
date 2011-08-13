@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  Command.h : Fim Command class header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,15 +27,15 @@ namespace fim
 class Command
 {
 	public:
-	fim::string cmd,
-		    help ;
-	Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),browserf(bf),browser(b),type(0) { type=BrowserT;}
-	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
+	fim::string cmd_,
+		    help_ ;
+	Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(0) { type=BrowserT;}
+	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
 #ifdef FIM_WINDOWS
-	Command(fim::string cmd,fim::string help,Window *w=NULL,fim::string(Window::*cf)(const std::vector<fim::string>&)=NULL) :cmd(cmd),help(help),windowf(cf),window(w),type(0) { type=WindowT;}
+	Command(fim::string cmd,fim::string help,Window *w=NULL,fim::string(Window::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
 #endif
 
-	fim::string getHelp()const{return help;}
+	fim::string getHelp()const{return help_;}
 	private:
 	enum
 	{
@@ -59,7 +59,7 @@ class Command
 		Window *window;
 #endif
 	};
-	int type;
+	fim_cmd_type_t type;
 
 	public:
 	
@@ -72,17 +72,17 @@ class Command
 		 */
 		assert(browser && browserf);
 
-		//std::cerr <<  "about to execute '"<<cmd.c_str();for(int i=0;i<args.size();++i)std::cerr << " " << args[i].c_str(); std::cerr << "'\n";
+		//std::cerr <<  "about to execute '"<<cmd_.c_str();for(int i=0;i<args.size();++i)std::cerr << " " << args[i].c_str(); std::cerr << "'\n";
 /*		if(!browser || !browserf)
 		{
-			//std::cout << cmd.c_str() << " : "<< "\n";
+			//std::cout << cmd_.c_str() << " : "<< "\n";
 			return fim::string("problems executing command..");
 		}else*/
 		return (browser->*browserf)(args);
 	}
 
-	bool operator < (Command c)const{return cmd< c.cmd;}
-	bool operator <=(Command c)const{return cmd<=c.cmd;}
+	bool operator < (Command c)const{return cmd_< c.cmd_;}
+	bool operator <=(Command c)const{return cmd_<=c.cmd_;}
 };
 }
 #endif

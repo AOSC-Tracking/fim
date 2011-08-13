@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-12 14:40:05 +0200 (Sun, 12 Jun 2011) $ */
 /*
  fim_stream.h : Textual output facility
 
@@ -28,12 +28,14 @@ namespace fim
 	 *
 	 * TODO: error and to file dump. maybe, some day.
 	 *	 move here the console handling functionalities.
+	 * TODO: introduce an enum for output selection
 	 * */
 
 	class fim_stream
 	{
+		int fd_;
 		public:
-		fim_stream(){}
+		fim_stream(int fd=-1);
 
 		fim_stream& operator<<(const  char* s);
 

@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-29 16:19:20 +0200 (Wed, 29 Jun 2011) $ */
 /*
  FbiStuffPs.cpp : fim functions for decoding PS files
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -43,6 +43,7 @@ extern "C"
 
 namespace fim
 {
+extern CommandConsole cc;
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -59,20 +60,21 @@ struct ps_state_t {
 
 
 /* ---------------------------------------------------------------------- */
-
+#define FIM_SPECTRE_DEFAULT_DPI 72
 static void*
 ps_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-	double scale = 1.5;
+	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
+	prd=prd<1?FIM_RENDERING_DPI:prd;
+	double scale = 1.0* (((double)prd)/((double)FIM_SPECTRE_DEFAULT_DPI)) ;
 	double rcscale = scale;
-
 	struct ps_state_t * ds=NULL;
 
 	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
 	if(fp) fclose(fp);
 
-	ds = (struct ps_state_t*)calloc(sizeof(struct ps_state_t),1);
+	ds = (struct ps_state_t*)fim_calloc(sizeof(struct ps_state_t),1);
 
 	if(!ds)
 		return NULL;
@@ -97,7 +99,7 @@ ps_init(FILE *fp, char *filename, unsigned int page,
 	if(!ds->src)
 		goto err;
 
-	i->dpi    = 1.0*72; /* FIXME */
+	i->dpi    = FIM_SPECTRE_DEFAULT_DPI; /* FIXME */
 
 	spectre_render_context_set_scale(ds->src,scale,scale);
 	spectre_render_context_set_rotation(ds->src,0);
@@ -137,12 +139,12 @@ err:
 	if(ds->sd )spectre_document_free(ds->sd);
 	if(ds->sp )spectre_page_free(ds->sp);
 	if(ds->src)spectre_render_context_free(ds->src);
-	if(ds)free(ds);
+	if(ds)fim_free(ds);
 	return NULL;
 }
 
 static void
-ps_read(unsigned char *dst, unsigned int line, void *data)
+ps_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     	struct ps_state_t *ds = (struct ps_state_t*)data;
 	if(!ds)return;
@@ -169,7 +171,7 @@ ps_read(unsigned char *dst, unsigned int line, void *data)
 			dst[ds->w*i*3+3*j+1]=page_data[ds->row_stride*i+4*j+1];
 			dst[ds->w*i*3+3*j+2]=page_data[ds->row_stride*i+4*j+2];
 		}
-	free(page_data);
+	fim_free(page_data);
 }
 
 static void
@@ -182,25 +184,25 @@ ps_done(void *data)
 	if(ds->sp )spectre_page_free(ds->sp);
 	if(ds->src)spectre_render_context_free(ds->src);
 
-	free(ds);
+	fim_free(ds);
 }
 
 /*
 0000000: 2521 5053 2d41 646f 6265 2d33 2e30 0a25  %!PS-Adobe-3.0.%
 */
 static struct ida_loader ps_loader = {
-    magic: "%!PS-",// FIXME : are sure this is enough ?
-    moff:  0,
-    mlen:  5,
-    name:  "libspectre",
-    init:  ps_init,
-    read:  ps_read,
-    done:  ps_done,
+    /*magic:*/ "%!PS-",// FI/*XME :*/ are sure this is enough ?
+    /*moff:*/  0,
+    /*mlen:*/  5,
+    /*name:*/  "libspectre",
+    /*init:*/  ps_init,
+    /*read:*/  ps_read,
+    /*done:*/  ps_done,
 };
 
 static void __init init_rd(void)
 {
-    load_register(&ps_loader);
+    fim_load_register(&ps_loader);
 }
 
 }

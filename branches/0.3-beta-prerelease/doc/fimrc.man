@@ -1,0 +1,1107 @@
+.\"
+.\" $Id$
+.\"
+.TH fimrc 5 "(c) 2011-2011 Michele Martone"
+.SH NAME
+fimrc - \fB fim \fP configuration file and language reference
+
+.SH SYNOPSIS
+.B ~/.fimrc
+.fi
+.B /etc/fimrc
+.fi
+.B fim --script-from-stdin [ {options} ] < {scriptfile}
+.fi
+.B fim --execute-script {scriptfile} [ {options} ]
+.fi
+.B fim --execute-commands {commands} [ {options} ]
+.fi
+.B fim --final-commands {commands} [ {options} ]
+.fi
+.B fim --write-scriptout {scriptfile} [ {options} ]  
+.fi
+.B fim --write-scriptout /dev/stdout [ {options} ]
+.fi
+
+.SH DESCRIPTION
+This page explains the 
+.B fim
+language, which is used for the 
+.B fimrc
+configuration files, {scriptfile}s, or {commands} passed via command line {options}.
+This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the ":" key (or rather, the key code specified by the "_console_key" variable).
+One may exit from command line mode by pressing the Enter key on an empty line (a non empty command line would be submitted for execution), or the Esc key  (only in SDL mode).
+The general form of a fim command/program is shown in the next section.
+
+
+.SH FIM LANGUAGE GRAMMAR
+This section specifies the grammar of the 
+.B fim
+language.
+
+Language elements surrounded by a single quote ("'") are literals.
+
+Warning: at the present state, this grammar has conflicts. A future release shall fix them.
+
+  program:
+         | statement_list
+
+  statement_list: statement
+                | statement ';' statement_list
+                | non_atomic_statements_block statement_list
+                | statements_block
+
+  non_atomic_statements_block: '{' statement_list '}'
+                             | INTEGER '{' statement_list '}'
+                             | conditional_statement
+
+  statements_block: atomic_statements_block
+                  | non_atomic_statements_block
+
+  conditional_statement: if_statement
+                       | loop_statement
+
+  if_statement: 'if' '(' expression ')' statements_block
+              | 'if' '(' expression ')' statements_block 'else' statements_block
+
+  loop_statement: 'while' '(' expression ')' statements_block
+                | 'do' statements_block 'while' '(' expression ')'
+
+  atomic_statements_block: statement ';'
+                         | statement ';' ';'
+                         | statement ';' ';' ';'
+
+  statement: '!' arguments
+           | INTEGER IDENTIFIER
+           | SLASH_AND_REGEXP
+           | '+' UNQUOTED_FLOAT '%'
+           | '+' QUOTED_FLOAT '%'
+           | '+' INTEGER '%'
+           | '*' UNQUOTED_FLOAT
+           | '*' QUOTED_FLOAT
+           | '*' INTEGER
+           | UNQUOTED_FLOAT '%'
+           | QUOTED_FLOAT '%'
+           | INTEGER '%'
+           | '-' UNQUOTED_FLOAT '%'
+           | '-' QUOTED_FLOAT '%'
+           | '-' INTEGER '%'
+           | INTEGER
+           | IDENTIFIER
+           | IDENTIFIER FILE_PATH
+           | IDENTIFIER arguments
+           | INTEGER IDENTIFIER arguments
+           | IDENTIFIER '=' expression
+
+  arguments: expression
+           | expression arguments
+
+  expression: '(' expression ')'
+            | expression '.' expression
+            | '!' expression
+            | expression '%' expression
+            | expression '+' expression
+            | expression '-' expression
+            | expression '*' expression
+            | expression '/' expression
+            | expression '<' expression
+            | expression '>' expression
+            | expression '||' expression
+            | expression '&&' expression
+            | expression '>=' expression
+            | expression '<=' expression
+            | expression '!=' expression
+            | expression '==' expression
+            | expression '=~' expression
+            | '-' expression
+            | IDENTIFIER
+            | INTEGER
+            | QUOTED_FLOAT
+            | UNQUOTED_FLOAT
+            | STRING
+
+A STRING can be either a single quoted string or a double quoted string.
+A FLOAT is a floating point number.
+A QUOTED_FLOAT is a floating point number, either single ("'") or double (""") quoted.
+An INTEGER shall be an unsigned integer number.
+An IDENTIFIER shall be one of the valid fim commands (see 
+.B COMMANDS REFERENCE
+) or a valid alias.
+A VARIABLE shall be an already declared or undeclared variable identifier (see 
+.B VARIABLES REFERENCE
+) or a valid alias, created using the 
+.B alias
+command.
+The "=~" operator treats the right expression as a STRING, and uses is as a regular expression for matching purposes.
+The SLASH_AND_REGEXP is a slash ("/") followed by a STRING, interpreted as a regular expression.
+See regex(1) for regular expression syntax.
+
+The way some one-line statements are evaluated:
+
+.nf
+:{number}       jump to {number}^th image in the list
+:^	        jump to first image in the list
+:$	        jump to last image in the list
+:*{factor}      scale the image by {factor}
+:{scale}%       scale the image to the desired {scale}
+:+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
+:-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
+
+/{regexp}		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
+/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
+/png		 a shortcut for /.*png.*
+
+!{syscmd}		executes the {syscmd} quoted string as a "/bin/sh" shell command
+
+
+.SH COMMANDS REFERENCE
+
+.B
+alias
+.fi
+alias [{identifier} [{commands} [{description}]]]
+.fi
+
+.B
+align
+.fi
+align bottom : align to the lower side the current image; align top : align to the upper side the current image; 
+.fi
+
+.B
+autocmd
+.fi
+autocmd {event} {pattern} {commands} : manipulate auto commands
+.fi
+
+.B
+autocmd_del
+.fi
+autocmd_del : manipulate auto commands. usage: autocmd_del {event} {pattern} {commands}
+.fi
+
+.B
+basename
+.fi
+basename {filename} : returns the basename of {filename}
+.fi
+
+.B
+bind
+.fi
+bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.; binding is dynamical, so you can rebind keys even during program's execution
+.fi
+
+.B
+cd
+.fi
+cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last ":cd {path}" command)
+.fi
+
+.B
+clear
+.fi
+clear : clear the virtual console
+.fi
+
+.B
+commands
+.fi
+commands : display the existing commands
+.fi
+
+.B
+display
+.fi
+display ['reinit' {string}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the --output-device command line switch for allowed values of {string};
+.fi
+
+.B
+redisplay
+.fi
+redisplay : re-display the current file contents
+.fi
+
+.B
+dump_key_codes
+.fi
+dump_key_codes : dump the active key codes (unescaped, for inspection)
+.fi
+
+.B
+echo
+.fi
+echo {args}: print the {args} on console
+.fi
+
+.B
+exec
+.fi
+exec {filename(s)} : execute script {filename(s)}
+.fi
+
+.B
+getenv
+.fi
+getenv {identifier} : display the value of the {identifier} environment variable
+.fi
+
+.B
+goto
+.fi
+goto {['+'|'-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern
+.fi
+
+.B
+help
+.fi
+help [{identifier}] : provide online help, if {identifier} is some variable, alias, or command identifier
+.fi
+
+.B
+if
+.fi
+if(expression){action;}['else'{action;}]
+.fi
+
+.B
+else
+.fi
+if(expression){action;}['else'{action;}]
+.fi
+
+.B
+eval
+.fi
+eval {args} : evaluate {args} as commands, executing them
+.fi
+
+.B
+info
+.fi
+info : display information about the current file
+.fi
+
+.B
+list
+.fi
+list : display the files list; list random_shuffle: randomly shuffle the file list; list reverse: reverse the file list; list sort: sort the file list; list pop : pop the last file from the files list; list remove [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; push {filename(s)} : push {filename(s)} to the back of the files list; list filesnum : display the number of files in the files list; list mark : mark the current file for stdout printing at exit; list unmark : unmark the current file, preventing from stdout printing at exit; list pushdir {dirname} : will push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression \.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.JPEG$|\.JFIF$|\.PPM$ 
+.fi
+
+.B
+load
+.fi
+load : load the image, if not yet loaded
+.fi
+
+.B
+reload
+.fi
+reload [{arg}] : load the image into memory; if {arg} is present, will force reloading, bypassing the cache
+.fi
+
+.B
+negate
+.fi
+negate : negate the displayed image colors
+.fi
+
+.B
+pan
+.fi
+pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
+.fi
+
+.B
+popen
+.fi
+popen {syscmd} : pipe a command, invoking popen(): spawns a shell, invoking {syscmd} and executing as fim commands the output of {syscmd}
+.fi
+
+.B
+pread
+.fi
+pread {args} : execute {args} as a shell command and read the output as an image file (using popen)
+.fi
+
+.B
+pwd
+.fi
+pwd : print the current directory name, and updates the _pwd variable
+.fi
+
+.B
+prefetch
+.fi
+prefetch : prefetch two nearby image files, for a faster subsequent opening
+.fi
+
+.B
+quit
+.fi
+quit [{number}] : terminate the program; if specified {number}, will use it as the program return code
+.fi
+
+.B
+recording
+.fi
+recording 'start' : start recording the executed commands; recording 'stop' : stop  recording the executed commands; recording 'dump' : dump in the console the record buffer; recording 'execute' : execute the record buffer; recording 'repeat_last' : repeat the last performed action; 
+.fi
+
+.B
+rotate
+.fi
+rotate {number}: rotate the image the specified amount of degrees [undocumented]
+.fi
+
+.B
+scale
+.fi
+scale {['+'|'-']{value}['%']|'w'|'h'|'a'|'b'|'++'|'+-'|'+*'|'+/'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; 
+.fi
+
+.B
+scrolldown
+.fi
+scrolldown : scroll down the image, going next if at bottom
+.fi
+
+.B
+scrollforward
+.fi
+scrollforward : scroll the image as it were reading it
+.fi
+
+.B
+set
+.fi
+set: returns a list of variables which are set; set {identifier}: returns the value of variable {identifier}; set {identifier} {commands}: sets variable {identifier} to value {commands}; 
+.fi
+
+.B
+set_commandline_mode
+.fi
+set_commandline_mode : set console mode
+.fi
+
+.B
+set_interactive_mode
+.fi
+set_interactive_mode : set interactive mode
+.fi
+
+.B
+sleep
+.fi
+sleep [{number}=1] : sleep for the specified (default 1) number of seconds
+.fi
+
+.B
+status
+.fi
+status : set the status line to the collation of the given arguments
+.fi
+
+.B
+stdout
+.fi
+stdout {args} : writes to stdout its arguments {args}
+.fi
+
+.B
+system
+.fi
+system {syscmd}: get the output of the shell command {syscmd}. (uses popen())
+.fi
+
+.B
+variables
+.fi
+variables : display the existing variables
+.fi
+
+.B
+unalias
+.fi
+unalias {identifier} | '-a' : delete the alias {identifier} or all aliases (use '-a', not -a)
+.fi
+
+.B
+unbind
+.fi
+unbind {keysym} : unbind the action associated to a specified {keysym}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.
+.fi
+
+.B
+while
+.fi
+while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key
+.fi
+
+.B
+window
+.fi
+window {args} : manipulates the window system windows; each value of {args} shall be one of ['split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap']
+.fi
+
+.SH AUTOCOMMANDS REFERENCE
+Available autocommands are: PostScale, PreScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PostReload, PreReload, PostLoad, PreLoad, PostGoto, PreGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PreExecutionCycleArgs, PostExecutionCycle, PreWindow, PostWindow,  and they are triggered on actions as indicated by their name.
+.SH VARIABLES REFERENCE
+If undeclared, a variable will evaluate to 0.
+
+There are multiple namespaces in which variables may exist: current image, browser, window, viewport, global. A namespace is specified by a prefix, which is one of: 'i:', 'b:', 'w:', 'v:', 'g:', which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''.
+
+In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
+
+.B
+_TERM
+[internal,out] the environment TERM variable
+.fi
+.B
+_autocmd_trace_stack
+[internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)
+.fi
+.B
+_autoflip
+[internal,in] if 1, will flip images by default
+.fi
+.B
+_automirror
+[internal,in] if 1, will mirror images by default
+.fi
+.B
+_autonegate
+[internal,in] if 1, will negate images by default
+.fi
+.B
+_autotop
+[internal,in] if 1, will align to the top freshly loaded images
+.fi
+.B
+_cache_status
+[internal,out] string with current information on cache status
+.fi
+.B
+_cached_images
+[internal,out] the number of images currently cached
+.fi
+.B
+_command_expansion
+[internal,in] if 1, will enable autocompletion (on execution) of alias and command strings
+.fi
+.B
+_comment
+[internal,out] the image comment, extracted from the image file (if any)
+.fi
+.B
+_console_buffer_free
+[internal,out] amount of unused memory in the output console buffer
+.fi
+.B
+_console_buffer_total
+[internal,out] amount of memory allocated for the output console buffer
+.fi
+.B
+_console_buffer_used
+[internal,out] amount of used memory in the output console buffer
+.fi
+.B
+_console_key
+[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding
+.fi
+.B
+_console_lines
+[internal,out] the number of buffered output console text lines
+.fi
+.B
+_console_offset
+[internal,in,out] position of the text beginning in the output console, expressed in lines
+.fi
+.B
+_debug_commands
+[internal,in] print out each command before its execution (for debugging purposes)
+.fi
+.B
+_device_string
+[internal,out] the current display device string
+.fi
+.B
+_display_as_binary
+[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual
+.fi
+.B
+_display_busy
+[internal,in] if 1, will display a message on the status bar when processing
+.fi
+.B
+_display_console
+[internal,in] if 1, will display the output console
+.fi
+.B
+_display_status
+[internal,in] if 1, will display the status bar
+.fi
+.B
+_display_status_bar
+[internal,in] if 1, will display the status bar
+.fi
+.B
+_do_sanity_check
+[internal,in,experimental] if 1, will execute a sanity check on startup
+.fi
+.B
+_fileindex
+[internal,out] the current image numeric index
+.fi
+.B
+_filelistlen
+[internal,out] the length of the current image list
+.fi
+.B
+_filename
+[internal,out] the current file name string
+.fi
+.B
+_fim_bpp
+[internal,out] the bits per pixel count
+.fi
+.B
+_fim_default_config_file_contents
+[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)
+.fi
+.B
+_fim_default_grammar_file_contents
+[internal,out] the contents of the default (hardcoded) grammar file
+.fi
+.B
+_fim_scriptout_file
+[internal,in] the name of the file to write to when recording sessions
+.fi
+.B
+_fim_version
+[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions.
+.fi
+.B
+_hsteps
+[internal,in] the default steps, in pixels, when panning images horizontally (overrides steps)
+.fi
+.B
+_ignorecase
+[internal,in] if 1, will allow for case insensitive regexp-based searches
+.fi
+.B
+_inhibit_display
+[internal] if 1, will inhibit display
+.fi
+.B
+_last_system_output
+[internal,out,experimental] the standard output of the last call to the system command
+.fi
+.B
+_load_default_etc_fimrc
+[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file
+.fi
+.B
+_load_fim_history
+[internal,in] if 1 on startup, will load the ~/fim_history file on startup
+.fi
+.B
+_lwidth
+[internal,in] if>0, will force the output console text width
+.fi
+.B
+_magnify_factor
+[internal,in] the image scale multiplier used when magnifying images size
+.fi
+.B
+_max_cached_images
+[internal,in] the maximum number of images allowed in the cache
+.fi
+.B
+_max_cached_memory
+[internal,in] the maximum amount of memory allowed for the cache
+.fi
+.B
+_max_iterated_commands
+[internal,experimental] the iteration limit for N in "N[commandname]" iterated command invocations
+.fi
+.B
+_no_default_configuration
+[internal,in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. 
+.fi
+.B
+_no_external_loader_programs
+[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file
+.fi
+.B
+_no_rc_file
+[internal,in] if 1, the ~/.fimrc file will not be loaded at startup
+.fi
+.B
+_open_offset
+[internal,in,optional] offset (specified in bytes) used when opening a file 
+.fi
+.B
+_orientation
+[internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" will do the same thing: rotate the image one time by 90'.
+.fi
+.B
+_preferred_rendering_dpi
+[internal,in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) 
+.fi
+.B
+_preferred_rendering_width
+[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) 
+.fi
+.B
+_push_pushes_dirs
+[internal,in] if 1, the push command will also accept and push directories (using pushdir)
+.fi
+.B
+_pushdir_re
+[internal,in] regular expression to match against when pushing files from a directory
+.fi
+.B
+_pwd
+[internal,out] the current working directory; will be updated at startup and whenever the working directory changes
+.fi
+.B
+_reduce_factor
+[internal,in] the image scale multiplier used when reducing images size
+.fi
+.B
+_rows
+[internal,in] if >0, will set the number of displayed text lines in the console
+.fi
+.B
+_save_fim_history
+[internal,in] if 1 on exit, will save the ~/fim_history file on exit
+.fi
+.B
+_scale_factor_delta
+[internal,in] value used for incrementing/decrementing the scaling factors
+.fi
+.B
+_scale_factor_multiplier
+[internal,in] value used for scaling up/down the scaling factors
+.fi
+.B
+_scale_style
+[internal,in] if non empty, this string will be fed to the scale command
+.fi
+.B
+_screen_height
+[internal,out] the screen height
+.fi
+.B
+_screen_width
+[internal,out] the screen width
+.fi
+.B
+_seek_magic
+[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
+.fi
+.B
+_status_line
+[internal,in] if 1, will display the status bar
+.fi
+.B
+_steps
+[internal,in] the default steps, in pixels, when panning images
+.fi
+.B
+_sys_rc_file
+[internal,in] string with the global configuration file name
+.fi
+.B
+_verbose_errors
+[internal,in] if 1, will display on stdout internal errors, while parsing commands
+.fi
+.B
+_verbose_keys
+[internal,in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode
+.fi
+.B
+_vsteps
+[internal,in] the default steps, in pixels, when panning images vertically (overrides steps)
+.fi
+.B
+_want_autocenter
+[internal,in] if 1, the image will be displayed centered 
+.fi
+.B
+_want_caption_status
+[internal,experimental] if not 0, and if supported by the display device, will show the status (or command) line in the window manager caption
+.fi
+.B
+_want_prefetch
+[internal,in] if 1, will prefetch further files just after display of the first file
+.fi
+.B
+_want_sleep_seconds
+[internal,in] number of seconds of sleep during slideshow mode
+.fi
+.B
+angle
+[internal,in,out] a floating point number specifying the rotation angle, in degrees
+.fi
+.B
+ascale
+[internal,in,out] the asymmetric scaling of the current image
+.fi
+.B
+flipped
+[internal,out] 1, if the image is flipped
+.fi
+.B
+fresh
+[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution
+.fi
+.B
+height
+[internal,out] the current image original height
+.fi
+.B
+mirrored
+[internal,out] 1, if the image is mirrored 
+.fi
+.B
+negated
+[internal,out] 1, if the image is negated
+.fi
+.B
+page
+[internal,out,experimental] the current page
+.fi
+.B
+pagecount
+[internal,out,experimental] the page count for a given image
+.fi
+.B
+random
+[internal,out] a pseudorandom number
+.fi
+.B
+scale
+[internal,in] the scale of the current image
+.fi
+.B
+sheight
+[internal,out] the current image scaled height
+.fi
+.B
+swidth
+[internal,out] the current image scaled width
+.fi
+.B
+width
+[internal,out] the current image original width
+.fi
+.SH USAGE EXAMPLES
+.nf
+# jump to the third image:
+3;
+# jump to first image:
+^;
+# jump to last image:
+$;
+# magnify the image two times:
+*2;
+# scale the image to the 30% of the original:
+30%;
+# scale the image up by 30%:
++30%;
+# scale the image down by 30%:
+-30%;
+# jump to the next image whose filename matches the ".*jpg" regular expression:
+/.*jpg;
+# executes the "date" system command
+!"date";
+
+.SH CONFIGURATION EXAMPLES
+This is the default configuration, as contained in the _fim_default_config_file_contents variable.
+
+.nf
+# $LastChangedDate: 2011-08-11 23:57:22 +0200 (Thu, 11 Aug 2011) $
+# Contents of the default 'fimrc' file, hardcoded in the fim executable.
+# Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
+# Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
+# Lines begining with a pound (#) are ignored by fim (they are treated as comments).
+#
+# Internal variables.
+# Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
+# It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
+if(_debug_commands==''){_debug_commands=0;}
+if(_command_expansion==''){_command_expansion=1;}
+if(_display_status==''){_display_status=0;}
+if(_max_cached_images==''){_max_cached_images=5;}
+if(_max_cached_memory==''){_max_cached_memory=80000000;}
+if(_max_iterated_commands==''){_max_iterated_commands=100;}
+if(_want_prefetch==''){_want_prefetch=1;}
+if(_no_external_loader_programs==''){_no_external_loader_programs=0;}
+if(_scale_style==''){_scale_style='b';}
+if(_save_fim_history==''){_save_fim_history=1;}
+if(_load_fim_history==''){_load_fim_history=1;}
+if(_verbose_keys==''){_verbose_keys=0;}
+if(_display_busy==''){_display_busy=1;}
+if(_ignorecase==''){_ignorecase=1;}
+if(_console_offset==''){_console_offset=0;}
+if(_console_key==''){_console_key=58;}
+if(_display_as_binary==''){_display_as_binary=0;}
+if(_want_caption_status==''){_want_caption_status=0;}
+if(ascale==''){ascale="1.0";}
+
+#
+# External variables (not used internally).
+if(allow_round_scroll==''){allow_round_scroll=0;}
+if(console_scroll_n==''){console_scroll_n=3;}
+#
+alias "toggleautoflip" "_autoflip=1-_autoflip;" "";
+alias "toggleautonegate" "_autonegate=1-_autonegate;" "";
+alias "toggleflip" "i:flipped=1-i:flipped;" "";
+alias "flip" "toggleflip;redisplay;" "flip the current image along the horizontal axis";
+alias "fliponce" "flip;toggleflip;" "";
+alias "toggleautomirror" "_automirror=1-_automirror;" "";
+alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
+alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
+alias "mirroronce" "mirror;togglemirror;" "";
+# Warning : binding to C-s, C-z and C-c won't make effect, as these
+# codes are catched by the console driver and will have no effect in fim.
+# Moreover, C-z will crash fim and C-c will terminate it.
+# Some other combinations (e.g.:C-l) may have similar problems in your console.
+bind 'f' "flip;";
+bind 'F' "fliponce;";
+bind 'm' "mirror;";
+bind 'M' "mirroronce;";
+bind 'q' "quit";
+bind 'Esc' "quit";
+#bind 'n' "next_file;";
+#bind 'n' "next;";
+bind 'C-h' "help";
+bind '?' "help";
+bind '=' "scale '100%'";
+#bind 'p' "prev_file;";
+#bind 'P' "list 'pop'";
+#bind 's' "list 'sort'";
+bind 's' "scrollforward";
+bind 'C-s' "swap;redisplay;";
+bind 'S' "toggleDisplayStatus";
+bind 'I' "toggleautonegate";
+#bind 'R' "reload";
+#bind 'R' "redisplay";
+#bind 'r' "rotate90";
+#bind 'R' "rotate10;display;";
+#bind 'r' "rotate10_ccw;display;";
+bind 'r' "reload;";
+#bind 'C-d' "display";
+bind '+' "magnify";
+#bind 'C-+' "angle=angle+10.0;display;";
+bind 'a' "scale 'a';";
+bind 'Tab' "toggleVerbosity";
+bind 'C-k' "_want_caption_status=1-_want_caption_status;status ' '";
+bind 'v' "toggleDisplayStatus";
+bind 'A' "A";
+bind 'C-m' "list 'mark'";
+bind 'u' "list 'unmark'";
+bind 'Enter' "list 'mark';next";
+bind '-' "reduce";
+bind "Up" "pan_up";
+bind 'k' "pan_up";
+#bind 'C-k' "pan_up";
+bind "Right" "pan_right";
+bind 'l' "pan_right";
+bind "Down" "pan_down";
+bind 'j' "pan_down";
+bind "Left" "pan_left";
+bind 'h' "pan_left";
+bind ' ' "scrolldown";
+bind 't' "align 'top';";
+bind 'C-g' "system 'fbgrab fim.png'";
+bind 'C-r' "recording 'start';";
+bind 'Q' "recording 'stop'";
+bind 'D' "recording 'dump';";
+bind 'E' "recording 'execute';";
+bind 'C-e' "recording 'execute';";
+bind 'C-x' "recording 'execute';";
+bind '.' "recording 'repeat_last';";
+alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;" "";
+alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
+#
+# autocommands are essential to Fim's automated behaviour
+# examples:
+#autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n';";
+#autocmd "PostDisplay" ".*png" "echo 'this is a png file';";
+#autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file';";
+#autocmd "PostDisplay" ".*gif" "echo 'this is a gif file';";
+#autocmd "PostDisplay" "" "echo '\\nthis is a file\\n'";
+#autocmd "PostGoto"   "" "set_interactive_mode;";
+autocmd "PostGoto" "" "reload;";
+#autocmd "PostGoto" "" "load;";
+#autocmd "PostDisplay"   "" "i:fresh=1" ;
+#autocmd "PreWindow"   "" "";
+autocmd "PostWindow"   "" "display;";
+autocmd "PreRedisplay"   "" "i:_will_display=1;";
+autocmd "PreRedisplay"   "" "if(_scale_style!='' && i:fresh){i:fresh=0;scale _scale_style ;i:fresh=0;}";
+autocmd "PostRedisplay" ""   "i:_will_display=0;";
+# Display device specific config
+alias "aalib_fix_do" "{if(aascale==''){ascale='2.0';}else{ascale=aascale;} i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "See aalib_fix.";
+alias "aalib_fix" "if(_device_string=='aa'){aalib_fix_do;scale 'a';}" "When using the aalib (ascii art) library we face a problem: glyph proportions are seldom square (as pixels are), and are tricky to detect; for this reason, we need to reshape the image with respect to the font ratio, but we have to make a guess in the scaling factor to compensate. If at runtime a better value is known for the terminal font height/with ratio, it may be fed in the 'aascale' variable for an accurate scaling.";
+#alias "exif_fix" "i:_orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
+#autocmd "PostReload"   "" "aalib_fix;exif_fix;";
+#autocmd "PostLoad"   "" "aalib_fix;exif_fix;";
+autocmd "PostReload"   "" "aalib_fix;";
+autocmd "PostLoad"   "" "aalib_fix;";
+bind "F11" "if(_device_string=='sdl' && !_fullscreen){_old_sw=_screen_width;_old_sh=_screen_height;display 'reinit' 'MW0:0';_fullscreen=1;}else if(_device_string=='sdl' && _old_sw*_old_sh*_fullscreen){display 'reinit' 'rwm'._old_sw.':'._old_sh;_fullscreen=0;}";
+
+autocmd "PostReload"  "" "i:fresh=1" ;
+autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
+#autocmd "PostScale"   "" "{i:fresh=1;display;}" ;
+autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
+autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
+autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
+autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";
+autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}";
+
+alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 10 images";
+bind 'N' 'next10';
+bind 'P' 'prev10';
+bind 'C-n' "goto '+//'";
+alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
+alias "bookview"          "while(1){display;sleep '2';scrolldown;};" "";
+alias "comicview"         "while(1){display;sleep '1';scrolldown;};" "";
+alias "read"              "while(1){display;sleep '1';scrollforward;};" "";
+alias "slowread"          "while(1){display;sleep '2';scrollforward;};" "";
+alias "fastread"          "while(1){display;scrollforward;};" "";
+alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow;" "";
+bind  "C-p" "pornview";
+bind  "C-b" "bookview";
+autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0;" ;
+autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
+#autocmd "PreExecutionCycle" "" "redisplay;";
+autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
+#autocmd "PostInteractiveCommand" "" "i:fresh=0;";
+#autocmd "PostInteractiveCommand" "" "prefetch;";
+bind '*' "scale '100%'";
+bind 'w' "scale 'w'";
+bind '<' "rotate10_ccw;display;";
+bind '>' "rotate10;display;";
+bind '_' "_scale_style='';scale '100%';";
+bind ',' "_display_console=1;echo _last_system_output;";
+bind 'C-a' "if(_scale_style!='a'){_scale_style='a';scale 'a';}else{_scale_style='';scale '100%';}";
+#bind 'h' "scale 'h'";
+#
+alias "pan_nw" "pan 'nw';" "pans the image to the upper left";
+alias "pan_ne" "pan 'ne';" "pans the image to the upper right";
+alias "pan_se" "pan 'se';" "pans the image to the lower left";
+alias "pan_sw" "pan 'sw';" "pans the image to the lower right";
+alias "pan_down" "pan 'down';" "pans the image down";
+alias "pan_up" "pan 'up';" "pans the image up";
+alias "pan_left" "pan 'left';" "pans the image left";
+alias "pan_right" "pan 'right';" "pans the image right";
+#
+alias "diagonal_nw" "pan_nw;" "pans the image to the upper left";
+alias "diagonal_ne" "pan_ne;" "pans the image to the upper right";
+alias "diagonal_se" "pan_se;" "pans the image to the lower left";
+alias "diagonal_sw" "pan_sw;" "pans the image to the lower right";
+bind 'd' "diagonal_nw;";
+bind 'D' "diagonal_se;";
+bind 'x' "diagonal_ne;";
+bind 'X' "diagonal_sw;";
+alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
+alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
+alias "sort" "list 'sort'" "sorts the files list ordered";
+#toggleVerbosity;
+#bind 'f' "next;display;";
+#bind 'b' "prev;display;";
+bind 'o' "sort";
+bind 'b' "prev;";
+bind 'B' "toggleDisplayBusy";
+alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
+alias "rotate90_ccw" "i:_orientation=i:_orientation+1;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90_cw"  "i:_orientation=i:_orientation+3;i:fresh=1;i:i:fresh=1;redisplay;" "";
+alias "rotate90" "rotate90_cw;display;" "";
+alias "rotate10"     "rotate  '10';display;" "";
+alias "rotate10_ccw" "rotate -10;display;" "";
+
+# window related aliases and commands
+alias "wu" "window 'up'" "selects the window upwards the current";
+alias "wd" "window 'down'" "selects the window under the current";
+alias "wl" "window 'left'" "selects the window at left of the current";
+alias "wr" "window 'right'" "selects the window at right of the current";
+bind 'K' "wu";
+# Note : on many consoles C-j is by default equivalent to Enter.. so this may not work :)
+#bind 'C-j' "wd";
+bind 'J' "wd";
+bind 'H' "wl";
+bind 'L' "wr";
+alias "split" "window 'split'" "split the current window horizontally";
+alias "vsplit" "window 'vsplit'" "split the current window vertically";
+alias "swap" "window 'swap'" "swap the enclosing window subwindows";
+alias "ws " "window 'swap'" "see swap";
+bind 'T' "split;redisplay;";
+#don't use C-s : it will be usually catched by the console driver, and fim won't get it!
+#bind 'C-s' "split;";
+bind 'V' "vsplit;redisplay;";
+bind 'U' "swap;redisplay;";
+alias 'venlarge' 'window "venlarge"' "";
+alias 'henlarge' 'window "henlarge"' "";
+alias 'wnormalize' 'window "normalize"' "";
+alias 'wclose' 'window "close"' "";
+alias 'wc' 'window "close"' "closes the current window";
+bind  'C' "wc;redisplay;";
+alias 'cache' 'echo _cache_status;' "displays cached images status";
+bind 'c' 'cache;';
+alias 'widen'  'i:ascale=i:ascale*"1.1";*1.0;' "widen the current image";
+alias 'narrow' 'i:ascale=i:ascale/"1.1";*1.0;' "narrow the current image";
+alias 'contract' 'narrow';
+bind  'y' "widen" "widens horizontally the image";
+bind  'Y' "narrow" "shrinks horizontally the image";
+#alias 'scu'   'scroll_console_up;'   "";
+#alias 'scd'   'scroll_console_down;' "";
+#alias 'console_scroll_up'   'if(_console_offset<_console_lines){_console_offset=_console_offset+1;}';
+#alias 'console_scroll_down' 'if(_console_offset>0){_console_offset=_console_offset-1;}';
+alias 'console_scroll_up' 'if(_console_offset<_console_lines+console_scroll_n-_rows){_console_offset=_console_offset+console_scroll_n;}';
+alias 'console_scroll_down' 'if(allow_round_scroll || (_console_offset>=console_scroll_n)){_console_offset=_console_offset-console_scroll_n;}';
+alias 'console_scroll_reset' '{_console_offset=0;}';
+alias 'scu'   'console_scroll_up;'   "";
+alias 'scd'   'console_scroll_down;' "";
+alias 'scz'   'console_scroll_reset;' "";
+bind "PageUp" "if(_display_console==0){prev_file;}else{scu;}";
+bind "PageDown" "if(_display_console==0){next_file;}else{scd;}";
+bind "Home" "0;";
+bind "End" "$;";
+bind "Backspace" "prev";
+_display_status=1;
+echo "WELCOME : to switch to the command line interface press ':' ";
+# Some more examples:
+#alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
+#alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
+#alias "musicplay"  "system 'mpc play'" "";
+#alias "musicpause" "system 'mpc pause'" "";
+#alias "rdjpgcom" 'system "rdjpgcom" i:_filename';
+# offsetscan usage : need a mechanism for popping all images before.
+#alias "offsetscan" "while(i:width<1){list 'push' offimage;_open_offset=_open_offset+1;reload;}";
+#alias "offsetscan" "while(i:width<1){list 'push' '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
+#alias "webcam" "pread 'vgrabbj -d /dev/video0';";
+#alias "webcam_cycle" "while(1){webcam;reload;sleep 1;};";
+#This is a FIM initialization file. 
+#Without one of these FIM is nothing.
+#So feel free to modify it, but with caution! 
+
+.SH NOTES
+This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.
+The conditions for autocommands triggering are not specified as they should.
+A formal description of the various one-line commands, as well a more extensive example list is needed.
+Many of the listed variables are only valid within a namespace, and this shall be documented clearly.
+.SH BUGS
+The
+.B fim
+language has a number of problems that shall be first documented, then fixed.
+.SH SEE ALSO
+fim(1), regex(1).
+.SH AUTHOR
+Michele Martone <dezperado _CUT_ autistici _CUT_ org>
+.SH COPYRIGHT
+See fim(1).
+
+

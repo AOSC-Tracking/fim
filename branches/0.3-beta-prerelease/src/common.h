@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-20 18:09:12 +0200 (Mon, 20 Jun 2011) $ */
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #define FIM_COMMON_H
 #undef yyFlexLexer
 #include <FlexLexer.h>
-extern int pipedesc[2];
+extern int fim_pipedesc[2];
 
 extern FlexLexer *lexer;
 //#define YYLEX lexer->yylex()
@@ -32,7 +32,13 @@ namespace fim
 	class string;
 }
 
+int fim_isspace(int c);
+int fim_isquote(int c);
 
+fim::string fim_dirname(const fim::string & arg);
+fim::string fim_shell_arg_escape(const fim::string & arg);
+void fim_perror(const char *s);
+size_t fim_strlen(const char *str);
 void trec(char *str,const char *f,const char*t);
 void trhex(char *str);
 void chomp(char *s);
@@ -49,8 +55,10 @@ char* slurp_binary_FD(FILE* fd,int *rs);
 void append_to_file(fim::string filename, fim::string lines);
 
 char * dupstr (const char* s);
-char * dupnstr (double n);
+char * dupnstr (float n, const char c='\0');
+char * dupnstr (const char c1, double n, const char c2='\0');
 char * dupnstr (int n);
+char * dupsqstr (const char* s);
 int fim_rand();
 
 bool regexp_match(const char*s, const char*r, int ignorecase=1, int ignorenewlines=0);
@@ -66,6 +74,9 @@ const char * fim_getenv(const char * name);
 FILE * fim_fread_tmpfile(FILE * fp);
 double fim_atof(const char *nptr);
 ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream);
+
+bool is_dir(const fim::string nf);
+bool is_file(const fim::string nf);
 
 /* exceptions */
 typedef int FimException;

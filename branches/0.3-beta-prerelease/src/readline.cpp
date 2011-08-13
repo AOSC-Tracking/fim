@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-07-12 11:14:07 +0200 (Tue, 12 Jul 2011) $ */
 /*
  readline.cpp : Code dealing with the GNU readline library.
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,17 +25,32 @@
 #include "readline.h"
 #endif
 #ifdef FIM_USE_READLINE
+#include "fim.h"
 
 #define min(x,y) ((x)<(y)?(x):(y))
 #define max(x,y) ((x)>(y)?(x):(y))
+
+#define FIM_COMPLETE_ONLY_IF_QUOTED  1
+#define FIM_COMPLETE_INSERTING_DOUBLE_QUOTE  0
+#define FIM_WANT_RL_KEY_DUMPOUT 0
 
 /*
  * This file is severely messed up :).
  * */
 
+static int fim_rl_pc=FIM_SYM_CHAR_NUL;
+
 namespace fim
 {
 	extern CommandConsole cc;
+char * fim_readline(const char *prompt)
+{
+	char * rc=NULL;
+	fim_rl_pc=FIM_SYM_CHAR_NUL;
+	rc=readline(prompt);
+	fim_rl_pc=FIM_SYM_CHAR_NUL;
+	return rc;
+}
 }
 
 /*
@@ -43,8 +58,43 @@ namespace fim
  * */
 extern fim::string g_fim_output_device;
 
+/* Generator function for command completion.  STATE lets us
+ *    know whether to start from scratch; without any state
+ *       (i.e. STATE == 0), then we start at the top of the list. */
+static char * command_generator (const char *text,int state)
+{
+//	static int list_index, len;
+//	char *name;
+	/* If this is a new word to complete, initialize now.  This
+	 *      includes saving the length of TEXT for efficiency, and
+	 *	initializing the index variable to 0. 
+	 */
+	return cc.command_generator(text,state,0);
+
+		
+//	if (!state) { list_index = 0; len = strlen (text); }
+
+        /* Return the next name which partially matches from the
+	 * command list.
+	 */
+
+//	while (name = commands[list_index].name)
+//	{ list_index++; if (strncmp (name, text, len) == 0) return (dupstr(name)); }
+	/* If no names matched, then return NULL. */
+//	return ((char *)NULL);
+}
+
+static char * varname_generator (const char *text,int state)
+{
+	return cc.command_generator(text,state,4);
+}
+
+
 namespace rl
 {
+#if FIM_WANT_READLINE_CLEAR_WITH_ESC
+	static int fim_want_rl_cl_with_esc;
+#endif
 /* 
  * Attempt to complete on the contents of TEXT.  START and END
  *     bound the region of rl_line_buffer that contains the word to
@@ -63,7 +113,7 @@ static char ** fim_completion (const char *text, int start,int end)
 		char **__s,*_s;
 		_s=dupstr("");
 		if(! _s)return NULL;
-		__s=(char**)calloc(1,sizeof(char*));
+		__s=(char**)fim_calloc(1,sizeof(char*));
 		if(!__s)return NULL;__s[0]=_s;
 		//we print all of the commands, with no completion, though.
 #endif
@@ -72,12 +122,11 @@ static char ** fim_completion (const char *text, int start,int end)
 		/* this could be set only here :) */
 		return NULL;
 	}
-	
 
-            /* If this word is at the start of the line, then it is a command
-	     *  to complete.  Otherwise it is the name of a file in the current
-	     *  directory.
-	     */
+        /* If this word is at the start of the line, then it is a command
+	*  to complete.  Otherwise it is the name of a file in the current
+	*  directory.
+	*/
         if (start == 0)
 	{
 		//std::cout << "completion for word " << start << "\n";
@@ -85,6 +134,29 @@ static char ** fim_completion (const char *text, int start,int end)
 	}
 	else 
 	{
+		if(start>0 && !fim_isquote(rl_line_buffer[start-1]) )
+		{
+#if FIM_COMPLETE_INSERTING_DOUBLE_QUOTE  
+			// FIXME: this is NEW
+			if(start==end && fim_isspace(rl_line_buffer[start-1]))
+			{
+				char**sp=(char**)malloc(2*sizeof(char*));
+				sp[0]=dupstr("\"");
+				sp[1]=NULL;
+				rl_completion_append_character = '\0';
+				fim::cout << "you can type double quoted string (e.g.: \""FIM_CNS_EXAMPLE_FILENAME"\"), or a variable name (e.g.:"FIM_VID_FILELISTLEN"). some variables need a prefix (one of "FIM_SYM_NAMESPACE_PREFIXES")\n" ;
+				return sp;
+			}
+#endif
+			if(start<end)
+			{
+				matches = rl_completion_matches (text, varname_generator);
+				return matches;
+			}
+#if FIM_COMPLETE_ONLY_IF_QUOTED
+			rl_attempted_completion_over = 1;
+#endif
+		}
 		//std::cout << "sorry, no completion for word " << start << "\n";
 	}
         return (matches);
@@ -95,12 +167,21 @@ static char ** fim_completion (const char *text, int start,int end)
  */
 static void completion_display_matches_hook(char **matches,int num,int max)
 {
+	/* FIXME : fix the oddities of this code */
 	char buffer[256];
 	int w,f,l;w=0;f=sizeof(buffer)-1;l=0;
 	buffer[0]='\0';
 	if(!matches)return;
-	for(int i=0;i<num && matches[i] && f>0;++i)
+#define FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 1
+#if FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 
+	if(num>1)
+		fim::cout << "possible completions for \""<<matches[0]<<"\":\n" ;
+#endif
+	for(int i=/*0*/1;i<num && matches[i] && f>0;++i)
 	{
+#if FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 
+		fim::cout << matches[i] << "\n";
+#endif
 		w=min(strlen(matches[i])+1,(size_t)f);
 		if(f>0){
 		strncpy(buffer+l,matches[i],w);
@@ -137,15 +218,36 @@ static int redisplay_hook_no_fb()
 	return 0;
 }*/
 
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
-int rl_sdl_getc_hook()
+static int fim_post_rl_getc(int c)
 {
-	unsigned int c;
+#if FIM_WANT_READLINE_CLEAR_WITH_ESC
+	if(c==FIM_SYM_ESC && fim_want_rl_cl_with_esc)
+	{
+		if(rl_line_buffer)
+			rl_point=0,
+			rl_line_buffer[0]=FIM_SYM_PROMPT_NUL;
+
+		c=FIM_SYM_ENTER;
+#if FIM_WANT_DOUBLE_ESC_TO_ENTER
+		if(fim_want_rl_cl_with_esc==-1)
+			fim_want_rl_cl_with_esc=0;
+#endif
+	}
+#endif
+	if(FIM_WANT_RL_KEY_DUMPOUT)cout << "got key: " << (int)(c) << " : " << (c==FIM_SYM_ESC)<<"\n";
+	return c;
+}
+
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
+static int fim_rl_sdl_aa_getc_hook()
+{
+	//unsigned int c;
+	fim_key_t c;
 	c=0;
 	
-	if(cc.displaydevice->get_input(&c)==1)
+	if(cc.displaydevice_->get_input(&c,true)==1)
 	{
-
+		c=fim_post_rl_getc(c);
 		if(c&(1<<31))
 		{
 			rl_set_keymap(rl_get_keymap_by_name("emacs-meta"));	/* FIXME : this is a dirty trick : */
@@ -166,14 +268,85 @@ int rl_sdl_getc_hook()
 	return 0;	
 }
 
+//void fim_rl_prep_dummy(int meta_flag){}
+//void fim_rl_deprep_dummy(void){}
 
-int rl_sdl_getc(FILE * fd)
+int fim_rl_sdl_aa_getc(FILE * fd)
 {
 	return 0;/* yes, a dummy function instead of getc() */
 }
 #endif
 
+int fim_rl_getc(FILE * fd)
+{
+	int c=FIM_SYM_CHAR_NUL;
+#if 1
+	c=rl_getc(fd);
+#if FIM_WANT_DOUBLE_ESC_TO_ENTER
+	if(c==FIM_SYM_ESC)
+	{
+		if(fim_rl_pc==c)
+			fim_want_rl_cl_with_esc=-1,
+			fim_rl_pc=c;
+		else
+			fim_rl_pc=c;
+			//c=FIM_SYM_CHAR_NUL;
+	}
+	else
+#endif
+		fim_rl_pc=c;
+#else
+	/* the following code is not complete yet. it needs interpretation of the input sequence */
+	int cc=rl_getc(fd);
+	if(cc==FIM_SYM_ESC)
+	{
+		int tries=0;
+		char cb[4];
+		cb[0]=cb[1]=cb[2]=cb[3]=FIM_SYM_CHAR_NUL;
+		c|=cc;
+		cb[0]=cc;
+		if(FIM_WANT_RL_KEY_DUMPOUT)cout<<"adding: "<<((int)cc)<<"\n";
+		for(tries=1;tries<3;++tries)
+		if((cc=rl_getc(fd))==FIM_SYM_ESC)
+		{
+			ungetc(cc,fd);
+			for(--tries;tries>1;--tries) ungetc(cb[tries],fd);
+			c=cb[0];
+			goto read_ok;
+		}
+		else
+		{
+			if(cc==FIM_SYM_CHAR_NUL)
+			{
+				for(--tries;tries>1;--tries) ungetc(cb[tries],fd);
+				c=cb[0];
+				goto read_ok;
+			}
+			if(FIM_WANT_RL_KEY_DUMPOUT)cout<<"adding: "<<((int)cc)<<"\n";
+			c*=256;
+			c|=cc;
+			cb[tries]=cc;
+			c=*(int*)cb;
+		}
+	}
+	else 
+		c=cc;
+#endif
+read_ok:
+	c=fim_post_rl_getc(c);
+	return c;
+}
 
+int fim_search_rl_startup_hook()
+{
+	const char * hs=cc.browser_.last_regexp_.c_str();
+	if(hs)
+	{
+		rl_replace_line(hs,0);
+		rl_point=strlen(hs);
+	}
+	return 0;
+}
 
 static int redisplay_hook()
 {
@@ -203,7 +376,7 @@ static int redisplay_hook()
 /*
  *	initial setup to set the readline library working
  */
-void initialize_readline (int with_no_display_device)
+void initialize_readline (fim_bool_t with_no_display_device)
 {
 	//FIX ME
 	/* Allow conditional parsing of the ~/.inputrc file. */
@@ -211,6 +384,10 @@ void initialize_readline (int with_no_display_device)
 	/* Tell the completer that we want a crack first. */
 	rl_attempted_completion_function = fim_completion;
 	rl_completion_display_matches_hook=completion_display_matches_hook;
+	rl_erase_empty_line=1; // NEW: 20110630 in sdl mode with no echo disabling, prints newlines, if unset
+#if FIM_WANT_READLINE_CLEAR_WITH_ESC
+	fim_want_rl_cl_with_esc=1;
+#endif
 
 	if(with_no_display_device==0)
 	{
@@ -221,13 +398,16 @@ void initialize_readline (int with_no_display_device)
 	        rl_pre_input_hook=redisplay_hook;
 	}
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
-	if( g_fim_output_device=="sdl" 
-		/* only useful to bypass X11-windowed aalib (but sadly, breaks plain aalib input)  */ 
-		/*|| g_fim_output_device=="aa" */ 
+	//if( g_fim_output_device==FIM_DDN_INN_SDL 
+	if(g_fim_output_device.find(FIM_DDN_INN_SDL)==0
+		/* uncommenting the following may give problems; but commenting it will break X11-backed aalib input ..  */ 
+		|| g_fim_output_device==FIM_DDN_INN_AA
 	)
 	{
-		rl_getc_function=rl_sdl_getc;
-		rl_event_hook   =rl_sdl_getc_hook;
+		rl_getc_function=fim_rl_sdl_aa_getc;
+		rl_event_hook   =fim_rl_sdl_aa_getc_hook;
+//		rl_prep_term_function=fim_rl_prep_dummy;
+//		rl_deprep_term_function=fim_rl_deprep_dummy;
 
 		/*
                  * FIXME : The following hack uses SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT, all -0x100 ..
@@ -241,6 +421,21 @@ void initialize_readline (int with_no_display_device)
  		rl_bind_keyseq("\x14", rl_backward_char);		// left
 	}
 	#endif
+	if(
+			g_fim_output_device.find(FIM_DDN_INN_FB)==0 ||
+			g_fim_output_device.find(FIM_DDN_INN_AA)==0 ||
+			0
+	  )
+#if FIM_WANT_READLINE_CLEAR_WITH_ESC
+	if(
+		       	g_fim_output_device==FIM_DDN_INN_AA
+		       	|| g_fim_output_device==FIM_DDN_INN_FB
+	  )
+	{
+		fim_want_rl_cl_with_esc=0;
+		rl_getc_function=fim_rl_getc;
+	}
+#endif
 	//rl_completion_entry_function=NULL;
 	/*
 	 * to do:
@@ -263,32 +458,6 @@ void initialize_readline (int with_no_display_device)
 	rl_hook_func_t *rl_event_hook=redisplay_hook;
 	rl_hook_func_t *rl_pre_input_hook=redisplay_hook;*/
 	//std::cout << "readline initialized\n";
-}
-
-/* Generator function for command completion.  STATE lets us
- *    know whether to start from scratch; without any state
- *       (i.e. STATE == 0), then we start at the top of the list. */
-char * command_generator (const char *text,int state)
-{
-//	static int list_index, len;
-//	char *name;
-	/* If this is a new word to complete, initialize now.  This
-	 *      includes saving the length of TEXT for efficiency, and
-	 *	initializing the index variable to 0. 
-	 */
-	return cc.command_generator(text,state);
-
-		
-//	if (!state) { list_index = 0; len = strlen (text); }
-
-        /* Return the next name which partially matches from the
-	 * command list.
-	 */
-
-//	while (name = commands[list_index].name)
-//	{ list_index++; if (strncmp (name, text, len) == 0) return (dupstr(name)); }
-	/* If no names matched, then return NULL. */
-//	return ((char *)NULL);
 }
 
 

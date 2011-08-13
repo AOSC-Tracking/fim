@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-07-11 02:14:39 +0200 (Mon, 11 Jul 2011) $ */
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@
 #include "fim.h"
 #include "DisplayDevice.h"
 
-#define FIM_SCALE_FACTOR 1.322	/* move this outta here ! */
-
 namespace fim
 {
 	/*
@@ -44,18 +42,20 @@ class Viewport
 #endif
 {
 	protected:
-	int		steps,top,left,panned ;	/* viewport variables */
-        DisplayDevice* displaydevice;
+	fim_off_t	hsteps_,vsteps_,steps_,top_,left_,panned_ ;	/* viewport variables */
+	fim_bool_t	psteps_;
+        DisplayDevice* displaydevice_;
 
 
-	Image  *image;	// !! 
+	Image  *image_;	// !! 
 #ifdef FIM_WINDOWS
-	Window *window;
+	Window *window_;
 #endif
 
 	CommandConsole &commandConsole;
 	public:
         void reset();
+        void steps_reset();
 #ifdef FIM_WINDOWS
         void reassignWindow(Window *w);
 #endif
@@ -74,29 +74,32 @@ class Viewport
 	void should_redraw()const;
 	public:
 
+#if 0
 	int valid()const;
-
+#endif
 
 	/* viewport methods */
-	void pan_up   (int s=0);
-	void pan_down (int s=0);
-	void pan_right(int s=0);
-	void pan_left (int s=0);
-	int onBottom();
-	int onRight();
-	int onLeft();
-	int onTop();
+	fim::string pan(const args_t &args);
+	fim::string pan(const char*a1, const char*a2);
+	void pan_up   (fim_pan_t s=0);
+	void pan_down (fim_pan_t s=0);
+	void pan_right(fim_pan_t s=0);
+	void pan_left (fim_pan_t s=0);
+	bool onBottom();
+	bool onRight();
+	bool onLeft();
+	bool onTop();
 
-	int xorigin();
-	int yorigin();
+	fim_coo_t xorigin();
+	fim_coo_t yorigin();
 	protected:
 
 //	int redraw;	// there is already an external one!
 	/* viewport methods */
 
 	public:
-	int viewport_width();
-	int viewport_height();
+	fim_coo_t viewport_width();
+	fim_coo_t viewport_height();
 	/* viewport methods */
 	void top_align();
 	void bottom_align();
@@ -115,14 +118,17 @@ class Viewport
         Image* getImage()const;
 
 	void auto_scale();
+	void auto_scale_if_bigger();
 
 	void free();
         bool check_invalid()const;
         bool check_valid()const;
+#if 0
 	int valid();
+#endif
 	bool scrollforward();
-	void scale_position_magnify(float factor=FIM_SCALE_FACTOR );
-	void scale_position_reduce(float factor=FIM_SCALE_FACTOR );
+	void scale_position_magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
+	void scale_position_reduce(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	void recenter_horizontally();
 	void recenter_vertically();
 	void recenter();

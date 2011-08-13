@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-29 16:19:20 +0200 (Wed, 29 Jun 2011) $ */
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -48,11 +48,17 @@
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
 
+#if HAVE_FILENO
+#define FIM_PDF_USE_FILENO 1
+#else
+#define FIM_PDF_USE_FILENO 0
+#endif
 
 /*								*/
 
 namespace fim
 {
+extern CommandConsole cc;
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -120,17 +126,34 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	_[0]='\0';
 	struct pdf_state_t * ds=NULL;
 	int rotation=0,pageNo=page+1;
-	double zoomReal=250.0*2;
+	double zoomReal=100.0;
 	double hDPI;
 	double vDPI;
 	GBool  useMediaBox ;
 	GBool  crop        ;
 	GBool  doLinks     ;
+	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
+	prd=prd<1?FIM_RENDERING_DPI:prd;
+
 	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
 
+#if !FIM_PDF_USE_FILENO
 	if(fp) fclose(fp);
+#else
+	if(fp)
+	{
+		// FIXME: this hack will only work on Linux.
+		static char linkname[64];
+		sprintf(linkname,"/proc/self/fd/%d",fileno(fp));
+		//printf("%s\n",linkname);
+		filename=linkname;
+		if(-1==access(filename,R_OK))
+			return NULL;
+	}
+#endif
 
-	ds = (struct pdf_state_t*)calloc(sizeof(struct pdf_state_t),1);
+
+	ds = (struct pdf_state_t*)fim_calloc(sizeof(struct pdf_state_t),1);
 
 	if(!ds)
 		return NULL;
@@ -168,9 +191,9 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
         if (!ds->od)
 		goto err;
 
-	i->dpi    = 72; /* FIXME */
-	hDPI = (double)i->dpi* zoomReal * 0.01;
-	vDPI = (double)i->dpi* zoomReal * 0.01;
+	i->dpi    = prd;
+	hDPI = (double)i->dpi* (zoomReal * 0.01);
+	vDPI = (double)i->dpi* (zoomReal * 0.01);
 
 	useMediaBox = gFalse;
 	crop        = gTrue;
@@ -180,6 +203,7 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	if(page>=i->npages || page<0)goto err;
 	
 	ds->pd->displayPage(ds->od, pageNo, hDPI, vDPI, rotation, useMediaBox, crop, doLinks, NULL, NULL);
+
 
 	if(!ds->pd) goto err;
 
@@ -196,12 +220,12 @@ err:
 	if(ds->od)	delete ds->od ;
 	if (globalParams)	delete globalParams;
 	globalParams = NULL;
-	if(ds)free(ds);
+	if(ds)fim_free(ds);
 	return NULL;
 }
 
 static void
-pdf_read(unsigned char *dst, unsigned int line, void *data)
+pdf_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     	struct pdf_state_t *ds = (struct pdf_state_t*)data;
 	if(!ds)return;
@@ -224,25 +248,25 @@ pdf_done(void *data)
 	if (globalParams)	delete globalParams;
 	globalParams = NULL;
 
-	free(ds);
+	fim_free(ds);
 }
 
 /*
 0000000: 2550 4446 2d31 2e34 0a25 d0d4 c5d8 0a35  %PDF-1.4.%.....5
 */
 static struct ida_loader pdf_loader = {
-    magic: "%PDF-",// FIXME : are sure this is enough ?
-    moff:  0,
-    mlen:  5,
-    name:  "libpoppler",
-    init:  pdf_init,
-    read:  pdf_read,
-    done:  pdf_done,
+    /*magic:*/ "%PDF-",// FI/*XME :*/ are sure this is enough ?
+    /*moff:*/  0,
+    /*mlen:*/  5,
+    /*name:*/  "libpoppler",
+    /*init:*/  pdf_init,
+    /*read:*/  pdf_read,
+    /*done:*/  pdf_done,
 };
 
 static void __init init_rd(void)
 {
-    load_register(&pdf_loader);
+    fim_load_register(&pdf_loader);
 }
 
 }

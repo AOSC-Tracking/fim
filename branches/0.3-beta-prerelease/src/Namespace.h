@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,9 @@ namespace fim
 		 *
 		 * the identifier->variable binding
 		 */
-		variables_t variables;	//id->var
+		private:
+		variables_t variables_;	//id->var
+		fim_char_t ns_char_; // ns_char_ ':' varname
 	
 		public:
 
@@ -57,12 +59,14 @@ namespace fim
 		int setGlobalVariable(const fim::string& varname,const char*value);
 
 		int getGlobalIntVariable(const fim::string &varname)const;
-		float getGlobalFloatVariable(const fim::string &varname);
-		fim::string getGlobalStringVariable(const fim::string &varname);
+		float getGlobalFloatVariable(const fim::string &varname)const;
+		fim::string getGlobalStringVariable(const fim::string &varname)const;
 		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
+		fim::string get_variables_list()const;
 
-		Namespace():variables(variables_t()) {}
+		Namespace(const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char) {}
 		virtual ~Namespace(){}
+		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
 	};
 }
 

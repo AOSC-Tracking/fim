@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-07-12 10:44:27 +0200 (Tue, 12 Jul 2011) $ */
 /*
  readline.h : Code dealing with the GNU readline library.
 
@@ -25,10 +25,15 @@
 #include <readline/history.h> 	/*	the GNU readline library	*/
 #include <readline/keymaps.h> 	/*	the GNU readline library	*/
 
+namespace fim
+{
+	char * fim_readline(const char *prompt);
+}
+
 namespace rl
 {
 	void initialize_readline ();
-	char * command_generator (const char *text,int state);
+	int fim_search_rl_startup_hook();
 }
 
 #endif

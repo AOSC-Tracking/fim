@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-12 17:16:48 +0200 (Sun, 12 Jun 2011) $ */
 /*
  string.cpp : A reimplementation of string class
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "fim.h"
+
+#define FIM_WANT_DEBUG_REGEXP 0
 
 namespace fim
 {
@@ -386,6 +388,14 @@ namespace fim
 	{
 	}
 
+	string::string(char c)
+	{
+		char buf[2];
+		buf[0]=c;
+		buf[1]='\0';
+		append(buf);
+	}
+
 	string::string(int i)
 	{
 		char buf[FIM_CHARS_FOR_INT];
@@ -478,13 +488,17 @@ namespace fim
 	void string::substitute(const char*r, const char* s, int flags)
 	{
 		/*
-		 * each occurrence of regular expression r will be substituted with t
+		 * each occurrence of regular expression r will be substituted with s
 		 *
 		 * FIXME : return values could be more informative
+		 * FIXME : not efficient
 		 * */
 		regex_t regex;
 		const int nmatch=1;
 		regmatch_t pmatch[nmatch];
+		int off=0,sl=0;
+		std::string rs =FIM_CNS_EMPTY_STRING;
+		int ts=this->size();
 
 		if( !r || !*r || !s )
 			return;
@@ -492,19 +506,29 @@ namespace fim
 		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE | flags ) != 0 )
 			return;
 
-		int off=0;
+		sl=strlen(s);
 		//const int s_len=strlen(s);
-		while(regexec(&regex,off+c_str(),nmatch,pmatch,0)==0)
+		while(regexec(&regex,off+c_str(),nmatch,pmatch,REG_NOTBOL)==0)
 		{
 			/*
 			 * please note that this is not an efficient subsitution implementation.
 			 * */
-			std::string ss = substr(0,pmatch->rm_so);
-			ss+=s;
-			ss+=substr(pmatch->rm_eo,this->size());
-			*this=ss.c_str();
-
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "pasting "<<off<< ":"<<off+pmatch->rm_so<<"\n";
+			if(pmatch->rm_so>0)
+			rs+=substr(off,off+pmatch->rm_so-1);
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "forward to "<<rs<<"\n";
+			rs+=s;
+			//rs+=substr(pmatch->rm_eo,ts);
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "match at "<<c_str() << " from " << off+pmatch->rm_so << " to " << off+pmatch->rm_eo<< ", off="<<off<<"\n";
+			off+=pmatch->rm_eo;
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "forward to "<<rs<<"\n";
 		}
+		if(FIM_WANT_DEBUG_REGEXP)std::cerr << "forward no more\n";
+		if(ts>off)
+			rs+=substr(off,ts);
+		if(FIM_WANT_DEBUG_REGEXP)std::cerr << "res is "<<rs<<", off= "<<off<<"\n";
+		if(rs!=*this)
+			*this=rs.c_str();
 		regfree(&regex);
 		return;
 	}

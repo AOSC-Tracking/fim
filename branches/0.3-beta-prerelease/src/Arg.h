@@ -1,4 +1,4 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-05-23 14:51:20 +0200 (Mon, 23 May 2011) $ */
 /*
  Arg.h : Argument class
 
@@ -26,14 +26,14 @@ namespace fim
 class Arg
 {
 	public:
-	fim::string val;
-	Arg(const fim::string &s):val(s){}
-	Arg(const Arg &arg):val(arg.val){}
-	bool operator==(int i){int v=atoi(val.c_str());return v==i;}
-	bool operator<=(int i){int v=atoi(val.c_str());return v<=i;}
-	bool operator>=(int i){int v=atoi(val.c_str());return v>=i;}
-	bool operator <(int i){int v=atoi(val.c_str());return v <i;}
-	bool operator >(int i){int v=atoi(val.c_str());return v >i;}
+	fim::string val_;
+	Arg(const fim::string &s):val_(s){}
+	Arg(const Arg &arg):val_(arg.val_){}
+	bool operator==(int i){int v=atoi(val_.c_str());return v==i;}
+	bool operator<=(int i){int v=atoi(val_.c_str());return v<=i;}
+	bool operator>=(int i){int v=atoi(val_.c_str());return v>=i;}
+	bool operator <(int i){int v=atoi(val_.c_str());return v <i;}
+	bool operator >(int i){int v=atoi(val_.c_str());return v >i;}
 };
 
 

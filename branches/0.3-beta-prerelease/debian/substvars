@@ -1,1 +1,1 @@
-shlibs:Depends=libc6 (>= 2.7-1), libdjvulibre21 (>= 3.5.20), libgcc1 (>= 1:4.1.1), libgif4 (>= 4.1.6), libjpeg62, libncurses5 (>= 5.6+20071006-3), libpng12-0 (>= 1.2.13-4), libreadline5 (>= 5.2), libspectre1, libstdc++6 (>= 4.2.1), libtiff4
+shlibs:Depends=libc6 (>= 2.7-1), libdjvulibre21 (>= 3.5.20), libgcc1 (>= 1:4.1.1), libgif4 (>= 4.1.6), libjpeg62, libncurses5 (>= 5.6+20071006-3), libpng12-0 (>= 1.2.13-4), libreadline (>= 5.2), libspectre1, libstdc++6 (>= 4.2.1), libtiff4

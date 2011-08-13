@@ -1,8 +1,8 @@
-/* $Id$ */
+/* $LastChangedDate: 2011-06-13 13:02:06 +0200 (Mon, 13 Jun 2011) $ */
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -46,7 +46,7 @@ extern CommandConsole cc;
 
 static void
 op_grayscale(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     unsigned char *scanline;
     int i,g;
@@ -81,17 +81,17 @@ op_3x3_init(struct ida_image *src, struct ida_rect *rect,
     struct op_3x3_parm *args = (struct op_3x3_parm*)parm;
     struct op_3x3_handle *h;
 
-    h = (struct op_3x3_handle*)malloc(sizeof(*h));
+    h = (struct op_3x3_handle*)fim_malloc(sizeof(*h));
     if(!h)goto oops;
     memcpy(&h->filter,args,sizeof(*args));
-    h->linebuf = (int*)malloc(sizeof(int)*3*(src->i.width));
+    h->linebuf = (int*)fim_malloc(sizeof(int)*3*(src->i.width));
     if(!h->linebuf)goto oops;
 
     *i = src->i;
     return h;
 oops:
-    if(h && h->linebuf)free(h->linebuf);
-    if(h)free(h);
+    if(h && h->linebuf)fim_free(h->linebuf);
+    if(h)fim_free(h);
     return NULL;
 }
 
@@ -174,7 +174,7 @@ op_3x3_calc_line(struct ida_image *src, struct ida_rect *rect,
 }
 
 static void
-op_3x3_clip_line(unsigned char *dst, int *src, int left, int right)
+op_3x3_clip_line(fim_byte_t *dst, int *src, int left, int right)
 {
     int i,val;
 
@@ -192,7 +192,7 @@ op_3x3_clip_line(unsigned char *dst, int *src, int left, int right)
 
 static void
 op_3x3_work(struct ida_image *src, struct ida_rect *rect,
-	    unsigned char *dst, int line, void *data)
+	    fim_byte_t *dst, int line, void *data)
 {
     struct op_3x3_handle *h = (struct op_3x3_handle *)data;
     unsigned char *scanline;
@@ -211,8 +211,8 @@ op_3x3_free(void *data)
 {
     struct op_3x3_handle *h = (struct op_3x3_handle *)data;
 
-    free(h->linebuf);
-    free(h);
+    fim_free(h->linebuf);
+    fim_free(h);
 }
 	    
 /* ----------------------------------------------------------------------- */
@@ -229,28 +229,32 @@ op_sharpe_init(struct ida_image *src, struct ida_rect *rect,
     struct op_sharpe_parm *args = (struct op_sharpe_parm *)parm;
     struct op_sharpe_handle *h;
 
-    h = (struct op_sharpe_handle *)calloc(sizeof(*h),1);
+    h = (struct op_sharpe_handle *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     h->factor  = args->factor;
-    h->linebuf = (int *)malloc(sizeof(int)*3*(src->i.width));
+    h->linebuf = (int *)fim_malloc(sizeof(int)*3*(src->i.width));
     if(!h->linebuf)goto oops;
 
     *i = src->i;
     return h;
 oops:
-    if(h && h->linebuf)free(h->linebuf);
-    if(h)free(h);
+    if(h && h->linebuf)fim_free(h->linebuf);
+    if(h)fim_free(h);
     return NULL;
 }
 
 static void
 op_sharpe_work(struct ida_image *src, struct ida_rect *rect,
-	       unsigned char *dst, int line, void *data)
+	       fim_byte_t *dst, int line, void *data)
 {
     static struct op_3x3_parm laplace = {
-	f1: {  1,  1,  1 },
+/*  	f1: {  1,  1,  1 },
 	f2: {  1, -8,  1 },
-	f3: {  1,  1,  1 },
+	f3: {  1,  1,  1 },*/
+  	 {  1,  1,  1 },
+	 {  1, -8,  1 },
+	 {  1,  1,  1 },
+	 0,0,0
     };
     struct op_sharpe_handle *h = (struct op_sharpe_handle *)data;
     unsigned char *scanline;
@@ -272,8 +276,8 @@ op_sharpe_free(void *data)
 {
     struct op_sharpe_handle *h = (struct op_sharpe_handle *)data;
 
-    free(h->linebuf);
-    free(h);
+    fim_free(h->linebuf);
+    fim_free(h);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -291,13 +295,13 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
     struct op_resize_parm *args = (struct op_resize_parm *)parm;
     struct op_resize_state *h;
 
-    h = (struct op_resize_state *)calloc(sizeof(*h),1);
+    h = (struct op_resize_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
     h->width  = args->width;
     h->height = args->height;
     h->xscale = (float)args->width/src->i.width;
     h->yscale = (float)args->height/src->i.height;
-    h->rowbuf = (float*)malloc(src->i.width * 3 * sizeof(float));
+    h->rowbuf = (float*)fim_malloc(src->i.width * 3 * sizeof(float));
     if(!h->rowbuf)goto oops;
     h->srcrow = 0;
     h->inleft = 1;
@@ -308,12 +312,12 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
     i->dpi    = args->dpi;
     return h;
     oops:
-    if(h)free(h);
+    if(h)fim_free(h);
     return NULL;
 }
 
 #if 1
-void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data)
+void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 //#ifndef FIM_WANTS_SLOW_RESIZE	/*uncommenting this triggers failure */
@@ -363,7 +367,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, uns
 }
 
 
-inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
+inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
@@ -457,7 +461,7 @@ inline void op_resize_work_row_expand_i_unrolled(struct ida_image *src, struct i
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
-inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
+inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
@@ -522,7 +526,7 @@ inline void op_resize_work_unrolled4_row_expand(struct ida_image *src, struct id
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
-inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct ida_rect *rect, unsigned char *dst, int line, void *data, int sr)
+inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	unsigned char* srcline=src->data+src->i.width*3*(sr);
@@ -586,7 +590,7 @@ inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct id
 
 static void
 op_resize_work(struct ida_image *src, struct ida_rect *rect,
-	       unsigned char *dst, int line, void *data)
+	       fim_byte_t *dst, int line, void *data)
 {
     struct op_resize_state *h = (struct op_resize_state *)data;
     float outleft,left,weight,d0,d1,d2;
@@ -613,7 +617,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	    h->inleft  = 0;
 	}
 #if 0
-	if (cc.displaydevice->debug)
+	if (cc.displaydevice_->debug_)
 	    FIM_FBI_PRINTF("y:  %6.2f%%: %d/%d => %d/%d\n",
 		    weight*100,h->srcrow,src->height,line,h->height);
 #endif
@@ -726,7 +730,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 		left     = 0;
 	    }
 #if 0
-	    if (cc.displaydevice->debug)
+	    if (cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF(" x: %6.2f%%: %d/%d => %d/%d\n",
 			weight*100,sx,src->width,dx,h->width);
 #endif
@@ -751,8 +755,8 @@ op_resize_done(void *data)
 {
     struct op_resize_state *h = (struct op_resize_state *)data;
 
-    free(h->rowbuf);
-    free(h);
+    fim_free(h->rowbuf);
+    fim_free(h);
 }
     
 /* ----------------------------------------------------------------------- */
@@ -771,7 +775,7 @@ op_rotate_init(struct ida_image *src, struct ida_rect *rect,
     struct op_rotate_state *h;
     float  diag;
 
-    h = (struct op_rotate_state *)malloc(sizeof(*h));
+    h = (struct op_rotate_state *)fim_malloc(sizeof(*h));
     if(!h)return NULL;
     /* dez's : FIXME : NULL check missing */
     h->angle = args->angle * 2 * M_PI / 360;
@@ -839,7 +843,7 @@ unsigned char* op_rotate_getpixel(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_rotate_work(struct ida_image *src, struct ida_rect *rect,
-	       unsigned char *dst, int y, void *data)
+	       fim_byte_t *dst, int y, void *data)
 {
     struct op_rotate_state *h = (struct op_rotate_state *) data;
     unsigned char *pix;
@@ -899,40 +903,40 @@ op_rotate_done(void *data)
 {
     struct op_rotate_state *h = (struct op_rotate_state *)data;
 
-    free(h);
+    fim_free(h);
 }
 
 /* ----------------------------------------------------------------------- */
 
 struct ida_op desc_grayscale = {
-    name:  "grayscale",
-    init:  op_none_init,
-    work:  op_grayscale,
-    done:  op_none_done,
+    /*name:*/  "grayscale",
+    /*init:*/  op_none_init,
+    /*work:*/  op_grayscale,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_3x3 = {
-    name:  "3x3",
-    init:  op_3x3_init,
-    work:  op_3x3_work,
-    done:  op_3x3_free,
+    /*name:*/  "3x3",
+    /*init:*/  op_3x3_init,
+    /*work:*/  op_3x3_work,
+    /*done:*/  op_3x3_free,
 };
 struct ida_op desc_sharpe = {
-    name:  "sharpe",
-    init:  op_sharpe_init,
-    work:  op_sharpe_work,
-    done:  op_sharpe_free,
+    /*name:*/  "sharpe",
+    /*init:*/  op_sharpe_init,
+    /*work:*/  op_sharpe_work,
+    /*done:*/  op_sharpe_free,
 };
 struct ida_op desc_resize = {
-    name:  "resize",
-    init:  op_resize_init,
-    work:  op_resize_work,
-    done:  op_resize_done,
+    /*name:*/  "resize",
+    /*init:*/  op_resize_init,
+    /*work:*/  op_resize_work,
+    /*done:*/  op_resize_done,
 };
 struct ida_op desc_rotate = {
-    name:  "rotate",
-    init:  op_rotate_init,
-    work:  op_rotate_work,
-    done:  op_rotate_done,
+    /*name:*/  "rotate",
+    /*init:*/  op_rotate_init,
+    /*work:*/  op_rotate_work,
+    /*done:*/  op_rotate_done,
 };
 
 // end filter.c
@@ -953,7 +957,7 @@ static char op_none_data_;
 
 static void
 op_flip_vert_(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     char *scanline;
 
@@ -963,7 +967,7 @@ op_flip_vert_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_flip_horz_(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     char *scanline;
     unsigned int i;
@@ -991,7 +995,7 @@ op_rotate_init_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_rotate_cw_(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     char *pix;
     unsigned int i;
@@ -1008,7 +1012,7 @@ op_rotate_cw_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_rotate_ccw_(struct ida_image *src, struct ida_rect *rect,
-	      unsigned char *dst, int line, void *data)
+	      fim_byte_t *dst, int line, void *data)
 {
     char *pix;
     unsigned int i;
@@ -1025,7 +1029,7 @@ op_rotate_ccw_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_invert_(struct ida_image *src, struct ida_rect *rect,
-	  unsigned char *dst, int line, void *data)
+	  fim_byte_t *dst, int line, void *data)
 {
     unsigned char *scanline;
     int i;
@@ -1060,7 +1064,7 @@ op_crop_init_(struct ida_image *src, struct ida_rect *rect,
 
 static void
 op_crop_work_(struct ida_image *src, struct ida_rect *rect,
-	     unsigned char *dst, int line, void *data)
+	     fim_byte_t *dst, int line, void *data)
 {
     unsigned char *scanline;
     int i;
@@ -1081,9 +1085,9 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
 {
 #ifdef FIM_USE_DESIGNATED_INITIALIZERS
     static struct op_3x3_parm filter = {
-	f1: { -1, -1, -1 },
-	f2: { -1,  8, -1 },
-	f3: { -1, -1, -1 },
+	/*f1:*/ { -1, -1, -1 },
+	/*f2:*/ { -1,  8, -1 },
+	/*f3:*/ { -1, -1, -1 },
     };
 #else
     /* I have no quick fix for this ! (m.m.) 
@@ -1091,9 +1095,9 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
      * and are usually tolerated by g++.
      * */
     static struct op_3x3_parm filter = {
-	f1: { -1, -1, -1 },
-	f2: { -1,  8, -1 },
-	f3: { -1, -1, -1 },
+	/*f1:*/ { -1, -1, -1 },
+	/*f2:*/ { -1,  8, -1 },
+	/*f3:*/ { -1, -1, -1 },
     };
 #endif
     struct ida_rect rect;
@@ -1109,7 +1113,7 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
     rect.y2 = src->i.height;
     data = desc_3x3.init(src, &rect, &img.i, &filter);
 
-    img.data   = (unsigned char*)malloc(img.i.width * img.i.height * 3);
+    img.data   = (unsigned char*)fim_malloc(img.i.width * img.i.height * 3);
     if(!img.data)return NULL;
 
     for (y = 0; y < (int)img.i.height; y++)
@@ -1167,8 +1171,8 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
     }
     rect.x2 = x+1;
 
-    free(img.data);
-    if (cc.displaydevice->debug)
+    fim_free(img.data);
+    if (cc.displaydevice_->debug_)
 	FIM_FBI_PRINTF("y: %d-%d/%d  --  x: %d-%d/%d\n",
 		rect.y1, rect.y2, img.i.height,
 		rect.x1, rect.x2, img.i.width);
@@ -1195,51 +1199,51 @@ void* op_none_init(struct ida_image *src,  struct ida_rect *sel,
 }
 
 void  op_none_done(void *data) {}
-void  op_free_done(void *data) { free(data); }
+void  op_free_done(void *data) { fim_free(data); }
 
 /* ----------------------------------------------------------------------- */
 
 struct ida_op desc_flip_vert = {
-    name:  "flip-vert",
-    init:  op_none_init,
-    work:  op_flip_vert_,
-    done:  op_none_done,
+    /*name:*/  "flip-vert",
+    /*init:*/  op_none_init,
+    /*work:*/  op_flip_vert_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_flip_horz = {
-    name:  "flip-horz",
-    init:  op_none_init,
-    work:  op_flip_horz_,
-    done:  op_none_done,
+    /*name:*/  "flip-horz",
+    /*init:*/  op_none_init,
+    /*work:*/  op_flip_horz_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_rotate_cw = {
-    name:  "rotate-cw",
-    init:  op_rotate_init_,
-    work:  op_rotate_cw_,
-    done:  op_none_done,
+    /*name:*/  "rotate-cw",
+    /*init:*/  op_rotate_init_,
+    /*work:*/  op_rotate_cw_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_rotate_ccw = {
-    name:  "rotate-ccw",
-    init:  op_rotate_init_,
-    work:  op_rotate_ccw_,
-    done:  op_none_done,
+    /*name:*/  "rotate-ccw",
+    /*init:*/  op_rotate_init_,
+    /*work:*/  op_rotate_ccw_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_invert = {
-    name:  "invert",
-    init:  op_none_init,
-    work:  op_invert_,
-    done:  op_none_done,
+    /*name:*/  "invert",
+    /*init:*/  op_none_init,
+    /*work:*/  op_invert_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_crop = {
-    name:  "crop",
-    init:  op_crop_init_,
-    work:  op_crop_work_,
-    done:  op_none_done,
+    /*name:*/  "crop",
+    /*init:*/  op_crop_init_,
+    /*work:*/  op_crop_work_,
+    /*done:*/  op_none_done,
 };
 struct ida_op desc_autocrop = {
-    name:  "autocrop",
-    init:  op_autocrop_init_,
-    work:  op_crop_work_,
-    done:  op_none_done,
+    /*name:*/  "autocrop",
+    /*init:*/  op_autocrop_init_,
+    /*work:*/  op_crop_work_,
+    /*done:*/  op_none_done,
 };
 
 // end op.c
@@ -1277,8 +1281,8 @@ extern struct ida_loader bit1_loader ;
 //static void __init init_rd(void)
 /*static void init_rd(void)
 {
-    load_register(&ppm_loader);
-    load_register(&pgm_loader);
+    fim_load_register(&ppm_loader);
+    fim_load_register(&pgm_loader);
 }*/
 
 #ifdef USE_X11
@@ -1298,16 +1302,17 @@ ppm_write(FILE *fp, struct ida_image *img)
 }
 
 static struct ida_writer ppm_writer = {
-    label:  "PPM",
-    ext:    { "ppm", NULL},
-    write:  ppm_write,
+    /*  label:*/  "PPM",
+    /*  ext:*/    { "ppm", NULL},
+    /*  write:*/  ppm_write,
+    /* FIXME : still missing some struct members */
 };
 
 // 20080108 WARNING
 //static void __init init_wr(void)
 static void init_wr(void)
 {
-    write_register(&ppm_writer);
+    fim_write_register(&ppm_writer);
 }
 #endif
 
@@ -1319,8 +1324,8 @@ void FbiStuff::free_image(struct ida_image *img)
 {
     if (img) {
 	if (img->data)
-	    free(img->data);
-	free(img);
+	    fim_free(img->data);
+	fim_free(img);
     }
 }
 
@@ -1340,7 +1345,7 @@ FILE* FbiStuff::fim_execlp(const char *cmd, ...)
 	switch(fork())
 	{
 		case -1:
-		perror("fork");
+		fim_perror("fork");
 		close(p[0]);
 		close(p[1]);
 		return NULL;
@@ -1454,7 +1459,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     /* open file */
     if (NULL == (fp = fopen(filename, "r"))) {
 	//comment by dez, temporary
-	if(cc.displaydevice->debug)
+	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("open %s: %s\n",filename,strerror(errno));
 	return NULL;
     }
@@ -1474,14 +1479,13 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		the user should specify a magix string like:
 		sm="\xFF\xD8\xFF\xE0";
 	*/
-   	if(sm!="")
+   	if(sm!=FIM_CNS_EMPTY_STRING)
 	{
 		read_offset=find_regexp_offset(fp, sm.c_str() , read_offset);
 		if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
 		cc.setVariable(FIM_VID_OPEN_OFFSET ,(int)read_offset);
 	}
 #endif
-
     memset(blk,0,sizeof(blk));
     if((fr=fread(blk,1,sizeof(blk),fp))<0)
     {
@@ -1491,20 +1495,28 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     rewind(fp);
     if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
 
-    if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY)!=0)
+    {
+    fim_int bd=cc.getIntVariable(FIM_VID_BINARY_DISPLAY);
+    if(bd!=0)
     {
         /* a funny feature */
-    	if(cc.getIntVariable(FIM_VID_BINARY_DISPLAY)==1)
+    	if(bd==1)
 		loader = &bit1_loader;
 	else
-		loader = &bit24_loader;
+	{
+    		if(bd==24)
+			loader = &bit24_loader;
+		else
+			;// FIXME: need some error 	
+	}
+    }
     }
     /* pick loader */
 #ifdef FIM_SKIP_KNOWN_FILETYPES
     if (NULL == loader && (*blk==0x42) && (*(unsigned char*)(blk+1)==0x5a))
     {
 	cc.set_status_bar("skipping 'bz2'...", "*");
-	return NULL;
+	goto shall_skip_header;
     }
 /* gz is another ! */
 /*    if (NULL == loader && (*blk==0x30) && (*(unsigned char*)(blk+1)==0x30))
@@ -1517,7 +1529,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
      && NULL == loader && (*(unsigned char*)(blk+2)==0x44) && (*(unsigned char*)(blk+3)==0x46))
     {
 	cc.set_status_bar("skipping 'pdf' (use fimgs for this)...", "*");
-	return NULL;
+	goto shall_skip_header;
     }
 #endif
 #ifndef HAVE_LIBSPECTRE
@@ -1525,7 +1537,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
      && NULL == loader && (*(unsigned char*)(blk+2)==0x50) && (*(unsigned char*)(blk+3)==0x53))
     {
 	cc.set_status_bar("skipping 'ps' (use fimgs for this)...", "*");
-	return NULL;
+	goto shall_skip_header;
     }
 #endif
 #endif
@@ -1538,22 +1550,28 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	    break;
 	loader = NULL;
     }
-     
+    if(loader!=NULL)
+    {
+		goto found_a_loader;
+    }
+    if((loader==NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
+		goto head_not_found;
+
 #ifdef FIM_WITH_LIBPNG 
 #ifdef FIM_TRY_DIA
     if (NULL == loader && (*blk==0x1f) && (*(unsigned char*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
-	cc.set_status_bar("please wait while piping through 'dia'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_DIA"'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
-	cc.set_status_bar("please wait while piping through 'dia'...", "*");
-	if(NULL!=(fp=fim_execlp("dia","dia",filename,"-e",FIM_TMP_FILENAME".png",NULL))&& 0==fclose (fp))
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_DIA"'...", "*");
+	if(NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME".png",NULL))&& 0==fclose (fp))
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
 		/* this could happen in case dia was removed from the system */
-			return NULL;
+			goto shall_skip_header;
 		else
 		{
 			unlink(FIM_TMP_FILENAME".png");
@@ -1566,26 +1584,26 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 #ifdef FIM_TRY_XFIG
     if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))
     {
-	cc.set_status_bar("please wait while piping through 'fig2dev'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_FIG2DEV"'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a xfig file was found, and we try to use fig2dev */
-	if(NULL==(fp=fim_execlp("fig2dev","fig2dev","-L","ppm",filename,NULL)))
-	    return NULL;
+	if(NULL==(fp=fim_execlp(FIM_EPR_FIG2DEV,FIM_EPR_FIG2DEV,"-L","ppm",filename,NULL)))
+		goto shall_skip_header;
 	loader = &ppm_loader;
     }
 #endif
 #ifdef FIM_TRY_XCFTOPNM
     if (NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
     {
-	cc.set_status_bar("please wait while piping through 'xcftopnm'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_XCFTOPNM"'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
-	if(NULL==(fp=fim_execlp("xcftopnm","xcftopnm",filename,NULL)))
-	    return NULL;
+	if(NULL==(fp=fim_execlp(FIM_EPR_XCFTOPNM,FIM_EPR_XCFTOPNM,filename,NULL)))
+		goto shall_skip_header;
 	loader = &ppm_loader;
     }
 #endif
@@ -1601,12 +1619,12 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	/* an svg file was found, and we try to use inkscape with it
 	 * note that braindamaged inkscape doesn't export to stdout ...
 	 * */
-	cc.set_status_bar("please wait while piping through 'inkscape'...", "*");
-	sprintf(command,"inkscape \"%s\" --export-png \"%s\"",
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_INKSCAPE"'...", "*");
+	sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"",
 		filename,FIM_TMP_FILENAME );
 #if 0
 	/* FIXME : the following code should work, but it doesn't */
-	if(NULL!=(fp=fim_execlp("inkscape","inkscape",filename,"--export-png","/dev/stdout",NULL)))
+	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png","/dev/stdout",NULL)))
 	{
 		fp=fim_fread_tmpfile(fp);
 		if(fp==NULL) return NULL;
@@ -1616,10 +1634,10 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		}
 	}
 #else
-	if(NULL!=(fp=fim_execlp("inkscape","inkscape",filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fclose(fp))
+	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fclose(fp))
 	{
 		if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
-			    return NULL;
+			goto shall_skip_header;
 		else
 		{
 			unlink(FIM_TMP_FILENAME);
@@ -1648,20 +1666,21 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 //#endif
 #ifdef FIM_TRY_CONVERT
     if (NULL == loader) {
-	cc.set_status_bar(string("please wait while piping ")+string(filename)+string(" through 'convert'..."), "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" through '"FIM_EPR_CONVERT"'...", "*");
 	/* no loader found, try to use ImageMagick's convert */
-	if(NULL==(fp=fim_execlp("convert","convert",filename,"ppm:-",NULL)))
-		return NULL;
+	if(NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",NULL)))
+		goto shall_skip_header;
 	loader = &ppm_loader;
     }
 #endif
-    /*
-     * no appropriate loader found for this image
-     * */
-    if (NULL == loader) return NULL;
+
+    if (NULL == loader)
+	    goto head_not_found;
+
+found_a_loader:	/* we have a loader */
 
     /* load image */
-    img = (struct ida_image*)calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
+    img = (struct ida_image*)fim_calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
     if(!img)goto errl;
     memset(img,0,sizeof(*img));
 #ifdef FIM_EXPERIMENTAL_ROTATION
@@ -1675,12 +1694,12 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
 #endif
     if (NULL == data) {
-	if(cc.displaydevice->debug)
+	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);
-	return NULL;
+	goto shall_skip_header;
     }
-    img->data = (unsigned char*)malloc(img->i.width * img->i.height * 3);
+    img->data = (unsigned char*)fim_malloc(img->i.width * img->i.height * 3);
     if(!img->data)goto errl;
 #ifndef FIM_IS_SLOWER_THAN_FBI
     for (y = 0; y < img->i.height; y++) {
@@ -1688,7 +1707,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     }
 #else
     for (y = 0; y < img->i.height; y++) {
-	cc.displaydevice->switch_if_needed();
+	cc.displaydevice_->switch_if_needed();
 	loader->read(img->data + img->i.width * 3 * y, y, data);
     }
 #endif
@@ -1715,8 +1734,12 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     loader->done(data);
     return img;
 errl:
-    if(img && img->data)free(img->data);
-    if(img )free(img);
+    if(img && img->data)fim_free(img->data);
+    if(img )fim_free(img);
+    return NULL;
+
+shall_skip_header:
+head_not_found: /* no appropriate loader found for this image */
     return NULL;
 }
 
@@ -1734,7 +1757,7 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     unsigned int y;
     struct ida_op *desc_p;
 
-    dest =(ida_image*) malloc(sizeof(*dest));
+    dest =(ida_image*) fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
     memset(dest,0,sizeof(*dest));
     memset(&rect,0,sizeof(rect));
@@ -1753,10 +1776,10 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     else	   {desc_p=&desc_rotate_cw ;}
 
     data = desc_p->init(src,&rect,&dest->i,&p);
-    dest->data = (unsigned char*)malloc(dest->i.width * dest->i.height * 3);
-    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    dest->data = (unsigned char*)fim_malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice->switch_if_needed();
+	cc.displaydevice_->switch_if_needed();
 	desc_p->work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -1780,7 +1803,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     void *data;
     unsigned int y;
 
-    dest = (ida_image*)malloc(sizeof(*dest));
+    dest = (ida_image*)fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
     memset(dest,0,sizeof(*dest));
     memset(&rect,0,sizeof(rect));
@@ -1807,7 +1830,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     int w_extra  = (diagonal - src->i.width      )/2;
     int e_extra  = (diagonal - src->i.width - w_extra  );
     /* we allocate a new, larger canvas */
-    unsigned char * larger_data = (unsigned char*)calloc(diagonal * diagonal * 3,1);
+    unsigned char * larger_data = (unsigned char*)fim_calloc(diagonal * diagonal * 3,1);
     if(larger_data)
     {
 	    for(y = n_extra; y < (unsigned int) diagonal - s_extra; ++y )
@@ -1819,7 +1842,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 	    rect.x2+=e_extra;
 	    rect.y1+=n_extra;
 	    rect.y2+=s_extra;
-	    free(src->data);
+	    fim_free(src->data);
 	    src->data=larger_data;
     	    src->i.fim_extra_flags=1;	/* to avoid this operation to repeat on square images or already rotated images */
     }
@@ -1832,10 +1855,10 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 
     p.angle    = (int) angle;
     data = desc_rotate.init(src,&rect,&dest->i,&p);
-    dest->data = (unsigned char*)calloc(dest->i.width * dest->i.height * 3,1);
-    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    dest->data = (unsigned char*)fim_calloc(dest->i.width * dest->i.height * 3,1);
+    /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice->switch_if_needed();
+	cc.displaydevice_->switch_if_needed();
 	desc_rotate.work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -1862,7 +1885,7 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
     unsigned int y;
     /* dez: */ if(ascale<=0.0||ascale>=100.0)ascale=1.0;
 
-    dest = (ida_image*)malloc(sizeof(*dest));
+    dest = (ida_image*)fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
     memset(dest,0,sizeof(*dest));
     memset(&rect,0,sizeof(rect));
@@ -1879,10 +1902,10 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
     if (0 == p.height)
 	p.height = 1;
     data = desc_resize.init(src,&rect,&dest->i,&p);
-    dest->data = (unsigned char*)malloc(dest->i.width * dest->i.height * 3);
-    /* dez: */ if(!(dest->data)){free(dest);return NULL;}
+    dest->data = (unsigned char*)fim_malloc(dest->i.width * dest->i.height * 3);
+    /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice->switch_if_needed();
+	cc.displaydevice_->switch_if_needed();
 	desc_resize.work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -1899,15 +1922,15 @@ struct ida_image * fbi_image_clone(struct ida_image *img)
 	if(!img || !img->data)return NULL;
 	struct ida_image *nimg=NULL;
 	int n;
-	if(!(nimg=(ida_image*)calloc(1,sizeof(struct ida_image))))return NULL;
+	if(!(nimg=(ida_image*)fim_calloc(1,sizeof(struct ida_image))))return NULL;
 	memcpy(nimg,img,sizeof(struct ida_image));
 	/*note .. no checks .. :P */
 	n = img->i.width * img->i.height * 3;
 	
-	nimg->data = (unsigned char*)malloc( n );
+	nimg->data = (unsigned char*)fim_malloc( n );
 	if(!(nimg->data))
 	{
-		free(nimg);
+		fim_free(nimg);
 		return NULL;
 	}
 	memcpy(nimg->data, img->data,n);
@@ -1917,8 +1940,8 @@ struct ida_image * fbi_image_clone(struct ida_image *img)
 
 	int FbiStuff::fim_filereading_debug()
 	{
-		return cc.displaydevice ?
-			cc.displaydevice->debug:
+		return cc.displaydevice_ ?
+			cc.displaydevice_->debug_:
 			0;
 	}
 
