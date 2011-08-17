@@ -1345,7 +1345,7 @@ int main(int argc,char *argv[])
 			"Fim options (features included (+) or not (-)):\n"
 	#include "version.h"
 	/* i think some flags are missing .. */
-		"\nSupported output devices (for --"FIM_OSW_OUTPUT_DEVICE") : "
+		"\nSupported output devices (for --"FIM_OSW_OUTPUT_DEVICE"): "
 	#ifdef FIM_WITH_AALIB
 		" "FIM_DDN_INN_AA
 	#endif
@@ -1362,7 +1362,7 @@ int main(int argc,char *argv[])
 		" "FIM_DDN_INN_DUMB
 	#endif
 		"\n"
-		"\nSupported file formats : "
+		"\nSupported file formats: "
 #ifdef ENABLE_PDF
 		" pdf"
 #endif
@@ -1391,6 +1391,8 @@ int main(int argc,char *argv[])
 #endif
 		"\n"
 			    );
+		
+		fim_loaders_to_stderr();
 	}
 	/* WARNING: PLEASE DO NOT WRITE ANY MORE CODE AFTER THIS DECLARATION (RIGHT ABOVE, AN UNCLEAN CODING PRACTICE WAS USED) */
 

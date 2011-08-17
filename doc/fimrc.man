@@ -550,6 +550,10 @@ _do_sanity_check
 [internal,in,experimental] if 1, will execute a sanity check on startup
 .fi
 .B
+_file_loader
+[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)
+.fi
+.B
 _fileindex
 [internal,out] the current image numeric index
 .fi

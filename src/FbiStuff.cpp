@@ -1267,14 +1267,20 @@ struct ida_op desc_autocrop = {
 /* load                                                                   */
 
 
+#ifdef HAVE_LIBGRAPHICSMAGICK
+	extern struct ida_loader magick_loader ;
+#endif
+
 #ifdef FIM_WITH_LIBPNG 
 	extern struct ida_loader png_loader ;
 #endif
 
 extern struct ida_loader ppm_loader ;
 extern struct ida_loader pgm_loader ;
+#if FIM_WANT_BINARY_DISPLAY
 extern struct ida_loader bit24_loader ;
 extern struct ida_loader bit1_loader ;
+#endif
 
 // 20080108 WARNING
 // 20080801 removed the loader functions from this file, as init_rd was not __init : did I break something ?
@@ -1438,7 +1444,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
      * This function is complicated and should be reworked, in some way.
      * FIXME : many memory allocations are not checked for failure: DANGER
      * */
-    char command[1024];
+    char command[1024]; /* FIXME: overflow risk ! */
     struct ida_loader *loader = NULL;
     struct ida_image *img=NULL;
     struct list_head *item=NULL;
@@ -1495,11 +1501,25 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     rewind(fp);
     if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
 
+#if FIM_WANT_LOADER_STRING
+    {
+    fim::string ls=cc.getStringVariable("g:"FIM_VID_FILE_LOADER);
+    if(ls!=FIM_CNS_EMPTY_STRING)
+    if(NULL==loader)/* we could have forced one */
+    list_for_each(item,&loaders) {
+        loader = list_entry(item, struct ida_loader, list);
+	if (!strcmp(loader->name,ls.c_str()))
+		goto found_a_loader;
+    }
+		loader = NULL;
+    }
+#endif
+
+#if FIM_WANT_BINARY_DISPLAY
     {
     fim_int bd=cc.getIntVariable(FIM_VID_BINARY_DISPLAY);
     if(bd!=0)
     {
-        /* a funny feature */
     	if(bd==1)
 		loader = &bit1_loader;
 	else
@@ -1507,10 +1527,11 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     		if(bd==24)
 			loader = &bit24_loader;
 		else
-			;// FIXME: need some error 	
+			;// FIXME: need some error reporting
 	}
     }
     }
+#endif
     /* pick loader */
 #ifdef FIM_SKIP_KNOWN_FILETYPES
     if (NULL == loader && (*blk==0x42) && (*(unsigned char*)(blk+1)==0x5a))
@@ -1542,9 +1563,12 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 #endif
 #endif
     if(NULL==loader)/* we could have forced one */
-    list_for_each(item,&loaders) {
+    list_for_each(item,&loaders)
+    {
         loader = list_entry(item, struct ida_loader, list);
 	if (NULL == loader->magic)
+	    break;
+    	if(loader->mlen < 1)
 	    break;
 	if (0 == memcmp(blk+loader->moff,loader->magic,loader->mlen))
 	    break;
@@ -1554,6 +1578,15 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     {
 		goto found_a_loader;
     }
+
+#ifdef HAVE_LIBGRAPHICSMAGICK
+    /* FIXME: for now, this is the only 0-mlen loader */
+    if (NULL == loader)
+	loader = &magick_loader;
+    else
+	;
+#endif
+
     if((loader==NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
 		goto head_not_found;
 
@@ -1673,7 +1706,6 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	loader = &ppm_loader;
     }
 #endif
-
     if (NULL == loader)
 	    goto head_not_found;
 

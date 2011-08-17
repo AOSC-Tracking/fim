@@ -22,6 +22,10 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110817	need macros to check for allowed width/height/bpp/... values
+20110817	s/bzero/fim_bzero s/malloc/fim_malloc s/calloc/fim_calloc
+20110816	fim.h should be an #include-only container !
+20110816	repeat should become a standard argument of commands
 20110801	is there a way to make fim load . if no file is specified ?
 20110801	a pensarci bene, bottoni in sdl mode non sono poi cosi' impossibili
 20110724	program 'fimtutor' as 'fim --tutorial'

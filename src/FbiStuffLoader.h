@@ -27,8 +27,7 @@
 #ifndef FIM_STUFF_LOADER_H
 #define FIM_STUFF_LOADER_H
 
-#include "fim.h"
-
+#include "fim_types.h"
 #include "FbiStuffList.h"
 
 //#include "list.h"
@@ -157,6 +156,7 @@ extern struct list_head writers;
 
 void fim_load_register(struct ida_loader *loader);
 void fim_write_register(struct ida_writer *writer);
+void fim_loaders_to_stderr();
 
 }
 #endif

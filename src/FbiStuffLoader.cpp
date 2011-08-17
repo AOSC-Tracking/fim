@@ -30,6 +30,7 @@
 #include <string.h>
 
 //#include "loader.h"
+#include "fim.h"
 #include "FbiStuffLoader.h"
 
 /* ----------------------------------------------------------------------- */
@@ -173,5 +174,24 @@ void fim_write_register(struct ida_writer *writer)
 }
 #endif
 
+	void fim_loaders_to_stderr()
+    	{
+		/* FIXME: new, should be generalized */
+    		struct list_head *item=NULL;
+    		struct ida_loader *loader = NULL;
+    		FIM_FPRINTF(stderr,"%s","\nSupported file loaders: ");
+    		list_for_each(item,&loaders)
+		{
+        		loader = list_entry(item, struct ida_loader, list);
+			if(loader->name && loader->mlen>=1)
+				FIM_FPRINTF(stderr," %s",loader->name); 
+    		}
+    		list_for_each(item,&loaders)
+		{
+        		loader = list_entry(item, struct ida_loader, list);
+			if(loader->name && loader->mlen<=0)
+				FIM_FPRINTF(stderr," %s",loader->name); 
+    		}
+    		FIM_FPRINTF(stderr,"%s","\n");
+	}
 }
-
