@@ -116,6 +116,16 @@ AC_CHECK_FUNC([get_current_dir_name], AC_DEFINE([HAVE_GET_CURRENT_DIR_NAME], [1]
 
 AC_CHECK_LIB([m],[pow])
 AC_CHECK_LIB([fl],[yylex])
+AC_ARG_ENABLE(graphicsmagick, AC_HELP_STRING([--enable-graphicsmagick], [Enable GraphicsMagick library support (EXPERIMENTAL).]), [ if test x$enableval != xno ; then fim_handle_graphicsmagick=yes ; fi ] )
+AC_CHECK_LIB([GraphicsMagick],[GetMagickVersion],
+  [
+if test x"$fim_handle_graphicsmagick" = x"yes" ; then 
+  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffMagick.o";
+  LIBS="$LIBS `GraphicsMagick-config --cppflags --ldflags --libs|tr '\n' ' '` ";
+  CXXFLAGS="$CXXFLAGS `GraphicsMagick-config --cppflags |tr '\n' ' '` ";
+  AC_DEFINE([HAVE_LIBGRAPHICSMAGICK],[1],[We have libGraphicsMagick])
+fi
+  ], [])
 
 AC_CHECK_PROG([HAVE_FLEX],[flex],[yes],[no])
 AC_CHECK_PROG([HAVE_BISON],[bison],[yes],[no])
@@ -1611,6 +1621,7 @@ AC_MSG_NOTICE([
 	djvu file support                   : ${fim_handle_djvu:-no}
 	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
 	ps   file support (libspectre)      : ${fim_handle_ps:-no}
+	GraphicsMagick support              : ${fim_handle_graphicsmagick:-no}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
