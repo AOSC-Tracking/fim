@@ -137,7 +137,7 @@ static struct ida_loader mm_loader = {
     magic: "%%MatrixMarket matrix",
     moff:  0,
     mlen:  20,
-    name:  "matrix market",
+    name:  "MatrixMarket",
     init:  mm_init,
     read:  mm_read,
     done:  mm_done,

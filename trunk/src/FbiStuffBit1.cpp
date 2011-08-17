@@ -140,7 +140,7 @@ struct ida_loader bit1_loader = {
     /*magic:*/ "ELF",
     /*moff:*/  1,
     /*mlen:*/  3,
-    /*name:*/  "bmp",
+    /*name:*/  "Bit1",
     /*init:*/  bit1_init,
     /*read:*/  bit1_read,
     /*done:*/  bit1_done,

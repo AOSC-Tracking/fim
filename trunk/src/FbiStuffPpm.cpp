@@ -31,6 +31,7 @@
 #include <errno.h>
 
 //#include "loader.h"
+#include "fim.h"
 #include "FbiStuffLoader.h"
 #ifdef USE_X11
 # include "viewer.h"
@@ -131,7 +132,7 @@ struct ida_loader ppm_loader = {
     /*magic:*/ "P6",
     /*moff:*/  0,
     /*mlen:*/  2,
-    /*name:*/  "ppm parser",
+    /*name:*/  "ppm",
     /*init:*/  pnm_init,
     /*read:*/  ppm_read,
     /*done:*/  pnm_done,
@@ -141,7 +142,7 @@ struct ida_loader pgm_loader = {
     /*magic:*/ "P5",
     /*moff:*/  0,
     /*mlen:*/  2,
-    /*name:*/  "pgm parser",
+    /*name:*/  "pgm",
     /*init:*/  pnm_init,
     /*read:*/  pgm_read,
     /*done:*/  pnm_done,
