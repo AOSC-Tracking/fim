@@ -132,6 +132,7 @@ gif_init(FILE *fp, char *filename, unsigned int page,
 
     h->infile = fp;
     h->gif = DGifOpenFileHandle(fileno(fp));
+    if(!h->gif)goto oops; /* opening gifs from stdin seems to cause DGifOpenFileHandle=NULL */
     h->row = (GifPixelType*)fim_malloc(h->gif->SWidth * sizeof(GifPixelType));
     if(!h->row)goto oops;
 
