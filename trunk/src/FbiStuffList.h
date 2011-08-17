@@ -26,7 +26,7 @@
 #ifndef FBI_STUFF_LIST_H
 #define FBI_STUFF_LIST_H
 
-#include "fim.h"
+#include "fim_types.h"
 
 //from list.h
 /*

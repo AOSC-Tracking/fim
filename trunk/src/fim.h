@@ -372,6 +372,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 "!"FIM_CNS_EX_SYSC_STRING"		executes the "FIM_CNS_EX_SYSC_STRING" quoted string as a \""FIM_CNS_SHELL"\" shell command\n"\
 ""
 
+#include "fim_types.h"
 #include "string.h"
 #include "Command.h"
 #include "Arg.h"
@@ -425,6 +426,7 @@ namespace fim
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file" */
 #define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] string with the global configuration file name" */
+#define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
@@ -695,6 +697,8 @@ namespace fim
 #define FIM_WANT_CAPTION_CONTROL	1
 #define FIM_WANT_READLINE_CLEAR_WITH_ESC	1
 #define FIM_WANT_DOUBLE_ESC_TO_ENTER 0	/* if enabled in the console mode, would require three presses the first time; two later on; this is non consistent, so we keep it disabled until we find a fix */
+#define FIM_WANT_BINARY_DISPLAY 1
+#define FIM_WANT_LOADER_STRING 1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_STRING_BUFSIZE	4096
@@ -733,9 +737,6 @@ namespace fim
 #define FIM_FLAG_FLIP 2
 #define FIM_FLAG_RGB2GRAY 4
 #define FIM_FLAG_RGB2GRAYGRAYGRAY 8
-
-/* we wait for variadic macros support in standard C++ */
-#define FIM_FPRINTF fprintf
 
 /* symbolic wrappers for memory handling calls */
 #define fim_calloc(x,y) calloc((x),(y))
