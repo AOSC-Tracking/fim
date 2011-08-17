@@ -199,10 +199,11 @@ png_done(void *data)
 
 //used in FbiStuff.cpp
 #ifdef FIM_WITH_LIBPNG 
-struct ida_loader png_loader = {
+struct ida_loader png_loader
 #else
-static struct ida_loader png_loader = {
+static struct ida_loader png_loader
 #endif
+= {
     /*magic:*/ "\x89PNG",
     /*moff:*/  0,
     /*mlen:*/  4,
