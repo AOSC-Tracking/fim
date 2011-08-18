@@ -22,6 +22,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110818	should sort loaders by mlen, descendingly
 20110817	need macros to check for allowed width/height/bpp/... values
 20110817	s/bzero/fim_bzero s/malloc/fim_malloc s/calloc/fim_calloc
 20110816	fim.h should be an #include-only container !
