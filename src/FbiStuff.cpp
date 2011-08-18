@@ -1569,7 +1569,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	if (NULL == loader->magic)
 	    break;
     	if(loader->mlen < 1)
-	    break;
+	    continue;
 	if (0 == memcmp(blk+loader->moff,loader->magic,loader->mlen))
 	    break;
 	loader = NULL;
