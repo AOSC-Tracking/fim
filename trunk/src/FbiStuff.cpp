@@ -1522,9 +1522,9 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     rewind(fp);
     if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
 
-#if FIM_WANT_LOADER_STRING
+#if FIM_ALLOW_LOADER_STRING_SPECIFICATION
     {
-    fim::string ls=cc.getStringVariable("g:"FIM_VID_FILE_LOADER);
+    fim::string ls=cc.getStringVariable(FIM_VID_FILE_LOADER);
     if(ls!=FIM_CNS_EMPTY_STRING)
     if(NULL==loader)/* we could have forced one */
     list_for_each(item,&loaders) {
