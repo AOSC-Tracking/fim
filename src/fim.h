@@ -724,6 +724,9 @@ namespace fim
 #define fim_calloc(x,y) calloc((x),(y))
 #define fim_malloc(x) malloc(x)
 #define fim_free(x) free(x)
+#define fim_memset(x,y,z) memset(x,y,z)
+#define fim_bzero(x,y) fim_memset(x,0,y)
+//#define fim_bzero(x,y) bzero(x,0,y)
 
 
 #define FIM_XSTRINGIFY(X) FIM_STRINGIFY(X)

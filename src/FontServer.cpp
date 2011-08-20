@@ -212,7 +212,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 
     f_ =(struct fs_font*) fim_calloc(sizeof(*f_),1);
     if(!f_)goto oops;
-    memset(f_,0,sizeof(*f_));
+    fim_bzero(f_,sizeof(*f_));
 	
     fgetc(fp);
     f_->maxenc = 256;

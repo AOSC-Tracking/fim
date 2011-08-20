@@ -60,7 +60,7 @@ void fb_catch_exit_signals(void)
     struct sigaction act,old;
     int termsig;
 
-    memset(&act,0,sizeof(act));
+    fim_bzero(&act,sizeof(act));
     act.sa_handler = fb_catch_exit_signal;
     sigemptyset(&act.sa_mask);
     sigaction(SIGINT, &act,&old);

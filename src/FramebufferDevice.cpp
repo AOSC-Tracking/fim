@@ -191,7 +191,7 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 #ifdef FIM_IS_SLOWER_THAN_FBI
 	for (j = 0; j < f_->height; j++) {
 /////	    memset_combine(start,0x20,w);
-	    memset(start,0,w);
+	    fim_bzero(start,w);
 	    start += fb_fix_.line_length;
 	}
 #else
@@ -199,12 +199,12 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 	if(fb_fix_.line_length==(unsigned int)w)
 	{
 		//contiguous case
-		memset(start,0,w*f_->height);
+		fim_bzero(start,w*f_->height);
 	    	start += fb_fix_.line_length*f_->height;
 	}
 	else
 	for (j = 0; j < f_->height; j++) {
-	    memset(start,0,w);
+	    fim_bzero(start,w);
 	    start += fb_fix_.line_length;
 	}
 #endif
@@ -1283,7 +1283,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
     unsigned char  *ptr  = (unsigned char*)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
     unsigned int  *ptr4 = (unsigned int*)dst;
-    unsigned ZERO_BYTE=0x00;
+    unsigned clear_byte=0x00;
 #ifdef FIM_IS_SLOWER_THAN_FBI
     int x;
 #endif
@@ -1300,7 +1300,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 	    ptr2[x] = 0x0;
 	}
 #else
-	memset(ptr,ZERO_BYTE,2*owidth);
+	memset(ptr,clear_byte,2*owidth);
 #endif
 	ptr2 += owidth;
 	return (unsigned char*)ptr2;
@@ -1312,7 +1312,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 	    ptr[3*x+0] = 0x0;
 	}
 #else
-	memset(ptr,ZERO_BYTE,3*owidth);
+	memset(ptr,clear_byte,3*owidth);
 #endif
 	ptr += owidth * 3;
 	return ptr;
@@ -1322,7 +1322,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 	    ptr4[x] = 0x0;
 	}
 #else
-	memset(ptr,ZERO_BYTE,4*owidth);
+	memset(ptr,clear_byte,4*owidth);
 #endif
 	ptr4 += owidth;
 	return (unsigned char*)ptr4;
@@ -1552,7 +1552,7 @@ int FramebufferDevice::fb_switch_init()
 {
     struct sigaction act,old;
 
-    memset(&act,0,sizeof(act));
+    fim_bzero(&act,sizeof(act));
     
     ffdp=this;// WARNING : A DIRTY HACK
     act.sa_handler  = _fb_switch_signal;

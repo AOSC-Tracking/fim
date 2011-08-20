@@ -317,7 +317,7 @@
 		caca_set_bitmap_palette(caca_bitmap, r, g, b, a);
 		bitmap = (char*)malloc(4 * caca_get_width() * caca_get_height() * sizeof(char));
 		if(!bitmap) return FIM_ERR_GENERIC;
-		memset(bitmap, 0, 4 * caca_get_width() * caca_get_height());
+		fim_bzero(bitmap, 4 * caca_get_width() * caca_get_height());
 
 		caca_clear();
 		caca_set_color(CACA_COLOR_BLACK,CACA_COLOR_WHITE);

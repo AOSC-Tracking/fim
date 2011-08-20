@@ -302,8 +302,8 @@ jpeg_init(FILE *fp, char *filename, unsigned int page,
     
     h = (struct jpeg_state *)fim_calloc(sizeof(*h),1);
     if(!h) goto oops;
+    fim_bzero(h,sizeof(*h));
 
-    memset(h,0,sizeof(*h));
     h->infile = fp;
 
     h->jerr.error_exit=NULL; // ?

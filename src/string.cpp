@@ -199,7 +199,7 @@ namespace fim
 		if(ns)
 		{
 			s=ns;
-			if(l>len)memset(s+len,0,l-len);
+			if(l>len)fim_bzero(s+len,l-len);
 			len=l;
 		}
 		//if realloc fails, we keep the old one
@@ -338,7 +338,7 @@ namespace fim
 		//do we need some allocation? only if l was already > 0
 		if(l+1<len && s)
 		{
-			memset(s,0,l+1);
+			fim_bzero(s,l+1);
 		}else
 		if(l++>0)
 		{

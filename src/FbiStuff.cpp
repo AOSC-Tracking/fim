@@ -606,7 +606,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 #endif
 
     /* scale y */
-    memset(h->rowbuf, 0, src->i.width * 3 * sizeof(float));
+    fim_bzero(h->rowbuf, src->i.width * 3 * sizeof(float));
     outleft = 1/h->yscale;
     while (outleft > 0  &&  h->srcrow < src->i.height) {
 	if (outleft < h->inleft) {
@@ -864,7 +864,7 @@ op_rotate_work(struct ida_image *src, struct ida_rect *rect,
     sx = (int)fx;
     sx *= 0;
     dst += 3*(h->calc.x1+sx);*/
-    memset(dst, 0, (h->calc.x2-h->calc.x1) * 3);
+    fim_bzero(dst, (h->calc.x2-h->calc.x1) * 3);
    for (x = h->calc.x1; x < h->calc.x2; x++, dst+=3) {
 	fx = h->cosa * (x - h->cx) - h->sina * (y - h->cy) + h->cx;
 	fy = h->sina * (x - h->cx) + h->cosa * (y - h->cy) + h->cy;
@@ -1513,7 +1513,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		cc.setVariable(FIM_VID_OPEN_OFFSET ,(int)read_offset);
 	}
 #endif
-    memset(blk,0,sizeof(blk));
+    fim_bzero(blk,sizeof(blk));
     if((fr=fread(blk,1,sizeof(blk),fp))<0)
     {
       /* should we care about the error code ? */
@@ -1752,7 +1752,7 @@ found_a_loader:	/* we have a loader */
     /* load image */
     img = (struct ida_image*)fim_calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
     if(!img)goto errl;
-    memset(img,0,sizeof(*img));
+    fim_bzero(img,sizeof(*img));
 #ifdef FIM_EXPERIMENTAL_ROTATION
     /* 
      * warning : there is a new field in ida_image_info (fim_extra_flags) 
@@ -1818,9 +1818,9 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
 
     dest =(ida_image*) fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
-    memset(dest,0,sizeof(*dest));
-    memset(&rect,0,sizeof(rect));
-    memset(&p,0,sizeof(p));
+    fim_bzero(dest,sizeof(*dest));
+    fim_bzero(&rect,sizeof(rect));
+    fim_bzero(&p,sizeof(p));
     
     p.width  = src->i.width;
     p.height = src->i.height;
@@ -1864,9 +1864,9 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 
     dest = (ida_image*)fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
-    memset(dest,0,sizeof(*dest));
-    memset(&rect,0,sizeof(rect));
-    memset(&p,0,sizeof(p));
+    fim_bzero(dest,sizeof(*dest));
+    fim_bzero(&rect,sizeof(rect));
+    fim_bzero(&p,sizeof(p));
 
     /* source rectangle */
     rect.x1=0;
@@ -1946,9 +1946,9 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
 
     dest = (ida_image*)fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)return NULL;
-    memset(dest,0,sizeof(*dest));
-    memset(&rect,0,sizeof(rect));
-    memset(&p,0,sizeof(p));
+    fim_bzero(dest,sizeof(*dest));
+    fim_bzero(&rect,sizeof(rect));
+    fim_bzero(&p,sizeof(p));
     
 //    p.width  = (int)(src->i.width  * scale * ascale);
 //    p.height = (int)(src->i.height * scale);

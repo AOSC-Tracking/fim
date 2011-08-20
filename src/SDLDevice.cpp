@@ -780,7 +780,7 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 #ifdef FIM_IS_SLOWER_THAN_FBI
 	for (j = 0; j < f_->height; j++) {
 /////	    memset_combine(start,0x20,w);
-	    memset(start,0,w);
+	    fim_bzero(start,w);
 	    start += fb_fix.line_length;
 	}
 #else
@@ -788,12 +788,12 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 	if(fb_fix.line_length==(unsigned int)w)
 	{
 		//contiguous case
-		memset(start,0,w*f_->height);
+		fim_bzero(start,w*f_->height);
 	    	start += fb_fix.line_length*f_->height;
 	}
 	else
 	for (j = 0; j < f_->height; j++) {
-	    memset(start,0,w);
+	    fim_bzero(start,w);
 	    start += fb_fix.line_length;
 	}
 #endif
