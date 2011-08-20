@@ -697,7 +697,6 @@ namespace fim
 #define FIM_WANT_CAPTION_CONTROL	1
 #define FIM_WANT_READLINE_CLEAR_WITH_ESC	1
 #define FIM_WANT_DOUBLE_ESC_TO_ENTER 0	/* if enabled in the console mode, would require three presses the first time; two later on; this is non consistent, so we keep it disabled until we find a fix */
-#define FIM_WANT_BINARY_DISPLAY 1
 #define FIM_WANT_LOADER_STRING 1
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
