@@ -131,7 +131,7 @@
 		tattr.c_cc[VTIME] = 1 * (seconds==0?1:(seconds*10)%256);
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		
-		fim_key_t c,r;//char buf[64];
+		fim_key_t c,r;
 		//r=read(fim_stdin_,&c,4);
 		// FIXME : read(.,.,3) is NOT portable. DANGER
 		r=read(cc.fim_stdin_,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);c=(0x1b)+(c<<8);/* we should do something with rc now */}

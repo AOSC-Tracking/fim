@@ -143,7 +143,7 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	if(fp)
 	{
 		// FIXME: this hack will only work on Linux.
-		static char linkname[64];
+		static char linkname[FIM_LINUX_LINKFILENAME_BUFSIZE];
 		sprintf(linkname,"/proc/self/fd/%d",fileno(fp));
 		//printf("%s\n",linkname);
 		filename=linkname;

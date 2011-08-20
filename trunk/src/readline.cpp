@@ -168,7 +168,7 @@ static char ** fim_completion (const char *text, int start,int end)
 static void completion_display_matches_hook(char **matches,int num,int max)
 {
 	/* FIXME : fix the oddities of this code */
-	char buffer[256];
+	char buffer[FIM_RL_COMPLETION_BUFSIZE];
 	int w,f,l;w=0;f=sizeof(buffer)-1;l=0;
 	buffer[0]='\0';
 	if(!matches)return;

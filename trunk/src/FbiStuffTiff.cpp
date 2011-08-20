@@ -30,7 +30,6 @@
 #include <inttypes.h>
 #include <tiffio.h>
 
-//#include "loader.h"
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 #ifdef USE_X11
@@ -42,7 +41,7 @@ namespace fim
 
 struct tiff_state {
     TIFF*          tif;
-    //char           emsg[1024];
+    //char           emsg[FIM_LIBERR_BUFSIZE];
     tdir_t         ndirs;     /* Number of directories                     */
                               /* (could be interpreted as number of pages) */
     uint32         width,height;
@@ -57,7 +56,7 @@ static void*
 tiff_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-    struct tiff_state *h;
+    struct tiff_state *h=NULL;
 
     fclose(fp);
     h = (struct tiff_state *) fim_calloc(sizeof(*h),1);

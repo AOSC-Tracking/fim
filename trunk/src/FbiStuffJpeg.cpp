@@ -170,7 +170,7 @@ static void dump_exif(FILE *out, ExifData *ed)
 {
     const char *title, *value;
 #if HAVE_NEW_EXIF
-    char buffer[256];
+    char buffer[FIM_EXIF_BUFSIZE];
 #endif
     ExifEntry  *ee;
     int tag,i;

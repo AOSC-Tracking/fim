@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- fim_types.h : Fim misc declarations
+ fim_types.h : Basic Fim type declarations
 
  (c) 2011-2011 Michele Martone
 
@@ -24,7 +24,34 @@
 #ifndef FIM_TYPES_FIM_H
 #define FIM_TYPES_FIM_H
 
-typedef unsigned char fim_byte_t;	/* a type for bytes */
+namespace fim
+{
+	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
+	typedef int fim_off_t;		/* a type for pixel offsets (positive)  */
+	typedef float fim_scale_t;	/* a type for image scaling */
+	typedef float fim_angle_t;	/* a type for angles */
+	typedef int   fim_page_t;	/* a type for multipage document pages */
+	typedef int   fim_pgor_t;	/* a type for page orientation */
+	typedef bool   fim_bool_t;	/* a type for bolean expressions */
+	typedef int fim_coo_t;		/* a type for coordinates */
+	typedef int fim_cc_t;		/* a type for console control */
+	typedef int fim_flags_t;	/* a type for display flags */
+	typedef int fim_bpp_t;		/* a type for bits Per Pixel */
+	typedef int fim_key_t;		/* a type for keycodes */
+	typedef int fim_err_t;		/* a type for errors */
+	typedef int fim_status_t;	/* a type for fim's status */
+	typedef int fim_cycles_t;	/* a type for fim's cycles */
+	typedef int fim_cmd_type_t;	/* a type for fim's command types */
+	typedef int fim_var_t;		/* a type for fim's variable types */
+	typedef int fim_int;		/* a type for fim's internal integer type (TODO: shall extend its use!) */
+
+	typedef int fim_ts_t;		/* a type for time, in seconds */
+	typedef int fim_tms_t;		/* a type for time, in milliseconds */
+	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
+	typedef char fim_char_t;	/* a type for chars */
+	typedef unsigned char fim_byte_t;	/* a type for bytes */
+	typedef unsigned char fim_byte_t;	/* a type for bytes */
+}
 
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf

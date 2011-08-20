@@ -1462,14 +1462,14 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
      * This function is complicated and should be reworked, in some way.
      * FIXME : many memory allocations are not checked for failure: DANGER
      * */
-    char command[1024]; /* FIXME: overflow risk ! */
+    char command[FIM_PIPE_CMD_BUFSIZE]; /* FIXME: overflow risk ! */
     struct ida_loader *loader = NULL;
     struct ida_image *img=NULL;
     struct list_head *item=NULL;
-    char blk[512];
-    FILE *fp;
+    char blk[FIM_FILE_PROBE_BLKSIZE];
+    FILE *fp=NULL;
     unsigned int y;
-    void *data;
+    void *data=NULL;
     int fr=0;
 #if FIM_HAVE_FULL_PROBING_LOADER
     bool rozlsl=false;/* retry on zero length signature loader */
@@ -1583,6 +1583,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     }
 #endif
 #endif
+    /* TODO: should sort loaders by mlen, descendingly */
     if(NULL==loader)/* we could have forced one */
     list_for_each(item,&loaders)
     {

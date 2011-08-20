@@ -682,7 +682,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     fb_mem_ = (unsigned char*) mmap(NULL,fb_fix_.smem_len+fb_mem_offset_,
 		  PROT_READ|PROT_WRITE,MAP_SHARED,fb_,0);
     /*
-     * FIXME : this is not 64 bits safe
+     * FIXME : this may not 64 bits safe
      * */
     if (-1L == (long)fb_mem_) {
 	fim_perror("mmap failed");
