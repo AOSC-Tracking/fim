@@ -118,34 +118,12 @@
 #define FIM_LINE_COUT std::cout << "in " <<__func__ << " # " << __FILE__ << ":" << __LINE__ << "\n";
 #define FIM_INT_PCNT(P,L) ((fim_int)ceilf((float)((P)*(L))/100.0)) //FIXME: gross errors may occur here
 
+#include "fim_types.h"
+#include "fim_limits.h"
+
 namespace fim
 {
-	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
-	typedef int fim_off_t;		/* a type for pixel offsets (positive)  */
-	typedef float fim_scale_t;	/* a type for image scaling */
-	typedef float fim_angle_t;	/* a type for angles */
-	typedef int   fim_page_t;	/* a type for multipage document pages */
-	typedef int   fim_pgor_t;	/* a type for page orientation */
-	typedef bool   fim_bool_t;	/* a type for bolean expressions */
-	typedef int fim_coo_t;		/* a type for coordinates */
-	typedef int fim_cc_t;		/* a type for console control */
-	typedef int fim_flags_t;	/* a type for display flags */
-	typedef int fim_bpp_t;		/* a type for bits Per Pixel */
-	typedef int fim_key_t;		/* a type for keycodes */
-	typedef int fim_err_t;		/* a type for errors */
-	typedef int fim_status_t;	/* a type for fim's status */
-	typedef int fim_cycles_t;	/* a type for fim's cycles */
-	typedef int fim_cmd_type_t;	/* a type for fim's command types */
-	typedef int fim_var_t;		/* a type for fim's variable types */
-	typedef int fim_int;		/* a type for fim's internal integer type (TODO: shall extend its use!) */
-
-	typedef int fim_ts_t;		/* a type for time, in seconds */
-	typedef int fim_tms_t;		/* a type for time, in milliseconds */
-	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
 	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code
-	typedef char fim_char_t;	/* a type for chars */
-	typedef unsigned char fim_byte_t;	/* a type for bytes */
-
 	void status(const char *desc, const char *info);
 
 	class Arg;
@@ -372,7 +350,6 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 "!"FIM_CNS_EX_SYSC_STRING"		executes the "FIM_CNS_EX_SYSC_STRING" quoted string as a \""FIM_CNS_SHELL"\" shell command\n"\
 ""
 
-#include "fim_types.h"
 #include "string.h"
 #include "Command.h"
 #include "Arg.h"
@@ -699,8 +676,15 @@ namespace fim
 #define FIM_WANT_DOUBLE_ESC_TO_ENTER 0	/* if enabled in the console mode, would require three presses the first time; two later on; this is non consistent, so we keep it disabled until we find a fix */
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
+#define FIM_METAINFO_BUFSIZE	256
+#define FIM_EXIF_BUFSIZE FIM_METAINFO_BUFSIZE
+#define FIM_RL_COMPLETION_BUFSIZE	256
+#define FIM_LIBERR_BUFSIZE	1024
+#define FIM_LINUX_LINKFILENAME_BUFSIZE 64
 #define FIM_STRING_BUFSIZE	4096
 #define FIM_PIPE_BUFSIZE	1024
+#define FIM_PIPE_CMD_BUFSIZE	1024
+#define FIM_FILE_PROBE_BLKSIZE	512
 #define FIM_CONSOLE_BLOCKSIZE	1024
 #define FIM_CONSOLE_DEF_WIDTH	128
 #define FIM_BITRENDERING_DEF_WIDTH	1024

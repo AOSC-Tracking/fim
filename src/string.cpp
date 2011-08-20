@@ -345,7 +345,6 @@ namespace fim
 
 #if 1
 			// this is a sort of buffering
-//			#define BUFSIZE 64
 			#define BUFSIZE TOKSIZE
 			l=(l<BUFSIZE?BUFSIZE:l);
 #endif
@@ -412,12 +411,6 @@ namespace fim
 		append(buf);
 	}
 	
-	/*
-	 * see the next commented declaration ? it is pure evil, do not use it !
-	 *
-	#define	FIM_STRING_INITIAL_LENGTH 64
-	string::string():std::string(FIM_STRING_INITIAL_LENGTH,'\0'){}
-	*/
 	string::string():std::string(""){}
 
 	string string::operator+(const string s)const

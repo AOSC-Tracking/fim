@@ -87,6 +87,8 @@ fim_LDADD = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(FIMLIBS) $(LEXLIB)
 fim_SOURCES  = $(BUILT_SOURCES) \
 	fim.cpp \
 	fim.h \
+	fim_types.h \
+	fim_limits.h \
 	AADevice.h \
 	CACADevice.h \
 	SDLDevice.h \
