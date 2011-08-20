@@ -70,6 +70,9 @@ namespace fim
 {
 
 #define	FIM_DEBUGGING_FOR_ARM_WITH_VITALY 0
+#define FIM_FBI_FB_MODES_LINE_BUFSIZE	80
+#define FIM_FBI_FB_MODES_LABEL_BUFSIZE	32
+#define FIM_FBI_FB_MODES_VALUE_BUFSIZE	16
 /*
    this code will be enabled by default if we can make sure it
    won't break often with kernel updates */
@@ -733,10 +736,10 @@ void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
     for (p = (unsigned int*) addr; len--; p++)
 	*p = i;
 #else
-    memset(addr, i, len );
+    fim_memset(addr, i, len );
 #endif
 #else
-    memset(addr, c, len);
+    fim_memset(addr, c, len);
 #endif
 }
 
@@ -805,7 +808,9 @@ void FramebufferDevice::fb_setvt(int vtno)
 int FramebufferDevice::fb_setmode(char *name)
 {
     FILE *fp;
-    char line[80],label[32],value[16];
+    char line[FIM_FBI_FB_MODES_LINE_BUFSIZE],
+	 label[FIM_FBI_FB_MODES_LABEL_BUFSIZE],
+	 value[FIM_FBI_FB_MODES_VALUE_BUFSIZE];
     int  geometry=0, timings=0;
  
     /* load current values */
@@ -845,13 +850,13 @@ int FramebufferDevice::fb_setmode(char *name)
     {
 	return -1;
     }
-    while (NULL != fgets(line,79,fp)) {
+    while (NULL != fgets(line,FIM_FBI_FB_MODES_LINE_BUFSIZE-1,fp)) {
 	if (1 == sscanf(line, "mode \"%31[^\"]\"",label) &&
 	    0 == strcmp(label,name)) {
 	    /* fill in new values */
 	    fb_var_.sync  = 0;
 	    fb_var_.vmode = 0;
-	    while (NULL != fgets(line,79,fp) &&
+	    while (NULL != fgets(line,FIM_FBI_FB_MODES_LINE_BUFSIZE-1,fp) &&
 		   NULL == strstr(line,"endmode")) {
 //		if (5 == sscanf(line," geometry %d %d %d %d %d",
 		if (5 == sscanf(line," geometry %u %u %u %u %u",
@@ -1300,7 +1305,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 	    ptr2[x] = 0x0;
 	}
 #else
-	memset(ptr,clear_byte,2*owidth);
+	fim_memset(ptr,clear_byte,2*owidth);
 #endif
 	ptr2 += owidth;
 	return (unsigned char*)ptr2;
@@ -1312,7 +1317,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 	    ptr[3*x+0] = 0x0;
 	}
 #else
-	memset(ptr,clear_byte,3*owidth);
+	fim_memset(ptr,clear_byte,3*owidth);
 #endif
 	ptr += owidth * 3;
 	return ptr;
@@ -1322,7 +1327,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 	    ptr4[x] = 0x0;
 	}
 #else
-	memset(ptr,clear_byte,4*owidth);
+	fim_memset(ptr,clear_byte,4*owidth);
 #endif
 	ptr4 += owidth;
 	return (unsigned char*)ptr4;

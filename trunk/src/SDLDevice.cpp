@@ -700,7 +700,7 @@ done:
 		 * */
 		for(y=y1;y<y2;++y)
 		{
-			memset(((char*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1)* Bpp_);
+			fim_memset(((char*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1)* Bpp_);
 		}
 		return 0;
 	}

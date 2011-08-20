@@ -118,7 +118,7 @@ namespace fim
 	    		for(i=0  ;i<scroll_ ;++i)
 			{
 				int t = (min(maxcols,lwidth_)+1);
-				memset(buf,' ',t);
+				fim_memset(buf,' ',t);
 				buf[t-1]='\0';
 				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*((l-f_+1)+i), (const fim_char_t*)buf);
 			}

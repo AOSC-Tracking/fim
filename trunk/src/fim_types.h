@@ -50,7 +50,6 @@ namespace fim
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
 	typedef char fim_char_t;	/* a type for chars */
 	typedef unsigned char fim_byte_t;	/* a type for bytes */
-	typedef unsigned char fim_byte_t;	/* a type for bytes */
 }
 
 /* we wait for variadic macros support in standard C++ */
