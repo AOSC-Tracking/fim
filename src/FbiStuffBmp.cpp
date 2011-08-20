@@ -224,7 +224,7 @@ bmp_read(fim_byte_t *dst, unsigned int line, void *data)
 	}
 	break;
     default:
-	memset(dst,128,h->hdr.width*3);
+	fim_memset(dst,128,h->hdr.width*3);
 	break;
     }
 }
