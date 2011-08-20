@@ -118,7 +118,7 @@ int load_add_extra(struct ida_image_info *info, enum ida_extype type,
     if (NULL == extra)
 	return -1;
     if(type==EXTRA_COMMENT) ++size;// dez's
-    memset(extra,0,sizeof(*extra));
+    fim_bzero(extra,sizeof(*extra));
     extra->data = (unsigned char*)malloc(size);
     if (NULL == extra->data) {
 	fim_free(extra);

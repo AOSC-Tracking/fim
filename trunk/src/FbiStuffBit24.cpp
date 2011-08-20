@@ -65,7 +65,6 @@ bit24_init(FILE *fp, char *filename, unsigned int page,
     
     h = (struct bit24_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
-    memset(h,0,sizeof(*h));
     h->fp = fp;
     if(fseek(fp,0,SEEK_END)!=0) goto oops;
     if((h->flen=ftell(fp))==-1)goto oops;

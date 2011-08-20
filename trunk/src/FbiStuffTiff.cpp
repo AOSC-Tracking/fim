@@ -61,7 +61,7 @@ tiff_init(FILE *fp, char *filename, unsigned int page,
     fclose(fp);
     h = (struct tiff_state *) fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
-    memset(h,0,sizeof(*h));
+    fim_bzero(h,sizeof(*h));
 
     TIFFSetWarningHandler(NULL);
     h->tif = TIFFOpen(filename,"r");

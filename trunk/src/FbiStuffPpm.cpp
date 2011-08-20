@@ -58,7 +58,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
 
     h = (struct ppm_state*) fim_calloc(sizeof(*h),1);
     if(!h)return NULL;
-    memset(h,0,sizeof(*h));
+    fim_bzero(h,sizeof(*h));
 
     h->infile = fp;
     fr=fgets(line,sizeof(line),fp); /* Px */

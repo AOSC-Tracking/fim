@@ -1,4 +1,4 @@
-/* $LastChangedDate: 2011-08-17 19:50:01 +0200 (Wed, 17 Aug 2011) $ */
+/* $LastChangedDate$ */
 /*
  fim_limits.h : Basic Fim types limits
 

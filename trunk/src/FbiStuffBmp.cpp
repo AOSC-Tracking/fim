@@ -102,7 +102,7 @@ bmp_init(FILE *fp, char *filename, unsigned int page,
 
     h = (struct bmp_state *)fim_calloc(sizeof(*h),1);
     if(!h)goto oops;
-    memset(h,0,sizeof(*h));
+    fim_bzero(h,sizeof(*h));
     h->fp = fp;
 
     fseek(fp,10,SEEK_SET);
