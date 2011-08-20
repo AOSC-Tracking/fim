@@ -1503,6 +1503,17 @@ if test x$fim_want_rbr = xyes ; then
 	AC_DEFINE_UNQUOTED([FIM_WANT_RAW_BITS_RENDERING], 1, [Enables raw bits rendering])
 fi
 dnl ==================
+AH_TEMPLATE([FIM_ALLOW_LOADER_STRING_SPECIFICATION])
+fim_want_lss=yes
+AC_ARG_ENABLE(loader-string-specification, AC_HELP_STRING([--disable-loader-string-specification], [Disables the chance to specify a file loader.]),
+[       if test x$enableval = xno ; then
+		fim_want_lss=no
+        fi
+])
+if test x$fim_want_lss = xyes ; then
+	AC_DEFINE_UNQUOTED([FIM_ALLOW_LOADER_STRING_SPECIFICATION], 1, [Allows the user to specify a file loader])
+fi
+dnl ==================
 
 dnl uhmmmmmm : does not seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 
