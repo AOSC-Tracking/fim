@@ -1492,6 +1492,17 @@ if test x$fim_cv_want_unicode == x1 ; then
 	AC_DEFINE_UNQUOTED([FIM_WANT_UNICODE], $fim_cv_want_unicode, [Unicode. (disabled by default)])
 fi
 dnl ==================
+AH_TEMPLATE([FIM_WANT_RAW_BITS_RENDERING])
+fim_want_rbr=yes
+AC_ARG_ENABLE(raw-bits-rendering, AC_HELP_STRING([--disable-raw-bits-rendering], [Disable raw bits rendering (viewing of any file as either a 1 or 24 bpp bitmap).]),
+[       if test x$enableval = xno ; then
+		fim_want_rbr=no
+        fi
+])
+if test x$fim_want_rbr = xyes ; then
+	AC_DEFINE_UNQUOTED([FIM_WANT_RAW_BITS_RENDERING], 1, [Enables raw bits rendering])
+fi
+dnl ==================
 
 dnl uhmmmmmm : does not seem to work
 dnl AC_ARG_ENABLE(verbose_make,[Enables verbose macros passing to the compiler (for a funnier compilation process.)], 

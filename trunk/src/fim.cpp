@@ -77,11 +77,13 @@ struct fim_options_t fim_options[] = {
     {"autozoom",   no_argument,       NULL, 'a',"scale according to a best fit",NULL,
 "Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)"
     },
+#if FIM_WANT_RAW_BITS_RENDERING
     {FIM_OSW_BINARY,     optional_argument,       NULL, 'b',"view any file as either a 1 or 24 bpp bitmap","[=24|1]",
 "Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.\n" 
 "Will pad with zeros.\n"
 "Regard this as a toy..\n"
     },
+#endif
     {"cd-and-readdir", no_argument,       NULL, 0x4352,"step into the first loaded file directory and push other files",NULL,"step into the first loaded file directory and push other files"},
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
@@ -804,6 +806,7 @@ done:
 		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif
 		    break;
+#if FIM_WANT_RAW_BITS_RENDERING
 		case 'b':
 		    //fim's
 		    if(optarg && strstr(optarg,"1")==optarg && !optarg[1])
@@ -821,6 +824,9 @@ done:
 		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,FIM_DEFAULT_AS_BINARY_BPP);
                     }
 		    break;
+#else
+			std::cerr<<"Warning: the --"FIM_OSW_BINARY" option was disabled at compile time.\n";
+#endif
 		case 'A':
 		    //fbi's
 		    //cc.setVariable(FIM_VID_AUTOTOP,1);
