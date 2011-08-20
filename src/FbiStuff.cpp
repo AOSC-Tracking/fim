@@ -34,6 +34,8 @@
 #include <string.h>
 #include <stdarg.h>	/* va_start, va_end, ... */
 
+#define FIM_HAVE_FULL_PROBING_LOADER 0
+
 namespace fim
 {
 
@@ -1437,6 +1439,22 @@ static long find_regexp_offset(FILE *fp, const char *byte_stream, size_t base_of
 	return 0;
 }
 
+static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h) 
+{
+
+	register fim_byte_t t;
+	register fim_byte_t *p=data,
+		 	*pm=p+w*3*h;
+	while(p<pm)
+	{
+            t=*p;
+            *p=p[2];
+            p[2]=t;
+	    p+=3;
+	}
+}
+
+
 /*static struct ida_image**/
 struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 {
@@ -1453,6 +1471,9 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     unsigned int y;
     void *data;
     int fr=0;
+#if FIM_HAVE_FULL_PROBING_LOADER
+    bool rozlsl=false;/* retry on zero length signature loader */
+#endif
     
     //WARNING
     //new_image = 1;
@@ -1566,10 +1587,10 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     list_for_each(item,&loaders)
     {
         loader = list_entry(item, struct ida_loader, list);
-	if (NULL == loader->magic)
-	    break;
     	if(loader->mlen < 1)
 	    continue;
+	if (NULL == loader->magic)
+	    break;
 	if (0 == memcmp(blk+loader->moff,loader->magic,loader->mlen))
 	    break;
 	loader = NULL;
@@ -1579,12 +1600,28 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 		goto found_a_loader;
     }
 
+#if !FIM_HAVE_FULL_PROBING_LOADER
 #ifdef HAVE_LIBGRAPHICSMAGICK
-    /* FIXME: for now, this is the only 0-mlen loader */
+    /* FIXME: with this scheme, this is the only 0-mlen loader allowed */
     if (NULL == loader)
 	loader = &magick_loader;
     else
 	;
+#endif
+#else
+    /* Incomplete: the problem is related to the descriptor: after the first probe, 
+     * the file descriptor may not be available anymore, in case of standard input,
+     * unless some more advanced solution is found.
+     * */
+    if(NULL==loader)
+    if(rozlsl)
+    list_for_each(item,&loaders)
+    {
+        loader = list_entry(item, struct ida_loader, list);
+    	if(loader->mlen > 0)
+	    continue;
+	loader = NULL;
+    }
 #endif
 
     if((loader==NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
@@ -1750,18 +1787,7 @@ found_a_loader:	/* we have a loader */
      * be dumped to the video memory, resulting in much faster image
      * drawing in fim than in fbi !
      * */
-    {
-	register char t;
-	register char	*p=(char*) img->data,
-		 	*pm=(char*)p+img->i.width*3*y;
-	while(p<pm)
-	{
-            t=*p;
-            *p=p[2];
-            p[2]=t;
-	    p+=3;
-	}
-    }
+	rgb2bgr(img->data,img->i.width,y); 
 #endif
     loader->done(data);
     return img;
