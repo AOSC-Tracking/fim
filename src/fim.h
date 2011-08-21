@@ -262,13 +262,17 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  * Fim Constants
  * */
 #define FIM_CNS_FIM	 "FIM - Fbi IMproved"
-#define FIM_CNS_FIM_TXT	 "FIM.TXT"
+//#define FIM_CNS_FIM_TXT	 "FIM.TXT"
 #define FIM_CNS_BUGS_FILE	 "BUGS"
 #define FIM_CNS_TERM_VAR	 "TERM"
 #define FIM_CNS_HOME_VAR	 "HOME"
 #define FIM_CNS_HIST_FILENAME	 ".fim_history"
 #define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
+#ifdef FIM_CONFIG_DOCDIR
+#define FIM_CNS_DOC_PATH	 FIM_CONFIG_DOCDIR
+#else
 #define FIM_CNS_DOC_PATH	 "/usr/local/share/doc/fim"	/* FIXME: shall depend on config.h */
+#endif
 #define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
 #define FIM_CNS_USR_RC_COMPLETE_FILEPATH	 "~/.fimrc"
 #define FIM_CNS_EXAMPLE_FILENAME	 "file.jpg"

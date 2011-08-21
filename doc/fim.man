@@ -41,9 +41,7 @@ may be as well a directory containing files in supported formats.
 
 If configured at build time, fim will be capable of using SDL or aalib output.
 
-Please note that a user guide of 
-.B fim
-is in the FIM.TXT file distributed in the source package.  This man page only describes the
+This man page only describes the
 .B fim
 command line options.
 
@@ -116,7 +114,7 @@ For example,
 
 .TP
 .B -d {framebuffer device}, --device {framebuffer device}
-framebuffer device to use.  Default is the one your vc is mapped to (as in fbi).
+Framebuffer device to use. Default is the one your vc is mapped to (as in fbi).
 .TP
 .B 	 --dump-reference-help[=man]
 Will dump to stdout the language reference help.
@@ -135,7 +133,7 @@ Specify an alternative system wide initialization file (default: /etc/fimrc), wh
 The \fBcommands\fP string will be executed after exiting the interactive loop of the program (right before terminating the program).
 .TP
 .B -h, --help[=s|d|l|m]
-display help and terminate the program.
+		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
 .B -i, --image-from-stdin
 Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats.
@@ -143,7 +141,7 @@ In the image list, this image will be displayed as "<STDIN>".
 
 .TP
 .B -m {vmode}, --mode {vmode}
-name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
+Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
 .TP
 .B -N, --no-rc-file
 No personal initialization file will be read (default is ~/.fimrc) at startup.
@@ -183,13 +181,13 @@ Will use the specified \fBoffset\fP (in bytes) for opening the specified files (
 Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course).
 .TP
 .B -s {value}, --scroll {value}
-set scroll steps in pixels (default is 50).
+Set scroll steps for internal variable _steps (default is 20%).
 .TP
 .B 	 --slideshow {number}
-interruptible slideshow mode; will wait for {number} of seconds (assigned to the _want_sleep_seconds variable after each loading; implemented by executing while(_fileindex<_filelistlen){sleep _want_sleep_seconds; next;} as a first command.
+Interruptible slideshow mode; will wait for {number} of seconds (assigned to the _want_sleep_seconds variable after each loading; implemented by executing while(_fileindex<_filelistlen){sleep _want_sleep_seconds; next;} as a first command.
 .TP
 .B -S, --sanity-check
-a quick sanity check before starting the interactive fim execution, but after the initialization.
+A quick sanity check before starting the interactive fim execution, but after the initialization.
 .TP
 .B -t, --no-framebuffer
 Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).
@@ -202,28 +200,28 @@ Use (con2fb (1)) to map a terminal to a framebuffer device.
 
 .TP
 .B -u, --random
-randomly shuffle the files list before browsing.
+Randomly shuffle the files list before browsing.
 .TP
 .B -v, --verbose
-be verbose: show status bar.
+Be verbose: show status bar.
 .TP
 .B -V, --version
-display version and compile flags, and then terminate.
+Display program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate.
 .TP
 .B -w, --autowidth
-Will scale the image according to the screen width.
+Scale the image according to the screen width.
 .TP
 .B 	 --no-auto-scale
-Will not scale the images after loading.
+Do not scale the images after loading.
 .TP
 .B -H, --autoheight
-Will scale the image according to the screen height.
+Scale the image according to the screen height.
 .TP
 .B -W {scriptfile}, --write-scriptout {scriptfile}
 All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
 .TP
 .B  -,  --read-from-stdin
-Reads file list from stdin.
+Read file list from stdin.
 
 Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
 
@@ -418,10 +416,10 @@ file shipped in the documentation directory to discover the known ones.
 .SH  FILES
 
 .TP 15
-.B /usr/local/share/doc/fim/FIM.TXT
-The
+.B /usr/local/share/doc/fim
+The directory with 
 .B Fim
-documentation files (may have been installed in a different location than /usr/local/share/doc/fim, in a custom install).
+documentation files (they may have been installed in a different location than /usr/local/share/doc/fim, in a custom install).
 .TP 15
 .B /etc/fimrc
 The system wide
