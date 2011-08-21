@@ -8,7 +8,7 @@ fimrc - \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 .fi
 .B fim --script-from-stdin [ {options} ] < {scriptfile}
 .fi
@@ -603,7 +603,7 @@ _last_system_output
 .fi
 .B
 _load_default_etc_fimrc
-[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file
+[internal,in] if 1 at startup, will load the system wide initialization file
 .fi
 .B
 _load_fim_history

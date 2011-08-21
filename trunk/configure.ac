@@ -1598,10 +1598,6 @@ LIBS="$LIBS `librsb-config --static --ldflags | sed s/-static//g`"
         fi
 ])
 dnl ###############################################################################
-[if test x"$docdir" != x ; then
-	CXXFLAGS="$CXXFLAGS "'-DFIM_CONFIG_DOCDIR=\"$(docdir)\"'
-fi]
-dnl ###############################################################################
 
 
 dnl ==================

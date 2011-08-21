@@ -643,7 +643,7 @@ mp+=string(
 ".B "FIM_CNS_DOC_PATH"\n"
 "The directory with \n"
 ".B Fim\n"
-"documentation files (they may have been installed in a different location than "FIM_CNS_DOC_PATH", in a custom install).\n"
+"documentation files.\n"
 ".TP 15\n"
 ".B "FIM_CNS_SYS_RC_FILEPATH"\n"
 "The system wide\n"

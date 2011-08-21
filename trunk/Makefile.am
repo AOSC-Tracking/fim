@@ -132,10 +132,12 @@ news: freshmeat mail-announce
 
 dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 
+MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g'
+
 doc/fim.man doc/fimrc.man doc/fimgs.man: $(FIM_EXE)
-	$(FIM_EXE) $(FIMNORCOPTS) --help=m                   > doc/fim.man
-	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man  > doc/fimrc.man
-	$(FIMGS_EXE) -m -- $(FIMNORCOPTS)                    > doc/fimgs.man
+	$(FIM_EXE) $(FIMNORCOPTS) --help=m                   |$(MANSUBST) > doc/fim.man
+	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man  |$(MANSUBST) > doc/fimrc.man
+	$(FIMGS_EXE) -m -- $(FIMNORCOPTS)                    |$(MANSUBST) > doc/fimgs.man
 
 # fixme : missing integration with ChangeLog file
 mail-announce:

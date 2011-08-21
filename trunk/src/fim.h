@@ -267,12 +267,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_TERM_VAR	 "TERM"
 #define FIM_CNS_HOME_VAR	 "HOME"
 #define FIM_CNS_HIST_FILENAME	 ".fim_history"
-#define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
-#ifdef FIM_CONFIG_DOCDIR
-#define FIM_CNS_DOC_PATH	 FIM_CONFIG_DOCDIR
-#else
-#define FIM_CNS_DOC_PATH	 "/usr/local/share/doc/fim"	/* FIXME: shall depend on config.h */
-#endif
+#define FIM_CNS_SYS_RC_FILEPATH	 "@sysconfdir@/fimrc"
+#define FIM_CNS_DOC_PATH	 "@docdir@"
 #define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
 #define FIM_CNS_USR_RC_COMPLETE_FILEPATH	 "~/.fimrc"
 #define FIM_CNS_EXAMPLE_FILENAME	 "file.jpg"
@@ -405,7 +401,7 @@ namespace fim
 #define FIM_VID_PUSH_PUSHES_DIRS		"_push_pushes_dirs"	/* "[internal,in] if 1, the push command will also accept and push directories (using pushdir)" */
 #define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[internal,in,experimental] if 1, will execute a sanity check on startup" */
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
-#define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load /etc/fimrc, or equivalent system startup file" */
+#define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load the system wide initialization file" */
 #define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] string with the global configuration file name" */
 #define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" */
