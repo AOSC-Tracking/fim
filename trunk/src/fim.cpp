@@ -105,7 +105,7 @@ struct fim_options_t fim_options[] = {
 "\n"
     },
     {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}",
-"framebuffer device to use.  Default is the one your vc is mapped to (as in fbi)."
+"Framebuffer device to use. Default is the one your vc is mapped to (as in fbi)."
     },
     {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0xd15cbab3,"dump reference info","[=man]",
 "Will dump to stdout the language reference help."
@@ -122,8 +122,8 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit","{commands}",
 "The \\fBcommands\\fP string will be executed after exiting the interactive loop of the program (right before terminating the program)."
     },
-    {"help",       optional_argument,       NULL, 'h',"print short (or descriptive, or long, or complete man) program invocation help","[=s|d|l|m]",
-"display help and terminate the program."
+    {"help",       optional_argument,       NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and terminate.","[=s|d|l|m]",
+NULL
     },
 #ifdef FIM_READ_STDIN_IMAGE
     {FIM_OSW_IMAGE_FROM_STDIN,      no_argument,       NULL, 'i',"read an image file from standard input",NULL,
@@ -132,7 +132,7 @@ struct fim_options_t fim_options[] = {
     },
 #endif
     {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}",
-"name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
+"Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
     {"no-rc-file",      no_argument,       NULL, 'N',"do not read the personal initialization file at startup",NULL,
 "No personal initialization file will be read (default is "FIM_CNS_USR_RC_COMPLETE_FILEPATH") at startup."
@@ -172,14 +172,14 @@ struct fim_options_t fim_options[] = {
     {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document",NULL,
 "Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
     },
-    {"scroll",     required_argument, NULL, 's',"set scroll value (in pixels)","{value}",
-"set scroll steps in pixels (default is 50)."
+    {"scroll",     required_argument, NULL, 's',"set scroll variable value","{value}",
+"Set scroll steps for internal variable "FIM_VID_STEPS" (default is "FIM_CNS_STEPS_DEFAULT")."
     },
     {"slideshow",     required_argument, NULL, 0x7373,"interruptible slideshow mode",FIM_CNS_EX_NUM_STRING,
-"interruptible slideshow mode; will wait for "FIM_CNS_EX_NUM_STRING" of seconds (assigned to the "FIM_VID_WANT_SLEEPS" variable after each loading; implemented by executing "FIM_CNS_SLIDESHOW_CMD" as a first command."
+"Interruptible slideshow mode; will wait for "FIM_CNS_EX_NUM_STRING" of seconds (assigned to the "FIM_VID_WANT_SLEEPS" variable after each loading; implemented by executing "FIM_CNS_SLIDESHOW_CMD" as a first command."
     },
     {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check",NULL,
-"a quick sanity check before starting the interactive fim execution, but after the initialization."
+"A quick sanity check before starting the interactive fim execution, but after the initialization."
     },	/* NEW */
     {"no-framebuffer",      no_argument,       NULL, 't',"display images in text mode (as -o aa)",NULL,
 "Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).\n"
@@ -191,29 +191,29 @@ struct fim_options_t fim_options[] = {
 "Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
     {"random",     no_argument,       NULL, 'u',"randomize images order",NULL,
-"randomly shuffle the files list before browsing."
+"Randomly shuffle the files list before browsing."
     },
     {"verbose",    no_argument,       NULL, 'v',"verbose mode",NULL,
-"be verbose: show status bar."
+"Be verbose: show status bar."
     },
     {"version",    no_argument,       NULL, 'V',"print program version",NULL,
-"display version and compile flags, and then terminate."
+"Display program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate."
     },
     {"autowidth",   no_argument,       NULL, 'w',"scale according to width",NULL,
-"Will scale the image according to the screen width."
+"Scale the image according to the screen width."
     },
     {"no-auto-scale",   no_argument,   NULL,0x4E4053,"do not use any auto-scaling",NULL,
-"Will not scale the images after loading."
+"Do not scale the images after loading."
     },
     {"autoheight",   no_argument,       NULL, 'H',"scale according to height",NULL,
-"Will scale the image according to the screen height."
+"Scale the image according to the screen height."
     },
     {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}","{scriptfile}",
 "All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
     },
 #ifdef FIM_READ_STDIN
     {"read-from-stdin",      no_argument,       NULL, '-',"read an image list from standard input",NULL,
-"Reads file list from stdin.\n"
+"Read file list from stdin.\n"
 
 "\n"
 "Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.\n"
@@ -313,7 +313,7 @@ struct option options[fim_options_count];
 
 class FimInstance
 {
-	static void version();
+	static void show_version();
 
 string fim_dump_man_page_snippets()
 {
@@ -434,7 +434,8 @@ int fim_dump_man_page()
 #endif
 
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
-			string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.  This man page only describes the\n.B fim\ncommand line options.\n\n")+
+	//		string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.\n\n")+
+			string("This man page only describes the\n.B fim\ncommand line options.\n\n")+
 			string(".SH USAGE\n")+
 			string("You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any reasonable image viewer.\n")+
 			string("\n.B\nfim\nis keyboard oriented: there are no user menus or buttons available.\n")+
@@ -639,10 +640,10 @@ mp+=string(
 ".SH  FILES\n"
 "\n"
 ".TP 15\n"
-".B "FIM_CNS_DOC_PATH"/"FIM_CNS_FIM_TXT"\n"
-"The\n"
+".B "FIM_CNS_DOC_PATH"\n"
+"The directory with \n"
 ".B Fim\n"
-"documentation files (may have been installed in a different location than "FIM_CNS_DOC_PATH", in a custom install).\n"
+"documentation files (they may have been installed in a different location than "FIM_CNS_DOC_PATH", in a custom install).\n"
 ".TP 15\n"
 ".B "FIM_CNS_SYS_RC_FILEPATH"\n"
 "The system wide\n"
@@ -730,7 +731,7 @@ int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
 		std::cout << FIM_SYM_ENDL;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 		}
-		std::cout << "\n Please read the documentation distributed with the program, in "FIM_CNS_FIM_TXT".\n"
+		std::cout << "\n Please read the documentation distributed with the program.\n"
 			  << " For further help, consult the online help in fim (:"FIM_FLT_HELP"), and man fim (1), fimrc (1).\n"
 			  << " For bug reporting read the "FIM_CNS_BUGS_FILE" file.\n";
 done:
@@ -994,7 +995,7 @@ done:
 		    default_vt = atoi(optarg);
 		    break;
 		case 'V':
-		    version();
+		    show_version();
 		    return 0;
 		    break;
 		case 0x4352:
@@ -1287,7 +1288,7 @@ int main(int argc,char *argv[])
 //#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
 //#endif
 
-	void FimInstance::version()
+	void FimInstance::show_version()
 	{
 	    FIM_FPRINTF(stderr, 
 			    FIM_CNS_FIM" "
