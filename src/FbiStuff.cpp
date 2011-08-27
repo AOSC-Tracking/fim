@@ -1791,6 +1791,10 @@ found_a_loader:	/* we have a loader */
 	rgb2bgr(img->data,img->i.width,y); 
 #endif
     loader->done(data);
+#if FIM_WANT_REMEMBER_LAST_FILE_LOADER
+    if(img && loader)
+	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);
+#endif
     return img;
 errl:
     if(img && img->data)fim_free(img->data);

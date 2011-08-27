@@ -70,6 +70,7 @@ fim_var_help_db[FIM_VID_SWIDTH]= "[internal,out] the current image scaled width"
 fim_var_help_db[FIM_VID_SHEIGHT]= "[internal,out] the current image scaled height" ;
 fim_var_help_db[FIM_VID_AUTOFLIP]= "[internal,in] if 1, will flip images by default" ;
 fim_var_help_db[FIM_VID_AUTONEGATE]= "[internal,in] if 1, will negate images by default" ;
+fim_var_help_db[FIM_VID_LAST_FILE_LOADER]= "[internal,out] string identifying the last file loader which has loaded an image" ;
 fim_var_help_db[FIM_VID_FLIPPED]= "[internal,out] 1, if the image is flipped" ;
 fim_var_help_db[FIM_VID_NEGATED]= "[internal,out] 1, if the image is negated" ;
 fim_var_help_db[FIM_VID_FIM_BPP]= "[internal,out] the bits per pixel count" ;

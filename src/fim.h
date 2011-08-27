@@ -121,6 +121,8 @@
 #include "fim_types.h"
 #include "fim_limits.h"
 
+#define FIM_WANT_REMEMBER_LAST_FILE_LOADER 1	/* TODO: shall use this feature to set a i:file_loader attribute; FIXME: move this down */
+
 namespace fim
 {
 	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code
@@ -462,6 +464,9 @@ namespace fim
 #define FIM_VID_SHEIGHT				"sheight"		/* "[internal,out] the current image scaled height" */
 #define FIM_VID_AUTOFLIP			"_autoflip"		/* "[internal,in] if 1, will flip images by default" */
 #define FIM_VID_AUTONEGATE			"_autonegate"		/* "[internal,in] if 1, will negate images by default" */
+#if FIM_WANT_REMEMBER_LAST_FILE_LOADER
+#define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[internal,out] string identifying the last file loader which has loaded an image" */
+#endif
 #define FIM_VID_FLIPPED				"flipped"		/* "[internal,out] 1, if the image is flipped" */
 #define FIM_VID_NEGATED				"negated"		/* "[internal,out] 1, if the image is negated" */
 #define FIM_VID_FIM_BPP				"_fim_bpp"		/* "[internal,out] the bits per pixel count" */
