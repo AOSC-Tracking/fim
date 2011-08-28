@@ -120,6 +120,7 @@
 
 #include "fim_types.h"
 #include "fim_limits.h"
+#include "fim_wrappers.h"
 
 #define FIM_WANT_REMEMBER_LAST_FILE_LOADER 1	/* TODO: shall use this feature to set a i:file_loader attribute; FIXME: move this down */
 #define FIM_WANT_BENCHMARKS	1	/* FIXME: move this down */
@@ -726,14 +727,6 @@ namespace fim
 #define FIM_FLAG_FLIP 2
 #define FIM_FLAG_RGB2GRAY 4
 #define FIM_FLAG_RGB2GRAYGRAYGRAY 8
-
-/* symbolic wrappers for memory handling calls */
-#define fim_calloc(x,y) calloc((x),(y))
-#define fim_malloc(x) malloc(x)
-#define fim_free(x) free(x)
-#define fim_memset(x,y,z) memset(x,y,z)
-#define fim_bzero(x,y) fim_memset(x,0,y)
-//#define fim_bzero(x,y) bzero(x,0,y)
 
 
 #define FIM_XSTRINGIFY(X) FIM_STRINGIFY(X)

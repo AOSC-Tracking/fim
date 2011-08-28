@@ -144,7 +144,7 @@ err:
 		const char*os=opts_.c_str();
 		parse_optstring(os);
 #endif
-		bzero(&bvi_,sizeof(bvi_));
+		fim_bzero(&bvi_,sizeof(bvi_));
 		//current_w_=current_h_=0;
 	}
 
@@ -713,7 +713,7 @@ done:
 		 * */
 		for(y=y1;y<=y2;++y)
 		{
-			bzero(((char*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_, (x2-x1+1)* Bpp_);
+			fim_bzero(((char*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_, (x2-x1+1)* Bpp_);
 		}
 		return 0;
 	}

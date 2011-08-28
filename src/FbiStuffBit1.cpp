@@ -120,7 +120,7 @@ bit1_read(fim_byte_t *dst, unsigned int line, void *data)
 		*(dst++) = (c & 1 << 7)?255:0;
 		*(dst++) = (c & 1 << 7)?255:0;
 	}
-//	if(y==h->h-1) bzero(dst,h->w*8-8*x);
+//	if(y==h->h-1) fim_bzero(dst,h->w*8-8*x);
 }
 
 static void

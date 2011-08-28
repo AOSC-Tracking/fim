@@ -1,4 +1,4 @@
-/* $LastChangedDate: 2011-06-29 16:19:20 +0200 (Wed, 29 Jun 2011) $ */
+/* $LastChangedDate$ */
 /*
  FbiStuffMagick.cpp : fim functions for decoding image files using libGraphicsMagick
 
@@ -31,6 +31,7 @@
 
 #include "../config.h"
 #include "fim_types.h"
+#include "fim_wrappers.h"
 #include "FbiStuffList.h"
 #include "FbiStuffLoader.h"
 
@@ -63,7 +64,7 @@ static void*
 magick_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-	bzero(&ms,sizeof(ms));
+	fim_bzero(&ms,sizeof(ms));
 	ms.mpf=MagickFail;
 
 	if(!fp && !filename)
