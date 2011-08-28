@@ -411,6 +411,13 @@ namespace fim
 		append(buf);
 	}
 	
+	string::string(float i)
+	{
+		char buf[FIM_ATOX_BUFSIZE];
+		sprintf(buf,"%f",i);
+		assign(buf);
+	}
+
 	string::string():std::string(""){}
 
 	string string::operator+(const string s)const

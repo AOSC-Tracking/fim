@@ -90,6 +90,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	fim_types.h \
 	fim_limits.h \
 	AADevice.h \
+	Benchmarkable.h \
 	CACADevice.h \
 	SDLDevice.h \
 	Arg.h \

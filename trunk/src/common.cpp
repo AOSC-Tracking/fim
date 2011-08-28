@@ -617,6 +617,14 @@ double getmilliseconds()
 	return dt;
 }
 
+struct fim_bench_struct { void *data; };
+
+typedef fim_err_t (*fim_bench_ft)(struct fim_bench_struct*);
+static fim_err_t fim_bench_video(struct fim_bench_struct*)
+{
+	//cc.clear_rect(0, width()-1, 0,height()/2);
+}
+
 const char * fim_getenv(const char * name)
 {
 	/*

@@ -47,6 +47,7 @@ namespace fim
 
 	typedef int fim_ts_t;		/* a type for time, in seconds */
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */
+	typedef double fim_fms_t;		/* a type for time, in milliseconds, floating point */
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
 	typedef char fim_char_t;	/* a type for chars */
 	typedef unsigned char fim_byte_t;	/* a type for bytes */
