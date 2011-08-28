@@ -305,8 +305,8 @@ static bool aainvalid;
 
 		/* we zero the pixel field */
 		//img or scr ?!
-		//bzero(aa_image(ascii_context_),aa_imgheight(ascii_context_)*ocskip);
-		//bzero(aa_image(ascii_context_),width()*height());
+		//fim_bzero(aa_image(ascii_context_),aa_imgheight(ascii_context_)*ocskip);
+		//fim_bzero(aa_image(ascii_context_),width()*height());
 		AADevice::clear_rect_( aa_image(ascii_context_), oroff,ocoff, oroff+orows,ocoff+ocols, ocskip); 
 
 	//	cout << iroff << " " << icoff << " " << irows << " " << icols << " " << icskip << "\n";

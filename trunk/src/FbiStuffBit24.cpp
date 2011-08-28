@@ -98,7 +98,7 @@ bit24_read(fim_byte_t *dst, unsigned int line, void *data)
 		*(dst++) = fgetc(h->fp);
 		*(dst++) = fgetc(h->fp);
 	}
-//	if(y==h->h-1) bzero(dst,h->w*3-3*x);
+//	if(y==h->h-1) fim_bzero(dst,h->w*3-3*x);
 }
 
 static void

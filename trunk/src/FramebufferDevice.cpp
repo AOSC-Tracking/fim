@@ -1295,7 +1295,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 
     switch (fb_var_.bits_per_pixel) {
     case 8:
-	bzero(ptr, owidth);
+	fim_bzero(ptr, owidth);
 	ptr += owidth;
 	return ptr;
     case 15:

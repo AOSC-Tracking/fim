@@ -1419,7 +1419,7 @@ static long find_regexp_offset(FILE *fp, const char *byte_stream, size_t base_of
 	/* we read in a good chunk of the file */
 	while((rb=fread(buf,1,FIM_FILE_BUF_SIZE,fp))>0)
 	{
-		bzero(buf,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
+		fim_bzero(buf,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
 		off=rb-sl;
 		while( off > 0 )
 		{
