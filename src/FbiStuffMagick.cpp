@@ -20,6 +20,8 @@
 */
 
 /* FIXME: This code is very inefficient, so please regard it as temporary */
+/* FIXME: Error handling is incomplete */
+/* TODO: CatchException fprintf's stuff: it is not adequate error reporting; we would prefer an error string instead  */
 /* Tested with MagickLibVersion defined as 0x090600 */
 
 #include <iostream>
@@ -48,6 +50,15 @@ static struct magick_state_t ms;
 namespace fim
 {
 
+static void magick_cleanup()
+{
+	if(ms.image)DestroyImageList(ms.image);
+	if(ms.cimage)DestroyImageList(ms.cimage);
+	if(ms.image_info)DestroyImageInfo(ms.image_info);
+	//DestroyExceptionInfo(ms.exception);
+	DestroyMagick();
+}
+
 static void*
 magick_init(FILE *fp, char *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
@@ -66,7 +77,7 @@ magick_init(FILE *fp, char *filename, unsigned int page,
 	GetExceptionInfo(&ms.exception);
 	if (ms.exception.severity != UndefinedException)
 	{
-        	CatchException(&ms.exception);
+        	//CatchException(&ms.exception);
 		goto err;
 	}
 	ms.image_info=CloneImageInfo((ImageInfo *) NULL);
@@ -79,7 +90,7 @@ magick_init(FILE *fp, char *filename, unsigned int page,
 	ms.image=ReadImage(ms.image_info,&ms.exception);
 	if (ms.exception.severity != UndefinedException)
 	{
-        	CatchException(&ms.exception);
+        	//CatchException(&ms.exception);
 		goto err;
 	}
 	if(!ms.image)
@@ -94,11 +105,17 @@ magick_init(FILE *fp, char *filename, unsigned int page,
 		goto err;
 
 	ms.cimage=GetImageFromList(ms.image,page);
-	if (ms.exception.severity != UndefinedException) CatchException(&ms.exception);
+	if (ms.exception.severity != UndefinedException)
+	{
+ 		//CatchException(&ms.exception);
+	}
 	if(!ms.cimage)
+	{
 		goto err;
+	}
 	return &ms;
 err:
+	magick_cleanup();
 	return NULL; 
 }
 
@@ -118,6 +135,7 @@ magick_read(fim_byte_t *dst, unsigned int line, void *data)
 static void
 magick_done(void *data)
 {
+	magick_cleanup();
 }
 
 /*

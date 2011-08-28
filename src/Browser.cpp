@@ -792,8 +792,8 @@ ddone:
 		/*	if it is a directory , return */
 		//if(  S_ISDIR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 #ifdef FIM_READ_DIRS
-		if(  S_ISDIR(stat_s.st_mode))
-			if(getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS)==1)
+		if(getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS)==1)
+			if(  S_ISDIR(stat_s.st_mode))
 				return push_dir(nf);
 #endif
 		/*	we want a regular file .. */
@@ -824,7 +824,7 @@ ddone:
 		}
 #endif
 		flist_.push_back(nf);
-
+		//std::cout << "pushing " << nf <<"\n";
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return false;
 	}
