@@ -1510,7 +1510,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	{
 		read_offset=find_regexp_offset(fp, sm.c_str() , read_offset);
 		if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
-		cc.setVariable(FIM_VID_OPEN_OFFSET ,(int)read_offset);
+		cc.setVariable(FIM_VID_OPEN_OFFSET ,(fim_int)read_offset);
 	}
 #endif
     fim_bzero(blk,sizeof(blk));

@@ -183,12 +183,12 @@ namespace fim
 		//cout<<"loaded page "<< want_page<<" to "<<((int*)this)<<"\n";
 
 #ifdef FIM_NAMESPACES
-		setVariable(FIM_VID_HEIGHT ,(int)fimg_->i.height);
-		setVariable(FIM_VID_WIDTH ,(int)fimg_->i.width );
-		setVariable(FIM_VID_SHEIGHT,(int) img_->i.height);
-		setVariable(FIM_VID_SWIDTH,(int) img_->i.width );
+		setVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
+		setVariable(FIM_VID_WIDTH ,(fim_int)fimg_->i.width );
+		setVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
+		setVariable(FIM_VID_SWIDTH,(fim_int) img_->i.width );
 		if(cc.displaydevice_)
-		setVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice_->get_bpp());
+		setVariable(FIM_VID_FIM_BPP ,(fim_int) cc.displaydevice_->get_bpp());
 		setVariable(FIM_VID_SCALE  ,newscale_*100);
 		setVariable(FIM_VID_ASCALE,ascale_);
 		setVariable(FIM_VID_ANGLE , angle_);
@@ -436,10 +436,10 @@ namespace fim
 			/*
 			 * it is important to set these values after rotation, too!
 			 * */
-			setVariable(FIM_VID_HEIGHT ,(int)fimg_->i.height);
-			setVariable(FIM_VID_WIDTH  ,(int)fimg_->i.width );
-			setVariable(FIM_VID_SHEIGHT,(int) img_->i.height);
-			setVariable(FIM_VID_SWIDTH ,(int) img_->i.width );
+			setVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
+			setVariable(FIM_VID_WIDTH  ,(fim_int)fimg_->i.width );
+			setVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
+			setVariable(FIM_VID_SWIDTH ,(fim_int) img_->i.width );
 			setVariable(FIM_VID_ASCALE , ascale_ );
 			//setGlobalVariable(FIM_VID_ANGLE  ,  angle_ );
 		}
@@ -603,12 +603,11 @@ fim::string Image::getInfo()
 		/*
 		 * warning : this should work more intuitively
 		 * */
-		return ((
+		return (FIM_MOD(
 		(  getIntVariable(FIM_VID_ORIENTATION)
 		+getGlobalIntVariable("v:"FIM_VID_ORIENTATION)
 		+getGlobalIntVariable(FIM_VID_ORIENTATION)
-		)
-		%4)+4)%4;
+		) ,4));
 	}
 
 	fim_err_t Image::rotate( fim_scale_t angle_ )
@@ -673,7 +672,7 @@ fim::string Image::getInfo()
 	bool Image::is_multipage()const
 	{
 		if( fimg_ && ( fimg_->i.npages>1 ) )
-			return fimg_->i.npages>1 ;
+			return true;
 		return false;
 	}
 

@@ -431,7 +431,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 	{
 		/* FIXME: #including a file not a clean practice, but it is clean regarding this file. */
 		#include "defaultConfiguration.cpp"
-		return 0; 
+		return FIM_ERR_NO_ERROR; 
 	}
 
         bool CommandConsole::is_file(fim::string nf)const
@@ -453,7 +453,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 	fim_err_t CommandConsole::addCommand(Command *c)
 	{
 		/*
-		 * C is added to the commands list
+		 * c is added to the commands list
 		 */
 		assert(c);	//FIXME : see the macro NDEBUG for this
 		int idx=findCommandIdx(c->cmd_);
@@ -468,7 +468,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 			commands_.push_back(c);
 		//sort(commands_.begin(),commands_.end()); // 20110517 FIXME: shall sort pointers by inspecting pointed data.
 		//based on actual 
-		return 0;
+		return FIM_ERR_NO_ERROR; 
 	}
 
 	fim::string CommandConsole::alias(const fim::string& a, const fim::string& c, const fim::string& d)
@@ -1238,18 +1238,6 @@ rlnull:
 #endif
 	}
 
-	fim_err_t CommandConsole::toggleStatusLine()
-	{
-		/*
-		 * toggles the display of the status line
-		 *
-		 * FIX ME
-		 */
-		int sl=getIntVariable(FIM_VID_STATUS_LINE)?0:1;
-		setVariable(FIM_VID_STATUS_LINE,sl);
-		return 0;
-	}
-
 	fim::string CommandConsole::readStdFileDescriptor(FILE* fd)
 	{
 		/*
@@ -1280,7 +1268,7 @@ rlnull:
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
 		if(r==-1)return FIM_ERR_GENERIC;
 		execute_internal(cmds.c_str(),FIM_X_QUIET);
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t CommandConsole::executeFile(const char *s)
@@ -1291,7 +1279,7 @@ rlnull:
 		 * TODO : catch exceptions
 		 * */
 		execute_internal(slurp_file(s).c_str(),FIM_X_QUIET);
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_var_t CommandConsole::getVariableType(const fim::string &varname)const
@@ -1303,7 +1291,7 @@ rlnull:
 		variables_t::const_iterator vi=variables_.find(varname);
 		if(vi!=variables_.end())
 			return vi->second.getType();
-		else return 0;
+		else return FIM_ERR_NO_ERROR;
 	}
 
 	bool CommandConsole::isVariable(const fim::string &varname)const
@@ -1318,10 +1306,10 @@ rlnull:
 		/*
 		 * a variable is taken and converted to a string and printed
 		 *
-		 * FIXME: should stringify ?
+		 * FIXME: should escape (possibly optionally) ?
 		 * */
 		fim::cout<<getStringVariable(varname);
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_bool_t CommandConsole::drawOutput(const char *s)const
@@ -2025,12 +2013,12 @@ ok:
 			/* else : /home/useeeeeeeeeeeeeeeeeeeeeee.....eeeeeeeer ? :) */
 			
 		}
-		return 0;
+		return FIM_ERR_NO_ERROR;
     #endif
   #endif
 #endif
 #endif
-		return -1;
+		return FIM_ERR_GENERIC;
 	}
 
 	fim_err_t CommandConsole::load_history()
@@ -2051,12 +2039,13 @@ ok:
 				read_history(hfile);
 			}
 		}
-		return 1;
+		//return 1;
+		return FIM_ERR_NO_ERROR;
     #endif
   #endif
 #endif
 #endif
-		return -1;
+		return FIM_ERR_GENERIC;
 	}
 
 	/*
