@@ -24,6 +24,9 @@
 #include "DebugConsole.h"
 
 class DisplayDevice
+#if FIM_WANT_BENCHMARKS
+: public Benchmarkable
+#endif
 {
 	protected:
 	fim_bool_t finalized_;
@@ -83,7 +86,13 @@ class DisplayDevice
 	int redraw_;
 	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
 	void fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags);//experimental
-	void quickbench();
+#if FIM_WANT_BENCHMARKS
+	virtual fim_int get_n_qbenchmarks()const;
+	virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const;
+	virtual void quickbench_init(fim_int qbi);
+	virtual void quickbench_finalize(fim_int qbi);
+	virtual void quickbench(fim_int qbi);
+#endif
 	private:
 	virtual void console_switch(fim_bool_t is_busy){}// really, only for making happy fbdev
 	public:

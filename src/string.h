@@ -122,6 +122,7 @@ namespace fim
 
 		string(char c);
 		string(int i);
+		string(float i);
 		string(int * i);
 
 /*

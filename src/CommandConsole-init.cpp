@@ -37,6 +37,44 @@
 
 namespace fim
 {
+
+#if FIM_WANT_BENCHMARKS
+static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
+{
+	fim_int qbn,qbi;
+	fim_fms_t tbtime,btime;// ms
+	size_t times=1;
+
+	if(!bo)
+		return FIM_ERR_GENERIC;
+	qbn=bo->get_n_qbenchmarks();
+
+	for(qbi=0;qbi<qbn;++qbi)
+	{
+		times=1;
+		tbtime=1000.0,btime=0.0;// ms
+		bo->quickbench_init(qbi);
+		do
+		{
+			btime=-getmilliseconds();
+			//fim_bench_video(bfp);
+			bo->quickbench(qbi);
+			btime+=getmilliseconds();
+			++times;
+			tbtime-=btime;
+		}
+		while(btime>=0.0 && tbtime>0.0 && times>0);
+		--times;
+		tbtime=1000.0-tbtime;
+		std::cout << bo->get_bresults_string(qbi,times,tbtime);
+		bo->quickbench_finalize(qbi);
+	}
+	return FIM_ERR_NO_ERROR;
+}
+#endif
+
+
+
 	fim_err_t CommandConsole::init(fim::string device)
 	{
 		/*
@@ -323,13 +361,64 @@ namespace fim
 #endif
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
+#if FIM_WANT_BENCHMARKS
 			/* experimental */
-			displaydevice_->quickbench();
+			fim_bench_subsystem(displaydevice_);
+			fim_bench_subsystem(this);
+//#else
+			/* */
+			//displaydevice_->quickbench();
+#endif
+#if 0
+			/* FIXME: move this in a static Namespace function ! */
+			fim_fms_t bt;
+			/* insert a quick cc.setVariable benchmark */
+			/* insert a quick cc.getIntVariable benchmark */
+			/* insert a quick cc.getStringVariable benchmark */
+			/* insert a quick cc.getFloatVariable benchmark */
+#endif
 			quit(return_code_);
 			exit(return_code_);
 		}
 		return FIM_ERR_NO_ERROR;
 	}
+
+#if FIM_WANT_BENCHMARKS
+	fim_int CommandConsole::get_n_qbenchmarks()const
+	{
+		return 1;
+	}
+
+	string CommandConsole::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const
+	{
+		string msg=FIM_CNS_EMPTY_STRING;
+		switch(qbi)
+		{
+			case 0:
+			msg+="fim variables set/get test";
+			msg+=" : ";
+			msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
+			msg+=" set/get /s\n";
+		}
+		return msg;
+	}
+
+	void CommandConsole::quickbench_init(fim_int qbi)
+	{
+	}
+
+	void CommandConsole::quickbench_finalize(fim_int qbi)
+	{
+	}
+
+	void CommandConsole::quickbench(fim_int qbi)
+	{
+		const fim_int max_sq=1024*1024;
+		/* FIXME: may be enhanced with sequence numbers ... */
+		cc.setVariable(fim_rand()%(max_sq),fim_rand());
+		cc.getIntVariable(fim_rand()%max_sq);
+	}
+#endif
 
 	void CommandConsole::dumpDefaultFimrc()const
 	{

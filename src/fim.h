@@ -122,6 +122,7 @@
 #include "fim_limits.h"
 
 #define FIM_WANT_REMEMBER_LAST_FILE_LOADER 1	/* TODO: shall use this feature to set a i:file_loader attribute; FIXME: move this down */
+#define FIM_WANT_BENCHMARKS	1	/* FIXME: move this down */
 
 namespace fim
 {
@@ -354,6 +355,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 
 #include "string.h"
 #include "Command.h"
+#include "Benchmarkable.h"
 #include "Arg.h"
 #include "FontServer.h"
 #include "FbiStuff.h"

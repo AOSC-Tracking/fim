@@ -221,33 +221,52 @@ DisplayDevice::~DisplayDevice()
 {
 }
 
-void DisplayDevice::quickbench()
+#if FIM_WANT_BENCHMARKS
+fim_int DisplayDevice::get_n_qbenchmarks()const
+{
+	return 1;
+}
+
+string DisplayDevice::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const
+{
+	string msg=FIM_CNS_EMPTY_STRING;
+	switch(qbi)
+	{
+		case 0:
+		msg+="fim check";
+		msg+=" : ";
+		msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
+		msg+=" clears/s\n";
+	}
+	return msg;
+}
+
+void DisplayDevice::quickbench_init(fim_int qbi)
+{
+	switch(qbi)
+	{
+		case 0:
+		string msg="fim check";
+		std::cout << msg << " : " << "please be patient\n";
+		break;
+	}
+}
+
+void DisplayDevice::quickbench_finalize(fim_int qbi)
+{
+}
+
+void DisplayDevice::quickbench(fim_int qbi)
 {
 	/*
 		a quick draw benchmark and sanity check.
 		currently performs only the clear function.
 	*/
-	double tbtime,btime;// ms
-	size_t times=1;
-	string msg="fim check";
-
-	std::cout << msg << " : " << "please be patient\n";
-
-	times=1;
-	tbtime=1000.0,btime=0.0;// ms
-
-	do
+	switch(qbi)
 	{
-		btime=-getmilliseconds();
+		case 0:
 		clear_rect(0, width()-1, 0,height()/2);
-		btime+=getmilliseconds();
-		++times;
-		tbtime-=btime;
+		break;
 	}
-	while(btime>=0.0 && tbtime>0.0 && times>0);
-	--times;
-	tbtime=1000.0-tbtime;
-
-	std::cout << msg << " : " << ((double)times)/((tbtime)*1.e-3) << " clears/s\n";
 }
-
+#endif

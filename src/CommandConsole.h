@@ -29,7 +29,11 @@
 namespace fim
 {
 class CommandConsole
+#if FIM_WANT_BENCHMARKS
+	: public Benchmarkable
+#endif
 {
+	public:
 	friend class FbiStuff;
 
 	private:
@@ -364,6 +368,13 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_err_t display_reinit(const fim_char_t *rs);
 	fim::string fcmd_basename(const args_t& args);
 	fim_bool_t key_syms_update();
+#if FIM_WANT_BENCHMARKS
+	virtual fim_int get_n_qbenchmarks()const;
+	virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const;
+	virtual void quickbench_init(fim_int qbi);
+	virtual void quickbench_finalize(fim_int qbi);
+	virtual void quickbench(fim_int qbi);
+#endif
 };
 }
 
