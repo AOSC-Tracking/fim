@@ -362,20 +362,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
 #if FIM_WANT_BENCHMARKS
-			/* experimental */
 			fim_bench_subsystem(displaydevice_);
 			fim_bench_subsystem(this);
-//#else
-			/* */
-			//displaydevice_->quickbench();
-#endif
-#if 0
-			/* FIXME: move this in a static Namespace function ! */
-			fim_fms_t bt;
-			/* insert a quick cc.setVariable benchmark */
-			/* insert a quick cc.getIntVariable benchmark */
-			/* insert a quick cc.getStringVariable benchmark */
-			/* insert a quick cc.getFloatVariable benchmark */
 #endif
 			quit(return_code_);
 			exit(return_code_);
