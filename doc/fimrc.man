@@ -339,7 +339,7 @@ prefetch : prefetch two nearby image files, for a faster subsequent opening
 .B
 quit
 .fi
-quit [{number}] : terminate the program; if specified {number}, will use it as the program return code
+quit [{number}] : terminate the program; if {number} is specified, use it as the program return status
 .fi
 
 .B
@@ -596,6 +596,10 @@ _ignorecase
 .B
 _inhibit_display
 [internal] if 1, will inhibit display
+.fi
+.B
+_last_file_loader
+[internal,out] string identifying the last file loader which has loaded an image
 .fi
 .B
 _last_system_output
