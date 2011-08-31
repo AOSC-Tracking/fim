@@ -331,6 +331,7 @@ err:
 		int want_width=current_w_, want_height=current_h_, want_bpp=0;
 		int want_flags=FIM_SDL_FLAGS;
 		int delay=0,interval=0;
+		const char * errstr=NULL;
 		//want_flags|=SDL_NOFRAME;
 		//std::cout << want_width << " : "<< want_height<<"\n";
 #if 0
@@ -349,13 +350,13 @@ err:
 		if(!allowed_resolution(want_width,want_height))
 		{
 			std::cout << "requested window size ("<<want_width<<":"<<want_height<<") smaller than the smallest allowed.\n";
-			return FIM_ERR_GENERIC;
+			goto sdlerr;
 		}
 
 		if (SDL_Init(SDL_INIT_VIDEO) < 0 )
 		{
 			std::cout << "problems initializing SDL (SDL_Init)\n";
-			return 1;
+			goto sdlerr;
 		}
 		{
 			const SDL_VideoInfo*bvip=SDL_GetVideoInfo();
@@ -383,7 +384,7 @@ err:
 		{
 			std::cout << "problems initializing SDL (SDL_SetVideoMode)\n";
 			SDL_Quit();
-			return FIM_ERR_GENERIC;
+			goto err;
 		}
 		fim_perror(NULL);
 
@@ -422,6 +423,12 @@ err:
 		mc_.reformat(    width() /    f_->width   );
 #endif
 		return FIM_ERR_NO_ERROR;
+sdlerr:
+		errstr=SDL_GetError();
+		if(errstr)
+			std::cerr << "SDL error string: \"" << errstr  << "\"\n";
+err:
+		return FIM_ERR_GENERIC;
 	}
 
 	void SDLDevice::finalize()
