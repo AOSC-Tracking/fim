@@ -446,6 +446,7 @@ int fim_dump_man_page()
 			string("\n.SH OPTIONS\n")+
 			string("Accepted command line \n.B\n{options}\n:\n");
 			mp+=fim_dump_man_page_snippets();
+			mp+=string(".SH PROGRAM RETURN STATUS\n The program return status is 0 on correct operation, or a different value in case of an error.\n The return status may be controlled by the use of the "FIM_FLT_QUIT" command.\n");
 			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
 ".nf\n"
 "The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable "FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS").\n\n"

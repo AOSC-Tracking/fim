@@ -239,6 +239,9 @@ below to read some useful (and unique) ways of employing fim.
 .B -r {resolution}, --resolution {resolution}
 		 set resolution (UNFINISHED)
 
+.SH PROGRAM RETURN STATUS
+ The program return status is 0 on correct operation, or a different value in case of an error.
+ The return status may be controlled by the use of the quit command.
 .SH COMMON KEYS AND COMMANDS
 .nf
 The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable _fim_default_config_file_contents).
