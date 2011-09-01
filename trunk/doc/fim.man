@@ -240,7 +240,7 @@ below to read some useful (and unique) ways of employing fim.
 		 set resolution (UNFINISHED)
 
 .SH PROGRAM RETURN STATUS
- The program return status is 0 on correct operation, or a different value in case of an error.
+The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error;  or a different value in case of an another error.
  The return status may be controlled by the use of the quit command.
 .SH COMMON KEYS AND COMMANDS
 .nf

@@ -971,7 +971,7 @@ ok:
 */
 #endif
 
-	fim_err_t CommandConsole::executionCycle()
+	fim_perr_t CommandConsole::executionCycle()
 	{
 		/*
 		 * the cycle with fetches the instruction stream.
@@ -1169,7 +1169,7 @@ rlnull:
 		std::exit(i);
 	}
 
-	int CommandConsole::quit(int i)
+	fim_perr_t CommandConsole::quit(int i)
 	{
 		/*
 		 * the method to be called to exit from the program safely.

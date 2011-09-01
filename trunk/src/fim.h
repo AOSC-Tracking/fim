@@ -225,12 +225,26 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_EPR_ZCAT		"zcat"
 
 /*
- * Some Fim error codes.
+ * Some Fim (internal) error codes.
  */
 #define FIM_ERR_NO_ERROR	0
 #define FIM_ERR_GENERIC	-1
 #define FIM_ERR_UNSUPPORTED	-2
 #define FIM_ERR_BUFFER_FULL	-1024 // FIXME: -2 seems in use
+#define FIM_ERR_UNSUPPORTED_DEVICE	-4
+#define FIM_ERR_BAD_PARAMS	-8
+
+#define FIM_ERR_TO_PERR(E)	(((unsigned char)(E)))
+
+/*
+ * Some Fim (program) error codes.
+ */
+#define FIM_PERR_NO_ERROR	FIM_ERR_TO_PERR(FIM_ERR_NO_ERROR)
+#define FIM_PERR_GENERIC	FIM_ERR_TO_PERR(FIM_ERR_GENERIC)
+#define FIM_PERR_UNSUPPORTED	FIM_ERR_TO_PERR(FIM_ERR_UNSUPPORTED)
+//#define FIM_PERR_BUFFER_FULL	FIM_ERR_TO_PERR(FIM_ERR_BUFFER_FULL)
+#define FIM_PERR_UNSUPPORTED_DEVICE	FIM_ERR_TO_PERR(FIM_ERR_UNSUPPORTED_DEVICE)
+#define FIM_PERR_BAD_PARAMS	 FIM_ERR_TO_PERR(FIM_ERR_BAD_PARAMS)
 
 /*
  * Some Fim error messages.
@@ -729,7 +743,9 @@ namespace fim
 #define FIM_FLAG_RGB2GRAYGRAYGRAY 8
 
 
+/* FIM_XSTRINGIFY evaluates to a string with the supplied preprocessor symbol value */
 #define FIM_XSTRINGIFY(X) FIM_STRINGIFY(X)
+/* FIM_STRINGIFY evaluates to a string with the supplied preprocessor symbol identifier */
 #define FIM_STRINGIFY(X) #X
 
 #endif

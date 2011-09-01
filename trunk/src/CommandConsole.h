@@ -190,7 +190,7 @@ class CommandConsole
 	bool display();
 	bool redisplay();
 	char * command_generator (const char *text,int state,int mask)const;
-	fim_err_t executionCycle();
+	fim_perr_t executionCycle();
 	fim_err_t init(fim::string device);
 	int  inConsole()const;
 	~CommandConsole();
@@ -296,7 +296,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string scroll_up(const args_t& args);
 	fim::string scroll_down(const args_t& args);
 #endif
-	int quit(int i=FIM_CNS_ERR_QUIT);
+	fim_perr_t quit(int i=FIM_CNS_ERR_QUIT);
 	public:
 	fim_key_t find_keycode_for_bound_cmd(fim::string binding);
 

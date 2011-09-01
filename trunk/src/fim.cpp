@@ -446,7 +446,13 @@ int fim_dump_man_page()
 			string("\n.SH OPTIONS\n")+
 			string("Accepted command line \n.B\n{options}\n:\n");
 			mp+=fim_dump_man_page_snippets();
-			mp+=string(".SH PROGRAM RETURN STATUS\n The program return status is 0 on correct operation, or a different value in case of an error.\n The return status may be controlled by the use of the "FIM_FLT_QUIT" command.\n");
+			mp+=string(".SH PROGRAM RETURN STATUS\n"
+		     	"The program return status is ")+string(FIM_ERR_NO_ERROR)+string(" on correct operation; ");
+			mp+=string(FIM_PERR_UNSUPPORTED_DEVICE)+string(" on unsupported device specification; ");
+			mp+=string(FIM_PERR_BAD_PARAMS)+string(" on bad input; ");
+			mp+=string(FIM_PERR_GENERIC)+string(" on a generic error; ");
+			mp+=string(" or a different value in case of an another error.\n");
+			mp+=string(" The return status may be controlled by the use of the "FIM_FLT_QUIT" command.\n");
 			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
 ".nf\n"
 "The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable "FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS").\n\n"
@@ -693,7 +699,7 @@ FBI_AUTHOR" is the author of \"fbi\", upon which\n.B fim\nwas originally based. 
 	return 0;
 }
 
-int help_and_exit(char *argv0, int code=0, const char*helparg=NULL)
+fim_perr_t help_and_exit(char *argv0, fim_perr_t code=FIM_PERR_NO_ERROR, const char*helparg=NULL)
 {
 	if(helparg&&*helparg=='b')
 	{
@@ -742,9 +748,9 @@ done:
 
 
 	public:
-	int main(int argc,char *argv[])
+	fim_perr_t main(int argc,char *argv[])
 	{
-		int retcode=0;
+		fim_perr_t retcode=FIM_PERR_NO_ERROR;
 		/*
 		 * an adapted version of the main function
 		 * of the original version of the fbi program
@@ -1120,7 +1126,7 @@ done:
 	#endif
 		default:
 		case 'h':
-		    help_and_exit(argv[0],0,optarg);
+		    help_and_exit(argv[0],FIM_PERR_NO_ERROR,optarg);
 		}
 	    }
 		for (i = optind; i < argc; i++)
@@ -1154,7 +1160,7 @@ done:
 					", -i"
 #endif
 					")!\n\n");
-			retcode=help_and_exit(argv[0],0,"b");/* should return 0 or -1 ? */
+			retcode=help_and_exit(argv[0],FIM_PERR_NO_ERROR,"b");/* should return 0 or -1 ? */
 			goto ret;
 		}
 		/*
@@ -1222,7 +1228,7 @@ done:
 		&& !perform_sanity_check
 		)
 		{
-			retcode=help_and_exit(argv[0],-1,"b");goto ret;
+			retcode=help_and_exit(argv[0],FIM_PERR_BAD_PARAMS,"b");goto ret;
 		}
 	
 		/* output device guess */
@@ -1249,7 +1255,7 @@ done:
 
 		// TODO : we still need a good output device probing mechanism
 
-		if(cc.init(g_fim_output_device)!=0) {retcode=-1;goto ret;};
+		if((retcode=FIM_ERR_TO_PERR(cc.init(g_fim_output_device)))!=FIM_PERR_NO_ERROR) {goto ret;}
 		retcode=cc.executionCycle();/* note that this could not return */
 ret:
 		return retcode;
@@ -1257,7 +1263,7 @@ ret:
 
 };
 
-int main(int argc,char *argv[])
+fim_perr_t main(int argc,char *argv[])
 {
 	/*
 	 * FimInstance will encapsulate all of the fim's code someday.
