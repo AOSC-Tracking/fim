@@ -39,6 +39,7 @@ namespace fim
 	typedef int fim_bpp_t;		/* a type for bits Per Pixel */
 	typedef int fim_key_t;		/* a type for keycodes */
 	typedef int fim_err_t;		/* a type for errors */
+	typedef int fim_perr_t;		/* a type for program errors */
 	typedef int fim_status_t;	/* a type for fim's status */
 	typedef int fim_cycles_t;	/* a type for fim's cycles */
 	typedef int fim_cmd_type_t;	/* a type for fim's command types */

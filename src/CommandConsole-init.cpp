@@ -103,7 +103,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 					mc_
 #endif
 					);
-			if(!displaydevice_ || ((FramebufferDevice*)displaydevice_)->framebuffer_init()){cleanup();return -1;}
+			if(!displaydevice_ || ((FramebufferDevice*)displaydevice_)->framebuffer_init()){cleanup();return FIM_ERR_GENERIC;}
 			ffdp=((FramebufferDevice*)displaydevice_);
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_FB);
 			if(default_fbdev)ffdp->set_fbdev(default_fbdev);
@@ -221,7 +221,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			{
 				std::cerr << "Failure using the \""<<device<<"\" display device driver string (wrong options?)!\n";
 				cleanup();
-				return -1;
+				return FIM_ERR_UNSUPPORTED_DEVICE;
+
 			}
 			else
 			if(device!=FIM_DDN_VAR_DUMB)
@@ -238,7 +239,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #ifdef FIM_WINDOWS
 		/* true pixels if we are in framebuffer mode */
 		/* fake pixels if we are in text (er.. less than!) mode */
-		if( xres<=0 || yres<=0 ) return -1;
+		if( xres<=0 || yres<=0 )
+		       	return FIM_ERR_BAD_PARAMS;
 
 		try
 		{
