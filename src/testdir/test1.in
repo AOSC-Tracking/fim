@@ -22,4 +22,16 @@ else { stdout "basic integer arithmetics does not work"; quit -1; }
 if ( 41 != 50-10 ) { stdout "basic integer arithmetics works"; }
 else { stdout "basic integer arithmetics does not work"; quit -1; }
 
+if ( 1 | 2 ) { stdout "basic integer bitwise OR works"; }
+else { stdout "basic integer bitwise OR does not work"; quit -1; }
+
+if ( ! 0 ) { stdout "basic integer bitwise OR works"; }
+else { stdout "basic integer bitwise OR does not work"; quit -1; }
+
+if ( 1 & 3 ) { stdout "basic integer bitwise AND works"; }
+else { stdout "basic integer bitwise AND does not work"; quit -1; }
+
+if ( !( 1 & 0) ) { stdout "basic integer bitwise AND works"; }
+else { stdout "basic integer bitwise AND does not work"; quit -1; }
+
 stdout "basic integer arithmetic test success";
