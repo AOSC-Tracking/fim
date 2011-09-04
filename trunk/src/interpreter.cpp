@@ -463,6 +463,9 @@ Var ex(nodeType *p)
 			case REGEXP_MATCH: return ex(p->opr.op[0]).re_match(ex(p->opr.op[1]));
 			case AND:return ex(p->opr.op[0]) && ex(p->opr.op[1]);
 			case OR :return ex(p->opr.op[0]) || ex(p->opr.op[1]);
+			case BOR :return ex(p->opr.op[0]) | ex(p->opr.op[1]);
+			case BAND:return ex(p->opr.op[0]) & ex(p->opr.op[1]);
+			/* FIXME: NEED A DEFAULT CASE */
 		}	
 		case cmdId:/* FIXME : cmdId is dead */
 			DBG("cmdId ?!\n");

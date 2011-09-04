@@ -112,7 +112,7 @@ STRINGC_DQ {STRINGC}|\'
 
 
 %%
-"|" return SYSTEM;
+^"|" return SYSTEM;
 "!"  return NOT;
 ">=" return GE;
 "<=" return LE;
@@ -120,7 +120,9 @@ STRINGC_DQ {STRINGC}|\'
 "=~" return REGEXP_MATCH;
 "!=" return NE;
 "&&" return AND;
+"&" return BAND;
 "||" return OR;
+"|" return BOR;
 "while" return WHILE;
 "if" return IF;
 "else" return ELSE;

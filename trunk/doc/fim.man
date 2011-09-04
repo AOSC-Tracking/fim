@@ -19,7 +19,7 @@ fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH DESCRIPTION
 .B
 fim
-is a `swiss army knife` for displaying image files.
+is a `swiss army knife' for displaying image files.
 It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim-like autocommands, and much more.
 
 As a default,

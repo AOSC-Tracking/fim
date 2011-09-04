@@ -107,7 +107,9 @@ Warning: at the present state, this grammar has conflicts. A future release shal
             | expression '<' expression
             | expression '>' expression
             | expression '||' expression
+            | expression BOR expression
             | expression '&&' expression
+            | expression BAND expression
             | expression '>=' expression
             | expression '<=' expression
             | expression '!=' expression
