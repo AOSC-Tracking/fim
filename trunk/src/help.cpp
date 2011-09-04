@@ -52,6 +52,7 @@ fim_var_help_db[FIM_VID_CONSOLE_BUFFER_USED]= "[internal,out] amount of used mem
 fim_var_help_db[FIM_VID_VERBOSE_KEYS]= "[internal,in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode" ;
 fim_var_help_db[FIM_VID_CMD_EXPANSION]= "[internal,in] if 1, will enable autocompletion (on execution) of alias and command strings" ;
 fim_var_help_db[FIM_VID_VERBOSE_ERRORS]= "[internal,in] if 1, will display on stdout internal errors, while parsing commands" ;
+fim_var_help_db[FIM_VID_VERBOSITY]= "[internal,in,experimental] program verbosity" ;
 fim_var_help_db[FIM_VID_CONSOLE_KEY]= "[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" ;
 fim_var_help_db[FIM_VID_IGNORECASE]= "[internal,in] if 1, will allow for case insensitive regexp-based searches" ;
 fim_var_help_db[FIM_VID_SAVE_FIM_HISTORY]= "[internal,in] if 1 on exit, will save the ~/fim_history file on exit" ;

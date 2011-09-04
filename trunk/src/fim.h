@@ -124,6 +124,7 @@
 
 #define FIM_WANT_REMEMBER_LAST_FILE_LOADER 1	/* TODO: shall use this feature to set a i:file_loader attribute; FIXME: move this down */
 #define FIM_WANT_BENCHMARKS	1	/* FIXME: move this down */
+#define FIM_ALLOW_LOADER_VERBOSITY 1
 
 namespace fim
 {
@@ -167,6 +168,7 @@ namespace rl
 //#define FIM_FBI_PRINTF( ... ) fprintf(stderr, __VA_ARGS__ )
 /* " warning: anonymous variadic macros were introduced in C99" (here and elsewhere) */
 #define FIM_FBI_PRINTF( ... ) 1
+#define FIM_VERB_PRINTF printf
 
 namespace fim{
 enum fim_image_source_t { FIM_E_FILE=-11, FIM_E_STDIN=-22};	/* these */
@@ -346,6 +348,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EX_SCALE_STRING	"{scale}"
 #define FIM_CNS_SHELL	"/bin/sh"
 #define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.JPEG$|\\.JFIF$|\\.PPM$"
+#define FIM_CNS_VERBOSITY_LOADER		1 /* a value for FIM_VID_VERBOSITY */ 
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
@@ -463,6 +466,7 @@ namespace fim
 #define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[internal,in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode" */
 #define FIM_VID_CMD_EXPANSION			"_command_expansion"			/* "[internal,in] if 1, will enable autocompletion (on execution) of alias and command strings" */
 #define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[internal,in] if 1, will display on stdout internal errors, while parsing commands" */
+#define FIM_VID_VERBOSITY			"_verbosity"			/* "[internal,in,experimental] program verbosity" */
 #define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
 #define FIM_VID_IGNORECASE			"_ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp-based searches" */
 #define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[internal,in] if 1 on exit, will save the ~/fim_history file on exit" */
