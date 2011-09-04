@@ -1252,9 +1252,12 @@ done:
 
 		if((retcode=FIM_ERR_TO_PERR(cc.init(g_fim_output_device)))!=FIM_PERR_NO_ERROR) {goto ret;}
 #if FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG
+		if(read_one_file_from_stdin)
+		{
 			cc.fpush(fim_fread_tmpfile(stdin));
 			close(0);
 			ndd=dup(2);
+		}
 #endif
 		retcode=cc.executionCycle();/* note that this could not return */
 ret:
