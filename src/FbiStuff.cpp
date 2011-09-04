@@ -1474,6 +1474,11 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 #if FIM_HAVE_FULL_PROBING_LOADER
     bool rozlsl=false;/* retry on zero length signature loader */
 #endif
+#if FIM_ALLOW_LOADER_VERBOSITY
+    const bool vl=(cc.getIntVariable(FIM_VID_VERBOSITY)&FIM_CNS_VERBOSITY_LOADER);
+#else
+    const bool vl=false;
+#endif
     
     //WARNING
     //new_image = 1;
@@ -1527,10 +1532,14 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     fim::string ls=cc.getStringVariable(FIM_VID_FILE_LOADER);
     if(ls!=FIM_CNS_EMPTY_STRING)
     if(NULL==loader)/* we could have forced one */
+    {
+    if(vl)FIM_VERB_PRINTF("using user specified loader string: %s\n",ls.c_str());
     list_for_each(item,&loaders) {
         loader = list_entry(item, struct ida_loader, list);
+    	if(vl)FIM_VERB_PRINTF("loader %s\n",loader->name);
 	if (!strcmp(loader->name,ls.c_str()))
 		goto found_a_loader;
+    }
     }
 		loader = NULL;
     }
@@ -1598,6 +1607,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     }
     if(loader!=NULL)
     {
+    		if(vl)FIM_VERB_PRINTF("found loader %s by magic number\n",loader->name);
 		goto found_a_loader;
     }
 
@@ -1749,6 +1759,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 
 found_a_loader:	/* we have a loader */
 
+    if(vl)FIM_VERB_PRINTF("using loader %s\n",loader->name);
     /* load image */
     img = (struct ida_image*)fim_calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
     if(!img)goto errl;
@@ -1764,6 +1775,7 @@ found_a_loader:	/* we have a loader */
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
 #endif
     if (NULL == data) {
+	if(vl)FIM_VERB_PRINTF("loader failed\n");
 	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);

@@ -732,6 +732,10 @@ _verbose_keys
 [internal,in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode
 .fi
 .B
+_verbosity
+[internal,in,experimental] program verbosity
+.fi
+.B
 _vsteps
 [internal,in] the default steps, in pixels, when panning images vertically (overrides steps)
 .fi
