@@ -2,7 +2,7 @@
 /*
  Var.h : Var class header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -211,6 +211,14 @@ class Var
 		if(_both('f'))return getFloat()*v.getFloat();
 		if(_both('s'))return getFloat()*v.getFloat();
 		return getFloat()*v.getFloat(); 
+	}
+	Var operator| (const Var &v)const
+	{
+		return getInt  ()|v.getInt  (); 
+	}
+	Var operator& (const Var &v)const
+	{
+		return getInt  ()&v.getInt  (); 
 	}
 	Var operator+ (const Var &v)const
 	{
