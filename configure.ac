@@ -253,6 +253,7 @@ AC_CHECK_FUNCS([bzero memset memcmp strncmp strcpy])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([drand48 random rand])
 AC_CHECK_FUNCS([fileno])
+AC_CHECK_FUNCS([fmemopen])
 dnl AC_FUNC_REALLOC()	dnl triggers error in automake 1.10.1
 
 #AC_CHECK_HEADERS([stddef.h])

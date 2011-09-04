@@ -51,7 +51,7 @@ int int2msbf(int in);
 int int2lsbf(int in);
 fim::string slurp_file(fim::string filename);
 char* slurp_binary_fd(int fd,int *rs);
-char* slurp_binary_FD(FILE* fd,int *rs);
+unsigned char* slurp_binary_FD(FILE* fd, size_t  *rs);
 void append_to_file(fim::string filename, fim::string lines);
 
 char * dupstr (const char* s);

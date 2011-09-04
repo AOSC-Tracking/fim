@@ -35,6 +35,12 @@
 #include <stdarg.h>	/* va_start, va_end, ... */
 
 #define FIM_HAVE_FULL_PROBING_LOADER 0
+#ifdef HAVE_FMEMOPEN
+//#define FIM_SHALL_BUFFER_STDIN (HAVE_FMEMOPEN && FIM_READ_STDIN_IMAGE)	/* FIXME: new */
+#define FIM_SHALL_BUFFER_STDIN 0 /* FIXME: before activating this, we shall harmonize other buffering methods first (e.g.: cc.fpush(), which is backed up by a temporary file) */
+#else
+#define FIM_SHALL_BUFFER_STDIN 0
+#endif
 
 namespace fim
 {
@@ -1475,14 +1481,39 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
     bool rozlsl=false;/* retry on zero length signature loader */
 #endif
 #if FIM_ALLOW_LOADER_VERBOSITY
-    const bool vl=(cc.getIntVariable(FIM_VID_VERBOSITY)&FIM_CNS_VERBOSITY_LOADER);
+    const fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY)&FIM_CNS_VERBOSITY_LOADER);
 #else
-    const bool vl=false;
+    const fim_int vl=false;
+#endif
+#if FIM_SHALL_BUFFER_STDIN
+    fim_byte_t * sbuf=NULL;
+    //fim_size_t sbbs=NULL;
+    size_t sbbs=NULL;
 #endif
     
+    //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
+    if(vl)FIM_VERB_PRINTF("approaching loading \"%s\"\n",filename);
     //WARNING
     //new_image = 1;
 
+#if FIM_SHALL_BUFFER_STDIN
+    if(fd!=NULL)
+    if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) 
+    {
+	    if(vl)FIM_VERB_PRINTF("will attempt to use fmemopen\n");
+	    sbuf=slurp_binary_FD(fd,&sbbs);
+	    if(sbuf==NULL || !sbbs)
+	    {
+		if(sbuf)fim_free(sbuf);
+    		if(vl)FIM_VERB_PRINTF("problems slurping the file\n");
+	    }
+	    else
+	    {
+		fd=fmemopen(sbuf,sbbs,"rb");
+    		if(vl)FIM_VERB_PRINTF("using fmemopen\n");
+	    }
+    }
+#endif
     // Warning: this fd passing 
     // is a trick for reading stdin...
     // ... and it is simpler that rewriting loader stuff.
@@ -1807,15 +1838,19 @@ found_a_loader:	/* we have a loader */
     if(img && loader)
 	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);
 #endif
-    return img;
-errl:
-    if(img && img->data)fim_free(img->data);
-    if(img )fim_free(img);
-    return NULL;
+    goto ret;
 
 shall_skip_header:
 head_not_found: /* no appropriate loader found for this image */
-    return NULL;
+    img=NULL;
+errl:
+    if(img && img->data)fim_free(img->data);
+    if(img )fim_free(img);
+#if FIM_SHALL_BUFFER_STDIN
+    if(sbuf)fim_free(sbuf);
+#endif
+ret:
+    return img;
 }
 
 /*all dez's

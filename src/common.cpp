@@ -194,22 +194,22 @@ void trec(char *str,const char *f,const char*t)
 	} 
 }
 
-	char* slurp_binary_FD(FILE* fd,int *rs)
+	unsigned char* slurp_binary_FD(FILE* fd, size_t  *rs)
 	{
 			/*
 			 * ripped off quickly from slurp_binary_fd
 			 * FIXME : it is not throughly tested
 			 * */
-			char	*buf=NULL;
+			unsigned char	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
-			buf=(char*)fim_calloc(inc,1);
+			buf=(unsigned char*)fim_calloc(inc,1);
 			if(!buf) return buf;
 			while((nrb=fread(buf+rb,1,inc,fd))>0)
 			{
-				char *tb;
+				unsigned char *tb;
 				// if(nrb==inc) a full read. let's try again
 				// else we assume this is the last read (could not be true, of course)
-				tb=(char*)realloc(buf,rb+=nrb);
+				tb=(unsigned char*)realloc(buf,rb+=nrb);
 				if(tb!=NULL)
 					buf=tb;
 				else
