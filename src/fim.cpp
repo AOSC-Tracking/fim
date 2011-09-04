@@ -1185,16 +1185,11 @@ done:
 		else
 		if(read_one_file_from_stdin)
 		{
-			/*
-			 * we read a whole image file from stdin
-			 * */
-			FILE *tfd=NULL;
-			if( ( tfd=fim_fread_tmpfile(stdin) )!=NULL )
-			{	
-				cc.fpush(tfd);
-			}
+#if !FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG
+			cc.fpush(fim_fread_tmpfile(stdin));
 			close(0);
 			ndd=dup(2);
+#endif
 		}
 		#endif
 		else
@@ -1256,6 +1251,11 @@ done:
 		// TODO : we still need a good output device probing mechanism
 
 		if((retcode=FIM_ERR_TO_PERR(cc.init(g_fim_output_device)))!=FIM_PERR_NO_ERROR) {goto ret;}
+#if FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG
+			cc.fpush(fim_fread_tmpfile(stdin));
+			close(0);
+			ndd=dup(2);
+#endif
 		retcode=cc.executionCycle();/* note that this could not return */
 ret:
 		return retcode;
