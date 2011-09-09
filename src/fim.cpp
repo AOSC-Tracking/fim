@@ -52,7 +52,7 @@ namespace fim
 	 * Globals : should be encapsulated.
 	 * */
 	fim::CommandConsole cc;
-	char *default_fbdev=NULL,*default_fbmode=NULL;
+	fim_char_t *default_fbdev=NULL,*default_fbmode=NULL;
 	int default_vt=-1;
 	float default_fbgamma=-1.0;
 	fim_stream cout/*(1)*/;
@@ -60,13 +60,13 @@ namespace fim
 }
 
 struct fim_options_t{
-  const char *name;
+  const fim_char_t *name;
   int has_arg;
   int *flag;
   int val;
-  const char *desc;/* this is fim specific */
-  const char *optdesc;/* this is fim specific */
-  const char *mandesc;/* this is fim specific */
+  const fim_char_t *desc;/* this is fim specific */
+  const fim_char_t *optdesc;/* this is fim specific */
+  const fim_char_t *mandesc;/* this is fim specific */
 };
 
 /*
@@ -318,11 +318,11 @@ class FimInstance
 string fim_dump_man_page_snippets()
 {
 	string ms;
-	const char*helparg="m";
-	const char*slob;
-	const char*sloe;
-	const char*slol;
-	const char*slom;
+	const fim_char_t *helparg="m";
+	const fim_char_t *slob;
+	const fim_char_t *sloe;
+	const fim_char_t *slol;
+	const fim_char_t *slom;
 	ms+=
 ".TP\n"
 ".B --\n"
@@ -356,7 +356,7 @@ string fim_dump_man_page_snippets()
 		{
 	   		if((fim_options[i].val)!='-')
 			{
-				ms+=slol,ms+="-",ms+=string((char)(fim_options[i].val));
+				ms+=slol,ms+="-",ms+=string((fim_char_t)(fim_options[i].val));
 				if(fim_options[i].has_arg==required_argument)
 				{
 					if(fim_options[i].optdesc) ms+=" ",ms+=fim_options[i].optdesc;
@@ -699,7 +699,7 @@ FBI_AUTHOR" is the author of \"fbi\", upon which\n.B fim\nwas originally based. 
 	return 0;
 }
 
-fim_perr_t help_and_exit(char *argv0, fim_perr_t code=FIM_PERR_NO_ERROR, const char*helparg=NULL)
+fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ERROR, const fim_char_t*helparg=NULL)
 {
 	if(helparg&&*helparg=='b')
 	{
@@ -717,7 +717,7 @@ fim_perr_t help_and_exit(char *argv0, fim_perr_t code=FIM_PERR_NO_ERROR, const c
 	    for(size_t i=0;i<fim_options_count-1;++i)
 	    {	
 		if(isascii(fim_options[i].val)){
-	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(char)(fim_options[i].val) ;
+	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(fim_char_t)(fim_options[i].val) ;
 	   	else std::cout << "\t-";}else std::cout<<"\t";
 		std::cout << "\t\t";
 	    	std::cout << "--"<<fim_options[i].name ;

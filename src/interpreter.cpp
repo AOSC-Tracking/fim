@@ -177,9 +177,9 @@ std::vector<fim::string> var(nodeType *p)
 using namespace fim;
 Var ex(nodeType *p)
 {
-	int iValue;
+	fim_int iValue;
 	float fValue;
-	char *s;
+	fim_char_t *s=NULL;
 
   	std::vector<fim::string> args;
 	int typeHint;
@@ -418,7 +418,7 @@ Var ex(nodeType *p)
 				Var v=cvar(p->opr.op[1]);
 				//iValue=r;
 				fim::cc.setVariable(s,v);
-			        DBG("SET:"<<s<<":"<<v.getString()<<" '"<<(char)v.getType()<<"'\n");
+			        DBG("SET:"<<s<<":"<<v.getString()<<" '"<<(fim_char_t)v.getType()<<"'\n");
 			        DBG("GET:"<<s<<":"<<fim::cc.getVariable(s).getString()<<FIM_SYM_ENDL);
 			        //DBG("GET:"<<s<<":"<<fim::cc.getStringVariable(s)<<FIM_SYM_ENDL);
 

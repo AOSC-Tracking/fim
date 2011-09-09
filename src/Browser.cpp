@@ -432,13 +432,13 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::display_status(const char *l,const char *r)
+	fim::string Browser::display_status(const fim_char_t *l,const fim_char_t *r)
 	{
 		/*
 		 * displays the left text message and a right bracketed one
 		 */
 		if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1)
-			commandConsole_.set_status_bar((const char*)l, image()?(image()->getInfo().c_str()):"*");
+			commandConsole_.set_status_bar(l, image()?(image()->getInfo().c_str()):"*");
 		return FIM_CNS_EMPTY_RESULT;
 	}
 

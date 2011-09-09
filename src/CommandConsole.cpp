@@ -55,14 +55,14 @@ extern int yyparse();
 namespace fim
 {
 
-	static int nochars(const char *s)
+	static  bool nochars(const fim_char_t *s)
 	{
 		/*
 		 * 1 if the string is null or empty, 0 otherwise
 		 */
-		if(s==NULL)return 1;
+		if(s==NULL)return true;
 		while(*s && isspace(*s))++s;
-		return *s=='\0'?1:0;
+		return *s=='\0'?true:false;
 	}
 
 	int CommandConsole::findCommandIdx(fim::string cmd)const
@@ -148,7 +148,7 @@ namespace fim
 		 */
 		fim_key_t key=FIM_SYM_NULL_KEY;
 #ifdef FIM_WANT_RAW_KEYS_BINDING
-		const char*kstr=kfstr.c_str();
+		const fim_char_t*kstr=kfstr.c_str();
 		if(strlen(kstr)>=2 && isdigit(kstr[0]) && isdigit(kstr[1]))
 		{
 			key=atoi(kstr+1);
@@ -496,7 +496,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 *	DANGER : this method allocates memory
 		 */
 		static size_t list_index=0;
-		char nschar='\0';
+		fim_char_t nschar='\0';
 		if(state==0)list_index=0;
 		while(isdigit(*text))text++;	//initial  repeat match
 		/*const*/ fim::string cmd(text);
@@ -667,7 +667,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		}
 	}
 
-	fim_err_t CommandConsole::execute_internal(const char *ss, fim_xflags_t xflags)
+	fim_err_t CommandConsole::execute_internal(const fim_char_t *ss, fim_xflags_t xflags)
 	{
 		try{
 		/*
@@ -680,7 +680,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 */
 		fim_bool_t add_history_=(xflags&FIM_X_HISTORY)?true:false;
 		fim_bool_t suppress_output_=(xflags&FIM_X_QUIET)?true:false;
-		char *s=dupstr(ss);//this malloc is free
+		fim_char_t *s=dupstr(ss);//this malloc is free
 		int iret=0;
 		int r =0;
 		if(s==NULL)
@@ -730,7 +730,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
     			cleanup();
 			return FIM_ERR_GENERIC;
 		} 
-		for(char*p=s;*p;++p)
+		for(fim_char_t *p=s;*p;++p)
 			if(*p=='\n')*p=' ';
 		iret=close(fim_pipedesc[1]);
 		if(iret || errno)
@@ -761,7 +761,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 
 
 #ifdef FIM_USE_READLINE
-		if(add_history_)if(nochars(s)==0)add_history(s);
+		if(add_history_)if(nochars(s)==false)add_history(s);
 #endif
 ret:
 		fim_free(s);
@@ -873,7 +873,7 @@ ret:
 			if(getIntVariable(FIM_VID_CMD_EXPANSION)==1)
 			if(c==NULL)
 			{
-				char *match = this->command_generator(cmd.c_str(),0,0);
+				fim_char_t *match = this->command_generator(cmd.c_str(),0,0);
 				if(match)
 				{
 					//cout << "but found :`"<<match<<"...\n";
@@ -904,7 +904,7 @@ ok:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	int CommandConsole::catchLoopBreakingCommand(fim_ts_t seconds)
+	fim_int CommandConsole::catchLoopBreakingCommand(fim_ts_t seconds)
 	{
 		/*	
 		 *	This method is invoked during non interactive loops to
@@ -955,7 +955,6 @@ ok:
 			if(c==exitBinding_) return 1; 		/* the user hit the exitBinding_ key */
 		}
 		return 0; 		/* no chars read  */
-
 	}
 		
 
@@ -1004,7 +1003,7 @@ ok:
 			if(ic_==1)
 			{
 				ic_=1;
-				char *rl=fim_readline(FIM_KBD_COLON);
+				fim_char_t *rl=fim_readline(FIM_KBD_COLON);
 				*prompt_=FIM_SYM_PROMPT_CHAR;
 				if(rl==NULL)
 				{
@@ -1056,7 +1055,8 @@ ok:
 			{
 				*prompt_=FIM_SYM_PROMPT_NUL;
 				fim_key_t c;
-				int r;char buf[FIM_VERBOSE_KEYS_BUFSIZE];
+				int r;
+				fim_char_t buf[FIM_VERBOSE_KEYS_BUFSIZE];
 //				int c=getchar();
 //				int c=fgetc(stdin);
 				/*
@@ -1103,7 +1103,7 @@ ok:
 						*prompt_=FIM_SYM_PROMPT_SLASH;
 						rl_hook_func_t *osh=rl_startup_hook;
 						rl_startup_hook=rl::fim_search_rl_startup_hook;
-						char *rl=fim_readline(FIM_CNS_SLASH_STRING); // !!
+						fim_char_t *rl=fim_readline(FIM_CNS_SLASH_STRING); // !!
 						rl_startup_hook=osh;
 						// no readline ? no interactive searches !
 						*prompt_=FIM_SYM_PROMPT_NUL;
@@ -1158,7 +1158,7 @@ rlnull:
 		return quit(return_code_);
 	}
 
-	void CommandConsole::exit(int i)const
+	void CommandConsole::exit(fim_perr_t i)const
 	{
 		/*
 		 *	This method will exit the program as a whole.
@@ -1169,7 +1169,7 @@ rlnull:
 		std::exit(i);
 	}
 
-	fim_perr_t CommandConsole::quit(int i)
+	fim_perr_t CommandConsole::quit(fim_perr_t i)
 	{
 		/*
 		 * the method to be called to exit from the program safely.
@@ -1245,7 +1245,7 @@ rlnull:
 		 */
 
 		int r;
-		char buf[FIM_STREAM_BUFSIZE];	// TODO : buffer too small
+		fim_char_t buf[FIM_STREAM_BUFSIZE];	// TODO : buffer too small
 		fim::string cmds;
 		if(fd==NULL)return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
@@ -1262,7 +1262,7 @@ rlnull:
 		 */
 
 		int r;
-		char buf[FIM_STREAM_BUFSIZE];
+		fim_char_t buf[FIM_STREAM_BUFSIZE];
 		fim::string cmds;
 		if(fd==NULL)return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
@@ -1271,7 +1271,7 @@ rlnull:
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t CommandConsole::executeFile(const char *s)
+	fim_err_t CommandConsole::executeFile(const fim_char_t *s)
 	{
 		/*
 		 * executes a file denoted by filename
@@ -1296,7 +1296,7 @@ rlnull:
 
 	bool CommandConsole::isVariable(const fim::string &varname)const
 	{
-		const char * s;
+		const fim_char_t* s;
 		s = getStringVariable(varname).c_str();
 		return (s && *s);
 	}
@@ -1312,7 +1312,7 @@ rlnull:
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_bool_t CommandConsole::drawOutput(const char *s)const
+	fim_bool_t CommandConsole::drawOutput(const fim_char_t *s)const
 	{
 		/*
 		 * whether the console should draw or not itself upon the arrival of textual output
@@ -1654,7 +1654,7 @@ ok:
 	}
 #endif
 	
-	bool CommandConsole::regexp_match(const char*s, const char*r)const
+	bool CommandConsole::regexp_match(const fim_char_t*s, const fim_char_t*r)const
 	{
 		/*
 		 *	given a string s, and a Posix regular expression r, this
@@ -1831,7 +1831,7 @@ ok:
 	}
 #endif
 
-	void CommandConsole::printHelpMessage(char *pn)const
+	void CommandConsole::printHelpMessage(const fim_char_t *pn)const
 	{
 		/*
 		 * a prompty help message is pretty printed in the console
@@ -1867,7 +1867,7 @@ ok:
 		return cmd;
 	}
 #endif
-	void CommandConsole::appendPostInitCommand(const char* c)
+	void CommandConsole::appendPostInitCommand(const fim_char_t* c)
 	{
 		/*
 		 * the supplied command is applied right before a normal execution of Fim
@@ -1876,7 +1876,7 @@ ok:
 		postInitCommand_+=c;
 	}
 
-	void CommandConsole::appendPreConfigCommand(const char* c)
+	void CommandConsole::appendPreConfigCommand(const fim_char_t* c)
 	{
 		/*
 		 * */
@@ -2000,8 +2000,8 @@ ok:
 		/* default, hard-coded configuration first */
 		if(getIntVariable(FIM_VID_SAVE_FIM_HISTORY)==1 )
 		{
-			char hfile[FIM_PATH_MAX];
-			const char *e = fim_getenv(FIM_CNS_HOME_VAR);
+			fim_char_t hfile[FIM_PATH_MAX];
+			const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
 			if(e && strlen(e)<FIM_PATH_MAX-14)//strlen(FIM_CNS_HIST_FILENAME)+2
 			{
 				strcpy(hfile,e);
@@ -2030,8 +2030,8 @@ ok:
 		/* default, hard-coded configuration first */
 		if(getIntVariable(FIM_VID_LOAD_FIM_HISTORY)==1 )
 		{
-			char hfile[FIM_PATH_MAX];
-			const char *e = fim_getenv(FIM_CNS_HOME_VAR);
+			fim_char_t hfile[FIM_PATH_MAX];
+			const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
 			if(e && strlen(e)<FIM_PATH_MAX-14)//strlen(FIM_CNS_HIST_FILENAME)+2
 			{
 				strcpy(hfile,e);
@@ -2071,7 +2071,7 @@ ok:
 	 * inserts the desc text into the textual console,
 	 * and eventually displays it
 	 */
-	void CommandConsole::status_screen(const char *desc)
+	void CommandConsole::status_screen(const fim_char_t *desc)
 	{
 		if(!displaydevice_)
 			return;
@@ -2079,7 +2079,7 @@ ok:
 		displaydevice_->fb_status_screen_new((fim_char_t*)desc,drawOutput(desc),0);
 	}
 
-	void CommandConsole::set_status_bar(fim::string desc, const char *info)
+	void CommandConsole::set_status_bar(fim::string desc, const fim_char_t *info)
 	{
 		set_status_bar(desc.c_str(), info);
 	}
@@ -2092,18 +2092,18 @@ ok:
 	 *
 	 *	TODO: a printf-like general functionality
 	 */
-	void CommandConsole::set_status_bar(const char *desc, const char *info)
+	void CommandConsole::set_status_bar(const fim_char_t *desc, const fim_char_t *info)
 	{
 		/*
 		 * pointers are not freed, by any means
 		 */
 		//FIX ME : does this function always draw ?
 		int chars, ilen;
-		char *str;
+		fim_char_t *str=NULL;
 		fim::string hk=FIM_CNS_EMPTY_STRING;	/* help key string */
 		int hkl=0;		/* help key string length */
 		const int mhkl=5,eisl=9;
-		const char*hp=" - Help";int hpl=fim_strlen(hp);
+		const fim_char_t *hp=" - Help";int hpl=fim_strlen(hp);
 		prompt_[1]='\0';
 		fim_int style=getIntVariable(FIM_VID_WANT_CAPTION_STATUS);
 		fim_err_t rc=FIM_ERR_NO_ERROR;
@@ -2121,7 +2121,7 @@ ok:
 	
 		chars = displaydevice_->get_chars_per_line();
 		if(chars<1)return;
-		str = (char*) fim_calloc(chars+1,1);//this malloc is free
+		str = (fim_char_t*) fim_calloc(chars+1,1);//this malloc is free
 		if(!str)return;
 		//sprintf(str, FIM_CNS_EMPTY_STRING);
 		*str='\0';
