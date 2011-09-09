@@ -28,7 +28,7 @@ namespace fim
 	 * WARNING : TEMPORARILY, THIS FILE WILL HOST SOME CommandConsole's METHODS
 	 * */
 
-	int CommandConsole::setVariable(const fim::string& varname,int value)
+	fim_int CommandConsole::setVariable(const fim::string& varname,fim_int value)
 	{
 		/*
 		 * an internal function to set a user variable
@@ -39,7 +39,7 @@ namespace fim
 			try
 			{
 			//a specific namespace was selected!
-			char ns = varname[0];
+			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 #ifdef FIM_WINDOWS
@@ -88,7 +88,7 @@ namespace fim
 		return variables_[varname].setInt(value);
 	}
 
-	float CommandConsole::setVariable(const fim::string& varname,float value)
+	fim_float_t CommandConsole::setVariable(const fim::string& varname,fim_float_t value)
 	{
 		/*
 		 * an internal function to set a user variable
@@ -100,7 +100,7 @@ namespace fim
 			try
 			{
 			//a specific namespace was selected!
-			char ns = varname[0];
+			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
@@ -149,7 +149,7 @@ namespace fim
 		return variables_[varname].setFloat(value);
 	}
 
-	int CommandConsole::setVariable(const fim::string& varname,const char*value)
+	fim_int CommandConsole::setVariable(const fim::string& varname,const fim_char_t*value)
 	{
 		/*
 		 * an internal function to set a user variable
@@ -161,7 +161,7 @@ namespace fim
 			//a specific namespace was selected!
 			try
 			{
-			char ns = varname[0];
+			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
@@ -207,7 +207,7 @@ namespace fim
 			catch(FimException e){}
 		}
 #endif
-		return (int)(variables_[varname].setString(s));
+		return (fim_int)(variables_[varname].setString(s));
 	}
 
 	Var CommandConsole::setVariable(const fim::string varname,const Var&value)
@@ -222,7 +222,7 @@ namespace fim
 			//a specific namespace was selected!
 			try
 			{
-			char ns = varname[0];
+			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
@@ -278,7 +278,7 @@ namespace fim
 	}
 
 
-	int CommandConsole::getIntVariable(const fim::string &varname)const
+	fim_int CommandConsole::getIntVariable(const fim::string &varname)const
 	{
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
@@ -286,7 +286,7 @@ namespace fim
 			try
 			{
 			//a specific namespace was selected!
-			char ns = varname[0];
+			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
@@ -347,7 +347,7 @@ namespace fim
 		//return ((c_variables_t)(variables_))[varname].getInt();
 	}
 
-	float CommandConsole::getFloatVariable(const fim::string &varname)const
+	fim_float_t CommandConsole::getFloatVariable(const fim::string &varname)const
 	{
 		/*
 		 * the variable name supplied is used as a key to the variables hash
@@ -359,7 +359,7 @@ namespace fim
 		{
 			try{	
 			//a specific namespace was selected!
-			char ns = varname[0];
+			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
@@ -422,7 +422,7 @@ namespace fim
 			try
 			{
 			//a specific namespace was selected!
-			char ns = varname[0];
+			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
@@ -478,12 +478,12 @@ namespace fim
 		else return FIM_CNS_EMPTY_RESULT;
 	}
 
-		int Namespace::setVariable(const fim::string& varname,int value)
+		fim_int Namespace::setVariable(const fim::string& varname,fim_int value)
 		{
 			return variables_[varname].setInt(value);
 		}
 
-		float Namespace::setVariable(const fim::string& varname,float value)
+		fim_float_t Namespace::setVariable(const fim::string& varname,fim_float_t value)
 		{
 			/*
 			 * an internal function to set a user variable
@@ -506,16 +506,16 @@ namespace fim
 			return variables_[varname].getString();
 		}
 
-		int Namespace::setVariable(const fim::string& varname,const char*value)
+		fim_int Namespace::setVariable(const fim::string& varname,const fim_char_t*value)
 		{
 			/*
 			 * an internal function to set a user variable
 			 */
 			fim::string s(value);
-			return (int)(variables_[varname].setString(s));
+			return (fim_int)(variables_[varname].setString(s));
 		}
 	
-		int Namespace::getIntVariable(const fim::string &varname)const
+		fim_int Namespace::getIntVariable(const fim::string &varname)const
 		{
 			// this scope was selected
 			//return variables_[varname];
@@ -534,7 +534,7 @@ namespace fim
 		{
 			try{	
 			//a specific namespace was selected!
-			char ns = varname[0];
+			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
 #ifdef FIM_WINDOWS
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
@@ -593,7 +593,7 @@ namespace fim
 			else return Var(0);
 		}
 
-		float Namespace::getFloatVariable(const fim::string &varname)const
+		fim_float_t Namespace::getFloatVariable(const fim::string &varname)const
 		{
 			/*
 			 * the variable name supplied is used as a key to the variables hash
@@ -620,27 +620,27 @@ namespace fim
 			else return FIM_CNS_EMPTY_RESULT;
 		}
 
-	        float Namespace::setGlobalVariable(const fim::string& varname,float value)
+	        fim_float_t Namespace::setGlobalVariable(const fim::string& varname,fim_float_t value)
 		{
 			return cc.setVariable(varname,value);
 		}
 
-		int Namespace::setGlobalVariable(const fim::string& varname,int value)
+		fim_int Namespace::setGlobalVariable(const fim::string& varname,fim_int value)
 		{
 			return cc.setVariable(varname,value);
 		}
 
-		int Namespace::setGlobalVariable(const fim::string& varname,const char*value)
+		fim_int Namespace::setGlobalVariable(const fim::string& varname,const fim_char_t*value)
 		{
 			return cc.setVariable(varname,value);
 		}
 
-		int Namespace::getGlobalIntVariable(const fim::string &varname)const
+		fim_int Namespace::getGlobalIntVariable(const fim::string &varname)const
 		{
 			return cc.getIntVariable(varname);
 		}
 
-		float Namespace::getGlobalFloatVariable(const fim::string &varname)const
+		fim_float_t Namespace::getGlobalFloatVariable(const fim::string &varname)const
 		{
 			return cc.getFloatVariable(varname);
 		}

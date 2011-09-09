@@ -54,7 +54,7 @@ namespace fim
 	fim::CommandConsole cc;
 	fim_char_t *default_fbdev=NULL,*default_fbmode=NULL;
 	int default_vt=-1;
-	float default_fbgamma=-1.0;
+	fim_float_t default_fbgamma=-1.0;
 	fim_stream cout/*(1)*/;
 	fim_stream cerr(2);
 }

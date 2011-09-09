@@ -30,6 +30,7 @@ namespace fim
 	typedef int fim_off_t;		/* a type for pixel offsets (positive)  */
 	typedef float fim_scale_t;	/* a type for image scaling */
 	typedef float fim_angle_t;	/* a type for angles */
+	typedef float fim_float_t;	/* a type for floats */
 	typedef int   fim_page_t;	/* a type for multipage document pages */
 	typedef int   fim_pgor_t;	/* a type for page orientation */
 	typedef bool   fim_bool_t;	/* a type for bolean expressions */
