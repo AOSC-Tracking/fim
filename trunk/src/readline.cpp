@@ -43,7 +43,7 @@ static int fim_rl_pc=FIM_SYM_CHAR_NUL;
 namespace fim
 {
 	extern CommandConsole cc;
-char * fim_readline(const char *prompt)
+fim_char_t * fim_readline(const fim_char_t *prompt)
 {
 	char * rc=NULL;
 	fim_rl_pc=FIM_SYM_CHAR_NUL;

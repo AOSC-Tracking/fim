@@ -27,7 +27,7 @@
 
 namespace fim
 {
-	char * fim_readline(const char *prompt);
+	fim_char_t* fim_readline(const char *fim_char_t);
 }
 
 namespace rl

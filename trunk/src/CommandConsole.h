@@ -49,8 +49,8 @@ class CommandConsole
 	fim::string preConfigCommand_;
 	fim::string postExecutionCommand_;
 
-	int show_must_go_on_;
-	int return_code_;	/* new, to support the 'return' command */
+	fim_int show_must_go_on_;
+	fim_int return_code_;	/* new, to support the 'return' command */
 	bool mangle_tcattr_;
 	public:
 
@@ -181,7 +181,7 @@ class CommandConsole
 
 	fim::string execute(fim::string cmd, args_t args);
 
-	const char*get_prompt()const{return prompt_;}
+	//const fim_char_t*get_prompt()const{return prompt_;}
 
 	CommandConsole();
 	private:
@@ -230,8 +230,8 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 */
 	fim::string fcmd_foo (const args_t &args);
 	fim::string fcmd_status(const args_t &args);
-	fim_err_t executeFile(const char *s);
-	fim_err_t execute_internal(const char *ss, fim_xflags_t xflags);
+	fim_err_t executeFile(const fim_char_t *s);
+	fim_err_t execute_internal(const fim_char_t *ss, fim_xflags_t xflags);
 
 	fim_err_t addCommand(Command *c);
 	Command* findCommand(fim::string cmd)const;
@@ -274,12 +274,12 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_commands_list(const args_t& args){return get_commands_list();}
 	fim::string fcmd_set(const args_t &args);
 	fim::string fcmd_unalias(const args_t& args);
-	char ** tokenize_(const char *s);
+	//fim_char_t ** tokenize_(const fim_char_t *s);
 	void executeBinding(const fim_key_t c);
 	fim::string getBoundAction(const fim_key_t c)const;
 	//	void execute(fim::string cmd);
 	fim::string fcmd_eval(const args_t &args);
-	void exit(int i)const;// FIXME: exit vs quit
+	void exit(fim_perr_t i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
 	fim::string bind(fim_key_t c,fim::string binding);
 	public:
@@ -296,18 +296,18 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string scroll_up(const args_t& args);
 	fim::string scroll_down(const args_t& args);
 #endif
-	fim_perr_t quit(int i=FIM_CNS_ERR_QUIT);
+	fim_perr_t quit(fim_perr_t i=FIM_CNS_ERR_QUIT);
 	public:
 	fim_key_t find_keycode_for_bound_cmd(fim::string binding);
 
-	fim_bool_t drawOutput(const char*s=NULL)const;
-	bool regexp_match(const char*s, const char*r)const;
+	fim_bool_t drawOutput(const fim_char_t*s=NULL)const;
+	bool regexp_match(const fim_char_t*s, const fim_char_t*r)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	fim::string pre_autocmd_add(const fim::string &cmd);
 	fim::string pre_autocmd_exec();
 #endif
-	int catchLoopBreakingCommand(fim_ts_t seconds=0);
+	fim_int catchLoopBreakingCommand(fim_ts_t seconds=0);
 
 	private:
 	fim_key_t catchInteractiveCommand(fim_ts_t seconds=0)const;
@@ -331,9 +331,9 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string get_commands_list()const;
 	public:
 
-	void printHelpMessage(char *pn="fim")const;
-	void appendPostInitCommand(const char* c);
-	void appendPreConfigCommand(const char* c);
+	void printHelpMessage(const fim_char_t *pn="fim")const;
+	void appendPostInitCommand(const fim_char_t* c);
+	void appendPreConfigCommand(const fim_char_t* c);
 	void appendPostExecutionCommand(const fim::string &c);
 	bool appendedPostInitCommand()const;
 	bool appendedPreConfigCommand()const;
@@ -351,9 +351,9 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	
 	fim::string print_commands()const;
 
-	void status_screen(const char *desc);
-	void set_status_bar(fim::string desc, const char *info);
-	void set_status_bar(const char *desc, const char *info);
+	void status_screen(const fim_char_t *desc);
+	void set_status_bar(fim::string desc, const fim_char_t *info);
+	void set_status_bar(const fim_char_t *desc, const fim_char_t *info);
         bool is_file(fim::string nf)const;
 	fim::string fcmd_do_getenv(const args_t& args);
 	bool isVariable(const fim::string &varname)const;
