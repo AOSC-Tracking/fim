@@ -57,7 +57,7 @@ class AADevice:public DisplayDevice
 		fim_coo_t ocskip,// output columns to skip for each line
 		fim_flags_t flags// some flags
 		);
-	int initialize(sym_keys_t &sym_keys);
+	fim_err_t initialize(sym_keys_t &sym_keys);
 	void finalize();
 
 	int get_chars_per_line();
@@ -69,7 +69,7 @@ class AADevice:public DisplayDevice
 	fim_err_t status_line(const fim_char_t *msg);
 	void status_screen(int desc,int draw_output){}
 	fim_bool_t handle_console_switch(){return false;}
-	int clear_rect_(
+	fim_err_t clear_rect_(
 		void* dst,
 		int oroff,int ocoff,
 		int orows,int ocols,

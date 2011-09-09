@@ -36,7 +36,7 @@
 
 static bool aainvalid;
 
-	int AADevice::clear_rect_(
+	fim_err_t AADevice::clear_rect_(
 		void* dst,	// destination gray array and source rgb array
 		int oroff,int ocoff,	// row  and column  offset of the first output pixel
 		int orows,int ocols,	// rows and columns drawable in the output buffer
@@ -78,10 +78,9 @@ static bool aainvalid;
 		for(oi=oroff;oi<lor;++oi)
 		for(oj=ocoff;oj<loc;++oj)
 		{
-			((char*)(dst))[oi*ocskip+oj]=0;
+			((fim_byte_t*)(dst))[oi*ocskip+oj]=0;
 		}
-		return  0;
-		
+		return  FIM_ERR_NO_ERROR;
 	}
 
 
@@ -134,7 +133,7 @@ static bool aainvalid;
 			oj;// output image columns index
 
 		int gray;
-		char *srcp;
+		fim_byte_t*srcp;
 		int idr,idc,lor,loc;
     		
 		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
@@ -187,11 +186,11 @@ static bool aainvalid;
 		{
 			ii    = oi + idr;
 			ij    = oj + idc;
-			srcp  = ((char*)src)+(3*(ii*icskip+ij));
+			srcp  = ((fim_byte_t*)src)+(3*(ii*icskip+ij));
 			gray  = (int)srcp[0];
 			gray += (int)srcp[1];
 			gray += (int)srcp[2];
-			((char*)(dst))[oi*ocskip+oj]=(char)(gray/3);
+			((fim_byte_t*)(dst))[oi*ocskip+oj]=(fim_byte_t)(gray/3);
 		}
 		else
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
@@ -214,14 +213,14 @@ static bool aainvalid;
 			
 			if(mirror)ij=((icols-1)-ij);
 			if( flip )ii=((irows-1)-ii);
-			srcp  = ((char*)src)+(3*(ii*icskip+ij));
+			srcp  = ((fim_byte_t*)src)+(3*(ii*icskip+ij));
 			if(mirror)ij=((icols-1)-ij);
 			if( flip )ii=((irows-1)-ii);
 
 			gray  = (int)srcp[0];
 			gray += (int)srcp[1];
 			gray += (int)srcp[2];
-			((char*)(dst))[oi*ocskip+oj]=(char)(gray/3);
+			((fim_byte_t*)(dst))[oi*ocskip+oj]=(fim_byte_t)(gray/3);
 		}
 
 		return  0;

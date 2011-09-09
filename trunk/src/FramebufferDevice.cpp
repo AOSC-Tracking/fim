@@ -179,13 +179,13 @@ static void _fb_switch_signal(int signal)
 
 fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
 {
-    unsigned char *pos,*start;
+    fim_byte_t *pos,*start;
     int i,c,j,w;
 
     pos  = fb_mem_+fb_mem_offset_;
     pos += fb_fix_.line_length * y;
     for (i = 0; str[i] != '\0'; i++) {
-	c = (unsigned char)str[i];
+	c = (fim_byte_t)str[i];
 	if (NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
@@ -222,7 +222,7 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 	return FIM_ERR_NO_ERROR;
 }
 
-void FramebufferDevice::fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data)
+void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data)
 {
 
 /* 
@@ -499,7 +499,7 @@ void FramebufferDevice::svga_display_image_new(
     /* FIXME : COMPLETE ME ... */
 
 #ifndef FIM_IS_SLOWER_THAN_FBI
-    unsigned char *(FramebufferDevice::*convert_line_f)(int , int , int , char unsigned *, char unsigned *, int );
+    fim_byte_t *(FramebufferDevice::*convert_line_f)(int , int , int , char unsigned *, char unsigned *, int );
     if(fb_var_.bits_per_pixel==8)
  	   convert_line_f=&fim::FramebufferDevice::convert_line_8;
     else
@@ -682,7 +682,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
     /* FIXME : what are the wider implications of this ? */
     fb_mem_offset_ = 0;
 #endif
-    fb_mem_ = (unsigned char*) mmap(NULL,fb_fix_.smem_len+fb_mem_offset_,
+    fb_mem_ = (fim_byte_t*) mmap(NULL,fb_fix_.smem_len+fb_mem_offset_,
 		  PROT_READ|PROT_WRITE,MAP_SHARED,fb_,0);
     /*
      * FIXME : this may not 64 bits safe
@@ -979,6 +979,8 @@ rerr:
     return FIM_ERR_GENERIC;
 }
 
+#if 0
+/* 20110909 FIXME: unused */
 void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
 {
     int x,y;
@@ -995,6 +997,7 @@ void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
     fb_line(x, x + f_->width, fb_var_.yres-1, fb_var_.yres-1);
     fb_line(x, x + f_->width, fb_var_.yres-2, fb_var_.yres-2);
 }
+#endif
 
 void FramebufferDevice::fb_text_box(int x, int y, char *lines[], unsigned int count)
 {
@@ -1061,7 +1064,7 @@ void FramebufferDevice::fb_rect(int x1, int x2, int y1,int y2)
 
 void FramebufferDevice::fb_setpixel(int x, int y, unsigned int color)
 {
-    unsigned char *ptr;
+    fim_byte_t *ptr;
 
     ptr  = fb_mem_;
     ptr += y * fb_fix_.line_length;
@@ -1071,7 +1074,7 @@ void FramebufferDevice::fb_setpixel(int x, int y, unsigned int color)
 
 void FramebufferDevice::fb_clear_rect(int x1, int x2, int y1,int y2)
 {
-    unsigned char *ptr;
+    fim_byte_t *ptr;
     int y,h;
 
     if (!visible_)
@@ -1134,17 +1137,17 @@ void FramebufferDevice::cleanup(void)
     //close(tty_);
 }
 
-unsigned char * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror)/*dez's mirror patch*/
+fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror)/*dez's mirror patch*/
 {
-    unsigned char  *ptr  = (unsigned char *)dst;
+    fim_byte_t  *ptr  = (fim_byte_t *)dst;
 	dither_line(buffer, ptr, line, owidth, mirror);
 	ptr += owidth;
 	return ptr;
 }
 
-unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror)/*dez's mirror patch*/
+fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror)/*dez's mirror patch*/
 {
-    unsigned char  *ptr  = (unsigned char *)dst;
+    fim_byte_t  *ptr  = (fim_byte_t *)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
     unsigned int  *ptr4 = (unsigned int *)dst;
     int x;
@@ -1181,7 +1184,7 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
 	}
 #endif
 	ptr2 += owidth;
-	return (unsigned char*)ptr2;
+	return (fim_byte_t*)ptr2;
     case 24:
 #ifdef FIM_IS_SLOWER_THAN_FBI
 	for (x = 0; x < owidth; x++) {
@@ -1270,7 +1273,7 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
 	}
 #endif
 	ptr4 += owidth;
-	return (unsigned char*)ptr4;
+	return (fim_byte_t*)ptr4;
     default:
 	/* keep compiler happy */
 	return NULL;
@@ -1278,14 +1281,14 @@ unsigned char * FramebufferDevice::convert_line(int bpp, int line, int owidth, c
 }
 
 /*dez's*/
-/*unsigned char * FramebufferDevice::clear_lines(int bpp, int lines, int owidth, char unsigned *dst)
+/*fim_byte_t * FramebufferDevice::clear_lines(int bpp, int lines, int owidth, char unsigned *dst)
 {
 
 }*/
 
-unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, char unsigned *dst)
+fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, char unsigned *dst)
 {
-    unsigned char  *ptr  = (unsigned char*)dst;
+    fim_byte_t  *ptr  = (fim_byte_t*)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
     unsigned int  *ptr4 = (unsigned int*)dst;
     unsigned clear_byte=0x00;
@@ -1308,7 +1311,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 	fim_memset(ptr,clear_byte,2*owidth);
 #endif
 	ptr2 += owidth;
-	return (unsigned char*)ptr2;
+	return (fim_byte_t*)ptr2;
     case 24:
 #ifdef FIM_IS_SLOWER_THAN_FBI
 	for (x = 0; x < owidth; x++) {
@@ -1330,7 +1333,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 	fim_memset(ptr,clear_byte,4*owidth);
 #endif
 	ptr4 += owidth;
-	return (unsigned char*)ptr4;
+	return (fim_byte_t*)ptr4;
     default:
 	/* keep compiler happy */
 	return NULL;
@@ -1340,7 +1343,7 @@ unsigned char * FramebufferDevice::clear_line(int bpp, int line, int owidth, cha
 void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, int shades_gray)
 {
     int             i, j;
-    unsigned char   low_shade, high_shade;
+    fim_byte_t   low_shade, high_shade;
     unsigned short  index;
     float           red_colors_per_shade;
     float           green_colors_per_shade;
@@ -1371,7 +1374,7 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
 
 	/*  setup the red information  */
 	{
-	    low_shade = (unsigned char) (i / red_colors_per_shade);
+	    low_shade = (fim_byte_t) (i / red_colors_per_shade);
 	    high_shade = low_shade + 1;
 
 	    index = (unsigned short)
@@ -1386,7 +1389,7 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
 
 	/*  setup the green information  */
 	{
-	    low_shade = (unsigned char) (i / green_colors_per_shade);
+	    low_shade = (fim_byte_t) (i / green_colors_per_shade);
 	    high_shade = low_shade + 1;
 
 	    index = (unsigned short)
@@ -1401,7 +1404,7 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
 
 	/*  setup the blue information  */
 	{
-	    low_shade = (unsigned char) (i / blue_colors_per_shade);
+	    low_shade = (fim_byte_t) (i / blue_colors_per_shade);
 	    high_shade = low_shade + 1;
 
 	    index = (unsigned short)
@@ -1413,7 +1416,7 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
 
 	/*  setup the gray information  */
 	{
-	    low_shade = (unsigned char) (i / gray_colors_per_shade);
+	    low_shade = (fim_byte_t) (i / gray_colors_per_shade);
 	    high_shade = low_shade + 1;
 
 	    index = (unsigned short)
@@ -1778,7 +1781,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	if(!draw )return;//CONVENTION!
 
 	    y = 1*fb_font_height();
-	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), (unsigned char*)columns[i]);
+	    for(i=0  ;i<R ;++i) fs_puts(fb_font_get_current_font(), 0, y*(i), columns[i]);
 
 	    /*
 	     *WARNING : note that columns and columns_data arrays are not freed and should not, as long as they are static.
