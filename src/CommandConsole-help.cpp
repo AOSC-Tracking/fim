@@ -2,7 +2,7 @@
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help methods
 
- (c) 2011 Michele Martone
+ (c) 2011-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

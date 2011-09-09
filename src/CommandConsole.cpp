@@ -2177,12 +2177,12 @@ done:
 		fim_free(str);
 	}
 
-	int  CommandConsole::inConsole()const
+	fim_bool_t CommandConsole::inConsole()const
 	{
 #ifdef FIM_USE_READLINE
 		return ic_==1;
 #else
-		return 0;
+		return false;
 #endif
 	}
 
