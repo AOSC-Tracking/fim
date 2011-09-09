@@ -79,7 +79,7 @@ class SDLDevice:public DisplayDevice
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
 	int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
-	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, unsigned char *data);
+	void fs_render_fb(int x, int y, FSXCharInfo *charInfo, fim_byte_t *data);
 	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 	void flush();
 	void lock();

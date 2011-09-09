@@ -145,19 +145,19 @@ class FramebufferDevice:public DisplayDevice
 
 	static void setpixel1(void *ptr, unsigned int color)
 	{
-	    unsigned char *p = (unsigned char *) ptr;
+	    fim_byte_t *p = (fim_byte_t *) ptr;
 	    *p = color;
 	}
 
 	static void setpixel2(void *ptr, unsigned int color)
 	{
-	    unsigned char *p = (unsigned char *) ptr;
+	    fim_byte_t *p = (fim_byte_t *) ptr;
 	    *p = color;
 	}
 
 	static void setpixel3(void *ptr, unsigned int color)
 	{
-	    unsigned char *p = (unsigned char *) ptr;
+	    fim_byte_t *p = (fim_byte_t *) ptr;
 	    *(p++) = (color >> 16) & 0xff;
 	    *(p++) = (color >>  8) & 0xff;
 	    *(p++) =  color        & 0xff;
@@ -252,7 +252,7 @@ class FramebufferDevice:public DisplayDevice
 	struct fb_fix_screeninfo   fb_fix_;
 	struct fb_var_screeninfo   fb_var_;
 	//private:
-	unsigned char             *fb_mem_;
+	fim_byte_t             *fb_mem_;
 	int			   fb_mem_offset_;
 	int                        fb_switch_state_;
 
@@ -303,7 +303,7 @@ class FramebufferDevice:public DisplayDevice
 
 	int status_line(const fim_char_t *msg);
 
-	void fb_edit_line(unsigned char *str, int pos);
+	//void fb_edit_line(unsigned char *str, int pos);
 
 	void fb_text_box(int x, int y, char *lines[], unsigned int count);
 
@@ -388,9 +388,9 @@ void svga_display_image_new(
 /* ---------------------------------------------------------------------- */
 /* by dez
  */
-inline unsigned char * clear_line(int bpp, int line, int owidth, char unsigned *dst);
-unsigned char * convert_line(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror);/*dez's mirror patch*/
-unsigned char * convert_line_8(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror);/*dez's mirror patch*/
+inline fim_byte_t * clear_line(int bpp, int line, int owidth, char unsigned *dst);
+fim_byte_t * convert_line(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror);/*dez's mirror patch*/
+fim_byte_t * convert_line_8(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror);/*dez's mirror patch*/
 
 
 
@@ -526,7 +526,7 @@ void init_one(int32_t *lut, int bits, int shift)
         }
 
 	//void status_screen(const char *msg, int draw);
-	void fs_render_fb(unsigned char *ptr, int pitch, FSXCharInfo *charInfo, unsigned char *data);
+	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
 	fim_bpp_t get_bpp(){return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice();
 };

@@ -141,7 +141,7 @@ err:
 		keypress_ = 0;
 		h_=0;
 #if FIM_WANT_SDL_OPTIONS_STRING 
-		const char*os=opts_.c_str();
+		const fim_char_t*os=opts_.c_str();
 		parse_optstring(os);
 #endif
 		fim_bzero(&bvi_,sizeof(bvi_));
@@ -206,7 +206,7 @@ err:
 		 * shareable with FramebufferDevice would be nice, if implemented in AADevice.
 		 * */
 		//was : void
-		unsigned char* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
+		fim_byte_t* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
 		if ( !rgb ) return -1;
 	
 		if( iroff <0 ) return -2;
@@ -266,7 +266,7 @@ err:
 		int ii,ij;
 		int oi,oj;
 		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
-		unsigned char * srcp;
+		fim_byte_t * srcp;
 
 		// FIXME : temporary
 //		clear_rect(  ocoff, ocoff+ocols, oroff, oroff+orows); 
@@ -281,7 +281,7 @@ err:
 
 			ii    = oi + idr;
 			ij    = oj + idc;
-			srcp  = ((unsigned char*)rgb)+(3*(ii*icskip+ij));
+			srcp  = ((fim_byte_t*)rgb)+(3*(ii*icskip+ij));
 
 			setpixel(screen_, oj, ytimesw, (int)srcp[0], (int)srcp[1], (int)srcp[2]);
 		}
@@ -297,7 +297,7 @@ err:
 			
 			if(mirror)ij=((icols-1)-ij);
 			if( flip )ii=((irows-1)-ii);
-			srcp  = ((unsigned char*)rgb)+(3*(ii*icskip+ij));
+			srcp  = ((fim_byte_t*)rgb)+(3*(ii*icskip+ij));
 
 			setpixel(screen_, oj, ytimesw, (int)srcp[0], (int)srcp[1], (int)srcp[2]);
 		}
@@ -331,7 +331,7 @@ err:
 		int want_width=current_w_, want_height=current_h_, want_bpp=0;
 		int want_flags=FIM_SDL_FLAGS;
 		int delay=0,interval=0;
-		const char * errstr=NULL;
+		const fim_char_t*errstr=NULL;
 		//want_flags|=SDL_NOFRAME;
 		//std::cout << want_width << " : "<< want_height<<"\n";
 #if 0
@@ -470,7 +470,7 @@ err:
 			Uint8 *pixmem8;
 			Uint8 colour;
 			colour = SDL_MapRGB( screen_->format, b, g, r );
-			pixmem8 = (Uint8*)((char*)( screen_->pixels)  + (y + x)*Bpp_);
+			pixmem8 = (Uint8*)((fim_byte_t*)( screen_->pixels)  + (y + x)*Bpp_);
 			*pixmem8 = colour;
 		}
 		break;
@@ -480,7 +480,7 @@ err:
 			Uint16 *pixmem16;
 			Uint16 colour;
 			colour = SDL_MapRGB( screen_->format, b, g, r );
-			pixmem16 = (Uint16*)((char*)( screen_->pixels)  + (y + x)*Bpp_);
+			pixmem16 = (Uint16*)((fim_byte_t*)( screen_->pixels)  + (y + x)*Bpp_);
 			*pixmem16 = colour;
 		}
 		break;
@@ -489,7 +489,7 @@ err:
 			Uint32 *pixmem32;
 			Uint32 colour;
 			colour = SDL_MapRGB( screen_->format, b, g, r );
-			pixmem32 = (Uint32*)((char*)( screen_->pixels)  + (y + x)*Bpp_);
+			pixmem32 = (Uint32*)((fim_byte_t*)( screen_->pixels)  + (y + x)*Bpp_);
 			*pixmem32 = colour;
 		}
 		break;
@@ -498,7 +498,7 @@ err:
 			Uint32 *pixmem32;
 			Uint32 colour;
 			colour = SDL_MapRGBA( screen_->format, b, g, r, 255 );
-			pixmem32 = (Uint32*)((char*)( screen_->pixels)  + (y + x)*Bpp_);
+			pixmem32 = (Uint32*)((fim_byte_t*)( screen_->pixels)  + (y + x)*Bpp_);
 			*pixmem32 = colour;
 		}
 		break;
@@ -599,7 +599,7 @@ err:
 
 				if(alt_on)
 				{
-					*c=(unsigned char)event.key.keysym.unicode;
+					*c=(fim_byte_t)event.key.keysym.unicode;
 					*c|=(1<<31);	/* FIXME : a dirty trick */
 					return 1;
 				}
@@ -612,7 +612,7 @@ err:
 					 * a characters ASCII value.
 					 * */
 			//		if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) std::cout << "ctrl ! \n";
-					*c=(unsigned char)event.key.keysym.unicode;
+					*c=(fim_byte_t)event.key.keysym.unicode;
 
 					if(ctrl_on)
 					{
@@ -707,7 +707,7 @@ done:
 		 * */
 		for(y=y1;y<y2;++y)
 		{
-			fim_memset(((char*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1)* Bpp_);
+			fim_memset(((fim_byte_t*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1)* Bpp_);
 		}
 		return 0;
 	}
@@ -720,12 +720,12 @@ done:
 		 * */
 		for(y=y1;y<=y2;++y)
 		{
-			fim_bzero(((char*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_, (x2-x1+1)* Bpp_);
+			fim_bzero(((fim_byte_t*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_, (x2-x1+1)* Bpp_);
 		}
 		return 0;
 	}
 
-void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, unsigned char *data)
+void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, fim_byte_t *data)
 {
 
 /* 
@@ -778,7 +778,7 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
     int i,c/*,j,w*/;
 
     for (i = 0; str[i] != '\0'; i++) {
-	c = (unsigned char)str[i];
+	c = (fim_byte_t)str[i];
 	if (NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */

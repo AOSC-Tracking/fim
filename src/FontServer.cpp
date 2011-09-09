@@ -223,7 +223,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
     f_->fontHeader.max_bounds.descent = 0;
     f_->fontHeader.max_bounds.ascent  = f_->height;
 
-    f_->glyphs  =(unsigned char*) fim_malloc(f_->height * 256);
+    f_->glyphs  =(fim_byte_t*) fim_malloc(f_->height * 256);
     if(!f_->glyphs) goto oops;
     f_->extents = (FSXCharInfo*)fim_malloc(sizeof(FSXCharInfo)*256);
     if(!f_->extents) goto oops;
@@ -233,7 +233,7 @@ struct fs_font* FontServer::fs_consolefont(const char **filename)
 
     f_->eindex  =(FSXCharInfo**) fim_malloc(sizeof(FSXCharInfo*)   * 256);
     if(!f_->eindex) goto oops;
-    f_->gindex  = (unsigned char**)fim_malloc(sizeof(unsigned char*) * 256);
+    f_->gindex  = (fim_byte_t**)fim_malloc(sizeof(fim_byte_t*) * 256);
     if(!f_->gindex) goto oops;
     for (i = 0; i < 256; i++) {
 	f_->eindex[i] = f_->extents +i;
