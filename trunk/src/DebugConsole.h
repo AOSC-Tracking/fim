@@ -60,18 +60,18 @@ namespace fim
 		public:
 		CommandConsole & cc_;	// temporarily
 
-		MiniConsole(CommandConsole & cc,int lw=48, int r=12);
+		MiniConsole(CommandConsole & cc,int lw=48, int r=12); /* FIXME: shall get rid of numerical constants! */
 		virtual ~MiniConsole(){}
-		int dump();	// non const due to user variables reaction
-		int grow();
+		fim_err_t dump();	// non const due to user variables reaction
+		fim_err_t grow();
 		fim_err_t setRows(int nr);
 		fim_err_t add(const fim_char_t * cso);
 		fim_err_t add(const fim_byte_t* cso){return add((const fim_char_t*)cso);}
-		int reformat(int newlsize);
-		int do_dump(int amount)const;
-		int clear();
-		int scroll_down();
-		int scroll_up();
+		fim_err_t reformat(int newlsize);
+		fim_err_t do_dump(int amount)const;
+		fim_err_t clear();
+		fim_err_t scroll_down();
+		fim_err_t scroll_up();
 
 		private:
 		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignment */}
@@ -90,12 +90,12 @@ namespace fim
 			{/* this constructor should not be used */}
 
 		int line_length(int li);
-		int do_dump(int f, int l)const;
-		int do_dump()const;
+		fim_err_t do_dump(int f, int l)const;
+		fim_err_t do_dump()const;
 
-		int grow_lines(int glines);
-		int grow_buffer(int gbuffer);
-		int grow(int glines, int gbuffer);
+		fim_err_t grow_lines(int glines);
+		fim_err_t grow_buffer(int gbuffer);
+		fim_err_t grow(int glines, int gbuffer);
 	};
 }
 #endif
