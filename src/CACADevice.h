@@ -33,7 +33,7 @@ class CACADevice:public DisplayDevice
 
 	int XSIZ, YSIZ;
 	struct caca_bitmap *caca_bitmap;
-	char *bitmap;
+	fim_char_t *bitmap;
 
 	public:
 

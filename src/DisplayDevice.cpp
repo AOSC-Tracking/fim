@@ -33,7 +33,7 @@
 	,redraw_(0)
 	,finalized_(false)
 	{
-		const char *line;
+		const fim_char_t *line;
 	    	if (NULL != (line = fim_getenv(FIM_ENV_FBFONT)))
 			fontname_ = line;
 	}

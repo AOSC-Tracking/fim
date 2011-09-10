@@ -31,7 +31,7 @@
 #include "yacc.tab.hpp"
 #include "common.h"
 #include "fim.h"	/* fim_calloc, ... */
-void yyerror(const char *);
+void yyerror(const fim_char_t *);
 #if 0
 /* we use %option noyywrap now ! */
 #ifdef YY_PROTO
@@ -66,7 +66,7 @@ int fim_pipedesc[2];
 #define astrcpy(dst,src) \
 { \
 	if((src)==NULL)yyerror("null pointer given!\n"); \
-	if(((dst)=(char*)fim_calloc(1+strlen(src),1))==NULL) \
+	if(((dst)=(fim_char_t*)fim_calloc(1+strlen(src),1))==NULL) \
 		yyerror("out of memory\n"); \
 	strcpy((dst),(src)); \
 }
@@ -83,7 +83,7 @@ int fim_pipedesc[2];
 #define tl(src) \
 { \
 	if((src)==NULL)yyerror("null pointer given!\n"); \
-	{char*s=src;while(*s){*s=tolower(*s);++s;}} \
+	{fim_char_t*s=src;while(*s){*s=tolower(*s);++s;}} \
 }
 
 

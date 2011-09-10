@@ -1168,7 +1168,7 @@ done:
 		 * */
 		if(read_file_list_from_stdin)
 		{
-			char *lineptr=NULL;
+			fim_char_t *lineptr=NULL;
 			size_t bs=0;
 			while(fim_getline(&lineptr,&bs,stdin)>0)
 			{
@@ -1195,7 +1195,7 @@ done:
 		else
 		if(read_one_script_file_from_stdin)
 		{
-		    	char* buf;
+		    	fim_char_t* buf;
 			buf=slurp_binary_fd(0,NULL);
 			if(buf) cc.appendPostInitCommand(buf);
 			if(buf) appendedPostInitCommand=true;

@@ -42,7 +42,7 @@ namespace fim
 	/*
 	 *	Allocation and duplication of a single string
 	 */
-	static char * fim_dupstr (const char* s);
+	static fim_char_t * fim_dupstr (const fim_char_t* s);
 
 	class string{
 	/*
@@ -54,11 +54,11 @@ namespace fim
 	 */
         static const int TOKSIZE=128*8*4*2;	//max len.NUL included
 #ifdef _FIM_DYNAMIC_STRING
-	char*s;		/* the string : can be NULL */
+	fim_char_t*s;		/* the string : can be NULL */
 	int len;	/* the allocated amount */
 	std::string ss;
 #else
-	char s[TOKSIZE];
+	fim_char_t s[TOKSIZE];
 #endif
 	public :
 	void _string_init();
@@ -72,19 +72,19 @@ namespace fim
 	virtual ~string();//virtual, as -Weffc++ suggests
 	string();
 	string(const string& s);
-	string(const char *str);
+	string(const fim_char_t *str);
 	string(const int i);
 	string(const unsigned int i);
-	const char*c_str()const;
+	const fim_char_t*c_str()const;
 	bool operator==(const string& s)const;
-	bool operator==(const char *  s)const;
+	bool operator==(const fim_char_t *  s)const;
 	bool operator!=(const string& s)const;
 	bool operator<=(const string& s)const;
 	bool operator>=(const string& s)const;
 	bool operator <(const string& s)const;
 	bool operator >(const string& s)const;
-	bool operator >(const char *s)const;
-	bool operator <(const char *s)const;
+	bool operator >(const fim_char_t *s)const;
+	bool operator <(const fim_char_t *s)const;
 
 	string& operator =(const string& s);
 	string operator+=(const string& s);
@@ -95,8 +95,8 @@ namespace fim
 	int  size()const;
 	int  find(const string&str)const;
 	int  assign(const string&str);
-	int  assign(const char*str);
-	int  find(const char*ss)const;
+	int  assign(const fim_char_t*str);
+	int  find(const fim_char_t*ss)const;
  	std::ostream& print(std::ostream &os)const;
 //	int operator=(int &i,const string& s){i=-1;return i;}
 	operator int()const{return atoi(s);}
@@ -118,9 +118,9 @@ namespace fim
 			 what():  basic_string::_S_construct NULL not valid
 		*/
 		string(const std::string&s):std::string(s){}
-		string(const char*s):std::string(s?s:""){}
+		string(const fim_char_t*s):std::string(s?s:""){}
 
-		string(char c);
+		string(fim_char_t c);
 		string(int i);
 		string(float i);
 		string(int * i);
@@ -134,11 +134,11 @@ namespace fim
 		string operator+(const string s)const;
 		/* copy constructor */
 		string(const string& s);
-		bool re_match(const char*r)const;
-		void substitute(const char*r, const char* s, int flags=0);
+		bool re_match(const fim_char_t*r)const;
+		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=0);
 		fim::string line(int ln)const;
 		size_t lines()const;
-		int find_re(const char*r,int *mbuf=NULL)const;
+		int find_re(const fim_char_t*r,int *mbuf=NULL)const;
 	};
 
 
