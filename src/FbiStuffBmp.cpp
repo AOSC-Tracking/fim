@@ -94,7 +94,7 @@ struct bmp_state {
 };
 
 static void*
-bmp_init(FILE *fp, char *filename, unsigned int page,
+bmp_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct bmp_state *h;

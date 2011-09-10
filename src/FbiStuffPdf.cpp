@@ -119,10 +119,10 @@ void SplashColorsInit(void)
 }
 
 static void*
-pdf_init(FILE *fp, char *filename, unsigned int page,
+pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-	char _[1];
+	fim_char_t _[1];
 	_[0]='\0';
 	struct pdf_state_t * ds=NULL;
 	int rotation=0,pageNo=page+1;
@@ -143,7 +143,7 @@ pdf_init(FILE *fp, char *filename, unsigned int page,
 	if(fp)
 	{
 		// FIXME: this hack will only work on Linux.
-		static char linkname[FIM_LINUX_LINKFILENAME_BUFSIZE];
+		static fim_char_t linkname[FIM_LINUX_LINKFILENAME_BUFSIZE];
 		sprintf(linkname,"/proc/self/fd/%d",fileno(fp));
 		//printf("%s\n",linkname);
 		filename=linkname;

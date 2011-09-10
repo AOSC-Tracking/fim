@@ -60,11 +60,12 @@ extern "C"
 	From fbi's misc.h :
 */
 
+#if 0
 #define container_of(ptr, type, member) ({			\
         const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
-        (type *)( (char *)__mptr - offsetof(type,member) );})
-
+        (type *)( (fim_char_t *)__mptr - offsetof(type,member) );})
 #define array_size(x) (sizeof(x)/sizeof(x[0]))
+#endif
 
 /*								*/
 
@@ -168,9 +169,9 @@ static void fim_error_exit (j_common_ptr cinfo)
 // FIXME: temporarily here
 static void dump_exif(FILE *out, ExifData *ed)
 {
-    const char *title, *value;
+    const fim_char_t *title, *value;
 #if HAVE_NEW_EXIF
-    char buffer[FIM_EXIF_BUFSIZE];
+    fim_char_t buffer[FIM_EXIF_BUFSIZE];
 #endif
     ExifEntry  *ee;
     int tag,i;
@@ -209,7 +210,7 @@ static void dump_exif(FILE *out, ExifData *ed)
 		// 7,8 want a cw rotation
 		// 5,6 want a ccw rotation
 		//
-		bool shouldmirror,shouldrotatecw,shouldrotateccw,shouldflip; char r,c;const char *p;char f;
+		bool shouldmirror,shouldrotatecw,shouldrotateccw,shouldflip; fim_char_t r,c;const fim_char_t *p;fim_char_t f;
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
 		if(!value || ((p=strstr(value," - "))==NULL))goto uhmpf;
 		r=tolower(value[0]); c=tolower(p[3]);
@@ -289,7 +290,7 @@ uhmpf:
 /* jpeg loader                                                            */
 
 static void*
-jpeg_init(FILE *fp, char *filename, unsigned int page,
+jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
     struct jpeg_state *h;
@@ -482,7 +483,7 @@ jpeg_button_cb(Widget widget, XtPointer clientdata, XtPointer call_data)
 static int
 jpeg_conf(Widget parent, struct ida_image *img)
 {
-    char tmp[32];
+    fim_char_t tmp[32];
     
     if (!jpeg_shell) {
 	/* build dialog */

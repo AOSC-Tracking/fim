@@ -50,11 +50,11 @@ struct ppm_state {
 };
 
 static void*
-pnm_init(FILE *fp, char *filename, unsigned int page,
+pnm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct ppm_state *h;
-    char line[FIM_FBI_PPM_LINEBUFSIZE],*fr;
+    fim_char_t line[FIM_FBI_PPM_LINEBUFSIZE],*fr;
 
     h = (struct ppm_state*) fim_calloc(sizeof(*h),1);
     if(!h)return NULL;

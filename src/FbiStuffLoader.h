@@ -76,11 +76,12 @@ struct ida_rect {
 
 /* load image files */
 struct ida_loader {
-    const char  *magic;
+    //const fim_byte_t  *magic;
+    const fim_char_t  *magic;
     int   moff;
     int   mlen;
-    const char  *name;
-    void* (*init)(FILE *fp, char *filename, unsigned int page,
+    const fim_char_t  *name;
+    void* (*init)(FILE *fp, const fim_char_t *filename, unsigned int page,
 		  struct ida_image_info *i, int thumbnail);
     void  (*read)(fim_byte_t *dst, unsigned int line, void *data);
     void  (*done)(void *data);
@@ -89,7 +90,7 @@ struct ida_loader {
 
 /* filter + operations */
 struct ida_op {
-    const char  *name;
+    const fim_char_t  *name;
     void* (*init)(struct ida_image *src, struct ida_rect *rect,
 		  struct ida_image_info *i, void *parm);
     void  (*work)(struct ida_image *src, struct ida_rect *rect,
@@ -106,8 +107,8 @@ void  op_free_done(void *data);
 #ifdef USE_X11
 /* save image files */
 struct ida_writer {
-    const char  *label;
-    const char  *ext[8];
+    const fim_char_t  *label;
+    const fim_char_t  *ext[8];
     int   (*write)(FILE *fp, struct ida_image *img);
     int   (*conf)(Widget widget, struct ida_image *img);
     struct list_head list;

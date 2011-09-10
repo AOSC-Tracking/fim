@@ -43,7 +43,7 @@ namespace fim
 /* load                                                                   */
 
 struct mm_state_t {
-	char * filename;
+	fim_char_t * filename;
 	fim_byte_t * first_row_dst;
 	int width  ;
 	int height ;
@@ -53,7 +53,7 @@ struct mm_state_t {
 /* ---------------------------------------------------------------------- */
 
 static void*
-mm_init(FILE *fp, char *filename, unsigned int page,
+mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
 	rsb_coo_index_t rows,cols;

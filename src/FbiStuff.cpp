@@ -1462,7 +1462,7 @@ static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h)
 
 
 /*static struct ida_image**/
-struct ida_image* FbiStuff::read_image(fim_char_t *filename, FILE* fd, int page)
+struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int page)
 {
     /*
      * This function is complicated and should be reworked, in some way.

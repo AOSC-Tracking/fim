@@ -56,7 +56,7 @@ class FbiStuff{
 public:
 static void free_image(struct ida_image *img);
 static FILE* fim_execlp(const fim_char_t *arg, ...);/* new */
-static struct ida_image* read_image(fim_char_t *filename, FILE* fd, int page=0);
+static struct ida_image* read_image(const fim_char_t *filename, FILE* fd, int page=0);
 static struct ida_image* rotate_image90(struct ida_image *src, unsigned int rotation);
 static struct ida_image* rotate_image(struct ida_image *src, float angle);
 static struct ida_image* scale_image(struct ida_image *src, float scale, float ascale);

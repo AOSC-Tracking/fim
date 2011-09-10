@@ -68,7 +68,7 @@ namespace fim
 		return img_->i.height;
 	}
 
-	Image::Image(const char *fname, FILE*fd):
+	Image::Image(const fim_char_t *fname, FILE*fd):
 		scale_(0.0),
 		ascale_(0.0),
 		newscale_(0.0),
@@ -105,7 +105,7 @@ namespace fim
 
 			struct ida_extra* ie=load_find_extra(&(img_->i),EXTRA_COMMENT);
 			if(ie)
-				setVariable(FIM_VID_COMMENT,(char*)(ie->data));
+				setVariable(FIM_VID_COMMENT,(fim_char_t*)(ie->data));
 		}
 	}
 
@@ -145,7 +145,7 @@ namespace fim
 		return b;
 	}
 	
-	bool Image::load(const char *fname, FILE* fd, int want_page)
+	bool Image::load(const fim_char_t *fname, FILE* fd, int want_page)
 	{
 		/*
 		 *	an image is loaded and initializes this image.
@@ -162,7 +162,7 @@ namespace fim
 				cc.set_status_bar("please wait while reloading...", "*");
 		}
 
-		fimg_ = FbiStuff::read_image((char*)fname,fd,want_page);
+		fimg_ = FbiStuff::read_image(fname,fd,want_page);
 
     		if(strcmp(FIM_STDIN_IMAGE_NAME,fname)==0)
 		{
@@ -535,9 +535,9 @@ fim::string Image::getInfo()
 	//FIX ME !
 	if(!fimg_)return FIM_CNS_EMPTY_RESULT;
 
-	static char linebuffer[FIM_STATUSLINE_BUF_SIZE];
-	char pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
-	char imagemode[3],*imp;
+	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
+	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
+	fim_char_t imagemode[3],*imp;
 	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 	imp=imagemode;
 
