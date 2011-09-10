@@ -155,7 +155,7 @@ tiff_read(fim_byte_t *dst, unsigned int line, void *data)
     if (h->image) {
 	/* loaded whole image using TIFFReadRGBAImage() */
 	uint32 *row = h->image + h->width * (h->height - line -1);
-	load_rgba(dst,(unsigned char*)row,h->width);
+	load_rgba(dst,(fim_byte_t*)row,h->width);
 	return;
     }
     
@@ -178,15 +178,15 @@ tiff_read(fim_byte_t *dst, unsigned int line, void *data)
 #if 0
 	    /* Huh?  Does TIFFReadScanline handle this already ??? */
 	    if (FILLORDER_MSB2LSB == h->fillorder)
-		load_bits_msb(dst,(unsigned char*)(h->row),h->width,on,off);
+		load_bits_msb(dst,(fim_byte_t*)(h->row),h->width,on,off);
 	    else
-		load_bits_lsb(dst,(unsigned char*)(h->row),h->width,on,off);
+		load_bits_lsb(dst,(fim_byte_t*)(h->row),h->width,on,off);
 #else
-	    load_bits_msb(dst,(unsigned char*)(h->row),h->width,on,off);
+	    load_bits_msb(dst,(fim_byte_t*)(h->row),h->width,on,off);
 #endif
 	} else {
 	    /* grayscaled */
-	    load_gray(dst,(unsigned char*)(h->row),h->width);
+	    load_gray(dst,(fim_byte_t*)(h->row),h->width);
 	}
 	break;
     case 3:
@@ -195,7 +195,7 @@ tiff_read(fim_byte_t *dst, unsigned int line, void *data)
 	break;
     case 4:
 	/* rgb+alpha */
-	load_rgba(dst,(unsigned char*)(h->row),h->width);
+	load_rgba(dst,(fim_byte_t*)(h->row),h->width);
 	break;
     }
 }

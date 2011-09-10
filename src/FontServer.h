@@ -46,15 +46,15 @@ struct fs_font {
     FSXFontInfoHeader  fontHeader;
     FSPropInfo         propInfo;
     FSPropOffset       *propOffsets;
-    unsigned char      *propData;
+    fim_byte_t      *propData;
 
     FSXCharInfo        *extents;
     FSOffset           *offsets;
-    unsigned char      *glyphs;
+    fim_byte_t      *glyphs;
 
     int                maxenc,width,height;
     FSXCharInfo        **eindex;
-    unsigned char      **gindex;
+    fim_byte_t      **gindex;
 };
 
 #else
@@ -82,12 +82,12 @@ typedef struct _FSXFontInfoHeader {
 
 struct fs_font {
     FSXFontInfoHeader  fontHeader;
-    /*unsigned char      *propData;*/
+    /*fim_byte_t      *propData;*/
     FSXCharInfo        *extents;
-    unsigned char      *glyphs;
+    fim_byte_t      *glyphs;
     int                maxenc,width,height;
     FSXCharInfo        **eindex;
-    unsigned char      **gindex;
+    fim_byte_t      **gindex;
 };
 
 #endif

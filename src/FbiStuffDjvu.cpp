@@ -57,7 +57,7 @@ struct djvu_state_t {
     ddjvu_format_t * pf;
     int row_stride;    /* physical row width in output buffer */
 
-    unsigned char * first_row_dst;
+    fim_byte_t * first_row_dst;
 };
 
 /* ---------------------------------------------------------------------- */

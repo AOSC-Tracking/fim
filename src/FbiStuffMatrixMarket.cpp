@@ -44,7 +44,7 @@ namespace fim
 
 struct mm_state_t {
 	char * filename;
-	unsigned char * first_row_dst;
+	fim_byte_t * first_row_dst;
 	int width  ;
 	int height ;
 };

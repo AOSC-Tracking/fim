@@ -981,7 +981,7 @@ rerr:
 
 #if 0
 /* 20110909 FIXME: unused */
-void FramebufferDevice::fb_edit_line(unsigned char *str, int pos)
+void FramebufferDevice::fb_edit_line(fim_byte_t *str, int pos)
 {
     int x,y;
     

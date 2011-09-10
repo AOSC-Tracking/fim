@@ -96,10 +96,10 @@ struct jpeg_state {
     struct jpeg_error_mgr jerr;
     JSAMPARRAY buffer;            /* Output row buffer */
     int row_stride,linelength;    /* physical row width in output buffer */
-    unsigned char *image,*ptr;
+    fim_byte_t *image,*ptr;
 
     /* thumbnail */
-    unsigned char  *thumbnail;
+    fim_byte_t  *thumbnail;
     unsigned int   tpos, tsize;
 };
 
@@ -504,7 +504,7 @@ jpeg_write(FILE *fp, struct ida_image *img)
 {
     struct jpeg_compress_struct cinfo;
     struct jpeg_error_mgr jerr;
-    unsigned char *line;
+    fim_byte_t *line;
     unsigned int i;
 
     cinfo.err = jpeg_std_error(&jerr);

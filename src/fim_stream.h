@@ -39,7 +39,7 @@ namespace fim
 
 		fim_stream& operator<<(const  char* s);
 
-		fim_stream& operator<<(const unsigned char* s);
+		fim_stream& operator<<(const fim_byte_t* s);
 
 		fim_stream& operator<<(const  fim::string&s);
 
