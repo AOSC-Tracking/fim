@@ -66,8 +66,8 @@ namespace fim
 				{
 					// a fixup for the dumb console
 					int n=1+line_[l]-line_[f_];
-					char*buf=NULL;
-					if(n>0 && (buf=(char*)fim_malloc(n))!=NULL)
+					fim_char_t*buf=NULL;
+					if(n>0 && (buf=(fim_char_t*)fim_malloc(n))!=NULL)
 					{
 						strncpy(buf,line_[f_],n);
 						buf[n-1]='\0';
@@ -80,7 +80,7 @@ namespace fim
 					return -1;
 			}
 
-			char *buf = (char*) fim_malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
+			fim_char_t *buf = (fim_char_t*) fim_malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
 			if(!buf)return -1;
 
 			if(*bp_){fim_free(buf);return -1;}//if *bp_ then we could print garbage so we exit before damage is done
@@ -131,13 +131,13 @@ done:
 		#undef min
 		}
 
-		fim_err_t MiniConsole::add(const char* cso_)
+		fim_err_t MiniConsole::add(const fim_char_t* cso_)
 		{
-			char *s=NULL,*b=NULL;
+			fim_char_t *s=NULL,*b=NULL;
 			int nc;
 			int nl,ol=cline_;
-			char *cs=NULL;/* using co would mean provoking the compiler */
-			char*cso=(char*)cso_;// FIXME
+			fim_char_t *cs=NULL;/* using co would mean provoking the compiler */
+			fim_char_t*cso=(fim_char_t*)cso_;// FIXME
 
 #if FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE
 			if(cc_.displaydevice_ && 0==cc_.displaydevice_->get_chars_per_column())
@@ -156,7 +156,7 @@ done:
 			if(lwidth_<1)goto rerr;
 			nl=lines_count(cs,lwidth_);
 			// we count exactly the number of new entries needed in the arrays we have
-			if((s=const_cast<char*>(strchr(cs,'\n')))!=NULL && s!=cs)nl+=(ccol_+(s-cs-1))/lwidth_;// single line_ with \n or multiline
+			if((s=const_cast<fim_char_t*>(strchr(cs,'\n')))!=NULL && s!=cs)nl+=(ccol_+(s-cs-1))/lwidth_;// single line_ with \n or multiline
 			else nl+=(strlen(cs)+ccol_)/lwidth_;	// single line_, with no terminators
 
 			/*
@@ -172,7 +172,7 @@ done:
 			sanitize_string_from_nongraph_except_newline(bp_,0);
 			s=bp_-ccol_;// we will work in our buffer_ space now on
 			b=s;
-			while(*s && (s=(char*)next_row(s,lwidth_))!=NULL && *s)
+			while(*s && (s=(fim_char_t*)next_row(s,lwidth_))!=NULL && *s)
 			{
 				line_[++cline_]=s;// we keep track of each new line_
 				ccol_=0;
@@ -245,8 +245,8 @@ rerr:
 
 			cline_ =0;
 			ccol_  =0;
-			buffer_=(char*) fim_calloc(bsize_,sizeof(char ));
-			line_  =(char**)fim_calloc(lsize_,sizeof(char*));
+			buffer_=(fim_char_t*) fim_calloc(bsize_,sizeof(fim_char_t ));
+			line_  =(fim_char_t**)fim_calloc(lsize_,sizeof(fim_char_t*));
 			bp_    =buffer_;
 			if(!buffer_ || !line_)
 			{
@@ -303,9 +303,9 @@ rerr:
 			/* TEST ME AND FINISH ME */
 			if(glines< 0)return -1;
 			if(glines==0)return  0;
-			char **p;
+			fim_char_t **p;
 			p=line_;
-			line_=(char**)realloc(line_,bsize_+glines*sizeof(char*));
+			line_=(fim_char_t**)realloc(line_,bsize_+glines*sizeof(fim_char_t*));
 			if(!line_){line_=p;return -1;/* no change */}
 			lsize_+=glines;
 			return 0;
@@ -321,9 +321,9 @@ rerr:
 			/* TEST ME AND FINISH ME */
 			if(gbuffer< 0)return -1;
 			if(gbuffer==0)return  0;
-			char *p;int i,d;
+			fim_char_t *p;int i,d;
 			p=buffer_;
-			buffer_=(char*)realloc(buffer_,(bsize_+gbuffer)*sizeof(char));
+			buffer_=(fim_char_t*)realloc(buffer_,(bsize_+gbuffer)*sizeof(fim_char_t));
 			if(!buffer_){buffer_=p;return -1;/* no change */}
 			if((d=(p-buffer_))!=0)// in the case a shift is needed
 			{

@@ -805,7 +805,7 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 	}
 #endif
 #endif
-	/* draw char */
+	/* draw character */
 	//fs_render_fb(fb_fix.line_length,f_->eindex[c],f_->gindex[c]);
 	fs_render_fb(x,y,f_->eindex[c],f_->gindex[c]);
 	x += f_->eindex[c]->width;

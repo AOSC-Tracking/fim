@@ -42,7 +42,7 @@ extern "C"
 
 namespace fim
 {
-
+typedef char fim_libdjvu_char;
 extern CommandConsole cc;
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -170,7 +170,7 @@ djvu_read(fim_byte_t *dst, unsigned int line, void *data)
                            & (ds->rrect),
                            ds->pf,
                            ds->row_stride,
-                           (char*)dst);
+                           (fim_libdjvu_char*)dst);
         return ;
 }
 

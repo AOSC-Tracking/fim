@@ -938,7 +938,7 @@ ok:
 //			// 20110601 need some string variable with these two keys (see while() interruption documentation) 
 			if((ki=sym_keys_.find(FIM_KBD_ESC))!=sym_keys_.end() && c==ki->second)return 1;
 			if((ki=sym_keys_.find(FIM_KBD_COLON))!=sym_keys_.end() && c==ki->second)return 1;
-			if( c != exitBinding_ )  /* some char read */
+			if( c != exitBinding_ )  /* some character read */
 			{
 				/*
 				 * we give the user chance to issue commands
