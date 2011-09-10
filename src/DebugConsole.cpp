@@ -38,7 +38,7 @@ namespace fim
 			return ccol_;
 		}
 
-		int MiniConsole::do_dump(int f_, int l)const
+		fim_err_t MiniConsole::do_dump(int f_, int l)const
 		{
 			/*
 			 *
@@ -57,7 +57,7 @@ namespace fim
 			else
 				if(f_<=l && f_>=0){f_=f_>cline_?cline_:f_;l=l>cline_?cline_:l;}
 			else
-				return -1;// unsupported combination
+				return FIM_ERR_GENERIC;// unsupported combination
 			
 			if(maxcols<1)
 			{
@@ -77,13 +77,13 @@ namespace fim
 				}
 				else
 #endif
-					return -1;
+					return FIM_ERR_GENERIC;
 			}
 
 			fim_char_t *buf = (fim_char_t*) fim_malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
-			if(!buf)return -1;
+			if(!buf)return FIM_ERR_GENERIC;
 
-			if(*bp_){fim_free(buf);return -1;}//if *bp_ then we could print garbage so we exit before damage is done
+			if(*bp_){fim_free(buf);return FIM_ERR_GENERIC;}//if *bp_ then we could print garbage so we exit before damage is done
 
 			int fh=cc_.displaydevice_->f_ ? cc_.displaydevice_->f_->height:1; // FIXME : this is not clean
 			l-=f_; l%=(rows_+1); l+=f_;
@@ -101,7 +101,7 @@ namespace fim
 	    		for(i=f_  ;i<=l   ;++i)
 			{
 				int t = (i<cline_?(line_[i+1]-line_[i]):(ccol_))%(min(maxcols,lwidth_)+1);
-				if( t<0 ){fim_free(buf);return -1;} // hmmm
+				if( t<0 ){fim_free(buf);return FIM_ERR_GENERIC;} // hmmm
 				strncpy(buf,line_[i],t);
 				while(buf[t-1]=='\n' && t>0)--t;
 				buf[maxcols]='\0';
@@ -127,7 +127,7 @@ namespace fim
 			cc_.displaydevice_->flush();
 done:
 			fim_free(buf);
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		#undef min
 		}
 
@@ -263,7 +263,7 @@ rerr:
 			add(FIM_MSG_CONSOLE_FIRST_LINE_BANNER);
 		}
 
-		int MiniConsole::do_dump(int amount)const
+		fim_err_t MiniConsole::do_dump(int amount)const
 		{
 			/*
 			 * We dump:
@@ -290,10 +290,10 @@ rerr:
 				if(-amount>=cline_)amount+=cline_;
 				do_dump(0,-amount);
 			}
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 
-		int MiniConsole::grow_lines(int glines)
+		fim_err_t MiniConsole::grow_lines(int glines)
 		{
 			/*
 			 * grow of a specified amount of lines the lines array
@@ -301,17 +301,17 @@ rerr:
 			 * see the doc for grow() to get more
 			 * */
 			/* TEST ME AND FINISH ME */
-			if(glines< 0)return -1;
-			if(glines==0)return  0;
+			if(glines< 0)return FIM_ERR_GENERIC;
+			if(glines==0)return FIM_ERR_NO_ERROR;
 			fim_char_t **p;
 			p=line_;
 			line_=(fim_char_t**)realloc(line_,bsize_+glines*sizeof(fim_char_t*));
-			if(!line_){line_=p;return -1;/* no change */}
+			if(!line_){line_=p;return FIM_ERR_GENERIC;/* no change */}
 			lsize_+=glines;
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 
-		int MiniConsole::grow_buffer(int gbuffer)
+		fim_err_t MiniConsole::grow_buffer(int gbuffer)
 		{
 			/*
 			 * grow of a specified amount of lines the buffer_ array
@@ -319,22 +319,22 @@ rerr:
 			 * see the doc for grow() to get more
 			 * */
 			/* TEST ME AND FINISH ME */
-			if(gbuffer< 0)return -1;
-			if(gbuffer==0)return  0;
+			if(gbuffer< 0)return  FIM_ERR_GENERIC;
+			if(gbuffer==0)return  FIM_ERR_NO_ERROR;
 			fim_char_t *p;int i,d;
 			p=buffer_;
 			buffer_=(fim_char_t*)realloc(buffer_,(bsize_+gbuffer)*sizeof(fim_char_t));
-			if(!buffer_){buffer_=p;return -1;/* no change */}
+			if(!buffer_){buffer_=p;return FIM_ERR_GENERIC;/* no change */}
 			if((d=(p-buffer_))!=0)// in the case a shift is needed
 			{
 				for(i=0;i<cline_;++i)line_[i]-=d;
 				bp_-=d;
 			}
 			bsize_+=gbuffer;
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 
-		int MiniConsole::grow()
+		fim_err_t MiniConsole::grow()
 		{
 			/*
 			 * We grow a specified amount both the line_ count and the line_ buffer_.
@@ -342,7 +342,7 @@ rerr:
 			return grow(FIM_CONSOLE_BLOCKSIZE,8*FIM_CONSOLE_BLOCKSIZE);
 		}
 
-		int MiniConsole::grow(int glines, int gbuffer)
+		fim_err_t MiniConsole::grow(int glines, int gbuffer)
 		{
 			/*
 			 * grow of a specified amount of lines or bytes the 
@@ -362,10 +362,10 @@ rerr:
 			int gb,gl;
 			gb=grow_buffer(gbuffer);
 			gl=grow_lines (glines);
-			return !( gb==0 && 0==gl );// 0 if both 0
+			return ( gb==FIM_ERR_NO_ERROR && FIM_ERR_NO_ERROR ==gl )?FIM_ERR_NO_ERROR:FIM_ERR_GENERIC;// 0 if both 0
 		}
 
-		int MiniConsole::reformat(int newlwidth)
+		fim_err_t MiniConsole::reformat(int newlwidth)
 		{
 			/*
 			 * This method reformats the whole buffer_ array; that is, it recomputes
@@ -378,12 +378,12 @@ rerr:
 			 * 
 			 * */
 			int nls;
-			if(newlwidth==lwidth_)return 0;//are we sure?
+			if(newlwidth==lwidth_)return FIM_ERR_NO_ERROR;//are we sure?
 			if(newlwidth< lwidth_)
 			{
 				// realloc needed
 				if ( ( nls=lines_count(buffer_, newlwidth) + 1 ) < lsize_ )
-				if ( grow_lines( nls )!=0 )return -1;
+				if ( grow_lines( nls )!=FIM_ERR_NO_ERROR )return FIM_ERR_GENERIC;
 			}
 			if(newlwidth> lwidth_ || ( lines_count(buffer_, newlwidth) + 1 < lsize_ ) )
 			{
@@ -394,15 +394,15 @@ rerr:
 					ccol_=0;cline_=0;lwidth_=newlwidth;*line_=buffer_;bp_=buffer_;
 					// the easy way
 					add(buf.c_str());// by adding a very big chunk of text, we make sure it gets formatted.
-					return 0;
+					return FIM_ERR_NO_ERROR;
 				}
 				// if some error happened in buf string initialization, we return -1
-				return -1;
+				return FIM_ERR_GENERIC;
 			}
-			return -1;
+			return FIM_ERR_GENERIC;
 		}
 
-		int MiniConsole::dump()
+		fim_err_t MiniConsole::dump()
 		{
 			/*
 			 * We dump on screen the textual console contents.
@@ -428,10 +428,10 @@ rerr:
 			}
 			else
 				return do_dump(-co-1,cline_);
-			return -1;
+			return FIM_ERR_GENERIC;
 		}
 
-		int MiniConsole::do_dump()const
+		fim_err_t MiniConsole::do_dump()const
 		{
 			/*
 			 * We dump on screen the textual console contents.
@@ -439,22 +439,22 @@ rerr:
 			return do_dump((cline_-rows_+1)>=0?(cline_-rows_+1):0,cline_);
 		}
 
-		int MiniConsole::clear()
+		fim_err_t MiniConsole::clear()
 		{
 			scroll_=rows_;
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 
-		int MiniConsole::scroll_down()
+		fim_err_t MiniConsole::scroll_down()
 		{
 			scroll_=scroll_<1?0:--scroll_;
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 
-		int MiniConsole::scroll_up()
+		fim_err_t MiniConsole::scroll_up()
 		{
 			scroll_=scroll_<rows_?++scroll_:scroll_;
-			return 0;
+			return FIM_ERR_NO_ERROR;
 		}
 }
 #endif
