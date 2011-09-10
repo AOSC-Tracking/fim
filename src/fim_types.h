@@ -24,8 +24,8 @@
 #ifndef FIM_TYPES_FIM_H
 #define FIM_TYPES_FIM_H
 
-namespace fim
-{
+//namespace fim
+//{
 	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
 	typedef int fim_off_t;		/* a type for pixel offsets (positive)  */
 	typedef float fim_scale_t;	/* a type for image scaling */
@@ -54,7 +54,7 @@ namespace fim
 	typedef char fim_char_t;	/* a type for chars */
 	typedef unsigned char fim_byte_t;	/* a type for bytes */
 	typedef size_t fim_size_t;	/* a type for file size */
-}
+//}
 
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf
