@@ -625,7 +625,7 @@ fim::string Image::getInfo()
 	{
 		/* FIXME : this is BAD style ! */
 	        if(cc.displaydevice_)
-		        cc.displaydevice_->redraw_=1;
+		        cc.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;
 	}
 
 	bool Image::prev_page(int j)

@@ -62,10 +62,10 @@ class AADevice:public DisplayDevice
 
 	int get_chars_per_line();
 	int get_chars_per_column();
-	int txt_width();
-	int txt_height();
-	int width();
-	int height();
+	fim_coo_t txt_width();
+	fim_coo_t txt_height();
+	fim_coo_t width();
+	fim_coo_t height();
 	fim_err_t status_line(const fim_char_t *msg);
 	void status_screen(int desc,int draw_output){}
 	fim_bool_t handle_console_switch(){return false;}

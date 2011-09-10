@@ -132,14 +132,14 @@ err:
 	want_windowed_(false),
 	want_mouse_display_(false),
 	want_resize_(false),
-	Bpp_(NULL),
-	bpp_(NULL),
+	Bpp_(FIM_CNS_BPP_INVALID),
+	bpp_(FIM_CNS_BPP_INVALID),
 	screen_(NULL),
 	vi_(NULL)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		keypress_ = 0;
-		h_=0;
+		//h_=0;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		const fim_char_t*os=opts_.c_str();
 		parse_optstring(os);
@@ -148,7 +148,7 @@ err:
 		//current_w_=current_h_=0;
 	}
 
-	int SDLDevice::clear_rect_(
+	fim_err_t SDLDevice::clear_rect_(
 		void* dst,	// destination array 
 		int oroff,int ocoff,	// row  and column  offset of the first output pixel
 		int orows,int ocols,	// rows and columns drawable in the output buffer
@@ -181,7 +181,7 @@ err:
 		lor = orows-1;
 		loc = ocols-1;
 		
-		return  -1;
+		return  FIM_ERR_GENERIC;
 	}
 
 	fim_err_t SDLDevice::display(
@@ -252,7 +252,7 @@ err:
 
 		if(SDL_MUSTLOCK(screen_))
 		{
-			if(SDL_LockSurface(screen_) < 0) return -1;
+			if(SDL_LockSurface(screen_) < 0) return FIM_ERR_GENERIC;
 		}
 
 		int idr,idc,lor,loc;
@@ -447,12 +447,12 @@ err:
 		return width() / f_->width;
 	}
 
-	int SDLDevice::width()
+	fim_coo_t SDLDevice::width()
 	{
 		return current_w_;
 	}
 
-	int SDLDevice::height()
+	fim_coo_t SDLDevice::height()
 	{
 		return current_h_;
 	}
@@ -699,7 +699,7 @@ done:
 		return get_input_inner(c,&event_,&keypress_,want_poll);
 	}
 
-	int SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
+	fim_err_t SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
 	{
 		int y;
 		/*
@@ -709,7 +709,7 @@ done:
 		{
 			fim_memset(((fim_byte_t*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1)* Bpp_);
 		}
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t SDLDevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)

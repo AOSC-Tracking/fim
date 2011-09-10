@@ -55,7 +55,7 @@ class CommandConsole
 	public:
 
 	struct termios  saved_attributes_;
-	int             saved_fl_;
+	fim_sys_int             saved_fl_; /* file status flags for stdin */
 
 	/*
 	 * the image browser_ logic
@@ -158,7 +158,7 @@ class CommandConsole
 #endif
 
 	public:
-	int fim_stdin_;	// the standard input file descriptor
+	fim_str_t fim_stdin_;	// the standard input file descriptor
 	private:
 	fim_char_t prompt_[2];
 

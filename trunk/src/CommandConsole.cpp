@@ -50,7 +50,7 @@
 #define FIM_CNS_RAW_KEYS_MESG 
 #endif
 						
-extern int yyparse();
+extern fim_sys_int yyparse();
 
 namespace fim
 {
@@ -606,11 +606,11 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 *	If the binding is inexistent, ignores silently the error.
 		 */
 		bindings_t::const_iterator bi=bindings_.find(c);
-		int status=0;
+		fim_err_t status=FIM_ERR_NO_ERROR;
 #define KEY_OFFSET '0'
 
 #ifdef FIM_ITERATED_COMMANDS
-		static int it_buf=-1;
+		static fim_int it_buf=-1;
 		if( c>='0' && c <='9' && (bi==bindings_.end() || bi->second==FIM_CNS_EMPTY_STRING))//a number, not bound
 		{
 			if(it_buf>0){it_buf*=10;it_buf+=c - KEY_OFFSET;}
@@ -631,7 +631,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
 			{
-				int m = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
+				fim_int m = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
 				fim::string nc;
 				/*
 				 *  A non positive value of  _max_iterated_commands
@@ -796,7 +796,7 @@ ret:
 			/*
 			 * WARNING : i am not sure this is the best choice
 			 */
-			int r = pipe(fim_pipedesc),sl;
+			fim_sys_int r = pipe(fim_pipedesc),sl;
 			if(r!=0){ferror("pipe error\n");exit(-1);}
 #ifndef			FIM_ALIASES_WITHOUT_ARGUMENTS
 			for(size_t i=0;i<args.size();++i)
@@ -1055,10 +1055,10 @@ ok:
 			{
 				*prompt_=FIM_SYM_PROMPT_NUL;
 				fim_key_t c;
-				int r;
+				fim_sys_int r;
 				fim_char_t buf[FIM_VERBOSE_KEYS_BUFSIZE];
-//				int c=getchar();
-//				int c=fgetc(stdin);
+//				fim_sys_int c=getchar();
+//				fim_sys_int c=fgetc(stdin);
 				/*
 				 *	problems :
 				 *	 I can't read Control key and 
@@ -1098,7 +1098,7 @@ ok:
 						 * this is a hack to handle vim-styled regexp searches
 						 */
 						ic_=1;
-						int tmp=rl_filename_completion_desired;
+						fim_sys_int tmp=rl_filename_completion_desired;
 						rl_inhibit_completion=1;
 						*prompt_=FIM_SYM_PROMPT_SLASH;
 						rl_hook_func_t *osh=rl_startup_hook;
@@ -1244,7 +1244,7 @@ rlnull:
 		 * TODO : catch exceptions
 		 */
 
-		int r;
+		fim_sys_int r;
 		fim_char_t buf[FIM_STREAM_BUFSIZE];	// TODO : buffer too small
 		fim::string cmds;
 		if(fd==NULL)return FIM_ERR_GENERIC;
@@ -1261,7 +1261,7 @@ rlnull:
 		 * TODO : catch exceptions
 		 */
 
-		int r;
+		fim_sys_int r;
 		fim_char_t buf[FIM_STREAM_BUFSIZE];
 		fim::string cmds;
 		if(fd==NULL)return FIM_ERR_GENERIC;
@@ -1661,7 +1661,7 @@ ok:
 		 *	method returns true if there is match. false otherwise.
 		 */
 		regex_t regex;		//should be static!!!
-		const int nmatch=1;	// we are satisfied with the first match, aren't we ?
+		const fim_size_t nmatch=1;	// we are satisfied with the first match, aren't we ?
 		regmatch_t pmatch[nmatch];
 
 		/*
@@ -1780,7 +1780,8 @@ ok:
 		 * NOTE: recording the start_recording command itself is not harmful,
 		 * as it only sets a flag.
 		 * */
-		static int pt=0;fim_tms_t t,d,err;//t,pt in ms; d in us
+		static time_t pt=0;
+		fim_tms_t t,d,err;//t,pt in ms; d in us
 	        struct timeval tv;
 		if(cmd==FIM_CNS_EMPTY_STRING){pt=0;return;}
 	        if(!pt){err=gettimeofday(&tv, NULL);pt=tv.tv_usec/1000+tv.tv_sec*1000;}

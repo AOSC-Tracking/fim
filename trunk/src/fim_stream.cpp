@@ -25,7 +25,7 @@
 
 namespace fim
 {
-		fim_stream::fim_stream(int fd):fd_(fd)
+		fim_stream::fim_stream(fim_str_t fd):fd_(fd)
 		{
 		}
 

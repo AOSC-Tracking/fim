@@ -30,7 +30,7 @@
 #endif
 	,f_(NULL)
 	,debug_(false)
-	,redraw_(0)
+	,redraw_(FIM_REDRAW_UNNECESSARY)
 	,finalized_(false)
 	{
 		const fim_char_t *line;

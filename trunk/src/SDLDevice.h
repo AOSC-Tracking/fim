@@ -35,11 +35,11 @@ class SDLDevice:public DisplayDevice
 	SDL_VideoInfo bvi_;
 
 	int keypress_ ;
-	int h_;
+	//int h_;
 
-	int current_w_;
-	int current_h_;
-	int Bpp_,bpp_;
+	fim_coo_t current_w_;
+	fim_coo_t current_h_;
+	fim_bpp_t Bpp_,bpp_;
 	fim::string opts_;
 	bool want_windowed_;
 	bool want_mouse_display_;
@@ -67,13 +67,13 @@ class SDLDevice:public DisplayDevice
 		fim_flags_t flags// some flags
 		);
 
-	int initialize(sym_keys_t &sym_keys);
+	fim_err_t initialize(sym_keys_t &sym_keys);
 	void finalize() ;
 
 	int get_chars_per_line() ;
 	int get_chars_per_column();
-	int width();
-	int height();
+	fim_coo_t width();
+	fim_coo_t height();
 	fim_err_t status_line(const fim_char_t *msg);
 	fim_bool_t handle_console_switch(){return false;}
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
@@ -87,13 +87,13 @@ class SDLDevice:public DisplayDevice
 	fim_bpp_t get_bpp(){return bpp_; };
 	bool sdl_window_update();
 	private:
-	int clear_rect_( void* dst, int oroff,int ocoff, int orows,int ocols, int ocskip);
+	fim_err_t clear_rect_( void* dst, int oroff,int ocoff, int orows,int ocols, int ocskip);
 	/* TEMPORARY */
 	inline void setpixel(SDL_Surface *screen_, int x, int y, Uint8 r, Uint8 g, Uint8 b);
 	void status_screen_(int desc,int draw_output){ return ; }
-	int fill_rect(int x1, int x2, int y1,int y2, int color);
-	int txt_width() ;
-	int txt_height() ;
+	fim_err_t fill_rect(int x1, int x2, int y1,int y2, int color);
+	fim_coo_t txt_width() ;
+	fim_coo_t txt_height() ;
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	private:
 	bool allowed_resolution(fim_coo_t w, fim_coo_t h);
