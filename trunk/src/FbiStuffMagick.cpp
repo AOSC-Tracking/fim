@@ -61,7 +61,7 @@ static void magick_cleanup()
 }
 
 static void*
-magick_init(FILE *fp, char *filename, unsigned int page,
+magick_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
 	fim_bzero(&ms,sizeof(ms));

@@ -62,7 +62,7 @@ struct ps_state_t {
 /* ---------------------------------------------------------------------- */
 #define FIM_SPECTRE_DEFAULT_DPI 72
 static void*
-ps_init(FILE *fp, char *filename, unsigned int page,
+ps_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
 	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);

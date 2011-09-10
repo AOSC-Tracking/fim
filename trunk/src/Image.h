@@ -59,8 +59,8 @@ class Image
 
 	public:
 
-	Image(const char *fname, FILE *fd=NULL);
-	Image(const char *fname, Foo& foo, FILE *fd=NULL);
+	Image(const fim_char_t *fname, FILE *fd=NULL);
+	Image(const fim_char_t *fname, Foo& foo, FILE *fd=NULL);
 	~Image();
 
 	bool prev_page(int j=+1);
@@ -87,7 +87,7 @@ class Image
 	struct ida_image *fimg_    ;     /* master image */
 
 	/* image methods */
-	bool load(const char *fname, FILE *fd, int want_page);
+	bool load(const fim_char_t *fname, FILE *fd, int want_page);
 	void should_redraw(int should=1)const;
 
 	protected:
@@ -114,7 +114,7 @@ class Image
 	fim_err_t rescale( fim_scale_t ns=0.0 );
 	fim_err_t rotate( fim_scale_t angle_=1.0 );
 
-	const char* getName()const{return fname_.c_str();}
+	const fim_char_t* getName()const{return fname_.c_str();}
 	cache_key_t getKey()const;
 
 	/* viewport methods */

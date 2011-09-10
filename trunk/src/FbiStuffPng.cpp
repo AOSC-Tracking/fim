@@ -39,7 +39,7 @@ namespace fim
 {
 
 
-static const char *ct[] = {
+static const fim_char_t *ct[] = {
     "gray",  "X1", "rgb",  "palette",
     "graya", "X5", "rgba", "X7",
 };
@@ -54,7 +54,7 @@ struct fim_png_state {
 };
 
 static void*
-png_init(FILE *fp, char *filename, unsigned int page,
+png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct fim_png_state *h;

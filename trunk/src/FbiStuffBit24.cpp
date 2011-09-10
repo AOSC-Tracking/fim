@@ -56,7 +56,7 @@ struct bit24_state {
 };
 
 static void*
-bit24_init(FILE *fp, char *filename, unsigned int page,
+bit24_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct bit24_state *h=NULL;

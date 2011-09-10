@@ -84,7 +84,7 @@ struct djvu_state_t {
    }
 
 static void*
-djvu_init(FILE *fp, char *filename, unsigned int page,
+djvu_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
 	struct djvu_state_t * ds=NULL;

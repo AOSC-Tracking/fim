@@ -53,7 +53,7 @@ struct tiff_state {
 };
 
 static void*
-tiff_init(FILE *fp, char *filename, unsigned int page,
+tiff_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
     struct tiff_state *h=NULL;

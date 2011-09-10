@@ -51,7 +51,7 @@ gif_fileread(struct gif_state *h)
     GifRecordType RecordType;
     GifByteType *Extension;
     int ExtCode, rc;
-    const char *type;
+    const fim_char_t *type;
 
     for (;;) {
 	if (GIF_ERROR == DGifGetRecordType(h->gif,&RecordType)) {
@@ -119,7 +119,7 @@ gif_skipimage(struct gif_state *h)
 #endif
 
 static void*
-gif_init(FILE *fp, char *filename, unsigned int page,
+gif_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *info, int thumbnail)
 {
     struct gif_state *h;
