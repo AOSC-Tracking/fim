@@ -43,7 +43,7 @@
 fim::string fim_dirname(const fim::string & arg)
 {
 #ifdef HAVE_LIBGEN_H
-	char buf[FIM_PATH_MAX];
+	fim_char_t buf[FIM_PATH_MAX];
 	strncpy(buf,arg.c_str(),FIM_PATH_MAX-1);
 	buf[FIM_PATH_MAX-1]='\0';
 	return dirname(buf);
@@ -63,7 +63,7 @@ fim::string fim_dirname(const fim::string & arg)
 		return res;
 	}
 
-void fim_perror(const char *s)
+void fim_perror(const fim_char_t *s)
 {
 #if 1
 	if(errno)
@@ -75,13 +75,13 @@ void fim_perror(const char *s)
 #endif
 }
 
-size_t fim_strlen(const char *str)
+size_t fim_strlen(const fim_char_t *str)
 {
 	return strlen(str);
 }
 
 
-void trhex(char *str)
+void trhex(fim_char_t *str)
 {
 	/*	
 	 * 	translates C-like hexcodes (e.g.: \xFF) to chars, in place.
@@ -92,9 +92,9 @@ void trhex(char *str)
 	 *
 	 * 	FIXME : UNUSED
 	 */
-	const char *fp;//fast pointer
-	char *sp;//slow pointer
-	char hb[3];
+	const fim_char_t *fp;//fast pointer
+	fim_char_t *sp;//slow pointer
+	fim_char_t hb[3];
 	if(!str)return;
 
 	hb[2]=0;
@@ -110,7 +110,7 @@ void trhex(char *str)
 				unsigned int hc;
 				hb[0]=toupper(fp[2]);
 				hb[1]=toupper(fp[3]);
-				hc=(unsigned char)strtol(hb,NULL,16);
+				hc=(fim_byte_t)strtol(hb,NULL,16);
 				*sp=hc;
 				fp+=3;
 			}
@@ -124,7 +124,7 @@ ret:
 	return;
 }
 
-void trec(char *str,const char *f,const char*t)
+void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 {
 	/*	this function translates escaped characters at index i in 
 	 *	f into the characters at index i in t.
@@ -136,9 +136,9 @@ void trec(char *str,const char *f,const char*t)
 	 */
 	if(!str || !f || !t || strlen(f)-strlen(t))return;
 	int tl=strlen(f);//table length
-	char*_p=str;
-	const char *fp;
-	const char *tp;
+	fim_char_t*_p=str;
+	const fim_char_t *fp;
+	const fim_char_t *tp;
 	while(*_p && _p[1])//redundant ?
 	{
 		fp=f;
@@ -153,12 +153,12 @@ void trec(char *str,const char *f,const char*t)
 			 && _p[3] && isxdigit(toupper(_p[3]))  )
 		{
 			unsigned int hc;
-			char hb[3];
-			char *pp;
+			fim_char_t hb[3];
+			fim_char_t *pp;
 			hb[2]=0;
 			hb[0]=toupper(_p[2]);
 			hb[1]=toupper(_p[3]);
-			hc=(unsigned char)strtol(hb,NULL,16);
+			hc=(fim_byte_t)strtol(hb,NULL,16);
 			*_p=hc;
 			/*	
 				\xFF
@@ -175,7 +175,7 @@ void trec(char *str,const char *f,const char*t)
 			//  if the following char is backslash-escaped and is in our from-list ..
 			if( *_p == '\\' && *(_p+1) == *fp )
 			{
-				char*pp;
+				fim_char_t*pp;
 				*_p = *tp;//translation	
 				++_p;  //new focus
 				pp=_p+1;
@@ -194,22 +194,22 @@ void trec(char *str,const char *f,const char*t)
 	} 
 }
 
-	unsigned char* slurp_binary_FD(FILE* fd, size_t  *rs)
+	fim_byte_t* slurp_binary_FD(FILE* fd, size_t  *rs)
 	{
 			/*
 			 * ripped off quickly from slurp_binary_fd
 			 * FIXME : it is not throughly tested
 			 * */
-			unsigned char	*buf=NULL;
+			fim_byte_t	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
-			buf=(unsigned char*)fim_calloc(inc,1);
+			buf=(fim_byte_t*)fim_calloc(inc,1);
 			if(!buf) return buf;
 			while((nrb=fread(buf+rb,1,inc,fd))>0)
 			{
-				unsigned char *tb;
+				fim_byte_t *tb;
 				// if(nrb==inc) a full read. let's try again
 				// else we assume this is the last read (could not be true, of course)
-				tb=(unsigned char*)realloc(buf,rb+=nrb);
+				tb=(fim_byte_t*)realloc(buf,rb+=nrb);
 				if(tb!=NULL)
 					buf=tb;
 				else
@@ -219,7 +219,7 @@ void trec(char *str,const char *f,const char*t)
 			return buf;
 	}
 
-	char* slurp_binary_fd(int fd,int *rs)
+	fim_char_t* slurp_binary_fd(int fd,int *rs)
 	{
 			/*
 			 * If badly tuned, this code is a true allocator grinder :)
@@ -229,16 +229,16 @@ void trec(char *str,const char *f,const char*t)
 			 * FIXME : use stat if possible.
 			 * FIXME : it is not throughly tested
 			 * */
-			char	*buf=NULL;
+			fim_char_t	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
-			buf=(char*)fim_calloc(inc,1);
+			buf=(fim_char_t*)fim_calloc(inc,1);
 			if(!buf) return buf;
 			while((nrb=read(fd,buf+rb,inc))>0)
 			{
-				char *tb;
+				fim_char_t *tb;
 				// if(nrb==inc) a full read. let's try again
 				// else we assume this is the last read (could not be true, of course)
-				tb=(char*)realloc(buf,rb+=nrb);
+				tb=(fim_char_t*)realloc(buf,rb+=nrb);
 				if(tb!=NULL)
 					buf=tb;
 				else
@@ -285,7 +285,7 @@ void trec(char *str,const char *f,const char*t)
  * Turns newline characters in NULs.
  * Does stop on the first NUL encountered.
  */
-void chomp(char *s)
+void chomp(fim_char_t *s)
 {
 	for(;*s;++s)if(*s=='\n')*s='\0';
 }
@@ -294,7 +294,7 @@ void chomp(char *s)
  * cleans the input string terminating it when some non printable character is encountered
  * (except newline)
  * */
-void sanitize_string_from_nongraph_except_newline(char *s, int c)
+void sanitize_string_from_nongraph_except_newline(fim_char_t *s, int c)
 {	
 	int n=c;
 	if(s)
@@ -305,7 +305,7 @@ void sanitize_string_from_nongraph_except_newline(char *s, int c)
 /*
  * cleans the input string terminating it when some non printable character is encountered
  * */
-void sanitize_string_from_nongraph(char *s, int c)
+void sanitize_string_from_nongraph(fim_char_t *s, int c)
 {	
 	int n=c;
 	if(s)
@@ -317,19 +317,19 @@ void sanitize_string_from_nongraph(char *s, int c)
  *	Allocation of a small string for storing the 
  *	representation of a double.
  */
-char * dupnstr (float n, const char c)
+fim_char_t * dupnstr (float n, const fim_char_t c)
 {
 	//allocation of a single string
-	char *r = (char*) fim_malloc (32);
+	fim_char_t *r = (fim_char_t*) fim_malloc (32);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%f%c",n,c);
 	return (r);
 }
 
-char * dupnstr (const char c1, double n, const char c2)
+fim_char_t * dupnstr (const fim_char_t c1, double n, const fim_char_t c2)
 {
 	//allocation of a single string
-	char *r = (char*) fim_malloc (32);
+	fim_char_t *r = (fim_char_t*) fim_malloc (32);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%c%f%c",c1,n,c2);
 	return (r);
@@ -338,10 +338,10 @@ char * dupnstr (const char c1, double n, const char c2)
 /*
  *	Allocation of a small string for storing the *	representation of an integer.
  */
-char * dupnstr (int n)
+fim_char_t * dupnstr (int n)
 {
 	//allocation of a single string
-	char *r = (char*) fim_malloc (16);
+	fim_char_t *r = (fim_char_t*) fim_malloc (16);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%d",n);
 	return (r);
@@ -350,9 +350,9 @@ char * dupnstr (int n)
 /*
  *	Allocation and duplication of a single string
  */
-char * dupstr (const char* s)
+fim_char_t * dupstr (const fim_char_t* s)
 {
-	char *r = (char*) fim_malloc (strlen (s) + 1);
+	fim_char_t *r = (fim_char_t*) fim_malloc (strlen (s) + 1);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	strcpy (r, s);
 	return (r);
@@ -361,10 +361,10 @@ char * dupstr (const char* s)
 /*
  *	Allocation and duplication of a single string, slash-quoted
  */
-char * dupsqstr (const char* s)
+fim_char_t * dupsqstr (const fim_char_t* s)
 {
 	int l=0;
-	char *r = (char*) fim_malloc ((l=strlen (s)) + 3);
+	fim_char_t *r = (fim_char_t*) fim_malloc ((l=strlen (s)) + 3);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	else
 	{
@@ -378,15 +378,15 @@ char * dupsqstr (const char* s)
 /*
  *	Allocation and duplication of a single string (not necessarily terminating)
  */
-static char * dupstrn (const char* s, size_t l)
+static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
 {
-	char *r = (char*) fim_malloc (l + 1);
+	fim_char_t *r = (fim_char_t*) fim_malloc (l + 1);
 	strncpy(r,s,l);
 	r[l]='\0';
 	return (r);
 }
 
-static int pick_word(const char *f, unsigned int *w)
+static int pick_word(const fim_char_t *f, unsigned int *w)
 {
 	/*
 		FIXME : what is this ? :)
@@ -414,7 +414,7 @@ int fim_rand()
 
 }
 
-	bool regexp_match(const char*s, const char*r, int ignorecase, int ignorenewlines)
+	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase, int ignorenewlines)
 	{
 		/*
 		 *	given a string s, and a Posix regular expression r, this
@@ -471,7 +471,7 @@ int fim_rand()
 		//return true;
 	}
 
-int strchr_count(const char*s, int c)
+int strchr_count(const fim_char_t*s, int c)
 {
 	int n=0;
 	if(!s)return 0;
@@ -479,7 +479,7 @@ int strchr_count(const char*s, int c)
 	return n;
 }
 
-int newlines_count(const char*s)
+int newlines_count(const fim_char_t*s)
 {
 	/*
 	 * "" 0
@@ -492,7 +492,7 @@ int newlines_count(const char*s)
 	return c;
 }
 
-const char* next_row(const char*s, int cols)
+const fim_char_t* next_row(const fim_char_t*s, int cols)
 {
 	/*
 	 * returns a pointer to the first char *after*
@@ -504,7 +504,7 @@ const char* next_row(const char*s, int cols)
 	 * next_row("12")     -> \0
 	 * next_row("1234")   ->  4
 	 * */
-	const char *b=s;int l=strlen(s);
+	const fim_char_t *b=s;int l=strlen(s);
 	if(!s)return NULL;
 	if((s=strchr(s,'\n'))!=NULL)
 	{
@@ -517,7 +517,7 @@ const char* next_row(const char*s, int cols)
 	return b+(l>=cols?cols:l);// no newlines in this string; we return the cols'th char or the NUL
 }
 
-int lines_count(const char*s, int cols)
+int lines_count(const fim_char_t*s, int cols)
 {
 	/* for cols=6
 	 *
@@ -531,7 +531,7 @@ int lines_count(const char*s, int cols)
 	if(cols==0)return newlines_count(s);
 
 	int n=0;
-	const char*b;
+	const fim_char_t*b;
 	if(!s)return 0;
 	b=s;
 	while((s=strchr(s,'\n'))!=NULL && *s)
@@ -579,8 +579,8 @@ int swap_bytes_in_int(int in)
 	int b=sizeof(int),i=-1;
 	while(i++<b/2)
 	{
-		((char*)&out)[i]=((char*)&in)[b-i-1];
-		((char*)&out)[b-i-1]=((char*)&in)[i];
+		((fim_char_t*)&out)[i]=((fim_char_t*)&in)[b-i-1];
+		((fim_char_t*)&out)[b-i-1]=((fim_char_t*)&in)[i];
 	}
 	return out;
 }
@@ -588,7 +588,7 @@ int swap_bytes_in_int(int in)
 int int2lsbf(int in)
 {
 	int one=0x01;
-	if( 0x01 & (*(char*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
+	if( 0x01 & (*(fim_char_t*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
 		return swap_bytes_in_int(in);
 	return in;
 }
@@ -596,7 +596,7 @@ int int2lsbf(int in)
 int int2msbf(int in)
 {
 	int one=0x01;
-	if( 0x01 & (*(char*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
+	if( 0x01 & (*(fim_char_t*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
 		return in;
 	return swap_bytes_in_int(in);
 }
@@ -625,7 +625,7 @@ static fim_err_t fim_bench_video(struct fim_bench_struct*)
 	//cc.clear_rect(0, width()-1, 0,height()/2);
 }
 
-const char * fim_getenv(const char * name)
+const fim_char_t * fim_getenv(const fim_char_t * name)
 {
 	/*
 	*  A getenv() wrapper function.
@@ -648,7 +648,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 	{	
 		/* todo : read errno in case of error and print some report.. */
 		const size_t buf_size=FIM_STREAM_BUFSIZE;
-		char buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
+		fim_char_t buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
 		while( (rc=fread(buf,1,buf_size,fp))>0 )
 		{
 			wc=fwrite(buf,1,rc,tfd);
@@ -666,7 +666,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 	return NULL;
 }
 
-double fim_atof(const char *nptr)
+double fim_atof(const fim_char_t *nptr)
 {
 	/* the original atof suffers from locale 'problems', like non dotted radix representations */
 	/* although, atof can be used if one calls setlocale(LC_ALL,"C");  */
@@ -692,7 +692,7 @@ double fim_atof(const char *nptr)
 	return sign?-n:n;
 }
 
-ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream)
+ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 {
 	/*
 	 * WARNING : untested!
@@ -703,7 +703,7 @@ ssize_t fim_getline(char **lineptr, size_t *n, FILE *stream)
 #ifdef HAVE_FGETLN
 	{	
 		/* for BSD (in stdlib.h) */
-		char *s,*ns;
+		fim_char_t *s,*ns;
 		size_t len=0;
 		s=fgetln(stream,&len);
 		if(!s)return EINVAL;
