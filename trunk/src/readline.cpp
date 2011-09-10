@@ -45,7 +45,7 @@ namespace fim
 	extern CommandConsole cc;
 fim_char_t * fim_readline(const fim_char_t *prompt)
 {
-	char * rc=NULL;
+	fim_char_t * rc=NULL;
 	fim_rl_pc=FIM_SYM_CHAR_NUL;
 	rc=readline(prompt);
 	fim_rl_pc=FIM_SYM_CHAR_NUL;
@@ -61,10 +61,10 @@ extern fim::string g_fim_output_device;
 /* Generator function for command completion.  STATE lets us
  *    know whether to start from scratch; without any state
  *       (i.e. STATE == 0), then we start at the top of the list. */
-static char * command_generator (const char *text,int state)
+static fim_char_t * command_generator (const fim_char_t *text,int state)
 {
 //	static int list_index, len;
-//	char *name;
+//	fim_char_t *name;
 	/* If this is a new word to complete, initialize now.  This
 	 *      includes saving the length of TEXT for efficiency, and
 	 *	initializing the index variable to 0. 
@@ -81,10 +81,10 @@ static char * command_generator (const char *text,int state)
 //	while (name = commands[list_index].name)
 //	{ list_index++; if (strncmp (name, text, len) == 0) return (dupstr(name)); }
 	/* If no names matched, then return NULL. */
-//	return ((char *)NULL);
+//	return ((fim_char_t *)NULL);
 }
 
-static char * varname_generator (const char *text,int state)
+static fim_char_t * varname_generator (const fim_char_t *text,int state)
 {
 	return cc.command_generator(text,state,4);
 }
@@ -102,18 +102,18 @@ namespace rl
  *     contents of rl_line_buffer in case we want to do some simple
  *     parsing.  Return the array of matches, or NULL if there aren't any.
  */
-static char ** fim_completion (const char *text, int start,int end)
+static fim_char_t ** fim_completion (const fim_char_t *text, int start,int end)
 {
 	//FIX ME
-	char **matches = (char **)NULL;
+	fim_char_t **matches = (fim_char_t **)NULL;
 
 	if(start==end && end<1)
 	{
 #if 0
-		char **__s,*_s;
+		fim_char_t **__s,*_s;
 		_s=dupstr("");
 		if(! _s)return NULL;
-		__s=(char**)fim_calloc(1,sizeof(char*));
+		__s=(fim_char_t**)fim_calloc(1,sizeof(fim_char_t*));
 		if(!__s)return NULL;__s[0]=_s;
 		//we print all of the commands, with no completion, though.
 #endif
@@ -140,7 +140,7 @@ static char ** fim_completion (const char *text, int start,int end)
 			// FIXME: this is NEW
 			if(start==end && fim_isspace(rl_line_buffer[start-1]))
 			{
-				char**sp=(char**)malloc(2*sizeof(char*));
+				fim_char_t**sp=(fim_char_t**)malloc(2*sizeof(fim_char_t*));
 				sp[0]=dupstr("\"");
 				sp[1]=NULL;
 				rl_completion_append_character = '\0';
@@ -165,10 +165,10 @@ static char ** fim_completion (const char *text, int start,int end)
 /*
  * 	this function is called to display the proposed autocompletions
  */
-static void completion_display_matches_hook(char **matches,int num,int max)
+static void completion_display_matches_hook(fim_char_t **matches,int num,int max)
 {
 	/* FIXME : fix the oddities of this code */
-	char buffer[FIM_RL_COMPLETION_BUFSIZE];
+	fim_char_t buffer[FIM_RL_COMPLETION_BUFSIZE];
 	int w,f,l;w=0;f=sizeof(buffer)-1;l=0;
 	buffer[0]='\0';
 	if(!matches)return;
@@ -205,7 +205,7 @@ static void redisplay_no_fb()
 
 static void redisplay()
 {	
-	cc.set_status_bar(( char*)rl_line_buffer,NULL);
+	cc.set_status_bar(( fim_char_t*)rl_line_buffer,NULL);
 }
 
 /*
@@ -301,7 +301,7 @@ int fim_rl_getc(FILE * fd)
 	if(cc==FIM_SYM_ESC)
 	{
 		int tries=0;
-		char cb[4];
+		fim_char_t cb[4];
 		cb[0]=cb[1]=cb[2]=cb[3]=FIM_SYM_CHAR_NUL;
 		c|=cc;
 		cb[0]=cc;
@@ -339,7 +339,7 @@ read_ok:
 
 int fim_search_rl_startup_hook()
 {
-	const char * hs=cc.browser_.last_regexp_.c_str();
+	const fim_char_t * hs=cc.browser_.last_regexp_.c_str();
 	if(hs)
 	{
 		rl_replace_line(hs,0);
@@ -366,7 +366,7 @@ static int redisplay_hook()
 /*
  * ?!
  * */
-/*static int fim_set_command_line_text(const char*s)
+/*static int fim_set_command_line_text(const fim_char_t*s)
 {
 	rl_replace_line(s,0);
 	return 0;

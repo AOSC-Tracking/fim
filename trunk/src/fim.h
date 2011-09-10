@@ -129,7 +129,7 @@
 namespace fim
 {
 	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code
-	void status(const char *desc, const char *info);
+	void status(const fim_char_t *desc, const fim_char_t *info);
 
 	class Arg;
 	class Browser;

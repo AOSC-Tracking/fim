@@ -73,7 +73,7 @@ namespace fim
 		this->assign(s.c_str());
 	}
 
-	string::string(const char *str)
+	string::string(const fim_char_t *str)
 	{
 		_string_init();
 		this->assign(str);
@@ -95,7 +95,7 @@ namespace fim
 	string::string(const int i)
 	{
 		_string_init();
-		char buf[FIM_CHARS_FOR_INT];
+		fim_char_t buf[FIM_CHARS_FOR_INT];
 		sprintf(buf,"%d",i);
 		assign(buf);
 	}
@@ -103,12 +103,12 @@ namespace fim
 	string::string(const unsigned int i)
 	{
 		_string_init();
-		char buf[FIM_CHARS_FOR_INT];
+		fim_char_t buf[FIM_CHARS_FOR_INT];
 		sprintf(buf,"%u",i);
 		assign(buf);
 	}
 
-	const char*string::c_str()const
+	const fim_char_t*string::c_str()const
 	{
 		if(  this->isempty() == true ) return "";
 		return s;	/* yes, a heap allocated reference */
@@ -122,7 +122,7 @@ namespace fim
 		return ((*this) == s.c_str());
 	}
 
-	bool string::operator==(const char *  s)const
+	bool string::operator==(const fim_char_t *  s)const
 	{
 		/* both empty ? */
 		if(fim_empty_string(s) && this->isempty())return true;
@@ -156,7 +156,7 @@ namespace fim
 		return ((*this)>s.c_str());
 	}
 
-	bool string::operator >(const char *s)const
+	bool string::operator >(const fim_char_t *s)const
 	{
 		if(this->isempty())return false;
 		if(!s || !*s)return true;
@@ -164,7 +164,7 @@ namespace fim
 		return (strcmp(this->s,s) >0);
 	}
 
-	bool string::operator <(const char *s)const
+	bool string::operator <(const fim_char_t *s)const
 	{
 		if(this->isempty())
 		{
@@ -194,8 +194,8 @@ namespace fim
 #ifdef _FIM_DYNAMIC_STRING
 		++l;
 		if(l<size())return size();
-		char *ns;/* new string */
-		ns=(char*)realloc((void*)s,l);/* the terminator is our stuff */
+		fim_char_t *ns;/* new string */
+		ns=(fim_char_t*)realloc((void*)s,l);/* the terminator is our stuff */
 		if(ns)
 		{
 			s=ns;
@@ -267,7 +267,7 @@ namespace fim
 	/*
 	 * returns the new length
 	 * */
-	int  string::assign(const char *s)
+	int  string::assign(const fim_char_t *s)
 	{
 		int l,r;
 		if(!s || !*s)	// length is zero in these cases
@@ -294,13 +294,13 @@ namespace fim
 	/*
 	 * empty or null string is always found
 	 * */
-	int  string::find(const char*ss)const
+	int  string::find(const fim_char_t*ss)const
 	{
 		if( this->isempty() && !ss      )return 0;
 		if( this->isempty() && *ss!='\0')return -1;
 		if(!this->isempty() && *ss=='\0')return 0;
 
-		const char*p=strstr(s,ss);if(!p)return -1;return p-s;
+		const fim_char_t*p=strstr(s,ss);if(!p)return -1;return p-s;
 	}
  	
 	std::ostream& string::print(std::ostream &os)const
@@ -349,7 +349,7 @@ namespace fim
 			l=(l<BUFSIZE?BUFSIZE:l);
 #endif
 
-			s=(char*)(fim_calloc(l));
+			s=(fim_char_t*)(fim_calloc(l));
 
 			len=(s?l:0);	/* who knows .. */
 		}
@@ -387,9 +387,9 @@ namespace fim
 	{
 	}
 
-	string::string(char c)
+	string::string(fim_char_t c)
 	{
-		char buf[2];
+		fim_char_t buf[2];
 		buf[0]=c;
 		buf[1]='\0';
 		append(buf);
@@ -397,7 +397,7 @@ namespace fim
 
 	string::string(int i)
 	{
-		char buf[FIM_CHARS_FOR_INT];
+		fim_char_t buf[FIM_CHARS_FOR_INT];
 		snprintf(buf,FIM_CHARS_FOR_INT-1,"%d",i);
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
@@ -405,7 +405,7 @@ namespace fim
 
 	string::string(int * i)
 	{
-		char buf[FIM_CHARS_FOR_INT];
+		fim_char_t buf[FIM_CHARS_FOR_INT];
 		snprintf(buf,FIM_CHARS_FOR_INT-1,"%p",i);
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
@@ -413,7 +413,7 @@ namespace fim
 	
 	string::string(float i)
 	{
-		char buf[FIM_ATOX_BUFSIZE];
+		fim_char_t buf[FIM_ATOX_BUFSIZE];
 		sprintf(buf,"%f",i);
 		assign(buf);
 	}
@@ -427,7 +427,7 @@ namespace fim
 		return string(res);
 	}
 
-	bool string::re_match(const char*r)const
+	bool string::re_match(const fim_char_t*r)const
 	{
 		/*
 		 * each occurrence of regular expression r will be substituted with t
@@ -453,7 +453,7 @@ namespace fim
 		return false;
 	}
 
-	int string::find_re(const char*r, int *mbuf)const
+	int string::find_re(const fim_char_t*r, int *mbuf)const
 	{
 		/*
 		 * each occurrence of regular expression r will be substituted with t
@@ -485,7 +485,7 @@ namespace fim
 		return -1;
 	}
 
-	void string::substitute(const char*r, const char* s, int flags)
+	void string::substitute(const fim_char_t*r, const fim_char_t* s, int flags)
 	{
 		/*
 		 * each occurrence of regular expression r will be substituted with s
@@ -538,7 +538,7 @@ namespace fim
 		/*
 		 * each empty line will be counted unless it is the last and not only.
 		 * */
-		const char*s=c_str(),*f=s;
+		const fim_char_t*s=c_str(),*f=s;
 		size_t c=0;
 		if(!s)return 0;
 		while((s=strchr(s,'\n'))!=NULL){++c;f=++s;}
@@ -550,7 +550,7 @@ namespace fim
 		/*
 		 * returns the ln'th line of the string, if found, or ""
 		 * */
-		const char*s,*f;
+		const fim_char_t*s,*f;
 		s=this->c_str();
 		f=s;
 		if(ln< 0 || !s)return "";
@@ -561,7 +561,7 @@ namespace fim
 		}
 		if(!ln)
 		{
-			const char *se=s;
+			const fim_char_t *se=s;
 			if(!*s)se=s+strlen(s);
 			else se=strchr(s,'\n');
 			fim::string rs;

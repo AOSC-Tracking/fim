@@ -31,33 +31,33 @@ namespace fim
 
 		fim_stream& fim_stream::operator<<(const fim_byte_t* s)
 		{
-			*this<<(const char*)s;
+			*this<<(const fim_char_t*)s;
 			return *this;
 		}
 
 
 		fim_stream& fim_stream::operator<<(const  fim::string&s)
 		{
-			*this<<(const  char*)(s.c_str());
+			*this<<(const  fim_char_t*)(s.c_str());
 			return *this;
 		}
 
 
 		fim_stream& fim_stream::operator<<(float f)
 		{
-			char s[FIM_ATOX_BUFSIZE];sprintf(s,"%f",f);
-			*this<<(const char*)s;
+			fim_char_t s[FIM_ATOX_BUFSIZE];sprintf(s,"%f",f);
+			*this<<(const fim_char_t*)s;
 			return *this;
 		}
 
 		fim_stream& fim_stream::operator<<(int i)
 		{
-			char s[FIM_ATOX_BUFSIZE];sprintf(s,"%d",i);
+			fim_char_t s[FIM_ATOX_BUFSIZE];sprintf(s,"%d",i);
 			*this<<s;
 			return *this;
 		}
 
-		fim_stream& fim_stream::operator<<(const  char* s)
+		fim_stream& fim_stream::operator<<(const  fim_char_t* s)
 		{
 			if(s)
 			{

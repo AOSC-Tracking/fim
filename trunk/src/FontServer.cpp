@@ -40,8 +40,8 @@ namespace fim
 /* 20080507 unused ? */
 void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
 { 
-    const char*font=(char*)font_;
-    const char *fonts[2] = { font, NULL };
+    const fim_char_t*font=(fim_char_t*)font_;
+    const fim_char_t *fonts[2] = { font, NULL };
 
     if (NULL == *_f)
 	*_f = fs_consolefont(font ? fonts : NULL);
@@ -56,7 +56,7 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
 }
 
 #if 1
-static const char *default_font[] = {
+static const fim_char_t *default_font[] = {
     /* why the heck every f*cking distribution picks another
        location for these fonts ??? (GK)
        +1 (MM) */
@@ -90,7 +90,7 @@ static const char *default_font[] = {
 fim::string get_default_font_list()
 {
 	fim::string dfl;
-	const char ** filename=default_font;
+	const fim_char_t ** filename=default_font;
 	for(int i = 0; filename[i] != NULL; i++)
        	{
 		dfl+=filename[i];
@@ -100,7 +100,7 @@ fim::string get_default_font_list()
 }
 #endif
 
-static int probe_font_file(const char *fontfilename)
+static int probe_font_file(const fim_char_t *fontfilename)
 {
     	FILE *fp=NULL;
 	if ( strlen(fontfilename)>3 && 0 == strcmp(fontfilename+strlen(fontfilename)-3,".gz"))
@@ -130,15 +130,15 @@ no:
 	return -1;
 }
 
-struct fs_font* FontServer::fs_consolefont(const char **filename)
+struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
 {
     int  i=0;
     int  fr;
-    const char *h=NULL;
+    const fim_char_t *h=NULL;
     struct fs_font *f_ = NULL;
-    const char *fontfilename=NULL;
+    const fim_char_t *fontfilename=NULL;
     FILE *fp=NULL;
-    char fontfilenameb[FIM_PATH_MAX];
+    fim_char_t fontfilenameb[FIM_PATH_MAX];
 
     if (NULL == filename)
 	filename = fim::default_font;

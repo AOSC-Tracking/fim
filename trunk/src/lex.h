@@ -2,7 +2,7 @@
 /*
  lex.h : Lexer (lex) header file
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 */
 #ifndef FIM_LEX_H
 #define FIM_LEX_H
+#include "fim_types.h"
 
 typedef enum { intCon, floatCon, typeOpr, stringCon,cmdId/*cmdId is dead */,vId } nodeEnum;
 /* constants */
@@ -28,7 +29,7 @@ int value; /* value of constant */
 } conNodeType;
 /* identifiers */
 typedef struct {
-char *s; /* subscript to sym array */
+fim_char_t *s; /* subscript to sym array */
 } stringNodeType;
 typedef struct {
 float f; /* subscript to sym array */
