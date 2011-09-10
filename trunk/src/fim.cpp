@@ -889,7 +889,7 @@ done:
 		case 0x4E4053:
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"=' ';");// FIXME: shall document the allowed scaling char/options
+		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"=' ';");// FIXME: shall document the allowed scaling character/options
 	#endif
 		    break;
 		case 'H':

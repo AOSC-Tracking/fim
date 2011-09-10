@@ -71,7 +71,7 @@ struct bmp_hdr {
     uint32 height;
     uint16 planes;
     uint16 bit_cnt;
-    char   compression[4];
+    fim_char_t   compression[4];
     uint32 image_size;
     uint32 xpels_meter;
     uint32 ypels_meter;

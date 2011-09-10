@@ -67,19 +67,19 @@ nodeType *opr(int oper, int nops, ...);
 nodeType *fid(float f);
 nodeType *con(int value);
 nodeType *fcon(float fValue);
-nodeType *scon(char* s);
-nodeType *vscon(char*s,int typeHint);
+nodeType *scon(fim_char_t* s);
+nodeType *vscon(fim_char_t*s,int typeHint);
 void freeNode(nodeType *p);
 Var ex(nodeType *p);
 
-void yyerror(const char *s);
+void yyerror(const fim_char_t *s);
 
 %}
 
 %union {
 	int   iValue; /* integer value */
 	float fValue; /* float   value */
-	char* sValue;
+	fim_char_t* sValue;
 	nodeType *nPtr; /* node pointer */
 };
 
@@ -342,12 +342,12 @@ expression:
 	;
 
 %%
-#define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)
+#define SIZEOF_NODETYPE ((fim_char_t *)&p->con - (fim_char_t *)p)
 
 /*
  * string constant handling
  */
-nodeType *scon(char*s)
+nodeType *scon(fim_char_t*s)
 {
 	if(s==NULL)yyerror("TOKEN NULL!\n");
 	nodeType *p;
@@ -362,7 +362,7 @@ nodeType *scon(char*s)
 	return p;
 }
 
-nodeType *vscon(char*s,int typeHint)
+nodeType *vscon(fim_char_t*s,int typeHint)
 {
 	/*
 	 * NOTE:
@@ -470,7 +470,7 @@ void freeNode(nodeType *p)
 	free (p);
 }
 
-void yyerror(const char *s)
+void yyerror(const fim_char_t *s)
 {
 	//fprintf(stdout, "%s \n", s);
 	/* omitting std:: causes error on darwin gcc */

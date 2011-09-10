@@ -33,6 +33,7 @@
   	  this is not well handled by our code, as we expect a 1:1 mapping.
  */
 #define min(x,y) ((x)<(y)?(x):(y))
+typedef char fim_aa_char;	/* a type for aalib chars */
 
 static bool aainvalid;
 
@@ -350,7 +351,7 @@ static bool aainvalid;
 		aa_putpixel(ascii_context_, aa_imgwidth(ascii_context_)-1, aa_imgheight(ascii_context_)-1, 0xAA);
 		aa_putpixel(ascii_context_, aa_imgwidth(ascii_context_)-2, aa_imgheight(ascii_context_)-2, 0xAA);*/
 
-	//	((char*)aa_image(ascii_context_))[]=;
+	//	((fim_aa_char*)aa_image(ascii_context_))[]=;
 		
 //		std::cout << "width() : " << width << "\n"; //		std::cout << "height() : " << height << "\n";
 		aa_render (ascii_context_, &aa_defrenderparams,0, 0, width() , height() );
@@ -371,7 +372,7 @@ static bool aainvalid;
 		//aa_parseoptions (&ascii_hwparms_, ascii_rndparms, &argc, argv);
 
 //		NOTE: if uncommenting this, remember to #ifdef HAVE_GETENV
-//		char *e;int v;
+//		fim_aa_char *e;int v;
 //		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms_.width  = v-1;
 //		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms_.height = v-1;
 //		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms_.recwidth  = v;
@@ -388,7 +389,7 @@ static bool aainvalid;
 		
 		name_[0]='\0';
 		name_[1]='\0';
-		ascii_save_.name = (char*)name_;
+		ascii_save_.name = (fim_aa_char*)name_;
 		ascii_save_.format = &aa_text_format;
 		ascii_save_.file = NULL;
 //		ascii_context_ = aa_init (&save_d, &ascii_hwparms_, &ascii_save_);
@@ -458,7 +459,7 @@ static bool aainvalid;
 			//AA_REVERSE,
 			AA_NORMAL,
 			//AA_SPECIAL,
-			(const char*)str);
+			(const fim_aa_char*)str);
 #endif
 		return FIM_ERR_NO_ERROR;
 	}

@@ -172,7 +172,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 #endif
 		while(*fp)
 		{
-			//  if the following char is backslash-escaped and is in our from-list ..
+			//  if the following charcter is backslash-escaped and is in our from-list ..
 			if( *_p == '\\' && *(_p+1) == *fp )
 			{
 				fim_char_t*pp;
@@ -495,7 +495,7 @@ int newlines_count(const fim_char_t*s)
 const fim_char_t* next_row(const fim_char_t*s, int cols)
 {
 	/*
-	 * returns a pointer to the first char *after*
+	 * returns a pointer to the first character *after*
 	 * the newline or the last one of the string.
 	 *
 	 * for cols=3:
@@ -514,7 +514,7 @@ const fim_char_t* next_row(const fim_char_t*s, int cols)
 		// ... or without merge (b[cols]!=\n and belongs to the next line)
 		else return b+=cols;
 	}
-	return b+(l>=cols?cols:l);// no newlines in this string; we return the cols'th char or the NUL
+	return b+(l>=cols?cols:l);// no newlines in this string; we return the cols'th character or the NUL
 }
 
 int lines_count(const fim_char_t*s, int cols)

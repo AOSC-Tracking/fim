@@ -785,7 +785,7 @@ ddone:
 		struct stat stat_s;
 		/*	if the file doesn't exist, return */
 		if(-1==stat(nf.c_str(),&stat_s))return false;
-		/*	if it is a char device , return */
+		/*	if it is a character device , return */
 		//if(  S_ISCHR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 		/*	if it is a block device , return */
 		//if(  S_ISBLK(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;

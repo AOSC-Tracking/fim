@@ -93,7 +93,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 		if( device==FIM_DDN_INN_FB )
 		{
-			extern char *default_fbdev,*default_fbmode;
+			extern fim_char_t *default_fbdev,*default_fbmode;
 			extern int default_vt;
 			extern float default_fbgamma;
 			FramebufferDevice * ffdp=NULL;
@@ -195,7 +195,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			 * weird, isn't it ?
 			 * Regard this as a weird patch.
 			 * */
-			const char * term = fim_getenv(FIM_CNS_TERM_VAR);
+			const fim_char_t * term = fim_getenv(FIM_CNS_TERM_VAR);
 			if(term && string(term).re_match("screen"))
 			{
 				sym_keys_[FIM_KBD_LEFT]-=3072;
@@ -277,8 +277,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
-		char rcfile[FIM_PATH_MAX];
-		const char *e = fim_getenv(FIM_CNS_HOME_VAR);
+		fim_char_t rcfile[FIM_PATH_MAX];
+		const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
 
 		if(preConfigCommand_!=fim::string(""))
 			execute_internal(preConfigCommand_.c_str(),FIM_X_HISTORY);

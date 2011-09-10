@@ -211,7 +211,7 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 	    start += fb_fix_.line_length;
 	}
 #endif
-	/* draw char */
+	/* draw character */
 	start = pos + x*fs_bpp_ + fb_fix_.line_length * (f_->height-f_->eindex[c]->ascent);
 	fs_render_fb(start,fb_fix_.line_length,f_->eindex[c],f_->gindex[c]);
 	x += f_->eindex[c]->width;

@@ -38,8 +38,8 @@ namespace fim
 		 *	is associated to the user supplied actin (be it a command, alias, etc..)
 		 *	FIX ME
 		 */
-		const char *kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
-		const char*kstr=NULL;
+		const fim_char_t *kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
+		const fim_char_t*kstr=NULL;
 		int l;
 		fim_key_t key=FIM_SYM_NULL_KEY;
 		if(args.size()==0)return getBindingsList();
@@ -353,7 +353,7 @@ namespace fim
 		 * */
 		size_t i;
 		FILE* tfd;
-		char buf[FIM_PIPE_BUFSIZE];int rc=0;
+		fim_char_t buf[FIM_PIPE_BUFSIZE];int rc=0;
 		for(i=0;i<args.size();++i)
 		if( (tfd=popen(args[i].c_str(),"r")) != NULL )
 		{	
@@ -406,7 +406,7 @@ namespace fim
 		for(size_t i=0;i<args.size();++i)
 		{
 			fim::string arg=args[i];
-			res+=basename((char*)arg.c_str());//FIXME
+			res+=basename((fim_char_t*)arg.c_str());//FIXME
 		}
 		setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,res.c_str());
 		return res;
@@ -420,7 +420,7 @@ namespace fim
 		fim::string cwd=FIM_CNS_EMPTY_STRING;
 #if HAVE_GET_CURRENT_DIR_NAME
 		/* default */
-		char *p=get_current_dir_name();
+		fim_char_t *p=get_current_dir_name();
 		if(p)cwd=p;
 		else cwd=FIM_CNS_EMPTY_STRING;
 		if(p)fim_free(p);
@@ -428,7 +428,7 @@ namespace fim
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 		{
 			/* untested */
-			char *buf[PATH_MAX];
+			fim_char_t *buf[PATH_MAX];
 			getcwd(buf,PATH_MAX-1): 
 			buf[PATH_MAX-1]='\0';
 			cwd=buf;
