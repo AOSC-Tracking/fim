@@ -483,7 +483,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		return fcmd_alias(args);
 	}
 
-	char * CommandConsole::command_generator (const char *text,int state,int mask)const
+	fim_char_t * CommandConsole::command_generator (const fim_char_t *text,int state,int mask)const
 	{
 		/*
 		 *	This is the reason why the commands should be kept

@@ -63,9 +63,9 @@
 namespace fim
 {
 struct DEVS {
-    const char *fb0;
-    const char *fbnr;
-    const char *ttynr;
+    const fim_char_t *fb0;
+    const fim_char_t *fbnr;
+    const fim_char_t *ttynr;
 };
 
 
@@ -97,9 +97,9 @@ class FramebufferDevice:public DisplayDevice
 	 * We are heading forward on this road, slowly.
 	 * */
 #if 0
-	void fb_text_init1(char *font)
+	void fb_text_init1(fim_char_t *font)
 	{
-	    char   *fonts[2] = { font, NULL };
+	    fim_char_t   *fonts[2] = { font, NULL };
 	
 	    if (NULL == f_)
 		f_ = fs_consolefont(font ? fonts : NULL);
@@ -134,7 +134,7 @@ class FramebufferDevice:public DisplayDevice
 	int visible_ ;
 
 	/* private */
-	//char *x11_font_ ;
+	//fim_char_t *x11_font_ ;
 
 	int ys_ ;
 	int xs_ ;
@@ -170,14 +170,14 @@ class FramebufferDevice:public DisplayDevice
 	}
 
 	/* framebuffer */
-	char                       *fbdev_;
-	char                       *fbmode_;
+	fim_char_t                       *fbdev_;
+	fim_char_t                       *fbmode_;
 
 	public:
 	/*
 	 * FIXME : should be a static string, or troubles will come!
 	 * */
-	fim_err_t set_fbdev(char *fbdev_)
+	fim_err_t set_fbdev(fim_char_t *fbdev_)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
@@ -190,7 +190,7 @@ class FramebufferDevice:public DisplayDevice
 	/*
 	 * FIXME : should be a static string, or troubles will come!
 	 * */
-	fim_err_t set_fbmode(char *fbmode_)
+	fim_err_t set_fbmode(fim_char_t *fbmode_)
 	{
 		/* only possible before init() */
 		if(fb_mem_)
@@ -282,7 +282,7 @@ class FramebufferDevice:public DisplayDevice
 
 	void dev_init(void);
 	private:
-	int fb_init(const char *device, char *mode, int vt_
+	int fb_init(const fim_char_t *device, fim_char_t *mode, int vt_
 			, int try_boz_patch=0
 			);
 	public:
@@ -293,7 +293,7 @@ class FramebufferDevice:public DisplayDevice
 
 
 	void fb_setvt(int vtno);
-	int fb_setmode(char *name);
+	int fb_setmode(fim_char_t *name);
 	int fb_activate_current(int tty_);
 
 	void console_switch(fim_bool_t is_busy);
@@ -303,9 +303,9 @@ class FramebufferDevice:public DisplayDevice
 
 	int status_line(const fim_char_t *msg);
 
-	//void fb_edit_line(unsigned char *str, int pos);
+	//void fb_edit_line(fim_char_t *str, int pos);
 
-	void fb_text_box(int x, int y, char *lines[], unsigned int count);
+	void fb_text_box(int x, int y, fim_char_t *lines[], unsigned int count);
 
 	void fb_line(int x1, int x2, int y1,int y2);
 
@@ -388,9 +388,9 @@ void svga_display_image_new(
 /* ---------------------------------------------------------------------- */
 /* by dez
  */
-inline fim_byte_t * clear_line(int bpp, int line, int owidth, char unsigned *dst);
-fim_byte_t * convert_line(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror);/*dez's mirror patch*/
-fim_byte_t * convert_line_8(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror);/*dez's mirror patch*/
+inline fim_byte_t * clear_line(int bpp, int line, int owidth, fim_byte_t *dst);
+fim_byte_t * convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror);/*dez's mirror patch*/
+fim_byte_t * convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror);/*dez's mirror patch*/
 
 
 
@@ -525,7 +525,7 @@ void init_one(int32_t *lut, int bits, int shift)
 		return true;
         }
 
-	//void status_screen(const char *msg, int draw);
+	//void status_screen(const fim_char_t *msg, int draw);
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
 	fim_bpp_t get_bpp(){return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice();

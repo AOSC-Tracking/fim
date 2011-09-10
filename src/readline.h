@@ -2,7 +2,7 @@
 /*
  readline.h : Code dealing with the GNU readline library.
 
- (c) 2008 Michele Martone
+ (c) 2008-2011 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,10 +24,11 @@
 #include <readline/readline.h>	/*	the GNU readline library	*/
 #include <readline/history.h> 	/*	the GNU readline library	*/
 #include <readline/keymaps.h> 	/*	the GNU readline library	*/
+#include "fim_types.h"
 
 namespace fim
 {
-	fim_char_t* fim_readline(const char *fim_char_t);
+	fim_char_t* fim_readline(const fim_char_t *prompt);
 }
 
 namespace rl

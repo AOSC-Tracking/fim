@@ -2,7 +2,7 @@
 /*
  FontServer.h : Font Server code from fbi, adapted for fim.
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -116,7 +116,7 @@ public:
 /* 20080507 unused, as default_font ? */
 static void fb_text_init1(const fim_char_t *font, struct fs_font **_f);
 
-static struct fs_font* fs_consolefont(const char **filename);
+static struct fs_font* fs_consolefont(const fim_char_t **filename);
 #endif
 
 
