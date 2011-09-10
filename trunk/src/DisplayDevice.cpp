@@ -38,7 +38,7 @@
 			fontname_ = line;
 	}
 
-	int DisplayDevice::get_input(fim_key_t * c, bool want_poll)
+	fim_sys_int DisplayDevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		*c=0;
 		/*
@@ -46,7 +46,7 @@
 		 * is tightly bound to the output device.
 		 * FIXME : before, it accepted unsigned int
 		 * */
-			int r=0;
+			fim_sys_int r=0;
 #ifdef  FIM_SWITCH_FIXUP
 			/*
 			 * this way the console switches the right way :
@@ -62,9 +62,9 @@
 			 */
 			{
 				fd_set set;
-				int fdmax;
+				fim_sys_int fdmax;
 				struct timeval  limit;
-				int timeout=1,rc,paused=0;
+				fim_sys_int timeout=1,rc,paused=0;
 	
 			        FD_ZERO(&set);
 			        FD_SET(cc.fim_stdin_, &set);
@@ -97,7 +97,7 @@
 			 */
 			r=read(fim_stdin_,&c,4);	//up to four chars should suffice
 #endif
-			//std::cout << (int)*c<<"\n";
+			//std::cout << (fim_int)*c<<"\n";
 
 			return r;
 	}
@@ -148,7 +148,7 @@
 void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags)//experimental
 {
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	int r;
+	fim_err_t r=FIM_ERR_NO_ERROR;
 	
 	if(flags==0x03)
 	{
@@ -176,8 +176,8 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw,
 #if 1
 	// FIXME: this is temporary
 	{
-		int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
-		int fh=f_?f_->height:1;
+		fim_int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
+		fim_coo_t fh=f_?f_->height:1;
 		ls=FIM_MIN(ls,height()/fh);
 		clear_rect(0, width()-1, 0,fh*ls);
 	}

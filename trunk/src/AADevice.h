@@ -67,20 +67,20 @@ class AADevice:public DisplayDevice
 	fim_coo_t width();
 	fim_coo_t height();
 	fim_err_t status_line(const fim_char_t *msg);
-	void status_screen(int desc,int draw_output){}
+	//void status_screen(int desc,int draw_output){}
 	fim_bool_t handle_console_switch(){return false;}
 	fim_err_t clear_rect_(
 		void* dst,
-		int oroff,int ocoff,
-		int orows,int ocols,
-		int ocskip);
+		fim_coo_t oroff,fim_coo_t ocoff,
+		fim_coo_t orows,fim_coo_t ocols,
+		fim_coo_t ocskip);
 
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1, fim_coo_t y2);
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 	void flush();
 	fim_err_t init_console();
-	fim_bpp_t get_bpp(){return 1; /* :) */ };
-	int get_input(fim_key_t * c, bool want_poll=false);
+	fim_bpp_t get_bpp(){return 1;};
+	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 };
 

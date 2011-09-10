@@ -48,6 +48,7 @@
 	typedef int fim_int;		/* a type for fim's internal integer type, always signed */
 	typedef int fim_str_t;		/* a type for stdin/stdout streams */
 	typedef int fim_sys_int;	/* always int */
+	typedef int fim_color_t;	/* >= 4 bytes */
 
 	typedef int fim_ts_t;		/* a type for time, in seconds */
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */

@@ -51,8 +51,8 @@ class DummyDisplayDevice:public DisplayDevice
 
 	virtual int get_chars_per_line(){return 0;/* this is a special value */}
 	virtual int get_chars_per_column(){return 0;/* */}
-	virtual int width(){return 1;/* 0 would be so cruel */}
-	virtual int height(){return 1;/* 0 would be so cruel */}
+	virtual fim_coo_t width(){return 1;/* 0 would be so cruel */}
+	virtual fim_coo_t height(){return 1;/* 0 would be so cruel */}
 	virtual fim_err_t status_line(const fim_char_t *msg){return FIM_ERR_NO_ERROR;}
 	virtual fim_err_t console_control(fim_cc_t code){return FIM_ERR_NO_ERROR;}
 	virtual fim_bool_t handle_console_switch(){return false;}
