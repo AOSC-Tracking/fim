@@ -909,7 +909,7 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-				if(viewport_)commandConsole_.displaydevice_->redraw_=1;// no effect
+				if(viewport_)commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// no effect
 				return FIM_ERR_NO_ERROR;
 			}
 
@@ -956,7 +956,7 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-				if(viewport_)commandConsole_.displaydevice_->redraw_=1;// no effect
+				if(viewport_)commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// no effect
 				return FIM_ERR_NO_ERROR;
 			}
 
@@ -1146,7 +1146,7 @@ namespace fim
 	fim_err_t Window::update(const Rect& corners)
 	{
 		corners_=corners;
-		if(viewport_ && commandConsole_.displaydevice_)commandConsole_.displaydevice_->redraw_=1;// FIXME
+		if(viewport_ && commandConsole_.displaydevice_)commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// FIXME
 	}
 }
 #if 0

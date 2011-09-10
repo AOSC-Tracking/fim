@@ -45,7 +45,9 @@
 	typedef int fim_cycles_t;	/* a type for fim's cycles */
 	typedef int fim_cmd_type_t;	/* a type for fim's command types */
 	typedef int fim_var_t;		/* a type for fim's variable types */
-	typedef int fim_int;		/* a type for fim's internal integer type (TODO: shall extend its use!) */
+	typedef int fim_int;		/* a type for fim's internal integer type, always signed */
+	typedef int fim_str_t;		/* a type for stdin/stdout streams */
+	typedef int fim_sys_int;	/* always int */
 
 	typedef int fim_ts_t;		/* a type for time, in seconds */
 	typedef int fim_tms_t;		/* a type for time, in milliseconds */
@@ -53,7 +55,8 @@
 	typedef unsigned long fim_tus_t;	/* a type for time, in microseconds */
 	typedef char fim_char_t;	/* a type for chars */
 	typedef unsigned char fim_byte_t;	/* a type for bytes */
-	typedef size_t fim_size_t;	/* a type for file size */
+	typedef size_t fim_size_t;	/* always size_t */
+	enum fim_redraw_t { FIM_REDRAW_UNNECESSARY=0, FIM_REDRAW_NECESSARY=1};
 //}
 
 /* we wait for variadic macros support in standard C++ */

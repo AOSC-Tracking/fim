@@ -370,7 +370,7 @@ void FramebufferDevice::console_switch(fim_bool_t is_busy)
 		//when stepping in console..
 		visible_ = 1;
 		ioctl(fd_,FBIOPAN_DISPLAY,&fb_var_);
-		redraw_ = 1;
+		redraw_ = FIM_REDRAW_NECESSARY;
 	/*
 	 * thanks to the next line, the image is redrawn each time 
 	 * the console is switched! 

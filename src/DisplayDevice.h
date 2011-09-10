@@ -70,9 +70,9 @@ class DisplayDevice
 	virtual void unlock(){}
 	virtual int get_chars_per_line()=0;
 	virtual int get_chars_per_column()=0;
-	virtual int width()=0;
+	virtual fim_coo_t width()=0;
 	virtual fim_bpp_t get_bpp()=0;
-	virtual int height()=0;
+	virtual fim_coo_t height()=0;
 	virtual fim_err_t status_line(const fim_char_t *msg)=0;
 	fim_err_t console_control(fim_cc_t code);
 	virtual fim_bool_t handle_console_switch()=0;
@@ -83,7 +83,7 @@ class DisplayDevice
 	virtual void switch_if_needed(){}// really, only for making happy fbdev
 	virtual void cleanup(){}// really, only for making happy fbdev
 
-	int redraw_;
+	fim_redraw_t redraw_;
 	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
 	void fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags);//experimental
 #if FIM_WANT_BENCHMARKS
