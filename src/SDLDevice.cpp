@@ -55,7 +55,7 @@ namespace fim
 std::cout << (size_t)getmilliseconds() << " : "<<MSG<<" : "; \
 std::cout.setf ( std::ios::hex, std::ios::basefield ); \
 std::cout.setf ( std::ios::showbase ); \
-std::cout << *(int*)(C) <<"\n"; \
+std::cout << *(fim_int*)(C) <<"\n"; \
 std::cout.unsetf ( std::ios::showbase ); \
 std::cout.unsetf ( std::ios::hex );
 #else
@@ -63,7 +63,7 @@ std::cout.unsetf ( std::ios::hex );
 #endif
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
-
+typedef int fim_sdl_int;
 
 fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 {
@@ -139,7 +139,6 @@ err:
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		keypress_ = 0;
-		//h_=0;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		const fim_char_t*os=opts_.c_str();
 		parse_optstring(os);
@@ -150,17 +149,17 @@ err:
 
 	fim_err_t SDLDevice::clear_rect_(
 		void* dst,	// destination array 
-		int oroff,int ocoff,	// row  and column  offset of the first output pixel
-		int orows,int ocols,	// rows and columns drawable in the output buffer
-		int ocskip		// output columns to skip for each line
+		fim_coo_t oroff,fim_coo_t ocoff,	// row  and column  offset of the first output pixel
+		fim_coo_t orows,fim_coo_t ocols,	// rows and columns drawable in the output buffer
+		fim_coo_t ocskip		// output columns to skip for each line
 	)
 	{
 		/* output screen variables */
-//		int 
+//		fim_coo_t 
 //			oi,// output image row index
 //			oj;// output image columns index
 
-		int lor,loc;
+		fim_coo_t lor,loc;
     		
 		if( oroff <0 ) return -8;
 		if( ocoff <0 ) return -9;
@@ -246,16 +245,14 @@ err:
 		if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
 
 
-//		int h_=1;
-//		int x, y;
-		int ytimesw;
+		fim_coo_t ytimesw;
 
 		if(SDL_MUSTLOCK(screen_))
 		{
 			if(SDL_LockSurface(screen_) < 0) return FIM_ERR_GENERIC;
 		}
 
-		int idr,idc,lor,loc;
+		fim_coo_t idr,idc,lor,loc;
 
 		idr = iroff-oroff;
 		idc = icoff-ocoff;
@@ -263,9 +260,9 @@ err:
 		lor = (FIM_MIN(orows-1,irows-1-iroff+oroff));
 		loc = (FIM_MIN(ocols-1,icols-1-icoff+ocoff));
 
-		int ii,ij;
-		int oi,oj;
-		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
+		fim_coo_t ii,ij;
+		fim_coo_t oi,oj;
+		fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
 		fim_byte_t * srcp;
 
 		// FIXME : temporary
@@ -283,7 +280,7 @@ err:
 			ij    = oj + idc;
 			srcp  = ((fim_byte_t*)rgb)+(3*(ii*icskip+ij));
 
-			setpixel(screen_, oj, ytimesw, (int)srcp[0], (int)srcp[1], (int)srcp[2]);
+			setpixel(screen_, oj, ytimesw, (fim_coo_t)srcp[0], (fim_coo_t)srcp[1], (fim_coo_t)srcp[2]);
 		}
 		else
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
@@ -299,7 +296,7 @@ err:
 			if( flip )ii=((irows-1)-ii);
 			srcp  = ((fim_byte_t*)rgb)+(3*(ii*icskip+ij));
 
-			setpixel(screen_, oj, ytimesw, (int)srcp[0], (int)srcp[1], (int)srcp[2]);
+			setpixel(screen_, oj, ytimesw, (fim_coo_t)srcp[0], (fim_coo_t)srcp[1], (fim_coo_t)srcp[2]);
 		}
 
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
@@ -327,10 +324,10 @@ err:
 		/*
 		 *
 		 * */
-		//int want_width=0, want_height=0, want_bpp=0;
-		int want_width=current_w_, want_height=current_h_, want_bpp=0;
-		int want_flags=FIM_SDL_FLAGS;
-		int delay=0,interval=0;
+		//fim_coo_t want_width=0, want_height=0, want_bpp=0;
+		fim_coo_t want_width=current_w_, want_height=current_h_, want_bpp=0;
+		fim_sdl_int want_flags=FIM_SDL_FLAGS;
+		fim_sdl_int delay=0,interval=0;
 		const fim_char_t*errstr=NULL;
 		//want_flags|=SDL_NOFRAME;
 		//std::cout << want_width << " : "<< want_height<<"\n";
@@ -457,7 +454,7 @@ err:
 		return current_h_;
 	}
 
-	inline void SDLDevice::setpixel(SDL_Surface *screen_, int x, int y, Uint8 r, Uint8 g, Uint8 b)
+	inline void SDLDevice::setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b)
 	{
 		/*
 		 * this function is taken straight from the sdl documentation: there are smarter ways to do this.
@@ -510,13 +507,13 @@ err:
 
 	}
 
-	static int get_input_inner(fim_key_t * c, SDL_Event*eventp, int *keypressp, bool want_poll)
+	static fim_sys_int get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_int *keypressp, bool want_poll)
 	{
-//		int keypress_=0;
+//		fim_sys_int keypress_=0;
 		bool ctrl_on=0;
 		bool alt_on=0;
 		bool shift_on=0;
-		int ret=0;
+		fim_sys_int ret=0;
 		SDL_Event event=*eventp;
 		*c = 0x0;	/* blank */
 
@@ -553,8 +550,8 @@ err:
 				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  )  alt_on=true;
 				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )  shift_on=true;
 
-			//	std::cout << "sym : " << (int)event.key.keysym.sym << "\n" ;
-			//	std::cout << "uni : " << (int)event.key.keysym.unicode<< "\n" ;
+			//	std::cout << "sym : " << (fim_int)event.key.keysym.sym << "\n" ;
+			//	std::cout << "uni : " << (fim_int)event.key.keysym.unicode<< "\n" ;
 			//	if(shift_on)std::cout << "shift_on\n";
 
 				if( event.key.keysym.unicode == 0x0 )
@@ -663,7 +660,7 @@ err:
 				case SDL_MOUSEBUTTONDOWN:
 				//case SDL_MOUSEBUTTONUP:
 				{
-					int x,y;
+					fim_coo_t x,y;
 					Uint8 ms=SDL_GetMouseState(&x,&y);
 #if 0
 					cout << "mouse clicked at "<<x<<" "<<y<<" : "<< ((x>this->width()/2)?'r':'l') <<"; state: "<<ms<<"\n";
@@ -694,14 +691,14 @@ done:
 		return 0;
 	}
 
-	int SDLDevice::get_input(fim_key_t * c, bool want_poll)
+	fim_sys_int SDLDevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		return get_input_inner(c,&event_,&keypress_,want_poll);
 	}
 
-	fim_err_t SDLDevice::fill_rect(int x1, int x2, int y1,int y2, int color)
+	fim_err_t SDLDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color)
 	{
-		int y;
+		fim_coo_t y;
 		/*
 		 * This could be optimized
 		 * */
@@ -714,7 +711,7 @@ done:
 
 	fim_err_t SDLDevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)
 	{
-		int y;
+		fim_coo_t y;
 		/*
 		 * This could be optimized
 		 * */
@@ -725,7 +722,7 @@ done:
 		return 0;
 	}
 
-void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, fim_byte_t *data)
+void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data)
 {
 
 /* 
@@ -748,7 +745,8 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, fim_byte_t *d
         :(nBytes) == 8 ? ((((bits) + 63) >> 3) & ~7)    /* pad to 8 bytes */\
         : 0)
 
-	int row,bit,bpr,x;
+	fim_coo_t row,bit,x;
+	fim_sys_int bpr;
 
 	bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left), SCANLINE_PAD_BYTES);
 	for (row = 0; row < (charInfo->ascent + charInfo->descent); row++)
@@ -775,7 +773,7 @@ void SDLDevice::fs_render_fb(int x_, int y, FSXCharInfo *charInfo, fim_byte_t *d
 
 fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
 {
-    int i,c/*,j,w*/;
+    fim_sys_int i,c/*,j,w*/;
 
     for (i = 0; str[i] != '\0'; i++) {
 	c = (fim_byte_t)str[i];
@@ -792,7 +790,7 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 	}
 #else
 	//sometimes we can gather multiple calls..
-	if(fb_fix.line_length==(unsigned int)w)
+	if(fb_fix.line_length==(fim_int)w)
 	{
 		//contiguous case
 		fim_bzero(start,w*f_->height);
@@ -810,11 +808,10 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 	fs_render_fb(x,y,f_->eindex[c],f_->gindex[c]);
 	x += f_->eindex[c]->width;
 	/* FIXME : SLOW ! */
-	if ((int)x > width() - f_->width)
+	if (((fim_coo_t)x) > width() - f_->width)
 		goto err;
     }
     // FIXME
-//	return x;
 	return FIM_ERR_NO_ERROR;
 err:
 	return FIM_ERR_GENERIC;
@@ -827,8 +824,7 @@ err:
 			if(SDL_LockSurface(screen_) < 0) return FIM_ERR_GENERIC;
 		}
 
-		int y;
-		int ys=3;// FIXME
+		fim_coo_t y,ys=3;// FIXME
 
 		if(get_chars_per_column()<1)
 			goto done;
@@ -853,7 +849,7 @@ done:
 		 * */
 		fim_key_t c=0;
 		SDL_Event levent;
-		int lkeypress=0;
+		fim_sys_int lkeypress=0;
 		fim_tms_t sms=10,ms=seconds*1000;// sms: sleep ms
 #if 0
 		for(;seconds>0;--seconds)
@@ -869,14 +865,14 @@ done:
 		do
 		{
 			if(ms>0)
-				usleep((int)(sms*1000)),ms-=sms;
+				usleep((useconds_t)(sms*1000)),ms-=sms;
 			// we read input twice: it seems we have a number of "spurious" inputs. 
 			if(1==get_input_inner(&c,&levent,&lkeypress,true)) goto done;
 		}
 		while(ms>0);
 		return -1;
 done:
-		usleep((int)(sms*1000)),ms-=sms;
+		usleep((useconds_t)(sms*1000)),ms-=sms;
 		return c;
 #endif
 	}
@@ -914,7 +910,7 @@ ok:
 	fim_err_t SDLDevice::resize(fim_coo_t w, fim_coo_t h)
 	{
 		SDL_Surface *nscreen_=NULL;
-		int want_flags=screen_?screen_->flags:FIM_SDL_FLAGS;
+		fim_sdl_int want_flags=screen_?screen_->flags:FIM_SDL_FLAGS;
 
 		if(want_resize_)
 			want_flags|=SDL_RESIZABLE;

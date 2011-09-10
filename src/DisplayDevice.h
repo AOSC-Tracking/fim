@@ -77,7 +77,7 @@ class DisplayDevice
 	fim_err_t console_control(fim_cc_t code);
 	virtual fim_bool_t handle_console_switch()=0;
 	virtual fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)=0;
-	virtual int get_input(fim_key_t * c, bool want_poll=false);
+	virtual fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	virtual fim_err_t init_console();
 	virtual void switch_if_needed(){}// really, only for making happy fbdev

@@ -39,17 +39,17 @@ static bool aainvalid;
 
 	fim_err_t AADevice::clear_rect_(
 		void* dst,	// destination gray array and source rgb array
-		int oroff,int ocoff,	// row  and column  offset of the first output pixel
-		int orows,int ocols,	// rows and columns drawable in the output buffer
-		int ocskip		// output columns to skip for each line
+		fim_coo_t oroff,fim_coo_t ocoff,	// row  and column  offset of the first output pixel
+		fim_coo_t orows,fim_coo_t ocols,	// rows and columns drawable in the output buffer
+		fim_coo_t ocskip		// output columns to skip for each line
 	)
 	{
 		/* output screen variables */
-		int 
+		fim_coo_t 
 			oi,// output image row index
 			oj;// output image columns index
 
-		int lor,loc;
+		fim_coo_t lor,loc;
     		
 		if( oroff <0 ) return -8;
 		if( ocoff <0 ) return -9;
@@ -85,15 +85,15 @@ static bool aainvalid;
 	}
 
 
-	int matrix_copy_rgb_to_gray(
+	static fim_err_t matrix_copy_rgb_to_gray(
 		void* dst, void* src,	// destination gray array and source rgb array
-		int iroff,int icoff,	// row  and column  offset of the first input pixel
-		int irows,int icols,	// rows and columns in the input image
-		int icskip,		// input columns to skip for each line
-		int oroff,int ocoff,	// row  and column  offset of the first output pixel
-		int orows,int ocols,	// rows and columns drawable in the output buffer
-		int ocskip,		// output columns to skip for each line
-		int flags		// some flags :flag values in fim.h : FIXME
+		fim_coo_t iroff,fim_coo_t icoff,	// row  and column  offset of the first input pixel
+		fim_coo_t irows,fim_coo_t icols,	// rows and columns in the input image
+		fim_coo_t icskip,		// input columns to skip for each line
+		fim_coo_t oroff,fim_coo_t ocoff,	// row  and column  offset of the first output pixel
+		fim_coo_t orows,fim_coo_t ocols,	// rows and columns drawable in the output buffer
+		fim_coo_t ocskip,		// output columns to skip for each line
+		fim_flags_t flags		// some flags :flag values in fim.h : FIXME
 	)
 	{
 		/*
@@ -124,20 +124,20 @@ static bool aainvalid;
 		 * output buffer the corresponding single byte gray values.
 		 * */
 
-		int
+		fim_coo_t
 			ii,// output image row index
 			ij;// output image columns index
 
 		/* output screen variables */
-		int 
+		fim_coo_t 
 			oi,// output image row index
 			oj;// output image columns index
 
-		int gray;
+		fim_color_t gray;
 		fim_byte_t*srcp;
-		int idr,idc,lor,loc;
+		fim_coo_t idr,idc,lor,loc;
     		
-		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
+		fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
 
 		if ( !src ) return FIM_ERR_GENERIC;
 	
@@ -188,9 +188,9 @@ static bool aainvalid;
 			ii    = oi + idr;
 			ij    = oj + idc;
 			srcp  = ((fim_byte_t*)src)+(3*(ii*icskip+ij));
-			gray  = (int)srcp[0];
-			gray += (int)srcp[1];
-			gray += (int)srcp[2];
+			gray  = (fim_color_t)srcp[0];
+			gray += (fim_color_t)srcp[1];
+			gray += (fim_color_t)srcp[2];
 			((fim_byte_t*)(dst))[oi*ocskip+oj]=(fim_byte_t)(gray/3);
 		}
 		else
@@ -218,13 +218,13 @@ static bool aainvalid;
 			if(mirror)ij=((icols-1)-ij);
 			if( flip )ii=((irows-1)-ii);
 
-			gray  = (int)srcp[0];
-			gray += (int)srcp[1];
-			gray += (int)srcp[2];
+			gray  = (fim_color_t)srcp[0];
+			gray += (fim_color_t)srcp[1];
+			gray += (fim_color_t)srcp[2];
 			((fim_byte_t*)(dst))[oi*ocskip+oj]=(fim_byte_t)(gray/3);
 		}
 
-		return  0;
+		return  FIM_ERR_NO_ERROR;
 	}
 
 //#define width() aa_imgwidth(ascii_context_)
@@ -321,7 +321,7 @@ static bool aainvalid;
 		if(icols<ocols) { ocoff+=(ocols-icols-1)/2; ocols-=(ocols-icols-1)/2; }
 		if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
 
-		int r;
+		fim_err_t r;
 #if (!FIM_AALIB_DRIVER_DEBUG)
 		if((r=matrix_copy_rgb_to_gray(
 				aa_image(ascii_context_),rgb,
@@ -372,7 +372,7 @@ static bool aainvalid;
 		//aa_parseoptions (&ascii_hwparms_, ascii_rndparms, &argc, argv);
 
 //		NOTE: if uncommenting this, remember to #ifdef HAVE_GETENV
-//		fim_aa_char *e;int v;
+//		fim_aa_char *e;fim_sys_int v;
 //		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms_.width  = v-1;
 //		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms_.height = v-1;
 //		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms_.recwidth  = v;
@@ -480,7 +480,7 @@ static bool aainvalid;
 
 	fim_err_t AADevice::status_line(const fim_char_t *msg)
 	{
-		int th=txt_height();
+		fim_coo_t th=txt_height();
 		if(th<1)
 			goto err;
 #if (!FIM_AALIB_DRIVER_DEBUG)
@@ -497,7 +497,7 @@ err:
 		if(!finalized_)finalize();// finalize should be called explicitly !
 	}
 
-	int AADevice::get_input(fim_key_t * c, bool want_poll)
+	fim_sys_int AADevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		*c = 0x0;	/* blank */
 		if(!c)return 0;
@@ -583,7 +583,7 @@ err:
 		   the code we have here is not completely clean, but it catches the situation and proposes
  		   a fallback solution, by reinitializing the library video mode to reasonable defaults. */
 		{
-			int width=0, height=0;
+			fim_coo_t width=0, height=0;
 			ascii_context_->driver->getsize(ascii_context_, &width, &height);
 			if (width < FIM_AA_MINWIDTH || height < FIM_AA_MINHEIGHT )
 			{
