@@ -94,7 +94,7 @@ bit1_read(fim_byte_t *dst, unsigned int line, void *data)
 
 	for (x = 0; x < h->w; x+=8)
 	{
-		unsigned char c = fgetc(h->fp);
+		fim_byte_t c = fgetc(h->fp);
 		*(dst++) = (c & 1 << 0)?255:0;
 		*(dst++) = (c & 1 << 0)?255:0;
 		*(dst++) = (c & 1 << 0)?255:0;

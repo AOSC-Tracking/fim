@@ -45,7 +45,7 @@ enum ida_extype {
 
 struct ida_extra {
     enum ida_extype   type;
-    unsigned char     *data;
+    fim_byte_t     *data;
     unsigned int      size;
     struct ida_extra  *next;
 };
@@ -68,7 +68,7 @@ struct ida_image_info {
 
 struct ida_image {
     struct ida_image_info  i;
-    unsigned char          *data;
+    fim_byte_t          *data;
 };
 struct ida_rect {
     int x1,y1,x2,y2;
@@ -133,7 +133,7 @@ void load_graya(fim_byte_t *dst, fim_byte_t *src, int width);
 void load_rgba(fim_byte_t *dst, fim_byte_t *src, int width);
 
 int load_add_extra(struct ida_image_info *info, enum ida_extype type,
-		   unsigned char *data, unsigned int size);
+		   fim_byte_t *data, unsigned int size);
 struct ida_extra* load_find_extra(struct ida_image_info *info,
 				  enum ida_extype type);
 int load_free_extras(struct ida_image_info *info);

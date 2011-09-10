@@ -753,10 +753,10 @@ fim::string Image::getInfo()
 		if(!fimg_ || !fimg_->data)
 			return false;
 
-		for( unsigned char * p = fimg_->data; p < fimg_->data + 3*fimg_->i.width*fimg_->i.height ;++p)
+		for( fim_byte_t * p = fimg_->data; p < fimg_->data + 3*fimg_->i.width*fimg_->i.height ;++p)
 			*p = ~ *p;
 
-		for( unsigned char * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;++p)
+		for( fim_byte_t * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;++p)
 			*p = ~ *p;
 
 		setGlobalVariable("i:"FIM_VID_NEGATED,1-getGlobalIntVariable("i:"FIM_VID_NEGATED));

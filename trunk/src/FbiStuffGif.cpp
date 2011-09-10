@@ -105,7 +105,7 @@ gif_fileread(struct gif_state *h)
 static void
 gif_skipimage(struct gif_state *h)
 {
-    unsigned char *line;
+    fim_byte_t *line;
     int i;
 
     if (FbiStuff::fim_filereading_debug())

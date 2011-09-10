@@ -110,7 +110,7 @@ void load_rgba(fim_byte_t *dst, fim_byte_t *src, int width)
 /* ----------------------------------------------------------------------- */
 
 int load_add_extra(struct ida_image_info *info, enum ida_extype type,
-		   unsigned char *data, unsigned int size)
+		   fim_byte_t *data, unsigned int size)
 {
     struct ida_extra *extra;
 
@@ -119,7 +119,7 @@ int load_add_extra(struct ida_image_info *info, enum ida_extype type,
 	return -1;
     if(type==EXTRA_COMMENT) ++size;// dez's
     fim_bzero(extra,sizeof(*extra));
-    extra->data = (unsigned char*)malloc(size);
+    extra->data = (fim_byte_t*)malloc(size);
     if (NULL == extra->data) {
 	fim_free(extra);
 	return -1;

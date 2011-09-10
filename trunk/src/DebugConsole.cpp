@@ -71,7 +71,7 @@ namespace fim
 					{
 						strncpy(buf,line_[f_],n);
 						buf[n-1]='\0';
-						cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,(unsigned char*)buf);
+						cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,buf);
 						fim_free(buf);
 					}
 				}

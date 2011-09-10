@@ -66,7 +66,7 @@ namespace fim
 		int grow();
 		fim_err_t setRows(int nr);
 		fim_err_t add(const char * cso);
-		fim_err_t add(const unsigned char* cso){return add((const char*)cso);}
+		fim_err_t add(const fim_byte_t* cso){return add((const char*)cso);}
 		int reformat(int newlsize);
 		int do_dump(int amount)const;
 		int clear();

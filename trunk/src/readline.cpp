@@ -193,7 +193,7 @@ static void completion_display_matches_hook(char **matches,int num,int max)
 	}
 
 //	std::cout << buffer << "\n" ;
- //     status((unsigned char*)"here shall be autocompletions", NULL);
+ //     status((fim_byte_t*)"here shall be autocompletions", NULL);
 }
 
 /*
@@ -253,14 +253,14 @@ static int fim_rl_sdl_aa_getc_hook()
 			rl_set_keymap(rl_get_keymap_by_name("emacs-meta"));	/* FIXME : this is a dirty trick : */
 			//c&=!(1<<31);		/* FIXME : a dirty trick */
 			c&=0xFFFFFF^(1<<31);	/* FIXME : a dirty trick */
-			//std::cout << "alt!  : "<< (unsigned char)c <<" !\n";
+			//std::cout << "alt!  : "<< (fim_byte_t)c <<" !\n";
 			//rl_stuff_char(c);	/* warning : this may fail */
 			rl_stuff_char(c);	/* warning : this may fail */
 		}
 		else
 		{
 			rl_set_keymap(rl_get_keymap_by_name("emacs"));		/* FIXME : this is a dirty trick : */
-			//std::cout << "char in : "<< (unsigned char)c <<" !\n";
+			//std::cout << "char in : "<< (fim_byte_t)c <<" !\n";
 			rl_stuff_char(c);	/* warning : this may fail */
 		}
 		return 1;	

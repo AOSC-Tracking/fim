@@ -81,10 +81,10 @@ struct bmp_hdr {
 };
 
 struct bmp_cmap {
-    unsigned char blue;
-    unsigned char green;
-    unsigned char red;
-    unsigned char unused;
+    fim_byte_t blue;
+    fim_byte_t green;
+    fim_byte_t red;
+    fim_byte_t unused;
 };
 
 struct bmp_state {

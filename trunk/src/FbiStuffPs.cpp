@@ -50,7 +50,7 @@ extern CommandConsole cc;
 
 struct ps_state_t {
 	int row_stride;    /* physical row width in output buffer */
-	unsigned char * first_row_dst;
+	fim_byte_t * first_row_dst;
 	int w,h;
 	SpectreDocument * sd;
 	SpectrePage * sp;
@@ -153,7 +153,7 @@ ps_read(fim_byte_t *dst, unsigned int line, void *data)
     		ds->first_row_dst = dst;
 	else return;
 
-	unsigned char       *page_data=NULL;
+	fim_byte_t       *page_data=NULL;
 
 	//render in RGB32 format
 	//spectre_page_render(ds->sp,ds->src,&page_data,&ds->row_stride);

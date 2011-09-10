@@ -46,7 +46,7 @@ namespace fim
 struct ppm_state {
     FILE          *infile;
     int           width,height;
-    unsigned char *row;
+    fim_byte_t *row;
 };
 
 static void*
@@ -78,7 +78,7 @@ pnm_init(FILE *fp, char *filename, unsigned int page,
     i->width  = h->width;
     i->height = h->height;
     i->npages = 1;
-    h->row = (unsigned char*)fim_malloc(h->width*3);
+    h->row = (fim_byte_t*)fim_malloc(h->width*3);
     if(!h->row)goto oops;
 
     return h;

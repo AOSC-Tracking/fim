@@ -68,7 +68,7 @@ struct pdf_state_t {
 	PDFDoc *            pd ;
 	SplashOutputDev *   od ;
 	int row_stride;    /* physical row width in output buffer */
-	unsigned char * first_row_dst;
+	fim_byte_t * first_row_dst;
 };
 
 

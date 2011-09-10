@@ -29,7 +29,7 @@ namespace fim
 		{
 		}
 
-		fim_stream& fim_stream::operator<<(const unsigned char* s)
+		fim_stream& fim_stream::operator<<(const fim_byte_t* s)
 		{
 			*this<<(const char*)s;
 			return *this;
