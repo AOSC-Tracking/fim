@@ -23,17 +23,17 @@ yacc.tab.cpp: yacc.ypp lex.lex
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
 conf.h:       fimrc
-	$(ECHO) 'const char * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $@
+	$(ECHO) 'const fim_char_t * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $@
 	$(SED)  's/\\/\\\\/g;s/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< >> $@
 	$(ECHO) '"";' >> $@
 
 grammar.h: yacc.tab.cpp yacc.output
-	$(ECHO) 'const char * FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =' > $@
+	$(ECHO) 'const fim_char_t * FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =' > $@
 	$(CAT) yacc.output | $(AWK) -f ../scripts/maintenance/yacc2grammar.awk  | $(CPP) -include ../scripts/maintenance/yacc2grammar.h  | $(GREP) -v '^#' | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
 	$(ECHO) '"";' >> $@
 
 examples.h: ../scripts/example/oneline.fim
-	$(ECHO) 'const char * FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =' > $@
+	$(ECHO) 'const fim_char_t * FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =' > $@
 	$(CAT) ../scripts/example/oneline.fim | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
 	$(ECHO) '"";' >> $@
 

@@ -112,7 +112,7 @@ static void print_vinfo(struct fb_var_screeninfo *vinfo)
 static void print_finfo(struct fb_fix_screeninfo *finfo)
 {
 	FIM_FPRINTF(stderr,  "Printing finfo:\n");
-	FIM_FPRINTF(stderr,  "\tsmem_start = %p\n", (char *)finfo->smem_start);
+	FIM_FPRINTF(stderr,  "\tsmem_start = %p\n", (void *)finfo->smem_start);
 	FIM_FPRINTF(stderr,  "\tsmem_len = %d\n", finfo->smem_len);
 	FIM_FPRINTF(stderr,  "\ttype = %d\n", finfo->type);
 	FIM_FPRINTF(stderr,  "\ttype_aux = %d\n", finfo->type_aux);
@@ -121,7 +121,7 @@ static void print_finfo(struct fb_fix_screeninfo *finfo)
 	FIM_FPRINTF(stderr,  "\typanstep = %d\n", finfo->ypanstep);
 	FIM_FPRINTF(stderr,  "\tywrapstep = %d\n", finfo->ywrapstep);
 	FIM_FPRINTF(stderr,  "\tline_length = %d\n", finfo->line_length);
-	FIM_FPRINTF(stderr,  "\tmmio_start = %p\n", (char *)finfo->mmio_start);
+	FIM_FPRINTF(stderr,  "\tmmio_start = %p\n", (void *)finfo->mmio_start);
 	FIM_FPRINTF(stderr,  "\tmmio_len = %d\n", finfo->mmio_len);
 	FIM_FPRINTF(stderr,  "\taccel = %d\n", finfo->accel);
 }
@@ -499,7 +499,7 @@ void FramebufferDevice::svga_display_image_new(
     /* FIXME : COMPLETE ME ... */
 
 #ifndef FIM_IS_SLOWER_THAN_FBI
-    fim_byte_t *(FramebufferDevice::*convert_line_f)(int , int , int , char unsigned *, char unsigned *, int );
+    fim_byte_t *(FramebufferDevice::*convert_line_f)(int , int , int , fim_byte_t *, fim_byte_t *, int );
     if(fb_var_.bits_per_pixel==8)
  	   convert_line_f=&fim::FramebufferDevice::convert_line_8;
     else
@@ -521,7 +521,7 @@ void FramebufferDevice::svga_display_image_new(
     }
 }
 
-int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_boz_patch)
+int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int vt_, int try_boz_patch)
 {
     /*
      * This method will probe for a valid framebuffer device.
@@ -530,7 +530,7 @@ int FramebufferDevice::fb_init(const char *device, char *mode, int vt_, int try_
      * Like the ones when running fim under screen.
      * Like the ones when running fim under X. :)
      * */
-    char   fbdev_[FIM_FBDEV_FILE_MAX_CHARS];
+    fim_char_t fbdev_[FIM_FBDEV_FILE_MAX_CHARS];
     struct vt_stat vts;
 
     dev_init();
@@ -746,7 +746,7 @@ void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
 void FramebufferDevice::fb_setvt(int vtno)
 {
     struct vt_stat vts;
-    char vtname[12];
+    fim_char_t vtname[12];
     
     if (vtno < 0) {
 	if (-1 == ioctl(tty_,VT_OPENQRY, &vtno) || vtno == -1) {
@@ -805,10 +805,10 @@ void FramebufferDevice::fb_setvt(int vtno)
     }
 }
 
-int FramebufferDevice::fb_setmode(char *name)
+int FramebufferDevice::fb_setmode(fim_char_t *name)
 {
     FILE *fp;
-    char line[FIM_FBI_FB_MODES_LINE_BUFSIZE],
+    fim_char_t line[FIM_FBI_FB_MODES_LINE_BUFSIZE],
 	 label[FIM_FBI_FB_MODES_LABEL_BUFSIZE],
 	 value[FIM_FBI_FB_MODES_VALUE_BUFSIZE];
     int  geometry=0, timings=0;
@@ -999,7 +999,7 @@ void FramebufferDevice::fb_edit_line(fim_byte_t *str, int pos)
 }
 #endif
 
-void FramebufferDevice::fb_text_box(int x, int y, char *lines[], unsigned int count)
+void FramebufferDevice::fb_text_box(int x, int y, fim_char_t *lines[], unsigned int count)
 {
     unsigned int i,len,max, x1, x2, y1, y2;
 
@@ -1137,7 +1137,7 @@ void FramebufferDevice::cleanup(void)
     //close(tty_);
 }
 
-fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror)/*dez's mirror patch*/
+fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror)/*dez's mirror patch*/
 {
     fim_byte_t  *ptr  = (fim_byte_t *)dst;
 	dither_line(buffer, ptr, line, owidth, mirror);
@@ -1145,7 +1145,7 @@ fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, ch
 	return ptr;
 }
 
-fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, char unsigned *dst, char unsigned *buffer, int mirror)/*dez's mirror patch*/
+fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror)/*dez's mirror patch*/
 {
     fim_byte_t  *ptr  = (fim_byte_t *)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
@@ -1214,7 +1214,7 @@ fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, char
 		 * this is far worse than the preceding !
 		 */
 		memcpy(ptr,buffer,owidth*3);
-		//register char t;
+		//register fim_char_t t;
 		//register i=x;
 		/*since RGB and GBR swap already done, this is not necessary*/
 		/*for (i = 0; i < owidth; i+=3)
@@ -1281,12 +1281,12 @@ fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, char
 }
 
 /*dez's*/
-/*fim_byte_t * FramebufferDevice::clear_lines(int bpp, int lines, int owidth, char unsigned *dst)
+/*fim_byte_t * FramebufferDevice::clear_lines(int bpp, int lines, int owidth, fim_byte_t *dst)
 {
 
 }*/
 
-fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, char unsigned *dst)
+fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, fim_byte_t *dst)
 {
     fim_byte_t  *ptr  = (fim_byte_t*)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
@@ -1656,13 +1656,13 @@ int FramebufferDevice::fs_init_fb(int white8)
  */
 #if 0
 #ifndef FIM_KEEP_BROKEN_CONSOLE
-void FramebufferDevice::status_screen(const char *msg, int draw)
+void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 {	
 	/* current code */
 	return fb_status_screen_new(msg, (fim_bool_t)draw,0);
 }
 #else
-void FramebufferDevice::status_screen(const char *msg, int draw)
+void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 {
 	/* dead code */
 
@@ -1673,13 +1673,13 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 	// R rows, C columns
 	int R=(fb_var_.yres/fb_font_height())/2,/* half screen : more seems evil */
 	C=(fb_var_.xres/fb_font_width());
-	static char **columns=NULL;
-	static char *columns_data=NULL;
+	static fim_char_t **columns=NULL;
+	static fim_char_t *columns_data=NULL;
 	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
 	/* R rows and C columns; the last one for string terminators..
 	 */
-	if(!columns)columns=(char**)fim_calloc(sizeof(char**)*R,1);
-	if(!columns_data)columns_data=(char*)fim_calloc(sizeof(char)*(R*(C+1)),1);
+	if(!columns)columns=(fim_char_t**)fim_calloc(sizeof(fim_char_t**)*R,1);
+	if(!columns_data)columns_data=(fim_char_t*)fim_calloc(sizeof(fim_char_t)*(R*(C+1)),1);
 	/* 
 	 * seems tricky : we allocate one single buffer and use it as console 
 	 * storage and console pointers storage ...
@@ -1698,7 +1698,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 
 	static int cline=0,	//current line		[0..R-1]
 		   ccol=0;	//current column	[0..C]
-	const char *p=msg,	//p points to the substring not yet printed
+	const fim_char_t *p=msg,	//p points to the substring not yet printed
 	      	    *s=p;	//s advances and updates p
 
 	if(!msg)
@@ -1823,7 +1823,7 @@ void FramebufferDevice::status_screen(const char *msg, int draw)
 //	C=(fb_var_.xres/fb_font_width());
 #endif
 	{
-		const char *line;
+		const fim_char_t *line;
 
 		cmap_.start  =  0;
 		cmap_.len    =  256;

@@ -42,10 +42,10 @@ namespace fim
 	:public Namespace
 #endif
 	{
-		char *buffer_;	// the raw console buffer
-		char **line_;	// the (displayed) line_ pointers array
+		fim_char_t *buffer_;	// the raw console buffer
+		fim_char_t **line_;	// the (displayed) line_ pointers array
 
-		char *bp_;	// pointer to the top of the buffer
+		fim_char_t *bp_;	// pointer to the top of the buffer
 
 		int  bsize_;	// the buffer size
 		int  lsize_;	// the lines array size
@@ -65,8 +65,8 @@ namespace fim
 		int dump();	// non const due to user variables reaction
 		int grow();
 		fim_err_t setRows(int nr);
-		fim_err_t add(const char * cso);
-		fim_err_t add(const fim_byte_t* cso){return add((const char*)cso);}
+		fim_err_t add(const fim_char_t * cso);
+		fim_err_t add(const fim_byte_t* cso){return add((const fim_char_t*)cso);}
 		int reformat(int newlsize);
 		int do_dump(int amount)const;
 		int clear();

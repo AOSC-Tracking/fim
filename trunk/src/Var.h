@@ -97,7 +97,7 @@ class Var
 	:type(0),i(0),s(fim::string())
 	{
 		type='i';
-		const char *s="0";
+		const fim_char_t *s="0";
 		if(type=='i')i=atoi(s);
 		else if(type=='f')f=fim_atof(s);
 		else if(type=='s')this->s=s;
@@ -111,14 +111,14 @@ class Var
 		this->s=s.c_str();
 	}
 
-	Var(const char*s)
+	Var(const fim_char_t*s)
 	:type(0),i(0),s(fim::string())
 	{
 		type='s';
 		this->s=s;
 	}
 /*
-	Var(const char*s="0",int type_='i')
+	Var(const fim_char_t*s="0",int type_='i')
 	{
 		type=type_;
 		if(type=='i')i=atoi(s);
@@ -160,7 +160,7 @@ class Var
 
 	fim::string getString()const
 	{
-		char buf[16];
+		fim_char_t buf[16];
 		DBG("t:"<<type <<"\n");
 		if(type=='s')return this->s;
 		else
@@ -187,7 +187,7 @@ class Var
 	#define _types() DBG("t1:"<<(getType())<<",t2:"<<(v.getType())<<"\n");
 	#define _some_string() (getType()=='s' || v.getType()=='s')
 	#define _numeric() (!_some_string())
-	#define _p_t(op) DBG(op<<"("<<(char)getType()<<","<<(char)v.getType()<<")\n");
+	#define _p_t(op) DBG(op<<"("<<(fim_char_t)getType()<<","<<(fim_char_t)v.getType()<<")\n");
 	Var operator!=(const Var &v)const {
 		//_p_t("!=")
 		_types() 

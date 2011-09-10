@@ -637,7 +637,7 @@ namespace fim
 		free();
 	}
 
-	fim::string Viewport::pan(const char*a1, const char*a2)
+	fim::string Viewport::pan(const fim_char_t*a1, const fim_char_t*a2)
 	{
 		// FIXME: a quick hack
 		args_t args;
@@ -650,9 +650,9 @@ namespace fim
 	{
 		fim_pan_t hs=0,vs=0;
 		fim_bool_t ps=false;
-		char f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
-		const char*fs=args[0].c_str();
-		const char*ss=NULL;
+		fim_char_t f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
+		const fim_char_t*fs=args[0].c_str();
+		const fim_char_t*ss=NULL;
 		if(args.size()<1 || (!fs))goto nop;
 		f=tolower(*fs);
 		if(!fs[0])goto nop;

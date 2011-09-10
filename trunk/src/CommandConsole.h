@@ -189,7 +189,7 @@ class CommandConsole
 	public:
 	bool display();
 	bool redisplay();
-	char * command_generator (const char *text,int state,int mask)const;
+	fim_char_t * command_generator (const fim_char_t *text,int state,int mask)const;
 	fim_perr_t executionCycle();
 	fim_err_t init(fim::string device);
 	fim_bool_t inConsole()const;
@@ -202,7 +202,7 @@ class CommandConsole
 	Var  getVariable(const fim::string & varname)const;
 	fim_int  setVariable(const fim::string& varname,fim_int value);
 	fim_float_t setVariable(const fim::string& varname, fim_float_t value);
-	fim_int setVariable(const fim::string& varname,const char*value);
+	fim_int setVariable(const fim::string& varname,const fim_char_t*value);
 	Var setVariable(const fim::string varname,const Var&value);//NEW
 
 	fim_var_t getVariableType(const fim::string &varname)const;
