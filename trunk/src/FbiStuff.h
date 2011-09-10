@@ -2,7 +2,7 @@
 /*
  FbiStuff.h : Misc fbi functionality routines, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2011 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -55,8 +55,8 @@ namespace fim
 class FbiStuff{
 public:
 static void free_image(struct ida_image *img);
-static FILE* fim_execlp(const char *arg, ...);/* new */
-static struct ida_image* read_image(char *filename, FILE* fd, int page=0);
+static FILE* fim_execlp(const fim_char_t *arg, ...);/* new */
+static struct ida_image* read_image(fim_char_t *filename, FILE* fd, int page=0);
 static struct ida_image* rotate_image90(struct ida_image *src, unsigned int rotation);
 static struct ida_image* rotate_image(struct ida_image *src, float angle);
 static struct ida_image* scale_image(struct ida_image *src, float scale, float ascale);
