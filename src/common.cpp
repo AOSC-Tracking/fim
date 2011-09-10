@@ -579,8 +579,8 @@ int swap_bytes_in_int(int in)
 	int b=sizeof(int),i=-1;
 	while(i++<b/2)
 	{
-		((fim_char_t*)&out)[i]=((fim_char_t*)&in)[b-i-1];
-		((fim_char_t*)&out)[b-i-1]=((fim_char_t*)&in)[i];
+		((fim_byte_t*)&out)[i]=((fim_byte_t*)&in)[b-i-1];
+		((fim_byte_t*)&out)[b-i-1]=((fim_byte_t*)&in)[i];
 	}
 	return out;
 }
@@ -588,7 +588,7 @@ int swap_bytes_in_int(int in)
 int int2lsbf(int in)
 {
 	int one=0x01;
-	if( 0x01 & (*(fim_char_t*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
+	if( 0x01 & (*(fim_byte_t*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
 		return swap_bytes_in_int(in);
 	return in;
 }
@@ -596,7 +596,7 @@ int int2lsbf(int in)
 int int2msbf(int in)
 {
 	int one=0x01;
-	if( 0x01 & (*(fim_char_t*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
+	if( 0x01 & (*(fim_byte_t*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
 		return in;
 	return swap_bytes_in_int(in);
 }
