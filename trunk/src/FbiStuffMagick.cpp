@@ -38,6 +38,13 @@
 #ifdef HAVE_LIBGRAPHICSMAGICK
 #include <magick/api.h>
 
+/* versions as far as 1.13.12 have this bug, in coders/txt.c:328, due to a NULL p returning in case of empty text file */
+#ifdef MagickLibVersion
+#define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG (MagickLibVersion<=0x090600)
+#else
+#define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG 1
+#endif
+
 struct magick_state_t {
 	Image * image; /* Warning: this is NOT to be confused with fim's Image class */
 	Image * cimage; /* Warning: this is NOT to be confused with fim's Image class */
@@ -68,12 +75,22 @@ magick_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	ms.mpf=MagickFail;
 
 	if(!fp && !filename)
-		goto err;
+		goto nocleanuperr;
 	if(!filename)
-		goto err;
+		goto nocleanuperr;
 	if(!fp)
-		goto err;
+		goto nocleanuperr;
 
+#if HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG
+	if(filename)
+	{
+		fim_size_t fnl=strlen(filename);
+		if(fnl>=3 && 0==strcasecmp(filename+fnl-3,"txt"))
+			goto nocleanuperr;
+		if(fnl>=4 && 0==strcasecmp(filename+fnl-4,"text"))
+			goto nocleanuperr;
+	}
+#endif
 	InitializeMagick(filename);
 	GetExceptionInfo(&ms.exception);
 	if (ms.exception.severity != UndefinedException)
@@ -82,6 +99,8 @@ magick_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		goto err;
 	}
 	ms.image_info=CloneImageInfo((ImageInfo *) NULL);
+	if(ms.image_info==NULL)
+		goto err;
 
 	/* FIXME need correctness check on dimensions values ! */
 	if(strlen(filename)>MaxTextExtent-1)
@@ -117,6 +136,7 @@ magick_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	return &ms;
 err:
 	magick_cleanup();
+nocleanuperr:
 	return NULL; 
 }
 
