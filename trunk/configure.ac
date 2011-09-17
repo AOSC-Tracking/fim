@@ -1027,10 +1027,9 @@ fi
 
 
 dnl ==================
-
 fim_cv_fimrc=yes
 
-AC_ARG_ENABLE(fimrc, AC_HELP_STRING([--disable-fimrc], [Fim will by default load the ~.fimrc file.]),
+AC_ARG_ENABLE(fimrc, AC_HELP_STRING([--disable-fimrc], [Fim will by default load the ~/.fimrc file.]),
 [if test x$enableval = xno; then
         fim_cv_fimrc=no
 fi])
@@ -1040,6 +1039,22 @@ if test x$fim_cv_fimrc = xyes; then
 	have_fimrc=yes
 else
 	AC_DEFINE([FIM_NOFIMRC])
+fi
+
+dnl ==================
+AH_TEMPLATE([FIM_NOHISTORY])
+fim_cv_history=yes
+
+AC_ARG_ENABLE(history, AC_HELP_STRING([--disable-history], [Fim will by default load/save a ~/.fim_history file.]),
+[if test x$enableval = xno; then
+        fim_cv_history=no
+fi])
+
+AH_TEMPLATE([FIM_NOHISTORY])
+if test x$fim_cv_history = xyes; then
+	have_history=yes
+else
+	AC_DEFINE([FIM_NOHISTORY])
 fi
 
 dnl ==================
@@ -1648,6 +1663,7 @@ AC_MSG_NOTICE([
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
+	~/.fim_history load/save            : ${have_history:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 	internal windowing system           : ${have_windows:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
