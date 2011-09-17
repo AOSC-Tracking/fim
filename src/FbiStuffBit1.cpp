@@ -26,6 +26,7 @@
 
 #include "fim.h"
 
+#if FIM_WANT_RAW_BITS_RENDERING
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -152,4 +153,4 @@ static void __init init_rd(void)
 
 
 }
-
+#endif

@@ -275,11 +275,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 	    	autocmd_exec(FIM_ACM_PRECONF,"");
 	    	autocmd_exec(FIM_ACM_PREHFIMRC,"");
 #endif
-#ifndef FIM_NOFIMRC
-  #ifndef FIM_WANT_NOSCRIPTING
-		fim_char_t rcfile[FIM_PATH_MAX];
-		const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
 
+  #ifndef FIM_WANT_NOSCRIPTING
 		if(preConfigCommand_!=fim::string(""))
 			execute_internal(preConfigCommand_.c_str(),FIM_X_HISTORY);
 
@@ -291,6 +288,12 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			execute_internal(FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_X_QUIET);
     #endif		
 		}
+  #endif
+
+#ifndef FIM_NOFIMRC
+  #ifndef FIM_WANT_NOSCRIPTING
+		fim_char_t rcfile[FIM_PATH_MAX];
+		const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
 
 #ifdef FIM_AUTOCMDS
 	    	autocmd_exec(FIM_ACM_POSTHFIMRC,""); 
@@ -303,7 +306,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		{
 			string ef=getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC);
 			if(is_file(ef.c_str()))
-				if(-1==executeFile(ef.c_str()));
+				if(FIM_ERR_NO_ERROR!=executeFile(ef.c_str()));
 		}
 		
 #ifdef FIM_AUTOCMDS
@@ -323,8 +326,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			if(getIntVariable(FIM_VID_NO_RC_FILE)!=1 )
 			{
 				if(
-					(!is_file(rcfile) || -1==executeFile(rcfile))
-	//			&&	(!is_file(FIM_CNS_SYS_RC_FILEPATH) || -1==executeFile(FIM_CNS_SYS_RC_FILEPATH))
+					(!is_file(rcfile) || FIM_ERR_NO_ERROR!=executeFile(rcfile))
+	//			&&	(!is_file(FIM_CNS_SYS_RC_FILEPATH) || FIM_ERR_NO_ERROR!=executeFile(FIM_CNS_SYS_RC_FILEPATH))
 				  )
   #endif
 #endif

@@ -329,6 +329,7 @@ namespace fim
 				return FIM_ERR_GENERIC;
 			try{ stream_image=new Image(FIM_STDIN_IMAGE_NAME,fim_fread_tmpfile(tfd)); }
 			catch (FimException e){/* write me */}
+#ifdef FIM_READ_STDIN_IMAGE
 			// DANGEROUS TRICK!
 			if(stream_image)
 			{
@@ -337,6 +338,9 @@ namespace fim
 						std::cerr << FIM_EMSG_CACHING_STDIN;// FIXME
 				browser_.push(FIM_STDIN_IMAGE_NAME);
 			}
+#else
+			/* FIXME: this point should be better not reached */
+#endif
 			return FIM_ERR_NO_ERROR;
 			//pclose(tfd);
 	}
