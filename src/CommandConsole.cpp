@@ -1995,7 +1995,7 @@ ok:
 	fim_err_t CommandConsole::save_history()
 	{
 #if FIM_WANT_HISTORY
-#ifndef FIM_NOFIMRC
+#ifndef FIM_NOHISTORY
   #ifndef FIM_WANT_NOSCRIPTING
     #ifdef FIM_USE_READLINE
 		/* default, hard-coded configuration first */
@@ -2003,7 +2003,7 @@ ok:
 		{
 			fim_char_t hfile[FIM_PATH_MAX];
 			const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
-			if(e && strlen(e)<FIM_PATH_MAX-14)//strlen(FIM_CNS_HIST_FILENAME)+2
+			if(e && strlen(e)<sizeof(hfile)-14)//14==strlen(FIM_CNS_HIST_FILENAME)+2
 			{
 				strcpy(hfile,e);
 				strcat(hfile,"/"FIM_CNS_HIST_FILENAME);
@@ -2025,7 +2025,7 @@ ok:
 	fim_err_t CommandConsole::load_history()
 	{
 #if FIM_WANT_HISTORY
-#ifndef FIM_NOFIMRC
+#ifndef FIM_NOHISTORY
   #ifndef FIM_WANT_NOSCRIPTING
     #ifdef FIM_USE_READLINE
 		/* default, hard-coded configuration first */
