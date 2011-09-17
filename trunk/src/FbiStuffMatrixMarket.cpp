@@ -76,6 +76,9 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		goto err;
 
 #if 1
+	if(cols<1 || rows<1)
+		goto err;
+
 	if(cols>cols_max)
 		cols=cols_max;
 	if(rows>rows_max)
