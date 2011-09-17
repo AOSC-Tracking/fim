@@ -22,6 +22,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110917	should build a separate fim-main program, in order to generate a valid man help when the user manual will not be online (e.g.: in a minimalistically configured fim, with all inner docs cut out)
 20110820	should have a way to disable terminal control flow (thus allowing C-s, C-q)
 20110817	need macros to check for allowed width/height/bpp/... values
 20110817	s/bzero/fim_bzero s/malloc/fim_malloc s/calloc/fim_calloc
