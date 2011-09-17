@@ -39,6 +39,8 @@ int fim_isquote(int c);
 fim::string fim_dirname(const fim::string & arg);
 fim::string fim_shell_arg_escape(const fim::string & arg);
 void fim_perror(const fim_char_t *s);
+//void fim_tolowers(fim_char_t *s);
+//void fim_touppers(fim_char_t *s);
 size_t fim_strlen(const fim_char_t *str);
 void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t);
 void trhex(fim_char_t *str);

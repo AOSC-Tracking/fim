@@ -405,15 +405,15 @@ string fim_dump_man_page_snippets()
 int fim_dump_man_page()
 {
 	string mp=
-			string(".\\\"\n")+
-			string(".\\\" $Id""$\n")+
-			string(".\\\"\n")+
-			string(".TH fim 1 \"(c) 2007-2011 "FIM_AUTHOR_NAME"\"\n")+
-			string(".SH NAME\n")+
-			string("fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n")+
-			string(".SH SYNOPSIS\n")+
-			string(".B fim [{options}] [--] {imagefile} [{imagefiles}]\n.fi\n")+
-			string(".B ... | fim [{options}] [--] [{imagefiles}] -\n.fi\n")+
+			string(".\\\"\n"
+			".\\\" $Id""$\n"
+			".\\\"\n"
+			".TH fim 1 \"(c) 2007-2011 "FIM_AUTHOR_NAME"\"\n"
+			".SH NAME\n"
+			"fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n"
+			".SH SYNOPSIS\n"
+			".B fim [{options}] [--] {imagefile} [{imagefiles}]\n.fi\n"
+			".B ... | fim [{options}] [--] [{imagefiles}] -\n.fi\n")+
 #ifdef FIM_READ_STDIN
 			string(".B fim [{options}] [--] [{files}] - < {file_name_list_text_file}\n.fi\n")+
 #endif
@@ -423,37 +423,37 @@ int fim_dump_man_page()
 #ifdef FIM_READ_STDIN
 			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [{options}] < {scriptfile}\n.fi\n")+
 #endif
-			string("\n")+
-			string(".SH DESCRIPTION\n")+
-			string(".B\nfim\nis a `swiss army knife' for displaying image files.\n")+
-			string("It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim-like autocommands, and much more.\n\n")+
-			string("As a default,\n.B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '"FIM_EPR_XCFTOPNM"'.\nFor '.fig' vectorial images, fim will try to use '"FIM_EPR_FIG2DEV"'.\nFor '.dia' vectorial images, fim will try to use '"FIM_EPR_DIA"'.\nFor '.svg' vectorial images, fim will try to use '"FIM_EPR_INKSCAPE"'.\nFor other formats fim will try to use ImageMagick's '"FIM_EPR_CONVERT"' executable.\n")+
-			string("\n")+
+			string("\n"
+			".SH DESCRIPTION\n"
+			".B\nfim\nis a `swiss army knife' for displaying image files.\n"
+			"It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim-like autocommands, and much more.\n\n"
+			"As a default,\n.B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '"FIM_EPR_XCFTOPNM"'.\nFor '.fig' vectorial images, fim will try to use '"FIM_EPR_FIG2DEV"'.\nFor '.dia' vectorial images, fim will try to use '"FIM_EPR_DIA"'.\nFor '.svg' vectorial images, fim will try to use '"FIM_EPR_INKSCAPE"'.\nFor other formats fim will try to use ImageMagick's '"FIM_EPR_CONVERT"' executable.\n"
+			"\n")+
 #ifdef FIM_READ_DIRS
 			string("\n""If configured at build time,\n.B\n{imagefile}\nmay be as well a directory containing files in supported formats.""\n\n")+
 #endif
 
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
 	//		string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.\n\n")+
-			string("This man page only describes the\n.B fim\ncommand line options.\n\n")+
-			string(".SH USAGE\n")+
-			string("You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any reasonable image viewer.\n")+
-			string("\n.B\nfim\nis keyboard oriented: there are no user menus or buttons available.\n")+
-			string("If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need to type a custom command. For these, you can use the internal command and configuration language.\n")+
-			string("The full specification for these is available at runtime using the internal help system.\n")+
-			string("\nAlternatively, see man fimrc for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n")+
-			string("\n")+
-			string("\n.SH OPTIONS\n")+
-			string("Accepted command line \n.B\n{options}\n:\n");
+			string("This man page only describes the\n.B fim\ncommand line options.\n\n"
+			".SH USAGE\n"
+			"You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any reasonable image viewer.\n"
+			"\n.B\nfim\nis keyboard oriented: there are no user menus or buttons available.\n"
+			"If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need to type a custom command. For these, you can use the internal command and configuration language.\n"
+			"The full specification for these is available at runtime using the internal help system.\n"
+			"\nAlternatively, see man fimrc for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n"
+			"\n"
+			"\n.SH OPTIONS\n"
+			"Accepted command line \n.B\n{options}\n:\n");
 			mp+=fim_dump_man_page_snippets();
 			mp+=string(".SH PROGRAM RETURN STATUS\n"
 		     	"The program return status is ")+string(FIM_ERR_NO_ERROR)+string(" on correct operation; ");
 			mp+=string(FIM_PERR_UNSUPPORTED_DEVICE)+string(" on unsupported device specification; ");
 			mp+=string(FIM_PERR_BAD_PARAMS)+string(" on bad input; ");
 			mp+=string(FIM_PERR_GENERIC)+string(" on a generic error; ");
-			mp+=string(" or a different value in case of an another error.\n");
-			mp+=string(" The return status may be controlled by the use of the "FIM_FLT_QUIT" command.\n");
-			mp+=string(".SH COMMON KEYS AND COMMANDS\n"
+			mp+=string(" or a different value in case of an another error.\n"
+			" The return status may be controlled by the use of the "FIM_FLT_QUIT" command.\n"
+			".SH COMMON KEYS AND COMMANDS\n"
 ".nf\n"
 "The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable "FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS").\n\n"
 //"cursor keys     scroll large images\n"

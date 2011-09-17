@@ -40,6 +40,24 @@
 #include <libgen.h>
 #endif
 
+/*
+void fim_tolowers(fim_char_t *s)
+{
+	if(!s)
+		return;
+	for(;*s;++s)
+		*s=tolower(*s);
+}
+
+void fim_touppers(fim_char_t *s)
+{
+	if(!s)
+		return;
+	for(;*s;++s)
+		*s=toupper(*s);
+}
+*/
+
 fim::string fim_dirname(const fim::string & arg)
 {
 #ifdef HAVE_LIBGEN_H
