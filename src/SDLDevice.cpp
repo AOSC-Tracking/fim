@@ -271,6 +271,7 @@ err:
 		clear_rect(  0, width()-1, 0, height()-1); 
 
 		if(!mirror && !flip)
+#if 0
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
 		{
@@ -282,6 +283,33 @@ err:
 
 			setpixel(screen_, oj, ytimesw, (fim_coo_t)srcp[0], (fim_coo_t)srcp[1], (fim_coo_t)srcp[2]);
 		}
+#else
+		{
+			const Uint32 rmask=0x00000000,gmask=0x00000000,bmask=0x00000000,amask=0x00000000;
+			SDL_Surface *src=SDL_CreateRGBSurfaceFrom(rgb,icols,irows,24,icols*3,rmask,gmask,bmask,amask);
+			if(src)
+			{
+				SDL_Rect srcrect;
+				SDL_Rect dstrect;
+				srcrect.x=icoff;
+				srcrect.y=iroff;
+				srcrect.w=icols;
+				srcrect.h=irows;
+				dstrect.x=ocoff;
+				dstrect.y=oroff;
+				dstrect.w=ocols;
+				dstrect.h=orows;
+				SDL_UpperBlit(src,&srcrect,screen_,&dstrect);
+				SDL_FreeSurface(src);
+				/* FIXME: shall check error codes */
+			}
+			else
+			{
+				/* FIXME: need some error processing, here */
+				return FIM_ERR_GENERIC;
+			}
+		}
+#endif
 		else
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
