@@ -163,7 +163,7 @@ manmode:
 			"A VARIABLE shall be an already declared or undeclared variable identifier (see \n.B VARIABLES REFERENCE\n) or a valid alias, created using the \n.B alias\ncommand.\n"
 			"The \"=~\" operator treats the right expression as a STRING, and uses is as a regular expression for matching purposes.\n"
 			"The SLASH_AND_REGEXP is a slash (\"/\") followed by a STRING, interpreted as a regular expression.\n"
-			"See regex(1) for regular expression syntax.\n"
+			"See ""\\fR\\fI""regex""\\fR""(1) for regular expression syntax.\n"
 			"\n"
 			"The way some one-line statements are evaluated:\n\n")+
 			string(FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP)+
@@ -204,12 +204,12 @@ manmode:
 			string(".SH BUGS\n"
 "The\n.B fim\nlanguage has a number of problems that shall be first documented, then fixed.\n"
 			".SH SEE ALSO\n"
-			"fim(1), regex(1).\n"
+			"""\\fR\\fI""fim""\\fR""(1), ""\\fR\\fI""regex""\\fR""(1).\n"
 			".SH AUTHOR\n"
 			FIM_AUTHOR
 			"\n"
 			".SH COPYRIGHT\n"
-			"See fim(1).\n"
+			"See copyright notice in ""\\fR\\fI""fim""\\fR""(1).\n"
 			"\n"
 			"\n")
 			;

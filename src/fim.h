@@ -235,6 +235,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_ERR_BUFFER_FULL	-1024 // FIXME: -2 seems in use
 #define FIM_ERR_UNSUPPORTED_DEVICE	-4
 #define FIM_ERR_BAD_PARAMS	-8
+#define FIM_ERR_OOPS		42
 
 #define FIM_ERR_TO_PERR(E)	(((unsigned char)(E)))
 
@@ -247,6 +248,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 //#define FIM_PERR_BUFFER_FULL	FIM_ERR_TO_PERR(FIM_ERR_BUFFER_FULL)
 #define FIM_PERR_UNSUPPORTED_DEVICE	FIM_ERR_TO_PERR(FIM_ERR_UNSUPPORTED_DEVICE)
 #define FIM_PERR_BAD_PARAMS	 FIM_ERR_TO_PERR(FIM_ERR_BAD_PARAMS)
+#define FIM_PERR_OOPS	FIM_ERR_TO_PERR(FIM_ERR_OOPS)
 
 /*
  * Some Fim error messages.

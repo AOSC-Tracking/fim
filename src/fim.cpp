@@ -435,13 +435,14 @@ int fim_dump_man_page()
 
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
 	//		string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.\n\n")+
-			string("This man page only describes the\n.B fim\ncommand line options.\n\n"
+			string("This man page only describes the\n.B fim\ncommand line options.\n"
+			"See man \\fR\\fI""fimrc""\\fR(5) for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n"
+			"\n"
 			".SH USAGE\n"
-			"You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any reasonable image viewer.\n"
+			"You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any image viewer with reasonable key bindings.\n"
 			"\n.B\nfim\nis keyboard oriented: there are no user menus or buttons available.\n"
 			"If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need to type a custom command. For these, you can use the internal command and configuration language.\n"
 			"The full specification for these is available at runtime using the internal help system.\n"
-			"\nAlternatively, see man fimrc for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n"
 			"\n"
 			"\n.SH OPTIONS\n"
 			"Accepted command line \n.B\n{options}\n:\n");
@@ -451,6 +452,7 @@ int fim_dump_man_page()
 			mp+=string(FIM_PERR_UNSUPPORTED_DEVICE)+string(" on unsupported device specification; ");
 			mp+=string(FIM_PERR_BAD_PARAMS)+string(" on bad input; ");
 			mp+=string(FIM_PERR_GENERIC)+string(" on a generic error; ");
+			mp+=string(FIM_PERR_OOPS)+string(" on a signal-triggered program exit; ");
 			mp+=string(" or a different value in case of an another error.\n"
 			" The return status may be controlled by the use of the "FIM_FLT_QUIT" command.\n"
 			".SH COMMON KEYS AND COMMANDS\n"
@@ -666,17 +668,17 @@ mp+=string(
 ".TP 15\n"
 ".B ~/.inputrc\n"
 "If\n.B Fim\n"
-"is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man readline)."
+"is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see"
+" (man \\fR\\fI""readline""\\fR(3))."
 "\n"
-
 			      )+
 string(
 ".SH SEE ALSO\n"
 "Other \n"
 ".B Fim \n"
-"man pages: fimgs(1), fimrc(1).\n"
+"man pages: ""\\fR\\fI""fimgs""\\fR""(1), ""\\fR\\fI""fimrc""\\fR""(1).\n"
 ".fi\n"
-"Or related programs: fbset(1), con2fb(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)\n"
+"Or related programs: ""\\fR\\fI""fbset""\\fR""(1), ""\\fR\\fI""con2fb""\\fR""(1), ""\\fR\\fI""convert""\\fR""(1), ""\\fR\\fI""vim""\\fR""(1), ""\\fR\\fI""fb.modes""\\fR""(8), ""\\fR\\fI""fbset""\\fR""(8), ""\\fR\\fI""fbgrab""\\fR""(1), ""\\fR\\fI""fbdev""\\fR""(4), ""\\fR\\fI""setfont""\\fR""(8), ""\\fR\\fI""xfs""\\fR""(1).\n"
 ".SH AUTHOR\n"
 ".nf\n"
 FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
