@@ -82,7 +82,7 @@ void fb_catch_exit_signals(void)
 #ifdef HAVE_SYS_SIGLIST
     FIM_FBI_PRINTF("Oops: %s\n",sys_siglist[termsig]);
 #endif
-    std::exit(42);
+    std::exit(FIM_PERR_OOPS);
 }
 
 

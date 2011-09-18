@@ -44,23 +44,22 @@ If configured at build time, fim will be capable of using SDL or aalib output.
 This man page only describes the
 .B fim
 command line options.
+See man \fR\fIfimrc\fR(5) for a full specification of the 
+.B
+fim
+language, commands, variables, and an example configuration file.
 
 .SH USAGE
 You may invoke
 .B
 fim
-from an interactive shell and control it with the keyboard, as you would do with any reasonable image viewer.
+from an interactive shell and control it with the keyboard, as you would do with any image viewer with reasonable key bindings.
 
 .B
 fim
 is keyboard oriented: there are no user menus or buttons available.
 If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need to type a custom command. For these, you can use the internal command and configuration language.
 The full specification for these is available at runtime using the internal help system.
-
-Alternatively, see man fimrc for a full specification of the 
-.B
-fim
-language, commands, variables, and an example configuration file.
 
 
 .SH OPTIONS
@@ -240,7 +239,7 @@ below to read some useful (and unique) ways of employing fim.
 		 set resolution (UNFINISHED)
 
 .SH PROGRAM RETURN STATUS
-The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error;  or a different value in case of an another error.
+The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error; 42 on a signal-triggered program exit;  or a different value in case of an another error.
  The return status may be controlled by the use of the quit command.
 .SH COMMON KEYS AND COMMANDS
 .nf
@@ -437,13 +436,13 @@ initialization file (executed at startup, after the system wide initialization f
 .B ~/.inputrc
 If
 .B Fim
-is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man readline).
+is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man \fR\fIreadline\fR(3)).
 .SH SEE ALSO
 Other 
 .B Fim 
-man pages: fimgs(1), fimrc(1).
+man pages: \fR\fIfimgs\fR(1), \fR\fIfimrc\fR(1).
 .fi
-Or related programs: fbset(1), con2fb(1), convert(1), vim(1), fb.modes(8), fbset(8), fbgrab(1), fbdev(4), setfont(8), xfs(1)
+Or related programs: \fR\fIfbset\fR(1), \fR\fIcon2fb\fR(1), \fR\fIconvert\fR(1), \fR\fIvim\fR(1), \fR\fIfb.modes\fR(8), \fR\fIfbset\fR(8), \fR\fIfbgrab\fR(1), \fR\fIfbdev\fR(4), \fR\fIsetfont\fR(8), \fR\fIxfs\fR(1).
 .SH AUTHOR
 .nf
 Michele Martone <dezperado _CUT_ autistici _CUT_ org> is the author of fim, "fbi improved". 
