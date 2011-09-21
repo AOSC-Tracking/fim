@@ -25,6 +25,7 @@
 
 
 #include "fim.h"
+#include "fim_plugin.h"
 #include "common.h"
 
 #include <stdio.h>	/* fdopen, tmpfile */
@@ -1837,6 +1838,9 @@ found_a_loader:	/* we have a loader */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
     if(img && loader)
 	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);
+#endif
+#if FIM_WANT_EXPERIMENTAL_PLUGINS
+	fim_post_read_plugins_exec(img,filename);
 #endif
     goto ret;
 

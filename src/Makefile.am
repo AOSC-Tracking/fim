@@ -89,6 +89,8 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	fim.h \
 	fim_types.h \
 	fim_limits.h \
+	fim_plugin.h \
+	fim_plugin.cpp \
 	fim_wrappers.h \
 	AADevice.h \
 	Benchmarkable.h \
