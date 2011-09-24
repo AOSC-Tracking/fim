@@ -43,11 +43,94 @@
 #define FIM_SHALL_BUFFER_STDIN 0
 #endif
 
+#define FIM_WANT_EXPERIMENTAL_MIPMAPS 0
+
 namespace fim
 {
 
 extern CommandConsole cc;
 
+
+/* ----------------------------------------------------------------------- */
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *src, fim_byte_t * dst)
+{
+	if(hw<1||hh<1)
+		goto err;
+#if 0
+	/* 'internal' version, unfinished */
+	for(int r=0;r<hh;++r)
+	for(int c=0;c<hw;++c)
+	for(int k=0;k<3;++k)
+	{
+		dst[3*(r*hw+c)+k]=
+			src[2*(3*((r+0)*w+c+0))+k]/4+src[2*(3*((r+0)*w+c+1))+k]/4+
+			src[2*(3*((r+1)*w+c+0))+k]/4+src[2*(3*((r+1)*w+c+1))+k]/4+
+			0;
+	}
+#else
+	/* 'external' version, unoptimized */
+	for(int r=0,hr=0;r<2*(h/2);++r,hr=r/2)
+	for(int c=0,hc=0;c<2*(w/2);++c,hc=c/2)
+	for(int k=0;k<3;++k)
+			dst[3*(hr*hw+hc)+k]+=src[3*(r*w+c)+k]/4;
+#endif
+	return FIM_ERR_NO_ERROR; 
+err:
+	return FIM_ERR_GENERIC;
+}
+
+static fim_err_t mipmaps_compute(struct ida_image *src)
+{
+	/* TODO: UNFINISHED 
+	 * Computation of mipmaps for a faster image downscaling.
+	 * */
+	const int MAX_MIPMAPS=32;
+	int mmoffs[MAX_MIPMAPS];
+	int mmsize[MAX_MIPMAPS];
+	int nmm=0,mmidx=0;
+	size_t mmb=0;
+	fim_byte_t* mmp=NULL;
+	int w=src->i.width,h=src->i.height,d;
+	if(!src)
+		goto err;
+	mmoffs[nmm]=0;
+	std::cout <<  3*src->i.width*src->i.height<< " bytes are needed for the original image\n";
+	for(d=2;w>=d && h>=d;d*=2)
+	{
+		mmsize[nmm]=(w/d)*(h/d)*3;
+		mmb+=mmsize[nmm];
+		mmoffs[nmm+1]=mmb;
+		++nmm;
+	}
+	std::cout << nmm << " mipmaps are possible\n";
+	std::cout << mmb << " bytes are needed for the mipmaps\n";
+	if(nmm<1)
+		goto err;
+	mmp=(fim_byte_t*)calloc(1,mmb);
+	if(!mmp)
+	{ goto err; }
+
+	if(nmm)
+		mipmap_compute(w,h,w/2,h/2,src->data,mmp+mmoffs[0]);
+	for(mmidx=1,d=2;mmidx<nmm;++mmidx,d*=2)
+	{
+		std::cout << w/d << " " << h/d <<  " at " << mmoffs[mmidx-1] << " ... " << mmoffs[mmidx] << " : "<< mmsize[mmidx] << "\n";
+		mipmap_compute(w/d,h/d,w/(2*d),h/(2*d),mmp+mmoffs[mmidx-1],mmp+mmoffs[mmidx]);
+	}
+	if(0)
+	{
+		src->i.width/=2;
+		src->i.height/=2;
+		src->data=mmp;
+	}
+
+	return FIM_ERR_NO_ERROR; 
+err:
+	return FIM_ERR_GENERIC;
+}
+#endif
+/* ----------------------------------------------------------------------- */
 
 // filter.c
 
@@ -1840,7 +1923,12 @@ found_a_loader:	/* we have a loader */
 	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);
 #endif
 #if FIM_WANT_EXPERIMENTAL_PLUGINS
-	fim_post_read_plugins_exec(img,filename);
+    	if(img)
+		fim_post_read_plugins_exec(img,filename);
+#endif
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+    	if(img)
+		mipmaps_compute(img);
 #endif
     goto ret;
 

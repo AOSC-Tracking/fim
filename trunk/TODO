@@ -10,11 +10,10 @@ advice, meanwhile if you would like to contribute with an idea, it may
 contribute to this file, too.
 
 Of course, the BUGS file is a source of constant inspiration (we may say,
-of a maniacal taste ) for further work, too.
+of a maniacal taste ) for further improvement, too.
 
 If you just intend to learn more about Fim, please read the program
-documentation in the "doc" directory first along with the man pages,
-of course.
+documentation in the "doc" directory first along with the man pages.
 
 Warning : Stuff in this file may be outdated, but necessary for
 ongoing further inspiration.
@@ -22,10 +21,32 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20110922	plugins shall be able to return variables
+20110921	need mipmap scaled versions of images; plugins as the opencv one may operate on a selected mipmap, and then incrementally go up
+20110913	shall use AC_ARG_VAR in configure.ac, so ./configure --help displays the 'precious' variables
+20110909	tty control stuff (e.g.:saved_attributes_) shall be compile time optional
+20110907	vedi liburiparser
+20110904	buffering stdin/whatever shall be tmpname/fd backed
+20110904	shall introduce more verbosity levels
+20110904	see http://barre.nom.fr/medical/samples/ for sample DICOM files
+20110902	'cd' should (may?) have vim's semantics
+20110902	every command should be profilable: how ?
+20110902	need fim-recipes (1) to collect misc wisdom
+20110901	should provide an easy and benchmarkable method (variable based) to load a big list of files (thousands) with maximum speed (that is, without checking the signatures)
+20110831	insert macros here and there for random or controlled error injection
+20110831	whenever possible, error strings shall be printed out escaped; if not possible, this should be reported.
+20110831	program return codes should reflect failure reason (e.g.: generic unspecified, input, internal, device, memory exhaustion, etc)
+20110830	should provide some statistics/microbenchmarks; e.g.: pixels/s in resize, or bytes/s in disk I/O, etc.
+20110830	write an 'interruptible' interface for heavier functions
+20110830	very big files should be allowed to be read with no big copy 
+20110830	smaller files should be allowed to be read with copy (so, a single from-disk copy)
+20110829	I am not sure whether --cd-and-readdir works; shall write an accurate test for this
+20110824	need statistics on memory usage, from within fim.
+20110824	need help [ "grep" | "find" ]
+20110823	need to interface to zip.h and libzip -- and define a 'buffered', or 'virtual' files abstraction
 20110917	should build a separate fim-main program, in order to generate a valid man help when the user manual will not be online (e.g.: in a minimalistically configured fim, with all inner docs cut out)
 20110820	should have a way to disable terminal control flow (thus allowing C-s, C-q)
 20110817	need macros to check for allowed width/height/bpp/... values
-20110817	s/bzero/fim_bzero s/malloc/fim_malloc s/calloc/fim_calloc
 20110816	fim.h should be an #include-only container !
 20110816	repeat should become a standard argument of commands
 20110801	is there a way to make fim load . if no file is specified ?
@@ -162,7 +183,7 @@ Minor but tricky (time consuming) features/issues:
 20080313	make each cpp file include exactly the header files used
 20080216	add textureview mode
 20091214	consider using libmagic
-20090810	:|ocr -
+20090810	:|ocr -   or    :<scan -
 20090218	implement a printf() like interface for customizing the status bar information (format specifiers)
 20090401	should use aa_getevent
 20081230	need of a square angle rotation support, especially for reading text documents
