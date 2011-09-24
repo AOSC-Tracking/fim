@@ -745,7 +745,16 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 	bool is_file(const fim::string nf)
 	{
 		/* FIXME */
+#if 0
 		return !is_dir(nf);
+#else
+		struct stat stat_s;
+		/*	if the file (it can be a device, but not a directory) doesn't exist, return */
+		if(-1==stat(nf.c_str(),&stat_s))return false;
+		if( S_ISDIR(stat_s.st_mode))return false;
+		/*if(!S_IFREG(stat_s.st_mode))return false;*/
+		return true;
+#endif
 	}
 
 int fim_isspace(int c){return isspace(c);}
