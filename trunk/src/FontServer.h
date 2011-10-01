@@ -38,7 +38,7 @@ namespace fim
 {
 
 
-#ifndef X_DISPLAY_MISSING
+#ifndef FIM_X_DISPLAY_MISSING
 # include <FSlib.h>
 
 struct fs_font {

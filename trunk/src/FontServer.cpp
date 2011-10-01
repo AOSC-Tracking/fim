@@ -45,7 +45,7 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
 
     if (NULL == *_f)
 	*_f = fs_consolefont(font ? fonts : NULL);
-#ifndef X_DISPLAY_MISSING
+#ifndef FIM_X_DISPLAY_MISSING
     if (NULL == *_f && 0 == fs_connect(NULL))
 	*_f = fs_open(font ? font : x11_font);
 #endif

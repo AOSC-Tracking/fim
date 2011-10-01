@@ -389,6 +389,9 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #include "Browser.h"
 #include "DebugConsole.h"
 #include "DummyDisplayDevice.h"
+#ifdef FIM_WITH_LIBIMLIB2
+#include "Imlib2Device.h"
+#endif
 #ifdef FIM_WITH_LIBSDL
 #include "SDLDevice.h"
 #endif

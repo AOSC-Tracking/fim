@@ -131,10 +131,10 @@ AC_ARG_ENABLE(imlib2, AC_HELP_STRING([--enable-imlib2], [Enable Imlib2 library s
 AC_CHECK_LIB([Imlib2],[imlib_create_image],
   [
 if test x"$fim_handle_imlib2" = x"yes" ; then 
-  dnl FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffMagick.o";
-  LIBS="$LIBS `imlib2-config --cppflags --ldflags --libs|tr '\n' ' '` ";
-  CXXFLAGS="$CXXFLAGS `imlib2-config --cppflags |tr '\n' ' '` ";
-  AC_DEFINE([HAVE_LIBIMLIB],[1],[We have libImlib])
+  FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS Imlib2Device.o";
+  LIBS="$LIBS `imlib2-config --libs|tr '\n' ' '` ";
+  CXXFLAGS="$CXXFLAGS `imlib2-config --cflags |tr '\n' ' '` ";
+  AC_DEFINE([FIM_WITH_LIBIMLIB2],[1],[We have libImlib])
 fi
   ], [])
 
@@ -1580,8 +1580,8 @@ AH_TEMPLATE([FIM_BUGGED_CACHE])
 dnl AC_DEFINE([FIM_BUGGED_CACHE])
 AH_TEMPLATE([FIM_VERSION])
 AC_DEFINE_UNQUOTED([FIM_VERSION],"${VERSION}")
-AH_TEMPLATE([X_DISPLAY_MISSING])
-AC_DEFINE([X_DISPLAY_MISSING])
+AH_TEMPLATE([FIM_X_DISPLAY_MISSING])
+AC_DEFINE([FIM_X_DISPLAY_MISSING])
 AH_TEMPLATE([FIM_TMP_FILENAME])
 AC_DEFINE_UNQUOTED([FIM_TMP_FILENAME],"$fim_cv_tmpfile")
 AH_TEMPLATE([FIM_ITERATED_COMMANDS])
