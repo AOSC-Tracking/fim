@@ -115,6 +115,30 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
 
 
+		#ifdef FIM_WITH_LIBIMLIB2
+		if(false)
+		{
+			DisplayDevice *imld=NULL;
+			fim::string fopts;
+			imld=new Imlib2Device(
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+					mc_,
+#endif
+					fopts
+					); if(imld && imld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete imld ; imld=NULL;}
+			if(imld && displaydevice_==NULL)
+			{
+				displaydevice_=imld;
+				//setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_SDL);
+				mangle_tcattr_=false;
+			}
+			else
+			{
+				device_failure=true;
+			}
+		}
+		#endif
+
 		#ifdef FIM_WITH_LIBSDL
 		if(device.find(FIM_DDN_INN_SDL)==0)
 		{

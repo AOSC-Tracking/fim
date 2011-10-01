@@ -23,7 +23,6 @@
 /*
  * NOTES : The SDL support is INCOMPLETE:
  *
- *  - largely inefficient, please do not be surprised
  *  - input problems when coupled with readline
  */
 #include "fim.h"
@@ -747,7 +746,7 @@ done:
 		{
 			fim_bzero(((fim_byte_t*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_, (x2-x1+1)* Bpp_);
 		}
-		return 0;
+		return FIM_ERR_NO_ERROR;
 	}
 
 void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data)
