@@ -32,7 +32,7 @@ class Command
 	Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(0) { type=BrowserT;}
 	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
 #ifdef FIM_WINDOWS
-	Command(fim::string cmd,fim::string help,Window *w=NULL,fim::string(Window::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
+	Command(fim::string cmd,fim::string help,FimWindow *w=NULL,fim::string(FimWindow::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
 #endif
 
 	fim::string getHelp()const{return help_;}
@@ -49,14 +49,14 @@ class Command
 		fim::string (Browser::*browserf)(const std::vector<fim::string>&) ;
 		fim::string (CommandConsole::*consolef)(const std::vector<fim::string>&) ;
 #ifdef FIM_WINDOWS
-		fim::string (Window::*windowf)(const std::vector<fim::string>&) ;
+		fim::string (FimWindow::*windowf)(const std::vector<fim::string>&) ;
 #endif
 	};
 	union{
 		Browser *browser;
 		CommandConsole *console;
 #ifdef FIM_WINDOWS
-		Window *window;
+		FimWindow *window;
 #endif
 	};
 	fim_cmd_type_t type;

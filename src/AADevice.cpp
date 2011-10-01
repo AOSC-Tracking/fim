@@ -564,7 +564,7 @@ err:
 		{
 			//status_line((const fim_char_t *)"window resizing not yet supported. sorry!");
 			cc.resize(0,0);
-			/*aa_resize(ascii_context_);*//*we are not yet ready : the Window and Viewport stuff .. */
+			/*aa_resize(ascii_context_);*//*we are not yet ready : the FimWindow and Viewport stuff .. */
 			return 0;
 		}/* esc  */
 

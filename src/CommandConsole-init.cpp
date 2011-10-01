@@ -244,7 +244,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 
 		try
 		{
-			window_ = new Window( *this, Rect(0,0,xres,yres) );
+			window_ = new FimWindow( *this, Rect(0,0,xres,yres) );
 
 			if(window_)window_->setroot();
 		}
@@ -256,7 +256,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		/*
 		 * TODO: exceptions should be launched here in case ...
 		 * */
-		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&Window::fcmd_cmd));
+		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&FimWindow::fcmd_cmd));
 #else
 		try
 		{

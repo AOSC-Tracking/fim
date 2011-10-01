@@ -39,7 +39,7 @@ namespace fim
 	Viewport::Viewport(
 			CommandConsole &c
 #ifdef FIM_WINDOWS
-			,Window *window
+			,FimWindow *window
 #endif
 			)
 			:steps_(0)
@@ -574,7 +574,7 @@ namespace fim
 	}
 
 #ifdef FIM_WINDOWS
-        void Viewport::reassignWindow(Window *w)
+        void Viewport::reassignWindow(FimWindow *w)
 	{
 		window_ = w;
 	}

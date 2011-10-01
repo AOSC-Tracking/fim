@@ -65,7 +65,7 @@ class CommandConsole
 
 #ifdef FIM_WINDOWS
 	public:// 20110617 this is terrible, I know
-	fim::Window * window_;
+	fim::FimWindow * window_;
 	private:
 #endif
 	/*
@@ -327,7 +327,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 
 	fim::string get_alias_info(const fim::string aname)const;
 #ifdef FIM_WINDOWS
-	const Window & current_window()const;
+	const FimWindow & current_window()const;
 #endif
 	fim::string get_variables_list()const;
 	fim::string get_aliases_list()const;

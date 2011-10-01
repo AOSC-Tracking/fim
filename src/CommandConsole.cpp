@@ -411,7 +411,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND" "FIM_CNS_EX_KSY_STRING" : unbind the action associated to a specified "FIM_CNS_EX_KSY_STRING FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::fcmd_unbind));
 		addCommand(new Command(fim::string(FIM_FLT_WHILE),fim::string("while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the "FIM_KBD_ESC" or the "FIM_KBD_COLON" key"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
 #ifdef FIM_WINDOWS
-		/* this is a stub for the manual generation (actually, the Window object gets built later) */
+		/* this is a stub for the manual generation (actually, the FimWindow object gets built later) */
 		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW),this,&CommandConsole::fcmd_foo));
 #endif
 //		addCommand(new Command(fim::string("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
@@ -1922,7 +1922,7 @@ ok:
 	}
 
 #ifdef FIM_WINDOWS
-	const Window & CommandConsole::current_window()const
+	const FimWindow & CommandConsole::current_window()const
 	{
 		/*
 		 * returns a reference to the current window_.
