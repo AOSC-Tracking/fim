@@ -127,6 +127,17 @@ if test x"$fim_handle_graphicsmagick" = x"yes" ; then
 fi
   ], [])
 
+AC_ARG_ENABLE(imlib2, AC_HELP_STRING([--enable-imlib2], [Enable Imlib2 library support (EXPERIMENTAL).]), [ if test x$enableval != xno ; then fim_handle_imlib2=yes ; fi ] )
+AC_CHECK_LIB([Imlib2],[imlib_create_image],
+  [
+if test x"$fim_handle_imlib2" = x"yes" ; then 
+  dnl FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffMagick.o";
+  LIBS="$LIBS `imlib2-config --cppflags --ldflags --libs|tr '\n' ' '` ";
+  CXXFLAGS="$CXXFLAGS `imlib2-config --cppflags |tr '\n' ' '` ";
+  AC_DEFINE([HAVE_LIBIMLIB],[1],[We have libImlib])
+fi
+  ], [])
+
 AC_CHECK_PROG([HAVE_FLEX],[flex],[yes],[no])
 AC_CHECK_PROG([HAVE_BISON],[bison],[yes],[no])
 if test x$HAVE_FLEX  != x"yes" ; then
@@ -1660,6 +1671,7 @@ AC_MSG_NOTICE([
 	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
 	ps   file support (libspectre)      : ${fim_handle_ps:-no}
 	GraphicsMagick support              : ${fim_handle_graphicsmagick:-no}
+dnl	Imlib support                       : ${fim_handle_imlib2:-no}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
