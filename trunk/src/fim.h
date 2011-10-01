@@ -142,7 +142,7 @@ namespace fim
 	class Var;
 	class MiniConsole;
 #ifdef FIM_WINDOWS
-	class Window;
+	class FimWindow;
 #endif
 	class Viewport;
 	class fim_stream;
@@ -385,7 +385,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #include "Image.h"
 #include "Cache.h"
 #include "Viewport.h"
-#include "Window.h"
+#include "FimWindow.h"
 #include "Browser.h"
 #include "DebugConsole.h"
 #include "DummyDisplayDevice.h"

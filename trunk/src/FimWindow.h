@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- Window.h : Fim's own windowing system header file
+ FimWindow.h : Fim's own windowing system header file
 
  (c) 2007-2011 Michele Martone
 
@@ -132,9 +132,9 @@ class Rect
 
 
 #ifdef FIM_NAMESPACES
-class Window:public Namespace
+class FimWindow:public Namespace
 #else
-class Window
+class FimWindow
 #endif
 {
 	
@@ -154,7 +154,7 @@ class Window
 	Rect corners_;//,status,canvas;
 	bool focus_;	// if 0 left/up ; otherwise right/lower
 
-	Window *first_,*second_;
+	FimWindow *first_,*second_;
 	bool amroot_;
 	
 	void split();
@@ -171,8 +171,8 @@ class Window
 	fim_err_t henlarge(fim_coo_t units);
 	fim_err_t venlarge(fim_coo_t units);
 
-	bool can_vgrow(const Window & window, fim_coo_t howmuch);
-	bool can_hgrow(const Window & window, fim_coo_t howmuch);
+	bool can_vgrow(const FimWindow & window, fim_coo_t howmuch);
+	bool can_hgrow(const FimWindow & window, fim_coo_t howmuch);
 
 
 
@@ -184,7 +184,7 @@ class Window
 	 it is hust defined to make -Weffc++ happy
 	 so keep this private!
 	*/
-	Window(const Window & root);
+	FimWindow(const FimWindow & root);
 //#endif
 	bool isleaf()const;
 	bool isvalid()const;
@@ -206,40 +206,40 @@ class Window
 	fim_err_t hlshrink(fim_coo_t units);
 	fim_err_t hrshrink(fim_coo_t units);
 
-	Window & focused()const;
-	Window & shadowed()const;
+	FimWindow & focused()const;
+	FimWindow & shadowed()const;
 
-	Window & upper();
-	Window & lower();
-	Window & left();
-	Window & right();
+	FimWindow & upper();
+	FimWindow & lower();
+	FimWindow & left();
+	FimWindow & right();
 
 	fim_coo_t setwidth(fim_coo_t w);
 	fim_coo_t setheight(fim_coo_t h);
 	fim_coo_t setxorigin(fim_coo_t x);
 	fim_coo_t setyorigin(fim_coo_t y);
 
-	bool operator==(const Window&window)const;
+	bool operator==(const FimWindow&window)const;
 
 	Viewport *viewport_;
 
 	/*
 	 * DANGER : nearly each of these methods launches some exception!
 	 * */
-	const Window & c_focused()const;
-	const Window & c_shadowed()const;
+	const FimWindow & c_focused()const;
+	const FimWindow & c_shadowed()const;
 
 	Viewport & current_viewport()const;
 	CommandConsole &commandConsole_;
 
-	Window & operator= (const Window &w){return *this;/* a nilpotent assignation */}
+	FimWindow & operator= (const FimWindow &w){return *this;/* a nilpotent assignation */}
 
 	public:
 	void setroot();	// only one root window should exist
 
 	/* The only public method launching exceptions is the constructor now.
 	 * */
-	Window(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
+	FimWindow(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
 	fim_err_t update(const Rect& corners);
 
 	Viewport * current_viewportp()const;
@@ -259,7 +259,7 @@ class Window
 	fim_coo_t width()const;
 	fim_coo_t xorigin()const;
 	fim_coo_t yorigin()const;
-	~Window();
+	~FimWindow();
 };
 
 }

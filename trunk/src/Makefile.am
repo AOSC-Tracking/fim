@@ -114,7 +114,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Namespace.h \
 	Var.h \
 	Viewport.h \
-	Window.h \
+	FimWindow.h \
 	common.h \
 	conf.h \
 	help.cpp \
@@ -157,7 +157,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Namespace.cpp \
 	Var.cpp \
 	Viewport.cpp \
-	Window.cpp \
+	FimWindow.cpp \
 	common.cpp \
 	interpreter.cpp \
 	string.cpp

@@ -49,7 +49,7 @@ class Viewport
 
 	Image  *image_;	// !! 
 #ifdef FIM_WINDOWS
-	Window *window_;
+	FimWindow *window_;
 #endif
 
 	CommandConsole &commandConsole;
@@ -57,13 +57,13 @@ class Viewport
         void reset();
         void steps_reset();
 #ifdef FIM_WINDOWS
-        void reassignWindow(Window *w);
+        void reassignWindow(FimWindow *w);
 #endif
 
 	Viewport( //yes, horrible
 			CommandConsole &c
 #ifdef FIM_WINDOWS
-			,Window *window
+			,FimWindow *window
 #endif
 			);
 
