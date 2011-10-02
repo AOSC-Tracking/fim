@@ -29,6 +29,17 @@
 class Imlib2Device:public DisplayDevice 
 {
 	private:
+   	XEvent ev_;
+   	Imlib_Updates updates_, current_update_;
+   	Imlib_Image buffer_;
+	fim_coo_t current_w_;
+	fim_coo_t current_h_;
+
+	Imlib_Image image;// FIXME: -> tmpimage
+        int w, h, text_w, text_h; // FIXME: temporary vals
+	bool want_windowed_;
+	bool want_mouse_display_;
+	bool want_resize_;
 
 	public:
 
@@ -53,6 +64,7 @@ class Imlib2Device:public DisplayDevice
 		);
 
 	fim_err_t initialize(sym_keys_t &sym_keys);
+	fim_err_t il2_initialize();
 	void finalize() ;
 
 	int get_chars_per_line() ;
@@ -69,9 +81,9 @@ class Imlib2Device:public DisplayDevice
 	void flush();
 	void lock();
 	void unlock();
-	fim_bpp_t get_bpp(){return 0; };
+	fim_bpp_t get_bpp();
 	private:
-	fim_err_t clear_rect_( void* dst, fim_coo_t oroff,fim_coo_t ocoff,fim_coo_t  orows,fim_coo_t ocols,fim_coo_t  ocskip);
+	fim_sys_int get_input_i2l(fim_key_t * c);
 	/* TEMPORARY */
 	void status_screen_(int desc,int draw_output){ return ; }
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color);

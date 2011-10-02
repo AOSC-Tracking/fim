@@ -238,7 +238,7 @@ static int fim_post_rl_getc(int c)
 	return c;
 }
 
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBIMLIB2)
 static int fim_rl_sdl_aa_getc_hook()
 {
 	//unsigned int c;
@@ -397,11 +397,12 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	        rl_event_hook=redisplay_hook;
 	        rl_pre_input_hook=redisplay_hook;
 	}
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB)
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBIMLIB2)
 	//if( g_fim_output_device==FIM_DDN_INN_SDL 
 	if(g_fim_output_device.find(FIM_DDN_INN_SDL)==0
 		/* uncommenting the following may give problems; but commenting it will break X11-backed aalib input ..  */ 
 		|| g_fim_output_device==FIM_DDN_INN_AA
+		|| g_fim_output_device==FIM_DDN_INN_IL2
 	)
 	{
 		rl_getc_function=fim_rl_sdl_aa_getc;
