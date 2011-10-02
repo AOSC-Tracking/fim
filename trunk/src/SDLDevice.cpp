@@ -729,7 +729,7 @@ done:
 		/*
 		 * This could be optimized
 		 * */
-		for(y=y1;y<y2;++y)
+		for(y=y1;y<=y2;++y)
 		{
 			fim_memset(((fim_byte_t*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1)* Bpp_);
 		}
@@ -860,7 +860,7 @@ err:
 			goto done;
 		clear_rect(0, width()-1, y+1,y+f_->height+ys-1);
 		fs_puts(f_, 0, y+ys, msg);
-		fill_rect(0,width()-1, y, y+1, 0xFF);	// FIXME : NO 1!
+		fill_rect(0,width()-1, y, y, 0xFF);!
 
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 		SDL_Flip(screen_);
