@@ -543,6 +543,8 @@ namespace fim
 #define FIM_DDN_VAR_FB	 "fb"
 #define FIM_DDN_INN_SDL	 "sdl"
 #define FIM_DDN_VAR_SDL	 "sdl"
+#define FIM_DDN_INN_IL2	 "imlib2"
+#define FIM_DDN_VAR_IL2	 "imlib2"
 #define FIM_DDN_INN_AA	 "aa"
 #define FIM_DDN_VAR_AA	 "aa"
 #define FIM_DDN_INN_CACA	 "caca"
@@ -722,6 +724,8 @@ namespace fim
 #define FIM_CONSOLE_BLOCKSIZE	1024
 #define FIM_CONSOLE_DEF_WIDTH	128
 #define FIM_BITRENDERING_DEF_WIDTH	1024
+#define FIM_DEFAULT_WINDOW_WIDTH	640
+#define FIM_DEFAULT_WINDOW_HEIGHT	512
 #define FIM_RENDERING_DPI	200
 #define FIM_RENDERING_MAX_ROWS	1024
 #define FIM_RENDERING_MAX_COLS	1024

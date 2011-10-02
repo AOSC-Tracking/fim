@@ -116,7 +116,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 
 
 		#ifdef FIM_WITH_LIBIMLIB2
-		if(false)
+		if(device.find(FIM_DDN_VAR_IL2)==0)
 		{
 			DisplayDevice *imld=NULL;
 			fim::string fopts;
@@ -125,11 +125,12 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 					mc_,
 #endif
 					fopts
-					); if(imld && imld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete imld ; imld=NULL;}
+					);
+			if(imld && imld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete imld ; imld=NULL;}
 			if(imld && displaydevice_==NULL)
 			{
 				displaydevice_=imld;
-				//setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_SDL);
+				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_IL2);
 				mangle_tcattr_=false;
 			}
 			else
@@ -264,7 +265,10 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		/* true pixels if we are in framebuffer mode */
 		/* fake pixels if we are in text (er.. less than!) mode */
 		if( xres<=0 || yres<=0 )
+		{
+			std::cerr << "Unable to spawn a suitable display.\n";
 		       	return FIM_ERR_BAD_PARAMS;
+		}
 
 		try
 		{

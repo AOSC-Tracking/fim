@@ -165,6 +165,9 @@ NULL
 #if FIM_WANT_SDL_OPTIONS_STRING 
 "The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the \\fB'w'\\fP character requests windowed mode; the \\fB'm'\\fP character requests mouse pointer display; the \\fB'r'\\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
 #endif
+#ifdef FIM_WITH_LIBIMLIB2
+/* FIXME: shall document this */
+#endif
     },
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
 "Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation)."
@@ -538,8 +541,10 @@ mp+=string(
 ""FIM_ENV_FRAMEBUFFER"	(just like in fbi) user set framebuffer device file (applies only to the "FIM_DDN_INN_FB" mode).\n"
 "If unset, fim will probe for "FIM_DEFAULT_FB_FILE".\n"
 ""FIM_CNS_TERM_VAR"		(only in fim) will influence the output device selection algorithm, especially if $"FIM_CNS_TERM_VAR"==\"screen\".\n"
-#ifdef FIM_WITH_LIBSDL
+#if defined(FIM_WITH_LIBSDL)
 ""FIM_ENV_DISPLAY"	If this variable is set, then the "FIM_DDN_INN_SDL" driver will be tried by default.\n"
+#elif defined(FIM_WITH_LIBIMLIB2)
+""FIM_ENV_DISPLAY"	If this variable is set, then the "FIM_DDN_INN_IL2" driver will be tried by default.\n"
 #endif
 ".SH COMMON PROBLEMS\n"
 ".B fim\n"
@@ -639,7 +644,7 @@ mp+=string(
 "The filename \""FIM_STDIN_IMAGE_NAME"\" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.\n"
 #endif
 #ifdef FIM_WITH_LIBSDL
-"The SDL driver is very inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.\n"
+"The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.\n"
 #endif
 ".SH BUGS\n"
 ".B fim\n"
@@ -1231,11 +1236,16 @@ done:
 		/* output device guess */
 		if( g_fim_output_device==FIM_CNS_EMPTY_STRING )
 		{
-			#ifdef FIM_WITH_LIBSDL
+			#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2)
 			/* check to see if we are under X */
 			if( fim_getenv(FIM_ENV_DISPLAY) )
 			{
+	#ifdef FIM_WITH_LIBIMLIB2
+				g_fim_output_device=FIM_DDN_INN_IL2;
+	#endif
+	#ifdef FIM_WITH_LIBSDL
 				g_fim_output_device=FIM_DDN_INN_SDL;
+	#endif
 			}
 			else
 			#endif
@@ -1372,6 +1382,9 @@ fim_perr_t main(int argc,char *argv[])
 	#endif
 	#ifdef FIM_WITH_CACALIB
 		" "FIM_DDN_INN_CACA
+	#endif
+	#ifdef FIM_WITH_LIBIMLIB2
+		" "FIM_DDN_INN_IL2
 	#endif
 	#ifdef FIM_WITH_LIBSDL
 		" "FIM_DDN_INN_SDL
