@@ -533,8 +533,16 @@ namespace fim
 #define FIM_KBD_PAGEUP			"PageUp"
 #define FIM_KBD_PAGEDOWN			"PageDown"
 #define FIM_KBD_COLON			":"
+#define FIM_KBD_SEMICOLON			";"
 #define FIM_KBD_MOUSE_LEFT			"MouseLeft"
 #define FIM_KBD_MOUSE_RIGHT			"MouseRight"
+#define FIM_KBD_PLUS			"+"
+#define FIM_KBD_MINUS			"-"
+#define FIM_KBD_SLASH			"/"
+#define FIM_KBD_ASTERISK			"*"
+#define FIM_KBD_GT			">"
+#define FIM_KBD_LT			"<"
+#define FIM_KBD_UNDERSCORE			"_"
 
 /*
  * Fim Display Driver Names

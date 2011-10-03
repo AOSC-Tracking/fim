@@ -255,9 +255,66 @@ err:
 		return FIM_ERR_GENERIC;
 	}
 
+static fim_err_t initialize_keys(sym_keys_t &sym_keys)
+{
+		sym_keys[FIM_KBD_BACKSPACE]=XK_BackSpace;
+		sym_keys[FIM_KBD_DEL]=XK_Delete;
+		sym_keys[FIM_KBD_ESC]=XK_Escape;
+		sym_keys[FIM_KBD_PAGEUP]=XK_KP_Page_Up;
+		sym_keys[FIM_KBD_PAGEDOWN]=XK_KP_Page_Down;
+		sym_keys[FIM_KBD_LEFT]=XK_Left;
+		sym_keys[FIM_KBD_RIGHT]=XK_Right;
+		sym_keys[FIM_KBD_UP]=XK_Up;
+		sym_keys[FIM_KBD_DOWN]=XK_Down;
+		sym_keys[FIM_KBD_SPACE]=XK_space;
+		sym_keys[FIM_KBD_END]=XK_KP_End;
+		sym_keys[FIM_KBD_HOME]=XK_KP_Home;
+		//XK_KP_Begin
+		//sym_keys["F1" ]=SDLK_F1;
+		sym_keys["0"]=XK_KP_0;
+		sym_keys["1"]=XK_KP_1;
+		sym_keys["2"]=XK_KP_2;
+		sym_keys["3"]=XK_KP_3;
+		sym_keys["4"]=XK_KP_4;
+		sym_keys["5"]=XK_KP_5;
+		sym_keys["6"]=XK_KP_6;
+		sym_keys["7"]=XK_KP_7;
+		sym_keys["8"]=XK_KP_8;
+		sym_keys["9"]=XK_KP_9;
+		sym_keys[FIM_KBD_PLUS]=XK_KP_Add;
+		sym_keys[FIM_KBD_MINUS]=XK_KP_Subtract;
+		sym_keys[FIM_KBD_SLASH]=XK_KP_Divide;
+		sym_keys[FIM_KBD_ASTERISK]=XK_KP_Multiply;
+		sym_keys[FIM_KBD_GT]=XK_greater;
+		sym_keys[FIM_KBD_LT]=XK_less;
+		sym_keys[FIM_KBD_UNDERSCORE]=XK_underscore;
+		sym_keys["F1" ]=XK_F1;
+		sym_keys["F2" ]=XK_F2;
+		sym_keys["F3" ]=XK_F3;
+		sym_keys["F4" ]=XK_F4;
+		sym_keys["F5" ]=XK_F5;
+		sym_keys["F6" ]=XK_F6;
+		sym_keys["F7" ]=XK_F7;
+		sym_keys["F8" ]=XK_F8;
+		sym_keys["F9" ]=XK_F9;
+		sym_keys["F10"]=XK_F10;
+		sym_keys["F11"]=XK_F11;
+		sym_keys["F12"]=XK_F12;
+		sym_keys[FIM_KBD_COLON]=XK_colon;
+		sym_keys[FIM_KBD_SEMICOLON]=XK_semicolon;
+		//sym_keys[FIM_KBD_a]=XK_a;
+		//XK_bar
+		//XK_minus
+		//XK_plus
+		fim_perror(NULL);
+		cc.key_syms_update();
+		return FIM_ERR_NO_ERROR;
+}
+
 	fim_err_t Imlib2Device::initialize(sym_keys_t &sym_keys)
 	{
 		/* FIXME */
+		initialize_keys(sym_keys);
 		return il2_initialize();
 	}
 
@@ -309,12 +366,24 @@ fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
 			case KeyPress:
 			{
 				char buf[FIM_ATOX_BUFSIZE];
+				int nc=0;
 				KeySym  ks;
-				rc=1;
-      				XLookupString(&ev_.xkey,buf,sizeof(buf),&ks,NULL);
+				buf[nc]=FIM_SYM_CHAR_NUL;
+      				nc=XLookupString(&ev_.xkey,buf,sizeof(buf),&ks,NULL);
+				buf[nc]=FIM_SYM_CHAR_NUL;
 				//FIM_IL2_PRINTF("PKEY :%d:%s:%d\n",ev_.xkey.keycode,buf,ks);
-				pk=ks;
-				if(ev_.xkey.keycode==23)pk='\t';/* FIXME */
+				if( *buf)rc=1;else break;
+				if(nc==1)
+					pk=*buf;
+				else
+					pk=ks;
+				//if(ev_.xkey.keycode==23)pk='\t';/* FIXME */
+				//FIM_IL2_PRINTF("PRESSED :%d %c\n",pk,pk);
+      				ks=XLookupKeysym(&ev_.xkey,0);
+				if(ks!=NoSymbol)
+					;//FIM_IL2_PRINTF("SYM :%d %c\n",ks,ks);
+				else
+					rc=0;
 			}
 			break;
 			case KeyRelease:
@@ -523,11 +592,14 @@ done:
 	fim_err_t Imlib2Device::set_wm_caption(const fim_char_t *msg)
 	{
 		// FIXME: unfinished
-		//fim_err_t rc=FIM_ERR_NO_ERROR;
+#if 1
 		fim_err_t rc=FIM_ERR_UNSUPPORTED;
+#else
+		fim_err_t rc=FIM_ERR_NO_ERROR;
 		if(!msg)
 			goto err;
        		XStoreName(disp,win,msg);
+#endif
 err:
 		return rc;
 	}
@@ -535,9 +607,12 @@ err:
 	fim_err_t Imlib2Device::reset_wm_caption()
 	{
 		// FIXME: unfinished
+#if 1
        		XStoreName(disp,win,"");
-		//return FIM_ERR_UNSUPPORTED;
 		return FIM_ERR_NO_ERROR;
+#else
+		return FIM_ERR_UNSUPPORTED;
+#endif
 	}
 #endif
 
