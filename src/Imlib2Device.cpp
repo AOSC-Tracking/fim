@@ -61,8 +61,11 @@ static Window   win;
 			):DisplayDevice(),
 #endif
    	current_w_(FIM_DEFAULT_WINDOW_HEIGHT), current_h_(FIM_DEFAULT_WINDOW_WIDTH)
+	,want_windowed_(false)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
+		const fim_char_t*os=opts.c_str();
+		parse_optstring(os);
 	}
 
 fim_bpp_t Imlib2Device::get_bpp(){return depth; }
@@ -83,7 +86,7 @@ fim_err_t Imlib2Device::parse_optstring(const fim_char_t *os)
 				if(isupper(*os))
 					tv=false;
 				switch(tolower(*os)){
-					//case 'w': want_windowed=tv; break;
+					case 'w': want_windowed=tv; break;
 					//case 'm': want_mouse_display=tv; break;
 					//case 'r': want_resize=tv; break;
 					default: std::cerr<<"unrecognized specifier character \""<<*os<<"\"\n";goto err;
@@ -209,12 +212,29 @@ ret:
 		return FIM_ERR_NO_ERROR;
 	}
 
+	void Imlib2Device::apply_fullscreen()
+	{
+		Atom prop_fs=XInternAtom(disp,"_NET_WM_STATE_FULLSCREEN",True);
+		Atom prop_state=XInternAtom(disp,"_NET_WM_STATE",True);
+		XChangeProperty(disp,win,prop_state,XA_ATOM,32,PropModeReplace,(unsigned char*)&prop_fs,want_windowed_?0:1);
+	}
+
+	void Imlib2Device::toggle_fullscreen()
+	{
+		want_windowed_=!want_windowed_;
+		apply_fullscreen();
+	}
+
 	fim_err_t Imlib2Device::il2_initialize()
 	{
+		if(!disp)
    		disp=XOpenDisplay(NULL);
 		if(!disp)goto err;
+		if(!vis)
    		vis=DefaultVisual(disp,DefaultScreen(disp));
 		if(!vis)goto err;
+		if(win)
+		XDestroyWindow(disp,win);
    		depth=DefaultDepth(disp,DefaultScreen(disp));
    		cm=DefaultColormap(disp,DefaultScreen(disp));
 #if 0
@@ -240,8 +260,9 @@ ret:
                           | CWColormap | CWBackPixel | CWBorderPixel | CWEventMask, &attr);
 		}
 #endif
-   		XSelectInput(disp, win, FIM_IMLIB2_X_MASK );
-   		XMapWindow(disp, win);
+   		XSelectInput(disp,win,FIM_IMLIB2_X_MASK);
+		apply_fullscreen();
+   		XMapWindow(disp,win);
 		/* FIXME: omitting cache sizes --- we do not load neither images, nor fonts */
 		/* FIXME: not handling dithering */
 		imlib_context_set_display(disp);
@@ -249,7 +270,6 @@ ret:
 		imlib_context_set_colormap(cm);
 		imlib_context_set_drawable(win);
 		resize(current_w_,current_h_);
-
 		return FIM_ERR_NO_ERROR;
 err:
 		return FIM_ERR_GENERIC;

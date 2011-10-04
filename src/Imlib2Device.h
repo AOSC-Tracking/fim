@@ -96,6 +96,9 @@ class Imlib2Device:public DisplayDevice
 	fim_err_t parse_optstring(const fim_char_t *os);
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg);
 	fim_err_t reset_wm_caption();
+	protected:
+	void toggle_fullscreen();
+	void apply_fullscreen();
 };
 
 
