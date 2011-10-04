@@ -120,6 +120,14 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		{
 			DisplayDevice *imld=NULL;
 			fim::string fopts;
+			int dsl=strlen(FIM_DDN_INN_IL2);
+			int ssl=strlen(FIM_SYM_DEVOPTS_SEP_STR);
+			std::string opts;
+			if(device.length()>dsl+ssl)
+			{
+				opts=device.substr(dsl+ssl,device.length());
+				fopts=opts.c_str();//FIXME
+			}
 			imld=new Imlib2Device(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_,
