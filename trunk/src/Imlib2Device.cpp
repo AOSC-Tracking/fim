@@ -568,7 +568,7 @@ done:
 	fim_key_t Imlib2Device::catchInteractiveCommand(fim_ts_t seconds)const
 	{
 		// FIXME: missing handling code, here
-		return 0;
+		return -1;
 	}
 
 	void Imlib2Device::flush()
