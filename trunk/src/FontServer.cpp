@@ -28,6 +28,15 @@
 #include <dirent.h>
 #include "fim.h"
 
+#define FIM_FONT_DEBUG 0
+//#define ff_stderr stdout
+#define ff_stderr stderr
+#define FIM_PSF1_MAGIC0     0x36
+#define FIM_PSF1_MAGIC1     0x04
+#define FIM_PSF2_MAGIC0     0x72
+#define FIM_PSF2_MAGIC1     0xb5
+#define FIM_PSF2_MAGIC2     0x4a
+#define FIM_PSF2_MAGIC3     0x86
 namespace fim
 {
 
@@ -42,15 +51,23 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
 { 
     const fim_char_t*font=(fim_char_t*)font_;
     const fim_char_t *fonts[2] = { font, NULL };
-
+#if FIM_FONT_DEBUG
+    std::cout << "before consolefont:" << "(0x"<<((void*)*_f) <<")\n";
+#endif
     if (NULL == *_f)
 	*_f = fs_consolefont(font ? fonts : NULL);
+#if FIM_FONT_DEBUG
+    std::cout << "after consolefont :" << "(0x"<<((void*)*_f) <<")\n";
+#endif
 #ifndef FIM_X_DISPLAY_MISSING
     if (NULL == *_f && 0 == fs_connect(NULL))
 	*_f = fs_open(font ? font : x11_font);
 #endif
+#if FIM_FONT_DEBUG
+    std::cout << "after fs_open     :" << "(0x"<<((void*)*_f) <<")\n";
+#endif
     if (NULL == *_f) {
-	FIM_FPRINTF(stderr, "font \"%s\" is not available\n",font);
+	FIM_FPRINTF(ff_stderr, "font \"%s\" is not available\n",font);
 	exit(1);
     }
 }
@@ -60,6 +77,7 @@ static const fim_char_t *default_font[] = {
     /* why the heck every f*cking distribution picks another
        location for these fonts ??? (GK)
        +1 (MM) */
+    "/dev/null",
     "/usr/share/consolefonts/lat1-16.psf",
     "/usr/share/consolefonts/lat1-16.psf.gz",
     "/usr/share/consolefonts/lat1-16.psfu.gz",
@@ -132,6 +150,7 @@ no:
 
 struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
 {
+    /* this function is too much involved: it shall be split in pieces */
     int  i=0;
     int  fr;
     const fim_char_t *h=NULL;
@@ -139,19 +158,28 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
     const fim_char_t *fontfilename=NULL;
     FILE *fp=NULL;
     fim_char_t fontfilenameb[FIM_PATH_MAX];
+    bool robmn=true;/* retry on bad magic numbers */
 
     if (NULL == filename)
 	filename = fim::default_font;
 
+scanlistforafontfile:
     for(i = 0; filename[i] != NULL; i++) {
 	if (-1 == access(filename[i],R_OK))
 	{
-	fim_perror(NULL);
+#if FIM_FONT_DEBUG
+    std::cout << "no access to " << filename[i] << "\n";
+#endif
+	    fim_perror(NULL);
 	    continue;
 	}
 	break;
     }
     fontfilename=filename[i];
+    filename+=i;//new
+#if FIM_FONT_DEBUG
+    std::cout << "probing :" << fontfilename << "\n";
+#endif
 
 #if FIM_LINUX_CONSOLEFONTS_DIR_SCAN 
     if(NULL == fontfilename)
@@ -185,8 +213,8 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
 #endif
 
     if (NULL == fontfilename) {
-	FIM_FPRINTF(stderr, "can't find console font file\n");
-	return NULL;
+	FIM_FPRINTF(ff_stderr, "can't find console font file\n");
+	goto oops;
     }
 
     h = fontfilename+strlen(fontfilename)-3;
@@ -194,24 +222,37 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
 	#ifdef FIM_USE_ZCAT
 	/* FIXME */
 	fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,NULL);
+	#else
+	FIM_FPRINTF(ff_stderr, "built with no gzip decoder!\n");
 	#endif
     } else {
 	fp = fopen(fontfilename, "r");
     }
     if (NULL == fp) {
-	FIM_FPRINTF(stderr, "can't open %s: %s\n",fontfilename,strerror(errno));
-	return NULL;
+	FIM_FPRINTF(ff_stderr, "can't open %s: %s\n",fontfilename,strerror(errno));
+	goto oops;
     }
-
-    if (fgetc(fp) != 0x36 ||
-	fgetc(fp) != 0x04) {
-	FIM_FPRINTF(stderr, "can't use font %s\n",fontfilename);
-	return NULL;
+{
+    int m0=0,m1=0;
+    m0=fgetc(fp);
+    m1=fgetc(fp);
+    if (m0 == EOF     || m1 == EOF     ) {
+	FIM_FPRINTF(ff_stderr, "problems reading two first bytes from %s.\n",fontfilename);
+	goto oops;
     }
-//    FIM_FPRINTF(stderr, "using linux console font \"%s\"\n",filename[i]);
+    if (m0 == FIM_PSF2_MAGIC0     && m1 == FIM_PSF2_MAGIC1     ) {
+	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) conform to PSF version 2, which is unsupported.\n",fontfilename,m0,m1);
+	goto oops;
+    }
+    if (m0 != FIM_PSF1_MAGIC0     || m1 != FIM_PSF1_MAGIC1     ) {
+	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) not conforming to PSF version 1\n",fontfilename,m0,m1);
+	goto oops;
+    }
+}
+//    FIM_FPRINTF(ff_stderr, "using linux console font \"%s\"\n",filename[i]);
 
     f_ =(struct fs_font*) fim_calloc(sizeof(*f_),1);
-    if(!f_)goto oops;
+    if(!f_)goto aoops;
     fim_bzero(f_,sizeof(*f_));
 	
     fgetc(fp);
@@ -224,17 +265,17 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
     f_->fontHeader.max_bounds.ascent  = f_->height;
 
     f_->glyphs  =(fim_byte_t*) fim_malloc(f_->height * 256);
-    if(!f_->glyphs) goto oops;
+    if(!f_->glyphs) goto aoops;
     f_->extents = (FSXCharInfo*)fim_malloc(sizeof(FSXCharInfo)*256);
-    if(!f_->extents) goto oops;
+    if(!f_->extents) goto aoops;
     fr=fread(f_->glyphs, 256, f_->height, fp);
-    if(!fr)return NULL;/* new */
-    fclose(fp);
+    if(!fr)goto aoops;/* new */
+    fclose(fp);fp=NULL;
 
     f_->eindex  =(FSXCharInfo**) fim_malloc(sizeof(FSXCharInfo*)   * 256);
-    if(!f_->eindex) goto oops;
+    if(!f_->eindex) goto aoops;
     f_->gindex  = (fim_byte_t**)fim_malloc(sizeof(fim_byte_t*) * 256);
-    if(!f_->gindex) goto oops;
+    if(!f_->gindex) goto aoops;
     for (i = 0; i < 256; i++) {
 	f_->eindex[i] = f_->extents +i;
 	f_->gindex[i] = f_->glyphs  +i * f_->height;
@@ -245,7 +286,8 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
 	f_->eindex[i]->ascent  = f_->height;
     }
     return f_;
-oops:
+aoops:	/* allocation-related oops */
+    robmn=false;/* no retry */
     if(f_)
     {
     	if(f_->eindex) fim_free(f_->eindex);
@@ -254,6 +296,9 @@ oops:
     	if(f_->extents) fim_free(f_->extents);
 	fim_free(f_);
     }
+oops:
+    if(fp){fclose(fp);fp=NULL;}
+    if(robmn && filename[0] && filename[1]){++filename;goto scanlistforafontfile;}else robmn=false;
     return NULL;
 }
 #endif
