@@ -14,6 +14,7 @@ EXTRA_DIST=  COPYING  \
 	media/image.jpg \
 	media/image.png \
 	media/fim.png \
+	var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim
 FIMGS_EXE=./src/fimgs

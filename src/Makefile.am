@@ -58,7 +58,13 @@ help-acm.cpp: fim.h
 	$(GREP)   '^#define FIM_ACM' $< | $(SED) 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/\1", "/g'|tr '\n' ' ' >> $@
 	$(ECHO)  ' '>> $@
 	$(ECHO) '//#endif' >> $@
-	
+
+b2ba:
+	$(CC) -o b2ba b2ba.c
+
+default_font_byte_array.h: ../var/fonts/Lat15-Terminus16.psf b2ba
+	./b2ba < ../var/fonts/Lat15-Terminus16.psf b2ba > default_font_byte_array.h
+
 # the following sources are built at make time
 # old bison versions could have problems with this (e.g.: generating yacc.tab.cpp.h instead of yacc.tab.hpp)
 BUILT_SOURCES = lex.yy.cc yacc.tab.cpp conf.h yacc.tab.hpp 
@@ -78,7 +84,7 @@ EXTRA_fim_SOURCES += FbiStuffMagick.cpp
 EXTRA_fim_SOURCES += FbiStuffPdf.cpp
 EXTRA_fim_SOURCES += FbiStuffPs.cpp
 
-CLEANFILES=$(BUILT_SOURCES) yacc.output 
+CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba
 
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
 AM_CPPFLAGS=
@@ -92,6 +98,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	fim_plugin.h \
 	fim_plugin.cpp \
 	fim_wrappers.h \
+	default_font_byte_array.h \
 	AADevice.h \
 	Benchmarkable.h \
 	CACADevice.h \
@@ -175,7 +182,7 @@ lex.yy.o: lex.yy.cc
 EXTRA_DIST = lex.lex yacc.ypp fimrc defaultConfiguration.cpp fimgs \
 	testdir/*ok testdir/*in testdir/Makefile \
 	testsuite/*/* \
-	regex.c
+	regex.c b2ba.c
 
 RUNTESTDEFAULTFLAGS = --tool ./fim FIM=$$srcdir/./fim  --srcdir $$srcdir/testsuite
 #RUNTESTDEFAULTFLAGS = --all --tool ./fim FIM=$$srcdir/./fim --tool_opts=$$srcdir/../media/fim.png --srcdir $$srcdir/testsuite

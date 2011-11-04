@@ -398,6 +398,9 @@ distributed on http://directory.fsf.org/regex.html, in the version shipped with
 the Mutt mail user agent (http://www.mutt.org).
  It also uses some scripts shipped with the Vim text editor (http://www.vim.org),
 which is licensed compatibly with the GPL.
+ The Fim source code package includes the Lat15-Terminus16.psf file, originally
+from the GPL licensed Terminus Font package, version 4.30 by Dimitar Toshkov
+ Zhekov.
 
 ================================================================================
 	10		Contacts, URLs

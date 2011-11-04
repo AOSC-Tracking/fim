@@ -37,6 +37,7 @@
 #define FIM_PSF2_MAGIC1     0xb5
 #define FIM_PSF2_MAGIC2     0x4a
 #define FIM_PSF2_MAGIC3     0x86
+#define FIM_MAX_FONT_HEIGHT 256
 namespace fim
 {
 
@@ -77,7 +78,6 @@ static const fim_char_t *default_font[] = {
     /* why the heck every f*cking distribution picks another
        location for these fonts ??? (GK)
        +1 (MM) */
-    "/dev/null",
     "/usr/share/consolefonts/lat1-16.psf",
     "/usr/share/consolefonts/lat1-16.psf.gz",
     "/usr/share/consolefonts/lat1-16.psfu.gz",
@@ -102,6 +102,9 @@ static const fim_char_t *default_font[] = {
     "/usr/share/consolefonts/Lat15-Fixed16.psf.gz",
     "/usr/share/consolefonts/default.psf.gz",
     /* end debian squeeze add */
+#if FIM_WANT_HARDCODED_FONT
+    FIM_DEFAULT_HARDCODEDFONT_STRING,
+#endif
     NULL
 };
 
@@ -159,6 +162,16 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
     FILE *fp=NULL;
     fim_char_t fontfilenameb[FIM_PATH_MAX];
     bool robmn=true;/* retry on bad magic numbers */
+#if FIM_WANT_HARDCODED_FONT
+    char dfontdata[] =
+#include "default_font_byte_array.h"/* FIXME: this is horrible practice */
+#endif
+
+#if FIM_WANT_HARDCODED_FONT
+    /* shortcut: no access() call required */
+    if (filename && *filename && 0 == strcmp(filename[0],FIM_DEFAULT_HARDCODEDFONT_STRING))
+	    goto openhardcodedfont;
+#endif
 
     if (NULL == filename)
 	filename = fim::default_font;
@@ -167,6 +180,10 @@ scanlistforafontfile:
     for(i = 0; filename[i] != NULL; i++) {
 	if (-1 == access(filename[i],R_OK))
 	{
+#if FIM_WANT_HARDCODED_FONT
+    		if (0 == strcmp(filename[i],FIM_DEFAULT_HARDCODEDFONT_STRING))
+			goto openhardcodedfont;
+#endif
 #if FIM_FONT_DEBUG
     std::cout << "no access to " << filename[i] << "\n";
 #endif
@@ -212,6 +229,15 @@ scanlistforafontfile:
     }
 #endif
 
+#if FIM_WANT_HARDCODED_FONT
+openhardcodedfont:
+    if (NULL == fontfilename)
+    {
+    	fp=fmemopen(dfontdata,sizeof(dfontdata),"r");
+	if(fp)
+		goto gotafp;
+    }
+#endif
     if (NULL == fontfilename) {
 	FIM_FPRINTF(ff_stderr, "can't find console font file\n");
 	goto oops;
@@ -232,6 +258,7 @@ scanlistforafontfile:
 	FIM_FPRINTF(ff_stderr, "can't open %s: %s\n",fontfilename,strerror(errno));
 	goto oops;
     }
+gotafp:
 {
     int m0=0,m1=0;
     m0=fgetc(fp);
@@ -259,6 +286,7 @@ scanlistforafontfile:
     f_->maxenc = 256;
     f_->width  = 8;	/* FIXME */
     f_->height = fgetc(fp);
+    if(f_->height<0 || f_->height>FIM_MAX_FONT_HEIGHT) goto oops;
     f_->fontHeader.min_bounds.left    = 0;
     f_->fontHeader.max_bounds.right   = f_->width;
     f_->fontHeader.max_bounds.descent = 0;
@@ -286,8 +314,8 @@ scanlistforafontfile:
 	f_->eindex[i]->ascent  = f_->height;
     }
     return f_;
-aoops:	/* allocation-related oops */
-    robmn=false;/* no retry */
+aoops:
+    robmn=false;/* no retry: this is a allocation-related oops */
     if(f_)
     {
     	if(f_->eindex) fim_free(f_->eindex);

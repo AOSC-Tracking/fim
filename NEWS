@@ -5,6 +5,7 @@
 
  * interface to the GraphicsMagic library 
  * introduced bitwise AND and OR operators
+ * hardcoded fonts support
 
         	Version 0.3-beta-prerelease (still ongoing)
 
