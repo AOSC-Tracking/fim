@@ -532,6 +532,9 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 ""FIM_ENV_FBFONT"		(just like in fbi) a Linux consolefont font file.\n"
 "If not specified, the following files will be probed and the first existing will be selected:\n\n");
 mp+=get_default_font_list();
+#if FIM_WANT_HARDCODED_FONT
+mp+="\nIf the special "FIM_DEFAULT_HARDCODEDFONT_STRING" string is specified, a hardcoded font will be used.";
+#endif
 mp+="\n";
 mp+=string(
 //"			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psf.gz is a Linux console file.\n"

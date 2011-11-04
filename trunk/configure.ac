@@ -1020,6 +1020,25 @@ fi
 
 
 dnl ==================
+fim_cv_hardcoded_font=no
+
+AC_ARG_ENABLE(hardcoded-font, AC_HELP_STRING([--enable-hardcoded-font], [Enable a hardcoded font in the executable (good as a fallback when no consolefonts are available).]),
+[if test x$enableval = xyes; then
+        fim_cv_hardcoded_font=yes
+else
+        fim_cv_hardcoded_font=no
+fi])
+
+AH_TEMPLATE([FIM_WANT_HARDCODED_FONT])
+if test x$fim_cv_hardcoded_font = xyes; then
+	have_hardcoded_font=yes
+	AC_DEFINE([FIM_WANT_HARDCODED_FONT],1,[Enable a hardcoded font in the executable.])
+else
+	have_hardcoded_font=no
+fi
+
+
+dnl ==================
 
 fim_cv_windows=yes
 
@@ -1678,6 +1697,7 @@ dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	~/.fim_history load/save            : ${have_history:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 	internal windowing system           : ${have_windows:-no}
+	hardcoded font                      : ${have_hardcoded_font:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      : ${fim_cv_regex:-no}
 	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}

@@ -750,6 +750,7 @@ namespace fim
 #define FIM_FBDEV_FILE_MAX_CHARS 16
 #define FIM_DEFAULT_FB_FILE "/dev/fb0"
 #define FIM_DEFAULT_AS_BINARY_BPP 24
+#define FIM_DEFAULT_HARDCODEDFONT_STRING	"fim://" 
 
 /*
  * Various  Fim messages.
