@@ -1036,6 +1036,7 @@ if test x$fim_cv_hardcoded_font = xyes; then
 else
 	have_hardcoded_font=no
 fi
+AM_CONDITIONAL(FIM_WANT_HARDCODED_CONSOLEFONT, test x$have_hardcoded_font = xyes )
 
 
 dnl ==================
@@ -1369,6 +1370,15 @@ AC_ARG_ENABLE(dia, AC_HELP_STRING([--disable-dia], [Fim will try to use dia for 
 )
 
 dnl ==================
+AH_TEMPLATE([FIM_DEFAULT_CONSOLEFONT])
+AC_ARG_WITH(default-consolefont, AC_HELP_STRING([--with-default-consolefont=FILE], [Specify a default consolefont (psf or psf.gz format) file.]), [ AC_DEFINE_UNQUOTED(FIM_DEFAULT_CONSOLEFONT, "$withval") ], [fim_cv_defaultconsolefont=""])
+dnl ==================
+AC_ARG_WITH(custom-hardcoded-consolefont, AC_HELP_STRING([--with-custom-hardcoded-consolefont=FILE], [Specify a custom consolefont to be hardcoded (psf format, absolute path) at build time.]), [
+fim_cv_want_custom_hardcoded_consolefont=true;
+AC_SUBST(FIM_CUSTOM_HARDCODED_CONSOLEFONT, "$withval")
+], [])
+AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )
+dnl ==================
 AC_ARG_WITH(tmpfile, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put temporary files created when interacting with external conversion programs (default is "/tmp/__FIM_TEMPORARY_FILE").]),
         [fim_cv_tmpfile=$withval],
         [fim_cv_tmpfile="/tmp/__FIM_TEMPORARY_FILE"])
@@ -1647,9 +1657,6 @@ dnl ############################################################################
 
 
 dnl ==================
-
-AC_SUBST(LIBIMAP)
-AC_SUBST(LIBIMAPDEPS)
 
 AC_SUBST(LIBS)
 AC_SUBST(FIM_DEFS)

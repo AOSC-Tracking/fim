@@ -78,6 +78,9 @@ static const fim_char_t *default_font[] = {
     /* why the heck every f*cking distribution picks another
        location for these fonts ??? (GK)
        +1 (MM) */
+#ifdef FIM_DEFAULT_CONSOLEFONT
+	FIM_DEFAULT_CONSOLEFONT,
+#endif
     "/usr/share/consolefonts/lat1-16.psf",
     "/usr/share/consolefonts/lat1-16.psf.gz",
     "/usr/share/consolefonts/lat1-16.psfu.gz",
