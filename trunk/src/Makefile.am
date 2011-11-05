@@ -38,6 +38,9 @@ examples.h: ../scripts/example/oneline.fim
 	$(ECHO) '"";' >> $@
 
 CommandConsole-help.o: CommandConsole-help.cpp help-acm.cpp help.cpp examples.h grammar.h
+if FIM_WANT_HARDCODED_CONSOLEFONT
+FontServer.o: default_font_byte_array.h
+endif
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
@@ -62,8 +65,13 @@ help-acm.cpp: fim.h
 b2ba:
 	$(CC) -o b2ba b2ba.c
 
+if FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT
+default_font_byte_array.h: $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) b2ba
+	./b2ba < $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) > default_font_byte_array.h
+else
 default_font_byte_array.h: ../var/fonts/Lat15-Terminus16.psf b2ba
-	./b2ba < ../var/fonts/Lat15-Terminus16.psf b2ba > default_font_byte_array.h
+	./b2ba < ../var/fonts/Lat15-Terminus16.psf > default_font_byte_array.h
+endif
 
 # the following sources are built at make time
 # old bison versions could have problems with this (e.g.: generating yacc.tab.cpp.h instead of yacc.tab.hpp)

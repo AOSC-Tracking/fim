@@ -460,6 +460,7 @@ namespace fim
 #define FIM_VID_COMMENT 				"_comment"				/* "[internal,out] the image comment, extracted from the image file (if any)" */
 #define FIM_VID_STEPS 				"_steps"				/* "[internal,in] the default steps, in pixels, when panning images" */
 #define FIM_VID_VERSION				"_fim_version"	/* "[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
+//#define FIM_FBFONT                           "_fbfont"       /* "[internal,out] current consolefont."  */
 #define FIM_VID_HSTEPS 				"_hsteps"				/* "[internal,in] the default steps, in pixels, when panning images horizontally (overrides steps)" */
 #define FIM_VID_VSTEPS 				"_vsteps"				/* "[internal,in] the default steps, in pixels, when panning images vertically (overrides steps)" */
 #define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[internal,in] if >0, will set the number of displayed text lines in the console" */
