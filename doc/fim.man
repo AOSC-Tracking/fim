@@ -288,6 +288,7 @@ distributed with fim.
 FBFONT		(just like in fbi) a Linux consolefont font file.
 If not specified, the following files will be probed and the first existing will be selected:
 
+/usr/lib/kbd/consolefonts/lat9-16.psf.gz
 /usr/share/consolefonts/lat1-16.psf
 /usr/share/consolefonts/lat1-16.psf.gz
 /usr/share/consolefonts/lat1-16.psfu.gz
