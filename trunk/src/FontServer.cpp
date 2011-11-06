@@ -81,6 +81,7 @@ static const fim_char_t *default_font[] = {
 #ifdef FIM_DEFAULT_CONSOLEFONT
 	FIM_DEFAULT_CONSOLEFONT,
 #endif
+    "/usr/lib/kbd/consolefonts/lat9-16.psf.gz",/* added for a Mandriva backport */
     "/usr/share/consolefonts/lat1-16.psf",
     "/usr/share/consolefonts/lat1-16.psf.gz",
     "/usr/share/consolefonts/lat1-16.psfu.gz",
