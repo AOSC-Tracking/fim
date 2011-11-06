@@ -10,9 +10,9 @@ AC_PREREQ([2.54])
 #AC_PROG_CC(cc gcc)
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
-define([svnversion],esyscmd([sh -c "svnversion | tr -d 'M\n'|sed s/exported/-1/g"]))dnl
+define([svnversion],esyscmd([sh -c "svnversion | tr  -c '[0-9]' ' ' | sed 's/ *//g;s/^$/-1/g' "]))dnl
 # WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
-AC_INIT([fim],[0.3],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
+AC_INIT([fim],[0.4],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 
 AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
 AC_SUBST(SVN_REVISION,"svnversion")
@@ -1373,7 +1373,7 @@ dnl ==================
 AH_TEMPLATE([FIM_DEFAULT_CONSOLEFONT])
 AC_ARG_WITH(default-consolefont, AC_HELP_STRING([--with-default-consolefont=FILE], [Specify a default consolefont (psf or psf.gz format) file.]), [ AC_DEFINE_UNQUOTED(FIM_DEFAULT_CONSOLEFONT, "$withval") ], [fim_cv_defaultconsolefont=""])
 dnl ==================
-AC_ARG_WITH(custom-hardcoded-consolefont, AC_HELP_STRING([--with-custom-hardcoded-consolefont=FILE], [Specify a custom consolefont to be hardcoded (psf format, absolute path) at build time.]), [
+AC_ARG_WITH(custom-hardcoded-consolefont, AC_HELP_STRING([--with-custom-hardcoded-consolefont=FILE], [Specify a custom consolefont to be hardcoded (psf format, absolute path) at build time (requires --enable-hardcoded-font).]), [
 fim_cv_want_custom_hardcoded_consolefont=true;
 AC_SUBST(FIM_CUSTOM_HARDCODED_CONSOLEFONT, "$withval")
 ], [])
