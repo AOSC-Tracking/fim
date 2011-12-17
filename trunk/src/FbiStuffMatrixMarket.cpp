@@ -112,7 +112,11 @@ mm_read(fim_byte_t *dst, unsigned int line, void *data)
 	else
 		return;
 
+#if 0
 	if(rsb_get_pixmap_RGB_from_matrix(h->filename, dst, h->width, h->height))
+#else
+	if(rsb_matrix_file_render(dst,h->filename,h->width,h->width,h->height,RSB_MARF_RGB))
+#endif
 		goto err;
 err:
 	return;
