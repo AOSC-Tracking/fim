@@ -2077,6 +2077,8 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 }
 
 
+#define FIM_OPTIMIZATION_20120129 1
+
 struct ida_image*	
 FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
 {
@@ -2106,6 +2108,11 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
     data = desc_resize.init(src,&rect,&dest->i,&p);
     dest->data = (fim_byte_t*)fim_malloc(dest->i.width * dest->i.height * 3);
     /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
+#if FIM_OPTIMIZATION_20120129
+    if(ascale==scale && ascale==1.0)
+	    memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
+    else
+#endif
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice_->switch_if_needed();
 	desc_resize.work(src,&rect,
