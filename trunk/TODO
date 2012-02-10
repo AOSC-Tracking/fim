@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20120130	to open svg files
 20120129	for scalings that are multiples of an integer, may write a specific code
 20120108	use zzuf; e.g.: for ((seed=0;seed<4;++seed));do zzuf -I jpg -s $seed src/fim media/ -c quit ; done 
 20111202	seem like an empty eps file crashes fim

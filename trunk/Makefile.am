@@ -53,7 +53,7 @@ tests:	all
 	@$(SHELL) ./scripts/tests/version.sh
 	@$(SHELL) ./scripts/tests/font.sh
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -E scripts/example/oneline.fim -c quit 
-	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo 'Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
 	make -C ./src/testdir
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
