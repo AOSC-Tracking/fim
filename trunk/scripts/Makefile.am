@@ -8,6 +8,7 @@ EXTRA_DIST= \
 	tests/sanity.fim  \
 	tests/maxlenscript.fim \
 	tests/version.sh \
+	tests/font.sh \
 	example/oneline.fim		\
 	rc/fimrc.eog		\
 	rc/fimrc.gqview		\

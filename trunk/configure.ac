@@ -476,7 +476,7 @@ AM_CONDITIONAL(ENABLE_TIFF, test x$have_tiff = xyes)
 
 
 dnl ============= cacalib : optional
-AC_CHECK_LIB(caca, caca_init,have_cacalib=yes,have_cacalib=no)
+dnl AC_CHECK_LIB(caca, caca_init,have_cacalib=yes,have_cacalib=no)
 
 dnl ============= GNU gpm, unofficial yet
 
@@ -981,11 +981,16 @@ if test x$fim_handle_sdl != xno; then
 			fim_handle_sdl='no'
 		fi
         else
+		if test x$fim_cv_want_static == x1 ; then 
+			LIBSDL_CONFIG_FLAGS=--static-libs
+		else
+			LIBSDL_CONFIG_FLAGS=--libs
+		fi
 		AC_MSG_NOTICE([Activating LIBSDL.])
 		fim_handle_sdl='yes'
                 LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
                 CXXFLAGS="$CXXFLAGS $LIBSDL_CXXFLAGS"
-                LIBS="$LIBS `$LIBSDL_CONFIG --libs`"
+                LIBS="$LIBS `$LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS`"
 		# finish this !
                 #FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS SDLDevice.o"
                 AC_DEFINE(FIM_WITH_LIBSDL, 1, [Defined, if libsdl support is enabled])
