@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2012 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -1729,7 +1729,11 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 #if !FIM_HAVE_FULL_PROBING_LOADER
 #ifdef HAVE_LIBGRAPHICSMAGICK
     /* FIXME: with this scheme, this is the only 0-mlen loader allowed */
-    if (NULL == loader)
+    if (NULL == loader
+#if 1
+		    && filename && is_file_nonempty(filename) /* FIXME: need an appropriate error/warning printout in this case */
+#endif
+		    )
 	loader = &magick_loader;
     else
 	;
