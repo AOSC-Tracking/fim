@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2012 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -80,6 +80,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream);
 
 bool is_dir(const fim::string nf);
 bool is_file(const fim::string nf);
+bool is_file_nonempty(const fim::string nf);
 
 /* exceptions */
 typedef int FimException;
