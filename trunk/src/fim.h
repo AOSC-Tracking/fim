@@ -547,6 +547,7 @@ namespace fim
 
 /*
  * Fim Display Driver Names
+ * Note: When adding a new driver, you shall update FIM_DDN_VARS as well. 
  * */
 #define FIM_DDN_INN_FB	 "fb"
 #define FIM_DDN_VAR_FB	 "fb"
@@ -561,7 +562,7 @@ namespace fim
 #define FIM_DDN_INN_DUMB	 "dumb"
 //#define FIM_DDN_VAR_DUMB	 "dummy"
 #define FIM_DDN_VAR_DUMB	 "dumb"
-#define FIM_DDN_VARS	 "[" FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_AA "|" FIM_DDN_INN_DUMB "]" 
+#define FIM_DDN_VARS	 "[" FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_AA "|" FIM_DDN_INN_DUMB "|" FIM_DDN_INN_IL2 "]" 
 //#define FIM_DDN_VARS	 "[" FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_AA "|" FIM_DDN_INN_CACA "|" FIM_DDN_INN_DUMB "]" 
 
 /*

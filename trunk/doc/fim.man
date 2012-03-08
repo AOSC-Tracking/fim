@@ -166,7 +166,7 @@ Do not load or save execution history at startup).
 .B -p, --script-from-stdin
 Will read commands from stdin prior to entering in interactive mode.
 .TP
-.B -o [fb|sdl|aa|dumb], --output-device [fb|sdl|aa|dumb]
+.B -o [fb|sdl|aa|dumb|imlib2], --output-device [fb|sdl|aa|dumb|imlib2]
 Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.The available devices depend on the original configuration/compilation options, so you should
 get the list of available output devices issuing \fBfim --version\fP.
 It will probably be a subset  of {\fBsdl\fP, \fBfb\fP, \fBaa\fP, \fBcaca\fP, \fBdumb\fP}.
