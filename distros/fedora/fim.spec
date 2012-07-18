@@ -15,7 +15,7 @@ Requires:	ImageMagick gimp inkscape
 
 %description
 FIM aims to be a highly customizable and scriptable image
-viewer targeted at the users who are confortable with software
+viewer targeted at the users who are comfortable with software
 like the Vim text editor or the Mutt mail user agent.
 
 It is based on the Fbi image viewer, by Gerd Hoffmann, and works in the 

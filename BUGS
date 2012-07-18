@@ -115,7 +115,7 @@ with a '@' and _Baz_ with a '.'.
 
 ==== UNFIXED EXTERNALLY ORIGINATING BUGS
 
-20090329	On my debian box's aalib, the ascii art driver leaks 224 bytes of memory.
+20090329	On my debian box's aalib, the ASCII art driver leaks 224 bytes of memory.
 Actually, it happens the same when compiling aalib-1.4.0's aafire.c program against debian aalib
 and running it in console mode (no X).
 After clean aalib recompilation, these problems vanish.

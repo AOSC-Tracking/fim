@@ -31,7 +31,7 @@ dnl
 <head>
 <meta name="generator" content="vim">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta name="keywords" content="fim, fbi improved, framebuffer image viewer, ascii art image viewer, aalib, sdl image viewer, framebuffer console image viewer">
+<meta name="keywords" content="fim, fbi improved, framebuffer image viewer, ASCII art image viewer, aalib, sdl image viewer, framebuffer console image viewer">
 <meta name="description" content="">
 <title>fim : fbi improved home page</title>
 
@@ -46,7 +46,7 @@ SECTION(Welcome to the FIM (Fbi IMproved) image viewer homepage,top)
 
 <h5>
 FIM aims to be a highly customizable and scriptable
-image viewer targeted at users who are confortable with software
+image viewer targeted at users who are comfortable with software
 like the Vim text editor or the Mutt mail user agent.
 
 

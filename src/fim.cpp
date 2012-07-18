@@ -185,7 +185,7 @@ NULL
 "A quick sanity check before starting the interactive fim execution, but after the initialization."
     },	/* NEW */
     {"no-framebuffer",      no_argument,       NULL, 't',"display images in text mode (as -o aa)",NULL,
-"Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).\n"
+"Fim will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).\n"
 "If aalib was not enabled at tompile time, fim will work without displaying images at all."
     },
     {"vt",         required_argument, NULL, 'T',"specify a virtual terminal for the framebufer","{terminal}",
@@ -630,7 +630,7 @@ mp+=string(
 "\n"
 ".B fim\n-o aa -c 'pread \"vgrabbj -d /dev/video0 -o png\";reload;system \"fbgrab\" \"asciime.png\"'\n"
 ".fi\n"
-"# if running in framebuffer mode, will save a png screenshot with an ascii rendering of an image grabbed from a webcam.\n"
+"# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam.\n"
 ".P\n"
 ".P\n"
 "\n"

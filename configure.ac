@@ -1716,12 +1716,12 @@ dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	use 'convert' for unknown files     : ${fim_cv_convert}
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
-	ascii art (aalib) support           : ${fim_cv_aalib}
+	ASCII art (aalib) support           : ${fim_cv_aalib}
 dnl	exif (libexif) support           : ${fim_cv_libexif}
 	X (sdllib) experimental support     : ${fim_handle_sdl}
         framebuffer support                 : ${fim_handle_framebuffer:-yes}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
-dnl	coloured ascii art (cacalib) support: ${fim_cv_cacalib}
+dnl	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
 
 
 	If you are not satisfied with this configuration, please run :

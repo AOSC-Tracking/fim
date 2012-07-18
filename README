@@ -19,15 +19,15 @@
 	1		Overview
 ================================================================================
 
-FIM is a highly customizable and scriptable image viewer targeted at the
-users who are confortable with software like the Vim text editor or the Mutt
-mail user agent.
+FIM (Fbi IMproved) is a highly customizable and scriptable image viewer targeted
+at the users who are comfortable with software like the Vim text editor or the
+Mutt mail user agent.
 FIM it aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
-the Linux framebuffer console.
+the Linux frame buffer console.
 It is multidevice: it has X support, too (via the SDL library) and it supports
-ascii art output (via the aalib library).
+ASCII art output (via the aalib library).
 
 FIM is free software, and it ships under the GPL software license, complete with
 documentation, in form of a doc/FIM.TXT documentation file, a man page, lots
@@ -38,18 +38,18 @@ of comments in the code, and some text files.
 ================================================================================
 
 FIM is a highly customizable and scriptable image viewer targeted at the
-users who are confortable with software like the Vim text editor or the Mutt
+users who are comfortable with software like the Vim text editor or the Mutt
 mail user agent.
 FIM it aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
-the Linux framebuffer console.
+the Linux frame buffer console.
 It is multidevice: it has X support too (via the SDL library) and it supports
-ascii art output (via the aalib library).
+ASCII art output (via the aalib library).
 
 It is capable of regular expressions based (on filename) vim-like autocommands.
 It offers GNU readline command line autocompletion and history,
-completely customizable key bindings, external/internal (if-while based)
+completely customizable key bindings, external/internal (if/while-based)
 scriptability (through return codes, standard input/output, and commands given
 at invocation time, initialization file), internal filename-based image search,
 and much more features.
@@ -67,7 +67,6 @@ Implemented features:
  - interactive (default) and command line modes
  - all of the functionality is scripted in an internal domain specific language
  - on-screen debug and information console in command mode
- - multiple internal windows with indipendent images displayed at once
  - per-image variables (e.g.: i:var="value")
  - regular expression filename searches (/*.png) and viewing
  - command line history (enter the console with ':', then use arrows with arrows)
@@ -75,7 +74,7 @@ Implemented features:
  - command line command autocompletion
  - command line history file saving/loading upport (~/.fim_history)
  - key-action binding, with Shift and Control key combinations for interactive mode
- - simple if-while scriptability, with integer/float/string variables and arithmetic evaluation
+ - simple if/while scriptability, with integer/float/string variables and arithmetic evaluation
  - command aliases support (macros)
  - event autocommands (in Vim's 'autocmd' style)
  - regular expressions on filenames to enrich autocommand behaviour
@@ -128,7 +127,7 @@ Yet unimplemented features:
  Features:
 
  status:(a)lpha/(m)ature   m       m   m         a     m     m    m	m   m
- environment(f=framebuffer)X      X  X,svga      f     f     X    f	X   X
+ environment(f=frame buffer)X      X X,svga      f     f     X    f	X   X
  linux specific                        ?         *     *          *	*   ?
  key rebindings            *                           *     *		    ?
  external scriptability(bash,..)                 ~     *		~   ?
@@ -151,7 +150,7 @@ Yet unimplemented features:
  standard input interaction                            *		    ?
  rotation		   *	?    ?           ?     *     ?    ?     *   *
  history                                               *		  
- multi-device (X/SDL, framebuffer, aalib)              *                   
+ multi-device (X/SDL, frame buffer, aalib)             *                   
  mirroring                                             *                    *
  ....
 
@@ -223,7 +222,7 @@ Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
 ================================================================================
 
  - A Linux (not sure if it is necessary for it to be an x86; i think not) box
- - The framebuffer device ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
+ - The frame buffer device ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
    ( and usually found in "/usr/src/linux/Documentation/fb" in the kernel source
     code tree ).
  - shared library files for: libpng, libjpeg, libungif, libtiff, libreadline
@@ -262,16 +261,16 @@ any means near to what is Fim today.
 
 Fim aims at a complete reorganization of the Fbi code, and ideally towards an
 implementation of the most scriptable and configurable image viewer ever - not
-tied to the framebuffer device and to a single keyboard input.
+tied to the frame buffer device and to a single keyboard input.
 
 ================================================================================
 	7		Technical overview (important for patch writers)
 ================================================================================
 
-To run Fim requires a Linux box with the framebuffer device enabled in the 
+To run Fim requires a Linux box with the frame buffer device enabled in the 
 kernel, and some popular image file decoding libraries.
 
-Information about the framebuffer can be found under the directory
+Information about the frame buffer can be found under the directory
  "./Documentation/fb"
  inside the kernel tree 
  (usually "/usr/src/linux/Documentation/fb" ).

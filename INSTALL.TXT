@@ -159,8 +159,8 @@ Optional Features:
   --enable-debug          Turns on debug options (recommended, for debugging)
   --enable-warnings       Turns on compiler warnings (recommended, for
                           debugging)
-  --enable-aalib          Enable aalib (ascii art output) support.
-  --enable-sdl            Enable sdl (X) support.
+  --enable-aalib          Enable aalib (ASCII art output) support.
+  --enable-sdl            Enable SDL (X) support.
 
 These are options to the configure script shipped with tarball, and 
 serves ot hard-code various configuration options prior to building fim.
