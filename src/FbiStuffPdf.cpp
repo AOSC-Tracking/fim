@@ -186,7 +186,13 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
         	GBool bitmapTopDown = gTrue;
         	ds->od = new SplashOutputDev(gSplashColorMode, /*4*/3, gFalse, gBgColor, bitmapTopDown,gFalse/*antialias*/);
 	        if (ds->od)
+#ifdef POPPLER_VERSION	/* as of 0.20.2, from poppler/poppler-config.h */
+			/* FIXME: this is an incomplete fix (triggered on 20120719's email on fim-devel);
+			  I don't really know which version of poppler defines this macro first, but I assume 0.20.2 or so */
+			ds->od->startDoc(ds->pd);
+#else
 			ds->od->startDoc(ds->pd->getXRef());
+#endif
     	}
         if (!ds->od)
 		goto err;
