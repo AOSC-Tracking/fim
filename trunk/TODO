@@ -21,6 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20120718	" - multiple internal windows with indipendent images displayed at once" is discontinued!
+20120718	make sure to substitute "framebuffer" with "frame buffer" in the docs and FIM.TXT
 20120705	some day would be nice to use dnotify
 20120408	bug: _filename non e' settato al primo caricamento: serve un goto_qualcosa prima
 20120407	to clone a whole fim instance in a new process

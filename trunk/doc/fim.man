@@ -189,7 +189,7 @@ Interruptible slideshow mode; will wait for {number} of seconds (assigned to the
 A quick sanity check before starting the interactive fim execution, but after the initialization.
 .TP
 .B -t, --no-framebuffer
-Fim will not use the framebuffer but the aalib (ascii art) driver instead (if you are curious, see (info aalib)).
+Fim will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).
 If aalib was not enabled at tompile time, fim will work without displaying images at all.
 .TP
 .B -T {terminal}, --vt {terminal}
@@ -398,7 +398,7 @@ scanimage ... | tee scan.ppm | fim -i
 .B fim
 -o aa -c 'pread "vgrabbj -d /dev/video0 -o png";reload;system "fbgrab" "asciime.png"'
 .fi
-# if running in framebuffer mode, will save a png screenshot with an ascii rendering of an image grabbed from a webcam.
+# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam.
 .P
 .P
 
