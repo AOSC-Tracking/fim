@@ -167,9 +167,15 @@ ps_read(fim_byte_t *dst, unsigned int line, void *data)
 	for(i=0;i<ds->h;++i)
 		for(j=0;j<ds->w;++j)
 		{
+#if 0
 			dst[ds->w*i*3+3*j+0]=page_data[ds->row_stride*i+4*j+0];
 			dst[ds->w*i*3+3*j+1]=page_data[ds->row_stride*i+4*j+1];
 			dst[ds->w*i*3+3*j+2]=page_data[ds->row_stride*i+4*j+2];
+#else
+			dst[ds->w*i*3+3*j+2]=page_data[ds->row_stride*i+4*j+0];
+			dst[ds->w*i*3+3*j+1]=page_data[ds->row_stride*i+4*j+1];
+			dst[ds->w*i*3+3*j+0]=page_data[ds->row_stride*i+4*j+2];
+#endif
 		}
 	fim_free(page_data);
 }
