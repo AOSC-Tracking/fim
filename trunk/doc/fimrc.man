@@ -309,6 +309,12 @@ negate : negate the displayed image colors
 .fi
 
 .B
+desaturate
+.fi
+desaturate : desaturate the displayed image colors
+.fi
+
+.B
 pan
 .fi
 pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
@@ -462,6 +468,10 @@ _TERM
 .B
 _autocmd_trace_stack
 [internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)
+.fi
+.B
+_autodesaturate
+[internal,in] if 1, will desaturate images by default
 .fi
 .B
 _autoflip
@@ -764,6 +774,10 @@ ascale
 [internal,in,out] the asymmetric scaling of the current image
 .fi
 .B
+desaturated
+[internal,out] 1, if the image is desaturated
+.fi
+.B
 flipped
 [internal,out] 1, if the image is flipped
 .fi
@@ -901,6 +915,8 @@ bind 's' "scrollforward";
 bind 'C-s' "swap;redisplay;";
 bind 'S' "toggleDisplayStatus";
 bind 'I' "toggleautonegate";
+bind 'i' "negate;redisplay;";
+bind 'g' "desaturate;redisplay;";
 #bind 'R' "reload";
 #bind 'R' "redisplay";
 #bind 'r' "rotate90";
@@ -959,7 +975,7 @@ autocmd "PreRedisplay"   "" "if(_scale_style!='' && i:fresh){i:fresh=0;scale _sc
 autocmd "PostRedisplay" ""   "i:_will_display=0;";
 # Display device specific config
 alias "aalib_fix_do" "{if(aascale==''){ascale='2.0';}else{ascale=aascale;} i:fresh=1;display;if(_TERM=~'screen'){echo 'screen+aalib?expect binding problems!'}}" "See aalib_fix.";
-alias "aalib_fix" "if(_device_string=='aa'){aalib_fix_do;scale 'a';}" "When using the aalib (ascii art) library we face a problem: glyph proportions are seldom square (as pixels are), and are tricky to detect; for this reason, we need to reshape the image with respect to the font ratio, but we have to make a guess in the scaling factor to compensate. If at runtime a better value is known for the terminal font height/with ratio, it may be fed in the 'aascale' variable for an accurate scaling.";
+alias "aalib_fix" "if(_device_string=='aa'){aalib_fix_do;scale 'a';}" "When using the aalib (ASCII art) library we face a problem: glyph proportions are seldom square (as pixels are), and are tricky to detect; for this reason, we need to reshape the image with respect to the font ratio, but we have to make a guess in the scaling factor to compensate. If at runtime a better value is known for the terminal font height/with ratio, it may be fed in the 'aascale' variable for an accurate scaling.";
 #alias "exif_fix" "i:_orientation=exif_orientation;exif_orientation='';i:mirrored=exif_mirrored;exif_mirrored='';i:flipped=exif_flipped;exif_flipped='';" "";
 #autocmd "PostReload"   "" "aalib_fix;exif_fix;";
 #autocmd "PostLoad"   "" "aalib_fix;exif_fix;";

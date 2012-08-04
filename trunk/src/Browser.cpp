@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2012 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -427,6 +427,19 @@ nop:
 			goto nop;
 
 		if(image() && image()->negate())
+			goto nop;
+nop:
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
+	fim::string Browser::fcmd_desaturate(const args_t &args)
+	{
+		/*
+		 */
+		if(!image() )
+			goto nop;
+
+		if(image() && image()->desaturate())
 			goto nop;
 nop:
 		return FIM_CNS_EMPTY_RESULT;

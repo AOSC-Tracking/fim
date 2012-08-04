@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2012 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -129,6 +129,7 @@ class Image
 	fim_err_t scale_increment(fim_scale_t ds);
 	fim_err_t scale_multiply (fim_scale_t sm);
 	bool negate ();/* let's read e-books by consuming less power :) */
+	bool desaturate ();
 	bool gray_negate();
 
 	bool check_invalid();
