@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2012 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -193,6 +193,7 @@ namespace fim
 		setVariable(FIM_VID_ASCALE,ascale_);
 		setVariable(FIM_VID_ANGLE , angle_);
 		setVariable(FIM_VID_NEGATED , 0);
+		setVariable(FIM_VID_DESATURATED, 0);
 		setVariable(FIM_VID_FILENAME,fname_.c_str());
 #endif
 
@@ -740,6 +741,27 @@ fim::string Image::getInfo()
 
 		return true;
 	} 
+
+	bool Image::desaturate()
+	{
+		register int avg;
+		if(! img_ || ! img_->data)
+			return false;
+		if(!fimg_ || !fimg_->data)
+			return false;
+
+		for( fim_byte_t * p = fimg_->data; p < fimg_->data + 3*fimg_->i.width*fimg_->i.height ;p+=3)
+		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
+
+		for( fim_byte_t * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;p+=3)
+		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
+
+		setGlobalVariable("i:"FIM_VID_DESATURATED,1-getGlobalIntVariable("i:"FIM_VID_DESATURATED));
+
+       		should_redraw();
+
+		return true;
+	}
 
 	bool Image::negate()
 	{

@@ -105,6 +105,7 @@ class Browser
 	fim::string fcmd_display(const args_t &args);
 	fim::string display_status(const fim_char_t *l,const fim_char_t*r);
 	fim::string fcmd_negate(const args_t &args);
+	fim::string fcmd_desaturate(const args_t &args);
 
 	fim::string fcmd_reload(const args_t &args);
 	fim::string fcmd_list(const args_t &args);

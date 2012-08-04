@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2012 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -298,10 +298,14 @@ namespace fim
 		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image_->getIntVariable(FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 		int negate   =	/* FIXME : temporarily here */
 		((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->getIntVariable(FIM_VID_NEGATED)==0));
+		int desaturate  =	/* FIXME : temporarily here */
+		((getGlobalIntVariable(FIM_VID_AUTODESATURATE)== 1)&&(image_->getIntVariable(FIM_VID_DESATURATED)==0));
 		image_->update();
 
 		if(negate)
 			image_->negate();
+		if(desaturate)
+			image_->desaturate();
 
 		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER)==1 && displaydevice_->redraw_!=FIM_REDRAW_UNNECESSARY  )
 		{
