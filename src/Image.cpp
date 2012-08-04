@@ -745,14 +745,18 @@ fim::string Image::getInfo()
 	bool Image::desaturate()
 	{
 		register int avg;
+#if 0
 		if(! img_ || ! img_->data)
 			return false;
 		if(!fimg_ || !fimg_->data)
 			return false;
+#endif
 
+		if( fimg_ &&  fimg_->data)
 		for( fim_byte_t * p = fimg_->data; p < fimg_->data + 3*fimg_->i.width*fimg_->i.height ;p+=3)
 		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
 
+		if(  img_ &&   img_->data)
 		for( fim_byte_t * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;p+=3)
 		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
 
@@ -769,15 +773,18 @@ fim::string Image::getInfo()
 
 		/* FIXME */
 		/*return gray_negate();*/
-
+#if 0
 		if(! img_ || ! img_->data)
 			return false;
 		if(!fimg_ || !fimg_->data)
 			return false;
+#endif
 
+		if( fimg_ &&  fimg_->data)
 		for( fim_byte_t * p = fimg_->data; p < fimg_->data + 3*fimg_->i.width*fimg_->i.height ;++p)
 			*p = ~ *p;
 
+		if(  img_ &&   img_->data)
 		for( fim_byte_t * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;++p)
 			*p = ~ *p;
 
