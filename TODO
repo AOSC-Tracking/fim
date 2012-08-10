@@ -21,6 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20120811	need proper jpeg error handling
+20120805	feeding a .png named PS file can lead to segfault. why ?
 20120804	should create a general 'filter' autocmd trigger
 20120804	negate and desaturate should be either applied instantly or accumulated in queue as transformations
 20120718	" - multiple internal windows with indipendent images displayed at once" is discontinued!

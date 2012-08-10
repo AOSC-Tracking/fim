@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2012 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -157,6 +157,7 @@ static void fim_error_exit (j_common_ptr cinfo)
 
   /* Always display the message. */
   /* We could postpone this until after returning, if we chose. */
+  std::cerr << "jpeglib:"<<"\n";
   (*cinfo->err->output_message) (cinfo);
 
   /* Return control to the setjmp point */
@@ -295,7 +296,6 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 {
     struct jpeg_state *h;
     jpeg_saved_marker_ptr mark;
-    fim_bool_t ferr=false;/* fatal errors ? */
     fim_jerr=0;
 #ifdef FIM_WITH_LIBEXIF
     //std::cout << "EXIF is not implemented, really :) \n";
@@ -309,19 +309,21 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 
     h->jerr.error_exit=NULL; // ?
     h->cinfo.err = jpeg_std_error(&h->jerr);	/* FIXME : should use an error manager of ours (this one exits the program!) */
-//    h->jerr.error_exit = fim_error_exit;	/* FIXME : should use an error manager of ours (this one exits the program!) */
-    h->jerr.error_exit = NULL ;	/* FIXME : should use an error manager of ours (this one exits the program!) */
-    if(ferr && h->jerr.msg_code)goto oops;
+    h->jerr.error_exit = fim_error_exit;	/* FIXME : should use an error manager of ours (this one exits the program!) */
+    //h->jerr.error_exit = NULL ;	/* FIXME : should use an error manager of ours (this one exits the program!) */
+    if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
     jpeg_create_decompress(&h->cinfo);
-    if(h->jerr.msg_code)goto oops;
+    /*if(h->jerr.msg_code)goto oops;*/
+    if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_COM,    0xffff); /* comment */
-    if(ferr && h->jerr.msg_code)goto oops;
+    if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_APP0+1, 0xffff); /* EXIF */
-    if(ferr && h->jerr.msg_code)goto oops;
+    if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
     jpeg_stdio_src(&h->cinfo, h->infile);
-    if(ferr && h->jerr.msg_code)goto oops;
+    if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
 //    if(jpeg_read_header(&h->cinfo, TRUE)==0)	goto oops;
     jpeg_read_header(&h->cinfo, TRUE);
+    if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
 //    if(h->jerr.msg_code)goto oops;	// this triggers with apparently good file
 
     for (mark = h->cinfo.marker_list; NULL != mark; mark = mark->next) {
@@ -386,18 +388,22 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 
 	/* re-setup jpeg */
 	jpeg_destroy_decompress(&h->cinfo);
+        if(fim_jerr)goto oops;
     //    if(h->jerr.msg_code)goto oops; // this triggers with apparently good files 
 	fclose(h->infile);
 	h->infile = NULL;
 	jpeg_create_decompress(&h->cinfo);
+        if(fim_jerr)goto oops;
   //      if(h->jerr.msg_code)goto oops;
 	h->cinfo.src = &thumbnail_mgr;
 	jpeg_read_header(&h->cinfo, TRUE);
+        if(fim_jerr)goto oops;
 //        if(h->jerr.msg_code)goto oops;
     }
 
     h->cinfo.out_color_space = JCS_RGB;
     jpeg_start_decompress(&h->cinfo);
+    if(fim_jerr)goto oops;
 //    if(h->jerr.msg_code)goto oops;
     i->width  = h->cinfo.image_width;
     i->height = h->cinfo.image_height;
@@ -418,6 +424,7 @@ oops:
 std::cerr << "OOPS: problems decoding "<< filename <<"...\n";
     if( h && h->thumbnail) fim_free(h->thumbnail);
     if( h ) fim_free(h);
+    fim_jerr=0;/* ready for the next */
     return NULL;
 }
 
