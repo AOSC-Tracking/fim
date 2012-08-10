@@ -27,7 +27,7 @@ AC_DEFINE_UNQUOTED([FIM_CONFIGURATION],"$FIM_CONFIGURATION")
 AC_MSG_NOTICE([
         Welcome to the Fim (revision $SVN_REVISION) configure script!
 	This script will create the right Makefile for building Fim on your system.
-	But first, it will check if your system has the right configuratin for Fim to build.
+	But first, it will check if your system has the right configuration for Fim to build.
 
 	There are options to this script, please run :
 	  ./configure --help=short
