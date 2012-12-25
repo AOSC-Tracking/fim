@@ -72,7 +72,7 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	if(rsb_init(RSB_NULL_INIT_OPTIONS))
 		goto err;
 
-	if(rsb_util_get_matrix_dimensions(filename, &cols, &rows))
+	if(rsb_util_get_matrix_dimensions(filename, &cols, &rows, NULL, NULL))
 		goto err;
 
 #if 1
