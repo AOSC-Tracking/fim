@@ -69,10 +69,10 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	i->dpi    = FIM_RENDERING_DPI; /* FIXME */
 	i->npages = 1; // uhm
 
-	if(rsb_init(RSB_NULL_INIT_OPTIONS))
+	if(rsb_lib_init(RSB_NULL_INIT_OPTIONS))
 		goto err;
 
-	if(rsb_util_get_matrix_dimensions(filename, &cols, &rows, NULL, NULL))
+	if(rsb_file_mtx_get_dimensions(filename, &cols, &rows, NULL, NULL))
 		goto err;
 
 #if 1
@@ -115,7 +115,7 @@ mm_read(fim_byte_t *dst, unsigned int line, void *data)
 #if 0
 	if(rsb_get_pixmap_RGB_from_matrix(h->filename, dst, h->width, h->height))
 #else
-	if(rsb_matrix_file_render(dst,h->filename,h->width,h->width,h->height,RSB_MARF_RGB))
+	if(rsb_file_mtx_render(dst,h->filename,h->width,h->width,h->height,RSB_MARF_RGB))
 #endif
 		goto err;
 err:
@@ -131,7 +131,7 @@ mm_done(void *data)
 	if(h->filename)
 		fim_free(h->filename);
 
-	if(rsb_exit())
+	if(rsb_lib_exit(RSB_NULL_EXIT_OPTIONS))
 		goto err;
 err:
 	return;

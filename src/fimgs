@@ -21,6 +21,7 @@ DIR="${TMPDIR-/var/tmp}/fbps-$$"
 #GSRESOLUTION=""
 #GSRESOLUTION=${GSRESOLUTION:--r240x240}
 GSRESOLUTION=${GSRESOLUTION:-120x120}
+shopt  -s nocasematch
 
 
 # we must have write permissions in that directory
@@ -276,10 +277,10 @@ then
 
 # 20070925 there were problems with '\\.' so i put '.' only :/
 [[ "$f" =~ .cbr$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
-[[ "$f" =~ .CBR$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
+#[[ "$f" =~ .CBR$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
 [[ "$f" =~ .rar$    ]] && ( $UNCBR "$f"    "$DIR"  ) 
 [[ "$f" =~ .cbz$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
-[[ "$f" =~ .CBZ$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
+#[[ "$f" =~ .CBZ$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
 [[ "$f" =~ .zip$    ]] && ( $UNCBZ "$f" $ZOPT -d "$DIR" ) 
 [[ "$f" =~ .tgz$    ]] && ( $UNTGZ "$f" -C "$DIR" ) 
 [[ "$f" =~ .tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
