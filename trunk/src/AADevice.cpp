@@ -2,7 +2,7 @@
 /*
  AADevice.cpp : aalib device Fim driver file
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -359,10 +359,17 @@ static bool aainvalid;
 		return FIM_ERR_NO_ERROR;
 	}
 
+	fim_err_t AADevice::reinit(const fim_char_t *rs)
+	{
+		if(strstr(rs,"w")!=NULL)
+			allow_windowed=1;
+	err:
+		return FIM_ERR_GENERIC;
+	}
+
 	fim_err_t AADevice::initialize(sym_keys_t &sym_keys)
 	{
 		aa_parseoptions (NULL, NULL, NULL, NULL);
-
 		aainvalid=false;
 		ascii_context_ = NULL;
 
@@ -389,6 +396,8 @@ static bool aainvalid;
 		
 		name_[0]='\0';
 		name_[1]='\0';
+		if(allow_windowed==0)
+			setenv("DISPLAY","",1);
 		ascii_save_.name = (fim_aa_char*)name_;
 		ascii_save_.format = &aa_text_format;
 		ascii_save_.file = NULL;

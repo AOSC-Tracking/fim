@@ -2,7 +2,7 @@
 /*
  CommandConsole-init.cpp : Fim console initialization
 
- (c) 2010-2011 Michele Martone
+ (c) 2010-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -80,18 +80,21 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		/*
 		 * TODO : move most of this stuff to the constructor, some day.
 		 */
-
+		int xres=0,yres=0;
+		bool device_failure=false;
+		int dosso=device.find(FIM_SYM_DEVOPTS_SEP_STR);
+		std::string dopts;
 		/* new : prevents atof, sprintf and such conversion mismatches! */
 		setlocale(LC_ALL,"C");	/* portable (among Linux hosts) : should use dots for numerical radix separator */
 		//setlocale(LC_NUMERIC,"en_US"); /* lame  */
 		//setlocale(LC_ALL,""); /* just lame */
-
 		displaydevice_=NULL;	/* TODO : is this really necessary ? */
-		int xres=0,yres=0;
-		bool device_failure=false;
+
+		if(dosso>0)
+			dopts=device.substr(dosso+strlen(FIM_SYM_DEVOPTS_SEP_STR),device.length()).c_str();
 
 #ifndef FIM_WITH_NO_FRAMEBUFFER
-		if( device==FIM_DDN_INN_FB )
+		if(device.find(FIM_DDN_INN_FB)==0)
 		{
 			extern fim_char_t *default_fbdev,*default_fbmode;
 			extern int default_vt;
@@ -119,20 +122,11 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		if(device.find(FIM_DDN_VAR_IL2)==0)
 		{
 			DisplayDevice *imld=NULL;
-			fim::string fopts;
-			int dsl=strlen(FIM_DDN_INN_IL2);
-			int ssl=strlen(FIM_SYM_DEVOPTS_SEP_STR);
-			std::string opts;
-			if(device.length()>dsl+ssl)
-			{
-				opts=device.substr(dsl+ssl,device.length());
-				fopts=opts.c_str();//FIXME
-			}
 			imld=new Imlib2Device(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_,
 #endif
-					fopts
+					dopts
 					);
 			if(imld && imld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete imld ; imld=NULL;}
 			if(imld && displaydevice_==NULL)
@@ -154,17 +148,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			DisplayDevice *sdld=NULL;
 			fim::string fopts;
 #if FIM_WANT_SDL_OPTIONS_STRING 
-			int dsl=strlen(FIM_DDN_INN_SDL);
-			int ssl=strlen(FIM_SYM_DEVOPTS_SEP_STR);
-			std::string opts;
-
-			if(device.find(FIM_DDN_INN_SDL FIM_SYM_DEVOPTS_SEP_STR)==0)
-			if(device.length()>dsl+ssl)
-			{
-				opts=device.substr(dsl+ssl,device.length());
-				fopts=opts.c_str();//FIXME
-			}
-#else
+			fopts=dopts;
 #endif
 			sdld=new SDLDevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -186,7 +170,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		#endif
 
 		#ifdef FIM_WITH_CACALIB
-		if(device==FIM_DDN_INN_CACA)
+		if(device.find(FIM_DDN_INN_CACA)==0)
 		{
 			DisplayDevice *cacad=NULL;
 			cacad=new CACADevice(
@@ -206,12 +190,13 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		#endif
 
 		#ifdef FIM_WITH_AALIB
-		if(device==FIM_DDN_INN_AA)
+		if(device.find(FIM_DDN_INN_AA)==0)
 		{
 		aad_=new AADevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-				mc_
+				mc_,
 #endif
+				dopts
 				);
 
 		if(aad_ && aad_->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete aad_ ; aad_=NULL;}
