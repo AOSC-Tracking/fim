@@ -2,7 +2,7 @@
 /*
  CommandConsole-cmd.cpp : Fim console commands
 
- (c) 2009-2011 Michele Martone
+ (c) 2009-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -99,6 +99,19 @@ namespace fim
 		if(args.size()!=1)return FIM_FLT_UNBIND" : specify the key to unbind\n";
 		return unbind(args[0]);
 	}
+
+#if 0
+	fim::string CommandConsole::fcmd_setenv(const args_t& args)
+	{
+		/*
+		 *	
+		 */
+		if(args.size()<2) return FIM_CNS_EMPTY_RESULT;
+		setenv(args[0].c_str(),args[1].c_str(),1);
+		setenv("DISPLAY","",1);
+		return FIM_CNS_EMPTY_RESULT;
+	}
+#endif
 
 	fim::string CommandConsole::fcmd_help(const args_t &args)
 	{	

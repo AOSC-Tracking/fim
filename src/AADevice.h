@@ -2,7 +2,7 @@
 /*
  AADevice.h : aalib device Fim driver header file
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 
 class AADevice:public DisplayDevice 
 {
+	int allow_windowed;
 	private:
 	aa_context *ascii_context_;
 	//struct aa_renderparams *ascii_rndparms;//we rely on aa_defrenderparams
@@ -40,10 +41,15 @@ class AADevice:public DisplayDevice
 	fim_char_t name_[2];	/* FIXME */
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	AADevice(MiniConsole & mc_):DisplayDevice(mc_){}
+	AADevice(MiniConsole & mc_, fim::string opts ):DisplayDevice(mc_),
 #else
-	AADevice():DisplayDevice(){}
+	AADevice( fim::string opts ):DisplayDevice(),
 #endif
+	allow_windowed(0)
+	{
+		reinit(opts.c_str());
+	}
+
 	virtual ~AADevice();
 
 	virtual fim_err_t  display(
@@ -81,6 +87,7 @@ class AADevice:public DisplayDevice
 	fim_err_t init_console();
 	fim_bpp_t get_bpp(){return 1;};
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
+	virtual fim_err_t reinit(const fim_char_t *rs);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 };
 
