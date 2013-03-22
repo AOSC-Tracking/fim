@@ -1648,7 +1648,7 @@ AC_DEFINE([FBI_AUTHOR],["Gerd Hoffmann <kraxel _CUT_ bytesex.org>"])
 dnl ###############################################################################
 dnl this is experimental stuff
 dnl ###############################################################################
-AC_ARG_ENABLE(matrices-rendering, AC_HELP_STRING([--enable-matrices-rendering], [Experimental, Unfinished]),
+AC_ARG_ENABLE(matrices-rendering, AC_HELP_STRING([--enable-matrices-rendering], [Uses librsb for rendering of Matrix Market files (must have librsb-config in the PATH).]),
 [       if test x$enableval = xyes; then
 AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
 AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
