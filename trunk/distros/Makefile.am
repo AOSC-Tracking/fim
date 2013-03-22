@@ -32,5 +32,5 @@ all:
 ebuild:	$(PREFIX)/Manifest
 
 clean:
-	rm -fRd $(PREFIX)/Manifest $(PREFIX)/files 
+	rm -fR $(PREFIX)/Manifest $(PREFIX)/files 
 

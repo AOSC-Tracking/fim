@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -276,7 +276,7 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
 		//initialization of the framebuffer text
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		/*
-		 * will initialized with the user set (or default ones)
+		 * will initialize with the user set (or default ones)
 		 *  - framebuffer device
 		 *  - framebuffer mode
 		 *  - virtual terminal
