@@ -1,5 +1,25 @@
 	
-	FIM NEWS -- history of user-visible changes in FIM.
+	FIM NEWS -- history of (main) user-visible changes in FIM.
+
+        	Version 0.3
+
+ * minor strchr compilation problem on some systems
+ * better consolefonts support  
+ * much better SDL support (different color modes)
+ * 'negate' feature
+ * -S, or 'sanity-check' switch 
+
+               Version 0.3-beta-prerelease
+
+ * auto-generated documentation: more consistency 
+ * grammar specification, in man fimrc
+ * internal commands,variables,autocommands  reference man page, in man fimrc
+ * better internal help mechanisms
+ * more control (resolution change,windowed mode) in experimental sdl mode
+ * new commands (pread,reverse,shuffle,...) 
+ * (temporarily) disabled internal windows splitting 
+ * pushing files from a directory
+ * several minor and major bugfixes
 
         	Version 0.3-beta
 
