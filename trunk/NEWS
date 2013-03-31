@@ -1,13 +1,36 @@
 	
-	FIM NEWS -- history of user-visible changes in FIM.
+	FIM NEWS -- history of (main) user-visible changes in FIM.
 
-        	Version 0.4-beta
+                Version 0.4-beta
 
- * interface to the GraphicsMagic library 
+ * interface to the GraphicsMagic library (more graphics formats supported)
  * introduced bitwise AND and OR operators
- * hardcoded fonts support
+ * support for rendering "matrix market" numerical matrix files (with librsb)
+ * X mode not anymore default in aalib, available at option 
+ * libjpeg usage fixes
+ * libpng usage fixes (support for PNG_LIBPNG_VER>=10209)
+ * documentation improvements (e.g.: fim man page is auto-generated)
+ * "imlib2" X-based output device support 
+ * "sdl" output device improvements (fullscreen/mouse/windowed options, I/O, ..)
+ * more default consolefont options (e.g.: hardcoded consolefonts support)
+ * configure option to disable the fim history file
+ * improvements to scale, goto, other commands
+ * improved directories reading
+ * introduced --no-commandline, --no-internal-config switches
+ * aggregated some commands for clarity
+ * output console can be disabled at configure time
+ * important fbdev bug fixes 
+ * autocompletion of variable identifiers
 
-        	Version 0.3-beta-prerelease (still ongoing)
+        	Version 0.3
+
+ * minor strchr compilation problem on some systems
+ * better consolefonts support  
+ * much better SDL support (different color modes)
+ * 'negate' feature
+ * -S, or 'sanity-check' switch 
+
+               Version 0.3-beta-prerelease
 
  * auto-generated documentation: more consistency 
  * grammar specification, in man fimrc

@@ -760,7 +760,7 @@ dnl
 dnl By default, we disable poppler : its API is still immature.
 dnl
 fim_handle_pdf=no
-AC_ARG_ENABLE(poppler, AC_HELP_STRING([--enable-poppler], [Enable poppler (PDF rendering) support.]),
+AC_ARG_ENABLE(poppler, AC_HELP_STRING([--enable-poppler], [Enable poppler (PDF rendering) support. This will add LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/" to the compilation flags. You can override this by passing configure a suitable LIBPOPPLER_CXXFLAGS variable.]),
 [       if test x$enableval = xyes ; then
 		fim_handle_pdf=yes
         fi
@@ -799,8 +799,10 @@ dnl FIXME : the following is a dirty hack
       if test x"$have_poppler" = xyes; then
         LIBPOPPLER="-lpoppler $LIBPOPPLER_STATIC_EXTRA"
 	# FIXME: the following is a dirty hack!
-        LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/"
-        CXXFLAGS="$CXXFLAGS $LIBPOPPLER_CXXFLAGS"
+	if test x"$LIBPOPPLER_CXXFLAGS" = x ; then
+        	LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/"
+	fi
+        CXXFLAGS="$CXXFLAGS $LIBPOPPLER_CXXFLAGS -DFIM_LIBPOPPLER_VERSION_MAYBE=$have_poppler_maybe_version"
 dnl	are we sure poppler does not have something like the following ?
 dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
       else

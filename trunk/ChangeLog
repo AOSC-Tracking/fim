@@ -1,3 +1,581 @@
+2013-03-22 23:05  dezperado
+
+	* doc/fim.man, src/AADevice.cpp, src/AADevice.h,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole-init.cpp,
+	  src/fim.cpp: extended the AADevice as well to get reinit options.
+
+2013-03-22 20:08  dezperado
+
+	* configure.ac, distros/Makefile.am, src/FbiStuffMatrixMarket.cpp,
+	  src/FramebufferDevice.cpp: fix to wrong rule in makefile.
+	  update of configure.ac librsb-related doc string, and matrix
+	  rendering code.
+	  comment typo fix.
+
+2012-12-26 15:13  dezperado
+
+	* src/FbiStuffMatrixMarket.cpp, src/fimgs: adapting to the new
+	  rsb.h interface.
+	  added 'shopt -s nocasematch' to fimgs.
+
+2012-12-25 00:33  dezperado
+
+	* src/FbiStuffMatrixMarket.cpp: updated way of invoking
+	  rsb_util_get_matrix_dimensions
+
+2012-08-10 23:51  dezperado
+
+	* Makefile.am, TODO, configure.ac, src/FbiStuffJpeg.cpp: slightly
+	  better jpeglib errors handling.
+	  configure typo fix.
+	  TODO notes.
+	  using 'ulimit' from within Makefile testing.
+
+2012-08-04 12:02  dezperado
+
+	* doc/fimrc.man, src/Image.cpp: trunk: less stringent rules in
+	  inner desaturate() and negate() options in Image class.
+	  man page update.
+
+2012-08-04 11:38  dezperado
+
+	* TODO, doc/fimrc.man, src/Browser.cpp, src/Browser.h,
+	  src/CommandConsole.cpp, src/Image.cpp, src/Image.h,
+	  src/Viewport.cpp, src/fim.h, src/fimrc, src/help.cpp: trunk:
+	  introduced a 'desaturate' command, and implemented bindings for
+	  image desaturation and negation.
+
+2012-07-21 12:30  dezperado
+
+	* src/FbiStuffPs.cpp: in the ps decoder, inverted r and b channels.
+
+2012-07-18 20:30  dezperado
+
+	* BUGS, INSTALL.TXT, README, TODO, configure.ac, debian/control,
+	  distros/fedora/fim.spec, doc/fim.man, src/fim.cpp, src/fimrc,
+	  var/index.html.in: implementing Justin B Rye's (debian
+	  Bug#679622) suggestions about english for documentation and
+	  metadata.
+
+2012-07-18 18:44  dezperado
+
+	* TODO, src/FbiStuffPdf.cpp: trunk: minimal hack to allow build
+	  with poppler 0.20.2 (that is, update to new poppler's API (though
+	  it's difficult to compile-time chck whether using an older
+	  poppler version because of missing appropriate preprocessor
+	  symbols)).
+
+2012-03-08 11:54  dezperado
+
+	* doc/fim.man, src/fim.h: trunk: the imlib2 device was not in the
+	  list of the ones available in the man page and help output.
+
+2012-03-02 14:19  dezperado
+
+	* src/FbiStuff.cpp, src/common.cpp, src/common.h: trunk: empty
+	  regular files will not be given graphicsmagick as a loader (this
+	  shall be fixed in version 1.3.13 of graphicsmagick)
+
+2012-02-11 00:27  dezperado
+
+	* configure.ac, scripts/Makefile.am: trunk:
+	  adding the font.sh script to the list of distributed files.
+	  configure modification to allow (cut-down) static builds.
+
+2012-02-10 23:47  dezperado
+
+	* Makefile.am, TODO, scripts/tests/version.sh,
+	  src/testdir/Makefile: trunk: adjusted some error reporting
+	  printout.
+
+2012-02-10 23:41  dezperado
+
+	* Makefile.am, scripts/tests/font.sh: trunk: adding a script for
+	  testing (basics) of font handling.
+
+2012-01-29 16:08  dezperado
+
+	* TODO, src/FbiStuff.cpp: notes in the TODO.
+	  when scaling to 1, will use copy instead of scaling.
+
+2011-12-17 17:36  dezperado
+
+	* src/FbiStuffMatrixMarket.cpp: trunk: changed the call to librsb
+	  responsible for matrix rendering (adapted to the new API).
+
+2011-11-06 10:22  dezperado
+
+	* configure.ac: configure fix: better `svnversion` parsing, and
+	  some more commentary to a configure option.
+
+2011-11-06 09:19  dezperado
+
+	* src/FontServer.cpp: added
+	  /usr/lib/kbd/consolefonts/lat9-16.psf.gz to the list of default
+	  fonts.
+
+2011-11-05 22:07  dezperado
+
+	* doc/fim.man: man page update according to last commit.
+
+2011-11-05 21:56  dezperado
+
+	* configure.ac, src/FontServer.cpp, src/Makefile.am, src/fim.h:
+	  configure options to specify a custom font to hardcode ar build
+	  time (--custom-hardcoded-consolefont), or a custom font to check
+	  for as first in the fonts list (--default-consolefont).
+
+2011-11-04 16:29  dezperado
+
+	* Makefile.am, NEWS, README, configure.ac, doc/fim.man,
+	  src/FontServer.cpp, src/Makefile.am, src/b2ba.c,
+	  src/default_font_byte_array.h, src/fim.cpp, src/fim.h, var/fonts,
+	  var/fonts/Lat15-Terminus16.psf: added a new, valuable feature:
+	  that of a hardcoded font file.
+	  this enables font display on non-Linux or
+	  non-consolefonts-equipped setups.
+	  added the appropriate copyright notice for the font file (in the
+	  README).
+
+2011-11-01 12:33  dezperado
+
+	* src/FontServer.cpp: on bad magic numbers found, the console font
+	  loading mechanism did not probe the remaining fonts in the
+	  supplied list. fixed this.
+
+2011-10-04 22:23  dezperado
+
+	* src/Imlib2Device.cpp: the imlib2 stub code does not hand loops
+	  now while reporting input.
+
+2011-10-04 22:13  dezperado
+
+	* src/CommandConsole-init.cpp, src/Imlib2Device.cpp,
+	  src/Imlib2Device.h: enabling basic fullscreen mode to the imlib2
+	  device.
+
+2011-10-03 20:56  dezperado
+
+	* src/Imlib2Device.cpp, src/fim.h: the imlib2/X input system
+	  recognize most of the useful keys.
+	  preventing from updating the caption (since the status line is
+	  active by default, for now) in imlib2 mode.
+
+2011-10-02 19:53  dezperado
+
+	* src/CommandConsole-init.cpp, src/Imlib2Device.cpp,
+	  src/Imlib2Device.h, src/fim.cpp, src/fim.h, src/readline.cpp: the
+	  imlib2 fim visualization device is not yet complete, but has its
+	  main features working.
+
+2011-10-02 19:30  dezperado
+
+	* src/SDLDevice.cpp: typo fix to the previous commit.
+
+2011-10-02 19:23  dezperado
+
+	* src/SDLDevice.cpp: minifix to the fill_rect function of SDL.
+
+2011-10-01 10:28  dezperado
+
+	* src/Imlib2Device.cpp, src/Imlib2Device.h: actually, the previous
+	  commit did not contain the Imlib2Device (so, it won't build,
+	  either).
+
+2011-10-01 10:24  dezperado
+
+	* configure.ac, src/CommandConsole-init.cpp, src/FontServer.cpp,
+	  src/FontServer.h, src/FramebufferDevice.h, src/SDLDevice.cpp,
+	  src/fim.cpp, src/fim.h: configure fixes for imlib.
+	  empty (stub) source files for an imlib-based display device.
+	  corrected using a symbolic return value in the sdl device code.
+	  renamed X_DISPLAY_MISSING to FIM_X_DISPLAY_MISSING, as it clashes
+	  with non-fim X code.
+
+2011-10-01 10:10  dezperado
+
+	* src/AADevice.cpp, src/Command.h, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/FimWindow.cpp,
+	  src/FimWindow.h, src/Makefile.am, src/Viewport.cpp,
+	  src/Viewport.h, src/Window.cpp, src/Window.h, src/fim.h: renaming
+	  Window to FimWindow (also sources).
+
+2011-10-01 08:46  dezperado
+
+	* configure.ac: adapted the configure script to recognize imlib2.
+
+2011-09-24 08:56  dezperado
+
+	* TODO, src/FbiStuff.cpp, src/common.cpp: update (or let's say,
+	  fix) to the is_file function.
+	  in some mipmap computing code (still inactive, though).
+	  TODO massive update.
+
+2011-09-21 21:22  dezperado
+
+	* src/FbiStuff.cpp, src/Makefile.am, src/fim.h, src/fim_plugin.cpp,
+	  src/fim_plugin.h: writing an embryonic version of what shall be a
+	  plugin interface for fim, featuring an opencv-based example.
+
+2011-09-18 18:58  dezperado
+
+	* doc/fim.man, doc/fimrc.man, src/CommandConsole-help.cpp,
+	  src/FbiStuffFbtools.cpp, src/fim.cpp, src/fim.h: doc fixes:
+	  documented signal-triggered return code; man pages references are
+	  now underlined, in the fim/fimrc man pages.
+
+2011-09-18 16:27  dezperado
+
+	* src/SDLDevice.cpp: using function SDL_UpperBlit in SDL driver's
+	  common, unmirrored, unflipped display case.
+
+2011-09-17 22:20  dezperado
+
+	* src/CommandConsole-help.cpp, src/common.cpp, src/common.h,
+	  src/fim.cpp: slight code changes for reducing total code size.
+
+2011-09-17 21:17  dezperado
+
+	* TODO, scripts/Makefile.am,
+	  scripts/maintenance/configure-minimal.sh,
+	  scripts/maintenance/configure-only-fb-mini.sh,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole-init.cpp,
+	  src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp, src/fim.cpp: in two
+	  new configure wrapper scripts; one for a minimal build, another
+	  for a fb-only one.
+	  fixes to work well with the fimrc disabled (it was handled
+	  wrong).
+	  fixes to not compile the bitmap rendering code at all, if
+	  deselected.
+	  misc (related) compilation fixes.
+
+2011-09-17 20:15  dezperado
+
+	* configure.ac, scripts/maintenance/configure-live.sh,
+	  src/CommandConsole.cpp: added a configure option to disable
+	  fim_history file load/save.
+	  updated the live configure wrapper script.
+
+2011-09-17 09:55  dezperado
+
+	* src/FbiStuffMatrixMarket.cpp: fix to the matrix market decoder:
+	  detecting invalid (negative) matrix sizes.
+	  still need a memory exhaustion prevention check.
+
+2011-09-12 23:40  dezperado
+
+	* src/FbiStuffMagick.cpp: circumventing libgraphicsmagick's bug
+	  #3408130: NULL pointer referencing while loading an empty
+	  *.txt/*.text file.
+
+2011-09-10 14:04  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h, src/DisplayDevice.cpp,
+	  src/DisplayDevice.h, src/DummyDisplayDevice.h, src/SDLDevice.cpp,
+	  src/SDLDevice.h, src/fim_types.h: more strictness and typedef
+	  based diversification of different integer types.
+
+2011-09-10 13:28  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/FramebufferDevice.cpp, src/Image.cpp, src/SDLDevice.cpp,
+	  src/SDLDevice.h, src/Viewport.cpp, src/Window.cpp, src/fim.h,
+	  src/fim_stream.cpp, src/fim_stream.h, src/fim_types.h: extending
+	  the use of fim_err_t, fim_int, and introduced an enum for redraw
+	  states and an int typedef.
+
+2011-09-10 12:48  dezperado
+
+	* src/DebugConsole.cpp, src/DebugConsole.h: enforcing use of
+	  fim_err_t in the DebugConsole class.
+
+2011-09-10 10:47  dezperado
+
+	* src/AADevice.cpp, src/Browser.cpp, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/DebugConsole.cpp, src/FbiStuffBmp.cpp, src/FbiStuffDjvu.cpp,
+	  src/FramebufferDevice.cpp, src/SDLDevice.cpp, src/common.cpp,
+	  src/fim.cpp, src/yacc.ypp: :%s/char/fim_char_t/gc
+	  in more files.
+
+2011-09-10 10:38  dezperado
+
+	* src/CACADevice.h, src/DisplayDevice.cpp, src/FontServer.cpp,
+	  src/defaultConfiguration.cpp, src/examples.h, src/fim.cpp,
+	  src/fim.h, src/fim_stream.cpp, src/fim_stream.h, src/lex.h,
+	  src/lex.lex, src/readline.cpp, src/string.cpp, src/string.h:
+	  :%s/char/fim_char_t/gc
+	  in more files.
+
+2011-09-10 10:23  dezperado
+
+	* src/CommandConsole.cpp, src/CommandConsole.h, src/DebugConsole.h,
+	  src/FbiStuffList.h, src/FontServer.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/Makefile.am, src/Var.h,
+	  src/Viewport.cpp, src/Viewport.h, src/grammar.h, src/readline.h:
+	  enforcing the use of fim_char_t in further source files.
+
+2011-09-10 10:04  dezperado
+
+	* src/FbiStuff.cpp, src/FbiStuff.h, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBit24.cpp, src/FbiStuffBmp.cpp, src/FbiStuffDjvu.cpp,
+	  src/FbiStuffGif.cpp, src/FbiStuffJpeg.cpp, src/FbiStuffLoader.h,
+	  src/FbiStuffMagick.cpp, src/FbiStuffMatrixMarket.cpp,
+	  src/FbiStuffPdf.cpp, src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp,
+	  src/FbiStuffPs.cpp, src/FbiStuffTiff.cpp, src/Image.cpp,
+	  src/Image.h: enforcing the use of fim_char_t in the image decoder
+	  sources.
+	  changed the decoder init function pointer signature to const
+	  char.
+
+2011-09-10 09:39  dezperado
+
+	* src/DebugConsole.cpp, src/DebugConsole.h, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBmp.cpp, src/FbiStuffDjvu.cpp, src/FbiStuffGif.cpp,
+	  src/FbiStuffJpeg.cpp, src/FbiStuffLoader.cpp,
+	  src/FbiStuffLoader.h, src/FbiStuffMatrixMarket.cpp,
+	  src/FbiStuffPdf.cpp, src/FbiStuffPpm.cpp, src/FbiStuffPs.cpp,
+	  src/FbiStuffTiff.cpp, src/FontServer.h,
+	  src/FramebufferDevice.cpp, src/Image.cpp, src/fim_stream.cpp,
+	  src/fim_stream.h, src/readline.cpp: :%s/unsigned
+	  char/fim_byte_t/gc
+	  in more files.
+
+2011-09-10 09:17  dezperado
+
+	* src/FbiStuff.cpp, src/FbiStuff.h, src/common.cpp:
+	  :%s/\<char\>/fim_char_t/gc
+	  :%s/unsigned char/fim_byte_t/gc
+	  in FbiStuff.{h,cpp}
+	  and some type change in internal buffers in common.c.
+
+2011-09-10 09:03  dezperado
+
+	* src/common.cpp, src/common.h, src/fim_types.h:
+	  :%s/\<char\>/fim_char_t/gc
+	  :%s/unsigned char/fim_byte_t/gc
+	  in common.{h,cpp}
+	  fim_.*_t are no more in namespace fim (for now).
+
+2011-09-09 20:40  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h, src/FontServer.cpp,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h: enforcing more type
+	  strictness, especially in drawing devices code.
+
+2011-09-09 20:14  dezperado
+
+	* src/CommandConsole-help.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/Namespace.cpp, src/Namespace.h,
+	  src/fim.cpp, src/fim_types.h: enforcing more type strictness,
+	  especially in Namespace & co.
+
+2011-09-09 19:54  dezperado
+
+	* src/Browser.cpp, src/Browser.h, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/fim.cpp, src/interpreter.cpp,
+	  src/readline.cpp, src/readline.h: enforcing type safety,
+	  especially for fim_int, fim_char_t.
+
+2011-09-04 14:02  dezperado
+
+	* configure.ac, src/FbiStuff.cpp, src/common.cpp, src/common.h,
+	  src/fim.h, src/fim_types.h: implementing an alternate file
+	  buffering method, based on fmemopen (not activating it yet,
+	  though).
+	  configure check for fmemopen.
+
+2011-09-04 13:49  dezperado
+
+	* src/fim.cpp: in the previous commit forgot a conditional check,
+	  leading to an infinite read wait for an image in stdin.
+
+2011-09-04 13:44  dezperado
+
+	* src/fim.cpp: the file load from stdin is postponed after config
+	  loading, now.
+
+2011-09-04 11:01  dezperado
+
+	* doc/fimrc.man, src/FbiStuff.cpp, src/fim.h, src/help.cpp: in a
+	  new user variable to have more information over the file load
+	  process.
+
+2011-09-04 10:31  dezperado
+
+	* NEWS, src/Var.h, src/grammar.h: in the last commit, forgot to add
+	  the NEWS and the Var.h modifications.
+
+2011-09-04 10:27  dezperado
+
+	* doc/fim.man, doc/fimrc.man, src/Var.cpp, src/fim.cpp,
+	  src/interpreter.cpp, src/lex.lex, src/testdir/test1.in,
+	  src/testdir/test1.ok, src/yacc.ypp: language modifications:
+	  implemented bitwise OR and AND (| and &) operators.
+	  documentation fix (backtick to tick).
+	  bitwise OR/AND test case in.
+
+2011-09-01 19:28  dezperado
+
+	* doc/fim.man, src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/fim.cpp, src/fim.h, src/fim_types.h:
+	  introduced a separate type for program error codes, documenting
+	  them in the man page, and using them in the code.
+
+2011-08-31 23:17  dezperado
+
+	* doc/fim.man, doc/fimrc.man, src/CommandConsole.cpp, src/fim.cpp:
+	  documenting the return status code of the program.
+	  slight update to the 'quit' command documentation.
+
+2011-08-31 22:55  dezperado
+
+	* src/SDLDevice.cpp, src/testdir/Makefile, src/testdir/test15.in,
+	  src/testdir/test16.in, src/testdir/test16.ok: in a new (rather
+	  brittle) test for testing the dir load capability.
+	  some more verbosity for the sdl code.
+
+2011-08-28 12:43  dezperado
+
+	* src/AADevice.cpp, src/FbiStuff.cpp, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBit24.cpp, src/FbiStuffMagick.cpp,
+	  src/FramebufferDevice.cpp, src/Makefile.am, src/SDLDevice.cpp,
+	  src/fim.h, src/fim_wrappers.h: bzero -> fim_bzero in all sources.
+	  introduced a header file with wrappers to bzero & co.
+	  set some missing svn ps.
+
+2011-08-28 11:55  dezperado
+
+	* src/Browser.cpp, src/FbiStuffMagick.cpp: some more error handling
+	  with the graphicsmagick file loader.
+	  a bit of more potential efficiency when pushing files.
+
+2011-08-28 01:23  dezperado
+
+	* src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/FbiStuff.cpp, src/Image.cpp: mainly
+	  cosmetics (macro preprocessor symbols instead of constants) &
+	  related changes.
+
+2011-08-28 00:54  dezperado
+
+	* src/Benchmarkable.h, src/CommandConsole-init.cpp,
+	  src/CommandConsole.h, src/DisplayDevice.cpp, src/DisplayDevice.h,
+	  src/Makefile.am, src/common.cpp, src/fim.h, src/fim_types.h,
+	  src/string.cpp, src/string.h: generalized the per-object
+	  benchmarking code by introducing a specialized interface.
+
+2011-08-27 13:35  dezperado
+
+	* src/FbiStuff.cpp, src/fim.h, src/help.cpp: introduced a
+	  user-accessible variable to get the last loaded image loader
+	  string.
+
+2011-08-21 11:17  dezperado
+
+	* Makefile.am, configure.ac, doc/fim.man, doc/fimrc.man,
+	  src/fim.cpp, src/fim.h, src/help.cpp: documentation oriented
+	  fixes: the previous revision did not compile well.
+	  now using environment variables substitution in the Makefile
+	  while generating man pages.
+
+2011-08-21 10:24  dezperado
+
+	* configure.ac, doc/fim.man, src/fim.cpp, src/fim.h: miscellaneous
+	  documentation fixes, especially with constant strings.
+
+2011-08-20 10:17  dezperado
+
+	* src/DebugConsole.cpp, src/FbiStuffBmp.cpp,
+	  src/FramebufferDevice.cpp, src/SDLDevice.cpp, src/fim_types.h:
+	  substituting memset with fim_memset.
+	  removed a duplicate typedef from a header file.
+	  substituting numerical constants with a symbolic macro for a char
+	  buffer size.
+
+2011-08-20 10:04  dezperado
+
+	* src/CACADevice.cpp, src/FbiStuff.cpp, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBit24.cpp, src/FbiStuffBmp.cpp,
+	  src/FbiStuffFbtools.cpp, src/FbiStuffGif.cpp,
+	  src/FbiStuffJpeg.cpp, src/FbiStuffLoader.cpp,
+	  src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp, src/FbiStuffTiff.cpp,
+	  src/FontServer.cpp, src/FramebufferDevice.cpp, src/SDLDevice.cpp,
+	  src/fim.h, src/fim_limits.h, src/string.cpp: substituting
+	  memset(x,0,y) calls with fim_bzero(x,y) calls (boiling down to
+	  memset(x,0,y)).
+
+2011-08-20 09:44  dezperado
+
+	* TODO, VERSION, src/DisplayDevice.cpp, src/FbiStuff.cpp,
+	  src/FbiStuffJpeg.cpp, src/FbiStuffPdf.cpp, src/FbiStuffTiff.cpp,
+	  src/FramebufferDevice.cpp, src/Makefile.am, src/fim.h,
+	  src/fim_limits.h, src/fim_types.h, src/readline.cpp,
+	  src/string.cpp: moved basic type definitions to a separate header
+	  file.
+	  added an include file with type inquiry macros.
+	  substituted several numerical constants with preprocessor
+	  symbols.
+	  added fim_types.h to the Makefile.am (it was missing, by
+	  accident).
+
+2011-08-20 08:44  dezperado
+
+	* configure.ac, src/FbiStuff.cpp, src/fim.h: loader string
+	  specification can be disabled at build time, now.
+
+2011-08-20 08:32  dezperado
+
+	* configure.ac, src/FbiStuff.cpp, src/fim.cpp, src/fim.h: the raw
+	  bits rendering feature is compile time optional now.
+
+2011-08-20 08:15  dezperado
+
+	* src/FbiStuff.cpp: some temporary code for a future full probing
+	  file loader.
+	  moved an image converting loop to a separate function.
+
+2011-08-18 07:43  dezperado
+
+	* TODO, src/FbiStuff.cpp: bugfix: the only zero-mlen-signature
+	  loader took precedence; now it does not anymore.
+
+2011-08-17 22:30  dezperado
+
+	* TODO, doc/fimrc.man, src/FbiStuff.cpp, src/FbiStuffList.h,
+	  src/FbiStuffLoader.cpp, src/FbiStuffLoader.h, src/fim.cpp,
+	  src/fim.h, src/help.cpp: introduced a variable to force a
+	  particular file loader.
+	  -V output will list available file loaders.
+	  dox update.
+
+2011-08-17 22:20  dezperado
+
+	* src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp,
+	  src/FbiStuffMatrixMarket.cpp, src/FbiStuffPng.cpp,
+	  src/FbiStuffPpm.cpp, src/FbiStuffTiff.cpp: renamed the file
+	  loader constant strings, so each loader has a unique name now,
+	  without spaces in it.
+	  code readability fix in FbiStuffPng.cpp.
+
+2011-08-17 22:16  dezperado
+
+	* src/FbiStuffGif.cpp: opening gifs from stdin seems to cause
+	  DGifOpenFileHandle=NULL: an extra check for this case.
+
+2011-08-17 17:50  dezperado
+
+	* configure.ac, src/FbiStuffMagick.cpp, src/Makefile.am,
+	  src/fim_types.h: a first interfacing to the GraphicsMagick
+	  library (for loading files).
+
+2011-08-11 22:11  dezperado
+
+	* ChangeLog, doc/Makefile.am: specified the right fimrc man section
+	  in Makefile.am.
+
 2011-08-11 21:57  dezperado
 
 	* ChangeLog, doc/fimrc.man: updated fimrc.man.

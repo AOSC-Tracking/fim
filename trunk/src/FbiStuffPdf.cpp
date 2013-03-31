@@ -38,7 +38,10 @@
  * and subject to change.
  * So when changing these headers here, take care of changing them
  * in the configure script, too.
+ * And please don't blame me (fim's author)!
  */
+#include <poppler/cpp/poppler-version.h>
+#if (POPPLER_VERSION_MINOR>=21)
 #include <poppler/poppler-config.h>
 #include <poppler/PDFDoc.h>
 #include <poppler/OutputDev.h>
@@ -47,6 +50,7 @@
 #include <poppler/splash/SplashTypes.h>
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
+#endif
 
 #if HAVE_FILENO
 #define FIM_PDF_USE_FILENO 1
@@ -171,8 +175,10 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		goto err;
 
 	globalParams->setErrQuiet(gFalse);
-	globalParams->setBaseDir(_);
 
+#if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22)
+	globalParams->setBaseDir(_);
+#endif
 
 	ds->pd = new PDFDoc(new GooString(filename), NULL, NULL, (void*)NULL);
 	if (!ds->pd)
