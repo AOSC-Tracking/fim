@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -170,12 +170,12 @@ static void fim_error_exit (j_common_ptr cinfo)
 // FIXME: temporarily here
 static void dump_exif(FILE *out, ExifData *ed)
 {
-    const fim_char_t *title, *value;
 #if HAVE_NEW_EXIF
+    const fim_char_t /**title=NULL,*/ *value=NULL;
     fim_char_t buffer[FIM_EXIF_BUFSIZE];
+    ExifEntry  *ee=NULL;
+    int /*tag,*/i;
 #endif
-    ExifEntry  *ee;
-    int tag,i;
 #if HAVE_NEW_EXIF
     //for (i = 0; i < EXIF_IFD_COUNT; i++) {
     for (i = 0; i < 1; i++) { // first only
@@ -435,7 +435,7 @@ jpeg_read(fim_byte_t *dst, unsigned int line, void *data)
     JSAMPROW row = dst;
 //    if(h->jerr.msg_code)goto oops;
     jpeg_read_scanlines(&h->cinfo, &row, 1);
-    oops:
+//    oops:
     return;
 }
 
@@ -540,10 +540,10 @@ jpeg_write(FILE *fp, struct ida_image *img)
 }
 
 struct ida_writer jpeg_writer = {
-    /*l/*abel:*/*/  "JPEG",
-   /*/* ext:*/*/    { "jpg", "jpeg", NULL},
-    /*w/*rite:*/*/  jpeg_write,
-    /*/*conf:*/*/   jpeg_conf,
+    /*label:*/  "JPEG",
+    /* ext: */    { "jpg", "jpeg", NULL},
+    /*write:*/  jpeg_write,
+    /*conf: */   jpeg_conf,
 };
 
 static void __init init_wr(void)

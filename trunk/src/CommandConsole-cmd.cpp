@@ -370,7 +370,7 @@ namespace fim
 		 * */
 		size_t i;
 		FILE* tfd;
-		fim_char_t buf[FIM_PIPE_BUFSIZE];int rc=0;
+		/* fim_char_t buf[FIM_PIPE_BUFSIZE]; int rc=0; */
 		for(i=0;i<args.size();++i)
 		if( (tfd=popen(args[i].c_str(),"r")) != NULL )
 		{	

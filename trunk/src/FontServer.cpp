@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -147,8 +147,8 @@ static int probe_font_file(const fim_char_t *fontfilename)
 		goto no;
  
      	/* this is enough */
-	if(fp)fclose(fp);
-ok:
+	if(fp)
+		fclose(fp);
 	return 0;
 no:
 	if(fp)fclose(fp);
@@ -167,7 +167,7 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
     fim_char_t fontfilenameb[FIM_PATH_MAX];
     bool robmn=true;/* retry on bad magic numbers */
 #if FIM_WANT_HARDCODED_FONT
-    char dfontdata[] =
+    unsigned char dfontdata[] =
 #include "default_font_byte_array.h"/* FIXME: this is horrible practice */
 #endif
 

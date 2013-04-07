@@ -1481,9 +1481,8 @@ static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t b
 	*/
 	/*size_t*/
 	/*l ong*/
-	int  read_offset=0,rb,sl,off,goff=0;
+	int  rb,sl,off,goff=0;
 	fim_char_t buf[FIM_FILE_BUF_SIZE];
-	int rs;/* FIXME : could overflow */
 
 	if(!byte_stream)
 		return 0;/* bad argument */

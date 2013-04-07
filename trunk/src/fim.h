@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -167,7 +167,8 @@ namespace rl
 
 //#define FIM_FBI_PRINTF( ... ) fprintf(stderr, __VA_ARGS__ )
 /* " warning: anonymous variadic macros were introduced in C99" (here and elsewhere) */
-#define FIM_FBI_PRINTF( ... ) 1
+#define FIM_NO_OP_STATEMENT 1
+#define FIM_FBI_PRINTF( ... ) FIM_NO_OP_STATEMENT 
 #define FIM_VERB_PRINTF printf
 
 namespace fim{

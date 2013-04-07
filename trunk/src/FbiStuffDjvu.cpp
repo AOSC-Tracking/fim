@@ -2,7 +2,7 @@
 /*
  FbiStuffDjvu.cpp : fim functions for decoding DJVU files
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -88,11 +88,15 @@ djvu_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
 	struct djvu_state_t * ds=NULL;
-        static unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
+        // static unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
 	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
 	prd=prd<1?FIM_RENDERING_DPI:prd;
 
-	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
+	if(filename==std::string(FIM_STDIN_IMAGE_NAME))
+	{
+		std::cerr<<"sorry, stdin multipage file reading is not supported\n";
+		goto ret;
+	}	/* a drivers' problem */ 
 
 	if(fp) fclose(fp);
 
@@ -150,7 +154,7 @@ err:
 	if(ds->dd)ddjvu_document_release(ds->dd);
 	if(ds->dc)ddjvu_context_release(ds->dc);
 	if(ds->pf)ddjvu_format_release(ds->pf);
-
+ret:
 	return NULL;
 }
 
@@ -171,6 +175,8 @@ djvu_read(fim_byte_t *dst, unsigned int line, void *data)
                            ds->pf,
                            ds->row_stride,
                            (fim_libdjvu_char*)dst);
+	if(rs)
+		;/* FIXME: missing error handling */
         return ;
 }
 

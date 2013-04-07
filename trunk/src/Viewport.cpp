@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -423,7 +423,6 @@ namespace fim
 
 	void Viewport::auto_scale_if_bigger()
 	{
-		fim_scale_t xs,ys;
 		if( check_invalid() ) return;
 		else
 		{
@@ -572,9 +571,10 @@ namespace fim
 		/*
 		 * this should not happen! (and probably doesn't happen :) )
 		 * */
-		if(!image_)return true;
-		if( image_)return image_->check_invalid();
-		//return true;
+		if(!image_)
+			return true;
+		else
+			return image_->check_invalid();
 	}
 
 #ifdef FIM_WINDOWS

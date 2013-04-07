@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -795,6 +795,6 @@ fim::string Image::getInfo()
 		return true;
 	}
 
-	int Image::n_pages()const{return (fimg_?fimg_->i.npages:0);};
+	int Image::n_pages()const{return (fimg_?fimg_->i.npages:0);}
 }
 
