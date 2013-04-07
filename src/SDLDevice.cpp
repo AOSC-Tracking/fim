@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -88,6 +88,7 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 				++os;
 			}
 		if(*os)
+		{
 		if(2==sscanf(os,"%d:%d",&current_w,&current_h))
 
 		{
@@ -102,6 +103,7 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 			current_w=current_h=0;
 			std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
 			// TODO: a better invaling string message needed here
+		}
 		}
 		}
 		// commit
@@ -351,8 +353,7 @@ err:
 		/*
 		 *
 		 * */
-		//fim_coo_t want_width=0, want_height=0, want_bpp=0;
-		fim_coo_t want_width=current_w_, want_height=current_h_, want_bpp=0;
+		fim_coo_t want_width=current_w_, want_height=current_h_/*, want_bpp=0*/;
 		fim_sdl_int want_flags=FIM_SDL_FLAGS;
 		fim_sdl_int delay=0,interval=0;
 		const fim_char_t*errstr=NULL;

@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -487,7 +487,6 @@ nop:
 //				FIXME:
 //				if(commandConsole_.window)commandConsole_.window->recursive_display();
 			}
-ddone:
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTDISPLAY,c);
 #endif
@@ -708,8 +707,9 @@ ddone:
 		/* 
 		 * returns whether the file nf is in the files list
 		 */
-		for(fim_int i=0;i<flist_.size();++i)
-			if(flist_[i]==nf)return i;
+		for(fim_size_t i=0;i<flist_.size();++i)
+			if(flist_[i]==nf)
+				return (fim_int)i;
 		return -1;
 	}
 
@@ -729,7 +729,6 @@ ddone:
 	bool Browser::push_dir(fim::string nf)
 	{
 		// TODO: may introduce some more variable to control recursive push 	
-		int d_n;
 		DIR *dir=NULL;
 		struct dirent *de=NULL;
 		fim::string f;
@@ -1378,8 +1377,10 @@ nop:
 		 * aligns to top/bottom the displayed image
 		 * TODO: incomplete
 		 */ 
-		if(args.size()<1)goto err;
-		if(!args[0].c_str() || !args[0].re_match("^(bottom|top)"))goto err;
+		if(args.size()<1)
+			goto err;
+		if(!args[0].c_str() || !args[0].re_match("^(bottom|top)"))
+			goto err;
 		if(c_image())
 		{
 			fim::string c=current();
@@ -1397,7 +1398,6 @@ nop:
 			autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 		}
-nop:
 		return FIM_CNS_EMPTY_RESULT;
 err:
 		return FIM_CMD_HELP_ALIGN;
@@ -1504,11 +1504,11 @@ err:
 	int Browser::n_pages()const
 	{
 		if(c_image())return c_image()->n_pages(); else return 0;
-	};
+	}
 
 	int Browser::c_page()const
 	{
 		if(c_image())return c_image()->c_page(); else return 0;
-	};
+	}
 }
 

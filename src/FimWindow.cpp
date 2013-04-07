@@ -2,7 +2,7 @@
 /*
  FimWindow.cpp : Fim's own windowing system
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1146,7 +1146,9 @@ namespace fim
 	fim_err_t FimWindow::update(const Rect& corners)
 	{
 		corners_=corners;
-		if(viewport_ && commandConsole_.displaydevice_)commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// FIXME
+		if(viewport_ && commandConsole_.displaydevice_)
+			commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// FIXME
+		return FIM_ERR_NO_ERROR;
 	}
 }
 #if 0

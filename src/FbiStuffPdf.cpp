@@ -2,7 +2,7 @@
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -139,7 +139,11 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
 	prd=prd<1?FIM_RENDERING_DPI:prd;
 
-	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
+	if(filename==std::string(FIM_STDIN_IMAGE_NAME))
+	{
+		std::cerr<<"sorry, stdin multipage file reading is not supported\n";
+		goto retnull;
+	}	/* a drivers's problem */ 
 
 #if !FIM_PDF_USE_FILENO
 	if(fp) fclose(fp);
@@ -233,6 +237,7 @@ err:
 	if (globalParams)	delete globalParams;
 	globalParams = NULL;
 	if(ds)fim_free(ds);
+retnull:
 	return NULL;
 }
 

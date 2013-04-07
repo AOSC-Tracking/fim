@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -680,7 +680,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 *	call, by the YY_INPUT macro (defined by me in lex.lex)
 		 */
 		fim_bool_t add_history_=(xflags&FIM_X_HISTORY)?true:false;
-		fim_bool_t suppress_output_=(xflags&FIM_X_QUIET)?true:false;
+		/* fim_bool_t suppress_output_=(xflags&FIM_X_QUIET)?true:false; */
 		fim_char_t *s=dupstr(ss);//this malloc is free
 		int iret=0;
 		int r =0;
@@ -748,7 +748,6 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		if(iret!=0 || errno!=0)
 		{
 			if(getIntVariable(FIM_VID_VERBOSE_ERRORS)==1)
-			if(1)
 			{
 				// FIXME; the pipe descriptor is used in a bad way.
 				std::cout << "When parsing: " << FIM_MSG_CONSOLE_LONG_LINE   << s << FIM_MSG_CONSOLE_LONG_LINE  << "\n";

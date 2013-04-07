@@ -363,8 +363,7 @@ static bool aainvalid;
 	{
 		if(strstr(rs,"w")!=NULL)
 			allow_windowed=1;
-	err:
-		return FIM_ERR_GENERIC;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t AADevice::initialize(sym_keys_t &sym_keys)

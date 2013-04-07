@@ -2,7 +2,7 @@
 /*
  Imlib2.cpp : Imlib2 device Fim driver file
 
- (c) 2011-2011 Michele Martone
+ (c) 2011-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -94,6 +94,7 @@ fim_err_t Imlib2Device::parse_optstring(const fim_char_t *os)
 				++os;
 			}
 		if(*os)
+		{
 		if(2==sscanf(os,"%d:%d",&current_w,&current_h))
 
 		{
@@ -108,6 +109,7 @@ fim_err_t Imlib2Device::parse_optstring(const fim_char_t *os)
 			current_w=current_h=0;
 			std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
 			// TODO: a better invaling string message needed here
+		}
 		}
 		}
 		// commit
@@ -137,9 +139,9 @@ err:
 		fim_coo_t idr,idc,lor,loc;
 		fim_coo_t ii,ij;
 		fim_coo_t oi,oj;
-		fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
+		// fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
 		fim_byte_t * srcp=NULL;
-   		Imlib_Image dimage;
+   		//Imlib_Image dimage;
 		struct ida_image*img=NULL;
 		fim_byte_t* rgb = NULL;
 		DATA32 *ild=NULL;
@@ -371,7 +373,8 @@ static fim_err_t initialize_keys(sym_keys_t &sym_keys)
 fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
 {
 	int rc=-1;
-	fim_key_t pk;
+	fim_key_t pk=0;
+
         updates_ = imlib_updates_init();
 	if(True==XCheckMaskEvent(disp,KeyPressMask,&ev_))
 	{
@@ -392,7 +395,10 @@ fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
       				nc=XLookupString(&ev_.xkey,buf,sizeof(buf),&ks,NULL);
 				buf[nc]=FIM_SYM_CHAR_NUL;
 				//FIM_IL2_PRINTF("PKEY :%d:%s:%d\n",ev_.xkey.keycode,buf,ks);
-				if( *buf)rc=1;else break;
+				if( *buf)
+					rc=1;
+				else
+					break;
 				if(nc==1)
 					pk=*buf;
 				else
@@ -428,7 +434,7 @@ fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
         if (updates_)
            imlib_updates_free(updates_),
            updates_=NULL;
-ret:
+
 	if(!c)
 		rc=0;
 	else
@@ -619,8 +625,8 @@ done:
 		if(!msg)
 			goto err;
        		XStoreName(disp,win,msg);
-#endif
 err:
+#endif
 		return rc;
 	}
 	

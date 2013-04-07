@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -113,7 +113,8 @@ void trhex(fim_char_t *str)
 	const fim_char_t *fp;//fast pointer
 	fim_char_t *sp;//slow pointer
 	fim_char_t hb[3];
-	if(!str)return;
+	if(!str)
+		goto ret;
 
 	hb[2]=0;
 	fp=sp=str;
@@ -396,6 +397,7 @@ fim_char_t * dupsqstr (const fim_char_t* s)
 /*
  *	Allocation and duplication of a single string (not necessarily terminating)
  */
+#ifdef HAVE_FGETLN
 static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
 {
 	fim_char_t *r = (fim_char_t*) fim_malloc (l + 1);
@@ -403,6 +405,7 @@ static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
 	r[l]='\0';
 	return (r);
 }
+#endif
 
 static int pick_word(const fim_char_t *f, unsigned int *w)
 {
@@ -635,13 +638,16 @@ double getmilliseconds()
 	return dt;
 }
 
+#if 0
 struct fim_bench_struct { void *data; };
 
 typedef fim_err_t (*fim_bench_ft)(struct fim_bench_struct*);
 static fim_err_t fim_bench_video(struct fim_bench_struct*)
 {
 	//cc.clear_rect(0, width()-1, 0,height()/2);
+	return FIM_ERR_NO_ERROR;
 }
+#endif
 
 const fim_char_t * fim_getenv(const fim_char_t * name)
 {
