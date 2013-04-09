@@ -119,6 +119,11 @@
 
 		struct termios tattr;
 		struct termios sattr;
+		if (! isatty(cc.fim_stdin_))
+		{
+			sleep(seconds);
+			return -1;
+		}
 		//we set the terminal in raw mode.
 		    
 	//	fcntl(0,F_GETFL,&saved_fl);
