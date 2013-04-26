@@ -49,6 +49,7 @@
 #else
 #define FIM_CNS_RAW_KEYS_MESG 
 #endif
+#define FIM_INVALID_IDX -1
 						
 extern fim_sys_int yyparse();
 
@@ -60,8 +61,10 @@ namespace fim
 		/*
 		 * 1 if the string is null or empty, 0 otherwise
 		 */
-		if(s==NULL)return true;
-		while(*s && isspace(*s))++s;
+		if(s==NULL)
+			return true;
+		while(*s && isspace(*s))
+			++s;
 		return *s=='\0'?true:false;
 	}
 
@@ -73,7 +76,7 @@ namespace fim
 		for(size_t i=0;i<commands_.size();++i) 
 			if(commands_[i] && commands_[i]->cmd_==cmd)
 				return i;
-		return -1;
+		return FIM_INVALID_IDX;
 	}
 
 	Command* CommandConsole::findCommand(fim::string cmd)const
@@ -82,7 +85,7 @@ namespace fim
 		 * is cmd a valid internal (registered) Fim command ?
 		 */
 		int idx=findCommandIdx(cmd);
-		if(idx!=-1)
+		if(idx!=FIM_INVALID_IDX)
 			return commands_[idx];
 		return NULL;
 	}
@@ -96,26 +99,24 @@ namespace fim
 		 * indirection...
 		 */
 		bindings_t::const_iterator bi=bindings_.find(c);
+		fim::string rs("keycode ");
 		if(bi!=bindings_.end())
 		{
 			bindings_[c]=binding;
-			fim::string rs("keycode ");
 			rs+=string((int)c);
 			rs+=" successfully reassigned to \"";
 			rs+=bindings_[c];
 			rs+="\"\n";
-			return rs;
 		}
 		else
 		{
 			bindings_[c]=binding;
-			fim::string rs("keycode ");
 			rs+=string((int)c);
 			rs+=" successfully assigned to \"";
 			rs+=bindings_[c];
 			rs+="\"\n";
-			return rs;
 		}
+		return rs;
 	}
 
 	fim::string CommandConsole::getBindingsList()const
@@ -169,15 +170,18 @@ namespace fim
 		 * looks for a binding to 'cmd' and returns a string description for its bound key 
 		 */
 		bindings_t::const_iterator bi;
+		fim_key_t key=FIM_SYM_NULL_KEY;
+
 		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
 		{
 			/* FIXME: should move this functionality to an ad-hoc search routine */
 			if(bi->second==binding)
 			{
-				return bi->first;	
+				key = bi->first;	
+				goto ret;
 			}
 		}
-		return FIM_SYM_NULL_KEY;
+ret:		return key;
 	}
 
 	fim::string CommandConsole::find_key_for_bound_cmd(fim::string binding)
@@ -260,7 +264,8 @@ namespace fim
 				r+=aname;
 				r+=fim::string("\" \"");
 				aliases_t::const_iterator ai=aliases_.find(aname);
-				if(ai!=aliases_.end())r+=ai->second.first;
+				if(ai!=aliases_.end())
+					r+=ai->second.first;
 				r+=fim::string("\"");
 				if(ai!=aliases_.end())
 				if(ai->second.second!=FIM_CNS_EMPTY_STRING)
@@ -446,8 +451,10 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 */
                 struct stat stat_s;
                 /*      if the file doesn't exist, return */
-                if(-1==stat(nf.c_str(),&stat_s))return false;
-                if( S_ISDIR(stat_s.st_mode))return false;
+                if(-1==stat(nf.c_str(),&stat_s))
+			return false;
+                if( S_ISDIR(stat_s.st_mode))
+			return false;
                 return true;
         }
 
@@ -459,7 +466,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		assert(c);	//FIXME : see the macro NDEBUG for this
 		int idx=findCommandIdx(c->cmd_);
 
-		if(idx!=-1)
+		if(idx!=FIM_INVALID_IDX)
 		{
 			// we replace rather than add
 			delete commands_[idx];
@@ -501,7 +508,8 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		if(state==0)list_index=0;
 		while(isdigit(*text))text++;	//initial  repeat match
 		/*const*/ fim::string cmd(text);
-		if(cmd==FIM_CNS_EMPTY_STRING)return NULL;
+		if(cmd==FIM_CNS_EMPTY_STRING)
+			return NULL;
 		if(cmd.re_match(FIM_SYM_NAMESPACE_REGEX)==true)
 		{
 			mask=4,
@@ -684,6 +692,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		fim_char_t *s=dupstr(ss);//this malloc is free
 		int iret=0;
 		int r =0;
+
 		if(s==NULL)
 		{
 			std::cerr << "allocation problem!\n";
@@ -732,7 +741,8 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 			return FIM_ERR_GENERIC;
 		} 
 		for(fim_char_t *p=s;*p;++p)
-			if(*p=='\n')*p=' ';
+			if(*p=='\n')
+				*p=' ';
 		iret=close(fim_pipedesc[1]);
 		if(iret || errno)
 		{
@@ -761,7 +771,9 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 
 
 #ifdef FIM_USE_READLINE
-		if(add_history_)if(nochars(s)==false)add_history(s);
+		if(add_history_)
+			if(nochars(s)==false)
+				add_history(s);
 #endif
 ret:
 		fim_free(s);
@@ -769,7 +781,8 @@ ret:
 		}
 		catch	(FimException e)
 		{
-			if( e == FIM_E_TRAGIC || true ) this->quit( FIM_E_TRAGIC );
+			if( e == FIM_E_TRAGIC || true )
+			       	this->quit( FIM_E_TRAGIC );
 		}
 		//we add to history only meaningful commands/aliases.
 		return FIM_ERR_NO_ERROR;
@@ -782,11 +795,9 @@ ret:
 		 *	This method executes single commands with arguments.
 		 */
 		Command *c=NULL;
-		/*
-		 * we first determine if this is an alias
-		 */
-
+		/* first determine whether cmd is an alias */
 		fim::string ocmd=aliasRecall(cmd);
+
 		if(ocmd!=FIM_CNS_EMPTY_STRING)
 		{
 			//an alias should be expanded. arguments are appended.
@@ -797,7 +808,8 @@ ret:
 			 * WARNING : i am not sure this is the best choice
 			 */
 			fim_sys_int r = pipe(fim_pipedesc),sl;
-			if(r!=0){ferror("pipe error\n");exit(-1);}
+			if(r!=0)
+			{ferror("pipe error\n");exit(-1);}
 #ifndef			FIM_ALIASES_WITHOUT_ARGUMENTS
 			for(size_t i=0;i<args.size();++i)
 			{
@@ -807,7 +819,8 @@ ret:
 #endif
 			sl=strlen(ex.c_str());
 			r=write(fim_pipedesc[1],ex.c_str(),sl);
-			if(r!=sl){ferror("pipe write error");exit(-1);} 
+			if(r!=sl)
+			{ferror("pipe write error");exit(-1);} 
 			
 			/*
 			 * now the yyparse macro YY_INPUT itself handles the closing of the pipe.
@@ -827,27 +840,26 @@ ret:
 		}
 		if(cmd==FIM_FLT_USLEEP)
 		{
-			fim_tus_t useconds;
-			if(args.size()>0) useconds=atoi(args[0].c_str());
-			else useconds=1;
+			fim_tus_t useconds=1;
+			if(args.size()>0)
+				useconds=atoi(args[0].c_str());
 			usleep(useconds);
 			goto ok;
 		}else
 		if(cmd==FIM_FLT_SLEEP)
 		{
-			fim_ts_t seconds;
+			fim_ts_t seconds=1;
 			//sleeping for an amount of time specified in seconds.
-			
-			if(args.size()>0) seconds=atoi(args[0].c_str());
-			else seconds=1;
+			if(args.size()>0)
+				seconds=atoi(args[0].c_str());
 #if 0
-				sleep(seconds);
+			sleep(seconds);
 #else
-				/*
-				 * FIXME : we would like interruptible sleep.
-				 */
-				//while(seconds>0 && catchLoopBreakingCommand(seconds--))sleep(1);
-				catchLoopBreakingCommand(seconds);
+			/*
+			 * FIXME : we would like interruptible sleep.
+			 */
+			//while(seconds>0 && catchLoopBreakingCommand(seconds--))sleep(1);
+			catchLoopBreakingCommand(seconds);
 #endif
 			goto ok;
 		}else
@@ -924,7 +936,8 @@ ok:
 		fim_key_t c;
 
 		//exitBinding_ = 10;
-		if ( exitBinding_ == 0 ) return 1;	/* any key triggers an exit */
+		if ( exitBinding_ == 0 )
+		       	return 1;	/* any key triggers an exit */
 
 		c = displaydevice_->catchInteractiveCommand(seconds);
 	//	while((c = displaydevice_.catchInteractiveCommand(seconds))!=-1)
@@ -936,8 +949,10 @@ ok:
 //			if(c==sym_keys_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
 //			if(c==sym_keys_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
 //			// 20110601 need some string variable with these two keys (see while() interruption documentation) 
-			if((ki=sym_keys_.find(FIM_KBD_ESC))!=sym_keys_.end() && c==ki->second)return 1;
-			if((ki=sym_keys_.find(FIM_KBD_COLON))!=sym_keys_.end() && c==ki->second)return 1;
+			if((ki=sym_keys_.find(FIM_KBD_ESC))!=sym_keys_.end() && c==ki->second)
+				return 1;
+			if((ki=sym_keys_.find(FIM_KBD_COLON))!=sym_keys_.end() && c==ki->second)
+				return 1;
 			if( c != exitBinding_ )  /* some character read */
 			{
 				/*
@@ -952,7 +967,8 @@ ok:
 				c = displaydevice_->catchInteractiveCommand(1);
 //				return 0;/* could be a command key */
 			}
-			if(c==exitBinding_) return 1; 		/* the user hit the exitBinding_ key */
+			if(c==exitBinding_)
+			       	return 1; 		/* the user hit the exitBinding_ key */
 		}
 		return 0; 		/* no chars read  */
 	}
@@ -988,7 +1004,6 @@ ok:
 	 	while(show_must_go_on_)
 		{
 			cycles_++;
-
 #if 0
 			/* dead code */
 			// FIXME : document this
@@ -1048,7 +1063,8 @@ ok:
 					*(prompt_)=FIM_SYM_PROMPT_NUL;
 					set_status_bar(FIM_CNS_EMPTY_STRING,NULL);
 				}
-				if(rl)fim_free(rl);
+				if(rl)
+					fim_free(rl);
 			}
 			else
 #endif
@@ -1138,7 +1154,8 @@ ok:
 						memorize_last(getBoundAction(c));
 #endif
 					}
-				}else
+				}
+				else
 				{
 					//cout<< "error reading key from keyboard\n";
 					/*
@@ -1228,13 +1245,16 @@ rlnull:
 		else
 	#endif
 		{
-			if(displaydevice_ && displaydevice_ != &dummydisplaydevice_)delete displaydevice_;
+			if(displaydevice_ && displaydevice_ != &dummydisplaydevice_)
+				delete displaydevice_;
 		}
 
 #ifdef FIM_WINDOWS
-		if(window_) delete window_;
+		if(window_)
+			delete window_;
 #else
-		if(viewport_) delete viewport_;
+		if(viewport_)
+		       	delete viewport_;
 #endif
 	}
 
@@ -1247,9 +1267,11 @@ rlnull:
 		fim_sys_int r;
 		fim_char_t buf[FIM_STREAM_BUFSIZE];	// TODO : buffer too small
 		fim::string cmds;
-		if(fd==NULL)return FIM_ERR_GENERIC;
+		if(fd==NULL)
+			return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
-		if(r==-1)return FIM_ERR_GENERIC;
+		if(r==-1)
+			return FIM_ERR_GENERIC;
 		return cmds;
 	}
 	
@@ -1264,9 +1286,11 @@ rlnull:
 		fim_sys_int r;
 		fim_char_t buf[FIM_STREAM_BUFSIZE];
 		fim::string cmds;
-		if(fd==NULL)return FIM_ERR_GENERIC;
+		if(fd==NULL)
+			return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
-		if(r==-1)return FIM_ERR_GENERIC;
+		if(r==-1)
+			return FIM_ERR_GENERIC;
 		execute_internal(cmds.c_str(),FIM_X_QUIET);
 		return FIM_ERR_NO_ERROR;
 	}
@@ -1291,12 +1315,13 @@ rlnull:
 		variables_t::const_iterator vi=variables_.find(varname);
 		if(vi!=variables_.end())
 			return vi->second.getType();
-		else return FIM_ERR_NO_ERROR;
+		else
+		       	return FIM_ERR_NO_ERROR;
 	}
 
 	bool CommandConsole::isVariable(const fim::string &varname)const
 	{
-		const fim_char_t* s;
+		const fim_char_t* s=NULL;
 		s = getStringVariable(varname).c_str();
 		return (s && *s);
 	}
@@ -1349,7 +1374,8 @@ rlnull:
 		fim::string commands_list;
 		for(size_t i=0;i<commands_.size();++i)
 		{
-			if(i)commands_list+=" ";
+			if(i)
+				commands_list+=" ";
 			commands_list+=(commands_[i]->cmd_);
 		}
 		return commands_list;
@@ -1487,7 +1513,8 @@ rlnull:
 		{
 			/* deletion of all autocmd's for given event */
 			ai=autocmds_.find(event);
-			if(ai==autocmds_.end())return FIM_CNS_EMPTY_RESULT;
+			if(ai==autocmds_.end())
+				return FIM_CNS_EMPTY_RESULT;
 			n = (*ai).second.size();
 			for(	autocmds_p_t::iterator api=((*ai)).second.begin();
 				api!=((*ai)).second.end();++api )
@@ -1498,7 +1525,8 @@ rlnull:
 		{
 			/* deletion of all autocmd's for given event and pattern */
 			ai=autocmds_.find(event);
-			if(ai==autocmds_.end())return FIM_CNS_EMPTY_RESULT;
+			if(ai==autocmds_.end())
+				return FIM_CNS_EMPTY_RESULT;
 			autocmds_p_t::iterator api=((*ai)).second.find(pattern);
 			n = (*api).second.size();
 			for(	args_t::iterator aui=((*api)).second.begin();
@@ -1667,11 +1695,13 @@ ok:
 		/*
 		 * we allow for the default match, in case of null regexp
 		 */
-		if(!r || !strlen(r))return true;
+		if(!r || !strlen(r))
+			return true;
 
 		/* fixup code for a mysterious bug
 		 */
-		if(*r=='*')return false;
+		if(*r=='*')
+			return false;
 
 		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
 		if(regcomp(&regex,r, 0 | REG_EXTENDED | (getIntVariable(FIM_VID_IGNORECASE)==0?0:REG_ICASE) )!=0)
@@ -1783,8 +1813,10 @@ ok:
 		static time_t pt=0;
 		fim_tms_t t,d,err;//t,pt in ms; d in us
 	        struct timeval tv;
-		if(cmd==FIM_CNS_EMPTY_STRING){pt=0;return;}
-	        if(!pt){err=gettimeofday(&tv, NULL);pt=tv.tv_usec/1000+tv.tv_sec*1000;}
+		if(cmd==FIM_CNS_EMPTY_STRING)
+		{pt=0;return;}
+	        if(!pt)
+		{err=gettimeofday(&tv, NULL);pt=tv.tv_usec/1000+tv.tv_sec*1000;}
 	        err=gettimeofday(&tv, NULL);t=tv.tv_usec/1000+tv.tv_sec*1000;
 		d=(t-pt)*1000;
 		pt=t;
@@ -2109,21 +2141,26 @@ ok:
 		fim_int style=getIntVariable(FIM_VID_WANT_CAPTION_STATUS);
 		fim_err_t rc=FIM_ERR_NO_ERROR;
 	
-		if( ! displaydevice_   ) return;
+		if( ! displaydevice_   )
+		       	goto ret;
 		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP);/* FIXME: this is SLOW, and should be replaced */
 		hkl=fim_strlen(hk.c_str());
 		/* FIXME: could we guarantee a bound on its length in some way ? */
 		if(hkl>mhkl){hk=FIM_CNS_EMPTY_STRING;hkl=0;/* fix */}
 		else
 		{
-			if(hkl>0){hk+=hp;hkl=hpl;/* help message append*/}
-			else {hpl=0;/* no help key ? no message, then */}
+			if(hkl>0)
+				{hk+=hp;hkl=hpl;/* help message append*/}
+			else
+				{hpl=0;/* no help key ? no message, then */}
 		}
 	
 		chars = displaydevice_->get_chars_per_line();
-		if(chars<1)return;
+		if(chars<1)
+			goto ret;
 		str = (fim_char_t*) fim_calloc(chars+1,1);//this malloc is free
-		if(!str)return;
+		if(!str)
+			goto ret;
 		//sprintf(str, FIM_CNS_EMPTY_STRING);
 		*str='\0';
 		if (info && desc)
@@ -2176,6 +2213,8 @@ ok:
 			rc=displaydevice_->status_line((const fim_char_t*)str);
 done:
 		fim_free(str);
+ret:
+		return;
 	}
 
 	fim_bool_t CommandConsole::inConsole()const
