@@ -260,6 +260,9 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_EMSG_OUT_OF_MEM	"out of memory\n"
 #define FIM_EMSG_UNFINISHED	"sorry, feature incomplete!\n"
 
+/* Command related error messages */
+#define FIM_EMSG_NOMARKUNMARK	"sorry, mark/unmark functionality was opted out."
+
 /*
  * Some environment variables used by Fim.
  */

@@ -997,10 +997,11 @@ ok:
 	{
 		fim_err_t rc=FIM_ERR_NO_ERROR;
 #if FIM_WANT_CAPTION_CONTROL
-		if(!msg)
-		{ rc=FIM_ERR_UNSUPPORTED; goto err;}
-		if(!want_windowed_)
-		       return FIM_ERR_UNSUPPORTED; 	
+		if((!msg) || (!want_windowed_))
+		{
+		       	rc=FIM_ERR_UNSUPPORTED;
+		       	goto err;
+		}
 		SDL_WM_SetCaption(msg,FIM_SDL_ICONPATH);
 #else
 		rc=FIM_ERR_UNSUPPORTED;
