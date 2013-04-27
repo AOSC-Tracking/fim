@@ -44,7 +44,8 @@ namespace fim
 		 * returns a string with the info about the files in list
 		 */
 		fim::string fileslist;
-		for(size_t i=0;i<flist_.size();++i)fileslist+=flist_[i]+fim::string(" ");
+		for(size_t i=0;i<flist_.size();++i)
+			fileslist+=flist_[i]+fim::string(" ");
 		return fileslist;
 	}
 
@@ -105,14 +106,20 @@ namespace fim
 			}
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 			if(args[0]=="mark")
-			{ cc.markCurrentFile(); goto nop; } 
+			{
+			       	cc.markCurrentFile(); 
+				goto nop;
+		       	} 
 			if(args[0]=="unmark")
-			{ cc.unmarkCurrentFile(); goto nop; } 
+			{
+			       	cc.unmarkCurrentFile();
+			       	goto nop;
+		       	} 
 #else
 			if(args[0]=="mark")
-				return "sorry, mark functionality was opted out.";
+				return FIM_EMSG_NOMARKUNMARK;
 			if(args[0]=="unmark")
-				return "sorry, mark functionality was opted out.";
+				return FIM_EMSG_NOMARKUNMARK;
 #endif
 			return FIM_CMD_HELP_LIST;
 		}
@@ -129,7 +136,6 @@ nop:
 			os << flist_[i] << "\n";
 		return os;
 	}
-
 
 	fim::string Browser::fcmd_redisplay(const args_t &args)
 	{
@@ -175,9 +181,11 @@ nop:
 		/*
 		 * this is used mainly to set image files read from pipe or stdin
 		 * */
-		if(!stdin_image || stdin_image->check_invalid())return;
+		if(!stdin_image || stdin_image->check_invalid())
+			return;
 
-		if(default_image_) delete default_image_;
+		if(default_image_)
+		       	delete default_image_;
 		default_image_=stdin_image;
 	}
 #endif
@@ -202,7 +210,8 @@ nop:
 		 * WARNING : SAME AS ERASE !
 		 */
 		fim::string s;
-		if(flist_.size()<=0)return nofile_;
+		if(flist_.size()<=0)
+			return nofile_;
 		assert(cf_);
 		flist_.erase(flist_.begin()+current_n());
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
@@ -216,7 +225,8 @@ nop:
 		 * ( note that it doesn't refresh the image in any way ! )
 		 */
 		fim::string s;
-		if(flist_.size()<=0)return nofile_;
+		if(flist_.size()<=0)
+			return nofile_;
 		assert(cf_);
 		if(filename==FIM_CNS_EMPTY_STRING)
 		{
@@ -241,7 +251,8 @@ nop:
 		 * pans the image left
 		 * FIXME: unfinished
 		 */
-		if(args.size()<1 || (!args[0].c_str()))goto nop;
+		if(args.size()<1 || (!args[0].c_str()))
+			goto nop;
 		if(c_image())
 		{
 			fim::string c=current();
@@ -249,16 +260,17 @@ nop:
 			if(f)
 			{
 #ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPAN,c);
+				autocmd_exec(FIM_ACM_PREPAN,c);
 #endif
-			if(c_image() && viewport())
-				viewport()->pan(args);
+				if(c_image() && viewport())
+					viewport()->pan(args);
 #ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPAN,c);
+				autocmd_exec(FIM_ACM_POSTPAN,c);
 #endif
 			}
 		}
-		else prev();
+		else
+			prev();
 nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -275,7 +287,8 @@ nop:
 		const fim_char_t*ss=NULL;
 		int sl=0;
 		bool pcsc=false;
-		if(args.size()<1 || !(ss=args[0].c_str()))goto nop;
+		if(args.size()<1 || !(ss=args[0].c_str()))
+			goto nop;
 		fc=tolower(*ss);
 		sl=strlen(ss);
 		if(isalpha(fc))
@@ -515,7 +528,8 @@ nop:
 		 * */
 		static int lehsof=0;	/* './fim FILE NONFILE' and hitting 'prev' will make this necessary  */
 
-		if(lehsof)return 0; /* this prevents infinite recursion */
+		if(lehsof)
+			return 0; /* this prevents infinite recursion */
 		if(/*image() &&*/ viewport() && ! (viewport()->check_valid()))
 		{
 			free_current_image();
@@ -901,7 +915,8 @@ nop:
 		 * goes to the next filename-matching file
 		 */
 		size_t i,j,c=current_n(),s=flist_.size();
-		if( args.size() < 1 || s < 1 )goto nop;
+		if( args.size() < 1 || s < 1 )
+			goto nop;
 		for(j=0;j<s;++j)
 		{
 			last_regexp_=args[0];
@@ -936,7 +951,8 @@ nop:
 		 *	FIX ME
 		 */
 		int N=flist_.size();
-		if(!N)return FIM_CNS_EMPTY_RESULT;
+		if(!N)
+			return FIM_CNS_EMPTY_RESULT;
 
 		if(!isfg)
 		if( N==1 && c_image() && c_image()->is_multipage())
@@ -962,7 +978,8 @@ nop:
 		 */
 		int ccp=cf_+n;
 		int N=flist_.size();
-		if(!N)return FIM_CNS_EMPTY_RESULT;
+		if(!N)
+			return FIM_CNS_EMPTY_RESULT;
 		ccp=FIM_MOD(ccp,N);
 		return flist_[ccp];
 	}
@@ -1009,9 +1026,11 @@ nop:
 			bool ispg=false;
 			bool isfg=false;
 			bool isrj=false;
-			if(!s)goto ret;
+			if(!s)
+				goto ret;
 			sl=strlen(s);
-			if(sl<1)goto ret;
+			if(sl<1)
+				goto ret;
 			c=*s;
 			//for(li=sl-2;li<sl;++li) { l=tolower(s[li]); pcnt=(l=='%'); ispg=(l=='p'); }
 			l=tolower(s[li=sl-1]);
@@ -1034,7 +1053,9 @@ nop:
 				nf=gv;
 				goto go_jump;
 			}
-			else if(isre){;}
+			else
+				if(isre)
+					{;}
 			else
 			{
 				cout << " please specify a number or ^ or $\n";
@@ -1076,17 +1097,17 @@ nop:
 			//cout << "at " << cf <<", gv="<<gv <<", mod="<<mv<<"\n";
 			if(ispg)
 			{
-			if(isrj)
-				{np=cp+gv;}// FIXME: what if gv gv<1 ? pity :)
-			else
-				np=gv;
+				if(isrj)
+					{np=cp+gv;}// FIXME: what if gv gv<1 ? pity :)
+				else
+					np=gv;
 			}
 			else
 			{
-			if(isrj)
-				{nf=cf+gv;}// FIXME: what if gv gv<1 ? pity :)
-			else
-				nf=gv;
+				if(isrj)
+					{nf=cf+gv;}// FIXME: what if gv gv<1 ? pity :)
+				else
+					nf=gv;
 			}
 			gv=FIM_MOD(gv,mv);
 			nf=FIM_MOD(nf,fc);
@@ -1122,14 +1143,16 @@ go_jump:
 			{	
 				fim::string c=current();
 #ifdef FIM_AUTOCMDS
-				if(!(xflags&FIM_X_NOAUTOCMD))autocmd_exec(FIM_ACM_PREGOTO,c);
+				if(!(xflags&FIM_X_NOAUTOCMD))
+					autocmd_exec(FIM_ACM_PREGOTO,c);
 #endif
 				if(ispg)
 					image()->goto_page(np);
 				else
 					goto_image(nf,isfg?true:false);
 #ifdef FIM_AUTOCMDS
-				if(!(xflags&FIM_X_NOAUTOCMD))autocmd_exec(FIM_ACM_POSTGOTO,c);
+				if(!(xflags&FIM_X_NOAUTOCMD))
+					autocmd_exec(FIM_ACM_POSTGOTO,c);
 #endif
 			}
 		}
@@ -1146,7 +1169,8 @@ err:
 		 *
 		 *	FIXME : dangerous!
 		 */
-		if(flist_.size()<1)return "the files list is empty\n";
+		if(flist_.size()<1)
+			return "the files list is empty\n";
 		args_t rlist=args;	//the remove list
 		if(rlist.size()>0)
 		{
@@ -1163,8 +1187,10 @@ err:
 				flist_.erase(flist_.begin()+i);
 			}
 			int N=flist_.size();
-			if(N<=0)cf_=0;
-			else cf_=FIM_MIN(cf_,N-1);
+			if(N<=0)
+				cf_=0;
+			else
+				cf_=FIM_MIN(cf_,N-1);
 			setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 			setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 			goto nop;
@@ -1227,7 +1253,8 @@ nop:
 #endif
 		if(c_image() && viewport())
 		{
-			if(viewport()->onBottom()) next();
+			if(viewport()->onBottom())
+				next();
 			else
 				viewport()->pan("down",FIM_CNS_SCROLL_DEFAULT);
 		}
@@ -1276,9 +1303,12 @@ nop:
 		 * rotates the displayed image a specified amount of degrees
 		 */ 
 		fim_angle_t angle;
-		if(args.size()==0)angle=FIM_CNS_ANGLE_ONE;
-		else angle=fim_atof(args[0].c_str());
-		if(angle==FIM_CNS_ANGLE_ZERO)return FIM_CNS_EMPTY_RESULT;
+		if(args.size()==0)
+			angle=FIM_CNS_ANGLE_ONE;
+		else
+			angle=fim_atof(args[0].c_str());
+		if(angle==FIM_CNS_ANGLE_ZERO)
+			return FIM_CNS_EMPTY_RESULT;
 
 		if(c_image())
 		{
@@ -1311,24 +1341,25 @@ nop:
 		if(c_image())
 		{
 			fim_scale_t factor;
-			factor = firstforzero(args);
-			if(!factor) factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 			fim::string c=current();
+			factor = firstforzero(args);
+			if(!factor)
+				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PRESCALE,c);
 #endif
 			if(c_image())
 			{
 				if(factor)
-					{
-						if(image())image()->magnify(factor);
-						if(viewport())viewport()->scale_position_magnify(factor);
-					}
+				{
+					if(image())image()->magnify(factor);
+					if(viewport())viewport()->scale_position_magnify(factor);
+				}
 				else	
-					{
-						if(image())image()->magnify();
-						if(viewport())viewport()->scale_position_magnify();
-					}
+				{
+					if(image())image()->magnify();
+					if(viewport())viewport()->scale_position_magnify();
+				}
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
@@ -1354,15 +1385,15 @@ nop:
 			if(c_image())
 			{
 				if(factor)
-					{
-						if(image())image()->reduce(factor);
-						if(viewport())viewport()->scale_position_reduce(factor);
-					}
+				{
+					if(image())image()->reduce(factor);
+					if(viewport())viewport()->scale_position_reduce(factor);
+				}
 				else	
-					{
-						if(image())image()->reduce();
-						if(viewport())viewport()->scale_position_reduce();
-					}
+				{
+					if(image())image()->reduce();
+					if(viewport())viewport()->scale_position_reduce();
+				}
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTSCALE,c);
@@ -1503,12 +1534,18 @@ err:
 
 	int Browser::n_pages()const
 	{
-		if(c_image())return c_image()->n_pages(); else return 0;
+		if(c_image())
+			return c_image()->n_pages();
+	       	else
+		       	return 0;
 	}
 
 	int Browser::c_page()const
 	{
-		if(c_image())return c_image()->c_page(); else return 0;
+		if(c_image())
+			return c_image()->c_page();
+	       	else
+		       	return 0;
 	}
 }
 
