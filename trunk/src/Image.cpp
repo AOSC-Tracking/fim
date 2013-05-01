@@ -80,6 +80,7 @@ namespace fim
 		orientation_(0),
                 invalid_(false),
 		no_file_(true),
+		fs_(0), ms_(0),
 #ifdef FIM_NAMESPACES
 		Namespace(FIM_SYM_NAMESPACE_IMAGE_CHAR),
 #endif
@@ -170,7 +171,16 @@ namespace fim
 			fis_ = FIM_E_STDIN; // yes, it seems redundant but it is necessary
 		}
 		else 
+		{
+#if FIM_WANT_DISPLAY_FILESIZE
+			struct stat stat_s;
+			if(-1!=stat(fname,&stat_s))
+			{
+				fs_=stat_s.st_size;
+			}
+#endif
 			no_file_=false;	//reloading allowed
+		}
 
 		img_=fimg_;	/* no scaling : one copy only */
 		should_redraw();
@@ -488,6 +498,7 @@ namespace fim
                 invalid_(image.invalid_),
 		no_file_(true),
 		fis_(image.fis_),
+		fs_(0), ms_(0),
                 fname_     (image.fname_)
 	{
 		/*
@@ -562,8 +573,22 @@ fim::string Image::getInfo()
 	else
 		*pagesinfobuffer='\0';
 		
+#if FIM_WANT_DISPLAY_MEMSIZE
+	ms_=0;
+	if(fimg_)
+		ms_+=fimg_->i.height*fimg_->i.width*3;
+	if(fimg_!=img_)
+		ms_+= img_->i.height* img_->i.width*3;
+#endif
 	snprintf(linebuffer, sizeof(linebuffer),
-	     "%s%.0f%% %dx%d%s%s %d/%d",
+	     "%s%.0f%% %dx%d%s%s %d/%d"
+#if FIM_WANT_DISPLAY_FILESIZE
+	     " %dkB"
+#endif
+#if FIM_WANT_DISPLAY_MEMSIZE
+	     " %dMB"
+#endif
+	     ,
 	     /*fcurrent->tag*/ 0 ? "* " : "",
 	     scale_*100,
 	     this->width(), this->height(),
@@ -571,6 +596,12 @@ fim::string Image::getInfo()
 	     pagesinfobuffer,
 	     n?n:1, /* ... */
 	     (getGlobalIntVariable(FIM_VID_FILELISTLEN))
+#if FIM_WANT_DISPLAY_FILESIZE
+	     ,fs_/1024
+#endif
+#if FIM_WANT_DISPLAY_MEMSIZE
+	     ,ms_/(1024*1024)
+#endif
 	     );
 	return fim::string(linebuffer);
 }

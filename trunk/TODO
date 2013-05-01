@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20130501	shall cache stat() results
 20130412	may use a library like http://www.littlecms.com/
 20120811	need proper jpeg error handling
 20120805	feeding a .png named PS file can lead to segfault. why ?
