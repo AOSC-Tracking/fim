@@ -727,6 +727,8 @@ namespace fim
 #define FIM_WANT_DOUBLE_ESC_TO_ENTER 0	/* if enabled in the console mode, would require three presses the first time; two later on; this is non consistent, so we keep it disabled until we find a fix */
 #define FIM_WANT_EXPERIMENTAL_PLUGINS 1	/* unfinished */
 #define FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG 1
+#define FIM_WANT_DISPLAY_FILESIZE 0
+#define FIM_WANT_DISPLAY_MEMSIZE  0
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_METAINFO_BUFSIZE	256

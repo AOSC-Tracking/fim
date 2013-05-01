@@ -98,6 +98,8 @@ class Image
 	fim_image_source_t fis_;
 
 	string  fname_;		/* viewport variable, too */
+	size_t fs_;		/* file size */
+	size_t ms_;		/* memory size */
 
         void free();
 	void reset();
