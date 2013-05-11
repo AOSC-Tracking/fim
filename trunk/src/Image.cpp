@@ -545,12 +545,16 @@ fim::string Image::getInfo()
 	 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
 	 */
 	//FIX ME !
-	if(!fimg_)return FIM_CNS_EMPTY_RESULT;
+	if(!fimg_)
+		return FIM_CNS_EMPTY_RESULT;
 
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[3],*imp;
 	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
+#if FIM_WANT_CUSTOM_INFO_STRING
+	fim::string ifs;
+#endif
 	imp=imagemode;
 
 	//if(getGlobalIntVariable(FIM_VID_AUTOFLIP))*(imp++)='F';
@@ -563,6 +567,7 @@ fim::string Image::getInfo()
 	int mirror   =
 	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
 	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
+
 
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
@@ -580,8 +585,83 @@ fim::string Image::getInfo()
 	if(fimg_!=img_)
 		ms_+= img_->i.height* img_->i.width*3;
 #endif
+
+#if FIM_WANT_CUSTOM_INFO_STRING
+	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
+	{
+		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE];
+		char*ifsp=(char*)ifs.c_str(); // FIXME
+		char*fp=ifsp;
+		char*sp=ifsp;
+		clb[0]=FIM_SYM_CHAR_NUL;
+
+		while(*sp && *sp!='%')
+		{
+			++sp;
+		}
+		goto sbum;
+		while(*sp=='%' && isprint(sp[1]))
+		{
+			++sp;
+			switch(*sp)
+			{
+				// "%p %wx%h %i/%l %F %M"
+				case('p'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%.0f",scale_*100);
+				break;
+				case('w'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%d",this->width());
+				break;
+				case('h'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%d",this->height());
+				break;
+				case('i'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%d",n?n:1);
+				break;
+				case('l'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%d",(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
+				break;
+				case('L'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%s",imagemode);
+				break;
+				case('P'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%s",pagesinfobuffer);
+				break;
+				case('F'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%dkB",fs_/1024);
+				break;
+				case('M'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%dMB",ms_/(1024*1024));
+				break;
+				case('%'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
+				break;
+				// default:
+				/* rejecting char; may display an error message here */
+			}
+			++sp;
+			fp=sp;
+sbum:
+			while(*sp!='%' && sp[0])
+				++sp;
+			if(sp[0]==FIM_SYM_CHAR_NUL)
+				snprintf(clb+strlen(clb), sizeof(clb), "%s",fp);
+#if 1
+			else
+			{
+				sp[0]=FIM_SYM_CHAR_NUL;
+				snprintf(clb+strlen(clb), sizeof(clb), "%s",fp);
+				sp[0]='%';
+			}
+#endif
+		}
+		// std::cout << "Custom format string chosen: "<< ifsp << ", resulting in :"<< clb <<"\n";
+		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
+		goto labeldone;
+	}
+#endif
 	snprintf(linebuffer, sizeof(linebuffer),
-	     "%s%.0f%% %dx%d%s%s %d/%d"
+	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
 #if FIM_WANT_DISPLAY_FILESIZE
 	     " %dkB"
 #endif
@@ -603,6 +683,7 @@ fim::string Image::getInfo()
 	     ,ms_/(1024*1024)
 #endif
 	     );
+labeldone:
 	return fim::string(linebuffer);
 }
 

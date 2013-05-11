@@ -2172,7 +2172,8 @@ ok:
 			ilen = fim_strlen(info);
 			if(chars-eisl-ilen-hkl>0)
 			{
-				sprintf(str, "%s%-*.*s [ %s ] %s",prompt_,
+				// sprintf(str, "%s%-*.*s [ %s ] %s",prompt_,
+				sprintf(str, "%s%-*.*s %s %s",prompt_,
 				chars-eisl-ilen-hkl, chars-eisl-ilen-hkl, desc, info, hk.c_str());//here above there is the need of 14+ilen chars
 			}
 			else
