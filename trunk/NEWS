@@ -1,6 +1,9 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
+                Version 0.4
+ * customizable image info string (TODO)
+
                 Version 0.4-beta
 
  * interface to the GraphicsMagic library (more graphics formats supported)
