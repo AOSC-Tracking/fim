@@ -96,7 +96,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 		if(device.find(FIM_DDN_INN_FB)==0)
 		{
-			extern fim_char_t *default_fbdev,*default_fbmode;
+			extern fim_char_t *default_fbdev,*default_fbmode; /* FIXME: we don't want globals! */
 			extern int default_vt;
 			extern float default_fbgamma;
 			FramebufferDevice * ffdp=NULL;

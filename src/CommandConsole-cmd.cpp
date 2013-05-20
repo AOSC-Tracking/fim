@@ -42,12 +42,15 @@ namespace fim
 		const fim_char_t*kstr=NULL;
 		int l;
 		fim_key_t key=FIM_SYM_NULL_KEY;
-		if(args.size()==0)return getBindingsList();
+		if(args.size()==0)
+			return getBindingsList();
 
 		kstr=(args[0].c_str());
-		if(!kstr)return kerr;
+		if(!kstr)
+			return kerr;
 		l=strlen(kstr);
-		if(!l)return kerr;
+		if(!l)
+			return kerr;
 
 #ifdef FIM_WANT_RAW_KEYS_BINDING
 		if(l>=2 && isdigit(kstr[0]) && isdigit(kstr[1]))
@@ -84,8 +87,10 @@ namespace fim
 		/*
 		 * TODO: there will be room for the binding comment by the user
 		 * */
-		if(args.size()<2) return kerr;
-		if(args[1]==FIM_CNS_EMPTY_STRING) return unbind(args[0]);
+		if(args.size()<2)
+		       	return kerr;
+		if(args[1]==FIM_CNS_EMPTY_STRING)
+		       	return unbind(args[0]);
 		return bind(key,args[1]);
 	}
 
@@ -96,7 +101,8 @@ namespace fim
 		 *	IDEAS : multiple unbindings ?
 		 *	maybe you should made surjective the binding_keys mapping..
 		 */
-		if(args.size()!=1)return FIM_FLT_UNBIND" : specify the key to unbind\n";
+		if(args.size()!=1)
+			return FIM_FLT_UNBIND" : specify the key to unbind\n";
 		return unbind(args[0]);
 	}
 
@@ -174,7 +180,8 @@ namespace fim
 		/*
 		 * TODO : catch exceptions
 		 * */
-		for(size_t i=0;i<args.size();++i)executeFile(args[i].c_str());
+		for(size_t i=0;i<args.size();++i)
+			executeFile(args[i].c_str());
 		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif
@@ -210,8 +217,10 @@ namespace fim
 		/*
 		 * a command to echo arguments, for debug and learning purposes
 		 */
-		if(args.size()==0)fim::cout<<FIM_FLT_ECHO" command\n";
-		for(size_t i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
+		if(args.size()==0)
+			fim::cout<<FIM_FLT_ECHO" command\n";
+		for(size_t i=0;i<args.size();++i)
+			fim::cout << (args[i].c_str()) << "\n";
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -220,8 +229,10 @@ namespace fim
 		/*
 		 * a command to echo to stdout arguments, for debug and learning purposes
 		 */
-		if(args.size()==0)std::cout<<"echo command\n";
-		for(size_t i=0;i<args.size();++i)std::cout << (args[i].c_str()) << "\n";
+		if(args.size()==0)
+			std::cout<<"echo command\n";
+		for(size_t i=0;i<args.size();++i)
+			std::cout << (args[i].c_str()) << "\n";
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -405,10 +416,12 @@ namespace fim
 #endif
 			int ret = chdir(dir.c_str());
 #if 1
-			if(ret) return (fim::string("cd error : ")+fim::string(strerror(errno)));
+			if(ret)
+			       	return (fim::string("cd error : ")+fim::string(strerror(errno)));
 #else
 			// deprecated
-			if(ret) return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
+			if(ret)
+			       	return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
 #endif
 		}
 		setVariable(FIM_VID_PWD,fcmd_pwd(args_t()).c_str());
@@ -432,22 +445,25 @@ namespace fim
 	fim::string CommandConsole::fcmd_pwd(const args_t& args)
 	{
 		/*
-		 * yes, print working directory
+		 * print working directory
 		 * */
 		fim::string cwd=FIM_CNS_EMPTY_STRING;
 #if HAVE_GET_CURRENT_DIR_NAME
 		/* default */
 		fim_char_t *p=get_current_dir_name();
-		if(p)cwd=p;
-		else cwd=FIM_CNS_EMPTY_STRING;
-		if(p)fim_free(p);
+		if(p)
+			cwd=p;
+		else
+		       	cwd=FIM_CNS_EMPTY_STRING;
+		if(p)
+			fim_free(p);
 #else
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 		{
 			/* untested */
 			fim_char_t *buf[PATH_MAX];
 			getcwd(buf,PATH_MAX-1): 
-			buf[PATH_MAX-1]='\0';
+			buf[PATH_MAX-1]=FIM_SYM_CHAR_NUL;
 			cwd=buf;
 		}
 #endif
@@ -553,7 +569,8 @@ namespace fim
 			return FIM_CNS_EMPTY_RESULT;
 			/* fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" successfully unaliased.\n"); */
 		}
-		else return fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" there is not such alias.\n");
+		else
+		       	return fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" there is not such alias.\n");
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -726,27 +743,34 @@ nop:
 		 *
 		 * NOTE : THIS IS NOT EXACTLY VIM'S BEHAVIOUR (FIXME)
 		 * */
-		if( ! args.size())return get_variables_list();
-		if(1==args.size())return getStringVariable(args[0]);
+		if( ! args.size())
+			return get_variables_list();
+		if(1==args.size())
+			return getStringVariable(args[0]);
 		/*
 		 * warning!
 		 * */
-		if(2==args.size())return setVariable(args[0],args [1].c_str());
+		if(2==args.size())
+			return setVariable(args[0],args [1].c_str());
 		else
-		return FIM_CMD_HELP_SET;
+			return FIM_CMD_HELP_SET;
 	}
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	fim::string CommandConsole::scroll_up(const args_t& args)
 	{
-		if(!displaydevice_) { } else
+		if(!displaydevice_)
+	       	{ }
+		else
 			displaydevice_->console_control(0x01);
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::scroll_down(const args_t& args)
 	{
-		if(!displaydevice_) { } else
+		if(!displaydevice_)
+	       	{ }
+		else
 			displaydevice_->console_control(0x02);
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -765,7 +789,8 @@ nop:
 		" (note that getenv call was not available at build time, so it won't work)\n"
 #endif
 		;
-		if( ! args.size())return help;
+		if( ! args.size())
+			return help;
 #ifdef HAVE_GETENV
 		if(1==args.size())
 		{

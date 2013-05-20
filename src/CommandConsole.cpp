@@ -59,7 +59,7 @@ namespace fim
 	static  bool nochars(const fim_char_t *s)
 	{
 		/*
-		 * 1 if the string is null or empty, 0 otherwise
+		 * true if the string is null or empty, false otherwise
 		 */
 		if(s==NULL)
 			return true;
@@ -71,7 +71,7 @@ namespace fim
 	int CommandConsole::findCommandIdx(fim::string cmd)const
 	{
 		/*
-		 * is cmd a valid internal (registered) Fim command ?
+		 * check whether cmd is a valid internal (registered) Fim command and returns index
 		 */
 		for(size_t i=0;i<commands_.size();++i) 
 			if(commands_[i] && commands_[i]->cmd_==cmd)
@@ -82,7 +82,7 @@ namespace fim
 	Command* CommandConsole::findCommand(fim::string cmd)const
 	{
 		/*
-		 * is cmd a valid internal (registered) Fim command ?
+		 * check whether cmd is a valid internal (registered) Fim command and returns pointer
 		 */
 		int idx=findCommandIdx(cmd);
 		if(idx!=FIM_INVALID_IDX)
@@ -231,7 +231,8 @@ ret:		return key;
 		 * ( and this method would loose the chance to be const ).
 		 */
 		aliases_t::const_iterator ai=aliases_.find(cmd);
-		if(ai!=aliases_.end()) return ai->second.first;
+		if(ai!=aliases_.end())
+		       	return ai->second.first;
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -505,7 +506,8 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 */
 		static size_t list_index=0;
 		fim_char_t nschar='\0';
-		if(state==0)list_index=0;
+		if(state==0)
+			list_index=0;
 		while(isdigit(*text))text++;	//initial  repeat match
 		/*const*/ fim::string cmd(text);
 		if(cmd==FIM_CNS_EMPTY_STRING)
@@ -602,8 +604,10 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 * */
 		//return bindings_[c];
 		bindings_t::const_iterator bi=bindings_.find(c);
-		if(bi!=bindings_.end()) return bi->second;
-		else return FIM_CNS_EMPTY_RESULT;
+		if(bi!=bindings_.end()) 
+			return bi->second;
+		else
+		       	return FIM_CNS_EMPTY_RESULT;
 	}
 
 	void CommandConsole::executeBinding(const fim_key_t c)
@@ -622,8 +626,13 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		static fim_int it_buf=-1;
 		if( c>='0' && c <='9' && (bi==bindings_.end() || bi->second==FIM_CNS_EMPTY_STRING))//a number, not bound
 		{
-			if(it_buf>0){it_buf*=10;it_buf+=c - KEY_OFFSET;}
-			else it_buf=c - KEY_OFFSET;
+			if(it_buf>0)
+			{
+				it_buf*=10;
+				it_buf+=c - KEY_OFFSET;
+			}
+			else
+			       	it_buf=c - KEY_OFFSET;
 			return;
 		}
 		/* FIXME 20110515 this prevents infinite recursion on iterated commands in SDL mode. this is probably a bug in the sdl input handling code and shall be solved */
@@ -752,8 +761,10 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		try	{	iret=yyparse();		}
 		catch	(FimException e)
 		{
-			if( e == FIM_E_TRAGIC || e == FIM_E_NO_MEM ) this->quit( FIM_E_NO_MEM );
-			else ;	/* ]:-)> */
+			if( e == FIM_E_TRAGIC || e == FIM_E_NO_MEM )
+			       	this->quit( FIM_E_NO_MEM );
+			else
+			       	;	/* ]:-)> */
 		}
 		if(iret!=0 || errno!=0)
 		{
@@ -845,7 +856,8 @@ ret:
 				useconds=atoi(args[0].c_str());
 			usleep(useconds);
 			goto ok;
-		}else
+		}
+		else
 		if(cmd==FIM_FLT_SLEEP)
 		{
 			fim_ts_t seconds=1;
@@ -862,7 +874,8 @@ ret:
 			catchLoopBreakingCommand(seconds);
 #endif
 			goto ok;
-		}else
+		}
+		else
 		if(cmd==FIM_FLT_ALIAS)
 		{
 			//assignment of an alias
@@ -1106,9 +1119,13 @@ ok:
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY) || 
 					   c==FIM_SYM_SEARCH_KEY)set_status_bar("compiled with no readline support!\n",NULL);
 #else
-					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY)
-					){ic_=1;*prompt_=FIM_SYM_PROMPT_CHAR;}	//should be configurable..
-					else if(c==FIM_SYM_SEARCH_KEY)
+					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY))
+					{
+						// TODO: FIM_VID_CONSOLE_KEY should be configurable..
+						ic_=1;*prompt_=FIM_SYM_PROMPT_CHAR;
+					}
+					else
+					if(c==FIM_SYM_SEARCH_KEY)
 					{
 						/*
 						 * this is a hack to handle vim-styled regexp searches
@@ -1150,7 +1167,8 @@ ok:
 
 						this->executeBinding(c);
 #ifdef FIM_RECORDING
-						if(recordMode_) record_action(getBoundAction(c));
+						if(recordMode_)
+						       	record_action(getBoundAction(c));
 						memorize_last(getBoundAction(c));
 #endif
 					}
@@ -1269,7 +1287,10 @@ rlnull:
 		fim::string cmds;
 		if(fd==NULL)
 			return FIM_ERR_GENERIC;
-		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
+		while((r=fread(buf,1,sizeof(buf)-1,fd))>0)
+		{
+			buf[r]='\0';cmds+=buf;
+		}
 		if(r==-1)
 			return FIM_ERR_GENERIC;
 		return cmds;
@@ -1288,7 +1309,10 @@ rlnull:
 		fim::string cmds;
 		if(fd==NULL)
 			return FIM_ERR_GENERIC;
-		while((r=fread(buf,1,sizeof(buf)-1,fd))>0){buf[r]='\0';cmds+=buf;}
+		while((r=fread(buf,1,sizeof(buf)-1,fd))>0)
+		{
+			buf[r]='\0';cmds+=buf;
+		}
 		if(r==-1)
 			return FIM_ERR_GENERIC;
 		execute_internal(cmds.c_str(),FIM_X_QUIET);
@@ -1729,7 +1753,7 @@ ok:
 		else
 		{
 			/*	no match	*/
-		};
+		}
 		regfree(&regex);
 		return false;
 		//return true;
@@ -1814,9 +1838,15 @@ ok:
 		fim_tms_t t,d,err;//t,pt in ms; d in us
 	        struct timeval tv;
 		if(cmd==FIM_CNS_EMPTY_STRING)
-		{pt=0;return;}
+		{
+			pt=0;
+			return;
+		}
 	        if(!pt)
-		{err=gettimeofday(&tv, NULL);pt=tv.tv_usec/1000+tv.tv_sec*1000;}
+		{
+			err=gettimeofday(&tv, NULL);
+			pt=tv.tv_usec/1000+tv.tv_sec*1000;
+		}
 	        err=gettimeofday(&tv, NULL);t=tv.tv_usec/1000+tv.tv_sec*1000;
 		d=(t-pt)*1000;
 		pt=t;
@@ -2093,8 +2123,10 @@ ok:
 		 * used by : fb_catch_exit_signals() : should this matter ?
 		 * */
 
-		if(mangle_tcattr_)tty_restore();	
-		if(displaydevice_) displaydevice_->finalize();
+		if(mangle_tcattr_)
+			tty_restore();	
+		if(displaydevice_)
+		       	displaydevice_->finalize();
 #ifdef FIM_USE_READLINE
 		save_history();
 #endif
@@ -2146,7 +2178,8 @@ ok:
 		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP);/* FIXME: this is SLOW, and should be replaced */
 		hkl=fim_strlen(hk.c_str());
 		/* FIXME: could we guarantee a bound on its length in some way ? */
-		if(hkl>mhkl){hk=FIM_CNS_EMPTY_STRING;hkl=0;/* fix */}
+		if(hkl>mhkl)
+			{hk=FIM_CNS_EMPTY_STRING;hkl=0;/* fix */}
 		else
 		{
 			if(hkl>0)
@@ -2177,9 +2210,15 @@ ok:
 				chars-eisl-ilen-hkl, chars-eisl-ilen-hkl, desc, info, hk.c_str());//here above there is the need of 14+ilen chars
 			}
 			else
-			if(chars>5) sprintf(str, "<-!->");
-			else
-			if(chars>0) sprintf(str, "!");	/* :D */
+			{
+				if(chars>5)
+				       	sprintf(str, "<-!->");
+				else
+				{
+				       	if(chars>0)
+				       	sprintf(str, "!");
+			       	}	/* :D */
+			}
 		}
 #ifdef FIM_USE_READLINE
 		else
@@ -2238,7 +2277,11 @@ ret:
 		w=displaydevice_->width();
 		h=displaydevice_->height();
 
-		if(window_) { Rect nr(0,0,w,h);cc.window_->update(nr);}
+		if(window_)
+	       	{
+		       	Rect nr(0,0,w,h);
+			cc.window_->update(nr);
+		}
 
 		displaydevice_->init_console();
 
