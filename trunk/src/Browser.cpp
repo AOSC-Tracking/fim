@@ -35,10 +35,7 @@
 namespace fim
 {
 	//int Browser::current_n()const{ return current_n(cf_); }
-	int Browser::current_n()const
-	{
-	       	return cf_;
-       	}
+	int Browser::current_n()const{ return cf_; }
 	//int Browser::current_n(int ccp)const{ return ccp?ccp-1:ccp; }
 
 	fim::string Browser::list()const
@@ -315,8 +312,7 @@ nop:
 				if(fc=='+' && sc=='+')
 				{
 					fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
-					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)
-						sfd=FIM_CNS_SCALEFACTOR_DELTA ;
+					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)+sfd);
 					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)+sfd);
 					goto nop;
@@ -324,8 +320,7 @@ nop:
 				if(fc=='+' && sc=='-')
 				{
 					fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
-					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)
-						sfd=FIM_CNS_SCALEFACTOR_DELTA ;
+					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)-sfd);
 					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)-sfd);
 					goto nop;
@@ -333,8 +328,7 @@ nop:
 				if(fc=='+' && sc=='*')
 				{
 					fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
-					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)
-						sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
+					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)*sfm);
 					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)*sfm);
 					goto nop;
@@ -342,8 +336,7 @@ nop:
 				if(fc=='+' && sc=='/')
 				{
 					fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
-					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)
-						sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
+					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 					setGlobalVariable(FIM_VID_REDUCE_FACTOR,getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR)/sfm);
 					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR)/sfm);
 					goto nop;
@@ -352,14 +345,11 @@ nop:
 				{
 					newscale=fim_atof(ss+1);
 					pcsc=(strstr(ss,"%")!=NULL);
-					if( pcsc)newscale*=.01;
-					if(!newscale)
-						goto nop;
+					if(pcsc)newscale*=.01;
+					if(!newscale)goto nop;
 #if 1
-					if(fc=='+')
-						newscale=1.0+newscale;
-					if(fc=='-')
-						newscale=1.0-newscale;
+					if(fc=='+')newscale=1.0+newscale;
+					if(fc=='-')newscale=1.0-newscale;
 					fc=FIM_SYM_CHAR_NUL;
 #endif
 					goto comeon;
@@ -370,10 +360,8 @@ nop:
 			{
 				newscale=fim_atof(ss);
 				pcsc=(strstr(ss,"%")!=NULL);
-				if(pcsc)
-					newscale*=.01;
-				if(newscale==FIM_CNS_SCALEFACTOR_ZERO)
-				       	goto nop;
+				if(pcsc)newscale*=.01;
+				if(newscale==FIM_CNS_SCALEFACTOR_ZERO) goto nop;
 				pcsc=false;
 				goto comeon;
 			}
@@ -390,36 +378,28 @@ comeon:
 			switch(fc)
 			{
 				case('w'):
-				if(viewport())
-					viewport()->auto_width_scale();
+				if(viewport())viewport()->auto_width_scale();
 				break;
 				case('h'):
-				if(viewport())
-					viewport()->auto_height_scale();
+				if(viewport())viewport()->auto_height_scale();
 				break;
 				case('a'):
-				if(viewport())
-					viewport()->auto_scale();
+				if(viewport())viewport()->auto_scale();
 				break;
 				case('b'):
-				if(viewport())
-					viewport()->auto_scale_if_bigger();
+				if(viewport())viewport()->auto_scale_if_bigger();
 				break;
 				case('-'):
 				{
 				if(newscale)
 					{
-						if(image())
-							image()->reduce(newscale);
-						if(viewport())
-							viewport()->scale_position_reduce(newscale);
+						if(image())image()->reduce(newscale);
+						if(viewport())viewport()->scale_position_reduce(newscale);
 					}
 				else	
 					{
-						if(image())
-							image()->reduce();
-						if(viewport())
-							viewport()->scale_position_reduce();
+						if(image())image()->reduce();
+						if(viewport())viewport()->scale_position_reduce();
 					}
 				}
 				break;
@@ -427,16 +407,13 @@ comeon:
 				{
 				if(newscale)
 					{
-						if(image())
-							image()->magnify(newscale);
+						if(image())image()->magnify(newscale);
 						if(viewport())viewport()->scale_position_magnify(newscale);
 					}
 				else	
 					{
-						if(image())
-							image()->magnify();
-						if(viewport())
-							viewport()->scale_position_magnify();
+						if(image())image()->magnify();
+						if(viewport())viewport()->scale_position_magnify();
 					}
 
 				}
@@ -527,11 +504,8 @@ nop:
 			autocmd_exec(FIM_ACM_POSTDISPLAY,c);
 #endif
 		}
-		else
-		{
-			cout << "no image to display, sorry!";
-			commandConsole_.set_status_bar("no image loaded.", "*");
-		}
+		else{ cout << "no image to display, sorry!";
+		commandConsole_.set_status_bar("no image loaded.", "*");}
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -602,18 +576,15 @@ nop:
 		{
 #ifndef FIM_BUGGED_CACHE
 	#ifdef FIM_CACHE_DEBUG
-		if(viewport())
-			std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
+		if(viewport())std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif
-		if(viewport())
-			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
+		if(viewport())viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
 #else
 		// warning : in this cases exception handling is missing
 	#ifdef FIM_READ_STDIN_IMAGE
 		if(current()!=FIM_STDIN_IMAGE_NAME)
 		{
-			if(viewport())
-				viewport()->setImage( new Image(current().c_str()) );
+			if(viewport())viewport()->setImage( new Image(current().c_str()) );
 		}
 		else
 		{
@@ -625,15 +596,13 @@ nop:
 			}
 		}
 	#else
-		if(viewport())
-			viewport()->setImage( new Image(current().c_str()) );
+		if(viewport())viewport()->setImage( new Image(current().c_str()) );
 	#endif
 #endif
 		}
 		catch(FimException e)
 		{
-			if(viewport())
-				viewport()->setImage( NULL );
+			if(viewport())viewport()->setImage( NULL );
 //		commented temporarily for safety reasons
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
@@ -646,8 +615,7 @@ nop:
 		 * FIXME
 		 * only cleans up the internal data structures
 		 * */
-		if(viewport())
-			viewport()->free();
+		if(viewport())viewport()->free();
 		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport().c_str());
 	}
 
@@ -665,8 +633,7 @@ nop:
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PREPREFETCH,current());
 #endif
-		if( args.size() > 0 )
-			return FIM_CNS_EMPTY_RESULT;
+		if( args.size() > 0 )return FIM_CNS_EMPTY_RESULT;
 
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,0);
 		if(cache_.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
@@ -697,8 +664,7 @@ nop:
 		 */
 		fim::string c=current();
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
-		if(empty_file_list())
-			return "sorry, no image to reload\n";
+		if(empty_file_list())return "sorry, no image to reload\n";
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_PRERELOAD,c);
 #endif
@@ -735,8 +701,7 @@ nop:
 		{
 			return "image already loaded\n";		//warning
 		}
-		if(empty_file_list())
-			return "sorry, no image to load\n";	//warning
+		if(empty_file_list())return "sorry, no image to load\n";	//warning
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_PRELOAD,c);
 #endif
@@ -787,8 +752,7 @@ nop:
 		if(!is_dir(nf.c_str()))
 			nf=fim_dirname(nf);
 #else
-		if( !is_dir( nf ))
-			return false;
+		if( !is_dir( nf ))return false;
 #endif
 
 		if ( ! ( dir = opendir(nf.c_str() ) ))
@@ -799,16 +763,13 @@ nop:
 		//are we sure -1 is not paranoid ?
 		while( ( de = readdir(dir) ) != NULL )
 		{
-			if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] ) 
-				continue;
-			if( de->d_name[0] == '.' && !de->d_name[1] ) 
-				continue;
+			if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] ) continue;
+			if( de->d_name[0] == '.' && !de->d_name[1] ) continue;
 #if 1
 			/*
 			 * We follow the convention of ignoring hidden files.
 			 * */
-			if( de->d_name[0] == '.' ) 
-				continue;
+			if( de->d_name[0] == '.' ) continue;
 #endif
 			
 			/*
@@ -996,8 +957,7 @@ nop:
 		if(!isfg)
 		if( N==1 && c_image() && c_image()->is_multipage())
 		{
-			if(0)
-				std::cout<<"goto page "<<n<<"\n";
+			if(0)std::cout<<"goto page "<<n<<"\n";
 			image()->goto_page(n);
 			return N;
 		}
@@ -1050,14 +1010,12 @@ nop:
 	{
 		/*
 		 */
-		const fim_char_t*errmsg=FIM_CNS_EMPTY_RESULT;
+		const fim_char_t*errmsg=FIM_CNS_EMPTY_STRING;
 		//const int cf=cf_,cp=c_page(),pc=n_pages(),fc=n_files();
 		const int cf=cf_,cp=getGlobalIntVariable(FIM_VID_PAGE),pc=FIM_MAX(1,n_pages()),fc=n_files();
 		int gv=0,nf=cf,mv=0,np=cp;
-		if(n_files()==0 || !s)
-			goto herr;
-		if(!s)
-			goto herr;
+		if(n_files()==0 || !s){errmsg=FIM_CMD_HELP_GOTO;goto err;}
+		if(!s){errmsg=FIM_CMD_HELP_GOTO;goto err;}
 		else
 		{
 			fim_char_t c=FIM_SYM_CHAR_NUL;
@@ -1198,10 +1156,8 @@ go_jump:
 #endif
 			}
 		}
-ret:		
-		return errmsg;
-herr:
-		errmsg=FIM_CMD_HELP_GOTO;
+ret:
+		return FIM_CNS_EMPTY_RESULT;
 err:
 		return errmsg;
 	}
@@ -1214,7 +1170,7 @@ err:
 		 *	FIXME : dangerous!
 		 */
 		if(flist_.size()<1)
-			return "cannot remove: the files list is empty\n";
+			return "the files list is empty\n";
 		args_t rlist=args;	//the remove list
 		if(rlist.size()>0)
 		{
@@ -1223,7 +1179,6 @@ err:
 			 * if this software will have success, we will have indices here :)
 			 * sort(rlist.begin(),rlist.end());...
 			 */
-			int N=flist_.size();
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
 			if(flist_[i]==rlist[r])
@@ -1231,6 +1186,7 @@ err:
 //				std::cout << "removing" << flist_[i]<<"\n";
 				flist_.erase(flist_.begin()+i);
 			}
+			int N=flist_.size();
 			if(N<=0)
 				cf_=0;
 			else
@@ -1273,11 +1229,9 @@ nop:
 			if(viewport()->onRight())
 			{
 				viewport()->pan("down",FIM_CNS_SCROLL_DEFAULT);
-				while(!(viewport()->onLeft()))
-					viewport()->pan("left",FIM_CNS_SCROLL_DEFAULT);
+				while(!(viewport()->onLeft()))viewport()->pan("left",FIM_CNS_SCROLL_DEFAULT);
 			}
-			else
-			       	viewport()->pan("right",FIM_CNS_SCROLL_DEFAULT);
+			else viewport()->pan("right",FIM_CNS_SCROLL_DEFAULT);
 		}
 		else next(1);
 #ifdef FIM_AUTOCMDS
@@ -1386,9 +1340,9 @@ nop:
 		 */ 
 		if(c_image())
 		{
-			fim_scale_t factor = firstforzero(args);
+			fim_scale_t factor;
 			fim::string c=current();
-
+			factor = firstforzero(args);
 			if(!factor)
 				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 #ifdef FIM_AUTOCMDS
@@ -1421,9 +1375,9 @@ nop:
 		 */ 
 		if(c_image())
 		{
-			fim_scale_t factor = firstforzero(args);
-			if(!factor)
-			       	factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
+			fim_scale_t factor;
+			factor = firstforzero(args);
+			if(!factor) factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PRESCALE,c);
@@ -1519,10 +1473,9 @@ err:
 		 * dilemma : should the current() filename and next() operations
 		 * be relative to viewport's own current's ?
 		 * */
-		if(empty_file_list())
-			return nofile_; // FIXME: patch!
+		if(empty_file_list())return nofile_; // FIXME: patch!
 	       	//return cf_?flist_[current_n()]:nofile_;
-	       	return cf_>=0?flist_[FIM_MIN(cf_,flist_.size()-1)]:nofile_;
+	       	return cf_>=0?flist_[cf_]:nofile_;
 	}
 
 	int Browser::empty_file_list()const
