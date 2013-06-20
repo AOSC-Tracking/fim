@@ -436,6 +436,7 @@ namespace fim
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load the system wide initialization file" */
 #define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] string with the global configuration file name" */
 #define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)" */
+#define FIM_VID_RETRY_LOADER_PROBE 		"_retry_loader_probe"		/* "[in] if 1 and user specified a file loader and this fails, will probe for a different loader" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */

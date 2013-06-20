@@ -138,7 +138,7 @@ namespace fim
 			FIXME : still unused
 		*/
 		bool b=false;
-		FILE *fd=fopen(fname_.c_str(),"r");
+		FILE *fd=fim_fopen(fname_.c_str(),"r");
 		if(!fd)
 			return b;
 		b=load(fname_.c_str(),fd,page_);

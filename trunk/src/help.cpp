@@ -12,6 +12,7 @@ fim_var_help_db[FIM_VID_LAST_SYSTEM_OUTPUT]= "[internal,out,experimental] the st
 fim_var_help_db[FIM_VID_LOAD_DEFAULT_ETC_FIMRC]= "[internal,in] if 1 at startup, will load the system wide initialization file" ;
 fim_var_help_db[FIM_VID_DEFAULT_ETC_FIMRC]= "[internal,in] string with the global configuration file name" ;
 fim_var_help_db[FIM_VID_FILE_LOADER]= "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)" ;
+fim_var_help_db[FIM_VID_RETRY_LOADER_PROBE]= "[in] if 1 and user specified a file loader and this fails, will probe for a different loader" ;
 fim_var_help_db[FIM_VID_NO_RC_FILE]= "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" ;
 fim_var_help_db[FIM_VID_NO_EXTERNAL_LOADERS]= "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" ;
 fim_var_help_db[FIM_VID_SCRIPTOUT_FILE]= "[internal,in] the name of the file to write to when recording sessions" ;
