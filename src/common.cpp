@@ -39,6 +39,7 @@
 #ifdef HAVE_LIBGEN_H
 #include <libgen.h>
 #endif
+#include <zlib.h>
 
 /*
 void fim_tolowers(fim_char_t *s)
@@ -229,7 +230,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			buf=(fim_byte_t*)fim_calloc(inc,1);
 			if(!buf) 
 				return buf;
-			while((nrb=fread(buf+rb,1,inc,fd))>0)
+			while((nrb=fim_fread(buf+rb,1,inc,fd))>0)
 			{
 				fim_byte_t *tb;
 				// if(nrb==inc) a full read. let's try again
@@ -714,7 +715,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 		/* todo : read errno in case of error and print some report.. */
 		const size_t buf_size=FIM_STREAM_BUFSIZE;
 		fim_char_t buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
-		while( (rc=fread(buf,1,buf_size,fp))>0 )
+		while( (rc=fim_fread(buf,1,buf_size,fp))>0 )
 		{
 			wc=fwrite(buf,1,rc,tfd);
 			if(wc!=rc)
@@ -832,3 +833,62 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 
 int fim_isspace(int c){return isspace(c);}
 int fim_isquote(int c){return c=='\'' || c=='\"';}
+#define FIM_WANT_ZLIB 0
+FILE *fim_fopen(const char *path, const char *mode)
+{
+#if FIM_WANT_ZLIB
+	/* cast necessary; in v.1.2.3.4 declared as void* */
+	return (FILE*)gzopen(path,mode);
+#else
+	return fopen(path,mode);
+#endif
+}
+
+int fim_fclose(FILE*fp)
+{
+#if FIM_WANT_ZLIB
+	return gzclose(fp);
+#else
+	return fclose(fp);
+#endif
+}
+
+size_t fim_fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+{
+#if FIM_WANT_ZLIB
+	return gzread(stream,ptr,size*nmemb);
+#else
+	return fread(ptr,size,nmemb,stream);
+#endif
+}
+
+int fim_rewind(FILE *stream)
+{
+#if FIM_WANT_ZLIB
+	gzrewind(stream);
+	return 0;
+#else
+	rewind(stream);
+	return 0;
+#endif
+}
+
+int fim_fseek(FILE *stream, long offset, int whence)
+{
+#if FIM_WANT_ZLIB
+	return gzseek(stream,offset,whence);
+	0;
+#else
+	return fseek(stream,offset,whence);
+#endif
+}
+
+int fim_fgetc(FILE *stream)
+{
+#if FIM_WANT_ZLIB
+	return gzgetc(stream);
+#else
+	return fgetc(stream);
+#endif
+}
+

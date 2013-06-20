@@ -1522,7 +1522,7 @@ err:
 		if(empty_file_list())
 			return nofile_; // FIXME: patch!
 	       	//return cf_?flist_[current_n()]:nofile_;
-	       	return cf_>=0?flist_[cf_]:nofile_;
+	       	return cf_>=0?flist_[FIM_MIN(cf_,flist_.size()-1)]:nofile_;
 	}
 
 	int Browser::empty_file_list()const

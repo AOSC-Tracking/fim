@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2012 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -1494,9 +1494,9 @@ static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t b
 
 	if(base_offset)
 	{
-    		if(fseek(fp,base_offset,SEEK_SET)!=0);// NEW
+    		if(fim_fseek(fp,base_offset,SEEK_SET)!=0);// NEW
 		{
-    			// fseek(fp,0,SEEK_SET);
+    			// fim_fseek(fp,0,SEEK_SET);
 			// should handle in some better way..
 			return 0;
 		}
@@ -1506,7 +1506,7 @@ static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t b
 		goff+=ftell(fp);
 
 	/* we read in a good chunk of the file */
-	while((rb=fread(buf,1,FIM_FILE_BUF_SIZE,fp))>0)
+	while((rb=fim_fread(buf,1,FIM_FILE_BUF_SIZE,fp))>0)
 	{
 		fim_bzero(buf,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
 		off=rb-sl;
@@ -1573,6 +1573,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     //fim_size_t sbbs=NULL;
     size_t sbbs=NULL;
 #endif
+    int want_retry=0;
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
     if(vl)FIM_VERB_PRINTF("approaching loading \"%s\"\n",filename);
@@ -1603,7 +1604,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     // but much dirtier :/
     if(fd==NULL) {
     /* open file */
-    if (NULL == (fp = fopen(filename, "r"))) {
+    if (NULL == (fp = fim_fopen(filename, "r"))) {
 	//comment by dez, temporary
 	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("open %s: %s\n",filename,strerror(errno));
@@ -1615,7 +1616,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     size_t read_offset=0;
     read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
 
-    if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
+    if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
 
 #ifdef FIM_WANT_SEEK_MAGIC
 	/* FIXME : EXPERIMENTAL */
@@ -1628,22 +1629,23 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
    	if(sm!=FIM_CNS_EMPTY_STRING)
 	{
 		read_offset=find_regexp_offset(fp, sm.c_str() , read_offset);
-		if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
+		if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
 		cc.setVariable(FIM_VID_OPEN_OFFSET ,(fim_int)read_offset);
 	}
 #endif
     fim_bzero(blk,sizeof(blk));
-    if((fr=fread(blk,1,sizeof(blk),fp))<0)
+    if((fr=fim_fread(blk,1,sizeof(blk),fp))<0)
     {
       /* should we care about the error code ? */
       return NULL;	/* new */
     }
-    rewind(fp);
-    if(read_offset>0)fseek(fp,read_offset,SEEK_SET);// NEW
+    fim_rewind(fp);
+    if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
 
 #if FIM_ALLOW_LOADER_STRING_SPECIFICATION
     {
     fim::string ls=cc.getStringVariable(FIM_VID_FILE_LOADER);
+    want_retry=(cc.getIntVariable(FIM_VID_RETRY_LOADER_PROBE));
     if(ls!=FIM_CNS_EMPTY_STRING)
     if(NULL==loader)/* we could have forced one */
     {
@@ -1654,6 +1656,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 	if (!strcmp(loader->name,ls.c_str()))
 		goto found_a_loader;
     }
+    	if(vl)FIM_VERB_PRINTF("user specified loader string: %s is invalid!\n",ls.c_str());
     }
 		loader = NULL;
     }
@@ -1676,6 +1679,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     }
     }
 #endif
+probe_loader:
     /* pick loader */
 #ifdef FIM_SKIP_KNOWN_FILETYPES
     if (NULL == loader && (*blk==0x42) && (*(fim_byte_t*)(blk+1)==0x5a))
@@ -1766,9 +1770,9 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_DIA"'...", "*");
-	if(NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME".png",NULL))&& 0==fclose (fp))
+	if(NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME".png",NULL))&& 0==fim_fclose (fp))
 	{
-		if (NULL == (fp = fopen(FIM_TMP_FILENAME".png","r")))
+		if (NULL == (fp = fim_fopen(FIM_TMP_FILENAME".png","r")))
 		/* this could happen in case dia was removed from the system */
 			goto shall_skip_header;
 		else
@@ -1833,9 +1837,9 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 		}
 	}
 #else
-	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fclose(fp))
+	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fim_fclose(fp))
 	{
-		if (NULL == (fp = fopen(FIM_TMP_FILENAME,"r")))
+		if (NULL == (fp = fim_fopen(FIM_TMP_FILENAME,"r")))
 			goto shall_skip_header;
 		else
 		{
@@ -1888,6 +1892,7 @@ found_a_loader:	/* we have a loader */
      * which gets cleared to 0 (default) in this way.
      * */
 #endif
+    // cc.set_status_bar("loading...", "*");
     data = loader->init(fp,filename,page,&img->i,0);
 #ifdef FIM_READ_STDIN_IMAGE
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
@@ -1897,6 +1902,14 @@ found_a_loader:	/* we have a loader */
 	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);
+	img=NULL;
+	if(want_retry)
+	{
+		want_retry=0;
+		loader=NULL;
+    		if(vl)FIM_VERB_PRINTF("retrying with probing..\n");
+		goto probe_loader;
+	}
 	goto shall_skip_header;
     }
     img->data = (fim_byte_t*)fim_malloc(img->i.width * img->i.height * 3);
@@ -1923,7 +1936,7 @@ found_a_loader:	/* we have a loader */
     loader->done(data);
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
     if(img && loader)
-	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);
+	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);	/* FIXME: shall become an image specific variable */
 #endif
 #if FIM_WANT_EXPERIMENTAL_PLUGINS
     	if(img)

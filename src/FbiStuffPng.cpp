@@ -53,6 +53,12 @@ struct fim_png_state {
     int          color_type;
 };
 
+static FILE*fim_png_fp;
+void PNGAPI fim_png_rw_ptr(png_structp s, png_bytep p, png_size_t l)
+{
+	fim_fread(p, l, 1, fim_png_fp);
+}
+
 static void*
 png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
@@ -90,6 +96,8 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if (NULL == h->info)
 	goto oops;
 
+    fim_png_fp=fp;
+    h->png->read_data_fn=&fim_png_rw_ptr;
     png_init_io(h->png, h->infile);
     png_read_info(h->png, h->info);
     png_get_IHDR(h->png, h->info, &h->w, &h->h,
@@ -151,7 +159,7 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	fim_free(h->image);
     if (h->png)
 	png_destroy_read_struct(&h->png, NULL, NULL);
-    fclose(h->infile);
+    fim_fclose(h->infile);
     if(h)fim_free(h);
     return NULL;
 }
@@ -193,7 +201,7 @@ png_done(void *data)
 
     fim_free(h->image);
     png_destroy_read_struct(&h->png, &h->info, NULL);
-    fclose(h->infile);
+    fim_fclose(h->infile);
     fim_free(h);
 }
 

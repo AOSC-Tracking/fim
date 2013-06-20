@@ -105,8 +105,8 @@ bmp_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     fim_bzero(h,sizeof(*h));
     h->fp = fp;
 
-    fseek(fp,10,SEEK_SET);
-    fr=fread(&h->hdr,sizeof(struct bmp_hdr),1,fp);
+    fim_fseek(fp,10,SEEK_SET);
+    fr=fim_fread(&h->hdr,sizeof(struct bmp_hdr),1,fp);
     if(!fr)goto oops;
 
 #if BYTE_ORDER == BIG_ENDIAN
@@ -156,8 +156,8 @@ bmp_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if (h->hdr.num_colors > 256)
 	h->hdr.num_colors = 256;
     if (h->hdr.num_colors) {
-	fseek(fp,14+h->hdr.size,SEEK_SET);
-	fr=fread(&h->cmap,sizeof(struct bmp_cmap),h->hdr.num_colors,fp);
+	fim_fseek(fp,14+h->hdr.size,SEEK_SET);
+	fr=fim_fread(&h->cmap,sizeof(struct bmp_cmap),h->hdr.num_colors,fp);
         if(!fr)goto oops;
     }
     
@@ -181,13 +181,13 @@ bmp_read(fim_byte_t *dst, unsigned int line, void *data)
     
     ll = (((h->hdr.width * h->hdr.bit_cnt + 31) & ~0x1f) >> 3);
     y  = h->hdr.height - line - 1;
-    fseek(h->fp,h->hdr.foobar + y * ll,SEEK_SET);
+    fim_fseek(h->fp,h->hdr.foobar + y * ll,SEEK_SET);
 
     switch (h->hdr.bit_cnt) {
     case 1:
 	for (x = 0; x < h->hdr.width; x++) {
 	    if (0 == (x & 0x07))
-		byte = fgetc(h->fp);
+		byte = fim_fgetc(h->fp);
 	    pixel = byte & (0x80 >> (x & 0x07)) ? 1 : 0;
 	    *(dst++) = h->cmap[pixel].red;
 	    *(dst++) = h->cmap[pixel].green;
@@ -199,7 +199,7 @@ bmp_read(fim_byte_t *dst, unsigned int line, void *data)
 	    if (x & 1) {
 		pixel = byte & 0xf;
 	    } else {
-		byte = fgetc(h->fp);
+		byte = fim_fgetc(h->fp);
 		pixel = byte >> 4;
 	    }
 	    *(dst++) = h->cmap[pixel].red;
@@ -209,7 +209,7 @@ bmp_read(fim_byte_t *dst, unsigned int line, void *data)
 	break;
     case 8:
 	for (x = 0; x < h->hdr.width; x++) {
-	    pixel = fgetc(h->fp);
+	    pixel = fim_fgetc(h->fp);
 	    *(dst++) = h->cmap[pixel].red;
 	    *(dst++) = h->cmap[pixel].green;
 	    *(dst++) = h->cmap[pixel].blue;
@@ -217,9 +217,9 @@ bmp_read(fim_byte_t *dst, unsigned int line, void *data)
 	break;
     case 24:
 	for (x = 0; x < h->hdr.width; x++) {
-	    dst[2] = fgetc(h->fp);
-	    dst[1] = fgetc(h->fp);
-	    dst[0] = fgetc(h->fp);
+	    dst[2] = fim_fgetc(h->fp);
+	    dst[1] = fim_fgetc(h->fp);
+	    dst[0] = fim_fgetc(h->fp);
 	    dst += 3;
 	}
 	break;
@@ -234,7 +234,7 @@ bmp_done(void *data)
 {
     struct bmp_state *h = (struct bmp_state *) data;
 
-    fclose(h->fp);
+    fim_fclose(h->fp);
     fim_free(h);
 }
 

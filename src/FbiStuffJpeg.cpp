@@ -390,7 +390,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	jpeg_destroy_decompress(&h->cinfo);
         if(fim_jerr)goto oops;
     //    if(h->jerr.msg_code)goto oops; // this triggers with apparently good files 
-	fclose(h->infile);
+	fim_fclose(h->infile);
 	h->infile = NULL;
 	jpeg_create_decompress(&h->cinfo);
         if(fim_jerr)goto oops;
@@ -445,7 +445,7 @@ jpeg_done(void *data)
     struct jpeg_state *h = (struct jpeg_state*)data;
     jpeg_destroy_decompress(&h->cinfo);
     if (h->infile)
-	fclose(h->infile);
+	fim_fclose(h->infile);
     if (h->thumbnail)
 	fim_free(h->thumbnail);
     fim_free(h);
