@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 #include "FbiStuffLoader.h"
 #ifdef USE_X11
 # include "viewer.h"
-#endif
+#endif /* USE_X11 */
 namespace fim
 {
 
@@ -123,10 +123,10 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	png_set_expand_gray_1_2_4_to_8(h->png);
  #else
 	png_set_gray_1_2_4_to_8(h->png);
- #endif
+ #endif /* PNG_LIBPNG_VER */
 #else
  #error  need a proper function name for png_set_gray_1_2_4_to_8, here.
-#endif
+#endif /* PNG_LIBPNG_VER */
     if (png_get_bKGD(h->png, h->info, &file_bg)) {
 	png_set_background(h->png,file_bg,PNG_BACKGROUND_GAMMA_FILE,1,1.0);
     } else {
@@ -210,7 +210,7 @@ png_done(void *data)
 struct ida_loader png_loader
 #else
 static struct ida_loader png_loader
-#endif
+#endif /* FIM_WITH_LIBPNG */
 = {
     /*magic:*/ "\x89PNG",
     /*moff:*/  0,
@@ -295,5 +295,5 @@ static void __init init_wr(void)
 }
 
 
-#endif
+#endif /* USE_X11 */
 }

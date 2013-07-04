@@ -55,11 +55,11 @@ static Window   win;
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	Imlib2Device::Imlib2Device(MiniConsole & mc_, fim::string opts):DisplayDevice(mc_),
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	Imlib2Device::Imlib2Device(
 			fim::string opts
 			):DisplayDevice(),
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
    	current_w_(FIM_DEFAULT_WINDOW_HEIGHT), current_h_(FIM_DEFAULT_WINDOW_WIDTH)
 	,want_windowed_(false)
 	{

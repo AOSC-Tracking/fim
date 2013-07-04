@@ -27,13 +27,13 @@
 #include <cstdio>
 #include <cstdlib>
 
-/*
+#if 0
 
 #ifdef HAVE_STDLIB_H
 //#undef HAVE_STDLIB_H
 #define HAVE_STDLIB_H_BACKUP HAVE_STDLIB_H
+#endif /* HAVE_STDLIB_H */
 #endif
-*/
 
 
 #include <cstring>
@@ -46,7 +46,7 @@
 #ifdef FIM_WITH_LIBEXIF
 #include <libexif/exif-data.h>
 #define HAVE_NEW_EXIF 0
-#endif
+#endif /* FIM_WITH_LIBEXIF */
 
 //
 extern "C"
@@ -78,13 +78,13 @@ extern "C"
 # include "RegEdit.h"
 # include "ida.h"
 # include "viewer.h"
-#endif
+#endif /* USE_X11 */
 namespace fim
 {
 
 #if HAVE_NEW_EXIF
 extern CommandConsole cc;
-#endif
+#endif /* HAVE_NEW_EXIF */
    int fim_jerr=0;
 
 /* ---------------------------------------------------------------------- */
@@ -175,7 +175,7 @@ static void dump_exif(FILE *out, ExifData *ed)
     fim_char_t buffer[FIM_EXIF_BUFSIZE];
     ExifEntry  *ee=NULL;
     int /*tag,*/i;
-#endif
+#endif /* HAVE_NEW_EXIF */
 #if HAVE_NEW_EXIF
     //for (i = 0; i < EXIF_IFD_COUNT; i++) {
     for (i = 0; i < 1; i++) { // first only
@@ -261,7 +261,7 @@ uhmpf:
 		1;
 	}
     }
-#endif
+#endif /* HAVE_NEW_EXIF */
 #if 0
     for (i = 0; i < EXIF_IFD_COUNT; i++) {
 	fprintf(out,"   ifd %s\n", exif_ifd_get_name (i));
@@ -274,9 +274,9 @@ uhmpf:
 		continue;
 #ifdef HAVE_NEW_EXIF
 	    value = exif_entry_get_value(ee, buffer, sizeof(buffer));
-#else
+#else /* HAVE_NEW_EXIF */
 	    value = exif_entry_get_value(ee);
-#endif
+#endif /* HAVE_NEW_EXIF */
 	    fprintf(out,"      0x%04x  %-30s %s\n", tag, title, value);
 	}
     }
@@ -284,7 +284,7 @@ uhmpf:
 	fprintf(out,"   thumbnail\n      %d bytes data\n", ed->size);
 #endif
 }
-#endif
+#endif /* FIM_WITH_LIBEXIF */
 
 
 /* ---------------------------------------------------------------------- */
@@ -346,8 +346,8 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     		if(ed)
 			dump_exif(stdout,ed);
 	}
-#endif
-#endif
+#endif /* FIM_WITH_LIBEXIF */
+#endif /* HAVE_NEW_EXIF */
 #ifdef FIM_WITH_LIBEXIF_nonono
 	    if (thumbnail) {
 		ExifData *ed;
@@ -367,7 +367,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		}
 		exif_data_unref(ed);
 	    }
-#endif
+#endif /* FIM_WITH_LIBEXIF_nonono */
 	    break;
 	}
     }
@@ -552,11 +552,11 @@ static void __init init_wr(void)
 }
 
 
-#endif
-/*
+#endif /* USE_X11 */
+#if 0
 #ifdef HAVE_STDLIB_H_BACKUP 
 #define HAVE_STDLIB_H HAVE_STDLIB_H_BACKUP 
 #undef HAVE_STDLIB_H_BACKUP 
+#endif /* HAVE_STDLIB_H_BACKUP */
 #endif
-*/
 }

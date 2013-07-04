@@ -83,7 +83,7 @@ namespace fim
 		fs_(0), ms_(0),
 #ifdef FIM_NAMESPACES
 		Namespace(FIM_SYM_NAMESPACE_IMAGE_CHAR),
-#endif
+#endif /* FIM_NAMESPACES */
 		fis_(fim::string(fname)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
                 fname_     (FIM_CNS_DEFAULT_IFNAME)
 
@@ -178,7 +178,7 @@ namespace fim
 			{
 				fs_=stat_s.st_size;
 			}
-#endif
+#endif /* FIM_WANT_DISPLAY_FILESIZE */
 			no_file_=false;	//reloading allowed
 		}
 
@@ -205,7 +205,7 @@ namespace fim
 		setVariable(FIM_VID_NEGATED , 0);
 		setVariable(FIM_VID_DESATURATED, 0);
 		setVariable(FIM_VID_FILENAME,fname_.c_str());
-#endif
+#endif /* FIM_NAMESPACES */
 
 		setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg_->i.height);
 		setGlobalVariable(FIM_VID_WIDTH  ,(int)fimg_->i.width );
@@ -225,7 +225,7 @@ namespace fim
 		 * */
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "freeing Image " << this << "\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 		this->free();
 	}
 
@@ -308,7 +308,7 @@ namespace fim
 		 * */
 #if FIM_BUGGED_RESCALE
 		return FIM_ERR_NO_ERROR;
-#endif
+#endif /* FIM_BUGGED_RESCALE */
 		if(ns>0.0)newscale_=ns;//patch
 
 		if( check_invalid() ) return FIM_ERR_GENERIC;
@@ -373,7 +373,7 @@ namespace fim
 				img_ = scale_image(fimg_,newscale_,newascale);
 #else
 			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale);
-#endif
+#endif /* FIM_PROGRESSIVE_RESCALING */
 			/* orientation_ can be 0,1,2,3 */
 			if( img_ && orientation_!=0 && orientation_ != 2)
 			{
@@ -554,7 +554,7 @@ fim::string Image::getInfo()
 	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 #if FIM_WANT_CUSTOM_INFO_STRING
 	fim::string ifs;
-#endif
+#endif /* FIM_WANT_CUSTOM_INFO_STRING */
 	imp=imagemode;
 
 	//if(getGlobalIntVariable(FIM_VID_AUTOFLIP))*(imp++)='F';
@@ -584,7 +584,7 @@ fim::string Image::getInfo()
 		ms_+=fimg_->i.height*fimg_->i.width*3;
 	if(fimg_!=img_)
 		ms_+= img_->i.height* img_->i.width*3;
-#endif
+#endif /* FIM_WANT_DISPLAY_MEMSIZE */
 
 #if FIM_WANT_CUSTOM_INFO_STRING
 	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
@@ -659,15 +659,15 @@ sbum:
 		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
 		goto labeldone;
 	}
-#endif
+#endif /* FIM_WANT_CUSTOM_INFO_STRING */
 	snprintf(linebuffer, sizeof(linebuffer),
 	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
 #if FIM_WANT_DISPLAY_FILESIZE
 	     " %dkB"
-#endif
+#endif /* FIM_WANT_DISPLAY_FILESIZE */
 #if FIM_WANT_DISPLAY_MEMSIZE
 	     " %dMB"
-#endif
+#endif /* FIM_WANT_DISPLAY_MEMSIZE */
 	     ,
 	     /*fcurrent->tag*/ 0 ? "* " : "",
 	     scale_*100,
@@ -678,10 +678,10 @@ sbum:
 	     (getGlobalIntVariable(FIM_VID_FILELISTLEN))
 #if FIM_WANT_DISPLAY_FILESIZE
 	     ,fs_/1024
-#endif
+#endif /* FIM_WANT_DISPLAY_FILESIZE */
 #if FIM_WANT_DISPLAY_MEMSIZE
 	     ,ms_/(1024*1024)
-#endif
+#endif /* FIM_WANT_DISPLAY_MEMSIZE */
 	     );
 labeldone:
 	return fim::string(linebuffer);

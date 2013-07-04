@@ -25,9 +25,9 @@
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	DisplayDevice::DisplayDevice(MiniConsole & mc):fontname_(NULL)
 	,mc_(mc)
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	DisplayDevice::DisplayDevice():fontname_(NULL)
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,f_(NULL)
 	,debug_(false)
 	,redraw_(FIM_REDRAW_UNNECESSARY)
@@ -77,7 +77,7 @@
 			            FD_SET(lirc,&set);
 			            fdmax = lirc+1;
 			        }
-#endif
+#endif /* FBI_HAVE_LIBLIRC */
 			        limit.tv_sec = timeout;
 			        limit.tv_usec = 0;
 			        rc = select(fdmax, &set, NULL, NULL,
@@ -93,12 +93,12 @@
 				r=rc;
 				*c=int2msbf(*c);
 			}
-#else	
+#else  /* FIM_SWITCH_FIXUP */
 			/*
 			 * this way the console switches the wrong way
 			 */
 			r=read(fim_stdin_,&c,4);	//up to four chars should suffice
-#endif
+#endif  /* FIM_SWITCH_FIXUP */
 			//std::cout << (fim_int)*c<<"\n";
 ret:		return r;
 	}
@@ -189,11 +189,11 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw,
 #endif
 	cc.displaydevice_->unlock();
 	mc_.dump();
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 ret:
 	return;
 }
-#endif
+#endif /* FIM_KEEP_BROKEN_CONSOLE */
 
 fim_err_t DisplayDevice::console_control(fim_cc_t arg)//experimental
 {
@@ -219,7 +219,7 @@ fim_err_t DisplayDevice::init_console()
 		mc_.setRows ( height()   );
 		mc_.reformat( width()    );
 	}
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	return FIM_ERR_NO_ERROR;
 }
 
@@ -275,4 +275,4 @@ void DisplayDevice::quickbench(fim_int qbi)
 		break;
 	}
 }
-#endif
+#endif /* FIM_WANT_BENCHMARKS */

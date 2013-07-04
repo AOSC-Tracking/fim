@@ -37,12 +37,12 @@ namespace fim
 		fim_err_t rc=0;/*return code*/
 #if FIM_DISABLE_WINDOW_SPLITTING
 		return "Warning: window splitting is temporarily disabled. It shall fixed in a soon-to-come version.\n";
-#endif
+#endif /* FIM_DISABLE_WINDOW_SPLITTING */
 #ifdef FIM_AUTOCMDS
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal
 		if(amroot_)autocmd_exec(FIM_ACM_PREWINDOW,c);
-#endif
+#endif /* FIM_AUTOCMDS */
 		try
 		{
 		while(i<args.size())
@@ -118,14 +118,14 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		// note that an autocommand on a transient object is lethal
 		if(amroot_)autocmd_exec(FIM_ACM_POSTWINDOW,c);
-#endif
+#endif /* FIM_AUTOCMDS */
                 return FIM_CNS_EMPTY_RESULT;
         }
 
 	FimWindow::FimWindow(CommandConsole &c,const Rect& corners, Viewport* vp):corners_(corners),focus_(false),first_(NULL),second_(NULL),amroot_(false)
 #ifdef FIM_NAMESPACES
 	,Namespace(FIM_SYM_NAMESPACE_WINDOW_CHAR)
-#endif
+#endif /* FIM_NAMESPACES */
 	,viewport_(NULL),
 	commandConsole_(c)
 	{
@@ -150,7 +150,7 @@ namespace fim
 	FimWindow::FimWindow(const FimWindow & root):corners_(root.corners_),focus_(root.focus_),first_(root.first_),second_(root.second_),amroot_(false), viewport_(NULL),commandConsole_(root.commandConsole_)
 #ifdef FIM_NAMESPACES
 			,Namespace(FIM_SYM_NAMESPACE_WINDOW_CHAR)
-#endif
+#endif /* FIM_NAMESPACES */
 	{
 		/*
 		 *  A new leave FimWindow is created with a specified geometry.
@@ -373,7 +373,7 @@ namespace fim
 #define FIM_COOL_WINDOWS_SPLITTING 0
 #if     FIM_COOL_WINDOWS_SPLITTING
 				first_ ->current_viewport().pan_up  ( second_->current_viewport().viewport_height() );
-#endif
+#endif /* FIM_COOL_WINDOWS_SPLITTING */
 				delete viewport_;
 				viewport_ = NULL;
 			}
@@ -399,7 +399,7 @@ namespace fim
 			{
 #if     FIM_COOL_WINDOWS_SPLITTING
 				second_->current_viewport().pan_right( first_->current_viewport().viewport_width() );
-#endif
+#endif /* FIM_COOL_WINDOWS_SPLITTING */
 				delete viewport_;
 				viewport_ = NULL;
 			}
@@ -893,7 +893,7 @@ namespace fim
 	{
 #if FIM_BUGGED_ENLARGE
 		return FIM_ERR_GENERIC;
-#endif
+#endif /* FIM_BUGGED_ENLARGE */
 		/*
 		 * SEEMS BUGGY:
 		 * */
@@ -943,7 +943,7 @@ namespace fim
 		 // make && src/fim media/* -c 'split;vsplit;6henlarge;wd;7henlarge;wu;4henlarge'
 #if FIM_BUGGED_ENLARGE
 		return FIM_ERR_GENERIC;
-#endif
+#endif /* FIM_BUGGED_ENLARGE */
 			/*
 			 * this operation doesn't change the outer bounds of the called window
 			 *
@@ -990,7 +990,7 @@ namespace fim
 		 */
 #if FIM_BUGGED_ENLARGE
 			return FIM_ERR_GENERIC;
-#endif
+#endif /* FIM_BUGGED_ENLARGE */
 		/*
 		 * complicato ...
 		 */
@@ -1187,5 +1187,5 @@ int main()
 	w.close();
 }
 #endif
-#endif
+#endif /* FIM_WINDOWS */
 

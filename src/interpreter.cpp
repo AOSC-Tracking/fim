@@ -439,10 +439,10 @@ Var ex(nodeType *p)
 #if FIM_WANT_AVOID_FP_EXCEPTIONS
 			case '%': {Var v1=ex(p->opr.op[0]),v2=ex(p->opr.op[1]); if(v2.getInt())return v1%v2; else return v2;};
 			case '/': {Var v1=ex(p->opr.op[0]),v2=ex(p->opr.op[1]); if(v2.getInt())return v1/v2; else return v2;};
-#else
+#else /* FIM_WANT_AVOID_FP_EXCEPTIONS */
 			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]); // FIXME: may generate an exception
 			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]); // FIXME: may generate an exception
-#endif
+#endif /* FIM_WANT_AVOID_FP_EXCEPTIONS */
 			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
 			case '!': return ((ex(p->opr.op[0])).getInt())==0?1:0;
 			/* unary minus is still under definition */
