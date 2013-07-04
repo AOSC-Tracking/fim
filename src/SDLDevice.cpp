@@ -57,9 +57,9 @@ std::cout.setf ( std::ios::showbase ); \
 std::cout << *(fim_int*)(C) <<"\n"; \
 std::cout.unsetf ( std::ios::showbase ); \
 std::cout.unsetf ( std::ios::hex );
-#else
+#else /* FIM_SDL_DEBUG */
 #define FIM_SDL_INPUT_DEBUG(C,MSG) {}
-#endif
+#endif /* FIM_SDL_DEBUG */
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 typedef int fim_sdl_int;
@@ -111,9 +111,9 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 		want_mouse_display_=want_mouse_display;
 #if FIM_SDL_WANT_RESIZE 
 		want_resize_=want_resize;
-#else
+#else /* FIM_SDL_WANT_RESIZE */
 		want_resize_=false;
-#endif
+#endif /* FIM_SDL_WANT_RESIZE */
 		current_w_=current_w;
 		current_h_=current_h;
 		return FIM_ERR_NO_ERROR;
@@ -123,11 +123,11 @@ err:
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	SDLDevice::SDLDevice(MiniConsole & mc_, fim::string opts):DisplayDevice(mc_),
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	SDLDevice::SDLDevice(
 			fim::string opts
 			):DisplayDevice(),
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	current_w_(0), current_h_(0),
 	opts_(opts),
 	want_windowed_(false),
@@ -143,7 +143,7 @@ err:
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		const fim_char_t*os=opts_.c_str();
 		parse_optstring(os);
-#endif
+#endif /* FIM_WANT_SDL_OPTIONS_STRING */
 		fim_bzero(&bvi_,sizeof(bvi_));
 		//current_w_=current_h_=0;
 	}
@@ -367,7 +367,7 @@ err:
 #if FIM_SDL_WANT_RESIZE 
 		if(want_resize_)
 			want_flags|=SDL_RESIZABLE;
-#endif
+#endif /* FIM_SDL_WANT_RESIZE */
 		if(want_windowed_)
 			want_flags&=~SDL_FULLSCREEN;
 		//want_flags|=SDL_DOUBLEBUF;
@@ -446,7 +446,7 @@ err:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f_->height));
 		mc_.reformat(    width() /    f_->width   );
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;
 sdlerr:
 		errstr=SDL_GetError();
@@ -562,13 +562,13 @@ err:
 				case SDL_VIDEORESIZE:
 						cc.resize(event.resize.w,event.resize.h);
 				break;
-#endif
+#endif /* FIM_SDL_WANT_RESIZE */
 				case SDL_QUIT:
 #if FIM_SDL_ALLOW_QUIT
 				*c=cc.find_keycode_for_bound_cmd(FIM_FLT_QUIT);
 				return 1;
 				//cc.quit();
-#endif	
+#endif /* FIM_SDL_ALLOW_QUIT */
 				*keypressp = 1;
 				
 				break;
@@ -697,7 +697,7 @@ err:
 					if(ms&SDL_BUTTON_MMASK) cout << "mmask\n";
 					if(ms&SDL_BUTTON_X1MASK) cout << "x1mask\n";
 					if(ms&SDL_BUTTON_X2MASK) cout << "x2mask\n";
-#endif
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 					if(!cc.inConsole())
 					{
 						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }

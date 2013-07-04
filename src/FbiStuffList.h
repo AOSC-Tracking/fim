@@ -2,7 +2,7 @@
 /*
  FbiStuffList.h : fbi functions for lists, modified for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -47,11 +47,11 @@ struct list_head {
 /* beware that LIST_HEAD is defined in freebsd's <sys/queue.h> */
 #ifdef FIM_LIST_HEAD_INIT
 #undef FIM_LIST_HEAD_INIT
-#endif
+#endif /* FIM_LIST_HEAD_INIT */
 
 #ifdef FIM_LIST_HEAD
 #undef FIM_LIST_HEAD
-#endif
+#endif /* FIM_LIST_HEAD */
 
 #define FIM_LIST_HEAD_INIT(name) { &(name), &(name) }
 
@@ -206,5 +206,5 @@ static __inline__ void list_splice(struct list_head *list, struct list_head *hea
 
 //end from list.h 
 
-#endif
+#endif /* FBI_STUFF_LIST_H */
 

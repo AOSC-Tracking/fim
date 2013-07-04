@@ -2,7 +2,7 @@
 /*
  DummyDisplayDevice.h : virtual device Fim driver header file
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ class DummyDisplayDevice:public DisplayDevice
 	DummyDisplayDevice(MiniConsole & mc_):DisplayDevice(mc_){}
 #else
 	DummyDisplayDevice(){}
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	virtual ~DummyDisplayDevice(){}
 
 	virtual int get_chars_per_line(){return 0;/* this is a special value */}
@@ -63,4 +63,4 @@ class DummyDisplayDevice:public DisplayDevice
 	private:
 };
 
-#endif
+#endif /* FIM_DUMMYDISPLAY_DEVICE_H */

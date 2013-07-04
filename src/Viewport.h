@@ -2,7 +2,7 @@
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ namespace fim
 	 * */
 #ifdef FIM_NAMESPACES
 class Viewport:public Namespace
-#else
+#else /* FIM_NAMESPACES */
 class Viewport
-#endif
+#endif /* FIM_NAMESPACES */
 {
 	protected:
 	fim_off_t	hsteps_,vsteps_,steps_,top_,left_,panned_ ;	/* viewport variables */
@@ -50,7 +50,7 @@ class Viewport
 	Image  *image_;	// !! 
 #ifdef FIM_WINDOWS
 	FimWindow *window_;
-#endif
+#endif /* FIM_WINDOWS */
 
 	CommandConsole &commandConsole;
 	public:
@@ -58,13 +58,13 @@ class Viewport
         void steps_reset();
 #ifdef FIM_WINDOWS
         void reassignWindow(FimWindow *w);
-#endif
+#endif /* FIM_WINDOWS */
 
 	Viewport( //yes, horrible
 			CommandConsole &c
 #ifdef FIM_WINDOWS
 			,FimWindow *window
-#endif
+#endif /* FIM_WINDOWS */
 			);
 
 	Viewport(const Viewport &v);
@@ -134,4 +134,4 @@ class Viewport
 	void recenter();
 };
 }
-#endif
+#endif /* FIM_VIEWPORT_H */

@@ -99,4 +99,4 @@ typedef int FimException;
 
 
 
-#endif
+#endif /* FIM_COMMON_H */

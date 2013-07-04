@@ -2,7 +2,7 @@
 /*
  fim_limits.h : Basic Fim types limits
 
- (c) 2011-2011 Michele Martone
+ (c) 2011-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,4 +34,4 @@ namespace fim
 #define FIM_CHAR_BITS (8)
 #define FIM_BYTES_COUNT (1<<(sizeof(T)*FIM_CHAR_BITS))
 }
-#endif
+#endif /* FIM_LIMITS_FIM_H */

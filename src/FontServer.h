@@ -2,7 +2,7 @@
 /*
  FontServer.h : Font Server code from fbi, adapted for fim.
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -57,7 +57,7 @@ struct fs_font {
     fim_byte_t      **gindex;
 };
 
-#else
+#else /* FIM_X_DISPLAY_MISSING */
 
 typedef struct _FSXCharInfo {
     short       left;
@@ -90,7 +90,7 @@ struct fs_font {
     fim_byte_t      **gindex;
 };
 
-#endif
+#endif  /* FIM_X_DISPLAY_MISSING */
 
 
 
@@ -125,5 +125,5 @@ static struct fs_font* fs_consolefont(const fim_char_t **filename);
 
 }
 
-#endif
+#endif /* FIM_FONT_SERVER_H */
 
