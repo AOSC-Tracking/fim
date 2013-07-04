@@ -30,7 +30,7 @@
 
 #ifdef FIM_USE_READLINE
 #include "readline.h"
-#endif
+#endif /* FIM_USE_READLINE */
 
 #include <sys/ioctl.h>
 
@@ -38,17 +38,17 @@
 #include <fstream>
 
 #if HAVE_GET_CURRENT_DIR_NAME
-#else
+#else /* HAVE_GET_CURRENT_DIR_NAME */
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 #include <unistd.h>		/* getcwd, as replacement for get_current_dir_name */ /* STDIN_FILENO */
 #endif
-#endif
+#endif /* HAVE_GET_CURRENT_DIR_NAME */
 
 #if FIM_WANT_RAW_KEYS_BINDING
 #define FIM_CNS_RAW_KEYS_MESG "; if "FIM_CNS_EX_KSY_STRING" is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified "FIM_CNS_EX_KSY_STRING" to. activate the "FIM_VID_VERBOSE_KEYS" variable to discover (display device dependent) raw keys." 
-#else
+#else /* FIM_WANT_RAW_KEYS_BINDING */
 #define FIM_CNS_RAW_KEYS_MESG 
-#endif
+#endif /* FIM_WANT_RAW_KEYS_BINDING */
 #define FIM_INVALID_IDX -1
 						
 extern fim_sys_int yyparse();
@@ -155,7 +155,7 @@ namespace fim
 			key=atoi(kstr+1);
 		}
 		else
-#endif
+#endif /* FIM_WANT_RAW_KEYS_BINDING */
 		{
 			sym_keys_t::const_iterator kbi=sym_keys_.find(kfstr);
 			if(kbi!=sym_keys_.end())
@@ -329,8 +329,8 @@ ret:		return key;
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	mc_(*this),
-#endif
-#endif
+#endif /* FIM_KEEP_BROKEN_CONSOLE */
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fontserver_(),
 	browser_(*this)
 	//,framebufferdevice(_framebufferdevice)
@@ -338,14 +338,14 @@ ret:		return key;
 	,mangle_tcattr_(false)
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	,dummydisplaydevice_(this->mc_)
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,dummydisplaydevice_()
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,displaydevice_(NULL)			/* the display device could be NULL ! (FIXME) */
 #ifdef FIM_RECORDING
 	,dont_record_last_action_(false)		/* this variable is only useful in record mode */
 	,recordMode_(false)			/* we start not recording anything */
-#endif
+#endif /* FIM_RECORDING */
 	,fim_stdin_(STDIN_FILENO)
 	,cycles_(0)
 	,show_must_go_on_(1)
@@ -355,7 +355,7 @@ ret:		return key;
 #ifdef FIM_AUTOCMDS
 		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD),fim::string(FIM_FLT_AUTOCMD" "FIM_CNS_EX_EVT_STRING" "FIM_CNS_EX_PAT_STRING" "FIM_CNS_EX_CMDS_STRING" : manipulate auto commands"),this,&CommandConsole::fcmd_autocmd));
 		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD_DEL),fim::string(FIM_FLT_AUTOCMD_DEL" : manipulate auto commands. usage: "FIM_FLT_AUTOCMD_DEL" "FIM_CNS_EX_EVT_STRING" "FIM_CNS_EX_PAT_STRING" "FIM_CNS_EX_CMDS_STRING),this,&CommandConsole::fcmd_autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
-#endif
+#endif /* FIM_AUTOCMDS */
 		addCommand(new Command(fim::string(FIM_FLT_BASENAME),fim::string(FIM_FLT_BASENAME" {filename} : returns the basename of {filename}"),this,&CommandConsole::fcmd_basename));
 		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" ["FIM_CNS_EX_KSY_STRING" ["FIM_CNS_EX_CMDS_STRING"]] : bind some keyboard shortcut "FIM_CNS_EX_KSY_STRING" to "FIM_CNS_EX_CMDS_STRING""FIM_CNS_RAW_KEYS_MESG"; binding is dynamical, so you can rebind keys even during program's execution"),this,&CommandConsole::fcmd_bind));
 		addCommand(new Command(fim::string(FIM_FLT_CD),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::fcmd_cd));
@@ -364,7 +364,7 @@ ret:		return key;
 		// 20110507 we other means for scrolling the console, now
 		//addCommand(new Command(fim::string("scroll_console_up"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
 		//addCommand(new Command(fim::string("scroll_console_down"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		addCommand(new Command(fim::string(FIM_FLT_COMMANDS),fim::string(FIM_FLT_COMMANDS" : display the existing commands"),this,&CommandConsole::fcmd_commands_list));
 
 		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string(FIM_FLT_DISPLAY" ['reinit' {string}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the --"FIM_OSW_OUTPUT_DEVICE" command line switch for allowed values of {string};"),&browser_,&Browser::fcmd_display));
@@ -373,7 +373,7 @@ ret:		return key;
 		addCommand(new Command(fim::string(FIM_FLT_ECHO),fim::string(FIM_FLT_ECHO" "FIM_CNS_EX_ARGS_STRING": print the "FIM_CNS_EX_ARGS_STRING" on console"),this,&CommandConsole::fcmd_echo));
 #ifndef FIM_WANT_NOSCRIPTING
 		addCommand(new Command(fim::string(FIM_FLT_EXEC),fim::string(FIM_FLT_EXEC" "FIM_CNS_EX_FNS_STRING" : execute script "FIM_CNS_EX_FNS_STRING""),this,&CommandConsole::fcmd_executeFile));
-#endif
+#endif /* FIM_WANT_NOSCRIPTING */
 		addCommand(new Command(fim::string(FIM_FLT_GETENV),fim::string(FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" : display the value of the "FIM_CNS_EX_ID_STRING" environment variable"),this,&CommandConsole::fcmd_do_getenv));
 		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string(FIM_CMD_HELP_GOTO),&browser_,&Browser::fcmd_goto_image));
 		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string(FIM_CMD_HELP_HELP),this,&CommandConsole::fcmd_help));
@@ -381,7 +381,7 @@ ret:		return key;
 		addCommand(new Command(fim::string(FIM_FLT_ELSE),fim::string("if(expression){action;}['else'{action;}]"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string(FIM_FLT_EVAL),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::fcmd_eval));
-#endif
+#endif /* FIM_RECORDING */
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string(FIM_FLT_INFO" : display information about the current file" ),&browser_,&Browser::fcmd_info));
 		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_CMD_HELP_LIST),&browser_,&Browser::fcmd_list));
 		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded"),&browser_,&Browser::fcmd_load));
@@ -392,14 +392,14 @@ ret:		return key;
 		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string(FIM_FLT_POPEN" "FIM_CNS_EX_SYSC_STRING" : pipe a command, invoking popen(): spawns a shell, invoking "FIM_CNS_EX_SYSC_STRING" and executing as fim commands the output of "FIM_CNS_EX_SYSC_STRING),this,&CommandConsole::fcmd_sys_popen));
 #ifdef FIM_PIPE_IMAGE_READ
 		addCommand(new Command(fim::string(FIM_FLT_PREAD),fim::string(FIM_FLT_PREAD" "FIM_CNS_EX_ARGS_STRING" : execute "FIM_CNS_EX_ARGS_STRING" as a shell command and read the output as an image file (using "FIM_FLT_POPEN")"),this,&CommandConsole::fcmd_pread));
-#endif
+#endif /* FIM_PIPE_IMAGE_READ */
 		addCommand(new Command(fim::string(FIM_FLT_PWD),fim::string(FIM_CMD_HELP_PWD   ),this,&CommandConsole::fcmd_pwd));
 		addCommand(new Command(fim::string(FIM_FLT_PREFETCH),fim::string(FIM_FLT_PREFETCH" : prefetch two nearby image files, for a faster subsequent opening"),&browser_,&Browser::fcmd_prefetch));
 		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string(FIM_FLT_QUIT" [{number}] : terminate the program; if {number} is specified, use it as the program return status"),this,&CommandConsole::fcmd_quit));
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string(FIM_FLT_RECORDING),fim::string(
 FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_RECORDING " 'stop' : stop  recording the executed commands; " FIM_FLT_RECORDING " 'dump' : dump in the console the record buffer; " FIM_FLT_RECORDING " 'execute' : execute the record buffer; " FIM_FLT_RECORDING " 'repeat_last' : repeat the last performed action; "),this,&CommandConsole::fcmd_recording));
-#endif
+#endif /* FIM_RECORDING */
 		addCommand(new Command(fim::string(FIM_FLT_ROTATE),fim::string(FIM_FLT_ROTATE" "FIM_CNS_EX_NUM_STRING": rotate the image the specified amount of degrees [undocumented]" ),&browser_,&Browser::fcmd_rotate));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE),fim::string(FIM_CMD_HELP_SCALE),&browser_,&Browser::fcmd_scale));
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLDOWN),fim::string(FIM_FLT_SCROLLDOWN" : scroll down the image, going next if at bottom" ),&browser_,&Browser::fcmd_scrolldown));
@@ -412,7 +412,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		addCommand(new Command(fim::string(FIM_FLT_STDOUT),fim::string(FIM_FLT_STDOUT" "FIM_CNS_EX_ARGS_STRING" : writes to stdout its arguments "FIM_CNS_EX_ARGS_STRING""),this,&CommandConsole::fcmd__stdout));
 #ifndef FIM_NO_SYSTEM
 		addCommand(new Command(fim::string(FIM_FLT_SYSTEM),fim::string(FIM_CMD_HELP_SYSTEM),this,&CommandConsole::fcmd_system));
-#endif
+#endif /* FIM_NO_SYSTEM */
 		addCommand(new Command(fim::string(FIM_FLT_VARIABLES),fim::string(FIM_FLT_VARIABLES" : display the existing variables"),this,&CommandConsole::fcmd_variables_list));
 		addCommand(new Command(fim::string(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS" "FIM_CNS_EX_ID_STRING" | '-a' : delete the alias "FIM_CNS_EX_ID_STRING" or all aliases (use '-a', not -a)"),this,&CommandConsole::fcmd_unalias));
 		addCommand(new Command(fim::string(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND" "FIM_CNS_EX_KSY_STRING" : unbind the action associated to a specified "FIM_CNS_EX_KSY_STRING FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::fcmd_unbind));
@@ -420,7 +420,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 #ifdef FIM_WINDOWS
 		/* this is a stub for the manual generation (actually, the FimWindow object gets built later) */
 		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW),this,&CommandConsole::fcmd_foo));
-#endif
+#endif /* FIM_WINDOWS */
 //		addCommand(new Command(fim::string("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
 //		addCommand(new Command(fim::string(FIM_FLT_NO_IMAGE),fim::string(FIM_FLT_NO_IMAGE" : displays no image at all (BROKEN)"),&browser_,&Browser::fcmd_no_image));/* FIXME: broken */
 		//addCommand(new Command(fim::string("print"   ),fim::string("displays the value of a variable"),this,&CommandConsole::fcmd_foo));
@@ -559,7 +559,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		/* THIS DIRECTIVE IS MOTIVATED BY SOME STRANGE BUG!
 		 */
 		sort(completions.begin(),completions.end());
-#endif 
+#endif /* FIM_COMMAND_AUTOCOMPLETION */
 		
 /*		for(size_t i=list_index;i<completions.size();++i)
 				cout << cmd << " matches with " << completions[i].c_str()<<  "\n";*/
@@ -638,14 +638,14 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		/* FIXME 20110515 this prevents infinite recursion on iterated commands in SDL mode. this is probably a bug in the sdl input handling code and shall be solved */
 		if(c==FIM_SYM_NULL_KEY)
 			return;
-#endif
+#endif /* FIM_ITERATED_COMMANDS */
 
 		if(bi!=bindings_.end() && bi->second!=FIM_CNS_EMPTY_STRING)
 		{
 			fim::string cf=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PREINTERACTIVECOMMAND,cf);
-#endif
+#endif /* FIM_AUTOCMDS */
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
 			{
@@ -671,11 +671,11 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 				it_buf=-1;
 			}
 			else
-#endif
+#endif /* FIM_ITERATED_COMMANDS */
 				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
-#endif
+#endif /* FIM_AUTOCMDS */
 		}
 
 		if(status)
@@ -785,7 +785,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		if(add_history_)
 			if(nochars(s)==false)
 				add_history(s);
-#endif
+#endif /* FIM_USE_READLINE */
 ret:
 		fim_free(s);
 
@@ -827,7 +827,7 @@ ret:
 				ex+=fim::string(" \""); ex+=args[i];
 				ex+=fim::string("\""); 
 			}
-#endif
+#endif			/* FIM_ALIASES_WITHOUT_ARGUMENTS */
 			sl=strlen(ex.c_str());
 			r=write(fim_pipedesc[1],ex.c_str(),sl);
 			if(r!=sl)
@@ -906,7 +906,7 @@ ret:
 					fim_free(match);
 				}
 			}
-#endif
+#endif /* FIM_COMMAND_AUTOCOMPLETION */
 			if(c==NULL)
 			{
 				/* FIXME : should stringify here and elsewhere
@@ -997,7 +997,7 @@ ok:
 		return 0;
 	}
 */
-#endif
+#endif	/* FIM_USE_GPM */
 
 	fim_perr_t CommandConsole::executionCycle()
 	{
@@ -1006,12 +1006,12 @@ ok:
 		 * */
 #ifdef	FIM_USE_GPM
 		//Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,NULL);
-#endif
+#endif	/* FIM_USE_GPM */
 #ifdef FIM_AUTOCMDS
 		fim::string initial=browser_.current();
 		autocmd_exec(FIM_ACM_PREEXECUTIONCYCLE,initial);
 		autocmd_exec(FIM_ACM_PREEXECUTIONCYCLEARGS,initial);
-#endif
+#endif /* FIM_AUTOCMDS */
 		*prompt_=FIM_SYM_PROMPT_NUL;
 
 	 	while(show_must_go_on_)
@@ -1049,10 +1049,10 @@ ok:
 					fim::string cf=current();
 #ifdef FIM_AUTOCMDS
 					autocmd_exec(FIM_ACM_PREINTERACTIVECOMMAND,cf);
-#endif
+#endif /* FIM_AUTOCMDS */
 #ifdef FIM_RECORDING
 					if(recordMode_)record_action(fim::string(rl));
-#endif					
+#endif /* FIM_RECORDING */
 					//ic_=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
 					execute_internal(rl,FIM_X_HISTORY);	//execution of the command line with history
 					ic_=(ic_==-1)?0:1; //a command could change the mode !
@@ -1060,10 +1060,10 @@ ok:
 //					execute_internal("redisplay;",FIM_X_NULL);	//execution of the command line with history
 #ifdef FIM_AUTOCMDS
 					autocmd_exec(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
-#endif
+#endif /* FIM_AUTOCMDS */
 #ifdef FIM_RECORDING
 					memorize_last(rl);
-#endif
+#endif /* FIM_RECORDING */
 					//p.s.:note that current() returns not necessarily the same in 
 					//the two autocmd_exec() calls..
 				}
@@ -1080,7 +1080,7 @@ ok:
 					fim_free(rl);
 			}
 			else
-#endif
+#endif /* FIM_USE_READLINE */
 			{
 				*prompt_=FIM_SYM_PROMPT_NUL;
 				fim_key_t c;
@@ -1104,7 +1104,7 @@ ok:
 				Gpm_Event *EVENT;
 				if(Gpm_GetEvent(EVENT)==1)quit();
 				else cout << "...";*/
-#endif
+#endif	/* FIM_USE_GPM */
 				if(r>0)
 				{
 					if(getIntVariable(FIM_VID_VERBOSE_KEYS)==1)
@@ -1118,7 +1118,7 @@ ok:
 #ifndef FIM_USE_READLINE
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY) || 
 					   c==FIM_SYM_SEARCH_KEY)set_status_bar("compiled with no readline support!\n",NULL);
-#else
+#else /* FIM_USE_READLINE */
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY))
 					{
 						// TODO: FIM_VID_CONSOLE_KEY should be configurable..
@@ -1162,7 +1162,7 @@ ok:
 						}
 					}
 					else
-#endif
+#endif /* FIM_USE_READLINE */
 					{
 
 						this->executeBinding(c);
@@ -1170,7 +1170,7 @@ ok:
 						if(recordMode_)
 						       	record_action(getBoundAction(c));
 						memorize_last(getBoundAction(c));
-#endif
+#endif /* FIM_RECORDING */
 					}
 				}
 				else
@@ -1189,7 +1189,7 @@ ok:
 rlnull:
 #ifdef FIM_AUTOCMDS
 		autocmd_exec(FIM_ACM_POSTEXECUTIONCYCLE,initial);
-#endif
+#endif /* FIM_AUTOCMDS */
 		return quit(return_code_);
 	}
 
@@ -1229,7 +1229,7 @@ rlnull:
 			for(std::set<fim::string>::iterator i=marked_files_.begin();i!=marked_files_.end();++i)
 			std::cout << *i << "\n";
 		}
-#endif
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 		
 		fim::string sof=getStringVariable(FIM_VID_SCRIPTOUT_FILE);
 		if(sof!=FIM_CNS_EMPTY_STRING)
@@ -1261,7 +1261,7 @@ rlnull:
 		if(aad_ && !displaydevice_)
 			delete aad_;	/* aad_ is an alias */
 		else
-	#endif
+	#endif /* FIM_WITH_AALIB */
 		{
 			if(displaydevice_ && displaydevice_ != &dummydisplaydevice_)
 				delete displaydevice_;
@@ -1270,10 +1270,10 @@ rlnull:
 #ifdef FIM_WINDOWS
 		if(window_)
 			delete window_;
-#else
+#else /* FIM_WINDOWS */
 		if(viewport_)
 		       	delete viewport_;
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 	fim::string CommandConsole::readStdFileDescriptor(FILE* fd)
@@ -1426,7 +1426,7 @@ rlnull:
 			acl+=browser_.c_image()->get_variables_list();
 			acl+=sep;
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 #ifdef FIM_WINDOWS
 		if(window_)
 		{
@@ -1438,7 +1438,7 @@ rlnull:
 			acl+=current_viewport()->get_variables_list();
 			acl+=sep;
 		}
-#endif
+#endif /* FIM_WINDOWS */
 		return acl;
 	}
 
@@ -1704,7 +1704,7 @@ ok:
 		//return  autocmds_loop_stack.find(frame)!=autocmds_loop_stack.end();
 		return  find(autocmds_loop_stack.begin(),autocmds_loop_stack.end(),frame)!=autocmds_loop_stack.end();
 	}
-#endif
+#endif /* FIM_AUTOCMDS */
 	
 	bool CommandConsole::regexp_match(const fim_char_t*s, const fim_char_t*r)const
 	{
@@ -1777,12 +1777,12 @@ ok:
 			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 		}
 		return needed_redisplay;
-#else
+#else /* FIM_WINDOWS */
 		//browser_.redisplay();
 		if(cc.viewport_)
 			return cc.viewport_->redisplay();
 		return true;
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 	bool CommandConsole::display()
@@ -1807,10 +1807,10 @@ ok:
 			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 		}
 		return needed_redisplay;
-#else
+#else /* FIM_WINDOWS */
 		browser_.redisplay();
 		return true;
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 #ifdef FIM_RECORDING
@@ -1852,7 +1852,7 @@ ok:
 		pt=t;
 		recorded_actions_.push_back(recorded_action_t(sanitize_action(cmd),d));
 	}
-#endif
+#endif /* FIM_RECORDING */
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	void CommandConsole::markCurrentFile()
@@ -1892,7 +1892,7 @@ ok:
 				cout<<"File \""<<browser_.current()<<"\" was not marked\n";
 		}
 	}
-#endif
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 
 	void CommandConsole::printHelpMessage(const fim_char_t *pn)const
 	{
@@ -1929,7 +1929,7 @@ ok:
 			return cmd+fim::string(FIM_SYM_SEMICOLON_STRING);
 		return cmd;
 	}
-#endif
+#endif /* FIM_RECORDING */
 	void CommandConsole::appendPostInitCommand(const fim_char_t* c)
 	{
 		/*
@@ -1978,9 +1978,9 @@ ok:
 		 * */
 #ifdef FIM_WINDOWS
 		return current_window().current_viewportp();
-#else
+#else /* FIM_WINDOWS */
 		return viewport_;
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 #ifdef FIM_WINDOWS
@@ -1998,8 +1998,8 @@ ok:
 		}
 		return *window_;
 	}
+#endif /* FIM_WINDOWS */
 
-#endif
 	bool CommandConsole::push(const fim::string nf)
 	{
 		/*
@@ -2021,7 +2021,7 @@ ok:
 	{
 		return scripts_.size() !=0;
 	}
-#endif
+#endif /* FIM_WANT_NOSCRIPTING */
 
 	/*
 	 *	Setting the terminal in raw mode means:
@@ -2077,10 +2077,10 @@ ok:
 			
 		}
 		return FIM_ERR_NO_ERROR;
-    #endif
-  #endif
-#endif
-#endif
+    #endif /* FIM_USE_READLINE */
+  #endif /* FIM_WANT_NOSCRIPTING */
+#endif /* FIM_NOHISTORY */
+#endif /* FIM_WANT_HISTORY */
 		return FIM_ERR_GENERIC;
 	}
 
@@ -2104,10 +2104,10 @@ ok:
 		}
 		//return 1;
 		return FIM_ERR_NO_ERROR;
-    #endif
-  #endif
-#endif
-#endif
+    #endif /* FIM_USE_READLINE */
+  #endif /* FIM_WANT_NOSCRIPTING  */
+#endif /* FIM_NOHISTORY */
+#endif /* FIM_WANT_HISTORY */
 		return FIM_ERR_GENERIC;
 	}
 
@@ -2129,7 +2129,7 @@ ok:
 		       	displaydevice_->finalize();
 #ifdef FIM_USE_READLINE
 		save_history();
-#endif
+#endif /* FIM_USE_READLINE */
 	}
 
 	/*
@@ -2239,7 +2239,7 @@ ok:
 			sprintf(str, "%s%-*.*s | %s",prompt_, chars, chars, desc+offset, hk.c_str());
 			str[coffset]='_';
 		}
-#endif
+#endif /* FIM_USE_READLINE */
 
 #if FIM_WANT_CAPTION_CONTROL
 		if(style!=0)
@@ -2249,7 +2249,7 @@ ok:
 				style=0;
 		}
 		if(style==0)
-#endif
+#endif /* FIM_WANT_CAPTION_CONTROL */
 			rc=displaydevice_->status_line((const fim_char_t*)str);
 done:
 		fim_free(str);
@@ -2261,9 +2261,9 @@ ret:
 	{
 #ifdef FIM_USE_READLINE
 		return ic_==1;
-#else
+#else /* FIM_USE_READLINE */
 		return false;
-#endif
+#endif /* FIM_USE_READLINE */
 	}
 
 	fim_err_t CommandConsole::resize(fim_coo_t w, fim_coo_t h)

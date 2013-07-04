@@ -333,7 +333,7 @@ static bool aainvalid;
 				flags
 			)))
 			return r;
-#endif
+#endif	/* !FIM_AALIB_DRIVER_DEBUG */
 			//return -50;
 
 /*		aa_putpixel(ascii_context_,ocols-1,orows-1,0xAA);
@@ -613,9 +613,9 @@ err:
 				return FIM_ERR_NO_ERROR;
 			}
 		}
-#else
+#else /* AA_LIB_VERSIONCODE */
 		/* FIXME: shall track back the first evil aalib version */
-#endif
+#endif /* AA_LIB_VERSIONCODE */
 		if(!want_resize_)
 			return FIM_ERR_GENERIC;
 
@@ -627,4 +627,4 @@ err:
 		}
 		return FIM_ERR_GENERIC;
 	}
-#endif
+#endif /* FIM_WITH_AALIB */

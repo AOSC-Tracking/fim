@@ -27,13 +27,13 @@
 #include "fim.h"
 #ifdef FIM_DEFAULT_CONFIGURATION
 #include "conf.h"
-#endif
+#endif /* FIM_DEFAULT_CONFIGURATION */
 #include <sys/time.h>
 #include <errno.h>
 
 #ifdef FIM_USE_READLINE
 #include "readline.h"
-#endif
+#endif /* FIM_USE_READLINE */
 
 namespace fim
 {
@@ -71,7 +71,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 	}
 	return FIM_ERR_NO_ERROR;
 }
-#endif
+#endif /* FIM_WANT_BENCHMARKS */
 
 
 
@@ -104,7 +104,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			displaydevice_=new FramebufferDevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					);
 			if(!displaydevice_ || ((FramebufferDevice*)displaydevice_)->framebuffer_init()){cleanup();return FIM_ERR_GENERIC;}
 			ffdp=((FramebufferDevice*)displaydevice_);
@@ -125,7 +125,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			imld=new Imlib2Device(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_,
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					dopts
 					);
 			if(imld && imld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete imld ; imld=NULL;}
@@ -140,7 +140,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 				device_failure=true;
 			}
 		}
-		#endif
+		#endif /* FIM_WITH_LIBIMLIB2 */
 
 		#ifdef FIM_WITH_LIBSDL
 		if(device.find(FIM_DDN_INN_SDL)==0)
@@ -149,11 +149,11 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			fim::string fopts;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 			fopts=dopts;
-#endif
+#endif /* FIM_WANT_SDL_OPTIONS_STRING */
 			sdld=new SDLDevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_,
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					fopts
 					); if(sdld && sdld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice_==NULL)
@@ -167,7 +167,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 				device_failure=true;
 			}
 		}
-		#endif
+		#endif /* FIM_WITH_LIBSDL */
 
 		#ifdef FIM_WITH_CACALIB
 		if(device.find(FIM_DDN_INN_CACA)==0)
@@ -176,7 +176,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			cacad=new CACADevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					); if(cacad && cacad->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete cacad ; cacad=NULL;}
 			if(cacad && displaydevice_==NULL)
 			{
@@ -187,7 +187,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			else
 				device_failure=true;
 		}
-		#endif
+		#endif /* FIM_WITH_CACALIB */
 
 		#ifdef FIM_WITH_AALIB
 		if(device.find(FIM_DDN_INN_AA)==0)
@@ -195,7 +195,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		aad_=new AADevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 				mc_,
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 				dopts
 				);
 
@@ -222,12 +222,12 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 				sym_keys_[FIM_KBD_DOWN]-=3072;
 			}
 			mangle_tcattr_=false;
-#endif
+#endif /* FIM_WANT_SCREEN_KEY_REMAPPING_PATCH */
 		}
 		else device_failure=true;
 		}
 		}
-		#endif
+		#endif /* FIM_WITH_AALIB */
 		if(mangle_tcattr_)tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
 		// FIXME: an error here on, leaves the terminal in raw mode, and this is not cool
 
@@ -278,7 +278,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		 * TODO: exceptions should be launched here in case ...
 		 * */
 		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&FimWindow::fcmd_cmd));
-#else
+#else /* FIM_WINDOWS */
 		try
 		{
 			viewport_ = new Viewport(*this);
@@ -287,7 +287,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		{
 			if( e == FIM_E_NO_MEM || true ) quit(FIM_E_NO_MEM);
 		}
-#endif
+#endif /* FIM_WINDOWS */
 		setVariable(FIM_VID_SCREEN_WIDTH, xres);
 		setVariable(FIM_VID_SCREEN_HEIGHT,yres);
 
@@ -295,7 +295,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #ifdef FIM_AUTOCMDS
 	    	autocmd_exec(FIM_ACM_PRECONF,"");
 	    	autocmd_exec(FIM_ACM_PREHFIMRC,"");
-#endif
+#endif /* FIM_AUTOCMDS */
 
   #ifndef FIM_WANT_NOSCRIPTING
 		if(preConfigCommand_!=fim::string(""))
@@ -307,9 +307,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			/* so the user could inspect what goes in the default configuration */
 			setVariable(FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_DEFAULT_CONFIG_FILE_CONTENTS);
 			execute_internal(FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_X_QUIET);
-    #endif		
+    #endif		/* FIM_DEFAULT_CONFIGURATION */
 		}
-  #endif
+  #endif /* FIM_WANT_NOSCRIPTING */
 
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
@@ -319,7 +319,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #ifdef FIM_AUTOCMDS
 	    	autocmd_exec(FIM_ACM_POSTHFIMRC,""); 
 	    	autocmd_exec(FIM_ACM_PREGFIMRC,""); 
-#endif
+#endif /* FIM_AUTOCMDS */
 
 		if((getIntVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC)==1 )
 		&& (getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC)!=FIM_CNS_EMPTY_STRING)
@@ -334,7 +334,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		/* execution of command line-set autocommands */
 	    	autocmd_exec(FIM_ACM_POSTGFIMRC,""); 
 	    	autocmd_exec(FIM_ACM_PREUFIMRC,""); 
-#endif		
+#endif		/* FIM_AUTOCMDS */
 		{
 			#include "grammar.h"
 			setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
@@ -350,8 +350,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 					(!is_file(rcfile) || FIM_ERR_NO_ERROR!=executeFile(rcfile))
 	//			&&	(!is_file(FIM_CNS_SYS_RC_FILEPATH) || FIM_ERR_NO_ERROR!=executeFile(FIM_CNS_SYS_RC_FILEPATH))
 				  )
-  #endif
-#endif
+  #endif /* FIM_WANT_NOSCRIPTING */
+#endif /* FIM_NOFIMRC */
 				{
 					/*
 					 if no configuration file is present, or fails loading,
@@ -359,38 +359,38 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
   #ifdef FIM_DEFAULT_CONFIGURATION
 					// 20110529 commented the following, as it is a (harmful) duplicate execution 
 					//execute_internal(FIM_DEFAULT_CONFIG_FILE_CONTENTS,FIM_X_QUIET);
-  #endif		
+  #endif		/* FIM_DEFAULT_CONFIGURATION */
 				}
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
 			}
 		}
-  #endif		
-#endif		
+  #endif		/* FIM_WANT_NOSCRIPTING */
+#endif		/* FIM_NOFIMRC */
 #ifdef FIM_AUTOCMDS
 	    	autocmd_exec(FIM_ACM_POSTUFIMRC,""); 
 	    	autocmd_exec(FIM_ACM_POSTCONF,"");
-#endif
+#endif /* FIM_AUTOCMDS */
 #ifndef FIM_WANT_NOSCRIPTING
 		for(size_t i=0;i<scripts_.size();++i) executeFile(scripts_[i].c_str());
-#endif		
+#endif		/* FIM_WANT_NOSCRIPTING */
 #ifdef FIM_AUTOCMDS
 		if(postInitCommand_!=fim::string(""))
 			autocmd_add(FIM_ACM_PREEXECUTIONCYCLE,"",postInitCommand_.c_str());
 		if(postExecutionCommand_!=fim::string(""))
 			autocmd_add(FIM_ACM_POSTEXECUTIONCYCLE,"",postExecutionCommand_.c_str());
-#endif
+#endif /* FIM_AUTOCMDS */
 
 #ifdef FIM_USE_READLINE
 		rl::initialize_readline( displaydevice_==NULL );
 		load_history();
-#endif
+#endif /* FIM_USE_READLINE */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
 #if FIM_WANT_BENCHMARKS
 			fim_bench_subsystem(displaydevice_);
 			fim_bench_subsystem(this);
-#endif
+#endif /* FIM_WANT_BENCHMARKS */
 			quit(return_code_);
 			exit(return_code_);
 		}
@@ -432,13 +432,13 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		cc.setVariable(fim_rand()%(max_sq),fim_rand());
 		cc.getIntVariable(fim_rand()%max_sq);
 	}
-#endif
+#endif /* FIM_WANT_BENCHMARKS */
 
 	void CommandConsole::dumpDefaultFimrc()const
 	{
 #ifdef FIM_DEFAULT_CONFIGURATION
 		std::cout << FIM_DEFAULT_CONFIG_FILE_CONTENTS << "\n";
-#endif
+#endif /* FIM_DEFAULT_CONFIGURATION */
 	}
 }
 

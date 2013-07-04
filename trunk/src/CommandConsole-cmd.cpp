@@ -24,7 +24,7 @@
 #include "fim.h"
 #ifdef HAVE_LIBGEN_H
 #include <libgen.h>
-#endif
+#endif /* HAVE_LIBGEN_H */
 
 #define FIM_WANT_SYSTEM_CALL_DEBUG 0
 
@@ -58,7 +58,7 @@ namespace fim
 			/* special syntax for raw keys */
 			key=atoi(kstr+1);
 		}
-#endif
+#endif /* FIM_WANT_RAW_KEYS_BINDING */
 		else
 		{
 			if(sym_keys_.find(kstr)!= sym_keys_.end())
@@ -184,7 +184,7 @@ namespace fim
 			executeFile(args[i].c_str());
 		return FIM_CNS_EMPTY_RESULT;
 	}
-#endif
+#endif /* FIM_WANT_NOSCRIPTING */
 	
 	fim::string CommandConsole::fcmd_foo(const args_t &args)
 	{
@@ -291,7 +291,7 @@ namespace fim
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
-#endif
+#endif /* FIM_AUTOCMDS */
 
 	fim::string CommandConsole::fcmd_set_in_console(const args_t& args)
 	{
@@ -300,7 +300,7 @@ namespace fim
 		 * */
 #ifdef FIM_USE_READLINE
 		ic_ = 1;
-#endif
+#endif /* FIM_USE_READLINE */
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -308,7 +308,7 @@ namespace fim
 	{
 #ifdef FIM_USE_READLINE
 		ic_=-1;set_status_bar("",NULL);
-#endif
+#endif /* FIM_USE_READLINE */
 		/*
 		 *
 		 * */
@@ -362,9 +362,9 @@ namespace fim
 						std::cerr << FIM_EMSG_CACHING_STDIN;// FIXME
 				browser_.push(FIM_STDIN_IMAGE_NAME);
 			}
-#else
+#else /* FIM_READ_STDIN_IMAGE */
 			/* FIXME: this point should be better not reached */
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 			return FIM_ERR_NO_ERROR;
 			//pclose(tfd);
 	}
@@ -395,7 +395,7 @@ namespace fim
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
-#endif
+#endif /* FIM_PIPE_IMAGE_READ */
 
 	fim::string CommandConsole::fcmd_cd(const args_t& args)
 	{
@@ -413,7 +413,7 @@ namespace fim
 			{
 				dir=fim_dirname(dir);
 			}
-#endif
+#endif /* HAVE_LIBGEN_H */
 			int ret = chdir(dir.c_str());
 #if 1
 			if(ret)
@@ -457,7 +457,7 @@ namespace fim
 		       	cwd=FIM_CNS_EMPTY_STRING;
 		if(p)
 			fim_free(p);
-#else
+#else /* HAVE_GET_CURRENT_DIR_NAME */
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 		{
 			/* untested */
@@ -467,7 +467,7 @@ namespace fim
 			cwd=buf;
 		}
 #endif
-#endif
+#endif /* HAVE_GET_CURRENT_DIR_NAME */
 		return cwd;
 	}
 
@@ -480,7 +480,7 @@ namespace fim
 		 * */
 #if FIM_WANT_SYSTEM_CALL_DEBUG
 		fim::string is=FIM_CNS_EMPTY_STRING;
-#endif
+#endif /* FIM_WANT_SYSTEM_CALL_DEBUG */
 #if FIM_WANT_SINGLE_SYSTEM_INVOCATION
 		/* 20110302 FIXME: inefficient */
 		fim::string cc=FIM_CNS_EMPTY_STRING;
@@ -490,19 +490,19 @@ namespace fim
 #define FIM_WANT_SIMPLE_SHELL_ESCAPING 1
 #if FIM_WANT_SIMPLE_SHELL_ESCAPING
 			cc+=fim_shell_arg_escape(args[i]);
-#else
+#else /* FIM_WANT_SIMPLE_SHELL_ESCAPING */
 			cc+=args[i];
-#endif
+#endif /* FIM_WANT_SIMPLE_SHELL_ESCAPING */
 			cc+=" ";
 #if FIM_WANT_SYSTEM_CALL_DEBUG
 			is+=args[i];
 			is+=" ";
-#endif
+#endif /* FIM_WANT_SYSTEM_CALL_DEBUG */
 		}
 #if FIM_WANT_SYSTEM_CALL_DEBUG
 		std::cerr << "received string: " << is << FIM_SYM_ENDL;	
 		std::cerr << "about to call popen on string: " << cc << FIM_SYM_ENDL;	
-#endif
+#endif /* FIM_WANT_SYSTEM_CALL_DEBUG */
 		if(args.size())
 		{
 			FILE* fd=popen(cc.c_str(),"r");
@@ -511,7 +511,7 @@ namespace fim
 			cout << getStringVariable(FIM_VID_LAST_SYSTEM_OUTPUT);
 		       	pclose(fd);
 		}
-#else
+#else /* FIM_WANT_SINGLE_SYSTEM_INVOCATION */
 		for(size_t i=0;i<args.size();++i)
 		{
 			FILE* fd=popen(args[i].c_str(),"r");
@@ -524,7 +524,7 @@ namespace fim
 			setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,readStdFileDescriptor(fd).c_str());
 			pclose(fd);
 		}
-#endif
+#endif /* FIM_WANT_SINGLE_SYSTEM_INVOCATION */
 #if 0
 		for(size_t i=0;i<args.size();++i)
 		{
@@ -533,7 +533,7 @@ namespace fim
 #endif
 		return FIM_CNS_EMPTY_RESULT;
 	}
-#endif
+#endif /* FIM_NO_SYSTEM */
 	
 	fim::string CommandConsole::fcmd_status(const args_t &args)
 	{
@@ -658,7 +658,7 @@ namespace fim
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
-#endif
+#endif /* FIM_RECORDING */
 
 	fim::string CommandConsole::repeat_last(const args_t &args)
 	{
@@ -780,14 +780,14 @@ nop:
 		displaydevice_->console_control(0x03);//experimental
 		return FIM_CNS_EMPTY_RESULT;
 	}
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 
 	fim::string CommandConsole::fcmd_do_getenv(const args_t& args)
 	{
 		string help="usage : "FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" will create a fim variable named "FIM_CNS_EX_ID_STRING" with value $"FIM_CNS_EX_ID_STRING" (if nonempty), from the current shell."
 #ifndef HAVE_GETENV
 		" (note that getenv call was not available at build time, so it won't work)\n"
-#endif
+#endif /* HAVE_GETENV */
 		;
 		if( ! args.size())
 			return help;
@@ -801,9 +801,9 @@ nop:
 		}
 		else
 			return help;
-#else
+#else /* HAVE_GETENV */
 		return help;
-#endif
+#endif /* HAVE_GETENV */
 	}
 
 }
