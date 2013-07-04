@@ -2,7 +2,7 @@
 /*
  FbiStuffFbtools.cpp : fbi functions from fbtools.c, modified for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 #include <setjmp.h>
 #ifdef HAVE_SYS_USER_H
 #include <sys/user.h>	  /* this should be a safer replacement */
-#endif
+#endif /* HAVE_SYS_USER_H */
 
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"
@@ -81,7 +81,7 @@ void fb_catch_exit_signals(void)
     cc.cleanup();
 #ifdef HAVE_SYS_SIGLIST
     FIM_FBI_PRINTF("Oops: %s\n",sys_siglist[termsig]);
-#endif
+#endif /* HAVE_SYS_SIGLIST */
     std::exit(FIM_PERR_OOPS);
 }
 

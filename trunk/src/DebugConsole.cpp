@@ -76,7 +76,7 @@ namespace fim
 					}
 				}
 				else
-#endif
+#endif /* FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE */
 					return FIM_ERR_GENERIC;
 			}
 
@@ -146,7 +146,7 @@ done:
 				if(this->getGlobalIntVariable(FIM_VID_DISPLAY_CONSOLE))
 					cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,(const fim_char_t*)cso);
 			}
-#endif
+#endif /* FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE */
 			cs=dupstr(cso);
 
 			if(!cs)goto rerr;
@@ -457,4 +457,4 @@ rerr:
 			return FIM_ERR_NO_ERROR;
 		}
 }
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

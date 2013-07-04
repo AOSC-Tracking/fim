@@ -56,7 +56,7 @@
 #define FIM_PDF_USE_FILENO 1
 #else
 #define FIM_PDF_USE_FILENO 0
-#endif
+#endif /* HAVE_FILENO */
 
 /*								*/
 
@@ -158,7 +158,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		if(-1==access(filename,R_OK))
 			return NULL;
 	}
-#endif
+#endif /* FIM_PDF_USE_FILENO */
 
 
 	ds = (struct pdf_state_t*)fim_calloc(sizeof(struct pdf_state_t),1);
@@ -202,7 +202,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 			ds->od->startDoc(ds->pd);
 #else
 			ds->od->startDoc(ds->pd->getXRef());
-#endif
+#endif /* POPPLER_VERSION */
     	}
         if (!ds->od)
 		goto err;

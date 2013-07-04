@@ -34,7 +34,7 @@
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H
 # include <endian.h>
-#endif
+#endif /* HAVE_ENDIAN_H */
 
 namespace fim
 {
@@ -136,4 +136,4 @@ static void __init init_rd(void)
 
 
 }
-#endif
+#endif /* FIM_WANT_RAW_BITS_RENDERING */

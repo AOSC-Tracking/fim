@@ -39,9 +39,9 @@
 #ifdef HAVE_FMEMOPEN
 //#define FIM_SHALL_BUFFER_STDIN (HAVE_FMEMOPEN && FIM_READ_STDIN_IMAGE)	/* FIXME: new */
 #define FIM_SHALL_BUFFER_STDIN 0 /* FIXME: before activating this, we shall harmonize other buffering methods first (e.g.: cc.fpush(), which is backed up by a temporary file) */
-#else
+#else /* HAVE_FMEMOPEN */
 #define FIM_SHALL_BUFFER_STDIN 0
-#endif
+#endif /* HAVE_FMEMOPEN */
 
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 0
 
@@ -129,7 +129,7 @@ static fim_err_t mipmaps_compute(struct ida_image *src)
 err:
 	return FIM_ERR_GENERIC;
 }
-#endif
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 /* ----------------------------------------------------------------------- */
 
 // filter.c
@@ -408,13 +408,14 @@ op_resize_init(struct ida_image *src, struct ida_rect *rect,
     return NULL;
 }
 
-#if 1
+#define FIM_HAS_MISC_FBI_OPS 1
+#ifdef FIM_HAS_MISC_FBI_OPS
 void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 //#ifndef FIM_WANTS_SLOW_RESIZE	/*uncommenting this triggers failure */
        int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
-//#endif
+//#endif /* FIM_WANTS_SLOW_RESIZE */
 	fim_byte_t* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
 	register int sx=0,dx;
@@ -678,7 +679,7 @@ inline void op_resize_work_unrolled2_row_expand(struct ida_image *src, struct id
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
-#endif
+#endif /* FIM_HAS_MISC_FBI_OPS */
 
 static void
 op_resize_work(struct ida_image *src, struct ida_rect *rect,
@@ -693,7 +694,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 
 #ifndef FIM_WANTS_SLOW_RESIZE
     int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
-#endif
+#endif /* FIM_WANTS_SLOW_RESIZE */
 
     /* scale y */
     fim_bzero(h->rowbuf, src->i.width * 3 * sizeof(float));
@@ -737,7 +738,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	{
 #ifdef FIM_WANTS_SLOW_RESIZE
 		fim_byte_t* srcline=src->data+src->i.width*3*(sr);
-#endif
+#endif /* FIM_WANTS_SLOW_RESIZE */
 
 #ifndef FIM_WANTS_SLOW_RESIZE
 		if(h->xscale>2.0)
@@ -751,7 +752,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 			op_resize_work_row_expand_i_unrolled( src, rect, dst, line, data, sr);
 //			op_resize_work_row_expand( src, rect, dst, line, data);
 
-#else
+#else /* FIM_WANTS_SLOW_RESIZE */
 		float fsx=0.0;
 		for (sx=0,dx=0; dx<Mdx; ++dx)
 		{
@@ -771,7 +772,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 			dst += 3;
 	#endif
 		}
-#endif
+#endif /* FIM_WANTS_SLOW_RESIZE */
 	}
 #define ZEROF 0.0f
 	else    // image minification
@@ -839,7 +840,7 @@ op_resize_work(struct ida_image *src, struct ida_rect *rect,
 	dst[2] = (fim_byte_t)d2;
 	dst += 3;
     }
-#endif
+#endif /* FIM_WANTS_SLOW_RESIZE */
 }
 
 static void
@@ -1191,7 +1192,7 @@ op_autocrop_init_(struct ida_image *src, struct ida_rect *unused,
 	/*f2:*/ { -1,  8, -1 },
 	/*f3:*/ { -1, -1, -1 },
     };
-#endif
+#endif /* FIM_USE_DESIGNATED_INITIALIZERS */
     struct ida_rect rect;
     struct ida_image img;
     int x,y,limit;
@@ -1353,7 +1354,7 @@ struct ida_op desc_autocrop = {
 
 #ifdef USE_X11
 # include "viewer.h"
-#endif
+#endif /* USE_X11 */
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -1361,18 +1362,18 @@ struct ida_op desc_autocrop = {
 
 #ifdef HAVE_LIBGRAPHICSMAGICK
 	extern struct ida_loader magick_loader ;
-#endif
+#endif /* HAVE_LIBGRAPHICSMAGICK */
 
 #ifdef FIM_WITH_LIBPNG 
 	extern struct ida_loader png_loader ;
-#endif
+#endif /* FIM_WITH_LIBPNG */
 
 extern struct ida_loader ppm_loader ;
 extern struct ida_loader pgm_loader ;
 #if FIM_WANT_RAW_BITS_RENDERING
 extern struct ida_loader bit24_loader ;
 extern struct ida_loader bit1_loader ;
-#endif
+#endif /* FIM_WANT_RAW_BITS_RENDERING */
 
 // 20080108 WARNING
 // 20080801 removed the loader functions from this file, as init_rd was not __init : did I break something ?
@@ -1412,7 +1413,7 @@ static void init_wr(void)
 {
     fim_write_register(&ppm_writer);
 }
-#endif
+#endif /* USE_X11 */
 
 
 
@@ -1562,17 +1563,17 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     int fr=0;
 #if FIM_HAVE_FULL_PROBING_LOADER
     bool rozlsl=false;/* retry on zero length signature loader */
-#endif
+#endif /* FIM_HAVE_FULL_PROBING_LOADER */
 #if FIM_ALLOW_LOADER_VERBOSITY
     const fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY)&FIM_CNS_VERBOSITY_LOADER);
-#else
+#else /* FIM_ALLOW_LOADER_VERBOSITY */
     const fim_int vl=false;
-#endif
+#endif /* FIM_ALLOW_LOADER_VERBOSITY */
 #if FIM_SHALL_BUFFER_STDIN
     fim_byte_t * sbuf=NULL;
     //fim_size_t sbbs=NULL;
     size_t sbbs=NULL;
-#endif
+#endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
@@ -1597,7 +1598,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     		if(vl)FIM_VERB_PRINTF("using fmemopen\n");
 	    }
     }
-#endif
+#endif /* FIM_SHALL_BUFFER_STDIN */
     // Warning: this fd passing 
     // is a trick for reading stdin...
     // ... and it is simpler that rewriting loader stuff.
@@ -1632,7 +1633,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 		if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
 		cc.setVariable(FIM_VID_OPEN_OFFSET ,(fim_int)read_offset);
 	}
-#endif
+#endif /* FIM_WANT_SEEK_MAGIC */
     fim_bzero(blk,sizeof(blk));
     if((fr=fim_fread(blk,1,sizeof(blk),fp))<0)
     {
@@ -1660,7 +1661,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     }
 		loader = NULL;
     }
-#endif
+#endif /* FIM_ALLOW_LOADER_STRING_SPECIFICATION */
 
 #if FIM_WANT_RAW_BITS_RENDERING
     {
@@ -1678,7 +1679,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 	}
     }
     }
-#endif
+#endif /* FIM_WANT_RAW_BITS_RENDERING */
 probe_loader:
     /* pick loader */
 #ifdef FIM_SKIP_KNOWN_FILETYPES
@@ -1700,7 +1701,7 @@ probe_loader:
 	cc.set_status_bar("skipping 'pdf' (use fimgs for this)...", "*");
 	goto shall_skip_header;
     }
-#endif
+#endif /* HAVE_LIBPOPPLER */
 #ifndef HAVE_LIBSPECTRE
     if (NULL == loader && (*blk==0x25) && (*(fim_byte_t*)(blk+1)==0x21 )
      && NULL == loader && (*(fim_byte_t*)(blk+2)==0x50) && (*(fim_byte_t*)(blk+3)==0x53))
@@ -1708,8 +1709,8 @@ probe_loader:
 	cc.set_status_bar("skipping 'ps' (use fimgs for this)...", "*");
 	goto shall_skip_header;
     }
-#endif
-#endif
+#endif /* HAVE_LIBSPECTRE */
+#endif /* FIM_SKIP_KNOWN_FILETYPES */ 
     /* TODO: should sort loaders by mlen, descendingly */
     if(NULL==loader)/* we could have forced one */
     list_for_each(item,&loaders)
@@ -1735,13 +1736,13 @@ probe_loader:
     if (NULL == loader
 #if 1
 		    && filename && is_file_nonempty(filename) /* FIXME: need an appropriate error/warning printout in this case */
-#endif
+#endif /* */
 		    )
 	loader = &magick_loader;
     else
 	;
-#endif
-#else
+#endif /* HAVE_LIBGRAPHICSMAGICK */
+#else /* FIM_HAVE_FULL_PROBING_LOADER */
     /* Incomplete: the problem is related to the descriptor: after the first probe, 
      * the file descriptor may not be available anymore, in case of standard input,
      * unless some more advanced solution is found.
@@ -1755,7 +1756,7 @@ probe_loader:
 	    continue;
 	loader = NULL;
     }
-#endif
+#endif /* FIM_HAVE_FULL_PROBING_LOADER */
 
     if((loader==NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
 		goto head_not_found;
@@ -1782,8 +1783,8 @@ probe_loader:
 		}
    	}
    }
-#endif
-#endif
+#endif /* FIM_TRY_DIA */
+#endif /* FIM_WITH_LIBPNG  */
 #ifdef FIM_TRY_XFIG
     if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))
     {
@@ -1796,7 +1797,7 @@ probe_loader:
 		goto shall_skip_header;
 	loader = &ppm_loader;
     }
-#endif
+#endif /* FIM_TRY_XFIG */
 #ifdef FIM_TRY_XCFTOPNM
     if (NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
     {
@@ -1809,7 +1810,7 @@ probe_loader:
 		goto shall_skip_header;
 	loader = &ppm_loader;
     }
-#endif
+#endif /* FIM_TRY_XCFTOPNM */
 //#if 0
 #ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 
@@ -1848,8 +1849,8 @@ probe_loader:
 		}
 	}
     }
-#endif
-#endif
+#endif /* FIM_WITH_LIBPNG  */
+#endif /* FIM_TRY_INKSCAPE */
 #if 0
 /*
  * Warning : this is potentially dangerous and so we wait a little before working on this.
@@ -1865,7 +1866,7 @@ probe_loader:
 	return NULL;
     }
 #endif
-#endif
+#endif /* FIM_HAVE_FULL_PROBING_LOADER */
 //#endif
 #ifdef FIM_TRY_CONVERT
     if (NULL == loader) {
@@ -1875,7 +1876,7 @@ probe_loader:
 		goto shall_skip_header;
 	loader = &ppm_loader;
     }
-#endif
+#endif /* FIM_TRY_CONVERT */
     if (NULL == loader)
 	    goto head_not_found;
 
@@ -1891,12 +1892,12 @@ found_a_loader:	/* we have a loader */
      * warning : there is a new field in ida_image_info (fim_extra_flags) 
      * which gets cleared to 0 (default) in this way.
      * */
-#endif
+#endif /* FIM_EXPERIMENTAL_ROTATION */
     // cc.set_status_bar("loading...", "*");
     data = loader->init(fp,filename,page,&img->i,0);
 #ifdef FIM_READ_STDIN_IMAGE
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
     if (NULL == data) {
 	if(vl)FIM_VERB_PRINTF("loader failed\n");
 	if(cc.displaydevice_->debug_)
@@ -1918,12 +1919,12 @@ found_a_loader:	/* we have a loader */
     for (y = 0; y < img->i.height; y++) {
 	loader->read(img->data + img->i.width * 3 * y, y, data);
     }
-#else
+#else /* FIM_IS_SLOWER_THAN_FBI */
     for (y = 0; y < img->i.height; y++) {
 	cc.displaydevice_->switch_if_needed();
 	loader->read(img->data + img->i.width * 3 * y, y, data);
     }
-#endif
+#endif /* FIM_IS_SLOWER_THAN_FBI */
 
 #ifndef FIM_IS_SLOWER_THAN_FBI
     /*
@@ -1932,20 +1933,20 @@ found_a_loader:	/* we have a loader */
      * drawing in fim than in fbi !
      * */
 	rgb2bgr(img->data,img->i.width,y); 
-#endif
+#endif /* FIM_IS_SLOWER_THAN_FBI */
     loader->done(data);
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
     if(img && loader)
 	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);	/* FIXME: shall become an image specific variable */
-#endif
+#endif /* FIM_WANT_REMEMBER_LAST_FILE_LOADER */
 #if FIM_WANT_EXPERIMENTAL_PLUGINS
     	if(img)
 		fim_post_read_plugins_exec(img,filename);
-#endif
+#endif /* FIM_WANT_EXPERIMENTAL_PLUGINS */
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
     	if(img)
 		mipmaps_compute(img);
-#endif
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
     goto ret;
 
 shall_skip_header:
@@ -1956,7 +1957,7 @@ errl:
     if(img )fim_free(img);
 #if FIM_SHALL_BUFFER_STDIN
     if(sbuf)fim_free(sbuf);
-#endif
+#endif /* FIM_SHALL_BUFFER_STDIN */
 ret:
     return img;
 }
@@ -2069,7 +2070,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     else
     	cc.set_status_bar( "rescaling failed (insufficient memory?!)", "*");
     }
-#endif
+#endif /* FIM_EXPERIMENTAL_ROTATION */
 
     p.angle    = (int) angle;
     data = desc_rotate.init(src,&rect,&dest->i,&p);
@@ -2128,7 +2129,7 @@ FbiStuff::scale_image(struct ida_image *src, float scale, float ascale)
     if(ascale==scale && ascale==1.0)
 	    memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
     else
-#endif
+#endif /* FIM_OPTIMIZATION_20120129 */
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice_->switch_if_needed();
 	desc_resize.work(src,&rect,

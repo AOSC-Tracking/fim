@@ -2,7 +2,7 @@
 /*
  FbiStuffMagick.cpp : fim functions for decoding image files using libGraphicsMagick
 
- (c) 2011-2011 Michele Martone
+ (c) 2011-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
 #define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG (MagickLibVersion<=0x090600)
 #else
 #define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG 1
-#endif
+#endif /* MagickLibVersion */
 
 struct magick_state_t {
 	Image * image; /* Warning: this is NOT to be confused with fim's Image class */
@@ -90,7 +90,7 @@ magick_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		if(fnl>=4 && 0==strcasecmp(filename+fnl-4,"text"))
 			goto nocleanuperr;
 	}
-#endif
+#endif /* HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG */
 	InitializeMagick(filename);
 	GetExceptionInfo(&ms.exception);
 	if (ms.exception.severity != UndefinedException)
@@ -178,4 +178,4 @@ static void __init init_rd(void)
 }
 
 }
-#endif // ifdef HAVE_LIBGRAPHICSMAGICK
+#endif /* HAVE_LIBGRAPHICSMAGICK */
