@@ -872,12 +872,15 @@ nop:
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 
-	fim::string Browser::_random_shuffle()
+	fim::string Browser::_random_shuffle(bool dts)
 	{
 		/*
 		 *	sorts the image filenames list
+		 *	if dts==true, do time() based seeding
 		 *	TODO: it would be cool to support a user supplied seed value
 		 */
+		if(dts)
+			std::srand(time(NULL));	/* FIXME: AFAIK, effect of srand() on random_shuffle is not mandated by any standard. */
 		std::random_shuffle(flist_.begin(),flist_.end());
 		return n_files()?(flist_[current_n()]):nofile_;
 	}

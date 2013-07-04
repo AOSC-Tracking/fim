@@ -3,6 +3,7 @@
 
                 Version 0.4
  * customizable image info string (TODO)
+ * changed --random and introduced --pseudo-random option
 
                 Version 0.4-beta
 

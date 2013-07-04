@@ -606,6 +606,10 @@ _ignorecase
 [internal,in] if 1, will allow for case insensitive regexp-based searches
 .fi
 .B
+_info_fmt_str
+[internal,in] file info format string 
+.fi
+.B
 _inhibit_display
 [internal] if 1, will inhibit display
 .fi
@@ -688,6 +692,10 @@ _pwd
 .B
 _reduce_factor
 [internal,in] the image scale multiplier used when reducing images size
+.fi
+.B
+_retry_loader_probe
+[in] if 1 and user specified a file loader and this fails, will probe for a different loader
 .fi
 .B
 _rows
