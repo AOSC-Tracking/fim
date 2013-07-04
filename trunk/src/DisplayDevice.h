@@ -2,7 +2,7 @@
 /*
  DisplayDevice.h : virtual device Fim driver header file
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 class DisplayDevice
 #if FIM_WANT_BENCHMARKS
 : public Benchmarkable
-#endif
+#endif /* FIM_WANT_BENCHMARKS */
 {
 	protected:
 	fim_bool_t finalized_;
@@ -34,8 +34,8 @@ class DisplayDevice
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
 	MiniConsole & mc_;
-#endif
-#endif
+#endif /* FIM_KEEP_BROKEN_CONSOLE */
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	/*
 	 * The generalization of a Fim output device.
 	 */
@@ -46,9 +46,9 @@ class DisplayDevice
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	DisplayDevice(MiniConsole &mc_);
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	DisplayDevice();
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	virtual fim_err_t initialize(sym_keys_t &sym_keys)=0;
 	virtual void  finalize()=0;
 
@@ -92,7 +92,7 @@ class DisplayDevice
 	virtual void quickbench_init(fim_int qbi);
 	virtual void quickbench_finalize(fim_int qbi);
 	virtual void quickbench(fim_int qbi);
-#endif
+#endif /* FIM_WANT_BENCHMARKS */
 	private:
 	virtual void console_switch(fim_bool_t is_busy){}// really, only for making happy fbdev
 	public:
@@ -101,4 +101,4 @@ class DisplayDevice
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg){return FIM_ERR_UNSUPPORTED;}
 };
 
-#endif
+#endif /* FIM_DISPLAY_DEVICE_H */

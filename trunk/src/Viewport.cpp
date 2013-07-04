@@ -40,7 +40,7 @@ namespace fim
 			CommandConsole &c
 #ifdef FIM_WINDOWS
 			,FimWindow *window
-#endif
+#endif /* FIM_WINDOWS */
 			)
 			:steps_(0)
 			,hsteps_(0)
@@ -53,10 +53,10 @@ namespace fim
 			,image_(NULL)
 #ifdef FIM_WINDOWS
 			,window_(window)
-#endif
+#endif /* FIM_WINDOWS */
 #ifdef FIM_NAMESPACES
 			,Namespace(FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
-#endif
+#endif /* FIM_NAMESPACES */
 			,commandConsole(c)
 	{
 		// WARNING : this constructor will be filled soon
@@ -78,10 +78,10 @@ namespace fim
 		,image_(NULL)
 #ifdef FIM_WINDOWS
 		,window_(v.window_)
-#endif
+#endif /* FIM_WINDOWS */
 #ifdef FIM_NAMESPACES
 		,Namespace(FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
-#endif
+#endif /* FIM_NAMESPACES */
 		,commandConsole(v.commandConsole)
 	{
 		// WARNING
@@ -92,11 +92,11 @@ namespace fim
 	#ifdef FIM_CACHE_DEBUG
 			if(v.image_) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image_->getName() << "\" from "<<v.image_<<"\n" ;
 			else std::cout << "no image_ to cache..\n";
-	#endif
+	#endif /* FIM_CACHE_DEBUG */
 			if(v.image_ && !v.image_->check_invalid()) setImage( commandConsole.browser_.cache_.useCachedImage(v.image_->getKey()) );
-#else
+#else /* FIM_BUGGED_CACHE */
 			if(v.image_) setImage ( new Image(*v.image_) ) ;
-#endif
+#endif /* FIM_BUGGED_CACHE */
 		}
 		catch(FimException e)
 		{
@@ -190,7 +190,7 @@ namespace fim
 		else return 0;
 #else
 		return displaydevice_->width();
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 	fim_coo_t Viewport::viewport_height()
@@ -202,7 +202,7 @@ namespace fim
 		else return 0;
 #else
 		return displaydevice_->height();
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 	void Viewport::bottom_align()
@@ -236,7 +236,7 @@ namespace fim
 		return window_->xorigin();
 #else
 		return 0;
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 	fim_coo_t Viewport::yorigin()
@@ -244,9 +244,9 @@ namespace fim
 		// vertical origin coordinate (upper)
 #ifdef FIM_WINDOWS
 		return window_->yorigin();
-#else
+#else /* FIM_WINDOWS */
 		return 0;
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 	void Viewport::null_display()
@@ -265,10 +265,10 @@ namespace fim
 				yorigin()+viewport_height()-1
 				);
 		}
-#else
+#else /* FIM_WINDOWS */
 		/* FIXME */
 		displaydevice_->clear_rect( 0, (viewport_width()-1)*displaydevice_->get_bpp(), 0, (viewport_height()-1));
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
 	bool Viewport::display()
@@ -468,7 +468,7 @@ namespace fim
 		 */
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "setting image \""<<ni->getName()<<"\" in viewport: "<< ni << "\n\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 
 		//image_ = NULL;
 		if(ni)free();
@@ -490,10 +490,10 @@ namespace fim
 		vsteps_ = getGlobalIntVariable(FIM_VID_VSTEPS);
 		if(vsteps_<FIM_CNS_STEPS_MIN)vsteps_ = steps_;
 		else psteps_=(getGlobalStringVariable(FIM_VID_VSTEPS).re_match("%$"));
-#else 
+#else  /* FIM_WINDOWS */
 		hsteps_ = vsteps_ = steps_ = FIM_CNS_STEPS_DEFAULT_N;
 		psteps_ = FIM_CNS_STEPS_DEFAULT_P;
-#endif
+#endif /* FIM_WINDOWS */
 	}
 
         void Viewport::reset()
@@ -551,10 +551,10 @@ namespace fim
 			if( !commandConsole.browser_.cache_.freeCachedImage(image_) )
 				delete image_;	// do it yourself :P
 		}
-#else
+#else /* FIM_BUGGED_CACHE */
 		// warning : in this cases exception handling is missing
 		if(image_)delete image_;
-#endif
+#endif /* FIM_BUGGED_CACHE */
 		image_ = NULL;
 	}
 
@@ -582,7 +582,7 @@ namespace fim
 	{
 		window_ = w;
 	}
-#endif
+#endif /* FIM_WINDOWS */
 	void Viewport::scale_position_magnify(fim_scale_t factor)
 	{
 		/*

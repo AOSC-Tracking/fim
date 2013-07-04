@@ -32,7 +32,7 @@
 #include <config.h>
 */
 #include "../config.h"
-#endif
+#endif /* HAVE_CONFIG_H */
 
 /*
  *	This is the main fim program header file.
@@ -57,27 +57,27 @@
 # include <regex.h>		/*	the Posix (GNU implementation,not functionality) readline library	*/
 #else
 # include "regex.h"		/*	the GNU (implementation and functionality) readline library	*/
-#endif
+#endif /* USE_GNU_REGEX */
 
 #ifdef HAVE_CLIMITS
  #include <climits>
  /* From:
   * ISO C++ 14882: 18.2.2  Implementation properties: C library 
   * we get some more stuff than limits.h. */
-#else
+#else /* HAVE_CLIMITS */
  #ifdef HAVE_LIMITS_H
  /* According to IEEE Std 1003.1-2001, 
   * this should define _POSIX_PATH_MAX
   * */
   #include <limits.h>
- #endif
-#endif
+ #endif /* HAVE_LIMITS_H */
+#endif /* HAVE_LIMITS_H */
 #ifndef _POSIX_PATH_MAX
  /* I don't know in what case could arise this situation 
   * (no limits.h nor climits : i guess a badly configured system),
   * but this would be the fix :*/
  #define _POSIX_PATH_MAX 4096
-#endif
+#endif /* _POSIX_PATH_MAX */
 
 /* FIXME : should create some fim specific sys.h header, some day */
 #include <sys/types.h>		/* stat */
@@ -85,7 +85,7 @@
 #include <unistd.h>		/* stat */
 #ifdef FIM_WITH_PTHREADS
 #include <pthread.h>		/* */
-#endif
+#endif /* FIM_WITH_PTHREADS */
 
 #if 0
 #ifdef HAVE_UNIX_H
@@ -108,7 +108,7 @@
 #include "common.h"	/* misc FIM stuff					*/
 #ifdef FIM_USE_GPM
 #include <gpm.h>	/* mouse events						*/
-#endif
+#endif /* FIM_USE_GPM */
 /*#include <unistd.h>*/ /* standard Posix symbolic constants and types		*/
 /*#include <sys/stat.h> */
 /*#include <sys/types.h>*/
@@ -143,7 +143,7 @@ namespace fim
 	class MiniConsole;
 #ifdef FIM_WINDOWS
 	class FimWindow;
-#endif
+#endif /* FIM_WINDOWS */
 	class Viewport;
 	class fim_stream;
 }
@@ -159,11 +159,11 @@ namespace rl
 	#define FIM_UNLIKELY(expr) __builtin_expect(!!(expr),0)
 	#define FIM_LIKELY(expr)   __builtin_expect(!!(expr),1)
 	#define FIM_ALIGNED __attribute__((aligned (64)))
-#else
+#else /* FIM_IS_SLOWER_THAN_FBI */
 	#define FIM_UNLIKELY(expr)  (expr)
 	#define FIM_LIKELY(expr)   (expr)
 	#define FIM_ALIGNED
-#endif
+#endif /* FIM_IS_SLOWER_THAN_FBI */
 
 //#define FIM_FBI_PRINTF( ... ) fprintf(stderr, __VA_ARGS__ )
 /* " warning: anonymous variadic macros were introduced in C99" (here and elsewhere) */
@@ -325,14 +325,14 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EMPTY_RESULT	FIM_CNS_EMPTY_STRING
 #ifdef SVN_REVISION
 #define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION" (r."SVN_REVISION")"
-#else
+#else /* SVN_REVISION */
 #define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION""
-#endif
+#endif /* SVN_REVISION */
 #ifdef SVN_REVISION_NUMBER
 #define FIM_REVISION_NUMBER SVN_REVISION_NUMBER
-#else
+#else /* SVN_REVISION_NUMBER */
 #define FIM_REVISION_NUMBER -1
-#endif
+#endif /* SVN_REVISION_NUMBER */
 #define FIM_CNS_EX_KSY_STRING	"{keysym}"
 #define FIM_CNS_EX_CMD_STRING	"{command}"
 #define FIM_CNS_EX_FN_STRING	"{filename}"
@@ -395,16 +395,16 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #include "DummyDisplayDevice.h"
 #ifdef FIM_WITH_LIBIMLIB2
 #include "Imlib2Device.h"
-#endif
+#endif /* FIM_WITH_LIBIMLIB2 */
 #ifdef FIM_WITH_LIBSDL
 #include "SDLDevice.h"
-#endif
+#endif /* FIM_WITH_LIBSDL */
 #ifdef FIM_WITH_CACALIB
 #include "CACADevice.h"
-#endif
+#endif /* FIM_WITH_CACALIB */
 #ifdef FIM_WITH_AALIB
 #include "AADevice.h"
-#endif
+#endif /* FIM_WITH_AALIB */
 #include "FramebufferDevice.h"
 #include "CommandConsole.h"
 #include "fim_stream.h"
@@ -501,7 +501,7 @@ namespace fim
 #define FIM_VID_AUTODESATURATE			"_autodesaturate"	/* "[internal,in] if 1, will desaturate images by default" */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
 #define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[internal,out] string identifying the last file loader which has loaded an image" */
-#endif
+#endif /* FIM_WANT_REMEMBER_LAST_FILE_LOADER */
 #define FIM_VID_FLIPPED				"flipped"		/* "[internal,out] 1, if the image is flipped" */
 #define FIM_VID_NEGATED				"negated"		/* "[internal,out] 1, if the image is negated" */
 #define FIM_VID_DESATURATED			"desaturated"		/* "[internal,out] 1, if the image is desaturated" */
@@ -787,4 +787,4 @@ namespace fim
 /* FIM_STRINGIFY evaluates to a string with the supplied preprocessor symbol identifier */
 #define FIM_STRINGIFY(X) #X
 
-#endif
+#endif /* FIM_FIM_H */

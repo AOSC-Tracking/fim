@@ -2,7 +2,7 @@
 /*
  readline.h : Code dealing with the GNU readline library.
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,5 +37,5 @@ namespace rl
 	int fim_search_rl_startup_hook();
 }
 
-#endif
+#endif /* FIM_READLINE_H */
 

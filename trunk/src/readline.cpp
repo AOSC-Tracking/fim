@@ -23,7 +23,7 @@
 #include <iostream>
 #ifdef FIM_USE_READLINE
 #include "readline.h"
-#endif
+#endif /* FIM_USE_READLINE */
 #ifdef FIM_USE_READLINE
 #include "fim.h"
 
@@ -94,7 +94,7 @@ namespace rl
 {
 #if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	static int fim_want_rl_cl_with_esc;
-#endif
+#endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
 /* 
  * Attempt to complete on the contents of TEXT.  START and END
  *     bound the region of rl_line_buffer that contains the word to
@@ -147,7 +147,7 @@ static fim_char_t ** fim_completion (const fim_char_t *text, int start,int end)
 				fim::cout << "you can type double quoted string (e.g.: \""FIM_CNS_EXAMPLE_FILENAME"\"), or a variable name (e.g.:"FIM_VID_FILELISTLEN"). some variables need a prefix (one of "FIM_SYM_NAMESPACE_PREFIXES")\n" ;
 				return sp;
 			}
-#endif
+#endif /* FIM_COMPLETE_INSERTING_DOUBLE_QUOTE */
 			if(start<end)
 			{
 				matches = rl_completion_matches (text, varname_generator);
@@ -155,7 +155,7 @@ static fim_char_t ** fim_completion (const fim_char_t *text, int start,int end)
 			}
 #if FIM_COMPLETE_ONLY_IF_QUOTED
 			rl_attempted_completion_over = 1;
-#endif
+#endif /* FIM_COMPLETE_ONLY_IF_QUOTED */
 		}
 		//std::cout << "sorry, no completion for word " << start << "\n";
 	}
@@ -176,12 +176,12 @@ static void completion_display_matches_hook(fim_char_t **matches,int num,int max
 #if FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 
 	if(num>1)
 		fim::cout << "possible completions for \""<<matches[0]<<"\":\n" ;
-#endif
+#endif /* FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS */
 	for(int i=/*0*/1;i<num && matches[i] && f>0;++i)
 	{
 #if FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS 
 		fim::cout << matches[i] << "\n";
-#endif
+#endif /* FIM_SHOULD_SUGGEST_POSSIBLE_COMPLETIONS  */
 		w=min(strlen(matches[i])+1,(size_t)f);
 		if(f>0){
 		strncpy(buffer+l,matches[i],w);
@@ -231,9 +231,9 @@ static int fim_post_rl_getc(int c)
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER
 		if(fim_want_rl_cl_with_esc==-1)
 			fim_want_rl_cl_with_esc=0;
-#endif
+#endif /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 	}
-#endif
+#endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
 	if(FIM_WANT_RL_KEY_DUMPOUT)cout << "got key: " << (int)(c) << " : " << (c==FIM_SYM_ESC)<<"\n";
 	return c;
 }
@@ -275,7 +275,7 @@ int fim_rl_sdl_aa_getc(FILE * fd)
 {
 	return 0;/* yes, a dummy function instead of getc() */
 }
-#endif
+#endif /* defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBIMLIB2) */
 
 int fim_rl_getc(FILE * fd)
 {
@@ -293,7 +293,7 @@ int fim_rl_getc(FILE * fd)
 			//c=FIM_SYM_CHAR_NUL;
 	}
 	else
-#endif
+#endif /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 		fim_rl_pc=c;
 #else
 	/* the following code is not complete yet. it needs interpretation of the input sequence */
@@ -387,7 +387,7 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	rl_erase_empty_line=1; // NEW: 20110630 in sdl mode with no echo disabling, prints newlines, if unset
 #if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	fim_want_rl_cl_with_esc=1;
-#endif
+#endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
 
 	if(with_no_display_device==0)
 	{
@@ -436,7 +436,7 @@ void initialize_readline (fim_bool_t with_no_display_device)
 		fim_want_rl_cl_with_esc=0;
 		rl_getc_function=fim_rl_getc;
 	}
-#endif
+#endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
 	//rl_completion_entry_function=NULL;
 	/*
 	 * to do:
@@ -464,4 +464,4 @@ void initialize_readline (fim_bool_t with_no_display_device)
 
 }
 
-#endif
+#endif /* FIM_USE_READLINE */

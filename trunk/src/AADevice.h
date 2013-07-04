@@ -42,9 +42,9 @@ class AADevice:public DisplayDevice
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	AADevice(MiniConsole & mc_, fim::string opts ):DisplayDevice(mc_),
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	AADevice( fim::string opts ):DisplayDevice(),
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	allow_windowed(0)
 	{
 		reinit(opts.c_str());
@@ -97,5 +97,5 @@ class AADevice:public DisplayDevice
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 };
 
-#endif
-#endif
+#endif /* FIM_WITH_AALIB  */
+#endif /* FIM_AADEVICE_H*/

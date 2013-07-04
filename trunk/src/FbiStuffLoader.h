@@ -2,7 +2,7 @@
 /*
  FbiStuffLoader.h : fbi functions for loading files, modified for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@
 //#include "list.h"
 #ifdef USE_X11
 # include <X11/Intrinsic.h>
-#endif
+#endif /* USE_X11 */
 
 namespace fim
 {
@@ -59,7 +59,7 @@ struct ida_image_info {
     struct ida_extra  *extra;
 #ifdef FIM_EXPERIMENTAL_ROTATION
     unsigned int      fim_extra_flags;/* FIXME : unclean: regard this as a hack (flag set on a rotated image) */
-#endif
+#endif /* FIM_EXPERIMENTAL_ROTATION */
 
     int               thumbnail;
     unsigned int      real_width;
@@ -113,7 +113,7 @@ struct ida_writer {
     int   (*conf)(Widget widget, struct ida_image *img);
     struct list_head list;
 };
-#endif
+#endif /* USE_X11 */
 
 /* ----------------------------------------------------------------------- */
 /* resolution                                                              */
@@ -160,6 +160,6 @@ void fim_write_register(struct ida_writer *writer);
 void fim_loaders_to_stderr();
 
 }
-#endif
+#endif /* FIM_STUFF_LOADER_H */
 
 

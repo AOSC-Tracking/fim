@@ -2,7 +2,7 @@
 /*
  FbiStuff.h : Misc fbi functionality routines, modified for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 
 #ifdef USE_X11
 # include <X11/Intrinsic.h>
-#endif
+#endif /* USE_X11 */
 #include <stdio.h>//FILE
 #include <stdlib.h>//free()
 #include <errno.h>//free()
@@ -98,6 +98,6 @@ struct ida_image * fbi_image_clone(struct ida_image *img);
 
 }
 
-#endif
+#endif /* FIM_FBI_STUFF_H */
 
 

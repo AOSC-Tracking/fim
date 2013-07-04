@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -44,10 +44,10 @@
 
 #if HAVE_LINUX_VT_H
 #include <linux/vt.h>
-#endif
+#endif /* HAVE_LINUX_VT_H */
 #if HAVE_LINUX_FB_H
 #include <linux/fb.h>	// fb_fix_screeninfo
-#endif
+#endif /* HAVE_LINUX_FB_H */
 
 
 /* from fbtools.h */
@@ -106,7 +106,7 @@ class FramebufferDevice:public DisplayDevice
 	#ifndef FIM_X_DISPLAY_MISSING
 	    if (NULL == f_ && 0 == fs_connect(NULL))
 		f_ = fs_open(font ? font : x11_font_);
-	#endif
+	#endif /* FIM_X_DISPLAY_MISSING */
 	    if (NULL == f_) {
 		fprintf(stderr,"font \"%s\" is not available\n",font);
 		exit(1);
@@ -237,13 +237,13 @@ class FramebufferDevice:public DisplayDevice
 
 #ifdef FIM_BOZ_PATCH
 	int with_boz_patch_;
-#endif
+#endif /* FIM_BOZ_PATCH */
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	FramebufferDevice(MiniConsole & mc_);
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	FramebufferDevice();
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 
 
 /* -------------------------------------------------------------------- */
@@ -535,6 +535,6 @@ void init_one(int32_t *lut, int bits, int shift)
 
 
 
-#endif
-#endif  //ifndef FIM_WITH_NO_FRAMEBUFFER
+#endif /* FIM_WITH_NO_FRAMEBUFFER */
+#endif /* FIM_FRAMEBUFFER_DEVICE_H */
 

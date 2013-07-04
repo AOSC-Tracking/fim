@@ -2,7 +2,7 @@
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ namespace fim
 class Cache:public Namespace
 #else
 class Cache
-#endif
+#endif /* FIM_NAMESPACES */
 {	
 	typedef std::map<fim::Image*,time_t > 	   lru_t;	//filename - last usage time
 	typedef std::map<cache_key_t,fim::Image* >  cachels_t;	//filename - image
@@ -103,5 +103,5 @@ class Cache
 };
 }
 
-#endif
+#endif /* FIM_CACHE_H */
 
