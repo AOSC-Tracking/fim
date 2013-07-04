@@ -200,7 +200,10 @@ Use (con2fb (1)) to map a terminal to a framebuffer device.
 
 .TP
 .B -u, --random
-Randomly shuffle the files list before browsing.
+Randomly shuffle the files list before browsing (seed depending on time() function).
+.TP
+.B 	 --random-no-seed
+Randomly shuffle the files list before browsing (no seeding).
 .TP
 .B -v, --verbose
 Be verbose: show status bar.

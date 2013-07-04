@@ -195,7 +195,10 @@ NULL
 "Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
     {"random",     no_argument,       NULL, 'u',"randomize images order",NULL,
-"Randomly shuffle the files list before browsing."
+"Randomly shuffle the files list before browsing (seed depending on time() function)."
+    },
+    {"random-no-seed",     no_argument,       NULL, 0x7073,"randomize images order (always same sequence)",NULL,
+"Randomly shuffle the files list before browsing (no seeding)."
     },
     {"verbose",    no_argument,       NULL, 'v',"verbose mode",NULL,
 "Be verbose: show status bar."
@@ -970,9 +973,12 @@ done:
 	//	    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 	//	    break;
 		case 'u':
+		    want_random_shuffle=1;
+		    break;
+		case 0x7073:
 		    //FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 		    //fim's
-		    want_random_shuffle=1;
+		    want_random_shuffle=-1;
 		    break;
 		case 'd':
 		    //fbi's
@@ -1216,8 +1222,10 @@ done:
 			ndd=dup(2);
 		}
 	#endif
-		if(want_random_shuffle)
-			cc.browser_._random_shuffle();
+		if(want_random_shuffle== 1)
+			cc.browser_._random_shuffle(true);
+		if(want_random_shuffle==-1)
+			cc.browser_._random_shuffle(false);
 
 		if(ndd==-1)
 			fim_perror(NULL);

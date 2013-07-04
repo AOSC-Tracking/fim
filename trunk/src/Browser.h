@@ -131,7 +131,7 @@ class Browser
 	bool push(fim::string nf);
 
 	fim::string display();
-	fim::string _random_shuffle();
+	fim::string _random_shuffle(bool dts=true);
 	fim::string _clear_list();
 	private:
 	fim::string loadCurrentImage();
