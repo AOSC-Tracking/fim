@@ -32,13 +32,13 @@
 
 #ifdef HAVE_GETLINE
 #include <stdio.h>	/* getline : _GNU_SOURCE  */
-#endif
+#endif /* HAVE_GETLINE */
 #ifdef HAVE_WCHAR_H
 #include <wchar.h>
-#endif
+#endif /* HAVE_WCHAR_H */
 #ifdef HAVE_LIBGEN_H
 #include <libgen.h>
-#endif
+#endif /* HAVE_LIBGEN_H */
 #include <zlib.h>
 
 /*
@@ -66,9 +66,9 @@ fim::string fim_dirname(const fim::string & arg)
 	strncpy(buf,arg.c_str(),FIM_PATH_MAX-1);
 	buf[FIM_PATH_MAX-1]='\0';
 	return dirname(buf);
-#else
+#else /* HAVE_LIBGEN_H */
 	return "";//FIXME
-#endif
+#endif /* HAVE_LIBGEN_H */
 }
 	fim::string fim_shell_arg_escape(const fim::string & arg)
 	{
@@ -433,7 +433,7 @@ static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
 	r[l]='\0';
 	return (r);
 }
-#endif
+#endif /* HAVE_FGETLN */
 
 static int pick_word(const fim_char_t *f, unsigned int *w)
 {
@@ -698,9 +698,9 @@ const fim_char_t * fim_getenv(const fim_char_t * name)
 	*/
 #ifdef HAVE_GETENV
 	return getenv(name);
-#else
+#else /* HAVE_GETENV */
 	return NULL;
-#endif
+#endif /* HAVE_GETENV */
 }
 
 FILE * fim_fread_tmpfile(FILE * fp)
@@ -767,7 +767,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 	 */
 #ifdef HAVE_GETLINE
 	return getline(lineptr,n,stream);
-#endif
+#endif /* HAVE_GETLINE */
 #ifdef HAVE_FGETLN
 	{	
 		/* for BSD (in stdlib.h) */
@@ -780,7 +780,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 		*n=len;
 		return len;
 	}
-#endif
+#endif /* HAVE_FGETLN */
 	return EINVAL;
 }
 
@@ -839,27 +839,27 @@ FILE *fim_fopen(const char *path, const char *mode)
 #if FIM_WANT_ZLIB
 	/* cast necessary; in v.1.2.3.4 declared as void* */
 	return (FILE*)gzopen(path,mode);
-#else
+#else /* FIM_WANT_ZLIB */
 	return fopen(path,mode);
-#endif
+#endif /* FIM_WANT_ZLIB */
 }
 
 int fim_fclose(FILE*fp)
 {
 #if FIM_WANT_ZLIB
 	return gzclose(fp);
-#else
+#else /* FIM_WANT_ZLIB */
 	return fclose(fp);
-#endif
+#endif /* FIM_WANT_ZLIB */
 }
 
 size_t fim_fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
 #if FIM_WANT_ZLIB
 	return gzread(stream,ptr,size*nmemb);
-#else
+#else /* FIM_WANT_ZLIB */
 	return fread(ptr,size,nmemb,stream);
-#endif
+#endif /* FIM_WANT_ZLIB */
 }
 
 int fim_rewind(FILE *stream)
@@ -867,10 +867,10 @@ int fim_rewind(FILE *stream)
 #if FIM_WANT_ZLIB
 	gzrewind(stream);
 	return 0;
-#else
+#else /* FIM_WANT_ZLIB */
 	rewind(stream);
 	return 0;
-#endif
+#endif /* FIM_WANT_ZLIB */
 }
 
 int fim_fseek(FILE *stream, long offset, int whence)
@@ -878,17 +878,17 @@ int fim_fseek(FILE *stream, long offset, int whence)
 #if FIM_WANT_ZLIB
 	return gzseek(stream,offset,whence);
 	0;
-#else
+#else /* FIM_WANT_ZLIB */
 	return fseek(stream,offset,whence);
-#endif
+#endif /* FIM_WANT_ZLIB */
 }
 
 int fim_fgetc(FILE *stream)
 {
 #if FIM_WANT_ZLIB
 	return gzgetc(stream);
-#else
+#else /* FIM_WANT_ZLIB */
 	return fgetc(stream);
-#endif
+#endif /* FIM_WANT_ZLIB */
 }
 
