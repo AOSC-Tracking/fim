@@ -151,7 +151,7 @@ class FramebufferDevice:public DisplayDevice
 
 	static void setpixel2(void *ptr, unsigned int color)
 	{
-	    fim_byte_t *p = (fim_byte_t *) ptr;
+	    short unsigned int *p = (short unsigned int*) ptr;
 	    *p = color;
 	}
 
