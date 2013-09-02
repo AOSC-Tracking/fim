@@ -299,7 +299,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     fim_jerr=0;
 #ifdef FIM_WITH_LIBEXIF
     //std::cout << "EXIF is not implemented, really :) \n";
-#endif
+#endif /* FIM_WITH_LIBEXIF */
     
     h = (struct jpeg_state *)fim_calloc(sizeof(*h),1);
     if(!h) goto oops;

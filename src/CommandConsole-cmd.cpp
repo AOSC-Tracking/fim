@@ -466,7 +466,7 @@ namespace fim
 			buf[PATH_MAX-1]=FIM_SYM_CHAR_NUL;
 			cwd=buf;
 		}
-#endif
+#endif /* _BSD_SOURCE || _XOPEN_SOURCE >= 500 */
 #endif /* HAVE_GET_CURRENT_DIR_NAME */
 		return cwd;
 	}
