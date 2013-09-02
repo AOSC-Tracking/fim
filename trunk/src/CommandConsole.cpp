@@ -41,7 +41,7 @@
 #else /* HAVE_GET_CURRENT_DIR_NAME */
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 #include <unistd.h>		/* getcwd, as replacement for get_current_dir_name */ /* STDIN_FILENO */
-#endif
+#endif /* _BSD_SOURCE || _XOPEN_SOURCE >= 500 */
 #endif /* HAVE_GET_CURRENT_DIR_NAME */
 
 #if FIM_WANT_RAW_KEYS_BINDING

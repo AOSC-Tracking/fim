@@ -32,7 +32,7 @@
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H
 # include <endian.h>
-#endif
+#endif /* HAVE_ENDIAN_H */
 
 //#include "loader.h"
 
@@ -56,9 +56,9 @@ typedef unsigned short uint16;
                          ((x>>8)  & 0x0000ff00) |\
                          ((x<<8)  & 0x00ff0000) |\
                          ((x<<24) & 0xff000000))
-#else
+#else /* BYTE_ORDER == LITTLE_ENDIAN */
 # error "Oops: unknown byte order"
-#endif
+#endif /* BYTE_ORDER == LITTLE_ENDIAN */
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -123,7 +123,7 @@ bmp_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     h->hdr.ypels_meter = le32_to_cpu(h->hdr.ypels_meter);
     h->hdr.num_colors  = le32_to_cpu(h->hdr.num_colors);
     h->hdr.imp_colors  = le32_to_cpu(h->hdr.imp_colors);
-#endif
+#endif /* BYTE_ORDER == BIG_ENDIAN */
 
     if (FbiStuff::fim_filereading_debug())
 	FIM_FBI_PRINTF("bmp: hdr=%d size=%dx%d planes=%d"

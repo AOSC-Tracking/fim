@@ -50,7 +50,7 @@
 #include <poppler/splash/SplashTypes.h>
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
-#endif
+#endif /* (POPPLER_VERSION_MINOR>=21) */
 
 #if HAVE_FILENO
 #define FIM_PDF_USE_FILENO 1
@@ -182,7 +182,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 
 #if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22)
 	globalParams->setBaseDir(_);
-#endif
+#endif /* defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22) */
 
 	ds->pd = new PDFDoc(new GooString(filename), NULL, NULL, (void*)NULL);
 	if (!ds->pd)
@@ -200,7 +200,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 			/* FIXME: this is an incomplete fix (triggered on 20120719's email on fim-devel);
 			  I don't really know which version of poppler defines this macro first, but I assume 0.20.2 or so */
 			ds->od->startDoc(ds->pd);
-#else
+#else /* POPPLER_VERSION */
 			ds->od->startDoc(ds->pd->getXRef());
 #endif /* POPPLER_VERSION */
     	}

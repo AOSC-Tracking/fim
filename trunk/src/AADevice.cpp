@@ -455,7 +455,7 @@ static bool aainvalid;
 		//mc_.setRows ( -height()/2);
 		mc_.setRows ( get_chars_per_column()/2 );
 		mc_.reformat(  txt_width()   );
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -467,7 +467,7 @@ static bool aainvalid;
 			AA_NORMAL,
 			//AA_SPECIAL,
 			(const fim_aa_char*)str);
-#endif
+#endif /* FIM_AALIB_DRIVER_DEBUG */
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -492,7 +492,7 @@ static bool aainvalid;
 			goto err;
 #if (!FIM_AALIB_DRIVER_DEBUG)
 		aa_printf(ascii_context_,0,th-1,AA_NORMAL,"%s",msg);
-#endif
+#endif /* FIM_AALIB_DRIVER_DEBUG */
 		aa_flush(ascii_context_);
 err:
 		return FIM_ERR_NO_ERROR;

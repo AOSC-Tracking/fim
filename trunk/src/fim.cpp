@@ -24,7 +24,7 @@
 #include <getopt.h>
 #ifdef FIM_READLINE_H
 #include "readline.h"	/* readline stuff */
-#endif
+#endif /* FIM_READLINE_H */
 /*
  * We use the STL (Standard Template Library)
  */
@@ -83,7 +83,7 @@ struct fim_options_t fim_options[] = {
 "Will pad with zeros.\n"
 "Regard this as a toy..\n"
     },
-#endif
+#endif /* FIM_WANT_RAW_BITS_RENDERING */
     {"cd-and-readdir", no_argument,       NULL, 0x4352,"step into the first loaded file directory and push other files",NULL,"step into the first loaded file directory and push other files"},
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
@@ -130,7 +130,7 @@ NULL
 "Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats."
 "\nIn the image list, this image will be displayed as \""FIM_STDIN_IMAGE_NAME"\".\n"
     },
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
     {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}",
 "Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
@@ -153,7 +153,7 @@ NULL
     {"no-history",      no_argument,       NULL, 0x4E48,"do not load/save execution history",NULL,
 "Do not load or save execution history at startup). "
     },
-#endif
+#endif /* FIM_WANT_HISTORY */
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
 "Will read commands from stdin prior to entering in interactive mode."
     },
@@ -165,10 +165,10 @@ NULL
 "The \\fBaa\\fP option may be specified as  \\fBaa"FIM_SYM_DEVOPTS_SEP_STR"{['w']}\\fP ; the \\fB'w'\\fP character allows windowed mode in case of aalib running under X (otherwise, the DISPLAY environment variable will be unset for the current instance of fim).\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
 "The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the \\fB'w'\\fP character requests windowed mode; the \\fB'm'\\fP character requests mouse pointer display; the \\fB'r'\\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
-#endif
+#endif /* FIM_WANT_SDL_OPTIONS_STRING */
 #ifdef FIM_WITH_LIBIMLIB2
 /* FIXME: shall document this */
-#endif
+#endif /* FIM_WITH_LIBIMLIB2 */
     },
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
 "Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation)."
@@ -229,7 +229,7 @@ NULL
 ".B EXAMPLES\n"
 "below to read some useful (and unique) ways of employing fim.\n"
     },
-#endif
+#endif /* FIM_READ_STDIN */
     {"autotop",   no_argument,       NULL, 'A',"align images to the top (UNFINISHED)",NULL,
 	    NULL
     },
@@ -423,13 +423,13 @@ int fim_dump_man_page()
 			".B ... | fim [{options}] [--] [{imagefiles}] -\n.fi\n")+
 #ifdef FIM_READ_STDIN
 			string(".B fim [{options}] [--] [{files}] - < {file_name_list_text_file}\n.fi\n")+
-#endif
+#endif /* FIM_READ_STDIN */
 #ifdef FIM_READ_STDIN_IMAGE
 			string(".B fim --"FIM_OSW_IMAGE_FROM_STDIN" [{options}] < {imagefile}\n.fi\n")+
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 #ifdef FIM_READ_STDIN
 			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [{options}] < {scriptfile}\n.fi\n")+
-#endif
+#endif /* FIM_READ_STDIN */
 			string("\n"
 			".SH DESCRIPTION\n"
 			".B\nfim\nis a `swiss army knife' for displaying image files.\n"
@@ -438,7 +438,7 @@ int fim_dump_man_page()
 			"\n")+
 #ifdef FIM_READ_DIRS
 			string("\n""If configured at build time,\n.B\n{imagefile}\nmay be as well a directory containing files in supported formats.""\n\n")+
-#endif
+#endif /* FIM_READ_DIRS */
 
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
 	//		string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.\n\n")+
@@ -1372,7 +1372,7 @@ fim_perr_t main(int argc,char *argv[])
 	"Compiled with readline, v."FIM_XSTRINGIFY(RL_VERSION_MAJOR)"."FIM_XSTRINGIFY(RL_VERSION_MINOR)".\n"
 	#else
 	"Compiled with readline, version unknown.\n"
-	#endif 
+	#endif /* defined(RL_VERSION_MINOR) && defined(RL_VERSION_MAJOR) && ((RL_VERSION_MAJOR)>=6) */
 	#endif /* FIM_USE_READLINE */
 	// for TIFF need TIFFGetVersion
 	#ifdef FIM_CONFIGURATION
