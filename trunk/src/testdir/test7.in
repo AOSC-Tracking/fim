@@ -61,6 +61,8 @@ if(_device_string=="aalib")
 #stdout "_screen_height="._screen_height." should equal   scaled_height=".scaled_height."     ";
 
 #if ( (scaled_width!=i:swidth) || (scaled_height!=i:sheight) )
+if ( i:swidth > 2.0 )
+{
 if ( (scaled_width!=i:swidth) || (scaled_height!=i:sheight) )
 {
 	stdout "[!]";
@@ -79,6 +81,7 @@ if ( (scaled_width!=i:swidth) || (scaled_height!=i:sheight) )
 	stdout "g:scale      :".g:scale;
 	stdout "scale      :".scale;
 }
+}
 else
 {
 	stdout "auto scaling seems ok";
@@ -88,6 +91,7 @@ else
 #stdout _screen_height==i:sheight;
 
 rc=0;
+if ( i:swidth > 2.0 )
 if(_screen_width!=i:swidth)stdout "PLEASE FINISH WRITING THIS TEST";
 #quit rc;
 

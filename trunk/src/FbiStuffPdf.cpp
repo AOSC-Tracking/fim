@@ -42,12 +42,17 @@
  */
 #include <poppler/cpp/poppler-version.h>
 #if (POPPLER_VERSION_MINOR>=21)
-#include <poppler/poppler-config.h>
-#include <poppler/PDFDoc.h>
-#include <poppler/OutputDev.h>
-#include <poppler/SplashOutputDev.h>
+#if (POPPLER_VERSION_MINOR< 24)
 #include <poppler/splash/SplashBitmap.h>
 #include <poppler/splash/SplashTypes.h>
+#else
+#include <splash/SplashBitmap.h>
+#include <splash/SplashTypes.h>
+#endif /* (POPPLER_VERSION_MINOR< 24) */
+#include <poppler/poppler-config.h>
+#include <poppler/OutputDev.h>
+#include <poppler/PDFDoc.h>
+#include <poppler/SplashOutputDev.h>
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
 #endif /* (POPPLER_VERSION_MINOR>=21) */
