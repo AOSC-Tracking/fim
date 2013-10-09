@@ -376,6 +376,8 @@ fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
 	fim_key_t pk=0;
 
         updates_ = imlib_updates_init();
+	// if(True==XCheckMaskEvent(disp,FIM_IMLIB2_X_INPUT_MASK /*KeyPressMask,&ev_))
+	// if(True==XCheckMaskEvent(disp,FIM_IMLIB2_X_INPUT_MASK,&ev_))
 	if(True==XCheckMaskEvent(disp,KeyPressMask,&ev_))
 	{
 		switch (ev_.type)
@@ -413,13 +415,16 @@ fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
 			}
 			break;
 			case KeyRelease:
+			//FIM_IL2_PRINTF("KEY RELEASE:%d %c\n",0,0);
 			break;
 			case Expose:
 			updates_=imlib_update_append_rect(updates_,ev_.xexpose.x,ev_.xexpose.y,ev_.xexpose.width,ev_.xexpose.height);
 			break;
 			case ButtonPress:
+			//FIM_IL2_PRINTF("MOUSE PRESSED :%d %d\n",ev_.xbutton.x,ev_.xbutton.y);
 			break;
 			case MotionNotify:
+			// FIM_IL2_PRINTF("MOTION NOTIFY:%d %c\n",0,0);
 			break;
 			default:
 			break;
