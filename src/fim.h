@@ -106,6 +106,7 @@
 #include <fcntl.h>	/* file descriptor manipulation interface (Posix)	*/
 #include <time.h>	/* time related functionality (Posix)			*/
 #include "common.h"	/* misc FIM stuff					*/
+/* #define FIM_USE_GPM 0 */
 #ifdef FIM_USE_GPM
 #include <gpm.h>	/* mouse events						*/
 #endif /* FIM_USE_GPM */

@@ -988,15 +988,14 @@ ok:
 		
 
 #ifdef	FIM_USE_GPM
-/*
-	int gh(Gpm_Event *event, void *clientdata)
+	static int gh(Gpm_Event *event, void *clientdata)
 	{
+		std::cout << "GPM event captured.\n";
 		exit(0);
-		quit();
+		//quit();
 		return 'n';
 		return 0;
 	}
-*/
 #endif	/* FIM_USE_GPM */
 
 	fim_perr_t CommandConsole::executionCycle()
@@ -1005,7 +1004,7 @@ ok:
 		 * the cycle with fetches the instruction stream.
 		 * */
 #ifdef	FIM_USE_GPM
-		//Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,NULL);
+		Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,NULL);
 #endif	/* FIM_USE_GPM */
 #ifdef FIM_AUTOCMDS
 		fim::string initial=browser_.current();
@@ -1100,10 +1099,9 @@ ok:
 				
 				r=displaydevice_->get_input(&c);
 #ifdef	FIM_USE_GPM
-/*
 				Gpm_Event *EVENT;
 				if(Gpm_GetEvent(EVENT)==1)quit();
-				else cout << "...";*/
+				else cout << "...";
 #endif	/* FIM_USE_GPM */
 				if(r>0)
 				{
