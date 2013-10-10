@@ -1390,6 +1390,15 @@ AC_ARG_WITH(tmpfile, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put
         [fim_cv_tmpfile=$withval],
         [fim_cv_tmpfile="/tmp/__FIM_TEMPORARY_FILE"])
 dnl ==================
+AC_ARG_ENABLE(custom-status-bar, AC_HELP_STRING([--enable-custom-status-bar], [Will allow customization of status bar via a printf-like string (EXPERIMENTAL)]),
+[       if test x$enableval = xno; then
+		fim_cv_custom_status_bar=no
+	else
+                fim_cv_custom_status_bar=yes
+        fi
+],[ fim_cv_custom_status_bar=no ]
+)
+dnl ==================
 
 AC_ARG_ENABLE(optimizations, AC_HELP_STRING([--enable-optimizations], [Will try to enhance compilation flags (EXPERIMENTAL)]),
 [       if test x$enableval = xno; then
@@ -1528,6 +1537,12 @@ dnl ==================
     AH_TEMPLATE([FIM_WANT_SEEK_MAGIC])
             if test x$fim_cv_seek_magic = xyes ; then
     		AC_DEFINE([FIM_WANT_SEEK_MAGIC])
+    	fi
+
+dnl ==================
+    AH_TEMPLATE([FIM_WANT_CUSTOM_INFO_STATUS_BAR])
+            if test x$fim_cv_custom_status_bar = xyes ; then
+    		AC_DEFINE([FIM_WANT_CUSTOM_INFO_STATUS_BAR])
     	fi
 
 dnl ==================
@@ -1723,6 +1738,7 @@ dnl	exif (libexif) support           : ${fim_cv_libexif}
 	X (sdllib) experimental support     : ${fim_handle_sdl}
         framebuffer support                 : ${fim_handle_framebuffer:-yes}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
+	allow custom status bar file info   : ${fim_cv_custom_status_bar:-no}
 dnl	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
 
 

@@ -21,6 +21,8 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20131010	text/ascii/bits ascii renderer as funny fallback renderer
+20131010	shall configure default tmpdir to /dev/shmem/something
 20131009	may interface to http://www.feep.net/libtar/
 20130902	add a simple menu e.g.: using Motif (http://www.opengroup.org/desktop/motif.html), or buttons; e.g.: using X: http://www.x.org/releases/X11R7.7/doc/libX11/libX11/libX11.html#XEvent
 20130829	interface to a library for gestures, someday.

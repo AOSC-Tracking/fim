@@ -449,7 +449,7 @@ namespace fim
 #define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if non empty, this string will be fed to the scale command" */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[internal,out] the current image numeric index" */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[internal,out] the length of the current image list" */
-#define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[internal,in] file info format string " */
+#define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[internal,in] custom (status bar) file info format string " */
 #define FIM_VID_FILENAME			"_filename"		/* "[internal,out] the current file name string" */
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
@@ -730,9 +730,10 @@ namespace fim
 #define FIM_WANT_DOUBLE_ESC_TO_ENTER 0	/* if enabled in the console mode, would require three presses the first time; two later on; this is non consistent, so we keep it disabled until we find a fix */
 #define FIM_WANT_EXPERIMENTAL_PLUGINS 1	/* unfinished */
 #define FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG 1
-#define FIM_WANT_DISPLAY_FILESIZE 0
+#define FIM_WANT_KEEP_FILESIZE 1
+#define FIM_WANT_DISPLAY_FILESIZE (FIM_WANT_KEEP_FILESIZE && 0)
 #define FIM_WANT_DISPLAY_MEMSIZE  0
-#define FIM_WANT_CUSTOM_INFO_STRING  0
+/* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_METAINFO_BUFSIZE	256
