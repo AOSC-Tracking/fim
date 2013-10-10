@@ -21,6 +21,9 @@
 
 #include "Image.h"
 
+#define FIM_C_K 1024
+#define FIM_C_M (FIM_C_K*FIM_C_K)
+
 /*
  * TODO :
  *	Windowing related problems:
@@ -172,13 +175,13 @@ namespace fim
 		}
 		else 
 		{
-#if FIM_WANT_DISPLAY_FILESIZE
+#if FIM_WANT_KEEP_FILESIZE
 			struct stat stat_s;
 			if(-1!=stat(fname,&stat_s))
 			{
 				fs_=stat_s.st_size;
 			}
-#endif /* FIM_WANT_DISPLAY_FILESIZE */
+#endif /* FIM_WANT_KEEP_FILESIZE */
 			no_file_=false;	//reloading allowed
 		}
 
@@ -552,9 +555,9 @@ fim::string Image::getInfo()
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[3],*imp;
 	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
-#if FIM_WANT_CUSTOM_INFO_STRING
+#if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	fim::string ifs;
-#endif /* FIM_WANT_CUSTOM_INFO_STRING */
+#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 	imp=imagemode;
 
 	//if(getGlobalIntVariable(FIM_VID_AUTOFLIP))*(imp++)='F';
@@ -578,15 +581,15 @@ fim::string Image::getInfo()
 	else
 		*pagesinfobuffer='\0';
 		
-#if FIM_WANT_DISPLAY_MEMSIZE
+/* #if FIM_WANT_DISPLAY_MEMSIZE */
 	ms_=0;
 	if(fimg_)
 		ms_+=fimg_->i.height*fimg_->i.width*3;
 	if(fimg_!=img_)
 		ms_+= img_->i.height* img_->i.width*3;
-#endif /* FIM_WANT_DISPLAY_MEMSIZE */
+/* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
 
-#if FIM_WANT_CUSTOM_INFO_STRING
+#if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
 	{
 		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE];
@@ -628,10 +631,10 @@ fim::string Image::getInfo()
 					snprintf(clb+strlen(clb), sizeof(clb), "%s",pagesinfobuffer);
 				break;
 				case('F'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%dkB",fs_/1024);
+					snprintf(clb+strlen(clb), sizeof(clb), "%dkB",fs_/FIM_C_K);
 				break;
 				case('M'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%dMB",ms_/(1024*1024));
+					snprintf(clb+strlen(clb), sizeof(clb), "%dMB",ms_/FIM_C_M);
 				break;
 				case('%'):
 					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
@@ -659,7 +662,7 @@ sbum:
 		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
 		goto labeldone;
 	}
-#endif /* FIM_WANT_CUSTOM_INFO_STRING */
+#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 	snprintf(linebuffer, sizeof(linebuffer),
 	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
 #if FIM_WANT_DISPLAY_FILESIZE
@@ -677,10 +680,10 @@ sbum:
 	     n?n:1, /* ... */
 	     (getGlobalIntVariable(FIM_VID_FILELISTLEN))
 #if FIM_WANT_DISPLAY_FILESIZE
-	     ,fs_/1024
+	     ,fs_/FIM_C_K
 #endif /* FIM_WANT_DISPLAY_FILESIZE */
 #if FIM_WANT_DISPLAY_MEMSIZE
-	     ,ms_/(1024*1024)
+	     ,ms_/FIM_C_M
 #endif /* FIM_WANT_DISPLAY_MEMSIZE */
 	     );
 labeldone:

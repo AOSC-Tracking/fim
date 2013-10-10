@@ -24,7 +24,7 @@ fim_var_help_db[FIM_VID_AUTOTOP]= "[internal,in] if 1, will align to the top fre
 fim_var_help_db[FIM_VID_SCALE_STYLE]= "[internal,in] if non empty, this string will be fed to the scale command" ;
 fim_var_help_db[FIM_VID_FILEINDEX]= "[internal,out] the current image numeric index" ;
 fim_var_help_db[FIM_VID_FILELISTLEN]= "[internal,out] the length of the current image list" ;
-fim_var_help_db[FIM_VID_INFO_FMT_STR]= "[internal,in] file info format string " ;
+fim_var_help_db[FIM_VID_INFO_FMT_STR]= "[internal,in] custom (status bar) file info format string " ;
 fim_var_help_db[FIM_VID_FILENAME]= "[internal,out] the current file name string" ;
 fim_var_help_db[FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS]= "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" ;
 fim_var_help_db[FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS]= "[internal,out] the contents of the default (hardcoded) grammar file" ;
@@ -93,4 +93,4 @@ fim_var_help_db[FIM_VID_OPEN_OFFSET]= "[internal,in,optional] offset (specified 
 fim_var_help_db[FIM_VID_SEEK_MAGIC]= "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_WIDTH]= "[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_DPI]= "[internal,in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " ;
-#endif
+#endif /* FIM_WANT_INLINE_HELP */
