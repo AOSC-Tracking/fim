@@ -84,6 +84,13 @@ struct fim_options_t fim_options[] = {
 "Regard this as a toy..\n"
     },
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
+#if FIM_WANT_TEXT_RENDERING
+    {FIM_OSW_TEXT,     no_argument,       NULL, 0x74657874, "view any file as rendered text",NULL,
+"Display (any filetype) files contents as they were text.\n" 
+"Will only show printable characters.\n"
+"Regard this as a toy..\n"
+    },
+#endif /* FIM_WANT_RAW_BITS_RENDERING */
     {"cd-and-readdir", no_argument,       NULL, 0x4352,"step into the first loaded file directory and push other files",NULL,"step into the first loaded file directory and push other files"},
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
@@ -828,6 +835,13 @@ done:
 		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif /* FIM_AUTOCMDS */
 		    break;
+#if FIM_WANT_TEXT_RENDERING
+		case 0x74657874:
+		    	cc.setVariable(FIM_VID_TEXT_DISPLAY,1);
+#else /* FIM_WANT_TEXT_RENDERING */
+			std::cerr<<"Warning: the --"FIM_OSW_TEXT" option was disabled at compile time.\n";
+#endif /* FIM_WANT_TEXT_RENDERING */
+
 #if FIM_WANT_RAW_BITS_RENDERING
 		case 'b':
 		    //fim's

@@ -2,6 +2,7 @@
 
 fim_var_help_db[FIM_VID_RANDOM]= "[internal,out] a pseudorandom number" ;
 fim_var_help_db[FIM_VID_BINARY_DISPLAY]= "[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" ;
+fim_var_help_db[FIM_VID_TEXT_DISPLAY]= "[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" ;
 fim_var_help_db[FIM_VID_CACHE_STATUS]= "[internal,out] string with current information on cache status" ;
 fim_var_help_db[FIM_VID_DISPLAY_CONSOLE]= "[internal,in] if 1, will display the output console" ;
 fim_var_help_db[FIM_VID_DEVICE_DRIVER]= "[internal,out] the current display device string" ;

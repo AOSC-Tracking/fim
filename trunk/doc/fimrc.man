@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fimrc 5 "(c) 2011-2011 Michele Martone"
+.TH fimrc 5 "(c) 2011-2013 Michele Martone"
 .SH NAME
 fimrc - \fB fim \fP configuration file and language reference
 
@@ -542,6 +542,10 @@ _display_as_binary
 [internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual
 .fi
 .B
+_display_as_rendered_text
+[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual
+.fi
+.B
 _display_busy
 [internal,in] if 1, will display a message on the status bar when processing
 .fi
@@ -607,7 +611,7 @@ _ignorecase
 .fi
 .B
 _info_fmt_str
-[internal,in] file info format string 
+[internal,in] custom (status bar) file info format string 
 .fi
 .B
 _inhibit_display
