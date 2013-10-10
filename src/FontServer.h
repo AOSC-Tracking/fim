@@ -122,6 +122,7 @@ static struct fs_font* fs_consolefont(const fim_char_t **filename);
 
 
 };
+void fim_free_fs_font(struct fs_font *f_); /* FIXME: temporarily here */
 
 }
 

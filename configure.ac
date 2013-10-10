@@ -1570,6 +1570,17 @@ if test x$fim_cv_want_unicode == x1 ; then
 	AC_DEFINE_UNQUOTED([FIM_WANT_UNICODE], $fim_cv_want_unicode, [Unicode. (disabled by default)])
 fi
 dnl ==================
+AH_TEMPLATE([FIM_WANT_TEXT_RENDERING])
+fim_want_astext=yes
+AC_ARG_ENABLE(as-text-rendering, AC_HELP_STRING([--disable-as-text-rendering], [Disable as-text rendering (viewing of any file as character bytes -- not to be confused with the ASCII art output).]),
+[       if test x$enableval = xno ; then
+		fim_want_astext=no
+        fi
+])
+if test x$fim_want_astext = xyes ; then
+	AC_DEFINE_UNQUOTED([FIM_WANT_TEXT_RENDERING], 1, [Enables text rendering])
+fi
+dnl ==================
 AH_TEMPLATE([FIM_WANT_RAW_BITS_RENDERING])
 fim_want_rbr=yes
 AC_ARG_ENABLE(raw-bits-rendering, AC_HELP_STRING([--disable-raw-bits-rendering], [Disable raw bits rendering (viewing of any file as either a 1 or 24 bpp bitmap).]),

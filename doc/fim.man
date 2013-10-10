@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fim 1 "(c) 2007-2013 Michele Martone"
+.TH fim 1 "(c) 2007-2011 Michele Martone"
 .SH NAME
 fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
@@ -85,6 +85,12 @@ Enable autozoom.  fim will automagically pick a reasonable zoom factor when load
 .B -b, --binary[=24|1]
 Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.
 Will pad with zeros.
+Regard this as a toy..
+
+.TP
+.B 	 --as-text
+Display (any filetype) files contents as they were text.
+Will only show printable characters.
 Regard this as a toy..
 
 .TP
@@ -459,7 +465,7 @@ Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 was originally based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2013 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
+Copyright (C) 2007-2011 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 .fi
 Copyright (C) 1999-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org>
 .P

@@ -155,6 +155,18 @@ no:
 	return -1;
 }
 
+void fim_free_fs_font(struct fs_font *f_)
+{
+	if(f_)
+	{
+		if(f_->eindex) fim_free(f_->eindex);
+		if(f_->gindex) fim_free(f_->gindex);
+		if(f_->glyphs) fim_free(f_->glyphs);
+		if(f_->extents) fim_free(f_->extents);
+		fim_free(f_);
+	}
+}
+
 struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
 {
     /* this function is too much involved: it shall be split in pieces */
@@ -321,13 +333,7 @@ gotafp:
 aoops:
     robmn=false;/* no retry: this is a allocation-related oops */
     if(f_)
-    {
-    	if(f_->eindex) fim_free(f_->eindex);
-    	if(f_->gindex) fim_free(f_->gindex);
-    	if(f_->glyphs) fim_free(f_->glyphs);
-    	if(f_->extents) fim_free(f_->extents);
-	fim_free(f_);
-    }
+	fim_free_fs_font(f_);
 oops:
     if(fp){fclose(fp);fp=NULL;}
     if(robmn && filename[0] && filename[1]){++filename;goto scanlistforafontfile;}else robmn=false;

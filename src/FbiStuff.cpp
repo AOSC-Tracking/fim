@@ -1370,6 +1370,9 @@ struct ida_op desc_autocrop = {
 
 extern struct ida_loader ppm_loader ;
 extern struct ida_loader pgm_loader ;
+#if FIM_WANT_TEXT_RENDERING
+extern struct ida_loader text_loader ;
+#endif /* FIM_WANT_TEXT_RENDERING */
 #if FIM_WANT_RAW_BITS_RENDERING
 extern struct ida_loader bit24_loader ;
 extern struct ida_loader bit1_loader ;
@@ -1663,6 +1666,16 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     }
 #endif /* FIM_ALLOW_LOADER_STRING_SPECIFICATION */
 
+#if FIM_WANT_TEXT_RENDERING
+    {
+    	fim_int bd=cc.getIntVariable(FIM_VID_TEXT_DISPLAY);
+    	if(bd==1)
+	{
+		loader = &text_loader;
+		goto found_a_loader;
+	}
+    }
+#endif
 #if FIM_WANT_RAW_BITS_RENDERING
     {
     fim_int bd=cc.getIntVariable(FIM_VID_BINARY_DISPLAY);

@@ -277,6 +277,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  * */
 #define FIM_OSW_OUTPUT_DEVICE	"output-device"
 #define FIM_OSW_BINARY	"binary"
+#define FIM_OSW_TEXT	"as-text"
 #define FIM_OSW_EXECUTE_COMMANDS	"execute-commands"
 #define FIM_OSW_EXECUTE_COMMANDS_EARLY	"execute-commands-early"
 #define FIM_OSW_EXECUTE_SCRIPT	"execute-script"
@@ -427,6 +428,7 @@ namespace fim
 //#define FIM_VID_TAB 				"_tab"	/* "" */
 #define FIM_VID_RANDOM 				"random"	/* "[internal,out] a pseudorandom number" */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
+#define FIM_VID_TEXT_DISPLAY 			"_display_as_rendered_text"	/* "[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" */
 #define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[internal,out] string with current information on cache status" */
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[internal,in] if 1, will display the output console" */
 #define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[internal,out] the current display device string" */
