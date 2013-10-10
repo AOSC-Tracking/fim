@@ -74,6 +74,8 @@ text_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	    goto oops;
 
     FontServer::fb_text_init1(NULL,&(h->f_));	// FIXME : move this outta here
+    if(!h->f_)
+	    goto oops;
     h->fp = fp;
     h->fw = h->f_->width;
     h->fh = h->f_->height;
@@ -85,14 +87,17 @@ text_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     ftellr=ftell(fp);
     if((ftellr)==-1)
 	    goto oops;
+    if(ftellr==0)
+    	ftellr=1; /* (artificial) promotion to 1x1 */
     h->maxc = (128*1024*1024)/(3*h->fw*h->fh);
 
     ftellr = FIM_MIN(h->maxc,ftellr);
     /* FIXME: shall make max allocation limit configurable :) */
+    h->cw = FIM_MIN(h->cw, ftellr);
 
     h->ch = ( ( ftellr + h->cw - 1 ) / h->cw );
 
-    i->width  = h->w = prw;
+    i->width  = h->w = /* prw */ h->fw * h->cw;
     i->height = h->h = h->ch * h->fh;
     return h;
  oops:
@@ -164,6 +169,7 @@ text_read(fim_byte_t *dst, unsigned int line, void *data)
 
     	if(line==0)
 	{
+		bzero(dst,3*h->h*h->w);
 		fseek(h->fp, 0,SEEK_SET );
 		while( ( fr = fgetc(h->fp) ) != EOF && cc < h->maxc  )
 		{

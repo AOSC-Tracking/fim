@@ -535,6 +535,16 @@ namespace fim
 		return new Image(*this);
 	}
 
+static int snprintf_XB(char *str, size_t size, size_t q)
+{
+	char u='B',b=' ';
+	size_t d=1;
+	if(q/d>1024)d*=FIM_C_K,u='K',b='B';
+	if(q/d>1024)d*=FIM_C_K,u='M';
+	if(q/d>1024)d*=FIM_C_K,u='G';
+	return snprintf(str, size, "%zd%c%c",q/d,u,b);
+}
+
 /*
  *	Creates a little description of some image,
  *	and places it in a NUL terminated static buffer.
@@ -631,10 +641,10 @@ fim::string Image::getInfo()
 					snprintf(clb+strlen(clb), sizeof(clb), "%s",pagesinfobuffer);
 				break;
 				case('F'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%dkB",fs_/FIM_C_K);
+					snprintf_XB(clb+strlen(clb), sizeof(clb),fs_);
 				break;
 				case('M'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%dMB",ms_/FIM_C_M);
+					snprintf_XB(clb+strlen(clb), sizeof(clb),ms_);
 				break;
 				case('%'):
 					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
