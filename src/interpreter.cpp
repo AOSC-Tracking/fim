@@ -2,7 +2,7 @@
 /*
  interpreter.cpp : Fim language interpreter
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -291,14 +291,14 @@ Var ex(nodeType *p)
 			  if(p->opr.nops==2)	//int yacc.ypp we specified only 2 ops per x node
 		          {
 				  nodeType *np=p;	
-				  nodeType *dp;
+				  //nodeType *dp;
 	                          np=(np->opr.op[1]); //the right subtree first node
 				  while( np &&    np->opr.nops >=1 )
 				  if( np->opr.oper=='a' )
 			  	  {
 					  std::vector<fim::string> na;
 					  na=var(np);
-				          for(int i=0;i<na.size();++i)
+				          for(fim_size_t i=0;i<na.size();++i)
                                           { //std::cout << "?"<<na[i]<<FIM_SYM_ENDL;
 					    args.push_back(na[i]);}// FIXME : non sono sicuro che questo serva
 					  DBG("A:"<<np->opr.nops<<FIM_SYM_ENDL);
@@ -439,10 +439,10 @@ Var ex(nodeType *p)
 #if FIM_WANT_AVOID_FP_EXCEPTIONS
 			case '%': {Var v1=ex(p->opr.op[0]),v2=ex(p->opr.op[1]); if(v2.getInt())return v1%v2; else return v2;};
 			case '/': {Var v1=ex(p->opr.op[0]),v2=ex(p->opr.op[1]); if(v2.getInt())return v1/v2; else return v2;};
-#else
+#else /* FIM_WANT_AVOID_FP_EXCEPTIONS */
 			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]); // FIXME: may generate an exception
 			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]); // FIXME: may generate an exception
-#endif
+#endif /* FIM_WANT_AVOID_FP_EXCEPTIONS */
 			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
 			case '!': return ((ex(p->opr.op[0])).getInt())==0?1:0;
 			/* unary minus is still under definition */

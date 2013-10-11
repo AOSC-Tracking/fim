@@ -2,7 +2,7 @@
 /*
  FbiStuffTiff.cpp : fbi functions for TIFF files, modified for fim
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 #include "FbiStuffLoader.h"
 #ifdef USE_X11
 # include "viewer.h"
-#endif
+#endif /* USE_X11 */
 
 namespace fim
 {
@@ -86,11 +86,11 @@ tiff_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     h->row = (uint32*)fim_malloc(TIFFScanlineSize(h->tif));
     if(!h->row)goto oops;
     if (FbiStuff::fim_filereading_debug())
-#ifndef PRId32
-#define PRId32 "x"
-#endif
-	FIM_FBI_PRINTF("tiff: %" PRId32 "x%" PRId32 ", planar=%d, "
-		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" PRId32 "\n",
+#ifndef FIM_PRId32
+#define FIM_PRId32 "x"
+#endif /* FIM_PRId32 */
+	FIM_FBI_PRINTF("tiff: %" FIM_PRId32 "x%" FIM_PRId32 ", planar=%d, "
+		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" FIM_PRId32 "\n",
 //	FIM_FBI_PRINTF("tiff: %" "%d" "x%" "%d" ", planar=%d, "
 //		"nsamples=%d, depth=%d fo=%d pm=%d scanline=%" "%d" "\n",
 		h->width,h->height,h->config,h->nsamples,h->depth,
@@ -290,6 +290,6 @@ static void __init init_wr(void)
     fim_write_register(&tiff_writer);
 }
 
-#endif
+#endif /* USE_X11 */
 }
 

@@ -2,7 +2,7 @@
 /*
  FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@
 #include "FbiStuffLoader.h"
 #ifdef USE_X11
 # include "viewer.h"
-#endif
+#endif /* USE_X11 */
 
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
@@ -84,7 +84,7 @@ pnm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     return h;
 
  oops:
-    fclose(fp);
+    fim_fclose(fp);
     if(h->row)fim_free(h->row);
     if(h)fim_free(h);
     return NULL;
@@ -95,7 +95,7 @@ ppm_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct ppm_state *h = (struct ppm_state *) data;
     int fr;
-    fr=fread(dst,h->width,3,h->infile);
+    fr=fim_fread(dst,h->width,3,h->infile);
     if(fr){/* FIXME : there should be error handling */}
 }
 
@@ -106,7 +106,7 @@ pgm_read(fim_byte_t *dst, unsigned int line, void *data)
     fim_byte_t *src;
     int x,fr;
 
-    fr=fread(h->row,h->width,1,h->infile);
+    fr=fim_fread(h->row,h->width,1,h->infile);
     if(!fr){/* FIXME : there should be error handling */ return ; }
     src = h->row;
     for (x = 0; x < h->width; x++) {
@@ -123,7 +123,7 @@ pnm_done(void *data)
 {
     struct ppm_state *h = (struct ppm_state *) data;
 
-    fclose(h->infile);
+    fim_fclose(h->infile);
     fim_free(h->row);
     fim_free(h);
 }
@@ -180,7 +180,7 @@ static void __init init_wr(void)
 {
     fim_write_register(&ppm_writer);
 }
-#endif
+#endif /* USE_X11 */
 
 }
 

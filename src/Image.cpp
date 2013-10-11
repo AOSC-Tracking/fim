@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@
 */
 
 #include "Image.h"
+
+#define FIM_C_K 1024
+#define FIM_C_M (FIM_C_K*FIM_C_K)
 
 /*
  * TODO :
@@ -80,9 +83,10 @@ namespace fim
 		orientation_(0),
                 invalid_(false),
 		no_file_(true),
+		fs_(0), ms_(0),
 #ifdef FIM_NAMESPACES
 		Namespace(FIM_SYM_NAMESPACE_IMAGE_CHAR),
-#endif
+#endif /* FIM_NAMESPACES */
 		fis_(fim::string(fname)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
                 fname_     (FIM_CNS_DEFAULT_IFNAME)
 
@@ -137,7 +141,7 @@ namespace fim
 			FIXME : still unused
 		*/
 		bool b=false;
-		FILE *fd=fopen(fname_.c_str(),"r");
+		FILE *fd=fim_fopen(fname_.c_str(),"r");
 		if(!fd)
 			return b;
 		b=load(fname_.c_str(),fd,page_);
@@ -170,7 +174,16 @@ namespace fim
 			fis_ = FIM_E_STDIN; // yes, it seems redundant but it is necessary
 		}
 		else 
+		{
+#if FIM_WANT_KEEP_FILESIZE
+			struct stat stat_s;
+			if(-1!=stat(fname,&stat_s))
+			{
+				fs_=stat_s.st_size;
+			}
+#endif /* FIM_WANT_KEEP_FILESIZE */
 			no_file_=false;	//reloading allowed
+		}
 
 		img_=fimg_;	/* no scaling : one copy only */
 		should_redraw();
@@ -195,7 +208,7 @@ namespace fim
 		setVariable(FIM_VID_NEGATED , 0);
 		setVariable(FIM_VID_DESATURATED, 0);
 		setVariable(FIM_VID_FILENAME,fname_.c_str());
-#endif
+#endif /* FIM_NAMESPACES */
 
 		setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg_->i.height);
 		setGlobalVariable(FIM_VID_WIDTH  ,(int)fimg_->i.width );
@@ -215,7 +228,7 @@ namespace fim
 		 * */
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "freeing Image " << this << "\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 		this->free();
 	}
 
@@ -298,7 +311,7 @@ namespace fim
 		 * */
 #if FIM_BUGGED_RESCALE
 		return FIM_ERR_NO_ERROR;
-#endif
+#endif /* FIM_BUGGED_RESCALE */
 		if(ns>0.0)newscale_=ns;//patch
 
 		if( check_invalid() ) return FIM_ERR_GENERIC;
@@ -363,7 +376,7 @@ namespace fim
 				img_ = scale_image(fimg_,newscale_,newascale);
 #else
 			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale);
-#endif
+#endif /* FIM_PROGRESSIVE_RESCALING */
 			/* orientation_ can be 0,1,2,3 */
 			if( img_ && orientation_!=0 && orientation_ != 2)
 			{
@@ -488,6 +501,7 @@ namespace fim
                 invalid_(image.invalid_),
 		no_file_(true),
 		fis_(image.fis_),
+		fs_(0), ms_(0),
                 fname_     (image.fname_)
 	{
 		/*
@@ -521,6 +535,16 @@ namespace fim
 		return new Image(*this);
 	}
 
+static int snprintf_XB(char *str, size_t size, size_t q)
+{
+	char u='B',b=' ';
+	size_t d=1;
+	if(q/d>1024)d*=FIM_C_K,u='K',b='B';
+	if(q/d>1024)d*=FIM_C_K,u='M';
+	if(q/d>1024)d*=FIM_C_K,u='G';
+	return snprintf(str, size, "%zd%c%c",q/d,u,b);
+}
+
 /*
  *	Creates a little description of some image,
  *	and places it in a NUL terminated static buffer.
@@ -534,12 +558,16 @@ fim::string Image::getInfo()
 	 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
 	 */
 	//FIX ME !
-	if(!fimg_)return FIM_CNS_EMPTY_RESULT;
+	if(!fimg_)
+		return FIM_CNS_EMPTY_RESULT;
 
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[3],*imp;
 	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
+#if FIM_WANT_CUSTOM_INFO_STATUS_BAR
+	fim::string ifs;
+#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 	imp=imagemode;
 
 	//if(getGlobalIntVariable(FIM_VID_AUTOFLIP))*(imp++)='F';
@@ -553,6 +581,7 @@ fim::string Image::getInfo()
 	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
 	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 
+
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
 	*imp='\0';
@@ -562,8 +591,97 @@ fim::string Image::getInfo()
 	else
 		*pagesinfobuffer='\0';
 		
+/* #if FIM_WANT_DISPLAY_MEMSIZE */
+	ms_=0;
+	if(fimg_)
+		ms_+=fimg_->i.height*fimg_->i.width*3;
+	if(fimg_!=img_)
+		ms_+= img_->i.height* img_->i.width*3;
+/* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
+
+#if FIM_WANT_CUSTOM_INFO_STATUS_BAR
+	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
+	{
+		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE];
+		char*ifsp=(char*)ifs.c_str(); // FIXME
+		char*fp=ifsp;
+		char*sp=ifsp;
+		clb[0]=FIM_SYM_CHAR_NUL;
+
+		while(*sp && *sp!='%')
+		{
+			++sp;
+		}
+		goto sbum;
+		while(*sp=='%' && isprint(sp[1]))
+		{
+			++sp;
+			switch(*sp)
+			{
+				// "%p %wx%h %i/%l %F %M"
+				case('p'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%.0f",scale_*100);
+				break;
+				case('w'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%d",this->width());
+				break;
+				case('h'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%d",this->height());
+				break;
+				case('i'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%d",n?n:1);
+				break;
+				case('l'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%d",(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
+				break;
+				case('L'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%s",imagemode);
+				break;
+				case('P'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%s",pagesinfobuffer);
+				break;
+				case('F'):
+					snprintf_XB(clb+strlen(clb), sizeof(clb),fs_);
+				break;
+				case('M'):
+					snprintf_XB(clb+strlen(clb), sizeof(clb),ms_);
+				break;
+				case('%'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
+				break;
+				// default:
+				/* rejecting char; may display an error message here */
+			}
+			++sp;
+			fp=sp;
+sbum:
+			while(*sp!='%' && sp[0])
+				++sp;
+			if(sp[0]==FIM_SYM_CHAR_NUL)
+				snprintf(clb+strlen(clb), sizeof(clb), "%s",fp);
+#if 1
+			else
+			{
+				sp[0]=FIM_SYM_CHAR_NUL;
+				snprintf(clb+strlen(clb), sizeof(clb), "%s",fp);
+				sp[0]='%';
+			}
+#endif
+		}
+		// std::cout << "Custom format string chosen: "<< ifsp << ", resulting in :"<< clb <<"\n";
+		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
+		goto labeldone;
+	}
+#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 	snprintf(linebuffer, sizeof(linebuffer),
-	     "%s%.0f%% %dx%d%s%s %d/%d",
+	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
+#if FIM_WANT_DISPLAY_FILESIZE
+	     " %dkB"
+#endif /* FIM_WANT_DISPLAY_FILESIZE */
+#if FIM_WANT_DISPLAY_MEMSIZE
+	     " %dMB"
+#endif /* FIM_WANT_DISPLAY_MEMSIZE */
+	     ,
 	     /*fcurrent->tag*/ 0 ? "* " : "",
 	     scale_*100,
 	     this->width(), this->height(),
@@ -571,7 +689,14 @@ fim::string Image::getInfo()
 	     pagesinfobuffer,
 	     n?n:1, /* ... */
 	     (getGlobalIntVariable(FIM_VID_FILELISTLEN))
+#if FIM_WANT_DISPLAY_FILESIZE
+	     ,fs_/FIM_C_K
+#endif /* FIM_WANT_DISPLAY_FILESIZE */
+#if FIM_WANT_DISPLAY_MEMSIZE
+	     ,ms_/FIM_C_M
+#endif /* FIM_WANT_DISPLAY_MEMSIZE */
 	     );
+labeldone:
 	return fim::string(linebuffer);
 }
 
@@ -795,6 +920,6 @@ fim::string Image::getInfo()
 		return true;
 	}
 
-	int Image::n_pages()const{return (fimg_?fimg_->i.npages:0);};
+	int Image::n_pages()const{return (fimg_?fimg_->i.npages:0);}
 }
 

@@ -2,7 +2,7 @@
 /*
  Command.h : Fim Command class header file
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ class Command
 	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
 #ifdef FIM_WINDOWS
 	Command(fim::string cmd,fim::string help,FimWindow *w=NULL,fim::string(FimWindow::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
-#endif
+#endif /* FIM_WINDOWS */
 
 	fim::string getHelp()const{return help_;}
 	private:
@@ -42,7 +42,7 @@ class Command
 		BrowserT,
 #ifdef FIM_WINDOWS
 		WindowT,
-#endif
+#endif /* FIM_WINDOWS */
 		CommandConsoleT 
 	};
 	union{
@@ -50,14 +50,14 @@ class Command
 		fim::string (CommandConsole::*consolef)(const std::vector<fim::string>&) ;
 #ifdef FIM_WINDOWS
 		fim::string (FimWindow::*windowf)(const std::vector<fim::string>&) ;
-#endif
+#endif /* FIM_WINDOWS */
 	};
 	union{
 		Browser *browser;
 		CommandConsole *console;
 #ifdef FIM_WINDOWS
 		FimWindow *window;
-#endif
+#endif /* FIM_WINDOWS */
 	};
 	fim_cmd_type_t type;
 
@@ -85,4 +85,4 @@ class Command
 	bool operator <=(Command c)const{return cmd_<=c.cmd_;}
 };
 }
-#endif
+#endif /* FIM_COMMAND_H */

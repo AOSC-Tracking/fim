@@ -88,6 +88,12 @@ Will pad with zeros.
 Regard this as a toy..
 
 .TP
+.B 	 --as-text
+Display (any filetype) files contents as they were text.
+Will only show printable characters.
+Regard this as a toy..
+
+.TP
 .B 	 --cd-and-readdir
 step into the first loaded file directory and push other files
 .TP
@@ -200,7 +206,10 @@ Use (con2fb (1)) to map a terminal to a framebuffer device.
 
 .TP
 .B -u, --random
-Randomly shuffle the files list before browsing.
+Randomly shuffle the files list before browsing (seed depending on time() function).
+.TP
+.B 	 --random-no-seed
+Randomly shuffle the files list before browsing (no seeding).
 .TP
 .B -v, --verbose
 Be verbose: show status bar.

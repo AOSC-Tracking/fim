@@ -4,7 +4,7 @@
 /*
  string.h : Fim's own string implementation header file
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,9 +57,9 @@ namespace fim
 	fim_char_t*s;		/* the string : can be NULL */
 	int len;	/* the allocated amount */
 	std::string ss;
-#else
+#else /* _FIM_DYNAMIC_STRING */
 	fim_char_t s[TOKSIZE];
-#endif
+#endif /* _FIM_DYNAMIC_STRING */
 	public :
 	void _string_init();
 
@@ -102,7 +102,7 @@ namespace fim
 	operator int()const{return atoi(s);}
 	operator float()const{return fim_atof(s);}
 	};
-#else
+#else /* _FIM_STRING_WRAPPER */
 	class string:public std::string
 	{
 		public:
@@ -142,8 +142,8 @@ namespace fim
 	};
 
 
-#endif
+#endif /* _FIM_STRING_WRAPPER */
 }
 
 
-#endif
+#endif /* FIM_STRING_H */

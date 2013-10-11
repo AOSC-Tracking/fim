@@ -60,7 +60,7 @@ namespace fim
 					return 0;
 			}
 			else
-#endif
+#endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
@@ -84,7 +84,7 @@ namespace fim
 			}
 			catch(FimException e){}
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 		return variables_[varname].setInt(value);
 	}
 
@@ -121,7 +121,7 @@ namespace fim
 					return 0;
 			}
 			else
-#endif
+#endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
@@ -145,7 +145,7 @@ namespace fim
 			}
 			catch(FimException e){}
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 		return variables_[varname].setFloat(value);
 	}
 
@@ -182,7 +182,7 @@ namespace fim
 					return 0;
 			}
 			else
-#endif
+#endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
@@ -206,7 +206,7 @@ namespace fim
 			}
 			catch(FimException e){}
 		}
-#endif
+#endif /* FIM_WINDOWS */
 		return (fim_int)(variables_[varname].setString(s));
 	}
 
@@ -243,7 +243,7 @@ namespace fim
 					return 0;
 			}
 			else
-#endif
+#endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
@@ -269,7 +269,7 @@ namespace fim
 			}
 			catch(FimException e){}
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 		variables_[varname]=value;	/* FIXME : this does not work */
 		variables_[varname].set(value);	/* FIXME : this works */
 		//std::cout <<"CCGS["<<varname<<"]"<<variables_[varname].getString()<<"\n";
@@ -307,7 +307,7 @@ namespace fim
 					return 0;
 			}
 			else
-#endif
+#endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
@@ -331,7 +331,7 @@ namespace fim
 			}
 			catch(FimException e){}
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 		// this scope was selected
 		/*
 		 * the variable name supplied is used as a key to the variables hash
@@ -380,7 +380,7 @@ namespace fim
 					return FIM_CNS_EMPTY_FP_VAL;
 			}
 			else
-#endif
+#endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
@@ -404,7 +404,7 @@ namespace fim
 			}
 			catch(FimException e){}
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 		variables_t::const_iterator vi=variables_.find(varname);
 		if(vi!=variables_.end()) return vi->second.getFloat();
 		else return FIM_CNS_EMPTY_FP_VAL;
@@ -443,7 +443,7 @@ namespace fim
 					return FIM_CNS_EMPTY_RESULT;
 			}
 			else
-#endif
+#endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
@@ -468,7 +468,7 @@ namespace fim
 			}
 			catch(FimException e){}
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 //		return variables_[varname].getString();
 		variables_t::const_iterator vi=variables_.find(varname);
 		if(vi!=variables_.end()) 
@@ -555,7 +555,7 @@ namespace fim
 					return Var();
 			}
 			else
-#endif
+#endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
@@ -579,7 +579,7 @@ namespace fim
 			}
 			catch(FimException e){}
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 		variables_t::const_iterator vi=variables_.find(varname);
 		if(vi!=variables_.end()) return vi->second;
 		else return Var();
@@ -654,9 +654,9 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			return cc.autocmd_exec(event,fname);
-#else
+#else /* FIM_AUTOCMDS */
 			return FIM_CNS_EMPTY_RESULT;
-#endif
+#endif /* FIM_AUTOCMDS */
 		}
 
 		fim::string Namespace::get_variables_list()const

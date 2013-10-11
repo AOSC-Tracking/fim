@@ -24,7 +24,7 @@
 #include <getopt.h>
 #ifdef FIM_READLINE_H
 #include "readline.h"	/* readline stuff */
-#endif
+#endif /* FIM_READLINE_H */
 /*
  * We use the STL (Standard Template Library)
  */
@@ -83,7 +83,14 @@ struct fim_options_t fim_options[] = {
 "Will pad with zeros.\n"
 "Regard this as a toy..\n"
     },
-#endif
+#endif /* FIM_WANT_RAW_BITS_RENDERING */
+#if FIM_WANT_TEXT_RENDERING
+    {FIM_OSW_TEXT,     no_argument,       NULL, 0x74657874, "view any file as rendered text",NULL,
+"Display (any filetype) files contents as they were text.\n" 
+"Will only show printable characters.\n"
+"Regard this as a toy..\n"
+    },
+#endif /* FIM_WANT_RAW_BITS_RENDERING */
     {"cd-and-readdir", no_argument,       NULL, 0x4352,"step into the first loaded file directory and push other files",NULL,"step into the first loaded file directory and push other files"},
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
@@ -130,7 +137,7 @@ NULL
 "Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats."
 "\nIn the image list, this image will be displayed as \""FIM_STDIN_IMAGE_NAME"\".\n"
     },
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
     {"mode",       required_argument, NULL, 'm',"specify a video mode","{vmode}",
 "Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
@@ -153,7 +160,7 @@ NULL
     {"no-history",      no_argument,       NULL, 0x4E48,"do not load/save execution history",NULL,
 "Do not load or save execution history at startup). "
     },
-#endif
+#endif /* FIM_WANT_HISTORY */
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
 "Will read commands from stdin prior to entering in interactive mode."
     },
@@ -165,10 +172,10 @@ NULL
 "The \\fBaa\\fP option may be specified as  \\fBaa"FIM_SYM_DEVOPTS_SEP_STR"{['w']}\\fP ; the \\fB'w'\\fP character allows windowed mode in case of aalib running under X (otherwise, the DISPLAY environment variable will be unset for the current instance of fim).\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
 "The \\fBsdl\\fP option may be specified as  \\fBsdl"FIM_SYM_DEVOPTS_SEP_STR"{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the \\fB'w'\\fP character requests windowed mode; the \\fB'm'\\fP character requests mouse pointer display; the \\fB'r'\\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
-#endif
+#endif /* FIM_WANT_SDL_OPTIONS_STRING */
 #ifdef FIM_WITH_LIBIMLIB2
 /* FIXME: shall document this */
-#endif
+#endif /* FIM_WITH_LIBIMLIB2 */
     },
     {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
 "Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation)."
@@ -195,7 +202,10 @@ NULL
 "Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
     {"random",     no_argument,       NULL, 'u',"randomize images order",NULL,
-"Randomly shuffle the files list before browsing."
+"Randomly shuffle the files list before browsing (seed depending on time() function)."
+    },
+    {"random-no-seed",     no_argument,       NULL, 0x7073,"randomize images order (always same sequence)",NULL,
+"Randomly shuffle the files list before browsing (no seeding)."
     },
     {"verbose",    no_argument,       NULL, 'v',"verbose mode",NULL,
 "Be verbose: show status bar."
@@ -226,7 +236,7 @@ NULL
 ".B EXAMPLES\n"
 "below to read some useful (and unique) ways of employing fim.\n"
     },
-#endif
+#endif /* FIM_READ_STDIN */
     {"autotop",   no_argument,       NULL, 'A',"align images to the top (UNFINISHED)",NULL,
 	    NULL
     },
@@ -420,13 +430,13 @@ int fim_dump_man_page()
 			".B ... | fim [{options}] [--] [{imagefiles}] -\n.fi\n")+
 #ifdef FIM_READ_STDIN
 			string(".B fim [{options}] [--] [{files}] - < {file_name_list_text_file}\n.fi\n")+
-#endif
+#endif /* FIM_READ_STDIN */
 #ifdef FIM_READ_STDIN_IMAGE
 			string(".B fim --"FIM_OSW_IMAGE_FROM_STDIN" [{options}] < {imagefile}\n.fi\n")+
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 #ifdef FIM_READ_STDIN
 			string(".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [{options}] < {scriptfile}\n.fi\n")+
-#endif
+#endif /* FIM_READ_STDIN */
 			string("\n"
 			".SH DESCRIPTION\n"
 			".B\nfim\nis a `swiss army knife' for displaying image files.\n"
@@ -435,7 +445,7 @@ int fim_dump_man_page()
 			"\n")+
 #ifdef FIM_READ_DIRS
 			string("\n""If configured at build time,\n.B\n{imagefile}\nmay be as well a directory containing files in supported formats.""\n\n")+
-#endif
+#endif /* FIM_READ_DIRS */
 
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
 	//		string("Please note that a user guide of \n.B fim\nis in the "FIM_CNS_FIM_TXT" file distributed in the source package.\n\n")+
@@ -535,7 +545,7 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 mp+=get_default_font_list();
 #if FIM_WANT_HARDCODED_FONT
 mp+="\nIf the special "FIM_DEFAULT_HARDCODEDFONT_STRING" string is specified, a hardcoded font will be used.";
-#endif
+#endif /* FIM_WANT_HARDCODED_FONT */
 mp+="\n";
 mp+=string(
 //"			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psf.gz is a Linux console file.\n"
@@ -549,7 +559,7 @@ mp+=string(
 ""FIM_ENV_DISPLAY"	If this variable is set, then the "FIM_DDN_INN_SDL" driver will be tried by default.\n"
 #elif defined(FIM_WITH_LIBIMLIB2)
 ""FIM_ENV_DISPLAY"	If this variable is set, then the "FIM_DDN_INN_IL2" driver will be tried by default.\n"
-#endif
+#endif /* FIM_WITH_LIBSDL */
 ".SH COMMON PROBLEMS\n"
 ".B fim\n"
 "needs read-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our\n"
@@ -609,7 +619,7 @@ mp+=string(
 "# Will make fim read the image scanned from a flatbed scanner as soon as it is read \n"
 ".P\n"
 ".P\n"
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 "\n"
 ".B fim * > selection.txt\n"
 ".fi\n"
@@ -646,10 +656,10 @@ mp+=string(
 "This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.\n"
 #ifdef FIM_READ_STDIN_IMAGE
 "The filename \""FIM_STDIN_IMAGE_NAME"\" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.\n"
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 #ifdef FIM_WITH_LIBSDL
 "The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.\n"
-#endif
+#endif /* FIM_WITH_LIBSDL */
 ".SH BUGS\n"
 ".B fim\n"
 "has bugs. Please read the \n"
@@ -775,11 +785,11 @@ done:
 		#ifdef FIM_READ_STDIN_IMAGE
 		int		 read_one_file_from_stdin;
 		read_one_file_from_stdin=0;
-		#endif
+		#endif /* FIM_READ_STDIN_IMAGE */
 		int		 read_one_script_file_from_stdin;
 		read_one_script_file_from_stdin=0;
 		int perform_sanity_check=0;
-	#endif
+	#endif /* FIM_READ_STDIN */
 		int c;
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
@@ -821,10 +831,17 @@ done:
 		    //TODO: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='a';");
-	#else
+	#else /* FIM_AUTOCMDS */
 		    cout << FIM_EMSG_NO_SCRIPTING;
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
+#if FIM_WANT_TEXT_RENDERING
+		case 0x74657874:
+		    	cc.setVariable(FIM_VID_TEXT_DISPLAY,1);
+#else /* FIM_WANT_TEXT_RENDERING */
+			std::cerr<<"Warning: the --"FIM_OSW_TEXT" option was disabled at compile time.\n";
+#endif /* FIM_WANT_TEXT_RENDERING */
+
 #if FIM_WANT_RAW_BITS_RENDERING
 		case 'b':
 		    //fim's
@@ -843,16 +860,16 @@ done:
 		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,FIM_DEFAULT_AS_BINARY_BPP);
                     }
 		    break;
-#else
+#else /* FIM_WANT_RAW_BITS_RENDERING */
 			std::cerr<<"Warning: the --"FIM_OSW_BINARY" option was disabled at compile time.\n";
-#endif
+#endif /* FIM_WANT_RAW_BITS_RENDERING */
 		case 'A':
 		    //fbi's
 		    //cc.setVariable(FIM_VID_AUTOTOP,1);
 		    //FIXME: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_AUTOTOP"=1;");
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'q':
 		    //fbi's
@@ -860,60 +877,60 @@ done:
 		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,0);
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=0;");
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'f':
 	#ifndef FIM_WANT_NOSCRIPTING
 		    cc.setVariable(FIM_VID_DEFAULT_ETC_FIMRC,optarg);
-	#else
+	#else /* FIM_WANT_NOSCRIPTING */
 		    cout << FIM_EMSG_NO_SCRIPTING;
-	#endif
+	#endif /* FIM_WANT_NOSCRIPTING */
 		    break;
 		case 0x7373:
 	#ifndef FIM_WANT_NOSCRIPTING
 		    	cc.setVariable(FIM_VID_WANT_SLEEPS,optarg);
 	    		cc.autocmd_add(FIM_ACM_PREEXECUTIONCYCLE,"",FIM_CNS_SLIDESHOW_CMD);
-	#else
+	#else /* FIM_WANT_NOSCRIPTING */
 		    cout << FIM_EMSG_NO_SCRIPTING;
-	#endif
+	#endif /* FIM_WANT_NOSCRIPTING */
 		    break;
 		case 'S':
 		    //fim's
 	#ifdef FIM_AUTOCMDS
 		    cc.setVariable(FIM_VID_SANITY_CHECK,1);
 		    perform_sanity_check=1;
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'v':
 		    //fbi's
 		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,1);
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=1;");
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'w':
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='w';");
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 0x4E4053:
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"=' ';");// FIXME: shall document the allowed scaling character/options
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'H':
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='h';");
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'P':
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='w';"FIM_VID_AUTOTOP"=1;");
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 0xFFD8FFE0:
 		    //fbi's
@@ -939,7 +956,7 @@ done:
 				//std::cout << "peppe_offset" << peppe_offset<< "\n";
 			}
 		}
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'g':
 		    //fbi's
@@ -961,7 +978,7 @@ done:
 			s+=";";
 	#ifdef FIM_AUTOCMDS
 			cc.pre_autocmd_add(s);
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    }
 		    break;
 	//	case 't':
@@ -970,9 +987,12 @@ done:
 	//	    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 	//	    break;
 		case 'u':
+		    want_random_shuffle=1;
+		    break;
+		case 0x7073:
 		    //FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 		    //fim's
-		    want_random_shuffle=1;
+		    want_random_shuffle=-1;
 		    break;
 		case 'd':
 		    //fbi's
@@ -982,9 +1002,9 @@ done:
 		    //fim's
 #ifdef FIM_READ_STDIN_IMAGE
 		    read_one_file_from_stdin=1;
-#else
+#else /* FIM_READ_STDIN_IMAGE */
 		    FIM_FPRINTF(stderr, FIM_EMSG_NO_READ_STDIN_IMAGE);
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 		    break;
 		case 'm':
 		    //fbi's
@@ -1037,7 +1057,7 @@ done:
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_FLT_RECORDING" 'start';");
 		    cc.appendPostExecutionCommand(FIM_FLT_RECORDING" 'stop';");
-	#endif
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'F':
 		    //fim's
@@ -1047,17 +1067,17 @@ done:
 		    //fim's
 	#ifndef FIM_WANT_NOSCRIPTING
 		    cc.push_scriptfile(optarg);
-	#else
+	#else /* FIM_WANT_NOSCRIPTING */
 		    cout << FIM_EMSG_NO_SCRIPTING;
-	#endif
+	#endif /* FIM_WANT_NOSCRIPTING */
 		    break;
 		case 'p':
 		    //fim's (differing semantics from fbi's)
 	#ifndef FIM_WANT_NOSCRIPTING
 		    read_one_script_file_from_stdin=1;
-	#else
+        #else /* FIM_WANT_NOSCRIPTING */
 		    cout << FIM_EMSG_NO_SCRIPTING;
-	#endif
+        #endif /* FIM_WANT_NOSCRIPTING */
 		    break;
 		case 'D':
 		    //fim's
@@ -1095,15 +1115,15 @@ done:
 		    	cc.setVariable(FIM_VID_SAVE_FIM_HISTORY,-1);
 		    	cc.setVariable(FIM_VID_LOAD_FIM_HISTORY,-1);
 		    break;
-#endif
+#endif /* FIM_WANT_HISTORY */
 		case 't':
 		    //fim's
 			#ifdef FIM_WITH_AALIB
 		    	g_fim_output_device=FIM_DDN_INN_AA;
-			#else
+			#else /* FIM_WITH_AALIB */
 			std::cerr << "you should recompile fim with aalib support!\n";
 			g_fim_output_device=FIM_DDN_INN_DUMB;
-			#endif
+			#endif /* FIM_WITH_AALIB */
 		    break;
 		case 'o':
 		    //fim's
@@ -1114,7 +1134,7 @@ done:
 				if(si>0);else si=g_fim_output_device.end()-g_fim_output_device.begin();
 				transform(g_fim_output_device.begin(), si+g_fim_output_device.begin(), g_fim_output_device.begin(),(int (*)(int))tolower);
 			}
-#endif
+#endif /* FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE */
 		    break;
 		case 0xd15cbab3:
 		    //fim's
@@ -1134,7 +1154,7 @@ done:
 		    //fim's
 		    read_file_list_from_stdin=1;
 		    break;
-	#endif
+	#endif /* FIM_READ_STDIN */
 		default:
 		case 'h':
 		    help_and_exit(argv[0],FIM_PERR_NO_ERROR,optarg);
@@ -1145,7 +1165,7 @@ done:
 	#ifdef FIM_READ_STDIN
 			if(*argv[i]=='-'&&!argv[i][1])read_file_list_from_stdin=1;
 			else
-	#endif
+	#endif /* FIM_READ_STDIN */
 			{
 				cc.push(argv[i]);
 			}
@@ -1163,13 +1183,13 @@ done:
 		if( read_file_list_from_stdin +
 		#ifdef FIM_READ_STDIN_IMAGE
 		read_one_file_from_stdin+
-		#endif
+		#endif /* FIM_READ_STDIN_IMAGE */
 		read_one_script_file_from_stdin > 1)
 		{
 			FIM_FPRINTF(stderr, "error : you shouldn't specify more than one standard input reading options among (-, -p"
 #ifdef FIM_READ_STDIN_IMAGE
 					", -i"
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 					")!\n\n");
 			retcode=help_and_exit(argv[0],FIM_PERR_NO_ERROR,"b");/* should return 0 or -1 ? */
 			goto ret;
@@ -1200,9 +1220,9 @@ done:
 			cc.fpush(fim_fread_tmpfile(stdin));
 			close(0);
 			ndd=dup(2);
-#endif
+#endif /* FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG */
 		}
-		#endif
+		#endif /* FIM_READ_STDIN_IMAGE */
 		else
 		if(read_one_script_file_from_stdin)
 		{
@@ -1216,8 +1236,10 @@ done:
 			ndd=dup(2);
 		}
 	#endif
-		if(want_random_shuffle)
-			cc.browser_._random_shuffle();
+		if(want_random_shuffle== 1)
+			cc.browser_._random_shuffle(true);
+		if(want_random_shuffle==-1)
+			cc.browser_._random_shuffle(false);
 
 		if(ndd==-1)
 			fim_perror(NULL);
@@ -1225,12 +1247,12 @@ done:
 		if(cc.browser_.empty_file_list()
 #ifndef FIM_WANT_NOSCRIPTING
 			       	&& !cc.with_scriptfile()
-#endif
+#endif /* FIM_WANT_NOSCRIPTING */
 			       	&& !appendedPostInitCommand 
 			       	&& !appendedPreConfigCommand 
 		#ifdef FIM_READ_STDIN_IMAGE
 		&& !read_one_file_from_stdin
-		#endif
+		#endif /* FIM_READ_STDIN_IMAGE */
 		&& !perform_sanity_check
 		)
 		{
@@ -1246,21 +1268,21 @@ done:
 			{
 	#ifdef FIM_WITH_LIBIMLIB2
 				g_fim_output_device=FIM_DDN_INN_IL2;
-	#endif
+	#endif /* FIM_WITH_LIBIMLIB2 */
 	#ifdef FIM_WITH_LIBSDL
 				g_fim_output_device=FIM_DDN_INN_SDL;
-	#endif
+	#endif /* FIM_WITH_LIBSDL */
 			}
 			else
 			#endif
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 			g_fim_output_device=FIM_DDN_INN_FB;
-#else
+#else /* FIM_WITH_NO_FRAMEBUFFER */
 	#ifdef FIM_WITH_AALIB
 			g_fim_output_device=FIM_DDN_INN_AA;
-	#else
+	#else /* FIM_WITH_AALIB */
 			g_fim_output_device=FIM_DDN_INN_DUMB ;
-	#endif
+	#endif /* FIM_WITH_AALIB */
 #endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
 		}
 
@@ -1275,8 +1297,8 @@ done:
 			close(0);
 			ndd=dup(2);
 		}
-#endif
-#endif
+#endif /* FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG */
+#endif /* FIM_READ_STDIN_IMAGE */
 		retcode=cc.executionCycle();/* note that this could not return */
 ret:
 		return retcode;
@@ -1299,22 +1321,22 @@ fim_perr_t main(int argc,char *argv[])
 		 * this is a horrible programming practice and shall be fixed. */
 #ifdef FIM_WITH_LIBPNG
 #include <png.h>
-#endif
+#endif /* FIM_WITH_LIBPNG */
 #ifdef HAVE_LIBJPEG
 #include <jpeglib.h>
-#endif
+#endif /* HAVE_LIBJPEG */
 #ifdef FIM_HANDLE_TIFF
 #include <tiffio.h>
-#endif
+#endif /* FIM_HANDLE_TIFF */
 #ifdef FIM_HANDLE_GIF
 #include <gif_lib.h>
-#endif
+#endif /* FIM_HANDLE_GIF */
 #ifdef FIM_USE_READLINE
 #include "readline.h"
-#endif
+#endif /* FIM_USE_READLINE */
 //#ifdef HAVE_LIBPOPPLER
 //#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
-//#endif
+//#endif /* HAVE_LIBPOPPLER */
 
 	void FimInstance::show_version()
 	{
@@ -1322,77 +1344,77 @@ fim_perr_t main(int argc,char *argv[])
 			    FIM_CNS_FIM" "
 	#ifdef FIM_VERSION
 			    FIM_VERSION
-	#endif
+	#endif /* FIM_VERSION */
 	#ifdef SVN_REVISION
 			    " ( repository version "
 		SVN_REVISION
 			    " )"
-	#else
+	#else /* SVN_REVISION */
 	/* obsolete */
 	# define FIM_REPOSITORY_VERSION  "$LastChangedDate$"
 	# ifdef FIM_REPOSITORY_VERSION 
 			    " ( repository version "
 		FIM_REPOSITORY_VERSION 	    
 			    " )"
-	# endif
-	#endif
+	# endif /* FIM_REPOSITORY_VERSION  */
+	#endif /* SVN_REVISION */
 	#ifdef FIM_AUTHOR 
 			    ", by "
 			    FIM_AUTHOR
-	#endif
+	#endif /* FIM_AUTHOR  */
 			    ", built on %s\n",
 			    __DATE__
 	    		    " ( based on fbi version 1.31 (c) by 1999-2004 "FBI_AUTHOR_NAME" )\n"
 	#ifdef FIM_WITH_LIBPNG
 	#ifdef PNG_HEADER_VERSION_STRING 
 	"Compiled with "PNG_HEADER_VERSION_STRING""
-	#endif 
-	#endif 
+	#endif /* PNG_HEADER_VERSION_STRING */
+	#endif /* FIM_WITH_LIBPNG */
 	#ifdef FIM_HANDLE_GIF
 	#ifdef GIF_LIB_VERSION
 	"Compiled with libgif, "GIF_LIB_VERSION".\n"
-	#endif 
-	#endif 
+	#endif /* GIF_LIB_VERSION */
+	#endif /* FIM_HANDLE_GIF */
 	#ifdef HAVE_LIBJPEG
 	#ifdef JPEG_LIB_VERSION
 	"Compiled with libjpeg, v."FIM_XSTRINGIFY(JPEG_LIB_VERSION)".\n"
-	#endif 
-	#endif 
+	#endif /* JPEG_LIB_VERSION */
+	#endif /* HAVE_LIBJPEG */
 	#ifdef FIM_USE_READLINE
 	// TODO: shall use RL_READLINE_VERSION instead
 	#if defined(RL_VERSION_MINOR) && defined(RL_VERSION_MAJOR) && ((RL_VERSION_MAJOR)>=6)
 	"Compiled with readline, v."FIM_XSTRINGIFY(RL_VERSION_MAJOR)"."FIM_XSTRINGIFY(RL_VERSION_MINOR)".\n"
 	#else
 	"Compiled with readline, version unknown.\n"
-	#endif 
-	#endif 
+	#endif /* defined(RL_VERSION_MINOR) && defined(RL_VERSION_MAJOR) && ((RL_VERSION_MAJOR)>=6) */
+	#endif /* FIM_USE_READLINE */
 	// for TIFF need TIFFGetVersion
 	#ifdef FIM_CONFIGURATION
 			"Configuration invocation: "FIM_CONFIGURATION"\n" 
-	#endif
+	#endif /* FIM_CONFIGURATION */
 	#ifdef CXXFLAGS
 			"Compile flags: CXXFLAGS="CXXFLAGS
 	#ifdef CFLAGS
 			"  CFLAGS="CFLAGS
-	#endif
+	#endif /* CFLAGS */
 			"\n"
-	#endif
+	#endif /* CXXFLAGS */
 			"Fim options (features included (+) or not (-)):\n"
 	#include "version.h"
 	/* i think some flags are missing .. */
 		"\nSupported output devices (for --"FIM_OSW_OUTPUT_DEVICE"): "
 	#ifdef FIM_WITH_AALIB
 		" "FIM_DDN_INN_AA
-	#endif
+	#endif /* FIM_WITH_AALIB */
 	#ifdef FIM_WITH_CACALIB
 		" "FIM_DDN_INN_CACA
-	#endif
+	#endif /* FIM_WITH_CACALIB */
 	#ifdef FIM_WITH_LIBIMLIB2
 		" "FIM_DDN_INN_IL2
-	#endif
+	#endif /* FIM_WITH_LIBIMLIB2 */
 	#ifdef FIM_WITH_LIBSDL
 		" "FIM_DDN_INN_SDL
-	#endif
+	#endif /* FIM_WITH_LIBSDL */
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 		" "FIM_DDN_INN_FB
 #endif //#ifndef FIM_WITH_NO_FRAMEBUFFER
@@ -1403,30 +1425,30 @@ fim_perr_t main(int argc,char *argv[])
 		"\nSupported file formats: "
 #ifdef ENABLE_PDF
 		" pdf"
-#endif
+#endif /* ENABLE_PDF */
 #ifdef HAVE_LIBSPECTRE
 		" ps"
-#endif
+#endif /* HAVE_LIBSPECTRE */
 #ifdef HAVE_LIBDJVU
 		" djvu"
-#endif
+#endif /* HAVE_LIBDJVU */
 #ifdef HAVE_LIBJPEG
 		" jpeg"
-#endif
+#endif /* HAVE_LIBJPEG */
 #ifdef FIM_HANDLE_TIFF
 		" tiff"
-#endif
+#endif /* FIM_HANDLE_TIFF */
 #ifdef FIM_HANDLE_GIF
 		" gif"
-#endif
+#endif /* FIM_HANDLE_GIF */
 #ifdef FIM_WITH_LIBPNG
 		" png"
-#endif
+#endif /* FIM_WITH_LIBPNG */
 		" ppm"	/* no library is needed for these */
 		" bmp"
 #ifdef HAVE_MATRIX_MARKET_DECODER
 		" mtx (Matrix Market)"
-#endif
+#endif /* HAVE_MATRIX_MARKET_DECODER */
 		"\n"
 			    );
 		

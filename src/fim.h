@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 #include <config.h>
 */
 #include "../config.h"
-#endif
+#endif /* HAVE_CONFIG_H */
 
 /*
  *	This is the main fim program header file.
@@ -57,27 +57,27 @@
 # include <regex.h>		/*	the Posix (GNU implementation,not functionality) readline library	*/
 #else
 # include "regex.h"		/*	the GNU (implementation and functionality) readline library	*/
-#endif
+#endif /* USE_GNU_REGEX */
 
 #ifdef HAVE_CLIMITS
  #include <climits>
  /* From:
   * ISO C++ 14882: 18.2.2  Implementation properties: C library 
   * we get some more stuff than limits.h. */
-#else
+#else /* HAVE_CLIMITS */
  #ifdef HAVE_LIMITS_H
  /* According to IEEE Std 1003.1-2001, 
   * this should define _POSIX_PATH_MAX
   * */
   #include <limits.h>
- #endif
-#endif
+ #endif /* HAVE_LIMITS_H */
+#endif /* HAVE_LIMITS_H */
 #ifndef _POSIX_PATH_MAX
  /* I don't know in what case could arise this situation 
   * (no limits.h nor climits : i guess a badly configured system),
   * but this would be the fix :*/
  #define _POSIX_PATH_MAX 4096
-#endif
+#endif /* _POSIX_PATH_MAX */
 
 /* FIXME : should create some fim specific sys.h header, some day */
 #include <sys/types.h>		/* stat */
@@ -85,7 +85,7 @@
 #include <unistd.h>		/* stat */
 #ifdef FIM_WITH_PTHREADS
 #include <pthread.h>		/* */
-#endif
+#endif /* FIM_WITH_PTHREADS */
 
 #if 0
 #ifdef HAVE_UNIX_H
@@ -106,9 +106,10 @@
 #include <fcntl.h>	/* file descriptor manipulation interface (Posix)	*/
 #include <time.h>	/* time related functionality (Posix)			*/
 #include "common.h"	/* misc FIM stuff					*/
+/* #define FIM_USE_GPM 0 */
 #ifdef FIM_USE_GPM
 #include <gpm.h>	/* mouse events						*/
-#endif
+#endif /* FIM_USE_GPM */
 /*#include <unistd.h>*/ /* standard Posix symbolic constants and types		*/
 /*#include <sys/stat.h> */
 /*#include <sys/types.h>*/
@@ -143,7 +144,7 @@ namespace fim
 	class MiniConsole;
 #ifdef FIM_WINDOWS
 	class FimWindow;
-#endif
+#endif /* FIM_WINDOWS */
 	class Viewport;
 	class fim_stream;
 }
@@ -159,15 +160,16 @@ namespace rl
 	#define FIM_UNLIKELY(expr) __builtin_expect(!!(expr),0)
 	#define FIM_LIKELY(expr)   __builtin_expect(!!(expr),1)
 	#define FIM_ALIGNED __attribute__((aligned (64)))
-#else
+#else /* FIM_IS_SLOWER_THAN_FBI */
 	#define FIM_UNLIKELY(expr)  (expr)
 	#define FIM_LIKELY(expr)   (expr)
 	#define FIM_ALIGNED
-#endif
+#endif /* FIM_IS_SLOWER_THAN_FBI */
 
 //#define FIM_FBI_PRINTF( ... ) fprintf(stderr, __VA_ARGS__ )
 /* " warning: anonymous variadic macros were introduced in C99" (here and elsewhere) */
-#define FIM_FBI_PRINTF( ... ) 1
+#define FIM_NO_OP_STATEMENT 1
+#define FIM_FBI_PRINTF( ... ) FIM_NO_OP_STATEMENT 
 #define FIM_VERB_PRINTF printf
 
 namespace fim{
@@ -259,6 +261,9 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_EMSG_OUT_OF_MEM	"out of memory\n"
 #define FIM_EMSG_UNFINISHED	"sorry, feature incomplete!\n"
 
+/* Command related error messages */
+#define FIM_EMSG_NOMARKUNMARK	"sorry, mark/unmark functionality was opted out."
+
 /*
  * Some environment variables used by Fim.
  */
@@ -272,6 +277,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  * */
 #define FIM_OSW_OUTPUT_DEVICE	"output-device"
 #define FIM_OSW_BINARY	"binary"
+#define FIM_OSW_TEXT	"as-text"
 #define FIM_OSW_EXECUTE_COMMANDS	"execute-commands"
 #define FIM_OSW_EXECUTE_COMMANDS_EARLY	"execute-commands-early"
 #define FIM_OSW_EXECUTE_SCRIPT	"execute-script"
@@ -321,14 +327,14 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EMPTY_RESULT	FIM_CNS_EMPTY_STRING
 #ifdef SVN_REVISION
 #define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION" (r."SVN_REVISION")"
-#else
+#else /* SVN_REVISION */
 #define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION""
-#endif
+#endif /* SVN_REVISION */
 #ifdef SVN_REVISION_NUMBER
 #define FIM_REVISION_NUMBER SVN_REVISION_NUMBER
-#else
+#else /* SVN_REVISION_NUMBER */
 #define FIM_REVISION_NUMBER -1
-#endif
+#endif /* SVN_REVISION_NUMBER */
 #define FIM_CNS_EX_KSY_STRING	"{keysym}"
 #define FIM_CNS_EX_CMD_STRING	"{command}"
 #define FIM_CNS_EX_FN_STRING	"{filename}"
@@ -391,16 +397,16 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #include "DummyDisplayDevice.h"
 #ifdef FIM_WITH_LIBIMLIB2
 #include "Imlib2Device.h"
-#endif
+#endif /* FIM_WITH_LIBIMLIB2 */
 #ifdef FIM_WITH_LIBSDL
 #include "SDLDevice.h"
-#endif
+#endif /* FIM_WITH_LIBSDL */
 #ifdef FIM_WITH_CACALIB
 #include "CACADevice.h"
-#endif
+#endif /* FIM_WITH_CACALIB */
 #ifdef FIM_WITH_AALIB
 #include "AADevice.h"
-#endif
+#endif /* FIM_WITH_AALIB */
 #include "FramebufferDevice.h"
 #include "CommandConsole.h"
 #include "fim_stream.h"
@@ -422,6 +428,7 @@ namespace fim
 //#define FIM_VID_TAB 				"_tab"	/* "" */
 #define FIM_VID_RANDOM 				"random"	/* "[internal,out] a pseudorandom number" */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
+#define FIM_VID_TEXT_DISPLAY 			"_display_as_rendered_text"	/* "[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" */
 #define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[internal,out] string with current information on cache status" */
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[internal,in] if 1, will display the output console" */
 #define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[internal,out] the current display device string" */
@@ -432,6 +439,7 @@ namespace fim
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load the system wide initialization file" */
 #define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] string with the global configuration file name" */
 #define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)" */
+#define FIM_VID_RETRY_LOADER_PROBE 		"_retry_loader_probe"		/* "[in] if 1 and user specified a file loader and this fails, will probe for a different loader" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
@@ -443,6 +451,7 @@ namespace fim
 #define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if non empty, this string will be fed to the scale command" */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[internal,out] the current image numeric index" */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[internal,out] the length of the current image list" */
+#define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for memory image size; %% for an ordinary %. This feature has to be enabled at configure time." */
 #define FIM_VID_FILENAME			"_filename"		/* "[internal,out] the current file name string" */
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
@@ -495,7 +504,7 @@ namespace fim
 #define FIM_VID_AUTODESATURATE			"_autodesaturate"	/* "[internal,in] if 1, will desaturate images by default" */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
 #define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[internal,out] string identifying the last file loader which has loaded an image" */
-#endif
+#endif /* FIM_WANT_REMEMBER_LAST_FILE_LOADER */
 #define FIM_VID_FLIPPED				"flipped"		/* "[internal,out] 1, if the image is flipped" */
 #define FIM_VID_NEGATED				"negated"		/* "[internal,out] 1, if the image is negated" */
 #define FIM_VID_DESATURATED			"desaturated"		/* "[internal,out] 1, if the image is desaturated" */
@@ -723,6 +732,10 @@ namespace fim
 #define FIM_WANT_DOUBLE_ESC_TO_ENTER 0	/* if enabled in the console mode, would require three presses the first time; two later on; this is non consistent, so we keep it disabled until we find a fix */
 #define FIM_WANT_EXPERIMENTAL_PLUGINS 1	/* unfinished */
 #define FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG 1
+#define FIM_WANT_KEEP_FILESIZE 1
+#define FIM_WANT_DISPLAY_FILESIZE (FIM_WANT_KEEP_FILESIZE && 0)
+#define FIM_WANT_DISPLAY_MEMSIZE  0
+/* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_METAINFO_BUFSIZE	256
@@ -746,7 +759,7 @@ namespace fim
 #define FIM_VERBOSE_KEYS_BUFSIZE	64
 #define FIM_FILE_BUF_SIZE 	(1024*256)
 #define FIM_ATOX_BUFSIZE 	(32)
-#define FIM_STATUSLINE_BUF_SIZE 	(128)
+#define FIM_STATUSLINE_BUF_SIZE 	(2*128)
 #define FIM_FBI_PPM_LINEBUFSIZE 	(1024)
 #define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
 #define FIM_LINUX_STDIN_FILE "/dev/stdin"
@@ -778,4 +791,4 @@ namespace fim
 /* FIM_STRINGIFY evaluates to a string with the supplied preprocessor symbol identifier */
 #define FIM_STRINGIFY(X) #X
 
-#endif
+#endif /* FIM_FIM_H */

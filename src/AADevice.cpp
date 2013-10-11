@@ -75,7 +75,7 @@ static bool aainvalid;
 		cout << idr << " " << idc << " " << "\n";
 		cout << loc << " " << lor << " " << "\n";*/
 
-		/* TODO : unroll me :) */
+		/* TODO : unroll me an use FIM_LIKELY :) */
 		for(oi=oroff;oi<lor;++oi)
 		for(oj=ocoff;oj<loc;++oj)
 		{
@@ -83,7 +83,6 @@ static bool aainvalid;
 		}
 		return  FIM_ERR_NO_ERROR;
 	}
-
 
 	static fim_err_t matrix_copy_rgb_to_gray(
 		void* dst, void* src,	// destination gray array and source rgb array
@@ -334,7 +333,7 @@ static bool aainvalid;
 				flags
 			)))
 			return r;
-#endif
+#endif	/* !FIM_AALIB_DRIVER_DEBUG */
 			//return -50;
 
 /*		aa_putpixel(ascii_context_,ocols-1,orows-1,0xAA);
@@ -363,8 +362,7 @@ static bool aainvalid;
 	{
 		if(strstr(rs,"w")!=NULL)
 			allow_windowed=1;
-	err:
-		return FIM_ERR_GENERIC;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t AADevice::initialize(sym_keys_t &sym_keys)
@@ -394,10 +392,10 @@ static bool aainvalid;
 		/*ascii_hwparms_.width()  = 4;
 		ascii_hwparms_.height() = 4;*/
 		
-		name_[0]='\0';
-		name_[1]='\0';
+		name_[0] = FIM_SYM_CHAR_NUL;
+		name_[1] = FIM_SYM_CHAR_NUL;
 		if(allow_windowed==0)
-			setenv("DISPLAY","",1);
+			setenv(FIM_ENV_DISPLAY,"",1);
 		ascii_save_.name = (fim_aa_char*)name_;
 		ascii_save_.format = &aa_text_format;
 		ascii_save_.file = NULL;
@@ -457,7 +455,7 @@ static bool aainvalid;
 		//mc_.setRows ( -height()/2);
 		mc_.setRows ( get_chars_per_column()/2 );
 		mc_.reformat(  txt_width()   );
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -469,7 +467,7 @@ static bool aainvalid;
 			AA_NORMAL,
 			//AA_SPECIAL,
 			(const fim_aa_char*)str);
-#endif
+#endif /* FIM_AALIB_DRIVER_DEBUG */
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -494,7 +492,7 @@ static bool aainvalid;
 			goto err;
 #if (!FIM_AALIB_DRIVER_DEBUG)
 		aa_printf(ascii_context_,0,th-1,AA_NORMAL,"%s",msg);
-#endif
+#endif /* FIM_AALIB_DRIVER_DEBUG */
 		aa_flush(ascii_context_);
 err:
 		return FIM_ERR_NO_ERROR;
@@ -502,18 +500,23 @@ err:
 
 	AADevice::~AADevice()
 	{
-		/* FIXME : seems like some aa stuff doesn't get freed. is it possible ? */
-		if(!finalized_)finalize();// finalize should be called explicitly !
+		/* seems like in some cases some aa stuff doesn't get freed. is this possible ? */
+		if(!finalized_)
+			finalize();
 	}
 
 	fim_sys_int AADevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		*c = 0x0;	/* blank */
-		if(!c)return 0;
+		if(!c)
+			return 0;
 		*c = aa_getevent(ascii_context_,0);/* 1 if want to receive AA_RELEASE events, too */
-		if(*c==AA_UNKNOWN)*c=0;
-		if(*c)std::cout << "";/* FIXME : removing this breaks things. console-related problem, I guess */
-		if(!*c)return 0;
+		if(*c==AA_UNKNOWN)
+			*c=0;
+		if(*c)
+			std::cout << "";/* FIXME : removing this breaks things. console-related problem, I guess */
+		if(!*c)
+			return 0;
 #if 0
 		if(*c==AA_UP   ){*c=272;return 1;}
 		if(*c==AA_DOWN ){*c=274;return 1;}
@@ -563,24 +566,29 @@ err:
 			return 1;
 			/* shift (arbitrary) */
 		}
-		if(*c==AA_ESC){*c=27;return 1;}/* esc  */
+		if(*c==AA_ESC)
+		{
+			*c=27;return 1;
+			/* esc  */
+		}
 		if(*c==AA_MOUSE)
 		{
 			status_line((const fim_char_t *)"mouse events not yet supported in aa. sorry!");
 			return 1;
-		}/* esc  */
+			/* */
+		}
 		if(*c==AA_RESIZE )
 		{
 			//status_line((const fim_char_t *)"window resizing not yet supported. sorry!");
 			cc.resize(0,0);
 			/*aa_resize(ascii_context_);*//*we are not yet ready : the FimWindow and Viewport stuff .. */
 			return 0;
-		}/* esc  */
+			/* */
+		}
 
 		//std::cout << "event : " << *c << "\n";
 		//if(*c<0x80) return 1;
 		return 1;
-		//return 0;
 	}
 
 	fim_err_t AADevice::resize(fim_coo_t w, fim_coo_t h)
@@ -600,13 +608,14 @@ err:
 				aa_close(ascii_context_);
 				memcpy (&ascii_hwparms_, &aa_defparams, sizeof (struct aa_hardware_params));
 				ascii_context_ = aa_autoinit (&ascii_hwparms_);
-				if(!aa_autoinitkbd(ascii_context_, 0));
+				if(!aa_autoinitkbd(ascii_context_, 0))
+					;// error handling / reporting missing
 				return FIM_ERR_NO_ERROR;
 			}
 		}
-#else
-/* FIXME: shall track back the first evil aalib version */
-#endif
+#else /* AA_LIB_VERSIONCODE */
+		/* FIXME: shall track back the first evil aalib version */
+#endif /* AA_LIB_VERSIONCODE */
 		if(!want_resize_)
 			return FIM_ERR_GENERIC;
 
@@ -618,6 +627,4 @@ err:
 		}
 		return FIM_ERR_GENERIC;
 	}
-
-
-#endif
+#endif /* FIM_WITH_AALIB */

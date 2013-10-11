@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 #include "FbiStuffLoader.h"
 #ifdef USE_X11
 # include "viewer.h"
-#endif
+#endif /* USE_X11 */
 namespace fim
 {
 
@@ -52,6 +52,12 @@ struct fim_png_state {
     png_uint_32  w,h;
     int          color_type;
 };
+
+static FILE*fim_png_fp;
+void PNGAPI fim_png_rw_ptr(png_structp s, png_bytep p, png_size_t l)
+{
+	fim_fread(p, l, 1, fim_png_fp);
+}
 
 static void*
 png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
@@ -90,6 +96,8 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if (NULL == h->info)
 	goto oops;
 
+    fim_png_fp=fp;
+    h->png->read_data_fn=&fim_png_rw_ptr;
     png_init_io(h->png, h->infile);
     png_read_info(h->png, h->info);
     png_get_IHDR(h->png, h->info, &h->w, &h->h,
@@ -115,10 +123,10 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	png_set_expand_gray_1_2_4_to_8(h->png);
  #else
 	png_set_gray_1_2_4_to_8(h->png);
- #endif
+ #endif /* PNG_LIBPNG_VER */
 #else
  #error  need a proper function name for png_set_gray_1_2_4_to_8, here.
-#endif
+#endif /* PNG_LIBPNG_VER */
     if (png_get_bKGD(h->png, h->info, &file_bg)) {
 	png_set_background(h->png,file_bg,PNG_BACKGROUND_GAMMA_FILE,1,1.0);
     } else {
@@ -151,7 +159,7 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	fim_free(h->image);
     if (h->png)
 	png_destroy_read_struct(&h->png, NULL, NULL);
-    fclose(h->infile);
+    fim_fclose(h->infile);
     if(h)fim_free(h);
     return NULL;
 }
@@ -193,7 +201,7 @@ png_done(void *data)
 
     fim_free(h->image);
     png_destroy_read_struct(&h->png, &h->info, NULL);
-    fclose(h->infile);
+    fim_fclose(h->infile);
     fim_free(h);
 }
 
@@ -202,7 +210,7 @@ png_done(void *data)
 struct ida_loader png_loader
 #else
 static struct ida_loader png_loader
-#endif
+#endif /* FIM_WITH_LIBPNG */
 = {
     /*magic:*/ "\x89PNG",
     /*moff:*/  0,
@@ -287,5 +295,5 @@ static void __init init_wr(void)
 }
 
 
-#endif
+#endif /* USE_X11 */
 }

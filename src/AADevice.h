@@ -38,13 +38,13 @@ class AADevice:public DisplayDevice
 	//struct aa_renderparams *ascii_rndparms;//we rely on aa_defrenderparams
 	struct aa_hardware_params ascii_hwparms_;
 	struct aa_savedata ascii_save_;
-	fim_char_t name_[2];	/* FIXME */
+	fim_char_t name_[2];	/* For ascii_save_.name */
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	AADevice(MiniConsole & mc_, fim::string opts ):DisplayDevice(mc_),
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	AADevice( fim::string opts ):DisplayDevice(),
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	allow_windowed(0)
 	{
 		reinit(opts.c_str());
@@ -74,7 +74,10 @@ class AADevice:public DisplayDevice
 	fim_coo_t height();
 	fim_err_t status_line(const fim_char_t *msg);
 	//void status_screen(int desc,int draw_output){}
-	fim_bool_t handle_console_switch(){return false;}
+	fim_bool_t handle_console_switch()
+	{
+		return false;
+	}
 	fim_err_t clear_rect_(
 		void* dst,
 		fim_coo_t oroff,fim_coo_t ocoff,
@@ -85,12 +88,14 @@ class AADevice:public DisplayDevice
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 	void flush();
 	fim_err_t init_console();
-	fim_bpp_t get_bpp(){return 1;};
+	fim_bpp_t get_bpp()
+	{
+		return 1;
+	}
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_err_t reinit(const fim_char_t *rs);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 };
 
-
-#endif
-#endif
+#endif /* FIM_WITH_AALIB  */
+#endif /* FIM_AADEVICE_H*/

@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ namespace fim
 		if(!oi || !is_in_clone_cache(oi))return -1;
 #ifdef FIM_CACHE_DEBUG
 		cout << "deleting " << oi->getName() << "\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 		cloneUsageCounter_.erase(oi);
 		delete oi;
 		clone_pool_.erase(oi);
@@ -230,7 +230,7 @@ namespace fim
 		{	
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 			if( cacheNewImage( ni ) ) return ni;
 		}
 		}
@@ -268,7 +268,7 @@ namespace fim
 		FIM_LOUD_CACHE_STUFF;
 #ifdef FIM_CACHE_DEBUG
 					std::cout << "going to cache: "<< ni << "\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!ni)return false;
@@ -304,7 +304,7 @@ namespace fim
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "will erase  "<< oi << "\n";
 			cout << "deleting " << oi->getName() << "\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 			delete oi; // NEW !!
 			setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 			return 0;
@@ -410,7 +410,7 @@ namespace fim
 		FIM_LOUD_CACHE_STUFF;
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "  useCachedImage(\""<<key.first<<","<<key.second<<"\")\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 		if(!is_in_cache(key)) 
 		{
 			/*
@@ -437,7 +437,7 @@ namespace fim
 				// critical error
 #ifdef FIM_CACHE_DEBUG
 				cout << "critical internal cache error!\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 				setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 				return NULL;
 			}
@@ -449,11 +449,11 @@ namespace fim
 				{
 #ifdef FIM_CACHE_DEBUG
 					Image * oi=image;
-#endif
+#endif /* FIM_CACHE_DEBUG */
 					image = new Image(*image); // cloning
 #ifdef FIM_CACHE_DEBUG
 					std::cout << "  cloned image: \"" <<image->getName()<< "\" "<< image << " from \""<<oi->getName() <<"\" " << oi << "\n";
-#endif
+#endif /* FIM_CACHE_DEBUG */
 					if(image)
 					if(image->n_pages()>1 && image->c_page()!=getGlobalIntVariable(FIM_VID_PAGE))// FIXME: HORRIBLE HACK
 						//image->load(key.first.c_str(),NULL,getGlobalIntVariable(FIM_VID_PAGE));
@@ -490,7 +490,7 @@ namespace fim
 		{
 #ifdef FIM_CACHE_DEBUG
 			Image * oi=image;
-#endif
+#endif /* FIM_CACHE_DEBUG */
 			image = new Image(*image); // cloning
 			if(image)
 			{

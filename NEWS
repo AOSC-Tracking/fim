@@ -1,12 +1,18 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
+                Version 0.4
+
+ * changed --random and introduced --pseudo-random option
+ * customizable status bar file info string (--enable-custom-status-bar)
+ * introduced --as-text to render printable bytes as text
+
                 Version 0.4-beta
 
  * interface to the GraphicsMagic library (more graphics formats supported)
  * introduced bitwise AND and OR operators
  * support for rendering "matrix market" numerical matrix files (with librsb)
- * windowed mode not anymore default in aalib, available at option 
+ * X mode not anymore default in aalib, available at option 
  * libjpeg usage fixes
  * libpng usage fixes (support for PNG_LIBPNG_VER>=10209)
  * documentation improvements (e.g.: fim man page is auto-generated)
@@ -19,7 +25,7 @@
  * introduced --no-commandline, --no-internal-config switches
  * aggregated some commands for clarity
  * output console can be disabled at configure time
- * serious fbdev bug fixes 
+ * important fbdev bug fixes 
  * autocompletion of variable identifiers
 
         	Version 0.3
