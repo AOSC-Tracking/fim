@@ -2,8 +2,10 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.4
- * customizable image info string (TODO)
+
  * changed --random and introduced --pseudo-random option
+ * customizable status bar file info string (--enable-custom-status-bar)
+ * introduced --as-text to render printable bytes as text
 
                 Version 0.4-beta
 

@@ -1,3 +1,167 @@
+2013-10-10 22:15  dezperado
+
+	* src/FbiStuffText.cpp, src/Image.cpp: fixing the 0-byte corner
+	  case in the --as-text rendering mode; refining the memory/file
+	  occupation s
+	  tatus bar text printing code to display either B,KB,MB, or GB
+	  alongside with the number.
+
+2013-10-10 18:52  dezperado
+
+	* README: restoring README tainted in last commit.
+
+2013-10-10 18:43  dezperado
+
+	* README, configure.ac, doc/fim.man, doc/fimrc.man,
+	  src/FbiStuff.cpp, src/FbiStuffText.cpp, src/FontServer.cpp,
+	  src/FontServer.h, src/Makefile.am, src/fim.cpp, src/fim.h,
+	  src/help.cpp: implemented a for-fun --as-text mode; that is,
+	  rendering printable text of files (almost) as in a text file
+	  viewer.
+
+2013-10-10 16:39  dezperado
+
+	* TODO, configure.ac, src/Image.cpp, src/fim.h, src/help.cpp:
+	  introduced the --enable-custom-status-bar configure option to
+	  enable printf-like customizable status bar info.
+
+2013-10-09 22:42  dezperado
+
+	* TODO, doc/fim.man, src/CommandConsole.cpp, src/Imlib2Device.cpp,
+	  src/fim.h: leftovers of some tests for future work.
+
+2013-10-09 22:37  dezperado
+
+	* src/FbiStuffPdf.cpp, src/testdir/test7.in: minor modifications
+	  for my poppler-0.24 installatio.
+	  change to a test case: I'm unsure whether this is correct.
+
+2013-09-02 18:56  dezperado
+
+	* src/AADevice.cpp, src/Cache.cpp, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-help.cpp, src/CommandConsole.cpp,
+	  src/FbiStuffBmp.cpp, src/FbiStuffJpeg.cpp, src/FbiStuffPdf.cpp,
+	  src/fim.cpp: comment changes.
+
+2013-07-11 12:58  dezperado
+
+	* src/FramebufferDevice.h: fixed a bug in which in 16 bit mode
+	  lines and text were displayed in the wrong colour (one byte was
+	  being written to pixel memory instead of two).
+
+2013-07-04 21:07  dezperado
+
+	* src/AADevice.h, src/Arg.h, src/Benchmarkable.h, src/Browser.h,
+	  src/CACADevice.h, src/Cache.h, src/Command.h,
+	  src/CommandConsole.h, src/DebugConsole.h, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FbiStuff.h, src/FbiStuffFbtools.h,
+	  src/FbiStuffList.h, src/FbiStuffLoader.h, src/FimWindow.h,
+	  src/FontServer.h, src/FramebufferDevice.h, src/Image.h,
+	  src/Imlib2Device.h, src/Namespace.h, src/SDLDevice.cpp,
+	  src/SDLDevice.h, src/Var.h, src/Viewport.cpp, src/Viewport.h,
+	  src/common.h, src/fim.h, src/fim_limits.h, src/fim_plugin.h,
+	  src/fim_stream.h, src/fim_types.h, src/fim_wrappers.h, src/lex.h,
+	  src/readline.cpp, src/readline.h, src/string.cpp, src/string.h:
+	  putting commented preprocessor symbol information after every
+	  #endif and #else, for the remaining *.cpp and *.h files, third
+	  round.
+
+2013-07-04 19:56  dezperado
+
+	* src/DebugConsole.cpp, src/DisplayDevice.cpp, src/FbiStuff.cpp,
+	  src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp, src/FbiStuffBmp.cpp,
+	  src/FbiStuffFbtools.cpp, src/FbiStuffJpeg.cpp,
+	  src/FbiStuffLoader.cpp, src/FbiStuffMagick.cpp,
+	  src/FbiStuffPdf.cpp, src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp,
+	  src/FbiStuffTiff.cpp, src/FimWindow.cpp, src/FontServer.cpp,
+	  src/FramebufferDevice.cpp, src/Image.cpp, src/Imlib2Device.cpp,
+	  src/Makefile.am, src/Namespace.cpp, src/fim.cpp,
+	  src/fim_plugin.cpp, src/interpreter.cpp: putting commented
+	  preprocessor symbol information after every #endif and #else, for
+	  many *.cpp files, second round.
+
+2013-07-04 17:38  dezperado
+
+	* src/AADevice.cpp, src/Browser.cpp, src/CACADevice.cpp,
+	  src/Cache.cpp, src/Command.cpp, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-help.cpp, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/common.cpp: putting commented
+	  preprocessor symbol information after every #endif and #else, for
+	  each [ABCc]*cpp file.
+
+2013-07-04 09:28  dezperado
+
+	* NEWS, doc/fim.man, doc/fimrc.man, src/Browser.cpp, src/Browser.h,
+	  src/fim.cpp: using seeding before random shuffling.
+	  differentiating --random from --random-no-seed.
+
+2013-06-20 11:23  dezperado
+
+	* src/Browser.cpp: restoring Browser.cpp: previous commit's change
+	  was unintented.
+
+2013-06-20 11:21  dezperado
+
+	* src/Browser.cpp, src/FbiStuff.cpp, src/FbiStuffBmp.cpp,
+	  src/FbiStuffJpeg.cpp, src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp,
+	  src/Image.cpp, src/common.cpp, src/common.h, src/fim.h,
+	  src/help.cpp: first changes towards the integration of zlib, for
+	  reading transparently gz-compressed files.
+
+2013-05-20 10:28  dezperado
+
+	* NEWS, TODO, src/AADevice.cpp, src/AADevice.h, src/Browser.cpp,
+	  src/CommandConsole-cmd.cpp, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/common.cpp: formatting/readability
+	  oriented code changes.
+
+2013-05-11 13:28  dezperado
+
+	* src/CommandConsole.cpp, src/Image.cpp, src/fim.h, src/help.cpp:
+	  implemented a custom image info string functionality (off by
+	  default).
+
+2013-05-01 20:40  dezperado
+
+	* TODO, src/Image.cpp, src/Image.h, src/fim.h: first sketch of
+	  support for image file size and memory occupation display (off by
+	  default).
+
+2013-04-27 07:50  dezperado
+
+	* src/Browser.cpp, src/SDLDevice.cpp, src/fim.h: just readability
+	  changes.
+
+2013-04-26 22:38  dezperado
+
+	* TODO, src/CommandConsole.cpp, src/DisplayDevice.cpp: just
+	  readability changes.
+
+2013-04-09 17:09  dezperado
+
+	* src/DisplayDevice.cpp: Added Brian Murray's suggested patch to
+	  use sleep() when !isatty(stdin) in
+	  DisplayDevice::catchInteractiveCommand.
+
+2013-04-07 20:43  dezperado
+
+	* src/AADevice.cpp, src/Browser.cpp, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole.cpp, src/FbiStuff.cpp, src/FbiStuffBit24.cpp,
+	  src/FbiStuffDjvu.cpp, src/FbiStuffJpeg.cpp, src/FbiStuffPdf.cpp,
+	  src/FimWindow.cpp, src/FontServer.cpp, src/Image.cpp,
+	  src/Imlib2Device.cpp, src/SDLDevice.cpp, src/Viewport.cpp,
+	  src/common.cpp, src/fim.h, src/interpreter.cpp, src/readline.cpp,
+	  src/string.cpp: several minor language standard adherence fixes.
+	  in two cases, fixed if-if-else branch ambiguities.
+	  in one case, preventing an uninitialized variable from being
+	  used.
+
+2013-03-31 17:31  dezperado
+
+	* ChangeLog, NEWS, configure.ac, src/FbiStuffPdf.cpp: patch for
+	  POPPLER_VERSION_MINOR>=22.
+	  updating to NEWS and ChangeLog.
+
 2013-03-22 23:05  dezperado
 
 	* doc/fim.man, src/AADevice.cpp, src/AADevice.h,

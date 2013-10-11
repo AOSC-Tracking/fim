@@ -611,7 +611,7 @@ _ignorecase
 .fi
 .B
 _info_fmt_str
-[internal,in] custom (status bar) file info format string 
+[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for memory image size; %% for an ordinary %. This feature has to be enabled at configure time.
 .fi
 .B
 _inhibit_display
