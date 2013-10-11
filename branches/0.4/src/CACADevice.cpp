@@ -2,7 +2,7 @@
 /*
  CACADevice.cpp : cacalib device Fim driver file
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -348,4 +348,4 @@
  * This is embryo code and should be used for experimental purposes only!
  */
 
-#endif
+#endif /* FIM_WITH_CACALIB */

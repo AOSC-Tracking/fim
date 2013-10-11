@@ -21,6 +21,21 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20131010	text/ascii/bits ascii renderer as funny fallback renderer
+20131010	shall configure default tmpdir to /dev/shmem/something
+20131009	may interface to http://www.feep.net/libtar/
+20130902	add a simple menu e.g.: using Motif (http://www.opengroup.org/desktop/motif.html), or buttons; e.g.: using X: http://www.x.org/releases/X11R7.7/doc/libX11/libX11/libX11.html#XEvent
+20130829	interface to a library for gestures, someday.
+20130824	need a "verbose pressed keys" mode, to help when guessing key bindings.
+20130725	shall add autodetection of file format to "fim -"
+20130702	"nextindir" function
+20130702	http://dvdhrm.wordpress.com/2012/12/10/kmscon-introduction/
+20130620	need a minimal ppm file for testing
+20130523	fix the bug when loading say, a a/1.fake  and getting the files list shortened by two instead of one.
+20130521	image decoder name as a variable.
+20130505	glob() on non existent files
+20130501	shall cache stat() results
+20130412	may use a library like http://www.littlecms.com/
 20120811	need proper jpeg error handling
 20120805	feeding a .png named PS file can lead to segfault. why ?
 20120804	should create a general 'filter' autocmd trigger

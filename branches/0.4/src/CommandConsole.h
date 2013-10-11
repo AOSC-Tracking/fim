@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ namespace fim
 class CommandConsole
 #if FIM_WANT_BENCHMARKS
 	: public Benchmarkable
-#endif
+#endif /* FIM_WANT_BENCHMARKS */
 {
 	public:
 	friend class FbiStuff;
@@ -41,8 +41,8 @@ class CommandConsole
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
 	MiniConsole mc_;
-#endif
-#endif
+#endif /* FIM_KEEP_BROKEN_CONSOLE */
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	FontServer fontserver_;
 
 	fim::string postInitCommand_;
@@ -67,7 +67,7 @@ class CommandConsole
 	public:// 20110617 this is terrible, I know
 	fim::FimWindow * window_;
 	private:
-#endif
+#endif /* FIM_WINDOWS */
 	/*
 	 * the registered command methods and objects
 	 */
@@ -111,7 +111,7 @@ class CommandConsole
 	 */
 	typedef std::set<fim::string> marked_files_t;	//
 	marked_files_t marked_files_;		//filenames
-#endif
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 
 	/*
 	 * flags
@@ -119,7 +119,7 @@ class CommandConsole
 #ifdef FIM_USE_READLINE
 	/* no readline ? no console ! */
 	fim_status_t 	ic_;				//in console if 1. not if 0. willing to exit from console mode if -1
-#endif
+#endif /* FIM_USE_READLINE */
 	fim_cycles_t cycles_;					//fim execution cycles_ counter (quite useless)
 	fim_key_t exitBinding_;				//The key bound to exit. If 0, the special "Any" key.
 
@@ -130,7 +130,7 @@ class CommandConsole
 	typedef std::map<fim::string,args_t >  autocmds_p_t;	//pattern - commands
 	typedef std::map<fim::string,autocmds_p_t >  autocmds_t;		//autocommand - pattern - commands
 	autocmds_t autocmds_;
-#endif
+#endif /* FIM_AUTOCMDS */
 	
 	/*
 	 * the last executed action (being a command line or key bounded command issued)
@@ -155,7 +155,7 @@ class CommandConsole
 	fim::string sanitize_action(const fim::string &cmd)const;
 
 	void record_action(const fim::string &cmd);
-#endif
+#endif /* FIM_RECORDING */
 
 	public:
 	fim_str_t fim_stdin_;	// the standard input file descriptor
@@ -164,17 +164,17 @@ class CommandConsole
 
 #ifndef FIM_WANT_NOSCRIPTING
 	args_t scripts_;		//scripts to execute : FIX ME PRIVATE
-#endif
+#endif /* FIM_WANT_NOSCRIPTING */
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	public:
 	void markCurrentFile();
 	void unmarkCurrentFile();
 	private:
-#endif
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #ifdef FIM_WITH_AALIB
 	AADevice * aad_;
-#endif
+#endif /* FIM_WITH_AALIB */
 	public:
 	DummyDisplayDevice dummydisplaydevice_;
 	DisplayDevice *displaydevice_;
@@ -214,7 +214,7 @@ class CommandConsole
 	bool push_scriptfile(const fim::string ns);
 	bool with_scriptfile()const;
 	fim::string fcmd_executeFile(const args_t &args);
-#endif
+#endif /* FIM_WANT_NOSCRIPTING */
 	private:
 	fim::string fcmd_echo(const args_t &args);
 	fim::string do_echo(const args_t &args)const;
@@ -248,7 +248,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_sys_popen(const args_t& args);
 #ifdef FIM_PIPE_IMAGE_READ
 	fim::string fcmd_pread(const args_t& args);
-#endif
+#endif /* FIM_PIPE_IMAGE_READ */
 	public:// 20110601
 	fim_err_t fpush(FILE *tfd);
 	private:
@@ -262,7 +262,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
 	private:
 	fim::string autocmds_list(const fim::string event, const fim::string pattern)const;
-#endif
+#endif /* FIM_AUTOCMDS */
 	typedef std::pair<fim::string,fim::string> autocmds_loop_frame_t;
 	typedef std::pair<autocmds_loop_frame_t,fim::string> autocmds_frame_t;
 	typedef std::vector<autocmds_loop_frame_t > autocmds_stack__t;
@@ -298,7 +298,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_clear(const args_t& args);
 	fim::string scroll_up(const args_t& args);
 	fim::string scroll_down(const args_t& args);
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fim_perr_t quit(fim_perr_t i=FIM_CNS_ERR_QUIT);
 	public:
 	fim_key_t find_keycode_for_bound_cmd(fim::string binding);
@@ -309,7 +309,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	fim::string pre_autocmd_add(const fim::string &cmd);
 	fim::string pre_autocmd_exec();
-#endif
+#endif /* FIM_AUTOCMDS */
 	fim_int catchLoopBreakingCommand(fim_ts_t seconds=0);
 
 	private:
@@ -322,13 +322,13 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	void autocmd_trace_stack();
 	private:
 	fim_bool_t autocmd_in_stack(const autocmds_loop_frame_t& frame)const;
-#endif
+#endif /* FIM_AUTOCMDS */
 	fim::string current()const{ return browser_.current();}
 
 	fim::string get_alias_info(const fim::string aname)const;
 #ifdef FIM_WINDOWS
 	const FimWindow & current_window()const;
-#endif
+#endif /* FIM_WINDOWS */
 	fim::string get_variables_list()const;
 	fim::string get_aliases_list()const;
 	fim::string get_commands_list()const;
@@ -343,9 +343,9 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 
 	Viewport* current_viewport()const;
 #ifdef FIM_WINDOWS
-#else
+#else /* FIM_WINDOWS */
 	Viewport* viewport_;
-#endif
+#endif /* FIM_WINDOWS */
 	void dumpDefaultFimrc()const;
 
 	void tty_raw();
@@ -376,8 +376,8 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	virtual void quickbench_init(fim_int qbi);
 	virtual void quickbench_finalize(fim_int qbi);
 	virtual void quickbench(fim_int qbi);
-#endif
+#endif /* FIM_WANT_BENCHMARKS */
 };
 }
 
-#endif
+#endif /* FIM_COMMANDCONSOLE_H */

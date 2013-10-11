@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,13 +32,14 @@
 
 #ifdef HAVE_GETLINE
 #include <stdio.h>	/* getline : _GNU_SOURCE  */
-#endif
+#endif /* HAVE_GETLINE */
 #ifdef HAVE_WCHAR_H
 #include <wchar.h>
-#endif
+#endif /* HAVE_WCHAR_H */
 #ifdef HAVE_LIBGEN_H
 #include <libgen.h>
-#endif
+#endif /* HAVE_LIBGEN_H */
+#include <zlib.h>
 
 /*
 void fim_tolowers(fim_char_t *s)
@@ -65,13 +66,13 @@ fim::string fim_dirname(const fim::string & arg)
 	strncpy(buf,arg.c_str(),FIM_PATH_MAX-1);
 	buf[FIM_PATH_MAX-1]='\0';
 	return dirname(buf);
-#else
+#else /* HAVE_LIBGEN_H */
 	return "";//FIXME
-#endif
+#endif /* HAVE_LIBGEN_H */
 }
 	fim::string fim_shell_arg_escape(const fim::string & arg)
 	{
-		// FIXME: this escaping function is NOT safe; it shall only serve as a basis.
+		// FIXME: this escaping function is NOT safe; this code shall only serve as a placeholder for a better one.
 		fim::string ear=arg;
 		fim::string res=FIM_CNS_EMPTY_STRING;
 		res+="'";
@@ -113,7 +114,8 @@ void trhex(fim_char_t *str)
 	const fim_char_t *fp;//fast pointer
 	fim_char_t *sp;//slow pointer
 	fim_char_t hb[3];
-	if(!str)return;
+	if(!str)
+		goto ret;
 
 	hb[2]=0;
 	fp=sp=str;
@@ -152,7 +154,8 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 	 *	this function could be optimized.
 	 *	20090520 hex translation in
 	 */
-	if(!str || !f || !t || strlen(f)-strlen(t))return;
+	if(!str || !f || !t || strlen(f)-strlen(t))
+		return;
 	int tl=strlen(f);//table length
 	fim_char_t*_p=str;
 	const fim_char_t *fp;
@@ -197,12 +200,16 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 				*_p = *tp;//translation	
 				++_p;  //new focus
 				pp=_p+1;
-				while(*pp){pp[-1]=*pp;++pp;}//!*pp means we are done :)
+				while(*pp)
+				{
+					pp[-1]=*pp;++pp;
+				}//!*pp means we are done :)
 				pp[-1]='\0';
 				//if(*_p=='\\')++_p;//we want a single pass
 //				if(*_p)++_p;//we want a single pass // ! BUG
 				fp=f+tl;// in this way  *(fp) == '\0' (single translation pass) as soon as we continue
-				if(!*_p)return;
+				if(!*_p)
+					return;
 				--_p;//note that the outermost loop will increment this anyway
 				continue;//we jump straight to while(NUL)
 			}
@@ -221,8 +228,9 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			fim_byte_t	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
 			buf=(fim_byte_t*)fim_calloc(inc,1);
-			if(!buf) return buf;
-			while((nrb=fread(buf+rb,1,inc,fd))>0)
+			if(!buf) 
+				return buf;
+			while((nrb=fim_fread(buf+rb,1,inc,fd))>0)
 			{
 				fim_byte_t *tb;
 				// if(nrb==inc) a full read. let's try again
@@ -233,7 +241,10 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 				else
 					{rb-=nrb;continue;}
 			}
-			if(rs){*rs=rb;}
+			if(rs)
+			{
+				*rs=rb;
+			}
 			return buf;
 	}
 
@@ -250,7 +261,8 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			fim_char_t	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
 			buf=(fim_char_t*)fim_calloc(inc,1);
-			if(!buf) return buf;
+			if(!buf)
+			       	return buf;
 			while((nrb=read(fd,buf+rb,inc))>0)
 			{
 				fim_char_t *tb;
@@ -262,7 +274,8 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 				else
 					{rb-=nrb;continue;}
 			}
-			if(rs){*rs=rb;}
+			if(rs)
+				*rs=rb;
 			return buf;
 	}
 
@@ -305,7 +318,9 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
  */
 void chomp(fim_char_t *s)
 {
-	for(;*s;++s)if(*s=='\n')*s='\0';
+	for(;*s;++s)
+		if(*s=='\n')
+			*s='\0';
 }
 
 /*
@@ -316,7 +331,14 @@ void sanitize_string_from_nongraph_except_newline(fim_char_t *s, int c)
 {	
 	int n=c;
 	if(s)
-	while(*s && (c--||!n))if(!isgraph(*s)&&*s!='\n'){*s=' ';++s;}else ++s;
+		while(*s && (c--||!n))
+			if(!isgraph(*s)&&*s!='\n')
+			{
+				*s=' ';
+				++s;
+			}
+			else
+			       	++s;
 	return;
 }
 
@@ -327,7 +349,14 @@ void sanitize_string_from_nongraph(fim_char_t *s, int c)
 {	
 	int n=c;
 	if(s)
-	while(*s && (c--||!n))if(!isgraph(*s)||*s=='\n'){*s=' ';++s;}else ++s;
+		while(*s && (c--||!n))
+			if(!isgraph(*s)||*s=='\n')
+			{
+				*s=' ';
+				++s;
+			}
+			else
+			       	++s;
 	return;
 }
 
@@ -396,6 +425,7 @@ fim_char_t * dupsqstr (const fim_char_t* s)
 /*
  *	Allocation and duplication of a single string (not necessarily terminating)
  */
+#ifdef HAVE_FGETLN
 static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
 {
 	fim_char_t *r = (fim_char_t*) fim_malloc (l + 1);
@@ -403,6 +433,7 @@ static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
 	r[l]='\0';
 	return (r);
 }
+#endif /* HAVE_FGETLN */
 
 static int pick_word(const fim_char_t *f, unsigned int *w)
 {
@@ -410,8 +441,10 @@ static int pick_word(const fim_char_t *f, unsigned int *w)
 		FIXME : what is this ? :)
 	*/
 	int fd = open(f,O_RDONLY);
-	if(fd==-1) return -1;
-	if(read(fd,w,sizeof(int))==sizeof(int))return 0;
+	if(fd==-1)
+	       	return -1;
+	if(read(fd,w,sizeof(int))==sizeof(int))
+		return 0;
 	return -1;
 }
 
@@ -426,10 +459,11 @@ int fim_rand()
 	 * Reading from     /dev/random could instead block.
 	 * */
 	unsigned int w;
-	if(pick_word(FIM_LINUX_RAND_FILE,&w)==0) return (w%RAND_MAX);// TODO: are we sure that RAND_MAX corresponds to FIM_LINUX_RAND_FILE ?
+	if(pick_word(FIM_LINUX_RAND_FILE,&w)==0)
+	       	return (w%RAND_MAX);// TODO: are we sure that RAND_MAX corresponds to FIM_LINUX_RAND_FILE ?
 	
-	srand(clock()); return rand();
-
+	srand(clock());
+	return rand();
 }
 
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase, int ignorenewlines)
@@ -445,11 +479,13 @@ int fim_rand()
 		/*
 		 * we allow for the default match, in case of null regexp
 		 */
-		if(!r || !strlen(r))return true;
+		if(!r || !strlen(r))
+			return true;
 
 		/* fixup code for a mysterious bug
 		 */
-		if(*r=='*')return false;
+		if(*r=='*')
+			return false;
 
 		fim::string aux;
 		if(ignorenewlines)
@@ -492,8 +528,10 @@ int fim_rand()
 int strchr_count(const fim_char_t*s, int c)
 {
 	int n=0;
-	if(!s)return 0;
-	while((s=strchr(s,c))!=NULL && *s){++n;++s;}
+	if(!s)
+		return 0;
+	while((s=strchr(s,c))!=NULL && *s)
+		++n,++s;
 	return n;
 }
 
@@ -506,7 +544,8 @@ int newlines_count(const fim_char_t*s)
 	 * "aaaaba\nemk\n" 2
 	 * */
 	int c=strchr_count(s,'\n');
-	if(s[strlen(s)-1]=='\n')++c;
+	if(s[strlen(s)-1]=='\n')
+		++c;
 	return c;
 }
 
@@ -523,14 +562,17 @@ const fim_char_t* next_row(const fim_char_t*s, int cols)
 	 * next_row("1234")   ->  4
 	 * */
 	const fim_char_t *b=s;int l=strlen(s);
-	if(!s)return NULL;
+	if(!s)
+		return NULL;
 	if((s=strchr(s,'\n'))!=NULL)
 	{
 		// we have a newline marking the end of line:
 		// with newline-column merge (*s==\n and s+1 is after)
-		if((s-b)<=cols) return s+1;
+		if((s-b)<=cols)
+		       	return s+1;
 		// ... or without merge (b[cols]!=\n and belongs to the next line)
-		else return b+=cols;
+		else
+		       	return b+=cols;
 	}
 	return b+(l>=cols?cols:l);// no newlines in this string; we return the cols'th character or the NUL
 }
@@ -545,12 +587,15 @@ int lines_count(const fim_char_t*s, int cols)
 	 * "aaaaba\nemk\n" 2
 	 * "aaaabaa\nemk\n" 3
 	 * */
-	if(cols<=0)return -1;
-	if(cols==0)return newlines_count(s);
+	if(cols<=0)
+		return -1;
+	if(cols==0)
+		return newlines_count(s);
 
 	int n=0;
 	const fim_char_t*b;
-	if(!s)return 0;
+	if(!s)
+		return 0;
 	b=s;
 	while((s=strchr(s,'\n'))!=NULL && *s)
 	{
@@ -635,13 +680,16 @@ double getmilliseconds()
 	return dt;
 }
 
+#if 0
 struct fim_bench_struct { void *data; };
 
 typedef fim_err_t (*fim_bench_ft)(struct fim_bench_struct*);
 static fim_err_t fim_bench_video(struct fim_bench_struct*)
 {
 	//cc.clear_rect(0, width()-1, 0,height()/2);
+	return FIM_ERR_NO_ERROR;
 }
+#endif
 
 const fim_char_t * fim_getenv(const fim_char_t * name)
 {
@@ -650,9 +698,9 @@ const fim_char_t * fim_getenv(const fim_char_t * name)
 	*/
 #ifdef HAVE_GETENV
 	return getenv(name);
-#else
+#else /* HAVE_GETENV */
 	return NULL;
-#endif
+#endif /* HAVE_GETENV */
 }
 
 FILE * fim_fread_tmpfile(FILE * fp)
@@ -667,7 +715,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 		/* todo : read errno in case of error and print some report.. */
 		const size_t buf_size=FIM_STREAM_BUFSIZE;
 		fim_char_t buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
-		while( (rc=fread(buf,1,buf_size,fp))>0 )
+		while( (rc=fim_fread(buf,1,buf_size,fp))>0 )
 		{
 			wc=fwrite(buf,1,rc,tfd);
 			if(wc!=rc)
@@ -692,14 +740,16 @@ double fim_atof(const fim_char_t *nptr)
 	double d=1.0;
 	bool sign=false;
 	while( *nptr == '-' ){++nptr;sign=!sign;}
-	if(!nptr)return n;
+	if(!nptr)
+		return n;
 	while( isdigit(*nptr) )
 	{
 		n+=.1*((double)(*nptr-'0'));
 		n*=10.0;
 		++nptr;
 	}
-	if(*nptr!='.')return sign?-n:n;
+	if(*nptr!='.')
+		return sign?-n:n;
 	++nptr;
 	while( isdigit(*nptr) )
 	{
@@ -717,19 +767,20 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 	 */
 #ifdef HAVE_GETLINE
 	return getline(lineptr,n,stream);
-#endif
+#endif /* HAVE_GETLINE */
 #ifdef HAVE_FGETLN
 	{	
 		/* for BSD (in stdlib.h) */
 		fim_char_t *s,*ns;
 		size_t len=0;
 		s=fgetln(stream,&len);
-		if(!s)return EINVAL;
+		if(!s)
+			return EINVAL;
 		*lineptr=dupstrn(s,len);
 		*n=len;
 		return len;
 	}
-#endif
+#endif /* HAVE_FGETLN */
 	return EINVAL;
 }
 
@@ -737,8 +788,10 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 	{
 		struct stat stat_s;
 		/*	if the directory doesn't exist, return */
-		if(-1==stat(nf.c_str(),&stat_s))return false;
-		if( ! S_ISDIR(stat_s.st_mode))return false;
+		if(-1==stat(nf.c_str(),&stat_s))
+			return false;
+		if( ! S_ISDIR(stat_s.st_mode))
+			return false;
 		return true;
 	}
 
@@ -750,8 +803,10 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 #else
 		struct stat stat_s;
 		/*	if the file (it can be a device, but not a directory) doesn't exist, return */
-		if(-1==stat(nf.c_str(),&stat_s))return false;
-		if( S_ISDIR(stat_s.st_mode))return false;
+		if(-1==stat(nf.c_str(),&stat_s))
+			return false;
+		if( S_ISDIR(stat_s.st_mode))
+			return false;
 		/*if(!S_IFREG(stat_s.st_mode))return false;*/
 		return true;
 #endif
@@ -765,13 +820,75 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 #else
 		struct stat stat_s;
 		/*	if the file (it can be a device, but not a directory) doesn't exist, return */
-		if(-1==stat(nf.c_str(),&stat_s))return false;
-		if( S_ISDIR(stat_s.st_mode))return false;
+		if(-1==stat(nf.c_str(),&stat_s))
+			return false;
+		if( S_ISDIR(stat_s.st_mode))
+			return false;
 		/*if(!S_IFREG(stat_s.st_mode))return false;*/
-		if( stat_s.st_size == 0 )return false;
+		if( stat_s.st_size == 0 )
+			return false;
 		return true;
 #endif
 	}
 
 int fim_isspace(int c){return isspace(c);}
 int fim_isquote(int c){return c=='\'' || c=='\"';}
+#define FIM_WANT_ZLIB 0
+FILE *fim_fopen(const char *path, const char *mode)
+{
+#if FIM_WANT_ZLIB
+	/* cast necessary; in v.1.2.3.4 declared as void* */
+	return (FILE*)gzopen(path,mode);
+#else /* FIM_WANT_ZLIB */
+	return fopen(path,mode);
+#endif /* FIM_WANT_ZLIB */
+}
+
+int fim_fclose(FILE*fp)
+{
+#if FIM_WANT_ZLIB
+	return gzclose(fp);
+#else /* FIM_WANT_ZLIB */
+	return fclose(fp);
+#endif /* FIM_WANT_ZLIB */
+}
+
+size_t fim_fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+{
+#if FIM_WANT_ZLIB
+	return gzread(stream,ptr,size*nmemb);
+#else /* FIM_WANT_ZLIB */
+	return fread(ptr,size,nmemb,stream);
+#endif /* FIM_WANT_ZLIB */
+}
+
+int fim_rewind(FILE *stream)
+{
+#if FIM_WANT_ZLIB
+	gzrewind(stream);
+	return 0;
+#else /* FIM_WANT_ZLIB */
+	rewind(stream);
+	return 0;
+#endif /* FIM_WANT_ZLIB */
+}
+
+int fim_fseek(FILE *stream, long offset, int whence)
+{
+#if FIM_WANT_ZLIB
+	return gzseek(stream,offset,whence);
+	0;
+#else /* FIM_WANT_ZLIB */
+	return fseek(stream,offset,whence);
+#endif /* FIM_WANT_ZLIB */
+}
+
+int fim_fgetc(FILE *stream)
+{
+#if FIM_WANT_ZLIB
+	return gzgetc(stream);
+#else /* FIM_WANT_ZLIB */
+	return fgetc(stream);
+#endif /* FIM_WANT_ZLIB */
+}
+

@@ -760,7 +760,7 @@ dnl
 dnl By default, we disable poppler : its API is still immature.
 dnl
 fim_handle_pdf=no
-AC_ARG_ENABLE(poppler, AC_HELP_STRING([--enable-poppler], [Enable poppler (PDF rendering) support.]),
+AC_ARG_ENABLE(poppler, AC_HELP_STRING([--enable-poppler], [Enable poppler (PDF rendering) support. This will add LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/" to the compilation flags. You can override this by passing configure a suitable LIBPOPPLER_CXXFLAGS variable.]),
 [       if test x$enableval = xyes ; then
 		fim_handle_pdf=yes
         fi
@@ -799,8 +799,10 @@ dnl FIXME : the following is a dirty hack
       if test x"$have_poppler" = xyes; then
         LIBPOPPLER="-lpoppler $LIBPOPPLER_STATIC_EXTRA"
 	# FIXME: the following is a dirty hack!
-        LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/"
-        CXXFLAGS="$CXXFLAGS $LIBPOPPLER_CXXFLAGS"
+	if test x"$LIBPOPPLER_CXXFLAGS" = x ; then
+        	LIBPOPPLER_CXXFLAGS="-I/usr/include/poppler/"
+	fi
+        CXXFLAGS="$CXXFLAGS $LIBPOPPLER_CXXFLAGS -DFIM_LIBPOPPLER_VERSION_MAYBE=$have_poppler_maybe_version"
 dnl	are we sure poppler does not have something like the following ?
 dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
       else
@@ -1388,6 +1390,15 @@ AC_ARG_WITH(tmpfile, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put
         [fim_cv_tmpfile=$withval],
         [fim_cv_tmpfile="/tmp/__FIM_TEMPORARY_FILE"])
 dnl ==================
+AC_ARG_ENABLE(custom-status-bar, AC_HELP_STRING([--enable-custom-status-bar], [Will allow customization of status bar via a printf-like string (EXPERIMENTAL)]),
+[       if test x$enableval = xno; then
+		fim_cv_custom_status_bar=no
+	else
+                fim_cv_custom_status_bar=yes
+        fi
+],[ fim_cv_custom_status_bar=no ]
+)
+dnl ==================
 
 AC_ARG_ENABLE(optimizations, AC_HELP_STRING([--enable-optimizations], [Will try to enhance compilation flags (EXPERIMENTAL)]),
 [       if test x$enableval = xno; then
@@ -1529,6 +1540,12 @@ dnl ==================
     	fi
 
 dnl ==================
+    AH_TEMPLATE([FIM_WANT_CUSTOM_INFO_STATUS_BAR])
+            if test x$fim_cv_custom_status_bar = xyes ; then
+    		AC_DEFINE([FIM_WANT_CUSTOM_INFO_STATUS_BAR])
+    	fi
+
+dnl ==================
 AH_TEMPLATE([FIM_WANT_FILENAME_MARK_AND_DUMP])
 AC_ARG_ENABLE(mark-and-dump, AC_HELP_STRING([--enable-mark-and-dump], [Fim will be capable of marking files while viewing and outputting their names on exit. (enabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_mark_and_dump=1 ; else fim_cv_want_mark_and_dump=0 ; fi ],[ fim_cv_want_mark_and_dump=1 ])
 AC_DEFINE_UNQUOTED([FIM_WANT_FILENAME_MARK_AND_DUMP], $fim_cv_want_mark_and_dump, [Fim will be capable of marking files while viewing and outputting their names on exit.])
@@ -1551,6 +1568,17 @@ if test x$fim_cv_want_unicode == x1 ; then
 	CXXFLAGS="$CXXFLAGS `freetype-config --cflags`"
 	LIBS="$LIBS `freetype-config --libs`"
 	AC_DEFINE_UNQUOTED([FIM_WANT_UNICODE], $fim_cv_want_unicode, [Unicode. (disabled by default)])
+fi
+dnl ==================
+AH_TEMPLATE([FIM_WANT_TEXT_RENDERING])
+fim_want_astext=yes
+AC_ARG_ENABLE(as-text-rendering, AC_HELP_STRING([--disable-as-text-rendering], [Disable as-text rendering (viewing of any file as character bytes -- not to be confused with the ASCII art output).]),
+[       if test x$enableval = xno ; then
+		fim_want_astext=no
+        fi
+])
+if test x$fim_want_astext = xyes ; then
+	AC_DEFINE_UNQUOTED([FIM_WANT_TEXT_RENDERING], 1, [Enables text rendering])
 fi
 dnl ==================
 AH_TEMPLATE([FIM_WANT_RAW_BITS_RENDERING])
@@ -1721,6 +1749,7 @@ dnl	exif (libexif) support           : ${fim_cv_libexif}
 	X (sdllib) experimental support     : ${fim_handle_sdl}
         framebuffer support                 : ${fim_handle_framebuffer:-yes}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
+	allow custom status bar file info   : ${fim_cv_custom_status_bar:-no}
 dnl	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
 
 

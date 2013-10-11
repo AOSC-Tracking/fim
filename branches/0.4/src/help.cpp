@@ -2,6 +2,7 @@
 
 fim_var_help_db[FIM_VID_RANDOM]= "[internal,out] a pseudorandom number" ;
 fim_var_help_db[FIM_VID_BINARY_DISPLAY]= "[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" ;
+fim_var_help_db[FIM_VID_TEXT_DISPLAY]= "[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" ;
 fim_var_help_db[FIM_VID_CACHE_STATUS]= "[internal,out] string with current information on cache status" ;
 fim_var_help_db[FIM_VID_DISPLAY_CONSOLE]= "[internal,in] if 1, will display the output console" ;
 fim_var_help_db[FIM_VID_DEVICE_DRIVER]= "[internal,out] the current display device string" ;
@@ -12,6 +13,7 @@ fim_var_help_db[FIM_VID_LAST_SYSTEM_OUTPUT]= "[internal,out,experimental] the st
 fim_var_help_db[FIM_VID_LOAD_DEFAULT_ETC_FIMRC]= "[internal,in] if 1 at startup, will load the system wide initialization file" ;
 fim_var_help_db[FIM_VID_DEFAULT_ETC_FIMRC]= "[internal,in] string with the global configuration file name" ;
 fim_var_help_db[FIM_VID_FILE_LOADER]= "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)" ;
+fim_var_help_db[FIM_VID_RETRY_LOADER_PROBE]= "[in] if 1 and user specified a file loader and this fails, will probe for a different loader" ;
 fim_var_help_db[FIM_VID_NO_RC_FILE]= "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" ;
 fim_var_help_db[FIM_VID_NO_EXTERNAL_LOADERS]= "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" ;
 fim_var_help_db[FIM_VID_SCRIPTOUT_FILE]= "[internal,in] the name of the file to write to when recording sessions" ;
@@ -23,6 +25,7 @@ fim_var_help_db[FIM_VID_AUTOTOP]= "[internal,in] if 1, will align to the top fre
 fim_var_help_db[FIM_VID_SCALE_STYLE]= "[internal,in] if non empty, this string will be fed to the scale command" ;
 fim_var_help_db[FIM_VID_FILEINDEX]= "[internal,out] the current image numeric index" ;
 fim_var_help_db[FIM_VID_FILELISTLEN]= "[internal,out] the length of the current image list" ;
+fim_var_help_db[FIM_VID_INFO_FMT_STR]= "[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for memory image size; %% for an ordinary %. This feature has to be enabled at configure time." ;
 fim_var_help_db[FIM_VID_FILENAME]= "[internal,out] the current file name string" ;
 fim_var_help_db[FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS]= "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" ;
 fim_var_help_db[FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS]= "[internal,out] the contents of the default (hardcoded) grammar file" ;
@@ -91,4 +94,4 @@ fim_var_help_db[FIM_VID_OPEN_OFFSET]= "[internal,in,optional] offset (specified 
 fim_var_help_db[FIM_VID_SEEK_MAGIC]= "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_WIDTH]= "[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_DPI]= "[internal,in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " ;
-#endif
+#endif /* FIM_WANT_INLINE_HELP */

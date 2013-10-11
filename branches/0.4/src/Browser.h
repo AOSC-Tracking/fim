@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,9 +28,9 @@ namespace fim
  */
 #ifdef FIM_NAMESPACES
 class Browser:public Namespace
-#else
+#else /* FIM_NAMESPACES */
 class Browser
-#endif
+#endif /* FIM_NAMESPACES */
 {
 	private:
 	args_t flist_; /* the names of files in the slideshow.  */
@@ -46,13 +46,13 @@ class Browser
 #ifndef FIM_WINDOWS
 	/* when compiled with no multiple windowing support, one viewport only will last. */
 	Viewport *only_viewport_;
-#endif
+#endif /* FIM_WINDOWS */
 	CommandConsole &commandConsole_;
 	Image *image()const;
 
 #ifdef FIM_READ_STDIN_IMAGE
 	Image *default_image_;	// experimental
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 
 	Viewport* viewport()const;
 
@@ -67,7 +67,7 @@ class Browser
 	Cache cache_;	// was private
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(Image *stdin_image);
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 	const Image *c_image()const;	// was private
 	int empty_file_list()const;
 
@@ -82,7 +82,7 @@ class Browser
 		commandConsole_(cc),
 #ifdef FIM_READ_STDIN_IMAGE
 		default_image_(NULL),
-#endif
+#endif /* FIM_READ_STDIN_IMAGE */
 		last_regexp_(fim::string()),
 		cache_(Cache())
 		{}
@@ -127,11 +127,11 @@ class Browser
 	fim_int find_file_index(const fim::string nf);
 #ifdef FIM_READ_DIRS
 	bool push_dir(fim::string nf);
-#endif
+#endif /* FIM_READ_DIRS */
 	bool push(fim::string nf);
 
 	fim::string display();
-	fim::string _random_shuffle();
+	fim::string _random_shuffle(bool dts=true);
 	fim::string _clear_list();
 	private:
 	fim::string loadCurrentImage();
@@ -151,4 +151,4 @@ class Browser
 };
 }
 
-#endif
+#endif /* FIM_BROWSER_H */

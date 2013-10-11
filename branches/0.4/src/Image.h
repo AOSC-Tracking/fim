@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@ namespace fim
 
 #ifdef FIM_NAMESPACES
 class Image:public Namespace
-#else
+#else /* FIM_NAMESPACES */
 class Image
-#endif
+#endif /* FIM_NAMESPACES */
 {
 
 	friend class Viewport;		/* don't panic, we are wise people ;) */
@@ -98,6 +98,8 @@ class Image
 	fim_image_source_t fis_;
 
 	string  fname_;		/* viewport variable, too */
+	size_t fs_;		/* file size */
+	size_t ms_;		/* memory size */
 
         void free();
 	void reset();
@@ -146,4 +148,4 @@ class Image
 	int c_page()const{return page_;}
 };
 }
-#endif
+#endif /* FIM_IMAGE_H */

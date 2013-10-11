@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2012 Michele Martone
+ (c) 2007-2013 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -27,13 +27,13 @@
 #include <cstdio>
 #include <cstdlib>
 
-/*
+#if 0
 
 #ifdef HAVE_STDLIB_H
 //#undef HAVE_STDLIB_H
 #define HAVE_STDLIB_H_BACKUP HAVE_STDLIB_H
+#endif /* HAVE_STDLIB_H */
 #endif
-*/
 
 
 #include <cstring>
@@ -46,7 +46,7 @@
 #ifdef FIM_WITH_LIBEXIF
 #include <libexif/exif-data.h>
 #define HAVE_NEW_EXIF 0
-#endif
+#endif /* FIM_WITH_LIBEXIF */
 
 //
 extern "C"
@@ -78,13 +78,13 @@ extern "C"
 # include "RegEdit.h"
 # include "ida.h"
 # include "viewer.h"
-#endif
+#endif /* USE_X11 */
 namespace fim
 {
 
 #if HAVE_NEW_EXIF
 extern CommandConsole cc;
-#endif
+#endif /* HAVE_NEW_EXIF */
    int fim_jerr=0;
 
 /* ---------------------------------------------------------------------- */
@@ -170,12 +170,12 @@ static void fim_error_exit (j_common_ptr cinfo)
 // FIXME: temporarily here
 static void dump_exif(FILE *out, ExifData *ed)
 {
-    const fim_char_t *title, *value;
 #if HAVE_NEW_EXIF
+    const fim_char_t /**title=NULL,*/ *value=NULL;
     fim_char_t buffer[FIM_EXIF_BUFSIZE];
-#endif
-    ExifEntry  *ee;
-    int tag,i;
+    ExifEntry  *ee=NULL;
+    int /*tag,*/i;
+#endif /* HAVE_NEW_EXIF */
 #if HAVE_NEW_EXIF
     //for (i = 0; i < EXIF_IFD_COUNT; i++) {
     for (i = 0; i < 1; i++) { // first only
@@ -261,7 +261,7 @@ uhmpf:
 		1;
 	}
     }
-#endif
+#endif /* HAVE_NEW_EXIF */
 #if 0
     for (i = 0; i < EXIF_IFD_COUNT; i++) {
 	fprintf(out,"   ifd %s\n", exif_ifd_get_name (i));
@@ -274,9 +274,9 @@ uhmpf:
 		continue;
 #ifdef HAVE_NEW_EXIF
 	    value = exif_entry_get_value(ee, buffer, sizeof(buffer));
-#else
+#else /* HAVE_NEW_EXIF */
 	    value = exif_entry_get_value(ee);
-#endif
+#endif /* HAVE_NEW_EXIF */
 	    fprintf(out,"      0x%04x  %-30s %s\n", tag, title, value);
 	}
     }
@@ -284,7 +284,7 @@ uhmpf:
 	fprintf(out,"   thumbnail\n      %d bytes data\n", ed->size);
 #endif
 }
-#endif
+#endif /* FIM_WITH_LIBEXIF */
 
 
 /* ---------------------------------------------------------------------- */
@@ -299,7 +299,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     fim_jerr=0;
 #ifdef FIM_WITH_LIBEXIF
     //std::cout << "EXIF is not implemented, really :) \n";
-#endif
+#endif /* FIM_WITH_LIBEXIF */
     
     h = (struct jpeg_state *)fim_calloc(sizeof(*h),1);
     if(!h) goto oops;
@@ -346,8 +346,8 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     		if(ed)
 			dump_exif(stdout,ed);
 	}
-#endif
-#endif
+#endif /* FIM_WITH_LIBEXIF */
+#endif /* HAVE_NEW_EXIF */
 #ifdef FIM_WITH_LIBEXIF_nonono
 	    if (thumbnail) {
 		ExifData *ed;
@@ -367,7 +367,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		}
 		exif_data_unref(ed);
 	    }
-#endif
+#endif /* FIM_WITH_LIBEXIF_nonono */
 	    break;
 	}
     }
@@ -390,7 +390,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	jpeg_destroy_decompress(&h->cinfo);
         if(fim_jerr)goto oops;
     //    if(h->jerr.msg_code)goto oops; // this triggers with apparently good files 
-	fclose(h->infile);
+	fim_fclose(h->infile);
 	h->infile = NULL;
 	jpeg_create_decompress(&h->cinfo);
         if(fim_jerr)goto oops;
@@ -435,7 +435,7 @@ jpeg_read(fim_byte_t *dst, unsigned int line, void *data)
     JSAMPROW row = dst;
 //    if(h->jerr.msg_code)goto oops;
     jpeg_read_scanlines(&h->cinfo, &row, 1);
-    oops:
+//    oops:
     return;
 }
 
@@ -445,7 +445,7 @@ jpeg_done(void *data)
     struct jpeg_state *h = (struct jpeg_state*)data;
     jpeg_destroy_decompress(&h->cinfo);
     if (h->infile)
-	fclose(h->infile);
+	fim_fclose(h->infile);
     if (h->thumbnail)
 	fim_free(h->thumbnail);
     fim_free(h);
@@ -540,10 +540,10 @@ jpeg_write(FILE *fp, struct ida_image *img)
 }
 
 struct ida_writer jpeg_writer = {
-    /*l/*abel:*/*/  "JPEG",
-   /*/* ext:*/*/    { "jpg", "jpeg", NULL},
-    /*w/*rite:*/*/  jpeg_write,
-    /*/*conf:*/*/   jpeg_conf,
+    /*label:*/  "JPEG",
+    /* ext: */    { "jpg", "jpeg", NULL},
+    /*write:*/  jpeg_write,
+    /*conf: */   jpeg_conf,
 };
 
 static void __init init_wr(void)
@@ -552,11 +552,11 @@ static void __init init_wr(void)
 }
 
 
-#endif
-/*
+#endif /* USE_X11 */
+#if 0
 #ifdef HAVE_STDLIB_H_BACKUP 
 #define HAVE_STDLIB_H HAVE_STDLIB_H_BACKUP 
 #undef HAVE_STDLIB_H_BACKUP 
+#endif /* HAVE_STDLIB_H_BACKUP */
 #endif
-*/
 }

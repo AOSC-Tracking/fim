@@ -2,7 +2,7 @@
 /*
  string.cpp : A reimplementation of string class
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ namespace fim
 		len=0;
 #else
 		*s='\0';
-#endif
+#endif /* _FIM_DYNAMIC_STRING */
 	}
 
 	std::ostream& operator<<(std::ostream &os,const string& s)
@@ -88,8 +88,8 @@ namespace fim
 		{
 			fim_free(s);
 		}
-#else
-#endif
+#else /* _FIM_DYNAMIC_STRING */
+#endif /* _FIM_DYNAMIC_STRING */
 	}
 
 	string::string(const int i)
@@ -203,8 +203,8 @@ namespace fim
 			len=l;
 		}
 		//if realloc fails, we keep the old one
-#else
-#endif
+#else /* _FIM_DYNAMIC_STRING */
+#endif /* _FIM_DYNAMIC_STRING */
 		return this->size();
 	}
 
@@ -246,9 +246,9 @@ namespace fim
 #ifdef _FIM_DYNAMIC_STRING
 		if(!s)return 0;
 		return len;
-#else
+#else /* _FIM_DYNAMIC_STRING */
 		return sizeof(s);
-#endif
+#endif /* _FIM_DYNAMIC_STRING */
 	}
 
 	int  string::find(const string&str)const
@@ -316,9 +316,9 @@ namespace fim
 	{
 #ifdef _FIM_DYNAMIC_STRING
 		return (s==NULL || len==0 || *s=='\0');
-#else
+#else /* _FIM_DYNAMIC_STRING */
 		return *s=='\0';
-#endif
+#endif /* _FIM_DYNAMIC_STRING */
 	}
 
 	/* 
@@ -347,7 +347,7 @@ namespace fim
 			// this is a sort of buffering
 			#define BUFSIZE TOKSIZE
 			l=(l<BUFSIZE?BUFSIZE:l);
-#endif
+#endif /* _FIM_DYNAMIC_STRING */
 
 			s=(fim_char_t*)(fim_calloc(l));
 
@@ -357,12 +357,12 @@ namespace fim
 		{
 			/* we keep the string blanked  and we are happy */
 		}
-#else
+#else /* _FIM_DYNAMIC_STRING */
 		*s='\0';
-#endif
+#endif /* _FIM_DYNAMIC_STRING */
 		return (this->size());
 	}
-#else
+#else /* _FIM_STRING_WRAPPER */
 	std::ostream& operator<<(std::ostream &os,const string& s)
 	{
 		return os << s.c_str();
@@ -406,7 +406,7 @@ namespace fim
 	string::string(int * i)
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
-		snprintf(buf,FIM_CHARS_FOR_INT-1,"%p",i);
+		snprintf(buf,FIM_CHARS_FOR_INT-1,"%p",(void*)i);
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
 	}
@@ -570,6 +570,6 @@ namespace fim
 		}
 		return "";
 	}
-#endif
+#endif /* _FIM_STRING_WRAPPER */
 }
 
