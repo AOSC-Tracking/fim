@@ -2,7 +2,7 @@
 /*
  fim_plugin.cpp : Fim plugin stuff
 
- (c) 2011-2011 Michele Martone
+ (c) 2011-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ static void fim_opencv_detect_and_draw( IplImage* img, struct ida_image *iimg )
 #ifdef HAVE_GETENV
    	if(haarpath==FIM_CNS_EMPTY_STRING)
 		haarpath=getenv(FIM_HAAR_PATH);
-#endif
+#endif /* HAVE_GETENV */
 	haarpath+=haarfile;
 
 	if(is_file(haarpath))
@@ -147,7 +147,7 @@ static fim_err_t fim_opencv_plugin_example(struct ida_image *img, const fim_char
 err:
 	return FIM_ERR_GENERIC;
 }
-#endif
+#endif /* FIM_WANT_OPENCV_EXAMPLE */
 
 #if FIM_WANT_EXPERIMENTAL_PLUGINS
 fim_err_t fim_post_read_plugins_exec(struct ida_image *img, const fim_char_t * filename)
@@ -158,7 +158,7 @@ fim_err_t fim_post_read_plugins_exec(struct ida_image *img, const fim_char_t * f
 	return fim_opencv_plugin_example(img,filename);
 #else
 	return FIM_ERR_NO_ERROR;
-#endif
+#endif /* FIM_WANT_OPENCV_EXAMPLE */
 }
-#endif
+#endif /* FIM_WANT_EXPERIMENTAL_PLUGINS */
 

@@ -2,7 +2,7 @@
 /*
  fim_plugin.h : Fim plugin definitions
 
- (c) 2011-2011 Michele Martone
+ (c) 2011-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,5 +25,5 @@
 
 #if FIM_WANT_EXPERIMENTAL_PLUGINS
 fim_err_t fim_post_read_plugins_exec(struct ida_image *img, const fim_char_t * filename);
-#endif
-#endif
+#endif /* FIM_WANT_EXPERIMENTAL_PLUGINS */
+#endif /* FIM_PLUGIN_FIM_H */

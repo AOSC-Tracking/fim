@@ -2,7 +2,7 @@
 /*
  fim_types.h : Basic Fim type declarations
 
- (c) 2011-2011 Michele Martone
+ (c) 2011-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -63,4 +63,4 @@
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf
 
-#endif
+#endif /* FIM_TYPES_FIM_H */

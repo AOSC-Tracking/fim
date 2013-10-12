@@ -2,7 +2,7 @@
 /*
  FimWindow.h : Fim's own windowing system header file
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 
 #ifndef NULL
 	#define NULL 0
-#endif
+#endif /* NULL */
 #define FIM_DISABLE_WINDOW_SPLITTING 1
 
 /*
@@ -133,9 +133,9 @@ class Rect
 
 #ifdef FIM_NAMESPACES
 class FimWindow:public Namespace
-#else
+#else /* FIM_NAMESPACES */
 class FimWindow
-#endif
+#endif /* FIM_NAMESPACES */
 {
 	
 	private:
@@ -185,7 +185,7 @@ class FimWindow
 	 so keep this private!
 	*/
 	FimWindow(const FimWindow & root);
-//#endif
+//#endif /* FIM_UNDEFINED */
 	bool isleaf()const;
 	bool isvalid()const;
 	bool issplit()const;
@@ -263,6 +263,6 @@ class FimWindow
 };
 
 }
-#endif
-#endif
+#endif /* FIM_WINDOWS */
+#endif /* FIM_WINDOW_H */
 
