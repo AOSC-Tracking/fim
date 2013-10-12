@@ -1732,7 +1732,7 @@ AC_MSG_NOTICE([
 	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
 	ps   file support (libspectre)      : ${fim_handle_ps:-no}
 	GraphicsMagick support              : ${fim_handle_graphicsmagick:-no}
-dnl	Imlib support                       : ${fim_handle_imlib2:-no}
+	Imlib2 support                      : ${fim_handle_imlib2:-no}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
