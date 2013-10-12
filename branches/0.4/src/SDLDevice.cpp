@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -57,9 +57,9 @@ std::cout.setf ( std::ios::showbase ); \
 std::cout << *(fim_int*)(C) <<"\n"; \
 std::cout.unsetf ( std::ios::showbase ); \
 std::cout.unsetf ( std::ios::hex );
-#else
+#else /* FIM_SDL_DEBUG */
 #define FIM_SDL_INPUT_DEBUG(C,MSG) {}
-#endif
+#endif /* FIM_SDL_DEBUG */
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 typedef int fim_sdl_int;
@@ -88,6 +88,7 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 				++os;
 			}
 		if(*os)
+		{
 		if(2==sscanf(os,"%d:%d",&current_w,&current_h))
 
 		{
@@ -104,14 +105,15 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 			// TODO: a better invaling string message needed here
 		}
 		}
+		}
 		// commit
 		want_windowed_=want_windowed;
 		want_mouse_display_=want_mouse_display;
 #if FIM_SDL_WANT_RESIZE 
 		want_resize_=want_resize;
-#else
+#else /* FIM_SDL_WANT_RESIZE */
 		want_resize_=false;
-#endif
+#endif /* FIM_SDL_WANT_RESIZE */
 		current_w_=current_w;
 		current_h_=current_h;
 		return FIM_ERR_NO_ERROR;
@@ -121,11 +123,11 @@ err:
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	SDLDevice::SDLDevice(MiniConsole & mc_, fim::string opts):DisplayDevice(mc_),
-#else
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	SDLDevice::SDLDevice(
 			fim::string opts
 			):DisplayDevice(),
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	current_w_(0), current_h_(0),
 	opts_(opts),
 	want_windowed_(false),
@@ -141,7 +143,7 @@ err:
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		const fim_char_t*os=opts_.c_str();
 		parse_optstring(os);
-#endif
+#endif /* FIM_WANT_SDL_OPTIONS_STRING */
 		fim_bzero(&bvi_,sizeof(bvi_));
 		//current_w_=current_h_=0;
 	}
@@ -351,8 +353,7 @@ err:
 		/*
 		 *
 		 * */
-		//fim_coo_t want_width=0, want_height=0, want_bpp=0;
-		fim_coo_t want_width=current_w_, want_height=current_h_, want_bpp=0;
+		fim_coo_t want_width=current_w_, want_height=current_h_/*, want_bpp=0*/;
 		fim_sdl_int want_flags=FIM_SDL_FLAGS;
 		fim_sdl_int delay=0,interval=0;
 		const fim_char_t*errstr=NULL;
@@ -366,7 +367,7 @@ err:
 #if FIM_SDL_WANT_RESIZE 
 		if(want_resize_)
 			want_flags|=SDL_RESIZABLE;
-#endif
+#endif /* FIM_SDL_WANT_RESIZE */
 		if(want_windowed_)
 			want_flags&=~SDL_FULLSCREEN;
 		//want_flags|=SDL_DOUBLEBUF;
@@ -445,7 +446,7 @@ err:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f_->height));
 		mc_.reformat(    width() /    f_->width   );
-#endif
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;
 sdlerr:
 		errstr=SDL_GetError();
@@ -561,13 +562,13 @@ err:
 				case SDL_VIDEORESIZE:
 						cc.resize(event.resize.w,event.resize.h);
 				break;
-#endif
+#endif /* FIM_SDL_WANT_RESIZE */
 				case SDL_QUIT:
 #if FIM_SDL_ALLOW_QUIT
 				*c=cc.find_keycode_for_bound_cmd(FIM_FLT_QUIT);
 				return 1;
 				//cc.quit();
-#endif	
+#endif /* FIM_SDL_ALLOW_QUIT */
 				*keypressp = 1;
 				
 				break;
@@ -696,7 +697,7 @@ err:
 					if(ms&SDL_BUTTON_MMASK) cout << "mmask\n";
 					if(ms&SDL_BUTTON_X1MASK) cout << "x1mask\n";
 					if(ms&SDL_BUTTON_X2MASK) cout << "x2mask\n";
-#endif
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 					if(!cc.inConsole())
 					{
 						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
@@ -996,10 +997,11 @@ ok:
 	{
 		fim_err_t rc=FIM_ERR_NO_ERROR;
 #if FIM_WANT_CAPTION_CONTROL
-		if(!msg)
-		{ rc=FIM_ERR_UNSUPPORTED; goto err;}
-		if(!want_windowed_)
-		       return FIM_ERR_UNSUPPORTED; 	
+		if((!msg) || (!want_windowed_))
+		{
+		       	rc=FIM_ERR_UNSUPPORTED;
+		       	goto err;
+		}
 		SDL_WM_SetCaption(msg,FIM_SDL_ICONPATH);
 #else
 		rc=FIM_ERR_UNSUPPORTED;

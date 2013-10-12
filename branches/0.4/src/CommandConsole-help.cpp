@@ -2,7 +2,7 @@
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help methods
 
- (c) 2011-2011 Michele Martone
+ (c) 2011-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ namespace fim
 			s+=browser_.c_image()->get_variables_list();
 			s+=sep;
 		}
-#endif
+#endif /* FIM_NAMESPACES */
 #endif
 #if 0
 #ifdef FIM_WINDOWS
@@ -56,7 +56,7 @@ namespace fim
 			s+=current_viewport()->get_variables_list();
 			s+=sep;
 		}
-#endif
+#endif /* FIM_WINDOWS */
 #endif
 		// FIXME: incomplete
 		return s;
@@ -118,7 +118,7 @@ manmode:
 			string(".\\\"\n"
 			".\\\" $Id""$\n"
 			".\\\"\n"
-			".TH fimrc 5 \"(c) 2011-2011 "FIM_AUTHOR_NAME"\"\n"
+			".TH fimrc 5 \"(c) 2011-2013 "FIM_AUTHOR_NAME"\"\n"
 			".SH NAME\n"
 			"fimrc - \\fB fim \\fP configuration file and language reference\n"
 			"\n"
@@ -138,13 +138,13 @@ manmode:
 			"One may exit from command line mode by pressing the "FIM_KBD_ENTER" key on an empty line (a non empty command line would be submitted for execution), or the "FIM_KBD_ESC" key ")+
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER
 		       	string(" (in non-SDL mode, it is required to press the "FIM_KBD_ESC" key twice).\n")+
-#else
+#else /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 		       	string(" (only in SDL mode).\n")+
-#endif
+#endif /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 			string("The general form of a fim command/program is shown in the next section.\n")+
 #ifndef FIM_COMMAND_AUTOCOMPLETION
 			string("\nInterpretation of commands or aliases may use autocompletion (if enabled; see the "FIM_VID_CMD_EXPANSION" variable description), in a way to allow the user to type only the beginning of the command of interest.\n")+
-#endif
+#endif /* FIM_COMMAND_AUTOCOMPLETION */
 			string("\n"
 			"\n"
 			".SH FIM LANGUAGE GRAMMAR\n"

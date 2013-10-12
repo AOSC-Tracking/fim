@@ -2,7 +2,7 @@
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -38,21 +38,30 @@
  * and subject to change.
  * So when changing these headers here, take care of changing them
  * in the configure script, too.
+ * And please don't blame me (fim's author)!
  */
-#include <poppler/poppler-config.h>
-#include <poppler/PDFDoc.h>
-#include <poppler/OutputDev.h>
-#include <poppler/SplashOutputDev.h>
+#include <poppler/cpp/poppler-version.h>
+#if (POPPLER_VERSION_MINOR>=21)
+#if (POPPLER_VERSION_MINOR< 24)
 #include <poppler/splash/SplashBitmap.h>
 #include <poppler/splash/SplashTypes.h>
+#else
+#include <splash/SplashBitmap.h>
+#include <splash/SplashTypes.h>
+#endif /* (POPPLER_VERSION_MINOR< 24) */
+#include <poppler/poppler-config.h>
+#include <poppler/OutputDev.h>
+#include <poppler/PDFDoc.h>
+#include <poppler/SplashOutputDev.h>
 #include <poppler/Page.h>
 #include <poppler/GlobalParams.h>	/* globalParams lives here */
+#endif /* (POPPLER_VERSION_MINOR>=21) */
 
 #if HAVE_FILENO
 #define FIM_PDF_USE_FILENO 1
 #else
 #define FIM_PDF_USE_FILENO 0
-#endif
+#endif /* HAVE_FILENO */
 
 /*								*/
 
@@ -135,7 +144,11 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
 	prd=prd<1?FIM_RENDERING_DPI:prd;
 
-	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
+	if(filename==std::string(FIM_STDIN_IMAGE_NAME))
+	{
+		std::cerr<<"sorry, stdin multipage file reading is not supported\n";
+		goto retnull;
+	}	/* a drivers's problem */ 
 
 #if !FIM_PDF_USE_FILENO
 	if(fp) fclose(fp);
@@ -150,7 +163,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		if(-1==access(filename,R_OK))
 			return NULL;
 	}
-#endif
+#endif /* FIM_PDF_USE_FILENO */
 
 
 	ds = (struct pdf_state_t*)fim_calloc(sizeof(struct pdf_state_t),1);
@@ -171,8 +184,10 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		goto err;
 
 	globalParams->setErrQuiet(gFalse);
-	globalParams->setBaseDir(_);
 
+#if defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22)
+	globalParams->setBaseDir(_);
+#endif /* defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22) */
 
 	ds->pd = new PDFDoc(new GooString(filename), NULL, NULL, (void*)NULL);
 	if (!ds->pd)
@@ -190,9 +205,9 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 			/* FIXME: this is an incomplete fix (triggered on 20120719's email on fim-devel);
 			  I don't really know which version of poppler defines this macro first, but I assume 0.20.2 or so */
 			ds->od->startDoc(ds->pd);
-#else
+#else /* POPPLER_VERSION */
 			ds->od->startDoc(ds->pd->getXRef());
-#endif
+#endif /* POPPLER_VERSION */
     	}
         if (!ds->od)
 		goto err;
@@ -227,6 +242,7 @@ err:
 	if (globalParams)	delete globalParams;
 	globalParams = NULL;
 	if(ds)fim_free(ds);
+retnull:
 	return NULL;
 }
 

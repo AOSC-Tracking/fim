@@ -2,7 +2,7 @@
 /*
  FbiStuffBit24.cpp : fbi functions for reading ELF files as they were raw 24 bit per pixel pixelmaps
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H
 # include <endian.h>
-#endif
+#endif /* HAVE_ENDIAN_H */
 
 namespace fim
 {
@@ -61,14 +61,19 @@ bit24_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct bit24_state *h=NULL;
+    long ftellr;
     fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
     prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
     
     h = (struct bit24_state *)fim_calloc(sizeof(*h),1);
-    if(!h)goto oops;
+    if(!h)
+	    goto oops;
     h->fp = fp;
-    if(fseek(fp,0,SEEK_END)!=0) goto oops;
-    if((h->flen=ftell(fp))==-1)goto oops;
+    if(fseek(fp,0,SEEK_END)!=0)
+	    goto oops;
+    ftellr=ftell(fp);
+    if((ftellr)==-1)
+	    goto oops;
     i->width  = h->w = prw;
     i->height = h->h = (h->flen+(h->w*3-1)) / ( h->w*3 ); // should pad
     return h;
@@ -81,7 +86,7 @@ static void
 bit24_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct bit24_state *h = (struct bit24_state *) data;
-    unsigned int ll,y,x,pixel,byte = 0;
+    unsigned int ll,y,x = 0;
     
 	y  = line ;
 	if(y==h->h-1)
@@ -131,4 +136,4 @@ static void __init init_rd(void)
 
 
 }
-#endif
+#endif /* FIM_WANT_RAW_BITS_RENDERING */

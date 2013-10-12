@@ -2,7 +2,7 @@
 /*
  Benchmarkable.h.h : header file for benchmarkable classes
 
- (c) 2011-2011 Michele Martone
+ (c) 2011-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,5 +34,5 @@
 		virtual void quickbench_init(fim_int qbi)=0;
 		virtual void quickbench_finalize(fim_int qbi)=0;
        	};
-#endif
-#endif
+#endif /* FIM_WANT_BENCHMARKS */
+#endif /* FIM_BENCHMARKABLE_H */
