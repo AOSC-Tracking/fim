@@ -7,4 +7,4 @@ BEGIN { sp=0 }
 /^Grammar/ { sp=sp+1; }
 /^Terminals/ { sp=sp+1; }
 #/.*/ { if(sp==3){  print; } }
-/.*/ { if(sp==3){ gsub("^[ \t]*[0-9]*","\t"); print; } }
+/.*/ { if(sp==3){ gsub("^[ \t]*[0-9][0-9]*","\t"); print; } }

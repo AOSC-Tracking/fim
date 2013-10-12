@@ -91,6 +91,7 @@ EXTRA_fim_SOURCES += FbiStuffDjvu.cpp
 EXTRA_fim_SOURCES += FbiStuffMagick.cpp
 EXTRA_fim_SOURCES += FbiStuffPdf.cpp
 EXTRA_fim_SOURCES += FbiStuffPs.cpp
+EXTRA_fim_SOURCES += Imlib2Device.cpp
 
 CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba
 
@@ -119,13 +120,14 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	DebugConsole.h \
 	DisplayDevice.h \
 	DummyDisplayDevice.h \
-	Image.h \
 	FbiStuff.h \
 	FbiStuffList.h \
 	FbiStuffFbtools.h \
 	FbiStuffLoader.h \
 	FontServer.h \
 	FramebufferDevice.h \
+	Imlib2Device.h \
+	Image.h \
 	Namespace.h \
 	Var.h \
 	Viewport.h \

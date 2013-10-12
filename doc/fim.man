@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fim 1 "(c) 2007-2011 Michele Martone"
+.TH fim 1 "(c) 2007-2013 Michele Martone"
 .SH NAME
 fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
@@ -319,9 +319,7 @@ If not specified, the following files will be probed and the first existing will
 /usr/share/consolefonts/default8x9.psf.gz
 /usr/share/consolefonts/Lat15-Fixed16.psf.gz
 /usr/share/consolefonts/default.psf.gz
-fim://
 
-If the special fim:// string is specified, a hardcoded font will be used.
 FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode only). Default is 1.0.
 FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
 If unset, fim will probe for /dev/fb0.
@@ -465,7 +463,7 @@ Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 was originally based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2011 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
+Copyright (C) 2007-2013 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 .fi
 Copyright (C) 1999-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org>
 .P

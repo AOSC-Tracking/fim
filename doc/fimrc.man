@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fimrc 5 "(c) 2011-2011 Michele Martone"
+.TH fimrc 5 "(c) 2011-2013 Michele Martone"
 .SH NAME
 fimrc - \fB fim \fP configuration file and language reference
 
@@ -542,6 +542,10 @@ _display_as_binary
 [internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual
 .fi
 .B
+_display_as_rendered_text
+[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual
+.fi
+.B
 _display_busy
 [internal,in] if 1, will display a message on the status bar when processing
 .fi
@@ -604,6 +608,10 @@ _hsteps
 .B
 _ignorecase
 [internal,in] if 1, will allow for case insensitive regexp-based searches
+.fi
+.B
+_info_fmt_str
+[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for memory image size; %% for an ordinary %. This feature has to be enabled at configure time.
 .fi
 .B
 _inhibit_display
@@ -688,6 +696,10 @@ _pwd
 .B
 _reduce_factor
 [internal,in] the image scale multiplier used when reducing images size
+.fi
+.B
+_retry_loader_probe
+[in] if 1 and user specified a file loader and this fails, will probe for a different loader
 .fi
 .B
 _rows

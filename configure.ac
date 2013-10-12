@@ -11,8 +11,7 @@ AC_PREREQ([2.54])
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
 define([svnversion],esyscmd([sh -c "svnversion | tr  -c '[0-9]' ' ' | sed 's/ *//g;s/^$/-1/g' "]))dnl
-# WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
-AC_INIT([fim],[0.4],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
+AC_INIT([fim],[0.4-rc0],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 AC_CONFIG_SRCDIR([src/fim.cpp])
 
 AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
@@ -1732,7 +1731,7 @@ AC_MSG_NOTICE([
 	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
 	ps   file support (libspectre)      : ${fim_handle_ps:-no}
 	GraphicsMagick support              : ${fim_handle_graphicsmagick:-no}
-dnl	Imlib support                       : ${fim_handle_imlib2:-no}
+	Imlib2 support                      : ${fim_handle_imlib2:-no}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}

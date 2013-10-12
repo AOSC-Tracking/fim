@@ -26,8 +26,8 @@ FIM it aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux frame buffer console.
-It is multidevice: it has X support, too (via the SDL library) and it supports
-ASCII art output (via the aalib library).
+It is multidevice: it has X support, too (via the SDL and the Imlib2 libraries)
+and it supports ASCII art output (via the aalib library).
 
 FIM is free software, and it ships under the GPL software license, complete with
 documentation, in form of a doc/FIM.TXT documentation file, a man page, lots
@@ -44,8 +44,8 @@ FIM it aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux frame buffer console.
-It is multidevice: it has X support too (via the SDL library) and it supports
-ASCII art output (via the aalib library).
+It is multidevice: it has X support too (via the SDL and the Imlib2 libraries)
+and it supports ASCII art output (via the aalib library).
 
 It is capable of regular expressions based (on filename) vim-like autocommands.
 It offers GNU readline command line autocompletion and history,
@@ -104,8 +104,10 @@ Implemented features:
  - history file
  - full         support for AAlib (Ascii Art rendering) (-o aa)
  - experimental support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
+ - experimental support for Imlib2 (-o imlib2) (X!)
  - experimental PDF, PS, DJVU file support
  - viewing any file as a binary/RGB pixelmap
+ - viewing any file as text
 
 Yet unimplemented features:
 
@@ -264,7 +266,7 @@ implementation of the most scriptable and configurable image viewer ever - not
 tied to the frame buffer device and to a single keyboard input.
 
 ================================================================================
-	7		Technical overview (important for patch writers)
+	7		Technical overview (important for patch writers,but old)
 ================================================================================
 
 To run Fim requires a Linux box with the frame buffer device enabled in the 
@@ -361,7 +363,19 @@ Tested platforms:
 
  sudo apt-get install fim
 
- But beware: the deb packages are often outdated.
+ But beware: the deb packages are very likely to be outdated.
+ 
+
+ In order to build from svn sources, you are advised to install packages from
+ the following (overly complete) list:
+  
+ autoconf autoconf-archive autoheader automake autotools-dev bison ctags
+ flex g++ libaa1-dev libdjvulibre-dev libgif4 libgif-dev libimlib2-dev
+ libjpeg-dev libncurses5-dev libpng-dev libpoppler-cpp-dev libpoppler-dev
+ libreadline-dev libsdl-dev libspectre-dev libtiff-dev libtool m4 make svn
+
+ The above list was valid on a Debian Jessie installation; it's fair to expect
+ these packages names to change a little with time..
  
 --------------------------------------------------------------------------------
 	8.2		Gentoo Installation Tips (obsolete)
@@ -405,7 +419,7 @@ from the GPL licensed Terminus Font package, version 4.30 by Dimitar Toshkov
 	10		Contacts, URLs
 ================================================================================
 
-Fim is (C) 2007-2011 Michele Martone.
+Fim is (C) 2007-2013 Michele Martone.
 
 You can contact me via email: "dezperado_FOobAr_autistici_Baz_org", after
 replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
@@ -418,6 +432,8 @@ Fim is not perfect: a number of weaknesses are summarized in TODO and BUGS.
 
 
 Web Page     : http://savannah.nongnu.org/projects/fbi-improved/
+
+Announcements: http://freecode.com/projects/fbi-improved/
 
 Mailing List : http://savannah.nongnu.org/mail/?group=fbi-improved
 	(or http://lists.nongnu.org/mailman/listinfo/fbi-improved-devel)
