@@ -13,6 +13,7 @@ AC_PREREQ([2.54])
 define([svnversion],esyscmd([sh -c "svnversion | tr  -c '[0-9]' ' ' | sed 's/ *//g;s/^$/-1/g' "]))dnl
 # WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
 AC_INIT([fim],[0.4],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
+AC_CONFIG_SRCDIR([src/fim.cpp])
 
 AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
 AC_SUBST(SVN_REVISION,"svnversion")
@@ -71,7 +72,8 @@ AC_CHECK_TOOL(AR, ar, ar)
 fim_cv_version=`cat VERSION`
 AC_LANG([C++])
 #AC_LANG_PUSH([C++])
-AM_INIT_AUTOMAKE(fim, $fim_cv_version)
+AM_INIT_AUTOMAKE
+#AM_INIT_AUTOMAKE(fim, $fim_cv_version)
 #AM_INIT_AUTOMAKE(fim, 1.0)
 AC_SUBST([CONFIG_STATUS_DEPENDENCIES], ['$(top_srcdir)/VERSION'])
 CPPFLAGS=''
@@ -93,7 +95,7 @@ fi
 AC_MSG_RESULT($fim_cv_prefix)
 
 AC_ISC_POSIX
-AM_C_PROTOTYPES
+#AM_C_PROTOTYPES
 if test "x$U" != "x"; then
   AC_MSG_ERROR(Compiler not ANSI compliant)
 fi
