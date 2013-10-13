@@ -3,8 +3,8 @@
 
                 Version 0.4
 
- * changed --random and introduced --pseudo-random option
- * customizable status bar file info string (--enable-custom-status-bar)
+ * changed --random semantics and introduced --random-no-seed switch
+ * customizable status bar file info string
  * introduced --as-text to render printable bytes as text
 
                 Version 0.4-beta
