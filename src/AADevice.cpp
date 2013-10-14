@@ -48,7 +48,6 @@ static bool aainvalid;
 		fim_coo_t 
 			oi,// output image row index
 			oj;// output image columns index
-
 		fim_coo_t lor,loc;
     		
 		if( oroff <0 ) return -8;

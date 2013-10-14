@@ -370,9 +370,10 @@ Tested platforms:
  the following (overly complete) list:
   
  autoconf autoconf-archive autoheader automake autotools-dev bison ctags
- flex g++ libaa1-dev libdjvulibre-dev libgif4 libgif-dev libimlib2-dev
+ flex groff g++ libaa1-dev libdjvulibre-dev libgif4 libgif-dev libimlib2-dev
  libjpeg-dev libncurses5-dev libpng-dev libpoppler-cpp-dev libpoppler-dev
  libreadline-dev libsdl-dev libspectre-dev libtiff-dev libtool m4 make svn
+ txt2html
 
  The above list was valid on a Debian Jessie installation; it's fair to expect
  these packages names to change a little with time..

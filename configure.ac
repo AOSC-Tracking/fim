@@ -817,7 +817,7 @@ dnl        LIBPOPPLER_LIBS=`$LIBPOPPLER_CONFIG --libs`
   if test x"$have_poppler" == xyes ; then
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPdf.o"
   LIBS="$LIBS $LIBPOPPLER"
-  AC_DEFINE([HAVE_LIBPOPPLER],[1],[We have libpoppler (Warning: the API could still break! (tested with v.0.8.7))])
+  AC_DEFINE([HAVE_LIBPOPPLER],[1],[We have libpoppler (Warning: the API could still break! (as of v.0.8.7--0.24.1))])
   else
     fim_handle_pdf=no
   fi

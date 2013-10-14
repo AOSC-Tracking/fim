@@ -2,7 +2,7 @@
 /*
  Namespace.h : a class for local variables storage
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ namespace fim
 		/*
 		 * an internal function to set a user variable
 		 */
+		fim_int retval = 0;
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -41,51 +42,54 @@ namespace fim
 			//a specific namespace was selected!
 			fim_char_t ns = varname[0];
 			fim::string id=varname.c_str()+2;
+
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 #ifdef FIM_WINDOWS
 			{
 				//window variable
 				if(window_)
-					return window_->setVariable(id,value);
-				else
-					return 0;
+					retval = window_->setVariable(id,value);
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
-					return window_->current_viewportp()->setVariable(id,value);
-				else
-					return 0;
+					retval = window_->current_viewportp()->setVariable(id,value);
+				goto err;
 			}
 			else
 #endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				return
+				retval =	
 					browser_.c_image()?
 					( (Image*) (browser_.c_image()))->setVariable(id,value):
 					0;
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
-				return browser_.setVariable(id,value);
+				retval = browser_.setVariable(id,value);
+				goto err;
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
-				return 0;
+				goto err;
 			}
 			}
 			catch(FimException e){}
 		}
 #endif /* FIM_NAMESPACES */
-		return variables_[varname].setInt(value);
+		retval = variables_[varname].setInt(value);
+err:
+		return retval;
 	}
 
 	fim_float_t CommandConsole::setVariable(const fim::string& varname,fim_float_t value)
@@ -94,6 +98,7 @@ namespace fim
 		 * an internal function to set a user variable
 		 */
 //		cout << "setVariable " << variables_[varname].setFloat(value) << "\n"; 
+		fim_float_t retval = 0;
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -107,46 +112,47 @@ namespace fim
 			{
 				//window variable
 				if(window_)
-					return window_->setVariable(id,value);
-				else
-					return 0;
+					retval = window_->setVariable(id,value);
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
-					return window_->current_viewportp()->setVariable(id,value);
-				else
-					return 0;
+					retval = window_->current_viewportp()->setVariable(id,value);
+				goto err;
 			}
 			else
 #endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				return
-					browser_.c_image()?
+				retval = browser_.c_image()?
 					( (Image*) (browser_.c_image()))->setVariable(id,value):
 					0;
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
-				return browser_.setVariable(id,value);
+				retval = browser_.setVariable(id,value);
+				goto err;
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
-				return 0;
+				goto err;
 			}
 			}
 			catch(FimException e){}
 		}
 #endif /* FIM_NAMESPACES */
-		return variables_[varname].setFloat(value);
+		retval = variables_[varname].setFloat(value);
+err:
+		return retval;
 	}
 
 	fim_int CommandConsole::setVariable(const fim::string& varname,const fim_char_t*value)
@@ -155,6 +161,8 @@ namespace fim
 		 * an internal function to set a user variable
 		 */
 		fim::string s(value);
+		fim_int retval = 0;
+
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -168,46 +176,48 @@ namespace fim
 			{
 				//window variable
 				if(window_)
-					return window_->setVariable(id,s.c_str());
-				else
-					return 0;
+					retval = window_->setVariable(id,s.c_str());
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
-					return window_->current_viewportp()->setVariable(id,s.c_str());
-				else
-					return 0;
+					retval = window_->current_viewportp()->setVariable(id,s.c_str());
+				goto err;
 			}
 			else
 #endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				return
+				retval = 	
 					browser_.c_image()?
 					( (Image*) (browser_.c_image()))->setVariable(id,s.c_str()):
 					0;
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
-				return browser_.setVariable(id,s.c_str());
+				retval = browser_.setVariable(id,s.c_str());
+				goto err;
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
-				return 0;
+				goto err;
 			}
 			}
 			catch(FimException e){}
 		}
 #endif /* FIM_WINDOWS */
-		return (fim_int)(variables_[varname].setString(s));
+		retval = (fim_int)(variables_[varname].setString(s));
+err:
+		return retval;
 	}
 
 	Var CommandConsole::setVariable(const fim::string varname,const Var&value)
@@ -216,6 +226,8 @@ namespace fim
 		 * an internal function to set a user variable
 		 */
 //		std::cout << "CCSV\n";
+		Var retval = 0;
+
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -229,18 +241,16 @@ namespace fim
 			{
 				//window variable
 				if(window_)
-					return window_->setVariable(id,value);
-				else
-					return 0;
+					retval = window_->setVariable(id,value);
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
-					return window_->current_viewportp()->setVariable(id,value);
-				else
-					return 0;
+					retval = window_->current_viewportp()->setVariable(id,value);
+				goto err;
 			}
 			else
 #endif /* FIM_WINDOWS */
@@ -249,22 +259,24 @@ namespace fim
 				//image variable
 				if(browser_.c_image())
 				DBG(varname<<" : "<<value.getType()<<"\n");
-				return
+				retval = 	
 					browser_.c_image()?
 					( (Image*) (browser_.c_image()))->setVariable(id,value):
 					Var(0);
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
-				return browser_.setVariable(id,value);
+				retval = browser_.setVariable(id,value);
+				goto err;
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
-				return 0;
+				goto err;
 			}
 			}
 			catch(FimException e){}
@@ -274,12 +286,15 @@ namespace fim
 		variables_[varname].set(value);	/* FIXME : this works */
 		//std::cout <<"CCGS["<<varname<<"]"<<variables_[varname].getString()<<"\n";
 		//std::cout <<"CCGS["<<varname<<"]"<<value.getString()<<"\n";
-		return value;;
+err:
+		retval = value;
+		return retval;
 	}
-
 
 	fim_int CommandConsole::getIntVariable(const fim::string &varname)const
 	{
+		fim_int retval = 0;
+
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -293,40 +308,40 @@ namespace fim
 			{
 				//window variable
 				if(window_)
-					return window_->getIntVariable(id);
-				else
-					return 0;
+					retval = window_->getIntVariable(id);
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
-					return window_->current_viewportp()->getIntVariable(id);
-				else
-					return 0;
+					retval = window_->current_viewportp()->getIntVariable(id);
+				goto err;
 			}
 			else
 #endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				return
+				retval = 	
 					browser_.c_image()?
 					( (Image*) (browser_.c_image()))->getIntVariable(id):
 					0;
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
-				return browser_.getIntVariable(id);
+				retval = browser_.getIntVariable(id);
+				goto err;
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
-				return 0;
+				goto err;
 			}
 			}
 			catch(FimException e){}
@@ -341,9 +356,13 @@ namespace fim
 		 *
 		 * BEWARE!
 		 * */
-		variables_t::const_iterator vi=variables_.find(varname);
-		if(vi!=variables_.end()) return vi->second.getInt();
-		else return 0;
+		{
+			variables_t::const_iterator vi=variables_.find(varname);
+			if(vi!=variables_.end())
+				retval = vi->second.getInt();
+		}
+err:
+		return retval;
 		//return ((c_variables_t)(variables_))[varname].getInt();
 	}
 
@@ -354,6 +373,8 @@ namespace fim
 		 * */
 //		cout << "getVariable " << varname  << " : " << variables_[varname].getFloat()<< "\n";
 //		cout << "getVariable " << varname  << ", type : " << variables_[varname].getType()<< "\n";
+		fim_float_t retval=FIM_CNS_EMPTY_FP_VAL;
+
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -366,48 +387,55 @@ namespace fim
 			{
 				//window variable
 				if(window_)
-					return window_->getFloatVariable(id);
-				else
-					return FIM_CNS_EMPTY_FP_VAL;
+					retval = window_->getFloatVariable(id);
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_VIEWPORT_CHAR )
 			{
 				//viewport variable
 				if(window_ && window_->current_viewportp())
-					return window_->current_viewportp()->getFloatVariable(id);
-				else
-					return FIM_CNS_EMPTY_FP_VAL;
+					retval = window_->current_viewportp()->getFloatVariable(id);
+				goto err;
 			}
 			else
 #endif /* FIM_WINDOWS */
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				return
+				retval = 	
 					browser_.c_image()?
 					( (Image*) (browser_.c_image()))->getFloatVariable(id):
 					FIM_CNS_EMPTY_FP_VAL;
+				goto err;
 			}
 			else
 			if( ns == FIM_SYM_NAMESPACE_BROWSER_CHAR )
 			{
 				//browser variable
-				return browser_.getFloatVariable(id);
+				retval = browser_.getFloatVariable(id);
+				goto err;
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
-				return FIM_CNS_EMPTY_FP_VAL;
+				retval = FIM_CNS_EMPTY_FP_VAL;
+				goto err;
 			}
 			}
 			catch(FimException e){}
 		}
 #endif /* FIM_NAMESPACES */
-		variables_t::const_iterator vi=variables_.find(varname);
-		if(vi!=variables_.end()) return vi->second.getFloat();
-		else return FIM_CNS_EMPTY_FP_VAL;
+		{
+			variables_t::const_iterator vi=variables_.find(varname);
+			if(vi!=variables_.end())
+				retval = vi->second.getFloat();
+			else
+			       	retval = FIM_CNS_EMPTY_FP_VAL;
+		}
+err:
+		return retval;
 //		return variables_[varname].getFloat();
 	}
 
@@ -416,6 +444,7 @@ namespace fim
 		/*
 		 * the variable name supplied is used as a key to the variables hash
 		 * */
+		// fim::string retval;
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{

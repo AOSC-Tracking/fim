@@ -34,19 +34,20 @@
 	,finalized_(false)
 	{
 		const fim_char_t *line;
+
 	    	if (NULL != (line = fim_getenv(FIM_ENV_FBFONT)))
 			fontname_ = line;
 	}
 
 	fim_sys_int DisplayDevice::get_input(fim_key_t * c, bool want_poll)
 	{
+		fim_sys_int r=0;
 		*c=0;
 		/*
 		 * It is sad to place this functionality here, but often the input subsystem 
 		 * is tightly bound to the output device.
 		 * FIXME : before, it accepted unsigned int
 		 * */
-			fim_sys_int r=0;
 #ifdef  FIM_SWITCH_FIXUP
 			/*
 			 * this way the console switches the right way :
@@ -73,7 +74,8 @@
 				/*
 				 * expansion code :)
 				 */
-			        if (-1 != lirc) {
+			        if (-1 != lirc)
+				{
 			            FD_SET(lirc,&set);
 			            fdmax = lirc+1;
 			        }
@@ -89,7 +91,8 @@
 
 				}
 				
-				if (FD_ISSET(cc.fim_stdin_,&set))rc = read(cc.fim_stdin_, c, 4);
+				if (FD_ISSET(cc.fim_stdin_,&set))
+					rc = read(cc.fim_stdin_, c, 4);
 				r=rc;
 				*c=int2msbf(*c);
 			}
@@ -118,6 +121,7 @@ ret:		return r;
 		size_t rc=0;
 		fim_key_t c=-1,r;/*	-1 means 'no character pressed	*/
 		struct termios tattr, sattr;
+
 		//we set the terminal in raw mode.
                 if (! isatty(cc.fim_stdin_))
 		{
@@ -236,6 +240,7 @@ fim_int DisplayDevice::get_n_qbenchmarks()const
 string DisplayDevice::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const
 {
 	string msg=FIM_CNS_EMPTY_STRING;
+
 	switch(qbi)
 	{
 		case 0:

@@ -44,6 +44,7 @@ namespace fim
 		 * returns a string with the info about the files in list
 		 */
 		fim::string fileslist;
+
 		for(size_t i=0;i<flist_.size();++i)
 			fileslist+=flist_[i]+fim::string(" ");
 		return fileslist;
@@ -56,7 +57,7 @@ namespace fim
 		if(args.size()<1)
 		{
 			return list();
-			goto nop;
+			// goto nop;
 		}
 		else
 		{
@@ -154,6 +155,7 @@ nop:
 		 * So, this behaviour is different from reloading..
 		 */
 		fim::string c=current();
+
 		if(c_image())
 		{
 #ifdef FIM_AUTOCMDS
@@ -210,6 +212,7 @@ nop:
 		 * WARNING : SAME AS ERASE !
 		 */
 		fim::string s;
+
 		if(flist_.size()<=0)
 			return nofile_;
 		assert(cf_);
@@ -225,6 +228,7 @@ nop:
 		 * ( note that it doesn't refresh the image in any way ! )
 		 */
 		fim::string s;
+
 		if(flist_.size()<=0)
 			return nofile_;
 		assert(cf_);
@@ -287,6 +291,7 @@ nop:
 		const fim_char_t*ss=NULL;
 		int sl=0;
 		bool pcsc=false;
+
 		if(args.size()<1 || !(ss=args[0].c_str()))
 			goto nop;
 		fc=tolower(*ss);
@@ -663,6 +668,7 @@ nop:
 		 * tries to load a new one from the current filename
 		 */
 		fim::string c=current();
+
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if(empty_file_list())return "sorry, no image to reload\n";
 #ifdef FIM_AUTOCMDS
@@ -696,6 +702,7 @@ nop:
 		 * loads the current file, if not already loaded
 		 */
 		fim::string c=current();
+
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if(image() && ( image()->getName() == current()) )
 		{
@@ -733,6 +740,7 @@ nop:
 		 * returns whether the file nf is in the files list
 		 */
 		fim_int i=find_file_index(nf);
+
 		if(i>=0)
 			return true;
 		else
@@ -804,40 +812,40 @@ nop:
 		if(nf!=FIM_STDIN_IMAGE_NAME)
 		{
 #ifdef FIM_CHECK_FILE_EXISTENCE
-		/*
-		 * skip adding the filename in the list if
-		 * it is not existent or it is a directory...
-		 */
-		struct stat stat_s;
-		/*	if the file doesn't exist, return */
-		if(-1==stat(nf.c_str(),&stat_s))return false;
-		/*	if it is a character device , return */
-		//if(  S_ISCHR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
-		/*	if it is a block device , return */
-		//if(  S_ISBLK(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
-		/*	if it is a directory , return */
-		//if(  S_ISDIR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
+			/*
+			 * skip adding the filename in the list if
+			 * it is not existent or it is a directory...
+			 */
+			struct stat stat_s;
+			/*	if the file doesn't exist, return */
+			if(-1==stat(nf.c_str(),&stat_s))return false;
+			/*	if it is a character device , return */
+			//if(  S_ISCHR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
+			/*	if it is a block device , return */
+			//if(  S_ISBLK(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
+			/*	if it is a directory , return */
+			//if(  S_ISDIR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 #ifdef FIM_READ_DIRS
-		if(getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS)==1)
-			if(  S_ISDIR(stat_s.st_mode))
-				return push_dir(nf);
+			if(getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS)==1)
+				if(  S_ISDIR(stat_s.st_mode))
+					return push_dir(nf);
 #endif /* FIM_READ_DIRS */
-		/*	we want a regular file .. */
-		if(
-			! S_ISREG(stat_s.st_mode) 
+			/*	we want a regular file .. */
+			if(
+				! S_ISREG(stat_s.st_mode) 
 #define FIM_READ_BLK_DEVICES 1
 #ifdef FIM_READ_BLK_DEVICES
-			&& ! S_ISBLK(stat_s.st_mode)  // NEW
+				&& ! S_ISBLK(stat_s.st_mode)  // NEW
 #endif /* FIM_READ_BLK_DEVICES */
-		)
-		{
-			/*
-			 * i am not fully sure this is effective
-			 * */
-			nf+=" is not a regular file!";
-			commandConsole_.set_status_bar(nf.c_str(), "*");
-			return false;
-		}
+			)
+			{
+				/*
+				 * i am not fully sure this is effective
+				 * */
+				nf+=" is not a regular file!";
+				commandConsole_.set_status_bar(nf.c_str(), "*");
+				return false;
+			}
 #endif /* FIM_CHECK_FILE_EXISTENCE */
 		}
 #ifdef FIM_CHECK_DUPLICATES
@@ -907,6 +915,7 @@ nop:
 		 * goes to the next filename-matching file
 		 */
 		args_t arg;
+
 		arg.push_back(last_regexp_);
 		return regexp_goto(arg);
 	}
@@ -917,6 +926,7 @@ nop:
 		 * goes to the next filename-matching file
 		 */
 		size_t i,j,c=current_n(),s=flist_.size();
+
 		if( args.size() < 1 || s < 1 )
 			goto nop;
 		for(j=0;j<s;++j)
@@ -953,6 +963,7 @@ nop:
 		 *	FIX ME
 		 */
 		int N=flist_.size();
+
 		if(!N)
 			return FIM_CNS_EMPTY_RESULT;
 
@@ -980,6 +991,7 @@ nop:
 		 */
 		int ccp=cf_+n;
 		int N=flist_.size();
+
 		if(!N)
 			return FIM_CNS_EMPTY_RESULT;
 		ccp=FIM_MOD(ccp,N);
@@ -989,6 +1001,7 @@ nop:
 	fim::string Browser::next(int n)
 	{
 		fim::string gs="+";
+
 		gs+=fim::string(n);
 		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
@@ -996,6 +1009,7 @@ nop:
 	fim::string Browser::prev(int n)
 	{
 		fim::string gs="-";
+		
 		gs+=fim::string(n);
 		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
@@ -1016,6 +1030,7 @@ nop:
 		//const int cf=cf_,cp=c_page(),pc=n_pages(),fc=n_files();
 		const int cf=cf_,cp=getGlobalIntVariable(FIM_VID_PAGE),pc=FIM_MAX(1,n_pages()),fc=n_files();
 		int gv=0,nf=cf,mv=0,np=cp;
+
 		if(n_files()==0 || !s){errmsg=FIM_CMD_HELP_GOTO;goto err;}
 		if(!s){errmsg=FIM_CMD_HELP_GOTO;goto err;}
 		else
@@ -1028,6 +1043,7 @@ nop:
 			bool ispg=false;
 			bool isfg=false;
 			bool isrj=false;
+
 			if(!s)
 				goto ret;
 			sl=strlen(s);
@@ -1220,6 +1236,7 @@ nop:
 		 * FIX ME : move to Viewport
 		 */
 		fim::string c=current();
+
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif /* FIM_AUTOCMDS */
@@ -1250,6 +1267,7 @@ nop:
 		 * FIX ME : move to Viewport
 		 */
 		fim::string c=current();
+
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PREPAN,c);
 #endif /* FIM_AUTOCMDS */
@@ -1282,6 +1300,7 @@ nop:
 		return fl;
 #else
 		fim::string r=current();
+
 		if(image())
 			r+=image()->getInfo();
 		else
@@ -1305,6 +1324,7 @@ nop:
 		 * rotates the displayed image a specified amount of degrees
 		 */ 
 		fim_angle_t angle;
+
 		if(args.size()==0)
 			angle=FIM_CNS_ANGLE_ONE;
 		else
@@ -1519,6 +1539,7 @@ err:
 			 * FIXME : regard this as a bug
 			 * */
 			fim::string ss=args[i];
+
 			ss.substitute(" +$","");
 			push(ss);
 #else /* FIM_SMART_COMPLETION */

@@ -50,7 +50,9 @@
 #define FIM_CNS_RAW_KEYS_MESG 
 #endif /* FIM_WANT_RAW_KEYS_BINDING */
 #define FIM_INVALID_IDX -1
-						
+
+#define FIM_KEY_OFFSET '0'
+
 extern fim_sys_int yyparse();
 
 namespace fim
@@ -85,6 +87,7 @@ namespace fim
 		 * check whether cmd is a valid internal (registered) Fim command and returns pointer
 		 */
 		int idx=findCommandIdx(cmd);
+
 		if(idx!=FIM_INVALID_IDX)
 			return commands_[idx];
 		return NULL;
@@ -100,6 +103,7 @@ namespace fim
 		 */
 		bindings_t::const_iterator bi=bindings_.find(c);
 		fim::string rs("keycode ");
+
 		if(bi!=bindings_.end())
 		{
 			bindings_[c]=binding;
@@ -126,6 +130,7 @@ namespace fim
 		 * */
 		fim::string bindings_expanded;
 		bindings_t::const_iterator bi;
+
 		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
 		{
 			//if(bi->second == FIM_CNS_EMPTY_STRING)continue;//FIX : THIS SHOULD NOT OCCUR
@@ -150,6 +155,7 @@ namespace fim
 		fim_key_t key=FIM_SYM_NULL_KEY;
 #ifdef FIM_WANT_RAW_KEYS_BINDING
 		const fim_char_t*kstr=kfstr.c_str();
+
 		if(strlen(kstr)>=2 && isdigit(kstr[0]) && isdigit(kstr[1]))
 		{
 			key=atoi(kstr+1);
@@ -190,6 +196,7 @@ ret:		return key;
 		 * looks for a binding to 'cmd' and returns a string description for its bound key 
 		 */
 		bindings_t::const_iterator bi;
+
 		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
 		{
 			/* FIXME: should move this functionality to an ad-hoc search routine */
@@ -208,6 +215,7 @@ ret:		return key;
 		 */
 		fim::string rs(FIM_FLT_UNBIND" ");
 		bindings_t::const_iterator bi=bindings_.find(c);
+
 		if(bi!=bindings_.end())
 		{
 			bindings_.erase(c);
@@ -231,6 +239,7 @@ ret:		return key;
 		 * ( and this method would loose the chance to be const ).
 		 */
 		aliases_t::const_iterator ai=aliases_.find(cmd);
+
 		if(ai!=aliases_.end())
 		       	return ai->second.first;
 		return FIM_CNS_EMPTY_RESULT;
@@ -243,6 +252,7 @@ ret:		return key;
 		 * */
 		fim::string aliases_expanded;
 		aliases_t::const_iterator ai;
+
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
 		{
 #if 0
@@ -260,22 +270,23 @@ ret:		return key;
 
 	fim::string CommandConsole::get_alias_info(const fim::string aname)const
 	{
-			string  r;
-				r+=fim::string(FIM_FLT_ALIAS" \"");
-				r+=aname;
-				r+=fim::string("\" \"");
-				aliases_t::const_iterator ai=aliases_.find(aname);
-				if(ai!=aliases_.end())
-					r+=ai->second.first;
-				r+=fim::string("\"");
-				if(ai!=aliases_.end())
-				if(ai->second.second!=FIM_CNS_EMPTY_STRING)
-				{
-					r+=" # ";
-					r+=ai->second.second;
-				}
-				r+=fim::string("\n");
-				return r;
+		string  r;
+		r+=fim::string(FIM_FLT_ALIAS" \"");
+		r+=aname;
+		r+=fim::string("\" \"");
+
+		aliases_t::const_iterator ai=aliases_.find(aname);
+		if(ai!=aliases_.end())
+			r+=ai->second.first;
+		r+=fim::string("\"");
+		if(ai!=aliases_.end())
+		if(ai->second.second!=FIM_CNS_EMPTY_STRING)
+		{
+			r+=" # ";
+			r+=ai->second.second;
+		}
+		r+=fim::string("\n");
+		return r;
 	}
 
 	fim::string CommandConsole::fcmd_alias(std::vector<Arg> args)
@@ -284,6 +295,7 @@ ret:		return key;
 		 * assigns to an alias some action
 		 */
 		fim::string cmdlist,desc;
+
 		if(args.size()==0)
 		{
 			return getAliasesList();
@@ -451,6 +463,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 * TODO: maybe access() should be used too (it checks file permissions, too)
 		 */
                 struct stat stat_s;
+
                 /*      if the file doesn't exist, return */
                 if(-1==stat(nf.c_str(),&stat_s))
 			return false;
@@ -504,8 +517,12 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 *	FIXME
 		 *	DANGER : this method allocates memory
 		 */
+		args_t completions;
+		aliases_t::const_iterator ai;
+		variables_t::const_iterator vi;
 		static size_t list_index=0;
 		fim_char_t nschar='\0';
+
 		if(state==0)
 			list_index=0;
 		while(isdigit(*text))text++;	//initial  repeat match
@@ -518,9 +535,6 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 			nschar=cmd[0],
 			cmd=cmd.substr(2,cmd.size());
 		}
-		args_t completions;
-		aliases_t::const_iterator ai;
-		variables_t::const_iterator vi;
 		if(mask==0 || (mask&1))
 		for(size_t i=0;i<commands_.size();++i)
 		{
@@ -604,6 +618,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 * */
 		//return bindings_[c];
 		bindings_t::const_iterator bi=bindings_.find(c);
+
 		if(bi!=bindings_.end()) 
 			return bi->second;
 		else
@@ -620,24 +635,23 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 */
 		bindings_t::const_iterator bi=bindings_.find(c);
 		fim_err_t status=FIM_ERR_NO_ERROR;
-#define KEY_OFFSET '0'
-
 #ifdef FIM_ITERATED_COMMANDS
 		static fim_int it_buf=-1;
+
 		if( c>='0' && c <='9' && (bi==bindings_.end() || bi->second==FIM_CNS_EMPTY_STRING))//a number, not bound
 		{
 			if(it_buf>0)
 			{
 				it_buf*=10;
-				it_buf+=c - KEY_OFFSET;
+				it_buf+=c - FIM_KEY_OFFSET;
 			}
 			else
-			       	it_buf=c - KEY_OFFSET;
-			return;
+			       	it_buf=c - FIM_KEY_OFFSET;
+			goto ret;
 		}
 		/* FIXME 20110515 this prevents infinite recursion on iterated commands in SDL mode. this is probably a bug in the sdl input handling code and shall be solved */
 		if(c==FIM_SYM_NULL_KEY)
-			return;
+			goto ret;
 #endif /* FIM_ITERATED_COMMANDS */
 
 		if(bi!=bindings_.end() && bi->second!=FIM_CNS_EMPTY_STRING)
@@ -683,6 +697,8 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 			std::cerr << "error performing execute()\n";
 			//show_must_go_on_=0;	/* we terminate interactive execution */
 		}
+ret:
+		return;
 	}
 
 	fim_err_t CommandConsole::execute_internal(const fim_char_t *ss, fim_xflags_t xflags)
@@ -852,6 +868,7 @@ ret:
 		if(cmd==FIM_FLT_USLEEP)
 		{
 			fim_tus_t useconds=1;
+			
 			if(args.size()>0)
 				useconds=atoi(args[0].c_str());
 			usleep(useconds);
@@ -861,6 +878,7 @@ ret:
 		if(cmd==FIM_FLT_SLEEP)
 		{
 			fim_ts_t seconds=1;
+
 			//sleeping for an amount of time specified in seconds.
 			if(args.size()>0)
 				seconds=atoi(args[0].c_str());
@@ -880,6 +898,7 @@ ret:
 		{
 			//assignment of an alias
 			std::vector<Arg> aargs;	//Arg args :P
+
 			for(size_t i=0;i<args.size();++i)
 			{
 				aargs.push_back(Arg(args[i]));
@@ -899,6 +918,7 @@ ret:
 			if(c==NULL)
 			{
 				fim_char_t *match = this->command_generator(cmd.c_str(),0,0);
+
 				if(match)
 				{
 					//cout << "but found :`"<<match<<"...\n";
@@ -959,6 +979,7 @@ ok:
 			/* while characters read */
 			//if( c == -1 ) return 0;	/* no chars read */
 			sym_keys_t::const_iterator ki;
+
 //			if(c==sym_keys_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
 //			if(c==sym_keys_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
 //			// 20110601 need some string variable with these two keys (see while() interruption documentation) 
@@ -1008,6 +1029,7 @@ ok:
 #endif	/* FIM_USE_GPM */
 #ifdef FIM_AUTOCMDS
 		fim::string initial=browser_.current();
+
 		autocmd_exec(FIM_ACM_PREEXECUTIONCYCLE,initial);
 		autocmd_exec(FIM_ACM_PREEXECUTIONCYCLEARGS,initial);
 #endif /* FIM_AUTOCMDS */
@@ -1030,7 +1052,7 @@ ok:
 			if(ic_==1)
 			{
 				ic_=1;
-				fim_char_t *rl=fim_readline(FIM_KBD_COLON);
+				fim_char_t *rl = fim_readline(FIM_KBD_COLON);
 				*prompt_=FIM_SYM_PROMPT_CHAR;
 				if(rl==NULL)
 				{
@@ -1081,10 +1103,14 @@ ok:
 			else
 #endif /* FIM_USE_READLINE */
 			{
-				*prompt_=FIM_SYM_PROMPT_NUL;
+#ifdef	FIM_USE_GPM
+				Gpm_Event *EVENT = NULL;
+#endif	/* FIM_USE_GPM */
 				fim_key_t c;
 				fim_sys_int r;
 				fim_char_t buf[FIM_VERBOSE_KEYS_BUFSIZE];
+
+				*prompt_ = FIM_SYM_PROMPT_NUL;
 //				fim_sys_int c=getchar();
 //				fim_sys_int c=fgetc(stdin);
 				/*
@@ -1096,12 +1122,12 @@ ok:
 				 *	the keyboard is needed!.
 				 */
 				c=0;
-				
 				r=displaydevice_->get_input(&c);
 #ifdef	FIM_USE_GPM
-				Gpm_Event *EVENT;
-				if(Gpm_GetEvent(EVENT)==1)quit();
-				else cout << "...";
+				if(Gpm_GetEvent(EVENT)==1)
+					quit();
+				else
+					cout << "...";
 #endif	/* FIM_USE_GPM */
 				if(r>0)
 				{
@@ -1115,7 +1141,7 @@ ok:
 					}
 #ifndef FIM_USE_READLINE
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY) || 
-					   c==FIM_SYM_SEARCH_KEY)set_status_bar("compiled with no readline support!\n",NULL);
+						c==FIM_SYM_SEARCH_KEY)set_status_bar("compiled with no readline support!\n",NULL);
 #else /* FIM_USE_READLINE */
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY))
 					{
@@ -1128,14 +1154,15 @@ ok:
 						/*
 						 * this is a hack to handle vim-styled regexp searches
 						 */
-						ic_=1;
 						fim_sys_int tmp=rl_filename_completion_desired;
+						rl_hook_func_t *osh=rl_startup_hook;
+						rl_startup_hook=osh;
+						fim_char_t *rl=fim_readline(FIM_CNS_SLASH_STRING); // !!
+
+						ic_=1;
 						rl_inhibit_completion=1;
 						*prompt_=FIM_SYM_PROMPT_SLASH;
-						rl_hook_func_t *osh=rl_startup_hook;
 						rl_startup_hook=rl::fim_search_rl_startup_hook;
-						fim_char_t *rl=fim_readline(FIM_CNS_SLASH_STRING); // !!
-						rl_startup_hook=osh;
 						// no readline ? no interactive searches !
 						*prompt_=FIM_SYM_PROMPT_NUL;
 						rl_inhibit_completion=tmp;
@@ -1153,6 +1180,7 @@ ok:
 						{
 							args_t args;
 							std::string rls("/");
+
 							rls+=rl;
 							rls+="/";
 							args.push_back(rls);
@@ -1219,17 +1247,17 @@ rlnull:
 		 * NOTE:
 		 * as long as this class is a singleton, we couldn't care less about memory freeing :)
 		 */
+		fim::string sof=getStringVariable(FIM_VID_SCRIPTOUT_FILE);
+
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		if(!marked_files_.empty())
 		{
 			std::cerr << "The following files were marked by the user :\n";
 			std::cout << "\n";
 			for(std::set<fim::string>::iterator i=marked_files_.begin();i!=marked_files_.end();++i)
-			std::cout << *i << "\n";
+				std::cout << *i << "\n";
 		}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
-		
-		fim::string sof=getStringVariable(FIM_VID_SCRIPTOUT_FILE);
 		if(sof!=FIM_CNS_EMPTY_STRING)
 		{
         		if(is_file(sof))
@@ -1239,6 +1267,7 @@ rlnull:
 			else
 			{
 				std::ofstream out(sof.c_str());
+
 				if(!out)
 				{
 					std::cerr << "Warning : The "<<sof<<" file could not be opened for writing!\n";
@@ -1283,6 +1312,7 @@ rlnull:
 		fim_sys_int r;
 		fim_char_t buf[FIM_STREAM_BUFSIZE];	// TODO : buffer too small
 		fim::string cmds;
+
 		if(fd==NULL)
 			return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0)
@@ -1305,6 +1335,7 @@ rlnull:
 		fim_sys_int r;
 		fim_char_t buf[FIM_STREAM_BUFSIZE];
 		fim::string cmds;
+
 		if(fd==NULL)
 			return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0)
@@ -1335,6 +1366,7 @@ rlnull:
 		 * FIXME : eradicate this cancer
 		 * */
 		variables_t::const_iterator vi=variables_.find(varname);
+
 		if(vi!=variables_.end())
 			return vi->second.getType();
 		else
@@ -1344,6 +1376,7 @@ rlnull:
 	bool CommandConsole::isVariable(const fim::string &varname)const
 	{
 		const fim_char_t* s=NULL;
+
 		s = getStringVariable(varname).c_str();
 		return (s && *s);
 	}
@@ -1380,6 +1413,7 @@ rlnull:
 		 */
 		fim::string aliases_list;
 		aliases_t::const_iterator ai;
+
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
 		{	
 			aliases_list+=((*ai).first);
@@ -1394,6 +1428,7 @@ rlnull:
 		 * returns the list of registered commands
 		 */
 		fim::string commands_list;
+
 		for(size_t i=0;i<commands_.size();++i)
 		{
 			if(i)
@@ -1410,6 +1445,7 @@ rlnull:
 		 */
 		fim::string acl,sep=" ";
 		variables_t::const_iterator vi;
+
 		for( vi=variables_.begin();vi!=variables_.end();++vi)
 		{
 			acl+=((*vi).first);
@@ -1451,6 +1487,7 @@ rlnull:
 		fim::string acl;
 //		std::map<fim::string,std::map<fim::string,fim::string> >  autocmds_;
 		autocmds_t::const_iterator ai;
+
 		if(event==FIM_CNS_EMPTY_STRING && pattern==FIM_CNS_EMPTY_STRING)
 		//for each autocommand event registered
 		for( ai=autocmds_.begin();ai!=autocmds_.end();++ai )
@@ -1470,47 +1507,54 @@ rlnull:
 			acl+="\"\n"; 
 		}
 		else
-		if(pattern==FIM_CNS_EMPTY_STRING){
-		autocmds_t::const_iterator ai=autocmds_.find(event);
-		//for each autocommand event registered
-		//for each file pattern registered, display the list..
-		if(ai!=autocmds_.end())
-		for(	autocmds_p_t::const_iterator api=(*ai).second.begin();
-				api!=(*ai).second.end();++api )
-		//.. display the list of autocommands...
-		for(	args_t::const_iterator aui=((*api)).second.begin();
-				aui!=((*api)).second.end();++aui )
+		if(pattern==FIM_CNS_EMPTY_STRING)
 		{
-			acl+=FIM_FLT_AUTOCMD" \""; 
-			acl+=(*ai).first; 
-			acl+="\" \""; 
-			acl+=(*api).first; 
-			acl+="\" \""; 
-			acl+=(*aui); 
-			acl+="\"\n"; 
-		}}
+			autocmds_t::const_iterator ai=autocmds_.find(event);
+			//for each autocommand event registered
+			//for each file pattern registered, display the list..
+			if(ai!=autocmds_.end())
+			for(	autocmds_p_t::const_iterator api=(*ai).second.begin();
+					api!=(*ai).second.end();++api )
+			//.. display the list of autocommands...
+			for(	args_t::const_iterator aui=((*api)).second.begin();
+					aui!=((*api)).second.end();++aui )
+			{
+				acl+=FIM_FLT_AUTOCMD" \""; 
+				acl+=(*ai).first; 
+				acl+="\" \""; 
+				acl+=(*api).first; 
+				acl+="\" \""; 
+				acl+=(*aui); 
+				acl+="\"\n"; 
+			}
+		}
 		else
 		{
-		autocmds_t::const_iterator ai=autocmds_.find(event);
-		//for each autocommand event registered
-		//for each file pattern registered, display the list..
-		if(ai!=autocmds_.end())
-		{
-		autocmds_p_t::const_iterator api=(*ai).second.find(pattern);
-		//.. display the list of autocommands...
-		if(api!=(*ai).second.end())
-		{
-		for(	args_t::const_iterator aui=((*api)).second.begin();
-				aui!=((*api)).second.end();++aui )
-		{
-			acl+=FIM_FLT_AUTOCMD" \""; 
-			acl+=(*ai).first; 
-			acl+="\" \""; 
-			acl+=(*api).first; 
-			acl+="\" \""; 
-			acl+=(*aui); 
-			acl+="\"\n"; 
-		}}}}
+			autocmds_t::const_iterator ai=autocmds_.find(event);
+
+			//for each autocommand event registered
+			//for each file pattern registered, display the list..
+			if(ai!=autocmds_.end())
+			{
+				autocmds_p_t::const_iterator api=(*ai).second.find(pattern);
+
+				//.. display the list of autocommands...
+				if(api!=(*ai).second.end())
+				{
+					for(	args_t::const_iterator aui=((*api)).second.begin();
+					aui!=((*api)).second.end();++aui )
+					{
+						acl+=FIM_FLT_AUTOCMD" \""; 
+						acl+=(*ai).first; 
+						acl+="\" \""; 
+						acl+=(*api).first; 
+						acl+="\" \""; 
+						acl+=(*aui); 
+						acl+="\"\n"; 
+					}
+				}
+			}
+		}
 		
 		if(acl==FIM_CNS_EMPTY_STRING)acl="no autocommands loaded\n";
 		return acl;
@@ -1617,6 +1661,7 @@ ok:
 		 *	mechanism should avoid the majority of them.
 		 */
 		autocmds_loop_frame_t frame(event,fname);
+
 		if(! autocmd_in_stack( frame ))
 		{
 			autocmd_push_stack( frame );
@@ -1680,7 +1725,9 @@ ok:
 		 * set the FIM_VID_DBG_AUTOCMD_TRACE_STACK variable
 		 */
 		size_t indent=0,i;
-		if(autocmds_stack.end()==autocmds_stack.begin()) std::cout << "<>\n";
+
+		if(autocmds_stack.end()==autocmds_stack.begin())
+			std::cout << "<>\n";
 		for(
 			autocmds_stack_t::const_iterator citer=autocmds_stack.begin();
 			citer!=autocmds_stack.end();++citer,++indent )
@@ -1764,6 +1811,7 @@ ok:
 		 */
 #ifdef FIM_WINDOWS
 		bool needed_redisplay=false;
+
 		try
 		{
 			if(window_)
@@ -1790,6 +1838,7 @@ ok:
 		 */
 #ifdef FIM_WINDOWS
 		bool needed_redisplay=false;
+
 		try
 		{
 			if(window_ )
@@ -1835,6 +1884,7 @@ ok:
 		static time_t pt=0;
 		fim_tms_t t,d,err;//t,pt in ms; d in us
 	        struct timeval tv;
+
 		if(cmd==FIM_CNS_EMPTY_STRING)
 		{
 			pt=0;
@@ -2063,6 +2113,7 @@ ok:
 		{
 			fim_char_t hfile[FIM_PATH_MAX];
 			const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
+
 			if(e && strlen(e)<sizeof(hfile)-14)//14==strlen(FIM_CNS_HIST_FILENAME)+2
 			{
 				strcpy(hfile,e);
@@ -2093,6 +2144,7 @@ ok:
 		{
 			fim_char_t hfile[FIM_PATH_MAX];
 			const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
+
 			if(e && strlen(e)<FIM_PATH_MAX-14)//strlen(FIM_CNS_HIST_FILENAME)+2
 			{
 				strcpy(hfile,e);
@@ -2225,6 +2277,7 @@ ok:
 			/* interactive print */
 			static int statusline_cursor=0;
 			int offset=0,coffset=0;
+
 			statusline_cursor=rl_point;	/* rl_point is readline stuff */
 			ilen = fim_strlen(desc);
 			chars-=6+hpl+(*prompt_=='\0'?0:1);	/* displayable, non-service chars  */
@@ -2287,11 +2340,13 @@ ret:
 		setVariable("i:"FIM_VID_FRESH,(fim_int)1);//FIXME: bad practice
 		browser_.fcmd_redisplay(args_t());
 
-		fim::string msg="resized window to ";
-		msg+=fim::string(w);
-	       	msg+=" x ";
-	       	msg+=fim::string(h);
-		cc.set_status_bar(msg.c_str(),NULL);
+		{
+			fim::string msg="resized window to ";
+			msg+=fim::string(w);
+		       	msg+=" x ";
+		       	msg+=fim::string(h);
+			cc.set_status_bar(msg.c_str(),NULL);
+		}
 
 		return FIM_ERR_NO_ERROR;
 	}
@@ -2309,6 +2364,7 @@ err:
 	fim_bool_t CommandConsole::key_syms_update()
 	{
 		sym_keys_t::const_iterator ki;
+
 		for( ki=sym_keys_.begin();ki!=sym_keys_.end();++ki)
 			key_syms_[(((*ki).second))]=((*ki).first);
 		return true;
