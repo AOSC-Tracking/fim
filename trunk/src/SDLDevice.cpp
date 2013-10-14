@@ -72,53 +72,53 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 	fim_coo_t current_w=current_w_;
 	fim_coo_t current_h=current_h_;
 
-		if(os)
+	if(os)
+	{
+		while(*os&&!isdigit(*os))
 		{
-			while(*os&&!isdigit(*os))
-			{
-				bool tv=true;
-				if(isupper(*os))
-					tv=false;
-				switch(tolower(*os)){
-					case 'w': want_windowed=tv; break;
-					case 'm': want_mouse_display=tv; break;
-					case 'r': want_resize=tv; break;
-					default: std::cerr<<"unrecognized specifier character \""<<*os<<"\"\n";goto err;
-				}
-				++os;
+			bool tv=true;
+			if(isupper(*os))
+				tv=false;
+			switch(tolower(*os)){
+				case 'w': want_windowed=tv; break;
+				case 'm': want_mouse_display=tv; break;
+				case 'r': want_resize=tv; break;
+				default: std::cerr<<"unrecognized specifier character \""<<*os<<"\"\n";goto err;
 			}
+			++os;
+		}
 		if(*os)
 		{
-		if(2==sscanf(os,"%d:%d",&current_w,&current_h))
+			if(2==sscanf(os,"%d:%d",&current_w,&current_h))
 
-		{
-		//	std::cout << w << " : "<< h<<"\n";
-			current_w=FIM_MAX(current_w,0);
-			current_h=FIM_MAX(current_h,0);
-			if(!allowed_resolution(current_w,current_h))
-				goto err;
+			{
+			//	std::cout << w << " : "<< h<<"\n";
+				current_w=FIM_MAX(current_w,0);
+				current_h=FIM_MAX(current_h,0);
+				if(!allowed_resolution(current_w,current_h))
+					goto err;
+			}
+			else
+			{
+				current_w=current_h=0;
+				std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
+				// TODO: a better invaling string message needed here
+			}
 		}
-		else
-		{
-			current_w=current_h=0;
-			std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
-			// TODO: a better invaling string message needed here
-		}
-		}
-		}
-		// commit
-		want_windowed_=want_windowed;
-		want_mouse_display_=want_mouse_display;
+	}
+	// commit
+	want_windowed_=want_windowed;
+	want_mouse_display_=want_mouse_display;
 #if FIM_SDL_WANT_RESIZE 
-		want_resize_=want_resize;
+	want_resize_=want_resize;
 #else /* FIM_SDL_WANT_RESIZE */
-		want_resize_=false;
+	want_resize_=false;
 #endif /* FIM_SDL_WANT_RESIZE */
-		current_w_=current_w;
-		current_h_=current_h;
-		return FIM_ERR_NO_ERROR;
+	current_w_=current_w;
+	current_h_=current_h;
+	return FIM_ERR_NO_ERROR;
 err:
-		return FIM_ERR_GENERIC;
+	return FIM_ERR_GENERIC;
 }
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -162,16 +162,23 @@ err:
 
 		fim_coo_t lor,loc;
     		
-		if( oroff <0 ) return -8;
-		if( ocoff <0 ) return -9;
-		if( orows <=0 ) return -10;
-		if( ocols <=0 ) return -11;
-		if( ocskip<0 ) return -12;
+		if( oroff <0 )
+		       	return -8;
+		if( ocoff <0 )
+		       	return -9;
+		if( orows <=0 )
+		       	return -10;
+		if( ocols <=0 )
+		       	return -11;
+		if( ocskip<0 )
+		       	return -12;
 
-		if( oroff>orows ) return -8-10*100;
-		if( ocoff>ocols ) return -9-11*100;
-
-		if( ocskip<ocols ) return -12-11*100;
+		if( oroff>orows )
+		       	return -8-10*100;
+		if( ocoff>ocols )
+		       	return -9-11*100;
+		if( ocskip<ocols )
+		       	return -12-11*100;
 
 		/*
 		 * orows and ocols is the total number of rows and columns in the output window.
@@ -207,6 +214,7 @@ err:
 		 * */
 		//was : void
 		fim_byte_t* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
+
 		if ( !rgb ) return -1;
 	
 		if( iroff <0 ) return -2;
@@ -245,7 +253,6 @@ err:
 		if(icols<ocols) { ocoff+=(ocols-icols-1)/2; ocols-=(ocols-icols-1)/2; }
 		if(irows<orows) { oroff+=(orows-irows-1)/2; orows-=(orows-irows-1)/2; }
 
-
 		fim_coo_t ytimesw;
 
 		if(SDL_MUSTLOCK(screen_))
@@ -272,6 +279,7 @@ err:
 		clear_rect(  0, width()-1, 0, height()-1); 
 
 		if(!mirror && !flip)
+		{
 #if 0
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
@@ -285,7 +293,6 @@ err:
 			setpixel(screen_, oj, ytimesw, (fim_coo_t)srcp[0], (fim_coo_t)srcp[1], (fim_coo_t)srcp[2]);
 		}
 #else
-		{
 			const Uint32 rmask=0x00000000,gmask=0x00000000,bmask=0x00000000,amask=0x00000000;
 			SDL_Surface *src=SDL_CreateRGBSurfaceFrom(rgb,icols,irows,24,icols*3,rmask,gmask,bmask,amask);
 			if(src)
@@ -309,8 +316,8 @@ err:
 				/* FIXME: need some error processing, here */
 				return FIM_ERR_GENERIC;
 			}
-		}
 #endif
+		}
 		else
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
 		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
@@ -385,7 +392,8 @@ err:
 		}
 		{
 			const SDL_VideoInfo*bvip=SDL_GetVideoInfo();
-			if(bvip)bvi_=*bvip;
+			if(bvip)
+				bvi_=*bvip;
 		}
 		fim_perror(NULL);
 		
@@ -396,6 +404,7 @@ err:
 			interval=SDL_DEFAULT_REPEAT_INTERVAL;
 			if(SDL_EnableKeyRepeat(delay,interval)<0)
 			{
+
 			}
 			else
 			{
@@ -543,6 +552,7 @@ err:
 		bool shift_on=0;
 		fim_sys_int ret=0;
 		SDL_Event event=*eventp;
+
 		*c = 0x0;	/* blank */
 
 //		while(SDL_PollEvent(&event))
@@ -574,9 +584,12 @@ err:
 				break;
 				case SDL_KEYDOWN:
 
-				if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL ) ctrl_on=true;
-				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  )  alt_on=true;
-				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )  shift_on=true;
+				if(event.key.keysym.mod == KMOD_RCTRL || event.key.keysym.mod == KMOD_LCTRL )
+					ctrl_on=true;
+				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  ) 
+					alt_on=true;
+				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )
+					shift_on=true;
 
 			//	std::cout << "sym : " << (fim_int)event.key.keysym.sym << "\n" ;
 			//	std::cout << "uni : " << (fim_int)event.key.keysym.unicode<< "\n" ;
@@ -847,12 +860,14 @@ err:
 
 	fim_err_t SDLDevice::status_line(const fim_char_t *msg)
 	{
-		if(SDL_MUSTLOCK(screen_))
-		{
-			if(SDL_LockSurface(screen_) < 0) return FIM_ERR_GENERIC;
-		}
-
+		fim_err_t errval = FIM_ERR_NO_ERROR;
 		fim_coo_t y,ys=3;// FIXME
+
+		if(SDL_MUSTLOCK(screen_) && SDL_LockSurface(screen_) < 0)
+		{
+			 errval = FIM_ERR_GENERIC;
+			 goto done;
+		}
 
 		if(get_chars_per_column()<1)
 			goto done;
@@ -866,7 +881,7 @@ err:
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 		SDL_Flip(screen_);
 done:
-		return FIM_ERR_NO_ERROR;
+		return errval;
 	}
 
 	fim_key_t SDLDevice::catchInteractiveCommand(fim_ts_t seconds)const

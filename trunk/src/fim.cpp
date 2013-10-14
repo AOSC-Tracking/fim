@@ -373,30 +373,41 @@ string fim_dump_man_page_snippets()
 				ms+=slol,ms+="-",ms+=string((fim_char_t)(fim_options[i].val));
 				if(fim_options[i].has_arg==required_argument)
 				{
-					if(fim_options[i].optdesc) ms+=" ",ms+=fim_options[i].optdesc;
+					if(fim_options[i].optdesc)
+					       	ms+=" ",ms+=fim_options[i].optdesc;
 				}
 				ms+=",";
 			}
-	 	  	else ms+=slol,ms+=" -, ";
+	 	  	else
+			       	ms+=slol,ms+=" -, ";
 		}
-		else ms+=".TP\n.B \t";
+		else
+		       	ms+=".TP\n.B \t";
 		ms+=slob;
 		ms+=fim_options[i].name ;
-		switch(fim_options[i].has_arg){
-		case no_argument:
-		break;
-		case required_argument:
-		//std::cout << " <arg>";
-		if(fim_options[i].optdesc) ms+=" ",ms+=fim_options[i].optdesc; else ms+=" <arg>";
-		break;
-		case optional_argument:
-		if(fim_options[i].optdesc) ms+=fim_options[i].optdesc; else ms+="[=arg]";
-		break;
-		default:
-		;
+		switch(fim_options[i].has_arg)
+		{
+			case no_argument:
+			break;
+			case required_argument:
+			//std::cout << " <arg>";
+			if(fim_options[i].optdesc)
+			       	ms+=" ",ms+=fim_options[i].optdesc;
+			else
+			       	ms+=" <arg>";
+			break;
+			case optional_argument:
+			if(fim_options[i].optdesc)
+			       	ms+=fim_options[i].optdesc;
+			else
+			       	ms+="[=arg]";
+			break;
+			default:
+			;
 		};
 		ms+=slom;
-		if(helparg&&*helparg=='d')ms+="\t\t ",ms+=fim_options[i].desc;
+		if(helparg&&*helparg=='d')
+			ms+="\t\t ",ms+=fim_options[i].desc;
 		if(helparg&&*helparg=='m')
 		{
 			if(fim_options[i].mandesc)
@@ -801,6 +812,7 @@ done:
 
 		{
 			int foi;
+
 			for(foi=0;foi<fim_options_count;++foi)
 			{
 				options[foi].name=fim_options[foi].name;
@@ -1313,6 +1325,7 @@ fim_perr_t main(int argc,char *argv[])
 	 * ...someday.
 	 * */
 	FimInstance fiminstance;
+
 	Var::var_help_db_init();
 	return fiminstance.main(argc,argv);
 }

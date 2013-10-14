@@ -77,8 +77,8 @@ namespace fim
 		/*
 		 * free all unused elements from the cache
 		 */
-		
 		rcachels_t rcc = reverseCache_;
+		
 		FIM_LOUD_CACHE_STUFF;
                 for(    rcachels_t::const_iterator rcci=rcc.begin(); rcci!=rcc.end();++rcci )
 			if(usageCounter_[rcci->first->getKey()]==0)erase( rcci->first );
@@ -120,8 +120,8 @@ namespace fim
 
 		these are not the values we want ..
 		*/
-
 		int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+
 		if(mci==-1)return false;
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
@@ -287,10 +287,12 @@ namespace fim
 		 * erases the image from the image cache
 		 * */
 		/*	acca' nun stimm'a'ppazzia'	*/
+		int retval=-1;
+
 		FIM_LOUD_CACHE_STUFF;
 		if(!oi)
 		{
-			return -1;
+			goto ret;
 		}
 
 		if(is_in_cache(oi) )
@@ -307,17 +309,24 @@ namespace fim
 #endif /* FIM_CACHE_DEBUG */
 			delete oi; // NEW !!
 			setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
-			return 0;
+			retval = 0;
 		}
-		return -1;
+ret:
+		return retval;
 	}
 
 	time_t Cache::last_used(cache_key_t key)const
 	{
+		time_t retval=0;
+
 		FIM_LOUD_CACHE_STUFF;
-		if(imageCache_.find(key)==imageCache_.end())return 0;
-		if(lru_.find(imageCache_.find(key)->second )==lru_.end())return 0;
-		return lru_.find(imageCache_.find(key)->second )->second;
+		if(imageCache_.find(key)==imageCache_.end())
+			goto ret;
+		if(lru_.find(imageCache_.find(key)->second )==lru_.end())
+			goto ret;
+		retval = lru_.find(imageCache_.find(key)->second )->second;
+ret:
+		return retval;
 		//return lru_[imageCache_[key]]=time(NULL);
 	}
 
@@ -344,14 +353,15 @@ namespace fim
 		 * */
 		// WARNING : FIXME : DANGER !!
 		FIM_LOUD_CACHE_STUFF;
-		if( !image )return false;
+		if( !image )
+			goto err;
 //		if( is_in_cache(image) && usageCounter_[image->getKey()]==1 )
 		if( is_in_clone_cache(image) )
 		{
 			usageCounter_[image->getKey()]--;
 			erase_clone(image);	// we _always_ immediately delete clones
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-			return true;
+			goto ret;
 		}
 		else
 		if( is_in_cache(image) )
@@ -385,9 +395,12 @@ namespace fim
 #endif
 			}
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-			return true;
+			goto ret;
 		}
+err:
 		return false;
+ret:
+		return true;
 	}
 
 	Image * Cache::useCachedImage(cache_key_t key)
@@ -406,7 +419,7 @@ namespace fim
 		 *
 		 * so, if there is no such image, NULL is returned
 		 * */
-		Image * image=NULL;
+		Image * image = NULL;
 		FIM_LOUD_CACHE_STUFF;
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "  useCachedImage(\""<<key.first<<","<<key.second<<"\")\n";
@@ -417,13 +430,14 @@ namespace fim
 			 * no Image cached at all for this filename
 			 * */
 			image = loadNewImage(key);
-			if(!image)return NULL; // bad luck!
+			if(!image)
+				goto ret; // bad luck!
 			usageCounter_[key]=1;
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 					if(image->n_pages()>1)// FIXME: HORRIBLE HACK
 						//image->load(key.first.c_str(),NULL,getGlobalIntVariable(FIM_VID_PAGE));
 						image->goto_page(getGlobalIntVariable(FIM_VID_PAGE));
-			return image;
+			goto ret;
 //			usageCounter_[key]=0;
 		}
 		else
@@ -439,7 +453,7 @@ namespace fim
 				cout << "critical internal cache error!\n";
 #endif /* FIM_CACHE_DEBUG */
 				setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-				return NULL;
+				goto ret;
 			}
 			if( used_image( key ) )
 			{
@@ -465,7 +479,8 @@ namespace fim
 					image = NULL; /* we make sure no taint remains */
 //					if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 				}
-				if(!image)return NULL; //means that cloning failed.
+				if(!image)
+					goto ret; //means that cloning failed.
 
 				clone_pool_.insert(image); // we have a clone
 				cloneUsageCounter_[image]=1;
@@ -474,17 +489,21 @@ namespace fim
 			// if loading and eventual cloning succeeded, we count the image as used of course
 			usageCounter_[key]++;
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-			return image;	//so, it could be a clone..
+			goto ret;	//so, it could be a clone..
 		}
+ret:
+		return image;
 	}
 
 	Image * Cache::setAndCacheStdinCachedImage(Image * image)
 	{
 		/* FIXME : document me
 		 * */
-		FIM_LOUD_CACHE_STUFF;
-		if(!image) return NULL;
 		cache_key_t key(FIM_STDIN_IMAGE_NAME,FIM_E_STDIN);
+		FIM_LOUD_CACHE_STUFF;
+
+		if(!image)
+			goto ret;
 		
 		try
 		{
@@ -507,8 +526,10 @@ namespace fim
 			image = NULL; /* we make sure no taint remains */
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
-		if(!image)return NULL; //means that cloning failed.
+		if(!image)
+			goto ret; //means that cloning failed.
 		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
+ret:
 		return image;	//so, it could be a clone..
 	}
 

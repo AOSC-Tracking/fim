@@ -132,8 +132,6 @@ static void print_finfo(struct fb_fix_screeninfo *finfo)
 typedef unsigned long vector[DITHER_LEVEL];
 typedef vector  matrix[DITHER_LEVEL];
 
-
-
 //#if DITHER_LEVEL == 8 ||  DITHER_LEVEL == 4
 //static int matrix   DM ;
 //#endif
@@ -273,6 +271,7 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
 	fim_err_t FramebufferDevice::framebuffer_init()
 	{
 		int rc=0;
+
 		//initialization of the framebuffer text
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		/*
@@ -418,6 +417,7 @@ void FramebufferDevice::svga_display_image_new(
     int cxo=bw-dwidth-xo;
     //int cyo=bh-yo;
     int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;
+
     if (!visible_)/*COMMENT THIS IF svga_display_image IS NOT IN A CYCLE*/
 	return;
     /*fb_clear_screen();//EXPERIMENTAL
@@ -1862,24 +1862,30 @@ fim_err_t FramebufferDevice::display(
 	fim_coo_t ocskip,// output columns to skip for each line
 	fim_flags_t flags)
 {
-	if(by<0)return FIM_ERR_GENERIC;
-	if(bx<0)return FIM_ERR_GENERIC;
-	if(bw<0)return FIM_ERR_GENERIC;
-	if(bh<0)return FIM_ERR_GENERIC;
+	if(by<0)
+		goto err;
+	if(bx<0)
+		goto err;
+	if(bw<0)
+		goto err;
+	if(bh<0)
+		goto err;
 
 	svga_display_image_new(
-	(struct ida_image*)ida_image_img,
-	yoff,
-	xoff,
-	irows,icols,// rows and columns in the input image
-	icskip,	// input columns to skip for each line
-	by,
-	bx,
-	bh,
-	bw,
-	ocskip,// output columns to skip for each line
-	flags);
+		(struct ida_image*)ida_image_img,
+		yoff,
+		xoff,
+		irows,icols,// rows and columns in the input image
+		icskip,	// input columns to skip for each line
+		by,
+		bx,
+		bh,
+		bw,
+		ocskip,// output columns to skip for each line
+		flags);
 	return FIM_ERR_NO_ERROR;
+err:
+	return FIM_ERR_GENERIC;
 }
 
 void FramebufferDevice::finalize (void)
