@@ -684,10 +684,12 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
 #endif /* PAGE_MASK */
     fb_mem_ = (fim_byte_t*) mmap(NULL,fb_fix_.smem_len+fb_mem_offset_,
 		  PROT_READ|PROT_WRITE,MAP_SHARED,fb_,0);
-    /*
-     * FIXME : this may not 64 bits safe
-     * */
-    if (-1L == (long)fb_mem_) {
+#ifdef MAP_FAILED
+    if (fb_mem_ == MAP_FAILED) 
+#else
+    if (-1L == (long)fb_mem_)  /* TODO: remove this */
+#endif
+    {
 	fim_perror("mmap failed");
 	goto err;
     }
@@ -779,13 +781,17 @@ void FramebufferDevice::fb_setvt(int vtno)
     close(1);
     close(2);
     setsid();
-    if(-1==open(vtname,O_RDWR))
-    {
-	fim_perror(NULL);
-    }
-    int ndd;/* FIXME : on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
-    ndd=dup(0);
-    ndd=dup(0);
+
+    	if( -1 == open(vtname,O_RDWR) )
+	{
+		fim_perror(NULL);
+	}
+	{
+		/* on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
+    		int ndd;
+    		ndd = dup(0);
+		ndd = dup(0);
+	}
 
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
@@ -812,6 +818,7 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
 	 label[FIM_FBI_FB_MODES_LABEL_BUFSIZE],
 	 value[FIM_FBI_FB_MODES_VALUE_BUFSIZE];
     int  geometry=0, timings=0;
+    int retval = 0;
  
     /* load current values */
     if (-1 == ioctl(fb_,FBIOGET_VSCREENINFO,&fb_var_)) {
@@ -844,11 +851,11 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
 
     if (NULL == name)
     {
-	return -1;
+	goto err;
     }
     if (NULL == (fp = fopen("/etc/fb.modes","r")))
     {
-	return -1;
+	goto err;
     }
     while (NULL != fgets(line,FIM_FBI_FB_MODES_LINE_BUFSIZE-1,fp)) {
 	if (1 == sscanf(line, "mode \"%31[^\"]\"",label) &&
@@ -892,7 +899,7 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
 	    }
 	    /* ok ? */
 	    if (!geometry || !timings)
-		return -1;
+	    	goto err;
 	    /* set */
 	    fb_var_.xoffset = 0;
 	    fb_var_.yoffset = 0;
@@ -921,10 +928,13 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
 		fim_perror("ioctl FBIOGET_VSCREENINFO");
 		exit(1);
 	    }
-	    return 0;
+	    goto ret;
 	}
     }
+err:
     return -1;
+ret:
+    return 0;
 }
 
 int FramebufferDevice::fb_activate_current(int tty_)
@@ -937,23 +947,25 @@ int FramebufferDevice::fb_activate_current(int tty_)
 #endif /* FIM_BOZ_PATCH */
     if (-1 == ioctl(tty_,VT_GETSTATE, &vts)) {
 	fim_perror("ioctl VT_GETSTATE");
-	return -1;
+	goto err;
     }
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
 #endif /* FIM_BOZ_PATCH */
     if (-1 == ioctl(tty_,VT_ACTIVATE, vts.v_active)) {
 	fim_perror("ioctl VT_ACTIVATE");
-	return -1;
+	goto err;
     }
 #ifdef FIM_BOZ_PATCH
     if(!with_boz_patch_)
 #endif /* FIM_BOZ_PATCH */
     if (-1 == ioctl(tty_,VT_WAITACTIVE, vts.v_active)) {
 	fim_perror("ioctl VT_WAITACTIVE");
-	return -1;
+	goto err;
     }
     return 0;
+err:
+	return -1;
 }
 
 fim_err_t FramebufferDevice::status_line(const fim_char_t *msg)
@@ -1004,7 +1016,7 @@ void FramebufferDevice::fb_text_box(int x, int y, fim_char_t *lines[], unsigned 
     unsigned int i,len,max, x1, x2, y1, y2;
 
     if (!visible_)
-	return;
+	goto err;
 
     max = 0;
     for (i = 0; i < count; i++) {
@@ -1026,6 +1038,8 @@ void FramebufferDevice::fb_text_box(int x, int y, fim_char_t *lines[], unsigned 
 	fs_puts(f_,x,y,(const fim_char_t*)lines[i]);
 	y += f_->height;
     }
+err:
+	return;
 }
 
 void FramebufferDevice::fb_line(int x1, int x2, int y1,int y2)
@@ -1078,7 +1092,7 @@ void FramebufferDevice::fb_clear_rect(int x1, int x2, int y1,int y2)
     int y,h;
 
     if (!visible_)
-	return;
+	goto ret;
 
     if (x2 < x1)
 	h = x2, x2 = x1, x1 = h;
@@ -1092,6 +1106,8 @@ void FramebufferDevice::fb_clear_rect(int x1, int x2, int y1,int y2)
 	fb_memset(ptr, 0, (x2 - x1 + 1) * fs_bpp_ * 4 /* FIXME : 4 */);
 	ptr += fb_fix_.line_length;
     }
+ret:
+    return;
 }
 
 void FramebufferDevice::clear_screen(void)
@@ -1443,7 +1459,8 @@ void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int
     register const int inc=mirror?-1:1;
     dst=mirror?dst+width-1:dst;
     /*	mirror patch by dez	*/
-    if(FIM_UNLIKELY(width<1))goto nodither; //who knows
+    if(FIM_UNLIKELY(width<1))
+	    goto nodither; //who knows
 
 #ifndef FIM_IS_SLOWER_THAN_FBI
     switch(width%8){
@@ -1898,14 +1915,7 @@ void FramebufferDevice::finalize (void)
 FramebufferDevice::~FramebufferDevice()
 {
 	/* added in fim : fbi did not have this */
-	if(f_)
-	{
-		if(f_->eindex) fim_free(f_->eindex);
-		if(f_->gindex) fim_free(f_->gindex);
-		if(f_->glyphs) fim_free(f_->glyphs);
-		if(f_->extents) fim_free(f_->extents);
-		fim_free(f_);
-	}
+	fim_free_fs_font(f_);
 }
 
 #endif  //ifdef FIM_WITH_NO_FRAMEBUFFER, else

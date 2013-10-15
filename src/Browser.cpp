@@ -754,30 +754,35 @@ nop:
 		DIR *dir=NULL;
 		struct dirent *de=NULL;
 		fim::string f;
+		bool retval = false;
 
 		/*	we want a dir .. */
 #ifdef HAVE_LIBGEN_H
 		if(!is_dir(nf.c_str()))
 			nf=fim_dirname(nf);
 #else /* HAVE_LIBGEN_H */
-		if( !is_dir( nf ))return false;
+		if( !is_dir( nf ))
+			goto ret;
 #endif /* HAVE_LIBGEN_H */
 
 		if ( ! ( dir = opendir(nf.c_str() ) ))
-			return false;
+			goto ret;
 
 		f+=nf;
 		f+=FIM_CNS_DIRSEP_STRING;
 		//are we sure -1 is not paranoid ?
 		while( ( de = readdir(dir) ) != NULL )
 		{
-			if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] ) continue;
-			if( de->d_name[0] == '.' && !de->d_name[1] ) continue;
+			if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] )
+				continue;
+			if( de->d_name[0] == '.' && !de->d_name[1] )
+				continue;
 #if 1
 			/*
 			 * We follow the convention of ignoring hidden files.
 			 * */
-			if( de->d_name[0] == '.' ) continue;
+			if( de->d_name[0] == '.' )
+				continue;
 #endif
 			
 			/*
@@ -793,13 +798,16 @@ nop:
 			{
 				fim::string re=getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
 				fim::string fn=f+fim::string(de->d_name);
+
 				if(re==FIM_CNS_EMPTY_STRING)
 					re=FIM_CNS_PUSHDIR_RE;
 				if(fn.re_match(re.c_str()))
 					push(f+fim::string(de->d_name));
 			}
 		}
-		return (closedir(dir)==0);
+ret:
+		retval = (closedir(dir)==0);
+		return retval;
 	}
 #endif /* FIM_READ_DIRS */
 
@@ -809,6 +817,8 @@ nop:
 		 * FIX ME:
 		 * are we sure we want no repetition!????
 		 * */
+		bool retval = false;
+
 		if(nf!=FIM_STDIN_IMAGE_NAME)
 		{
 #ifdef FIM_CHECK_FILE_EXISTENCE
@@ -817,8 +827,10 @@ nop:
 			 * it is not existent or it is a directory...
 			 */
 			struct stat stat_s;
+
 			/*	if the file doesn't exist, return */
-			if(-1==stat(nf.c_str(),&stat_s))return false;
+			if(-1==stat(nf.c_str(),&stat_s))
+				goto ret;
 			/*	if it is a character device , return */
 			//if(  S_ISCHR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 			/*	if it is a block device , return */
@@ -828,7 +840,10 @@ nop:
 #ifdef FIM_READ_DIRS
 			if(getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS)==1)
 				if(  S_ISDIR(stat_s.st_mode))
-					return push_dir(nf);
+				{
+					retval = push_dir(nf);
+					goto ret;
+				}
 #endif /* FIM_READ_DIRS */
 			/*	we want a regular file .. */
 			if(
@@ -844,7 +859,7 @@ nop:
 				 * */
 				nf+=" is not a regular file!";
 				commandConsole_.set_status_bar(nf.c_str(), "*");
-				return false;
+				goto ret;
 			}
 #endif /* FIM_CHECK_FILE_EXISTENCE */
 		}
@@ -853,13 +868,14 @@ nop:
 		{
 			//there could be an option to have duplicates...
 			//std::cout << "no duplicates allowed..\n";
-			return false;
+			goto ret;
 		}
 #endif /* FIM_CHECK_DUPLICATES */
 		flist_.push_back(nf);
 		//std::cout << "pushing " << nf <<"\n";
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
-		return false;
+ret:
+		return retval;
 	}
 	
 	int Browser::n_files()const

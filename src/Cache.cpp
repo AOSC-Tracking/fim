@@ -40,12 +40,6 @@ namespace fim
 
 	int Cache::cached_elements()const
 	{
-		//int count=0;
-		//cachels_t::const_iterator ci;
-
-		// FIXME : :)
-		//for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)++count;
-		//return count;
 		FIM_LOUD_CACHE_STUFF;
 		return imageCache_.size();
 	}
@@ -58,10 +52,12 @@ namespace fim
 		time_t m_time;
 		m_time = time(NULL);
 		Image*  l_img=NULL;
+		cachels_t::const_iterator ci;
 		FIM_LOUD_CACHE_STUFF;
 
-		if ( cached_elements() < 1 ) return NULL;
-		cachels_t::const_iterator ci;
+		if ( cached_elements() < 1 )
+			goto ret;
+
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
 		if( ci->second /* <- so we can call this function in some intermediate states .. */
 			 && last_used(ci->first) < m_time  &&  (  (! unused) || (used_image(ci->first)<=0)  ) )
@@ -69,6 +65,7 @@ namespace fim
 			l_img  = ci->second;
 			m_time = last_used(ci->first);
 		}
+ret:
 		return l_img;
 	}
 
@@ -92,14 +89,16 @@ namespace fim
 		 * (yes, it is a sort of garbage collector, with its pros and cons)
 		 */
 		FIM_LOUD_CACHE_STUFF;
-		if ( cached_elements() < 1 ) return 0;
+		if ( cached_elements() < 1 )
+			return 0;
 		return erase( get_lru()  );
 	}
 
 	int Cache::erase_clone(fim::Image* oi)
 	{
 		FIM_LOUD_CACHE_STUFF;
-		if(!oi || !is_in_clone_cache(oi))return -1;
+		if(!oi || !is_in_clone_cache(oi))
+			return -1;
 #ifdef FIM_CACHE_DEBUG
 		cout << "deleting " << oi->getName() << "\n";
 #endif /* FIM_CACHE_DEBUG */
@@ -122,7 +121,8 @@ namespace fim
 		*/
 		int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
 
-		if(mci==-1)return false;
+		if(mci==-1)
+			return false;
 		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
 	}
 
@@ -159,12 +159,11 @@ namespace fim
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		FIM_LOUD_CACHE_STUFF;
-		if(!oi)return -1;
-		//return reverseCache_[oi]!=cache_key_t("",FIM_E_FILE);// FIXME
+		if(!oi)
+			return -1;
 		return ( reverseCache_.find(oi)!=reverseCache_.end() )	
 			&&
 			( (*(reverseCache_.find(oi))).second.first.c_str()== oi->getKey().first );
-			
 	}
 
 #if 0
@@ -204,24 +203,29 @@ namespace fim
 
 	int Cache::prefetch(cache_key_t key)
 	{
+		int retval=0;
 		FIM_LOUD_CACHE_STUFF;
 //		if(need_free())
 //			free_some_lru();
 		if(key.first == FIM_STDIN_IMAGE_NAME)
-			return 0;// just a fix in the case the browser is still lame
+			goto ret;// just a fix in the case the browser is still lame
 		if(is_in_cache(key))
-			return 0;
+			goto ret;
 		if(!loadNewImage(key))
-			return -1;
+		{
+			retval = -1;
+			goto ret;
+		}
 		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-		return 0;
-//		return getCachedImage(key)?0:-1;
+ret:
+		return retval;
 	}
 
 	Image * Cache::loadNewImage(cache_key_t key)
 	{
 		Image *ni = NULL;
+
 		FIM_LOUD_CACHE_STUFF;
 		/*	load attempt as alternative approach	*/
 		try
@@ -231,7 +235,8 @@ namespace fim
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
 #endif /* FIM_CACHE_DEBUG */
-			if( cacheNewImage( ni ) ) return ni;
+			if( cacheNewImage( ni ) )
+				goto ret;
 		}
 		}
 		catch(FimException e)
@@ -239,7 +244,8 @@ namespace fim
 			ni = NULL; /* not a big problem */
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
-		return NULL;
+ret:
+		return ni;
 	}
 	
 	Image * Cache::getCachedImage(cache_key_t key)
@@ -258,9 +264,8 @@ namespace fim
 		if( ( ni = this->imageCache_[key]) )
 		{
 			this->lru_touch(key);
-			return ni;
 		}
-		return ni;//could be NULL
+		return ni;
 	}
 
 	bool Cache::cacheNewImage( fim::Image* ni )
@@ -307,7 +312,7 @@ namespace fim
 			std::cout << "will erase  "<< oi << "\n";
 			cout << "deleting " << oi->getName() << "\n";
 #endif /* FIM_CACHE_DEBUG */
-			delete oi; // NEW !!
+			delete oi;
 			setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 			retval = 0;
 		}
@@ -327,7 +332,6 @@ ret:
 		retval = lru_.find(imageCache_.find(key)->second )->second;
 ret:
 		return retval;
-		//return lru_[imageCache_[key]]=time(NULL);
 	}
 
 	int Cache::lru_touch(cache_key_t key)
@@ -337,9 +341,6 @@ ret:
 		 *
 		 * NOTE : the usage count is not affected, 
 		 * */
-		//if(!fname) return -1;
-		//if(!imageCache_[key])return -1;
-		//if(fim::string(fname)==FIM_CNS_EMPTY_STRING)return -1;
 		FIM_LOUD_CACHE_STUFF;
 		lru_[imageCache_[key]]=time(NULL);
 		return 0;
@@ -420,6 +421,7 @@ ret:
 		 * so, if there is no such image, NULL is returned
 		 * */
 		Image * image = NULL;
+
 		FIM_LOUD_CACHE_STUFF;
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "  useCachedImage(\""<<key.first<<","<<key.second<<"\")\n";
@@ -574,6 +576,7 @@ ret:
 	Cache::~Cache()
 	{
 		cachels_t::const_iterator ci;
+
 		FIM_LOUD_CACHE_STUFF;
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
 			if(ci->second)delete ci->second;
