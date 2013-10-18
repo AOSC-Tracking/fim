@@ -87,6 +87,7 @@ size_t fim_fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
 int fim_rewind(FILE *stream);
 int fim_fseek(FILE *stream, long offset, int whence);
 int fim_fgetc(FILE *stream);
+int fim_snprintf_XB(char *str, size_t size, size_t q);
 
 /* exceptions */
 typedef int FimException;
@@ -96,7 +97,5 @@ typedef int FimException;
 #define FIM_E_TRAGIC -1	/* no hope */
 #define FIM_E_NO_MEM 4	/* also a return code */
 /* ... */
-
-
 
 #endif /* FIM_COMMON_H */

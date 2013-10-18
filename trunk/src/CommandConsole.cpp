@@ -144,7 +144,6 @@ namespace fim
 		return bindings_expanded;
 	}
 
-
 	fim::string CommandConsole::unbind(const fim::string& kfstr)
 	{
 		/*
@@ -795,7 +794,6 @@ ret:
 			// ignoring yyparse's errno: it may originate from any command!
 			//goto ret;
 		}
-
 
 #ifdef FIM_USE_READLINE
 		if(add_history_)

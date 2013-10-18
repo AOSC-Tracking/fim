@@ -290,6 +290,7 @@ AC_CHECK_HEADERS([climits limits.h], [break], AC_MSG_ERROR([[Cannot find limits.
 
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([int *])
+AC_CHECK_SIZEOF([size_t])
 AC_C_BIGENDIAN([fim_big_endian=yes],[fim_big_endian=no],[fim_big_endian=hmmm])
 
 if test "x$fim_big_endian" = "xyes" ; then
