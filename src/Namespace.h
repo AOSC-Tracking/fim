@@ -63,6 +63,7 @@ namespace fim
 		fim::string getGlobalStringVariable(const fim::string &varname)const;
 		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 		fim::string get_variables_list()const;
+		virtual size_t byte_size(void)const = 0;
 
 		Namespace(const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char) {}
 		virtual ~Namespace(){}

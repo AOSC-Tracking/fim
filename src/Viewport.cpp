@@ -722,5 +722,13 @@ nop:
 err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
+
+	size_t Viewport::byte_size(void)const
+	{
+		size_t bs = 0;
+		bs += sizeof(*this);
+		return bs;
+	}
+
 }
 

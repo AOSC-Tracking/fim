@@ -100,6 +100,7 @@ class Cache
 
 	fim::string getReport();
 	~Cache();
+	virtual size_t byte_size(void)const;
 };
 }
 

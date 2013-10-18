@@ -592,11 +592,7 @@ fim::string Image::getInfo()
 		*pagesinfobuffer='\0';
 		
 /* #if FIM_WANT_DISPLAY_MEMSIZE */
-	ms_=0;
-	if(fimg_)
-		ms_+=fimg_->i.height*fimg_->i.width*3;
-	if(fimg_!=img_)
-		ms_+= img_->i.height* img_->i.width*3;
+	ms_ = byte_size();
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
 
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
@@ -629,9 +625,11 @@ fim::string Image::getInfo()
 					snprintf(clb+strlen(clb), sizeof(clb), "%d",this->height());
 				break;
 				case('i'):
+					/* browser property. TODO: move outta here */
 					snprintf(clb+strlen(clb), sizeof(clb), "%d",n?n:1);
 				break;
 				case('l'):
+					/* browser property. TODO: move outta here */
 					snprintf(clb+strlen(clb), sizeof(clb), "%d",(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
 				break;
 				case('L'):
@@ -645,6 +643,14 @@ fim::string Image::getInfo()
 				break;
 				case('M'):
 					snprintf_XB(clb+strlen(clb), sizeof(clb),ms_);
+				break;
+				case('T'):
+					/* console property. TODO: move outta here */
+					snprintf_XB(clb+strlen(clb), sizeof(clb),cc.byte_size());
+				break;
+				case('C'):
+					/* cache property. TODO: move outta here */
+					snprintf_XB(clb+strlen(clb), sizeof(clb),cc.browser_.cache_.byte_size());
 				break;
 				case('%'):
 					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
@@ -921,5 +927,17 @@ labeldone:
 	}
 
 	int Image::n_pages()const{return (fimg_?fimg_->i.npages:0);}
+
+	size_t Image::byte_size(void)const
+	{
+		size_t ms = 0;
+
+		if(fimg_)
+			ms += fimg_->i.height*fimg_->i.width*3;
+		if(fimg_!=img_ && img_)
+			ms += img_->i.height* img_->i.width*3;
+		return ms;
+	}
 }
+
 

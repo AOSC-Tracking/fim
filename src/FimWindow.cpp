@@ -1150,6 +1150,13 @@ namespace fim
 			commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// FIXME
 		return FIM_ERR_NO_ERROR;
 	}
+
+	size_t FimWindow::byte_size(void)const
+	{
+		size_t bs = 0;
+		bs += sizeof(*this);
+		return bs;
+	}
 }
 #if 0
 /*
