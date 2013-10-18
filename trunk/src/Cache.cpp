@@ -85,7 +85,7 @@ ret:
 	int Cache::free_some_lru()
 	{
 		/*
-		 * this triggering deletion (and memory freeying) of cached elements
+		 * this triggering deletion (and memory freeing) of cached elements
 		 * (yes, it is a sort of garbage collector, with its pros and cons)
 		 */
 		FIM_LOUD_CACHE_STUFF;
@@ -580,6 +580,20 @@ ret:
 		FIM_LOUD_CACHE_STUFF;
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
 			if(ci->second)delete ci->second;
+	}
+
+	size_t Cache::byte_size(void)const
+	{
+		size_t bs = 0;
+		cachels_t::const_iterator ci;
+
+		FIM_LOUD_CACHE_STUFF;
+		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
+			if(ci->second)
+				bs += ci->second->byte_size();
+		bs += sizeof(*this);
+		/* TODO: incomplete ... */
+		return bs;
 	}
 }
 

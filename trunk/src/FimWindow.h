@@ -260,6 +260,7 @@ class FimWindow
 	fim_coo_t xorigin()const;
 	fim_coo_t yorigin()const;
 	~FimWindow();
+	virtual size_t byte_size(void)const;
 };
 
 }

@@ -456,5 +456,12 @@ rerr:
 			scroll_=scroll_<rows_?++scroll_:scroll_;
 			return FIM_ERR_NO_ERROR;
 		}
+
+		size_t MiniConsole::byte_size(void)const
+		{
+			size_t bs = 0;
+			bs += bsize_ + lsize_;
+			return bs;
+		}
 }
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

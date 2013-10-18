@@ -148,6 +148,7 @@ class Browser
 	int load_error_handle(fim::string c);
 	public:
 	int c_page()const;
+	virtual size_t byte_size(void)const;
 };
 }
 

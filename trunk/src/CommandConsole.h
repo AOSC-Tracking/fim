@@ -377,6 +377,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	virtual void quickbench_finalize(fim_int qbi);
 	virtual void quickbench(fim_int qbi);
 #endif /* FIM_WANT_BENCHMARKS */
+	virtual size_t byte_size(void)const;
 };
 }
 

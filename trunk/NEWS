@@ -1,6 +1,9 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
+                Version 0.5-trunk
+ * "%T" specifier to get (and display) total program used memory
+
                 Version 0.4
 
  * changed --random and introduced --random-no-seed option

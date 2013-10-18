@@ -72,6 +72,7 @@ namespace fim
 		fim_err_t clear();
 		fim_err_t scroll_down();
 		fim_err_t scroll_up();
+		virtual size_t byte_size(void)const;
 
 		private:
 		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignment */}

@@ -1586,5 +1586,14 @@ err:
 	       	else
 		       	return 0;
 	}
+
+	size_t Browser::byte_size(void)const
+	{
+		size_t bs = 0;
+		bs += cache_.byte_size();;
+		bs += sizeof(*this);
+		/* TODO: complete this .. */
+		return bs;
+	}
 }
 

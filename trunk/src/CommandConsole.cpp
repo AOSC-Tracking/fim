@@ -2369,5 +2369,13 @@ err:
 			key_syms_[(((*ki).second))]=((*ki).first);
 		return true;
 	}
+
+	size_t CommandConsole::byte_size(void)const
+	{
+		size_t bs = 0;
+		bs += browser_.byte_size();
+		/* FIXME: unfinished */
+		return bs;
+	}
 }
 

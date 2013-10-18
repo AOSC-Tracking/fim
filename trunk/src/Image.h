@@ -107,6 +107,8 @@ class Image
 
         bool tiny()const;
 	public:
+	virtual size_t byte_size(void)const;
+
 	bool can_reload()const{return !no_file_;}
 	bool update();
 

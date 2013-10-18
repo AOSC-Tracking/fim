@@ -132,6 +132,7 @@ class Viewport
 	void recenter_horizontally();
 	void recenter_vertically();
 	void recenter();
+	virtual size_t byte_size(void)const;
 };
 }
 #endif /* FIM_VIEWPORT_H */
