@@ -56,7 +56,6 @@ class Image
 
 	friend class Viewport;		/* don't panic, we are wise people ;) */
 
-
 	public:
 
 	Image(const fim_char_t *fname, FILE *fd=NULL);
@@ -103,7 +102,6 @@ class Image
 
         void free();
 	void reset();
-
 
         bool tiny()const;
 	public:

@@ -99,7 +99,6 @@ size_t fim_strlen(const fim_char_t *str)
 	return strlen(str);
 }
 
-
 void trhex(fim_char_t *str)
 {
 	/*	
@@ -114,6 +113,7 @@ void trhex(fim_char_t *str)
 	const fim_char_t *fp;//fast pointer
 	fim_char_t *sp;//slow pointer
 	fim_char_t hb[3];
+
 	if(!str)
 		goto ret;
 
@@ -154,19 +154,23 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 	 *	this function could be optimized.
 	 *	20090520 hex translation in
 	 */
-	if(!str || !f || !t || strlen(f)-strlen(t))
-		return;
-	int tl=strlen(f);//table length
-	fim_char_t*_p=str;
+	int tl;
+	fim_char_t*_p=NULL;
 	const fim_char_t *fp;
 	const fim_char_t *tp;
+
+	if(!str || !f || !t || strlen(f)-strlen(t))
+		goto ret;
+
+	tl = strlen(f);//table length
+	_p=str;
+
 	while(*_p && _p[1])//redundant ?
 	{
 		fp=f;
 		tp=t;
 
 #if 1
-		// NEW
 		if(
 			    _p[0] =='\\'
 			 && _p[1] && _p[1]=='x'
@@ -209,7 +213,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 //				if(*_p)++_p;//we want a single pass // ! BUG
 				fp=f+tl;// in this way  *(fp) == '\0' (single translation pass) as soon as we continue
 				if(!*_p)
-					return;
+					goto ret;
 				--_p;//note that the outermost loop will increment this anyway
 				continue;//we jump straight to while(NUL)
 			}
@@ -217,6 +221,8 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 		}
 		++_p;
 	} 
+ret:
+	return;
 }
 
 	fim_byte_t* slurp_binary_FD(FILE* fd, size_t  *rs)
@@ -229,7 +235,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
 			buf=(fim_byte_t*)fim_calloc(inc,1);
 			if(!buf) 
-				return buf;
+				goto ret;
 			while((nrb=fim_fread(buf+rb,1,inc,fd))>0)
 			{
 				fim_byte_t *tb;
@@ -245,6 +251,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			{
 				*rs=rb;
 			}
+ret:
 			return buf;
 	}
 
@@ -262,7 +269,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
 			buf=(fim_char_t*)fim_calloc(inc,1);
 			if(!buf)
-			       	return buf;
+			       	goto ret;
 			while((nrb=read(fd,buf+rb,inc))>0)
 			{
 				fim_char_t *tb;
@@ -276,6 +283,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			}
 			if(rs)
 				*rs=rb;
+ret:
 			return buf;
 	}
 
@@ -442,10 +450,11 @@ static int pick_word(const fim_char_t *f, unsigned int *w)
 	*/
 	int fd = open(f,O_RDONLY);
 	if(fd==-1)
-	       	return -1;
+	       	goto ret;
 	if(read(fd,w,sizeof(int))==sizeof(int))
-		return 0;
-	return -1;
+		fd=0;
+ret:
+	return fd;
 }
 
 /*
@@ -458,12 +467,15 @@ int fim_rand()
 	 * Note that we use /dev/urandom because it will never block on reading.
 	 * Reading from     /dev/random could instead block.
 	 * */
-	unsigned int w;
+	unsigned int w,r;
 	if(pick_word(FIM_LINUX_RAND_FILE,&w)==0)
-	       	return (w%RAND_MAX);// TODO: are we sure that RAND_MAX corresponds to FIM_LINUX_RAND_FILE ?
-	
-	srand(clock());
-	return rand();
+	       	r = (w%RAND_MAX);// TODO: are we sure that RAND_MAX corresponds to FIM_LINUX_RAND_FILE ?
+	else
+	{
+		srand(clock());
+		r = rand();
+	}
+	return r;
 }
 
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase, int ignorenewlines)
@@ -475,21 +487,25 @@ int fim_rand()
 		regex_t regex;		//should be static!!!
 		const int nmatch=1;	// we are satisfied with the first match, aren't we ?
 		regmatch_t pmatch[nmatch];
+		bool match=true;
 
 		/*
 		 * we allow for the default match, in case of null regexp
 		 */
 		if(!r || !strlen(r))
-			return true;
+			goto ret;
 
 		/* fixup code for a mysterious bug
 		 */
 		if(*r=='*')
-			return false;
+		{
+			match = false;
+			goto ret;
+		}
 
-		fim::string aux;
 		if(ignorenewlines)
 		{
+			fim::string aux;
 			aux=s;
 		}
 
@@ -514,15 +530,16 @@ int fim_rand()
 				cout << s[0+m];
 			cout << "\"\n";*/
 			regfree(&regex);
-			return true;
+			goto ret;
 		}
 		else
 		{
 			/*	no match	*/
 		};
 		regfree(&regex);
-		return false;
-		//return true;
+		match = false;
+ret:
+		return match;
 	}
 
 int strchr_count(const fim_char_t*s, int c)
@@ -890,5 +907,30 @@ int fim_fgetc(FILE *stream)
 #else /* FIM_WANT_ZLIB */
 	return fgetc(stream);
 #endif /* FIM_WANT_ZLIB */
+}
+
+int fim_snprintf_XB(char *str, size_t size, size_t q)
+{
+	/* result fits in 5 bytes */
+	char u='B',b=' ';
+	size_t d=1;
+	int src;
+	if(q/d>1024)
+		d*=FIM_CNS_K,u='K',b='B';
+	if(q/d>1024)
+		d*=FIM_CNS_K,u='M';
+	if(q/d>1024)
+		d*=FIM_CNS_K,u='G';
+#if (SIZEOF_SIZE_T > 4)
+	if(q/d>1024)
+		d*=FIM_CNS_K,u='T';
+	if(q/d>1024)
+		d*=FIM_CNS_K,u='P';
+#endif
+	if(q/d<10)
+		src = snprintf(str, size, "%1.1f%c%c",((float)q)/((float)d),u,b);
+	else
+		src = snprintf(str, size, "%zd%c%c",q/d,u,b);
+	return src;
 }
 

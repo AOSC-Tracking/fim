@@ -21,9 +21,6 @@
 
 #include "Image.h"
 
-#define FIM_C_K 1024
-#define FIM_C_M (FIM_C_K*FIM_C_K)
-
 /*
  * TODO :
  *	Windowing related problems:
@@ -155,7 +152,8 @@ namespace fim
 		 *	an image is loaded and initializes this image.
 		 *	returns false if the image does not load
 		 */
-		if(fname==NULL && fname_==FIM_CNS_EMPTY_STRING){return false;}//no loading = no state change
+		if(fname==NULL && fname_==FIM_CNS_EMPTY_STRING)
+			return false;//no loading = no state change
 		this->free();
 		fname_=fname;
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
@@ -190,7 +188,9 @@ namespace fim
 
 		if(! img_)
 		{
-			cout<<"warning : image loading error!\n"   ;invalid_=true;return false;
+			cout<<"warning : image loading error!\n"   ;
+			invalid_=true;
+			return false;
 		}
 		else page_=want_page;
 		//cout<<"loaded page "<< want_page<<" to "<<((int*)this)<<"\n";
@@ -201,7 +201,7 @@ namespace fim
 		setVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
 		setVariable(FIM_VID_SWIDTH,(fim_int) img_->i.width );
 		if(cc.displaydevice_)
-		setVariable(FIM_VID_FIM_BPP ,(fim_int) cc.displaydevice_->get_bpp());
+			setVariable(FIM_VID_FIM_BPP ,(fim_int) cc.displaydevice_->get_bpp());
 		setVariable(FIM_VID_SCALE  ,newscale_*100);
 		setVariable(FIM_VID_ASCALE,ascale_);
 		setVariable(FIM_VID_ANGLE , angle_);
@@ -215,7 +215,7 @@ namespace fim
 		setGlobalVariable(FIM_VID_SHEIGHT,(int) img_->i.height);
 		setGlobalVariable(FIM_VID_SWIDTH ,(int) img_->i.width );
 		if(cc.displaydevice_)
-		setGlobalVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice_->get_bpp());
+			setGlobalVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice_->get_bpp());
 		//setGlobalVariable(FIM_VID_SCALE  ,newscale_*100);
 		//setGlobalVariable(FIM_VID_ASCALE ,ascale_);
 		return true;
@@ -237,7 +237,9 @@ namespace fim
 		/*
 		 * image width or height is <= 1
 		 * */
-		if(!img_)return true; return ( img_->i.width<=1 || img_->i.height<=1 )?true:false;
+		if(!img_)
+			return true;
+	       	return ( img_->i.width<=1 || img_->i.height<=1 )?true:false;
 	}
 
 	fim_err_t Image::scale_multiply(fim_scale_t sm)
@@ -245,7 +247,9 @@ namespace fim
 		/*
 		 * current scale_ is multiplied by a factor
 		 * */
-		if(scale_*sm>0.0)newscale_=scale_*sm;rescale();return FIM_ERR_NO_ERROR;
+		if(scale_*sm>0.0)
+			newscale_=scale_*sm;rescale();
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t Image::scale_increment(fim_scale_t ds)
@@ -253,7 +257,9 @@ namespace fim
 		/*
 		 * current scale_ is multiplied by a factor
 		 * */
-		if(scale_+ds>0.0)newscale_=scale_+ds;rescale();return FIM_ERR_NO_ERROR;
+		if(scale_+ds>0.0)
+			newscale_=scale_+ds;rescale();
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t Image::setscale(fim_scale_t ns)
@@ -280,14 +286,13 @@ namespace fim
                  */
 
 		//ACHTUNG! 
-		if(!img_ ){img_=fimg_;}
+		if(!img_)
+			img_ = fimg_;
                 if(!img_)
-                {
-                        invalid_=true;
-                        return true;
-                }
-		invalid_=false;
-                return false;
+                        invalid_ = true;
+		else
+			invalid_ = false;
+                return invalid_;
         }
 
         void Image::free()
@@ -295,8 +300,10 @@ namespace fim
 		/*
 		 * the image descriptors are freed if necessary and pointers blanked
 		 * */
-                if(fimg_!=img_ && img_ ) FbiStuff::free_image(img_ );
-                if(fimg_     ) FbiStuff::free_image(fimg_);
+                if(fimg_!=img_ && img_ )
+		       	FbiStuff::free_image(img_ );
+                if(fimg_     )
+		       	FbiStuff::free_image(fimg_);
                 reset();
         }
 
@@ -312,10 +319,16 @@ namespace fim
 #if FIM_BUGGED_RESCALE
 		return FIM_ERR_NO_ERROR;
 #endif /* FIM_BUGGED_RESCALE */
-		if(ns>0.0)newscale_=ns;//patch
+		if(ns>0.0)
+			newscale_=ns;//patch
 
-		if( check_invalid() ) return FIM_ERR_GENERIC;
-		if(tiny() && newscale_<scale_){newscale_=scale_;return FIM_ERR_NO_ERROR;}
+		if( check_invalid() )
+		       	return FIM_ERR_GENERIC;
+		if(tiny() && newscale_<scale_)
+		{
+			newscale_=scale_;
+			return FIM_ERR_NO_ERROR;
+		}
 
 		fim_pgor_t neworientation=getOrientation();
 		fim_angle_t	gascale=getGlobalFloatVariable(FIM_VID_ASCALE);
@@ -396,7 +409,8 @@ namespace fim
 				struct ida_image *rbb=NULL,*rb=NULL;
 				// FIXME: should use a faster and memory-smarter method : in-place
 				rb  = FbiStuff::rotate_image90(img_,0);
-				if(rb)rbb  = FbiStuff::rotate_image90(rb,0);
+				if(rb)
+					rbb  = FbiStuff::rotate_image90(rb,0);
 				if(rbb)
 				{
 					FbiStuff::free_image(img_);
@@ -416,7 +430,8 @@ namespace fim
 				// we make a backup.. who knows!
 				struct ida_image *rbb=NULL,*rb=NULL;
 				rb  = FbiStuff::rotate_image(img_,newangle_);
-				if(rb)rbb  = FbiStuff::rotate_image(rb,0);
+				if(rb)
+					rbb  = FbiStuff::rotate_image(rb,0);
 				if(rbb)
 				{
 					FbiStuff::free_image(img_);
@@ -457,7 +472,8 @@ namespace fim
 			setVariable(FIM_VID_ASCALE , ascale_ );
 			//setGlobalVariable(FIM_VID_ANGLE  ,  angle_ );
 		}
-		else should_redraw(0);
+		else
+		       	should_redraw(0);
 		orientation_=neworientation;
 		return FIM_ERR_NO_ERROR;
 	}
@@ -535,16 +551,6 @@ namespace fim
 		return new Image(*this);
 	}
 
-static int snprintf_XB(char *str, size_t size, size_t q)
-{
-	char u='B',b=' ';
-	size_t d=1;
-	if(q/d>1024)d*=FIM_C_K,u='K',b='B';
-	if(q/d>1024)d*=FIM_C_K,u='M';
-	if(q/d>1024)d*=FIM_C_K,u='G';
-	return snprintf(str, size, "%zd%c%c",q/d,u,b);
-}
-
 /*
  *	Creates a little description of some image,
  *	and places it in a NUL terminated static buffer.
@@ -580,7 +586,6 @@ fim::string Image::getInfo()
 	int mirror   =
 	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
 	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
-
 
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
@@ -639,18 +644,18 @@ fim::string Image::getInfo()
 					snprintf(clb+strlen(clb), sizeof(clb), "%s",pagesinfobuffer);
 				break;
 				case('F'):
-					snprintf_XB(clb+strlen(clb), sizeof(clb),fs_);
+					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),fs_);
 				break;
 				case('M'):
-					snprintf_XB(clb+strlen(clb), sizeof(clb),ms_);
+					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),ms_);
 				break;
 				case('T'):
 					/* console property. TODO: move outta here */
-					snprintf_XB(clb+strlen(clb), sizeof(clb),cc.byte_size());
+					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),cc.byte_size());
 				break;
 				case('C'):
 					/* cache property. TODO: move outta here */
-					snprintf_XB(clb+strlen(clb), sizeof(clb),cc.browser_.cache_.byte_size());
+					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),cc.browser_.cache_.byte_size());
 				break;
 				case('%'):
 					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
@@ -696,10 +701,10 @@ sbum:
 	     n?n:1, /* ... */
 	     (getGlobalIntVariable(FIM_VID_FILELISTLEN))
 #if FIM_WANT_DISPLAY_FILESIZE
-	     ,fs_/FIM_C_K
+	     ,fs_/FIM_CNS_K
 #endif /* FIM_WANT_DISPLAY_FILESIZE */
 #if FIM_WANT_DISPLAY_MEMSIZE
-	     ,ms_/FIM_C_M
+	     ,ms_/FIM_CNS_M
 #endif /* FIM_WANT_DISPLAY_MEMSIZE */
 	     );
 labeldone:
@@ -939,5 +944,4 @@ labeldone:
 		return ms;
 	}
 }
-
 
