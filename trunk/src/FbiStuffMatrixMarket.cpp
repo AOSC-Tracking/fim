@@ -20,10 +20,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-/*
- * this code should be fairly correct, although unfinished
- * */
-
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>

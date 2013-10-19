@@ -43,8 +43,6 @@
 #define FIM_SHALL_BUFFER_STDIN 0
 #endif /* HAVE_FMEMOPEN */
 
-#define FIM_WANT_EXPERIMENTAL_MIPMAPS 0
-
 namespace fim
 {
 
@@ -53,7 +51,7 @@ extern CommandConsole cc;
 
 /* ----------------------------------------------------------------------- */
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
-fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *src, fim_byte_t * dst)
+static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *src, fim_byte_t * dst)
 {
 	fim_err_t errval=FIM_ERR_GENERIC;
 
@@ -82,7 +80,7 @@ err:
 	return errval;
 }
 
-static fim_err_t mipmaps_compute(struct ida_image *src)
+fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_t * mmp)
 {
 	/* TODO: UNFINISHED 
 	 
@@ -94,15 +92,9 @@ static fim_err_t mipmaps_compute(struct ida_image *src)
 		img_ = FbiStuff::scale_image(fimg_,newscale_,newascale);
 		->
 		img_ = FbiStuff::scale_image(fimg_,mipsp_,newscale_,newascale);
+		p.s.: this does not come from fbi
 	*/
-	const int MAX_MIPMAPS=32;
-	size_t mmoffs[MAX_MIPMAPS];
-	size_t mmsize[MAX_MIPMAPS];
-	fim_int mmw[MAX_MIPMAPS];
-	fim_int mmh[MAX_MIPMAPS];
-	int nmm=0;
-	size_t mmb=0;
-	fim_byte_t* mmp=NULL;
+	fim_mipmap_t mm;
 	int w=src->i.width,h=src->i.height,d;
 
 	int mmidx=0;
@@ -111,43 +103,47 @@ static fim_err_t mipmaps_compute(struct ida_image *src)
 	{
 		goto err;
 	}
-	mmoffs[nmm]=0;
-	std::cout <<  3*src->i.width*src->i.height<< " bytes are needed for the original image\n";
+	mm.mmoffs[mm.nmm]=0;
+	//std::cout <<  3*src->i.width*src->i.height<< " bytes are needed for the original image\n";
 	for(d=2;w>=d && h>=d;d*=2)
 	{
-		mmw[nmm]=w;
-		mmh[nmm]=h;
-		mmsize[nmm]=(w/d)*(h/d)*3;
-		mmb+=mmsize[nmm];
-		mmoffs[nmm+1]=mmb;
-		++nmm;
+		mm.mmw[mm.nmm]=w/d;
+		mm.mmh[mm.nmm]=h/d;
+		mm.mmsize[mm.nmm]=(w/d)*(h/d)*3;
+		mm.mmb+=mm.mmsize[mm.nmm];
+		mm.mmoffs[mm.nmm+1]=mm.mmb;
+		++mm.nmm;
 	}
-	std::cout << nmm << " mipmaps are possible\n";
-	std::cout << mmb << " bytes are needed for the mipmaps\n";
-	if(nmm<1)
+	//std::cout << mm.nmm << " mipmaps are possible\n";
+	//std::cout << mm.mmb << " bytes are needed for the mipmaps\n";
+	if(mm.nmm<1)
 	{
 		goto err;
 	}
-	mmp=(fim_byte_t*)calloc(1,mmb);
-	if(!mmp)
+	mm.mdp=(fim_byte_t*)fim_calloc(1,mm.mmb);
+	if(!mm.mdp)
 	{
 		goto err;
 	}
 
-	if(nmm)
-		mipmap_compute(w,h,w/2,h/2,src->data,mmp+mmoffs[0]);
-	for(mmidx=1,d=2;mmidx<nmm;++mmidx,d*=2)
+	if(mm.nmm)
+		mipmap_compute(w,h,w/2,h/2,src->data,mm.mdp+mm.mmoffs[0]);
+	for(mmidx=1,d=2;mmidx<mm.nmm;++mmidx,d*=2)
 	{
-		std::cout << w/d << " " << h/d <<  " at " << mmoffs[mmidx-1] << " ... " << mmoffs[mmidx] << " : "<< mmsize[mmidx] << "\n";
-		mipmap_compute(w/d,h/d,w/(2*d),h/(2*d),mmp+mmoffs[mmidx-1],mmp+mmoffs[mmidx]);
+		//std::cout << w/d << " " << h/d <<  " at " << mm.mmoffs[mmidx-1] << " ... " << mm.mmoffs[mmidx] << " : "<< mm.mmsize[mmidx] << "\n";
+		mipmap_compute(w/d,h/d,w/(2*d),h/(2*d),mm.mdp+mm.mmoffs[mmidx-1],mm.mdp+mm.mmoffs[mmidx]);
 	}
+	/*
 	if(0)
 	{
 		src->i.width/=2;
 		src->i.height/=2;
-		src->data=mmp;
+		src->data=mm.mdp;
 	}
+	*/
 
+    	memcpy(mmp,&mm,sizeof(mm));
+	mm.mdp=NULL; // this is to avoid mm's destructor to free(mm.mdp)
 	return FIM_ERR_NO_ERROR; 
 err:
 	return FIM_ERR_GENERIC;
@@ -1570,7 +1566,6 @@ static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h)
 	}
 }
 
-
 /*static struct ida_image**/
 struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int page)
 {
@@ -1982,10 +1977,6 @@ found_a_loader:	/* we have a loader */
     	if(img)
 		fim_post_read_plugins_exec(img,filename);
 #endif /* FIM_WANT_EXPERIMENTAL_PLUGINS */
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
-    	if(img)
-		mipmaps_compute(img);
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
     goto ret;
 
 shall_skip_header:
@@ -2137,13 +2128,21 @@ err:
 #define FIM_OPTIMIZATION_20120129 1
 
 struct ida_image*	
-FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ float scale, float ascale)
+FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ float scale, float ascale
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+		, const fim_mipmap_t * mmp
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+		)
 {
     struct op_resize_parm p;
     struct ida_rect  rect;
     struct ida_image *dest;
     void *data;
     unsigned int y;
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+    int mmi=-1;
+    struct ida_image msrc;
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
     /* dez: */ if(ascale<=0.0||ascale>=100.0)
 	    ascale=1.0;
 
@@ -2153,7 +2152,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     fim_bzero(dest,sizeof(*dest));
     fim_bzero(&rect,sizeof(rect));
     fim_bzero(&p,sizeof(p));
-    
+ 
 //    p.width  = (int)(src->i.width  * scale * ascale);
 //    p.height = (int)(src->i.height * scale);
     // ceil() : new
@@ -2164,9 +2163,41 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 	p.width = 1;
     if (0 == p.height)
 	p.height = 1;
+   
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+    if(mmp && ascale == 1.0 && scale < 1.0)
+    {
+	msrc=*src;
+
+	for(mmi=0;mmi<mmp->nmm && mmp->mmw[mmi]>=p.width && mmp->mmh[mmi]>=p.height ;++mmi)
+	{
+		msrc.i.width  = mmp->mmw[mmi];
+		msrc.i.height = mmp->mmh[mmi];
+		msrc.data     = mmp->mdp + mmp->mmoffs[mmi];
+	}
+	if(mmi>0)
+	{
+		src=&msrc;
+		// std::cout << "using mipmap " << mmi << " / " << mmp->nmm << std::endl;
+	}
+	else
+		;// std::cout << "not using mipmap " << std::endl;
+    }
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+
     data = desc_resize.init(src,&rect,&dest->i,&p);
     dest->data = (fim_byte_t*)fim_malloc(dest->i.width * dest->i.height * 3);
-    /* dez: */ if(!(dest->data)){fim_free(dest);return NULL;}
+    if(!(dest->data)){fim_free(dest);return NULL;}
+
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+    if(mmi>0 && msrc.i.width == dest->i.width && msrc.i.height == dest->i.height )
+    {
+	memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
+	// std::cout << "just copying mipmap :) \n";
+	goto done;
+    }
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+
 #if FIM_OPTIMIZATION_20120129
     if(ascale==scale && ascale==1.0)
 	    memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
@@ -2178,6 +2209,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
     }
+done:
     desc_resize.done(data);
 err:
     return dest;

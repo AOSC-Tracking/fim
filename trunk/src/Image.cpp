@@ -174,6 +174,12 @@ namespace fim
 
 		fimg_ = FbiStuff::read_image(fname,fd,want_page);
 
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+    		if(fimg_)
+		if(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)
+			FbiStuff::fim_mipmaps_compute(fimg_,&mm_);
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+
     		if(strcmp(FIM_STDIN_IMAGE_NAME,fname)==0)
 		{
 			no_file_=true;	//no file is associated to this image (to prevent reloading)
@@ -200,7 +206,8 @@ namespace fim
 			invalid_=true;
 			return false;
 		}
-		else page_=want_page;
+		else
+		       	page_=want_page;
 		//cout<<"loaded page "<< want_page<<" to "<<((int*)this)<<"\n";
 
 #ifdef FIM_NAMESPACES
@@ -401,7 +408,11 @@ namespace fim
 			else
 				img_ = scale_image(fimg_,newscale_,newascale);
 #else
-			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale);
+			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+					,(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>1)?(&mm_):NULL
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+					);
 #endif /* FIM_PROGRESSIVE_RESCALING */
 			/* orientation_ can be 0,1,2,3 */
 			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
@@ -958,6 +969,9 @@ labeldone:
 			ms += fimg_->i.height*fimg_->i.width*3;
 		if(fimg_!=img_ && img_)
 			ms += img_->i.height* img_->i.width*3;
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+		ms += mm_.byte_size();
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 		return ms;
 	}
 

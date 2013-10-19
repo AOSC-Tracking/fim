@@ -128,6 +128,7 @@
 #define FIM_ALLOW_LOADER_VERBOSITY 1
 #define FIM_WANT_FAT_BROWSER 1
 #define FIM_WANT_BDI 1
+#define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
 
 namespace fim
 {
@@ -386,6 +387,26 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 "!"FIM_CNS_EX_SYSC_STRING"		executes the "FIM_CNS_EX_SYSC_STRING" quoted string as a \""FIM_CNS_SHELL"\" shell command\n"\
 ""
 
+#define FIM_MAX_MIPMAPS 32
+class fim_mipmap_t
+{
+	public:
+	size_t mmoffs[FIM_MAX_MIPMAPS];
+	size_t mmsize[FIM_MAX_MIPMAPS];
+	fim_int mmw[FIM_MAX_MIPMAPS];
+	fim_int mmh[FIM_MAX_MIPMAPS];
+	int nmm;
+	size_t mmb;
+	fim_byte_t* mdp;
+
+	fim_mipmap_t(const fim_mipmap_t&mm){reset();}
+	fim_mipmap_t(void){reset();}
+	~fim_mipmap_t(void){if(mdp)fim_free(mdp);reset();}
+	size_t byte_size(void)const{return mmb;}
+	private:
+	void reset(void){nmm=0;mmb=0;mdp=NULL;}
+};
+
 #include "string.h"
 #include "Command.h"
 #include "Benchmarkable.h"
@@ -497,6 +518,7 @@ namespace fim
 #define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[internal,in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. " */
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in] if 1, will display a message on the status bar when processing" */
+#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[internal,in] if >0, will compute mipmaps; if >1, will also use mipmaps to speed up downscaling of images" */
 #define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
 #define FIM_VID_ASCALE				"ascale"			/* "[internal,in,out] the asymmetric scaling of the current image" */
 #define FIM_VID_ANGLE				"angle"				/* "[internal,in,out] a floating point number specifying the rotation angle, in degrees" */

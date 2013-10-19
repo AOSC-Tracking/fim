@@ -2,7 +2,10 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.5-trunk
+
  * "%T" specifier to get (and display) total program used memory
+ * "%C" specifier to get (and display) used program cache memory
+ * mipmaps (rescaled images) for e.g. faster display of large images (TODO)
 
                 Version 0.4
 

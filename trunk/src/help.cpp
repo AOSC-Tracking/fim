@@ -64,6 +64,7 @@ fim_var_help_db[FIM_VID_TERM]= "[internal,out] the environment TERM variable" ;
 fim_var_help_db[FIM_VID_NO_DEFAULT_CONFIGURATION]= "[internal,in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. " ;
 fim_var_help_db[FIM_VID_DISPLAY_STATUS_BAR]= "[internal,in] if 1, will display the status bar" ;
 fim_var_help_db[FIM_VID_DISPLAY_BUSY]= "[internal,in] if 1, will display a message on the status bar when processing" ;
+fim_var_help_db[FIM_VID_WANT_MIPMAPS]= "[internal,in] if >0, will compute mipmaps; if >1, will also use mipmaps to speed up downscaling of images" ;
 fim_var_help_db[FIM_VID_SCALE]= "[internal,in] the scale of the current image" ;
 fim_var_help_db[FIM_VID_ASCALE]= "[internal,in,out] the asymmetric scaling of the current image" ;
 fim_var_help_db[FIM_VID_ANGLE]= "[internal,in,out] a floating point number specifying the rotation angle, in degrees" ;
