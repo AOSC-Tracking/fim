@@ -90,7 +90,7 @@ namespace fim
 		{
 #ifndef FIM_BUGGED_CACHE
 	#ifdef FIM_CACHE_DEBUG
-			if(v.image_) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image_->getName() << "\" from "<<v.image_<<"\n" ;
+			if(v.image_) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image_->getName() << "\" from "<<v.image_<<FIM_CNS_NEWLINE ;
 			else std::cout << "no image_ to cache..\n";
 	#endif /* FIM_CACHE_DEBUG */
 			if(v.image_ && !v.image_->check_invalid()) setImage( commandConsole.browser_.cache_.useCachedImage(v.image_->getKey()) );
@@ -101,7 +101,7 @@ namespace fim
 		catch(FimException e)
 		{
 			image_=NULL;
-			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
+			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << FIM_CNS_NEWLINE;
 		}
 	}
 
@@ -471,7 +471,8 @@ namespace fim
 #endif /* FIM_CACHE_DEBUG */
 
 		//image_ = NULL;
-		if(ni)free();
+		if(ni)
+			free();
 		reset();
 		image_ = ni;
 	}
@@ -480,8 +481,10 @@ namespace fim
 	{
 #ifdef FIM_WINDOWS
 		steps_ = getGlobalIntVariable(FIM_VID_STEPS);
-		if(steps_<FIM_CNS_STEPS_MIN)steps_ = FIM_CNS_STEPS_DEFAULT_N;
-		else psteps_=(getGlobalStringVariable(FIM_VID_STEPS).re_match("%$"));
+		if(steps_<FIM_CNS_STEPS_MIN)
+			steps_ = FIM_CNS_STEPS_DEFAULT_N;
+		else
+			psteps_=(getGlobalStringVariable(FIM_VID_STEPS).re_match("%$"));
 
 		hsteps_ = getGlobalIntVariable(FIM_VID_HSTEPS);
 		if(hsteps_<FIM_CNS_STEPS_MIN)hsteps_ = steps_;
@@ -681,7 +684,7 @@ namespace fim
 			hs=(viewport_width()*hs)/100;
 		}
 
-		//std::cout << vs << " " << hs << " " << ps << "\n";
+		//std::cout << vs << " " << hs << " " << ps << FIM_CNS_NEWLINE;
 
 		switch(f)
 		{
