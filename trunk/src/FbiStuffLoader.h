@@ -91,9 +91,9 @@ struct ida_loader {
 /* filter + operations */
 struct ida_op {
     const fim_char_t  *name;
-    void* (*init)(struct ida_image *src, struct ida_rect *rect,
+    void* (*init)(const struct ida_image *src, struct ida_rect *rect,
 		  struct ida_image_info *i, void *parm);
-    void  (*work)(struct ida_image *src, struct ida_rect *rect,
+    void  (*work)(const struct ida_image *src, struct ida_rect *rect,
 		  fim_byte_t *dst, int line,
 		  void *data);
     void  (*done)(void *data);

@@ -59,7 +59,7 @@ static FILE* fim_execlp(const fim_char_t *arg, ...);/* new */
 static struct ida_image* read_image(const fim_char_t *filename, FILE* fd, int page=0);
 static struct ida_image* rotate_image90(struct ida_image *src, unsigned int rotation);
 static struct ida_image* rotate_image(struct ida_image *src, float angle);
-static struct ida_image* scale_image(struct ida_image *src, float scale, float ascale);
+static struct ida_image* scale_image(const struct ida_image *src, float scale, float ascale);
 
 static int fim_filereading_debug();
 };
@@ -94,7 +94,7 @@ struct op_rotate_parm {
 /* 
  * dez's function, on the way to windowing Fim!
  * */
-struct ida_image * fbi_image_clone(struct ida_image *img);
+struct ida_image * fbi_image_clone(const struct ida_image *img);
 
 }
 
