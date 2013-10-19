@@ -90,6 +90,7 @@ class Image
 	void should_redraw(int should=1)const;
 
 	protected:
+	enum { FIM_NO_ROT=0,FIM_ROT_0Q=0,FIM_ROT_1Q=1,FIM_ROT_2Q=2,FIM_ROT_3Q=3,FIM_ROT_4Q=4,FIM_ROT_ROUND=4 };
 	fim_pgor_t              orientation_;	//aka rotation
 
 	fim_bool_t invalid_;		//the first time the image is loaded it is set to 1
