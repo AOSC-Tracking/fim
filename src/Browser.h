@@ -99,8 +99,13 @@ class Browser
 	fim::string fcmd_scrolldown(const args_t &args);
 	fim::string fcmd_scrollforward(const args_t &args);
 	fim::string fcmd_scale(const args_t &args);
+#if FIM_WANT_FAT_BROWSER
 	fim::string fcmd_reduce(const args_t &args);
 	fim::string fcmd_magnify(const args_t &args);
+	fim::string fcmd_next(const args_t &args);
+	fim::string fcmd_prev(const args_t &args);
+	fim::string fcmd_no_image(const args_t &args);
+#endif /* FIM_WANT_FAT_BROWSER */
 	fim::string fcmd_rotate(const args_t &args);/* FIXME : UNFINISHED */
 	fim::string fcmd_display(const args_t &args);
 	fim::string display_status(const fim_char_t *l,const fim_char_t*r);
@@ -110,9 +115,7 @@ class Browser
 	fim::string fcmd_reload(const args_t &args);
 	fim::string fcmd_list(const args_t &args);
 	fim::string do_push(const args_t &args);
-	fim::string fcmd_next(const args_t &args);
 	fim::string prev(int n=1);
-	fim::string fcmd_prev(const args_t &args);
 	fim::string do_remove(const args_t &args);
 	fim::string fcmd_info(const args_t &args);
 	fim::string info();
@@ -122,7 +125,6 @@ class Browser
 	fim::string fcmd_load(const args_t &args);
 	const fim::string pop_current();
 	fim::string pop_current(const args_t &args);
-	fim::string fcmd_no_image(const args_t &args);
 	bool present(const fim::string nf);
 	fim_int find_file_index(const fim::string nf);
 #ifdef FIM_READ_DIRS
@@ -136,7 +138,6 @@ class Browser
 	private:
 	fim::string loadCurrentImage();
 	fim::string reload();
-	fim::string list()const;
 
 	int n_files()const;
 	int n_pages()const;

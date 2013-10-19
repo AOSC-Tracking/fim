@@ -126,6 +126,7 @@
 #define FIM_WANT_REMEMBER_LAST_FILE_LOADER 1	/* TODO: shall use this feature to set a i:file_loader attribute; FIXME: move this down */
 #define FIM_WANT_BENCHMARKS	1	/* FIXME: move this down */
 #define FIM_ALLOW_LOADER_VERBOSITY 1
+#define FIM_WANT_FAT_BROWSER 1
 
 namespace fim
 {
@@ -318,6 +319,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_WENLARGE_STEPS_DEFAULT	 10
 #define FIM_CNS_SCALEDELTA	 0.01f
 #define FIM_CNS_EMPTY_STRING	""
+#define FIM_CNS_NEWLINE		"\n"
+//#define FIM_CNS_NEWLINE		std::endl
 #define FIM_CNS_DEFAULT_IFNAME	FIM_CNS_EMPTY_STRING
 #define FIM_CNS_SLASH_STRING	"/"
 #define FIM_CNS_DIRSEP_STRING	FIM_CNS_SLASH_STRING
