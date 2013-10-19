@@ -32,6 +32,9 @@
 namespace fim
 {
 	Cache::Cache()
+#if FIM_WANT_BDI
+		:dummy_img_()
+#endif	/* FIM_WANT_BDI */
 	{
 		/*	FIXME : potential flaw ?	*/
 		FIM_LOUD_CACHE_STUFF;

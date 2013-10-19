@@ -394,7 +394,11 @@ noplus:
 			goto nop;
 		}
 comeon:
+#if FIM_WANT_BDI
+		if(1)
+#else	/* FIM_WANT_BDI */
 		if(c_image())
+#endif	/* FIM_WANT_BDI */
 		{
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
@@ -1035,7 +1039,11 @@ nop:
 			return FIM_CNS_EMPTY_RESULT;
 
 		if(!isfg)
+#if FIM_WANT_BDI
+		if( N==1 &&              c_image()->is_multipage())
+#else	/* FIM_WANT_BDI */
 		if( N==1 && c_image() && c_image()->is_multipage())
+#endif	/* FIM_WANT_BDI */
 		{
 			if(0)std::cout<<"goto page "<<n<<FIM_CNS_NEWLINE;
 			image()->goto_page(n);
@@ -1646,7 +1654,9 @@ err:
 	{
 		int pi=0;
 
+#if !FIM_WANT_BDI
 		if(c_image())
+#endif	/* FIM_WANT_BDI */
 			pi = c_image()->n_pages();
 		return pi;
 	}
@@ -1655,7 +1665,9 @@ err:
 	{
 		int pi=0;
 
+#if !FIM_WANT_BDI
 		if(c_image())
+#endif	/* FIM_WANT_BDI */
 			pi = c_image()->c_page();
 		return pi;
 	}

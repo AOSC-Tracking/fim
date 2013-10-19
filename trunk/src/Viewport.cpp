@@ -440,6 +440,19 @@ namespace fim
 	}
 #endif
 
+        Image* Viewport::getImage()const
+	{
+		/*
+		 * returns the image pointer, regardless its use! 
+		 * */
+#if FIM_WANT_BDI
+		if(!image_)
+			return &commandConsole.browser_.cache_.dummy_img_;
+		else
+#endif	/* FIM_WANT_BDI */
+			return image_;
+	}
+
         const Image* Viewport::c_getImage()const
 	{
 		/*
@@ -447,15 +460,11 @@ namespace fim
 		 *
 		 * FIXME : this check is heavy.. move it downwards the call tree!
 		 * */
+#if FIM_WANT_BDI
+		return check_valid() ? image_ : getImage();
+#else	/* FIM_WANT_BDI */
 		return check_valid() ? image_ : NULL;
-	}
-
-        Image* Viewport::getImage()const
-	{
-		/*
-		 * returns the image pointer, regardless its use! 
-		 * */
-		return image_;
+#endif	/* FIM_WANT_BDI */
 	}
 
         void Viewport::setImage(fim::Image* ni)
@@ -625,8 +634,10 @@ namespace fim
 
 	void Viewport::recenter()
 	{
-		if(!(panned_ & 0x02))recenter_horizontally();
-		if(!(panned_ & 0x01))recenter_vertically();
+		if(!(panned_ & 0x02))
+			recenter_horizontally();
+		if(!(panned_ & 0x01))
+			recenter_vertically();
 	}
 
 	void Viewport::should_redraw()const
@@ -635,7 +646,8 @@ namespace fim
 		if(image_)
 			image_->should_redraw();
 		else
-	        	if(displaydevice_)displaydevice_->redraw_=FIM_REDRAW_NECESSARY;
+	        	if(displaydevice_)
+				displaydevice_->redraw_=FIM_REDRAW_NECESSARY;
 	}
 
 	Viewport::~Viewport()

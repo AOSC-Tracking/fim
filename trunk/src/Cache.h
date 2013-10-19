@@ -29,7 +29,7 @@ class Cache:public Namespace
 #else
 class Cache
 #endif /* FIM_NAMESPACES */
-{	
+{
 	typedef std::map<fim::Image*,time_t > 	   lru_t;	//filename - last usage time
 	typedef std::map<cache_key_t,fim::Image* >  cachels_t;	//filename - image
 	typedef std::map<fim::Image*,cache_key_t >  rcachels_t;	//image - filename
@@ -85,6 +85,10 @@ class Cache
 	int used_image(cache_key_t key)const;
 	public:
 	Cache();
+
+#if FIM_WANT_BDI
+	Image dummy_img_;	// experimental
+#endif	/* FIM_WANT_BDI */
 
 	/*	free() and counter update */
 	bool freeCachedImage(Image *image);
