@@ -53,7 +53,6 @@ class Browser
 #ifdef FIM_READ_STDIN_IMAGE
 	Image *default_image_;	// experimental
 #endif /* FIM_READ_STDIN_IMAGE */
-
 	Viewport* viewport()const;
 
 	int current_n()const;

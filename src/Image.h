@@ -113,7 +113,9 @@ class Image
 
 	fim::string getInfo();
 	Image(const Image& image); // yes, a private constructor (was)
-
+#if FIM_WANT_BDI
+	Image();
+#endif	/* FIM_WANT_BDI */
 	fim_err_t rescale( fim_scale_t ns=0.0 );
 	fim_err_t rotate( fim_scale_t angle_=1.0 );
 

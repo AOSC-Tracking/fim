@@ -127,6 +127,7 @@
 #define FIM_WANT_BENCHMARKS	1	/* FIXME: move this down */
 #define FIM_ALLOW_LOADER_VERBOSITY 1
 #define FIM_WANT_FAT_BROWSER 1
+#define FIM_WANT_BDI 1
 
 namespace fim
 {

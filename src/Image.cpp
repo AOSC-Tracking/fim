@@ -19,7 +19,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "Image.h"
+//#include "Image.h"
+#include "fim.h"
 
 /*
  * TODO :
@@ -768,7 +769,8 @@ labeldone:
 		 * rotates the image the specified amount of degrees
 		 * */
 		float newangle_=this->angle_+angle_;
-		if( check_invalid() ) return FIM_ERR_GENERIC;
+		if( check_invalid() )
+		       	return FIM_ERR_GENERIC;
 		setVariable(FIM_VID_ANGLE,newangle_);
 		return rescale();	// FIXME : necessary *only* for image update and display
 	}
@@ -958,5 +960,15 @@ labeldone:
 			ms += img_->i.height* img_->i.width*3;
 		return ms;
 	}
+
+#if FIM_WANT_BDI
+	Image::Image()
+	{
+		/* although invalid, this image instance should support all operations on it */
+		// fim_bzero(this,sizeof(*this));
+		reset();
+		assert(check_invalid());
+	}
+#endif	/* FIM_WANT_BDI */
 }
 
