@@ -44,27 +44,35 @@ namespace fim
  */
 	fim_coo_t Image::original_width()
 	{
-		//WARNING : assumes the image is valid
-		if(orientation_%2) return fimg_->i.height;
-		return fimg_->i.width;
+		fim_coo_t ow;
+		assert(fimg_);
+		if(orientation_%2)
+		       	ow = fimg_->i.height;
+		else
+			ow = fimg_->i.width;
+		return ow;
 	}
 
 	fim_coo_t Image::original_height()
 	{
-		//WARNING : assumes the image is valid
-		if(orientation_%2) return fimg_->i.width;
-		return fimg_->i.height;
+		fim_coo_t ow;
+		assert(fimg_);
+		if(orientation_%2)
+		       	ow = fimg_->i.width;
+		else
+			ow = fimg_->i.height;
+		return ow;
 	}
 
 	int Image::width()
 	{
-		//WARNING : assumes the image is valid
+		assert(img_);
 		return img_->i.width;
 	}
 
 	int Image::height()
 	{
-		//WARNING : assumes the image is valid
+		assert(img_);
 		return img_->i.height;
 	}
 
@@ -77,7 +85,7 @@ namespace fim
 		page_(0),
                 img_     (NULL),
                 fimg_    (NULL),
-		orientation_(0),
+		orientation_(FIM_NO_ROT),
                 invalid_(false),
 		no_file_(true),
 		fs_(0), ms_(0),
@@ -115,20 +123,19 @@ namespace fim
 		/*
 		 * pointers are blanked and values set to default 
 		 * */
-                scale_    = 1.0;
-                newscale_ = 1.0;
-                ascale_   = 1.0;
+                scale_   = 1.0;
+                newscale_= 1.0;
+                ascale_  = 1.0;
                 angle_   = 0.0;
 		setVariable(FIM_VID_SCALE  ,scale_*100);
 		setVariable(FIM_VID_ASCALE ,ascale_);
-		setVariable(FIM_VID_ANGLE ,angle_);
-		no_file_=true;	//reloading allowed
-
-                invalid_=false;
+		setVariable(FIM_VID_ANGLE  ,angle_);
+		no_file_ =true;	//reloading allowed
+                invalid_ =false;
                 fimg_    = NULL;
                 img_     = NULL;
-                orientation_=0;
-		setVariable(FIM_VID_ORIENTATION ,0);
+                orientation_=FIM_NO_ROT;
+		setVariable(FIM_VID_ORIENTATION ,FIM_NO_ROT);
 	}
 	
 	bool Image::reload()
@@ -316,30 +323,35 @@ namespace fim
 		 * effective image rescaling
 		 * TODO: should rather be called "apply"
 		 * */
+		fim_pgor_t neworientation;
+		fim_angle_t	gascale;
+		fim_scale_t	newascale;
+		fim_angle_t	gangle;
+
 #if FIM_BUGGED_RESCALE
-		return FIM_ERR_NO_ERROR;
+		goto ret;
 #endif /* FIM_BUGGED_RESCALE */
 		if(ns>0.0)
 			newscale_=ns;//patch
 
 		if( check_invalid() )
-		       	return FIM_ERR_GENERIC;
+			goto err;
 		if(tiny() && newscale_<scale_)
 		{
 			newscale_=scale_;
-			return FIM_ERR_NO_ERROR;
+			goto ret;
 		}
 
-		fim_pgor_t neworientation=getOrientation();
-		fim_angle_t	gascale=getGlobalFloatVariable(FIM_VID_ASCALE);
-		fim_scale_t	newascale=getFloatVariable(FIM_VID_ASCALE);
+		neworientation=getOrientation();
+		gascale=getGlobalFloatVariable(FIM_VID_ASCALE);
+		newascale=getFloatVariable(FIM_VID_ASCALE);
 		newascale=(newascale>0.0 && newascale!=1.0)?newascale:((gascale>0.0 && gascale!=1.0)?gascale:1.0);
 		
 		//float newascale=getFloatVariable(FIM_VID_ASCALE); if(newascale<=0.0) newascale=1.0;
 		/*
 		 * The global angle_ variable value will override the local if not 0 and the local unset
 		 * */
-		fim_angle_t	gangle  =getGlobalFloatVariable(FIM_VID_ANGLE),
+		gangle  =getGlobalFloatVariable(FIM_VID_ANGLE),
 			newangle_=getFloatVariable(FIM_VID_ANGLE);
 		newangle_=angle_?newangle_:((gangle!=0.0)?gangle:newangle_);
 
@@ -350,9 +362,9 @@ namespace fim
 			&& ( !newangle_  && !angle_ )
 		)
 		{
-			return FIM_ERR_NO_ERROR;/*no need to rescale*/
+			goto ret;/*no need to rescale*/
 		}
-		orientation_=((neworientation%4)+4)%4; // fix this
+		orientation_=((neworientation%FIM_ROT_ROUND)+FIM_ROT_ROUND)%FIM_ROT_ROUND; // fix this
 
 		setGlobalVariable(FIM_VID_SCALE,newscale_*100);
 		if(fimg_)
@@ -391,19 +403,19 @@ namespace fim
 			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale);
 #endif /* FIM_PROGRESSIVE_RESCALING */
 			/* orientation_ can be 0,1,2,3 */
-			if( img_ && orientation_!=0 && orientation_ != 2)
+			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
 			{
 				// we make a backup.. who knows!
 				// FIXME: should use a faster and memory-smarter method : in-place
 				struct ida_image *rb=img_;
-				rb  = FbiStuff::rotate_image90(rb,orientation_==1?0:1);
+				rb  = FbiStuff::rotate_image90(rb,orientation_==FIM_ROT_1Q?FIM_ROT_0Q:FIM_ROT_1Q);
 				if(rb)
 				{
 					FbiStuff::free_image(img_);
 					img_=rb;
 				}
 			}
-			if( img_ && orientation_!=0 && orientation_ == 2)
+			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ == FIM_ROT_2Q)
 			{	
 				// we make a backup.. who knows!
 				struct ida_image *rbb=NULL,*rb=NULL;
@@ -475,7 +487,10 @@ namespace fim
 		else
 		       	should_redraw(0);
 		orientation_=neworientation;
+ret:
 		return FIM_ERR_NO_ERROR;
+err:
+		return FIM_ERR_GENERIC;
 	}
 
 	void Image::reduce(fim_scale_t factor)
