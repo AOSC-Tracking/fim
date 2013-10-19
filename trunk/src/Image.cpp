@@ -624,7 +624,8 @@ fim::string Image::getInfo()
 		*pagesinfobuffer='\0';
 		
 /* #if FIM_WANT_DISPLAY_MEMSIZE */
-	ms_ = byte_size();
+	// ms_ = byte_size();
+	ms_ = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
 
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
@@ -679,6 +680,9 @@ fim::string Image::getInfo()
 				case('T'):
 					/* console property. TODO: move outta here */
 					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),cc.byte_size());
+				break;
+				case('m'):
+					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),mm_.byte_size());
 				break;
 				case('C'):
 					/* cache property. TODO: move outta here */

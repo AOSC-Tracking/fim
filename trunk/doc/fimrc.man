@@ -611,7 +611,7 @@ _ignorecase
 .fi
 .B
 _info_fmt_str
-[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for memory image size; %C for memory used by cache; %T for total memory used; %% for an ordinary %. This feature has to be enabled at configure time.
+[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used; %% for an ordinary %. This feature has to be enabled at configure time.
 .fi
 .B
 _inhibit_display
@@ -744,6 +744,10 @@ _steps
 .B
 _sys_rc_file
 [internal,in] string with the global configuration file name
+.fi
+.B
+_use_mipmaps
+[internal,in] if >0, will compute mipmaps; if >1, will also use mipmaps to speed up downscaling of images
 .fi
 .B
 _verbose_errors
