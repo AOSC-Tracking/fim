@@ -582,7 +582,8 @@ ret:
 
 		FIM_LOUD_CACHE_STUFF;
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
-			if(ci->second)delete ci->second;
+			if(ci->second)
+				delete ci->second;
 	}
 
 	size_t Cache::byte_size(void)const

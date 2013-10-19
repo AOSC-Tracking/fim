@@ -22,6 +22,7 @@
 #ifndef FIM_IMAGE_H
 #define FIM_IMAGE_H
 
+#include "FbiStuff.h"
 #include "fim.h"
 
 namespace fim
@@ -83,6 +84,9 @@ class Image
         struct ida_image *img_     ;     /* local (eventually) copy images */
 	bool reload();
 	private://TMP
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+	fim_mipmap_t mm_;
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 	struct ida_image *fimg_    ;     /* master image */
 
 	/* image methods */
