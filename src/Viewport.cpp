@@ -222,23 +222,6 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	void Viewport::bottom_align()
-	{
-		if(this->onBottom())
-			return;
-		if( check_valid() )
-			top_ = image_->height() - this->viewport_height();
-		should_redraw();
-	}
-
-	void Viewport::top_align()
-	{
-		if(this->onTop())
-			return;
-		top_=0;
-		should_redraw();
-	}
-
 	bool Viewport::redisplay()
 	{
 		/*
@@ -865,6 +848,43 @@ err:
 				res += snprintf(str+res, size-res, "%s%2.0f%%%c",es,ha,hc);
 		}
 		return res;
+	}
+
+	void Viewport::align(const char c)
+	{
+		switch( c )
+		{
+		case 'b':
+		{
+			if(this->onBottom())
+				goto ret;
+			if( check_valid() )
+				top_ = image_->height() - this->viewport_height();
+		}
+		break;
+		case 't':
+		{
+			if(this->onTop())
+				goto ret;
+			top_=0;
+		}
+		break;
+		case 'l':
+			left_=0;
+		break;
+		case 'r':
+	       		left_ = image_->width() - viewport_width();
+		break;
+		case 'c':
+			//this->recenter();
+			this->recenter_vertically(); this->recenter_horizontally();
+		break;
+		default:
+		goto ret;
+		}
+		should_redraw();
+ret:
+		return;
 	}
 }
 
