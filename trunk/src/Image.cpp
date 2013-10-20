@@ -443,8 +443,10 @@ namespace fim
 				}
 				else
 				{
-					if(rbb)FbiStuff::free_image(rbb);
-					if(rb )FbiStuff::free_image(rb);
+					if(rbb)
+						FbiStuff::free_image(rbb);
+					if(rb )
+						FbiStuff::free_image(rb);
 				}
 			}
 
@@ -464,8 +466,10 @@ namespace fim
 				}
 				else
 				{
-					if(rbb)FbiStuff::free_image(rbb);
-					if(rb )FbiStuff::free_image(rb);
+					if(rbb)
+						FbiStuff::free_image(rbb);
+					if(rb )
+						FbiStuff::free_image(rb);
 				}
 			}
 
@@ -479,7 +483,8 @@ namespace fim
 			else 
 			{
 				/* reallocation succeeded */
-				if( backup_img && backup_img!=fimg_ ) FbiStuff::free_image(backup_img);
+				if( backup_img && backup_img!=fimg_ )
+				       	FbiStuff::free_image(backup_img);
 				scale_=newscale_;
 				ascale_=newascale;
 				angle_ =newangle_;
@@ -527,7 +532,8 @@ err:
 	void Image::resize(int nw, int nh)
 	{
 		//fixme
-		if(check_invalid())return;
+		if(check_invalid())
+			return;
 	}*/
 
 	Image::Image(const Image& image):
@@ -812,7 +818,8 @@ labeldone:
 	//	if( j>0 )--j;
 		if( !fimg_ )
 			return false;
-		if( j<0 )j=fimg_->i.npages-1;
+		if( j<0 )
+			j=fimg_->i.npages-1;
 		if( j>page_ ? have_nextpage(j-page_) : have_prevpage(page_-j) )
 		{
 			//if(0)cout<<"about to goto page "<<j<<"\n";

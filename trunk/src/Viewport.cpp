@@ -90,12 +90,15 @@ namespace fim
 		{
 #ifndef FIM_BUGGED_CACHE
 	#ifdef FIM_CACHE_DEBUG
-			if(v.image_) std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image_->getName() << "\" from "<<v.image_<<FIM_CNS_NEWLINE ;
+			if(v.image_)
+				std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image_->getName() << "\" from "<<v.image_<<FIM_CNS_NEWLINE ;
 			else std::cout << "no image_ to cache..\n";
 	#endif /* FIM_CACHE_DEBUG */
-			if(v.image_ && !v.image_->check_invalid()) setImage( commandConsole.browser_.cache_.useCachedImage(v.image_->getKey()) );
+			if(v.image_ && !v.image_->check_invalid())
+				setImage( commandConsole.browser_.cache_.useCachedImage(v.image_->getKey()) );
 #else /* FIM_BUGGED_CACHE */
-			if(v.image_) setImage ( new Image(*v.image_) ) ;
+			if(v.image_)
+				setImage ( new Image(*v.image_) ) ;
 #endif /* FIM_BUGGED_CACHE */
 		}
 		catch(FimException e)
@@ -108,10 +111,12 @@ namespace fim
 	void Viewport::pan_up(fim_pan_t s)
 	{
 		panned_ |= 0x1;
-		if(s<0)pan_down(-s);
+		if(s<0)
+			pan_down(-s);
 		else
 		{
-			if(this->onTop())return;
+			if(this->onTop())
+				return;
 			s=(s==0)?steps_:s;
 			top_ -= s;
 			should_redraw();
@@ -121,10 +126,12 @@ namespace fim
 	void Viewport::pan_down(fim_pan_t s)
 	{
 		panned_ |= 0x1;
-		if(s<0)pan_up(-s);
+		if(s<0)
+			pan_up(-s);
 		else
 		{
-			if(this->onBottom())return;
+			if(this->onBottom())
+				return;
 			s=(s==0)?steps_:s;
 			top_ += s;
 			should_redraw();
@@ -134,10 +141,12 @@ namespace fim
 	void Viewport::pan_right(fim_pan_t s)
 	{
 		panned_ |= 0x2;
-		if(s<0)pan_left(s);
+		if(s<0)
+			pan_left(s);
 		else
 		{
-			if(onRight())return;
+			if(onRight())
+				return;
 			s=(s==0)?steps_:s;
 			left_+=s;
 			should_redraw();
@@ -147,10 +156,12 @@ namespace fim
 	void Viewport::pan_left(fim_pan_t s)
 	{
 		panned_ |= 0x2;
-		if(s<0)pan_right(s);
+		if(s<0)
+			pan_right(s);
 		else
 		{
-			if(onLeft())return;
+			if(onLeft())
+				return;
 			s=(s==0)?steps_:s;
 			left_-=s;
 			should_redraw();
@@ -159,25 +170,29 @@ namespace fim
 
 	bool Viewport::onBottom()
 	{
-		if( check_invalid() )return false;
+		if( check_invalid() )
+			return false;
 		return (top_ + viewport_height() >= image_->height());
 	}
 
 	bool Viewport::onRight()
 	{
-		if( check_invalid() )return false;
+		if( check_invalid() )
+			return false;
 		return (left_ + viewport_width() >= image_->width());
 	}
 
 	bool Viewport::onLeft()
 	{
-		if( check_invalid() )return false;
+		if( check_invalid() )
+			return false;
 		return (left_ <= 0 );
 	}
 
 	bool Viewport::onTop()
 	{
-		if( check_invalid() )return false;
+		if( check_invalid() )
+			return false;
 		return (top_ <= 0 );
 	}
 
@@ -186,7 +201,8 @@ namespace fim
 		/*
 		 * */
 #ifdef FIM_WINDOWS
-		if(window_)return window_->width();
+		if(window_)
+			return window_->width();
 		else return 0;
 #else
 		return displaydevice_->width();
@@ -198,7 +214,8 @@ namespace fim
 		/*
 		 * */
 #ifdef FIM_WINDOWS
-		if(window_)return window_->height();
+		if(window_)
+			return window_->height();
 		else return 0;
 #else
 		return displaydevice_->height();
@@ -207,14 +224,17 @@ namespace fim
 
 	void Viewport::bottom_align()
 	{
-		if(this->onBottom())return;
-		if( check_valid() )top_ = image_->height() - this->viewport_height();
+		if(this->onBottom())
+			return;
+		if( check_valid() )
+			top_ = image_->height() - this->viewport_height();
 		should_redraw();
 	}
 
 	void Viewport::top_align()
 	{
-		if(this->onTop())return;
+		if(this->onTop())
+			return;
 		top_=0;
 		should_redraw();
 	}
@@ -254,7 +274,8 @@ namespace fim
 		/*
 		 * for recovery purposes. FIXME
 		 * */
-		if( displaydevice_->redraw_==FIM_REDRAW_UNNECESSARY )return;
+		if( displaydevice_->redraw_==FIM_REDRAW_UNNECESSARY )
+			return;
 #ifdef FIM_WINDOWS
 		/* FIXME : note that fbi's clear_rect() is a buggy function and thus the fs_bpp multiplication need ! */
 		{
@@ -280,9 +301,12 @@ namespace fim
 		 *
 		 *	returns true when some drawing occurred.
 		 */
-		if((displaydevice_->redraw_==FIM_REDRAW_UNNECESSARY) )return false;
-		if( check_invalid() ) null_display();//  NEW
-		if( check_invalid() ) return false;
+		if((displaydevice_->redraw_==FIM_REDRAW_UNNECESSARY) )
+			return false;
+		if( check_invalid() )
+			null_display();//  NEW
+		if( check_invalid() )
+			return false;
 		/*
 		 * should flip ? should mirror ?
 		 *
@@ -411,7 +435,8 @@ namespace fim
 	void Viewport::auto_scale()
 	{
 		fim_scale_t xs,ys;
-		if( check_invalid() ) return;
+		if( check_invalid() )
+			return;
 		else
 		{
 			xs = (fim_scale_t)this->viewport_width()  / (fim_scale_t)(image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
@@ -423,7 +448,8 @@ namespace fim
 
 	void Viewport::auto_scale_if_bigger()
 	{
-		if( check_invalid() ) return;
+		if( check_invalid() )
+			return;
 		else
 		{
 			if((this->viewport_width()<(image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0)))
@@ -496,11 +522,13 @@ namespace fim
 			psteps_=(getGlobalStringVariable(FIM_VID_STEPS).re_match("%$"));
 
 		hsteps_ = getGlobalIntVariable(FIM_VID_HSTEPS);
-		if(hsteps_<FIM_CNS_STEPS_MIN)hsteps_ = steps_;
+		if(hsteps_<FIM_CNS_STEPS_MIN)
+			hsteps_ = steps_;
 		else psteps_=(getGlobalStringVariable(FIM_VID_HSTEPS).re_match("%$"));
 
 		vsteps_ = getGlobalIntVariable(FIM_VID_VSTEPS);
-		if(vsteps_<FIM_CNS_STEPS_MIN)vsteps_ = steps_;
+		if(vsteps_<FIM_CNS_STEPS_MIN)
+			vsteps_ = steps_;
 		else psteps_=(getGlobalStringVariable(FIM_VID_VSTEPS).re_match("%$"));
 #else  /* FIM_WINDOWS */
 		hsteps_ = vsteps_ = steps_ = FIM_CNS_STEPS_DEFAULT_N;
@@ -532,7 +560,8 @@ namespace fim
 		 * scales the image in a way to fit in the viewport height
 		 * */
 		fim_scale_t newscale;
-		if( check_invalid() ) return;
+		if( check_invalid() )
+			return;
 
 		newscale = ((fim_scale_t)this->viewport_height()) / (fim_scale_t)image_->original_height();
 
@@ -545,7 +574,8 @@ namespace fim
 		 * scales the image in a way to fit in the viewport width
 		 * */
 		fim_scale_t newscale;
-		if( check_invalid() ) return;
+		if( check_invalid() )
+			return;
 
 		newscale = ((fim_scale_t)this->viewport_width()) / ((fim_scale_t)image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
 
@@ -565,7 +595,8 @@ namespace fim
 		}
 #else /* FIM_BUGGED_CACHE */
 		// warning : in this cases exception handling is missing
-		if(image_)delete image_;
+		if(image_)
+			delete image_;
 #endif /* FIM_BUGGED_CACHE */
 		image_ = NULL;
 	}
@@ -600,7 +631,8 @@ namespace fim
 		/*
 		 * scale image positioning variables by adjusting by a multiplying factor
 		 * */
-		if(factor<=0.0)return;
+		if(factor<=0.0)
+			return;
 		left_ = (fim_off_t)ceilf(((fim_scale_t)left_)*factor);
 		top_  = (fim_off_t)ceilf(((fim_scale_t)top_ )*factor);
 		/*
@@ -615,7 +647,8 @@ namespace fim
 		/*
 		 * scale image positioning variables by adjusting by a multiplying factor
 		 * */
-		if(factor<=0.0)return;
+		if(factor<=0.0)
+			return;
 		left_ = (fim_off_t)ceilf(((fim_scale_t)left_)/factor);
 		top_  = (fim_off_t)ceilf(((fim_scale_t)top_ )/factor);
 		//if(!panned_  /* && we_want_centering */ )
@@ -660,8 +693,10 @@ namespace fim
 	{
 		// FIXME: a quick hack
 		args_t args;
-		if(a1)args.push_back(a1);
-		if(a2)args.push_back(a2);
+		if(a1)
+			args.push_back(a1);
+		if(a2)
+			args.push_back(a2);
 		return pan(args);
 	}
 
@@ -672,9 +707,11 @@ namespace fim
 		fim_char_t f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
 		const fim_char_t*fs=args[0].c_str();
 		const fim_char_t*ss=NULL;
-		if(args.size()<1 || (!fs))goto nop;
+		if(args.size()<1 || (!fs))
+			goto nop;
 		f=tolower(*fs);
-		if(!fs[0])goto nop;
+		if(!fs[0])
+			goto nop;
 		s=tolower(fs[1]);
         	steps_reset();
 		// FIXME: write me
@@ -714,8 +751,10 @@ namespace fim
 			break;
 			case('n'):
 			case('s'):
-			if(f=='n') pan_up(vs);
-			if(f=='s') pan_down(vs);
+			if(f=='n')
+		       		pan_up(vs);
+			if(f=='s')
+			       	pan_down(vs);
 			switch(s)
 			{
 				case('e'):

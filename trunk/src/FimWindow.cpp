@@ -24,7 +24,6 @@
  *	FIXME : there are bugs.
  */
 
-
 #include "fim.h"
 
 #ifdef FIM_WINDOWS
@@ -41,7 +40,8 @@ namespace fim
 #ifdef FIM_AUTOCMDS
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal
-		if(amroot_)autocmd_exec(FIM_ACM_PREWINDOW,c);
+		if(amroot_)
+			autocmd_exec(FIM_ACM_PREWINDOW,c);
 #endif /* FIM_AUTOCMDS */
 		try
 		{
@@ -99,7 +99,8 @@ namespace fim
 			/*
 			 * FIXME
 			 * */
-			if(rc!=0) return "window : bad command\n";
+			if(rc!=0)
+			       	return "window : bad command\n";
 
 			/*
 			else if(cmd == "test")
@@ -117,7 +118,8 @@ namespace fim
 		}
 #ifdef FIM_AUTOCMDS
 		// note that an autocommand on a transient object is lethal
-		if(amroot_)autocmd_exec(FIM_ACM_POSTWINDOW,c);
+		if(amroot_)
+			autocmd_exec(FIM_ACM_POSTWINDOW,c);
 #endif /* FIM_AUTOCMDS */
                 return FIM_CNS_EMPTY_RESULT;
         }
@@ -137,13 +139,15 @@ namespace fim
 		if(vp)
 		{
 			viewport_=new Viewport(*vp );
-			if(viewport_)viewport_->reassignWindow(this);
+			if(viewport_)
+				viewport_->reassignWindow(this);
 
 		}
 		else
 			viewport_=new Viewport( commandConsole_,  this );
 
-		if( viewport_ == NULL ) throw FIM_E_NO_MEM;
+		if( viewport_ == NULL )
+		       	throw FIM_E_NO_MEM;
 	}
 
 //#ifdef FIM_UNDEFINED
@@ -160,7 +164,8 @@ namespace fim
 		 */
 		viewport_=new Viewport( commandConsole_, this );
 
-		if( viewport_ == NULL ) throw FIM_E_NO_MEM;
+		if( viewport_ == NULL )
+		       	throw FIM_E_NO_MEM;
 	}
 //#endif
 
@@ -236,7 +241,8 @@ namespace fim
 		 * */
 		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
-		if(focus_==false)return first_->c_focused();
+		if(focus_==false)
+			return first_->c_focused();
 		else return second_->c_focused();
 	}
 
@@ -248,7 +254,8 @@ namespace fim
 		 * */
 		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
-		if(focus_==false)return *first_;
+		if(focus_==false)
+			return *first_;
 		else return *second_;
 	}
 
@@ -300,7 +307,8 @@ namespace fim
 		 * */		
 		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
-		if(focus_!=false)return *first_;
+		if(focus_!=false)
+			return *first_;
 		else return *second_;
 	}
 
@@ -312,7 +320,8 @@ namespace fim
 		 * */		
 		if(isleaf())/* temporarily, for security reasons */throw FIM_E_WINDOW_ERROR;
 
-		if(focus_!=false)return first_->c_shadowed();
+		if(focus_!=false)
+			return first_->c_shadowed();
 		else return second_->c_shadowed();
 	}
 
@@ -345,12 +354,17 @@ namespace fim
 
 	void FimWindow::print()
 	{
-		if(amroot_)std::cout<<"--\n";
-		if(amroot_)print_focused();
-		if(isleaf())std::cout<<"L:";
+		if(amroot_)
+			std::cout<<"--\n";
+		if(amroot_)
+			print_focused();
+		if(isleaf())
+			std::cout<<"L:";
 		corners_.print();
-		if(!isleaf())first_ ->print();
-		if(!isleaf())second_->print();
+		if(!isleaf())
+			first_ ->print();
+		if(!isleaf())
+			second_->print();
 	}
 #endif
 	
@@ -359,7 +373,8 @@ namespace fim
 		/*
 		 * splits the window with a horizontal separator
 		 * */
-		if(   ! isvalid() ) return;
+		if(   ! isvalid() )
+		       	return;
 
 		/*
 		 * we should check if there is still room to split ...
@@ -386,7 +401,8 @@ namespace fim
 		/*
 		 * splits the window with a vertical separator
 		 * */
-		if(   !isvalid() ) return;
+		if(   !isvalid() )
+		       	return;
 
 		/*
 		 * we should check if there is still room to split ...
@@ -421,7 +437,8 @@ namespace fim
 		 * |b.jpg|a.jpg|   |a.jpg|b.jpg|
 		 * +-----+-----+   +-----+-----+
 		 */
-		if(   !isvalid() ) return false;
+		if(   !isvalid() )
+			return false;
 
 		if(isleaf())
 		{
@@ -467,7 +484,8 @@ namespace fim
 		 * |    |     |   |          |
 		 * +----+-----+   +----------+
 		 */
-		if(   !isvalid() ) return false;
+		if(   !isvalid() )
+			return false;
 
 		if(isleaf())
 		{
@@ -534,10 +552,14 @@ namespace fim
 		 * ( ^ )^-1 = v
 		 * ( v )^-1 = ^
 		 * */
-		if(move==Left )return Right;
-		if(move==Right)return Left;
-		if(move==Up   )return Down;
-		if(move==Down )return Up;
+		if(move==Left )
+			return Right;
+		if(move==Right)
+			return Left;
+		if(move==Up   )
+			return Down;
+		if(move==Down )
+			return Up;
 		return move;
 	}
 
@@ -550,7 +572,8 @@ namespace fim
 		 * maybe more abstractions is needed here..
 		 * */
 		Moves m;
-		if( isleaf() || move==NoMove )return NoMove;
+		if( isleaf() || move==NoMove )
+			return NoMove;
 		else
 		if( isvsplit() )
 		{
@@ -909,7 +932,8 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-				if(viewport_)commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// no effect
+				if(viewport_)
+					commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// no effect
 				return FIM_ERR_NO_ERROR;
 			}
 
@@ -920,16 +944,20 @@ namespace fim
 				 * + | +
 				 * +-+-+
 				 * */
-				if(focused()==left()) focused().hrgrow(units);
-				if(focused()==right())focused().hlgrow(units);
+				if(focused()==left()) 
+					focused().hrgrow(units);
+				if(focused()==right())
+					focused().hlgrow(units);
 				focused().normalize();  // i think there is a more elegant way to this but hmm..
 				
 			}
 			focused().venlarge(units); //regardless the split status
 			if(isvsplit())
 			{
-				if(focused()==left())  shadowed().hlshrink(units);
-				if(focused()==right()) shadowed().hrshrink(units);
+				if(focused()==left())  
+					shadowed().hlshrink(units);
+				if(focused()==right()) 
+					shadowed().hrshrink(units);
 				shadowed().normalize(); 
 			}
 			return FIM_ERR_NO_ERROR;
@@ -956,7 +984,8 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-				if(viewport_)commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// no effect
+				if(viewport_)
+					commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// no effect
 				return FIM_ERR_NO_ERROR;
 			}
 
@@ -967,16 +996,20 @@ namespace fim
 				 * +---+
 				 * +---+
 				 * */
-				if(focused()==upper()) focused().vlgrow(units);
-				if(focused()==lower()) focused().vugrow(units);
+				if(focused()==upper()) 
+					focused().vlgrow(units);
+				if(focused()==lower()) 
+					focused().vugrow(units);
 				focused().normalize();  // i think there is a more elegant way to thism but hmm..
 				
 			}
 			focused().henlarge(units); //regardless the split status
 			if(ishsplit())
 			{
-				if(focused()==upper()) shadowed().vushrink(units);
-				if(focused()==lower()) shadowed().vlshrink(units);
+				if(focused()==upper()) 
+					shadowed().vushrink(units);
+				if(focused()==lower()) 
+					shadowed().vlshrink(units);
 
 				shadowed().normalize(); 
 			}
@@ -1050,7 +1083,8 @@ namespace fim
 		{
 		if(isleaf())
 		{
-			if(viewport_)re=viewport_->redisplay();
+			if(viewport_)
+				re=viewport_->redisplay();
 		}
 		else
 		{
@@ -1076,7 +1110,8 @@ namespace fim
 		{
 		if(isleaf())
 		{
-			if(viewport_)re=viewport_->display();
+			if(viewport_)
+				re=viewport_->display();
 		}
 		else
 		{
@@ -1103,7 +1138,8 @@ namespace fim
 		 * ||   ||     |
 		 * +#===#+-----+
 		 */
-		if(!isleaf()) return focused().current_viewportp();
+		if(!isleaf()) 
+			return focused().current_viewportp();
 
 		return viewport_;
 	}	
@@ -1121,7 +1157,8 @@ namespace fim
 		 * ||   ||     |
 		 * +#===#+-----+
 		 */
-		if(!isleaf()) return focused().current_viewport();
+		if(!isleaf())
+			return focused().current_viewport();
 
 		if(!viewport_)/* temporarily, for security reasons throw FIM_E_TRAGIC*/; // isleaf()
 
@@ -1138,9 +1175,12 @@ namespace fim
 
 	FimWindow::~FimWindow()
 	{
-		if(viewport_) delete viewport_;
-		if(first_)delete first_;
-		if(second_)delete second_; 
+		if(viewport_)
+			delete viewport_;
+		if(first_)
+			delete first_;
+		if(second_)
+			delete second_; 
 	}
 
 	fim_err_t FimWindow::update(const Rect& corners)

@@ -745,11 +745,13 @@ fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ER
 	}
 	    cc.printHelpMessage(argv0);
 	    std::cout << " where OPTIONS are taken from :\n";
-	    if(helparg&&*helparg=='l') std::cout << "(EXPERIMENTAL: long help ('l') printout still unsupported)\n";
+	    if(helparg&&*helparg=='l')
+		    std::cout << "(EXPERIMENTAL: long help ('l') printout still unsupported)\n";
 	    for(size_t i=0;i<fim_options_count-1;++i)
 	    {	
 		if(isascii(fim_options[i].val)){
-	   	if((fim_options[i].val)!='-')std::cout << "\t-"<<(fim_char_t)(fim_options[i].val) ;
+	   	if((fim_options[i].val)!='-')
+			std::cout << "\t-"<<(fim_char_t)(fim_options[i].val) ;
 	   	else std::cout << "\t-";}else std::cout<<"\t";
 		std::cout << "\t\t";
 	    	std::cout << "--"<<fim_options[i].name ;
@@ -758,15 +760,18 @@ fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ER
 		break;
 		case required_argument:
 		//std::cout << " <arg>";
-		if(fim_options[i].optdesc) std::cout << " =" << fim_options[i].optdesc; else std::cout << " =<arg>";
+		if(fim_options[i].optdesc)
+		       	std::cout << " =" << fim_options[i].optdesc; else std::cout << " =<arg>";
 		break;
 		case optional_argument:
-		if(fim_options[i].optdesc) std::cout << " " << fim_options[i].optdesc; else std::cout << "[=arg]";
+		if(fim_options[i].optdesc)
+		       	std::cout << " " << fim_options[i].optdesc; else std::cout << "[=arg]";
 		break;
 		default:
 		;
 		};
-		if(helparg&&*helparg=='d')std::cout << "\t\t " << fim_options[i].desc;
+		if(helparg&&*helparg=='d')
+			std::cout << "\t\t " << fim_options[i].desc;
 		std::cout << FIM_SYM_ENDL;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 		}
@@ -868,7 +873,8 @@ done:
 			}
                     else
 		    {
-			if(optarg)std::cerr<<"Warning : the --"FIM_OSW_BINARY" option supports 1 or 24 bpp depths. Using "<<FIM_DEFAULT_AS_BINARY_BPP<<".\n";
+			if(optarg)
+				std::cerr<<"Warning : the --"FIM_OSW_BINARY" option supports 1 or 24 bpp depths. Using "<<FIM_DEFAULT_AS_BINARY_BPP<<".\n";
 		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,FIM_DEFAULT_AS_BINARY_BPP);
                     }
 		    break;
@@ -1152,7 +1158,8 @@ done:
 		    //fim's
 		{
 			args_t args;
-			if(optarg)args.push_back(optarg);
+			if(optarg)
+				args.push_back(optarg);
 			cc.dump_reference_manual(args);
 			std::exit(0);
 		}
@@ -1175,7 +1182,8 @@ done:
 		for (i = optind; i < argc; i++)
 		{
 	#ifdef FIM_READ_STDIN
-			if(*argv[i]=='-'&&!argv[i][1])read_file_list_from_stdin=1;
+			if(*argv[i]=='-'&&!argv[i][1])
+				read_file_list_from_stdin=1;
 			else
 	#endif /* FIM_READ_STDIN */
 			{
@@ -1220,7 +1228,8 @@ done:
 				//printf("%s\n",lineptr);
 				lineptr=NULL;
 			}
-			if(lineptr)fim_free(lineptr);
+			if(lineptr)
+				fim_free(lineptr);
 			close(0);
 			ndd=dup(2);
 		}
@@ -1240,10 +1249,13 @@ done:
 		{
 		    	fim_char_t* buf;
 			buf=slurp_binary_fd(0,NULL);
-			if(buf) cc.appendPostInitCommand(buf);
-			if(buf) appendedPostInitCommand=true;
+			if(buf)
+			       	cc.appendPostInitCommand(buf);
+			if(buf)
+			       	appendedPostInitCommand=true;
 	//		if(buf) appendedPreConfigCommand=true;
-			if(buf) fim_free(buf);
+			if(buf)
+			       	fim_free(buf);
 			close(0);
 			ndd=dup(2);
 		}

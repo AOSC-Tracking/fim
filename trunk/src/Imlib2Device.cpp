@@ -541,7 +541,8 @@ fim_err_t Imlib2Device::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, co
 {
     fim_err_t rc=FIM_ERR_GENERIC;
     fim_sys_int i,c/*,j,w*/;
-	if(initialized==false) goto ret;
+	if(initialized==false)
+	       	goto ret;
 
     for (i = 0; str[i] != '\0'; i++) {
 	c = (fim_byte_t)str[i];

@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -129,25 +129,25 @@ STRINGC_DQ {STRINGC}|\'
 "do" return DO;
 
 ([gwibv]:)?{ID}	{
-	astrcpy(yylval.sValue,yytext);
-	//tl(yylval.sValue);
-	// tolower breaks aliases, but it would be useful on  keywords, above..
-	return IDENTIFIER;
+		astrcpy(yylval.sValue,yytext);
+		//tl(yylval.sValue);
+		// tolower breaks aliases, but it would be useful on  keywords, above..
+		return IDENTIFIER;
 	}
 
 "0"[0-9]+ {
-	yylval.iValue = strtol(yytext,NULL,8);
-	return INTEGER;
+		yylval.iValue = strtol(yytext,NULL,8);
+		return INTEGER;
 	}
 
 "0x"[0-9]+ {
-	yylval.iValue = strtol(yytext,NULL,16);
-	return INTEGER;
+		yylval.iValue = strtol(yytext,NULL,16);
+		return INTEGER;
 	}
 
 [0-9]+	{
-	yylval.iValue = atoi(yytext);
-	return INTEGER;
+		yylval.iValue = atoi(yytext);
+		return INTEGER;
 	}
 
 "$" 	{
@@ -161,64 +161,64 @@ STRINGC_DQ {STRINGC}|\'
 	}
 
 "'"{DIGIT}+"."{DIGIT}*"'" {
-	yylval.fValue = fim_atof(yytext+1);
-	return QUOTED_FLOAT;
+		yylval.fValue = fim_atof(yytext+1);
+		return QUOTED_FLOAT;
 	}
 
 "\""{DIGIT}+"."{DIGIT}*"\"" {
-	yylval.fValue = fim_atof(yytext+1);
-	return QUOTED_FLOAT;
+		yylval.fValue = fim_atof(yytext+1);
+		return QUOTED_FLOAT;
 	}
 
 \'((\\\')|[^\'])*\' {
 	//trec(yytext+1,"n\\\'","\n\\\'");
 	/* single quoted strings are not escaped */
-	qastrcpy(yylval.sValue,yytext);;
-	return STRING;
+		qastrcpy(yylval.sValue,yytext);;
+		return STRING;
 	}
 
 \"((\\\")|[^\"])*\" {
 	/* double quoted strings unescaping */
-	trec(yytext+1,"n\\\"","\n\\\"");
-	//trhex(yytext+1); // hex escaping already perfomed in trec.
-	qastrcpy(yylval.sValue,yytext);;
-	return STRING;
+		trec(yytext+1,"n\\\"","\n\\\"");
+		//trhex(yytext+1); // hex escaping already perfomed in trec.
+		qastrcpy(yylval.sValue,yytext);;
+		return STRING;
 	}
 
 "./"{STRINGC}* {/* FIXME : "/"{STRINGC} - like tokens clashed with lone / operator */
-	/* FIM_SMART_COMPLETION patch */
-	/* a path */
-	astrcpy(yylval.sValue,yytext);;
-	return FILE_PATH;
+		/* FIM_SMART_COMPLETION patch */
+		/* a path */
+		astrcpy(yylval.sValue,yytext);;
+		return FILE_PATH;
 	}
 
 "../"{STRINGC}* {
-	/* FIM_SMART_COMPLETION patch */
-	/* a path */
-	astrcpy(yylval.sValue,yytext);;
-	return FILE_PATH;
+		/* FIM_SMART_COMPLETION patch */
+		/* a path */
+		astrcpy(yylval.sValue,yytext);;
+		return FILE_PATH;
 	}
 
 {ID}([.]{ID})+ {
-	/* FIM_SMART_COMPLETION patch */
-	/* a path */
-	astrcpy(yylval.sValue,yytext);;
-	return FILE_PATH;
+		/* FIM_SMART_COMPLETION patch */
+		/* a path */
+		astrcpy(yylval.sValue,yytext);;
+		return FILE_PATH;
 	}
 
 
 {SYMBOL} {
-	return *yytext;
+		return *yytext;
 	}
 
 ^"/".+  {  
-	astrcpy(yylval.sValue,yytext+1);;
-	return SLASH_AND_REGEXP;
+		astrcpy(yylval.sValue,yytext+1);;
+		return SLASH_AND_REGEXP;
 	}
 
 {DIGIT}+"."{DIGIT}* {
-	yylval.fValue = fim_atof(yytext+0);
-	return UNQUOTED_FLOAT;
+		yylval.fValue = fim_atof(yytext+0);
+		return UNQUOTED_FLOAT;
 	}
 
 [ \t]+ { /* we ignore whitespace */ ; }

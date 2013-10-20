@@ -81,7 +81,8 @@ ret:
 		
 		FIM_LOUD_CACHE_STUFF;
                 for(    rcachels_t::const_iterator rcci=rcc.begin(); rcci!=rcc.end();++rcci )
-			if(usageCounter_[rcci->first->getKey()]==0)erase( rcci->first );
+			if(usageCounter_[rcci->first->getKey()]==0)
+				erase( rcci->first );
 		return true;
 	}
 
@@ -118,7 +119,8 @@ ret:
 		/*
 		struct mallinfo mi = mallinfo();
 		cout << "allocated : " <<  mi.uordblks << "\n";
-		if( mi.uordblks > getIntGlobalVariable(FIM_VID_MAX_CACHED_MEMORY) )return true;
+		if( mi.uordblks > getIntGlobalVariable(FIM_VID_MAX_CACHED_MEMORY) )
+			return true;
 
 		these are not the values we want ..
 		*/
@@ -141,7 +143,8 @@ ret:
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		FIM_LOUD_CACHE_STUFF;
-		if(!oi)return -1;
+		if(!oi)
+			return -1;
 		//return *(clone_pool_.find(oi))==oi;
 		return ( clone_pool_.find(oi)!=clone_pool_.end() )	
 			&&
@@ -173,7 +176,8 @@ ret:
 	int Cache::free(fim::Image* oi)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!oi)return -1;
+		if(!oi)
+			return -1;
 
 		if(!is_in_cache(oi))
 		{
@@ -279,7 +283,8 @@ ret:
 #endif /* FIM_CACHE_DEBUG */
 
 		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!ni)return false;
+		if(!ni)
+			return false;
 
 		this->imageCache_[ni->getKey()]=ni;
 		this->reverseCache_[ni]= ni->getKey();

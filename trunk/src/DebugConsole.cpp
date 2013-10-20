@@ -2,7 +2,7 @@
 /*
  DebugConsole.cpp : Fim virtual console display.
 
- (c) 2008-2011 Michele Martone
+ (c) 2008-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,7 +33,8 @@ namespace fim
 				return li<cline_?(line_[li+1]-line_[li]):(ccol_);
 			}
 			else
-			if(li<0)return 0;
+			if(li<0)
+				return 0;
 			// in the case li==cline_, ccol_==bp_-buffer_ will do the job:
 			return ccol_;
 		}
@@ -67,7 +68,8 @@ namespace fim
 					// a fixup for the dumb console
 					int n=1+line_[l]-line_[f_];
 					fim_char_t*buf=NULL;
-					if(n>0 && (buf=(fim_char_t*)fim_malloc(n))!=NULL)
+					if(n>0 && (buf=(fim_char_t*)
+								fim_malloc(n))!=NULL)
 					{
 						strncpy(buf,line_[f_],n);
 						buf[n-1]='\0';
@@ -81,7 +83,8 @@ namespace fim
 			}
 
 			fim_char_t *buf = (fim_char_t*) fim_malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
-			if(!buf)return FIM_ERR_GENERIC;
+			if(!buf)
+				return FIM_ERR_GENERIC;
 
 			if(*bp_){fim_free(buf);return FIM_ERR_GENERIC;}//if *bp_ then we could print garbage so we exit before damage is done
 
@@ -149,21 +152,26 @@ done:
 #endif /* FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE */
 			cs=dupstr(cso);
 
-			if(!cs)goto rerr;
+			if(!cs)
+				goto rerr;
 			nc=strlen(cs);
-			if(!nc)goto rerr;
+			if(!nc)
+				goto rerr;
 			nl=lines_count(cs,lwidth_);
-			if(lwidth_<1)goto rerr;
+			if(lwidth_<1)
+				goto rerr;
 			nl=lines_count(cs,lwidth_);
 			// we count exactly the number of new entries needed in the arrays we have
-			if((s=const_cast<fim_char_t*>(strchr(cs,'\n')))!=NULL && s!=cs)nl+=(ccol_+(s-cs-1))/lwidth_;// single line_ with \n or multiline
+			if((s=const_cast<fim_char_t*>(strchr(cs,'\n')))!=NULL && s!=cs)
+				nl+=(ccol_+(s-cs-1))/lwidth_;// single line_ with \n or multiline
 			else nl+=(strlen(cs)+ccol_)/lwidth_;	// single line_, with no terminators
 
 			/*
 			 * we check for room (please note that nl >= the effective new lines introduced , while
 			 * nc amounts to the exact extra room needed )
 			 * */
-			if(nc+1+(int)(bp_-buffer_)>bsize_ || nl+1+cline_>lsize_)return FIM_ERR_BUFFER_FULL;//no room : realloc needed ; 1 is for secur1ty
+			if(nc+1+(int)(bp_-buffer_)>bsize_ || nl+1+cline_>lsize_)
+				return FIM_ERR_BUFFER_FULL;//no room : realloc needed ; 1 is for secur1ty
 			scroll_=scroll_-nl<0?0:scroll_-nl;
 
 			// we copy the whole new string in our buffer_
@@ -252,8 +260,10 @@ rerr:
 			{
 				bsize_=0;
 				lsize_=0;
-				if(buffer_)fim_free(buffer_);
-				if(line_  )fim_free(line_);
+				if(buffer_)
+					fim_free(buffer_);
+				if(line_  )
+					fim_free(line_);
 			}
 			else
 			{
@@ -287,7 +297,8 @@ rerr:
 			if(amount < 0)
 			{
 				// dumps the first amount of lines
-				if(-amount>=cline_)amount+=cline_;
+				if(-amount>=cline_)
+					amount+=cline_;
 				do_dump(0,-amount);
 			}
 			return FIM_ERR_NO_ERROR;
@@ -301,8 +312,10 @@ rerr:
 			 * see the doc for grow() to get more
 			 * */
 			/* TEST ME AND FINISH ME */
-			if(glines< 0)return FIM_ERR_GENERIC;
-			if(glines==0)return FIM_ERR_NO_ERROR;
+			if(glines< 0)
+				return FIM_ERR_GENERIC;
+			if(glines==0)
+				return FIM_ERR_NO_ERROR;
 			fim_char_t **p;
 			p=line_;
 			line_=(fim_char_t**)realloc(line_,bsize_+glines*sizeof(fim_char_t*));
@@ -319,8 +332,10 @@ rerr:
 			 * see the doc for grow() to get more
 			 * */
 			/* TEST ME AND FINISH ME */
-			if(gbuffer< 0)return  FIM_ERR_GENERIC;
-			if(gbuffer==0)return  FIM_ERR_NO_ERROR;
+			if(gbuffer< 0)
+				return  FIM_ERR_GENERIC;
+			if(gbuffer==0)
+				return  FIM_ERR_NO_ERROR;
 			fim_char_t *p;int i,d;
 			p=buffer_;
 			buffer_=(fim_char_t*)realloc(buffer_,(bsize_+gbuffer)*sizeof(fim_char_t));
@@ -378,12 +393,14 @@ rerr:
 			 * 
 			 * */
 			int nls;
-			if(newlwidth==lwidth_)return FIM_ERR_NO_ERROR;//are we sure?
+			if(newlwidth==lwidth_)
+				return FIM_ERR_NO_ERROR;//are we sure?
 			if(newlwidth< lwidth_)
 			{
 				// realloc needed
 				if ( ( nls=lines_count(buffer_, newlwidth) + 1 ) < lsize_ )
-				if ( grow_lines( nls )!=FIM_ERR_NO_ERROR )return FIM_ERR_GENERIC;
+				if ( grow_lines( nls )!=FIM_ERR_NO_ERROR )
+					return FIM_ERR_GENERIC;
 			}
 			if(newlwidth> lwidth_ || ( lines_count(buffer_, newlwidth) + 1 < lsize_ ) )
 			{
@@ -417,7 +434,8 @@ rerr:
 			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_LINES,cline_);
 			// we eventually update internal variables now
 			setRows(ls);
-			if( lw > 0 && lw!=lwidth_ ) reformat(lw);
+			if( lw > 0 && lw!=lwidth_ )
+				reformat(lw);
 			if(co>=0)
 			{
 				scroll_=scroll_%(rows_+1);
