@@ -151,13 +151,13 @@ STRINGC_DQ {STRINGC}|\'
 	}
 
 "$" 	{
-	yylval.iValue = -1;
-	return INTEGER;
+		yylval.iValue = FIM_CNS_LAST;
+		return INTEGER;
 	}
 
 "^"	{
-	yylval.iValue = 0;
-	return INTEGER;
+		yylval.iValue = 0;
+		return INTEGER;
 	}
 
 "'"{DIGIT}+"."{DIGIT}*"'" {

@@ -358,6 +358,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.JPEG$|\\.JFIF$|\\.PPM$"
 #define FIM_CNS_VERBOSITY_LOADER		1 /* a value for FIM_VID_VERBOSITY */ 
 #define FIM_CNS_BPP_INVALID	0
+#define FIM_CNS_LAST	2000000000
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
