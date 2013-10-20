@@ -98,4 +98,12 @@ typedef int FimException;
 #define FIM_E_NO_MEM 4	/* also a return code */
 /* ... */
 
+#define FIM_CHAR_BIT 8 /* FIXME */
+#define FIM_IS_SIGNED(T)   (((T)0) > (((T)-1)))
+#define FIM_MAX_UNSIGNED(T) ((T)-1)
+#define FIM_HALF_MAX_SIGNED(T) ((T)1 << (sizeof(T)*FIM_CHAR_BIT-2))
+#define FIM_MAX_SIGNED(T) (FIM_HALF_MAX_SIGNED(T) - 1 + FIM_HALF_MAX_SIGNED(T))
+#define FIM_MAX_VALUE_FOR_TYPE(T) (FIM_IS_SIGNED(T)?FIM_MAX_SIGNED(T):FIM_MAX_UNSIGNED(T))
+#define FIM_MAX_INT FIM_MAX_VALUE_FOR_TYPE(fim_int) 
+
 #endif /* FIM_COMMON_H */

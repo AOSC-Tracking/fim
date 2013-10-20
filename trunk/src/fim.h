@@ -365,6 +365,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_BPP_INVALID	0
 #define FIM_CNS_K 1024
 #define FIM_CNS_M (FIM_CNS_K*FIM_CNS_K)
+#define FIM_CNS_LAST FIM_MAX_INT
+#define FIM_CNS_FIRST 0
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
