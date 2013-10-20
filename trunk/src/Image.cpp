@@ -694,6 +694,10 @@ fim::string Image::getInfo()
 					/* cache property. TODO: move outta here */
 					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),cc.browser_.cache_.byte_size());
 				break;
+				case('c'):
+					/* viewport property. TODO: move outta here */
+					cc.current_viewport()->snprintf_centering_info(clb+strlen(clb), sizeof(clb));
+				break;
 				case('%'):
 					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
 				break;

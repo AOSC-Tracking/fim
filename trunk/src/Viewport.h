@@ -46,7 +46,6 @@ class Viewport
 	fim_bool_t	psteps_;
         DisplayDevice* displaydevice_;
 
-
 	Image  *image_;	// !! 
 #ifdef FIM_WINDOWS
 	FimWindow *window_;
@@ -85,10 +84,10 @@ class Viewport
 	void pan_down (fim_pan_t s=0);
 	void pan_right(fim_pan_t s=0);
 	void pan_left (fim_pan_t s=0);
-	bool onBottom();
-	bool onRight();
-	bool onLeft();
-	bool onTop();
+	bool onBottom()const;
+	bool onRight()const;
+	bool onLeft()const;
+	bool onTop()const;
 
 	fim_coo_t xorigin();
 	fim_coo_t yorigin();
@@ -98,8 +97,8 @@ class Viewport
 	/* viewport methods */
 
 	public:
-	fim_coo_t viewport_width();
-	fim_coo_t viewport_height();
+	fim_coo_t viewport_width()const;
+	fim_coo_t viewport_height()const;
 	/* viewport methods */
 	void top_align();
 	void bottom_align();
@@ -133,6 +132,7 @@ class Viewport
 	void recenter_vertically();
 	void recenter();
 	virtual size_t byte_size(void)const;
+	int snprintf_centering_info(char *str, size_t size)const;
 };
 }
 #endif /* FIM_VIEWPORT_H */
