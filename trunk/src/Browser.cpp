@@ -1549,7 +1549,7 @@ nop:
 		 */ 
 		if(args.size()<1)
 			goto err;
-		if(!args[0].c_str() || !args[0].re_match("^(bottom|top)"))
+		if(!args[0].c_str() || !args[0].re_match("^(bottom|top|left|right|center)"))
 			goto err;
 		if(c_image())
 		{
@@ -1559,10 +1559,17 @@ nop:
 #endif /* FIM_AUTOCMDS */
 			if(c_image() && viewport())
 			{
+				// FIXME: need a switch/case construct here
 				if(args[0].re_match("top"))
-					viewport()->top_align();
+					viewport()->align('t');
 				if(args[0].re_match("bottom"))
-					viewport()->bottom_align();
+					viewport()->align('b');
+				if(args[0].re_match("left"))
+					viewport()->align('l');
+				if(args[0].re_match("right"))
+					viewport()->align('r');
+				if(args[0].re_match("center"))
+					viewport()->align('c');
 			}
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_POSTPAN,c);

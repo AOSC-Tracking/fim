@@ -100,8 +100,7 @@ class Viewport
 	fim_coo_t viewport_width()const;
 	fim_coo_t viewport_height()const;
 	/* viewport methods */
-	void top_align();
-	void bottom_align();
+	void align(const char c);
 
 	/* viewport methods */
 	bool display();
