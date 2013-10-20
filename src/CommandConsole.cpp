@@ -136,7 +136,8 @@ namespace fim
 			//if(bi->second == FIM_CNS_EMPTY_STRING)continue;//FIX : THIS SHOULD NOT OCCUR
 			bindings_expanded+=FIM_FLT_BIND" \"";
 			key_syms_t::const_iterator ikbi=key_syms_.find(((*bi).first));
-			if(ikbi!=key_syms_.end()) bindings_expanded+=ikbi->second;
+			if(ikbi!=key_syms_.end())
+			       	bindings_expanded+=ikbi->second;
 			bindings_expanded+="\" \"";
 			bindings_expanded+=((*bi).second);
 			bindings_expanded+="\"\n";
@@ -304,8 +305,10 @@ ret:		return key;
 			return get_alias_info(args[0].val_);
 		}
 		//for(size_t i=1;i<args.size();++i) cmdlist+=args[i].val_;
-		if(args.size()>=2)cmdlist+=args[1].val_;
-		if(args.size()>=3)desc   +=args[2].val_;
+		if(args.size()>=2)
+			cmdlist+=args[1].val_;
+		if(args.size()>=3)
+			desc   +=args[2].val_;
 		if(aliases_[args[0].val_].first!=FIM_CNS_EMPTY_STRING)
 		{
 			string r;
@@ -591,7 +594,8 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 
 /*		for(int i=list_index;i<aliases_keys.size();++i)
 		{
-			if(!commands_[i])continue;
+			if(!commands_[i])
+				continue;
 			if(commands_[i]->cmd_.find(cmd)==0)
 			{
 				list_index++;
@@ -1070,7 +1074,8 @@ ok:
 					autocmd_exec(FIM_ACM_PREINTERACTIVECOMMAND,cf);
 #endif /* FIM_AUTOCMDS */
 #ifdef FIM_RECORDING
-					if(recordMode_)record_action(fim::string(rl));
+					if(recordMode_)
+						record_action(fim::string(rl));
 #endif /* FIM_RECORDING */
 					//ic_=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
 					execute_internal(rl,FIM_X_HISTORY);	//execution of the command line with history
@@ -1554,7 +1559,8 @@ rlnull:
 			}
 		}
 		
-		if(acl==FIM_CNS_EMPTY_STRING)acl="no autocommands loaded\n";
+		if(acl==FIM_CNS_EMPTY_STRING)
+			acl="no autocommands loaded\n";
 		return acl;
 	}
 
@@ -2118,7 +2124,8 @@ ok:
 				strcat(hfile,"/"FIM_CNS_HIST_FILENAME);
 				bool need_chmod=!is_file(hfile);		// will try to chmod if already non existent
 				write_history(hfile);
-				if(need_chmod)chmod(hfile,S_IRUSR|S_IWUSR);	// we write the first .fim_history in mode -rw------- (600)
+				if(need_chmod)
+					chmod(hfile,S_IRUSR|S_IWUSR);	// we write the first .fim_history in mode -rw------- (600)
 			}
 			/* else : /home/useeeeeeeeeeeeeeeeeeeeeee.....eeeeeeeer ? :) */
 			

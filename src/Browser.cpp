@@ -232,7 +232,8 @@ ret:
 		assert(cf_);
 		if(filename==FIM_CNS_EMPTY_STRING)
 		{
-			if(current_n()==(int)flist_.size())cf_--;
+			if(current_n()==(int)flist_.size())
+				cf_--;
 			s=flist_[flist_.size()-1];
 			flist_.erase(flist_.begin()+current_n());
 		}
@@ -317,37 +318,35 @@ nop:
 				{
 					fim_scale_t vmf = getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 					fim_scale_t vrf = getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
+					fim_scale_t sfd = getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
+					fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
+					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)
+						sfd=FIM_CNS_SCALEFACTOR_DELTA;
+					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)
+					       	sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 
 					switch(sc)
 					{
 						case('+'):
 						{
-							fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
-							if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 							vrf+=sfd;
 							vmf+=sfd;
 						}
 						break;
 						case('-'):
 						{
-							fim_scale_t sfd=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
-							if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)sfd=FIM_CNS_SCALEFACTOR_DELTA ;
 							vrf-=sfd;
 							vmf-=sfd;
 						}
 						break;
 						case('*'):
 						{
-							fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
-							if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 							vrf*=sfm;
 							vmf*=sfm;
 						}
 						break;
 						case('/'):
 						{
-							fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
-							if(sfm<=FIM_CNS_SCALEFACTOR_ONE)sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
 							vrf/=sfm;
 							vmf/=sfm;
 						}
@@ -628,7 +627,8 @@ ret:
 	#ifdef FIM_CACHE_DEBUG
 		if(viewport())std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif /* FIM_CACHE_DEBUG */
-		if(viewport())viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
+		if(viewport())
+			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
 #else /* FIM_BUGGED_CACHE */
 		// warning : in this cases exception handling is missing
 	#ifdef FIM_READ_STDIN_IMAGE
@@ -647,13 +647,15 @@ ret:
 			}
 		}
 	#else
-		if(viewport())viewport()->setImage( new Image(current().c_str()) );
+		if(viewport())
+			viewport()->setImage( new Image(current().c_str()) );
 	#endif /* FIM_READ_STDIN_IMAGE */
 #endif /* FIM_BUGGED_CACHE */
 		}
 		catch(FimException e)
 		{
-			if(viewport())viewport()->setImage( NULL );
+			if(viewport())
+				viewport()->setImage( NULL );
 //		commented temporarily for safety reasons
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
@@ -1440,9 +1442,15 @@ nop:
 			if(c_image())
 			{
 				if(angle)
-					{if(image())image()->rotate(angle);}
+				{
+					if(image())
+						image()->rotate(angle);
+				}
 				else	
-					{if(image())image()->rotate();}
+				{
+					if(image())
+						image()->rotate();
+				}
 			}
 #ifdef FIM_AUTOCMDS
 //			autocmd_exec(FIM_ACM_POSTROTATE,c);//FIXME
@@ -1472,13 +1480,17 @@ nop:
 			{
 				if(factor)
 				{
-					if(image())image()->magnify(factor);
-					if(viewport())viewport()->scale_position_magnify(factor);
+					if(image())
+						image()->magnify(factor);
+					if(viewport())
+						viewport()->scale_position_magnify(factor);
 				}
 				else	
 				{
-					if(image())image()->magnify();
-					if(viewport())viewport()->scale_position_magnify();
+					if(image())
+						image()->magnify();
+					if(viewport())
+						viewport()->scale_position_magnify();
 				}
 			}
 #ifdef FIM_AUTOCMDS
@@ -1497,7 +1509,8 @@ nop:
 		{
 			fim_scale_t factor;
 			factor = firstforzero(args);
-			if(!factor) factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
+			if(!factor)
+				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			fim::string c=current();
 #ifdef FIM_AUTOCMDS
 			autocmd_exec(FIM_ACM_PRESCALE,c);
@@ -1506,13 +1519,17 @@ nop:
 			{
 				if(factor)
 				{
-					if(image())image()->reduce(factor);
-					if(viewport())viewport()->scale_position_reduce(factor);
+					if(image())
+						image()->reduce(factor);
+					if(viewport())
+						viewport()->scale_position_reduce(factor);
 				}
 				else	
 				{
-					if(image())image()->reduce();
-					if(viewport())viewport()->scale_position_reduce();
+					if(image())
+						image()->reduce();
+					if(viewport())
+						viewport()->scale_position_reduce();
 				}
 			}
 #ifdef FIM_AUTOCMDS

@@ -250,6 +250,8 @@ bind "PageUp" "if(_display_console==0){prev_file;}else{scu;}";
 bind "PageDown" "if(_display_console==0){next_file;}else{scd;}";
 bind "Home" "0;";
 bind "End" "$;";
+bind "^" "0;";
+bind "$" "$;";
 bind "Backspace" "prev";
 _display_status=1;
 echo "WELCOME : to switch to the command line interface press ':' ";
