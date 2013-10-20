@@ -1140,12 +1140,18 @@ nop:
 			isfg=(l=='f');
 			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+') && s[1]=='/') ||( c=='/')));
 			isrj=(c=='+' || c=='-');
-			if(isdigit(c)  || c=='-' || c=='+')gv=atoi(s);
+			if(isdigit(c)  || c=='-' || c=='+')
+			{
+				gv=atoi(s);
+				if(gv==FIM_CNS_LAST)
+					gv=-1;
+			}
 			else
 			       	if(c=='^' || c=='f')
 					gv=1;
 			else
-			       	if(c=='$' || c=='l')gv=-1;// temporarily
+			       	if(c=='$' || c=='l')
+					gv=-1;// temporarily
 			else
 			if(c=='?')
 			{
@@ -1203,6 +1209,7 @@ nop:
 			if((!isrj) && gv>0)
 				gv=gv-1;// user input is interpreted as 1-based 
 			gv=FIM_MOD(gv,mv);
+			/* gv=FIM_MAX(FIM_MIN(gv,mv-1),0); */
 			//cout << "at " << cf <<", gv="<<gv <<", mod="<<mv<<FIM_CNS_NEWLINE;
 			if(ispg)
 			{
