@@ -168,35 +168,35 @@ namespace fim
 		}
 	}
 
-	bool Viewport::onBottom()
+	bool Viewport::onBottom()const
 	{
 		if( check_invalid() )
 			return false;
 		return (top_ + viewport_height() >= image_->height());
 	}
 
-	bool Viewport::onRight()
+	bool Viewport::onRight()const
 	{
 		if( check_invalid() )
 			return false;
 		return (left_ + viewport_width() >= image_->width());
 	}
 
-	bool Viewport::onLeft()
+	bool Viewport::onLeft()const
 	{
 		if( check_invalid() )
 			return false;
 		return (left_ <= 0 );
 	}
 
-	bool Viewport::onTop()
+	bool Viewport::onTop()const
 	{
 		if( check_invalid() )
 			return false;
 		return (top_ <= 0 );
 	}
 
-	fim_coo_t Viewport::viewport_width()
+	fim_coo_t Viewport::viewport_width()const
 	{
 		/*
 		 * */
@@ -209,7 +209,7 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	fim_coo_t Viewport::viewport_height()
+	fim_coo_t Viewport::viewport_height()const
 	{
 		/*
 		 * */
@@ -784,5 +784,87 @@ err:
 		return bs;
 	}
 
+	int Viewport::snprintf_centering_info(char *str, size_t size)const
+	{
+		int vum,vlm;
+		int hum,hlm;
+		float va,ha;
+		char vc='c',hc='c';
+		int res=0;
+		const char*cs=NULL;
+		const char*es="";
+		const float bt=99.0;
+		const float ct=1.0;
+
+		vum = top_;
+	        vlm = image_->height() - viewport_height() - vum;
+		hum = left_;
+	       	hlm = image_->width() - viewport_width() - hum;
+		vum = FIM_MAX(vum,0);
+		vlm = FIM_MAX(vlm,0);
+		hum = FIM_MAX(hum,0);
+		hlm = FIM_MAX(hlm,0);
+
+		if(vum<1 && vlm<1)
+		{
+			va=0.0;
+			// res = snprintf(str+res, size-res, "-");
+		}
+		else
+		{
+			va=((float)(vum))/((float)(vum+vlm));
+			va-=0.5;
+			va*=200.0;
+			if(va<0.0)
+			{
+				va*=-1.0,vc='^';
+				if(va>=bt)
+					cs="top";
+			}
+			else
+			{
+				vc='v';
+				if(va>=bt)
+					cs="bot";
+			}
+			if(va<ct)
+				cs="";
+			if(cs)
+				res += snprintf(str+res, size-res, "%s%s",es,cs);
+			else
+				res += snprintf(str+res, size-res, "%s%2.0f%%%c",es,va,vc);
+		}
+	
+		if(cs)
+			es=" ",cs=NULL;
+
+		if(hum<1 && hlm<1)
+			ha=0.0;
+		else
+		{
+			ha=((float)(hum))/((float)(hum+hlm));
+		       	ha-=0.5;
+			ha*=200.0;
+			if(ha<0.0)
+			{
+				ha*=-1.0,hc='<';
+				if(ha>=bt)
+					cs="left";
+			}
+			else
+			{
+				hc='>';
+				if(ha>=bt)
+					cs="right";
+			}
+			if(ha<ct)
+				cs="";
+			if(cs)
+				res += snprintf(str+res, size-res, "%s%s",es,cs);
+			else
+				res += snprintf(str+res, size-res, "%s%2.0f%%%c",es,ha,hc);
+		}
+		return res;
+	}
 }
 

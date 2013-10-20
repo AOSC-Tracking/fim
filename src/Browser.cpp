@@ -165,6 +165,7 @@ nop:
 				 * should be:
 				 * viewport().redisplay();
 				 */
+				viewport()->recenter(); // 20131020 this shall center as default
 				if( commandConsole_.redisplay() )
 					this->display_status(current().c_str(), NULL);
 			}
