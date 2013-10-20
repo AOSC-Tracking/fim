@@ -11,7 +11,7 @@ AC_PREREQ([2.54])
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
 define([svnversion],esyscmd([sh -c "svnversion | tr  -c '[0-9]' ' ' | sed 's/ *//g;s/^$/-1/g' "]))dnl
-AC_INIT([fim],[0.4-rc0],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
+AC_INIT([fim],[0.4-rc1],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 AC_CONFIG_SRCDIR([src/fim.cpp])
 
 AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])

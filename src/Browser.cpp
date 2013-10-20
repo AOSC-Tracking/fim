@@ -1041,7 +1041,12 @@ nop:
 			isfg=(l=='f');
 			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+') && s[1]=='/') ||( c=='/')));
 			isrj=(c=='+' || c=='-');
-			if(isdigit(c)  || c=='-' || c=='+')gv=atoi(s);
+			if(isdigit(c)  || c=='-' || c=='+')
+			{
+				gv=atoi(s);
+				if(gv==FIM_CNS_LAST)
+					gv=-1;
+			}
 			else if(c=='^' || c=='f')gv=1;
 			else if(c=='$' || c=='l')gv=-1;// temporarily
 			else if(c=='?')
