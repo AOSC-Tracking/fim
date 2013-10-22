@@ -43,6 +43,7 @@
 #define FIM_SHALL_BUFFER_STDIN 0
 #endif /* HAVE_FMEMOPEN */
 
+#define FIM_WANTS_SLOW_RESIZE 1
 namespace fim
 {
 
@@ -407,13 +408,15 @@ op_resize_init(const struct ida_image *src, struct ida_rect *rect,
     struct op_resize_state *h;
 
     h = (struct op_resize_state *)fim_calloc(sizeof(*h),1);
-    if(!h)goto oops;
+    if(!h)
+	    goto oops;
     h->width  = args->width;
     h->height = args->height;
     h->xscale = (float)args->width/src->i.width;
     h->yscale = (float)args->height/src->i.height;
     h->rowbuf = (float*)fim_malloc(src->i.width * 3 * sizeof(float));
-    if(!h->rowbuf)goto oops;
+    if(!h->rowbuf)
+	    goto oops;
     h->srcrow = 0;
     h->inleft = 1;
 
@@ -423,7 +426,8 @@ op_resize_init(const struct ida_image *src, struct ida_rect *rect,
     i->dpi    = args->dpi;
     return h;
     oops:
-    if(h)fim_free(h);
+    if(h)
+	    fim_free(h);
     return NULL;
 }
 
@@ -708,11 +712,12 @@ op_resize_work(const struct ida_image *src, struct ida_rect *rect,
     float outleft,left,weight,d0,d1,d2;
     const fim_byte_t *csrcline;
     float *fsrcline;
-
     register unsigned int i,sx,dx;
 
 #ifndef FIM_WANTS_SLOW_RESIZE
-    int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
+    int sr=h->srcrow;
+    if(sr<0)
+	    sr=-sr;//who knows
 #endif /* FIM_WANTS_SLOW_RESIZE */
 
     /* scale y */
@@ -2136,8 +2141,8 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 {
     struct op_resize_parm p;
     struct ida_rect  rect;
-    struct ida_image *dest;
-    void *data;
+    struct ida_image *dest=NULL;
+    void *data=NULL;
     unsigned int y;
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
     int mmi=-1;
@@ -2186,14 +2191,23 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 
     data = desc_resize.init(src,&rect,&dest->i,&p);
+    if(data==NULL)
+    {
+	fim_free(dest);
+    	goto err;
+    }
     dest->data = (fim_byte_t*)fim_malloc(dest->i.width * dest->i.height * 3);
-    if(!(dest->data)){fim_free(dest);return NULL;}
+    if(!(dest->data))
+    {
+	    fim_free(data);
+	    fim_free(dest);
+	    goto err;
+    }
 
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
     if(mmi>0 && msrc.i.width == dest->i.width && msrc.i.height == dest->i.height )
     {
 	memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
-	// std::cout << "just copying mipmap :) \n";
 	goto done;
     }
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */

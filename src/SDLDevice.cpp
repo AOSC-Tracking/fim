@@ -272,13 +272,15 @@ err:
 		fim_coo_t oi,oj;
 		fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
 		fim_byte_t * srcp;
+		const int buginsdlorsomewhere=(icols > 16*1024 || irows > 16*1024); /* FIXME: occurring with SDL-1.2.15; to ascertain! (actually problems occur with an 21874x940 pixelmap ) */
 
 		// FIXME : temporary
 //		clear_rect(  ocoff, ocoff+ocols, oroff, oroff+orows); 
 //		clear_rect(  0, ocols, 0, orows); 
 		clear_rect(  0, width()-1, 0, height()-1); 
 
-		if(!mirror && !flip)
+
+		if(!mirror && !flip && !buginsdlorsomewhere)
 		{
 #if 0
 		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
