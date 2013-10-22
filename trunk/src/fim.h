@@ -404,7 +404,7 @@ class fim_mipmap_t
 	fim_mipmap_t(const fim_mipmap_t&mm){reset();}
 	fim_mipmap_t(void){reset();}
 	~fim_mipmap_t(void){if(mdp)fim_free(mdp);reset();}
-	size_t byte_size(void)const{return mmb;}
+	size_t byte_size(void)const{return mmb+sizeof(*this);}
 	private:
 	void reset(void){nmm=0;mmb=0;mdp=NULL;}
 };
