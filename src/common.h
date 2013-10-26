@@ -88,6 +88,7 @@ int fim_rewind(FILE *stream);
 int fim_fseek(FILE *stream, long offset, int whence);
 int fim_fgetc(FILE *stream);
 int fim_snprintf_XB(char *str, size_t size, size_t q);
+fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_calloc = false);
 
 /* exceptions */
 typedef int FimException;

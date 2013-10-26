@@ -173,6 +173,20 @@ namespace fim
 		}
 
 		fimg_ = FbiStuff::read_image(fname,fd,want_page);
+#if 0
+		if(fimg_)
+		{
+			// fim_free(fimg_->data);
+			/* Such dimensions break SDL */
+    			fimg_->i.width = 100*1000*1000;
+	       		fimg_->i.height = 1;
+    			fimg_->data = fim_pm_alloc(fimg_->i.width, fimg_->i.height);
+			for(int i=0;i<fimg_->i.width*fimg_->i.height;++i)
+    				fimg_->data[i*3+0]=i%256,
+    				fimg_->data[i*3+1]=i%256,
+    				fimg_->data[i*3+2]=i%256;
+		}
+#endif
 
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
     		if(fimg_)
