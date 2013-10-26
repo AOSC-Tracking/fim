@@ -5,6 +5,9 @@
 
  * "%T" specifier to get (and display) total program used memory
  * "%C" specifier to get (and display) used program cache memory
+ * "%c" specifier to get (and display) centering information
+ * "%m" specifier to get (and display) mipmap information
+ * improved the 'align' (TODO)
  * mipmaps (rescaled images) for e.g. faster display of large images (TODO)
 
                 Version 0.4
