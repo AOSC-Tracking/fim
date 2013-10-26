@@ -934,3 +934,15 @@ int fim_snprintf_XB(char *str, size_t size, size_t q)
 	return src;
 }
 
+fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_calloc)
+{
+	size_t nmemb=1, size=1;
+	nmemb *= width;
+	nmemb *= height;
+	nmemb *= 3;
+	/* FIXME: shall implement overflow checks here */
+	if(want_calloc)
+		return (fim_byte_t*)fim_calloc(nmemb, 1);
+	else
+		return (fim_byte_t*)fim_malloc(nmemb);
+}
