@@ -97,7 +97,12 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	goto oops;
 
     fim_png_fp=fp;
+#if defined(PNG_LIBPNG_VER) && (PNG_LIBPNG_VER>=10249)
+    /* in the above, check on version >=10249 is not sufficient, not necessary. for e.g; 10606 it's necessary */
+    png_set_read_fn(h->png,NULL,fim_png_rw_ptr); /* TODO: shall make use of return second argument */
+#else
     h->png->read_data_fn=&fim_png_rw_ptr;
+#endif
     png_init_io(h->png, h->infile);
     png_read_info(h->png, h->info);
     png_get_IHDR(h->png, h->info, &h->w, &h->h,
