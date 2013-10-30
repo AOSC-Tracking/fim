@@ -61,7 +61,7 @@ namespace fim
 	fim_char_t s[TOKSIZE];
 #endif /* _FIM_DYNAMIC_STRING */
 	public :
-	void _string_init();
+	void _string_init(void);
 
 	int reallocate(int l);
 
@@ -69,8 +69,8 @@ namespace fim
 
 	bool isempty()const;
 
-	virtual ~string();//virtual, as -Weffc++ suggests
-	string();
+	virtual ~string(void);//virtual, as -Weffc++ suggests
+	string(void);
 	string(const string& s);
 	string(const fim_char_t *str);
 	string(const int i);

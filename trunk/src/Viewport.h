@@ -53,8 +53,8 @@ class Viewport
 
 	CommandConsole &commandConsole;
 	public:
-        void reset();
-        void steps_reset();
+        void reset(void);
+        void steps_reset(void);
 #ifdef FIM_WINDOWS
         void reassignWindow(FimWindow *w);
 #endif /* FIM_WINDOWS */
@@ -67,7 +67,7 @@ class Viewport
 			);
 
 	Viewport(const Viewport &v);
-	~Viewport();
+	~Viewport(void);
 	private:
 	Viewport& operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
 	void should_redraw()const;
@@ -89,8 +89,8 @@ class Viewport
 	bool onLeft()const;
 	bool onTop()const;
 
-	fim_coo_t xorigin();
-	fim_coo_t yorigin();
+	fim_coo_t xorigin(void);
+	fim_coo_t yorigin(void);
 	protected:
 
 //	int redraw;	// there is already an external one!
@@ -103,33 +103,33 @@ class Viewport
 	void align(const char c);
 
 	/* viewport methods */
-	bool display();
-	bool redisplay();
-	void null_display();
+	bool display(void);
+	bool redisplay(void);
+	void null_display(void);
 
-	void auto_width_scale();
-	void auto_height_scale();
+	void auto_width_scale(void);
+	void auto_height_scale(void);
 
         void setImage(fim::Image* ni);
-	void scale_fix_top_left();
+	void scale_fix_top_left(void);
         const Image* c_getImage()const;
         Image* getImage()const;
 
-	void auto_scale();
-	void auto_scale_if_bigger();
+	void auto_scale(void);
+	void auto_scale_if_bigger(void);
 
-	void free();
+	void free(void);
         bool check_invalid()const;
         bool check_valid()const;
 #if 0
-	int valid();
+	int valid(void);
 #endif
-	bool scrollforward();
+	bool scrollforward(void);
 	void scale_position_magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	void scale_position_reduce(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
-	void recenter_horizontally();
-	void recenter_vertically();
-	void recenter();
+	void recenter_horizontally(void);
+	void recenter_vertically(void);
+	void recenter(void);
 	virtual size_t byte_size(void)const;
 	int snprintf_centering_info(char *str, size_t size)const;
 };

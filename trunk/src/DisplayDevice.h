@@ -47,7 +47,7 @@ class DisplayDevice
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	DisplayDevice(MiniConsole &mc_);
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	DisplayDevice();
+	DisplayDevice(void);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	virtual fim_err_t initialize(sym_keys_t &sym_keys)=0;
 	virtual void  finalize()=0;
@@ -63,7 +63,7 @@ class DisplayDevice
 		fim_flags_t flags// some flags
 		)=0;
 
-	virtual ~DisplayDevice();
+	virtual ~DisplayDevice(void);
 
 	virtual void flush(){};
 	virtual void lock(){}
@@ -81,7 +81,7 @@ class DisplayDevice
 	virtual fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)=0;
 	virtual fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
-	virtual fim_err_t init_console();
+	virtual fim_err_t init_console(void);
 	virtual void switch_if_needed(){}// really, only for making happy fbdev
 	virtual void cleanup(){}// really, only for making happy fbdev
 

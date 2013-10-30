@@ -49,13 +49,13 @@ class CACADevice:public DisplayDevice
 		fim_flags_t flags// some flags
 		);
 	int initialize(sym_keys_t &sym_keys);
-	void finalize();
+	void finalize(void);
 
-	int get_chars_per_line();
-	int txt_width();
-	int txt_height();
-	int width();
-	int height();
+	int get_chars_per_line(void);
+	int txt_width(void);
+	int txt_height(void);
+	int width(void);
+	int height(void);
 	fim_err_t status_line(const fim_char_t *msg);
 	void status_screen(int desc,int draw_output){}
 	fim_err_t console_control(fim_cc_t code){return FIM_ERR_GENERIC;}

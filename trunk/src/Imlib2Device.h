@@ -65,13 +65,13 @@ class Imlib2Device:public DisplayDevice
 		);
 
 	fim_err_t initialize(sym_keys_t &sym_keys);
-	fim_err_t il2_initialize();
+	fim_err_t il2_initialize(void);
 	void finalize() ;
 
 	int get_chars_per_line() ;
-	int get_chars_per_column();
-	fim_coo_t width();
-	fim_coo_t height();
+	int get_chars_per_column(void);
+	fim_coo_t width(void);
+	fim_coo_t height(void);
 	fim_err_t status_line(const fim_char_t *msg);
 	fim_bool_t handle_console_switch(){return false;}
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
@@ -79,10 +79,10 @@ class Imlib2Device:public DisplayDevice
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	void fs_render_fb(fim_coo_t x, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data);
 	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
-	void flush();
-	void lock();
-	void unlock();
-	fim_bpp_t get_bpp();
+	void flush(void);
+	void lock(void);
+	void unlock(void);
+	fim_bpp_t get_bpp(void);
 	virtual fim_coo_t status_line_height(void)const;
 	private:
 	fim_sys_int get_input_i2l(fim_key_t * c);
@@ -97,10 +97,10 @@ class Imlib2Device:public DisplayDevice
 	virtual fim_err_t reinit(const fim_char_t *rs);
 	fim_err_t parse_optstring(const fim_char_t *os);
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg);
-	fim_err_t reset_wm_caption();
+	fim_err_t reset_wm_caption(void);
 	protected:
-	void toggle_fullscreen();
-	void apply_fullscreen();
+	void toggle_fullscreen(void);
+	void apply_fullscreen(void);
 };
 
 

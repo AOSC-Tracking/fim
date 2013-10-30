@@ -62,16 +62,16 @@ namespace fim
 
 		MiniConsole(CommandConsole & cc,int lw=48, int r=12); /* FIXME: shall get rid of numerical constants! */
 		virtual ~MiniConsole(){}
-		fim_err_t dump();	// non const due to user variables reaction
-		fim_err_t grow();
+		fim_err_t dump(void);	// non const due to user variables reaction
+		fim_err_t grow(void);
 		fim_err_t setRows(int nr);
 		fim_err_t add(const fim_char_t * cso);
 		fim_err_t add(const fim_byte_t* cso){return add((const fim_char_t*)cso);}
 		fim_err_t reformat(int newlsize);
 		fim_err_t do_dump(int amount)const;
-		fim_err_t clear();
-		fim_err_t scroll_down();
-		fim_err_t scroll_up();
+		fim_err_t clear(void);
+		fim_err_t scroll_down(void);
+		fim_err_t scroll_up(void);
 		virtual size_t byte_size(void)const;
 
 		private:
