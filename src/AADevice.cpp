@@ -436,7 +436,7 @@ static bool aainvalid;
 		return FIM_ERR_NO_ERROR;
 	}
 
-	void AADevice::finalize() 
+	void AADevice::finalize(void)
 	{
 		finalized_=true;
 		aa_close(ascii_context_);
@@ -448,7 +448,7 @@ static bool aainvalid;
 	fim_coo_t AADevice::width() { return aa_imgwidth(ascii_context_ ) ;}
 	fim_coo_t AADevice::height(){ return aa_imgheight(ascii_context_) ;}
 
-	fim_err_t AADevice::init_console()
+	fim_err_t AADevice::init_console(void)
 	{
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		//mc_.setRows ( -height()/2);
@@ -470,7 +470,7 @@ static bool aainvalid;
 		return FIM_ERR_NO_ERROR;
 	}
 
-	void AADevice::flush()
+	void AADevice::flush(void)
 	{
 		aa_flush(ascii_context_);
 	}
@@ -497,7 +497,7 @@ err:
 		return FIM_ERR_NO_ERROR;
 	}
 
-	AADevice::~AADevice()
+	AADevice::~AADevice(void)
 	{
 		/* seems like in some cases some aa stuff doesn't get freed. is this possible ? */
 		if(!finalized_)

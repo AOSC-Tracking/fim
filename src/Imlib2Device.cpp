@@ -214,20 +214,20 @@ ret:
 		return FIM_ERR_NO_ERROR;
 	}
 
-	void Imlib2Device::apply_fullscreen()
+	void Imlib2Device::apply_fullscreen(void)
 	{
 		Atom prop_fs=XInternAtom(disp,"_NET_WM_STATE_FULLSCREEN",True);
 		Atom prop_state=XInternAtom(disp,"_NET_WM_STATE",True);
 		XChangeProperty(disp,win,prop_state,XA_ATOM,32,PropModeReplace,(unsigned char*)&prop_fs,want_windowed_?0:1);
 	}
 
-	void Imlib2Device::toggle_fullscreen()
+	void Imlib2Device::toggle_fullscreen(void)
 	{
 		want_windowed_=!want_windowed_;
 		apply_fullscreen();
 	}
 
-	fim_err_t Imlib2Device::il2_initialize()
+	fim_err_t Imlib2Device::il2_initialize(void)
 	{
 		if(!disp)
    		disp=XOpenDisplay(NULL);
@@ -340,27 +340,27 @@ static fim_err_t initialize_keys(sym_keys_t &sym_keys)
 		return il2_initialize();
 	}
 
-	void Imlib2Device::finalize()
+	void Imlib2Device::finalize(void)
 	{
 		finalized_=true;
 	}
 
-	int Imlib2Device::get_chars_per_column()
+	int Imlib2Device::get_chars_per_column(void)
 	{
 		return height() / f_->height;
 	}
 
-	int Imlib2Device::get_chars_per_line()
+	int Imlib2Device::get_chars_per_line(void)
 	{
 		return width() / f_->width;
 	}
 
-	fim_coo_t Imlib2Device::width()
+	fim_coo_t Imlib2Device::width(void)
 	{
 		return current_w_;
 	}
 
-	fim_coo_t Imlib2Device::height()
+	fim_coo_t Imlib2Device::height(void)
 	{
 		return current_h_;
 	}
@@ -583,15 +583,15 @@ done:
 		return -1;
 	}
 
-	void Imlib2Device::flush()
+	void Imlib2Device::flush(void)
 	{
 	}
 
-	void Imlib2Device::lock()
+	void Imlib2Device::lock(void)
 	{
 	}
 
-	void Imlib2Device::unlock()
+	void Imlib2Device::unlock(void)
 	{
 	}
 
@@ -636,7 +636,7 @@ err:
 		return rc;
 	}
 	
-	fim_err_t Imlib2Device::reset_wm_caption()
+	fim_err_t Imlib2Device::reset_wm_caption(void)
 	{
 		// FIXME: unfinished
 #if 1

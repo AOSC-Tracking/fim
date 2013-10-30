@@ -460,7 +460,7 @@ ret:
 /*
  * Will be improved, if needed.
  * */
-int fim_rand()
+int fim_rand(void)
 {
 	/*
 	 * Please don't use Fim for cryptographical purposes ;)
@@ -633,7 +633,7 @@ int lines_count(const fim_char_t*s, int cols)
 	return n;
 }
 
-int fim_common_test()
+int fim_common_test(void)
 {	
 	/*
 	 * this function should test the correctness of the functions in this file.
@@ -681,7 +681,7 @@ int int2msbf(int in)
 	return swap_bytes_in_int(in);
 }
 
-double getmilliseconds()
+double getmilliseconds(void)
 {
 	/*
          * For internal usage: returns with milliseconds precision the current clock time.
@@ -723,7 +723,7 @@ const fim_char_t * fim_getenv(const fim_char_t * name)
 FILE * fim_fread_tmpfile(FILE * fp)
 {
 	/*
-	*  We transfer a stream contents in a tmpfile()
+	*  We transfer a stream contents in a tmpfile(void)
 	* NEW
 	*/
 	FILE *tfd=NULL;

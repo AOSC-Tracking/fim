@@ -268,7 +268,7 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
 }
 
 
-	fim_err_t FramebufferDevice::framebuffer_init()
+	fim_err_t FramebufferDevice::framebuffer_init(void)
 	{
 		int rc=0;
 
@@ -1559,21 +1559,21 @@ void FramebufferDevice::dither_line_gray(fim_byte_t *src, fim_byte_t *dst, int y
 	*(dst++) = a & 0xff;
     }
 }
-void FramebufferDevice::fb_switch_release()
+void FramebufferDevice::fb_switch_release(void)
 {
     ioctl(tty_, VT_RELDISP, 1);
     fb_switch_state_ = FB_INACTIVE;
     if (debug_)
 	FIM_FPRINTF(stderr, "vt: release\n");
 }
-void FramebufferDevice::fb_switch_acquire()
+void FramebufferDevice::fb_switch_acquire(void)
 {
     ioctl(tty_, VT_RELDISP, VT_ACKACQ);
     fb_switch_state_ = FB_ACTIVE;
     if (debug_)
 	FIM_FPRINTF(stderr, "vt: acquire\n");
 }
-int FramebufferDevice::fb_switch_init()
+int FramebufferDevice::fb_switch_init(void)
 {
     struct sigaction act,old;
 
@@ -1813,7 +1813,7 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 	DisplayDevice(mc)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	FramebufferDevice::FramebufferDevice():	
-	DisplayDevice()
+	DisplayDevice(void)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,vt_(0)
 	,dither_(FALSE)
@@ -1912,7 +1912,7 @@ void FramebufferDevice::finalize (void)
 	cleanup();
 }
 
-FramebufferDevice::~FramebufferDevice()
+FramebufferDevice::~FramebufferDevice(void)
 {
 	/* added in fim : fbi did not have this */
 	fim_free_fs_font(f_);

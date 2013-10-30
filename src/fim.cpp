@@ -328,7 +328,7 @@ class FimInstance
 {
 	static void show_version();
 
-string fim_dump_man_page_snippets()
+string fim_dump_man_page_snippets(void)
 {
 	string ms;
 	const fim_char_t *helparg="m";
@@ -426,7 +426,7 @@ string fim_dump_man_page_snippets()
 	return ms;
 }
 
-int fim_dump_man_page()
+int fim_dump_man_page(void)
 {
 	string mp=
 			string(".\\\"\n"
@@ -1362,7 +1362,7 @@ fim_perr_t main(int argc,char *argv[])
 //#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
 //#endif /* HAVE_LIBPOPPLER */
 
-	void FimInstance::show_version()
+	void FimInstance::show_version(void)
 	{
 	    FIM_FPRINTF(stderr, 
 			    FIM_CNS_FIM" "

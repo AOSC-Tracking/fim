@@ -36,7 +36,7 @@
 
 namespace fim
 {
-	int Browser::current_n()const
+	int Browser::current_n(void)const
 	{
 	       	return cf_;
 	}
@@ -144,7 +144,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	void Browser::redisplay()
+	void Browser::redisplay(void)
 	{
 		/*
 		 * Given a current() file, we display it again like 
@@ -202,7 +202,7 @@ ret:
 		cf_=0;	//and to file index 0 (no file)
 	}
 
-	const fim::string Browser::pop_current()
+	const fim::string Browser::pop_current(void)
 	{	
 		/*
 		 * pops the current image filename from the filenames list
@@ -603,7 +603,7 @@ ret:
 		return retval;
 	}
 
-	fim::string Browser::reload()
+	fim::string Browser::reload(void)
 	{
 		/*
 		 * FIXME
@@ -615,7 +615,7 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::loadCurrentImage()
+	fim::string Browser::loadCurrentImage(void)
 	{
 		/*
 		 * FIXME
@@ -663,7 +663,7 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	void Browser::free_current_image()
+	void Browser::free_current_image(void)
 	{
 		/*
 		 * FIXME
@@ -936,7 +936,7 @@ ret:
 		return retval;
 	}
 	
-	int Browser::n_files()const
+	int Browser::n_files(void)const
 	{
 		/*
 		 * the number of files in the filenames list
@@ -944,7 +944,7 @@ ret:
 		return flist_.size();
 	}
 
-	fim::string Browser::_sort()
+	fim::string Browser::_sort(void)
 	{
 		/*
 		 *	sorts the image filenames list
@@ -966,7 +966,7 @@ ret:
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 
-	fim::string Browser::_clear_list()
+	fim::string Browser::_clear_list(void)
 	{
 		/*
 		 */
@@ -974,7 +974,7 @@ ret:
 		return 0;
 	}
 
-	fim::string Browser::_reverse()
+	fim::string Browser::_reverse(void)
 	{
 		/*
 		 *	sorts the image filenames list
@@ -1410,7 +1410,7 @@ nop:
 #endif
 	}
 
-	fim::string Browser::info()
+	fim::string Browser::info(void)
 	{
 		/*
 		 *	short information in status-line format
@@ -1580,7 +1580,7 @@ err:
 		return FIM_CMD_HELP_ALIGN;
 	}
 
-	const Image *Browser::c_image()const
+	const Image *Browser::c_image(void)const
 	{
 		/*
 		 *	a const pointer to the currently loaded image
@@ -1592,7 +1592,7 @@ err:
 		return image;
 	}
 
-	Image *Browser::image()const
+	Image *Browser::image(void)const
 	{
 		/*
 		 *	the image loaded in the current viewport is returned
@@ -1604,7 +1604,7 @@ err:
 		return image;
 	}
 
-	Viewport* Browser::viewport()const
+	Viewport* Browser::viewport(void)const
 	{
 		/* 
 		 * A valid pointer will be returned 
@@ -1615,7 +1615,7 @@ err:
 		return (commandConsole_.current_viewport());
 	}
 
-	fim::string Browser::current()const
+	fim::string Browser::current(void)const
 	{
 		/*
 		 * dilemma : should the current() filename and next() operations
@@ -1627,7 +1627,7 @@ err:
 	       	return cf_>=0?flist_[cf_]:nofile_;
 	}
 
-	int Browser::empty_file_list()const
+	int Browser::empty_file_list(void)const
 	{
 		/*
 		 *	is the filename list empty ?
@@ -1635,7 +1635,7 @@ err:
 		return flist_.size()==0;
 	}
 
-	fim::string Browser::display()
+	fim::string Browser::display(void)
 	{
 		/*
 		 *	display the current image
@@ -1676,13 +1676,13 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	int Browser::current_image()const
+	int Browser::current_image(void)const
 	{
 		/* counting from 1 */
 		return cf_+1;
 	}
 
-	int Browser::n_pages()const
+	int Browser::n_pages(void)const
 	{
 		int pi=0;
 
@@ -1693,7 +1693,7 @@ err:
 		return pi;
 	}
 
-	int Browser::c_page()const
+	int Browser::c_page(void)const
 	{
 		int pi=0;
 

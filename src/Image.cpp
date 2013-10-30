@@ -43,7 +43,7 @@ namespace fim
  *	 Private ones are stricter.
  * 
  */
-	fim_coo_t Image::original_width()
+	fim_coo_t Image::original_width(void)
 	{
 		fim_coo_t ow;
 		assert(fimg_);
@@ -54,7 +54,7 @@ namespace fim
 		return ow;
 	}
 
-	fim_coo_t Image::original_height()
+	fim_coo_t Image::original_height(void)
 	{
 		fim_coo_t ow;
 		assert(fimg_);
@@ -65,13 +65,13 @@ namespace fim
 		return ow;
 	}
 
-	int Image::width()
+	int Image::width(void)
 	{
 		assert(img_);
 		return img_->i.width;
 	}
 
-	int Image::height()
+	int Image::height(void)
 	{
 		assert(img_);
 		return img_->i.height;
@@ -119,7 +119,7 @@ namespace fim
 		}
 	}
 
-	void Image::reset()
+	void Image::reset(void)
 	{
 		/*
 		 * pointers are blanked and values set to default 
@@ -139,7 +139,7 @@ namespace fim
 		setVariable(FIM_VID_ORIENTATION ,FIM_NO_ROT);
 	}
 	
-	bool Image::reload()
+	bool Image::reload(void)
 	{
 		/*
 			reloads the file (no hope for streams, therefore)
@@ -250,7 +250,7 @@ namespace fim
 		return true;
 	}
 
-	Image::~Image()
+	Image::~Image(void)
 	{
 		/*
 		 * buffers are freed
@@ -261,7 +261,7 @@ namespace fim
 		this->free();
 	}
 
-        bool Image::tiny()const
+        bool Image::tiny(void)const
 	{
 		/*
 		 * image width or height is <= 1
@@ -300,7 +300,7 @@ namespace fim
 		return FIM_ERR_NO_ERROR;
 	}
 
-        bool Image::check_valid()
+        bool Image::check_valid(void)
 	{
 		/*
 		 * well,why not ?
@@ -308,7 +308,7 @@ namespace fim
 		return ! check_invalid();
 	}
 
-        bool Image::check_invalid()
+        bool Image::check_invalid(void)
         {
                 /*
 		 * the image is declared invalid if the image structures are not loaded.
@@ -324,7 +324,7 @@ namespace fim
                 return invalid_;
         }
 
-        void Image::free()
+        void Image::free(void)
         {
 		/*
 		 * the image descriptors are freed if necessary and pointers blanked
@@ -589,7 +589,7 @@ err:
 #endif
 	}
 
-	Image * Image::getClone()
+	Image * Image::getClone(void)
 	{
 		/*
 		 * returns a clone of this image.
@@ -602,7 +602,7 @@ err:
  *	Creates a little description of some image,
  *	and places it in a NUL terminated static buffer.
  */
-fim::string Image::getInfo()
+fim::string Image::getInfo(void)
 {
 	/*
 	 * a short information about the current image is returned
@@ -766,7 +766,7 @@ labeldone:
 	return fim::string(linebuffer);
 }
 
-	bool Image::update()
+	bool Image::update(void)
 	{
 		/*
 		 * updates the image according to its variables
@@ -790,7 +790,7 @@ labeldone:
 		return false;
 	}
 
-	fim_pgor_t Image::getOrientation()const
+	fim_pgor_t Image::getOrientation(void)const
 	{
 		/*
 		 * warning : this should work more intuitively
@@ -858,12 +858,12 @@ labeldone:
 			return false;
 	} 
 
-	cache_key_t Image::getKey()const
+	cache_key_t Image::getKey(void)const
 	{
 		return cache_key_t(fname_.c_str(),fis_);
 	}
 
-	bool Image::is_multipage()const
+	bool Image::is_multipage(void)const
 	{
 		if( fimg_ && ( fimg_->i.npages>1 ) )
 			return true;
@@ -882,7 +882,7 @@ labeldone:
 		return (is_multipage() && page_-j >= 0);
 	}
  
-	bool Image::gray_negate()
+	bool Image::gray_negate(void)
 	{
 		/* FIXME : NEW, but unused */
 		int n;
@@ -935,7 +935,7 @@ labeldone:
 		return true;
 	} 
 
-	bool Image::desaturate()
+	bool Image::desaturate(void)
 	{
 		register int avg;
 #if 0
@@ -960,7 +960,7 @@ labeldone:
 		return true;
 	}
 
-	bool Image::negate()
+	bool Image::negate(void)
 	{
 		/* NEW */
 
@@ -1005,7 +1005,7 @@ labeldone:
 	}
 
 #if FIM_WANT_BDI
-	Image::Image()
+	Image::Image(void)
 	{
 		/* although invalid, this image instance should support all operations on it */
 		// fim_bzero(this,sizeof(*this));

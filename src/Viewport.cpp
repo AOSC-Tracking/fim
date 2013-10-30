@@ -168,35 +168,35 @@ namespace fim
 		}
 	}
 
-	bool Viewport::onBottom()const
+	bool Viewport::onBottom(void)const
 	{
 		if( check_invalid() )
 			return false;
 		return (top_ + viewport_height() >= image_->height());
 	}
 
-	bool Viewport::onRight()const
+	bool Viewport::onRight(void)const
 	{
 		if( check_invalid() )
 			return false;
 		return (left_ + viewport_width() >= image_->width());
 	}
 
-	bool Viewport::onLeft()const
+	bool Viewport::onLeft(void)const
 	{
 		if( check_invalid() )
 			return false;
 		return (left_ <= 0 );
 	}
 
-	bool Viewport::onTop()const
+	bool Viewport::onTop(void)const
 	{
 		if( check_invalid() )
 			return false;
 		return (top_ <= 0 );
 	}
 
-	fim_coo_t Viewport::viewport_width()const
+	fim_coo_t Viewport::viewport_width(void)const
 	{
 		/*
 		 * */
@@ -209,7 +209,7 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	fim_coo_t Viewport::viewport_height()const
+	fim_coo_t Viewport::viewport_height(void)const
 	{
 		/*
 		 * */
@@ -226,7 +226,7 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	bool Viewport::redisplay()
+	bool Viewport::redisplay(void)
 	{
 		/*
 		 * we 'force' redraw.
@@ -236,7 +236,7 @@ namespace fim
 		return display();
 	}
 
-	fim_coo_t Viewport::xorigin()
+	fim_coo_t Viewport::xorigin(void)
 	{
 		// horizontal origin coordinate (upper)
 #ifdef FIM_WINDOWS
@@ -246,7 +246,7 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	fim_coo_t Viewport::yorigin()
+	fim_coo_t Viewport::yorigin(void)
 	{
 		// vertical origin coordinate (upper)
 #ifdef FIM_WINDOWS
@@ -256,7 +256,7 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	void Viewport::null_display()
+	void Viewport::null_display(void)
 	{
 		/*
 		 * for recovery purposes. FIXME
@@ -279,7 +279,7 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	bool Viewport::display()
+	bool Viewport::display(void)
 	{
 		/*
 		 *	the display function draws the image in the frame buffer
@@ -417,7 +417,7 @@ namespace fim
 		return false;
 	}
 
-	void Viewport::auto_scale()
+	void Viewport::auto_scale(void)
 	{
 		fim_scale_t xs,ys;
 		if( check_invalid() )
@@ -431,7 +431,7 @@ namespace fim
 		image_->rescale(FIM_MIN(xs,ys));
 	}
 
-	void Viewport::auto_scale_if_bigger()
+	void Viewport::auto_scale_if_bigger(void)
 	{
 		if( check_invalid() )
 			return;
@@ -444,14 +444,14 @@ namespace fim
 	}
 
 #if 0
-	int Viewport::valid()
+	int Viewport::valid(void)
 	{
 		// int instead of bool
 		return check_valid();
 	}
 #endif
 
-        Image* Viewport::getImage()const
+        Image* Viewport::getImage(void)const
 	{
 		/*
 		 * returns the image pointer, regardless its use! 
@@ -464,7 +464,7 @@ namespace fim
 			return image_;
 	}
 
-        const Image* Viewport::c_getImage()const
+        const Image* Viewport::c_getImage(void)const
 	{
 		/*
 		 * returns the image pointer, regardless its use! 
@@ -497,7 +497,7 @@ namespace fim
 		image_ = ni;
 	}
 
-        void Viewport::steps_reset()
+        void Viewport::steps_reset(void)
 	{
 #ifdef FIM_WINDOWS
 		steps_ = getGlobalIntVariable(FIM_VID_STEPS);
@@ -521,7 +521,7 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-        void Viewport::reset()
+        void Viewport::reset(void)
         {
 		/*
 		 * resets some image flags and should reset the image position in the viewport
@@ -539,7 +539,7 @@ namespace fim
         	steps_reset();
         }
 
-	void Viewport::auto_height_scale()
+	void Viewport::auto_height_scale(void)
 	{
 		/*
 		 * scales the image in a way to fit in the viewport height
@@ -553,7 +553,7 @@ namespace fim
 		image_->rescale(newscale);
 	}
 
-	void Viewport::auto_width_scale()
+	void Viewport::auto_width_scale(void)
 	{
 		/*
 		 * scales the image in a way to fit in the viewport width
@@ -567,7 +567,7 @@ namespace fim
 		image_->rescale(newscale);
 	}
 
-	void Viewport::free()
+	void Viewport::free(void)
 	{
 		/*
 		 * frees the currently loaded image, if any
@@ -586,7 +586,7 @@ namespace fim
 		image_ = NULL;
 	}
 
-        bool Viewport::check_valid()const
+        bool Viewport::check_valid(void)const
 	{
 		/*
 		 * yes :)
@@ -594,7 +594,7 @@ namespace fim
 		return ! check_invalid();
 	}
 
-        bool Viewport::check_invalid()const
+        bool Viewport::check_invalid(void)const
 	{
 		/*
 		 * this should not happen! (and probably doesn't happen :) )
@@ -640,17 +640,17 @@ namespace fim
 			this->recenter();
 	}
 
-	void Viewport::recenter_horizontally()
+	void Viewport::recenter_horizontally(void)
 	{
 		left_ = (image_->width() - this->viewport_width()) / 2;
 	}
 
-	void Viewport::recenter_vertically()
+	void Viewport::recenter_vertically(void)
 	{
 		top_ = (image_->height() - this->viewport_height()) / 2;
 	}
 
-	void Viewport::recenter()
+	void Viewport::recenter(void)
 	{
 		if(!(panned_ & 0x02))
 			recenter_horizontally();
@@ -658,7 +658,7 @@ namespace fim
 			recenter_vertically();
 	}
 
-	void Viewport::should_redraw()const
+	void Viewport::should_redraw(void)const
 	{
 		/* FIXME */
 		if(image_)
@@ -668,7 +668,7 @@ namespace fim
 				displaydevice_->redraw_=FIM_REDRAW_NECESSARY;
 	}
 
-	Viewport::~Viewport()
+	Viewport::~Viewport(void)
 	{
 		// FIXME : we need a revival for free()
 		free();

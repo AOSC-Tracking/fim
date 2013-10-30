@@ -197,13 +197,13 @@ static void completion_display_matches_hook(fim_char_t **matches,int num,int max
 }
 
 /*
-static void redisplay_no_fb()
+static void redisplay_no_fb(void)
 {
 	printf("%s",rl_line_buffer);
 }
 */
 
-static void redisplay()
+static void redisplay(void)
 {	
 	cc.set_status_bar(( fim_char_t*)rl_line_buffer,NULL);
 }
@@ -212,7 +212,7 @@ static void redisplay()
  * ?!
  * */
 /*
-static int redisplay_hook_no_fb()
+static int redisplay_hook_no_fb(void)
 {
 	redisplay_no_fb();
 	return 0;
@@ -239,7 +239,7 @@ static int fim_post_rl_getc(int c)
 }
 
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBIMLIB2)
-static int fim_rl_sdl_aa_getc_hook()
+static int fim_rl_sdl_aa_getc_hook(void)
 {
 	//unsigned int c;
 	fim_key_t c;
@@ -337,7 +337,7 @@ read_ok:
 	return c;
 }
 
-int fim_search_rl_startup_hook()
+int fim_search_rl_startup_hook(void)
 {
 	const fim_char_t * hs=cc.browser_.last_regexp_.c_str();
 	if(hs)
@@ -348,7 +348,7 @@ int fim_search_rl_startup_hook()
 	return 0;
 }
 
-static int redisplay_hook()
+static int redisplay_hook(void)
 {
 	redisplay();
 	return 0;

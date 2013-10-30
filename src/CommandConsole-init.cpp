@@ -398,7 +398,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 	}
 
 #if FIM_WANT_BENCHMARKS
-	fim_int CommandConsole::get_n_qbenchmarks()const
+	fim_int CommandConsole::get_n_qbenchmarks(void)const
 	{
 		return 1;
 	}
@@ -434,7 +434,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 	}
 #endif /* FIM_WANT_BENCHMARKS */
 
-	void CommandConsole::dumpDefaultFimrc()const
+	void CommandConsole::dumpDefaultFimrc(void)const
 	{
 #ifdef FIM_DEFAULT_CONFIGURATION
 		std::cout << FIM_DEFAULT_CONFIG_FILE_CONTENTS << "\n";

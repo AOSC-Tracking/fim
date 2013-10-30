@@ -349,7 +349,7 @@ rerr:
 			return FIM_ERR_NO_ERROR;
 		}
 
-		fim_err_t MiniConsole::grow()
+		fim_err_t MiniConsole::grow(void)
 		{
 			/*
 			 * We grow a specified amount both the line_ count and the line_ buffer_.
@@ -419,7 +419,7 @@ rerr:
 			return FIM_ERR_GENERIC;
 		}
 
-		fim_err_t MiniConsole::dump()
+		fim_err_t MiniConsole::dump(void)
 		{
 			/*
 			 * We dump on screen the textual console contents.
@@ -449,7 +449,7 @@ rerr:
 			return FIM_ERR_GENERIC;
 		}
 
-		fim_err_t MiniConsole::do_dump()const
+		fim_err_t MiniConsole::do_dump(void)const
 		{
 			/*
 			 * We dump on screen the textual console contents.
@@ -457,19 +457,19 @@ rerr:
 			return do_dump((cline_-rows_+1)>=0?(cline_-rows_+1):0,cline_);
 		}
 
-		fim_err_t MiniConsole::clear()
+		fim_err_t MiniConsole::clear(void)
 		{
 			scroll_=rows_;
 			return FIM_ERR_NO_ERROR;
 		}
 
-		fim_err_t MiniConsole::scroll_down()
+		fim_err_t MiniConsole::scroll_down(void)
 		{
 			scroll_=scroll_<1?0:--scroll_;
 			return FIM_ERR_NO_ERROR;
 		}
 
-		fim_err_t MiniConsole::scroll_up()
+		fim_err_t MiniConsole::scroll_up(void)
 		{
 			scroll_=scroll_<rows_?++scroll_:scroll_;
 			return FIM_ERR_NO_ERROR;

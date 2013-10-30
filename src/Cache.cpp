@@ -31,7 +31,7 @@
 
 namespace fim
 {
-	Cache::Cache()
+	Cache::Cache(void)
 #if FIM_WANT_BDI
 		:dummy_img_()
 #endif	/* FIM_WANT_BDI */
@@ -41,7 +41,7 @@ namespace fim
 		lru_.erase(lru_.begin(),lru_.end());
 	}
 
-	int Cache::cached_elements()const
+	int Cache::cached_elements(void)const
 	{
 		FIM_LOUD_CACHE_STUFF;
 		return imageCache_.size();
@@ -72,7 +72,7 @@ ret:
 		return l_img;
 	}
 
-	bool Cache::free_all()
+	bool Cache::free_all(void)
 	{
 		/*
 		 * free all unused elements from the cache
@@ -86,7 +86,7 @@ ret:
 		return true;
 	}
 
-	int Cache::free_some_lru()
+	int Cache::free_some_lru(void)
 	{
 		/*
 		 * this triggering deletion (and memory freeing) of cached elements
@@ -112,7 +112,7 @@ ret:
 		return 0;
 	}
 
-	bool Cache::need_free()const
+	bool Cache::need_free(void)const
 	{
 		/*	temporary : we free elements for more than some cached images	*/
 
@@ -543,7 +543,7 @@ ret:
 		return image;	//so, it could be a clone..
 	}
 
-	fim::string Cache::getReport()
+	fim::string Cache::getReport(void)
 	{
 		fim::string cache_report = "cache contents : \n";
 		FIM_LOUD_CACHE_STUFF;
@@ -581,7 +581,7 @@ ret:
 		return cache_report;
 	}
 
-	Cache::~Cache()
+	Cache::~Cache(void)
 	{
 		cachels_t::const_iterator ci;
 

@@ -123,7 +123,7 @@ namespace fim
 		return rs;
 	}
 
-	fim::string CommandConsole::getBindingsList()const
+	fim::string CommandConsole::getBindingsList(void)const
 	{
 		/*
 		 * collates all registered action bindings_ together in a single string
@@ -245,7 +245,7 @@ ret:		return key;
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::getAliasesList()const
+	fim::string CommandConsole::getAliasesList(void)const
 	{
 		/*
 		 * collates all registered action aliases together in a single string
@@ -353,7 +353,7 @@ ret:		return key;
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	,dummydisplaydevice_(this->mc_)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	,dummydisplaydevice_()
+	,dummydisplaydevice_(void)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,displaydevice_(NULL)			/* the display device could be NULL ! (FIXME) */
 #ifdef FIM_RECORDING
@@ -448,7 +448,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		*prompt_=*(prompt_+1)=FIM_SYM_CHAR_NUL;
 	}
 
-	fim_err_t CommandConsole::execDefaultConfiguration()
+	fim_err_t CommandConsole::execDefaultConfiguration(void)
 	{
 		/* FIXME: #including a file not a clean practice, but it is clean regarding this file. */
 		#include "defaultConfiguration.cpp"
@@ -1021,7 +1021,7 @@ ok:
 	}
 #endif	/* FIM_USE_GPM */
 
-	fim_perr_t CommandConsole::executionCycle()
+	fim_perr_t CommandConsole::executionCycle(void)
 	{
 		/*
 		 * the cycle with fetches the instruction stream.
@@ -1244,7 +1244,7 @@ rlnull:
 		return i;/* is should be used in return */
 	}
 
-	CommandConsole::~CommandConsole()
+	CommandConsole::~CommandConsole(void)
 	{
 		/*
 		 * NOTE:
@@ -1409,7 +1409,7 @@ rlnull:
 		return sd;
 	}
 
-	fim::string CommandConsole::get_aliases_list()const
+	fim::string CommandConsole::get_aliases_list(void)const
 	{
 		/*
 		 * returns the list of set action aliases
@@ -1425,7 +1425,7 @@ rlnull:
 		return aliases_list;
 	}
 
-	fim::string CommandConsole::get_commands_list()const
+	fim::string CommandConsole::get_commands_list(void)const
 	{
 		/*
 		 * returns the list of registered commands
@@ -1441,7 +1441,7 @@ rlnull:
 		return commands_list;
 	}
 
-	fim::string CommandConsole::get_variables_list()const
+	fim::string CommandConsole::get_variables_list(void)const
 	{
 		/*
 		 * returns the list of set variables
@@ -1642,7 +1642,7 @@ ok:
 	    	return autocmd_add(FIM_ACM_POSTHFIMRC,"",cmd);
 	}
 
-	fim::string CommandConsole::pre_autocmd_exec()
+	fim::string CommandConsole::pre_autocmd_exec(void)
 	{
 		/*
 		 */
@@ -1721,7 +1721,7 @@ ok:
 		autocmds_loop_stack.pop_back();
 	}
 	
-	void CommandConsole::autocmd_trace_stack()
+	void CommandConsole::autocmd_trace_stack(void)
 	{
 		/*
 		 * this is mainly a debug function: it will write to stdout
@@ -1808,7 +1808,7 @@ ok:
 		//return true;
 	}
 
-	bool CommandConsole::redisplay()
+	bool CommandConsole::redisplay(void)
 	{
 		/*
 		 * quick and dirty display function
@@ -1835,7 +1835,7 @@ ok:
 #endif /* FIM_WINDOWS */
 	}
 
-	bool CommandConsole::display()
+	bool CommandConsole::display(void)
 	{
 		/*
 		 * quick and dirty display function
@@ -1870,7 +1870,7 @@ ok:
 		/*	(action,millisleeps waitingbefore) is registered	*/
 		/*
 		 * PROBLEM:
-		  clock_gettime() clock() times() getrusage() time() asctime() ctime() 
+		  clock_gettime() clock() times() getrusage() time() asctime() ctime(void)
 		  are NOT suitable
 
 		 * clock_gettime() needs librealtime, and segfaults
@@ -1907,7 +1907,7 @@ ok:
 #endif /* FIM_RECORDING */
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-	void CommandConsole::markCurrentFile()
+	void CommandConsole::markCurrentFile(void)
 	{
 		/*
 		 * the current file will be added to the list of filenames
@@ -1926,7 +1926,7 @@ ok:
 		}
 	}
 
-	void CommandConsole::unmarkCurrentFile()
+	void CommandConsole::unmarkCurrentFile(void)
 	{
 		/*
 		 * the current file will be added to the list of filenames
@@ -2006,7 +2006,7 @@ ok:
 		postExecutionCommand_+=c;
 	}
 	
-	bool CommandConsole::appendedPostInitCommand()const
+	bool CommandConsole::appendedPostInitCommand(void)const
 	{
 		/*
 		 * whether some command will be executed right after initialization
@@ -2014,14 +2014,14 @@ ok:
 		return postInitCommand_!=fim::string("");
 	}
 
-	bool CommandConsole::appendedPreConfigCommand()const
+	bool CommandConsole::appendedPreConfigCommand(void)const
 	{
 		/*
 		 * */
 		return preConfigCommand_!=fim::string("");
 	}
 
-	Viewport* CommandConsole::current_viewport()const
+	Viewport* CommandConsole::current_viewport(void)const
 	{
 		/*
 		 * returns a reference to the current viewport.
@@ -2036,7 +2036,7 @@ ok:
 	}
 
 #ifdef FIM_WINDOWS
-	const FimWindow & CommandConsole::current_window()const
+	const FimWindow & CommandConsole::current_window(void)const
 	{
 		/*
 		 * returns a reference to the current window_.
@@ -2069,7 +2069,7 @@ ok:
 	    	scripts_.push_back(ns);
 		return true; /* for now a fare return code */
 	}
-	bool CommandConsole::with_scriptfile()const
+	bool CommandConsole::with_scriptfile(void)const
 	{
 		return scripts_.size() !=0;
 	}
@@ -2081,7 +2081,7 @@ ok:
 	 *	 - setting the read rate
 	 *	 - disabling the echo
 	 */
-	void CommandConsole::tty_raw()
+	void CommandConsole::tty_raw(void)
 	{
 		struct termios tattr;
 		//we set the terminal in raw mode.
@@ -2097,7 +2097,7 @@ ok:
 		tcsetattr (0, TCSAFLUSH, &tattr);
 	}
 	
-	void CommandConsole::tty_restore()
+	void CommandConsole::tty_restore(void)
 	{	
 		//POSIX.1 compliant:
 		//"a SIGIO signal is sent whenever input or output becomes possible on that file descriptor"
@@ -2106,7 +2106,7 @@ ok:
 		tcsetattr (0, TCSANOW, &saved_attributes_);
 	}
 
-	fim_err_t CommandConsole::save_history()
+	fim_err_t CommandConsole::save_history(void)
 	{
 #if FIM_WANT_HISTORY
 #ifndef FIM_NOHISTORY
@@ -2138,7 +2138,7 @@ ok:
 		return FIM_ERR_GENERIC;
 	}
 
-	fim_err_t CommandConsole::load_history()
+	fim_err_t CommandConsole::load_history(void)
 	{
 #if FIM_WANT_HISTORY
 #ifndef FIM_NOHISTORY
@@ -2170,7 +2170,7 @@ ok:
 	 * This routine terminates the program as cleanly as possible.
 	 * It should be used whenever useful.
 	 */
-	void CommandConsole::cleanup()
+	void CommandConsole::cleanup(void)
 	{
 		/*
 		 * the display device should exit cleanly to avoid cluttering the console
@@ -2313,7 +2313,7 @@ ret:
 		return;
 	}
 
-	fim_bool_t CommandConsole::inConsole()const
+	fim_bool_t CommandConsole::inConsole(void)const
 	{
 #ifdef FIM_USE_READLINE
 		return ic_==1;
@@ -2366,7 +2366,7 @@ err:
 		return FIM_ERR_GENERIC;
 	}
 
-	fim_bool_t CommandConsole::key_syms_update()
+	fim_bool_t CommandConsole::key_syms_update(void)
 	{
 		sym_keys_t::const_iterator ki;
 
