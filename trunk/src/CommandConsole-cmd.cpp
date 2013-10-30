@@ -714,7 +714,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::start_recording()
+	fim::string CommandConsole::start_recording(void)
 	{
 		/*
 		 * recording of commands starts here
@@ -724,7 +724,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::stop_recording()
+	fim::string CommandConsole::stop_recording(void)
 	{
 		/*
 		 * since the last recorded action was stop_recording, we pop out the last command

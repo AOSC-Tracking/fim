@@ -169,7 +169,7 @@ namespace fim
 	}
 //#endif
 
-	bool FimWindow::issplit()const
+	bool FimWindow::issplit(void)const
 	{
 		/*
 		 * return whether this window is split in some way
@@ -177,7 +177,7 @@ namespace fim
 		return ( first_ && second_ ) ;
 	}
 
-	bool FimWindow::isleaf()const
+	bool FimWindow::isleaf(void)const
 	{
 		/*
 		 * +----------+
@@ -199,7 +199,7 @@ namespace fim
 		return ( ! first_ && ! second_ ) ;
 	}
 
-	bool FimWindow::isvalid()const
+	bool FimWindow::isvalid(void)const
 	{	
 		/*
 		 * return whether this window is split right, if it is
@@ -207,7 +207,7 @@ namespace fim
 		return !(( first_ && ! second_ ) || ( ! first_ && second_ ) );
 	}
 
-	bool FimWindow::ishsplit()const
+	bool FimWindow::ishsplit(void)const
 	{
 		/*
 		 * +----------+
@@ -220,7 +220,7 @@ namespace fim
 		return ( issplit() && focused().corners_.x==shadowed().corners_.x ) ;
 	}
 	
-	bool FimWindow::isvsplit()const
+	bool FimWindow::isvsplit(void)const
 	{
 		/*
 		 * +----------+
@@ -233,7 +233,7 @@ namespace fim
 		return ( issplit() && focused().corners_.y==shadowed().corners_.y ) ;
 	}
 	
-	const FimWindow & FimWindow::c_focused()const
+	const FimWindow & FimWindow::c_focused(void)const
 	{
 		/*
 		 * return a const reference to the focused window
@@ -246,7 +246,7 @@ namespace fim
 		else return second_->c_focused();
 	}
 
-	FimWindow & FimWindow::focused()const
+	FimWindow & FimWindow::focused(void)const
 	{
 		/*
 		 * return a reference to the focused window
@@ -259,7 +259,7 @@ namespace fim
 		else return *second_;
 	}
 
-	FimWindow & FimWindow::upper()
+	FimWindow & FimWindow::upper(void)
 	{
 		/*
 		 * return a reference to the upper window
@@ -269,7 +269,7 @@ namespace fim
 		return *first_;
 	}
 
-	FimWindow & FimWindow::lower()
+	FimWindow & FimWindow::lower(void)
 	{
 		/*
 		 * return a reference to the lower window
@@ -279,7 +279,7 @@ namespace fim
 		return *second_;
 	}
 
-	FimWindow & FimWindow::left()
+	FimWindow & FimWindow::left(void)
 	{
 		/*
 		 * return a reference to the left window
@@ -289,7 +289,7 @@ namespace fim
 		return *first_;
 	}
 
-	FimWindow & FimWindow::right()
+	FimWindow & FimWindow::right(void)
 	{
 		/*
 		 * return a reference to the right window
@@ -299,7 +299,7 @@ namespace fim
 		return *second_;
 	}
 
-	FimWindow & FimWindow::shadowed()const
+	FimWindow & FimWindow::shadowed(void)const
 	{
 		/*
 		 * return a const reference to the right window
@@ -312,7 +312,7 @@ namespace fim
 		else return *second_;
 	}
 
-	const FimWindow & FimWindow::c_shadowed()const
+	const FimWindow & FimWindow::c_shadowed(void)const
 	{
 		/*
 		 * return a const reference to the shadowed window
@@ -325,7 +325,7 @@ namespace fim
 		else return second_->c_shadowed();
 	}
 
-	void FimWindow::setroot()
+	void FimWindow::setroot(void)
 	{
 		/*
 		 * FIXME
@@ -333,16 +333,16 @@ namespace fim
 		amroot_=true;
 	}
 
-	void FimWindow::split()
+	void FimWindow::split(void)
 	{
 		/*
-		 * an alias for hsplit()
+		 * an alias for hsplit(void)
 		 * */
 		hsplit();
 	}
 
 #if 0
-	void FimWindow::print_focused()
+	void FimWindow::print_focused(void)
 	{
 		if(isleaf())
 		{
@@ -352,7 +352,7 @@ namespace fim
 		else focused().print_focused();
 	}
 
-	void FimWindow::print()
+	void FimWindow::print(void)
 	{
 		if(amroot_)
 			std::cout<<"--\n";
@@ -368,7 +368,7 @@ namespace fim
 	}
 #endif
 	
-	void FimWindow::hsplit()
+	void FimWindow::hsplit(void)
 	{
 		/*
 		 * splits the window with a horizontal separator
@@ -396,7 +396,7 @@ namespace fim
 		else focused().hsplit();
 	}
 
-	void FimWindow::vsplit()
+	void FimWindow::vsplit(void)
 	{
 		/*
 		 * splits the window with a vertical separator
@@ -423,7 +423,7 @@ namespace fim
 		else focused().vsplit();
 	}
 
-	bool FimWindow::swap()
+	bool FimWindow::swap(void)
 	{
 		/*
 		 * swap window content
@@ -470,7 +470,7 @@ namespace fim
 	}
 
 
-	bool FimWindow::close()
+	bool FimWindow::close(void)
 	{
 		/*
 		 * closing a leaf window implies its rejoining with the parent one
@@ -528,7 +528,7 @@ namespace fim
 		return true;
 	}
 
-	void FimWindow::balance()
+	void FimWindow::balance(void)
 	{
 		/*
 		 * FIXME
@@ -633,7 +633,7 @@ namespace fim
 		return move;
 	}
 
-	bool FimWindow::chfocus()
+	bool FimWindow::chfocus(void)
 	{
 		/*
 		 * this makes sense if issplit().
@@ -650,7 +650,7 @@ namespace fim
 		return focus_ = !focus_;
 	}
 
-	fim_coo_t FimWindow::height()const
+	fim_coo_t FimWindow::height(void)const
 	{
 		/*
 		 * +---+ +
@@ -681,7 +681,7 @@ namespace fim
 		return corners_.h=h;
 	}
 
-	fim_coo_t FimWindow::width()const
+	fim_coo_t FimWindow::width(void)const
 	{
 		/*
 		 * +---+
@@ -712,7 +712,7 @@ namespace fim
 		return corners_.y=y ;
 	}
 
-	fim_coo_t FimWindow::xorigin()const
+	fim_coo_t FimWindow::xorigin(void)const
 	{
 		/*
 		 * o---+
@@ -722,7 +722,7 @@ namespace fim
 		return corners_.x ;
 	}
 
-	fim_coo_t FimWindow::yorigin()const
+	fim_coo_t FimWindow::yorigin(void)const
 	{
 		/*
 		 * o---+
@@ -774,7 +774,7 @@ namespace fim
 		return corners_==window.corners_;
 	}
 
-	int FimWindow::count_hdivs()const
+	int FimWindow::count_hdivs(void)const
 	{
 		/*
 		 * how many horizontal divisions ?
@@ -789,7 +789,7 @@ namespace fim
 		return (isleaf()|| !ishsplit())?1: first_->count_hdivs()+ second_->count_hdivs();
 	}
 
-	int FimWindow::count_vdivs()const
+	int FimWindow::count_vdivs(void)const
 	{
 		/*
 		 * how many vertical divisions ?
@@ -797,7 +797,7 @@ namespace fim
 		return (isleaf()|| !isvsplit())?1: first_->count_vdivs()+ second_->count_vdivs();
 	}
 
-	bool FimWindow::normalize()
+	bool FimWindow::normalize(void)
 	{
 		/*
 		 * FIXME vs balance
@@ -1036,7 +1036,7 @@ namespace fim
 			{
 				return venlarge(units);
 			}else
-			// isleaf()
+			// isleaf(void)
 			return FIM_ERR_NO_ERROR;
 	}
 
@@ -1052,7 +1052,7 @@ namespace fim
 	fim_err_t FimWindow::hrshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) {  return corners_.hrshrink(units); }
 
 #if 0
-	void FimWindow::draw()const
+	void FimWindow::draw(void)const
 	{
 		/*
 		 * 
@@ -1073,7 +1073,7 @@ namespace fim
 #endif
 
 	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
-	bool FimWindow::recursive_redisplay()const
+	bool FimWindow::recursive_redisplay(void)const
 	{
 		/*
 		 * whole, deep, window redisplay
@@ -1100,7 +1100,7 @@ namespace fim
 	}
 
 	// WARNING : SHOULD BE SURE VIEWPORT IS CORRECTLY INITIALIZED
-	bool FimWindow::recursive_display()const
+	bool FimWindow::recursive_display(void)const
 	{
 		/*
 		 * whole, deep, window display
@@ -1126,7 +1126,7 @@ namespace fim
 		return re;
 	}
 
-	Viewport * FimWindow::current_viewportp()const
+	Viewport * FimWindow::current_viewportp(void)const
 	{
 		/*
 		 * returns a pointer to the current window's viewport_.
@@ -1144,7 +1144,7 @@ namespace fim
 		return viewport_;
 	}	
 
-	Viewport & FimWindow::current_viewport()const
+	Viewport & FimWindow::current_viewport(void)const
 	{
 		/*
 		 * returns a reference to the current window's viewport_.
@@ -1160,12 +1160,12 @@ namespace fim
 		if(!isleaf())
 			return focused().current_viewport();
 
-		if(!viewport_)/* temporarily, for security reasons throw FIM_E_TRAGIC*/; // isleaf()
+		if(!viewport_)/* temporarily, for security reasons throw FIM_E_TRAGIC*/; // isleaf(void)
 
 		return *viewport_;
 	}	
 
-	const Image *FimWindow::getImage()const
+	const Image *FimWindow::getImage(void)const
 	{
 		if( current_viewportp() )
 			return current_viewportp()->getImage();
@@ -1173,7 +1173,7 @@ namespace fim
 			return NULL;
 	}
 
-	FimWindow::~FimWindow()
+	FimWindow::~FimWindow(void)
 	{
 		if(viewport_)
 			delete viewport_;
@@ -1202,7 +1202,7 @@ namespace fim
 /*
  *	A test main program.
  */
-int main()
+int main(void)
 {
 	FimWindow w(Rect(0,0,1024,768));
 	w.setroot();

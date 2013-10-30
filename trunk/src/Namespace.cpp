@@ -706,7 +706,7 @@ ret:
 #endif /* FIM_AUTOCMDS */
 		}
 
-		fim::string Namespace::get_variables_list()const
+		fim::string Namespace::get_variables_list(void)const
 		{
 			/*
 			 * returns the list of set variables

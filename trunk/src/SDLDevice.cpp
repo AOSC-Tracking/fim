@@ -344,7 +344,7 @@ err:
 		return FIM_ERR_NO_ERROR;
 	}
 
-	bool SDLDevice::sdl_window_update()
+	bool SDLDevice::sdl_window_update(void)
 	{
 		vi_ = SDL_GetVideoInfo();
 		if(!vi_)
@@ -467,28 +467,28 @@ err:
 		return FIM_ERR_GENERIC;
 	}
 
-	void SDLDevice::finalize()
+	void SDLDevice::finalize(void)
 	{
 		finalized_=true;
 		SDL_Quit();
 	}
 
-	int SDLDevice::get_chars_per_column()
+	int SDLDevice::get_chars_per_column(void)
 	{
 		return height() / f_->height;
 	}
 
-	int SDLDevice::get_chars_per_line()
+	int SDLDevice::get_chars_per_line(void)
 	{
 		return width() / f_->width;
 	}
 
-	fim_coo_t SDLDevice::width()
+	fim_coo_t SDLDevice::width(void)
 	{
 		return current_w_;
 	}
 
-	fim_coo_t SDLDevice::height()
+	fim_coo_t SDLDevice::height(void)
 	{
 		return current_h_;
 	}
@@ -922,11 +922,11 @@ done:
 #endif
 	}
 
-	void SDLDevice::flush()
+	void SDLDevice::flush(void)
 	{
 	}
 
-	void SDLDevice::lock()
+	void SDLDevice::lock(void)
 	{
 		if(SDL_MUSTLOCK(screen_))
 		{
@@ -934,7 +934,7 @@ done:
 		}
 	}
 
-	void SDLDevice::unlock()
+	void SDLDevice::unlock(void)
 	{
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 		SDL_Flip(screen_);
@@ -1027,7 +1027,7 @@ err:
 		return rc;
 	}
 	
-	fim_err_t SDLDevice::reset_wm_caption()
+	fim_err_t SDLDevice::reset_wm_caption(void)
 	{
 		SDL_WM_SetCaption(FIM_CNS_FIM_APPTITLE,FIM_SDL_ICONPATH);
 		return FIM_ERR_NO_ERROR;

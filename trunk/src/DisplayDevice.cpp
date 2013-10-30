@@ -210,7 +210,7 @@ fim_err_t DisplayDevice::console_control(fim_cc_t arg)//experimental
 	return FIM_ERR_NO_ERROR;
 }
 
-fim_err_t DisplayDevice::init_console()
+fim_err_t DisplayDevice::init_console(void)
 {
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	if(f_)
@@ -227,12 +227,12 @@ fim_err_t DisplayDevice::init_console()
 	return FIM_ERR_NO_ERROR;
 }
 
-DisplayDevice::~DisplayDevice()
+DisplayDevice::~DisplayDevice(void)
 {
 }
 
 #if FIM_WANT_BENCHMARKS
-fim_int DisplayDevice::get_n_qbenchmarks()const
+fim_int DisplayDevice::get_n_qbenchmarks(void)const
 {
 	return 1;
 }

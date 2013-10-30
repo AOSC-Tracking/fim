@@ -93,7 +93,7 @@ manmode:
 		return s;
 	}
 
-	fim::string CommandConsole::print_commands()const
+	fim::string CommandConsole::print_commands(void)const
 	{
 		cout << "VARIABLES : "<<get_variables_list()<<"\n";
 		cout << "COMMANDS : "<<get_commands_list()<<"\n";

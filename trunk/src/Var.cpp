@@ -2,7 +2,7 @@
 /*
  Var.cpp : 
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2013 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ namespace fim
 	typedef std::map<fim::string, fim::string> fim_var_help_t;//variable id -> variable help
 	static fim_var_help_t fim_var_help_db;	/* this is the global help db for fim variables */
 
-	void Var::var_help_db_init()
+	void Var::var_help_db_init(void)
 	{
 		/* The inclusion of the next file is not essential : it serves only to populate the variables help database. */
 		#define FIM_WANT_INLINE_HELP 1

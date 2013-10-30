@@ -112,7 +112,7 @@ static const fim_char_t *default_font[] = {
     NULL
 };
 
-fim::string get_default_font_list()
+fim::string get_default_font_list(void)
 {
 	fim::string dfl;
 	const fim_char_t ** filename=default_font;

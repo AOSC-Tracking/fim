@@ -326,7 +326,7 @@
 		return rc?FIM_ERR_GENERIC:FIM_ERR_NO_ERROR;
 	}
 
-	void CACADevice::finalize()
+	void CACADevice::finalize(void)
 	{
 		caca_end();
 	}

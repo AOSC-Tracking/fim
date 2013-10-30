@@ -58,7 +58,7 @@ static struct magick_state_t ms;
 namespace fim
 {
 
-static void magick_cleanup()
+static void magick_cleanup(void)
 {
 	if(ms.image)DestroyImageList(ms.image);
 	if(ms.cimage)DestroyImageList(ms.cimage);

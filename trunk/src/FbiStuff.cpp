@@ -2258,7 +2258,7 @@ err:
 }
 
 
-	int FbiStuff::fim_filereading_debug()
+	int FbiStuff::fim_filereading_debug(void)
 	{
 		return cc.displaydevice_ ?
 			cc.displaydevice_->debug_:

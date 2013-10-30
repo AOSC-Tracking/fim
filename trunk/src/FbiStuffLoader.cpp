@@ -174,7 +174,7 @@ void fim_write_register(struct ida_writer *writer)
 }
 #endif /* USE_X11 */
 
-	void fim_loaders_to_stderr()
+	void fim_loaders_to_stderr(void)
     	{
 		/* FIXME: new, should be generalized */
     		struct list_head *item=NULL;

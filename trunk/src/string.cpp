@@ -31,7 +31,7 @@ namespace fim
 	 *	without breaking the rest of the program.
 	 */
 
-	void string::_string_init()
+	void string::_string_init(void)
 	{	
 		/* the string is initialized as unallocated and blank */
 #ifdef _FIM_DYNAMIC_STRING
@@ -61,7 +61,7 @@ namespace fim
 		return b.print(os);
 	}
 
-	string::string()
+	string::string(void)
 	{
 		_string_init();
 		/* no allocation is necessary for an empty string */
@@ -79,7 +79,7 @@ namespace fim
 		this->assign(str);
 	}
 
-	string::~string()
+	string::~string(void)
 	{
 #ifdef _FIM_DYNAMIC_STRING
 		if(s && len==0){std::cout <<"anomalia\n";exit(-1);}
@@ -108,7 +108,7 @@ namespace fim
 		assign(buf);
 	}
 
-	const fim_char_t*string::c_str()const
+	const fim_char_t*string::c_str(void)const
 	{
 		if(  this->isempty() == true ) return "";
 		return s;	/* yes, a heap allocated reference */
@@ -234,14 +234,14 @@ namespace fim
 	}
 
 	/* reports the effective used space */
-	int  string::length()const
+	int  string::length(void)const
 	{
 		if(isempty())return 0;
 		return strlen(s);
 	}
 
 	/* reports the effective allocated space */
-	int  string::size()const
+	int  string::size(void)const
 	{
 #ifdef _FIM_DYNAMIC_STRING
 		if(!s)return 0;
@@ -312,7 +312,7 @@ namespace fim
 	/*
 	 * a string is empty if NULL or allocated to zero bytes (if possible)
 	 * */
-	bool string::isempty()const
+	bool string::isempty(void)const
 	{
 #ifdef _FIM_DYNAMIC_STRING
 		return (s==NULL || len==0 || *s=='\0');
@@ -533,7 +533,7 @@ namespace fim
 		return;
 	}
 
-	size_t string::lines()const
+	size_t string::lines(void)const
 	{
 		/*
 		 * each empty line will be counted unless it is the last and not only.
