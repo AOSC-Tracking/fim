@@ -96,8 +96,8 @@ class CommandConsole
 
 	private:
 
-	fim_err_t save_history();
-	fim_err_t load_history();
+	fim_err_t save_history(void);
+	fim_err_t load_history(void);
 
 	/*
 	 * the identifier->variable binding
@@ -149,9 +149,9 @@ class CommandConsole
 	fim::string dump_record_buffer(const args_t &args);
 	fim::string do_dump_record_buffer(const args_t &args)const;
 	fim::string execute_record_buffer(const args_t &args);
-	fim::string start_recording();
+	fim::string start_recording(void);
 	fim::string fcmd_recording(const args_t &args);
-	fim::string stop_recording();
+	fim::string stop_recording(void);
 	fim::string sanitize_action(const fim::string &cmd)const;
 
 	void record_action(const fim::string &cmd);
@@ -168,8 +168,8 @@ class CommandConsole
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	public:
-	void markCurrentFile();
-	void unmarkCurrentFile();
+	void markCurrentFile(void);
+	void unmarkCurrentFile(void);
 	private:
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #ifdef FIM_WITH_AALIB
@@ -183,17 +183,17 @@ class CommandConsole
 
 	//const fim_char_t*get_prompt()const{return prompt_;}
 
-	CommandConsole();
+	CommandConsole(void);
 	private:
 	CommandConsole& operator= (const CommandConsole&cc){return *this;/* a nilpotent assignation */}
 	public:
-	bool display();
-	bool redisplay();
+	bool display(void);
+	bool redisplay(void);
 	fim_char_t * command_generator (const fim_char_t *text,int state,int mask)const;
-	fim_perr_t executionCycle();
+	fim_perr_t executionCycle(void);
 	fim_err_t init(fim::string device);
 	fim_bool_t inConsole()const;
-	~CommandConsole();
+	~CommandConsole(void);
 
 	/* the following group is defined in Namespace.cpp */
 	fim_float_t getFloatVariable(const fim::string &varname)const;
@@ -287,7 +287,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string bind(fim_key_t c,fim::string binding);
 	public:
 	fim::string find_key_for_bound_cmd(fim::string binding);
-	fim_err_t execDefaultConfiguration();
+	fim_err_t execDefaultConfiguration(void);
 	private:
 	fim::string unbind(const fim::string& key);
 	fim::string fcmd_unbind(const args_t& args);
@@ -308,7 +308,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	fim::string pre_autocmd_add(const fim::string &cmd);
-	fim::string pre_autocmd_exec();
+	fim::string pre_autocmd_exec(void);
 #endif /* FIM_AUTOCMDS */
 	fim_int catchLoopBreakingCommand(fim_ts_t seconds=0);
 
@@ -319,7 +319,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	void autocmd_push_stack(const autocmds_loop_frame_t& frame);
 	void autocmd_pop_stack(const autocmds_loop_frame_t& frame);
 	public:
-	void autocmd_trace_stack();
+	void autocmd_trace_stack(void);
 	private:
 	fim_bool_t autocmd_in_stack(const autocmds_loop_frame_t& frame)const;
 #endif /* FIM_AUTOCMDS */
@@ -348,9 +348,9 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 #endif /* FIM_WINDOWS */
 	void dumpDefaultFimrc()const;
 
-	void tty_raw();
-	void tty_restore();
-	void cleanup();
+	void tty_raw(void);
+	void tty_restore(void);
+	void cleanup(void);
 	
 	fim::string print_commands()const;
 
@@ -369,7 +369,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	fim_err_t display_reinit(const fim_char_t *rs);
 	fim::string fcmd_basename(const args_t& args);
-	fim_bool_t key_syms_update();
+	fim_bool_t key_syms_update(void);
 #if FIM_WANT_BENCHMARKS
 	virtual fim_int get_n_qbenchmarks()const;
 	virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const;

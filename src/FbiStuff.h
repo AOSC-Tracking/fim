@@ -65,7 +65,7 @@ static struct ida_image* scale_image(const struct ida_image *src, float scale, f
 		, const fim_mipmap_t * mmp=NULL
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 	);
-static int fim_filereading_debug();
+static int fim_filereading_debug(void);
 };
 
 // filter.h

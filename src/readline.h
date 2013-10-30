@@ -33,8 +33,8 @@ namespace fim
 
 namespace rl
 {
-	void initialize_readline ();
-	int fim_search_rl_startup_hook();
+	void initialize_readline (void);
+	int fim_search_rl_startup_hook(void);
 }
 
 #endif /* FIM_READLINE_H */

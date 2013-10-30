@@ -62,7 +62,7 @@ fim_char_t * dupnstr (float n, const fim_char_t c='\0');
 fim_char_t * dupnstr (const fim_char_t c1, double n, const fim_char_t c2='\0');
 fim_char_t * dupnstr (int n);
 fim_char_t * dupsqstr (const fim_char_t* s);
-int fim_rand();
+int fim_rand(void);
 
 bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase=1, int ignorenewlines=0);
 
@@ -70,9 +70,9 @@ int strchr_count(const fim_char_t*s, int c);
 int lines_count(const fim_char_t*s, int cols);
 int newlines_count(const fim_char_t*s);
 const fim_char_t* next_row(const fim_char_t*s, int cols);
-int fim_common_test();
+int fim_common_test(void);
 
-double getmilliseconds();
+double getmilliseconds(void);
 const fim_char_t * fim_getenv(const fim_char_t * name);
 FILE * fim_fread_tmpfile(FILE * fp);
 double fim_atof(const fim_char_t *nptr);

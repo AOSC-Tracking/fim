@@ -117,12 +117,12 @@ class Browser
 	fim::string prev(int n=1);
 	fim::string do_remove(const args_t &args);
 	fim::string fcmd_info(const args_t &args);
-	fim::string info();
+	fim::string info(void);
 	std::ostream& print(std::ostream &os)const;
-	void redisplay();
+	void redisplay(void);
 	fim::string fcmd_redisplay(const args_t &args);
 	fim::string fcmd_load(const args_t &args);
-	const fim::string pop_current();
+	const fim::string pop_current(void);
 	fim::string pop_current(const args_t &args);
 	bool present(const fim::string nf);
 	fim_int find_file_index(const fim::string nf);
@@ -131,20 +131,20 @@ class Browser
 #endif /* FIM_READ_DIRS */
 	bool push(fim::string nf);
 
-	fim::string display();
+	fim::string display(void);
 	fim::string _random_shuffle(bool dts=true);
-	fim::string _clear_list();
+	fim::string _clear_list(void);
 	private:
-	fim::string loadCurrentImage();
-	fim::string reload();
+	fim::string loadCurrentImage(void);
+	fim::string reload(void);
 
 	int n_files()const;
 	int n_pages()const;
-	fim::string _sort();
-	fim::string _reverse();
+	fim::string _sort(void);
+	fim::string _reverse(void);
 	fim::string next(int n=1);
 
-	void free_current_image();
+	void free_current_image(void);
 	int load_error_handle(fim::string c);
 	public:
 	int c_page()const;

@@ -78,13 +78,13 @@ class Cache
 	/* get the lru_ element. if unused is true, only an unused image will be returned, _if any_*/
 	Image* get_lru( bool unused = false )const;
 
-	int free_some_lru();
+	int free_some_lru(void);
 
-	bool free_all();
+	bool free_all(void);
 	
 	int used_image(cache_key_t key)const;
 	public:
-	Cache();
+	Cache(void);
 
 #if FIM_WANT_BDI
 	Image dummy_img_;	// experimental
@@ -102,8 +102,8 @@ class Cache
 	/**/
 	int prefetch(cache_key_t key);
 
-	fim::string getReport();
-	~Cache();
+	fim::string getReport(void);
+	~Cache(void);
 	virtual size_t byte_size(void)const;
 };
 }

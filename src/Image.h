@@ -61,7 +61,7 @@ class Image
 
 	Image(const fim_char_t *fname, FILE *fd=NULL);
 	Image(const fim_char_t *fname, Foo& foo, FILE *fd=NULL);
-	~Image();
+	~Image(void);
 
 	bool prev_page(int j=+1);
 	bool next_page(int j=+1);
@@ -82,7 +82,7 @@ class Image
 	/* virtual stuff */
 	public://TMP
         struct ida_image *img_     ;     /* local (eventually) copy images */
-	bool reload();
+	bool reload(void);
 	private://TMP
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
 	fim_mipmap_t mm_;
@@ -105,20 +105,20 @@ class Image
 	size_t fs_;		/* file size */
 	size_t ms_;		/* memory size */
 
-        void free();
-	void reset();
+        void free(void);
+	void reset(void);
 
         bool tiny()const;
 	public:
 	virtual size_t byte_size(void)const;
 
 	bool can_reload()const{return !no_file_;}
-	bool update();
+	bool update(void);
 
-	fim::string getInfo();
+	fim::string getInfo(void);
 	Image(const Image& image); // yes, a private constructor (was)
 #if FIM_WANT_BDI
-	Image();
+	Image(void);
 #endif	/* FIM_WANT_BDI */
 	fim_err_t rescale( fim_scale_t ns=0.0 );
 	fim_err_t rotate( fim_scale_t angle_=1.0 );
@@ -137,20 +137,20 @@ class Image
 	/* viewport methods ? */
 	fim_err_t scale_increment(fim_scale_t ds);
 	fim_err_t scale_multiply (fim_scale_t sm);
-	bool negate ();/* let's read e-books by consuming less power :) */
-	bool desaturate ();
-	bool gray_negate();
+	bool negate (void);/* let's read e-books by consuming less power :) */
+	bool desaturate (void);
+	bool gray_negate(void);
 
-	bool check_invalid();
-	bool check_valid();
+	bool check_invalid(void);
+	bool check_valid(void);
 
-	int width();
-	fim_coo_t original_width();
-	int height();
-	fim_coo_t original_height();
+	int width(void);
+	fim_coo_t original_width(void);
+	int height(void);
+	fim_coo_t original_height(void);
 	bool goto_page(fim_page_t j);
 
-	Image * getClone();
+	Image * getClone(void);
 //	void resize(int nw, int nh);
 	int c_page()const{return page_;}
 };

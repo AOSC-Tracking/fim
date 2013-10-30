@@ -157,16 +157,16 @@ class FimWindow
 	FimWindow *first_,*second_;
 	bool amroot_;
 	
-	void split();
-	void hsplit();
-	void vsplit();
-	bool close();
-	bool swap(); // new
-	void balance();
-	bool chfocus();
+	void split(void);
+	void hsplit(void);
+	void vsplit(void);
+	bool close(void);
+	bool swap(void); // new
+	void balance(void);
+	bool chfocus(void);
 	Moves move_focus(Moves move);
 	Moves reverseMove(Moves move);
-	bool normalize();
+	bool normalize(void);
 	fim_err_t enlarge(fim_coo_t units);
 	fim_err_t henlarge(fim_coo_t units);
 	fim_err_t venlarge(fim_coo_t units);
@@ -209,10 +209,10 @@ class FimWindow
 	FimWindow & focused()const;
 	FimWindow & shadowed()const;
 
-	FimWindow & upper();
-	FimWindow & lower();
-	FimWindow & left();
-	FimWindow & right();
+	FimWindow & upper(void);
+	FimWindow & lower(void);
+	FimWindow & left(void);
+	FimWindow & right(void);
 
 	fim_coo_t setwidth(fim_coo_t w);
 	fim_coo_t setheight(fim_coo_t h);
@@ -235,7 +235,7 @@ class FimWindow
 	FimWindow & operator= (const FimWindow &w){return *this;/* a nilpotent assignation */}
 
 	public:
-	void setroot();	// only one root window should exist
+	void setroot(void);	// only one root window should exist
 
 	/* The only public method launching exceptions is the constructor now.
 	 * */
@@ -250,8 +250,8 @@ class FimWindow
 	const Image *getImage()const;		//exception safe
 
 #if 0
-	void print();
-	void print_focused();
+	void print(void);
+	void print_focused(void);
 	void draw()const;
 #endif
 
@@ -259,7 +259,7 @@ class FimWindow
 	fim_coo_t width()const;
 	fim_coo_t xorigin()const;
 	fim_coo_t yorigin()const;
-	~FimWindow();
+	~FimWindow(void);
 	virtual size_t byte_size(void)const;
 };
 

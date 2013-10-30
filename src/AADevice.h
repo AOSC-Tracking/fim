@@ -50,7 +50,7 @@ class AADevice:public DisplayDevice
 		reinit(opts.c_str());
 	}
 
-	virtual ~AADevice();
+	virtual ~AADevice(void);
 
 	virtual fim_err_t  display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
@@ -64,14 +64,14 @@ class AADevice:public DisplayDevice
 		fim_flags_t flags// some flags
 		);
 	fim_err_t initialize(sym_keys_t &sym_keys);
-	void finalize();
+	void finalize(void);
 
-	int get_chars_per_line();
-	int get_chars_per_column();
-	fim_coo_t txt_width();
-	fim_coo_t txt_height();
-	fim_coo_t width();
-	fim_coo_t height();
+	int get_chars_per_line(void);
+	int get_chars_per_column(void);
+	fim_coo_t txt_width(void);
+	fim_coo_t txt_height(void);
+	fim_coo_t width(void);
+	fim_coo_t height(void);
 	fim_err_t status_line(const fim_char_t *msg);
 	//void status_screen(int desc,int draw_output){}
 	fim_bool_t handle_console_switch()
@@ -86,8 +86,8 @@ class AADevice:public DisplayDevice
 
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1, fim_coo_t y2);
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
-	void flush();
-	fim_err_t init_console();
+	void flush(void);
+	fim_err_t init_console(void);
 	fim_bpp_t get_bpp()
 	{
 		return 1;

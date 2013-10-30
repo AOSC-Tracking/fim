@@ -243,7 +243,7 @@ class FramebufferDevice:public DisplayDevice
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	FramebufferDevice(MiniConsole & mc_);
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	FramebufferDevice();
+	FramebufferDevice(void);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 
 
@@ -275,7 +275,7 @@ class FramebufferDevice:public DisplayDevice
 
 
 	public:
-	fim_err_t framebuffer_init();
+	fim_err_t framebuffer_init(void);
 
 	struct DEVS *devices_;
 
@@ -405,11 +405,11 @@ inline void dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int m
 void dither_line_gray(fim_byte_t *src, fim_byte_t *dst, int y, int width);
 
 
-void fb_switch_release();
+void fb_switch_release(void);
 
-void fb_switch_acquire();
+void fb_switch_acquire(void);
 
-int fb_switch_init();
+int fb_switch_init(void);
 
 void fb_switch_signal(int signal);
 
@@ -529,7 +529,7 @@ void init_one(int32_t *lut, int bits, int shift)
 	//void status_screen(const fim_char_t *msg, int draw);
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
 	fim_bpp_t get_bpp(){return fb_var_.bits_per_pixel; };
-	virtual ~FramebufferDevice();
+	virtual ~FramebufferDevice(void);
 	virtual fim_coo_t status_line_height(void)const;
 };
 
