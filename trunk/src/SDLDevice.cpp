@@ -1032,4 +1032,11 @@ err:
 		SDL_WM_SetCaption(FIM_CNS_FIM_APPTITLE,FIM_SDL_ICONPATH);
 		return FIM_ERR_NO_ERROR;
 	}
+
+	fim_coo_t SDLDevice::status_line_height(void)const
+	{
+		return f_ ? border_height_ + f_->height : 0;
+	}
 #endif
+
+

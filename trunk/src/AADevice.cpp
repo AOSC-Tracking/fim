@@ -627,3 +627,8 @@ err:
 		return FIM_ERR_GENERIC;
 	}
 #endif /* FIM_WITH_AALIB */
+
+	fim_coo_t AADevice::status_line_height(void)const
+	{
+		return 1;
+	}

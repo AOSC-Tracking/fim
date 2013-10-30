@@ -114,6 +114,7 @@ class FramebufferDevice:public DisplayDevice
 	}
 #endif
 	private:
+	static const fim_coo_t border_height_=1;
 
 	int             vt_ ;
 	//public:
@@ -529,6 +530,7 @@ void init_one(int32_t *lut, int bits, int shift)
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
 	fim_bpp_t get_bpp(){return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice();
+	virtual fim_coo_t status_line_height(void)const;
 };
 
 }

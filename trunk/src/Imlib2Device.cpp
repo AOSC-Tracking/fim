@@ -648,3 +648,7 @@ err:
 	}
 #endif
 
+	fim_coo_t Imlib2Device::status_line_height(void)const
+	{
+		return f_ ? border_height_ + f_->height : 0;
+	}
