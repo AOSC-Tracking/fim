@@ -213,12 +213,16 @@ namespace fim
 	{
 		/*
 		 * */
+		fim_coo_t fh = displaydevice_->status_line_height();
+		if(fh)
+			fh*=(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
 #ifdef FIM_WINDOWS
 		if(window_)
-			return window_->height();
-		else return 0;
+			return window_->height()-fh;
+		else
+		       	return 0;
 #else
-		return displaydevice_->height();
+		return displaydevice_->height()-fh;
 #endif /* FIM_WINDOWS */
 	}
 
@@ -390,8 +394,8 @@ namespace fim
 					yorigin(),
 					xorigin(),
 					viewport_height(),
-					viewport_width(),
-					viewport_width(),
+				       	viewport_width(),
+				       	viewport_width(),
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);}
 #else
@@ -399,14 +403,12 @@ namespace fim
 					image_->img_,
 					top_,
 					left_,
-					displaydevice_->height(),
-					displaydevice_->width(),
-					displaydevice_->width(),
+					//displaydevice_->height(), displaydevice_->width(), displaydevice_->width(),
+					viewport_height(), viewport_width(), viewport_width(),
 					0,
 					0,
-					displaydevice_->height(),
-					displaydevice_->width(),
-					displaydevice_->width(),
+					// displaydevice_->height(), displaydevice_->width(), displaydevice_->width(),
+					viewport_height(), viewport_width(), viewport_width(),
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);
 #endif					

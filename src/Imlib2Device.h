@@ -40,6 +40,7 @@ class Imlib2Device:public DisplayDevice
 	bool want_windowed_;
 	bool want_mouse_display_;
 	bool want_resize_;
+	static const fim_coo_t border_height_=1;
 
 	public:
 
@@ -82,6 +83,7 @@ class Imlib2Device:public DisplayDevice
 	void lock();
 	void unlock();
 	fim_bpp_t get_bpp();
+	virtual fim_coo_t status_line_height(void)const;
 	private:
 	fim_sys_int get_input_i2l(fim_key_t * c);
 	/* TEMPORARY */

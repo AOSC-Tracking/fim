@@ -40,6 +40,7 @@ class SDLDevice:public DisplayDevice
 	fim_coo_t current_h_;
 	fim_bpp_t Bpp_,bpp_;
 	fim::string opts_;
+	static const fim_coo_t border_height_=1;
 	bool want_windowed_;
 	bool want_mouse_display_;
 	bool want_resize_;
@@ -85,6 +86,7 @@ class SDLDevice:public DisplayDevice
 	void unlock();
 	fim_bpp_t get_bpp(){return bpp_; };
 	bool sdl_window_update();
+	virtual fim_coo_t status_line_height(void)const;
 	private:
 	fim_err_t clear_rect_( void* dst, fim_coo_t oroff,fim_coo_t ocoff,fim_coo_t  orows,fim_coo_t ocols,fim_coo_t  ocskip);
 	/* TEMPORARY */

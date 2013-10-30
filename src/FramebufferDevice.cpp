@@ -1918,6 +1918,10 @@ FramebufferDevice::~FramebufferDevice()
 	fim_free_fs_font(f_);
 }
 
+fim_coo_t FramebufferDevice::status_line_height(void)const
+{
+	return f_ ? border_height_ + f_->height : 0;
+}
 #endif  //ifdef FIM_WITH_NO_FRAMEBUFFER, else
 
 

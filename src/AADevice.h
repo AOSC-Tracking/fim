@@ -95,6 +95,7 @@ class AADevice:public DisplayDevice
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_err_t reinit(const fim_char_t *rs);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
+	virtual fim_coo_t status_line_height(void)const;
 };
 
 #endif /* FIM_WITH_AALIB  */
