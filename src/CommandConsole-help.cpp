@@ -30,7 +30,7 @@ namespace fim
 		 */
 		fim::string s;
 		fim::string sep=" ";
-		s+= Var::get_variables_reference(refmode);
+		s+= fim_get_variables_reference(refmode);
 
 		// FIXME: shall fix the following to work
 #if 0

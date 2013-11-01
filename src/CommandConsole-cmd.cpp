@@ -148,7 +148,7 @@ namespace fim
 					hs+=args[0] + fim::string( "\" is a variable, with value:\n" );
 					hs+=getStringVariable(args[0]);
 					hs+=fim::string("\nand description:\n");
-					hs+=Var::var_help_db_query(args[0]);
+					hs+=fim_var_help_db_query(args[0]);
 					hs+=fim::string("\n");
 					return hs;
 				}

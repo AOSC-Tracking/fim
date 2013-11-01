@@ -1337,7 +1337,7 @@ fim_perr_t main(int argc,char *argv[])
 	 * */
 	FimInstance fiminstance;
 
-	Var::var_help_db_init();
+	fim::fim_var_help_db_init();
 	return fiminstance.main(argc,argv);
 }
 
