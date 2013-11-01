@@ -24,7 +24,7 @@
 
 #include <iostream>
 #include "fim.h"
-#include "string.h"
+#include "fim_string.h"
 #include "common.h"
 #include <string>
 #include <fstream>
