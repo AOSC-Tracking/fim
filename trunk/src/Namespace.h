@@ -26,7 +26,6 @@
 
 namespace fim
 {
-	extern CommandConsole cc;
 	typedef std::map<const fim::string,Var> variables_t;	//id->var
 	class Namespace
 	{
@@ -40,6 +39,7 @@ namespace fim
 		 */
 		//private:
 		protected:
+		CommandConsole*rnsp_;
 		variables_t variables_;	//id->var
 		fim_char_t ns_char_; // ns_char_ ':' varname
 	
@@ -66,7 +66,7 @@ namespace fim
 		fim::string get_variables_list()const;
 		virtual size_t byte_size(void)const = 0;
 
-		Namespace(const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char) {}
+		Namespace(CommandConsole *rnsp=NULL, const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char),rnsp_(rnsp) {}
 		virtual ~Namespace(){}
 		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
 	};

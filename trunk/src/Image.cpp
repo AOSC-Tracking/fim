@@ -91,7 +91,7 @@ namespace fim
 		no_file_(true),
 		fs_(0), ms_(0),
 #ifdef FIM_NAMESPACES
-		Namespace(FIM_SYM_NAMESPACE_IMAGE_CHAR),
+		Namespace(&cc,FIM_SYM_NAMESPACE_IMAGE_CHAR),
 #endif /* FIM_NAMESPACES */
 		fis_(fim::string(fname)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
                 fname_     (FIM_CNS_DEFAULT_IFNAME)

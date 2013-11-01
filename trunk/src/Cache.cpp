@@ -29,12 +29,14 @@
 #define FIM_LOUD_CACHE_STUFF
 #endif
 
+	extern CommandConsole cc;
 namespace fim
 {
 	Cache::Cache(void)
 #if FIM_WANT_BDI
 		:dummy_img_()
 #endif	/* FIM_WANT_BDI */
+		,Namespace(&cc)
 	{
 		/*	FIXME : potential flaw ?	*/
 		FIM_LOUD_CACHE_STUFF;

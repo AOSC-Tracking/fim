@@ -23,6 +23,7 @@
 #include "fim.h"
 namespace fim
 {
+	extern CommandConsole cc;
 /*
  * A Browser object oversees image browsing.
  */
@@ -75,6 +76,7 @@ class Browser
 	private:
 	Browser& operator= (const Browser &b){return *this;/* a nilpotent assignation */}
 	Browser(const Browser &b):
+		Namespace(b),
 		flist_(args_t()),
 		nofile_(""),
 		cf_(0),

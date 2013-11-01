@@ -193,7 +193,7 @@ ret:
 
 	Browser::Browser(CommandConsole &cc):nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
 #ifdef FIM_NAMESPACES
-		,Namespace(FIM_SYM_NAMESPACE_BROWSER_CHAR)
+		,Namespace(&cc,FIM_SYM_NAMESPACE_BROWSER_CHAR)
 #endif /* FIM_NAMESPACES */
 	{	
 		/*

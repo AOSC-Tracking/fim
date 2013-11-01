@@ -67,7 +67,7 @@ namespace fim
 			// this scope was selected
 			//return variables_[varname];
 			variables_t::const_iterator vi=variables_.find(varname);
-			fim_int retval = 0;
+			fim_int retval = FIM_CNS_EMPTY_INT_VAL;
 
 			if(vi!=variables_.end())
 				retval = vi->second.getInt();
@@ -82,7 +82,7 @@ namespace fim
 			if(vi!=variables_.end())
 				return vi->second;
 			else
-			       	return Var(0);
+			       	return Var(FIM_CNS_EMPTY_INT_VAL);
 		}
 
 		fim_float_t Namespace::getFloatVariable(const fim::string &varname)const
@@ -118,38 +118,52 @@ namespace fim
 
 	        fim_float_t Namespace::setGlobalVariable(const fim::string& varname,fim_float_t value)
 		{
-			return cc.setVariable(varname,value);
+			/* FIXME: need a better solution here ! */
+			if(!rnsp_) return FIM_CNS_EMPTY_FP_VAL;
+			return rnsp_->setVariable(varname,value);
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim::string& varname,fim_int value)
 		{
-			return cc.setVariable(varname,value);
+			/* FIXME: need a better solution here ! */
+			if(!rnsp_) return FIM_CNS_EMPTY_INT_VAL;
+			return rnsp_->setVariable(varname,value);
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim::string& varname,const fim_char_t*value)
 		{
-			return cc.setVariable(varname,value);
+			/* FIXME: need a better solution here ! */
+			if(!rnsp_) return FIM_CNS_EMPTY_INT_VAL;
+			return rnsp_->setVariable(varname,value);
 		}
 
 		fim_int Namespace::getGlobalIntVariable(const fim::string &varname)const
 		{
-			return cc.getIntVariable(varname);
+			/* FIXME: need a better solution here ! */
+			if(!rnsp_) return FIM_CNS_EMPTY_INT_VAL;
+			return rnsp_->getIntVariable(varname);
 		}
 
 		fim_float_t Namespace::getGlobalFloatVariable(const fim::string &varname)const
 		{
-			return cc.getFloatVariable(varname);
+			/* FIXME: need a better solution here ! */
+			if(!rnsp_) return FIM_CNS_EMPTY_FP_VAL;
+			return rnsp_->getFloatVariable(varname);
 		}
 
 		fim::string Namespace::getGlobalStringVariable(const fim::string &varname)const
 		{
-			return cc.getStringVariable(varname);
+			/* FIXME: need a better solution here ! */
+			if(!rnsp_) return FIM_CNS_EMPTY_RESULT;
+			return rnsp_->getStringVariable(varname);
 		}
 
 		fim::string Namespace::autocmd_exec(const fim::string &event,const fim::string &fname)
 		{
 #ifdef FIM_AUTOCMDS
-			return cc.autocmd_exec(event,fname);
+			/* FIXME: need a better solution here ! */
+			if(!rnsp_) return FIM_CNS_EMPTY_RESULT;
+			return rnsp_->autocmd_exec(event,fname);
 #else /* FIM_AUTOCMDS */
 			return FIM_CNS_EMPTY_RESULT;
 #endif /* FIM_AUTOCMDS */
