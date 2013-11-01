@@ -24,7 +24,7 @@ namespace fim
 	typedef std::map<fim::string, fim::string> fim_var_help_t;//variable id -> variable help
 	static fim_var_help_t fim_var_help_db;	/* this is the global help db for fim variables */
 
-	void Var::var_help_db_init(void)
+	void fim_var_help_db_init(void)
 	{
 		/* The inclusion of the next file is not essential : it serves only to populate the variables help database. */
 		#define FIM_WANT_INLINE_HELP 1
@@ -33,7 +33,7 @@ namespace fim
 		;/* freebsd 7.2 cc dies without */
 	}
 
-	fim::string Var::var_help_db_query(const fim::string &id)
+	fim::string fim_var_help_db_query(const fim::string &id)
 	{
 		string hs = fim_var_help_db[id];
 		if(hs==FIM_CNS_EMPTY_STRING)
@@ -42,7 +42,7 @@ namespace fim
 			return hs;
 	}
 
-	fim::string Var::get_variables_reference(FimDocRefMode refmode)
+	fim::string fim_get_variables_reference(FimDocRefMode refmode)
 	{
 		string s =FIM_CNS_EMPTY_STRING;
 		fim_var_help_t::const_iterator vi;
@@ -52,7 +52,7 @@ namespace fim
 		{
 			s+=vi->first;
 			s+=" : ";
-			s+=Var::var_help_db_query(vi->first);
+			s+=fim_var_help_db_query(vi->first);
 			s+="\n";
 		}
 		return s;
@@ -62,7 +62,7 @@ manmode:
 			s+=".B\n";
 			s+=vi->first;
 			s+="\n";
-			s+=Var::var_help_db_query(vi->first);
+			s+=fim_var_help_db_query(vi->first);
 			s+="\n";
 			s+=".fi\n";
 		}

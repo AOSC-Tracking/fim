@@ -25,7 +25,7 @@
 #ifndef FIM_VAR_H
 #define FIM_VAR_H
 
-#include "fim.h"
+//#include "fim.h"
 #include "string.h"
 
 #if 0
@@ -256,10 +256,10 @@ class Var
 	{
 		return (type==v.getType()) && (i==v.getInt());
 	}*/
-	static fim::string var_help_db_query(const fim::string &id);
-	static fim::string get_variables_reference(FimDocRefMode refmode);
-	static void var_help_db_init();
 };
+	fim::string fim_var_help_db_query(const fim::string &id);
+	void fim_var_help_db_init();
+	fim::string fim_get_variables_reference(FimDocRefMode refmode);
 
 }
 
