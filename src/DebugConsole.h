@@ -87,7 +87,8 @@ namespace fim
 			lwidth_(0),
 			rows_(0),
 			scroll_(0),
-			cc_(mc.cc_)
+			cc_(mc.cc_),
+			Namespace(mc)
 			{/* this constructor should not be used */}
 
 		int line_length(int li);

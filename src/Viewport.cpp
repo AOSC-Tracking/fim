@@ -55,7 +55,7 @@ namespace fim
 			,window_(window)
 #endif /* FIM_WINDOWS */
 #ifdef FIM_NAMESPACES
-			,Namespace(FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
+			,Namespace(&c,FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
 #endif /* FIM_NAMESPACES */
 			,commandConsole(c)
 	{
@@ -80,7 +80,7 @@ namespace fim
 		,window_(v.window_)
 #endif /* FIM_WINDOWS */
 #ifdef FIM_NAMESPACES
-		,Namespace(FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
+		,Namespace(v)
 #endif /* FIM_NAMESPACES */
 		,commandConsole(v.commandConsole)
 	{

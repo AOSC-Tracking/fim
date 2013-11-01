@@ -126,7 +126,7 @@ namespace fim
 
 	FimWindow::FimWindow(CommandConsole &c,const Rect& corners, Viewport* vp):corners_(corners),focus_(false),first_(NULL),second_(NULL),amroot_(false)
 #ifdef FIM_NAMESPACES
-	,Namespace(FIM_SYM_NAMESPACE_WINDOW_CHAR)
+	,Namespace(&c,FIM_SYM_NAMESPACE_WINDOW_CHAR)
 #endif /* FIM_NAMESPACES */
 	,viewport_(NULL),
 	commandConsole_(c)
@@ -153,7 +153,7 @@ namespace fim
 //#ifdef FIM_UNDEFINED
 	FimWindow::FimWindow(const FimWindow & root):corners_(root.corners_),focus_(root.focus_),first_(root.first_),second_(root.second_),amroot_(false), viewport_(NULL),commandConsole_(root.commandConsole_)
 #ifdef FIM_NAMESPACES
-			,Namespace(FIM_SYM_NAMESPACE_WINDOW_CHAR)
+			,Namespace(root)
 #endif /* FIM_NAMESPACES */
 	{
 		/*
