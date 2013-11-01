@@ -146,7 +146,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	lex.h \
 	readline.h \
 	readline.cpp \
-	string.h \
+	fim_string.h \
 	AADevice.cpp \
 	CACADevice.cpp \
 	SDLDevice.cpp \
@@ -178,7 +178,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	FimWindow.cpp \
 	common.cpp \
 	interpreter.cpp \
-	string.cpp
+	fim_string.cpp
 
 Command.o: Command.h
 CommandConsole.o: defaultConfiguration.o

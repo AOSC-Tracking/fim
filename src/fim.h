@@ -409,7 +409,7 @@ class fim_mipmap_t
 	void reset(void){nmm=0;mmb=0;mdp=NULL;}
 };
 
-#include "string.h"
+#include "fim_string.h"
 #include "Command.h"
 #include "Benchmarkable.h"
 #include "Arg.h"
