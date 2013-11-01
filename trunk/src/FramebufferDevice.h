@@ -103,10 +103,10 @@ class FramebufferDevice:public DisplayDevice
 	
 	    if (NULL == f_)
 		f_ = fs_consolefont(font ? fonts : NULL);
-	#ifndef FIM_X_DISPLAY_MISSING
+	#ifdef FIM_USE_X11_FONTS
 	    if (NULL == f_ && 0 == fs_connect(NULL))
 		f_ = fs_open(font ? font : x11_font_);
-	#endif /* FIM_X_DISPLAY_MISSING */
+	#endif /* FIM_USE_X11_FONTS */
 	    if (NULL == f_) {
 		fprintf(stderr,"font \"%s\" is not available\n",font);
 		exit(1);

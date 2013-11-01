@@ -60,10 +60,10 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
 #if FIM_FONT_DEBUG
     std::cout << "after consolefont :" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
-#ifndef FIM_X_DISPLAY_MISSING
+#ifdef FIM_USE_X11_FONTS
     if (NULL == *_f && 0 == fs_connect(NULL))
 	*_f = fs_open(font ? font : x11_font);
-#endif /* FIM_X_DISPLAY_MISSING */
+#endif /* FIM_USE_X11_FONTS */
 #if FIM_FONT_DEBUG
     std::cout << "after fs_open     :" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
