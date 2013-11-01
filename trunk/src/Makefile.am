@@ -156,6 +156,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	Command.cpp \
 	CommandConsole.cpp \
 	CommandConsole-cmd.cpp \
+	CommandConsole-var.cpp \
 	CommandConsole-init.cpp \
 	CommandConsole-help.cpp \
 	DebugConsole.cpp \
