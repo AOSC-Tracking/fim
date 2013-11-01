@@ -38,7 +38,7 @@ namespace fim
 {
 
 
-#ifndef FIM_X_DISPLAY_MISSING
+#ifdef FIM_USE_X11_FONTS
 # include <FSlib.h>
 
 struct fs_font {
@@ -57,7 +57,7 @@ struct fs_font {
     fim_byte_t      **gindex;
 };
 
-#else /* FIM_X_DISPLAY_MISSING */
+#else /* FIM_USE_X11_FONTS */
 
 typedef struct _FSXCharInfo {
     short       left;
@@ -90,7 +90,7 @@ struct fs_font {
     fim_byte_t      **gindex;
 };
 
-#endif  /* FIM_X_DISPLAY_MISSING */
+#endif  /* FIM_USE_X11_FONTS */
 
 
 
