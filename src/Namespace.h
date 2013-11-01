@@ -38,7 +38,8 @@ namespace fim
 		 *
 		 * the identifier->variable binding
 		 */
-		private:
+		//private:
+		protected:
 		variables_t variables_;	//id->var
 		fim_char_t ns_char_; // ns_char_ ':' varname
 	
