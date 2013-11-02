@@ -39,7 +39,9 @@ namespace fim
 		 */
 		//private:
 		protected:
+#ifndef FIM_INDIPENDENT_NAMESPACE
 		CommandConsole*rnsp_;
+#endif /* FIM_INDIPENDENT_NAMESPACE */
 		variables_t variables_;	//id->var
 		fim_char_t ns_char_; // ns_char_ ':' varname
 	
@@ -66,7 +68,15 @@ namespace fim
 		fim::string get_variables_list()const;
 		virtual size_t byte_size(void)const = 0;
 
-		Namespace(CommandConsole *rnsp=NULL, const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char),rnsp_(rnsp) {}
+		Namespace(
+#ifndef FIM_INDIPENDENT_NAMESPACE
+				CommandConsole *rnsp=NULL,
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+			       	const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char)
+#ifndef FIM_INDIPENDENT_NAMESPACE
+										      ,rnsp_(rnsp)
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+	       	{}
 		virtual ~Namespace(){}
 		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
 	};
