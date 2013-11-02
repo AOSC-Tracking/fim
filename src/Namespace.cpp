@@ -119,51 +119,72 @@ namespace fim
 	        fim_float_t Namespace::setGlobalVariable(const fim::string& varname,fim_float_t value)
 		{
 			/* FIXME: need a better solution here ! */
-			if(!rnsp_) return FIM_CNS_EMPTY_FP_VAL;
-			return rnsp_->setVariable(varname,value);
+#ifndef FIM_INDIPENDENT_NAMESPACE
+			if(rnsp_)
+				return rnsp_->setVariable(varname,value);
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+			return FIM_CNS_EMPTY_FP_VAL;
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim::string& varname,fim_int value)
 		{
 			/* FIXME: need a better solution here ! */
-			if(!rnsp_) return FIM_CNS_EMPTY_INT_VAL;
-			return rnsp_->setVariable(varname,value);
+#ifndef FIM_INDIPENDENT_NAMESPACE
+			if(rnsp_)
+				return rnsp_->setVariable(varname,value);
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim::string& varname,const fim_char_t*value)
 		{
 			/* FIXME: need a better solution here ! */
-			if(!rnsp_) return FIM_CNS_EMPTY_INT_VAL;
-			return rnsp_->setVariable(varname,value);
+#ifndef FIM_INDIPENDENT_NAMESPACE
+			if(rnsp_)
+				return rnsp_->setVariable(varname,value);
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
 		fim_int Namespace::getGlobalIntVariable(const fim::string &varname)const
 		{
 			/* FIXME: need a better solution here ! */
-			if(!rnsp_) return FIM_CNS_EMPTY_INT_VAL;
-			return rnsp_->getIntVariable(varname);
+#ifndef FIM_INDIPENDENT_NAMESPACE
+			if(rnsp_)
+				return rnsp_->getIntVariable(varname);
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
 		fim_float_t Namespace::getGlobalFloatVariable(const fim::string &varname)const
 		{
 			/* FIXME: need a better solution here ! */
-			if(!rnsp_) return FIM_CNS_EMPTY_FP_VAL;
-			return rnsp_->getFloatVariable(varname);
+#ifndef FIM_INDIPENDENT_NAMESPACE
+			if(rnsp_)
+				return rnsp_->getFloatVariable(varname);
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+			return FIM_CNS_EMPTY_FP_VAL;
 		}
 
 		fim::string Namespace::getGlobalStringVariable(const fim::string &varname)const
 		{
 			/* FIXME: need a better solution here ! */
-			if(!rnsp_) return FIM_CNS_EMPTY_RESULT;
-			return rnsp_->getStringVariable(varname);
+#ifndef FIM_INDIPENDENT_NAMESPACE
+			if(rnsp_)
+				return rnsp_->getStringVariable(varname);
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+			return FIM_CNS_EMPTY_RESULT;
 		}
 
 		fim::string Namespace::autocmd_exec(const fim::string &event,const fim::string &fname)
 		{
 #ifdef FIM_AUTOCMDS
 			/* FIXME: need a better solution here ! */
-			if(!rnsp_) return FIM_CNS_EMPTY_RESULT;
-			return rnsp_->autocmd_exec(event,fname);
+#ifndef FIM_INDIPENDENT_NAMESPACE
+			if(rnsp_)
+				return rnsp_->autocmd_exec(event,fname);
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+			return FIM_CNS_EMPTY_RESULT;
 #else /* FIM_AUTOCMDS */
 			return FIM_CNS_EMPTY_RESULT;
 #endif /* FIM_AUTOCMDS */
