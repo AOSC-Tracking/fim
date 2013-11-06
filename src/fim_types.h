@@ -24,6 +24,12 @@
 #ifndef FIM_TYPES_FIM_H
 #define FIM_TYPES_FIM_H
 
+#if	defined(__GNUC__)
+#define FIM_RSTRCT __restrict__
+#else	/* defined(__GNUC__) */
+#define FIM_RSTRCT
+#endif	/* defined(__GNUC__) */
+
 //namespace fim
 //{
 	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
