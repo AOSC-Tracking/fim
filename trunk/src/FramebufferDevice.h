@@ -333,7 +333,7 @@ class FramebufferDevice:public DisplayDevice
 	    return f_;
 	}
 
-	void switch_if_needed()
+	void switch_if_needed(void)
 	{
 		//fim's
 		if (switch_last_ != fb_switch_state_)
@@ -498,27 +498,27 @@ void init_one(int32_t *lut, int bits, int shift)
 	    lut[i] = (i >> (8 - bits)) << shift;
 }
 
-	int width()
+	int width(void)
 	{
 		return fb_var_.xres;
 	}
 
-	int height()
+	int height(void)
 	{
 		return fb_var_.yres;
 	}
 
-	int get_chars_per_column()
+	int get_chars_per_column(void)
 	{
 		return fb_var_.yres / fb_font_height();
 	}
 
-	int get_chars_per_line()
+	int get_chars_per_line(void)
 	{
 		return fb_var_.xres / fb_font_width();
 	}
 
-	fim_bool_t handle_console_switch()
+	fim_bool_t handle_console_switch(void)
 	{
 		if (switch_last_ == fb_switch_state_)return false;
 
@@ -528,7 +528,7 @@ void init_one(int32_t *lut, int bits, int shift)
 
 	//void status_screen(const fim_char_t *msg, int draw);
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
-	fim_bpp_t get_bpp(){return fb_var_.bits_per_pixel; };
+	fim_bpp_t get_bpp(void){return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice(void);
 	virtual fim_coo_t status_line_height(void)const;
 };

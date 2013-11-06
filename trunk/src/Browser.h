@@ -49,30 +49,30 @@ class Browser
 	Viewport *only_viewport_;
 #endif /* FIM_WINDOWS */
 	CommandConsole &commandConsole_;
-	Image *image()const;
+	Image *image(void)const;
 
 #ifdef FIM_READ_STDIN_IMAGE
 	Image *default_image_;	// experimental
 #endif /* FIM_READ_STDIN_IMAGE */
-	Viewport* viewport()const;
+	Viewport* viewport(void)const;
 
-	int current_n()const;
+	int current_n(void)const;
 	int current_n(int ccp)const;
 	const fim::string pop(fim::string filename=FIM_CNS_EMPTY_STRING);
 	fim::string get_next_filename(int n)const;
 	
-	int current_image()const;
+	int current_image(void)const;
 	public:
 	fim::string last_regexp_; // was private
 	Cache cache_;	// was private
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(Image *stdin_image);
 #endif /* FIM_READ_STDIN_IMAGE */
-	const Image *c_image()const;	// was private
-	int empty_file_list()const;
+	const Image *c_image(void)const;	// was private
+	int empty_file_list(void)const;
 
 	Browser(CommandConsole &cc);
-	~Browser() { }
+	~Browser(void) { }
 	private:
 	Browser& operator= (const Browser &b){return *this;/* a nilpotent assignation */}
 	Browser(const Browser &b):
@@ -88,7 +88,7 @@ class Browser
 		cache_(Cache())
 		{}
 	public:
-	fim::string current()const;
+	fim::string current(void)const;
 	fim::string regexp_goto(const args_t &args);
 	fim::string fcmd_prefetch(const args_t &args);
 	fim::string regexp_goto_next(const args_t &args);
@@ -140,8 +140,8 @@ class Browser
 	fim::string loadCurrentImage(void);
 	fim::string reload(void);
 
-	int n_files()const;
-	int n_pages()const;
+	int n_files(void)const;
+	int n_pages(void)const;
 	fim::string _sort(void);
 	fim::string _reverse(void);
 	fim::string next(int n=1);
@@ -149,7 +149,7 @@ class Browser
 	void free_current_image(void);
 	int load_error_handle(fim::string c);
 	public:
-	int c_page()const;
+	int c_page(void)const;
 	virtual size_t byte_size(void)const;
 };
 }

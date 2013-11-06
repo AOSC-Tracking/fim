@@ -1012,6 +1012,10 @@ labeldone:
 		reset();
 		assert(check_invalid());
 	}
+
+	bool Image::can_reload(void)const{return !no_file_;}
+	const fim_char_t* Image::getName(void)const{return fname_.c_str();}
+	int Image::c_page(void)const{return page_;}
 #endif	/* FIM_WANT_BDI */
 }
 

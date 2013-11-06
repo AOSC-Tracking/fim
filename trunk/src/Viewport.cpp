@@ -888,5 +888,6 @@ err:
 ret:
 		return;
 	}
+	Viewport& Viewport::operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
 }
 

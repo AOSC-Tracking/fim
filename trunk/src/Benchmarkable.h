@@ -26,9 +26,9 @@
 		private:
 		fim_int benchmarkstate;
 	       	public:
-		Benchmarkable(){benchmarkstate=0;}
-		virtual ~Benchmarkable(){}
-		virtual fim_int get_n_qbenchmarks()const=0;
+		Benchmarkable(void){benchmarkstate=0;}
+		virtual ~Benchmarkable(void){}
+		virtual fim_int get_n_qbenchmarks(void)const=0;
 		virtual void quickbench(fim_int qbi)=0;
 		virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const=0;
 		virtual void quickbench_init(fim_int qbi)=0;

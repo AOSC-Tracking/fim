@@ -61,12 +61,12 @@ namespace fim
 		CommandConsole & cc_;	// temporarily
 
 		MiniConsole(CommandConsole & cc,int lw=48, int r=12); /* FIXME: shall get rid of numerical constants! */
-		virtual ~MiniConsole(){}
+		virtual ~MiniConsole(void){}
 		fim_err_t dump(void);	// non const due to user variables reaction
 		fim_err_t grow(void);
 		fim_err_t setRows(int nr);
 		fim_err_t add(const fim_char_t * cso);
-		fim_err_t add(const fim_byte_t* cso){return add((const fim_char_t*)cso);}
+		fim_err_t add(const fim_byte_t* cso);
 		fim_err_t reformat(int newlsize);
 		fim_err_t do_dump(int amount)const;
 		fim_err_t clear(void);
@@ -75,7 +75,7 @@ namespace fim
 		virtual size_t byte_size(void)const;
 
 		private:
-		MiniConsole& operator= (const MiniConsole&mc){return *this;/* a nilpotent assignment */}
+		MiniConsole& operator= (const MiniConsole&mc);
 		MiniConsole(const MiniConsole &mc) :
 			buffer_(NULL),
 			line_(NULL),
@@ -93,7 +93,7 @@ namespace fim
 
 		int line_length(int li);
 		fim_err_t do_dump(int f, int l)const;
-		fim_err_t do_dump()const;
+		fim_err_t do_dump(void)const;
 
 		fim_err_t grow_lines(int glines);
 		fim_err_t grow_buffer(int gbuffer);

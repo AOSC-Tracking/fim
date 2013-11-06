@@ -29,11 +29,11 @@ class Arg
 	fim::string val_;
 	Arg(const fim::string &s):val_(s){}
 	Arg(const Arg &arg):val_(arg.val_){}
-	bool operator==(int i){int v=atoi(val_.c_str());return v==i;}
-	bool operator<=(int i){int v=atoi(val_.c_str());return v<=i;}
-	bool operator>=(int i){int v=atoi(val_.c_str());return v>=i;}
-	bool operator <(int i){int v=atoi(val_.c_str());return v <i;}
-	bool operator >(int i){int v=atoi(val_.c_str());return v >i;}
+	bool operator==(int i);
+	bool operator<=(int i);
+	bool operator>=(int i);
+	bool operator <(int i);
+	bool operator >(int i);
 };
 
 

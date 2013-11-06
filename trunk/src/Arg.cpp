@@ -22,4 +22,9 @@
 #include "fim.h"
 namespace fim
 {
+	bool Arg::operator==(int i){int v=atoi(val_.c_str());return v==i;}
+	bool Arg::operator<=(int i){int v=atoi(val_.c_str());return v<=i;}
+	bool Arg::operator>=(int i){int v=atoi(val_.c_str());return v>=i;}
+	bool Arg::operator <(int i){int v=atoi(val_.c_str());return v <i;}
+	bool Arg::operator >(int i){int v=atoi(val_.c_str());return v >i;}
 }

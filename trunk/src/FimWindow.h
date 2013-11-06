@@ -70,64 +70,31 @@ class Rect
 {
 	public:
 	fim_coo_t x,y,w,h;	// units, not pixels
-	void print()
-	{
-		std::cout << x <<" " << y  << " "<< w << " " << h  << "\n";
-	}
+	void print(void);
 
-	Rect(fim_coo_t x,fim_coo_t y,fim_coo_t w,fim_coo_t h):
-	x(x), y(y), w(w), h(h)
-	/* redundant, but not evil */
-	{
-	}
+	Rect(fim_coo_t x,fim_coo_t y,fim_coo_t w,fim_coo_t h);
 
-	Rect(const Rect& rect): x(rect.x), y(rect.y), w(rect.w), h(rect.h)
-	{
-	}
+	Rect(const Rect& rect);
 
 	public:
 
 	enum Splitmode{ Left,Right,Upper,Lower};
 
-	Rect hsplit(Splitmode s){return split(s);}
-	Rect vsplit(Splitmode s){return split(s);}
-	Rect split(Splitmode s)
-	{
-		/*
-		 * the default split halves
-		 * */
-		switch(s)
-		{
-		case Left:
-			return Rect(x,y,w/2,h);
-		case Right:
-			return Rect(x+w/2,y,w-w/2,h);
-		case Upper:
-			return Rect(x,y,w,h/2);
-		case Lower:
-			return Rect(x,y+h/2,w,h-h/2);
-		break;
-		}
-		return Rect(x,y,w,h);
-	}
+	Rect hsplit(Splitmode s);
+	Rect vsplit(Splitmode s);
+	Rect split(Splitmode s);
 
 	/* todo : to unsigned integer ! */
-	fim_err_t vlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   { h+=units; return FIM_ERR_NO_ERROR; } 
-	fim_err_t vlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) { h-=units; return FIM_ERR_NO_ERROR; }
-	fim_err_t vugrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   { y-=units; h+=units ; return FIM_ERR_NO_ERROR; } 
-	fim_err_t vushrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) { y+=units; h-=units ; return FIM_ERR_NO_ERROR; }
+	fim_err_t vlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
+	fim_err_t vlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
+	fim_err_t vugrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
+	fim_err_t vushrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 
-	fim_err_t hlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   { x-=units; w+=units ; return FIM_ERR_NO_ERROR; } 
-	fim_err_t hrshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) { w-=units; return FIM_ERR_NO_ERROR; }
-	fim_err_t hrgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT)   { w+=units; return FIM_ERR_NO_ERROR; } 
-	fim_err_t hlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT) { x+=units; w-=units ; return FIM_ERR_NO_ERROR; }
-	bool operator==(const Rect&rect)const
-	{
-		return x==rect.x &&
-		y==rect.y &&
-		w==rect.w &&
-		h==rect.h;
-	}
+	fim_err_t hlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
+	fim_err_t hrshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
+	fim_err_t hrgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
+	fim_err_t hlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
+	bool operator==(const Rect&rect)const;
 };
 
 
@@ -186,15 +153,15 @@ class FimWindow
 	*/
 	FimWindow(const FimWindow & root);
 //#endif /* FIM_UNDEFINED */
-	bool isleaf()const;
-	bool isvalid()const;
-	bool issplit()const;
-	bool ishsplit()const;
-	bool isvsplit()const;
+	bool isleaf(void)const;
+	bool isvalid(void)const;
+	bool issplit(void)const;
+	bool ishsplit(void)const;
+	bool isvsplit(void)const;
 	fim_err_t hnormalize(fim_coo_t x, fim_coo_t w);
 	fim_err_t vnormalize(fim_coo_t y, fim_coo_t h);
-	int count_hdivs()const;
-	int count_vdivs()const;
+	int count_hdivs(void)const;
+	int count_vdivs(void)const;
 
 	fim_err_t vlgrow(fim_coo_t units);
 	fim_err_t vugrow(fim_coo_t units);
@@ -206,8 +173,8 @@ class FimWindow
 	fim_err_t hlshrink(fim_coo_t units);
 	fim_err_t hrshrink(fim_coo_t units);
 
-	FimWindow & focused()const;
-	FimWindow & shadowed()const;
+	FimWindow & focused(void)const;
+	FimWindow & shadowed(void)const;
 
 	FimWindow & upper(void);
 	FimWindow & lower(void);
@@ -226,13 +193,13 @@ class FimWindow
 	/*
 	 * DANGER : nearly each of these methods launches some exception!
 	 * */
-	const FimWindow & c_focused()const;
-	const FimWindow & c_shadowed()const;
+	const FimWindow & c_focused(void)const;
+	const FimWindow & c_shadowed(void)const;
 
-	Viewport & current_viewport()const;
+	Viewport & current_viewport(void)const;
 	CommandConsole &commandConsole_;
 
-	FimWindow & operator= (const FimWindow &w){return *this;/* a nilpotent assignation */}
+	FimWindow & operator= (const FimWindow &w);
 
 	public:
 	void setroot(void);	// only one root window should exist
@@ -242,23 +209,23 @@ class FimWindow
 	FimWindow(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
 	fim_err_t update(const Rect& corners);
 
-	Viewport * current_viewportp()const;
+	Viewport * current_viewportp(void)const;
         fim::string fcmd_cmd(const std::vector<fim::string> &args);
-	bool recursive_redisplay()const;	//exception safe
-	bool recursive_display()const;		//exception safe
+	bool recursive_redisplay(void)const;	//exception safe
+	bool recursive_display(void)const;		//exception safe
 
-	const Image *getImage()const;		//exception safe
+	const Image *getImage(void)const;		//exception safe
 
 #if 0
 	void print(void);
 	void print_focused(void);
-	void draw()const;
+	void draw(void)const;
 #endif
 
-	fim_coo_t height()const;
-	fim_coo_t width()const;
-	fim_coo_t xorigin()const;
-	fim_coo_t yorigin()const;
+	fim_coo_t height(void)const;
+	fim_coo_t width(void)const;
+	fim_coo_t xorigin(void)const;
+	fim_coo_t yorigin(void)const;
 	~FimWindow(void);
 	virtual size_t byte_size(void)const;
 };

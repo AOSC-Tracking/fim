@@ -481,5 +481,7 @@ rerr:
 			bs += bsize_ + lsize_;
 			return bs;
 		}
+		MiniConsole& MiniConsole::operator= (const MiniConsole&mc){return *this;/* a nilpotent assignment */}
+		fim_err_t MiniConsole::add(const fim_byte_t* cso){return add((const fim_char_t*)cso);}
 }
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

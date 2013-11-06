@@ -41,14 +41,10 @@ class AADevice:public DisplayDevice
 	fim_char_t name_[2];	/* For ascii_save_.name */
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	AADevice(MiniConsole & mc_, fim::string opts ):DisplayDevice(mc_),
+	AADevice(MiniConsole & mc_, fim::string opts);
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	AADevice( fim::string opts ):DisplayDevice(),
+	AADevice( fim::string opts );
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	allow_windowed(0)
-	{
-		reinit(opts.c_str());
-	}
 
 	virtual ~AADevice(void);
 
@@ -74,7 +70,7 @@ class AADevice:public DisplayDevice
 	fim_coo_t height(void);
 	fim_err_t status_line(const fim_char_t *msg);
 	//void status_screen(int desc,int draw_output){}
-	fim_bool_t handle_console_switch()
+	fim_bool_t handle_console_switch(void)
 	{
 		return false;
 	}
@@ -88,7 +84,7 @@ class AADevice:public DisplayDevice
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 	void flush(void);
 	fim_err_t init_console(void);
-	fim_bpp_t get_bpp()
+	fim_bpp_t get_bpp(void)
 	{
 		return 1;
 	}

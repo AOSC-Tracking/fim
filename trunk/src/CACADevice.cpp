@@ -343,7 +343,14 @@
 		caca_putstr(0,0,"foooooooo");
 		return FIM_ERR_NO_ERROR;
 	}
-
+	fim_err_t CACADevice::fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str){return FIM_ERR_NO_ERROR;}
+	fim_err_t CACADevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)
+	{
+		/* FIXME : only if initialized !*/
+		return FIM_ERR_GENERIC;
+	}
+	fim_bool_t CACADevice::handle_console_switch(){return true;}
+	fim_err_t CACADevice::console_control(fim_cc_t code){return FIM_ERR_GENERIC;}
 /*
  * This is embryo code and should be used for experimental purposes only!
  */

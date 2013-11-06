@@ -65,8 +65,8 @@ class Image
 
 	bool prev_page(int j=+1);
 	bool next_page(int j=+1);
-	int n_pages()const;
-	bool is_multipage()const;
+	int n_pages(void)const;
+	bool is_multipage(void)const;
 	bool have_nextpage(int j=1)const;
 	bool have_prevpage(int j=1)const;
 
@@ -108,11 +108,11 @@ class Image
         void free(void);
 	void reset(void);
 
-        bool tiny()const;
+        bool tiny(void)const;
 	public:
 	virtual size_t byte_size(void)const;
 
-	bool can_reload()const{return !no_file_;}
+	bool can_reload(void)const;
 	bool update(void);
 
 	fim::string getInfo(void);
@@ -123,15 +123,15 @@ class Image
 	fim_err_t rescale( fim_scale_t ns=0.0 );
 	fim_err_t rotate( fim_scale_t angle_=1.0 );
 
-	const fim_char_t* getName()const{return fname_.c_str();}
-	cache_key_t getKey()const;
+	const fim_char_t* getName(void)const;
+	cache_key_t getKey(void)const;
 
 	/* viewport methods */
 
 	void reduce( fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	void magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	
-	fim_pgor_t getOrientation()const;
+	fim_pgor_t getOrientation(void)const;
 
 	fim_err_t setscale(fim_scale_t ns);
 	/* viewport methods ? */
@@ -152,7 +152,7 @@ class Image
 
 	Image * getClone(void);
 //	void resize(int nw, int nh);
-	int c_page()const{return page_;}
+	int c_page(void)const;
 };
 }
 #endif /* FIM_IMAGE_H */

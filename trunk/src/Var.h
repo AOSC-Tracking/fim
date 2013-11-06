@@ -156,14 +156,14 @@ class Var
 	float setFloat(float f){type='f';return this->f=f;}
 	int   setInt(int i){type='i';return this->i=i;}
 	fim::string setString(fim::string &s){type='s';this->s=s;return this->s;}
-	int getType()const{return type;}
-	int getInt()const{return(type=='i')?i:
+	int getType(void)const{return type;}
+	int getInt(void)const{return(type=='i')?i:
 		(type=='f'?((int)(f)):
 		 (type=='s'?(atoi(s.c_str())):0)
 		 )
 		;}
 
-	float getFloat()const{
+	float getFloat(void)const{
 	
 	return(type=='f')?f:
 		(type=='i'?
@@ -172,7 +172,7 @@ class Var
 			)
 			;}
 
-	fim::string getString()const
+	fim::string getString(void)const
 	{
 		fim_char_t buf[16];
 		DBG("t:"<<(char)type <<"\n");
@@ -190,9 +190,9 @@ class Var
 		
 	}
 
-//	operator int()const{return getInt();}
-///	operator float()const{return getFloat();}
-//	operator string()const{return getString();}
+//	operator int(void)const{return getInt();}
+///	operator float(void)const{return getFloat();}
+//	operator string(void)const{return getString();}
 
 	/*
 	 * These should be refined some day :)
@@ -275,7 +275,7 @@ class Var
 		return getFloat()+v.getFloat(); 
 	}
 	*/
-	Var operator- ()const {
+	Var operator- (void)const {
 	if(getType()=='i')return - getInt  (); 
 	if(getType()=='f')return - getFloat(); 
 	if(getType()=='s')return - getFloat(); 
@@ -297,7 +297,7 @@ class Var
 	std::ostream& print(std::ostream &os)const;
 };
 	fim::string fim_var_help_db_query(const fim::string &id);
-	void fim_var_help_db_init();
+	void fim_var_help_db_init(void);
 	fim::string fim_get_variables_reference(FimDocRefMode refmode);
 	std::ostream& operator<<(std::ostream &os, const Var & var);
 }

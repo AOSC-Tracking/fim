@@ -2382,5 +2382,10 @@ err:
 		/* FIXME: unfinished */
 		return bs;
 	}
+
+	fim::string CommandConsole::fcmd_variables_list(const args_t& args){return get_variables_list();}
+	fim::string CommandConsole::fcmd_commands_list(const args_t& args){return get_commands_list();}
+	fim::string CommandConsole::current()const{ return browser_.current();}
+	CommandConsole& CommandConsole::operator= (const CommandConsole&cc){return *this;/* a nilpotent assignation */}
 }
 
