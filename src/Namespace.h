@@ -65,7 +65,7 @@ namespace fim
 		fim_float_t getGlobalFloatVariable(const fim::string &varname)const;
 		fim::string getGlobalStringVariable(const fim::string &varname)const;
 		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
-		fim::string get_variables_list()const;
+		fim::string get_variables_list(bool with_values=false)const;
 		virtual size_t byte_size(void)const = 0;
 
 		Namespace(
@@ -79,7 +79,10 @@ namespace fim
 	       	{}
 		virtual ~Namespace(){}
 		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
+		std::ostream& print(std::ostream &os)const;
 	};
+
+		std::ostream& operator<<(std::ostream &os, const Namespace & ns);
 }
 
 #endif /* FIM_NAMESPACE_H */

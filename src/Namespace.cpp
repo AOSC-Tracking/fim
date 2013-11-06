@@ -190,7 +190,7 @@ namespace fim
 #endif /* FIM_AUTOCMDS */
 		}
 
-		fim::string Namespace::get_variables_list(void)const
+		fim::string Namespace::get_variables_list(bool with_values)const
 		{
 			/*
 			 * returns the list of set variables
@@ -208,6 +208,10 @@ namespace fim
 				}
 				acl+=((*vi).first);
 				acl+=" ";
+				if(with_values)
+					acl+=" = ",
+					acl+=((*vi).second.getString()),
+				       	acl+="\n";
 			}
 			return acl;
 		}
@@ -227,5 +231,16 @@ namespace fim
 			}
 			return FIM_ERR_NO_ERROR;
 		}
+
+	std::ostream& Namespace::print(std::ostream &os)const
+	{
+		return os << this->get_variables_list(true);
+	}
+
+	std::ostream& operator<<(std::ostream &os, const Namespace & ns)
+	{
+		return ns.print(os);
+	}
+
 }
 

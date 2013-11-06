@@ -28,8 +28,9 @@
 //#include "fim.h"
 #include "string.h"
 
+#define FIM_FFL_PRT printf("In %s located in %20s:%d :\n",__func__,__FILE__,__LINE__)
 #if 0
-#define DBG(X) std::cout<<X;
+#define DBG(X) FIM_FFL_PRT;std::cout<<X;
 #else
 #define DBG(X) 
 #endif
@@ -63,16 +64,21 @@ class Var
 		/*
                  * 20090327 introduced for a harmful conversions story..
 		 */
+		DBG("(v:?)\n");
 		this->type=v.type;
-		if(type=='i')this->i=v.i;
-		if(type=='f')this->f=v.f;
-		if(type=='s')this->s=v.s;
+		if(type=='i')
+			this->i=v.i;
+		if(type=='f')
+			this->f=v.f;
+		if(type=='s')
+			this->s=v.s;
 		return 0;
 	}
 
 	Var(float v)
 	:type(0),i(0),s(fim::string())
 	{
+		DBG("(f:"<<v<<")\n");
 		type='f';
 		f=v;
 	}
@@ -80,7 +86,7 @@ class Var
 /*	Var(int* v)
 	:type(0),i(0)
 	{
-		DBG("VAR(i:"<<*v<<")\n");
+		DBG("(i:"<<*v<<")\n");
 		type='i';
 		i=*v;
 	}*/
@@ -88,20 +94,26 @@ class Var
 	Var(int v)
 	:type(0),i(0),s(fim::string())
 	{
-		DBG("VAR(i:"<<v<<")\n");
+		DBG("(i:"<<v<<")\n");
 		type='i';
 		i=v;
 	}
 
-	Var()
+	Var(void)
 	:type(0),i(0),s(fim::string())
 	{
-		type='i';
 		const fim_char_t *s="0";
+		DBG("(v())\n");
+		type='i';
 		if(type=='i')i=atoi(s);
-		else if(type=='f')f=fim_atof(s);
-		else if(type=='s')this->s=s;
-		else i=0;
+		else
+		       	if(type=='f')
+				f=fim_atof(s);
+		else
+		       	if(type=='s')
+			this->s=s;
+		else
+		       	i=0;
 	}
 
 	Var(const fim::string s)
@@ -134,10 +146,12 @@ class Var
 	void operator= (float f){setFloat(f);}
 	void operator= (fim::string &s){setString(s);}
 #else
-	const Var& operator= (int   i){DBG("VAR2i:"<<i<<"\n";type='i');this->i=i;return *this;}
+	const Var& operator= (int   i){DBG("2i:"<<i<<"\n";type='i');this->i=i;return *this;}
 	const Var& operator= (float f){setFloat(f);return *this;}
 	const Var& operator= (fim::string &s){setString(s);return *this;}
-	const Var& operator= (const Var &v){type=v.type;;return *this;}
+	/* const Var& operator= (const Var &v){type=v.type;;return *this;} */
+	const Var& operator= (const Var &v){set(v);return *this;}
+	Var concat(const Var &v)const{return this->getString()+v.getString();}
 #endif
 	float setFloat(float f){type='f';return this->f=f;}
 	int   setInt(int i){type='i';return this->i=i;}
@@ -161,12 +175,16 @@ class Var
 	fim::string getString()const
 	{
 		fim_char_t buf[16];
-		DBG("t:"<<type <<"\n");
+		DBG("t:"<<(char)type <<"\n");
 		if(type=='s')return this->s;
 		else
 		{
-			if(type=='i')sprintf(buf,"%d",i);
-			else if(type=='f')sprintf(buf,"%f",f);
+			if(type=='i')
+				sprintf(buf,"%d",i);
+			else
+			       	if(type=='f')
+					sprintf(buf,"%f",f);
+			DBG(" v:"<<buf <<"\n");
 			return buf;
 		}
 		
@@ -237,6 +255,26 @@ class Var
 		if(_both('s'))return getFloat()-v.getFloat();//yes...
 		return getFloat()-v.getFloat(); 
 	}
+	int eq (const char*s)const
+	{
+		int aeq = 1;
+		if(s)
+			aeq = strcmp(s,this->getString().c_str());
+		return aeq == 0;
+	}
+	int re (const Var &v)const
+	{
+		return re_match(v).getInt();
+	}
+/*
+	Var operator< (const Var &v)const
+	{
+		if(_both('i'))return getInt  ()<v.getInt  (); 
+		if(_both('f'))return getFloat()<v.getFloat();
+		if(_both('s'))return getString()<v.getString();//yes...
+		return getFloat()+v.getFloat(); 
+	}
+	*/
 	Var operator- ()const {
 	if(getType()=='i')return - getInt  (); 
 	if(getType()=='f')return - getFloat(); 
@@ -256,11 +294,12 @@ class Var
 	{
 		return (type==v.getType()) && (i==v.getInt());
 	}*/
+	std::ostream& print(std::ostream &os)const;
 };
 	fim::string fim_var_help_db_query(const fim::string &id);
 	void fim_var_help_db_init();
 	fim::string fim_get_variables_reference(FimDocRefMode refmode);
-
+	std::ostream& operator<<(std::ostream &os, const Var & var);
 }
 
 
