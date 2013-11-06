@@ -3,6 +3,7 @@
 
                 Version 0.5-trunk
 
+ * scaling image code slightly faster (thanks to __restrict__ of pointers)
  * status bar will not cover image drawing space unless requested (TODO)
  * "%T" specifier to get (and display) total program used memory
  * "%C" specifier to get (and display) used program cache memory

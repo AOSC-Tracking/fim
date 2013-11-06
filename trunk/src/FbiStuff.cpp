@@ -52,7 +52,7 @@ extern CommandConsole cc;
 
 /* ----------------------------------------------------------------------- */
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
-static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *src, fim_byte_t * dst)
+static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *FIM_RSTRCT src, fim_byte_t * FIM_RSTRCT dst)
 {
 	fim_err_t errval=FIM_ERR_GENERIC;
 
@@ -577,10 +577,10 @@ static inline void op_resize_work_row_expand_i_unrolled(const struct ida_image *
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 }
 
-const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
+const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *src, struct ida_rect *rect, fim_byte_t *FIM_RSTRCT dst, int line, void *FIM_RSTRCT data, int sr)
 {
-	struct op_resize_state *h = (struct op_resize_state *)data;
-	const fim_byte_t* srcline=src->data+src->i.width*3*(sr);
+	struct op_resize_state *FIM_RSTRCT h = (struct op_resize_state *)data;
+	const fim_byte_t*FIM_RSTRCT  srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
 	register int sx,dx;
 
@@ -703,16 +703,16 @@ static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *s
 }
 
 #endif /* FIM_HAS_MISC_FBI_OPS */
-
 static void
-op_resize_work(const struct ida_image *src, struct ida_rect *rect,
-	       fim_byte_t *dst, int line, void *data)
+op_resize_work(const struct ida_image *FIM_RSTRCT src, struct ida_rect *rect,
+	       fim_byte_t *FIM_RSTRCT dst, int line, void *FIM_RSTRCT data)
 {
-    struct op_resize_state *h = (struct op_resize_state *)data;
+    struct op_resize_state *FIM_RSTRCT h = (struct op_resize_state *)data;
     float outleft,left,weight,d0,d1,d2;
-    const fim_byte_t *csrcline;
-    float *fsrcline;
+    const fim_byte_t *FIM_RSTRCT csrcline;
+    float *FIM_RSTRCT fsrcline;
     register unsigned int i,sx,dx;
+    float *FIM_RSTRCT rowbuf = h->rowbuf; 
 
 #ifndef FIM_WANTS_SLOW_RESIZE
     int sr=h->srcrow;
@@ -721,7 +721,7 @@ op_resize_work(const struct ida_image *src, struct ida_rect *rect,
 #endif /* FIM_WANTS_SLOW_RESIZE */
 
     /* scale y */
-    fim_bzero(h->rowbuf, src->i.width * 3 * sizeof(float));
+    fim_bzero(rowbuf, src->i.width * 3 * sizeof(float));
     outleft = 1/h->yscale;
     while (outleft > 0  &&  h->srcrow < src->i.height) {
 	if (outleft < h->inleft) {
@@ -740,7 +740,7 @@ op_resize_work(const struct ida_image *src, struct ida_rect *rect,
 #endif
 	csrcline = src->data + h->srcrow * src->i.width * 3;
 	for (i = 0; i < src->i.width * 3; i++)
-	    h->rowbuf[i] += (float)csrcline[i] * weight;
+	    rowbuf[i] += (float)csrcline[i] * weight;
 	if (0 == h->inleft) {
 	    h->inleft = 1;
 	    h->srcrow++;
@@ -761,7 +761,7 @@ op_resize_work(const struct ida_image *src, struct ida_rect *rect,
 	if(h->xscale>1.0)//here we handle the case of magnification
 	{
 #ifdef FIM_WANTS_SLOW_RESIZE
-		fim_byte_t* srcline=src->data+src->i.width*3*(sr);
+		fim_byte_t*FIM_RSTRCT srcline=src->data+src->i.width*3*(sr);
 #endif /* FIM_WANTS_SLOW_RESIZE */
 
 #ifndef FIM_WANTS_SLOW_RESIZE
