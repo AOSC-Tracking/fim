@@ -68,4 +68,14 @@ manmode:
 		}
 		return s;
 	}
+
+	std::ostream& Var::print(std::ostream &os)const
+	{
+		return os << this->getString();
+	}
+
+	std::ostream& operator<<(std::ostream &os, const Var & var)
+	{
+		return var.print(os);
+	}
 }
