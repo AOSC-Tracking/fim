@@ -1197,6 +1197,63 @@ namespace fim
 		bs += sizeof(*this);
 		return bs;
 	}
+
+	FimWindow & FimWindow ::operator= (const FimWindow &w){return *this;/* a nilpotent assignation */}
+
+	/* Rect stuff */
+
+	Rect Rect::hsplit(Splitmode s){return split(s);}
+	Rect Rect::vsplit(Splitmode s){return split(s);}
+	Rect Rect::split(Splitmode s)
+	{
+		/*
+		 * the default split halves
+		 * */
+		switch(s)
+		{
+		case Left:
+			return Rect(x,y,w/2,h);
+		case Right:
+			return Rect(x+w/2,y,w-w/2,h);
+		case Upper:
+			return Rect(x,y,w,h/2);
+		case Lower:
+			return Rect(x,y+h/2,w,h-h/2);
+		break;
+		}
+		return Rect(x,y,w,h);
+	}
+
+	void Rect::print()
+	{
+		std::cout << x <<" " << y  << " "<< w << " " << h  << "\n";
+	}
+
+	Rect::Rect(fim_coo_t x,fim_coo_t y,fim_coo_t w,fim_coo_t h):
+	x(x), y(y), w(w), h(h)
+	/* redundant, but not evil */
+	{
+	}
+
+	Rect::Rect(const Rect& rect): x(rect.x), y(rect.y), w(rect.w), h(rect.h){}
+
+	bool Rect::operator==(const Rect&rect)const
+	{
+		return x==rect.x &&
+		y==rect.y &&
+		w==rect.w &&
+		h==rect.h;
+	}
+
+	fim_err_t Rect::vlgrow(fim_coo_t units)   { h+=units; return FIM_ERR_NO_ERROR; } 
+	fim_err_t Rect::vlshrink(fim_coo_t units) { h-=units; return FIM_ERR_NO_ERROR; }
+	fim_err_t Rect::vugrow(fim_coo_t units)   { y-=units; h+=units ; return FIM_ERR_NO_ERROR; } 
+	fim_err_t Rect::vushrink(fim_coo_t units) { y+=units; h-=units ; return FIM_ERR_NO_ERROR; }
+	
+	fim_err_t Rect::hlgrow(fim_coo_t units)   { x-=units; w+=units ; return FIM_ERR_NO_ERROR; } 
+	fim_err_t Rect::hrshrink(fim_coo_t units) { w-=units; return FIM_ERR_NO_ERROR; }
+	fim_err_t Rect::hrgrow(fim_coo_t units)   { w+=units; return FIM_ERR_NO_ERROR; } 
+	fim_err_t Rect::hlshrink(fim_coo_t units) { x+=units; w-=units ; return FIM_ERR_NO_ERROR; }
 }
 #if 0
 /*

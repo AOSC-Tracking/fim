@@ -77,7 +77,7 @@ namespace fim
 										      ,rnsp_(rnsp)
 #endif /* FIM_INDIPENDENT_NAMESPACE */
 	       	{}
-		virtual ~Namespace(){}
+		virtual ~Namespace(void){}
 		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
 		std::ostream& print(std::ostream &os)const;
 	};

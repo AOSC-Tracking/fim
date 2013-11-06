@@ -67,7 +67,7 @@ namespace fim
 
 	int reset(int l);
 
-	bool isempty()const;
+	bool isempty(void)const;
 
 	virtual ~string(void);//virtual, as -Weffc++ suggests
 	string(void);
@@ -75,7 +75,7 @@ namespace fim
 	string(const fim_char_t *str);
 	string(const int i);
 	string(const unsigned int i);
-	const fim_char_t*c_str()const;
+	const fim_char_t*c_str(void)const;
 	bool operator==(const string& s)const;
 	bool operator==(const fim_char_t *  s)const;
 	bool operator!=(const string& s)const;
@@ -90,17 +90,17 @@ namespace fim
 	string operator+=(const string& s);
 	string operator+(const string& s)const;
 	int  reinit(const int n)const;
-	int  length()const;
-	static int  max_string(){return TOKSIZE-1;}
-	int  size()const;
+	int  length(void)const;
+	static int  max_string(void){return TOKSIZE-1;}
+	int  size(void)const;
 	int  find(const string&str)const;
 	int  assign(const string&str);
 	int  assign(const fim_char_t*str);
 	int  find(const fim_char_t*ss)const;
  	std::ostream& print(std::ostream &os)const;
 //	int operator=(int &i,const string& s){i=-1;return i;}
-	operator int()const{return atoi(s);}
-	operator float()const{return fim_atof(s);}
+	operator int(void)const;
+	operator float(void)const;
 	};
 #else /* _FIM_STRING_WRAPPER */
 	class string:public std::string
@@ -128,8 +128,8 @@ namespace fim
 /*
  		the following two operators are very nice to use but pose unexpected problems.		
 */
- 		operator int  ()const{return atoi(this->c_str());}
-		operator float()const{return fim_atof(this->c_str());}
+ 		operator int  (void)const;
+		operator float(void)const;
 
 		string operator+(const string s)const;
 		/* copy constructor */
@@ -137,7 +137,7 @@ namespace fim
 		bool re_match(const fim_char_t*r)const;
 		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=0);
 		fim::string line(int ln)const;
-		size_t lines()const;
+		size_t lines(void)const;
 		int find_re(const fim_char_t*r,int *mbuf=NULL)const;
 	};
 

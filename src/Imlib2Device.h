@@ -66,14 +66,14 @@ class Imlib2Device:public DisplayDevice
 
 	fim_err_t initialize(sym_keys_t &sym_keys);
 	fim_err_t il2_initialize(void);
-	void finalize() ;
+	void finalize(void) ;
 
-	int get_chars_per_line() ;
+	int get_chars_per_line(void) ;
 	int get_chars_per_column(void);
 	fim_coo_t width(void);
 	fim_coo_t height(void);
 	fim_err_t status_line(const fim_char_t *msg);
-	fim_bool_t handle_console_switch(){return false;}
+	fim_bool_t handle_console_switch(void){return false;}
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
@@ -89,8 +89,8 @@ class Imlib2Device:public DisplayDevice
 	/* TEMPORARY */
 	void status_screen_(int desc,int draw_output){ return ; }
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color);
-	fim_coo_t txt_width() ;
-	fim_coo_t txt_height() ;
+	fim_coo_t txt_width(void) ;
+	fim_coo_t txt_height(void) ;
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	private:
 	bool allowed_resolution(fim_coo_t w, fim_coo_t h);

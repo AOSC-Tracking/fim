@@ -632,3 +632,14 @@ err:
 	{
 		return 1;
 	}
+
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+	AADevice::AADevice(MiniConsole & mc_, fim::string opts ):DisplayDevice(mc_),
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	AADevice( fim::string opts ):DisplayDevice(),
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	allow_windowed(0)
+	{
+		this->reinit(opts.c_str());
+	}
+

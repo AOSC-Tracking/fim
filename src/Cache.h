@@ -47,10 +47,10 @@ class Cache
 //	clone_counter_t cloneCounter;
 
 	/*	the count of cached images	*/
-	int cached_elements()const;
+	int cached_elements(void)const;
 
 	/*	whether we should free some cache ..	*/
-	bool need_free()const;
+	bool need_free(void)const;
 
 	/**/
 	int lru_touch(cache_key_t key);

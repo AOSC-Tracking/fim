@@ -69,12 +69,12 @@ class Viewport
 	Viewport(const Viewport &v);
 	~Viewport(void);
 	private:
-	Viewport& operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
-	void should_redraw()const;
+	Viewport& operator= (const Viewport&v);
+	void should_redraw(void)const;
 	public:
 
 #if 0
-	int valid()const;
+	int valid(void)const;
 #endif
 
 	/* viewport methods */
@@ -84,10 +84,10 @@ class Viewport
 	void pan_down (fim_pan_t s=0);
 	void pan_right(fim_pan_t s=0);
 	void pan_left (fim_pan_t s=0);
-	bool onBottom()const;
-	bool onRight()const;
-	bool onLeft()const;
-	bool onTop()const;
+	bool onBottom(void)const;
+	bool onRight(void)const;
+	bool onLeft(void)const;
+	bool onTop(void)const;
 
 	fim_coo_t xorigin(void);
 	fim_coo_t yorigin(void);
@@ -97,8 +97,8 @@ class Viewport
 	/* viewport methods */
 
 	public:
-	fim_coo_t viewport_width()const;
-	fim_coo_t viewport_height()const;
+	fim_coo_t viewport_width(void)const;
+	fim_coo_t viewport_height(void)const;
 	/* viewport methods */
 	void align(const char c);
 
@@ -112,15 +112,15 @@ class Viewport
 
         void setImage(fim::Image* ni);
 	void scale_fix_top_left(void);
-        const Image* c_getImage()const;
-        Image* getImage()const;
+        const Image* c_getImage(void)const;
+        Image* getImage(void)const;
 
 	void auto_scale(void);
 	void auto_scale_if_bigger(void);
 
 	void free(void);
-        bool check_invalid()const;
-        bool check_valid()const;
+        bool check_invalid(void)const;
+        bool check_valid(void)const;
 #if 0
 	int valid(void);
 #endif

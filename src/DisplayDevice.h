@@ -50,7 +50,7 @@ class DisplayDevice
 	DisplayDevice(void);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	virtual fim_err_t initialize(sym_keys_t &sym_keys)=0;
-	virtual void  finalize()=0;
+	virtual void  finalize(void)=0;
 
 	virtual fim_err_t display(
 		void *ida_image_img, // source image structure
@@ -65,31 +65,31 @@ class DisplayDevice
 
 	virtual ~DisplayDevice(void);
 
-	virtual void flush(){};
-	virtual void lock(){}
-	virtual void unlock(){}
-	virtual int get_chars_per_line()=0;
-	virtual int get_chars_per_column()=0;
-	virtual fim_coo_t width()=0;
+	virtual void flush(void){};
+	virtual void lock(void){}
+	virtual void unlock(void){}
+	virtual int get_chars_per_line(void)=0;
+	virtual int get_chars_per_column(void)=0;
+	virtual fim_coo_t width(void)=0;
 	virtual fim_bpp_t get_bpp(void)=0;
 	virtual fim_coo_t height(void)=0;
 	virtual fim_coo_t status_line_height(void)const=0;
-	/* virtual fim_coo_t font_width()const{return 1;} */
+	/* virtual fim_coo_t font_width(void)const{return 1;} */
 	virtual fim_err_t status_line(const fim_char_t *msg)=0;
 	fim_err_t console_control(fim_cc_t code);
-	virtual fim_bool_t handle_console_switch()=0;
+	virtual fim_bool_t handle_console_switch(void)=0;
 	virtual fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)=0;
 	virtual fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
 	virtual fim_err_t init_console(void);
-	virtual void switch_if_needed(){}// really, only for making happy fbdev
-	virtual void cleanup(){}// really, only for making happy fbdev
+	virtual void switch_if_needed(void){}// really, only for making happy fbdev
+	virtual void cleanup(void){}// really, only for making happy fbdev
 
 	fim_redraw_t redraw_;
 	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
 	void fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags);//experimental
 #if FIM_WANT_BENCHMARKS
-	virtual fim_int get_n_qbenchmarks()const;
+	virtual fim_int get_n_qbenchmarks(void)const;
 	virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const;
 	virtual void quickbench_init(fim_int qbi);
 	virtual void quickbench_finalize(fim_int qbi);
@@ -98,9 +98,9 @@ class DisplayDevice
 	private:
 	virtual void console_switch(fim_bool_t is_busy){}// really, only for making happy fbdev
 	public:
-	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h){return FIM_ERR_NO_ERROR;}
-	virtual fim_err_t reinit(const fim_char_t *rs){return FIM_ERR_NO_ERROR;}
-	virtual fim_err_t set_wm_caption(const fim_char_t *msg){return FIM_ERR_UNSUPPORTED;}
+	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
+	virtual fim_err_t reinit(const fim_char_t *rs);
+	virtual fim_err_t set_wm_caption(const fim_char_t *msg);
 };
 
 #endif /* FIM_DISPLAY_DEVICE_H */

@@ -182,18 +182,18 @@ class CommandConsole
 
 	fim::string execute(fim::string cmd, args_t args);
 
-	//const fim_char_t*get_prompt()const{return prompt_;}
+	//const fim_char_t*get_prompt(void)const{return prompt_;}
 
 	CommandConsole(void);
 	private:
-	CommandConsole& operator= (const CommandConsole&cc){return *this;/* a nilpotent assignation */}
+	CommandConsole& operator= (const CommandConsole&cc);
 	public:
 	bool display(void);
 	bool redisplay(void);
 	fim_char_t * command_generator (const fim_char_t *text,int state,int mask)const;
 	fim_perr_t executionCycle(void);
 	fim_err_t init(fim::string device);
-	fim_bool_t inConsole()const;
+	fim_bool_t inConsole(void)const;
 	~CommandConsole(void);
 
 	/* the following group is defined in Namespace.cpp */
@@ -213,7 +213,7 @@ class CommandConsole
 	fim::string readStdFileDescriptor(FILE* fd);
 #ifndef FIM_WANT_NOSCRIPTING
 	bool push_scriptfile(const fim::string ns);
-	bool with_scriptfile()const;
+	bool with_scriptfile(void)const;
 	fim::string fcmd_executeFile(const args_t &args);
 #endif /* FIM_WANT_NOSCRIPTING */
 	private:
@@ -272,10 +272,10 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	autocmds_stack__t autocmds_loop_stack;
 	autocmds_stack_t autocmds_stack;
 	fim::string fcmd_bind(const args_t& args);
-	fim::string getAliasesList()const;
+	fim::string getAliasesList(void)const;
 	fim::string dummy(std::vector<Arg> args);
-	fim::string fcmd_variables_list(const args_t& args){return get_variables_list();}
-	fim::string fcmd_commands_list(const args_t& args){return get_commands_list();}
+	fim::string fcmd_variables_list(const args_t& args);
+	fim::string fcmd_commands_list(const args_t& args);
 	fim::string fcmd_set(const args_t &args);
 	fim::string fcmd_unalias(const args_t& args);
 	//fim_char_t ** tokenize_(const fim_char_t *s);
@@ -292,7 +292,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	private:
 	fim::string unbind(const fim::string& key);
 	fim::string fcmd_unbind(const args_t& args);
-	fim::string getBindingsList()const;
+	fim::string getBindingsList(void)const;
 	fim::string fcmd_dump_key_codes(const args_t& args);
 	fim::string do_dump_key_codes(const args_t& args)const;
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -324,36 +324,36 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	private:
 	fim_bool_t autocmd_in_stack(const autocmds_loop_frame_t& frame)const;
 #endif /* FIM_AUTOCMDS */
-	fim::string current()const{ return browser_.current();}
+	fim::string current(void)const;
 
 	fim::string get_alias_info(const fim::string aname)const;
 #ifdef FIM_WINDOWS
-	const FimWindow & current_window()const;
+	const FimWindow & current_window(void)const;
 #endif /* FIM_WINDOWS */
-	fim::string get_variables_list()const;
-	fim::string get_aliases_list()const;
-	fim::string get_commands_list()const;
+	fim::string get_variables_list(void)const;
+	fim::string get_aliases_list(void)const;
+	fim::string get_commands_list(void)const;
 	public:
 
 	void printHelpMessage(const fim_char_t *pn="fim")const;
 	void appendPostInitCommand(const fim_char_t* c);
 	void appendPreConfigCommand(const fim_char_t* c);
 	void appendPostExecutionCommand(const fim::string &c);
-	bool appendedPostInitCommand()const;
-	bool appendedPreConfigCommand()const;
+	bool appendedPostInitCommand(void)const;
+	bool appendedPreConfigCommand(void)const;
 
-	Viewport* current_viewport()const;
+	Viewport* current_viewport(void)const;
 #ifdef FIM_WINDOWS
 #else /* FIM_WINDOWS */
 	Viewport* viewport_;
 #endif /* FIM_WINDOWS */
-	void dumpDefaultFimrc()const;
+	void dumpDefaultFimrc(void)const;
 
 	void tty_raw(void);
 	void tty_restore(void);
 	void cleanup(void);
 	
-	fim::string print_commands()const;
+	fim::string print_commands(void)const;
 
 	void status_screen(const fim_char_t *desc);
 	void set_status_bar(fim::string desc, const fim_char_t *info);
@@ -372,7 +372,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_basename(const args_t& args);
 	fim_bool_t key_syms_update(void);
 #if FIM_WANT_BENCHMARKS
-	virtual fim_int get_n_qbenchmarks()const;
+	virtual fim_int get_n_qbenchmarks(void)const;
 	virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const;
 	virtual void quickbench_init(fim_int qbi);
 	virtual void quickbench_finalize(fim_int qbi);

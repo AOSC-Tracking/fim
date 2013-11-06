@@ -281,3 +281,8 @@ void DisplayDevice::quickbench(fim_int qbi)
 	}
 }
 #endif /* FIM_WANT_BENCHMARKS */
+
+	fim_err_t DisplayDevice::resize(fim_coo_t w, fim_coo_t h){return FIM_ERR_NO_ERROR;}
+	fim_err_t DisplayDevice::reinit(const fim_char_t *rs){return FIM_ERR_NO_ERROR;}
+	fim_err_t DisplayDevice::set_wm_caption(const fim_char_t *msg){return FIM_ERR_UNSUPPORTED;}
+

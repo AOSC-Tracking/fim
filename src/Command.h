@@ -35,7 +35,7 @@ class Command
 	Command(fim::string cmd,fim::string help,FimWindow *w=NULL,fim::string(FimWindow::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
 #endif /* FIM_WINDOWS */
 
-	fim::string getHelp()const{return help_;}
+	fim::string getHelp(void)const{return help_;}
 	private:
 	enum
 	{
@@ -63,7 +63,7 @@ class Command
 
 	public:
 	
-	~Command() { }
+	~Command(void) { }
 	
 	fim::string execute(const std::vector<fim::string> &args)
 	{
