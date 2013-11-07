@@ -350,7 +350,7 @@ ret:		return key;
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	,dummydisplaydevice_(this->mc_)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	,dummydisplaydevice_(void)
+	,dummydisplaydevice_()
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,displaydevice_(NULL)			/* the display device could be NULL ! (FIXME) */
 #ifdef FIM_RECORDING
@@ -562,11 +562,13 @@ err:
 				browser_.c_image()->find_matching_list(cmd,completions,true);
 			if(nschar==FIM_SYM_NULL_NAMESPACE_CHAR || nschar==FIM_SYM_NAMESPACE_BROWSER_CHAR)
 				browser_.find_matching_list(cmd,completions,true);
+#ifdef FIM_WINDOWS
 			if(current_window().current_viewportp())
 			if(nschar==FIM_SYM_NULL_NAMESPACE_CHAR || nschar==FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
 				current_window().current_viewportp()->find_matching_list(cmd,completions,true);
 			if(nschar==FIM_SYM_NULL_NAMESPACE_CHAR || nschar==FIM_SYM_NAMESPACE_WINDOW_CHAR)
 				current_window().find_matching_list(cmd,completions,true);
+#endif
 #endif
 		}
 #ifndef FIM_COMMAND_AUTOCOMPLETION
@@ -1018,8 +1020,8 @@ err:
 #ifdef	FIM_USE_GPM
 		Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,NULL);
 #endif	/* FIM_USE_GPM */
+		fim::string initial = browser_.current();
 #ifdef FIM_AUTOCMDS
-		fim::string initial=browser_.current();
 
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLE,initial);
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLEARGS,initial);
@@ -2290,11 +2292,13 @@ ret:
 		w=displaydevice_->width();
 		h=displaydevice_->height();
 
+#ifdef FIM_WINDOWS
 		if(window_)
 	       	{
 		       	Rect nr(0,0,w,h);
 			cc.window_->update(nr);
 		}
+#endif
 
 		displaydevice_->init_console();
 

@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20131107	fix --disable-scripting case !
 20131107	this is spurious: fim::string execute(const std::vector<fim::string> &args)
 20131107	getIntVariable(varname) -> getIntVariable(varname, domain)
 20131024	? shall search backwards
