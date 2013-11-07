@@ -195,16 +195,13 @@ ret:		return key;
 		/*
 		 * looks for a binding to 'cmd' and returns a string description for its bound key 
 		 */
-		bindings_t::const_iterator bi;
+		fim_key_t key = find_keycode_for_bound_cmd(binding);
 
-		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
+		if( key != FIM_SYM_NULL_KEY)
 		{
-			/* FIXME: should move this functionality to an ad-hoc search routine */
-			if(bi->second==binding)
-			{
-				return key_syms_[bi->first];	
-			}
+				return key_syms_[key];	
 		}
+
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -466,12 +463,14 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		 */
                 struct stat stat_s;
 
-                /*      if the file doesn't exist, return */
                 if(-1==stat(nf.c_str(),&stat_s))
-			return false;
+			goto err;
                 if( S_ISDIR(stat_s.st_mode))
-			return false;
+			goto err;
                 return true;
+err:
+                /* if the file doesn't exist, return false */
+		return false;
         }
 
 	fim_err_t CommandConsole::addCommand(Command *c)
@@ -479,19 +478,17 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		/*
 		 * c is added to the commands list
 		 */
-		assert(c);	//FIXME : see the macro NDEBUG for this
+		assert(c);
 		int idx=findCommandIdx(c->cmd_);
 
 		if(idx!=FIM_INVALID_IDX)
 		{
-			// we replace rather than add
+			// here, we replace rather than add
 			delete commands_[idx];
 			commands_[idx]=c;
 		}
 		else
 			commands_.push_back(c);
-		//sort(commands_.begin(),commands_.end()); // 20110517 FIXME: shall sort pointers by inspecting pointed data.
-		//based on actual 
 		return FIM_ERR_NO_ERROR; 
 	}
 
@@ -527,7 +524,8 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 
 		if(state==0)
 			list_index=0;
-		while(isdigit(*text))text++;	//initial  repeat match
+		while(isdigit(*text))
+			text++;	//initial  repeat match
 		/*const*/ fim::string cmd(text);
 		if(cmd==FIM_CNS_EMPTY_STRING)
 			return NULL;
@@ -556,7 +554,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 			for( vi=variables_.begin();vi!=variables_.end();++vi)
 			{
 				if((vi->first).find(cmd)==0)
-				completions.push_back((*vi).first);
+					completions.push_back((*vi).first);
 			}
 #if 1
 			if(browser_.c_image())
@@ -619,7 +617,6 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		/*
 		 * returns the action assigned to key biding c
 		 * */
-		//return bindings_[c];
 		bindings_t::const_iterator bi=bindings_.find(c);
 
 		if(bi!=bindings_.end()) 
@@ -838,7 +835,8 @@ ret:
 #ifndef			FIM_ALIASES_WITHOUT_ARGUMENTS
 			for(size_t i=0;i<args.size();++i)
 			{
-				ex+=fim::string(" \""); ex+=args[i];
+				ex+=fim::string(" \"");
+				ex+=args[i];
 				ex+=fim::string("\""); 
 			}
 #endif			/* FIM_ALIASES_WITHOUT_ARGUMENTS */
@@ -877,15 +875,12 @@ ret:
 		{
 			fim_ts_t seconds=1;
 
-			//sleeping for an amount of time specified in seconds.
 			if(args.size()>0)
 				seconds=atoi(args[0].c_str());
 #if 0
 			sleep(seconds);
 #else
-			/*
-			 * FIXME : we would like interruptible sleep.
-			 */
+			/* we want an interruptible sleep.  */
 			//while(seconds>0 && catchLoopBreakingCommand(seconds--))sleep(1);
 			catchLoopBreakingCommand(seconds);
 #endif
@@ -909,9 +904,6 @@ ret:
 			c=findCommand(cmd);
 
 #ifdef FIM_COMMAND_AUTOCOMPLETION
-			/*
-			 * in case command autocompletion is enabled
-			 */
 			if(getIntVariable(FIM_VID_CMD_EXPANSION)==1)
 			if(c==NULL)
 			{
@@ -960,15 +952,14 @@ ok:
 		 *	If not, and the key is bound to some action; this action
 		 *	is executed.
 		 *
-		 *	FIXME : this could nest while loops !
+		 *	NOTE: this could nest while loops !
 		 *
 		 *	returns 0 if no command was received.
 		 */
 		fim_key_t c;
 
-		//exitBinding_ = 10;
 		if ( exitBinding_ == 0 )
-		       	return 1;	/* any key triggers an exit */
+		       	goto err;	/* any key triggers an exit */
 
 		c = displaydevice_->catchInteractiveCommand(seconds);
 	//	while((c = displaydevice_.catchInteractiveCommand(seconds))!=-1)
@@ -980,12 +971,12 @@ ok:
 
 //			if(c==sym_keys_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
 //			if(c==sym_keys_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
-//			// 20110601 need some string variable with these two keys (see while() interruption documentation) 
+//			// 20110601 need some string variables with these two keys (see while() interruption documentation) 
 			if((ki=sym_keys_.find(FIM_KBD_ESC))!=sym_keys_.end() && c==ki->second)
-				return 1;
+				goto err;
 			if((ki=sym_keys_.find(FIM_KBD_COLON))!=sym_keys_.end() && c==ki->second)
-				return 1;
-			if( c != exitBinding_ )  /* some character read */
+				goto err;
+			if( c != exitBinding_ )  /* characters read */
 			{
 				/*
 				 * we give the user chance to issue commands
@@ -995,14 +986,16 @@ ok:
 				 */
 				executeBinding(c);
 				if(!show_must_go_on_)
-					return 1;
+					goto err;
 				c = displaydevice_->catchInteractiveCommand(1);
 //				return 0;/* could be a command key */
 			}
 			if(c==exitBinding_)
-			       	return 1; 		/* the user hit the exitBinding_ key */
+			       	goto err; 		/* the user hit the exitBinding_ key */
 		}
 		return 0; 		/* no chars read  */
+err:
+		return 1;
 	}
 		
 
@@ -1054,7 +1047,7 @@ ok:
 				*prompt_=FIM_SYM_PROMPT_CHAR;
 				if(rl==NULL)
 				{
-					/* FIXME : should exit ? */
+					/* should exit or not ? */
 					//this->quit();
 					goto rlnull;// FIXME: this is horrible and shall be fixed
 					/* empty line */
@@ -1140,8 +1133,8 @@ ok:
 #else /* FIM_USE_READLINE */
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY))
 					{
-						// TODO: FIM_VID_CONSOLE_KEY should be configurable..
-						ic_=1;*prompt_=FIM_SYM_PROMPT_CHAR;
+						ic_=1;
+						*prompt_ = FIM_SYM_PROMPT_CHAR;
 					}
 					else
 					if(c==FIM_SYM_SEARCH_KEY)
@@ -1296,24 +1289,27 @@ rlnull:
 #endif /* FIM_WINDOWS */
 	}
 
-	fim::string CommandConsole::readStdFileDescriptor(FILE* fd)
+	fim::string CommandConsole::readStdFileDescriptor(FILE* fd, int*rp)
 	{
 		/*
-		 * TODO : catch exceptions
+		 * TODO : catch exceptions/interruptions
 		 */
 
 		fim_sys_int r;
-		fim_char_t buf[FIM_STREAM_BUFSIZE];	// TODO : buffer too small
+		fim_char_t buf[FIM_STREAM_BUFSIZE];	// NOTE: a larger buffer would be ok (e.g.: user configurable)...
 		fim::string cmds;
 
 		if(fd==NULL)
 			return FIM_ERR_GENERIC;
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0)
 		{
-			buf[r]='\0';cmds+=buf;
+			buf[r]='\0';
+			cmds+=buf;
+	/*		if(displaydevice_->catchInteractiveCommand(0)!=-1) goto ret; */
 		}
-		if(r==-1)
-			return FIM_ERR_GENERIC;
+		if(rp)
+			*rp=r;
+ret:
 		return cmds;
 	}
 	
@@ -1327,17 +1323,13 @@ rlnull:
 
 		fim_sys_int r;
 		fim_char_t buf[FIM_STREAM_BUFSIZE];
-		fim::string cmds;
+		fim::string cmds = CommandConsole::readStdFileDescriptor(fd,&r);
 
-		if(fd==NULL)
-			return FIM_ERR_GENERIC;
-		while((r=fread(buf,1,sizeof(buf)-1,fd))>0)
-		{
-			buf[r]='\0';cmds+=buf;
-		}
 		if(r==-1)
 			return FIM_ERR_GENERIC;
+
 		execute_internal(cmds.c_str(),FIM_X_QUIET);
+ret:
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -1345,8 +1337,6 @@ rlnull:
 	{
 		/*
 		 * executes a file denoted by filename
-		 *
-		 * TODO : catch exceptions
 		 * */
 		execute_internal(slurp_file(s).c_str(),FIM_X_QUIET);
 		return FIM_ERR_NO_ERROR;
@@ -2061,7 +2051,7 @@ ok:
 	}
 	bool CommandConsole::with_scriptfile(void)const
 	{
-		return scripts_.size() !=0;
+		return scripts_.size() !=0 ;
 	}
 #endif /* FIM_WANT_NOSCRIPTING */
 
@@ -2096,46 +2086,16 @@ ok:
 		tcsetattr (0, TCSANOW, &saved_attributes_);
 	}
 
-	fim_err_t CommandConsole::save_history(void)
+	fim_err_t CommandConsole::load_or_save_history(bool load_or_save)
 	{
 #if FIM_WANT_HISTORY
 #ifndef FIM_NOHISTORY
   #ifndef FIM_WANT_NOSCRIPTING
     #ifdef FIM_USE_READLINE
-		/* default, hard-coded configuration first */
-		if(getIntVariable(FIM_VID_SAVE_FIM_HISTORY)==1 )
-		{
-			fim_char_t hfile[FIM_PATH_MAX];
-			const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
+		bool do_load = (  load_or_save  && getIntVariable(FIM_VID_LOAD_FIM_HISTORY)==1 );
+		bool do_save = ((!load_or_save) && getIntVariable(FIM_VID_SAVE_FIM_HISTORY)==1 );
 
-			if(e && strlen(e)<sizeof(hfile)-14)//14==strlen(FIM_CNS_HIST_FILENAME)+2
-			{
-				strcpy(hfile,e);
-				strcat(hfile,"/"FIM_CNS_HIST_FILENAME);
-				bool need_chmod=!is_file(hfile);		// will try to chmod if already non existent
-				write_history(hfile);
-				if(need_chmod)
-					chmod(hfile,S_IRUSR|S_IWUSR);	// we write the first .fim_history in mode -rw------- (600)
-			}
-			/* else : /home/useeeeeeeeeeeeeeeeeeeeeee.....eeeeeeeer ? :) */
-			
-		}
-		return FIM_ERR_NO_ERROR;
-    #endif /* FIM_USE_READLINE */
-  #endif /* FIM_WANT_NOSCRIPTING */
-#endif /* FIM_NOHISTORY */
-#endif /* FIM_WANT_HISTORY */
-		return FIM_ERR_GENERIC;
-	}
-
-	fim_err_t CommandConsole::load_history(void)
-	{
-#if FIM_WANT_HISTORY
-#ifndef FIM_NOHISTORY
-  #ifndef FIM_WANT_NOSCRIPTING
-    #ifdef FIM_USE_READLINE
-		/* default, hard-coded configuration first */
-		if(getIntVariable(FIM_VID_LOAD_FIM_HISTORY)==1 )
+		if( do_load || do_save )
 		{
 			fim_char_t hfile[FIM_PATH_MAX];
 			const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
@@ -2144,10 +2104,19 @@ ok:
 			{
 				strcpy(hfile,e);
 				strcat(hfile,"/"FIM_CNS_HIST_FILENAME);
-				read_history(hfile);
+
+				if( do_load )
+					read_history(hfile);
+				else
+				{
+					bool need_chmod=!is_file(hfile);		// will try to chmod if already non existent
+					write_history(hfile);
+					if(need_chmod)
+						chmod(hfile,S_IRUSR|S_IWUSR);	// we write the first .fim_history in mode -rw------- (600)
+				}
 			}
 		}
-		//return 1;
+
 		return FIM_ERR_NO_ERROR;
     #endif /* FIM_USE_READLINE */
   #endif /* FIM_WANT_NOSCRIPTING  */
@@ -2172,9 +2141,7 @@ ok:
 			tty_restore();	
 		if(displaydevice_)
 		       	displaydevice_->finalize();
-#ifdef FIM_USE_READLINE
-		save_history();
-#endif /* FIM_USE_READLINE */
+		load_or_save_history(false);
 	}
 
 	/*
@@ -2369,13 +2336,28 @@ err:
 	{
 		size_t bs = 0;
 		bs += browser_.byte_size();
-		/* FIXME: unfinished */
+		/* NOTE: lots is missing here */
 		return bs;
 	}
 
-	fim::string CommandConsole::fcmd_variables_list(const args_t& args){return get_variables_list();}
-	fim::string CommandConsole::fcmd_commands_list(const args_t& args){return get_commands_list();}
-	fim::string CommandConsole::current()const{ return browser_.current();}
-	CommandConsole& CommandConsole::operator= (const CommandConsole&cc){return *this;/* a nilpotent assignation */}
+	fim::string CommandConsole::fcmd_variables_list(const args_t& args)
+	{
+		return get_variables_list();
+	}
+
+	fim::string CommandConsole::fcmd_commands_list(const args_t& args)
+	{
+		return get_commands_list();
+	}
+
+	fim::string CommandConsole::current()const
+	{
+	       	return browser_.current();
+	}
+
+	CommandConsole& CommandConsole::operator= (const CommandConsole&cc)
+	{
+		return *this;/* a nilpotent assignment */
+	}
 }
 
