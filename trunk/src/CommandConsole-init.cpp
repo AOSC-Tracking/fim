@@ -292,10 +292,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		setVariable(FIM_VID_SCREEN_HEIGHT,yres);
 
 		/* Here the program loads initialization scripts */
-#ifdef FIM_AUTOCMDS
-	    	autocmd_exec(FIM_ACM_PRECONF,"");
-	    	autocmd_exec(FIM_ACM_PREHFIMRC,"");
-#endif /* FIM_AUTOCMDS */
+
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_PRECONF,"");
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_PREHFIMRC,"");
 
   #ifndef FIM_WANT_NOSCRIPTING
 		if(preConfigCommand_!=fim::string(""))
@@ -316,10 +315,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		fim_char_t rcfile[FIM_PATH_MAX];
 		const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
 
-#ifdef FIM_AUTOCMDS
-	    	autocmd_exec(FIM_ACM_POSTHFIMRC,""); 
-	    	autocmd_exec(FIM_ACM_PREGFIMRC,""); 
-#endif /* FIM_AUTOCMDS */
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTHFIMRC,""); 
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_PREGFIMRC,""); 
 
 		if((getIntVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC)==1 )
 		&& (getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC)!=FIM_CNS_EMPTY_STRING)
@@ -330,11 +327,10 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 				if(FIM_ERR_NO_ERROR!=executeFile(ef.c_str()));
 		}
 		
-#ifdef FIM_AUTOCMDS
 		/* execution of command line-set autocommands */
-	    	autocmd_exec(FIM_ACM_POSTGFIMRC,""); 
-	    	autocmd_exec(FIM_ACM_PREUFIMRC,""); 
-#endif		/* FIM_AUTOCMDS */
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTGFIMRC,""); 
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_PREUFIMRC,""); 
+
 		{
 			#include "grammar.h"
 			setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
@@ -367,10 +363,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		}
   #endif		/* FIM_WANT_NOSCRIPTING */
 #endif		/* FIM_NOFIMRC */
-#ifdef FIM_AUTOCMDS
-	    	autocmd_exec(FIM_ACM_POSTUFIMRC,""); 
-	    	autocmd_exec(FIM_ACM_POSTCONF,"");
-#endif /* FIM_AUTOCMDS */
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTUFIMRC,""); 
+	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTCONF,"");
 #ifndef FIM_WANT_NOSCRIPTING
 		for(size_t i=0;i<scripts_.size();++i) executeFile(scripts_[i].c_str());
 #endif		/* FIM_WANT_NOSCRIPTING */

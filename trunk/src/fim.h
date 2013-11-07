@@ -130,6 +130,12 @@
 #define FIM_WANT_BDI 1
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
 
+#ifdef FIM_AUTOCMDS
+#define FIM_AUTOCMD_EXEC autocmd_exec
+#else /* FIM_AUTOCMDS */
+#define FIM_AUTOCMD_EXEC
+#endif /* FIM_AUTOCMDS */
+
 namespace fim
 {
 	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code

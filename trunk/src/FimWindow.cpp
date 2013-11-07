@@ -41,7 +41,7 @@ namespace fim
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);
 		// note that an autocommand on a transient object is lethal
 		if(amroot_)
-			autocmd_exec(FIM_ACM_PREWINDOW,c);
+		{ FIM_AUTOCMD_EXEC(FIM_ACM_PREWINDOW,c); }
 #endif /* FIM_AUTOCMDS */
 		try
 		{
@@ -116,11 +116,9 @@ namespace fim
 		{
 			cout << "please note some problems occurred in the window subsystem\n";
 		}
-#ifdef FIM_AUTOCMDS
 		// note that an autocommand on a transient object is lethal
 		if(amroot_)
-			autocmd_exec(FIM_ACM_POSTWINDOW,c);
-#endif /* FIM_AUTOCMDS */
+		{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTWINDOW,c); }
                 return FIM_CNS_EMPTY_RESULT;
         }
 

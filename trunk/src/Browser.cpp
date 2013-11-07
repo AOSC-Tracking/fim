@@ -155,9 +155,7 @@ nop:
 
 		if(c_image())
 		{
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREREDISPLAY,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_PREREDISPLAY,c);
 			if(c_image())
 			{
 				/*
@@ -169,9 +167,7 @@ nop:
 				if( commandConsole_.redisplay() )
 					this->display_status(current().c_str(), NULL);
 			}
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTREDISPLAY,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTREDISPLAY,c);
 		}
 	}
 
@@ -262,14 +258,10 @@ ret:
 			fim_char_t f=tolower(*args[0].c_str());
 			if(f)
 			{
-#ifdef FIM_AUTOCMDS
-				autocmd_exec(FIM_ACM_PREPAN,c);
-#endif /* FIM_AUTOCMDS */
+				FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
 				if(c_image() && viewport())
 					viewport()->pan(args);
-#ifdef FIM_AUTOCMDS
-				autocmd_exec(FIM_ACM_POSTPAN,c);
-#endif /* FIM_AUTOCMDS */
+				FIM_AUTOCMD_EXEC(FIM_ACM_POSTPAN,c);
 			}
 		}
 		else
@@ -401,9 +393,7 @@ comeon:
 #endif	/* FIM_WANT_BDI */
 		{
 			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PRESCALE,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
 			if(c_image())
 			switch(fc)
 			{
@@ -466,9 +456,7 @@ comeon:
 				else
 					image()->setscale(newscale);
 			}
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTSCALE,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c);
 		}
 nop:
 		return FIM_CNS_EMPTY_RESULT;
@@ -519,9 +507,7 @@ nop:
 
 		if(c_image())
 		{
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREDISPLAY,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_PREDISPLAY,c);
 			/*
 			 * the following is a trick to override redisplaying..
 			 */
@@ -543,9 +529,7 @@ nop:
 //				FIXME:
 //				if(commandConsole_.window)commandConsole_.window->recursive_display();
 			}
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTDISPLAY,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTDISPLAY,c);
 		}
 		else
 		{
@@ -685,9 +669,7 @@ ret:
 		return " prefetching disabled";
 #endif /* FIM_BUGGED_CACHE */
 
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPREFETCH,current());
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_PREPREFETCH,current());
 		if( args.size() > 0 )
 			return FIM_CNS_EMPTY_RESULT;
 
@@ -704,9 +686,7 @@ ret:
 #else /* FIM_AUTOSKIP_FAILED */
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif /* FIM_AUTOSKIP_FAILED */
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPREFETCH,current());
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPREFETCH,current());
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,1);
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -723,9 +703,7 @@ ret:
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if(empty_file_list())
 			return "sorry, no image to reload\n";
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_PRERELOAD,c);
-#endif /* FIM_AUTOCMDS */
+		FIM_AUTOCMD_EXEC(FIM_ACM_PRERELOAD,c);
 #if FIM_HORRIBLE_CACHE_INVALIDATING_HACK
 		if(args.size()>0)
 		{
@@ -742,9 +720,7 @@ ret:
 
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(c);
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_POSTRELOAD,c);
-#endif /* FIM_AUTOCMDS */
+		FIM_AUTOCMD_EXEC(FIM_ACM_POSTRELOAD,c);
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -762,17 +738,13 @@ ret:
 		}
 		if(empty_file_list())
 			return "sorry, no image to load\n";	//warning
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_PRELOAD,c);
-#endif /* FIM_AUTOCMDS */
+		FIM_AUTOCMD_EXEC(FIM_ACM_PRELOAD,c);
 		commandConsole_.set_status_bar("please wait while loading...", "*");
 
 		loadCurrentImage();
 
 		load_error_handle(c);
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_POSTLOAD,c);
-#endif /* FIM_AUTOCMDS */
+		FIM_AUTOCMD_EXEC(FIM_ACM_POSTLOAD,c);
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -1000,12 +972,10 @@ ret:
 			if(commandConsole_.regexp_match(flist_[i].c_str(),args[0].c_str()))
 			{	
 				fim::string c=current();
-#ifdef FIM_AUTOCMDS
-				autocmd_exec(FIM_ACM_PREGOTO,c);
-#endif /* FIM_AUTOCMDS */
+				FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c);
 				goto_image(i);
 #ifdef FIM_AUTOCMDS
-				autocmd_exec(FIM_ACM_POSTGOTO,c);
+				FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,c);
 				if(!commandConsole_.inConsole())
 					commandConsole_.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
 				goto nop;
@@ -1251,18 +1221,14 @@ go_jump:
 			if((nf!=cf) || (np!=cp) )
 			{	
 				fim::string c=current();
-#ifdef FIM_AUTOCMDS
 				if(!(xflags&FIM_X_NOAUTOCMD))
-					autocmd_exec(FIM_ACM_PREGOTO,c);
-#endif /* FIM_AUTOCMDS */
+				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c); }
 				if(ispg)
 					image()->goto_page(np);
 				else
 					goto_image(nf,isfg?true:false);
-#ifdef FIM_AUTOCMDS
 				if(!(xflags&FIM_X_NOAUTOCMD))
-					autocmd_exec(FIM_ACM_POSTGOTO,c);
-#endif /* FIM_AUTOCMDS */
+				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,c); }
 			}
 		}
 ret:
@@ -1328,9 +1294,7 @@ nop:
 		 */
 		fim::string c=current();
 
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPAN,c);
-#endif /* FIM_AUTOCMDS */
+		FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
 		if(c_image() && viewport())
 		{
 			if(viewport()->onRight() && viewport()->onBottom())
@@ -1343,10 +1307,9 @@ nop:
 			}
 			else viewport()->pan("right",FIM_CNS_SCROLL_DEFAULT);
 		}
-		else next(1);
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPAN,c);
-#endif /* FIM_AUTOCMDS */
+		else
+		       	next(1);
+		FIM_AUTOCMD_EXEC(FIM_ACM_POSTPAN,c);
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -1359,9 +1322,7 @@ nop:
 		 */
 		fim::string c=current();
 
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPAN,c);
-#endif /* FIM_AUTOCMDS */
+		FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
 		if(c_image() && viewport())
 		{
 			if(viewport()->onBottom())
@@ -1369,10 +1330,9 @@ nop:
 			else
 				viewport()->pan("down",FIM_CNS_SCROLL_DEFAULT);
 		}
-		else next(1);
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPAN,c);
-#endif /* FIM_AUTOCMDS */
+		else
+		       	next(1);
+		FIM_AUTOCMD_EXEC(FIM_ACM_POSTPAN,c);
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -1426,10 +1386,8 @@ nop:
 		{
 			//angle = (double)getGlobalFloatVariable(FIM_VID_ANGLE);
 			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-//			autocmd_exec(FIM_ACM_PREROTATE,c);//FIXME
-			autocmd_exec(FIM_ACM_PRESCALE,c); //FIXME
-#endif /* FIM_AUTOCMDS */
+//			FIM_AUTOCMD_EXEC(FIM_ACM_PREROTATE,c);//FIXME
+			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c); //FIXME
 			if(c_image())
 			{
 				if(angle)
@@ -1443,10 +1401,8 @@ nop:
 						image()->rotate();
 				}
 			}
-#ifdef FIM_AUTOCMDS
-//			autocmd_exec(FIM_ACM_POSTROTATE,c);//FIXME
-			autocmd_exec(FIM_ACM_POSTSCALE,c); //FIXME
-#endif /* FIM_AUTOCMDS */
+//			FIM_AUTOCMD_EXEC(FIM_ACM_POSTROTATE,c);//FIXME
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c); //FIXME
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -1464,9 +1420,7 @@ nop:
 			factor = firstforzero(args);
 			if(!factor)
 				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PRESCALE,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
 			if(c_image())
 			{
 				if(factor)
@@ -1484,9 +1438,7 @@ nop:
 						viewport()->scale_position_magnify();
 				}
 			}
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTSCALE,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c);
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -1503,9 +1455,7 @@ nop:
 			if(!factor)
 				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PRESCALE,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
 			if(c_image())
 			{
 				if(factor)
@@ -1523,9 +1473,7 @@ nop:
 						viewport()->scale_position_reduce();
 				}
 			}
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTSCALE,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c);
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -1544,9 +1492,7 @@ nop:
 		if(c_image())
 		{
 			fim::string c=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREPAN,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
 			if(c_image() && viewport())
 			{
 				// FIXME: need a switch/case construct here
@@ -1561,9 +1507,7 @@ nop:
 				if(args[0].re_match("center"))
 					viewport()->align('c');
 			}
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTPAN,c);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPAN,c);
 		}
 		return FIM_CNS_EMPTY_RESULT;
 err:
