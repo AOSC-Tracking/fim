@@ -89,9 +89,8 @@ class Browser
 		{}
 	public:
 	fim::string current(void)const;
-	fim::string regexp_goto(const args_t &args);
+	fim::string regexp_goto(const args_t &args, int src_dir=1);
 	fim::string fcmd_prefetch(const args_t &args);
-	fim::string regexp_goto_next(const args_t &args);
 	fim::string fcmd_goto_image(const args_t &args);
 	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
 	fim::string goto_image(int n, bool isfg=false);
