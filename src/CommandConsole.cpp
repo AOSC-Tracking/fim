@@ -660,9 +660,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		if(bi!=bindings_.end() && bi->second!=FIM_CNS_EMPTY_STRING)
 		{
 			fim::string cf=current();
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_PREINTERACTIVECOMMAND,cf);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_PREINTERACTIVECOMMAND,cf);
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
 			{
@@ -690,9 +688,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 			else
 #endif /* FIM_ITERATED_COMMANDS */
 				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
-#ifdef FIM_AUTOCMDS
-			autocmd_exec(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
-#endif /* FIM_AUTOCMDS */
+			FIM_AUTOCMD_EXEC(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
 		}
 
 		if(status)
@@ -1032,8 +1028,8 @@ ok:
 #ifdef FIM_AUTOCMDS
 		fim::string initial=browser_.current();
 
-		autocmd_exec(FIM_ACM_PREEXECUTIONCYCLE,initial);
-		autocmd_exec(FIM_ACM_PREEXECUTIONCYCLEARGS,initial);
+		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLE,initial);
+		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLEARGS,initial);
 #endif /* FIM_AUTOCMDS */
 		*prompt_=FIM_SYM_PROMPT_NUL;
 
@@ -1070,9 +1066,7 @@ ok:
 					 * having she pressed the 'Enter' key and expecting result.
 					 * */
 					fim::string cf=current();
-#ifdef FIM_AUTOCMDS
-					autocmd_exec(FIM_ACM_PREINTERACTIVECOMMAND,cf);
-#endif /* FIM_AUTOCMDS */
+					FIM_AUTOCMD_EXEC(FIM_ACM_PREINTERACTIVECOMMAND,cf);
 #ifdef FIM_RECORDING
 					if(recordMode_)
 						record_action(fim::string(rl));
@@ -1082,14 +1076,12 @@ ok:
 					ic_=(ic_==-1)?0:1; //a command could change the mode !
 //					this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);	//!!
 //					execute_internal("redisplay;",FIM_X_NULL);	//execution of the command line with history
-#ifdef FIM_AUTOCMDS
-					autocmd_exec(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
-#endif /* FIM_AUTOCMDS */
+					FIM_AUTOCMD_EXEC(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
 #ifdef FIM_RECORDING
 					memorize_last(rl);
 #endif /* FIM_RECORDING */
 					//p.s.:note that current() returns not necessarily the same in 
-					//the two autocmd_exec() calls..
+					//the two FIM_AUTOCMD_EXEC() calls..
 				}
 				/*  else : *rl==FIM_CNS_EMPTY_STRING : doesn't happen :) */
 
@@ -1216,9 +1208,7 @@ ok:
 			}
 		}
 rlnull:
-#ifdef FIM_AUTOCMDS
-		autocmd_exec(FIM_ACM_POSTEXECUTIONCYCLE,initial);
-#endif /* FIM_AUTOCMDS */
+		FIM_AUTOCMD_EXEC(FIM_ACM_POSTEXECUTIONCYCLE,initial);
 		return quit(return_code_);
 	}
 
@@ -1646,8 +1636,8 @@ ok:
 	{
 		/*
 		 */
-	    	//return autocmd_exec(FIM_ACM_POSTFIMRC,"");
-	    	return autocmd_exec(FIM_ACM_POSTHFIMRC,"");
+	    	//return FIM_AUTOCMD_EXEC(FIM_ACM_POSTFIMRC,"");
+	    	return FIM_AUTOCMD_EXEC(FIM_ACM_POSTHFIMRC,"");
 
 	}
 
