@@ -377,7 +377,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 
 #ifdef FIM_USE_READLINE
 		rl::initialize_readline( displaydevice_==NULL );
-		load_history();
+		load_or_save_history(true);
 #endif /* FIM_USE_READLINE */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{

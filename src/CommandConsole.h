@@ -97,8 +97,7 @@ class CommandConsole
 
 	private:
 
-	fim_err_t save_history(void);
-	fim_err_t load_history(void);
+	fim_err_t load_or_save_history(bool load_or_save);
 
 	/*
 	 * the identifier->variable binding
@@ -210,7 +209,7 @@ class CommandConsole
 	fim_err_t printVariable(const fim::string & varname)const;
 	bool push(const fim::string nf);
 	fim_err_t executeStdFileDescriptor(FILE *fd);
-	fim::string readStdFileDescriptor(FILE* fd);
+	fim::string readStdFileDescriptor(FILE* fd, int*rp=NULL);
 #ifndef FIM_WANT_NOSCRIPTING
 	bool push_scriptfile(const fim::string ns);
 	bool with_scriptfile(void)const;
@@ -314,7 +313,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_int catchLoopBreakingCommand(fim_ts_t seconds=0);
 
 	private:
-	fim_key_t catchInteractiveCommand(fim_ts_t seconds=0)const;
+	/* fim_key_t catchInteractiveCommand(fim_ts_t seconds=0)const; */
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname);
 	void autocmd_push_stack(const autocmds_loop_frame_t& frame);

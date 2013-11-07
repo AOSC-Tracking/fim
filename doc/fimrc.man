@@ -43,7 +43,7 @@ Language elements surrounded by a single quote ("'") are literals.
 
 Warning: at the present state, this grammar has conflicts. A future release shall fix them.
 
-  program:
+  program: %empty
          | statement_list
 
   statement_list: statement
@@ -611,7 +611,7 @@ _ignorecase
 .fi
 .B
 _info_fmt_str
-[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used; %c for centering information; %% for an ordinary %. This feature has to be enabled at configure time.
+[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %c for centering information; %% for an ordinary %. This feature has to be enabled at configure time.
 .fi
 .B
 _inhibit_display
