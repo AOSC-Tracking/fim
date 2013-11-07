@@ -983,21 +983,11 @@ ret:
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 
-	fim::string Browser::regexp_goto_next(const args_t &args)
+	fim::string Browser::regexp_goto(const args_t &args, int src_dir)
 	{
 		/*
 		 * goes to the next filename-matching file
-		 */
-		args_t arg;
-
-		arg.push_back(last_regexp_);
-		return regexp_goto(arg);
-	}
-
-	fim::string Browser::regexp_goto(const args_t &args)
-	{
-		/*
-		 * goes to the next filename-matching file
+		 * TODO: this method shall only find the index and return it !
 		 */
 		size_t i,j,c=current_n(),s=flist_.size();
 
@@ -1006,7 +996,7 @@ ret:
 		for(j=0;j<s;++j)
 		{
 			last_regexp_=args[0];
-			i=(j+c+1)%s;
+			i=((src_dir<0?(s-j):j)+c+src_dir)%s;
 			if(commandConsole_.regexp_match(flist_[i].c_str(),args[0].c_str()))
 			{	
 				fim::string c=current();
@@ -1141,7 +1131,7 @@ nop:
 			pcnt=(l=='%'); 
 			ispg=(l=='p');
 			isfg=(l=='f');
-			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+') && s[1]=='/') ||( c=='/')));
+			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
 			isrj=(c=='+' || c=='-');
 			if(isdigit(c)  || c=='-' || c=='+')
 			{
@@ -1249,13 +1239,13 @@ nop:
 			if(isre)
 			{
 				args_t argsc;
-				if(c=='+')
-					return regexp_goto_next(argsc);/* no args needed */
+				int src_dir = 1;
+				if(c=='+' || c=='-')
+					src_dir=((c=='-')?-1:1),
+					argsc.push_back(last_regexp_);
 				else
-				{
 					argsc.push_back(string(s).substr(1,sl-2));
-					return regexp_goto(argsc);
-				}
+				return regexp_goto(argsc,src_dir);
 			}
 go_jump:
 			if((nf!=cf) || (np!=cp) )
