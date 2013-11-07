@@ -322,6 +322,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_SCROLL_DEFAULT	 	"90%"
 #define FIM_CNS_STEPS_DEFAULT_N	 	50
 #define FIM_CNS_STEPS_DEFAULT	 	"20%"
+#define FIM_CNS_STEPS_DEFAULT_P		true	/* FIXME */
 #define FIM_CNS_STEPS_MIN	 1
 #define FIM_CNS_WGROW_STEPS_DEFAULT	 1
 #define FIM_CNS_WENLARGE_STEPS_DEFAULT	 10

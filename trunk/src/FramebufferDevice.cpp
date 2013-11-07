@@ -1813,7 +1813,7 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 	DisplayDevice(mc)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	FramebufferDevice::FramebufferDevice():	
-	DisplayDevice(void)
+	DisplayDevice()
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,vt_(0)
 	,dither_(FALSE)
