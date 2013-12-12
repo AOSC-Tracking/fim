@@ -115,6 +115,7 @@ AC_CHECK_FUNC([getenv], AC_DEFINE([HAVE_GETENV], [1], [If present, the getenv fu
 AC_CHECK_FUNC([getline], AC_DEFINE([HAVE_GETLINE], [1], [If present, will be used for stdin reading. (on GNU)]))
 AC_CHECK_FUNC([fgetln], AC_DEFINE([HAVE_FGETLN], [1], [If present, fgetln() will be used as a replacement for getline(). (on BSD)]))
 AC_CHECK_FUNC([get_current_dir_name], AC_DEFINE([HAVE_GET_CURRENT_DIR_NAME], [1], [Should live when _GNU_SOURCE, but it could be not the case.]))
+AC_CHECK_FUNC([rsb_lib_init])
 
 AC_CHECK_LIB([m],[pow])
 AC_CHECK_LIB([fl],[yylex])
@@ -1681,10 +1682,14 @@ dnl this is experimental stuff
 dnl ###############################################################################
 AC_ARG_ENABLE(matrices-rendering, AC_HELP_STRING([--enable-matrices-rendering], [Uses librsb for rendering of Matrix Market files (must have librsb-config in the PATH).]),
 [       if test x$enableval = xyes; then
+        	if test x$ac_cv_func_rsb_lib_init = xyes; then
 AH_TEMPLATE([HAVE_MATRIX_MARKET_DECODER])
 AC_DEFINE([HAVE_MATRIX_MARKET_DECODER])
-CXXFLAGS="$CXXFLAGS `librsb-config  --cflags`"
-LIBS="$LIBS `librsb-config --static --ldflags | sed s/-static//g`"
+#CXXFLAGS="$CXXFLAGS `librsb-config  --cflags`"
+#LIBS="$LIBS `librsb-config --static --ldflags | sed s/-static//g`"
+		else
+			AC_MSG_ERROR([Cannot detect librsb! Either disable matrix rendering or supply the right LIBS and CXXFLAGS!])
+        	fi
 	else
 		true;
         fi
