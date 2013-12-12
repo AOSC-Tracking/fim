@@ -916,12 +916,30 @@ ret:
 		return flist_.size();
 	}
 
+#define FIM_SORT_BY_DATE 0
+#if FIM_SORT_BY_DATE
+struct FimDateSorter
+{
+	bool operator() (fim::string lfn, fim::string rfn)
+	{ 
+		struct stat lstat_s;
+		struct stat rstat_s;
+		stat(lfn.c_str(),&lstat_s);
+		stat(rfn.c_str(),&rstat_s);
+		return (lstat_s.st_mtime < rstat_s.st_mtime);
+	}
+} fimDateSorter;
+#endif
+
 	fim::string Browser::_sort(void)
 	{
 		/*
 		 *	sorts the image filenames list
 		 */
 		std::sort(flist_.begin(),flist_.end());
+#if FIM_SORT_BY_DATE
+		std::sort(flist_.begin(),flist_.end(),fimDateSorter);
+#endif
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 
