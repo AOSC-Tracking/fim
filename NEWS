@@ -2,7 +2,9 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.5-trunk
-
+ * changed librsb library detection: now it's 
+   LIBS="`librsb-config  --ldflags --extra_libs` " CXXFLAGS="`librsb-config --cflags ` \
+   ./configure --enable-matrices-rendering
  * scaling image code slightly faster (thanks to __restrict__ of pointers)
  * status bar will not cover image drawing space unless requested (TODO)
  * "%T" specifier to get (and display) total program used memory
