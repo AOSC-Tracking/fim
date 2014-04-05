@@ -1399,6 +1399,9 @@ extern struct ida_loader text_loader ;
 extern struct ida_loader bit24_loader ;
 extern struct ida_loader bit1_loader ;
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
+#if FIM_WITH_UFRAW
+extern struct ida_loader nef_loader ;
+#endif /* FIM_WITH_UFRAW */
 
 // 20080108 WARNING
 // 20080801 removed the loader functions from this file, as init_rd was not __init : did I break something ?
@@ -1671,6 +1674,15 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     }
     fim_rewind(fp);
     if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
+
+#if FIM_WITH_UFRAW
+    if (NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
+    if(regexp_match(filename,".*NEF$") || regexp_match(filename,".*nef$"))
+    {
+	loader = &nef_loader;
+        goto found_a_loader;
+    }
+#endif /* FIM_WITH_UFRAW */
 
 #if FIM_ALLOW_LOADER_STRING_SPECIFICATION
     {
