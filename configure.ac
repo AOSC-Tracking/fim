@@ -905,6 +905,29 @@ fi
 
 dnl ================================================================================
 
+## raw/nef file handling via UFRaw
+
+fim_handle_ufraw=no
+
+AC_ARG_ENABLE(ufraw, AC_HELP_STRING([--enable-ufraw], [Enable UFRaw support (EXPERIMENTAL).]),
+[       if test x$enableval = xno ; then
+		fim_handle_ufraw=no
+	else
+		fim_handle_ufraw=yes
+        fi
+])
+
+if test x$fim_handle_ufraw = xyes; then
+	# support for custom library configurator path
+	CXXFLAGS="$CXXFLAGS $UFRAW_CXXFLAGS"
+	LIBS="$LIBS $UFRAW_LIBS"
+	FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffUFRaw.o" # FIXME
+	AC_DEFINE(FIM_WITH_UFRAW, 1, [Defined, if UFRaw support is enabled])
+	AC_MSG_NOTICE([Enabling UFRaw / libufraw.])
+fi
+
+dnl ================================================================================
+
 AC_ARG_ENABLE(exif, AC_HELP_STRING([--enable-exif], [Turns on libexif support (EXPERIMENTAL)]),
 	[if test x$enableval = xyes; then
 		fim_cv_libexif=yes
@@ -1737,6 +1760,7 @@ AC_MSG_NOTICE([
 	djvu file support                   : ${fim_handle_djvu:-no}
 	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
 	ps   file support (libspectre)      : ${fim_handle_ps:-no}
+	nef  file support (libufraw)        : ${fim_handle_ufraw:-no}
 	GraphicsMagick support              : ${fim_handle_graphicsmagick:-no}
 	Imlib2 support                      : ${fim_handle_imlib2:-no}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
