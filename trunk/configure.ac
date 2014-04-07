@@ -928,6 +928,28 @@ fi
 
 dnl ================================================================================
 
+## archive file handling via libarchive
+
+fim_handle_archive=no
+
+AC_ARG_ENABLE(archive, AC_HELP_STRING([--enable-archive], [Enable libarchive support (EXPERIMENTAL).]),
+[       if test x$enableval = xno ; then
+		fim_handle_archive=no
+	else
+		fim_handle_archive=yes
+        fi
+])
+
+if test x$fim_handle_archive = xyes; then
+	# support for custom library configurator path
+	CXXFLAGS="$CXXFLAGS $ARCHIVE_CXXFLAGS"
+	LIBS="$LIBS $ARCHIVE_LIBS -larchive"
+	AC_DEFINE(FIM_WITH_ARCHIVE, 1, [Defined, if libarchive support is enabled])
+	AC_MSG_NOTICE([Enabling libarchive.])
+fi
+
+dnl ================================================================================
+
 AC_ARG_ENABLE(exif, AC_HELP_STRING([--enable-exif], [Turns on libexif support (EXPERIMENTAL)]),
 	[if test x$enableval = xyes; then
 		fim_cv_libexif=yes
@@ -1761,6 +1783,7 @@ AC_MSG_NOTICE([
 	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
 	ps   file support (libspectre)      : ${fim_handle_ps:-no}
 	nef  file support (libufraw)        : ${fim_handle_ufraw:-no}
+	archives  support (libarchive)      : ${fim_handle_archive:-no}
 	GraphicsMagick support              : ${fim_handle_graphicsmagick:-no}
 	Imlib2 support                      : ${fim_handle_imlib2:-no}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
