@@ -34,6 +34,10 @@
 #include <math.h>
 #include <string.h>
 #include <stdarg.h>	/* va_start, va_end, ... */
+#if FIM_WITH_ARCHIVE
+#include <archive.h>
+extern "C" { const char * archive_entry_pathname(struct archive_entry *); }
+#endif /* FIM_WITH_ARCHIVE */
 
 #define FIM_HAVE_FULL_PROBING_LOADER 0
 #ifdef HAVE_FMEMOPEN
@@ -1604,6 +1608,10 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     size_t sbbs=NULL;
 #endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
+    size_t read_offset = 0;
+#if FIM_WITH_ARCHIVE
+    int npages = 0;
+#endif /* FIM_WITH_ARCHIVE */
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
     if(vl)
@@ -1645,8 +1653,93 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     }
     } else fp=fd;
 
+#if FIM_WITH_ARCHIVE
+    if(regexp_match(filename,".*tar$") || regexp_match(filename,".*TAR$"))
+    {
+	struct archive *a = NULL;
+	struct archive_entry *entry = NULL;
+	int r,pi;
+	size_t bs = 10240;
+
+	a = archive_read_new();
+	if (a == NULL)
+		goto noa;
+	archive_read_support_format_all(a);
+	archive_read_support_filter_all(a);
+	r = archive_read_open_filename(a, filename, bs); // filename=NULL for stdin
+	if (r != ARCHIVE_OK)
+	{
+		printf("!!\n");
+		goto noa;
+	}
+	for (pi=0;;)
+	{
+                const char * pn = NULL;
+		r = archive_read_next_header(a, &entry);
+      		if (r == ARCHIVE_EOF)
+		{
+			npages = pi  ;
+			printf("ARCHIVE_EOF at %d !!\n",npages);
+			break;
+		}
+		if (r != ARCHIVE_OK)
+		{
+			printf("ARCHIVE_OK !!\n");
+			break;
+		}
+		pn = archive_entry_pathname(entry);
+		if(pn && strlen(pn)>0 && pn[strlen(pn)-1]!='/') // is file
+		{
+			if(pi == page)
+			{
+				static int fap[2];
+				printf("OPENING PAGE %d of %s : SUBFILE %s\n",page,filename,pn);
+				if( 0 != pipe2(fap,O_NONBLOCK) )
+				//if( 0 != pipe(fap) )
+					goto noa;
+				printf("pipe to %s\n",pn);
+				//archive_read_data_into_fd(a,1);
+				if(1)
+				{
+					const void *buff = NULL;
+					int64_t offset = 0;
+					size_t tsize = 0, size = 0;
+					tsize = 0, size = 0;
+					for (;;) {
+						r = archive_read_data_block(a, &buff, &size, &offset);
+						if (r == ARCHIVE_EOF)
+							break;
+						if (r != ARCHIVE_OK)
+							break;
+						write(fap[1],buff,size);
+						tsize += size;
+						// ...
+					}
+					printf("piped %d bytes\n",tsize);
+				}
+				else
+				{
+					r = archive_read_data_into_fd(a,fap[1]);
+				}
+				close(fap[1]);
+				fp = fdopen(fap[0],"r");
+				fd = NULL;
+				fp = fim_fread_tmpfile(fp); // FIXME: pipe saturates quickly (at 64 k on recent Linux...)
+				close(fap[0]);
+				filename = FIM_STDIN_IMAGE_NAME;
+			}
+			else
+				;//printf("SKIPPING [%d/%d] %s in %s\n",pi,page,pn,filename);
+			++pi;
+		}
+	}
+ena:
+	archive_read_close(a);
+	archive_read_free(a);
+noa:	1;
+    }
+#endif /* FIM_WITH_ARCHIVE */
     //size_t read_offset=cc.getIntVariable("g:"FIM_VID_OPEN_OFFSET);
-    size_t read_offset=0;
     read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
 
     if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
@@ -1986,6 +2079,10 @@ found_a_loader:	/* we have a loader */
 	rgb2bgr(img->data,img->i.width,y); 
 #endif /* FIM_IS_SLOWER_THAN_FBI */
     loader->done(data);
+#if FIM_WITH_ARCHIVE
+    if(npages)
+	    img->i.npages = npages; /* FIXME: temporarily here */
+#endif /* FIM_WITH_ARCHIVE */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
     if(img && loader)
 	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);	/* FIXME: shall become an image specific variable */
