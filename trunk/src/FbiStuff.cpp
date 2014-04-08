@@ -1661,6 +1661,9 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 	int r,pi;
 	size_t bs = 10240;
 
+	if( fim_getenv("PAGE") )
+		page = atoi( fim_getenv("PAGE") );
+
 	a = archive_read_new();
 	if (a == NULL)
 		goto noa;
@@ -1669,7 +1672,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 	r = archive_read_open_filename(a, filename, bs); // filename=NULL for stdin
 	if (r != ARCHIVE_OK)
 	{
-		printf("!!\n");
+		printf("Problems opening archive %s\n",filename);
 		goto noa;
 	}
 	for (pi=0;;)
@@ -1679,31 +1682,36 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
       		if (r == ARCHIVE_EOF)
 		{
 			npages = pi  ;
-			printf("ARCHIVE_EOF at %d !!\n",npages);
+			printf("ARCHIVE_EOF reached after %d files.\n",npages);
 			break;
 		}
 		if (r != ARCHIVE_OK)
 		{
-			printf("ARCHIVE_OK !!\n");
+			printf("Problems reading header of %s\n",filename);
 			break;
 		}
 		pn = archive_entry_pathname(entry);
-		if(pn && strlen(pn)>0 && pn[strlen(pn)-1]!='/') // is file
+
+		if(pn)
+    		if(regexp_match(pn,".*jpg$") || regexp_match(pn,".*png$")) /* FIXME: temporary */
+		if(strlen(pn)>0 && pn[strlen(pn)-1]!='/') /* skip directories */
 		{
 			if(pi == page)
 			{
 				static int fap[2];
-				printf("OPENING PAGE %d of %s : SUBFILE %s\n",page,filename,pn);
-				if( 0 != pipe2(fap,O_NONBLOCK) )
-				//if( 0 != pipe(fap) )
-					goto noa;
-				printf("pipe to %s\n",pn);
+				printf("Opening page %d of %s, subfile %s\n",page,filename,pn);
 				//archive_read_data_into_fd(a,1);
-				if(1)
+				if(0)
 				{
 					const void *buff = NULL;
 					int64_t offset = 0;
 					size_t tsize = 0, size = 0;
+
+					if( 0 != pipe2(fap,O_NONBLOCK) )
+					//if( 0 != pipe(fap) )
+						goto noa;
+					printf("Pipe to %s\n",pn);
+
 					tsize = 0, size = 0;
 					for (;;) {
 						r = archive_read_data_block(a, &buff, &size, &offset);
@@ -1716,16 +1724,24 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 						// ...
 					}
 					printf("piped %d bytes\n",tsize);
+					close(fap[1]);
+					fp = fdopen(fap[0],"r");
+					fd = NULL;
+					fp = fim_fread_tmpfile(fp); // FIXME: a pipe saturates quickly (at 64 k on recent Linux...)
+					close(fap[0]);
 				}
 				else
 				{
-					r = archive_read_data_into_fd(a,fap[1]);
+					FILE *tfd=NULL;
+					if( ( tfd=tmpfile() )!=NULL )
+					{	
+						int tfp = fileno(tfd);
+						r = archive_read_data_into_fd(a,tfp);
+						rewind(tfd);
+						fd = NULL;
+						fp = tfd;
+					}
 				}
-				close(fap[1]);
-				fp = fdopen(fap[0],"r");
-				fd = NULL;
-				fp = fim_fread_tmpfile(fp); // FIXME: pipe saturates quickly (at 64 k on recent Linux...)
-				close(fap[0]);
 				filename = FIM_STDIN_IMAGE_NAME;
 			}
 			else
