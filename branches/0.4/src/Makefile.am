@@ -18,7 +18,7 @@ lex.yy.cc: lex.lex
 	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
 yacc.tab.cpp: yacc.ypp lex.lex
-	$(YACC) $(YFLAGS) $< -o yacc.tab.cpp
+	$(YACC) $(YFLAGS) $< -o $@
 
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
@@ -64,14 +64,14 @@ help-acm.cpp: fim.h
 
 # Target native build
 b2ba: b2ba.c
-	$(CC) -o b2ba $<
+	$(CC) -o $@ $<
 
 if FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT
 default_font_byte_array.h: $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) b2ba
-	./b2ba < $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) > default_font_byte_array.h
+	./b2ba < $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) > $@
 else
 default_font_byte_array.h: ../var/fonts/Lat15-Terminus16.psf b2ba
-	./b2ba < ../var/fonts/Lat15-Terminus16.psf > default_font_byte_array.h
+	./b2ba < $< > $@
 endif
 
 # the following sources are built at make time
@@ -97,7 +97,7 @@ EXTRA_fim_SOURCES += Imlib2Device.cpp
 CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba
 
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
-AM_CPPFLAGS= -I$(srcdir) -I.
+AM_CPPFLAGS=
 fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
 fim_LDADD = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(FIMLIBS) $(LEXLIB)
 fim_SOURCES  = $(BUILT_SOURCES) \

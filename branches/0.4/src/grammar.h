@@ -1,5 +1,5 @@
 const fim_char_t * FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =
-"  program:\n"
+"  program: %empty\n"
 "         | statement_list\n"
 "\n"
 "  statement_list: statement\n"
