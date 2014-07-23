@@ -18,7 +18,7 @@ lex.yy.cc: lex.lex
 	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
 yacc.tab.cpp: yacc.ypp lex.lex
-	$(YACC) $(YFLAGS) yacc.ypp -o yacc.tab.cpp
+	$(YACC) $(YFLAGS) yacc.ypp -o $@
 
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
@@ -62,15 +62,15 @@ help-acm.cpp: fim.h
 	$(ECHO)  ' '>> $@
 	$(ECHO) '//#endif' >> $@
 
-b2ba:
-	$(CC) -o b2ba b2ba.c
+b2ba: b2ba.c
+	$(CC) -o $@ $<
 
 if FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT
 default_font_byte_array.h: $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) b2ba
-	./b2ba < $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) > default_font_byte_array.h
+	./b2ba < $< > $@
 else
-default_font_byte_array.h: ../var/fonts/Lat15-Terminus16.psf b2ba
-	./b2ba < ../var/fonts/Lat15-Terminus16.psf > default_font_byte_array.h
+default_font_byte_array.h:   ../var/fonts/Lat15-Terminus16.psf b2ba
+	./b2ba < $< > $@
 endif
 
 # the following sources are built at make time
