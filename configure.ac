@@ -10,14 +10,8 @@ AC_PREREQ([2.54])
 #AC_PROG_CC(cc gcc)
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
-define([svnversion],esyscmd([sh -c "svnversion | tr  -c '[0-9]' ' ' | sed 's/ *//g;s/^$/-1/g' "]))dnl
 AC_INIT([fim],[0.4-rc1],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 AC_CONFIG_SRCDIR([src/fim.cpp])
-
-AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
-AC_SUBST(SVN_REVISION,"svnversion")
-AC_DEFINE(SVN_REVISION_NUMBER,svnversion,[SVN REVISION NUMBER])
-AC_SUBST(SVN_REVISION_NUMBER,svnversion)
 
 AH_TEMPLATE([FIM_CONFIGURATION])
 FIM_CONFIGURATION="$0 $@"
@@ -25,7 +19,7 @@ AC_SUBST(FIM_CONFIGURATION)
 AC_DEFINE_UNQUOTED([FIM_CONFIGURATION],"$FIM_CONFIGURATION")
 
 AC_MSG_NOTICE([
-        Welcome to the Fim (revision $SVN_REVISION) configure script!
+	    Welcome to the Fim configure script!
 	This script will create the right Makefile for building Fim on your system.
 	But first, it will check if your system has the right configuration for Fim to build.
 
@@ -36,6 +30,15 @@ AC_MSG_NOTICE([
 	Please read BUGS and README and report any bug found to the Fim maintainer!
 ])
 
+# Subversion development release
+AC_CHECK_PROG([HASSVNVERSION], [svnversion], [yes], [no])
+AS_IF([test "x$HASSVNVERSION" = "xyes"], [
+  SVNVERSION=m4_esyscmd([svnversion -n | sed -ne '/[0-9]/s/^\([0-9]\+\)\([:MSP].*\)\?$/\1/p'])
+  AS_IF([test "x$SVNVERSION" != "x"], [
+    AC_DEFINE_UNQUOTED(SVN_REVISION,"$SVNVERSION",[SVN revision])
+    AC_DEFINE_UNQUOTED(SVN_REVISION_NUMBER,$SVNVERSION,[SVN revision number])
+  ])
+])
 
 #AM_CONFIG_HEADER([config.h])
 #AC_CONFIG_SRCDIR(pinentry/pinentry.h)
