@@ -13,16 +13,16 @@ YFLAGS = -v -d
 
 #lex.yy.cc : lex.lex
 lex.yy.cc: lex.lex
-	$(LEX) $(LFLAGS) lex.lex
+	$(LEX) $(LFLAGS) $<
 	@$(ECHO) "Applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
 	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
 yacc.tab.cpp: yacc.ypp lex.lex
-	$(YACC) $(YFLAGS) yacc.ypp -o yacc.tab.cpp
+	$(YACC) $(YFLAGS) $< -o yacc.tab.cpp
 
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
-conf.h:       fimrc
+conf.h: fimrc
 	$(ECHO) 'const fim_char_t * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $@
 	$(SED)  's/\\/\\\\/g;s/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< >> $@
 	$(ECHO) '"";' >> $@
@@ -43,27 +43,28 @@ FontServer.o: default_font_byte_array.h
 endif
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
-version.h:	../config.h
+version.h: $(CONFIG_HEADER)
 	$(GREP) define $< | $(GREP) FIM | $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > $@
 	$(ECHO) "\"\n\"" >> $@
 	$(GREP) define $< | $(GREP) FIM.*'"' | $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> $@
 	$(GREP) undef $< | $(GREP) FIM | $(SORT) | $(SED) 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]*\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> $@
-	$(ECHO)  '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> $@
+	$(ECHO) '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> $@
 
 help.cpp: fim.h
 	$(ECHO) -e "#ifdef FIM_WANT_INLINE_HELP\n" > $@
-	$(GREP)   '^#define FIM_VID' $< | $(SED) 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/fim_var_help_db[\1]=\3;/g' >> $@
+	$(GREP) '^#define FIM_VID' $< | $(SED) 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/fim_var_help_db[\1]=\3;/g' >> $@
 	$(ECHO) '#endif /* FIM_WANT_INLINE_HELP */' >> $@
 
 help-acm.cpp: fim.h
 	$(ECHO) -e "//#ifdef FIM_WANT_INLINE_HELP\n" > $@
 	$(ECHO) -e '#define FIM_AUTOCOMMANDS_LIST \' >> $@
-	$(GREP)   '^#define FIM_ACM' $< | $(SED) 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/\1", "/g'|tr '\n' ' ' >> $@
-	$(ECHO)  ' '>> $@
+	$(GREP) '^#define FIM_ACM' $< | $(SED) 's/^#define //g;s/\(^[A-Z0-9_]\+\)\s\+\("[^ ]*"\)\s*\/\*\(.*\)\*\/$$/\1", "/g'|tr '\n' ' ' >> $@
+	$(ECHO) ' '>> $@
 	$(ECHO) '//#endif' >> $@
 
-b2ba:
-	$(CC) -o b2ba b2ba.c
+# Target native build
+b2ba: b2ba.c
+	$(CC) -o b2ba $<
 
 if FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT
 default_font_byte_array.h: $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) b2ba
@@ -75,13 +76,13 @@ endif
 
 # the following sources are built at make time
 # old bison versions could have problems with this (e.g.: generating yacc.tab.cpp.h instead of yacc.tab.hpp)
-BUILT_SOURCES = lex.yy.cc yacc.tab.cpp conf.h yacc.tab.hpp 
+BUILT_SOURCES = lex.yy.cc yacc.tab.cpp conf.h yacc.tab.hpp
 
 # this hook triggers on 'make dist'
 dist-hook:
 	-for file in $(BUILT_SOURCES) ; do $(RM) -f $(distdir)/$$file ; done
 
-EXTRA_fim_SOURCES = 
+EXTRA_fim_SOURCES =
 # The following files are marked as source files by configure.ac
 EXTRA_fim_SOURCES += FbiStuffGif.cpp
 EXTRA_fim_SOURCES += FbiStuffJpeg.cpp
@@ -96,7 +97,7 @@ EXTRA_fim_SOURCES += Imlib2Device.cpp
 CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba
 
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
-AM_CPPFLAGS=
+AM_CPPFLAGS= -I$(srcdir) -I.
 fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
 fim_LDADD = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(FIMLIBS) $(LEXLIB)
 fim_SOURCES  = $(BUILT_SOURCES) \
