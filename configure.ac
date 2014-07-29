@@ -71,7 +71,7 @@ AC_REVISION([$Revision$])
 AC_PROG_CXX
 #AC_PROG_CXXCPP
 AC_CHECK_TOOL(AR, ar, ar)
-fim_cv_version=`cat VERSION`
+fim_cv_version=`cat $srcdir/VERSION`
 AC_LANG([C++])
 #AC_LANG_PUSH([C++])
 AM_INIT_AUTOMAKE

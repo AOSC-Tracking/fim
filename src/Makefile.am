@@ -1,7 +1,8 @@
 # $Id$
 
 subdir = src
-AUTOMAKE_OPTIONS = nostdinc no-dependencies dejagnu
+AUTOMAKE_OPTIONS = no-dependencies dejagnu
+# AUTOMAKE_OPTIONS+= nostdinc 
 SUBDIRS = 
 check_PROGRAMS = fim
 bin_PROGRAMS = fim
@@ -29,12 +30,12 @@ conf.h: fimrc
 
 grammar.h: yacc.tab.cpp yacc.output
 	$(ECHO) 'const fim_char_t * FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =' > $@
-	$(CAT) yacc.output | $(AWK) -f ../scripts/maintenance/yacc2grammar.awk  | $(CPP) -include ../scripts/maintenance/yacc2grammar.h  | $(GREP) -v '^#' | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
+	$(AWK) -f $(top_srcdir)/scripts/maintenance/yacc2grammar.awk yacc.output | $(CPP) -include $(top_srcdir)/scripts/maintenance/yacc2grammar.h  | $(GREP) -v '^#' | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
 	$(ECHO) '"";' >> $@
 
 examples.h: ../scripts/example/oneline.fim
 	$(ECHO) 'const fim_char_t * FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =' > $@
-	$(CAT) ../scripts/example/oneline.fim | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
+	$(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< >> $@
 	$(ECHO) '"";' >> $@
 
 CommandConsole-help.o: CommandConsole-help.cpp help-acm.cpp help.cpp examples.h grammar.h
@@ -97,89 +98,89 @@ EXTRA_fim_SOURCES += Imlib2Device.cpp
 CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba
 
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
-AM_CPPFLAGS=
+#AM_CPPFLAGS=
 fim_DEPENDENCIES = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(INTLDEPS)
 fim_LDADD = @FIM_LIB_OBJECTS@ @LIBOBJS@ $(FIMLIBS) $(LEXLIB)
 fim_SOURCES  = $(BUILT_SOURCES) \
-	fim.cpp \
-	fim.h \
-	fim_types.h \
-	fim_limits.h \
-	fim_plugin.h \
-	fim_plugin.cpp \
-	fim_wrappers.h \
-	default_font_byte_array.h \
-	AADevice.h \
-	Benchmarkable.h \
-	CACADevice.h \
-	SDLDevice.h \
-	Arg.h \
-	Browser.h \
-	Cache.h \
-	Command.h \
-	CommandConsole.h \
-	DebugConsole.h \
-	DisplayDevice.h \
-	DummyDisplayDevice.h \
-	FbiStuff.h \
-	FbiStuffList.h \
-	FbiStuffFbtools.h \
-	FbiStuffLoader.h \
-	FontServer.h \
-	FramebufferDevice.h \
-	Imlib2Device.h \
-	Image.h \
-	Namespace.h \
-	Var.h \
-	Viewport.h \
-	FimWindow.h \
-	common.h \
-	conf.h \
-	help.cpp \
-	help-acm.cpp \
-	version.h \
-	grammar.h \
-	examples.h \
-	fim.h \
-	fim_stream.h \
-	fim_stream.cpp \
-	fimgs \
-	lex.h \
-	readline.h \
-	readline.cpp \
-	string.h \
-	AADevice.cpp \
-	CACADevice.cpp \
-	SDLDevice.cpp \
-	Arg.cpp \
-	Browser.cpp \
-	Cache.cpp \
-	Command.cpp \
-	CommandConsole.cpp \
-	CommandConsole-cmd.cpp \
-	CommandConsole-init.cpp \
-	CommandConsole-help.cpp \
-	DebugConsole.cpp \
-	DisplayDevice.cpp \
-	FbiStuff.cpp \
-	FbiStuffFbtools.cpp \
-	FbiStuffLoader.cpp \
-	FbiStuffPpm.cpp \
-	FbiStuffBmp.cpp \
-	FbiStuffBit1.cpp \
-	FbiStuffBit24.cpp \
-	FbiStuffText.cpp \
-	FbiStuffMatrixMarket.cpp \
-	FontServer.cpp \
-	FramebufferDevice.cpp \
-	Image.cpp \
-	Namespace.cpp \
-	Var.cpp \
-	Viewport.cpp \
-	FimWindow.cpp \
-	common.cpp \
-	interpreter.cpp \
-	string.cpp
+	$(srcdir)/fim.cpp \
+	$(srcdir)/fim.h \
+	$(srcdir)/fim_types.h \
+	$(srcdir)/fim_limits.h \
+	$(srcdir)/fim_plugin.h \
+	$(srcdir)/fim_plugin.cpp \
+	$(srcdir)/fim_wrappers.h \
+	$(srcdir)/default_font_byte_array.h \
+	$(srcdir)/AADevice.h \
+	$(srcdir)/Benchmarkable.h \
+	$(srcdir)/CACADevice.h \
+	$(srcdir)/SDLDevice.h \
+	$(srcdir)/Arg.h \
+	$(srcdir)/Browser.h \
+	$(srcdir)/Cache.h \
+	$(srcdir)/Command.h \
+	$(srcdir)/CommandConsole.h \
+	$(srcdir)/DebugConsole.h \
+	$(srcdir)/DisplayDevice.h \
+	$(srcdir)/DummyDisplayDevice.h \
+	$(srcdir)/FbiStuff.h \
+	$(srcdir)/FbiStuffList.h \
+	$(srcdir)/FbiStuffFbtools.h \
+	$(srcdir)/FbiStuffLoader.h \
+	$(srcdir)/FontServer.h \
+	$(srcdir)/FramebufferDevice.h \
+	$(srcdir)/Imlib2Device.h \
+	$(srcdir)/Image.h \
+	$(srcdir)/Namespace.h \
+	$(srcdir)/Var.h \
+	$(srcdir)/Viewport.h \
+	$(srcdir)/FimWindow.h \
+	$(srcdir)/common.h \
+	$(srcdir)/conf.h \
+	$(srcdir)/help.cpp \
+	$(srcdir)/help-acm.cpp \
+	$(srcdir)/version.h \
+	$(srcdir)/grammar.h \
+	$(srcdir)/examples.h \
+	$(srcdir)/fim.h \
+	$(srcdir)/fim_stream.h \
+	$(srcdir)/fim_stream.cpp \
+	$(srcdir)/fimgs \
+	$(srcdir)/lex.h \
+	$(srcdir)/readline.h \
+	$(srcdir)/readline.cpp \
+	$(srcdir)/FimString.h \
+	$(srcdir)/AADevice.cpp \
+	$(srcdir)/CACADevice.cpp \
+	$(srcdir)/SDLDevice.cpp \
+	$(srcdir)/Arg.cpp \
+	$(srcdir)/Browser.cpp \
+	$(srcdir)/Cache.cpp \
+	$(srcdir)/Command.cpp \
+	$(srcdir)/CommandConsole.cpp \
+	$(srcdir)/CommandConsole-cmd.cpp \
+	$(srcdir)/CommandConsole-init.cpp \
+	$(srcdir)/CommandConsole-help.cpp \
+	$(srcdir)/DebugConsole.cpp \
+	$(srcdir)/DisplayDevice.cpp \
+	$(srcdir)/FbiStuff.cpp \
+	$(srcdir)/FbiStuffFbtools.cpp \
+	$(srcdir)/FbiStuffLoader.cpp \
+	$(srcdir)/FbiStuffPpm.cpp \
+	$(srcdir)/FbiStuffBmp.cpp \
+	$(srcdir)/FbiStuffBit1.cpp \
+	$(srcdir)/FbiStuffBit24.cpp \
+	$(srcdir)/FbiStuffText.cpp \
+	$(srcdir)/FbiStuffMatrixMarket.cpp \
+	$(srcdir)/FontServer.cpp \
+	$(srcdir)/FramebufferDevice.cpp \
+	$(srcdir)/Image.cpp \
+	$(srcdir)/Namespace.cpp \
+	$(srcdir)/Var.cpp \
+	$(srcdir)/Viewport.cpp \
+	$(srcdir)/FimWindow.cpp \
+	$(srcdir)/common.cpp \
+	$(srcdir)/interpreter.cpp \
+	$(srcdir)/FimString.cpp
 
 Command.o: Command.h
 CommandConsole.o: defaultConfiguration.o
