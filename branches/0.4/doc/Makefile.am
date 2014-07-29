@@ -19,7 +19,7 @@ dist_doc_DATA = FIM.TXT
 all:	$(HTMLDOCS) $(EXTRA_DIST)
 
 FIM.html fim-stylesheet.css: doctags FIM.TXT
-	./doctags FIM.TXT > tags ; ./vim2html.pl tags FIM.TXT
+	./doctags $(srcdir)/FIM.TXT > tags ; $(srcdir)/vim2html.pl tags $(srcdir)/FIM.TXT
 
 fim.man.html: fim.man
 	$(MAN2HTML) ./$< >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
@@ -32,8 +32,8 @@ ERRMSG="No $(MAN2HTML) at build time : please install $(MAN2HTML) and reissue :"
 fimgs.man.html: fimgs.man
 	$(MAN2HTML) ./$< >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
-doctags:
-	        $(CC) -o doctags doctags.c
+doctags: doctags.c
+	        $(CC) -o $@ $<
 
 #clean:
 #	        $(RM) -f  doctags.o doctags FIM.html tags fim-stylesheet.css fim.man.html fimgs.man.html

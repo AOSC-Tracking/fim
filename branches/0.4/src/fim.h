@@ -381,7 +381,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 "!"FIM_CNS_EX_SYSC_STRING"		executes the "FIM_CNS_EX_SYSC_STRING" quoted string as a \""FIM_CNS_SHELL"\" shell command\n"\
 ""
 
-#include "string.h"
+#include "FimString.h"
 #include "Command.h"
 #include "Benchmarkable.h"
 #include "Arg.h"

@@ -26,7 +26,7 @@
 #define FIM_VAR_H
 
 #include "fim.h"
-#include "string.h"
+#include "FimString.h"
 
 #if 0
 #define DBG(X) std::cout<<X;
