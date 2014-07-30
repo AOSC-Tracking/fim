@@ -10,7 +10,7 @@ AC_PREREQ([2.54])
 #AC_PROG_CC(cc gcc)
 #AC_PROG_CXX(CC g++ gcc c++ cxx)
 
-AC_INIT([fim],[0.4-rc1],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
+AC_INIT([fim],[0.4-rc2],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 AC_CONFIG_SRCDIR([src/fim.cpp])
 
 AH_TEMPLATE([FIM_CONFIGURATION])

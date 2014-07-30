@@ -57,7 +57,7 @@ tests:	all
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/font.sh
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -E $(top_srcdir)/scripts/example/oneline.fim -c quit 
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
-	make -C src/testdir
+	if test $(abs_builddir) = $(abs_srcdir) ; then make -C src/testdir ; fi
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
