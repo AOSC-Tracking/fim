@@ -4,10 +4,6 @@
 # this script shall work whatever its configure options (even if fim was compiled 'dumb')
 
 f=src/fim 
-date
-set | grep 0.4
-echo $top_srcdir
-date
 if test x != "$top_srcdir"; then true ; else top_srcdir=./ ; fi
 ff="$top_srcdir/media/fim.png media/icon_smile.gif"
 fa="-c quit $ff "
