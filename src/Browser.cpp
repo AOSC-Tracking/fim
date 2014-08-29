@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ namespace fim
 			fim::string fileslist;
 
 			for(size_t i=0;i<flist_.size();++i)
-				fileslist+=flist_[i]+fim::string(" ");
+				fileslist += flist_[i] + fim::string(" ");
 			return fileslist;
 		}
 		else
@@ -130,7 +130,7 @@ nop:
 		/*
 		 * accessory method
 		 */
-		for(size_t i=0;i<flist_.size();++i)
+		for(size_t i=0; i<flist_.size(); ++i)
 			os << flist_[i] << FIM_CNS_NEWLINE;
 		return os;
 	}
@@ -177,11 +177,11 @@ nop:
 		/*
 		 * this is used mainly to set image files read from pipe or stdin
 		 * */
-		if(!stdin_image || stdin_image->check_invalid())
+		if( !stdin_image || stdin_image->check_invalid() )
 			goto ret;
-		if(default_image_)
+		if( default_image_ )
 		       	delete default_image_;
-		default_image_=stdin_image;
+		default_image_ = stdin_image;
 ret:
 		return;
 	}
@@ -195,7 +195,7 @@ ret:
 		/*
 		 * we initialize to no file the current file name
 		 */
-		cf_=0;	//and to file index 0 (no file)
+		cf_ = 0;	//and to file index 0 (no file)
 	}
 
 	const fim::string Browser::pop_current(void)
@@ -208,10 +208,10 @@ ret:
 		 */
 		fim::string s;
 
-		if(flist_.size()<=0)
+		if( flist_.size() <= 0 )
 			return nofile_;
 		assert(cf_);
-		flist_.erase(flist_.begin()+current_n());
+		flist_.erase( flist_.begin() + current_n() );
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return s;
 	}
@@ -224,21 +224,21 @@ ret:
 		 */
 		fim::string s;
 
-		if(flist_.size()<=0)
+		if( flist_.size() <= 0 )
 			return nofile_;
 		assert(cf_);
-		if(filename==FIM_CNS_EMPTY_STRING)
+		if( filename == FIM_CNS_EMPTY_STRING )
 		{
-			if(current_n()==(int)flist_.size())
+			if( current_n() == (int)flist_.size() )
 				cf_--;
-			s=flist_[flist_.size()-1];
-			flist_.erase(flist_.begin()+current_n());
+			s = flist_[flist_.size()-1];
+			flist_.erase( flist_.begin() + current_n() );
 		}
 		else
 		{
 			// FIXME: shall use a search method/function
-			for(size_t i=0;i<flist_.size();++i)
-				if(flist_[i]==filename)
+			for( size_t i=0; i < flist_.size(); ++i )
+				if( flist_[i] == filename )
 					flist_.erase(flist_.begin()+i);
 		}
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
@@ -250,13 +250,14 @@ ret:
 		/*
 		 * FIXME: unfinished
 		 */
-		if(args.size()<1 || (!args[0].c_str()))
+		if( args.size() < 1 || (!args[0].c_str()) )
 			goto nop;
-		if(c_image())
+
+		if( c_image() )
 		{
-			fim::string c=current();
-			fim_char_t f=tolower(*args[0].c_str());
-			if(f)
+			fim::string c = current();
+			fim_char_t f = tolower(*args[0].c_str());
+			if( f )
 			{
 				FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
 				if(c_image() && viewport())
@@ -278,70 +279,70 @@ nop:
 		 * TODO: wxh / w:h syntax needed
 		 * FIXME: this shall belong to viewport
 		 */
-		fim_scale_t newscale=FIM_CNS_SCALEFACTOR_ZERO;
-		fim_char_t fc=FIM_SYM_CHAR_NUL;
-		const fim_char_t*ss=NULL;
-		int sl=0;
-		bool pcsc=false;
+		fim_scale_t newscale = FIM_CNS_SCALEFACTOR_ZERO;
+		fim_char_t fc = FIM_SYM_CHAR_NUL;
+		const fim_char_t*ss = NULL;
+		int sl = 0;
+		bool pcsc = false;
 
-		if(args.size()<1 || !(ss=args[0].c_str()))
+		if( args.size() < 1 || !(ss=args[0].c_str() ))
 			goto nop;
-		fc=tolower(*ss);
-		sl=strlen(ss);
-		if(isalpha(fc))
+		fc = tolower(*ss);
+		sl = strlen(ss);
+		if( isalpha(fc) )
 		{
-			if( !(fc=='w'||fc=='h'||fc=='a'||fc=='b'))
+			if( !( fc == 'w' || fc == 'h' || fc == 'a' || fc == 'b' ) )
 				goto nop;
 		}
 		else
 		{
-			if(sl==1 && (fc=='+'||fc=='-'))
+			if( sl == 1 && ( fc =='+' || fc == '-' ) )
 			{
-				if(fc=='+')
+				if( fc == '+' )
 					newscale=(fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
-				if(fc=='-')
+				if( fc == '-' )
 					newscale=(fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 				goto comeon;
 			}
-			if(sl>=2 && (fc=='+'||fc=='-'))
+			if( sl >= 2 && ( fc == '+' || fc == '-' ) )
 			{
-				fim_char_t sc=ss[1];
+				fim_char_t sc =ss[1];
 
-				if(fc=='+')
+				if( fc == '+' )
 				{
 					fim_scale_t vmf = getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 					fim_scale_t vrf = getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 					fim_scale_t sfd = getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
-					fim_scale_t sfm=getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
-					if(sfd<=FIM_CNS_SCALEFACTOR_ZERO)
-						sfd=FIM_CNS_SCALEFACTOR_DELTA;
-					if(sfm<=FIM_CNS_SCALEFACTOR_ONE)
-					       	sfm=FIM_CNS_SCALEFACTOR_MULTIPLIER;
+					fim_scale_t sfm = getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
+					if( sfd <= FIM_CNS_SCALEFACTOR_ZERO )
+						sfd = FIM_CNS_SCALEFACTOR_DELTA;
+					if( sfm <= FIM_CNS_SCALEFACTOR_ONE )
+					       	sfm = FIM_CNS_SCALEFACTOR_MULTIPLIER;
 
 					switch(sc)
 					{
 						case('+'):
 						{
-							vrf+=sfd;
-							vmf+=sfd;
+							vrf += sfd;
+							vmf += sfd;
 						}
 						break;
 						case('-'):
 						{
-							vrf-=sfd;
-							vmf-=sfd;
+							vrf -= sfd;
+							vmf -= sfd;
 						}
 						break;
 						case('*'):
 						{
-							vrf*=sfm;
-							vmf*=sfm;
+							vrf *= sfm;
+							vmf *= sfm;
 						}
 						break;
 						case('/'):
 						{
-							vrf/=sfm;
-							vmf/=sfm;
+							vrf /= sfm;
+							vmf /= sfm;
 						}
 						break;
 						default:
@@ -353,34 +354,34 @@ nop:
 					goto nop;
 				}
 noplus:
-				if(fc=='+' || fc=='-')
+				if( fc == '+' || fc == '-')
 				{
-					newscale=fim_atof(ss+1);
-					pcsc=(strstr(ss,"%")!=NULL);
+					newscale = fim_atof(ss+1);
+					pcsc = (strstr(ss,"%") != NULL );
 					if(pcsc)
-						newscale*=.01;
-					if(!newscale)
+						newscale *= .01;
+					if( !newscale )
 						goto nop;
 #if 1
-					if(fc=='+')
-						newscale=1.0+newscale;
-					if(fc=='-')
-						newscale=1.0-newscale;
-					fc=FIM_SYM_CHAR_NUL;
+					if( fc == '+' )
+						newscale = 1.0 + newscale;
+					if( fc == '-' )
+						newscale = 1.0 - newscale;
+					fc = FIM_SYM_CHAR_NUL;
 #endif
 					goto comeon;
 				}
 				goto nop;
 			}
-			if(sl)
+			if( sl )
 			{
-				newscale=fim_atof(ss);
-				pcsc=(strstr(ss,"%")!=NULL);
+				newscale = fim_atof(ss);
+				pcsc = (strstr(ss,"%") != NULL );
 				if(pcsc)
-					newscale*=.01;
-				if(newscale==FIM_CNS_SCALEFACTOR_ZERO)
+					newscale *= .01;
+				if( newscale == FIM_CNS_SCALEFACTOR_ZERO )
 				       	goto nop;
-				pcsc=false;
+				pcsc = false;
 				goto comeon;
 			}
 			goto nop;
@@ -392,10 +393,10 @@ comeon:
 		if(c_image())
 #endif	/* FIM_WANT_BDI */
 		{
-			fim::string c=current();
+			fim::string c = current();
 			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
-			if(c_image())
-			switch(fc)
+			if( c_image() )
+			switch( fc )
 			{
 				case('w'):
 				if(viewport())
@@ -415,14 +416,14 @@ comeon:
 				break;
 				case('-'):
 				{
-				if(newscale)
+					if( newscale )
 					{
 						if(image())
 							image()->reduce(newscale);
 						if(viewport())
 							viewport()->scale_position_reduce(newscale);
 					}
-				else	
+					else	
 					{
 						if(image())
 							image()->reduce();
@@ -433,25 +434,24 @@ comeon:
 				break;
 				case('+'):
 				{
-				if(newscale)
+					if( newscale )
 					{
 						if(image())
 							image()->magnify(newscale);
 						if(viewport())
 							viewport()->scale_position_magnify(newscale);
 					}
-				else	
+					else	
 					{
 						if(image())
 							image()->magnify();
 						if(viewport())
 							viewport()->scale_position_magnify();
 					}
-
 				}
 				break;
 				default:
-				if(pcsc)
+				if( pcsc )
 					image()->scale_multiply(newscale);
 				else
 					image()->setscale(newscale);
@@ -466,10 +466,10 @@ nop:
 	{
 		/*
 		 */
-		if(!image() )
+		if( !image() )
 			goto nop;
 
-		if(image() && image()->negate())
+		if( image() && image()->negate() )
 			goto nop;
 nop:
 		return FIM_CNS_EMPTY_RESULT;
@@ -479,10 +479,10 @@ nop:
 	{
 		/*
 		 */
-		if(!image() )
+		if( !image() )
 			goto nop;
 
-		if(image() && image()->desaturate())
+		if( image() && image()->desaturate() )
 			goto nop;
 nop:
 		return FIM_CNS_EMPTY_RESULT;
@@ -493,7 +493,7 @@ nop:
 		/*
 		 * displays the left text message and a right bracketed one
 		 */
-		if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1)
+		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
 			commandConsole_.set_status_bar(l, image()?(image()->getInfo().c_str()):"*");
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -503,17 +503,17 @@ nop:
 		/*
 		 * displays the current image, (if already loaded), on screen
 		 */
-		fim::string c=current();
+		fim::string c = current();
 
-		if(c_image())
+		if( c_image() )
 		{
 			FIM_AUTOCMD_EXEC(FIM_ACM_PREDISPLAY,c);
 			/*
 			 * the following is a trick to override redisplaying..
 			 */
-			if(args.size()>0 && args[0] == "reinit")
+			if( args.size()>0 && args[0] == "reinit" )
 			{
-				string arg=args.size()>1?args[1]:"";
+				string arg = args.size()>1?args[1]:"";
 				commandConsole_.display_reinit(arg.c_str());
 			}
 			if(image() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
@@ -558,15 +558,15 @@ nop:
 		 * FIXME : this behaviour is BUGGY, because recursion will be killed off 
 		 *         by the autocommand loop prevention mechanism. (this is not true, as 20090215)
 		 * */
-		static int lehsof=0;	/* './fim FILE NONFILE' and hitting 'prev' will make this necessary  */
-		int retval=0;
+		static int lehsof = 0;	/* './fim FILE NONFILE' and hitting 'prev' will make this necessary  */
+		int retval = 0;
 
-		if(lehsof)
+		if( lehsof )
 			goto ret; /* this prevents infinite recursion */
-		if(/*image() &&*/ viewport() && ! (viewport()->check_valid()))
+		if( /*image() &&*/ viewport() && ! (viewport()->check_valid()) )
 		{
 			free_current_image();
-			++lehsof;
+			++ lehsof;
 #ifdef FIM_REMOVE_FAILED
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
 				args_t args;
@@ -594,8 +594,8 @@ ret:
 		 *
 		 * reload the current filename
 		 * */
-		if(n_files())
-			return fcmd_reload(args_t());
+		if( n_files() )
+			return fcmd_reload( args_t() );
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -610,14 +610,14 @@ ret:
 		{
 #ifndef FIM_BUGGED_CACHE
 	#ifdef FIM_CACHE_DEBUG
-		if(viewport())std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
+		if( viewport() ) std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif /* FIM_CACHE_DEBUG */
-		if(viewport())
+		if( viewport() )
 			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
 #else /* FIM_BUGGED_CACHE */
 		// warning : in this cases exception handling is missing
 	#ifdef FIM_READ_STDIN_IMAGE
-		if(current()!=FIM_STDIN_IMAGE_NAME)
+		if( current() != FIM_STDIN_IMAGE_NAME )
 		{
 			if(viewport())
 				viewport()->setImage( new Image(current().c_str()) );
@@ -632,7 +632,7 @@ ret:
 			}
 		}
 	#else
-		if(viewport())
+		if( viewport() )
 			viewport()->setImage( new Image(current().c_str()) );
 	#endif /* FIM_READ_STDIN_IMAGE */
 #endif /* FIM_BUGGED_CACHE */
@@ -653,7 +653,7 @@ ret:
 		 * FIXME
 		 * only cleans up the internal data structures
 		 * */
-		if(viewport())
+		if( viewport() )
 			viewport()->free();
 		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport().c_str());
 	}
@@ -698,14 +698,14 @@ ret:
 		 * and then
 		 * tries to load a new one from the current filename
 		 */
-		fim::string c=current();
+		fim::string c = current();
 
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
-		if(empty_file_list())
+		if( empty_file_list() )
 			return "sorry, no image to reload\n";
 		FIM_AUTOCMD_EXEC(FIM_ACM_PRERELOAD,c);
 #if FIM_HORRIBLE_CACHE_INVALIDATING_HACK
-		if(args.size()>0)
+		if( args.size() > 0 )
 		{
 			int mci=getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
 			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,0);
@@ -729,14 +729,14 @@ ret:
 		/*
 		 * loads the current file, if not already loaded
 		 */
-		fim::string c=current();
+		fim::string c = current();
 
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
-		if(image() && ( image()->getName() == current()) )
+		if( image() && ( image()->getName() == current()) )
 		{
 			return "image already loaded\n";		//warning
 		}
-		if(empty_file_list())
+		if( empty_file_list() )
 			return "sorry, no image to load\n";	//warning
 		FIM_AUTOCMD_EXEC(FIM_ACM_PRELOAD,c);
 		commandConsole_.set_status_bar("please wait while loading...", "*");
@@ -753,10 +753,10 @@ ret:
 		/* 
 		 * returns whether the file nf is in the files list
 		 */
-		fim_int fi=-1;
+		fim_int fi = -1;
 
 		for(fim_size_t i=0;i<flist_.size();++i)
-			if(flist_[i]==nf)
+			if( flist_[i] == nf )
 			{
 				fi = (fim_int)i;
 				goto ret;
@@ -773,7 +773,7 @@ ret:
 		fim_int i = find_file_index(nf);
 		bool ip = false;
 
-		if(i>=0)
+		if( i >= 0 )
 			ip = true;
 		return ip;
 	}
@@ -782,15 +782,15 @@ ret:
 	bool Browser::push_dir(fim::string nf)
 	{
 		// TODO: may introduce some more variable to control recursive push 	
-		DIR *dir=NULL;
-		struct dirent *de=NULL;
+		DIR *dir = NULL;
+		struct dirent *de = NULL;
 		fim::string f;
 		bool retval = false;
 
 		/*	we want a dir .. */
 #ifdef HAVE_LIBGEN_H
-		if(!is_dir(nf.c_str()))
-			nf=fim_dirname(nf);
+		if( !is_dir( nf.c_str() ) )
+			nf = fim_dirname(nf);
 #else /* HAVE_LIBGEN_H */
 		if( !is_dir( nf ))
 			goto ret;
@@ -799,8 +799,8 @@ ret:
 		if ( ! ( dir = opendir(nf.c_str() ) ))
 			goto ret;
 
-		f+=nf;
-		f+=FIM_CNS_DIRSEP_STRING;
+		f += nf;
+		f += FIM_CNS_DIRSEP_STRING;
 		//are we sure -1 is not paranoid ?
 		while( ( de = readdir(dir) ) != NULL )
 		{
@@ -819,25 +819,25 @@ ret:
 			/*
 			 * Warning : this is dangerous, as following circular links may cause memory exhaustion.
 			 * */
-			if(is_dir( f+fim::string(de->d_name)))
+			if( is_dir( f + fim::string(de->d_name)) )
 #ifdef FIM_RECURSIVE_DIRS
-				push_dir(f+fim::string(de->d_name));
+				push_dir( f + fim::string(de->d_name) );
 #else /* FIM_RECURSIVE_DIRS */
 				continue;
 #endif /* FIM_RECURSIVE_DIRS */
 			else 
 			{
-				fim::string re=getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
-				fim::string fn=f+fim::string(de->d_name);
+				fim::string re = getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
+				fim::string fn = f + fim::string( de->d_name );
 
-				if(re==FIM_CNS_EMPTY_STRING)
-					re=FIM_CNS_PUSHDIR_RE;
-				if(fn.re_match(re.c_str()))
-					push(f+fim::string(de->d_name));
+				if( re == FIM_CNS_EMPTY_STRING )
+					re = FIM_CNS_PUSHDIR_RE;
+				if( fn.re_match(re.c_str()) )
+					push( f + fim::string(de->d_name) );
 			}
 		}
 ret:
-		retval = (closedir(dir)==0);
+		retval = ( closedir(dir) == 0 );
 		return retval;
 	}
 #endif /* FIM_READ_DIRS */
@@ -850,7 +850,7 @@ ret:
 		 * */
 		bool retval = false;
 
-		if(nf!=FIM_STDIN_IMAGE_NAME)
+		if( nf != FIM_STDIN_IMAGE_NAME )
 		{
 #ifdef FIM_CHECK_FILE_EXISTENCE
 			/*
@@ -860,7 +860,7 @@ ret:
 			struct stat stat_s;
 
 			/*	if the file doesn't exist, return */
-			if(-1==stat(nf.c_str(),&stat_s))
+			if( -1 == stat(nf.c_str(),&stat_s) )
 				goto ret;
 			/*	if it is a character device , return */
 			//if(  S_ISCHR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
@@ -869,7 +869,7 @@ ret:
 			/*	if it is a directory , return */
 			//if(  S_ISDIR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 #ifdef FIM_READ_DIRS
-			if(getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS)==1)
+			if( getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS) == 1 )
 				if(  S_ISDIR(stat_s.st_mode))
 				{
 					retval = push_dir(nf);
@@ -887,14 +887,14 @@ ret:
 				/*
 				 * i am not fully sure this is effective
 				 * */
-				nf+=" is not a regular file!";
+				nf += " is not a regular file!";
 				commandConsole_.set_status_bar(nf.c_str(), "*");
 				goto ret;
 			}
 #endif /* FIM_CHECK_FILE_EXISTENCE */
 		}
 #ifdef FIM_CHECK_DUPLICATES
-		if(present(nf))
+		if( present(nf) )
 		{
 			//there could be an option to have duplicates...
 			//std::cout << "no duplicates allowed..\n";
@@ -940,7 +940,7 @@ struct FimDateSorter
 #if FIM_SORT_BY_DATE
 		std::sort(flist_.begin(),flist_.end(),fimDateSorter);
 #endif
-		return n_files()?(flist_[current_n()]):nofile_;
+		return n_files() ? (flist_[current_n()]) : nofile_;
 	}
 
 	fim::string Browser::_random_shuffle(bool dts)
@@ -950,10 +950,10 @@ struct FimDateSorter
 		 *	if dts==true, do time() based seeding
 		 *	TODO: it would be cool to support a user supplied seed value
 		 */
-		if(dts)
+		if( dts )
 			std::srand(time(NULL));	/* FIXME: AFAIK, effect of srand() on random_shuffle is not mandated by any standard. */
 		std::random_shuffle(flist_.begin(),flist_.end());
-		return n_files()?(flist_[current_n()]):nofile_;
+		return n_files() ? (flist_[current_n()]) : nofile_;
 	}
 
 	fim::string Browser::_clear_list(void)
@@ -979,17 +979,17 @@ struct FimDateSorter
 		 * goes to the next filename-matching file
 		 * TODO: this method shall only find the index and return it !
 		 */
-		size_t i,j,c=current_n(),s=flist_.size();
+		size_t i,j,c = current_n(),s = flist_.size();
 
 		if( args.size() < 1 || s < 1 )
 			goto nop;
 		for(j=0;j<s;++j)
 		{
-			last_regexp_=args[0];
-			i=((src_dir<0?(s-j):j)+c+src_dir)%s;
+			last_regexp_ = args[0];
+			i = ((src_dir<0?(s-j):j)+c+src_dir)%s;
 			if(commandConsole_.regexp_match(flist_[i].c_str(),args[0].c_str()))
 			{	
-				fim::string c=current();
+				fim::string c = current();
 				FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c);
 				goto_image(i);
 #ifdef FIM_AUTOCMDS
@@ -1014,12 +1014,12 @@ nop:
 		/*
 		 *	FIX ME
 		 */
-		int N=flist_.size();
+		int N = flist_.size();
 
-		if(!N)
+		if( !N )
 			return FIM_CNS_EMPTY_RESULT;
 
-		if(!isfg)
+		if( !isfg )
 #if FIM_WANT_BDI
 		if( N==1 &&              c_image()->is_multipage())
 #else	/* FIM_WANT_BDI */
@@ -1030,8 +1030,8 @@ nop:
 			image()->goto_page(n);
 			return N;
 		}
-		cf_=n;
-		cf_=FIM_MOD(cf_,N);
+		cf_ = n;
+		cf_ = FIM_MOD(cf_,N);
 		setGlobalVariable(FIM_VID_PAGE ,(fim_int)0);
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
@@ -1045,170 +1045,170 @@ nop:
 		 * returns to the next image in the list, the mechanism
 		 * p.s.: n<>0
 		 */
-		int ccp=cf_+n;
-		int N=flist_.size();
+		int ccp = cf_ + n;
+		int N = flist_.size();
 
-		if(!N)
+		if( !N )
 			return FIM_CNS_EMPTY_RESULT;
-		ccp=FIM_MOD(ccp,N);
+		ccp = FIM_MOD(ccp,N);
 		return flist_[ccp];
 	}
 
 	fim::string Browser::next(int n)
 	{
-		fim::string gs="+";
+		fim::string gs = "+";
 
-		gs+=fim::string(n);
+		gs += fim::string(n);
 		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
 
 	fim::string Browser::prev(int n)
 	{
-		fim::string gs="-";
+		fim::string gs = "-";
 		
-		gs+=fim::string(n);
+		gs += fim::string(n);
 		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
 	
 	fim::string Browser::fcmd_goto_image(const args_t &args)
 	{
-		if(args.size()>0)
+		if( args.size() > 0 )
 			return goto_image_internal(args[0].c_str(),FIM_X_NULL);
 		else
 			return goto_image_internal(NULL,FIM_X_NULL);
 	}
 
-	fim::string Browser::goto_image_internal(const fim_char_t *s, fim_xflags_t xflags)
+	fim::string Browser::goto_image_internal(const fim_char_t *s,fim_xflags_t xflags)
 	{
 		/*
 		 */
-		const fim_char_t*errmsg=FIM_CNS_EMPTY_STRING;
+		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
 		//const int cf=cf_,cp=c_page(),pc=n_pages(),fc=n_files();
-		const int cf=cf_,cp=getGlobalIntVariable(FIM_VID_PAGE),pc=FIM_MAX(1,n_pages()),fc=n_files();
-		int gv=0,nf=cf,mv=0,np=cp;
+		const int cf = cf_,cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages()),fc = n_files();
+		int gv = 0,nf = cf,mv = 0,np = cp;
 
-		if(n_files()==0 || !s)
+		if( n_files() == 0 || !s )
 		{
-			errmsg=FIM_CMD_HELP_GOTO;
+			errmsg = FIM_CMD_HELP_GOTO;
 			goto err;
 		}
 		if(!s)
 		{
-			errmsg=FIM_CMD_HELP_GOTO;
+			errmsg = FIM_CMD_HELP_GOTO;
 			goto err;
 		}
 		else
 		{
-			fim_char_t c=FIM_SYM_CHAR_NUL;
-			fim_char_t l=FIM_SYM_CHAR_NUL;
-			int sl=0,li=0;
-			bool pcnt=false;
-			bool isre=false;
-			bool ispg=false;
-			bool isfg=false;
-			bool isrj=false;
+			fim_char_t c = FIM_SYM_CHAR_NUL;
+			fim_char_t l = FIM_SYM_CHAR_NUL;
+			int sl = 0,li = 0;
+			bool pcnt = false;
+			bool isre = false;
+			bool ispg = false;
+			bool isfg = false;
+			bool isrj = false;
 
-			if(!s)
+			if( !s )
 				goto ret;
-			sl=strlen(s);
-			if(sl<1)
+			sl = strlen(s);
+			if( sl < 1 )
 				goto ret;
-			c=*s;
+			c = *s;
 			//for(li=sl-2;li<sl;++li) { l=tolower(s[li]); pcnt=(l=='%'); ispg=(l=='p'); }
-			l=tolower(s[li=sl-1]);
-			pcnt=(l=='%'); 
-			ispg=(l=='p');
-			isfg=(l=='f');
-			isre=((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
-			isrj=(c=='+' || c=='-');
-			if(isdigit(c)  || c=='-' || c=='+')
+			l = tolower(s[li=sl-1]);
+			pcnt = (l=='%'); 
+			ispg = (l=='p');
+			isfg = (l=='f');
+			isre = ((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
+			isrj = (c=='+' || c=='-');
+			if( isdigit(c)  || c == '-' || c == '+' )
 			{
-				gv=atoi(s);
-				if(gv==FIM_CNS_LAST)
-					gv=-1;
+				gv = atoi(s);
+				if(gv == FIM_CNS_LAST)
+					gv = -1;
 			}
 			else
-			       	if(c=='^' || c=='f')
-					gv=1;
+			       	if( c == '^' || c == 'f' )
+					gv = 1;
 			else
-			       	if(c=='$' || c=='l')
-					gv=-1;// temporarily
+			       	if( c == '$' || c == 'l' )
+					gv = -1;// temporarily
 			else
-			if(c=='?')
+			if( c == '?' )
 			{
-				gv=find_file_index(string(s).substr(1,sl-1));
+				gv = find_file_index(string(s).substr(1,sl-1));
 				//std::cout<<string(s).substr(1,sl-1)<<" "<<gv<<FIM_CNS_NEWLINE;
-				if(gv<0)
+				if( gv < 0 )
 				{
 					goto ret;
 				}
-				nf=gv;
+				nf = gv;
 				goto go_jump;
 			}
 			else
-				if(isre)
+				if( isre )
 					{;}
 			else
 			{
 				cout << " please specify a number or ^ or $\n";
 			}
-			if(li>0 && ( isfg || pcnt || ispg ))
+			if( li > 0 && ( isfg || pcnt || ispg ))
 			{
-				l=tolower(s[li=sl-2]);
-				if(l=='%')
-					pcnt=true;
-				if(l=='p')
-					ispg=true;
-				if(l=='f')
-					isfg=true;
+				l = tolower( s[ li = sl-2 ] );
+				if( l == '%' )
+					pcnt = true;
+				if( l == 'p' )
+					ispg = true;
+				if( l == 'f' )
+					isfg = true;
 			}
-			if(c=='$' || c=='l')
-				gv=mv-1;
-			if((isrj) && (!isfg) && (!ispg) && pc>1)
+			if( c=='$' || c == 'l' )
+				gv = mv - 1;
+			if( (isrj) && (!isfg) && (!ispg) && pc > 1 )
 			{
-				if((cp==0 && gv<0) || (cp==pc-1 && gv>0))
-					isfg=true;
+				if(( cp == 0 && gv < 0 ) || (cp == pc-1 && gv > 0 ) )
+					isfg = true;
 				else
-					ispg=true;
+					ispg = true;
 			}
-			if(ispg)
-				mv=pc;
+			if( ispg )
+				mv = pc;
 			else
-				mv=fc;
-			if(pcnt)
-				gv=FIM_INT_PCNT(gv,mv);
-			if(!mv)
+				mv = fc;
+			if( pcnt )
+				gv = FIM_INT_PCNT(gv,mv);
+			if( !mv )
 			{
 			       	goto ret; 
 			}
-			if(isfg && ispg)
+			if( isfg && ispg )
 			{
 				goto err;
 			}
 			//if((!isre) && (!isrj))nf=gv;
 			//if(isrj && gv<0 && cf==1){cf=0;}//TODO: this is a bugfix
-			if((!isrj) && gv>0)
-				gv=gv-1;// user input is interpreted as 1-based 
-			gv=FIM_MOD(gv,mv);
+			if( (!isrj) && gv > 0 )
+				gv = gv - 1;// user input is interpreted as 1-based 
+			gv = FIM_MOD(gv,mv);
 			/* gv=FIM_MAX(FIM_MIN(gv,mv-1),0); */
 			//cout << "at " << cf <<", gv="<<gv <<", mod="<<mv<<FIM_CNS_NEWLINE;
-			if(ispg)
+			if( ispg )
 			{
-				if(isrj)
-					{np=cp+gv;}// FIXME: what if gv gv<1 ? pity :)
+				if( isrj )
+					{ np = cp + gv;}// FIXME: what if gv gv<1 ? pity :)
 				else
-					np=gv;
+					np = gv;
 			}
 			else
 			{
-				if(isrj)
-					{nf=cf+gv;}// FIXME: what if gv gv<1 ? pity :)
+				if( isrj )
+					{nf = cf + gv;}// FIXME: what if gv gv<1 ? pity :)
 				else
-					nf=gv;
+					nf = gv;
 			}
-			gv=FIM_MOD(gv,mv);
-			nf=FIM_MOD(nf,fc);
-			np=FIM_MOD(np,pc);
+			gv = FIM_MOD(gv,mv);
+			nf = FIM_MOD(nf,fc);
+			np = FIM_MOD(np,pc);
 	//			nf++;
 			if(0)
 			cout << "goto: "
@@ -1228,17 +1228,17 @@ nop:
 			{
 				args_t argsc;
 				int src_dir = 1;
-				if(c=='+' || c=='-')
-					src_dir=((c=='-')?-1:1),
+				if( c == '+' || c == '-' )
+					src_dir = ((c=='-')?-1:1),
 					argsc.push_back(last_regexp_);
 				else
 					argsc.push_back(string(s).substr(1,sl-2));
 				return regexp_goto(argsc,src_dir);
 			}
 go_jump:
-			if((nf!=cf) || (np!=cp) )
+			if( ( nf != cf ) || ( np != cp ) )
 			{	
-				fim::string c=current();
+				fim::string c = current();
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c); }
 				if(ispg)
@@ -1262,9 +1262,9 @@ err:
 		 *
 		 *	FIXME : dangerous!
 		 */
-		if(flist_.size()<1)
+		if( flist_.size() < 1 )
 			return "the files list is empty\n";
-		args_t rlist=args;	//the remove list
+		args_t rlist = args;	//the remove list
 		if(rlist.size()>0)
 		{
 			/*
@@ -1274,16 +1274,16 @@ err:
 			 */
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
-			if(flist_[i]==rlist[r])
+			if( flist_[i] == rlist[r] )
 			{
 //				std::cout << "removing" << flist_[i]<<FIM_CNS_NEWLINE;
 				flist_.erase(flist_.begin()+i);
 			}
-			int N=flist_.size();
-			if(N<=0)
-				cf_=0;
+			int N = flist_.size();
+			if( N <= 0 )
+				cf_ = 0;
 			else
-				cf_=FIM_MIN(cf_,N-1);
+				cf_ = FIM_MIN(cf_,N-1);
 			setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 			setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 			goto nop;
@@ -1310,7 +1310,7 @@ nop:
 		 *
 		 * FIX ME : move to Viewport
 		 */
-		fim::string c=current();
+		fim::string c = current();
 
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
 		if(c_image() && viewport())
@@ -1323,7 +1323,8 @@ nop:
 				viewport()->pan("down",FIM_CNS_SCROLL_DEFAULT);
 				while(!(viewport()->onLeft()))viewport()->pan("left",FIM_CNS_SCROLL_DEFAULT);
 			}
-			else viewport()->pan("right",FIM_CNS_SCROLL_DEFAULT);
+			else
+			       	viewport()->pan("right",FIM_CNS_SCROLL_DEFAULT);
 		}
 		else
 		       	next(1);
@@ -1338,7 +1339,7 @@ nop:
 		 *
 		 * FIX ME : move to Viewport
 		 */
-		fim::string c=current();
+		fim::string c = current();
 
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
 		if(c_image() && viewport())
@@ -1368,12 +1369,12 @@ nop:
 		}
 		return fl;
 #else
-		fim::string r=current();
+		fim::string r = current();
 
 		if(image())
-			r+=image()->getInfo();
+			r += image()->getInfo();
 		else
-			r+=" (unloaded)";
+			r += " (unloaded)";
 		return r;
 #endif
 	}
@@ -1393,20 +1394,20 @@ nop:
 		 */ 
 		fim_angle_t angle;
 
-		if(args.size()==0)
-			angle=FIM_CNS_ANGLE_ONE;
+		if( args.size() == 0 )
+			angle = FIM_CNS_ANGLE_ONE;
 		else
-			angle=fim_atof(args[0].c_str());
-		if(angle==FIM_CNS_ANGLE_ZERO)
+			angle = fim_atof(args[0].c_str());
+		if( angle == FIM_CNS_ANGLE_ZERO)
 			return FIM_CNS_EMPTY_RESULT;
 
 		if(c_image())
 		{
 			//angle = (double)getGlobalFloatVariable(FIM_VID_ANGLE);
-			fim::string c=current();
+			fim::string c = current();
 //			FIM_AUTOCMD_EXEC(FIM_ACM_PREROTATE,c);//FIXME
 			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c); //FIXME
-			if(c_image())
+			if( c_image() )
 			{
 				if(angle)
 				{
@@ -1434,9 +1435,9 @@ nop:
 		if(c_image())
 		{
 			fim_scale_t factor;
-			fim::string c=current();
+			fim::string c = current();
 			factor = firstforzero(args);
-			if(!factor)
+			if( !factor )
 				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
 			if(c_image())
@@ -1472,7 +1473,7 @@ nop:
 			factor = firstforzero(args);
 			if(!factor)
 				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
-			fim::string c=current();
+			fim::string c = current();
 			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
 			if(c_image())
 			{
@@ -1503,13 +1504,13 @@ nop:
 		 * aligns to top/bottom the displayed image
 		 * TODO: incomplete
 		 */ 
-		if(args.size()<1)
+		if( args.size() < 1 )
 			goto err;
-		if(!args[0].c_str() || !args[0].re_match("^(bottom|top|left|right|center)"))
+		if( !args[0].c_str() || !args[0].re_match("^(bottom|top|left|right|center)") )
 			goto err;
-		if(c_image())
+		if( c_image() )
 		{
-			fim::string c=current();
+			fim::string c = current();
 			FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
 			if(c_image() && viewport())
 			{
@@ -1537,7 +1538,7 @@ err:
 		/*
 		 *	a const pointer to the currently loaded image
 		 */
-		const Image * image=NULL;
+		const Image * image = NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->c_getImage();
@@ -1549,7 +1550,7 @@ err:
 		/*
 		 *	the image loaded in the current viewport is returned
 		 */
-		Image * image=NULL;
+		Image * image = NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->getImage();
@@ -1573,10 +1574,10 @@ err:
 		 * dilemma : should the current() filename and next() operations
 		 * be relative to viewport's own current's ?
 		 * */
-		if(empty_file_list())
+		if( empty_file_list() )
 			return nofile_; // FIXME: patch!
 	       	//return cf_?flist_[current_n()]:nofile_;
-	       	return cf_>=0?flist_[cf_]:nofile_;
+	       	return cf_ >= 0 ? flist_[cf_] : nofile_;
 	}
 
 	int Browser::empty_file_list(void)const
@@ -1584,7 +1585,7 @@ err:
 		/*
 		 *	is the filename list empty ?
 		 */
-		return flist_.size()==0;
+		return flist_.size() == 0;
 	}
 
 	fim::string Browser::display(void)
@@ -1617,7 +1618,7 @@ err:
 			 * 
 			 * FIXME : regard this as a bug
 			 * */
-			fim::string ss=args[i];
+			fim::string ss = args[i];
 
 			ss.substitute(" +$","");
 			push(ss);
@@ -1631,15 +1632,15 @@ err:
 	int Browser::current_image(void)const
 	{
 		/* counting from 1 */
-		return cf_+1;
+		return cf_ + 1;
 	}
 
 	int Browser::n_pages(void)const
 	{
-		int pi=0;
+		int pi = 0;
 
 #if !FIM_WANT_BDI
-		if(c_image())
+		if( c_image() )
 #endif	/* FIM_WANT_BDI */
 			pi = c_image()->n_pages();
 		return pi;
@@ -1647,10 +1648,10 @@ err:
 
 	int Browser::c_page(void)const
 	{
-		int pi=0;
+		int pi = 0;
 
 #if !FIM_WANT_BDI
-		if(c_image())
+		if( c_image() )
 #endif	/* FIM_WANT_BDI */
 			pi = c_image()->c_page();
 		return pi;
