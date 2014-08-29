@@ -5,18 +5,18 @@ AUTOMAKE_OPTIONS = nostdinc no-dependencies
 SUBDIRS = 
 
 EXTRA_DIST= \
-	tests/sanity.fim  \
-	tests/maxlenscript.fim \
-	tests/version.sh \
-	tests/font.sh \
-	example/oneline.fim		\
-	rc/fimrc.eog		\
-	rc/fimrc.gqview		\
-	rc/fimrc.kuickshow	\
-	rc/fimrc.lazy		\
-	utilities/screenshot.sh	\
-	maintenance/configure-*.sh \
-	maintenance/yacc2grammar.h \
-	maintenance/yacc2grammar.awk \
-	utilities/fimscan.sh
+	$(srcdir)/tests/sanity.fim  \
+	$(srcdir)/tests/maxlenscript.fim \
+	$(srcdir)/tests/version.sh \
+	$(srcdir)/tests/font.sh \
+	$(srcdir)/example/oneline.fim		\
+	$(srcdir)/rc/fimrc.eog		\
+	$(srcdir)/rc/fimrc.gqview		\
+	$(srcdir)/rc/fimrc.kuickshow	\
+	$(srcdir)/rc/fimrc.lazy		\
+	$(srcdir)/utilities/screenshot.sh	\
+	$(srcdir)/maintenance/configure-*.sh \
+	$(srcdir)/maintenance/yacc2grammar.h \
+	$(srcdir)/maintenance/yacc2grammar.awk \
+	$(srcdir)/utilities/fimscan.sh
 
