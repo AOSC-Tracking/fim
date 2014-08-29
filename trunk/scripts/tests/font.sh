@@ -4,7 +4,8 @@
 # this script shall work whatever its configure options (even if fim was compiled 'dumb')
 
 f=src/fim 
-ff="media/fim.png media/icon_smile.gif"
+if test x != "$top_srcdir"; then true ; else top_srcdir=./ ; fi
+ff="$top_srcdir/media/fim.png media/icon_smile.gif"
 fa="-c quit $ff "
 fv="-V "
 
@@ -39,7 +40,7 @@ export FBFONT=/dev/null
 if $f $fa ; then fail "$f $fa does not fail as it should on wrong font file" ; 
 else echo "$f $fa correctly recognizes an invalid FBFONT variable and exits" ; fi
 
-export FBFONT=./var/fonts/Lat15-Terminus16.psf
+export FBFONT=$top_srcdir/var/fonts/Lat15-Terminus16.psf
 if ! $f $fa ; then fail "$f $fa fails, but it should not, as a correct font was provided" ; 
 else echo "$f $fa correctly recognizes a valid font file" ; fi
 

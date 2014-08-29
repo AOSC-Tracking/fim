@@ -5,16 +5,16 @@
 AUTOMAKE_OPTIONS = nostdinc no-dependencies # dejagnu
 SUBDIRS = src doc distros scripts
 
-dist_doc_DATA=README README.FIRST TODO VERSION BUGS  FAQ.TXT AUTHORS ChangeLog NEWS
+dist_doc_DATA=$(top_srcdir)/README $(top_srcdir)/README.FIRST $(top_srcdir)/TODO $(top_srcdir)/VERSION $(top_srcdir)/BUGS  $(top_srcdir)/FAQ.TXT $(top_srcdir)/AUTHORS $(top_srcdir)/ChangeLog $(top_srcdir)/NEWS
 # no INSTALL INSTALL.TXT is necessary in rules
 EXTRA_DIST=  COPYING  \
 	Makefile.am configure.ac configure \
 	 aclocal.m4 config.h.in \
 	autogen.sh \
-	media/image.jpg \
-	media/image.png \
-	media/fim.png \
-	var/fonts/Lat15-Terminus16.psf \
+	$(top_srcdir)/media/image.jpg \
+	$(top_srcdir)/media/image.png \
+	$(top_srcdir)/media/fim.png \
+	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim
 FIMGS_EXE=./src/fimgs
@@ -46,18 +46,18 @@ FIMNORCOPTS=-N --no-etc-rc-file
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
 sanity-check:	all
-	@$(FIM_EXE) $(FIMNORCOPTS) -E scripts/tests/sanity.fim -t
+	@$(FIM_EXE) $(FIMNORCOPTS) -E $(top_srcdir)/scripts/tests/sanity.fim -t
 
 # this is the official way of testing fim
 tests:	all
 	ulimit -c unlimited
 	ulimit -v 32000
 	ulimit -t 1000
-	@$(SHELL) ./scripts/tests/version.sh
-	@$(SHELL) ./scripts/tests/font.sh
-	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -E scripts/example/oneline.fim -c quit 
+	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/version.sh
+	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/font.sh
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -E $(top_srcdir)/scripts/example/oneline.fim -c quit 
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
-	make -C ./src/testdir
+	if test $(abs_builddir) = $(abs_srcdir) ; then make -C src/testdir ; fi
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
@@ -71,11 +71,11 @@ tests-all: tests $(FIMSCRIPTSDIR)/configure-brute-check.sh
 
 # this rule is deprecated, too
 test:	all
-	@$(FIM_EXE) $(FIMNORCOPTS) media/* #~/M*s/*g
+	@$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/* #~/M*s/*g
 
 # this rule is deprecated, too
 aatest:	all
-	@$(FIM_EXE) $(FIMNORCOPTS) media/* -o aa #~/M*s/*g
+	@$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/* -o aa #~/M*s/*g
 
 # this rule is old and deprecated
 #tgz:	clean
