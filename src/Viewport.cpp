@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,13 +42,7 @@ namespace fim
 			,FimWindow *window
 #endif /* FIM_WINDOWS */
 			)
-			:steps_(0)
-			,hsteps_(0)
-			,vsteps_(0)
-			,psteps_(false)
-			,top_(0)
-			,left_(0)
-			,panned_(0x0)
+			:psteps_(false)
 			,displaydevice_(c.displaydevice_)	/* could be NULL */
 			,image_(NULL)
 #ifdef FIM_WINDOWS
@@ -67,13 +61,13 @@ namespace fim
 
 	Viewport::Viewport(const Viewport &v)
 		:
-		steps_(v.steps_)
+	/*	steps_(v.steps_)
 		,hsteps_(v.hsteps_)
 		,vsteps_(v.vsteps_)
-		,psteps_(v.psteps_)
 		,top_(v.top_)
 		,left_(v.left_)
-		,panned_(v.panned_)
+		,panned_(v.panned_) */
+		psteps_(v.psteps_)
 		,displaydevice_(v.displaydevice_)
 		,image_(NULL)
 #ifdef FIM_WINDOWS
@@ -84,6 +78,12 @@ namespace fim
 #endif /* FIM_NAMESPACES */
 		,commandConsole(v.commandConsole)
 	{
+		steps_ = v.steps_;
+		hsteps_ = v.hsteps_;
+		vsteps_ = v.vsteps_;
+		top_ = v.top_;
+		left_ = v.left_;
+		panned_ = v.panned_;
 		// WARNING
 		//reset();
 		try
@@ -92,10 +92,15 @@ namespace fim
 	#ifdef FIM_CACHE_DEBUG
 			if(v.image_)
 				std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image_->getName() << "\" from "<<v.image_<<FIM_CNS_NEWLINE ;
-			else std::cout << "no image_ to cache..\n";
+			else
+				std::cout << "no image_ to cache..\n";
 	#endif /* FIM_CACHE_DEBUG */
 			if(v.image_ && !v.image_->check_invalid())
-				setImage( commandConsole.browser_.cache_.useCachedImage(v.image_->getKey()) );
+			{
+				ViewportState viewportState;
+				setImage( commandConsole.browser_.cache_.useCachedImage(v.image_->getKey(),&viewportState) );
+				setState(viewportState);
+			}
 #else /* FIM_BUGGED_CACHE */
 			if(v.image_)
 				setImage ( new Image(*v.image_) ) ;
@@ -106,6 +111,16 @@ namespace fim
 			image_=NULL;
 			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << FIM_CNS_NEWLINE;
 		}
+	}
+
+	void Viewport::setState(const ViewportState & viewportState)
+	{
+      		hsteps_ = viewportState.hsteps_;
+		vsteps_ = viewportState.vsteps_;
+		steps_ = viewportState.steps_;
+		top_ = viewportState.top_;
+		left_ = viewportState.left_;
+		panned_ = viewportState.panned_;
 	}
 
 	void Viewport::pan_up(fim_pan_t s)
@@ -575,7 +590,16 @@ namespace fim
 #ifndef FIM_BUGGED_CACHE
 		if(image_)
 		{	
-			if( !commandConsole.browser_.cache_.freeCachedImage(image_) )
+			/* ViewportState viewportState() { */
+			ViewportState viewportState;
+		      	viewportState.hsteps_ = hsteps_;
+			viewportState.vsteps_ = vsteps_;
+			viewportState.steps_ = steps_;
+			viewportState.top_ = top_;
+			viewportState.left_ = left_;
+			viewportState.panned_ = panned_;
+			/* } */
+			if( !commandConsole.browser_.cache_.freeCachedImage(image_,&viewportState) )
 				delete image_;	// do it yourself :P
 		}
 #else /* FIM_BUGGED_CACHE */
@@ -707,15 +731,15 @@ namespace fim
 		}
 		else
 		{
-			ps=psteps_;
-			vs=vsteps_;
-			hs=hsteps_;
+			ps = psteps_;
+			vs = vsteps_;
+			hs = hsteps_;
 		}
 		if(ps)
 		{
 			// FIXME: new, brittle
-			vs=(viewport_height()*vs)/100;
-			hs=(viewport_width()*hs)/100;
+			vs = (viewport_height()*vs)/100;
+			hs = (viewport_width()*hs)/100;
 		}
 
 		//std::cout << vs << " " << hs << " " << ps << FIM_CNS_NEWLINE;

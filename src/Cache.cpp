@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -356,7 +356,7 @@ ret:
 		return 0;
 	}
 
-	bool Cache::freeCachedImage(Image *image)
+	bool Cache::freeCachedImage(Image *image, const ViewportState *vsp)
 	{
 		/*
 		 * if the supplied image is cached as a master image of a clone, it is freed and deregistered.
@@ -367,6 +367,10 @@ ret:
 		if( !image )
 			goto err;
 //		if( is_in_cache(image) && usageCounter_[image->getKey()]==1 )
+		if(vsp)
+		{
+			viewportInfo_[image->getKey()] = *vsp;
+		}
 		if( is_in_clone_cache(image) )
 		{
 			usageCounter_[image->getKey()]--;
@@ -395,13 +399,19 @@ ret:
 				if( need_free() )
 				{
 					Image * lrui = get_lru(true);
-					if(lrui && ( lrui->getKey().second!=FIM_E_STDIN ))
-					{	
+
+					if( lrui ) 
+					{
 						cache_key_t key = lrui->getKey();
-						this->erase( lrui );
-						usageCounter_.erase(key);
+						viewportInfo_.erase(key);
+
+						if(( key.second != FIM_E_STDIN ))
+						{	
+							this->erase( lrui );
+							usageCounter_.erase(key);
+						}
 					}
-						// missing usageCounter_.erase()..
+					// missing usageCounter_.erase()..
 				}
 #endif
 			}
@@ -414,14 +424,13 @@ ret:
 		return true;
 	}
 
-	Image * Cache::useCachedImage(cache_key_t key)
+	Image * Cache::useCachedImage(cache_key_t key, ViewportState *vsp)
 	{
 		/*
-		 * the calling function needs an image, so calls this method.
-		 * if we already have the desired image and it is already used,
-		 * a clone is built and returned.
+		 * the caller invokes this method to obtain an Image object pointer.
+		 * if the object is cached and it already used, a clone is built and returned.
 		 *
-		 * if we have an unused master, we return it.
+		 * if we have an unused master copy, we return that.
 		 *
 		 * then declare this image as used and increase a relative counter.
 		 *
@@ -504,6 +513,10 @@ ret:
 			goto ret;	//so, it could be a clone..
 		}
 ret:
+		if(vsp && image)
+		{
+			*vsp = viewportInfo_[image->getKey()];
+		}
 		return image;
 	}
 

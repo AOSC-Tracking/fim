@@ -2,7 +2,7 @@
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ class Cache
 	typedef std::map<cache_key_t,fim::Image* >  cachels_t;	//filename - image
 	typedef std::map<fim::Image*,cache_key_t >  rcachels_t;	//image - filename
 	typedef std::map<cache_key_t,int >        ccachels_t;	//filename - counter
+	typedef std::map<cache_key_t,ViewportState >        vcachels_t;	//filename to viewport state
 	typedef std::map<cache_key_t,std::vector<fim::Image*> > cloned_cachels_t;	//filename - cloned images??
 	typedef std::map<fim::Image*,int >  	   cuc_t;	//image - filename
 
@@ -41,6 +42,7 @@ class Cache
 	rcachels_t	reverseCache_;
 	lru_t		lru_;
 	ccachels_t	usageCounter_;
+	vcachels_t	viewportInfo_;
 	cloned_cachels_t cloneCache_;
 	cuc_t		cloneUsageCounter_;
 	std::set< fim::Image* > clone_pool_;
@@ -91,10 +93,10 @@ class Cache
 #endif	/* FIM_WANT_BDI */
 
 	/*	free() and counter update */
-	bool freeCachedImage(Image *image);
+	bool freeCachedImage(Image *image, const ViewportState *vsp);
 
 	/*	getCachedImage() and counter update */
-	Image * useCachedImage(cache_key_t key);
+	Image * useCachedImage(cache_key_t key, ViewportState *vsp);
 	
 	/* FIXME */
 	Image * setAndCacheStdinCachedImage(Image * image);

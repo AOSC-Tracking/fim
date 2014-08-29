@@ -2,7 +2,7 @@
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,18 +31,14 @@ namespace fim
 	/*
 	 * A viewport displays one single image, so it contains the information
 	 * relative to the way it is displayed.
-	 *
-	 * FIXME:
-	 * 20070909 A Viewport object does NOT own an image, so it should be deallocated elsewhere!!
 	 * */
 #ifdef FIM_NAMESPACES
-class Viewport:public Namespace
+class Viewport:public Namespace,public ViewportState
 #else /* FIM_NAMESPACES */
-class Viewport
+class Viewport:public ViewportState
 #endif /* FIM_NAMESPACES */
 {
 	protected:
-	fim_off_t	hsteps_,vsteps_,steps_,top_,left_,panned_ ;	/* viewport variables */
 	fim_bool_t	psteps_;
         DisplayDevice* displaydevice_;
 
@@ -80,6 +76,7 @@ class Viewport
 	/* viewport methods */
 	fim::string pan(const args_t &args);
 	fim::string pan(const fim_char_t*a1, const fim_char_t*a2);
+	void setState(const ViewportState & viewportState);
 	void pan_up   (fim_pan_t s=0);
 	void pan_down (fim_pan_t s=0);
 	void pan_right(fim_pan_t s=0);

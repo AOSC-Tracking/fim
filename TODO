@@ -21,6 +21,7 @@ ongoing further inspiration.
 -------------------------------------------------------------------------------
 	Misc Current development directions
 
+20140830	need a precise control of scaling rules and viewports cache, as well to extend the viewport cache to scaled images
 20131211	sort file names by modification date ?
 20131107	fix --disable-scripting case !
 20131107	this is spurious: fim::string execute(const std::vector<fim::string> &args)
