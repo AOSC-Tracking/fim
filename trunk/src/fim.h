@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -140,6 +140,13 @@ namespace fim
 {
 	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code
 	void status(const fim_char_t *desc, const fim_char_t *info);
+
+class ViewportState
+{
+	public:
+	fim_off_t	hsteps_,vsteps_,steps_,top_,left_,panned_ ;	/* viewport variables */
+	ViewportState()	:steps_(0) ,hsteps_(0) ,vsteps_(0) ,top_(0) ,left_(0) ,panned_(0x0) {}
+};
 
 	class Arg;
 	class Browser;

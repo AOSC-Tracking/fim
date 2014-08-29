@@ -613,7 +613,11 @@ ret:
 		if( viewport() ) std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif /* FIM_CACHE_DEBUG */
 		if( viewport() )
-			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE)) );// FIXME
+		{
+			ViewportState viewportState;
+			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState) );// FIXME
+			viewport()->setState(viewportState);
+		}
 #else /* FIM_BUGGED_CACHE */
 		// warning : in this cases exception handling is missing
 	#ifdef FIM_READ_STDIN_IMAGE
