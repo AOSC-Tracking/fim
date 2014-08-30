@@ -1358,7 +1358,13 @@ fim_perr_t main(int argc,char *argv[])
 #ifdef FIM_USE_READLINE
 #include "readline.h"
 #endif /* FIM_USE_READLINE */
-//#ifdef HAVE_LIBPOPPLER
+#if 0 /* namespace clashes */
+#ifdef HAVE_LIBGRAPHICSMAGICK
+#include <magick/api.h>
+#include <magick/version.h>
+#endif /* HAVE_LIBGRAPHICSMAGICK */
+#endif
+///#ifdef HAVE_LIBPOPPLER
 //#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
 //#endif /* HAVE_LIBPOPPLER */
 
@@ -1404,6 +1410,13 @@ fim_perr_t main(int argc,char *argv[])
 	"Compiled with libjpeg, v."FIM_XSTRINGIFY(JPEG_LIB_VERSION)".\n"
 	#endif /* JPEG_LIB_VERSION */
 	#endif /* HAVE_LIBJPEG */
+#if 0 /* namespace clashes */
+	#ifdef HAVE_LIBGRAPHICSMAGICK
+	#ifdef MagickLibVersionText
+	"Compiled with GraphicsMagick, v."MagickLibVersionText".\n"
+	#endif /* MagickLibVersionText */
+	#endif /* HAVE_LIBGRAPHICSMAGICK */
+#endif
 	#ifdef FIM_USE_READLINE
 	// TODO: shall use RL_READLINE_VERSION instead
 	#if defined(RL_VERSION_MINOR) && defined(RL_VERSION_MAJOR) && ((RL_VERSION_MAJOR)>=6)
