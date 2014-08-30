@@ -667,12 +667,14 @@ namespace fim
 
 	void Viewport::recenter_horizontally(void)
 	{
-		left_ = (image_->width() - this->viewport_width()) / 2;
+		if(image_)
+			left_ = (image_->width() - this->viewport_width()) / 2;
 	}
 
 	void Viewport::recenter_vertically(void)
 	{
-		top_ = (image_->height() - this->viewport_height()) / 2;
+		if(image_)
+			top_ = (image_->height() - this->viewport_height()) / 2;
 	}
 
 	void Viewport::recenter(void)

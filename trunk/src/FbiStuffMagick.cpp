@@ -2,7 +2,7 @@
 /*
  FbiStuffMagick.cpp : fim functions for decoding image files using libGraphicsMagick
 
- (c) 2011-2013 Michele Martone
+ (c) 2011-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,9 +38,13 @@
 #ifdef HAVE_LIBGRAPHICSMAGICK
 #include <magick/api.h>
 
-/* versions as far as 1.13.12 have this bug, in coders/txt.c:328, due to a NULL p returning in case of empty text file */
+/* versions as far as e.g. 1.13.12 have this bug, in coders/txt.c:328, due to a NULL p returning in case of empty text file */
 #ifdef MagickLibVersion
-#define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG (MagickLibVersion<=0x090600)
+#define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG (MagickLibVersion<=0x151200) /* 0x090600 was previously supposed to fix the problem but it did not, seemingly (as of 1.3.20) ... still:
+ fim: magick/semaphore.c:531: LockSemaphoreInfo: Assertion `semaphore_info != (SemaphoreInfo *) ((void *)0)' failed.
+ Aborted
+*/
+#define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG 1
 #else
 #define HAVE_LIBGRAPHICSMAGICK_TXT_FILEXTENSION_BUG 1
 #endif /* MagickLibVersion */
