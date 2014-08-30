@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2014 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -128,15 +128,15 @@ err:
 			fim::string opts
 			):DisplayDevice(),
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	screen_(NULL),
+	vi_(NULL),
 	current_w_(0), current_h_(0),
+	Bpp_(FIM_CNS_BPP_INVALID),
+	bpp_(FIM_CNS_BPP_INVALID),
 	opts_(opts),
 	want_windowed_(false),
 	want_mouse_display_(false),
-	want_resize_(false),
-	Bpp_(FIM_CNS_BPP_INVALID),
-	bpp_(FIM_CNS_BPP_INVALID),
-	screen_(NULL),
-	vi_(NULL)
+	want_resize_(false)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		keypress_ = 0;

@@ -187,10 +187,11 @@ ret:
 	}
 #endif /* FIM_READ_STDIN_IMAGE */
 
-	Browser::Browser(CommandConsole &cc):nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
+	Browser::Browser(CommandConsole &cc):
 #ifdef FIM_NAMESPACES
-		,Namespace(&cc,FIM_SYM_NAMESPACE_BROWSER_CHAR)
+		Namespace(&cc,FIM_SYM_NAMESPACE_BROWSER_CHAR),
 #endif /* FIM_NAMESPACES */
+		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
 	{	
 		/*
 		 * we initialize to no file the current file name
