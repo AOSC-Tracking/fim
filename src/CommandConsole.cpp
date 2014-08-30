@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -343,23 +343,23 @@ ret:		return key;
 #endif /* FIM_KEEP_BROKEN_CONSOLE */
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fontserver_(),
-	browser_(*this)
-	//,framebufferdevice(_framebufferdevice)
-	,return_code_(0)
+	show_must_go_on_(1),
+	return_code_(0)
 	,mangle_tcattr_(false)
+	,browser_(*this)
+	//,framebufferdevice(_framebufferdevice)
+	,cycles_(0)
+#ifdef FIM_RECORDING
+	,recordMode_(false)			/* we start not recording anything */
+	,dont_record_last_action_(false)		/* this variable is only useful in record mode */
+#endif /* FIM_RECORDING */
+	,fim_stdin_(STDIN_FILENO)
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	,dummydisplaydevice_(this->mc_)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,dummydisplaydevice_()
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,displaydevice_(NULL)			/* the display device could be NULL ! (FIXME) */
-#ifdef FIM_RECORDING
-	,dont_record_last_action_(false)		/* this variable is only useful in record mode */
-	,recordMode_(false)			/* we start not recording anything */
-#endif /* FIM_RECORDING */
-	,fim_stdin_(STDIN_FILENO)
-	,cycles_(0)
-	,show_must_go_on_(1)
 	{
 		addCommand(new Command(fim::string(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS" ["FIM_CNS_EX_ID_STRING" ["FIM_CNS_EX_CMDS_STRING" ["FIM_CNS_EX_DSC_STRING"]]]"),this,&CommandConsole::fcmd_foo));
 		addCommand(new Command(fim::string(FIM_FLT_ALIGN),fim::string(FIM_CMD_HELP_ALIGN),&browser_,&Browser::fcmd_align));
@@ -1302,7 +1302,12 @@ rlnull:
 		fim::string cmds;
 
 		if(fd==NULL)
-			return FIM_ERR_GENERIC;
+		{
+			/* return FIM_ERR_GENERIC; */
+		       	cmds = FIM_ERR_GENERIC;
+		       	goto ret;
+	       	}
+
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0)
 		{
 			buf[r]='\0';
@@ -1322,17 +1327,20 @@ ret:
 		 *
 		 * TODO : catch exceptions
 		 */
-
 		fim_sys_int r;
-		fim_char_t buf[FIM_STREAM_BUFSIZE];
+		fim_err_t errv = FIM_ERR_NO_ERROR;
+		/* fim_char_t buf[FIM_STREAM_BUFSIZE]; */
 		fim::string cmds = CommandConsole::readStdFileDescriptor(fd,&r);
 
 		if(r==-1)
-			return FIM_ERR_GENERIC;
+		{
+			errv = FIM_ERR_GENERIC;
+			goto ret;
+		}
 
 		execute_internal(cmds.c_str(),FIM_X_QUIET);
 ret:
-		return FIM_ERR_NO_ERROR;
+		return errv;
 	}
 
 	fim_err_t CommandConsole::executeFile(const fim_char_t *s)
@@ -1882,6 +1890,10 @@ ok:
 			pt=tv.tv_usec/1000+tv.tv_sec*1000;
 		}
 	        err=gettimeofday(&tv, NULL);t=tv.tv_usec/1000+tv.tv_sec*1000;
+		if(err != 0)
+		{
+			/* TODO: error handling ... */
+		}
 		d=(t-pt)*1000;
 		pt=t;
 		recorded_actions_.push_back(recorded_action_t(sanitize_action(cmd),d));

@@ -2,7 +2,7 @@
 /*
  DebugConsole.cpp : Fim virtual console display.
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -229,7 +229,6 @@ rerr:
 
 		MiniConsole::MiniConsole(CommandConsole & cc,int lw, int r)
 		:
-		cc_(cc),
 		buffer_(NULL),
 		line_(NULL),
 		bp_(NULL),
@@ -238,7 +237,8 @@ rerr:
 		ccol_(0),
 		cline_(0),
 		lwidth_(0),
-		rows_(0)
+		rows_(0),
+		cc_(cc)
 		{
 			/*
 			 * We initialize the console

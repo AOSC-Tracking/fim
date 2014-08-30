@@ -2,7 +2,7 @@
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -70,12 +70,16 @@ namespace fim
 
 		Namespace(
 #ifndef FIM_INDIPENDENT_NAMESPACE
-				CommandConsole *rnsp=NULL,
+				CommandConsole *rnsp = NULL,
 #endif /* FIM_INDIPENDENT_NAMESPACE */
-			       	const fim_char_t ns_char=FIM_SYM_NULL_NAMESPACE_CHAR):variables_(variables_t()),ns_char_(ns_char)
+			       	const fim_char_t ns_char = FIM_SYM_NULL_NAMESPACE_CHAR
+			)
+			:
 #ifndef FIM_INDIPENDENT_NAMESPACE
-										      ,rnsp_(rnsp)
+		      rnsp_(rnsp),
 #endif /* FIM_INDIPENDENT_NAMESPACE */
+			variables_(variables_t())
+			,ns_char_(ns_char)
 	       	{}
 		virtual ~Namespace(void){}
 		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;

@@ -33,10 +33,10 @@
 namespace fim
 {
 	Cache::Cache(void)
+		:Namespace(&cc)
 #if FIM_WANT_BDI
-		:dummy_img_()
+		,dummy_img_()
 #endif	/* FIM_WANT_BDI */
-		,Namespace(&cc)
 	{
 		/*	FIXME : potential flaw ?	*/
 		FIM_LOUD_CACHE_STUFF;
@@ -516,6 +516,7 @@ ret:
 		if(vsp && image)
 		{
 			*vsp = viewportInfo_[image->getKey()];
+			/* *vsp = viewportInfo_[key]; */
 		}
 		return image;
 	}
@@ -616,6 +617,10 @@ ret:
 			if(ci->second)
 				bs += ci->second->byte_size();
 		bs += sizeof(*this);
+		bs += sizeof(viewportInfo_) + viewportInfo_.size() * ( sizeof(vcachels_t::mapped_type) + sizeof(vcachels_t::key_type) );
+		/* 
+		bs += sizeof(usageCounter_);
+		bs += sizeof(reverseCache_); */
 		/* TODO: incomplete ... */
 		return bs;
 	}

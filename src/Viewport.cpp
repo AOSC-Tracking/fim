@@ -42,15 +42,16 @@ namespace fim
 			,FimWindow *window
 #endif /* FIM_WINDOWS */
 			)
-			:psteps_(false)
-			,displaydevice_(c.displaydevice_)	/* could be NULL */
+			:
+#ifdef FIM_NAMESPACES
+			Namespace(&c,FIM_SYM_NAMESPACE_VIEWPORT_CHAR),
+#endif /* FIM_NAMESPACES */
+			psteps_(false),
+			displaydevice_(c.displaydevice_)	/* could be NULL */
 			,image_(NULL)
 #ifdef FIM_WINDOWS
 			,window_(window)
 #endif /* FIM_WINDOWS */
-#ifdef FIM_NAMESPACES
-			,Namespace(&c,FIM_SYM_NAMESPACE_VIEWPORT_CHAR)
-#endif /* FIM_NAMESPACES */
 			,commandConsole(c)
 	{
 		// WARNING : this constructor will be filled soon
@@ -67,15 +68,15 @@ namespace fim
 		,top_(v.top_)
 		,left_(v.left_)
 		,panned_(v.panned_) */
+#ifdef FIM_NAMESPACES
+		Namespace(v),
+#endif /* FIM_NAMESPACES */
 		psteps_(v.psteps_)
 		,displaydevice_(v.displaydevice_)
 		,image_(NULL)
 #ifdef FIM_WINDOWS
 		,window_(v.window_)
 #endif /* FIM_WINDOWS */
-#ifdef FIM_NAMESPACES
-		,Namespace(v)
-#endif /* FIM_NAMESPACES */
 		,commandConsole(v.commandConsole)
 	{
 		steps_ = v.steps_;

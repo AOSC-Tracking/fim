@@ -144,7 +144,7 @@ namespace fim
 class ViewportState
 {
 	public:
-	fim_off_t	hsteps_,vsteps_,steps_,top_,left_,panned_ ;	/* viewport variables */
+	fim_off_t	steps_,hsteps_,vsteps_,top_,left_,panned_ ;	/* viewport variables */
 	ViewportState()	:steps_(0) ,hsteps_(0) ,vsteps_(0) ,top_(0) ,left_(0) ,panned_(0x0) {}
 };
 

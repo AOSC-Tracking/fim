@@ -2,7 +2,7 @@
 /*
  DebugConsole.h : Fim virtual console display.
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,6 +77,7 @@ namespace fim
 		private:
 		MiniConsole& operator= (const MiniConsole&mc);
 		MiniConsole(const MiniConsole &mc) :
+			Namespace(mc),
 			buffer_(NULL),
 			line_(NULL),
 			bp_(NULL),
@@ -87,8 +88,7 @@ namespace fim
 			lwidth_(0),
 			rows_(0),
 			scroll_(0),
-			cc_(mc.cc_),
-			Namespace(mc)
+			cc_(mc.cc_)
 			{/* this constructor should not be used */}
 
 		int line_length(int li);
