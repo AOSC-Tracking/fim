@@ -28,6 +28,7 @@
 #else
 #define FIM_LOUD_CACHE_STUFF
 #endif
+#define FIM_VCBS(VI) ( sizeof(VI) + VI.size() * ( sizeof(vcachels_t::mapped_type) + sizeof(vcachels_t::key_type) ) )
 
 	extern CommandConsole cc;
 namespace fim
@@ -421,7 +422,9 @@ ret:
 					if( lrui ) 
 					{
 						cache_key_t key = lrui->getKey();
-						viewportInfo_.erase(key);
+						
+						if( FIM_VCBS(viewportInfo_) > FIM_CNS_VICSZ )
+							viewportInfo_.erase(key);
 
 						if(( key.second != FIM_E_STDIN ))
 						{	
@@ -635,7 +638,7 @@ ret:
 			if(ci->second)
 				bs += ci->second->byte_size();
 		bs += sizeof(*this);
-		bs += sizeof(viewportInfo_) + viewportInfo_.size() * ( sizeof(vcachels_t::mapped_type) + sizeof(vcachels_t::key_type) );
+		bs += FIM_VCBS(viewportInfo_);
 		/* 
 		bs += sizeof(usageCounter_);
 		bs += sizeof(reverseCache_); */
