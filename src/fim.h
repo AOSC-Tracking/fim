@@ -558,7 +558,7 @@ namespace fim
 #define FIM_VID_MIRRORED			"mirrored"		/* "[internal,out] 1, if the image is mirrored " */
 #define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[internal,in] if 1, the image will be displayed centered " */
 #define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in] the maximum number of images allowed in the cache" */
-#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in] the maximum amount of memory allowed for the cache" */
+#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in] the maximum amount of memory allowed for the cache (in KiB)" */
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached" */
 #define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[internal,out] the screen width"  */
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[internal,out] the screen height" */
