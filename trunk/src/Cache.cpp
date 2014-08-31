@@ -97,7 +97,7 @@ ret:
 		FIM_LOUD_CACHE_STUFF;
 		if ( cached_elements() < 1 )
 			return 0;
-		return erase( get_lru()  );
+		return erase( get_lru(true)  );
 	}
 
 	int Cache::erase_clone(fim::Image* oi)
@@ -127,10 +127,22 @@ ret:
 		these are not the values we want ..
 		*/
 		int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+		int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY); /* getIntGlobalVariable */
+		size_t smcm = mcm > 0 ? mcm : 0;
+
+	       	if( smcm > 0 && byte_size()/FIM_CNS_K > smcm )
+			goto rt;
 
 		if(mci==-1)
-			return false;
-		return ( cached_elements() > ( ( mci>0)?mci:-1 ) );
+			goto rf;
+
+		/* return ( cached_elements() > ( ( mci>0)?mci:-1 ) ); */
+		if(mci > 0 && cached_elements() > mci)
+			goto rt;
+rf:
+		return false;
+rt:
+		return true;
 	}
 
 	int Cache::used_image(cache_key_t key)const
@@ -212,14 +224,20 @@ ret:
 
 	int Cache::prefetch(cache_key_t key)
 	{
-		int retval=0;
+		int retval = 0;
+
 		FIM_LOUD_CACHE_STUFF;
-//		if(need_free())
-//			free_some_lru();
-		if(key.first == FIM_STDIN_IMAGE_NAME)
-			goto ret;// just a fix in the case the browser is still lame
 		if(is_in_cache(key))
 			goto ret;
+	  	if(need_free())
+			free_some_lru();
+		if(need_free())
+			goto ret; /* skip prefetch if cache is full */
+		if(key.first == FIM_STDIN_IMAGE_NAME)
+			goto ret;// just a fix in the case the browser is still lame
+#ifdef FIM_CACHE_DEBUG
+		std::cout << "prefetch request for "<< key.first << " \n";
+#endif /* FIM_CACHE_DEBUG */
 		if(!loadNewImage(key))
 		{
 			retval = -1;
@@ -319,7 +337,7 @@ ret:
 			reverseCache_.erase(oi);
 //			delete imageCache_[reverseCache_[oi]];
 #ifdef FIM_CACHE_DEBUG
-			std::cout << "will erase  "<< oi << "\n";
+			std::cout << "will erase  "<< oi << " " <<  oi->getName() << "\n";
 			cout << "deleting " << oi->getName() << "\n";
 #endif /* FIM_CACHE_DEBUG */
 			delete oi;
