@@ -382,6 +382,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_M (FIM_CNS_K*FIM_CNS_K)
 #define FIM_CNS_LAST FIM_MAX_INT
 #define FIM_CNS_FIRST 0
+#define FIM_CNS_VICSZ FIM_CNS_K * 64 /* viewport info cache size */
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
