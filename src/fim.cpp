@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ struct fim_options_t fim_options[] = {
 "Just as the --"FIM_OSW_EXECUTE_COMMANDS" option, but commands will be executed before the loading of any config file.\n"
 "\n"
 "For example,\n"
-"-C '"FIM_VID_SCALE_STYLE"=\"\"' will make fim start with no auto-scaling.\n"
+"-C '"FIM_VID_SCALE_STYLE"=\" \"' will make fim start with no auto-scaling.\n"
 "\n"
     },
     {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}",
@@ -216,7 +216,7 @@ NULL
 "Scale the image according to the screen width."
     },
     {"no-auto-scale",   no_argument,   NULL,0x4E4053,"do not use any auto-scaling",NULL,
-"Do not scale the images after loading."
+"Do not scale the images after loading (will set '"FIM_VID_SCALE_STYLE"=\" \"';)."
     },
     {"autoheight",   no_argument,       NULL, 'H',"scale according to height",NULL,
 "Scale the image according to the screen height."

@@ -43,7 +43,7 @@ Language elements surrounded by a single quote ("'") are literals.
 
 Warning: at the present state, this grammar has conflicts. A future release shall fix them.
 
-  program:
+  program: %empty
          | statement_list
 
   statement_list: statement
