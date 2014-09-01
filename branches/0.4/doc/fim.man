@@ -114,7 +114,7 @@ do an endless loop consisting of bottom and top aligning, alternated.
 Just as the --execute-commands option, but commands will be executed before the loading of any config file.
 
 For example,
--C '_scale_style=""' will make fim start with no auto-scaling.
+-C '_scale_style=" "' will make fim start with no auto-scaling.
 
 
 .TP
@@ -220,7 +220,7 @@ Display program version, compile flags, enabled features, linked libraries infor
 Scale the image according to the screen width.
 .TP
 .B 	 --no-auto-scale
-Do not scale the images after loading.
+Do not scale the images after loading (will set '_scale_style=" "';).
 .TP
 .B -H, --autoheight
 Scale the image according to the screen height.
