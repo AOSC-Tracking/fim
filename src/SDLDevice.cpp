@@ -47,6 +47,7 @@ namespace fim
 #define FIM_SDL_WANT_RESIZE 1
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
+#define FIM_WANT_EXPERIMENTAL_MOUSE_PAN 1
 
 #ifdef FIM_SDL_DEBUG
 #define FIM_SDL_INPUT_DEBUG(C,MSG)  \
@@ -724,6 +725,38 @@ err:
 #endif
 				case SDL_KEYUP:
 				return 0;
+				break;
+				case SDL_MOUSEMOTION:
+#if FIM_WANT_EXPERIMENTAL_MOUSE_PAN 
+				FIM_SDL_INPUT_DEBUG(c,"SDL_MOUSEMOTION");
+				{
+					//std::cout << current_w_    << " " << event.motion.y    << "\n";
+					//std::cout << event.motion.x    << " " << event.motion.y    << "\n";
+					//std::cout << event.motion.xrel << " " << event.motion.yrel << "\n";
+					Viewport* cv = cc.current_viewport();
+					if(cv)
+					if( event.motion.x > 0 && event.motion.y )
+					{
+						fim_off_t bf = 5;
+						fim_off_t vx = cv->viewport_width();
+						fim_off_t vy = cv->viewport_height();
+						fim_off_t bx = vx / bf;
+						fim_off_t by = vy / bf;
+						fim_off_t px = FIM_INT_DET_PCNT(event.motion.x-bx/2,vx-bx);
+						fim_off_t py = FIM_INT_DET_PCNT(event.motion.y-by/2,vy-by);
+						px = FIM_DELIMIT_TO_100(px);
+						py = FIM_DELIMIT_TO_100(py);
+						if(px >=   0   && py >=   0  )
+						if(px <= 100   && py <= 100  )
+						{
+							//std::cout << "pct:"<< px << " " << py << "\n";
+							cv->place(px,py);
+							cv->redisplay();
+						}
+					}
+				}
+#endif /* FIM_WANT_EXPERIMENTAL_MOUSE_PAN */
+				break;
 				default:
 				FIM_SDL_INPUT_DEBUG(c,"default-unknown");
 			}

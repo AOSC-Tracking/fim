@@ -76,6 +76,7 @@ class Viewport:public ViewportState
 	/* viewport methods */
 	fim::string pan(const args_t &args);
 	fim::string pan(const fim_char_t*a1, const fim_char_t*a2);
+	bool place(const fim_pan_t px, const fim_pan_t py);
 	void setState(const ViewportState & viewportState);
 	void pan_up   (fim_pan_t s=0);
 	void pan_down (fim_pan_t s=0);

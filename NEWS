@@ -15,6 +15,7 @@
  * mipmaps (rescaled images) for e.g. faster display of large images (TODO)
  * image cache will remember alignment within viewport (TODO)
  * viewport info cache size  (TODO)
+ * mouse panning with SDL  (TODO)
 
                 Version 0.4
 

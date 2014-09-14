@@ -158,7 +158,7 @@ namespace fim
 	{
 		panned_ |= 0x2;
 		if(s<0)
-			pan_left(s);
+			pan_left(-s);
 		else
 		{
 			if(onRight())
@@ -173,7 +173,7 @@ namespace fim
 	{
 		panned_ |= 0x2;
 		if(s<0)
-			pan_right(s);
+			pan_right(-s);
 		else
 		{
 			if(onLeft())
@@ -712,13 +712,43 @@ namespace fim
 		return pan(args);
 	}
 
+	bool Viewport::place(const fim_pan_t px, const fim_pan_t py)
+	{
+		/* FIXME: find a nicer name. */
+
+		if(image_)
+		{
+			fim_pan_t ih = image_->height();
+			fim_pan_t iw = image_->width();
+			fim_pan_t vh = this->viewport_height();
+			fim_pan_t vw = this->viewport_width();
+			fim_off_t top = top_, left = left_;
+
+			if(ih>vh)
+				top = FIM_INT_PCNT_SAFE(py,ih-vh);
+			if(iw>vw)
+				left = FIM_INT_PCNT_SAFE(px,iw-vw);
+
+			if( top != top_ || left != left_ )
+			{
+				top_ = top;
+			       	left_ = left;
+				should_redraw();
+			}
+
+		}
+		return true;
+	}
+
 	fim::string Viewport::pan(const args_t &args)
 	{
+		/* FIXME: unfinished */
 		fim_pan_t hs=0,vs=0;
 		fim_bool_t ps=false;
 		fim_char_t f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
 		const fim_char_t*fs=args[0].c_str();
 		const fim_char_t*ss=NULL;
+
 		if(args.size()<1 || (!fs))
 			goto nop;
 		f=tolower(*fs);
@@ -741,8 +771,8 @@ namespace fim
 		if(ps)
 		{
 			// FIXME: new, brittle
-			vs = (viewport_height()*vs)/100;
-			hs = (viewport_width()*hs)/100;
+			vs = FIM_INT_PCNT(viewport_height(),vs);
+			hs = FIM_INT_PCNT(viewport_width(), hs);
 		}
 
 		//std::cout << vs << " " << hs << " " << ps << FIM_CNS_NEWLINE;
