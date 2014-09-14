@@ -134,7 +134,7 @@ namespace fim
 	void Viewport::pan_right(fim_pan_t s)
 	{
 		panned_ |= 0x2;
-		if(s<0)pan_left(s);
+		if(s<0)pan_left(-s);
 		else
 		{
 			if(onRight())return;
@@ -147,7 +147,7 @@ namespace fim
 	void Viewport::pan_left(fim_pan_t s)
 	{
 		panned_ |= 0x2;
-		if(s<0)pan_right(s);
+		if(s<0)pan_right(-s);
 		else
 		{
 			if(onLeft())return;
