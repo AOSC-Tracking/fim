@@ -16,6 +16,7 @@
  * image cache will remember alignment within viewport (TODO)
  * viewport info cache size  (TODO)
  * mouse panning with SDL  (TODO)
+ * `make fim' eliminated (TODO: r632)
 
                 Version 0.4
 
