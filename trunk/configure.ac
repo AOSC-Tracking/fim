@@ -1815,7 +1815,6 @@ dnl	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
 	for a complete list of configure options specific to Fim.
 
 	If you are satisfied, run 'make' to build Fim and its documentation.
-	Otherwise, 'make fim' to build only Fim.
 
 	To install the program and its documentation, run 'make install' if you are root,
 	or run 'su -c '"make install"' if you are not root.
