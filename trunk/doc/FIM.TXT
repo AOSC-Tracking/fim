@@ -150,37 +150,37 @@ The secondary Fim page is:
 Tarball releases are located on
 	http://download.savannah.nongnu.org/releases/fbi-improved/
 
-Right now the official SVN (subversion) repository is:
-	http://code.autistici.org/svn/fim/
+The official SVN (subversion) repository is:
+	http://svn.savannah.nongnu.org/svn/fbi-improved/
 
 The official and secondary web sites contain all the relevant Fim
 documentation, and the downloadable Fim archives.
 
-The current SVN repository is kindly hosted by the Autistici/Inventati 
-'code' project: https://code.autistici.org/project/fim .
-You can support Fim supporting the A/I project.
+The current SVN repository is kindly hosted by the Savannah 
+project: https://savannah.nongnu.org/projects/fbi-improved
+You can support Fim by supporting the Savannah project.
+
+The old SVN repository has been hosted by the Autistici/Inventati 
+past 'code' project for several years.
+You can support Fim supporting the A/I project as well.
 
 You could be able to browse the Fim code on the repository, pointing your
 browser on:
-	http://code.autistici.org/svn/fim/trunk/
+	http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/
 
-and get the latest source code tree issuing:
- 	svn export http://code.autistici.org/svn/fim/trunk/
+and get the latest source code tree on:
+ 	svn export http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/
 
-or
+This documentation is distributed with the software.
+See the INSTALL file for installation instructions and issues.
 
-wget -r http://code.autistici.org/svn/fim/trunk/ && cd code.autistici.org/svn/fim/trunk
+Although an official bug tracker exists:
+ http://savannah.nongnu.org/bugs/?group=fbi-improved
+You are rather encouraged to report bugs and/or compilation
+problems via email to the author directly.
 
-This documentation is distributed with the software. See the INSTALL file for
-installation instructions and issues.
-
-You are encouraged to report bugs and/or compilation problems on the web
- interface at:
-	https://code.autistici.org/trac/fim
- but when encountering bugs, please read |bugs|.
-
-But before posting anything, read the BUGS file, and have a look and subscribe
-to the Fim developement mailing list:
+But before posting anything, read the BUGS file, the |bugs| section,
+and have a look and subscribe to the Fim development mailing list:
 
    http://lists.nongnu.org/mailman/listinfo/fbi-improved-devel
 
