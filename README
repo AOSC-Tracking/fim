@@ -214,7 +214,7 @@ Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libgif-dev
  sudo apt-get install libsdl1.2-dev libaa1-dev 
  sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
- svn co http://code.autistici.org/svn/fim/trunk/ fim
+ svn co http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ fim
  cd fim
  ./configure --enable-poppler --enable-aa --enable-sdl
  make
@@ -420,7 +420,7 @@ from the GPL licensed Terminus Font package, version 4.30 by Dimitar Toshkov
 	10		Contacts, URLs
 ================================================================================
 
-Fim is (C) 2007-2013 Michele Martone.
+Fim is (C) 2007-2014 Michele Martone.
 
 You can contact me via email: "dezperado_FOobAr_autistici_Baz_org", after
 replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
@@ -441,13 +441,11 @@ Mailing List : http://savannah.nongnu.org/mail/?group=fbi-improved
 
 Releases     : http://download.savannah.nongnu.org/releases/fbi-improved
 
-Repository   : http://code.autistici.org/svn/fim/
+Repository   : http://svn.savannah.nongnu.org/svn/fbi-improved/
 
 Off.  Mirror : http://www.autistici.org/dezperado/fim/
 
-ChangeLog    : http://code.autistici.org/svn/fim/trunk/ChangeLog
-
-Bugs(unofficial): http://code.autistici.org/trac/fim/report
+ChangeLog    : http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ChangeLog
 
 Bugs (official) : http://savannah.nongnu.org/bugs/?group=fbi-improved
 

@@ -15,7 +15,6 @@
 # @weekly         FIM_REPUSER=antani FIM_BACKUPDIR=/var/backups/fim /usr/local/bin/cron-rsync.sh
 
 R=${FIM_REPURL:="http://@FIM_SVN_REPOSITORY@"};
-#FIM_REPURL=${R:="http://code.autistici.org:/svn/fim/"};
 U=${FIM_REPUSER:="dezperado"}
 BP=${FIM_BACKUPDIR:="/backups/fim"}
 R=`echo $R | sed s/^http:..//g`

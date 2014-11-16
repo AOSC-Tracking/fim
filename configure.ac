@@ -1748,7 +1748,7 @@ AC_SUBST(LIBS)
 AC_SUBST(FIM_DEFS)
 
 AC_SUBST(FIM_LIB_OBJECTS)
-AC_SUBST(FIM_SVN_REPOSITORY,[http://code.autistici.org/svn/fim/])
+AC_SUBST(FIM_SVN_REPOSITORY,[http://svn.savannah.nongnu.org/svn/fbi-improved/])
 
 dnl we want these symbols defined in our code
 AC_SUBST(CXXFLAGS)
