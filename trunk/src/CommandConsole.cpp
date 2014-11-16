@@ -2238,7 +2238,15 @@ ok:
 			else
 			{
 				if(chars>5)
-				       	sprintf(str, "<-!->");
+				{
+					if(chars>10)
+					{
+				       		snprintf(str, chars-3, "%s%s", prompt_, info);
+				       		strcat(str, "...");
+					}
+					else
+				       		sprintf(str, "<-!->");
+				}
 				else
 				{
 				       	if(chars>0)

@@ -22,6 +22,7 @@ ongoing further inspiration.
 	Misc Current development directions
 
 
+20141113	shall document the new '%k' descriptor, or expand it for generality.
 20140830	version 0.4 does not cache limit on memory: may want to fix this.
 20140830	need a precise control of scaling rules and viewports cache, as well to extend the viewport cache to scaled images
 20131211	sort file names by modification date ?

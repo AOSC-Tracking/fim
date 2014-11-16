@@ -51,6 +51,8 @@ struct fim_png_state {
     png_bytep    image;
     png_uint_32  w,h;
     int          color_type;
+    struct ida_image_info *i; 
+    char * cmt;
 };
 
 static FILE*fim_png_fp;
@@ -58,6 +60,52 @@ void PNGAPI fim_png_rw_ptr(png_structp s, png_bytep p, png_size_t l)
 {
 	fim_fread(p, l, 1, fim_png_fp);
 }
+
+void fim_png_rd_cmts(void *data, png_infop info)
+#ifdef PNG_WRITE_tEXt_SUPPORTED
+    {
+    	struct fim_png_state *h = (struct fim_png_state *) data;
+	png_textp text_ptr = NULL;
+	int num_comments = png_get_text(h->png, info, &text_ptr, NULL);
+	int ti = 0;
+	fim::string fs;
+
+	for (ti=0;ti<num_comments;++ti)
+	{
+		if( text_ptr[ti].compression == PNG_TEXT_COMPRESSION_NONE || text_ptr[ti].compression == PNG_ITXT_COMPRESSION_NONE )
+		{
+	    		fs+=text_ptr[ti].key;
+	    		fs+=":";
+	    		fs+=text_ptr[ti].text;
+	    		if( ti < num_comments && num_comments > 1 )
+			       	fs+=" ";
+		}
+	}
+
+	if(num_comments>0)
+	if(fs.c_str() && strlen(fs.c_str()))
+	{
+		const char * s = fs.c_str();
+
+		if(!h->cmt)
+			h->cmt = (char*) calloc(strlen(s)+1,1);
+		else
+		{
+			h->cmt = (char*) realloc(h->cmt,strlen(h->cmt)+strlen(s)+1);
+			if(h->cmt)
+				strcat(h->cmt," ");
+		}
+
+		if(h->cmt)
+		{
+			strcat(h->cmt,s);
+		}
+	}
+    }
+#else
+   {
+   }
+#endif
 
 static void*
 png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
@@ -87,6 +135,7 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     fim_bzero(h,sizeof(*h));
 
     h->infile = fp;
+    h->i = i;
 
     h->png = png_create_read_struct(PNG_LIBPNG_VER_STRING,
 				    NULL, NULL, NULL);
@@ -157,6 +206,8 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	}
     }
 
+    fim_png_rd_cmts(h,h->info);
+
     return h;
 
  oops:
@@ -165,6 +216,8 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if (h->png)
 	png_destroy_read_struct(&h->png, NULL, NULL);
     fim_fclose(h->infile);
+    if(h->cmt)
+    	fim_free(h->cmt);
     if(h)fim_free(h);
     return NULL;
 }
@@ -203,6 +256,16 @@ static void
 png_done(void *data)
 {
     struct fim_png_state *h =(struct fim_png_state *) data;
+    png_infop end_info = png_create_info_struct(h->png);
+
+    png_read_end(h->png, end_info );
+    fim_png_rd_cmts(h,end_info);
+
+    if(h->cmt)
+    {
+	load_add_extra(h->i,EXTRA_COMMENT,(fim_byte_t*)h->cmt,strlen(h->cmt));
+    	fim_free(h->cmt);
+    }
 
     fim_free(h->image);
     png_destroy_read_struct(&h->png, &h->info, NULL);

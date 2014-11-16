@@ -681,6 +681,15 @@ fim::string Image::getInfo(void)
 					/* browser property. TODO: move outta here */
 					snprintf(clb+strlen(clb), sizeof(clb), "%d",n?n:1);
 				break;
+#if 1
+				case('k'):
+				{
+					const char * cmnts = getStringVariable(FIM_VID_COMMENT).c_str();
+					if(cmnts && *cmnts)
+						snprintf(clb+strlen(clb), sizeof(clb), "[%s] ",cmnts); /* FIXME: need sanitization */
+				}/* FIXME: this shamelessly breaks all max lenght assumptions ! */
+#endif
+				break;
 				case('l'):
 					/* browser property. TODO: move outta here */
 					snprintf(clb+strlen(clb), sizeof(clb), "%d",(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
@@ -734,7 +743,7 @@ sbum:
 			}
 #endif
 		}
-		// std::cout << "Custom format string chosen: "<< ifsp << ", resulting in :"<< clb <<"\n";
+		//std::cout << "Custom format string chosen: "<< ifsp << ", resulting in: "<< clb <<"\n";
 		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
 		goto labeldone;
 	}
