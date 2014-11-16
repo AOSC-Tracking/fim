@@ -337,7 +337,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	case JPEG_APP0 +1:
 	    if (FbiStuff::fim_filereading_debug())
 		FIM_FBI_PRINTF("jpeg: exif data found (APP1 marker)\n");
-	    load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length);
+	    /* load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length); */
 
 #if HAVE_NEW_EXIF
 #ifdef FIM_WITH_LIBEXIF
