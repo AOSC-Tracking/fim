@@ -2,7 +2,7 @@
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2014 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -166,7 +166,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 #endif /* FIM_PDF_USE_FILENO */
 
 
-	ds = (struct pdf_state_t*)fim_calloc(sizeof(struct pdf_state_t),1);
+	ds = (struct pdf_state_t*)fim_calloc(1,sizeof(struct pdf_state_t));
 
 	if(!ds)
 		return NULL;

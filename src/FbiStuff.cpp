@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2014 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -345,7 +345,7 @@ op_sharpe_init(const struct ida_image *src, struct ida_rect *rect,
     struct op_sharpe_parm *args = (struct op_sharpe_parm *)parm;
     struct op_sharpe_handle *h;
 
-    h = (struct op_sharpe_handle *)fim_calloc(sizeof(*h),1);
+    h = (struct op_sharpe_handle *)fim_calloc(1,sizeof(*h));
     if(!h)goto oops;
     h->factor  = args->factor;
     h->linebuf = (int *)fim_malloc(sizeof(int)*3*(src->i.width));
@@ -411,7 +411,7 @@ op_resize_init(const struct ida_image *src, struct ida_rect *rect,
     struct op_resize_parm *args = (struct op_resize_parm *)parm;
     struct op_resize_state *h;
 
-    h = (struct op_resize_state *)fim_calloc(sizeof(*h),1);
+    h = (struct op_resize_state *)fim_calloc(1,sizeof(*h));
     if(!h)
 	    goto oops;
     h->width  = args->width;
@@ -2044,9 +2044,9 @@ found_a_loader:	/* we have a loader */
 
     if(vl)FIM_VERB_PRINTF("using loader %s\n",loader->name);
     /* load image */
-    img = (struct ida_image*)fim_calloc(sizeof(*img),1);/* calloc, not malloc: we want zeros */
+    img = (struct ida_image*)fim_calloc(1,sizeof(*img));/* calloc, not malloc: we want zeros */
     if(!img)goto errl;
-    fim_bzero(img,sizeof(*img));
+
 #ifdef FIM_EXPERIMENTAL_ROTATION
     /* 
      * warning : there is a new field in ida_image_info (fim_extra_flags) 

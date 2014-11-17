@@ -24,7 +24,7 @@
 namespace fim
 {
 /* symbolic wrappers for memory handling calls */
-#define fim_calloc(x,y) calloc((x),(y))
+#define fim_calloc(x,y) calloc((x),(y)) /* may make this routine aligned in the future */
 #define fim_stralloc(x) (fim_char_t*) calloc((x),(1)) /* ensures that first char is NUL */
 #define fim_malloc(x) malloc(x)
 #define fim_free(x) free(x)

@@ -108,9 +108,8 @@ nef_init(FILE *fp, const fim_char_t *filename_, unsigned int page,
 
 	FIM_NEF_PRINTF("NEF loading\n");
 
-    	h = (struct nef_state *)fim_calloc(sizeof(*h),1);
+    	h = (struct nef_state *)fim_calloc(1,sizeof(*h));
     	if(!h)goto oops;
-    	fim_bzero(h,sizeof(*h));
 
     	/* uf_win32_locale_free(filename); */
     	conf_load(&rc, NULL);

@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2014 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -130,9 +130,8 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	my_bg .gray  = 192;
     int unit;
     
-    h = (struct fim_png_state *) fim_calloc(sizeof(*h),1);
+    h = (struct fim_png_state *) fim_calloc(1,sizeof(*h));
     if(!h) goto oops;
-    fim_bzero(h,sizeof(*h));
 
     h->infile = fp;
     h->i = i;

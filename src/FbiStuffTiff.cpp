@@ -2,7 +2,7 @@
 /*
  FbiStuffTiff.cpp : fbi functions for TIFF files, modified for fim
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -59,9 +59,8 @@ tiff_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     struct tiff_state *h=NULL;
 
     fclose(fp);
-    h = (struct tiff_state *) fim_calloc(sizeof(*h),1);
+    h = (struct tiff_state *) fim_calloc(1,sizeof(*h));
     if(!h)goto oops;
-    fim_bzero(h,sizeof(*h));
 
     TIFFSetWarningHandler(NULL);
     h->tif = TIFFOpen(filename,"r");
