@@ -2,7 +2,7 @@
 /*
  FbiStuffBit1.cpp : fbi functions for reading ELF files as they were raw 1 bit per pixel pixelmaps
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -64,7 +64,7 @@ bit1_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
     prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
 
-    h = (struct bit1_state *)fim_calloc(sizeof(*h),1);
+    h = (struct bit1_state *)fim_calloc(1,sizeof(*h));
     if(!h)goto oops;
     h->fp = fp;
     if(fseek(fp,0,SEEK_END)!=0) goto oops;

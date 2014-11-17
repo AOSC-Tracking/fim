@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -294,9 +294,8 @@ gotafp:
 }
 //    FIM_FPRINTF(ff_stderr, "using linux console font \"%s\"\n",filename[i]);
 
-    f_ =(struct fs_font*) fim_calloc(sizeof(*f_),1);
+    f_ =(struct fs_font*) fim_calloc(1,sizeof(*f_));
     if(!f_)goto aoops;
-    fim_bzero(f_,sizeof(*f_));
 	
     fgetc(fp);
     f_->maxenc = 256;

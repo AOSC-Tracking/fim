@@ -2,7 +2,7 @@
 /*
  FbiStuffMatrixMarket.cpp : fim functions for decoding Matrix Market files
 
- (c) 2009-2013 Michele Martone
+ (c) 2009-2014 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 {
 	rsb_coo_idx_t rows,cols;
 	struct mm_state_t *h;
-	h = (struct mm_state_t *)fim_calloc(sizeof(*h),1);
+	h = (struct mm_state_t *)fim_calloc(1,sizeof(*h));
 	int rows_max=FIM_RENDERING_MAX_ROWS,cols_max=FIM_RENDERING_MAX_COLS;
 //	int rows_max=2048,cols_max=2048;
 

@@ -2,7 +2,7 @@
 /*
  FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2014 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -56,9 +56,8 @@ pnm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     struct ppm_state *h;
     fim_char_t line[FIM_FBI_PPM_LINEBUFSIZE],*fr;
 
-    h = (struct ppm_state*) fim_calloc(sizeof(*h),1);
+    h = (struct ppm_state*) fim_calloc(1,sizeof(*h));
     if(!h)return NULL;
-    fim_bzero(h,sizeof(*h));
 
     h->infile = fp;
     fr=fgets(line,sizeof(line),fp); /* Px */
