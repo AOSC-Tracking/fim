@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -267,7 +267,7 @@ ret:
 			 * */
 			fim_char_t	*buf=NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
-			buf=(fim_char_t*)fim_calloc(inc,1);
+			buf = fim_stralloc(inc);
 			if(!buf)
 			       	goto ret;
 			while((nrb=read(fd,buf+rb,inc))>0)
