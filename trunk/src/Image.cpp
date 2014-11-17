@@ -402,13 +402,9 @@ namespace fim
 			 * keeping score of copies and ... too complicated ...
 			 */
 			struct ida_image *backup_img=img_;
+
 			if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
-			{
-				if( getGlobalIntVariable(FIM_VID_WANT_PREFETCH) == 1)
-					cc.set_status_bar("please wait while prefetching...", "*");
-				else
-					cc.set_status_bar("please wait while rescaling...", "*");
-			}
+				cc.set_status_bar("please wait while rescaling...", "*");
 
 #define FIM_PROGRESSIVE_RESCALING 0
 #if FIM_PROGRESSIVE_RESCALING
