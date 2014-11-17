@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -1695,8 +1695,8 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
 	/* R rows and C columns; the last one for string terminators..
 	 */
-	if(!columns)columns=(fim_char_t**)fim_calloc(sizeof(fim_char_t**)*R,1);
-	if(!columns_data)columns_data=(fim_char_t*)fim_calloc(sizeof(fim_char_t)*(R*(C+1)),1);
+	if(!columns)columns=(fim_char_t**)fim_calloc(1,sizeof(fim_char_t**)*R);
+	if(!columns_data)columns_data=fim_stralloc(sizeof(fim_char_t)*(R*(C+1)));
 	/* 
 	 * seems tricky : we allocate one single buffer and use it as console 
 	 * storage and console pointers storage ...

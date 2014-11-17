@@ -2175,35 +2175,34 @@ ok:
 		set_status_bar(desc.c_str(), info);
 	}
 	
-	/*
-	 *	Set the 'status bar' of the program.
-	 *	- desc will be placed on the left corner
-	 *	- info on the right
-	 *	pointers are not freed
-	 *
-	 *	TODO: a printf-like general functionality
-	 */
 	void CommandConsole::set_status_bar(const fim_char_t *desc, const fim_char_t *info)
 	{
 		/*
-		 * pointers are not freed, by any means
+		 *	Set the 'status bar' of the program.
+		 *	- desc will be placed on the left corner
+		 *	- info on the right
+		 *	Pointers are meant to be freed by the caller.
+		 *
+		 *	TODO: need a printf-like general functionality.
+		 *	FIX ME : does this function always draw ?
 		 */
-		//FIX ME : does this function always draw ?
 		int chars, ilen;
-		fim_char_t *str=NULL;
+		fim_char_t *str = NULL;
 		fim::string hk=FIM_CNS_EMPTY_STRING;	/* help key string */
 		int hkl=0;		/* help key string length */
 		const int mhkl=5,eisl=9;
-		const fim_char_t *hp=" - Help";int hpl=fim_strlen(hp);
-		prompt_[1]='\0';
+		const fim_char_t *hp=" - Help";
+		int hpl=fim_strlen(hp);
+		prompt_[1]=FIM_SYM_CHAR_NUL;
 		fim_int style=getIntVariable(FIM_VID_WANT_CAPTION_STATUS);
 		fim_err_t rc=FIM_ERR_NO_ERROR;
 	
 		if( ! displaydevice_   )
 		       	goto ret;
+
 		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP);/* FIXME: this is SLOW, and should be replaced */
 		hkl=fim_strlen(hk.c_str());
-		/* FIXME: could we guarantee a bound on its length in some way ? */
+		/* FIXME: can we guarantee a bound on its length in some way ? */
 		if(hkl>mhkl)
 			{hk=FIM_CNS_EMPTY_STRING;hkl=0;/* fix */}
 		else
@@ -2217,12 +2216,12 @@ ok:
 		chars = displaydevice_->get_chars_per_line();
 		if(chars<1)
 			goto ret;
-		str = (fim_char_t*) fim_calloc(chars+1,1);//this malloc is free
+
+		str = fim_stralloc(chars+1);
 		if(!str)
 			goto ret;
-		//sprintf(str, FIM_CNS_EMPTY_STRING);
-		*str='\0';
-		if (info && desc)
+
+		if (desc && info)
 		{
 			/* non interactive print */
 			/*

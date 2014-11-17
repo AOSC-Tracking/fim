@@ -2,7 +2,7 @@
 /*
  fim_wrappers.h : Some wrappers
 
- (c) 2011-2013 Michele Martone
+ (c) 2011-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ namespace fim
 {
 /* symbolic wrappers for memory handling calls */
 #define fim_calloc(x,y) calloc((x),(y))
+#define fim_stralloc(x) (fim_char_t*) calloc((x),(1)) /* ensures that first char is NUL */
 #define fim_malloc(x) malloc(x)
 #define fim_free(x) free(x)
 #define fim_memset(x,y,z) memset(x,y,z)
