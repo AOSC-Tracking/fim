@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -247,6 +247,9 @@ namespace fim
 			setGlobalVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice_->get_bpp());
 		//setGlobalVariable(FIM_VID_SCALE  ,newscale_*100);
 		//setGlobalVariable(FIM_VID_ASCALE ,ascale_);
+	
+		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
+			cc.browser_.display_status(cc.browser_.current().c_str(), NULL); /* FIXME: an ugly way to force the proper status display */
 		return true;
 	}
 
