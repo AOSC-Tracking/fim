@@ -719,6 +719,10 @@ err:
 						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
 						if(ms&SDL_BUTTON_RMASK) { *c='b'; return 1; }
 						if(ms&SDL_BUTTON_MMASK) { *c='q'; return 1; }
+						if(ms&SDL_BUTTON_X1MASK	) { *c='+'; return 1; }
+						if(ms&SDL_BUTTON_X2MASK	) { *c='-'; return 1; }
+						if(ms&SDL_BUTTON(SDL_BUTTON_WHEELUP)) { *c='+'; return 1; }
+						if(ms&SDL_BUTTON(SDL_BUTTON_WHEELDOWN)) { *c='-'; return 1; }
 					}
 				}
 				break;
