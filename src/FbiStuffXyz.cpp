@@ -1,8 +1,8 @@
 /* $LastChangedDate$ */
 /*
- FbiStuffBit1.cpp : fbi functions for reading ELF files as they were raw 1 bit per pixel pixelmaps
+ FbiStuffXyz.cpp : An example file for reading new file types with hypothetical library libxyz.
 
- (c) 2007-2014 Michele Martone
+ (c) 2014-2014 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -19,14 +19,22 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * this is basically toy code, so enjoy!
- * */
-
 
 #include "fim.h"
 
-#if FIM_WANT_RAW_BITS_RENDERING
+/*
+ If you want to include a new file format reader in fim, use this file as a playground.
+ This is an example file decoder for our test ".xyz" file format.
+ An *.xyz file may look like the quoted text that follows:
+ "xyz 255 255 1 This is an sample file to be opened by the sample decoder in FbiStuffXyz.cpp."
+
+ Set FIM_WITH_LIBXYZ to 1 to enable this sample decoder and be able to open *.xyz files.
+ Then do:
+ echo "xyz 255 255 1 This is an sample file to be opened by the sample decoder in FbiStuffXyz.cpp." > file.xyz
+ src/fim file.xyz
+ */
+#define FIM_WITH_LIBXYZ 0
+#if FIM_WITH_LIBXYZ
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,116 +49,171 @@ namespace fim
 
 extern CommandConsole cc;
 
+
 /* ---------------------------------------------------------------------- */
+/* hypothetic libxyz routines */
+static fim_err_t xyz_load_image_info_fp(FILE *fp, int * numpagesp, unsigned int *wp, unsigned int *hp)
+{
+	/* gives width and height and number of pages (assuming each page same size) */
+	fseek(fp,3,SEEK_SET);
+	fscanf(fp,"%d %d %d",wp,hp,numpagesp);
+	std::cout << "Identified a " << *wp << " x " << *hp << " file with " << *numpagesp << " pages.\n";
+       	return FIM_ERR_NO_ERROR;
+}
 
-typedef unsigned int   uint32;
-typedef unsigned short uint16;
+static fim_err_t xyz_load_image_fp(FILE *fp, unsigned int page, unsigned char * rgb, int bytes_per_line)
+{
+	int l,c,w,h,numpages; /* page starts at 0 */
+	fseek(fp,3,SEEK_SET);
+	fscanf(fp,"%d %d %d",&w,&h,&numpages);
+	std::cout << "Will read page "<< page << " of " << w << " x " << h << " file with " << numpages << " pages.\n";
 
+	if(bytes_per_line < w*3)
+		goto err;
+
+	for (l=0;l<h;++l)
+	{
+		for (c=0;c<w && c<l;++c)
+		{
+			rgb[l*bytes_per_line+c*3+0] = 255;
+			rgb[l*bytes_per_line+c*3+1] = c;
+			rgb[l*bytes_per_line+c*3+2] = 255;
+		}
+		for (c=l+1;c<w;++c)
+		{
+			rgb[l*bytes_per_line+c*3+0] = c;
+			rgb[l*bytes_per_line+c*3+1] = 255;
+			rgb[l*bytes_per_line+c*3+2] = 255;
+		}
+	}
+	std::cout << "Read the file\n";
+
+       	return FIM_ERR_NO_ERROR;
+err:
+	std::cout << "A reading error occured!\n";
+	return FIM_ERR_GENERIC;
+}
 /* ---------------------------------------------------------------------- */
 /* load                                                                   */
 
-struct bit1_state {
-    FILE *fp;
-    uint32 w;
-    uint32 h;
-    uint32 flen;
+struct xyz_state {
+	FILE *fp;
+	int w; /* image width: 1... */
+	int h; /* image height: 1... */
+	int np; /* number of pages: 1... */
+    	size_t flen; /* file length */
+	fim_byte_t*rgb; /* pixels, from upper left to lower right, line by line */
+	int bytes_per_line; /* rgb has bytes_per_line bytes per line */
 };
 
 static void*
-bit1_init(FILE *fp, const fim_char_t *filename, unsigned int page,
-	 struct ida_image_info *i, int thumbnail)
+xyz_init(FILE *fp, const fim_char_t *filename, unsigned int page, struct ida_image_info *i, int thumbnail)
 {
-    struct bit1_state *h=NULL;
-    fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
-    prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
+	/* it is safe to ignore filename, page, thumbnail */
+	struct xyz_state *h = NULL;
+    	fim_err_t errval = FIM_ERR_GENERIC;
 
-    h = (struct bit1_state *)fim_calloc(1,sizeof(*h));
-    if(!h)goto oops;
-    h->fp = fp;
-    if(fseek(fp,0,SEEK_END)!=0) goto oops;
-    if((h->flen=ftell(fp))==-1)goto oops;
-    i->width  = h->w = prw;	// must be congruent to 8
-    i->height = h->h = (8*h->flen + h->w-1) / ( i->width ); // should pad
-    return h;
- oops:
-    if(h)fim_free(h);
-    return NULL;
+	h = (struct xyz_state *)fim_calloc(1,sizeof(*h));
+
+	if(!h)
+		goto oops;
+
+    	h->fp = fp;
+
+	if(fseek(h->fp,0,SEEK_END)!=0)
+		goto oops;
+
+    	if((h->flen=ftell(h->fp))==-1)
+		goto oops;
+
+	errval = xyz_load_image_info_fp(h->fp, &h->np, &i->width, &i->height);
+	if(errval != FIM_ERR_NO_ERROR)
+	{
+		std::cout << "Failed xyz_load_image_info_fp !\n";
+ 	   	goto oops;
+	}
+
+	h->w = i->width;
+       	h->h = i->height;
+	h->bytes_per_line = i->width * 3;
+	h->rgb = (fim_byte_t*)fim_malloc(i->height * h->bytes_per_line );
+	if(!h->rgb)
+	{
+		std::cout << "Failed fim_malloc!\n";
+    		goto oops;
+	}
+
+	errval = xyz_load_image_fp(h->fp, page, h->rgb, h->bytes_per_line);
+	if(errval != FIM_ERR_NO_ERROR)
+	{
+		std::cout << "Failed xyz_load_image_fp!\n";
+		goto oops;
+	}
+
+	return h;
+oops:
+	if(h)
+	{
+		if(h->rgb)
+			fim_free(h->rgb);
+		fim_free(h);
+	}
+	return NULL;
 }
 
 static void
-bit1_read(fim_byte_t *dst, unsigned int line, void *data)
+xyz_read(fim_byte_t *dst, unsigned int line, void *data)
 {
-    struct bit1_state *h = (struct bit1_state *) data;
-    unsigned int ll,y,x = 0;
-    
-	y  = line ;
-	if(y==h->h-1)
-	{
-		ll = h->flen - h->w * (h->h-1) / 8;
-	}
-	else
-		ll = h->w / 8;
+	/* this gets called every line. can be left empty if useless. */
+	struct xyz_state *h = (struct xyz_state *) data;
+	int c;
 
-	fseek(h->fp,0 + y * ll,SEEK_SET);
-
-	for (x = 0; x < h->w; x+=8)
+	/* 
+	 * In this example, we copy back from a buffer.
+	 * A particular file format may require a call to e.g. xyz_read_line().
+	 * */
+	if(line == 0)
+		std::cout << "Reading first line of the file..\n";
+	for (c=0;c<h->w;++c)
 	{
-		fim_byte_t c = fgetc(h->fp);
-		*(dst++) = (c & 1 << 0)?255:0;
-		*(dst++) = (c & 1 << 0)?255:0;
-		*(dst++) = (c & 1 << 0)?255:0;
-		*(dst++) = (c & 1 << 1)?255:0;
-		*(dst++) = (c & 1 << 1)?255:0;
-		*(dst++) = (c & 1 << 1)?255:0;
-		*(dst++) = (c & 1 << 2)?255:0;
-		*(dst++) = (c & 1 << 2)?255:0;
-		*(dst++) = (c & 1 << 2)?255:0;
-		*(dst++) = (c & 1 << 3)?255:0;
-		*(dst++) = (c & 1 << 3)?255:0;
-		*(dst++) = (c & 1 << 3)?255:0;
-		*(dst++) = (c & 1 << 4)?255:0;
-		*(dst++) = (c & 1 << 4)?255:0;
-		*(dst++) = (c & 1 << 4)?255:0;
-		*(dst++) = (c & 1 << 5)?255:0;
-		*(dst++) = (c & 1 << 5)?255:0;
-		*(dst++) = (c & 1 << 5)?255:0;
-		*(dst++) = (c & 1 << 6)?255:0;
-		*(dst++) = (c & 1 << 6)?255:0;
-		*(dst++) = (c & 1 << 6)?255:0;
-		*(dst++) = (c & 1 << 7)?255:0;
-		*(dst++) = (c & 1 << 7)?255:0;
-		*(dst++) = (c & 1 << 7)?255:0;
+		dst[c*3+0] = h->rgb[h->bytes_per_line*line+c*3+0];
+		dst[c*3+1] = h->rgb[h->bytes_per_line*line+c*3+1];
+		dst[c*3+2] = h->rgb[h->bytes_per_line*line+c*3+2];
 	}
-//	if(y==h->h-1) fim_bzero(dst,h->w*8-8*x);
+	if(line==h->h/2)
+	       	std::cout << "Read half of the file\n";
+	if(line == h->h-1)
+	       	std::cout << "Read the entire file\n";
 }
 
 static void
-bit1_done(void *data)
+xyz_done(void *data)
 {
-    struct bit1_state *h = (struct bit1_state *) data;
+	struct xyz_state *h = (struct xyz_state *) data;
 
-    fclose(h->fp);
-    fim_free(h);
+	std::cout << "Done! Closing the file.\n";
+	fclose(h->fp);
+	fim_free(h->rgb);
+	fim_free(h);
 }
 
-struct ida_loader bit1_loader = {
+struct ida_loader xyz_loader = {
 /*
- * 0000000: 7f45 4c46 0101 0100 0000 0000 0000 0000  .ELF............
+ * 0000000: 7879 7a2e 2e2e 202e 0a                   xyz... ..
  */
-    /*magic:*/ "ELF",
-    /*moff:*/  1,
+    /*magic:*/ "xyz",
+    /*moff:*/  0,
     /*mlen:*/  3,
-    /*name:*/  "Bit1",
-    /*init:*/  bit1_init,
-    /*read:*/  bit1_read,
-    /*done:*/  bit1_done,
+    /*name:*/  "xyz",
+    /*init:*/  xyz_init,
+    /*read:*/  xyz_read,
+    /*done:*/  xyz_done,
 };
 
 static void __init init_rd(void)
 {
-    fim_load_register(&bit1_loader);
+	fim_load_register(&xyz_loader);
 }
 
-
 }
-#endif /* FIM_WANT_RAW_BITS_RENDERING */
+#endif /* FIM_WITH_LIBXYZ */

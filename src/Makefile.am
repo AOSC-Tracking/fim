@@ -93,6 +93,7 @@ EXTRA_fim_SOURCES += FbiStuffMagick.cpp
 EXTRA_fim_SOURCES += FbiStuffPdf.cpp
 EXTRA_fim_SOURCES += FbiStuffPs.cpp
 EXTRA_fim_SOURCES += Imlib2Device.cpp
+EXTRA_fim_SOURCES += FbiStuffXyz.cpp
 
 CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba
 
