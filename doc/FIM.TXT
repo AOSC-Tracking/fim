@@ -1560,6 +1560,10 @@ See 'man fimrc' for a reference.
     to my youth for writing fim, was an enthusiastic fan of free software, and
     hope to be so in the years to come.
 
+ Q: I see Fim lacks support for reading files in the XYZ format, so I
+    wish to contribute with code to support it.
+ A: Then please use src/FbiStuffXyz.cpp as a model and |contact| me when done.
+
  Q: I wish to use Fim for military purposes, could I ?
  A: Remember me to add somewhere a clause to deny this to you.
 
