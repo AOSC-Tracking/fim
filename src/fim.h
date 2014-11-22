@@ -132,7 +132,6 @@
 #define FIM_WANT_FAT_BROWSER 1
 #define FIM_WANT_BDI 1
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
-#define FIM_WANT_EXPERIMENTAL_BASENAME 0 /* FIXME: shall replace this with a more flexible method */
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
@@ -482,6 +481,7 @@ namespace fim
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[internal,in] if 1, will display the output console" */
 #define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[internal,out] the current display device string" */
 #define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "[internal,in] if 1, will display the status bar" */
+#define FIM_VID_DISPLAY_STATUS_FMT		"_display_status_fmt"	/* "[internal,in,experimental] format of display status string; if 0, full pathname; if 1, basename. " */
 #define FIM_VID_PUSH_PUSHES_DIRS		"_push_pushes_dirs"	/* "[internal,in] if 1, the push command will also accept and push directories (using pushdir)" */
 #define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[internal,in,experimental] if 1, will execute a sanity check on startup" */
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
