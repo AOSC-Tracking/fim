@@ -495,7 +495,12 @@ nop:
 		 * displays the left text message and a right bracketed one
 		 */
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
+		{
+#if FIM_WANT_EXPERIMENTAL_BASENAME
+			l = fim_basename_of(l);
+#endif /* FIM_WANT_EXPERIMENTAL_BASENAME */
 			commandConsole_.set_status_bar(l, image()?(image()->getInfo().c_str()):"*");
+		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
 

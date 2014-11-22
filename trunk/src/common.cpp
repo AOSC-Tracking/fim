@@ -946,3 +946,20 @@ fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_cal
 	else
 		return (fim_byte_t*)fim_malloc(nmemb);
 }
+
+const fim_char_t * fim_basename_of(const fim_char_t * s)
+{
+	if(s && *s)
+	{
+		size_t sl = strlen(s);
+
+		while(sl > 0 )
+		{
+			sl--;
+			if(s[sl]=='/')
+				return s+sl+1;
+		}
+	}
+	return s;
+}
+

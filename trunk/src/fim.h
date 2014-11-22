@@ -132,6 +132,7 @@
 #define FIM_WANT_FAT_BROWSER 1
 #define FIM_WANT_BDI 1
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
+#define FIM_WANT_EXPERIMENTAL_BASENAME 0 /* FIXME: shall replace this with a more flexible method */
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
