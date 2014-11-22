@@ -496,9 +496,8 @@ nop:
 		 */
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
 		{
-#if FIM_WANT_EXPERIMENTAL_BASENAME
-			l = fim_basename_of(l);
-#endif /* FIM_WANT_EXPERIMENTAL_BASENAME */
+			if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_FMT) == 1 )
+				l = fim_basename_of(l);
 			commandConsole_.set_status_bar(l, image()?(image()->getInfo().c_str()):"*");
 		}
 		return FIM_CNS_EMPTY_RESULT;
