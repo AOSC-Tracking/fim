@@ -597,22 +597,8 @@ err:
 		return new Image(*this);
 	}
 
-/*
- *	Creates a little description of some image,
- *	and places it in a NUL terminated static buffer.
- */
-fim::string Image::getInfo(void)
+fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 {
-	/*
-	 * a short information about the current image is returned
-	 *
-	 * WARNING:
-	 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
-	 */
-	//FIX ME !
-	if(!fimg_)
-		return FIM_CNS_EMPTY_RESULT;
-
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[3],*imp;
@@ -644,16 +630,18 @@ fim::string Image::getInfo(void)
 		
 /* #if FIM_WANT_DISPLAY_MEMSIZE */
 	// ms_ = byte_size();
-	ms_ = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
+	size_t ms = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
 
+
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
-	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
+	//if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
 	{
 		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE];
-		char*ifsp=(char*)ifs.c_str(); // FIXME
-		char*fp=ifsp;
-		char*sp=ifsp;
+		//char*ifsp=(char*)ifs.c_str(); // FIXME
+		const char*fp=ifsp;
+		const char*sp=ifsp;
+
 		clb[0]=FIM_SYM_CHAR_NUL;
 
 		while(*sp && *sp!='%')
@@ -731,22 +719,78 @@ fim::string Image::getInfo(void)
 sbum:
 			while(*sp!='%' && sp[0])
 				++sp;
-			if(sp[0]==FIM_SYM_CHAR_NUL)
-				snprintf(clb+strlen(clb), sizeof(clb), "%s",fp);
-#if 1
-			else
-			{
-				sp[0]=FIM_SYM_CHAR_NUL;
-				snprintf(clb+strlen(clb), sizeof(clb), "%s",fp);
-				sp[0]='%';
-			}
-#endif
+			snprintf(clb+strlen(clb), FIM_MIN(sp-fp+1,sizeof(clb)), "%s",fp);
 		}
 		//std::cout << "Custom format string chosen: "<< ifsp << ", resulting in: "<< clb <<"\n";
 		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
 		goto labeldone;
 	}
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
+labeldone:
+	return fim::string(linebuffer);
+}
+
+/*
+ *	Creates a little description of some image,
+ *	and places it in a NUL terminated static buffer.
+ */
+fim::string Image::getInfo(void)
+{
+	/*
+	 * a short information about the current image is returned
+	 *
+	 * WARNING:
+	 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
+	 */
+	//FIX ME !
+	if(!fimg_)
+		return FIM_CNS_EMPTY_RESULT;
+
+	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
+#if FIM_WANT_CUSTOM_INFO_STATUS_BAR
+	fim::string ifs;
+#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
+
+	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
+	{
+		fim::string clb = getInfoCustom(ifs.c_str());
+		snprintf(linebuffer, sizeof(linebuffer),"%s",clb.c_str());
+		goto labeldone;
+	}
+	else
+{
+	/* FIXME: for cleanup, shall eliminate this branch and introduce a default string. */
+	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
+	fim_char_t imagemode[3],*imp;
+	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
+	imp=imagemode;
+
+	//if(getGlobalIntVariable(FIM_VID_AUTOFLIP))*(imp++)='F';
+	//if(getGlobalIntVariable(FIM_VID_AUTOMIRROR))*(imp++)='M';
+
+	// should flip ? should mirror ?
+	int flip   =
+	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:"FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:"FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
+	int mirror   =
+	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
+
+	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
+	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
+	*imp='\0';
+
+	if(fimg_->i.npages>1)
+		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",page_+1,fimg_->i.npages);
+	else
+		*pagesinfobuffer='\0';
+		
+/* #if FIM_WANT_DISPLAY_MEMSIZE */
+	// ms_ = byte_size();
+	ms_ = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
+/* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
+
+
 	snprintf(linebuffer, sizeof(linebuffer),
 	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
 #if FIM_WANT_DISPLAY_FILESIZE
@@ -770,6 +814,7 @@ sbum:
 	     ,ms_/FIM_CNS_M
 #endif /* FIM_WANT_DISPLAY_MEMSIZE */
 	     );
+}
 labeldone:
 	return fim::string(linebuffer);
 }
