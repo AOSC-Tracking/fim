@@ -691,7 +691,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),fs_);
 				break;
 				case('M'):
-					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),ms_);
+					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),ms);
 				break;
 				case('n'):
 					snprintf(clb+strlen(clb), sizeof(clb), "%s",getStringVariable(FIM_VID_FILENAME).c_str());
