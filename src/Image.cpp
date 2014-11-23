@@ -43,7 +43,7 @@ namespace fim
  *	 Private ones are stricter.
  * 
  */
-	fim_coo_t Image::original_width(void)
+	fim_coo_t Image::original_width(void)const
 	{
 		fim_coo_t ow;
 		assert(fimg_);
@@ -54,7 +54,7 @@ namespace fim
 		return ow;
 	}
 
-	fim_coo_t Image::original_height(void)
+	fim_coo_t Image::original_height(void)const
 	{
 		fim_coo_t ow;
 		assert(fimg_);
@@ -65,13 +65,13 @@ namespace fim
 		return ow;
 	}
 
-	int Image::width(void)
+	int Image::width(void)const
 	{
 		assert(img_);
 		return img_->i.width;
 	}
 
-	int Image::height(void)
+	int Image::height(void)const
 	{
 		assert(img_);
 		return img_->i.height;
