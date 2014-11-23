@@ -509,7 +509,7 @@ namespace fim
 #define FIM_VID_PAGECOUNT			"pagecount"			/* "[internal,out,experimental] the page count for a given image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal] if 1, will inhibit display" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
-#define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[internal,experimental] if not 0, and if supported by the display device, will show the status (or command) line in the window manager caption; if set to a non-empty string, will display that string." */
+#define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[internal,experimental] if not 0, and if supported by the display device, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret that string file info format string (see _info_fmt_str)." */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
 #define FIM_VID_PWD				"_pwd"			/* "[internal,out] the current working directory; will be updated at startup and whenever the working directory changes" */
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */

@@ -693,6 +693,12 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 				case('M'):
 					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),ms_);
 				break;
+				case('n'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%s",getStringVariable(FIM_VID_FILENAME).c_str());
+				break;
+				case('N'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%s",fim_basename_of(getStringVariable(FIM_VID_FILENAME).c_str()));
+				break;
 				case('T'):
 					/* console property. TODO: move outta here */
 					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),cc.byte_size());
@@ -707,6 +713,9 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 				case('c'):
 					/* viewport property. TODO: move outta here */
 					cc.current_viewport()->snprintf_centering_info(clb+strlen(clb), sizeof(clb));
+				break;
+				case('v'):
+					snprintf(clb+strlen(clb), sizeof(clb), "%s",FIM_CNS_FIM_APPTITLE);
 				break;
 				case('%'):
 					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
