@@ -638,7 +638,7 @@ err:
 		bindings_t::const_iterator bi=bindings_.find(c);
 		fim_err_t status=FIM_ERR_NO_ERROR;
 #ifdef FIM_ITERATED_COMMANDS
-		static fim_int it_buf=-1;
+		static fim_int it_buf=-1; /* FIXME: make this it_buf_ instead. */
 
 		if( c>='0' && c <='9' && (bi==bindings_.end() || bi->second==FIM_CNS_EMPTY_STRING))//a number, not bound
 		{
@@ -2194,7 +2194,7 @@ ok:
 		const fim_char_t *hp=" - Help";
 		int hpl=fim_strlen(hp);
 		prompt_[1]=FIM_SYM_CHAR_NUL;
-		fim_int style=getIntVariable(FIM_VID_WANT_CAPTION_STATUS);
+		fim_bool_t wcs = isSetVar(FIM_VID_WANT_CAPTION_STATUS);
 		fim_err_t rc=FIM_ERR_NO_ERROR;
 	
 		if( ! displaydevice_   )
@@ -2276,13 +2276,23 @@ ok:
 #endif /* FIM_USE_READLINE */
 
 #if FIM_WANT_CAPTION_CONTROL
-		if(style!=0)
+		if(wcs)
 		{
-			rc=displaydevice_->set_wm_caption(str);
+			string wcss = getStringVariable(FIM_VID_WANT_CAPTION_STATUS);
+
+			if( wcss.c_str() && *wcss.c_str() )
+			{
+				rc = displaydevice_->set_wm_caption(wcss.c_str());
+				wcs = false; /* caption + status */
+			}
+			else
+			if( str && *str )
+				rc = displaydevice_->set_wm_caption(str);
+
 			if(rc==FIM_ERR_UNSUPPORTED)
-				style=0;
+				wcs = false; /* revert */
 		}
-		if(style==0)
+		if(!wcs)
 #endif /* FIM_WANT_CAPTION_CONTROL */
 			rc=displaydevice_->status_line((const fim_char_t*)str);
 done:

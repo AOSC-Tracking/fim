@@ -62,6 +62,12 @@ namespace fim
 			return (fim_int)(variables_[varname].setString(s));
 		}
 	
+		fim_bool_t Namespace::isSetVar(const fim::string &varname)const
+		{
+			fim_bool_t isv = variables_.find(varname) != variables_.end();
+			return isv;
+		}
+
 		fim_int Namespace::getIntVariable(const fim::string &varname)const
 		{
 			// this scope was selected
