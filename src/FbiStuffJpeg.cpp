@@ -33,7 +33,7 @@
 //#undef HAVE_STDLIB_H
 #define HAVE_STDLIB_H_BACKUP HAVE_STDLIB_H
 #endif /* HAVE_STDLIB_H */
-#endif
+#endif /* 0 */
 
 
 #include <cstring>
@@ -43,9 +43,10 @@
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 //#include "loader.h"
+//#define FIM_WITH_LIBEXIF 1
 #ifdef FIM_WITH_LIBEXIF
 #include <libexif/exif-data.h>
-#define HAVE_NEW_EXIF 0
+//#define HAVE_NEW_EXIF 1
 #endif /* FIM_WITH_LIBEXIF */
 
 //
@@ -174,11 +175,12 @@ static void dump_exif(FILE *out, ExifData *ed)
     const fim_char_t /**title=NULL,*/ *value=NULL;
     fim_char_t buffer[FIM_EXIF_BUFSIZE];
     ExifEntry  *ee=NULL;
-    int /*tag,*/i;
+    int i;
 #endif /* HAVE_NEW_EXIF */
 #if HAVE_NEW_EXIF
-    //for (i = 0; i < EXIF_IFD_COUNT; i++) {
-    for (i = 0; i < 1; i++) { // first only
+    for (i = 0; i < EXIF_IFD_COUNT; i++) {
+    /* values of EXIF_TAG_* in libexif/exif-tag.h */
+    //for (i = 0; i < 1; i++) { // first only
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_ORIENTATION)){
 		// value can be of the form "X - Y", with X and Y in
 		// {top,bottom,left,right}
@@ -260,6 +262,35 @@ static void dump_exif(FILE *out, ExifData *ed)
 uhmpf:
 		1;
 	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_EXPOSURE_TIME)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_FNUMBER)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_BATTERY_LEVEL)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_APERTURE_VALUE)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_METERING_MODE)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_EXPOSURE_PROGRAM)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_ISO_SPEED_RATINGS)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	// ... EXIF_TAG_XP_TITLE EXIF_TAG_XP_COMMENT EXIF_TAG_XP_AUTHOR EXIF_TAG_XP_KEYWORDS EXIF_TAG_XP_SUBJECT
     }
 #endif /* HAVE_NEW_EXIF */
 #if 0
