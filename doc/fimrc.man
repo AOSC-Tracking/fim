@@ -562,6 +562,10 @@ _display_status_bar
 [internal,in] if 1, will display the status bar
 .fi
 .B
+_display_status_fmt
+[internal,in,experimental] format of display status string; if 0, full pathname; if 1, basename. 
+.fi
+.B
 _do_sanity_check
 [internal,in,experimental] if 1, will execute a sanity check on startup
 .fi
@@ -771,7 +775,7 @@ _want_autocenter
 .fi
 .B
 _want_caption_status
-[internal,experimental] if not 0, and if supported by the display device, will show the status (or command) line in the window manager caption
+[internal,experimental] if not 0, and if supported by the display device, will show the status (or command) line in the window manager caption; if set to a non-empty string, will display that string.
 .fi
 .B
 _want_prefetch
