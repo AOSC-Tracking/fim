@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -144,10 +144,10 @@ class Image
 	bool check_invalid(void);
 	bool check_valid(void);
 
-	int width(void);
-	fim_coo_t original_width(void);
-	int height(void);
-	fim_coo_t original_height(void);
+	int width(void)const;
+	fim_coo_t original_width(void)const;
+	int height(void)const;
+	fim_coo_t original_height(void)const;
 	bool goto_page(fim_page_t j);
 
 	Image * getClone(void);
