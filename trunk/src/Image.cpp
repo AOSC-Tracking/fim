@@ -758,7 +758,6 @@ fim::string Image::getInfo(void)
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	fim::string ifs;
-#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 
 	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
 	{
@@ -767,6 +766,7 @@ fim::string Image::getInfo(void)
 		goto labeldone;
 	}
 	else
+#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 {
 	/* FIXME: for cleanup, shall eliminate this branch and introduce a default string. */
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
