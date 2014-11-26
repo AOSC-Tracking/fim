@@ -122,8 +122,9 @@ namespace fim
 			if(ie)
 				setVariable(FIM_VID_COMMENT,(fim_char_t*)(ie->data));
 #if FIM_WANT_EXIFTOOL
-if(fname)
+if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 {
+	fim_int ue = getGlobalIntVariable(FIM_VID_EXIFTOOL);
 	/* FIXME: one shall execute this code in a separate thread */
 	/* std::cout << "will try exiftool on : " << fname << "\n"; */
 	fim::string etc;
@@ -151,8 +152,10 @@ if(fname)
     	if (err) std::cerr << err;
     	delete et;      // delete our ExifTool object
 	//std::cout << "setting: " << etc << "\n",
-	setVariable(FIM_VID_COMMENT,getVariable(FIM_VID_COMMENT)+(etc.c_str()));
-	//setVariable(FIM_VID_COMMENT,(fim_char_t*)(etc.c_str()));
+	if(ue == 1)
+		setVariable(FIM_VID_COMMENT,getVariable(FIM_VID_COMMENT)+(etc.c_str()));
+	if(ue == 2)
+		setVariable(FIM_VID_EXIFTOOL_COMMENT,etc.c_str());
 }
 #endif /* FIM_WANT_EXIFTOOL */
 		}
