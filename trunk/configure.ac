@@ -1048,7 +1048,19 @@ if test x$fim_handle_sdl != xno; then
         fi
 fi
 
+dnl ================================================================================
 
+AH_TEMPLATE([FIM_WANT_EXIFTOOL])
+fim_cv_exiftool=no
+AC_ARG_ENABLE(exiftool, AC_HELP_STRING([--enable-exiftool], [Turns on exiftool support (EXPERIMENTAL, shall provide the EXIFTOOLLINK variable with library or object files and EXIFTOOLCXXFLAGS)]),
+	[if test x$enableval = xyes; then
+		fim_cv_exiftool=yes
+		CXXFLAGS="$CXXFLAGS $EXIFTOOLCXXFLAGS"
+		LIBS="$LIBS $EXIFTOOLLINK"
+      		AC_MSG_NOTICE([Enabling exiftool interface.])
+		AC_DEFINE(FIM_WANT_EXIFTOOL, 1, [If defined, exiftool will be used to get additional file information (EXPERIMENTAL).])
+	fi],[fim_cv_exiftool=no])
+dnl
 
 #AC_DEFINE([FIM_DEFAULT_KEY_CONFIG]   ,1, [Defined, if GPGME support is enabled])
 #AC_DEFINE([FIM_DEFAULT_CONFIG], 1, [Defined, if GPGME support is enabled])
@@ -1805,6 +1817,7 @@ dnl	exif (libexif) support           : ${fim_cv_libexif}
         framebuffer support                 : ${fim_handle_framebuffer:-yes}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
 	allow custom status bar file info   : ${fim_cv_custom_status_bar:-no}
+	exiftool interface                  : ${fim_cv_exiftool}
 dnl	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
 
 

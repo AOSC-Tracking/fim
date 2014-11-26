@@ -22,6 +22,7 @@ ongoing further inspiration.
 	Misc Current development directions
 
 
+20141126	shall document the exiftool interface
 20141123	update all flags docuentation of FIM_VID_WANT_CAPTION_STATUS/...
 20141123	clean up Image::getInfo
 20141122	document/expand the FIM_WANT_EXPERIMENTAL_BASENAME functionality.
