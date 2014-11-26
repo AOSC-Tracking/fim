@@ -22,6 +22,11 @@
 //#include "Image.h"
 #include "fim.h"
 
+#if FIM_WANT_EXIFTOOL
+#include "ExifTool.h"
+#endif /* FIM_WANT_EXIFTOOL */
+
+
 /*
  * TODO :
  *	Windowing related problems:
@@ -116,6 +121,40 @@ namespace fim
 			struct ida_extra* ie=load_find_extra(&(img_->i),EXTRA_COMMENT);
 			if(ie)
 				setVariable(FIM_VID_COMMENT,(fim_char_t*)(ie->data));
+#if FIM_WANT_EXIFTOOL
+if(fname)
+{
+	/* FIXME: one shall execute this code in a separate thread */
+	/* std::cout << "will try exiftool on : " << fname << "\n"; */
+	fim::string etc;
+	ExifTool *et = new ExifTool();
+    	TagInfo *info = et->ImageInfo(fname,NULL,2);
+
+	if (info)
+       	{
+        	for (TagInfo *i=info; i; i=i->next)
+	       	{
+			etc+=i->name;
+			etc+=" = ";
+			etc+=i->value;
+			etc+=";";
+			etc+="\n";
+			//std::cout << "reading " << i->name << "...\n";
+        	}
+        	delete info;
+    	}
+       	else if (et->LastComplete() <= 0)
+       	{
+		std::cerr << "Error executing exiftool!" << std::endl;
+    	}
+    	char *err = et->GetError();
+    	if (err) std::cerr << err;
+    	delete et;      // delete our ExifTool object
+	//std::cout << "setting: " << etc << "\n",
+	setVariable(FIM_VID_COMMENT,getVariable(FIM_VID_COMMENT)+(etc.c_str()));
+	//setVariable(FIM_VID_COMMENT,(fim_char_t*)(etc.c_str()));
+}
+#endif /* FIM_WANT_EXIFTOOL */
 		}
 	}
 
