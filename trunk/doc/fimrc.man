@@ -563,11 +563,15 @@ _display_status_bar
 .fi
 .B
 _display_status_fmt
-[internal,in,experimental] format of display status string; if 0, full pathname; if 1, basename. 
+[internal,in,experimental] format of display status string; if unset: full pathname; otherwise a custom format string (see _info_fmt_str). 
 .fi
 .B
 _do_sanity_check
 [internal,in,experimental] if 1, will execute a sanity check on startup
+.fi
+.B
+_exiftool_comment
+[internal,out] comment extracted via the exiftool interface; see _use_exiftool.
 .fi
 .B
 _file_loader
@@ -748,6 +752,10 @@ _steps
 .B
 _sys_rc_file
 [internal,in] string with the global configuration file name
+.fi
+.B
+_use_exiftool
+[internal,in] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment
 .fi
 .B
 _use_mipmaps

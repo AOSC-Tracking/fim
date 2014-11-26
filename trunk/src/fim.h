@@ -516,6 +516,7 @@ namespace fim
 #define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[internal,in] value used for scaling up/down the scaling factors" */
 #define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[internal,in] value used for incrementing/decrementing the scaling factors" */
 #define FIM_VID_COMMENT 				"_comment"				/* "[internal,out] the image comment, extracted from the image file (if any)" */
+#define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[internal,out] comment extracted via the exiftool interface; see _use_exiftool." */
 #define FIM_VID_STEPS 				"_steps"				/* "[internal,in] the default steps, in pixels, when panning images" */
 #define FIM_VID_VERSION				"_fim_version"	/* "[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
 //#define FIM_FBFONT                           "_fbfont"       /* "[internal,out] current consolefont."  */
@@ -541,6 +542,7 @@ namespace fim
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in] if 1, will display a message on the status bar when processing" */
 #define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[internal,in] if >0, will compute mipmaps; if >1, will also use mipmaps to speed up downscaling of images" */
+#define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[internal,in] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment" */
 #define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
 #define FIM_VID_ASCALE				"ascale"			/* "[internal,in,out] the asymmetric scaling of the current image" */
 #define FIM_VID_ANGLE				"angle"				/* "[internal,in,out] a floating point number specifying the rotation angle, in degrees" */
