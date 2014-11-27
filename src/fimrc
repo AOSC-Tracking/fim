@@ -209,7 +209,8 @@ alias "wu" "window 'up'" "selects the window upwards the current";
 alias "wd" "window 'down'" "selects the window under the current";
 alias "wl" "window 'left'" "selects the window at left of the current";
 alias "wr" "window 'right'" "selects the window at right of the current";
-bind 'K' "wu";
+#bind 'K' "wu";
+bind 'K' 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosity}else{toggleVerbosity;}';
 # Note : on many consoles C-j is by default equivalent to Enter.. so this may not work :)
 #bind 'C-j' "wd";
 #bind 'J' "wd";
@@ -262,6 +263,9 @@ bind "^" "0;";
 bind "$" "$;";
 bind "Backspace" "prev";
 _display_status=1;
+_want_caption_status="fim:%N@%p%%[%i/%l]";
+#_display_status_fmt="%N:%k"; #
+#_use_exiftool=0;
 echo "WELCOME : to switch to the command line interface press ':' ";
 # Some more examples:
 #alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
