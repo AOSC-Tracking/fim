@@ -665,7 +665,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
 	*imp='\0';
 
-	if(fimg_->i.npages>1)
+	if(fimg_ && fimg_->i.npages>1)
 		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",page_+1,fimg_->i.npages);
 	else
 		*pagesinfobuffer='\0';
