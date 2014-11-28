@@ -26,6 +26,11 @@
 #include "ExifTool.h"
 #endif /* FIM_WANT_EXIFTOOL */
 
+#define FIM_WANT_BACKGROUND_LOAD 0
+
+#if FIM_WANT_BACKGROUND_LOAD
+#include <thread>
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 
 /*
  * TODO :
@@ -196,6 +201,13 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 		return b;
 	}
 	
+#if FIM_WANT_BACKGROUND_LOAD
+void fim_background_load();
+{
+	std::cout << "background loading";
+}
+#endif /* FIM_WANT_BACKGROUND_LOAD */
+
 	bool Image::load(const fim_char_t *fname, FILE* fd, int want_page)
 	{
 		/*
@@ -214,7 +226,15 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 				cc.set_status_bar("please wait while reloading...", "*");
 		}
 
+#if FIM_WANT_BACKGROUND_LOAD
+		/* this would be a hypothetical starting point for a background running loader */
+		std::thread t(&fim_background_load);
+		std::cout << "foreground running";
+		t.join(); 
+		std::cout << "loaded!";
+#else
 		fimg_ = FbiStuff::read_image(fname,fd,want_page);
+#endif
 #if 0
 		if(fimg_)
 		{

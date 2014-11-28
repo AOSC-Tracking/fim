@@ -46,7 +46,7 @@
 //#define FIM_WITH_LIBEXIF 1
 #ifdef FIM_WITH_LIBEXIF
 #include <libexif/exif-data.h>
-//#define HAVE_NEW_EXIF 1
+//#define HAVE_NEW_EXIF 0
 #endif /* FIM_WITH_LIBEXIF */
 
 //
@@ -168,9 +168,9 @@ static void fim_error_exit (j_common_ptr cinfo)
 
 
 #ifdef FIM_WITH_LIBEXIF
-// FIXME: temporarily here
 static void dump_exif(FILE *out, ExifData *ed)
 {
+/* FIXME: temporarily here; shall transfer keys/values to a Namespace object */
 #if HAVE_NEW_EXIF
     const fim_char_t /**title=NULL,*/ *value=NULL;
     fim_char_t buffer[FIM_EXIF_BUFSIZE];
@@ -262,6 +262,18 @@ static void dump_exif(FILE *out, ExifData *ed)
 uhmpf:
 		1;
 	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_DATE_TIME)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_DATE_TIME_ORIGINAL)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_DATE_TIME_DIGITIZED)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		std::cout << value << "\n";
+	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_EXPOSURE_TIME)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
 		std::cout << value << "\n";
@@ -348,6 +360,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     jpeg_save_markers(&h->cinfo, JPEG_COM,    0xffff); /* comment */
     if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
     jpeg_save_markers(&h->cinfo, JPEG_APP0+1, 0xffff); /* EXIF */
+    jpeg_save_markers(&h->cinfo, JPEG_APP0+13, 0xffff); /* ?? */
     if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
     jpeg_stdio_src(&h->cinfo, h->infile);
     if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
@@ -399,6 +412,14 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	    }
 #endif /* FIM_WITH_LIBEXIF_nonono */
 	    break;
+	case JPEG_APP0 +13:
+	    if (FbiStuff::fim_filereading_debug())
+		printf("jpeg: exif data found (APP13 marker)\n");
+	    /* load_add_extra(i,EXTRA_COMMENT,mark->data,mark->data_length); */
+
+	    break;
+	default:
+		printf("jpeg: unknown marker\n");
 	}
     }
 
