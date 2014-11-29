@@ -968,6 +968,25 @@ AC_ARG_ENABLE(exif, AC_HELP_STRING([--enable-exif], [Turns on libexif support (E
 
 dnl ================================================================================
 
+AC_ARG_ENABLE(jasper, AC_HELP_STRING([--enable-jasper], [Turns on JPEG-2000 files support using JasPer (EXPERIMENTAL)]),
+	[if test x$enableval = xyes; then
+		fim_cv_libjasper=yes
+		CXXFLAGS="$CXXFLAGS"
+		LIBS="$LIBS -ljasper"
+		AC_CHECK_LIB(exif, exif_data_new_from_data,have_libjasper=yes,have_libjasper=no)
+		if test x$have_libjasper = xyes; then
+			AC_MSG_NOTICE([Enabling support of JPEG-2K files with JasPer.])
+  			FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffJasPer.o"
+		else
+			fim_cv_libjasper=no
+		        AC_MSG_ERROR([Sorry, it doesn not seem like libjasper is installed or detectable.
+			Please run --disable-exif or install libjasper in a system-wide directory instead.
+			])
+		fi
+	fi],[fim_cv_libjasper=no])
+
+dnl ================================================================================
+
 AC_ARG_ENABLE(aa, AC_HELP_STRING([--enable-aa], [Turns on aalib support (EXPERIMENTAL)]),
 	[if test x$enableval = xyes; then
 		fim_cv_aalib=yes
@@ -1575,6 +1594,12 @@ dnl ==================
 
 dnl ==================
 
+    AH_TEMPLATE([FIM_WITH_LIBJASPER])
+            if test x$fim_cv_libjasper = xyes ; then
+    		AC_DEFINE([FIM_WITH_LIBJASPER])
+    	fi
+dnl ==================
+
     AH_TEMPLATE([FIM_WITH_LIBEXIF])
             if test x$fim_cv_libexif = xyes ; then
     		AC_DEFINE([FIM_WITH_LIBEXIF])
@@ -1813,6 +1838,7 @@ dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
 	ASCII art (aalib) support           : ${fim_cv_aalib}
 dnl	exif (libexif) support           : ${fim_cv_libexif}
+	JPEG-2K/JasPer experimental support : ${fim_cv_libjasper}
 	X (sdllib) experimental support     : ${fim_handle_sdl}
         framebuffer support                 : ${fim_handle_framebuffer:-yes}
         seek magic signatures               : ${fim_cv_seek_magic:-no}

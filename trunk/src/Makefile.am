@@ -85,6 +85,7 @@ dist-hook:
 EXTRA_fim_SOURCES = 
 # The following files are marked as source files by configure.ac
 EXTRA_fim_SOURCES += FbiStuffGif.cpp
+EXTRA_fim_SOURCES += FbiStuffJasPer.cpp
 EXTRA_fim_SOURCES += FbiStuffJpeg.cpp
 EXTRA_fim_SOURCES += FbiStuffTiff.cpp
 EXTRA_fim_SOURCES += FbiStuffPng.cpp
