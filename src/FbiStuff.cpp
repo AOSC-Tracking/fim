@@ -1755,7 +1755,7 @@ ena:
 noa:	1;
     }
 #endif /* FIM_WITH_ARCHIVE */
-    //size_t read_offset=cc.getIntVariable("g:"FIM_VID_OPEN_OFFSET);
+    //size_t read_offset=cc.getIntVariable("g:" FIM_VID_OPEN_OFFSET);
     read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
 
     if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
@@ -1925,13 +1925,13 @@ probe_loader:
 #ifdef FIM_TRY_DIA
     if (NULL == loader && (*blk==0x1f) && (*(fim_byte_t*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_DIA"'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_DIA "'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_DIA"'...", "*");
-	if(NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME".png",NULL))&& 0==fim_fclose (fp))
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_DIA "'...", "*");
+	if(NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME ".png",NULL))&& 0==fim_fclose (fp))
 	{
 		if (NULL == (fp = fim_fopen(FIM_TMP_FILENAME".png","r")))
 		/* this could happen in case dia was removed from the system */
@@ -1948,7 +1948,7 @@ probe_loader:
 #ifdef FIM_TRY_XFIG
     if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))
     {
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_FIG2DEV"'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_FIG2DEV "'...", "*");
     	/*
 	 * dez's
 	 * */
@@ -1961,7 +1961,7 @@ probe_loader:
 #ifdef FIM_TRY_XCFTOPNM
     if (NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
     {
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_XCFTOPNM"'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_XCFTOPNM "'...", "*");
     	/*
 	 * dez's
 	 * */
@@ -1983,7 +1983,7 @@ probe_loader:
 	/* an svg file was found, and we try to use inkscape with it
 	 * note that braindamaged inkscape doesn't export to stdout ...
 	 * */
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '"FIM_EPR_INKSCAPE"'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_INKSCAPE "'...", "*");
 	sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"",
 		filename,FIM_TMP_FILENAME );
 #if 0
@@ -2030,7 +2030,7 @@ probe_loader:
 //#endif
 #ifdef FIM_TRY_CONVERT
     if (NULL == loader) {
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" through '"FIM_EPR_CONVERT"'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" through '" FIM_EPR_CONVERT "'...", "*");
 	/* no loader found, try to use ImageMagick's convert */
 	if(NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",NULL)))
 		goto shall_skip_header;

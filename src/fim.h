@@ -349,9 +349,9 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_ERR_QUIT	0
 #define FIM_CNS_EMPTY_RESULT	FIM_CNS_EMPTY_STRING
 #ifdef SVN_REVISION
-#define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION" (r."SVN_REVISION")"
+#define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM ", v." PACKAGE_VERSION " (r." SVN_REVISION ")"
 #else /* SVN_REVISION */
-#define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM", v."PACKAGE_VERSION""
+#define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM ", v." PACKAGE_VERSION ""
 #endif /* SVN_REVISION */
 #ifdef SVN_REVISION_NUMBER
 #define FIM_REVISION_NUMBER SVN_REVISION_NUMBER
@@ -393,19 +393,19 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 
 #define FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP \
 ".nf\n"\
-":"FIM_CNS_EX_NUM_STRING"       jump to "FIM_CNS_EX_NUM_STRING"^th image in the list\n"\
+":" FIM_CNS_EX_NUM_STRING "       jump to " FIM_CNS_EX_NUM_STRING "^th image in the list\n"\
 ":^	        jump to first image in the list\n"\
 ":$	        jump to last image in the list\n"\
-":*"FIM_CNS_EX_FCT_STRING"      scale the image by "FIM_CNS_EX_FCT_STRING"\n"\
-":"FIM_CNS_EX_SCALE_STRING"%       scale the image to the desired "FIM_CNS_EX_SCALE_STRING"\n"\
-":+"FIM_CNS_EX_SCALE_STRING"%       scale the image up to the desired percentage "FIM_CNS_EX_SCALE_STRING" (relatively to the original)\n"\
-":-"FIM_CNS_EX_SCALE_STRING"%       scale the image down to the desired percentage "FIM_CNS_EX_SCALE_STRING" (relatively to the original)\n"\
+":*" FIM_CNS_EX_FCT_STRING "      scale the image by " FIM_CNS_EX_FCT_STRING "\n"\
+":" FIM_CNS_EX_SCALE_STRING "%       scale the image to the desired " FIM_CNS_EX_SCALE_STRING "\n"\
+":+" FIM_CNS_EX_SCALE_STRING "%       scale the image up to the desired percentage " FIM_CNS_EX_SCALE_STRING " (relatively to the original)\n"\
+":-" FIM_CNS_EX_SCALE_STRING "%       scale the image down to the desired percentage " FIM_CNS_EX_SCALE_STRING " (relatively to the original)\n"\
 "\n"\
-"/"FIM_CNS_EX_RE_STRING"		 entering the pattern "FIM_CNS_EX_RE_STRING" (with /) makes fim jump to the next image whose filename matches "FIM_CNS_EX_RE_STRING"\n"\
+"/" FIM_CNS_EX_RE_STRING "		 entering the pattern " FIM_CNS_EX_RE_STRING " (with /) makes fim jump to the next image whose filename matches " FIM_CNS_EX_RE_STRING "\n"\
 "/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'\n"\
 "/png		 a shortcut for /.*png.*\n"\
 "\n"\
-"!"FIM_CNS_EX_SYSC_STRING"		executes the "FIM_CNS_EX_SYSC_STRING" quoted string as a \""FIM_CNS_SHELL"\" shell command\n"\
+"!" FIM_CNS_EX_SYSC_STRING "		executes the " FIM_CNS_EX_SYSC_STRING " quoted string as a \"" FIM_CNS_SHELL "\" shell command\n"\
 ""
 
 #define FIM_MAX_MIPMAPS 32
@@ -752,20 +752,20 @@ namespace fim
  * Help messages for Fim commands (partial).
  * One glorious day these macros will serve to build automatically documentation.
  * */
-#define FIM_CMD_HELP_ALIGN FIM_FLT_ALIGN" bottom : align to the lower side the current image; " FIM_FLT_ALIGN" top : align to the upper side the current image; "
-#define FIM_CMD_HELP_LIST	FIM_FLT_LIST" : display the files list; "FIM_FLT_LIST" random_shuffle: randomly shuffle the file list; "FIM_FLT_LIST" reverse: reverse the file list; "FIM_FLT_LIST" sort: sort the file list; "FIM_FLT_LIST" pop : pop the last file from the files list; " FIM_FLT_LIST" remove ["FIM_CNS_EX_FNS_STRING"] : remove the current file, or the "FIM_CNS_EX_FNS_STRING", if specified " "; push "FIM_CNS_EX_FNS_STRING" : push "FIM_CNS_EX_FNS_STRING" to the back of the files list; "FIM_FLT_LIST" filesnum : display the number of files in the files list; "FIM_FLT_LIST" mark : mark the current file for stdout printing at exit; "FIM_FLT_LIST" unmark : unmark the current file, preventing from stdout printing at exit; "FIM_FLT_LIST" pushdir {dirname} : will push all the files in {dirname}, when matching the regular expression in variable "FIM_VID_PUSHDIR_RE" or, if empty, from constant regular expression "FIM_CNS_PUSHDIR_RE" "
-#define FIM_CMD_HELP_CD			FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING": change the current directory to "FIM_CNS_EX_PATH_STRING". "FIM_FLT_CD" - will change to the previous current directory (before the last \":"FIM_FLT_CD" "FIM_CNS_EX_PATH_STRING"\" command)"
-#define FIM_CMD_HELP_SET			FIM_FLT_SET": returns a list of variables which are set; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING": returns the value of variable "FIM_CNS_EX_ID_STRING"; "FIM_FLT_SET" "FIM_CNS_EX_ID_STRING" "FIM_CNS_EX_CMDS_STRING": sets variable "FIM_CNS_EX_ID_STRING" to value "FIM_CNS_EX_CMDS_STRING"; " 
-#define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the "FIM_VID_PWD" variable"
-#define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL" "FIM_CNS_EX_ARGS_STRING" : evaluate "FIM_CNS_EX_ARGS_STRING" as commands, executing them"
-#define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM" "FIM_CNS_EX_SYSC_STRING": get the output of the shell command "FIM_CNS_EX_SYSC_STRING". (uses popen())"
-#define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW" "FIM_CNS_EX_ARGS_STRING" : manipulates the window system windows; each value of "FIM_CNS_EX_ARGS_STRING" shall be one of ['split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap']"
-#define FIM_CMD_HELP_GOTO 	FIM_FLT_GOTO" {['+'|'-']"FIM_CNS_EX_NUM_STRING"['%']['f'|'p']} | {/"FIM_CNS_EX_RE_STRING"/} | {'+//'}: jump to an image; if "FIM_CNS_EX_NUM_STRING" is given, and not surrounded by any specifier, will go to image at index "FIM_CNS_EX_NUM_STRING" ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /"FIM_CNS_EX_RE_STRING"/ is given, will jump to the first image matching the given /"FIM_CNS_EX_RE_STRING"/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern"
-#define FIM_CMD_HELP_SCALE	FIM_FLT_SCALE" {['+'|'-']{value}['%']|'w'|'h'|'a'|'b'|'++'|'+-'|'+*'|'+/'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; " "if given '++'('+-'), will increment (decrement) the \""FIM_VID_MAGNIFY_FACTOR"\", \""FIM_VID_REDUCE_FACTOR"\" variables by \""FIM_VID_SCALE_FACTOR_DELTA"\"; " "if given '+*'('+/'), will multiply (divide) the \""FIM_VID_MAGNIFY_FACTOR"\", \""FIM_VID_REDUCE_FACTOR"\" variables by \""FIM_VID_SCALE_FACTOR_MULTIPLIER"\"; "
-#define FIM_CMD_HELP_HELP	FIM_FLT_HELP" ["FIM_CNS_EX_ID_STRING"] : provide online help, if "FIM_CNS_EX_ID_STRING" is some variable, alias, or command identifier"
+#define FIM_CMD_HELP_ALIGN FIM_FLT_ALIGN " bottom : align to the lower side the current image; " FIM_FLT_ALIGN " top : align to the upper side the current image; "
+#define FIM_CMD_HELP_LIST	FIM_FLT_LIST " : display the files list; " FIM_FLT_LIST " random_shuffle: randomly shuffle the file list; " FIM_FLT_LIST " reverse: reverse the file list; " FIM_FLT_LIST " sort: sort the file list; " FIM_FLT_LIST " pop : pop the last file from the files list; " FIM_FLT_LIST " remove [" FIM_CNS_EX_FNS_STRING "] : remove the current file, or the " FIM_CNS_EX_FNS_STRING ", if specified " "; push " FIM_CNS_EX_FNS_STRING " : push " FIM_CNS_EX_FNS_STRING " to the back of the files list; " FIM_FLT_LIST " filesnum : display the number of files in the files list; " FIM_FLT_LIST " mark : mark the current file for stdout printing at exit; " FIM_FLT_LIST " unmark : unmark the current file, preventing from stdout printing at exit; " FIM_FLT_LIST " pushdir {dirname} : will push all the files in {dirname}, when matching the regular expression in variable " FIM_VID_PUSHDIR_RE " or, if empty, from constant regular expression " FIM_CNS_PUSHDIR_RE " "
+#define FIM_CMD_HELP_CD			FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING ": change the current directory to " FIM_CNS_EX_PATH_STRING ". " FIM_FLT_CD " - will change to the previous current directory (before the last \":" FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING "\" command)"
+#define FIM_CMD_HELP_SET			FIM_FLT_SET ": returns a list of variables which are set; " FIM_FLT_SET " " FIM_CNS_EX_ID_STRING ": returns the value of variable " FIM_CNS_EX_ID_STRING "; " FIM_FLT_SET " " FIM_CNS_EX_ID_STRING " " FIM_CNS_EX_CMDS_STRING ": sets variable " FIM_CNS_EX_ID_STRING " to value " FIM_CNS_EX_CMDS_STRING "; " 
+#define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the " FIM_VID_PWD " variable"
+#define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL " " FIM_CNS_EX_ARGS_STRING " : evaluate " FIM_CNS_EX_ARGS_STRING " as commands, executing them"
+#define FIM_CMD_HELP_SYSTEM		FIM_FLT_SYSTEM " " FIM_CNS_EX_SYSC_STRING ": get the output of the shell command " FIM_CNS_EX_SYSC_STRING ". (uses popen())"
+#define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW " " FIM_CNS_EX_ARGS_STRING " : manipulates the window system windows; each value of " FIM_CNS_EX_ARGS_STRING " shall be one of ['split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap']"
+#define FIM_CMD_HELP_GOTO 	FIM_FLT_GOTO" {['+'|'-']" FIM_CNS_EX_NUM_STRING "['%']['f'|'p']} | {/" FIM_CNS_EX_RE_STRING "/} | {'+//'}: jump to an image; if " FIM_CNS_EX_NUM_STRING " is given, and not surrounded by any specifier, will go to image at index " FIM_CNS_EX_NUM_STRING " ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /" FIM_CNS_EX_RE_STRING "/ is given, will jump to the first image matching the given /" FIM_CNS_EX_RE_STRING "/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern"
+#define FIM_CMD_HELP_SCALE	FIM_FLT_SCALE" {['+'|'-']{value}['%']|'w'|'h'|'a'|'b'|'++'|'+-'|'+*'|'+/'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; " "if given '++'('+-'), will increment (decrement) the \"" FIM_VID_MAGNIFY_FACTOR "\", \"" FIM_VID_REDUCE_FACTOR "\" variables by \"" FIM_VID_SCALE_FACTOR_DELTA "\"; " "if given '+*'('+/'), will multiply (divide) the \"" FIM_VID_MAGNIFY_FACTOR "\", \"" FIM_VID_REDUCE_FACTOR "\" variables by \"" FIM_VID_SCALE_FACTOR_MULTIPLIER "\"; "
+#define FIM_CMD_HELP_HELP	FIM_FLT_HELP " [" FIM_CNS_EX_ID_STRING "] : provide online help, if " FIM_CNS_EX_ID_STRING " is some variable, alias, or command identifier"
 
 
-#define FIM_CNS_SLIDESHOW_CMD "while("FIM_VID_FILEINDEX"<"FIM_VID_FILELISTLEN"){sleep "FIM_VID_WANT_SLEEPS"; next;}"
+#define FIM_CNS_SLIDESHOW_CMD "while(" FIM_VID_FILEINDEX "<" FIM_VID_FILELISTLEN "){sleep " FIM_VID_WANT_SLEEPS "; next;}"
 
 /*
  * Some Fim compilation defaults

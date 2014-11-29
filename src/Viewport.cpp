@@ -334,7 +334,7 @@ namespace fim
 		if(desaturate)
 			image_->desaturate();
 
-		if (getGlobalIntVariable("i:"FIM_VID_WANT_AUTOCENTER)==1 && displaydevice_->redraw_!=FIM_REDRAW_UNNECESSARY  )
+		if (getGlobalIntVariable("i:" FIM_VID_WANT_AUTOCENTER)==1 && displaydevice_->redraw_!=FIM_REDRAW_UNNECESSARY  )
 		{
 			/*
 			 * If this is the first image display, we have
@@ -349,7 +349,7 @@ namespace fim
 				left_ = (image_->width() - this->viewport_width()) / 2;
 			if (image_->height() > this->viewport_height() &&  autotop==0)
 				top_ = (image_->height() - this->viewport_height()) / 2;
-                       setGlobalVariable("i:"FIM_VID_WANT_AUTOCENTER,0);
+                       setGlobalVariable("i:" FIM_VID_WANT_AUTOCENTER,0);
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
@@ -547,7 +547,7 @@ namespace fim
 		if(image_)
 		{
 			image_->reset();
-			setGlobalVariable("i:"FIM_VID_WANT_AUTOCENTER,1);
+			setGlobalVariable("i:" FIM_VID_WANT_AUTOCENTER,1);
 		}
 		should_redraw();
                 top_  = 0;

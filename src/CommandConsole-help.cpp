@@ -2,7 +2,7 @@
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help methods
 
- (c) 2011-2013 Michele Martone
+ (c) 2011-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -118,32 +118,32 @@ manmode:
 			string(".\\\"\n"
 			".\\\" $Id""$\n"
 			".\\\"\n"
-			".TH fimrc 5 \"(c) 2011-2013 "FIM_AUTHOR_NAME"\"\n"
+			".TH fimrc 5 \"(c) 2011-2013 " FIM_AUTHOR_NAME "\"\n"
 			".SH NAME\n"
 			"fimrc - \\fB fim \\fP configuration file and language reference\n"
 			"\n"
 			".SH SYNOPSIS\n"
-			".B "FIM_CNS_USR_RC_COMPLETE_FILEPATH"\n.fi\n"
-			".B "FIM_CNS_SYS_RC_FILEPATH"\n.fi\n"
-			".B fim --"FIM_OSW_SCRIPT_FROM_STDIN" [ {options} ] < {scriptfile}\n.fi\n"
-			".B fim --"FIM_OSW_EXECUTE_SCRIPT" {scriptfile} [ {options} ]\n.fi\n"
-			".B fim --"FIM_OSW_EXECUTE_COMMANDS" {commands} [ {options} ]\n.fi\n"
-			".B fim --"FIM_OSW_FINAL_COMMANDS" {commands} [ {options} ]\n.fi\n"
-			".B fim --"FIM_OSW_DUMP_SCRIPTOUT" {scriptfile} [ {options} ]  \n.fi\n"
-			".B fim --"FIM_OSW_DUMP_SCRIPTOUT" "FIM_LINUX_STDOUT_FILE" [ {options} ]\n.fi\n"
+			".B " FIM_CNS_USR_RC_COMPLETE_FILEPATH "\n.fi\n"
+			".B " FIM_CNS_SYS_RC_FILEPATH "\n.fi\n"
+			".B fim --" FIM_OSW_SCRIPT_FROM_STDIN " [ {options} ] < {scriptfile}\n.fi\n"
+			".B fim --" FIM_OSW_EXECUTE_SCRIPT " {scriptfile} [ {options} ]\n.fi\n"
+			".B fim --" FIM_OSW_EXECUTE_COMMANDS " {commands} [ {options} ]\n.fi\n"
+			".B fim --" FIM_OSW_FINAL_COMMANDS " {commands} [ {options} ]\n.fi\n"
+			".B fim --" FIM_OSW_DUMP_SCRIPTOUT " {scriptfile} [ {options} ]  \n.fi\n"
+			".B fim --" FIM_OSW_DUMP_SCRIPTOUT " " FIM_LINUX_STDOUT_FILE " [ {options} ]\n.fi\n"
 			"\n"
 			".SH DESCRIPTION\n"
 			"This page explains the \n.B fim\nlanguage, which is used for the \n.B fimrc\nconfiguration files, {scriptfile}s, or {commands} passed via command line {options}.\n"
-			"This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \""FIM_SYM_CONSOLE_KEY_STR"\" key (or rather, the key code specified by the \""FIM_VID_CONSOLE_KEY"\" variable).\n"
-			"One may exit from command line mode by pressing the "FIM_KBD_ENTER" key on an empty line (a non empty command line would be submitted for execution), or the "FIM_KBD_ESC" key ")+
+			"This language can be used to issue commands (or programs) from the internal program command line accessed interactively through the \"" FIM_SYM_CONSOLE_KEY_STR "\" key (or rather, the key code specified by the \"" FIM_VID_CONSOLE_KEY "\" variable).\n"
+			"One may exit from command line mode by pressing the " FIM_KBD_ENTER " key on an empty line (a non empty command line would be submitted for execution), or the " FIM_KBD_ESC " key ")+
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER
-		       	string(" (in non-SDL mode, it is required to press the "FIM_KBD_ESC" key twice).\n")+
+		       	string(" (in non-SDL mode, it is required to press the " FIM_KBD_ESC " key twice).\n")+
 #else /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 		       	string(" (only in SDL mode).\n")+
 #endif /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 			string("The general form of a fim command/program is shown in the next section.\n")+
 #ifndef FIM_COMMAND_AUTOCOMPLETION
-			string("\nInterpretation of commands or aliases may use autocompletion (if enabled; see the "FIM_VID_CMD_EXPANSION" variable description), in a way to allow the user to type only the beginning of the command of interest.\n")+
+			string("\nInterpretation of commands or aliases may use autocompletion (if enabled; see the " FIM_VID_CMD_EXPANSION " variable description), in a way to allow the user to type only the beginning of the command of interest.\n")+
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
 			string("\n"
 			"\n"
@@ -182,7 +182,7 @@ manmode:
 			" and they are triggered on actions as indicated by their name.\n"
 			".SH VARIABLES REFERENCE\n"
 			"If undeclared, a variable will evaluate to 0.\n\n"
-			"There are multiple namespaces in which variables may exist: "FIM_SYM_NAMESPACE_PREFIXES_DSC". A namespace is specified by a prefix, which is one of: "FIM_SYM_NAMESPACE_PREFIXES", which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''.\n"
+			"There are multiple namespaces in which variables may exist: " FIM_SYM_NAMESPACE_PREFIXES_DSC ". A namespace is specified by a prefix, which is one of: " FIM_SYM_NAMESPACE_PREFIXES ", which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''.\n"
 			"\nIn the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n"
 			"\n")+
 		       	get_variables_reference(refmode)+
@@ -191,7 +191,7 @@ manmode:
 			string(FIM_DEFAULT_EXAMPLE_FILE_CONTENTS)+
 			string("\n"
 			".SH CONFIGURATION EXAMPLES\n"
-			"This is the default configuration, as contained in the "FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS" variable.\n"
+			"This is the default configuration, as contained in the " FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS " variable.\n"
 			"\n.nf\n")+
 			string(FIM_DEFAULT_CONFIG_FILE_CONTENTS)+
 			string("\n")+

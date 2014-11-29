@@ -202,9 +202,9 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 	}
 	
 #if FIM_WANT_BACKGROUND_LOAD
-void fim_background_load();
+void fim_background_load()
 {
-	std::cout << "background loading";
+	std::cout << "background loading\n";
 }
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
@@ -229,12 +229,11 @@ void fim_background_load();
 #if FIM_WANT_BACKGROUND_LOAD
 		/* this would be a hypothetical starting point for a background running loader */
 		std::thread t(&fim_background_load);
-		std::cout << "foreground running";
+		std::cout << "foreground running\n";
 		t.join(); 
-		std::cout << "loaded!";
-#else
+		std::cout << "loaded!\n";
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		fimg_ = FbiStuff::read_image(fname,fd,want_page);
-#endif
 #if 0
 		if(fimg_)
 		{
@@ -675,11 +674,11 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 
 	// should flip ? should mirror ?
 	int flip   =
-	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:"FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:"FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
+	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
 	int mirror   =
-	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
+	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
@@ -841,11 +840,11 @@ fim::string Image::getInfo(void)
 
 	// should flip ? should mirror ?
 	int flip   =
-	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:"FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:"FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
+	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
 	int mirror   =
-	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:"FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
+	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
@@ -921,7 +920,7 @@ labeldone:
 		 * */
 		return (FIM_MOD(
 		(  getIntVariable(FIM_VID_ORIENTATION)
-		+getGlobalIntVariable("v:"FIM_VID_ORIENTATION)
+		+getGlobalIntVariable("v:" FIM_VID_ORIENTATION)
 		+getGlobalIntVariable(FIM_VID_ORIENTATION)
 		) ,4));
 	}
@@ -1052,7 +1051,7 @@ labeldone:
 			}
 		}
 
-		setGlobalVariable("i:"FIM_VID_NEGATED,1-getGlobalIntVariable("i:"FIM_VID_NEGATED));
+		setGlobalVariable("i:" FIM_VID_NEGATED,1-getGlobalIntVariable("i:" FIM_VID_NEGATED ));
 
        		should_redraw();
 
@@ -1077,7 +1076,7 @@ labeldone:
 		for( fim_byte_t * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;p+=3)
 		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
 
-		setGlobalVariable("i:"FIM_VID_DESATURATED,1-getGlobalIntVariable("i:"FIM_VID_DESATURATED));
+		setGlobalVariable("i:" FIM_VID_DESATURATED ,1-getGlobalIntVariable("i:" FIM_VID_DESATURATED ));
 
        		should_redraw();
 
@@ -1105,7 +1104,7 @@ labeldone:
 		for( fim_byte_t * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;++p)
 			*p = ~ *p;
 
-		setGlobalVariable("i:"FIM_VID_NEGATED,1-getGlobalIntVariable("i:"FIM_VID_NEGATED));
+		setGlobalVariable("i:" FIM_VID_NEGATED ,1-getGlobalIntVariable("i:" FIM_VID_NEGATED ));
 
        		should_redraw();
 

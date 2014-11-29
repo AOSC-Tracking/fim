@@ -2,7 +2,7 @@
 /*
  CommandConsole-cmd.cpp : Fim console commands
 
- (c) 2009-2013 Michele Martone
+ (c) 2009-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ namespace fim
 
 		}
 		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
-		return ""FIM_FLT_HELP" "FIM_CNS_EX_ID_STRING": provides help for "FIM_CNS_EX_ID_STRING", if it is a variable, alias, or command. Use "FIM_KBD_TAB" in commandline mode to get a list of commands. Command line mode can be entered with the default key '"FIM_SYM_CONSOLE_KEY_STR"', and left pressing "FIM_KBD_ENTER".\n";
+		return "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
 	}
 
 	fim::string CommandConsole::fcmd_quit(const args_t &args)
@@ -784,7 +784,7 @@ nop:
 
 	fim::string CommandConsole::fcmd_do_getenv(const args_t& args)
 	{
-		string help="usage : "FIM_FLT_GETENV" "FIM_CNS_EX_ID_STRING" will create a fim variable named "FIM_CNS_EX_ID_STRING" with value $"FIM_CNS_EX_ID_STRING" (if nonempty), from the current shell."
+		string help="usage : " FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING " will create a fim variable named " FIM_CNS_EX_ID_STRING " with value $" FIM_CNS_EX_ID_STRING " (if nonempty), from the current shell."
 #ifndef HAVE_GETENV
 		" (note that getenv call was not available at build time, so it won't work)\n"
 #endif /* HAVE_GETENV */
