@@ -22,8 +22,6 @@
 
 #include "fim.h"
 
-#define FIM_WITH_LIBJASPER 1
-
 #if FIM_WITH_LIBJASPER
 /* Experimental, preliminar, unfinished support for JPEG-2K (JPEG-2000) files loading.
  * Error handling and performance shall be dealt with...
