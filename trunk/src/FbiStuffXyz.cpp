@@ -112,6 +112,7 @@ xyz_init(FILE *fp, const fim_char_t *filename, unsigned int page, struct ida_ima
 	/* it is safe to ignore filename, page, thumbnail */
 	struct xyz_state *h = NULL;
     	fim_err_t errval = FIM_ERR_GENERIC;
+	long fo = 0;
 
 	h = (struct xyz_state *)fim_calloc(1,sizeof(*h));
 
@@ -123,7 +124,9 @@ xyz_init(FILE *fp, const fim_char_t *filename, unsigned int page, struct ida_ima
 	if(fseek(h->fp,0,SEEK_END)!=0)
 		goto oops;
 
-    	if((h->flen=ftell(h->fp))==-1)
+    	fo = ftell(h->fp);
+	h->flen = fo; /* FIXME: evil conversion */
+    	if( fo == -1 )
 		goto oops;
 
 	errval = xyz_load_image_info_fp(h->fp, &h->np, &i->width, &i->height);
