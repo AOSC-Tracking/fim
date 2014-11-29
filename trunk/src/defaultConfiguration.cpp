@@ -4,7 +4,7 @@
   The following code contains key bindings and aliases definitions
   which make up a first usable configuration for FIM.
  
- (c) 2007-2011 Michele Martone
+ (c) 2007-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 */
 #if FIM_DEFAULT_CONFIG
 #if 1
-		alias(FIM_FLA_MAGNIFY,FIM_FLC_MAGNIFY,"magnify the displayed image by the "FIM_VID_MAGNIFY_FACTOR" variable or "FIM_CNS_EX_ARGS_STRING"");
-		alias(FIM_FLA_REDUCE ,FIM_FLC_REDUCE,"reduce the displayed image by "FIM_VID_REDUCE_FACTOR" or "FIM_CNS_EX_ARGS_STRING"");
+		alias(FIM_FLA_MAGNIFY,FIM_FLC_MAGNIFY,"magnify the displayed image by the " FIM_VID_MAGNIFY_FACTOR " variable or " FIM_CNS_EX_ARGS_STRING "");
+		alias(FIM_FLA_REDUCE ,FIM_FLC_REDUCE,"reduce the displayed image by " FIM_VID_REDUCE_FACTOR " or " FIM_CNS_EX_ARGS_STRING "");
  		alias(FIM_FLA_NEXT,FIM_FLC_NEXT,"go to the next page or picture file");
  		alias(FIM_FLA_PREV,FIM_FLC_PREV,"go to the previous page or picture file");
  		alias(FIM_FLA_NEXT_PAGE,FIM_FLC_NEXT_PAGE,"go to the next page in the file");
@@ -32,11 +32,11 @@
  		alias(FIM_FLA_PREV_FILE,FIM_FLC_PREV_FILE,"go to the previous file in the list");
 #endif
 #if 1
- 		alias("scale_factor_grow","scale '+*'","multiply the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by "FIM_VID_SCALE_FACTOR_MULTIPLIER"");
- 		alias("scale_factor_shrink","scale '+/'","divide the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR" by "FIM_VID_SCALE_FACTOR_MULTIPLIER"");
- 		alias("scale_factor_decrease","scale '+-'","subtract "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR"");
- 		alias("scale_factor_increase","scale '++'","add "FIM_VID_SCALE_FACTOR_DELTA" to the scale factors "FIM_VID_REDUCE_FACTOR" and "FIM_VID_MAGNIFY_FACTOR"");
- 		alias('A',"'"FIM_VID_AUTOTOP"=1-"FIM_VID_AUTOTOP";'");
+ 		alias("scale_factor_grow","scale '+*'","multiply the scale factors " FIM_VID_REDUCE_FACTOR " and " FIM_VID_MAGNIFY_FACTOR " by " FIM_VID_SCALE_FACTOR_MULTIPLIER "");
+ 		alias("scale_factor_shrink","scale '+/'","divide the scale factors " FIM_VID_REDUCE_FACTOR " and " FIM_VID_MAGNIFY_FACTOR " by " FIM_VID_SCALE_FACTOR_MULTIPLIER "");
+ 		alias("scale_factor_decrease","scale '+-'","subtract " FIM_VID_SCALE_FACTOR_DELTA " to the scale factors " FIM_VID_REDUCE_FACTOR " and " FIM_VID_MAGNIFY_FACTOR "");
+ 		alias("scale_factor_increase","scale '++'","add " FIM_VID_SCALE_FACTOR_DELTA " to the scale factors " FIM_VID_REDUCE_FACTOR " and " FIM_VID_MAGNIFY_FACTOR "");
+ 		alias('A',"'" FIM_VID_AUTOTOP "=1-" FIM_VID_AUTOTOP ";'");
 #endif
 #if 0
  		alias('A',"'autotop=1-autotop;'");

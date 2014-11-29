@@ -2,7 +2,7 @@
 /*
  CommandConsole-init.cpp : Fim console initialization
 
- (c) 2010-2013 Michele Martone
+ (c) 2010-2014 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -244,7 +244,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			}
 			else
 			if(device!=FIM_DDN_VAR_DUMB)
-				std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are "FIM_DDN_VARS")!\n",
+				std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are " FIM_DDN_VARS ")!\n",
 			std::cerr << "Using the default \""<<FIM_DDN_INN_DUMB<<"\" display device instead.\n";
 		}
 
@@ -336,10 +336,10 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
 		}
 
-		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/"FIM_CNS_USR_RC_FILEPATH)+2
+		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/" FIM_CNS_USR_RC_FILEPATH)+2
 		{
 			strcpy(rcfile,e);
-			strcat(rcfile,"/"FIM_CNS_USR_RC_FILEPATH);
+			strcat(rcfile,"/" FIM_CNS_USR_RC_FILEPATH);
 			if(getIntVariable(FIM_VID_NO_RC_FILE)!=1 )
 			{
 				if(

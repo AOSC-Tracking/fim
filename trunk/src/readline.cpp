@@ -144,7 +144,7 @@ static fim_char_t ** fim_completion (const fim_char_t *text, int start,int end)
 				sp[0]=dupstr("\"");
 				sp[1]=NULL;
 				rl_completion_append_character = '\0';
-				fim::cout << "you can type double quoted string (e.g.: \""FIM_CNS_EXAMPLE_FILENAME"\"), or a variable name (e.g.:"FIM_VID_FILELISTLEN"). some variables need a prefix (one of "FIM_SYM_NAMESPACE_PREFIXES")\n" ;
+				fim::cout << "you can type double quoted string (e.g.: \"" FIM_CNS_EXAMPLE_FILENAME "\"), or a variable name (e.g.:" FIM_VID_FILELISTLEN "). some variables need a prefix (one of " FIM_SYM_NAMESPACE_PREFIXES ")\n" ;
 				return sp;
 			}
 #endif /* FIM_COMPLETE_INSERTING_DOUBLE_QUOTE */
