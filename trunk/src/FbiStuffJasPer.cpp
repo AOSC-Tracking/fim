@@ -1,4 +1,4 @@
-/* $LastChangedDate: 2014-11-19 23:53:58 +0100 (Wed, 19 Nov 2014) $ */
+/* $LastChangedDate$ */
 /*
  FbiStuffXyz.cpp : An example file for reading new file types with hypothetical library libjp2.
 
