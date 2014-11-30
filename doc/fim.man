@@ -464,7 +464,7 @@ Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 was originally based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2013 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
+Copyright (C) 2007-2014 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 .fi
 Copyright (C) 1999-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org>
 .P

@@ -262,6 +262,7 @@ bind "End" "$;";
 bind "^" "0;";
 bind "$" "$;";
 bind "Backspace" "prev";
+bind "'" "goto _lastfileindex"; 
 _display_status=1;
 _want_caption_status="fim:%N@%p%%[%i/%l]";
 #_display_status_fmt="%N:%k"; #

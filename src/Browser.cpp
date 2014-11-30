@@ -1033,7 +1033,7 @@ nop:
 	fim::string Browser::goto_image(int n, bool isfg)
 	{
 		/*
-		 *	FIX ME
+		 *	FIX ME: ultimately, all file transitions should pass by here.
 		 */
 		int N = flist_.size();
 
@@ -1051,6 +1051,10 @@ nop:
 			image()->goto_page(n);
 			return N;
 		}
+#if FIM_WANT_GOTOLAST
+		if(getGlobalIntVariable(FIM_VID_LASTFILEINDEX) != current_image())
+			setGlobalVariable(FIM_VID_LASTFILEINDEX, current_image());
+#endif /* FIM_WANT_GOTOLAST */
 		cf_ = n;
 		cf_ = FIM_MOD(cf_,N);
 		setGlobalVariable(FIM_VID_PAGE ,(fim_int)0);
