@@ -1,7 +1,10 @@
 
 # $Id$
 
-FWP=http://www.autistici.org/dezperado/fim
+#FWP=http://www.autistici.org/dezperado/fim
+FWP=http://www.nongnu.org/fbi-improved/
+FIM_ABBR='<ABBR TITLE="Fbi IMproved">FIM</ABBR>'
+VIM_ABBR='<ABBR TITLE="Vi IMproved">VIM</ABBR>'
 INDEXIN=index.html.in
 FIMDIR=..
 FIMSITE=html-dezperado/fim
@@ -25,19 +28,19 @@ CP=cp -p
 
 help:
 	@echo
-	@echo HELP : 'make site | make up | make all'
+	@echo HELP : 'make pages | make site | make up | make all'
 	@echo
 
 #tgz: $(SITEDIR)/$(TGZ)
 tgz:
 	cd $(FIMDIR) && make doc && make signed-tgzdist && cd -
 	
-all:	site up
+all:	site up cp
 
 $(FIMHTMLDOCS):
 	cd $(FIMDIR)/doc && make $(FIMHTMLDOCS)
 
-$(SITEDIR)/index.html:
+$(SITEDIR)/index.html: $(INDEXIN)
 	m4 -DVERSION="$(FVERSION)"  \
 	-D REPOSITORY=$(REPOSITORY) \
 	-D MIRROR=$(MIRROR) \
@@ -45,6 +48,9 @@ $(SITEDIR)/index.html:
 	-D SIG=$(SIG) \
 	-D URL=$(URL) \
 	-D FWP=$(FWP) \
+	-D FDP=$(FDP) \
+	-D FIM_ABBR=$(FIM_ABBR) \
+	-D VIM_ABBR=$(VIM_ABBR) \
 	-D NEWSCONTENTS="$$( cat $(FIMDIR)/NEWS  )" \
 	-D DATE="`date +'%d/%m/%Y'`" \
 	-D SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )" \
@@ -56,9 +62,9 @@ $(SITEDIR)/index.html:
 
 #$(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/VERSION
 
-#site:	$(PAGES) $(SITEDIR)/index.html
+pages:	$(PAGES) $(SITEDIR)/index.html
 
-site:	$(PAGES) $(SITEDIR)/index.html
+site:	pages
 	make tgz
 	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/$(INDEXIN) > $(SITEDIR)/index.html
 	mkdir -p $(SITEDIR)
@@ -75,8 +81,8 @@ site:	$(PAGES) $(SITEDIR)/index.html
 	$(CP) $(FIMDIR)/BUGS  $(SITEDIR)/BUGS
 	$(CP) $(FIMDIR)/NEWS  $(SITEDIR)/NEWS
 	$(CP) $(FIMDIR)/doc/FIM.TXT  $(SITEDIR)/FIM.TXT
-	$(CP) ../$(TGZ) $(SITEDIR)
-	$(CP) ../$(SIG) $(SITEDIR)
+	#$(CP) ../$(TGZ) $(SITEDIR)
+	#$(CP) ../$(SIG) $(SITEDIR)
 	#webcheck -a $(SITEDIR)/index.html 
 	ls -ltr $(SITEDIR) 
 
@@ -94,7 +100,7 @@ site:	$(PAGES) $(SITEDIR)/index.html
 # If the second directory is omitted, basename of first directory is used.
 # If both directories are omitted, current local and remote directories are used.
  
-up:
+up_old:
 	echo "# generated automatically ftp session to $(FTPURL)" > $(FTPSCRIPT)
 	echo "set ftp:ssl-force true" > $(FTPSCRIPT)
 	echo "set ftp:passive-mode true" > $(FTPSCRIPT)
@@ -107,4 +113,13 @@ up:
 	lftp -f $(FTPSCRIPT)
 	cat ftp.log
 
+FIMCVSDIR=~/src/fim_cvs_www/fbi-improved/
+
+up:
+	cd $(SITEDIR) && cp * $(FIMCVSDIR)
+	ls -l $(FIMCVSDIR)
+
+cp:
+	cp -v ../$(TGZ) ../$(SIG) $(FIMCVSDIR)/../mirror
+	ls -l $(FIMCVSDIR)/../mirror
 
