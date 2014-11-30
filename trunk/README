@@ -407,6 +407,7 @@ WARNING: the gentoo linux fim package version (<=0.2) is obsolete!
  Fim is free software, and is licensed under the GPLv2 or later.
 
  Fim extends the Fbi program by Gerd Hoffmann, which is "GPLv2 or later".
+ Fim uses the PCX reading code contributed by Mohammed Isam.
  Fim also uses a regex.c file from the GNU Regular Expressions library, 
 distributed on http://directory.fsf.org/regex.html, in the version shipped with
 the Mutt mail user agent (http://www.mutt.org).
