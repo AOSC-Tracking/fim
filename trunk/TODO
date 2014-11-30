@@ -22,6 +22,7 @@ ongoing further inspiration.
 	Misc Current development directions
 
 
+20141130	configure output shall fit in one screen
 20141129	the configure is not well made w.r.t. exif, jasper, ...
 20141129	setGlobalVariable -> setGV
 20141129	setGlobalVariable("i:",FIM_VID_WANT_AUTOCENTER,1);

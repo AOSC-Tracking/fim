@@ -95,6 +95,7 @@ EXTRA_fim_SOURCES += FbiStuffPdf.cpp
 EXTRA_fim_SOURCES += FbiStuffPs.cpp
 EXTRA_fim_SOURCES += Imlib2Device.cpp
 EXTRA_fim_SOURCES += FbiStuffXyz.cpp
+EXTRA_fim_SOURCES += FbiStuffBmp.cpp
 
 CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba
 
@@ -168,7 +169,6 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/FbiStuffFbtools.cpp \
 	$(srcdir)/FbiStuffLoader.cpp \
 	$(srcdir)/FbiStuffPpm.cpp \
-	$(srcdir)/FbiStuffBmp.cpp \
 	$(srcdir)/FbiStuffBit1.cpp \
 	$(srcdir)/FbiStuffBit24.cpp \
 	$(srcdir)/FbiStuffText.cpp \
