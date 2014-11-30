@@ -8,6 +8,8 @@ define(`ANCHORS',
 <a href="#docs">documentation</a>
 <a href="#screenshots">screenshots</a>
 <a href="#download">download</a>
+<a href="#license">license</a>
+<a href="#copyright">copyright</a>
 <a href="#bugs">bugs</a>
 </h4>
 </td>
@@ -33,7 +35,7 @@ dnl
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="keywords" content="fim, fbi improved, framebuffer image viewer, ASCII art image viewer, aalib, sdl image viewer, framebuffer console image viewer">
 <meta name="description" content="">
-<title>fim : fbi improved home page</title>
+<title>FIM: fbi improved home page</title>
 
 <link rel="stylesheet" type="text/css" href="fim.css">
 </head>
@@ -42,60 +44,63 @@ dnl
 SECTION(Welcome to the FIM (Fbi IMproved) image viewer homepage,top)
 <tr>
 <td>
-<!-- We have not much to offer, if not a humble, little computer program, called Fim. -->
 
 <h5>
-FIM aims to be a highly customizable and scriptable
+FIM_ABBR aims to be a highly customizable and scriptable
 image viewer targeted at users who are comfortable with software
-like the Vim text editor or the Mutt mail user agent.
+like the VIM_ABBR text editor or the Mutt mail user agent.
 
 
 <br> &nbsp;<br>
 
-  It is based on the <a href="http://www.bytesex.org">Fbi</a> image viewer, by Gerd Hoffmann, 
-  and works in the
-   <a href="http://www.linux.org">Linux</a>
-   <a href="http://www.kernelhq.cc/browse-view.py?fv_nr=200556">framebuffer console</a> mode,
-   as well as under 
-   <a href="http://www.x.org">X/Xorg</a>, using the
-   <a href="http://www.libsdl.org">SDL library</a>.
-  The right video mode gets auto-detected at runtime, and may be configured out at build time, if necessary. 
+It derives from the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
+<BR>
+It can display pictures on screen via the following video devices/modes:
+<UL>
+<LI>
+   The <a href="http://www.linux.org">Linux</a>
+   <a href="https://www.kernel.org/doc/Documentation/fb/framebuffer.txt">framebuffer device</a> mode.
+</LI>
+<LI>
+   Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://www.libsdl.org">SDL library</a>.
+</LI>
+<LI>
+   Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://docs.enlightenment.org/api/imlib2/html/">Imlib2 library</a>.
+</LI>
+<LI>
+   In any textual console, using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> Ascii Art library.
+</LI>
+</UL>
+<BR>
+
+The right video mode gets auto-detected or selected at runtime, and may be opted in/out before build at configure time, if desired.
 
 <br> &nbsp;<br>
 
-   <a href="FWP">FIM</a> is
-   <a href="http://www.fsf.org">free software</a>, and it ships under the
-   <a href="http://www.fsf.org/licensing">GPL</a>
-   software license, complete with
-   documentation, in form of a
-   <a href="README.html">README.TXT</a> file,
-   <a href="FIM.html">doc/FIM.TXT</a> documentation file,  man pages
-   <a href="fim.man.html">for fim</a>, 
-   <a href="fimrc.man.html">for fim's language</a>, and the 
-   <a href="fimgs.man.html">fimgs script</a>
-   ,lots
-   of comments in the <a href="http://code.autistici.org/svn/fim">code</a>, and <a href="#docs">some</a> text files.
+<a href="FWP">FIM</a> is free software
+(see <a href="#license">licensing info</a>)
+and it is richly documented 
+(see the <a href="#docs">documentation section</a>).
 <br> &nbsp;<br>
 
-Fim's official web page is hosted on Savannah:<a href="HOMEPAGE">HOMEPAGE</a>
+FIM_ABBR's official web page is hosted on Savannah: <a href="HOMEPAGE">HOMEPAGE</a>
 <br> &nbsp;<br>
 
-Fim's official mirror for stable releases is located on Savannah mirror network:<a href="MIRROR">MIRROR</a>
+FIM_ABBR's official mirror for stable releases is located on Savannah mirror network: <a href="MIRROR">MIRROR</a>
 <br> &nbsp;<br>
 
-Fim's official mailing list is at :<a href="MAILINGLIST">MAILINGLIST</a>
+FIM_ABBR's official mailing list is at: <a href="MAILINGLIST">MAILINGLIST</a>
 <br> &nbsp;<br>
 
 
-Fim is an idea by
-<!-- <a href="http://www.autistici.org/dezperado">dezperado</a> -->
+FIM_ABBR is an idea by
 dezperado, although this software
-was inspired by the other, forementioned marvelous programs, and some science fiction movies.
+was inspired by the other, forementioned marvelous programs, and some science fiction.
 &nbsp;<br>
 
 
 <br> &nbsp;<br>
-You can support Fim by supporting the <a href="http://www.autistici.org">A/I collective</a>, whom network kindly hosts Fim repositories.
+You can support FIM_ABBR by supporting the <a href="http://savannah.nongnu.org/">Savannah project</a>, whom network kindly hosts FIM_ABBR repositories.
 
 <br> &nbsp;<br>
 
@@ -106,7 +111,7 @@ SECTION(news,news)
 <tr>
 <td>
 <h5>
-(last update : DATE)
+(last update: DATE)
 </td>
 </tr>
 
@@ -127,7 +132,7 @@ SECTION(screenshots,screenshots)
 <tr>
 <td>
 <h5>
-A screenshot of a regular (framebuffer) Fim run:
+A screenshot of a regular (framebuffer) FIM_ABBR run:
 </h5>
 </td>
 </tr>
@@ -139,7 +144,7 @@ A screenshot of a regular (framebuffer) Fim run:
 <tr>
 <td>
 <h5>
-A screenshot of an Ascii Art Fim run:
+A screenshot of an Ascii Art FIM_ABBR run:
 </h5>
 </td>
 </tr>
@@ -157,62 +162,76 @@ SECTION(documentation,docs)
 <h5>
 
 <br>
-README file (the first document you should read, with compilation info):
- <a href="README.html">README.html</a>,
- <a href="README">README</a>.
+The first document you look at is the <a href="README.html">README.html</a>, (<a href="README">README</a>) file.
+
+Then there are 
+   the <a href="fim.man.html">FIM man page</a>, 
+   the <a href="fimrc.man.html">FIM language man page</a>, 
+   the <a href="fimgs.man.html">fimgs script man page</a>,
+   and the <a href="FIM.html">doc/FIM.TXT</a> documentation file (slightly outdated but still interesting --- look in the man pages first).
+
+<br> &nbsp;<br>
+Here links to some relevant sections:
+<UL>
+<LI>
+<a href="FIM.html#basics">first steps in FIM</a>
+</LI>
+<LI>
+the <a href="FIM.html#framebuffer">Linux Framebuffer</a> in the docs
+</LI>
+<LI>
+<a href="fim.man.html#EXAMPLES">FIM usage examples</a>
+</LI>
+<LI>
+<a href="fimrc.man.html#FIM LANGUAGE GRAMMAR">FIM language grammar</a>
+</LI>
+<LI>
+<a href="fimrc.man.html#COMMANDS REFERENCE">FIM commands reference</a>
+</LI>
+<LI>
+<a href="fimrc.man.html#VARIABLES REFERENCE">FIM variables reference</a>
+</LI>
+<LI>
+<a href="fimrc.man.html#USAGE EXAMPLES">FIM language usage examples</a>
+</LI>
+<LI>
+the <a href="FIM.html#faq">Frequently Asked Questions (FAQ)</a>
+</LI>
+</UL>
 
 <br>
-Fim man pages:
- <a href="fim.man.html">fim.man.html</a>,
- <a href="fimrc.man.html">fimrc.man.html</a>,
- <a href="fimgs.man.html">fimgs.man.html</a>.
+
+<!--
+And more:
+<UL>
+<LI>
+<a href="FIM-slides-cccmuc13.pdf">FIM slides (in English)</a> (a slideshow presented at muc.ccc.de in March, 2013).
+</LI>
+<LI>
+<a href="FIM-slides-hackit11.pdf">FIM introduction (in Italian) slides, from ground-up</a> (a slideshow presented at the italian Hackmeeting 2011).
+</LI>
+<LI>
+<a href="FIM-slides-hackit07.pdf">FIM introduction (in Italian) slides, from ground-up</a> (a slideshow presented at the italian Hackmeeting 2007).
+</LI>
+<LI>
+<a href="FIM-slides-mohp2007.pdf">FIM introduction (in Italian) slides, from ground-up</a> (a slideshow presented at the Metro Olografix Hacking Party 2007).
+</LI>
+</UL>
 
 <br>
-NEWS file:
- <a href="NEWS.html">NEWS.html</a>,
- <a href="NEWS">NEWS</a>,
- <a href="BUGS.html">BUGS.html</a>,
- <a href="BUGS">BUGS</a>.
-
-<br> &nbsp;<br>
-FIM.TXT file:
- <a href="FIM.html">FIM.html</a>,
- <a href="FIM.TXT">FIM.TXT</a> (an obsolete guide --- man pages are up to date).
-
-<br>
-From the guide:
-<br> &nbsp;<br>
-information to perform your <a href="FIM.html#basics">first steps in Fim</a>,
-<br> &nbsp;<br>
-information about <a href="FIM.html#bugs">bug reporting</a>,
-<br> &nbsp;<br>
-information about the <a href="FIM.html#framebuffer">Linux Framebuffer</a> in the docs,
-<br> &nbsp;<br>
-From the manual pages:
-<br> &nbsp;<br>
-information about <a href="fim.man.html#EXAMPLES">Fim usage examples</a>, <br> &nbsp;<br>
-dnl information about the <a href="FIM.html#syntax-ref">Fim language syntax</a>, <br> &nbsp;<br>
-information about the <a href="fimrc.man.html#FIM LANGUAGE GRAMMAR">Fim language grammar</a>, <br> &nbsp;<br>
-information about the <a href="fimrc.man.html#COMMANDS REFERENCE">Fim commands reference</a>, <br> &nbsp;<br>
-information about the <a href="fimrc.man.html#VARIABLES REFERENCE">Fim variables reference</a>, <br> &nbsp;<br>
-information about <a href="fimrc.man.html#USAGE EXAMPLES">Fim language usage examples</a>, <br> &nbsp;<br>
-the <a href="FIM.html#faq">Frequently Asked Questions (FAQ)</a>.
-<br> &nbsp;<br> <a href="FIM-slides-hackit11.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the italian Hackmeeting 2011).
-<br> &nbsp;<br> <a href="FIM-slides-hackit07.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the italian Hackmeeting 2007).
-<br> &nbsp;<br> <a href="FIM-slides-mohp2007.pdf">Fim introduction (in italian) slides, from ground-up</a> (a slideshow presented at the Metro Olografix Hacking Party 2007).
-<br> &nbsp;<br>
+-->
 
 </h5>
 </td>
 </tr>
-SECTION(download,download)
+SECTION(download and build,download)
 <tr>
 <td>
 <h5>
 <!--Fim aims towards respecting <a href="http://www.gnu.org">GNU</a> coding and documentation standards and conventions. -->
-You are welcome to download the latest (prerelease, dated DATE) snapshot of Fim :
+You are welcome to download the latest (prerelease, dated DATE) snapshot of FIM_ABBR:
 <br> &nbsp;<br>
-<a href="fim-VERSION.tar.gz">fim-VERSION.tar.gz</a>
+<a href="MIRROR/fim-VERSION.tar.gz">fim-VERSION.tar.gz</a>
 ( SIZE bytes )
 <br> &nbsp;<br>
 and the signature file:
@@ -221,12 +240,12 @@ and the signature file:
 
 
 <br>
-If you want to be sure of downloaded files authenticity, you should at least follow these steps:
+If you want to be sure of the files authenticity, you should at least follow these steps:
 <br>
 <h6>
 <pre>
-wget FWP/TGZ
-wget FWP/SIG
+wget MIRROR/TGZ
+wget MIRROR/SIG
 gpg --search 'dezperado autistici org'
 # import the key from a trusted keyserver by following on screen instructions
 gpg --verify SIG
@@ -236,7 +255,7 @@ gpg --verify SIG
 
 <br> &nbsp;<br>
 <h5>
-The typical sequence of actions to build Fim, which should suffice is :
+The typical sequence of actions to build FIM_ABBR, which should suffice is 
 </h5>
 
 <h6>
@@ -244,7 +263,7 @@ The typical sequence of actions to build Fim, which should suffice is :
 tar xzf fim-VERSION.tar.gz 
 cd fim-VERSION 
 ./configure --help=short 
-# read the ./configure --help=short output : you can give options to ./configure
+# read the ./configure --help=short output: you can give options to ./configure
 ./configure 
 make 
 su -c "make install"
@@ -262,24 +281,50 @@ dnl <h5>
 dnl Of course, there is a lot of
 dnl <a href="FIM.html">documentation</a> available
 dnl (here the <a href="README.html">README</a> page).
-dnl You are welcome to <a href="FIM.html#intro">browse</a> it even before downloading Fim.
+dnl You are welcome to <a href="FIM.html#intro">browse</a> it even before downloading FIM_ABBR.
 dnl </h5>
 
 
 <h5>
 <br> &nbsp;<br>
 If you are interested in compiling the freshest <a href="REPOSITORY">repository</a> version,
-typing :
+typing 
 </h5>
 <h6>
 <pre>
-svn export REPOSITORY
+svn export REPOSITORY/trunk fim
 </pre>
 </h6>
 <h5>
-at the command prompt will export the freshest (possibly unstable) version of Fim in a directory named 'fim', and ready for compilation (see the <a href="#docs">documentation</a> for details).
+at the command prompt will export the freshest (possibly unstable) version of FIM_ABBR in a directory named <code>fim</code>, and ready for compilation (see the <a href="#docs">documentation</a> for details).
 </h5>
 <br> &nbsp;<br>
+
+</td>
+</tr>
+SECTION(copyright,copyright)
+<tr>
+<td>
+<h5>
+FIM_ABBR is copyright (C) 2007-2014 Michele Martone
+and derives from the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
+See the <a href="README.html">README.TXT</a> file for a list of contributors.
+<BR>
+
+</h5>
+</td>
+</tr>
+SECTION(license,license)
+<tr>
+<td>
+<h5>
+FIM_ABBR is <a href="http://www.fsf.org/">free software</a>, licensed under the terms of the <A HREF="http://www.gnu.org/licenses/licenses.html">GNU Public License version 2 (GPLv2)</A> or later.
+<BR>
+You find a
+<ABBR TITLE="Frequently Asked Questions">FAQ</ABBR>
+about the
+<ABBR TITLE="GNU (GNU is Not Unix) Public License">GPL</ABBR>
+<A HREF="http://www.gnu.org/licenses/gpl-faq.html">here</A>.
 
 </h5>
 </td>
@@ -289,9 +334,9 @@ SECTION(bugs,bugs)
 <td>
 <h5>
 
-Fim has some bugs. They are documented in the BUGS file:
- <a href="BUGS.html">BUGS.html</a>,
- <a href="BUGS">BUGS</a>.
+They are notes about documented bugs in the 
+ <a href="BUGS.html">BUGS.html</a>
+ (<a href="BUGS">BUGS</a>) file.
 <br> &nbsp;<br>
 You are welcome to report bugs and propose patches only after reading the documentation.
 <br>
