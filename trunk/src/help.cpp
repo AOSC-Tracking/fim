@@ -25,6 +25,7 @@ fim_var_help_db[FIM_VID_WANT_SLEEPS]= "[internal,in] number of seconds of sleep 
 fim_var_help_db[FIM_VID_AUTOTOP]= "[internal,in] if 1, will align to the top freshly loaded images" ;
 fim_var_help_db[FIM_VID_SCALE_STYLE]= "[internal,in] if non empty, this string will be fed to the scale command" ;
 fim_var_help_db[FIM_VID_FILEINDEX]= "[internal,out] the current image numeric index" ;
+fim_var_help_db[FIM_VID_LASTFILEINDEX]= "[internal,out] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." ;
 fim_var_help_db[FIM_VID_FILELISTLEN]= "[internal,out] the length of the current image list" ;
 fim_var_help_db[FIM_VID_INFO_FMT_STR]= "[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %c for centering information; %% for an ordinary %. This feature has to be enabled at configure time." ;
 fim_var_help_db[FIM_VID_FILENAME]= "[internal,out] the current file name string" ;

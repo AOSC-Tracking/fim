@@ -132,6 +132,7 @@
 #define FIM_WANT_FAT_BROWSER 1
 #define FIM_WANT_BDI 1
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
+#define FIM_WANT_GOTOLAST 1
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
@@ -499,6 +500,7 @@ namespace fim
 #define FIM_VID_AUTOTOP				"_autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
 #define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if non empty, this string will be fed to the scale command" */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[internal,out] the current image numeric index" */
+#define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[internal,out] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[internal,out] the length of the current image list" */
 #define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %c for centering information; %% for an ordinary %. This feature has to be enabled at configure time." */
 #define FIM_VID_FILENAME			"_filename"		/* "[internal,out] the current file name string" */

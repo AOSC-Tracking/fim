@@ -634,6 +634,10 @@ _last_system_output
 [internal,out,experimental] the standard output of the last call to the system command
 .fi
 .B
+_lastfileindex
+[internal,out] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'.
+.fi
+.B
 _load_default_etc_fimrc
 [internal,in] if 1 at startup, will load the system wide initialization file
 .fi
@@ -1142,6 +1146,7 @@ bind "End" "$;";
 bind "^" "0;";
 bind "$" "$;";
 bind "Backspace" "prev";
+bind "'" "goto _lastfileindex"; 
 _display_status=1;
 _want_caption_status="fim:%N@%p%%[%i/%l]";
 #_display_status_fmt="%N:%k"; #

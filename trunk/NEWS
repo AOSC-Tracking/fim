@@ -24,6 +24,8 @@
  * BMP format can be turned off from default (TODO: r664)
  * PCX format support (TODO: r666)
  * opening image files in archives with libarchive (TODO: r665)
+ * jump back and forth from the last viewed image with the ' key and 
+   the _lastfileindex variable (r667).
 
                 Version 0.4
 
