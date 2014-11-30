@@ -1654,7 +1654,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     } else fp=fd;
 
 #if FIM_WITH_ARCHIVE
-    if(regexp_match(filename,".*tar$") || regexp_match(filename,".*TAR$"))
+    if(regexp_match(filename,".*tar$") || regexp_match(filename,".*TAR$") || regexp_match(filename,".*tar.gz$") || regexp_match(filename,".*TAR.GZ$"))
     {
 	struct archive *a = NULL;
 	struct archive_entry *entry = NULL;

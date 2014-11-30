@@ -22,6 +22,8 @@ ongoing further inspiration.
 	Misc Current development directions
 
 
+20141130	shall support a dual configure style: for each $LIBRARY, $FIM_LIBRARY_LIBS/$FIM_LIBRARY_CXXFLAGS and LIBS/CXXFLAGS.
+20141130	rename configure options w.r.t. program options; e.g. --raw-bits-rendering to -o  bit1/ -o bit24
 20141130	configure output shall fit in one screen
 20141129	the configure is not well made w.r.t. exif, jasper, ...
 20141129	setGlobalVariable -> setGV

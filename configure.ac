@@ -964,7 +964,7 @@ dnl ============================================================================
 
 fim_handle_archive=no
 
-AC_ARG_ENABLE(archive, AC_HELP_STRING([--enable-archive], [Enable libarchive support (EXPERIMENTAL).]),
+AC_ARG_ENABLE(archive, AC_HELP_STRING([--enable-archive], [Enable libarchive support (please provide ARCHIVE_LIBS, ARCHIVE_CXXFLAGS) (EXPERIMENTAL, UNFINISHED).]),
 [       if test x$enableval = xno ; then
 		fim_handle_archive=no
 	else
@@ -976,7 +976,7 @@ if test x$fim_handle_archive = xyes; then
 	# support for custom library configurator path
 	CXXFLAGS="$CXXFLAGS $ARCHIVE_CXXFLAGS"
 	LIBS="$LIBS $ARCHIVE_LIBS -larchive"
-	AC_DEFINE(FIM_WITH_ARCHIVE, 1, [Defined, if libarchive support is enabled])
+	AC_DEFINE(FIM_WITH_ARCHIVE, 1, [Defined, if (EXPERIMENTAL, UNFINISHED) libarchive support is enabled])
 	AC_MSG_NOTICE([Enabling libarchive.])
 fi
 
@@ -1835,66 +1835,58 @@ AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile
 AC_MSG_NOTICE([
 	Fim v${VERSION} has been configured as follows:
 
-	default minimal key mapping         : ${have_default_mapping:-no}
-	readline library support            : ${fim_want_readline}
-	default minimal key bindings        : ${have_default_bindings:-no}
+   	default minimal key mapping         : ${have_default_mapping:-no}
+   	default minimal key bindings        : ${have_default_bindings:-no}
 	default configuration file builtin  : ${have_default_config:-no}
-        compile time warnings               : ${fim_cv_warnings:-no} (additional CXXFLAGS: ${CXXFLAGS} )
+dnl     compile time warnings               : ${fim_cv_warnings:-no} (additional CXXFLAGS: ${CXXFLAGS} )
         resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
-	will read directories               : ${fim_cv_read_dirs}
-	will recurse directories            : ${fim_cv_recursive_dirs}
-	bmp  file support                   : ${fim_handle_bmp:-no}
-	png  file support                   : ${fim_handle_png:-no}
-	jpeg file support                   : ${fim_handle_jpeg:-no}
-	tiff file support                   : ${fim_handle_tiff:-no}
-	gif  file support                   : ${fim_handle_gif:-no}
-	djvu file support                   : ${fim_handle_djvu:-no}
-	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
-	ps   file support (libspectre)      : ${fim_handle_ps:-no}
-	nef  file support (libufraw)        : ${fim_handle_ufraw:-no}
-	archives  support (libarchive)      : ${fim_handle_archive:-no}
-	GraphicsMagick support              : ${fim_handle_graphicsmagick:-no}
-	Imlib2 support                      : ${fim_handle_imlib2:-no}
+   	will read directories               : ${fim_cv_read_dirs}
+   	will recurse directories            : ${fim_cv_recursive_dirs}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
-	~/.fimrc file loading on startup    : ${have_fimrc:-no}
-	~/.fim_history load/save            : ${have_history:-no}
+	~/.fimrc startup file support       : ${have_fimrc:-no}
+	~/.fim_history load/save support    : ${have_history:-no}
 	autocommands enabled                : ${have_autocommands:-no}
-	internal windowing system           : ${have_windows:-no}
+dnl	internal windowing system           : ${have_windows:-no}
 	hardcoded font                      : ${have_hardcoded_font:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      : ${fim_cv_regex:-no}
-	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
-	use 'convert' for unknown files     : ${fim_cv_convert}
-	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
-	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
-	ASCII art (aalib) support           : ${fim_cv_aalib}
 dnl	exif (libexif) support           : ${fim_cv_libexif}
-	JPEG-2K/JasPer experimental support : ${fim_cv_libjasper}
-	X (sdllib) experimental support     : ${fim_handle_sdl}
-        framebuffer support                 : ${fim_handle_framebuffer:-yes}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
 	allow custom status bar file info   : ${fim_cv_custom_status_bar:-no}
-	exiftool interface                  : ${fim_cv_exiftool}
 dnl	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
+dnl
+	readline (-lrl) library support     : ${fim_want_readline}
+	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
+	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
+	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
+	use 'convert' for unrecognized files: ${fim_cv_convert}
+	use 'exiftool' to read tags         : ${fim_cv_exiftool}
+dnl
+        framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
+	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
+	X        (Imlib2) support(-o imlib2): ${fim_handle_imlib2:-no}
+	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
+dnl
+	BMP      file support (builtin)     : ${fim_handle_bmp:-no}
+	JP2 (JPEG-2K) file support (JasPer) : ${fim_cv_libjasper}
+	PNG      file support (libpng)      : ${fim_handle_png:-no}
+	JPEG     file support (libjpeg)     : ${fim_handle_jpeg:-no}
+	TIFF     file support (libtiff)     : ${fim_handle_tiff:-no}
+	GIF      file support (libgif)      : ${fim_handle_gif:-no}
+	DJVU     file support (libdjvu)     : ${fim_handle_djvu:-no}
+	PDF      file support (libpoppler)  : ${fim_handle_pdf:-no}
+	PS       file support (libspectre)  : ${fim_handle_ps:-no}
+	NEF/RAW  file support (libufraw)    : ${fim_handle_ufraw:-no}
+	TAR/ZIP/.. file support (libarchive): ${fim_handle_archive:-no}
+	GraphicsMagick support (libGraphicsMagick): ${fim_handle_graphicsmagick:-no}
 
-
-	If you are not satisfied with this configuration, please run :
-
+	If you are not satisfied with this configuration, please invoke
 	  ./configure --help=short
-
 	for a complete list of configure options specific to Fim.
-
-	If you are satisfied, run 'make' to build Fim and its documentation.
-
+	When you are satisfied, run 'make' to build Fim and its documentation.
 	To install the program and its documentation, run 'make install' if you are root,
 	or run 'su -c '"make install"' if you are not root.
-
-	p.s.: documentation is found in the doc/ directory !
-	Please see doc/FIM.TXT, doc/FIM.html, doc/fim.man.
-
-	Enjoy! Please see the BUGS file for bug reports, and the documentation anyway!
+	RTFM: README, man fim, man fimrc.  Enjoy!
 ])
-
-

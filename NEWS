@@ -21,7 +21,8 @@
  * exiftool interface (TODO: r654)
  * customizable SDL window caption line (TODO: r648)
  * customizable status line (TODO: r644,r651)
- * BMP format can be turned off from default (r664)
+ * BMP format can be turned off from default (TODO: r664)
+ * opening image files in archives with libarchive (TODO: r665)
 
                 Version 0.4
 
