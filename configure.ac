@@ -864,18 +864,33 @@ dnl ================== end of pdf checks =======================================
 
 dnl ================================================================================
 fim_handle_bmp=yes
-AC_ARG_ENABLE(bmp, AC_HELP_STRING([--disable-bmp], [Disable BMP file support (on by default).]),
+AC_ARG_ENABLE(bmp, AC_HELP_STRING([--disable-bmp], [Disable BMP file support (enabled by default).]),
 [       if test x$enableval = xno ; then
 		fim_handle_bmp=no
         fi
 ])
 if test x$fim_handle_bmp = xyes; then
 	AC_MSG_NOTICE([Enabling BMP file format support.])
-	AC_DEFINE(FIM_WITH_BMP, 1, [BMP support.])
+	AC_DEFINE(FIM_WITH_BMP, 1, [BMP file support.])
 	FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffBmp.o"
 else
 	AC_MSG_NOTICE([Disabling BMP file format support.])
-	AC_DEFINE(FIM_WITH_BMP, 0, [BMP support.])
+	AC_DEFINE(FIM_WITH_BMP, 0, [BMP file support.])
+fi
+dnl ================================================================================
+fim_handle_pcx=yes
+AC_ARG_ENABLE(pcx, AC_HELP_STRING([--disable-pcx], [Disable PCX file support (enabled by default).]),
+[       if test x$enableval = xno ; then
+		fim_handle_pcx=no
+        fi
+])
+if test x$fim_handle_pcx = xyes; then
+	AC_MSG_NOTICE([Enabling PCX file format support.])
+	AC_DEFINE(FIM_WITH_PCX, 1, [PCX file support.])
+	FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffPcx.o"
+else
+	AC_MSG_NOTICE([Disabling PCX file format support.])
+	AC_DEFINE(FIM_WITH_PCX, 0, [PCX file support.])
 fi
 dnl ================================================================================
 
@@ -1871,6 +1886,7 @@ dnl
 dnl
 	BMP      file support (builtin)     : ${fim_handle_bmp:-no}
 	JP2 (JPEG-2K) file support (JasPer) : ${fim_cv_libjasper}
+	PCX      file support (builtin)     : ${fim_handle_pcx:-no}
 	PNG      file support (libpng)      : ${fim_handle_png:-no}
 	JPEG     file support (libjpeg)     : ${fim_handle_jpeg:-no}
 	TIFF     file support (libtiff)     : ${fim_handle_tiff:-no}
