@@ -26,14 +26,13 @@
  If you want to include a new file format reader in fim, use this file as a playground.
  This is an example file decoder for our test ".xyz" file format.
  An *.xyz file may look like the quoted text that follows:
- "xyz 255 255 1 This is an sample file to be opened by the sample decoder in FbiStuffXyz.cpp."
+ "xyz 255 255 1 This is a sample file to be opened by the sample decoder in FbiStuffXyz.cpp."
 
  Set FIM_WITH_LIBXYZ to 1 to enable this sample decoder and be able to open *.xyz files.
  Then do:
- echo "xyz 255 255 1 This is an sample file to be opened by the sample decoder in FbiStuffXyz.cpp." > file.xyz
+ echo "xyz 255 255 1 This is a sample file to be opened by the sample decoder in FbiStuffXyz.cpp." > file.xyz
  src/fim file.xyz
  */
-#define FIM_WITH_LIBXYZ 0
 #if FIM_WITH_LIBXYZ
 
 #include <stdio.h>
