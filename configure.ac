@@ -863,6 +863,21 @@ AM_CONDITIONAL(ENABLE_PDF, test x$enable_pdf = xyes)
 dnl ================== end of pdf checks ============================================
 
 dnl ================================================================================
+fim_handle_bmp=yes
+AC_ARG_ENABLE(bmp, AC_HELP_STRING([--disable-bmp], [Disable BMP file support (on by default).]),
+[       if test x$enableval = xno ; then
+		fim_handle_bmp=no
+        fi
+])
+if test x$fim_handle_bmp = xyes; then
+	AC_MSG_NOTICE([Enabling BMP file format support.])
+	AC_DEFINE(FIM_WITH_BMP, 1, [BMP support.])
+	FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffBmp.o"
+else
+	AC_MSG_NOTICE([Disabling BMP file format support.])
+	AC_DEFINE(FIM_WITH_BMP, 0, [BMP support.])
+fi
+dnl ================================================================================
 
 ## png file handling
 
@@ -1829,6 +1844,7 @@ AC_MSG_NOTICE([
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
 	will read directories               : ${fim_cv_read_dirs}
 	will recurse directories            : ${fim_cv_recursive_dirs}
+	bmp  file support                   : ${fim_handle_bmp:-no}
 	png  file support                   : ${fim_handle_png:-no}
 	jpeg file support                   : ${fim_handle_jpeg:-no}
 	tiff file support                   : ${fim_handle_tiff:-no}

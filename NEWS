@@ -21,6 +21,7 @@
  * exiftool interface (TODO: r654)
  * customizable SDL window caption line (TODO: r648)
  * customizable status line (TODO: r644,r651)
+ * BMP format can be turned off from default (r664)
 
                 Version 0.4
 

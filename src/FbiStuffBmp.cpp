@@ -25,6 +25,7 @@
 
 #include "fim.h"
 
+#if FIM_WITH_BMP
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -255,4 +256,5 @@ static void __init init_rd(void)
 
 
 }
+#endif /* FIM_WITH_BMP */
 
