@@ -905,6 +905,23 @@ fi
 
 dnl ================================================================================
 
+fim_handle_xyz=no
+
+AC_ARG_ENABLE(xyz, AC_HELP_STRING([--enable-xyz], [Enable the sample bogus 'xyz' file loading support. This makes only sense in order to learn how to include a new file format and wish to play with src/FbiStuffXyz.cpp in the while.]),
+[       if test x$enableval = xyes ; then
+		fim_handle_xyz=yes
+        fi
+])
+
+if test x$fim_handle_xyz = xyes; then
+	LIBXYZ="" # one would set an actual value here
+	LIBS="$LIBS $LIBXYZ"
+	FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffXyz.o"
+	AC_DEFINE(FIM_WITH_LIBXYZ, 1, [Defined if sample bogus 'xyz' loader support is enabled.])
+fi
+
+dnl ================================================================================
+
 ## raw/nef file handling via UFRaw
 
 fim_handle_ufraw=no
