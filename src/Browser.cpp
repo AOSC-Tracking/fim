@@ -64,6 +64,8 @@ namespace fim
 				return _random_shuffle();
 			if(args[0]=="sort")
 				return _sort();
+			if(args[0]=="sort_basename")
+				return _sort('b');
 			if(args[0]=="reverse")
 				return _reverse();
 			if(args[0]=="pop")
@@ -952,14 +954,33 @@ struct FimDateSorter
 } fimDateSorter;
 #endif
 
-	fim::string Browser::_sort(void)
+struct FimBaseNameSorter
+{
+	bool operator() (fim::string lfn, fim::string rfn)
+	{ 
+		const char * ls = lfn.c_str();
+		const char * rs = rfn.c_str();
+		int scr = 0;
+
+		if(ls && rs)
+			scr = (strcmp(fim_basename_of(ls),fim_basename_of(rs)));
+		return (scr < 0);
+		
+	}
+} fimBaseNameSorter;
+
+	fim::string Browser::_sort(const fim_char_t sc)
 	{
 		/*
 		 *	sorts the image filenames list
 		 */
-		std::sort(flist_.begin(),flist_.end());
+		if(sc=='f')
+			std::sort(flist_.begin(),flist_.end());
+		if(sc=='b')
+			std::sort(flist_.begin(),flist_.end(),fimBaseNameSorter);
 #if FIM_SORT_BY_DATE
-		std::sort(flist_.begin(),flist_.end(),fimDateSorter);
+		if(sc=='d')
+			std::sort(flist_.begin(),flist_.end(),fimDateSorter);
 #endif
 		return n_files() ? (flist_[current_n()]) : nofile_;
 	}

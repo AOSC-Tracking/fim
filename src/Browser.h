@@ -134,6 +134,7 @@ class Browser
 
 	fim::string display(void);
 	fim::string _random_shuffle(bool dts=true);
+	fim::string _sort(const fim_char_t sc='f');
 	fim::string _clear_list(void);
 	private:
 	fim::string loadCurrentImage(void);
@@ -141,7 +142,6 @@ class Browser
 
 	int n_files(void)const;
 	int n_pages(void)const;
-	fim::string _sort(void);
 	fim::string _reverse(void);
 	fim::string next(int n=1);
 

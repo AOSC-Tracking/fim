@@ -204,6 +204,12 @@ See (chvt (1)), (openvt (1)) for more info about this.
 Use (con2fb (1)) to map a terminal to a framebuffer device.
 
 .TP
+.B 	 --sort
+Sorts files list before browsing according to full filename.
+.TP
+.B 	 --sort-basename
+Sorts files list before browsing according to file basename.
+.TP
 .B -u, --random
 Randomly shuffle the files list before browsing (seed depending on time() function).
 .TP
