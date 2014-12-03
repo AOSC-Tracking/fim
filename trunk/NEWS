@@ -25,7 +25,8 @@
  * PCX format support (TODO: r666)
  * opening image files in archives with libarchive (TODO: r665)
  * jump back and forth from the last viewed image with the ' key and 
-   the _lastfileindex variable (r667).
+   the _lastfileindex variable (r667)
+ * added --sort and --sort-basename (TODO: r669)
 
                 Version 0.4
 

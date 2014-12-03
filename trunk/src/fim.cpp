@@ -200,6 +200,12 @@ NULL
 "See (chvt (1)), (openvt (1)) for more info about this.\n"
 "Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
+    {"sort",     no_argument,       NULL, 0x736f7274 ,"sort images by pathname",NULL,
+"Sorts files list before browsing according to full filename."
+    },
+    {"sort-basename",     no_argument,       NULL, 0x736f626e ,"sort images by basename",NULL,
+"Sorts files list before browsing according to file basename."
+    },
     {"random",     no_argument,       NULL, 'u',"randomize images order",NULL,
 "Randomly shuffle the files list before browsing (seed depending on time() function)."
     },
@@ -1011,6 +1017,14 @@ done:
 		    //fim's
 		    want_random_shuffle=-1;
 		    break;
+		case 0x736f626e:
+		    //fim's
+		    want_random_shuffle=c;
+		    break;
+		case 0x736f7274:
+		    //fim's
+		    want_random_shuffle=c;
+		    break;
 		case 'd':
 		    //fbi's
 		    default_fbdev = optarg;
@@ -1263,6 +1277,10 @@ done:
 			cc.browser_._random_shuffle(true);
 		if(want_random_shuffle==-1)
 			cc.browser_._random_shuffle(false);
+		if(want_random_shuffle==0x736f7274)
+			cc.browser_._sort();
+		if(want_random_shuffle==0x736f626e)
+			cc.browser_._sort('b');
 
 		if(ndd==-1)
 			fim_perror(NULL);
