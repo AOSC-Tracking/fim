@@ -1022,14 +1022,39 @@ struct FimBaseNameSorter
 		 * TODO: this method shall only find the index and return it !
 		 */
 		size_t i,j,c = current_n(),s = flist_.size();
+		const char *rso = cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) ? cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str() : "bi";
+		/* int rsic =  cc.isSetVar(FIM_VID_IGNORECASE) ? cc.getIntVariable(FIM_VID_IGNORECASE) : 0; */
+		int rsic = 1;
+		int rsbn = 1;
+
+		if ( rso && strchr(rso,'i') )
+			rsic = 1;
+		else
+			if ( rso && strchr(rso,'I') )
+				rsic = 0;
+		if ( rso && strchr(rso,'b') )
+			rsbn = 1;
+		else
+			if ( rso && strchr(rso,'f') )
+				rsbn = 0;
 
 		if( args.size() < 1 || s < 1 )
 			goto nop;
+
 		for(j=0;j<s;++j)
 		{
+			const fim_char_t *fstm = NULL;
+
 			last_regexp_ = args[0];
 			i = ((src_dir<0?(s-j):j)+c+src_dir)%s;
-			if(commandConsole_.regexp_match(flist_[i].c_str(),args[0].c_str()))
+
+			if(!(fstm = flist_[i].c_str()))
+				continue;
+
+			if(rsbn==1)
+				fstm = fim_basename_of(fstm);
+
+			if(commandConsole_.regexp_match(fstm,args[0].c_str(),rsic))
 			{	
 				fim::string c = current();
 				FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c);

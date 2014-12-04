@@ -27,6 +27,7 @@
  * jump back and forth from the last viewed image with the ' key and 
    the _lastfileindex variable (r667)
  * added --sort and --sort-basename (TODO: r669)
+ * changed meaning of of _ignorecase, introduced _re_search_opts (TODO: r671)
 
                 Version 0.4
 

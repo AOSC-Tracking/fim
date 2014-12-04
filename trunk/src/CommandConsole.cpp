@@ -1685,7 +1685,7 @@ ok:
 		if(getIntVariable(FIM_VID_DBG_AUTOCMD_TRACE_STACK)!=0)
 			autocmd_trace_stack();
 			
-		if(regexp_match(fname.c_str(),pat.c_str()))
+		if(regexp_match(fname.c_str(),pat.c_str(),getIntVariable(FIM_VID_IGNORECASE)))
 		{
 			for (size_t i=0;i<autocmds_[event][pat].size();++i)
 			{
@@ -1745,7 +1745,7 @@ ok:
 	}
 #endif /* FIM_AUTOCMDS */
 	
-	bool CommandConsole::regexp_match(const fim_char_t*s, const fim_char_t*r)const
+	bool CommandConsole::regexp_match(const fim_char_t*s, const fim_char_t*r, int rsic)const
 	{
 		/*
 		 *	given a string s, and a Posix regular expression r, this
@@ -1767,7 +1767,7 @@ ok:
 			return false;
 
 		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
-		if(regcomp(&regex,r, 0 | REG_EXTENDED | (getIntVariable(FIM_VID_IGNORECASE)==0?0:REG_ICASE) )!=0)
+		if(regcomp(&regex,r, 0 | REG_EXTENDED | (rsic==0?0:REG_ICASE) )!=0)
 		{
 			/* error calling regcomp (invalid regexp?)! (should we warn the user ?) */
 			//cout << "error calling regcomp (invalid regexp?)!" << "\n";
