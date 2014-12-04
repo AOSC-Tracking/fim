@@ -223,6 +223,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_NAMESPACE_PREFIXES_DSC	"current image, browser, window, viewport, global"
 #define FIM_SYM_NAMESPACE_REGEX	"^[givbw]:"
 #define FIM_SYM_PROMPT_CHAR	':'
+/*#define FIM_SYM_SYS_SLASH	'/'*/
 #define FIM_SYM_PROMPT_SLASH	'/'
 #define FIM_SYM_PROMPT_NUL	'\0'
 #define FIM_SYM_CHAR_NUL	'\0'
@@ -537,6 +538,7 @@ namespace fim
 #define FIM_VID_VERBOSITY			"_verbosity"			/* "[internal,in,experimental] program verbosity" */
 #define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
 #define FIM_VID_IGNORECASE			"_ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp-based searches" */
+#define FIM_VID_RE_SEARCH_OPTS			"_re_search_opts"	/* "[internal,in] if empty, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. " */
 #define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[internal,in] if 1 on exit, will save the ~/fim_history file on exit" */
 #define FIM_VID_LOAD_FIM_HISTORY		"_load_fim_history"	/* "[internal,in] if 1 on startup, will load the ~/fim_history file on startup" */
 #define FIM_VID_TERM				"_TERM"			/* "[internal,out] the environment TERM variable" */

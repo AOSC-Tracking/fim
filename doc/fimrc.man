@@ -706,6 +706,10 @@ _pwd
 [internal,out] the current working directory; will be updated at startup and whenever the working directory changes
 .fi
 .B
+_re_search_opts
+[internal,in] if empty, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. 
+.fi
+.B
 _reduce_factor
 [internal,in] the image scale multiplier used when reducing images size
 .fi
@@ -905,6 +909,7 @@ if(_load_fim_history==''){_load_fim_history=1;}
 if(_verbose_keys==''){_verbose_keys=0;}
 if(_display_busy==''){_display_busy=1;}
 if(_ignorecase==''){_ignorecase=1;}
+if(_re_search_opts==''){_re_search_opts='bi';}
 if(_console_offset==''){_console_offset=0;}
 if(_console_key==''){_console_key=58;}
 if(_display_as_binary==''){_display_as_binary=0;}

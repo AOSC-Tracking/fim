@@ -304,7 +304,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_key_t find_keycode_for_bound_cmd(fim::string binding);
 
 	fim_bool_t drawOutput(const fim_char_t*s=NULL)const;
-	bool regexp_match(const fim_char_t*s, const fim_char_t*r)const;
+	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int rsic)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 	fim::string pre_autocmd_add(const fim::string &cmd);
