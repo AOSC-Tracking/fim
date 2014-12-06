@@ -32,6 +32,13 @@
 #include <thread>
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
+#if FIM_WANT_PIC_CMTS
+	std::ostream& operator<<(std::ostream &os, const ImgDscs & id)
+	{
+		return id.print(os);
+	}
+#endif /* FIM_WANT_PIC_CMTS */
+
 /*
  * TODO :
  *	Windowing related problems:
@@ -311,6 +318,14 @@ void fim_background_load()
 	
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 			cc.browser_.display_status(cc.browser_.current().c_str(), NULL); /* FIXME: an ugly way to force the proper status display */
+#if FIM_WANT_PIC_CMTS
+		if(fname)
+		{
+			fim_fn_t key(fim_basename_of(fname));
+			if(cc.id_.find(key) != cc.id_.end() )
+				setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
+		}
+#endif /* FIM_WANT_PIC_CMTS */
 		return true;
 	}
 

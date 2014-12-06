@@ -132,6 +132,10 @@ struct fim_options_t fim_options[] = {
     {"help",       optional_argument,       NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and terminate.","[=s|d|l|m]",
 NULL
     },
+#if FIM_WANT_PIC_CMTS
+    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the basename of an image file, then a Tab character, then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time."
+    },
+#endif /* FIM_WANT_PIC_CMTS */
 #ifdef FIM_READ_STDIN_IMAGE
     {FIM_OSW_IMAGE_FROM_STDIN,      no_argument,       NULL, 'i',"read an image file from standard input",NULL,
 "Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats."
@@ -1177,6 +1181,11 @@ done:
 			std::exit(0);
 		}
 		    break;
+#if FIM_WANT_PIC_CMTS
+		case 0x6c696466:
+			cc.id_.fetch(optarg);
+		    break;
+#endif /* FIM_WANT_PIC_CMTS */
 	#ifdef FIM_READ_STDIN
 		case '-':
 		    //fim's

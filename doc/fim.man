@@ -140,6 +140,9 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 .B -h, --help[=s|d|l|m]
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
+.B 	 --load-image-descriptions-file {filename}
+Load image descriptions from {filename}. In {filename} each line is the basename of an image file, then a Tab character, then the description text. Each description will be put in the _comment variable of the image at load time.
+.TP
 .B -i, --image-from-stdin
 Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats.
 In the image list, this image will be displayed as "<STDIN>".
