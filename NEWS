@@ -29,6 +29,7 @@
  * added --sort and --sort-basename (TODO: r669)
  * changed meaning of of _ignorecase, introduced _re_search_opts (TODO: r671)
  * added --load-image-descriptions-file (TODO: r672)
+ * search (and jump) on image descriptions (TODO: r674)
 
                 Version 0.4
 

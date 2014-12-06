@@ -1044,6 +1044,7 @@ struct FimBaseNameSorter
 		for(j=0;j<s;++j)
 		{
 			const fim_char_t *fstm = NULL;
+			bool hm = false;
 
 			last_regexp_ = args[0];
 			i = ((src_dir<0?(s-j):j)+c+src_dir)%s;
@@ -1054,7 +1055,18 @@ struct FimBaseNameSorter
 			if(rsbn==1)
 				fstm = fim_basename_of(fstm);
 
-			if(commandConsole_.regexp_match(fstm,args[0].c_str(),rsic))
+			hm = (commandConsole_.regexp_match(fstm,args[0].c_str(),rsic));
+#if FIM_WANT_PIC_CMTS
+			/* FIXME: this is temporary. If filename does not match, we match on description. */
+			if(!hm)
+			{
+				if(cc.id_.find(fim_fn_t(fstm)) != cc.id_.end() )
+					fstm = (cc.id_[fim_fn_t(fstm)]).c_str();
+				hm = (commandConsole_.regexp_match(fstm,args[0].c_str(),rsic));
+			}
+#endif /* FIM_WANT_PIC_CMTS */
+
+			if(hm)
 			{	
 				fim::string c = current();
 				FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c);
