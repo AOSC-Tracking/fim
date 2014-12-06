@@ -391,7 +391,8 @@ string fim_dump_man_page_snippets(void)
 			       	ms+=slol,ms+=" -, ";
 		}
 		else
-		       	ms+=".TP\n.B \t";
+		       	//ms+=".TP\n.B \t";
+		       	ms+=".TP\n.B ";
 		ms+=slob;
 		ms+=fim_options[i].name ;
 		switch(fim_options[i].has_arg)
