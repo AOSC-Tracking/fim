@@ -88,13 +88,13 @@ Will pad with zeros.
 Regard this as a toy..
 
 .TP
-.B 	 --as-text
+.B  --as-text
 Display (any filetype) files contents as they were text.
 Will only show printable characters.
 Regard this as a toy..
 
 .TP
-.B 	 --cd-and-readdir
+.B  --cd-and-readdir
 step into the first loaded file directory and push other files
 .TP
 .B -c {commands}, --execute-commands {commands}
@@ -121,7 +121,7 @@ For example,
 .B -d {framebuffer device}, --device {framebuffer device}
 Framebuffer device to use. Default is the one your vc is mapped to (as in fbi).
 .TP
-.B 	 --dump-reference-help[=man]
+.B  --dump-reference-help[=man]
 Will dump to stdout the language reference help.
 .TP
 .B -D, --dump-default-fimrc
@@ -140,7 +140,7 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 .B -h, --help[=s|d|l|m]
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
-.B 	 --load-image-descriptions-file {filename}
+.B  --load-image-descriptions-file {filename}
 Load image descriptions from {filename}. In {filename} each line is the basename of an image file, then a Tab character, then the description text. Each description will be put in the _comment variable of the image at load time.
 .TP
 .B -i, --image-from-stdin
@@ -154,22 +154,22 @@ Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Def
 .B -N, --no-rc-file
 No personal initialization file will be read (default is ~/.fimrc) at startup.
 .TP
-.B 	 --no-etc-rc-file
+.B  --no-etc-rc-file
 No system wide initialization file will be read (default is /usr/local/etc/fimrc) at startup.
 .TP
-.B 	 --no-internal-config
+.B  --no-internal-config
 No internal default configuration at startup (uses internal variable _no_default_configuration). Will only provide a minimal working configuration. 
 .TP
-.B 	 --no-commandline
+.B  --no-commandline
 with internal command line mode disabled
 .TP
-.B 	 --no-history-save
+.B  --no-history-save
 Do not save execution history at finalization (uses internal variable _save_fim_history). 
 .TP
-.B 	 --no-history-load
+.B  --no-history-load
 		 do not load execution history
 .TP
-.B 	 --no-history
+.B  --no-history
 Do not load or save execution history at startup). 
 .TP
 .B -p, --script-from-stdin
@@ -182,7 +182,7 @@ The \fBaa\fP option may be specified as  \fBaa={['w']}\fP ; the \fB'w'\fP charac
 The \fBsdl\fP option may be specified as  \fBsdl={['w']['m']['r']['W']['M']['R']width:height}\fP , where \fBwidth\fP is and \fBheight\fP are integer numbers specifying the desired resolution; the \fB'w'\fP character requests windowed mode; the \fB'm'\fP character requests mouse pointer display; the \fB'r'\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.
 
 .TP
-.B 	 --offset {bytes-offset}
+.B  --offset {bytes-offset}
 Will use the specified \fBoffset\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation).
 .TP
 .B -P, --text-reading
@@ -191,7 +191,7 @@ Enable textreading mode.  This has the effect that fim will display images scale
 .B -s {value}, --scroll {value}
 Set scroll steps for internal variable _steps (default is 20%).
 .TP
-.B 	 --slideshow {number}
+.B  --slideshow {number}
 Interruptible slideshow mode; will wait for {number} of seconds (assigned to the _want_sleep_seconds variable after each loading; implemented by executing while(_fileindex<_filelistlen){sleep _want_sleep_seconds; next;} as a first command.
 .TP
 .B -S, --sanity-check
@@ -207,16 +207,16 @@ See (chvt (1)), (openvt (1)) for more info about this.
 Use (con2fb (1)) to map a terminal to a framebuffer device.
 
 .TP
-.B 	 --sort
+.B  --sort
 Sorts files list before browsing according to full filename.
 .TP
-.B 	 --sort-basename
+.B  --sort-basename
 Sorts files list before browsing according to file basename.
 .TP
 .B -u, --random
 Randomly shuffle the files list before browsing (seed depending on time() function).
 .TP
-.B 	 --random-no-seed
+.B  --random-no-seed
 Randomly shuffle the files list before browsing (no seeding).
 .TP
 .B -v, --verbose
@@ -228,7 +228,7 @@ Display program version, compile flags, enabled features, linked libraries infor
 .B -w, --autowidth
 Scale the image according to the screen width.
 .TP
-.B 	 --no-auto-scale
+.B  --no-auto-scale
 Do not scale the images after loading (will set '_scale_style=" "';).
 .TP
 .B -H, --autoheight
