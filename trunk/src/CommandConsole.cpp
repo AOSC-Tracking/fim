@@ -2377,6 +2377,9 @@ err:
 		size_t bs = 0;
 		bs += browser_.byte_size();
 		/* NOTE: lots is missing here */
+#if FIM_WANT_PIC_CMTS
+		bs += id_.byte_size();
+#endif /* FIM_WANT_PIC_CMTS */
 		return bs;
 	}
 

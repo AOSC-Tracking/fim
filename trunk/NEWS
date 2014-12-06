@@ -28,6 +28,7 @@
    the _lastfileindex variable (r667)
  * added --sort and --sort-basename (TODO: r669)
  * changed meaning of of _ignorecase, introduced _re_search_opts (TODO: r671)
+ * added --load-image-descriptions-file (TODO: r672)
 
                 Version 0.4
 

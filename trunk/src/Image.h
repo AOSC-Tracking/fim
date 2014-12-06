@@ -24,6 +24,17 @@
 
 #include "FbiStuff.h"
 #include "fim.h"
+#if FIM_WANT_PIC_CMTS
+/* FIXME: temporarily here */
+#include <iostream>
+#include <fstream>
+#include <istream>
+#include <ios>
+#include <string>
+#include <map>
+#include <sstream>
+#include <algorithm>
+#endif /* FIM_WANT_PIC_CMTS */
 
 namespace fim
 {
@@ -156,4 +167,108 @@ class Image
 	int c_page(void)const;
 };
 }
+
+#if FIM_WANT_PIC_CMTS
+/* FIXME: temporarily here */
+typedef std::string fim_fn_t;
+typedef std::string fim_ds_t;
+
+class ImgDscs: public std::map<fim_fn_t,fim_ds_t>
+{
+	template<class T> struct ImgDscsCmp:public std::binary_function<typename T::value_type, typename T::mapped_type, bool>
+	{
+		public:
+		bool operator() (const typename T::value_type &vo, const typename T::mapped_type mo) const
+		{
+			return vo.second == mo;
+		}
+	};
+	ImgDscs::iterator li_;
+	ImgDscs::iterator fo(const key_type & sk, const ImgDscs::iterator & li)
+	{
+		return std::find_if(li,end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+	}
+	ImgDscs::const_iterator fo(const key_type & sk, const ImgDscs::const_iterator & li)const
+	{
+		return std::find_if(li,end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+	}
+public:
+	ImgDscs::const_iterator fo(const key_type & sk)const
+	{
+		return std::find_if(begin(),end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+	}
+private:
+	ImgDscs::iterator fi(const key_type & sk)
+	{
+		ImgDscs::iterator li;
+
+		if(li_ == end())
+			li_ = begin();
+		li = li_ = fo(sk,li_);
+		if(li_ == end())
+			li_ = begin();
+		else
+		++li_;
+		return li;
+	}
+public:
+	void reset(void)
+	{
+		li_=begin();
+	}
+	ImgDscs(void)
+	{
+		reset();
+	}
+	void fetch(const fim_fn_t &dfn)
+	{
+		std::ifstream mfs (dfn.c_str(),std::ios::app);
+		std::string ln;
+
+		while( std::getline(mfs,ln))
+		{
+			std::stringstream  ls(ln);
+			key_type fn;
+			mapped_type ds;
+			if(std::getline(ls,fn,'	'))
+			{
+				if(std::getline(ls,ds,'\n'))
+				{
+					(*this)[fn]=ds;
+				}
+			}
+		}
+		reset();
+	}
+	key_type fk(const mapped_type & sk) 
+	{
+		mapped_type v;
+		if ( fo(sk,li_) != end() )
+		{
+			v = fi(sk)->first;
+		}
+		else
+		{
+			reset();
+			if ( fo(sk,li_) != end() )
+				v = fi(sk)->first;
+		}
+		return v;
+	}
+	size_t byte_size(void)const
+	{
+		size_t bs = size() + sizeof(*this);
+		for( const_iterator it = begin();it != end(); ++it )
+			bs += it->first.size() + sizeof(it->first),
+			bs += it->second.size() + sizeof(it->second);
+		return bs;
+	}
+	std::ostream& print(std::ostream &os)const
+	{
+		os << (size()) << " entries in " << byte_size() << " bytes";
+		return os;
+	}
+};
+	std::ostream& operator<<(std::ostream &os, const ImgDscs & id);
+#endif /* FIM_WANT_PIC_CMTS */
 #endif /* FIM_IMAGE_H */

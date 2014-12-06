@@ -133,6 +133,7 @@
 #define FIM_WANT_BDI 1
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
 #define FIM_WANT_GOTOLAST 1
+#define FIM_WANT_PIC_CMTS 1
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
