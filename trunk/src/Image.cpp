@@ -240,7 +240,7 @@ void fim_background_load()
 		t.join(); 
 		std::cout << "loaded!\n";
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-		fimg_ = FbiStuff::read_image(fname,fd,want_page);
+		fimg_ = FbiStuff::read_image(fname,fd,want_page,this);
 #if 0
 		if(fimg_)
 		{

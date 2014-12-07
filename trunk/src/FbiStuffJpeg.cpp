@@ -46,7 +46,7 @@
 //#define FIM_WITH_LIBEXIF 1
 #ifdef FIM_WITH_LIBEXIF
 #include <libexif/exif-data.h>
-//#define HAVE_NEW_EXIF 0
+#define HAVE_NEW_EXIF 1
 #endif /* FIM_WITH_LIBEXIF */
 
 //
@@ -168,7 +168,7 @@ static void fim_error_exit (j_common_ptr cinfo)
 
 
 #ifdef FIM_WITH_LIBEXIF
-static void dump_exif(FILE *out, ExifData *ed)
+static void dump_exif(FILE *out, ExifData *ed, Namespace *nsp = NULL)
 {
 /* FIXME: temporarily here; shall transfer keys/values to a Namespace object */
 #if HAVE_NEW_EXIF
@@ -262,45 +262,46 @@ static void dump_exif(FILE *out, ExifData *ed)
 uhmpf:
 		1;
 	}
+	/* FIXME: shall rationalize the following: */
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_DATE_TIME)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_DATE_TIME",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_DATE_TIME_ORIGINAL)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_DATE_TIME_ORIGINAL",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_DATE_TIME_DIGITIZED)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_DATE_TIME_DIGITIZED",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_EXPOSURE_TIME)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_EXPOSURE_TIME",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_FNUMBER)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_FNUMBER",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_BATTERY_LEVEL)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_BATTERY_LEVEL",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_APERTURE_VALUE)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_APERTURE_VALUE",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_METERING_MODE)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_METERING_MODE",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_EXPOSURE_PROGRAM)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_EXPOSURE_PROGRAM",value);
 	}
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_ISO_SPEED_RATINGS)){
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		std::cout << value << "\n";
+		if(nsp) nsp->setVariable("EXIF_TAG_ISO_SPEED_RATINGS",value);
 	}
 	// ... EXIF_TAG_XP_TITLE EXIF_TAG_XP_COMMENT EXIF_TAG_XP_AUTHOR EXIF_TAG_XP_KEYWORDS EXIF_TAG_XP_SUBJECT
     }
@@ -387,7 +388,11 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	{
 		ExifData *ed=exif_data_new_from_data(mark->data,mark->data_length);
     		if(ed)
-			dump_exif(stdout,ed);
+#if FIM_EXPERIMEMTAL_IMG_NMSPC
+			dump_exif(stdout,ed,i->nsp);
+#else /* FIM_EXPERIMEMTAL_IMG_NMSPC */
+			dump_exif(stdout,ed,NULL);
+#endif /* FIM_EXPERIMEMTAL_IMG_NMSPC */
 	}
 #endif /* FIM_WITH_LIBEXIF */
 #endif /* HAVE_NEW_EXIF */

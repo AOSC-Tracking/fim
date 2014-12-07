@@ -1579,7 +1579,7 @@ static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h)
 }
 
 /*static struct ida_image**/
-struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int page)
+struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int page, Namespace *nsp)
 {
     /*
      * This function is complicated and should be reworked, in some way.
@@ -2054,6 +2054,9 @@ found_a_loader:	/* we have a loader */
      * */
 #endif /* FIM_EXPERIMENTAL_ROTATION */
     // cc.set_status_bar("loading...", "*");
+#if FIM_EXPERIMEMTAL_IMG_NMSPC
+	img->i.nsp = nsp;
+#endif /* FIM_EXPERIMEMTAL_IMG_NMSPC */
     data = loader->init(fp,filename,page,&img->i,0);
 #ifdef FIM_READ_STDIN_IMAGE
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
