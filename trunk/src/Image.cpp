@@ -804,7 +804,8 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					if( 3 == sscanf(sp,"?%a[^?%]?%a[A-Z_a-z]?%a[^?%]?",&fcp,&vip,&bcp) )
 					if(fcp && bcp && vip)
 					{
-						snprintf(clb+strlen(clb), sizeof(clb), "%s%s%s",fcp,getStringVariable(vip).c_str(),bcp);
+						if(*vip && isSetVar(vip))
+							snprintf(clb+strlen(clb), sizeof(clb), "%s%s%s",fcp,getStringVariable(vip).c_str(),bcp);
 						sp += strlen(fcp)+strlen(vip)+strlen(bcp)+3;
 					}
 					if(fcp)std::free(fcp);
