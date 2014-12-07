@@ -64,6 +64,9 @@ struct ida_image_info {
     int               thumbnail;
     unsigned int      real_width;
     unsigned int      real_height;
+#if FIM_EXPERIMEMTAL_IMG_NMSPC
+    fim::Namespace *nsp;
+#endif /* FIM_EXPERIMEMTAL_IMG_NMSPC */
 };
 
 struct ida_image {
