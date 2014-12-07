@@ -796,6 +796,23 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 				case('%'):
 					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
 				break;
+#if FIM_EXPERIMEMTAL_VAR_EXPANDOS 
+				case('?'): /* "%?forward_comment?_filename?back_comment?" */
+				if(strlen(sp+1)>=3)
+				{
+					char *fcp = NULL, *vip = NULL, *bcp = NULL;
+					if( 3 == sscanf(sp,"?%a[^?%]?%a[A-Z_a-z]?%a[^?%]?",&fcp,&vip,&bcp) )
+					if(fcp && bcp && vip)
+					{
+						snprintf(clb+strlen(clb), sizeof(clb), "%s%s%s",fcp,getStringVariable(vip).c_str(),bcp);
+						sp += strlen(fcp)+strlen(vip)+strlen(bcp)+3;
+					}
+					if(fcp)std::free(fcp);
+					if(bcp)std::free(bcp);
+					if(vip)std::free(vip);
+				}
+				break;
+#endif /* FIM_EXPERIMEMTAL_VAR_EXPANDOS */
 				// default:
 				/* rejecting char; may display an error message here */
 			}
