@@ -7,10 +7,10 @@
    ./configure --enable-matrices-rendering
  * scaling image code slightly faster (thanks to __restrict__ of pointers)
  * status bar will not cover image drawing space unless requested (TODO)
- * "%T" specifier to get (and display) total program used memory
- * "%C" specifier to get (and display) used program cache memory
- * "%c" specifier to get (and display) centering information
- * "%m" specifier to get (and display) mipmap information
+ * "%T" expando to get (and display) total program used memory
+ * "%C" expando to get (and display) used program cache memory
+ * "%c" expando to get (and display) centering information
+ * "%m" expando to get (and display) mipmap information
  * improved the 'align' (TODO)
  * mipmaps (rescaled images) for e.g. faster display of large images (TODO)
  * image cache will remember alignment within viewport (TODO)
@@ -30,6 +30,8 @@
  * changed meaning of of _ignorecase, introduced _re_search_opts (TODO: r671)
  * added --load-image-descriptions-file (TODO: r672)
  * search (and jump) on image descriptions (TODO: r674)
+ * EXIF tags will make it into the Image's Namespace. (TODO: r675)
+ * special image variable expandos/specifiers (TODO: (undocumented) r676)
 
                 Version 0.4
 
