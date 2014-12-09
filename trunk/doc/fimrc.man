@@ -694,6 +694,10 @@ _preferred_rendering_width
 [internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) 
 .fi
 .B
+_preload_checks
+[internal,in,experimental] if 1, will check with stat() existence of input files before list load (set to 0 to speed up loading very long file lists).
+.fi
+.B
 _push_pushes_dirs
 [internal,in] if 1, the push command will also accept and push directories (using pushdir)
 .fi
@@ -913,6 +917,7 @@ if(_re_search_opts==''){_re_search_opts='bi';}
 if(_console_offset==''){_console_offset=0;}
 if(_console_key==''){_console_key=58;}
 if(_display_as_binary==''){_display_as_binary=0;}
+if(_preload_checks==''){_preload_checks=1;}
 #if(_want_caption_status==''){_want_caption_status=0;}
 if(ascale==''){ascale="1.0";}
 

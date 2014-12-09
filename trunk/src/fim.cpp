@@ -443,7 +443,7 @@ int fim_dump_man_page(void)
 			string(".\\\"\n"
 			".\\\" $Id""$\n"
 			".\\\"\n"
-			".TH fim 1 \"(c) 2007-2013 " FIM_AUTHOR_NAME "\"\n"
+			".TH fim 1 \"(c) 2007-2014 " FIM_AUTHOR_NAME "\"\n"
 			".SH NAME\n"
 			"fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n"
 			".SH SYNOPSIS\n"
@@ -1242,14 +1242,18 @@ done:
 		 * */
 		if(read_file_list_from_stdin)
 		{
+		    	bool wv = false; /*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
 			fim_char_t *lineptr=NULL;
 			size_t bs=0;
+			int fc=0;
 			while(fim_getline(&lineptr,&bs,stdin)>0)
 			{
 				chomp(lineptr);
 				cc.push(lineptr);
 				//printf("%s\n",lineptr);
 				lineptr=NULL;
+				if(wv)
+					++fc, printf("%s %d\n",FIM_CNS_CLEARTERM,fc);
 			}
 			if(lineptr)
 				fim_free(lineptr);
