@@ -25,6 +25,7 @@ if(_re_search_opts==''){_re_search_opts='bi';}
 if(_console_offset==''){_console_offset=0;}
 if(_console_key==''){_console_key=58;}
 if(_display_as_binary==''){_display_as_binary=0;}
+if(_preload_checks==''){_preload_checks=1;}
 #if(_want_caption_status==''){_want_caption_status=0;}
 if(ascale==''){ascale="1.0";}
 

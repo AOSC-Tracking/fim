@@ -391,6 +391,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_LAST FIM_MAX_INT
 #define FIM_CNS_FIRST 0
 #define FIM_CNS_VICSZ FIM_CNS_K * 64 /* viewport info cache size */
+#define FIM_CNS_CLEARTERM "\x1B\x4D" /* FIXME: still unused */
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
@@ -582,6 +583,7 @@ namespace fim
 #define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
 #define FIM_VID_PREFERRED_RENDERING_WIDTH	"_preferred_rendering_width"		/* "[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " */
 #define FIM_VID_PREFERRED_RENDERING_DPI	"_preferred_rendering_dpi"		/* "[internal,in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " */
+#define FIM_VID_PRELOAD_CHECKS			"_preload_checks"	/* "[internal,in,experimental] if 1, will check with stat() existence of input files before list load (set to 0 to speed up loading very long file lists)." */
 
 /*
  * Fim Keyboard Descriptions

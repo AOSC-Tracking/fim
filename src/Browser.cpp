@@ -883,8 +883,17 @@ ret:
 			struct stat stat_s;
 
 			/*	if the file doesn't exist, return */
+			if(cc.getIntVariable(FIM_VID_PRELOAD_CHECKS))
 			if( -1 == stat(nf.c_str(),&stat_s) )
-				goto ret;
+			{
+#if 0
+				if( errno != EOVERFLOW) /* this may happen with a readable file...  */
+#endif
+				{
+					/* fim_perror("!"); */
+					goto ret;
+				}
+			}
 			/*	if it is a character device , return */
 			//if(  S_ISCHR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 			/*	if it is a block device , return */

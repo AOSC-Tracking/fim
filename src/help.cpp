@@ -100,4 +100,5 @@ fim_var_help_db[FIM_VID_OPEN_OFFSET]= "[internal,in,optional] offset (specified 
 fim_var_help_db[FIM_VID_SEEK_MAGIC]= "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_WIDTH]= "[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_DPI]= "[internal,in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " ;
+fim_var_help_db[FIM_VID_PRELOAD_CHECKS]= "[internal,in,experimental] if 1, will check with stat() existence of input files before list load (set to 0 to speed up loading very long file lists)." ;
 #endif /* FIM_WANT_INLINE_HELP */

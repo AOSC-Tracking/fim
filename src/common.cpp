@@ -308,6 +308,7 @@ ret:
 		return fim::string(file.c_str());
 	}
 
+#if 0
 	void append_to_file(fim::string filename, fim::string lines)
 	{
 		std::ofstream fs;
@@ -319,6 +320,7 @@ ret:
 		fs.close();
 		sync();
 	}
+#endif
 
 /*
  * Turns newline characters in NULs.
