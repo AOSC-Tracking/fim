@@ -228,6 +228,9 @@ NULL
     {"no-auto-scale",   no_argument,   NULL,0x4E4053,"do not use any auto-scaling",NULL,
 "Do not scale the images after loading (will set '" FIM_VID_SCALE_STYLE "=\" \"';)."
     },
+    {"no-stat-push",   no_argument,   NULL,0x6e7363,"do not check file/dir checks with stat() at push",NULL,
+"Sets " FIM_VID_PRELOAD_CHECKS "=0 before initialization, thus disabling file/dir checks with stat()."
+    },
     {"autoheight",   no_argument,       NULL, 'H',"scale according to height",NULL,
 "Scale the image according to the screen height."
     },
@@ -942,6 +945,10 @@ done:
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='w';");
 	#endif /* FIM_AUTOCMDS */
 		    break;
+		case 0x6e7363:
+		    //fim's
+		    cc.setVariable(FIM_VID_PRELOAD_CHECKS,0);
+		    break;
 		case 0x4E4053:
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
@@ -1246,6 +1253,7 @@ done:
 			fim_char_t *lineptr=NULL;
 			size_t bs=0;
 			int fc=0;
+
 			while(fim_getline(&lineptr,&bs,stdin)>0)
 			{
 				chomp(lineptr);

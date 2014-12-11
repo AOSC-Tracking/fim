@@ -33,6 +33,7 @@
  * EXIF tags will make it into the Image's Namespace. (TODO: r675)
  * special image variable expandos/specifiers (TODO: (undocumented) r676)
  * stat() checking of files on load can be disabled with _preload_checks (TODO: 678)
+ * added --no-stat-push to set _preload_checks=0 before initialization (TODO: 679)
 
                 Version 0.4
 
