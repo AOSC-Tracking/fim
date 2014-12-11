@@ -810,6 +810,8 @@ ret:
 		fim::string f;
 		bool retval = false;
 
+		if(cc.getIntVariable(FIM_VID_PRELOAD_CHECKS)!=1)
+			goto nostat;
 		/*	we want a dir .. */
 #ifdef HAVE_LIBGEN_H
 		if( !is_dir( nf.c_str() ) )
@@ -819,6 +821,7 @@ ret:
 			goto ret;
 #endif /* HAVE_LIBGEN_H */
 
+nostat:
 		if ( ! ( dir = opendir(nf.c_str() ) ))
 			goto ret;
 
@@ -873,7 +876,26 @@ ret:
 		 * */
 		bool retval = false;
 
-		if( nf != FIM_STDIN_IMAGE_NAME )
+		if( nf == FIM_STDIN_IMAGE_NAME )
+			goto isfile;
+
+		if(cc.getIntVariable(FIM_VID_PRELOAD_CHECKS)!=1)
+		{
+			int sl = strlen(nf.c_str());
+
+			if(sl < 1)
+				goto ret;
+
+			if( nf[sl-1] == FIM_CNS_SLASH_CHAR )
+			{
+				goto isdir;
+			}
+			else
+			{
+				goto isfile;
+			}
+		}
+
 		{
 #ifdef FIM_CHECK_FILE_EXISTENCE
 			/*
@@ -883,7 +905,6 @@ ret:
 			struct stat stat_s;
 
 			/*	if the file doesn't exist, return */
-			if(cc.getIntVariable(FIM_VID_PRELOAD_CHECKS))
 			if( -1 == stat(nf.c_str(),&stat_s) )
 			{
 #if 0
@@ -904,8 +925,7 @@ ret:
 			if( getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS) == 1 )
 				if(  S_ISDIR(stat_s.st_mode))
 				{
-					retval = push_dir(nf);
-					goto ret;
+					goto isdir;
 				}
 #endif /* FIM_READ_DIRS */
 			/*	we want a regular file .. */
@@ -925,6 +945,7 @@ ret:
 			}
 #endif /* FIM_CHECK_FILE_EXISTENCE */
 		}
+isfile:
 #ifdef FIM_CHECK_DUPLICATES
 		if( present(nf) )
 		{
@@ -936,6 +957,11 @@ ret:
 		flist_.push_back(nf);
 		//std::cout << "pushing " << nf << FIM_CNS_NEWLINE;
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
+		goto ret;
+#ifdef FIM_READ_DIRS
+isdir:
+		retval = push_dir(nf);
+#endif /* FIM_READ_DIRS */
 ret:
 		return retval;
 	}

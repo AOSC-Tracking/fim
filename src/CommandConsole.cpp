@@ -442,6 +442,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		setVariable(FIM_VID_TERM, fim_getenv(FIM_CNS_TERM_VAR));
 		setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,1);
 		setVariable(FIM_VID_DEFAULT_ETC_FIMRC,FIM_CNS_SYS_RC_FILEPATH);
+		setVariable(FIM_VID_PRELOAD_CHECKS,1);
 		*prompt_=*(prompt_+1)=FIM_SYM_CHAR_NUL;
 	}
 

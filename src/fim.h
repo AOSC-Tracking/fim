@@ -226,7 +226,6 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_NAMESPACE_PREFIXES_DSC	"current image, browser, window, viewport, global"
 #define FIM_SYM_NAMESPACE_REGEX	"^[givbw]:"
 #define FIM_SYM_PROMPT_CHAR	':'
-/*#define FIM_SYM_SYS_SLASH	'/'*/
 #define FIM_SYM_PROMPT_SLASH	'/'
 #define FIM_SYM_PROMPT_NUL	'\0'
 #define FIM_SYM_CHAR_NUL	'\0'
@@ -346,7 +345,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_NEWLINE		"\n"
 //#define FIM_CNS_NEWLINE		std::endl
 #define FIM_CNS_DEFAULT_IFNAME	FIM_CNS_EMPTY_STRING
-#define FIM_CNS_SLASH_STRING	"/"
+#define FIM_CNS_SLASH_CHAR	'/' /* directory delimiter */
+#define FIM_CNS_SLASH_STRING	"/" /* directory delimiter */
 #define FIM_CNS_DIRSEP_STRING	FIM_CNS_SLASH_STRING
 #define FIM_CNS_FP_ZERO		0.0
 #define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
@@ -583,7 +583,7 @@ namespace fim
 #define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
 #define FIM_VID_PREFERRED_RENDERING_WIDTH	"_preferred_rendering_width"		/* "[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " */
 #define FIM_VID_PREFERRED_RENDERING_DPI	"_preferred_rendering_dpi"		/* "[internal,in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " */
-#define FIM_VID_PRELOAD_CHECKS			"_preload_checks"	/* "[internal,in,experimental] if 1, will check with stat() existence of input files before list load (set to 0 to speed up loading very long file lists)." */
+#define FIM_VID_PRELOAD_CHECKS			"_preload_checks"	/* "[internal,in,experimental] if 1 (default), will check with stat() existence of input files before push'ing files (set to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initializatoin (thus, after command line files have been push'ed); use --no-stat-push if you wish to set this to 0 at command line files specification " */
 
 /*
  * Fim Keyboard Descriptions

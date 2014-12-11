@@ -695,7 +695,7 @@ _preferred_rendering_width
 .fi
 .B
 _preload_checks
-[internal,in,experimental] if 1, will check with stat() existence of input files before list load (set to 0 to speed up loading very long file lists).
+[internal,in,experimental] if 1 (default), will check with stat() existence of input files before push'ing files (set to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initializatoin (thus, after command line files have been push'ed); use --no-stat-push if you wish to set this to 0 at command line files specification 
 .fi
 .B
 _push_pushes_dirs
