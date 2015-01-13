@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -229,12 +229,18 @@ public:
 		{
 			std::stringstream  ls(ln);
 			key_type fn;
+			const char sc = ' ', nl = '\n';
 			mapped_type ds;
-			if(std::getline(ls,fn,'	'))
+			if(std::getline(ls,fn,sc))
 			{
-				if(std::getline(ls,ds,'\n'))
+				if(std::getline(ls,ds,nl))
 				{
-					(*this)[fn]=ds;
+#if 0
+					if(false)
+						(*this)[fn]=ds;
+					else
+#endif
+						(*this)[fim_basename_of(fn.c_str())]=ds;
 				}
 			}
 		}
