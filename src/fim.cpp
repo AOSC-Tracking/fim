@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -809,14 +809,8 @@ done:
 		int              i;
 		int		 want_random_shuffle=0;
 	#ifdef FIM_READ_STDIN
-		int              read_file_list_from_stdin;
-		read_file_list_from_stdin=0;
-		#ifdef FIM_READ_STDIN_IMAGE
-		int		 read_one_file_from_stdin;
-		read_one_file_from_stdin=0;
-		#endif /* FIM_READ_STDIN_IMAGE */
-		int		 read_one_script_file_from_stdin;
-		read_one_script_file_from_stdin=0;
+		enum rsc { Nothing = 0, ImageFile = 1, FilesList = 2, Script = 3/*, Desc = 4*/ };
+		int              read_stdin_choice = Nothing;
 		int perform_sanity_check=0;
 	#endif /* FIM_READ_STDIN */
 		int c;
@@ -1044,7 +1038,7 @@ done:
 		case 'i':
 		    //fim's
 #ifdef FIM_READ_STDIN_IMAGE
-		    read_one_file_from_stdin=1;
+		    read_stdin_choice = ImageFile;
 #else /* FIM_READ_STDIN_IMAGE */
 		    FIM_FPRINTF(stderr, FIM_EMSG_NO_READ_STDIN_IMAGE);
 #endif /* FIM_READ_STDIN_IMAGE */
@@ -1117,7 +1111,7 @@ done:
 		case 'p':
 		    //fim's (differing semantics from fbi's)
 	#ifndef FIM_WANT_NOSCRIPTING
-		    read_one_script_file_from_stdin=1;
+		    read_stdin_choice = Script;
         #else /* FIM_WANT_NOSCRIPTING */
 		    cout << FIM_EMSG_NO_SCRIPTING;
         #endif /* FIM_WANT_NOSCRIPTING */
@@ -1197,11 +1191,11 @@ done:
 	#ifdef FIM_READ_STDIN
 		case '-':
 		    //fim's
-		    read_file_list_from_stdin=1;
+		    read_stdin_choice = FilesList;
 		    break;
 		case 0:
 		    //fim's
-		    read_file_list_from_stdin=1;
+		    read_stdin_choice = FilesList;
 		    break;
 	#endif /* FIM_READ_STDIN */
 		default:
@@ -1213,7 +1207,7 @@ done:
 		{
 	#ifdef FIM_READ_STDIN
 			if(*argv[i]=='-'&&!argv[i][1])
-				read_file_list_from_stdin=1;
+				read_stdin_choice = FilesList;
 			else
 	#endif /* FIM_READ_STDIN */
 			{
@@ -1230,12 +1224,13 @@ done:
 		}
 
 	#ifdef FIM_READ_STDIN	
-		if( read_file_list_from_stdin +
+		if( ( read_stdin_choice == FilesList ) +
 		#ifdef FIM_READ_STDIN_IMAGE
-		read_one_file_from_stdin+
+		( read_stdin_choice == ImageFile ) + 
 		#endif /* FIM_READ_STDIN_IMAGE */
-		read_one_script_file_from_stdin > 1)
+		( read_stdin_choice == Script ) > 1 )
 		{
+			/* FIXME: this case is now useless. Shall rather implement a warning for when -p and -i overlap. */
 			FIM_FPRINTF(stderr, "error : you shouldn't specify more than one standard input reading options among (-, -p"
 #ifdef FIM_READ_STDIN_IMAGE
 					", -i"
@@ -1247,7 +1242,7 @@ done:
 		/*
 		 * this is Vim's solution for stdin reading
 		 * */
-		if(read_file_list_from_stdin)
+		if( read_stdin_choice == FilesList )
 		{
 		    	bool wv = false; /*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
 			fim_char_t *lineptr=NULL;
@@ -1270,7 +1265,7 @@ done:
 		}
 		#ifdef FIM_READ_STDIN_IMAGE
 		else
-		if(read_one_file_from_stdin)
+		if( read_stdin_choice == ImageFile )
 		{
 #if !FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG
 			cc.fpush(fim_fread_tmpfile(stdin));
@@ -1280,7 +1275,7 @@ done:
 		}
 		#endif /* FIM_READ_STDIN_IMAGE */
 		else
-		if(read_one_script_file_from_stdin)
+		if( read_stdin_choice == Script )
 		{
 		    	fim_char_t* buf;
 			buf=slurp_binary_fd(0,NULL);
@@ -1314,7 +1309,7 @@ done:
 			       	&& !appendedPostInitCommand 
 			       	&& !appendedPreConfigCommand 
 		#ifdef FIM_READ_STDIN_IMAGE
-		&& !read_one_file_from_stdin
+		&& ( read_stdin_choice != ImageFile )
 		#endif /* FIM_READ_STDIN_IMAGE */
 		&& !perform_sanity_check
 		)
@@ -1354,7 +1349,7 @@ done:
 		if((retcode=FIM_ERR_TO_PERR(cc.init(g_fim_output_device)))!=FIM_PERR_NO_ERROR) {goto ret;}
 #ifdef FIM_READ_STDIN_IMAGE
 #if FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG
-		if(read_one_file_from_stdin)
+		if( read_stdin_choice == ImageFile )
 		{
 			cc.fpush(fim_fread_tmpfile(stdin));
 			close(0);
