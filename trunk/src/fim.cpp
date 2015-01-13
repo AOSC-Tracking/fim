@@ -133,7 +133,7 @@ struct fim_options_t fim_options[] = {
 NULL
     },
 #if FIM_WANT_PIC_CMTS
-    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the basename of an image file, then a Tab character, then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time."
+    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character, then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time."
     },
 #endif /* FIM_WANT_PIC_CMTS */
 #ifdef FIM_READ_STDIN_IMAGE
@@ -239,7 +239,7 @@ NULL
     },
 #ifdef FIM_READ_STDIN
     {"read-from-stdin",      no_argument,       NULL, '-',"read an image list from standard input",NULL,
-"Read file list from stdin.\n"
+"Read file list from stdin: each line one file.\n"
 
 "\n"
 "Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.\n"
@@ -247,6 +247,9 @@ NULL
 "See the section\n"
 ".B EXAMPLES\n"
 "below to read some useful (and unique) ways of employing fim.\n"
+    },
+    {"read-from-stdin-elds",      required_argument,       NULL, 0x72667373,"--read-from-stdin filenames endline delimiter string",NULL,
+"Specify an endline delimiter string for breaking lines read via -/--read-from-stdin. Line text before the delimiter will be treated as names of files to load; the text after will be ignored until a newline. This is useful e.g. to description files as filename list files.\n"
     },
 #endif /* FIM_READ_STDIN */
     {"autotop",   no_argument,       NULL, 'A',"align images to the top (UNFINISHED)",NULL,
@@ -446,7 +449,7 @@ int fim_dump_man_page(void)
 			string(".\\\"\n"
 			".\\\" $Id""$\n"
 			".\\\"\n"
-			".TH fim 1 \"(c) 2007-2014 " FIM_AUTHOR_NAME "\"\n"
+			".TH fim 1 \"(c) 2007-2015 " FIM_AUTHOR_NAME "\"\n"
 			".SH NAME\n"
 			"fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n"
 			".SH SYNOPSIS\n"
@@ -729,7 +732,7 @@ FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
 FBI_AUTHOR" is the author of \"fbi\", upon which\n.B fim\nwas originally based. \n"
 ".SH COPYRIGHT\n"
 ".nf\n"
-"Copyright (C) 2007-2014 " FIM_AUTHOR "\n"
+"Copyright (C) 2007-2015 " FIM_AUTHOR "\n"
 ".fi\n"
 "Copyright (C) 1999-2004 " FBI_AUTHOR "\n"
 ".P\n"
@@ -817,6 +820,7 @@ done:
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
 		bool appendedPreConfigCommand=false;
+		const char * sa = NULL;
 
 	    	g_fim_output_device=FIM_CNS_EMPTY_STRING;
 	
@@ -1193,6 +1197,9 @@ done:
 		    //fim's
 		    read_stdin_choice = FilesList;
 		    break;
+		case 0x72667373:
+		    sa = optarg;
+		    break;
 		case 0:
 		    //fim's
 		    read_stdin_choice = FilesList;
@@ -1252,8 +1259,11 @@ done:
 			while(fim_getline(&lineptr,&bs,stdin)>0)
 			{
 				chomp(lineptr);
+
+				if(sa && lineptr && strstr(lineptr,sa))
+					*strstr(lineptr,sa) = FIM_SYM_CHAR_NUL;
 				cc.push(lineptr);
-				//printf("%s\n",lineptr);
+				// printf("%s\n",lineptr);
 				lineptr=NULL;
 				if(wv)
 					++fc, printf("%s %d\n",FIM_CNS_CLEARTERM,fc);

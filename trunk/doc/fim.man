@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fim 1 "(c) 2007-2014 Michele Martone"
+.TH fim 1 "(c) 2007-2015 Michele Martone"
 .SH NAME
 fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
@@ -141,7 +141,7 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
 .B  --load-image-descriptions-file {filename}
-Load image descriptions from {filename}. In {filename} each line is the basename of an image file, then a Tab character, then the description text. Each description will be put in the _comment variable of the image at load time.
+Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character, then the description text. Each description will be put in the _comment variable of the image at load time.
 .TP
 .B -i, --image-from-stdin
 Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats.
@@ -241,13 +241,17 @@ Scale the image according to the screen height.
 All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
 .TP
 .B  -,  --read-from-stdin
-Read file list from stdin.
+Read file list from stdin: each line one file.
 
 Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
 
 See the section
 .B EXAMPLES
 below to read some useful (and unique) ways of employing fim.
+
+.TP
+.B  --read-from-stdin-elds <arg>
+Specify an endline delimiter string for breaking lines read via -/--read-from-stdin. Line text before the delimiter will be treated as names of files to load; the text after will be ignored until a newline. This is useful e.g. to description files as filename list files.
 
 .TP
 .B -A, --autotop
@@ -476,7 +480,7 @@ Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 was originally based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2014 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
+Copyright (C) 2007-2015 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 .fi
 Copyright (C) 1999-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org>
 .P
