@@ -480,7 +480,7 @@ AM_CONDITIONAL(ENABLE_TIFF, test x$have_tiff = xyes)
 
 
 dnl ============= cacalib : optional
-dnl AC_CHECK_LIB(caca, caca_init,have_cacalib=yes,have_cacalib=no)
+AC_CHECK_LIB(caca, caca_create_canvas,have_cacalib=yes,have_cacalib=no)
 
 dnl ============= GNU gpm, unofficial yet
 
@@ -1382,16 +1382,16 @@ dnl ==================
 
 fim_cv_cacalib=no
 
-dnl AC_ARG_ENABLE(cacalib, AC_HELP_STRING([--enable-cacalib], [Turns on cacalib support (STILL INCOMPLETE)]),
-dnl 	[if test x$enableval = xyes; then
-dnl 	if test x$have_cacalib = xyes; then
-dnl 	fim_cv_cacalib=yes
-dnl 	else
-dnl     AC_MSG_ERROR([Sorry, it does not seem like cacalib is installed or detectable.
-dnl 	Please run --disable-cacalib or install cacalib in a system-wide directory instead.
-dnl 	])
-dnl 	fi
-dnl 	fi])
+AC_ARG_ENABLE(cacalib, AC_HELP_STRING([--enable-cacalib], [Turns on cacalib support (STILL INCOMPLETE)]),
+	[if test x$enableval = xyes; then
+	if test x$have_cacalib = xyes; then
+	fim_cv_cacalib=yes
+	else
+    AC_MSG_ERROR([Sorry, it does not seem like cacalib is installed or detectable.
+	Please run --disable-cacalib or install cacalib in a system-wide directory instead.
+	])
+	fi
+	fi])
 
 dnl ==================
 
@@ -1870,7 +1870,7 @@ dnl	internal windowing system           : ${have_windows:-no}
 dnl	exif (libexif) support           : ${fim_cv_libexif}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
 	allow custom status bar file info   : ${fim_cv_custom_status_bar:-no}
-dnl	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
+	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
 dnl
 	readline (-lrl) library support     : ${fim_want_readline}
 	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
