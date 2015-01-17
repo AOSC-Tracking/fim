@@ -220,7 +220,7 @@ public:
 	{
 		reset();
 	}
-	void fetch(const fim_fn_t &dfn)
+	void fetch(const fim_fn_t &dfn, const fim_char_t sc)
 	{
 		std::ifstream mfs (dfn.c_str(),std::ios::app);
 		std::string ln;
@@ -229,17 +229,17 @@ public:
 		{
 			std::stringstream  ls(ln);
 			key_type fn;
-			const char sc = ' ', nl = '\n';
+			const fim_char_t nl = '\n';
 			mapped_type ds;
 			if(std::getline(ls,fn,sc))
 			{
 				if(std::getline(ls,ds,nl))
 				{
-#if 0
-					if(false)
+					const bool want_basename = true; /*  */
+
+					if(! want_basename )
 						(*this)[fn]=ds;
 					else
-#endif
 						(*this)[fim_basename_of(fn.c_str())]=ds;
 				}
 			}
