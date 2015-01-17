@@ -506,6 +506,10 @@ _comment
 [internal,out] the image comment, extracted from the image file (if any)
 .fi
 .B
+_comment_over_image
+[experimental,in] if v:_comment_over_image is set not to 0, will display the contents of i:_comment over the image.
+.fi
+.B
 _console_buffer_free
 [internal,out] amount of unused memory in the output console buffer
 .fi

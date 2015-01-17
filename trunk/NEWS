@@ -35,6 +35,7 @@
  * special image variable expandos/specifiers (TODO: (undocumented) r676)
  * stat() checking of files on load can be disabled with _preload_checks (TODO: 678)
  * added --no-stat-push to set _preload_checks=0 before initialization (TODO: 679)
+ * added the _comment_over_image variable (TODO: r683)
 
                 Version 0.4
 
