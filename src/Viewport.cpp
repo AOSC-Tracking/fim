@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -428,6 +428,19 @@ namespace fim
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);
 #endif					
+#if FIM_WANT_PIC_CMTS
+			/* FIXME: temporary; move to fs_puts_multiline() */
+			if(image_)
+			if(getIntVariable(FIM_VID_COMMENT_OI))
+			{
+				int fh=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->height:1; // FIXME : this is not clean
+				int fw=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->width:1; // FIXME : this is not clean
+				const char * cmnts = image_->getStringVariable(FIM_VID_COMMENT).c_str();
+				int sl = strlen(cmnts), rw = viewport_width() / fw;
+				for( int li = 0 ; sl > rw * li ; ++li )
+					commandConsole.displaydevice_->fs_puts(commandConsole.displaydevice_->f_, 0, fh*li, cmnts+rw*li);
+			}
+#endif /* FIM_WANT_PIC_CMTS */
 			return true;
 		}
 		return false;
