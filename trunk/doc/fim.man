@@ -141,7 +141,10 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
 .B  --load-image-descriptions-file {filename}
-Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character, then the description text. Each description will be put in the _comment variable of the image at load time.
+Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --load-image-descriptions-file is specified), then the description text. Each description will be put in the _comment variable of the image at load time.
+.TP
+.B  --image-descriptions-file-separator {sepchar}
+A character to be used as a separator between the filename and the description part of lines specified just before a --load-image-descriptions-file.
 .TP
 .B -i, --image-from-stdin
 Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats.

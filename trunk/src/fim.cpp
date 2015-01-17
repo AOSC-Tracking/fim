@@ -133,7 +133,9 @@ struct fim_options_t fim_options[] = {
 NULL
     },
 #if FIM_WANT_PIC_CMTS
-    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character, then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time."
+    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --load-image-descriptions-file is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time."
+    },
+    {"image-descriptions-file-separator",       required_argument,       NULL, 0x69646673, "image descriptions file separator character", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --load-image-descriptions-file."
     },
 #endif /* FIM_WANT_PIC_CMTS */
 #ifdef FIM_READ_STDIN_IMAGE
@@ -821,6 +823,9 @@ done:
 		bool appendedPostInitCommand=false;
 		bool appendedPreConfigCommand=false;
 		const char * sa = NULL;
+#if FIM_WANT_PIC_CMTS
+		fim_char_t sc = '\t'; /* separation character for --load-image-descriptions-file */
+#endif /* FIM_WANT_PIC_CMTS */
 
 	    	g_fim_output_device=FIM_CNS_EMPTY_STRING;
 	
@@ -1188,8 +1193,12 @@ done:
 		}
 		    break;
 #if FIM_WANT_PIC_CMTS
+		case 0x69646673:
+		    if(optarg)
+			    sc = *optarg;
+		    break;
 		case 0x6c696466:
-			cc.id_.fetch(optarg);
+		    cc.id_.fetch(optarg,sc);
 		    break;
 #endif /* FIM_WANT_PIC_CMTS */
 	#ifdef FIM_READ_STDIN
