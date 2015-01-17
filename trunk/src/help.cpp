@@ -43,6 +43,7 @@ fim_var_help_db[FIM_VID_REDUCE_FACTOR]= "[internal,in] the image scale multiplie
 fim_var_help_db[FIM_VID_SCALE_FACTOR_MULTIPLIER]= "[internal,in] value used for scaling up/down the scaling factors" ;
 fim_var_help_db[FIM_VID_SCALE_FACTOR_DELTA]= "[internal,in] value used for incrementing/decrementing the scaling factors" ;
 fim_var_help_db[FIM_VID_COMMENT]= "[internal,out] the image comment, extracted from the image file (if any)" ;
+fim_var_help_db[FIM_VID_COMMENT_OI]= "[experimental,in] if v:_comment_over_image is set not to 0, will display the contents of i:_comment over the image." ;
 fim_var_help_db[FIM_VID_EXIFTOOL_COMMENT]= "[internal,out] comment extracted via the exiftool interface; see _use_exiftool." ;
 fim_var_help_db[FIM_VID_STEPS]= "[internal,in] the default steps, in pixels, when panning images" ;
 fim_var_help_db[FIM_VID_VERSION]= "[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  ;
