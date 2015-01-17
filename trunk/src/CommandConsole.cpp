@@ -1050,10 +1050,7 @@ err:
 				*prompt_=FIM_SYM_PROMPT_CHAR;
 				if(rl==NULL)
 				{
-					/* should exit or not ? */
-					//this->quit();
-					goto rlnull;// FIXME: this is horrible and shall be fixed
-					/* empty line */
+					goto rlnull;
 				}
 				else if(*rl!=FIM_SYM_CHAR_NUL)
 				{
@@ -1160,9 +1157,7 @@ err:
 						ic_=0;
 						if(rl==NULL)
 						{
-							/* FIXME : should exit ? */
-							this->quit();
-							/* empty line */
+							goto rlnull;
 						}
 						/* 
 						 * if using "" instead string("")
@@ -1202,8 +1197,20 @@ err:
 					 */
 				}
 			}
-		}
+			continue;
+#ifdef FIM_USE_READLINE
 rlnull:
+			{
+				ic_=0;
+				*prompt_=FIM_SYM_CHAR_NUL;
+				*prompt_=*(prompt_+1)=FIM_SYM_CHAR_NUL;
+				const fim_char_t * msg = " Warning: readline failed ! Probably no stdin is available, right ? Unfortunately fim is not yet ready for this case.\n";
+				cout << msg;
+				set_status_bar(msg,NULL);
+			}
+			/* this->quit(); */
+#endif /* FIM_USE_READLINE */
+		}
 		FIM_AUTOCMD_EXEC(FIM_ACM_POSTEXECUTIONCYCLE,initial);
 		return quit(return_code_);
 	}
