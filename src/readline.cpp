@@ -2,7 +2,7 @@
 /*
  readline.cpp : Code dealing with the GNU readline library.
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -376,7 +376,7 @@ static int redisplay_hook(void)
 /*
  *	initial setup to set the readline library working
  */
-void initialize_readline (fim_bool_t with_no_display_device)
+void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 {
 	//FIX ME
 	/* Allow conditional parsing of the ~/.inputrc file. */
@@ -389,6 +389,15 @@ void initialize_readline (fim_bool_t with_no_display_device)
 	fim_want_rl_cl_with_esc=1;
 #endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
 
+#define FIM_WANT_COOKIE_STREAM 1 /* FIXME: for now, this is just a dirty hack for the no-stdin case; in the future this shall be completed and replace the rl_stuff_char trick. */
+#if FIM_WANT_COOKIE_STREAM
+	if(wcs)
+       	{
+		int isp[2];
+		pipe(isp);
+		rl_instream = fdopen(isp[0],"r");
+	}
+#endif /* FIM_WANT_COOKIE_STREAM */
 	if(with_no_display_device==0)
 	{
 		rl_catch_signals=0;

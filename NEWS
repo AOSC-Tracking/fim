@@ -37,6 +37,7 @@
  * added --no-stat-push to set _preload_checks=0 before initialization (TODO: 679)
  * added the _comment_over_image variable (TODO: r683)
  * key r is bound to 'rotate90', key R to 'rotate270'
+ * can be invoked without stdin; e.g. from an X menu (TODO: 688)
 
                 Version 0.4
 
