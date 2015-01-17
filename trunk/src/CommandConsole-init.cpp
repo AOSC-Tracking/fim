@@ -2,7 +2,7 @@
 /*
  CommandConsole-init.cpp : Fim console initialization
 
- (c) 2010-2014 Michele Martone
+ (c) 2010-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -83,6 +83,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		int xres=0,yres=0;
 		bool device_failure=false;
 		int dosso=device.find(FIM_SYM_DEVOPTS_SEP_STR);
+		bool wcs = false;
 		std::string dopts;
 		/* new : prevents atof, sprintf and such conversion mismatches! */
 		setlocale(LC_ALL,"C");	/* portable (among Linux hosts) : should use dots for numerical radix separator */
@@ -139,6 +140,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			{
 				device_failure=true;
 			}
+			wcs = true; /* FIXME: want cookie stream (for readline with no stdin) */
 		}
 		#endif /* FIM_WITH_LIBIMLIB2 */
 
@@ -166,6 +168,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			{
 				device_failure=true;
 			}
+			wcs = true; /* FIXME: want cookie stream (for readline with no stdin) */
 		}
 		#endif /* FIM_WITH_LIBSDL */
 
@@ -376,7 +379,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_AUTOCMDS */
 
 #ifdef FIM_USE_READLINE
-		rl::initialize_readline( displaydevice_==NULL );
+		rl::initialize_readline( displaydevice_==NULL, wcs );
 		load_or_save_history(true);
 #endif /* FIM_USE_READLINE */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
