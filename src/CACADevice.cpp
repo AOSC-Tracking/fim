@@ -291,10 +291,11 @@
 		caca_clear();
 		caca_refresh();
 
-		caca_printf(0,0,"foooooooo");
-		caca_putstr(0,0,"foooooooo");
-
-		//caca_draw_bitmap(0, 0, caca_get_width() - 1, caca_get_height() - 1,caca_bitmap, bitmap);
+		caca_draw_bitmap(0, 0, caca_get_width() - 1, caca_get_height() - 1, caca_bitmap, bitmap);
+		caca_draw_bitmap(0, 0, caca_get_width() - 1, caca_get_height() - 1, caca_bitmap, rgb);
+		caca_putstr(0,0,"Unfinished display interface!");
+		caca_printf(0,txt_height()-1,"%s","sample caca msg");
+		caca_refresh();
 
 		ocskip = width();// output columns to skip for each line
 		ocskip = width();// output columns to skip for each line
@@ -322,6 +323,7 @@
 		caca_clear();
 		caca_set_color(CACA_COLOR_BLACK,CACA_COLOR_WHITE);
 		caca_set_color(CACA_COLOR_RED,CACA_COLOR_BLACK);
+		caca_putstr(0,0,"What a caca!");
 		caca_refresh();
 		return rc?FIM_ERR_GENERIC:FIM_ERR_NO_ERROR;
 	}
@@ -354,5 +356,16 @@
 /*
  * This is embryo code and should be used for experimental purposes only!
  */
-
+	int CACADevice::get_chars_per_column(){return height();}
+	fim_coo_t CACADevice::status_line_height(void)const
+	{
+		return 1;
+	}
+	fim_sys_int CACADevice::get_input(fim_key_t * c, bool want_poll)
+	{
+		/* FIXME: better make this virtual pure before writing the next Device ..  */
+		int ce = caca_wait_event(CACA_EVENT_KEY_PRESS);
+		//caca_get_event(...);
+		return ce;
+	}
 #endif /* FIM_WITH_CACALIB */

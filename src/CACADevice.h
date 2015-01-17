@@ -23,7 +23,7 @@
 #ifdef FIM_WITH_CACALIB
 
 #include "DisplayDevice.h"
-#include <caca.h>
+#include <caca0.h>
 
 /*  20080504 this CACA driver doesn't work yet */
 class CACADevice:public DisplayDevice 
@@ -36,6 +36,11 @@ class CACADevice:public DisplayDevice
 	fim_char_t *bitmap;
 
 	public:
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+	CACADevice(MiniConsole & mc_):DisplayDevice(mc_){}
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	CACADevice():DisplayDevice(){}
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 
 	fim_err_t display(
 		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
@@ -68,6 +73,13 @@ class CACADevice:public DisplayDevice
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 
+	int get_chars_per_column(void);
+	fim_bpp_t get_bpp(void)
+	{
+		return 1;
+	}
+	virtual fim_coo_t status_line_height(void)const;
+	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 };
 
 
