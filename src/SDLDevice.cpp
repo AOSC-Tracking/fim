@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify

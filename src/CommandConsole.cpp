@@ -1248,7 +1248,7 @@ rlnull:
 		if(!marked_files_.empty())
 		{
 			std::cerr << "The following files were marked by the user :\n";
-			std::cout << "\n";
+			std::cerr << "\n";
 			for(std::set<fim::string>::iterator i=marked_files_.begin();i!=marked_files_.end();++i)
 				std::cout << *i << "\n";
 		}
