@@ -693,6 +693,7 @@ namespace fim
 #define FIM_FLT_DESATURATE              "desaturate" /* not in vim */
 #define FIM_FLT_DISPLAY			"display" /* in vim, with another meaning */
 #define FIM_FLT_DUMP_KEY_CODES		"dump_key_codes" /* not in vim */
+#define FIM_FLT_DESCLOAD		"descload" /* not in vim */
 #define FIM_FLT_ECHO			"echo" /* in vim */
 #define FIM_FLT_ELSE			"else" /* in vim */
 #define FIM_FLT_EXEC			"exec" /* not in vim */

@@ -806,4 +806,17 @@ nop:
 #endif /* HAVE_GETENV */
 	}
 
+	fim::string CommandConsole::fcmd_descload(const args_t& args)
+	{
+		fim_char_t sc = '\t';
+
+		if(1 > args.size())
+			goto err;
+		if(1 < args.size())
+			sc = *args[1].c_str();
+		this->id_.fetch(args[0],sc);
+err:
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
 }
