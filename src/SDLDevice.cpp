@@ -32,6 +32,7 @@
 #include "SDLDevice.h"
 #define FIM_SDL_FLAGS SDL_FULLSCREEN|SDL_HWSURFACE
 
+#define FIM_WANT_HARDCODED_ICON 1
 #define FIM_SDL_ICONPATH ""
 
 namespace fim
@@ -993,6 +994,11 @@ ok:
 	{
 		SDL_Surface *nscreen_=NULL;
 		fim_sdl_int want_flags=screen_?screen_->flags:FIM_SDL_FLAGS;
+#if FIM_WANT_HARDCODED_ICON
+		unsigned char icondata[] =
+#include "default_icon_byte_array.h"
+		SDL_Surface *icon = NULL;
+#endif /* FIM_WANT_HARDCODED_ICON */
 
 		if(want_resize_)
 			want_flags|=SDL_RESIZABLE;
@@ -1011,6 +1017,13 @@ ok:
 
 		if(w==0 && h==0)
 			w=bvi_.current_w, h=bvi_.current_h; // best video mode, as suggested by SDL
+
+#if FIM_WANT_HARDCODED_ICON
+		icon = SDL_LoadBMP_RW(SDL_RWFromMem(icondata, sizeof(icondata)), 1);
+		SDL_WM_SetIcon(icon, NULL);
+		SDL_FreeSurface(icon);
+#endif /* FIM_WANT_HARDCODED_ICON */
+
 		//std::cout << "resizing to " << w << " "<< h << "\n";
 		if (NULL==(nscreen_ = SDL_SetVideoMode(w, h, bpp_, want_flags)))
 		{
