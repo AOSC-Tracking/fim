@@ -42,6 +42,7 @@ CommandConsole-help.o: CommandConsole-help.cpp help-acm.cpp help.cpp examples.h 
 if FIM_WANT_HARDCODED_CONSOLEFONT
 FontServer.o: default_font_byte_array.h
 endif
+SDLDevice.o: default_icon_byte_array.h
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
@@ -113,6 +114,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/fim_plugin.cpp \
 	$(srcdir)/fim_wrappers.h \
 	$(srcdir)/default_font_byte_array.h \
+	$(srcdir)/default_icon_byte_array.h \
 	$(srcdir)/AADevice.h \
 	$(srcdir)/Benchmarkable.h \
 	$(srcdir)/CACADevice.h \
