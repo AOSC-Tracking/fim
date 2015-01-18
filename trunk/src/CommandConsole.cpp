@@ -1140,18 +1140,16 @@ err:
 					else
 					if(c==FIM_SYM_SEARCH_KEY)
 					{
-						/*
-						 * this is a hack to handle vim-styled regexp searches
-						 */
+						/* a hack to handle vim-style regexp searches */
 						fim_sys_int tmp=rl_filename_completion_desired;
 						rl_hook_func_t *osh=rl_startup_hook;
-						rl_startup_hook=osh;
-						fim_char_t *rl=fim_readline(FIM_CNS_SLASH_STRING); // !!
-
+						rl_startup_hook=rl::fim_search_rl_startup_hook;
+						fim_char_t *rl = NULL;
+						*prompt_=FIM_SYM_PROMPT_SLASH;
+						rl=fim_readline(FIM_CNS_SLASH_STRING); // !!
 						ic_=1;
 						rl_inhibit_completion=1;
-						*prompt_=FIM_SYM_PROMPT_SLASH;
-						rl_startup_hook=rl::fim_search_rl_startup_hook;
+						rl_startup_hook=osh;
 						// no readline ? no interactive searches !
 						*prompt_=FIM_SYM_PROMPT_NUL;
 						rl_inhibit_completion=tmp;
