@@ -211,7 +211,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  * */
 #define FIM_SYM_CONSOLE_KEY	':'
 #define FIM_SYM_CONSOLE_KEY_STR	":"
-#define FIM_SYM_SEARCH_KEY	'/'
+#define FIM_SYM_FW_SEARCH_KEY	'/'
+#define FIM_SYM_BW_SEARCH_KEY	'?'
 #define FIM_SYM_NULL_KEY	0
 #define FIM_SYM_NAMESPACE_SEP	':'
 #define FIM_SYM_DEVOPTS_SEP	'='
@@ -347,6 +348,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_DEFAULT_IFNAME	FIM_CNS_EMPTY_STRING
 #define FIM_CNS_SLASH_CHAR	'/' /* directory delimiter */
 #define FIM_CNS_SLASH_STRING	"/" /* directory delimiter */
+#define FIM_CNS_QU_MA_STRING	"?" /* */
 #define FIM_CNS_DIRSEP_STRING	FIM_CNS_SLASH_STRING
 #define FIM_CNS_FP_ZERO		0.0
 #define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO

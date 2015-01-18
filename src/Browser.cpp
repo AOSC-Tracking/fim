@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1076,12 +1076,14 @@ struct FimBaseNameSorter
 		if( args.size() < 1 || s < 1 )
 			goto nop;
 
+		last_regexp_ = args[0];
+		last_src_dir_ = src_dir;
+
 		for(j=0;j<s;++j)
 		{
 			const fim_char_t *fstm = NULL;
 			bool hm = false;
 
-			last_regexp_ = args[0];
 			i = ((src_dir<0?(s-j):j)+c+src_dir)%s;
 
 			if(!(fstm = flist_[i].c_str()))

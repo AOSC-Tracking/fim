@@ -1130,7 +1130,8 @@ err:
 					}
 #ifndef FIM_USE_READLINE
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY) || 
-						c==FIM_SYM_SEARCH_KEY)set_status_bar("compiled with no readline support!\n",NULL);
+						c == FIM_SYM_FW_SEARCH_KEY || c == FIM_SYM_BW_SEARCH_KEY )
+						set_status_bar("compiled with no readline support!\n",NULL);
 #else /* FIM_USE_READLINE */
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY))
 					{
@@ -1138,15 +1139,19 @@ err:
 						*prompt_ = FIM_SYM_PROMPT_CHAR;
 					}
 					else
-					if(c==FIM_SYM_SEARCH_KEY)
+					if( c == FIM_SYM_FW_SEARCH_KEY || c == FIM_SYM_BW_SEARCH_KEY )
 					{
 						/* a hack to handle vim-style regexp searches */
 						fim_sys_int tmp=rl_filename_completion_desired;
 						rl_hook_func_t *osh=rl_startup_hook;
 						rl_startup_hook=rl::fim_search_rl_startup_hook;
 						fim_char_t *rl = NULL;
+						fim_char_t *rlp = FIM_CNS_SLASH_STRING;
 						*prompt_=FIM_SYM_PROMPT_SLASH;
-						rl=fim_readline(FIM_CNS_SLASH_STRING); // !!
+						if(c == FIM_SYM_BW_SEARCH_KEY)
+							rlp=FIM_CNS_QU_MA_STRING,
+							*prompt_='?';
+						rl=fim_readline(rlp); // !!
 						ic_=1;
 						rl_inhibit_completion=1;
 						rl_startup_hook=osh;
@@ -1164,8 +1169,11 @@ err:
 						else if(rl!=string(FIM_CNS_EMPTY_STRING))
 						{
 							args_t args;
-							std::string rls("/");
+							std::string rls("");
 
+							if(c == FIM_SYM_BW_SEARCH_KEY)
+								rls+="-";
+							rls+="/";
 							rls+=rl;
 							rls+="/";
 							args.push_back(rls);

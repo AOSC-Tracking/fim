@@ -64,6 +64,7 @@ class Browser
 	int current_image(void)const;
 	public:
 	fim::string last_regexp_; // was private
+	int last_src_dir_;
 	Cache cache_;	// was private
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(Image *stdin_image);
@@ -85,6 +86,7 @@ class Browser
 		default_image_(NULL),
 #endif /* FIM_READ_STDIN_IMAGE */
 		last_regexp_(fim::string()),
+		last_src_dir_(0),
 		cache_(Cache())
 		{}
 	public:
