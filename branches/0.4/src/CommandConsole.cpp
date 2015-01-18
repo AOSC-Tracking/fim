@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1223,7 +1223,7 @@ rlnull:
 		if(!marked_files_.empty())
 		{
 			std::cerr << "The following files were marked by the user :\n";
-			std::cout << "\n";
+			std::cerr << "\n";
 			for(std::set<fim::string>::iterator i=marked_files_.begin();i!=marked_files_.end();++i)
 			std::cout << *i << "\n";
 		}
