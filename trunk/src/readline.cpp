@@ -396,6 +396,7 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 		int isp[2];
 		pipe(isp);
 		rl_instream = fdopen(isp[0],"r");
+		rl_outstream = fopen("/dev/null","w"); /* FIXME: seems like rl_erase_empty_line is not always working :-( */
 	}
 #endif /* FIM_WANT_COOKIE_STREAM */
 	if(with_no_display_device==0)
