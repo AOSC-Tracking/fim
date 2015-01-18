@@ -225,6 +225,12 @@ redisplay : re-display the current file contents
 .fi
 
 .B
+descload
+.fi
+descload : load a description file (first argument), using the (optional) second argument character as separator.
+.fi
+
+.B
 dump_key_codes
 .fi
 dump_key_codes : dump the active key codes (unescaped, for inspection)

@@ -380,6 +380,7 @@ ret:		return key;
 
 		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string(FIM_FLT_DISPLAY" ['reinit' {string}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the --" FIM_OSW_OUTPUT_DEVICE " command line switch for allowed values of {string};"),&browser_,&Browser::fcmd_display));
 		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string(FIM_FLT_REDISPLAY" : re-display the current file contents"),&browser_,&Browser::fcmd_redisplay));
+		addCommand(new Command(fim::string(FIM_FLT_DESCLOAD),fim::string(FIM_FLT_DESCLOAD" : load a description file (first argument), using the (optional) second argument character as separator."),this,&CommandConsole::fcmd_descload));
 		addCommand(new Command(fim::string(FIM_FLT_DUMP_KEY_CODES),fim::string(FIM_FLT_DUMP_KEY_CODES" : dump the active key codes (unescaped, for inspection)"),this,&CommandConsole::fcmd_dump_key_codes));
 		addCommand(new Command(fim::string(FIM_FLT_ECHO),fim::string(FIM_FLT_ECHO" " FIM_CNS_EX_ARGS_STRING ": print the " FIM_CNS_EX_ARGS_STRING " on console"),this,&CommandConsole::fcmd_echo));
 #ifndef FIM_WANT_NOSCRIPTING
