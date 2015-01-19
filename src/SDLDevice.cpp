@@ -138,8 +138,8 @@ err:
 	bpp_(FIM_CNS_BPP_INVALID),
 	opts_(opts),
 	want_windowed_(FIM_SDL_FLAGS & SDL_FULLSCREEN ? false : true),
-	want_mouse_display_(false),
-	want_resize_(false)
+	want_mouse_display_(true),
+	want_resize_(true)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 		keypress_ = 0;
@@ -376,12 +376,12 @@ err:
 		want_height=480;
 		want_width=480;
 #endif
-#if FIM_SDL_WANT_RESIZE 
-		if(want_resize_)
-			want_flags|=SDL_RESIZABLE;
-#endif /* FIM_SDL_WANT_RESIZE */
 		if(want_windowed_)
 			want_flags&=~SDL_FULLSCREEN;
+#if FIM_SDL_WANT_RESIZE 
+		if(want_resize_ && ! want_windowed_)
+			want_flags|=SDL_RESIZABLE;
+#endif /* FIM_SDL_WANT_RESIZE */
 		//want_flags|=SDL_DOUBLEBUF;
 		
 		if(!allowed_resolution(want_width,want_height))
