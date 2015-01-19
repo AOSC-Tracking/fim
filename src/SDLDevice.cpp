@@ -1028,6 +1028,7 @@ ok:
 		}
 		w = FIM_MIN(w,bvi_.current_w);
 		h = FIM_MIN(h,bvi_.current_h);
+		//std::cout << "using " << bvi_.current_w << " "<<  bvi_.current_h << " !\n";
 
 #if FIM_WANT_HARDCODED_ICON
 		icon = SDL_LoadBMP_RW(SDL_RWFromMem(icondata, sizeof(icondata)), 1);

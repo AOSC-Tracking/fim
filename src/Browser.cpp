@@ -538,7 +538,7 @@ nop:
 			}
 			if( args.size()>0 && args[0] == "resize" )
 			{
-				fim_coo_t fh = commandConsole_.displaydevice_->status_line_height();
+				fim_coo_t fh = (getGlobalIntVariable(FIM_VID_DISPLAY_BUSY)) ?  commandConsole_.displaydevice_->status_line_height() : 0;
 				fim_coo_t nww = c_image()->width();
 				fim_coo_t nwh = c_image()->height() + fh;
 
