@@ -1026,6 +1026,8 @@ ok:
 			w = FIM_FRAC(bvi_.current_w,nr,dr);
 		       	h = FIM_FRAC(bvi_.current_h,nr,dr);
 		}
+		w = FIM_MIN(w,bvi_.current_w);
+		h = FIM_MIN(h,bvi_.current_h);
 
 #if FIM_WANT_HARDCODED_ICON
 		icon = SDL_LoadBMP_RW(SDL_RWFromMem(icondata, sizeof(icondata)), 1);
@@ -1039,7 +1041,7 @@ ok:
 			///std::cout << "resizing to " << w << " "<< h << " FAILED!\n";
 			return FIM_ERR_GENERIC;
 		}
-		//std::cout << "resizing to " << w << " "<< h << " SUCCESS!\n";
+
 		screen_=nscreen_;
 		if(want_flags&SDL_FULLSCREEN)
 			reset_wm_caption();
@@ -1048,6 +1050,7 @@ ok:
 			std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
 			return FIM_ERR_GENERIC;
 		}
+
 		cc.setVariable(FIM_VID_SCREEN_WIDTH, current_w_);
 		cc.setVariable(FIM_VID_SCREEN_HEIGHT,current_h_);
 		return FIM_ERR_NO_ERROR;
