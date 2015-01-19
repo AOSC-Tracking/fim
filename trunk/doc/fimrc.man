@@ -958,7 +958,8 @@ bind 'Esc' "quit";
 #bind 'n' "next_file;";
 #bind 'n' "next;";
 bind 'C-h' "help";
-bind '?' "help";
+#bind '?' "help"; # assigned to back-search
+#bind '/' "help"; # assigned to forward-search
 bind '=' "scale '100%'";
 #bind 'p' "prev_file;";
 #bind 'P' "list 'pop'";
@@ -1052,6 +1053,8 @@ alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 1
 bind 'N' 'next10';
 bind 'P' 'prev10';
 bind 'C-n' "goto '+//'";
+bind 'C-p' "goto '-//'";
+bind 'C-b' "goto '-//'"; # Warning: C-b cannot be detected on many configurations.
 alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
 alias "bookview"          "while(1){display;sleep '2';scrolldown;};" "";
 alias "comicview"         "while(1){display;sleep '1';scrolldown;};" "";
@@ -1059,8 +1062,8 @@ alias "read"              "while(1){display;sleep '1';scrollforward;};" "";
 alias "slowread"          "while(1){display;sleep '2';scrollforward;};" "";
 alias "fastread"          "while(1){display;scrollforward;};" "";
 alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow;" "";
-bind  "C-p" "pornview";
-bind  "C-b" "bookview";
+#bind  "C-p" "pornview";
+#bind  "C-b" "bookview";
 autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0;" ;
 autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
 #autocmd "PreExecutionCycle" "" "redisplay;";

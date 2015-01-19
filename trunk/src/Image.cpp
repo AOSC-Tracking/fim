@@ -130,9 +130,21 @@ namespace fim
 		else
 		{
 
+#if FIM_WANT_PIC_CMTS
+			/* Picture commentary. user-set overrides the file's own. */
 			struct ida_extra* ie=load_find_extra(&(img_->i),EXTRA_COMMENT);
+
 			if(ie)
 				setVariable(FIM_VID_COMMENT,(fim_char_t*)(ie->data));
+
+			if(fname)
+			{
+				fim_fn_t key(fim_basename_of(fname));
+				if(cc.id_.find(key) != cc.id_.end() )
+					setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
+			}
+#endif /* FIM_WANT_PIC_CMTS */
+
 #if FIM_WANT_EXIFTOOL
 if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 {
@@ -318,14 +330,6 @@ void fim_background_load()
 	
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 			cc.browser_.display_status(cc.browser_.current().c_str(), NULL); /* FIXME: an ugly way to force the proper status display */
-#if FIM_WANT_PIC_CMTS
-		if(fname)
-		{
-			fim_fn_t key(fim_basename_of(fname));
-			if(cc.id_.find(key) != cc.id_.end() )
-				setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
-		}
-#endif /* FIM_WANT_PIC_CMTS */
 		return true;
 	}
 
