@@ -133,7 +133,7 @@ struct fim_options_t fim_options[] = {
 NULL
     },
 #if FIM_WANT_PIC_CMTS
-    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --load-image-descriptions-file is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time."
+    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --load-image-descriptions-file is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually directly read from the file."
     },
     {"image-descriptions-file-separator",       required_argument,       NULL, 0x69646673, "image descriptions file separator character", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --load-image-descriptions-file."
     },

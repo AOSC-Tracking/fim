@@ -41,8 +41,6 @@ ongoing further inspiration.
 20131107	fix --disable-scripting case !
 20131107	this is spurious: fim::string execute(const std::vector<fim::string> &args)
 20131107	getIntVariable(varname) -> getIntVariable(varname, domain)
-20131024	? shall search backwards
-20131024	/ shall search forward
 20131010	text/ascii/bits ascii renderer as funny fallback renderers
 20131010	shall configure default tmpdir to /dev/shmem/something
 20131009	may interface to http://www.feep.net/libtar/

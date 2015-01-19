@@ -1094,7 +1094,7 @@ struct FimBaseNameSorter
 
 			hm = (commandConsole_.regexp_match(fstm,args[0].c_str(),rsic));
 #if FIM_WANT_PIC_CMTS
-			/* FIXME: this is temporary. If filename does not match, we match on description. */
+			/* FIXME: this is temporary. If filename does not match, we look for match on description. */
 			if(!hm)
 			{
 				if(cc.id_.find(fim_fn_t(fstm)) != cc.id_.end() )
