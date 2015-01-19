@@ -42,6 +42,10 @@
  * when repeating searching with repeat_last, will use last direction (TODO: 696)
  * '?' key is now assigned to backward search (TODO: 696)
  * default 'C-p' key is now assigned to repeat last backward search (TODO: 696)
+ * added a "display 'resize'" to resize the SDL window  (TODO, to document: 698)
+ * default SDL mode is windowed  (TODO, to document: 698)
+ * default 'C-w' key will resize the SDL window to the original image size (TODO: 698)
+ * default 'W' key will resize the SDL window to the image size (TODO: 698)
 
                 Version 0.4
 

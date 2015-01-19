@@ -2357,6 +2357,7 @@ ret:
 		setVariable("i:" FIM_VID_FRESH,(fim_int)1);//FIXME: bad practice
 		browser_.fcmd_redisplay(args_t());
 
+		if(getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 		{
 			fim::string msg="resized window to ";
 			msg+=fim::string(w);

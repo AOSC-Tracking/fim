@@ -30,10 +30,11 @@
 #ifdef FIM_WITH_LIBSDL
 
 #include "SDLDevice.h"
-#define FIM_SDL_FLAGS SDL_FULLSCREEN|SDL_HWSURFACE
+#define FIM_SDL_FLAGS /*SDL_FULLSCREEN|*/SDL_HWSURFACE
 
 #define FIM_WANT_HARDCODED_ICON 1
 #define FIM_SDL_ICONPATH ""
+#define FIM_FRAC(VAL,N,D) (((VAL)*(N))/(D))
 
 namespace fim
 {
@@ -136,7 +137,7 @@ err:
 	Bpp_(FIM_CNS_BPP_INVALID),
 	bpp_(FIM_CNS_BPP_INVALID),
 	opts_(opts),
-	want_windowed_(false),
+	want_windowed_(FIM_SDL_FLAGS & SDL_FULLSCREEN ? false : true),
 	want_mouse_display_(false),
 	want_resize_(false)
 	{
@@ -1016,7 +1017,15 @@ ok:
 		SDL_ShowCursor(want_mouse_display_?1:0);
 
 		if(w==0 && h==0)
-			w=bvi_.current_w, h=bvi_.current_h; // best video mode, as suggested by SDL
+		{
+			int nr = 1, dr = 2;
+
+			if( want_flags & SDL_FULLSCREEN )
+				nr = 1, dr = 1;
+
+			w = FIM_FRAC(bvi_.current_w,nr,dr);
+		       	h = FIM_FRAC(bvi_.current_h,nr,dr);
+		}
 
 #if FIM_WANT_HARDCODED_ICON
 		icon = SDL_LoadBMP_RW(SDL_RWFromMem(icondata, sizeof(icondata)), 1);
