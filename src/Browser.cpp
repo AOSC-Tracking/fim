@@ -527,6 +527,7 @@ nop:
 		if( c_image() )
 		{
 			FIM_AUTOCMD_EXEC(FIM_ACM_PREDISPLAY,c);
+			/* FIXME: need a "help" request answer. */
 			/*
 			 * the following is a trick to override redisplaying..
 			 */
@@ -534,6 +535,24 @@ nop:
 			{
 				string arg = args.size()>1?args[1]:"";
 				commandConsole_.display_reinit(arg.c_str());
+			}
+			if( args.size()>0 && args[0] == "resize" )
+			{
+				fim_coo_t fh = commandConsole_.displaydevice_->status_line_height();
+				fim_coo_t nww = c_image()->width();
+				fim_coo_t nwh = c_image()->height() + fh;
+
+#if 0
+				if( args.size() == 2 && args[1] == "original" )
+					nww = c_image()->original_width(),
+					nwh = c_image()->original_height() + fh;
+#endif
+
+				if( args.size()>2 )
+					nww = args[1],
+					nwh = args[2];
+
+				commandConsole_.resize(nww,nwh);
 			}
 			if(image() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
 			//	if(c_image())
