@@ -154,7 +154,7 @@ bind 'C-n' "goto '+//'";
 bind 'C-p' "goto '-//'";
 bind 'C-b' "goto '-//'"; # Warning: C-b cannot be detected on many configurations.
 bind 'W' "display 'resize';" "if supported, resizes the window to match the current image pixels size";
-bind 'C-w' "scale '100%';display 'resize';" "if supported, scales the image to 100% and resizes the window to match its size";
+bind 'C-w' "scale '100%';display 'resize';" "if supported, scales the image to 100% and resizes the window to match its size (if fits)";
 alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
 alias "bookview"          "while(1){display;sleep '2';scrolldown;};" "";
 alias "comicview"         "while(1){display;sleep '1';scrolldown;};" "";
