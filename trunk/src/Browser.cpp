@@ -398,6 +398,8 @@ comeon:
 		{
 			fim::string c = current();
 			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
+			if(image())
+				image()->update();/* rotation update */ /* FIXME: shall separate scaling from orientation */
 			if( c_image() )
 			switch( fc )
 			{
