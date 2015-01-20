@@ -46,6 +46,7 @@
  * default SDL mode is windowed  (TODO, to document: 698)
  * default 'C-w' key will resize the SDL window to the original image size (TODO: 698)
  * default 'W' key will resize the SDL window to the image size (TODO: 698)
+ * added a --autowindow switch to adapt window size to picture size (TODO: 703)
 
                 Version 0.4
 
