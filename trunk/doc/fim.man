@@ -234,6 +234,9 @@ Scale the image according to the screen width.
 .B  --no-auto-scale
 Do not scale the images after loading (will set '_scale_style=" "';).
 .TP
+.B  --autowindow
+Will resize the window size (if supported) to the image size. Don't use this with other image scaling options.
+.TP
 .B  --no-stat-push
 Sets _preload_checks=0 before initialization, thus disabling file/dir checks with stat().
 .TP
