@@ -1,3 +1,804 @@
+2015-01-20 08:03  dezperado
+
+	* NEWS, doc/fim.man, src/fim.cpp: added a --autowindow switch to
+	  adapt window size to picture size.
+
+2015-01-19 22:02  dezperado
+
+	* src/Browser.cpp: enforcing reorientation after before scaling.
+
+2015-01-19 20:21  dezperado
+
+	* src/Browser.cpp, src/SDLDevice.cpp: on "display 'resize'", will
+	  space for status line only if status line verbosity is on.
+
+2015-01-19 19:58  dezperado
+
+	* src/SDLDevice.cpp: setting also resizeable window and mouse
+	  pointer active as default for SDL.
+
+2015-01-19 19:34  dezperado
+
+	* src/SDLDevice.cpp, src/fimrc: added a missing check after the SDL
+	  window resize.
+
+2015-01-19 19:01  dezperado
+
+	* NEWS, src/Browser.cpp, src/CommandConsole.cpp, src/SDLDevice.cpp,
+	  src/fimrc: added a "display 'resize'" to resize the SDL window.
+	  default SDL mode is windowed now.
+	  default 'C-w' key will resize the SDL window to the original
+	  image size.
+	  default 'W' key will resize the SDL window to the image size.
+	  if unspecified, the initial window size will be half of the
+	  screen.
+
+2015-01-19 00:27  dezperado
+
+	* NEWS, TODO, doc/fim.man, doc/fimrc.man, src/Browser.cpp,
+	  src/Image.cpp, src/fim.cpp: --load-image-descriptions-file will
+	  override the comment eventually directly read from the file.
+
+2015-01-18 23:45  dezperado
+
+	* NEWS, src/Browser.cpp, src/Browser.h, src/CommandConsole.cpp,
+	  src/fim.h, src/fimrc: when repeating searching with repeat_last,
+	  will use last direction.
+	  '?' key is now assigned to backward search.
+	  default 'C-p' key is now assigned to repeat last backward search.
+
+2015-01-18 12:37  dezperado
+
+	* src/readline.cpp: directing the output stream of readline to
+	  /dev/null: it seems like for some reason rl_erase_empty_line
+	  emits a newline after e.g.: ":<something>".
+
+2015-01-18 11:53  dezperado
+
+	* src/CommandConsole.cpp, src/SDLDevice.cpp: when dumping selected
+	  filenames will not emit the first newline to stdout anymore, but
+	  to stderr instead.
+
+2015-01-18 11:39  dezperado
+
+	* src/Makefile.am, src/SDLDevice.cpp,
+	  src/default_icon_byte_array.h: will display a (hardcoded) icon
+	  when running in SDL mode.
+
+2015-01-18 09:31  dezperado
+
+	* src/CommandConsole-cmd.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/fim.h: avoiding command console buffer
+	  pollution after a search.
+
+2015-01-18 00:58  dezperado
+
+	* NEWS, doc/fimrc.man, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/fim.h: Added
+	  the 'descload' command.
+
+2015-01-17 14:47  dezperado
+
+	* NEWS, src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/readline.cpp, src/readline.h: overwriting rl_instream with a
+	  bogus stream for the situations when no stdin causes readline()
+	  to fail (e.g.: invoking fim from an X menu).
+
+2015-01-17 13:28  dezperado
+
+	* src/CommandConsole.cpp: when attempting entering in command line
+	  mode with no stdin (e.g. fim < /dev/null), instead of cowardly
+	  exiting the program, just displaying a message.
+
+2015-01-17 11:27  dezperado
+
+	* configure.ac, doc/fimrc.man, src/CACADevice.cpp,
+	  src/CACADevice.h: resuscicated the partial libcaca driver based
+	  device to compile. before making it working, shall migrate to the
+	  1.0 interface.
+
+2015-01-17 10:02  dezperado
+
+	* NEWS, src/fimrc: key r is bound to 'rotate90', key R to
+	  'rotate270', both in trunk and 0.4.
+
+2015-01-17 09:22  dezperado
+
+	* src/help.cpp: had forgotten one (this) line of text in the
+	  previous commit.
+
+2015-01-17 09:21  dezperado
+
+	* NEWS, doc/fimrc.man, src/Viewport.cpp, src/fim.h: added a
+	  _comment_over_image variable and the capability of displaying
+	  comment/description text over the image.
+
+2015-01-17 08:53  dezperado
+
+	* NEWS, doc/fim.man, src/Image.h, src/fim.cpp: Added a
+	  --image-descriptions-file-separator option to specify an
+	  arbitrary separator character to --load-image-descriptions-file.
+
+2015-01-13 23:10  dezperado
+
+	* doc/fim.man, src/Image.h, src/fim.cpp: added a
+	  --read-from-stdin-elds option to allow endline delimiters
+	  specification in the filenames text.
+	  --load-image-descriptions-file will now associate to basename.
+	  corresponding documentation updates.
+
+2015-01-13 22:13  dezperado
+
+	* src/fim.cpp: replacing read_one_file_from_stdin with an enum.
+
+2014-12-11 00:10  dezperado
+
+	* NEWS, doc/fim.man, doc/fimrc.man, src/Browser.cpp,
+	  src/CommandConsole.cpp, src/fim.cpp, src/fim.h, src/help.cpp:
+	  introduced --no-stat-push, which sets _preload_checks=0 before
+	  files push'ing.
+
+2014-12-09 21:41  dezperado
+
+	* NEWS, doc/fim.man, doc/fimrc.man, src/Browser.cpp,
+	  src/common.cpp, src/common.h, src/fim.cpp, src/fim.h, src/fimrc,
+	  src/help.cpp: stat() checking of files on load can be disabled
+	  with _preload_checks.
+	  commented out the still unused append_to_file function.
+	  terminal clear term code (commented) for future use.
+
+2014-12-07 17:55  dezperado
+
+	* src/Image.cpp: In a check to prevent the ? expando from working
+	  in case of empty variable.
+
+2014-12-07 14:16  dezperado
+
+	* NEWS, src/Image.cpp, src/fim.h: introduced special image variable
+	  expandos.
+
+2014-12-07 13:17  dezperado
+
+	* src/FbiStuff.cpp, src/FbiStuff.h, src/FbiStuffJpeg.cpp,
+	  src/FbiStuffLoader.h, src/Image.cpp, src/fim.h: EXIF tags will
+	  make it into the Image's Namespace.
+
+2014-12-06 13:48  dezperado
+
+	* NEWS, src/Browser.cpp: a rudimentary mechanism for search (and
+	  jump) on image descriptions.
+
+2014-12-06 13:10  dezperado
+
+	* doc/fim.man, src/CommandConsole.h, src/fim.cpp: In the man file
+	  will not indent anymore the long options.
+
+2014-12-06 12:58  dezperado
+
+	* NEWS, doc/fim.man, src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/Image.cpp, src/Image.h, src/fim.cpp, src/fim.h: Implemented
+	  an experimental --load-image-descriptions-file function.
+
+2014-12-04 18:46  dezperado
+
+	* NEWS, doc/fimrc.man, src/Browser.cpp, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/fim.h, src/fimrc, src/help.cpp:
+	  introduced _re_search_opts to allow regexp searches on basename
+	  (default) or full pathname.
+
+2014-12-04 18:34  dezperado
+
+	* src/common.cpp: using strrchr in fim_basename_of().
+
+2014-12-03 22:22  dezperado
+
+	* NEWS, doc/fim.man, src/Browser.cpp, src/Browser.h, src/fim.cpp:
+	  added --sort program switch; then --sort-basename and its
+	  internal "sort 'b'".
+
+2014-11-30 18:19  dezperado
+
+	* README, var/Makefile, var/index.html.in: update of the www stuff
+
+2014-11-30 16:46  dezperado
+
+	* NEWS, doc/fim.man, doc/fimrc.man, src/Browser.cpp, src/fim.h,
+	  src/fimrc, src/help.cpp: jump back and forth from the last viewed
+	  image with the ' key and the _lastfileindex variable.
+
+2014-11-30 12:03  dezperado
+
+	* NEWS, README, THANKS, TODO, configure.ac, src/FbiStuffPcx.cpp,
+	  src/Makefile.am: Now supporting PCX files reading thanks to code
+	  contributed by Mohammed Isam.
+
+2014-11-30 11:21  dezperado
+
+	* NEWS, TODO, configure.ac, src/FbiStuff.cpp: made the configure
+	  output a little more informative/readable/compact.
+	  added .tar.gz to the (sic!) hardcoded libarchive handled
+	  extensions.
+
+2014-11-30 10:29  dezperado
+
+	* NEWS, TODO, configure.ac, src/FbiStuffBmp.cpp, src/Makefile.am:
+	  introduced the ability to disable BMP file support with
+	  --disable-bmp.
+
+2014-11-30 00:44  dezperado
+
+	* configure.ac, src/FbiStuffXyz.cpp: Added a --enable-xyz switch to
+	  enable the bogus xyz sample format decoder.
+
+2014-11-29 14:37  dezperado
+
+	* src/FbiStuffJasPer.cpp: svn ps svn:keywords LastChangedDate
+	  src/FbiStuffJasPer.cpp
+
+2014-11-29 14:35  dezperado
+
+	* src/FbiStuffJasPer.cpp: ooops: removed a hardcoded '#define
+	  FIM_WITH_LIBJASPER 1'.
+
+2014-11-29 14:14  dezperado
+
+	* NEWS, TODO, configure.ac, src/FbiStuffJasPer.cpp,
+	  src/Makefile.am: A first, experimental JPEG-2000 support via
+	  JasPer.
+
+2014-11-29 14:09  dezperado
+
+	* src/FbiStuffXyz.cpp: Got rid of a risky conversion in
+	  FbiStuffXyz.cpp.
+
+2014-11-29 00:04  dezperado
+
+	* TODO, src/CommandConsole-cmd.cpp, src/CommandConsole-help.cpp,
+	  src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/FbiStuff.cpp, src/Image.cpp, src/Viewport.cpp,
+	  src/defaultConfiguration.cpp, src/fim.cpp, src/fim.h,
+	  src/readline.cpp: enabled the code to be compiled with
+	  -std=gnu++11.
+
+2014-11-28 22:49  dezperado
+
+	* TODO, src/CommandConsole.cpp, src/FbiStuffJpeg.cpp,
+	  src/Image.cpp: Using snprintf instead of sprintf in accepting the
+	  'desc' string.
+	  Thinking about the future of JPEG/EXIF and background loaders.
+
+2014-11-27 19:45  dezperado
+
+	* src/Image.cpp: Fixing a segfault case.
+
+2014-11-27 09:34  dezperado
+
+	* doc/fimrc.man, src/fim.h, src/fimrc, src/help.cpp: yesterday
+	  forgot to version this change of defaults. C-k binding (comments
+	  display) and a nice (nicer than %v) _want_caption_status are now
+	  the default.
+
+2014-11-26 20:28  dezperado
+
+	* doc/fimrc.man, src/Image.cpp, src/fim.h: added two variables
+	  (_use_exiftool,_exiftool_comment) that respectively control and
+	  use exiftool's capabilities.
+
+2014-11-26 20:17  dezperado
+
+	* TODO, configure.ac, src/Image.cpp: added an exiftool interface,
+	  which can be activated via --enable-exiftool and updates the
+	  _comment variable with output from exiftool.
+
+2014-11-25 22:55  dezperado
+
+	* src/Image.cpp: Builds without FIM_WANT_CUSTOM_INFO_STATUS_BAR set
+	  were broken. Fix.
+
+2014-11-24 10:13  dezperado
+
+	* src/Browser.cpp, src/fim.h, src/help.cpp: _display_status_fmt is
+	  now a customizable format string.
+
+2014-11-23 02:50  dezperado
+
+	* src/Image.cpp: the last commit used to show a quantity to be zero
+	  in the format string function. fix.
+
+2014-11-23 01:53  dezperado
+
+	* src/FbiStuffJpeg.cpp: A few changes in the (non active) libexif
+	  code.
+
+2014-11-23 01:52  dezperado
+
+	* TODO, doc/fimrc.man, src/Image.cpp, src/fim.h, src/fimrc,
+	  src/help.cpp: Now the caption as well can be set to a custom
+	  format string.
+
+2014-11-23 01:28  dezperado
+
+	* TODO, src/CommandConsole.cpp, src/Image.cpp, src/Image.h,
+	  src/help.cpp: generalized a bit the custom info string mechanism
+	  and enabling it for the window caption.
+
+2014-11-23 01:25  dezperado
+
+	* src/Image.cpp, src/Image.h: made a few Image accessors const.
+
+2014-11-23 00:17  dezperado
+
+	* doc/fimrc.man, src/CommandConsole.cpp, src/Namespace.cpp,
+	  src/Namespace.h, src/fim.h: FIM_VID_WANT_CAPTION_STATUS now
+	  allows specification of a custom fixed string.
+
+2014-11-22 22:45  dezperado
+
+	* src/Browser.cpp, src/fim.h, src/help.cpp: introduced an
+	  experimental FIM_VID_DISPLAY_STATUS_FMT variable.
+
+2014-11-22 22:25  dezperado
+
+	* src/Browser.cpp, src/common.cpp, src/common.h, src/fim.h: an
+	  internal experimental switch for optionally displaying basename
+	  of displayed filenames (instead of full path) in the status bar.
+
+2014-11-20 11:45  dezperado
+
+	* TODO, doc/FIM.TXT: Added mention to FbiStuffXyz.cpp to the FAQ.
+
+2014-11-19 22:53  dezperado
+
+	* TODO, src/FbiStuffXyz.cpp, src/Makefile.am: A working sample file
+	  format decoder example (disabled).
+
+2014-11-19 22:49  dezperado
+
+	* src/FbiStuffXyz.cpp: Introducing a sample file format decoder
+	  source, FbiStuffXyz.cpp .
+
+2014-11-17 18:50  dezperado
+
+	* src/Image.cpp: for some weird reason the scaling routine used to
+	  display a notice about prefetching... got rid of this.
+
+2014-11-17 18:47  dezperado
+
+	* src/Image.cpp: an ugly way to force the proper status display
+	  after prefetch after load.
+
+2014-11-17 18:22  dezperado
+
+	* src/FbiStuff.cpp, src/FbiStuffBit1.cpp, src/FbiStuffBit24.cpp,
+	  src/FbiStuffBmp.cpp, src/FbiStuffDjvu.cpp, src/FbiStuffGif.cpp,
+	  src/FbiStuffJpeg.cpp, src/FbiStuffMatrixMarket.cpp,
+	  src/FbiStuffPdf.cpp, src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp,
+	  src/FbiStuffPs.cpp, src/FbiStuffText.cpp, src/FbiStuffTiff.cpp,
+	  src/FbiStuffUFRaw.cpp, src/FontServer.cpp, src/fim_wrappers.h:
+	  may have improved alignment properties (towards this end
+	  fim_calloc still needs a revamp) of a few allocatable structs,
+	  with changes like e.g.:
+	  - h = (struct jpeg_state *)fim_calloc(sizeof(*h),1);
+	  + h = (struct jpeg_state *)fim_calloc(1,sizeof(*h));
+
+2014-11-17 18:05  dezperado
+
+	* src/CommandConsole.cpp, src/FramebufferDevice.cpp,
+	  src/common.cpp, src/fim_wrappers.h: introduced a handy macro
+	  'fim_stralloc'.
+
+2014-11-17 08:03  dezperado
+
+	* src/SDLDevice.cpp: four SDL hardcoded bindings for mouse wheel
+	  and extra buttons.
+
+2014-11-16 22:16  dezperado
+
+	* TODO, src/CommandConsole.cpp, src/FbiStuffJpeg.cpp,
+	  src/FbiStuffPng.cpp, src/Image.cpp: added (in a rather quick,
+	  incomplete and dirty way) a way to display JPEG (and, not anymore
+	  the laconical "Exif" reminder) and PNG comments, via the %k
+	  specifier for _info_fmt_str.
+
+2014-11-16 22:13  dezperado
+
+	* README, configure.ac, doc/FIM.TXT,
+	  scripts/maintenance/cron-rsync.sh.in: First commit on the
+	  Savannah SVN repository.
+	  Changes to accommodate transition from
+	  http://code.autistici.org/svn/fim/trunk/
+	  to
+	  http://svn.savannah.nongnu.org/svn/fbi-improved/
+
+2014-09-24 23:23  dezperado
+
+	* NEWS, configure.ac: the configure script use to advertise a
+	  non-existent `make fim' target. eliminated this. (missing target
+	  noticed by Arturo Rinaldi).
+
+2014-09-14 19:04  dezperado
+
+	* NEWS, src/SDLDevice.cpp, src/Viewport.cpp, src/Viewport.h,
+	  src/fim.h: wrote a mouse-driven image panning functionality for
+	  sdl (non active by default).
+	  bugfix to Viewport::pan_left and Viewport::pan_right.
+
+2014-09-01 17:41  dezperado
+
+	* TODO, src/fim.cpp: Updated the mention to _scale_style=' ' in
+	  branches/0.4 .
+
+2014-09-01 17:24  dezperado
+
+	* TODO, doc/fim.man, doc/fimrc.man, src/fim.cpp: fixed
+	  documentation note about _scale_style and changed the hardcoded
+	  default memory cache occupation limit.
+
+2014-08-31 10:44  dezperado
+
+	* NEWS, src/Cache.cpp, src/fim.h: The viewport info / position
+	  cache will now be freed slightly independently from images; after
+	  the triggering of a (for now) hardcoded cache size limit
+	  threshold.
+
+2014-08-31 01:14  dezperado
+
+	* TODO, src/Cache.cpp, src/fim.h, src/fimrc, src/help.cpp:
+	  Effectively activated the max cached memory (_max_cached_memory)
+	  cache eviction mechanism.
+
+2014-08-30 12:43  dezperado
+
+	* src/FbiStuffMagick.cpp, src/Viewport.cpp, src/fim.cpp: Fix to
+	  when a single, non-decodeable file is (unsuccessfully) attempted
+	  to be loaded.
+	  Extended (or rather, resuscitated) the workaround for
+	  libGraphicsMagick failing in rendering txt files.
+
+2014-08-30 08:31  dezperado
+
+	* src/Browser.cpp, src/Cache.cpp, src/CommandConsole.cpp,
+	  src/DebugConsole.cpp, src/DebugConsole.h, src/FimWindow.cpp,
+	  src/Namespace.h, src/SDLDevice.cpp, src/Viewport.cpp, src/fim.h:
+	  Adjusting to respect the proper classes members initialization
+	  order.
+
+2014-08-29 23:47  dezperado
+
+	* NEWS, TODO, src/Browser.cpp, src/Cache.cpp, src/Cache.h,
+	  src/Viewport.cpp, src/Viewport.h, src/fim.h: Implemented a first,
+	  rudimentary 'viewport' cache.
+
+2014-08-29 21:42  dezperado
+
+	* src/Browser.cpp: Small readability fixes of Browser methods code.
+
+2014-08-29 20:50  dezperado
+
+	* Makefile.am, THANKS, configure.ac, doc/Makefile.am,
+	  scripts/Makefile.am, scripts/tests/font.sh, src/Makefile.am:
+	  Adapted the trunk to the last two revisions of 0.4.
+	  Removed a couple of spurious lines from a script in 0.4.
+
+2014-07-23 20:30  dezperado
+
+	* src/Makefile.am: Better notation in the Makefile.am.
+
+2014-04-08 07:18  dezperado
+
+	* src/FbiStuff.cpp: avoiding using a pipe with libarchive.
+
+2014-04-07 22:43  dezperado
+
+	* configure.ac, src/FbiStuff.cpp: preliminary, unfinished toy
+	  interfacing with libarchive.
+
+2014-04-05 20:35  dezperado
+
+	* configure.ac, src/FbiStuff.cpp, src/FbiStuffUFRaw.cpp: initial
+	  experimental support for decoding files with ufraw.
+
+2013-12-12 20:43  dezperado
+
+	* src/Browser.cpp: ghost patch for proof-of-concept testing of
+	  sort-by-date possibility.
+
+2013-12-12 20:15  dezperado
+
+	* NEWS, TODO, configure.ac: changed librsb library detection.
+
+2013-11-07 22:37  dezperado
+
+	* TODO, src/AADevice.cpp, src/CommandConsole.cpp,
+	  src/FramebufferDevice.cpp, src/fim.h: fixes for build broken
+	  --disable-scripting. however, `make tests' fails so more is
+	  needed.
+
+2013-11-07 21:57  dezperado
+
+	* TODO, doc/fimrc.man, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/CommandConsole.h, src/fim.h,
+	  src/help.cpp: cleaning up a little CommandConsole internals.
+
+2013-11-07 20:27  dezperado
+
+	* src/Browser.cpp, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/FimWindow.cpp, src/fim.h: introduced
+	  macro "FIM_AUTOCMD_EXEC autocmd_exec", active only if
+	  FIM_AUTOCMDS is defined (thus saving much #ifdef/#endif code).
+
+2013-11-07 19:55  dezperado
+
+	* TODO, src/Browser.cpp, src/Browser.h: introduced backward regexp
+	  based search for regexp_goto. got rid of regexp_goto_next (merged
+	  in regexp_goto).
+
+2013-11-06 20:52  dezperado
+
+	* NEWS, src/FbiStuff.cpp, src/fim_types.h: with gcc, declaring the
+	  scaling functions pointers as __restrict__'ed, resulting in a
+	  slightly (e.g. I see 10% here) faster scaling code.
+
+2013-11-06 18:33  dezperado
+
+	* src/AADevice.cpp, src/AADevice.h, src/Arg.cpp, src/Arg.h,
+	  src/Benchmarkable.h, src/Browser.h, src/CACADevice.cpp,
+	  src/CACADevice.h, src/Cache.h, src/Command.h,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/DebugConsole.h, src/DisplayDevice.cpp,
+	  src/DisplayDevice.h, src/DummyDisplayDevice.h, src/FimWindow.cpp,
+	  src/FimWindow.h, src/FramebufferDevice.h, src/Image.cpp,
+	  src/Image.h, src/Imlib2Device.h, src/Namespace.h,
+	  src/SDLDevice.h, src/Var.h, src/Viewport.cpp, src/Viewport.h,
+	  src/fim_string.cpp, src/fim_string.h: (except for
+	  FramebufferDevice) moving a lot of method definitions from the
+	  header to the respective cpp file.
+	  () -> (void) in the headers method declarations.
+
+2013-11-06 17:43  dezperado
+
+	* src/Namespace.cpp, src/Namespace.h, src/Var.cpp, src/Var.h,
+	  src/grammar.h: easing printout of Var and Namespace instances.
+	  added an option to Namespace's get variables method.
+
+2013-11-02 22:35  dezperado
+
+	* src/Namespace.cpp, src/Namespace.h: introduced a preprocessor
+	  symbol (for now undefined) to disable CommandConsole existence
+	  requirement in Namespace...
+
+2013-11-01 18:01  dezperado
+
+	* src/Browser.cpp, src/Browser.h, src/Cache.cpp,
+	  src/DebugConsole.h, src/FimWindow.cpp, src/Image.cpp,
+	  src/Namespace.cpp, src/Namespace.h, src/Viewport.cpp, src/fim.h:
+	  working to decouple Namespace from CommandConsole.
+
+2013-11-01 16:43  dezperado
+
+	* TODO, src/CommandConsole-var.cpp, src/CommandConsole.h,
+	  src/Makefile.am, src/Namespace.cpp, src/Namespace.h:
+	  CommandConsole now extends Namespace.
+	  moved Namespace.cpp's CommandConsole:: stuff to new
+	  CommandConsole-var.cpp.
+	  and of course, "svn ps svn:keywords LastChangedDate
+	  src/CommandConsole-var.cpp"
+
+2013-11-01 15:18  dezperado
+
+	* configure.ac, src/FontServer.cpp, src/FontServer.h,
+	  src/FramebufferDevice.h:
+	  :%s/FIM_X_DISPLAY_MISSING/FIM_USE_X11_FONTS/g
+	  (inverted preprocessor conditionals consequently)
+
+2013-11-01 15:13  dezperado
+
+	* src/Makefile.am, src/common.cpp, src/fim.h, src/fim_string.cpp,
+	  src/fim_string.h, src/string.cpp, src/string.h: string.h ->
+	  fim_string.h
+	  string.cpp -> fim_string.cpp
+
+2013-11-01 15:07  dezperado
+
+	* src/CommandConsole-cmd.cpp, src/CommandConsole-help.cpp,
+	  src/Var.cpp, src/Var.h, src/fim.cpp: moved the help db-related
+	  methods of Var to separate functions.
+
+2013-10-30 17:17  dezperado
+
+	* src/AADevice.cpp, src/Browser.cpp, src/CACADevice.cpp,
+	  src/Cache.cpp, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-help.cpp, src/CommandConsole-init.cpp,
+	  src/CommandConsole.cpp, src/DebugConsole.cpp,
+	  src/DisplayDevice.cpp, src/FbiStuff.cpp, src/FbiStuffLoader.cpp,
+	  src/FbiStuffMagick.cpp, src/FbiStuffPs.cpp, src/FimWindow.cpp,
+	  src/FontServer.cpp, src/FramebufferDevice.cpp, src/Image.cpp,
+	  src/Imlib2Device.cpp, src/Namespace.cpp, src/SDLDevice.cpp,
+	  src/Var.cpp, src/Viewport.cpp, src/common.cpp, src/fim.cpp,
+	  src/readline.cpp, src/string.cpp: sed -i 's/() *$/(void)/g' *.cpp
+	  sed -i 's/() *const *$/(void)const/g' *.cpp
+	  and some fixes where that was not correct.
+
+2013-10-30 17:08  dezperado
+
+	* src/AADevice.h, src/Browser.h, src/CACADevice.h, src/Cache.h,
+	  src/CommandConsole.h, src/DebugConsole.h, src/DisplayDevice.h,
+	  src/FbiStuff.h, src/FbiStuffLoader.h, src/FimWindow.h,
+	  src/FontServer.h, src/FramebufferDevice.h, src/Image.h,
+	  src/Imlib2Device.h, src/SDLDevice.h, src/Viewport.h,
+	  src/common.h, src/readline.h, src/string.h: petty substitution of
+	  '();' with '(void);' in method/function declarations/definitions
+	  in *.h files.
+
+2013-10-30 16:59  dezperado
+
+	* NEWS, src/AADevice.cpp, src/AADevice.h, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FramebufferDevice.cpp,
+	  src/FramebufferDevice.h, src/Imlib2Device.cpp,
+	  src/Imlib2Device.h, src/SDLDevice.cpp, src/SDLDevice.h,
+	  src/Viewport.cpp: the status bar will not always cover image
+	  space.
+
+2013-10-30 16:06  dezperado
+
+	* doc/fim.man, src/fim.cpp: removed an obsolete documentation line.
+
+2013-10-26 13:18  dezperado
+
+	* src/FbiStuff.cpp: allocating pixelmaps through the newly
+	  introduced fim_pm_alloc (I forgot this file in last commit).
+
+2013-10-26 13:17  dezperado
+
+	* src/Image.cpp, src/common.cpp, src/common.h: allocating pixelmaps
+	  through the newly introduced fim_pm_alloc.
+
+2013-10-26 10:34  dezperado
+
+	* src/FbiStuffPng.cpp: fix to the png code according to new
+	  versions: assuming no definition (only declaration) of
+	  png_structp.
+	  tested with PNG_LIBPNG_VER 10249 and 10606.
+
+2013-10-26 09:47  dezperado
+
+	* NEWS, TODO, src/FbiStuffGif.cpp: the previous fix to
+	  FbiStuffGif.cpp was insufficient: this should be (tested with
+	  5.0.5 and 4.1); trunk and 0.4 branch.
+	  update to NEWS.
+
+2013-10-25 16:04  dezperado
+
+	* src/FbiStuffGif.cpp: a change to fix effects of removal of
+	  PrintGifError since giflib-4.2, still keeping backward
+	  compatibility.
+
+2013-10-22 17:25  dezperado
+
+	* src/FbiStuff.cpp, src/SDLDevice.cpp, src/fim.h: bypassing a
+	  possible bug in sdl image display when invoking SDL_UpperBlit
+	  with extra large images (0.4 branch, trunk).
+	  readability changes in trunk.
+	  byte_size of mipmap type correction in trunk.
+
+2013-10-20 19:02  dezperado
+
+	* doc/fimrc.man, src/fimrc: commented the window-related aliases in
+	  the default fimrc.
+	  added a binding of 'H' to to-image-height scaling.
+
+2013-10-20 18:30  dezperado
+
+	* src/Browser.cpp, src/Viewport.cpp, src/Viewport.h, src/fimrc:
+	  beefed the align functionality by enbling left/right and adding
+	  left,right,top,bottom,center default aliases, as well as binding
+	  'c' to the center alignment.
+
+2013-10-20 17:56  dezperado
+
+	* doc/fimrc.man, src/Browser.cpp, src/Image.cpp, src/Viewport.cpp,
+	  src/Viewport.h, src/fim.h, src/help.cpp: enabled image centering
+	  on redisplay (this may be a problem so it shall be reviewed).
+	  added %c specifier for centering information.
+
+2013-10-20 15:45  dezperado
+
+	* src/Browser.cpp, src/Cache.cpp, src/CommandConsole.cpp,
+	  src/DebugConsole.cpp, src/FimWindow.cpp, src/Image.cpp,
+	  src/Imlib2Device.cpp, src/Viewport.cpp, src/fim.cpp, src/fimrc,
+	  src/lex.lex: introduced default key bindings for ^ and $. apart
+	  from this, only readability changes.
+
+2013-10-20 15:04  dezperado
+
+	* src/Browser.cpp, src/common.h, src/fim.h, src/lex.lex: fixed a
+	  bug (repeated input of '$' line leading to hopping images back).
+
+2013-10-19 21:11  dezperado
+
+	* doc/fimrc.man, src/Image.cpp, src/fim.h, src/help.cpp: added %m
+	  specifier for getting mipmap mem info.
+
+2013-10-19 20:33  dezperado
+
+	* NEWS, src/Cache.cpp, src/FbiStuff.cpp, src/FbiStuff.h,
+	  src/FbiStuffMatrixMarket.cpp, src/Image.cpp, src/Image.h,
+	  src/fim.h, src/help.cpp: completed and activated mip map
+	  mechanism.
+
+2013-10-19 12:19  dezperado
+
+	* src/FbiStuff.cpp, src/FbiStuff.h, src/FbiStuffLoader.h: declaring
+	  as const the arguments of many pixel manipulating functions.
+
+2013-10-19 11:19  dezperado
+
+	* src/Browser.cpp, src/Browser.h, src/Cache.cpp, src/Cache.h,
+	  src/Image.cpp, src/Image.h, src/Viewport.cpp, src/fim.h:
+	  introduced commandConsole.browser_.cache_.dummy_img_ .
+
+2013-10-19 08:23  dezperado
+
+	* src/Browser.cpp, src/Browser.h, src/Viewport.cpp, src/fim.h:
+	  petty optimizations; code readability changes; in
+	  browser/vieweport.
+
+2013-10-19 06:53  dezperado
+
+	* src/Image.cpp, src/Image.h: an enum to express rotation values.
+
+2013-10-18 22:29  dezperado
+
+	* configure.ac, src/CommandConsole.cpp, src/Image.cpp, src/Image.h,
+	  src/common.cpp, src/common.h, src/fim.h: formatting changes +
+	  return pruning + conditional GB/PG support in fim_snprintf_XB.
+
+2013-10-18 21:46  dezperado
+
+	* NEWS, doc/fim.man, doc/fimrc.man, src/Browser.cpp, src/Browser.h,
+	  src/Cache.cpp, src/Cache.h, src/CommandConsole.cpp,
+	  src/CommandConsole.h, src/DebugConsole.cpp, src/DebugConsole.h,
+	  src/FimWindow.cpp, src/FimWindow.h, src/Image.cpp, src/Image.h,
+	  src/Namespace.h, src/Viewport.cpp, src/Viewport.h, src/fim.h,
+	  src/help.cpp: introduced %C and %T specifiers to get memory usage
+	  info.
+
+2013-10-15 16:41  dezperado
+
+	* VERSION, configure.ac, src/Browser.cpp, src/Cache.cpp,
+	  src/FramebufferDevice.cpp, src/Namespace.cpp: mostly code
+	  readability measures and extra 'return' statements pruning.
+
+2013-10-14 21:08  dezperado
+
+	* NEWS, README, configure.ac, src/AADevice.cpp, src/Browser.cpp,
+	  src/Cache.cpp, src/CommandConsole.cpp, src/DisplayDevice.cpp,
+	  src/FbiStuff.cpp, src/FramebufferDevice.cpp, src/Namespace.cpp,
+	  src/SDLDevice.cpp, src/fim.cpp: cleaning up the code; mainly
+	  making it more readable.
+
+2013-10-12 16:54  dezperado
+
+	* INSTALL, README, configure.ac,
+	  scripts/maintenance/yacc2grammar.awk, src/Makefile.am,
+	  src/b2ba.c, src/fim.cpp, src/fimgs: modest README update, with
+	  Debian install info.
+	  removed INSTALL file.
+	  corrected some dates/version information.
+	  Imlib2 configure reporting and makefile fixes.
+	  adapting an awk script to mawk (we were using only gawk, until
+	  now).
+
+2013-10-12 14:31  dezperado
+
+	* configure.ac: updating configure.ac for autoconf-2.69.
+
+2013-10-11 15:44  dezperado
+
+	* ChangeLog, NEWS, doc/fimrc.man, src/fim.h, src/help.cpp: better
+	  documentation string for the status bar format string.
+	  changelog update.
+
 2013-10-10 22:15  dezperado
 
 	* src/FbiStuffText.cpp, src/Image.cpp: fixing the 0-byte corner
