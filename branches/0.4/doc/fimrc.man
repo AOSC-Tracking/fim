@@ -866,7 +866,7 @@ This is the default configuration, as contained in the _fim_default_config_file_
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
-# Lines begining with a pound (#) are ignored by fim (they are treated as comments).
+# Lines beginning with a pound (#) are ignored by fim (they are treated as comments).
 #
 # Internal variables.
 # Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
