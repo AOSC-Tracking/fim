@@ -679,6 +679,7 @@ err:
 
 fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 {
+	/* FIXME: throughout this file snprintf is used in an insafe way; shall fix this ASAP. */
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[3],*imp;
@@ -837,14 +838,14 @@ strdo:
 								else
 								{
 									//snprintf(clb+strlen(clb), sizeof(clb), "%s",(string(vipp).substr(1,fcpp-vipp-1)).c_str());
-									snprintf(clb+strlen(clb), sizeof(clb), "%s","<??>");
+									snprintf(clb+strlen(clb), sizeof(clb), "%s","<?>");
 								}
 									
 							}
 							else
 							{
 								//snprintf(clb+strlen(clb), sizeof(clb), "%s",fcpp);
-								snprintf(clb+strlen(clb), sizeof(clb), "%s","<??>");
+								snprintf(clb+strlen(clb), sizeof(clb), "%s","<?>");
 							}
 							goto strdo;
 						}
