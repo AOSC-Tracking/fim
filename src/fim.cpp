@@ -398,20 +398,24 @@ string fim_dump_man_page_snippets()
 		if(helparg&&*helparg=='d')ms+="\t\t ",ms+=fim_options[i].desc;
 		if(helparg&&*helparg=='m')
 		{
+			string md;
 			if(fim_options[i].mandesc)
-				ms+=fim_options[i].mandesc;
+				md+=fim_options[i].mandesc;
 			else
 			{
-				ms+="\t\t ";
+				md+="\t\t ";
 				if(fim_options[i].desc)
-					ms+=fim_options[i].desc;
+					md+=fim_options[i].desc;
 			}
+			//md.substitute("-","\\-");
+			ms+=md;
 		}
 		//if(helparg||*helparg!='m') ms+=FIM_SYM_ENDL;
 		ms+=sloe;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 	}
 	ms+="\n";
+	//ms.substitute("-","\\-");
 	return ms;
 }
 
@@ -421,7 +425,7 @@ int fim_dump_man_page()
 			string(".\\\"\n"
 			".\\\" $Id""$\n"
 			".\\\"\n"
-			".TH fim 1 \"(c) 2007-2013 "FIM_AUTHOR_NAME"\"\n"
+			".TH fim 1 \"(c) 2007-2015 "FIM_AUTHOR_NAME"\"\n"
 			".SH NAME\n"
 			"fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n"
 			".SH SYNOPSIS\n"
@@ -704,7 +708,7 @@ FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
 FBI_AUTHOR" is the author of \"fbi\", upon which\n.B fim\nwas originally based. \n"
 ".SH COPYRIGHT\n"
 ".nf\n"
-"Copyright (C) 2007-2013 "FIM_AUTHOR"\n"
+"Copyright (C) 2007-2015 "FIM_AUTHOR"\n"
 ".fi\n"
 "Copyright (C) 1999-2004 "FBI_AUTHOR"\n"
 ".P\n"
