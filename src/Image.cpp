@@ -802,6 +802,59 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 				break;
 #if FIM_EXPERIMEMTAL_VAR_EXPANDOS 
 				case('?'): /* "%?forward_comment?_filename?back_comment?" */
+#if 1
+				if(strlen(sp+1)>=4)
+				{
+					char *fcp = NULL, *vip = NULL;
+					if( 2 == sscanf(sp,"?%a[A-Z_a-z]?%a[^?]?",&vip,&fcp) )
+					if(fcp && vip)
+					{
+						char *fcpp = fcp;
+
+						if(*vip && isSetVar(vip) && *fcp )
+						{
+							char *vipp = NULL;
+strdo:
+							vipp = fcpp;
+							while(*fcpp && *fcpp != '%')
+								++fcpp;
+							snprintf(clb+strlen(clb), fcpp-vipp+1, "%s", vipp );
+
+							if(!*fcpp)
+								goto strdone;
+							++fcpp;
+							vipp = fcpp;
+							if(*fcpp==':')
+							{
+								++fcpp;
+								while(*fcpp && *fcpp!=':' && ( isalpha(*fcpp) || isdigit(*fcpp) || *fcpp=='_' ))
+									++fcpp;
+								if(*fcpp==':')
+								{
+									snprintf(clb+strlen(clb), sizeof(clb), "%s",getStringVariable(string(vipp).substr(1,fcpp-vipp-1)).c_str());
+									++fcpp;
+								}
+								else
+								{
+									//snprintf(clb+strlen(clb), sizeof(clb), "%s",(string(vipp).substr(1,fcpp-vipp-1)).c_str());
+									snprintf(clb+strlen(clb), sizeof(clb), "%s","<??>");
+								}
+									
+							}
+							else
+							{
+								//snprintf(clb+strlen(clb), sizeof(clb), "%s",fcpp);
+								snprintf(clb+strlen(clb), sizeof(clb), "%s","<??>");
+							}
+							goto strdo;
+						}
+strdone:
+						sp += strlen(fcp)+strlen(vip)+2;
+					}
+					if(fcp)std::free(fcp);
+					if(vip)std::free(vip);
+				}
+#else
 				if(strlen(sp+1)>=3)
 				{
 					char *fcp = NULL, *vip = NULL, *bcp = NULL;
@@ -816,6 +869,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					if(bcp)std::free(bcp);
 					if(vip)std::free(vip);
 				}
+#endif
 				break;
 #endif /* FIM_EXPERIMEMTAL_VAR_EXPANDOS */
 				// default:
