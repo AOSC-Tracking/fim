@@ -303,6 +303,22 @@ uhmpf:
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
 		if(nsp) nsp->setVariable("EXIF_TAG_ISO_SPEED_RATINGS",value);
 	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_MODEL)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		if(nsp) nsp->setVariable("EXIF_TAG_MODEL",value);
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_TIME_ZONE_OFFSET)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		if(nsp) nsp->setVariable("EXIF_TAG_TIME_ZONE_OFFSET",value);
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_IMAGE_UNIQUE_ID)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		if(nsp) nsp->setVariable("EXIF_TAG_IMAGE_UNIQUE_ID",value);
+	}
+	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_SHARPNESS)){
+		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
+		if(nsp) nsp->setVariable("EXIF_TAG_SHARPNESS",value);
+	}
 	// ... EXIF_TAG_XP_TITLE EXIF_TAG_XP_COMMENT EXIF_TAG_XP_AUTHOR EXIF_TAG_XP_KEYWORDS EXIF_TAG_XP_SUBJECT
     }
 #endif /* HAVE_NEW_EXIF */
