@@ -1,3 +1,30 @@
+2015-01-21 14:37  dezperado
+
+	* doc/fimrc.man, src/fimrc: 797 had left out a typo fix. remedy.
+
+2015-01-21 13:53  dezperado
+
+	* debian/rules: removed a useless line.
+
+2015-01-21 13:48  dezperado
+
+	* debian/changelog, debian/compat, debian/control,
+	  debian/copyright, debian/dirs, debian/files,
+	  debian/fim.substvars, debian/menu.ex, debian/rules,
+	  debian/source, debian/source/format, debian/substvars,
+	  debian/watch: replaced the old debian/* files with the ones
+	  kindly provided by Gianfranco Costamagna.
+
+2015-01-21 13:20  dezperado
+
+	* ChangeLog, Makefile.am, doc/fim.man, doc/fimgs.man,
+	  doc/fimrc.man, src/CommandConsole-help.cpp, src/fim.cpp:
+	  translating the -'s in \-'s in the man pages, via a Makefile
+	  rule.
+	  one typoe fix.
+	  ChangeLog update.
+	  copyright year update.
+
 2015-01-18 16:19  dezperado
 
 	* src/CommandConsole-init.cpp, src/CommandConsole.cpp,

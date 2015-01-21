@@ -5,7 +5,7 @@
 AUTOMAKE_OPTIONS = nostdinc no-dependencies # dejagnu
 SUBDIRS = src doc distros scripts
 
-dist_doc_DATA=$(top_srcdir)/README $(top_srcdir)/README.FIRST $(top_srcdir)/TODO $(top_srcdir)/VERSION $(top_srcdir)/BUGS  $(top_srcdir)/FAQ.TXT $(top_srcdir)/AUTHORS $(top_srcdir)/ChangeLog $(top_srcdir)/NEWS
+dist_doc_DATA=$(top_srcdir)/README $(top_srcdir)/README.FIRST $(top_srcdir)/TODO $(top_srcdir)/VERSION $(top_srcdir)/BUGS  $(top_srcdir)/FAQ.TXT $(top_srcdir)/AUTHORS $(top_srcdir)/changelog $(top_srcdir)/NEWS
 # no INSTALL INSTALL.TXT is necessary in rules
 EXTRA_DIST=  COPYING  \
 	Makefile.am configure.ac configure \
@@ -144,7 +144,7 @@ doc/fim.man doc/fimrc.man doc/fimgs.man: $(FIM_EXE)
 	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man  |$(MANSUBST) > doc/fimrc.man
 	$(FIMGS_EXE) -m -- $(FIMNORCOPTS)                    |$(MANSUBST) > doc/fimgs.man
 
-# fixme : missing integration with ChangeLog file
+# fixme : missing integration with changelog file
 mail-announce:
 	@ figlet fim | mutt -s "fim-`cat VERSION` release" "fbi-improved-devel@nongnu.org"  -i -
 
@@ -165,7 +165,7 @@ savannah: signed-dist
 savannah-lookup:
 	lynx -dump dl.sv.gnu.org/releases/fbi-improved
 
-# fixme : missing integration with ChangeLog file and such information
+# fixme : missing integration with changelog file and such information
 freshmeat_old: 
 	@ $(AWK)  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
 	@echo freshmeat-submit -v "fbi-`cat VERSION`" \
