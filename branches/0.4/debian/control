@@ -3,7 +3,7 @@ Section: graphics
 Priority: extra
 Maintainer: Michele Martone <michele.martone@uniroma2.it>
 Uploaders: Gianfranco Costamagna <costamagnagianfranco@yahoo.it>
-Build-Depends: autotools-dev,
+Build-Depends: dh-autoreconf,
                bison,
                debhelper (>= 9),
                flex,
@@ -13,6 +13,7 @@ Build-Depends: autotools-dev,
                libjpeg-dev,
                libpng-dev,
                libreadline-dev,
+               libsdl1.2-dev,
                libtiff-dev
 Standards-Version: 3.9.6
 Homepage: http://savannah.nongnu.org/projects/fbi-improved/
@@ -20,7 +21,7 @@ Homepage: http://savannah.nongnu.org/projects/fbi-improved/
 Package: fim
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Description: a scriptable frame buffer and ascii art image viewer
+Description: scriptable frame buffer and ascii art image viewer
  FIM is a highly customizable and scriptable image viewer targeted at the
  users who are confortable with software like the Vim text editor or the Mutt
  mail user agent (it aims to be a swiss army knife for viewing images).
