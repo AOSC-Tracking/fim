@@ -1,3 +1,173 @@
+2015-01-18 16:19  dezperado
+
+	* src/CommandConsole-init.cpp, src/CommandConsole.cpp,
+	  src/readline.cpp, src/readline.h: directing the output stream of
+	  readline to /dev/null: it seems like for some reason
+	  rl_erase_empty_line emits a newline after e.g.: ":<something>".
+	  when dumping selected filenames will not emit the first newline
+	  to stdout anymore, but to stderr instead.
+
+2015-01-17 14:49  dezperado
+
+	* src/readline.h: wrong declaration of initialize_readline() in a
+	  header.
+
+2015-01-17 10:02  dezperado
+
+	* NEWS, src/fimrc: key r is bound to 'rotate90', key R to
+	  'rotate270', both in trunk and 0.4.
+
+2014-09-14 19:03  dezperado
+
+	* src/Viewport.cpp: bugfix to Viewport::pan_left and
+	  Viewport::pan_right.
+
+2014-09-01 17:41  dezperado
+
+	* doc/fim.man, doc/fimrc.man, src/fim.cpp: Updated the mention to
+	  _scale_style=' ' in branches/0.4 .
+
+2014-08-29 20:50  dezperado
+
+	* scripts/tests/font.sh: Adapted the trunk to the last two
+	  revisions of 0.4.
+	  Removed a couple of spurious lines from a script in 0.4.
+
+2014-07-30 19:58  dezperado
+
+	* Makefile.am, THANKS, VERSION, configure.ac: Marked this version
+	  as 0.4-rc2 (to be packaged and released soon).
+	  Bypassing a part of `make tests' in case of out-of-tree building.
+	  Acknowledging Matthieu Crapet's help in the THANKS file.
+
+2014-07-29 23:45  dezperado
+
+	* Makefile.am, configure.ac, depcomp, doc/Makefile.am,
+	  scripts/Makefile.am, scripts/tests/font.sh, src/FimString.cpp,
+	  src/FimString.h, src/Makefile.am, src/Var.h, src/common.cpp,
+	  src/fim.h, src/string.cpp, src/string.h: Changes to fim aiming to
+	  make "out-of-tree" builds supported.
+	  This seems to work.
+	  Based on Matthieu Crapet's suggested patch.
+	  Additionally, adapted a few other goals/scripts for the
+	  out-of-tree case.
+
+2014-07-23 20:30  dezperado
+
+	* src/Makefile.am, src/grammar.h: Restoring AM_CPPFLAGS= as
+	  including -I. (last revision) broke the proper path inclusion.
+	  Better notation in the Makefile.am.
+
+2014-07-23 15:41  dezperado
+
+	* src/Makefile.am: Implemented a second patch to have a more
+	  standards compliant Makefile.am (provided by Matthieu Crapet).
+
+2014-07-23 15:33  dezperado
+
+	* configure.ac: Implemented a first patch to better handle the
+	  cases with `svnversion' missing (provided by Matthieu Crapet).
+
+2013-10-30 16:06  dezperado
+
+	* doc/fim.man, src/fim.cpp: removed an obsolete documentation line.
+
+2013-10-26 10:34  dezperado
+
+	* src/FbiStuffPng.cpp: fix to the png code according to new
+	  versions: assuming no definition (only declaration) of
+	  png_structp.
+	  tested with PNG_LIBPNG_VER 10249 and 10606.
+
+2013-10-26 09:47  dezperado
+
+	* src/FbiStuffGif.cpp: the previous fix to FbiStuffGif.cpp was
+	  insufficient: this should be (tested with 5.0.5 and 4.1); trunk
+	  and 0.4 branch.
+	  update to NEWS.
+
+2013-10-25 16:04  dezperado
+
+	* src/FbiStuffGif.cpp: a change to fix effects of removal of
+	  PrintGifError since giflib-4.2, still keeping backward
+	  compatibility.
+
+2013-10-22 17:25  dezperado
+
+	* src/SDLDevice.cpp: bypassing a possible bug in sdl image display
+	  when invoking SDL_UpperBlit with extra large images (0.4 branch,
+	  trunk).
+	  readability changes in trunk.
+	  byte_size of mipmap type correction in trunk.
+
+2013-10-20 19:02  dezperado
+
+	* doc/fimrc.man, src/fimrc: commented the window-related aliases in
+	  the default fimrc.
+	  added a binding of 'H' to to-image-height scaling.
+
+2013-10-20 15:05  dezperado
+
+	* VERSION, configure.ac, src/Browser.cpp, src/fim.h, src/lex.lex:
+	  fixed a bug (repeated input of '$' line leading to hopping images
+	  back).
+	  this will appear in rc1.
+
+2013-10-13 18:31  dezperado
+
+	* NEWS, doc/fim.man: NEWS and man page files update.
+
+2013-10-12 16:54  dezperado
+
+	* INSTALL, README, configure.ac, doc/fim.man, doc/fimrc.man,
+	  scripts/maintenance/yacc2grammar.awk, src/Makefile.am,
+	  src/b2ba.c, src/fim.cpp, src/fimgs: modest README update, with
+	  Debian install info.
+	  removed INSTALL file.
+	  corrected some dates/version information.
+	  Imlib2 configure reporting and makefile fixes.
+	  adapting an awk script to mawk (we were using only gawk, until
+	  now).
+
+2013-10-12 14:31  dezperado
+
+	* configure.ac: updating configure.ac for autoconf-2.69.
+
+2013-10-12 12:41  dezperado
+
+	* src/Benchmarkable.h, src/CommandConsole-cmd.cpp,
+	  src/CommandConsole-help.cpp, src/CommandConsole-init.cpp,
+	  src/DisplayDevice.cpp, src/FbiStuffBit1.cpp,
+	  src/FbiStuffBit24.cpp, src/FbiStuffDjvu.cpp,
+	  src/FbiStuffMagick.cpp, src/FbiStuffPdf.cpp, src/FimWindow.cpp,
+	  src/FimWindow.h, src/Imlib2Device.cpp, src/Imlib2Device.h,
+	  src/SDLDevice.cpp, src/SDLDevice.h, src/fim_limits.h,
+	  src/fim_plugin.cpp, src/fim_plugin.h, src/fim_types.h,
+	  src/fim_wrappers.h: forgot to properly merge a number of files
+	  from trunk. doing this now. `make tests` clean.
+
+2013-10-11 16:23  dezperado
+
+	* ChangeLog, NEWS, TODO, VERSION, configure.ac, doc/fim.man,
+	  src/AADevice.cpp, src/AADevice.h, src/Arg.h, src/Browser.cpp,
+	  src/Browser.h, src/CACADevice.cpp, src/CACADevice.h,
+	  src/Cache.cpp, src/Cache.h, src/Command.cpp, src/Command.h,
+	  src/CommandConsole.cpp, src/CommandConsole.h,
+	  src/DebugConsole.cpp, src/DebugConsole.h, src/DisplayDevice.h,
+	  src/DummyDisplayDevice.h, src/FbiStuff.cpp, src/FbiStuff.h,
+	  src/FbiStuffBmp.cpp, src/FbiStuffFbtools.cpp,
+	  src/FbiStuffFbtools.h, src/FbiStuffJpeg.cpp, src/FbiStuffList.h,
+	  src/FbiStuffLoader.cpp, src/FbiStuffLoader.h,
+	  src/FbiStuffPng.cpp, src/FbiStuffPpm.cpp, src/FbiStuffText.cpp,
+	  src/FbiStuffTiff.cpp, src/FontServer.cpp, src/FontServer.h,
+	  src/FramebufferDevice.cpp, src/FramebufferDevice.h,
+	  src/Image.cpp, src/Image.h, src/Makefile.am, src/Namespace.cpp,
+	  src/Namespace.h, src/Var.h, src/Viewport.cpp, src/Viewport.h,
+	  src/common.cpp, src/common.h, src/fim.cpp, src/fim.h,
+	  src/fim_stream.h, src/help.cpp, src/interpreter.cpp, src/lex.h,
+	  src/readline.cpp, src/readline.h, src/string.cpp, src/string.h:
+	  svn merge ^/trunk/ (r565)
+
 2013-03-23 10:45  dezperado
 
 	* ChangeLog, NEWS, VERSION: VERSION, NEWS and ChangeLog files
