@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -358,7 +358,18 @@ nop:
 			}
 			if(sl)
 			{
+				if(fc=='*')
+				{
+					++ss;
+					if(!*ss)
+						goto nop; /* a '*' alone. may assign a special meaning to this... */
+				}
 				newscale=fim_atof(ss);
+				if(fc=='*')
+				{
+					fc = '+';
+					goto comeon;
+				}
 				pcsc=(strstr(ss,"%")!=NULL);
 				if(pcsc)newscale*=.01;
 				if(newscale==FIM_CNS_SCALEFACTOR_ZERO) goto nop;
