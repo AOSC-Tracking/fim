@@ -378,7 +378,18 @@ noplus:
 			}
 			if( sl )
 			{
+				if(fc=='*')
+				{
+					++ss;
+					if(!*ss)
+						goto nop; /* a '*' alone. may assign a special meaning to this... */
+				}
 				newscale = fim_atof(ss);
+				if(fc=='*')
+				{
+					fc = '+';
+					goto comeon;
+				}
 				pcsc = (strstr(ss,"%") != NULL );
 				if(pcsc)
 					newscale *= .01;
