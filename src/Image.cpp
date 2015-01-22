@@ -679,7 +679,6 @@ err:
 
 fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 {
-	/* FIXME: throughout this file snprintf is used in an insafe way; shall fix this ASAP. */
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[3],*imp;
@@ -702,7 +701,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
-	*imp='\0';
+	*imp=FIM_SYM_CHAR_NUL;
 
 	if(fimg_ && fimg_->i.npages>1)
 		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",page_+1,fimg_->i.npages);
@@ -718,10 +717,12 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	//if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
 	{
-		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE];
+		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE]; /* FIXME: reasons for having this static ? */
 		//char*ifsp=(char*)ifs.c_str(); // FIXME
 		const char*fp=ifsp;
 		const char*sp=ifsp;
+		fim_char_t *clbp = clb;
+		int rbc = sizeof(clb)/sizeof(clb[0]);
 
 		clb[0]=FIM_SYM_CHAR_NUL;
 
@@ -732,74 +733,75 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 		goto sbum;
 		while(*sp=='%' && isprint(sp[1]))
 		{
+
 			++sp;
 			switch(*sp)
 			{
 				// "%p %wx%h %i/%l %F %M"
 				case('p'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%.0f",scale_*100);
+					snprintf(clbp, rbc, "%.0f",scale_*100);
 				break;
 				case('w'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%d",this->width());
+					snprintf(clbp, rbc, "%d",this->width());
 				break;
 				case('h'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%d",this->height());
+					snprintf(clbp, rbc, "%d",this->height());
 				break;
 				case('i'):
 					/* browser property. TODO: move outta here */
-					snprintf(clb+strlen(clb), sizeof(clb), "%d",n?n:1);
+					snprintf(clbp, rbc, "%d",n?n:1);
 				break;
 #if 1
 				case('k'):
 				{
 					const char * cmnts = getStringVariable(FIM_VID_COMMENT).c_str();
 					if(cmnts && *cmnts)
-						snprintf(clb+strlen(clb), sizeof(clb), "[%s] ",cmnts); /* FIXME: need sanitization */
-				}/* FIXME: this shamelessly breaks all max lenght assumptions ! */
+						snprintf(clbp, rbc, "[%s] ",cmnts); /* FIXME: need sanitization */
+				}
 #endif
 				break;
 				case('l'):
 					/* browser property. TODO: move outta here */
-					snprintf(clb+strlen(clb), sizeof(clb), "%d",(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
+					snprintf(clbp, rbc, "%d",(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
 				break;
 				case('L'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%s",imagemode);
+					snprintf(clbp, rbc, "%s",imagemode);
 				break;
 				case('P'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%s",pagesinfobuffer);
+					snprintf(clbp, rbc, "%s",pagesinfobuffer);
 				break;
 				case('F'):
-					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),fs_);
+					fim_snprintf_XB(clbp, rbc,fs_);
 				break;
 				case('M'):
-					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),ms);
+					fim_snprintf_XB(clbp, rbc,ms);
 				break;
 				case('n'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%s",getStringVariable(FIM_VID_FILENAME).c_str());
+					snprintf(clbp, rbc, "%s",getStringVariable(FIM_VID_FILENAME).c_str());
 				break;
 				case('N'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%s",fim_basename_of(getStringVariable(FIM_VID_FILENAME).c_str()));
+					snprintf(clbp, rbc, "%s",fim_basename_of(getStringVariable(FIM_VID_FILENAME).c_str()));
 				break;
 				case('T'):
 					/* console property. TODO: move outta here */
-					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),cc.byte_size());
+					fim_snprintf_XB(clbp, rbc,cc.byte_size());
 				break;
 				case('m'):
-					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),mm_.byte_size());
+					fim_snprintf_XB(clbp, rbc,mm_.byte_size());
 				break;
 				case('C'):
 					/* cache property. TODO: move outta here */
-					fim_snprintf_XB(clb+strlen(clb), sizeof(clb),cc.browser_.cache_.byte_size());
+					fim_snprintf_XB(clbp, rbc,cc.browser_.cache_.byte_size());
 				break;
 				case('c'):
 					/* viewport property. TODO: move outta here */
-					cc.current_viewport()->snprintf_centering_info(clb+strlen(clb), sizeof(clb));
+					cc.current_viewport()->snprintf_centering_info(clbp, rbc);
 				break;
 				case('v'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%s",FIM_CNS_FIM_APPTITLE);
+					snprintf(clbp, rbc, "%s",FIM_CNS_FIM_APPTITLE);
 				break;
 				case('%'):
-					snprintf(clb+strlen(clb), sizeof(clb), "%c",'%');
+					snprintf(clbp, rbc, "%c",'%');
 				break;
 #if FIM_EXPERIMEMTAL_VAR_EXPANDOS 
 				case('?'): /* "%?forward_comment?_filename?back_comment?" */
@@ -820,6 +822,7 @@ strdo:
 							while(*fcpp && *fcpp != '%')
 								++fcpp;
 							snprintf(clb+strlen(clb), fcpp-vipp+1, "%s", vipp );
+							rbc -= strlen(clbp); clbp += strlen(clbp);
 
 							if(!*fcpp)
 								goto strdone;
@@ -832,20 +835,20 @@ strdo:
 									++fcpp;
 								if(*fcpp==':')
 								{
-									snprintf(clb+strlen(clb), sizeof(clb), "%s",getStringVariable(string(vipp).substr(1,fcpp-vipp-1)).c_str());
+									snprintf(clbp, rbc, "%s",getStringVariable(string(vipp).substr(1,fcpp-vipp-1)).c_str());
 									++fcpp;
 								}
 								else
 								{
 									//snprintf(clb+strlen(clb), sizeof(clb), "%s",(string(vipp).substr(1,fcpp-vipp-1)).c_str());
-									snprintf(clb+strlen(clb), sizeof(clb), "%s","<?>");
+									snprintf(clbp, rbc, "%s","<?>");
 								}
 									
 							}
 							else
 							{
 								//snprintf(clb+strlen(clb), sizeof(clb), "%s",fcpp);
-								snprintf(clb+strlen(clb), sizeof(clb), "%s","<?>");
+								snprintf(clbp, rbc, "%s","<?>");
 							}
 							goto strdo;
 						}
@@ -863,7 +866,7 @@ strdone:
 					if(fcp && bcp && vip)
 					{
 						if(*vip && isSetVar(vip))
-							snprintf(clb+strlen(clb), sizeof(clb), "%s%s%s",fcp,getStringVariable(vip).c_str(),bcp);
+							snprintf(clbp, rbc, "%s%s%s",fcp,getStringVariable(vip).c_str(),bcp);
 						sp += strlen(fcp)+strlen(vip)+strlen(bcp)+3;
 					}
 					if(fcp)std::free(fcp);
@@ -881,7 +884,9 @@ strdone:
 sbum:
 			while(*sp!='%' && sp[0])
 				++sp;
-			snprintf(clb+strlen(clb), FIM_MIN(sp-fp+1,sizeof(clb)), "%s",fp);
+			rbc -= strlen(clbp); clbp += strlen(clbp);
+			snprintf(clbp, FIM_MIN(sp-fp+1,rbc), "%s",fp);
+			rbc -= strlen(clbp); clbp += strlen(clbp);
 		}
 		//std::cout << "Custom format string chosen: "<< ifsp << ", resulting in: "<< clb <<"\n";
 		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
