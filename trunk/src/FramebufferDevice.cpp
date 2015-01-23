@@ -302,7 +302,7 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
 			switch (fb_var_.bits_per_pixel) {
 		case 8:
 			svga_dither_palette(8, 8, 4);
-			dither_ = TRUE;
+			dither_ = FIM_FBI_TRUE;
 			init_dither(8, 8, 4, 2);
 			break;
 		case 15:
@@ -1816,7 +1816,7 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 	DisplayDevice()
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,vt_(0)
-	,dither_(FALSE)
+	,dither_(FIM_FBI_FALSE)
 	,pcd_res_(3)
 	//,steps_(FIM_CNS_STEPS_DEFAULT)
 	,fbgamma_(FIM_CNS_GAMMA_DEFAULT)
