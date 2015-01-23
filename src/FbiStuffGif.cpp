@@ -44,6 +44,12 @@
 #define FIM_GIFLIB_RETIRED_PrintGifError 0
 #endif
 
+#if defined(GIFLIB_MAJOR) && ((GIFLIB_MAJOR> 5) || ((GIFLIB_MAJOR==5) && defined(GIFLIB_MINOR) && (GIFLIB_MINOR>=1)))
+#define FIM_DGifCloseFile_ARG ,NULL
+#else
+#define FIM_DGifCloseFile_ARG
+#endif
+
 namespace fim
 {
 struct gif_state {
@@ -58,14 +64,22 @@ struct gif_state {
 #if FIM_GIFLIB_RETIRED_PrintGifError  
 void
 FimPrintGifError(struct gif_state * gs) {
+#if defined(GIFLIB_MAJOR) && (GIFLIB_MAJOR==4) && defined(GIFLIB_MINOR) && (GIFLIB_MINOR>=2)
+    int ErrorCode = GifError();// introduced in 4.2, removed in 5.0
+#else
     int ErrorCode = gs->gif->Error;
+#endif
     /* On the basis of giflib-5.0.5/util/qprintf.c suggestion, after retirement of PrintGifError  */
-    char *Err = NULL;
+    const char *Err = NULL;
 
     if(ErrorCode == 0)   
 	    return;
 
-    Err = GifErrorString(ErrorCode);
+#if ( defined(GIFLIB_MAJOR) && (GIFLIB_MAJOR >= 5) )
+    Err = GifErrorString(ErrorCode);// Introduced in 4.2; argument from 5.0.0.
+#else
+    Err = GifErrorString();// introduced in 4.2
+#endif
                                                                                                                               
     if (Err != NULL)
         fprintf(stderr, "GIF-LIB error: %s.\n", Err);
@@ -82,7 +96,7 @@ gif_fileread(struct gif_state *h)
 {
     GifRecordType RecordType;
     GifByteType *Extension = NULL;
-    int ExtCode, rc;
+    int ExtCode = 0, rc = 0;
     const fim_char_t *type = NULL;
 
     for (;;) {
@@ -231,7 +245,7 @@ gif_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	FIM_FBI_PRINTF("gif: fatal error, aborting\n");
     if(h->gif);
     {
-    	DGifCloseFile(h->gif);
+    	DGifCloseFile(h->gif FIM_DGifCloseFile_ARG);
         fim_free(h->gif);
     }
     fclose(h->infile);
@@ -274,7 +288,7 @@ gif_done(void *data)
 
     if (FbiStuff::fim_filereading_debug())
 	FIM_FBI_PRINTF("gif: done, cleaning up\n");
-    DGifCloseFile(h->gif);
+    DGifCloseFile(h->gif FIM_DGifCloseFile_ARG);
     fclose(h->infile);
     if (h->il)
 	fim_free(h->il);
