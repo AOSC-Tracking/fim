@@ -22,11 +22,11 @@
 FIM (Fbi IMproved) is a highly customizable and scriptable image viewer targeted
 at the users who are comfortable with software like the Vim text editor or the
 Mutt mail user agent.
-FIM it aims to be a swiss army knife for viewing images.
+FIM aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux frame buffer console.
-It is multidevice: it has X support, too (via the SDL and the Imlib2 libraries)
+It is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
 
 FIM is free software, and it ships under the GPL software license, complete with
@@ -40,11 +40,11 @@ of comments in the code, and some text files.
 FIM is a highly customizable and scriptable image viewer targeted at the
 users who are comfortable with software like the Vim text editor or the Mutt
 mail user agent.
-FIM it aims to be a swiss army knife for viewing images.
+FIM it aims to be a Swiss Army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux frame buffer console.
-It is multidevice: it has X support too (via the SDL and the Imlib2 libraries)
+It is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
 
 It is capable of regular expressions based (on filename) vim-like autocommands.
@@ -87,7 +87,7 @@ Implemented features:
  - regular expressions (on filename) based goto and image search
  - stuff     usual for an image viewer (scale, pan, etc..)
  - stuff (un)usual for an image viewer (setting scale factor, auto width scale, 
-   auto heigth scale, marking of 'interesting' files, sorting of files in the
+   auto height scale, marking of 'interesting' files, sorting of files in the
    list, recording/replaying of sessions, repeat last action )
  - image flipping, mirroring, rotation, stretching (asymmetric scaling)
  - command iteration ( in the [n]<command key> form )
@@ -101,17 +101,16 @@ Implemented features:
  - standard input file list read
  - standard input whole file read
  - standard input script file read
- - history file
- - full         support for AAlib (Ascii Art rendering) (-o aa)
- - experimental support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
+ - support for AAlib (Ascii Art rendering) (-o aa)
+ - support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
  - experimental support for Imlib2 (-o imlib2) (X!)
  - experimental PDF, PS, DJVU file support
  - viewing any file as a binary/RGB pixelmap
- - viewing any file as text
+ - viewing any file as (rendered) text
 
 Yet unimplemented features:
 
- - autodocumentation, in gdb style!
+ - autodocumentation, like gdb or vim
  - mutt-like patterns ~p, ~r ...
  - advanced pattern selection of images on other criterias ?
 
@@ -140,7 +139,7 @@ Yet unimplemented features:
  caching                   *       ?                   *     *		    ?
  preview browser           *                                 *		    ?
  EXIF tag display          *                     *           *		    ?
- internal windowing                                    *		    ?
+ internal windowing                                    X		    ?
  internal image search                                 *		    ?
  external image search                                       *		    ?
  'pan views' ('rich' views)                                  *		    ?
@@ -166,15 +165,14 @@ Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
 	4		Compilation Requirements
 ================================================================================
 
- - fbi, with curl and exif support disabled
  - the GNU readline library ( http://directory.fsf.org/readline.html )
  - GNU flex  (NOT any lex ) ( http://directory.fsf.org/flex.html  )
  - GNU bison (NOT any yacc) ( http://directory.fsf.org/bison.html )
- - the GCC ( Gnu Compiler Collection ) ( http://directory.fsf.org/gcc.html )
+ - the GCC ( GNU Compiler Collection ) ( http://directory.fsf.org/gcc.html )
  - optionally, header files for:
 	libpng		  ( http://directory.fsf.org/libpng.html )
 	libjpeg		  ( http://www.ijg.org/ )
- 	libungif	  ( http://sourceforge.net/projects/libungif/ )
+ 	giflib		  ( http://sourceforge.net/projects/giflib/ )
 	libtiff 	  ( http://www.libtiff.org/ )
 	libdjvulibre	  ( http://sourceforge.net/projects/djvu/  )
 
@@ -281,7 +279,7 @@ The libraries can be found on their sites (as of 20070312):
 
  libpng   : http://www.libpng.org/
  libjpeg  : http://www.ijg.org/
- libungif : http://sourceforge.net/projects/libungif/
+ giflib   : http://sourceforge.net/projects/giflib/
  libtiff  : http://www.libtiff.org/
  libdjvulibre : http://sourceforge.net/projects/djvu/
 
@@ -419,7 +417,7 @@ from the GPL licensed Terminus Font package, version 4.30 by Dimitar Toshkov
 	10		Contacts, URLs
 ================================================================================
 
-Fim is (C) 2007-2013 Michele Martone.
+Fim is (C) 2007-2015 Michele Martone.
 
 You can contact me via email: "dezperado_FOobAr_autistici_Baz_org", after
 replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
@@ -440,13 +438,11 @@ Mailing List : http://savannah.nongnu.org/mail/?group=fbi-improved
 
 Releases     : http://download.savannah.nongnu.org/releases/fbi-improved
 
-Repository   : http://code.autistici.org/svn/fim/
+Repository   : http://svn.savannah.nongnu.org/svn/fbi-improved
 
 Off.  Mirror : http://www.autistici.org/dezperado/fim/
 
-ChangeLog    : http://code.autistici.org/svn/fim/trunk/changelog
-
-Bugs(unofficial): http://code.autistici.org/trac/fim/report
+ChangeLog    : http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/changelog
 
 Bugs (official) : http://savannah.nongnu.org/bugs/?group=fbi-improved
 
