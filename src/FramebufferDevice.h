@@ -57,8 +57,8 @@
 #define FB_ACQ_REQ   3
 
 
-#define TRUE            1
-#define FALSE           0
+#define FIM_FBI_TRUE            1
+#define FIM_FBI_FALSE           0
 
 namespace fim
 {
@@ -340,8 +340,8 @@ class FramebufferDevice:public DisplayDevice
 		    console_switch(true);
 	}
 
-#define TRUE            1
-#define FALSE           0
+#define FIM_FBI_TRUE            1
+#define FIM_FBI_FALSE           0
 #define ARRAY_SIZE(x)   (sizeof(x)/sizeof(x[0]))
 
 /*
