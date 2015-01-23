@@ -22,11 +22,11 @@
 FIM (Fbi IMproved) is a highly customizable and scriptable image viewer targeted
 at the users who are comfortable with software like the Vim text editor or the
 Mutt mail user agent.
-FIM it aims to be a swiss army knife for viewing images.
+FIM aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux frame buffer console.
-It is multidevice: it has X support, too (via the SDL and the Imlib2 libraries)
+FIM is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
 
 FIM is free software, and it ships under the GPL software license, complete with
@@ -40,19 +40,21 @@ of comments in the code, and some text files.
 FIM is a highly customizable and scriptable image viewer targeted at the
 users who are comfortable with software like the Vim text editor or the Mutt
 mail user agent.
-FIM it aims to be a swiss army knife for viewing images.
+FIM aims to be a swiss army knife for viewing images.
 
 It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux frame buffer console.
-It is multidevice: it has X support too (via the SDL and the Imlib2 libraries)
+FIM is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
 
-It is capable of regular expressions based (on filename) vim-like autocommands.
+FIM is capable of regular expressions based (on filename) vim-like autocommands,
+comment-based search, EXIF tags display.
 It offers GNU readline command line autocompletion and history,
 completely customizable key bindings, external/internal (if/while-based)
 scriptability (through return codes, standard input/output, and commands given
 at invocation time, initialization file), internal filename-based image search,
 and much more features.
+Each user available command and variable is documented.
 
 FIM is free software, and it ships under the GPL software license, complete with
 documentation, in form of a doc/FIM.TXT documentation file, a man page, lots
@@ -78,16 +80,17 @@ Implemented features:
  - command aliases support (macros)
  - event autocommands (in Vim's 'autocmd' style)
  - regular expressions on filenames to enrich autocommand behaviour
+ - regular expressions on image descriptions
  - configuration (initialization) file support (~/.fimrc)
  - usable builtin default configuration
  - wrapper script to convert pdf,ps,eps,dvi,cbr(rar),cbz(zip),tar,tar.gz,tgz,http://...
-   contents into images and display with Fim
+   contents into images and display with FIM
  - embedded piping through 'convert','inkscape','xcftopnm','dia'... for a wider file formats compatibility
  - index based goto in Vim's style (:<number>)
  - regular expressions (on filename) based goto and image search
  - stuff     usual for an image viewer (scale, pan, etc..)
  - stuff (un)usual for an image viewer (setting scale factor, auto width scale, 
-   auto heigth scale, marking of 'interesting' files, sorting of files in the
+   auto height scale, marking of 'interesting' files, sorting of files in the
    list, recording/replaying of sessions, repeat last action )
  - image flipping, mirroring, rotation, stretching (asymmetric scaling)
  - command iteration ( in the [n]<command key> form )
@@ -101,24 +104,23 @@ Implemented features:
  - standard input file list read
  - standard input whole file read
  - standard input script file read
- - history file
- - full         support for AAlib (Ascii Art rendering) (-o aa)
- - experimental support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
+ - support for AAlib (Ascii Art rendering) (-o aa)
+ - support for SDLlib (Simple Directmedia Layer) (-o sdl) (X!)
  - experimental support for Imlib2 (-o imlib2) (X!)
  - experimental PDF, PS, DJVU file support
  - viewing any file as a binary/RGB pixelmap
- - viewing any file as text
+ - viewing any file as (rendered) text
 
 Yet unimplemented features:
 
- - autodocumentation, in gdb style!
+ - autodocumentation, like gdb or vim
  - mutt-like patterns ~p, ~r ...
  - advanced pattern selection of images on other criterias ?
 
 
  Follows a comparison of popular image viewers available on Linux, focusing on
- the peculiar Fim features (so, Fim have no competitors because it is not in any
- competition! ). We take in consideration free software only, of course.
+ the peculiar FIM features.
+ We take in consideration free software.
  Note also that no all of the feature could ever exist in all of the mentioned
  programs, by their very nature.
 
@@ -140,7 +142,7 @@ Yet unimplemented features:
  caching                   *       ?                   *     *		    ?
  preview browser           *                                 *		    ?
  EXIF tag display          *                     *           *		    ?
- internal windowing                                    *		    ?
+ internal windowing                                    X		    ?
  internal image search                                 *		    ?
  external image search                                       *		    ?
  'pan views' ('rich' views)                                  *		    ?
@@ -156,7 +158,7 @@ Yet unimplemented features:
  mirroring                                             *                    *
  ....
 
-Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
+Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  zgv, feh ...
 
  ______________________________________________________________________________
@@ -166,19 +168,18 @@ Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
 	4		Compilation Requirements
 ================================================================================
 
- - fbi, with curl and exif support disabled
  - the GNU readline library ( http://directory.fsf.org/readline.html )
  - GNU flex  (NOT any lex ) ( http://directory.fsf.org/flex.html  )
  - GNU bison (NOT any yacc) ( http://directory.fsf.org/bison.html )
- - the GCC ( Gnu Compiler Collection ) ( http://directory.fsf.org/gcc.html )
+ - the GCC ( GNU Compiler Collection ) ( http://directory.fsf.org/gcc.html )
  - optionally, header files for:
 	libpng		  ( http://directory.fsf.org/libpng.html )
 	libjpeg		  ( http://www.ijg.org/ )
- 	libungif	  ( http://sourceforge.net/projects/libungif/ )
+ 	giflib		  ( http://sourceforge.net/projects/giflib/ )
 	libtiff 	  ( http://www.libtiff.org/ )
 	libdjvulibre	  ( http://sourceforge.net/projects/djvu/  )
 
- Libraries originally required by Fbi but removed from Fim:
+ Libraries originally required by Fbi but not by FIM:
  	libFS, libCURL, libLIRC
 
 
@@ -207,7 +208,7 @@ Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  make tests-all
 
 --------------------------------------------------------------------------------
-	4.6		Example: compiling Fim from repository on Ubuntu 11.04
+	4.6		Example: compiling FIM from repository on Ubuntu 11.04
 
  sudo apt-get install subversion
  sudo apt-get install automake autoconf libtool libreadline6-dev
@@ -243,14 +244,14 @@ contributing to Fim.
    list the supported file types list. So you should update it.
  - If you intend to support a new output device, remember that `fim -V` should 
    list the supported output devices. So you should update it.
- - Fim should continue passing the tests after your patch, and your patch should
+ - FIM should continue passing the tests after your patch, and your patch should
    be robust, too. Consider writing a new test case.
 
 ================================================================================
 	6		Original Idea
 ================================================================================
 
-The original architecture of Fim is based on the wonderful fbi-1.31, written by
+The original architecture of FIM is based on the wonderful fbi-1.31, written by
 Gerd Hoffmann/Knorr: ( Fbi can be obtained at http://linux.bytesex.org/fbida/ ).
 
 The idea was to enrich Fbi with a command line and configurability features.
@@ -259,9 +260,9 @@ An idea of the concept was settled when developing a small 'vim-like fbi patch'
 back in 2005.
 
 The code was applied as a patch an the existing fbi source tree, but was not by
-any means near to what is Fim today.
+any means near to what is FIM today.
 
-Fim aims at a complete reorganization of the Fbi code, and ideally towards an
+FIM aims at a complete reorganization of the Fbi code, and ideally towards an
 implementation of the most scriptable and configurable image viewer ever - not
 tied to the frame buffer device and to a single keyboard input.
 
@@ -269,7 +270,7 @@ tied to the frame buffer device and to a single keyboard input.
 	7		Technical overview (important for patch writers,but old)
 ================================================================================
 
-To run Fim requires a Linux box with the frame buffer device enabled in the 
+To run FIM requires a Linux box with the frame buffer device enabled in the 
 kernel, and some popular image file decoding libraries.
 
 Information about the frame buffer can be found under the directory
@@ -281,7 +282,7 @@ The libraries can be found on their sites (as of 20070312):
 
  libpng   : http://www.libpng.org/
  libjpeg  : http://www.ijg.org/
- libungif : http://sourceforge.net/projects/libungif/
+ giflib   : http://sourceforge.net/projects/giflib/
  libtiff  : http://www.libtiff.org/
  libdjvulibre : http://sourceforge.net/projects/djvu/
 
@@ -293,7 +294,7 @@ system, especially on Gentoo Linux.
 From the original README, it reads that Gerd himself built FBI hacking
 "a svgalib PhotoCD viewer", so regard this software as a big, dirty code
 potpourri :) .
-For the sake of completeness, Fim is based on the version 1.31 of fbi,
+For the sake of completeness, FIM is based on the version 1.31 of fbi,
 available from http://dl.bytesex.org/releases/fbida/fbi_1.31.tar.gz .
 
 Useful documents I've read and consulted during the coding of Fim, and 
@@ -381,7 +382,7 @@ Tested platforms:
 --------------------------------------------------------------------------------
 	8.2		Gentoo Installation Tips (obsolete)
 
-On the Gentoo Linux distribution , you should not have problems building Fim by
+On the Gentoo Linux distribution , you should not have problems building FIM by
 first installing some libraries:
 
  $ emerge media-libs/giflib media-libs/jpeg media-libs/libpng media-libs/tiff
@@ -404,16 +405,16 @@ WARNING: the gentoo linux fim package version (<=0.2) is obsolete!
 	9		License
 ================================================================================
 
- Fim is free software, and is licensed under the GPLv2 or later.
+ FIM is free software, and is licensed under the GPLv2 or later.
 
- Fim extends the Fbi program by Gerd Hoffmann, which is "GPLv2 or later".
- Fim uses the PCX reading code contributed by Mohammed Isam.
- Fim also uses a regex.c file from the GNU Regular Expressions library, 
+ FIM extends the Fbi program by Gerd Hoffmann, which is "GPLv2 or later".
+ FIM uses the PCX reading code contributed by Mohammed Isam.
+ FIM also uses a regex.c file from the GNU Regular Expressions library, 
 distributed on http://directory.fsf.org/regex.html, in the version shipped with
 the Mutt mail user agent (http://www.mutt.org).
  It also uses some scripts shipped with the Vim text editor (http://www.vim.org),
 which is licensed compatibly with the GPL.
- The Fim source code package includes the Lat15-Terminus16.psf file, originally
+ The FIM source code package includes the Lat15-Terminus16.psf file, originally
 from the GPL licensed Terminus Font package, version 4.30 by Dimitar Toshkov
  Zhekov.
 
@@ -421,7 +422,7 @@ from the GPL licensed Terminus Font package, version 4.30 by Dimitar Toshkov
 	10		Contacts, URLs
 ================================================================================
 
-Fim is (C) 2007-2014 Michele Martone.
+FIM is (C) 2007-2015 Michele Martone.
 
 You can contact me via email: "dezperado_FOobAr_autistici_Baz_org", after
 replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
@@ -430,7 +431,7 @@ If it is for a bug report or installation help, be sure of reading the
 documentation and the BUGS file first, and then you're welcome.
 If it is for other suggestions or ideas, you are welcome, too (and don't miss
 the TODO file, too)!
-Fim is not perfect: a number of weaknesses are summarized in TODO and BUGS.
+FIM is not perfect: a number of weaknesses are summarized in TODO and BUGS.
 
 
 Web Page     : http://savannah.nongnu.org/projects/fbi-improved/

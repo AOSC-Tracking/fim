@@ -5,48 +5,49 @@
  * changed librsb library detection: now it's 
    LIBS="`librsb-config  --ldflags --extra_libs` " CXXFLAGS="`librsb-config --cflags ` \
    ./configure --enable-matrices-rendering
- * scaling image code slightly faster (thanks to __restrict__ of pointers)
+ * scaling image code faster (thanks to __restrict__ pointers)
  * status bar will not cover image drawing space unless requested (TODO)
+ * customizable SDL window caption line (TODO: r648)
+ * customizable status line (TODO: r644,r651)
  * "%T" expando to get (and display) total program used memory
  * "%C" expando to get (and display) used program cache memory
  * "%c" expando to get (and display) centering information
- * "%m" expando to get (and display) mipmap information
- * improved the 'align' (TODO)
+ * "%m" expando to get (and display) current image mipmap occupation information
+ * improved the 'align' command (TODO; FIXME)
  * mipmaps (rescaled images) for e.g. faster display of large images (TODO)
  * image cache will remember alignment within viewport (TODO)
  * viewport info cache size  (TODO)
- * mouse panning with SDL  (TODO)
- * `make fim' eliminated (TODO: r632)
+ * mouse panning with in SDL mode (TODO: FIXME: disable this)
+ * `make fim' goal eliminated
  * experimental JPEG-2000 support via JasPer (TODO: r660)
  * exiftool interface (TODO: r654)
- * customizable SDL window caption line (TODO: r648)
- * customizable status line (TODO: r644,r651)
- * BMP format can be turned off from default (TODO: r664)
- * PCX format support (TODO: r666)
- * opening image files in archives with libarchive (TODO: r665)
- * jump back and forth from the last viewed image with the ' key and 
-   the _lastfileindex variable (r667)
- * added --sort and --sort-basename (TODO: r669)
- * changed meaning of of _ignorecase, introduced _re_search_opts (TODO: r671)
- * added --load-image-descriptions-file (equivalent to descload) (TODO: r672)
- * added --image-descriptions-file-separator (TODO: r682)
- * search (and jump) on image descriptions (TODO: r674)
+ * BMP format can be configured in and out (TODO: r664*)
+ * PCX format support (TODO: r666*)
+ * jump back and forth from the last viewed image with the ' (single quote aka apostrophe)
+   key and the _lastfileindex variable (r667*)
+ * added --sort and --sort-basename to sort the images list (TODO: r669*)
+ * changed meaning of variable _ignorecase: now it affects autocmd's (TODO: r671*)
+ * introduced variable _re_search_opts affecting regexp-based search (TODO: r671*)
+ * added the 'descload' command to load a textual files comments description file (TODO: 689*)
+ * added --load-image-descriptions-file (equivalent to descload) (TODO: r672*)
+ * added --image-descriptions-file-separator (TODO: r682*)
+ * search (and jump) on image descriptions via 'goto' (TODO: r674*)
  * EXIF tags will make it into the Image's Namespace. (TODO: r675)
  * special image variable expandos/specifiers (TODO: (undocumented) r676)
  * stat() checking of files on load can be disabled with _preload_checks (TODO: 678)
  * added --no-stat-push to set _preload_checks=0 before initialization (TODO: 679)
  * added the _comment_over_image variable (TODO: r683)
- * default key r is bound to 'rotate90', key R to 'rotate270'
- * can be invoked without stdin; e.g. from an X menu (TODO: 688)
- * added the 'descload' command (TODO: 689)
- * when repeating searching with repeat_last, will use last direction (TODO: 696)
- * '?' key is now assigned to backward search (TODO: 696)
- * default 'C-p' key is now assigned to repeat last backward search (TODO: 696)
- * added a "display 'resize'" to resize the SDL window  (TODO, to document: 698)
+ * default key 'r' is bound to 'rotate90', key 'R' to 'rotate270'
+ * can be invoked without stdin; e.g. from an X menu
+ * when repeating search with repeat_last, will use last direction (TODO: 696)
+ * '?' key is now assigned to backward search (goto '-//')
+ * default 'C-p' key is now assigned to repeat last backward search (goto '-//')
+ * added "display 'resize'" to resize the SDL window, eventually to image size
  * default SDL mode is windowed  (TODO, to document: 698)
  * default 'C-w' key will resize the SDL window to the original image size (TODO: 698)
  * default 'W' key will resize the SDL window to the image size (TODO: 698)
  * added a --autowindow switch to adapt window size to picture size (TODO: 703)
+ * opening image files in archives with libarchive (experimental, incomplete; TODO: r665)
 
                 Version 0.4
 

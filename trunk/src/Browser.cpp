@@ -1090,9 +1090,8 @@ struct FimBaseNameSorter
 		 */
 		size_t i,j,c = current_n(),s = flist_.size();
 		const char *rso = cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) ? cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str() : "bi";
-		/* int rsic =  cc.isSetVar(FIM_VID_IGNORECASE) ? cc.getIntVariable(FIM_VID_IGNORECASE) : 0; */
-		int rsic = 1;
-		int rsbn = 1;
+		int rsic = 1; /* ignore case */
+		int rsbn = 1; /* base name */
 
 		if ( rso && strchr(rso,'i') )
 			rsic = 1;
@@ -1126,7 +1125,7 @@ struct FimBaseNameSorter
 
 			hm = (commandConsole_.regexp_match(fstm,args[0].c_str(),rsic));
 #if FIM_WANT_PIC_CMTS
-			/* FIXME: this is temporary. If filename does not match, we look for match on description. */
+			/* If filename does not match, we look for match on description. */
 			if(!hm)
 			{
 				if(cc.id_.find(fim_fn_t(fstm)) != cc.id_.end() )
