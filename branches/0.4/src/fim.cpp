@@ -1374,9 +1374,13 @@ fim_perr_t main(int argc,char *argv[])
 	#endif /* PNG_HEADER_VERSION_STRING */
 	#endif /* FIM_WITH_LIBPNG */
 	#ifdef FIM_HANDLE_GIF
+	#if defined(GIFLIB_MAJOR) && defined(GIFLIB_MINOR) && defined(GIFLIB_RELEASE)
+	"Compiled with libgif, " FIM_XSTRINGIFY(GIFLIB_MAJOR) "." FIM_XSTRINGIFY(GIFLIB_MINOR) "." FIM_XSTRINGIFY(GIFLIB_RELEASE) ".\n"
+	#else /* GIFLIB_MAJOR GIFLIB_MINOR GIFLIB_RELEASE */
 	#ifdef GIF_LIB_VERSION
-	"Compiled with libgif, "GIF_LIB_VERSION".\n"
+	"Compiled with libgif, " GIF_LIB_VERSION ".\n"
 	#endif /* GIF_LIB_VERSION */
+	#endif /* GIFLIB_MAJOR GIFLIB_MINOR GIFLIB_RELEASE */
 	#endif /* FIM_HANDLE_GIF */
 	#ifdef HAVE_LIBJPEG
 	#ifdef JPEG_LIB_VERSION
