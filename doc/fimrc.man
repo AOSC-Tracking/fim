@@ -215,7 +215,7 @@ commands : display the existing commands
 .B
 display
 .fi
-display ['reinit' {string}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the --output-device command line switch for allowed values of {string};
+display ['reinit' {string}]|'resize' {w} {h}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the --output-device command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. 
 .fi
 
 .B
@@ -227,7 +227,7 @@ redisplay : re-display the current file contents
 .B
 descload
 .fi
-descload : load a description file (first argument), using the (optional) second argument character as separator.
+descload : load a description file (first argument), using the (optional) second argument character as separator. See documentation of --load-image-descriptions-file for the format and interpretation of this file.
 .fi
 
 .B
@@ -257,7 +257,7 @@ getenv {identifier} : display the value of the {identifier} environment variable
 .B
 goto
 .fi
-goto {['+'|'-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern
+goto {['+'|'-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via descload or --load-image-descriptions-file.
 .fi
 
 .B
@@ -625,7 +625,7 @@ _hsteps
 .fi
 .B
 _ignorecase
-[internal,in] if 1, will allow for case insensitive regexp-based searches
+[internal,in] if 1, will allow for case insensitive regexp-based match in autocmd's; 
 .fi
 .B
 _info_fmt_str
@@ -721,7 +721,7 @@ _pwd
 .fi
 .B
 _re_search_opts
-[internal,in] if empty, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. 
+[internal,in] affects regexp-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. 
 .fi
 .B
 _reduce_factor

@@ -394,7 +394,7 @@ static bool aainvalid;
 		name_[0] = FIM_SYM_CHAR_NUL;
 		name_[1] = FIM_SYM_CHAR_NUL;
 		if(allow_windowed==0)
-			setenv(FIM_ENV_DISPLAY,"",1);
+			setenv(FIM_ENV_DISPLAY,"",1); /* running fim -o aalib in a window may render fim unusable */
 		ascii_save_.name = (fim_aa_char*)name_;
 		ascii_save_.format = &aa_text_format;
 		ascii_save_.file = NULL;

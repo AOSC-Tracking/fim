@@ -133,7 +133,7 @@ struct fim_options_t fim_options[] = {
 NULL
     },
 #if FIM_WANT_PIC_CMTS
-    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --load-image-descriptions-file is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually directly read from the file."
+    {"load-image-descriptions-file",       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --load-image-descriptions-file is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file."
     },
     {"image-descriptions-file-separator",       required_argument,       NULL, 0x69646673, "image descriptions file separator character", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --load-image-descriptions-file."
     },
@@ -207,10 +207,10 @@ NULL
 "Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
     {"sort",     no_argument,       NULL, 0x736f7274 ,"sort images by pathname",NULL,
-"Sorts files list before browsing according to full filename."
+"Sort files list before browsing according to full filename."
     },
     {"sort-basename",     no_argument,       NULL, 0x736f626e ,"sort images by basename",NULL,
-"Sorts files list before browsing according to file basename."
+"Sort files list before browsing according to file basename's."
     },
     {"random",     no_argument,       NULL, 'u',"randomize images order",NULL,
 "Randomly shuffle the files list before browsing (seed depending on time() function)."
@@ -1464,9 +1464,13 @@ fim_perr_t main(int argc,char *argv[])
 	#endif /* PNG_HEADER_VERSION_STRING */
 	#endif /* FIM_WITH_LIBPNG */
 	#ifdef FIM_HANDLE_GIF
+	#if defined(GIFLIB_MAJOR) && defined(GIFLIB_MINOR) && defined(GIFLIB_RELEASE)
+	"Compiled with libgif, " FIM_XSTRINGIFY(GIFLIB_MAJOR) "." FIM_XSTRINGIFY(GIFLIB_MINOR) "." FIM_XSTRINGIFY(GIFLIB_RELEASE) ".\n"
+	#else /* GIFLIB_MAJOR GIFLIB_MINOR GIFLIB_RELEASE */
 	#ifdef GIF_LIB_VERSION
 	"Compiled with libgif, " GIF_LIB_VERSION ".\n"
 	#endif /* GIF_LIB_VERSION */
+	#endif /* GIFLIB_MAJOR GIFLIB_MINOR GIFLIB_RELEASE */
 	#endif /* FIM_HANDLE_GIF */
 	#ifdef HAVE_LIBJPEG
 	#ifdef JPEG_LIB_VERSION
