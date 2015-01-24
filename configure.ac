@@ -130,7 +130,7 @@ if test x"$fim_handle_graphicsmagick" = x"yes" ; then
 fi
   ], [])
 
-AC_ARG_ENABLE(imlib2, AC_HELP_STRING([--enable-imlib2], [Enable Imlib2 library support (EXPERIMENTAL).]), [ if test x$enableval != xno ; then fim_handle_imlib2=yes ; fi ] )
+AC_ARG_ENABLE(imlib2, AC_HELP_STRING([--enable-imlib2], [Enable Imlib2 library support (EXPERIMENTAL,INCOMPLETE).]), [ if test x$enableval != xno ; then fim_handle_imlib2=yes ; fi ] )
 AC_CHECK_LIB([Imlib2],[imlib_create_image],
   [
 if test x"$fim_handle_imlib2" = x"yes" ; then 
@@ -997,40 +997,39 @@ fi
 
 dnl ================================================================================
 
-AC_ARG_ENABLE(exif, AC_HELP_STRING([--enable-exif], [Turns on libexif support (EXPERIMENTAL)]),
-	[if test x$enableval = xyes; then
-		fim_cv_libexif=yes
-		CXXFLAGS="$CXXFLAGS"
-		LIBS="$LIBS -lexif"
-		AC_CHECK_LIB(exif, exif_data_new_from_data,have_libexif=yes,have_libexif=no)
-		if test x$have_libexif = xyes; then
+AC_CHECK_LIB(exif, exif_data_new_from_data,have_libexif=yes,have_libexif=no)
+AC_ARG_ENABLE(exif, AC_HELP_STRING([--disable-exif], [JPEG EXIF tags support with libexif.]), [if test x$enableval != xno; then fim_cv_libexif=yes; fi],[fim_cv_libexif=yes;])
+
+if test x$fim_cv_libexif = xyes; then
+	if test x$have_libexif = xyes; then
       			AC_MSG_NOTICE([Enabling libexif usage.])
-		else
-			fim_cv_libexif=no
-		        AC_MSG_ERROR([Sorry, it doesn not seem like libexif is installed or detectable.
+			CXXFLAGS="$CXXFLAGS";
+			LIBS="$LIBS -lexif";
+	else
+		        AC_MSG_ERROR([Sorry, it does not seem like libexif is installed or detectable.
 			Please run --disable-exif or install libexif in a system-wide directory instead.
 			])
-		fi
-	fi],[fim_cv_libexif=no])
+	fi
+fi
 
 dnl ================================================================================
 
 AC_ARG_ENABLE(jasper, AC_HELP_STRING([--enable-jasper], [Turns on JPEG-2000 files support using JasPer (EXPERIMENTAL)]),
 	[if test x$enableval = xyes; then
-		fim_cv_libjasper=yes
-		CXXFLAGS="$CXXFLAGS"
-		LIBS="$LIBS -ljasper"
-		AC_CHECK_LIB(exif, exif_data_new_from_data,have_libjasper=yes,have_libjasper=no)
+		fim_cv_libjasper=yes;
+		CXXFLAGS="$CXXFLAGS";
+		LIBS="$LIBS -ljasper";
+		AC_CHECK_LIB(jasper, jas_init,have_libjasper=yes,have_libjasper=no)
 		if test x$have_libjasper = xyes; then
-			AC_MSG_NOTICE([Enabling support of JPEG-2K files with JasPer.])
-  			FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffJasPer.o"
+			AC_MSG_NOTICE([Enabling support of JPEG-2K files with JasPer.]);
+  			FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS FbiStuffJasPer.o";
 		else
-			fim_cv_libjasper=no
-		        AC_MSG_ERROR([Sorry, it doesn not seem like libjasper is installed or detectable.
+			fim_cv_libjasper=no;
+		        AC_MSG_ERROR([Sorry, it does not seem like libjasper is installed or detectable.
 			Please run --disable-exif or install libjasper in a system-wide directory instead.
-			])
+			]);
 		fi
-	fi],[fim_cv_libjasper=no])
+	fi],[fim_cv_libjasper=no;])
 
 dnl ================================================================================
 
@@ -1876,14 +1875,14 @@ dnl
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
 	use 'convert' for unrecognized files: ${fim_cv_convert}
-	use 'exiftool' for JPEG EXIF tags   : ${fim_cv_exiftool}
+	use 'exiftool' for EXIF tags in JPEG: ${fim_cv_exiftool}
 dnl
         framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
 	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
 	X        (Imlib2) support(-o imlib2): ${fim_handle_imlib2:-no}
 	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
 dnl
-   	JPEG EXIF tags support (libexif)    : ${fim_cv_libexif}
+   	EXIF (JPEG) tags support (libexif)  : ${fim_cv_libexif}
 	BMP      file support (builtin)     : ${fim_handle_bmp:-no}
 	JP2 (JPEG-2K) file support (JasPer) : ${fim_cv_libjasper}
 	PCX      file support (builtin)     : ${fim_handle_pcx:-no}
