@@ -311,13 +311,13 @@ reload [{arg}] : load the image into memory; if {arg} is present, will force rel
 .B
 negate
 .fi
-negate : negate the displayed image colors
+negate : negate the displayed image colors.
 .fi
 
 .B
 desaturate
 .fi
-desaturate : desaturate the displayed image colors
+desaturate : desaturate the displayed image colors. To get back the original you will have to reload the image.
 .fi
 
 .B
