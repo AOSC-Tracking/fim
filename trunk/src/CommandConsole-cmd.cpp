@@ -35,7 +35,7 @@ namespace fim
 		/*
 		 *	this is the interactive bind command
 		 *	the user supplies a string with the key combination, and if valid, its keycode
-		 *	is associated to the user supplied actin (be it a command, alias, etc..)
+		 *	is associated to the user supplied action (be it a command, alias, etc..)
 		 *	FIX ME
 		 */
 		const fim_char_t *kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
@@ -121,14 +121,46 @@ namespace fim
 
 	fim::string CommandConsole::fcmd_help(const args_t &args)
 	{	
-		/*
-		 *	FIX ME:
-		 *	the online help system still needs rework
-	 	 * 	TODO : implement a regexp-based search, to give the user hints. (20090512) (like vim's helpgrep)
-		 */
-		Command *cmd;
-		if(!args.empty())
+		Command *cmd = NULL;
+
+		if(!args.empty() && args[0].length()>0 )
 		{
+			if((args[0].at(0))==FIM_CNS_SLASH_CHAR)
+			{
+				/* FIXME: this shall be regexp-based. */
+				fim::string hstr,cstr,astr,bstr,ptn;
+
+				ptn = args[0].substr(1,args[0].size());
+				for(size_t i=0;i<commands_.size();++i) 
+					if(commands_[i] && commands_[i]->help_.find(ptn) != commands_[i]->help_.npos)
+					{
+						cstr += commands_[i]->cmd_;
+						// cstr += ": ";
+						// cstr += commands_[i]->help_;
+						cstr += " ";
+					}
+				for( aliases_t::const_iterator ai=aliases_.begin();ai!=aliases_.end();++ai)
+					if(ai->second.second.find(ptn) != ai->second.second.npos)
+					{	
+						astr +=((*ai).first);
+						astr += " ";
+					}
+				/*
+				for(bindings_t::const_iterator  bi=bindings_.begin();bi!=bindings_.end();++bi)
+					;
+				*/
+				if(!cstr.empty())
+					hstr+="Commands: " + cstr + "\n";
+				if(!astr.empty())
+					hstr+="Aliases: " + astr + "\n";
+				if(!bstr.empty())
+					hstr+="Bindings: " + bstr + "\n";
+				if(!hstr.empty())
+					return "The following help items matched \"" + ptn + "\":\n" + hstr;
+				else
+					return "No item matched \"" + ptn + "\"\n";
+			}
+
 			cmd=findCommand(args[0]);
 			if(cmd)
 				return
@@ -137,7 +169,7 @@ namespace fim
 			else
 			if(aliasRecall(fim::string(args[0]))!=FIM_CNS_EMPTY_STRING)
 				return
-					string("\"")+(args[0]+string("\" is an alias, and was declared:\n"))+
+					string("\"")+(args[0]+string("\" is an alias, and was declared as:\n"))+
 					get_alias_info(args[0]);
 			else
 			{

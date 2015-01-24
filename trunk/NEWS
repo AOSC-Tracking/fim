@@ -48,6 +48,7 @@
  * default 'W' key will resize the SDL window to the image size (TODO: 698)
  * added a --autowindow switch to adapt window size to picture size (TODO: 703)
  * opening image files in archives with libarchive (experimental, incomplete; TODO: r665)
+ * the 'help' command will search in help items if argument starts with /
 
                 Version 0.4
 
