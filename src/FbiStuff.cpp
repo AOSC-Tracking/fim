@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -2383,12 +2383,10 @@ err:
 	return nimg;
 }
 
-
 	int FbiStuff::fim_filereading_debug(void)
 	{
 		return cc.displaydevice_ ?
 			cc.displaydevice_->debug_:
 			0;
 	}
-
 }

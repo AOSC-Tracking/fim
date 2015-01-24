@@ -1102,6 +1102,7 @@ labeldone:
 		return (is_multipage() && page_-j >= 0);
 	}
  
+#if 0
 	bool Image::gray_negate(void)
 	{
 		/* FIXME : NEW, but unused */
@@ -1154,10 +1155,17 @@ labeldone:
 
 		return true;
 	} 
+#endif
+
+	static void fim_desaturate_rgb(fim_byte_t * data, int howmany)
+	{
+		register int avg;
+		for( fim_byte_t * p = data; p < data + howmany ;p+=3)
+		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
+	}
 
 	bool Image::desaturate(void)
 	{
-		register int avg;
 #if 0
 		if(! img_ || ! img_->data)
 			return false;
@@ -1166,18 +1174,28 @@ labeldone:
 #endif
 
 		if( fimg_ &&  fimg_->data)
-		for( fim_byte_t * p = fimg_->data; p < fimg_->data + 3*fimg_->i.width*fimg_->i.height ;p+=3)
-		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
+			fim_desaturate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height);
 
 		if(  img_ &&   img_->data)
-		for( fim_byte_t * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;p+=3)
-		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
+			fim_desaturate_rgb(img_->data, 3*img_->i.width*img_->i.height);
+
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+		if(  mm_.mdp)
+			fim_desaturate_rgb(mm_.mdp, mm_.mmb);
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 
 		setGlobalVariable("i:" FIM_VID_DESATURATED ,1-getGlobalIntVariable("i:" FIM_VID_DESATURATED ));
 
        		should_redraw();
 
 		return true;
+	}
+
+	static void fim_negate_rgb(fim_byte_t * data, int howmany)
+	{
+		register int avg;
+		for( fim_byte_t * p = data; p < data + howmany ;p++)
+			*p = ~ *p;
 	}
 
 	bool Image::negate(void)
@@ -1194,12 +1212,15 @@ labeldone:
 #endif
 
 		if( fimg_ &&  fimg_->data)
-		for( fim_byte_t * p = fimg_->data; p < fimg_->data + 3*fimg_->i.width*fimg_->i.height ;++p)
-			*p = ~ *p;
+			fim_negate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height);
 
 		if(  img_ &&   img_->data)
-		for( fim_byte_t * p = img_->data; p < img_->data + 3*img_->i.width*img_->i.height ;++p)
-			*p = ~ *p;
+			fim_negate_rgb(img_->data, 3*img_->i.width*img_->i.height);
+
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+		if(  mm_.mdp)
+			fim_negate_rgb(mm_.mdp, mm_.mmb);
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 
 		setGlobalVariable("i:" FIM_VID_NEGATED ,1-getGlobalIntVariable("i:" FIM_VID_NEGATED ));
 
