@@ -48,6 +48,8 @@ extern "C" { const char * archive_entry_pathname(struct archive_entry *); }
 #endif /* HAVE_FMEMOPEN */
 
 #define FIM_WANTS_SLOW_RESIZE 1
+#define FIM_WVMM 0 /* want verbose mip maps (for FIM_WANT_EXPERIMENTAL_MIPMAPS) */
+
 namespace fim
 {
 
@@ -58,10 +60,13 @@ extern CommandConsole cc;
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
 static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *FIM_RSTRCT src, fim_byte_t * FIM_RSTRCT dst)
 {
-	fim_err_t errval=FIM_ERR_GENERIC;
+	fim_err_t errval = FIM_ERR_GENERIC;
+	/* we compute a quarter of an image, half-sided */
 
 	if(hw<1||hh<1)
+	{
 		goto err;
+	}
 #if 0
 	/* 'internal' version, unfinished */
 	for(int r=0;r<hh;++r)
@@ -87,30 +92,24 @@ err:
 
 fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_t * mmp)
 {
-	/* TODO: UNFINISHED 
-	 
-	   Computation of mipmaps for a faster image downscaling (especially large ones at first load).
-	
-		struct fim_mipmaps_t{ ... } mips;
-		mipsp = &mips;
-	 
-		img_ = FbiStuff::scale_image(fimg_,newscale_,newascale);
-		->
-		img_ = FbiStuff::scale_image(fimg_,mipsp_,newscale_,newascale);
-		p.s.: this does not come from fbi
+	/* 
+	   Computation of mipmaps.
+	   Mipmaps are images dimensioned (on both sides) as fractions of the original: 1/2, 1/4, ...
+	   When the user requests a scaled-down image, we can downscale the nearest mipmap, which is faster than using the original.
+	   This function was not present in Fbi.
 	*/
-	fim_mipmap_t mm;
-	int w=src->i.width,h=src->i.height,d;
-
-	int mmidx=0;
+	fim_mipmap_t mm; /* mipmap structure */
+	int w = src->i.width, h = src->i.height,d; /* the original */
+	int mmidx = 0; /* mipmap index */
 
 	if(!src)
 	{
 		goto err;
 	}
+	mm.nmm=0;
 	mm.mmoffs[mm.nmm]=0;
-	//std::cout <<  3*src->i.width*src->i.height<< " bytes are needed for the original image\n";
-	for(d=2;w>=d && h>=d;d*=2)
+	if(FIM_WVMM) std::cout <<  3*src->i.width*src->i.height<< " bytes are needed for the original image\n";
+	for(d=2;w>=d && h>=d && mm.nmm<=FIM_MAX_MIPMAPS ;d*=2)
 	{
 		mm.mmw[mm.nmm]=w/d;
 		mm.mmh[mm.nmm]=h/d;
@@ -119,8 +118,8 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 		mm.mmoffs[mm.nmm+1]=mm.mmb;
 		++mm.nmm;
 	}
-	//std::cout << mm.nmm << " mipmaps are possible\n";
-	//std::cout << mm.mmb << " bytes are needed for the mipmaps\n";
+	if(FIM_WVMM) std::cout << mm.nmm << " mipmaps are possible\n";
+	if(FIM_WVMM) std::cout << mm.mmb << " bytes are needed for the mipmaps\n";
 	if(mm.nmm<1)
 	{
 		goto err;
@@ -135,20 +134,12 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 		mipmap_compute(w,h,w/2,h/2,src->data,mm.mdp+mm.mmoffs[0]);
 	for(mmidx=1,d=2;mmidx<mm.nmm;++mmidx,d*=2)
 	{
-		//std::cout << w/d << " " << h/d <<  " at " << mm.mmoffs[mmidx-1] << " ... " << mm.mmoffs[mmidx] << " : "<< mm.mmsize[mmidx] << "\n";
+		if(FIM_WVMM) std::cout << w/d << " " << h/d <<  " at " << mm.mmoffs[mmidx-1] << " ... " << mm.mmoffs[mmidx] << " : "<< mm.mmsize[mmidx] << "\n";
 		mipmap_compute(w/d,h/d,w/(2*d),h/(2*d),mm.mdp+mm.mmoffs[mmidx-1],mm.mdp+mm.mmoffs[mmidx]);
 	}
-	/*
-	if(0)
-	{
-		src->i.width/=2;
-		src->i.height/=2;
-		src->data=mm.mdp;
-	}
-	*/
 
     	memcpy(mmp,&mm,sizeof(mm));
-	mm.mdp=NULL; // this is to avoid mm's destructor to free(mm.mdp)
+	mm.mdp = NULL; // this is to avoid mm's destructor to free(mm.mdp)
 	return FIM_ERR_NO_ERROR; 
 err:
 	return FIM_ERR_GENERIC;
@@ -2311,10 +2302,17 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 	if(mmi>0)
 	{
 		src=&msrc;
-		// std::cout << "using mipmap " << mmi << " / " << mmp->nmm << std::endl;
+		mmi--;
+		if(FIM_WVMM) std::cout << "for scale " << scale << std::endl;
+		if(FIM_WVMM) std::cout << "using mipmap " << mmi << " / " << mmp->nmm << std::endl;
+		if(FIM_WVMM) std::cout << mmp->mmw[mmi] << " x " << mmp->mmh[mmi] << "" << std::endl;
+		if(FIM_WVMM) std::cout << p.width << " x " << p.height << " -> " << std::endl;
 	}
 	else
-		;// std::cout << "not using mipmap " << std::endl;
+	{
+		if(FIM_WVMM) std::cout << "for scale " << scale << std::endl;
+		if(FIM_WVMM) std::cout << "not using mipmap " << std::endl;
+	}
     }
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 

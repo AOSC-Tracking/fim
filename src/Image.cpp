@@ -503,7 +503,7 @@ void fim_background_load()
 #else
 			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
-					,(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>1)?(&mm_):NULL
+					,(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)?(&mm_):NULL
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 					);
 #endif /* FIM_PROGRESSIVE_RESCALING */

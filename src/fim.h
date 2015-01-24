@@ -417,17 +417,17 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 "!" FIM_CNS_EX_SYSC_STRING "		executes the " FIM_CNS_EX_SYSC_STRING " quoted string as a \"" FIM_CNS_SHELL "\" shell command\n"\
 ""
 
-#define FIM_MAX_MIPMAPS 32
+#define FIM_MAX_MIPMAPS 32 /* pretty large ;-) */
 class fim_mipmap_t
 {
 	public:
-	size_t mmoffs[FIM_MAX_MIPMAPS];
-	size_t mmsize[FIM_MAX_MIPMAPS];
-	fim_int mmw[FIM_MAX_MIPMAPS];
-	fim_int mmh[FIM_MAX_MIPMAPS];
-	int nmm;
-	size_t mmb;
-	fim_byte_t* mdp;
+	size_t mmoffs[FIM_MAX_MIPMAPS]; /* mipmap offset */
+	size_t mmsize[FIM_MAX_MIPMAPS]; /* mipmap size */
+	fim_int mmw[FIM_MAX_MIPMAPS]; /* mipmap width */
+	fim_int mmh[FIM_MAX_MIPMAPS]; /* mipmap height */
+	int nmm; /* number of mipmaps */
+	size_t mmb; /* mipmap bytes (total) */
+	fim_byte_t* mdp; /* mipmap data pointer */
 
 	fim_mipmap_t(const fim_mipmap_t&mm){reset();}
 	fim_mipmap_t(void){reset();}
@@ -553,7 +553,7 @@ namespace fim
 #define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[internal,in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. " */
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in] if 1, will display a message on the status bar when processing" */
-#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[internal,in] if >0, will compute mipmaps; if >1, will also use mipmaps to speed up downscaling of images" */
+#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[internal,in] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy) " */
 #define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[internal,in] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment" */
 #define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
 #define FIM_VID_ASCALE				"ascale"			/* "[internal,in,out] the asymmetric scaling of the current image" */
