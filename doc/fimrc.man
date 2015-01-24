@@ -263,7 +263,7 @@ goto {['+'|'-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an imag
 .B
 help
 .fi
-help [{identifier}] : provide online help, if {identifier} is some variable, alias, or command identifier
+help [{identifier}] : provide online help, assuming {identifier} is a variable, alias, or command identifier. If {identifier} begins with  /, the search will be on the help contents and a list of matching items will be given instead. A list of commands can be obtained simply invoking "commands"; a list of aliases with "alias"; a list of bindings with "bind".
 .fi
 
 .B
