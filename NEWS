@@ -2,6 +2,7 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.5-trunk
+
  * changed librsb library detection: now it's 
    LIBS="`librsb-config  --ldflags --extra_libs` " CXXFLAGS="`librsb-config --cflags ` \
    ./configure --enable-matrices-rendering
@@ -33,7 +34,6 @@
  * added --image-descriptions-file-separator (TODO: r682*)
  * search (and jump) on image descriptions via 'goto' (TODO: r674*)
  * EXIF tags will make it into the Image's Namespace. (TODO: r675)
- * special image variable expandos/specifiers (TODO: (undocumented) r676)
  * stat() checking of files on load can be disabled with _preload_checks (TODO: 678)
  * added --no-stat-push to set _preload_checks=0 before initialization (TODO: 679)
  * added the _comment_over_image variable (TODO: r683)
@@ -49,6 +49,8 @@
  * added a --autowindow switch to adapt window size to picture size (TODO: 703)
  * opening image files in archives with libarchive (experimental, incomplete; TODO: r665)
  * the 'help' command will search in help items if argument starts with /
+ * special image variable expandos/specifiers (TODO: (undocumented) r676)
+ * special variable i:* expanding to all the variable name/value pairs of an image (r724)
 
                 Version 0.4
 
