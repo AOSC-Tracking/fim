@@ -573,7 +573,7 @@ _display_status_bar
 .fi
 .B
 _display_status_fmt
-[internal,in,experimental] format of display status string; if unset: full pathname; otherwise a custom format string (see _info_fmt_str). 
+[internal,in] custom (status bar) info format string, displayed in the lower left corner; if unset: full pathname; otherwise a custom format string specified with the same format of _info_fmt_str. 
 .fi
 .B
 _do_sanity_check
@@ -629,7 +629,7 @@ _ignorecase
 .fi
 .B
 _info_fmt_str
-[internal,in] custom (status bar) file info format string; may contain ordinary text and special sequences; these are: %p for scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; % for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %c for centering information; %% for an ordinary %. This feature has to be enabled at configure time.
+[internal,in] custom (status bar) info format string, displayed in the lower right corner; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF-set variable (make sure you have libexif for this) will be used only if present.
 .fi
 .B
 _inhibit_display
@@ -805,7 +805,7 @@ _want_autocenter
 .fi
 .B
 _want_caption_status
-[internal,experimental] this works only if supported by the display device (currently only sdl). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret that string file info format string (see _info_fmt_str); if empty, will show the program version.
+[internal,in] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version.
 .fi
 .B
 _want_prefetch
@@ -1176,6 +1176,8 @@ bind "Backspace" "prev";
 bind "'" "goto _lastfileindex"; 
 _display_status=1;
 _want_caption_status="fim:%N@%p%%[%i/%l]";
+_info_fmt_str="%p%% %wx%h %i/%l%L%P %F %T %c";
+_display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k";
 #_display_status_fmt="%N:%k"; #
 #_use_exiftool=0;
 echo "WELCOME : to switch to the command line interface press ':' ";
