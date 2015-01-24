@@ -138,24 +138,65 @@ namespace fim
 						cstr += commands_[i]->cmd_;
 						cstr += " ";
 					}
+
 				for( aliases_t::const_iterator ai=aliases_.begin();ai!=aliases_.end();++ai)
+				{
+					if(ai->first.find(ptn) != ai->first.npos)
+					{	
+						astr +=((*ai).first);
+						astr += " ";
+					}
+					else
+					if(ai->second.first.find(ptn) != ai->second.first.npos)
+					{	
+						astr +=((*ai).first);
+						astr += " ";
+					}
+					else
 					if(ai->second.second.find(ptn) != ai->second.second.npos)
 					{	
 						astr +=((*ai).first);
 						astr += " ";
 					}
-				for(bindings_help_t::const_iterator  bi=bindings_help_.begin();bi!=bindings_help_.end();++bi)
-					if(bi->second.find(ptn) != bi->second.npos)
+				}
+
+				for(bindings_t::const_iterator  bi=bindings_.begin();bi!=bindings_.end();++bi)
+				{
+					key_syms_t::const_iterator ikbi=key_syms_.find(((*bi).first));
+					bindings_help_t::const_iterator  bhi=bindings_help_.find((*bi).first);
+
+					if(ikbi!=key_syms_.end())
 					{
-						bstr +=((*bi).first);
-					       	bstr += " ";
+						if(ikbi->second.find(ptn) != ikbi->second.npos)
+						{
+							bstr += ikbi->second;
+						       	bstr += " ";
+							// std::cout << "key : " << ikbi->second << "\n";
+						}
+						else
+						if(bi->second.find(ptn) != bi->second.npos)
+						{
+							bstr += ikbi->second;
+						       	bstr += " ";
+							// std::cout << "def : " << ikbi->second << "\n";
+						}
+						if(bhi != bindings_help_.end() )
+						if(bhi->second.find(ptn) != bhi->second.npos)
+						{
+							bstr += ikbi->second;
+						       	bstr += " ";
+							// std::cout << "dsc : " << ikbi->second << "\n";
+						}
 					}
+				}
+				/* FIXME: may extend to autocmd's */
+
 				if(!cstr.empty())
-					hstr+="Commands: " + cstr + "\n";
+					hstr+="Commands (type 'help' and one quoted command name to get more info):\n " + cstr + "\n";
 				if(!astr.empty())
-					hstr+="Aliases: " + astr + "\n";
+					hstr+="Aliases (type 'alias' and one quoted alias to get more info):\n " + astr + "\n";
 				if(!bstr.empty())
-					hstr+="Bindings: " + bstr + "\n";
+					hstr+="Bindings (type 'bind' and one quoted binding to get more info):\n " + bstr + "\n";
 				if(!hstr.empty())
 					return "The following help items matched \"" + ptn + "\":\n" + hstr;
 				else
@@ -186,7 +227,7 @@ namespace fim
 					return hs;
 				}
 				else
-					cout << args[0] << " : no such command\n";
+					cout << args[0] << " : no such command, alias, or variable.\n";
 			}
 
 		}
