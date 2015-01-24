@@ -2,7 +2,7 @@
 /*
  DebugConsole.cpp : Fim virtual console display.
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -238,7 +238,8 @@ rerr:
 		cline_(0),
 		lwidth_(0),
 		rows_(0),
-		cc_(cc)
+		cc_(cc),
+		Namespace(&cc)
 		{
 			/*
 			 * We initialize the console
