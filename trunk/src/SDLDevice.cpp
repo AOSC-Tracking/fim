@@ -456,11 +456,7 @@ err:
 		fim_perror(NULL);
 		cc.key_syms_update();
 
-		// textual console reformatting
-#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f_->height));
-		mc_.reformat(    width() /    f_->width   );
-#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+		post_wmresize();
 		return FIM_ERR_NO_ERROR;
 sdlerr:
 		errstr=SDL_GetError();
@@ -1052,8 +1048,7 @@ ok:
 			return FIM_ERR_GENERIC;
 		}
 
-		cc.setVariable(FIM_VID_SCREEN_WIDTH, current_w_);
-		cc.setVariable(FIM_VID_SCREEN_HEIGHT,current_h_);
+		post_wmresize();
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -1099,6 +1094,18 @@ err:
 	fim_coo_t SDLDevice::status_line_height(void)const
 	{
 		return f_ ? border_height_ + f_->height : 0;
+	}
+
+	fim_err_t SDLDevice::post_wmresize(void)
+	{
+		cc.setVariable(FIM_VID_SCREEN_WIDTH, current_w_);
+		cc.setVariable(FIM_VID_SCREEN_HEIGHT,current_h_);
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+		// textual console reformatting
+		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f_->height));
+		mc_.reformat(    width() /    f_->width   );
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+		return FIM_ERR_NO_ERROR;
 	}
 #endif
 
