@@ -1516,13 +1516,13 @@ AC_ARG_WITH(tmpfile, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put
         [fim_cv_tmpfile=$withval],
         [fim_cv_tmpfile="/tmp/__FIM_TEMPORARY_FILE"])
 dnl ==================
-AC_ARG_ENABLE(custom-status-bar, AC_HELP_STRING([--enable-custom-status-bar], [Will allow customization of status bar via a printf-like string (EXPERIMENTAL)]),
+AC_ARG_ENABLE(custom-status-bar, AC_HELP_STRING([--disable-custom-status-bar], [Customization of status bar via a printf-like string.]),
 [       if test x$enableval = xno; then
-		fim_cv_custom_status_bar=no
+		fim_cv_custom_status_bar=no;
 	else
-                fim_cv_custom_status_bar=yes
+                fim_cv_custom_status_bar=yes;
         fi
-],[ fim_cv_custom_status_bar=no ]
+],[ fim_cv_custom_status_bar=yes; ]
 )
 dnl ==================
 
@@ -1867,8 +1867,7 @@ dnl	internal windowing system           : ${have_windows:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      : ${fim_cv_regex:-no}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
-	allow custom status bar file info   : ${fim_cv_custom_status_bar:-no}
-	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
+	customizable status bar             : ${fim_cv_custom_status_bar:-no}
 dnl
 	readline (-lrl) library support     : ${fim_want_readline}
 	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
@@ -1879,8 +1878,9 @@ dnl
 dnl
         framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
 	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
-	X        (Imlib2) support(-o imlib2): ${fim_handle_imlib2:-no}
 	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
+	X        (Imlib2) support(-o imlib2): ${fim_handle_imlib2:-no}
+	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
 dnl
    	EXIF (JPEG) tags support (libexif)  : ${fim_cv_libexif}
 	BMP      file support (builtin)     : ${fim_handle_bmp:-no}
