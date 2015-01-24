@@ -781,7 +781,7 @@ _use_exiftool
 .fi
 .B
 _use_mipmaps
-[internal,in] if >0, will compute mipmaps; if >1, will also use mipmaps to speed up downscaling of images
+[internal,in] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy) 
 .fi
 .B
 _verbose_errors
@@ -930,7 +930,7 @@ if(_display_as_binary==''){_display_as_binary=0;}
 if(_preload_checks==''){_preload_checks=1;}
 #if(_want_caption_status==''){_want_caption_status=0;}
 if(ascale==''){ascale="1.0";}
-
+if(_use_mipmaps==''){_use_mipmaps=1;}
 #
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}
