@@ -2,7 +2,7 @@
 /*
  Namespace.h : a class for local variables storage
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -83,12 +83,19 @@ namespace fim
 		Var Namespace::getVariable(const fim::string &varname)const
 		{
 			// this scope was selected
-			variables_t::const_iterator vi=variables_.find(varname);
-
-			if(vi!=variables_.end())
-				return vi->second;
+			if(varname == "*")
+			{
+				return Var(get_variables_list(true));
+			}
 			else
-			       	return Var(FIM_CNS_EMPTY_INT_VAL);
+			{
+				variables_t::const_iterator vi=variables_.find(varname);
+
+				if(vi!=variables_.end())
+					return vi->second;
+				else
+			       		return Var(FIM_CNS_EMPTY_INT_VAL);
+			}
 		}
 
 		fim_float_t Namespace::getFloatVariable(const fim::string &varname)const

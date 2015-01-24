@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -127,6 +127,11 @@ STRINGC_DQ {STRINGC}|\'
 "if" return IF;
 "else" return ELSE;
 "do" return DO;
+
+"i:*"	{
+		astrcpy(yylval.sValue,yytext);
+		return IDENTIFIER;
+	}
 
 ([gwibv]:)?{ID}	{
 		astrcpy(yylval.sValue,yytext);
