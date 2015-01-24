@@ -42,6 +42,7 @@ namespace fim
 		const fim_char_t*kstr=NULL;
 		int l;
 		fim_key_t key=FIM_SYM_NULL_KEY;
+
 		if(args.size()==0)
 			return getBindingsList();
 
@@ -84,13 +85,13 @@ namespace fim
 			binding_expanded+="'\n";
 			return binding_expanded;
 		}
-		/*
-		 * TODO: there will be room for the binding comment by the user
-		 * */
 		if(args.size()<2)
 		       	return kerr;
 		if(args[1]==FIM_CNS_EMPTY_STRING)
 		       	return unbind(args[0]);
+
+		if(args.size()>=3)
+			bindings_help_[key]=args[2]; /* TODO: shall move to bind() */
 		return bind(key,args[1]);
 	}
 
@@ -135,8 +136,6 @@ namespace fim
 					if(commands_[i] && commands_[i]->help_.find(ptn) != commands_[i]->help_.npos)
 					{
 						cstr += commands_[i]->cmd_;
-						// cstr += ": ";
-						// cstr += commands_[i]->help_;
 						cstr += " ";
 					}
 				for( aliases_t::const_iterator ai=aliases_.begin();ai!=aliases_.end();++ai)
@@ -145,10 +144,12 @@ namespace fim
 						astr +=((*ai).first);
 						astr += " ";
 					}
-				/*
-				for(bindings_t::const_iterator  bi=bindings_.begin();bi!=bindings_.end();++bi)
-					;
-				*/
+				for(bindings_help_t::const_iterator  bi=bindings_help_.begin();bi!=bindings_help_.end();++bi)
+					if(bi->second.find(ptn) != bi->second.npos)
+					{
+						bstr +=((*bi).first);
+					       	bstr += " ";
+					}
 				if(!cstr.empty())
 					hstr+="Commands: " + cstr + "\n";
 				if(!astr.empty())

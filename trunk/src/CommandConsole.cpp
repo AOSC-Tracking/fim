@@ -140,7 +140,12 @@ namespace fim
 			       	bindings_expanded+=ikbi->second;
 			bindings_expanded+="\" \"";
 			bindings_expanded+=((*bi).second);
-			bindings_expanded+="\"\n";
+			if( bindings_help_.find((*bi).first) != bindings_help_.end() )
+				bindings_expanded+="\" # ",
+				bindings_expanded+=string(bindings_help_.find((*bi).first) -> second),
+				bindings_expanded+="\n";
+			else
+				bindings_expanded+="\"\n";
 		}
 		return bindings_expanded;
 	}
@@ -218,6 +223,8 @@ ret:		return key;
 			bindings_.erase(c);
 			rs+=c;
 			rs+=": successfully unbound.\n";
+			if( bindings_help_.find(c) != bindings_help_.end() )
+				bindings_help_.erase(c);
 		}
 		else
 		{

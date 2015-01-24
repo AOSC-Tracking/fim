@@ -86,6 +86,8 @@ class CommandConsole
 	 */
 	typedef std::map<fim_key_t,fim::string> bindings_t;		//code->commands
 	bindings_t bindings_;		//code->commands
+	typedef std::map<fim_key_t,fim::string> bindings_help_t; // code->help
+	bindings_help_t bindings_help_;		//code->commands
 
 	/*
 	 * mapping of key name to key code
