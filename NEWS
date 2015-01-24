@@ -8,21 +8,20 @@
    ./configure --enable-matrices-rendering
  * scaling image code faster (thanks to __restrict__ pointers)
  * status bar will not cover image drawing space unless requested (TODO)
- * customizable SDL window caption line (TODO: r648)
- * customizable status line (TODO: r644,r651)
- * "%T" expando to get (and display) total program used memory
- * "%C" expando to get (and display) used program cache memory
- * "%c" expando to get (and display) centering information
- * "%m" expando to get (and display) current image mipmap occupation information
+ * customizable SDL window caption line with _want_caption_status (TODO: r648*)
+ * status bar customizable with _display_status_fmt and _info_fmt_str (TODO: r644,r651*)
+ *  "%T" expando to get (and display) total memory used by the program 
+ *  "%C" expando to get (and display) memory used by internal cache
+ *  "%M" expando to get (and display) memory used by the current (displayed) image
+ *  "%c" expando to get (and display) centering information
+ *  "%m" expando to get (and display) current image mipmap occupation information
  * improved the 'align' command (TODO; FIXME)
  * mipmaps (rescaled images) for e.g. faster display of large images (TODO)
  * image cache will remember alignment within viewport (TODO)
  * viewport info cache size  (TODO)
  * mouse panning with in SDL mode (TODO: FIXME: disable this)
  * `make fim' goal eliminated
- * experimental JPEG-2000 support via JasPer (TODO: r660)
- * exiftool interface (TODO: r654)
- * BMP format can be configured in and out (TODO: r664*)
+ * BMP format support is now optional (TODO: r664*)
  * PCX format support (TODO: r666*)
  * jump back and forth from the last viewed image with the ' (single quote aka apostrophe)
    key and the _lastfileindex variable (r667*)
@@ -47,10 +46,12 @@
  * default 'C-w' key will resize the SDL window to the original image size (TODO: 698)
  * default 'W' key will resize the SDL window to the image size (TODO: 698)
  * added a --autowindow switch to adapt window size to picture size (TODO: 703)
- * opening image files in archives with libarchive (experimental, incomplete; TODO: r665)
  * the 'help' command will search in help items if argument starts with /
  * special image variable expandos/specifiers (TODO: (undocumented) r676)
  * special variable i:* expanding to all the variable name/value pairs of an image (r724)
+ * opening image files in archives with libarchive (experimental, incomplete; TODO: r665)
+ * (experimental) JPEG-2000 support via JasPer (TODO: r660)
+ * (experimental) exiftool interface (TODO: r654*)
 
                 Version 0.4
 

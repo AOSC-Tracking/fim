@@ -1867,7 +1867,6 @@ dnl	internal windowing system           : ${have_windows:-no}
 	hardcoded font                      : ${have_hardcoded_font:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      : ${fim_cv_regex:-no}
-dnl	exif (libexif) support           : ${fim_cv_libexif}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
 	allow custom status bar file info   : ${fim_cv_custom_status_bar:-no}
 	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
@@ -1877,13 +1876,14 @@ dnl
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
 	use 'convert' for unrecognized files: ${fim_cv_convert}
-	use 'exiftool' to read tags         : ${fim_cv_exiftool}
+	use 'exiftool' for JPEG EXIF tags   : ${fim_cv_exiftool}
 dnl
         framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
 	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
 	X        (Imlib2) support(-o imlib2): ${fim_handle_imlib2:-no}
 	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
 dnl
+   	JPEG EXIF tags support (libexif)    : ${fim_cv_libexif}
 	BMP      file support (builtin)     : ${fim_handle_bmp:-no}
 	JP2 (JPEG-2K) file support (JasPer) : ${fim_cv_libjasper}
 	PCX      file support (builtin)     : ${fim_handle_pcx:-no}
