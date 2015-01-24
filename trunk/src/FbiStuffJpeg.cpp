@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -166,21 +166,44 @@ static void fim_error_exit (j_common_ptr cinfo)
    fim_jerr=1;
 }
 
-
 #ifdef FIM_WITH_LIBEXIF
+static void fim_ExifContentForeachEntryFunc (ExifEntry *entry, void * user_data)
+{
+	fim_char_t buffer[FIM_EXIF_BUFSIZE];
+	Namespace *nsp = (Namespace*) ((void**)user_data)[0];
+	ExifContent *c =  (ExifContent *) ((void**)user_data)[1];
+	const fim_char_t *value = exif_entry_get_value(entry, buffer, sizeof(buffer));
+	ExifIfd ifd = exif_content_get_ifd (c);
+	const fim_char_t *title = exif_tag_get_name_in_ifd (entry->tag,ifd); /* exif_tag_get_name() is deprecated */
+
+	if(nsp)
+		/* std::cout << "|" << title << "|\n", */
+		nsp->setVariable(string("EXIF_") + title,value);
+}
+
+static void fim_ExifDataForeachContentFunc (ExifContent *content, void * user_data)
+{
+	void * user_data2[] = {user_data,content};
+	exif_content_foreach_entry (content, fim_ExifContentForeachEntryFunc, user_data2);
+}
+
 static void dump_exif(FILE *out, ExifData *ed, Namespace *nsp = NULL)
 {
 /* FIXME: temporarily here; shall transfer keys/values to a Namespace object */
 #if HAVE_NEW_EXIF
-    const fim_char_t /**title=NULL,*/ *value=NULL;
-    fim_char_t buffer[FIM_EXIF_BUFSIZE];
-    ExifEntry  *ee=NULL;
-    int i;
+    if(nsp)
+    	exif_data_foreach_content (ed, fim_ExifDataForeachContentFunc, nsp);
 #endif /* HAVE_NEW_EXIF */
-#if HAVE_NEW_EXIF
-    for (i = 0; i < EXIF_IFD_COUNT; i++) {
+
+/* #if HAVE_NEW_EXIF */
+#if 0
+    for (int i = 0; i < EXIF_IFD_COUNT; i++) {
+    fim_char_t buffer[FIM_EXIF_BUFSIZE];
+    const fim_char_t *value=NULL;
+    ExifEntry  *ee=NULL;
     /* values of EXIF_TAG_* in libexif/exif-tag.h */
     //for (i = 0; i < 1; i++) { // first only
+    std::cout << "EXIF_IFD_COUNT " << i << " " << EXIF_IFD_COUNT << "\n";
 	if( ee=exif_content_get_entry(ed->ifd[i],EXIF_TAG_ORIENTATION)){
 		// value can be of the form "X - Y", with X and Y in
 		// {top,bottom,left,right}
