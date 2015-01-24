@@ -141,7 +141,7 @@ Yet unimplemented features:
  slideshow                 *       *             *     *     *    *	*   *
  caching                   *       ?                   *     *		    ?
  preview browser           *                                 *		    ?
- EXIF tag display          *                     *           *		    ?
+ EXIF tag display          *                     *     *     *		    ?
  internal windowing                                    X		    ?
  internal image search                                 *		    ?
  external image search                                       *		    ?
@@ -156,7 +156,7 @@ Yet unimplemented features:
  history                                               *		  
  multi-device (X/SDL, frame buffer, aalib)             *                   
  mirroring                                             *                    *
- ....
+ ...
 
 Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  zgv, feh ...
@@ -228,17 +228,18 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  - The frame buffer device ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
    ( and usually found in "/usr/src/linux/Documentation/fb" in the kernel source
     code tree ).
- - shared library files for: libpng, libjpeg, libungif, libtiff, libreadline
+ - shared library files for: libpng, libjpeg, libgif, libtiff, libreadline,
+   libexif
 
 ================================================================================
 	5.5		Hacking, maintenance guidelines
 ================================================================================
 
-If you hack fim in an interesting way, consider submitting your changes as a
+If you hack FIM in an interesting way, consider submitting your changes as a
 patch.
 
 There is a number of informal rules to follow when maintaining or hacking and
-contributing to Fim.
+contributing to FIM
 
  - If you intend to support a new file format, remember that `fim -V` should 
    list the supported file types list. So you should update it.
@@ -374,7 +375,7 @@ Tested platforms:
  flex groff g++ libaa1-dev libdjvulibre-dev libgif4 libgif-dev libimlib2-dev
  libjpeg-dev libncurses5-dev libpng-dev libpoppler-cpp-dev libpoppler-dev
  libreadline-dev libsdl-dev libspectre-dev libtiff-dev libtool m4 make svn
- txt2html
+ txt2html libexif-dev
 
  The above list was valid on a Debian Jessie installation; it's fair to expect
  these packages names to change a little with time..

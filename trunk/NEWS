@@ -32,7 +32,7 @@
  * added --load-image-descriptions-file (equivalent to descload) (TODO: r672*)
  * added --image-descriptions-file-separator (TODO: r682*)
  * search (and jump) on image descriptions via 'goto' (TODO: r674*)
- * EXIF tags will make it into the Image's Namespace. (TODO: r675)
+ * EXIF tags will be read with libexif and become i:EXIF_-prefixed variables (TODO: r675*)
  * stat() checking of files on load can be disabled with _preload_checks (TODO: 678)
  * added --no-stat-push to set _preload_checks=0 before initialization (TODO: 679)
  * added the _comment_over_image variable (TODO: r683)
