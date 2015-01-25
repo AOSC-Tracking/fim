@@ -1262,5 +1262,9 @@ labeldone:
 	const fim_char_t* Image::getName(void)const{return fname_.c_str();}
 	int Image::c_page(void)const{return page_;}
 #endif	/* FIM_WANT_BDI */
+
+	void Image::mm_free(void) { mm_.dealloc(); }
+	void Image::mm_make(void) { mm_.dealloc(); FbiStuff::fim_mipmaps_compute(fimg_,&mm_); }
+	bool Image::has_mm(void)const { return mm_.ok(); }
 }
 
