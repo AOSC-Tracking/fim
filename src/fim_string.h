@@ -4,7 +4,7 @@
 /*
  string.h : Fim's own string implementation header file
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -124,6 +124,7 @@ namespace fim
 		string(int i);
 		string(float i);
 		string(int * i);
+		string(size_t i);
 
 /*
  		the following two operators are very nice to use but pose unexpected problems.		

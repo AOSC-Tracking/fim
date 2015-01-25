@@ -394,6 +394,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_LAST FIM_MAX_INT
 #define FIM_CNS_FIRST 0
 #define FIM_CNS_VICSZ FIM_CNS_K * 64 /* viewport info cache size */
+#define FIM_CNS_CSU FIM_CNS_K  /* cache size unit */ 
 #define FIM_CNS_CLEARTERM "\x1B\x4D" /* FIXME: still unused */
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
@@ -576,8 +577,8 @@ namespace fim
 #define FIM_VID_AUTOMIRROR			"_automirror"		/* "[internal,in] if 1, will mirror images by default" */
 #define FIM_VID_MIRRORED			"mirrored"		/* "[internal,out] 1, if the image is mirrored " */
 #define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[internal,in] if 1, the image will be displayed centered " */
-#define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in] the maximum number of images allowed in the cache" */
-#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in] the maximum amount of memory allowed for the cache (in KiB)" */
+#define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in,experimental] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." */
+#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in,experimental] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." */
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached" */
 #define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[internal,out] the screen width"  */
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[internal,out] the screen height" */
@@ -805,6 +806,7 @@ namespace fim
 /* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024
+#define FIM_PRINTFNUM_BUFSIZE	32
 #define FIM_METAINFO_BUFSIZE	256
 #define FIM_EXIF_BUFSIZE FIM_METAINFO_BUFSIZE
 #define FIM_RL_COMPLETION_BUFSIZE	256

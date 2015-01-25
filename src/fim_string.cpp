@@ -2,7 +2,7 @@
 /*
  string.cpp : A reimplementation of string class
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -402,6 +402,14 @@ namespace fim
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
 		snprintf(buf,FIM_CHARS_FOR_INT-1,"%d",i);
+		buf[FIM_CHARS_FOR_INT-1]='\0';
+		append(buf);
+	}
+
+	string::string(size_t i)
+	{
+		fim_char_t buf[FIM_CHARS_FOR_INT];
+		snprintf(buf,FIM_CHARS_FOR_INT-1,"%zd",i);
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
 	}

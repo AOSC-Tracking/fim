@@ -665,11 +665,11 @@ _magnify_factor
 .fi
 .B
 _max_cached_images
-[internal,in] the maximum number of images allowed in the cache
+[internal,in,experimental] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully.
 .fi
 .B
 _max_cached_memory
-[internal,in] the maximum amount of memory allowed for the cache (in KiB)
+[internal,in,experimental] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently).
 .fi
 .B
 _max_iterated_commands
@@ -1173,7 +1173,8 @@ bind "End" "$;";
 bind "^" "0;";
 bind "$" "$;";
 bind "Backspace" "prev";
-bind "'" "goto _lastfileindex"; 
+bind "'" "goto _lastfileindex;"; 
+#bind "'" "_skip_prefetch_turn=1;goto _lastfileindex;"; 
 _display_status=1;
 _want_caption_status="fim:%N@%p%%[%i/%l]";
 _info_fmt_str="%p%% %wx%h %i/%l%L%P %F %T %c";
