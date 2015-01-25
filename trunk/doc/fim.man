@@ -1,26 +1,26 @@
 .\"
 .\" $Id$
 .\"
-.TH fim 1 "(c) 2007-2015 Michele Martone"
+.TH fim 1 "(c) 2007\-2015 Michele Martone"
 .SH NAME
-fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
+fim \- \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
-.B fim [{options}] [--] {imagefile} [{imagefiles}]
+.B fim [{options}] [\-\-] {imagefile} [{imagefiles}]
 .fi
-.B ... | fim [{options}] [--] [{imagefiles}] -
+.B ... | fim [{options}] [\-\-] [{imagefiles}] \-
 .fi
-.B fim [{options}] [--] [{files}] - < {file_name_list_text_file}
+.B fim [{options}] [\-\-] [{files}] \- < {file_name_list_text_file}
 .fi
-.B fim --image-from-stdin [{options}] < {imagefile}
+.B fim \-\-image\-from\-stdin [{options}] < {imagefile}
 .fi
-.B fim --script-from-stdin [{options}] < {scriptfile}
+.B fim \-\-script\-from\-stdin [{options}] < {scriptfile}
 .fi
 
 .SH DESCRIPTION
 .B
 fim
 is a `swiss army knife' for displaying image files.
-It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim-like autocommands, and much more.
+It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim\-like autocommands, and much more.
 
 As a default,
 .B
@@ -68,218 +68,218 @@ Accepted command line
 {options}
 :
 .TP
-.B --
+.B \-\-
 The arguments before
-.B --
+.B \-\-
 beginning with 
-.B -
+.B \-
 will be treated as command line options.
 All arguments after
-.B --
+.B \-\-
 will be treated as filenames regardlessly.
 .
 .TP
-.B -a, --autozoom
+.B \-a, \-\-autozoom
 Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)
 .TP
-.B -b, --binary[=24|1]
+.B \-b, \-\-binary[=24|1]
 Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.
 Will pad with zeros.
 Regard this as a toy..
 
 .TP
-.B  --as-text
+.B  \-\-as\-text
 Display (any filetype) files contents as they were text.
 Will only show printable characters.
 Regard this as a toy..
 
 .TP
-.B  --cd-and-readdir
+.B  \-\-cd\-and\-readdir
 step into the first loaded file directory and push other files
 .TP
-.B -c {commands}, --execute-commands {commands}
+.B \-c {commands}, \-\-execute\-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.
 Please note that if your commands are more complicated than a simple 'next' or 'pornview'
 command, they must be quoted and escaped in a manner suitable for your shell!
 
 For example,
--c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
+\-c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
 
 (with the single quotes) will tell fim to first double the displayed image 
 size, then pan two times up, then display the image ; and then 
 do an endless loop consisting of bottom and top aligning, alternated.
 
 .TP
-.B -C {commands}, --execute-commands-early {commands}
-Just as the --execute-commands option, but commands will be executed before the loading of any config file.
+.B \-C {commands}, \-\-execute\-commands\-early {commands}
+Just as the \-\-execute\-commands option, but commands will be executed before the loading of any config file.
 
 For example,
--C '_scale_style=" "' will make fim start with no auto-scaling.
+\-C '_scale_style=" "' will make fim start with no auto\-scaling.
 
 
 .TP
-.B -d {framebuffer device}, --device {framebuffer device}
+.B \-d {framebuffer device}, \-\-device {framebuffer device}
 Framebuffer device to use. Default is the one your vc is mapped to (as in fbi).
 .TP
-.B  --dump-reference-help[=man]
+.B  \-\-dump\-reference\-help[=man]
 Will dump to stdout the language reference help.
 .TP
-.B -D, --dump-default-fimrc
+.B \-D, \-\-dump\-default\-fimrc
 The default configuration (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
 .TP
-.B -E {scriptfile}, --execute-script {scriptfile}
+.B \-E {scriptfile}, \-\-execute\-script {scriptfile}
 The \fBscriptfile\fP will be executed right after the default initialization file is executed.
 .TP
-.B -f {fimrc}, --etc-fimrc {fimrc}
+.B \-f {fimrc}, \-\-etc\-fimrc {fimrc}
 Specify an alternative system wide initialization file (default: /usr/local/etc/fimrc), which will be executed prior to any other configuration file.
 
 .TP
-.B -F {commands}, --final-commands {commands}
+.B \-F {commands}, \-\-final\-commands {commands}
 The \fBcommands\fP string will be executed after exiting the interactive loop of the program (right before terminating the program).
 .TP
-.B -h, --help[=s|d|l|m]
+.B \-h, \-\-help[=s|d|l|m]
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
-.B  --load-image-descriptions-file {filename}
-Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --load-image-descriptions-file is specified), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file.
+.B  \-\-load\-image\-descriptions\-file {filename}
+Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless \-\-load\-image\-descriptions\-file is specified), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file.
 .TP
-.B  --image-descriptions-file-separator {sepchar}
-A character to be used as a separator between the filename and the description part of lines specified just before a --load-image-descriptions-file.
+.B  \-\-image\-descriptions\-file\-separator {sepchar}
+A character to be used as a separator between the filename and the description part of lines specified just before a \-\-load\-image\-descriptions\-file.
 .TP
-.B -i, --image-from-stdin
+.B \-i, \-\-image\-from\-stdin
 Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats.
 In the image list, this image will be displayed as "<STDIN>".
 
 .TP
-.B -m {vmode}, --mode {vmode}
+.B \-m {vmode}, \-\-mode {vmode}
 Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
 .TP
-.B -N, --no-rc-file
+.B \-N, \-\-no\-rc\-file
 No personal initialization file will be read (default is ~/.fimrc) at startup.
 .TP
-.B  --no-etc-rc-file
+.B  \-\-no\-etc\-rc\-file
 No system wide initialization file will be read (default is /usr/local/etc/fimrc) at startup.
 .TP
-.B  --no-internal-config
+.B  \-\-no\-internal\-config
 No internal default configuration at startup (uses internal variable _no_default_configuration). Will only provide a minimal working configuration. 
 .TP
-.B  --no-commandline
+.B  \-\-no\-commandline
 with internal command line mode disabled
 .TP
-.B  --no-history-save
+.B  \-\-no\-history\-save
 Do not save execution history at finalization (uses internal variable _save_fim_history). 
 .TP
-.B  --no-history-load
+.B  \-\-no\-history\-load
 		 do not load execution history
 .TP
-.B  --no-history
+.B  \-\-no\-history
 Do not load or save execution history at startup). 
 .TP
-.B -p, --script-from-stdin
+.B \-p, \-\-script\-from\-stdin
 Will read commands from stdin prior to entering in interactive mode.
 .TP
-.B -o [fb|sdl|aa|dumb|imlib2], --output-device [fb|sdl|aa|dumb|imlib2]
+.B \-o [fb|sdl|aa|dumb|imlib2], \-\-output\-device [fb|sdl|aa|dumb|imlib2]
 Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.The available devices depend on the original configuration/compilation options, so you should
-get the list of available output devices issuing \fBfim --version\fP.
+get the list of available output devices issuing \fBfim \-\-version\fP.
 The \fBaa\fP option may be specified as  \fBaa={['w']}\fP ; the \fB'w'\fP character allows windowed mode in case of aalib running under X (otherwise, the DISPLAY environment variable will be unset for the current instance of fim).
 The \fBsdl\fP option may be specified as  \fBsdl={['w']['m']['r']['W']['M']['R']width:height}\fP , where \fBwidth\fP is and \fBheight\fP are integer numbers specifying the desired resolution; the \fB'w'\fP character requests windowed mode; the \fB'm'\fP character requests mouse pointer display; the \fB'r'\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.
 
 .TP
-.B  --offset {bytes-offset}
+.B  \-\-offset {bytes\-offset}
 Will use the specified \fBoffset\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation).
 .TP
-.B -P, --text-reading
+.B \-P, \-\-text\-reading
 Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course).
 .TP
-.B -s {value}, --scroll {value}
+.B \-s {value}, \-\-scroll {value}
 Set scroll steps for internal variable _steps (default is 20%).
 .TP
-.B  --slideshow {number}
+.B  \-\-slideshow {number}
 Interruptible slideshow mode; will wait for {number} of seconds (assigned to the _want_sleep_seconds variable after each loading; implemented by executing while(_fileindex<_filelistlen){sleep _want_sleep_seconds; next;} as a first command.
 .TP
-.B -S, --sanity-check
+.B \-S, \-\-sanity\-check
 A quick sanity check before starting the interactive fim execution, but after the initialization.
 .TP
-.B -t, --no-framebuffer
+.B \-t, \-\-no\-framebuffer
 Fim will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).
 If aalib was not enabled at tompile time, fim will work without displaying images at all.
 .TP
-.B -T {terminal}, --vt {terminal}
+.B \-T {terminal}, \-\-vt {terminal}
 The \fBterminal\fP will be used as virtual terminal device file (as in fbi).
 See (chvt (1)), (openvt (1)) for more info about this.
 Use (con2fb (1)) to map a terminal to a framebuffer device.
 
 .TP
-.B  --sort
+.B  \-\-sort
 Sort files list before browsing according to full filename.
 .TP
-.B  --sort-basename
+.B  \-\-sort\-basename
 Sort files list before browsing according to file basename's.
 .TP
-.B -u, --random
+.B \-u, \-\-random
 Randomly shuffle the files list before browsing (seed depending on time() function).
 .TP
-.B  --random-no-seed
+.B  \-\-random\-no\-seed
 Randomly shuffle the files list before browsing (no seeding).
 .TP
-.B -v, --verbose
+.B \-v, \-\-verbose
 Be verbose: show status bar.
 .TP
-.B -V, --version
+.B \-V, \-\-version
 Display program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate.
 .TP
-.B -w, --autowidth
+.B \-w, \-\-autowidth
 Scale the image according to the screen width.
 .TP
-.B  --no-auto-scale
+.B  \-\-no\-auto\-scale
 Do not scale the images after loading (will set '_scale_style=" "';).
 .TP
-.B  --autowindow
+.B  \-\-autowindow
 Will resize the window size (if supported) to the image size. Don't use this with other image scaling options.
 .TP
-.B  --no-stat-push
+.B  \-\-no\-stat\-push
 Sets _preload_checks=0 before initialization, thus disabling file/dir checks with stat().
 .TP
-.B -H, --autoheight
+.B \-H, \-\-autoheight
 Scale the image according to the screen height.
 .TP
-.B -W {scriptfile}, --write-scriptout {scriptfile}
-All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
+.B \-W {scriptfile}, \-\-write\-scriptout {scriptfile}
+All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim \-c" or ":exec" (analogous to Vim's \-s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's \-w). 
 .TP
-.B  -,  --read-from-stdin
+.B  \-,  \-\-read\-from\-stdin
 Read file list from stdin: each line one file.
 
-Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
+Note that these the three standard input reading functionalities (\-i,\-p and \-) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
 
 See the section
 .B EXAMPLES
 below to read some useful (and unique) ways of employing fim.
 
 .TP
-.B  --read-from-stdin-elds <arg>
-Specify an endline delimiter string for breaking lines read via -/--read-from-stdin. Line text before the delimiter will be treated as names of files to load; the text after will be ignored until a newline. This is useful e.g. to description files as filename list files.
+.B  \-\-read\-from\-stdin\-elds <arg>
+Specify an endline delimiter string for breaking lines read via \-/\-\-read\-from\-stdin. Line text before the delimiter will be treated as names of files to load; the text after will be ignored until a newline. This is useful e.g. to description files as filename list files.
 
 .TP
-.B -A, --autotop
+.B \-A, \-\-autotop
 		 align images to the top (UNFINISHED)
 .TP
-.B -q, --quiet
+.B \-q, \-\-quiet
 		 quiet mode (UNFINISHED)
 .TP
-.B -r {resolution}, --resolution {resolution}
+.B \-r {resolution}, \-\-resolution {resolution}
 		 set resolution (UNFINISHED)
 
 .SH PROGRAM RETURN STATUS
-The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error; 42 on a signal-triggered program exit;  or a different value in case of an another error.
+The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error; 42 on a signal\-triggered program exit;  or a different value in case of an another error.
  The return status may be controlled by the use of the quit command.
 .SH COMMON KEYS AND COMMANDS
 .nf
 The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable _fim_default_config_file_contents).
 
 n    goto '+1'
-p    goto '-1'
+p    goto '\-1'
 +    magnify
--    reduce
+\-    reduce
 h    pan 'left'
 l    pan 'right'
 k    pan 'up'
@@ -293,7 +293,7 @@ q    quit
 :*{factor}      scale the image by {factor}
 :{scale}%       scale the image to the desired {scale}
 :+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
-:-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
+:\-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
 
 /{regexp}		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
@@ -302,8 +302,8 @@ q    quit
 !{syscmd}		executes the {syscmd} quoted string as a "/bin/sh" shell command
 
 
-You can visualize all of the default bindings invoking fim --dump-default-fimrc | grep bind .
-You can visualize all of the default aliases invoking fim  --dump-default-fimrc | grep alias .
+You can visualize all of the default bindings invoking fim \-\-dump\-default\-fimrc | grep bind .
+You can visualize all of the default aliases invoking fim  \-\-dump\-default\-fimrc | grep alias .
 
 .fi
 .P
@@ -319,26 +319,26 @@ distributed with fim.
 FBFONT		(just like in fbi) a Linux consolefont font file.
 If not specified, the following files will be probed and the first existing will be selected:
 
-/usr/lib/kbd/consolefonts/lat9-16.psf.gz
-/usr/share/consolefonts/lat1-16.psf
-/usr/share/consolefonts/lat1-16.psf.gz
-/usr/share/consolefonts/lat1-16.psfu.gz
-/usr/share/kbd/consolefonts/lat1-16.psf
-/usr/share/kbd/consolefonts/lat1-16.psf.gz
-/usr/share/kbd/consolefonts/lat1-16.psfu.gz
-/usr/lib/kbd/consolefonts/lat1-16.psf
-/usr/lib/kbd/consolefonts/lat1-16.psf.gz
-/usr/lib/kbd/consolefonts/lat1-16.psfu.gz
-/lib/kbd/consolefonts/lat1-16.psf
-/lib/kbd/consolefonts/lat1-16.psf.gz
-/lib/kbd/consolefonts/lat1-16.psfu.gz
-/lib/kbd/consolefonts/Lat2-VGA14.psf.gz
-/lib/kbd/consolefonts/Lat2-VGA16.psf.gz
-/lib/kbd/consolefonts/Lat2-VGA8.psf.gz
-/lib/kbd/consolefonts/Uni2-VGA16.psf.gz
+/usr/lib/kbd/consolefonts/lat9\-16.psf.gz
+/usr/share/consolefonts/lat1\-16.psf
+/usr/share/consolefonts/lat1\-16.psf.gz
+/usr/share/consolefonts/lat1\-16.psfu.gz
+/usr/share/kbd/consolefonts/lat1\-16.psf
+/usr/share/kbd/consolefonts/lat1\-16.psf.gz
+/usr/share/kbd/consolefonts/lat1\-16.psfu.gz
+/usr/lib/kbd/consolefonts/lat1\-16.psf
+/usr/lib/kbd/consolefonts/lat1\-16.psf.gz
+/usr/lib/kbd/consolefonts/lat1\-16.psfu.gz
+/lib/kbd/consolefonts/lat1\-16.psf
+/lib/kbd/consolefonts/lat1\-16.psf.gz
+/lib/kbd/consolefonts/lat1\-16.psfu.gz
+/lib/kbd/consolefonts/Lat2\-VGA14.psf.gz
+/lib/kbd/consolefonts/Lat2\-VGA16.psf.gz
+/lib/kbd/consolefonts/Lat2\-VGA8.psf.gz
+/lib/kbd/consolefonts/Uni2\-VGA16.psf.gz
 /usr/share/consolefonts/default8x16.psf.gz
 /usr/share/consolefonts/default8x9.psf.gz
-/usr/share/consolefonts/Lat15-Fixed16.psf.gz
+/usr/share/consolefonts/Lat15\-Fixed16.psf.gz
 /usr/share/consolefonts/default.psf.gz
 fim://
 
@@ -350,7 +350,7 @@ TERM		(only in fim) will influence the output device selection algorithm, especi
 DISPLAY	If this variable is set, then the sdl driver will be tried by default.
 .SH COMMON PROBLEMS
 .B fim
-needs read-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
+needs read\-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
 your admin) have to make sure fim can open the devices in rw mode.
 The IMHO most elegant way is to use pam_console (see
 /etc/security/console.perms) to chown the devices to the user logged
@@ -362,11 +362,11 @@ has.  On a private box it might be fine to handle it this way
 through.
 
 If using udev, you can edit :
-/etc/udev/permissions.d/50-udev.permissions
+/etc/udev/permissions.d/50\-udev.permissions
 and set these lines like here :
  # fb devices
  fb:root:root:0600
- fb[0-9]*:root:root:0600
+ fb[0\-9]*:root:root:0600
  fb/*:root:root:0600
 .P
 
@@ -377,21 +377,21 @@ logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
 .SH EXAMPLES
-.B find /mnt/media/ -name *.jpg | fim - .
+.B find /mnt/media/ \-name *.jpg | fim \- .
 .fi 
 # Will make fim read the file list from standard input.
 .P
 .P
 
 .B
-find /mnt/media/ -name *.jpg | shuf | fim -
+find /mnt/media/ \-name *.jpg | shuf | fim \-
 .fi
 # will make fim read the file list from standard input, randomly shuffled.
 .P
 .P
 
 .B
-cat script.fim | fim -p images/*
+cat script.fim | fim \-p images/*
 .fi
 # Will make fim read the script file
 .B script.fim
@@ -401,7 +401,7 @@ from standard input prior to displaying files in the directory
 .P
 
 .B 
-scanimage ... | tee scan.ppm | fim -i
+scanimage ... | tee scan.ppm | fim \-i
 .fi
 # Will make fim read the image scanned from a flatbed scanner as soon as it is read 
 .P
@@ -413,28 +413,28 @@ scanimage ... | tee scan.ppm | fim -i
 .P
 .P
 
-.B fim * | fim -
+.B fim * | fim \-
 .fi
 # will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
 .P
 .P
 
 .B fim
--c 'pread "vgrabbj -d /dev/video0 -o png";reload'
+\-c 'pread "vgrabbj \-d /dev/video0 \-o png";reload'
 .fi
 # will display an image grabbed from a webcam.
 .P
 .P
 
 .B fim
--o aa -c 'pread "vgrabbj -d /dev/video0 -o png";reload;system "fbgrab" "asciime.png"'
+\-o aa \-c 'pread "vgrabbj \-d /dev/video0 \-o png";reload;system "fbgrab" "asciime.png"'
 .fi
 # if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam.
 .P
 .P
 
 .B fim
--c 'while(1){pread "vgrabbj -d /dev/video0 -o png";reload;sleep 1;};'
+\-c 'while(1){pread "vgrabbj \-d /dev/video0 \-o png";reload;sleep 1;};'
 .fi
 # will display a sequence of images grabbed from a webcam; circa 1 per second.
 .P
@@ -486,13 +486,13 @@ Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 was originally based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2015 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
+Copyright (C) 2007\-2015 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 .fi
-Copyright (C) 1999-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org>
+Copyright (C) 1999\-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org>
 .P
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 .P
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 .P
-You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110\-1301 USA.
 
