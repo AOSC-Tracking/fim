@@ -165,6 +165,9 @@ class Image
 	Image * getClone(void);
 //	void resize(int nw, int nh);
 	int c_page(void)const;
+	void mm_free(void) { mm_.dealloc(); }
+	void mm_make(void) { mm_.dealloc(); FbiStuff::fim_mipmaps_compute(fimg_,&mm_); }
+	bool has_mm(void)const { return mm_.ok(); }
 };
 }
 

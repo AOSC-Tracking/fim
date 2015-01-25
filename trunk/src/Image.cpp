@@ -271,7 +271,7 @@ void fim_background_load()
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
     		if(fimg_)
 		if(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)
-			FbiStuff::fim_mipmaps_compute(fimg_,&mm_);
+			mm_make();
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 
     		if(strcmp(FIM_STDIN_IMAGE_NAME,fname)==0)

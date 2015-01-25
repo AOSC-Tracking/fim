@@ -26,9 +26,9 @@
 	#include <time.h>
 #endif /* HAVE_SYS_TIME_H */
 
-//#define FIM_CACHE_INSPECT 0
+#define FIM_CACHE_INSPECT 0
 #if FIM_CACHE_INSPECT
-#define FIM_PR(X) printf("CACHE:%c:%20s:%s",X,__func__,getReport(1).c_str());
+#define FIM_PR(X) printf("CACHE:%c:%20s:%s",X,__func__,getReport(FIM_CR_CD).c_str());
 #else /* FIM_CACHE_INSPECT */
 #define FIM_PR(X) 
 #endif /* FIM_CACHE_INSPECT */
@@ -448,6 +448,9 @@ ret:
 		if( is_in_cache(image) )
 		{
 			usageCounter_[image->getKey()]--;
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+			image->mm_free();
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 			if(
 				(usageCounter_[image->getKey()])==0 && 
 				image->getKey().second!=FIM_E_STDIN 
@@ -577,8 +580,14 @@ ret:
 					goto ret; //means that cloning failed.
 
 				clone_pool_.insert(image); // we have a clone
+
 				cloneUsageCounter_[image]=1;
 			}
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+			if(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)
+				if(!image->has_mm())
+					image->mm_make();
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 			lru_touch( key );
 			// if loading and eventual cloning succeeded, we count the image as used of course
 			usageCounter_[key]++;

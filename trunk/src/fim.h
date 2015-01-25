@@ -432,8 +432,10 @@ class fim_mipmap_t
 
 	fim_mipmap_t(const fim_mipmap_t&mm){reset();}
 	fim_mipmap_t(void){reset();}
-	~fim_mipmap_t(void){if(mdp)fim_free(mdp);reset();}
 	size_t byte_size(void)const{return mmb+sizeof(*this);}
+	void dealloc(void){if(mdp)fim_free(mdp);reset();}
+	~fim_mipmap_t(void){this->dealloc();}
+	bool ok(void)const{return mmb > 0;}
 	private:
 	void reset(void){nmm=0;mmb=0;mdp=NULL;}
 };
@@ -554,7 +556,7 @@ namespace fim
 #define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[internal,in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. " */
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in] if 1, will display a message on the status bar when processing" */
-#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[internal,in] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy) " */
+#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[internal,in] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. " */
 #define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[internal,in] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment" */
 #define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
 #define FIM_VID_ASCALE				"ascale"			/* "[internal,in,out] the asymmetric scaling of the current image" */
@@ -579,7 +581,7 @@ namespace fim
 #define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[internal,in] if 1, the image will be displayed centered " */
 #define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in,experimental] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." */
 #define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in,experimental] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." */
-#define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached" */
+#define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached." */
 #define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[internal,out] the screen width"  */
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[internal,out] the screen height" */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
