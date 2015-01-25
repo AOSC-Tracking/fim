@@ -26,7 +26,7 @@
 	#include <time.h>
 #endif /* HAVE_SYS_TIME_H */
 
-#define FIM_CACHE_INSPECT 0
+#define FIM_CACHE_INSPECT 1
 #if FIM_CACHE_INSPECT
 #define FIM_PR(X) printf("CACHE:%c:%20s:%s",X,__func__,getReport(FIM_CR_CD).c_str());
 #else /* FIM_CACHE_INSPECT */
@@ -299,7 +299,7 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
 #endif /* FIM_CACHE_DEBUG */
-			if( cacheNewImage( ni ) )
+			if( ni->cacheable() || cacheNewImage( ni ) )
 				goto ret;
 		}
 		}
@@ -529,11 +529,10 @@ ret:
 			image = loadNewImage(key);
 			if(!image)
 				goto ret; // bad luck!
+			if(!image->cacheable())
+				goto ret;
 			usageCounter_[key]=1;
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-					if(image->n_pages()>1)// FIXME: HORRIBLE HACK
-						//image->load(key.first.c_str(),NULL,getGlobalIntVariable(FIM_VID_PAGE));
-						image->goto_page(getGlobalIntVariable(FIM_VID_PAGE));
 			goto ret;
 //			usageCounter_[key]=0;
 		}
@@ -565,10 +564,6 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 					std::cout << "  cloned image: \"" <<fim_basename_of(image->getName())<< "\" "<< image << " from \""<<fim_basename_of(oi->getName()) <<"\" " << oi << "\n";
 #endif /* FIM_CACHE_DEBUG */
-					if(image)
-					if(image->n_pages()>1 && image->c_page()!=getGlobalIntVariable(FIM_VID_PAGE))// FIXME: HORRIBLE HACK
-						//image->load(key.first.c_str(),NULL,getGlobalIntVariable(FIM_VID_PAGE));
-						image->goto_page(getGlobalIntVariable(FIM_VID_PAGE));
 				}
 				catch(FimException e)
 				{
@@ -624,10 +619,6 @@ ret:
 			if(image)
 			{
 				cacheNewImage( image );
-					if(image->n_pages()>1 && image->c_page()!=getGlobalIntVariable(FIM_VID_PAGE))// FIXME: HORRIBLE HACK
-						//image->load(key.first.c_str(),NULL,getGlobalIntVariable(FIM_VID_PAGE));
-						image->goto_page(getGlobalIntVariable(FIM_VID_PAGE));
-
 			}
 		}
 		catch(FimException e)

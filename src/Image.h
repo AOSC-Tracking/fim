@@ -168,6 +168,7 @@ class Image
 	void mm_free(void);
 	void mm_make(void);
 	bool has_mm(void)const;
+	bool cacheable(void)const;
 };
 }
 

@@ -1266,5 +1266,6 @@ labeldone:
 	void Image::mm_free(void) { mm_.dealloc(); }
 	void Image::mm_make(void) { mm_.dealloc(); FbiStuff::fim_mipmaps_compute(fimg_,&mm_); }
 	bool Image::has_mm(void)const { return mm_.ok(); }
+	bool Image::cacheable(void)const { return this->n_pages() == 1 ; }
 }
 
