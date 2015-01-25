@@ -146,6 +146,7 @@ class Image
 	Image * getClone();
 //	void resize(int nw, int nh);
 	int c_page()const{return page_;}
+	bool cacheable(void)const;
 };
 }
 #endif /* FIM_IMAGE_H */

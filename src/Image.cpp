@@ -921,5 +921,6 @@ labeldone:
 	}
 
 	int Image::n_pages()const{return (fimg_?fimg_->i.npages:0);}
+	bool Image::cacheable(void)const { return this->n_pages() == 1 ; }
 }
 
