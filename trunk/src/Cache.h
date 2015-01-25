@@ -22,6 +22,16 @@
 #define FIM_CACHE_H
 #include "fim.h"
 
+#ifdef HAVE_SYS_TIME_H
+#include <stdint.h>
+#include <unistd.h>
+typedef uint64_t fim_time_t;
+#else /* HAVE_SYS_TIME_H */
+typedef time_t fim_time_t;
+#endif /* HAVE_SYS_TIME_H */
+#define FIM_CR_BS 0 /* base */
+#define FIM_CR_CN 1 /* not detailed */
+#define FIM_CR_CD 2 /* detailed */
 namespace fim
 {
 #ifdef FIM_NAMESPACES
@@ -30,7 +40,7 @@ class Cache:public Namespace
 class Cache
 #endif /* FIM_NAMESPACES */
 {
-	typedef std::map<fim::Image*,time_t > 	   lru_t;	//filename - last usage time
+	typedef std::map<fim::Image*,fim_time_t > 	   lru_t;	//filename - last usage time
 	typedef std::map<cache_key_t,fim::Image* >  cachels_t;	//filename - image
 	typedef std::map<fim::Image*,cache_key_t >  rcachels_t;	//image - filename
 	typedef std::map<cache_key_t,int >        ccachels_t;	//filename - counter
@@ -46,10 +56,8 @@ class Cache
 	cloned_cachels_t cloneCache_;
 	cuc_t		cloneUsageCounter_;
 	std::set< fim::Image* > clone_pool_;
+	time_t time0_;
 //	clone_counter_t cloneCounter;
-
-	/*	the count of cached images	*/
-	int cached_elements(void)const;
 
 	/*	whether we should free some cache ..	*/
 	bool need_free(void)const;
@@ -60,7 +68,7 @@ class Cache
 	bool is_in_cache(fim::Image* oi)const;
 	bool is_in_cache(cache_key_t key)const;
 	bool is_in_clone_cache(fim::Image* oi)const;
-	time_t last_used(cache_key_t key)const;
+	fim_time_t last_used(cache_key_t key)const;
 
 	bool cacheNewImage( fim::Image* ni );
 	Image * loadNewImage(cache_key_t key);
@@ -85,6 +93,9 @@ class Cache
 	bool free_all(void);
 	
 	int used_image(cache_key_t key)const;
+
+	fim_time_t reltime(void)const;
+
 	public:
 	Cache(void);
 
@@ -104,9 +115,15 @@ class Cache
 	/**/
 	int prefetch(cache_key_t key);
 
-	fim::string getReport(void);
+	void touch(cache_key_t key);
+
+	fim::string getReport(int type = FIM_CR_CD )const;
 	~Cache(void);
 	virtual size_t byte_size(void)const;
+	size_t img_byte_size(void)const;
+
+	/*	the count of cached images	*/
+	int cached_elements(void)const;
 };
 }
 

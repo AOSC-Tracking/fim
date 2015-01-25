@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,19 +20,48 @@
 */
 #include "fim.h"
 /*	#include <malloc.h>	*/
+#ifdef HAVE_SYS_TIME_H
+	#include <sys/time.h>
+#else /* HAVE_SYS_TIME_H */
 	#include <time.h>
+#endif /* HAVE_SYS_TIME_H */
+
+//#define FIM_CACHE_INSPECT 0
+#if FIM_CACHE_INSPECT
+#define FIM_PR(X) printf("CACHE:%c:%20s:%s",X,__func__,getReport(1).c_str());
+#else /* FIM_CACHE_INSPECT */
+#define FIM_PR(X) 
+#endif /* FIM_CACHE_INSPECT */
+
+//#define FIM_CACHE_DEBUG 0
 
 #if 0
-#define FIM_LOUD_CACHE_STUFF FIM_LINE_COUT
-#define FIM_CACHE_DEBUG 1
+#define FIM_LOUD_CACHE_STUFF FIM_PR(-10); FIM_LINE_COUT
 #else
-#define FIM_LOUD_CACHE_STUFF
+#define FIM_LOUD_CACHE_STUFF 
 #endif
 #define FIM_VCBS(VI) ( sizeof(VI) + VI.size() * ( sizeof(vcachels_t::mapped_type) + sizeof(vcachels_t::key_type) ) )
-
+/* TODO: maybe fim_basename_of is excessive ?  */
 	extern CommandConsole cc;
 namespace fim
 {
+	static fim_time_t fim_time(void) /* stand-alone function */
+	{
+#ifdef HAVE_SYS_TIME_H
+		struct timeval tv;
+		const fim_time_t prec = 1000; /* fraction of second precision */
+		gettimeofday(&tv, NULL);
+		return tv.tv_sec * prec + tv.tv_usec / ( 1000000 / prec );
+#else /* HAVE_SYS_TIME_H */
+		return time(NULL);
+#endif /* HAVE_SYS_TIME_H */
+	}
+
+	fim_time_t Cache::reltime(void)const
+	{
+		return fim_time()-time0_;
+	}
+
 	Cache::Cache(void)
 		:Namespace(&cc)
 #if FIM_WANT_BDI
@@ -42,6 +71,7 @@ namespace fim
 		/*	FIXME : potential flaw ?	*/
 		FIM_LOUD_CACHE_STUFF;
 		lru_.erase(lru_.begin(),lru_.end());
+		time0_ = fim_time();
 	}
 
 	int Cache::cached_elements(void)const
@@ -55,8 +85,8 @@ namespace fim
 		lru_t::const_iterator lrui;
 
 		/* warning : syscall ! */
-		time_t m_time;
-		m_time = time(NULL);
+		fim_time_t m_time;
+		m_time = reltime();
 		Image*  l_img=NULL;
 		cachels_t::const_iterator ci;
 		FIM_LOUD_CACHE_STUFF;
@@ -81,8 +111,9 @@ ret:
 		 * free all unused elements from the cache
 		 */
 		rcachels_t rcc = reverseCache_;
-		
+
 		FIM_LOUD_CACHE_STUFF;
+		FIM_PR(' ');
                 for(    rcachels_t::const_iterator rcci=rcc.begin(); rcci!=rcc.end();++rcci )
 			if(usageCounter_[rcci->first->getKey()]==0)
 				erase( rcci->first );
@@ -96,6 +127,7 @@ ret:
 		 * (yes, it is a sort of garbage collector, with its pros and cons)
 		 */
 		FIM_LOUD_CACHE_STUFF;
+		FIM_PR(' ');
 		if ( cached_elements() < 1 )
 			return 0;
 		return erase( get_lru(true)  );
@@ -104,10 +136,11 @@ ret:
 	int Cache::erase_clone(fim::Image* oi)
 	{
 		FIM_LOUD_CACHE_STUFF;
+		FIM_PR(' ');
 		if(!oi || !is_in_clone_cache(oi))
 			return -1;
 #ifdef FIM_CACHE_DEBUG
-		cout << "deleting " << oi->getName() << "\n";
+		cout << "deleting " << fim_basename_of(oi->getName()) << "\n";
 #endif /* FIM_CACHE_DEBUG */
 		cloneUsageCounter_.erase(oi);
 		delete oi;
@@ -131,7 +164,7 @@ ret:
 		int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY); /* getIntGlobalVariable */
 		size_t smcm = mcm > 0 ? mcm : 0;
 
-	       	if( smcm > 0 && byte_size()/FIM_CNS_K > smcm )
+	       	if( smcm > 0 && img_byte_size()/FIM_CNS_CSU > smcm )
 			goto rt;
 
 		if(mci==-1)
@@ -226,6 +259,7 @@ rt:
 	int Cache::prefetch(cache_key_t key)
 	{
 		int retval = 0;
+		FIM_PR('*');
 
 		FIM_LOUD_CACHE_STUFF;
 		if(is_in_cache(key))
@@ -247,12 +281,14 @@ rt:
 		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 ret:
+		FIM_PR('.');
 		return retval;
 	}
 
 	Image * Cache::loadNewImage(cache_key_t key)
 	{
 		Image *ni = NULL;
+		FIM_PR(' ');
 
 		FIM_LOUD_CACHE_STUFF;
 		/*	load attempt as alternative approach	*/
@@ -283,6 +319,7 @@ ret:
 		 * */
 		Image *ni = NULL;
 		FIM_LOUD_CACHE_STUFF;
+		FIM_PR(' ');
 	
 		/*	acca' nun stimm'a'ppazzia'	*/
 		//if(!key.first)return ni;
@@ -299,6 +336,7 @@ ret:
 	bool Cache::cacheNewImage( fim::Image* ni )
 	{
 		FIM_LOUD_CACHE_STUFF;
+		FIM_PR(' ');
 #ifdef FIM_CACHE_DEBUG
 					std::cout << "going to cache: "<< ni << "\n";
 #endif /* FIM_CACHE_DEBUG */
@@ -322,6 +360,7 @@ ret:
 		 * */
 		/*	acca' nun stimm'a'ppazzia'	*/
 		int retval=-1;
+		FIM_PR(' ');
 
 		FIM_LOUD_CACHE_STUFF;
 		if(!oi)
@@ -333,14 +372,14 @@ ret:
 		{
 			usageCounter_[oi->getKey()]=0;
 			/* NOTE : the user should call usageCounter_.erase(key) after this ! */
+#ifdef FIM_CACHE_DEBUG
+			std::cout << "will erase  "<< oi << " " <<  fim_basename_of(oi->getName()) << " time:"<< lru_[oi] << "\n";
+			cout << "deleting " << fim_basename_of(oi->getName()) << "\n";
+#endif /* FIM_CACHE_DEBUG */
 			lru_.erase(oi);
 			imageCache_.erase(reverseCache_[oi]);
 			reverseCache_.erase(oi);
 //			delete imageCache_[reverseCache_[oi]];
-#ifdef FIM_CACHE_DEBUG
-			std::cout << "will erase  "<< oi << " " <<  oi->getName() << "\n";
-			cout << "deleting " << oi->getName() << "\n";
-#endif /* FIM_CACHE_DEBUG */
 			delete oi;
 			setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 			retval = 0;
@@ -349,9 +388,9 @@ ret:
 		return retval;
 	}
 
-	time_t Cache::last_used(cache_key_t key)const
+	fim_time_t Cache::last_used(cache_key_t key)const
 	{
-		time_t retval=0;
+		fim_time_t retval=0;
 
 		FIM_LOUD_CACHE_STUFF;
 		if(imageCache_.find(key)==imageCache_.end())
@@ -371,20 +410,28 @@ ret:
 		 * NOTE : the usage count is not affected, 
 		 * */
 		FIM_LOUD_CACHE_STUFF;
-		lru_[imageCache_[key]]=time(NULL);
+		FIM_PR(' ');
+//		std::cout << lru_[imageCache_[key]] << " -> ";
+		lru_[imageCache_[key]]= reltime();
+//		std::cout << lru_[imageCache_[key]] << "\n";
 		return 0;
 	}
 
 	bool Cache::freeCachedImage(Image *image, const ViewportState *vsp)
 	{
 		/*
-		 * if the supplied image is cached as a master image of a clone, it is freed and deregistered.
-		 * if not, no action is performed.
+		 * TODO: rename to free().
+		 *
+		 * If the supplied image is cached as a master image of a clone, it is freed and deregistered.
+		 * If not, no action is performed.
 		 * */
 		// WARNING : FIXME : DANGER !!
 		FIM_LOUD_CACHE_STUFF;
+		FIM_PR('*');
+
 		if( !image )
 			goto err;
+
 //		if( is_in_cache(image) && usageCounter_[image->getKey()]==1 )
 		if(vsp)
 		{
@@ -440,31 +487,36 @@ ret:
 			goto ret;
 		}
 err:
+		FIM_PR('.');
 		return false;
 ret:
+		FIM_PR('.');
 		return true;
 	}
 
 	Image * Cache::useCachedImage(cache_key_t key, ViewportState *vsp)
 	{
 		/*
-		 * the caller invokes this method to obtain an Image object pointer.
-		 * if the object is cached and it already used, a clone is built and returned.
+		 * TODO: rename to get().
 		 *
-		 * if we have an unused master copy, we return that.
+		 * The caller invokes this method to obtain an Image object pointer.
+		 * If the object is cached and it already used, a clone is built and returned.
 		 *
-		 * then declare this image as used and increase a relative counter.
+		 * If we have an unused master copy, we return that.
 		 *
-		 * a freeImage action will do the converse operation (and delete).
-		 * if the image is not already cached, it is loaded, if possible.
+		 * Then declare this image as used and increase a relative counter.
 		 *
-		 * so, if there is no such image, NULL is returned
+		 * A freeImage action will do the converse operation (and delete).
+		 * If the image is not already cached, it is loaded, if possible.
+		 *
+		 * So, if there is no such image, NULL is returned
 		 * */
 		Image * image = NULL;
 
 		FIM_LOUD_CACHE_STUFF;
+		FIM_PR('*');
 #ifdef FIM_CACHE_DEBUG
-		std::cout << "  useCachedImage(\""<<key.first<<","<<key.second<<"\")\n";
+		std::cout << "  useCachedImage(\""<<fim_basename_of(key.first.c_str())<<" of type "<< ( key.second == FIM_E_FILE ? " file ": " stdin ")<<"\")\n";
 #endif /* FIM_CACHE_DEBUG */
 		if(!is_in_cache(key)) 
 		{
@@ -508,7 +560,7 @@ ret:
 #endif /* FIM_CACHE_DEBUG */
 					image = new Image(*image); // cloning
 #ifdef FIM_CACHE_DEBUG
-					std::cout << "  cloned image: \"" <<image->getName()<< "\" "<< image << " from \""<<oi->getName() <<"\" " << oi << "\n";
+					std::cout << "  cloned image: \"" <<fim_basename_of(image->getName())<< "\" "<< image << " from \""<<fim_basename_of(oi->getName()) <<"\" " << oi << "\n";
 #endif /* FIM_CACHE_DEBUG */
 					if(image)
 					if(image->n_pages()>1 && image->c_page()!=getGlobalIntVariable(FIM_VID_PAGE))// FIXME: HORRIBLE HACK
@@ -539,6 +591,7 @@ ret:
 			*vsp = viewportInfo_[image->getKey()];
 			/* *vsp = viewportInfo_[key]; */
 		}
+		FIM_PR('.');
 		return image;
 	}
 
@@ -548,6 +601,7 @@ ret:
 		 * */
 		cache_key_t key(FIM_STDIN_IMAGE_NAME,FIM_E_STDIN);
 		FIM_LOUD_CACHE_STUFF;
+		FIM_PR('*');
 
 		if(!image)
 			goto ret;
@@ -580,9 +634,48 @@ ret:
 		return image;	//so, it could be a clone..
 	}
 
-	fim::string Cache::getReport(void)
+	fim::string Cache::getReport(int type)const
 	{
-		fim::string cache_report = "cache contents : \n";
+		/* TODO: rename to info(). */
+		fim::string cache_report;
+
+		if(type == FIM_CR_CN || type == FIM_CR_CD)
+		{
+			fim_char_t buf[FIM_PRINTFNUM_BUFSIZE];
+			int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+			int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY);
+			mcm = mcm >= 0 ? mcm*FIM_CNS_CSU:0;
+			cache_report  = " ";
+			cache_report += "count:";
+			cache_report += fim::string(cached_elements());
+			cache_report += "/";
+			cache_report += fim::string(mci);
+			cache_report += " ";
+			cache_report += "occupation:";
+			fim_snprintf_XB(buf, sizeof(buf), img_byte_size());cache_report += buf;
+			cache_report += "/";
+			fim_snprintf_XB(buf, sizeof(buf), mcm);cache_report += buf;
+			cache_report += " ";
+			for(ccachels_t::const_iterator ci=usageCounter_.begin();ci!=usageCounter_.end();++ci)
+			if(
+			  ( type == FIM_CR_CD && ( imageCache_.find(ci->first) != imageCache_.end() ) ) ||
+			  ( type == FIM_CR_CN && ( imageCache_.find(ci->first) != imageCache_.end()  && ci->second) )
+			  )
+			{
+				cache_report+= fim_basename_of((*ci).first.first.c_str());
+				cache_report+=":";
+				cache_report+=fim::string((*ci).second);
+				cache_report+=":";
+				fim_snprintf_XB(buf, sizeof(buf), imageCache_.find(ci->first)->second->byte_size());
+				cache_report += buf;
+				cache_report+="@";
+				cache_report+=fim::string((size_t)last_used(ci->first));
+				cache_report+=" ";
+			}
+			cache_report += "\n";
+			goto ret;
+		}
+		cache_report = "cache contents : \n";
 		FIM_LOUD_CACHE_STUFF;
 #if 0
 		cachels_t::const_iterator ci;
@@ -594,27 +687,26 @@ ret:
 			cache_report+="\n";
 		}
 #else
-		ccachels_t::const_iterator ci;
-		for( ci=usageCounter_.begin();ci!=usageCounter_.end();++ci)
+		for(ccachels_t::const_iterator ci=usageCounter_.begin();ci!=usageCounter_.end();++ci)
 		{	
 			cache_report+=((*ci).first.first);
 			cache_report+=":";
 			cache_report+=fim::string((*ci).first.second);
-			cache_report+=" ";
+			cache_report+=" ,usage:";
 			cache_report+=fim::string((*ci).second);
 			cache_report+="\n";
 		}
-		std::set< fim::Image* >::const_iterator cpi;
 		cache_report += "clone pool contents : \n";
-		for( cpi=clone_pool_.begin();cpi!=clone_pool_.end();++cpi)
+		for(std::set< fim::Image* >::const_iterator  cpi=clone_pool_.begin();cpi!=clone_pool_.end();++cpi)
 		{	
-			cache_report+=(*cpi)->getName();
+			cache_report+=fim_basename_of((*cpi)->getName());
 			cache_report+=" " ; 
 			cache_report+= string((int*)(*cpi)) ; 
 			cache_report+=",";
 		}
 		cache_report+="\n";
 #endif
+ret:
 		return cache_report;
 	}
 
@@ -628,7 +720,7 @@ ret:
 				delete ci->second;
 	}
 
-	size_t Cache::byte_size(void)const
+	size_t Cache::img_byte_size(void)const
 	{
 		size_t bs = 0;
 		cachels_t::const_iterator ci;
@@ -637,6 +729,15 @@ ret:
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
 			if(ci->second)
 				bs += ci->second->byte_size();
+		return bs;
+	}
+
+	size_t Cache::byte_size(void)const
+	{
+		size_t bs = 0;
+		cachels_t::const_iterator ci;
+		FIM_LOUD_CACHE_STUFF;
+		bs += img_byte_size();
 		bs += sizeof(*this);
 		bs += FIM_VCBS(viewportInfo_);
 		/* 
@@ -645,5 +746,12 @@ ret:
 		/* TODO: incomplete ... */
 		return bs;
 	}
+
+	void Cache::touch(cache_key_t key)
+	{
+		FIM_PR('*');
+		getCachedImage(key);
+		FIM_PR('.');
+       	}
 }
 
