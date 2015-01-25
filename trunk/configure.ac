@@ -1847,7 +1847,7 @@ AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile
 #AC_OUTPUT
 
 AC_MSG_NOTICE([
-	Fim v${VERSION} has been configured as follows:
+	Fim v${VERSION} has been configured as follows (features marked with * are not recommended):
 
    	default minimal key mapping         : ${have_default_mapping:-no}
    	default minimal key bindings        : ${have_default_bindings:-no}
@@ -1856,7 +1856,7 @@ dnl     compile time warnings               : ${fim_cv_warnings:-no} (additional
         resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
    	will read directories               : ${fim_cv_read_dirs}
-   	will recurse directories            : ${fim_cv_recursive_dirs}
+   	will recurse directories            :*${fim_cv_recursive_dirs}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc startup file support       : ${have_fimrc:-no}
@@ -1865,22 +1865,22 @@ dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 dnl	internal windowing system           : ${have_windows:-no}
 	hardcoded font                      : ${have_hardcoded_font:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
-	GNU regexps (default is Posix)      : ${fim_cv_regex:-no}
-        seek magic signatures               : ${fim_cv_seek_magic:-no}
+	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
+        seek magic signatures               :*${fim_cv_seek_magic:-no}
 	customizable status bar             : ${fim_cv_custom_status_bar:-no}
 dnl
 	readline (-lrl) library support     : ${fim_want_readline}
-	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
+	use 'xcftopnm' for XCF files        :*${fim_cv_xcftopnm}
 	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
 	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
-	use 'convert' for unrecognized files: ${fim_cv_convert}
-	use 'exiftool' for EXIF tags in JPEG: ${fim_cv_exiftool}
+	use 'convert' for unrecognized files:*${fim_cv_convert}
+	use 'exiftool' for EXIF tags in JPEG:*${fim_cv_exiftool}
 dnl
         framebuffer (built-in) support      : ${fim_handle_framebuffer:-yes}
 	X        (sdllib) support (-o sdl)  : ${fim_handle_sdl}
 	ASCII art (aalib) support (-o aa)   : ${fim_cv_aalib}
-	X        (Imlib2) support(-o imlib2): ${fim_handle_imlib2:-no}
-	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
+	X        (Imlib2) support(-o imlib2):*${fim_handle_imlib2:-no}
+	coloured ASCII art (cacalib) support:*${fim_cv_cacalib}
 dnl
    	EXIF (JPEG) tags support (libexif)  : ${fim_cv_libexif}
 	BMP      file support (builtin)     : ${fim_handle_bmp:-no}
@@ -1890,12 +1890,12 @@ dnl
 	JPEG     file support (libjpeg)     : ${fim_handle_jpeg:-no}
 	TIFF     file support (libtiff)     : ${fim_handle_tiff:-no}
 	GIF      file support (libgif)      : ${fim_handle_gif:-no}
-	DJVU     file support (libdjvu)     : ${fim_handle_djvu:-no}
-	PDF      file support (libpoppler)  : ${fim_handle_pdf:-no}
-	PS       file support (libspectre)  : ${fim_handle_ps:-no}
-	NEF/RAW  file support (libufraw)    : ${fim_handle_ufraw:-no}
-	TAR/ZIP/.. file support (libarchive): ${fim_handle_archive:-no}
-	GraphicsMagick support (libGraphicsMagick): ${fim_handle_graphicsmagick:-no}
+	DJVU     file support (libdjvu)     :*${fim_handle_djvu:-no}
+	PDF      file support (libpoppler)  :*${fim_handle_pdf:-no}
+	PS       file support (libspectre)  :*${fim_handle_ps:-no}
+	NEF/RAW  file support (libufraw)    :*${fim_handle_ufraw:-no}
+	TAR/ZIP/.. file support (libarchive):*${fim_handle_archive:-no}
+	GraphicsMagick support (libGraphicsMagick):*${fim_handle_graphicsmagick:-no}
 
 	If you are not satisfied with this configuration, please invoke
 	  ./configure --help=short
