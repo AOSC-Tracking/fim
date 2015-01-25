@@ -225,7 +225,7 @@ Some nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  - The frame buffer device ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
    ( and usually found in "/usr/src/linux/Documentation/fb" in the kernel source
     code tree ).
- - shared library files for: libpng, libjpeg, libungif, libtiff, libreadline
+ - shared library files for: libpng, libjpeg, libgif, libtiff, libreadline
 
 ================================================================================
 	5.5		Hacking, maintenance guidelines

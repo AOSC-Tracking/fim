@@ -1713,44 +1713,44 @@ AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile
 #AC_OUTPUT
 
 AC_MSG_NOTICE([
-	Fim v${VERSION} has been configured as follows:
+	Fim v${VERSION} has been configured as follows (features marked with * are not recommended):
 
 	default minimal key mapping         : ${have_default_mapping:-no}
 	readline library support            : ${fim_want_readline}
 	default minimal key bindings        : ${have_default_bindings:-no}
 	default configuration file builtin  : ${have_default_config:-no}
-        compile time warnings               : ${fim_cv_warnings:-no} (additional CXXFLAGS: ${CXXFLAGS} )
+dnl        compile time warnings               : ${fim_cv_warnings:-no} (additional CXXFLAGS: ${CXXFLAGS} )
         resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
 	will read directories               : ${fim_cv_read_dirs}
-	will recurse directories            : ${fim_cv_recursive_dirs}
-	png  file support                   : ${fim_handle_png:-no}
-	jpeg file support                   : ${fim_handle_jpeg:-no}
-	tiff file support                   : ${fim_handle_tiff:-no}
-	gif  file support                   : ${fim_handle_gif:-no}
-	djvu file support                   : ${fim_handle_djvu:-no}
-	pdf  file support (libpoppler)      : ${fim_handle_pdf:-no}
-	ps   file support (libspectre)      : ${fim_handle_ps:-no}
-	GraphicsMagick support              : ${fim_handle_graphicsmagick:-no}
-	Imlib2 support                      : ${fim_handle_imlib2:-no}
-dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
+	will recurse directories            :*${fim_cv_recursive_dirs}
+	PNG  file support                   : ${fim_handle_png:-no}
+	JPEG file support                   : ${fim_handle_jpeg:-no}
+	TIFF file support                   : ${fim_handle_tiff:-no}
+	GIF  file support                   : ${fim_handle_gif:-no}
+	DJVU file support                   :*${fim_handle_djvu:-no}
+	PDF  file support (libpoppler)      :*${fim_handle_pdf:-no}
+	PS   file support (libspectre)      :*${fim_handle_ps:-no}
+	GraphicsMagick support              :*${fim_handle_graphicsmagick:-no}
+	Imlib2 support                      :*${fim_handle_imlib2:-no}
+dnl	dvi  file support (dvilib29)        :*${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc file loading on startup    : ${have_fimrc:-no}
 	~/.fim_history load/save            : ${have_history:-no}
 	autocommands enabled                : ${have_autocommands:-no}
-	internal windowing system           : ${have_windows:-no}
+dnl	internal windowing system           : ${have_windows:-no}
 	hardcoded font                      : ${have_hardcoded_font:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
-	GNU regexps (default is Posix)      : ${fim_cv_regex:-no}
-	use 'xcftopnm' for XCF files        : ${fim_cv_xcftopnm}
-	use 'convert' for unknown files     : ${fim_cv_convert}
-	use 'inkscape' for SVG files        : ${fim_cv_inkscape}
-	use 'fig2dev' for FIG files         : ${fim_cv_xfig}
+	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
+	use 'xcftopnm' for XCF files        :*${fim_cv_xcftopnm}
+	use 'convert' for unknown files     :*${fim_cv_convert}
+	use 'inkscape' for SVG files        :*${fim_cv_inkscape}
+	use 'fig2dev' for FIG files         :*${fim_cv_xfig}
 	ASCII art (aalib) support           : ${fim_cv_aalib}
 dnl	exif (libexif) support           : ${fim_cv_libexif}
 	X (sdllib) experimental support     : ${fim_handle_sdl}
         framebuffer support                 : ${fim_handle_framebuffer:-yes}
-        seek magic signatures               : ${fim_cv_seek_magic:-no}
+        seek magic signatures               :*${fim_cv_seek_magic:-no}
 	allow custom status bar file info   : ${fim_cv_custom_status_bar:-no}
 dnl	coloured ASCII art (cacalib) support: ${fim_cv_cacalib}
 
