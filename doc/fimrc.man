@@ -1,26 +1,26 @@
 .\"
 .\" $Id$
 .\"
-.TH fimrc 5 "(c) 2011-2013 Michele Martone"
+.TH fimrc 5 "(c) 2011\-2013 Michele Martone"
 .SH NAME
-fimrc - \fB fim \fP configuration file and language reference
+fimrc \- \fB fim \fP configuration file and language reference
 
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
 .B /usr/local/etc/fimrc
 .fi
-.B fim --script-from-stdin [ {options} ] < {scriptfile}
+.B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
-.B fim --execute-script {scriptfile} [ {options} ]
+.B fim \-\-execute\-script {scriptfile} [ {options} ]
 .fi
-.B fim --execute-commands {commands} [ {options} ]
+.B fim \-\-execute\-commands {commands} [ {options} ]
 .fi
-.B fim --final-commands {commands} [ {options} ]
+.B fim \-\-final\-commands {commands} [ {options} ]
 .fi
-.B fim --write-scriptout {scriptfile} [ {options} ]  
+.B fim \-\-write\-scriptout {scriptfile} [ {options} ]  
 .fi
-.B fim --write-scriptout /dev/stdout [ {options} ]
+.B fim \-\-write\-scriptout /dev/stdout [ {options} ]
 .fi
 
 .SH DESCRIPTION
@@ -83,9 +83,9 @@ Warning: at the present state, this grammar has conflicts. A future release shal
            | UNQUOTED_FLOAT '%'
            | QUOTED_FLOAT '%'
            | INTEGER '%'
-           | '-' UNQUOTED_FLOAT '%'
-           | '-' QUOTED_FLOAT '%'
-           | '-' INTEGER '%'
+           | '\-' UNQUOTED_FLOAT '%'
+           | '\-' QUOTED_FLOAT '%'
+           | '\-' INTEGER '%'
            | INTEGER
            | IDENTIFIER
            | IDENTIFIER FILE_PATH
@@ -101,7 +101,7 @@ Warning: at the present state, this grammar has conflicts. A future release shal
             | '!' expression
             | expression '%' expression
             | expression '+' expression
-            | expression '-' expression
+            | expression '\-' expression
             | expression '*' expression
             | expression '/' expression
             | expression '<' expression
@@ -115,7 +115,7 @@ Warning: at the present state, this grammar has conflicts. A future release shal
             | expression '!=' expression
             | expression '==' expression
             | expression '=~' expression
-            | '-' expression
+            | '\-' expression
             | IDENTIFIER
             | INTEGER
             | QUOTED_FLOAT
@@ -138,7 +138,7 @@ The "=~" operator treats the right expression as a STRING, and uses is as a regu
 The SLASH_AND_REGEXP is a slash ("/") followed by a STRING, interpreted as a regular expression.
 See \fR\fIregex\fR(1) for regular expression syntax.
 
-The way some one-line statements are evaluated:
+The way some one\-line statements are evaluated:
 
 .nf
 :{number}       jump to {number}^th image in the list
@@ -147,7 +147,7 @@ The way some one-line statements are evaluated:
 :*{factor}      scale the image by {factor}
 :{scale}%       scale the image to the desired {scale}
 :+{scale}%       scale the image up to the desired percentage {scale} (relatively to the original)
-:-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
+:\-{scale}%       scale the image down to the desired percentage {scale} (relatively to the original)
 
 /{regexp}		 entering the pattern {regexp} (with /) makes fim jump to the next image whose filename matches {regexp}
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
@@ -197,7 +197,7 @@ bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands
 .B
 cd
 .fi
-cd {path}: change the current directory to {path}. cd - will change to the previous current directory (before the last ":cd {path}" command)
+cd {path}: change the current directory to {path}. cd \- will change to the previous current directory (before the last ":cd {path}" command)
 .fi
 
 .B
@@ -215,19 +215,19 @@ commands : display the existing commands
 .B
 display
 .fi
-display ['reinit' {string}]|'resize' {w} {h}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the --output-device command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. 
+display ['reinit' {string}]|'resize' {w} {h}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the \-\-output\-device command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. 
 .fi
 
 .B
 redisplay
 .fi
-redisplay : re-display the current file contents
+redisplay : re\-display the current file contents
 .fi
 
 .B
 descload
 .fi
-descload : load a description file (first argument), using the (optional) second argument character as separator. See documentation of --load-image-descriptions-file for the format and interpretation of this file.
+descload : load a description file (first argument), using the (optional) second argument character as separator. See documentation of \-\-load\-image\-descriptions\-file for the format and interpretation of this file.
 .fi
 
 .B
@@ -257,7 +257,7 @@ getenv {identifier} : display the value of the {identifier} environment variable
 .B
 goto
 .fi
-goto {['+'|'-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via descload or --load-image-descriptions-file.
+goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '\-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via descload or \-\-load\-image\-descriptions\-file.
 .fi
 
 .B
@@ -371,7 +371,7 @@ rotate {number}: rotate the image the specified amount of degrees [undocumented]
 .B
 scale
 .fi
-scale {['+'|'-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+-*/]'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given '*' and a value, will multiply the current scale by that value; if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; 
+scale {['+'|'\-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+\-*/]'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given '*' and a value, will multiply the current scale by that value; if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+\-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; 
 .fi
 
 .B
@@ -437,7 +437,7 @@ variables : display the existing variables
 .B
 unalias
 .fi
-unalias {identifier} | '-a' : delete the alias {identifier} or all aliases (use '-a', not -a)
+unalias {identifier} | '\-a' : delete the alias {identifier} or all aliases (use '\-a', not \-a)
 .fi
 
 .B
@@ -463,7 +463,7 @@ Available autocommands are: PostScale, PreScale, PrePan, PostPan, PreRedisplay, 
 .SH VARIABLES REFERENCE
 If undeclared, a variable will evaluate to 0.
 
-There are multiple namespaces in which variables may exist: current image, browser, window, viewport, global. A namespace is specified by a prefix, which is one of: 'i:', 'b:', 'w:', 'v:', 'g:', which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable i:* expands to the collation of all the name-value pairs for the current image.
+There are multiple namespaces in which variables may exist: current image, browser, window, viewport, global. A namespace is specified by a prefix, which is one of: 'i:', 'b:', 'w:', 'v:', 'g:', which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable i:* expands to the collation of all the name\-value pairs for the current image.
 
 In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
 
@@ -585,7 +585,7 @@ _exiftool_comment
 .fi
 .B
 _file_loader
-[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)
+[in] if not empty, this string will force a file loader (among the ones listed in the \-V switch output)
 .fi
 .B
 _fileindex
@@ -625,11 +625,11 @@ _hsteps
 .fi
 .B
 _ignorecase
-[internal,in] if 1, will allow for case insensitive regexp-based match in autocmd's; 
+[internal,in] if 1, will allow for case insensitive regexp\-based match in autocmd's; 
 .fi
 .B
 _info_fmt_str
-[internal,in] custom (status bar) info format string, displayed in the lower right corner; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF-set variable (make sure you have libexif for this) will be used only if present.
+[internal,in] custom (status bar) info format string, displayed in the lower right corner; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF\-set variable (make sure you have libexif for this) will be used only if present.
 .fi
 .B
 _inhibit_display
@@ -693,7 +693,7 @@ _open_offset
 .fi
 .B
 _orientation
-[internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" will do the same thing: rotate the image one time by 90'.
+[internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per\-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" will do the same thing: rotate the image one time by 90'.
 .fi
 .B
 _preferred_rendering_dpi
@@ -705,7 +705,7 @@ _preferred_rendering_width
 .fi
 .B
 _preload_checks
-[internal,in,experimental] if 1 (default), will check with stat() existence of input files before push'ing files (set to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initializatoin (thus, after command line files have been push'ed); use --no-stat-push if you wish to set this to 0 at command line files specification 
+[internal,in,experimental] if 1 (default), will check with stat() existence of input files before push'ing files (set to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initializatoin (thus, after command line files have been push'ed); use \-\-no\-stat\-push if you wish to set this to 0 at command line files specification 
 .fi
 .B
 _push_pushes_dirs
@@ -721,7 +721,7 @@ _pwd
 .fi
 .B
 _re_search_opts
-[internal,in] affects regexp-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. 
+[internal,in] affects regexp\-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. 
 .fi
 .B
 _reduce_factor
@@ -761,7 +761,7 @@ _screen_width
 .fi
 .B
 _seek_magic
-[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
+[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim \-c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
 .fi
 .B
 _status_line
@@ -805,7 +805,7 @@ _want_autocenter
 .fi
 .B
 _want_caption_status
-[internal,in] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version.
+[internal,in] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non\-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version.
 .fi
 .B
 _want_prefetch
@@ -890,7 +890,7 @@ $;
 # scale the image up by 30%:
 +30%;
 # scale the image down by 30%:
--30%;
+\-30%;
 # jump to the next image whose filename matches the ".*jpg" regular expression:
 /.*jpg;
 # executes the "date" system command
@@ -936,19 +936,19 @@ if(_use_mipmaps==''){_use_mipmaps=1;}
 if(allow_round_scroll==''){allow_round_scroll=0;}
 if(console_scroll_n==''){console_scroll_n=3;}
 #
-alias "toggleautoflip" "_autoflip=1-_autoflip;" "";
-alias "toggleautonegate" "_autonegate=1-_autonegate;" "";
-alias "toggleflip" "i:flipped=1-i:flipped;" "";
+alias "toggleautoflip" "_autoflip=1\-_autoflip;" "";
+alias "toggleautonegate" "_autonegate=1\-_autonegate;" "";
+alias "toggleflip" "i:flipped=1\-i:flipped;" "";
 alias "flip" "toggleflip;redisplay;" "flip the current image along the horizontal axis";
 alias "fliponce" "flip;toggleflip;" "";
-alias "toggleautomirror" "_automirror=1-_automirror;" "";
-alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
+alias "toggleautomirror" "_automirror=1\-_automirror;" "";
+alias "togglemirror" "i:mirrored=1\-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
-# Warning : binding to C-s, C-z and C-c won't make effect, as these
+# Warning : binding to C\-s, C\-z and C\-c won't make effect, as these
 # codes are catched by the console driver and will have no effect in fim.
-# Moreover, C-z will crash fim and C-c will terminate it.
-# Some other combinations (e.g.:C-l) may have similar problems in your console.
+# Moreover, C\-z will crash fim and C\-c will terminate it.
+# Some other combinations (e.g.:C\-l) may have similar problems in your console.
 bind 'f' "flip;";
 bind 'F' "fliponce;";
 bind 'm' "mirror;";
@@ -957,15 +957,15 @@ bind 'q' "quit";
 bind 'Esc' "quit";
 #bind 'n' "next_file;";
 #bind 'n' "next;";
-bind 'C-h' "help";
-#bind '?' "help"; # assigned to back-search
-#bind '/' "help"; # assigned to forward-search
+bind 'C\-h' "help";
+#bind '?' "help"; # assigned to back\-search
+#bind '/' "help"; # assigned to forward\-search
 bind '=' "scale '100%'";
 #bind 'p' "prev_file;";
 #bind 'P' "list 'pop'";
 #bind 's' "list 'sort'";
 bind 's' "scrollforward";
-bind 'C-s' "swap;redisplay;";
+bind 'C\-s' "swap;redisplay;";
 bind 'S' "toggleDisplayStatus";
 bind 'I' "toggleautonegate";
 bind 'i' "negate;redisplay;";
@@ -978,22 +978,22 @@ bind 'R' "rotate270;";
 #bind 'R' "rotate10;display;";
 #bind 'r' "rotate10_ccw;display;";
 #bind 'r' "reload;";
-#bind 'C-d' "display";
+#bind 'C\-d' "display";
 bind '+' "magnify";
-#bind 'C-+' "angle=angle+10.0;display;";
+#bind 'C\-+' "angle=angle+10.0;display;";
 bind 'a' "scale 'a';";
 bind 'H' "scale 'H';";
 bind 'Tab' "toggleVerbosity";
-#bind 'C-k' "_want_caption_status=1-_want_caption_status;status ' '";
+#bind 'C\-k' "_want_caption_status=1\-_want_caption_status;status ' '";
 bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
-bind 'C-m' "list 'mark'";
+bind 'C\-m' "list 'mark'";
 bind 'u' "list 'unmark'";
 bind 'Enter' "list 'mark';next";
-bind '-' "reduce";
+bind '\-' "reduce";
 bind "Up" "pan_up";
 bind 'k' "pan_up";
-#bind 'C-k' "pan_up";
+#bind 'C\-k' "pan_up";
 bind "Right" "pan_right";
 bind 'l' "pan_right";
 bind "Down" "pan_down";
@@ -1002,17 +1002,17 @@ bind "Left" "pan_left";
 bind 'h' "pan_left";
 bind ' ' "scrolldown";
 bind 't' "align 'top';";
-bind 'C-g' "system 'fbgrab fim.png'";
-bind 'C-r' "recording 'start';";
+bind 'C\-g' "system 'fbgrab fim.png'";
+bind 'C\-r' "recording 'start';";
 bind 'Q' "recording 'stop'";
 bind 'D' "recording 'dump';";
 bind 'E' "recording 'execute';";
-bind 'C-e' "recording 'execute';";
-bind 'C-x' "recording 'execute';";
+bind 'C\-e' "recording 'execute';";
+bind 'C\-x' "recording 'execute';";
 bind '.' "recording 'repeat_last';";
-alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;" "";
-alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
-alias "toggleDesaturate" "_autodesaturate=1-_autodesaturate;redisplay;" "";
+alias "toggleVerbosity" "_display_console=1\-_display_console;i:fresh=1;redisplay;" "";
+alias "toggleKeyVerbosity" "_verbose_keys=1\-_verbose_keys;redisplay;" "";
+alias "toggleDesaturate" "_autodesaturate=1\-_autodesaturate;redisplay;" "";
 #
 # autocommands are essential to Fim's automated behaviour
 # examples:
@@ -1052,11 +1052,11 @@ autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisp
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 10 images";
 bind 'N' 'next10';
 bind 'P' 'prev10';
-bind 'C-n' "goto '+//'";
-bind 'C-p' "goto '-//'";
-bind 'C-b' "goto '-//'"; # Warning: C-b cannot be detected on many configurations.
+bind 'C\-n' "goto '+//'";
+bind 'C\-p' "goto '\-//'";
+bind 'C\-b' "goto '\-//'"; # Warning: C\-b cannot be detected on many configurations.
 bind 'W' "display 'resize';" "if supported, resizes the window to match the current image pixels size";
-bind 'C-w' "scale '100%';display 'resize';" "if supported, scales the image to 100% and resizes the window to match its size (if fits)";
+bind 'C\-w' "scale '100%';display 'resize';" "if supported, scales the image to 100% and resizes the window to match its size (if fits)";
 alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
 alias "bookview"          "while(1){display;sleep '2';scrolldown;};" "";
 alias "comicview"         "while(1){display;sleep '1';scrolldown;};" "";
@@ -1064,12 +1064,12 @@ alias "read"              "while(1){display;sleep '1';scrollforward;};" "";
 alias "slowread"          "while(1){display;sleep '2';scrollforward;};" "";
 alias "fastread"          "while(1){display;scrollforward;};" "";
 alias "pornview"          "echo 'press any key repeatedly to terminate' ;endless_slideshow;" "";
-#bind  "C-p" "pornview";
-#bind  "C-b" "bookview";
-autocmd "PreExecutionCycle" "/fbps-" "_display_busy=0;_display_status=0;" ;
+#bind  "C\-p" "pornview";
+#bind  "C\-b" "bookview";
+autocmd "PreExecutionCycle" "/fbps\-" "_display_busy=0;_display_status=0;" ;
 autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
 #autocmd "PreExecutionCycle" "" "redisplay;";
-autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
+autocmd "PreExecutionCycle" "/fbps\-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
 bind '*' "scale '100%'";
@@ -1078,7 +1078,7 @@ bind '<' "rotate10_ccw;display;";
 bind '>' "rotate10;display;";
 bind '_' "_scale_style='';scale '100%';";
 bind ',' "_display_console=1;echo _last_system_output;";
-bind 'C-a' "if(_scale_style!='a'){_scale_style='a';scale 'a';}else{_scale_style='';scale '100%';}";
+bind 'C\-a' "if(_scale_style!='a'){_scale_style='a';scale 'a';}else{_scale_style='';scale '100%';}";
 #bind 'h' "scale 'h'";
 #
 alias "pan_nw" "pan 'nw';" "pans the image to the upper left";
@@ -1098,8 +1098,8 @@ bind 'd' "diagonal_nw;";
 bind 'D' "diagonal_se;";
 bind 'x' "diagonal_ne;";
 bind 'X' "diagonal_sw;";
-alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
-alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
+alias "toggleDisplayStatus" "_display_status=1\-_display_status;" "";
+alias "toggleDisplayBusy" "_display_busy=1\-_display_busy;" "";
 alias "sort" "list 'sort'" "sorts the files list ordered";
 #toggleVerbosity;
 #bind 'f' "next;display;";
@@ -1113,7 +1113,7 @@ alias "rotate90_cw"  "i:_orientation=i:_orientation+3;i:fresh=1;i:fresh=1;redisp
 alias "rotate90" "rotate90_cw;display;" "";
 alias "rotate270" "rotate90_ccw;display;" "";
 alias "rotate10"     "rotate  '10';display;" "";
-alias "rotate10_ccw" "rotate -10;display;" "";
+alias "rotate10_ccw" "rotate \-10;display;" "";
 
 # window related aliases and commands
 alias "wu" "window 'up'" "selects the window upwards the current";
@@ -1122,8 +1122,8 @@ alias "wl" "window 'left'" "selects the window at left of the current";
 alias "wr" "window 'right'" "selects the window at right of the current";
 #bind 'K' "wu";
 bind 'K' 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosity}else{toggleVerbosity;}';
-# Note : on many consoles C-j is by default equivalent to Enter.. so this may not work :)
-#bind 'C-j' "wd";
+# Note : on many consoles C\-j is by default equivalent to Enter.. so this may not work :)
+#bind 'C\-j' "wd";
 #bind 'J' "wd";
 #bind 'H' "wl";
 #bind 'L' "wr";
@@ -1132,8 +1132,8 @@ bind 'K' 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosi
 #alias "swap" "window 'swap'" "swap the enclosing window subwindows";
 #alias "ws " "window 'swap'" "see swap";
 #bind 'T' "split;redisplay;";
-##don't use C-s : it will be usually catched by the console driver, and fim won't get it!
-##bind 'C-s' "split;";
+##don't use C\-s : it will be usually catched by the console driver, and fim won't get it!
+##bind 'C\-s' "split;";
 #bind 'V' "vsplit;redisplay;";
 #bind 'U' "swap;redisplay;";
 #alias 'venlarge' 'window "venlarge"' "";
@@ -1154,9 +1154,9 @@ bind  'Y' "narrow" "shrinks horizontally the image";
 #alias 'scu'   'scroll_console_up;'   "";
 #alias 'scd'   'scroll_console_down;' "";
 #alias 'console_scroll_up'   'if(_console_offset<_console_lines){_console_offset=_console_offset+1;}';
-#alias 'console_scroll_down' 'if(_console_offset>0){_console_offset=_console_offset-1;}';
-alias 'console_scroll_up' 'if(_console_offset<_console_lines+console_scroll_n-_rows){_console_offset=_console_offset+console_scroll_n;}';
-alias 'console_scroll_down' 'if(allow_round_scroll || (_console_offset>=console_scroll_n)){_console_offset=_console_offset-console_scroll_n;}';
+#alias 'console_scroll_down' 'if(_console_offset>0){_console_offset=_console_offset\-1;}';
+alias 'console_scroll_up' 'if(_console_offset<_console_lines+console_scroll_n\-_rows){_console_offset=_console_offset+console_scroll_n;}';
+alias 'console_scroll_down' 'if(allow_round_scroll || (_console_offset>=console_scroll_n)){_console_offset=_console_offset\-console_scroll_n;}';
 alias 'console_scroll_reset' '{_console_offset=0;}';
 alias 'scu'   'console_scroll_up;'   "";
 alias 'scd'   'console_scroll_down;' "";
@@ -1182,7 +1182,7 @@ _display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF
 #_use_exiftool=0;
 echo "WELCOME : to switch to the command line interface press ':' ";
 # Some more examples:
-#alias "plisten" 'popen "nc -l -p 9999 "' "executes fim commands coming from port 9999 on this computer";
+#alias "plisten" 'popen "nc \-l \-p 9999 "' "executes fim commands coming from port 9999 on this computer";
 #alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
 #alias "musicplay"  "system 'mpc play'" "";
 #alias "musicpause" "system 'mpc pause'" "";
@@ -1190,7 +1190,7 @@ echo "WELCOME : to switch to the command line interface press ':' ";
 # offsetscan usage : need a mechanism for popping all images before.
 #alias "offsetscan" "while(i:width<1){list 'push' offimage;_open_offset=_open_offset+1;reload;}";
 #alias "offsetscan" "while(i:width<1){list 'push' '/home/dez/mostro.jpg';stdout _open_offset ;_open_offset=_open_offset+1;reload;}";
-#alias "webcam" "pread 'vgrabbj -d /dev/video0';";
+#alias "webcam" "pread 'vgrabbj \-d /dev/video0';";
 #alias "webcam_cycle" "while(1){webcam;reload;sleep 1;};";
 #This is a FIM initialization file. 
 #Without one of these FIM is nothing.
@@ -1199,7 +1199,7 @@ echo "WELCOME : to switch to the command line interface press ':' ";
 .SH NOTES
 This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.
 The conditions for autocommands triggering are not specified as they should.
-A formal description of the various one-line commands, as well a more extensive example list is needed.
+A formal description of the various one\-line commands, as well a more extensive example list is needed.
 Many of the listed variables are only valid within a namespace, and this shall be documented clearly.
 .SH BUGS
 The

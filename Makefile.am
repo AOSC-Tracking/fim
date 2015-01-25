@@ -137,7 +137,7 @@ news: freshmeat mail-announce
 
 dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 
-MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g'
+MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g' -e 's,-,\\-,g'
 
 doc/fim.man doc/fimrc.man doc/fimgs.man: $(FIM_EXE)
 	$(FIM_EXE) $(FIMNORCOPTS) --help=m                   |$(MANSUBST) > doc/fim.man
