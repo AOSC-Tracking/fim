@@ -790,8 +790,12 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					fim_snprintf_XB(clbp, rbc,mm_.byte_size());
 				break;
 				case('C'):
+				{
+					fim_char_t buf[2*FIM_PRINTFNUM_BUFSIZE];
 					/* cache property. TODO: move outta here */
-					fim_snprintf_XB(clbp, rbc,cc.browser_.cache_.byte_size());
+					fim_snprintf_XB(buf, sizeof(buf),cc.browser_.cache_.img_byte_size());
+					snprintf(clbp, rbc, "#%d:%s",cc.browser_.cache_.cached_elements(),buf);
+				}
 				break;
 				case('c'):
 					/* viewport property. TODO: move outta here */

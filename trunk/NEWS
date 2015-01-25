@@ -11,7 +11,7 @@
  * customizable SDL window caption line with _want_caption_status (TODO: r648*)
  * status bar customizable with _display_status_fmt and _info_fmt_str (TODO: r644,r651*)
  *  "%T" expando to get (and display) total memory used by the program 
- *  "%C" expando to get (and display) memory used by internal cache
+ *  "%C" expando to get (and display) file/memory usage by image cache
  *  "%M" expando to get (and display) memory used by the current (displayed) image
  *  "%c" expando to get (and display) centering information
  *  "%m" expando to get (and display) current image mipmap occupation information
