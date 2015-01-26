@@ -87,6 +87,7 @@ Warning: at the present state, this grammar has conflicts. A future release shal
            | '\-' QUOTED_FLOAT '%'
            | '\-' INTEGER '%'
            | INTEGER
+           | '\-' INTEGER
            | IDENTIFIER
            | IDENTIFIER FILE_PATH
            | IDENTIFIER arguments

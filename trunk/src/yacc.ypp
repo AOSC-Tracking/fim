@@ -2,7 +2,7 @@
 /*
  yacc.ypp : Parser source file template
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -238,7 +238,8 @@ statement:
 	| '-' QUOTED_FLOAT   '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('-',((float)$2),'%'))))); }
 	| '-' INTEGER '%' { $$ = opr('x',2,scon(dupstr(FIM_FLT_SCALE)),opr('a',1,opr('a',1,scon(dupnstr('-',((float)$2),'%'))))); }
 	// $ and ^ work too (see lex.lex)
-	| INTEGER         { $$ = opr('x',2,scon(dupstr(FIM_FLT_GOTO)),opr('a',1,opr('a',1,scon(dupnstr($1))))); }
+	| INTEGER         { $$ = opr('x',2,scon(dupstr(FIM_FLT_GOTO)),opr('a',1,opr('a',1,scon(dupnstr(    $1))))); }
+	| '-' INTEGER     { $$ = opr('x',2,scon(dupstr(FIM_FLT_GOTO)),opr('a',1,opr('a',1,scon(dupnstr('-',$2))))); }
 	// cmd ..
 	| IDENTIFIER      { $$ = opr('x',1,scon($1));     }
 	| IDENTIFIER FILE_PATH {

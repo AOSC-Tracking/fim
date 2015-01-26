@@ -43,6 +43,7 @@ const fim_char_t * FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =
 "           | '-' QUOTED_FLOAT '%'\n"
 "           | '-' INTEGER '%'\n"
 "           | INTEGER\n"
+"           | '-' INTEGER\n"
 "           | IDENTIFIER\n"
 "           | IDENTIFIER FILE_PATH\n"
 "           | IDENTIFIER arguments\n"
