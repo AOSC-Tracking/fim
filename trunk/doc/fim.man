@@ -170,10 +170,10 @@ with internal command line mode disabled
 Do not save execution history at finalization (uses internal variable _save_fim_history). 
 .TP
 .B  \-\-no\-history\-load
-		 do not load execution history
+Do not load execution history at startup. 
 .TP
 .B  \-\-no\-history
-Do not load or save execution history at startup). 
+Do not load or save execution history at startup. 
 .TP
 .B \-p, \-\-script\-from\-stdin
 Will read commands from stdin prior to entering in interactive mode.
