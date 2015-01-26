@@ -52,6 +52,7 @@
  * opening image files in archives with libarchive (experimental, incomplete; TODO: r665)
  * (experimental) JPEG-2000 support via JasPer (TODO: r660)
  * (experimental) exiftool interface (TODO: r654*)
+ * added a ':- INTEGER' syntax, so one can specify the file in the list counting from the end (r743*)
 
                 Version 0.4
 
