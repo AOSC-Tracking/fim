@@ -162,9 +162,10 @@ NULL
 "Do not save execution history at finalization (uses internal variable " FIM_VID_SAVE_FIM_HISTORY "). "
     },
     {"no-history-load",      no_argument,       NULL, 0x4E484C,"do not load execution history",NULL,
+"Do not load execution history at startup. "
     },
     {"no-history",      no_argument,       NULL, 0x4E48,"do not load/save execution history",NULL,
-"Do not load or save execution history at startup). "
+"Do not load or save execution history at startup. "
     },
 #endif /* FIM_WANT_HISTORY */
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input",NULL,
