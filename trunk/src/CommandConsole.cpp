@@ -2068,12 +2068,12 @@ ok:
 	}
 #endif /* FIM_WINDOWS */
 
-	bool CommandConsole::push(const fim::string nf)
+	bool CommandConsole::push(const fim::string nf, fim_flags_t pf)
 	{
 		/*
 		 * returns true if push was ok
 		 * */
-		return browser_.push(nf);
+		return browser_.push(nf,pf);
 	}
 
 #ifndef FIM_WANT_NOSCRIPTING

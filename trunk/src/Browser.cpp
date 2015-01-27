@@ -99,6 +99,19 @@ namespace fim
 					push_dir(".");
 				return FIM_CNS_EMPTY_RESULT;
 			}
+
+			if(args[0]=="pushdirr")
+			{
+#ifdef FIM_RECURSIVE_DIRS
+				if(args.size()>=2)
+					push_dir(args[1],true);
+				else
+					push_dir(".",true);
+				return FIM_CNS_EMPTY_RESULT;
+#else /* FIM_RECURSIVE_DIRS */
+				return "Please recompile with +FIM_RECURSIVE_DIRS to activate pushdirr.";
+#endif /* FIM_RECURSIVE_DIRS */
+			}
 #endif /* FIM_READ_DIRS */
 			if(args[0]=="filesnum")
 			{
@@ -834,7 +847,7 @@ ret:
 	}
 
 #ifdef FIM_READ_DIRS
-	bool Browser::push_dir(fim::string nf)
+	bool Browser::push_dir(fim::string nf, fim_flags_t pf)
 	{
 		// TODO: may introduce some more variable to control recursive push 	
 		DIR *dir = NULL;
@@ -878,11 +891,14 @@ nostat:
 			 * Warning : this is dangerous, as following circular links may cause memory exhaustion.
 			 * */
 			if( is_dir( f + fim::string(de->d_name)) )
+			{
 #ifdef FIM_RECURSIVE_DIRS
-				push_dir( f + fim::string(de->d_name) );
-#else /* FIM_RECURSIVE_DIRS */
-				continue;
+				if( pf & FIM_FLAG_PUSH_REC )
+					push_dir( f + fim::string(de->d_name) );
+				else
 #endif /* FIM_RECURSIVE_DIRS */
+					continue;
+			}
 			else 
 			{
 				fim::string re = getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
@@ -892,6 +908,7 @@ nostat:
 					re = FIM_CNS_PUSHDIR_RE;
 				if( fn.re_match(re.c_str()) )
 					push( f + fim::string(de->d_name) );
+				//std::cout << re << " " << f + fim::string(de->d_name) << "!\n";
 			}
 		}
 ret:
@@ -900,7 +917,7 @@ ret:
 	}
 #endif /* FIM_READ_DIRS */
 
-	bool Browser::push(fim::string nf)
+	bool Browser::push(fim::string nf, fim_flags_t pf)
 	{	
 		/*
 		 * FIX ME:
@@ -992,7 +1009,7 @@ isfile:
 		goto ret;
 #ifdef FIM_READ_DIRS
 isdir:
-		retval = push_dir(nf);
+		retval = push_dir(nf,pf);
 #endif /* FIM_READ_DIRS */
 ret:
 		return retval;

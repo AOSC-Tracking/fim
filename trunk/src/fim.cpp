@@ -270,6 +270,9 @@ NULL
     {"resolution", required_argument, NULL, 'r',"set resolution (UNFINISHED)","{resolution}",
 	    NULL
     },
+    {"recursive", no_argument, NULL, 'R',"Push files/directories to the files list recursively.", NULL,
+	    NULL
+    },
 /*    {"timeout",    required_argument, NULL, 't',"",NULL},*/  /* timeout value */	/* fbi's */
 /*    {"once",       no_argument,       NULL, '1',"",NULL},*/  /* loop only once */
 /*    {"font",       required_argument, NULL, 'f',"",NULL},*/  /* font */
@@ -827,6 +830,7 @@ done:
 		bool appendedPostInitCommand=false;
 		bool appendedPreConfigCommand=false;
 		const char * sa = NULL;
+		fim_flags_t pf = FIM_FLAG_DEFAULT; /* push flags */
 #if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t'; /* separation character for --load-image-descriptions-file */
 #endif /* FIM_WANT_PIC_CMTS */
@@ -849,7 +853,7 @@ done:
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:S",
+		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:SR",
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -1014,6 +1018,10 @@ done:
 		    //fbi's
 	// TODO
 	//	    pcd_res = atoi(optarg);
+		    break;
+		case 'R':
+		    //fim's
+		    pf = FIM_FLAG_PUSH_REC ;
 		    break;
 		case 's':
 	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,atoi(optarg));
@@ -1236,7 +1244,7 @@ done:
 			else
 	#endif /* FIM_READ_STDIN */
 			{
-				cc.push(argv[i]);
+				cc.push(argv[i],pf);
 			}
 		}
 	
@@ -1280,7 +1288,7 @@ done:
 
 				if(sa && lineptr && strstr(lineptr,sa))
 					*strstr(lineptr,sa) = FIM_SYM_CHAR_NUL;
-				cc.push(lineptr);
+				cc.push(lineptr,pf);
 				// printf("%s\n",lineptr);
 				lineptr=NULL;
 				if(wv)

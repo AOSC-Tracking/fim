@@ -1287,14 +1287,14 @@ AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan
 ],[ fim_cv_read_dirs=yes ]
 )
 dnl ==================
-AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--enable-recursive-dirs], [Fim will try to recurse directories (implies --enable-read-dirs )]),
-[       if test x$enableval = xno; then
-		fim_cv_recursive_dirs=no
+AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--disable-recursive-dirs], [Fim will be able to recurse directories (implies --enable-read-dirs )]),
+[       if test x$enableval = xyes; then
+		fim_cv_recursive_dirs=yes;
+                fim_cv_read_dirs=yes;
 	else
-                fim_cv_recursive_dirs=yes
-                fim_cv_read_dirs=yes
+                fim_cv_recursive_dirs=no;
         fi
-],[ fim_cv_recursive_dirs=no ]
+],[ fim_cv_recursive_dirs=yes;fim_cv_read_dirs=yes; ]
 )
 dnl ==================
 
@@ -1856,7 +1856,7 @@ dnl     compile time warnings               : ${fim_cv_warnings:-no} (additional
         resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
    	will read directories               : ${fim_cv_read_dirs}
-   	will recurse directories            :*${fim_cv_recursive_dirs}
+   	will recurse directories            : ${fim_cv_recursive_dirs}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc startup file support       : ${have_fimrc:-no}

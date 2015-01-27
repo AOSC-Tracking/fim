@@ -209,7 +209,7 @@ class CommandConsole
 
 	fim_var_t getVariableType(const fim::string &varname)const;
 	fim_err_t printVariable(const fim::string & varname)const;
-	bool push(const fim::string nf);
+	bool push(const fim::string nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
 	fim_err_t executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd, int*rp=NULL);
 #ifndef FIM_WANT_NOSCRIPTING

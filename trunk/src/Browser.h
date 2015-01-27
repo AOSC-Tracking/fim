@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,10 @@
 #ifndef FIM_BROWSER_H
 #define FIM_BROWSER_H
 #include "fim.h"
+
+#define FIM_FLAG_DEFAULT 0
+#define FIM_FLAG_PUSH_REC 1
+
 namespace fim
 {
 	extern CommandConsole cc;
@@ -130,9 +134,9 @@ class Browser
 	bool present(const fim::string nf);
 	fim_int find_file_index(const fim::string nf);
 #ifdef FIM_READ_DIRS
-	bool push_dir(fim::string nf);
+	bool push_dir(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC);
 #endif /* FIM_READ_DIRS */
-	bool push(fim::string nf);
+	bool push(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC);
 
 	fim::string display(void);
 	fim::string _random_shuffle(bool dts=true);
