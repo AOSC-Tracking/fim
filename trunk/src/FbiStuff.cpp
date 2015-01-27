@@ -36,7 +36,8 @@
 #include <stdarg.h>	/* va_start, va_end, ... */
 #if FIM_WITH_ARCHIVE
 #include <archive.h>
-extern "C" { const char * archive_entry_pathname(struct archive_entry *); }
+#include <archive_entry.h>
+//extern "C" { const char * archive_entry_pathname(struct archive_entry *); }
 #endif /* FIM_WITH_ARCHIVE */
 
 #define FIM_HAVE_FULL_PROBING_LOADER 0
@@ -1589,9 +1590,9 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     bool rozlsl=false;/* retry on zero length signature loader */
 #endif /* FIM_HAVE_FULL_PROBING_LOADER */
 #if FIM_ALLOW_LOADER_VERBOSITY
-    const fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY)&FIM_CNS_VERBOSITY_LOADER);
+    /*const*/ fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY)&FIM_CNS_VERBOSITY_LOADER);
 #else /* FIM_ALLOW_LOADER_VERBOSITY */
-    const fim_int vl=false;
+    /*const*/ fim_int vl=0;
 #endif /* FIM_ALLOW_LOADER_VERBOSITY */
 #if FIM_SHALL_BUFFER_STDIN
     fim_byte_t * sbuf=NULL;
@@ -1602,6 +1603,10 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     size_t read_offset = 0;
 #if FIM_WITH_ARCHIVE
     int npages = 0;
+    fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
+
+    if( re == FIM_CNS_EMPTY_STRING )
+	    re = FIM_CNS_ARCHIVE_RE;
 #endif /* FIM_WITH_ARCHIVE */
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
@@ -1645,12 +1650,17 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     } else fp=fd;
 
 #if FIM_WITH_ARCHIVE
-    if(regexp_match(filename,".*tar$") || regexp_match(filename,".*TAR$") || regexp_match(filename,".*tar.gz$") || regexp_match(filename,".*TAR.GZ$"))
+    vl = 1; // FIXME
+    if( regexp_match(filename,re.c_str(),1) )
     {
 	struct archive *a = NULL;
 	struct archive_entry *entry = NULL;
 	int r,pi;
 	size_t bs = 10240;
+	re = cc.getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
+
+	if( re == FIM_CNS_EMPTY_STRING )
+		re = FIM_CNS_PUSHDIR_RE;
 
 	if( fim_getenv("PAGE") )
 		page = atoi( fim_getenv("PAGE") );
@@ -1673,7 +1683,8 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
       		if (r == ARCHIVE_EOF)
 		{
 			npages = pi  ;
-			printf("ARCHIVE_EOF reached after %d files.\n",npages);
+			if(vl)
+				printf("ARCHIVE_EOF reached after %d files.\n",npages);
 			break;
 		}
 		if (r != ARCHIVE_OK)
@@ -1683,14 +1694,14 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 		}
 		pn = archive_entry_pathname(entry);
 
-		if(pn)
-    		if(regexp_match(pn,".*jpg$") || regexp_match(pn,".*png$")) /* FIXME: temporary */
-		if(strlen(pn)>0 && pn[strlen(pn)-1]!='/') /* skip directories */
+    		if( pn && regexp_match(pn,re.c_str(),1) && strlen(pn)>0 && pn[strlen(pn)-1] != FIM_CNS_DIRSEP_CHAR ) /* skip directories */
 		{
+			//std::cout << re << " " << pi << " " << pn << " " << page  << ".\n"; // FIXME
 			if(pi == page)
 			{
 				static int fap[2];
-				printf("Opening page %d of %s, subfile %s\n",page,filename,pn);
+    				if(vl)
+					printf("Opening page %d of %s, subfile %s\n",page,filename,pn);
 				//archive_read_data_into_fd(a,1);
 				if(0)
 				{
@@ -1732,12 +1743,25 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 						fd = NULL;
 						fp = tfd;
 					}
+					else
+					{
+						std::cout << "Problem opening embedded file!\n"; // FIXME
+						archive_read_data_skip(a);
+					}
 				}
 				filename = FIM_STDIN_IMAGE_NAME;
 			}
 			else
-				;//printf("SKIPPING [%d/%d] %s in %s\n",pi,page,pn,filename);
+			{
+				//archive_read_data_skip(a);
+				printf("SKIPPING MATCHING [%d/%d] %s in %s\n",pi,page,pn,filename);
+			}
 			++pi;
+		}
+		else
+		{
+			printf("SKIPPING NON MATCHING [%d/%d] %s in %s\n",pi,page,pn,filename);
+			//archive_read_data_skip(a);
 		}
 	}
 ena:
@@ -1745,6 +1769,7 @@ ena:
 	archive_read_free(a);
 noa:	1;
     }
+    vl = 0; // FIXME
 #endif /* FIM_WITH_ARCHIVE */
     //size_t read_offset=cc.getIntVariable("g:" FIM_VID_OPEN_OFFSET);
     read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
