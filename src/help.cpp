@@ -1,5 +1,6 @@
 #ifdef FIM_WANT_INLINE_HELP
 
+fim_var_help_db[FIM_VID_ARCHIVE_FILES]= "[internal,in] Regular expression matching filenames to be treated as (multipage) archives. If empty, \"" FIM_CNS_ARCHIVE_RE "\" will be used. Within each archive, only filenames matching the regular expression in the " FIM_VID_PUSHDIR_RE " variable will be considered for opening." ;
 fim_var_help_db[FIM_VID_RANDOM]= "[internal,out] a pseudorandom number" ;
 fim_var_help_db[FIM_VID_BINARY_DISPLAY]= "[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" ;
 fim_var_help_db[FIM_VID_TEXT_DISPLAY]= "[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" ;
@@ -18,7 +19,7 @@ fim_var_help_db[FIM_VID_RETRY_LOADER_PROBE]= "[in] if 1 and user specified a fil
 fim_var_help_db[FIM_VID_NO_RC_FILE]= "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" ;
 fim_var_help_db[FIM_VID_NO_EXTERNAL_LOADERS]= "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" ;
 fim_var_help_db[FIM_VID_SCRIPTOUT_FILE]= "[internal,in] the name of the file to write to when recording sessions" ;
-fim_var_help_db[FIM_VID_PUSHDIR_RE]= "[internal,in] regular expression to match against when pushing files from a directory" ;
+fim_var_help_db[FIM_VID_PUSHDIR_RE]= "[internal,in] regular expression to match against when pushing files from a directory or an archive. By default this is \"" FIM_CNS_PUSHDIR_RE "\"." ;
 fim_var_help_db[FIM_VID_STATUS_LINE]= "[internal,in] if 1, will display the status bar" ;
 fim_var_help_db[FIM_VID_WANT_PREFETCH]= "[internal,in] if 1, will prefetch further files just after display of the first file" ;
 fim_var_help_db[FIM_VID_WANT_SLEEPS]= "[internal,in] number of seconds of sleep during slideshow mode" ;

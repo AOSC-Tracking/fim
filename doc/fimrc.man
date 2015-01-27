@@ -473,6 +473,10 @@ _TERM
 [internal,out] the environment TERM variable
 .fi
 .B
+_archive_files
+[internal,in] Regular expression matching filenames to be treated as (multipage) archives. If empty, ".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" will be used. Within each archive, only filenames matching the regular expression in the _pushdir_re variable will be considered for opening.
+.fi
+.B
 _autocmd_trace_stack
 [internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)
 .fi
@@ -714,7 +718,7 @@ _push_pushes_dirs
 .fi
 .B
 _pushdir_re
-[internal,in] regular expression to match against when pushing files from a directory
+[internal,in] regular expression to match against when pushing files from a directory or an archive. By default this is "\.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX$".
 .fi
 .B
 _pwd

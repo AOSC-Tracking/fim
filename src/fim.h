@@ -351,6 +351,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_SLASH_STRING	"/" /* directory delimiter */
 #define FIM_CNS_QU_MA_STRING	"?" /* */
 #define FIM_CNS_DIRSEP_STRING	FIM_CNS_SLASH_STRING
+#define FIM_CNS_DIRSEP_CHAR	FIM_CNS_SLASH_CHAR
 #define FIM_CNS_FP_ZERO		0.0
 #define FIM_CNS_EMPTY_FP_VAL	FIM_CNS_FP_ZERO
 #define FIM_CNS_EMPTY_INT_VAL	0
@@ -386,7 +387,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EX_NUM_STRING	"{number}"
 #define FIM_CNS_EX_SCALE_STRING	"{scale}"
 #define FIM_CNS_SHELL	"/bin/sh"
-#define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.JPEG$|\\.JFIF$|\\.PPM$"
+#define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.TIF$|\\.JPEG$|\\.JFIF$|\\.PPM$|\\.PGM$|\\.PBM$|\\.PCX$" /* FIXME: this shall depend on build options */
+#define FIM_CNS_ARCHIVE_RE	".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* FIXME: there is much more: CAB.. */
 #define FIM_CNS_VERBOSITY_LOADER		1 /* a value for FIM_VID_VERBOSITY */ 
 #define FIM_CNS_BPP_INVALID	0
 #define FIM_CNS_K 1024
@@ -486,6 +488,7 @@ namespace fim
  * */
 //#define FIM_VID_NEWLINE 			"_newline"	/* "" */
 //#define FIM_VID_TAB 				"_tab"	/* "" */
+#define FIM_VID_ARCHIVE_FILES			"_archive_files"	/* "[internal,in] Regular expression matching filenames to be treated as (multipage) archives. If empty, \"" FIM_CNS_ARCHIVE_RE "\" will be used. Within each archive, only filenames matching the regular expression in the " FIM_VID_PUSHDIR_RE " variable will be considered for opening." */
 #define FIM_VID_RANDOM 				"random"	/* "[internal,out] a pseudorandom number" */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
 #define FIM_VID_TEXT_DISPLAY 			"_display_as_rendered_text"	/* "[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" */
@@ -504,7 +507,7 @@ namespace fim
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
-#define FIM_VID_PUSHDIR_RE			"_pushdir_re"	/* "[internal,in] regular expression to match against when pushing files from a directory" */
+#define FIM_VID_PUSHDIR_RE			"_pushdir_re"	/* "[internal,in] regular expression to match against when pushing files from a directory or an archive. By default this is \"" FIM_CNS_PUSHDIR_RE "\"." */
 #define FIM_VID_STATUS_LINE 			"_status_line"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[internal,in] if 1, will prefetch further files just after display of the first file" */
 #define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[internal,in] number of seconds of sleep during slideshow mode" */
