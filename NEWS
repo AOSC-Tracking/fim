@@ -54,6 +54,8 @@
  * (experimental) exiftool interface (TODO: r654*)
  * added a ':- INTEGER' syntax, so one can specify the file in the list counting from the end (r744*)
  * added a _archive_files variable to specify which file names specify archives (r745*)
+ * -R / --recursive switch to turn on recursive push of command line specified directories (r746*)
+ * added a 'list "pushdirr"' command, working like "pushdir" but recursive (r746*)
 
                 Version 0.4
 
