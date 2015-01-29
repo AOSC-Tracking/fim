@@ -33,10 +33,13 @@ For '.svg' vectorial images, fim will try to use 'inkscape'.
 For other formats fim will try to use ImageMagick's 'convert' executable.
 
 
-If configured at build time,
+If 
 .B
 {imagefile}
-may be as well a directory containing files in supported formats.
+ is a directory, contained files in supported file formats will be loaded. If 
+.B
+{imagefile}
+ contains a trailing slash (/), it will be treated as a directory; otherwise a check will be made using stat(). To change this default, see description of the _pushdir_re variable and the \-\-no\-stat\-push and \-\-recursive  options.
 
 
 If configured at build time, fim will be capable of using SDL or aalib output.
