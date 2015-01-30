@@ -519,23 +519,22 @@ nop:
 
 	fim::string Browser::display_status(const fim_char_t *l)
 	{
+		fim_bool_t wcs = cc.isSetVar(FIM_VID_WANT_CAPTION_STATUS);
+
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
 		{
-#if 0
-			if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_FMT) == 1 )
-				l = fim_basename_of(l);
-#else
+			fim::string dss ;
+
 			if( cc.isSetVar(FIM_VID_DISPLAY_STATUS_FMT) )
 			{
-				fim::string dss;
 				dss = c_image()->getInfoCustom(cc.getStringVariable(FIM_VID_DISPLAY_STATUS_FMT).c_str());
-				if( dss.c_str() && *dss.c_str() )
-					l = dss.c_str();
-				commandConsole_.set_status_bar(l, image()?(image()->getInfo().c_str()):"*");
 			}
-			else
-#endif
-			commandConsole_.set_status_bar(l, image()?(image()->getInfo().c_str()):"*");
+			commandConsole_.set_status_bar(dss != FIM_CNS_EMPTY_STRING ? dss.c_str() : l, image()?(image()->getInfo().c_str()):"*");
+		}
+		else
+		{
+			if(wcs)
+				wcs = cc.set_wm_caption(NULL);
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}

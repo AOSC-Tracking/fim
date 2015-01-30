@@ -368,6 +368,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string get_commands_reference(FimDocRefMode refmode=DefRefMode)const;
 	fim::string get_variables_reference(FimDocRefMode refmode=DefRefMode)const;
 	public:
+	bool set_wm_caption(const fim_char_t *str);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	fim_err_t display_reinit(const fim_char_t *rs);
 	fim::string fcmd_basename(const args_t& args);
