@@ -2197,6 +2197,31 @@ ok:
 		set_status_bar(desc.c_str(), info);
 	}
 	
+
+	bool CommandConsole::set_wm_caption(const fim_char_t *str)
+	{
+		bool wcs = true;
+#if FIM_WANT_CAPTION_CONTROL
+		int rc;
+		string wcss = getStringVariable(FIM_VID_WANT_CAPTION_STATUS);
+
+		if( wcss.c_str() && *wcss.c_str() && browser_.c_image())
+		{
+			fim::string clb = browser_.c_image()->getInfoCustom(wcss.c_str());
+
+			rc = displaydevice_->set_wm_caption(clb.c_str());
+			wcs = false; /* caption + status */
+		}
+		else
+			if( str && *str )
+				rc = displaydevice_->set_wm_caption(str);
+
+		if(rc==FIM_ERR_UNSUPPORTED)
+			wcs = false; /* revert */
+#endif /* FIM_WANT_CAPTION_CONTROL */
+		return wcs;
+	}
+
 	void CommandConsole::set_status_bar(const fim_char_t *desc, const fim_char_t *info)
 	{
 		/*
@@ -2304,23 +2329,7 @@ ok:
 
 #if FIM_WANT_CAPTION_CONTROL
 		if(wcs)
-		{
-			string wcss = getStringVariable(FIM_VID_WANT_CAPTION_STATUS);
-
-			if( wcss.c_str() && *wcss.c_str() && browser_.c_image())
-			{
-				fim::string clb = browser_.c_image()->getInfoCustom(wcss.c_str());
-
-				rc = displaydevice_->set_wm_caption(clb.c_str());
-				wcs = false; /* caption + status */
-			}
-			else
-			if( str && *str )
-				rc = displaydevice_->set_wm_caption(str);
-
-			if(rc==FIM_ERR_UNSUPPORTED)
-				wcs = false; /* revert */
-		}
+			wcs = set_wm_caption(str);
 		if(!wcs)
 #endif /* FIM_WANT_CAPTION_CONTROL */
 			rc=displaydevice_->status_line((const fim_char_t*)str);
