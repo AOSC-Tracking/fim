@@ -617,7 +617,7 @@ namespace fim
 		fim::string s;
 		for(size_t i=0;i<args.size();++i)
 			s+=args[i].c_str();
-		browser_.display_status(s.c_str(),NULL);
+		browser_.display_status(s.c_str());
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
