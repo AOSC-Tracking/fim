@@ -234,8 +234,8 @@ NULL
     {"autowindow",   no_argument,   NULL,0x61757769,"adapt window to image size",NULL,
 "Will resize the window size (if supported) to the image size. Don't use this with other image scaling options."
     },
-    {"no-stat-push",   no_argument,   NULL,0x6e7363,"do not check file/dir checks with stat() at push",NULL,
-"Sets " FIM_VID_PRELOAD_CHECKS "=0 before initialization, thus disabling file/dir checks with stat()."
+    {"no-stat-push",   no_argument,   NULL,0x6e7363,"do not check file/dir checks with stat(2) at push",NULL,
+"Sets " FIM_VID_PRELOAD_CHECKS "=0 before initialization, thus disabling file/dir checks with stat(2)."
     },
     {"autoheight",   no_argument,       NULL, 'H',"scale according to height",NULL,
 "Scale the image according to the screen height."
@@ -476,11 +476,11 @@ int fim_dump_man_page(void)
 			string("\n"
 			".SH DESCRIPTION\n"
 			".B\nfim\nis a `swiss army knife' for displaying image files.\n"
-			"It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim-like autocommands, and much more.\n\n"
-			"As a default,\n.B\nfim\ndisplays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.\nFor 'xcf' (Gimp's) images, fim will try to use '" FIM_EPR_XCFTOPNM "'.\nFor '.fig' vectorial images, fim will try to use '" FIM_EPR_FIG2DEV "'.\nFor '.dia' vectorial images, fim will try to use '" FIM_EPR_DIA "'.\nFor '.svg' vectorial images, fim will try to use '" FIM_EPR_INKSCAPE "'.\nFor other formats fim will try to use ImageMagick's '" FIM_EPR_CONVERT "' executable.\n"
+			"It is capable of displaying image files using different graphical devices while offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, customizable key bindings, internal variables and command aliases, vim-like autocommands, JPEG comments and EXIF tags display, and much more.\n\n"
+			"As a default,\n.B\nfim\ndisplays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not).  " FIM_CNS_DSFF " formats are supported. \nFor 'XCF' (Gimp's) images, fim will try to use '" FIM_EPR_XCFTOPNM "'.\nFor '.FIG' vectorial images, fim will try to use '" FIM_EPR_FIG2DEV "'.\nFor '.DIA' vectorial images, fim will try to use '" FIM_EPR_DIA "'.\nFor '.SVG' vectorial images, fim will try to use '" FIM_EPR_INKSCAPE "'.\nFor other formats fim will try to use ImageMagick's '" FIM_EPR_CONVERT "' executable.\n"
 			"\n")+
 #ifdef FIM_READ_DIRS
-			string("\n""If \n.B\n{imagefile}\n is a directory, contained files in supported file formats will be loaded. If \n.B\n{imagefile}\n contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise a check will be made using stat(). To change this default, see description of the " FIM_VID_PUSHDIR_RE " variable and the --no-stat-push and --recursive  options.\n\n")+
+			string("\n""If \\fB{imagefile}\\fP is a directory, therein contained files of supported formats will be loaded. If \\fB{imagefile}\\fP contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise a check will be made using \\fB" "stat(2)" "\\fP. To change this default, see description of the " FIM_VID_PUSHDIR_RE " variable and the --no-stat-push and --recursive  options.\n\n")+
 #endif /* FIM_READ_DIRS */
 
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
@@ -492,7 +492,7 @@ int fim_dump_man_page(void)
 			"You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any image viewer with reasonable key bindings.\n"
 			"\n.B\nfim\nis keyboard oriented: there are no user menus or buttons available.\n"
 			"If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need to type a custom command. For these, you can use the internal command and configuration language.\n"
-			"The full specification for these is available at runtime using the internal help system.\n"
+			"The full specification for these is accessible at runtime using the internal help system (typing :help).\n"
 			"\n"
 			"\n.SH OPTIONS\n"
 			"Accepted command line \n.B\n{options}\n:\n");
@@ -625,7 +625,20 @@ mp+=string(
 ".B not\n"
 "work.\n"
 ".SH EXAMPLES\n"
-".B find /mnt/media/ -name *.jpg | fim - .\n"
+".B fim media/ \n"
+".fi \n"
+"# Will load files from the directory media.\n"
+".P\n"
+".P\n"
+"\n"
+".B fim -R media/ --sort \n"
+".fi \n"
+"# Will open files found by recursive traversal of directory media, then sorting the list.\n"
+".P\n"
+".P\n"
+"\n"
+".B\n"
+".B find /mnt/media/ -name *.jpg | fim - \n"
 ".fi \n"
 "# Will make fim read the file list from standard input.\n"
 ".P\n"
