@@ -20,26 +20,20 @@ fim \- \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPprove
 .B
 fim
 is a `swiss army knife' for displaying image files.
-It is capable of displaying image files using a variety of output video modes, while attempting at offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output in a number of ways; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, key bindings customization, internal variables and command aliases, vim\-like autocommands, and much more.
+It is capable of displaying image files using different graphical devices while offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, customizable key bindings, internal variables and command aliases, vim\-like autocommands, JPEG comments and EXIF tags display, and much more.
 
 As a default,
 .B
 fim
-displays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.
-For 'xcf' (Gimp's) images, fim will try to use 'xcftopnm'.
-For '.fig' vectorial images, fim will try to use 'fig2dev'.
-For '.dia' vectorial images, fim will try to use 'dia'.
-For '.svg' vectorial images, fim will try to use 'inkscape'.
+displays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not).  JPEG,PNG,GIF,BMP,TIFF,PPM,PGM,PBM,PCX formats are supported. 
+For 'XCF' (Gimp's) images, fim will try to use 'xcftopnm'.
+For '.FIG' vectorial images, fim will try to use 'fig2dev'.
+For '.DIA' vectorial images, fim will try to use 'dia'.
+For '.SVG' vectorial images, fim will try to use 'inkscape'.
 For other formats fim will try to use ImageMagick's 'convert' executable.
 
 
-If 
-.B
-{imagefile}
- is a directory, contained files in supported file formats will be loaded. If 
-.B
-{imagefile}
- contains a trailing slash (/), it will be treated as a directory; otherwise a check will be made using stat(). To change this default, see description of the _pushdir_re variable and the \-\-no\-stat\-push and \-\-recursive  options.
+If \fB{imagefile}\fP is a directory, therein contained files of supported formats will be loaded. If \fB{imagefile}\fP contains a trailing slash (/), it will be treated as a directory; otherwise a check will be made using \fBstat(2)\fP. To change this default, see description of the _pushdir_re variable and the \-\-no\-stat\-push and \-\-recursive  options.
 
 
 If configured at build time, fim will be capable of using SDL or aalib output.
@@ -62,7 +56,7 @@ from an interactive shell and control it with the keyboard, as you would do with
 fim
 is keyboard oriented: there are no user menus or buttons available.
 If you need some feature or setting which is not accessible from the default keyboard configuration, you probably need a custom configuration or simply need to type a custom command. For these, you can use the internal command and configuration language.
-The full specification for these is available at runtime using the internal help system.
+The full specification for these is accessible at runtime using the internal help system (typing :help).
 
 
 .SH OPTIONS
@@ -241,7 +235,7 @@ Do not scale the images after loading (will set '_scale_style=" "';).
 Will resize the window size (if supported) to the image size. Don't use this with other image scaling options.
 .TP
 .B  \-\-no\-stat\-push
-Sets _preload_checks=0 before initialization, thus disabling file/dir checks with stat().
+Sets _preload_checks=0 before initialization, thus disabling file/dir checks with stat(2).
 .TP
 .B \-H, \-\-autoheight
 Scale the image according to the screen height.
@@ -383,7 +377,20 @@ logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
 .SH EXAMPLES
-.B find /mnt/media/ \-name *.jpg | fim \- .
+.B fim media/ 
+.fi 
+# Will load files from the directory media.
+.P
+.P
+
+.B fim \-R media/ \-\-sort 
+.fi 
+# Will open files found by recursive traversal of directory media, then sorting the list.
+.P
+.P
+
+.B
+.B find /mnt/media/ \-name *.jpg | fim \- 
 .fi 
 # Will make fim read the file list from standard input.
 .P
