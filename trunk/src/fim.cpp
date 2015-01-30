@@ -175,9 +175,9 @@ NULL
 "Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks."
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
-"The \\fBaa\\fP option may be specified as  \\fBaa" FIM_SYM_DEVOPTS_SEP_STR "{['w']}\\fP ; the \\fB'w'\\fP character allows windowed mode in case of aalib running under X (otherwise, the DISPLAY environment variable will be unset for the current instance of fim).\n"
+"The \\fBaa\\fP option may be specified as  \\fBaa" FIM_SYM_DEVOPTS_SEP_STR "{['w']}\\fP ; the " FIM_MAN_fB("'w'") " character allows windowed mode in case of aalib running under X (otherwise, the DISPLAY environment variable will be unset for the current instance of fim).\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
-"The \\fBsdl\\fP option may be specified as  \\fBsdl" FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the \\fB'w'\\fP character requests windowed mode; the \\fB'm'\\fP character requests mouse pointer display; the \\fB'r'\\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
+"The \\fBsdl\\fP option may be specified as  \\fBsdl" FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the " FIM_MAN_fB("'w'") " character requests windowed mode; the " FIM_MAN_fB("'m'") " character requests mouse pointer display; the " FIM_MAN_fB("'r'") " character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
 #ifdef FIM_WITH_LIBIMLIB2
 /* FIXME: shall document this */
@@ -480,13 +480,13 @@ int fim_dump_man_page(void)
 			"As a default,\n.B\nfim\ndisplays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not).  " FIM_CNS_DSFF " formats are supported. \nFor 'XCF' (Gimp's) images, fim will try to use '" FIM_EPR_XCFTOPNM "'.\nFor '.FIG' vectorial images, fim will try to use '" FIM_EPR_FIG2DEV "'.\nFor '.DIA' vectorial images, fim will try to use '" FIM_EPR_DIA "'.\nFor '.SVG' vectorial images, fim will try to use '" FIM_EPR_INKSCAPE "'.\nFor other formats fim will try to use ImageMagick's '" FIM_EPR_CONVERT "' executable.\n"
 			"\n")+
 #ifdef FIM_READ_DIRS
-			string("\n""If \\fB{imagefile}\\fP is a directory, therein contained files of supported formats will be loaded. If \\fB{imagefile}\\fP contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise a check will be made using \\fB" "stat(2)" "\\fP. To change this default, see description of the " FIM_VID_PUSHDIR_RE " variable and the --no-stat-push and --recursive  options.\n\n")+
+			string("\n""If " FIM_MAN_fB("{imagefile}") " is a directory, therein contained files of supported formats will be loaded. If " FIM_MAN_fB("{imagefile}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise a check will be made using " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_VID_PUSHDIR_RE " variable and the --no-stat-push and --recursive  options.\n\n")+
 #endif /* FIM_READ_DIRS */
 
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
 	//		string("Please note that a user guide of \n.B fim\nis in the " FIM_CNS_FIM_TXT " file distributed in the source package.\n\n")+
 			string("This man page only describes the\n.B fim\ncommand line options.\n"
-			"See man \\fR\\fI""fimrc""\\fR(5) for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n"
+			"See man " FIM_MAN_fR("fimrc") "(5) for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n"
 			"\n"
 			".SH USAGE\n"
 			"You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any image viewer with reasonable key bindings.\n"
@@ -737,16 +737,16 @@ mp+=string(
 ".B ~/.inputrc\n"
 "If\n.B Fim\n"
 "is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see"
-" (man \\fR\\fI""readline""\\fR(3))."
+" (man " FIM_MAN_fR("readline") "(3))."
 "\n"
 			      )+
 string(
 ".SH SEE ALSO\n"
 "Other \n"
 ".B Fim \n"
-"man pages: ""\\fR\\fI""fimgs""\\fR""(1), ""\\fR\\fI""fimrc""\\fR""(1).\n"
+"man pages: " FIM_MAN_fR("fimgs") "(1), " FIM_MAN_fR("fimrc") "(1).\n"
 ".fi\n"
-"Or related programs: ""\\fR\\fI""fbset""\\fR""(1), ""\\fR\\fI""con2fb""\\fR""(1), ""\\fR\\fI""convert""\\fR""(1), ""\\fR\\fI""vim""\\fR""(1), ""\\fR\\fI""fb.modes""\\fR""(8), ""\\fR\\fI""fbset""\\fR""(8), ""\\fR\\fI""fbgrab""\\fR""(1), ""\\fR\\fI""fbdev""\\fR""(4), ""\\fR\\fI""setfont""\\fR""(8), ""\\fR\\fI""xfs""\\fR""(1).\n"
+"Or related programs: " FIM_MAN_fR("fbset") "(1), " FIM_MAN_fR("con2fb") "(1), " FIM_MAN_fR("convert") "(1), " FIM_MAN_fR("vim") "(1), " FIM_MAN_fR("fb.modes") "(8), " FIM_MAN_fR("fbset") "(8), " FIM_MAN_fR("fbgrab") "(1), " FIM_MAN_fR("fbdev") "(4), " FIM_MAN_fR("setfont") "(8), " FIM_MAN_fR("xfs") "(1).\n"
 ".SH AUTHOR\n"
 ".nf\n"
 FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"

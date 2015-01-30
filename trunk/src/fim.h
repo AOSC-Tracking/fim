@@ -865,5 +865,7 @@ namespace fim
 #define FIM_XSTRINGIFY(X) FIM_STRINGIFY(X)
 /* FIM_STRINGIFY evaluates to a string with the supplied preprocessor symbol identifier */
 #define FIM_STRINGIFY(X) #X
+#define FIM_MAN_fB(X) "\\fB" X "\\fP"
+#define FIM_MAN_fR(X) "\\fR\\fI" X "\\fR"
 
 #endif /* FIM_FIM_H */
