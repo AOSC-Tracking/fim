@@ -180,7 +180,7 @@ nop:
 				 */
 				viewport()->recenter(); // 20131020 this shall center as default
 				if( commandConsole_.redisplay() )
-					this->display_status(current().c_str(), NULL);
+					this->display_status(current().c_str());
 			}
 			FIM_AUTOCMD_EXEC(FIM_ACM_POSTREDISPLAY,c);
 		}
@@ -517,11 +517,8 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::display_status(const fim_char_t *l,const fim_char_t *r)
+	fim::string Browser::display_status(const fim_char_t *l)
 	{
-		/*
-		 * displays the left text message and a right bracketed one
-		 */
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
 		{
 #if 0
@@ -589,7 +586,7 @@ nop:
 				 * we redraw the whole screen and thus all of the windows
 				 * */
 				if( commandConsole_.display() )
-					this->display_status(current().c_str(), NULL);
+					this->display_status(current().c_str());
 //				FIXME:
 //				if(commandConsole_.window)commandConsole_.window->recursive_display();
 			}
