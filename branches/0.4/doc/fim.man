@@ -25,7 +25,7 @@ It is capable of displaying image files using a variety of output video modes, w
 As a default,
 .B
 fim
-displays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, xwd, bmp and png are supported directly.
+displays the specified file(s) on the linux console using the framebuffer device.  jpeg, ppm, gif, tiff, bmp and png are supported directly.
 For 'xcf' (Gimp's) images, fim will try to use 'xcftopnm'.
 For '.fig' vectorial images, fim will try to use 'fig2dev'.
 For '.dia' vectorial images, fim will try to use 'dia'.
