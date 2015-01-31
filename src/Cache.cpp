@@ -26,7 +26,7 @@
 	#include <time.h>
 #endif /* HAVE_SYS_TIME_H */
 
-#define FIM_CACHE_INSPECT 1
+#define FIM_CACHE_INSPECT 0
 #if FIM_CACHE_INSPECT
 #define FIM_PR(X) printf("CACHE:%c:%20s:%s",X,__func__,getReport(FIM_CR_CD).c_str());
 #else /* FIM_CACHE_INSPECT */
