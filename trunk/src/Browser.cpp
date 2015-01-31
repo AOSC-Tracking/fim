@@ -140,7 +140,7 @@ namespace fim
 		}
 ret:
 		FIM_PR('.');
-		return FIM_CNS_EMPTY_RESULT;
+		return result;
 	}
 
 	std::ostream& Browser::print(std::ostream &os)const
