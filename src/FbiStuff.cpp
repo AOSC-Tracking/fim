@@ -107,13 +107,14 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 	   This function was not present in Fbi.
 	*/
 	fim_mipmap_t mm; /* mipmap structure */
-	int w = src->i.width, h = src->i.height,d; /* the original */
+	int w, h, d;
 	int mmidx = 0; /* mipmap index */
 
 	if(!src)
 	{
 		goto err;
 	}
+	w = src->i.width, h = src->i.height; /* the original */
 	mm.nmm=0;
 	mm.mmoffs[mm.nmm]=0;
 	if(FIM_WVMM) std::cout <<  3*src->i.width*src->i.height<< " bytes are needed for the original image\n";
