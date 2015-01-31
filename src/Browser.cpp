@@ -843,24 +843,29 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_int Browser::find_file_index(const fim::string nf)
+	fim_int Browser::find_file_index(const fim::string nf)const
 	{
 		/* 
 		 * returns whether the file nf is in the files list
 		 */
 		fim_int fi = -1;
-
+#if 1
+		for(args_t::const_iterator fi=flist_.begin();fi!=flist_.end();++fi)
+			if( *fi == nf )
+				goto ret;
+#else
 		for(fim_size_t i=0;i<flist_.size();++i)
 			if( flist_[i] == nf )
 			{
 				fi = (fim_int)i;
 				goto ret;
 			}
+#endif
 ret:
 		return fi;
 	}
 
-	bool Browser::present(const fim::string nf)
+	bool Browser::present(const fim::string nf)const
 	{
 		/* 
 		 * returns whether the file nf is in the files list
