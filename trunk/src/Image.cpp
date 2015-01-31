@@ -32,9 +32,9 @@
 #include <thread>
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
-#define FIM_IMAGE_INSPECT 1
+#define FIM_IMAGE_INSPECT 0
 #if FIM_IMAGE_INSPECT
-#define FIM_PR(X) printf("IMAGE:%c:%20s: f:%d/%d p:%d/%d\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),getIntVariable(FIM_VID_PAGES));
+#define FIM_PR(X) printf("IMAGE:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),getIntVariable(FIM_VID_PAGES),(cacheable()?"cacheable":"uncacheable"));
 #else /* FIM_IMAGE_INSPECT */
 #define FIM_PR(X) 
 #endif /* FIM_IMAGE_INSPECT */
@@ -67,6 +67,20 @@ namespace fim
  *	 Private ones are stricter.
  * 
  */
+	static void fim_desaturate_rgb(fim_byte_t * data, int howmany)
+	{
+		register int avg;
+		for( fim_byte_t * p = data; p < data + howmany ;p+=3)
+		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
+	}
+
+	static void fim_negate_rgb(fim_byte_t * data, int howmany)
+	{
+		register int avg;
+		for( fim_byte_t * p = data; p < data + howmany ;p++)
+			*p = ~ *p;
+	}
+
 	fim_coo_t Image::original_width(void)const
 	{
 		fim_coo_t ow;
@@ -426,9 +440,16 @@ ret:
 		 * the image descriptors are freed if necessary and pointers blanked
 		 * */
                 if(fimg_!=img_ && img_ )
+	// shred:
+	//		fim_desaturate_rgb( img_->data, 3* img_->i.width* img_->i.height),
+	//		fim_negate_rgb(     img_->data, 3* img_->i.width* img_->i.height),
 		       	FbiStuff::free_image(img_ );
                 if(fimg_     )
+	// shred:
+	//		fim_desaturate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height),
+	//		fim_negate_rgb(    fimg_->data, 3*fimg_->i.width*fimg_->i.height),
 		       	FbiStuff::free_image(fimg_);
+		mm_free();
                 reset();
         }
 
@@ -1179,13 +1200,6 @@ ret:
 	} 
 #endif
 
-	static void fim_desaturate_rgb(fim_byte_t * data, int howmany)
-	{
-		register int avg;
-		for( fim_byte_t * p = data; p < data + howmany ;p+=3)
-		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
-	}
-
 	bool Image::desaturate(void)
 	{
 #if 0
@@ -1211,13 +1225,6 @@ ret:
        		should_redraw();
 
 		return true;
-	}
-
-	static void fim_negate_rgb(fim_byte_t * data, int howmany)
-	{
-		register int avg;
-		for( fim_byte_t * p = data; p < data + howmany ;p++)
-			*p = ~ *p;
 	}
 
 	bool Image::negate(void)

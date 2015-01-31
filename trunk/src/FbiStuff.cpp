@@ -51,7 +51,7 @@
 #define FIM_WANTS_SLOW_RESIZE 1
 #define FIM_WVMM 0 /* want verbose mip maps (for FIM_WANT_EXPERIMENTAL_MIPMAPS) */
 
-#define FIM_FBISTUFF_INSPECT 1
+#define FIM_FBISTUFF_INSPECT 0
 #if FIM_FBISTUFF_INSPECT
 #define FIM_PR(X) printf("FBISTUFF:%c:%20s\n",X,__func__);
 #else /* FIM_FBISTUFF_INSPECT */
