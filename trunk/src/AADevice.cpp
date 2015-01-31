@@ -2,7 +2,7 @@
 /*
  AADevice.cpp : aalib device Fim driver file
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -506,9 +506,9 @@ err:
 
 	fim_sys_int AADevice::get_input(fim_key_t * c, bool want_poll)
 	{
-		*c = 0x0;	/* blank */
 		if(!c)
 			return 0;
+		*c = 0x0;	/* blank */
 		*c = aa_getevent(ascii_context_,0);/* 1 if want to receive AA_RELEASE events, too */
 		if(*c==AA_UNKNOWN)
 			*c=0;

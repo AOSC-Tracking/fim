@@ -50,6 +50,7 @@ with a '@' and _Baz_ with a '.'.
 
 ==== KNOWN BUGS
 
+20150131	in aalib mode PageUp / PageDown do not seem to work.
 20150123
 
    When in framebuffer mode, never, for ANY reason, press C-z (^Z) with the
