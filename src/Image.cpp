@@ -436,21 +436,28 @@ ret:
 
         void Image::free(void)
         {
+		FIM_PR('*');
 		/*
 		 * the image descriptors are freed if necessary and pointers blanked
 		 * */
+		const bool shred = false; /* this is only for debug purposes */
                 if(fimg_!=img_ && img_ )
-	// shred:
-	//		fim_desaturate_rgb( img_->data, 3* img_->i.width* img_->i.height),
-	//		fim_negate_rgb(     img_->data, 3* img_->i.width* img_->i.height),
+		{
+			if(shred)
+			fim_desaturate_rgb( img_->data, 3* img_->i.width* img_->i.height),
+			fim_negate_rgb(     img_->data, 3* img_->i.width* img_->i.height);
 		       	FbiStuff::free_image(img_ );
+		}
                 if(fimg_     )
-	// shred:
-	//		fim_desaturate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height),
-	//		fim_negate_rgb(    fimg_->data, 3*fimg_->i.width*fimg_->i.height),
+		{
+			if(shred)
+			fim_desaturate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height),
+			fim_negate_rgb(    fimg_->data, 3*fimg_->i.width*fimg_->i.height);
 		       	FbiStuff::free_image(fimg_);
+		}
 		mm_free();
                 reset();
+		FIM_PR('.');
         }
 
 // if the image rescaling mechanism is suspected of bugs, this will inhibit its use.

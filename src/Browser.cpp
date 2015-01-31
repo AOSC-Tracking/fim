@@ -36,7 +36,7 @@
 
 #define FIM_BROWSER_INSPECT 0
 #if FIM_BROWSER_INSPECT
-#define FIM_PR(X) printf("BROWSER:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),-1,current().c_str());
+#define FIM_PR(X) printf("BROWSER:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),/*(image()?image()->getIntVariable(FIM_VID_PAGES):-1)*/-1,current().c_str());
 #else /* FIM_BROWSER_INSPECT */
 #define FIM_PR(X) 
 #endif /* FIM_BROWSER_INSPECT */
@@ -681,7 +681,7 @@ ret:
 		{
 			ViewportState viewportState;
 			FIM_PR('0');
-			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState) );// FIXME
+			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState,getGlobalIntVariable(FIM_VID_PAGE)) );// FIXME
 			viewport()->setState(viewportState);
 		}
 #else /* FIM_BUGGED_CACHE */
@@ -728,9 +728,11 @@ ret:
 		 * FIXME
 		 * only cleans up the internal data structures
 		 * */
+		FIM_PR('*');
 		if( viewport() )
 			viewport()->free();
 		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport().c_str());
+		FIM_PR('.');
 	}
 
 	fim::string Browser::fcmd_prefetch(const args_t &args)
@@ -1238,8 +1240,8 @@ nop:
 		cf_ = FIM_MOD(cf_,N);
 		FIM_PR(' ');
 		setGlobalVariable(FIM_VID_PAGE ,(fim_int)0);
-		//setGlobalVariable(FIM_VID_FILEINDEX,current_image());
-		setGlobalVariable(FIM_VID_FILEINDEX,cf_);
+		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
+		//setGlobalVariable(FIM_VID_FILEINDEX,cf_);
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
 		FIM_PR(' ');
 		//loadCurrentImage();
@@ -1380,7 +1382,7 @@ ret:
 				ispg = true;
 				if(( cp == 0 && gv < 0 ) || (cp == pc-1 && gv > 0 ) )
 					if( fc > 1 )
-						isfg = true;
+						isfg = true, ispg = false;
 			}
 			if( ispg )
 				mv = pc;
