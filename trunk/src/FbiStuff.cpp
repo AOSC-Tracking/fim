@@ -1619,7 +1619,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
     if(vl)
-	    FIM_VERB_PRINTF("approaching loading \"%s\"\n",filename);
+	    FIM_VERB_PRINTF("approaching loading page %d of \"%s\"\n",page,filename);
     //WARNING
     //new_image = 1;
 
@@ -1683,6 +1683,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 		printf("Problems opening archive %s\n",filename);
 		goto noa;
 	}
+
 	for (pi=0;;)
 	{
                 const char * pn = NULL;

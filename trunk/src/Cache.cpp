@@ -263,16 +263,33 @@ rt:
 
 		FIM_LOUD_CACHE_STUFF;
 		if(is_in_cache(key))
+		{
 			goto ret;
+			FIM_PR('c');
+		}
 	  	if(need_free())
 			free_some_lru();
 		if(need_free())
+		{
+			FIM_PR('f');
 			goto ret; /* skip prefetch if cache is full */
+		}
 		if(key.first == FIM_STDIN_IMAGE_NAME)
+		{
+			FIM_PR('s');
 			goto ret;// just a fix in the case the browser is still lame
+		}
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "prefetch request for "<< key.first << " \n";
 #endif /* FIM_CACHE_DEBUG */
+
+    		if( regexp_match(key.first.c_str(),FIM_CNS_ARCHIVE_RE,1) )
+		{
+			/* FIXME: This is a hack. One shall determine unprefetchability othwerwise. */
+			FIM_PR('j');
+			goto ret;
+		}
+
 		if(!loadNewImage(key))
 		{
 			retval = -1;
@@ -299,7 +316,7 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
 #endif /* FIM_CACHE_DEBUG */
-			if( ni->cacheable() || cacheNewImage( ni ) )
+			if( (!ni->cacheable()) || cacheNewImage( ni ) )
 				goto ret;
 		}
 		}
@@ -497,7 +514,7 @@ ret:
 		return true;
 	}
 
-	Image * Cache::useCachedImage(cache_key_t key, ViewportState *vsp)
+	Image * Cache::useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page)
 	{
 		/*
 		 * TODO: rename to get().
@@ -526,7 +543,7 @@ ret:
 			/*
 			 * no Image cached at all for this filename
 			 * */
-			image = loadNewImage(key);
+			image = loadNewImage(key,page);
 			if(!image)
 				goto ret; // bad luck!
 			if(!image->cacheable())
@@ -541,7 +558,7 @@ ret:
 			/*
 			 * at least one copy of this filename image is in cache
 			 * */
-			image=getCachedImage(key);// in this way we update the LRU cache :)
+			image = getCachedImage(key);// in this way we update the LRU cache :)
 			if(!image)
 			{
 				// critical error

@@ -107,7 +107,7 @@ class Cache
 	bool freeCachedImage(Image *image, const ViewportState *vsp);
 
 	/*	getCachedImage() and counter update */
-	Image * useCachedImage(cache_key_t key, ViewportState *vsp);
+	Image * useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page = 0);
 	
 	/* FIXME */
 	Image * setAndCacheStdinCachedImage(Image * image);
