@@ -131,8 +131,8 @@ class Browser
 	fim::string fcmd_load(const args_t &args);
 	const fim::string pop_current(void);
 	fim::string pop_current(const args_t &args);
-	bool present(const fim::string nf);
-	fim_int find_file_index(const fim::string nf);
+	bool present(const fim::string nf)const;
+	fim_int find_file_index(const fim::string nf)const;
 #ifdef FIM_READ_DIRS
 	bool push_dir(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC);
 #endif /* FIM_READ_DIRS */
