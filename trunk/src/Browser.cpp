@@ -34,6 +34,13 @@
 
 #define FIM_READ_BLK_DEVICES 1
 
+#define FIM_BROWSER_INSPECT 0
+#if FIM_BROWSER_INSPECT
+#define FIM_PR(X) printf("BROWSER:%c:%20s:%s",X,__func__,"getReport(FIM_CR_CD).c_str()\n");
+#else /* FIM_BROWSER_INSPECT */
+#define FIM_PR(X) 
+#endif /* FIM_BROWSER_INSPECT */
+
 namespace fim
 {
 	int Browser::current_n(void)const
@@ -45,6 +52,8 @@ namespace fim
 	{
 		/*
 		 */
+		fim::string result = FIM_CNS_EMPTY_RESULT;
+		FIM_PR('*');
 		if(args.size()<1)
 		{
 			/*
@@ -54,21 +63,22 @@ namespace fim
 
 			for(size_t i=0;i<flist_.size();++i)
 				fileslist += flist_[i] + fim::string(" ");
-			return fileslist;
+			result = fileslist;
+			goto ret;
 		}
 		else
 		{
 			if(args[0]=="clear")
-				return _clear_list();
-			if(args[0]=="random_shuffle")
-				return _random_shuffle();
-			if(args[0]=="sort")
-				return _sort();
-			if(args[0]=="sort_basename")
-				return _sort('b');
-			if(args[0]=="reverse")
-				return _reverse();
-			if(args[0]=="pop")
+				result = _clear_list();
+			else if(args[0]=="random_shuffle")
+				result = _random_shuffle();
+			else if(args[0]=="sort")
+				result = _sort();
+			else if(args[0]=="sort_basename")
+				result = _sort('b');
+			else if(args[0]=="reverse")
+				result = _reverse();
+			else if(args[0]=="pop")
 			{
 				/*
 				 * deletes the last image from the files list
@@ -76,67 +86,68 @@ namespace fim
 				 * filename matching based remove..
 		 		*/
 				pop();
-				return this->n_files();
+				result = this->n_files();
 			}
-			if(args[0]=="remove")
+			else if(args[0]=="remove")
 			{
 				args_t argsc(args);
 				argsc.erase(argsc.begin());
-				return do_remove(argsc);
+				result = do_remove(argsc);
 			}
-			if(args[0]=="push")
+			else if(args[0]=="push")
 			{
 				args_t argsc(args);
 				argsc.erase(argsc.begin());
-				return do_push(argsc);
+				result = do_push(argsc);
 			}
 #ifdef FIM_READ_DIRS
-			if(args[0]=="pushdir")
+			else if(args[0]=="pushdir")
 			{
 				if(args.size()>=2)
 					push_dir(args[1]);
 				else
 					push_dir(".");
-				return FIM_CNS_EMPTY_RESULT;
+				result = FIM_CNS_EMPTY_RESULT;
 			}
 
-			if(args[0]=="pushdirr")
+			else if(args[0]=="pushdirr")
 			{
 #ifdef FIM_RECURSIVE_DIRS
 				if(args.size()>=2)
 					push_dir(args[1],true);
 				else
 					push_dir(".",true);
-				return FIM_CNS_EMPTY_RESULT;
+				result = FIM_CNS_EMPTY_RESULT;
 #else /* FIM_RECURSIVE_DIRS */
-				return "Please recompile with +FIM_RECURSIVE_DIRS to activate pushdirr.";
+				result = "Please recompile with +FIM_RECURSIVE_DIRS to activate pushdirr.";
 #endif /* FIM_RECURSIVE_DIRS */
 			}
 #endif /* FIM_READ_DIRS */
-			if(args[0]=="filesnum")
+			else if(args[0]=="filesnum")
 			{
-				return n_files();
+				result = n_files();
 			}
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-			if(args[0]=="mark")
+			else if(args[0]=="mark")
 			{
 			       	cc.markCurrentFile(); 
-				goto nop;
+				goto ret;
 		       	} 
-			if(args[0]=="unmark")
+			else if(args[0]=="unmark")
 			{
 			       	cc.unmarkCurrentFile();
-			       	goto nop;
+			       	goto ret;
 		       	} 
 #else /* FIM_WANT_FILENAME_MARK_AND_DUMP */
-			if(args[0]=="mark")
-				return FIM_EMSG_NOMARKUNMARK;
-			if(args[0]=="unmark")
-				return FIM_EMSG_NOMARKUNMARK;
+			else if(args[0]=="mark")
+				result = FIM_EMSG_NOMARKUNMARK;
+			else if(args[0]=="unmark")
+				result = FIM_EMSG_NOMARKUNMARK;
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
-			return FIM_CMD_HELP_LIST;
+			else result = FIM_CMD_HELP_LIST;
 		}
-nop:
+ret:
+		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -167,6 +178,7 @@ nop:
 		 * So, this behaviour is different from reloading..
 		 */
 		fim::string c=current();
+		FIM_PR('*');
 
 		if(c_image())
 		{
@@ -184,6 +196,7 @@ nop:
 			}
 			FIM_AUTOCMD_EXEC(FIM_ACM_POSTREDISPLAY,c);
 		}
+		FIM_PR('.');
 	}
 
 #ifdef FIM_READ_STDIN_IMAGE
@@ -192,12 +205,14 @@ nop:
 		/*
 		 * this is used mainly to set image files read from pipe or stdin
 		 * */
+		FIM_PR('*');
 		if( !stdin_image || stdin_image->check_invalid() )
 			goto ret;
 		if( default_image_ )
 		       	delete default_image_;
 		default_image_ = stdin_image;
 ret:
+		FIM_PR('.');
 		return;
 	}
 #endif /* FIM_READ_STDIN_IMAGE */
@@ -300,6 +315,7 @@ nop:
 		const fim_char_t*ss = NULL;
 		int sl = 0;
 		bool pcsc = false;
+		FIM_PR('*');
 
 		if( args.size() < 1 || !(ss=args[0].c_str() ))
 			goto nop;
@@ -488,6 +504,7 @@ comeon:
 			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c);
 		}
 nop:
+		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
@@ -520,6 +537,7 @@ nop:
 	fim::string Browser::display_status(const fim_char_t *l)
 	{
 		fim_bool_t wcs = cc.isSetVar(FIM_VID_WANT_CAPTION_STATUS);
+		FIM_PR('*');
 
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
 		{
@@ -536,6 +554,7 @@ nop:
 			if(wcs)
 				wcs = cc.set_wm_caption(NULL);
 		}
+		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -545,6 +564,7 @@ nop:
 		 * displays the current image, (if already loaded), on screen
 		 */
 		fim::string c = current();
+		FIM_PR('*');
 
 		if( c_image() )
 		{
@@ -596,6 +616,7 @@ nop:
 		       	cout << "no image to display, sorry!";
 			commandConsole_.set_status_bar("no image loaded.", "*");
 		}
+		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -666,6 +687,7 @@ ret:
 		 *
 		 * an attempt to load the current image
 		 * */
+		FIM_PR('*');
 		try
 		{
 #ifndef FIM_BUGGED_CACHE
@@ -708,6 +730,7 @@ ret:
 //		commented temporarily for safety reasons
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
+		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -732,10 +755,11 @@ ret:
 #ifdef FIM_BUGGED_CACHE
 		return " prefetching disabled";
 #endif /* FIM_BUGGED_CACHE */
+		FIM_PR('*');
 
 			FIM_AUTOCMD_EXEC(FIM_ACM_PREPREFETCH,current());
 		if( args.size() > 0 )
-			return FIM_CNS_EMPTY_RESULT;
+			goto ret;
 
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,0);
 		if(cache_.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
@@ -752,6 +776,8 @@ ret:
 #endif /* FIM_AUTOSKIP_FAILED */
 			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPREFETCH,current());
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,1);
+ret:
+		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -763,10 +789,12 @@ ret:
 		 * tries to load a new one from the current filename
 		 */
 		fim::string c = current();
+		fim::string result;
 
+		FIM_PR('*');
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if( empty_file_list() )
-			return "sorry, no image to reload\n";
+		{ result = "sorry, no image to reload\n"; goto ret; }
 		FIM_AUTOCMD_EXEC(FIM_ACM_PRERELOAD,c);
 #if FIM_HORRIBLE_CACHE_INVALIDATING_HACK
 		if( args.size() > 0 )
@@ -785,7 +813,10 @@ ret:
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(c);
 		FIM_AUTOCMD_EXEC(FIM_ACM_POSTRELOAD,c);
-		return FIM_CNS_EMPTY_RESULT;
+		result = FIM_CNS_EMPTY_RESULT;
+ret:
+		FIM_PR('.');
+		return result;
 	}
 
 	fim::string Browser::fcmd_load(const args_t &args)
@@ -850,6 +881,7 @@ ret:
 		struct dirent *de = NULL;
 		fim::string f;
 		bool retval = false;
+		FIM_PR('*');
 
 		if(cc.getIntVariable(FIM_VID_PRELOAD_CHECKS)!=1)
 			goto nostat;
@@ -909,6 +941,7 @@ nostat:
 		}
 ret:
 		retval = ( closedir(dir) == 0 );
+		FIM_PR('.');
 		return retval;
 	}
 #endif /* FIM_READ_DIRS */
@@ -920,6 +953,7 @@ ret:
 		 * are we sure we want no repetition!????
 		 * */
 		bool retval = false;
+		FIM_PR('*');
 
 		if( nf == FIM_STDIN_IMAGE_NAME )
 			goto isfile;
@@ -1008,6 +1042,7 @@ isdir:
 		retval = push_dir(nf,pf);
 #endif /* FIM_READ_DIRS */
 ret:
+		FIM_PR('.');
 		return retval;
 	}
 	
@@ -1105,6 +1140,7 @@ struct FimBaseNameSorter
 		const char *rso = cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) ? cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str() : "bi";
 		int rsic = 1; /* ignore case */
 		int rsbn = 1; /* base name */
+		FIM_PR('*');
 
 		if ( rso && strchr(rso,'i') )
 			rsic = 1;
@@ -1166,6 +1202,7 @@ struct FimBaseNameSorter
 						args[0]+
 						fim::string("\"")).c_str(),NULL);
 nop:
+		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -1174,10 +1211,12 @@ nop:
 		/*
 		 *	FIX ME: ultimately, all file transitions should pass by here.
 		 */
+		fim::string result = FIM_CNS_EMPTY_RESULT;
 		int N = flist_.size();
+		FIM_PR('*');
 
 		if( !N )
-			return FIM_CNS_EMPTY_RESULT;
+			goto ret;
 
 		if( !isfg )
 #if FIM_WANT_BDI
@@ -1186,9 +1225,11 @@ nop:
 		if( N==1 && c_image() && c_image()->is_multipage())
 #endif	/* FIM_WANT_BDI */
 		{
-			if(0)std::cout<<"goto page "<<n<<FIM_CNS_NEWLINE;
+			//if(1)std::cout<<"goto page "<<n<<FIM_CNS_NEWLINE;
+			FIM_PR(' ');
 			image()->goto_page(n);
-			return N;
+			result = N;
+			goto ret;
 		}
 #if FIM_WANT_GOTOLAST
 		if(getGlobalIntVariable(FIM_VID_LASTFILEINDEX) != current_image())
@@ -1199,7 +1240,11 @@ nop:
 		setGlobalVariable(FIM_VID_PAGE ,(fim_int)0);
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
-		fim::string result = n_files()?(flist_[current_n()]):nofile_;
+		if(isfg)
+			loadCurrentImage();
+		result = n_files()?(flist_[current_n()]):nofile_;
+ret:
+		FIM_PR('.');
 		return result;
 	}
 
@@ -1250,6 +1295,7 @@ nop:
 		//const int cf=cf_,cp=c_page(),pc=n_pages(),fc=n_files();
 		const int cf = cf_,cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages()),fc = n_files();
 		int gv = 0,nf = cf,mv = 0,np = cp;
+		FIM_PR('*');
 
 		if( n_files() == 0 || !s )
 		{
@@ -1365,6 +1411,7 @@ nop:
 			}
 			else
 			{
+				np = 0;
 				if( isrj )
 					{nf = cf + gv;}// FIXME: what if gv gv<1 ? pity :)
 				else
@@ -1397,6 +1444,7 @@ nop:
 					argsc.push_back(last_regexp_);
 				else
 					argsc.push_back(string(s).substr(1,sl-2));
+				FIM_PR('.');
 				return regexp_goto(argsc,src_dir);
 			}
 go_jump:
@@ -1409,13 +1457,15 @@ go_jump:
 					image()->goto_page(np);
 				else
 					goto_image(nf,isfg?true:false);
+
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,c); }
 			}
 		}
 ret:
-		return FIM_CNS_EMPTY_RESULT;
+		errmsg = FIM_CNS_EMPTY_RESULT;
 err:
+		FIM_PR('.');
 		return errmsg;
 	}
 
