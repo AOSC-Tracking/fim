@@ -26,7 +26,7 @@
 	#include <time.h>
 #endif /* HAVE_SYS_TIME_H */
 
-#define FIM_CACHE_INSPECT 0
+#define FIM_CACHE_INSPECT 1
 #if FIM_CACHE_INSPECT
 #define FIM_PR(X) printf("CACHE:%c:%20s:%s",X,__func__,getReport(FIM_CR_CD).c_str());
 #else /* FIM_CACHE_INSPECT */
@@ -285,7 +285,7 @@ ret:
 		return retval;
 	}
 
-	Image * Cache::loadNewImage(cache_key_t key)
+	Image * Cache::loadNewImage(cache_key_t key, fim_page_t page)
 	{
 		Image *ni = NULL;
 		FIM_PR(' ');
@@ -294,7 +294,7 @@ ret:
 		/*	load attempt as alternative approach	*/
 		try
 		{
-		if( ( ni = new Image(key.first.c_str()) ) )// FIXME
+		if( ( ni = new Image(key.first.c_str(), NULL, page) ) )
 		{	
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";

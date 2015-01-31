@@ -32,6 +32,13 @@
 #include <thread>
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
+#define FIM_IMAGE_INSPECT 1
+#if FIM_IMAGE_INSPECT
+#define FIM_PR(X) printf("IMAGE:%c:%20s: f:%d/%d p:%d/%d\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),getIntVariable(FIM_VID_PAGES));
+#else /* FIM_IMAGE_INSPECT */
+#define FIM_PR(X) 
+#endif /* FIM_IMAGE_INSPECT */
+
 #if FIM_WANT_PIC_CMTS
 	std::ostream& operator<<(std::ostream &os, const ImgDscs & id)
 	{
@@ -94,7 +101,7 @@ namespace fim
 		return img_->i.height;
 	}
 
-	Image::Image(const fim_char_t *fname, FILE*fd):
+	Image::Image(const fim_char_t *fname, FILE*fd, fim_page_t page):
 		scale_(0.0),
 		ascale_(0.0),
 		newscale_(0.0),
@@ -118,7 +125,7 @@ namespace fim
 		 *	an image object is created from an image filename
 		 */
 		reset();	// pointers blank
-		if( !load(fname,fd,getGlobalIntVariable(FIM_VID_PAGE)) || check_invalid() || (!fimg_) ) 
+		if( !load(fname,fd,/*getGlobalIntVariable(FIM_VID_PAGE)*/page) || check_invalid() || (!fimg_) ) 
 		{
 			// FIXME: sometimes load() intentionally skips a file. an appropriate message shall be printed out
 			cout << "warning : invalid loading "<<fname<<" ! \n";
@@ -233,8 +240,10 @@ void fim_background_load()
 		 *	an image is loaded and initializes this image.
 		 *	returns false if the image does not load
 		 */
+		bool retval = false;
+		FIM_PR('*');
 		if(fname==NULL && fname_==FIM_CNS_EMPTY_STRING)
-			return false;//no loading = no state change
+			goto ret;//no loading = no state change
 		this->free();
 		fname_=fname;
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
@@ -298,13 +307,14 @@ void fim_background_load()
 		{
 			cout<<"warning : image loading error!\n"   ;
 			invalid_=true;
-			return false;
+			goto ret;
 		}
 		else
 		       	page_=want_page;
 		//cout<<"loaded page "<< want_page<<" to "<<((int*)this)<<"\n";
 
 #ifdef FIM_NAMESPACES
+		setVariable(FIM_VID_PAGES  ,(fim_int)fimg_->i.npages);
 		setVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
 		setVariable(FIM_VID_WIDTH ,(fim_int)fimg_->i.width );
 		setVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
@@ -330,7 +340,10 @@ void fim_background_load()
 	
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 			cc.browser_.display_status(cc.browser_.current().c_str()); /* FIXME: an ugly way to force the proper status display */
-		return true;
+		FIM_PR('.');
+		retval = true;
+ret:
+		return retval;
 	}
 
 	Image::~Image(void)
@@ -1057,20 +1070,25 @@ labeldone:
 	bool Image::goto_page(fim_page_t j)
 	{
 		string s=fname_;
+		bool retval = false;
 	//	if( j>0 )--j;
+		FIM_PR('*');
 		if( !fimg_ )
-			return false;
+			goto ret;
 		if( j<0 )
 			j=fimg_->i.npages-1;
 		if( j>page_ ? have_nextpage(j-page_) : have_prevpage(page_-j) )
 		{
 			//if(0)cout<<"about to goto page "<<j<<"\n";
 			setGlobalVariable(FIM_VID_PAGE ,(fim_int)j);
-			return load(s.c_str(),NULL,j);
+			retval = load(s.c_str(),NULL,j);
 			//return true;
 		}
 		else
-			return false;
+			goto ret;
+ret:
+		FIM_PR('.');
+		return retval;
 	} 
 
 	bool Image::next_page(int j)

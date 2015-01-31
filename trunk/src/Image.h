@@ -70,7 +70,7 @@ class Image
 
 	public:
 
-	Image(const fim_char_t *fname, FILE *fd=NULL);
+	Image(const fim_char_t *fname, FILE *fd=NULL, fim_page_t page = 0);
 	Image(const fim_char_t *fname, Foo& foo, FILE *fd=NULL);
 	~Image(void);
 

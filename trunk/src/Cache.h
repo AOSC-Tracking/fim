@@ -2,7 +2,7 @@
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ class Cache
 	fim_time_t last_used(cache_key_t key)const;
 
 	bool cacheNewImage( fim::Image* ni );
-	Image * loadNewImage(cache_key_t key);
+	Image * loadNewImage(cache_key_t key, fim_page_t page = 0);
 
 	/*	returns an image from the cache or loads it from disk marking it as used in the LRU (internal) */
 	Image * getCachedImage(cache_key_t key);

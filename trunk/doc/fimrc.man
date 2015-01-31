@@ -861,6 +861,10 @@ pagecount
 [internal,out,experimental] the page count for a given image
 .fi
 .B
+pages
+[internal,out,experimental] the current number of pages of an image (i:) 
+.fi
+.B
 random
 [internal,out] a pseudorandom number
 .fi
