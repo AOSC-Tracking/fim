@@ -157,7 +157,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 					mc_,
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					fopts
-					); if(sdld && sdld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=NULL;}
+					);
+		       	if(sdld && sdld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=NULL;}
 			if(sdld && displaydevice_==NULL)
 			{
 				displaydevice_=sdld;

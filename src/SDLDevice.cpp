@@ -1102,6 +1102,7 @@ err:
 		cc.setVariable(FIM_VID_SCREEN_HEIGHT,current_h_);
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		// textual console reformatting
+		//mc_.setRows ( get_chars_per_column()/(2*f_->height) );
 		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f_->height));
 		mc_.reformat(    width() /    f_->width   );
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
