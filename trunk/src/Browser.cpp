@@ -850,9 +850,12 @@ ret:
 		 */
 		fim_int fi = -1;
 #if 1
-		for(args_t::const_iterator fi=flist_.begin();fi!=flist_.end();++fi)
-			if( *fi == nf )
+		for(args_t::const_iterator fit=flist_.begin();fit!=flist_.end();++fit)
+			if( *fit == nf )
+			{
+				fi = fit - flist_.begin();
 				goto ret;
+			}
 #else
 		for(fim_size_t i=0;i<flist_.size();++i)
 			if( flist_[i] == nf )
