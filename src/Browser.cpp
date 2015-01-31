@@ -34,9 +34,9 @@
 
 #define FIM_READ_BLK_DEVICES 1
 
-#define FIM_BROWSER_INSPECT 0
+#define FIM_BROWSER_INSPECT 1
 #if FIM_BROWSER_INSPECT
-#define FIM_PR(X) printf("BROWSER:%c:%20s:%s",X,__func__,"getReport(FIM_CR_CD).c_str()\n");
+#define FIM_PR(X) printf("BROWSER:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),-1,current().c_str());
 #else /* FIM_BROWSER_INSPECT */
 #define FIM_PR(X) 
 #endif /* FIM_BROWSER_INSPECT */
@@ -56,9 +56,7 @@ namespace fim
 		FIM_PR('*');
 		if(args.size()<1)
 		{
-			/*
-			 * returns a string with the info about the files in list (const op)
-			 */
+			/* returns a string with the info about the files in list (const op) */
 			fim::string fileslist;
 
 			for(size_t i=0;i<flist_.size();++i)
@@ -80,11 +78,7 @@ namespace fim
 				result = _reverse();
 			else if(args[0]=="pop")
 			{
-				/*
-				 * deletes the last image from the files list
-				 * FIX ME :
-				 * filename matching based remove..
-		 		*/
+				/* deletes the last image from the files list.  someday may add filename matching based remove..  */
 				pop();
 				result = this->n_files();
 			}
@@ -153,9 +147,6 @@ ret:
 
 	std::ostream& Browser::print(std::ostream &os)const
 	{
-		/*
-		 * accessory method
-		 */
 		for(size_t i=0; i<flist_.size(); ++i)
 			os << flist_[i] << FIM_CNS_NEWLINE;
 		return os;
@@ -163,9 +154,7 @@ ret:
 
 	fim::string Browser::fcmd_redisplay(const args_t &args)
 	{
-		/*
-		 * for now redisplaying is optionless
-		 */
+		/* ...shall merge with fcmd_display() */
 		redisplay();
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -173,9 +162,8 @@ ret:
 	void Browser::redisplay(void)
 	{
 		/*
-		 * Given a current() file, we display it again like 
-		 * the first time it should be displayed.
-		 * So, this behaviour is different from reloading..
+		 * Given the current() file, display it again like the first time.
+		 * This behaviour is different from reloading.
 		 */
 		fim::string c=current();
 		FIM_PR('*');
@@ -190,7 +178,7 @@ ret:
 				 * should be:
 				 * viewport().redisplay();
 				 */
-				viewport()->recenter(); // 20131020 this shall center as default
+				viewport()->recenter();
 				if( commandConsole_.redisplay() )
 					this->display_status(current().c_str());
 			}
@@ -223,10 +211,7 @@ ret:
 #endif /* FIM_NAMESPACES */
 		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
 	{	
-		/*
-		 * we initialize to no file the current file name
-		 */
-		cf_ = 0;	//and to file index 0 (no file)
+		cf_ = 0;
 	}
 
 	const fim::string Browser::pop_current(void)
@@ -697,6 +682,7 @@ ret:
 		if( viewport() )
 		{
 			ViewportState viewportState;
+			FIM_PR('0');
 			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState) );// FIXME
 			viewport()->setState(viewportState);
 		}
@@ -705,11 +691,13 @@ ret:
 	#ifdef FIM_READ_STDIN_IMAGE
 		if( current() != FIM_STDIN_IMAGE_NAME )
 		{
+			FIM_PR('1');
 			if(viewport())
 				viewport()->setImage( new Image(current().c_str()) );
 		}
 		else
 		{
+			FIM_PR('2');
 			if( viewport() && default_image_ )
 			{
 				// a one time only image (new, experimental)
@@ -718,6 +706,7 @@ ret:
 			}
 		}
 	#else
+		FIM_PR('3');
 		if( viewport() )
 			viewport()->setImage( new Image(current().c_str()) );
 	#endif /* FIM_READ_STDIN_IMAGE */
@@ -725,6 +714,7 @@ ret:
 		}
 		catch(FimException e)
 		{
+			FIM_PR('E');
 			if(viewport())
 				viewport()->setImage( NULL );
 //		commented temporarily for safety reasons
@@ -747,11 +737,6 @@ ret:
 
 	fim::string Browser::fcmd_prefetch(const args_t &args)
 	{
-		/*
-		 * fetches in the cache_ the next image..
-		 *
-		 * FIX ME : enrich this behaviour
-		 * */
 #ifdef FIM_BUGGED_CACHE
 		return " prefetching disabled";
 #endif /* FIM_BUGGED_CACHE */
@@ -1245,11 +1230,13 @@ nop:
 #endif /* FIM_WANT_GOTOLAST */
 		cf_ = n;
 		cf_ = FIM_MOD(cf_,N);
+		FIM_PR(' ');
 		setGlobalVariable(FIM_VID_PAGE ,(fim_int)0);
-		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
+		//setGlobalVariable(FIM_VID_FILEINDEX,current_image());
+		setGlobalVariable(FIM_VID_FILEINDEX,cf_);
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
-		if(isfg)
-			loadCurrentImage();
+		FIM_PR(' ');
+		//loadCurrentImage();
 		result = n_files()?(flist_[current_n()]):nofile_;
 ret:
 		FIM_PR('.');

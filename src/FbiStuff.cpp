@@ -51,6 +51,13 @@
 #define FIM_WANTS_SLOW_RESIZE 1
 #define FIM_WVMM 0 /* want verbose mip maps (for FIM_WANT_EXPERIMENTAL_MIPMAPS) */
 
+#define FIM_FBISTUFF_INSPECT 1
+#if FIM_FBISTUFF_INSPECT
+#define FIM_PR(X) printf("FBISTUFF:%c:%20s\n",X,__func__);
+#else /* FIM_FBISTUFF_INSPECT */
+#define FIM_PR(X) 
+#endif /* FIM_FBISTUFF_INSPECT */
+
 namespace fim
 {
 
@@ -1605,6 +1612,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
 
+    FIM_PR('*');
     if( re == FIM_CNS_EMPTY_STRING )
 	    re = FIM_CNS_ARCHIVE_RE;
 #endif /* FIM_WITH_ARCHIVE */
@@ -1650,7 +1658,6 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
     } else fp=fd;
 
 #if FIM_WITH_ARCHIVE
-    vl = 1; // FIXME
     if( regexp_match(filename,re.c_str(),1) )
     {
 	struct archive *a = NULL;
@@ -1754,13 +1761,13 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 			else
 			{
 				//archive_read_data_skip(a);
-				printf("SKIPPING MATCHING [%d/%d] %s in %s\n",pi,page,pn,filename);
+				if(vl)printf("SKIPPING MATCHING [%d/%d] %s in %s\n",pi,page,pn,filename);
 			}
 			++pi;
 		}
 		else
 		{
-			printf("SKIPPING NON MATCHING [%d/%d] %s in %s\n",pi,page,pn,filename);
+			if(vl)printf("SKIPPING NON MATCHING [%d/%d] %s in %s\n",pi,page,pn,filename);
 			//archive_read_data_skip(a);
 		}
 	}
@@ -1769,7 +1776,6 @@ ena:
 	archive_read_free(a);
 noa:	1;
     }
-    vl = 0; // FIXME
 #endif /* FIM_WITH_ARCHIVE */
     //size_t read_offset=cc.getIntVariable("g:" FIM_VID_OPEN_OFFSET);
     read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
@@ -2138,6 +2144,7 @@ errl:
     if(sbuf)fim_free(sbuf);
 #endif /* FIM_SHALL_BUFFER_STDIN */
 ret:
+    FIM_PR('.');
     return img;
 }
 

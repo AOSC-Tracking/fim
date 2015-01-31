@@ -523,6 +523,7 @@ namespace fim
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
 #define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
 #define FIM_VID_PAGE				"page"			/* "[internal,out,experimental] the current page" */
+#define FIM_VID_PAGES				"pages"			/* "[internal,out,experimental] the current number of pages of an image (i:) " */
 #define FIM_VID_PAGECOUNT			"pagecount"			/* "[internal,out,experimental] the page count for a given image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal] if 1, will inhibit display" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
