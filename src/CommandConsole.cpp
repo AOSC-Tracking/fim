@@ -653,8 +653,11 @@ err:
 		{
 			if(it_buf>0)
 			{
+				fim_int nit_buf = it_buf;
 				it_buf*=10;
 				it_buf+=c - FIM_KEY_OFFSET;
+				if( it_buf < nit_buf )
+					it_buf = nit_buf;
 			}
 			else
 			       	it_buf=c - FIM_KEY_OFFSET;
@@ -672,16 +675,14 @@ err:
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
 			{
-				fim_int m = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
+				fim_int mit = getIntVariable(FIM_VID_MAX_ITERATED_COMMANDS);
 				fim::string nc;
-				/*
-				 *  A non positive value of  _max_iterated_commands
-				 *  will imply no limits on it_buf.
-				 *
-				 *  We can't assume the user is not so dumb to set a near 31 bits value..
-				 */
-				if(m>0 && m+1>0)
-					it_buf=it_buf%(m+1);
+
+				if(mit>0 && it_buf > mit)
+				{
+					cout << "Command repeat parameter of " << it_buf << " exceeds the maximum allowed value of " << mit << ". You can adjust " FIM_VID_MAX_ITERATED_COMMANDS " to raise this limit.\n";
+					it_buf = FIM_MIN(mit,it_buf);
+				}
 				nc=it_buf;
 				if(it_buf>1)
 					nc+="{"+getBoundAction(c)+"}";
@@ -689,7 +690,7 @@ err:
 				else
 					nc = getBoundAction(c);
 					
-				cout << "about to execute " << nc << "\n";
+				cout << "About to execute " << nc << " .\n";
 				status=execute_internal(nc.c_str(),FIM_X_HISTORY);
 				it_buf=-1;
 			}
