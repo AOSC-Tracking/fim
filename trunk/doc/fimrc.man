@@ -142,6 +142,7 @@ See \fR\fIregex\fR(1) for regular expression syntax.
 The way some one\-line statements are evaluated:
 
 .nf
+:       enter command line mode
 :{number}       jump to {number}^th image in the list
 :^	        jump to first image in the list
 :$	        jump to last image in the list
