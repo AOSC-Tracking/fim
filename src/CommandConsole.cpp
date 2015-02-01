@@ -2203,7 +2203,7 @@ ok:
 	{
 		bool wcs = true;
 #if FIM_WANT_CAPTION_CONTROL
-		int rc;
+		fim_err_t rc=FIM_ERR_NO_ERROR;
 		string wcss = getStringVariable(FIM_VID_WANT_CAPTION_STATUS);
 
 		if( wcss.c_str() && *wcss.c_str() && browser_.c_image())
@@ -2230,9 +2230,6 @@ ok:
 		 *	- desc will be placed on the left corner
 		 *	- info on the right
 		 *	Pointers are meant to be freed by the caller.
-		 *
-		 *	TODO: need a printf-like general functionality.
-		 *	FIX ME : does this function always draw ?
 		 */
 		int chars, ilen;
 		fim_char_t *str = NULL;
@@ -2243,7 +2240,6 @@ ok:
 		int hpl=fim_strlen(hp);
 		prompt_[1]=FIM_SYM_CHAR_NUL;
 		fim_bool_t wcs = isSetVar(FIM_VID_WANT_CAPTION_STATUS);
-		fim_err_t rc=FIM_ERR_NO_ERROR;
 	
 		if( ! displaydevice_   )
 		       	goto ret;
@@ -2333,7 +2329,7 @@ ok:
 			wcs = set_wm_caption(str);
 		if(!wcs)
 #endif /* FIM_WANT_CAPTION_CONTROL */
-			rc=displaydevice_->status_line((const fim_char_t*)str);
+			displaydevice_->status_line((const fim_char_t*)str); /* one may check the return value.... */
 done:
 		fim_free(str);
 ret:
