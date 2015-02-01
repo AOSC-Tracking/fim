@@ -406,6 +406,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 
 #define FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP \
 ".nf\n"\
+":" "       enter command line mode\n"\
 ":" FIM_CNS_EX_NUM_STRING "       jump to " FIM_CNS_EX_NUM_STRING "^th image in the list\n"\
 ":^	        jump to first image in the list\n"\
 ":$	        jump to last image in the list\n"\
