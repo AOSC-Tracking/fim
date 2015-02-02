@@ -829,7 +829,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 {
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
-	fim_char_t imagemode[3],*imp;
+	fim_char_t imagemode[4],*imp;
 	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	fim::string ifs;
@@ -849,6 +849,14 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
+	if(orientation_!=FIM_NO_ROT)
+	{
+		if(orientation_==FIM_ROT_1Q) *(imp++)='L';
+		else
+		if(orientation_==FIM_ROT_2Q) *(imp++)='U';
+		else
+		if(orientation_==FIM_ROT_3Q) *(imp++)='R';
+	}
 	*imp=FIM_SYM_CHAR_NUL;
 
 	if(fimg_ && fimg_->i.npages>1)
