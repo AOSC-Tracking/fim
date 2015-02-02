@@ -24,6 +24,8 @@
 #define FIM_C_K 1024
 #define FIM_C_M (FIM_C_K*FIM_C_K)
 
+#define FIM_WANT_ASCALE_FRIENDLY_ROTATION 1
+
 /*
  * TODO :
  *	Windowing related problems:
@@ -360,6 +362,11 @@ namespace fim
 					cc.set_status_bar("please wait while rescaling...", "*");
 			}
 
+#if FIM_WANT_ASCALE_FRIENDLY_ROTATION
+			if( img_ && orientation_!= 0 && orientation_ !=  2 )
+				if( newascale != 1.0 )
+					newascale = 1.0 / newascale;
+#endif /* FIM_WANT_ASCALE_FRIENDLY_ROTATION */
 #define FIM_PROGRESSIVE_RESCALING 0
 #if FIM_PROGRESSIVE_RESCALING
 			/*
@@ -377,6 +384,11 @@ namespace fim
 #else
 			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale);
 #endif /* FIM_PROGRESSIVE_RESCALING */
+#if FIM_WANT_ASCALE_FRIENDLY_ROTATION
+			if( img_ && orientation_!= 0 && orientation_ !=  2 )
+				if( newascale != 1.0 )
+					newascale = 1.0 / newascale;
+#endif /* FIM_WANT_ASCALE_FRIENDLY_ROTATION */
 			/* orientation_ can be 0,1,2,3 */
 			if( img_ && orientation_!=0 && orientation_ != 2)
 			{
