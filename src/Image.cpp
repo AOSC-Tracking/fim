@@ -39,6 +39,8 @@
 #define FIM_PR(X) 
 #endif /* FIM_IMAGE_INSPECT */
 
+#define FIM_WANT_ASCALE_FRIENDLY_ROTATION 1
+
 #if FIM_WANT_PIC_CMTS
 	std::ostream& operator<<(std::ostream &os, const ImgDscs & id)
 	{
@@ -527,6 +529,11 @@ ret:
 			if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 				cc.set_status_bar("please wait while rescaling...", "*");
 
+#if FIM_WANT_ASCALE_FRIENDLY_ROTATION
+			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
+				if( newascale != 1.0 )
+					newascale = 1.0 / newascale;
+#endif /* FIM_WANT_ASCALE_FRIENDLY_ROTATION */
 #define FIM_PROGRESSIVE_RESCALING 0
 #if FIM_PROGRESSIVE_RESCALING
 			/*
@@ -548,6 +555,11 @@ ret:
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 					);
 #endif /* FIM_PROGRESSIVE_RESCALING */
+#if FIM_WANT_ASCALE_FRIENDLY_ROTATION
+			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
+				if( newascale != 1.0 )
+					newascale = 1.0 / newascale;
+#endif /* FIM_WANT_ASCALE_FRIENDLY_ROTATION */
 			/* orientation_ can be 0,1,2,3 */
 			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
 			{
