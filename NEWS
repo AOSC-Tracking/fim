@@ -57,6 +57,7 @@
  * -R / --recursive switch to turn on recursive push of command line specified directories (r746*)
  * added a 'list "pushdirr"' command, working like "pushdir" but recursive (r746*)
  * the _fbfont variable will contain the current console font file string (r767*)
+ * if _want_exif_orientation is set, images will be reoriented according to EXIF metadata (r769!*)
 
                 Version 0.4
 

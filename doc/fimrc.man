@@ -818,6 +818,10 @@ _want_caption_status
 [internal,in] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non\-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version.
 .fi
 .B
+_want_exif_orientation
+[internal,in] if 1, will reorient images using information in EXIF metadata.
+.fi
+.B
 _want_prefetch
 [internal,in] if 1, will prefetch further files just after display of the first file
 .fi
@@ -943,6 +947,7 @@ if(_console_key==''){_console_key=58;}
 if(_display_as_binary==''){_display_as_binary=0;}
 if(_preload_checks==''){_preload_checks=1;}
 #if(_want_caption_status==''){_want_caption_status=0;}
+if(_want_exif_orientation==''){_want_exif_orientation=1;}
 if(ascale==''){ascale="1.0";}
 if(_use_mipmaps==''){_use_mipmaps=1;}
 #

@@ -23,6 +23,7 @@ fim_var_help_db[FIM_VID_PUSHDIR_RE]= "[internal,in] regular expression to match 
 fim_var_help_db[FIM_VID_STATUS_LINE]= "[internal,in] if 1, will display the status bar" ;
 fim_var_help_db[FIM_VID_WANT_PREFETCH]= "[internal,in] if 1, will prefetch further files just after display of the first file" ;
 fim_var_help_db[FIM_VID_WANT_SLEEPS]= "[internal,in] number of seconds of sleep during slideshow mode" ;
+fim_var_help_db[FIM_VID_WANT_EXIF_ORIENTATION]= "[internal,in] if 1, will reorient images using information in EXIF metadata." ;
 fim_var_help_db[FIM_VID_AUTOTOP]= "[internal,in] if 1, will align to the top freshly loaded images" ;
 fim_var_help_db[FIM_VID_SCALE_STYLE]= "[internal,in] if non empty, this string will be fed to the scale command" ;
 fim_var_help_db[FIM_VID_FILEINDEX]= "[internal,out] the current image numeric index" ;
