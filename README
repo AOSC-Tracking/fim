@@ -208,13 +208,16 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  make tests-all
 
 --------------------------------------------------------------------------------
-	4.6		Example: compiling FIM from repository on Ubuntu 11.04
+	4.6		Example: compiling FIM from repository on Ubuntu/Debian:
 
  sudo apt-get install subversion
- sudo apt-get install automake autoconf libtool libreadline6-dev
+ sudo apt-get install automake autoconf libtool
+ sudo apt-get install libreadline-dev libexif-dev
  sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libgif-dev
  sudo apt-get install libsdl1.2-dev libaa1-dev 
+ # experimental:
  sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
+ sudo apt-get install libarchive-dev
  svn co http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ fim
  cd fim
  ./configure --enable-poppler --enable-aa --enable-sdl
