@@ -250,6 +250,97 @@ void fim_background_load()
 }
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
+static void ers(const char*value, Image *image)
+{
+		/* FIXME: shall clean up this function! */
+		// value can be of the form "X - Y", with X and Y in
+		// {top,bottom,left,right}
+		// here we handle only
+		// on: http://sylvana.net/jpegcrop/exif_orientation.html 
+		// we got the following combinations:
+		// Value	0th Row	0th Column
+		// 1	top	left side
+		// 2	top	right side
+		// 3	bottom	right side
+		// 4	bottom	left side
+		// 5	left side	top
+		// 6	right side	top
+		// 7	right side	bottom
+		// 8	left side	bottom
+		//
+		// neatly depicted in an F letter example:
+		//
+		//   1        2       3      4         5            6           7          8
+		//
+		//   888888  888888      88  88      8888888888  88                  88  8888888888
+		//   88          88      88  88      88  88      88  88          88  88      88  88
+		//   8888      8888    8888  8888    88          8888888888  8888888888          88
+		//   88          88      88  88
+		//   88          88  888888  888888
+		//
+		// note that (in this order):
+		// 2,3,5,7 want a mirror transformation
+		// 4,3 want a flip transformation
+		// 7,8 want a cw rotation
+		// 5,6 want a ccw rotation
+		//
+		bool shouldmirror,shouldrotatecw,shouldrotateccw,shouldflip;
+	       	fim_char_t r,c;
+		const fim_char_t *p = NULL;
+		fim_char_t f;
+
+		if(!value || NULL == strchr(value,'-'))
+			goto uhmpf;
+
+		p = strchr(value,'-')+1;
+		r=tolower(value[0]);
+		c=tolower(p[0]);
+		switch(r)
+		{
+			case 't':
+			switch(c){
+				case 'l':f=1; break;
+				case 'r':f=2; break;
+				default: f=0;
+			} break;
+			case 'b':
+			switch(c){
+				case 'r':f=3; break;
+				case 'l':f=4; break;
+				default: f=0;
+			} break;
+			case 'l':
+			switch(c){
+				case 't':f=5; break;
+				case 'b':f=8; break;
+				default: f=0;
+			} break;
+			case 'r':
+			switch(c){
+				case 't':f=6; break;
+				case 'b':f=7; break;
+				default: f=0;
+			} break;
+			default: f=0;
+		}
+		if(f==0)
+			goto uhmpf;
+		shouldmirror=(f==2 || f==4 || f==5 || f==7);
+		shouldflip=(f==4 || f==3);
+		shouldrotatecw=(f==5 || f==6);
+		shouldrotateccw=(f==7 || f==8);
+		//std::cout << "EXIF_TAG_ORIENTATION FOUND !\n",
+		//std::cout << "VALUE: " <<(int)f << r<< c<<
+		//shouldmirror<< shouldrotatecw<< shouldrotateccw<< shouldflip,
+		//std::cout << "\n";
+		if(shouldrotateccw)image->setVariable("__exif_orientation",1);
+		if(shouldrotatecw)image->setVariable("__exif_orientation",3);
+		//if(shouldmirror)image->setVariable("exif_mirrored",1);
+		//if(shouldflip)image->setVariable("exif_flipped",1);
+uhmpf:
+		return;
+	}
+
 	bool Image::load(const fim_char_t *fname, FILE* fd, int want_page)
 	{
 		/*
@@ -356,6 +447,9 @@ void fim_background_load()
 	
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 			cc.browser_.display_status(cc.browser_.current().c_str()); /* FIXME: an ugly way to force the proper status display */
+		if(isSetVar("EXIF_Orientation"))
+			ers(getStringVariable("EXIF_Orientation").c_str(),this);
+
 		FIM_PR('.');
 		retval = true;
 ret:
@@ -528,6 +622,7 @@ ret:
 
 			if(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 				cc.set_status_bar("please wait while rescaling...", "*");
+
 
 #if FIM_WANT_ASCALE_FRIENDLY_ROTATION
 			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
@@ -1072,8 +1167,11 @@ labeldone:
 		/*
 		 * warning : this should work more intuitively
 		 * */
+		fim_int eo = FIM_NO_ROT, weo = cc.getIntVariable(FIM_VID_WANT_EXIF_ORIENTATION);
+		eo += getIntVariable("__exif_orientation") * ( weo ? 1 : 0 );
 		return (FIM_MOD(
-		(  getIntVariable(FIM_VID_ORIENTATION)
+		( eo +
+	       	 getIntVariable(FIM_VID_ORIENTATION)
 		+getGlobalIntVariable("v:" FIM_VID_ORIENTATION)
 		+getGlobalIntVariable(FIM_VID_ORIENTATION)
 		) ,4));
