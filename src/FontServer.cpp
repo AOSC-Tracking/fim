@@ -38,6 +38,7 @@
 #define FIM_PSF2_MAGIC2     0x4a
 #define FIM_PSF2_MAGIC3     0x86
 #define FIM_MAX_FONT_HEIGHT 256
+#define FIM_SAVE_CONSOLEFONTNAME(CFN) cc.setVariable(FIM_VID_FBFONT,CFN);
 namespace fim
 {
 
@@ -47,7 +48,6 @@ namespace fim
 
 
 #if 1
-/* 20080507 unused ? */
 void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
 { 
     const fim_char_t*font=(fim_char_t*)font_;
@@ -249,6 +249,7 @@ scanlistforafontfile:
 openhardcodedfont:
     if (NULL == fontfilename)
     {
+	FIM_SAVE_CONSOLEFONTNAME(FIM_DEFAULT_HARDCODEDFONT_STRING);
     	fp=fmemopen(dfontdata,sizeof(dfontdata),"r");
 	if(fp)
 		goto gotafp;
@@ -274,6 +275,7 @@ openhardcodedfont:
 	FIM_FPRINTF(ff_stderr, "can't open %s: %s\n",fontfilename,strerror(errno));
 	goto oops;
     }
+    FIM_SAVE_CONSOLEFONTNAME(fontfilename);
 gotafp:
 {
     int m0=0,m1=0;

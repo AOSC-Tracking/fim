@@ -49,6 +49,7 @@ fim_var_help_db[FIM_VID_COMMENT_OI]= "[experimental,in] if v:_comment_over_image
 fim_var_help_db[FIM_VID_EXIFTOOL_COMMENT]= "[internal,out] comment extracted via the exiftool interface; see _use_exiftool." ;
 fim_var_help_db[FIM_VID_STEPS]= "[internal,in] the default steps, in pixels, when panning images" ;
 fim_var_help_db[FIM_VID_VERSION]= "[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  ;
+fim_var_help_db[FIM_VID_FBFONT]= "[internal,out] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." ;
 fim_var_help_db[FIM_VID_HSTEPS]= "[internal,in] the default steps, in pixels, when panning images horizontally (overrides steps)" ;
 fim_var_help_db[FIM_VID_VSTEPS]= "[internal,in] the default steps, in pixels, when panning images vertically (overrides steps)" ;
 fim_var_help_db[FIM_VID_CONSOLE_ROWS]= "[internal,in] if >0, will set the number of displayed text lines in the console" ;

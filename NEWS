@@ -56,6 +56,7 @@
  * added a _archive_files variable to specify which file names specify archives (r745*)
  * -R / --recursive switch to turn on recursive push of command line specified directories (r746*)
  * added a 'list "pushdirr"' command, working like "pushdir" but recursive (r746*)
+ * the _fbfont variable will contain the current console font file string (r767*)
 
                 Version 0.4
 

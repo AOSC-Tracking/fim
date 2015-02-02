@@ -539,7 +539,7 @@ namespace fim
 #define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[internal,out] comment extracted via the exiftool interface; see _use_exiftool." */
 #define FIM_VID_STEPS 				"_steps"				/* "[internal,in] the default steps, in pixels, when panning images" */
 #define FIM_VID_VERSION				"_fim_version"	/* "[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
-//#define FIM_FBFONT                           "_fbfont"       /* "[internal,out] current consolefont."  */
+#define FIM_VID_FBFONT                           "_fbfont"       /* "[internal,out] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." */
 #define FIM_VID_HSTEPS 				"_hsteps"				/* "[internal,in] the default steps, in pixels, when panning images horizontally (overrides steps)" */
 #define FIM_VID_VSTEPS 				"_vsteps"				/* "[internal,in] the default steps, in pixels, when panning images vertically (overrides steps)" */
 #define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[internal,in] if >0, will set the number of displayed text lines in the console" */

@@ -590,6 +590,10 @@ _exiftool_comment
 [internal,out] comment extracted via the exiftool interface; see _use_exiftool.
 .fi
 .B
+_fbfont
+[internal,out] The current console font file string. If the internal hardcoded font has been used, then its value is "fim://".
+.fi
+.B
 _file_loader
 [in] if not empty, this string will force a file loader (among the ones listed in the \-V switch output)
 .fi
