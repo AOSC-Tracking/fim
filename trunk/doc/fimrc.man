@@ -663,7 +663,7 @@ _load_default_etc_fimrc
 .fi
 .B
 _load_fim_history
-[internal,in] if 1 on startup, will load the ~/fim_history file on startup
+[internal,in] if 1 on startup, will load the ~/.fim_history file on startup
 .fi
 .B
 _lwidth
@@ -747,7 +747,7 @@ _rows
 .fi
 .B
 _save_fim_history
-[internal,in] if 1 on exit, will save the ~/fim_history file on exit
+[internal,in] if 1 on exit, will save the ~/.fim_history file on exit
 .fi
 .B
 _scale_factor_delta
