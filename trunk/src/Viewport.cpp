@@ -33,6 +33,7 @@
  * 	When windowing will be implemented, note that redisplay will be also affected
  * 	after window geometry change. Update mechanisms are needed..
  */
+#define FIM_WANT_VIEWPORT_TRANSFORM 1
 namespace fim
 {
 
@@ -394,6 +395,9 @@ namespace fim
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
 			 */
+#if FIM_WANT_VIEWPORT_TRANSFORM
+			this->transform(mirror, flip);
+#endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 #ifdef FIM_WINDOWS
 			if(commandConsole.displaydevice_ )
 			{
@@ -428,6 +432,9 @@ namespace fim
 					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
 					);
 #endif					
+#if FIM_WANT_VIEWPORT_TRANSFORM
+			this->transform(mirror, flip);
+#endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 #if FIM_WANT_PIC_CMTS
 			/* FIXME: temporary; move to fs_puts_multiline() */
 			if(image_)
@@ -789,6 +796,13 @@ namespace fim
 		}
 
 		//std::cout << vs << " " << hs << " " << ps << FIM_CNS_NEWLINE;
+		
+#if FIM_WANT_VIEWPORT_TRANSFORM
+		if(image_ && image_->getIntVariable(FIM_VID_FLIPPED)) /* FIXME: this is only i: ... */
+			vs=-vs;
+		if(image_ && image_->getIntVariable(FIM_VID_MIRRORED)) /* FIXME: this is only i: ... */
+			hs=-hs;
+#endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 
 		switch(f)
 		{
@@ -959,5 +973,12 @@ ret:
 		return;
 	}
 	Viewport& Viewport::operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
+	void Viewport::transform(bool mirror, bool flip)
+	{
+		if(mirror)
+		{ if( image_ && image_->width() > viewport_width() ) left_ = image_->width() - viewport_width() - left_; }
+		if(flip)
+		{ if( image_ && image_->height() > viewport_height() ) top_ = image_->height() - viewport_height() - top_; }
+	}
 }
 

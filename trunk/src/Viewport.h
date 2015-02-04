@@ -130,6 +130,7 @@ class Viewport:public ViewportState
 	void recenter(void);
 	virtual size_t byte_size(void)const;
 	int snprintf_centering_info(char *str, size_t size)const;
+	void transform(bool mirror, bool flip);
 };
 }
 #endif /* FIM_VIEWPORT_H */
