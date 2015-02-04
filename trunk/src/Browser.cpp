@@ -1444,11 +1444,16 @@ go:
 			{
 				args_t argsc;
 				int src_dir = 1;
-				if( c == '+' || c == '-' )
-					src_dir = ((c=='-')?-1:1),
+
+				if( c == '-' )
+					src_dir = ((c=='-')?-1:1);
+				if( (c == '+' || c == '-' ) && sl == 3 && s[1] == '/' && s[2] == '/' )
 					argsc.push_back(last_regexp_);
 				else
-					argsc.push_back(string(s).substr(1,sl-2));
+                                {
+				        int sks = (c == '+' || c == '-' ) ? 1 : 0;
+					argsc.push_back(string(s).substr(1+sks,sl-2-sks));
+                                }
 				FIM_PR('.');
 				return regexp_goto(argsc,src_dir);
 			}
