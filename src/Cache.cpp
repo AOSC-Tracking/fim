@@ -305,14 +305,14 @@ ret:
 	Image * Cache::loadNewImage(cache_key_t key, fim_page_t page)
 	{
 		Image *ni = NULL;
-		FIM_PR(' ');
+		FIM_PR('*');
 
 		FIM_LOUD_CACHE_STUFF;
 		/*	load attempt as alternative approach	*/
 		try
 		{
 		if( ( ni = new Image(key.first.c_str(), NULL, page) ) )
-		{	
+		{
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
 #endif /* FIM_CACHE_DEBUG */
@@ -322,10 +322,12 @@ ret:
 		}
 		catch(FimException e)
 		{
+			FIM_PR('E');
 			ni = NULL; /* not a big problem */
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
 ret:
+		FIM_PR(' ');
 		return ni;
 	}
 	
@@ -584,6 +586,7 @@ ret:
 				}
 				catch(FimException e)
 				{
+					FIM_PR('E');
 					/* we will survive :P */
 					image = NULL; /* we make sure no taint remains */
 //					if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
@@ -640,6 +643,7 @@ ret:
 		}
 		catch(FimException e)
 		{
+			FIM_PR('E');
 			/* we will survive :P */
 			image = NULL; /* we make sure no taint remains */
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */

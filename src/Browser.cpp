@@ -640,6 +640,7 @@ nop:
 		 * */
 		static int lehsof = 0;	/* './fim FILE NONFILE' and hitting 'prev' will make this necessary  */
 		int retval = 0;
+		FIM_PR('*');
 
 		if( lehsof )
 			goto ret; /* this prevents infinite recursion */
@@ -664,6 +665,7 @@ nop:
 			retval = 1;
 		}
 ret:
+		FIM_PR('.');
 		return retval;
 	}
 
@@ -679,13 +681,15 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::loadCurrentImage(void)
+	fim_err_t Browser::loadCurrentImage(void)
 	{
 		/*
 		 * FIXME
 		 *
 		 * an attempt to load the current image
 		 * */
+		fim_err_t errval = FIM_ERR_NO_ERROR;
+
 		FIM_PR('*');
 		try
 		{
@@ -693,7 +697,9 @@ ret:
 	#ifdef FIM_CACHE_DEBUG
 		if( viewport() ) std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif /* FIM_CACHE_DEBUG */
-		if( viewport() )
+		if( viewport()
+			&& !( current()!=FIM_STDIN_IMAGE_NAME && !is_file(current()) ) /* FIXME: this is an unelegant fix to prevent crashes on non-existent files. One shall better fix this by a good exception mechanism for Image::Image() and a clean approach w.r.t. e.g. free_current_image() */
+		)
 		{
 			ViewportState viewportState;
 			FIM_PR('0');
@@ -735,7 +741,7 @@ ret:
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
 		FIM_PR('.');
-		return FIM_CNS_EMPTY_RESULT;
+		return errval;
 	}
 
 	void Browser::free_current_image(void)

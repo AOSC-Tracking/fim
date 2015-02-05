@@ -461,10 +461,12 @@ ret:
 		/*
 		 * buffers are freed
 		 * */
+		FIM_PR('*');
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "freeing Image " << this << "\n";
 #endif /* FIM_CACHE_DEBUG */
 		this->free();
+		FIM_PR('.');
 	}
 
         bool Image::tiny(void)const
