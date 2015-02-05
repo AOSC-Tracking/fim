@@ -1125,7 +1125,7 @@ alias "sort" "list 'sort'" "sorts the files list ordered";
 #bind 'f' "next;display;";
 #bind 'b' "prev;display;";
 bind 'o' "sort";
-bind 'b' "prev_page;";
+bind 'b' "prev;";
 bind 'B' "toggleDisplayBusy";
 alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
 alias "rotate90_ccw" "i:_orientation=i:_orientation+1;i:fresh=1;i:fresh=1;redisplay;" "";

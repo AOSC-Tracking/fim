@@ -584,6 +584,7 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 ".nf\n"
 //"" FIM_ENV_FBFONT "		(just like in fbi) a consolefont or a X11 (X Font Server - xfs) font file.\n"
 "" FIM_ENV_FBFONT "		(just like in fbi) a Linux consolefont font file.\n"
+"If using a gzipped font, the " FIM_EPR_ZCAT " program will be used to uncompress it (via " FIM_MAN_fB("execvp(3)") ").\n"
 "If not specified, the following files will be probed and the first existing will be selected:\n\n");
 mp+=get_default_font_list();
 #if FIM_WANT_HARDCODED_FONT
@@ -599,9 +600,9 @@ mp+=string(
 "If unset, fim will probe for " FIM_DEFAULT_FB_FILE ".\n"
 "" FIM_CNS_TERM_VAR "		(only in fim) will influence the output device selection algorithm, especially if $" FIM_CNS_TERM_VAR "==\"screen\".\n"
 #if defined(FIM_WITH_LIBSDL)
-"" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_SDL " driver will be tried by default.\n"
+"" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_SDL " driver will be probed by default.\n"
 #elif defined(FIM_WITH_LIBIMLIB2)
-"" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_IL2 " driver will be tried by default.\n"
+"" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_IL2 " driver will be probed by default.\n"
 #endif /* FIM_WITH_LIBSDL */
 ".SH COMMON PROBLEMS\n"
 ".B fim\n"
