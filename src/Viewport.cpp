@@ -735,6 +735,15 @@ namespace fim
 	bool Viewport::place(const fim_pan_t px, const fim_pan_t py)
 	{
 		/* FIXME: find a nicer name. */
+		/* FIXME: shall merge this in an internal pan function. */
+		fim_pan_t _px = px, _py = py;
+
+#if FIM_WANT_VIEWPORT_TRANSFORM
+		if(image_ && image_->getIntVariable(FIM_VID_FLIPPED)) /* FIXME: this is only i: ... */
+			_py = 100 - _py;
+		if(image_ && image_->getIntVariable(FIM_VID_MIRRORED)) /* FIXME: this is only i: ... */
+			_px = 100 - _px;
+#endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 
 		if(image_)
 		{
@@ -745,9 +754,9 @@ namespace fim
 			fim_off_t top = top_, left = left_;
 
 			if(ih>vh)
-				top = FIM_INT_PCNT_SAFE(py,ih-vh);
+				top = FIM_INT_PCNT_SAFE(_py,ih-vh);
 			if(iw>vw)
-				left = FIM_INT_PCNT_SAFE(px,iw-vw);
+				left = FIM_INT_PCNT_SAFE(_px,iw-vw);
 
 			if( top != top_ || left != left_ )
 			{
@@ -755,7 +764,6 @@ namespace fim
 			       	left_ = left;
 				should_redraw();
 			}
-
 		}
 		return true;
 	}
