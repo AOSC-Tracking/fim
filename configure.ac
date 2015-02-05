@@ -1277,7 +1277,7 @@ AC_ARG_ENABLE(seek-magic, AC_HELP_STRING([--enable-seek-magic], [Fim will be cap
 ],[ fim_cv_seek_magic=no ]
 )
 dnl ==================
-AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan directories for files.]),
+AC_ARG_ENABLE(pushdir, AC_HELP_STRING([--enable-pushdir], [Fim will scan directories for files.]),
 [       if test x$enableval = xno; then
 		fim_cv_read_dirs=no
 	else
@@ -1286,7 +1286,7 @@ AC_ARG_ENABLE(read-dirs, AC_HELP_STRING([--enable-read-dirs], [Fim will try scan
 ],[ fim_cv_read_dirs=yes ]
 )
 dnl ==================
-AC_ARG_ENABLE(recursive-dirs, AC_HELP_STRING([--disable-recursive-dirs], [Fim will be able to recurse directories (implies --enable-read-dirs )]),
+AC_ARG_ENABLE(recursive-pushdir, AC_HELP_STRING([--disable-recursive-pushdir], [Fim will be able to push directories recursively (implies --enable-push-dirs )]),
 [       if test x$enableval = xyes; then
 		fim_cv_recursive_dirs=yes;
                 fim_cv_read_dirs=yes;
@@ -1854,7 +1854,7 @@ AC_MSG_NOTICE([
 dnl     compile time warnings               : ${fim_cv_warnings:-no} (additional CXXFLAGS: ${CXXFLAGS} )
         resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
-   	will read directories               : ${fim_cv_read_dirs}
+   	will allow push of directories      : ${fim_cv_read_dirs}
    	will recurse directories (-R switch): ${fim_cv_recursive_dirs}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
