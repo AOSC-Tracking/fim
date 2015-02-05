@@ -225,22 +225,26 @@ nop:
 		 * ( note that it doesn't refresh the image in any way ! )
 		 */
 		fim::string s;
-		if(flist_.size()<=0)
+
+		if( flist_.size() <= 1 )
 			return nofile_;
 		assert(cf_);
-		if(filename==FIM_CNS_EMPTY_STRING)
+		if( filename == FIM_CNS_EMPTY_STRING )
 		{
-			if(current_n()==(int)flist_.size())cf_--;
-			s=flist_[flist_.size()-1];
-			flist_.erase(flist_.begin()+current_n());
+			flist_.erase( flist_.begin() + current_n() );
+			if( cf_ >= (int)flist_.size() && cf_ > 0 )
+				cf_--;
+			s = flist_[flist_.size()-1];
 		}
 		else
 		{
 			// FIXME: shall use a search method/function
-			for(size_t i=0;i<flist_.size();++i)
-				if(flist_[i]==filename)
+			for( size_t i=0; i < flist_.size(); ++i )
+				if( flist_[i] == filename )
 					flist_.erase(flist_.begin()+i);
+                        cf_ = FIM_MAX(FIM_MIN(flist_.size()-1,cf_),0);
 		}
+		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return s;
 	}
