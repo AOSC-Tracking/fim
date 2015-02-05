@@ -792,6 +792,9 @@ err:
 		no_file_(true),
 		fis_(image.fis_),
 		fs_(0), ms_(0),
+#ifdef FIM_NAMESPACES
+		Namespace(image.rnsp_,FIM_SYM_NAMESPACE_IMAGE_CHAR),
+#endif /* FIM_NAMESPACES */
                 fname_     (image.fname_)
 	{
 		/*
