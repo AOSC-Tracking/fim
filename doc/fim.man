@@ -320,6 +320,7 @@ distributed with fim.
 .SH AFFECTING ENVIRONMENT VARIABLES
 .nf
 FBFONT		(just like in fbi) a Linux consolefont font file.
+If using a gzipped font, the zcat program will be used to uncompress it (via \fBexecvp(3)\fP).
 If not specified, the following files will be probed and the first existing will be selected:
 
 /usr/lib/kbd/consolefonts/lat9\-16.psf.gz
@@ -350,7 +351,7 @@ FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode onl
 FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
 If unset, fim will probe for /dev/fb0.
 TERM		(only in fim) will influence the output device selection algorithm, especially if $TERM=="screen".
-DISPLAY	If this variable is set, then the sdl driver will be tried by default.
+DISPLAY	If this variable is set, then the sdl driver will be probed by default.
 .SH COMMON PROBLEMS
 .B fim
 needs read\-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
