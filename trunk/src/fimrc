@@ -61,7 +61,7 @@ bind 'C-h' "help";
 #bind '/' "help"; # assigned to forward-search
 bind '=' "scale '100%'";
 #bind 'p' "prev_file;";
-#bind 'P' "list 'pop'";
+bind 'Del' "list 'pop';reload;";
 #bind 's' "list 'sort'";
 bind 's' "scrollforward";
 bind 'C-s' "swap;redisplay;";
