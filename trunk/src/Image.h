@@ -155,6 +155,7 @@ class Image
 
 	bool check_invalid(void);
 	bool check_valid(void);
+	bool valid(void)const{return !invalid_;}
 
 	int width(void)const;
 	fim_coo_t original_width(void)const;

@@ -143,7 +143,7 @@ class Browser
 	fim::string _sort(const fim_char_t sc='f');
 	fim::string _clear_list(void);
 	private:
-	fim::string loadCurrentImage(void);
+	fim_err_t loadCurrentImage(void);
 	fim::string reload(void);
 
 	int n_files(void)const;
