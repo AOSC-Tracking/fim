@@ -1153,14 +1153,13 @@ fi
 
 
 dnl ==================
-fim_cv_hardcoded_font=no
 
-AC_ARG_ENABLE(hardcoded-font, AC_HELP_STRING([--enable-hardcoded-font], [Enable a hardcoded font in the executable (good as a fallback when no consolefonts are available).]),
+AC_ARG_ENABLE(hardcoded-font, AC_HELP_STRING([--enable-hardcoded-font], [Enable a hardcoded font in the executable (good as a fallback (FBFONT=fim://) when no PSF format consolefonts files are available).]),
 [if test x$enableval = xyes; then
-        fim_cv_hardcoded_font=yes
+        fim_cv_hardcoded_font=yes;
 else
-        fim_cv_hardcoded_font=no
-fi])
+        fim_cv_hardcoded_font=no;
+fi],[ fim_cv_hardcoded_font=yes; ])
 
 AH_TEMPLATE([FIM_WANT_HARDCODED_FONT])
 if test x$fim_cv_hardcoded_font = xyes; then
@@ -1856,14 +1855,14 @@ dnl     compile time warnings               : ${fim_cv_warnings:-no} (additional
         resize optimizations                : ${fim_cv_resize_optimizations:-no}
         system,popen calls wrappers enabled : ${fim_system_calls:-yes}
    	will read directories               : ${fim_cv_read_dirs}
-   	will recurse directories            : ${fim_cv_recursive_dirs}
+   	will recurse directories (-R switch): ${fim_cv_recursive_dirs}
 dnl	dvi  file support (dvilib29)        : ${fim_handle_dvi:-no}
 	patch for running under screen      : ${fim_cv_screen:-no}
 	~/.fimrc startup file support       : ${have_fimrc:-no}
 	~/.fim_history load/save support    : ${have_history:-no}
 	autocommands enabled                : ${have_autocommands:-no}
 dnl	internal windowing system           : ${have_windows:-no}
-	hardcoded font                      : ${have_hardcoded_font:-no}
+	hardcoded PSF font (FBFONT=fim://)  : ${have_hardcoded_font:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
         seek magic signatures               :*${fim_cv_seek_magic:-no}
