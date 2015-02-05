@@ -426,7 +426,7 @@ static bool aainvalid;
 		sym_keys["Esc"  ]=AA_ESC;
 #endif
 
-	//	The mulx and muly often fail!
+	/*	The mulx and muly are not reliable */
 #if 0
 		if(ascii_context_->mulx>0 && ascii_context_->muly>0)
 			cc.setVariable("aascale",(((fim_scale_t)ascii_context_->muly)/((fim_scale_t)ascii_context_->mulx)));

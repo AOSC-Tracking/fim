@@ -234,8 +234,8 @@ NULL
     {"autowindow",   no_argument,   NULL,0x61757769,"adapt window to image size",NULL,
 "Will resize the window size (if supported) to the image size. Don't use this with other image scaling options."
     },
-    {"no-stat-push",   no_argument,   NULL,0x6e7363,"do not check file/dir checks with stat(2) at push",NULL,
-"Sets " FIM_VID_PRELOAD_CHECKS "=0 before initialization, thus disabling file/dir checks with stat(2)."
+    {"no-stat-push",   no_argument,   NULL,0x6e7363,"do not check file/dir existence with stat(2) at push time",NULL,
+"Sets " FIM_VID_PRELOAD_CHECKS "=0 before initialization, thus disabling file/dir existence checks with stat(2) at push push time (and speeding up startup)."
     },
     {"autoheight",   no_argument,       NULL, 'H',"scale according to height",NULL,
 "Scale the image according to the screen height."

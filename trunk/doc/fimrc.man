@@ -714,8 +714,8 @@ _preferred_rendering_width
 [internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) 
 .fi
 .B
-_preload_checks
-[internal,in,experimental] if 1 (default), will check with stat() existence of input files before push'ing files (set to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initializatoin (thus, after command line files have been push'ed); use \-\-no\-stat\-push if you wish to set this to 0 at command line files specification 
+_push_checks
+[internal,in,experimental] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use \-\-no\-stat\-push if you wish to set this to 0 at command line files specification 
 .fi
 .B
 _push_pushes_dirs
@@ -945,7 +945,7 @@ if(_re_search_opts==''){_re_search_opts='bi';}
 if(_console_offset==''){_console_offset=0;}
 if(_console_key==''){_console_key=58;}
 if(_display_as_binary==''){_display_as_binary=0;}
-if(_preload_checks==''){_preload_checks=1;}
+if(_push_checks==''){_push_checks=1;}
 #if(_want_caption_status==''){_want_caption_status=0;}
 if(_want_exif_orientation==''){_want_exif_orientation=1;}
 if(ascale==''){ascale="1.0";}
