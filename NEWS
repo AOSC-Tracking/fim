@@ -60,6 +60,7 @@
  * if _want_exif_orientation is set, images will be reoriented according to EXIF metadata (r769!*)
  * mirror/flip is now being applied with respect to the viewport borders (r772,r775*)
  * Pause and Menu keys are now available in -o sdl mode (r776*)
+ * added  list 'marked'  to show the list of marked files (r780*)
 
                 Version 0.4
 

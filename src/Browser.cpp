@@ -125,6 +125,18 @@ namespace fim
 			       	cc.markCurrentFile(); 
 				goto ret;
 		       	} 
+			else if(args[0]=="marked")
+			{
+                                std::string mfl = cc.marked_files_list();
+		                if( mfl != FIM_CNS_EMPTY_STRING )
+                                {
+                                        result += "The following files have been marked by the user :\n";
+                                        result += mfl;
+                                }
+                                else
+                                        result += "No files have been marked by the user.\n";
+				goto ret;
+		       	} 
 			else if(args[0]=="unmark")
 			{
 			       	cc.unmarkCurrentFile();
@@ -132,6 +144,8 @@ namespace fim
 		       	} 
 #else /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 			else if(args[0]=="mark")
+				result = FIM_EMSG_NOMARKUNMARK;
+			else if(args[0]=="marked")
 				result = FIM_EMSG_NOMARKUNMARK;
 			else if(args[0]=="unmark")
 				result = FIM_EMSG_NOMARKUNMARK;
