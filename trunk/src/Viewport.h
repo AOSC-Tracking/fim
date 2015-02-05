@@ -2,7 +2,7 @@
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

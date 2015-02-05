@@ -61,8 +61,8 @@
 #endif
 #if 1
 		bind('q',FIM_FLT_QUIT);
-		bind('n',FIM_FLC_NEXT);
-		bind('p',FIM_FLC_PREV);
+		bind('n',FIM_FLC_NEXT_FILE);
+		bind('p',FIM_FLC_PREV_FILE);
 		bind('d',FIM_FLT_DISPLAY);
 		bind('+',FIM_FLA_MAGNIFY);
 		bind('-',FIM_FLA_REDUCE);
