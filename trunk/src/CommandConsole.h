@@ -113,6 +113,9 @@ class CommandConsole
 	 */
 	typedef std::set<fim::string> marked_files_t;	//
 	marked_files_t marked_files_;		//filenames
+	public:
+	fim::string marked_files_list(void)const;
+	private:
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 
 	/*

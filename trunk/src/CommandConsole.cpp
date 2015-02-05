@@ -1249,6 +1249,17 @@ rlnull:
 		return i;/* is should be used in return */
 	}
 
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
+	fim::string CommandConsole::marked_files_list(void)const
+	{
+		fim::string res;
+		for(std::set<fim::string>::iterator i=marked_files_.begin();i!=marked_files_.end();++i)
+			res += *i,
+			res += "\n";
+		return res;
+	}
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
+
 	CommandConsole::~CommandConsole(void)
 	{
 		/*
@@ -1262,8 +1273,7 @@ rlnull:
 		{
 			std::cerr << "The following files were marked by the user :\n";
 			std::cerr << "\n";
-			for(std::set<fim::string>::iterator i=marked_files_.begin();i!=marked_files_.end();++i)
-				std::cout << *i << "\n";
+			std::cout << marked_files_list();
 		}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 		if(sof!=FIM_CNS_EMPTY_STRING)
