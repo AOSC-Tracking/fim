@@ -71,7 +71,7 @@ namespace fim
 		}
 		if(args.size()==1 && bindings_.find(key)==bindings_.end())
 		{
-			return "no command bound to keycode "+string(key)+".\n";
+			return "no command bound to keycode "+string(key)+" (keysym "+args[0]+").\n";
 		}
 
 		if(args.size()==1)
