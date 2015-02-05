@@ -605,6 +605,8 @@ namespace fim
  * */
 #define FIM_KBD_TAB			"Tab"
 #define FIM_KBD_ENTER			"Enter"
+#define FIM_KBD_PAUSE			"Pause"
+#define FIM_KBD_MENU			"Menu"
 #define FIM_KBD_BACKSPACE		"BackSpace"
 #define FIM_KBD_BACKSPACE_		"Backspace"
 #define FIM_KBD_SPACE			" "

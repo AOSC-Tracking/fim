@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -428,6 +428,14 @@ err:
 		sym_keys[FIM_KBD_SPACE]=SDLK_SPACE;
 		sym_keys[FIM_KBD_END]=SDLK_END;
 		sym_keys[FIM_KBD_HOME]=SDLK_HOME;
+		sym_keys[FIM_KBD_BACKSPACE]=SDLK_BACKSPACE;
+		sym_keys[FIM_KBD_BACKSPACE_]=SDLK_BACKSPACE;
+		sym_keys[FIM_KBD_TAB]=SDLK_TAB;
+		sym_keys[FIM_KBD_ENTER]=SDLK_RETURN;
+		sym_keys[FIM_KBD_PAUSE]=SDLK_PAUSE;
+		sym_keys[FIM_KBD_INS]=SDLK_INSERT;
+		sym_keys[FIM_KBD_DEL]=SDLK_DELETE;
+		sym_keys[FIM_KBD_MENU]=SDLK_MENU;
 		sym_keys["F1" ]=SDLK_F1;
 		sym_keys["F2" ]=SDLK_F2;
 		sym_keys["F3" ]=SDLK_F3;

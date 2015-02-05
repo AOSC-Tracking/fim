@@ -441,6 +441,14 @@ err:
 		sym_keys[FIM_KBD_SPACE]=SDLK_SPACE;
 		sym_keys[FIM_KBD_END]=SDLK_END;
 		sym_keys[FIM_KBD_HOME]=SDLK_HOME;
+		sym_keys[FIM_KBD_BACKSPACE]=SDLK_BACKSPACE;
+		sym_keys[FIM_KBD_BACKSPACE_]=SDLK_BACKSPACE;
+		sym_keys[FIM_KBD_TAB]=SDLK_TAB;
+		sym_keys[FIM_KBD_ENTER]=SDLK_RETURN;
+		sym_keys[FIM_KBD_PAUSE]=SDLK_PAUSE;
+		sym_keys[FIM_KBD_INS]=SDLK_INSERT;
+		sym_keys[FIM_KBD_DEL]=SDLK_DELETE;
+		sym_keys[FIM_KBD_MENU]=SDLK_MENU;
 		sym_keys["F1" ]=SDLK_F1;
 		sym_keys["F2" ]=SDLK_F2;
 		sym_keys["F3" ]=SDLK_F3;
