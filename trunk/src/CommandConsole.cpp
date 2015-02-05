@@ -103,23 +103,20 @@ namespace fim
 		 */
 		bindings_t::const_iterator bi=bindings_.find(c);
 		fim::string rs("keycode ");
+		string ksym = key_syms_[c];
+		if( ksym != FIM_CNS_EMPTY_STRING )
+			ksym = " (keysym \"" + ksym + "\")";
 
+		bindings_[c]=binding; /* this is the operation; what follows is only debug info */
+
+		rs+=string((int)c);
+		rs+=ksym;
 		if(bi!=bindings_.end())
-		{
-			bindings_[c]=binding;
-			rs+=string((int)c);
 			rs+=" successfully reassigned to \"";
-			rs+=bindings_[c];
-			rs+="\"\n";
-		}
 		else
-		{
-			bindings_[c]=binding;
-			rs+=string((int)c);
 			rs+=" successfully assigned to \"";
-			rs+=bindings_[c];
-			rs+="\"\n";
-		}
+		rs+=bindings_[c];
+		rs+="\"\n";
 		return rs;
 	}
 
