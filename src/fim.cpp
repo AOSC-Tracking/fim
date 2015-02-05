@@ -522,6 +522,11 @@ int fim_dump_man_page(void)
 #define FIM_ADD_DOCLINE_FOR_CMD(REP,CMD) if(cc.find_key_for_bound_cmd(CMD)!=""){if(REP!=1)mp+=FIM_XSTRINGIFY(REP);else mp+=" ";mp+=cc.find_key_for_bound_cmd(CMD);mp+="    ";if(REP!=1)mp+=FIM_XSTRINGIFY(REP);mp+=CMD;mp+="\n";}
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT);
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV);
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT_FILE);
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV_FILE);
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT_PAGE);
+			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV_PAGE);
+			/* TODO: may use a search-based method for locating an keys to other commands... */
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLA_MAGNIFY);
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLA_REDUCE);
 			//FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_MIRROR);

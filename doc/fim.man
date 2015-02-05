@@ -276,8 +276,8 @@ The program return status is 0 on correct operation; 252 on unsupported device s
 .nf
 The following keys and commands are hardcoded in the minimal configuration. These are working by default before any config loading, and before the hardcoded config loading (see variable _fim_default_config_file_contents).
 
- n    goto '+1'
- p    goto '\-1'
+ n    goto '+1f'
+ p    goto '\-1f'
  +    magnify
  \-    reduce
  h    pan 'left'
