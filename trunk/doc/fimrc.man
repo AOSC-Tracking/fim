@@ -595,7 +595,7 @@ _fbfont
 .fi
 .B
 _file_loader
-[in] if not empty, this string will force a file loader (among the ones listed in the \-V switch output)
+[in] if not empty, this string will force a file loader (among the ones listed in the \-V switch output); [out] i:_file_loader stores the loader of the current image
 .fi
 .B
 _fileindex
@@ -647,7 +647,7 @@ _inhibit_display
 .fi
 .B
 _last_file_loader
-[internal,out] string identifying the last file loader which has loaded an image
+[internal,out] after each image load, _last_file_loader will be set to the last file loader used
 .fi
 .B
 _last_system_output

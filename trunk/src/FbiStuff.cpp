@@ -2128,7 +2128,11 @@ found_a_loader:	/* we have a loader */
 #endif /* FIM_WITH_ARCHIVE */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
     if(img && loader)
-	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);	/* FIXME: shall become an image specific variable */
+    {
+	if(nsp)
+		nsp->setVariable(FIM_VID_FILE_LOADER,loader->name);
+	cc.setVariable(FIM_VID_LAST_FILE_LOADER,loader->name);
+    }
 #endif /* FIM_WANT_REMEMBER_LAST_FILE_LOADER */
 #if FIM_WANT_EXPERIMENTAL_PLUGINS
     	if(img)

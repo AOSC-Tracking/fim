@@ -505,7 +505,7 @@ namespace fim
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load the system wide initialization file" */
 #define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] string with the global configuration file name" */
-#define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output)" */
+#define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image" */
 #define FIM_VID_RETRY_LOADER_PROBE 		"_retry_loader_probe"		/* "[in] if 1 and user specified a file loader and this fails, will probe for a different loader" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
@@ -578,7 +578,7 @@ namespace fim
 #define FIM_VID_AUTONEGATE			"_autonegate"		/* "[internal,in] if 1, will negate images by default" */
 #define FIM_VID_AUTODESATURATE			"_autodesaturate"	/* "[internal,in] if 1, will desaturate images by default" */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
-#define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[internal,out] string identifying the last file loader which has loaded an image" */
+#define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[internal,out] after each image load, " FIM_VID_LAST_FILE_LOADER " will be set to the last file loader used" */
 #endif /* FIM_WANT_REMEMBER_LAST_FILE_LOADER */
 #define FIM_VID_FLIPPED				"flipped"		/* "[internal,out] 1, if the image is flipped" */
 #define FIM_VID_NEGATED				"negated"		/* "[internal,out] 1, if the image is negated" */
