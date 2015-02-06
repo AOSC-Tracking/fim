@@ -323,6 +323,7 @@ FBFONT		(just like in fbi) a Linux consolefont font file.
 If using a gzipped font, the zcat program will be used to uncompress it (via \fBexecvp(3)\fP).
 If not specified, the following files will be probed and the first existing will be selected:
 
+/usr/share/consolefonts/Uni3\-TerminusBoldVGA14.psf.gz
 /usr/lib/kbd/consolefonts/lat9\-16.psf.gz
 /usr/share/consolefonts/lat1\-16.psf
 /usr/share/consolefonts/lat1\-16.psf.gz
