@@ -1528,6 +1528,7 @@ static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t b
 
 	if(base_offset)
 	{
+		//printf("%x%x\n",byte_stream[0],byte_stream[1]);
     		if(fim_fseek(fp,base_offset,SEEK_SET)!=0);// NEW
 		{
     			// fim_fseek(fp,0,SEEK_SET);
@@ -1542,7 +1543,7 @@ static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t b
 	/* we read in a good chunk of the file */
 	while((rb=fim_fread(buf,1,FIM_FILE_BUF_SIZE,fp))>0)
 	{
-		fim_bzero(buf,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
+		fim_bzero(buf+rb,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
 		off=rb-sl;
 		while( off > 0 )
 		{
@@ -1782,20 +1783,24 @@ noa:	1;
     //size_t read_offset=cc.getIntVariable("g:" FIM_VID_OPEN_OFFSET);
     read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
 
-    if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
+    if(read_offset>0)
+	    fim_fseek(fp,read_offset,SEEK_SET);
 
 #ifdef FIM_WANT_SEEK_MAGIC
 	/* FIXME : EXPERIMENTAL */
 	string sm;
-   	sm=cc.getStringVariable(FIM_VID_SEEK_MAGIC);
+   	sm = cc.getStringVariable(FIM_VID_SEEK_MAGIC);
 	/*
-		the user should specify a magix string like:
+		the user should be able to specify a magic string like:
 		sm="\xFF\xD8\xFF\xE0";
 	*/
    	if(sm!=FIM_CNS_EMPTY_STRING)
 	{
-		read_offset=find_regexp_offset(fp, sm.c_str() , read_offset);
-		if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
+		read_offset = find_regexp_offset(fp, sm.c_str() , read_offset);
+		if(read_offset>0)
+		{
+			fim_fseek(fp,read_offset,SEEK_SET);
+		}
 		cc.setVariable(FIM_VID_OPEN_OFFSET ,(fim_int)read_offset);
 	}
 #endif /* FIM_WANT_SEEK_MAGIC */
@@ -1806,7 +1811,8 @@ noa:	1;
       return NULL;	/* new */
     }
     fim_rewind(fp);
-    if(read_offset>0)fim_fseek(fp,read_offset,SEEK_SET);// NEW
+    if(read_offset>0)
+	    fim_fseek(fp,read_offset,SEEK_SET);
 
 #if FIM_WITH_UFRAW
     if (NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
