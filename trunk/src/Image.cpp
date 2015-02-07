@@ -325,7 +325,7 @@ static void ers(const char*value, Image *image)
 		}
 		if(f==0)
 			goto uhmpf;
-		shouldmirror=(f==2 || f==4 || f==5 || f==7);
+		shouldmirror=(f==2 || f==3 || f==5 || f==7);
 		shouldflip=(f==4 || f==3);
 		shouldrotatecw=(f==5 || f==6);
 		shouldrotateccw=(f==7 || f==8);
@@ -335,6 +335,10 @@ static void ers(const char*value, Image *image)
 		//std::cout << "\n";
 		if(shouldrotateccw)image->setVariable("__exif_orientation",1);
 		if(shouldrotatecw)image->setVariable("__exif_orientation",3);
+		if(shouldmirror && shouldflip && !shouldrotatecw && !shouldrotateccw)
+			shouldmirror = false,
+			shouldflip = false,
+			image->setVariable("__exif_orientation",2);
 		//if(shouldmirror)image->setVariable("exif_mirrored",1);
 		//if(shouldflip)image->setVariable("exif_flipped",1);
 uhmpf:
