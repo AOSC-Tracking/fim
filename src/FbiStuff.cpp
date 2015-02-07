@@ -1512,7 +1512,7 @@ static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t b
 	/* we read in a good chunk of the file */
 	while((rb=fim_fread(buf,1,FIM_FILE_BUF_SIZE,fp))>0)
 	{
-		fim_bzero(buf,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
+		fim_bzero(buf+rb,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
 		off=rb-sl;
 		while( off > 0 )
 		{
