@@ -384,7 +384,7 @@ ret:		return key;
 
 		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string(FIM_FLT_HELP_DISPLAY),&browser_,&Browser::fcmd_display));
 		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string(FIM_FLT_REDISPLAY " : re-display the current file contents"),&browser_,&Browser::fcmd_redisplay));
-		addCommand(new Command(fim::string(FIM_FLT_DESCLOAD),fim::string(FIM_FLT_HELP_DESCLOAD),this,&CommandConsole::fcmd_descload));
+		addCommand(new Command(fim::string(FIM_FLT_DESC),fim::string(FIM_FLT_HELP_DESC),this,&CommandConsole::fcmd_desc));
 		addCommand(new Command(fim::string(FIM_FLT_DUMP_KEY_CODES),fim::string(FIM_FLT_DUMP_KEY_CODES " : dump the active key codes (unescaped, for inspection)"),this,&CommandConsole::fcmd_dump_key_codes));
 		addCommand(new Command(fim::string(FIM_FLT_ECHO),fim::string(FIM_FLT_ECHO " " FIM_CNS_EX_ARGS_STRING ": print the " FIM_CNS_EX_ARGS_STRING " on console"),this,&CommandConsole::fcmd_echo));
 #ifndef FIM_WANT_NOSCRIPTING

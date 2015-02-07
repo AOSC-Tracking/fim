@@ -880,15 +880,15 @@ nop:
 #endif /* HAVE_GETENV */
 	}
 
-	fim::string CommandConsole::fcmd_descload(const args_t& args)
+	fim::string CommandConsole::fcmd_desc(const args_t& args)
 	{
 		fim_char_t sc = '\t';
 
-		if(1 > args.size())
+		if(2 > args.size() || args[0] != "load" )
 			goto err;
-		if(1 < args.size())
-			sc = *args[1].c_str();
-		this->id_.fetch(args[0],sc);
+		if(2 < args.size())
+			sc = *args[2].c_str();
+		this->id_.fetch(args[1],sc);
 err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
