@@ -203,6 +203,12 @@ namespace fim
 					return "No item matched \"" + ptn + "\"\n";
 			}
 
+		{
+			fim::string sws;
+			sws = fim_help_opt(args[0].c_str());
+			if(sws != FIM_CNS_EMPTY_STRING)
+				return sws+string("\n");
+		}
 			cmd=findCommand(args[0]);
 			if(cmd)
 				return
