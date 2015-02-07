@@ -77,22 +77,22 @@ will be treated as filenames regardlessly.
 .
 .TP
 .B \-a, \-\-autozoom
-Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)
+Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image (as in fbi).
 .TP
 .B \-b, \-\-binary[=24|1]
 Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.
 Will pad with zeros.
-Regard this as a toy..
+Regard this as an easter bunny option.
 
 .TP
 .B  \-\-as\-text
 Display (any filetype) files contents as they were text.
 Will only show printable characters.
-Regard this as a toy..
+Regard this as an easter bunny option.
 
 .TP
 .B  \-\-cd\-and\-readdir
-step into the first loaded file directory and push other files
+step into the first loaded file directory and push other files.
 .TP
 .B \-c {commands}, \-\-execute\-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.
@@ -118,7 +118,7 @@ For example,
 .B \-d {framebuffer device}, \-\-device {framebuffer device}
 Framebuffer device to use. Default is the one your vc is mapped to (as in fbi).
 .TP
-.B  \-\-dump\-reference\-help[=man]
+.B  \-\-dump\-reference\-help[=man].
 Will dump to stdout the language reference help.
 .TP
 .B \-D, \-\-dump\-default\-fimrc
@@ -161,7 +161,7 @@ No system wide initialization file will be read (default is /etc/fimrc) at start
 No internal default configuration at startup (uses internal variable _no_default_configuration). Will only provide a minimal working configuration. 
 .TP
 .B  \-\-no\-commandline
-with internal command line mode disabled
+with internal command line mode disabled.
 .TP
 .B  \-\-no\-history\-save
 Do not save execution history at finalization (uses internal variable _save_fim_history). 
@@ -258,13 +258,13 @@ Specify an endline delimiter string for breaking lines read via \-/\-\-read\-fro
 
 .TP
 .B \-A, \-\-autotop
-		 align images to the top (UNFINISHED)
+		 align images to the top (UNFINISHED).
 .TP
 .B \-q, \-\-quiet
-		 quiet mode (UNFINISHED)
+		 quiet mode (UNFINISHED).
 .TP
 .B \-r {resolution}, \-\-resolution {resolution}
-		 set resolution (UNFINISHED)
+		 set resolution (UNFINISHED).
 .TP
 .B \-R, \-\-recursive
 		 Push files/directories to the files list recursively.
