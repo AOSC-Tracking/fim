@@ -776,10 +776,7 @@ namespace fim
 #define FIM_FLC_MAGNIFY			"scale '+'" /* not in vim */
 #define FIM_FLC_REDUCE			"scale '-'" /* not in vim */
 
-/*
- * Help messages for Fim commands (partial).
- * One glorious day these macros will serve to build automatically documentation.
- * */
+/* Help messages for Fim internal commands. */
 #define FIM_CMD_HELP_ALIGN FIM_FLT_ALIGN " bottom : align to the lower side the current image; " FIM_FLT_ALIGN " top : align to the upper side the current image; "
 #define FIM_CMD_HELP_LIST	FIM_FLT_LIST " : display the files list; " FIM_FLT_LIST " 'random_shuffle': randomly shuffle the file list; " FIM_FLT_LIST " 'reverse': reverse the file list; " FIM_FLT_LIST " 'clear': clear the file list; " FIM_FLT_LIST " 'sort': sort the file list; " FIM_FLT_LIST " 'pop' : pop the last file from the files list; " FIM_FLT_LIST " 'remove' [" FIM_CNS_EX_FNS_STRING "] : remove the current file, or the " FIM_CNS_EX_FNS_STRING ", if specified " "; " FIM_FLT_LIST " " FIM_CNS_EX_FNS_STRING " 'push': push " FIM_CNS_EX_FNS_STRING " to the back of the files list; " FIM_FLT_LIST " 'filesnum': display the number of files in the files list; " FIM_FLT_LIST " 'mark' : mark the current file for stdout printing at exit; " FIM_FLT_LIST " 'unmark': unmark the current file, preventing from stdout printing at exit; " FIM_FLT_LIST " 'marked': show which files have been marked so far; " FIM_FLT_LIST " 'pushdir; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable " FIM_VID_PUSHDIR_RE " or, if empty, from constant regular expression " FIM_CNS_PUSHDIR_RE "; " FIM_FLT_LIST " 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively. "
 #define FIM_CMD_HELP_CD			FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING ": change the current directory to " FIM_CNS_EX_PATH_STRING ". " FIM_FLT_CD " - will change to the previous current directory (before the last \":" FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING "\" command)"
