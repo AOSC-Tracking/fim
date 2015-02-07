@@ -595,7 +595,7 @@ namespace fim
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[internal,out] the screen height" */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[internal,in] print out each command before its execution (for debugging purposes)" */
-#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal,in,optional] offset (specified in bytes) used when opening a file " */
+#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal,in,optional] offset (specified in bytes) used when opening a file; [internal,out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " */
 #define FIM_VID_OPEN_OFFSET_RETRY		"_open_offset_retry"	/* "[internal,in,optional] number of adjacent bytes to probe in opening the file " */
 #define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
 #define FIM_VID_PREFERRED_RENDERING_WIDTH	"_preferred_rendering_width"		/* "[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " */

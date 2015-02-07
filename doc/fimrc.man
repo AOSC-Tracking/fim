@@ -699,7 +699,7 @@ _no_rc_file
 .fi
 .B
 _open_offset
-[internal,in,optional] offset (specified in bytes) used when opening a file 
+[internal,in,optional] offset (specified in bytes) used when opening a file; [internal,out] i:_open_offset will be assigned to images opened at a nonzero offset 
 .fi
 .B
 _open_offset_retry
