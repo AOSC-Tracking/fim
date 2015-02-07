@@ -143,6 +143,7 @@
 #define FIM_AUTOCMD_EXEC
 #endif /* FIM_AUTOCMDS */
 
+	fim::string fim_help_opt(const char*qs);
 namespace fim
 {
 	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code

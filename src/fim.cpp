@@ -348,6 +348,70 @@ NULL
 const int fim_options_count=sizeof(fim_options)/sizeof(fim_options_t);
 struct option options[fim_options_count];
 
+fim::string fim_help_opt(const char*qs)
+{
+	string result;
+
+	if( qs && qs[0] == '-' && !qs[1] )
+	{
+		result += "The short command options of fim are: ";
+		for(size_t i=0;i<fim_options_count-1;++i)
+		if( isascii( fim_options[i].val ) )
+		{
+			if( fim_options[i].val != '-' )
+				result += "-";
+			result += fim_options[i].val;
+			result += " ";
+		}
+		goto ret;
+	}
+
+	if( qs && qs[0] == '-' && qs[1] == '-' && !qs[2] )
+	{
+		result += "The long command options of fim are: ";
+		for(size_t i=0;i<fim_options_count-1;++i)
+		if( fim_options[i].name ) 
+			result += "--",
+			result += fim_options[i].name,
+			result += " ";
+		goto ret;
+	}
+
+	if( !qs || qs[0] != '-' || !qs[1] || (qs[1]!='-' && qs[2]) || (qs[1]=='-' && !qs[2])  )
+	{
+		goto ret;
+	}
+
+	for(size_t i=0;i<fim_options_count-1;++i)
+		if(
+				( ( (int) qs[1] ) == fim_options[i].val ) ||
+				( qs[1] == '-' && 0 == strcmp(qs+2,fim_options[i].name) )
+		  )
+		{
+			result += "A fim command option: ";
+			if( isascii( fim_options[i].val ) )
+			{
+				result += "-", result += fim_options[i].val;
+				if( fim_options[i].optdesc )
+			       		result += " =", result += fim_options[i].optdesc;
+				result += ", ";
+			}
+			if( ( fim_options[i].name ) )
+			{
+				result += "--", result += fim_options[i].name;
+				if( fim_options[i].optdesc )
+			       		result += " =", result += fim_options[i].optdesc;
+				result += " ";
+			}
+			result += ": ";
+			result += fim_options[i].desc;
+			// result += fim_options[i].mandesc; // man/groff markup should be cleaned up before printing
+			goto ret;
+		}
+		//result += fim_options[i].val << "\n";
+ret:
+	return result;
+}
 
 class FimInstance
 {
