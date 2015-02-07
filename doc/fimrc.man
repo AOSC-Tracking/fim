@@ -8,7 +8,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /usr/local/etc/fimrc
+.B /etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
@@ -227,9 +227,9 @@ redisplay : re\-display the current file contents
 .fi
 
 .B
-descload
+desc
 .fi
-descload : load a description file (first argument), using the (optional) second argument character as separator. See documentation of \-\-load\-image\-descriptions\-file for the format and interpretation of this file.
+desc 'load' {filename} [{sepchar}] : load description file {filename}, using the optional {sepchar} character as separator. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
 .fi
 
 .B
@@ -259,7 +259,7 @@ getenv {identifier} : display the value of the {identifier} environment variable
 .B
 goto
 .fi
-goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '\-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via descload or \-\-load\-image\-descriptions\-file.
+goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '\-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via desc or \-\-load\-image\-descriptions\-file.
 .fi
 
 .B

@@ -28,7 +28,7 @@
  * added --sort and --sort-basename to sort the images list (TODO: r669*)
  * changed meaning of variable _ignorecase: now it affects autocmd's (TODO: r671*)
  * introduced variable _re_search_opts affecting regexp-based search (TODO: r671*)
- * added the 'descload' command to load a textual files comments description file (TODO: 689*)
+ * added the 'desc "load"' command to load a textual files comments description file (TODO: 689*,790*)
  * added --load-image-descriptions-file (equivalent to descload) (TODO: r672*)
  * added --image-descriptions-file-separator (TODO: r682*)
  * search (and jump) on image descriptions via 'goto' (TODO: r674*)
