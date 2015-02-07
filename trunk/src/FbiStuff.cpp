@@ -2164,6 +2164,8 @@ errl:
     if(sbuf)fim_free(sbuf);
 #endif /* FIM_SHALL_BUFFER_STDIN */
 ret:
+    if( read_offset > 0 && nsp )
+	    nsp->setVariable(FIM_VID_OPEN_OFFSET,(fim_int)read_offset); /* FIXME */
     FIM_PR('.');
     return img;
 }
