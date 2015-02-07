@@ -183,9 +183,9 @@ NULL
 /* FIXME: shall document this */
 #endif /* FIM_WITH_LIBIMLIB2 */
     },
-    {"offset",      required_argument,       NULL,  0x6f66660a, "will open the first image file at the specified offset.","{bytes-offset}",
-"Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation)."
-    },/* NEW */
+    {"offset",      required_argument,       NULL,  0x6f66660a, "will open the first image file at the specified offset.","{bytes-offset[[:upper-offset]|+offset-range]}",
+"Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fBupper-offset\\fP is specified, further bytes will be probed, until \\fBupper-offset\\fP. If \\fB+offset-range\\fP is specified, so many further bytes will be probed. This is useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range."
+    },
     {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document.",NULL,
 "Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
     },
@@ -1074,21 +1074,23 @@ done:
 	#ifdef FIM_AUTOCMDS
 		{
 			int ipeppe_offset;
-
 			ipeppe_offset=(int)atoi(optarg);
 			if(ipeppe_offset<0)
 				std::cerr<< "warning: ignoring user set negative offset value.\n";
 			else
-			if(ipeppe_offset>0)
+			if(ipeppe_offset>=0 && isdigit(*optarg))
 			{
 				string tmp;
-				size_t peppe_offset=0;
-				peppe_offset =(size_t)ipeppe_offset;
-				tmp=FIM_VID_OPEN_OFFSET;
-				tmp+="=";
-				tmp+=string((int)peppe_offset);/* FIXME */
-				tmp+=";";
+				size_t peppe_offset=0,ro=0;
+				ro=peppe_offset =(size_t)ipeppe_offset;
+				if(strchr(optarg,':'))
+					ro=(size_t)atoi(strchr(optarg,':')+1)-peppe_offset;
+				if(strchr(optarg,'+'))
+					ro=(size_t)atoi(strchr(optarg,'+')+1);
+				tmp=FIM_VID_OPEN_OFFSET;       tmp+="="; tmp+=string((int)peppe_offset);/* FIXME */ tmp+=";";
+				tmp=FIM_VID_OPEN_OFFSET_RETRY; tmp+="="; tmp+=string((int)ro);/* FIXME */ tmp+=";";
 				cc.pre_autocmd_add(tmp);
+				//std::cout << "adding autocmd " << tmp<< "\n";
 				//std::cout << "peppe_offset" << peppe_offset<< "\n";
 			}
 		}

@@ -1610,6 +1610,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 #endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
     size_t read_offset = 0;
+    size_t read_offset_u = 0;
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
@@ -1782,10 +1783,11 @@ noa:	1;
 #endif /* FIM_WITH_ARCHIVE */
     //size_t read_offset=cc.getIntVariable("g:" FIM_VID_OPEN_OFFSET);
     read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
-
+    read_offset_u = read_offset + cc.getIntVariable(FIM_VID_OPEN_OFFSET_RETRY);/* warning : this can lead to negative values */
+    read_offset_u = FIM_MAX(read_offset,read_offset_u);
+with_offset:
     if(read_offset>0)
 	    fim_fseek(fp,read_offset,SEEK_SET);
-
 #ifdef FIM_WANT_SEEK_MAGIC
 	/* FIXME : EXPERIMENTAL */
 	string sm;
@@ -2149,6 +2151,12 @@ found_a_loader:	/* we have a loader */
 shall_skip_header:
 head_not_found: /* no appropriate loader found for this image */
     img=NULL;
+    if( read_offset_u > read_offset )
+    {
+	    read_offset++;
+	    //std::cout << "will retry with offset "<< read_offset  <<" :)\n" ;
+	    goto with_offset;
+    }
 errl:
     if(img && img->data)fim_free(img->data);
     if(img )fim_free(img);

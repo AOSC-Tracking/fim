@@ -8,7 +8,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
@@ -700,6 +700,10 @@ _no_rc_file
 .B
 _open_offset
 [internal,in,optional] offset (specified in bytes) used when opening a file 
+.fi
+.B
+_open_offset_retry
+[internal,in,optional] number of adjacent bytes to probe in opening the file 
 .fi
 .B
 _orientation
