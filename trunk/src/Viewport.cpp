@@ -739,9 +739,9 @@ namespace fim
 		fim_pan_t _px = px, _py = py;
 
 #if FIM_WANT_VIEWPORT_TRANSFORM
-		if(image_ && image_->getIntVariable(FIM_VID_FLIPPED)) /* FIXME: this is only i: ... */
+		if(image_ && image_->is_flipped()) /* FIXME: this is only i: ... */
 			_py = 100 - _py;
-		if(image_ && image_->getIntVariable(FIM_VID_MIRRORED)) /* FIXME: this is only i: ... */
+		if(image_ && image_->is_mirrored()) /* FIXME: this is only i: ... */
 			_px = 100 - _px;
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 
@@ -806,9 +806,9 @@ namespace fim
 		//std::cout << vs << " " << hs << " " << ps << FIM_CNS_NEWLINE;
 		
 #if FIM_WANT_VIEWPORT_TRANSFORM
-		if(image_ && image_->getIntVariable(FIM_VID_FLIPPED)) /* FIXME: this is only i: ... */
+		if(image_ && image_->is_flipped()) /* FIXME: this is only i: ... */
 			vs=-vs;
-		if(image_ && image_->getIntVariable(FIM_VID_MIRRORED)) /* FIXME: this is only i: ... */
+		if(image_ && image_->is_mirrored()) /* FIXME: this is only i: ... */
 			hs=-hs;
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 

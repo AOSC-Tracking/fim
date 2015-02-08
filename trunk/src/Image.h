@@ -78,6 +78,8 @@ class Image
 	bool next_page(int j=+1);
 	int n_pages(void)const;
 	bool is_multipage(void)const;
+	int is_mirrored(void)const;
+	int is_flipped(void)const;
 	bool have_nextpage(int j=1)const;
 	bool have_prevpage(int j=1)const;
 

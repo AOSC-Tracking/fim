@@ -252,11 +252,10 @@ void fim_background_load()
 
 static void ers(const char*value, Image *image)
 {
-		/* FIXME: shall clean up this function! */
-		// value can be of the form "X - Y", with X and Y in
+		// EXIF orientation value can be of the form "X - Y", with X and Y in
 		// {top,bottom,left,right}
-		// here we handle only
-		// on: http://sylvana.net/jpegcrop/exif_orientation.html 
+		//
+		// from http://sylvana.net/jpegcrop/exif_orientation.html 
 		// we got the following combinations:
 		// Value	0th Row	0th Column
 		// 1	top	left side
@@ -284,7 +283,8 @@ static void ers(const char*value, Image *image)
 		// 7,8 want a cw rotation
 		// 5,6 want a ccw rotation
 		//
-		bool shouldmirror,shouldrotatecw,shouldrotateccw,shouldflip;
+		bool shouldmirror,shouldflip;
+		int shouldrotate=0;
 	       	fim_char_t r,c;
 		const fim_char_t *p = NULL;
 		fim_char_t f;
@@ -327,20 +327,22 @@ static void ers(const char*value, Image *image)
 			goto uhmpf;
 		shouldmirror=(f==2 || f==3 || f==5 || f==7);
 		shouldflip=(f==4 || f==3);
-		shouldrotatecw=(f==5 || f==6);
-		shouldrotateccw=(f==7 || f==8);
+		if (f==5 || f==6) shouldrotate = 3 ; // cw
+		if (f==7 || f==8) shouldrotate = 1 ; // ccw
 		//std::cout << "EXIF_TAG_ORIENTATION FOUND !\n",
 		//std::cout << "VALUE: " <<(int)f << r<< c<<
-		//shouldmirror<< shouldrotatecw<< shouldrotateccw<< shouldflip,
+		//shouldmirror << shouldrotate << shouldflip,
 		//std::cout << "\n";
-		if(shouldrotateccw)image->setVariable("__exif_orientation",1);
-		if(shouldrotatecw)image->setVariable("__exif_orientation",3);
-		if(shouldmirror && shouldflip && !shouldrotatecw && !shouldrotateccw)
+		if(shouldmirror && shouldflip && !shouldrotate)
 			shouldmirror = false,
 			shouldflip = false,
-			image->setVariable("__exif_orientation",2);
-		//if(shouldmirror)image->setVariable("exif_mirrored",1);
-		//if(shouldflip)image->setVariable("exif_flipped",1);
+			shouldrotate = 2;
+		if( shouldrotate )
+			image->setVariable("__exif_orientation",shouldrotate);
+		if(shouldmirror)
+			image->setVariable("__exif_mirrored",1);
+		if(shouldflip)
+			image->setVariable("__exif_flipped",1);
 uhmpf:
 		return;
 	}
@@ -850,10 +852,10 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 
 	// should flip ? should mirror ?
 	int flip   =
-	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1))&&
+	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(is_flipped()))&&
 	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
 	int mirror   =
-	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
+	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(is_mirrored()))&&
 	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
@@ -1106,10 +1108,10 @@ fim::string Image::getInfo(void)
 
 	// should flip ? should mirror ?
 	int flip   =
-	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1))&&
+	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(is_flipped()))&&
 	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
 	int mirror   =
-	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
+	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(is_mirrored()))&&
 	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
 
 	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
@@ -1279,6 +1281,17 @@ ret:
 		return (is_multipage() && page_-j >= 0);
 	}
  
+	int Image::is_mirrored(void)const
+	{
+		return FIM_XOR( this->getIntVariable("__exif_mirrored")==1, this->getIntVariable(FIM_VID_MIRRORED)==1 );
+	}
+
+	int Image::is_flipped(void)const
+	{
+
+		return FIM_XOR( this->getIntVariable("__exif_flipped") ==1, this->getIntVariable(FIM_VID_FLIPPED)==1 );
+	}
+
 #if 0
 	bool Image::gray_negate(void)
 	{

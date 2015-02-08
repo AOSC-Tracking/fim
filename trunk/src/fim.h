@@ -121,6 +121,7 @@
 #define FIM_INT_PCNT_SAFE(P,L) FIM_INT_PCNT(FIM_MIN(100,FIM_MAX(P,0)),(L))
 #define FIM_INT_DET_PCNT(P,T) ( (fim_int) ((((double)(P))/((double)(T)))*100.0) )
 #define FIM_DELIMIT_TO_100(X) FIM_MIN(FIM_MAX(X,0),100)
+#define FIM_XOR(X,Y) ((X)^(Y))
 
 #include "fim_types.h"
 #include "fim_limits.h"
