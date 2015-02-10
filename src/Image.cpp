@@ -614,7 +614,7 @@ ret:
 		{
 			goto ret;/*no need to rescale*/
 		}
-		orientation_=((neworientation%FIM_ROT_ROUND)+FIM_ROT_ROUND)%FIM_ROT_ROUND; // fix this
+		orientation_ = FIM_MOD(neworientation,FIM_ROT_ROUND);
 
 		setGlobalVariable(FIM_VID_SCALE,newscale_*100);
 		if(fimg_)
@@ -633,7 +633,7 @@ ret:
 
 
 #if FIM_WANT_ASCALE_FRIENDLY_ROTATION
-			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
+			if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
 				if( newascale != 1.0 )
 					newascale = 1.0 / newascale;
 #endif /* FIM_WANT_ASCALE_FRIENDLY_ROTATION */
@@ -659,31 +659,31 @@ ret:
 					);
 #endif /* FIM_PROGRESSIVE_RESCALING */
 #if FIM_WANT_ASCALE_FRIENDLY_ROTATION
-			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
+			if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
 				if( newascale != 1.0 )
 					newascale = 1.0 / newascale;
 #endif /* FIM_WANT_ASCALE_FRIENDLY_ROTATION */
 			/* orientation_ can be 0,1,2,3 */
-			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ != FIM_ROT_2Q)
+			if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
 			{
 				// we make a backup.. who knows!
 				// FIXME: should use a faster and memory-smarter method : in-place
 				struct ida_image *rb=img_;
-				rb  = FbiStuff::rotate_image90(rb,orientation_==FIM_ROT_1Q?FIM_ROT_0Q:FIM_ROT_1Q);
+				rb  = FbiStuff::rotate_image90(rb,orientation_==FIM_ROT_L?FIM_I_ROT_L:FIM_I_ROT_R);
 				if(rb)
 				{
 					FbiStuff::free_image(img_);
 					img_=rb;
 				}
 			}
-			if( img_ && orientation_!=FIM_ROT_0Q && orientation_ == FIM_ROT_2Q)
+			if( img_ && orientation_ == FIM_ROT_U)
 			{	
 				// we make a backup.. who knows!
 				struct ida_image *rbb=NULL,*rb=NULL;
 				// FIXME: should use a faster and memory-smarter method : in-place
-				rb  = FbiStuff::rotate_image90(img_,0);
+				rb  = FbiStuff::rotate_image90(img_,FIM_I_ROT_L);
 				if(rb)
-					rbb  = FbiStuff::rotate_image90(rb,0);
+					rbb  = FbiStuff::rotate_image90(rb,FIM_I_ROT_L);
 				if(rbb)
 				{
 					FbiStuff::free_image(img_);
@@ -862,11 +862,11 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
 	if(orientation_!=FIM_NO_ROT)
 	{
-		if(orientation_==FIM_ROT_1Q) *(imp++)='L';
+		if(orientation_==FIM_ROT_L) *(imp++)=FIM_ROT_L_C;
 		else
-		if(orientation_==FIM_ROT_2Q) *(imp++)='U';
+		if(orientation_==FIM_ROT_U) *(imp++)=FIM_ROT_U_C;
 		else
-		if(orientation_==FIM_ROT_3Q) *(imp++)='R';
+		if(orientation_==FIM_ROT_R) *(imp++)=FIM_ROT_R_C;
 	}
 	*imp=FIM_SYM_CHAR_NUL;
 

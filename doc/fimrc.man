@@ -707,7 +707,7 @@ _open_offset_retry
 .fi
 .B
 _orientation
-[internal] Rotation is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied with a per\-image basis.  In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" will do the same thing: rotate the image one time by 90'.
+[internal] Orthogonal clockwise rotation (orientation) is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied on a per\-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" are equivalent: they rotate the image one time by 90'.
 .fi
 .B
 _preferred_rendering_dpi
@@ -1132,8 +1132,8 @@ bind 'o' "sort";
 bind 'b' "prev;";
 bind 'B' "toggleDisplayBusy";
 alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
-alias "rotate90_ccw" "i:_orientation=i:_orientation+1;i:fresh=1;i:fresh=1;redisplay;" "";
-alias "rotate90_cw"  "i:_orientation=i:_orientation+3;i:fresh=1;i:fresh=1;redisplay;" "";
+alias "rotate90_ccw" "i:_orientation=i:_orientation+3;i:fresh=1;i:fresh=1;redisplay;" "";
+alias "rotate90_cw"  "i:_orientation=i:_orientation+1;i:fresh=1;i:fresh=1;redisplay;" "";
 alias "rotate90" "rotate90_cw;display;" "";
 alias "rotate270" "rotate90_ccw;display;" "";
 alias "rotate10"     "rotate  '10';display;" "";

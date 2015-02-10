@@ -2177,6 +2177,7 @@ ret:
 struct ida_image*
 FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
 {
+    /* 0: CCW, 1: CW */
     struct op_resize_parm p;
     struct ida_rect  rect;
     struct ida_image *dest;
