@@ -182,7 +182,7 @@ manmode:
 			" and they are triggered on actions as indicated by their name.\n"
 			".SH VARIABLES REFERENCE\n"
 			"If undeclared, a variable will evaluate to 0.\n\n"
-			"There are multiple namespaces in which variables may exist: " FIM_SYM_NAMESPACE_PREFIXES_DSC ". A namespace is specified by a prefix, which is one of: " FIM_SYM_NAMESPACE_PREFIXES ", which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable " FIM_SYM_NAMESPACE_IMAGE_ALL_STR " expands to the collation of all the name-value pairs for the current image.\n"
+			"There namespaces in which variables may exist are: " FIM_SYM_NAMESPACE_PREFIXES_DSC ". A namespace is specified by a prefix, which is one of: " FIM_SYM_NAMESPACE_PREFIXES ", which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable " FIM_SYM_NAMESPACE_IMAGE_ALL_STR " expands to the collation of all the name-value pairs for the current image.\n"
 			"\nIn the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n"
 			"\n")+
 		       	get_variables_reference(refmode)+
