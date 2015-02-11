@@ -1,8 +1,8 @@
 /* $LastChangedDate$ */
 /*
- Namespace.h : a class for local variables storage
+ Namespace.cpp : a class for local variables storage
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -76,6 +76,11 @@ namespace fim
 				return browser_.setVariable(id,value);
 			}
 			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				return variables_[id].setInt(value);
+			}
+			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
@@ -137,6 +142,11 @@ namespace fim
 				return browser_.setVariable(id,value);
 			}
 			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				return variables_[id].setFloat(value);
+			}
+			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
@@ -196,6 +206,11 @@ namespace fim
 			{
 				//browser variable
 				return browser_.setVariable(id,s.c_str());
+			}
+			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				return (fim_int)(variables_[id].setString(s));
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
@@ -261,6 +276,13 @@ namespace fim
 				return browser_.setVariable(id,value);
 			}
 			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_[id]=value;	/* FIXME : this does not work */
+				variables_[id].set(value);	/* FIXME : this works */
+				return value;
+			}
+			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
@@ -321,6 +343,13 @@ namespace fim
 			{
 				//browser variable
 				return browser_.getIntVariable(id);
+			}
+			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_t::const_iterator vi=variables_.find(id);
+				if(vi!=variables_.end()) return vi->second.getInt();
+				else return 0;
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
@@ -396,6 +425,13 @@ namespace fim
 				return browser_.getFloatVariable(id);
 			}
 			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_t::const_iterator vi=variables_.find(id);
+				if(vi!=variables_.end()) return vi->second.getFloat();
+				else return FIM_CNS_EMPTY_FP_VAL;
+			}
+			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
@@ -458,6 +494,16 @@ namespace fim
 				//browser variable
 //				std::cout << "brbbbr\n";
 				return browser_.getStringVariable(id);
+			}
+			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_t::const_iterator vi=variables_.find(id);
+				if(vi!=variables_.end()) 
+				{
+					return vi->second.getString();
+				}
+				else return FIM_CNS_EMPTY_RESULT;
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
@@ -569,6 +615,13 @@ namespace fim
 			{
 				//browser variable
 				return browser_.getVariable(id);
+			}
+			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_t::const_iterator vi=variables_.find(id);
+				if(vi!=variables_.end()) return vi->second;
+				else return Var();
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
