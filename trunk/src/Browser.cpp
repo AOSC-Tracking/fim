@@ -1319,7 +1319,7 @@ ret:
 		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
 		//const int cf=cf_,cp=c_page(),pc=n_pages(),fc=n_files();
 		const int cf = cf_,cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages()),fc = n_files();
-		int gv = 0,nf = cf,mv = 0,np = cp;
+		fim_int gv = 0,nf = cf,mv = 0,np = cp;
 		FIM_PR('*');
 
 		if( n_files() == 0 || !s )
@@ -1358,7 +1358,7 @@ ret:
 			isrj = (c=='+' || c=='-');
 			if( isdigit(c)  || c == '-' || c == '+' )
 			{
-				gv = atoi(s);
+				gv = fim_atoi(s);
 				if(gv == FIM_CNS_LAST)
 					gv = -1;
 			}

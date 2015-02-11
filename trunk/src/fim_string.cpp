@@ -321,7 +321,7 @@ namespace fim
 	}
 
 	operator string::int()const{return atoi(s);}
-	operator string::fim_int()const{return atoll(s);}
+	operator string::fim_int()const{return fim_atoi(s);}
 	operator string::float()const{return fim_atof(s);}
 
 	/*
@@ -492,7 +492,7 @@ namespace fim
 #if FIM_WANT_LONG_INT
  	string::operator int  (void)const{return atoi(this->c_str());}
 #endif /* FIM_WANT_LONG_INT */
- 	string::operator fim_int  (void)const{return atoll(this->c_str());}
+ 	string::operator fim_int  (void)const{return fim_atoi(this->c_str());}
 	string::operator float(void)const{return fim_atof(this->c_str());}
 
 	int string::find_re(const fim_char_t*r, int *mbuf)const

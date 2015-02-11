@@ -2,7 +2,7 @@
 /*
  Arg.h : Argument class
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,11 +29,11 @@ class Arg
 	fim::string val_;
 	Arg(const fim::string &s):val_(s){}
 	Arg(const Arg &arg):val_(arg.val_){}
-	bool operator==(int i);
-	bool operator<=(int i);
-	bool operator>=(int i);
-	bool operator <(int i);
-	bool operator >(int i);
+	bool operator==(fim_int i);
+	bool operator<=(fim_int i);
+	bool operator>=(fim_int i);
+	bool operator <(fim_int i);
+	bool operator >(fim_int i);
 };
 
 

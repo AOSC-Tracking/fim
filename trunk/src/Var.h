@@ -115,7 +115,7 @@ class Var
 		const fim_char_t *s="0";
 		DBG("(v())\n");
 		type='i';
-		if(type=='i')i=atoi(s);
+		if(type=='i')i=fim_atoi(s);
 		else
 		       	if(type=='f')
 				f=fim_atof(s);
@@ -143,7 +143,7 @@ class Var
 	Var(const fim_char_t*s="0",int type_='i')
 	{
 		type=type_;
-		if(type=='i')i=atoi(s);
+		if(type=='i')i=fim_atoi(s);
 		else if(type=='f')f=fim_atof(s);
 		else if(type=='s')this->s=s;
 		else i=0;
@@ -164,11 +164,11 @@ class Var
 	Var concat(const Var &v)const{return this->getString()+v.getString();}
 #endif
 	float setFloat(float f){type='f';return this->f=f;}
-	int   setInt(int i){type='i';return this->i=i;}
+	fim_int   setInt(fim_int i){type='i';return this->i=i;}
 	fim::string setString(fim::string &s){type='s';this->s=s;return this->s;}
 	int getType(void)const{return type;}
-	int getInt(void)const{return(type=='i')?i:
-		(type=='f'?((int)(f)):
+	fim_int getInt(void)const{return(type=='i')?i:
+		(type=='f'?((fim_int)(f)):
 		 (type=='s'?(atoi(s.c_str())):0)
 		 )
 		;}
@@ -190,7 +190,12 @@ class Var
 		else
 		{
 			if(type=='i')
-				sprintf(buf,"%d",i);
+			{
+				if(sizeof(fim_int)==sizeof(int))
+					sprintf(buf,"%d",(int)i);
+				else
+					sprintf(buf,"%lld",(long long int)i);
+			}
 			else
 			       	if(type=='f')
 					sprintf(buf,"%f",f);

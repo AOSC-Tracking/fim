@@ -377,10 +377,10 @@ static bool aainvalid;
 
 //		NOTE: if uncommenting this, remember to #ifdef HAVE_GETENV
 //		fim_aa_char *e;fim_sys_int v;
-//		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms_.width  = v-1;
-//		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms_.height = v-1;
-//		if((e=getenv("COLUMNS"))!=NULL && (v=atoi(e))>0) ascii_hwparms_.recwidth  = v;
-//		if((e=getenv("LINES"  ))!=NULL && (v=atoi(e))>0) ascii_hwparms_.recheight = v;
+//		if((e=getenv("COLUMNS"))!=NULL && (v=fim_atoi(e))>0) ascii_hwparms_.width  = v-1;
+//		if((e=getenv("LINES"  ))!=NULL && (v=fim_atoi(e))>0) ascii_hwparms_.height = v-1;
+//		if((e=getenv("COLUMNS"))!=NULL && (v=fim_atoi(e))>0) ascii_hwparms_.recwidth  = v;
+//		if((e=getenv("LINES"  ))!=NULL && (v=fim_atoi(e))>0) ascii_hwparms_.recheight = v;
 
 //		ascii_hwparms_.width  = 80;
 //		ascii_hwparms_.height = 56;

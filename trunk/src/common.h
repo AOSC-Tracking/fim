@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ void append_to_file(fim::string filename, fim::string lines);
 fim_char_t * dupstr (const fim_char_t* s);
 fim_char_t * dupnstr (float n, const fim_char_t c='\0');
 fim_char_t * dupnstr (const fim_char_t c1, double n, const fim_char_t c2='\0');
-fim_char_t * dupnstr (int n);
+fim_char_t * dupnstr (fim_int n);
 fim_char_t * dupsqstr (const fim_char_t* s);
 int fim_rand(void);
 
@@ -92,6 +92,7 @@ int fim_fgetc(FILE *stream);
 int fim_snprintf_XB(char *str, size_t size, size_t q);
 fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_calloc = false);
 const fim_char_t * fim_basename_of(const fim_char_t * s);
+fim_int fim_atoi(const char*s);
 
 /* exceptions */
 typedef int FimException;

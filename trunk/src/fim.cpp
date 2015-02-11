@@ -1073,8 +1073,8 @@ done:
 		    //fim's
 	#ifdef FIM_AUTOCMDS
 		{
-			int ipeppe_offset;
-			ipeppe_offset=(int)atoi(optarg);
+			fim_int ipeppe_offset;
+			ipeppe_offset = fim_atoi(optarg);
 			if(ipeppe_offset<0)
 				std::cerr<< "warning: ignoring user set negative offset value.\n";
 			else
@@ -1087,8 +1087,8 @@ done:
 					ro=(size_t)atoi(strchr(optarg,':')+1)-peppe_offset;
 				if(strchr(optarg,'+'))
 					ro=(size_t)atoi(strchr(optarg,'+')+1);
-				tmp=FIM_VID_OPEN_OFFSET;       tmp+="="; tmp+=string((int)peppe_offset);/* FIXME */ tmp+=";";
-				tmp=FIM_VID_OPEN_OFFSET_RETRY; tmp+="="; tmp+=string((int)ro);/* FIXME */ tmp+=";";
+				tmp=FIM_VID_OPEN_OFFSET;       tmp+="="; tmp+=string((fim_int)peppe_offset);/* FIXME */ tmp+=";";
+				tmp=FIM_VID_OPEN_OFFSET_RETRY; tmp+="="; tmp+=string((fim_int)ro);/* FIXME */ tmp+=";";
 				cc.pre_autocmd_add(tmp);
 				//std::cout << "adding autocmd " << tmp<< "\n";
 				//std::cout << "peppe_offset" << peppe_offset<< "\n";
@@ -1111,12 +1111,12 @@ done:
 		    pf = FIM_FLAG_PUSH_REC ;
 		    break;
 		case 's':
-	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,atoi(optarg));
-		    if(atoi(optarg)>0)
+	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,fim_atoi(optarg));
+		    if(fim_atoi(optarg)>0)
 		    {
 		    	// fixme : still buggy
 		    	fim::string s=FIM_VID_STEPS;
-			s+=fim::string((int)atoi(optarg));
+			s+=fim::string(fim_atoi(optarg));
 			s+=";";
 	#ifdef FIM_AUTOCMDS
 			cc.pre_autocmd_add(s);
