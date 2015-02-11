@@ -30,6 +30,13 @@ namespace fim
 			return variables_[varname].setInt(value);
 		}
 
+#if FIM_WANT_LONG_INT
+		fim_int Namespace::setVariable(const fim::string& varname,    int value)
+		{
+			return setVariable(varname,(fim_int) value);
+		}
+#endif /* FIM_WANT_LONG_INT */
+
 		fim_float_t Namespace::setVariable(const fim::string& varname,fim_float_t value)
 		{
 			/*
@@ -148,6 +155,13 @@ namespace fim
 #endif /* FIM_INDIPENDENT_NAMESPACE */
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
+
+#if FIM_WANT_LONG_INT
+		fim_int Namespace::setGlobalVariable(const fim::string& varname,    int value)
+		{
+			return setGlobalVariable(varname,(fim_int) value);
+		}
+#endif /* FIM_WANT_LONG_INT */
 
 		fim_int Namespace::setGlobalVariable(const fim::string& varname,const fim_char_t*value)
 		{

@@ -1106,12 +1106,12 @@ err:
 
 	fim_err_t SDLDevice::post_wmresize(void)
 	{
-		cc.setVariable(FIM_VID_SCREEN_WIDTH, current_w_);
-		cc.setVariable(FIM_VID_SCREEN_HEIGHT,current_h_);
+		cc.setVariable(FIM_VID_SCREEN_WIDTH, (fim_int)current_w_);
+		cc.setVariable(FIM_VID_SCREEN_HEIGHT,(fim_int)current_h_);
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		// textual console reformatting
 		//mc_.setRows ( get_chars_per_column()/(2*f_->height) );
-		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,height()/(2*f_->height));
+		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(fim_int)(height()/(2*f_->height)));
 		mc_.reformat(    width() /    f_->width   );
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;

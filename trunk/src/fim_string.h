@@ -121,7 +121,10 @@ namespace fim
 		string(const fim_char_t*s):std::string(s?s:""){}
 
 		string(fim_char_t c);
+#if FIM_WANT_LONG_INT
 		string(int i);
+#endif /* FIM_WANT_LONG_INT */
+		string(fim_int i);
 		string(float i);
 		string(int * i);
 		string(size_t i);
@@ -129,7 +132,10 @@ namespace fim
 /*
  		the following two operators are very nice to use but pose unexpected problems.		
 */
+ 		operator fim_int  (void)const;
+#if FIM_WANT_LONG_INT
  		operator int  (void)const;
+#endif /* FIM_WANT_LONG_INT */
 		operator float(void)const;
 
 		string operator+(const string s)const;

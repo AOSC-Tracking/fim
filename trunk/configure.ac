@@ -1173,6 +1173,24 @@ AM_CONDITIONAL(FIM_WANT_HARDCODED_CONSOLEFONT, test x$have_hardcoded_font = xyes
 
 dnl ==================
 
+AC_ARG_ENABLE(long-int-vars, AC_HELP_STRING([--enable-long-int-vars], [Internals shall use 64 bit integers (EXPERIMENTAL].),
+[if test x$enableval = xyes; then
+        fim_cv_want_int64_int=yes;
+else
+        fim_cv_want_int64_int=no;
+fi],[ fim_cv_want_int64_int=yes; ])
+
+AH_TEMPLATE([FIM_WANT_LONG_INT])
+if test x$fim_cv_want_int64_int = xyes; then
+	AC_DEFINE([FIM_WANT_LONG_INT],0,[Internals shall use 64 bit integers (EXPERIMENTAL).])
+else
+	fim_cv_want_int64_int=no
+fi
+AM_CONDITIONAL(FIM_WANT_LONG_INT, test x$fim_cv_want_int64_int = xyes )
+
+
+dnl ==================
+
 fim_cv_windows=yes
 
 AC_ARG_ENABLE(windows, AC_HELP_STRING([--disable-windows], [Disable windowing system in Fim. (deprecated)]),

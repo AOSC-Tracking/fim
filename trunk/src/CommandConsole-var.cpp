@@ -2,7 +2,7 @@
 /*
  CommandConsole-var.h : CommandConsole variables store
 
- (c) 2013-2013 Michele Martone
+ (c) 2013-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,13 @@
 
 namespace fim
 {
+#if FIM_WANT_LONG_INT
+	fim_int CommandConsole::setVariable(const fim::string& varname,    int value)
+	{
+		return setVariable(varname,(fim_int) value);
+	}
+#endif /* FIM_WANT_LONG_INT */
+
 	fim_int CommandConsole::setVariable(const fim::string& varname,fim_int value)
 	{
 		/*
