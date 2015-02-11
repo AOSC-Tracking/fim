@@ -316,14 +316,14 @@ namespace fim
 		 *
 		 * global or inner (not i: !) or local (v:) marker
 		 * */
-		int autotop=getGlobalIntVariable(FIM_VID_AUTOTOP)   | image_->getIntVariable(FIM_VID_AUTOTOP) | getIntVariable(FIM_VID_AUTOTOP);
+		int autotop=getGlobalIntVariable(FIM_VID_AUTOTOP)   | image_->getIntVariable(FIM_VID_AUTOTOP) /* | getIntVariable(FIM_VID_AUTOTOP)*/;
 		//int flip   =getGlobalIntVariable(FIM_VID_AUTOFLIP)  | image_->getIntVariable(FIM_VID_FLIPPED) | getIntVariable(FIM_VID_FLIPPED);
 		int flip   =
-		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image_->getIntVariable(FIM_VID_FLIPPED)== 1)|(getIntVariable(FIM_VID_FLIPPED)== 1)&&
-		!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(image_->getIntVariable(FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
+		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image_->getIntVariable(FIM_VID_FLIPPED)== 1)/*|(getIntVariable(FIM_VID_FLIPPED)== 1)*/&&
+		!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(image_->getIntVariable(FIM_VID_FLIPPED)==-1)/*|(getIntVariable(FIM_VID_FLIPPED)==-1)*/));
 		int mirror   =
-		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image_->getIntVariable(FIM_VID_MIRRORED)== 1)|(getIntVariable(FIM_VID_MIRRORED)== 1))&&
-		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image_->getIntVariable(FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
+		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image_->getIntVariable(FIM_VID_MIRRORED)== 1)/*|(getIntVariable(FIM_VID_MIRRORED)== 1)*/)&&
+		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image_->getIntVariable(FIM_VID_MIRRORED)==-1)/*|(getIntVariable(FIM_VID_MIRRORED)==-1)*/));
 		int negate   =	/* FIXME : temporarily here */
 		((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->getIntVariable(FIM_VID_NEGATED)==0));
 		int desaturate  =	/* FIXME : temporarily here */

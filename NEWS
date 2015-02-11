@@ -49,7 +49,7 @@
  * the 'help' command will search in help items if argument starts with /
  * the 'help' command will search also in fim command options (r791*)
  * special image variable expandos/specifiers (TODO: (undocumented) r676)
- * special variable i:* expanding to all the variable name/value pairs of an image (r724)
+ * special variable i:* expanding to all the variable name/value pairs of the current image (r724)
  * opening image files in archives with libarchive (experimental, incomplete; TODO: r665)
  * (experimental) JPEG-2000 support via JasPer (TODO: r660)
  * (experimental) exiftool interface (TODO: r654*)
@@ -68,6 +68,7 @@
  * --offset accepts a range now (using the new _open_offset_retry variable) (EXPERIMENTAL,r795*)
  * if an image has been opened with an offset, i:_open_offset will be set accordingly (EXPERIMENTAL,r796*)
  * i:pagecount is now replaced by i:pages (r806*)
+ * put aside the v: b: and w: namespaces until they make more sense (r807*)
 
                 Version 0.4
 
