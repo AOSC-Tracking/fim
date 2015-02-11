@@ -338,11 +338,11 @@ static void ers(const char*value, Image *image)
 			shouldflip = false,
 			shouldrotate = 2;
 		if( shouldrotate )
-			image->setVariable("__exif_orientation",shouldrotate);
+			image->setVariable(FIM_VID_EXIF_ORIENTATION,shouldrotate);
 		if(shouldmirror)
-			image->setVariable("__exif_mirrored",1);
+			image->setVariable(FIM_VID_EXIF_MIRRORED,1);
 		if(shouldflip)
-			image->setVariable("__exif_flipped",1);
+			image->setVariable(FIM_VID_EXIF_FLIPPED,1);
 uhmpf:
 		return;
 	}
@@ -1187,7 +1187,7 @@ labeldone:
 		 * warning : this should work more intuitively
 		 * */
 		fim_int eo = FIM_NO_ROT, weo = cc.getIntVariable(FIM_VID_WANT_EXIF_ORIENTATION);
-		eo += getIntVariable("__exif_orientation") * ( weo ? 1 : 0 );
+		eo += getIntVariable(FIM_VID_EXIF_ORIENTATION) * ( weo ? 1 : 0 );
 		return (FIM_MOD(
 		( eo +
 	       	 getIntVariable(FIM_VID_ORIENTATION)
@@ -1283,13 +1283,13 @@ ret:
  
 	int Image::is_mirrored(void)const
 	{
-		return FIM_XOR( this->getIntVariable("__exif_mirrored")==1, this->getIntVariable(FIM_VID_MIRRORED)==1 );
+		return FIM_XOR( this->getIntVariable(FIM_VID_EXIF_MIRRORED)==1, this->getIntVariable(FIM_VID_MIRRORED)==1 );
 	}
 
 	int Image::is_flipped(void)const
 	{
 
-		return FIM_XOR( this->getIntVariable("__exif_flipped") ==1, this->getIntVariable(FIM_VID_FLIPPED)==1 );
+		return FIM_XOR( this->getIntVariable(FIM_VID_EXIF_FLIPPED) ==1, this->getIntVariable(FIM_VID_FLIPPED)==1 );
 	}
 
 #if 0
