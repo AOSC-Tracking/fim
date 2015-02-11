@@ -475,15 +475,15 @@ _TERM
 .fi
 .B
 __exif_flipped
-[out] flipping information, read from the EXIF tags of a given image (i:).
+[out,i:] flipping information, read from the EXIF tags of a given image.
 .fi
 .B
 __exif_mirrored
-[out] mirroring information, read from the EXIF tags of a given image (i:).
+[out,i:] mirroring information, read from the EXIF tags of a given imag.
 .fi
 .B
 __exif_orientation
-[out] orientation information in the same format of _orientation, read from the EXIF tags of a given image (i:).
+[out,i:] orientation information in the same format of _orientation, read from the orientation EXIF tags (i:EXIF_Orientation).
 .fi
 .B
 _archive_files
@@ -527,11 +527,11 @@ _command_expansion
 .fi
 .B
 _comment
-[out] the image comment, extracted from the image file (if any)
+[i:,out] the image comment, extracted from the image file (if any)
 .fi
 .B
 _comment_over_image
-[experimental,in] if v:_comment_over_image is set not to 0, will display the contents of i:_comment over the image.
+[experimental,in,v:] if v:_comment_over_image is set not to 0, will display the contents of i:_comment over the image.
 .fi
 .B
 _console_buffer_free
@@ -607,7 +607,7 @@ _fbfont
 .fi
 .B
 _file_loader
-[in] if not empty, this string will force a file loader (among the ones listed in the \-V switch output); [out] i:_file_loader stores the loader of the current image
+[in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the \-V switch output); [out] i:_file_loader stores the loader of the current image
 .fi
 .B
 _fileindex
@@ -619,7 +619,7 @@ _filelistlen
 .fi
 .B
 _filename
-[out] the current file name string
+[out,i:] the current file name string
 .fi
 .B
 _fim_bpp
@@ -719,7 +719,7 @@ _open_offset_retry
 .fi
 .B
 _orientation
-[internal] Orthogonal clockwise rotation (orientation) is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied on a per\-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" are equivalent: they rotate the image one time by 90'.
+[internal,i:] Orthogonal clockwise rotation (orientation) is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied on a per\-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" are equivalent: they rotate the image one time by 90'.
 .fi
 .B
 _preferred_rendering_dpi
@@ -847,47 +847,43 @@ _want_sleep_seconds
 .fi
 .B
 angle
-[in,out] a floating point number specifying the rotation angle, in degrees
+[in,out,i:] a floating point number specifying the rotation angle, in degrees
 .fi
 .B
 ascale
-[in,out] the asymmetric scaling of the current image
+[in,out,i:] the asymmetric scaling of the current image
 .fi
 .B
 desaturated
-[out] 1, if the image is desaturated
+[out,i:] 1, if the image is desaturated
 .fi
 .B
 flipped
-[out] 1, if the image is flipped
+[out,i:] 1, if the image is flipped
 .fi
 .B
 fresh
-[in,out,experimental] 1 if the image was loaded, before all autocommands execution
+[in,out,i:,experimental] 1 if the image was loaded, before all autocommands execution
 .fi
 .B
 height
-[out] the current image original height
+[out,i:] the current image original height
 .fi
 .B
 mirrored
-[out] 1, if the image is mirrored 
+[out,i:] 1, if the image is mirrored 
 .fi
 .B
 negated
-[out] 1, if the image is negated
+[out,i:] 1, if the image is negated
 .fi
 .B
 page
 [out,experimental] the current page
 .fi
 .B
-pagecount
-[out,experimental] the page count for a given image
-.fi
-.B
 pages
-[out,experimental] the current number of pages of an image (i:) 
+[out,experimental,i:] the current number of pages of an image
 .fi
 .B
 random
@@ -895,19 +891,19 @@ random
 .fi
 .B
 scale
-[in] the scale of the current image
+[in,i:] the scale of the current image
 .fi
 .B
 sheight
-[out] the current image scaled height
+[out,i:] the current image scaled height
 .fi
 .B
 swidth
-[out] the current image scaled width
+[out,i:] the current image scaled width
 .fi
 .B
 width
-[out] the current image original width
+[out,i:] the current image original width
 .fi
 .SH USAGE EXAMPLES
 .nf
