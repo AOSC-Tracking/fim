@@ -2,7 +2,7 @@
 /*
  fim_stream.cpp : Textual output facility
 
- (c) 2007-2011 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,6 +56,16 @@ namespace fim
 			*this<<s;
 			return *this;
 		}
+
+#if FIM_WANT_LONG_INT
+		fim_stream& fim_stream::operator<<(fim_int i)
+		{
+			/* FIXME */
+			fim_char_t s[FIM_ATOX_BUFSIZE];sprintf(s,"%lld",(long long int)i);
+			*this<<s;
+			return *this;
+		}
+#endif /* FIM_WANT_LONG_INT */
 
 		fim_stream& fim_stream::operator<<(const  fim_char_t* s)
 		{

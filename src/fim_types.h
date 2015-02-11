@@ -2,7 +2,7 @@
 /*
  fim_types.h : Basic Fim type declarations
 
- (c) 2011-2013 Michele Martone
+ (c) 2011-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,6 +29,10 @@
 #else	/* defined(__GNUC__) */
 #define FIM_RSTRCT
 #endif	/* defined(__GNUC__) */
+#include <config.h>
+#if FIM_WANT_LONG_INT
+#include <stdint.h>
+#endif /* FIM_WANT_LONG_INT */
 
 //namespace fim
 //{
@@ -51,7 +55,11 @@
 	typedef int fim_cycles_t;	/* a type for fim's cycles */
 	typedef int fim_cmd_type_t;	/* a type for fim's command types */
 	typedef int fim_var_t;		/* a type for fim's variable types */
+#if FIM_WANT_LONG_INT
+	typedef int64_t fim_int;	/* a type for fim's internal integer type, always signed */
+#else /* FIM_WANT_LONG_INT */
 	typedef int fim_int;		/* a type for fim's internal integer type, always signed */
+#endif /* FIM_WANT_LONG_INT */
 	typedef int fim_str_t;		/* a type for stdin/stdout streams */
 	typedef int fim_sys_int;	/* always int */
 	typedef int fim_color_t;	/* >= 4 bytes */

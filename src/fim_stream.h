@@ -45,7 +45,11 @@ namespace fim
 
 		fim_stream& operator<<(float f);
 
+#if FIM_WANT_LONG_INT
 		fim_stream& operator<<(int i);
+#endif /* FIM_WANT_LONG_INT */
+
+		fim_stream& operator<<(fim_int i);
 
 	};
 }

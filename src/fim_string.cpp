@@ -100,6 +100,14 @@ namespace fim
 		assign(buf);
 	}
 
+	string::string(const fim_int i)
+	{
+		_string_init();
+		fim_char_t buf[FIM_CHARS_FOR_INT];
+		sprintf(buf,"%lld",(long long int)i);
+		assign(buf);
+	}
+
 	string::string(const unsigned int i)
 	{
 		_string_init();
@@ -310,6 +318,7 @@ namespace fim
 	}
 
 	operator string::int()const{return atoi(s);}
+	operator string::fim_int()const{return atoll(s);}
 	operator string::float()const{return fim_atof(s);}
 
 	/*
@@ -398,10 +407,20 @@ namespace fim
 		append(buf);
 	}
 
+#if FIM_WANT_LONG_INT
 	string::string(int i)
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
 		snprintf(buf,FIM_CHARS_FOR_INT-1,"%d",i);
+		buf[FIM_CHARS_FOR_INT-1]='\0';
+		append(buf);
+	}
+#endif /* FIM_WANT_LONG_INT */
+
+	string::string(fim_int i)
+	{
+		fim_char_t buf[FIM_CHARS_FOR_INT];
+		snprintf(buf,FIM_CHARS_FOR_INT-1,"%lld",(long long int)i);
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
 	}
@@ -464,7 +483,10 @@ namespace fim
 		return false;
 	}
 
+#if FIM_WANT_LONG_INT
  	string::operator int  (void)const{return atoi(this->c_str());}
+#endif /* FIM_WANT_LONG_INT */
+ 	string::operator fim_int  (void)const{return atoll(this->c_str());}
 	string::operator float(void)const{return fim_atof(this->c_str());}
 
 	int string::find_re(const fim_char_t*r, int *mbuf)const
