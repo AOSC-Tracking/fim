@@ -1609,8 +1609,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     size_t sbbs=NULL;
 #endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
-    size_t read_offset = 0;
-    size_t read_offset_u = 0;
+    long read_offset = 0, read_offset_u = 0;
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
@@ -1622,7 +1621,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
     if(vl)
-	    FIM_VERB_PRINTF("approaching loading page %d of \"%s\"\n",page,filename);
+	    FIM_VERB_PRINTF("approaching loading page %d of \"%s\"\n",(int)page,filename);
     //WARNING
     //new_image = 1;
 
@@ -1695,7 +1694,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 		{
 			npages = pi  ;
 			if(vl)
-				printf("ARCHIVE_EOF reached after %d files.\n",npages);
+				printf("ARCHIVE_EOF reached after %d files.\n",(int)npages);
 			break;
 		}
 		if (r != ARCHIVE_OK)
@@ -1712,7 +1711,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 			{
 				static int fap[2];
     				if(vl)
-					printf("Opening page %d of %s, subfile %s\n",page,filename,pn);
+					printf("Opening page %d of %s, subfile %s\n",(int)page,filename,pn);
 				//archive_read_data_into_fd(a,1);
 				if(0)
 				{
@@ -1736,7 +1735,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 						tsize += size;
 						// ...
 					}
-					printf("piped %d bytes\n",tsize);
+					printf("piped %zd bytes\n",(size_t)tsize);
 					close(fap[1]);
 					fp = fdopen(fap[0],"r");
 					fd = NULL;
@@ -1765,13 +1764,13 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 			else
 			{
 				//archive_read_data_skip(a);
-				if(vl)printf("SKIPPING MATCHING [%d/%d] %s in %s\n",pi,page,pn,filename);
+				if(vl)printf("SKIPPING MATCHING [%d/%d] %s in %s\n",(int)pi,(int)page,pn,filename);
 			}
 			++pi;
 		}
 		else
 		{
-			if(vl)printf("SKIPPING NON MATCHING [%d/%d] %s in %s\n",pi,page,pn,filename);
+			if(vl)printf("SKIPPING NON MATCHING [%d/%d] %s in %s\n",(int)pi,(int)page,pn,filename);
 			//archive_read_data_skip(a);
 		}
 	}

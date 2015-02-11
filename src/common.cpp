@@ -400,7 +400,10 @@ fim_char_t * dupnstr (fim_int n)
 	//allocation of a single string
 	fim_char_t *r = (fim_char_t*) fim_malloc (FIM_PRINTINUM_BUFSIZE);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
-	sprintf(r,"%d",n);
+	if(sizeof(fim_int)==sizeof(int))
+		sprintf(r,"%d",(int)n);
+	else
+		sprintf(r,"%lld",(long long int)n);
 	return (r);
 }
 
