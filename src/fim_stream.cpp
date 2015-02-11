@@ -61,7 +61,11 @@ namespace fim
 		fim_stream& fim_stream::operator<<(fim_int i)
 		{
 			/* FIXME */
-			fim_char_t s[FIM_ATOX_BUFSIZE];sprintf(s,"%lld",(long long int)i);
+			fim_char_t s[FIM_ATOX_BUFSIZE];
+			if(sizeof(fim_int)==sizeof(int))
+				sprintf(s,"%d",(int)i);
+			else
+				sprintf(s,"%lld",(long long int)i);
 			*this<<s;
 			return *this;
 		}
