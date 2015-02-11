@@ -81,6 +81,12 @@ namespace fim
 				goto err;
 			}
 			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				retval = variables_[id].setInt(value);
+				goto err;
+			}
+			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
@@ -142,6 +148,12 @@ err:
 			{
 				//browser variable
 				retval = browser_.setVariable(id,value);
+				goto err;
+			}
+			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				retval = variables_[id].setFloat(value);
 				goto err;
 			}
 			else
@@ -207,6 +219,12 @@ err:
 			{
 				//browser variable
 				retval = browser_.setVariable(id,s.c_str());
+				goto err;
+			}
+			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				retval = (fim_int)(variables_[id].setString(s));
 				goto err;
 			}
 			else
@@ -277,6 +295,13 @@ err:
 				goto err;
 			}
 			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_[id]=value;
+				variables_[id].set(value);
+				goto err;
+			}
+			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
@@ -339,6 +364,14 @@ err:
 			{
 				//browser variable
 				retval = browser_.getIntVariable(id);
+				goto err;
+			}
+			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_t::const_iterator vi=variables_.find(id);
+				if(vi!=variables_.end())
+					retval = vi->second.getInt();
 				goto err;
 			}
 			else
@@ -421,6 +454,16 @@ err:
 				goto err;
 			}
 			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_t::const_iterator vi=variables_.find(id);
+				if(vi!=variables_.end())
+					retval = vi->second.getFloat();
+				else
+			       		retval = FIM_CNS_EMPTY_FP_VAL;
+				goto err;
+			}
+			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
@@ -494,6 +537,14 @@ err:
 				goto ret;
 			}
 			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_t::const_iterator vi=variables_.find(id);
+				if(vi!=variables_.end()) 
+				retval = vi->second.getString();
+				goto ret;
+			}
+			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
 			{
 				//invalid namespace
@@ -559,6 +610,16 @@ ret:
 			{
 				//browser variable
 				return browser_.getVariable(id);
+			}
+			else
+			if( ns == FIM_SYM_NAMESPACE_GLOBAL_CHAR )
+			{
+				variables_t::const_iterator vi=variables_.find(id);
+
+				if(vi!=variables_.end())
+					return vi->second;
+				else
+			       		return Var();
 			}
 			else
 			if( ns != FIM_SYM_NAMESPACE_GLOBAL_CHAR )
