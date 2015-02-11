@@ -34,7 +34,7 @@
 
 #define FIM_IMAGE_INSPECT 0
 #if FIM_IMAGE_INSPECT
-#define FIM_PR(X) printf("IMAGE:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),getIntVariable(FIM_VID_PAGES),(cacheable()?"cacheable":"uncacheable"));
+#define FIM_PR(X) printf("IMAGE:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,(int)getGlobalIntVariable(FIM_VID_FILEINDEX),(int)getGlobalIntVariable(FIM_VID_FILELISTLEN),(int)getGlobalIntVariable(FIM_VID_PAGE),(int)getIntVariable(FIM_VID_PAGES),(cacheable()?"cacheable":"uncacheable"));
 #else /* FIM_IMAGE_INSPECT */
 #define FIM_PR(X) 
 #endif /* FIM_IMAGE_INSPECT */
@@ -871,7 +871,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 	*imp=FIM_SYM_CHAR_NUL;
 
 	if(fimg_ && fimg_->i.npages>1)
-		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",page_+1,fimg_->i.npages);
+		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",(int)page_+1,(int)fimg_->i.npages);
 	else
 		*pagesinfobuffer='\0';
 		
@@ -909,14 +909,14 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					snprintf(clbp, rbc, "%.0f",scale_*100);
 				break;
 				case('w'):
-					snprintf(clbp, rbc, "%d",this->width());
+					snprintf(clbp, rbc, "%d",(int)this->width());
 				break;
 				case('h'):
-					snprintf(clbp, rbc, "%d",this->height());
+					snprintf(clbp, rbc, "%d",(int)this->height());
 				break;
 				case('i'):
 					/* browser property. TODO: move outta here */
-					snprintf(clbp, rbc, "%d",n?n:1);
+					snprintf(clbp, rbc, "%d",(int)(n?n:1));
 				break;
 #if 1
 				case('k'):
@@ -929,7 +929,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 				break;
 				case('l'):
 					/* browser property. TODO: move outta here */
-					snprintf(clbp, rbc, "%d",(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
+					snprintf(clbp, rbc, "%d",(int)(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
 				break;
 				case('L'):
 					snprintf(clbp, rbc, "%s",imagemode);
@@ -961,7 +961,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					fim_char_t buf[2*FIM_PRINTFNUM_BUFSIZE];
 					/* cache property. TODO: move outta here */
 					fim_snprintf_XB(buf, sizeof(buf),cc.browser_.cache_.img_byte_size());
-					snprintf(clbp, rbc, "#%d:%s",cc.browser_.cache_.cached_elements(),buf);
+					snprintf(clbp, rbc, "#%d:%s",(int)cc.browser_.cache_.cached_elements(),buf);
 				}
 				break;
 				case('c'):
@@ -1119,7 +1119,7 @@ fim::string Image::getInfo(void)
 	*imp='\0';
 
 	if(fimg_->i.npages>1)
-		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",page_+1,fimg_->i.npages);
+		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",(int)page_+1,(int)fimg_->i.npages);
 	else
 		*pagesinfobuffer='\0';
 		
@@ -1139,12 +1139,12 @@ fim::string Image::getInfo(void)
 #endif /* FIM_WANT_DISPLAY_MEMSIZE */
 	     ,
 	     /*fcurrent->tag*/ 0 ? "* " : "",
-	     scale_*100,
-	     this->width(), this->height(),
+	     (scale_*100),
+	     (int)this->width(), (int)this->height(),
 	     imagemode,
 	     pagesinfobuffer,
-	     n?n:1, /* ... */
-	     (getGlobalIntVariable(FIM_VID_FILELISTLEN))
+	     (int)(n?n:1), /* ... */
+	     (int)(getGlobalIntVariable(FIM_VID_FILELISTLEN))
 #if FIM_WANT_DISPLAY_FILESIZE
 	     ,fs_/FIM_CNS_K
 #endif /* FIM_WANT_DISPLAY_FILESIZE */
