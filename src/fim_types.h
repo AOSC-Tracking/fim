@@ -29,7 +29,9 @@
 #else	/* defined(__GNUC__) */
 #define FIM_RSTRCT
 #endif	/* defined(__GNUC__) */
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif /* HAVE_CONFIG_H */
 #if FIM_WANT_LONG_INT
 #include <stdint.h>
 #endif /* FIM_WANT_LONG_INT */

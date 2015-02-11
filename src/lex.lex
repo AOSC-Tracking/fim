@@ -151,7 +151,7 @@ STRINGC_DQ {STRINGC}|\'
 	}
 
 [0-9]+	{
-		yylval.iValue = atoi(yytext);
+		yylval.iValue = fim_atoi(yytext);
 		return INTEGER;
 	}
 

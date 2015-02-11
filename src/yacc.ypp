@@ -65,7 +65,7 @@
 /* prototypes */
 nodeType *opr(int oper, int nops, ...);
 nodeType *fid(float f);
-nodeType *con(int value);
+nodeType *con(fim_int value);
 nodeType *fcon(float fValue);
 nodeType *scon(fim_char_t* s);
 nodeType *vscon(fim_char_t*s,int typeHint);
@@ -77,7 +77,7 @@ void yyerror(const fim_char_t *s);
 %}
 
 %union {
-	int   iValue; /* integer value */
+	fim_int   iValue; /* integer value */
 	float fValue; /* float   value */
 	fim_char_t* sValue;
 	nodeType *nPtr; /* node pointer */
@@ -416,7 +416,7 @@ nodeType *fcon(float fValue)
 
 
 
-nodeType *con(int value)
+nodeType *con(fim_int value)
 {
 	nodeType *p;
 	size_t nodeSize;

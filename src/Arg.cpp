@@ -2,7 +2,7 @@
 /*
  Arg.cpp : 
 
- (c) 2007-2008 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,9 +22,9 @@
 #include "fim.h"
 namespace fim
 {
-	bool Arg::operator==(int i){int v=atoi(val_.c_str());return v==i;}
-	bool Arg::operator<=(int i){int v=atoi(val_.c_str());return v<=i;}
-	bool Arg::operator>=(int i){int v=atoi(val_.c_str());return v>=i;}
-	bool Arg::operator <(int i){int v=atoi(val_.c_str());return v <i;}
-	bool Arg::operator >(int i){int v=atoi(val_.c_str());return v >i;}
+	bool Arg::operator==(fim_int i){fim_int v=fim_atoi(val_.c_str());return v==i;}
+	bool Arg::operator<=(fim_int i){fim_int v=fim_atoi(val_.c_str());return v<=i;}
+	bool Arg::operator>=(fim_int i){fim_int v=fim_atoi(val_.c_str());return v>=i;}
+	bool Arg::operator <(fim_int i){fim_int v=fim_atoi(val_.c_str());return v <i;}
+	bool Arg::operator >(fim_int i){fim_int v=fim_atoi(val_.c_str());return v >i;}
 }

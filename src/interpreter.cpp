@@ -2,7 +2,7 @@
 /*
  interpreter.cpp : Fim language interpreter
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ Var cvar(nodeType *p)
 	{
 		/* FIXME : int cast is due to some sick inner conversion */
 		DBG("cvar:intCon:"<<p->con.value<<FIM_SYM_ENDL);
-		return Var((int)(p->con.value));
+		return Var((fim_int)(p->con.value));
 	}
 	else if(p->type == floatCon)
 	{
@@ -358,7 +358,7 @@ Var ex(nodeType *p)
 				if(p->opr.op[0]->scon.s) result =
 				       	fim::cc.execute(p->opr.op[0]->scon.s,args);
 				/* sometimes there are NULLs  : BAD !!  */
-				return atoi(result.c_str());
+				return fim_atoi(result.c_str());
 			  }
 		}
 		case 'a':

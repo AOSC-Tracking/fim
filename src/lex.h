@@ -25,7 +25,7 @@
 typedef enum { intCon, floatCon, typeOpr, stringCon,cmdId/*cmdId is dead */,vId } nodeEnum;
 /* constants */
 typedef struct {
-int value; /* value of constant */
+fim_int value; /* value of constant */
 } conNodeType;
 /* identifiers */
 typedef struct {

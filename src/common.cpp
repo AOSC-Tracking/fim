@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -130,7 +130,7 @@ void trhex(fim_char_t *str)
 				unsigned int hc;
 				hb[0]=toupper(fp[2]);
 				hb[1]=toupper(fp[3]);
-				hc=(fim_byte_t)strtol(hb,NULL,16);
+				hc=(fim_byte_t)strtol(hb,NULL,FIM_PRINTINUM_BUFSIZE);
 				*sp=hc;
 				fp+=3;
 			}
@@ -183,7 +183,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			hb[2]=0;
 			hb[0]=toupper(_p[2]);
 			hb[1]=toupper(_p[3]);
-			hc=(fim_byte_t)strtol(hb,NULL,16);
+			hc=(fim_byte_t)strtol(hb,NULL,FIM_PRINTINUM_BUFSIZE);
 			*_p=hc;
 			/*	
 				\xFF
@@ -395,10 +395,10 @@ fim_char_t * dupnstr (const fim_char_t c1, double n, const fim_char_t c2)
 /*
  *	Allocation of a small string for storing the *	representation of an integer.
  */
-fim_char_t * dupnstr (int n)
+fim_char_t * dupnstr (fim_int n)
 {
 	//allocation of a single string
-	fim_char_t *r = (fim_char_t*) fim_malloc (16);
+	fim_char_t *r = (fim_char_t*) fim_malloc (FIM_PRINTINUM_BUFSIZE);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	sprintf(r,"%d",n);
 	return (r);
@@ -971,3 +971,10 @@ const fim_char_t * fim_basename_of(const fim_char_t * s)
 	return s;
 }
 
+fim_int fim_atoi(const char*s)
+{
+	if(sizeof(fim_int)==sizeof(int))
+		return atoi(s);
+	else
+		return atoll(s);
+}

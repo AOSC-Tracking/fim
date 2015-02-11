@@ -1580,7 +1580,7 @@ static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h)
 }
 
 /*static struct ida_image**/
-struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int page, Namespace *nsp)
+struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim_int page, Namespace *nsp)
 {
     /*
      * This function is complicated and should be reworked, in some way.
@@ -1673,7 +1673,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, int
 		re = FIM_CNS_PUSHDIR_RE;
 
 	if( fim_getenv("PAGE") )
-		page = atoi( fim_getenv("PAGE") );
+		page = fim_atoi( fim_getenv("PAGE") );
 
 	a = archive_read_new();
 	if (a == NULL)
