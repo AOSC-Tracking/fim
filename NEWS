@@ -59,7 +59,7 @@
  * added a 'list "pushdirr"' command, working like "pushdir" but recursive (r746*)
  * the _fbfont variable will contain the current console font file string (r767*)
  * if _want_exif_orientation is set, images will be reoriented according to EXIF
-   metadata (__exif_orientation, __exif_mirrored, __exif_flipped). (r769!,805*)
+   metadata (i:__exif_orientation, i:__exif_mirrored, i:__exif_flipped). (r769!,805*)
  * mirror/flip is now being applied with respect to the viewport borders (r772,r775*)
  * Pause and Menu keys are now available in -o sdl mode (r776*)
  * added  list 'marked'  to show the list of marked files (r780*)
