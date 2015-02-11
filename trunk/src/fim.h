@@ -493,118 +493,118 @@ namespace fim
  * */
 //#define FIM_VID_NEWLINE 			"_newline"	/* "" */
 //#define FIM_VID_TAB 				"_tab"	/* "" */
-#define FIM_VID_ARCHIVE_FILES			"_archive_files"	/* "[internal,in] Regular expression matching filenames to be treated as (multipage) archives. If empty, \"" FIM_CNS_ARCHIVE_RE "\" will be used. Within each archive, only filenames matching the regular expression in the " FIM_VID_PUSHDIR_RE " variable will be considered for opening." */
-#define FIM_VID_RANDOM 				"random"	/* "[internal,out] a pseudorandom number" */
-#define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[internal,in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
-#define FIM_VID_TEXT_DISPLAY 			"_display_as_rendered_text"	/* "[internal,in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" */
-#define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[internal,out] string with current information on cache status" */
-#define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[internal,in] if 1, will display the output console" */
-#define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[internal,out] the current display device string" */
-#define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "[internal,in] if 1, will display the status bar" */
-#define FIM_VID_DISPLAY_STATUS_FMT		"_display_status_fmt"	/* "[internal,in] custom (status bar) info format string, displayed in the lower left corner; if unset: full pathname; otherwise a custom format string specified with the same format of _info_fmt_str. " */
-#define FIM_VID_PUSH_PUSHES_DIRS		"_push_pushes_dirs"	/* "[internal,in] if 1, the push command will also accept and push directories (using pushdir)" */
-#define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[internal,in,experimental] if 1, will execute a sanity check on startup" */
-#define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[internal,out,experimental] the standard output of the last call to the system command" */
-#define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[internal,in] if 1 at startup, will load the system wide initialization file" */
-#define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[internal,in] string with the global configuration file name" */
+#define FIM_VID_ARCHIVE_FILES			"_archive_files"	/* "[in] Regular expression matching filenames to be treated as (multipage) archives. If empty, \"" FIM_CNS_ARCHIVE_RE "\" will be used. Within each archive, only filenames matching the regular expression in the " FIM_VID_PUSHDIR_RE " variable will be considered for opening." */
+#define FIM_VID_RANDOM 				"random"	/* "[out] a pseudorandom number" */
+#define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[in] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
+#define FIM_VID_TEXT_DISPLAY 			"_display_as_rendered_text"	/* "[in] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" */
+#define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[out] string with current information on cache status" */
+#define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[in] if 1, will display the output console" */
+#define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[out] the current display device string" */
+#define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "[in] if 1, will display the status bar" */
+#define FIM_VID_DISPLAY_STATUS_FMT		"_display_status_fmt"	/* "[in] custom (status bar) info format string, displayed in the lower left corner; if unset: full pathname; otherwise a custom format string specified with the same format of _info_fmt_str. " */
+#define FIM_VID_PUSH_PUSHES_DIRS		"_push_pushes_dirs"	/* "[in] if 1, the push command will also accept and push directories (using pushdir)" */
+#define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[in,experimental] if 1, will execute a sanity check on startup" */
+#define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[out,experimental] the standard output of the last call to the system command" */
+#define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[in] if 1 at startup, will load the system wide initialization file" */
+#define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[in] string with the global configuration file name" */
 #define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image" */
 #define FIM_VID_RETRY_LOADER_PROBE 		"_retry_loader_probe"		/* "[in] if 1 and user specified a file loader and this fails, will probe for a different loader" */
-#define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[internal,in] if 1, the ~/.fimrc file will not be loaded at startup" */
-#define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[internal,in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
-#define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[internal,in] the name of the file to write to when recording sessions" */
-#define FIM_VID_PUSHDIR_RE			"_pushdir_re"	/* "[internal,in] regular expression to match against when pushing files from a directory or an archive. By default this is \"" FIM_CNS_PUSHDIR_RE "\"." */
-#define FIM_VID_STATUS_LINE 			"_status_line"		/* "[internal,in] if 1, will display the status bar" */
-#define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[internal,in] if 1, will prefetch further files just after display of the first file" */
-#define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[internal,in] number of seconds of sleep during slideshow mode" */
-#define FIM_VID_WANT_EXIF_ORIENTATION		"_want_exif_orientation"	/* "[internal,in] if 1, will reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." */
-#define FIM_VID_EXIF_ORIENTATION 		"__exif_orientation"	/* "[internal,out] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the EXIF tags of a given image (i:)." */
-#define FIM_VID_EXIF_MIRRORED 			"__exif_mirrored"	/* "[internal,out] mirroring information, read from the EXIF tags of a given image (i:)." */
-#define FIM_VID_EXIF_FLIPPED 			"__exif_flipped"	/* "[internal,out] flipping information, read from the EXIF tags of a given image (i:)." */
-#define FIM_VID_AUTOTOP				"_autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
-#define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if non empty, this string will be fed to the scale command" */
-#define FIM_VID_FILEINDEX			"_fileindex"		/* "[internal,out] the current image numeric index" */
-#define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[internal,out] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
-#define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[internal,out] the length of the current image list" */
-#define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[internal,in] custom (status bar) info format string, displayed in the lower right corner; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF-set variable (make sure you have libexif for this) will be used only if present." */
-#define FIM_VID_FILENAME			"_filename"		/* "[internal,out] the current file name string" */
-#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[internal,out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
-#define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[internal,out] the contents of the default (hardcoded) grammar file" */
-#define FIM_VID_FRESH				"fresh"			/* "[internal,in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
-#define FIM_VID_PAGE				"page"			/* "[internal,out,experimental] the current page" */
-#define FIM_VID_PAGES				"pages"			/* "[internal,out,experimental] the current number of pages of an image (i:) " */
-#define FIM_VID_PAGECOUNT			"pagecount"			/* "[internal,out,experimental] the page count for a given image" */
+#define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[in] if 1, the ~/.fimrc file will not be loaded at startup" */
+#define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
+#define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[in] the name of the file to write to when recording sessions" */
+#define FIM_VID_PUSHDIR_RE			"_pushdir_re"	/* "[in] regular expression to match against when pushing files from a directory or an archive. By default this is \"" FIM_CNS_PUSHDIR_RE "\"." */
+#define FIM_VID_STATUS_LINE 			"_status_line"		/* "[in] if 1, will display the status bar" */
+#define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[in] if 1, will prefetch further files just after display of the first file" */
+#define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[in] number of seconds of sleep during slideshow mode" */
+#define FIM_VID_WANT_EXIF_ORIENTATION		"_want_exif_orientation"	/* "[in] if 1, will reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." */
+#define FIM_VID_EXIF_ORIENTATION 		"__exif_orientation"	/* "[out] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the EXIF tags of a given image (i:)." */
+#define FIM_VID_EXIF_MIRRORED 			"__exif_mirrored"	/* "[out] mirroring information, read from the EXIF tags of a given image (i:)." */
+#define FIM_VID_EXIF_FLIPPED 			"__exif_flipped"	/* "[out] flipping information, read from the EXIF tags of a given image (i:)." */
+#define FIM_VID_AUTOTOP				"_autotop"		/* "[in] if 1, will align to the top freshly loaded images" */
+#define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[in] if non empty, this string will be fed to the scale command" */
+#define FIM_VID_FILEINDEX			"_fileindex"		/* "[out] the current image numeric index" */
+#define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[out] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
+#define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[out] the length of the current image list" */
+#define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[in] custom (status bar) info format string, displayed in the lower right corner; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF-set variable (make sure you have libexif for this) will be used only if present." */
+#define FIM_VID_FILENAME			"_filename"		/* "[out] the current file name string" */
+#define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
+#define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[out] the contents of the default (hardcoded) grammar file" */
+#define FIM_VID_FRESH				"fresh"			/* "[in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
+#define FIM_VID_PAGE				"page"			/* "[out,experimental] the current page" */
+#define FIM_VID_PAGES				"pages"			/* "[out,experimental] the current number of pages of an image (i:) " */
+#define FIM_VID_PAGECOUNT			"pagecount"			/* "[out,experimental] the page count for a given image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal] if 1, will inhibit display" */
-#define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[internal,experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
-#define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[internal,in] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version." */
-#define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[internal,in] the image scale multiplier used when magnifying images size" */
-#define FIM_VID_PWD				"_pwd"			/* "[internal,out] the current working directory; will be updated at startup and whenever the working directory changes" */
-#define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[internal,in] the image scale multiplier used when reducing images size" */
-#define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[internal,in] value used for scaling up/down the scaling factors" */
-#define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[internal,in] value used for incrementing/decrementing the scaling factors" */
-#define FIM_VID_COMMENT 				"_comment"				/* "[internal,out] the image comment, extracted from the image file (if any)" */
+#define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
+#define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[in] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version." */
+#define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[in] the image scale multiplier used when magnifying images size" */
+#define FIM_VID_PWD				"_pwd"			/* "[out] the current working directory; will be updated at startup and whenever the working directory changes" */
+#define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[in] the image scale multiplier used when reducing images size" */
+#define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[in] value used for scaling up/down the scaling factors" */
+#define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[in] value used for incrementing/decrementing the scaling factors" */
+#define FIM_VID_COMMENT 				"_comment"				/* "[out] the image comment, extracted from the image file (if any)" */
 #define FIM_VID_COMMENT_OI 				"_comment_over_image"				/* "[experimental,in] if v:_comment_over_image is set not to 0, will display the contents of i:_comment over the image." */
-#define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[internal,out] comment extracted via the exiftool interface; see _use_exiftool." */
-#define FIM_VID_STEPS 				"_steps"				/* "[internal,in] the default steps, in pixels, when panning images" */
-#define FIM_VID_VERSION				"_fim_version"	/* "[internal,out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
-#define FIM_VID_FBFONT                           "_fbfont"       /* "[internal,out] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." */
-#define FIM_VID_HSTEPS 				"_hsteps"				/* "[internal,in] the default steps, in pixels, when panning images horizontally (overrides steps)" */
-#define FIM_VID_VSTEPS 				"_vsteps"				/* "[internal,in] the default steps, in pixels, when panning images vertically (overrides steps)" */
-#define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[internal,in] if >0, will set the number of displayed text lines in the console" */
-#define FIM_VID_CONSOLE_LINE_WIDTH 		"_lwidth"		/* "[internal,in] if>0, will force the output console text width" */
-#define FIM_VID_CONSOLE_LINE_OFFSET 		"_console_offset"	/* "[internal,in,out] position of the text beginning in the output console, expressed in lines" */
-#define FIM_VID_CONSOLE_BUFFER_LINES		"_console_lines"		/* "[internal,out] the number of buffered output console text lines" */
-#define FIM_VID_CONSOLE_BUFFER_TOTAL		"_console_buffer_total"		/* "[internal,out] amount of memory allocated for the output console buffer" */
-#define FIM_VID_CONSOLE_BUFFER_FREE		"_console_buffer_free"		/* "[internal,out] amount of unused memory in the output console buffer" */
-#define FIM_VID_CONSOLE_BUFFER_USED		"_console_buffer_used"		/* "[internal,out] amount of used memory in the output console buffer" */
-#define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[internal,in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode" */
-#define FIM_VID_CMD_EXPANSION			"_command_expansion"			/* "[internal,in] if 1, will enable autocompletion (on execution) of alias and command strings" */
-#define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[internal,in] if 1, will display on stdout internal errors, while parsing commands" */
-#define FIM_VID_VERBOSITY			"_verbosity"			/* "[internal,in,experimental] program verbosity" */
-#define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[internal,in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
-#define FIM_VID_IGNORECASE			"_ignorecase"		/* "[internal,in] if 1, will allow for case insensitive regexp-based match in autocmd's; " */
-#define FIM_VID_RE_SEARCH_OPTS			"_re_search_opts"	/* "[internal,in] affects regexp-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. " */
-#define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[internal,in] if 1 on exit, will save the " FIM_CNS_HIST_COMPLETE_FILENAME " file on exit" */
-#define FIM_VID_LOAD_FIM_HISTORY		"_load_fim_history"	/* "[internal,in] if 1 on startup, will load the " FIM_CNS_HIST_COMPLETE_FILENAME " file on startup" */
-#define FIM_VID_TERM				"_TERM"			/* "[internal,out] the environment TERM variable" */
-#define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[internal,in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. " */
-#define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[internal,in] if 1, will display the status bar" */
-#define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[internal,in] if 1, will display a message on the status bar when processing" */
-#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[internal,in] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. " */
-#define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[internal,in] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment" */
-#define FIM_VID_SCALE				"scale"				/* "[internal,in] the scale of the current image" */
-#define FIM_VID_ASCALE				"ascale"			/* "[internal,in,out] the asymmetric scaling of the current image" */
-#define FIM_VID_ANGLE				"angle"				/* "[internal,in,out] a floating point number specifying the rotation angle, in degrees" */
+#define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[out] comment extracted via the exiftool interface; see _use_exiftool." */
+#define FIM_VID_STEPS 				"_steps"				/* "[in] the default steps, in pixels, when panning images" */
+#define FIM_VID_VERSION				"_fim_version"	/* "[out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
+#define FIM_VID_FBFONT                           "_fbfont"       /* "[out] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." */
+#define FIM_VID_HSTEPS 				"_hsteps"				/* "[in] the default steps, in pixels, when panning images horizontally (overrides steps)" */
+#define FIM_VID_VSTEPS 				"_vsteps"				/* "[in] the default steps, in pixels, when panning images vertically (overrides steps)" */
+#define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[in] if >0, will set the number of displayed text lines in the console" */
+#define FIM_VID_CONSOLE_LINE_WIDTH 		"_lwidth"		/* "[in] if>0, will force the output console text width" */
+#define FIM_VID_CONSOLE_LINE_OFFSET 		"_console_offset"	/* "[in,out] position of the text beginning in the output console, expressed in lines" */
+#define FIM_VID_CONSOLE_BUFFER_LINES		"_console_lines"		/* "[out] the number of buffered output console text lines" */
+#define FIM_VID_CONSOLE_BUFFER_TOTAL		"_console_buffer_total"		/* "[out] amount of memory allocated for the output console buffer" */
+#define FIM_VID_CONSOLE_BUFFER_FREE		"_console_buffer_free"		/* "[out] amount of unused memory in the output console buffer" */
+#define FIM_VID_CONSOLE_BUFFER_USED		"_console_buffer_used"		/* "[out] amount of used memory in the output console buffer" */
+#define FIM_VID_VERBOSE_KEYS			"_verbose_keys"			/* "[in] if 1, after each interactive mode key hit, the console will display the hit key raw keycode" */
+#define FIM_VID_CMD_EXPANSION			"_command_expansion"			/* "[in] if 1, will enable autocompletion (on execution) of alias and command strings" */
+#define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[in] if 1, will display on stdout internal errors, while parsing commands" */
+#define FIM_VID_VERBOSITY			"_verbosity"			/* "[in,experimental] program verbosity" */
+#define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[in] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
+#define FIM_VID_IGNORECASE			"_ignorecase"		/* "[in] if 1, will allow for case insensitive regexp-based match in autocmd's; " */
+#define FIM_VID_RE_SEARCH_OPTS			"_re_search_opts"	/* "[in] affects regexp-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. " */
+#define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[in] if 1 on exit, will save the " FIM_CNS_HIST_COMPLETE_FILENAME " file on exit" */
+#define FIM_VID_LOAD_FIM_HISTORY		"_load_fim_history"	/* "[in] if 1 on startup, will load the " FIM_CNS_HIST_COMPLETE_FILENAME " file on startup" */
+#define FIM_VID_TERM				"_TERM"			/* "[out] the environment TERM variable" */
+#define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[in] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. " */
+#define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[in] if 1, will display the status bar" */
+#define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[in] if 1, will display a message on the status bar when processing" */
+#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[in] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. " */
+#define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[in] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment" */
+#define FIM_VID_SCALE				"scale"				/* "[in] the scale of the current image" */
+#define FIM_VID_ASCALE				"ascale"			/* "[in,out] the asymmetric scaling of the current image" */
+#define FIM_VID_ANGLE				"angle"				/* "[in,out] a floating point number specifying the rotation angle, in degrees" */
 #define FIM_VID_ORIENTATION			"_orientation"		/* "[internal] Orthogonal clockwise rotation (orientation) is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied on a per-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, \":i:_orientation=1\" and \":i:_orientation=5\" are equivalent: they rotate the image one time by 90'." */
-#define FIM_VID_WIDTH				"width"			/* "[internal,out] the current image original width" */
-#define FIM_VID_HEIGHT				"height"		/* "[internal,out] the current image original height" */
-#define FIM_VID_SWIDTH				"swidth"		/* "[internal,out] the current image scaled width" */
-#define FIM_VID_SHEIGHT				"sheight"		/* "[internal,out] the current image scaled height" */
-#define FIM_VID_AUTOFLIP			"_autoflip"		/* "[internal,in] if 1, will flip images by default" */
-#define FIM_VID_AUTONEGATE			"_autonegate"		/* "[internal,in] if 1, will negate images by default" */
-#define FIM_VID_AUTODESATURATE			"_autodesaturate"	/* "[internal,in] if 1, will desaturate images by default" */
+#define FIM_VID_WIDTH				"width"			/* "[out] the current image original width" */
+#define FIM_VID_HEIGHT				"height"		/* "[out] the current image original height" */
+#define FIM_VID_SWIDTH				"swidth"		/* "[out] the current image scaled width" */
+#define FIM_VID_SHEIGHT				"sheight"		/* "[out] the current image scaled height" */
+#define FIM_VID_AUTOFLIP			"_autoflip"		/* "[in] if 1, will flip images by default" */
+#define FIM_VID_AUTONEGATE			"_autonegate"		/* "[in] if 1, will negate images by default" */
+#define FIM_VID_AUTODESATURATE			"_autodesaturate"	/* "[in] if 1, will desaturate images by default" */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
-#define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[internal,out] after each image load, " FIM_VID_LAST_FILE_LOADER " will be set to the last file loader used" */
+#define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[out] after each image load, " FIM_VID_LAST_FILE_LOADER " will be set to the last file loader used" */
 #endif /* FIM_WANT_REMEMBER_LAST_FILE_LOADER */
-#define FIM_VID_FLIPPED				"flipped"		/* "[internal,out] 1, if the image is flipped" */
-#define FIM_VID_NEGATED				"negated"		/* "[internal,out] 1, if the image is negated" */
-#define FIM_VID_DESATURATED			"desaturated"		/* "[internal,out] 1, if the image is desaturated" */
-#define FIM_VID_FIM_BPP				"_fim_bpp"		/* "[internal,out] the bits per pixel count" */
-#define FIM_VID_AUTOMIRROR			"_automirror"		/* "[internal,in] if 1, will mirror images by default" */
-#define FIM_VID_MIRRORED			"mirrored"		/* "[internal,out] 1, if the image is mirrored " */
-#define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[internal,in] if 1, the image will be displayed centered " */
-#define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[internal,in,experimental] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." */
-#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[internal,in,experimental] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." */
-#define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[internal,out] the number of images currently cached." */
-#define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[internal,out] the screen width"  */
-#define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[internal,out] the screen height" */
-#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[internal,in] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
-#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[internal,in] print out each command before its execution (for debugging purposes)" */
-#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[internal,in,optional] offset (specified in bytes) used when opening a file; [internal,out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " */
-#define FIM_VID_OPEN_OFFSET_RETRY		"_open_offset_retry"	/* "[internal,in,optional] number of adjacent bytes to probe in opening the file " */
-#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[internal,optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
-#define FIM_VID_PREFERRED_RENDERING_WIDTH	"_preferred_rendering_width"		/* "[internal,in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " */
-#define FIM_VID_PREFERRED_RENDERING_DPI	"_preferred_rendering_dpi"		/* "[internal,in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " */
-#define FIM_VID_PRELOAD_CHECKS			"_push_checks"	/* "[internal,in,experimental] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use --no-stat-push if you wish to set this to 0 at command line files specification " */
+#define FIM_VID_FLIPPED				"flipped"		/* "[out] 1, if the image is flipped" */
+#define FIM_VID_NEGATED				"negated"		/* "[out] 1, if the image is negated" */
+#define FIM_VID_DESATURATED			"desaturated"		/* "[out] 1, if the image is desaturated" */
+#define FIM_VID_FIM_BPP				"_fim_bpp"		/* "[out] the bits per pixel count" */
+#define FIM_VID_AUTOMIRROR			"_automirror"		/* "[in] if 1, will mirror images by default" */
+#define FIM_VID_MIRRORED			"mirrored"		/* "[out] 1, if the image is mirrored " */
+#define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[in] if 1, the image will be displayed centered " */
+#define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[in,experimental] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." */
+#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[in,experimental] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." */
+#define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[out] the number of images currently cached." */
+#define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[out] the screen width"  */
+#define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[out] the screen height" */
+#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[in] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
+#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in] print out each command before its execution (for debugging purposes)" */
+#define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[in,optional] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " */
+#define FIM_VID_OPEN_OFFSET_RETRY		"_open_offset_retry"	/* "[in,optional] number of adjacent bytes to probe in opening the file " */
+#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[optional] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " */
+#define FIM_VID_PREFERRED_RENDERING_WIDTH	"_preferred_rendering_width"		/* "[in,optional] if >0, bit based rendering will use this value for a default document width (instead of a default value) " */
+#define FIM_VID_PREFERRED_RENDERING_DPI	"_preferred_rendering_dpi"		/* "[in,optional] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " */
+#define FIM_VID_PRELOAD_CHECKS			"_push_checks"	/* "[in,experimental] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use --no-stat-push if you wish to set this to 0 at command line files specification " */
 
 /*
  * Fim Keyboard Descriptions
