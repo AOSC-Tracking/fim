@@ -1166,7 +1166,7 @@ labeldone:
 		 * */
 		setVariable(FIM_VID_FRESH,(fim_int)0);
 		if(fimg_)
-			setVariable(FIM_VID_PAGECOUNT,(fim_int)fimg_->i.npages);
+			setVariable(FIM_VID_PAGES,(fim_int)fimg_->i.npages);
 
 		/*
 		 * rotation dispatch

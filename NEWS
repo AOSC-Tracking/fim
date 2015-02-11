@@ -67,6 +67,7 @@
  * i:_file loader will store the used loader string (r784*)
  * --offset accepts a range now (using the new _open_offset_retry variable) (EXPERIMENTAL,r795*)
  * if an image has been opened with an offset, i:_open_offset will be set accordingly (EXPERIMENTAL,r796*)
+ * i:pagecount is now replaced by i:pages (r806*)
 
                 Version 0.4
 

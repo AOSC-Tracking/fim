@@ -507,7 +507,7 @@ namespace fim
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[out,experimental] the standard output of the last call to the system command" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[in] if 1 at startup, will load the system wide initialization file" */
 #define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[in] string with the global configuration file name" */
-#define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in] if not empty, this string will force a file loader (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image" */
+#define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image" */
 #define FIM_VID_RETRY_LOADER_PROBE 		"_retry_loader_probe"		/* "[in] if 1 and user specified a file loader and this fails, will probe for a different loader" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[in] if 1, the ~/.fimrc file will not be loaded at startup" */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[in] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
@@ -517,22 +517,21 @@ namespace fim
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[in] if 1, will prefetch further files just after display of the first file" */
 #define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[in] number of seconds of sleep during slideshow mode" */
 #define FIM_VID_WANT_EXIF_ORIENTATION		"_want_exif_orientation"	/* "[in] if 1, will reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." */
-#define FIM_VID_EXIF_ORIENTATION 		"__exif_orientation"	/* "[out] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the EXIF tags of a given image (i:)." */
-#define FIM_VID_EXIF_MIRRORED 			"__exif_mirrored"	/* "[out] mirroring information, read from the EXIF tags of a given image (i:)." */
-#define FIM_VID_EXIF_FLIPPED 			"__exif_flipped"	/* "[out] flipping information, read from the EXIF tags of a given image (i:)." */
+#define FIM_VID_EXIF_ORIENTATION 		"__exif_orientation"	/* "[out,i:] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the orientation EXIF tags (i:EXIF_Orientation)." */
+#define FIM_VID_EXIF_MIRRORED 			"__exif_mirrored"	/* "[out,i:] mirroring information, read from the EXIF tags of a given imag." */
+#define FIM_VID_EXIF_FLIPPED 			"__exif_flipped"	/* "[out,i:] flipping information, read from the EXIF tags of a given image." */
 #define FIM_VID_AUTOTOP				"_autotop"		/* "[in] if 1, will align to the top freshly loaded images" */
 #define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[in] if non empty, this string will be fed to the scale command" */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[out] the current image numeric index" */
 #define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[out] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[out] the length of the current image list" */
 #define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[in] custom (status bar) info format string, displayed in the lower right corner; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF-set variable (make sure you have libexif for this) will be used only if present." */
-#define FIM_VID_FILENAME			"_filename"		/* "[out] the current file name string" */
+#define FIM_VID_FILENAME			"_filename"		/* "[out,i:] the current file name string" */
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[out] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[out] the contents of the default (hardcoded) grammar file" */
-#define FIM_VID_FRESH				"fresh"			/* "[in,out,experimental] 1 if the image was loaded, before all autocommands execution" */
+#define FIM_VID_FRESH				"fresh"			/* "[in,out,i:,experimental] 1 if the image was loaded, before all autocommands execution" */
 #define FIM_VID_PAGE				"page"			/* "[out,experimental] the current page" */
-#define FIM_VID_PAGES				"pages"			/* "[out,experimental] the current number of pages of an image (i:) " */
-#define FIM_VID_PAGECOUNT			"pagecount"			/* "[out,experimental] the page count for a given image" */
+#define FIM_VID_PAGES				"pages"			/* "[out,experimental,i:] the current number of pages of an image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal] if 1, will inhibit display" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[experimental] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
 #define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[in] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version." */
@@ -541,8 +540,8 @@ namespace fim
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[in] the image scale multiplier used when reducing images size" */
 #define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[in] value used for scaling up/down the scaling factors" */
 #define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[in] value used for incrementing/decrementing the scaling factors" */
-#define FIM_VID_COMMENT 				"_comment"				/* "[out] the image comment, extracted from the image file (if any)" */
-#define FIM_VID_COMMENT_OI 				"_comment_over_image"				/* "[experimental,in] if v:_comment_over_image is set not to 0, will display the contents of i:_comment over the image." */
+#define FIM_VID_COMMENT 				"_comment"				/* "[i:,out] the image comment, extracted from the image file (if any)" */
+#define FIM_VID_COMMENT_OI 				"_comment_over_image"				/* "[experimental,in,v:] if v:_comment_over_image is set not to 0, will display the contents of i:_comment over the image." */
 #define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[out] comment extracted via the exiftool interface; see _use_exiftool." */
 #define FIM_VID_STEPS 				"_steps"				/* "[in] the default steps, in pixels, when panning images" */
 #define FIM_VID_VERSION				"_fim_version"	/* "[out] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
@@ -571,26 +570,26 @@ namespace fim
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[in] if 1, will display a message on the status bar when processing" */
 #define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[in] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. " */
 #define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[in] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment" */
-#define FIM_VID_SCALE				"scale"				/* "[in] the scale of the current image" */
-#define FIM_VID_ASCALE				"ascale"			/* "[in,out] the asymmetric scaling of the current image" */
-#define FIM_VID_ANGLE				"angle"				/* "[in,out] a floating point number specifying the rotation angle, in degrees" */
-#define FIM_VID_ORIENTATION			"_orientation"		/* "[internal] Orthogonal clockwise rotation (orientation) is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied on a per-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, \":i:_orientation=1\" and \":i:_orientation=5\" are equivalent: they rotate the image one time by 90'." */
-#define FIM_VID_WIDTH				"width"			/* "[out] the current image original width" */
-#define FIM_VID_HEIGHT				"height"		/* "[out] the current image original height" */
-#define FIM_VID_SWIDTH				"swidth"		/* "[out] the current image scaled width" */
-#define FIM_VID_SHEIGHT				"sheight"		/* "[out] the current image scaled height" */
+#define FIM_VID_SCALE				"scale"				/* "[in,i:] the scale of the current image" */
+#define FIM_VID_ASCALE				"ascale"			/* "[in,out,i:] the asymmetric scaling of the current image" */
+#define FIM_VID_ANGLE				"angle"				/* "[in,out,i:] a floating point number specifying the rotation angle, in degrees" */
+#define FIM_VID_ORIENTATION			"_orientation"		/* "[internal,i:] Orthogonal clockwise rotation (orientation) is controlled by: 'i:_orientation', 'v:_orientation', 'g:_orientation' and applied on a per-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, \":i:_orientation=1\" and \":i:_orientation=5\" are equivalent: they rotate the image one time by 90'." */
+#define FIM_VID_WIDTH				"width"			/* "[out,i:] the current image original width" */
+#define FIM_VID_HEIGHT				"height"		/* "[out,i:] the current image original height" */
+#define FIM_VID_SWIDTH				"swidth"		/* "[out,i:] the current image scaled width" */
+#define FIM_VID_SHEIGHT				"sheight"		/* "[out,i:] the current image scaled height" */
 #define FIM_VID_AUTOFLIP			"_autoflip"		/* "[in] if 1, will flip images by default" */
 #define FIM_VID_AUTONEGATE			"_autonegate"		/* "[in] if 1, will negate images by default" */
 #define FIM_VID_AUTODESATURATE			"_autodesaturate"	/* "[in] if 1, will desaturate images by default" */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
 #define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[out] after each image load, " FIM_VID_LAST_FILE_LOADER " will be set to the last file loader used" */
 #endif /* FIM_WANT_REMEMBER_LAST_FILE_LOADER */
-#define FIM_VID_FLIPPED				"flipped"		/* "[out] 1, if the image is flipped" */
-#define FIM_VID_NEGATED				"negated"		/* "[out] 1, if the image is negated" */
-#define FIM_VID_DESATURATED			"desaturated"		/* "[out] 1, if the image is desaturated" */
+#define FIM_VID_FLIPPED				"flipped"		/* "[out,i:] 1, if the image is flipped" */
+#define FIM_VID_NEGATED				"negated"		/* "[out,i:] 1, if the image is negated" */
+#define FIM_VID_DESATURATED			"desaturated"		/* "[out,i:] 1, if the image is desaturated" */
 #define FIM_VID_FIM_BPP				"_fim_bpp"		/* "[out] the bits per pixel count" */
 #define FIM_VID_AUTOMIRROR			"_automirror"		/* "[in] if 1, will mirror images by default" */
-#define FIM_VID_MIRRORED			"mirrored"		/* "[out] 1, if the image is mirrored " */
+#define FIM_VID_MIRRORED			"mirrored"		/* "[out,i:] 1, if the image is mirrored " */
 #define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[in] if 1, the image will be displayed centered " */
 #define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[in,experimental] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." */
 #define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[in,experimental] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." */
