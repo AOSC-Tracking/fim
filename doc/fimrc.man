@@ -474,6 +474,18 @@ _TERM
 [internal,out] the environment TERM variable
 .fi
 .B
+__exif_flipped
+[internal,out] flipping information, read from the EXIF tags of a given image (i:).
+.fi
+.B
+__exif_mirrored
+[internal,out] mirroring information, read from the EXIF tags of a given image (i:).
+.fi
+.B
+__exif_orientation
+[internal,out] orientation information in the same format of _orientation, read from the EXIF tags of a given image (i:).
+.fi
+.B
 _archive_files
 [internal,in] Regular expression matching filenames to be treated as (multipage) archives. If empty, ".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" will be used. Within each archive, only filenames matching the regular expression in the _pushdir_re variable will be considered for opening.
 .fi
@@ -823,7 +835,7 @@ _want_caption_status
 .fi
 .B
 _want_exif_orientation
-[internal,in] if 1, will reorient images using information in EXIF metadata.
+[internal,in] if 1, will reorient images using information from EXIF metadata (and stored in in __exif_orientation, __exif_mirrored, __exif_flipped ).
 .fi
 .B
 _want_prefetch

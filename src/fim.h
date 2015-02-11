@@ -516,7 +516,10 @@ namespace fim
 #define FIM_VID_STATUS_LINE 			"_status_line"		/* "[internal,in] if 1, will display the status bar" */
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[internal,in] if 1, will prefetch further files just after display of the first file" */
 #define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[internal,in] number of seconds of sleep during slideshow mode" */
-#define FIM_VID_WANT_EXIF_ORIENTATION 			"_want_exif_orientation"	/* "[internal,in] if 1, will reorient images using information in EXIF metadata." */
+#define FIM_VID_WANT_EXIF_ORIENTATION		"_want_exif_orientation"	/* "[internal,in] if 1, will reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." */
+#define FIM_VID_EXIF_ORIENTATION 		"__exif_orientation"	/* "[internal,out] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the EXIF tags of a given image (i:)." */
+#define FIM_VID_EXIF_MIRRORED 			"__exif_mirrored"	/* "[internal,out] mirroring information, read from the EXIF tags of a given image (i:)." */
+#define FIM_VID_EXIF_FLIPPED 			"__exif_flipped"	/* "[internal,out] flipping information, read from the EXIF tags of a given image (i:)." */
 #define FIM_VID_AUTOTOP				"_autotop"		/* "[internal,in] if 1, will align to the top freshly loaded images" */
 #define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[internal,in] if non empty, this string will be fed to the scale command" */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[internal,out] the current image numeric index" */
