@@ -211,7 +211,10 @@ class CommandConsole
 	fim_int  setVariable(const fim::string& varname,fim_int value);
 	fim_float_t setVariable(const fim::string& varname, fim_float_t value);
 	fim_int setVariable(const fim::string& varname,const fim_char_t*value);
-	Var setVariable(const fim::string varname,const Var&value);//NEW
+	Var setVariable(const fim::string varname,const Var&value);
+	Namespace * rns(const fim::string varname);
+	const Namespace * c_rns(const fim::string varname)const;
+	fim::string rnid(const fim::string & varname)const;
 
 	fim_var_t getVariableType(const fim::string &varname)const;
 	fim_err_t printVariable(const fim::string & varname)const;
