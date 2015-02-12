@@ -438,7 +438,7 @@ namespace fim
 #if FIM_WANT_PIC_CMTS
 			/* FIXME: temporary; move to fs_puts_multiline() */
 			if(image_)
-			if(getIntVariable(FIM_VID_COMMENT_OI))
+			if(getGlobalIntVariable(FIM_VID_COMMENT_OI))
 			{
 				int fh=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->height:1; // FIXME : this is not clean
 				int fw=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->width:1; // FIXME : this is not clean
