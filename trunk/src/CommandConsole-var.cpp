@@ -165,13 +165,6 @@ err:
 		return nsp;
 	}
 
-#if FIM_WANT_LONG_INT
-	fim_int CommandConsole::setVariable(const fim::string& varname,    int value)
-	{
-		return setVariable(varname,(fim_int) value);
-	}
-#endif /* FIM_WANT_LONG_INT */
-
 	fim_int CommandConsole::setVariable(const fim::string& varname,fim_int value)
 	{
 		fim_int retval = 0;

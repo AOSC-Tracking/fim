@@ -64,7 +64,7 @@ fim_char_t * dupnstr (float n, const fim_char_t c='\0');
 fim_char_t * dupnstr (const fim_char_t c1, double n, const fim_char_t c2='\0');
 fim_char_t * dupnstr (fim_int n);
 fim_char_t * dupsqstr (const fim_char_t* s);
-int fim_rand(void);
+fim_int fim_rand(void);
 
 bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase=1, int ignorenewlines=0);
 

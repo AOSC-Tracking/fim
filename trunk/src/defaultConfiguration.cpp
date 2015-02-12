@@ -4,7 +4,7 @@
   The following code contains key bindings and aliases definitions
   which make up a first usable configuration for FIM.
  
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -76,8 +76,8 @@
 		bind(31,"scale_factor_shrink");
 #endif
 #if 1
-		setVariable(FIM_VID_CONSOLE_KEY,FIM_SYM_CONSOLE_KEY);
-		setVariable(FIM_VID_PUSH_PUSHES_DIRS,1);
+		setVariable(FIM_VID_CONSOLE_KEY,(fim_int)FIM_SYM_CONSOLE_KEY);
+		setVariable(FIM_VID_PUSH_PUSHES_DIRS,(fim_int)1);
 #endif
 #if 0
 		setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);
