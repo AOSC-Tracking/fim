@@ -465,10 +465,10 @@ ret:
 /*
  * Will be improved, if needed.
  * */
-int fim_rand(void)
+fim_int fim_rand(void)
 {
 	/*
-	 * Please don't use Fim for cryptographical purposes ;)
+	 * Please don't use Fim random numbers for cryptographical purposes ;)
 	 * Note that we use /dev/urandom because it will never block on reading.
 	 * Reading from     /dev/random could instead block.
 	 * */
@@ -480,7 +480,7 @@ int fim_rand(void)
 		srand(clock());
 		r = rand();
 	}
-	return r;
+	return (fim_int) r; /* FIXME: shall document this limitation  */
 }
 
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase, int ignorenewlines)

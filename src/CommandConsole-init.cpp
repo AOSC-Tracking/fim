@@ -80,7 +80,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		/*
 		 * TODO : move most of this stuff to the constructor, some day.
 		 */
-		int xres=0,yres=0;
+		fim_int xres=0,yres=0;
 		bool device_failure=false;
 		int dosso=device.find(FIM_SYM_DEVOPTS_SEP_STR);
 		bool wcs = false;
