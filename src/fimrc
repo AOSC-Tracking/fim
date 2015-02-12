@@ -276,7 +276,7 @@ bind "Backspace" "prev;";
 bind "'" "goto _lastfileindex"; 
 _display_status=1;
 _want_caption_status="fim:%N@%p%%%L[%i/%l]";
-_info_fmt_str="%p%% %wx%h %i/%l%L%P %F %T %c";
+_info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c";
 _display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k";
 #_display_status_fmt="%N:%k"; #
 #_use_exiftool=0;
