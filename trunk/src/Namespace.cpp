@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- Namespace.h : a class for local variables storage
+ Namespace.cpp : a class for local variables storage
 
  (c) 2007-2015 Michele Martone
 
