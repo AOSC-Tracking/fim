@@ -94,6 +94,7 @@ class Image
 
 	/* virtual stuff */
 	public://TMP
+	enum { FIM_ROT_L=3,FIM_ROT_R=1,FIM_ROT_U=2 };
         struct ida_image *img_     ;     /* local (eventually) copy images */
 	bool reload(void);
 	private://TMP
@@ -107,7 +108,6 @@ class Image
 	void should_redraw(int should=1)const;
 
 	protected:
-	enum { FIM_ROT_L=3,FIM_ROT_R=1,FIM_ROT_U=2 };
 	enum { FIM_NO_ROT=0,FIM_ROT_ROUND=4 };
 	enum { FIM_ROT_L_C='L',FIM_ROT_R_C='C',FIM_ROT_U_C='U' };
 	enum { FIM_I_ROT_L=0, FIM_I_ROT_R=1}; /* internal */
