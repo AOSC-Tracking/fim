@@ -327,8 +327,8 @@ static void ers(const char*value, Image *image)
 			goto uhmpf;
 		shouldmirror=(f==2 || f==3 || f==5 || f==7);
 		shouldflip=(f==4 || f==3);
-		if (f==5 || f==6) shouldrotate = 3 ; // cw
-		if (f==7 || f==8) shouldrotate = 1 ; // ccw
+		if (f==5 || f==6) shouldrotate = Image::FIM_ROT_R; // cw
+		if (f==7 || f==8) shouldrotate = Image::FIM_ROT_L; // ccw
 		//std::cout << "EXIF_TAG_ORIENTATION FOUND !\n",
 		//std::cout << "VALUE: " <<(int)f << r<< c<<
 		//shouldmirror << shouldrotate << shouldflip,
@@ -336,7 +336,7 @@ static void ers(const char*value, Image *image)
 		if(shouldmirror && shouldflip && !shouldrotate)
 			shouldmirror = false,
 			shouldflip = false,
-			shouldrotate = 2;
+			shouldrotate = Image::FIM_ROT_U;
 		if( shouldrotate )
 			image->setVariable(FIM_VID_EXIF_ORIENTATION,shouldrotate);
 		if(shouldmirror)
