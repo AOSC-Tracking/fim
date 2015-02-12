@@ -46,7 +46,7 @@ class Browser
 	 * cf_ is zero only when there are no files in the list.
 	 * the current file index is in current_n()
 	 */
-	int cf_;
+	fim_int cf_;
 
 #ifndef FIM_WINDOWS
 	/* when compiled with no multiple windowing support, one viewport only will last. */
@@ -65,7 +65,7 @@ class Browser
 	const fim::string pop(fim::string filename=FIM_CNS_EMPTY_STRING);
 	fim::string get_next_filename(int n)const;
 	
-	int current_image(void)const;
+	fim_int current_image(void)const;
 	public:
 	fim::string last_regexp_; // was private
 	int last_src_dir_;
@@ -146,15 +146,15 @@ class Browser
 	fim_err_t loadCurrentImage(void);
 	fim::string reload(void);
 
-	int n_files(void)const;
-	int n_pages(void)const;
+	fim_int n_files(void)const;
+	fim_int n_pages(void)const;
 	fim::string _reverse(void);
 	fim::string next(int n=1);
 
 	void free_current_image(void);
 	int load_error_handle(fim::string c);
 	public:
-	int c_page(void)const;
+	fim_int c_page(void)const;
 	virtual size_t byte_size(void)const;
 };
 }

@@ -170,7 +170,7 @@ class Image
 
 	Image * getClone(void);
 //	void resize(int nw, int nh);
-	int c_page(void)const;
+	fim_int c_page(void)const;
 	void mm_free(void);
 	void mm_make(void);
 	bool has_mm(void)const;
