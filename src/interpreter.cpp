@@ -183,13 +183,14 @@ Var ex(nodeType *p)
 
   	std::vector<fim::string> args;
 	int typeHint;
-	if (!p) return 0;
+	if (!p)
+		return (fim_int)0;
 	switch(p->type)
 	{
 		case intCon:
 			/* FIXME : are we sure this case executes ? */
 			DBG("intCon:\n");
-			return (int)p->con.value;
+			return (fim_int)p->con.value;
 	        case floatCon:
 			DBG("ex:floatCon:"<<p->fid.f<<FIM_SYM_ENDL);
 			/* FIXME : are we sure this case executes ? */
@@ -245,14 +246,14 @@ Var ex(nodeType *p)
 				{
 					ex(p->opr.op[1]);
 				}
-				return 0;
+				return (fim_int)0;
 			case IF:
 				DBG("IF:"<<(ex(p->opr.op[0]).getInt())<<FIM_SYM_ENDL);
 				if (ex(p->opr.op[0]).getInt())
 					ex(p->opr.op[1]);
 				else if (p->opr.nops > 2)
 					ex(p->opr.op[2]);
-				return 0;
+				return (fim_int)0;
 			case FIM_SYM_SEMICOLON:
 				/*
 				 *		;
@@ -267,14 +268,16 @@ Var ex(nodeType *p)
 			if( p->opr.nops == 2 )
 			{
 				int times=ex(p->opr.op[1]).getInt();
-				if(times<0)return -1;
+				if(times<0)
+					return (fim_int)-1;
 				for (int i=0;i<times && fim::cc.catchLoopBreakingCommand(0)==0;++i)
 				{
 					ex(p->opr.op[0]);
 				}
-			  	return 0;	
+			  	return (fim_int)0;	
 			}
-			else return -1;
+			else
+				return (fim_int)-1;
 			case 'x': 
 				DBG("X\n");
 			  /*
@@ -286,7 +289,7 @@ Var ex(nodeType *p)
 			  	if( p->opr.nops<1 )
 			  {
 				  DBG("NO-OP\n");
-				  return -1;
+				  return (fim_int)-1;
 			  }
 			  if(p->opr.nops==2)	//int yacc.ypp we specified only 2 ops per x node
 		          {
@@ -364,7 +367,7 @@ Var ex(nodeType *p)
 		case 'a':
 			// we shouldn't be here, because 'a' (argument) nodes are evaluated elsewhere
 			assert(0);
-			return -1;
+			return (fim_int)-1;
 		case '=':
 			//assignment of a variable
 			s=p->opr.op[0]->scon.s;
@@ -375,7 +378,7 @@ Var ex(nodeType *p)
 				DBG("SVf"<<s<<FIM_SYM_ENDL);
 				fValue=p->opr.op[1]->fid.f;
 				fim::cc.setVariable(s,fValue);
-				return (int)fValue;
+				return (fim_int)fValue;
 			}//FIM_SYM_TYPE_INT
 			else if(typeHint=='s')
 			{
@@ -397,7 +400,7 @@ Var ex(nodeType *p)
 			                	//return fim::cc.getIntVariable(s);
 			                	return fim::cc.getStringVariable(s);
 				}
-				return -1;
+				return (fim_int)-1;
 			}//FIM_SYM_TYPE_INT
 			else if(typeHint==FIM_SYM_TYPE_INT)
 			{
@@ -444,14 +447,14 @@ Var ex(nodeType *p)
 			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]); // FIXME: may generate an exception
 #endif /* FIM_WANT_AVOID_FP_EXCEPTIONS */
 			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
-			case '!': return ((ex(p->opr.op[0])).getInt())==0?1:0;
+			case '!': return (fim_int)(((ex(p->opr.op[0])).getInt())==0?1:0);
 			/* unary minus is still under definition */
 			case UMINUS:
-				return Var(0) - ex(p->opr.op[0]);
+				return Var((fim_int)0) - ex(p->opr.op[0]);
 			case '-': 
 				DBG("SUB\n");
 				if ( 2==p->opr.nops) {Var d= ex(p->opr.op[0]) - ex(p->opr.op[1]);return d;}
-				else return Var(0) - ex(p->opr.op[0]);
+				else return Var((fim_int)0) - ex(p->opr.op[0]);
 			case '*': return ex(p->opr.op[0]) * ex(p->opr.op[1]);
 			case '<': return ex(p->opr.op[0]) < ex(p->opr.op[1]);
 			case '>': return ex(p->opr.op[0]) > ex(p->opr.op[1]);
@@ -469,8 +472,8 @@ Var ex(nodeType *p)
 		}	
 		case cmdId:/* FIXME : cmdId is dead */
 			DBG("cmdId ?!\n");
-			return 0;
+			return Var((fim_int)0);
 
 	}
-	return 0;
+	return Var((fim_int)0);
 }

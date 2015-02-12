@@ -21,6 +21,12 @@
 
 #include "fim.h"
 
+#ifndef FIM_INDIPENDENT_NAMESPACE
+#define FIM_NS_SV(VN,VL) if(rnsp_) return rnsp_->setVariable(VN,VL); /* FIXME: need a better solution here ! */
+#else
+#define FIM_NS_SV(VN,VL)
+#endif /* FIM_INDIPENDENT_NAMESPACE */
+
 namespace fim
 {
 		fim_int Namespace::setVariable(const fim::string& varname,fim_int value)
@@ -35,9 +41,7 @@ namespace fim
 
 		Var Namespace::setVariable(const fim::string& varname,const Var&value)
 		{
-			variables_[varname]=Var(value);
-			variables_[varname].set(value);/* FIXME : it seems necessary (see tests) */
-			return variables_[varname].getString();
+			return (fim_int)variables_[varname].set(value);
 		}
 
 		fim_int Namespace::setVariable(const fim::string& varname,const fim_char_t*value)
@@ -75,7 +79,7 @@ namespace fim
 				if(vi!=variables_.end())
 					return vi->second;
 				else
-			       		return Var(FIM_CNS_EMPTY_INT_VAL);
+			       		return Var((fim_int)FIM_CNS_EMPTY_INT_VAL);
 			}
 		}
 
@@ -101,31 +105,19 @@ namespace fim
 
 	        fim_float_t Namespace::setGlobalVariable(const fim::string& varname,fim_float_t value)
 		{
-			/* FIXME: need a better solution here ! */
-#ifndef FIM_INDIPENDENT_NAMESPACE
-			if(rnsp_)
-				return rnsp_->setVariable(varname,value);
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_FP_VAL;
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim::string& varname,fim_int value)
 		{
-			/* FIXME: need a better solution here ! */
-#ifndef FIM_INDIPENDENT_NAMESPACE
-			if(rnsp_)
-				return rnsp_->setVariable(varname,value);
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim::string& varname,const fim_char_t*value)
 		{
-			/* FIXME: need a better solution here ! */
-#ifndef FIM_INDIPENDENT_NAMESPACE
-			if(rnsp_)
-				return rnsp_->setVariable(varname,value);
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
 

@@ -35,8 +35,6 @@
 #define DBG(X) 
 #endif
 
-
-
 namespace fim
 {
 class Var
@@ -52,18 +50,11 @@ class Var
 	Var(const Var &v)
 	:type(0),i(0),s(v.s)
 	{
-		this->set(v);// FIXME : new
-/*		this->type=v.type;
-		if(type=='i')this->i=v.i;
-		if(type=='f')this->f=v.f;
-		if(type=='s')this->s=v.s;*/
+		this->set(v);
 	}
 
 	int   set(const Var &v)
 	{
-		/*
-                 * 20090327 introduced for a harmful conversions story..
-		 */
 		DBG("(v:?)\n");
 		this->type=v.type;
 		if(type=='i')
@@ -83,23 +74,13 @@ class Var
 		f=v;
 	}
 
-/*	Var(int* v)
-	:type(0),i(0)
-	{
-		DBG("(i:"<<*v<<")\n");
-		type='i';
-		i=*v;
-	}*/
-
-#if FIM_WANT_LONG_INT
-	Var(int v)
+	Var(bool v)
 	:type(0),i(0),s(fim::string())
 	{
 		DBG("(i:"<<v<<")\n");
 		type='i';
-		i=v;
+		i=v?1:0;
 	}
-#endif /* FIM_WANT_LONG_INT */
 
 	Var(fim_int v)
 	:type(0),i(0),s(fim::string())

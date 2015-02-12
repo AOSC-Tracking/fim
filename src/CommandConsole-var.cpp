@@ -200,7 +200,7 @@ err:
 
 	Var CommandConsole::setVariable(const fim::string varname,const Var&value)
 	{
-		Var retval = 0;
+		Var retval = (fim_int)0;
 		Namespace *nsp = rns(varname);
 
 		if(nsp)
