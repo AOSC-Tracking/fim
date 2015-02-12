@@ -38,12 +38,17 @@
 
 //namespace fim
 //{
+#if FIM_WANT_LONG_INT
+	typedef int64_t fim_int;	/* a type for fim's internal integer type, always signed */
+#else /* FIM_WANT_LONG_INT */
+	typedef int fim_int;		/* a type for fim's internal integer type, always signed */
+#endif /* FIM_WANT_LONG_INT */
 	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
 	typedef int fim_off_t;		/* a type for pixel offsets (positive)  */
 	typedef float fim_scale_t;	/* a type for image scaling */
 	typedef float fim_angle_t;	/* a type for angles */
 	typedef float fim_float_t;	/* a type for floats */
-	typedef int   fim_page_t;	/* a type for multipage document pages */
+	typedef fim_int   fim_page_t;	/* a type for multipage document pages */
 	typedef int   fim_pgor_t;	/* a type for page orientation */
 	typedef bool   fim_bool_t;	/* a type for bolean expressions */
 	typedef int fim_coo_t;		/* a type for coordinates */
@@ -57,11 +62,6 @@
 	typedef int fim_cycles_t;	/* a type for fim's cycles */
 	typedef int fim_cmd_type_t;	/* a type for fim's command types */
 	typedef int fim_var_t;		/* a type for fim's variable types */
-#if FIM_WANT_LONG_INT
-	typedef int64_t fim_int;	/* a type for fim's internal integer type, always signed */
-#else /* FIM_WANT_LONG_INT */
-	typedef int fim_int;		/* a type for fim's internal integer type, always signed */
-#endif /* FIM_WANT_LONG_INT */
 	typedef int fim_str_t;		/* a type for stdin/stdout streams */
 	typedef int fim_sys_int;	/* always int */
 	typedef int fim_color_t;	/* >= 4 bytes */

@@ -768,7 +768,7 @@ ret:
 		if( args.size() > 0 )
 			goto ret;
 
-		setGlobalVariable(FIM_VID_WANT_PREFETCH,0);
+		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)0);
 		if(cache_.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
 #ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename( 1));/* if the filename doesn't match a loadable image, we remove it */
@@ -782,7 +782,7 @@ ret:
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif /* FIM_AUTOSKIP_FAILED */
 			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPREFETCH,current());
-		setGlobalVariable(FIM_VID_WANT_PREFETCH,1);
+		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)1);
 ret:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
@@ -806,8 +806,8 @@ ret:
 #if FIM_HORRIBLE_CACHE_INVALIDATING_HACK
 		if( args.size() > 0 )
 		{
-			int mci=getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
-			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,0);
+			fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,(fim_int)0);
 			free_current_image();
 			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,mci);
 		}
@@ -1069,7 +1069,7 @@ ret:
 		return retval;
 	}
 	
-	int Browser::n_files(void)const
+	fim_int Browser::n_files(void)const
 	{
 		/*
 		 * the number of files in the filenames list
@@ -1902,15 +1902,15 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	int Browser::current_image(void)const
+	fim_int Browser::current_image(void)const
 	{
 		/* counting from 1 */
 		return cf_ + 1;
 	}
 
-	int Browser::n_pages(void)const
+	fim_int Browser::n_pages(void)const
 	{
-		int pi = 0;
+		fim_int pi = 0;
 
 #if !FIM_WANT_BDI
 		if( c_image() )
@@ -1919,9 +1919,9 @@ err:
 		return pi;
 	}
 
-	int Browser::c_page(void)const
+	fim_int Browser::c_page(void)const
 	{
-		int pi = 0;
+		fim_int pi = 0;
 
 #if !FIM_WANT_BDI
 		if( c_image() )

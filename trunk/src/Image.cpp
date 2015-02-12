@@ -225,7 +225,7 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
                 fimg_    = NULL;
                 img_     = NULL;
                 orientation_=FIM_NO_ROT;
-		setVariable(FIM_VID_ORIENTATION ,FIM_NO_ROT);
+		setVariable(FIM_VID_ORIENTATION, (fim_int)FIM_NO_ROT);
 	}
 	
 	bool Image::reload(void)
@@ -284,7 +284,7 @@ static void ers(const char*value, Image *image)
 		// 5,6 want a ccw rotation
 		//
 		bool shouldmirror,shouldflip;
-		int shouldrotate=0;
+		fim_int shouldrotate = 0;
 	       	fim_char_t r,c;
 		const fim_char_t *p = NULL;
 		fim_char_t f;
@@ -340,9 +340,9 @@ static void ers(const char*value, Image *image)
 		if( shouldrotate )
 			image->setVariable(FIM_VID_EXIF_ORIENTATION,shouldrotate);
 		if(shouldmirror)
-			image->setVariable(FIM_VID_EXIF_MIRRORED,1);
+			image->setVariable(FIM_VID_EXIF_MIRRORED,(fim_int)1);
 		if(shouldflip)
-			image->setVariable(FIM_VID_EXIF_FLIPPED,1);
+			image->setVariable(FIM_VID_EXIF_FLIPPED,(fim_int)1);
 uhmpf:
 		return;
 	}
@@ -437,17 +437,17 @@ uhmpf:
 		setVariable(FIM_VID_SCALE  ,newscale_*100);
 		setVariable(FIM_VID_ASCALE,ascale_);
 		setVariable(FIM_VID_ANGLE , angle_);
-		setVariable(FIM_VID_NEGATED , 0);
-		setVariable(FIM_VID_DESATURATED, 0);
+		setVariable(FIM_VID_NEGATED , (fim_int)0);
+		setVariable(FIM_VID_DESATURATED, (fim_int)0);
 		setVariable(FIM_VID_FILENAME,fname_.c_str());
 #endif /* FIM_NAMESPACES */
 
-		setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg_->i.height);
-		setGlobalVariable(FIM_VID_WIDTH  ,(int)fimg_->i.width );
-		setGlobalVariable(FIM_VID_SHEIGHT,(int) img_->i.height);
-		setGlobalVariable(FIM_VID_SWIDTH ,(int) img_->i.width );
+		setGlobalVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
+		setGlobalVariable(FIM_VID_WIDTH  ,(fim_int)fimg_->i.width );
+		setGlobalVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
+		setGlobalVariable(FIM_VID_SWIDTH ,(fim_int) img_->i.width );
 		if(cc.displaydevice_)
-			setGlobalVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice_->get_bpp());
+			setGlobalVariable(FIM_VID_FIM_BPP ,(fim_int) cc.displaydevice_->get_bpp());
 		//setGlobalVariable(FIM_VID_SCALE  ,newscale_*100);
 		//setGlobalVariable(FIM_VID_ASCALE ,ascale_);
 	
@@ -1432,7 +1432,7 @@ ret:
 
 	bool Image::can_reload(void)const{return !no_file_;}
 	const fim_char_t* Image::getName(void)const{return fname_.c_str();}
-	int Image::c_page(void)const{return page_;}
+	fim_int Image::c_page(void)const{return page_;}
 #endif	/* FIM_WANT_BDI */
 
 	void Image::mm_free(void) { mm_.dealloc(); }

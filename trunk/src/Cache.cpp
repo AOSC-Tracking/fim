@@ -295,7 +295,7 @@ rt:
 			retval = -1;
 			goto ret;
 		}
-		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
+		setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
 		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 ret:
 		FIM_PR('.');
@@ -368,7 +368,7 @@ ret:
 		this->reverseCache_[ni]= ni->getKey();
 		lru_touch( ni->getKey() );
 		usageCounter_[ ni->getKey()]=0; // we yet don't assume any usage
-		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
+		setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
 		return true;
 	}
 	
@@ -400,7 +400,7 @@ ret:
 			reverseCache_.erase(oi);
 //			delete imageCache_[reverseCache_[oi]];
 			delete oi;
-			setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
+			setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
 			retval = 0;
 		}
 ret:

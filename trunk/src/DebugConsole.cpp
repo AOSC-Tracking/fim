@@ -429,10 +429,10 @@ rerr:
 			fim_int co=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_OFFSET);
 			fim_int lw=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_WIDTH );
 			fim_int ls=getGlobalIntVariable(FIM_VID_CONSOLE_ROWS       );
-			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_TOTAL,bsize_);
-			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_FREE,(int)bsize_-(int)(bp_-buffer_));
-			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_USED,(int)(bp_-buffer_));
-			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_LINES,cline_);
+			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_TOTAL,(fim_int)bsize_);
+			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_FREE, (fim_int)(bsize_-(bp_-buffer_)));
+			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_USED, (fim_int)(bp_-buffer_));
+			setGlobalVariable(FIM_VID_CONSOLE_BUFFER_LINES,(fim_int)cline_);
 			// we eventually update internal variables now
 			setRows(ls);
 			if( lw > 0 && lw!=lwidth_ )
