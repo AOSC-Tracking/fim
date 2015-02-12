@@ -2,7 +2,7 @@
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,18 +29,9 @@ namespace fim
 	typedef std::map<const fim::string,Var> variables_t;	//id->var
 	class Namespace
 	{
-		/*
-		 * FIXME: experimental
-		 *
-		 * note that right here inside there is no check on the id token correctness 
-		 * respect to the Fim language grammar syntax.
-		 *
-		 * the identifier->variable binding
-		 */
-		//private:
 		protected:
 #ifndef FIM_INDIPENDENT_NAMESPACE
-		CommandConsole*rnsp_;
+		CommandConsole*rnsp_; // root Namespace pointer
 #endif /* FIM_INDIPENDENT_NAMESPACE */
 		variables_t variables_;	//id->var
 		fim_char_t ns_char_; // ns_char_ ':' varname
@@ -93,7 +84,6 @@ namespace fim
 		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
 		std::ostream& print(std::ostream &os)const;
 	};
-
 		std::ostream& operator<<(std::ostream &os, const Namespace & ns);
 }
 

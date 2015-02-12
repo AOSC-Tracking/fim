@@ -23,8 +23,6 @@
 
 namespace fim
 {
-
-
 		fim_int Namespace::setVariable(const fim::string& varname,fim_int value)
 		{
 			return variables_[varname].setInt(value);
@@ -39,32 +37,18 @@ namespace fim
 
 		fim_float_t Namespace::setVariable(const fim::string& varname,fim_float_t value)
 		{
-			/*
-			 * an internal function to set a user variable
-			 */
-	//		cout << "setVariable " << variables_[varname].setFloat(value) << "\n"; 
 			return variables_[varname].setFloat(value);
 		}
 
 		Var Namespace::setVariable(const fim::string& varname,const Var&value)
 		{
-			/*
-			 * an internal function to set a user variable
-			 */
-			/* FIXME ! */
-//			std::cout << "NSSV:"<<varname<<"\n";
-//			std::cout << __FILE__<<":"<<__LINE__<<"\n";
 			variables_[varname]=Var(value);
 			variables_[varname].set(value);/* FIXME : it seems necessary (see tests) */
-//			std::cout << "NSSV:"<<variables_[varname].getString()<<"\n";
 			return variables_[varname].getString();
 		}
 
 		fim_int Namespace::setVariable(const fim::string& varname,const fim_char_t*value)
 		{
-			/*
-			 * an internal function to set a user variable
-			 */
 			fim::string s(value);
 			return (fim_int)(variables_[varname].setString(s));
 		}
@@ -77,8 +61,6 @@ namespace fim
 
 		fim_int Namespace::getIntVariable(const fim::string &varname)const
 		{
-			// this scope was selected
-			//return variables_[varname];
 			variables_t::const_iterator vi=variables_.find(varname);
 			fim_int retval = FIM_CNS_EMPTY_INT_VAL;
 
@@ -89,7 +71,6 @@ namespace fim
 
 		Var Namespace::getVariable(const fim::string &varname)const
 		{
-			// this scope was selected
 			if(varname == "*")
 			{
 				return Var(get_variables_list(true));
@@ -107,11 +88,6 @@ namespace fim
 
 		fim_float_t Namespace::getFloatVariable(const fim::string &varname)const
 		{
-			/*
-			 * the variable name supplied is used as a key to the variables hash
-			 * */
-//			cout << "getVariable " << varname  << " : " << variables_[varname].getFloat()<< "\n";
-//			cout << "getVariable " << varname  << ", type : " << variables_[varname].getType()<< "\n";
 			variables_t::const_iterator vi=variables_.find(varname);
 			fim_float_t retval = FIM_CNS_EMPTY_FP_VAL;
 
@@ -122,17 +98,11 @@ namespace fim
 
 		fim::string Namespace::getStringVariable(const fim::string &varname)const
 		{
-			/*
-			 * the variable name supplied is used as a key to the variables hash
-			 * */
-//			std::cout << "NSGSV:"<<varname<<"\n";
 			fim::string retval = FIM_CNS_EMPTY_RESULT;
 			variables_t::const_iterator vi=variables_.find(varname);
+
 			if(vi!=variables_.end())
-			{
-//				std::cout << "NSGSV:"<<vi->second.getString()<<"\n";
 				retval = vi->second.getString();
-			}
 			return retval;
 		}
 
@@ -219,10 +189,6 @@ namespace fim
 
 		fim::string Namespace::get_variables_list(bool with_values)const
 		{
-			/*
-			 * returns the list of set variables
-			 * TODO: to accept an optional argument as separator.
-			 */
 			fim::string acl;
 			variables_t::const_iterator vi;
 
@@ -268,6 +234,5 @@ namespace fim
 	{
 		return ns.print(os);
 	}
-
 }
 
