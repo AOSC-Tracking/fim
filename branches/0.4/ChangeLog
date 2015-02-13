@@ -1,3 +1,112 @@
+2015-02-13 15:58  dezperado
+
+	* debian/control, debian/copyright: ran wrap-and-sort in trunk and
+	  0.4.
+
+2015-02-13 15:50  dezperado
+
+	* VERSION: VERSION to 0.4-rc3
+
+2015-02-13 14:15  dezperado
+
+	* NEWS, README, debian/control: update of further details in NEWS,
+	  README, and debian/control files.
+
+2015-02-13 13:59  dezperado
+
+	* configure.ac, debian/control: update of debian/control
+	  description files; rc-3 notice in the 0.4 branch.
+
+2015-02-11 20:35  dezperado
+
+	* src/Namespace.cpp: repaired the buggy g: namespace access (as in
+	  trunk).
+
+2015-02-07 14:12  dezperado
+
+	* src/FbiStuff.cpp: find_regexp_offset had a bug, thus neutralizing
+	  the _seek_magic=.. mechanism. fix.
+
+2015-02-05 18:56  dezperado
+
+	* src/Browser.cpp: fix to the "list 'pop'" command.
+
+2015-02-05 17:16  dezperado
+
+	* src/SDLDevice.cpp, src/fim.h: Listing explicitly the keycodes for
+	  events SDLK_BACKSPACE SDLK_TAB SDLK_RETURN SDLK_PAUSE SDLK_INSERT
+	  SDLK_DELETE SDLK_MENU. Handling of Backspace was broken and that
+	  of Insert and that of the Menu key is now new in SDL mode.
+
+2015-02-02 18:56  dezperado
+
+	* doc/fimrc.man, src/fim.h, src/help.cpp: documentation fixes
+	  (~/fim_history -> ~/.fim_history).
+	  and in trunk, README adjustment.
+
+2015-02-02 18:10  dezperado
+
+	* src/Image.cpp: If ascale is set and rotating orthogonally, image
+	  proportions shall now be preserved during rotation.
+
+2015-02-01 10:19  dezperado
+
+	* src/CommandConsole.cpp: changes to the command repeat feature
+	  limit: using min between upper limit and value as a limit (not
+	  mod()), a message will be displayed on exceeding of
+	  _max_iterated_commands.
+
+2015-01-30 20:30  dezperado
+
+	* doc/fim.man, src/fim.cpp: removed wrong documentation reference
+	  to XWD format (part of fbida, not in fim).
+	  typo fix in trunk.
+
+2015-01-25 18:00  dezperado
+
+	* README, configure.ac, doc/fimrc.man, src/fim.h: unrecommended
+	  features will be annotated in the configure script output.
+	  small documentation fixes.
+
+2015-01-25 17:46  dezperado
+
+	* src/Cache.cpp, src/Image.cpp, src/Image.h: multipage support
+	  seems back to life (introduced 'uncacheable' images). tested ith
+	  djvu (as in trunk/).
+
+2015-01-23 23:12  dezperado
+
+	* BUGS, README, debian/control, src/FbiStuffGif.cpp, src/fim.cpp:
+	  typo fixing in the Debian control file.
+	  updates to README and NEWS.
+	  will print out giflib version.
+
+2015-01-23 18:32  dezperado
+
+	* src/FbiStuffGif.cpp: Adapted the gif decoder to build with:
+	  giflib-4.1.6, giflib-4.2.3, giflib-5.0.0, giflib-5.1.1 (their
+	  APIs differ).
+
+2015-01-22 22:07  dezperado
+
+	* BUGS, doc/fim.man, doc/fimrc.man, src/Browser.cpp, src/fim.h: as
+	  in trunk,
+	  fixed a bug in which the syntax of relative scaling (e.g.;
+	  '*1.2') was being ignored by 'scale'.
+	  added mention of bugfix from r688 to BUGS.
+	  additionally, upated the scale command documentation line.
+
+2015-01-21 16:22  dezperado
+
+	* ChangeLog, Makefile.am, README, changelog, configure.ac,
+	  debian/control, debian/rules, src/Makefile.am: debian packaging
+	  oriented changes:
+	  relying on autoreconf rather than on autotools_dev,
+	  including libsdl1.2-dev dependency,
+	  complying with a number of lintian warnings,
+	  not overwriting CPPFLAGS from the configure.
+	  renamed ChangeLog to changelog.
+
 2015-01-21 14:37  dezperado
 
 	* doc/fimrc.man, src/fimrc: 797 had left out a typo fix. remedy.
