@@ -7,6 +7,8 @@
  * customizable status bar file info string
  * introduced --as-text to render printable bytes as text
  * key r is bound to 'rotate90', key R to 'rotate270'                                                                          
+ * bug fixes for the g: namespace, SDL/X mode, "list 'pop'" command, 
+   the --offset option, 'ascale' and rotation, documentation.
 
                 Version 0.4-beta
 
