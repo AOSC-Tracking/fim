@@ -22,9 +22,9 @@
 FIM (Fbi IMproved) is a highly customizable and scriptable image viewer targeted
 at the users who are comfortable with software like the Vim text editor or the
 Mutt mail user agent.
-FIM aims to be a swiss army knife for viewing images.
+FIM aims to be a "Swiss Army knife" for viewing images.
 
-It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
+It derives from the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux frame buffer console.
 FIM is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
@@ -42,7 +42,7 @@ users who are comfortable with software like the Vim text editor or the Mutt
 mail user agent.
 FIM aims to be a swiss army knife for viewing images.
 
-It is based on the Fbi image viewer (by Gerd Hoffmann), and works primarily in
+It derives from the Fbi image viewer (by Gerd Hoffmann), and works primarily in
 the Linux frame buffer console.
 FIM is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
@@ -80,9 +80,10 @@ Implemented features:
  - command aliases support (macros)
  - event autocommands (in Vim's 'autocmd' style)
  - regular expressions on filenames to enrich autocommand behaviour
+ - image descriptions display
  - regular expressions on image descriptions
  - configuration (initialization) file support (~/.fimrc)
- - usable builtin default configuration
+ - usable built-in default configuration
  - wrapper script to convert pdf,ps,eps,dvi,cbr(rar),cbz(zip),tar,tar.gz,tgz,http://...
    contents into images and display with FIM
  - embedded piping through 'convert','inkscape','xcftopnm','dia'... for a wider file formats compatibility
@@ -110,6 +111,7 @@ Implemented features:
  - experimental PDF, PS, DJVU file support
  - viewing any file as a binary/RGB pixelmap
  - viewing any file as (rendered) text
+ - opening files at a specified file offset
 
 Yet unimplemented features:
 
