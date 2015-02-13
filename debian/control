@@ -24,7 +24,7 @@ Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: scriptable frame buffer, X, and ascii art image viewer
  FIM is a highly customizable and scriptable image viewer targeted at the
  users who are comfortable with software like the Vim text editor or the Mutt
- mail user agent (it aims to be a swiss army knife for viewing images).
+ mail user agent (it aims to be a "Swiss Army knife" for viewing images).
  It derives from the Fbi image viewer (by Gerd Hoffmann), and in addition to 
  the Linux framebuffer console it can use X (via the SDL library) and offer
  ascii art output (via the aalib library).
