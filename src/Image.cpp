@@ -212,12 +212,12 @@ namespace fim
 		setVariable(FIM_VID_FILENAME,fname_.c_str());
 #endif /* FIM_NAMESPACES */
 
-		setGlobalVariable(FIM_VID_HEIGHT ,(int)fimg_->i.height);
-		setGlobalVariable(FIM_VID_WIDTH  ,(int)fimg_->i.width );
-		setGlobalVariable(FIM_VID_SHEIGHT,(int) img_->i.height);
-		setGlobalVariable(FIM_VID_SWIDTH ,(int) img_->i.width );
+		setGlobalVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
+		setGlobalVariable(FIM_VID_WIDTH  ,(fim_int)fimg_->i.width );
+		setGlobalVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
+		setGlobalVariable(FIM_VID_SWIDTH ,(fim_int) img_->i.width );
 		if(cc.displaydevice_)
-		setGlobalVariable(FIM_VID_FIM_BPP ,(int) cc.displaydevice_->get_bpp());
+		setGlobalVariable(FIM_VID_FIM_BPP ,(fim_int) cc.displaydevice_->get_bpp());
 		//setGlobalVariable(FIM_VID_SCALE  ,newscale_*100);
 		//setGlobalVariable(FIM_VID_ASCALE ,ascale_);
 		return true;
