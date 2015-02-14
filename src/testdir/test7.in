@@ -44,7 +44,7 @@ reload;
 #
 scaled_width= ((i:width *scale)/100.0);
 # FIXME : missing ascale effect
-scaled_height=((i:height*'1.0'*scale)/100.0);
+scaled_height=((i:height*scale)/100.0);
 if(scaled_height<1) scaled_height=1; # fix for dumb driver
 if(_device_string=="aalib")
 {

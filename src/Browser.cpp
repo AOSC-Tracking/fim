@@ -1411,7 +1411,9 @@ ret:
 			else
 				mv = fc;
 			if( pcnt )
-				gv = FIM_INT_PCNT(gv,mv);
+			{
+			       	gv = FIM_INT_PCNT_OF_100(gv,mv);
+			}
 			if( !mv )
 			{
 			       	goto ret; 
