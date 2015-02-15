@@ -980,7 +980,9 @@ err:
 ret:
 		return;
 	}
+
 	Viewport& Viewport::operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
+
 	void Viewport::transform(bool mirror, bool flip)
 	{
 		if(mirror)
