@@ -443,7 +443,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		execDefaultConfiguration();
 		fcmd_cd(args_t());
 		setVariable(FIM_VID_VERSION,(fim_int)FIM_REVISION_NUMBER);
-		setVariable(FIM_VID_STEPS,(fim_int)FIM_CNS_STEPS_DEFAULT);
+		setVariable(FIM_VID_STEPS,FIM_CNS_STEPS_DEFAULT);
 		setVariable(FIM_VID_TERM, fim_getenv(FIM_CNS_TERM_VAR));
 		setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,(fim_int)1);
 		setVariable(FIM_VID_DEFAULT_ETC_FIMRC,FIM_CNS_SYS_RC_FILEPATH);
