@@ -443,8 +443,9 @@ namespace fim
 				int fh=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->height:1; // FIXME : this is not clean
 				int fw=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->width:1; // FIXME : this is not clean
 				const char * cmnts = image_->getStringVariable(FIM_VID_COMMENT).c_str();
-				int sl = strlen(cmnts), rw = viewport_width() / fw;
+				int sl = strlen(cmnts), rw = viewport_width() / fw, wh = viewport_height();
 				for( int li = 0 ; sl > rw * li ; ++li )
+					if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
 					commandConsole.displaydevice_->fs_puts(commandConsole.displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 			}
 #endif /* FIM_WANT_PIC_CMTS */
