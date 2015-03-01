@@ -787,6 +787,7 @@ ret:
 			else
 			       	;	/* ]:-)> */
 		}
+		close(fim_pipedesc[0]);
 		if(iret!=0 || errno!=0)
 		{
 			if(getIntVariable(FIM_VID_VERBOSE_ERRORS)==1)
@@ -868,6 +869,7 @@ ret:
 			fim_perror(NULL);//FIXME: shall use only one yyparse-calling function!
 			yyparse();
 			fim_perror(NULL);//FIXME: shall use only one yyparse-calling function!
+			close(fim_pipedesc[0]);
 			goto ok;
 		}
 		if(cmd==FIM_FLT_USLEEP)
