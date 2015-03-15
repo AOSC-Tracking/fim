@@ -109,7 +109,7 @@ class Image
 
 	protected:
 	enum { FIM_NO_ROT=0,FIM_ROT_ROUND=4 };
-	enum { FIM_ROT_L_C='L',FIM_ROT_R_C='C',FIM_ROT_U_C='U' };
+	enum { FIM_ROT_L_C='L',FIM_ROT_R_C='R',FIM_ROT_U_C='U' };
 	enum { FIM_I_ROT_L=0, FIM_I_ROT_R=1}; /* internal */
 	fim_pgor_t              orientation_;	// orthogonal rotation
 
