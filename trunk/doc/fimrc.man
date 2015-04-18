@@ -531,7 +531,7 @@ _comment
 .fi
 .B
 _comment_over_image
-[experimental,in,g:] if _comment_over_image is set not to 0, will display the contents of i:_comment over the image.
+[experimental,in,g:] if _comment_over_image is set not to 0, will display the contents of i:_comment over the image; if larger than 1, with black background. 
 .fi
 .B
 _console_buffer_free
