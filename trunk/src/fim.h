@@ -321,6 +321,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
  * Fim Constants
  * */
 #define FIM_CNS_FIM	 "FIM - Fbi IMproved"
+#define FIM_CNS_LCY	 "2015" /* latest copyright year */
 //#define FIM_CNS_FIM_TXT	 "FIM.TXT"
 #define FIM_CNS_BUGS_FILE	 "BUGS"
 #define FIM_CNS_TERM_VAR	 "TERM"
