@@ -888,6 +888,7 @@ nop:
 
 	fim::string CommandConsole::fcmd_desc(const args_t& args)
 	{
+#if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t';
 
 		if(2 > args.size() || args[0] != "load" )
@@ -895,7 +896,9 @@ nop:
 		if(2 < args.size())
 			sc = *args[2].c_str();
 		this->id_.fetch(args[1],sc);
+		browser_.cache_.desc_update();
 err:
+#endif /* FIM_WANT_PIC_CMTS */
 		return FIM_CNS_EMPTY_RESULT;
 	}
 

@@ -833,6 +833,8 @@ void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 
 	fim_coo_t row,bit,x;
 	fim_sys_int bpr;
+	const Uint8 rc = 0xff, gc = 0xff, bc = 0xff;
+	// const Uint8 rc = 0x00, gc = 0x00, bc = 0xff;
 
 	bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left), SCANLINE_PAD_BYTES);
 	for (row = 0; row < (charInfo->ascent + charInfo->descent); row++)
@@ -841,7 +843,7 @@ void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 		{
 			if (data[bit>>3] & fs_masktab[bit&7])
 			{	// WARNING !
-				setpixel(screen_,x_+x,(y+row)*screen_->pitch/Bpp_,(Uint8)0xff,(Uint8)0xff,(Uint8)0xff);
+				setpixel(screen_,x_+x,(y+row)*screen_->pitch/Bpp_,rc,gc,bc);
 			}
 			x += Bpp_/Bpp_;/* FIXME */
 		}

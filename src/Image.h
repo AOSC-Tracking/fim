@@ -175,6 +175,7 @@ class Image
 	void mm_make(void);
 	bool has_mm(void)const;
 	bool cacheable(void)const;
+	void desc_update();
 };
 }
 
