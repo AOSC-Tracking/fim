@@ -28,7 +28,12 @@ CP=cp -p
 
 help:
 	@echo
-	@echo HELP : 'make pages | make site | make up | make all'
+	@echo HELP : 'make pages | make site | make up | make all | make cp'
+	@echo        'make pages # generates the HTML files'
+	@echo        'make site  # generates also the tarball'
+	@echo        'make up    # copies the HTML files to their local dir'
+	@echo        'make cp    # copies the tarball to the local mirror dir'
+	@echo        'make all   # all of the above'
 	@echo
 
 #tgz: $(SITEDIR)/$(TGZ)
@@ -40,7 +45,7 @@ all:	site up cp
 $(FIMHTMLDOCS):
 	cd $(FIMDIR)/doc && make $(FIMHTMLDOCS)
 
-$(SITEDIR)/index.html: $(INDEXIN)
+$(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	m4 -DVERSION="$(FVERSION)"  \
 	-D REPOSITORY=$(REPOSITORY) \
 	-D MIRROR=$(MIRROR) \

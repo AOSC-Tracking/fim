@@ -51,4 +51,5 @@ BODY {
 	font-link:
 }
 
-
+/* CODE { text-align: left; font-family: monospace; background: #CCC fixed; color: #222; border: medium solid #00F ; overflow: hidden; padding:1pt; } */
+CODE { font-family: monospace; overflow: hidden; padding:1pt; background: #333 fixed; } 

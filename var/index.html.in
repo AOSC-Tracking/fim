@@ -132,13 +132,14 @@ SECTION(screenshots,screenshots)
 <tr>
 <td>
 <h5>
-A screenshot of a regular (framebuffer) FIM_ABBR run:
+A screenshot of a regular (framebuffer) FIM_ABBR run (SDL would look the same):
 </h5>
 </td>
 </tr>
 <tr>
 <td align="center">
-<a href="fim-shot-fb.png"><img src="fim-shot-fb-mini.png" alt=""></a>
+<!--<a href="fim-shot-fb.png"><img src="fim-shot-fb-mini.png" alt=""></a>-->
+<a href="fim_diana_fb.jpg"><img src="fim_diana_fb.jpg" WIDTH="80%" alt=""></a>
 </td>
 </tr>
 <tr>
@@ -150,10 +151,21 @@ A screenshot of an Ascii Art FIM_ABBR run:
 </tr>
 <tr>
 <td align="center">
-<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>
+<!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
+<a href="fim_diana_aa.png"><img src="fim_diana_aa.png" WIDTH="80%" alt=""></a>
 
-
+<br>
+<h5>
+Both screenshots taken with the <code>fbgrab</code> program using the trunk version of FIM_ABBR.
+<br>
+The top textual line was taken from the
+<ABBR TITLE="Joint Photographic Experts Group">JPEG</ABBR>
+comment contained in the file;
+<ABBR TITLE="Exchangeable image file format">EXIF</ABBR>
+metadata is being displayed in the bottom textual line.
 </h5>
+<br>
+
 </td>
 </tr>
 SECTION(documentation,docs)
@@ -306,7 +318,7 @@ SECTION(copyright,copyright)
 <tr>
 <td>
 <h5>
-FIM_ABBR is copyright (C) 2007-2014 Michele Martone
+FIM_ABBR is copyright (C) 2007-2015 Michele Martone
 and derives from the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
 See the <a href="README.html">README.TXT</a> file for a list of contributors.
 <BR>
