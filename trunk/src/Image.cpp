@@ -117,6 +117,15 @@ namespace fim
 		return img_->i.height;
 	}
 
+	void Image::desc_update()
+	{
+#if FIM_WANT_PIC_CMTS
+		fim_fn_t key(fim_basename_of(fname_.c_str()));
+		if(cc.id_.find(key) != cc.id_.end() )
+			setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
+#endif /* FIM_WANT_PIC_CMTS */
+	}
+
 	Image::Image(const fim_char_t *fname, FILE*fd, fim_page_t page):
 		scale_(0.0),
 		ascale_(0.0),
@@ -161,11 +170,7 @@ namespace fim
 				setVariable(FIM_VID_COMMENT,(fim_char_t*)(ie->data));
 
 			if(fname)
-			{
-				fim_fn_t key(fim_basename_of(fname));
-				if(cc.id_.find(key) != cc.id_.end() )
-					setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
-			}
+				desc_update();
 #endif /* FIM_WANT_PIC_CMTS */
 
 #if FIM_WANT_EXIFTOOL

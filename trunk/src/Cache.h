@@ -124,6 +124,7 @@ class Cache
 
 	/*	the count of cached images	*/
 	int cached_elements(void)const;
+	void desc_update(void);
 };
 }
 

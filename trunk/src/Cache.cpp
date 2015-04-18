@@ -774,5 +774,18 @@ ret:
 		getCachedImage(key);
 		FIM_PR('.');
        	}
+
+	void Cache::desc_update(void)
+	{
+		/* TODO: report error code */
+#if FIM_WANT_PIC_CMTS
+		cachels_t::const_iterator ci;
+
+		FIM_LOUD_CACHE_STUFF;
+		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
+			if(ci->second)
+				ci->second->desc_update();
+#endif /* FIM_WANT_PIC_CMTS */
+	}
 }
 
