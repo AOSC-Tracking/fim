@@ -131,6 +131,7 @@ class Viewport:public ViewportState
 	virtual size_t byte_size(void)const;
 	int snprintf_centering_info(char *str, size_t size)const;
 	void transform(bool mirror, bool flip);
+	void fs_ml_puts(const char *str, fim_int doclear);
 };
 }
 #endif /* FIM_VIEWPORT_H */
