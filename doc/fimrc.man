@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fimrc 5 "(c) 2011\-2013 Michele Martone"
+.TH fimrc 5 "(c) 2011\-2015 Michele Martone"
 .SH NAME
 fimrc \- \fB fim \fP configuration file and language reference
 
@@ -1142,6 +1142,7 @@ bind 'B' "toggleDisplayBusy";
 alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
 alias "rotate90_ccw" "i:_orientation=i:_orientation+3;i:fresh=1;i:fresh=1;redisplay;" "";
 alias "rotate90_cw"  "i:_orientation=i:_orientation+1;i:fresh=1;i:fresh=1;redisplay;" "";
+alias "rotate180"  "i:_orientation=i:_orientation+2;i:fresh=1;i:fresh=1;redisplay;" "";
 alias "rotate90" "rotate90_cw;display;" "";
 alias "rotate270" "rotate90_ccw;display;" "";
 alias "rotate10"     "rotate  '10';display;" "";

@@ -118,7 +118,7 @@ manmode:
 			string(".\\\"\n"
 			".\\\" $Id""$\n"
 			".\\\"\n"
-			".TH fimrc 5 \"(c) 2011-2013 " FIM_AUTHOR_NAME "\"\n"
+			".TH fimrc 5 \"(c) 2011-" FIM_CNS_LCY " " FIM_AUTHOR_NAME "\"\n"
 			".SH NAME\n"
 			"fimrc - \\fB fim \\fP configuration file and language reference\n"
 			"\n"
