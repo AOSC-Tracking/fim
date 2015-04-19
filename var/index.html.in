@@ -163,9 +163,14 @@ The top textual line was taken from the
 comment contained in the file;
 <ABBR TITLE="Exchangeable image file format">EXIF</ABBR>
 metadata is being displayed in the bottom textual line.
+<br>
+If you are curious, there are also a 
+<a href="fim_diana_aa.txt">textual</a>
+and 
+<a href="fim_diana_aa.txt.html">HTML</a> screenshots taken using sorcery.
 </h5>
 <br>
-
+<!-- <iframe src="fim_diana_aa.txt.html" scrolling="auto" frameborder="1" WIDTH="100%" HEIGHT="600px" align="center"></iframe> -->
 </td>
 </tr>
 SECTION(documentation,docs)
