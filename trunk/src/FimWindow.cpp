@@ -1198,7 +1198,7 @@ namespace fim
 		return bs;
 	}
 
-	FimWindow & FimWindow ::operator= (const FimWindow &w){return *this;/* a nilpotent assignation */}
+	FimWindow & FimWindow ::operator= (const FimWindow &w){return *this;/* a disabled assignment */}
 
 	/* Rect stuff */
 
