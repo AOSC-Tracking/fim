@@ -2438,7 +2438,7 @@ err:
 
 	CommandConsole& CommandConsole::operator= (const CommandConsole&cc)
 	{
-		return *this;/* a nilpotent assignment */
+		return *this;/* a disabled copy constructor */
 	}
 }
 

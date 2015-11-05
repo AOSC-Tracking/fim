@@ -79,7 +79,7 @@ class Browser
 	Browser(CommandConsole &cc);
 	~Browser(void) { }
 	private:
-	Browser& operator= (const Browser &b){return *this;/* a nilpotent assignation */}
+	Browser& operator= (const Browser &b){return *this;/* a disabled copy constructor */}
 	Browser(const Browser &b):
 		Namespace(b),
 		flist_(args_t()),

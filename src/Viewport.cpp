@@ -1004,7 +1004,7 @@ ret:
 		return;
 	}
 
-	Viewport& Viewport::operator= (const Viewport&v){return *this;/* a nilpotent assignation */}
+	Viewport& Viewport::operator= (const Viewport&v){return *this;/* a disabled assignment */}
 
 	void Viewport::transform(bool mirror, bool flip)
 	{
