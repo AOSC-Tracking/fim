@@ -482,8 +482,8 @@ namespace fim
 			// if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, FIM_FLT_PCNT_OF_100(bp,vh-1),vh, 0x00000000 );
 			// displaydevice_->fill_rect(0, 1, 0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->height()-1), 0xFFFFFFFF );
 			// displaydevice_->fill_rect(0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->width()-1), 0, 0,  0xFFFFFFFF );
-			return true;
 #endif /* FIM_WANT_BROWSER_PROGRESS_BAR */
+			return true;
 		}
 		return false;
 	}
