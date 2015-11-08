@@ -471,7 +471,19 @@ namespace fim
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
+
+#define FIM_WANT_BROWSER_PROGRESS_BAR 0 /* new */
+#if FIM_WANT_BROWSER_PROGRESS_BAR 
+			fim_float_t bp = commandConsole.browser_.file_progress() * 100.0;
+			fim_coo_t xc = viewport_width(); // x coordinate
+			const fim_coo_t bw = 1; // bar width
+			const fim_coo_t vh = viewport_height();
+			if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, 0, FIM_FLT_PCNT_OF_100(bp,vh-1), 0xFFFFFFFF );
+			// if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, FIM_FLT_PCNT_OF_100(bp,vh-1),vh, 0x00000000 );
+			// displaydevice_->fill_rect(0, 1, 0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->height()-1), 0xFFFFFFFF );
+			// displaydevice_->fill_rect(0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->width()-1), 0, 0,  0xFFFFFFFF );
 			return true;
+#endif /* FIM_WANT_BROWSER_PROGRESS_BAR */
 		}
 		return false;
 	}
