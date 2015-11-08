@@ -37,6 +37,7 @@ typedef char fim_aa_char;	/* a type for aalib chars */
 
 static bool aainvalid;
 
+	template <fim_color_t PIXELCOL>
 	fim_err_t AADevice::clear_rect_(
 		void* dst,	// destination gray array and source rgb array
 		fim_coo_t oroff,fim_coo_t ocoff,	// row  and column  offset of the first output pixel
@@ -45,6 +46,7 @@ static bool aainvalid;
 	)
 	{
 		/* output screen variables */
+		fim_byte_t PIXELVAL = (fim_byte_t) PIXELCOL;
 		fim_coo_t 
 			oi,// output image row index
 			oj;// output image columns index
@@ -74,11 +76,11 @@ static bool aainvalid;
 		cout << idr << " " << idc << " " << "\n";
 		cout << loc << " " << lor << " " << "\n";*/
 
-		/* TODO : unroll me an use FIM_LIKELY :) */
+		/* TODO : unroll me and use FIM_LIKELY :) */
 		for(oi=oroff;oi<lor;++oi)
 		for(oj=ocoff;oj<loc;++oj)
 		{
-			((fim_byte_t*)(dst))[oi*ocskip+oj]=0;
+			((fim_byte_t*)(dst))[oi*ocskip+oj]=PIXELVAL;
 		}
 		return  FIM_ERR_NO_ERROR;
 	}
@@ -305,7 +307,7 @@ static bool aainvalid;
 		//img or scr ?!
 		//fim_bzero(aa_image(ascii_context_),aa_imgheight(ascii_context_)*ocskip);
 		//fim_bzero(aa_image(ascii_context_),width()*height());
-		AADevice::clear_rect_( aa_image(ascii_context_), oroff,ocoff, oroff+orows,ocoff+ocols, ocskip); 
+		AADevice::clear_rect_<FIM_CNS_BLACK>( aa_image(ascii_context_), oroff,ocoff, oroff+orows,ocoff+ocols, ocskip); 
 
 	//	cout << iroff << " " << icoff << " " << irows << " " << icols << " " << icskip << "\n";
 /*		cout << oroff << " " << ocoff << " " << orows << " " << ocols << " " << ocskip << "\n";
@@ -481,7 +483,15 @@ static bool aainvalid;
 		 * TODO : define the exact conditions to use this method
 		 * */
 		
-		return clear_rect_(aa_image(ascii_context_),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context_));
+		return clear_rect_<FIM_CNS_BLACK>(aa_image(ascii_context_),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context_));
+	}
+
+	fim_err_t AADevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color)
+	{
+		if( color == FIM_CNS_WHITE )
+			return clear_rect_<FIM_CNS_WHITE>(aa_image(ascii_context_),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context_));
+		else
+			return clear_rect_<FIM_CNS_BLACK>(aa_image(ascii_context_),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context_));
 	}
 
 	fim_err_t AADevice::status_line(const fim_char_t *msg)
