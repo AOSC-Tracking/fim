@@ -487,7 +487,7 @@ fim_int fim_rand(void)
 	{
 		/*
 		 *	given a string s, and a Posix regular expression r, this
-		 *	method returns true if there is match. false otherwise.
+		 *	member function returns true if there is match. false otherwise.
 		 */
 		regex_t regex;		//should be static!!!
 		const int nmatch=1;	// we are satisfied with the first match, aren't we ?

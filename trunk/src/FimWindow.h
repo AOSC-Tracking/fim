@@ -2,7 +2,7 @@
 /*
  FimWindow.h : Fim's own windowing system header file
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -204,7 +204,7 @@ class FimWindow
 	public:
 	void setroot(void);	// only one root window should exist
 
-	/* The only public method launching exceptions is the constructor now.
+	/* The only public member function launching exceptions is the constructor now.
 	 * */
 	FimWindow(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
 	fim_err_t update(const Rect& corners);

@@ -384,7 +384,7 @@ rerr:
 		fim_err_t MiniConsole::reformat(int newlwidth)
 		{
 			/*
-			 * This method reformats the whole buffer_ array; that is, it recomputes
+			 * This member function reformats the whole buffer_ array; that is, it recomputes
 			 * line_ information for it, thus updating the whole line_ array contents.
 			 * It may fail, in the case a new line_ width (smaller) is desired, because
 			 * more line_ information would be needed.

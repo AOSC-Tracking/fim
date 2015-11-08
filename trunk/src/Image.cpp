@@ -672,7 +672,7 @@ ret:
 			if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
 			{
 				// we make a backup.. who knows!
-				// FIXME: should use a faster and memory-smarter method : in-place
+				// FIXME: should use a faster and memory-smarter member function : in-place
 				struct ida_image *rb=img_;
 				rb  = FbiStuff::rotate_image90(rb,orientation_==FIM_ROT_L?FIM_I_ROT_L:FIM_I_ROT_R);
 				if(rb)
@@ -685,7 +685,7 @@ ret:
 			{	
 				// we make a backup.. who knows!
 				struct ida_image *rbb=NULL,*rb=NULL;
-				// FIXME: should use a faster and memory-smarter method : in-place
+				// FIXME: should use a faster and memory-smarter member function : in-place
 				rb  = FbiStuff::rotate_image90(img_,FIM_I_ROT_L);
 				if(rb)
 					rbb  = FbiStuff::rotate_image90(rb,FIM_I_ROT_L);
@@ -1167,7 +1167,7 @@ labeldone:
 		/*
 		 * updates the image according to its variables
 		 *
-		 * FIXME: a temporary method
+		 * FIXME: a temporary member function
 		 * */
 		setVariable(FIM_VID_FRESH,(fim_int)0);
 		if(fimg_)

@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -524,7 +524,7 @@ void FramebufferDevice::svga_display_image_new(
 int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int vt_, int try_boz_patch)
 {
     /*
-     * This method will probe for a valid framebuffer device.
+     * This member function will probe for a valid framebuffer device.
      *
      * The try_boz_patch will make fim go straight ahead ignoring lots of errors.
      * Like the ones when running fim under screen.

@@ -72,7 +72,7 @@ class CommandConsole
 	/*
 	 * the registered command methods and objects
 	 */
-	std::vector<Command*> commands_;			//command->method
+	std::vector<Command*> commands_;			//command->member function
 
 	/*
 	 * the aliases to actions (compounds of commands)

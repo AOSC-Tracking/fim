@@ -264,7 +264,7 @@ ret:
 		}
 		else
 		{
-			// FIXME: shall use a search method/function
+			// FIXME: shall use a search member function/function
 			for( size_t i=0; i < flist_.size(); ++i )
 				if( flist_[i] == filename )
 					flist_.erase(flist_.begin()+i);
@@ -1157,7 +1157,7 @@ struct FimBaseNameSorter
 	{
 		/*
 		 * goes to the next filename-matching file
-		 * TODO: this method shall only find the index and return it !
+		 * TODO: this member function shall only find the index and return it !
 		 */
 		size_t i,j,c = current_n(),s = flist_.size();
 		const char *rso = cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) ? cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str() : "bi";
