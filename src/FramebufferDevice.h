@@ -322,6 +322,7 @@ class FramebufferDevice:public DisplayDevice
 		fb_clear_rect(x1, x2, y1,y2);
 		return 0;
 	}
+	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) {/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
 
 	void clear_screen(void);
 	void cleanup(void);
