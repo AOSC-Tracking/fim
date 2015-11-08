@@ -475,13 +475,16 @@ namespace fim
 #define FIM_WANT_BROWSER_PROGRESS_BAR 0 /* new */
 #if FIM_WANT_BROWSER_PROGRESS_BAR 
 			fim_float_t bp = commandConsole.browser_.file_progress() * 100.0;
-			fim_coo_t xc = viewport_width(); // x coordinate
-			const fim_coo_t bw = 1; // bar width
-			const fim_coo_t vh = viewport_height();
-			if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, 0, FIM_FLT_PCNT_OF_100(bp,vh-1), FIM_CNS_WHITE );
-			// if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, FIM_FLT_PCNT_OF_100(bp,vh-1),vh, FIM_CNS_BLACK );
-			// displaydevice_->fill_rect(0, 1, 0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->height()-1), FIM_CNS_WHITE );
-			// displaydevice_->fill_rect(0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->width()-1), 0, 0,  FIM_CNS_WHITE );
+			const fim_pan_t bw = 1; // bar width
+			const fim_pan_t vw = viewport_width();
+			const fim_pan_t vh = viewport_height();
+			const fim_coo_t xc = vw; // x coordinate
+			fim_color_t bc = FIM_CNS_WHITE;
+			bc = FIM_CNS_WHITE;
+			if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, 0, FIM_FLT_PCNT_OF_100(bp,vh-1), bc);
+			// if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, FIM_FLT_PCNT_OF_100(bp,vh-1),vh, bc);
+			// displaydevice_->fill_rect(0, 1, 0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->height()-1), bc);
+			// displaydevice_->fill_rect(0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->width()-1), 0, 1, bc);
 #endif /* FIM_WANT_BROWSER_PROGRESS_BAR */
 			return true;
 		}

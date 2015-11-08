@@ -74,6 +74,7 @@ class AADevice:public DisplayDevice
 	{
 		return false;
 	}
+	template <fim_color_t PIXELCOL>
 	fim_err_t clear_rect_(
 		void* dst,
 		fim_coo_t oroff,fim_coo_t ocoff,
@@ -81,7 +82,7 @@ class AADevice:public DisplayDevice
 		fim_coo_t ocskip);
 
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1, fim_coo_t y2);
-	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color){/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
+	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color);
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 	void flush(void);
 	fim_err_t init_console(void);
