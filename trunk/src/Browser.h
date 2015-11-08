@@ -156,6 +156,7 @@ class Browser
 	public:
 	fim_int c_page(void)const;
 	virtual size_t byte_size(void)const;
+	fim_float_t file_progress(void)const { /* FIXME: relies on range 0... */ double fp = (((double)(1+this->current_n()))/this->n_files()); return FIM_MIN(1.0,fp);} 
 };
 }
 
