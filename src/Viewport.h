@@ -73,7 +73,7 @@ class Viewport:public ViewportState
 	int valid(void)const;
 #endif
 
-	/* viewport methods */
+	/* viewport member functions */
 	fim::string pan(const args_t &args);
 	fim::string pan(const fim_char_t*a1, const fim_char_t*a2);
 	bool place(const fim_pan_t px, const fim_pan_t py);
@@ -92,15 +92,15 @@ class Viewport:public ViewportState
 	protected:
 
 //	int redraw;	// there is already an external one!
-	/* viewport methods */
+	/* viewport member functions */
 
 	public:
 	fim_coo_t viewport_width(void)const;
 	fim_coo_t viewport_height(void)const;
-	/* viewport methods */
+	/* viewport member functions */
 	void align(const char c);
 
-	/* viewport methods */
+	/* viewport member functions */
 	bool display(void);
 	bool redisplay(void);
 	void null_display(void);

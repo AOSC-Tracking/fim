@@ -39,7 +39,7 @@
 namespace fim
 {
 /*
- *	A general rule in programming the Image methods is that
+ *	A general rule in programming the Image member functions is that
  *	of keeping them minimal.
  *	Combining them is matter of the invoking function.
  *	So, there is NO internal triggering  here to call ANY 
@@ -103,7 +103,7 @@ class Image
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 	struct ida_image *fimg_    ;     /* master image */
 
-	/* image methods */
+	/* image member functions */
 	bool load(const fim_char_t *fname, FILE *fd, int want_page);
 	void should_redraw(int should=1)const;
 
@@ -143,7 +143,7 @@ class Image
 	const fim_char_t* getName(void)const;
 	cache_key_t getKey(void)const;
 
-	/* viewport methods */
+	/* viewport member functions */
 
 	void reduce( fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	void magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
@@ -151,7 +151,7 @@ class Image
 	fim_pgor_t getOrientation(void)const;
 
 	fim_err_t setscale(fim_scale_t ns);
-	/* viewport methods ? */
+	/* viewport member functions ? */
 	fim_err_t scale_increment(fim_scale_t ds);
 	fim_err_t scale_multiply (fim_scale_t sm);
 	bool negate (void);/* let's read e-books by consuming less power :) */

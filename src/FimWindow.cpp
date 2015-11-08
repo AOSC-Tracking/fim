@@ -2,7 +2,7 @@
 /*
  FimWindow.cpp : Fim's own windowing system
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -160,7 +160,7 @@ namespace fim
 		 *  A new leave FimWindow is created with a specified geometry.
 		 *  An exception is launched upon memory errors.
 		 *
-		 *  Note : this method is useless, and should be kept private :D
+		 *  Note : this member function is useless, and should be kept private :D
 		 */
 		viewport_=new Viewport( commandConsole_, this );
 

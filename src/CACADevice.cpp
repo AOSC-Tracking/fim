@@ -2,7 +2,7 @@
 /*
  CACADevice.cpp : cacalib device Fim driver file
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@
 	{
 		/*
 		 * This routine will be optimized, some day.
-		 * Note that it is not a method.
+		 * Note that it is not a member function.
 		 * TODO : optimize and generalize, in all possible ways:
 		 * 	RGBTOGRAY
 		 * 	RGBTOGRAYGRAYGRAY

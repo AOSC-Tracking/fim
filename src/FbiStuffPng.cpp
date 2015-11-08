@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -306,7 +306,7 @@ png_write(FILE *fp, struct ida_image *img)
     unsigned int y;
     
    /* Create and initialize the png_struct with the desired error handler
-    * functions.  If you want to use the default stderr and longjump method,
+    * functions.  If you want to use the default stderr and longjump based method,
     * you can supply NULL for the last three parameters.  We also check that
     * the library version is compatible with the one used at compile time,
     * in case we are using dynamically linked libraries.  REQUIRED.

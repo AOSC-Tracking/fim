@@ -521,7 +521,7 @@ ret:
 		/*
 		 * TODO: rename to get().
 		 *
-		 * The caller invokes this method to obtain an Image object pointer.
+		 * The caller invokes this member function to obtain an Image object pointer.
 		 * If the object is cached and it already used, a clone is built and returned.
 		 *
 		 * If we have an unused master copy, we return that.

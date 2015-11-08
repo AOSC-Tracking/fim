@@ -237,7 +237,7 @@ ret:		return key;
 		 * returns the alias command eventually specified by token cmd
 		 *
 		 * Note : return aliases_[cmd] would create an entry associated to cmd 
-		 * ( and this method would loose the chance to be const ).
+		 * ( and this member function could not be const anymore ).
 		 */
 		aliases_t::const_iterator ai=aliases_.find(cmd);
 
@@ -501,7 +501,7 @@ err:
 	fim::string CommandConsole::alias(const fim::string& a, const fim::string& c, const fim::string& d)
 	{
 		/*
-		 * an internal alias method
+		 * an internal alias member function
 		 */
 		std::vector<fim::Arg> args;
 		args.push_back(Arg(a));
@@ -520,7 +520,7 @@ err:
 		 *	TODO : the 'mask' mechanism is still a quick hack; it shall be adjusted more properly 
 		 *	with completions!
 		 *	FIXME
-		 *	DANGER : this method allocates memory
+		 *	DANGER : this member function allocates memory
 		 */
 		args_t completions;
 		aliases_t::const_iterator ai;
@@ -710,7 +710,7 @@ ret:
 	{
 		try{
 		/*
-		 *	This method executes a character string containing a script.
+		 *	This member function executes a character string containing a script.
 		 *	The second argument specifies whether the command is added or 
 		 *	not to the command history buffer.
 		 *
@@ -823,8 +823,8 @@ ret:
         fim::string CommandConsole::execute(fim::string cmd, args_t args)
 	{
 		/*
-		 *	This is the method where the tokenized commands are executed.
-		 *	This method executes single commands with arguments.
+		 *	This is the member function where the tokenized commands are executed.
+		 *	This member function executes single commands with arguments.
 		 */
 		Command *c=NULL;
 		/* first determine whether cmd is an alias */
@@ -953,7 +953,7 @@ ok:
 	fim_int CommandConsole::catchLoopBreakingCommand(fim_ts_t seconds)
 	{
 		/*	
-		 *	This method is invoked during non interactive loops to
+		 *	This member function is invoked during non interactive loops to
 		 *	provide a method for interactive loop breaking.
 		 *
 		 *	The provided mechanism allows the user to press any key
@@ -1232,7 +1232,7 @@ rlnull:
 	void CommandConsole::exit(fim_perr_t i)const
 	{
 		/*
-		 *	This method will exit the program as a whole.
+		 *	This member function will exit the program as a whole.
 		 *      If various object destructors are set to destroy device
 		 *	contexts, it should do no harm to the console.
 		 *      (it will call statically declared object's destructors )
@@ -1243,7 +1243,7 @@ rlnull:
 	fim_perr_t CommandConsole::quit(fim_perr_t i)
 	{
 		/*
-		 * the method to be called to exit from the program safely.
+		 * the member function to be called to exit from the program safely.
 		 * it is used mainly for safe and exit after severe errors.
 		 * TODO : get rid of it.
 		 */
@@ -1781,7 +1781,7 @@ ok:
 	{
 		/*
 		 *	given a string s, and a Posix regular expression r, this
-		 *	method returns true if there is match. false otherwise.
+		 *	member function returns true if there is match. false otherwise.
 		 */
 		regex_t regex;		//should be static!!!
 		const fim_size_t nmatch=1;	// we are satisfied with the first match, aren't we ?
@@ -2000,7 +2000,7 @@ ok:
 	fim::string CommandConsole::sanitize_action(const fim::string &cmd)const
 	{
 		/*
-		 * the purpose of this method is to sanitize the action token
+		 * the purpose of this member function is to sanitize the action token
 		 * in order to gain a dumpable and self standing action
 		 */
 		if(cmd.c_str()[strlen(cmd.c_str())-1]!=FIM_SYM_SEMICOLON)

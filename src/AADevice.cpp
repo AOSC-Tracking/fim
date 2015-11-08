@@ -98,7 +98,7 @@ static bool aainvalid;
 	{
 		/*
 		 * This routine will be optimized, some day.
-		 * Note that it is not a method.
+		 * Note that it is not a member function.
 		 * TODO : optimize and generalize, in all possible ways:
 		 * 	RGBTOGRAY
 		 * 	RGBTOGRAYGRAYGRAY
@@ -480,7 +480,7 @@ static bool aainvalid;
 	fim_err_t AADevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1, fim_coo_t y2)
 	{
 		/* FIXME : only if initialized !
-		 * TODO : define the exact conditions to use this method
+		 * TODO : define the exact conditions to use this member function
 		 * */
 		
 		return clear_rect_<FIM_CNS_BLACK>(aa_image(ascii_context_),y1, x1, y2-y1+1, x2-x1+1,aa_imgwidth(ascii_context_));
