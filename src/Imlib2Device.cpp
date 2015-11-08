@@ -572,7 +572,7 @@ ret:
 			goto done;
 		clear_rect(0, width()-1, y+1,y+f_->height+ys-1);
 		fs_puts(f_, 0, y+ys, msg);
-		fill_rect(0,width()-1, y, y, 0xFFFFFFFF);
+		fill_rect(0,width()-1, y, y, FIM_CNS_WHITE);
 done:
 		return FIM_ERR_NO_ERROR;
 	}

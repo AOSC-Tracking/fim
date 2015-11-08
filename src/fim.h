@@ -409,6 +409,8 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_VICSZ FIM_CNS_K * 64 /* viewport info cache size */
 #define FIM_CNS_CSU FIM_CNS_K  /* cache size unit */ 
 #define FIM_CNS_CLEARTERM "\x1B\x4D" /* FIXME: still unused */
+#define FIM_CNS_WHITE 0xFFFFFFFF	/* Temporarily here. Will better need an enum or another portable solution. */
+#define FIM_CNS_BLACK 0x00000000	/* Temporarily here. Will better need an enum or another portable solution. */
 
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
