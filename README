@@ -221,6 +221,7 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  sudo apt-get install libpoppler-dev libdjvulibre-dev libspectre-dev
  sudo apt-get install libarchive-dev
  svn co http://svn.savannah.nongnu.org/svn/fbi-improved/trunk/ fim
+ sh autogen.sh
  cd fim
  ./configure --enable-poppler --enable-aa --enable-sdl
  make
