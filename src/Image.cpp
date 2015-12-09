@@ -123,6 +123,12 @@ namespace fim
 		fim_fn_t key(fim_basename_of(fname_.c_str()));
 		if(cc.id_.find(key) != cc.id_.end() )
 			setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
+#if FIM_WANT_PIC_LVDN
+		/* TODO: need a proper variable assignment function in Namespace. */
+		for(variables_t::const_iterator fit=cc.id_.vd_[key].variables_.begin();fit!=cc.id_.vd_[key].variables_.end();++fit)
+			setVariable((fit->first),Var(fit->second));
+			//cc.id_.vd_[cc.id_[key]];
+#endif /* FIM_WANT_PIC_LVDN */
 #endif /* FIM_WANT_PIC_CMTS */
 	}
 

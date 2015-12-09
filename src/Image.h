@@ -178,14 +178,22 @@ class Image
 	void desc_update();
 };
 }
+#if FIM_WANT_PIC_LVDN
+	class VNamespace: public Namespace { size_t byte_size(void)const{return 0; /* FIXME */}; };
+#endif /* FIM_WANT_PIC_LVDN */
 
 #if FIM_WANT_PIC_CMTS
 /* FIXME: temporarily here */
-typedef std::string fim_fn_t;
-typedef std::string fim_ds_t;
+typedef std::string fim_fn_t; /* file name */
+typedef std::string fim_ds_t; /* file description */
 
 class ImgDscs: public std::map<fim_fn_t,fim_ds_t>
 {
+	public:
+#if FIM_WANT_PIC_LVDN
+	typedef std::map<std::string,VNamespace> vd_t;
+	vd_t vd_;
+#endif /* FIM_WANT_PIC_LVDN */
 	template<class T> struct ImgDscsCmp:public std::binary_function<typename T::value_type, typename T::mapped_type, bool>
 	{
 		public:
@@ -235,13 +243,39 @@ public:
 	{
 		std::ifstream mfs (dfn.c_str(),std::ios::app);
 		std::string ln;
+#if FIM_WANT_PIC_LVDN
+		VNamespace ns;
+#endif /* FIM_WANT_PIC_LVDN */
 
 		while( std::getline(mfs,ln))
 		{
 			std::stringstream  ls(ln);
 			key_type fn;
 			const fim_char_t nl = '\n';
-			mapped_type ds;
+			fim_fn_t ds;
+
+#if FIM_WANT_PIC_LVDN
+			if( ls.peek() == FIM_SYM_PIC_CMT_CHAR )
+			{
+				if( std::getline(ls,fn,nl) )
+				{
+					/* ignoring it: it's a comment line */
+					size_t vn = fn.find_first_of("!fim:",1);
+					if( vn != std::string::npos && fn[vn+=5] )
+					{
+						size_t es = fn.find_first_of("=",vn);
+						if( es != std::string::npos && fn[++es] )
+						{
+							std::string varname = fn.substr(vn,es-1-vn);
+							std::string varval = fn.substr(es);
+							ns.setVariable(varname,Var(varval));
+							/* TODO: need to reset/invalidate that variable on e.g. "var=" */
+						}
+					}
+				}
+			}
+			else
+#endif /* FIM_WANT_PIC_LVDN */
 			if(std::getline(ls,fn,sc))
 			{
 				if(std::getline(ls,ds,nl))
@@ -249,9 +283,19 @@ public:
 					const bool want_basename = true; /*  */
 
 					if(! want_basename )
+					{
 						(*this)[fn]=ds;
+#if FIM_WANT_PIC_LVDN
+						vd_[std::string(fn)]=ns;
+#endif /* FIM_WANT_PIC_LVDN */
+					}
 					else
+					{
 						(*this)[fim_basename_of(fn.c_str())]=ds;
+#if FIM_WANT_PIC_LVDN
+						vd_[fim_basename_of(fn.c_str())]=ns;
+#endif /* FIM_WANT_PIC_LVDN */
+					}
 				}
 			}
 		}
