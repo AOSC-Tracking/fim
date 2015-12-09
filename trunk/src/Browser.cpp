@@ -1532,6 +1532,7 @@ err:
 			{
 //				std::cout << "removing" << flist_[i]<<FIM_CNS_NEWLINE;
 				flist_.erase(flist_.begin()+i);
+				--i; /* i needs to be reconsidered */
 			}
 			int N = flist_.size();
 			if( N <= 0 )
