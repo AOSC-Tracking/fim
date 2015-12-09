@@ -122,7 +122,7 @@ class Browser
 	fim::string fcmd_list(const args_t &args);
 	fim::string do_push(const args_t &args);
 	fim::string prev(int n=1);
-	fim::string do_remove(const args_t &args);
+	fim::string do_remove(const args_t &args, bool partial=false, bool negative=false);
 	fim::string fcmd_info(const args_t &args);
 	fim::string info(void);
 	std::ostream& print(std::ostream &os)const;
