@@ -221,6 +221,9 @@ ret:
 #ifdef FIM_NAMESPACES
 		Namespace(&cc,FIM_SYM_NAMESPACE_BROWSER_CHAR),
 #endif /* FIM_NAMESPACES */
+#if FIM_WANT_PIC_LBFL
+		flist_(tlist_),
+#endif /* FIM_WANT_PIC_LBFL */
 		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
 	{	
 		cf_ = 0;
@@ -532,6 +535,23 @@ nop:
 nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
+
+#if FIM_WANT_PIC_LBFL
+	fim::string Browser::fcmd_limit(const args_t &args)
+	{
+		/* FIXME: unfinished function */
+		if( args.size() > 0 )
+		{
+			cout << "limiting to " << args[0] << "... \n";
+			tlist_ = flist_; /* limiting */
+			do_remove(args,true,true); /* this is remove on filenames; need remove on comments */
+		}
+		else
+			flist_ = tlist_; /* reset */
+nop:
+		return FIM_CNS_EMPTY_RESULT;
+	}
+#endif /* FIM_WANT_PIC_LBFL */
 
 	fim::string Browser::display_status(const fim_char_t *l)
 	{
