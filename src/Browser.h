@@ -39,6 +39,10 @@ class Browser
 {
 	private:
 	args_t flist_; /* the names of files in the slideshow.  */
+#if FIM_WANT_PIC_LBFL
+	args_t tlist_; /* the names of files in the slideshow.  */
+	args_t llist_; /* limited file list */
+#endif /* FIM_WANT_PIC_LBFL */
 
 	const fim::string nofile_; /* a dummy empty filename */
 
@@ -82,7 +86,13 @@ class Browser
 	Browser& operator= (const Browser &b){return *this;/* a disabled copy constructor */}
 	Browser(const Browser &b):
 		Namespace(b),
+#if FIM_WANT_PIC_LBFL
+		tlist_(args_t()),
+#endif /* FIM_WANT_PIC_LBFL */
 		flist_(args_t()),
+#if FIM_WANT_PIC_LBFL
+		llist_(args_t()),
+#endif /* FIM_WANT_PIC_LBFL */
 		nofile_(""),
 		cf_(0),
 		commandConsole_(cc),
@@ -118,6 +128,9 @@ class Browser
 	fim::string fcmd_negate(const args_t &args);
 	fim::string fcmd_desaturate(const args_t &args);
 
+#if FIM_WANT_PIC_LBFL
+	fim::string fcmd_limit(const args_t &args);
+#endif /* FIM_WANT_PIC_LBFL */
 	fim::string fcmd_reload(const args_t &args);
 	fim::string fcmd_list(const args_t &args);
 	fim::string do_push(const args_t &args);

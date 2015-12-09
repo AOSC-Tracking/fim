@@ -139,6 +139,7 @@
 #define FIM_WANT_GOTOLAST 1
 #define FIM_WANT_PIC_CMTS 1
 #define FIM_WANT_PIC_LVDN 1 /* pictures load variables description namespace (FIXME: experimental) */
+#define FIM_WANT_PIC_LBFL 0 /* limit browser file list */
 #define FIM_EXPERIMEMTAL_IMG_NMSPC 1
 #define FIM_EXPERIMEMTAL_VAR_EXPANDOS 1
 
@@ -738,6 +739,7 @@ namespace fim
 #define FIM_FLT_IF			"if" /* in vim */
 #define FIM_FLT_INFO			"info" /* not in vim */
 #define FIM_FLT_LOAD			"load" /* not in vim */
+#define FIM_FLT_LIMIT			"limit" /* not in vim */
 #define FIM_FLT_LIST			"list" /* not in vim */
 #define FIM_FLT_NEGATE			"negate" /* not in vim */
 #define FIM_FLT_NO_IMAGE		"no_image" /* not in vim */
