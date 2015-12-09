@@ -3,6 +3,7 @@
 
                 Version 0.5-trunk
 
+ * bugfix in the "list 'remove'" internals (TODO: r849)
  * load variables description namespace from file ("#!fim:var=value" forms)(TODO: r848)
  * changed librsb library detection: now it's 
    LIBS="`librsb-config  --ldflags --extra_libs` " CXXFLAGS="`librsb-config --cflags ` \
