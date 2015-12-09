@@ -1503,12 +1503,9 @@ err:
 		return errmsg;
 	}
 
-	fim::string Browser::do_remove(const args_t &args)
+	fim::string Browser::do_remove(const args_t &args, bool partial, bool negative)
 	{
 		/*
-		 *	ONLY if the image filename exists and matches EXACTLY,
-		 *
-		 *	FIXME : dangerous!
 		 */
 		fim::string result;
 		FIM_PR('*');
@@ -1528,11 +1525,17 @@ err:
 			 */
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
-			if( flist_[i] == rlist[r] )
 			{
-//				std::cout << "removing" << flist_[i]<<FIM_CNS_NEWLINE;
-				flist_.erase(flist_.begin()+i);
-				--i; /* i needs to be reconsidered */
+				bool keep = true;
+				keep &= ! ( partial == false && ( ( flist_[i] == rlist[r] ) ) != negative );
+				keep &= ! ( partial == true  && ( ( flist_[i].re_match(rlist[r].c_str()) ) ) != negative );
+
+				if( ! keep )
+				{
+//					std::cout << "removing" << flist_[i]<<FIM_CNS_NEWLINE;
+					flist_.erase(flist_.begin()+i);
+					--i; /* i needs to be reconsidered */
+				}
 			}
 			int N = flist_.size();
 			if( N <= 0 )
