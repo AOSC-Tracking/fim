@@ -30,6 +30,10 @@ namespace fim
 	class Namespace
 	{
 		protected:
+#if FIM_WANT_PIC_LVDN
+		/* TODO: need a proper variable assignment function in Namespace. */
+		friend class Image; /* FIXME: this is a temporary hack, not a long term solution */
+#endif /* FIM_WANT_PIC_LVDN */
 #ifndef FIM_INDIPENDENT_NAMESPACE
 		CommandConsole*rnsp_; // root Namespace pointer
 #endif /* FIM_INDIPENDENT_NAMESPACE */

@@ -138,6 +138,7 @@
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
 #define FIM_WANT_GOTOLAST 1
 #define FIM_WANT_PIC_CMTS 1
+#define FIM_WANT_PIC_LVDN 1 /* pictures load variables description namespace (FIXME: experimental) */
 #define FIM_EXPERIMEMTAL_IMG_NMSPC 1
 #define FIM_EXPERIMEMTAL_VAR_EXPANDOS 1
 
@@ -250,6 +251,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_SEMICOLON	';'
 #define FIM_SYM_SEMICOLON_STRING	";"
 #define FIM_SYM_ENDL	"\n"
+#define FIM_SYM_PIC_CMT_CHAR    '#'
 
 /*
  * External programs used by fim.
