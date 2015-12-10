@@ -539,12 +539,15 @@ nop:
 #if FIM_WANT_PIC_LBFL
 	fim::string Browser::fcmd_limit(const args_t &args)
 	{
-		/* FIXME: unfinished function */
+		/* FIXME: experimental, unfinished function */
 		if( args.size() > 0 )
 		{
-			cout << "limiting to " << args[0] << "... \n";
+			if(tlist_.size())
+			       	flist_ = tlist_; /* reset the first time */
+			if( args.size() > 1 )
+				cout << "limiting to " << args[0] << " = " << args[1] << " \n";
 			tlist_ = flist_; /* limiting */
-			do_remove(args,true,true); /* this is remove on filenames; need remove on comments */
+			do_remove(args,VarMatch,true); /* this is remove on filenames; need remove on comments */
 		}
 		else
 			flist_ = tlist_; /* reset */
@@ -1523,9 +1526,10 @@ err:
 		return errmsg;
 	}
 
-	fim::string Browser::do_remove(const args_t &args, bool partial, bool negative)
+	fim::string Browser::do_remove(const args_t &args, RemoveMode rm, bool negative)
 	{
 		/*
+		 * TODO: flags for negative, ... 
 		 */
 		fim::string result;
 		FIM_PR('*');
@@ -1543,12 +1547,25 @@ err:
 			 * if this software will have success, we will have indices here :)
 			 * sort(rlist.begin(),rlist.end());...
 			 */
+			fim_int lf = flist_.size();
+#if FIM_WANT_PIC_LVDN
+			if ( rm == VarMatch )
+				if(rlist.size() < 2)
+					rm = CmtMatch;
+#else
+			if ( rm == VarMatch )
+				rm == FullMatch;
+#endif /* FIM_WANT_PIC_LVDN */
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
 			{
 				bool keep = true;
-				keep &= ! ( partial == false && ( ( flist_[i] == rlist[r] ) ) != negative );
-				keep &= ! ( partial == true  && ( ( flist_[i].re_match(rlist[r].c_str()) ) ) != negative );
+				keep &= ! ( rm == FullMatch    && ( ( flist_[i] == rlist[r] ) ) != negative );
+				keep &= ! ( rm == PartialMatch && ( ( flist_[i].re_match(rlist[r].c_str()) ) ) != negative );
+#if FIM_WANT_PIC_LVDN
+				keep &= ! ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(std::string(flist_[i]).c_str())].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
+				keep &= ! ( rm == CmtMatch     && ( ( string(cc.id_    [fim_basename_of(std::string(flist_[i]).c_str())]).re_match(rlist[0].c_str()) ) != negative ) );
+#endif /* FIM_WANT_PIC_LVDN */
 
 				if( ! keep )
 				{
@@ -1557,6 +1574,8 @@ err:
 					--i; /* i needs to be reconsidered */
 				}
 			}
+	//		if(lf != flist_.size() )
+	//			cout << "limited to " << int(flist_.size()) << " files, excluding " << int(lf - flist_.size()) << " files." <<FIM_CNS_NEWLINE;
 			int N = flist_.size();
 			if( N <= 0 )
 				cf_ = 0;
