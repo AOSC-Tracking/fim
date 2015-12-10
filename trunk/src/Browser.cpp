@@ -1554,7 +1554,7 @@ err:
 					rm = CmtMatch;
 #else
 			if ( rm == VarMatch )
-				rm == FullMatch;
+				rm = FullMatch;
 #endif /* FIM_WANT_PIC_LVDN */
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
