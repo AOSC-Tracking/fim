@@ -38,6 +38,7 @@ class Browser
 #endif /* FIM_NAMESPACES */
 {
 	private:
+	enum RemoveMode{ FullMatch, PartialMatch, VarMatch, CmtMatch }; /* FIXME */
 	args_t flist_; /* the names of files in the slideshow.  */
 #if FIM_WANT_PIC_LBFL
 	args_t tlist_; /* the names of files in the slideshow.  */
@@ -135,7 +136,7 @@ class Browser
 	fim::string fcmd_list(const args_t &args);
 	fim::string do_push(const args_t &args);
 	fim::string prev(int n=1);
-	fim::string do_remove(const args_t &args, bool partial=false, bool negative=false);
+	fim::string do_remove(const args_t &args, RemoveMode rm=FullMatch, bool negative=false);
 	fim::string fcmd_info(const args_t &args);
 	fim::string info(void);
 	std::ostream& print(std::ostream &os)const;
