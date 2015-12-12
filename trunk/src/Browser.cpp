@@ -539,20 +539,29 @@ nop:
 #if FIM_WANT_PIC_LBFL
 	fim::string Browser::fcmd_limit(const args_t &args)
 	{
-		/* FIXME: experimental, unfinished function */
+		fim::string result = FIM_CNS_EMPTY_RESULT;
+
+		if( args.size() > 2 )
+		{
+			result = "Provided more than two arguments to "FIM_FLT_LIMIT". Using the first two, ignoring the rest.\n";
+		}
+
 		if( args.size() > 0 )
 		{
 			if(tlist_.size())
 			       	flist_ = tlist_; /* reset the first time */
 			if( args.size() > 1 )
-				cout << "limiting to " << args[0] << " = " << args[1] << " \n";
+				result = result + "Limiting to " + args[0] + " = " + args[1] + "\n";
 			tlist_ = flist_; /* limiting */
 			do_remove(args,VarMatch,true); /* this is remove on filenames; need remove on comments */
 		}
 		else
+		{
+			result = "Restoring the original browsable files list.";
 			flist_ = tlist_; /* reset */
+		}
 nop:
-		return FIM_CNS_EMPTY_RESULT;
+		return result;
 	}
 #endif /* FIM_WANT_PIC_LBFL */
 
@@ -1547,7 +1556,7 @@ err:
 			 * if this software will have success, we will have indices here :)
 			 * sort(rlist.begin(),rlist.end());...
 			 */
-			fim_int lf = flist_.size();
+			//fim_int lf = flist_.size();
 #if FIM_WANT_PIC_LVDN
 			if ( rm == VarMatch )
 				if(rlist.size() < 2)

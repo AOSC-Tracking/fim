@@ -87,10 +87,10 @@ class Browser
 	Browser& operator= (const Browser &b){return *this;/* a disabled copy constructor */}
 	Browser(const Browser &b):
 		Namespace(b),
+		flist_(args_t()),
 #if FIM_WANT_PIC_LBFL
 		tlist_(args_t()),
 #endif /* FIM_WANT_PIC_LBFL */
-		flist_(args_t()),
 #if FIM_WANT_PIC_LBFL
 		llist_(args_t()),
 #endif /* FIM_WANT_PIC_LBFL */
