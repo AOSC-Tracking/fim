@@ -323,6 +323,12 @@ desaturate : desaturate the displayed image colors. To get back the original you
 .fi
 
 .B
+limit
+.fi
+limit [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via \-\-load\-image\-descriptions\-file. If one argument only is provided, restrict to files whose description string matches {expression}. If two arguments are provided, restrict to files having property {variable} set to {value}. Invoked with no arguments, the original browsable files list is restored.
+.fi
+
+.B
 pan
 .fi
 pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 

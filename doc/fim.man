@@ -138,7 +138,7 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
 .B  \-\-load\-image\-descriptions\-file {filename}
-Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless \-\-load\-image\-descriptions\-file is specified), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file. Special comment lines like "#!fim:var=val" will lead i:var to have value val (unquoted) at image loading time.
+Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless \-\-load\-image\-descriptions\-file is specified), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file. Special comment lines like "#!fim:var=val" will lead i:var to be assigned value val (unquoted) at image loading time. These variables are stored also in an internal index used by the limit command.
 .TP
 .B  \-\-image\-descriptions\-file\-separator {sepchar}
 A character to be used as a separator between the filename and the description part of lines specified just before a \-\-load\-image\-descriptions\-file.
