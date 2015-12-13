@@ -107,11 +107,13 @@ Var cvar(nodeType *p)
 	{
 		/* FIXME : int cast is due to some sick inner conversion */
 		DBG("cvar:intCon:"<<p->con.value<<FIM_SYM_ENDL);
+		//return Var((fim_int)(p->con.value));
 		return Var((fim_int)(p->con.value));
 	}
 	else if(p->type == floatCon)
 	{
 		DBG("cvar:floatCon:"<<p->fid.f<<FIM_SYM_ENDL);
+		//return Var((fim_float_t)(p->fid.f));
 		return p->fid.f;
 	}
 	else
@@ -190,10 +192,12 @@ Var ex(nodeType *p)
 		case intCon:
 			/* FIXME : are we sure this case executes ? */
 			DBG("intCon:\n");
+			//return Var((fim_int)p->con.value);
 			return (fim_int)p->con.value;
 	        case floatCon:
 			DBG("ex:floatCon:"<<p->fid.f<<FIM_SYM_ENDL);
 			/* FIXME : are we sure this case executes ? */
+			//return Var((fim_float_t)p->fid.f);
 			return p->fid.f;
 		case vId:
 		{
@@ -378,6 +382,7 @@ Var ex(nodeType *p)
 				DBG("SVf"<<s<<FIM_SYM_ENDL);
 				fValue=p->opr.op[1]->fid.f;
 				fim::cc.setVariable(s,fValue);
+				//return Var((fim_float_t)fValue);
 				return (fim_int)fValue;
 			}//FIM_SYM_TYPE_INT
 			else if(typeHint=='s')
@@ -422,7 +427,7 @@ Var ex(nodeType *p)
 				//iValue=r;
 				fim::cc.setVariable(s,v);
 			        DBG("SET:"<<s<<":"<<v.getString()<<" '"<<(fim_char_t)v.getType()<<"'\n");
-			        DBG("GET:"<<s<<":"<<fim::cc.getVariable(s).getString()<<FIM_SYM_ENDL);
+			        DBG("GET:"<<s<<":"<<fim::cc.getVariable(s).getString()<<" "<<(fim_char_t)fim::cc.getVariable(s).getType()<<FIM_SYM_ENDL);
 			        //DBG("GET:"<<s<<":"<<fim::cc.getStringVariable(s)<<FIM_SYM_ENDL);
 
 				if(/*want_bugs*/0){
