@@ -221,6 +221,16 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 		/*
 		 * pointers are blanked and values set to default 
 		 * */
+                fimg_    = NULL;
+                img_     = NULL;
+		reset_scale_flags();
+	}
+
+	void Image::reset_scale_flags(void)
+	{
+		/*
+		 * pointers are blanked and values set to default 
+		 * */
                 scale_   = 1.0;
                 newscale_= 1.0;
                 ascale_  = 1.0;
@@ -230,12 +240,10 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 		setVariable(FIM_VID_ANGLE  ,angle_);
 		no_file_ =true;	//reloading allowed
                 invalid_ =false;
-                fimg_    = NULL;
-                img_     = NULL;
                 orientation_=FIM_NO_ROT;
 		setVariable(FIM_VID_ORIENTATION, (fim_int)FIM_NO_ROT);
 	}
-	
+
 	bool Image::reload(void)
 	{
 		/*

@@ -65,9 +65,6 @@ class Image:public Namespace
 class Image
 #endif /* FIM_NAMESPACES */
 {
-
-	friend class Viewport;		/* don't panic, we are wise people ;) */
-
 	public:
 
 	Image(const fim_char_t *fname, FILE *fd=NULL, fim_page_t page = 0);
@@ -126,6 +123,7 @@ class Image
 
         bool tiny(void)const;
 	public:
+	void reset_scale_flags(void);
 	virtual size_t byte_size(void)const;
 
 	bool can_reload(void)const;
@@ -154,6 +152,7 @@ class Image
 	/* viewport member functions ? */
 	fim_err_t scale_increment(fim_scale_t ds);
 	fim_err_t scale_multiply (fim_scale_t sm);
+	fim_scale_t ascale()const{ return (ascale_>0.0?ascale_:1.0); }
 	bool negate (void);/* let's read e-books by consuming less power :) */
 	bool desaturate (void);
 	bool gray_negate(void);
