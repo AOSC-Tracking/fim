@@ -2357,11 +2357,12 @@ ret:
 #endif /* FIM_USE_READLINE */
 	}
 
-	fim_err_t CommandConsole::resize(fim_coo_t w, fim_coo_t h)
+	fim_err_t CommandConsole::resize(fim_coo_t w, fim_coo_t h, fim_bool_t wsl)
 	{
 		if(!displaydevice_)
 			return FIM_ERR_GENERIC;
-
+		if( wsl )
+			h += displaydevice_->status_line_height();
 		if(FIM_ERR_NO_ERROR!=displaydevice_->resize(w,h))
 			return FIM_ERR_GENERIC;
 

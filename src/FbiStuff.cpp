@@ -1302,10 +1302,12 @@ op_autocrop_init_(const struct ida_image *src, struct ida_rect *unused,
     rect.x2 = x+1;
 
     fim_free(img.data);
+#if 0 /* Disabled 20151213 */
     if (cc.displaydevice_->debug_)
 	FIM_FBI_PRINTF("y: %d-%d/%d  --  x: %d-%d/%d\n",
 		rect.y1, rect.y2, img.i.height,
 		rect.x1, rect.x2, img.i.width);
+#endif
 
     if (0 == rect.x2 - rect.x1  ||  0 == rect.y2 - rect.y1)
 	return NULL;

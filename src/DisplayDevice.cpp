@@ -179,7 +179,7 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw,
 		goto ret;
 	
 	//fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
-	cc.displaydevice_->lock();
+	this->lock();
 #if 1
 	// FIXME: this is temporary
 	{
@@ -191,7 +191,7 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw,
 #else
 	clear_rect(0, width()-1, 0,ls);
 #endif
-	cc.displaydevice_->unlock();
+	this->unlock();
 	mc_.dump();
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 ret:
