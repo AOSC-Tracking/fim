@@ -245,8 +245,7 @@ static int fim_rl_sdl_aa_getc_hook(void)
 	fim_key_t c;
 	c=0;
 	
-	//if(cc.displaydevice_->get_input(&c,true)==1)
-	if(fim_aa_get_input(&c,true,NULL)==1)
+	if(cc.get_displaydevice_input(&c,true)==1)
 	{
 		c=fim_post_rl_getc(c);
 		if(c&(1<<31))

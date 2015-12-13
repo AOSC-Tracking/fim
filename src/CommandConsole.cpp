@@ -2444,5 +2444,10 @@ err:
 	{
 		return *this;/* a disabled copy constructor */
 	}
+
+	fim_sys_int CommandConsole::get_displaydevice_input(fim_key_t * c, bool want_poll)
+	{
+		return displaydevice_->get_input(c, want_poll);
+	}
 }
 
