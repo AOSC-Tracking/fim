@@ -56,7 +56,6 @@ namespace fim
  *	Therefore the need for a framebufferdevice reference in Image.
  *
  *	TODO : separate Image in a way multiple viewports could use the same image.
- *	TODO : rename framebufferdevice.redraw -> this.need_redraw
  */
 
 #ifdef FIM_NAMESPACES
@@ -102,9 +101,10 @@ class Image
 
 	/* image member functions */
 	bool load(const fim_char_t *fname, FILE *fd, int want_page);
-	void should_redraw(int should=1)const;
+	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY) { redraw_ = sr; } 
 
 	protected:
+	fim_redraw_t redraw_;
 	enum { FIM_NO_ROT=0,FIM_ROT_ROUND=4 };
 	enum { FIM_ROT_L_C='L',FIM_ROT_R_C='R',FIM_ROT_U_C='U' };
 	enum { FIM_I_ROT_L=0, FIM_I_ROT_R=1}; /* internal */
@@ -175,6 +175,7 @@ class Image
 	bool has_mm(void)const;
 	bool cacheable(void)const;
 	void desc_update();
+	fim_bool_t need_redraw(void)const{ return (redraw_ != FIM_REDRAW_UNNECESSARY); }
 };
 }
 #if FIM_WANT_PIC_LVDN

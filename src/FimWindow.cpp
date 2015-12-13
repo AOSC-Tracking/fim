@@ -933,7 +933,7 @@ namespace fim
 			if( isleaf() )
 			{
 				if(viewport_)
-					commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// no effect
+					should_redraw();// no effect
 				return FIM_ERR_NO_ERROR;
 			}
 
@@ -985,7 +985,7 @@ namespace fim
 			if( isleaf() )
 			{
 				if(viewport_)
-					commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// no effect
+					should_redraw();// no effect
 				return FIM_ERR_NO_ERROR;
 			}
 
@@ -1187,7 +1187,7 @@ namespace fim
 	{
 		corners_=corners;
 		if(viewport_ && commandConsole_.displaydevice_)
-			commandConsole_.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;// FIXME
+			should_redraw();
 		return FIM_ERR_NO_ERROR;
 	}
 

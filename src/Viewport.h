@@ -66,8 +66,13 @@ class Viewport:public ViewportState
 	~Viewport(void);
 	private:
 	Viewport& operator= (const Viewport&v);
-	void should_redraw(void)const;
+#ifdef FIM_WINDOWS
+	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY);
+#else /* FIM_WINDOWS */
+	/* FIXME */
+#endif /* FIM_WINDOWS */
 	public:
+	fim_bool_t need_redraw(void)const;
 
 #if 0
 	int valid(void)const;
@@ -93,7 +98,6 @@ class Viewport:public ViewportState
 
 //	int redraw;	// there is already an external one!
 	/* viewport member functions */
-
 	public:
 	fim_coo_t viewport_width(void)const;
 	fim_coo_t viewport_height(void)const;
