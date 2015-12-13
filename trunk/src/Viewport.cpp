@@ -288,10 +288,10 @@ namespace fim
 	void Viewport::fs_ml_puts(const char *str, fim_int doclear)
 	{
 		/* multiline puts */
-		int fh=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->height:1; // FIXME : this is not clean
-		int fw=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->width:1; // FIXME : this is not clean
+		int fh=displaydevice_->f_ ? displaydevice_->f_->height:1; // FIXME : this is not clean
+		int fw=displaydevice_->f_ ? displaydevice_->f_->width:1; // FIXME : this is not clean
 		int sl = strlen(str), rw = viewport_width() / fw, wh = viewport_height();
-		int cpl = commandConsole.displaydevice_->get_chars_per_line();
+		int cpl = displaydevice_->get_chars_per_line();
 		int lc = FIM_INT_FRAC(sl,cpl); /* lines count */
 
 		if(doclear)
@@ -299,7 +299,7 @@ namespace fim
 
 		for( int li = 0 ; sl > rw * li ; ++li )
 			if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
-			commandConsole.displaydevice_->fs_puts(commandConsole.displaydevice_->f_, 0, fh*li, str+rw*li);
+			displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, str+rw*li);
 	}
 
 	bool Viewport::display(void)
@@ -406,7 +406,7 @@ namespace fim
 			this->transform(mirror, flip);
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 #ifdef FIM_WINDOWS
-			if(commandConsole.displaydevice_ )
+			if(displaydevice_ )
 			{
 			// FIXME : we need a mechanism for keeping the image pointer valid during multiple viewport usage
 			//std::cout << "display " << " ( " << yorigin() << "," << xorigin() << " ) ";
@@ -448,13 +448,13 @@ namespace fim
 			if(fim_int wcoi = getGlobalIntVariable(FIM_VID_COMMENT_OI))
 			{
 #if 0
-				int fh=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->height:1; // FIXME : this is not clean
-				int fw=commandConsole.displaydevice_->f_ ? commandConsole.displaydevice_->f_->width:1; // FIXME : this is not clean
+				int fh=displaydevice_->f_ ? displaydevice_->f_->height:1; // FIXME : this is not clean
+				int fw=displaydevice_->f_ ? displaydevice_->f_->width:1; // FIXME : this is not clean
 				const char * cmnts = image_->getStringVariable(FIM_VID_COMMENT).c_str();
 				int sl = strlen(cmnts), rw = viewport_width() / fw, wh = viewport_height();
 				for( int li = 0 ; sl > rw * li ; ++li )
 					if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
-					commandConsole.displaydevice_->fs_puts(commandConsole.displaydevice_->f_, 0, fh*li, cmnts+rw*li);
+					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
 				const char * cmnts = image_->getStringVariable(FIM_VID_COMMENT).c_str();
 				this->fs_ml_puts(cmnts,wcoi-1);

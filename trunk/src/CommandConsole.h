@@ -174,7 +174,15 @@ class CommandConsole
 #endif /* FIM_WITH_AALIB */
 	public:
 	DummyDisplayDevice dummydisplaydevice_;
+
+	//private: // FIXME: fim_rl_sdl_aa_getc_hook() prevents this to be private, and that's because of AADevice.
+	friend class MiniConsole;
+	friend class DisplayDevice;
+	friend class FbiStuff;
+	friend class Image;
+	friend class Viewport;
 	DisplayDevice *displaydevice_;
+	public:
 
 	fim::string execute(fim::string cmd, args_t args);
 
@@ -343,6 +351,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 
 	Viewport* current_viewport(void)const;
 #ifdef FIM_WINDOWS
+	/* Viewport is managed by FimWindow */
 #else /* FIM_WINDOWS */
 	Viewport* viewport_;
 #endif /* FIM_WINDOWS */
@@ -367,7 +376,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string get_variables_reference(FimDocRefMode refmode=DefRefMode)const;
 	public:
 	bool set_wm_caption(const fim_char_t *str);
-	fim_err_t resize(fim_coo_t w, fim_coo_t h);
+	fim_err_t resize(fim_coo_t w, fim_coo_t h, fim_bool_t wsl = false);
 	fim_err_t display_reinit(const fim_char_t *rs);
 	fim::string fcmd_basename(const args_t& args);
 	fim::string fcmd_desc(const args_t& args);

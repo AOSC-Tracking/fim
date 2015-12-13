@@ -614,21 +614,20 @@ nop:
 			}
 			if( args.size()>0 && args[0] == "resize" )
 			{
-				fim_coo_t fh = (getGlobalIntVariable(FIM_VID_DISPLAY_BUSY)) ?  commandConsole_.displaydevice_->status_line_height() : 0;
 				fim_coo_t nww = c_image()->width();
-				fim_coo_t nwh = c_image()->height() + fh;
+				fim_coo_t nwh = c_image()->height();
+				fim_bool_t wsl = (getGlobalIntVariable(FIM_VID_DISPLAY_BUSY)) ?  true : false;;
 
 #if 0
 				if( args.size() == 2 && args[1] == "original" )
 					nww = c_image()->original_width(),
 					nwh = c_image()->original_height() + fh;
 #endif
-
 				if( args.size()>2 )
 					nww = args[1],
-					nwh = args[2];
-
-				commandConsole_.resize(nww,nwh);
+					nwh = args[2],
+					wsl = false;
+				commandConsole_.resize(nww,nwh,wsl);
 			}
 			if(image() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
 			//	if(c_image())
