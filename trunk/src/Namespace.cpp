@@ -207,6 +207,7 @@ namespace fim
 		{
 			for(variables_t::const_iterator fit=ns.variables_.begin();fit!=ns.variables_.end();++fit)
 				setVariable((fit->first),Var(fit->second));
+			return FIM_ERR_NO_ERROR;
 		}
 
 	std::ostream& Namespace::print(std::ostream &os)const
