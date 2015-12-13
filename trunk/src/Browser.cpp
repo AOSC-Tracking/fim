@@ -548,16 +548,19 @@ nop:
 
 		if( args.size() > 0 )
 		{
+			fim_int lbl = n_files(); /* length before limiting */
 			if(tlist_.size())
 			       	flist_ = tlist_; /* reset the first time */
 			if( args.size() > 1 )
-				result = result + "Limiting to " + args[0] + " = " + args[1] + "\n";
+				;// result = result + "Limiting to " + args[0] + " = " + args[1] + "\n";
 			tlist_ = flist_; /* limiting */
 			do_remove(args,VarMatch,true); /* this is remove on filenames; need remove on comments */
+			if(lbl != n_files())
+				reload();
 		}
 		else
 		{
-			result = "Restoring the original browsable files list.";
+			// result = "Restoring the original browsable files list.";
 			flist_ = tlist_; /* reset */
 		}
 nop:
