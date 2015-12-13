@@ -175,7 +175,7 @@ class CommandConsole
 	public:
 	DummyDisplayDevice dummydisplaydevice_;
 
-	//private: // FIXME: fim_rl_sdl_aa_getc_hook() prevents this to be private, and that's because of AADevice.
+	private:
 	friend class MiniConsole;
 	friend class DisplayDevice;
 	friend class FbiStuff;

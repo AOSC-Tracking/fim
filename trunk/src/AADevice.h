@@ -30,6 +30,8 @@
  * */
 #define FIM_AALIB_DRIVER_DEBUG 0
 
+	fim_sys_int fim_aa_get_input(fim_key_t * c, bool want_poll, bool * srp); /* This is just for fim_rl_sdl_aa_getc_hook. */
+
 class AADevice:public DisplayDevice 
 {
 	int allow_windowed;
