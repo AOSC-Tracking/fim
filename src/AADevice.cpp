@@ -514,12 +514,16 @@ err:
 			finalize();
 	}
 
-	fim_sys_int AADevice::get_input(fim_key_t * c, bool want_poll)
+	static aa_context *fim_aa_ascii_context; /* A global variable just for the use in fim_aa_get_input. */
+
+	fim_sys_int fim_aa_get_input(fim_key_t * c, bool want_poll, bool * srp)
 	{
+		if(srp)
+		       	*srp = true;
 		if(!c)
 			return 0;
 		*c = 0x0;	/* blank */
-		*c = aa_getevent(ascii_context_,0);/* 1 if want to receive AA_RELEASE events, too */
+		*c = aa_getevent(fim_aa_ascii_context,0);/* 1 if want to receive AA_RELEASE events, too */
 		if(*c==AA_UNKNOWN)
 			*c=0;
 		if(*c)
@@ -551,6 +555,27 @@ err:
 		if(*c==65760){*c=2117163803;return 1;}/* home (arbitrary) */
 		if(*c==65767){*c=2117360411;return 1;}/* end  (arbitrary) */
 
+		if(*c==AA_ESC)
+		{
+			*c=27;
+			return 1;
+			/* esc  */
+		}
+		if(srp)
+			*srp = false;
+	}
+
+	fim_sys_int AADevice::get_input(fim_key_t * c, bool want_poll)
+	{
+		fim_sys_int rc = 0;
+		bool sr = false;
+
+		fim_aa_ascii_context = ascii_context_;
+		rc = fim_aa_get_input(c, want_poll, &sr);
+
+		if(sr)
+			return rc;
+
 		if(*c==65907)
 		{
 			status_line((const fim_char_t*)"control key not yet supported in aa. sorry!");
@@ -574,11 +599,6 @@ err:
 			status_line((const fim_char_t*)"shift key not yet supported in aa. sorry!");
 			return 1;
 			/* shift (arbitrary) */
-		}
-		if(*c==AA_ESC)
-		{
-			*c=27;return 1;
-			/* esc  */
 		}
 		if(*c==AA_MOUSE)
 		{
