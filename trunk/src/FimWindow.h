@@ -95,8 +95,16 @@ class Rect
 	fim_err_t hrgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 	fim_err_t hlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 	bool operator==(const Rect&rect)const;
-};
 
+	fim_coo_t setwidth(fim_coo_t w);
+	fim_coo_t setheight(fim_coo_t h);
+	fim_coo_t setxorigin(fim_coo_t x);
+	fim_coo_t setyorigin(fim_coo_t y);
+	fim_coo_t height(void)const;
+	fim_coo_t width(void)const;
+	fim_coo_t xorigin(void)const;
+	fim_coo_t yorigin(void)const;
+};
 
 #ifdef FIM_NAMESPACES
 class FimWindow:public Namespace
@@ -118,7 +126,9 @@ class FimWindow
  * not in the corners box coordinate system.
  *
  * */
+	public:
 	Rect corners_;//,status,canvas;
+	private:
 	bool focus_;	// if 0 left/up ; otherwise right/lower
 
 	FimWindow *first_,*second_;
@@ -181,11 +191,6 @@ class FimWindow
 	FimWindow & left(void);
 	FimWindow & right(void);
 
-	fim_coo_t setwidth(fim_coo_t w);
-	fim_coo_t setheight(fim_coo_t h);
-	fim_coo_t setxorigin(fim_coo_t x);
-	fim_coo_t setyorigin(fim_coo_t y);
-
 	bool operator==(const FimWindow&window)const;
 
 	Viewport *viewport_;
@@ -223,10 +228,6 @@ class FimWindow
 	void draw(void)const;
 #endif
 
-	fim_coo_t height(void)const;
-	fim_coo_t width(void)const;
-	fim_coo_t xorigin(void)const;
-	fim_coo_t yorigin(void)const;
 	~FimWindow(void);
 	virtual size_t byte_size(void)const;
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY) { redraw_ = sr; } 

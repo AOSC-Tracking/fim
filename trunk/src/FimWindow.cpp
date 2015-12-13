@@ -650,17 +650,17 @@ namespace fim
 		return focus_ = !focus_;
 	}
 
-	fim_coo_t FimWindow::height(void)const
+	fim_coo_t Rect::height(void)const
 	{
 		/*
 		 * +---+ +
 		 * |   | |
 		 * +---+ +
 		 */
-		return corners_.h_ ;
+		return h_ ;
 	}
 
-	fim_coo_t FimWindow::setwidth(fim_coo_t w)
+	fim_coo_t Rect::setwidth(fim_coo_t w)
 	{
 		/*
 		 * +---+
@@ -668,20 +668,20 @@ namespace fim
 		 * |   |
 		 * +---+
 		 */
-		return corners_.w_=w;
+		return w_=w;
 	}
 
-	fim_coo_t FimWindow::setheight(fim_coo_t h)
+	fim_coo_t Rect::setheight(fim_coo_t h)
 	{
 		/*
 		 * +---+ +
 		 * |   | |
 		 * +---+ +
 		 */
-		return corners_.h_=h;
+		return h_=h;
 	}
 
-	fim_coo_t FimWindow::width(void)const
+	fim_coo_t Rect::width(void)const
 	{
 		/*
 		 * +---+
@@ -689,47 +689,47 @@ namespace fim
 		 * |   |
 		 * +---+
 		 */
-		return corners_.w_ ;
+		return w_ ;
 	}
 
-	fim_coo_t FimWindow::setxorigin(fim_coo_t x)
-	{
-		/*
-		 * o---+
-		 * |   |
-		 * +---+
-		 */
-		return corners_.x_=x ;
-	}
-
-	fim_coo_t FimWindow::setyorigin(fim_coo_t y)
+	fim_coo_t Rect::setxorigin(fim_coo_t x)
 	{
 		/*
 		 * o---+
 		 * |   |
 		 * +---+
 		 */
-		return corners_.y_=y ;
+		return x_=x ;
 	}
 
-	fim_coo_t FimWindow::xorigin(void)const
+	fim_coo_t Rect::setyorigin(fim_coo_t y)
 	{
 		/*
 		 * o---+
 		 * |   |
 		 * +---+
 		 */
-		return corners_.x_ ;
+		return y_=y ;
 	}
 
-	fim_coo_t FimWindow::yorigin(void)const
+	fim_coo_t Rect::xorigin(void)const
 	{
 		/*
 		 * o---+
 		 * |   |
 		 * +---+
 		 */
-		return corners_.y_ ;
+		return x_ ;
+	}
+
+	fim_coo_t Rect::yorigin(void)const
+	{
+		/*
+		 * o---+
+		 * |   |
+		 * +---+
+		 */
+		return y_ ;
 	}
 
 	bool FimWindow::can_vgrow(const FimWindow & window, fim_coo_t howmuch)
@@ -745,7 +745,7 @@ namespace fim
 		 * +-v-+    |
 		 * +--------+
 		 */
-		return window.height() + howmuch + vspacing  < height();
+		return window.corners_.height() + howmuch + vspacing  < corners_.height();
 	}
 
 	bool FimWindow::can_hgrow(const FimWindow & window, fim_coo_t howmuch)
@@ -760,7 +760,7 @@ namespace fim
 		 * |<?>|    |
 		 * +---+    |
 		 * +--------+
-		 */		return window.width() + howmuch + hspacing   < width();
+		 */		return window.corners_.width() + howmuch + hspacing   < corners_.width();
 	}
 
 
@@ -811,9 +811,9 @@ namespace fim
 		 * +-----------+   +-----+-----+
 		 */
 		return
-//		(hnormalize(xorigin(), width() )!= -1);
-		(hnormalize(xorigin(), width() )!= -1) &&
-		(vnormalize(yorigin(), height())!= -1);
+//		(hnormalize(corners_.xorigin(), corners_.width() )!= -1);
+		(hnormalize(corners_.xorigin(), corners_.width() )!= -1) &&
+		(vnormalize(corners_.yorigin(), corners_.height())!= -1);
 	}
 
 	fim_err_t FimWindow::vnormalize(fim_coo_t y, fim_coo_t h)
@@ -833,8 +833,8 @@ namespace fim
 		 */
 		if(isleaf())
 		{
-			setyorigin(y);
-			setheight(h);
+			corners_.setyorigin(y);
+			corners_.setheight(h);
 			return FIM_ERR_NO_ERROR;
 		}
 		else
@@ -847,8 +847,8 @@ namespace fim
 			if(hdivs>h)// no space left
 				return FIM_ERR_GENERIC;
 			//...
-			setyorigin(y);
-			setheight(h);
+			corners_.setyorigin(y);
+			corners_.setheight(h);
 
 			if(ishsplit())
 			{
@@ -881,8 +881,8 @@ namespace fim
 		 */
 		if(isleaf())
 		{
-			setxorigin(x);
-			setwidth(w);
+			corners_.setxorigin(x);
+			corners_.setwidth(w);
 			return FIM_ERR_NO_ERROR;
 		}
 		else
@@ -895,8 +895,8 @@ namespace fim
 			if(vdivs>w)// no space left
 				return FIM_ERR_GENERIC;
 			//...
-			setxorigin(x);
-			setwidth(w);
+			corners_.setxorigin(x);
+			corners_.setwidth(w);
 
 			if(isvsplit())
 			{
@@ -1282,7 +1282,7 @@ int main(void)
 
 	w.print();
 	std::cout << "enlarged:\n";*/
-//	w.hnormalize(w.xorigin(),w.width());
+//	w.hnormalize(w.corners_.xorigin(),w.corners_.width());
 	w.close();
 	w.close();
 	w.close();
