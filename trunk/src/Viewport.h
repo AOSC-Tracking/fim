@@ -60,8 +60,9 @@ class Viewport:public ViewportState
 	~Viewport(void);
 	private:
 	Viewport& operator= (const Viewport&v);
-	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY);
+	fim_redraw_t redraw_;
 	public:
+	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY);
 	fim_bool_t need_redraw(void)const;
 
 #if 0

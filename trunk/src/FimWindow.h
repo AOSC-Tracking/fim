@@ -203,7 +203,6 @@ class FimWindow
 
 	Viewport & current_viewport(void)const;
 	CommandConsole &commandConsole_;
-	fim_redraw_t redraw_;
 
 	FimWindow & operator= (const FimWindow &w);
 
@@ -230,7 +229,7 @@ class FimWindow
 
 	~FimWindow(void);
 	virtual size_t byte_size(void)const;
-	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY) { redraw_ = sr; } 
+	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY); /* FIXME: this is a wrapper to Viewport's, until multiple windows get introduced again. */
 	fim_bool_t need_redraw(void)const;
 };
 

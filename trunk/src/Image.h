@@ -101,7 +101,8 @@ class Image
 
 	/* image member functions */
 	bool load(const fim_char_t *fname, FILE *fd, int want_page);
-	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY) { redraw_ = sr; } 
+	public:
+	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY) { redraw_ = sr; }  /* for Viewport after drawing */
 
 	protected:
 	fim_redraw_t redraw_;

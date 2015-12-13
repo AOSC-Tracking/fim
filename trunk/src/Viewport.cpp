@@ -134,7 +134,6 @@ namespace fim
 				return;
 			s=(s==0)?steps_:s;
 			top_ -= s;
-			should_redraw();
 		}
 	}
 
@@ -149,7 +148,6 @@ namespace fim
 				return;
 			s=(s==0)?steps_:s;
 			top_ += s;
-			should_redraw();
 		}
 	}
 
@@ -164,7 +162,6 @@ namespace fim
 				return;
 			s=(s==0)?steps_:s;
 			left_+=s;
-			should_redraw();
 		}
 	}
 
@@ -179,7 +176,6 @@ namespace fim
 				return;
 			s=(s==0)?steps_:s;
 			left_-=s;
-			should_redraw();
 		}
 	}
 
@@ -401,6 +397,7 @@ namespace fim
 		if( need_redraw())
 		{
 			should_redraw(FIM_REDRAW_UNNECESSARY);
+			image_->should_redraw(FIM_REDRAW_UNNECESSARY);
 			/*
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
@@ -862,7 +859,7 @@ namespace fim
 			default:
 			goto err;
 		}
-		// ...
+		should_redraw();
 nop:
 		return FIM_CNS_EMPTY_RESULT;
 err:
@@ -1006,7 +1003,13 @@ ret:
 		{ if( image_ && image_->height() > viewport_height() ) top_ = image_->height() - viewport_height() - top_; }
 	}
 	
-	fim_bool_t Viewport::need_redraw(void)const{ return ( image_ && image_->need_redraw() ); }
-	void Viewport::should_redraw(enum fim_redraw_t sr) {  } 
+	fim_bool_t Viewport::need_redraw(void)const
+	{
+		return ( ( redraw_ != FIM_REDRAW_UNNECESSARY ) || ( image_ && image_->need_redraw() ) || ( displaydevice_ && displaydevice_->need_redraw() ) );
+       	}
+	void Viewport::should_redraw(enum fim_redraw_t sr)
+       	{
+		redraw_ = sr;
+       	} 
 }
 
