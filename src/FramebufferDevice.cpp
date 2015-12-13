@@ -1900,6 +1900,7 @@ fim_err_t FramebufferDevice::display(
 		bw,
 		ocskip,// output columns to skip for each line
 		flags);
+	redraw_ = FIM_REDRAW_UNNECESSARY;
 	return FIM_ERR_NO_ERROR;
 err:
 	return FIM_ERR_GENERIC;

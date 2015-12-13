@@ -1196,7 +1196,16 @@ namespace fim
 
 	FimWindow & FimWindow ::operator= (const FimWindow &w){return *this;/* a disabled assignment */}
 
-	fim_bool_t FimWindow::need_redraw(void)const{ return ( ( redraw_ != FIM_REDRAW_UNNECESSARY) || ( viewport_ && viewport_->need_redraw() ) ); }
+	fim_bool_t FimWindow::need_redraw(void)const
+	{
+	       	return ( viewport_ && viewport_->need_redraw() );
+	}
+
+	void FimWindow::should_redraw(enum fim_redraw_t sr)
+       	{
+		if(viewport_)
+			viewport_->should_redraw(sr); 
+	} 
 
 	/* Rect stuff */
 

@@ -2,7 +2,7 @@
 /*
  DisplayDevice.h : virtual device Fim driver header file
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ class DisplayDevice
 	virtual void switch_if_needed(void){}// really, only for making happy fbdev
 	virtual void cleanup(void){}// really, only for making happy fbdev
 	protected:
-	fim_redraw_t redraw_;
+	fim_redraw_t redraw_; /* expected to be FIM_REDRAW_UNNECESSARY after each display() */
 	public:
 	fim_bool_t need_redraw(void)const{ return ( redraw_ != FIM_REDRAW_UNNECESSARY ); }
 	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
