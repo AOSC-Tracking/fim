@@ -43,7 +43,7 @@ class Viewport:public ViewportState
 	fim_bool_t	psteps_;
         DisplayDevice* displaydevice_;
 #ifdef FIM_WINDOWS
-	Rect&corners_; // TODO: for now, no reassignCorners, but this will have to place old reassignWindow).
+	const Rect&corners_; // TODO: for now, no reassignCorners, but this will have to place old reassignWindow).
 #endif /* FIM_WINDOWS */
 	Image  *image_;	// !! 
 	CommandConsole &commandConsole;
@@ -53,7 +53,7 @@ class Viewport:public ViewportState
 
 	Viewport( //yes, horrible
 			CommandConsole &c
-			,Rect &rect
+			,const Rect &rect
 			);
 
 	Viewport(const Viewport &v);
