@@ -24,7 +24,7 @@
 #define FIM_VIEWPORT_H
 
 #include "fim.h"
-#include "FimWindow.h"
+#include "FimWindow.h" // Rect
 #include "DisplayDevice.h"
 
 namespace fim
@@ -42,37 +42,25 @@ class Viewport:public ViewportState
 	protected:
 	fim_bool_t	psteps_;
         DisplayDevice* displaydevice_;
-	Rect&corners_;
-
-	Image  *image_;	// !! 
 #ifdef FIM_WINDOWS
-	FimWindow *window_;
+	Rect&corners_; // TODO: for now, no reassignCorners, but this will have to place old reassignWindow).
 #endif /* FIM_WINDOWS */
-
+	Image  *image_;	// !! 
 	CommandConsole &commandConsole;
 	public:
         void reset(void);
         void steps_reset(void);
-#ifdef FIM_WINDOWS
-        void reassignWindow(FimWindow *w);
-#endif /* FIM_WINDOWS */
 
 	Viewport( //yes, horrible
 			CommandConsole &c
-#ifdef FIM_WINDOWS
-			,FimWindow *window
-#endif /* FIM_WINDOWS */
+			,Rect &rect
 			);
 
 	Viewport(const Viewport &v);
 	~Viewport(void);
 	private:
 	Viewport& operator= (const Viewport&v);
-#ifdef FIM_WINDOWS
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY);
-#else /* FIM_WINDOWS */
-	/* FIXME */
-#endif /* FIM_WINDOWS */
 	public:
 	fim_bool_t need_redraw(void)const;
 
