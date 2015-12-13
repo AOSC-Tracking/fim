@@ -40,7 +40,7 @@ namespace fim
 	Viewport::Viewport(
 			CommandConsole &c
 #ifdef FIM_WINDOWS
-			,FimWindow *window
+			,Rect & corners
 #endif /* FIM_WINDOWS */
 			)
 			:
@@ -49,11 +49,10 @@ namespace fim
 #endif /* FIM_NAMESPACES */
 			psteps_(false),
 			displaydevice_(c.displaydevice_)	/* could be NULL */
-			,corners_(window->corners_)
-			,image_(NULL)
 #ifdef FIM_WINDOWS
-			,window_(window)
+			,corners_(corners)
 #endif /* FIM_WINDOWS */
+			,image_(NULL)
 			,commandConsole(c)
 	{
 		// WARNING : this constructor will be filled soon
@@ -75,11 +74,8 @@ namespace fim
 #endif /* FIM_NAMESPACES */
 		psteps_(v.psteps_)
 		,displaydevice_(v.displaydevice_)
-		,corners_(v.window_->corners_)
+		,corners_(v.corners_)
 		,image_(NULL)
-#ifdef FIM_WINDOWS
-		,window_(v.window_)
-#endif /* FIM_WINDOWS */
 		,commandConsole(v.commandConsole)
 	{
 		steps_ = v.steps_;
@@ -685,12 +681,6 @@ namespace fim
 			return image_->check_invalid();
 	}
 
-#ifdef FIM_WINDOWS
-        void Viewport::reassignWindow(FimWindow *w)
-	{
-		window_ = w;
-	}
-#endif /* FIM_WINDOWS */
 	void Viewport::scale_position_magnify(fim_scale_t factor)
 	{
 		/*
@@ -1016,7 +1006,7 @@ ret:
 		{ if( image_ && image_->height() > viewport_height() ) top_ = image_->height() - viewport_height() - top_; }
 	}
 	
-	fim_bool_t Viewport::need_redraw(void)const{ return ( ( window_ && window_->need_redraw() ) || ( image_ && image_->need_redraw() ) ); }
-	void Viewport::should_redraw(enum fim_redraw_t sr) { if( window_ ) window_->should_redraw( sr ); } 
+	fim_bool_t Viewport::need_redraw(void)const{ return ( image_ && image_->need_redraw() ); }
+	void Viewport::should_redraw(enum fim_redraw_t sr) {  } 
 }
 

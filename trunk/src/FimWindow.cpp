@@ -139,11 +139,11 @@ namespace fim
 		{
 			viewport_=new Viewport(*vp );
 			if(viewport_)
-				viewport_->reassignWindow(this);
+				;//viewport_->reassignWindow(this);
 
 		}
 		else
-			viewport_=new Viewport( commandConsole_,  this );
+			viewport_=new Viewport( commandConsole_,  corners_ );
 
 		if( viewport_ == NULL )
 		       	throw FIM_E_NO_MEM;
@@ -162,7 +162,7 @@ namespace fim
 		 *
 		 *  Note : this member function is useless, and should be kept private :D
 		 */
-		viewport_=new Viewport( commandConsole_, this );
+		viewport_=new Viewport( commandConsole_, corners_ );
 
 		if( viewport_ == NULL )
 		       	throw FIM_E_NO_MEM;
@@ -453,8 +453,8 @@ namespace fim
 			// WARNING : dangerous
 			if(vf && vs)
 			{
-				vf ->reassignWindow(&(shadowed()));
-				vs ->reassignWindow(&( focused()));
+				;//vf ->reassignWindow(&(shadowed()));
+				;//vs ->reassignWindow(&( focused()));
 				focused().viewport_  = vs;
 				shadowed().viewport_ = vf;
 			}
@@ -512,7 +512,7 @@ namespace fim
 			}
 			if( ( viewport_ = focused().viewport_ ) )
 			{
-				viewport_ ->reassignWindow(this);
+				;//viewport_ ->reassignWindow(this);
 				focused().viewport_=NULL;
 			}
 			else
@@ -762,7 +762,6 @@ namespace fim
 		 * +--------+
 		 */		return window.corners_.width() + howmuch + hspacing   < corners_.width();
 	}
-
 
 	bool FimWindow::operator==(const FimWindow&window)const
 	{
@@ -1196,6 +1195,8 @@ namespace fim
 	}
 
 	FimWindow & FimWindow ::operator= (const FimWindow &w){return *this;/* a disabled assignment */}
+
+	fim_bool_t FimWindow::need_redraw(void)const{ return ( ( redraw_ != FIM_REDRAW_UNNECESSARY) || ( viewport_ && viewport_->need_redraw() ) ); }
 
 	/* Rect stuff */
 
