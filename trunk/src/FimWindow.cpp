@@ -217,7 +217,7 @@ namespace fim
 		 * |          |
 		 * +----------+
 		 */
-		return ( issplit() && focused().corners_.x==shadowed().corners_.x ) ;
+		return ( issplit() && focused().corners_.x_==shadowed().corners_.x_ ) ;
 	}
 	
 	bool FimWindow::isvsplit(void)const
@@ -230,7 +230,7 @@ namespace fim
 		 * |    |     |
 		 * +----------+
 		 */
-		return ( issplit() && focused().corners_.y==shadowed().corners_.y ) ;
+		return ( issplit() && focused().corners_.y_==shadowed().corners_.y_ ) ;
 	}
 	
 	const FimWindow & FimWindow::c_focused(void)const
@@ -657,7 +657,7 @@ namespace fim
 		 * |   | |
 		 * +---+ +
 		 */
-		return corners_.h ;
+		return corners_.h_ ;
 	}
 
 	fim_coo_t FimWindow::setwidth(fim_coo_t w)
@@ -668,7 +668,7 @@ namespace fim
 		 * |   |
 		 * +---+
 		 */
-		return corners_.w=w;
+		return corners_.w_=w;
 	}
 
 	fim_coo_t FimWindow::setheight(fim_coo_t h)
@@ -678,7 +678,7 @@ namespace fim
 		 * |   | |
 		 * +---+ +
 		 */
-		return corners_.h=h;
+		return corners_.h_=h;
 	}
 
 	fim_coo_t FimWindow::width(void)const
@@ -689,7 +689,7 @@ namespace fim
 		 * |   |
 		 * +---+
 		 */
-		return corners_.w ;
+		return corners_.w_ ;
 	}
 
 	fim_coo_t FimWindow::setxorigin(fim_coo_t x)
@@ -699,7 +699,7 @@ namespace fim
 		 * |   |
 		 * +---+
 		 */
-		return corners_.x=x ;
+		return corners_.x_=x ;
 	}
 
 	fim_coo_t FimWindow::setyorigin(fim_coo_t y)
@@ -709,7 +709,7 @@ namespace fim
 		 * |   |
 		 * +---+
 		 */
-		return corners_.y=y ;
+		return corners_.y_=y ;
 	}
 
 	fim_coo_t FimWindow::xorigin(void)const
@@ -719,7 +719,7 @@ namespace fim
 		 * |   |
 		 * +---+
 		 */
-		return corners_.x ;
+		return corners_.x_ ;
 	}
 
 	fim_coo_t FimWindow::yorigin(void)const
@@ -729,7 +729,7 @@ namespace fim
 		 * |   |
 		 * +---+
 		 */
-		return corners_.y ;
+		return corners_.y_ ;
 	}
 
 	bool FimWindow::can_vgrow(const FimWindow & window, fim_coo_t howmuch)
@@ -1209,48 +1209,48 @@ namespace fim
 		switch(s)
 		{
 		case Left:
-			return Rect(x,y,w/2,h);
+			return Rect(x_,y_,w_/2,h_);
 		case Right:
-			return Rect(x+w/2,y,w-w/2,h);
+			return Rect(x_+w_/2,y_,w_-w_/2,h_);
 		case Upper:
-			return Rect(x,y,w,h/2);
+			return Rect(x_,y_,w_,h_/2);
 		case Lower:
-			return Rect(x,y+h/2,w,h-h/2);
+			return Rect(x_,y_+h_/2,w_,h_-h_/2);
 		break;
 		}
-		return Rect(x,y,w,h);
+		return Rect(x_,y_,w_,h_);
 	}
 
 	void Rect::print()
 	{
-		std::cout << x <<" " << y  << " "<< w << " " << h  << "\n";
+		std::cout << x_ <<" " << y_  << " "<< w_ << " " << h_  << "\n";
 	}
 
 	Rect::Rect(fim_coo_t x,fim_coo_t y,fim_coo_t w,fim_coo_t h):
-	x(x), y(y), w(w), h(h)
+	x_(x), y_(y), w_(w), h_(h)
 	/* redundant, but not evil */
 	{
 	}
 
-	Rect::Rect(const Rect& rect): x(rect.x), y(rect.y), w(rect.w), h(rect.h){}
+	Rect::Rect(const Rect& rect): x_(rect.x_), y_(rect.y_), w_(rect.w_), h_(rect.h_){}
 
 	bool Rect::operator==(const Rect&rect)const
 	{
-		return x==rect.x &&
-		y==rect.y &&
-		w==rect.w &&
-		h==rect.h;
+		return x_==rect.x_ &&
+		y_==rect.y_ &&
+		w_==rect.w_ &&
+		h_==rect.h_;
 	}
 
-	fim_err_t Rect::vlgrow(fim_coo_t units)   { h+=units; return FIM_ERR_NO_ERROR; } 
-	fim_err_t Rect::vlshrink(fim_coo_t units) { h-=units; return FIM_ERR_NO_ERROR; }
-	fim_err_t Rect::vugrow(fim_coo_t units)   { y-=units; h+=units ; return FIM_ERR_NO_ERROR; } 
-	fim_err_t Rect::vushrink(fim_coo_t units) { y+=units; h-=units ; return FIM_ERR_NO_ERROR; }
+	fim_err_t Rect::vlgrow(fim_coo_t units)   { h_+=units; return FIM_ERR_NO_ERROR; } 
+	fim_err_t Rect::vlshrink(fim_coo_t units) { h_-=units; return FIM_ERR_NO_ERROR; }
+	fim_err_t Rect::vugrow(fim_coo_t units)   { y_-=units; h_+=units ; return FIM_ERR_NO_ERROR; } 
+	fim_err_t Rect::vushrink(fim_coo_t units) { y_+=units; h_-=units ; return FIM_ERR_NO_ERROR; }
 	
-	fim_err_t Rect::hlgrow(fim_coo_t units)   { x-=units; w+=units ; return FIM_ERR_NO_ERROR; } 
-	fim_err_t Rect::hrshrink(fim_coo_t units) { w-=units; return FIM_ERR_NO_ERROR; }
-	fim_err_t Rect::hrgrow(fim_coo_t units)   { w+=units; return FIM_ERR_NO_ERROR; } 
-	fim_err_t Rect::hlshrink(fim_coo_t units) { x+=units; w-=units ; return FIM_ERR_NO_ERROR; }
+	fim_err_t Rect::hlgrow(fim_coo_t units)   { x_-=units; w_+=units ; return FIM_ERR_NO_ERROR; } 
+	fim_err_t Rect::hrshrink(fim_coo_t units) { w_-=units; return FIM_ERR_NO_ERROR; }
+	fim_err_t Rect::hrgrow(fim_coo_t units)   { w_+=units; return FIM_ERR_NO_ERROR; } 
+	fim_err_t Rect::hlshrink(fim_coo_t units) { x_+=units; w_-=units ; return FIM_ERR_NO_ERROR; }
 }
 #if 0
 /*

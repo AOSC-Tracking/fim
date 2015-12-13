@@ -69,7 +69,7 @@ namespace fim
 class Rect
 {
 	public:
-	fim_coo_t x,y,w,h;	// units, not pixels
+	fim_coo_t x_,y_,w_,h_;	// units, not pixels
 	void print(void);
 
 	Rect(fim_coo_t x,fim_coo_t y,fim_coo_t w,fim_coo_t h);
