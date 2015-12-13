@@ -50,21 +50,16 @@ class CommandConsole
 	fim_int show_must_go_on_;
 	fim_int return_code_;	/* new, to support the 'return' command */
 	bool mangle_tcattr_;
-	public:
 
 	struct termios  saved_attributes_;
 	fim_sys_int             saved_fl_; /* file status flags for stdin */
 
-	/*
-	 * the image browser_ logic
-	 */
-	Browser browser_;
+	public:
+	Browser browser_;	/* the image browser_ logic */
 	private:
 
 #ifdef FIM_WINDOWS
-	public:// 20110617 this is terrible, I know
 	fim::FimWindow * window_;
-	private:
 #endif /* FIM_WINDOWS */
 	/*
 	 * the registered command methods and objects
