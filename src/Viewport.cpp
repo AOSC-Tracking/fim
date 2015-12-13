@@ -40,7 +40,7 @@ namespace fim
 	Viewport::Viewport(
 			CommandConsole &c
 #ifdef FIM_WINDOWS
-			,Rect & corners
+			,const Rect & corners
 #endif /* FIM_WINDOWS */
 			)
 			:
