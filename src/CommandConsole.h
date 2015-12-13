@@ -34,16 +34,13 @@ class CommandConsole
 #endif /* FIM_WANT_BENCHMARKS */
 	public Namespace
 {
-	public:
-	friend class FbiStuff;
-
-	private:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
 	MiniConsole mc_;
 #endif /* FIM_KEEP_BROKEN_CONSOLE */
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	private:
 	FontServer fontserver_;
 
 	fim::string postInitCommand_;
