@@ -30,10 +30,6 @@ namespace fim
 	class Namespace
 	{
 		protected:
-#if FIM_WANT_PIC_LVDN
-		/* TODO: need a proper variable assignment function in Namespace. */
-		friend class Image; /* FIXME: this is a temporary hack, not a long term solution */
-#endif /* FIM_WANT_PIC_LVDN */
 #ifndef FIM_INDIPENDENT_NAMESPACE
 		CommandConsole*rnsp_; // root Namespace pointer
 #endif /* FIM_INDIPENDENT_NAMESPACE */
@@ -64,6 +60,7 @@ namespace fim
 		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 		fim::string get_variables_list(bool with_values=false)const;
 		virtual size_t byte_size(void)const = 0;
+		fim_err_t assign_ns(const Namespace & ns);
 
 		Namespace(
 #ifndef FIM_INDIPENDENT_NAMESPACE

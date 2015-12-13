@@ -202,6 +202,12 @@ namespace fim
 			}
 			return FIM_ERR_NO_ERROR;
 		}
+		
+		fim_err_t Namespace::assign_ns(const Namespace & ns)
+		{
+			for(variables_t::const_iterator fit=ns.variables_.begin();fit!=ns.variables_.end();++fit)
+				setVariable((fit->first),Var(fit->second));
+		}
 
 	std::ostream& Namespace::print(std::ostream &os)const
 	{
