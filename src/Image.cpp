@@ -448,8 +448,7 @@ uhmpf:
 		setVariable(FIM_VID_WIDTH ,(fim_int)fimg_->i.width );
 		setVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
 		setVariable(FIM_VID_SWIDTH,(fim_int) img_->i.width );
-		if(cc.displaydevice_)
-			setVariable(FIM_VID_FIM_BPP ,(fim_int) cc.displaydevice_->get_bpp());
+		setVariable(FIM_VID_FIM_BPP, getGlobalIntVariable(FIM_VID_FIM_BPP) );
 		setVariable(FIM_VID_SCALE  ,newscale_*100);
 		setVariable(FIM_VID_ASCALE,ascale_);
 		setVariable(FIM_VID_ANGLE , angle_);
@@ -462,8 +461,6 @@ uhmpf:
 		setGlobalVariable(FIM_VID_WIDTH  ,(fim_int)fimg_->i.width );
 		setGlobalVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
 		setGlobalVariable(FIM_VID_SWIDTH ,(fim_int) img_->i.width );
-		if(cc.displaydevice_)
-			setGlobalVariable(FIM_VID_FIM_BPP ,(fim_int) cc.displaydevice_->get_bpp());
 		//setGlobalVariable(FIM_VID_SCALE  ,newscale_*100);
 		//setGlobalVariable(FIM_VID_ASCALE ,ascale_);
 	

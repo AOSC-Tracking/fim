@@ -179,7 +179,6 @@ class CommandConsole
 	friend class MiniConsole;
 	friend class DisplayDevice;
 	friend class FbiStuff;
-	friend class Image;
 	friend class Viewport;
 	DisplayDevice *displaydevice_;
 	public:
