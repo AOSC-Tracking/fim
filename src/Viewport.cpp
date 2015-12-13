@@ -498,7 +498,7 @@ namespace fim
 			return;
 		else
 		{
-			xs = (fim_scale_t)this->viewport_width()  / (fim_scale_t)(image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
+			xs = (fim_scale_t)this->viewport_width()  / (fim_scale_t)(image_->original_width()*image_->ascale());
 			ys = (fim_scale_t)this->viewport_height() / (fim_scale_t)image_->original_height();
 		}
 
@@ -511,7 +511,7 @@ namespace fim
 			return;
 		else
 		{
-			if((this->viewport_width()<(image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0)))
+			if((this->viewport_width()<(image_->original_width()*image_->ascale()))
 			||(this->viewport_height() < image_->original_height()))
 				auto_scale();
 		}
@@ -604,7 +604,7 @@ namespace fim
 		 * */
 		if(image_)
 		{
-			image_->reset();
+			image_->reset_scale_flags();
 			setGlobalVariable("i:" FIM_VID_WANT_AUTOCENTER,(fim_int)1);
 		}
 		should_redraw();
@@ -636,7 +636,7 @@ namespace fim
 		if( check_invalid() )
 			return;
 
-		newscale = ((fim_scale_t)this->viewport_width()) / ((fim_scale_t)image_->original_width()*(image_->ascale_>0.0?image_->ascale_:1.0));
+		newscale = ((fim_scale_t)this->viewport_width()) / ((fim_scale_t)image_->original_width()*image_->ascale());
 
 		image_->rescale(newscale);
 	}
@@ -745,12 +745,9 @@ namespace fim
 
 	void Viewport::should_redraw(void)const
 	{
-		/* FIXME */
-		if(image_)
-			image_->should_redraw();
-		else
-	        	if(displaydevice_)
-				displaydevice_->redraw_=FIM_REDRAW_NECESSARY;
+		/* FIXME: this is bad style */
+	       	if(displaydevice_)
+			displaydevice_->redraw_=FIM_REDRAW_NECESSARY;
 	}
 
 	Viewport::~Viewport(void)
