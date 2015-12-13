@@ -24,6 +24,7 @@
 #define FIM_VIEWPORT_H
 
 #include "fim.h"
+#include "FimWindow.h"
 #include "DisplayDevice.h"
 
 namespace fim
@@ -41,6 +42,7 @@ class Viewport:public ViewportState
 	protected:
 	fim_bool_t	psteps_;
         DisplayDevice* displaydevice_;
+	Rect&corners_;
 
 	Image  *image_;	// !! 
 #ifdef FIM_WINDOWS

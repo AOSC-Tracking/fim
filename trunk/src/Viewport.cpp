@@ -49,6 +49,7 @@ namespace fim
 #endif /* FIM_NAMESPACES */
 			psteps_(false),
 			displaydevice_(c.displaydevice_)	/* could be NULL */
+			,corners_(window->corners_)
 			,image_(NULL)
 #ifdef FIM_WINDOWS
 			,window_(window)
@@ -74,6 +75,7 @@ namespace fim
 #endif /* FIM_NAMESPACES */
 		psteps_(v.psteps_)
 		,displaydevice_(v.displaydevice_)
+		,corners_(v.window_->corners_)
 		,image_(NULL)
 #ifdef FIM_WINDOWS
 		,window_(v.window_)
@@ -218,9 +220,7 @@ namespace fim
 		/*
 		 * */
 #ifdef FIM_WINDOWS
-		if(window_)
-			return window_->corners_.width();
-		else return 0;
+		return corners_.width();
 #else
 		return displaydevice_->width();
 #endif /* FIM_WINDOWS */
@@ -234,10 +234,7 @@ namespace fim
 		if(fh)
 			fh*=(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
 #ifdef FIM_WINDOWS
-		if(window_)
-			return window_->corners_.height()-fh;
-		else
-		       	return 0;
+		return corners_.height()-fh;
 #else
 		return displaydevice_->height()-fh;
 #endif /* FIM_WINDOWS */
@@ -257,7 +254,7 @@ namespace fim
 	{
 		// horizontal origin coordinate (upper)
 #ifdef FIM_WINDOWS
-		return window_->corners_.xorigin();
+		return corners_.xorigin();
 #else
 		return 0;
 #endif /* FIM_WINDOWS */
@@ -267,7 +264,7 @@ namespace fim
 	{
 		// vertical origin coordinate (upper)
 #ifdef FIM_WINDOWS
-		return window_->corners_.yorigin();
+		return corners_.yorigin();
 #else /* FIM_WINDOWS */
 		return 0;
 #endif /* FIM_WINDOWS */
