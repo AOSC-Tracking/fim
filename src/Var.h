@@ -66,7 +66,7 @@ class Var
 		return 0;
 	}
 
-	explicit Var(float v)
+	Var(float v)
 	:type(0),i(0),s(fim::string())
 	{
 		DBG("(f:"<<v<<")\n");
@@ -74,7 +74,7 @@ class Var
 		f=v;
 	}
 
-	explicit Var(bool v)
+	Var(bool v)
 	:type(0),i(0),s(fim::string())
 	{
 		DBG("(i:"<<v<<")\n");
@@ -114,7 +114,7 @@ class Var
 		this->s=s.c_str();
 	}
 
-	explicit Var(const fim_char_t*s)
+	Var(const fim_char_t*s)
 	:type(0),i(0),s(fim::string())
 	{
 		type='s';
