@@ -932,8 +932,7 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-				if(viewport_)
-					should_redraw();// no effect
+				should_redraw();// no effect
 				return FIM_ERR_NO_ERROR;
 			}
 
@@ -984,8 +983,7 @@ namespace fim
 			 */
 			if( isleaf() )
 			{
-				if(viewport_)
-					should_redraw();// no effect
+				should_redraw();// no effect
 				return FIM_ERR_NO_ERROR;
 			}
 
@@ -1186,8 +1184,7 @@ namespace fim
 	fim_err_t FimWindow::update(const Rect& corners)
 	{
 		corners_=corners;
-		if(viewport_ && commandConsole_.displaydevice_)
-			should_redraw();
+		should_redraw();
 		return FIM_ERR_NO_ERROR;
 	}
 
