@@ -278,7 +278,7 @@ namespace fim
 		/*
 		 * for recovery purposes. FIXME
 		 * */
-		if( displaydevice_->redraw_==FIM_REDRAW_UNNECESSARY )
+		if(! need_redraw())
 			return;
 #ifdef FIM_WINDOWS
 		/* FIXME : note that fbi's clear_rect() is a buggy function and thus the fs_bpp multiplication need ! */
@@ -322,7 +322,7 @@ namespace fim
 		 *
 		 *	returns true when some drawing occurred.
 		 */
-		if((displaydevice_->redraw_==FIM_REDRAW_UNNECESSARY) )
+		if(! need_redraw())
 			return false;
 		if( check_invalid() )
 			null_display();//  NEW
@@ -352,7 +352,7 @@ namespace fim
 		if(desaturate)
 			image_->desaturate();
 
-		if (getGlobalIntVariable("i:" FIM_VID_WANT_AUTOCENTER)==1 && displaydevice_->redraw_!=FIM_REDRAW_UNNECESSARY  )
+		if (getGlobalIntVariable("i:" FIM_VID_WANT_AUTOCENTER)==1 && need_redraw() )
 		{
 			/*
 			 * If this is the first image display, we have
@@ -371,7 +371,7 @@ namespace fim
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
-//		if (displaydevice_->redraw_!=FIM_REDRAW_UNNECESSARY  ) 
+//		if( need_redraw() )
 		{
 			/*	
 			 *	20070911
@@ -405,9 +405,9 @@ namespace fim
 		    	}
 		}
 		
-		if(displaydevice_->redraw_!=FIM_REDRAW_UNNECESSARY)
+		if( need_redraw())
 		{
-			displaydevice_->redraw_=FIM_REDRAW_UNNECESSARY;
+			should_redraw(FIM_REDRAW_UNNECESSARY);
 			/*
 			 * there should be more work to use double buffering (if possible!?)
 			 * and avoid image tearing!
@@ -743,13 +743,6 @@ namespace fim
 			recenter_vertically();
 	}
 
-	void Viewport::should_redraw(void)const
-	{
-		/* FIXME: this is bad style */
-	       	if(displaydevice_)
-			displaydevice_->redraw_=FIM_REDRAW_NECESSARY;
-	}
-
 	Viewport::~Viewport(void)
 	{
 		// FIXME : we need a revival for free()
@@ -1025,5 +1018,8 @@ ret:
 		if(flip)
 		{ if( image_ && image_->height() > viewport_height() ) top_ = image_->height() - viewport_height() - top_; }
 	}
+	
+	fim_bool_t Viewport::need_redraw(void)const{ return ( ( window_ && window_->need_redraw() ) || ( image_ && image_->need_redraw() ) ); }
+	void Viewport::should_redraw(enum fim_redraw_t sr) { if( window_ ) window_->should_redraw( sr ); } 
 }
 

@@ -198,6 +198,7 @@ class FimWindow
 
 	Viewport & current_viewport(void)const;
 	CommandConsole &commandConsole_;
+	fim_redraw_t redraw_;
 
 	FimWindow & operator= (const FimWindow &w);
 
@@ -228,6 +229,8 @@ class FimWindow
 	fim_coo_t yorigin(void)const;
 	~FimWindow(void);
 	virtual size_t byte_size(void)const;
+	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY) { redraw_ = sr; } 
+	fim_bool_t need_redraw(void)const{ return (redraw_ != FIM_REDRAW_UNNECESSARY); }
 };
 
 }

@@ -767,7 +767,7 @@ ret:
 			//setGlobalVariable(FIM_VID_ANGLE  ,  angle_ );
 		}
 		else
-		       	should_redraw(0);
+		       	should_redraw(); /* FIXME: here shall not really redraw */
 		orientation_=neworientation;
 ret:
 		return FIM_ERR_NO_ERROR;
@@ -1222,13 +1222,6 @@ labeldone:
 		       	return FIM_ERR_GENERIC;
 		setVariable(FIM_VID_ANGLE,newangle_);
 		return rescale();	// FIXME : necessary *only* for image update and display
-	}
-
-	void Image::should_redraw(int should)const
-	{
-		/* FIXME : this is BAD style ! */
-	        if(cc.displaydevice_)
-		        cc.displaydevice_->redraw_=FIM_REDRAW_NECESSARY;
 	}
 
 	bool Image::prev_page(int j)

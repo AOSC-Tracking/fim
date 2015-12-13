@@ -85,8 +85,10 @@ class DisplayDevice
 	virtual fim_err_t init_console(void);
 	virtual void switch_if_needed(void){}// really, only for making happy fbdev
 	virtual void cleanup(void){}// really, only for making happy fbdev
-
+	protected:
 	fim_redraw_t redraw_;
+	public:
+	fim_bool_t need_redraw(void)const{ return ( redraw_ != FIM_REDRAW_UNNECESSARY ); }
 	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
 	void fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags);//experimental
 #if FIM_WANT_BENCHMARKS
