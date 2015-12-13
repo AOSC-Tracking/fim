@@ -175,13 +175,13 @@ class CommandConsole
 	public:
 	DummyDisplayDevice dummydisplaydevice_;
 
-	private:
 	friend class MiniConsole;
 	friend class DisplayDevice;
 	friend class FbiStuff;
 	friend class Viewport;
 	DisplayDevice *displaydevice_;
 	public:
+	fim_sys_int get_displaydevice_input(fim_key_t * c, bool want_poll=false);
 
 	fim::string execute(fim::string cmd, args_t args);
 

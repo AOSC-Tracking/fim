@@ -514,9 +514,8 @@ err:
 			finalize();
 	}
 
-	static aa_context *fim_aa_ascii_context; /* A global variable just for the use in fim_aa_get_input. */
-
-	fim_sys_int fim_aa_get_input(fim_key_t * c, bool want_poll, bool * srp)
+	static aa_context *fim_aa_ascii_context; /* This was a global variable just for the use in fim_aa_get_input. Now one it's of no use.  */
+	static fim_sys_int fim_aa_get_input(fim_key_t * c, bool want_poll, bool * srp)
 	{
 		if(srp)
 		       	*srp = true;
