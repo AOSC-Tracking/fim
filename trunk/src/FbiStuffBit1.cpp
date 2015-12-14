@@ -2,7 +2,7 @@
 /*
  FbiStuffBit1.cpp : fbi functions for reading ELF files as they were raw 1 bit per pixel pixelmaps
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -71,6 +71,7 @@ bit1_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if((h->flen=ftell(fp))==-1)goto oops;
     i->width  = h->w = prw;	// must be congruent to 8
     i->height = h->h = (8*h->flen + h->w-1) / ( i->width ); // should pad
+    i->npages = 1;
     return h;
  oops:
     if(h)fim_free(h);

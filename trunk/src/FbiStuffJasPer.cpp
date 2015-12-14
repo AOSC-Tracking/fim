@@ -2,7 +2,7 @@
 /*
  FbiStuffXyz.cpp : An example file for reading new file types with hypothetical library libjp2.
 
- (c) 2014-2014 Michele Martone
+ (c) 2014-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -198,6 +198,7 @@ jas_stream_t *jas_stream_freopen(const char *path, const char *mode, FILE *fp);
 
 	i->width = jas_image_width(h->image);
 	i->height = jas_image_height(h->image);
+	i->npages = 1;
 
 	h->rgb = (fim_byte_t*) fim_calloc( i->width * i->height * 3 , sizeof(fim_byte_t));
 

@@ -2,7 +2,7 @@
 /*
  FbiStuffMatrixMarket.cpp : fim functions for decoding Matrix Market files
 
- (c) 2009-2014 Michele Martone
+ (c) 2009-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -63,7 +63,7 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 
 	h->filename=NULL;
 	i->dpi    = FIM_RENDERING_DPI; /* FIXME */
-	i->npages = 1; // uhm
+	i->npages = 1;
 
 	if(rsb_lib_init(RSB_NULL_INIT_OPTIONS))
 		goto err;
