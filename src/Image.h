@@ -171,9 +171,11 @@ class Image
 	Image * getClone(void);
 //	void resize(int nw, int nh);
 	fim_int c_page(void)const;
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
 	void mm_free(void);
 	void mm_make(void);
 	bool has_mm(void)const;
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 	bool cacheable(void)const;
 	void desc_update();
 	fim_bool_t need_redraw(void)const{ return (redraw_ != FIM_REDRAW_UNNECESSARY); }
