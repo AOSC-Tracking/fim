@@ -93,6 +93,7 @@ int fim_snprintf_XB(char *str, size_t size, size_t q);
 fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_calloc = false);
 const fim_char_t * fim_basename_of(const fim_char_t * s);
 fim_int fim_atoi(const char*s);
+size_t fim_maxrss(void);
 
 /* exceptions */
 typedef int FimException;
