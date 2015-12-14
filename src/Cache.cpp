@@ -290,7 +290,7 @@ rt:
 			goto ret;
 		}
 
-		if(!loadNewImage(key))
+		if(!loadNewImage(key,0,true))
 		{
 			retval = -1;
 			goto ret;
@@ -302,7 +302,7 @@ ret:
 		return retval;
 	}
 
-	Image * Cache::loadNewImage(cache_key_t key, fim_page_t page)
+	Image * Cache::loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc)
 	{
 		Image *ni = NULL;
 		FIM_PR('*');
@@ -316,8 +316,14 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
 #endif /* FIM_CACHE_DEBUG */
-			if( (!ni->cacheable()) || cacheNewImage( ni ) )
-				goto ret;
+			if( ni->cacheable() )
+				cacheNewImage( ni );
+			else
+				if (delnc) // delete non cacheable
+				{
+					delete ni;
+					ni = NULL;
+				}
 		}
 		}
 		catch(FimException e)
@@ -359,11 +365,6 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 					std::cout << "going to cache: "<< ni << "\n";
 #endif /* FIM_CACHE_DEBUG */
-
-		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!ni)
-			return false;
-
 		this->imageCache_[ni->getKey()]=ni;
 		this->reverseCache_[ni]= ni->getKey();
 		lru_touch( ni->getKey() );
@@ -545,11 +546,11 @@ ret:
 			/*
 			 * no Image cached at all for this filename
 			 * */
-			image = loadNewImage(key,page);
+			image = loadNewImage(key,page,false);
 			if(!image)
 				goto ret; // bad luck!
 			if(!image->cacheable())
-				goto ret;
+				goto ret; // we keep it but don't cache it
 			usageCounter_[key]=1;
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 			goto ret;
