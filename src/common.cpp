@@ -29,6 +29,9 @@
 #include <string>
 #include <fstream>
 #include <sys/time.h>	/* gettimeofday */
+#if HAVE_SYS_RESOURCE_H
+#include <sys/resource.h> /* getrusage */
+#endif /* HAVE_SYS_RESOURCE_H */
 
 #ifdef HAVE_GETLINE
 #include <stdio.h>	/* getline : _GNU_SOURCE  */
@@ -981,3 +984,17 @@ fim_int fim_atoi(const char*s)
 	else
 		return atoll(s);
 }
+
+size_t fim_maxrss(void)
+{
+#if HAVE_SYS_RESOURCE_H
+	struct rusage usage;
+	int gru = getrusage(RUSAGE_SELF,&usage);
+	// printf("ru_maxrss: %ld (maximum resident set size -- MB)\n",usage.ru_maxrss / 1024);
+	// return quantity in B
+	return usage.ru_maxrss * 1024;
+#else /* HAVE_SYS_RESOURCE_H */
+	return 0;
+#endif /* HAVE_SYS_RESOURCE_H */
+}
+

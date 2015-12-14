@@ -968,6 +968,10 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					/* console property. TODO: move outta here */
 					fim_snprintf_XB(clbp, rbc,cc.byte_size());
 				break;
+				case('R'):
+					/* console property. TODO: move outta here */
+					fim_snprintf_XB(clbp, rbc, fim_maxrss());
+				break;
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
 				case('m'):
 					fim_snprintf_XB(clbp, rbc,mm_.byte_size());
