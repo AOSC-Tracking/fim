@@ -572,7 +572,9 @@ ret:
 			fim_negate_rgb(    fimg_->data, 3*fimg_->i.width*fimg_->i.height);
 		       	FbiStuff::free_image(fimg_);
 		}
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
 		mm_free();
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
                 reset();
 		FIM_PR('.');
         }
@@ -966,9 +968,11 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					/* console property. TODO: move outta here */
 					fim_snprintf_XB(clbp, rbc,cc.byte_size());
 				break;
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
 				case('m'):
 					fim_snprintf_XB(clbp, rbc,mm_.byte_size());
 				break;
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 				case('C'):
 				{
 					fim_char_t buf[2*FIM_PRINTFNUM_BUFSIZE];
@@ -1441,9 +1445,11 @@ ret:
 	fim_int Image::c_page(void)const{return page_;}
 #endif	/* FIM_WANT_BDI */
 
+#if FIM_WANT_EXPERIMENTAL_MIPMAPS
 	void Image::mm_free(void) { mm_.dealloc(); }
 	void Image::mm_make(void) { mm_.dealloc(); FbiStuff::fim_mipmaps_compute(fimg_,&mm_); }
 	bool Image::has_mm(void)const { return mm_.ok(); }
+#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 	bool Image::cacheable(void)const { return this->n_pages() == 1 ; }
 }
 
