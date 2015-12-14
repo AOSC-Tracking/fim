@@ -71,7 +71,7 @@ class Cache
 	fim_time_t last_used(cache_key_t key)const;
 
 	bool cacheNewImage( fim::Image* ni );
-	Image * loadNewImage(cache_key_t key, fim_page_t page = 0);
+	Image * loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc);
 
 	/*	returns an image from the cache or loads it from disk marking it as used in the LRU (internal) */
 	Image * getCachedImage(cache_key_t key);
