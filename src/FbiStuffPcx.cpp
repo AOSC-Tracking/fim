@@ -2,7 +2,7 @@
 /*
  FbiStuffPcx.cpp : Code for reading PCX files.
 
- (c) 2014-2014 Michele Martone
+ (c) 2014-2015 Michele Martone
  The functions pcx_load_image_fp and pcx_load_image_info_fp are (c) 2014-2014 Mohammed Isam.
  Originally based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
@@ -635,6 +635,7 @@ pcx_init(FILE *fp, const fim_char_t *filename, unsigned int page, struct ida_ima
  	   	goto oops;
 	}
 
+       	i->npages = 1;
 	h->w = i->width;
        	h->h = i->height;
 	h->bytes_per_line = i->width * 3;
