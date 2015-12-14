@@ -2,7 +2,7 @@
 /*
  FbiStuffXyz.cpp : An example file for reading new file types with hypothetical library libxyz.
 
- (c) 2014-2014 Michele Martone
+ (c) 2014-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -135,6 +135,7 @@ xyz_init(FILE *fp, const fim_char_t *filename, unsigned int page, struct ida_ima
  	   	goto oops;
 	}
 
+	i->npages = 1;
 	h->w = i->width;
        	h->h = i->height;
 	h->bytes_per_line = i->width * 3;
