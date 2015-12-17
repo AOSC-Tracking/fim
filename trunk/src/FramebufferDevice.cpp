@@ -1888,6 +1888,7 @@ fim_err_t FramebufferDevice::display(
 	if(bh<0)
 		goto err;
 
+	clear_rect(  0, width()-1, 0, height()-1); 
 	svga_display_image_new(
 		(struct ida_image*)ida_image_img,
 		yoff,
