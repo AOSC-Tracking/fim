@@ -557,7 +557,7 @@ nop:
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 			if( args[0] == "!" )
 			{
-				result = result + "Limiting to marked files\n";
+				// result = result + "Limiting to marked files\n";
 				do_remove(args,MarkedMatch,true); /* this is remove on filenames; need remove on comments */
 			}
 			else
@@ -1560,7 +1560,6 @@ err:
 			for(size_t i=0;i<flist_.size();++i)
 				if( cc.isMarkedFile(flist_[i]) != negative )
 				{
-					std::cout << "erasing "<< flist_[i] <<"\n";
 					flist_.erase(flist_.begin()+i), --i;
 				}
 			goto rfrsh;
