@@ -554,7 +554,15 @@ nop:
 			if( args.size() > 1 )
 				;// result = result + "Limiting to " + args[0] + " = " + args[1] + "\n";
 			tlist_ = flist_; /* limiting */
-			do_remove(args,VarMatch,true); /* this is remove on filenames; need remove on comments */
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
+			if( args[0] == "!" )
+			{
+				result = result + "Limiting to marked files\n";
+				do_remove(args,MarkedMatch,true); /* this is remove on filenames; need remove on comments */
+			}
+			else
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
+				do_remove(args,VarMatch,true); /* this is remove on filenames; need remove on comments */
 			if(lbl != n_files())
 				reload();
 		}
@@ -1543,7 +1551,21 @@ err:
 		 * TODO: flags for negative, ... 
 		 */
 		fim::string result;
+		int N = 0;
+
 		FIM_PR('*');
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
+		if ( rm == MarkedMatch )
+		{
+			for(size_t i=0;i<flist_.size();++i)
+				if( cc.isMarkedFile(flist_[i]) != negative )
+				{
+					std::cout << "erasing "<< flist_[i] <<"\n";
+					flist_.erase(flist_.begin()+i), --i;
+				}
+			goto rfrsh;
+		}
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 		if( flist_.size() < 1 )
 		{
 			result = "the files list is empty\n";
@@ -1587,14 +1609,7 @@ err:
 			}
 	//		if(lf != flist_.size() )
 	//			cout << "limited to " << int(flist_.size()) << " files, excluding " << int(lf - flist_.size()) << " files." <<FIM_CNS_NEWLINE;
-			int N = flist_.size();
-			if( N <= 0 )
-				cf_ = 0;
-			else
-				cf_ = FIM_MIN(cf_,N-1);
-			setGlobalVariable(FIM_VID_FILEINDEX,current_image());
-			setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
-			goto nop;
+			goto rfrsh;
 		}
 		else
 		{
@@ -1609,6 +1624,15 @@ err:
 			goto nop;
 		}
 		}
+rfrsh:
+		N = flist_.size();
+		if( N <= 0 )
+			cf_ = 0;
+		else
+			cf_ = FIM_MIN(cf_,N-1);
+		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
+		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
+		goto nop;
 		result = FIM_CNS_EMPTY_RESULT;
 nop:
 		FIM_PR('.');
