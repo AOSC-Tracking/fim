@@ -3,6 +3,8 @@
 
                 Version 0.5-trunk
 
+ * bugfix: in some situations fim -o fb was not clearing the screen before drawing
+   the image (TODO: r882)
  * bugfix in the "list 'remove'" internals (TODO: r849)
  * load variables description namespace from file ("#!fim:var=value" forms)(TODO: r848)
  * changed librsb library detection: now it's 
