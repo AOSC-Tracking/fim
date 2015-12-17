@@ -3,6 +3,7 @@
 
                 Version 0.5-trunk
 
+ * introduced limit to expression, or file name, or marked file criteria (r851-r879)
  * bugfix: in some situations fim -o fb was not clearing the screen before drawing
    the image (TODO: r882)
  * bugfix in the "list 'remove'" internals (TODO: r849)
