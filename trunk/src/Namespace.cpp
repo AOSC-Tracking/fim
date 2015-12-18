@@ -56,6 +56,13 @@ namespace fim
 			return isv;
 		}
 
+		void Namespace::unsetVariable(const fim::string &varname)
+		{
+			variables_t ::iterator vi=variables_.find(varname);
+			if( vi!= variables_.end() )
+				variables_.erase(varname);
+		}
+
 		fim_int Namespace::getIntVariable(const fim::string &varname)const
 		{
 			variables_t::const_iterator vi=variables_.find(varname);
