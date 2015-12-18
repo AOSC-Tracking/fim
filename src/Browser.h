@@ -38,7 +38,7 @@ class Browser
 #endif /* FIM_NAMESPACES */
 {
 	private:
-	enum RemoveMode{ FullMatch, PartialMatch, VarMatch, CmtMatch }; /* FIXME */
+	enum RemoveMode{ FullMatch, PartialMatch, VarMatch, CmtMatch, MarkedMatch }; /* FIXME */
 	args_t flist_; /* the names of files in the slideshow.  */
 #if FIM_WANT_PIC_LBFL
 	args_t tlist_; /* the names of files in the slideshow.  */
