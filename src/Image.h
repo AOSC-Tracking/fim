@@ -267,12 +267,21 @@ public:
 					if( vn != std::string::npos && fn[vn+=5] )
 					{
 						size_t es = fn.find_first_of("=",vn);
-						if( es != std::string::npos && fn[++es] )
+						if( es != std::string::npos )
 						{
-							std::string varname = fn.substr(vn,es-1-vn);
-							std::string varval = fn.substr(es);
-							ns.setVariable(varname,Var(varval));
-							/* TODO: need to reset/invalidate that variable on e.g. "var=" */
+							std::string varname = fn.substr(vn,es-vn);
+							++es;
+							if( fn[es] )
+							{
+								std::string varval = fn.substr(es);
+								ns.setVariable(varname,Var(varval));
+							}
+							else
+							{
+								std::string varname = fn.substr(vn,es-1-vn);
+								ns.unsetVariable(varname);
+								std::cout << "cleanup\n";
+							}
 						}
 					}
 				}
