@@ -139,7 +139,7 @@ namespace fim
 		       	} 
 			else if(args[0]=="unmark")
 			{
-			       	cc.unmarkCurrentFile();
+			       	cc.markCurrentFile(false);
 			       	goto ret;
 		       	} 
 #else /* FIM_WANT_FILENAME_MARK_AND_DUMP */

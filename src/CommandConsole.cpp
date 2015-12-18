@@ -1950,7 +1950,7 @@ ok:
 			return true;
 	}
 
-	void CommandConsole::markCurrentFile(void)
+	void CommandConsole::markCurrentFile(bool mark)
 	{
 		/*
 		 * the current file will be added to the list of filenames
@@ -1961,30 +1961,20 @@ ok:
 			marked_files_t::iterator mfi=marked_files_.find(browser_.current());
 			if(mfi==marked_files_.end())
 			{
-				marked_files_.insert(browser_.current());
-				cout<<"Marked file \""<<browser_.current()<<"\"\n";
+				if(mark)
+					marked_files_.insert(browser_.current()),
+					cout<<"Marked file \""<<browser_.current()<<"\"\n";
+				else
+					marked_files_.erase(mfi),
+					cout<<"Unmarked file \""<<browser_.current()<<"\"\n";
 			}
 			else
-				cout<<"File \""<<browser_.current()<<"\" was already marked\n";
-		}
-	}
-
-	void CommandConsole::unmarkCurrentFile(void)
-	{
-		/*
-		 * the current file will be added to the list of filenames
-		 * which will be printed upon the program termination.
-		 * */
-		if(browser_.current()!=FIM_STDIN_IMAGE_NAME)
-		{
-			marked_files_t::iterator mfi=marked_files_.find(browser_.current());
-			if(mfi!=marked_files_.end())
 			{
-				marked_files_.erase(mfi);
-				cout<<"Unmarked file \""<<browser_.current()<<"\"\n";
+				if(mark)
+					cout<<"File \""<<browser_.current()<<"\" was already marked\n";
+				else
+					cout<<"File \""<<browser_.current()<<"\" was not marked\n";
 			}
-			else
-				cout<<"File \""<<browser_.current()<<"\" was not marked\n";
 		}
 	}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
