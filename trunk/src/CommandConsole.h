@@ -166,8 +166,7 @@ class CommandConsole
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	public:
-	void markCurrentFile(void);
-	void unmarkCurrentFile(void);
+	void markCurrentFile(bool mark = true);
 	private:
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #ifdef FIM_WITH_AALIB
