@@ -543,7 +543,7 @@ nop:
 
 		if( args.size() > 2 )
 		{
-			result = "Provided more than two arguments to "FIM_FLT_LIMIT". Using the first two, ignoring the rest.\n";
+			result = "Provided more than two arguments to " FIM_FLT_LIMIT ". Using the first two, ignoring the rest.\n";
 		}
 
 		if( args.size() > 0 )
