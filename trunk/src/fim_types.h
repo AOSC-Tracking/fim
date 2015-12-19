@@ -79,6 +79,10 @@
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf
 
-#define FIM_NULL NULL	/* In C++11, this will be nullptr */
+#if FIM_USE_CXX11
+#define FIM_NULL nullptr
+#else /* FIM_USE_CXX11 */
+#define FIM_NULL NULL
+#endif /* FIM_USE_CXX11 */
 
 #endif /* FIM_TYPES_FIM_H */
