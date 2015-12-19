@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -99,15 +99,15 @@ class FramebufferDevice:public DisplayDevice
 #if 0
 	void fb_text_init1(fim_char_t *font)
 	{
-	    fim_char_t   *fonts[2] = { font, NULL };
+	    fim_char_t   *fonts[2] = { font, FIM_NULL };
 	
-	    if (NULL == f_)
-		f_ = fs_consolefont(font ? fonts : NULL);
+	    if (FIM_NULL == f_)
+		f_ = fs_consolefont(font ? fonts : FIM_NULL);
 	#ifdef FIM_USE_X11_FONTS
-	    if (NULL == f_ && 0 == fs_connect(NULL))
+	    if (FIM_NULL == f_ && 0 == fs_connect(FIM_NULL))
 		f_ = fs_open(font ? font : x11_font_);
 	#endif /* FIM_USE_X11_FONTS */
-	    if (NULL == f_) {
+	    if (FIM_NULL == f_) {
 		fprintf(stderr,"font \"%s\" is not available\n",font);
 		exit(1);
 	    }

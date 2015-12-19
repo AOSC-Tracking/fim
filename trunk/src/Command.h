@@ -2,7 +2,7 @@
 /*
  Command.h : Fim Command class header file
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,10 +29,10 @@ class Command
 	public:
 	fim::string cmd_,
 		    help_ ;
-	Command(fim::string cmd,fim::string help,Browser *b=NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(0) { type=BrowserT;}
-	Command(fim::string cmd,fim::string help,CommandConsole *c=NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
+	Command(fim::string cmd,fim::string help,Browser *b=FIM_NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(0) { type=BrowserT;}
+	Command(fim::string cmd,fim::string help,CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
 #ifdef FIM_WINDOWS
-	Command(fim::string cmd,fim::string help,FimWindow *w=NULL,fim::string(FimWindow::*cf)(const std::vector<fim::string>&)=NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
+	Command(fim::string cmd,fim::string help,FimWindow *w=FIM_NULL,fim::string(FimWindow::*cf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
 #endif /* FIM_WINDOWS */
 
 	fim::string getHelp(void)const{return help_;}

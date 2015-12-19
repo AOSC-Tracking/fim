@@ -459,7 +459,7 @@ class fim_mipmap_t
 	~fim_mipmap_t(void){this->dealloc();}
 	bool ok(void)const{return mmb > 0;}
 	private:
-	void reset(void){nmm=0;mmb=0;mdp=NULL;}
+	void reset(void){nmm=0;mmb=0;mdp=FIM_NULL;}
 };
 
 #include "fim_string.h"
