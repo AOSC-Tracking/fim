@@ -45,7 +45,7 @@ namespace fim
 	extern CommandConsole cc;
 fim_char_t * fim_readline(const fim_char_t *prompt)
 {
-	fim_char_t * rc=NULL;
+	fim_char_t * rc=FIM_NULL;
 	fim_rl_pc=FIM_SYM_CHAR_NUL;
 	rc=readline(prompt);
 	fim_rl_pc=FIM_SYM_CHAR_NUL;
@@ -80,8 +80,8 @@ static fim_char_t * command_generator (const fim_char_t *text,int state)
 
 //	while (name = commands[list_index].name)
 //	{ list_index++; if (strncmp (name, text, len) == 0) return (dupstr(name)); }
-	/* If no names matched, then return NULL. */
-//	return ((fim_char_t *)NULL);
+	/* If no names matched, then return FIM_NULL. */
+//	return ((fim_char_t *)FIM_NULL);
 }
 
 static fim_char_t * varname_generator (const fim_char_t *text,int state)
@@ -100,27 +100,27 @@ namespace rl
  *     bound the region of rl_line_buffer that contains the word to
  *     complete.  TEXT is the word to complete.  We can use the entire
  *     contents of rl_line_buffer in case we want to do some simple
- *     parsing.  Return the array of matches, or NULL if there aren't any.
+ *     parsing.  Return the array of matches, or FIM_NULL if there aren't any.
  */
 static fim_char_t ** fim_completion (const fim_char_t *text, int start,int end)
 {
 	//FIX ME
-	fim_char_t **matches = (fim_char_t **)NULL;
+	fim_char_t **matches = (fim_char_t **)FIM_NULL;
 
 	if(start==end && end<1)
 	{
 #if 0
 		fim_char_t **__s,*_s;
 		_s=dupstr("");
-		if(! _s)return NULL;
+		if(! _s)return FIM_NULL;
 		__s=(fim_char_t**)fim_calloc(1,sizeof(fim_char_t*));
-		if(!__s)return NULL;__s[0]=_s;
+		if(!__s)return FIM_NULL;__s[0]=_s;
 		//we print all of the commands, with no completion, though.
 #endif
 		cc.print_commands();
 		rl_attempted_completion_over = 1;
 		/* this could be set only here :) */
-		return NULL;
+		return FIM_NULL;
 	}
 
         /* If this word is at the start of the line, then it is a command
@@ -142,7 +142,7 @@ static fim_char_t ** fim_completion (const fim_char_t *text, int start,int end)
 			{
 				fim_char_t**sp=(fim_char_t**)malloc(2*sizeof(fim_char_t*));
 				sp[0]=dupstr("\"");
-				sp[1]=NULL;
+				sp[1]=FIM_NULL;
 				rl_completion_append_character = '\0';
 				fim::cout << "you can type double quoted string (e.g.: \"" FIM_CNS_EXAMPLE_FILENAME "\"), or a variable name (e.g.:" FIM_VID_FILELISTLEN "). some variables need a prefix (one of " FIM_SYM_NAMESPACE_PREFIXES ")\n" ;
 				return sp;
@@ -193,7 +193,7 @@ static void completion_display_matches_hook(fim_char_t **matches,int num,int max
 	}
 
 //	std::cout << buffer << "\n" ;
- //     status((fim_byte_t*)"here shall be autocompletions", NULL);
+ //     status((fim_byte_t*)"here shall be autocompletions", FIM_NULL);
 }
 
 /*
@@ -205,7 +205,7 @@ static void redisplay_no_fb(void)
 
 static void redisplay(void)
 {	
-	cc.set_status_bar(( fim_char_t*)rl_line_buffer,NULL);
+	cc.set_status_bar(( fim_char_t*)rl_line_buffer,FIM_NULL);
 }
 
 /*
@@ -447,7 +447,7 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 		rl_getc_function=fim_rl_getc;
 	}
 #endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
-	//rl_completion_entry_function=NULL;
+	//rl_completion_entry_function=FIM_NULL;
 	/*
 	 * to do:
 	 * see rl_filename_quoting_function ..

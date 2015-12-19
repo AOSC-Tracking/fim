@@ -39,7 +39,7 @@ namespace fim
 		 *	FIX ME
 		 */
 		const fim_char_t *kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
-		const fim_char_t*kstr=NULL;
+		const fim_char_t*kstr=FIM_NULL;
 		int l;
 		fim_key_t key=FIM_SYM_NULL_KEY;
 
@@ -122,7 +122,7 @@ namespace fim
 
 	fim::string CommandConsole::fcmd_help(const args_t &args)
 	{	
-		Command *cmd = NULL;
+		Command *cmd = FIM_NULL;
 
 		if(!args.empty() && args[0].length()>0 )
 		{
@@ -387,7 +387,7 @@ namespace fim
 	fim::string CommandConsole::fcmd_set_interactive_mode(const args_t& args)
 	{
 #ifdef FIM_USE_READLINE
-		ic_=-1;set_status_bar("",NULL);
+		ic_=-1;set_status_bar("",FIM_NULL);
 #endif /* FIM_USE_READLINE */
 		/*
 		 *
@@ -428,7 +428,7 @@ namespace fim
 			 * but it would require to rewrite much of the file loading stuff
 			 * (which is quite fbi's untouched stuff right now)
 			 * */
-			Image* stream_image=NULL;
+			Image* stream_image=FIM_NULL;
 			if(!tfd)
 				return FIM_ERR_GENERIC;
 			try{ stream_image=new Image(FIM_STDIN_IMAGE_NAME,fim_fread_tmpfile(tfd)); }
@@ -463,7 +463,7 @@ namespace fim
 		FILE* tfd;
 		/* fim_char_t buf[FIM_PIPE_BUFSIZE]; int rc=0; */
 		for(i=0;i<args.size();++i)
-		if( (tfd=popen(args[i].c_str(),"r")) != NULL )
+		if( (tfd=popen(args[i].c_str(),"r")) != FIM_NULL )
 		{	
 			fpush(tfd);
 		}

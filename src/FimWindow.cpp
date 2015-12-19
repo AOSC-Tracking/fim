@@ -126,8 +126,8 @@ namespace fim
 #ifdef FIM_NAMESPACES
 	Namespace(&c,FIM_SYM_NAMESPACE_WINDOW_CHAR),
 #endif /* FIM_NAMESPACES */
-	corners_(corners),focus_(false),first_(NULL),second_(NULL),amroot_(false)
-	,viewport_(NULL),
+	corners_(corners),focus_(false),first_(FIM_NULL),second_(FIM_NULL),amroot_(false)
+	,viewport_(FIM_NULL),
 	commandConsole_(c)
 	{
 		/*
@@ -145,7 +145,7 @@ namespace fim
 		else
 			viewport_=new Viewport( commandConsole_,  corners_ );
 
-		if( viewport_ == NULL )
+		if( viewport_ == FIM_NULL )
 		       	throw FIM_E_NO_MEM;
 	}
 
@@ -154,7 +154,7 @@ namespace fim
 #ifdef FIM_NAMESPACES
 			Namespace(root),
 #endif /* FIM_NAMESPACES */
-		corners_(root.corners_),focus_(root.focus_),first_(root.first_),second_(root.second_),amroot_(false), viewport_(NULL),commandConsole_(root.commandConsole_)
+		corners_(root.corners_),focus_(root.focus_),first_(root.first_),second_(root.second_),amroot_(false), viewport_(FIM_NULL),commandConsole_(root.commandConsole_)
 	{
 		/*
 		 *  A new leave FimWindow is created with a specified geometry.
@@ -164,7 +164,7 @@ namespace fim
 		 */
 		viewport_=new Viewport( commandConsole_, corners_ );
 
-		if( viewport_ == NULL )
+		if( viewport_ == FIM_NULL )
 		       	throw FIM_E_NO_MEM;
 	}
 //#endif
@@ -390,7 +390,7 @@ namespace fim
 				first_ ->current_viewport().pan_up  ( second_->current_viewport().viewport_height() );
 #endif /* FIM_COOL_WINDOWS_SPLITTING */
 				delete viewport_;
-				viewport_ = NULL;
+				viewport_ = FIM_NULL;
 			}
 		}
 		else focused().hsplit();
@@ -417,7 +417,7 @@ namespace fim
 				second_->current_viewport().pan_right( first_->current_viewport().viewport_width() );
 #endif /* FIM_COOL_WINDOWS_SPLITTING */
 				delete viewport_;
-				viewport_ = NULL;
+				viewport_ = FIM_NULL;
 			}
 		}
 		else focused().vsplit();
@@ -507,21 +507,21 @@ namespace fim
 			// WARNING : dangerous
 			if(viewport_)
 			{
-				cout << "viewport_ should be NULL!\n";
+				cout << "viewport_ should be FIM_NULL!\n";
 				// an error should be spawned
 			}
 			if( ( viewport_ = focused().viewport_ ) )
 			{
 				;//viewport_ ->reassignWindow(this);
-				focused().viewport_=NULL;
+				focused().viewport_=FIM_NULL;
 			}
 			else
 			{
 				// error action
 				return false;
 			}
-			delete first_;  first_  = NULL;
-			delete second_; second_ = NULL;
+			delete first_;  first_  = FIM_NULL;
+			delete second_; second_ = FIM_NULL;
 		}
 		else return focused().close();
 //		print();
@@ -1167,7 +1167,7 @@ namespace fim
 		if( current_viewportp() )
 			return current_viewportp()->getImage();
 		else
-			return NULL;
+			return FIM_NULL;
 	}
 
 	FimWindow::~FimWindow(void)

@@ -48,11 +48,11 @@ namespace fim
 			Namespace(&c,FIM_SYM_NAMESPACE_VIEWPORT_CHAR),
 #endif /* FIM_NAMESPACES */
 			psteps_(false),
-			displaydevice_(c.displaydevice_)	/* could be NULL */
+			displaydevice_(c.displaydevice_)	/* could be FIM_NULL */
 #ifdef FIM_WINDOWS
 			,corners_(corners)
 #endif /* FIM_WINDOWS */
-			,image_(NULL)
+			,image_(FIM_NULL)
 			,commandConsole(c)
 	{
 		// WARNING : this constructor will be filled soon
@@ -75,7 +75,7 @@ namespace fim
 		psteps_(v.psteps_)
 		,displaydevice_(v.displaydevice_)
 		,corners_(v.corners_)
-		,image_(NULL)
+		,image_(FIM_NULL)
 		,commandConsole(v.commandConsole)
 	{
 		steps_ = v.steps_;
@@ -108,7 +108,7 @@ namespace fim
 		}
 		catch(FimException e)
 		{
-			image_=NULL;
+			image_=FIM_NULL;
 			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << FIM_CNS_NEWLINE;
 		}
 	}
@@ -538,14 +538,14 @@ namespace fim
 #if FIM_WANT_BDI
 		return check_valid() ? image_ : getImage();
 #else	/* FIM_WANT_BDI */
-		return check_valid() ? image_ : NULL;
+		return check_valid() ? image_ : FIM_NULL;
 #endif	/* FIM_WANT_BDI */
 	}
 
         void Viewport::setImage(fim::Image* ni)
 	{
 		/* 
-		 * the image could be NULL
+		 * the image could be FIM_NULL
 		 * this image is not tightly bound!
 		 *
 		 * FIXME
@@ -554,7 +554,7 @@ namespace fim
 		std::cout << "setting image \""<<ni->getName()<<"\" in viewport: "<< ni << "\n\n";
 #endif /* FIM_CACHE_DEBUG */
 
-		//image_ = NULL;
+		//image_ = FIM_NULL;
 		if(ni)
 			free();
 		reset();
@@ -656,7 +656,7 @@ namespace fim
 		if(image_)
 			delete image_;
 #endif /* FIM_BUGGED_CACHE */
-		image_ = NULL;
+		image_ = FIM_NULL;
 	}
 
         bool Viewport::check_valid(void)const
@@ -787,7 +787,7 @@ namespace fim
 		fim_bool_t ps=false;
 		fim_char_t f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
 		const fim_char_t*fs=args[0].c_str();
-		const fim_char_t*ss=NULL;
+		const fim_char_t*ss=FIM_NULL;
 
 		if(args.size()<1 || (!fs))
 			goto nop;
@@ -880,7 +880,7 @@ err:
 		float va,ha;
 		char vc='c',hc='c';
 		int res=0;
-		const char*cs=NULL;
+		const char*cs=FIM_NULL;
 		const char*es="";
 		const float bt=99.0;
 		const float ct=1.0;
@@ -925,7 +925,7 @@ err:
 		}
 	
 		if(cs)
-			es=" ",cs=NULL;
+			es=" ",cs=FIM_NULL;
 
 		if(hum<1 && hlm<1)
 			ha=0.0;

@@ -2,7 +2,7 @@
 /*
  fim_plugin.cpp : Fim plugin stuff
 
- (c) 2011-2013 Michele Martone
+ (c) 2011-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -58,8 +58,8 @@ static void fim_opencv_detect_and_draw( IplImage* img, struct ida_image *iimg )
     	CvPoint pt1, pt2;
 	int i;
 	fim_coo_t w=iimg->i.width;
-	static CvMemStorage* storage=NULL;
-	static CvHaarClassifierCascade* cascade=NULL;
+	static CvMemStorage* storage=FIM_NULL;
+	static CvHaarClassifierCascade* cascade=FIM_NULL;
 	static int haar_file_existent=-1;
 	const fim_char_t*haarfile="haarcascade_frontalface_alt.xml";
 	string haarpath; 
@@ -86,11 +86,11 @@ static void fim_opencv_detect_and_draw( IplImage* img, struct ida_image *iimg )
 	 fim -C 'FIM_HAAR_PATH="~/OpenCV-2.3.1/data/haarcascades/"' ...
 	 */
 	if(!cascade )
-    		cascade=(CvHaarClassifierCascade*)cvLoad(haarpath.c_str(),NULL,NULL,NULL);
+    		cascade=(CvHaarClassifierCascade*)cvLoad(haarpath.c_str(),FIM_NULL,FIM_NULL,FIM_NULL);
     	if( cascade )
     	{
         	CvSeq*faces=cvHaarDetectObjects(img,cascade,storage,1.1,2,CV_HAAR_DO_CANNY_PRUNING,cvSize(40,40));
-		CvRect * fr=NULL;
+		CvRect * fr=FIM_NULL;
 		if(faces)
         	for(i=0;i<(faces ? faces->total:0);i++)
             	if(fr=(CvRect*)cvGetSeqElem(faces,i))
@@ -112,18 +112,18 @@ static void fim_opencv_detect_and_draw( IplImage* img, struct ida_image *iimg )
 	       	/* FIXME: The OpenCV documentation says that cvClearSeq() does not deallocate anything;
 		 am not fully sure whether this code is completely correct, then.
 		 */
-		faces=NULL;
+		faces=FIM_NULL;
 	}
 	if(cascade)
 		cvReleaseHaarClassifierCascade(&cascade);
-	cascade=NULL;
+	cascade=FIM_NULL;
 }
 
 static fim_err_t fim_opencv_plugin_example(struct ida_image *img, const fim_char_t *filename)
 {
 	fim_coo_t r,c,h=img->i.height,w=img->i.width;
 	const int b=30;
-       	IplImage*cvimage=NULL;
+       	IplImage*cvimage=FIM_NULL;
 	int depth=IPL_DEPTH_8U;
        	int channels=3;
 	CvSize size;

@@ -2,7 +2,7 @@
 /*
  FbiStuffTiff.cpp : fbi functions for TIFF files, modified for fim
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -56,15 +56,15 @@ static void*
 tiff_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-    struct tiff_state *h=NULL;
+    struct tiff_state *h=FIM_NULL;
 
     fclose(fp);
     h = (struct tiff_state *) fim_calloc(1,sizeof(*h));
     if(!h)goto oops;
 
-    TIFFSetWarningHandler(NULL);
+    TIFFSetWarningHandler(FIM_NULL);
     h->tif = TIFFOpen(filename,"r");
-    if (NULL == h->tif)
+    if (FIM_NULL == h->tif)
 	goto oops;
     /* Determine number of directories */
     h->ndirs = 1;
@@ -142,7 +142,7 @@ tiff_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(h && h->row)fim_free(h->row);
     if(h && h->image)fim_free(h->image);
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static void
@@ -249,7 +249,7 @@ tiff_write(FILE *fp, struct ida_image *img)
     unsigned int  y;
 
     TiffHndl = TIFFFdOpen(fileno(fp),"42.tiff","w");
-    if (TiffHndl == NULL)
+    if (TiffHndl == FIM_NULL)
 	return -1;
     TIFFSetField(TiffHndl, TIFFTAG_IMAGEWIDTH, img->i.width);
     TIFFSetField(TiffHndl, TIFFTAG_IMAGELENGTH, img->i.height);
@@ -280,7 +280,7 @@ tiff_write(FILE *fp, struct ida_image *img)
 
 static struct ida_writer tiff_writer = {
     /*  label:*/  "TIFF",
-    /*  ext:*/    { "tif", "tiff", NULL},
+    /*  ext:*/    { "tif", "tiff", FIM_NULL},
     /*  write:*/  tiff_write,
 };
 

@@ -2,7 +2,7 @@
 /*
  Imlib2.cpp : Imlib2 device Fim driver file
 
- (c) 2011-2013 Michele Martone
+ (c) 2011-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,8 +46,8 @@ namespace fim
 }
 
 // FIXME: these shall become Imlib2Device members!
-static Display *disp=NULL;
-static Visual  *vis=NULL;
+static Display *disp=FIM_NULL;
+static Visual  *vis=FIM_NULL;
 static int      depth;
 static bool      initialized=false;
 static Colormap cm;
@@ -140,11 +140,11 @@ err:
 		fim_coo_t ii,ij;
 		fim_coo_t oi,oj;
 		// fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
-		fim_byte_t * srcp=NULL;
+		fim_byte_t * srcp=FIM_NULL;
    		//Imlib_Image dimage;
-		struct ida_image*img=NULL;
-		fim_byte_t* rgb = NULL;
-		DATA32 *ild=NULL;
+		struct ida_image*img=FIM_NULL;
+		fim_byte_t* rgb = FIM_NULL;
+		DATA32 *ild=FIM_NULL;
 
 		if( iroff <0 ) return -2;
 		if( icoff <0 ) return -3;
@@ -189,7 +189,7 @@ err:
 		loc = (FIM_MIN(ocols-1,icols-1-icoff+ocoff));
 
 		img=(struct ida_image*)ida_image_img;
-		rgb = img?img->data:NULL;// source rgb array
+		rgb = img?img->data:FIM_NULL;// source rgb array
 
 		if(initialized==false) goto ret;
 
@@ -230,7 +230,7 @@ ret:
 	fim_err_t Imlib2Device::il2_initialize(void)
 	{
 		if(!disp)
-   		disp=XOpenDisplay(NULL);
+   		disp=XOpenDisplay(FIM_NULL);
 		if(!disp)goto err;
 		if(!vis)
    		vis=DefaultVisual(disp,DefaultScreen(disp));
@@ -328,7 +328,7 @@ static fim_err_t initialize_keys(sym_keys_t &sym_keys)
 		//XK_bar
 		//XK_minus
 		//XK_plus
-		fim_perror(NULL);
+		fim_perror(FIM_NULL);
 		cc.key_syms_update();
 		return FIM_ERR_NO_ERROR;
 }
@@ -394,7 +394,7 @@ fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
 				int nc=0;
 				KeySym  ks;
 				buf[nc]=FIM_SYM_CHAR_NUL;
-      				nc=XLookupString(&ev_.xkey,buf,sizeof(buf),&ks,NULL);
+      				nc=XLookupString(&ev_.xkey,buf,sizeof(buf),&ks,FIM_NULL);
 				buf[nc]=FIM_SYM_CHAR_NUL;
 				//FIM_IL2_PRINTF("PKEY :%d:%s:%d\n",ev_.xkey.keycode,buf,ks);
 				if( *buf)
@@ -438,7 +438,7 @@ fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
 
         if (updates_)
            imlib_updates_free(updates_),
-           updates_=NULL;
+           updates_=FIM_NULL;
 
 	if(!c)
 		rc=0;
@@ -546,7 +546,7 @@ fim_err_t Imlib2Device::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, co
 
     for (i = 0; str[i] != '\0'; i++) {
 	c = (fim_byte_t)str[i];
-	if (NULL == f_->eindex[c])
+	if (FIM_NULL == f_->eindex[c])
 	    continue;
 	fs_render_fb(x,y,f_->eindex[c],f_->gindex[c]);
 	x += f_->eindex[c]->width;

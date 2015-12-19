@@ -89,7 +89,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		setlocale(LC_ALL,"C");	/* portable (among Linux hosts) : should use dots for numerical radix separator */
 		//setlocale(LC_NUMERIC,"en_US"); /* lame  */
 		//setlocale(LC_ALL,""); /* just lame */
-		displaydevice_=NULL;	/* TODO : is this really necessary ? */
+		displaydevice_=FIM_NULL;	/* TODO : is this really necessary ? */
 
 		if(dosso>0)
 			dopts=device.substr(dosso+strlen(FIM_SYM_DEVOPTS_SEP_STR),device.length()).c_str();
@@ -100,7 +100,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			extern fim_char_t *default_fbdev,*default_fbmode; /* FIXME: we don't want globals! */
 			extern int default_vt;
 			extern float default_fbgamma;
-			FramebufferDevice * ffdp=NULL;
+			FramebufferDevice * ffdp=FIM_NULL;
 
 			displaydevice_=new FramebufferDevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -122,15 +122,15 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		#ifdef FIM_WITH_LIBIMLIB2
 		if(device.find(FIM_DDN_VAR_IL2)==0)
 		{
-			DisplayDevice *imld=NULL;
+			DisplayDevice *imld=FIM_NULL;
 			imld=new Imlib2Device(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_,
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					dopts
 					);
-			if(imld && imld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete imld ; imld=NULL;}
-			if(imld && displaydevice_==NULL)
+			if(imld && imld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete imld ; imld=FIM_NULL;}
+			if(imld && displaydevice_==FIM_NULL)
 			{
 				displaydevice_=imld;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_IL2);
@@ -147,7 +147,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		#ifdef FIM_WITH_LIBSDL
 		if(device.find(FIM_DDN_INN_SDL)==0)
 		{
-			DisplayDevice *sdld=NULL;
+			DisplayDevice *sdld=FIM_NULL;
 			fim::string fopts;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 			fopts=dopts;
@@ -158,8 +158,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 					fopts
 					);
-		       	if(sdld && sdld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=NULL;}
-			if(sdld && displaydevice_==NULL)
+		       	if(sdld && sdld->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete sdld ; sdld=FIM_NULL;}
+			if(sdld && displaydevice_==FIM_NULL)
 			{
 				displaydevice_=sdld;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_SDL);
@@ -176,13 +176,13 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		#ifdef FIM_WITH_CACALIB
 		if(device.find(FIM_DDN_INN_CACA)==0)
 		{
-			DisplayDevice *cacad=NULL;
+			DisplayDevice *cacad=FIM_NULL;
 			cacad=new CACADevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 					mc_
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-					); if(cacad && cacad->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete cacad ; cacad=NULL;}
-			if(cacad && displaydevice_==NULL)
+					); if(cacad && cacad->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete cacad ; cacad=FIM_NULL;}
+			if(cacad && displaydevice_==FIM_NULL)
 			{
 				displaydevice_=cacad;
 				setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_CACA);
@@ -203,9 +203,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 				dopts
 				);
 
-		if(aad_ && aad_->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete aad_ ; aad_=NULL;}
+		if(aad_ && aad_->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete aad_ ; aad_=FIM_NULL;}
 		{
-		if(aad_ && displaydevice_==NULL)
+		if(aad_ && displaydevice_==FIM_NULL)
 		{
 			displaydevice_=aad_;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_AA);
@@ -235,7 +235,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		if(mangle_tcattr_)tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
 		// FIXME: an error here on, leaves the terminal in raw mode, and this is not cool
 
-		if( displaydevice_==NULL)
+		if( displaydevice_==FIM_NULL)
 		{
 			displaydevice_=&dummydisplaydevice_;
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_DUMB);
@@ -384,7 +384,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_AUTOCMDS */
 
 #ifdef FIM_USE_READLINE
-		rl::initialize_readline( displaydevice_==NULL, wcs );
+		rl::initialize_readline( displaydevice_==FIM_NULL, wcs );
 		load_or_save_history(true);
 #endif /* FIM_USE_READLINE */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )

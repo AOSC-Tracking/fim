@@ -2,7 +2,7 @@
 /*
  FbiStuffBmp.cpp : fbi functions for BMP files, modified for fim
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -171,7 +171,7 @@ bmp_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 
  oops:
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static void

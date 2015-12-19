@@ -181,7 +181,7 @@ Var ex(nodeType *p)
 {
 	fim_int iValue;
 	float fValue;
-	fim_char_t *s=NULL;
+	fim_char_t *s=FIM_NULL;
 
   	std::vector<fim::string> args;
 	int typeHint;
@@ -320,7 +320,7 @@ Var ex(nodeType *p)
 					  dp=dp->opr.op[0];
 	                          	  if(np->opr.nops < 2) 
 					  {
-						np=NULL;
+						np=FIM_NULL;
 				          }
 					  else
 					  {

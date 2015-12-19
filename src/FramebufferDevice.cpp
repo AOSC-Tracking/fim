@@ -184,7 +184,7 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
     pos += fb_fix_.line_length * y;
     for (i = 0; str[i] != '\0'; i++) {
 	c = (fim_byte_t)str[i];
-	if (NULL == f_->eindex[c])
+	if (FIM_NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
 	start = pos + x*fs_bpp_ + f_->fontHeader.max_bounds.descent * fb_fix_.line_length;
@@ -344,7 +344,7 @@ void FramebufferDevice::dev_init(void)
 {
     struct stat dummy;
 
-    if (NULL != devices_)
+    if (FIM_NULL != devices_)
 	return;
     if (0 == stat("/dev/.devfsd",&dummy))
 	devices_ = &devs_devfs_;
@@ -377,7 +377,7 @@ void FramebufferDevice::console_switch(fim_bool_t is_busy)
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		mc_.cc_.redisplay();
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	//if (is_busy) status("busy, please wait ...", NULL);		
+	//if (is_busy) status("busy, please wait ...", FIM_NULL);		
 	break;
 	default:
 	break;
@@ -549,14 +549,14 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
     }
     
     /* no device supplied ? we will probe for one */
-    if (NULL == device) {
+    if (FIM_NULL == device) {
 	device = fim_getenv(FIM_ENV_FRAMEBUFFER);
 	/* no environment - supplied device ? */
-	if (NULL == device) {
+	if (FIM_NULL == device) {
 	    struct fb_con2fbmap c2m;
 	    if (-1 == (fb_ = open(devices_->fb0,O_RDWR /* O_WRONLY */,0))) {
 		FIM_FPRINTF(stderr, "open %s: %s\n",devices_->fb0,strerror(errno));
-	        fim_perror(NULL);
+	        fim_perror(FIM_NULL);
 		exit(1);
 	    }
 	    c2m.console = vts.v_active;
@@ -583,7 +583,7 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
     /* get current settings (which we have to restore) */
     if (-1 == (fb_ = open(device,O_RDWR /* O_WRONLY */))) {
 	FIM_FPRINTF(stderr, "open %s: %s\n",device,strerror(errno));
-	fim_perror(NULL);
+	fim_perror(FIM_NULL);
 	exit(1);
     }
     if (-1 == ioctl(fb_,FBIOGET_VSCREENINFO,&fb_ovar_)) {
@@ -682,7 +682,7 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
     /* FIXME : what are the wider implications of this ? */
     fb_mem_offset_ = 0;
 #endif /* PAGE_MASK */
-    fb_mem_ = (fim_byte_t*) mmap(NULL,fb_fix_.smem_len+fb_mem_offset_,
+    fb_mem_ = (fim_byte_t*) mmap(FIM_NULL,fb_fix_.smem_len+fb_mem_offset_,
 		  PROT_READ|PROT_WRITE,MAP_SHARED,fb_,0);
 #ifdef MAP_FAILED
     if (fb_mem_ == MAP_FAILED) 
@@ -784,7 +784,7 @@ void FramebufferDevice::fb_setvt(int vtno)
 
     	if( -1 == open(vtname,O_RDWR) )
 	{
-		fim_perror(NULL);
+		fim_perror(FIM_NULL);
 	}
 	{
 		/* on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
@@ -849,22 +849,22 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
 #endif
     /* name="640x480-72"; */
 
-    if (NULL == name)
+    if (FIM_NULL == name)
     {
 	goto err;
     }
-    if (NULL == (fp = fopen("/etc/fb.modes","r")))
+    if (FIM_NULL == (fp = fopen("/etc/fb.modes","r")))
     {
 	goto err;
     }
-    while (NULL != fgets(line,FIM_FBI_FB_MODES_LINE_BUFSIZE-1,fp)) {
+    while (FIM_NULL != fgets(line,FIM_FBI_FB_MODES_LINE_BUFSIZE-1,fp)) {
 	if (1 == sscanf(line, "mode \"%31[^\"]\"",label) &&
 	    0 == strcmp(label,name)) {
 	    /* fill in new values */
 	    fb_var_.sync  = 0;
 	    fb_var_.vmode = 0;
-	    while (NULL != fgets(line,FIM_FBI_FB_MODES_LINE_BUFSIZE-1,fp) &&
-		   NULL == strstr(line,"endmode")) {
+	    while (FIM_NULL != fgets(line,FIM_FBI_FB_MODES_LINE_BUFSIZE-1,fp) &&
+		   FIM_NULL == strstr(line,"endmode")) {
 //		if (5 == sscanf(line," geometry %d %d %d %d %d",
 		if (5 == sscanf(line," geometry %u %u %u %u %u",
 				&fb_var_.xres,&fb_var_.yres,
@@ -1292,7 +1292,7 @@ fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_
 	return (fim_byte_t*)ptr4;
     default:
 	/* keep compiler happy */
-	return NULL;
+	return FIM_NULL;
     }
 }
 
@@ -1352,7 +1352,7 @@ fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, fim_by
 	return (fim_byte_t*)ptr4;
     default:
 	/* keep compiler happy */
-	return NULL;
+	return FIM_NULL;
     }
 }
 
@@ -1666,7 +1666,7 @@ int FramebufferDevice::fs_init_fb(int white8)
  *	This function treats the framebuffer screen as a text outout terminal.
  *	So it prints all the contents of its buffer on screen..
  *	if noDraw is set, the screen will be not refreshed.
-	 *	NULL,NULL is the clearing combination !!
+	 *	FIM_NULL,FIM_NULL is the clearing combination !!
 
 	//FIX ME : move this functionality to some new class and add ways to scroll and manipulate it
 	dez's
@@ -1690,8 +1690,8 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 	// R rows, C columns
 	int R=(fb_var_.yres/fb_font_height())/2,/* half screen : more seems evil */
 	C=(fb_var_.xres/fb_font_width());
-	static fim_char_t **columns=NULL;
-	static fim_char_t *columns_data=NULL;
+	static fim_char_t **columns=FIM_NULL;
+	static fim_char_t *columns_data=FIM_NULL;
 	if(R<1 || C < 1)return;		/* sa finimm'acca', nun ce sta nient'a fa! */
 	/* R rows and C columns; the last one for string terminators..
 	 */
@@ -1722,7 +1722,7 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 	{
 		cline=0;
 		ccol=0;
-		p=NULL;
+		p=FIM_NULL;
 		/*noDraw=0;*/
 	}
 	if(msg&&*msg=='\0')return;
@@ -1824,16 +1824,16 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 	//,x11_font_("10x20")
 	,ys_( 3)
 	,xs_(10)
-	,fs_setpixel(NULL)
-	,fbdev_(NULL)
-	,fbmode_(NULL)
+	,fs_setpixel(FIM_NULL)
+	,fbdev_(FIM_NULL)
+	,fbmode_(FIM_NULL)
 #ifdef FIM_BOZ_PATCH
 	,with_boz_patch_(0)
 #endif /* FIM_BOZ_PATCH */
 	,fb_mem_offset_(0)
 	,fb_switch_state_(FB_ACTIVE)
 	,orig_vt_no_(0)
-	,devices_(NULL)
+	,devices_(FIM_NULL)
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	//mc_(48,12),
 //	int R=(fb_var_.yres/fb_font_height())/2,/* half screen : more seems evil */
@@ -1860,7 +1860,7 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 		ocmap_.green=ogreen_;
 		ocmap_.blue=oblue_;
 
-	    	if (NULL != (line = fim_getenv(FIM_ENV_FBGAMMA)))
+	    	if (FIM_NULL != (line = fim_getenv(FIM_ENV_FBGAMMA)))
 	        	fbgamma_ = fim_atof(line);
 	}
 

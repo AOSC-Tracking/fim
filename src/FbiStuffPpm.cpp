@@ -2,7 +2,7 @@
 /*
  FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -57,7 +57,7 @@ pnm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     fim_char_t line[FIM_FBI_PPM_LINEBUFSIZE],*fr;
 
     h = (struct ppm_state*) fim_calloc(1,sizeof(*h));
-    if(!h)return NULL;
+    if(!h)return FIM_NULL;
 
     h->infile = fp;
     fr=fgets(line,sizeof(line),fp); /* Px */
@@ -86,7 +86,7 @@ pnm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     fim_fclose(fp);
     if(h->row)fim_free(h->row);
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static void
@@ -171,7 +171,7 @@ ppm_write(FILE *fp, struct ida_image *img)
 
 static struct ida_writer ppm_writer = {
     /*label:*/  "PPM",
-    /*ext:*/    { "ppm", NULL},
+    /*ext:*/    { "ppm", FIM_NULL},
     /*write:*/  ppm_write,
 };
 

@@ -67,9 +67,9 @@ namespace fim
 				{
 					// a fixup for the dumb console
 					int n=1+line_[l]-line_[f_];
-					fim_char_t*buf=NULL;
+					fim_char_t*buf=FIM_NULL;
 					if(n>0 && (buf=(fim_char_t*)
-								fim_malloc(n))!=NULL)
+								fim_malloc(n))!=FIM_NULL)
 					{
 						strncpy(buf,line_[f_],n);
 						buf[n-1]='\0';
@@ -136,10 +136,10 @@ done:
 
 		fim_err_t MiniConsole::add(const fim_char_t* cso_)
 		{
-			fim_char_t *s=NULL,*b=NULL;
+			fim_char_t *s=FIM_NULL,*b=FIM_NULL;
 			int nc;
 			int nl,ol=cline_;
-			fim_char_t *cs=NULL;/* using co would mean provoking the compiler */
+			fim_char_t *cs=FIM_NULL;/* using co would mean provoking the compiler */
 			fim_char_t*cso=(fim_char_t*)cso_;// FIXME
 
 #if FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE
@@ -162,7 +162,7 @@ done:
 				goto rerr;
 			nl=lines_count(cs,lwidth_);
 			// we count exactly the number of new entries needed in the arrays we have
-			if((s=const_cast<fim_char_t*>(strchr(cs,'\n')))!=NULL && s!=cs)
+			if((s=const_cast<fim_char_t*>(strchr(cs,'\n')))!=FIM_NULL && s!=cs)
 				nl+=(ccol_+(s-cs-1))/lwidth_;// single line_ with \n or multiline
 			else nl+=(strlen(cs)+ccol_)/lwidth_;	// single line_, with no terminators
 
@@ -176,11 +176,11 @@ done:
 
 			// we copy the whole new string in our buffer_
 			strcpy(bp_,cs);
-			fim_free(cs); cs=NULL;
+			fim_free(cs); cs=FIM_NULL;
 			sanitize_string_from_nongraph_except_newline(bp_,0);
 			s=bp_-ccol_;// we will work in our buffer_ space now on
 			b=s;
-			while(*s && (s=(fim_char_t*)next_row(s,lwidth_))!=NULL && *s)
+			while(*s && (s=(fim_char_t*)next_row(s,lwidth_))!=FIM_NULL && *s)
 			{
 				line_[++cline_]=s;// we keep track of each new line_
 				ccol_=0;
@@ -210,7 +210,7 @@ rerr:
 			/*
 			 * We update the displayed rows_, if this is physically possible
 			 * If nr is negative, no correctness checks will occur.
-			 * ( useful if calling this routine with NULL displaydevice.. )
+			 * ( useful if calling this routine with FIM_NULL displaydevice.. )
 			 * */
 			int maxrows;
 			if(nr<0)
@@ -229,9 +229,9 @@ rerr:
 
 		MiniConsole::MiniConsole(CommandConsole & cc,int lw, int r)
 		:
-		buffer_(NULL),
-		line_(NULL),
-		bp_(NULL),
+		buffer_(FIM_NULL),
+		line_(FIM_NULL),
+		bp_(FIM_NULL),
 		bsize_(0),
 		lsize_(0),
 		ccol_(0),

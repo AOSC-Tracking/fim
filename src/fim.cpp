@@ -52,7 +52,7 @@ namespace fim
 	 * Globals : should be encapsulated.
 	 * */
 	fim::CommandConsole cc;
-	fim_char_t *default_fbdev=NULL,*default_fbmode=NULL;
+	fim_char_t *default_fbdev=FIM_NULL,*default_fbmode=FIM_NULL;
 	int default_vt=-1;
 	fim_float_t default_fbgamma=-1.0;
 	fim_stream cout/*(1)*/;
@@ -74,25 +74,25 @@ struct fim_options_t{
  * This structure keeps hold of Fim's options flags.
  */
 struct fim_options_t fim_options[] = {
-    {"autozoom",   no_argument,       NULL, 'a',"scale according to a best fit.",NULL,
+    {"autozoom",   no_argument,       FIM_NULL, 'a',"scale according to a best fit.",FIM_NULL,
 "Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image (as in fbi)."
     },
 #if FIM_WANT_RAW_BITS_RENDERING
-    {FIM_OSW_BINARY,     optional_argument,       NULL, 'b',"view any file as either a 1 or 24 bpp bitmap.","[=24|1]",
+    {FIM_OSW_BINARY,     optional_argument,       FIM_NULL, 'b',"view any file as either a 1 or 24 bpp bitmap.","[=24|1]",
 "Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.\n" 
 "Will pad with zeros.\n"
 "Regard this as an easter bunny option.\n"
     },
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
 #if FIM_WANT_TEXT_RENDERING
-    {FIM_OSW_TEXT,     no_argument,       NULL, 0x74657874, "view any file as rendered text.",NULL,
+    {FIM_OSW_TEXT,     no_argument,       FIM_NULL, 0x74657874, "view any file as rendered text.",FIM_NULL,
 "Display (any filetype) files contents as they were text.\n" 
 "Will only show printable characters.\n"
 "Regard this as an easter bunny option.\n"
     },
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
-    {"cd-and-readdir", no_argument,       NULL, 0x4352,"step into the first loaded file directory and push other files.",NULL,"step into the first loaded file directory and push other files."},
-    {FIM_OSW_EXECUTE_COMMANDS, required_argument,       NULL, 'c',"execute {commands} after initialization.","{commands}",
+    {"cd-and-readdir", no_argument,       FIM_NULL, 0x4352,"step into the first loaded file directory and push other files.",FIM_NULL,"step into the first loaded file directory and push other files."},
+    {FIM_OSW_EXECUTE_COMMANDS, required_argument,       FIM_NULL, 'c',"execute {commands} after initialization.","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
 "Please note that if your commands are more complicated than a simple 'next' or 'pornview'\n"
 "command, they must be quoted and escaped in a manner suitable for your shell!\n"
@@ -104,36 +104,36 @@ struct fim_options_t fim_options[] = {
 "size, then pan two times up, then display the image ; and then \n"
 "do an endless loop consisting of bottom and top aligning, alternated.\n"
     },
-    {FIM_OSW_EXECUTE_COMMANDS_EARLY, required_argument,       NULL, 'C',"execute {commands} after initialization, before any config loading.","{commands}",
+    {FIM_OSW_EXECUTE_COMMANDS_EARLY, required_argument,       FIM_NULL, 'C',"execute {commands} after initialization, before any config loading.","{commands}",
 "Just as the --" FIM_OSW_EXECUTE_COMMANDS " option, but commands will be executed before the loading of any config file.\n"
 "\n"
 "For example,\n"
 "-C '" FIM_VID_SCALE_STYLE "=\" \"' will make fim start with no auto-scaling.\n"
 "\n"
     },
-    {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}.","{framebuffer device}",
+    {"device",     required_argument, FIM_NULL, 'd',"specify a {framebuffer device}.","{framebuffer device}",
 "Framebuffer device to use. Default is the one your vc is mapped to (as in fbi)."
     },
-    {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0x6472690a,"dump reference info","[=man].",
+    {"dump-reference-help",      optional_argument /*no_argument*/,       FIM_NULL, 0x6472690a,"dump reference info","[=man].",
 "Will dump to stdout the language reference help."
     },
-    {"dump-default-fimrc",      no_argument,       NULL, 'D',"dump on standard output the default configuration.",NULL,
+    {"dump-default-fimrc",      no_argument,       FIM_NULL, 'D',"dump on standard output the default configuration.",FIM_NULL,
 "The default configuration (the one hardcoded in the fim executable) is dumped on standard output and fim exits."
     },
-    {FIM_OSW_EXECUTE_SCRIPT,   required_argument,       NULL, 'E',"execute {scriptfile} after initialization.","{scriptfile}",
+    {FIM_OSW_EXECUTE_SCRIPT,   required_argument,       FIM_NULL, 'E',"execute {scriptfile} after initialization.","{scriptfile}",
 "The \\fBscriptfile\\fP will be executed right after the default initialization file is executed."
     },
-    {"etc-fimrc",       required_argument, NULL, 'f',"etc-fimrc read.","{fimrc}",
+    {"etc-fimrc",       required_argument, FIM_NULL, 'f',"etc-fimrc read.","{fimrc}",
 "Specify an alternative system wide initialization file (default: " FIM_CNS_SYS_RC_FILEPATH "), which will be executed prior to any other configuration file.\n"
     },
-    {FIM_OSW_FINAL_COMMANDS,   required_argument,       NULL, 'F',"execute {commands} just before exit.","{commands}",
+    {FIM_OSW_FINAL_COMMANDS,   required_argument,       FIM_NULL, 'F',"execute {commands} just before exit.","{commands}",
 "The \\fBcommands\\fP string will be executed after exiting the interactive loop of the program (right before terminating the program)."
     },
-    {"help",       optional_argument,       NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and terminate.","[=s|d|l|m]",
-NULL
+    {"help",       optional_argument,       FIM_NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and terminate.","[=s|d|l|m]",
+FIM_NULL
     },
 #if FIM_WANT_PIC_CMTS
-    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_LOAD_IMG_DSC_FILE " is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file."
+    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_LOAD_IMG_DSC_FILE " is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file."
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time."
       " If val is empty that variable will be unset."
@@ -142,43 +142,43 @@ NULL
 #endif /* FIM_WANT_PIC_LBFL */
 #endif /* FIM_WANT_PIC_LVDN */
     },
-    {"image-descriptions-file-separator",       required_argument,       NULL, 0x69646673, "image descriptions file separator character.", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
+    {"image-descriptions-file-separator",       required_argument,       FIM_NULL, 0x69646673, "image descriptions file separator character.", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
     },
 #endif /* FIM_WANT_PIC_CMTS */
 #ifdef FIM_READ_STDIN_IMAGE
-    {FIM_OSW_IMAGE_FROM_STDIN,      no_argument,       NULL, 'i',"read an image file from standard input.",NULL,
+    {FIM_OSW_IMAGE_FROM_STDIN,      no_argument,       FIM_NULL, 'i',"read an image file from standard input.",FIM_NULL,
 "Will read one single image from the standard input (the image data, not the filename).  May not work with all supported file formats."
 "\nIn the image list, this image will be displayed as \"" FIM_STDIN_IMAGE_NAME "\".\n"
     },
 #endif /* FIM_READ_STDIN_IMAGE */
-    {"mode",       required_argument, NULL, 'm',"specify a video mode.","{vmode}",
+    {"mode",       required_argument, FIM_NULL, 'm',"specify a video mode.","{vmode}",
 "Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
-    {"no-rc-file",      no_argument,       NULL, 'N',"do not read the personal initialization file at startup.",NULL,
+    {"no-rc-file",      no_argument,       FIM_NULL, 'N',"do not read the personal initialization file at startup.",FIM_NULL,
 "No personal initialization file will be read (default is " FIM_CNS_USR_RC_COMPLETE_FILEPATH ") at startup."
     },
-    {"no-etc-rc-file",      no_argument,       NULL, 0x4E4E,"do not read the system wide initialization file at startup.",NULL,
+    {"no-etc-rc-file",      no_argument,       FIM_NULL, 0x4E4E,"do not read the system wide initialization file at startup.",FIM_NULL,
 "No system wide initialization file will be read (default is " FIM_CNS_SYS_RC_FILEPATH ") at startup."
     },
-    {"no-internal-config",      no_argument,       NULL, 0x4E4E4E,"do not execute the internal default configuration at startup.",NULL,
+    {"no-internal-config",      no_argument,       FIM_NULL, 0x4E4E4E,"do not execute the internal default configuration at startup.",FIM_NULL,
 "No internal default configuration at startup (uses internal variable " FIM_VID_NO_DEFAULT_CONFIGURATION "). Will only provide a minimal working configuration. "
     },
-    {"no-commandline",      no_argument,       NULL, 0x4E434C,"with internal command line mode disabled.",NULL, "with internal command line mode disabled."},
+    {"no-commandline",      no_argument,       FIM_NULL, 0x4E434C,"with internal command line mode disabled.",FIM_NULL, "with internal command line mode disabled."},
 #if FIM_WANT_HISTORY
-    {"no-history-save",      no_argument,       NULL, 0x4E4853,"do not save execution history.",NULL,
+    {"no-history-save",      no_argument,       FIM_NULL, 0x4E4853,"do not save execution history.",FIM_NULL,
 "Do not save execution history at finalization (uses internal variable " FIM_VID_SAVE_FIM_HISTORY "). "
     },
-    {"no-history-load",      no_argument,       NULL, 0x4E484C,"do not load execution history.",NULL,
+    {"no-history-load",      no_argument,       FIM_NULL, 0x4E484C,"do not load execution history.",FIM_NULL,
 "Do not load execution history at startup. "
     },
-    {"no-history",      no_argument,       NULL, 0x4E48,"do not load/save execution history.",NULL,
+    {"no-history",      no_argument,       FIM_NULL, 0x4E48,"do not load/save execution history.",FIM_NULL,
 "Do not load or save execution history at startup. "
     },
 #endif /* FIM_WANT_HISTORY */
-    {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       NULL, 'p',"read commands from standard input.",NULL,
+    {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       FIM_NULL, 'p',"read commands from standard input.",FIM_NULL,
 "Will read commands from stdin prior to entering in interactive mode."
     },
-    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       NULL, 'o',"specify the desired output driver (aka graphic mode).",FIM_DDN_VARS,
+    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       FIM_NULL, 'o',"specify the desired output driver (aka graphic mode).",FIM_DDN_VARS,
 "Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks."
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
@@ -190,68 +190,68 @@ NULL
 /* FIXME: shall document this */
 #endif /* FIM_WITH_LIBIMLIB2 */
     },
-    {"offset",      required_argument,       NULL,  0x6f66660a, "will open the first image file at the specified offset.","{bytes-offset[[:upper-offset]|+offset-range]}",
+    {"offset",      required_argument,       FIM_NULL,  0x6f66660a, "will open the first image file at the specified offset.","{bytes-offset[[:upper-offset]|+offset-range]}",
 "Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fBupper-offset\\fP is specified, further bytes will be probed, until \\fBupper-offset\\fP. If \\fB+offset-range\\fP is specified, so many further bytes will be probed. This is useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range."
     },
-    {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document.",NULL,
+    {"text-reading",      no_argument,       FIM_NULL, 'P',"proceed scrolling as reading through a text document.",FIM_NULL,
 "Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
     },
-    {"scroll",     required_argument, NULL, 's',"set scroll variable value.","{value}",
+    {"scroll",     required_argument, FIM_NULL, 's',"set scroll variable value.","{value}",
 "Set scroll steps for internal variable " FIM_VID_STEPS " (default is " FIM_CNS_STEPS_DEFAULT ")."
     },
-    {"slideshow",     required_argument, NULL, 0x7373,"interruptible slideshow mode.",FIM_CNS_EX_NUM_STRING,
+    {"slideshow",     required_argument, FIM_NULL, 0x7373,"interruptible slideshow mode.",FIM_CNS_EX_NUM_STRING,
 "Interruptible slideshow mode; will wait for " FIM_CNS_EX_NUM_STRING " of seconds (assigned to the " FIM_VID_WANT_SLEEPS " variable after each loading; implemented by executing " FIM_CNS_SLIDESHOW_CMD " as a first command."
     },
-    {"sanity-check",      no_argument,       NULL, 'S',"perform a sanity check.",NULL,
+    {"sanity-check",      no_argument,       FIM_NULL, 'S',"perform a sanity check.",FIM_NULL,
 "A quick sanity check before starting the interactive fim execution, but after the initialization."
     },	/* NEW */
-    {"no-framebuffer",      no_argument,       NULL, 't',"display images in text mode (as -o " FIM_DDN_INN_AA ").",NULL,
+    {"no-framebuffer",      no_argument,       FIM_NULL, 't',"display images in text mode (as -o " FIM_DDN_INN_AA ").",FIM_NULL,
 "Fim will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).\n"
 "If aalib was not enabled at tompile time, fim will work without displaying images at all."
     },
-    {"vt",         required_argument, NULL, 'T',"specify a virtual terminal for the framebufer.","{terminal}",
+    {"vt",         required_argument, FIM_NULL, 'T',"specify a virtual terminal for the framebufer.","{terminal}",
 "The \\fBterminal\\fP will be used as virtual terminal device file (as in fbi).\n"
 "See (chvt (1)), (openvt (1)) for more info about this.\n"
 "Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
-    {"sort",     no_argument,       NULL, 0x736f7274 ,"sort images by pathname.",NULL,
+    {"sort",     no_argument,       FIM_NULL, 0x736f7274 ,"sort images by pathname.",FIM_NULL,
 "Sort files list before browsing according to full filename."
     },
-    {"sort-basename",     no_argument,       NULL, 0x736f626e ,"sort images by basename.",NULL,
+    {"sort-basename",     no_argument,       FIM_NULL, 0x736f626e ,"sort images by basename.",FIM_NULL,
 "Sort files list before browsing according to file basename's."
     },
-    {"random",     no_argument,       NULL, 'u',"randomize images order.",NULL,
+    {"random",     no_argument,       FIM_NULL, 'u',"randomize images order.",FIM_NULL,
 "Randomly shuffle the files list before browsing (seed depending on time() function)."
     },
-    {"random-no-seed",     no_argument,       NULL, 0x7073,"randomize images order (always same sequence).",NULL,
+    {"random-no-seed",     no_argument,       FIM_NULL, 0x7073,"randomize images order (always same sequence).",FIM_NULL,
 "Randomly shuffle the files list before browsing (no seeding)."
     },
-    {"verbose",    no_argument,       NULL, 'v',"verbose mode.",NULL,
+    {"verbose",    no_argument,       FIM_NULL, 'v',"verbose mode.",FIM_NULL,
 "Be verbose: show status bar."
     },
-    {"version",    no_argument,       NULL, 'V',"print program version.",NULL,
+    {"version",    no_argument,       FIM_NULL, 'V',"print program version.",FIM_NULL,
 "Display program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate."
     },
-    {"autowidth",   no_argument,       NULL, 'w',"scale according to width.",NULL,
+    {"autowidth",   no_argument,       FIM_NULL, 'w',"scale according to width.",FIM_NULL,
 "Scale the image according to the screen width."
     },
-    {"no-auto-scale",   no_argument,   NULL,0x4E4053,"do not use any auto-scaling.",NULL,
+    {"no-auto-scale",   no_argument,   FIM_NULL,0x4E4053,"do not use any auto-scaling.",FIM_NULL,
 "Do not scale the images after loading (will set '" FIM_VID_SCALE_STYLE "=\" \"';)."
     },
-    {"autowindow",   no_argument,   NULL,0x61757769,"adapt window to image size.",NULL,
+    {"autowindow",   no_argument,   FIM_NULL,0x61757769,"adapt window to image size.",FIM_NULL,
 "Will resize the window size (if supported) to the image size. Don't use this with other image scaling options."
     },
-    {"no-stat-push",   no_argument,   NULL,0x6e7363,"do not check file/dir existence with stat(2) at push time",NULL,
+    {"no-stat-push",   no_argument,   FIM_NULL,0x6e7363,"do not check file/dir existence with stat(2) at push time",FIM_NULL,
 "Sets " FIM_VID_PRELOAD_CHECKS "=0 before initialization, thus disabling file/dir existence checks with stat(2) at push push time (and speeding up startup)."
     },
-    {"autoheight",   no_argument,       NULL, 'H',"scale according to height.",NULL,
+    {"autoheight",   no_argument,       FIM_NULL, 'H',"scale according to height.",FIM_NULL,
 "Scale the image according to the screen height."
     },
-    {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       NULL, 'W',"will record any executed command to the a {scriptfile}.","{scriptfile}",
+    {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       FIM_NULL, 'W',"will record any executed command to the a {scriptfile}.","{scriptfile}",
 "All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
     },
 #ifdef FIM_READ_STDIN
-    {"read-from-stdin",      no_argument,       NULL, '-',"read an image list from standard input.",NULL,
+    {"read-from-stdin",      no_argument,       FIM_NULL, '-',"read an image list from standard input.",FIM_NULL,
 "Read file list from stdin: each line one file.\n"
 
 "\n"
@@ -261,33 +261,33 @@ NULL
 ".B EXAMPLES\n"
 "below to read some useful (and unique) ways of employing fim.\n"
     },
-    {"read-from-stdin-elds",      required_argument,       NULL, 0x72667373,"--read-from-stdin filenames endline delimiter string.",NULL,
+    {"read-from-stdin-elds",      required_argument,       FIM_NULL, 0x72667373,"--read-from-stdin filenames endline delimiter string.",FIM_NULL,
 "Specify an endline delimiter string for breaking lines read via -/--read-from-stdin. Line text before the delimiter will be treated as names of files to load; the text after will be ignored until a newline. This is useful e.g. to description files as filename list files.\n"
     },
 #endif /* FIM_READ_STDIN */
-    {"autotop",   no_argument,       NULL, 'A',"align images to the top (UNFINISHED).",NULL,
-	    NULL
+    {"autotop",   no_argument,       FIM_NULL, 'A',"align images to the top (UNFINISHED).",FIM_NULL,
+	    FIM_NULL
     },
-//    {"gamma",      required_argument, NULL, 'g',"set gamma (UNFINISHED)","{gamma}",
+//    {"gamma",      required_argument, FIM_NULL, 'g',"set gamma (UNFINISHED)","{gamma}",
 //" gamma correction.  Can also be put into the FBGAMMA environment variable.  Default is 1.0.  Requires Pseudocolor or Directcolor visual, doesn't work for Truecolor."
 //    },
-    {"quiet",      no_argument,       NULL, 'q',"quiet mode (UNFINISHED).",NULL,
-	    NULL
+    {"quiet",      no_argument,       FIM_NULL, 'q',"quiet mode (UNFINISHED).",FIM_NULL,
+	    FIM_NULL
     },
-    {"resolution", required_argument, NULL, 'r',"set resolution (UNFINISHED).","{resolution}",
-	    NULL
+    {"resolution", required_argument, FIM_NULL, 'r',"set resolution (UNFINISHED).","{resolution}",
+	    FIM_NULL
     },
-    {"recursive", no_argument, NULL, 'R',"Push files/directories to the files list recursively.", NULL,
-	    NULL
+    {"recursive", no_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively.", FIM_NULL,
+	    FIM_NULL
     },
-/*    {"timeout",    required_argument, NULL, 't',"",NULL},*/  /* timeout value */	/* fbi's */
-/*    {"once",       no_argument,       NULL, '1',"",NULL},*/  /* loop only once */
-/*    {"font",       required_argument, NULL, 'f',"",NULL},*/  /* font */
-/*    {"edit",       no_argument,       NULL, 'e',"",NULL},*/  /* enable editing */	/* fbi's */
-/*    {"list",       required_argument, NULL, 'l',"",NULL},*/
-//    {"backup",     no_argument,       NULL, 'b',"",NULL},	/* fbi's */
-//    {"debug",      no_argument,       NULL, 'D',"",NULL},
-//    {"preserve",   no_argument,       NULL, 'p',"",NULL},	/* fbi's */
+/*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
+/*    {"once",       no_argument,       FIM_NULL, '1',"",FIM_NULL},*/  /* loop only once */
+/*    {"font",       required_argument, FIM_NULL, 'f',"",FIM_NULL},*/  /* font */
+/*    {"edit",       no_argument,       FIM_NULL, 'e',"",FIM_NULL},*/  /* enable editing */	/* fbi's */
+/*    {"list",       required_argument, FIM_NULL, 'l',"",FIM_NULL},*/
+//    {"backup",     no_argument,       FIM_NULL, 'b',"",FIM_NULL},	/* fbi's */
+//    {"debug",      no_argument,       FIM_NULL, 'D',"",FIM_NULL},
+//    {"preserve",   no_argument,       FIM_NULL, 'p',"",FIM_NULL},	/* fbi's */
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -848,7 +848,7 @@ FBI_AUTHOR" is the author of \"fbi\", upon which\n.B fim\nwas originally based. 
 	return 0;
 }
 
-fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ERROR, const fim_char_t*helparg=NULL)
+fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ERROR, const fim_char_t*helparg=FIM_NULL)
 {
 	if(helparg&&*helparg=='b')
 	{
@@ -921,7 +921,7 @@ done:
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
 		bool appendedPreConfigCommand=false;
-		const char * sa = NULL;
+		const char * sa = FIM_NULL;
 		fim_flags_t pf = FIM_FLAG_DEFAULT; /* push flags */
 #if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t'; /* separation character for --load-image-descriptions-file */
@@ -1372,7 +1372,7 @@ done:
 		if( read_stdin_choice == FilesList )
 		{
 		    	bool wv = false; /*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
-			fim_char_t *lineptr=NULL;
+			fim_char_t *lineptr=FIM_NULL;
 			size_t bs=0;
 			int fc=0;
 
@@ -1384,7 +1384,7 @@ done:
 					*strstr(lineptr,sa) = FIM_SYM_CHAR_NUL;
 				cc.push(lineptr,pf);
 				// printf("%s\n",lineptr);
-				lineptr=NULL;
+				lineptr=FIM_NULL;
 				if(wv)
 					++fc, printf("%s %d\n",FIM_CNS_CLEARTERM,fc);
 			}
@@ -1408,7 +1408,7 @@ done:
 		if( read_stdin_choice == Script )
 		{
 		    	fim_char_t* buf;
-			buf=slurp_binary_fd(0,NULL);
+			buf=slurp_binary_fd(0,FIM_NULL);
 			if(buf)
 			       	cc.appendPostInitCommand(buf);
 			if(buf)
@@ -1430,7 +1430,7 @@ done:
 			cc.browser_._sort('b');
 
 		if(ndd==-1)
-			fim_perror(NULL);
+			fim_perror(FIM_NULL);
 	
 		if(cc.browser_.empty_file_list()
 #ifndef FIM_WANT_NOSCRIPTING

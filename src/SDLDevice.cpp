@@ -131,8 +131,8 @@ err:
 			fim::string opts
 			):DisplayDevice(),
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	screen_(NULL),
-	vi_(NULL),
+	screen_(FIM_NULL),
+	vi_(FIM_NULL),
 	current_w_(0), current_h_(0),
 	Bpp_(FIM_CNS_BPP_INVALID),
 	bpp_(FIM_CNS_BPP_INVALID),
@@ -216,7 +216,7 @@ err:
 		 * shareable with FramebufferDevice would be nice, if implemented in AADevice.
 		 * */
 		//was : void
-		fim_byte_t* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
+		fim_byte_t* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 
 		if ( !rgb ) return -1;
 	
@@ -368,7 +368,7 @@ err:
 		fim_coo_t want_width=current_w_, want_height=current_h_/*, want_bpp=0*/;
 		fim_sdl_int want_flags=FIM_SDL_FLAGS;
 		fim_sdl_int delay=0,interval=0;
-		const fim_char_t*errstr=NULL;
+		const fim_char_t*errstr=FIM_NULL;
 		//want_flags|=SDL_NOFRAME;
 		//std::cout << want_width << " : "<< want_height<<"\n";
 #if 0
@@ -400,7 +400,7 @@ err:
 			if(bvip)
 				bvi_=*bvip;
 		}
-		fim_perror(NULL);
+		fim_perror(FIM_NULL);
 		
 		if(FIM_SDL_WANT_KEYREPEAT)
 		{
@@ -416,7 +416,7 @@ err:
 				SDL_GetKeyRepeat(&delay,&interval);
 		//		std::cout<<"interval:"<<interval<<"\n"; std::cout<<"delay :"<<delay <<"\n";
 			}
-			fim_perror(NULL);
+			fim_perror(FIM_NULL);
 		}
 
 		if(resize(want_width,want_height))
@@ -425,12 +425,12 @@ err:
 			SDL_Quit();
 			goto err;
 		}
-		fim_perror(NULL);
+		fim_perror(FIM_NULL);
 
 		/* Enable Unicode translation ( for a more flexible input handling ) */
 	        SDL_EnableUNICODE( 1 );
 		reset_wm_caption();
-		fim_perror(NULL);
+		fim_perror(FIM_NULL);
 
 		sym_keys[FIM_KBD_PAGEUP]=SDLK_PAGEUP;
 		sym_keys[FIM_KBD_PAGEDOWN]=SDLK_PAGEDOWN;
@@ -461,7 +461,7 @@ err:
 		sym_keys["F10"]=SDLK_F10;
 		sym_keys["F11"]=SDLK_F11;
 		sym_keys["F12"]=SDLK_F12;
-		fim_perror(NULL);
+		fim_perror(FIM_NULL);
 		cc.key_syms_update();
 
 		post_wmresize();
@@ -865,7 +865,7 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 
     for (i = 0; str[i] != '\0'; i++) {
 	c = (fim_byte_t)str[i];
-	if (NULL == f_->eindex[c])
+	if (FIM_NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
 //	w = (f_->eindex[c]->width+1)*Bpp_;
@@ -999,12 +999,12 @@ ok:
 
 	fim_err_t SDLDevice::resize(fim_coo_t w, fim_coo_t h)
 	{
-		SDL_Surface *nscreen_=NULL;
+		SDL_Surface *nscreen_=FIM_NULL;
 		fim_sdl_int want_flags=screen_?screen_->flags:FIM_SDL_FLAGS;
 #if FIM_WANT_HARDCODED_ICON
 		unsigned char icondata[] =
 #include "default_icon_byte_array.h"
-		SDL_Surface *icon = NULL;
+		SDL_Surface *icon = FIM_NULL;
 #endif /* FIM_WANT_HARDCODED_ICON */
 
 		if(want_resize_)
@@ -1038,12 +1038,12 @@ ok:
 
 #if FIM_WANT_HARDCODED_ICON
 		icon = SDL_LoadBMP_RW(SDL_RWFromMem(icondata, sizeof(icondata)), 1);
-		SDL_WM_SetIcon(icon, NULL);
+		SDL_WM_SetIcon(icon, FIM_NULL);
 		SDL_FreeSurface(icon);
 #endif /* FIM_WANT_HARDCODED_ICON */
 
 		//std::cout << "resizing to " << w << " "<< h << "\n";
-		if (NULL==(nscreen_ = SDL_SetVideoMode(w, h, bpp_, want_flags)))
+		if (FIM_NULL==(nscreen_ = SDL_SetVideoMode(w, h, bpp_, want_flags)))
 		{
 			///std::cout << "resizing to " << w << " "<< h << " FAILED!\n";
 			return FIM_ERR_GENERIC;

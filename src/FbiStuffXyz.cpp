@@ -109,7 +109,7 @@ static void*
 xyz_init(FILE *fp, const fim_char_t *filename, unsigned int page, struct ida_image_info *i, int thumbnail)
 {
 	/* it is safe to ignore filename, page, thumbnail */
-	struct xyz_state *h = NULL;
+	struct xyz_state *h = FIM_NULL;
     	fim_err_t errval = FIM_ERR_GENERIC;
 	long fo = 0;
 
@@ -161,7 +161,7 @@ oops:
 			fim_free(h->rgb);
 		fim_free(h);
 	}
-	return NULL;
+	return FIM_NULL;
 }
 
 static void

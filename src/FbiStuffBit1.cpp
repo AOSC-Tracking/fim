@@ -60,7 +60,7 @@ static void*
 bit1_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
-    struct bit1_state *h=NULL;
+    struct bit1_state *h=FIM_NULL;
     fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
     prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
 
@@ -75,7 +75,7 @@ bit1_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     return h;
  oops:
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static void

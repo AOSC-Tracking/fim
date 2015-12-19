@@ -136,8 +136,8 @@ namespace fim
 		angle_(0.0),
 		newangle_(0.0),
 		page_(0),
-                img_     (NULL),
-                fimg_    (NULL),
+                img_     (FIM_NULL),
+                fimg_    (FIM_NULL),
 		orientation_(FIM_NO_ROT),
                 invalid_(false),
 		no_file_(true),
@@ -184,7 +184,7 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 	/* std::cout << "will try exiftool on : " << fname << "\n"; */
 	fim::string etc;
 	ExifTool *et = new ExifTool();
-    	TagInfo *info = et->ImageInfo(fname,NULL,2);
+    	TagInfo *info = et->ImageInfo(fname,FIM_NULL,2);
 
 	if (info)
        	{
@@ -221,8 +221,8 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 		/*
 		 * pointers are blanked and values set to default 
 		 * */
-                fimg_    = NULL;
-                img_     = NULL;
+                fimg_    = FIM_NULL;
+                img_     = FIM_NULL;
 		reset_scale_flags();
 	}
 
@@ -302,10 +302,10 @@ static void ers(const char*value, Image *image)
 		bool shouldmirror,shouldflip;
 		fim_int shouldrotate = 0;
 	       	fim_char_t r,c;
-		const fim_char_t *p = NULL;
+		const fim_char_t *p = FIM_NULL;
 		fim_char_t f;
 
-		if(!value || NULL == strchr(value,'-'))
+		if(!value || FIM_NULL == strchr(value,'-'))
 			goto uhmpf;
 
 		p = strchr(value,'-')+1;
@@ -371,7 +371,7 @@ uhmpf:
 		 */
 		bool retval = false;
 		FIM_PR('*');
-		if(fname==NULL && fname_==FIM_CNS_EMPTY_STRING)
+		if(fname==FIM_NULL && fname_==FIM_CNS_EMPTY_STRING)
 			goto ret;//no loading = no state change
 		this->free();
 		fname_=fname;
@@ -669,7 +669,7 @@ ret:
 #else
 			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
-					,(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)?(&mm_):NULL
+					,(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)?(&mm_):FIM_NULL
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 					);
 #endif /* FIM_PROGRESSIVE_RESCALING */
@@ -694,7 +694,7 @@ ret:
 			if( img_ && orientation_ == FIM_ROT_U)
 			{	
 				// we make a backup.. who knows!
-				struct ida_image *rbb=NULL,*rb=NULL;
+				struct ida_image *rbb=FIM_NULL,*rb=FIM_NULL;
 				// FIXME: should use a faster and memory-smarter member function : in-place
 				rb  = FbiStuff::rotate_image90(img_,FIM_I_ROT_L);
 				if(rb)
@@ -718,7 +718,7 @@ ret:
 			if( img_ && ( angle_ != newangle_ || newangle_) )
 			{	
 				// we make a backup.. who knows!
-				struct ida_image *rbb=NULL,*rb=NULL;
+				struct ida_image *rbb=FIM_NULL,*rb=FIM_NULL;
 				rb  = FbiStuff::rotate_image(img_,newangle_);
 				if(rb)
 					rbb  = FbiStuff::rotate_image(rb,0);
@@ -807,8 +807,8 @@ err:
 		angle_(image.angle_),
 		newangle_(image.newangle_),
 		page_(page_),//FIXME
-                img_     (NULL),
-                fimg_    (NULL),
+                img_     (FIM_NULL),
+                fimg_    (FIM_NULL),
 		orientation_(image.orientation_),
                 //invalid_(0),
                 invalid_(image.invalid_),
@@ -835,7 +835,7 @@ err:
 		{
 			std::cerr << "fatal error : " << __FILE__ << ":" << __LINE__ << " ( are you sure you gave an image file in standard input, uh ?)\n";
 			throw FimException();
-			std::exit(*(int*)NULL);// FIXME
+			std::exit(*(int*)FIM_NULL);// FIXME
 		}
 #else
 			invalid_=true;
@@ -897,7 +897,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 
 
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
-	//if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
+	//if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != FIM_NULL)
 	{
 		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE]; /* FIXME: reasons for having this static ? */
 		//char*ifsp=(char*)ifs.c_str(); // FIXME
@@ -1000,7 +1000,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 #if 1
 				if(strlen(sp+1)>=4)
 				{
-					char *fcp = NULL, *vip = NULL;
+					char *fcp = FIM_NULL, *vip = FIM_NULL;
 					if( 2 == sscanf(sp,"?%a[A-Z_a-z]?%a[^?]?",&vip,&fcp) )
 					if(fcp && vip)
 					{
@@ -1008,7 +1008,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 
 						if(*vip && isSetVar(vip) && *fcp )
 						{
-							char *vipp = NULL;
+							char *vipp = FIM_NULL;
 strdo:
 							vipp = fcpp;
 							while(*fcpp && *fcpp != '%')
@@ -1053,7 +1053,7 @@ strdone:
 #else
 				if(strlen(sp+1)>=3)
 				{
-					char *fcp = NULL, *vip = NULL, *bcp = NULL;
+					char *fcp = FIM_NULL, *vip = FIM_NULL, *bcp = FIM_NULL;
 					if( 3 == sscanf(sp,"?%a[^?%]?%a[A-Z_a-z]?%a[^?%]?",&fcp,&vip,&bcp) )
 					if(fcp && bcp && vip)
 					{
@@ -1099,7 +1099,7 @@ fim::string Image::getInfo(void)
 	 * a short information about the current image is returned
 	 *
 	 * WARNING:
-	 * the returned info, if not NULL, belongs to a statical buffer which LIVES with the image!
+	 * the returned info, if not FIM_NULL, belongs to a statical buffer which LIVES with the image!
 	 */
 	//FIX ME !
 	if(!fimg_)
@@ -1109,7 +1109,7 @@ fim::string Image::getInfo(void)
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	fim::string ifs;
 
-	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != NULL)
+	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != FIM_NULL)
 	{
 		fim::string clb = getInfoCustom(ifs.c_str());
 		snprintf(linebuffer, sizeof(linebuffer),"%s",clb.c_str());
@@ -1233,7 +1233,7 @@ labeldone:
 	{
 		string s=fname_;
 		if(have_prevpage(j))
-			return load(s.c_str(),NULL,page_-j);
+			return load(s.c_str(),FIM_NULL,page_-j);
 		else
 			return false;
 	} 
@@ -1252,7 +1252,7 @@ labeldone:
 		{
 			//if(0)cout<<"about to goto page "<<j<<"\n";
 			setGlobalVariable(FIM_VID_PAGE ,(fim_int)j);
-			retval = load(s.c_str(),NULL,j);
+			retval = load(s.c_str(),FIM_NULL,j);
 			//return true;
 		}
 		else
@@ -1266,7 +1266,7 @@ ret:
 	{
 		string s=fname_;
 		if(have_nextpage(j))
-			return load(s.c_str(),NULL,page_+j);
+			return load(s.c_str(),FIM_NULL,page_+j);
 		else
 			return false;
 	} 

@@ -63,7 +63,7 @@ namespace fim
 		/*
 		 * true if the string is null or empty, false otherwise
 		 */
-		if(s==NULL)
+		if(s==FIM_NULL)
 			return true;
 		while(*s && isspace(*s))
 			++s;
@@ -90,7 +90,7 @@ namespace fim
 
 		if(idx!=FIM_INVALID_IDX)
 			return commands_[idx];
-		return NULL;
+		return FIM_NULL;
 	}
 
 	fim::string CommandConsole::bind(fim_key_t c,const fim::string binding)
@@ -363,7 +363,7 @@ ret:		return key;
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,dummydisplaydevice_()
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	,displaydevice_(NULL)			/* the display device could be NULL ! (FIXME) */
+	,displaydevice_(FIM_NULL)			/* the display device could be FIM_NULL ! (FIXME) */
 	{
 		addCommand(new Command(fim::string(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS " [" FIM_CNS_EX_ID_STRING " [" FIM_CNS_EX_CMDS_STRING " [" FIM_CNS_EX_DSC_STRING "]]]"),this,&CommandConsole::fcmd_foo));
 		addCommand(new Command(fim::string(FIM_FLT_ALIGN),fim::string(FIM_CMD_HELP_ALIGN),&browser_,&Browser::fcmd_align));
@@ -543,7 +543,7 @@ err:
 			text++;	//initial  repeat match
 		/*const*/ fim::string cmd(text);
 		if(cmd==FIM_CNS_EMPTY_STRING)
-			return NULL;
+			return FIM_NULL;
 		if(cmd.re_match(FIM_SYM_NAMESPACE_REGEX)==true)
 		{
 			mask=4,
@@ -622,7 +622,7 @@ err:
 				;//std::cout << cmd << " no matches with " << commands_[i]->cmd_<<  "\n";
 		}*/
 		//TO DO : ADD VARIABLE AND ALIAS EXPANSION..
-		return NULL;
+		return FIM_NULL;
 	}
 
 #define istrncpy(x,y,z) {strncpy(x,y,z-1);x[z-1]='\0';}
@@ -732,10 +732,10 @@ ret:
 		int iret=0;
 		int r =0;
 
-		if(s==NULL)
+		if(s==FIM_NULL)
 		{
 			std::cerr << "allocation problem!\n";
-			//if(s==NULL){ferror("null command");return;}
+			//if(s==FIM_NULL){ferror("null command");return;}
 			//assert(s);
 			//this shouldn't happen
 			//this->quit(0);
@@ -745,7 +745,7 @@ ret:
 		{
 			//fim_perror("before pipe(fim_pipedesc)");
 			//goto ret;
-			fim_perror(NULL);// we need to clear errno
+			fim_perror(FIM_NULL);// we need to clear errno
 		}
 		//we open a pipe with the lexer/parser
 		r = pipe(fim_pipedesc);
@@ -806,7 +806,7 @@ ret:
 				fim_perror("in yyparse()");
 			}
 			else
-				fim_perror(NULL);
+				fim_perror(FIM_NULL);
 			// ignoring yyparse's errno: it may originate from any command!
 			//goto ret;
 		}
@@ -835,7 +835,7 @@ ret:
 		 *	This is the member function where the tokenized commands are executed.
 		 *	This member function executes single commands with arguments.
 		 */
-		Command *c=NULL;
+		Command *c=FIM_NULL;
 		/* first determine whether cmd is an alias */
 		fim::string ocmd=aliasRecall(cmd);
 
@@ -875,9 +875,9 @@ ret:
 			 * resulting in a loss of the original descriptors on openings..
 			 */
 			close(fim_pipedesc[1]);
-			fim_perror(NULL);//FIXME: shall use only one yyparse-calling function!
+			fim_perror(FIM_NULL);//FIXME: shall use only one yyparse-calling function!
 			yyparse();
-			fim_perror(NULL);//FIXME: shall use only one yyparse-calling function!
+			fim_perror(FIM_NULL);//FIXME: shall use only one yyparse-calling function!
 			close(fim_pipedesc[0]);
 			goto ok;
 		}
@@ -925,7 +925,7 @@ ret:
 
 #ifdef FIM_COMMAND_AUTOCOMPLETION
 			if(getIntVariable(FIM_VID_CMD_EXPANSION)==1)
-			if(c==NULL)
+			if(c==FIM_NULL)
 			{
 				fim_char_t *match = this->command_generator(cmd.c_str(),0,0);
 
@@ -937,7 +937,7 @@ ret:
 				}
 			}
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
-			if(c==NULL)
+			if(c==FIM_NULL)
 			{
 				/* FIXME : should stringify here and elsewhere
 				 * see also http://gcc.gnu.org/onlinedocs/cpp/index.html
@@ -1036,7 +1036,7 @@ err:
 		 * the cycle with fetches the instruction stream.
 		 * */
 #ifdef	FIM_USE_GPM
-		Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,NULL);
+		Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,FIM_NULL);
 #endif	/* FIM_USE_GPM */
 		fim::string initial = browser_.current();
 #ifdef FIM_AUTOCMDS
@@ -1065,7 +1065,7 @@ err:
 				ic_=1;
 				fim_char_t *rl = fim_readline(FIM_KBD_COLON);
 				*prompt_=FIM_SYM_PROMPT_CHAR;
-				if(rl==NULL)
+				if(rl==FIM_NULL)
 				{
 					goto rlnull;
 				}
@@ -1100,7 +1100,7 @@ err:
 					/* happens when no command is issued and Enter key is pressed */
 					ic_=0;
 					*(prompt_)=FIM_SYM_PROMPT_NUL;
-					set_status_bar(FIM_CNS_EMPTY_STRING,NULL);
+					set_status_bar(FIM_CNS_EMPTY_STRING,FIM_NULL);
 				}
 				if(rl)
 					fim_free(rl);
@@ -1109,7 +1109,7 @@ err:
 #endif /* FIM_USE_READLINE */
 			{
 #ifdef	FIM_USE_GPM
-				Gpm_Event *EVENT = NULL;
+				Gpm_Event *EVENT = FIM_NULL;
 #endif	/* FIM_USE_GPM */
 				fim_key_t c;
 				fim_sys_int r;
@@ -1147,7 +1147,7 @@ err:
 #ifndef FIM_USE_READLINE
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY) || 
 						c == FIM_SYM_FW_SEARCH_KEY || c == FIM_SYM_BW_SEARCH_KEY )
-						set_status_bar("compiled with no readline support!\n",NULL);
+						set_status_bar("compiled with no readline support!\n",FIM_NULL);
 #else /* FIM_USE_READLINE */
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY))
 					{
@@ -1161,7 +1161,7 @@ err:
 						fim_sys_int tmp=rl_filename_completion_desired;
 						rl_hook_func_t *osh=rl_startup_hook;
 						rl_startup_hook=rl::fim_search_rl_startup_hook;
-						fim_char_t *rl = NULL;
+						fim_char_t *rl = FIM_NULL;
 						const fim_char_t *rlp = FIM_CNS_SLASH_STRING;
 						*prompt_=FIM_SYM_PROMPT_SLASH;
 						if(c == FIM_SYM_BW_SEARCH_KEY)
@@ -1175,7 +1175,7 @@ err:
 						*prompt_=FIM_SYM_PROMPT_NUL;
 						rl_inhibit_completion=tmp;
 						ic_=0;
-						if(rl==NULL)
+						if(rl==FIM_NULL)
 						{
 							goto rlnull;
 						}
@@ -1229,7 +1229,7 @@ rlnull:
 				*prompt_=*(prompt_+1)=FIM_SYM_CHAR_NUL;
 				const fim_char_t * msg = " Warning: readline failed ! Probably no stdin is available, right ? Unfortunately fim is not yet ready for this case.\n";
 				cout << msg;
-				set_status_bar(msg,NULL);
+				set_status_bar(msg,FIM_NULL);
 			}
 			/* this->quit(); */
 #endif /* FIM_USE_READLINE */
@@ -1342,7 +1342,7 @@ rlnull:
 		fim_char_t buf[FIM_STREAM_BUFSIZE];	// NOTE: a larger buffer would be ok (e.g.: user configurable)...
 		fim::string cmds;
 
-		if(fd==NULL)
+		if(fd==FIM_NULL)
 		{
 			/* return FIM_ERR_GENERIC; */
 		       	cmds = FIM_ERR_GENERIC;
@@ -1409,7 +1409,7 @@ ret:
 
 	bool CommandConsole::isVariable(const fim::string &varname)const
 	{
-		const fim_char_t* s=NULL;
+		const fim_char_t* s=FIM_NULL;
 
 		s = getStringVariable(varname).c_str();
 		return (s && *s);
@@ -1927,10 +1927,10 @@ ok:
 		}
 	        if(!pt)
 		{
-			err=gettimeofday(&tv, NULL);
+			err=gettimeofday(&tv, FIM_NULL);
 			pt=tv.tv_usec/1000+tv.tv_sec*1000;
 		}
-	        err=gettimeofday(&tv, NULL);t=tv.tv_usec/1000+tv.tv_sec*1000;
+	        err=gettimeofday(&tv, FIM_NULL);t=tv.tv_usec/1000+tv.tv_sec*1000;
 		if(err != 0)
 		{
 			/* TODO: error handling ... */
@@ -2248,7 +2248,7 @@ ok:
 		 *	Pointers are meant to be freed by the caller.
 		 */
 		int chars, ilen;
-		fim_char_t *str = NULL;
+		fim_char_t *str = FIM_NULL;
 		fim::string hk=FIM_CNS_EMPTY_STRING;	/* help key string */
 		int hkl=0;		/* help key string length */
 		const int mhkl=5,eisl=9;
@@ -2393,7 +2393,7 @@ ret:
 			msg+=fim::string(w);
 		       	msg+=" x ";
 		       	msg+=fim::string(h);
-			cc.set_status_bar(msg.c_str(),NULL);
+			cc.set_status_bar(msg.c_str(),FIM_NULL);
 		}
 
 		return FIM_ERR_NO_ERROR;
