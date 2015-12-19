@@ -98,7 +98,7 @@ class Browser
 		cf_(0),
 		commandConsole_(cc),
 #ifdef FIM_READ_STDIN_IMAGE
-		default_image_(NULL),
+		default_image_(FIM_NULL),
 #endif /* FIM_READ_STDIN_IMAGE */
 		last_regexp_(fim::string()),
 		last_src_dir_(0),

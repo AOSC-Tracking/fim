@@ -35,7 +35,7 @@ namespace fim
 #ifndef _FIM_STRING_WRAPPER
 
 #define fim_free(x) {free(x);}
-//#define fim_free(x) {std::cout<<"freeing "<<(int*)x<<"\n";free(x);x=NULL;std::cout<<"freeed!\n";}
+//#define fim_free(x) {std::cout<<"freeing "<<(int*)x<<"\n";free(x);x=FIM_NULL;std::cout<<"freeed!\n";}
 #define fim_realloc(x,n) realloc((x),(n))
 #define fim_empty_string(s) (!(s) || !(*(s)))
 
@@ -54,7 +54,7 @@ namespace fim
 	 */
         static const int TOKSIZE=128*8*4*2;	//max len.NUL included
 #ifdef _FIM_DYNAMIC_STRING
-	fim_char_t*s;		/* the string : can be NULL */
+	fim_char_t*s;		/* the string : can be FIM_NULL */
 	int len;	/* the allocated amount */
 	std::string ss;
 #else /* _FIM_DYNAMIC_STRING */
@@ -115,7 +115,7 @@ namespace fim
 		/*
 			 if not, exception:
 			 terminate called after throwing an instance of 'std::logic_error'
-			 what():  basic_string::_S_construct NULL not valid
+			 what():  basic_string::_S_construct FIM_NULL not valid
 		*/
 		string(const std::string&s):std::string(s){}
 		string(const fim_char_t*s):std::string(s?s:""){}
@@ -145,7 +145,7 @@ namespace fim
 		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=0);
 		fim::string line(int ln)const;
 		size_t lines(void)const;
-		int find_re(const fim_char_t*r,int *mbuf=NULL)const;
+		int find_re(const fim_char_t*r,int *mbuf=FIM_NULL)const;
 	};
 
 

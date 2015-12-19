@@ -30,9 +30,9 @@
 #include <iostream>
 
 
-#ifndef NULL
-	#define NULL 0
-#endif /* NULL */
+#ifndef FIM_NULL
+	#define FIM_NULL 0
+#endif /* FIM_NULL */
 #define FIM_DISABLE_WINDOW_SPLITTING 1
 
 /*
@@ -211,7 +211,7 @@ class FimWindow
 
 	/* The only public member function launching exceptions is the constructor now.
 	 * */
-	FimWindow(CommandConsole &c, const Rect& corners, Viewport* vp=NULL); // throws FIM_E_NO_MEM exception
+	FimWindow(CommandConsole &c, const Rect& corners, Viewport* vp=FIM_NULL); // throws FIM_E_NO_MEM exception
 	fim_err_t update(const Rect& corners);
 
 	Viewport * current_viewportp(void)const;

@@ -65,7 +65,7 @@ namespace fim
 
 		Namespace(
 #ifndef FIM_INDIPENDENT_NAMESPACE
-				CommandConsole *rnsp = NULL,
+				CommandConsole *rnsp = FIM_NULL,
 #endif /* FIM_INDIPENDENT_NAMESPACE */
 			       	const fim_char_t ns_char = FIM_SYM_NULL_NAMESPACE_CHAR
 			)

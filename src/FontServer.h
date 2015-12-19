@@ -2,7 +2,7 @@
 /*
  FontServer.h : Font Server code from fbi, adapted for fim.
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@
 #include "fim.h"
 
 # include <errno.h>
-# include <unistd.h> //for NULL
+# include <unistd.h> //for FIM_NULL
 # include <stdio.h> //for stderr..
 # include <stdlib.h> //for exit..
 # include <string.h> //for strlen..

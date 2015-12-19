@@ -214,7 +214,7 @@ class CommandConsole
 	fim_err_t printVariable(const fim::string & varname)const;
 	bool push(const fim::string nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
 	fim_err_t executeStdFileDescriptor(FILE *fd);
-	fim::string readStdFileDescriptor(FILE* fd, int*rp=NULL);
+	fim::string readStdFileDescriptor(FILE* fd, int*rp=FIM_NULL);
 #ifndef FIM_WANT_NOSCRIPTING
 	bool push_scriptfile(const fim::string ns);
 	bool with_scriptfile(void)const;
@@ -308,7 +308,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	public:
 	fim_key_t find_keycode_for_bound_cmd(fim::string binding);
 
-	fim_bool_t drawOutput(const fim_char_t*s=NULL)const;
+	fim_bool_t drawOutput(const fim_char_t*s=FIM_NULL)const;
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int rsic)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
