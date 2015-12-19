@@ -491,7 +491,7 @@ dnl ============= GNU gpm, unofficial yet
 
 dnl ============= no readline case handling
 
-fim_want_cxx11=yes
+fim_want_cxx11=no
 AC_ARG_ENABLE(cxx11, AC_HELP_STRING([--enable-cxx11], [Enable C++11 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++11) (EXPERIMENTAL).]),
 [       if test x$enableval = xno ; then
 		fim_want_cxx11=no
