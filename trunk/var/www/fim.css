@@ -61,5 +61,6 @@ CODE.FIMKEY{ font-family: monospace; background: #CCC fixed; color: #222; border
 CODE.FIMCMD{ font-family: monospace; background: #CCC fixed; color: #222; border: thin   solid #F00 ; overflow: hidden; padding:1pt; }
 PRE.FIMRCF { text-align: left; font-family: monospace; background: #CCC fixed; color: #222; border: medium solid #F00 ; overflow: visible; margin:1%; display: block; line-height: 130%; }
 IMG.SCREENSHOT { text-align: center; justify: center; margin: 10pt; padding: 1pt; color: #222; border: thin solid #FFF ; display: block; }
+IMG.SCREENSHOTI { text-align: center; justify: center; margin: 10pt; padding: 1pt; color: #222; border: thin solid #FFF ; }
 
 
