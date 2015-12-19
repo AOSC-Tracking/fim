@@ -7,6 +7,7 @@ define(`ANCHORS',
 <a href="#news">news</a>
 <a href="#docs">documentation</a>
 <a href="#screenshots">screenshots</a>
+<a href="#tutorial">tutorial</a>
 <a href="#download">download</a>
 <a href="#license">license</a>
 <a href="#copyright">copyright</a>
@@ -53,22 +54,22 @@ like the VIM_ABBR text editor or the Mutt mail user agent.
 
 <br> &nbsp;<br>
 
-It derives from the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
+Its sources derive from the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
 <BR>
 It can display pictures on screen via the following video devices/modes:
 <UL>
 <LI>
    The <a href="http://www.linux.org">Linux</a>
-   <a href="https://www.kernel.org/doc/Documentation/fb/framebuffer.txt">framebuffer device</a> mode.
+   <a href="https://www.kernel.org/doc/Documentation/fb/framebuffer.txt">framebuffer device</a> mode (graphically, see <a href="#screenshots">screenshots</a>).
 </LI>
 <LI>
-   Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://www.libsdl.org">SDL library</a>.
+   Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://www.libsdl.org">SDL library</a> mode (graphically, see <a href="#screenshots">screenshots</a>).
 </LI>
 <LI>
-   Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://docs.enlightenment.org/api/imlib2/html/">Imlib2 library</a>.
+   Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://docs.enlightenment.org/api/imlib2/html/">Imlib2 library</a> mode (graphically, see <a href="#screenshots">screenshots</a>).
 </LI>
 <LI>
-   In any textual console, using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> Ascii Art library.
+   In any textual console, using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> Ascii Art library mode (rendering into text, see <a href="#screenshots">screenshots</a>).
 </LI>
 </UL>
 <BR>
@@ -94,8 +95,8 @@ FIM_ABBR's official mailing list is at: <a href="MAILINGLIST">MAILINGLIST</a>
 
 
 FIM_ABBR is an idea by
-dezperado, although this software
-was inspired by the other, forementioned marvelous programs, and some science fiction.
+Michele Martone, although inspiration has been drawn
+from other softwares as well as from certain science fiction movie scenes.
 &nbsp;<br>
 
 
@@ -107,7 +108,7 @@ You can support FIM_ABBR by supporting the <a href="http://savannah.nongnu.org/"
 </h5>
 </td>
 </tr>
-SECTION(news,news)
+SECTION(News: What's new with FIM,news)
 <tr>
 <td>
 <h5>
@@ -128,7 +129,7 @@ NEWSCONTENTS
 </h5>
 </td>
 </tr>
-SECTION(screenshots,screenshots)
+SECTION(Screenshots,screenshots)
 <tr>
 <td>
 <h5>
@@ -139,7 +140,7 @@ A screenshot of a regular (framebuffer) FIM_ABBR run (SDL would look the same):
 <tr>
 <td align="center">
 <!--<a href="fim-shot-fb.png"><img src="fim-shot-fb-mini.png" alt=""></a>-->
-<a href="fim_diana_fb.jpg"><img src="fim_diana_fb.jpg" WIDTH="80%" alt=""></a>
+<A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOT" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
 </td>
 </tr>
 <tr>
@@ -152,16 +153,20 @@ A screenshot of an Ascii Art FIM_ABBR run:
 <tr>
 <td align="center">
 <!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
-<a href="fim_diana_aa.png"><img src="fim_diana_aa.png" WIDTH="80%" alt=""></a>
+<A HREF="fim_diana_aa.png"><IMG CLASS="SCREENSHOT" SRC="fim_diana_aa.png" WIDTH="80%" ALT=""></A>
+</td>
+</tr>
+<tr>
+<td>
 
 <br>
 <h5>
 Both screenshots taken with the <code>fbgrab</code> program using the trunk version of FIM_ABBR.
 <br>
 The top textual line was taken from the
-<ABBR TITLE="Joint Photographic Experts Group">JPEG</ABBR>
+JPEG_ABBR
 comment contained in the file;
-<ABBR TITLE="Exchangeable image file format">EXIF</ABBR>
+EXIF_ABBR
 metadata is being displayed in the bottom textual line.
 <br>
 If you are curious, there are also a 
@@ -169,11 +174,218 @@ If you are curious, there are also a
 and 
 <a href="fim_diana_aa.txt.html">HTML</a> screenshots taken using sorcery.
 </h5>
+
+
+<h5>
+See the <a href="#tutorial">tutorial here on this page</a> for a description of these screenshots.
+</h5>
+
 <br>
 <!-- <iframe src="fim_diana_aa.txt.html" scrolling="auto" frameborder="1" WIDTH="100%" HEIGHT="600px" align="center"></iframe> -->
+
 </td>
 </tr>
-SECTION(documentation,docs)
+SECTION(Tutorial: browsing through a photo collection with FIM_ABBR,tutorial)
+<tr>
+<td>
+
+Starting with version 0.5, FIM_ABBR has features to browse through photo collections.
+<br>
+These go well beyond basic browsing with
+<CODE CLASS="FIMKEY">n</CODE> (next file),
+<CODE CLASS="FIMKEY">p</CODE> (previous file),
+<CODE CLASS="FIMKEY">+</CODE> (magnify),
+<CODE CLASS="FIMKEY">-</CODE> (reduce),
+<CODE CLASS="FIMKEY">r</CODE> (rotate),
+<CODE CLASS="FIMKEY">m</CODE> (mirror),
+<CODE CLASS="FIMKEY">f</CODE> (flip), ...
+(see <a href="#docs">documentation</a> for the common defaults for keys and commands).
+<br>
+Say you have a collection of digital photographs, e.g. thousands of JPEG_ABBR files:
+<PRE CLASS="TEXTFB">
+DSC_0001.JPG	
+DSC_0002.JPG	
+...
+sample.jpg
+</PRE>
+<br>
+You can maintain textual descriptions of them and have them displayed in FIM_ABBR.
+<br>
+To do so, first produce a text file, say <CODE CLASS="SHCMD">files.dsc</CODE>, like this:
+
+<PRE CLASS="TEXTFB">
+# This is a FIM images description file.
+# A line beginning with a pound (#) is treated as a comment.
+# Each line consists of the file name, a Tab character and a textual description of the given picture:
+DSC_0001.JPG	A big dog.
+DSC_0002.JPG	A statue.
+# ...
+sample.jpg	Busto di Diana. Da Pompei, 1817, rinvenuto presso i portici occidentali del santuario di Apollo. Bronzo, II s.a.C. MANN, inv. 4895.
+# The file can be long as you wish.
+</PRE>
+<br>
+Then invoking e.g. <CODE CLASS="SHCMD">fim --load-image-descriptions-file files.dsc sample.jpg ...</CODE> 
+will additionally display each image description on screen, just like in the following screenshot:
+
+</td>
+</tr>
+
+<br>
+
+<tr>
+<td align="center">
+<A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOT" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
+</td>
+</tr>
+<br>
+
+<tr>
+<td>
+On the top of the screen you can see the 
+<CODE CLASS="FIMTXT">Busto di Diana. Da Pompei, 1817...</CODE> image description from the <CODE CLASS="SHCMD">files.dsc</CODE>.
+<br>
+But one can display more information about the image.
+
+<br>
+In the status line (lower side) of the screenshot there is additional information, which can be customized via the 
+<CODE CLASS="FIMCMD">_display_status_fmt</CODE>
+and
+<CODE CLASS="FIMCMD">_info_fmt_str</CODE> variables of your <CODE CLASS="SHCMD">~/.fimrc</CODE> file.
+<br>
+
+The
+<CODE CLASS="FIMCMD">_info_fmt_str</CODE> variable controls the information in the lower right corner, e.g.:
+<PRE CLASS="FIMRCF">
+# This is a sample custom ~/.fimrc file.
+# A line beginning with a pound (#) is treated as a comment.
+# The other lines are treated as fim commands and need to end with a ; (semicolon).
+
+# _info_fmt_str is set to display current scale percentage, width, height, ... 
+_info_fmt_str="%p%% %wx%h%L %i/%l%P img:%M cache:%C tot:%T %c"; 
+
+# See man fimrc for a reference on the usable commands.
+</PRE>
+<br>
+
+<br>
+In the left side of the status line of the screenshot there is additional information:
+<CODE CLASS="FIMTXT">[1/15 sec.][f/4.0][ISO400]</CODE>.
+<br>
+These are respectively exposure time, aperture and ISO Speed rating.
+<br>
+FIM_ABBR extracts this information from the EXIF_ABBR section of the JPEG_ABBR file at load time.
+<br>
+EXIF_ABBR information usually pertains the camera, the shot and the digitized image, and can be camera and vendor specific.
+<br>
+Each piece of such information is called EXIF_ABBR tag and has a name.
+<br>
+FIM_ABBR does not know about all possible EXIF_ABBR tag names, but it loads into variables associated to each loaded image each EXIF_ABBR tag it encounters.
+<br>
+In the above case, the status line displays the values of three variables corresponding to EXIF_ABBR tags:
+<CODE CLASS="FIMCMD">i:EXIF_ExposureTime</CODE>,
+<CODE CLASS="FIMCMD">i:EXIF_FNumber</CODE>,
+<CODE CLASS="FIMCMD">i:EXIF_ISOSpeedRatings</CODE>.
+<br>
+If you don't know in advance the names of the EXIF_ABBR tags your camera produces, then load a photograph file,
+enter in console mode by typing
+<CODE CLASS="FIMKEY">:</CODE>.
+and print the list of variables loaded with the image:
+<CODE CLASS="FIMCMD">echo i:*</CODE>.
+<br>
+
+<br>
+In the example above, the
+<CODE CLASS="FIMCMD">_display_status_fmt</CODE>
+has been customized as e.g.:
+<PRE CLASS="FIMRCF">
+# This is a sample custom ~/.fimrc file.
+# A command can span multiple lines, and long strings can be composed by substrings joined by a dot (.).
+  
+# The following info format string pertains the lower
+#  left part of the status line.
+# Assuming these are set, it uses each of the values 
+#  in EXIF_ExposureTime, EXIF_FNumber, EXIF_ISOSpeedRatings.
+_display_status_fmt=
+	"%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?".
+	"%?EXIF_FNumber?[%:EXIF_FNumber:]?".
+	"%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k";
+# Above, the dot (.)  has been used to break the declaration of a long string.
+
+# See man fimrc for a reference on the usable commands.
+</PRE>
+<br>
+The mechanism of displaying per-image variables can be used also in the following way.
+<br>
+Assuming an image has the <CODE CLASS="FIMCMD">i:city</CODE> variable set to a certain value, this might be displayed in the status line by having e.g;:
+<br>
+<PRE CLASS="FIMRCF">
+_display_status_fmt="%?city?[%:city:]?";
+</PRE>
+
+One can use this in conjunction with the following description file syntax:
+<PRE CLASS="TEXTFB">
+# This is files.dsc
+# Lines starting with '!fim:varname=varvalue' are not comments: they set variable varname to varvalue for the images following.
+#!fim:city=Rome
+DSC_0001.JPG	A big dog.
+#!fim:city=Naples
+DSC_0002.JPG	A statue.
+# ...
+sample.jpg	Busto di Diana. Da Pompei, 1817, rinvenuto presso i portici occidentali del santuario di Apollo. Bronzo, II s.a.C. MANN, inv. 4895.
+#!fim:city=
+unknown.jpg	Unknown city.
+</PRE>
+<br>
+This syntax will ensure that e.g. 
+<CODE CLASS="TEXTFI">DSC_0001.JPG</CODE>
+will have
+<CODE CLASS="FIMCMD">i:city="Rome"</CODE>
+while
+<CODE CLASS="TEXTFI">DSC_0002.JPG</CODE>,
+<CODE CLASS="TEXTFI">sample.jpg</CODE>
+will have
+<CODE CLASS="FIMCMD">i:city="Naples"</CODE>
+and
+<CODE CLASS="TEXTFI">unknown.jpg</CODE>
+will have the value
+<CODE CLASS="FIMCMD">i:city=""</CODE> (unset).
+<br>
+
+<br>
+This mechanism can be brought further with the new
+<CODE CLASS="FIMCMD">limit</CODE>
+command.
+Given a long list of files, entering the
+<CODE CLASS="FIMCMD">limit "city" "Naples"</CODE> 
+command will temporarily restrict the browsable files list to the files having
+<CODE CLASS="FIMCMD">i:city=="Naples"</CODE>.
+<br>
+This is useful when restricting the research in an archive down to a few pictures.
+<br>
+Entering <CODE CLASS="FIMCMD">limit</CODE> again will reset the list.
+<br>
+
+<br>
+Even more can be achieved using the file marking mechanism.
+This mechanism allows to build up a list of file names to be printed out on the standard output when FIM_ABBR terminates.
+<br>
+Assume you want to browse your big pictures collection to select the ones you want to send to a friend.
+<br>
+You can browse the pictures list and mark one by typing key <CODE CLASS="FIMKEY">Enter</CODE> each time you think it is worth sending.
+<br>
+Once you have marked many of them you wish to re-check them.
+By entering <CODE CLASS="FIMCMD">limit "!"</CODE> only the marked files will be displayed.
+Then you can eventually unmark 
+(<CODE CLASS="FIMKEY">u</CODE>)
+some pictures, and when exiting, fim will print out to standard output only the ones effectively marked.
+
+<br>
+<br>
+The examples above are just a small fraction of what you can do with FIM_ABBR; see the <a href="#docs">documentation</a> for more.
+<br>
+</td>
+</tr>
+SECTION(Links to documentation,docs)
 <tr>
 <td>
 <h5>
@@ -185,6 +397,7 @@ Then there are
    the <a href="fim.man.html">FIM man page</a>, 
    the <a href="fimrc.man.html">FIM language man page</a>, 
    the <a href="fimgs.man.html">fimgs script man page</a>,
+   the <a href="#tutorial">tutorial here right on this page</a>,
    and the <a href="FIM.html">doc/FIM.TXT</a> documentation file (slightly outdated but still interesting --- look in the man pages first).
 
 <br> &nbsp;<br>
@@ -241,7 +454,7 @@ And more:
 </h5>
 </td>
 </tr>
-SECTION(download and build,download)
+SECTION(Download and build instructions,download)
 <tr>
 <td>
 <h5>
@@ -319,7 +532,7 @@ at the command prompt will export the freshest (possibly unstable) version of FI
 
 </td>
 </tr>
-SECTION(copyright,copyright)
+SECTION(Copyright,copyright)
 <tr>
 <td>
 <h5>
@@ -331,7 +544,7 @@ See the <a href="README.html">README.TXT</a> file for a list of contributors.
 </h5>
 </td>
 </tr>
-SECTION(license,license)
+SECTION(License,license)
 <tr>
 <td>
 <h5>
@@ -346,7 +559,7 @@ about the
 </h5>
 </td>
 </tr>
-SECTION(bugs,bugs)
+SECTION(Bugs,bugs)
 <tr>
 <td>
 <h5>

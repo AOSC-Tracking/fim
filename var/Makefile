@@ -5,6 +5,8 @@
 FWP=http://www.nongnu.org/fbi-improved/
 FIM_ABBR='<ABBR TITLE="Fbi IMproved">FIM</ABBR>'
 VIM_ABBR='<ABBR TITLE="Vi IMproved">VIM</ABBR>'
+JPEG_ABBR='<ABBR TITLE="Joint Photographic Experts Group">JPEG</ABBR>'
+EXIF_ABBR='<ABBR TITLE="Exchangeable image file format">EXIF</ABBR>'
 INDEXIN=index.html.in
 FIMDIR=..
 FIMSITE=html-dezperado/fim
@@ -56,6 +58,8 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D FDP=$(FDP) \
 	-D FIM_ABBR=$(FIM_ABBR) \
 	-D VIM_ABBR=$(VIM_ABBR) \
+	-D JPEG_ABBR=$(JPEG_ABBR) \
+	-D EXIF_ABBR=$(EXIF_ABBR) \
 	-D NEWSCONTENTS="$$( cat $(FIMDIR)/NEWS  )" \
 	-D DATE="`date +'%d/%m/%Y'`" \
 	-D SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )" \
@@ -70,7 +74,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 pages:	$(PAGES) $(SITEDIR)/index.html
 
 site:	pages
-	make tgz
+	#make tgz
 	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/$(INDEXIN) > $(SITEDIR)/index.html
 	mkdir -p $(SITEDIR)
 	#cd $(FIMDIR) && ./autogen.sh && ./configure && make doc && make dist && cd -
