@@ -81,8 +81,10 @@
 
 #if FIM_USE_CXX11
 #define FIM_NULL nullptr
+#define FIM_ENUM_BASE : fim_flags_t /* In the future might want to add the class attribute to make the enums scoped. */
 #else /* FIM_USE_CXX11 */
 #define FIM_NULL NULL
+#define FIM_ENUM_BASE 
 #endif /* FIM_USE_CXX11 */
 
 #endif /* FIM_TYPES_FIM_H */
