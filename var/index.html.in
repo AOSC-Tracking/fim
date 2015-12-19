@@ -45,11 +45,17 @@ dnl
 SECTION(Welcome to the FIM (Fbi IMproved) image viewer homepage,top)
 <tr>
 <td>
+<A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="40%" ALT=""></A>
+<A HREF="#screenshots_aa"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_aa.png" WIDTH="40%" ALT=""></A>
+</td>
+</tr>
 
+<tr>
+<td>
 <h5>
 FIM_ABBR aims to be a highly customizable and scriptable
 image viewer targeted at users who are comfortable with software
-like the VIM_ABBR text editor or the Mutt mail user agent.
+like the VIM_ABBR text editor or the MUTT_ABBR mail user agent.
 
 
 <br> &nbsp;<br>
@@ -133,19 +139,23 @@ SECTION(Screenshots,screenshots)
 <tr>
 <td>
 <h5>
-A screenshot of a regular (framebuffer) FIM_ABBR run (SDL would look the same):
+<A NAME="screenshots_fb"></A>
+A screenshot of a regular (framebuffer) FIM_ABBR run (SDL would look the same)
 </h5>
 </td>
 </tr>
 <tr>
 <td align="center">
 <!--<a href="fim-shot-fb.png"><img src="fim-shot-fb-mini.png" alt=""></a>-->
+<!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
 <A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOT" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
 </td>
 </tr>
+
 <tr>
 <td>
 <h5>
+<A NAME="screenshots_aa"></A>
 A screenshot of an Ascii Art FIM_ABBR run:
 </h5>
 </td>
@@ -158,8 +168,6 @@ A screenshot of an Ascii Art FIM_ABBR run:
 </tr>
 <tr>
 <td>
-
-<br>
 <h5>
 Both screenshots taken with the <code>fbgrab</code> program using the trunk version of FIM_ABBR.
 <br>
@@ -175,10 +183,6 @@ and
 <a href="fim_diana_aa.txt.html">HTML</a> screenshots taken using sorcery.
 </h5>
 
-
-<h5>
-See the <a href="#tutorial">tutorial here on this page</a> for a description of these screenshots.
-</h5>
 
 <br>
 <!-- <iframe src="fim_diana_aa.txt.html" scrolling="auto" frameborder="1" WIDTH="100%" HEIGHT="600px" align="center"></iframe> -->
