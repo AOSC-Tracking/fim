@@ -2,7 +2,7 @@
 /*
  DisplayDevice.cpp : virtual device Fim driver file
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,19 +23,19 @@
 #include "DisplayDevice.h"
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	DisplayDevice::DisplayDevice(MiniConsole & mc):fontname_(NULL)
+	DisplayDevice::DisplayDevice(MiniConsole & mc):fontname_(FIM_NULL)
 	,mc_(mc)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	DisplayDevice::DisplayDevice():fontname_(NULL)
+	DisplayDevice::DisplayDevice():fontname_(FIM_NULL)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	,f_(NULL)
+	,f_(FIM_NULL)
 	,debug_(false)
 	,redraw_(FIM_REDRAW_UNNECESSARY)
 	,finalized_(false)
 	{
 		const fim_char_t *line;
 
-	    	if (NULL != (line = fim_getenv(FIM_ENV_FBFONT)))
+	    	if (FIM_NULL != (line = fim_getenv(FIM_ENV_FBFONT)))
 			fontname_ = line;
 	}
 
@@ -82,8 +82,8 @@
 #endif /* FBI_HAVE_LIBLIRC */
 			        limit.tv_sec = timeout;
 			        limit.tv_usec = 0;
-			        rc = select(fdmax, &set, NULL, NULL,
-			                    (0 != timeout && !paused) ? &limit : NULL);
+			        rc = select(fdmax, &set, FIM_NULL, FIM_NULL,
+			                    (0 != timeout && !paused) ? &limit : FIM_NULL);
 				if(handle_console_switch())	/* this may have side effects, though */
 				{
 					r=0;	/* warning : originally a 'continue' in a loop ! */
@@ -202,11 +202,11 @@ ret:
 fim_err_t DisplayDevice::console_control(fim_cc_t arg)//experimental
 {
 	if(arg==0x01)
-		fb_status_screen_new(NULL,false,arg);
+		fb_status_screen_new(FIM_NULL,false,arg);
 	if(arg==0x02)
-		fb_status_screen_new(NULL,false,arg);
+		fb_status_screen_new(FIM_NULL,false,arg);
 	if(arg==0x03)
-		fb_status_screen_new(NULL,false,arg);
+		fb_status_screen_new(FIM_NULL,false,arg);
 	return FIM_ERR_NO_ERROR;
 }
 

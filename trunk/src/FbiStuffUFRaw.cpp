@@ -2,7 +2,7 @@
 /*
  FbiStuffNef.cpp : fbi functions for NEF files, modified for fim
 
- (c) 2014-2014 Michele Martone
+ (c) 2014-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -87,7 +87,7 @@ static int fim_ufraw_row_writer(ufraw_data *uf,  void*volatile outp, void*pixbuf
 }
 
 struct nef_state {
-	ufraw_data *uf = NULL;
+	ufraw_data *uf = FIM_NULL;
         UFRectangle Crop;
     	uint32 width;
     	uint32 height;
@@ -97,13 +97,13 @@ static void*
 nef_init(FILE *fp, const fim_char_t *filename_, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
-    	struct nef_state *h = NULL;
+    	struct nef_state *h = FIM_NULL;
     	int status;
 	conf_data rc, cmd, conf;
 	int optInd;
-	void * pixel_region = NULL;
+	void * pixel_region = FIM_NULL;
 	int argc = 0;
-	char **argv = NULL;
+	char **argv = FIM_NULL;
 	fim_char_t *filename = strdupa(filename_);
 
 	FIM_NEF_PRINTF("NEF loading\n");
@@ -112,7 +112,7 @@ nef_init(FILE *fp, const fim_char_t *filename_, unsigned int page,
     	if(!h)goto oops;
 
     	/* uf_win32_locale_free(filename); */
-    	conf_load(&rc, NULL);
+    	conf_load(&rc, FIM_NULL);
     	if (rc.interpolation == half_interpolation)
 		rc.interpolation = ahd_interpolation;
     	conf_copy_save(&rc, &conf_default);
@@ -161,7 +161,7 @@ ret:
 oops:
     	if(h)
 		fim_free(h);
-    	return NULL;
+    	return FIM_NULL;
 }
 
 static void

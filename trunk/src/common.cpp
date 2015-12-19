@@ -133,7 +133,7 @@ void trhex(fim_char_t *str)
 				unsigned int hc;
 				hb[0]=toupper(fp[2]);
 				hb[1]=toupper(fp[3]);
-				hc=(fim_byte_t)strtol(hb,NULL,FIM_PRINTINUM_BUFSIZE);
+				hc=(fim_byte_t)strtol(hb,FIM_NULL,FIM_PRINTINUM_BUFSIZE);
 				*sp=hc;
 				fp+=3;
 			}
@@ -158,7 +158,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 	 *	20090520 hex translation in
 	 */
 	int tl;
-	fim_char_t*_p=NULL;
+	fim_char_t*_p=FIM_NULL;
 	const fim_char_t *fp;
 	const fim_char_t *tp;
 
@@ -186,7 +186,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 			hb[2]=0;
 			hb[0]=toupper(_p[2]);
 			hb[1]=toupper(_p[3]);
-			hc=(fim_byte_t)strtol(hb,NULL,FIM_PRINTINUM_BUFSIZE);
+			hc=(fim_byte_t)strtol(hb,FIM_NULL,FIM_PRINTINUM_BUFSIZE);
 			*_p=hc;
 			/*	
 				\xFF
@@ -234,7 +234,7 @@ ret:
 			 * ripped off quickly from slurp_binary_fd
 			 * FIXME : it is not throughly tested
 			 * */
-			fim_byte_t	*buf=NULL;
+			fim_byte_t	*buf=FIM_NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
 			buf=(fim_byte_t*)fim_calloc(inc,1);
 			if(!buf) 
@@ -245,7 +245,7 @@ ret:
 				// if(nrb==inc) a full read. let's try again
 				// else we assume this is the last read (could not be true, of course)
 				tb=(fim_byte_t*)realloc(buf,rb+=nrb);
-				if(tb!=NULL)
+				if(tb!=FIM_NULL)
 					buf=tb;
 				else
 					{rb-=nrb;continue;}
@@ -268,7 +268,7 @@ ret:
 			 * FIXME : use stat if possible.
 			 * FIXME : it is not throughly tested
 			 * */
-			fim_char_t	*buf=NULL;
+			fim_char_t	*buf=FIM_NULL;
 			int	inc=FIM_FILE_BUF_SIZE,rb=0,nrb=0;
 			buf = fim_stralloc(inc);
 			if(!buf)
@@ -279,7 +279,7 @@ ret:
 				// if(nrb==inc) a full read. let's try again
 				// else we assume this is the last read (could not be true, of course)
 				tb=(fim_char_t*)realloc(buf,rb+=nrb);
-				if(tb!=NULL)
+				if(tb!=FIM_NULL)
 					buf=tb;
 				else
 					{rb-=nrb;continue;}
@@ -555,7 +555,7 @@ int strchr_count(const fim_char_t*s, int c)
 	int n=0;
 	if(!s)
 		return 0;
-	while((s=strchr(s,c))!=NULL && *s)
+	while((s=strchr(s,c))!=FIM_NULL && *s)
 		++n,++s;
 	return n;
 }
@@ -588,8 +588,8 @@ const fim_char_t* next_row(const fim_char_t*s, int cols)
 	 * */
 	const fim_char_t *b=s;int l=strlen(s);
 	if(!s)
-		return NULL;
-	if((s=strchr(s,'\n'))!=NULL)
+		return FIM_NULL;
+	if((s=strchr(s,'\n'))!=FIM_NULL)
 	{
 		// we have a newline marking the end of line:
 		// with newline-column merge (*s==\n and s+1 is after)
@@ -622,7 +622,7 @@ int lines_count(const fim_char_t*s, int cols)
 	if(!s)
 		return 0;
 	b=s;
-	while((s=strchr(s,'\n'))!=NULL && *s)
+	while((s=strchr(s,'\n'))!=FIM_NULL && *s)
 	{
 		/*
 		 * we want a cols long sequence followed by \n
@@ -698,7 +698,7 @@ double getmilliseconds(void)
 	int err;//t,pt in ms; d in us
 	double dt=0.0;
         struct timeval tv;
-        err=gettimeofday(&tv, NULL);
+        err=gettimeofday(&tv, FIM_NULL);
 	dt+=tv.tv_usec/1000;
 	dt+=tv.tv_sec *1000;
 	// note : we ignore err!
@@ -724,7 +724,7 @@ const fim_char_t * fim_getenv(const fim_char_t * name)
 #ifdef HAVE_GETENV
 	return getenv(name);
 #else /* HAVE_GETENV */
-	return NULL;
+	return FIM_NULL;
 #endif /* HAVE_GETENV */
 }
 
@@ -734,8 +734,8 @@ FILE * fim_fread_tmpfile(FILE * fp)
 	*  We transfer a stream contents in a tmpfile(void)
 	* NEW
 	*/
-	FILE *tfd=NULL;
-	if( ( tfd=tmpfile() )!=NULL )
+	FILE *tfd=FIM_NULL;
+	if( ( tfd=tmpfile() )!=FIM_NULL )
 	{	
 		/* todo : read errno in case of error and print some report.. */
 		const size_t buf_size=FIM_STREAM_BUFSIZE;
@@ -754,7 +754,7 @@ FILE * fim_fread_tmpfile(FILE * fp)
 		 * */
 		return tfd;
 	}
-	return NULL;
+	return FIM_NULL;
 }
 
 double fim_atof(const fim_char_t *nptr)

@@ -2,7 +2,7 @@
 /*
  FbiStuffPs.cpp : fim functions for decoding PS files
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -69,20 +69,20 @@ ps_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	prd=prd<1?FIM_RENDERING_DPI:prd;
 	double scale = 1.0* (((double)prd)/((double)FIM_SPECTRE_DEFAULT_DPI)) ;
 	double rcscale = scale;
-	struct ps_state_t * ds=NULL;
+	struct ps_state_t * ds=FIM_NULL;
 
-	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return NULL;}	/* a drivers's problem */ 
+	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return FIM_NULL;}	/* a drivers's problem */ 
 	if(fp) fclose(fp);
 
 	ds = (struct ps_state_t*)fim_calloc(1,sizeof(struct ps_state_t));
 
 	if(!ds)
-		return NULL;
+		return FIM_NULL;
 
-    	ds->first_row_dst = NULL;
-	ds->sd = NULL;
-	ds->sp = NULL;
-	ds->src = NULL;
+    	ds->first_row_dst = FIM_NULL;
+	ds->sd = FIM_NULL;
+	ds->sp = FIM_NULL;
+	ds->src = FIM_NULL;
 	ds->ss = SPECTRE_STATUS_SUCCESS;
 
 	ds->sd = spectre_document_new();
@@ -140,7 +140,7 @@ err:
 	if(ds->sp )spectre_page_free(ds->sp);
 	if(ds->src)spectre_render_context_free(ds->src);
 	if(ds)fim_free(ds);
-	return NULL;
+	return FIM_NULL;
 }
 
 static void
@@ -149,11 +149,11 @@ ps_read(fim_byte_t *dst, unsigned int line, void *data)
     	struct ps_state_t *ds = (struct ps_state_t*)data;
 	if(!ds)return;
 
-    	if(ds->first_row_dst == NULL)
+    	if(ds->first_row_dst == FIM_NULL)
     		ds->first_row_dst = dst;
 	else return;
 
-	fim_byte_t       *page_data=NULL;
+	fim_byte_t       *page_data=FIM_NULL;
 
 	//render in RGB32 format
 	//spectre_page_render(ds->sp,ds->src,&page_data,&ds->row_stride);

@@ -35,7 +35,7 @@ namespace fim
 	{	
 		/* the string is initialized as unallocated and blank */
 #ifdef _FIM_DYNAMIC_STRING
-		s=NULL;
+		s=FIM_NULL;
 		len=0;
 #else
 		*s='\0';
@@ -325,12 +325,12 @@ namespace fim
 	operator string::float()const{return fim_atof(s);}
 
 	/*
-	 * a string is empty if NULL or allocated to zero bytes (if possible)
+	 * a string is empty if FIM_NULL or allocated to zero bytes (if possible)
 	 * */
 	bool string::isempty(void)const
 	{
 #ifdef _FIM_DYNAMIC_STRING
-		return (s==NULL || len==0 || *s=='\0');
+		return (s==FIM_NULL || len==0 || *s=='\0');
 #else /* _FIM_DYNAMIC_STRING */
 		return *s=='\0';
 #endif /* _FIM_DYNAMIC_STRING */
@@ -349,7 +349,7 @@ namespace fim
 
 #ifdef _FIM_DYNAMIC_STRING
 		//blanking
-		if(s){fim_free(s); s=NULL;len=0;}
+		if(s){fim_free(s); s=FIM_NULL;len=0;}
 		//do we need some allocation? only if l was already > 0
 		if(l+1<len && s)
 		{
@@ -583,7 +583,7 @@ namespace fim
 		const fim_char_t*s=c_str(),*f=s;
 		size_t c=0;
 		if(!s)return 0;
-		while((s=strchr(s,'\n'))!=NULL){++c;f=++s;}
+		while((s=strchr(s,'\n'))!=FIM_NULL){++c;f=++s;}
 		return c+(strlen(f)>0);
 	}
 
@@ -596,7 +596,7 @@ namespace fim
 		s=this->c_str();
 		f=s;
 		if(ln< 0 || !s)return "";
-		while( ln && ((f=strchr(s,'\n'))!=NULL ) )
+		while( ln && ((f=strchr(s,'\n'))!=FIM_NULL ) )
 		{
 			--ln;
 			s=f+1;

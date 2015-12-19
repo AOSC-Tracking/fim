@@ -2,7 +2,7 @@
 /*
  FbiStuffBitText.cpp : fbi functions for rendering image bytes as text
 
- (c) 2013-2014 Michele Martone
+ (c) 2013-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ static void*
 text_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
-    struct text_state *h=NULL;
+    struct text_state *h=FIM_NULL;
     long ftellr;
     fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
 
@@ -73,7 +73,7 @@ text_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(!h)
 	    goto oops;
 
-    FontServer::fb_text_init1(NULL,&(h->f_));	// FIXME : move this outta here
+    FontServer::fb_text_init1(FIM_NULL,&(h->f_));	// FIXME : move this outta here
     if(!h->f_)
 	    goto oops;
     h->fp = fp;
@@ -104,7 +104,7 @@ text_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 
     if(h && h->f_)fim_free_fs_font(h->f_);
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, int fs_bpp_, fim_byte_t *data)

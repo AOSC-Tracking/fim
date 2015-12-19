@@ -45,7 +45,7 @@
 #endif
 
 #if defined(GIFLIB_MAJOR) && ((GIFLIB_MAJOR> 5) || ((GIFLIB_MAJOR==5) && defined(GIFLIB_MINOR) && (GIFLIB_MINOR>=1)))
-#define FIM_DGifCloseFile_ARG ,NULL
+#define FIM_DGifCloseFile_ARG ,FIM_NULL
 #else
 #define FIM_DGifCloseFile_ARG
 #endif
@@ -70,7 +70,7 @@ FimPrintGifError(struct gif_state * gs) {
     int ErrorCode = gs->gif->Error;
 #endif
     /* On the basis of giflib-5.0.5/util/qprintf.c suggestion, after retirement of PrintGifError  */
-    const char *Err = NULL;
+    const char *Err = FIM_NULL;
 
     if(ErrorCode == 0)   
 	    return;
@@ -81,7 +81,7 @@ FimPrintGifError(struct gif_state * gs) {
     Err = GifErrorString();// introduced in 4.2
 #endif
                                                                                                                               
-    if (Err != NULL)
+    if (Err != FIM_NULL)
         fprintf(stderr, "GIF-LIB error: %s.\n", Err);
     else
         fprintf(stderr, "GIF-LIB undefined error %d.\n", ErrorCode);
@@ -95,9 +95,9 @@ static GifRecordType
 gif_fileread(struct gif_state *h)
 {
     GifRecordType RecordType;
-    GifByteType *Extension = NULL;
+    GifByteType *Extension = FIM_NULL;
     int ExtCode = 0, rc = 0;
-    const fim_char_t *type = NULL;
+    const fim_char_t *type = FIM_NULL;
 
     for (;;) {
 	if (GIF_ERROR == DGifGetRecordType(h->gif,&RecordType)) {
@@ -115,7 +115,7 @@ gif_fileread(struct gif_state *h)
 	    if (FbiStuff::fim_filereading_debug())
 		FIM_FBI_PRINTF("gif: EXTENSION_RECORD_TYPE found\n");
 	    for (rc = DGifGetExtension(h->gif,&ExtCode,&Extension);
-		 NULL != Extension;
+		 FIM_NULL != Extension;
 		 rc = DGifGetExtensionNext(h->gif,&Extension)) {
 		if (rc == GIF_ERROR) {
 		    if (FbiStuff::fim_filereading_debug())
@@ -168,7 +168,7 @@ static void*
 gif_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *info, int thumbnail)
 {
-    struct gif_state *h = NULL;
+    struct gif_state *h = FIM_NULL;
     GifRecordType RecordType;
     int i, image = 0;
     
@@ -181,7 +181,7 @@ gif_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 #else
     h->gif = DGifOpenFileHandle(fileno(fp));
 #endif
-    if(!h->gif)goto oops; /* opening gifs from stdin seems to cause DGifOpenFileHandle=NULL */
+    if(!h->gif)goto oops; /* opening gifs from stdin seems to cause DGifOpenFileHandle=FIM_NULL */
     h->row = (GifPixelType*)fim_malloc(h->gif->SWidth * sizeof(GifPixelType));
     if(!h->row)goto oops;
 
@@ -194,8 +194,8 @@ gif_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		    FIM_FBI_PRINTF("gif: DGifGetImageDesc failed\n");
 		FimPrintGifError(h);
 	    }
-	    if (NULL == h->gif->SColorMap &&
-		NULL == h->gif->Image.ColorMap) {
+	    if (FIM_NULL == h->gif->SColorMap &&
+		FIM_NULL == h->gif->Image.ColorMap) {
 		if (FbiStuff::fim_filereading_debug())
 		    FIM_FBI_PRINTF("gif: oops: no colormap found\n");
 		goto oops;
@@ -252,7 +252,7 @@ gif_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(h && h->il )fim_free(h->il );
     if(h && h->row)fim_free(h->row);
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static void

@@ -136,7 +136,7 @@ static void*
 jp2_init(FILE *fp, const fim_char_t *filename, unsigned int page, struct ida_image_info *i, int thumbnail)
 {
 	/* it is safe to ignore filename, page, thumbnail */
-	struct jp2_state *h = NULL;
+	struct jp2_state *h = FIM_NULL;
     	fim_err_t errval = FIM_ERR_GENERIC;
 	long fo = 0;
 
@@ -245,7 +245,7 @@ oops:
 		fim_free(h);
 	}
 	jas_cleanup();
-	return NULL;
+	return FIM_NULL;
 }
 
 static void

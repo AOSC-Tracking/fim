@@ -2,7 +2,7 @@
 /*
  FbiStuffDjvu.cpp : fim functions for decoding DJVU files
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -87,7 +87,7 @@ static void*
 djvu_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-	struct djvu_state_t * ds=NULL;
+	struct djvu_state_t * ds=FIM_NULL;
         // static unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
 	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
 	prd=prd<1?FIM_RENDERING_DPI:prd;
@@ -101,8 +101,8 @@ djvu_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	if(fp) fclose(fp);
 
 	ds = (struct djvu_state_t*)fim_calloc(1,sizeof(struct djvu_state_t));
-	if(!ds) return NULL;
-    	ds->first_row_dst = NULL;
+	if(!ds) return FIM_NULL;
+    	ds->first_row_dst = FIM_NULL;
 
         ds->dc = ddjvu_context_create("fim");
 	if(!ds->dc)goto err;
@@ -155,7 +155,7 @@ err:
 	if(ds->dc)ddjvu_context_release(ds->dc);
 	if(ds->pf)ddjvu_format_release(ds->pf);
 ret:
-	return NULL;
+	return FIM_NULL;
 }
 
 static void
@@ -165,7 +165,7 @@ djvu_read(fim_byte_t *dst, unsigned int line, void *data)
 
 	if(!ds)return;
 
-    	if(ds->first_row_dst == NULL)
+    	if(ds->first_row_dst == FIM_NULL)
     		ds->first_row_dst = dst;
 	else return;
 

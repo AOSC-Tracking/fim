@@ -148,7 +148,7 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 	}
 
     	memcpy(mmp,&mm,sizeof(mm));
-	mm.mdp = NULL; // this is to avoid mm's destructor to free(mm.mdp)
+	mm.mdp = FIM_NULL; // this is to avoid mm's destructor to free(mm.mdp)
 	return FIM_ERR_NO_ERROR; 
 err:
 	return FIM_ERR_GENERIC;
@@ -208,7 +208,7 @@ op_3x3_init(const struct ida_image *src, struct ida_rect *rect,
 oops:
     if(h && h->linebuf)fim_free(h->linebuf);
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static int inline
@@ -356,7 +356,7 @@ op_sharpe_init(const struct ida_image *src, struct ida_rect *rect,
 oops:
     if(h && h->linebuf)fim_free(h->linebuf);
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static void
@@ -432,7 +432,7 @@ op_resize_init(const struct ida_image *src, struct ida_rect *rect,
     oops:
     if(h)
 	    fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 #define FIM_HAS_MISC_FBI_OPS 1
@@ -897,8 +897,8 @@ op_rotate_init(const struct ida_image *src, struct ida_rect *rect,
     float  diag;
 
     h = (struct op_rotate_state *)fim_malloc(sizeof(*h));
-    if(!h)return NULL;
-    /* dez's : FIXME : NULL check missing */
+    if(!h)return FIM_NULL;
+    /* dez's : FIXME : FIM_NULL check missing */
     h->angle = args->angle * 2 * M_PI / 360;
     h->sina  = sin(h->angle);
     h->cosa  = cos(h->angle);
@@ -1185,7 +1185,7 @@ op_crop_init_(const struct ida_image *src, struct ida_rect *rect,
 {
     if (rect->x2 - rect->x1 == (int)src->i.width &&
 	rect->y2 - rect->y1 == (int)src->i.height)
-	return NULL;
+	return FIM_NULL;
     *i = src->i;
     i->width  = rect->x2 - rect->x1;
     i->height = rect->y2 - rect->y1;
@@ -1244,7 +1244,7 @@ op_autocrop_init_(const struct ida_image *src, struct ida_rect *unused,
     data = desc_3x3.init(src, &rect, &img.i, &filter);
 
     img.data   = (fim_byte_t*)fim_pm_alloc(img.i.width, img.i.height);
-    if(!img.data)return NULL;
+    if(!img.data)return FIM_NULL;
 
     for (y = 0; y < (int)img.i.height; y++)
 	desc_3x3.work(src, &rect, img.data+3*img.i.width*y, y, data);
@@ -1310,7 +1310,7 @@ op_autocrop_init_(const struct ida_image *src, struct ida_rect *unused,
 #endif
 
     if (0 == rect.x2 - rect.x1  ||  0 == rect.y2 - rect.y1)
-	return NULL;
+	return FIM_NULL;
     
     *unused = rect;
     *i = src->i;
@@ -1436,7 +1436,7 @@ ppm_write(FILE *fp, struct ida_image *img)
 
 static struct ida_writer ppm_writer = {
     /*  label:*/  "PPM",
-    /*  ext:*/    { "ppm", NULL},
+    /*  ext:*/    { "ppm", FIM_NULL},
     /*  write:*/  ppm_write,
     /* FIXME : still missing some struct members */
 };
@@ -1467,7 +1467,7 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 	/* new */
 	va_list ap;
         int rc;
-	FILE *fp=NULL;
+	FILE *fp=FIM_NULL;
 	int p[2];
 	#define FIM_SUBPROCESS_MAXARGV 128
 	fim_char_t * argv[FIM_SUBPROCESS_MAXARGV],*s;	/* FIXME */
@@ -1487,12 +1487,12 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 		close(p[0]);
 		close(p[1]);
 	        va_start(ap,cmd);
-		while(NULL!=(s=va_arg(ap,fim_char_t*)) && argc<FIM_SUBPROCESS_MAXARGV-1)
+		while(FIM_NULL!=(s=va_arg(ap,fim_char_t*)) && argc<FIM_SUBPROCESS_MAXARGV-1)
 		{
 			argv[argc]=s;
 			argc++;
 		}
-		argv[argc]=NULL;
+		argv[argc]=FIM_NULL;
 
 	        va_end(ap);
 	        rc=execvp(cmd,argv);
@@ -1500,12 +1500,12 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 		default:/* parent */
 		close(p[1]);
 		fp = fdopen(p[0],"r");
-		if(NULL==fp)
+		if(FIM_NULL==fp)
 			goto err;
 		return fp;
 	}
 err:
-	return NULL;
+	return FIM_NULL;
 }
 
 static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t base_offset)
@@ -1589,13 +1589,13 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
      * FIXME : many memory allocations are not checked for failure: DANGER
      * */
     fim_char_t command[FIM_PIPE_CMD_BUFSIZE]; /* FIXME: overflow risk ! */
-    struct ida_loader *loader = NULL;
-    struct ida_image *img=NULL;
-    struct list_head *item=NULL;
+    struct ida_loader *loader = FIM_NULL;
+    struct ida_image *img=FIM_NULL;
+    struct list_head *item=FIM_NULL;
     fim_char_t blk[FIM_FILE_PROBE_BLKSIZE];
-    FILE *fp=NULL;
+    FILE *fp=FIM_NULL;
     unsigned int y;
-    void *data=NULL;
+    void *data=FIM_NULL;
     int fr=0;
 #if FIM_HAVE_FULL_PROBING_LOADER
     bool rozlsl=false;/* retry on zero length signature loader */
@@ -1606,9 +1606,9 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     /*const*/ fim_int vl=0;
 #endif /* FIM_ALLOW_LOADER_VERBOSITY */
 #if FIM_SHALL_BUFFER_STDIN
-    fim_byte_t * sbuf=NULL;
-    //fim_size_t sbbs=NULL;
-    size_t sbbs=NULL;
+    fim_byte_t * sbuf=FIM_NULL;
+    //fim_size_t sbbs=FIM_NULL;
+    size_t sbbs=FIM_NULL;
 #endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
     long read_offset = 0, read_offset_u = 0;
@@ -1628,14 +1628,14 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     //new_image = 1;
 
 #if FIM_SHALL_BUFFER_STDIN
-    if(fd!=NULL)
+    if(fd!=FIM_NULL)
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) 
     {
 	    if(vl)
 		    FIM_VERB_PRINTF("will attempt to use fmemopen\n");
 
 	    sbuf=slurp_binary_FD(fd,&sbbs);
-	    if(sbuf==NULL || !sbbs)
+	    if(sbuf==FIM_NULL || !sbbs)
 	    {
 		if(sbuf)fim_free(sbuf);
     		if(vl)FIM_VERB_PRINTF("problems slurping the file\n");
@@ -1651,21 +1651,21 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     // is a trick for reading stdin...
     // ... and it is simpler that rewriting loader stuff.
     // but much dirtier :/
-    if(fd==NULL){
+    if(fd==FIM_NULL){
     /* open file */
-    if (NULL == (fp = fim_fopen(filename, "r"))) {
+    if (FIM_NULL == (fp = fim_fopen(filename, "r"))) {
 	//comment by dez, temporary
 	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("open %s: %s\n",filename,strerror(errno));
-	return NULL;
+	return FIM_NULL;
     }
     } else fp=fd;
 
 #if FIM_WITH_ARCHIVE
     if( regexp_match(filename,re.c_str(),1) )
     {
-	struct archive *a = NULL;
-	struct archive_entry *entry = NULL;
+	struct archive *a = FIM_NULL;
+	struct archive_entry *entry = FIM_NULL;
 	int r,pi;
 	size_t bs = 10240;
 	re = cc.getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
@@ -1677,11 +1677,11 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 		page = fim_atoi( fim_getenv("PAGE") );
 
 	a = archive_read_new();
-	if (a == NULL)
+	if (a == FIM_NULL)
 		goto noa;
 	archive_read_support_format_all(a);
 	archive_read_support_filter_all(a);
-	r = archive_read_open_filename(a, filename, bs); // filename=NULL for stdin
+	r = archive_read_open_filename(a, filename, bs); // filename=FIM_NULL for stdin
 	if (r != ARCHIVE_OK)
 	{
 		printf("Problems opening archive %s\n",filename);
@@ -1690,7 +1690,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 
 	for (pi=0;;)
 	{
-                const char * pn = NULL;
+                const char * pn = FIM_NULL;
 		r = archive_read_next_header(a, &entry);
       		if (r == ARCHIVE_EOF)
 		{
@@ -1717,7 +1717,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 				//archive_read_data_into_fd(a,1);
 				if(0)
 				{
-					const void *buff = NULL;
+					const void *buff = FIM_NULL;
 					int64_t offset = 0;
 					size_t tsize = 0, size = 0;
 
@@ -1740,19 +1740,19 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 					printf("piped %zd bytes\n",(size_t)tsize);
 					close(fap[1]);
 					fp = fdopen(fap[0],"r");
-					fd = NULL;
+					fd = FIM_NULL;
 					fp = fim_fread_tmpfile(fp); // FIXME: a pipe saturates quickly (at 64 k on recent Linux...)
 					close(fap[0]);
 				}
 				else
 				{
-					FILE *tfd=NULL;
-					if( ( tfd=tmpfile() )!=NULL )
+					FILE *tfd=FIM_NULL;
+					if( ( tfd=tmpfile() )!=FIM_NULL )
 					{	
 						int tfp = fileno(tfd);
 						r = archive_read_data_into_fd(a,tfp);
 						rewind(tfd);
-						fd = NULL;
+						fd = FIM_NULL;
 						fp = tfd;
 					}
 					else
@@ -1811,14 +1811,14 @@ with_offset:
     if((fr=fim_fread(blk,1,sizeof(blk),fp))<0)
     {
       /* should we care about the error code ? */
-      return NULL;	/* new */
+      return FIM_NULL;	/* new */
     }
     fim_rewind(fp);
     if(read_offset>0)
 	    fim_fseek(fp,read_offset,SEEK_SET);
 
 #if FIM_WITH_UFRAW
-    if (NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
+    if (FIM_NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
     if(regexp_match(filename,".*NEF$") || regexp_match(filename,".*nef$"))
     {
 	loader = &nef_loader;
@@ -1831,7 +1831,7 @@ with_offset:
     fim::string ls=cc.getStringVariable(FIM_VID_FILE_LOADER);
     want_retry=(cc.getIntVariable(FIM_VID_RETRY_LOADER_PROBE));
     if(ls!=FIM_CNS_EMPTY_STRING)
-    if(NULL==loader)/* we could have forced one */
+    if(FIM_NULL==loader)/* we could have forced one */
     {
     if(vl)FIM_VERB_PRINTF("using user specified loader string: %s\n",ls.c_str());
     list_for_each(item,&loaders) {
@@ -1842,7 +1842,7 @@ with_offset:
     }
     	if(vl)FIM_VERB_PRINTF("user specified loader string: %s is invalid!\n",ls.c_str());
     }
-		loader = NULL;
+		loader = FIM_NULL;
     }
 #endif /* FIM_ALLOW_LOADER_STRING_SPECIFICATION */
 
@@ -1876,28 +1876,28 @@ with_offset:
 probe_loader:
     /* pick loader */
 #ifdef FIM_SKIP_KNOWN_FILETYPES
-    if (NULL == loader && (*blk==0x42) && (*(fim_byte_t*)(blk+1)==0x5a))
+    if (FIM_NULL == loader && (*blk==0x42) && (*(fim_byte_t*)(blk+1)==0x5a))
     {
 	cc.set_status_bar("skipping 'bz2'...", "*");
 	goto shall_skip_header;
     }
 /* gz is another ! */
-/*    if (NULL == loader && (*blk==0x30) && (*(fim_byte_t*)(blk+1)==0x30))
+/*    if (FIM_NULL == loader && (*blk==0x30) && (*(fim_byte_t*)(blk+1)==0x30))
     {
 	cc.set_status_bar("skipping 'gz'...", "*");
-	return NULL;
+	return FIM_NULL;
     }*/
 #ifndef HAVE_LIBPOPPLER
-    if (NULL == loader && (*blk==0x25) && (*(fim_byte_t*)(blk+1)==0x50 )
-     && NULL == loader && (*(fim_byte_t*)(blk+2)==0x44) && (*(fim_byte_t*)(blk+3)==0x46))
+    if (FIM_NULL == loader && (*blk==0x25) && (*(fim_byte_t*)(blk+1)==0x50 )
+     && FIM_NULL == loader && (*(fim_byte_t*)(blk+2)==0x44) && (*(fim_byte_t*)(blk+3)==0x46))
     {
 	cc.set_status_bar("skipping 'pdf' (use fimgs for this)...", "*");
 	goto shall_skip_header;
     }
 #endif /* HAVE_LIBPOPPLER */
 #ifndef HAVE_LIBSPECTRE
-    if (NULL == loader && (*blk==0x25) && (*(fim_byte_t*)(blk+1)==0x21 )
-     && NULL == loader && (*(fim_byte_t*)(blk+2)==0x50) && (*(fim_byte_t*)(blk+3)==0x53))
+    if (FIM_NULL == loader && (*blk==0x25) && (*(fim_byte_t*)(blk+1)==0x21 )
+     && FIM_NULL == loader && (*(fim_byte_t*)(blk+2)==0x50) && (*(fim_byte_t*)(blk+3)==0x53))
     {
 	cc.set_status_bar("skipping 'ps' (use fimgs for this)...", "*");
 	goto shall_skip_header;
@@ -1905,19 +1905,19 @@ probe_loader:
 #endif /* HAVE_LIBSPECTRE */
 #endif /* FIM_SKIP_KNOWN_FILETYPES */ 
     /* TODO: should sort loaders by mlen, descendingly */
-    if(NULL==loader)/* we could have forced one */
+    if(FIM_NULL==loader)/* we could have forced one */
     list_for_each(item,&loaders)
     {
         loader = list_entry(item, struct ida_loader, list);
     	if(loader->mlen < 1)
 	    continue;
-	if (NULL == loader->magic)
+	if (FIM_NULL == loader->magic)
 	    break;
 	if (0 == memcmp(blk+loader->moff,loader->magic,loader->mlen))
 	    break;
-	loader = NULL;
+	loader = FIM_NULL;
     }
-    if(loader!=NULL)
+    if(loader!=FIM_NULL)
     {
     		if(vl)FIM_VERB_PRINTF("found loader %s by magic number\n",loader->name);
 		goto found_a_loader;
@@ -1926,7 +1926,7 @@ probe_loader:
 #if !FIM_HAVE_FULL_PROBING_LOADER
 #ifdef HAVE_LIBGRAPHICSMAGICK
     /* FIXME: with this scheme, this is the only 0-mlen loader allowed */
-    if (NULL == loader
+    if (FIM_NULL == loader
 #if 1
 		    && filename && is_file_nonempty(filename) /* FIXME: need an appropriate error/warning printout in this case */
 #endif /* */
@@ -1940,23 +1940,23 @@ probe_loader:
      * the file descriptor may not be available anymore, in case of standard input,
      * unless some more advanced solution is found.
      * */
-    if(NULL==loader)
+    if(FIM_NULL==loader)
     if(rozlsl)
     list_for_each(item,&loaders)
     {
         loader = list_entry(item, struct ida_loader, list);
     	if(loader->mlen > 0)
 	    continue;
-	loader = NULL;
+	loader = FIM_NULL;
     }
 #endif /* FIM_HAVE_FULL_PROBING_LOADER */
 
-    if((loader==NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
+    if((loader==FIM_NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
 		goto head_not_found;
 
 #ifdef FIM_WITH_LIBPNG 
 #ifdef FIM_TRY_DIA
-    if (NULL == loader && (*blk==0x1f) && (*(fim_byte_t*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
+    if (FIM_NULL == loader && (*blk==0x1f) && (*(fim_byte_t*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_DIA "'...", "*");
     	/*
@@ -1964,9 +1964,9 @@ probe_loader:
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_DIA "'...", "*");
-	if(NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME ".png",NULL))&& 0==fim_fclose (fp))
+	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME ".png",FIM_NULL))&& 0==fim_fclose (fp))
 	{
-		if (NULL == (fp = fim_fopen(FIM_TMP_FILENAME".png","r")))
+		if (FIM_NULL == (fp = fim_fopen(FIM_TMP_FILENAME".png","r")))
 		/* this could happen in case dia was removed from the system */
 			goto shall_skip_header;
 		else
@@ -1979,27 +1979,27 @@ probe_loader:
 #endif /* FIM_TRY_DIA */
 #endif /* FIM_WITH_LIBPNG  */
 #ifdef FIM_TRY_XFIG
-    if (NULL == loader && (0 == memcmp(blk,"#FIG",4)))
+    if (FIM_NULL == loader && (0 == memcmp(blk,"#FIG",4)))
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_FIG2DEV "'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a xfig file was found, and we try to use fig2dev */
-	if(NULL==(fp=fim_execlp(FIM_EPR_FIG2DEV,FIM_EPR_FIG2DEV,"-L","ppm",filename,NULL)))
+	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_FIG2DEV,FIM_EPR_FIG2DEV,"-L","ppm",filename,FIM_NULL)))
 		goto shall_skip_header;
 	loader = &ppm_loader;
     }
 #endif /* FIM_TRY_XFIG */
 #ifdef FIM_TRY_XCFTOPNM
-    if (NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
+    if (FIM_NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_XCFTOPNM "'...", "*");
     	/*
 	 * dez's
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
-	if(NULL==(fp=fim_execlp(FIM_EPR_XCFTOPNM,FIM_EPR_XCFTOPNM,filename,NULL)))
+	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_XCFTOPNM,FIM_EPR_XCFTOPNM,filename,FIM_NULL)))
 		goto shall_skip_header;
 	loader = &ppm_loader;
     }
@@ -2007,7 +2007,7 @@ probe_loader:
 //#if 0
 #ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 
-    if (NULL == loader && (0 == memcmp(blk,"<?xml version=\"1.0\" encoding=\"UTF-8\"",36)))
+    if (FIM_NULL == loader && (0 == memcmp(blk,"<?xml version=\"1.0\" encoding=\"UTF-8\"",36)))
     //if(regexp_match(filename,".*svg$"))
     {
     	/*
@@ -2021,19 +2021,19 @@ probe_loader:
 		filename,FIM_TMP_FILENAME );
 #if 0
 	/* FIXME : the following code should work, but it doesn't */
-	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png","/dev/stdout",NULL)))
+	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png","/dev/stdout",FIM_NULL)))
 	{
 		fp=fim_fread_tmpfile(fp);
-		if(fp==NULL) return NULL;
+		if(fp==FIM_NULL) return FIM_NULL;
 		else
 		{
 			loader = &png_loader;
 		}
 	}
 #else
-	if(NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png",FIM_TMP_FILENAME,NULL))&&0==fim_fclose(fp))
+	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png",FIM_TMP_FILENAME,FIM_NULL))&&0==fim_fclose(fp))
 	{
-		if (NULL == (fp = fim_fopen(FIM_TMP_FILENAME,"r")))
+		if (FIM_NULL == (fp = fim_fopen(FIM_TMP_FILENAME,"r")))
 			goto shall_skip_header;
 		else
 		{
@@ -2048,29 +2048,29 @@ probe_loader:
 /*
  * Warning : this is potentially dangerous and so we wait a little before working on this.
  * */
-    if((NULL == loader && (0 == memcmp(blk,"#!/usr/bin/fim",14))) ||
-       (NULL == loader && (0 == memcmp(blk,"#!/usr/sbin/fim",15))) ||
-       (NULL == loader && (0 == memcmp(blk,"#!/usr/local/bin/fim",20))) ||
-       (NULL == loader && (0 == memcmp(blk,"#!/usr/local/sbin/fim",21)))
+    if((FIM_NULL == loader && (0 == memcmp(blk,"#!/usr/bin/fim",14))) ||
+       (FIM_NULL == loader && (0 == memcmp(blk,"#!/usr/sbin/fim",15))) ||
+       (FIM_NULL == loader && (0 == memcmp(blk,"#!/usr/local/bin/fim",20))) ||
+       (FIM_NULL == loader && (0 == memcmp(blk,"#!/usr/local/sbin/fim",21)))
        )
     {
 	cc.set_status_bar("loading Fim script file ...", "*");
 	cc.executeFile(filename);
-	return NULL;
+	return FIM_NULL;
     }
 #endif
 #endif /* FIM_HAVE_FULL_PROBING_LOADER */
 //#endif
 #ifdef FIM_TRY_CONVERT
-    if (NULL == loader) {
+    if (FIM_NULL == loader) {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" through '" FIM_EPR_CONVERT "'...", "*");
 	/* no loader found, try to use ImageMagick's convert */
-	if(NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",NULL)))
+	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",FIM_NULL)))
 		goto shall_skip_header;
 	loader = &ppm_loader;
     }
 #endif /* FIM_TRY_CONVERT */
-    if (NULL == loader)
+    if (FIM_NULL == loader)
 	    goto head_not_found;
 
 found_a_loader:	/* we have a loader */
@@ -2094,16 +2094,16 @@ found_a_loader:	/* we have a loader */
 #ifdef FIM_READ_STDIN_IMAGE
     if(strcmp(filename,FIM_STDIN_IMAGE_NAME)==0) { close(0); if(dup(2)){/* FIXME : should we report this ?*/}/* if the image is loaded from stdin, we close its stream */}
 #endif /* FIM_READ_STDIN_IMAGE */
-    if (NULL == data) {
+    if (FIM_NULL == data) {
 	if(vl)FIM_VERB_PRINTF("loader failed\n");
 	if(cc.displaydevice_->debug_)
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);
-	img=NULL;
+	img=FIM_NULL;
 	if(want_retry)
 	{
 		want_retry=0;
-		loader=NULL;
+		loader=FIM_NULL;
     		if(vl)FIM_VERB_PRINTF("retrying with probing..\n");
 		goto probe_loader;
 	}
@@ -2151,7 +2151,7 @@ found_a_loader:	/* we have a loader */
 
 shall_skip_header:
 head_not_found: /* no appropriate loader found for this image */
-    img=NULL;
+    img=FIM_NULL;
     if( read_offset_u > read_offset )
     {
 	    read_offset++;
@@ -2206,7 +2206,7 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
 
     data = desc_p->init(src,&rect,&dest->i,&p);
     dest->data = (fim_byte_t*)fim_pm_alloc(dest->i.width, dest->i.height);
-    /* dez: */ if(!(dest->data)){fim_free(dest);dest=NULL;goto err;}
+    /* dez: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice_->switch_if_needed();
 	desc_p->work(src,&rect,
@@ -2286,7 +2286,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     p.angle    = (int) angle;
     data = desc_rotate.init(src,&rect,&dest->i,&p);
     dest->data = (fim_byte_t*)fim_pm_alloc(dest->i.width, dest->i.height, true);
-    /* dez: */ if(!(dest->data)){fim_free(dest);dest=NULL;goto err;}
+    /* dez: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice_->switch_if_needed();
 	desc_rotate.work(src,&rect,
@@ -2316,8 +2316,8 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 {
     struct op_resize_parm p;
     struct ida_rect  rect;
-    struct ida_image *dest=NULL;
-    void *data=NULL;
+    struct ida_image *dest=FIM_NULL;
+    void *data=FIM_NULL;
     unsigned int y;
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
     int mmi=-1;
@@ -2373,7 +2373,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 #endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
 
     data = desc_resize.init(src,&rect,&dest->i,&p);
-    if(data==NULL)
+    if(data==FIM_NULL)
     {
 	fim_free(dest);
     	goto err;
@@ -2415,7 +2415,7 @@ struct ida_image * fbi_image_clone(const struct ida_image *img)
 {
 	/* note that to fulfill free_image(), the descriptor and data couldn't be allocated together
 	 * */
-	struct ida_image *nimg=NULL;
+	struct ida_image *nimg=FIM_NULL;
 
 	if(!img || !img->data)
 		goto err;
@@ -2431,7 +2431,7 @@ struct ida_image * fbi_image_clone(const struct ida_image *img)
 	if(!(nimg->data))
 	{
 		fim_free(nimg);
-		nimg = NULL;
+		nimg = FIM_NULL;
 		goto err;
 	}
 	memcpy(nimg->data, img->data,n);

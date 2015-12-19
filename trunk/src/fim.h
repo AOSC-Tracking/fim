@@ -420,6 +420,7 @@ enum FimDocRefMode{ Txt, Man, DefRefMode=Txt};
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
 #define FIM_MOD(X,C)        ((((X)%(C))+(C))%(C))
 #define FIM_INT_FRAC(Q,D) (((Q)+((D)-1))/(D))
+#define FIM_NULL NULL	/* In C++11, this will be nullptr */
 
 #define FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP \
 ".nf\n"\

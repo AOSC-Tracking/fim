@@ -253,7 +253,7 @@ static bool aainvalid;
 		 * FIXME : centering mechanisms missing here; an intermediate function
 		 * shareable with FramebufferDevice would be nice, if implemented in AADevice.
 		 * */
-		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
+		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 		if ( !rgb ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -2;
@@ -361,16 +361,16 @@ static bool aainvalid;
 
 	fim_err_t AADevice::reinit(const fim_char_t *rs)
 	{
-		if(strstr(rs,"w")!=NULL)
+		if(strstr(rs,"w")!=FIM_NULL)
 			allow_windowed=1;
 		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t AADevice::initialize(sym_keys_t &sym_keys)
 	{
-		aa_parseoptions (NULL, NULL, NULL, NULL);
+		aa_parseoptions (FIM_NULL, FIM_NULL, FIM_NULL, FIM_NULL);
 		aainvalid=false;
-		ascii_context_ = NULL;
+		ascii_context_ = FIM_NULL;
 
 		memcpy (&ascii_hwparms_, &aa_defparams, sizeof (struct aa_hardware_params));
 
@@ -379,10 +379,10 @@ static bool aainvalid;
 
 //		NOTE: if uncommenting this, remember to #ifdef HAVE_GETENV
 //		fim_aa_char *e;fim_sys_int v;
-//		if((e=getenv("COLUMNS"))!=NULL && (v=fim_atoi(e))>0) ascii_hwparms_.width  = v-1;
-//		if((e=getenv("LINES"  ))!=NULL && (v=fim_atoi(e))>0) ascii_hwparms_.height = v-1;
-//		if((e=getenv("COLUMNS"))!=NULL && (v=fim_atoi(e))>0) ascii_hwparms_.recwidth  = v;
-//		if((e=getenv("LINES"  ))!=NULL && (v=fim_atoi(e))>0) ascii_hwparms_.recheight = v;
+//		if((e=getenv("COLUMNS"))!=FIM_NULL && (v=fim_atoi(e))>0) ascii_hwparms_.width  = v-1;
+//		if((e=getenv("LINES"  ))!=FIM_NULL && (v=fim_atoi(e))>0) ascii_hwparms_.height = v-1;
+//		if((e=getenv("COLUMNS"))!=FIM_NULL && (v=fim_atoi(e))>0) ascii_hwparms_.recwidth  = v;
+//		if((e=getenv("LINES"  ))!=FIM_NULL && (v=fim_atoi(e))>0) ascii_hwparms_.recheight = v;
 
 //		ascii_hwparms_.width  = 80;
 //		ascii_hwparms_.height = 56;
@@ -399,7 +399,7 @@ static bool aainvalid;
 			setenv(FIM_ENV_DISPLAY,"",1); /* running fim -o aalib in a window may render fim unusable */
 		ascii_save_.name = (fim_aa_char*)name_;
 		ascii_save_.format = &aa_text_format;
-		ascii_save_.file = NULL;
+		ascii_save_.file = FIM_NULL;
 //		ascii_context_ = aa_init (&save_d, &ascii_hwparms_, &ascii_save_);
 		ascii_context_ = aa_autoinit (&ascii_hwparms_);
 		if(!ascii_context_)

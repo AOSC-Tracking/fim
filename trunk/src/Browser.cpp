@@ -314,7 +314,7 @@ nop:
 		 */
 		fim_scale_t newscale = FIM_CNS_SCALEFACTOR_ZERO;
 		fim_char_t fc = FIM_SYM_CHAR_NUL;
-		const fim_char_t*ss = NULL;
+		const fim_char_t*ss = FIM_NULL;
 		int sl = 0;
 		bool pcsc = false;
 		FIM_PR('*');
@@ -391,7 +391,7 @@ noplus:
 				if( fc == '+' || fc == '-')
 				{
 					newscale = fim_atof(ss+1);
-					pcsc = (strstr(ss,"%") != NULL );
+					pcsc = (strstr(ss,"%") != FIM_NULL );
 					if(pcsc)
 						newscale *= .01;
 					if( !newscale )
@@ -421,7 +421,7 @@ noplus:
 					fc = '+';
 					goto comeon;
 				}
-				pcsc = (strstr(ss,"%") != NULL );
+				pcsc = (strstr(ss,"%") != FIM_NULL );
 				if(pcsc)
 					newscale *= .01;
 				if( newscale == FIM_CNS_SCALEFACTOR_ZERO )
@@ -594,7 +594,7 @@ nop:
 		else
 		{
 			if(wcs)
-				wcs = cc.set_wm_caption(NULL);
+				wcs = cc.set_wm_caption(FIM_NULL);
 		}
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
@@ -764,7 +764,7 @@ ret:
 			{
 				// a one time only image (new, experimental)
 				viewport()->setImage(default_image_->getClone());
-				//default_image_=NULL;
+				//default_image_=FIM_NULL;
 			}
 		}
 	#else
@@ -778,7 +778,7 @@ ret:
 		{
 			FIM_PR('E');
 			if(viewport())
-				viewport()->setImage( NULL );
+				viewport()->setImage( FIM_NULL );
 //		commented temporarily for safety reasons
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
@@ -942,8 +942,8 @@ ret:
 	bool Browser::push_dir(fim::string nf, fim_flags_t pf)
 	{
 		// TODO: may introduce some more variable to control recursive push 	
-		DIR *dir = NULL;
-		struct dirent *de = NULL;
+		DIR *dir = FIM_NULL;
+		struct dirent *de = FIM_NULL;
 		fim::string f;
 		bool retval = false;
 		FIM_PR('*');
@@ -966,7 +966,7 @@ nostat:
 		f += nf;
 		f += FIM_CNS_DIRSEP_STRING;
 		//are we sure -1 is not paranoid ?
-		while( ( de = readdir(dir) ) != NULL )
+		while( ( de = readdir(dir) ) != FIM_NULL )
 		{
 			if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] )
 				continue;
@@ -1173,7 +1173,7 @@ struct FimBaseNameSorter
 		 *	TODO: it would be cool to support a user supplied seed value
 		 */
 		if( dts )
-			std::srand(time(NULL));	/* FIXME: AFAIK, effect of srand() on random_shuffle is not mandated by any standard. */
+			std::srand(time(FIM_NULL));	/* FIXME: AFAIK, effect of srand() on random_shuffle is not mandated by any standard. */
 		std::random_shuffle(flist_.begin(),flist_.end());
 		return n_files() ? (flist_[current_n()]) : nofile_;
 	}
@@ -1226,7 +1226,7 @@ struct FimBaseNameSorter
 
 		for(j=0;j<s;++j)
 		{
-			const fim_char_t *fstm = NULL;
+			const fim_char_t *fstm = FIM_NULL;
 			bool hm = false;
 
 			i = ((src_dir<0?(s-j):j)+c+src_dir)%s;
@@ -1256,7 +1256,7 @@ struct FimBaseNameSorter
 #ifdef FIM_AUTOCMDS
 				FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,c);
 				if(!commandConsole_.inConsole())
-					commandConsole_.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),NULL);
+					commandConsole_.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),FIM_NULL);
 				goto nop;
 #endif /* FIM_AUTOCMDS */
 			}
@@ -1265,7 +1265,7 @@ struct FimBaseNameSorter
 		if(!commandConsole_.inConsole())
 			commandConsole_.set_status_bar((fim::string("sorry, no filename matches \"")+
 						args[0]+
-						fim::string("\"")).c_str(),NULL);
+						fim::string("\"")).c_str(),FIM_NULL);
 nop:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
@@ -1351,7 +1351,7 @@ ret:
 		if( args.size() > 0 )
 			return goto_image_internal(args[0].c_str(),FIM_X_NULL);
 		else
-			return goto_image_internal(NULL,FIM_X_NULL);
+			return goto_image_internal(FIM_NULL,FIM_X_NULL);
 	}
 
 	fim::string Browser::goto_image_internal(const fim_char_t *s,fim_xflags_t xflags)
@@ -1890,7 +1890,7 @@ err:
 		/*
 		 *	a const pointer to the currently loaded image
 		 */
-		const Image * image = NULL;
+		const Image * image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->c_getImage();
@@ -1902,7 +1902,7 @@ err:
 		/*
 		 *	the image loaded in the current viewport is returned
 		 */
-		Image * image = NULL;
+		Image * image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->getImage();
@@ -1915,7 +1915,7 @@ err:
 		 * A valid pointer will be returned 
 		 * whenever the image is loaded !
 		 *
-		 * NULL is returned in case no viewport is loaded.
+		 * FIM_NULL is returned in case no viewport is loaded.
 		 * */
 		return (commandConsole_.current_viewport());
 	}

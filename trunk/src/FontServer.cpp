@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2014 Michele Martone
+ (c) 2007-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -51,23 +51,23 @@ namespace fim
 void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
 { 
     const fim_char_t*font=(fim_char_t*)font_;
-    const fim_char_t *fonts[2] = { font, NULL };
+    const fim_char_t *fonts[2] = { font, FIM_NULL };
 #if FIM_FONT_DEBUG
     std::cout << "before consolefont:" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
-    if (NULL == *_f)
-	*_f = fs_consolefont(font ? fonts : NULL);
+    if (FIM_NULL == *_f)
+	*_f = fs_consolefont(font ? fonts : FIM_NULL);
 #if FIM_FONT_DEBUG
     std::cout << "after consolefont :" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
 #ifdef FIM_USE_X11_FONTS
-    if (NULL == *_f && 0 == fs_connect(NULL))
+    if (FIM_NULL == *_f && 0 == fs_connect(FIM_NULL))
 	*_f = fs_open(font ? font : x11_font);
 #endif /* FIM_USE_X11_FONTS */
 #if FIM_FONT_DEBUG
     std::cout << "after fs_open     :" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
-    if (NULL == *_f) {
+    if (FIM_NULL == *_f) {
 	FIM_FPRINTF(ff_stderr, "font \"%s\" is not available\n",font);
 	exit(1);
     }
@@ -110,14 +110,14 @@ static const fim_char_t *default_font[] = {
 #if FIM_WANT_HARDCODED_FONT
     FIM_DEFAULT_HARDCODEDFONT_STRING,
 #endif /* FIM_WANT_HARDCODED_FONT */
-    NULL
+    FIM_NULL
 };
 
 fim::string get_default_font_list(void)
 {
 	fim::string dfl;
 	const fim_char_t ** filename=default_font;
-	for(int i = 0; filename[i] != NULL; i++)
+	for(int i = 0; filename[i] != FIM_NULL; i++)
        	{
 		dfl+=filename[i];
 		dfl+="\n";
@@ -128,12 +128,12 @@ fim::string get_default_font_list(void)
 
 static int probe_font_file(const fim_char_t *fontfilename)
 {
-    	FILE *fp=NULL;
+    	FILE *fp=FIM_NULL;
 	if ( strlen(fontfilename)>3 && 0 == strcmp(fontfilename+strlen(fontfilename)-3,".gz"))
 	{
 		#ifdef FIM_USE_ZCAT
 		/* FIXME */
-		fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,NULL);
+		fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,FIM_NULL);
 		#endif /* FIM_USE_ZCAT */
 	}
 	else
@@ -141,7 +141,7 @@ static int probe_font_file(const fim_char_t *fontfilename)
 		fp = fopen(fontfilename, "r");
 	}
 
-	if (NULL == fp)
+	if (FIM_NULL == fp)
 		goto no;
 
 	if (fgetc(fp) != 0x36 || fgetc(fp) != 0x04)
@@ -173,10 +173,10 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
     /* this function is too much involved: it shall be split in pieces */
     int  i=0;
     int  fr;
-    const fim_char_t *h=NULL;
-    struct fs_font *f_ = NULL;
-    const fim_char_t *fontfilename=NULL;
-    FILE *fp=NULL;
+    const fim_char_t *h=FIM_NULL;
+    struct fs_font *f_ = FIM_NULL;
+    const fim_char_t *fontfilename=FIM_NULL;
+    FILE *fp=FIM_NULL;
     fim_char_t fontfilenameb[FIM_PATH_MAX];
     bool robmn=true;/* retry on bad magic numbers */
 #if FIM_WANT_HARDCODED_FONT
@@ -190,11 +190,11 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
 	    goto openhardcodedfont;
 #endif /* FIM_WANT_HARDCODED_FONT */
 
-    if (NULL == filename)
+    if (FIM_NULL == filename)
 	filename = fim::default_font;
 
 scanlistforafontfile:
-    for(i = 0; filename[i] != NULL; i++) {
+    for(i = 0; filename[i] != FIM_NULL; i++) {
 	if (-1 == access(filename[i],R_OK))
 	{
 #if FIM_WANT_HARDCODED_FONT
@@ -204,7 +204,7 @@ scanlistforafontfile:
 #if FIM_FONT_DEBUG
     std::cout << "no access to " << filename[i] << "\n";
 #endif /* FIM_FONT_DEBUG */
-	    fim_perror(NULL);
+	    fim_perror(FIM_NULL);
 	    continue;
 	}
 	break;
@@ -216,19 +216,19 @@ scanlistforafontfile:
 #endif /* FIM_FONT_DEBUG */
 
 #if FIM_LINUX_CONSOLEFONTS_DIR_SCAN 
-    if(NULL == fontfilename)
+    if(FIM_NULL == fontfilename)
     {
 	/* will scan FIM_LINUX_CONSOLEFONTS_DIR directory for console fonts */
 	fim::string nf = FIM_LINUX_CONSOLEFONTS_DIR;
-	DIR *dir=NULL;
-	struct dirent *de=NULL;
+	DIR *dir=FIM_NULL;
+	struct dirent *de=FIM_NULL;
 
 	if( !is_dir( nf.c_str() ))
 		goto oops;
 	if ( ! ( dir = opendir(nf.c_str() ) ))
 		goto oops;
 
-	while( ( de = readdir(dir) ) != NULL )
+	while( ( de = readdir(dir) ) != FIM_NULL )
 	{
 		if(is_file(de->d_name) && regexp_match(de->d_name,"8x.*\\.psf") && access(de->d_name,R_OK))
     		{
@@ -248,7 +248,7 @@ scanlistforafontfile:
 
 #if FIM_WANT_HARDCODED_FONT
 openhardcodedfont:
-    if (NULL == fontfilename)
+    if (FIM_NULL == fontfilename)
     {
 	FIM_SAVE_CONSOLEFONTNAME(FIM_DEFAULT_HARDCODEDFONT_STRING);
     	fp=fmemopen(dfontdata,sizeof(dfontdata),"r");
@@ -256,7 +256,7 @@ openhardcodedfont:
 		goto gotafp;
     }
 #endif /* FIM_WANT_HARDCODED_FONT */
-    if (NULL == fontfilename) {
+    if (FIM_NULL == fontfilename) {
 	FIM_FPRINTF(ff_stderr, "can't find console font file\n");
 	goto oops;
     }
@@ -265,14 +265,14 @@ openhardcodedfont:
     if ( h>fontfilename && 0 == strcmp(h,".gz")) {
 	#ifdef FIM_USE_ZCAT
 	/* FIXME */
-	fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,NULL);
+	fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,FIM_NULL);
 	#else /* FIM_USE_ZCAT */
 	FIM_FPRINTF(ff_stderr, "built with no gzip decoder!\n");
 	#endif /* FIM_USE_ZCAT */
     } else {
 	fp = fopen(fontfilename, "r");
     }
-    if (NULL == fp) {
+    if (FIM_NULL == fp) {
 	FIM_FPRINTF(ff_stderr, "can't open %s: %s\n",fontfilename,strerror(errno));
 	goto oops;
     }
@@ -316,7 +316,7 @@ gotafp:
     if(!f_->extents) goto aoops;
     fr=fread(f_->glyphs, 256, f_->height, fp);
     if(!fr)goto aoops;/* new */
-    fclose(fp);fp=NULL;
+    fclose(fp);fp=FIM_NULL;
 
     f_->eindex  =(FSXCharInfo**) fim_malloc(sizeof(FSXCharInfo*)   * 256);
     if(!f_->eindex) goto aoops;
@@ -337,9 +337,9 @@ aoops:
     if(f_)
 	fim_free_fs_font(f_);
 oops:
-    if(fp){fclose(fp);fp=NULL;}
+    if(fp){fclose(fp);fp=FIM_NULL;}
     if(robmn && filename[0] && filename[1]){++filename;goto scanlistforafontfile;}else robmn=false;
-    return NULL;
+    return FIM_NULL;
 }
 #endif
 

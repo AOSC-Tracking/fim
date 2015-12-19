@@ -2,7 +2,7 @@
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 
- (c) 2008-2014 Michele Martone
+ (c) 2008-2015 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -133,7 +133,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 {
 	fim_char_t _[1];
 	_[0]='\0';
-	struct pdf_state_t * ds=NULL;
+	struct pdf_state_t * ds=FIM_NULL;
 	int rotation=0,pageNo=page+1;
 	double zoomReal=100.0;
 	double hDPI;
@@ -161,7 +161,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 		//printf("%s\n",linkname);
 		filename=linkname;
 		if(-1==access(filename,R_OK))
-			return NULL;
+			return FIM_NULL;
 	}
 #endif /* FIM_PDF_USE_FILENO */
 
@@ -169,12 +169,12 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	ds = (struct pdf_state_t*)fim_calloc(1,sizeof(struct pdf_state_t));
 
 	if(!ds)
-		return NULL;
+		return FIM_NULL;
 
-    	ds->first_row_dst = NULL;
-	ds->bmp = NULL;
-	ds->pd = NULL;
-	ds->od = NULL;
+    	ds->first_row_dst = FIM_NULL;
+	ds->bmp = FIM_NULL;
+	ds->pd = FIM_NULL;
+	ds->od = FIM_NULL;
 
 	SplashColorsInit();
 
@@ -189,7 +189,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	globalParams->setBaseDir(_);
 #endif /* defined(POPPLER_VERSION_MINOR) && (POPPLER_VERSION_MINOR<22) */
 
-	ds->pd = new PDFDoc(new GooString(filename), NULL, NULL, (void*)NULL);
+	ds->pd = new PDFDoc(new GooString(filename), FIM_NULL, FIM_NULL, (void*)FIM_NULL);
 	if (!ds->pd)
         	goto err;
 
@@ -223,7 +223,7 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	i->npages = ds->pd->getNumPages();
 	if(page>=i->npages || page<0)goto err;
 	
-	ds->pd->displayPage(ds->od, pageNo, hDPI, vDPI, rotation, useMediaBox, crop, doLinks, NULL, NULL);
+	ds->pd->displayPage(ds->od, pageNo, hDPI, vDPI, rotation, useMediaBox, crop, doLinks, FIM_NULL, FIM_NULL);
 
 
 	if(!ds->pd) goto err;
@@ -240,10 +240,10 @@ err:
 	if(ds->pd)		delete ds->pd ;
 	if(ds->od)	delete ds->od ;
 	if (globalParams)	delete globalParams;
-	globalParams = NULL;
+	globalParams = FIM_NULL;
 	if(ds)fim_free(ds);
 retnull:
-	return NULL;
+	return FIM_NULL;
 }
 
 static void
@@ -252,7 +252,7 @@ pdf_read(fim_byte_t *dst, unsigned int line, void *data)
     	struct pdf_state_t *ds = (struct pdf_state_t*)data;
 	if(!ds)return;
 
-    	if(ds->first_row_dst == NULL)
+    	if(ds->first_row_dst == FIM_NULL)
     		ds->first_row_dst = dst;
 	else return;
 
@@ -268,7 +268,7 @@ pdf_done(void *data)
 	if(ds->pd)		delete ds->pd ;
 	if(ds->od)	delete ds->od ;
 	if (globalParams)	delete globalParams;
-	globalParams = NULL;
+	globalParams = FIM_NULL;
 
 	fim_free(ds);
 }

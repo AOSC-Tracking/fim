@@ -41,7 +41,7 @@ namespace fim
 
 	Namespace * CommandConsole::rns(const fim::string varname)
 	{
-		Namespace * nsp = NULL;
+		Namespace * nsp = FIM_NULL;
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{
@@ -104,7 +104,7 @@ err:
 
 	const Namespace * CommandConsole::c_rns(const fim::string varname)const
 	{
-		const Namespace * nsp = NULL;
+		const Namespace * nsp = FIM_NULL;
 #ifdef FIM_NAMESPACES
 		if( varname[1]==FIM_SYM_NAMESPACE_SEP )
 		{

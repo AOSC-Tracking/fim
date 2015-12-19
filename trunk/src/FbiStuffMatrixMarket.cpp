@@ -59,16 +59,16 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 //	int rows_max=2048,cols_max=2048;
 
 	if(!h)goto err;
-    	h->first_row_dst=NULL;
+    	h->first_row_dst=FIM_NULL;
 
-	h->filename=NULL;
+	h->filename=FIM_NULL;
 	i->dpi    = FIM_RENDERING_DPI; /* FIXME */
 	i->npages = 1;
 
 	if(rsb_lib_init(RSB_NULL_INIT_OPTIONS))
 		goto err;
 
-	if(rsb_file_mtx_get_dimensions(filename, &cols, &rows, NULL, NULL))
+	if(rsb_file_mtx_get_dimensions(filename, &cols, &rows, FIM_NULL, FIM_NULL))
 		goto err;
 
 #if 1
@@ -94,7 +94,7 @@ mm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	return h;
 err:
 	if( h ) fim_free(h);
-	return NULL;
+	return FIM_NULL;
 }
 
 static void
@@ -103,7 +103,7 @@ mm_read(fim_byte_t *dst, unsigned int line, void *data)
 	struct mm_state_t *h = (struct mm_state_t*)data;
 
 	if(!h)return;
-    	if(h->first_row_dst == NULL)
+    	if(h->first_row_dst == FIM_NULL)
     		h->first_row_dst = dst;
 	else
 		return;

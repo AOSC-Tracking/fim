@@ -65,8 +65,8 @@ void fim_png_rd_cmts(void *data, png_infop info)
 #ifdef PNG_WRITE_tEXt_SUPPORTED
     {
     	struct fim_png_state *h = (struct fim_png_state *) data;
-	png_textp text_ptr = NULL;
-	int num_comments = png_get_text(h->png, info, &text_ptr, NULL);
+	png_textp text_ptr = FIM_NULL;
+	int num_comments = png_get_text(h->png, info, &text_ptr, FIM_NULL);
 	int ti = 0;
 	fim::string fs;
 
@@ -137,24 +137,24 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     h->i = i;
 
     h->png = png_create_read_struct(PNG_LIBPNG_VER_STRING,
-				    NULL, NULL, NULL);
-    if (NULL == h->png)
+				    FIM_NULL, FIM_NULL, FIM_NULL);
+    if (FIM_NULL == h->png)
 	goto oops;
     h->info = png_create_info_struct(h->png);
-    if (NULL == h->info)
+    if (FIM_NULL == h->info)
 	goto oops;
 
     fim_png_fp=fp;
 #if defined(PNG_LIBPNG_VER) && (PNG_LIBPNG_VER>=10249)
     /* in the above, check on version >=10249 is not sufficient, not necessary. for e.g; 10606 it's necessary */
-    png_set_read_fn(h->png,NULL,fim_png_rw_ptr); /* TODO: shall make use of return second argument */
+    png_set_read_fn(h->png,FIM_NULL,fim_png_rw_ptr); /* TODO: shall make use of return second argument */
 #else
     h->png->read_data_fn=&fim_png_rw_ptr;
 #endif
     png_init_io(h->png, h->infile);
     png_read_info(h->png, h->info);
     png_get_IHDR(h->png, h->info, &h->w, &h->h,
-		 &bit_depth,&h->color_type,&interlace_type, NULL,NULL);
+		 &bit_depth,&h->color_type,&interlace_type, FIM_NULL,FIM_NULL);
     png_get_pHYs(h->png, h->info, &resx, &resy, &unit);
     i->width  = h->w;
     i->height = h->h;
@@ -201,7 +201,7 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	    FIM_FBI_PRINTF("png: pass #%d\n",pass);
 	for (y = 0; y < i->height; y++) {
 	    png_bytep row = h->image + y * i->width * 4;
-	    png_read_rows(h->png, &row, NULL, 1);
+	    png_read_rows(h->png, &row, FIM_NULL, 1);
 	}
     }
 
@@ -213,12 +213,12 @@ png_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if (h && h->image)
 	fim_free(h->image);
     if (h->png)
-	png_destroy_read_struct(&h->png, NULL, NULL);
+	png_destroy_read_struct(&h->png, FIM_NULL, FIM_NULL);
     fim_fclose(h->infile);
     if(h->cmt)
     	fim_free(h->cmt);
     if(h)fim_free(h);
-    return NULL;
+    return FIM_NULL;
 }
 
 static void
@@ -229,19 +229,19 @@ png_read(fim_byte_t *dst, unsigned int line, void *data)
     png_bytep row = h->image + line * h->w * 4;
     switch (h->color_type) {
     case PNG_COLOR_TYPE_GRAY:
-	png_read_rows(h->png, &row, NULL, 1);
+	png_read_rows(h->png, &row, FIM_NULL, 1);
 	load_gray(dst,row,h->w);
 	break;
     case PNG_COLOR_TYPE_RGB:
-	png_read_rows(h->png, &row, NULL, 1);
+	png_read_rows(h->png, &row, FIM_NULL, 1);
 	memcpy(dst,row,3*h->w);
 	break;
     case PNG_COLOR_TYPE_RGB_ALPHA:
-	png_read_rows(h->png, &row, NULL, 1);
+	png_read_rows(h->png, &row, FIM_NULL, 1);
 	load_rgba(dst,row,h->w);
 	break;
     case PNG_COLOR_TYPE_GRAY_ALPHA:
-	png_read_rows(h->png, &row, NULL, 1);
+	png_read_rows(h->png, &row, FIM_NULL, 1);
 	load_graya(dst,row,h->w);
 	break;
     default:
@@ -267,7 +267,7 @@ png_done(void *data)
     }
 
     fim_free(h->image);
-    png_destroy_read_struct(&h->png, &h->info, NULL);
+    png_destroy_read_struct(&h->png, &h->info, FIM_NULL);
     fim_fclose(h->infile);
     fim_free(h);
 }
@@ -300,24 +300,24 @@ static void __init init_rd(void)
 static int
 png_write(FILE *fp, struct ida_image *img)
 {
-    png_structp png_ptr = NULL;
-    png_infop info_ptr  = NULL;
+    png_structp png_ptr = FIM_NULL;
+    png_infop info_ptr  = FIM_NULL;
     png_bytep row;
     unsigned int y;
     
    /* Create and initialize the png_struct with the desired error handler
     * functions.  If you want to use the default stderr and longjump based method,
-    * you can supply NULL for the last three parameters.  We also check that
+    * you can supply FIM_NULL for the last three parameters.  We also check that
     * the library version is compatible with the one used at compile time,
     * in case we are using dynamically linked libraries.  REQUIRED.
     */
-    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
-    if (png_ptr == NULL)
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,FIM_NULL,FIM_NULL,FIM_NULL);
+    if (png_ptr == FIM_NULL)
 	goto oops;
 
    /* Allocate/initialize the image information data.  REQUIRED */
    info_ptr = png_create_info_struct(png_ptr);
-   if (info_ptr == NULL)
+   if (info_ptr == FIM_NULL)
        goto oops;
    if (setjmp(png_jmpbuf(png_ptr)))
        goto oops;
@@ -346,13 +346,13 @@ png_write(FILE *fp, struct ida_image *img)
  oops:
    FIM_FBI_PRINTF("can't save image: libpng error\n");
    if (png_ptr)
-       png_destroy_write_struct(&png_ptr,  (png_infopp)NULL);
+       png_destroy_write_struct(&png_ptr,  (png_infopp)FIM_NULL);
    return -1;
 }
 
 static struct ida_writer png_writer = {
     /*label:*/  "PNG",
-   /* ext:*/    { "png", NULL},
+   /* ext:*/    { "png", FIM_NULL},
     /*write:*/  png_write,
 };
 

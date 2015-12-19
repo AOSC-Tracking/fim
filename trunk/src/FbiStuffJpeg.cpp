@@ -187,7 +187,7 @@ static void fim_ExifDataForeachContentFunc (ExifContent *content, void * user_da
 	exif_content_foreach_entry (content, fim_ExifContentForeachEntryFunc, user_data2);
 }
 
-static void dump_exif(FILE *out, ExifData *ed, Namespace *nsp = NULL)
+static void dump_exif(FILE *out, ExifData *ed, Namespace *nsp = FIM_NULL)
 {
 /* FIXME: temporarily here; shall transfer keys/values to a Namespace object */
 #if HAVE_NEW_EXIF
@@ -199,8 +199,8 @@ static void dump_exif(FILE *out, ExifData *ed, Namespace *nsp = NULL)
 #if 0
     for (int i = 0; i < EXIF_IFD_COUNT; i++) {
     fim_char_t buffer[FIM_EXIF_BUFSIZE];
-    const fim_char_t *value=NULL;
-    ExifEntry  *ee=NULL;
+    const fim_char_t *value=FIM_NULL;
+    ExifEntry  *ee=FIM_NULL;
     /* values of EXIF_TAG_* in libexif/exif-tag.h */
     //for (i = 0; i < 1; i++) { // first only
     std::cout << "EXIF_IFD_COUNT " << i << " " << EXIF_IFD_COUNT << "\n";
@@ -238,7 +238,7 @@ static void dump_exif(FILE *out, ExifData *ed, Namespace *nsp = NULL)
 		//
 		bool shouldmirror,shouldrotatecw,shouldrotateccw,shouldflip; fim_char_t r,c;const fim_char_t *p;fim_char_t f;
 		value=exif_entry_get_value(ee, buffer, sizeof(buffer));
-		if(!value || ((p=strstr(value," - "))==NULL))goto uhmpf;
+		if(!value || ((p=strstr(value," - "))==FIM_NULL))goto uhmpf;
 		r=tolower(value[0]); c=tolower(p[3]);
 		switch(r)
 		{
@@ -353,7 +353,7 @@ uhmpf:
 	    if (!title)
 		continue;
 	    ee = exif_content_get_entry (ed->ifd[i], tag);
-	    if (NULL == ee)
+	    if (FIM_NULL == ee)
 		continue;
 #ifdef HAVE_NEW_EXIF
 	    value = exif_entry_get_value(ee, buffer, sizeof(buffer));
@@ -389,10 +389,10 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 
     h->infile = fp;
 
-    h->jerr.error_exit=NULL; // ?
+    h->jerr.error_exit=FIM_NULL; // ?
     h->cinfo.err = jpeg_std_error(&h->jerr);	/* FIXME : should use an error manager of ours (this one exits the program!) */
     h->jerr.error_exit = fim_error_exit;	/* FIXME : should use an error manager of ours (this one exits the program!) */
-    //h->jerr.error_exit = NULL ;	/* FIXME : should use an error manager of ours (this one exits the program!) */
+    //h->jerr.error_exit = FIM_NULL ;	/* FIXME : should use an error manager of ours (this one exits the program!) */
     if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
     jpeg_create_decompress(&h->cinfo);
     /*if(h->jerr.msg_code)goto oops;*/
@@ -409,7 +409,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
 //    if(h->jerr.msg_code)goto oops;	// this triggers with apparently good file
 
-    for (mark = h->cinfo.marker_list; NULL != mark; mark = mark->next) {
+    for (mark = h->cinfo.marker_list; FIM_NULL != mark; mark = mark->next) {
 	switch (mark->marker) {
 	case JPEG_COM:
 	    if (FbiStuff::fim_filereading_debug())
@@ -430,7 +430,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 #if FIM_EXPERIMEMTAL_IMG_NMSPC
 			dump_exif(stdout,ed,i->nsp);
 #else /* FIM_EXPERIMEMTAL_IMG_NMSPC */
-			dump_exif(stdout,ed,NULL);
+			dump_exif(stdout,ed,FIM_NULL);
 #endif /* FIM_EXPERIMEMTAL_IMG_NMSPC */
 	}
 #endif /* FIM_WITH_LIBEXIF */
@@ -468,7 +468,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     }
 
     // !! 
-    thumbnail_mgr.init_source         = /*thumbnail_src_init*/ NULL /* it is not useful, and breaks c++98 standard C++ compilation */;
+    thumbnail_mgr.init_source         = /*thumbnail_src_init*/ FIM_NULL /* it is not useful, and breaks c++98 standard C++ compilation */;
     thumbnail_mgr.fill_input_buffer   = thumbnail_src_fill;
     thumbnail_mgr.skip_input_data     = thumbnail_src_skip;
     thumbnail_mgr.resync_to_restart   = jpeg_resync_to_restart;
@@ -486,7 +486,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
         if(fim_jerr)goto oops;
     //    if(h->jerr.msg_code)goto oops; // this triggers with apparently good files 
 	fim_fclose(h->infile);
-	h->infile = NULL;
+	h->infile = FIM_NULL;
 	jpeg_create_decompress(&h->cinfo);
         if(fim_jerr)goto oops;
   //      if(h->jerr.msg_code)goto oops;
@@ -520,7 +520,7 @@ std::cerr << "OOPS: problems decoding "<< filename <<"...\n";
     if( h && h->thumbnail) fim_free(h->thumbnail);
     if( h ) fim_free(h);
     fim_jerr=0;/* ready for the next */
-    return NULL;
+    return FIM_NULL;
 }
 
 static void
@@ -589,12 +589,12 @@ jpeg_conf(Widget parent, struct ida_image *img)
     
     if (!jpeg_shell) {
 	/* build dialog */
-	jpeg_shell = XmCreatePromptDialog(parent,"jpeg",NULL,0);
+	jpeg_shell = XmCreatePromptDialog(parent,"jpeg",FIM_NULL,0);
 	XmdRegisterEditres(XtParent(jpeg_shell));
 	XtUnmanageChild(XmSelectionBoxGetChild(jpeg_shell,XmDIALOG_HELP_BUTTON));
         jpeg_text = XmSelectionBoxGetChild(jpeg_shell,XmDIALOG_TEXT);
-	XtAddCallback(jpeg_shell,XmNokCallback,jpeg_button_cb,NULL);
-	XtAddCallback(jpeg_shell,XmNcancelCallback,jpeg_button_cb,NULL);
+	XtAddCallback(jpeg_shell,XmNokCallback,jpeg_button_cb,FIM_NULL);
+	XtAddCallback(jpeg_shell,XmNcancelCallback,jpeg_button_cb,FIM_NULL);
     }
     sprintf(tmp,"%d",jpeg_quality);
     XmTextSetString(jpeg_text,tmp);
@@ -636,7 +636,7 @@ jpeg_write(FILE *fp, struct ida_image *img)
 
 struct ida_writer jpeg_writer = {
     /*label:*/  "JPEG",
-    /* ext: */    { "jpg", "jpeg", NULL},
+    /* ext: */    { "jpg", "jpeg", FIM_NULL},
     /*write:*/  jpeg_write,
     /*conf: */   jpeg_conf,
 };

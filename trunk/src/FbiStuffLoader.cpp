@@ -2,7 +2,7 @@
 /*
  FbiStuffLoader.cpp : fbi functions for loading files, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -115,12 +115,12 @@ int load_add_extra(struct ida_image_info *info, enum ida_extype type,
     struct ida_extra *extra;
 
     extra = (struct ida_extra*)malloc(sizeof(*extra));
-    if (NULL == extra)
+    if (FIM_NULL == extra)
 	return -1;
     if(type==EXTRA_COMMENT) ++size;// dez's
     fim_bzero(extra,sizeof(*extra));
     extra->data = (fim_byte_t*)malloc(size);
-    if (NULL == extra->data) {
+    if (FIM_NULL == extra->data) {
 	fim_free(extra);
 	return -1;
     }
@@ -138,17 +138,17 @@ struct ida_extra* load_find_extra(struct ida_image_info *info,
 {
     struct ida_extra *extra;
 
-    for (extra = info->extra; NULL != extra; extra = extra->next)
+    for (extra = info->extra; FIM_NULL != extra; extra = extra->next)
 	if (type == extra->type)
 	    return extra;
-    return NULL;
+    return FIM_NULL;
 }
 
 int load_free_extras(struct ida_image_info *info)
 {
     struct ida_extra *next;
 
-    while (NULL != info->extra) {
+    while (FIM_NULL != info->extra) {
 	next = info->extra->next;
 	fim_free(info->extra->data);
 	fim_free(info->extra);
@@ -177,8 +177,8 @@ void fim_write_register(struct ida_writer *writer)
 	void fim_loaders_to_stderr(void)
     	{
 		/* FIXME: new, should be generalized */
-    		struct list_head *item=NULL;
-    		struct ida_loader *loader = NULL;
+    		struct list_head *item=FIM_NULL;
+    		struct ida_loader *loader = FIM_NULL;
     		FIM_FPRINTF(stderr,"%s","\nSupported file loaders: ");
     		list_for_each(item,&loaders)
 		{

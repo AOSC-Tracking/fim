@@ -248,7 +248,7 @@
 		 * shareable with FramebufferDevice would be nice, if implemented in CACADevice.
 		 * */
 		int i;
-		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:NULL;// source rgb array
+		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 		if ( !rgb ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -2;

@@ -612,7 +612,7 @@ static void*
 pcx_init(FILE *fp, const fim_char_t *filename, unsigned int page, struct ida_image_info *i, int thumbnail)
 {
 	/* it is safe to ignore filename, page, thumbnail */
-	struct pcx_state *h = NULL;
+	struct pcx_state *h = FIM_NULL;
     	pcx_err_t errval = PCX_ERR_GENERIC;
 
 	h = (struct pcx_state *)fim_calloc(1,sizeof(*h));
@@ -661,7 +661,7 @@ oops:
 			fim_free(h->rgb);
 		fim_free(h);
 	}
-	return NULL;
+	return FIM_NULL;
 }
 
 static void
