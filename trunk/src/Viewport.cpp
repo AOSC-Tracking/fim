@@ -292,10 +292,12 @@ namespace fim
 		int fw=displaydevice_->f_ ? displaydevice_->f_->width:1; // FIXME : this is not clean
 		int sl = strlen(str), rw = viewport_width() / fw, wh = viewport_height();
 		int cpl = displaydevice_->get_chars_per_line();
-		int lc = FIM_INT_FRAC(sl,cpl); /* lines count */
 
-		if(doclear)
+		if(doclear && cpl)
+		{
+			int lc = FIM_INT_FRAC(sl,cpl); /* lines count */
 			displaydevice_->clear_rect(0, viewport_width()-1, 0, FIM_MIN(fh*lc,wh-1));
+		}
 
 		for( int li = 0 ; sl > rw * li ; ++li )
 			if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
