@@ -91,7 +91,7 @@ struct fim_options_t fim_options[] = {
 "Regard this as an easter bunny option.\n"
     },
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
-    {"cd-and-readdir", no_argument,       FIM_NULL, 0x4352,"step into the first loaded file directory and push other files.",FIM_NULL,"step into the first loaded file directory and push other files."},
+    {"cd-and-readdir", no_argument,       FIM_NULL, 0x4352,"step into the first loaded file directory and push other files.",FIM_NULL,"Step into the first loaded file directory and push other files."},
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       FIM_NULL, 'c',"execute {commands} after initialization.","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
 "Please note that if your commands are more complicated than a simple 'next' or 'pornview'\n"
@@ -99,7 +99,6 @@ struct fim_options_t fim_options[] = {
 "\n"
 "For example,\n"
 "-c '*2;2pan_up;display;while(1){bottom_align;sleep \"1\" ; top_align}'\n"
-"\n"
 "(with the single quotes) will tell fim to first double the displayed image \n"
 "size, then pan two times up, then display the image ; and then \n"
 "do an endless loop consisting of bottom and top aligning, alternated.\n"
@@ -133,7 +132,7 @@ struct fim_options_t fim_options[] = {
 FIM_NULL
     },
 #if FIM_WANT_PIC_CMTS
-    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_LOAD_IMG_DSC_FILE " is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file."
+    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_LOAD_IMG_DSC_FILE " is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time."
       " If val is empty that variable will be unset."
@@ -163,7 +162,7 @@ FIM_NULL
     {"no-internal-config",      no_argument,       FIM_NULL, 0x4E4E4E,"do not execute the internal default configuration at startup.",FIM_NULL,
 "No internal default configuration at startup (uses internal variable " FIM_VID_NO_DEFAULT_CONFIGURATION "). Will only provide a minimal working configuration. "
     },
-    {"no-commandline",      no_argument,       FIM_NULL, 0x4E434C,"with internal command line mode disabled.",FIM_NULL, "with internal command line mode disabled."},
+    {"no-commandline",      no_argument,       FIM_NULL, 0x4E434C,"with internal command line mode disabled.",FIM_NULL, "With internal command line mode disabled."},
 #if FIM_WANT_HISTORY
     {"no-history-save",      no_argument,       FIM_NULL, 0x4E4853,"do not save execution history.",FIM_NULL,
 "Do not save execution history at finalization (uses internal variable " FIM_VID_SAVE_FIM_HISTORY "). "
@@ -265,16 +264,16 @@ FIM_NULL
 "Specify an endline delimiter string for breaking lines read via -/--read-from-stdin. Line text before the delimiter will be treated as names of files to load; the text after will be ignored until a newline. This is useful e.g. to description files as filename list files.\n"
     },
 #endif /* FIM_READ_STDIN */
-    {"autotop",   no_argument,       FIM_NULL, 'A',"align images to the top (UNFINISHED).",FIM_NULL,
+    {"autotop",   no_argument,       FIM_NULL, 'A',"Align images to the top (UNFINISHED).",FIM_NULL,
 	    FIM_NULL
     },
 //    {"gamma",      required_argument, FIM_NULL, 'g',"set gamma (UNFINISHED)","{gamma}",
 //" gamma correction.  Can also be put into the FBGAMMA environment variable.  Default is 1.0.  Requires Pseudocolor or Directcolor visual, doesn't work for Truecolor."
 //    },
-    {"quiet",      no_argument,       FIM_NULL, 'q',"quiet mode (UNFINISHED).",FIM_NULL,
+    {"quiet",      no_argument,       FIM_NULL, 'q',"Quiet mode (UNFINISHED).",FIM_NULL,
 	    FIM_NULL
     },
-    {"resolution", required_argument, FIM_NULL, 'r',"set resolution (UNFINISHED).","{resolution}",
+    {"resolution", required_argument, FIM_NULL, 'r',"Set resolution (UNFINISHED).","{resolution}",
 	    FIM_NULL
     },
     {"recursive", no_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively.", FIM_NULL,

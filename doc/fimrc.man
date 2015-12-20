@@ -497,7 +497,7 @@ _archive_files
 .fi
 .B
 _autocmd_trace_stack
-[in,g:] dump to stdout autocommands stack trace during their execution (for debugging purposes)
+[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)
 .fi
 .B
 _autodesaturate
@@ -653,7 +653,7 @@ _hsteps
 .fi
 .B
 _ignorecase
-[in,g:] if 1, will allow for case insensitive regexp\-based match in autocmd's; 
+[in,g:] if 1, will allow for case insensitive regexp\-based match in autocommands (autocmd); 
 .fi
 .B
 _info_fmt_str
@@ -869,7 +869,7 @@ flipped
 .fi
 .B
 fresh
-[in,out,i:,experimental] 1 if the image was loaded, before all autocommands execution
+[in,out,i:,experimental] 1 if the image was loaded, before all autocommands (autocmd) execution
 .fi
 .B
 height

@@ -66,7 +66,8 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D EXIF_ABBR=$(EXIF_ABBR) \
 	-D MUTT_ABBR=$(MUTT_ABBR) \
 	-D ASCII_ABBR=$(ASCII_ABBR) \
-	-D NEWSCONTENTS="$$( cat $(FIMDIR)/NEWS  )" \
+	-D NEWSCONTENTS="$$( grep -v '^#' $(FIMDIR)/NEWS )" \
+	-D THANKSCONTENTS="$$( cat $(FIMDIR)/THANKS )" \
 	-D MANFIMCONTENTS="$$( cat $(FIMDIR)/doc/fim.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fim.man.html_/g;s/href=\"#/href=\"#fim.man.html_/g' )" \
 	-D MANFIMRCCONTENTS="$$( cat $(FIMDIR)/doc/fimrc.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fimrc.man.html_/g;s/href=\"#/href=\"#fimrc.man.html_/g')" \
 	-D MANFIMGSCONTENTS="$$( cat $(FIMDIR)/doc/fimgs.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fimgs.man.html_/g;s/href=\"#/href=\"#fimgs.man.html_/g')" \
@@ -91,13 +92,13 @@ site:	pages
 	cd $(FIMDIR) && make dox
 	for i in $(FIMHTMLDOCS) ; do cp $(FIMDIR)/doc/$$i  $(SITEDIR) ; done
 	txt2html $(FIMDIR)/README > $(SITEDIR)/README.html
-	txt2html $(FIMDIR)/NEWS > $(SITEDIR)/NEWS.html
+	grep -v '^#' $(FIMDIR)/NEWS | txt2html -  > $(SITEDIR)/NEWS.html
 	txt2html $(FIMDIR)/BUGS > $(SITEDIR)/BUGS.html
 	rm -f $(SITEDIR)/index.html
 	make $(SITEDIR)/index.html
 	$(CP) $(FIMDIR)/README  $(SITEDIR)/README
 	$(CP) $(FIMDIR)/BUGS  $(SITEDIR)/BUGS
-	$(CP) $(FIMDIR)/NEWS  $(SITEDIR)/NEWS
+	grep -v '^#' $(FIMDIR)/NEWS > $(SITEDIR)/NEWS
 	$(CP) $(FIMDIR)/doc/FIM.TXT  $(SITEDIR)/FIM.TXT
 	#$(CP) ../$(TGZ) $(SITEDIR)
 	#$(CP) ../$(SIG) $(SITEDIR)
