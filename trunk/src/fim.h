@@ -543,7 +543,7 @@ namespace fim
 #define FIM_VID_FILENAME			"_filename"		/* "[out,i:] the current file name string" */
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[out,g:] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[out,g:] the contents of the default (hardcoded) grammar file" */
-#define FIM_VID_FRESH				"fresh"			/* "[in,out,i:,experimental] 1 if the image was loaded, before all autocommands execution" */
+#define FIM_VID_FRESH				"fresh"			/* "[in,out,i:,experimental] 1 if the image was loaded, before all autocommands (autocmd) execution" */
 #define FIM_VID_PAGE				"page"			/* "[out,experimental,g:] the current page" */
 #define FIM_VID_PAGES				"pages"			/* "[out,experimental,i:] the current number of pages of an image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal,g:] if 1, will inhibit display" */
@@ -574,7 +574,7 @@ namespace fim
 #define FIM_VID_VERBOSE_ERRORS			"_verbose_errors"			/* "[in,g:] if 1, will display on stdout internal errors, while parsing commands" */
 #define FIM_VID_VERBOSITY			"_verbosity"			/* "[in,experimental,g:] program verbosity" */
 #define FIM_VID_CONSOLE_KEY			"_console_key"		/* "[in,g:] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding" */
-#define FIM_VID_IGNORECASE			"_ignorecase"		/* "[in,g:] if 1, will allow for case insensitive regexp-based match in autocmd's; " */
+#define FIM_VID_IGNORECASE			"_ignorecase"		/* "[in,g:] if 1, will allow for case insensitive regexp-based match in autocommands (autocmd); " */
 #define FIM_VID_RE_SEARCH_OPTS			"_re_search_opts"	/* "[in,g:] affects regexp-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. " */
 #define FIM_VID_SAVE_FIM_HISTORY		"_save_fim_history"	/* "[in,g:] if 1 on exit, will save the " FIM_CNS_HIST_COMPLETE_FILENAME " file on exit" */
 #define FIM_VID_LOAD_FIM_HISTORY		"_load_fim_history"	/* "[in,g:] if 1 on startup, will load the " FIM_CNS_HIST_COMPLETE_FILENAME " file on startup" */
@@ -610,7 +610,7 @@ namespace fim
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[out,g:] the number of images currently cached." */
 #define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[out,g:] the screen width"  */
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[out] the screen height" */
-#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[in,g:] dump to stdout autocommands stack trace during their execution (for debugging purposes)" */
+#define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)" */
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in,g:] print out each command before its execution (for debugging purposes)" */
 #define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " */
 #define FIM_VID_OPEN_OFFSET_RETRY		"_open_offset_retry"	/* "[in,optional,g:] number of adjacent bytes to probe in opening the file " */

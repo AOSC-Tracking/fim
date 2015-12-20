@@ -92,7 +92,7 @@ Regard this as an easter bunny option.
 
 .TP
 .B  \-\-cd\-and\-readdir
-step into the first loaded file directory and push other files.
+Step into the first loaded file directory and push other files.
 .TP
 .B \-c {commands}, \-\-execute\-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.
@@ -101,7 +101,6 @@ command, they must be quoted and escaped in a manner suitable for your shell!
 
 For example,
 \-c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
-
 (with the single quotes) will tell fim to first double the displayed image 
 size, then pan two times up, then display the image ; and then 
 do an endless loop consisting of bottom and top aligning, alternated.
@@ -138,7 +137,7 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
 .B  \-\-load\-image\-descriptions\-file {filename}
-Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless \-\-load\-image\-descriptions\-file is specified), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file. Special comment lines like "#!fim:var=val" will lead i:var to be assigned value val (unquoted) at image loading time. If val is empty that variable will be unset. These variables are stored also in an internal index used by the limit command.
+Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless \-\-load\-image\-descriptions\-file is specified), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment). Special comment lines like "#!fim:var=val" will lead i:var to be assigned value val (unquoted) at image loading time. If val is empty that variable will be unset. These variables are stored also in an internal index used by the limit command.
 .TP
 .B  \-\-image\-descriptions\-file\-separator {sepchar}
 A character to be used as a separator between the filename and the description part of lines specified just before a \-\-load\-image\-descriptions\-file.
@@ -161,7 +160,7 @@ No system wide initialization file will be read (default is /usr/local/etc/fimrc
 No internal default configuration at startup (uses internal variable _no_default_configuration). Will only provide a minimal working configuration. 
 .TP
 .B  \-\-no\-commandline
-with internal command line mode disabled.
+With internal command line mode disabled.
 .TP
 .B  \-\-no\-history\-save
 Do not save execution history at finalization (uses internal variable _save_fim_history). 
@@ -258,13 +257,13 @@ Specify an endline delimiter string for breaking lines read via \-/\-\-read\-fro
 
 .TP
 .B \-A, \-\-autotop
-		 align images to the top (UNFINISHED).
+		 Align images to the top (UNFINISHED).
 .TP
 .B \-q, \-\-quiet
-		 quiet mode (UNFINISHED).
+		 Quiet mode (UNFINISHED).
 .TP
 .B \-r {resolution}, \-\-resolution {resolution}
-		 set resolution (UNFINISHED).
+		 Set resolution (UNFINISHED).
 .TP
 .B \-R, \-\-recursive
 		 Push files/directories to the files list recursively.
