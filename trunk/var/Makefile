@@ -67,6 +67,9 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D MUTT_ABBR=$(MUTT_ABBR) \
 	-D ASCII_ABBR=$(ASCII_ABBR) \
 	-D NEWSCONTENTS="$$( cat $(FIMDIR)/NEWS  )" \
+	-D MANFIMCONTENTS="$$( cat $(FIMDIR)/doc/fim.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fim.man.html_/g;s/href=\"#/href=\"#fim.man.html_/g' )" \
+	-D MANFIMRCCONTENTS="$$( cat $(FIMDIR)/doc/fimrc.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fimrc.man.html_/g;s/href=\"#/href=\"#fimrc.man.html_/g')" \
+	-D MANFIMGSCONTENTS="$$( cat $(FIMDIR)/doc/fimgs.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fimgs.man.html_/g;s/href=\"#/href=\"#fimgs.man.html_/g')" \
 	-D DATE="`date +'%d/%m/%Y'`" \
 	-D SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )" \
 	-D HOMEPAGE=$(HOMEPAGE) \
@@ -80,7 +83,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 pages:	$(PAGES) $(SITEDIR)/index.html
 
 site:	pages
-	#make tgz
+	make tgz
 	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/$(INDEXIN) > $(SITEDIR)/index.html
 	mkdir -p $(SITEDIR)
 	#cd $(FIMDIR) && ./autogen.sh && ./configure && make doc && make dist && cd -
