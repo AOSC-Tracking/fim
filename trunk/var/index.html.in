@@ -5,9 +5,9 @@ define(`ANCHORS',
  sections:
 <a href="#top">top</a>
 <a href="#news">news</a>
+<a href="#tutorial">tutorial</a>
 <a href="#docs">documentation</a>
 <a href="#screenshots">screenshots</a>
-<a href="#tutorial">tutorial</a>
 <a href="#download">download</a>
 <a href="#license">license</a>
 <a href="#copyright">copyright</a>
@@ -33,7 +33,7 @@ dnl
 <html>
 <head>
 <meta name="generator" content="vim">
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="keywords" content="fim, fbi improved, framebuffer image viewer, ASCII art image viewer, aalib, sdl image viewer, framebuffer console image viewer">
 <meta name="description" content="">
 <title>FIM: fbi improved home page</title>
@@ -42,11 +42,11 @@ dnl
 </head>
 <body bgcolor="#ffeedd" link="#AA6600" vlink="#884400">
 <table align="center" cellspacing="15pt" border="0" width="60%" >
-SECTION(Welcome to the FIM (Fbi IMproved) image viewer homepage,top)
+SECTION(Welcome to the FIM_ABBR (Fbi IMproved) image viewer homepage,top)
 <tr>
 <td>
-<A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="40%" ALT=""></A>
-<A HREF="#screenshots_aa"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_aa.png" WIDTH="40%" ALT=""></A>
+<A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="40%" ALT="A screenshot of a regular (framebuffer) FIM run (SDL would look the same)"></A>
+<A HREF="#screenshots_aa"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_aa.png" WIDTH="40%" ALT="A screenshot of an ASCII Art FIM run"></A>
 </td>
 </tr>
 
@@ -75,7 +75,7 @@ It can display pictures on screen via the following video devices/modes:
    Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://docs.enlightenment.org/api/imlib2/html/">Imlib2 library</a> mode (graphically, see <a href="#screenshots">screenshots</a>).
 </LI>
 <LI>
-   In any textual console, using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> Ascii Art library mode (rendering into text, see <a href="#screenshots">screenshots</a>).
+   In any textual console, using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> ASCII_ABBR Art library mode (rendering into text, see <a href="#screenshots">screenshots</a>).
 </LI>
 </UL>
 <BR>
@@ -84,7 +84,7 @@ The right video mode gets auto-detected or selected at runtime, and may be opted
 
 <br> &nbsp;<br>
 
-<a href="FWP">FIM</a> is free software
+<a href="FWP">FIM_ABBR</a> is free software
 (see <a href="#license">licensing info</a>)
 and it is richly documented 
 (see the <a href="#docs">documentation section</a>).
@@ -114,81 +114,6 @@ You can support FIM_ABBR by supporting the <a href="http://savannah.nongnu.org/"
 </h5>
 </td>
 </tr>
-SECTION(News: What's new with FIM,news)
-<tr>
-<td>
-<h5>
-(last update: DATE)
-</td>
-</tr>
-
-
-<tr>
-<td>
-
-<pre>
-NEWSCONTENTS
-</pre>
-
-<br> &nbsp;<br>
-
-</h5>
-</td>
-</tr>
-SECTION(Screenshots,screenshots)
-<tr>
-<td>
-<h5>
-<A NAME="screenshots_fb"></A>
-A screenshot of a regular (framebuffer) FIM_ABBR run (SDL would look the same)
-</h5>
-</td>
-</tr>
-<tr>
-<td align="center">
-<!--<a href="fim-shot-fb.png"><img src="fim-shot-fb-mini.png" alt=""></a>-->
-<!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
-<A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOT" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
-</td>
-</tr>
-
-<tr>
-<td>
-<h5>
-<A NAME="screenshots_aa"></A>
-A screenshot of an Ascii Art FIM_ABBR run:
-</h5>
-</td>
-</tr>
-<tr>
-<td align="center">
-<!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
-<A HREF="fim_diana_aa.png"><IMG CLASS="SCREENSHOT" SRC="fim_diana_aa.png" WIDTH="80%" ALT=""></A>
-</td>
-</tr>
-<tr>
-<td>
-<h5>
-Both screenshots taken with the <code>fbgrab</code> program using the trunk version of FIM_ABBR.
-<br>
-The top textual line was taken from the
-JPEG_ABBR
-comment contained in the file;
-EXIF_ABBR
-metadata is being displayed in the bottom textual line.
-<br>
-If you are curious, there are also a 
-<a href="fim_diana_aa.txt">textual</a>
-and 
-<a href="fim_diana_aa.txt.html">HTML</a> screenshots taken using sorcery.
-</h5>
-
-
-<br>
-<!-- <iframe src="fim_diana_aa.txt.html" scrolling="auto" frameborder="1" WIDTH="100%" HEIGHT="600px" align="center"></iframe> -->
-
-</td>
-</tr>
 SECTION(Tutorial: browsing through a photo collection with FIM_ABBR,tutorial)
 <tr>
 <td>
@@ -206,7 +131,8 @@ These go well beyond basic browsing with
 (see <a href="#docs">documentation</a> for the common defaults for keys and commands).
 <br>
 Say you have a collection of digital photographs, e.g. thousands of JPEG_ABBR files:
-<PRE CLASS="TEXTFB">
+<PRE CLASS="SHCMD">
+$ ls
 DSC_0001.JPG	
 DSC_0002.JPG	
 ...
@@ -215,7 +141,7 @@ sample.jpg
 <br>
 You can maintain textual descriptions of them and have them displayed in FIM_ABBR.
 <br>
-To do so, first produce a text file, say <CODE CLASS="SHCMD">files.dsc</CODE>, like this:
+To do so, first produce a text description file, say with: <CODE CLASS="SHCMD">ls | sed 's/$/\t/g' &gt; files.dsc</CODE>, containing:
 
 <PRE CLASS="TEXTFB">
 # This is a FIM images description file.
@@ -275,7 +201,7 @@ _info_fmt_str="%p%% %wx%h%L %i/%l%P img:%M cache:%C tot:%T %c";
 In the left side of the status line of the screenshot there is additional information:
 <CODE CLASS="FIMTXT">[1/15 sec.][f/4.0][ISO400]</CODE>.
 <br>
-These are respectively exposure time, aperture and ISO Speed rating.
+These are respectively exposure time, aperture and ISO_ABBR Speed rating.
 <br>
 FIM_ABBR extracts this information from the EXIF_ABBR section of the JPEG_ABBR file at load time.
 <br>
@@ -389,6 +315,81 @@ The examples above are just a small fraction of what you can do with FIM_ABBR; s
 <br>
 </td>
 </tr>
+SECTION(News: What's new with FIM_ABBR,news)
+<tr>
+<td>
+<h5>
+(last update: DATE)
+</td>
+</tr>
+
+
+<tr>
+<td>
+
+<PRE class="README">
+NEWSCONTENTS
+</PRE>
+
+<br> &nbsp;<br>
+
+</h5>
+</td>
+</tr>
+SECTION(Screenshots,screenshots)
+<tr>
+<td>
+<h5>
+<A NAME="screenshots_fb"></A>
+A screenshot of a regular (framebuffer) FIM_ABBR run (SDL would look the same)
+</h5>
+</td>
+</tr>
+<tr>
+<td align="center">
+<!--<a href="fim-shot-fb.png"><img src="fim-shot-fb-mini.png" alt=""></a>-->
+<!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
+<A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOT" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
+</td>
+</tr>
+
+<tr>
+<td>
+<h5>
+<A NAME="screenshots_aa"></A>
+A screenshot of an ASCII_ABBR Art FIM_ABBR run:
+</h5>
+</td>
+</tr>
+<tr>
+<td align="center">
+<!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
+<A HREF="fim_diana_aa.png"><IMG CLASS="SCREENSHOT" SRC="fim_diana_aa.png" WIDTH="80%" ALT=""></A>
+</td>
+</tr>
+<tr>
+<td>
+<h5>
+Both screenshots taken with the <CODE class="SHCMD">fbgrab</CODE> program using the trunk version of FIM_ABBR.
+<br>
+The top textual line was taken from the
+JPEG_ABBR
+comment contained in the file;
+EXIF_ABBR
+metadata is being displayed in the bottom textual line.
+<br>
+If you are curious, there are also a 
+<a href="fim_diana_aa.txt">textual</a>
+and 
+<a href="fim_diana_aa.txt.html">HTML</a> screenshots.
+</h5>
+
+
+<br>
+<!-- <iframe src="fim_diana_aa.txt.html" scrolling="auto" frameborder="1" WIDTH="100%" HEIGHT="600px" align="center"></iframe> -->
+
+</td>
+</tr>
 SECTION(Links to documentation,docs)
 <tr>
 <td>
@@ -476,15 +477,14 @@ and the signature file:
 <br>
 If you want to be sure of the files authenticity, you should at least follow these steps:
 <br>
-<h6>
-<pre>
+</h5>
+<PRE CLASS="SHCMD">
 wget MIRROR/TGZ
 wget MIRROR/SIG
 gpg --search 'dezperado autistici org'
 # import the key from a trusted keyserver by following on screen instructions
 gpg --verify SIG
-</pre>
-</h6>
+</PRE>
 
 
 <br> &nbsp;<br>
@@ -492,8 +492,7 @@ gpg --verify SIG
 The typical sequence of actions to build FIM_ABBR, which should suffice is 
 </h5>
 
-<h6>
-<pre>
+<PRE CLASS="SHCMD">
 tar xzf fim-VERSION.tar.gz 
 cd fim-VERSION 
 ./configure --help=short 
@@ -501,8 +500,7 @@ cd fim-VERSION
 ./configure 
 make 
 su -c "make install"
-</pre>
-</h6>
+</PRE>
 
 
 <br> &nbsp;<br>
@@ -524,13 +522,11 @@ dnl </h5>
 If you are interested in compiling the freshest <a href="REPOSITORY">repository</a> version,
 typing 
 </h5>
-<h6>
-<pre>
+<PRE CLASS="SHCMD">
 svn export REPOSITORY/trunk fim
-</pre>
-</h6>
+</PRE>
 <h5>
-at the command prompt will export the freshest (possibly unstable) version of FIM_ABBR in a directory named <code>fim</code>, and ready for compilation (see the <a href="#docs">documentation</a> for details).
+at the command prompt will export the freshest (possibly unstable) version of FIM_ABBR in a directory named <CODE CLASS="SHCMD">fim</CODE>, and ready for compilation (see the <a href="#docs">documentation</a> for details).
 </h5>
 <br> &nbsp;<br>
 
@@ -568,7 +564,7 @@ SECTION(Bugs,bugs)
 <td>
 <h5>
 
-They are notes about documented bugs in the 
+There are notes about documented bugs in the 
  <a href="BUGS.html">BUGS.html</a>
  (<a href="BUGS">BUGS</a>) file.
 <br> &nbsp;<br>

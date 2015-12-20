@@ -3,12 +3,12 @@
 
                 Version 0.5-trunk
 
- * introduced limit to expression, or file name, or marked file criteria (r851-r879)
+ * introduced 'limit' command, with comment, file name, or marked file criteria (r851-r879)
  * bugfix: in some situations fim -o fb was not clearing the screen before drawing
    the image (TODO: r882)
  * bugfix in the "list 'remove'" internals (TODO: r849)
  * load variables description namespace from file ("#!fim:var=value" forms)(TODO: r848)
- * changed librsb library detection: now it's 
+ * changed librsb library detection: now it's e.g.:
    LIBS="`librsb-config  --ldflags --extra_libs` " CXXFLAGS="`librsb-config --cflags ` \
    ./configure --enable-matrices-rendering
  * scaling image code faster (thanks to __restrict__ pointers)
@@ -24,7 +24,7 @@
  * faster display/scaling of images with mipmaps, set with _use_mipmaps
  * image cache will remember alignment within viewport (TODO)
  * viewport info cache size  (TODO)
- * mouse panning with in SDL mode (TODO: FIXME: disable this)
+ * mouse panning in SDL mode (TODO: FIXME: disable this)
  * `make fim' goal eliminated
  * BMP format support is now optional (TODO: r664*)
  * PCX format support (TODO: r666*)

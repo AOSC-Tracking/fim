@@ -1,35 +1,15 @@
-
-h1 { color: #d2d2d2; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; font-family: "Courier New", Tahoma, Courier, Monaco; text-decoration: none; background: black ; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua; }
-
-h2 { color: #fff; font-weight: bolder; font-size: 30pt; line-height: 30pt; font-family: Courier; background-color: #363636; text-align: center; text-transform: uppercase; text-indent: 0pt; letter-spacing: 15pt; margin: 0pt; padding-top: 0pt; padding-bottom: -2pt; border-bottom: none }
-
-h3 { color: white; font-size: 24pt; line-height: 24pt; font-family: "Courier New", Courier, Monaco; background: #2c2c2c fixed; padding-top: 8pt; padding-bottom: 8pt; padding-left: 50pt }
-
-h4 { color: white; font-style: oblique; font-weight: bolder; font-size: 10pt; line-height: 10pt; font-family: "Courier New", Tahoma, Courier, Monaco; background-color: #222; text-align: right; text-transform: lowercase; margin-top: 0pt; margin-right: 0pt; margin-left: 0pt; padding-top: 4pt; padding-bottom: 3pt ; border: 0pt 0pt 0pt 0pt }
-
-h5 { color: white; font-weight: normal; font-size: 14pt; line-height: 17pt; font-family: "MS Sans Serif"; background-color: #0B0B0B; text-indent: 0pt; margin: 0pt 0pt 0pt 0pt; padding: 10pt 10pt 10pt 10pt;  }
-
-h6 { color: white; font-weight: lighter; font-size: 11pt; line-height: 12pt; font-family: "MS Sans Serif"; background-color: gray; text-indent: 10pt; margin: 10pt; padding: 10pt; text-indent: 0pt ; }
-
-h7 { color: white; font-weight: lighter; font-size: 12pt; line-height: 12pt; font-family: "MS Sans Serif"; background-color: gray; text-indent: 0pt; margin: 0pt; padding: 0pt; }
-
-h8  { color: #2e2e2e; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; font-family: "Courier New", Tahoma, Courier, Monaco; text-decoration: none; background: black ; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua }
-
-A:hover
-{
-	text-decoration: line-through;
-	background-color: #2e2e2e;
-	color: lime;
-}
-
-A{
-	text-decoration: underline;
-	color: #daffe0;
-}
-A:visited
-{
-}
-
+h1, h2, h3, h4, h5, h6 { font-family: Baskerville, Georgia, Garamond, Times, serif; }
+h1 { color: #d2d2d2; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt;  text-decoration: none; background: black ; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua; }
+h2 { color: #fff; font-weight: bolder; font-size: 30pt; line-height: 30pt; background-color: #363636; text-align: center; text-transform: uppercase; text-indent: 0pt; letter-spacing: 15pt; margin: 0pt; padding-top: 0pt; padding-bottom: -2pt; border-bottom: none }
+h3 { color: white; font-size: 24pt; line-height: 24pt; background: #2c2c2c fixed; padding-top: 8pt; padding-bottom: 8pt; padding-left: 50pt }
+h4 { color: white; font-style: oblique; font-weight: bolder; font-size: 10pt; line-height: 10pt; background-color: #222; text-align: right; text-transform: lowercase; margin-top: 0pt; margin-right: 0pt; margin-left: 0pt; padding-top: 4pt; padding-bottom: 3pt ; border: 0pt 0pt 0pt 0pt }
+h5 { color: white; font-weight: normal; font-size: 14pt; line-height: 17pt; background-color: #0B0B0B; text-indent: 0pt; margin: 0pt 0pt 0pt 0pt; padding: 10pt 10pt 10pt 10pt;  }
+h6 { color: white; font-weight: lighter; font-size: 11pt; line-height: 12pt; background-color: gray; text-indent: 10pt; margin: 10pt; padding: 10pt; text-indent: 0pt ; }
+h7 { color: white; font-weight: lighter; font-size: 12pt; line-height: 12pt; background-color: gray; text-indent: 0pt; margin: 0pt; padding: 0pt; }
+h8  { color: #2e2e2e; font-style: normal; font-weight: lighter; font-size: 16pt; line-height: 17pt; text-decoration: none; background: black ; text-align: left; text-indent: 0pt; word-spacing: 0pt; letter-spacing: 0pt; margin-right: 2pt; margin-bottom: 0pt; margin-left: 2pt; padding: 0pt; border: 0pt aqua }
+A:hover { text-decoration: line-through; background-color: #2e2e2e; color: lime; }
+A{ text-decoration: underline; color: #daffe0; }
+A:visited { }
 BODY {
 	scrollbar-face-color: #666666;
 	scrollbar-shadow-color: #333333; 
@@ -49,18 +29,23 @@ BODY {
 	margin-right: 200 pt;
 	padding:20 pt;
 	font-link:
+	font-family: Baskerville, Georgia, Garamond, Times, serif;
 }
 
 /* CODE { text-align: left; font-family: monospace; background: #CCC fixed; color: #222; border: medium solid #00F ; overflow: hidden; padding:1pt; } */
-CODE { font-family: monospace; overflow: hidden; padding:1pt; background: #333 fixed; } 
-PRE.TEXTFB { text-align: left; font-family: monospace; background: #CCC fixed; color: #222; border: medium solid #00F ; overflow: hidden; margin:1%; display: block; line-height: 130%; }
-CODE.TEXTFI { font-family: monospace; background: #CCC fixed; color: #222; border: medium   solid #00F ; overflow: hidden; padding:1pt; }
-CODE.SHCMD { font-family: monospace; background: #CCC fixed; color: #222; border: medium   solid #080 ; overflow: hidden; padding:1pt; }
-CODE.FIMTXT{ font-family: monospace; background: #000 fixed; color: #FFF; border: thin   solid #FFF ; overflow: hidden; padding:1pt; }
-CODE.FIMKEY{ font-family: monospace; background: #CCC fixed; color: #222; border: thin   solid #FFF ; overflow: hidden; padding:1pt; font-weight: bolder; }
-CODE.FIMCMD{ font-family: monospace; background: #CCC fixed; color: #222; border: thin   solid #F00 ; overflow: hidden; padding:1pt; }
-PRE.FIMRCF { text-align: left; font-family: monospace; background: #CCC fixed; color: #222; border: medium solid #F00 ; overflow: visible; margin:1%; display: block; line-height: 130%; }
-IMG.SCREENSHOT { text-align: center; justify: center; margin: 10pt; padding: 1pt; color: #222; border: thin solid #FFF ; display: block; }
-IMG.SCREENSHOTI { text-align: center; justify: center; margin: 10pt; padding: 1pt; color: #222; border: thin solid #FFF ; }
+CODE { font-family: monospace; overflow: hidden; padding:1pt; background: #CCC fixed; color: #222; border: thin solid; } 
+PRE  { font-family: monospace; background: #CCC fixed; color: #222; border: medium solid; margin:1%; display: block; line-height: 130%; overflow: hidden; }
+PRE.TEXTFB { text-align: left; border-color: #00F ; }
+PRE.SHCMD { text-align: left; border-color: #080 ; }
+PRE.FIMRCF { text-align: left; border-color: #F00 ; }
+PRE.README { text-align: left; border-color: #FFF ; }
+CODE.TEXTFI{ border-color: #00F ; }
+CODE.SHCMD { border-color: #080 ; }
+CODE.FIMTXT{ border-color: #FFF ; background: #000 fixed; color: #FFF; }
+CODE.FIMKEY{ border: medium solid #FFF ; font-weight: bolder; }
+CODE.FIMCMD{ border-color: #F00 ; }
+IMG { text-align: center; justify: center; margin: 10pt; padding: 1pt; border: thin solid #FFF ; }
+IMG.SCREENSHOT {  display: block; }
+IMG.SCREENSHOTI {  }
 
 

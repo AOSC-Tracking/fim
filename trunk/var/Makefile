@@ -5,9 +5,11 @@
 FWP=http://www.nongnu.org/fbi-improved/
 FIM_ABBR='<ABBR TITLE="Fbi IMproved">FIM</ABBR>'
 VIM_ABBR='<ABBR TITLE="Vi IMproved">VIM</ABBR>'
+ISO_ABBR='<ABBR TITLE="International Organization for Standardization">ISO</ABBR>'
 JPEG_ABBR='<ABBR TITLE="Joint Photographic Experts Group">JPEG</ABBR>'
 EXIF_ABBR='<ABBR TITLE="Exchangeable image file format">EXIF</ABBR>'
 MUTT_ABBR='<ABBR TITLE="The Mutt Mail User Agent">Mutt</ABBR>'
+ASCII_ABBR='<ABBR TITLE="American Standard Code for Information Interchange">ASCII</ABBR>'
 INDEXIN=index.html.in
 FIMDIR=..
 FIMSITE=html-dezperado/fim
@@ -59,9 +61,11 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D FDP=$(FDP) \
 	-D FIM_ABBR=$(FIM_ABBR) \
 	-D VIM_ABBR=$(VIM_ABBR) \
+	-D ISO_ABBR=$(ISO_ABBR) \
 	-D JPEG_ABBR=$(JPEG_ABBR) \
 	-D EXIF_ABBR=$(EXIF_ABBR) \
 	-D MUTT_ABBR=$(MUTT_ABBR) \
+	-D ASCII_ABBR=$(ASCII_ABBR) \
 	-D NEWSCONTENTS="$$( cat $(FIMDIR)/NEWS  )" \
 	-D DATE="`date +'%d/%m/%Y'`" \
 	-D SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )" \

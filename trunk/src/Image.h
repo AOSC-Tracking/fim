@@ -280,7 +280,6 @@ public:
 							{
 								std::string varname = fn.substr(vn,es-1-vn);
 								ns.unsetVariable(varname);
-								std::cout << "cleanup\n";
 							}
 						}
 					}
