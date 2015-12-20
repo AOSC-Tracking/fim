@@ -18,5 +18,6 @@ EXTRA_DIST= \
 	$(srcdir)/maintenance/configure-*.sh \
 	$(srcdir)/maintenance/yacc2grammar.h \
 	$(srcdir)/maintenance/yacc2grammar.awk \
+	$(srcdir)/maintenance/htmlbody.awk \
 	$(srcdir)/utilities/fimscan.sh
 

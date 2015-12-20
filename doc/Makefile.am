@@ -7,6 +7,7 @@ CLEANFILES= doctags *.o  tags $(HTMLDOCS)
 EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man fimrc.man
 #MAN2HTML=man2html
 MAN2HTML=$(MAN) --html=cat
+MAN2HTMLS = sed 's/&minus;/-/g'
 
 man1_MANS = fim.man fimgs.man
 man5_MANS = fimrc.man
@@ -22,15 +23,15 @@ FIM.html fim-stylesheet.css: doctags FIM.TXT
 	./doctags $(srcdir)/FIM.TXT > tags ; $(srcdir)/vim2html.pl tags $(srcdir)/FIM.TXT
 
 fim.man.html: fim.man
-	$(MAN2HTML) ./$< >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< | $(MAN2HTMLS) >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
 fimrc.man.html: fimrc.man
-	$(MAN2HTML) ./$< >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< | $(MAN2HTMLS) >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
 ERRMSG="No $(MAN2HTML) at build time : please install $(MAN2HTML) and reissue :"
 
 fimgs.man.html: fimgs.man
-	$(MAN2HTML) ./$< >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
+	$(MAN2HTML) ./$< | $(MAN2HTMLS) >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
 doctags: doctags.c
 	        $(CC) -o $@ $<

@@ -4,13 +4,16 @@ define(`ANCHORS',
 <h4>
  sections:
 <a href="#top">top</a>
-<a href="#news">news</a>
 <a href="#tutorial">tutorial</a>
-<a href="#docs">documentation</a>
+<a href="#news">news</a>
 <a href="#screenshots">screenshots</a>
+<a href="#docs">documentation</a>
 <a href="#download">download</a>
-<a href="#license">license</a>
+<a href="#man_fim">man fim</a>
+<a href="#man_fimrc">man fimrc</a>
+<a href="#man_fimgs">man fimgs</a>
 <a href="#copyright">copyright</a>
+<a href="#license">license</a>
 <a href="#bugs">bugs</a>
 </h4>
 </td>
@@ -42,9 +45,9 @@ dnl
 </head>
 <body bgcolor="#ffeedd" link="#AA6600" vlink="#884400">
 <table align="center" cellspacing="15pt" border="0" width="60%" >
-SECTION(Welcome to the FIM_ABBR (Fbi IMproved) image viewer homepage,top)
+SECTION(Welcome to the FIM_ABBR (Fbi IMproved) image viewer program homepage,top)
 <tr>
-<td>
+<td align="center">
 <A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="40%" ALT="A screenshot of a regular (framebuffer) FIM run (SDL would look the same)"></A>
 <A HREF="#screenshots_aa"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_aa.png" WIDTH="40%" ALT="A screenshot of an ASCII Art FIM run"></A>
 </td>
@@ -60,7 +63,6 @@ like the VIM_ABBR text editor or the MUTT_ABBR mail user agent.
 
 <br> &nbsp;<br>
 
-Its sources derive from the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
 <BR>
 It can display pictures on screen via the following video devices/modes:
 <UL>
@@ -104,9 +106,9 @@ FIM_ABBR is an idea by
 Michele Martone, although inspiration has been drawn
 from other softwares as well as from certain science fiction movie scenes.
 &nbsp;<br>
-
-
+FIM_ABBR started as a fork of the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
 <br> &nbsp;<br>
+
 You can support FIM_ABBR by supporting the <a href="http://savannah.nongnu.org/">Savannah project</a>, whom network kindly hosts FIM_ABBR repositories.
 
 <br> &nbsp;<br>
@@ -399,9 +401,12 @@ SECTION(Links to documentation,docs)
 The first document you look at is the <a href="README.html">README.html</a>, (<a href="README">README</a>) file.
 
 Then there are 
-   the <a href="fim.man.html">FIM man page</a>, 
-   the <a href="fimrc.man.html">FIM language man page</a>, 
-   the <a href="fimgs.man.html">fimgs script man page</a>,
+   the <a href="#man_fim">FIM man documentation</a> 
+   <a href="fim.man.html">(also on single page)</a>, 
+   the <a href="#man_fimrc">FIM language man documentation</a>,
+   <a href="fimrc.man.html">(also on single page)</a>, 
+   the <a href="#man_fimgs">fimgs script man page</a>
+   <a href="fimgs.man.html">(also on single page)</a>, 
    the <a href="#tutorial">tutorial here right on this page</a>,
    and the <a href="FIM.html">doc/FIM.TXT</a> documentation file (slightly outdated but still interesting --- look in the man pages first).
 
@@ -409,28 +414,28 @@ Then there are
 Here links to some relevant sections:
 <UL>
 <LI>
-<a href="FIM.html#basics">first steps in FIM</a>
+<a href="FIM.html#basics">first steps in FIM (in the old tutorial)</a>
 </LI>
 <LI>
-the <a href="FIM.html#framebuffer">Linux Framebuffer</a> in the docs
+the <a href="FIM.html#framebuffer">Linux Framebuffer</a> (in the old tutorial)
 </LI>
 <LI>
-<a href="fim.man.html#EXAMPLES">FIM usage examples</a>
+<a href="#fim.man.html_EXAMPLES">FIM usage examples</a>
 </LI>
 <LI>
-<a href="fimrc.man.html#FIM LANGUAGE GRAMMAR">FIM language grammar</a>
+<a href="#fimrc.man.html_FIM LANGUAGE GRAMMAR">FIM language grammar</a>
 </LI>
 <LI>
-<a href="fimrc.man.html#COMMANDS REFERENCE">FIM commands reference</a>
+<a href="#fimrc.man.html_COMMANDS REFERENCE">FIM commands reference</a>
 </LI>
 <LI>
-<a href="fimrc.man.html#VARIABLES REFERENCE">FIM variables reference</a>
+<a href="#fimrc.man.html_VARIABLES REFERENCE">FIM variables reference</a>
 </LI>
 <LI>
-<a href="fimrc.man.html#USAGE EXAMPLES">FIM language usage examples</a>
+<a href="#fimrc.man.html_USAGE EXAMPLES">FIM language usage examples</a>
 </LI>
 <LI>
-the <a href="FIM.html#faq">Frequently Asked Questions (FAQ)</a>
+the <a href="FIM.html#faq">Frequently Asked Questions (FAQ)</a> (in the old tutorial)
 </LI>
 </UL>
 
@@ -530,6 +535,27 @@ at the command prompt will export the freshest (possibly unstable) version of FI
 </h5>
 <br> &nbsp;<br>
 
+</td>
+</tr>
+SECTION(man fim,man_fim)
+<tr>
+<td>
+MANFIMCONTENTS
+<br> &nbsp;<br>
+</td>
+</tr>
+SECTION(man fimrc,man_fimrc)
+<tr>
+<td>
+MANFIMRCCONTENTS
+<br> &nbsp;<br>
+</td>
+</tr>
+SECTION(man fimgs,man_fimgs)
+<tr>
+<td>
+MANFIMGSCONTENTS
+<br> &nbsp;<br>
 </td>
 </tr>
 SECTION(Copyright,copyright)
