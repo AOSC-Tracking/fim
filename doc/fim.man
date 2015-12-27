@@ -498,14 +498,13 @@ Or related programs: \fR\fIfbset\fR(1), \fR\fIcon2fb\fR(1), \fR\fIconvert\fR(1),
 .nf
 Michele Martone <dezperado _CUT_ autistici _CUT_ org> is the author of fim, "fbi improved". 
 .fi
-Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
-.B fim
-was originally based. 
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007\-2015 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
+Copyright (C) 2007\-2015 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
 .fi
-Copyright (C) 1999\-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org>
+Copyright (C) 1999\-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
+.B fim
+was originally based. 
 .P
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 .P
