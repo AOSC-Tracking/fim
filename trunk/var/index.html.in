@@ -39,7 +39,7 @@ dnl
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="keywords" content="fim, fbi improved, framebuffer image viewer, ASCII art image viewer, aalib, sdl image viewer, framebuffer console image viewer">
 <meta name="description" content="">
-<title>FIM: fbi improved home page</title>
+<title>FIM: fbi improved (lightweight customizable image viewer) home page</title>
 
 <link rel="stylesheet" type="text/css" href="fim.css">
 </head>
@@ -56,34 +56,39 @@ SECTION(Welcome to the FIM_ABBR (Fbi IMproved) image viewer program homepage,top
 <tr>
 <td>
 <h5>
+FIM_ABBR is a lightweight universal image viewer, mostly for Linux (but not only).
+     &nbsp;<br>
 FIM_ABBR aims to be a highly customizable and scriptable
-image viewer targeted at users who are comfortable with software
+image viewer for users who are comfortable with software
 like the VIM_ABBR text editor or the MUTT_ABBR mail user agent.
+&nbsp;<br>
+It has been developed with Linux in mind, but can be built to run on several Unix systems or even on MS-Windows.
 
 
 <br> &nbsp;<br>
 
+It is lightweight: it depends on a relatively few libraries, it displays in full screen and you control it using the keyboard.
+
 <BR>
-It can display pictures on screen via the following video devices/modes:
+It is universal: it can open many file formats and it can display pictures in the following video modes:
 <UL>
 <LI>
-   The <a href="http://www.linux.org">Linux</a>
-   <a href="https://www.kernel.org/doc/Documentation/fb/framebuffer.txt">framebuffer device</a> mode (graphically, see <a href="#screenshots">screenshots</a>).
+   Graphically, with the <a href="http://www.linux.org">Linux</a>
+   <a href="https://www.kernel.org/doc/Documentation/fb/framebuffer.txt">framebuffer device</a> (see <a href="#screenshots">screenshots</a>).
 </LI>
 <LI>
-   Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://www.libsdl.org">SDL library</a> mode (graphically, see <a href="#screenshots">screenshots</a>).
+   Graphically, under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://www.libsdl.org">SDL library</a> (see <a href="#screenshots">screenshots</a>).
 </LI>
 <LI>
-   Under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://docs.enlightenment.org/api/imlib2/html/">Imlib2 library</a> mode (graphically, see <a href="#screenshots">screenshots</a>).
+   Graphically, under <a href="http://www.x.org">X/Xorg</a>, using the <a href="http://docs.enlightenment.org/api/imlib2/html/">Imlib2 library</a> (see <a href="#screenshots">screenshots</a>).
 </LI>
 <LI>
-   In any textual console, using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> ASCII_ABBR Art library mode (rendering into text, see <a href="#screenshots">screenshots</a>).
+   Rendered as ASCII_ABBR Art in any textual console, using the <a href="http://aa-project.sourceforge.net/aalib">AAlib</a> library (see <a href="#screenshots">screenshots</a>).
 </LI>
 </UL>
 <BR>
 
 The right video mode gets auto-detected or selected at runtime, and may be opted in/out before build at configure time, if desired.
-
 <br> &nbsp;<br>
 
 <a href="FWP">FIM_ABBR</a> is free software
@@ -92,13 +97,13 @@ and it is richly documented
 (see the <a href="#docs">documentation section</a>).
 <br> &nbsp;<br>
 
-FIM_ABBR's official web page is hosted on Savannah: <a href="HOMEPAGE">HOMEPAGE</a>
+Its official web page is hosted on Savannah: <a href="HOMEPAGE">HOMEPAGE</a>
 <br> &nbsp;<br>
 
-FIM_ABBR's official mirror for stable releases is located on Savannah mirror network: <a href="MIRROR">MIRROR</a>
+The official mirror for stable releases is located on Savannah mirror network: <a href="MIRROR">MIRROR</a>
 <br> &nbsp;<br>
 
-FIM_ABBR's official mailing list is at: <a href="MAILINGLIST">MAILINGLIST</a>
+The official mailing list is at: <a href="MAILINGLIST">MAILINGLIST</a>
 <br> &nbsp;<br>
 
 
@@ -109,7 +114,12 @@ from other softwares as well as from certain science fiction movie scenes.
 FIM_ABBR started as a fork of the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
 <br> &nbsp;<br>
 
-You can support FIM_ABBR by supporting the <a href="http://savannah.nongnu.org/">Savannah project</a>, whom network kindly hosts FIM_ABBR repositories.
+If you like FIM_ABBR, consider:
+ sending a "thank you" message to 
+<a href="#fim.man.html_AUTHOR">its author</a>;
+ supporting the <a href="http://savannah.nongnu.org/">Savannah project</a>, whom network kindly hosts FIM_ABBR repositories;
+ donating to the <a href="http://www.fsfe.org/">Free Software Foundation Europe</a>;
+ donating to the <a href="http://www.fsf.org/">Free Software Foundation</a>.
 
 <br> &nbsp;<br>
 
@@ -120,9 +130,13 @@ SECTION(Tutorial: browsing through a photo collection with FIM_ABBR,tutorial)
 <tr>
 <td>
 
-Starting with version 0.5, FIM_ABBR has features to browse through photo collections.
+The very basics of FIM_ABBR are opening files, e.g.:
+ <CODE CLASS="SHCMD">fim DSC_0001.JPG DSC_0002.JPG</CODE> 
+ or a directory of files, e.g.:
+ <CODE CLASS="SHCMD">fim -R ~/Pictures/ </CODE>
 <br>
-These go well beyond basic browsing with
+... and browsing through them with the basic keys:
+<br>
 <CODE CLASS="FIMKEY">n</CODE> (next file),
 <CODE CLASS="FIMKEY">p</CODE> (previous file),
 <CODE CLASS="FIMKEY">+</CODE> (magnify),
@@ -130,7 +144,12 @@ These go well beyond basic browsing with
 <CODE CLASS="FIMKEY">r</CODE> (rotate),
 <CODE CLASS="FIMKEY">m</CODE> (mirror),
 <CODE CLASS="FIMKEY">f</CODE> (flip), ...
+<br>
 (see <a href="#docs">documentation</a> for the common defaults for keys and commands).
+<br>
+<br>
+
+Starting with version 0.5, FIM_ABBR has powerful features to browse through photo collections.
 <br>
 Say you have a collection of digital photographs, e.g. thousands of JPEG_ABBR files:
 <PRE CLASS="SHCMD">
@@ -174,7 +193,7 @@ will additionally display each image description on screen, just like in the fol
 <tr>
 <td>
 On the top of the screen you can see the 
-<CODE CLASS="FIMTXT">Busto di Diana. Da Pompei, 1817...</CODE> image description from the <CODE CLASS="SHCMD">files.dsc</CODE>.
+<CODE CLASS="FIMTXT">Busto di Diana. Da Pompei, 1817...</CODE> image description from the <CODE CLASS="SHCMD">files.dsc</CODE> file.
 <br>
 But one can display more information about the image.
 
@@ -195,7 +214,7 @@ The
 # _info_fmt_str is set to display current scale percentage, width, height, ... 
 _info_fmt_str="%p%% %wx%h%L %i/%l%P img:%M cache:%C tot:%T %c"; 
 
-# See man fimrc for a reference on the usable commands.
+# See <a href="#man_fimrc" style="color:red">man fimrc</a> for a reference on the fim language commands.
 </PRE>
 <br>
 
@@ -243,7 +262,8 @@ _display_status_fmt=
 	"%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k";
 # Above, the dot (.)  has been used to break the declaration of a long string.
 
-# See man fimrc for a reference on the usable commands.
+# See <a href="#man_fimrc" style="color:red">man fimrc</a> for a reference on the fim language commands.
+# See <a href="#man_fimrc"                  >man fimrc</a> for a reference on the fim language commands.
 </PRE>
 <br>
 The mechanism of displaying per-image variables can be used also in the following way.
