@@ -167,6 +167,7 @@ class CommandConsole
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	public:
 	void markCurrentFile(bool mark = true);
+	void markFile(const fim::string & file, bool mark = true, bool aloud = true);
 	private:
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #ifdef FIM_WITH_AALIB

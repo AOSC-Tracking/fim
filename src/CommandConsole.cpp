@@ -1952,28 +1952,41 @@ ok:
 
 	void CommandConsole::markCurrentFile(bool mark)
 	{
+		markFile(browser_.current(), mark);
+	}
+
+	void CommandConsole::markFile(const fim::string & file, bool mark, bool aloud)
+	{
 		/*
 		 * the current file will be added to the list of filenames
 		 * which will be printed upon the program termination.
 		 * */
-		if(browser_.current()!=FIM_STDIN_IMAGE_NAME)
+		if(file!=FIM_STDIN_IMAGE_NAME)
 		{
-			marked_files_t::iterator mfi=marked_files_.find(browser_.current());
+			marked_files_t::iterator mfi=marked_files_.find(file);
 			if(mfi==marked_files_.end())
 			{
 				if(mark)
-					marked_files_.insert(browser_.current()),
-					cout<<"Marked file \""<<browser_.current()<<"\"\n";
+				{
+					marked_files_.insert(file);
+					if(aloud)
+						cout<<"Marked file \""<<file<<"\"\n";
+				}
 				else
-					marked_files_.erase(mfi),
-					cout<<"Unmarked file \""<<browser_.current()<<"\"\n";
+					if(aloud)
+						cout<<"File \""<<file<<"\" was not marked\n";
 			}
 			else
 			{
-				if(mark)
-					cout<<"File \""<<browser_.current()<<"\" was already marked\n";
+				if( ! mark)
+				{
+					marked_files_.erase(mfi);
+					if(aloud)
+						cout<<"Unmarked file \""<<file<<"\"\n";
+				}
 				else
-					cout<<"File \""<<browser_.current()<<"\" was not marked\n";
+					if(aloud)
+						cout<<"File \""<<file<<"\" was already marked\n";
 			}
 		}
 	}
