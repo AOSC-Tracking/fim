@@ -39,6 +39,8 @@
  * added the 'desc "load"' command to load a textual files comments description file
 # (r851-r879):
  * introduced a 'limit' command, with comment, file name, or marked file criteria
+# (r902)
+ * introduced 'list "mark"' and 'list "unmark"' syntax styled as 'limit'
  * load i:_comment and i:var from description file, with forms:
    "filename comment" (to i:_comment),
    "#!fim:var=value" (to   set i:var=value on all all the files following)

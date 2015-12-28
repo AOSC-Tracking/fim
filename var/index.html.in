@@ -263,7 +263,6 @@ _display_status_fmt=
 # Above, the dot (.)  has been used to break the declaration of a long string.
 
 # See <a href="#man_fimrc" style="color:red">man fimrc</a> for a reference on the fim language commands.
-# See <a href="#man_fimrc"                  >man fimrc</a> for a reference on the fim language commands.
 </PRE>
 <br>
 The mechanism of displaying per-image variables can be used also in the following way.

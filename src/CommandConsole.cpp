@@ -1955,12 +1955,14 @@ ok:
 		markFile(browser_.current(), mark);
 	}
 
-	void CommandConsole::markFile(const fim::string & file, bool mark, bool aloud)
+	fim_int CommandConsole::markFile(const fim::string & file, bool mark, bool aloud)
 	{
 		/*
 		 * the current file will be added to the list of filenames
 		 * which will be printed upon the program termination.
 		 * */
+		fim_int ret = 0; /* number of impacted files */
+
 		if(file!=FIM_STDIN_IMAGE_NAME)
 		{
 			marked_files_t::iterator mfi=marked_files_.find(file);
@@ -1968,6 +1970,7 @@ ok:
 			{
 				if(mark)
 				{
+					++ret;
 					marked_files_.insert(file);
 					if(aloud)
 						cout<<"Marked file \""<<file<<"\"\n";
@@ -1980,6 +1983,7 @@ ok:
 			{
 				if( ! mark)
 				{
+					++ret;
 					marked_files_.erase(mfi);
 					if(aloud)
 						cout<<"Unmarked file \""<<file<<"\"\n";
@@ -1989,6 +1993,7 @@ ok:
 						cout<<"File \""<<file<<"\" was already marked\n";
 			}
 		}
+		return ret;
 	}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 

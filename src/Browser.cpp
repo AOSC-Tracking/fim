@@ -1559,7 +1559,7 @@ err:
 		 */
 		fim::string result;
 		int N = 0;
-		fim_int matched = 0;
+		fim_int matched = 0, marked = 0;
 
 		FIM_PR('*');
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
@@ -1572,7 +1572,7 @@ err:
 					if(faction == Delete)
 						flist_.erase(flist_.begin()+i), --i;
 					else
-						cc.markFile(flist_[i],(faction == Mark),false);
+						marked += cc.markFile(flist_[i],(faction == Mark),false);
 				}
 			goto rfrsh;
 		}
@@ -1621,7 +1621,7 @@ err:
 						--i; /* i needs to be reconsidered */
 					}
 					else
-						cc.markFile(flist_[i],(faction == Mark),false);
+						marked += cc.markFile(flist_[i],(faction == Mark),false);
 				}
 			}
 	//		if(lf != flist_.size() )
@@ -1642,8 +1642,8 @@ err:
 		}
 		}
 rfrsh:
-		if (faction != Delete)
-			cout << ( faction == Mark ? "  Marked " : "Unmarked "  ) << matched << " files\n";
+		if ((faction != Delete) && marked)
+			cout << ( faction == Mark ? "  Marked " : "Unmarked "  ) << marked << " files\n";
 		N = flist_.size();
 		if( N <= 0 )
 			cf_ = 0;
