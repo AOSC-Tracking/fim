@@ -577,6 +577,7 @@ nop:
 			// result = "Restoring the original browsable files list.";
 			flist_ = tlist_; /* reset */
 		}
+		setGlobalVariable(FIM_VID_FILELISTLEN,n_files()); /* TODO: need a specific 'refresh' function */
 nop:
 		return result;
 	}
