@@ -84,7 +84,7 @@ namespace fim
 			{
 				args_t argsc(args);
 				argsc.erase(argsc.begin());
-				result = do_remove(argsc);
+				result = do_filter(argsc);
 			}
 			else if(args[0]=="push")
 			{
@@ -120,9 +120,20 @@ namespace fim
 				result = n_files();
 			}
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-			else if(args[0]=="mark")
+			else if(args[0]=="mark" || args[0]=="unmark")
 			{
-			       	cc.markCurrentFile(); 
+				bool domark = (args[0]=="mark");
+#if FIM_WANT_PIC_LBFL
+				if(args.size() > 1)
+				{
+					args_t args_1;
+					for(int ii=1;ii<args.size();++ii)
+						args_1.push_back(args[ii]); // FIXME: need a better syntax
+					do_filter(args_1,CmtMatch,false,domark ? Mark : Unmark);
+				}
+				else
+#endif /* FIM_WANT_PIC_LBFL */
+			       		cc.markCurrentFile(domark); 
 				goto ret;
 		       	} 
 			else if(args[0]=="marked")
@@ -136,11 +147,6 @@ namespace fim
                                 else
                                         result += "No files have been marked by the user.\n";
 				goto ret;
-		       	} 
-			else if(args[0]=="unmark")
-			{
-			       	cc.markCurrentFile(false);
-			       	goto ret;
 		       	} 
 #else /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 			else if(args[0]=="mark")
@@ -558,11 +564,11 @@ nop:
 			if( args[0] == "!" )
 			{
 				// result = result + "Limiting to marked files\n";
-				do_remove(args,MarkedMatch,true); /* this is remove on filenames; need remove on comments */
+				do_filter(args,MarkedMatch,true); /* this is remove on filenames; need remove on comments */
 			}
 			else
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
-				do_remove(args,VarMatch,true); /* this is remove on filenames; need remove on comments */
+				do_filter(args,VarMatch,true); /* this is remove on filenames; need remove on comments */
 			if(lbl != n_files())
 				reload();
 		}
@@ -694,7 +700,7 @@ nop:
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
 				args_t args;
 				args.push_back(c.c_str());
-				do_remove(args);	// remove is an experimental function
+				do_filter(args);	// remove is an experimental function
 #ifdef FIM_AUTOSKIP_FAILED
 				if(n_files())
 				{
@@ -1545,13 +1551,15 @@ err:
 		return errmsg;
 	}
 
-	fim::string Browser::do_remove(const args_t &args, RemoveMode rm, bool negative)
+	fim::string Browser::do_filter(const args_t &args, MatchMode rm, bool negative, enum FilterAction faction)
 	{
 		/*
 		 * TODO: flags for negative, ... 
+		 * TODO: message like 'marked xxx files' ...
 		 */
 		fim::string result;
 		int N = 0;
+		fim_int matched = 0;
 
 		FIM_PR('*');
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
@@ -1560,7 +1568,11 @@ err:
 			for(size_t i=0;i<flist_.size();++i)
 				if( cc.isMarkedFile(flist_[i]) != negative )
 				{
-					flist_.erase(flist_.begin()+i), --i;
+					++matched;
+					if(faction == Delete)
+						flist_.erase(flist_.begin()+i), --i;
+					else
+						cc.markFile(flist_[i],(faction == Mark),false);
 				}
 			goto rfrsh;
 		}
@@ -1586,24 +1598,30 @@ err:
 					rm = CmtMatch;
 #else
 			if ( rm == VarMatch )
-				rm = FullMatch;
+				rm = FullFileNameMatch;
 #endif /* FIM_WANT_PIC_LVDN */
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
 			{
-				bool keep = true;
-				keep &= ! ( rm == FullMatch    && ( ( flist_[i] == rlist[r] ) ) != negative );
-				keep &= ! ( rm == PartialMatch && ( ( flist_[i].re_match(rlist[r].c_str()) ) ) != negative );
+				bool match = false;
+				match |= ( rm == FullFileNameMatch && ( ( flist_[i] == rlist[r] ) ) != negative );
+				match |= ( rm == PartialFileNameMatch && ( ( flist_[i].re_match(rlist[r].c_str()) ) ) != negative );
 #if FIM_WANT_PIC_LVDN
-				keep &= ! ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(std::string(flist_[i]).c_str())].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
-				keep &= ! ( rm == CmtMatch     && ( ( string(cc.id_    [fim_basename_of(std::string(flist_[i]).c_str())]).re_match(rlist[0].c_str()) ) != negative ) );
+				match |= ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(std::string(flist_[i]).c_str())].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
+				match |= ( rm == CmtMatch     && ( ( string(cc.id_    [fim_basename_of(std::string(flist_[i]).c_str())]).re_match(rlist[0].c_str()) ) != negative ) );
 #endif /* FIM_WANT_PIC_LVDN */
 
-				if( ! keep )
+				if( match )
 				{
+					++matched;
 //					std::cout << "removing" << flist_[i]<<FIM_CNS_NEWLINE;
-					flist_.erase(flist_.begin()+i);
-					--i; /* i needs to be reconsidered */
+					if(faction == Delete)
+					{
+						flist_.erase(flist_.begin()+i);
+						--i; /* i needs to be reconsidered */
+					}
+					else
+						cc.markFile(flist_[i],(faction == Mark),false);
 				}
 			}
 	//		if(lf != flist_.size() )
@@ -1624,6 +1642,8 @@ err:
 		}
 		}
 rfrsh:
+		if (faction != Delete)
+			cout << ( faction == Mark ? "  Marked " : "Unmarked "  ) << matched << " files\n";
 		N = flist_.size();
 		if( N <= 0 )
 			cf_ = 0;
