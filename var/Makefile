@@ -4,6 +4,7 @@
 #FWP=http://www.autistici.org/dezperado/fim
 FWP=http://www.nongnu.org/fbi-improved/
 FIM_ABBR='<ABBR TITLE="Fbi IMproved">FIM</ABBR>'
+SSH_ABBR='<ABBR TITLE="Secure SHell">SSH</ABBR>'
 VIM_ABBR='<ABBR TITLE="Vi IMproved">VIM</ABBR>'
 ISO_ABBR='<ABBR TITLE="International Organization for Standardization">ISO</ABBR>'
 JPEG_ABBR='<ABBR TITLE="Joint Photographic Experts Group">JPEG</ABBR>'
@@ -60,6 +61,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D FWP=$(FWP) \
 	-D FDP=$(FDP) \
 	-D FIM_ABBR=$(FIM_ABBR) \
+	-D SSH_ABBR=$(SSH_ABBR) \
 	-D VIM_ABBR=$(VIM_ABBR) \
 	-D ISO_ABBR=$(ISO_ABBR) \
 	-D JPEG_ABBR=$(JPEG_ABBR) \
