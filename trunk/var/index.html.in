@@ -4,7 +4,7 @@ define(`ANCHORS',
 <h4>
  sections:
 <a href="#top">top</a>
-<a href="#tutorial">tutorial</a>
+<a href="#tutorials">tutorials</a>
 <a href="#news">news</a>
 <a href="#screenshots">screenshots</a>
 <a href="#docs">documentation</a>
@@ -19,16 +19,29 @@ define(`ANCHORS',
 </td>
 </tr>
 )
+dnl
 define(`SECTION',`
 pushdef(`STITLE',$1)dnl
 pushdef(`ANAME',$2)dnl
 dnl pushdef(`SBODY',$3)dnl
 ifelse(ANAME,,,<tr><td><a name="ANAME"></a></td></tr>)
 <tr><td> ANCHORS </td></tr>
-ifelse(STITLE,,,<tr><td><h3>STITLE</h3></td></tr>)
+ifelse(STITLE,,,<tr><td><h2>STITLE</h2></td></tr>)
 dnl popdef(`SBODY')dnl
 popdef(`ANAME')dnl
 popdef(`STITLE')dnl
+')
+dnl
+define(`SUBSECTION',`
+pushdef(`SSTITLE',$1)dnl
+pushdef(`SANAME',$2)dnl
+dnl pushdef(`SSBODY',$3)dnl
+ifelse(SANAME,,,<tr><td><a name="SANAME"></a></td></tr>)
+dnl <tr><td> ANCHORS </td></tr>
+ifelse(SSTITLE,,,<tr><td><h3>SSTITLE</h3></td></tr>)
+dnl popdef(`SSBODY')dnl
+popdef(`SANAME')dnl
+popdef(`SSTITLE')dnl
 ')
 dnl
 dnl
@@ -60,7 +73,7 @@ FIM_ABBR is a lightweight universal image viewer, mostly for Linux (but not only
      &nbsp;<br>
 FIM_ABBR aims to be a highly customizable and scriptable
 image viewer for users who are comfortable with software
-like the VIM_ABBR text editor or the MUTT_ABBR mail user agent.
+like the VIM_ABBR text editor or the MUTT_ABBR mail user agent (see <a href="#tutorial_mutt">this minitutorial</a>).
 &nbsp;<br>
 It has been developed with Linux in mind, but can be built to run on several Unix systems or even on MS-Windows.
 
@@ -126,9 +139,25 @@ If you like FIM_ABBR, consider:
 </h5>
 </td>
 </tr>
-SECTION(Tutorial: browsing through a photo collection with FIM_ABBR,tutorial)
+SECTION(Tutorials,tutorials)
 <tr>
 <td>
+
+We have the following tutorials:
+<UL>
+<LI>
+<a href="#tutorial_photos">
+How to manage a photo collection with FIM_ABBR</a>
+</LI>
+<LI>
+<a href="#tutorial_mutt">
+How to display attached images in MUTT_ABBR using FIM_ABBR</a>
+</LI>
+</UL>
+
+</td></tr>
+SUBSECTION(Tutorial: browsing through a photo collection with FIM_ABBR,tutorial_photos)
+<tr><td>
 
 The very basics of FIM_ABBR are opening files, e.g.:
  <CODE CLASS="SHCMD">fim DSC_0001.JPG DSC_0002.JPG</CODE> 
@@ -334,6 +363,58 @@ some pictures, and when exiting, fim will print out to standard output only the 
 <br>
 The examples above are just a small fraction of what you can do with FIM_ABBR; see the <a href="#docs">documentation</a> for more.
 <br>
+
+
+</td></tr>
+SUBSECTION(Tutorial: How to display attached images in MUTT_ABBR using FIM_ABBR,tutorial_mutt)
+<tr><td>
+I assume you know how to use MUTT_ABBR.
+<br>
+One can instruct MUTT_ABBR to open attachments or multimedia files using specific programs.
+<br>
+This is obviously possible also with FIM_ABBR and images.
+<br>
+
+<br>
+All you have to do is to edit the  <CODE CLASS="SHCMD">~/.mailcap</CODE> file, which is used by MUTT_ABBR when you open an attachment.
+<br>
+The following suffices for a minimal integration:
+<br>
+<PRE CLASS="TEXTFB">
+image/*; fim %s
+</PRE>
+<br>
+
+You can also instruct FIM_ABBR to use ASCII_ABBR art if we are working over an SSH_ABBR connection:
+<PRE CLASS="TEXTFB">
+image/*;( [ "$SSH_CLIENT" != "" ] && fim -o aa  %s ) || ( fim %s )
+</PRE>
+<br>
+
+Finally, if you wish to use the <CODE CLASS="SHCMD">fimgs</CODE> wrapper script (installed automatically when you install <CODE CLASS="SHCMD">fim</CODE>) to convert transparently with different programs, and then display with FIM_ABBR, you can do it like here:
+
+<PRE CLASS="TEXTFB">
+image/*;( [ "$SSH_CLIENT" != "" ] && fim -o aa  %s ) || ( fim %s )
+
+# Use evince, and if not, fimgs:
+application/pdf;( [ "$DISPLAY" != "" ] && evince %s ) || fimgs %s
+
+# Use gv, and if not, fimgs:
+application/ps;( [ "$DISPLAY" != "" ] && gv %s ) || fimgs %s
+application/postscript;( [ "$DISPLAY" != "" ] && gv %s ) || fimgs %s
+
+# Use xdvi, and if not, fimgs:
+application/x-dvi;( [ "$DISPLAY" != "" ] && xdvi %s ) || fimgs %s
+
+# The following two examples are more funny than useful.
+
+# Display each bit as a pixel:
+application/octet-stream; fim --binary=1 %s
+
+# Display a text file rendered:
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; docx2txt < %s | fim --as-text -i -q
+</PRE>
+<br>
 </td>
 </tr>
 SECTION(News: What's new with FIM_ABBR,news)
@@ -426,7 +507,7 @@ Then there are
    <a href="fimrc.man.html">(also on single page)</a>, 
    the <a href="#man_fimgs">fimgs script man page</a>
    <a href="fimgs.man.html">(also on single page)</a>, 
-   the <a href="#tutorial">tutorial here right on this page</a>,
+   the <a href="#tutorials">tutorials here right on this page</a>,
    and the <a href="FIM.html">doc/FIM.TXT</a> documentation file (slightly outdated but still interesting --- look in the man pages first).
 
 <br> &nbsp;<br>
