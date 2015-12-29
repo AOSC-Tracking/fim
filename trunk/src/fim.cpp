@@ -1481,6 +1481,7 @@ done:
 		{
 			cc.fpush(fim_fread_tmpfile(stdin));
 			close(0);
+			//fclose(stdin);
 			ndd=dup(2);
 		}
 #endif /* FIM_WANT_STDIN_FILELOAD_AFTER_CONFIG */

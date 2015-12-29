@@ -732,11 +732,11 @@ FILE * fim_fread_tmpfile(FILE * fp)
 {
 	/*
 	*  We transfer a stream contents in a tmpfile(void)
-	* NEW
 	*/
 	FILE *tfd=FIM_NULL;
+
 	if( ( tfd=tmpfile() )!=FIM_NULL )
-	{	
+	{
 		/* todo : read errno in case of error and print some report.. */
 		const size_t buf_size=FIM_STREAM_BUFSIZE;
 		fim_char_t buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
@@ -744,15 +744,27 @@ FILE * fim_fread_tmpfile(FILE * fp)
 		{
 			wc=fwrite(buf,1,rc,tfd);
 			if(wc!=rc)
-			{/* FIXME : this error condition should be handled, as this mechanism is very brittle */}
+			{
+				/* FIXME : this error condition should be handled, as this mechanism is very brittle */
+				// std::cerr << "fwrite error writing to tmpfile()!\n";
+			}
 		}
 		rewind(tfd);
+		if(errno)
+		{
+			// FIXME: need to handle errors properly.
+			std::cout << "Error while reading temporary file: errno has now value "<<errno<<":"<<sys_errlist[errno]<<"\n";
+		}
 		/*
 		 * Note that it would be much nicer to do this in another way,
 		 * but it would require to rewrite much of the file loading stuff
 		 * (which is quite fbi's untouched stuff right now)
 		 * */
 		return tfd;
+	}
+	else
+	{
+		// std::cerr << "tmpfile() error !\n";
 	}
 	return FIM_NULL;
 }

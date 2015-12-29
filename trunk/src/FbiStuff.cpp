@@ -1813,6 +1813,21 @@ with_offset:
       /* should we care about the error code ? */
       return FIM_NULL;	/* new */
     }
+    if(fr < sizeof(blk)) // FIXME: shall compare to min(sizeof(blk),filesize)
+    {
+      if(fr == 0)
+      {
+        std::cout << "Reading an empty file ?\n";
+        // FIXME: need to handle this case.
+	//goto ret;
+      }
+      else
+      {
+        // std::cout << "Read only " << fr << " bytes for block probing!\n";
+        // FIXME: tolerating and going further, for now (it might be a tiny file).
+	// goto ret;
+      }
+    }
     fim_rewind(fp);
     if(read_offset>0)
 	    fim_fseek(fp,read_offset,SEEK_SET);
