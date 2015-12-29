@@ -137,10 +137,8 @@ ret:
 	{
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
-		if(!oi || !is_in_clone_cache(oi))
-			return -1;
 #ifdef FIM_CACHE_DEBUG
-		cout << "deleting " << fim_basename_of(oi->getName()) << "\n";
+		std::cout << "erasing clone " << fim_basename_of(oi->getName()) << "\n";
 #endif /* FIM_CACHE_DEBUG */
 		cloneUsageCounter_.erase(oi);
 		delete oi;
@@ -264,9 +262,10 @@ rt:
 		FIM_LOUD_CACHE_STUFF;
 		if(is_in_cache(key))
 		{
-			goto ret;
 			FIM_PR('c');
+			goto ret;
 		}
+#if 0
 	  	if(need_free())
 			free_some_lru();
 		if(need_free())
@@ -274,6 +273,7 @@ rt:
 			FIM_PR('f');
 			goto ret; /* skip prefetch if cache is full */
 		}
+#endif
 		if(key.first == FIM_STDIN_IMAGE_NAME)
 		{
 			FIM_PR('s');
@@ -293,7 +293,14 @@ rt:
 		if(!loadNewImage(key,0,true))
 		{
 			retval = -1;
+#ifdef FIM_CACHE_DEBUG
+			std::cout << "loading failed\n";
+#endif /* FIM_CACHE_DEBUG */
 			goto ret;
+		}
+		else
+		{
+			FIM_PR('l');
 		}
 		setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
 		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
@@ -316,6 +323,7 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
 #endif /* FIM_CACHE_DEBUG */
+#if 0
 			if( ni->cacheable() )
 				cacheNewImage( ni );
 			else
@@ -324,6 +332,16 @@ ret:
 					delete ni;
 					ni = NULL;
 				}
+#else
+			if( (!ni->cacheable()) || cacheNewImage( ni ) )
+			{
+#ifdef FIM_CACHE_DEBUG
+				if( !ni->cacheable())
+					std::cout << "uncacheable :"<<key.first.c_str()<< " with " << ni->n_pages()<< " pages\n";
+#endif /* FIM_CACHE_DEBUG */
+				goto ret;
+			}
+#endif
 		}
 		}
 		catch(FimException e)
@@ -363,7 +381,7 @@ ret:
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
 #ifdef FIM_CACHE_DEBUG
-					std::cout << "going to cache: "<< ni << "\n";
+		std::cout << "going to cache: "<< ni << "\n";
 #endif /* FIM_CACHE_DEBUG */
 		this->imageCache_[ni->getKey()]=ni;
 		this->reverseCache_[ni]= ni->getKey();
@@ -394,7 +412,7 @@ ret:
 			/* NOTE : the user should call usageCounter_.erase(key) after this ! */
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "will erase  "<< oi << " " <<  fim_basename_of(oi->getName()) << " time:"<< lru_[oi] << "\n";
-			cout << "deleting " << fim_basename_of(oi->getName()) << "\n";
+			std::cout << "erasing original " << fim_basename_of(oi->getName()) << "\n";
 #endif /* FIM_CACHE_DEBUG */
 			lru_.erase(oi);
 			imageCache_.erase(reverseCache_[oi]);
@@ -460,6 +478,7 @@ ret:
 		if( is_in_clone_cache(image) )
 		{
 			usageCounter_[image->getKey()]--;
+			FIM_PR('c');
 			erase_clone(image);	// we _always_ immediately delete clones
 			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 			goto ret;
@@ -467,6 +486,7 @@ ret:
 		else
 		if( is_in_cache(image) )
 		{
+			FIM_PR('-');
 			usageCounter_[image->getKey()]--;
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
 			image->mm_free();
@@ -488,14 +508,12 @@ ret:
 				if( need_free() )
 				{
 					Image * lrui = get_lru(true);
-
+					FIM_PR('o');
 					if( lrui ) 
 					{
 						cache_key_t key = lrui->getKey();
-						
 						if( FIM_VCBS(viewportInfo_) > FIM_CNS_VICSZ )
 							viewportInfo_.erase(key);
-
 						if(( key.second != FIM_E_STDIN ))
 						{	
 							this->erase( lrui );
@@ -543,33 +561,25 @@ ret:
 #endif /* FIM_CACHE_DEBUG */
 		if(!is_in_cache(key)) 
 		{
-			/*
-			 * no Image cached at all for this filename
-			 * */
+#ifdef FIM_CACHE_DEBUG
+			std::cout << "not in the cache: "<< key.first << " \n";
+#endif /* FIM_CACHE_DEBUG */
 			image = loadNewImage(key,page,false);
 			if(!image)
 				goto ret; // bad luck!
 			if(!image->cacheable())
 				goto ret; // we keep it but don't cache it
 			usageCounter_[key]=1;
-			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-			goto ret;
-//			usageCounter_[key]=0;
 		}
-		else
+		else // is_in_cache(key)
 		{
-			/*
-			 * at least one copy of this filename image is in cache
-			 * */
 			image = getCachedImage(key);// in this way we update the LRU cache :)
 			if(!image)
 			{
-				// critical error
 #ifdef FIM_CACHE_DEBUG
 				cout << "critical internal cache error!\n";
 #endif /* FIM_CACHE_DEBUG */
-				setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-				goto ret;
+				goto done;
 			}
 			if( used_image( key ) )
 			{
@@ -594,9 +604,7 @@ ret:
 				}
 				if(!image)
 					goto ret; //means that cloning failed.
-
 				clone_pool_.insert(image); // we have a clone
-
 				cloneUsageCounter_[image]=1;
 			}
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
@@ -607,9 +615,9 @@ ret:
 			lru_touch( key );
 			// if loading and eventual cloning succeeded, we count the image as used of course
 			usageCounter_[key]++;
-			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
-			goto ret;	//so, it could be a clone..
 		}
+done:
+		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 ret:
 		if(vsp && image)
 		{
@@ -735,11 +743,16 @@ ret:
 	Cache::~Cache(void)
 	{
 		cachels_t::const_iterator ci;
-
 		FIM_LOUD_CACHE_STUFF;
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
 			if(ci->second)
+			{
+#ifdef FIM_CACHE_DEBUG
+				std::cout << "about to free " << (ci->first.first) << "\n";
+#endif /* FIM_CACHE_DEBUG */
 				delete ci->second;
+			}
+		imageCache_.clear(); /* destroy Image objects */
 	}
 
 	size_t Cache::img_byte_size(void)const

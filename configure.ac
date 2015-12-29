@@ -1877,7 +1877,7 @@ AC_OUTPUT(Makefile src/Makefile doc/Makefile distros/Makefile scripts/Makefile
 #AC_OUTPUT
 
 AC_MSG_NOTICE([
-	Fim v${VERSION} has been configured as follows (features marked with * are not recommended):
+	Fim v${VERSION} has been configured as follows (features marked with * are not recommended: either unfinished or broken: please do NOT use them when building for a distro):
 
    	default minimal key mapping         : ${have_default_mapping:-no}
    	default minimal key bindings        : ${have_default_bindings:-no}
