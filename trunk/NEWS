@@ -130,6 +130,8 @@
  * bugfix: in some situations fim -o fb was not clearing the screen before drawing the image
 # (r849)
  * bugfix in the "list 'remove'" internals
+# (r907)
+ * --binary=1/--binary=24 will not pad tiny renderings to _preferred_rendering_width pixels
 
                 Version 0.4
 
