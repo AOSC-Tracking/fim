@@ -155,6 +155,7 @@ namespace fim
 		reset();	// pointers blank
 		if( !load(fname,fd,/*getGlobalIntVariable(FIM_VID_PAGE)*/page) || check_invalid() || (!fimg_) ) 
 		{
+			FIM_PR('e');
 			// FIXME: sometimes load() intentionally skips a file. an appropriate message shall be printed out
 			cout << "warning : invalid loading "<<fname<<" ! \n";
 			if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
@@ -164,7 +165,7 @@ namespace fim
 		}
 		else
 		{
-
+			FIM_PR(' ');
 #if FIM_WANT_PIC_CMTS
 			/* Picture commentary. user-set overrides the file's own. */
 			struct ida_extra* ie=load_find_extra(&(img_->i),EXTRA_COMMENT);
@@ -372,7 +373,10 @@ uhmpf:
 		bool retval = false;
 		FIM_PR('*');
 		if(fname==FIM_NULL && fname_==FIM_CNS_EMPTY_STRING)
+		{
+			FIM_PR('e');
 			goto ret;//no loading = no state change
+		}
 		this->free();
 		fname_=fname;
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
@@ -434,6 +438,7 @@ uhmpf:
 
 		if(! img_)
 		{
+			FIM_PR('!');
 			cout<<"warning : image loading error!\n"   ;
 			invalid_=true;
 			goto ret;
