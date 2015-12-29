@@ -323,7 +323,6 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
 #endif /* FIM_CACHE_DEBUG */
-#if 0
 			if( ni->cacheable() )
 				cacheNewImage( ni );
 			else
@@ -332,16 +331,6 @@ ret:
 					delete ni;
 					ni = NULL;
 				}
-#else
-			if( (!ni->cacheable()) || cacheNewImage( ni ) )
-			{
-#ifdef FIM_CACHE_DEBUG
-				if( !ni->cacheable())
-					std::cout << "uncacheable :"<<key.first.c_str()<< " with " << ni->n_pages()<< " pages\n";
-#endif /* FIM_CACHE_DEBUG */
-				goto ret;
-			}
-#endif
 		}
 		}
 		catch(FimException e)
