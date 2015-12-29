@@ -80,7 +80,7 @@ struct fim_options_t fim_options[] = {
 #if FIM_WANT_RAW_BITS_RENDERING
     {FIM_OSW_BINARY,     optional_argument,       FIM_NULL, 'b',"view any file as either a 1 or 24 bpp bitmap.","[=24|1]",
 "Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.\n" 
-"Will pad with zeros.\n"
+"Will arrange the image by rows long as specified by the " FIM_VID_PREFERRED_RENDERING_WIDTH " variable for the image width (unless a narrower image suffices).\n"
 "Regard this as an easter bunny option.\n"
     },
 #endif /* FIM_WANT_RAW_BITS_RENDERING */

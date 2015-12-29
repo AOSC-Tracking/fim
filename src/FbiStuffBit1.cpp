@@ -53,7 +53,7 @@ struct bit1_state {
     FILE *fp;
     uint32 w;
     uint32 h;
-    uint32 flen;
+    long flen; /* for ftell() */
 };
 
 static void*
@@ -70,7 +70,12 @@ bit1_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(fseek(fp,0,SEEK_END)!=0) goto oops;
     if((h->flen=ftell(fp))==-1)goto oops;
     i->width  = h->w = prw;	// must be congruent to 8
-    i->height = h->h = (8*h->flen + h->w-1) / ( i->width ); // should pad
+    i->height = h->h = FIM_INT_FRAC(8*h->flen,h->w); // should pad
+    if(8*h->flen < h->w)
+    {
+    	i->width  = h->w = h->flen*8;
+    	i->height = h->h = 1;
+    }
     i->npages = 1;
     return h;
  oops:

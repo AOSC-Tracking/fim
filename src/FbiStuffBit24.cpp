@@ -53,7 +53,7 @@ struct bit24_state {
     FILE *fp;
     uint32 w;
     uint32 h;
-    uint32 flen;
+    long flen; /* for ftell() */
 };
 
 static void*
@@ -76,7 +76,6 @@ bit24_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     {
     	i->width  = h->w = h->flen/3;
     	i->height = h->h = 1;
-	std::cout << "krew"<<h->flen<<" "<<i->width<<" "<<i->height<<"\n";
     }
     i->npages = 1;
     return h;

@@ -81,7 +81,7 @@ Enable autozoom.  fim will automagically pick a reasonable zoom factor when load
 .TP
 .B \-b, \-\-binary[=24|1]
 Display (any filetype) binary files contents as they were raw 24 or 1 bits per pixel pixelmaps.
-Will pad with zeros.
+Will arrange the image by rows long as specified by the _preferred_rendering_width variable for the image width (unless a narrower image suffices).
 Regard this as an easter bunny option.
 
 .TP
