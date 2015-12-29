@@ -126,10 +126,9 @@ namespace fim
 #if FIM_WANT_PIC_LBFL
 				if(args.size() > 1)
 				{
-					args_t args_1;
-					for(int ii=1;ii<args.size();++ii)
-						args_1.push_back(args[ii]); // FIXME: need a better syntax
-					do_filter(args_1,CmtMatch,false,domark ? Mark : Unmark);
+					args_t argsc(args);
+					argsc.erase(argsc.begin());
+					do_filter(argsc,CmtMatch,false,domark ? Mark : Unmark);
 				}
 				else
 #endif /* FIM_WANT_PIC_LBFL */
