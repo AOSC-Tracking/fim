@@ -61,7 +61,6 @@ bit24_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct bit24_state *h=FIM_NULL;
-    long ftellr;
     fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
     prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
     
@@ -69,13 +68,16 @@ bit24_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(!h)
 	    goto oops;
     h->fp = fp;
-    if(fseek(fp,0,SEEK_END)!=0)
-	    goto oops;
-    ftellr=ftell(fp);
-    if((ftellr)==-1)
-	    goto oops;
+    if(fseek(fp,0,SEEK_END)!=0) goto oops;
+    if((h->flen=ftell(fp))==-1)goto oops;
     i->width  = h->w = prw;
-    i->height = h->h = (h->flen+(h->w*3-1)) / ( h->w*3 ); // should pad
+    i->height = h->h = FIM_INT_FRAC(h->flen,h->w*3); // should pad
+    if(h->flen < h->w*3)
+    {
+    	i->width  = h->w = h->flen/3;
+    	i->height = h->h = 1;
+	std::cout << "krew"<<h->flen<<" "<<i->width<<" "<<i->height<<"\n";
+    }
     i->npages = 1;
     return h;
  oops:
