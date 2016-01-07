@@ -136,7 +136,10 @@ FIM_NULL
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time."
 #if FIM_WANT_PIC_RCMT 
-      " Special description lines like \"#!fim:=\" will lead the last description line to be used."
+      " Special description lines begin with markers: "
+      " with \"#!fim:=\" the last description line to be used;"
+      " with \"#!fim:+\" what follows + will be appended to the last description line;"
+      " with \"#!fim:^\" what follows ^ will be prepended to the last description line."
 #endif /* FIM_WANT_PIC_RCMT  */
       " If val is empty that variable will be unset."
 #if FIM_WANT_PIC_LBFL

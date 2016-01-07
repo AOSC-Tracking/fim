@@ -297,10 +297,31 @@ public:
 					const bool want_basename = true; /*  */
 
 #if FIM_WANT_PIC_RCMT
-					if( ds.find_first_of("#!fim:=",0) == 0 )
-						ds = ld; // use last (cached) description
-					else
-						ld = ds; // cache new description
+					{
+						size_t csi = ds.find_first_of("#!fim:",0);
+						size_t csil = 6;
+
+						if( csi != 0 )
+							ld = ds; // cache new description
+						else
+						{
+							// use last (cached) description
+							char sc = ds[csil];
+
+							switch(sc)
+							{
+								case('='): // #!fim:=
+									ds = ld;
+								break;
+								case('+'): // #!fim:+
+									ds = ld + ds.substr(csil+1);
+								break;
+								case('^'): // #!fim:^
+									ds = ds.substr(csil+1) + ld;
+								break;
+							}
+						}
+					}
 #endif /* FIM_WANT_PIC_RCMT */
 					if(! want_basename )
 					{
