@@ -135,6 +135,9 @@ FIM_NULL
     {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_LOAD_IMG_DSC_FILE " is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time."
+#if FIM_WANT_PIC_RCMT 
+      " Special description lines like \"#!fim:=\" will lead the last description line to be used."
+#endif /* FIM_WANT_PIC_RCMT  */
       " If val is empty that variable will be unset."
 #if FIM_WANT_PIC_LBFL
       " These variables are stored also in an internal index used by the " FIM_FLT_LIMIT " command."
