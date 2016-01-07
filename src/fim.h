@@ -140,6 +140,7 @@
 #define FIM_WANT_PIC_CMTS 1
 #define FIM_WANT_PIC_LVDN 1 /* pictures load variables description namespace (FIXME: experimental) */
 #define FIM_WANT_PIC_LBFL 1 /* limit browser file list (see FIM_FLT_LIMIT) */
+#define FIM_WANT_PIC_RCMT 1 /* remember last comment with special "#!fim:=" syntax */
 #define FIM_EXPERIMEMTAL_IMG_NMSPC 1
 #define FIM_EXPERIMEMTAL_VAR_EXPANDOS 1
 

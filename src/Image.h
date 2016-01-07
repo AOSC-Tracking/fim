@@ -246,6 +246,9 @@ public:
 	{
 		std::ifstream mfs (dfn.c_str(),std::ios::app);
 		std::string ln;
+#if FIM_WANT_PIC_RCMT
+		std::string ld; // last description
+#endif /* FIM_WANT_PIC_RCMT */
 #if FIM_WANT_PIC_LVDN
 		VNamespace ns;
 #endif /* FIM_WANT_PIC_LVDN */
@@ -293,6 +296,12 @@ public:
 				{
 					const bool want_basename = true; /*  */
 
+#if FIM_WANT_PIC_RCMT
+					if( ds.find_first_of("#!fim:=",0) == 0 )
+						ds = ld; // use last (cached) description
+					else
+						ld = ds; // cache new description
+#endif /* FIM_WANT_PIC_RCMT */
 					if(! want_basename )
 					{
 						(*this)[fn]=ds;
