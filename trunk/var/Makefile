@@ -3,14 +3,18 @@
 
 #FWP=http://www.autistici.org/dezperado/fim
 FWP=http://www.nongnu.org/fbi-improved/
+VI_ABBR='<ABBR TITLE="Visual Interface">VI</ABBR>'
 FIM_ABBR='<ABBR TITLE="Fbi IMproved">FIM</ABBR>'
+GNU_ABBR='<ABBR TITLE="GNU is Not Unix">GNU</ABBR>'
 SSH_ABBR='<ABBR TITLE="Secure SHell">SSH</ABBR>'
-VIM_ABBR='<ABBR TITLE="Vi IMproved">VIM</ABBR>'
+VIM_ABBR='<ABBR TITLE="VI IMproved">VIM</ABBR>'
 ISO_ABBR='<ABBR TITLE="International Organization for Standardization">ISO</ABBR>'
 JPEG_ABBR='<ABBR TITLE="Joint Photographic Experts Group">JPEG</ABBR>'
+BASH_ABBR='<ABBR TITLE="Bourne Again SHell">BASH</ABBR>'
 EXIF_ABBR='<ABBR TITLE="Exchangeable image file format">EXIF</ABBR>'
 MUTT_ABBR='<ABBR TITLE="The Mutt Mail User Agent">Mutt</ABBR>'
 ASCII_ABBR='<ABBR TITLE="American Standard Code for Information Interchange">ASCII</ABBR>'
+EMACS_ABBR='<ABBR TITLE="Editing MACroS">Emacs</ABBR>'
 INDEXIN=index.html.in
 FIMDIR=..
 FIMSITE=html-dezperado/fim
@@ -60,14 +64,18 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D URL=$(URL) \
 	-D FWP=$(FWP) \
 	-D FDP=$(FDP) \
+	-D VI_ABBR=$(VI_ABBR) \
 	-D FIM_ABBR=$(FIM_ABBR) \
+	-D GNU_ABBR=$(GNU_ABBR) \
 	-D SSH_ABBR=$(SSH_ABBR) \
 	-D VIM_ABBR=$(VIM_ABBR) \
 	-D ISO_ABBR=$(ISO_ABBR) \
+	-D BASH_ABBR=$(BASH_ABBR) \
 	-D JPEG_ABBR=$(JPEG_ABBR) \
 	-D EXIF_ABBR=$(EXIF_ABBR) \
 	-D MUTT_ABBR=$(MUTT_ABBR) \
 	-D ASCII_ABBR=$(ASCII_ABBR) \
+	-D EMACS_ABBR=$(EMACS_ABBR) \
 	-D NEWSCONTENTS="$$( grep -v '^#' $(FIMDIR)/NEWS )" \
 	-D THANKSCONTENTS="$$( cat $(FIMDIR)/THANKS )" \
 	-D MANFIMCONTENTS="$$( cat $(FIMDIR)/doc/fim.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fim.man.html_/g;s/href=\"#/href=\"#fim.man.html_/g' )" \

@@ -73,7 +73,8 @@ FIM_ABBR is a lightweight universal image viewer, mostly for Linux (but not only
      &nbsp;<br>
 FIM_ABBR aims to be a highly customizable and scriptable
 image viewer for users who are comfortable with software
-like the VIM_ABBR text editor or the MUTT_ABBR mail user agent (see <a href="#tutorial_mutt">this minitutorial</a>).
+like the VIM_ABBR text editor (see <a href="#tutorial_vim">this minitutorial</a>)
+ or the MUTT_ABBR mail user agent (see <a href="#tutorial_mutt">this minitutorial</a>).
 &nbsp;<br>
 It has been developed with Linux in mind, but can be built to run on several Unix systems or even on MS-Windows.
 
@@ -147,16 +148,21 @@ We have the following tutorials:
 <UL>
 <LI>
 <a href="#tutorial_photos">
-How to manage a photo collection with FIM_ABBR</a>
+Browsing through a photo collection with FIM_ABBR
+</a>
 </LI>
 <LI>
 <a href="#tutorial_mutt">
 How to display attached images in MUTT_ABBR using FIM_ABBR</a>
 </LI>
+<LI>
+<a href="#tutorial_vim">
+VI_ABBR/VIM_ABBR-like feel in FIM_ABBR</a>
+</LI>
 </UL>
 
 </td></tr>
-SUBSECTION(Tutorial: browsing through a photo collection with FIM_ABBR,tutorial_photos)
+SUBSECTION(Tutorial: Browsing through a photo collection with FIM_ABBR,tutorial_photos)
 <tr><td>
 
 The very basics of FIM_ABBR are opening files, e.g.:
@@ -214,7 +220,7 @@ will additionally display each image description on screen, just like in the fol
 
 <tr>
 <td align="center">
-<A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOT" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
+<A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOTB" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
 </td>
 </tr>
 <br>
@@ -389,6 +395,8 @@ You can also instruct FIM_ABBR to use ASCII_ABBR art if we are working over an S
 <PRE CLASS="TEXTFB">
 image/*;( [ "$SSH_CLIENT" != "" ] && fim -o aa  %s ) || ( fim %s )
 </PRE>
+If you have configured FIM_ABBR properly, this will work seamlessly in the Linux framebuffer, in X and through SSH_ABBR.
+<br>
 <br>
 
 Finally, if you wish to use the <CODE CLASS="SHCMD">fimgs</CODE> wrapper script (installed automatically when you install <CODE CLASS="SHCMD">fim</CODE>) to convert transparently with different programs, and then display with FIM_ABBR, you can do it like here:
@@ -415,6 +423,92 @@ application/octet-stream; fim --binary=1 %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.document; docx2txt < %s | fim --as-text -i -q
 </PRE>
 <br>
+
+</td></tr>
+SUBSECTION(Tutorial: VI_ABBR/VIM_ABBR-like feel in FIM_ABBR,tutorial_vim)
+<tr><td>
+
+If you know the VI_ABBR/VIM_ABBR text editor shortcut based usage interface, then you know how to appreciate the comfort and speed of use it gives.
+<BR>
+FIM_ABBR offers a few features aimed at VI_ABBR/VIM_ABBR users, like:
+
+<UL>
+<LI>
+The motion keys:
+<CODE CLASS="FIMKEY">j</CODE> (like 'down' arrow),
+<CODE CLASS="FIMKEY">k</CODE> (like 'up' arrow),
+<CODE CLASS="FIMKEY">h</CODE> (like 'left' arrow),
+<CODE CLASS="FIMKEY">l</CODE> (like 'right' arrow),
+</LI>
+<LI>
+Repeat any interactive command by prepending it by a number.
+<br>
+E.g.: magnify two times in a row by pressing 
+<CODE CLASS="FIMKEY">2+</CODE>
+</LI>
+<LI>
+Filename based search.
+<BR>
+E.g.: jump to a file containing 'dog' in its name by pressing:
+<CODE CLASS="FIMKEY">/</CODE>
+and entering
+<CODE CLASS="FIMCMD">dog</CODE>
+then 
+<CODE CLASS="FIMKEY">Enter</CODE>.
+<BR>
+</LI>
+<LI>
+Search backwards using <CODE CLASS="FIMKEY">?</CODE> instead of <CODE CLASS="FIMKEY">/</CODE>.
+</LI>
+<LI>
+Repeat the last action by pressing <CODE CLASS="FIMKEY">.</CODE>.
+</LI>
+<LI>
+Jump to the first file by pressing <CODE CLASS="FIMKEY">^</CODE>
+or to the last file by pressing <CODE CLASS="FIMKEY">$</CODE>.
+</LI>
+<LI>
+Enter in command line mode by pressing
+<CODE CLASS="FIMKEY">:</CODE> and 
+<CODE CLASS="FIMKEY">Enter</CODE> to go back in interactive mode.
+</LI>
+<LI>
+When in command line mode
+<UL>
+
+<LI>
+type any command, like e.g.
+<CODE CLASS="FIMCMD">help</CODE>
+and execute it after pressing
+<CODE CLASS="FIMKEY">Enter</CODE>.
+</LI>
+<LI>
+type a number and then <CODE CLASS="FIMKEY">Enter</CODE> to jump to the image with that index in the list.
+</LI>
+<LI>
+use the up and down arrows to navigate the history (via the GNU <CODE>history</CODE> library).
+</LI>
+<LI>
+if using the framebuffer, GNU_ABBR EMACS_ABBR-like (via GNU_ABBR <CODE>readline</CODE>, just as in BASH_ABBR) command line editing is possible.
+</LI>
+
+</UL>
+</LI>
+<LI>
+Execute a command after startup: <CODE CLASS="SHCMD">fim -c command</CODE>.
+</LI>
+<LI>
+Read an image via standard input, e.g.:
+<CODE CLASS="SHCMD">cat image.jpg | fim -i</CODE>
+(note the difference: in VIM_ABBR it's<CODE CLASS="SHCMD">-</CODE>, not <CODE CLASS="SHCMD">-i</CODE>).
+</LI>
+<LI>
+Set autocommands with the
+<CODE CLASS="FIMCMD">autocmd</CODE>
+command.
+</LI>
+</UL>
+
 </td>
 </tr>
 SECTION(News: What's new with FIM_ABBR,news)
@@ -451,7 +545,7 @@ A screenshot of a regular (framebuffer) FIM_ABBR run (SDL would look the same)
 <td align="center">
 <!--<a href="fim-shot-fb.png"><img src="fim-shot-fb-mini.png" alt=""></a>-->
 <!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
-<A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOT" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
+<A HREF="fim_diana_fb.jpg"><IMG CLASS="SCREENSHOTB" SRC="fim_diana_fb.jpg" WIDTH="80%" ALT=""></A>
 </td>
 </tr>
 
@@ -466,7 +560,7 @@ A screenshot of an ASCII_ABBR Art FIM_ABBR run:
 <tr>
 <td align="center">
 <!--<a href="fim-shot-aa.png"><img src="fim-shot-aa-mini.png" alt=""></a>-->
-<A HREF="fim_diana_aa.png"><IMG CLASS="SCREENSHOT" SRC="fim_diana_aa.png" WIDTH="80%" ALT=""></A>
+<A HREF="fim_diana_aa.png"><IMG CLASS="SCREENSHOTB" SRC="fim_diana_aa.png" WIDTH="80%" ALT=""></A>
 </td>
 </tr>
 <tr>
@@ -497,9 +591,10 @@ SECTION(Links to documentation,docs)
 <td>
 <h5>
 
+If you wish to get an idea of FIM_ABBR in action see these <a href="#tutorials">tutorials first</a>.
 <br>
-The first document you look at is the <a href="README.html">README.html</a>, (<a href="README">README</a>) file.
-
+If you consider building/installing by yourself then look at the <a href="README.html">README.html</a>, (<a href="README">README</a>) file.
+<br>
 Then there are 
    the <a href="#man_fim">FIM man documentation</a> 
    <a href="fim.man.html">(also on single page)</a>, 
@@ -507,7 +602,6 @@ Then there are
    <a href="fimrc.man.html">(also on single page)</a>, 
    the <a href="#man_fimgs">fimgs script man page</a>
    <a href="fimgs.man.html">(also on single page)</a>, 
-   the <a href="#tutorials">tutorials here right on this page</a>,
    and the <a href="FIM.html">doc/FIM.TXT</a> documentation file (slightly outdated but still interesting --- look in the man pages first).
 
 <br> &nbsp;<br>
@@ -520,7 +614,7 @@ Here links to some relevant sections:
 the <a href="FIM.html#framebuffer">Linux Framebuffer</a> (in the old tutorial)
 </LI>
 <LI>
-<a href="#fim.man.html_EXAMPLES">FIM usage examples</a>
+<a href="#fim.man.html_EXAMPLES">FIM usage examples (man page)</a>
 </LI>
 <LI>
 <a href="#fimrc.man.html_FIM LANGUAGE GRAMMAR">FIM language grammar</a>
@@ -532,7 +626,7 @@ the <a href="FIM.html#framebuffer">Linux Framebuffer</a> (in the old tutorial)
 <a href="#fimrc.man.html_VARIABLES REFERENCE">FIM variables reference</a>
 </LI>
 <LI>
-<a href="#fimrc.man.html_USAGE EXAMPLES">FIM language usage examples</a>
+<a href="#fimrc.man.html_USAGE EXAMPLES">FIM language usage examples (man page)</a>
 </LI>
 <LI>
 the <a href="FIM.html#faq">Frequently Asked Questions (FAQ)</a> (in the old tutorial)
