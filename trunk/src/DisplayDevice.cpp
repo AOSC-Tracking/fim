@@ -2,7 +2,7 @@
 /*
  DisplayDevice.cpp : virtual device Fim driver file
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -184,7 +184,7 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw,
 	// FIXME: this is temporary
 	{
 		fim_int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
-		fim_coo_t fh=f_?f_->height:1;
+		fim_coo_t fh=f_?f_->sheight():1;
 		ls=FIM_MIN(ls,height()/fh);
 		clear_rect(0, width()-1, 0,fh*ls);
 	}
@@ -215,8 +215,8 @@ fim_err_t DisplayDevice::init_console(void)
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	if(f_)
 	{	
-		mc_.setRows ((height()/f_->height)/2);
-		mc_.reformat( width() /f_->width    );
+		mc_.setRows ((height()/f_->sheight())/2);
+		mc_.reformat( width() /f_->swidth()    );
 	}
 	else
 	{

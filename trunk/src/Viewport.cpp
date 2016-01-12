@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -288,8 +288,8 @@ namespace fim
 	void Viewport::fs_ml_puts(const char *str, fim_int doclear)
 	{
 		/* multiline puts */
-		int fh=displaydevice_->f_ ? displaydevice_->f_->height:1; // FIXME : this is not clean
-		int fw=displaydevice_->f_ ? displaydevice_->f_->width:1; // FIXME : this is not clean
+		int fh=displaydevice_->f_ ? displaydevice_->f_->sheight():1; // FIXME : this is not clean
+		int fw=displaydevice_->f_ ? displaydevice_->f_->swidth():1; // FIXME : this is not clean
 		int sl = strlen(str), rw = viewport_width() / fw, wh = viewport_height();
 		int cpl = displaydevice_->get_chars_per_line();
 
@@ -450,8 +450,8 @@ namespace fim
 			if(fim_int wcoi = getGlobalIntVariable(FIM_VID_COMMENT_OI))
 			{
 #if 0
-				int fh=displaydevice_->f_ ? displaydevice_->f_->height:1; // FIXME : this is not clean
-				int fw=displaydevice_->f_ ? displaydevice_->f_->width:1; // FIXME : this is not clean
+				int fh=displaydevice_->f_ ? displaydevice_->f_->sheight():1; // FIXME : this is not clean
+				int fw=displaydevice_->f_ ? displaydevice_->f_->swidth():1; // FIXME : this is not clean
 				const char * cmnts = image_->getStringVariable(FIM_VID_COMMENT).c_str();
 				int sl = strlen(cmnts), rw = viewport_width() / fw, wh = viewport_height();
 				for( int li = 0 ; sl > rw * li ; ++li )

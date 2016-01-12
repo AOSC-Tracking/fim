@@ -2,7 +2,7 @@
 /*
  DebugConsole.cpp : Fim virtual console display.
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ namespace fim
 
 			if(*bp_){fim_free(buf);return FIM_ERR_GENERIC;}//if *bp_ then we could print garbage so we exit before damage is done
 
-			int fh=cc_.displaydevice_->f_ ? cc_.displaydevice_->f_->height:1; // FIXME : this is not clean
+			int fh=cc_.displaydevice_->f_ ? cc_.displaydevice_->f_->sheight():1; // FIXME : this is not clean
 			l-=f_; l%=(rows_+1); l+=f_;
 
 			/* FIXME : the following line_ is redundant in fb, but not in SDL 
