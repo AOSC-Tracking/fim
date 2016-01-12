@@ -501,6 +501,8 @@ Execute a command after startup: <CODE CLASS="SHCMD">fim -c command</CODE>.
 Read an image via standard input, e.g.:
 <CODE CLASS="SHCMD">cat image.jpg | fim -i</CODE>
 (note the difference: in VIM_ABBR it's<CODE CLASS="SHCMD">-</CODE>, not <CODE CLASS="SHCMD">-i</CODE>).
+<BR>
+This is meant to be used with converters, e.g.: <CODE CLASS="SHCMD">convert image.pic ppm:- | fim -i</CODE>.
 </LI>
 <LI>
 Set autocommands with the

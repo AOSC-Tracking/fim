@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fimrc 5 "(c) 2011\-2015 Michele Martone"
+.TH fimrc 5 "(c) 2011\-2016 Michele Martone"
 .SH NAME
 fimrc \- \fB fim \fP configuration file and language reference
 
@@ -193,7 +193,7 @@ basename {filename} : returns the basename of {filename}
 .B
 bind
 .fi
-bind [{keysym} [{commands}]] : bind some keyboard shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.; binding is dynamical, so you can rebind keys even during program's execution
+bind [{keysym} [{commands}]] : bind a keyboard symbol/shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.; binding is dynamical, so you can rebind keys even during program's execution
 .fi
 
 .B
@@ -215,21 +215,21 @@ commands : display the existing commands
 .fi
 
 .B
-display
+desaturate
 .fi
-display ['reinit' {string}]|'resize' {w} {h}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the \-\-output\-device command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. 
-.fi
-
-.B
-redisplay
-.fi
-redisplay : re\-display the current file contents
+desaturate : desaturate the displayed image colors. To get back the original you will have to reload the image.
 .fi
 
 .B
 desc
 .fi
 desc 'load' {filename} [{sepchar}] : load description file {filename}, using the optional {sepchar} character as separator. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
+.fi
+
+.B
+display
+.fi
+display ['reinit' {string}]|'resize' {w} {h}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the \-\-output\-device command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. 
 .fi
 
 .B
@@ -242,6 +242,18 @@ dump_key_codes : dump the active key codes (unescaped, for inspection)
 echo
 .fi
 echo {args}: print the {args} on console
+.fi
+
+.B
+else
+.fi
+if(expression){action;}['else'{action;}] : see else
+.fi
+
+.B
+eval
+.fi
+eval {args} : evaluate {args} as commands, executing them
 .fi
 
 .B
@@ -271,25 +283,19 @@ help [{identifier}] : provide online help, assuming {identifier} is a variable, 
 .B
 if
 .fi
-if(expression){action;}['else'{action;}]
-.fi
-
-.B
-else
-.fi
-if(expression){action;}['else'{action;}]
-.fi
-
-.B
-eval
-.fi
-eval {args} : evaluate {args} as commands, executing them
+if(expression){action;}['else'{action;}] : see if
 .fi
 
 .B
 info
 .fi
 info : display information about the current file
+.fi
+
+.B
+limit
+.fi
+limit [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via \-\-load\-image\-descriptions\-file. If one argument only is provided, restrict to files whose description string matches {expression}. If two arguments are provided, restrict to files having property {variable} set to {value}. If invoked with one exclamation point ('!') as argument will restrict to the currently marked files only.  Invoked with no arguments, the original browsable files list is restored.
 .fi
 
 .B
@@ -301,31 +307,13 @@ list : display the files list; list 'random_shuffle': randomly shuffle the file 
 .B
 load
 .fi
-load : load the image, if not yet loaded
-.fi
-
-.B
-reload
-.fi
-reload [{arg}] : load the image into memory; if {arg} is present, will force reloading, bypassing the cache
+load : load the image, if not yet loaded (see also reload)
 .fi
 
 .B
 negate
 .fi
 negate : negate the displayed image colors.
-.fi
-
-.B
-desaturate
-.fi
-desaturate : desaturate the displayed image colors. To get back the original you will have to reload the image.
-.fi
-
-.B
-limit
-.fi
-limit [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via \-\-load\-image\-descriptions\-file. If one argument only is provided, restrict to files whose description string matches {expression}. If two arguments are provided, restrict to files having property {variable} set to {value}. If invoked with one exclamation point ('!') as argument will restrict to the currently marked files only.  Invoked with no arguments, the original browsable files list is restored.
 .fi
 
 .B
@@ -347,15 +335,15 @@ pread {args} : execute {args} as a shell command and read the output as an image
 .fi
 
 .B
-pwd
+prefetch
 .fi
-pwd : print the current directory name, and updates the _pwd variable
+prefetch : prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening. See also the _want_prefetch variable.
 .fi
 
 .B
-prefetch
+pwd
 .fi
-prefetch : prefetch two nearby image files, for a faster subsequent opening
+pwd : print the current directory name, and updates the _pwd variable
 .fi
 
 .B
@@ -368,6 +356,18 @@ quit [{number}] : terminate the program; if {number} is specified, use it as the
 recording
 .fi
 recording 'start' : start recording the executed commands; recording 'stop' : stop  recording the executed commands; recording 'dump' : dump in the console the record buffer; recording 'execute' : execute the record buffer; recording 'repeat_last' : repeat the last performed action; 
+.fi
+
+.B
+redisplay
+.fi
+redisplay : re\-display the current file contents
+.fi
+
+.B
+reload
+.fi
+reload [{arg}] : load the image into memory; if {arg} is present, will force reloading, bypassing the cache (see also load)
 .fi
 
 .B

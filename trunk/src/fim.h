@@ -324,12 +324,13 @@ typedef std::vector<fim::string> args_t;
 #define FIM_OSW_IMAGE_FROM_STDIN	"image-from-stdin"
 #define FIM_OSW_DUMP_SCRIPTOUT "write-scriptout"
 #define FIM_OSW_LOAD_IMG_DSC_FILE	"load-image-descriptions-file"
+#define FIM_OSW_IMG_DSC_FILE_SEPC	"image-descriptions-file-separator"
 
 /*
  * Fim Constants
  * */
 #define FIM_CNS_FIM	 "FIM - Fbi IMproved"
-#define FIM_CNS_LCY	 "2015" /* latest copyright year */
+#define FIM_CNS_LCY	 "2016" /* latest copyright year */
 //#define FIM_CNS_FIM_TXT	 "FIM.TXT"
 #define FIM_CNS_BUGS_FILE	 "BUGS"
 #define FIM_CNS_TERM_VAR	 "TERM"

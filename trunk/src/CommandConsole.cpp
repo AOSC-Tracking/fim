@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -372,7 +372,7 @@ ret:		return key;
 		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD_DEL),fim::string(FIM_FLT_AUTOCMD_DEL" : manipulate auto commands. usage: " FIM_FLT_AUTOCMD_DEL " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING),this,&CommandConsole::fcmd_autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
 #endif /* FIM_AUTOCMDS */
 		addCommand(new Command(fim::string(FIM_FLT_BASENAME),fim::string(FIM_FLT_BASENAME" {filename} : returns the basename of {filename}"),this,&CommandConsole::fcmd_basename));
-		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" [" FIM_CNS_EX_KSY_STRING " [" FIM_CNS_EX_CMDS_STRING "]] : bind some keyboard shortcut " FIM_CNS_EX_KSY_STRING " to " FIM_CNS_EX_CMDS_STRING "" FIM_CNS_RAW_KEYS_MESG "; binding is dynamical, so you can rebind keys even during program's execution"),this,&CommandConsole::fcmd_bind));
+		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" [" FIM_CNS_EX_KSY_STRING " [" FIM_CNS_EX_CMDS_STRING "]] : bind a keyboard symbol/shortcut " FIM_CNS_EX_KSY_STRING " to " FIM_CNS_EX_CMDS_STRING "" FIM_CNS_RAW_KEYS_MESG "; binding is dynamical, so you can rebind keys even during program's execution"),this,&CommandConsole::fcmd_bind));
 		addCommand(new Command(fim::string(FIM_FLT_CD),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::fcmd_cd));
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		addCommand(new Command(fim::string(FIM_FLT_CLEAR),fim::string(FIM_FLT_CLEAR" : clear the virtual console"),this,&CommandConsole::fcmd_clear));
@@ -382,49 +382,47 @@ ret:		return key;
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		addCommand(new Command(fim::string(FIM_FLT_COMMANDS),fim::string(FIM_FLT_COMMANDS " : display the existing commands"),this,&CommandConsole::fcmd_commands_list));
 
-		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string(FIM_FLT_HELP_DISPLAY),&browser_,&Browser::fcmd_display));
-		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string(FIM_FLT_REDISPLAY " : re-display the current file contents"),&browser_,&Browser::fcmd_redisplay));
+		addCommand(new Command(fim::string(FIM_FLT_DESATURATE),fim::string(FIM_FLT_DESATURATE" : desaturate the displayed image colors. To get back the original you will have to reload the image." ),&browser_,&Browser::fcmd_desaturate));
 		addCommand(new Command(fim::string(FIM_FLT_DESC),fim::string(FIM_FLT_HELP_DESC),this,&CommandConsole::fcmd_desc));
+		addCommand(new Command(fim::string(FIM_FLT_DISPLAY),fim::string(FIM_FLT_HELP_DISPLAY),&browser_,&Browser::fcmd_display));
 		addCommand(new Command(fim::string(FIM_FLT_DUMP_KEY_CODES),fim::string(FIM_FLT_DUMP_KEY_CODES " : dump the active key codes (unescaped, for inspection)"),this,&CommandConsole::fcmd_dump_key_codes));
 		addCommand(new Command(fim::string(FIM_FLT_ECHO),fim::string(FIM_FLT_ECHO " " FIM_CNS_EX_ARGS_STRING ": print the " FIM_CNS_EX_ARGS_STRING " on console"),this,&CommandConsole::fcmd_echo));
+		addCommand(new Command(fim::string(FIM_FLT_ELSE),fim::string("if(expression){action;}['else'{action;}] : see else"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
+#ifdef FIM_RECORDING
+		addCommand(new Command(fim::string(FIM_FLT_EVAL),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::fcmd_eval));
+#endif /* FIM_RECORDING */
 #ifndef FIM_WANT_NOSCRIPTING
 		addCommand(new Command(fim::string(FIM_FLT_EXEC),fim::string(FIM_FLT_EXEC " " FIM_CNS_EX_FNS_STRING " : execute script " FIM_CNS_EX_FNS_STRING ""),this,&CommandConsole::fcmd_executeFile));
 #endif /* FIM_WANT_NOSCRIPTING */
 		addCommand(new Command(fim::string(FIM_FLT_GETENV),fim::string(FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING " : display the value of the " FIM_CNS_EX_ID_STRING " environment variable"),this,&CommandConsole::fcmd_do_getenv));
 		addCommand(new Command(fim::string(FIM_FLT_GOTO),fim::string(FIM_CMD_HELP_GOTO),&browser_,&Browser::fcmd_goto_image));
 		addCommand(new Command(fim::string(FIM_FLT_HELP),fim::string(FIM_CMD_HELP_HELP),this,&CommandConsole::fcmd_help));
-		addCommand(new Command(fim::string(FIM_FLT_IF),fim::string("if(expression){action;}['else'{action;}]"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
-		addCommand(new Command(fim::string(FIM_FLT_ELSE),fim::string("if(expression){action;}['else'{action;}]"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
-#ifdef FIM_RECORDING
-		addCommand(new Command(fim::string(FIM_FLT_EVAL),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::fcmd_eval));
-#endif /* FIM_RECORDING */
+		addCommand(new Command(fim::string(FIM_FLT_IF),fim::string("if(expression){action;}['else'{action;}] : see if"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string(FIM_FLT_INFO" : display information about the current file" ),&browser_,&Browser::fcmd_info));
-		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_CMD_HELP_LIST),&browser_,&Browser::fcmd_list));
-		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded"),&browser_,&Browser::fcmd_load));
-		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string(FIM_FLT_RELOAD" [{arg}] : load the image into memory; if {arg} is present, will force reloading, bypassing the cache"),&browser_,&Browser::fcmd_reload));
-		addCommand(new Command(fim::string(FIM_FLT_NEGATE),fim::string(FIM_FLT_NEGATE" : negate the displayed image colors." ),&browser_,&Browser::fcmd_negate));
-		addCommand(new Command(fim::string(FIM_FLT_DESATURATE),fim::string(FIM_FLT_DESATURATE" : desaturate the displayed image colors. To get back the original you will have to reload the image." ),&browser_,&Browser::fcmd_desaturate));
 #if FIM_WANT_PIC_LBFL
 		addCommand(new Command(fim::string(FIM_FLT_LIMIT),fim::string(FIM_FLT_LIMIT " [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE ". If one argument only is provided, restrict to files whose description string matches {expression}. If two arguments are provided, restrict to files having property {variable} set to {value}."
-#endif /* FIM_WANT_PIC_LBFL */
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		" If invoked with one exclamation point ('!') as argument will restrict to the currently marked files only. "
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
-#if FIM_WANT_PIC_LBFL
 		" Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
 #endif /* FIM_WANT_PIC_LBFL */
+		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_CMD_HELP_LIST),&browser_,&Browser::fcmd_list));
+		addCommand(new Command(fim::string(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded (see also " FIM_FLT_RELOAD ")"),&browser_,&Browser::fcmd_load));
+		addCommand(new Command(fim::string(FIM_FLT_NEGATE),fim::string(FIM_FLT_NEGATE" : negate the displayed image colors." ),&browser_,&Browser::fcmd_negate));
 		addCommand(new Command(fim::string(FIM_FLT_PAN),fim::string( FIM_FLT_PAN" {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction;" " if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions;" " if {steps} is not specified, the \"" FIM_VID_STEPS "\" variable will be used;" " if present, the \"" FIM_VID_HSTEPS "\" variable will be considered for horizontal panning;" " if present, the \"" FIM_VID_VSTEPS "\" variable will be considered for vertical panning;" " the variables may be terminated by the \'%\' specifier" " "),&browser_,&Browser::pan));
 		addCommand(new Command(fim::string(FIM_FLT_POPEN),fim::string(FIM_FLT_POPEN " " FIM_CNS_EX_SYSC_STRING " : pipe a command, invoking popen(): spawns a shell, invoking " FIM_CNS_EX_SYSC_STRING " and executing as fim commands the output of " FIM_CNS_EX_SYSC_STRING),this,&CommandConsole::fcmd_sys_popen));
 #ifdef FIM_PIPE_IMAGE_READ
 		addCommand(new Command(fim::string(FIM_FLT_PREAD),fim::string(FIM_FLT_PREAD " " FIM_CNS_EX_ARGS_STRING " : execute " FIM_CNS_EX_ARGS_STRING " as a shell command and read the output as an image file (using " FIM_FLT_POPEN ")"),this,&CommandConsole::fcmd_pread));
 #endif /* FIM_PIPE_IMAGE_READ */
+		addCommand(new Command(fim::string(FIM_FLT_PREFETCH),fim::string(FIM_FLT_PREFETCH " : prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening. See also the " FIM_VID_WANT_PREFETCH 			 " variable."),&browser_,&Browser::fcmd_prefetch));
 		addCommand(new Command(fim::string(FIM_FLT_PWD),fim::string(FIM_CMD_HELP_PWD   ),this,&CommandConsole::fcmd_pwd));
-		addCommand(new Command(fim::string(FIM_FLT_PREFETCH),fim::string(FIM_FLT_PREFETCH " : prefetch two nearby image files, for a faster subsequent opening"),&browser_,&Browser::fcmd_prefetch));
 		addCommand(new Command(fim::string(FIM_FLT_QUIT),fim::string(FIM_FLT_QUIT " [{number}] : terminate the program; if {number} is specified, use it as the program return status"),this,&CommandConsole::fcmd_quit));
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim::string(FIM_FLT_RECORDING),fim::string(
 FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_RECORDING " 'stop' : stop  recording the executed commands; " FIM_FLT_RECORDING " 'dump' : dump in the console the record buffer; " FIM_FLT_RECORDING " 'execute' : execute the record buffer; " FIM_FLT_RECORDING " 'repeat_last' : repeat the last performed action; "),this,&CommandConsole::fcmd_recording));
 #endif /* FIM_RECORDING */
+		addCommand(new Command(fim::string(FIM_FLT_REDISPLAY),fim::string(FIM_FLT_REDISPLAY " : re-display the current file contents"),&browser_,&Browser::fcmd_redisplay));
+		addCommand(new Command(fim::string(FIM_FLT_RELOAD),fim::string(FIM_FLT_RELOAD" [{arg}] : load the image into memory; if {arg} is present, will force reloading, bypassing the cache (see also " FIM_FLT_LOAD ")"),&browser_,&Browser::fcmd_reload));
 		addCommand(new Command(fim::string(FIM_FLT_ROTATE),fim::string(FIM_FLT_ROTATE " " FIM_CNS_EX_NUM_STRING ": rotate the image the specified amount of degrees [undocumented]" ),&browser_,&Browser::fcmd_rotate));
 		addCommand(new Command(fim::string(FIM_FLT_SCALE),fim::string(FIM_CMD_HELP_SCALE),&browser_,&Browser::fcmd_scale));
 		addCommand(new Command(fim::string(FIM_FLT_SCROLLDOWN),fim::string(FIM_FLT_SCROLLDOWN " : scroll down the image, going next if at bottom" ),&browser_,&Browser::fcmd_scrolldown));

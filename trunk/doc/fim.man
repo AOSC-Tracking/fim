@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fim 1 "(c) 2007\-2015 Michele Martone"
+.TH fim 1 "(c) 2007\-2016 Michele Martone"
 .SH NAME
 fim \- \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
@@ -20,7 +20,7 @@ fim \- \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPprove
 .B
 fim
 is a `swiss army knife' for displaying image files.
-It is capable of displaying image files using different graphical devices while offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, customizable key bindings, internal variables and command aliases, vim\-like autocommands, JPEG comments and EXIF tags display, and much more.
+It is capable of displaying image files using different graphical devices while offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, customizable key bindings, internal variables and command aliases, vim\-like autocommands, JPEG comments, EXIF tags display, EXIF rotation/orientation, and much more.
 
 As a default,
 .B
@@ -137,7 +137,7 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
 .B  \-\-load\-image\-descriptions\-file {filename}
-Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless \-\-load\-image\-descriptions\-file is specified), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment). Special comment lines like "#!fim:var=val" will lead i:var to be assigned value val (unquoted) at image loading time. Special description lines begin with markers:  with "#!fim:=" the last description line to be used; with "#!fim:+" what follows + will be appended to the last description line; with "#!fim:^" what follows ^ will be prepended to the last description line. If val is empty that variable will be unset. These variables are stored also in an internal index used by the limit command.
+Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless \-\-image\-descriptions\-file\-separator specifies otherwise), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment). Special comment lines like "#!fim:var=val" will lead i:var to be assigned value val (unquoted) at image loading time. Special description lines begin with markers:  with "#!fim:=" the last description line to be used; with "#!fim:+" what follows + will be appended to the last description line; with "#!fim:^" what follows ^ will be prepended to the last description line. If val is empty that variable will be unset. These variables are stored also in an internal index used by the limit command.
 .TP
 .B  \-\-image\-descriptions\-file\-separator {sepchar}
 A character to be used as a separator between the filename and the description part of lines specified just before a \-\-load\-image\-descriptions\-file.
@@ -500,7 +500,7 @@ Michele Martone <dezperado _CUT_ autistici _CUT_ org> is the author of fim, "fbi
 .fi
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007\-2015 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
+Copyright (C) 2007\-2016 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
 .fi
 Copyright (C) 1999\-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 .B fim
