@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ struct fim_options_t fim_options[] = {
 FIM_NULL
     },
 #if FIM_WANT_PIC_CMTS
-    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_LOAD_IMG_DSC_FILE " is specified), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
+    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_IMG_DSC_FILE_SEPC " specifies otherwise), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time."
 #if FIM_WANT_PIC_RCMT 
@@ -147,7 +147,7 @@ FIM_NULL
 #endif /* FIM_WANT_PIC_LBFL */
 #endif /* FIM_WANT_PIC_LVDN */
     },
-    {"image-descriptions-file-separator",       required_argument,       FIM_NULL, 0x69646673, "image descriptions file separator character.", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
+    {FIM_OSW_IMG_DSC_FILE_SEPC,       required_argument,       FIM_NULL, 0x69646673, "image descriptions file separator character.", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
     },
 #endif /* FIM_WANT_PIC_CMTS */
 #ifdef FIM_READ_STDIN_IMAGE
@@ -552,7 +552,7 @@ int fim_dump_man_page(void)
 			string("\n"
 			".SH DESCRIPTION\n"
 			".B\nfim\nis a `swiss army knife' for displaying image files.\n"
-			"It is capable of displaying image files using different graphical devices while offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, customizable key bindings, internal variables and command aliases, vim-like autocommands, JPEG comments and EXIF tags display, and much more.\n\n"
+			"It is capable of displaying image files using different graphical devices while offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, customizable key bindings, internal variables and command aliases, vim-like autocommands, JPEG comments, EXIF tags display, EXIF rotation/orientation, and much more.\n\n"
 			"As a default,\n.B\nfim\ndisplays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not).  " FIM_CNS_DSFF " formats are supported. \nFor 'XCF' (Gimp's) images, fim will try to use '" FIM_EPR_XCFTOPNM "'.\nFor '.FIG' vectorial images, fim will try to use '" FIM_EPR_FIG2DEV "'.\nFor '.DIA' vectorial images, fim will try to use '" FIM_EPR_DIA "'.\nFor '.SVG' vectorial images, fim will try to use '" FIM_EPR_INKSCAPE "'.\nFor other formats fim will try to use ImageMagick's '" FIM_EPR_CONVERT "' executable.\n"
 			"\n")+
 #ifdef FIM_READ_DIRS
