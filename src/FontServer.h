@@ -2,7 +2,7 @@
 /*
  FontServer.h : Font Server code from fbi, adapted for fim.
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -59,6 +59,8 @@ struct fs_font {
 
 #else /* FIM_USE_X11_FONTS */
 
+#define fim_fmf FIM_FONT_MAGNIFY_FACTOR
+
 typedef struct _FSXCharInfo {
     short       left;
     short       right;
@@ -66,6 +68,7 @@ typedef struct _FSXCharInfo {
     short       ascent;
     short       descent;
     /*unsigned short      attributes;*/
+    int swidth(void)const{return fim_fmf*width;}
 } FSXCharInfo;
 
 typedef struct _FSXFontInfoHeader {
@@ -88,6 +91,8 @@ struct fs_font {
     int                maxenc,width,height;
     FSXCharInfo        **eindex;
     fim_byte_t      **gindex;
+    int swidth(void)const{return fim_fmf*width;}
+    int sheight(void)const{return fim_fmf*height;}
 };
 
 #endif  /* FIM_USE_X11_FONTS */

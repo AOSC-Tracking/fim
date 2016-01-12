@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -482,12 +482,12 @@ err:
 
 	int SDLDevice::get_chars_per_column(void)
 	{
-		return height() / f_->height;
+		return height() / f_->sheight();
 	}
 
 	int SDLDevice::get_chars_per_line(void)
 	{
-		return width() / f_->width;
+		return width() / f_->swidth();
 	}
 
 	fim_coo_t SDLDevice::width(void)
@@ -843,7 +843,13 @@ void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 		{
 			if (data[bit>>3] & fs_masktab[bit&7])
 			{	// WARNING !
+#if FIM_FONT_MAGNIFY_FACTOR == 1
 				setpixel(screen_,x_+x,(y+row)*screen_->pitch/Bpp_,rc,gc,bc);
+#else	/* FIM_FONT_MAGNIFY_FACTOR */
+				for(fim_coo_t mi = 0; mi < fim_fmf; ++mi)
+				for(fim_coo_t mj = 0; mj < fim_fmf; ++mj)
+					setpixel(screen_,x_+fim_fmf*x+mj,(y+fim_fmf*row+mi)*screen_->pitch/Bpp_,rc,gc,bc);
+#endif	/* FIM_FONT_MAGNIFY_FACTOR */
 			}
 			x += Bpp_/Bpp_;/* FIXME */
 		}
@@ -871,7 +877,7 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 //	w = (f_->eindex[c]->width+1)*Bpp_;
 #if 0
 #ifdef FIM_IS_SLOWER_THAN_FBI
-	for (j = 0; j < f_->height; j++) {
+	for (j = 0; j < f_->sheight(); j++) {
 /////	    memset_combine(start,0x20,w);
 	    fim_bzero(start,w);
 	    start += fb_fix.line_length;
@@ -881,11 +887,11 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 	if(fb_fix.line_length==(fim_int)w)
 	{
 		//contiguous case
-		fim_bzero(start,w*f_->height);
-	    	start += fb_fix.line_length*f_->height;
+		fim_bzero(start,w*f_->sheight());
+	    	start += fb_fix.line_length*f_->sheight();
 	}
 	else
-	for (j = 0; j < f_->height; j++) {
+	for (j = 0; j < f_->sheight(); j++) {
 	    fim_bzero(start,w);
 	    start += fb_fix.line_length;
 	}
@@ -894,9 +900,9 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 	/* draw character */
 	//fs_render_fb(fb_fix.line_length,f_->eindex[c],f_->gindex[c]);
 	fs_render_fb(x,y,f_->eindex[c],f_->gindex[c]);
-	x += f_->eindex[c]->width;
+	x += f_->eindex[c]->swidth();
 	/* FIXME : SLOW ! */
-	if (((fim_coo_t)x) > width() - f_->width)
+	if (((fim_coo_t)x) > width() - f_->swidth())
 		goto err;
     }
     // FIXME
@@ -918,10 +924,10 @@ err:
 
 		if(get_chars_per_column()<1)
 			goto done;
-		y = height() - f_->height - ys;
+		y = height() - f_->sheight() - ys;
 		if(y<0 )
 			goto done;
-		clear_rect(0, width()-1, y+1,y+f_->height+ys-1);
+		clear_rect(0, width()-1, y+1,y+f_->sheight()+ys-1);
 		fs_puts(f_, 0, y+ys, msg);
 		fill_rect(0,width()-1, y, y, FIM_CNS_WHITE);
 
@@ -991,7 +997,7 @@ done:
 			goto ok;
 		if(w<FIM_SDL_MINWIDTH || h<FIM_SDL_MINHEIGHT)
 			return false;
-		if(w<f_->width || h<f_->height)
+		if(w<f_->swidth() || h<f_->sheight())
 			return false;
 ok:
 		return true;
@@ -1103,7 +1109,7 @@ err:
 
 	fim_coo_t SDLDevice::status_line_height(void)const
 	{
-		return f_ ? border_height_ + f_->height : 0;
+		return f_ ? border_height_ + f_->sheight() : 0;
 	}
 
 	fim_err_t SDLDevice::post_wmresize(void)
@@ -1112,9 +1118,9 @@ err:
 		cc.setVariable(FIM_VID_SCREEN_HEIGHT,(fim_int)current_h_);
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		// textual console reformatting
-		//mc_.setRows ( get_chars_per_column()/(2*f_->height) );
-		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(fim_int)(height()/(2*f_->height)));
-		mc_.reformat(    width() /    f_->width   );
+		//mc_.setRows ( get_chars_per_column()/(2*f_->sheight()) );
+		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(fim_int)(height()/(2*f_->sheight())));
+		mc_.reformat(    width() /    f_->swidth()   );
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;
 	}
