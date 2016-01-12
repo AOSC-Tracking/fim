@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -244,6 +244,8 @@ public:
 	}
 	void fetch(const fim_fn_t &dfn, const fim_char_t sc)
 	{
+		/* dfn: descriptions file name */
+		/* sc: separator char */
 		std::ifstream mfs (dfn.c_str(),std::ios::app);
 		std::string ln;
 #if FIM_WANT_PIC_RCMT
@@ -292,10 +294,12 @@ public:
 #endif /* FIM_WANT_PIC_LVDN */
 			if(std::getline(ls,fn,sc))
 			{
-				if(std::getline(ls,ds,nl))
+				bool nec = (std::getline(ls,ds,nl)); // non empty commentary
+				const bool aoec = true; // (propagate i:variables) also on empty commentary
+
+				if(nec || aoec)
 				{
 					const bool want_basename = true; /*  */
-
 #if FIM_WANT_PIC_RCMT
 					{
 						size_t csi = ds.find_first_of("#!fim:",0);
