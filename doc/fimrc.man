@@ -982,7 +982,7 @@ alias "toggleautomirror" "_automirror=1\-_automirror;" "";
 alias "togglemirror" "i:mirrored=1\-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
-alias 'toggleLimitMarked' '_limit_mode=1\-_limit_mode; if(_limit_mode==1){limit "!";} else { limit; } if(_filelistlen<1){_limit_mode=0;limit; } i:fresh=1;redisplay; ';
+alias 'toggleLimitMarked' '__pre_limit_fileindex=_fileindex;_limit_mode=1\-_limit_mode; if(_limit_mode==1){limit "!";} else { limit; } if(_filelistlen<1){_limit_mode=0;limit;goto __pre_limit_fileindex;} i:fresh=1;redisplay; ' "toggle between limiting file list to the marked files and the full list";
 # Warning : binding to C\-s, C\-z and C\-c won't make effect, as these
 # codes are catched by the console driver and will have no effect in fim.
 # Moreover, C\-z will crash fim and C\-c will terminate it.
