@@ -32,7 +32,7 @@
    key and the _lastfileindex variable
 # (r672*)
  * added --load-image-descriptions-file (equivalent to 'desc' 'load') to populate 
-   the i:_comment values of each loaded image file
+   the i:_comment values of each loaded image file and set _comment_over_image=2
 # (r682*)
    (with it added also --image-descriptions-file-separator)
 # (689*,790*)
@@ -102,7 +102,7 @@
 # (r679)
  * added --no-stat-push to set _push_checks=0 before initialization
 # (r683)
- * added the _comment_over_image variable
+ * added the _comment_over_image variable (which is 0 unless --load-image-descriptions-file)
 # (r776*)
  * 'Pause' and 'Menu' keys are now available in SDL (-o sdl) mode
 # (r780*)
