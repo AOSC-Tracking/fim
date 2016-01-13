@@ -323,6 +323,20 @@ public:
 								case('^'): // #!fim:^
 									ds = ds.substr(csil+1) + ld;
 								break;
+								case('s'): // #!fim:s/from/to '/' not allowed in from or to
+								{
+									fim::string es = ds.substr(csil);
+									size_t m = ((es).re_match("s/[^/]+/[^/]+"));
+									if(m)
+									{
+										size_t n = es.find("/",2);
+										std::string fs = es.substr(2,n-2), ts = es.substr(n+1);
+										fim::string fds = ld;
+										fds.substitute(fs.c_str(),ts.c_str());
+										ds = fds.c_str();
+									}
+								}
+								break;
 							}
 						}
 					}
