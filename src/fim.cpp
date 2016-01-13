@@ -147,6 +147,7 @@ FIM_NULL
       " These variables are stored also in an internal index used by the " FIM_FLT_LIMIT " command."
 #endif /* FIM_WANT_PIC_LBFL */
 #endif /* FIM_WANT_PIC_LVDN */
+      " This option sets " FIM_VID_COMMENT_OI "=" FIM_XSTRINGIFY(FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL) "."
     },
     {FIM_OSW_IMG_DSC_FILE_SEPC,       required_argument,       FIM_NULL, 0x69646673, "image descriptions file separator character.", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
     },
@@ -1315,6 +1316,7 @@ done:
 		    break;
 		case 0x6c696466:
 		    cc.id_.fetch(optarg,sc);
+		    cc.setVariable(FIM_VID_COMMENT_OI,(fim_int)FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
 		    break;
 #endif /* FIM_WANT_PIC_CMTS */
 	#ifdef FIM_READ_STDIN

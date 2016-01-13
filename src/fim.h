@@ -138,6 +138,7 @@
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
 #define FIM_WANT_GOTOLAST 1
 #define FIM_WANT_PIC_CMTS 1
+#define FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL 2
 #define FIM_WANT_PIC_LVDN 1 /* pictures load variables description namespace (FIXME: experimental) */
 #define FIM_WANT_PIC_LBFL 1 /* limit browser file list (see FIM_FLT_LIMIT) */
 #define FIM_WANT_PIC_RCMT 1 /* remember last comment with special "#!fim:=" syntax */
