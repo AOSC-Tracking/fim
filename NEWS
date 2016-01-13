@@ -45,9 +45,10 @@
    "filename comment" (to i:_comment),
    "#!fim:var=value" (to   set i:var=value on all all the files following)
    "#!fim:var="      (to unset i:var=value on all all the files following)
-   "filename #!fim=" (to i:_comment from the value read last)
-   "filename #!fim+comment" (similar, but will append the new comment)
-   "filename #!fim^comment" (similar, but will prepend the new comment)
+   "filename #!fim:=" (to i:_comment from the value read last)
+   "filename #!fim:+comment" (similar, but will append the new comment)
+   "filename #!fim:^comment" (similar, but will prepend the new comment)
+   "filename #!fim:s/f/t" (similar, but replace string f with string t)
 # (r654*)
 # (r675*)
  * EXIF tags will be read with libexif and become i:EXIF_-prefixed variables

@@ -139,7 +139,8 @@ FIM_NULL
       " Special description lines begin with markers: "
       " with \"#!fim:=\" the last description line to be used;"
       " with \"#!fim:+\" what follows + will be appended to the last description line;"
-      " with \"#!fim:^\" what follows ^ will be prepended to the last description line."
+      " with \"#!fim:^\" what follows ^ will be prepended to the last description line;"
+      " with \"#!fim:s/f/t\" the last description line will be used, but occurrences of string f will be substituted with string t (f and t can contain anything but not a /)."
 #endif /* FIM_WANT_PIC_RCMT  */
       " If val is empty that variable will be unset."
 #if FIM_WANT_PIC_LBFL
