@@ -2,7 +2,7 @@
 /*
  string.cpp : A reimplementation of string class
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -553,11 +553,12 @@ namespace fim
 		while(regexec(&regex,off+c_str(),nmatch,pmatch,REG_NOTBOL)==0)
 		{
 			/*
-			 * please note that this is not an efficient subsitution implementation.
+			 * please note that this is not an efficient substitution implementation.
 			 * */
+			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "rm_so :"<<pmatch->rm_so<< " rm_eo:"<<pmatch->rm_eo<<"\n";
 			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "pasting "<<off<< ":"<<off+pmatch->rm_so<<"\n";
 			if(pmatch->rm_so>0)
-			rs+=substr(off,off+pmatch->rm_so-1);
+			rs+=substr(off,pmatch->rm_so);
 			if(FIM_WANT_DEBUG_REGEXP)std::cerr << "forward to "<<rs<<"\n";
 			rs+=s;
 			//rs+=substr(pmatch->rm_eo,ts);
