@@ -265,7 +265,7 @@ FIM_NULL
 "Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.\n"
 "\n"
 "See the section\n"
-".B EXAMPLES\n"
+".B INVOCATION EXAMPLES\n"
 "below to read some useful (and unique) ways of employing fim.\n"
     },
     {"read-from-stdin-elds",      required_argument,       FIM_NULL, 0x72667373,"--read-from-stdin filenames endline delimiter string.",FIM_NULL,
@@ -710,7 +710,7 @@ mp+=string(
 "logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will\n"
 ".B not\n"
 "work.\n"
-".SH EXAMPLES\n"
+".SH INVOCATION EXAMPLES\n"
 ".B fim media/ \n"
 ".fi \n"
 "# Will load files from the directory media.\n"

@@ -616,7 +616,7 @@ Here links to some relevant sections:
 the <a href="FIM.html#framebuffer">Linux Framebuffer</a> (in the old tutorial)
 </LI>
 <LI>
-<a href="#fim.man.html_EXAMPLES">FIM usage examples (man page)</a>
+<a href="#fim.man.html_INVOCATION EXAMPLES">FIM usage examples (man page)</a>
 </LI>
 <LI>
 <a href="#fimrc.man.html_FIM LANGUAGE GRAMMAR">FIM language grammar</a>
@@ -628,7 +628,7 @@ the <a href="FIM.html#framebuffer">Linux Framebuffer</a> (in the old tutorial)
 <a href="#fimrc.man.html_VARIABLES REFERENCE">FIM variables reference</a>
 </LI>
 <LI>
-<a href="#fimrc.man.html_USAGE EXAMPLES">FIM language usage examples (man page)</a>
+<a href="#fimrc.man.html_COMMAND LINE USAGE EXAMPLES">FIM language usage examples (man page)</a>
 </LI>
 <LI>
 the <a href="FIM.html#faq">Frequently Asked Questions (FAQ)</a> (in the old tutorial)

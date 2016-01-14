@@ -911,7 +911,7 @@ swidth
 width
 [out,i:] the current image original width
 .fi
-.SH USAGE EXAMPLES
+.SH COMMAND LINE USAGE EXAMPLES
 .nf
 # jump to the third image:
 3;
@@ -932,7 +932,7 @@ $;
 # executes the "date" system command
 !"date";
 
-.SH CONFIGURATION EXAMPLES
+.SH CONFIGURATION FILE EXAMPLES
 This is the default configuration, as contained in the _fim_default_config_file_contents variable.
 
 .nf
@@ -1247,7 +1247,7 @@ The
 .B fim
 language has a number of problems that shall be first documented, then fixed.
 .SH SEE ALSO
-\fR\fIfim\fR(1), \fR\fIregex\fR(1).
+\fR\fIfim\fR(1), \fR\fIfimgs\fR(1), \fR\fIregex\fR(1).
 .SH AUTHOR
 Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 .SH COPYRIGHT
