@@ -50,9 +50,9 @@ sanity-check:	all
 
 # this is the official way of testing fim
 tests:	all
-	ulimit -c unlimited
-	ulimit -v 32000
-	ulimit -t 1000
+	ulimit -c unlimited || true
+	ulimit -v 32000 || true
+	ulimit -t 1000 || true
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/version.sh
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/font.sh
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -E $(top_srcdir)/scripts/example/oneline.fim -c quit 
