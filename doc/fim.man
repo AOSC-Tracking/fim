@@ -248,7 +248,7 @@ Read file list from stdin: each line one file.
 Note that these the three standard input reading functionalities (\-i,\-p and \-) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
 
 See the section
-.B EXAMPLES
+.B INVOCATION EXAMPLES
 below to read some useful (and unique) ways of employing fim.
 
 .TP
@@ -380,7 +380,7 @@ console switch handling.  That is obviously no problem for console
 logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
-.SH EXAMPLES
+.SH INVOCATION EXAMPLES
 .B fim media/ 
 .fi 
 # Will load files from the directory media.

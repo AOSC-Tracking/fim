@@ -2,7 +2,7 @@
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help methods
 
- (c) 2011-2015 Michele Martone
+ (c) 2011-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -186,11 +186,11 @@ manmode:
 			"\nIn the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n"
 			"\n")+
 		       	get_variables_reference(refmode)+
-			string(".SH USAGE EXAMPLES\n"
+			string(".SH COMMAND LINE USAGE EXAMPLES\n"
 			".nf\n")+
 			string(FIM_DEFAULT_EXAMPLE_FILE_CONTENTS)+
 			string("\n"
-			".SH CONFIGURATION EXAMPLES\n"
+			".SH CONFIGURATION FILE EXAMPLES\n"
 			"This is the default configuration, as contained in the " FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS " variable.\n"
 			"\n.nf\n")+
 			string(FIM_DEFAULT_CONFIG_FILE_CONTENTS)+
@@ -204,7 +204,7 @@ manmode:
 			string(".SH BUGS\n"
 "The\n.B fim\nlanguage has a number of problems that shall be first documented, then fixed.\n"
 			".SH SEE ALSO\n"
-			"""\\fR\\fI""fim""\\fR""(1), ""\\fR\\fI""regex""\\fR""(1).\n"
+			"" FIM_MAN_fR("fim") "(1), " FIM_MAN_fR("fimgs") "(1), " FIM_MAN_fR("regex") "(1).\n"
 			".SH AUTHOR\n"
 			FIM_AUTHOR
 			"\n"
