@@ -493,7 +493,7 @@ __exif_orientation
 .fi
 .B
 _archive_files
-[in,g:] Regular expression matching filenames to be treated as (multipage) archives. If empty, ".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" will be used. Within each archive, only filenames matching the regular expression in the _pushdir_re variable will be considered for opening.
+[in,g:] Regular expression matching filenames to be treated as (multipage) archives. If empty, ".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" will be used. Within each archive, only filenames matching the regular expression in the _pushdir_re variable will be considered for opening.
 .fi
 .B
 _autocmd_trace_stack
@@ -597,7 +597,7 @@ _display_status_bar
 .fi
 .B
 _display_status_fmt
-[in,g:] custom (status bar) info format string, displayed in the lower left corner; if unset: full pathname; otherwise a custom format string specified with the same format of _info_fmt_str. 
+[in,g:] custom info format string, displayed in the lower left corner of the status bar; if unset: full pathname; otherwise a custom format string specified just as _info_fmt_str.
 .fi
 .B
 _do_sanity_check
@@ -657,7 +657,7 @@ _ignorecase
 .fi
 .B
 _info_fmt_str
-[in,g:] custom (status bar) info format string, displayed in the lower right corner; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF\-set variable (make sure you have libexif for this) will be used only if present.
+[in,g:] custom info format string, displayed in the lower right corner of the status bar; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF\-set variable (make sure you have libexif for this) will be used only if present.
 .fi
 .B
 _inhibit_display
@@ -837,7 +837,7 @@ _want_autocenter
 .fi
 .B
 _want_caption_status
-[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non\-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version.
+[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non\-empty string, will interpret it just as a file info format string (see _info_fmt_str); if empty, will show the program version.
 .fi
 .B
 _want_exif_orientation
