@@ -407,7 +407,7 @@ typedef std::vector<fim::string> args_t;
 #define FIM_CNS_SHELL	"/bin/sh"
 #define FIM_CNS_DSFF	"JPEG,PNG,GIF,BMP,TIFF,PPM,PGM,PBM,PCX" /* FIXME: this shall depend on build options */
 #define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.TIF$|\\.JPEG$|\\.JFIF$|\\.PPM$|\\.PGM$|\\.PBM$|\\.PCX$" /* FIXME: this shall depend on build options */
-#define FIM_CNS_ARCHIVE_RE	".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* FIXME: there is much more: CAB.. */
+#define FIM_CNS_ARCHIVE_RE	".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* FIXME: there is much more: CAB.. */
 #define FIM_CNS_VERBOSITY_LOADER		1 /* a value for FIM_VID_VERBOSITY */ 
 #define FIM_CNS_BPP_INVALID	0
 #define FIM_CNS_K 1024
@@ -519,7 +519,7 @@ namespace fim
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[in,g:] if 1, will display the output console" */
 #define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[out,g:] the current display device string" */
 #define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "[in,g:] if 1, will display the status bar" */
-#define FIM_VID_DISPLAY_STATUS_FMT		"_display_status_fmt"	/* "[in,g:] custom (status bar) info format string, displayed in the lower left corner; if unset: full pathname; otherwise a custom format string specified with the same format of _info_fmt_str. " */
+#define FIM_VID_DISPLAY_STATUS_FMT		"_display_status_fmt"	/* "[in,g:] custom info format string, displayed in the lower left corner of the status bar; if unset: full pathname; otherwise a custom format string specified just as _info_fmt_str." */
 #define FIM_VID_PUSH_PUSHES_DIRS		"_push_pushes_dirs"	/* "[in,g:] if 1, the push command will also accept and push directories (using pushdir)" */
 #define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[in,experimental,g:] if 1, will execute a sanity check on startup" */
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[out,experimental,g:] the standard output of the last call to the system command" */
@@ -543,7 +543,7 @@ namespace fim
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[out,g:] the current image numeric index" */
 #define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[out,g:] the length of the current image list" */
-#define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[in,g:] custom (status bar) info format string, displayed in the lower right corner; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF-set variable (make sure you have libexif for this) will be used only if present." */
+#define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[in,g:] custom info format string, displayed in the lower right corner of the status bar; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF-set variable (make sure you have libexif for this) will be used only if present." */
 #define FIM_VID_FILENAME			"_filename"		/* "[out,i:] the current file name string" */
 #define FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS "_fim_default_config_file_contents"/* "[out,g:] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)" */
 #define FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS "_fim_default_grammar_file_contents" /* "[out,g:] the contents of the default (hardcoded) grammar file" */
@@ -552,7 +552,7 @@ namespace fim
 #define FIM_VID_PAGES				"pages"			/* "[out,experimental,i:] the current number of pages of an image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal,g:] if 1, will inhibit display" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[experimental,g:] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
-#define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret that string file info format string (see _info_fmt_str for the format); if empty, will show the program version." */
+#define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret it just as a file info format string (see _info_fmt_str); if empty, will show the program version." */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[in,g:] the image scale multiplier used when magnifying images size" */
 #define FIM_VID_PWD				"_pwd"			/* "[out,g:] the current working directory; will be updated at startup and whenever the working directory changes" */
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[in,g:] the image scale multiplier used when reducing images size" */

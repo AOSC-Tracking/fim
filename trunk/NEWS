@@ -86,7 +86,8 @@
 # (r724)
  * special variable i:* expanding to all the variable name/value pairs of the current image
 # (experimental, incomplete; TODO: r665)
- * opening image files in archives with libarchive (experimental)
+ * opening image files in archives (e.g. CBZ,CBR,RAR,TAR,TGZ,TBZ,7Z,ISO,...)
+   with libarchive (experimental)
 # (r660)
  * JPEG-2000 file support via JasPer (experimental)
 # (r744*)
@@ -126,7 +127,7 @@
 #  (TODO)
 # * viewport info cache size
 # (TODO: FIXME: disable this)
- * mouse panning in SDL mode
+ * panning on mouse movement in SDL mode
  * `make fim' goal has been deleted
 # (r848)
  * changed librsb library detection: now it's e.g.:
