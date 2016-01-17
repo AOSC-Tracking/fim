@@ -62,7 +62,7 @@
  * will optionally use C++11 constructs with ./configure --enable-cxx11 (no user level impact)
  * scaling image code faster (thanks to __restrict__ pointers)
 # (r648*)
- * customizable SDL window caption line with _want_caption_status
+ * customizable SDL window caption line with _want_wm_caption_status
 # (r664*)
  * BMP format support is now optional
 # (r666*)

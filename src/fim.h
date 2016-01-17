@@ -552,7 +552,7 @@ namespace fim
 #define FIM_VID_PAGES				"pages"			/* "[out,experimental,i:] the current number of pages of an image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal,g:] if 1, will inhibit display" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[experimental,g:] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
-#define FIM_VID_WANT_CAPTION_STATUS		"_want_caption_status"	/* "[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret it just as a file info format string (see _info_fmt_str); if empty, will show the program version." */
+#define FIM_VID_WANT_CAPTION_STATUS		"_want_wm_caption_status"	/* "[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret it just as a file info format string (see _info_fmt_str); if empty, will show the program version." */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[in,g:] the image scale multiplier used when magnifying images size" */
 #define FIM_VID_PWD				"_pwd"			/* "[out,g:] the current working directory; will be updated at startup and whenever the working directory changes" */
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[in,g:] the image scale multiplier used when reducing images size" */

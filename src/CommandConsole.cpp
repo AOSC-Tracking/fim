@@ -2243,7 +2243,7 @@ ok:
 			fim::string clb = browser_.c_image()->getInfoCustom(wcss.c_str());
 
 			rc = displaydevice_->set_wm_caption(clb.c_str());
-			wcs = false; /* caption + status */
+			wcs = false; /* window caption + status */
 		}
 		else
 			if( str && *str )
