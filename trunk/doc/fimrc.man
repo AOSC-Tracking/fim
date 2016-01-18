@@ -528,16 +528,16 @@ _cached_images
 [out,g:] the number of images currently cached.
 .fi
 .B
+_caption_over_image
+[experimental,in,g:] if _caption_over_image is set not to 0, will display the contents of i:_comment as a caption over the image; if larger than 1, with black background. 
+.fi
+.B
 _command_expansion
 [in,g:] if 1, will enable autocompletion (on execution) of alias and command strings
 .fi
 .B
 _comment
 [i:,out] the image comment, extracted from the image file (if any)
-.fi
-.B
-_comment_over_image
-[experimental,in,g:] if _comment_over_image is set not to 0, will display the contents of i:_comment over the image; if larger than 1, with black background. 
 .fi
 .B
 _console_buffer_free

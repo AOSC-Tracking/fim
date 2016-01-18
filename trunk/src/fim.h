@@ -559,7 +559,7 @@ namespace fim
 #define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[in,g:] value used for scaling up/down the scaling factors" */
 #define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[in,g:] value used for incrementing/decrementing the scaling factors" */
 #define FIM_VID_COMMENT 				"_comment"				/* "[i:,out] the image comment, extracted from the image file (if any)" */
-#define FIM_VID_COMMENT_OI 				"_comment_over_image"				/* "[experimental,in,g:] if _comment_over_image is set not to 0, will display the contents of i:_comment over the image; if larger than 1, with black background. " */
+#define FIM_VID_COMMENT_OI 				"_caption_over_image"				/* "[experimental,in,g:] if _caption_over_image is set not to 0, will display the contents of i:_comment as a caption over the image; if larger than 1, with black background. " */
 #define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[out,g:] comment extracted via the exiftool interface; see _use_exiftool." */
 #define FIM_VID_STEPS 				"_steps"				/* "[in,g:] the default steps, in pixels, when panning images" */
 #define FIM_VID_VERSION				"_fim_version"	/* "[out,g:] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
