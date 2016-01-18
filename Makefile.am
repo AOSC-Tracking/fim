@@ -158,8 +158,9 @@ release: upload freshmeat
 
 upload: savannah 
 
-savannah: signed-dist
-	echo -en "cd /releases/fbi-improved\nput $(distdir).tar.gz.sig\n put fim-${fim_cv_version}.tar.gz\n put fim-${fim_cv_version}.tar.bz2\n put fim-${fim_cv_version}.tar.bz2.sig"  | sftp "dezperado@dl.sv.gnu.org" -b 
+savannah_: signed-dist
+	grep trunk VERSION || echo do
+	# echo -en "cd /releases/fbi-improved\nput $(distdir).tar.gz.sig\n put fim-${fim_cv_version}.tar.gz\n put fim-${fim_cv_version}.tar.bz2\n put fim-${fim_cv_version}.tar.bz2.sig"  | sftp "dezperado@dl.sv.gnu.org" -b 
 	lynx -dump dl.sv.gnu.org/releases/fbi-improved
 
 savannah-lookup:

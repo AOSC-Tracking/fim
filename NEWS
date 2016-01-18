@@ -1,7 +1,9 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
-                Version 0.5-trunk
+                Version 0.6-trunk
+# ...
+                Version 0.5
 
 # (r746*)
  * -R / --recursive switch to turn on recursive push of command line specified directories
