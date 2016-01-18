@@ -1,0 +1,35 @@
+Source: fim
+Section: graphics
+Priority: extra
+Maintainer: Michele Martone <michele.martone@uniroma2.it>
+Uploaders: Gianfranco Costamagna <costamagnagianfranco@yahoo.it>
+Build-Depends: bison,
+               debhelper (>= 9),
+               dh-autoreconf,
+               flex,
+               libaa1-dev,
+               libgif-dev,
+               libjpeg-dev,
+               libpng-dev,
+               libreadline-dev,
+               libsdl1.2-dev,
+               libtiff-dev
+Standards-Version: 3.9.6
+Homepage: http://savannah.nongnu.org/projects/fbi-improved/
+
+Package: fim
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: scriptable frame buffer, X, and ascii art image viewer
+ FIM is a highly customizable and scriptable image viewer targeted at the
+ users who are comfortable with software like the Vim text editor or the Mutt
+ mail user agent (it aims to be a "Swiss Army knife" for viewing images).
+ It derives from the Fbi image viewer (by Gerd Hoffmann), and in addition to
+ the Linux framebuffer console it can use X (via the SDL library) and offer
+ ascii art output (via the aalib library).
+ It provides: regular expressions based vim-like autocommands; GNU readline
+ based command line autocompletion and history; completely customizable key
+ bindings; external/internal (if-while based) scriptability (through return
+ codes, standard input/output, and commands given at invocation time) an
+ initialization file; filename-based and comments-based image search;
+ EXIF-tags based orientation, comments display and much more.

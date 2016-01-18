@@ -1,0 +1,248 @@
+ $Id$
+
+This file was obsoleted by INSTALL, so regard it as outdated.
+
+Summary:
+
+====== BUILDING FROM SVN
+====== BUILDING ON GENTOO LINUX - with overlays (recommended)
+====== BUILDING ON GENTOO LINUX - without overlays
+====== BUILDING ON DEBIAN LINUX
+====== BUILDING ON CENTOS LINUX (RED HAT LINUX)
+====== BUILDING FROM A COMPRESSED ARCHIVE (recommended)
+====== CONFIGURE
+====== INSTALLATION
+====== INSTALLATION BUG REPORTING
+====== FRAMEBUFFER PROBLEMS
+====== DEPENDENCIES
+====== DEPENDENCIES : example on Gentoo
+====== TODO
+====== BUILDING FROM SVN
+
+If you happen to have downloaed fim from the svn archive, 
+run the ./autogen.sh script.
+However, this require you to have the automake, autoconf, and 
+aclocal programs. If you don't have these, the ./autogen.sh 
+script won't work.
+
+The ./autogen.sh script will create a ./configure script, which
+will generate a Makefile file, which finally will permit you to 
+build the fim executable and install it.
+
+====== BUILDING ON GENTOO LINUX - with overlays (recommended)
+
+Fim is in the gentoo 'sunrise' overlay. So, you can 'emerge fim' if 
+you have this overlay installed on your system.
+Here it shows how to do it :
+
+ su
+ emerge layman
+ layman -a sunrise
+ echo "source /usr/portage/local/layman/make.conf" >> /etc/make.conf
+ layman -S
+ USE='gif jpeg png tiff' emerge fim
+ 
+====== BUILDING ON GENTOO LINUX - without overlays
+
+ NOTE : THE GENTOO PACKAGES ARE PROBABLY OBSOLETE, AND SO THESE INSTRUCTIONS
+
+On a gentoo system, you should resolve library dependencies with :
+
+ emerge media-libs/giflib media-libs/jpeg media-libs/libpng media-libs/tiff
+ emerge flex bison
+ 
+and then install using the custom ebuild in distros/gentoo/media-gfx/fim/:
+
+ su
+ FIM=fim-0.1
+ wget http://www.autistici.org/dezperado/fim/${FIM}.tar.gz -O /usr/portage/distfiles/${FIM}.tgz
+ mkdir -p /usr/local/portage/media-gfx/fim
+ tar xvzf   /usr/portage/distfiles/${FIM}.tar.gz ${FIM}/distros/gentoo/media-gfx/fim/${FIM}.ebuild
+ cd /usr/local/portage/media-gfx/fim
+ ebuild  ${FIM}.ebuild digest
+ echo PORTDIR_OVERLAY=/usr/local/portage >> /etc/make.conf
+ emerge fim
+
+if for some reason this method fails, please send the logfiles to the author
+as a bug report; see BUGS for this!
+
+ p.s.: emerge -pv fim
+       will give you some build flags
+
+====== BUILDING ON DEBIAN LINUX
+
+Actually I don't own a Debian system to try on, but I already have 
+a file in distros/debian/control (useless, though :) )
+
+Other libraries are installable by running:
+apt-get install libc6-dev
+apt-get install build-essential
+apt-get install libreadline5-dev
+apt-get install libungif4-dev
+apt-get install libpng-dev
+apt-get install libjpeg-dev
+apt-get install libtiff-dev
+apt-get install libdjvulibre-dev
+apt-get install libpoppler-dev
+apt-get install flex
+apt-get install bison
+apt-get install libaa1-dev
+apt-get install libsdl1.2-dev
+apt-get install libspectre-dev
+# apt-get install autoconf
+
+...
+
+Note: it is not necessary to install these libraries versions (i.e.: libreadline5-dev), but the right packages.
+
+To use the full Fim potential, you could also install GhostScript, Inkscape, Dia, Xfig, Gimp.
+
+If you could give me some help with this, I would be very grateful to you.
+
+====== BUILDING ON CENTOS LINUX (RED HAT LINUX)
+
+On a yum-based system, you would resolve dependencies with yum:
+
+yum install readline
+yum install readline-devel
+...
+
+====== BUILDING FROM A COMPRESSED ARCHIVE (recommended)
+
+To build fim, you should first unpack the .tgz archive.
+Say you have just downloaded fim.tgz from the Internet.
+So:
+
+tar xvzf fim.tgz
+cd fim/
+./configure --help=short
+./configure
+make
+
+Typing ./configure will run the configure script, which will test
+your machine for potential problems regarding the build and 
+installation of Fim.
+
+The configure script will build the Makefile file, which is essential to build 
+fim.
+If the configure script terminates with an error, please contact the author of
+fim giving him the generated config.log file and any useful information  to 
+spot the problem.
+
+Please see the BUGS file for bugs reporting.
+
+====== CONFIGURE
+
+What follows is a snip from the output of ./configure --help=short:
+
+Optional Features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --disable-dependency-tracking  speeds up one-time build
+  --enable-dependency-tracking   do not reject slow dependency extractors
+  --disable-largefile     omit support for large files
+  --disable-default_bindings
+                          Builtin default minimal key binding (unfinished)
+  --disable-default_mapping
+                          Builtin default minimal key binding (unfinished)
+  --disable-default_config
+                          Builtin default minimal key binding (unfinished)
+  --disable-system        Disable system() and pipe() calls.
+  --disable-gif           Disable gif support.
+  --disable-tiff          Disable tiff support.
+  --disable-jpeg          Disable jpeg support.
+  --disable-png           Disable png support.
+  --disable-autocommands  Fim will by default use autocommands.
+  --disable-windows       Enable Fim's own windowing system.
+  --disable-fimrc         Fim will by default load the ~.fimrc file.
+  --enable-screen         Fim will work under screen (EXPERIMENTAL!)
+  --enable-debug          Turns on debug options (recommended, for debugging)
+  --enable-warnings       Turns on compiler warnings (recommended, for
+                          debugging)
+  --enable-aalib          Enable aalib (ASCII art output) support.
+  --enable-sdl            Enable SDL (X) support.
+
+These are options to the configure script shipped with tarball, and 
+serves ot hard-code various configuration options prior to building fim.
+
+====== INSTALLATION
+
+To build Fim, type 'make' in its source directory, once expanded the archive
+and having run the ./configure script before.
+
+Then use 'make install' as root :
+
+# su 
+Password:
+# make install
+checking for libdir name ... lib
+install -d /usr/local/bin
+install -s fim /usr/local/bin
+install ./src/fimgs.sh /usr/local/bin/fimgs
+install -d /usr/local/share/man/man1
+install -m 644 doc/fim.man /usr/local/share/man/man1/fim.1
+install -d /usr/local/share/doc/fim
+install -m 644 doc/FIM.TXT /usr/local/share/doc/fim/
+install -m 644 doc/FIM.html /usr/local/share/doc/fim/
+
+or
+
+# su -c 'make install'
+Password:
+checking for libdir name ... lib
+install -d /usr/local/bin
+install -s fim /usr/local/bin
+...
+
+to install the fim executable, the fim wrapper script (fimgs), the fim man page,
+and documentation in the dedicated directories in /usr/local.
+
+====== INSTALLATION BUG REPORTING
+
+If something goes wrong, please email me the output of 'make report', or the .tgz
+file resulting from the following statement execution:
+
+ ( make;make report ) | gzip  > fim.`date +%Y%m%d%H%M`.log.gz
+
+Have fun!
+p.s.: please see the BUGS file for bug reporting!
+
+====== FRAMEBUFFER PROBLEMS
+
+p.s.: if you do not even know if you have the framebuffer or it is correctly configured,
+there is a section of the doc/FIM.TXT file dedicated to this, and the same information in
+the man page.
+
+Consider reading it!
+
+====== DEPENDENCIES
+
+p.p.s.: consider that to build Fim, you need the following programs installed:
+
+ flex	(the lexer generator)
+ bison	(the parser generator)
+ gcc	(the C compiler)
+ g++	(the C++ compiler)
+
+and some libraries, like libjpg, libpng, libgif, libtiff, libreadline.
+
+All of these programs are probably already on your system, and if not, your system will
+ probably give a way to install them (apt-get on debian, emerge on gentoo.. ).
+
+====== DEPENDENCIES : example on Gentoo
+
+On a Gentoo system, you should resolve dependencies running as root:
+
+# emerge media-libs/libpng media-libs/jpeg media-libs/tiff media-libs/giflib sys-libs/readline
+
+And install the essential developer tools flex and bison:
+
+# emerge sys-devel/flex sys-devel/bison
+
+====== TODO
+
+A gift in form of a well written gentoo/debian/other distribution dependency file
+would be much appreciated.
+
+Suggestions are welcome, too!
+
