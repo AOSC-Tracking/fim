@@ -47,8 +47,8 @@ help:
 	@echo
 
 #tgz: $(SITEDIR)/$(TGZ)
-tgz:
-	cd $(FIMDIR) && make doc && make signed-tgzdist && cd -
+# tgz:
+#	cd $(FIMDIR) && make doc && make signed-tgzdist && cd - # this directory cares just for the www pages
 	
 all:	site up cp
 
@@ -94,7 +94,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 pages:	$(PAGES) $(SITEDIR)/index.html
 
 site:	pages
-	make tgz
+	#make tgz # this directory cares just for the www pages
 	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/$(INDEXIN) > $(SITEDIR)/index.html
 	mkdir -p $(SITEDIR)
 	#cd $(FIMDIR) && ./autogen.sh && ./configure && make doc && make dist && cd -

@@ -1,14 +1,11 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
-                Version 0.5-trunk
+                Version 0.5
 
-# (r746*)
  * -R / --recursive switch to turn on recursive push of command line specified directories
-# (r669*)
  * added --sort and --sort-basename to sort the images list
  * introduced mipmap mechanism (_use_mipmaps) for faster display/scaling of images
-# (r644,r651*) (undocumented) r676)
  * status bar customizable with _display_status_fmt and _info_fmt_str, which can be
    controlled by the use of special image variable specifiers ('expandos'):
     "%T" expando to get (and display) total memory used by the program 
@@ -19,29 +16,19 @@
     "%k" expando to get (and display) current image i:_comment value
     "%?PRE?VAR?POST?" expando to get (and display) "PRE".i:VAR."POST"
     ...
-# (r674*)
  * search (and jump) on image descriptions via 'goto' and key '/'
-# (r696)
  * when repeating search with 'repeat_last', will use last direction
  * '?' key is now assigned to backward search (goto '-//')
  * default 'C-p' key is now assigned to repeat last backward search (goto '-//')
-# (TODO)
  * image cache will remember alignment within viewport
-# (r667*)
  * jump back and forth from the last viewed image with the ' (single quote aka apostrophe)
    key and the _lastfileindex variable
-# (r672*)
  * added --load-image-descriptions-file (equivalent to 'desc' 'load') to populate 
    the i:_comment values of each loaded image file and set _caption_over_image=2
-# (r682*)
    (with it added also --image-descriptions-file-separator)
-# (689*,790*)
  * added the 'desc "load"' command to load a textual files comments description file
-# (r851-r879):
  * introduced a 'limit' command, with comment, file name, or marked file criteria
-# (r920):
  * the '`' key is bound to toggle limit'ing to the marked files list
-# (r902)
  * introduced 'list "mark"' and 'list "unmark"' syntax styled as 'limit'
  * load i:_comment and i:var from description file, with forms:
    "filename comment" (to i:_comment),
@@ -51,93 +38,52 @@
    "filename #!fim:+comment" (similar, but will append the new comment)
    "filename #!fim:^comment" (similar, but will prepend the new comment)
    "filename #!fim:s/f/t" (similar, but replace string f with string t)
-# (r654*)
-# (r675*)
  * EXIF tags will be read with libexif and become i:EXIF_-prefixed variables
-# (r769!,805*)
  * if _want_exif_orientation is set, images will be reoriented according to EXIF
    metadata (i:__exif_orientation, i:__exif_mirrored, i:__exif_flipped).
-# (r791*)
  * the 'help' command will search also in fim command options
  * will optionally use C++11 constructs with ./configure --enable-cxx11 (no user level impact)
  * scaling image code faster (thanks to __restrict__ pointers)
-# (r648*)
  * customizable SDL window caption line with _want_wm_caption_status
-# (r664*)
  * BMP format support is now optional
-# (r666*)
  * PCX format support (optional)
-# (r671*)
  * changed meaning of variable _ignorecase: now it affects autocommands
-# (r671*)
  * introduced variable _re_search_opts affecting regexp-based search
  * default key 'r' is bound to 'rotate90', key 'R' to 'rotate270'
  * can be invoked without stdin; e.g. from an X menu
  * added "display 'resize'" to resize the SDL window, eventually to image size
-# (r698) (not mentioned in the docs)
  * default SDL mode is windowed now
-# (r698)
  * by default, the 'C-w' key will resize the SDL window to the original image size
-# (r698)
  * by default, the 'W' key will resize the SDL window to the image size,
-# (r703)
    and added an --autowindow switch to adapt window size to picture size
  * the 'help' command will search in help items if argument starts with /
-# (r724)
  * special variable i:* expanding to all the variable name/value pairs of the current image
-# (experimental, incomplete; TODO: r665)
  * opening image files in archives (e.g. CBZ,CBR,RAR,TAR,TGZ,TBZ,7Z,ISO,...)
    with libarchive (experimental)
-# (r660)
  * JPEG-2000 file support via JasPer (experimental)
-# (r744*)
  * added a ':- INTEGER' syntax, so one can specify the file in the list counting from the end
-# (r745*)
  * added an _archive_files variable to specify which file name types specify archives
-# (r746*)
  * added a 'list "pushdirr"' command, working like "pushdir" but recursively
-# (r767*)
  * the _fbfont variable will contain the current console font file string
-# (r772,r775*)
  * mirror/flip are now being applied with respect to the viewport borders
-# (r678)
  * stat() checking of files on load can be disabled with _push_checks
-# (r679)
  * added --no-stat-push to set _push_checks=0 before initialization
-# (r683)
  * added the _caption_over_image variable (which is 0 unless --load-image-descriptions-file)
-# (r776*)
  * 'Pause' and 'Menu' keys are now available in SDL (-o sdl) mode
-# (r780*)
  * added  'list' 'marked'  to show the list of marked files
-# (r782*)
  * key 'Del' bound to pop (delete) the current image from the list
-# (r784*)
  * i:_file loader will store the used loader string
-# (EXPERIMENTAL,r795*)
  * switch --offset accepts a range now (using the new _open_offset_retry variable)
-# (EXPERIMENTAL,r796*)
  * if an image has been opened with an offset, i:_open_offset will be set accordingly
-# (r806*)
  * variable i:pagecount is now replaced by i:pages
-# (r807*)
  * put aside (disabled) the v: b: and w: namespaces until they make more sense
-# (TODO; FIXME)
-# * improved the 'align' command
-#  (TODO)
-# * viewport info cache size
-# (TODO: FIXME: disable this)
  * panning on mouse movement in SDL mode
  * `make fim' goal has been deleted
-# (r848)
  * changed librsb library detection: now it's e.g.:
    LIBS="`librsb-config  --ldflags --extra_libs` " CXXFLAGS="`librsb-config --cflags ` \
    ./configure --enable-matrices-rendering
-# (r882)
  * bugfix: in some situations fim -o fb was not clearing the screen before drawing the image
-# (r849)
  * bugfix in the "list 'remove'" internals
-# (r907)
  * --binary=1/--binary=24 will not pad tiny renderings to _preferred_rendering_width pixels
 
                 Version 0.4
