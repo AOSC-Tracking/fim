@@ -1277,13 +1277,13 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::goto_image(int n, bool isfg)
+	fim::string Browser::goto_image(fim_int n, bool isfg)
 	{
 		/*
 		 *	FIX ME: ultimately, all file transitions should pass by here.
 		 */
 		fim::string result = FIM_CNS_EMPTY_RESULT;
-		int N = flist_.size();
+		fim_int N = flist_.size();
 		FIM_PR('*');
 
 		if( !N )
@@ -1305,9 +1305,15 @@ nop:
 #if FIM_WANT_GOTOLAST
 		if(getGlobalIntVariable(FIM_VID_LASTFILEINDEX) != current_image())
 			setGlobalVariable(FIM_VID_LASTFILEINDEX, current_image());
-#endif /* FIM_WANT_GOTOLAST */
 		cf_ = n;
 		cf_ = FIM_MOD(cf_,N);
+#if FIM_WANT_LASTGOTODIRECTION
+		if( ( n_files() + current_image() - getGlobalIntVariable(FIM_VID_LASTFILEINDEX) ) % n_files() > n_files() / 2 )
+			setGlobalVariable(FIM_VID_LASTGOTODIRECTION,"-1");
+		else
+			setGlobalVariable(FIM_VID_LASTGOTODIRECTION,"+1");
+#endif /* FIM_WANT_LASTGOTODIRECTION */
+#endif /* FIM_WANT_GOTOLAST */
 		FIM_PR(' ');
 		setGlobalVariable(FIM_VID_PAGE ,(fim_int)0);
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());

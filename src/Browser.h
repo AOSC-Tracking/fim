@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -111,7 +111,7 @@ class Browser
 	fim::string fcmd_prefetch(const args_t &args);
 	fim::string fcmd_goto_image(const args_t &args);
 	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
-	fim::string goto_image(int n, bool isfg=false);
+	fim::string goto_image(fim_int n, bool isfg=false);
 	fim::string fcmd_align(const args_t &args);
 	fim::string pan(const args_t &args);
 	fim::string fcmd_scrolldown(const args_t &args);

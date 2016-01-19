@@ -137,6 +137,7 @@
 #define FIM_WANT_BDI 1
 #define FIM_WANT_EXPERIMENTAL_MIPMAPS 1
 #define FIM_WANT_GOTOLAST 1
+#define FIM_WANT_LASTGOTODIRECTION (FIM_WANT_GOTOLAST && 1)
 #define FIM_WANT_PIC_CMTS 1
 #define FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL 2
 #define FIM_WANT_PIC_LVDN 1 /* pictures load variables description namespace (FIXME: experimental) */
@@ -542,6 +543,7 @@ namespace fim
 #define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[in,g:] if non empty, this string will be fed to the scale command" */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[out,g:] the current image numeric index" */
 #define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
+#define FIM_VID_LASTGOTODIRECTION			"_lastgotodirection"	/* "[out,g:] the last file goto direction (either string '+1' or string '-1')." */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[out,g:] the length of the current image list" */
 #define FIM_VID_INFO_FMT_STR			"_info_fmt_str"		/* "[in,g:] custom info format string, displayed in the lower right corner of the status bar; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF-set variable (make sure you have libexif for this) will be used only if present." */
 #define FIM_VID_FILENAME			"_filename"		/* "[out,i:] the current file name string" */
