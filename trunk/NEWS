@@ -2,7 +2,10 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
-# ...
+# (r931)
+ * added the _lastgotodirection variable, with the last file goto direction
+ * key Enter will now mark and then go forward or back according to _lastgotodirection 
+
                 Version 0.5
 
 # (r746*)

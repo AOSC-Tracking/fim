@@ -676,6 +676,10 @@ _lastfileindex
 [out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'.
 .fi
 .B
+_lastgotodirection
+[out,g:] the last file goto direction (either string '+1' or string '\-1').
+.fi
+.B
 _load_default_etc_fimrc
 [in,g:] if 1 at startup, will load the system wide initialization file
 .fi
@@ -1028,7 +1032,8 @@ bind 'v' "toggleDisplayStatus";
 bind 'A' "A";
 bind 'C\-m' "list 'mark'";
 bind 'u' "list 'unmark'";
-bind 'Enter' "list 'mark';next";
+#bind 'Enter' "list 'mark';next";
+bind 'Enter' "list 'mark';goto _lastgotodirection";
 bind '\-' "reduce";
 bind "Up" "pan_up";
 bind 'k' "pan_up";
