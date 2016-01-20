@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -2070,7 +2070,7 @@ ret:
 
 struct FimBaseNameSorter
 {
-	bool operator() (fim::string lfn, fim::string rfn)
+	bool operator() (const fim::string & lfn, const fim::string & rfn)
 	{ 
 		const char * ls = lfn.c_str();
 		const char * rs = rfn.c_str();
@@ -2087,14 +2087,14 @@ struct FimBaseNameSorter
 #if FIM_WANT_FLIST_STAT 
 struct FimSizeSorter
 {
-	bool operator() (fim::fle_t lfn, fim::fle_t rfn)
+	bool operator() (const fim::fle_t & lfn, const fim::fle_t & rfn)
 	{ 
 		return (lfn.stat_.st_size < rfn.stat_.st_size);
 	}
 }fimSizeSorter;
 struct FimDateSorter
 {
-	bool operator() (fim::fle_t lfn, fim::fle_t rfn)
+	bool operator() (const fim::fle_t & lfn, const fim::fle_t & rfn)
 	{ 
 		return (lfn.stat_.st_mtime < rfn.stat_.st_mtime);
 	}
@@ -2102,7 +2102,7 @@ struct FimDateSorter
 #else /* FIM_WANT_FLIST_STAT */
 struct FimDateSorter
 {
-	bool operator() (fim::string lfn, fim::string rfn)
+	bool operator() (const fim::string & lfn, const fim::string & rfn)
 	{ 
 		struct stat lstat_s;
 		struct stat rstat_s;
