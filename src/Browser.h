@@ -192,12 +192,12 @@ class Browser
 
 	fim_int n_files(void)const;
 	fim_int n_pages(void)const;
-	fim::string _reverse(void);
 	fim::string next(int n=1);
 
 	void free_current_image(void);
 	int load_error_handle(fim::string c);
 	public:
+	fim::string _reverse(void);
 	fim_int c_page(void)const;
 	virtual size_t byte_size(void)const;
 	fim_float_t file_progress(void)const { /* FIXME: relies on range 0... */ double fp = (((double)(1+this->current_n()))/this->n_files()); return FIM_MIN(1.0,fp);} 

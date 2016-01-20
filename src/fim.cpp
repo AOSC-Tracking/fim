@@ -221,6 +221,9 @@ FIM_NULL
 "See (chvt (1)), (openvt (1)) for more info about this.\n"
 "Use (con2fb (1)) to map a terminal to a framebuffer device.\n"
     },
+    {"reverse",     no_argument,       FIM_NULL, 0x7772666c ,"reverse images list.",FIM_NULL,
+"Reverse files list before browsing (can be combined with the other sorting options)."
+    },
     {"sort",     no_argument,       FIM_NULL, 0x736f7274 ,"sort images by pathname.",FIM_NULL,
 "Sort files list before browsing according to full filename."
     },
@@ -926,6 +929,7 @@ done:
 		int              opt_index = 0;
 		int              i;
 		int		 want_random_shuffle=0;
+		int              want_reverse_list=0;
 	#ifdef FIM_READ_STDIN
 		enum rsc { Nothing = 0, ImageFile = 1, FilesList = 2, Script = 3/*, Desc = 4*/ };
 		int              read_stdin_choice = Nothing;
@@ -1174,6 +1178,10 @@ done:
 		case 0x736f7274:
 		    //fim's
 		    want_random_shuffle=c;
+		    break;
+		case 0x7772666c:
+		    //fim's
+		    want_reverse_list=1;
 		    break;
 		case 'd':
 		    //fbi's
@@ -1461,6 +1469,8 @@ done:
 #else /* FIM_WANT_SORT_BY_STAT_INFO */
 		/* FIXME: notice for the user ... */
 #endif /* FIM_WANT_SORT_BY_STAT_INFO */
+		if(want_reverse_list==1)
+			cc.browser_._reverse();
 
 		if(ndd==-1)
 			fim_perror(FIM_NULL);
