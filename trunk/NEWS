@@ -2,6 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+# (r936)
+ * added --reverse to reverse the file list
 # (r933)
  * added --sort-mtime to sort file list according to modification time
  * added --sort-fsize to sort file list according to file size
