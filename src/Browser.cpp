@@ -58,7 +58,7 @@ namespace fim
 			fim::string fileslist;
 
 			for(size_t i=0;i<flist_.size();++i)
-				fileslist += flist_[i] + fim::string(" ");
+				fileslist += fim::string(flist_[i]) + fim::string(" ");
 			result = fileslist;
 			goto ret;
 		}
@@ -71,7 +71,13 @@ namespace fim
 			else if(args[0]=="sort")
 				result = _sort();
 			else if(args[0]=="sort_basename")
-				result = _sort('b');
+				result = _sort(FIM_SYM_SORT_BN);
+#if FIM_WANT_SORT_BY_STAT_INFO
+			else if(args[0]=="sort_mtime")
+				result = _sort(FIM_SYM_SORT_MD);
+			else if(args[0]=="sort_fsize")
+				result = _sort(FIM_SYM_SORT_SZ);
+#endif /* FIM_WANT_SORT_BY_STAT_INFO */
 			else if(args[0]=="reverse")
 				result = _reverse();
 			else if(args[0]=="pop")
@@ -274,7 +280,7 @@ ret:
 		{
 			// FIXME: shall use a search member function/function
 			for( size_t i=0; i < flist_.size(); ++i )
-				if( flist_[i] == filename )
+				if( fim::string(flist_[i]) == filename )
 					flist_.erase(flist_.begin()+i);
                         cf_ = FIM_MAX(FIM_MIN(flist_.size()-1,cf_),0);
 		}
@@ -913,8 +919,8 @@ ret:
 		 */
 		fim_int fi = -1;
 #if 1
-		for(args_t::const_iterator fit=flist_.begin();fit!=flist_.end();++fit)
-			if( *fit == nf )
+		for(flist_t::const_iterator fit=flist_.begin();fit!=flist_.end();++fit)
+			if( string(*fit) == nf )
 			{
 				fi = fit - flist_.begin();
 				goto ret;
@@ -1125,49 +1131,12 @@ ret:
 		return flist_.size();
 	}
 
-#define FIM_SORT_BY_DATE 0
-#if FIM_SORT_BY_DATE
-struct FimDateSorter
-{
-	bool operator() (fim::string lfn, fim::string rfn)
-	{ 
-		struct stat lstat_s;
-		struct stat rstat_s;
-		stat(lfn.c_str(),&lstat_s);
-		stat(rfn.c_str(),&rstat_s);
-		return (lstat_s.st_mtime < rstat_s.st_mtime);
-	}
-} fimDateSorter;
-#endif
-
-struct FimBaseNameSorter
-{
-	bool operator() (fim::string lfn, fim::string rfn)
-	{ 
-		const char * ls = lfn.c_str();
-		const char * rs = rfn.c_str();
-		int scr = 0;
-
-		if(ls && rs)
-			scr = (strcmp(fim_basename_of(ls),fim_basename_of(rs)));
-		return (scr < 0);
-		
-	}
-} fimBaseNameSorter;
-
 	fim::string Browser::_sort(const fim_char_t sc)
 	{
 		/*
 		 *	sorts the image filenames list
 		 */
-		if(sc=='f')
-			std::sort(flist_.begin(),flist_.end());
-		if(sc=='b')
-			std::sort(flist_.begin(),flist_.end(),fimBaseNameSorter);
-#if FIM_SORT_BY_DATE
-		if(sc=='d')
-			std::sort(flist_.begin(),flist_.end(),fimDateSorter);
-#endif
+		flist_._sort(sc);
 		return n_files() ? (flist_[current_n()]) : nofile_;
 	}
 
@@ -2044,5 +2013,124 @@ err:
 		/* TODO: this is incomplete ... */
 		return bs;
 	}
-}
+} /* namespace fim */
 
+namespace fim
+{
+	static fim_stat_t fim_get_stat(const string &fn, bool * dopushp = FIM_NULL)
+	{
+		bool dopush = false;
+#if FIM_WANT_FLIST_STAT
+		struct stat stat_s;
+		if(-1==stat(fn.c_str(),&stat_s))
+			goto ret;
+		if( S_ISDIR(stat_s.st_mode))
+			goto ret;
+		if( stat_s.st_size == 0 )
+			goto ret;
+#endif /* FIM_WANT_FLIST_STAT */
+		dopush = true;
+ret:
+		if( dopushp )
+		       *dopushp = dopush;
+		return stat_s; // FIXME: what about failure ?
+	}
+
+	void flist_t::get_stat(void)
+	{
+		for(flist_t::iterator fit=begin();fit!=end();++fit)
+			fit->stat_ = fim_get_stat(*fit);
+	}
+
+	flist_t::flist_t(const args_t & a)
+       	{
+		/* FIXME: unused for now */
+		this->reserve(a.size());
+		for(args_t::const_iterator fit=a.begin();fit!=a.end();++fit)
+		{
+			bool dopush;
+			struct stat stat_s = fim_get_stat(*fit,&dopush);
+			if(dopush)
+				push_back(fim::fle_t(*fit,stat_s));
+		}
+#if FIM_USE_CXX11
+		this->shrink_to_fit();
+#else /* FIM_USE_CXX11 */
+		this->reserve(this->size());
+#endif /* FIM_USE_CXX11 */
+	}
+
+	//std::string fle_t::operator(){return fn;}
+	fle_t::fle_t(){}
+	fle_t::fle_t(const string &s):string(s){fim_bzero(&stat_,sizeof(stat_));}
+	fle_t::fle_t(const string &s, const fim_stat_t & ss):string(s),stat_(ss)
+	{
+	}
+	fle_t::operator string () const { return string(*this);} 
+
+struct FimBaseNameSorter
+{
+	bool operator() (fim::string lfn, fim::string rfn)
+	{ 
+		const char * ls = lfn.c_str();
+		const char * rs = rfn.c_str();
+		int scr = 0;
+
+		if(ls && rs)
+			scr = (strcmp(fim_basename_of(ls),fim_basename_of(rs)));
+		return (scr < 0);
+		
+	}
+} fimBaseNameSorter;
+
+#if FIM_WANT_SORT_BY_STAT_INFO
+#if FIM_WANT_FLIST_STAT 
+struct FimSizeSorter
+{
+	bool operator() (fim::fle_t lfn, fim::fle_t rfn)
+	{ 
+		return (lfn.stat_.st_size < rfn.stat_.st_size);
+	}
+}fimSizeSorter;
+struct FimDateSorter
+{
+	bool operator() (fim::fle_t lfn, fim::fle_t rfn)
+	{ 
+		return (lfn.stat_.st_mtime < rfn.stat_.st_mtime);
+	}
+}fimDateSorter;
+#else /* FIM_WANT_FLIST_STAT */
+struct FimDateSorter
+{
+	bool operator() (fim::string lfn, fim::string rfn)
+	{ 
+		struct stat lstat_s;
+		struct stat rstat_s;
+		stat(lfn.c_str(),&lstat_s);
+		stat(rfn.c_str(),&rstat_s);
+		return (lstat_s.st_mtime < rstat_s.st_mtime);
+	}
+}fimDateSorter;
+#endif /* FIM_WANT_FLIST_STAT */
+#endif /* FIM_WANT_SORT_BY_STAT_INFO */
+
+	void flist_t::_sort(const fim_char_t sc)
+	{
+		if(sc==FIM_SYM_SORT_FN)
+			std::sort(this->begin(),this->end());
+		if(sc==FIM_SYM_SORT_BN)
+			std::sort(this->begin(),this->end(),fimBaseNameSorter);
+#if FIM_WANT_SORT_BY_STAT_INFO
+		if(sc==FIM_SYM_SORT_MD)
+		{
+			this->get_stat();
+			std::sort(this->begin(),this->end(),fimDateSorter);
+		}
+		if(sc==FIM_SYM_SORT_SZ)
+		{
+			this->get_stat();
+			std::sort(this->begin(),this->end(),fimSizeSorter);
+		}
+#endif /* FIM_WANT_SORT_BY_STAT_INFO */
+	}
+} /* namespace fim */

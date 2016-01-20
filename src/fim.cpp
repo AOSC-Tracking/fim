@@ -227,6 +227,14 @@ FIM_NULL
     {"sort-basename",     no_argument,       FIM_NULL, 0x736f626e ,"sort images by basename.",FIM_NULL,
 "Sort files list before browsing according to file basename's."
     },
+#if FIM_WANT_SORT_BY_STAT_INFO
+    {"sort-mdate",     no_argument,       FIM_NULL, 0x7369626d ,"sort images by modification date.",FIM_NULL,
+"Sort files list before browsing according to file modification date."
+    },
+    {"sort-fsize",     no_argument,       FIM_NULL, 0x73696273 ,"sort images by file size.",FIM_NULL,
+"Sort files list before browsing according to file size."
+    },
+#endif /* FIM_WANT_SORT_BY_STAT_INFO */
     {"random",     no_argument,       FIM_NULL, 'u',"randomize images order.",FIM_NULL,
 "Randomly shuffle the files list before browsing (seed depending on time() function)."
     },
@@ -1149,6 +1157,16 @@ done:
 		    //fim's
 		    want_random_shuffle=-1;
 		    break;
+#if FIM_WANT_SORT_BY_STAT_INFO
+		case 0x73696273:
+		    //fim's
+		    want_random_shuffle=c;
+		    break;
+		case 0x7369626d:
+		    //fim's
+		    want_random_shuffle=c;
+		    break;
+#endif /* FIM_WANT_SORT_BY_STAT_INFO */
 		case 0x736f626e:
 		    //fim's
 		    want_random_shuffle=c;
@@ -1434,7 +1452,15 @@ done:
 		if(want_random_shuffle==0x736f7274)
 			cc.browser_._sort();
 		if(want_random_shuffle==0x736f626e)
-			cc.browser_._sort('b');
+			cc.browser_._sort(FIM_SYM_SORT_BN);
+#if FIM_WANT_SORT_BY_STAT_INFO
+		if(want_random_shuffle==0x7369626d)
+			cc.browser_._sort(FIM_SYM_SORT_MD);
+		if(want_random_shuffle==0x73696273)
+			cc.browser_._sort(FIM_SYM_SORT_SZ);
+#else /* FIM_WANT_SORT_BY_STAT_INFO */
+		/* FIXME: notice for the user ... */
+#endif /* FIM_WANT_SORT_BY_STAT_INFO */
 
 		if(ndd==-1)
 			fim_perror(FIM_NULL);

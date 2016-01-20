@@ -2,6 +2,11 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+# (r933)
+ * added --sort-mtime to sort file list according to modification time
+ * added --sort-fsize to sort file list according to file size
+ * to list command added subcommand 'sort_mtime' to sort file list according to modification time
+ * to list command added subcommand 'sort_fsize' to sort file list according to file size
 # (r931)
  * added the _lastgotodirection variable, with the last file goto direction
  * key Enter will now mark and then go forward or back according to _lastgotodirection 
