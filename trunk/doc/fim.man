@@ -212,6 +212,12 @@ Sort files list before browsing according to full filename.
 .B  \-\-sort\-basename
 Sort files list before browsing according to file basename's.
 .TP
+.B  \-\-sort\-mdate
+Sort files list before browsing according to file modification date.
+.TP
+.B  \-\-sort\-fsize
+Sort files list before browsing according to file size.
+.TP
 .B \-u, \-\-random
 Randomly shuffle the files list before browsing (seed depending on time() function).
 .TP

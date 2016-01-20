@@ -28,6 +28,35 @@
 namespace fim
 {
 	extern CommandConsole cc;
+
+#if FIM_WANT_FLIST_STAT 
+typedef struct stat fim_stat_t;
+#else /* FIM_WANT_FLIST_STAT */
+typedef int fim_stat_t;
+#endif /* FIM_WANT_FLIST_STAT */
+
+class fle_t : public string /* file list element */
+{
+       	public:
+#if FIM_WANT_FLIST_STAT 
+       	fim_stat_t stat_;
+#endif /* FIM_WANT_FLIST_STAT */
+       	/*std::string operator();*/
+	fle_t(const string &s);
+	fle_t(const string &s, const fim_stat_t & ss);
+	fle_t();
+	operator string (void)const;
+};
+
+class flist_t : public std::vector<fim::fle_t>
+{
+	public:
+	flist_t(void){}
+	flist_t(const args_t & a);
+	void get_stat(void);
+	void _sort(const fim_char_t sc);
+};
+
 /*
  * A Browser object oversees image browsing.
  */
@@ -40,10 +69,10 @@ class Browser
 	private:
 	enum MatchMode{ FullFileNameMatch, PartialFileNameMatch, VarMatch, CmtMatch, MarkedMatch }; /* FIXME */
 	enum FilterAction{ Mark, Unmark, Delete }; /* FIXME */
-	args_t flist_; /* the names of files in the slideshow.  */
+	flist_t flist_; /* the names of files in the slideshow.  */
 #if FIM_WANT_PIC_LBFL
-	args_t tlist_; /* the names of files in the slideshow.  */
-	args_t llist_; /* limited file list */
+	flist_t tlist_; /* the names of files in the slideshow.  */
+	flist_t llist_; /* limited file list */
 #endif /* FIM_WANT_PIC_LBFL */
 
 	const fim::string nofile_; /* a dummy empty filename */
@@ -154,7 +183,7 @@ class Browser
 
 	fim::string display(void);
 	fim::string _random_shuffle(bool dts=true);
-	fim::string _sort(const fim_char_t sc='f');
+	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN);
 	fim::string _clear_list(void);
 	private:
 	fim::string do_filter(const args_t &args, MatchMode rm=FullFileNameMatch, bool negative=false, enum FilterAction faction = Delete);

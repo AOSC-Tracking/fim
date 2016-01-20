@@ -143,6 +143,8 @@
 #define FIM_WANT_PIC_LVDN 1 /* pictures load variables description namespace (FIXME: experimental) */
 #define FIM_WANT_PIC_LBFL 1 /* limit browser file list (see FIM_FLT_LIMIT) */
 #define FIM_WANT_PIC_RCMT 1 /* remember last comment with special "#!fim:=" syntax */
+#define FIM_WANT_FLIST_STAT ( HAVE_SYS_STAT_H && 1 ) /* stat() info in the file list */
+#define FIM_WANT_SORT_BY_STAT_INFO FIM_WANT_FLIST_STAT /* using stat() info for sorting (FIXME: shall cache this info at first sort or on -R) */
 #define FIM_EXPERIMEMTAL_IMG_NMSPC 1
 #define FIM_EXPERIMEMTAL_VAR_EXPANDOS 1
 #define FIM_FONT_MAGNIFY_FACTOR 1 /* EXPERIMENTAL,UNFINISHED: this only works on SDL and breaks the rest. Keep to 1. */
@@ -257,7 +259,10 @@ typedef std::vector<fim::string> args_t;
 #define FIM_SYM_SEMICOLON_STRING	";"
 #define FIM_SYM_ENDL	"\n"
 #define FIM_SYM_PIC_CMT_CHAR    '#'
-
+#define FIM_SYM_SORT_SZ	'z'
+#define FIM_SYM_SORT_MD	'm'
+#define FIM_SYM_SORT_BN	'b'
+#define FIM_SYM_SORT_FN 'f'
 /*
  * External programs used by fim.
  */
@@ -803,7 +808,7 @@ namespace fim
 
 /* Help messages for Fim internal commands. */
 #define FIM_CMD_HELP_ALIGN FIM_FLT_ALIGN " bottom : align to the lower side the current image; " FIM_FLT_ALIGN " top : align to the upper side the current image; "
-#define FIM_CMD_HELP_LIST	FIM_FLT_LIST " : display the files list; " FIM_FLT_LIST " 'random_shuffle': randomly shuffle the file list; " FIM_FLT_LIST " 'reverse': reverse the file list; " FIM_FLT_LIST " 'clear': clear the file list; " FIM_FLT_LIST " 'sort': sort the file list; " FIM_FLT_LIST " 'pop' : pop the last file from the files list; " FIM_FLT_LIST " 'remove' [" FIM_CNS_EX_FNS_STRING "] : remove the current file, or the " FIM_CNS_EX_FNS_STRING ", if specified " "; " FIM_FLT_LIST " " FIM_CNS_EX_FNS_STRING " 'push': push " FIM_CNS_EX_FNS_STRING " to the back of the files list; " FIM_FLT_LIST " 'filesnum': display the number of files in the files list; " FIM_FLT_LIST " 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file; " FIM_FLT_LIST " 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file; " FIM_FLT_LIST " 'marked': show which files have been marked so far; " FIM_FLT_LIST " 'pushdir; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable " FIM_VID_PUSHDIR_RE " or, if empty, from constant regular expression " FIM_CNS_PUSHDIR_RE "; " FIM_FLT_LIST " 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively. "
+#define FIM_CMD_HELP_LIST	FIM_FLT_LIST " : display the files list; " FIM_FLT_LIST " 'random_shuffle': randomly shuffle the file list; " FIM_FLT_LIST " 'reverse': reverse the file list; " FIM_FLT_LIST " 'clear': clear the file list; " FIM_FLT_LIST " 'sort': sort the file list; " FIM_FLT_LIST " 'sort_basename': sort the file list according to base name; " FIM_FLT_LIST " 'sort_fsize': sort the file list according to file size; " FIM_FLT_LIST " 'sort_mdate': sort the file list according to modification date; " FIM_FLT_LIST " 'pop' : pop the last file from the files list; " FIM_FLT_LIST " 'remove' [" FIM_CNS_EX_FNS_STRING "] : remove the current file, or the " FIM_CNS_EX_FNS_STRING ", if specified " "; " FIM_FLT_LIST " " FIM_CNS_EX_FNS_STRING " 'push': push " FIM_CNS_EX_FNS_STRING " to the back of the files list; " FIM_FLT_LIST " 'filesnum': display the number of files in the files list; " FIM_FLT_LIST " 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file; " FIM_FLT_LIST " 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file; " FIM_FLT_LIST " 'marked': show which files have been marked so far; " FIM_FLT_LIST " 'pushdir; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable " FIM_VID_PUSHDIR_RE " or, if empty, from constant regular expression " FIM_CNS_PUSHDIR_RE "; " FIM_FLT_LIST " 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively. "
 #define FIM_CMD_HELP_CD			FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING ": change the current directory to " FIM_CNS_EX_PATH_STRING ". " FIM_FLT_CD " - will change to the previous current directory (before the last \":" FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING "\" command)"
 #define FIM_CMD_HELP_SET			FIM_FLT_SET ": returns a list of variables which are set; " FIM_FLT_SET " " FIM_CNS_EX_ID_STRING ": returns the value of variable " FIM_CNS_EX_ID_STRING "; " FIM_FLT_SET " " FIM_CNS_EX_ID_STRING " " FIM_CNS_EX_CMDS_STRING ": sets variable " FIM_CNS_EX_ID_STRING " to value " FIM_CNS_EX_CMDS_STRING "; " 
 #define FIM_CMD_HELP_PWD			FIM_FLT_PWD" : print the current directory name, and updates the " FIM_VID_PWD " variable"
