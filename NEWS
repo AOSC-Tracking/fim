@@ -2,6 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+
+ * FIXME: did something with --enable-unicode ?
 # (r936)
  * added --reverse to reverse the file list
 # (r933)
