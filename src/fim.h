@@ -822,6 +822,7 @@ namespace fim
 #define FIM_FLT_HELP_DISPLAY FIM_FLT_DISPLAY " ['reinit' {string}]|'resize' {w} {h}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the --" FIM_OSW_OUTPUT_DEVICE " command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. "
 
 #define FIM_CNS_SLIDESHOW_CMD "while(" FIM_VID_FILEINDEX "<" FIM_VID_FILELISTLEN "){sleep " FIM_VID_WANT_SLEEPS "; next;}"
+#define FIM_CNS_QUIET_CMD FIM_VID_DISPLAY_STATUS "=0;" FIM_VID_DISPLAY_BUSY "=0;"
 
 /*
  * Some Fim compilation defaults

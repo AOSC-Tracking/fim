@@ -269,7 +269,8 @@ Specify an endline delimiter string for breaking lines read via \-/\-\-read\-fro
 		 Align images to the top (UNFINISHED).
 .TP
 .B \-q, \-\-quiet
-		 Quiet mode (UNFINISHED).
+Quiet mode. Sets _display_status=0;_display_busy=0;.
+
 .TP
 .B \-r {resolution}, \-\-resolution {resolution}
 		 Set resolution (UNFINISHED).
