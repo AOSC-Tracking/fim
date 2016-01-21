@@ -278,8 +278,7 @@ FIM_NULL
 //    {"gamma",      required_argument, FIM_NULL, 'g',"set gamma (UNFINISHED)","{gamma}",
 //" gamma correction.  Can also be put into the FBGAMMA environment variable.  Default is 1.0.  Requires Pseudocolor or Directcolor visual, doesn't work for Truecolor."
 //    },
-    {"quiet",      no_argument,       FIM_NULL, 'q',"Quiet mode (UNFINISHED).",FIM_NULL,
-	    FIM_NULL
+    {"quiet",      no_argument,       FIM_NULL, 'q',"Quiet mode.",FIM_NULL, "Quiet mode. Sets " FIM_CNS_QUIET_CMD ".\n"
     },
     {"resolution", required_argument, FIM_NULL, 'r',"Set resolution (UNFINISHED).","{resolution}",
 	    FIM_NULL
@@ -1016,7 +1015,7 @@ done:
 		    //FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
 		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,(fim_int)0);
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=0;");
+		    cc.pre_autocmd_add(FIM_CNS_QUIET_CMD);
 	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'f':
