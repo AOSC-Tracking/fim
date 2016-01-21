@@ -22,7 +22,8 @@
 #define FIM_BROWSER_H
 #include "fim.h"
 
-#define FIM_FLAG_DEFAULT 0
+#define FIM_FLAG_NONREC 0
+#define FIM_FLAG_DEFAULT FIM_FLAG_NONREC
 #define FIM_FLAG_PUSH_REC 1
 
 namespace fim

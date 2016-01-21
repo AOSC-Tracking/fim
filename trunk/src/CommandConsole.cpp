@@ -2469,5 +2469,14 @@ err:
 	{
 		return displaydevice_->get_input(c, want_poll);
 	}
+#if FIM_WANT_PIC_CMTS
+	bool CommandConsole::push_from_id(void)
+	{
+		for(	ImgDscs::const_iterator ifn=id_.begin();
+				ifn!=id_.end();++ifn )
+			this->push(ifn->first);
+		return true;
+	}
+#endif /* FIM_WANT_PIC_CMTS */
 }
 

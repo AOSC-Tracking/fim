@@ -145,6 +145,7 @@
 #define FIM_WANT_PIC_RCMT 1 /* remember last comment with special "#!fim:=" syntax */
 #define FIM_WANT_FLIST_STAT ( HAVE_SYS_STAT_H && 1 ) /* stat() info in the file list */
 #define FIM_WANT_SORT_BY_STAT_INFO FIM_WANT_FLIST_STAT /* using stat() info for sorting (FIXME: shall cache this info at first sort or on -R) */
+#define FIM_WANT_MAGIC_FIMDESC 1
 #define FIM_EXPERIMEMTAL_IMG_NMSPC 1
 #define FIM_EXPERIMEMTAL_VAR_EXPANDOS 1
 #define FIM_FONT_MAGNIFY_FACTOR 1 /* EXPERIMENTAL,UNFINISHED: this only works on SDL and breaks the rest. Keep to 1. */

@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -1890,6 +1890,26 @@ with_offset:
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
 probe_loader:
     /* pick loader */
+#if FIM_WANT_MAGIC_FIMDESC
+    if (FIM_NULL == loader && (*blk=='#')
+		    && (*(fim_byte_t*)(blk+1)=='!') 
+		    && (*(fim_byte_t*)(blk+2)=='f') 
+		    && (*(fim_byte_t*)(blk+3)=='i') 
+		    && (*(fim_byte_t*)(blk+4)=='m') 
+		    && (*(fim_byte_t*)(blk+5)==':') 
+		    && (*(fim_byte_t*)(blk+6)=='d') 
+		    && (*(fim_byte_t*)(blk+7)=='e') 
+		    && (*(fim_byte_t*)(blk+8)=='s') 
+		    && (*(fim_byte_t*)(blk+9)=='c') 
+	)
+    {
+	cc.set_status_bar("ok, a file list...", "*");
+	cc.id_.fetch(filename ,'\t');
+	cc.push_from_id();
+	cc.setVariable(FIM_VID_COMMENT_OI,(fim_int)FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
+	goto shall_skip_header;
+    }
+#endif /* FIM_WANT_MAGIC_FIMDESC */
 #ifdef FIM_SKIP_KNOWN_FILETYPES
     if (FIM_NULL == loader && (*blk==0x42) && (*(fim_byte_t*)(blk+1)==0x5a))
     {

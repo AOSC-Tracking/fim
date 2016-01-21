@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -390,6 +390,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	public:
 #if FIM_WANT_PIC_CMTS
 	ImgDscs id_;
+	bool push_from_id(void);
 #endif /* FIM_WANT_PIC_CMTS */
 };
 }
