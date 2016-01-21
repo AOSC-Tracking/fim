@@ -153,8 +153,10 @@
  * bugfix in the "list 'remove'" internals
 # (r907)
  * --binary=1/--binary=24 will not pad tiny renderings to _preferred_rendering_width pixels
-# (r937)
- * corrected the quiet mode (-q) to be quieter
+# (r937) (-rc1)
+ * fix: corrected the quiet mode (-q) to be quieter
+# (r940) (-rc1)
+ * fix: no zlib.h build time dependency (this will be reintroduced in the future)
 
                 Version 0.4
 

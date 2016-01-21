@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,7 +42,9 @@
 #ifdef HAVE_LIBGEN_H
 #include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
-#include <zlib.h>
+
+#define FIM_WANT_ZLIB 0
+/* #include <zlib.h> */ /* useless as long as FIM_WANT_ZLIB is 0 */
 
 /*
 void fim_tolowers(fim_char_t *s)
@@ -870,7 +872,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
 
 int fim_isspace(int c){return isspace(c);}
 int fim_isquote(int c){return c=='\'' || c=='\"';}
-#define FIM_WANT_ZLIB 0
+
 FILE *fim_fopen(const char *path, const char *mode)
 {
 #if FIM_WANT_ZLIB
