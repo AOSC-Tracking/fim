@@ -1021,6 +1021,8 @@ if test x$fim_cv_libexif = xyes; then
 			Please run --disable-exif or install libexif in a system-wide directory instead.
 			])
 	fi
+else
+	fim_cv_libexif=no;
 fi
 
 dnl ================================================================================
@@ -1531,7 +1533,7 @@ dnl ==================
 AH_TEMPLATE([FIM_DEFAULT_CONSOLEFONT])
 AC_ARG_WITH(default-consolefont, AC_HELP_STRING([--with-default-consolefont=FILE], [Specify a default consolefont (psf or psf.gz format) file.]), [ AC_DEFINE_UNQUOTED(FIM_DEFAULT_CONSOLEFONT, "$withval") ], [fim_cv_defaultconsolefont=""])
 dnl ==================
-AC_ARG_WITH(custom-hardcoded-consolefont, AC_HELP_STRING([--with-custom-hardcoded-consolefont=FILE], [Specify a custom consolefont to be hardcoded (psf format, absolute path) at build time (requires --enable-hardcoded-font).]), [
+AC_ARG_WITH(custom-hardcoded-consolefont, AC_HELP_STRING([--with-custom-hardcoded-consolefont=FILE], [Specify a custom consolefont to be hardcoded (uncompressed psf format, absolute path) at build time (requires --enable-hardcoded-font).]), [
 fim_cv_want_custom_hardcoded_consolefont=true;
 AC_SUBST(FIM_CUSTOM_HARDCODED_CONSOLEFONT, "$withval")
 ], [])
