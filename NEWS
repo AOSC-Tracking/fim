@@ -1,7 +1,12 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
-                Version 0.5
+                Version 0.5-rc1
+
+ * fix: corrected the quiet mode (-q) to be quieter
+ * fix: no zlib.h build time dependency (this will be reintroduced in the future)
+
+                Version 0.5-rc0
 
  * -R / --recursive switch to turn on recursive push of command line specified directories
  * added --sort and --sort-basename to sort the images list
@@ -85,7 +90,6 @@
  * bugfix: in some situations fim -o fb was not clearing the screen before drawing the image
  * bugfix in the "list 'remove'" internals
  * --binary=1/--binary=24 will not pad tiny renderings to _preferred_rendering_width pixels
- * corrected the quiet mode (-q) to be quieter
 
                 Version 0.4
 
