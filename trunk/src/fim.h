@@ -148,7 +148,7 @@
 #define FIM_WANT_MAGIC_FIMDESC 1
 #define FIM_EXPERIMEMTAL_IMG_NMSPC 1
 #define FIM_EXPERIMEMTAL_VAR_EXPANDOS 1
-#define FIM_FONT_MAGNIFY_FACTOR 1 /* EXPERIMENTAL,UNFINISHED: this only works on SDL and breaks the rest. Keep to 1. */
+#define FIM_FONT_MAGNIFY_FACTOR FIM_WANT_FONT_MAGNIFY_FACTOR /* Framebuffer font magnifying factor, >=1 (EXPERIMENTAL). Useful with very high resolutions and small fonts. */
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
