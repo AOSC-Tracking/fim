@@ -59,7 +59,9 @@ struct fs_font {
 
 #else /* FIM_USE_X11_FONTS */
 
+#if FIM_FONT_MAGNIFY_FACTOR
 #define fim_fmf FIM_FONT_MAGNIFY_FACTOR
+#endif /* FIM_FONT_MAGNIFY_FACTOR */
 
 typedef struct _FSXCharInfo {
     short       left;
@@ -67,6 +69,9 @@ typedef struct _FSXCharInfo {
     short       width;
     short       ascent;
     short       descent;
+#if ( FIM_FONT_MAGNIFY_FACTOR == 0 )
+    int fim_fmf;	/* FIXME: unfinished */
+#endif /* FIM_FONT_MAGNIFY_FACTOR */
     /*unsigned short      attributes;*/
     int swidth(void)const{return fim_fmf*width;}
 } FSXCharInfo;
@@ -91,6 +96,9 @@ struct fs_font {
     int                maxenc,width,height;
     FSXCharInfo        **eindex;
     fim_byte_t      **gindex;
+#if ( FIM_FONT_MAGNIFY_FACTOR == 0 )
+    int fim_fmf;	/* FIXME: unfinished */
+#endif /* FIM_FONT_MAGNIFY_FACTOR */
     int swidth(void)const{return fim_fmf*width;}
     int sheight(void)const{return fim_fmf*height;}
 };

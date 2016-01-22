@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -187,10 +187,11 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 	if (FIM_NULL == f_->eindex[c])
 	    continue;
 	/* clear with bg color */
+#if 0
 	start = pos + x*fs_bpp_ + f_->fontHeader.max_bounds.descent * fb_fix_.line_length;
-	w = (f_->eindex[c]->width+1)*fs_bpp_;
+	w = (f_->eindex[c]->width*fim_fmf+1)*fs_bpp_;
 #ifdef FIM_IS_SLOWER_THAN_FBI
-	for (j = 0; j < f_->height; j++) {
+	for (j = 0; j < f_->sheight(); j++) {
 /////	    memset_combine(start,0x20,w);
 	    fim_bzero(start,w);
 	    start += fb_fix_.line_length;
@@ -200,20 +201,21 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 	if(fb_fix_.line_length==(unsigned int)w)
 	{
 		//contiguous case
-		fim_bzero(start,w*f_->height);
-	    	start += fb_fix_.line_length*f_->height;
+		fim_bzero(start,w*f_->sheight());
+	    	start += fb_fix_.line_length*f_->sheight();
 	}
 	else
-	for (j = 0; j < f_->height; j++) {
+	for (j = 0; j < f_->sheight(); j++) {
 	    fim_bzero(start,w);
 	    start += fb_fix_.line_length;
 	}
 #endif /* FIM_IS_SLOWER_THAN_FBI */
 	/* draw character */
-	start = pos + x*fs_bpp_ + fb_fix_.line_length * (f_->height-f_->eindex[c]->ascent);
+#endif
+	start = pos + x*fs_bpp_ + fb_fix_.line_length * (f_->sheight()-fim_fmf*f_->eindex[c]->ascent);
 	fs_render_fb(start,fb_fix_.line_length,f_->eindex[c],f_->gindex[c]);
-	x += f_->eindex[c]->width;
-	if (x > fb_var_.xres - f_->width)
+	x += f_->eindex[c]->width*fim_fmf;
+	if (x > fb_var_.xres - f_->swidth())
 	    return FIM_ERR_GENERIC;
     }
     //return x;//FIXME
@@ -251,13 +253,18 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
 	for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++) {
 	    if (data[bit>>3] & fs_masktab[bit&7])
 		// WARNING !
+#if FIM_FONT_MAGNIFY_FACTOR == 1
 		fs_setpixel(ptr+x,fs_white_);
+#else	/* FIM_FONT_MAGNIFY_FACTOR */
+		for(fim_coo_t mi = 0; mi < 3; ++mi)
+		for(fim_coo_t mj = 0; mj < fim_fmf; ++mj)
+			fs_setpixel(ptr+((fim_fmf*x+mj*FB_BPP)+(mi)*pitch),fs_white_);
+#endif	/* FIM_FONT_MAGNIFY_FACTOR */
 	    x += fs_bpp_;
 	}
 	data += bpr;
-	ptr += pitch;
+	ptr += pitch*fim_fmf;
     }
-
 #undef BIT_ORDER
 #undef BYTE_ORDER
 #undef SCANLINE_UNIT
@@ -975,13 +982,13 @@ fim_err_t FramebufferDevice::status_line(const fim_char_t *msg)
     if (!visible_)
 	goto ret;
 
-    if(fb_var_.yres< 1 + f_->height + ys_)
+    if(fb_var_.yres< 1 + f_->sheight() + ys_)
 	/* we need enough pixels, and have no assumptions on weird visualization devices_ */
 	goto rerr;
 
-    y = fb_var_.yres -1 - f_->height - ys_;
+    y = fb_var_.yres -1 - f_->sheight() - ys_;
 //    fb_memset(fb_mem_ + fb_fix_.line_length * y, 0, fb_fix_.line_length * (f_->height+ys_));
-    clear_rect(0, fb_var_.xres-1, y+1,y+f_->height+ys_);
+    clear_rect(0, fb_var_.xres-1, y+1,y+f_->sheight()+ys_);
 
     fb_line(0, fb_var_.xres, y, y);
     fs_puts(f_, 0, y+ys_, msg);
@@ -1627,8 +1634,8 @@ int FramebufferDevice::fb_text_init2(void)
 {
     return fs_init_fb(255);
 }
-	int  FramebufferDevice::fb_font_width(void) { return f_->width; }
-	int  FramebufferDevice::fb_font_height(void) { return f_->height; }
+	int  FramebufferDevice::fb_font_width(void) { return f_->swidth(); }
+	int  FramebufferDevice::fb_font_height(void) { return f_->sheight(); }
 
 int FramebufferDevice::fs_init_fb(int white8)
 {
@@ -1922,7 +1929,7 @@ FramebufferDevice::~FramebufferDevice(void)
 
 fim_coo_t FramebufferDevice::status_line_height(void)const
 {
-	return f_ ? border_height_ + f_->height : 0;
+	return f_ ? border_height_ + f_->sheight() : 0;
 }
 #endif  //ifdef FIM_WITH_NO_FRAMEBUFFER, else
 

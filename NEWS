@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r942)
+ * --with-font-magnifying-factor=FACTOR option will render text magnified
+   by (hardcoded) FACTOR times. Useful with very high resolutions and small fonts.
 # (r941)
  * FIXME: description files beginning with "#!fim:desc" (whatever extension) can now
    be detected and loaded as they were normal image files (FIXME: undocumented)
