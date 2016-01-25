@@ -844,8 +844,11 @@ void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 		{
 			if (data[bit>>3] & fs_masktab[bit&7])
 			{	// WARNING !
-#if FIM_FONT_MAGNIFY_FACTOR <= 0
+#if FIM_FONT_MAGNIFY_FACTOR == 0
 				const fim_int fim_fmf = fim::fim_fmf_; 
+#endif	/* FIM_FONT_MAGNIFY_FACTOR */
+#if FIM_FONT_MAGNIFY_FACTOR <  0
+				fim_int fim_fmf = fim::fim_fmf_; 
 #endif	/* FIM_FONT_MAGNIFY_FACTOR */
 #if FIM_FONT_MAGNIFY_FACTOR == 1
 				setpixel(screen_,x_+x,(y+row)*screen_->pitch/Bpp_,rc,gc,bc);
