@@ -37,9 +37,9 @@
 namespace fim
 {
 
-
 #ifdef FIM_USE_X11_FONTS
 # include <FSlib.h>
+    int swidth(void)const{return /*_FSXCharInfo::fim_fmf_**/width;}
 
 struct fs_font {
     Font               font;
@@ -69,11 +69,13 @@ typedef struct _FSXCharInfo {
     short       width;
     short       ascent;
     short       descent;
-#if ( FIM_FONT_MAGNIFY_FACTOR == 0 )
-    int fim_fmf;	/* FIXME: unfinished */
-#endif /* FIM_FONT_MAGNIFY_FACTOR */
     /*unsigned short      attributes;*/
-    int swidth(void)const{return fim_fmf*width;}
+#if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
+    int fmf(void)const{extern fim_int fim_fmf_;return fim_fmf_;}
+#else /* FIM_FONT_MAGNIFY_FACTOR */
+    int fmf(void)const{return FIM_FONT_MAGNIFY_FACTOR;}
+#endif /* FIM_FONT_MAGNIFY_FACTOR */
+    int swidth(void)const{return fmf()*width;}
 } FSXCharInfo;
 
 typedef struct _FSXFontInfoHeader {
@@ -96,11 +98,13 @@ struct fs_font {
     int                maxenc,width,height;
     FSXCharInfo        **eindex;
     fim_byte_t      **gindex;
-#if ( FIM_FONT_MAGNIFY_FACTOR == 0 )
-    int fim_fmf;	/* FIXME: unfinished */
+#if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
+    int fmf(void)const{extern fim_int fim_fmf_;return fim_fmf_;}
+#else /* FIM_FONT_MAGNIFY_FACTOR */
+    int fmf(void)const{return FIM_FONT_MAGNIFY_FACTOR;}
 #endif /* FIM_FONT_MAGNIFY_FACTOR */
-    int swidth(void)const{return fim_fmf*width;}
-    int sheight(void)const{return fim_fmf*height;}
+    int swidth(void)const{return fmf()*width;}
+    int sheight(void)const{return fmf()*height;}
 };
 
 #endif  /* FIM_USE_X11_FONTS */

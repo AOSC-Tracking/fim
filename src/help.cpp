@@ -54,6 +54,7 @@ fim_var_help_db[FIM_VID_EXIFTOOL_COMMENT]= "[out,g:] comment extracted via the e
 fim_var_help_db[FIM_VID_STEPS]= "[in,g:] the default steps, in pixels, when panning images" ;
 fim_var_help_db[FIM_VID_VERSION]= "[out,g:] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  ;
 fim_var_help_db[FIM_VID_FBFONT]= "[out,g:] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." ;
+fim_var_help_db[FIM_VID_FBFMF]= "[in,g:] The rendered text will use a font magnified by this (integer) factor. Maximal value is \"" FIM_XSTRINGIFY(FIM_FONT_MAGNIFY_FACTOR_MAX) "\". (Only if enabled with --with-font-magnifying-factor=0)." ;
 fim_var_help_db[FIM_VID_HSTEPS]= "[in,g:] the default steps, in pixels, when panning images horizontally (overrides steps)" ;
 fim_var_help_db[FIM_VID_VSTEPS]= "[in,g:] the default steps, in pixels, when panning images vertically (overrides steps)" ;
 fim_var_help_db[FIM_VID_CONSOLE_ROWS]= "[in,g:] if >0, will set the number of displayed text lines in the console" ;
