@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -41,6 +41,12 @@
 #define FIM_SAVE_CONSOLEFONTNAME(CFN) cc.setVariable(FIM_VID_FBFONT,CFN);
 namespace fim
 {
+
+#if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
+    fim_int fim_fmf_ = FIM_FONT_MAGNIFY_FACTOR_DEFAULT; /* FIXME */
+#else /* FIM_FONT_MAGNIFY_FACTOR */
+    const fim_int fim_fmf_ = FIM_FONT_MAGNIFY_FACTOR;
+#endif /* FIM_FONT_MAGNIFY_FACTOR */
 
 	FontServer::FontServer( )
 	{

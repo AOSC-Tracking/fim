@@ -1540,7 +1540,7 @@ AC_SUBST(FIM_CUSTOM_HARDCODED_CONSOLEFONT, "$withval")
 AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )
 dnl ==================
 fim_cv_want_font_magnify_factor=1;
-AC_ARG_WITH(font-magnifying-factor, AC_HELP_STRING([--with-font-magnifying-factor=FACTOR], [Will render text magnified by (hardcoded) FACTOR times. Useful with very high resolutions and small fonts (default is 1).]), [
+AC_ARG_WITH(font-magnifying-factor, AC_HELP_STRING([--with-font-magnifying-factor=FACTOR], [If FACTOR>0, Will render text magnified by (hardcoded) FACTOR times. If FACTOR<=0, will allow run-time control of it via the _fbfont_magnify_factor variable. If negative, -FACTOR will be used as default. Default is 1 ]), [
 fim_cv_want_font_magnify_factor="$withval";
 ], [])
 AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )

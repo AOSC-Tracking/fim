@@ -68,6 +68,7 @@ static void foo(){} /* let's make our compiler happy */
 
 namespace fim
 {
+    extern fim_int fim_fmf_; /* FIXME */
 
 #define	FIM_DEBUGGING_FOR_ARM_WITH_VITALY 0
 #define FIM_FBI_FB_MODES_LINE_BUFSIZE	80
@@ -179,6 +180,9 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 {
     fim_byte_t *pos,*start;
     int i,c,j,w;
+#if FIM_FONT_MAGNIFY_FACTOR <= 0
+    const fim_int fim_fmf = fim::fim_fmf_; 
+#endif	/* FIM_FONT_MAGNIFY_FACTOR */
 
     pos  = fb_mem_+fb_mem_offset_;
     pos += fb_fix_.line_length * y;
@@ -246,6 +250,9 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
         : 0)
 
     int row,bit,bpr,x;
+#if FIM_FONT_MAGNIFY_FACTOR <= 0
+    const fim_int fim_fmf = fim::fim_fmf_; 
+#endif	/* FIM_FONT_MAGNIFY_FACTOR */
 
     bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left),
 			     SCANLINE_PAD_BYTES);

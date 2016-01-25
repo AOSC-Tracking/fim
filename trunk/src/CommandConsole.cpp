@@ -57,6 +57,9 @@ extern fim_sys_int yyparse();
 
 namespace fim
 {
+#if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
+    	extern fim_int fim_fmf_; /* FIXME */
+#endif /* FIM_FONT_MAGNIFY_FACTOR */
 
 	static  bool nochars(const fim_char_t *s)
 	{
@@ -2289,6 +2292,23 @@ ok:
 				{hpl=0;/* no help key ? no message, then */}
 		}
 	
+#if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
+		{
+			fim_int fim_fmf__ = getIntVariable(FIM_VID_FBFMF);
+			if( fim_fmf__ < FIM_FONT_MAGNIFY_FACTOR_MIN )
+				fim_fmf__ = FIM_FONT_MAGNIFY_FACTOR_DEFAULT;
+				setVariable(FIM_VID_FBFMF,fim_fmf__);
+			fim_fmf_ = FIM_MIN(fim_fmf__, FIM_FONT_MAGNIFY_FACTOR_MAX);
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+			// FIXME: instead, call something like SDLDevice::post_wmresize(void)
+			mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(fim_int)(displaydevice_->height()/(2*displaydevice_->f_->sheight())));
+			mc_.reformat(    displaydevice_->width() /    displaydevice_->f_->swidth()   );
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+		}
+#else /* FIM_FONT_MAGNIFY_FACTOR */
+		setVariable(FIM_VID_FBFMF,(fim_int)FIM_FONT_MAGNIFY_FACTOR);
+#endif /* FIM_FONT_MAGNIFY_FACTOR */
+
 		chars = displaydevice_->get_chars_per_line();
 		if(chars<1)
 			goto ret;
