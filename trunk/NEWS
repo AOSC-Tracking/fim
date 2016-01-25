@@ -6,7 +6,7 @@
 # (r942)
  * New option configure --with-font-magnifying-factor=FACTOR controls rendering of text
    font magnification. If FACTOR is positive this value will be hardcoded. 
-# (r944)
+# (r945)
    If FACTOR is negative, the magnification factor in the _fbfont_magnify_factor
    variable will be used, with -FACTOR as default.
    If FACTOR is 0 a default of 1 will apply.

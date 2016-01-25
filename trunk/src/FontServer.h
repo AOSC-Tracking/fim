@@ -59,7 +59,7 @@ struct fs_font {
 
 #else /* FIM_USE_X11_FONTS */
 
-#if FIM_FONT_MAGNIFY_FACTOR
+#if FIM_FONT_MAGNIFY_FACTOR >  0
 #define fim_fmf FIM_FONT_MAGNIFY_FACTOR
 #endif /* FIM_FONT_MAGNIFY_FACTOR */
 
