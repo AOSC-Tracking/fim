@@ -256,7 +256,7 @@ void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *ch
 #if FIM_FONT_MAGNIFY_FACTOR == 1
 		fs_setpixel(ptr+x,fs_white_);
 #else	/* FIM_FONT_MAGNIFY_FACTOR */
-		for(fim_coo_t mi = 0; mi < 3; ++mi)
+		for(fim_coo_t mi = 0; mi < fim_fmf; ++mi)
 		for(fim_coo_t mj = 0; mj < fim_fmf; ++mj)
 			fs_setpixel(ptr+((fim_fmf*x+mj*FB_BPP)+(mi)*pitch),fs_white_);
 #endif	/* FIM_FONT_MAGNIFY_FACTOR */
