@@ -613,7 +613,7 @@ _fbfont
 .fi
 .B
 _fbfont_magnify_factor
-[in,g:] The rendered text will use a font magnified by this (integer) factor. Maximal value is "16". (Only if enabled with \-\-with\-font\-magnifying\-factor=0).
+[in,g:] The rendered text will use a font magnified by this (integer) factor. Maximal value is "16". (Only enabled if configured with \-\-with\-font\-magnifying\-factor=FACTOR, with FACTOR<1).
 .fi
 .B
 _file_loader
