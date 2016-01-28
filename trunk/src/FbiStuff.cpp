@@ -50,6 +50,7 @@
 
 #define FIM_WANTS_SLOW_RESIZE 1
 #define FIM_WVMM 0 /* want verbose mip maps (for FIM_WANT_EXPERIMENTAL_MIPMAPS) */
+#define FIM_WFMM 1 /* want faster mip maps */
 
 #define FIM_FBISTUFF_INSPECT 0
 #if FIM_FBISTUFF_INSPECT
@@ -75,22 +76,24 @@ static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int 
 	{
 		goto err;
 	}
-#if 0
-	/* 'internal' version, unfinished */
-	for(int r=0;r<hh;++r)
-	for(int c=0;c<hw;++c)
-	for(int k=0;k<3;++k)
+#if FIM_WFMM
+	/* 'internal' version: faster, fewer writes */
+	for(fim_int hr=0;hr<hh;++hr)
+	for(fim_int hc=0;hc<hw;++hc)
+	for(fim_int k=0;k<3;++k)
 	{
-		dst[3*(r*hw+c)+k]=
-			src[2*(3*((r+0)*w+c+0))+k]/4+src[2*(3*((r+0)*w+c+1))+k]/4+
-			src[2*(3*((r+1)*w+c+0))+k]/4+src[2*(3*((r+1)*w+c+1))+k]/4+
-			0;
+		fim_int dstv = 
+			src[3*((2*(hr+0)*w+2*(hc+0)))+k]+
+			src[3*((2*(hr+0)*w+2*(hc+1)))+k]+
+			src[3*((2*(hr+1)*w+2*(hc+0)))+k]+
+			src[3*((2*(hr+1)*w+2*(hc+1)))+k];
+		dst[3*(hr*hw+hc)+k] = fim_byte_t(dstv/4);
 	}
 #else
-	/* 'external' version, unoptimized */
-	for(int r=0,hr=0;r<2*(h/2);++r,hr=r/2)
-	for(int c=0,hc=0;c<2*(w/2);++c,hc=c/2)
-	for(int k=0;k<3;++k)
+	/* 'external' version: slower, more writes */
+	for(fim_int r=0,hr=0;r<2*(h/2);++r,hr=r/2)
+	for(fim_int c=0,hc=0;c<2*(w/2);++c,hc=c/2)
+	for(fim_int k=0;k<3;++k)
 			dst[3*(hr*hw+hc)+k]+=src[3*(r*w+c)+k]/4;
 #endif
 	errval = FIM_ERR_NO_ERROR; 
@@ -109,6 +112,7 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 	fim_mipmap_t mm; /* mipmap structure */
 	int w, h, d;
 	int mmidx = 0; /* mipmap index */
+	fim_fms_t t0;
 
 	if(!src)
 	{
@@ -140,13 +144,14 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 	}
 
 	if(mm.nmm)
+		t0 = getmilliseconds(),
 		mipmap_compute(w,h,w/2,h/2,src->data,mm.mdp+mm.mmoffs[0]);
 	for(mmidx=1,d=2;mmidx<mm.nmm;++mmidx,d*=2)
 	{
 		if(FIM_WVMM) std::cout << w/d << " " << h/d <<  " at " << mm.mmoffs[mmidx-1] << " ... " << mm.mmoffs[mmidx] << " : "<< mm.mmsize[mmidx] << "\n";
 		mipmap_compute(w/d,h/d,w/(2*d),h/(2*d),mm.mdp+mm.mmoffs[mmidx-1],mm.mdp+mm.mmoffs[mmidx]);
 	}
-
+	if(FIM_WVMM) std::cout << __FUNCTION__ << " took " << (getmilliseconds() - t0) << " ms\n";
     	memcpy(mmp,&mm,sizeof(mm));
 	mm.mdp = FIM_NULL; // this is to avoid mm's destructor to free(mm.mdp)
 	return FIM_ERR_NO_ERROR; 
