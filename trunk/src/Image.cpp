@@ -410,11 +410,11 @@ uhmpf:
 		}
 #endif
 
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
     		if(fimg_)
 		if(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)
 			mm_make();
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 
     		if(strcmp(FIM_STDIN_IMAGE_NAME,fname)==0)
 		{
@@ -577,9 +577,9 @@ ret:
 			fim_negate_rgb(    fimg_->data, 3*fimg_->i.width*fimg_->i.height);
 		       	FbiStuff::free_image(fimg_);
 		}
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 		mm_free();
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
                 reset();
 		FIM_PR('.');
         }
@@ -673,9 +673,9 @@ ret:
 				img_ = scale_image(fimg_,newscale_,newascale);
 #else
 			img_ = FbiStuff::scale_image(fimg_,newscale_,newascale
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 					,(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)?(&mm_):FIM_NULL
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 					);
 #endif /* FIM_PROGRESSIVE_RESCALING */
 #if FIM_WANT_ASCALE_FRIENDLY_ROTATION
@@ -977,11 +977,11 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					/* console property. TODO: move outta here */
 					fim_snprintf_XB(clbp, rbc, fim_maxrss());
 				break;
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 				case('m'):
 					fim_snprintf_XB(clbp, rbc,mm_.byte_size());
 				break;
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 				case('C'):
 				{
 					fim_char_t buf[2*FIM_PRINTFNUM_BUFSIZE];
@@ -1381,10 +1381,10 @@ ret:
 		if(  img_ &&   img_->data)
 			fim_desaturate_rgb(img_->data, 3*img_->i.width*img_->i.height);
 
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
 			fim_desaturate_rgb(mm_.mdp, mm_.mmb);
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 
 		setGlobalVariable("i:" FIM_VID_DESATURATED ,1-getGlobalIntVariable("i:" FIM_VID_DESATURATED ));
 
@@ -1412,10 +1412,10 @@ ret:
 		if(  img_ &&   img_->data)
 			fim_negate_rgb(img_->data, 3*img_->i.width*img_->i.height);
 
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
 			fim_negate_rgb(mm_.mdp, mm_.mmb);
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 
 		setGlobalVariable("i:" FIM_VID_NEGATED ,1-getGlobalIntVariable("i:" FIM_VID_NEGATED ));
 
@@ -1434,9 +1434,9 @@ ret:
 			ms += fimg_->i.height*fimg_->i.width*3;
 		if(fimg_!=img_ && img_)
 			ms += img_->i.height* img_->i.width*3;
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 		ms += mm_.byte_size();
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 		return ms;
 	}
 
@@ -1454,11 +1454,11 @@ ret:
 	fim_int Image::c_page(void)const{return page_;}
 #endif	/* FIM_WANT_BDI */
 
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 	void Image::mm_free(void) { mm_.dealloc(); }
 	void Image::mm_make(void) { mm_.dealloc(); FbiStuff::fim_mipmaps_compute(fimg_,&mm_); }
 	bool Image::has_mm(void)const { return mm_.ok(); }
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 	bool Image::cacheable(void)const { return this->n_pages() == 1 ; }
 }
 

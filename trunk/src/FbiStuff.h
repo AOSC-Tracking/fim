@@ -57,15 +57,15 @@ public:
 static void free_image(struct ida_image *img);
 static FILE* fim_execlp(const fim_char_t *arg, ...);/* new */
 static struct ida_image* read_image(const fim_char_t *filename, FILE* fd, fim_int page=0, Namespace *nsp=FIM_NULL);
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 static fim_err_t fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_t * mmp);
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 static struct ida_image* rotate_image90(struct ida_image *src, unsigned int rotation);
 static struct ida_image* rotate_image(struct ida_image *src, float angle);
 static struct ida_image* scale_image(const struct ida_image *src, float scale, float ascale
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 		, const fim_mipmap_t * mmp=FIM_NULL
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 	);
 static int fim_filereading_debug(void);
 };

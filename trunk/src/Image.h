@@ -94,9 +94,9 @@ class Image
         struct ida_image *img_     ;     /* local (eventually) copy images */
 	bool reload(void);
 	private://TMP
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 	fim_mipmap_t mm_;
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 	struct ida_image *fimg_    ;     /* master image */
 
 	/* image member functions */
@@ -171,11 +171,11 @@ class Image
 	Image * getClone(void);
 //	void resize(int nw, int nh);
 	fim_int c_page(void)const;
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 	void mm_free(void);
 	void mm_make(void);
 	bool has_mm(void)const;
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 	bool cacheable(void)const;
 	void desc_update();
 	fim_bool_t need_redraw(void)const{ return (redraw_ != FIM_REDRAW_UNNECESSARY); }
