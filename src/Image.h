@@ -294,10 +294,9 @@ public:
 #endif /* FIM_WANT_PIC_LVDN */
 			if(std::getline(ls,fn,sc))
 			{
-				bool nec = (std::getline(ls,ds,nl)); // non empty commentary
 				const bool aoec = true; // (propagate i:variables) also on empty commentary
 
-				if(nec || aoec)
+				if( (std::getline(ls,ds,nl) /* non empty commentary */) || aoec)
 				{
 					const bool want_basename = true; /*  */
 #if FIM_WANT_PIC_RCMT
