@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r947)
+ * mipmap computing (controlled by _use_mipmaps) is now faster
 # (r942)
  * New option configure --with-font-magnifying-factor=FACTOR controls rendering of text
    font magnification. If FACTOR is positive this value will be hardcoded. 
