@@ -152,6 +152,7 @@
 #define FIM_FONT_MAGNIFY_FACTOR_MIN 1  /* Framebuffer font magnifying factor, minimal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_MAX 16 /* Framebuffer font magnifying factor, maximal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_DEFAULT ( FIM_WANT_FONT_MAGNIFY_FACTOR > 0 ? FIM_WANT_FONT_MAGNIFY_FACTOR : ( FIM_WANT_FONT_MAGNIFY_FACTOR < 0 ? -FIM_WANT_FONT_MAGNIFY_FACTOR : 1 ) ) /* Framebuffer font magnifying factor, default value. */
+#define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
