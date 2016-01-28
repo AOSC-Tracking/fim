@@ -49,7 +49,7 @@
 #endif /* HAVE_FMEMOPEN */
 
 #define FIM_WANTS_SLOW_RESIZE 1
-#define FIM_WVMM 0 /* want verbose mip maps (for FIM_WANT_EXPERIMENTAL_MIPMAPS) */
+#define FIM_WVMM 0 /* want verbose mip maps (for FIM_WANT_MIPMAPS) */
 #define FIM_WFMM 1 /* want faster mip maps */
 
 #define FIM_FBISTUFF_INSPECT 0
@@ -66,7 +66,7 @@ extern CommandConsole cc;
 
 
 /* ----------------------------------------------------------------------- */
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *FIM_RSTRCT src, fim_byte_t * FIM_RSTRCT dst)
 {
 	fim_err_t errval = FIM_ERR_GENERIC;
@@ -158,7 +158,7 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 err:
 	return FIM_ERR_GENERIC;
 }
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 /* ----------------------------------------------------------------------- */
 
 // filter.c
@@ -2349,9 +2349,9 @@ err:
 
 struct ida_image*	
 FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ float scale, float ascale
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 		, const fim_mipmap_t * mmp
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 		)
 {
     struct op_resize_parm p;
@@ -2359,10 +2359,10 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     struct ida_image *dest=FIM_NULL;
     void *data=FIM_NULL;
     unsigned int y;
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
     int mmi=-1;
     struct ida_image msrc;
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
     /* dez: */ if(ascale<=0.0||ascale>=100.0)
 	    ascale=1.0;
 
@@ -2384,7 +2384,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     if (0 == p.height)
 	p.height = 1;
    
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
     if(mmp && ascale == 1.0 && scale < 1.0)
     {
 	msrc=*src;
@@ -2410,7 +2410,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 		if(FIM_WVMM) std::cout << "not using mipmap " << std::endl;
 	}
     }
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 
     data = desc_resize.init(src,&rect,&dest->i,&p);
     if(data==FIM_NULL)
@@ -2426,13 +2426,13 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 	    goto err;
     }
 
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
     if(mmi>0 && msrc.i.width == dest->i.width && msrc.i.height == dest->i.height )
     {
 	memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
 	goto done;
     }
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 
 #if FIM_OPTIMIZATION_20120129
     if(ascale==scale && ascale==1.0)

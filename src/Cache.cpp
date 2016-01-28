@@ -477,9 +477,9 @@ ret:
 		{
 			FIM_PR('-');
 			usageCounter_[image->getKey()]--;
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 			image->mm_free();
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 			if(
 				(usageCounter_[image->getKey()])==0 && 
 				image->getKey().second!=FIM_E_STDIN 
@@ -597,11 +597,11 @@ ret:
 				clone_pool_.insert(image); // we have a clone
 				cloneUsageCounter_[image]=1;
 			}
-#if FIM_WANT_EXPERIMENTAL_MIPMAPS
+#if FIM_WANT_MIPMAPS
 			if(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)
 				if(!image->has_mm())
 					image->mm_make();
-#endif /* FIM_WANT_EXPERIMENTAL_MIPMAPS */
+#endif /* FIM_WANT_MIPMAPS */
 			lru_touch( key );
 			// if loading and eventual cloning succeeded, we count the image as used of course
 			usageCounter_[key]++;
