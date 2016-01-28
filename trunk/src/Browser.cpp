@@ -825,18 +825,24 @@ ret:
 #ifdef FIM_BUGGED_CACHE
 		return " prefetching disabled";
 #endif /* FIM_BUGGED_CACHE */
+		fim_int wp=1;
 		FIM_PR('*');
 
 			FIM_AUTOCMD_EXEC(FIM_ACM_PREPREFETCH,current());
 		if( args.size() > 0 )
 			goto ret;
 
+		wp = getIntVariable(FIM_VID_WANT_PREFETCH);
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)0);
 #if FIM_WANT_BACKGROUND_LOAD
-		if(true)
-			pcache_.asyncPrefetch(get_next_filename(1)),
+		if(wp == 2)
+		{
+			std::cout << "using background prefetch\n";
+			pcache_.asyncPrefetch(get_next_filename(1));
 			pcache_.asyncPrefetch(get_next_filename(-1));
-#else /* FIM_WANT_BACKGROUND_LOAD */
+			goto apf;
+		}
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		if(cache_.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
 #ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename( 1));/* if the filename doesn't match a loadable image, we remove it */
@@ -849,9 +855,9 @@ ret:
 #else /* FIM_AUTOSKIP_FAILED */
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif /* FIM_AUTOSKIP_FAILED */
+apf:		/* after prefetch */
 			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPREFETCH,current());
-#endif /* FIM_WANT_BACKGROUND_LOAD */
-		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)1);
+		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)wp);
 ret:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
@@ -1185,7 +1191,7 @@ ret:
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 
-	fim::string Browser::regexp_goto(const args_t &args, int src_dir)
+	fim::string Browser::regexp_goto(const args_t &args, fim_int src_dir)
 	{
 		/*
 		 * goes to the next filename-matching file
@@ -1505,7 +1511,7 @@ go:
 			if(isre)
 			{
 				args_t argsc;
-				int src_dir = 1;
+				fim_int src_dir = 1;
 
 				if( c == '-' )
 					src_dir = ((c=='-')?-1:1);

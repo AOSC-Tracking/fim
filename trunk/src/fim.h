@@ -543,7 +543,7 @@ namespace fim
 #define FIM_VID_SCRIPTOUT_FILE			"_fim_scriptout_file"	/* "[in,g:] the name of the file to write to when recording sessions" */
 #define FIM_VID_PUSHDIR_RE			"_pushdir_re"	/* "[in] regular expression to match against when pushing files from a directory or an archive. By default this is \"" FIM_CNS_PUSHDIR_RE "\"." */
 #define FIM_VID_STATUS_LINE 			"_status_line"		/* "[in,g:] if 1, will display the status bar" */
-#define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[in,g:] if 1, will prefetch further files just after display of the first file" */
+#define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[in,g:] if 1, will prefetch further files just after display of the first file; if 2 (and configured with --enable-cxx11) will load in the background" */
 #define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[in,g:] number of seconds of sleep during slideshow mode" */
 #define FIM_VID_WANT_EXIF_ORIENTATION		"_want_exif_orientation"	/* "[in,g:] if 1, will reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." */
 #define FIM_VID_EXIF_ORIENTATION 		"__exif_orientation"	/* "[out,i:] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the orientation EXIF tags (i:EXIF_Orientation)." */

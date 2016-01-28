@@ -104,7 +104,7 @@ class Browser
 	public:
 	fim::string get_next_filename(int n)const; // FIXME: should be private
 	fim::string last_regexp_; // was private
-	int last_src_dir_;
+	fim_int last_src_dir_;
 	Cache cache_;	// was private
 #if FIM_WANT_BACKGROUND_LOAD
 	PACA pcache_;	// was private
@@ -143,7 +143,7 @@ class Browser
 		{}
 	public:
 	fim::string current(void)const;
-	fim::string regexp_goto(const args_t &args, int src_dir=1);
+	fim::string regexp_goto(const args_t &args, fim_int src_dir=1);
 	fim::string fcmd_prefetch(const args_t &args);
 	fim::string fcmd_goto_image(const args_t &args);
 	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
