@@ -2,7 +2,7 @@
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ typedef time_t fim_time_t;
 #define FIM_CR_BS 0 /* base */
 #define FIM_CR_CN 1 /* not detailed */
 #define FIM_CR_CD 2 /* detailed */
+
 namespace fim
 {
 #ifdef FIM_NAMESPACES
@@ -65,8 +66,10 @@ class Cache
 	/**/
 	int lru_touch(cache_key_t key);
 
+	public:
 	bool is_in_cache(fim::Image* oi)const;
 	bool is_in_cache(cache_key_t key)const;
+	private:
 	bool is_in_clone_cache(fim::Image* oi)const;
 	fim_time_t last_used(cache_key_t key)const;
 
@@ -101,6 +104,7 @@ class Cache
 
 #if FIM_WANT_BDI
 	Image dummy_img_;	// experimental
+	Image & dummy_img(void){return dummy_img_;}	// experimental
 #endif	/* FIM_WANT_BDI */
 
 	/*	free() and counter update */
@@ -127,6 +131,79 @@ class Cache
 	void desc_update(void);
 };
 }
+
+#if FIM_WANT_BACKGROUND_LOAD
+#include <thread>
+#include <chrono>
+#include <mutex>
+
+namespace fim
+{
+
+typedef fim::string fid_t;
+
+class PACA	/* Parallel Cache */
+{
+	public:
+#if FIM_WANT_BACKGROUND_LOAD
+	std::thread t;
+#endif /* FIM_WANT_BACKGROUND_LOAD */
+	Cache & cache_;
+	const int dpc = 0; /* debug parallel cache (FIXME: temporary) */
+
+	void operator () (const fid_t & rid)
+	{
+		if(dpc) std::cout << __FUNCTION__ << ": "<< rid << " ...\n";
+		if(dpc) std::cout << (&cache_) << " : " << cache_.getReport() << "\n";
+
+		if(dpc) if( ! cache_.is_in_cache(cache_key_t(rid,FIM_E_FILE)))
+			std::cout << __FUNCTION__ << ": "<< rid << " ... sleeping\n",
+			std::this_thread::sleep_for(std::chrono::milliseconds(4000));
+		cache_.prefetch(cache_key_t(rid,FIM_E_FILE));
+		if(dpc) std::cout << __FUNCTION__ << ": "<< rid << " ... done\n";
+	}
+
+	PACA(const PACA & paca) : cache_(paca.cache_)
+       	{
+		if(dpc) std::cout << __FUNCTION__ << "\n";
+	}
+	PACA(Cache & cache):cache_(cache) { }
+
+	Image * useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page=0)
+	{
+		Image * image = NULL;
+		if(dpc) std::cout << __FUNCTION__ << ": " << key.first << "\n";
+		if( t.joinable() )
+		{
+			if(dpc) std::cout << __FUNCTION__ << ": " << key.first << " join()\n";
+	       		t.join();
+			if(dpc) std::cout << __FUNCTION__ << ": " << key.first << " joined()\n";
+		}
+		image = cache_.useCachedImage(key, vsp, page);
+		if(dpc) std::cout << __FUNCTION__ << ": " << key.first << " done\n";
+		if(dpc) std::cout << (&cache_) << " : " << cache_.getReport() << "\n";
+		return image;
+	}
+
+	void asyncPrefetch(const fid_t & rid)
+	{
+		if(dpc) std::cout << __FUNCTION__ << ": " << rid << "\n";
+		if( t.joinable() )
+		{
+			if(dpc) std::cout << __FUNCTION__ << ": " << rid << " return\n"; return;
+			if(dpc) std::cout << __FUNCTION__ << ": " << rid << " join()\n";
+	       		t.join();
+		}
+		t = std::thread(*this,rid); // operator ()
+	}
+	~PACA()
+	{
+		if( t.joinable() )
+	       		t.join();
+	}
+}; /* PACA */
+}
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 
 #endif /* FIM_CACHE_H */
 

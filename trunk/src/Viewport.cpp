@@ -524,7 +524,7 @@ namespace fim
 		 * */
 #if FIM_WANT_BDI
 		if(!image_)
-			return &commandConsole.browser_.cache_.dummy_img_;
+			return &commandConsole.browser_.cache_.dummy_img();
 		else
 #endif	/* FIM_WANT_BDI */
 			return image_;

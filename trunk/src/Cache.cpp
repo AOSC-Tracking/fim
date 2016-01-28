@@ -545,6 +545,7 @@ ret:
 
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR('*');
+
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "  useCachedImage(\""<<fim_basename_of(key.first.c_str())<<" of type "<< ( key.second == FIM_E_FILE ? " file ": " stdin ")<<"\")\n";
 #endif /* FIM_CACHE_DEBUG */

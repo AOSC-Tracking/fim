@@ -99,13 +99,16 @@ class Browser
 	int current_n(void)const;
 	int current_n(int ccp)const;
 	const fim::string pop(fim::string filename=FIM_CNS_EMPTY_STRING);
-	fim::string get_next_filename(int n)const;
 	
 	fim_int current_image(void)const;
 	public:
+	fim::string get_next_filename(int n)const; // FIXME: should be private
 	fim::string last_regexp_; // was private
 	int last_src_dir_;
 	Cache cache_;	// was private
+#if FIM_WANT_BACKGROUND_LOAD
+	PACA pcache_;	// was private
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(Image *stdin_image);
 #endif /* FIM_READ_STDIN_IMAGE */
@@ -132,8 +135,11 @@ class Browser
 		default_image_(FIM_NULL),
 #endif /* FIM_READ_STDIN_IMAGE */
 		last_regexp_(fim::string()),
-		last_src_dir_(0),
-		cache_(Cache())
+		last_src_dir_(0)
+		,cache_(Cache())
+#if FIM_WANT_BACKGROUND_LOAD
+		,pcache_(cache_)
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		{}
 	public:
 	fim::string current(void)const;

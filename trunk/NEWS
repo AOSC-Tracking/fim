@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r948)
+ * if configure'ing with --enable-cxx11, background image loading will be available
+  (FIXME: need controlling variable, need to handle failed loads)
 # (r947)
  * mipmap computing (controlled by _use_mipmaps) is now faster
 # (r942)

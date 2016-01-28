@@ -235,6 +235,9 @@ ret:
 #if FIM_WANT_PIC_LBFL
 		flist_(tlist_),
 #endif /* FIM_WANT_PIC_LBFL */
+#if FIM_WANT_BACKGROUND_LOAD
+		pcache_(cache_),
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
 	{	
 		cf_ = 0;
@@ -757,7 +760,13 @@ ret:
 		{
 			ViewportState viewportState;
 			FIM_PR('0');
-			viewport()->setImage( cache_.useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState,getGlobalIntVariable(FIM_VID_PAGE)) );// FIXME
+			viewport()->setImage(
+#if FIM_WANT_BACKGROUND_LOAD
+					pcache_.
+#else /* FIM_WANT_BACKGROUND_LOAD */
+					 cache_.
+#endif /* FIM_WANT_BACKGROUND_LOAD */
+					useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState,getGlobalIntVariable(FIM_VID_PAGE)) );// FIXME
 			viewport()->setState(viewportState);
 		}
 #else /* FIM_BUGGED_CACHE */
@@ -823,6 +832,11 @@ ret:
 			goto ret;
 
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)0);
+#if FIM_WANT_BACKGROUND_LOAD
+		if(true)
+			pcache_.asyncPrefetch(get_next_filename(1)),
+			pcache_.asyncPrefetch(get_next_filename(-1));
+#else /* FIM_WANT_BACKGROUND_LOAD */
 		if(cache_.prefetch(cache_key_t(get_next_filename( 1).c_str(),FIM_E_FILE)))// we prefetch 1 file forward
 #ifdef FIM_AUTOSKIP_FAILED
 			pop(get_next_filename( 1));/* if the filename doesn't match a loadable image, we remove it */
@@ -836,6 +850,7 @@ ret:
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif /* FIM_AUTOSKIP_FAILED */
 			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPREFETCH,current());
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)1);
 ret:
 		FIM_PR('.');
