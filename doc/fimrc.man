@@ -849,7 +849,7 @@ _want_exif_orientation
 .fi
 .B
 _want_prefetch
-[in,g:] if 1, will prefetch further files just after display of the first file
+[in,g:] if 1, will prefetch further files just after display of the first file; if 2 (and configured with \-\-enable\-cxx11) will load in the background
 .fi
 .B
 _want_sleep_seconds
