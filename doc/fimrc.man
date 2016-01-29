@@ -8,7 +8,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
@@ -614,6 +614,10 @@ _fbfont
 .B
 _fbfont_magnify_factor
 [in,g:] The rendered text will use a font magnified by this (integer) factor. Maximal value is "16". (Only enabled if configured with \-\-with\-font\-magnifying\-factor=FACTOR, with FACTOR<1).
+.fi
+.B
+_file_load_time
+[out,i:] time taken to load the file and decode the image, in seconds
 .fi
 .B
 _file_loader

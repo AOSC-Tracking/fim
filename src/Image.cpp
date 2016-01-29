@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -371,6 +371,10 @@ uhmpf:
 		 *	returns false if the image does not load
 		 */
 		bool retval = false;
+#if FIM_WANT_IMAGE_LOAD_TIME
+    		fim_fms_t dt=getmilliseconds();
+#endif /* FIM_WANT_IMAGE_LOAD_TIME */
+
 		FIM_PR('*');
 		if(fname==FIM_NULL && fname_==FIM_CNS_EMPTY_STRING)
 		{
@@ -448,6 +452,9 @@ uhmpf:
 		//cout<<"loaded page "<< want_page<<" to "<<((int*)this)<<"\n";
 
 #ifdef FIM_NAMESPACES
+#if FIM_WANT_IMAGE_LOAD_TIME
+		setVariable(FIM_VID_IMAGE_LOAD_TIME,(fim_float_t)((getmilliseconds()-dt)/1000.0));
+#endif /* FIM_WANT_IMAGE_LOAD_TIME */
 		setVariable(FIM_VID_PAGES  ,(fim_int)fimg_->i.npages);
 		setVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
 		setVariable(FIM_VID_WIDTH ,(fim_int)fimg_->i.width );

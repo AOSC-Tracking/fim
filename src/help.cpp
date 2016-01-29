@@ -14,6 +14,7 @@ fim_var_help_db[FIM_VID_SANITY_CHECK]= "[in,experimental,g:] if 1, will execute 
 fim_var_help_db[FIM_VID_LAST_SYSTEM_OUTPUT]= "[out,experimental,g:] the standard output of the last call to the system command" ;
 fim_var_help_db[FIM_VID_LOAD_DEFAULT_ETC_FIMRC]= "[in,g:] if 1 at startup, will load the system wide initialization file" ;
 fim_var_help_db[FIM_VID_DEFAULT_ETC_FIMRC]= "[in,g:] string with the global configuration file name" ;
+fim_var_help_db[FIM_VID_IMAGE_LOAD_TIME]= "[out,i:] time taken to load the file and decode the image, in seconds" ;
 fim_var_help_db[FIM_VID_FILE_LOADER]= "[in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image" ;
 fim_var_help_db[FIM_VID_RETRY_LOADER_PROBE]= "[in,g:] if 1 and user specified a file loader and this fails, will probe for a different loader" ;
 fim_var_help_db[FIM_VID_NO_RC_FILE]= "[in,g:] if 1, the ~/.fimrc file will not be loaded at startup" ;
