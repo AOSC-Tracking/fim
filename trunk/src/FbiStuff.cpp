@@ -83,10 +83,11 @@ static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int 
 	for(fim_int k=0;k<3;++k)
 	{
 		fim_int dstv = 
-			src[3*((2*(hr+0)*w+2*(hc+0)))+k]+
-			src[3*((2*(hr+0)*w+2*(hc+1)))+k]+
-			src[3*((2*(hr+1)*w+2*(hc+0)))+k]+
-			src[3*((2*(hr+1)*w+2*(hc+1)))+k];
+			src[3*(((2*hr+0)*w+2*hc+0))+k]+
+			src[3*(((2*hr+0)*w+2*hc+1))+k]+
+			src[3*(((2*hr+1)*w+2*hc+0))+k]+
+			src[3*(((2*hr+1)*w+2*hc+1))+k]+
+			0;
 		dst[3*(hr*hw+hc)+k] = fim_byte_t(dstv/4);
 	}
 #else
