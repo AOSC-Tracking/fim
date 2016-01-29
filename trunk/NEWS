@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r952)
+ * _use_mipmaps=2 will compute the mipmaps faster, using every fourth source pixel.
+   This can be a good solution for photographs.
 # (r948)
  * if configure'ing with --enable-cxx11, background image loading will be available
   (FIXME: need controlling variable, need to handle failed loads)
