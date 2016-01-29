@@ -153,6 +153,7 @@
 #define FIM_FONT_MAGNIFY_FACTOR_MAX 16 /* Framebuffer font magnifying factor, maximal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_DEFAULT ( FIM_WANT_FONT_MAGNIFY_FACTOR > 0 ? FIM_WANT_FONT_MAGNIFY_FACTOR : ( FIM_WANT_FONT_MAGNIFY_FACTOR < 0 ? -FIM_WANT_FONT_MAGNIFY_FACTOR : 1 ) ) /* Framebuffer font magnifying factor, default value. */
 #define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
+#define FIM_WANT_IMAGE_LOAD_TIME 1
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
@@ -536,6 +537,9 @@ namespace fim
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[out,experimental,g:] the standard output of the last call to the system command" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[in,g:] if 1 at startup, will load the system wide initialization file" */
 #define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[in,g:] string with the global configuration file name" */
+#if FIM_WANT_IMAGE_LOAD_TIME
+#define FIM_VID_IMAGE_LOAD_TIME			"_file_load_time"	/* "[out,i:] time taken to load the file and decode the image, in seconds" */
+#endif /* FIM_WANT_IMAGE_LOAD_TIME */
 #define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image" */
 #define FIM_VID_RETRY_LOADER_PROBE 		"_retry_loader_probe"		/* "[in,g:] if 1 and user specified a file loader and this fails, will probe for a different loader" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[in,g:] if 1, the ~/.fimrc file will not be loaded at startup" */
