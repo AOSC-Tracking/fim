@@ -599,7 +599,7 @@ namespace fim
 #define FIM_VID_NO_DEFAULT_CONFIGURATION	"_no_default_configuration"	/* "[in,g:] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. " */
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[in,g:] if 1, will display the status bar" */
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[in,g:] if 1, will display a message on the status bar when processing" */
-#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[in,g:] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. " */
+#define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[in,g:] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. If 2, will use every fourth source pixel instead of averaging (good for photos, not for graphs). " */
 #define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[in,g:] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment" */
 #define FIM_VID_SCALE				"scale"				/* "[in,i:] the scale of the current image" */
 #define FIM_VID_ASCALE				"ascale"			/* "[in,out,i:] the asymmetric scaling of the current image" */

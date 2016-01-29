@@ -821,7 +821,7 @@ _use_exiftool
 .fi
 .B
 _use_mipmaps
-[in,g:] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. 
+[in,g:] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. If 2, will use every fourth source pixel instead of averaging (good for photos, not for graphs). 
 .fi
 .B
 _verbose_errors

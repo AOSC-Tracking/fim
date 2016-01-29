@@ -78,6 +78,12 @@ static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int 
 	}
 #if FIM_WFMM
 	/* 'internal' version: faster, fewer writes */
+    	if(cc.getIntVariable(FIM_VID_WANT_MIPMAPS) == 2)  /* FIXME: this shall become a per-image variable */
+	for(fim_int hr=0;hr<hh;++hr)
+	for(fim_int hc=0;hc<hw;++hc)
+	for(fim_int k=0;k<3;++k)
+		dst[3*(hr*hw+hc)+k] = src[3*(((2*hr+0)*w+2*hc+0))+k];
+	else
 	for(fim_int hr=0;hr<hh;++hr)
 	for(fim_int hc=0;hc<hw;++hc)
 	for(fim_int k=0;k<3;++k)
