@@ -755,7 +755,12 @@ FILE * fim_fread_tmpfile(FILE * fp)
 		if(errno)
 		{
 			// FIXME: need to handle errors properly.
-			std::cout << "Error while reading temporary file: errno has now value "<<errno<<":"<<sys_errlist[errno]<<"\n";
+			std::cout << "Error while reading temporary file: errno has now value "<<errno<<":"<<
+#if HAVE_STRERROR
+				strerror(errno)<<"\n";
+#else
+				sys_errlist[errno]<<"\n";
+#endif
 		}
 		/*
 		 * Note that it would be much nicer to do this in another way,
