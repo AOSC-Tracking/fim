@@ -114,18 +114,16 @@ help:
 	@echo '			short Makefile help'
 	@echo -----------------------------------------------
 	@echo
-	@echo 'Please read the doc/FIM.TXT file before complaining!'
+	@echo 'Please read the documentation file before complaining!'
 	@echo
-	@echo '..or README, or INSTALL, or some other file around here. There is plenty!'
-	@echo '...'
+	@echo 'The first documentation file you should read is README'
 	@echo
-	@echo 'If you are experiencing problems, please write at dezperado, the author of fim.'
+	@echo 'If you are experiencing problems, please contact the code author.'
 	@echo
-	@echo 'His mail box resides as dezperado , on the server autistici dot org.'
+	@echo 'His mail box resides as dezperado, then a dot, then autistici dot org.'
 	@echo
-	@echo 'You are encouraged to read the documentation before, and emailing the output of `make report`!'
-	@echo 'Thanks for your collaboration'
-	@echo
+	@echo 'You are encouraged attaching the output of `make report` in your bug reports.'
+	@echo 'Thanks for your collaboration.'
 	@echo
 
 ai:
