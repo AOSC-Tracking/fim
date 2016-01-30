@@ -396,6 +396,11 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	ImgDscs id_;
 	bool push_from_id(void);
 #endif /* FIM_WANT_PIC_CMTS */
+#if FIM_WANT_BACKGROUND_LOAD
+	private:
+	static std::thread blt_; /* background loader thread */
+	std::vector<const char *> fnpv_; /* file names pointers vector */
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 };
 }
 

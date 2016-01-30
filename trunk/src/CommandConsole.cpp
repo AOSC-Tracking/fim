@@ -66,11 +66,6 @@ namespace fim
     	extern fim_int fim_fmf_; /* FIXME */
 #endif /* FIM_FONT_MAGNIFY_FACTOR */
 
-#if FIM_WANT_BACKGROUND_LOAD
-	static std::thread blt; /* background loader thread */
-	std::vector<const char *> fnpv; /* file names pointers vector */
-#endif /* FIM_WANT_BACKGROUND_LOAD */
-
 	static  bool nochars(const fim_char_t *s)
 	{
 		/*
@@ -1249,7 +1244,7 @@ rlnull:
 #endif /* FIM_USE_READLINE */
 		}
 #if FIM_WANT_BACKGROUND_LOAD
-		blt.join();
+		blt_.join();
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 		FIM_AUTOCMD_EXEC(FIM_ACM_POSTEXECUTIONCYCLE,initial);
 		return quit(return_code_);
@@ -2135,7 +2130,7 @@ ok:
 		 * */
 #if FIM_WANT_BACKGROUND_LOAD
 		if( pf & FIM_FLAG_PUSH_ONE )
-			fnpv.push_back(nf);
+			fnpv_.push_back(nf);
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 		return browser_.push(nf,pf);
 	}
@@ -2144,14 +2139,14 @@ ok:
 	bool CommandConsole::background_push(void)
 	{
 		/* FIXME: there is no concurrency control (e.g. lock in accessing browser_.flist_) at the moment. */
-		blt = std::thread
-	( [&fnpv,this](void)
+		blt_ = std::thread
+	( [this](void)
 	{
-		for( auto fnpi : fnpv )
-			this->browser_.push(fnpi,FIM_FLAG_PUSH_REC+FIM_FLAG_PUSH_BACKGROUND,&show_must_go_on_);
+		for( auto fnpi : this->fnpv_ )
+			this->browser_.push(fnpi,FIM_FLAG_PUSH_REC+FIM_FLAG_PUSH_BACKGROUND,&this->show_must_go_on_);
   	}
 	);
-		//fnpv.erase(fnpv.begin(),fnpv.end());
+		this->fnpv_.erase(this->fnpv_.begin(),this->fnpv_.end());
 		return true;
 	}
 #endif /* FIM_WANT_BACKGROUND_LOAD */
