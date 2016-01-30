@@ -36,7 +36,7 @@
 
 /*
  *	This is the main fim program header file.
- *	Estabilished 20061225 ( yes, i know what do you think about me now )
+ *	Established 20061225 ( yes, i know what do you think about me now )
  * */
 #include <cstdlib>	/* <stdlib.h> standard C library definitions			*/
 #include <cstdio>	/* <stdlib.h> standard C buffered I/O 				*/
