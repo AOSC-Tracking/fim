@@ -2,7 +2,7 @@
 /*
  SDLDevice.h : sdllib device Fim driver header file
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2015 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
