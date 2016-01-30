@@ -2144,9 +2144,10 @@ ok:
 	{
 		for( auto fnpi : this->fnpv_ )
 			this->browser_.push(fnpi,FIM_FLAG_PUSH_REC+FIM_FLAG_PUSH_BACKGROUND,&this->show_must_go_on_);
+		this->fnpv_.erase(this->fnpv_.begin(),this->fnpv_.end());
+		this->fnpv_.shrink_to_fit(); /* no use for this now */
   	}
 	);
-		this->fnpv_.erase(this->fnpv_.begin(),this->fnpv_.end());
 		return true;
 	}
 #endif /* FIM_WANT_BACKGROUND_LOAD */
