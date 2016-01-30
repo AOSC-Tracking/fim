@@ -1007,13 +1007,13 @@ nostat:
 				continue;
 			if( de->d_name[0] == '.' && !de->d_name[1] )
 				continue;
-#if 1
+#if FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK
 			/*
 			 * We follow the convention of ignoring hidden files.
 			 * */
-			if( de->d_name[0] == '.' )
+			if( (!(pf & FIM_FLAG_PUSH_HIDDEN)) && de->d_name[0] == '.' )
 				continue;
-#endif
+#endif /* FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK */
 			
 			/*
 			 * Warning : this is dangerous, as following circular links may cause memory exhaustion.
@@ -1113,11 +1113,17 @@ rret:
 			/*	if it is a directory , return */
 			//if(  S_ISDIR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 #ifdef FIM_READ_DIRS
-			if( getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS) == 1 )
-				if(  S_ISDIR(stat_s.st_mode))
+			{
+				fim_int ppd = getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS);
+				if( ppd >= 1 && S_ISDIR(stat_s.st_mode))
 				{
+#if FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK
+					if( ppd > 1 )
+						pf |= FIM_FLAG_PUSH_HIDDEN;
+#endif /* FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK */
 					goto isdir;
 				}
+			}
 #endif /* FIM_READ_DIRS */
 			/*	we want a regular file .. */
 			if(
