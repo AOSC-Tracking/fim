@@ -3,6 +3,7 @@
 
                 Version 0.5-rc1
 
+ * bug workaround: had no console scroll if no command executed on PostInteractiveCommand
  * fix: some systems don't have sys_errlist: using strerror there
  * fix: corrected the quiet mode (-q) to be quieter
  * fix: no zlib.h build time dependency (this will be reintroduced in the future)

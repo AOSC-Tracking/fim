@@ -115,6 +115,7 @@ bind '`' "toggleLimitMarked;";
 alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;" "";
 alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
 alias "toggleDesaturate" "_autodesaturate=1-_autodesaturate;redisplay;" "";
+alias "idempotent_cmd" "goto '+0p';";
 #
 # autocommands are essential to Fim's automated behaviour
 # examples:
@@ -150,6 +151,7 @@ autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
 autocmd "PostInteractiveCommand"   "" "if(i:fresh){display;i:fresh=0;}";
 autocmd "PostInteractiveCommand"   "" "if(_want_prefetch){prefetch;}";
 autocmd "PostInteractiveCommand"   "" "if(_display_console==0 && i:fresh){redisplay;i:fresh=0;}";
+autocmd "PostInteractiveCommand"   "" "idempotent_cmd;"; # Bug workaround: without it console scroll is broken.
 
 alias "next10" "i=0;while(i<10){i=i+1;next;display;sleep '1';};" "goes forward 10 images";
 bind 'N' 'next10';
