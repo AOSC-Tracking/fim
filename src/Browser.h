@@ -187,9 +187,9 @@ class Browser
 	bool present(const fim::string nf)const;
 	fim_int find_file_index(const fim::string nf)const;
 #ifdef FIM_READ_DIRS
-	bool push_dir(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC);
+	bool push_dir(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=NULL);
 #endif /* FIM_READ_DIRS */
-	bool push(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC);
+	bool push(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=NULL);
 
 	fim::string display(void);
 	fim::string _random_shuffle(bool dts=true);

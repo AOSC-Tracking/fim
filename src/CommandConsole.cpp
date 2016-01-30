@@ -1057,7 +1057,7 @@ err:
 		*prompt_=FIM_SYM_PROMPT_NUL;
 
 #if FIM_WANT_BACKGROUND_LOAD
-		cc.background_push();
+		background_push();
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
 	 	while(show_must_go_on_)
@@ -1248,6 +1248,9 @@ rlnull:
 			/* this->quit(); */
 #endif /* FIM_USE_READLINE */
 		}
+#if FIM_WANT_BACKGROUND_LOAD
+		blt.join();
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		FIM_AUTOCMD_EXEC(FIM_ACM_POSTEXECUTIONCYCLE,initial);
 		return quit(return_code_);
 	}
@@ -2145,7 +2148,7 @@ ok:
 	( [&fnpv,this](void)
 	{
 		for( auto fnpi : fnpv )
-			this->browser_.push(fnpi,FIM_FLAG_PUSH_REC+FIM_FLAG_PUSH_BACKGROUND);
+			this->browser_.push(fnpi,FIM_FLAG_PUSH_REC+FIM_FLAG_PUSH_BACKGROUND,&show_must_go_on_);
   	}
 	);
 		//fnpv.erase(fnpv.begin(),fnpv.end());

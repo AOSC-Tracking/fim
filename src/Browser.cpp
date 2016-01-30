@@ -971,7 +971,7 @@ ret:
 	}
 
 #ifdef FIM_READ_DIRS
-	bool Browser::push_dir(fim::string nf, fim_flags_t pf)
+	bool Browser::push_dir(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{
 		// TODO: may introduce some more variable to control recursive push 	
 		DIR *dir = FIM_NULL;
@@ -979,6 +979,9 @@ ret:
 		fim::string f;
 		bool retval = false;
 		FIM_PR('*');
+
+		if( show_must_go_on && !*show_must_go_on )
+			goto rret;
 
 		if(cc.getIntVariable(FIM_VID_PRELOAD_CHECKS)!=1)
 			goto nostat;
@@ -1019,7 +1022,7 @@ nostat:
 			{
 #ifdef FIM_RECURSIVE_DIRS
 				if( pf & FIM_FLAG_PUSH_REC )
-					retval |= push_dir( f + fim::string(de->d_name), pf);
+					retval |= push_dir( f + fim::string(de->d_name), pf, show_must_go_on);
 				else
 #endif /* FIM_RECURSIVE_DIRS */
 					continue;
@@ -1043,12 +1046,13 @@ nostat:
 ret:
 		//retval = ( closedir(dir) == 0 );
 		closedir(dir);
+rret:
 		FIM_PR('.');
 		return retval;
 	}
 #endif /* FIM_READ_DIRS */
 
-	bool Browser::push(fim::string nf, fim_flags_t pf)
+	bool Browser::push(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{	
 		/*
 		 * FIX ME:
@@ -1149,7 +1153,7 @@ isfile:
 		goto ret;
 #ifdef FIM_READ_DIRS
 isdir:
-		retval = push_dir(nf,pf);
+		retval = push_dir(nf,pf,show_must_go_on);
 #endif /* FIM_READ_DIRS */
 ret:
 		FIM_PR('.');
