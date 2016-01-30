@@ -339,7 +339,7 @@ ret:
 			ni = NULL; /* not a big problem */
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
-ret:
+//ret:
 		FIM_PR(' ');
 		return ni;
 	}
@@ -598,9 +598,7 @@ ret:
 				cloneUsageCounter_[image]=1;
 			}
 #if FIM_WANT_MIPMAPS
-			if(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)
-				if(!image->has_mm())
-					image->mm_make();
+			image->mm_make();
 #endif /* FIM_WANT_MIPMAPS */
 			lru_touch( key );
 			// if loading and eventual cloning succeeded, we count the image as used of course

@@ -456,6 +456,7 @@ typedef std::vector<fim::string> args_t;
 ""
 
 #define FIM_MAX_MIPMAPS 32 /* pretty large ;-) */
+enum fim_mmo_t { FIM_MMO_NORMAL=0, FIM_MMO_FASTER=1 };
 class fim_mipmap_t
 {
 	public:
@@ -466,6 +467,7 @@ class fim_mipmap_t
 	int nmm; /* number of mipmaps */
 	size_t mmb; /* mipmap bytes (total) */
 	fim_byte_t* mdp; /* mipmap data pointer */
+	enum fim_mmo_t mmo;
 
 	fim_mipmap_t(const fim_mipmap_t&mm){reset();}
 	fim_mipmap_t(void){reset();}

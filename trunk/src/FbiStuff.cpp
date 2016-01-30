@@ -67,7 +67,7 @@ extern CommandConsole cc;
 
 /* ----------------------------------------------------------------------- */
 #if FIM_WANT_MIPMAPS
-static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *FIM_RSTRCT src, fim_byte_t * FIM_RSTRCT dst)
+static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int hw, const int hh, const fim_byte_t *FIM_RSTRCT src, fim_byte_t * FIM_RSTRCT dst, enum fim_mmo_t mmo)
 {
 	fim_err_t errval = FIM_ERR_GENERIC;
 	/* we compute a quarter of an image, half-sided */
@@ -78,7 +78,7 @@ static fim_err_t mipmap_compute(const fim_coo_t w, const fim_coo_t h, const int 
 	}
 #if FIM_WFMM
 	/* 'internal' version: faster, fewer writes */
-    	if(cc.getIntVariable(FIM_VID_WANT_MIPMAPS) == 2)  /* FIXME: this shall become a per-image variable */
+    	if(mmo == FIM_MMO_FASTER)
 	for(fim_int hr=0;hr<hh;++hr)
 	for(fim_int hc=0;hc<hw;++hc)
 	for(fim_int k=0;k<3;++k)
@@ -127,6 +127,7 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 	}
 	w = src->i.width, h = src->i.height; /* the original */
 	mm.nmm=0;
+	mm.mmo=mmp->mmo;
 	mm.mmoffs[mm.nmm]=0;
 	if(FIM_WVMM) std::cout <<  3*src->i.width*src->i.height<< " bytes are needed for the original image\n";
 	for(d=2;w>=d && h>=d && mm.nmm<=FIM_MAX_MIPMAPS ;d*=2)
@@ -152,11 +153,11 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 
 	if(mm.nmm)
 		t0 = getmilliseconds(),
-		mipmap_compute(w,h,w/2,h/2,src->data,mm.mdp+mm.mmoffs[0]);
+		mipmap_compute(w,h,w/2,h/2,src->data,mm.mdp+mm.mmoffs[0],mm.mmo);
 	for(mmidx=1,d=2;mmidx<mm.nmm;++mmidx,d*=2)
 	{
 		if(FIM_WVMM) std::cout << w/d << " " << h/d <<  " at " << mm.mmoffs[mmidx-1] << " ... " << mm.mmoffs[mmidx] << " : "<< mm.mmsize[mmidx] << "\n";
-		mipmap_compute(w/d,h/d,w/(2*d),h/(2*d),mm.mdp+mm.mmoffs[mmidx-1],mm.mdp+mm.mmoffs[mmidx]);
+		mipmap_compute(w/d,h/d,w/(2*d),h/(2*d),mm.mdp+mm.mmoffs[mmidx-1],mm.mdp+mm.mmoffs[mmidx],mm.mmo);
 	}
 	if(FIM_WVMM) std::cout << __FUNCTION__ << " took " << (getmilliseconds() - t0) << " ms\n";
     	memcpy(mmp,&mm,sizeof(mm));
