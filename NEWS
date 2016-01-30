@@ -3,6 +3,10 @@
 
                 Version 0.6-trunk
 
+# (r963)
+ * if configure'ing with --enable-c++11, the --recursive-background switch will load
+   images in the background recursively, allowing viewing in the order they appear.
+  (FIXME: so far synchronization during loading and at program termination are missing.)
 # (r961)
  * renamed configure switch --enable-cxx11 to --enable-c++11
 # (r955)

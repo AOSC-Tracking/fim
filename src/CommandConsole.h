@@ -213,7 +213,10 @@ class CommandConsole
 
 	fim_var_t getVariableType(const fim::string &varname)const;
 	fim_err_t printVariable(const fim::string & varname)const;
-	bool push(const fim::string nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
+	bool push(const char * nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
+#if FIM_WANT_BACKGROUND_LOAD
+	bool background_push(void);
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 	fim_err_t executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd, int*rp=FIM_NULL);
 #ifndef FIM_WANT_NOSCRIPTING
@@ -222,6 +225,7 @@ class CommandConsole
 	fim::string fcmd_executeFile(const args_t &args);
 #endif /* FIM_WANT_NOSCRIPTING */
 	private:
+	bool push(const fim::string nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
 	fim::string fcmd_echo(const args_t &args);
 	fim::string do_echo(const args_t &args)const;
 	//	fim::string get_expr_type(const args_t &args);
