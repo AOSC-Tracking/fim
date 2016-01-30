@@ -13,12 +13,12 @@ LFLAGS = -+ --nounistd
 YFLAGS = -v -d
 
 #lex.yy.cc : lex.lex
-lex.yy.cc: lex.lex
+lex.yy.cc: lex.lex yacc.tab.cpp
 	$(LEX) $(LFLAGS) $<
 	@$(ECHO) "Applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
 	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
-yacc.tab.cpp: yacc.ypp lex.lex
+yacc.tab.hpp yacc.tab.cpp: yacc.ypp lex.lex
 	$(YACC) $(YFLAGS) $< -o $@
 
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
