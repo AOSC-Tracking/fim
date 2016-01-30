@@ -1019,7 +1019,7 @@ nostat:
 			{
 #ifdef FIM_RECURSIVE_DIRS
 				if( pf & FIM_FLAG_PUSH_REC )
-					push_dir( f + fim::string(de->d_name) );
+					retval |= push_dir( f + fim::string(de->d_name), pf);
 				else
 #endif /* FIM_RECURSIVE_DIRS */
 					continue;
@@ -1032,12 +1032,17 @@ nostat:
 				if( re == FIM_CNS_EMPTY_STRING )
 					re = FIM_CNS_PUSHDIR_RE;
 				if( fn.re_match(re.c_str()) )
-					push( f + fim::string(de->d_name) );
+					retval |= push( f + fim::string(de->d_name) );
 				//std::cout << re << " " << f + fim::string(de->d_name) << "!\n";
 			}
+#if FIM_WANT_BACKGROUND_LOAD
+			if( ( pf & FIM_FLAG_PUSH_ONE ) && retval )
+				goto ret;
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		}
 ret:
-		retval = ( closedir(dir) == 0 );
+		//retval = ( closedir(dir) == 0 );
+		closedir(dir);
 		FIM_PR('.');
 		return retval;
 	}
@@ -1050,6 +1055,12 @@ ret:
 		 * are we sure we want no repetition!????
 		 * */
 		bool retval = false;
+		bool lib = false; /* load in background */
+
+#if FIM_WANT_BACKGROUND_LOAD
+		if( pf & FIM_FLAG_PUSH_BACKGROUND )
+			lib = true;
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		FIM_PR('*');
 
 		if( nf == FIM_STDIN_IMAGE_NAME )
@@ -1115,8 +1126,9 @@ ret:
 				/*
 				 * i am not fully sure this is effective
 				 * */
-				nf += " is not a regular file!";
-				commandConsole_.set_status_bar(nf.c_str(), "*");
+				if(!lib)
+					nf += " is not a regular file!",
+					commandConsole_.set_status_bar(nf.c_str(), "*");
 				goto ret;
 			}
 #endif /* FIM_CHECK_FILE_EXISTENCE */
@@ -1133,6 +1145,7 @@ isfile:
 		flist_.push_back(nf);
 		//std::cout << "pushing " << nf << FIM_CNS_NEWLINE;
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
+		retval = true;
 		goto ret;
 #ifdef FIM_READ_DIRS
 isdir:

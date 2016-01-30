@@ -22,9 +22,12 @@
 #define FIM_BROWSER_H
 #include "fim.h"
 
-#define FIM_FLAG_NONREC 0
+#define FIM_FLAG_NONREC 0 /* let this be zero */
 #define FIM_FLAG_DEFAULT FIM_FLAG_NONREC
 #define FIM_FLAG_PUSH_REC 1
+#define FIM_FLAG_PUSH_BACKGROUND 2
+#define FIM_FLAG_PUSH_ONE 4 /* one is enough */
+#define FIM_FLAG_DEL(V,F)    (V) &= ~(F)
 
 namespace fim
 {

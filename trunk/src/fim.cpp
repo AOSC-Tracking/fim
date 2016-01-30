@@ -297,6 +297,11 @@ FIM_NULL
     {"recursive", no_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively.", FIM_NULL,
 	    FIM_NULL
     },
+#if FIM_WANT_BACKGROUND_LOAD
+    {"recursive-background", no_argument, FIM_NULL, 0x6c696267,"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
+	    FIM_NULL
+    },
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
 /*    {"once",       no_argument,       FIM_NULL, '1',"",FIM_NULL},*/  /* loop only once */
 /*    {"font",       required_argument, FIM_NULL, 'f',"",FIM_NULL},*/  /* font */
@@ -1132,8 +1137,15 @@ done:
 		    break;
 		case 'R':
 		    //fim's
-		    pf = FIM_FLAG_PUSH_REC ;
+		    pf |= FIM_FLAG_PUSH_REC ;
 		    break;
+#if FIM_WANT_BACKGROUND_LOAD
+		case 0x6c696267:
+		    //fim's
+		    pf |= FIM_FLAG_PUSH_REC ;
+		    pf |= FIM_FLAG_PUSH_ONE ;
+		    break;
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 		case 's':
 	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,fim_atoi(optarg));
 		    if(fim_atoi(optarg)>0)

@@ -54,12 +54,22 @@
 #define FIM_KEY_OFFSET '0'
 
 extern fim_sys_int yyparse();
+#if FIM_WANT_BACKGROUND_LOAD
+#include <thread>
+#include <chrono>
+#include <mutex>
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 
 namespace fim
 {
 #if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
     	extern fim_int fim_fmf_; /* FIXME */
 #endif /* FIM_FONT_MAGNIFY_FACTOR */
+
+#if FIM_WANT_BACKGROUND_LOAD
+	static std::thread blt; /* background loader thread */
+	std::vector<const char *> fnpv; /* file names pointers vector */
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 
 	static  bool nochars(const fim_char_t *s)
 	{
@@ -1041,11 +1051,14 @@ err:
 #endif	/* FIM_USE_GPM */
 		fim::string initial = browser_.current();
 #ifdef FIM_AUTOCMDS
-
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLE,initial);
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLEARGS,initial);
 #endif /* FIM_AUTOCMDS */
 		*prompt_=FIM_SYM_PROMPT_NUL;
+
+#if FIM_WANT_BACKGROUND_LOAD
+		cc.background_push();
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 
 	 	while(show_must_go_on_)
 		{
@@ -2111,6 +2124,34 @@ ok:
 		 * */
 		return browser_.push(nf,pf);
 	}
+
+	bool CommandConsole::push(const char * nf, fim_flags_t pf)
+	{
+		/*
+		 * returns true if push was ok
+		 * */
+#if FIM_WANT_BACKGROUND_LOAD
+		if( pf & FIM_FLAG_PUSH_ONE )
+			fnpv.push_back(nf);
+#endif /* FIM_WANT_BACKGROUND_LOAD */
+		return browser_.push(nf,pf);
+	}
+
+#if FIM_WANT_BACKGROUND_LOAD
+	bool CommandConsole::background_push(void)
+	{
+		/* FIXME: there is no concurrency control (e.g. lock in accessing browser_.flist_) at the moment. */
+		blt = std::thread
+	( [&fnpv,this](void)
+	{
+		for( auto fnpi : fnpv )
+			this->browser_.push(fnpi,FIM_FLAG_PUSH_REC+FIM_FLAG_PUSH_BACKGROUND);
+  	}
+	);
+		//fnpv.erase(fnpv.begin(),fnpv.end());
+		return true;
+	}
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 
 #ifndef FIM_WANT_NOSCRIPTING
 	bool CommandConsole::push_scriptfile(const fim::string ns)
