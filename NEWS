@@ -3,13 +3,15 @@
 
                 Version 0.6-trunk
 
+# (r961)
+ * renamed configure switch --enable-cxx11 to --enable-c++11
 # (r955)
   * i:_file_load_time will store the time taken to load the file and decode the image.
 # (r952)
  * _use_mipmaps=2 will compute the mipmaps faster, using every fourth source pixel.
    This can be a good solution for photographs.
 # (r948)
- * if configure'ing with --enable-cxx11, background image loading will be available
+ * if configure'ing with --enable-c++11, background image loading will be available
   (FIXME: need controlling variable, need to handle failed loads)
 # (r947)
  * mipmap computing (controlled by _use_mipmaps) is now faster
