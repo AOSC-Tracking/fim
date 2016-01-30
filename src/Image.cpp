@@ -416,7 +416,6 @@ uhmpf:
 
 #if FIM_WANT_MIPMAPS
     		if(fimg_)
-		if(getGlobalIntVariable(FIM_VID_WANT_MIPMAPS)>0)
 			mm_make();
 #endif /* FIM_WANT_MIPMAPS */
 
@@ -1463,7 +1462,19 @@ ret:
 
 #if FIM_WANT_MIPMAPS
 	void Image::mm_free(void) { mm_.dealloc(); }
-	void Image::mm_make(void) { mm_.dealloc(); FbiStuff::fim_mipmaps_compute(fimg_,&mm_); }
+	void Image::mm_make(void)
+	{
+	       	enum fim_mmo_t mmo = FIM_MMO_NORMAL;
+		fim_int wmm = getGlobalIntVariable(FIM_VID_WANT_MIPMAPS);
+
+		if( wmm<=0 || has_mm() )
+			return;
+		if(wmm>1)
+			mmo = FIM_MMO_FASTER;
+		mm_.dealloc();
+		mm_.mmo=mmo;
+	       	FbiStuff::fim_mipmaps_compute(fimg_,&mm_);
+	}
 	bool Image::has_mm(void)const { return mm_.ok(); }
 #endif /* FIM_WANT_MIPMAPS */
 	bool Image::cacheable(void)const { return this->n_pages() == 1 ; }
