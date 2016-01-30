@@ -837,7 +837,6 @@ ret:
 #if FIM_WANT_BACKGROUND_LOAD
 		if(wp == 2)
 		{
-			std::cout << "using background prefetch\n";
 			pcache_.asyncPrefetch(get_next_filename(1));
 			pcache_.asyncPrefetch(get_next_filename(-1));
 			goto apf;
