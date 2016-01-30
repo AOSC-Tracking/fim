@@ -832,7 +832,7 @@ ret:
 		if( args.size() > 0 )
 			goto ret;
 
-		wp = getIntVariable(FIM_VID_WANT_PREFETCH);
+		wp = getGlobalIntVariable(FIM_VID_WANT_PREFETCH);
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)0);
 #if FIM_WANT_BACKGROUND_LOAD
 		if(wp == 2)
