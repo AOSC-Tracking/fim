@@ -27,6 +27,7 @@
 #define FIM_FLAG_PUSH_REC 1
 #define FIM_FLAG_PUSH_BACKGROUND 2
 #define FIM_FLAG_PUSH_ONE 4 /* one is enough */
+#define FIM_FLAG_PUSH_HIDDEN 8 /* */
 #define FIM_FLAG_DEL(V,F)    (V) &= ~(F)
 
 namespace fim

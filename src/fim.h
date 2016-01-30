@@ -154,6 +154,7 @@
 #define FIM_FONT_MAGNIFY_FACTOR_DEFAULT ( FIM_WANT_FONT_MAGNIFY_FACTOR > 0 ? FIM_WANT_FONT_MAGNIFY_FACTOR : ( FIM_WANT_FONT_MAGNIFY_FACTOR < 0 ? -FIM_WANT_FONT_MAGNIFY_FACTOR : 1 ) ) /* Framebuffer font magnifying factor, default value. */
 #define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
 #define FIM_WANT_IMAGE_LOAD_TIME 1
+#define FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK 1
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
@@ -534,10 +535,11 @@ namespace fim
 #define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[out,g:] the current display device string" */
 #define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "[in,g:] if 1, will display the status bar" */
 #define FIM_VID_DISPLAY_STATUS_FMT		"_display_status_fmt"	/* "[in,g:] custom info format string, displayed in the lower left corner of the status bar; if unset: full pathname; otherwise a custom format string specified just as _info_fmt_str." */
-#define FIM_VID_PUSH_PUSHES_DIRS		"_push_pushes_dirs"	/* "[in,g:] if 1, the push command will also accept and push directories (using pushdir)" */
+#define FIM_VID_PUSH_PUSHES_DIRS		"_push_pushes_dirs"	/* "[in,g:] if 1, the push command will also accept and push directories (using pushdir). if 2, will also push hidden files/directories, that is, ones whose names begin with a dot (.). " */
 #define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[in,experimental,g:] if 1, will execute a sanity check on startup" */
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[out,experimental,g:] the standard output of the last call to the system command" */
 #define FIM_VID_LOAD_DEFAULT_ETC_FIMRC 		"_load_default_etc_fimrc"	/* "[in,g:] if 1 at startup, will load the system wide initialization file" */
+#define FIM_VID_LOAD_HIDDEN_DIRS 		"_load_hidden_dirs"	/* "[in,g:] if not 1, when pushing directories/files, those whose name begins with a dot (.) will be skipped." */
 #define FIM_VID_DEFAULT_ETC_FIMRC 		"_sys_rc_file"		/* "[in,g:] string with the global configuration file name" */
 #if FIM_WANT_IMAGE_LOAD_TIME
 #define FIM_VID_IMAGE_LOAD_TIME			"_file_load_time"	/* "[out,i:] time taken to load the file and decode the image, in seconds" */
