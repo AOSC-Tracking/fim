@@ -3,6 +3,7 @@
 
                 Version 0.5-rc1
 
+ * fix: enabled concurrent make, e.g.: make -j 4
  * bug workaround: had no console scroll if no command executed on PostInteractiveCommand
  * fix: some systems don't have sys_errlist: using strerror there
  * fix: corrected the quiet mode (-q) to be quieter
