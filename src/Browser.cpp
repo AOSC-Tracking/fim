@@ -64,6 +64,58 @@ namespace fim
 		}
 		else
 		{
+			/* read-only commands, that do not depend on FIM_VID_LOADING_IN_BACKGROUND */
+			if(args[0]=="filesnum")
+			{
+				result = n_files();
+			}
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
+			else if(args[0]=="mark" || args[0]=="unmark")
+			{
+				bool domark = (args[0]=="mark");
+#if FIM_WANT_PIC_LBFL
+				if(args.size() > 1)
+				{
+					args_t argsc(args);
+					argsc.erase(argsc.begin());
+					do_filter(argsc,CmtMatch,false,domark ? Mark : Unmark);
+				}
+				else
+#endif /* FIM_WANT_PIC_LBFL */
+			       		cc.markCurrentFile(domark); 
+				goto ret;
+		       	} 
+			else if(args[0]=="marked")
+			{
+                                std::string mfl = cc.marked_files_list();
+		                if( mfl != FIM_CNS_EMPTY_STRING )
+                                {
+                                        result += "The following files have been marked by the user :\n";
+                                        result += mfl;
+                                }
+                                else
+                                        result += "No files have been marked by the user.\n";
+				goto ret;
+		       	} 
+#else /* FIM_WANT_FILENAME_MARK_AND_DUMP */
+			else if(args[0]=="mark")
+				result = FIM_EMSG_NOMARKUNMARK;
+			else if(args[0]=="marked")
+				result = FIM_EMSG_NOMARKUNMARK;
+			else if(args[0]=="unmark")
+				result = FIM_EMSG_NOMARKUNMARK;
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
+#if FIM_WANT_BACKGROUND_LOAD
+			else
+			if(cc.getIntVariable(FIM_VID_LOADING_IN_BACKGROUND)!=0)
+			{
+				result = "File list temporarily locked; check out the ";
+			       	result += FIM_VID_LOADING_IN_BACKGROUND;
+				result += " variable later.";
+				goto ret;
+			}
+#endif /* FIM_WANT_BACKGROUND_LOAD */
+			/* commands, that do depend on FIM_VID_LOADING_IN_BACKGROUND */
 			if(args[0]=="clear")
 				result = _clear_list();
 			else if(args[0]=="random_shuffle")
@@ -107,7 +159,6 @@ namespace fim
 					push_dir(".");
 				result = FIM_CNS_EMPTY_RESULT;
 			}
-
 			else if(args[0]=="pushdirr")
 			{
 #ifdef FIM_RECURSIVE_DIRS
@@ -121,46 +172,6 @@ namespace fim
 #endif /* FIM_RECURSIVE_DIRS */
 			}
 #endif /* FIM_READ_DIRS */
-			else if(args[0]=="filesnum")
-			{
-				result = n_files();
-			}
-#if FIM_WANT_FILENAME_MARK_AND_DUMP
-			else if(args[0]=="mark" || args[0]=="unmark")
-			{
-				bool domark = (args[0]=="mark");
-#if FIM_WANT_PIC_LBFL
-				if(args.size() > 1)
-				{
-					args_t argsc(args);
-					argsc.erase(argsc.begin());
-					do_filter(argsc,CmtMatch,false,domark ? Mark : Unmark);
-				}
-				else
-#endif /* FIM_WANT_PIC_LBFL */
-			       		cc.markCurrentFile(domark); 
-				goto ret;
-		       	} 
-			else if(args[0]=="marked")
-			{
-                                std::string mfl = cc.marked_files_list();
-		                if( mfl != FIM_CNS_EMPTY_STRING )
-                                {
-                                        result += "The following files have been marked by the user :\n";
-                                        result += mfl;
-                                }
-                                else
-                                        result += "No files have been marked by the user.\n";
-				goto ret;
-		       	} 
-#else /* FIM_WANT_FILENAME_MARK_AND_DUMP */
-			else if(args[0]=="mark")
-				result = FIM_EMSG_NOMARKUNMARK;
-			else if(args[0]=="marked")
-				result = FIM_EMSG_NOMARKUNMARK;
-			else if(args[0]=="unmark")
-				result = FIM_EMSG_NOMARKUNMARK;
-#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 			else result = FIM_CMD_HELP_LIST;
 		}
 ret:
