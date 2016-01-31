@@ -24,6 +24,7 @@ fim_var_help_db[FIM_VID_SCRIPTOUT_FILE]= "[in,g:] the name of the file to write 
 fim_var_help_db[FIM_VID_PUSHDIR_RE]= "[in] regular expression to match against when pushing files from a directory or an archive. By default this is \"" FIM_CNS_PUSHDIR_RE "\"." ;
 fim_var_help_db[FIM_VID_STATUS_LINE]= "[in,g:] if 1, will display the status bar" ;
 fim_var_help_db[FIM_VID_WANT_PREFETCH]= "[in,g:] if 1, will prefetch further files just after display of the first file; if 2 (and configured with --enable-cxx11) will load in the background" ;
+fim_var_help_db[FIM_VID_LOADING_IN_BACKGROUND]= "[out,g:] 1 if program has been invoked with --recursive-background and still loading in background. " ;
 fim_var_help_db[FIM_VID_WANT_SLEEPS]= "[in,g:] number of seconds of sleep during slideshow mode" ;
 fim_var_help_db[FIM_VID_WANT_EXIF_ORIENTATION]= "[in,g:] if 1, will reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." ;
 fim_var_help_db[FIM_VID_EXIF_ORIENTATION]= "[out,i:] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the orientation EXIF tags (i:EXIF_Orientation)." ;
