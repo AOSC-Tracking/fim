@@ -154,6 +154,7 @@ class Image
 	fim_err_t scale_increment(fim_scale_t ds);
 	fim_err_t scale_multiply (fim_scale_t sm);
 	fim_scale_t ascale()const{ return (ascale_>0.0?ascale_:1.0); }
+	void shred(void);
 	bool negate (void);/* let's read e-books by consuming less power :) */
 	bool desaturate (void);
 	bool gray_negate(void);
