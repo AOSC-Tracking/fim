@@ -83,6 +83,12 @@ namespace fim
 			*p = ~ *p;
 	}
 
+	static void fim_shred(fim_byte_t * data, int howmany)
+	{
+		fim_desaturate_rgb(data, howmany);
+		fim_negate_rgb(    data, howmany);
+	}
+
 	fim_coo_t Image::original_width(void)const
 	{
 		fim_coo_t ow;
@@ -568,25 +574,31 @@ ret:
 		/*
 		 * the image descriptors are freed if necessary and pointers blanked
 		 * */
-		const bool shred = false; /* this is only for debug purposes */
+		const bool do_shred = false; /* this is only for debug purposes */
+        	if(do_shred)
+        		this->shred();
                 if(fimg_!=img_ && img_ )
-		{
-			if(shred)
-			fim_desaturate_rgb( img_->data, 3* img_->i.width* img_->i.height),
-			fim_negate_rgb(     img_->data, 3* img_->i.width* img_->i.height);
 		       	FbiStuff::free_image(img_ );
-		}
                 if(fimg_     )
-		{
-			if(shred)
-			fim_desaturate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height),
-			fim_negate_rgb(    fimg_->data, 3*fimg_->i.width*fimg_->i.height);
 		       	FbiStuff::free_image(fimg_);
-		}
 #if FIM_WANT_MIPMAPS
 		mm_free();
 #endif /* FIM_WANT_MIPMAPS */
                 reset();
+		FIM_PR('.');
+        }
+
+        void Image::shred(void)
+        {
+		FIM_PR('*');
+                if(fimg_!=img_ && img_ )
+		{
+			fim_shred(img_->data, 3*img_->i.width*img_->i.height);
+		}
+                if(fimg_     )
+		{
+		       	FbiStuff::free_image(fimg_);
+		}
 		FIM_PR('.');
         }
 
