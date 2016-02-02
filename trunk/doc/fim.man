@@ -277,9 +277,6 @@ Quiet mode. Sets _display_status=0;_display_busy=0;.
 .TP
 .B \-R, \-\-recursive
 		 Push files/directories to the files list recursively.
-.TP
-.B  \-\-recursive\-background
-		 Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).
 
 .SH PROGRAM RETURN STATUS
 The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error; 42 on a signal\-triggered program exit;  or a different value in case of an another error.

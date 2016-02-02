@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r971)
+ * introduced new variable _cache_control to control the cache mechanism
+ * now caching of mipmaps on by default; can be turned off with _cache_control
 # (r965)
  * if _push_pushes_dirs is 2, will also push hidden files and directories; that is,
    ones whose names begin with a dot (.)
