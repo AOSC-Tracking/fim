@@ -2,7 +2,7 @@
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@ namespace fim
 	class Namespace
 	{
 		protected:
-#ifndef FIM_INDIPENDENT_NAMESPACE
+#ifndef FIM_INDEPENDENT_NAMESPACE
 		CommandConsole*rnsp_; // root Namespace pointer
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 		variables_t variables_;	//id->var
 		fim_char_t ns_char_; // ns_char_ ':' varname
 	
@@ -64,15 +64,15 @@ namespace fim
 		fim_err_t assign_ns(const Namespace & ns);
 
 		Namespace(
-#ifndef FIM_INDIPENDENT_NAMESPACE
+#ifndef FIM_INDEPENDENT_NAMESPACE
 				CommandConsole *rnsp = FIM_NULL,
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 			       	const fim_char_t ns_char = FIM_SYM_NULL_NAMESPACE_CHAR
 			)
 			:
-#ifndef FIM_INDIPENDENT_NAMESPACE
+#ifndef FIM_INDEPENDENT_NAMESPACE
 		      rnsp_(rnsp),
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 			variables_(variables_t())
 			,ns_char_(ns_char)
 	       	{}
