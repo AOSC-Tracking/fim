@@ -298,7 +298,7 @@ FIM_NULL
 	    FIM_NULL
     },
 #if FIM_WANT_BACKGROUND_LOAD
-    {"recursive-background", no_argument, FIM_NULL, 0x6c696267,"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
+    {"background-recursive", no_argument, FIM_NULL, 0x6c696267,"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
 	    FIM_NULL
     },
 #endif /* FIM_WANT_BACKGROUND_LOAD */
