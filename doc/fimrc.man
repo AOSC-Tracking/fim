@@ -520,6 +520,10 @@ _autotop
 [in,g:] if 1, will align to the top freshly loaded images
 .fi
 .B
+_cache_control
+[in,g:] string for cache control. if it starts with 'm' mipmaps will be cached; if it starts with 'M' then not. otherwise defaults will apply.
+.fi
+.B
 _cache_status
 [out,g:] string with current information on cache status
 .fi

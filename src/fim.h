@@ -530,6 +530,7 @@ namespace fim
 #define FIM_VID_RANDOM 				"random"	/* "[out] a pseudorandom number" */
 #define FIM_VID_BINARY_DISPLAY 			"_display_as_binary"	/* "[in,g:] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" */
 #define FIM_VID_TEXT_DISPLAY 			"_display_as_rendered_text"	/* "[in,g:] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" */
+#define FIM_VID_CACHE_CONTROL 			"_cache_control"	/* "[in,g:] string for cache control. if it starts with 'm' mipmaps will be cached; if it starts with 'M' then not. otherwise defaults will apply." */
 #define FIM_VID_CACHE_STATUS 			"_cache_status"		/* "[out,g:] string with current information on cache status" */
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[in,g:] if 1, will display the output console" */
 #define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[out,g:] the current display device string" */

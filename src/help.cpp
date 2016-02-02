@@ -4,6 +4,7 @@ fim_var_help_db[FIM_VID_ARCHIVE_FILES]= "[in,g:] Regular expression matching fil
 fim_var_help_db[FIM_VID_RANDOM]= "[out] a pseudorandom number" ;
 fim_var_help_db[FIM_VID_BINARY_DISPLAY]= "[in,g:] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual" ;
 fim_var_help_db[FIM_VID_TEXT_DISPLAY]= "[in,g:] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual" ;
+fim_var_help_db[FIM_VID_CACHE_CONTROL]= "[in,g:] string for cache control. if it starts with 'm' mipmaps will be cached; if it starts with 'M' then not. otherwise defaults will apply." ;
 fim_var_help_db[FIM_VID_CACHE_STATUS]= "[out,g:] string with current information on cache status" ;
 fim_var_help_db[FIM_VID_DISPLAY_CONSOLE]= "[in,g:] if 1, will display the output console" ;
 fim_var_help_db[FIM_VID_DEVICE_DRIVER]= "[out,g:] the current display device string" ;
