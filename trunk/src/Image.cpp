@@ -26,12 +26,6 @@
 #include "ExifTool.h"
 #endif /* FIM_WANT_EXIFTOOL */
 
-#define FIM_WANT_BACKGROUND_LOAD 0
-
-#if FIM_WANT_BACKGROUND_LOAD
-#include <thread>
-#endif /* FIM_WANT_BACKGROUND_LOAD */
-
 #define FIM_IMAGE_INSPECT 0
 #if FIM_IMAGE_INSPECT
 #define FIM_PR(X) printf("IMAGE:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,(int)getGlobalIntVariable(FIM_VID_FILEINDEX),(int)getGlobalIntVariable(FIM_VID_FILELISTLEN),(int)getGlobalIntVariable(FIM_VID_PAGE),(int)getIntVariable(FIM_VID_PAGES),(cacheable()?"cacheable":"uncacheable"));
@@ -266,13 +260,6 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
 		return b;
 	}
 	
-#if FIM_WANT_BACKGROUND_LOAD
-void fim_background_load()
-{
-	std::cout << "background loading\n";
-}
-#endif /* FIM_WANT_BACKGROUND_LOAD */
-
 static void ers(const char*value, Image *image)
 {
 		// EXIF orientation value can be of the form "X - Y", with X and Y in
@@ -397,13 +384,6 @@ uhmpf:
 				cc.set_status_bar("please wait while reloading...", "*");
 		}
 
-#if FIM_WANT_BACKGROUND_LOAD
-		/* this would be a hypothetical starting point for a background running loader */
-		std::thread t(&fim_background_load);
-		std::cout << "foreground running\n";
-		t.join(); 
-		std::cout << "loaded!\n";
-#endif /* FIM_WANT_BACKGROUND_LOAD */
 		fimg_ = FbiStuff::read_image(fname,fd,want_page,this);
 #if 0
 		if(fimg_)
