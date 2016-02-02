@@ -2,7 +2,7 @@
 /*
  Namespace.cpp : a class for local variables storage
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@
 
 #include "fim.h"
 
-#ifndef FIM_INDIPENDENT_NAMESPACE
+#ifndef FIM_INDEPENDENT_NAMESPACE
 #define FIM_NS_SV(VN,VL) if(rnsp_) return rnsp_->setVariable(VN,VL); /* FIXME: need a better solution here ! */
 #else
 #define FIM_NS_SV(VN,VL)
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 
 namespace fim
 {
@@ -131,30 +131,30 @@ namespace fim
 		fim_int Namespace::getGlobalIntVariable(const fim::string &varname)const
 		{
 			/* FIXME: need a better solution here ! */
-#ifndef FIM_INDIPENDENT_NAMESPACE
+#ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				return rnsp_->getIntVariable(varname);
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
 		fim_float_t Namespace::getGlobalFloatVariable(const fim::string &varname)const
 		{
 			/* FIXME: need a better solution here ! */
-#ifndef FIM_INDIPENDENT_NAMESPACE
+#ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				return rnsp_->getFloatVariable(varname);
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 			return FIM_CNS_EMPTY_FP_VAL;
 		}
 
 		fim::string Namespace::getGlobalStringVariable(const fim::string &varname)const
 		{
 			/* FIXME: need a better solution here ! */
-#ifndef FIM_INDIPENDENT_NAMESPACE
+#ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				return rnsp_->getStringVariable(varname);
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 			return FIM_CNS_EMPTY_RESULT;
 		}
 
@@ -162,10 +162,10 @@ namespace fim
 		{
 #ifdef FIM_AUTOCMDS
 			/* FIXME: need a better solution here ! */
-#ifndef FIM_INDIPENDENT_NAMESPACE
+#ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				return rnsp_->autocmd_exec(event,fname);
-#endif /* FIM_INDIPENDENT_NAMESPACE */
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 			return FIM_CNS_EMPTY_RESULT;
 #else /* FIM_AUTOCMDS */
 			return FIM_CNS_EMPTY_RESULT;
