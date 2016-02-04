@@ -29,8 +29,9 @@ Description: a scriptable frame buffer, X.org and ascii art image viewer
  via the aalib library.
  It supports image description files, file search and filtering using regular
  expressions on filenames and descriptions, caption display, customizable
- status line, EXIF tags display, EXIF-based image rotation.
- It can speed up loading by caching and speed up scaling by using mipmaps.
+ status line, EXIF tags display, EXIF-based image rotation, recursive directory
+ traversal, reading from stdin, and can remember the positions of two images.
+ It can speed up loading by image caching and speed up scaling with mipmaps.
  It offers GNU readline command line autocompletion and history,
  completely customizable key bindings, external/internal (if-while based)
  scriptability (through return codes, standard input/output, and commands given
