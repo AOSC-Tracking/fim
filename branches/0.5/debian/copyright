@@ -3,12 +3,12 @@ Source: http://savannah.nongnu.org/projects/fbi-improved/
 Upstream-Contact: Michele Martone <michele.martone@uniroma2.it>
 
 Files: *
-Copyright: 2008-2015 Michele Martone <michele.martone@uniroma2.it>
+Copyright: 2008-2016 Michele Martone <michele.martone@uniroma2.it>
 License: GPL-2.0+
 
 Files: debian/*
 Copyright: 2009 Michele Martone <michele.martone@uniroma2.it>
-           2015 Gianfranco Costamagna <costamagnagianfranco@yahoo.it>
+           2016 Gianfranco Costamagna <locutusofborg@debian.org>
 License: GPL-2.0+
 
 License: GPL-2.0+
