@@ -20,7 +20,7 @@ Homepage: http://savannah.nongnu.org/projects/fbi-improved/
 Package: fim
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Description: a scriptable frame buffer, X.org and ascii art image viewer
+Description: scriptable frame buffer, X.org and ascii art image viewer
  FIM is a highly customizable scriptable image viewer targeted at the
  users who are comfortable with software like the Vim text editor or the Mutt
  mail user agent. FIM aims to be a swiss army knife for viewing images.

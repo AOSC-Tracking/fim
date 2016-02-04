@@ -47,7 +47,7 @@ alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical ax
 alias "mirroronce" "mirror;togglemirror;" "";
 alias 'toggleLimitMarked' '__pre_limit_fileindex=_fileindex;_limit_mode=1-_limit_mode; if(_limit_mode==1){limit "!";} else { limit; } if(_filelistlen<1){_limit_mode=0;limit;goto __pre_limit_fileindex;} i:fresh=1;redisplay; ' "toggle between limiting file list to the marked files and the full list";
 # Warning : binding to C-s, C-z and C-c won't make effect, as these
-# codes are catched by the console driver and will have no effect in fim.
+# codes are get caught by the console driver and will have no effect in fim.
 # Moreover, C-z will crash fim and C-c will terminate it.
 # Some other combinations (e.g.:C-l) may have similar problems in your console.
 bind 'f' "flip;";
@@ -240,7 +240,7 @@ bind 'K' 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosi
 #alias "swap" "window 'swap'" "swap the enclosing window subwindows";
 #alias "ws " "window 'swap'" "see swap";
 #bind 'T' "split;redisplay;";
-##don't use C-s : it will be usually catched by the console driver, and fim won't get it!
+##don't use C-s : it will be usually caught by the console driver, and fim won't get it!
 ##bind 'C-s' "split;";
 #bind 'V' "vsplit;redisplay;";
 #bind 'U' "swap;redisplay;";
