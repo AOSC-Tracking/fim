@@ -769,6 +769,13 @@ mp+=string(
 "# Will make fim read the image scanned from a flatbed scanner as soon as it is read \n"
 ".P\n"
 ".P\n"
+"\n"
+".B \n"
+"h5topng -x 1 -y 2 dataset.hdf -o /dev/stdout | fim -i\n"
+".fi\n"
+"# Use fim to visualize a slice from an HDF5 dataset file\n"
+".P\n"
+".P\n"
 #endif /* FIM_READ_STDIN_IMAGE */
 "\n"
 ".B fim * > selection.txt\n"
