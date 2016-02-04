@@ -59,6 +59,7 @@ namespace fim
 manmode:
 		for( vi=fim_var_help_db.begin();vi!=fim_var_help_db.end();++vi)
 		{
+			s+=".na\n"; /* No output-line adjusting; unelegant way to avoid man --html=cat's: cannot adjust line */
 			s+=".B\n";
 			s+=vi->first;
 			s+="\n";
@@ -66,6 +67,7 @@ manmode:
 			s+="\n";
 			s+=".fi\n";
 		}
+		s.substitute("\\$","$\\:"); /* Zero-width break point on $ (that is, on long hardcoded regexps). */
 		return s;
 	}
 

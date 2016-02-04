@@ -1,6 +1,11 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
+                Version 0.5-rc2
+
+ * fix: adjusted man pages for roff cleanliness
+ * fix: typos fixed in the documentation
+
                 Version 0.5-rc1
 
  * fix: enabled concurrent make, e.g.: make -j 4

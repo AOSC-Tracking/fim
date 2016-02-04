@@ -2,7 +2,7 @@
 /*
  Var.cpp : 
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -59,6 +59,7 @@ namespace fim
 manmode:
 		for( vi=fim_var_help_db.begin();vi!=fim_var_help_db.end();++vi)
 		{
+			s+=".na\n"; /* No output-line adjusting; unelegant way to avoid man --html=cat's: cannot adjust line */
 			s+=".B\n";
 			s+=vi->first;
 			s+="\n";
@@ -66,6 +67,7 @@ manmode:
 			s+="\n";
 			s+=".fi\n";
 		}
+		s.substitute("\\$","$\\:"); /* Zero-width break point on $ (that is, on long hardcoded regexps). */
 		return s;
 	}
 

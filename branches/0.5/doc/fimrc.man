@@ -160,306 +160,357 @@ The way some one\-line statements are evaluated:
 
 .SH COMMANDS REFERENCE
 
+.na
 .B
 alias
 .fi
 alias [{identifier} [{commands} [{description}]]]
 .fi
 
+.na
 .B
 align
 .fi
 align bottom : align to the lower side the current image; align top : align to the upper side the current image; 
 .fi
 
+.na
 .B
 autocmd
 .fi
 autocmd {event} {pattern} {commands} : manipulate auto commands
 .fi
 
+.na
 .B
 autocmd_del
 .fi
 autocmd_del : manipulate auto commands. usage: autocmd_del {event} {pattern} {commands}
 .fi
 
+.na
 .B
 basename
 .fi
 basename {filename} : returns the basename of {filename}
 .fi
 
+.na
 .B
 bind
 .fi
 bind [{keysym} [{commands}]] : bind a keyboard symbol/shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.; binding is dynamical, so you can rebind keys even during program's execution
 .fi
 
+.na
 .B
 cd
 .fi
 cd {path}: change the current directory to {path}. cd \- will change to the previous current directory (before the last ":cd {path}" command)
 .fi
 
+.na
 .B
 clear
 .fi
 clear : clear the virtual console
 .fi
 
+.na
 .B
 commands
 .fi
 commands : display the existing commands
 .fi
 
+.na
 .B
 desaturate
 .fi
 desaturate : desaturate the displayed image colors. To get back the original you will have to reload the image.
 .fi
 
+.na
 .B
 desc
 .fi
 desc 'load' {filename} [{sepchar}] : load description file {filename}, using the optional {sepchar} character as separator. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
 .fi
 
+.na
 .B
 display
 .fi
 display ['reinit' {string}]|'resize' {w} {h}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the \-\-output\-device command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. 
 .fi
 
+.na
 .B
 dump_key_codes
 .fi
 dump_key_codes : dump the active key codes (unescaped, for inspection)
 .fi
 
+.na
 .B
 echo
 .fi
 echo {args}: print the {args} on console
 .fi
 
+.na
 .B
 else
 .fi
 if(expression){action;}['else'{action;}] : see else
 .fi
 
+.na
 .B
 eval
 .fi
 eval {args} : evaluate {args} as commands, executing them
 .fi
 
+.na
 .B
 exec
 .fi
 exec {filename(s)} : execute script {filename(s)}
 .fi
 
+.na
 .B
 getenv
 .fi
 getenv {identifier} : display the value of the {identifier} environment variable
 .fi
 
+.na
 .B
 goto
 .fi
 goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '\-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via desc or \-\-load\-image\-descriptions\-file.
 .fi
 
+.na
 .B
 help
 .fi
 help [{identifier}] : provide online help, assuming {identifier} is a variable, alias, or command identifier. If {identifier} begins with  /, the search will be on the help contents and a list of matching items will be given instead. A list of commands can be obtained simply invoking "commands"; a list of aliases with "alias"; a list of bindings with "bind".
 .fi
 
+.na
 .B
 if
 .fi
 if(expression){action;}['else'{action;}] : see if
 .fi
 
+.na
 .B
 info
 .fi
 info : display information about the current file
 .fi
 
+.na
 .B
 limit
 .fi
 limit [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via \-\-load\-image\-descriptions\-file. If one argument only is provided, restrict to files whose description string matches {expression}. If two arguments are provided, restrict to files having property {variable} set to {value}. If invoked with one exclamation point ('!') as argument will restrict to the currently marked files only.  Invoked with no arguments, the original browsable files list is restored.
 .fi
 
+.na
 .B
 list
 .fi
-list : display the files list; list 'random_shuffle': randomly shuffle the file list; list 'reverse': reverse the file list; list 'clear': clear the file list; list 'sort': sort the file list; list 'sort_basename': sort the file list according to the file base name; list 'pop' : pop the last file from the files list; list 'remove' [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; list {filename(s)} 'push': push {filename(s)} to the back of the files list; list 'filesnum': display the number of files in the files list; list 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'marked': show which files have been marked so far; list 'pushdir; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression \.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX$; list 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively. 
+list : display the files list; list 'random_shuffle': randomly shuffle the file list; list 'reverse': reverse the file list; list 'clear': clear the file list; list 'sort': sort the file list; list 'sort_basename': sort the file list according to the file base name; list 'pop' : pop the last file from the files list; list 'remove' [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; list {filename(s)} 'push': push {filename(s)} to the back of the files list; list 'filesnum': display the number of files in the files list; list 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'marked': show which files have been marked so far; list 'pushdir; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression \.JPG$\:|\.PNG$\:|\.GIF$\:|\.BMP$\:|\.TIFF$\:|\.TIF$\:|\.JPEG$\:|\.JFIF$\:|\.PPM$\:|\.PGM$\:|\.PBM$\:|\.PCX$\:; list 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively. 
 .fi
 
+.na
 .B
 load
 .fi
 load : load the image, if not yet loaded (see also reload)
 .fi
 
+.na
 .B
 negate
 .fi
 negate : negate the displayed image colors.
 .fi
 
+.na
 .B
 pan
 .fi
 pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
 .fi
 
+.na
 .B
 popen
 .fi
 popen {syscmd} : pipe a command, invoking popen(): spawns a shell, invoking {syscmd} and executing as fim commands the output of {syscmd}
 .fi
 
+.na
 .B
 pread
 .fi
 pread {args} : execute {args} as a shell command and read the output as an image file (using popen)
 .fi
 
+.na
 .B
 prefetch
 .fi
 prefetch : prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening. See also the _want_prefetch variable.
 .fi
 
+.na
 .B
 pwd
 .fi
 pwd : print the current directory name, and updates the _pwd variable
 .fi
 
+.na
 .B
 quit
 .fi
 quit [{number}] : terminate the program; if {number} is specified, use it as the program return status
 .fi
 
+.na
 .B
 recording
 .fi
 recording 'start' : start recording the executed commands; recording 'stop' : stop  recording the executed commands; recording 'dump' : dump in the console the record buffer; recording 'execute' : execute the record buffer; recording 'repeat_last' : repeat the last performed action; 
 .fi
 
+.na
 .B
 redisplay
 .fi
 redisplay : re\-display the current file contents
 .fi
 
+.na
 .B
 reload
 .fi
 reload [{arg}] : load the image into memory; if {arg} is present, will force reloading, bypassing the cache (see also load)
 .fi
 
+.na
 .B
 rotate
 .fi
 rotate {number}: rotate the image the specified amount of degrees [undocumented]
 .fi
 
+.na
 .B
 scale
 .fi
 scale {['+'|'\-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+\-*/]'} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given '*' and a value, will multiply the current scale by that value; if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+\-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; 
 .fi
 
+.na
 .B
 scrolldown
 .fi
 scrolldown : scroll down the image, going next if at bottom
 .fi
 
+.na
 .B
 scrollforward
 .fi
 scrollforward : scroll the image as it were reading it
 .fi
 
+.na
 .B
 set
 .fi
 set: returns a list of variables which are set; set {identifier}: returns the value of variable {identifier}; set {identifier} {commands}: sets variable {identifier} to value {commands}; 
 .fi
 
+.na
 .B
 set_commandline_mode
 .fi
 set_commandline_mode : set console mode
 .fi
 
+.na
 .B
 set_interactive_mode
 .fi
 set_interactive_mode : set interactive mode
 .fi
 
+.na
 .B
 sleep
 .fi
 sleep [{number}=1] : sleep for the specified (default 1) number of seconds
 .fi
 
+.na
 .B
 status
 .fi
 status : set the status line to the collation of the given arguments
 .fi
 
+.na
 .B
 stdout
 .fi
 stdout {args} : writes to stdout its arguments {args}
 .fi
 
+.na
 .B
 system
 .fi
 system {syscmd}: get the output of the shell command {syscmd}. (uses popen())
 .fi
 
+.na
 .B
 variables
 .fi
 variables : display the existing variables
 .fi
 
+.na
 .B
 unalias
 .fi
 unalias {identifier} | '\-a' : delete the alias {identifier} or all aliases (use '\-a', not \-a)
 .fi
 
+.na
 .B
 unbind
 .fi
 unbind {keysym} : unbind the action associated to a specified {keysym}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.
 .fi
 
+.na
 .B
 while
 .fi
 while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key
 .fi
 
+.na
 .B
 window
 .fi
@@ -475,438 +526,547 @@ There namespaces in which variables may exist are: current image, global. A name
 
 In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
 
+.na
 .B
 _TERM
 [out,g:] the environment TERM variable
 .fi
+.na
 .B
 __exif_flipped
 [out,i:] flipping information, read from the EXIF tags of a given image.
 .fi
+.na
 .B
 __exif_mirrored
 [out,i:] mirroring information, read from the EXIF tags of a given imag.
 .fi
+.na
 .B
 __exif_orientation
 [out,i:] orientation information in the same format of _orientation, read from the orientation EXIF tags (i:EXIF_Orientation).
 .fi
+.na
 .B
 _archive_files
-[in,g:] Regular expression matching filenames to be treated as (multipage) archives. If empty, ".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" will be used. Within each archive, only filenames matching the regular expression in the _pushdir_re variable will be considered for opening.
+[in,g:] Regular expression matching filenames to be treated as (multipage) archives. If empty, ".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$\:" will be used. Within each archive, only filenames matching the regular expression in the _pushdir_re variable will be considered for opening.
 .fi
+.na
 .B
 _autocmd_trace_stack
 [in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)
 .fi
+.na
 .B
 _autodesaturate
 [in,g:] if 1, will desaturate images by default
 .fi
+.na
 .B
 _autoflip
 [in,g:] if 1, will flip images by default
 .fi
+.na
 .B
 _automirror
 [in,g:] if 1, will mirror images by default
 .fi
+.na
 .B
 _autonegate
 [in,g:] if 1, will negate images by default
 .fi
+.na
 .B
 _autotop
 [in,g:] if 1, will align to the top freshly loaded images
 .fi
+.na
 .B
 _cache_status
 [out,g:] string with current information on cache status
 .fi
+.na
 .B
 _cached_images
 [out,g:] the number of images currently cached.
 .fi
+.na
 .B
 _caption_over_image
 [experimental,in,g:] if _caption_over_image is set not to 0, will display the contents of i:_comment as a caption over the image; if larger than 1, with black background. 
 .fi
+.na
 .B
 _command_expansion
 [in,g:] if 1, will enable autocompletion (on execution) of alias and command strings
 .fi
+.na
 .B
 _comment
 [i:,out] the image comment, extracted from the image file (if any)
 .fi
+.na
 .B
 _console_buffer_free
 [out,g:] amount of unused memory in the output console buffer
 .fi
+.na
 .B
 _console_buffer_total
 [out,g:] amount of memory allocated for the output console buffer
 .fi
+.na
 .B
 _console_buffer_used
 [out,g:] amount of used memory in the output console buffer
 .fi
+.na
 .B
 _console_key
 [in,g:] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding
 .fi
+.na
 .B
 _console_lines
 [out,g:] the number of buffered output console text lines
 .fi
+.na
 .B
 _console_offset
 [in,out,g:] position of the text beginning in the output console, expressed in lines
 .fi
+.na
 .B
 _debug_commands
 [in,g:] print out each command before its execution (for debugging purposes)
 .fi
+.na
 .B
 _device_string
 [out,g:] the current display device string
 .fi
+.na
 .B
 _display_as_binary
 [in,g:] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual
 .fi
+.na
 .B
 _display_as_rendered_text
 [in,g:] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual
 .fi
+.na
 .B
 _display_busy
 [in,g:] if 1, will display a message on the status bar when processing
 .fi
+.na
 .B
 _display_console
 [in,g:] if 1, will display the output console
 .fi
+.na
 .B
 _display_status
 [in,g:] if 1, will display the status bar
 .fi
+.na
 .B
 _display_status_bar
 [in,g:] if 1, will display the status bar
 .fi
+.na
 .B
 _display_status_fmt
 [in,g:] custom info format string, displayed in the lower left corner of the status bar; if unset: full pathname; otherwise a custom format string specified just as _info_fmt_str.
 .fi
+.na
 .B
 _do_sanity_check
 [in,experimental,g:] if 1, will execute a sanity check on startup
 .fi
+.na
 .B
 _exiftool_comment
 [out,g:] comment extracted via the exiftool interface; see _use_exiftool.
 .fi
+.na
 .B
 _fbfont
 [out,g:] The current console font file string. If the internal hardcoded font has been used, then its value is "fim://".
 .fi
+.na
 .B
 _file_loader
 [in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the \-V switch output); [out] i:_file_loader stores the loader of the current image
 .fi
+.na
 .B
 _fileindex
 [out,g:] the current image numeric index
 .fi
+.na
 .B
 _filelistlen
 [out,g:] the length of the current image list
 .fi
+.na
 .B
 _filename
 [out,i:] the current file name string
 .fi
+.na
 .B
 _fim_bpp
 [out,g:] the bits per pixel count
 .fi
+.na
 .B
 _fim_default_config_file_contents
 [out,g:] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)
 .fi
+.na
 .B
 _fim_default_grammar_file_contents
 [out,g:] the contents of the default (hardcoded) grammar file
 .fi
+.na
 .B
 _fim_scriptout_file
 [in,g:] the name of the file to write to when recording sessions
 .fi
+.na
 .B
 _fim_version
 [out,g:] fim version number; may be used for keeping compatibility of fim scripts across evolving versions.
 .fi
+.na
 .B
 _hsteps
 [in,g:] the default steps, in pixels, when panning images horizontally (overrides steps)
 .fi
+.na
 .B
 _ignorecase
 [in,g:] if 1, will allow for case insensitive regexp\-based match in autocommands (autocmd); 
 .fi
+.na
 .B
 _info_fmt_str
 [in,g:] custom info format string, displayed in the lower right corner of the status bar; may contain ordinary text and special 'expando' sequences. These are: %p for current scale, in percentage; %w for width; %h for height; %i for image index in list; %l for image list length; %L for flip/mirror/orientation information; %P for page information; %F for file size; %M for screen image memory size; %m for memory used by mipmap; %C for memory used by cache; %T for total memory used (approximation); %R for total max memory used (as detected by getrusage()); %n for the current file path name; %N for the current file path name basename; ; %c for centering information; %v for the fim program/version identifier string; %% for an ordinary %. A sequence like %?VAR?EXP? expands to EXP if i:VAR is set; EXP will be copied verbatim except for contained sequences of the form %:VAR:, which will be expanded to the value of variable i:VAR; this is meant to be used like in e.g. 'EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?', where an EXIF\-set variable (make sure you have libexif for this) will be used only if present.
 .fi
+.na
 .B
 _inhibit_display
 [internal,g:] if 1, will inhibit display
 .fi
+.na
 .B
 _last_file_loader
 [out,g:] after each image load, _last_file_loader will be set to the last file loader used
 .fi
+.na
 .B
 _last_system_output
 [out,experimental,g:] the standard output of the last call to the system command
 .fi
+.na
 .B
 _lastfileindex
 [out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'.
 .fi
+.na
 .B
 _load_default_etc_fimrc
 [in,g:] if 1 at startup, will load the system wide initialization file
 .fi
+.na
 .B
 _load_fim_history
 [in,g:] if 1 on startup, will load the ~/.fim_history file on startup
 .fi
+.na
 .B
 _lwidth
 [in,g:] if>0, will force the output console text width
 .fi
+.na
 .B
 _magnify_factor
 [in,g:] the image scale multiplier used when magnifying images size
 .fi
+.na
 .B
 _max_cached_images
 [in,experimental,g:] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully.
 .fi
+.na
 .B
 _max_cached_memory
 [in,experimental,g:] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently).
 .fi
+.na
 .B
 _max_iterated_commands
 [experimental,g:] the iteration limit for N in "N[commandname]" iterated command invocations
 .fi
+.na
 .B
 _no_default_configuration
 [in,g:] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. 
 .fi
+.na
 .B
 _no_external_loader_programs
 [in,g:] if 1, no external loading programs will be tried for piping in an unsupported type image file
 .fi
+.na
 .B
 _no_rc_file
 [in,g:] if 1, the ~/.fimrc file will not be loaded at startup
 .fi
+.na
 .B
 _open_offset
 [in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:_open_offset will be assigned to images opened at a nonzero offset 
 .fi
+.na
 .B
 _open_offset_retry
 [in,optional,g:] number of adjacent bytes to probe in opening the file 
 .fi
+.na
 .B
 _orientation
 [internal,i:] Orthogonal clockwise rotation (orientation) is controlled by: 'i:_orientation', 'g:_orientation' and applied on a per\-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, ":i:_orientation=1" and ":i:_orientation=5" are equivalent: they rotate the image one time by 90'.
 .fi
+.na
 .B
 _preferred_rendering_dpi
 [in,optional,g:] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) 
 .fi
+.na
 .B
 _preferred_rendering_width
 [in,optional,g:] if >0, bit based rendering will use this value for a default document width (instead of a default value) 
 .fi
+.na
 .B
 _push_checks
 [in,experimental,g:] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use \-\-no\-stat\-push if you wish to set this to 0 at command line files specification 
 .fi
+.na
 .B
 _push_pushes_dirs
 [in,g:] if 1, the push command will also accept and push directories (using pushdir)
 .fi
+.na
 .B
 _pushdir_re
-[in] regular expression to match against when pushing files from a directory or an archive. By default this is "\.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX$".
+[in] regular expression to match against when pushing files from a directory or an archive. By default this is "\.JPG$\:|\.PNG$\:|\.GIF$\:|\.BMP$\:|\.TIFF$\:|\.TIF$\:|\.JPEG$\:|\.JFIF$\:|\.PPM$\:|\.PGM$\:|\.PBM$\:|\.PCX$\:".
 .fi
+.na
 .B
 _pwd
 [out,g:] the current working directory; will be updated at startup and whenever the working directory changes
 .fi
+.na
 .B
 _re_search_opts
 [in,g:] affects regexp\-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. 
 .fi
+.na
 .B
 _reduce_factor
 [in,g:] the image scale multiplier used when reducing images size
 .fi
+.na
 .B
 _retry_loader_probe
 [in,g:] if 1 and user specified a file loader and this fails, will probe for a different loader
 .fi
+.na
 .B
 _rows
 [in,g:] if >0, will set the number of displayed text lines in the console
 .fi
+.na
 .B
 _save_fim_history
 [in,g:] if 1 on exit, will save the ~/.fim_history file on exit
 .fi
+.na
 .B
 _scale_factor_delta
 [in,g:] value used for incrementing/decrementing the scaling factors
 .fi
+.na
 .B
 _scale_factor_multiplier
 [in,g:] value used for scaling up/down the scaling factors
 .fi
+.na
 .B
 _scale_style
 [in,g:] if non empty, this string will be fed to the scale command
 .fi
+.na
 .B
 _screen_height
 [out] the screen height
 .fi
+.na
 .B
 _screen_width
 [out,g:] the screen width
 .fi
+.na
 .B
 _seek_magic
 [optional,g:] will seek for a magic signature before opening a file (for now, use like this: fim \-c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
 .fi
+.na
 .B
 _status_line
 [in,g:] if 1, will display the status bar
 .fi
+.na
 .B
 _steps
 [in,g:] the default steps, in pixels, when panning images
 .fi
+.na
 .B
 _sys_rc_file
 [in,g:] string with the global configuration file name
 .fi
+.na
 .B
 _use_exiftool
 [in,g:] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment
 .fi
+.na
 .B
 _use_mipmaps
 [in,g:] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. 
 .fi
+.na
 .B
 _verbose_errors
 [in,g:] if 1, will display on stdout internal errors, while parsing commands
 .fi
+.na
 .B
 _verbose_keys
 [in,g:] if 1, after each interactive mode key hit, the console will display the hit key raw keycode
 .fi
+.na
 .B
 _verbosity
 [in,experimental,g:] program verbosity
 .fi
+.na
 .B
 _vsteps
 [in,g:] the default steps, in pixels, when panning images vertically (overrides steps)
 .fi
+.na
 .B
 _want_autocenter
 [in,g:] if 1, the image will be displayed centered 
 .fi
+.na
 .B
 _want_exif_orientation
 [in,g:] if 1, will reorient images using information from EXIF metadata (and stored in in __exif_orientation, __exif_mirrored, __exif_flipped ).
 .fi
+.na
 .B
 _want_prefetch
 [in,g:] if 1, will prefetch further files just after display of the first file
 .fi
+.na
 .B
 _want_sleep_seconds
 [in,g:] number of seconds of sleep during slideshow mode
 .fi
+.na
 .B
 _want_wm_caption_status
 [in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non\-empty string, will interpret it just as a file info format string (see _info_fmt_str); if empty, will show the program version.
 .fi
+.na
 .B
 angle
 [in,out,i:] a floating point number specifying the rotation angle, in degrees
 .fi
+.na
 .B
 ascale
 [in,out,i:] the asymmetric scaling of the current image
 .fi
+.na
 .B
 desaturated
 [out,i:] 1, if the image is desaturated
 .fi
+.na
 .B
 flipped
 [out,i:] 1, if the image is flipped
 .fi
+.na
 .B
 fresh
 [in,out,i:,experimental] 1 if the image was loaded, before all autocommands (autocmd) execution
 .fi
+.na
 .B
 height
 [out,i:] the current image original height
 .fi
+.na
 .B
 mirrored
 [out,i:] 1, if the image is mirrored 
 .fi
+.na
 .B
 negated
 [out,i:] 1, if the image is negated
 .fi
+.na
 .B
 page
 [out,experimental,g:] the current page
 .fi
+.na
 .B
 pages
 [out,experimental,i:] the current number of pages of an image
 .fi
+.na
 .B
 random
 [out] a pseudorandom number
 .fi
+.na
 .B
 scale
 [in,i:] the scale of the current image
 .fi
+.na
 .B
 sheight
 [out,i:] the current image scaled height
 .fi
+.na
 .B
 swidth
 [out,i:] the current image scaled width
 .fi
+.na
 .B
 width
 [out,i:] the current image original width
@@ -984,7 +1144,7 @@ alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical ax
 alias "mirroronce" "mirror;togglemirror;" "";
 alias 'toggleLimitMarked' '__pre_limit_fileindex=_fileindex;_limit_mode=1\-_limit_mode; if(_limit_mode==1){limit "!";} else { limit; } if(_filelistlen<1){_limit_mode=0;limit;goto __pre_limit_fileindex;} i:fresh=1;redisplay; ' "toggle between limiting file list to the marked files and the full list";
 # Warning : binding to C\-s, C\-z and C\-c won't make effect, as these
-# codes are catched by the console driver and will have no effect in fim.
+# codes are get caught by the console driver and will have no effect in fim.
 # Moreover, C\-z will crash fim and C\-c will terminate it.
 # Some other combinations (e.g.:C\-l) may have similar problems in your console.
 bind 'f' "flip;";
@@ -1175,7 +1335,7 @@ bind 'K' 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosi
 #alias "swap" "window 'swap'" "swap the enclosing window subwindows";
 #alias "ws " "window 'swap'" "see swap";
 #bind 'T' "split;redisplay;";
-##don't use C\-s : it will be usually catched by the console driver, and fim won't get it!
+##don't use C\-s : it will be usually caught by the console driver, and fim won't get it!
 ##bind 'C\-s' "split;";
 #bind 'V' "vsplit;redisplay;";
 #bind 'U' "swap;redisplay;";
