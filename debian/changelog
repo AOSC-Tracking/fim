@@ -1,14 +1,11 @@
-fim (0.5~alpha-1) UNRELEASED; urgency=medium
+fim (0.5~rc1-1) unstable; urgency=medium
 
   * New upstream release snapshot.
+  * Bump std-version to 3.9.7, no changes required.
+  * Use autoreconf
+  * Add libsdl1.2-dev and libexif-dev to build-dependencies.
 
- -- Gianfranco Costamagna <costamagnagianfranco@yahoo.it>  Wed, 21 Jan 2015 11:04:58 +0100
-
-fim (0.4~rc2-1) UNRELEASED; urgency=medium
-
-  * New upstream release snapshot.
-
- -- Gianfranco Costamagna <costamagnagianfranco@yahoo.it>  Wed, 21 Jan 2015 11:04:58 +0100
+ -- Michele Martone <michele.martone@uniroma2.it>  Thu, 04 Feb 2016 14:44:43 +0100
 
 fim (0.3-beta-prerelease-1.3) unstable; urgency=low
 
