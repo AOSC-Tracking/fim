@@ -34,7 +34,12 @@
 
 #define FIM_INTERPRETER_OBSOLETE 0 /* candidates for removal */
 #define FIM_NO_BREAK fim::cc.catchLoopBreakingCommand(0)==0
-#define FIM_OPRND(P,N) (P)->opr.op[(N)]
+#define FIM_OPRND(P,N) ((P)->opr.op[(N)])
+#define FIM_FACC(O,N)  (O)->fid.f
+#define FIM_IACC(O)  (O)->con.value
+#define FIM_NOPS(O)  (O)->opr.nops
+#define FIM_FOPRND(P,N) FIM_FACC(FIM_OPRND(P,N))
+#define FIM_IOPRND(P,N) FIM_IACC(FIM_OPRND(P,N))
 
 namespace fim
 {
@@ -64,7 +69,7 @@ static Var cvar(nodeType *p)
 	if(p->type == typeOpr && p->opr.oper==FIM_SYM_STRING_CONCAT)
 	{
 		DBG(".:"<<FIM_SYM_ENDL);
-		for(i=0;i<p->opr.nops;++i)
+		for(i=0;i<FIM_NOPS(p);++i)
 		{
 			np=(p->opr.op[i]);
 			arg+=(string)(cvar(np).getString());
@@ -100,8 +105,8 @@ static Var cvar(nodeType *p)
 	else if(p->type == intCon )
 	{
 		/* FIXME : int cast is due to some sick inner conversion */
-		DBG("cvar:intCon:"<<p->con.value<<FIM_SYM_ENDL);
-		return Var((fim_int)(p->con.value));
+		DBG("cvar:intCon:"<<FIM_IACC(p)<<FIM_SYM_ENDL);
+		return Var((fim_int)(FIM_IACC(p)));
 	}
 	else if(p->type == floatCon)
 	{
@@ -185,7 +190,7 @@ Var ex(nodeType *p)
 	{
 		case intCon:
 			DBG("intCon:\n");
-			return (fim_int)p->con.value;
+			return (fim_int)FIM_IACC(p);
 	        case floatCon:
 			DBG("ex:floatCon:"<<p->fid.f<<FIM_SYM_ENDL);
 			return p->fid.f;
@@ -259,17 +264,17 @@ Var ex(nodeType *p)
 			   * execute.
 			   */
 			  {
-			  	if( p->opr.nops<1 )
+			  	if( FIM_NOPS(p) < 1 )
 			  	{
 					DBG("INTERNAL ERROR\n");
 					goto err;
 				}
-			  if(p->opr.nops==2)	//int yacc.ypp we specified only 2 ops per x node
+			  if(FIM_NOPS(p)==2)	//int yacc.ypp we specified only 2 ops per x node
 		          {
 				  nodeType *np=p;	
 				  //nodeType *dp;
 	                          np=(FIM_OPRND(np,1)); //the right subtree first node
-				  while( np &&    np->opr.nops >=1 )
+				  while( np &&    FIM_NOPS(np) >=1 )
 				  if( np->opr.oper=='a' )
 			  	  {
 					  std::vector<fim::string> na;
@@ -278,7 +283,7 @@ Var ex(nodeType *p)
                                           {
 						//std::cout << "?"<<na[i]<<FIM_SYM_ENDL;
 						args.push_back(na[i]);}// FIXME : non sono sicuro che questo serva
-					  	DBG("A:"<<np->opr.nops<<FIM_SYM_ENDL);
+					  	DBG("A:"<<FIM_NOPS(np)<<FIM_SYM_ENDL);
 						break;
 #if 0
 					  return 0;
@@ -288,7 +293,7 @@ Var ex(nodeType *p)
 					   */
 					  dp=FIM_OPRND(np,0);	//we descend 1 step in the left subtree (under arg)
 					  dp=FIM_OPRND(dp,0);
-	                          	  if(np->opr.nops < 2) 
+	                          	  if(FIM_NOPS(np) < 2) 
 					  {
 						np=FIM_NULL;
 				          }
@@ -351,7 +356,7 @@ Var ex(nodeType *p)
 			if(typeHint==FIM_SYM_TYPE_FLOAT)
 			{
 				DBG("SVf"<<s<<FIM_SYM_ENDL);
-				fValue=FIM_OPRND(p,1)->fid.f;
+				fValue=FIM_FOPRND(p,1);
 				fim::cc.setVariable(s,fValue);
 				return (fim_int)fValue;
 			}
@@ -419,7 +424,7 @@ Var ex(nodeType *p)
 			case UMINUS: return Var((fim_int)0) - ex(FIM_OPRND(p,0));
 			case '-': 
 				DBG("SUB\n");
-				if ( 2==p->opr.nops) {Var d= ex(FIM_OPRND(p,0)) - ex(FIM_OPRND(p,1));return d;}
+				if ( 2==FIM_NOPS(p) ) {Var d= ex(FIM_OPRND(p,0)) - ex(FIM_OPRND(p,1));return d;}
 				else return Var((fim_int)0) - ex(FIM_OPRND(p,0));
 			case '*': return ex(FIM_OPRND(p,0)) * ex(FIM_OPRND(p,1));
 			case '<': return ex(FIM_OPRND(p,0)) < ex(FIM_OPRND(p,1));
