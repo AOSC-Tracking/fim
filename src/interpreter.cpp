@@ -33,6 +33,8 @@
 #endif
 
 #define FIM_INTERPRETER_OBSOLETE 0 /* candidates for removal */
+#define FIM_NO_BREAK fim::cc.catchLoopBreakingCommand(0)==0
+#define FIM_OPRND(P,N) (P)->opr.op[(N)]
 
 namespace fim
 {
@@ -174,7 +176,7 @@ Var ex(nodeType *p)
 	float fValue;
 	fim_char_t *s=FIM_NULL;
   	std::vector<fim::string> args;
-	int typeHint;
+	fim_int typeHint;
 
 	if (!p)
 		goto ret;
@@ -193,7 +195,7 @@ Var ex(nodeType *p)
 			// eventually may handle already here if p->scon.s is "random" ...
 			if(fim::cc.getVariableType(p->scon.s)==FIM_SYM_TYPE_INT)
 			{
-				DBG("vId:"<<p->scon.s<<":"<<(int)fim::cc.getIntVariable(p->scon.s)<<FIM_SYM_ENDL);
+				DBG("vId:"<<p->scon.s<<":"<<(fim_int)fim::cc.getIntVariable(p->scon.s)<<FIM_SYM_ENDL);
 				return fim::cc.getVariable(p->scon.s);
 			}
 
@@ -219,32 +221,32 @@ Var ex(nodeType *p)
 #if FIM_INTERPRETER_OBSOLETE
 			case FIM_SYM_STRING_CONCAT:
 				DBG(".:\n");
-				return (ex(p->opr.op[0]) + ex(p->opr.op[1])); // TODO: the , operator
+				return (ex(FIM_OPRND(p,0)) + ex(FIM_OPRND(p,1))); // TODO: the , operator
 #endif /* FIM_INTERPRETER_OBSOLETE */
 			case WHILE:
-				while(ex(p->opr.op[0]).getInt() && (fim::cc.catchLoopBreakingCommand(0)==0))
-					ex(p->opr.op[1]);
-				return (fim_int)0;
+				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK )
+					ex(FIM_OPRND(p,1));
+				goto ret;
 			case IF:
-				DBG("IF:"<<(ex(p->opr.op[0]).getInt())<<FIM_SYM_ENDL);
-				if (ex(p->opr.op[0]).getInt())
-					ex(p->opr.op[1]);
+				DBG("IF:"<<(ex(FIM_OPRND(p,0)).getInt())<<FIM_SYM_ENDL);
+				if (ex(FIM_OPRND(p,0)).getInt())
+					ex(FIM_OPRND(p,1));
 				else if (p->opr.nops > 2)
-					ex(p->opr.op[2]);
-				return (fim_int)0;
+					ex(FIM_OPRND(p,2));
+				goto ret;
 			case FIM_SYM_SEMICOLON:
 				DBG(";:\n"); // cmd;cmd
-				ex(p->opr.op[0]);
-				return ex(p->opr.op[1]);
+				ex(FIM_OPRND(p,0));
+				return ex(FIM_OPRND(p,1));
 			case 'r':
 				DBG("r\n");
 			if( p->opr.nops == 2 )
 			{
-				int times=ex(p->opr.op[1]).getInt();
+				fim_int times=ex(FIM_OPRND(p,1)).getInt();
 				if(times<0)
 					goto err;
-				for (int i=0;i<times && fim::cc.catchLoopBreakingCommand(0)==0;++i)
-					ex(p->opr.op[0]);
+				for (fim_int i=0;i<times && FIM_NO_BREAK ;++i)
+					ex(FIM_OPRND(p,0));
 				goto ret;
 			}
 			else
@@ -266,7 +268,7 @@ Var ex(nodeType *p)
 		          {
 				  nodeType *np=p;	
 				  //nodeType *dp;
-	                          np=(np->opr.op[1]); //the right subtree first node
+	                          np=(FIM_OPRND(np,1)); //the right subtree first node
 				  while( np &&    np->opr.nops >=1 )
 				  if( np->opr.oper=='a' )
 			  	  {
@@ -284,21 +286,21 @@ Var ex(nodeType *p)
 					   * we descend the right subtree  (the subtree of arguments)
 					   * (thus we waste the benefit of the multi argument operator!)
 					   */
-					  dp=np->opr.op[0];	//we descend 1 step in the left subtree (under arg)
-					  dp=dp->opr.op[0];
+					  dp=FIM_OPRND(np,0);	//we descend 1 step in the left subtree (under arg)
+					  dp=FIM_OPRND(dp,0);
 	                          	  if(np->opr.nops < 2) 
 					  {
 						np=FIM_NULL;
 				          }
 					  else
 					  {
-						np=(np->opr.op[1]);
+						np=(FIM_OPRND(np,1));
 				          }
-	                   		  if( ((dp->opr.op[0])) && (dp->type)==stringCon)//|| (dp->type)==intCon) 
+	                   		  if( ((FIM_OPRND(dp,0))) && (dp->type)==stringCon)//|| (dp->type)==intCon) 
 					  {	
 						  //probably dead code
 					  }
-	                   		  if( ((dp->opr.op[0])) && (dp->type)==typeOpr)//|| (dp->type)==intCon) 
+	                   		  if( ((FIM_OPRND(dp,0))) && (dp->type)==typeOpr)//|| (dp->type)==intCon) 
 					  {	
 						  //probably dead code
 					  }
@@ -313,8 +315,8 @@ Var ex(nodeType *p)
 				  }
 			  	  else if( np->opr.oper==FIM_SYM_STRING_CONCAT )
 				  {
-				  	//cout <<  "DEAD CODE\n";
-					  //probably dead code
+					//cout <<  "DEAD CODE\n";
+					//probably dead code
 				  }
 			  }
 			  {
@@ -323,15 +325,15 @@ Var ex(nodeType *p)
 				 * single command execution
 				 */
 				fim::string result;
-				//std::cout  <<"GULP:"<< p->opr.op[0]->scon.s<< args[0] <<FIM_SYM_ENDL;
+				//std::cout  <<"GULP:"<< FIM_OPRND(p,0)->scon.s<< args[0] <<FIM_SYM_ENDL;
 //				if(args.size()>0)
-//					std::cout  <<"GULP:"<< (int*)p->opr.op[0]->scon.s<<" "<<p->opr.op[0]->scon.s<<" "<<args[0] <<FIM_SYM_ENDL;
+//					std::cout  <<"GULP:"<< (fim_int*)FIM_OPRND(p,0)->scon.s<<" "<<FIM_OPRND(p,0)->scon.s<<" "<<args[0] <<FIM_SYM_ENDL;
 //				else
 //					std::cout  <<"GULP:"<< args.size() <<FIM_SYM_ENDL;
 				if(p)
-				if(p->opr.op[0])
-				if(p->opr.op[0]->scon.s) result =
-				       	fim::cc.execute(p->opr.op[0]->scon.s,args);
+				if(FIM_OPRND(p,0))
+				if(FIM_OPRND(p,0)->scon.s) result =
+				       	fim::cc.execute(FIM_OPRND(p,0)->scon.s,args);
 				/* sometimes there are NULLs  : BAD !!  */
 				return fim_atoi(result.c_str());
 			  }
@@ -339,32 +341,32 @@ Var ex(nodeType *p)
 		case 'a':
 			// we shouldn't be here, because 'a' (argument) nodes are evaluated elsewhere
 			assert(0);
-			return (fim_int)-1;
+			goto err;
 		case '=':
 			//assignment of a variable
-			s=p->opr.op[0]->scon.s;
+			s=FIM_OPRND(p,0)->scon.s;
 			DBG("SV:"<<s<<FIM_SYM_ENDL)
-			typeHint=p->opr.op[0]->typeHint;
+			typeHint=FIM_OPRND(p,0)->typeHint;
 #if FIM_INTERPRETER_OBSOLETE
 			if(typeHint==FIM_SYM_TYPE_FLOAT)
 			{
 				DBG("SVf"<<s<<FIM_SYM_ENDL);
-				fValue=p->opr.op[1]->fid.f;
+				fValue=FIM_OPRND(p,1)->fid.f;
 				fim::cc.setVariable(s,fValue);
 				return (fim_int)fValue;
 			}
 			else if(typeHint=='s')
 			{
 				DBG("SVs\n");
-				if(p->opr.op[1]->type!=stringCon)
+				if(FIM_OPRND(p,1)->type!=stringCon)
 				{
 					//this shouldn't happen
 				}
 				else 
 				{
-					DBG("SVs:"<<s<<":"<<p->opr.op[0]->scon.s<<FIM_SYM_ENDL);
+					DBG("SVs:"<<s<<":"<<FIM_OPRND(p,0)->scon.s<<FIM_SYM_ENDL);
 					// got a string!
-		       		        fim::cc.setVariable(s,p->opr.op[0]->scon.s);
+		       		        fim::cc.setVariable(s,FIM_OPRND(p,0)->scon.s);
 #if 0
 					if(0 && 0==strcmp(s,"random"))
 			                	return fim_rand();//FIXME
@@ -373,11 +375,11 @@ Var ex(nodeType *p)
 			                	//return fim::cc.getIntVariable(s);
 			                	return fim::cc.getStringVariable(s);
 				}
-				return (fim_int)-1;
+				goto err;
 			}//FIM_SYM_TYPE_INT
 			else if(typeHint==FIM_SYM_TYPE_INT)
 			{
-				iValue=ex(p->opr.op[1]).getInt();
+				iValue=ex(FIM_OPRND(p,1)).getInt();
 				DBG("SVi:"<<s<<":"<<iValue<<""<<FIM_SYM_ENDL);
 				fim::cc.setVariable(s,iValue);
 				return iValue;
@@ -392,21 +394,11 @@ Var ex(nodeType *p)
 			if(typeHint=='a')
 			{
 				DBG("SVa\n");
-				Var v=cvar(p->opr.op[1]);
+				Var v=cvar(FIM_OPRND(p,1));
 				fim::cc.setVariable(s,v);
 			        DBG("SET:"<<s<<":"<<v.getString()<<" '"<<(fim_char_t)v.getType()<<"'\n");
 			        DBG("GET:"<<s<<":"<<fim::cc.getVariable(s).getString()<<" "<<(fim_char_t)fim::cc.getVariable(s).getType()<<FIM_SYM_ENDL);
-			        //DBG("GET:"<<s<<":"<<fim::cc.getStringVariable(s)<<FIM_SYM_ENDL);
-
-				if(/*want_bugs*/0)
-				{
-					//fim::cc.setVariable(s,r.c_str());
-				        string rs = fim::cc.getStringVariable(s);
-					DBG("RS:"<<rs <<FIM_SYM_ENDL);
-					return rs;
-				}
-				else
-				       	return v;
+			       	return v;
 			}
 			else
 			{
@@ -416,32 +408,32 @@ Var ex(nodeType *p)
 #endif /* FIM_INTERPRETER_OBSOLETE */
 			}
 #if FIM_WANT_AVOID_FP_EXCEPTIONS
-			case '%': {Var v1=ex(p->opr.op[0]),v2=ex(p->opr.op[1]); if(v2.getInt())return v1%v2; else return v2;};
-			case '/': {Var v1=ex(p->opr.op[0]),v2=ex(p->opr.op[1]); if(v2.getInt())return v1/v2; else return v2;};
+			case '%': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1%v2; else return v2;};
+			case '/': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1/v2; else return v2;};
 #else /* FIM_WANT_AVOID_FP_EXCEPTIONS */
-			case '%': return ex(p->opr.op[0]) % ex(p->opr.op[1]); // FIXME: may generate an exception
-			case '/': return ex(p->opr.op[0]) / ex(p->opr.op[1]); // FIXME: may generate an exception
+			case '%': return ex(FIM_OPRND(p,0)) % ex(FIM_OPRND(p,1)); // FIXME: may generate an exception
+			case '/': return ex(FIM_OPRND(p,0)) / ex(FIM_OPRND(p,1)); // FIXME: may generate an exception
 #endif /* FIM_WANT_AVOID_FP_EXCEPTIONS */
-			case '+': return ex(p->opr.op[0]) + ex(p->opr.op[1]);
-			case '!': return (fim_int)(((ex(p->opr.op[0])).getInt())==0?1:0);
-			case UMINUS: return Var((fim_int)0) - ex(p->opr.op[0]);
+			case '+': return ex(FIM_OPRND(p,0)) + ex(FIM_OPRND(p,1));
+			case '!': return (fim_int)(((ex(FIM_OPRND(p,0))).getInt())==0?1:0);
+			case UMINUS: return Var((fim_int)0) - ex(FIM_OPRND(p,0));
 			case '-': 
 				DBG("SUB\n");
-				if ( 2==p->opr.nops) {Var d= ex(p->opr.op[0]) - ex(p->opr.op[1]);return d;}
-				else return Var((fim_int)0) - ex(p->opr.op[0]);
-			case '*': return ex(p->opr.op[0]) * ex(p->opr.op[1]);
-			case '<': return ex(p->opr.op[0]) < ex(p->opr.op[1]);
-			case '>': return ex(p->opr.op[0]) > ex(p->opr.op[1]);
+				if ( 2==p->opr.nops) {Var d= ex(FIM_OPRND(p,0)) - ex(FIM_OPRND(p,1));return d;}
+				else return Var((fim_int)0) - ex(FIM_OPRND(p,0));
+			case '*': return ex(FIM_OPRND(p,0)) * ex(FIM_OPRND(p,1));
+			case '<': return ex(FIM_OPRND(p,0)) < ex(FIM_OPRND(p,1));
+			case '>': return ex(FIM_OPRND(p,0)) > ex(FIM_OPRND(p,1));
 			//comparison operators : evaluation to integer..
-			case GE: return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
-			case LE: return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
-			case NE: return ex(p->opr.op[0]) != ex(p->opr.op[1]);
-			case EQ: {DBG("EQ\n");return ex(p->opr.op[0]) == ex(p->opr.op[1]);}
-			case REGEXP_MATCH: return ex(p->opr.op[0]).re_match(ex(p->opr.op[1]));
-			case AND:return ex(p->opr.op[0]) && ex(p->opr.op[1]);
-			case OR :return ex(p->opr.op[0]) || ex(p->opr.op[1]);
-			case BOR :return ex(p->opr.op[0]) | ex(p->opr.op[1]);
-			case BAND:return ex(p->opr.op[0]) & ex(p->opr.op[1]);
+			case GE: return ex(FIM_OPRND(p,0)) >= ex(FIM_OPRND(p,1));
+			case LE: return ex(FIM_OPRND(p,0)) <= ex(FIM_OPRND(p,1));
+			case NE: return ex(FIM_OPRND(p,0)) != ex(FIM_OPRND(p,1));
+			case EQ: {DBG("EQ\n");return ex(FIM_OPRND(p,0)) == ex(FIM_OPRND(p,1));}
+			case REGEXP_MATCH: return ex(FIM_OPRND(p,0)).re_match(ex(FIM_OPRND(p,1)));
+			case AND:return ex(FIM_OPRND(p,0)) && ex(FIM_OPRND(p,1));
+			case OR :return ex(FIM_OPRND(p,0)) || ex(FIM_OPRND(p,1));
+			case BOR :return ex(FIM_OPRND(p,0)) | ex(FIM_OPRND(p,1));
+			case BAND:return ex(FIM_OPRND(p,0)) & ex(FIM_OPRND(p,1));
 			default: goto err;
 		}
 	}
