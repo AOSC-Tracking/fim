@@ -35,11 +35,17 @@
 #define FIM_INTERPRETER_OBSOLETE 0 /* candidates for removal */
 #define FIM_NO_BREAK fim::cc.catchLoopBreakingCommand(0)==0
 #define FIM_OPRND(P,N) ((P)->opr.op[(N)])
-#define FIM_FACC(O,N)  (O)->fid.f
+#define FIM_FACC(O)  (O)->fid.f
+#define FIM_SACC(O)  (O)->scon.s
 #define FIM_IACC(O)  (O)->con.value
 #define FIM_NOPS(O)  (O)->opr.nops
 #define FIM_FOPRND(P,N) FIM_FACC(FIM_OPRND(P,N))
 #define FIM_IOPRND(P,N) FIM_IACC(FIM_OPRND(P,N))
+#define FIM_OPRNDO(P) (P)->opr.oper
+#define FIM_OPRNDT(P) (P)->type
+#define FIM_OPRNDH(P) (P)->typeHint
+#define FIM_GV(V) fim::cc.getVariable(V)
+#define FIM_SV(I,V) fim::cc.setVariable(I,V)
 
 namespace fim
 {
@@ -66,52 +72,52 @@ static Var cvar(nodeType *p)
   	fim::string arg;
 	int i;
 
-	if(p->type == typeOpr && p->opr.oper==FIM_SYM_STRING_CONCAT)
+	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(p)==FIM_SYM_STRING_CONCAT)
 	{
 		DBG(".:"<<FIM_SYM_ENDL);
 		for(i=0;i<FIM_NOPS(p);++i)
 		{
-			np=(p->opr.op[i]);
+			np=(FIM_OPRND(p,i));
 			arg+=(string)(cvar(np).getString());
 		}
 		goto ret;
 	}
 #if FIM_INTERPRETER_OBSOLETE
 	else
-	if(p->type == typeOpr && p->opr.oper=='a' )
+	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(p)=='a' )
 	{
 		DBG("a:"<<FIM_SYM_ENDL);
-		for(i=0;i<p->opr.nops;++i)
+		for(i=0;i<FIM_NOPS(p);++i)
 		{
 			//warning : only 1 should be allowed here..
-			np=(p->opr.op[i]);
+			np=(FIM_OPRND(p,i));
 			arg=cvar(np).getString();
 		}
 	}
 #endif /* FIM_INTERPRETER_OBSOLETE */
 	else
-	if(p->type == stringCon )
+	if(FIM_OPRNDT(p) == stringCon )
 	{
 		DBG("stringCon:"<<FIM_SYM_ENDL);
-		arg=(p->scon.s);
+		arg=(FIM_SACC(p));
 		return arg;
 	}
 	else
-	if(p->type == vId )
+	if(FIM_OPRNDT(p) == vId )
 	{	
 		DBG("cvId:"<<FIM_SYM_ENDL);
-		return fim::cc.getVariable(p->scon.s);
+		return FIM_GV(FIM_SACC(p));
 	}
-	else if(p->type == intCon )
+	else if(FIM_OPRNDT(p) == intCon )
 	{
 		/* FIXME : int cast is due to some sick inner conversion */
 		DBG("cvar:intCon:"<<FIM_IACC(p)<<FIM_SYM_ENDL);
 		return Var((fim_int)(FIM_IACC(p)));
 	}
-	else if(p->type == floatCon)
+	else if(FIM_OPRNDT(p) == floatCon)
 	{
-		DBG("cvar:floatCon:"<<p->fid.f<<FIM_SYM_ENDL);
-		return p->fid.f;
+		DBG("cvar:floatCon:"<<FIM_FACC(p)<<FIM_SYM_ENDL);
+		return FIM_FACC(p);
 	}
 	else
 	{
@@ -129,17 +135,17 @@ static std::vector<fim::string> var(nodeType *p)
   	std::vector<fim::string> args;
 	int i;
 
-	if(p->type == typeOpr && np->opr.oper=='a' )
-	for(i=0;i<p->opr.nops;++i)
+	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(np)=='a' )
+	for(i=0;i<FIM_NOPS(p);++i)
 	{
-		DBG("'a'args:"<<i<<"/"<<p->opr.nops<<":\n");
-		np=(p->opr.op[i]);
-		if(np->type == stringCon )
+		DBG("'a'args:"<<i<<"/"<<FIM_NOPS(p)<<":\n");
+		np=(FIM_OPRND(p,i));
+		if(FIM_OPRNDT(np) == stringCon )
 		{
-			args.push_back(np->scon.s);
+			args.push_back(FIM_SACC(np));
 		}
 		else
-		if(np->type == typeOpr && np->opr.oper=='a' )
+		if(FIM_OPRNDT(np) == typeOpr && FIM_OPRNDO(np)=='a' )
 		{
 		  	std::vector<fim::string> vargs=var(np);
 			for(size_t j=0;j<vargs.size();++j) args.push_back(vargs[j]);
@@ -153,12 +159,12 @@ static std::vector<fim::string> var(nodeType *p)
 	}
 #if FIM_INTERPRETER_OBSOLETE
 	else
-	if(p->type == typeOpr && np->opr.oper==FIM_SYM_STRING_CONCAT)
-	for(i=0;i<p->opr.nops;++i)
+	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT)
+	for(i=0;i<FIM_NOPS(p);++i)
 	{
-		DBG("'i'args:"<<i<<"/"<<p->opr.nops<<":\n");
-		np=(p->opr.op[i]);
-		if(np->type == typeOpr && np->opr.oper==FIM_SYM_STRING_CONCAT)
+		DBG("'i'args:"<<i<<"/"<<FIM_NOPS(p)<<":\n");
+		np=(FIM_OPRND(p,i));
+		if(FIM_OPRNDT(np) == typeOpr && FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT)
 		{
 		  	std::vector<fim::string> vargs=var(np);
 			for(size_t j=0;j<vargs.size();++j) args.push_back(vargs[j]);
@@ -186,42 +192,42 @@ Var ex(nodeType *p)
 	if (!p)
 		goto ret;
 
-	switch(p->type)
+	switch(FIM_OPRNDT(p))
 	{
 		case intCon:
 			DBG("intCon:\n");
 			return (fim_int)FIM_IACC(p);
 	        case floatCon:
-			DBG("ex:floatCon:"<<p->fid.f<<FIM_SYM_ENDL);
-			return p->fid.f;
+			DBG("ex:floatCon:"<<FIM_FACC(p)<<FIM_SYM_ENDL);
+			return FIM_FACC(p);
 		case vId:
 		{
 			DBG("vId:\n");
-			// eventually may handle already here if p->scon.s is "random" ...
-			if(fim::cc.getVariableType(p->scon.s)==FIM_SYM_TYPE_INT)
+			// eventually may handle already here if FIM_SACC(p) is "random" ...
+			if(fim::cc.getVariableType(FIM_SACC(p))==FIM_SYM_TYPE_INT)
 			{
-				DBG("vId:"<<p->scon.s<<":"<<(fim_int)fim::cc.getIntVariable(p->scon.s)<<FIM_SYM_ENDL);
-				return fim::cc.getVariable(p->scon.s);
+				DBG("vId:"<<FIM_SACC(p)<<":"<<(fim_int)fim::cc.getIntVariable(FIM_SACC(p))<<FIM_SYM_ENDL);
+				return FIM_GV(FIM_SACC(p));
 			}
 
-			if(fim::cc.getVariableType(p->scon.s)==FIM_SYM_TYPE_FLOAT)
+			if(fim::cc.getVariableType(FIM_SACC(p))==FIM_SYM_TYPE_FLOAT)
 			{
 				DBG("'f':\n");
-				return fim::cc.getVariable(p->scon.s);
+				return FIM_GV(FIM_SACC(p));
 			}
 			else
 			{
 				DBG("'s':\n");
-				return fim::cc.getVariable(p->scon.s);
+				return FIM_GV(FIM_SACC(p));
 			}
 		}
 		case stringCon:
 			DBG("'stringCon':\n");
 			// a single string token was encountered
-			return Var(p->scon.s);
+			return Var(FIM_SACC(p));
 		case typeOpr:	/*	some operator	*/
 			DBG("'typeOpr':\n");
-		switch(p->opr.oper)
+		switch(FIM_OPRNDO(p))
 		{
 #if FIM_INTERPRETER_OBSOLETE
 			case FIM_SYM_STRING_CONCAT:
@@ -236,7 +242,7 @@ Var ex(nodeType *p)
 				DBG("IF:"<<(ex(FIM_OPRND(p,0)).getInt())<<FIM_SYM_ENDL);
 				if (ex(FIM_OPRND(p,0)).getInt())
 					ex(FIM_OPRND(p,1));
-				else if (p->opr.nops > 2)
+				else if (FIM_NOPS(p) > 2)
 					ex(FIM_OPRND(p,2));
 				goto ret;
 			case FIM_SYM_SEMICOLON:
@@ -245,7 +251,7 @@ Var ex(nodeType *p)
 				return ex(FIM_OPRND(p,1));
 			case 'r':
 				DBG("r\n");
-			if( p->opr.nops == 2 )
+			if( FIM_NOPS(p) == 2 )
 			{
 				fim_int times=ex(FIM_OPRND(p,1)).getInt();
 				if(times<0)
@@ -275,7 +281,7 @@ Var ex(nodeType *p)
 				  //nodeType *dp;
 	                          np=(FIM_OPRND(np,1)); //the right subtree first node
 				  while( np &&    FIM_NOPS(np) >=1 )
-				  if( np->opr.oper=='a' )
+				  if( FIM_OPRNDO(np)=='a' )
 			  	  {
 					  std::vector<fim::string> na;
 					  na=var(np);
@@ -301,15 +307,15 @@ Var ex(nodeType *p)
 					  {
 						np=(FIM_OPRND(np,1));
 				          }
-	                   		  if( ((FIM_OPRND(dp,0))) && (dp->type)==stringCon)//|| (dp->type)==intCon) 
+	                   		  if( ((FIM_OPRND(dp,0))) && (dFIM_OPRNDT(p))==stringCon)//|| (dFIM_OPRNDT(p))==intCon) 
 					  {	
 						  //probably dead code
 					  }
-	                   		  if( ((FIM_OPRND(dp,0))) && (dp->type)==typeOpr)//|| (dp->type)==intCon) 
+	                   		  if( ((FIM_OPRND(dp,0))) && (dFIM_OPRNDT(p))==typeOpr)//|| (dFIM_OPRNDT(p))==intCon) 
 					  {	
 						  //probably dead code
 					  }
-					  else if( ((dp->opr.oper==FIM_SYM_STRING_CONCAT)))
+					  else if( ((dFIM_OPRNDO(p)==FIM_SYM_STRING_CONCAT)))
 					  {
 				  	//cout <<  "DEAD CODE\n";
 						  //probably dead code
@@ -318,7 +324,7 @@ Var ex(nodeType *p)
 					  assert(dp);
 #endif
 				  }
-			  	  else if( np->opr.oper==FIM_SYM_STRING_CONCAT )
+			  	  else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
 				  {
 					//cout <<  "DEAD CODE\n";
 					//probably dead code
@@ -330,15 +336,15 @@ Var ex(nodeType *p)
 				 * single command execution
 				 */
 				fim::string result;
-				//std::cout  <<"GULP:"<< FIM_OPRND(p,0)->scon.s<< args[0] <<FIM_SYM_ENDL;
+				//std::cout  <<"GULP:"<< FIM_SACC(FIM_OPRND(p,0))<< args[0] <<FIM_SYM_ENDL;
 //				if(args.size()>0)
-//					std::cout  <<"GULP:"<< (fim_int*)FIM_OPRND(p,0)->scon.s<<" "<<FIM_OPRND(p,0)->scon.s<<" "<<args[0] <<FIM_SYM_ENDL;
+//					std::cout  <<"GULP:"<< (fim_int*)FIM_SACC(FIM_OPRND(p,0))<<" "<<FIM_SACC(FIM_OPRND(p,0))<<" "<<args[0] <<FIM_SYM_ENDL;
 //				else
 //					std::cout  <<"GULP:"<< args.size() <<FIM_SYM_ENDL;
 				if(p)
 				if(FIM_OPRND(p,0))
-				if(FIM_OPRND(p,0)->scon.s) result =
-				       	fim::cc.execute(FIM_OPRND(p,0)->scon.s,args);
+				if(FIM_SACC(FIM_OPRND(p,0))) result =
+				       	fim::cc.execute(FIM_SACC(FIM_OPRND(p,0)),args);
 				/* sometimes there are NULLs  : BAD !!  */
 				return fim_atoi(result.c_str());
 			  }
@@ -349,29 +355,29 @@ Var ex(nodeType *p)
 			goto err;
 		case '=':
 			//assignment of a variable
-			s=FIM_OPRND(p,0)->scon.s;
+			s=FIM_SACC(FIM_OPRND(p,0));
 			DBG("SV:"<<s<<FIM_SYM_ENDL)
-			typeHint=FIM_OPRND(p,0)->typeHint;
+			typeHint=FIM_OPRNDH(FIM_OPRND(p,0));
 #if FIM_INTERPRETER_OBSOLETE
 			if(typeHint==FIM_SYM_TYPE_FLOAT)
 			{
 				DBG("SVf"<<s<<FIM_SYM_ENDL);
 				fValue=FIM_FOPRND(p,1);
-				fim::cc.setVariable(s,fValue);
+				FIM_SV(s,fValue);
 				return (fim_int)fValue;
 			}
 			else if(typeHint=='s')
 			{
 				DBG("SVs\n");
-				if(FIM_OPRND(p,1)->type!=stringCon)
+				if(FIM_OPRNDT(FIM_OPRND(p,1))!=stringCon)
 				{
 					//this shouldn't happen
 				}
 				else 
 				{
-					DBG("SVs:"<<s<<":"<<FIM_OPRND(p,0)->scon.s<<FIM_SYM_ENDL);
+					DBG("SVs:"<<s<<":"<<FIM_SACC(FIM_OPRND(p,0))<<FIM_SYM_ENDL);
 					// got a string!
-		       		        fim::cc.setVariable(s,FIM_OPRND(p,0)->scon.s);
+		       		        FIM_SV(s,FIM_SACC(FIM_OPRND(p,0)));
 #if 0
 					if(0 && 0==strcmp(s,"random"))
 			                	return fim_rand();//FIXME
@@ -386,7 +392,7 @@ Var ex(nodeType *p)
 			{
 				iValue=ex(FIM_OPRND(p,1)).getInt();
 				DBG("SVi:"<<s<<":"<<iValue<<""<<FIM_SYM_ENDL);
-				fim::cc.setVariable(s,iValue);
+				FIM_SV(s,iValue);
 				return iValue;
 			}
 			else if(typeHint=='v')
@@ -400,9 +406,9 @@ Var ex(nodeType *p)
 			{
 				DBG("SVa\n");
 				Var v=cvar(FIM_OPRND(p,1));
-				fim::cc.setVariable(s,v);
+				FIM_SV(s,v);
 			        DBG("SET:"<<s<<":"<<v.getString()<<" '"<<(fim_char_t)v.getType()<<"'\n");
-			        DBG("GET:"<<s<<":"<<fim::cc.getVariable(s).getString()<<" "<<(fim_char_t)fim::cc.getVariable(s).getType()<<FIM_SYM_ENDL);
+			        DBG("GET:"<<s<<":"<<FIM_GV(s).getString()<<" "<<(fim_char_t)FIM_GV(s).getType()<<FIM_SYM_ENDL);
 			       	return v;
 			}
 			else
