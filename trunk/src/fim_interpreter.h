@@ -23,12 +23,34 @@
 
 #ifndef FIM_INTERPRETER_H
 #define FIM_INTERPRETER_H
+#include "fim.h"
 
+#if FIM_INDEPENDENT_NAMESPACE
 #define FIM_SCON(V) scon(V)
 #define FIM_VSCON(V,T) vscon(V,T)
 #define FIM_FCON(V) fcon(V)
 #define FIM_ICON(V) con(V)
 #define FIM_OPR opr
 #define FIM_FREENODE freeNode
+#else /* FIM_INDEPENDENT_NAMESPACE */
+#define FIM_SCON(V) scon(V)
+#define FIM_VSCON(V,T) vscon(V,T)
+#define FIM_FCON(V) fcon(V)
+#define FIM_ICON(V) con(V)
+#define FIM_OPR opr
+#define FIM_FREENODE freeNode
+#endif /* FIM_INDEPENDENT_NAMESPACE */
+
+/* TODO: need to rename the functions in here */
+
+void yyerror(const fim_char_t *s);
+nodeType *opr(int oper, int nops, ...);
+//nodeType *fid(float f);
+nodeType *con(fim_int value);
+nodeType *fcon(float fValue);
+nodeType *scon(fim_char_t* s);
+nodeType *vscon(fim_char_t*s,int typeHint);
+void freeNode(nodeType *p);
+Var ex(nodeType *p);
 
 #endif /* FIM_INTERPRETER_H */
