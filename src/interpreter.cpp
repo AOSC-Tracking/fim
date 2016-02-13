@@ -32,6 +32,25 @@
 #define DBG(X) 
 #endif
 
+#if FIM_INDEPENDENT_NAMESPACE
+#define FIM_INTERPRETER_OBSOLETE 0 /* candidates for removal */
+#define FIM_NO_BREAK /* fim::cc.catchLoopBreakingCommand(0)==0 */ 1
+#define FIM_OPRND(P,N) ((P)->opr.op[(N)])
+#define FIM_FACC(O)  (O)->fid.f
+#define FIM_SACC(O)  (O)->scon.s
+#define FIM_IACC(O)  (O)->con.value
+#define FIM_NOPS(O)  (O)->opr.nops
+#define FIM_FOPRND(P,N) FIM_FACC(FIM_OPRND(P,N))
+#define FIM_IOPRND(P,N) FIM_IACC(FIM_OPRND(P,N))
+#define FIM_OPRNDO(P) (P)->opr.oper
+#define FIM_OPRNDT(P) (P)->type
+#define FIM_OPRNDH(P) (P)->typeHint
+#define FIM_GV(V) Var((fim_int)1) /* fim::cc.getVariable(V) */
+#define FIM_SV(I,V) /*fim::cc.setVariable(I,V)*/
+#define FIM_GVT(V) /*fim::cc.getVariableType(V)*/FIM_SYM_TYPE_FLOAT
+#define FIM_EC(CMD,ARGS) /* fim::cc.execute(CMD,ARGS) */ "result" /*Var((fim_int)1)*/ /* FIXME: shall return Arg or Var or Val */
+typedef nodeType * NodeType;
+#else /* FIM_INDEPENDENT_NAMESPACE */
 #define FIM_INTERPRETER_OBSOLETE 0 /* candidates for removal */
 #define FIM_NO_BREAK fim::cc.catchLoopBreakingCommand(0)==0
 #define FIM_OPRND(P,N) ((P)->opr.op[(N)])
@@ -46,6 +65,10 @@
 #define FIM_OPRNDH(P) (P)->typeHint
 #define FIM_GV(V) fim::cc.getVariable(V)
 #define FIM_SV(I,V) fim::cc.setVariable(I,V)
+#define FIM_GVT(V) fim::cc.getVariableType(V)
+#define FIM_EC(CMD,ARGS) fim::cc.execute(CMD,ARGS)
+typedef nodeType * NodeType;
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 
 namespace fim
 {
@@ -57,18 +80,18 @@ namespace fim
  *	Invoked by the flex and bison files.
  *	This code will be fully cleaned when the Fim language will settle.
  */
-std::ostream & operator<<(std::ostream &os,const nodeType &p)
+std::ostream & operator<<(std::ostream &os, const nodeType &p)
 {
 	os<< "type " << p.type << FIM_SYM_ENDL;
 	return os;
 }
 
-Var ex(nodeType *p); /* interpreter execution */
+Var ex(NodeType p); /* interpreter execution */
 
-static Var cvar(nodeType *p)
+static Var cvar(NodeType p)
 {
 	/* evaluate a single 'arg' entry */
-	nodeType *np=p;
+	NodeType np=p;
   	fim::string arg;
 	int i;
 
@@ -128,10 +151,10 @@ ret:
 	return arg;
 }
 
-static std::vector<fim::string> var(nodeType *p)
+static std::vector<fim::string> var(NodeType p)
 {
 	/* evaluate a whole chain of arg entries */
-	nodeType *np=p;
+	NodeType np=p;
   	std::vector<fim::string> args;
 	int i;
 
@@ -181,11 +204,8 @@ static std::vector<fim::string> var(nodeType *p)
 }
 
 using namespace fim;
-Var ex(nodeType *p)
+Var ex(NodeType p)
 {
-	fim_int iValue;
-	float fValue;
-	fim_char_t *s=FIM_NULL;
   	std::vector<fim::string> args;
 	fim_int typeHint;
 
@@ -204,13 +224,13 @@ Var ex(nodeType *p)
 		{
 			DBG("vId:\n");
 			// eventually may handle already here if FIM_SACC(p) is "random" ...
-			if(fim::cc.getVariableType(FIM_SACC(p))==FIM_SYM_TYPE_INT)
+			if(FIM_GVT(FIM_SACC(p))==FIM_SYM_TYPE_INT)
 			{
 				DBG("vId:"<<FIM_SACC(p)<<":"<<(fim_int)fim::cc.getIntVariable(FIM_SACC(p))<<FIM_SYM_ENDL);
 				return FIM_GV(FIM_SACC(p));
 			}
 
-			if(fim::cc.getVariableType(FIM_SACC(p))==FIM_SYM_TYPE_FLOAT)
+			if(FIM_GVT(FIM_SACC(p))==FIM_SYM_TYPE_FLOAT)
 			{
 				DBG("'f':\n");
 				return FIM_GV(FIM_SACC(p));
@@ -264,33 +284,32 @@ Var ex(nodeType *p)
 				goto err;
 			case 'x': 
 				DBG("X\n");
-			  /*
-			   * when encountering an 'x' node, the first (left) subtree should 
-			   * contain the string with the identifier of the command to 
-			   * execute.
-			   */
-			  {
-			  	if( FIM_NOPS(p) < 1 )
-			  	{
-					DBG("INTERNAL ERROR\n");
-					goto err;
-				}
-			  if(FIM_NOPS(p)==2)	//int yacc.ypp we specified only 2 ops per x node
-		          {
-				  nodeType *np=p;	
-				  //nodeType *dp;
-	                          np=(FIM_OPRND(np,1)); //the right subtree first node
-				  while( np &&    FIM_NOPS(np) >=1 )
-				  if( FIM_OPRNDO(np)=='a' )
-			  	  {
-					  std::vector<fim::string> na;
-					  na=var(np);
-				          for(fim_size_t i=0;i<na.size();++i)
-                                          {
-						//std::cout << "?"<<na[i]<<FIM_SYM_ENDL;
-						args.push_back(na[i]);}// FIXME : non sono sicuro che questo serva
-					  	DBG("A:"<<FIM_NOPS(np)<<FIM_SYM_ENDL);
-						break;
+			  	/*
+			     * when encountering an 'x' node, the first (left) subtree should 
+			     * contain the string with the identifier of the command to 
+			     * execute.
+			     */
+				{
+			  		if( FIM_NOPS(p) < 1 )
+			  		{
+						DBG("INTERNAL ERROR\n");
+						goto err;
+					}
+			  		if(FIM_NOPS(p)==2)	//int yacc.ypp we specified only 2 ops per x node
+		          	{
+						NodeType np=p;	
+						np=(FIM_OPRND(np,1)); //the right subtree first node
+						while( np &&    FIM_NOPS(np) >=1 )
+						if( FIM_OPRNDO(np)=='a' )
+						{
+					  		std::vector<fim::string> na;
+					  		na=var(np);
+				          	for(fim_size_t i=0;i<na.size();++i)
+							{
+								//std::cout << "?"<<na[i]<<FIM_SYM_ENDL;
+								args.push_back(na[i]);}// FIXME : non sono sicuro che questo serva
+							  	DBG("A:"<<FIM_NOPS(np)<<FIM_SYM_ENDL);
+								break;
 #if 0
 					  return 0;
 					  /*
@@ -323,46 +342,48 @@ Var ex(nodeType *p)
 					  else;
 					  assert(dp);
 #endif
-				  }
-			  	  else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
-				  {
-					//cout <<  "DEAD CODE\n";
-					//probably dead code
-				  }
-			  }
-			  {
-				DBG("A.\n");
-				/*
-				 * single command execution
-				 */
-				fim::string result;
-				//std::cout  <<"GULP:"<< FIM_SACC(FIM_OPRND(p,0))<< args[0] <<FIM_SYM_ENDL;
-//				if(args.size()>0)
-//					std::cout  <<"GULP:"<< (fim_int*)FIM_SACC(FIM_OPRND(p,0))<<" "<<FIM_SACC(FIM_OPRND(p,0))<<" "<<args[0] <<FIM_SYM_ENDL;
-//				else
-//					std::cout  <<"GULP:"<< args.size() <<FIM_SYM_ENDL;
-				if(p)
-				if(FIM_OPRND(p,0))
-				if(FIM_SACC(FIM_OPRND(p,0))) result =
-				       	fim::cc.execute(FIM_SACC(FIM_OPRND(p,0)),args);
-				/* sometimes there are NULLs  : BAD !!  */
-				return fim_atoi(result.c_str());
-			  }
+						}
+						else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
+						{
+							//cout <<  "DEAD CODE\n";
+							//probably dead code
+						}
+					}
+					{
+						DBG("A.\n");
+						/*
+						 * single command execution
+						 */
+						fim::string result;
+						//std::cout  <<"GULP:"<< FIM_SACC(FIM_OPRND(p,0))<< args[0] <<FIM_SYM_ENDL;
+//						if(args.size()>0)
+//							std::cout  <<"GULP:"<< (fim_int*)FIM_SACC(FIM_OPRND(p,0))<<" "<<FIM_SACC(FIM_OPRND(p,0))<<" "<<args[0] <<FIM_SYM_ENDL;
+//						else
+//							std::cout  <<"GULP:"<< args.size() <<FIM_SYM_ENDL;
+						if(p)
+						if(FIM_OPRND(p,0))
+						if(FIM_SACC(FIM_OPRND(p,0))) result =
+				    	   	FIM_EC(FIM_SACC(FIM_OPRND(p,0)),args);
+						/* sometimes there are NULLs  : BAD !!  */
+						return fim_atoi(result.c_str());
+			  		}
 		}
 		case 'a':
 			// we shouldn't be here, because 'a' (argument) nodes are evaluated elsewhere
 			assert(0);
 			goto err;
 		case '=':
+		{
 			//assignment of a variable
+			fim_char_t *s=FIM_NULL;
 			s=FIM_SACC(FIM_OPRND(p,0));
 			DBG("SV:"<<s<<FIM_SYM_ENDL)
 			typeHint=FIM_OPRNDH(FIM_OPRND(p,0));
 #if FIM_INTERPRETER_OBSOLETE
 			if(typeHint==FIM_SYM_TYPE_FLOAT)
 			{
+				float fValue=FIM_FOPRND(p,1);
 				DBG("SVf"<<s<<FIM_SYM_ENDL);
-				fValue=FIM_FOPRND(p,1);
 				FIM_SV(s,fValue);
 				return (fim_int)fValue;
 			}
@@ -390,7 +411,7 @@ Var ex(nodeType *p)
 			}//FIM_SYM_TYPE_INT
 			else if(typeHint==FIM_SYM_TYPE_INT)
 			{
-				iValue=ex(FIM_OPRND(p,1)).getInt();
+				fim_int iValue=ex(FIM_OPRND(p,1)).getInt();
 				DBG("SVi:"<<s<<":"<<iValue<<""<<FIM_SYM_ENDL);
 				FIM_SV(s,iValue);
 				return iValue;
@@ -418,6 +439,7 @@ Var ex(nodeType *p)
 				goto err;
 #endif /* FIM_INTERPRETER_OBSOLETE */
 			}
+		}
 #if FIM_WANT_AVOID_FP_EXCEPTIONS
 			case '%': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1%v2; else return v2;};
 			case '/': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1/v2; else return v2;};

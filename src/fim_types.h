@@ -2,7 +2,7 @@
 /*
  fim_types.h : Basic Fim type declarations
 
- (c) 2011-2015 Michele Martone
+ (c) 2011-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #define FIM_RSTRCT
 #endif	/* defined(__GNUC__) */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "../config.h"
 #endif /* HAVE_CONFIG_H */
 #if FIM_WANT_LONG_INT
 #include <stdint.h>
