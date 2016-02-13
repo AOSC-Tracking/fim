@@ -140,6 +140,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/Viewport.h \
 	$(srcdir)/FimWindow.h \
 	$(srcdir)/common.h \
+	$(srcdir)/fim_interpreter.h \
 	$(srcdir)/conf.h \
 	$(srcdir)/help.cpp \
 	$(srcdir)/help-acm.cpp \
@@ -184,7 +185,7 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/Viewport.cpp \
 	$(srcdir)/FimWindow.cpp \
 	$(srcdir)/common.cpp \
-	$(srcdir)/interpreter.cpp \
+	$(srcdir)/fim_interpreter.cpp \
 	$(srcdir)/fim_string.cpp
 
 Command.o: Command.h
