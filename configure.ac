@@ -15,10 +15,13 @@ define([svnversion],esyscmd([sh -c "svnversion | tr  -c '[0-9]' ' ' | sed 's/ */
 AC_INIT([fim],[0.6-trunk],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 AC_CONFIG_SRCDIR([src/fim.cpp])
 
-AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
-AC_SUBST(SVN_REVISION,"svnversion")
-AC_DEFINE(SVN_REVISION_NUMBER,svnversion,[SVN REVISION NUMBER])
-AC_SUBST(SVN_REVISION_NUMBER,svnversion)
+if test x"svnversion" != x ; then
+	# The above test gets evaluated when creating the configure script.
+	AC_DEFINE(SVN_REVISION,"svnversion",[SVN REVISION])
+	AC_SUBST(SVN_REVISION,"svnversion")
+	AC_DEFINE(SVN_REVISION_NUMBER,svnversion,[SVN REVISION NUMBER])
+	AC_SUBST(SVN_REVISION_NUMBER,svnversion)
+fi
 
 AH_TEMPLATE([FIM_CONFIGURATION])
 FIM_CONFIGURATION="$0 $@"
