@@ -381,9 +381,9 @@ typedef std::vector<fim::string> args_t;
 #define FIM_CNS_FIM_APPTITLE FIM_CNS_FIM ", v." PACKAGE_VERSION ""
 #endif /* SVN_REVISION */
 #ifdef SVN_REVISION_NUMBER
-#define FIM_REVISION_NUMBER (int)SVN_REVISION_NUMBER
+#define FIM_REVISION_NUMBER (SVN_REVISION_NUMBER)
 #else /* SVN_REVISION_NUMBER */
-#define FIM_REVISION_NUMBER (int)-1
+#define FIM_REVISION_NUMBER (-1)
 #endif /* SVN_REVISION_NUMBER */
 #define FIM_CNS_EX_KSY_STRING	"{keysym}"
 #define FIM_CNS_EX_CMD_STRING	"{command}"
