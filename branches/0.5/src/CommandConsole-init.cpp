@@ -2,7 +2,7 @@
 /*
  CommandConsole-init.cpp : Fim console initialization
 
- (c) 2010-2015 Michele Martone
+ (c) 2010-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -232,7 +232,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		}
 		}
 		#endif /* FIM_WITH_AALIB */
-		if(mangle_tcattr_)tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
+		if(mangle_tcattr_)
+			tty_raw();// this inhibits unwanted key printout (raw mode), and saves the current tty state
 		// FIXME: an error here on, leaves the terminal in raw mode, and this is not cool
 
 		if( displaydevice_==FIM_NULL)
@@ -241,14 +242,36 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_DUMB);
 			if(device_failure)
 			{
-				std::cerr << "Failure using the \""<<device<<"\" display device driver string (wrong options?)!\n";
+				std::cerr << "Failure using the \""<<device<<"\" display device driver string (wrong options to it ?)!\n";
 				cleanup();
 				return FIM_ERR_UNSUPPORTED_DEVICE;
 
 			}
 			else
 			if(device!=FIM_DDN_VAR_DUMB)
-				std::cerr << "Unrecognized display device string \""<<device<<"\" (valid choices are " FIM_DDN_VARS ")!\n",
+			{
+				if( 0
+		#ifndef FIM_WITH_AALIB
+					|| device==FIM_DDN_INN_AA
+		#endif /* FIM_WITH_AALIB */
+		#ifndef FIM_WITH_LIBSDL
+					|| device==FIM_WITH_LIBSDL
+		#endif /* FIM_WITH_LIBSDL */
+		#ifdef FIM_WITH_NO_FRAMEBUFFER
+					|| device==FIM_DDN_INN_FB
+		#endif /* FIM_WITH_NO_FRAMEBUFFER */
+		#ifndef FIM_WITH_LIBIMLIB2
+					|| device==FIM_DDN_VAR_IL2
+		#endif /* FIM_WITH_LIBIMLIB2 */
+		#ifndef FIM_WITH_CACALIB
+					|| device==FIM_DDN_INN_CACA
+		#endif /* FIM_WITH_CACALIB */
+				)
+					std::cerr << "Device string \""<<device<<"\" has been configured out (disabled) at build time.\n";
+				else
+					std::cerr << "Unrecognized display device string \""<<device<<"\".\n",
+				std::cerr << "Valid choices are " FIM_DDN_VARS "!\n";
+			}
 			std::cerr << "Using the default \""<<FIM_DDN_INN_DUMB<<"\" display device instead.\n";
 		}
 
