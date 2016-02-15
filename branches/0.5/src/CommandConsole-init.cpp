@@ -269,8 +269,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 				)
 					std::cerr << "Device string \""<<device<<"\" has been configured out (disabled) at build time.\n";
 				else
-					std::cerr << "Unrecognized display device string \""<<device<<"\".\n",
-				std::cerr << "Valid choices are " FIM_DDN_VARS "!\n";
+					std::cerr << "Unrecognized display device string \""<<device<<"\".\n";
+				std::cerr << "Valid choices are " << FIM_DDN_VARS_IN << "!\n";
 			}
 			std::cerr << "Using the default \""<<FIM_DDN_INN_DUMB<<"\" display device instead.\n";
 		}

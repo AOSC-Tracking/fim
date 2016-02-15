@@ -660,22 +660,28 @@ namespace fim
 /*
  * Fim Display Driver Names
  * Note: When adding a new driver, you shall update FIM_DDN_VARS as well. 
+ * p.s.: ICI = If Configured In
  * */
 #define FIM_DDN_INN_FB	 "fb"
 #define FIM_DDN_VAR_FB	 "fb"
+#define FIM_DDN_ICI_FB	 "fb|"
 #define FIM_DDN_INN_SDL	 "sdl"
 #define FIM_DDN_VAR_SDL	 "sdl"
+#define FIM_DDN_ICI_SDL	 "sdl|"
 #define FIM_DDN_INN_IL2	 "imlib2"
 #define FIM_DDN_VAR_IL2	 "imlib2"
+#define FIM_DDN_ICI_IL2	 "imlib2|"
 #define FIM_DDN_INN_AA	 "aa"
 #define FIM_DDN_VAR_AA	 "aa"
+#define FIM_DDN_ICI_AA	 "aa|"
 #define FIM_DDN_INN_CACA	 "caca"
 #define FIM_DDN_VAR_CACA	 "caca"
+#define FIM_DDN_ICI_CACA	 "|caca"
 #define FIM_DDN_INN_DUMB	 "dumb"
 //#define FIM_DDN_VAR_DUMB	 "dummy"
 #define FIM_DDN_VAR_DUMB	 "dumb"
-#define FIM_DDN_VARS	 "[" FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_AA "|" FIM_DDN_INN_DUMB "|" FIM_DDN_INN_IL2 "]" 
-//#define FIM_DDN_VARS	 "[" FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_AA "|" FIM_DDN_INN_CACA "|" FIM_DDN_INN_DUMB "]" 
+#define FIM_DDN_VARS	 "[" FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_AA  "|" FIM_DDN_INN_IL2 "|" FIM_DDN_INN_CACA	"|" FIM_DDN_INN_DUMB "]" 
+#define FIM_DDN_VARS_IN "[" FIM_DDN_ICI_FB FIM_DDN_ICI_SDL FIM_DDN_ICI_AA FIM_DDN_ICI_IL2 FIM_DDN_ICI_CACA FIM_DDN_INN_DUMB "]" 
 
 /*
  * Fim Autocommands
