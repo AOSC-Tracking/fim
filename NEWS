@@ -3,6 +3,7 @@
 
                 Version 0.5-rc2
 
+ * fix: will emit more precise diagnostics on unsupported device string
  * fix: adjusted man pages for roff cleanliness
  * fix: typos fixed in the documentation
 
