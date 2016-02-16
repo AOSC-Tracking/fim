@@ -1,4 +1,4 @@
-/* $LastChangedDate: 2015-12-19 12:03:27 +0100 (Sat, 19 Dec 2015) $ */
+/* $LastChangedDate$ */
 /*
  interpreter.h : Interpreter-related declarations
 
