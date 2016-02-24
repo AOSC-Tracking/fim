@@ -1275,7 +1275,8 @@ Or execute the command
 >
 	echo FIM_DEFAULT_CONFIG_FILE_CONTENTS
 
-Or simply invoke 'fim -D' to get the configuration on the standard output.
+Or simply invoke 'fim --dump-default-fimrc' to get the configuration on the
+standard output.
 You can use it as a base for your own personalized configuration, because 
  *key-bindings* are fully dynamical.
 

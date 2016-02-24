@@ -2,6 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+# (r1001)
+ * the -D switch is now short for --load-image-descriptions-file (not anymore for --dump-default-fimrc)
 # (r999,r1000)
  * introduced -L/--read-from-file switch: read an image list from file (similarly to the - switch).
 # (r971)

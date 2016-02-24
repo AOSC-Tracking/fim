@@ -116,7 +116,7 @@ struct fim_options_t fim_options[] = {
     {"dump-reference-help",      optional_argument /*no_argument*/,       FIM_NULL, 0x6472690a,"dump reference info","[=man].",
 "Will dump to stdout the language reference help."
     },
-    {"dump-default-fimrc",      no_argument,       FIM_NULL, 'D',"dump on standard output the default configuration.",FIM_NULL,
+    {"dump-default-fimrc",      no_argument,       FIM_NULL, 0x64646672,"dump on standard output the default configuration.",FIM_NULL,/*Before r1001,-D*/
 "The default configuration (the one hardcoded in the fim executable) is dumped on standard output and fim exits."
     },
     {FIM_OSW_EXECUTE_SCRIPT,   required_argument,       FIM_NULL, 'E',"execute {scriptfile} after initialization.","{scriptfile}",
@@ -132,7 +132,7 @@ struct fim_options_t fim_options[] = {
 FIM_NULL
     },
 #if FIM_WANT_PIC_CMTS
-    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, 0x6c696466, "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_IMG_DSC_FILE_SEPC " specifies otherwise), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
+    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, /*0x6c696466*/'D', "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_IMG_DSC_FILE_SEPC " specifies otherwise), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time."
 #if FIM_WANT_PIC_RCMT 
@@ -1011,7 +1011,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:SRL:",
+		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:SRL:",
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -1323,7 +1323,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    cout << FIM_EMSG_NO_SCRIPTING;
         #endif /* FIM_WANT_NOSCRIPTING */
 		    break;
-		case 'D':
+		case 0x64646672:
 		    //fim's
 	//	    cc.setNoFrameBuffer();	// no framebuffer (debug) mode
 		    cc.dumpDefaultFimrc();
@@ -1395,7 +1395,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    if(optarg)
 			    sc = *optarg;
 		    break;
-		case 0x6c696466:
+		case /*0x6c696466*/'D':
 		    cc.id_.fetch(optarg,sc);
 		    cc.setVariable(FIM_VID_COMMENT_OI,(fim_int)FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
 		    break;
