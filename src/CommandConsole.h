@@ -108,6 +108,7 @@ class CommandConsole
 	public:
 	bool isMarkedFile(std::string fname)const;
 	fim::string marked_files_list(void)const;
+	fim::string marked_files_clear(void);
 	private:
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 

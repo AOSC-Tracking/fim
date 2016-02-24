@@ -97,12 +97,26 @@ namespace fim
                                         result += "No files have been marked by the user.\n";
 				goto ret;
 		       	} 
+			else if(args[0]=="dumpmarked")
+			{
+				std::cout << cc.marked_files_list();
+				goto ret;
+		    } 
+			else if(args[0]=="unmarkall")
+			{
+				cc.marked_files_clear();
+				goto ret;
+		    } 
 #else /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 			else if(args[0]=="mark")
 				result = FIM_EMSG_NOMARKUNMARK;
 			else if(args[0]=="marked")
 				result = FIM_EMSG_NOMARKUNMARK;
 			else if(args[0]=="unmark")
+				result = FIM_EMSG_NOMARKUNMARK;
+			else if(args[0]=="dumpmarked")
+				result = FIM_EMSG_NOMARKUNMARK;
+			else if(args[0]=="unmarkall")
 				result = FIM_EMSG_NOMARKUNMARK;
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #if FIM_WANT_BACKGROUND_LOAD
