@@ -302,7 +302,7 @@ FIM_NULL
 	    FIM_NULL
     },
 #if FIM_WANT_BACKGROUND_LOAD
-    {"background-recursive", no_argument, FIM_NULL, 0x6c696267,"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
+    {"background-recursive", no_argument, FIM_NULL, /*0x6c696267*/'B',"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
 	    FIM_NULL
     },
 #endif /* FIM_WANT_BACKGROUND_LOAD */
@@ -1011,7 +1011,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:RL:",
+		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:RL:B",
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -1184,7 +1184,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    pf |= FIM_FLAG_PUSH_REC ;
 		    break;
 #if FIM_WANT_BACKGROUND_LOAD
-		case 0x6c696267:
+		case /*0x6c696267*/'B':
 		    //fim's
 		    pf |= FIM_FLAG_PUSH_REC ;
 		    pf |= FIM_FLAG_PUSH_ONE ;
