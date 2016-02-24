@@ -2,6 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+# (r1004)
+ * introduced 'list "dumpmarked"' and 'list "unmarkall"' commands.
 # (r1003)
  * the -B switch is now short for --background-recursive.
 # (r1002)
@@ -98,7 +100,7 @@
 # (r920):
  * the '`' key is bound to toggle limit'ing to the marked files list
 # (r902)
- * introduced 'list "mark"' and 'list "unmark"' syntax styled as 'limit'
+ * introduced 'list "mark"' and 'list "unmark"' subcommands styled as 'limit'
  * load i:_comment and i:var from description file, with forms:
    "filename comment" (to i:_comment),
    "#!fim:var=value" (to   set i:var=value on all all the files following)

@@ -1281,6 +1281,13 @@ rlnull:
 			res += "\n";
 		return res;
 	}
+
+	fim::string CommandConsole::marked_files_clear(void)
+	{
+		fim::string res;
+		marked_files_.erase(marked_files_.begin(),marked_files_.end());
+		return res;
+	}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 
 	CommandConsole::~CommandConsole(void)
