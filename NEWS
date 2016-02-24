@@ -2,6 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+# (r1002)
+ * the -S switch is now short for --image-descriptions-file-separator (not anymore for --sanity-check)
 # (r1001)
  * the -D switch is now short for --load-image-descriptions-file (not anymore for --dump-default-fimrc)
 # (r999,r1000)
@@ -232,7 +234,7 @@
  * better consolefonts support  
  * much better SDL support (different color modes)
  * 'negate' feature
- * -S, or 'sanity-check' switch 
+ * -S, or 'sanity-check' switch [changed meaning in v0.6]
 
                Version 0.3-beta-prerelease
 

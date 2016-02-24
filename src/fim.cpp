@@ -149,7 +149,7 @@ FIM_NULL
 #endif /* FIM_WANT_PIC_LVDN */
       " This option sets " FIM_VID_COMMENT_OI "=" FIM_XSTRINGIFY(FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL) ", so that a caption will be displayed over the image."
     },
-    {FIM_OSW_IMG_DSC_FILE_SEPC,       required_argument,       FIM_NULL, 0x69646673, "image descriptions file separator character.", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
+    {FIM_OSW_IMG_DSC_FILE_SEPC,       required_argument,       FIM_NULL, /*0x69646673*/'S', "image descriptions file separator character.", "{sepchar}", "A character to be used as a separator between the filename and the description part of lines specified just before a --" FIM_OSW_LOAD_IMG_DSC_FILE "."
     },
 #endif /* FIM_WANT_PIC_CMTS */
 #ifdef FIM_READ_STDIN_IMAGE
@@ -209,7 +209,7 @@ FIM_NULL
     {"slideshow",     required_argument, FIM_NULL, 0x7373,"interruptible slideshow mode.",FIM_CNS_EX_NUM_STRING,
 "Interruptible slideshow mode; will wait for " FIM_CNS_EX_NUM_STRING " of seconds (assigned to the " FIM_VID_WANT_SLEEPS " variable after each loading; implemented by executing " FIM_CNS_SLIDESHOW_CMD " as a first command."
     },
-    {"sanity-check",      no_argument,       FIM_NULL, 'S',"perform a sanity check.",FIM_NULL,
+    {"sanity-check",      no_argument,       FIM_NULL, 0x70617363,"perform a sanity check.",FIM_NULL, /* Was -S until r1001 */
 "A quick sanity check before starting the interactive fim execution, but after the initialization."
     },	/* NEW */
     {"no-framebuffer",      no_argument,       FIM_NULL, 't',"display images in text mode (as -o " FIM_DDN_INN_AA ").",FIM_NULL,
@@ -1011,7 +1011,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:SRL:",
+		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:RL:",
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -1094,7 +1094,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    cout << FIM_EMSG_NO_SCRIPTING;
 	#endif /* FIM_WANT_NOSCRIPTING */
 		    break;
-		case 'S':
+		case 0x70617363:
 		    //fim's
 	#ifdef FIM_AUTOCMDS
 		    cc.setVariable(FIM_VID_SANITY_CHECK,(fim_int)1);
@@ -1391,7 +1391,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		}
 		    break;
 #if FIM_WANT_PIC_CMTS
-		case 0x69646673:
+		case /*0x69646673*/'S':
 		    if(optarg)
 			    sc = *optarg;
 		    break;
