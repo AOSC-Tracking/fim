@@ -120,7 +120,7 @@ Framebuffer device to use. Default is the one your vc is mapped to (as in fbi).
 .B  \-\-dump\-reference\-help[=man].
 Will dump to stdout the language reference help.
 .TP
-.B \-D, \-\-dump\-default\-fimrc
+.B  \-\-dump\-default\-fimrc
 The default configuration (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
 .TP
 .B \-E {scriptfile}, \-\-execute\-script {scriptfile}
@@ -136,7 +136,7 @@ The \fBcommands\fP string will be executed after exiting the interactive loop of
 .B \-h, \-\-help[=s|d|l|m]
 		 Print (short, descriptive, long, or complete man) program invocation help, and terminate.
 .TP
-.B  \-\-load\-image\-descriptions\-file {filename}
+.B \-D {filename}, \-\-load\-image\-descriptions\-file {filename}
 Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless \-\-image\-descriptions\-file\-separator specifies otherwise), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment). Special comment lines like "#!fim:var=val" will lead i:var to be assigned value val (unquoted) at image loading time. Special description lines begin with markers:  with "#!fim:=" the last description line to be used; with "#!fim:+" what follows + will be appended to the last description line; with "#!fim:^" what follows ^ will be prepended to the last description line; with "#!fim:s/f/t" the last description line will be used, but occurrences of string f will be substituted with string t (f and t can contain anything but not a /). If val is empty that variable will be unset. These variables are stored also in an internal index used by the limit command. This option sets _caption_over_image=2, so that a caption will be displayed over the image.
 .TP
 .B  \-\-image\-descriptions\-file\-separator {sepchar}
