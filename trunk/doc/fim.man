@@ -251,7 +251,7 @@ Scale the image according to the screen height.
 .B \-W {scriptfile}, \-\-write\-scriptout {scriptfile}
 All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim \-c" or ":exec" (analogous to Vim's \-s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's \-w). 
 .TP
-.B  \-\-read\-from\-file <arg>
+.B \-L, \-\-read\-from\-file <arg>
 Read file list from file: each line one file to load (similar to \-\-read\-from\-stdin; interacts with \-\-read\-from\-stdin\-elds).
 
 
