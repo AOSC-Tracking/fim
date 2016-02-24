@@ -8,7 +8,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi

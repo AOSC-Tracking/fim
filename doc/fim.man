@@ -127,7 +127,7 @@ The default configuration (the one hardcoded in the fim executable) is dumped on
 The \fBscriptfile\fP will be executed right after the default initialization file is executed.
 .TP
 .B \-f {fimrc}, \-\-etc\-fimrc {fimrc}
-Specify an alternative system wide initialization file (default: /etc/fimrc), which will be executed prior to any other configuration file.
+Specify an alternative system wide initialization file (default: /usr/local/etc/fimrc), which will be executed prior to any other configuration file.
 
 .TP
 .B \-F {commands}, \-\-final\-commands {commands}
@@ -154,7 +154,7 @@ Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Def
 No personal initialization file will be read (default is ~/.fimrc) at startup.
 .TP
 .B  \-\-no\-etc\-rc\-file
-No system wide initialization file will be read (default is /etc/fimrc) at startup.
+No system wide initialization file will be read (default is /usr/local/etc/fimrc) at startup.
 .TP
 .B  \-\-no\-internal\-config
 No internal default configuration at startup (uses internal variable _no_default_configuration). Will only provide a minimal working configuration. 
@@ -174,7 +174,7 @@ Do not load or save execution history at startup.
 .B \-p, \-\-script\-from\-stdin
 Will read commands from stdin prior to entering in interactive mode.
 .TP
-.B \-o [fb|sdl|aa|dumb|imlib2], \-\-output\-device [fb|sdl|aa|dumb|imlib2]
+.B \-o [fb|sdl|aa|imlib2|caca|dumb], \-\-output\-device [fb|sdl|aa|imlib2|caca|dumb]
 Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.The available devices depend on the original configuration/compilation options, so you should
 get the list of available output devices issuing \fBfim \-\-version\fP.
 The \fBaa\fP option may be specified as  \fBaa={['w']}\fP ; the \fB'w'\fP character allows windowed mode in case of aalib running under X (otherwise, the DISPLAY environment variable will be unset for the current instance of fim).
@@ -251,8 +251,13 @@ Scale the image according to the screen height.
 .B \-W {scriptfile}, \-\-write\-scriptout {scriptfile}
 All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim \-c" or ":exec" (analogous to Vim's \-s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's \-w). 
 .TP
+.B  \-\-read\-from\-file <arg>
+Read file list from file: each line one file to load (similar to \-\-read\-from\-stdin; interacts with \-\-read\-from\-stdin\-elds).
+
+
+.TP
 .B  \-,  \-\-read\-from\-stdin
-Read file list from stdin: each line one file.
+Read file list from stdin: each line one file to load.
 
 Note that these the three standard input reading functionalities (\-i,\-p and \-) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
 
@@ -277,6 +282,9 @@ Quiet mode. Sets _display_status=0;_display_busy=0;.
 .TP
 .B \-R, \-\-recursive
 		 Push files/directories to the files list recursively.
+.TP
+.B  \-\-background\-recursive
+		 Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).
 
 .SH PROGRAM RETURN STATUS
 The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error; 42 on a signal\-triggered program exit;  or a different value in case of an another error.
@@ -486,12 +494,12 @@ file shipped in the documentation directory to discover the known ones.
 .SH  FILES
 
 .TP 15
-.B /usr/share/doc/fim
+.B /usr/local/share/doc/fim
 The directory with 
 .B Fim
 documentation files.
 .TP 15
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 The system wide
 .B Fim
 initialization file (executed at startup, after executing the hardcoded configuration).
