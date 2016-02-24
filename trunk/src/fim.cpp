@@ -268,9 +268,13 @@ FIM_NULL
     {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       FIM_NULL, 'W',"will record any executed command to the a {scriptfile}.","{scriptfile}",
 "All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
     },
+    {"read-from-file",      required_argument,       FIM_NULL, 0x72696c66,"read an image list from file.",FIM_NULL,
+"Read file list from file: each line one file to load (similar to --read-from-stdin; interacts with --read-from-stdin-elds).\n"
+"\n"
+    },
 #ifdef FIM_READ_STDIN
     {"read-from-stdin",      no_argument,       FIM_NULL, '-',"read an image list from standard input.",FIM_NULL,
-"Read file list from stdin: each line one file.\n"
+"Read file list from stdin: each line one file to load.\n"
 
 "\n"
 "Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.\n"
@@ -957,7 +961,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 
 			if(lineptr)
 				fim_free(lineptr);
-			if(fn)
+			if(fn && fd)
 					fim_fclose(fd);
 			return 0;
 }
@@ -1409,6 +1413,9 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    read_stdin_choice = FilesList;
 		    break;
 	#endif /* FIM_READ_STDIN */
+		case 0x72696c66:
+			fim_load_filelist(optarg,sa,pf);
+		    break;
 		default:
 		case 'h':
 		    help_and_exit(argv[0],FIM_PERR_NO_ERROR,optarg);
