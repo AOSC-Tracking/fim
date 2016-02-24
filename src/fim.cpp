@@ -928,6 +928,39 @@ done:
 	    return code;
 }
 
+static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t pf)
+{
+			/* TODO: move to CommandConsole */
+	    	bool wv = false; /*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
+			fim_char_t *lineptr=FIM_NULL;
+			size_t bs=0;
+			int fc=0;
+			FILE * fd = FIM_NULL;
+		
+			if(fn)
+					fd = fim_fopen(fn,"r");
+			else
+					fd = stdin;
+
+			while(fim_getline(&lineptr,&bs,fd)>0)
+			{
+				chomp(lineptr);
+
+				if(sa && lineptr && strstr(lineptr,sa))
+					*strstr(lineptr,sa) = FIM_SYM_CHAR_NUL;
+				cc.push(lineptr,pf);
+				// printf("%s\n",lineptr);
+				lineptr=FIM_NULL;
+				if(wv)
+					++fc, printf("%s %d\n",FIM_CNS_CLEARTERM,fc);
+			}
+
+			if(lineptr)
+				fim_free(lineptr);
+			if(fn)
+					fim_fclose(fd);
+			return 0;
+}
 
 	public:
 	fim_perr_t main(int argc,char *argv[])
@@ -1422,25 +1455,7 @@ done:
 		 * */
 		if( read_stdin_choice == FilesList )
 		{
-		    	bool wv = false; /*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
-			fim_char_t *lineptr=FIM_NULL;
-			size_t bs=0;
-			int fc=0;
-
-			while(fim_getline(&lineptr,&bs,stdin)>0)
-			{
-				chomp(lineptr);
-
-				if(sa && lineptr && strstr(lineptr,sa))
-					*strstr(lineptr,sa) = FIM_SYM_CHAR_NUL;
-				cc.push(lineptr,pf);
-				// printf("%s\n",lineptr);
-				lineptr=FIM_NULL;
-				if(wv)
-					++fc, printf("%s %d\n",FIM_CNS_CLEARTERM,fc);
-			}
-			if(lineptr)
-				fim_free(lineptr);
+			fim_load_filelist(FIM_NULL,sa,pf);
 			close(0);
 			ndd=dup(2);
 		}
