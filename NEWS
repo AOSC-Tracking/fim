@@ -2,8 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
-# (r998)
- * introduced --read-from-file switch: read an image list from file (just as the - switch).
+# (r999,r1000)
+ * introduced -L/--read-from-file switch: read an image list from file (similarly to the - switch).
 # (r971)
  * introduced new variable _cache_control to control the cache mechanism
  * now caching of mipmaps on by default; can be turned off with _cache_control
