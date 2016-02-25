@@ -128,7 +128,7 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       FIM_NULL, 'F',"execute {commands} just before exit.","{commands}",
 "The \\fBcommands\\fP string will be executed after exiting the interactive loop of the program (right before terminating the program)."
     },
-    {"help",       optional_argument,       FIM_NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and terminate.","[=s|d|l|m]",
+    {"help",       optional_argument,       FIM_NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and exit.","[=s|d|l|m]",
 FIM_NULL
     },
 #if FIM_WANT_PIC_CMTS
@@ -248,7 +248,7 @@ FIM_NULL
 "Be verbose: show status bar."
     },
     {"version",    no_argument,       FIM_NULL, 'V',"print program version.",FIM_NULL,
-"Display program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate."
+"Print to stdout program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then exit."
     },
     {"autowidth",   no_argument,       FIM_NULL, 'w',"scale according to width.",FIM_NULL,
 "Scale the image according to the screen width."
@@ -448,7 +448,7 @@ ret:
 
 class FimInstance
 {
-	static void show_version();
+	static void show_version(FILE * stream);
 
 string fim_dump_man_page_snippets(void)
 {
@@ -1277,7 +1277,8 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    default_vt = atoi(optarg);
 		    break;
 		case 'V':
-		    show_version();
+		    //fbi's option, but unlike fbi using stdout instead of stderr
+		    show_version(stdout);
 		    return 0;
 		    break;
 		case 0x4352:
@@ -1617,9 +1618,9 @@ fim_perr_t main(int argc,char *argv[])
 //#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
 //#endif /* HAVE_LIBPOPPLER */
 
-	void FimInstance::show_version(void)
+	void FimInstance::show_version(FILE * stream)
 	{
-	    FIM_FPRINTF(stderr, 
+	    FIM_FPRINTF(stream, 
 			    FIM_CNS_FIM" "
 	#ifdef FIM_VERSION
 			    FIM_VERSION
@@ -1742,7 +1743,7 @@ fim_perr_t main(int argc,char *argv[])
 		"\n"
 			    );
 		
-		fim_loaders_to_stderr();
+		fim_loaders_to_stderr(stream);
 	}
 	/* WARNING: PLEASE DO NOT WRITE ANY MORE CODE AFTER THIS DECLARATION (RIGHT ABOVE, AN UNCLEAN CODING PRACTICE WAS USED) */
 
