@@ -22,7 +22,7 @@
 /*
  * TODO:
  * 	framebufferdevice -> device
- * 	output methods should be moved in some other, new class
+ * 	member functions emitting output should be moved to a different class
  * */
 #include "fim.h"
 #include <sys/time.h>
@@ -969,7 +969,7 @@ ok:
 	{
 		/*	
 		 *	This member function is invoked during non interactive loops to
-		 *	provide a method for interactive loop breaking.
+		 *	provide interactive loop breaking.
 		 *
 		 *	The provided mechanism allows the user to press any key
 		 *	during the loop, and the loop will continue its execution,

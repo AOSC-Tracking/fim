@@ -22,7 +22,7 @@
 /*
  * TODO:
  * 	framebufferdevice -> device
- * 	output methods should be moved in some other, new class
+ * 	output member functions should be moved in some other, new class
  * */
 #include "fim.h"
 #ifdef FIM_DEFAULT_CONFIGURATION

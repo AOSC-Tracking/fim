@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- CommandConsole-help.cpp : Fim console dispatcher--help methods
+ CommandConsole-help.cpp : Fim console dispatcher--help member functions
 
  (c) 2011-2016 Michele Martone
 

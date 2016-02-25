@@ -2,7 +2,7 @@
 /*
  FimWindow.h : Fim's own windowing system header file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -196,7 +196,7 @@ class FimWindow
 	Viewport *viewport_;
 
 	/*
-	 * DANGER : nearly each of these methods launches some exception!
+	 * DANGER : nearly each of these member functions launches an exception!
 	 * */
 	const FimWindow & c_focused(void)const;
 	const FimWindow & c_shadowed(void)const;
