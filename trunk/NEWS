@@ -2,6 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+# (r1007)
+ * switch -V (--version) will print out libspectre version info.
 # (r1006)
  * switch -V (--version) will print to stdout (not anymore to stderr).
 # (r1004)

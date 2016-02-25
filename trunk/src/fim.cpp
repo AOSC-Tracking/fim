@@ -1614,6 +1614,12 @@ fim_perr_t main(int argc,char *argv[])
 #include <magick/version.h>
 #endif /* HAVE_LIBGRAPHICSMAGICK */
 #endif
+#ifdef HAVE_LIBSPECTRE
+extern "C" {
+#include <libspectre/spectre.h>
+}
+#endif /* HAVE_LIBSPECTRE */
+
 ///#ifdef HAVE_LIBPOPPLER
 //#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
 //#endif /* HAVE_LIBPOPPLER */
@@ -1664,6 +1670,11 @@ fim_perr_t main(int argc,char *argv[])
 	"Compiled with libjpeg, v." FIM_XSTRINGIFY(JPEG_LIB_VERSION) ".\n"
 	#endif /* JPEG_LIB_VERSION */
 	#endif /* HAVE_LIBJPEG */
+	#ifdef HAVE_LIBSPECTRE
+	#ifdef SPECTRE_VERSION_STRING
+	"Compiled with libspectre, v." SPECTRE_VERSION_STRING ".\n"
+	#endif /* SPECTRE_VERSION_STRING */
+	#endif /* HAVE_LIBSPECTRE */
 #if 0 /* namespace clashes */
 	#ifdef HAVE_LIBGRAPHICSMAGICK
 	#ifdef MagickLibVersionText
