@@ -2,7 +2,7 @@
 /*
  FbiStuffLoader.cpp : fbi functions for loading files, modified for fim
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -174,24 +174,25 @@ void fim_write_register(struct ida_writer *writer)
 }
 #endif /* USE_X11 */
 
-	void fim_loaders_to_stderr(void)
+	void fim_loaders_to_stderr(FILE * stream)
     	{
 		/* FIXME: new, should be generalized */
     		struct list_head *item=FIM_NULL;
     		struct ida_loader *loader = FIM_NULL;
-    		FIM_FPRINTF(stderr,"%s","\nSupported file loaders: ");
+
+    		FIM_FPRINTF(stream,"%s","\nSupported file loaders: ");
     		list_for_each(item,&loaders)
 		{
         		loader = list_entry(item, struct ida_loader, list);
 			if(loader->name && loader->mlen>=1)
-				FIM_FPRINTF(stderr," %s",loader->name); 
+				FIM_FPRINTF(stream," %s",loader->name); 
     		}
     		list_for_each(item,&loaders)
 		{
         		loader = list_entry(item, struct ida_loader, list);
 			if(loader->name && loader->mlen<=0)
-				FIM_FPRINTF(stderr," %s",loader->name); 
+				FIM_FPRINTF(stream," %s",loader->name); 
     		}
-    		FIM_FPRINTF(stderr,"%s","\n");
+    		FIM_FPRINTF(stream,"%s","\n");
 	}
 }

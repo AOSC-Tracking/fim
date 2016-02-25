@@ -2,7 +2,7 @@
 /*
  FbiStuffLoader.h : fbi functions for loading files, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -160,7 +160,7 @@ extern struct list_head writers;
 
 void fim_load_register(struct ida_loader *loader);
 void fim_write_register(struct ida_writer *writer);
-void fim_loaders_to_stderr(void);
+void fim_loaders_to_stderr(FILE * stream);
 
 }
 #endif /* FIM_STUFF_LOADER_H */
