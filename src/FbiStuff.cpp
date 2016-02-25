@@ -43,7 +43,7 @@
 #define FIM_HAVE_FULL_PROBING_LOADER 0
 #ifdef HAVE_FMEMOPEN
 //#define FIM_SHALL_BUFFER_STDIN (HAVE_FMEMOPEN && FIM_READ_STDIN_IMAGE)	/* FIXME: new */
-#define FIM_SHALL_BUFFER_STDIN 0 /* FIXME: before activating this, we shall harmonize other buffering methods first (e.g.: cc.fpush(), which is backed up by a temporary file) */
+#define FIM_SHALL_BUFFER_STDIN 0 /* FIXME: before activating this, we shall clean up some code first (e.g.: cc.fpush(), which is backed up by a temporary file) */
 #else /* HAVE_FMEMOPEN */
 #define FIM_SHALL_BUFFER_STDIN 0
 #endif /* HAVE_FMEMOPEN */

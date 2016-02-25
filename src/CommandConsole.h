@@ -62,7 +62,7 @@ class CommandConsole
 	fim::FimWindow * window_;
 #endif /* FIM_WINDOWS */
 	/*
-	 * the registered command methods and objects
+	 * the registered command member functions and objects
 	 */
 	std::vector<Command*> commands_;			//command->member function
 
