@@ -174,7 +174,7 @@ Do not load or save execution history at startup.
 .B \-p, \-\-script\-from\-stdin
 Will read commands from stdin prior to entering in interactive mode.
 .TP
-.B \-o [fb|sdl|aa|dumb|imlib2], \-\-output\-device [fb|sdl|aa|dumb|imlib2]
+.B \-o [fb|sdl|aa|imlib2|caca|dumb], \-\-output\-device [fb|sdl|aa|imlib2|caca|dumb]
 Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.The available devices depend on the original configuration/compilation options, so you should
 get the list of available output devices issuing \fBfim \-\-version\fP.
 The \fBaa\fP option may be specified as  \fBaa={['w']}\fP ; the \fB'w'\fP character allows windowed mode in case of aalib running under X (otherwise, the DISPLAY environment variable will be unset for the current instance of fim).
