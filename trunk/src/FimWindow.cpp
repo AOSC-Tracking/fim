@@ -2,7 +2,7 @@
 /*
  FimWindow.cpp : Fim's own windowing system
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ namespace fim
 		unsigned int i=0;
 		fim_err_t rc=0;/*return code*/
 #if FIM_DISABLE_WINDOW_SPLITTING
-		return "Warning: window splitting is temporarily disabled. It shall fixed in a soon-to-come version.\n";
+		return "Warning: window control (splitting, etc.) is disabled. It shall be re-enabled in a future version.\n";
 #endif /* FIM_DISABLE_WINDOW_SPLITTING */
 #ifdef FIM_AUTOCMDS
 		fim::string c=getGlobalIntVariable(FIM_VID_FILENAME);

@@ -514,7 +514,7 @@ while(expression){action;}  A conditional cycle construct. May be interrupted by
 .B
 window
 .fi
-window {args} : manipulates the window system windows; each value of {args} shall be one of ['split' | 'hsplit' | 'vsplit' | 'normalize' | 'enlarge' | 'venlarge' | 'henlarge' | 'up' | 'down' | 'left' | 'right' | 'close' | 'swap']
+window {args} : this command is disabled. It shall be re\-enabled in a future version.
 .fi
 
 .SH AUTOCOMMANDS REFERENCE
