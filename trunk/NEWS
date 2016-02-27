@@ -1,7 +1,9 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
-                eersion 0.6-trunk
+                Version 0.6-trunk
+# (r1009)
+ * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
 # (r1008)
  * switch --read-from-stdin-elds supports now the ASCII NUL terminator (via '').
 # (r1007)

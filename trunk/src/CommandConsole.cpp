@@ -648,13 +648,12 @@ err:
 		       	return FIM_CNS_EMPTY_RESULT;
 	}
 
-	void CommandConsole::executeBinding(const fim_key_t c)
+	bool CommandConsole::executeBinding(const fim_key_t c)
 	{
 		/*
 		 *	Executes the command eventually bound to c.
 		 *	Doesn't log anything.
-		 *	Just interpretates and executes the binding.
-		 *	If the binding is inexistent, ignores silently the error.
+		 *	If the binding is inexistent, ignores silently the error and return false.
 		 */
 		bindings_t::const_iterator bi=bindings_.find(c);
 		fim_err_t status=FIM_ERR_NO_ERROR;
@@ -717,8 +716,10 @@ err:
 			std::cerr << "error performing execute()\n";
 			//show_must_go_on_=0;	/* we terminate interactive execution */
 		}
+		else
+			return true;
 ret:
-		return;
+		return false;
 	}
 
 	fim_err_t CommandConsole::execute_internal(const fim_char_t *ss, fim_xflags_t xflags)
@@ -1209,12 +1210,14 @@ err:
 #endif /* FIM_USE_READLINE */
 					{
 
-						this->executeBinding(c);
+						if( this->executeBinding(c) )
+						{
 #ifdef FIM_RECORDING
-						if(recordMode_)
-						       	record_action(getBoundAction(c));
-						memorize_last(getBoundAction(c));
+							if(recordMode_)
+							       	record_action(getBoundAction(c));
+							memorize_last(getBoundAction(c));
 #endif /* FIM_RECORDING */
+						}
 					}
 				}
 				else

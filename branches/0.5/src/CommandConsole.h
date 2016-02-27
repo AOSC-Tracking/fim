@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -284,7 +284,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_set(const args_t &args);
 	fim::string fcmd_unalias(const args_t& args);
 	//fim_char_t ** tokenize_(const fim_char_t *s);
-	void executeBinding(const fim_key_t c);
+	bool executeBinding(const fim_key_t c);
 	fim::string getBoundAction(const fim_key_t c)const;
 	//	void execute(fim::string cmd);
 	fim::string fcmd_eval(const args_t &args);
