@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ double getmilliseconds(void);
 const fim_char_t * fim_getenv(const fim_char_t * name);
 FILE * fim_fread_tmpfile(FILE * fp);
 double fim_atof(const fim_char_t *nptr);
-ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream);
+ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim);
 
 bool is_dir(const fim::string nf);
 bool is_file(const fim::string nf);

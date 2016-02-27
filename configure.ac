@@ -116,6 +116,7 @@ AM_MAINTAINER_MODE
 AH_TEMPLATE([HAVE_GETENV])
 AC_CHECK_FUNC([getenv], AC_DEFINE([HAVE_GETENV], [1], [If present, the getenv function allows fim to read environment variables.]))
 AC_CHECK_FUNC([getline], AC_DEFINE([HAVE_GETLINE], [1], [If present, will be used for stdin reading. (on GNU)]))
+AC_CHECK_FUNC([getdelim], AC_DEFINE([HAVE_GETDELIM], [1], [If present, will be used for stdin reading. (on GNU)]))
 AC_CHECK_FUNC([fgetln], AC_DEFINE([HAVE_FGETLN], [1], [If present, fgetln() will be used as a replacement for getline(). (on BSD)]))
 AC_CHECK_FUNC([get_current_dir_name], AC_DEFINE([HAVE_GET_CURRENT_DIR_NAME], [1], [Should live when _GNU_SOURCE, but it could be not the case.]))
 AC_CHECK_FUNC([rsb_lib_init])

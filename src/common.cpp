@@ -804,11 +804,13 @@ double fim_atof(const fim_char_t *nptr)
 	return sign?-n:n;
 }
 
-ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream)
+ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 {
-	/*
-	 * WARNING : untested!
-	 */
+#ifdef HAVE_GETDELIM
+	return getdelim(lineptr,n,delim,stream);
+#else /* HAVE_GETDELIM */
+	/* the man page depends on this */
+#endif /* HAVE_GETDELIM */
 #ifdef HAVE_GETLINE
 	return getline(lineptr,n,stream);
 #endif /* HAVE_GETLINE */
