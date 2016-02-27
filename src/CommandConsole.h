@@ -289,7 +289,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_set(const args_t &args);
 	fim::string fcmd_unalias(const args_t& args);
 	//fim_char_t ** tokenize_(const fim_char_t *s);
-	void executeBinding(const fim_key_t c);
+	bool executeBinding(const fim_key_t c);
 	fim::string getBoundAction(const fim_key_t c)const;
 	//	void execute(fim::string cmd);
 	fim::string fcmd_eval(const args_t &args);
