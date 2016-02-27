@@ -252,12 +252,12 @@ Scale the image according to the screen height.
 All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim \-c" or ":exec" (analogous to Vim's \-s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's \-w). 
 .TP
 .B \-L, \-\-read\-from\-file <arg>
-Read file list from file: each line one file to load (similar to \-\-read\-from\-stdin; interacts with \-\-read\-from\-stdin\-elds).
+Read file list from file: each line one file to load (similar to \-\-read\-from\-stdin; use \-\-read\-from\-stdin\-elds to control line breaking).
 
 
 .TP
 .B  \-,  \-\-read\-from\-stdin
-Read file list from stdin: each line one file to load.
+Read file list from stdin: each line one file to load; use with \-\-read\-from\-stdin\-elds to control line breaking).
 
 Note that these the three standard input reading functionalities (\-i,\-p and \-) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.
 
@@ -267,7 +267,7 @@ below to read some useful (and unique) ways of employing fim.
 
 .TP
 .B  \-\-read\-from\-stdin\-elds <arg>
-Specify an endline delimiter string for breaking lines read via \-/\-\-read\-from\-stdin. Line text before the delimiter will be treated as names of files to load; the text after will be ignored until a newline. This is useful e.g. to description files as filename list files.
+Specify an endline delimiter character for breaking lines read via \-/\-\-read\-from\-stdin/\-\-read\-from\-file (which shall be specified after this). Line text before the delimiter will be treated as names of files to load; the text after will be ignored. This is also useful e.g. to load description files (see \-\-load\-image\-descriptions\-file) as filename list files. Default is the newline character (0x0A); to specify an ASCII NUL byte (0x00) use ''.
 
 .TP
 .B \-A, \-\-autotop
@@ -282,9 +282,6 @@ Quiet mode. Sets _display_status=0;_display_busy=0;.
 .TP
 .B \-R, \-\-recursive
 		 Push files/directories to the files list recursively.
-.TP
-.B \-B, \-\-background\-recursive
-		 Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).
 
 .SH PROGRAM RETURN STATUS
 The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error; 42 on a signal\-triggered program exit;  or a different value in case of an another error.

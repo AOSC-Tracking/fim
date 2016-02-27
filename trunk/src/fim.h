@@ -254,6 +254,7 @@ typedef std::vector<fim::string> args_t;
 #define FIM_SYM_PROMPT_SLASH	'/'
 #define FIM_SYM_PROMPT_NUL	'\0'
 #define FIM_SYM_CHAR_NUL	'\0'
+#define FIM_SYM_CHAR_ENDL	'\n'
 #define FIM_SYM_ESC		0x1B
 #define FIM_SYM_ENTER		0x0D
 #define FIM_SYM_FLIPCHAR	'F'

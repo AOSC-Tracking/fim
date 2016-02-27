@@ -269,12 +269,12 @@ FIM_NULL
 "All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
     },
     {"read-from-file",      required_argument,       FIM_NULL, 'L',"read an image list from file.",FIM_NULL,
-"Read file list from file: each line one file to load (similar to --read-from-stdin; interacts with --read-from-stdin-elds).\n"
+"Read file list from file: each line one file to load (similar to --read-from-stdin; use --read-from-stdin-elds to control line breaking).\n"
 "\n"
     },
 #ifdef FIM_READ_STDIN
     {"read-from-stdin",      no_argument,       FIM_NULL, '-',"read an image list from standard input.",FIM_NULL,
-"Read file list from stdin: each line one file to load.\n"
+"Read file list from stdin: each line one file to load; use with --read-from-stdin-elds to control line breaking).\n"
 
 "\n"
 "Note that these the three standard input reading functionalities (-i,-p and -) conflict : if two or more of them occur in fim invocation, fim will exit with an error and warn about the ambiguity.\n"
@@ -283,10 +283,14 @@ FIM_NULL
 ".B INVOCATION EXAMPLES\n"
 "below to read some useful (and unique) ways of employing fim.\n"
     },
-    {"read-from-stdin-elds",      required_argument,       FIM_NULL, 0x72667373,"--read-from-stdin filenames endline delimiter string.",FIM_NULL,
-"Specify an endline delimiter string for breaking lines read via -/--read-from-stdin. Line text before the delimiter will be treated as names of files to load; the text after will be ignored until a newline. This is useful e.g. to description files as filename list files.\n"
-    },
 #endif /* FIM_READ_STDIN */
+    {"read-from-stdin-elds",      required_argument,       FIM_NULL, 0x72667373,"--read-from-stdin/--read-from-file filenames endline delimiter character.",FIM_NULL,
+"Specify an endline delimiter character for breaking lines read via -/--read-from-stdin/--read-from-file (which shall be specified after this). Line text before the delimiter will be treated as names of files to load; the text after will be ignored. This is also useful e.g. to load description files (see --" FIM_OSW_LOAD_IMG_DSC_FILE ") as filename list files. Default is the newline character (0x0A)"
+#ifdef HAVE_GETDELIM
+	"; to specify an ASCII NUL byte (0x00) use ''"
+#endif /* HAVE_GETDELIM */
+	".\n"
+    },
     {"autotop",   no_argument,       FIM_NULL, 'A',"Align images to the top (UNFINISHED).",FIM_NULL,
 	    FIM_NULL
     },
@@ -935,22 +939,25 @@ done:
 static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t pf)
 {
 			/* TODO: move to CommandConsole */
-	    	bool wv = false; /*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
+	    		bool wv = false; /*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
 			fim_char_t *lineptr=FIM_NULL;
 			size_t bs=0;
 			int fc=0;
 			FILE * fd = FIM_NULL;
+			
+			sa = sa ? sa : "\n";
 		
 			if(fn)
 					fd = fim_fopen(fn,"r");
 			else
 					fd = stdin;
 
-			while(fim_getline(&lineptr,&bs,fd)>0)
+			while(fim_getline(&lineptr,&bs,fd,*sa)>0)
 			{
-				chomp(lineptr);
+				if(*sa=='\n')
+					chomp(lineptr); // BAD
 
-				if(sa && lineptr && strstr(lineptr,sa))
+				if(sa && *sa && lineptr && strstr(lineptr,sa))
 					*strstr(lineptr,sa) = FIM_SYM_CHAR_NUL;
 				cc.push(lineptr,pf);
 				// printf("%s\n",lineptr);
@@ -987,7 +994,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
 		bool appendedPreConfigCommand=false;
-		const char * sa = FIM_NULL;
+		char sac = FIM_SYM_CHAR_ENDL;
 		fim_flags_t pf = FIM_FLAG_DEFAULT; /* push flags */
 #if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t'; /* separation character for --load-image-descriptions-file */
@@ -1407,7 +1414,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    read_stdin_choice = FilesList;
 		    break;
 		case 0x72667373:
-		    sa = optarg;
+		    sac = *optarg;
 		    break;
 		case 0:
 		    //fim's
@@ -1415,7 +1422,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    break;
 	#endif /* FIM_READ_STDIN */
 		case 'L':
-			fim_load_filelist(optarg,sa,pf);
+			fim_load_filelist(optarg,&sac,pf);
 		    break;
 		default:
 		case 'h':
@@ -1463,7 +1470,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		 * */
 		if( read_stdin_choice == FilesList )
 		{
-			fim_load_filelist(FIM_NULL,sa,pf);
+			fim_load_filelist(FIM_NULL,&sac,pf);
 			close(0);
 			ndd=dup(2);
 		}
