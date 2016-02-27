@@ -3,6 +3,7 @@
 
                 Version 0.5-rc2
 
+ * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
  * configure will autodetect and turn aalib on by default
  * fix: will emit more precise diagnostics on unsupported device string
  * fix: adjusted man pages for roff cleanliness
