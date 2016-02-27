@@ -41,6 +41,12 @@
 #define FIM_PR(X) 
 #endif /* FIM_BROWSER_INSPECT */
 
+#if FIM_USE_CXX11
+#include <utility>	/* std::swap */
+#else /* FIM_USE_CXX11 */
+#include <algorithm>	/* std::swap */
+#endif /* FIM_USE_CXX11 */
+
 namespace fim
 {
 	int Browser::current_n(void)const
@@ -146,6 +152,8 @@ namespace fim
 #endif /* FIM_WANT_SORT_BY_STAT_INFO */
 			else if(args[0]=="reverse")
 				result = _reverse();
+			else if(args[0]=="swap")
+				result = _swap();
 			else if(args[0]=="pop")
 			{
 				/* deletes the last image from the files list.  someday may add filename matching based remove..  */
@@ -1235,6 +1243,16 @@ ret:
 		 *	sorts the image filenames list
 		 */
 		std::reverse(flist_.begin(),flist_.end());
+		return n_files()?(flist_[current_n()]):nofile_;
+	}
+
+	fim::string Browser::_swap(void)
+	{
+		/*
+		 *	swap current with first
+		 */
+		if( n_files() > 1 && current_n() )
+			std::swap(flist_[0],flist_[current_n()]);
 		return n_files()?(flist_[current_n()]):nofile_;
 	}
 

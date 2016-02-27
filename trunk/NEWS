@@ -2,6 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+# (r1010)
+ * introduced the 'list "swap"' command.
 # (r1009)
  * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
 # (r1008)
