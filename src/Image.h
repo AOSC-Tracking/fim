@@ -249,6 +249,9 @@ public:
 		/* sc: separator char */
 		std::ifstream mfs (dfn.c_str(),std::ios::app);
 		std::string ln;
+#if FIM_WANT_PIC_CCMT
+		std::string cps,cas; // contextual prepend/append string
+#endif /* FIM_WANT_PIC_CCMT */
 #if FIM_WANT_PIC_RCMT
 		std::string ld; // last description
 #endif /* FIM_WANT_PIC_RCMT */
@@ -277,6 +280,26 @@ public:
 						{
 							std::string varname = fn.substr(vn,es-vn);
 							++es;
+#if FIM_WANT_PIC_CCMT
+							/* FIXME: rationalize this code */
+							if( varname == "^" )
+							{
+								std::string varval = fn.substr(es);
+								if( fn[es] )
+									cps = varval;
+								else
+									cps = "";
+							}
+							if( varname == "+" )
+							{
+								std::string varval = fn.substr(es);
+								if( fn[es] )
+									cas = varval;
+								else
+									cas = "";
+							}
+#endif /* FIM_WANT_PIC_CCMT */
+							/* FIXME: shall introduce alphanumeric restriction */
 							if( fn[es] )
 							{
 								std::string varval = fn.substr(es);
@@ -341,6 +364,9 @@ public:
 						}
 					}
 #endif /* FIM_WANT_PIC_RCMT */
+#if FIM_WANT_PIC_CCMT
+					ds = cps + ds + cas;
+#endif /* FIM_WANT_PIC_CCMT */
 					if(! want_basename )
 					{
 						(*this)[fn]=ds;
