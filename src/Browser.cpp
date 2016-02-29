@@ -1620,12 +1620,14 @@ err:
 		 */
 		fim::string result;
 		int N = 0;
+		const bool wom = (flist_.size() > 1000); // warn on more. FIXME: 1000 is arbitrary..
 		fim_int matched = 0, marked = 0;
 
 		FIM_PR('*');
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		if ( rm == MarkedMatch )
 		{
+			if(wom) commandConsole_.set_status_bar("limiting marked...", "*");
 			for(size_t i=0;i<flist_.size();++i)
 				if( cc.isMarkedFile(flist_[i]) != negative )
 				{
@@ -1661,6 +1663,7 @@ err:
 			if ( rm == VarMatch )
 				rm = FullFileNameMatch;
 #endif /* FIM_WANT_PIC_LVDN */
+			if(wom) commandConsole_.set_status_bar("limiting matching...", "*");
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
 			{

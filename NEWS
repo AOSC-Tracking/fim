@@ -2,6 +2,8 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+# (r1015)
+ * will emit a status message when limiting long lists.
 # (r1014)
  * Default key for 'scrollforward' is now space (' ') instead of 's'.
 # (r1013)
