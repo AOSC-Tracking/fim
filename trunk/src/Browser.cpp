@@ -1303,9 +1303,11 @@ ret:
 			/* If filename does not match, we look for match on description. */
 			if(!hm)
 			{
-				if(cc.id_.find(fim_fn_t(fstm)) != cc.id_.end() )
-					fstm = (cc.id_[fim_fn_t(fstm)]).c_str();
-				hm = (commandConsole_.regexp_match(fstm,args[0].c_str(),rsic));
+				/* FIXME: in the long run need a uniform decision on whether comments are to be accessed by full path or basename. */
+				const fim_char_t * bfstm = fim_basename_of(fstm);
+				if(cc.id_.find(fim_fn_t(bfstm)) != cc.id_.end() )
+					bfstm = (cc.id_[fim_fn_t(bfstm)]).c_str();
+				hm = (commandConsole_.regexp_match(bfstm,args[0].c_str(),rsic));
 			}
 #endif /* FIM_WANT_PIC_CMTS */
 
