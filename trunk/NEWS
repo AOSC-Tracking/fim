@@ -2,6 +2,11 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.6-trunk
+
+# (r1018)
+# TODO: unfinished, undocumented
+ * added command line switch  -/  <arg> as short for -c /<arg>
+ * added command line switch --// <arg> as short for -c /<arg> with _re_search_opts='f'
 # (r1015)
  * will emit a status message when limiting long lists.
 # (r1014)
