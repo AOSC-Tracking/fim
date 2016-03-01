@@ -233,6 +233,7 @@ typedef std::vector<fim::string> args_t;
 #define FIM_SYM_CONSOLE_KEY	':'
 #define FIM_SYM_CONSOLE_KEY_STR	":"
 #define FIM_SYM_FW_SEARCH_KEY	'/'
+#define FIM_SYM_FW_SEARCH_KEY_STR	"/"
 #define FIM_SYM_BW_SEARCH_KEY	'?'
 #define FIM_SYM_NULL_KEY	0
 #define FIM_SYM_NAMESPACE_SEP	':'
@@ -522,9 +523,13 @@ namespace fim
 	std::ostream& operator<<(std::ostream &os,const string& s);
 }
 
+#define FIM_I2BI(VID) VID "_" /* identifier to backup identifier */
+
 /*
  * Fim language variable identifiers, with their help strings.
  * TODO: shall specify more information about these variables
+ *
+ * Please note that the prefix FIM_VID is reserved to variable identifiers exclusively. 
  * */
 //#define FIM_VID_NEWLINE 			"_newline"	/* "" */
 //#define FIM_VID_TAB 				"_tab"	/* "" */

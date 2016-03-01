@@ -310,6 +310,8 @@ FIM_NULL
 	    FIM_NULL
     },
 #endif /* FIM_WANT_BACKGROUND_LOAD */
+    { "/",   required_argument,       FIM_NULL, '/',"Equivalent to a search with the key '/'.",FIM_NULL, FIM_NULL },
+    {"//",   required_argument,       FIM_NULL, 0x2f2f0000,"Equivalent to a search with the key '/' on the full path.",FIM_NULL, FIM_NULL },
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
 /*    {"once",       no_argument,       FIM_NULL, '1',"",FIM_NULL},*/  /* loop only once */
 /*    {"font",       required_argument, FIM_NULL, 'f',"",FIM_NULL},*/  /* font */
@@ -1018,7 +1020,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:RL:B",
+		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:RL:B/:",
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -1423,6 +1425,23 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 	#endif /* FIM_READ_STDIN */
 		case 'L':
 			fim_load_filelist(optarg,&sac,pf);
+		    break;
+		case '/':
+		    //fim's
+		    cc.appendPostInitCommand(string( string(FIM_SYM_FW_SEARCH_KEY_STR) + fim_shell_arg_escape(optarg,false) ).c_str());
+		    appendedPostInitCommand=true;
+		    break;
+		case 0x2f2f0000:
+		    //fim's
+		    cc.appendPostInitCommand( ( string (
+			FIM_I2BI(FIM_VID_RE_SEARCH_OPTS) "=" FIM_VID_RE_SEARCH_OPTS ";\n"
+			FIM_VID_RE_SEARCH_OPTS "=\"f\";\n"
+		    	FIM_SYM_FW_SEARCH_KEY_STR) + fim_shell_arg_escape(optarg,false) + string("\n"
+		    	FIM_SYM_FW_SEARCH_KEY_STR "\n"
+		    	FIM_VID_RE_SEARCH_OPTS "=" FIM_I2BI(FIM_VID_RE_SEARCH_OPTS) ";\n") 
+					    ).c_str()
+			    );
+		    appendedPostInitCommand=true;
 		    break;
 		default:
 		case 'h':
