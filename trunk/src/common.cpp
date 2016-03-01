@@ -75,15 +75,17 @@ fim::string fim_dirname(const fim::string & arg)
 	return "";//FIXME
 #endif /* HAVE_LIBGEN_H */
 }
-	fim::string fim_shell_arg_escape(const fim::string & arg)
+	fim::string fim_shell_arg_escape(const fim::string & arg, bool quoted)
 	{
 		// FIXME: this escaping function is NOT safe; this code shall only serve as a placeholder for a better one.
 		fim::string ear=arg;
 		fim::string res=FIM_CNS_EMPTY_STRING;
-		res+="'";
+		if(quoted)
+			res+="'";
 		ear.substitute("'","'\\''");
 		res+=ear;
-		res+="'";
+		if(quoted)
+			res+="'";
 		return res;
 	}
 
