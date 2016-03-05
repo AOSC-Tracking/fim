@@ -191,6 +191,7 @@ class Browser
 	bool push_dir(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=NULL);
 #endif /* FIM_READ_DIRS */
 	bool push(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=NULL);
+	bool push_noglob(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=NULL);
 
 	fim::string display(void);
 	fim::string _random_shuffle(bool dts=true);
