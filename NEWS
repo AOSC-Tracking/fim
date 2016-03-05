@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1019)
+# TODO: not yet active
+ * support for glob fnmatch wordexp...
 # (r1018)
 # TODO: unfinished, undocumented
  * added command line switch  -/  <arg> as short for -c /<arg>

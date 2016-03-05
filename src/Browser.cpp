@@ -47,6 +47,23 @@
 #include <algorithm>	/* std::swap */
 #endif /* FIM_USE_CXX11 */
 
+#if 0
+#if HAVE_WORDEXP_H
+#include <wordexp.h>
+#else /* HAVE_WORDEXP_H */
+#endif /* HAVE_WORDEXP_H */
+
+#if HAVE_GLOB_H
+#include <glob.h>
+#else /* HAVE_GLOB_H */
+#endif /* HAVE_GLOB_H */
+
+#if HAVE_FNMATCH_H
+#include <fnmatch.h>
+#else /* HAVE_FNMATCH_H */
+#endif /* HAVE_FNMATCH_H */
+#endif /* 0 */
+
 namespace fim
 {
 	int Browser::current_n(void)const
@@ -1086,6 +1103,45 @@ rret:
 #endif /* FIM_READ_DIRS */
 
 	bool Browser::push(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
+	{
+		int eec = 0; // expansion error code
+		bool pec = false; // push error code
+#if 0
+#if HAVE_WORDEXP_H
+	{
+		wordexp_t p;
+		eec = wordexp(nf.c_str(),&p,0);
+		if( eec == 0 )
+		{
+			for(size_t g=0;g<p.we_wordc;++g)
+				pec |= push_noglob(p.we_wordv[g],pf,show_must_go_on);
+			wordfree(&p);
+			goto ret;
+		}
+	}
+#endif /* HAVE_WORDEXP_H */
+
+#if HAVE_GLOB_H
+	{
+               	glob_t pglob;
+               	pglob.gl_offs = 0;
+       		eec = glob(nf.c_str(),GLOB_NOSORT| GLOB_NOMAGIC | GLOB_TILDE, NULL, &pglob);
+		if( eec == 0 )
+		{
+			for(size_t g=0;g<pglob.gl_pathc;++g)
+				pec |= push_noglob(pglob.gl_pathv[g],pf,show_must_go_on);
+			globfree(&pglob);
+			goto ret;
+		}
+	}
+#endif /* HAVE_GLOB_H */
+#endif
+		pec = push_noglob(nf.c_str(),pf,show_must_go_on);
+ret:
+		return pec;
+	}
+
+	bool Browser::push_noglob(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{	
 		/*
 		 * FIX ME:
@@ -1670,7 +1726,11 @@ err:
 			for(size_t i=0;i<flist_.size();++i)
 			{
 				bool match = false;
+#if HAVE_FNMATCH_H && 0
+				match |= ( rm == FullFileNameMatch && ( ( 0 == fnmatch(rlist[r].c_str(), flist_[i].c_str(),0)  ) ) != negative );
+#else /* HAVE_FNMATCH_H */
 				match |= ( rm == FullFileNameMatch && ( ( flist_[i] == rlist[r] ) ) != negative );
+#endif /* HAVE_FNMATCH_H */
 				match |= ( rm == PartialFileNameMatch && ( ( flist_[i].re_match(rlist[r].c_str()) ) ) != negative );
 #if FIM_WANT_PIC_LVDN
 				match |= ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(std::string(flist_[i]).c_str())].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
