@@ -69,6 +69,8 @@ struct fim_options_t{
   const fim_char_t *mandesc;/* this is fim specific */
 };
 
+#define FIM_SYM_CMD_SLSL FIM_VID_RE_SEARCH_OPTS "=\"f\""
+
 /*
  * Yet unfinished. 
  * This structure keeps hold of Fim's options flags.
@@ -310,8 +312,8 @@ FIM_NULL
 	    FIM_NULL
     },
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-    { "/",   required_argument,       FIM_NULL, '/',"Equivalent to a search with the key '/'.",FIM_NULL, FIM_NULL },
-    {"//",   required_argument,       FIM_NULL, 0x2f2f0000,"Equivalent to a search with the key '/' on the full path.",FIM_NULL, FIM_NULL },
+    { "/",   required_argument,       FIM_NULL, '/',"After startup jump to pattern; short for -c '" FIM_SYM_FW_SEARCH_KEY_STR "'.",FIM_NULL, FIM_NULL },
+    {"//",   required_argument,       FIM_NULL, 0x2f2f0000,"After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "' but with search on the full path (with " FIM_SYM_CMD_SLSL ").",FIM_NULL, FIM_NULL },
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
 /*    {"once",       no_argument,       FIM_NULL, '1',"",FIM_NULL},*/  /* loop only once */
 /*    {"font",       required_argument, FIM_NULL, 'f',"",FIM_NULL},*/  /* font */
@@ -1435,7 +1437,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		    //fim's
 		    cc.appendPostInitCommand( ( string (
 			FIM_I2BI(FIM_VID_RE_SEARCH_OPTS) "=" FIM_VID_RE_SEARCH_OPTS ";\n"
-			FIM_VID_RE_SEARCH_OPTS "=\"f\";\n"
+			FIM_SYM_CMD_SLSL ";\n"
 		    	FIM_SYM_FW_SEARCH_KEY_STR) + fim_shell_arg_escape(optarg,false) + string("\n"
 		    	FIM_SYM_FW_SEARCH_KEY_STR "\n"
 		    	FIM_VID_RE_SEARCH_OPTS "=" FIM_I2BI(FIM_VID_RE_SEARCH_OPTS) ";\n") 
