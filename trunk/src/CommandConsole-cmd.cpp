@@ -2,7 +2,7 @@
 /*
  CommandConsole-cmd.cpp : Fim console commands
 
- (c) 2009-2015 Michele Martone
+ (c) 2009-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -67,31 +67,17 @@ err:
 		 */
 		const fim_char_t *kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
 		const fim_char_t*kstr=FIM_NULL;
-		int l;
 		fim_key_t key=FIM_SYM_NULL_KEY;
 
 		if(args.size()==0)
 			return getBindingsList();
 
 		kstr=(args[0].c_str());
-		if(!kstr)
-			return kerr;
-		l=strlen(kstr);
-		if(!l)
+		if(!kstr || 0 == strlen(kstr))
 			return kerr;
 
-#ifdef FIM_WANT_RAW_KEYS_BINDING
-		if(l>=2 && isdigit(kstr[0]) && isdigit(kstr[1]))
-		{
-			/* special syntax for raw keys */
-			key=atoi(kstr+1);
-		}
-#endif /* FIM_WANT_RAW_KEYS_BINDING */
-		else
-		{
-			if(sym_keys_.find(kstr)!= sym_keys_.end())
-				key=sym_keys_[args[0]];
-		}
+		key = kstr_to_key(args[0].c_str());
+
 		if(key==FIM_SYM_NULL_KEY)
 		{
 			return "supplied key "+args[0]+" is invalid.\n";
