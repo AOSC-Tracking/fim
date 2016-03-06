@@ -123,8 +123,8 @@
 		 */
 		k[0]='C'; k[1]='-'; k[3]='\0';
 		//problem : no uppercase with control.sorry.
-		for(fim_key_t i='a';i<='j';++i) k[2]=fim_char_t(i), sym_keys_[k]=((i-'a'));
-		for(fim_key_t i='k';i<='z';++i) k[2]=fim_char_t(i), sym_keys_[k]=((i-'a'));
+		for(fim_key_t i='a';i<='j';++i) k[2]=fim_char_t(i), sym_keys_[k]=((i-'a')+1);
+		for(fim_key_t i='k';i<='z';++i) k[2]=fim_char_t(i), sym_keys_[k]=((i-'a')+1);
 		// for(fim_key_t i=' ';i<='?';++i) k[2]=fim_char_t(i), sym_keys_[k]=( i+1)-'a' ;
 
 		/*

@@ -8,7 +8,7 @@
    that is jump to first or last page.
 # (r1026)
  * available symkeys are now documented in a section of man fimrc.
-# (r1025)
+# (r1025,r1028)
  * fix: cleaned up the internal keysyms initialization code.
 # (r1019)
 # TODO: not yet active
