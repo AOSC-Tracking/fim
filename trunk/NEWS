@@ -7,7 +7,7 @@
 # TODO: not yet active
  * support for glob fnmatch wordexp...
 # (r1021)
- * switch --keysym-press to execute simulated press of keysym at startup.
+ * switch -k --keysym-press <keysym> to execute simulated press of keysym at startup.
 # (r1018)
  * added command line switch  -/  <pattern> as short for -c /<pattern>.
  * added command line switch --// <pattern> as short for -c /<pattern> with _re_search_opts='f'.
