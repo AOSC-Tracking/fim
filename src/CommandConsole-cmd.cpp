@@ -669,24 +669,32 @@ err:
 
 	fim::string CommandConsole::fcmd_dump_key_codes(const args_t& args)
 	{
-		return do_dump_key_codes(args);
+		return do_dump_key_codes();
 	}
 
-	fim::string CommandConsole::do_dump_key_codes(const args_t& args)const
+	fim::string CommandConsole::do_dump_key_codes(FimDocRefMode refmode)const
 	{
 		/*
-		 * all keyboard codes are dumped in the console.
+		 * dump all keysyms
 		 * */
 		fim::string acl;
 		sym_keys_t::const_iterator ki;
-		acl+="There are ";
-		acl+=fim::string((int)(sym_keys_.size()));
-		acl+=" bindings (dumping them here, unescaped).\n";
+
+		if ( refmode == DefRefMode )
+			acl+="There are ",
+			acl+=fim::string((int)(sym_keys_.size())),
+			acl+=" bindings (dumping them here, unescaped).\n";
+
 		for( ki=sym_keys_.begin();ki!=sym_keys_.end();++ki)
 		{
-			acl+=((*ki).first);
-			acl+=" -> ";
-			acl+=fim::string((int)(((*ki).second)));
+			if ( refmode == DefRefMode )
+				acl+=((*ki).first);
+			else
+				if( isprint ( * ((*ki).first).c_str() ) )
+					acl+=((*ki).first);
+			if ( refmode == DefRefMode )
+				acl+=" -> ",
+				acl+=fim::string((int)(((*ki).second)));
 			acl+="  ";
 		}
 		acl+="\n";
