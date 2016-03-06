@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1025)
+ * fix: cleaned up the internal keysyms initialization code.
 # (r1019)
 # TODO: not yet active
  * support for glob fnmatch wordexp...
