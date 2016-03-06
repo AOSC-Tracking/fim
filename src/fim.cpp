@@ -236,8 +236,8 @@ FIM_NULL
 "Sort files list before browsing according to file basename's."
     },
 #if FIM_WANT_SORT_BY_STAT_INFO
-    {"sort-mdate",     no_argument,       FIM_NULL, 0x7369626d ,"sort images by modification date.",FIM_NULL,
-"Sort files list before browsing according to file modification date."
+    {"sort-mtime",     no_argument,       FIM_NULL, 0x7369626d ,"sort images by modification time.",FIM_NULL,
+"Sort files list before browsing according to file modification time."
     },
     {"sort-fsize",     no_argument,       FIM_NULL, 0x73696273 ,"sort images by file size.",FIM_NULL,
 "Sort files list before browsing according to file size."
