@@ -30,6 +30,33 @@
 
 namespace fim
 {
+	fim_key_t CommandConsole::kstr_to_key(const fim_char_t * kstr)const
+	{
+		int l;
+		fim_key_t key = FIM_SYM_NULL_KEY;
+
+		if(!kstr)
+			goto err;
+		l=strlen(kstr);
+		if(!l)
+			goto err;
+
+#ifdef FIM_WANT_RAW_KEYS_BINDING
+		if(l>=2 && isdigit(kstr[0]) && isdigit(kstr[1]))
+		{
+			/* special syntax for raw keys */
+			key=atoi(kstr+1);
+		}
+#endif /* FIM_WANT_RAW_KEYS_BINDING */
+		else
+		{
+			if(sym_keys_.find(kstr)!= sym_keys_.end())
+				key=sym_keys_.find(fim::string(kstr))->second;
+		}
+err:
+		return key;
+	}
+
 	fim::string CommandConsole::fcmd_bind(const args_t& args)
 	{
 		/*

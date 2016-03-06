@@ -282,6 +282,12 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	autocmds_stack__t autocmds_loop_stack;
 	autocmds_stack_t autocmds_stack;
 	fim::string fcmd_bind(const args_t& args);
+	fim_key_t kstr_to_key(const fim_char_t * kstr)const;
+#if FIM_WANT_CMDLINE_KEYPRESS
+	public:
+	std::vector<fim::string > clkpv_; /* command line key presses vector*/
+	private:
+#endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	fim::string getAliasesList(void)const;
 	fim::string dummy(std::vector<Arg> args);
 	fim::string fcmd_variables_list(const args_t& args);

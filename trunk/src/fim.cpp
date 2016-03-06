@@ -133,6 +133,9 @@ struct fim_options_t fim_options[] = {
     {"help",       optional_argument,       FIM_NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and exit.","[=s|d|l|m]",
 FIM_NULL
     },
+#if FIM_WANT_CMDLINE_KEYPRESS
+    { "keysym-press",   required_argument,       FIM_NULL, 'k',"Execute simulated press of keysym at startup.",FIM_NULL, FIM_NULL },
+#endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_PIC_CMTS
     {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, /*0x6c696466*/'D', "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_IMG_DSC_FILE_SEPC " specifies otherwise), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
 #if FIM_WANT_PIC_LVDN
@@ -1022,7 +1025,11 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 
 	    	for (;;) {
 		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:RL:B/:",
+		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:RL:B/:"
+#if FIM_WANT_CMDLINE_KEYPRESS
+		"k:"
+#endif /* FIM_WANT_CMDLINE_KEYPRESS */
+				    ,
 				options, &opt_index);
 		if (c == -1)
 		    break;
@@ -1445,6 +1452,11 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 			    );
 		    appendedPostInitCommand=true;
 		    break;
+#if FIM_WANT_CMDLINE_KEYPRESS
+		case 'k':
+			cc.clkpv_.push_back(optarg);
+		    break;
+#endif /* FIM_WANT_CMDLINE_KEYPRESS */
 		default:
 		case 'h':
 		    help_and_exit(argv[0],FIM_PERR_NO_ERROR,optarg);

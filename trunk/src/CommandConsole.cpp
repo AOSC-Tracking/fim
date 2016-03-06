@@ -1056,6 +1056,10 @@ err:
 		background_push();
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
+#if FIM_WANT_CMDLINE_KEYPRESS
+		for(size_t i=0;i<clkpv_.size();++i)
+			executeBinding( kstr_to_key(clkpv_[i].c_str() ) );
+#endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	 	while(show_must_go_on_)
 		{
 			cycles_++;
