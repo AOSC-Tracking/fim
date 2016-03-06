@@ -103,20 +103,19 @@
 		fim_char_t k[4];k[1]='\0';
 
 		/*	97=0x61 to 122=0x7A	*/
-		for(fim_char_t i='a';i<='z';++i,*k=i) sym_keys_[k]=i;
-
+		for(fim_char_t i='a';i<='z';++i) *k=i, sym_keys_[k]=i;
 		
 		/*	65=0x41 to 90=0x5A (shifted keys)	*/
-		for(fim_char_t i='A';i<='Z';++i,*k=i) sym_keys_[k]=i;
+		for(fim_char_t i='A';i<='Z';++i) *k=i, sym_keys_[k]=i;
 		
 		/*	32=0x20 to 65=0x40	*/
-		for(fim_char_t i=' ';i<='@';++i,*k=i) sym_keys_[k]=i;
+		for(fim_char_t i=' ';i<='@';++i) *k=i, sym_keys_[k]=i;
 
 		/*	91=0x5B to 96=0x60	*/
-		for(fim_char_t i='[';i<'a';++i,*k=i) sym_keys_[k]=i;
+		for(fim_char_t i='[';i<'a';++i) *k=i, sym_keys_[k]=i;
 
 		/*	123=0x7B to 127=0x7F (DEL)	*/
-		for(int i='{';i<=127;++i,*k=(fim_char_t)i) sym_keys_[k]=(fim_char_t)i;
+		for(fim_key_t i='{';i<=126;++i) *k=fim_char_t(i), sym_keys_[k]=(fim_char_t)i;
 		// A note : DEL is not captured by the above configuration.
 		
 		/*
@@ -124,10 +123,10 @@
 		 */
 		k[0]='C'; k[1]='-'; k[3]='\0';
 		//problem : no uppercase with control.sorry.
-		for(fim_char_t i='b';i<='j';++i,k[2]=i) sym_keys_[k]=((i+1)-'a');
-		for(fim_char_t i='k';i<='z';++i,k[2]=i) sym_keys_[k]=((i+1)-'a');
-		for(fim_char_t i=' ';i<='?';++i,k[2]=i) sym_keys_[k]=( i+1)-'a' ;
-		sym_keys_["C-a"]=1;//to circumvent a mysterious arithmetical bug..
+		for(fim_key_t i='a';i<='j';++i) k[2]=fim_char_t(i), sym_keys_[k]=((i-'a'));
+		for(fim_key_t i='k';i<='z';++i) k[2]=fim_char_t(i), sym_keys_[k]=((i-'a'));
+		// for(fim_key_t i=' ';i<='?';++i) k[2]=fim_char_t(i), sym_keys_[k]=( i+1)-'a' ;
+
 		/*
 		 * The following bindings are known to be useless or bugful.
 		*/

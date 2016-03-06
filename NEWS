@@ -4,8 +4,9 @@
                 Version 0.5-rc3
 
  * fix: with _re_search_opts='f' the in-descriptions search was broken
- * fix: removed obsolete documentation for the "window" command, now disabled.
- * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
+ * fix: removed obsolete documentation for the "window" command, now disabled
+ * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works
+ * fix: cleaned up the internal keysyms initialization code
 
                 Version 0.5-rc2
 
