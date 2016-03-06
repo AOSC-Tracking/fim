@@ -8,7 +8,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
@@ -199,7 +199,7 @@ basename {filename} : returns the basename of {filename}
 .B
 bind
 .fi
-bind [{keysym} [{commands}]] : bind a keyboard symbol/shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.; binding is dynamical, so you can rebind keys even during program's execution
+bind [{keysym} [{commands}]] : bind a keyboard symbol/shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys. Key binding is dynamical, so you can rebind keys even during program's execution. You can get a list of valid symbols (keysyms) by invoking dump_key_codes or in the man page.
 .fi
 
 .na
@@ -516,6 +516,10 @@ window
 .fi
 window {args} : this command is disabled. It shall be re\-enabled in a future version.
 .fi
+
+.SH KEYSYMS REFERENCE
+
+" "  "!"  """  "#"  "$"  "%"  "&"  "'"  "("  ")"  "*"  "+"  ","  "\-"  "."  "/"  "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  ":"  ";"  "<"  "="  ">"  "?"  "@"  "A"  "Any"  "B"  "BackSpace"  "Backspace"  "C"  "C\-a"  "C\-b"  "C\-c"  "C\-d"  "C\-e"  "C\-f"  "C\-g"  "C\-h"  "C\-i"  "C\-j"  "C\-k"  "C\-l"  "C\-m"  "C\-n"  "C\-o"  "C\-p"  "C\-q"  "C\-r"  "C\-s"  "C\-t"  "C\-u"  "C\-v"  "C\-w"  "C\-x"  "C\-y"  "C\-z"  "D"  "Del"  "Down"  "E"  "End"  "Enter"  "Esc"  "F"  "G"  "H"  "Home"  "I"  "Ins"  "J"  "K"  "L"  "Left"  "M"  "N"  "O"  "P"  "PageDown"  "PageUp"  "Q"  "R"  "Right"  "S"  "T"  "Tab"  "U"  "Up"  "V"  "W"  "X"  "Y"  "Z"  "["  "\\"  "]"  "^"  "_"  "`"  "a"  "b"  "c"  "d"  "e"  "f"  "g"  "h"  "i"  "j"  "k"  "l"  "m"  "n"  "o"  "p"  "q"  "r"  "s"  "t"  "u"  "v"  "w"  "x"  "y"  "z"  "{"  "|"  "}"  "~"  
 
 .SH AUTOCOMMANDS REFERENCE
 Available autocommands are: PostScale, PreScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PostReload, PreReload, PostLoad, PreLoad, PostGoto, PreGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PreExecutionCycleArgs, PostExecutionCycle, PreWindow, PostWindow,  and they are triggered on actions as indicated by their name.

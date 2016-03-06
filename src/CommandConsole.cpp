@@ -380,7 +380,7 @@ ret:		return key;
 		addCommand(new Command(fim::string(FIM_FLT_AUTOCMD_DEL),fim::string(FIM_FLT_AUTOCMD_DEL" : manipulate auto commands. usage: " FIM_FLT_AUTOCMD_DEL " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING),this,&CommandConsole::fcmd_autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
 #endif /* FIM_AUTOCMDS */
 		addCommand(new Command(fim::string(FIM_FLT_BASENAME),fim::string(FIM_FLT_BASENAME" {filename} : returns the basename of {filename}"),this,&CommandConsole::fcmd_basename));
-		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" [" FIM_CNS_EX_KSY_STRING " [" FIM_CNS_EX_CMDS_STRING "]] : bind a keyboard symbol/shortcut " FIM_CNS_EX_KSY_STRING " to " FIM_CNS_EX_CMDS_STRING "" FIM_CNS_RAW_KEYS_MESG "; binding is dynamical, so you can rebind keys even during program's execution"),this,&CommandConsole::fcmd_bind));
+		addCommand(new Command(fim::string(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" [" FIM_CNS_EX_KSY_STRING " [" FIM_CNS_EX_CMDS_STRING "]] : bind a keyboard symbol/shortcut " FIM_CNS_EX_KSY_STRING " to " FIM_CNS_EX_CMDS_STRING "" FIM_CNS_RAW_KEYS_MESG " Key binding is dynamical, so you can rebind keys even during program's execution. You can get a list of valid symbols (keysyms) by invoking " FIM_FLT_DUMP_KEY_CODES " or in the man page."),this,&CommandConsole::fcmd_bind));
 		addCommand(new Command(fim::string(FIM_FLT_CD),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::fcmd_cd));
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		addCommand(new Command(fim::string(FIM_FLT_CLEAR),fim::string(FIM_FLT_CLEAR" : clear the virtual console"),this,&CommandConsole::fcmd_clear));

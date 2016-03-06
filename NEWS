@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1026)
+ * available symkeys are now documented in a section of man fimrc.
 # (r1025)
  * fix: cleaned up the internal keysyms initialization code.
 # (r1019)
