@@ -178,6 +178,10 @@ manmode:
 			string(".SH COMMANDS REFERENCE\n")+
 			string("\n")+
 			get_commands_reference(refmode)+
+			/*
+			string(".SH KEYSYMS REFERENCE\n")+
+			string("\n")+
+			do_dump_key_codes( Man )+ */
 			string(".SH AUTOCOMMANDS REFERENCE\n"
 			"Available autocommands are: "
 			FIM_AUTOCOMMANDS_LIST

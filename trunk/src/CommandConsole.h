@@ -310,7 +310,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_unbind(const args_t& args);
 	fim::string getBindingsList(void)const;
 	fim::string fcmd_dump_key_codes(const args_t& args);
-	fim::string do_dump_key_codes(const args_t& args)const;
+	fim::string do_dump_key_codes(FimDocRefMode refmode=DefRefMode)const;
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	fim::string fcmd_clear(const args_t& args);
 	fim::string scroll_up(const args_t& args);
