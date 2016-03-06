@@ -669,7 +669,7 @@ err:
 
 	fim::string CommandConsole::fcmd_dump_key_codes(const args_t& args)
 	{
-		return do_dump_key_codes();
+		return do_dump_key_codes(DefRefMode);
 	}
 
 	fim::string CommandConsole::do_dump_key_codes(FimDocRefMode refmode)const
@@ -690,8 +690,13 @@ err:
 			if ( refmode == DefRefMode )
 				acl+=((*ki).first);
 			else
-				if( isprint ( * ((*ki).first).c_str() ) )
-					acl+=((*ki).first);
+			{
+				acl+="\"";
+				if( ((*ki).first)[0] == '\\' )
+					acl+='\\';
+				acl+=((*ki).first);
+				acl+="\"";
+			}
 			if ( refmode == DefRefMode )
 				acl+=" -> ",
 				acl+=fim::string((int)(((*ki).second)));
