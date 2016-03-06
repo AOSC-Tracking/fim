@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1027)
+ * Keys '(' and ')' are now bound respectively to "goto '^p'" and "goto '$p'";
+   that is jump to first or last page.
 # (r1026)
  * available symkeys are now documented in a section of man fimrc.
 # (r1025)

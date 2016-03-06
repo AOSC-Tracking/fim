@@ -282,6 +282,8 @@ bind "^" "0;";
 bind "$" "$;";
 bind "Backspace" "prev;";
 bind "'" "goto _lastfileindex"; 
+bind '(' "goto '^p'";
+bind ')' "goto '$p'";
 _display_status=1;
 _want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
 _info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c";
