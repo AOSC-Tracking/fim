@@ -255,7 +255,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 					|| device==FIM_DDN_INN_AA
 		#endif /* FIM_WITH_AALIB */
 		#ifndef FIM_WITH_LIBSDL
-					|| device==FIM_WITH_LIBSDL
+					|| device==FIM_DDN_INN_SDL
 		#endif /* FIM_WITH_LIBSDL */
 		#ifdef FIM_WITH_NO_FRAMEBUFFER
 					|| device==FIM_DDN_INN_FB
