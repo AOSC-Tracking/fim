@@ -94,6 +94,7 @@ fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_cal
 const fim_char_t * fim_basename_of(const fim_char_t * s);
 fim_int fim_atoi(const char*s);
 size_t fim_maxrss(void);
+fim_bool_t fim_is_id(const char*s);
 
 /* exceptions */
 typedef int FimException;
