@@ -286,9 +286,6 @@ Quiet mode. Sets _display_status=0;_display_busy=0;.
 .B \-R, \-\-recursive
 		 Push files/directories to the files list recursively.
 .TP
-.B \-B, \-\-background\-recursive
-		 Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).
-.TP
 .B \-/, \-\-/ <arg>
 		 After startup jump to pattern; short for \-c '/'.
 .TP

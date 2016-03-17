@@ -179,7 +179,7 @@ autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
 #bind '*' "scale '100%'";
-bind '*' "toggleVerbosity;echo i:*";
+bind '*' "_display_console=0;toggleVerbosity;echo i:*";
 bind 'w' "scale 'w'";
 bind '<' "rotate10_ccw;display;";
 bind '>' "rotate10;display;";
