@@ -1021,3 +1021,18 @@ size_t fim_maxrss(void)
 #endif /* HAVE_SYS_RESOURCE_H */
 }
 
+fim_bool_t fim_is_id(const char*s)
+{
+	/* is fim variable identifier ? */
+	if(s)
+	{
+		if(*s != '_' && ! isalpha(*s) )
+			goto no;
+		for(; *s == '_' || isalnum(*s); ++s )
+			;
+		if(!*s)
+			return true;
+	}
+no:
+	return false;
+}

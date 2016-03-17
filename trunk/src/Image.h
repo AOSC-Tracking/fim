@@ -290,6 +290,7 @@ public:
 								else
 									cps = "";
 							}
+							else
 							if( varname == "+" )
 							{
 								std::string varval = fn.substr(es);
@@ -298,12 +299,17 @@ public:
 								else
 									cas = "";
 							}
+							else
 #endif /* FIM_WANT_PIC_CCMT */
-							/* FIXME: shall introduce alphanumeric restriction */
 							if( fn[es] )
 							{
-								std::string varval = fn.substr(es);
-								ns.setVariable(varname,Var(varval));
+								if ( fim_is_id(varname.c_str()) )
+								{
+									std::string varval = fn.substr(es);
+									ns.setVariable(varname,Var(varval));
+								}
+								else
+									; // not an id; TODO: may warn the user
 							}
 							else
 							{

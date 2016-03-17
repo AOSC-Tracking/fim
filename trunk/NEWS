@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1030)
+ * fix: introduced alphanumeric restriction in the shebang variables (must
+   begin with underscore or alphabetic, continue with underscore or alphanumeric).
 # (r1027)
  * Keys '(' and ')' are now bound respectively to "goto '^p'" and "goto '$p'";
    that is jump to first or last page.
