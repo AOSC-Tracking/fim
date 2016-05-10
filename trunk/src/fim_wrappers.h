@@ -2,7 +2,7 @@
 /*
  fim_wrappers.h : Some wrappers
 
- (c) 2011-2014 Michele Martone
+ (c) 2011-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ namespace fim
 #define fim_malloc(x) malloc(x)
 #define fim_free(x) free(x)
 #define fim_memset(x,y,z) memset(x,y,z)
-#define fim_bzero(x,y) fim_memset(x,0,y)
-//#define fim_bzero(x,y) bzero(x,0,y)
+#define fim_bzero(x,y) fim_memset(x,0,y) /* bzero has been made legacy by POSIX.2001 and deprecated since POSIX.2004 */
 }
 #endif /* FIM_WRAPPERS_H */
