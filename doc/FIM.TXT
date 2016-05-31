@@ -1012,7 +1012,7 @@ different available namespaces.
 
  'console_key'	: the key used to enter in command line mode (WARNING:experimental)
 
- '_prefetch'	: if 0 or unset, no prefetching will be adopted.
+ '_want_prefetch' : if 0 or unset, no prefetching will be adopted.
 
  '_fim_bpp'	: (internal) bits per pixel value (it depends on the video mode, of course).
 
