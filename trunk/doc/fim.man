@@ -150,6 +150,10 @@ Will read one single image from the standard input (the image data, not the file
 In the image list, this image will be displayed as "<STDIN>".
 
 .TP
+.B  \-\-mark\-from\-image\-descriptions\-file {filename}
+Set those files specified in {filename} (see \-\-load\-image\-descriptions\-file for the file format) as marked (see the list command).
+
+.TP
 .B \-m {vmode}, \-\-mode {vmode}
 Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode.
 .TP

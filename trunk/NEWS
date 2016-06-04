@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1035)
+ * introduced --mark-from-image-descriptions-file: read file names from a
+   description file and use them to mark current list files.
 # (r1030)
  * fix: introduced alphanumeric restriction in the shebang variables (must
    begin with underscore or alphabetic, continue with underscore or alphanumeric).

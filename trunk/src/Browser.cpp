@@ -2164,6 +2164,13 @@ err:
 		/* TODO: this is incomplete ... */
 		return bs;
 	}
+
+	void Browser::mark_from_list(const args_t & argsc)
+	{
+		/* TODO: one would like to have better matching options */
+		if (argsc.size() )
+			this->do_filter(argsc,Browser::PartialFileNameMatch,false,Browser::Mark);
+	}
 } /* namespace fim */
 
 namespace fim
