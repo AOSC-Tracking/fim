@@ -163,6 +163,10 @@ FIM_NULL
 "\nIn the image list, this image will be displayed as \"" FIM_STDIN_IMAGE_NAME "\".\n"
     },
 #endif /* FIM_READ_STDIN_IMAGE */
+#if FIM_WANT_PIC_CMTS
+    {"mark-from-image-descriptions-file",       required_argument,       FIM_NULL, 0x6d666466, "mark files from descriptionos list file", "{filename}", "Set those files specified in {filename} (see --" FIM_OSW_LOAD_IMG_DSC_FILE " for the file format) as marked (see the " FIM_FLT_LIST " command).\n"
+    },
+#endif /* FIM_WANT_PIC_CMTS */
     {"mode",       required_argument, FIM_NULL, 'm',"specify a video mode.","{vmode}",
 "Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Default is not to change the video mode.  In the past, the XF86 config file (/etc/X11/XF86Config) used to contain Modeline information, which could be fed to the modeline2fb perl script (distributed with fbset).  On many modern xorg based systems, there is no direct way to obtain a fb.modes file from the xorg.conf file.  So instead one could obtain useful fb.modes info by using the (fbmodes (no man page AFAIK)) tool, written by bisqwit.  An unsupported mode should make fim exit with failure.  But it is possible the kernel could trick fim and set a supported mode automatically, thus ignoring the user set mode."
     },
@@ -980,6 +984,28 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 			return 0;
 }
 
+void fim_args_from_desc_file(args_t & argsc, const fim_fn_t &dfn, const fim_char_t sc)
+{
+	/* dfn: descriptions file name */
+	/* sc: separator char */
+	std::ifstream mfs (dfn.c_str(),std::ios::app);
+	std::string ln;
+
+	while( std::getline(mfs,ln))
+	{
+		std::stringstream  ls(ln);
+		std::string fn;
+		const fim_char_t nl = '\n';
+		fim_fn_t ds;
+
+		if( ls.peek() == FIM_SYM_PIC_CMT_CHAR )
+			;
+		else
+			if(std::getline(ls,fn,sc))
+				argsc.push_back(fn);
+	}
+}
+
 	public:
 	fim_perr_t main(int argc,char *argv[])
 	{
@@ -1003,7 +1029,11 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 		bool appendedPreConfigCommand=false;
 		char sac = FIM_SYM_CHAR_ENDL;
 		fim_flags_t pf = FIM_FLAG_DEFAULT; /* push flags */
-#if FIM_WANT_PIC_CMTS
+#if FIM_WANT_PIC_LISTUNMARK
+		args_t argsc;
+#endif /* FIM_WANT_PIC_LISTUNMARK */
+#if ( FIM_WANT_PIC_CMTS || FIM_WANT_PIC_LISTUNMARK )
+		/* TODO: shall merge the above in a FIM_WANT_PIC_DSCFILEREAD  */
 		fim_char_t sc = '\t'; /* separation character for --load-image-descriptions-file */
 #endif /* FIM_WANT_PIC_CMTS */
 
@@ -1409,6 +1439,11 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 			std::exit(0);
 		}
 		    break;
+#if FIM_WANT_PIC_LISTUNMARK
+		case 0x6d666466:
+		    fim_args_from_desc_file(argsc,optarg,sc);
+		    break;
+#endif /* FIM_WANT_PIC_LISTUNMARK */
 #if FIM_WANT_PIC_CMTS
 		case /*0x69646673*/'S':
 		    if(optarg)
@@ -1534,6 +1569,9 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 			ndd=dup(2);
 		}
 	#endif
+#if FIM_WANT_PIC_LISTUNMARK
+		cc.browser_.mark_from_list(argsc);
+#endif /* FIM_WANT_PIC_LISTUNMARK */
 		if(want_random_shuffle== 1)
 			cc.browser_._random_shuffle(true);
 		if(want_random_shuffle==-1)
