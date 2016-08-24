@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1038, also in branches/0.5)
+ * fix: when stdint.h is available use uint8_t, uint16_t, uint32_t instead of non-portable __u8, __u16, __u32
 # (r1037, also in branches/0.5)
  * fix: ./configure --disable-pcx was not properly disabling PCX format support
 # (r1036, also in branches/0.5)

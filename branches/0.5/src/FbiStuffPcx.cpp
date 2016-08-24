@@ -43,9 +43,15 @@ typedef int pcx_err_t;
 #define PCX_ERR_GENERIC		-1
 
 typedef char BOOL;
+#ifdef HAVE_STDINT_H
+typedef uint8_t UBYTE;		//define UNSIGNED BYTE as 1 byte
+typedef uint16_t UWORD;		//define UNSIGNED WORD as 2 bytes
+typedef uint32_t UDWORD;	//define UNSIGNED DOUBLE WORD as 4 bytes
+#else /* HAVE_STDINT_H */
 typedef __u8 UBYTE;		//define UNSIGNED BYTE as 1 byte
 typedef __u16 UWORD;		//define UNSIGNED WORD as 2 bytes
 typedef __u32 UDWORD;		//define UNSIGNED DOUBLE WORD as 4 bytes
+#endif /* HAVE_STDINT_H */
 
 UWORD swap_word(UWORD x) {
 	return ((x>>8)&0xff) |      // move byte 1 to byte 0

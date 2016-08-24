@@ -278,6 +278,7 @@ dnl AC_FUNC_REALLOC()	dnl triggers error in automake 1.10.1
 AC_CHECK_HEADERS([string.h strings.h], [AC_CHECK_FUNCS(strerror)])
 
 
+AC_CHECK_HEADERS([stdint.h])
 AC_CHECK_HEADERS([wchar.h])
 AC_CHECK_HEADERS([fontconfig/fontconfig.h])
 AC_CHECK_HEADERS([fontconfig/fcfreetype.h])
