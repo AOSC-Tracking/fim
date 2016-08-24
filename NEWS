@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1037, also in branches/0.5)
+ * fix: ./configure --disable-pcx was not properly disabling PCX format support
 # (r1036, also in branches/0.5)
  * fix: compilation was broken without framebuffer (FIM_WITH_NO_FRAMEBUFFER)
 # (r1035)
