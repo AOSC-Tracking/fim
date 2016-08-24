@@ -5,14 +5,14 @@
 
 # Sun Feb 24 14:49:17 CET 2002
 
-# slightly modified by dez for using with fim, 20070501
+# slightly modified by dez for using with fim, 20070501, 20160825
 
 use strict;
 use vars qw/%url $date/;
+use POSIX qw(strftime);
 
 %url = ();
-$date = `date`;
-chop $date;
+$date = strftime("%Y-%m-%d", gmtime($ENV{SOURCE_DATE_EPOCH} || time));
 
 sub maplink
 {
