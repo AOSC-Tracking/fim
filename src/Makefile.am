@@ -19,7 +19,7 @@ lex.yy.cc: lex.lex yacc.tab.cpp
 	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
 yacc.tab.hpp yacc.tab.cpp: yacc.ypp lex.lex
-	$(YACC) $(YFLAGS) $< -o $@
+	LC_ALL=C $(YACC) $(YFLAGS) $< -o $@
 
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
@@ -46,10 +46,10 @@ SDLDevice.o: default_icon_byte_array.h
 
 # in the following : for some freebsd oddity, i was forced to replace ..0-9_]\+ with ..0-9_]*
 version.h:	../config.h
-	$(GREP) define $< | $(GREP) FIM | $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > $@
+	$(GREP) define $< | $(GREP) FIM | LC_ALL=C $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\).*$$/+\1  /g;s/^/\"/g;s/$$/\"/g' > $@
 	$(ECHO) "\"\n\"" >> $@
-	$(GREP) define $< | $(GREP) FIM.*'"' | $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> $@
-	$(GREP) undef $< | $(GREP) FIM | $(SORT) | $(SED) 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]*\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> $@
+	$(GREP) define $< | $(GREP) FIM.*'"' | LC_ALL=C $(SORT) | $(SED) 's/^#//g;s/define //g;s/^\([A-Za-z0-9_]*\) "\(.*\)"$$/"\1 = \\"\2\\"\\n"/g'   >> $@
+	$(GREP) undef $< | $(GREP) FIM | LC_ALL=C $(SORT) | $(SED) 's/^#//g;s/.*undef //g;s/^\([A-Za-z0-9_]*\).\+$$/-\1  /g;s/^/\"/g;s/$$/\"/g' >> $@
 	$(ECHO)  '"\n'CXXFLAGS=$(CXXFLAGS)'\n"' >> $@
 
 help.cpp: fim.h

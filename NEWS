@@ -3,6 +3,7 @@
 
                 Version 0.5-rc3
 
+ * to ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
  * fix: when stdint.h is available use uint8_t, uint16_t, uint32_t instead of non-portable __u8, __u16, __u32
  * fix: ./configure --disable-pcx was not properly disabling PCX format support
  * fix: compilation was broken without framebuffer (FIM_WITH_NO_FRAMEBUFFER)
