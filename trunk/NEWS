@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1036, also in branches/0.5)
+ * fix: compilation was broken without framebuffer (FIM_WITH_NO_FRAMEBUFFER)
 # (r1035)
  * introduced --mark-from-image-descriptions-file: read file names from a
    description file and use them to mark current list files.

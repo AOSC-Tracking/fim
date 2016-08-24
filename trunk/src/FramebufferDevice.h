@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -36,6 +36,10 @@
 #include "FontServer.h"
 #include "DisplayDevice.h"
 
+/* these are required by FbiStuffJpeg.cpp */
+#define FIM_FBI_TRUE            1
+#define FIM_FBI_FALSE           0
+
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 
 #include <stdio.h>
@@ -56,9 +60,6 @@
 #define FB_INACTIVE  2
 #define FB_ACQ_REQ   3
 
-
-#define FIM_FBI_TRUE            1
-#define FIM_FBI_FALSE           0
 
 namespace fim
 {
