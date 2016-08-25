@@ -27,19 +27,19 @@ srcdir = src
 
 # still unfinished
 signed-tgzdist: dist
-	gpg -sbv -u EF1258B8 $(distdir).tar.gz
+	gpg -sbv -u 0xE0E669C8EF1258B8 $(distdir).tar.gz
 	ls -l $(distdir).tar.gz  $(distdir).tar.gz.sig
 
 # still unfinished
 signed-dist: dist
-	make dist-bzip2 && gpg -sbv -u EF1258B8 $(distdir).tar.bz2
+	make dist-bzip2 && gpg -sbv -u 0xE0E669C8EF1258B8 $(distdir).tar.bz2
 	ls -l $(distdir).tar.bz2 $(distdir).tar.bz2.sig
-	gpg -sbv -u EF1258B8 $(distdir).tar.gz
+	gpg -sbv -u 0xE0E669C8EF1258B8 $(distdir).tar.gz
 	ls -l $(distdir).tar.gz  $(distdir).tar.gz.sig
 
 #%.sig: %
-#	        gpg -sbv -u EF1258B8 $@ $<
-#	        gpg -sbav -u EF1258B8 $@ $<
+#	        gpg -sbv -u 0xE0E669C8EF1258B8 $@ $<
+#	        gpg -sbav -u 0xE0E669C8EF1258B8 $@ $<
 
 
 FIMNORCOPTS=-N --no-etc-rc-file
