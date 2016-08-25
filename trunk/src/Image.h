@@ -271,11 +271,12 @@ public:
 			{
 				if( std::getline(ls,fn,nl) )
 				{
-					/* ignoring it: it's a comment line */
-					size_t vn = fn.find_first_of("!fim:",1);
+					size_t vn = fn.find_first_of("!fim:",1); /* vn will point to first variable id char */
+
 					if( vn != std::string::npos && fn[vn+=5] )
 					{
-						size_t es = fn.find_first_of("=",vn);
+						size_t es = fn.find_first_of("=",vn); /* point to the first equal sign char */
+
 						if( es != std::string::npos )
 						{
 							std::string varname = fn.substr(vn,es-vn);

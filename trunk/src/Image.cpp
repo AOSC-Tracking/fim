@@ -117,7 +117,7 @@ namespace fim
 		return img_->i.height;
 	}
 
-	void Image::desc_update()
+	void Image::desc_update(void)
 	{
 #if FIM_WANT_PIC_CMTS
 		fim_fn_t key(fim_basename_of(fname_.c_str()));
