@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -55,6 +55,7 @@ extern "C"
 // we require C linkage for these symbols
 #include <jpeglib.h>
 }
+#define FIM_JPEGLIB_TRUE 1 /* jpeglib 8.0 uses 'boolean' */
 
 
 /*
@@ -404,8 +405,8 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
     jpeg_stdio_src(&h->cinfo, h->infile);
     if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
-//    if(jpeg_read_header(&h->cinfo, FIM_FBI_TRUE)==0)	goto oops;
-    jpeg_read_header(&h->cinfo, FIM_FBI_TRUE);
+//    if(jpeg_read_header(&h->cinfo, FIM_JPEGLIB_TRUE)==0)	goto oops;
+    jpeg_read_header(&h->cinfo, FIM_JPEGLIB_TRUE);
     if(fim_jerr /*&& h->jerr.msg_code*/)goto oops;
 //    if(h->jerr.msg_code)goto oops;	// this triggers with apparently good file
 
@@ -491,7 +492,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
         if(fim_jerr)goto oops;
   //      if(h->jerr.msg_code)goto oops;
 	h->cinfo.src = &thumbnail_mgr;
-	jpeg_read_header(&h->cinfo, FIM_FBI_TRUE);
+	jpeg_read_header(&h->cinfo, FIM_JPEGLIB_TRUE);
         if(fim_jerr)goto oops;
 //        if(h->jerr.msg_code)goto oops;
     }
@@ -623,8 +624,8 @@ jpeg_write(FILE *fp, struct ida_image *img)
     cinfo.input_components = 3;
     cinfo.in_color_space = JCS_RGB;
     jpeg_set_defaults(&cinfo);
-    jpeg_set_quality(&cinfo, jpeg_quality, FIM_FBI_TRUE);
-    jpeg_start_compress(&cinfo, FIM_FBI_TRUE);
+    jpeg_set_quality(&cinfo, jpeg_quality, FIM_JPEGLIB_TRUE);
+    jpeg_start_compress(&cinfo, FIM_JPEGLIB_TRUE);
 
     for (i = 0, line = img->data; i < img->i.height; i++, line += img->i.width*3)
         jpeg_write_scanlines(&cinfo, &line, 1);
