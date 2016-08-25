@@ -82,7 +82,7 @@ ongoing further inspiration.
 			'autocmd "PostRedisplay" "" "g:oscale=scale;";'\
 			'autocmd "PostReload" "" "scale g:oscale.\"%\";";'     *pages*
 20090226	debianize:
-		dpkg-buildpackage -rfakeroot -k0xEF1258B8
+		dpkg-buildpackage -rfakeroot -k0x0xE0E669C8EF1258B8
  		fakeroot debian/rules binary
 		http://www.debian.org/doc/debian-policy/
 		http://www.debian.org/doc/maint-guide/ch-build.en.html
