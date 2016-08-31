@@ -2172,7 +2172,7 @@ err:
 			this->do_filter(argsc,Browser::PartialFileNameMatch,false,Browser::Mark);
 	}
 
-	bool Browser::dump_desc(const fim::string nf, fim_char_t sc)const
+	bool Browser::dump_desc(const fim::string nf, fim_char_t sc, const bool want_all_vars)const
 	{
 		// dumps descriptions of the current images list.
 		// on no comment does not touch the file.
@@ -2183,8 +2183,6 @@ err:
 		{
 			fim::string bof = FIM_IMGDSCS_WANT_BASENAME ? fim_basename_of(flist_[i].c_str()) : flist_[i].c_str();
 #if FIM_WANT_PIC_LVDN
-			const bool want_all_vars = false;
-
 			if(want_all_vars)
 				cmtfc += cc.id_.vd_[bof].get_variables_list(true, true);
 #endif /* FIM_WANT_PIC_LVDN */
