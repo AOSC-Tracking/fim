@@ -956,15 +956,19 @@ static bool fim_args_opt_have(const args_t& args, fim::string optname)
 			browser_.cache_.desc_update();
 		}
 		else
-		if ( args[aoc] == "save" ) // TODO: need "append" option
+		if ( args[aoc] == "save" )
 		{
 			bool saveall = fim_args_opt_have(args,"-all");
 			bool wappend = fim_args_opt_have(args,"-append");
+			bool nooverw = fim_args_opt_have(args,"-nooverw");
+			string sdn = args[aoc+1];
 
 			if(2 < args.size()-aoc)
 				sc = *args[2+aoc].c_str();
 
-			browser_.dump_desc(args[1+aoc],sc,saveall,wappend );
+			if(nooverw && is_file_nonempty(sdn))
+				goto err;
+			browser_.dump_desc(args[1+aoc].c_str(),sc,saveall,wappend);
 		}
 		else
 			goto err;
