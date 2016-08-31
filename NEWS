@@ -3,6 +3,11 @@
 
                 Version 0.6-trunk
 
+# (r1046)
+ * Introduced a "#!fim:+=" special description line to append to cached description.
+ * Introduced a "#!fim:^=" special description line to prepend to cached description.
+# (r1045)
+ * Introduced a "#!fim:!=" special description line to reset all variables of the cached namespace.
 # (r1044)
  * 'desc "??"' functionality to save also all descriptions file variables (TODO: activate such a switch)
 # (r1043)
