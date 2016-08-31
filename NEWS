@@ -14,6 +14,8 @@
  * 'desc "-append" "save"' will work in append mode.
 # (r1044,r1047)
  * 'desc "-all" "save"' will save also all descriptions file variables.
+# (r1048)
+ * 'desc "-nooverw" "-append" "save"' will either force overwrite; saving and appending possible, if user request.
 # (r1039, also in branches/0.5)
  * to ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
 # (r1038, also in branches/0.5)
