@@ -912,28 +912,58 @@ nop:
 #endif /* HAVE_GETENV */
 	}
 
+static int fim_args_opt_count(const args_t& args)
+{
+	// FIXME: temporarily here 
+	int aoc = 0;
+	fim::string s;
+
+	for(size_t i=0;i<args.size();++i)
+	{
+		if ( args[i][0] == '-' )
+			aoc++;
+		else
+			break;
+	}
+	return aoc;
+}
+
+static bool fim_args_opt_have(const args_t& args, fim::string optname)
+{
+	// FIXME: temporarily here 
+	fim::string s;
+
+	for(size_t i=0;i<args.size();++i)
+		if ( args[i] == optname )
+			return true;
+	return false;
+}
+
 	fim::string CommandConsole::fcmd_desc(const args_t& args)
 	{
 #if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t';
+		int aoc = fim_args_opt_count(args);
 
-		if(2 > args.size() )
+		if(2 > args.size()-aoc )
 			goto err;
 
-		if ( args[0] == "load" )
+		if ( args[aoc] == "load" )
 		{
-			if(2 < args.size())
-				sc = *args[2].c_str();
-			this->id_.fetch(args[1],sc);
+			if(2 < args.size()-aoc)
+				sc = *args[2+aoc].c_str();
+			this->id_.fetch(args[1+aoc],sc);
 			browser_.cache_.desc_update();
 		}
 		else
-		if ( args[0] == "save" ) // TODO: need "append"
+		if ( args[aoc] == "save" ) // TODO: need "append" option
 		{
-			if(2 < args.size())
-				sc = *args[2].c_str();
+			bool saveall = fim_args_opt_have(args,"-all");
 
-			browser_.dump_desc(args[1],sc);
+			if(2 < args.size()-aoc)
+				sc = *args[2+aoc].c_str();
+
+			browser_.dump_desc(args[1+aoc],sc,saveall);
 		}
 		else
 			goto err;
