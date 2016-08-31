@@ -2172,7 +2172,7 @@ err:
 			this->do_filter(argsc,Browser::PartialFileNameMatch,false,Browser::Mark);
 	}
 
-	bool Browser::dump_desc(const fim::string nf, fim_char_t sc, const bool want_all_vars)const
+	bool Browser::dump_desc(const fim::string nf, fim_char_t sc, const bool want_all_vars, const bool want_append)const
 	{
 		// dumps descriptions of the current images list.
 		// on no comment does not touch the file.
@@ -2201,7 +2201,8 @@ err:
 #endif
 #endif /* FIM_WANT_PIC_LVDN */
 		}
-		write_to_file(nf,cmtfc); // TODO: error diagnostics are missing
+
+		write_to_file(nf,cmtfc,want_append); // TODO: error diagnostics are missing
 /*
  		// TODO: this will print info about all of them
 		cc.id_.print_descs(std::cout,sc);

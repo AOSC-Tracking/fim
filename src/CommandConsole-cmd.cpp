@@ -959,11 +959,12 @@ static bool fim_args_opt_have(const args_t& args, fim::string optname)
 		if ( args[aoc] == "save" ) // TODO: need "append" option
 		{
 			bool saveall = fim_args_opt_have(args,"-all");
+			bool wappend = fim_args_opt_have(args,"-append");
 
 			if(2 < args.size()-aoc)
 				sc = *args[2+aoc].c_str();
 
-			browser_.dump_desc(args[1+aoc],sc,saveall);
+			browser_.dump_desc(args[1+aoc],sc,saveall,wappend );
 		}
 		else
 			goto err;

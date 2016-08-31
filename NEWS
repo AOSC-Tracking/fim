@@ -10,7 +10,9 @@
  * Introduced a "#!fim:!=" special description line to reset all variables of the cached namespace.
 # (r1043)
  * 'desc        "save"' functionality to save descriptions file data from the currently browsable images list.
-# (r1044)
+# (r1048)
+ * 'desc "-append" "save"' will work in append mode.
+# (r1044,r1047)
  * 'desc "-all" "save"' will save also all descriptions file variables.
 # (r1039, also in branches/0.5)
  * to ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
