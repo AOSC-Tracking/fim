@@ -2171,6 +2171,32 @@ err:
 		if (argsc.size() )
 			this->do_filter(argsc,Browser::PartialFileNameMatch,false,Browser::Mark);
 	}
+
+	bool Browser::dump_desc(const fim::string nf, fim_char_t sc)const
+	{
+		// dumps descriptions of the current images list.
+		// on no comment does not touch the file.
+#if FIM_WANT_PIC_LBFL
+		// TODO: if no nf, then standard output
+		fim::string cmtfc; // comment file contents
+		for(size_t i=0;i<flist_.size();++i)
+		{
+			fim::string bof = FIM_IMGDSCS_WANT_BASENAME ? fim_basename_of(flist_[i].c_str()) : flist_[i].c_str();
+			cmtfc += bof,
+			cmtfc += sc,
+			cmtfc += cc.id_[bof] + "\n";
+		}
+		write_to_file(nf,cmtfc); // TODO: error diagnostics are missing
+/*
+ 		// TODO: this will print info about all of them
+		cc.id_.print_descs(std::cout,sc);
+*/
+		return true;
+#else /* FIM_WANT_PIC_LBFL */
+		return false;
+#endif /* FIM_WANT_PIC_LBFL */
+	}
+
 } /* namespace fim */
 
 namespace fim

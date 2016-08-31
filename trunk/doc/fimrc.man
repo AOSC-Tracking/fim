@@ -8,7 +8,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
@@ -234,7 +234,7 @@ desaturate : desaturate the displayed image colors. To get back the original you
 .B
 desc
 .fi
-desc 'load' {filename} [{sepchar}] : load description file {filename}, using the optional {sepchar} character as separator. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
+desc 'load' {filename} [{sepchar}] : load description file {filename}, using the optional {sepchar} character as separator. 'save' {filename} [{sepchar}] : save current list descriptions to file {filename}, using the optional {sepchar} character as separator. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
 .fi
 
 .na
