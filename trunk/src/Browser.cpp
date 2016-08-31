@@ -2193,9 +2193,14 @@ err:
 			cmtfc += cc.id_[bof];
 			cmtfc += "\n";
 #if FIM_WANT_PIC_LVDN
-			if(want_all_vars) // TODO: #!fim:*= to reset all variables ?
+#if 0
+			if(want_all_vars)
 				cmtfc += cc.id_.vd_[bof].get_variables_list(false,true),
 				cmtfc += "\n";
+#else
+			if(want_all_vars)
+				cmtfc += "#!fim:!=\n"; /* clean up vars for the next */
+#endif
 #endif /* FIM_WANT_PIC_LVDN */
 		}
 		write_to_file(nf,cmtfc); // TODO: error diagnostics are missing

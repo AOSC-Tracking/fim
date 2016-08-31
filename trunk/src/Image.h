@@ -303,6 +303,11 @@ public:
 									cas = "";
 							}
 							else
+							if( varname == "!" )
+							{
+								ns = VNamespace();//reset
+							}
+							else
 #endif /* FIM_WANT_PIC_CCMT */
 							if( fn[es] )
 							{
