@@ -2182,9 +2182,21 @@ err:
 		for(size_t i=0;i<flist_.size();++i)
 		{
 			fim::string bof = FIM_IMGDSCS_WANT_BASENAME ? fim_basename_of(flist_[i].c_str()) : flist_[i].c_str();
+#if FIM_WANT_PIC_LVDN
+			const bool want_all_vars = false;
+
+			if(want_all_vars)
+				cmtfc += cc.id_.vd_[bof].get_variables_list(true, true);
+#endif /* FIM_WANT_PIC_LVDN */
 			cmtfc += bof,
 			cmtfc += sc,
-			cmtfc += cc.id_[bof] + "\n";
+			cmtfc += cc.id_[bof];
+			cmtfc += "\n";
+#if FIM_WANT_PIC_LVDN
+			if(want_all_vars) // TODO: #!fim:*= to reset all variables ?
+				cmtfc += cc.id_.vd_[bof].get_variables_list(false,true),
+				cmtfc += "\n";
+#endif /* FIM_WANT_PIC_LVDN */
 		}
 		write_to_file(nf,cmtfc); // TODO: error diagnostics are missing
 /*

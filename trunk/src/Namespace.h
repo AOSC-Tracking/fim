@@ -59,7 +59,7 @@ namespace fim
 		fim_float_t getGlobalFloatVariable(const fim::string &varname)const;
 		fim::string getGlobalStringVariable(const fim::string &varname)const;
 		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
-		fim::string get_variables_list(bool with_values=false)const;
+		fim::string get_variables_list(bool with_values=false, bool fordesc=false)const;
 		virtual size_t byte_size(void)const = 0;
 		fim_err_t assign_ns(const Namespace & ns);
 
