@@ -315,19 +315,18 @@ ret:
 		return fim::string(file.c_str());
 	}
 
-#if 0
-	void append_to_file(fim::string filename, fim::string lines)
+	bool write_to_file(fim::string filename, fim::string lines, bool append)
 	{
 		std::ofstream fs;
-		fs.open(filename.c_str(),std::ios::app|std::ios::binary);
+		fs.open(filename.c_str(),
+				std::ios::binary | ( append ? std::ios::app : std::ios::binary ));
 		if(fs.is_open())
-		{
-			fs << "\""<< lines.c_str()<<"\"" ;
-		}
+			fs << lines.c_str();
 		fs.close();
 		sync();
+
+		return true; // TODO: need error diagnostics
 	}
-#endif
 
 /*
  * Turns newline characters in NULs.

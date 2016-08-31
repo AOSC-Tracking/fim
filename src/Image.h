@@ -191,6 +191,8 @@ class Image
 typedef std::string fim_fn_t; /* file name */
 typedef std::string fim_ds_t; /* file description */
 
+#define FIM_IMGDSCS_WANT_BASENAME true /* FIXME: this shall become a user controlled option */
+
 class ImgDscs: public std::map<fim_fn_t,fim_ds_t>
 {
 	public:
@@ -329,7 +331,6 @@ public:
 
 				if( (std::getline(ls,ds,nl) /* non empty commentary */) || aoec)
 				{
-					const bool want_basename = true; /*  */
 #if FIM_WANT_PIC_RCMT
 					{
 						size_t csi = ds.find_first_of("#!fim:",0);
@@ -374,7 +375,7 @@ public:
 #if FIM_WANT_PIC_CCMT
 					ds = cps + ds + cas;
 #endif /* FIM_WANT_PIC_CCMT */
-					if(! want_basename )
+					if(! FIM_IMGDSCS_WANT_BASENAME )
 					{
 						(*this)[fn]=ds;
 #if FIM_WANT_PIC_LVDN
@@ -421,7 +422,15 @@ public:
 		os << (size()) << " entries in " << byte_size() << " bytes";
 		return os;
 	}
-};
+	/*
+	std::ostream& print_descs(std::ostream &os, fim_char_t sc)const
+	{
+		for( const_iterator it = begin();it != end(); ++it )
+			os << it->first << sc << it->second << "\n";
+		return os;
+	}
+	*/
+}; /* ImgDscs */
 	std::ostream& operator<<(std::ostream &os, const ImgDscs & id);
 #endif /* FIM_WANT_PIC_CMTS */
 #endif /* FIM_IMAGE_H */

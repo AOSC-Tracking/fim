@@ -917,12 +917,26 @@ nop:
 #if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t';
 
-		if(2 > args.size() || args[0] != "load" )
+		if(2 > args.size() )
 			goto err;
-		if(2 < args.size())
-			sc = *args[2].c_str();
-		this->id_.fetch(args[1],sc);
-		browser_.cache_.desc_update();
+
+		if ( args[0] == "load" )
+		{
+			if(2 < args.size())
+				sc = *args[2].c_str();
+			this->id_.fetch(args[1],sc);
+			browser_.cache_.desc_update();
+		}
+		else
+		if ( args[0] == "save" ) // TODO: need "append"
+		{
+			if(2 < args.size())
+				sc = *args[2].c_str();
+
+			browser_.dump_desc(args[1],sc);
+		}
+		else
+			goto err;
 err:
 #endif /* FIM_WANT_PIC_CMTS */
 		return FIM_CNS_EMPTY_RESULT;

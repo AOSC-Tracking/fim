@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1043)
+ * 'desc "save"' functionality to save descriptions file data from the currently browsable images list.
 # (r1039, also in branches/0.5)
  * to ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
 # (r1038, also in branches/0.5)

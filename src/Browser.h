@@ -215,6 +215,7 @@ class Browser
 	virtual size_t byte_size(void)const;
 	fim_float_t file_progress(void)const { /* FIXME: relies on range 0... */ double fp = (((double)(1+this->current_n()))/this->n_files()); return FIM_MIN(1.0,fp);} 
 	void mark_from_list(const args_t & argsc);
+	bool dump_desc(const fim::string nf, fim_char_t sc)const;
 };
 }
 
