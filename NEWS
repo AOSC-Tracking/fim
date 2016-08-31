@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1044)
+ * 'desc "??"' functionality to save also all descriptions file variables (TODO: activate such a switch)
 # (r1043)
  * 'desc "save"' functionality to save descriptions file data from the currently browsable images list.
 # (r1039, also in branches/0.5)

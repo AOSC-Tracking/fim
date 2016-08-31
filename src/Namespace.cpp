@@ -172,24 +172,38 @@ namespace fim
 #endif /* FIM_AUTOCMDS */
 		}
 
-		fim::string Namespace::get_variables_list(bool with_values)const
+		fim::string Namespace::get_variables_list(bool with_values, bool fordesc)const
 		{
+			/* A list of var=val like lines. */
 			fim::string acl;
 			variables_t::const_iterator vi;
 
 			for( vi=variables_.begin();vi!=variables_.end();++vi)
 			{
+				if(fordesc)
+					acl+="#!fim:";
 				if(ns_char_!=FIM_SYM_NULL_NAMESPACE_CHAR)
 				{
 					acl+=ns_char_;
 					acl+=FIM_SYM_NAMESPACE_SEP;
 				}
 				acl+=((*vi).first);
-				acl+=" ";
-				if(with_values)
-					acl+=" = ",
-					acl+=((*vi).second.getString()),
-				       	acl+="\n";
+
+				if(fordesc)
+				{
+					acl+="=";
+					if(with_values)
+						acl+=((*vi).second.getString());
+			       		acl+="\n"; // newline always
+				}
+				else
+				{
+					acl+=" ";
+					if(with_values)
+						acl+=" = ",
+						acl+=((*vi).second.getString()),
+			       			acl+="\n"; // newline only on with_values
+				}
 			}
 			return acl;
 		}
