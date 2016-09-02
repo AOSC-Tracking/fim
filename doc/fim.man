@@ -287,8 +287,8 @@ Quiet mode. Sets _display_status=0;_display_busy=0;.
 .B \-r {resolution}, \-\-resolution {resolution}
 		 Set resolution (UNFINISHED).
 .TP
-.B \-R, \-\-recursive
-		 Push files/directories to the files list recursively.
+.B \-R, \-\-recursive[=arg]
+		 Push files/directories to the files list recursively. See variable _pushdir_re for extensions of filenames which will be loaded in the list. You can overwrite its value by optionally passing an expression here as argument.
 .TP
 .B \-/, \-\-/ <arg>
 		 After startup jump to pattern; short for \-c '/'.
