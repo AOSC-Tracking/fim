@@ -70,6 +70,7 @@ struct fim_options_t{
 };
 
 #define FIM_SYM_CMD_SLSL FIM_VID_RE_SEARCH_OPTS "=\"f\""
+#define FIM_WANT_RECURSE_FILTER_OPTION 1 /* FIXME: NEW */
 
 /*
  * Yet unfinished. 
@@ -314,9 +315,17 @@ FIM_NULL
     {"resolution", required_argument, FIM_NULL, 'r',"Set resolution (UNFINISHED).","{resolution}",
 	    FIM_NULL
     },
-    {"recursive", no_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively.", FIM_NULL,
+#if FIM_WANT_RECURSE_FILTER_OPTION
+    {"recursive", optional_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. See variable " FIM_VID_PUSHDIR_RE " for extensions of filenames which will be loaded in the list. "
+      "You can overwrite its value by optionally passing an expression here as argument."
+	    , FIM_NULL,
 	    FIM_NULL
     },
+#else /* FIM_WANT_RECURSE_FILTER_OPTION */
+    {"recursive", no_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. See variable " FIM_VID_PUSHDIR_RE " for extensions of filenames which will be loaded in the list. "			, FIM_NULL,
+	    FIM_NULL
+    },
+#endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 #if FIM_WANT_BACKGROUND_LOAD
     {"background-recursive", no_argument, FIM_NULL, /*0x6c696267*/'B',"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
 	    FIM_NULL
@@ -1233,6 +1242,10 @@ void fim_args_from_desc_file(args_t & argsc, const fim_fn_t &dfn, const fim_char
 		case 'R':
 		    //fim's
 		    pf |= FIM_FLAG_PUSH_REC ;
+#if FIM_WANT_RECURSE_FILTER_OPTION
+		    if(optarg)
+		    	cc.setVariable(FIM_VID_PUSHDIR_RE,optarg);
+#endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 		    break;
 #if FIM_WANT_BACKGROUND_LOAD
 		case /*0x6c696267*/'B':
