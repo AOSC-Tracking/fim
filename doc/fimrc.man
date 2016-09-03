@@ -552,6 +552,11 @@ __exif_orientation
 .fi
 .na
 .B
+_all_file_loaders
+[out,g:] space\-separated list of hardcoded file loaders usable with _file_loader. 
+.fi
+.na
+.B
 _archive_files
 [in,g:] Regular expression matching filenames to be treated as (multipage) archives. If empty, ".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$\:" will be used. Within each archive, only filenames matching the regular expression in the _pushdir_re variable will be considered for opening.
 .fi

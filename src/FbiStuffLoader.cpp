@@ -174,25 +174,42 @@ void fim_write_register(struct ida_writer *writer)
 }
 #endif /* USE_X11 */
 
-	void fim_loaders_to_stderr(FILE * stream)
+	static void fim_loaders_to_buffer(char * buf)
     	{
 		/* FIXME: new, should be generalized */
     		struct list_head *item=FIM_NULL;
     		struct ida_loader *loader = FIM_NULL;
 
-    		FIM_FPRINTF(stream,"%s","\nSupported file loaders: ");
+		*buf = FIM_SYM_CHAR_NUL;
+
     		list_for_each(item,&loaders)
 		{
         		loader = list_entry(item, struct ida_loader, list);
 			if(loader->name && loader->mlen>=1)
-				FIM_FPRINTF(stream," %s",loader->name); 
+				sprintf(buf+strlen(buf)," %s",loader->name); 
     		}
     		list_for_each(item,&loaders)
 		{
         		loader = list_entry(item, struct ida_loader, list);
 			if(loader->name && loader->mlen<=0)
-				FIM_FPRINTF(stream," %s",loader->name); 
+				sprintf(buf+strlen(buf)," %s",loader->name); 
     		}
-    		FIM_FPRINTF(stream,"%s","\n");
+	}
+
+	void fim_loaders_to_stderr(FILE * stream)
+    	{
+		fim_char_t buf[FIM_MAXLINE_BUFSIZE];	// NOTE: a larger buffer would be ok (e.g.: user configurable)...
+
+    		sprintf(buf,"%s","\nSupported file loaders: ");
+		fim_loaders_to_buffer(buf+strlen(buf));
+
+    		FIM_FPRINTF(stream,"%s\n",buf);
+	}
+
+	string fim_loaders_to_string(void)
+    	{
+		fim_char_t buf[FIM_MAXLINE_BUFSIZE];	// NOTE: a larger buffer would be ok (e.g.: user configurable)...
+		fim_loaders_to_buffer(buf);
+		return string(buf);
 	}
 }

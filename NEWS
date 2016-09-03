@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1053)
+ * Added variable _all_file_loaders: space-separated list of hardcoded file loaders usable with _file_loader.
 # (r1051,r1052)
  * Optional -R/--recursive[=arg] argument, overwrites (if set) or appends to (if beginning with + or |) 
    the "_pushdir_re" variable (recursed filename extensions).

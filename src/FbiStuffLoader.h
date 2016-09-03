@@ -162,6 +162,7 @@ void fim_load_register(struct ida_loader *loader);
 void fim_write_register(struct ida_writer *writer);
 void fim_loaders_to_stderr(FILE * stream);
 
+string fim_loaders_to_string(void);
 }
 #endif /* FIM_STUFF_LOADER_H */
 
