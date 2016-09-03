@@ -316,8 +316,10 @@ FIM_NULL
 	    FIM_NULL
     },
 #if FIM_WANT_RECURSE_FILTER_OPTION
-    {"recursive", optional_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. See variable " FIM_VID_PUSHDIR_RE " for extensions of filenames which will be loaded in the list. "
-      "You can overwrite its value by optionally passing an expression here as argument."
+    {"recursive", optional_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. "
+      "The expression in variable " FIM_VID_PUSHDIR_RE " (default: \"" FIM_CNS_PUSHDIR_RE "\") lists extensions of filenames which will be loaded in the list. "
+      "You can overwrite its value by optionally passing an expression here as argument. "
+      "If starting with '+' or '|', the expression following will be appended to it. "
 	    , FIM_NULL,
 	    FIM_NULL
     },
@@ -1244,7 +1246,13 @@ void fim_args_from_desc_file(args_t & argsc, const fim_fn_t &dfn, const fim_char
 		    pf |= FIM_FLAG_PUSH_REC ;
 #if FIM_WANT_RECURSE_FILTER_OPTION
 		    if(optarg)
-		    	cc.setVariable(FIM_VID_PUSHDIR_RE,optarg);
+		    { 
+		    	fim::string npre;
+		    	if(*optarg && ( *optarg=='+' || *optarg=='|' ) && optarg[1] )
+				npre=fim::string( FIM_CNS_PUSHDIR_RE "|" ), optarg++;
+			npre+=optarg;
+			cc.setVariable(FIM_VID_PUSHDIR_RE,Var(npre));
+		    }
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 		    break;
 #if FIM_WANT_BACKGROUND_LOAD

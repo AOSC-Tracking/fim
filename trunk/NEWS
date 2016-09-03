@@ -3,8 +3,9 @@
 
                 Version 0.6-trunk
 
-# (r1051)
- * Optional -R/--recursive[=arg] argument, overwrites "_pushdir_re" variable (recursed filename extensions).
+# (r1051,r1052)
+ * Optional -R/--recursive[=arg] argument, overwrites (if set) or appends to (if beginning with + or |) 
+   the "_pushdir_re" variable (recursed filename extensions).
 # (r1046)
  * Introduced a "#!fim:+=" special description line to append to cached description.
  * Introduced a "#!fim:^=" special description line to prepend to cached description.
