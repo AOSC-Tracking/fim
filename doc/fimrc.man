@@ -234,7 +234,7 @@ desaturate : desaturate the displayed image colors. To get back the original you
 .B
 desc
 .fi
-desc 'load' {filename} [{sepchar}] : load description file {filename}, using the optional {sepchar} character as separator; ['\-all'] ['\-append'] 'save' {filename} [{sepchar}] : save current list descriptions to file {filename}, using the optional {sepchar} character as separator, and if '\-all' is present will save the variables, and if '\-append' is present, will only append. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
+desc 'load' {filename} [{sepchar}] : load description file {filename}, using the optional {sepchar} character as separator; ['\-all'] ['\-append'] 'save' {filename} [{sepchar}] : save current list descriptions to file {filename}, using the optional {sepchar} character as separator, and if '\-all' is present will save the variables, and if '\-append' is present, will only append, and if '\-nooverw' is present, will not overwrite existing files. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
 .fi
 
 .na
@@ -1315,6 +1315,9 @@ autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
 autocmd "PreExecutionCycle" "/fbps\-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
+## Example in imposing a file loader to an extension:
+#autocmd "PreReload"    ".*mtx.gz" "_file_loader='MatrixMarket'";
+#autocmd "PostReload"   ".*mtx.gz" "_file_loader=''";
 #bind '*' "scale '100%'";
 bind '*' "_display_console=0;toggleVerbosity;echo i:*";
 bind 'w' "scale 'w'";

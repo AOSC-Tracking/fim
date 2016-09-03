@@ -178,6 +178,9 @@ autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
 autocmd "PreExecutionCycle" "/fbps-.*ps001.png" "i:fresh=1;redisplay;";
 #autocmd "PostInteractiveCommand" "" "i:fresh=0;";
 #autocmd "PostInteractiveCommand" "" "prefetch;";
+## Example in imposing a file loader to an extension:
+#autocmd "PreReload"    ".*mtx.gz" "_file_loader='MatrixMarket'";
+#autocmd "PostReload"   ".*mtx.gz" "_file_loader=''";
 #bind '*' "scale '100%'";
 bind '*' "_display_console=0;toggleVerbosity;echo i:*";
 bind 'w' "scale 'w'";
