@@ -95,6 +95,7 @@ fim_var_help_db[FIM_VID_AUTOFLIP]= "[in,g:] if 1, will flip images by default" ;
 fim_var_help_db[FIM_VID_AUTONEGATE]= "[in,g:] if 1, will negate images by default" ;
 fim_var_help_db[FIM_VID_AUTODESATURATE]= "[in,g:] if 1, will desaturate images by default" ;
 fim_var_help_db[FIM_VID_LAST_FILE_LOADER]= "[out,g:] after each image load, " FIM_VID_LAST_FILE_LOADER " will be set to the last file loader used" ;
+fim_var_help_db[FIM_VID_ALL_FILE_LOADERS]= "[out,g:] space-separated list of hardcoded file loaders usable with " FIM_VID_FILE_LOADER ". " ;
 fim_var_help_db[FIM_VID_FLIPPED]= "[out,i:] 1, if the image is flipped" ;
 fim_var_help_db[FIM_VID_NEGATED]= "[out,i:] 1, if the image is negated" ;
 fim_var_help_db[FIM_VID_DESATURATED]= "[out,i:] 1, if the image is desaturated" ;

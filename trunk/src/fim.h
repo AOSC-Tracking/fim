@@ -633,6 +633,7 @@ namespace fim
 #define FIM_VID_AUTODESATURATE			"_autodesaturate"	/* "[in,g:] if 1, will desaturate images by default" */
 #if FIM_WANT_REMEMBER_LAST_FILE_LOADER
 #define FIM_VID_LAST_FILE_LOADER		"_last_file_loader"	/* "[out,g:] after each image load, " FIM_VID_LAST_FILE_LOADER " will be set to the last file loader used" */
+#define FIM_VID_ALL_FILE_LOADERS		"_all_file_loaders"	/* "[out,g:] space-separated list of hardcoded file loaders usable with " FIM_VID_FILE_LOADER ". " */
 #endif /* FIM_WANT_REMEMBER_LAST_FILE_LOADER */
 #define FIM_VID_FLIPPED				"flipped"		/* "[out,i:] 1, if the image is flipped" */
 #define FIM_VID_NEGATED				"negated"		/* "[out,i:] 1, if the image is negated" */

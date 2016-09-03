@@ -366,6 +366,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			#include "grammar.h"
 			setVariable(FIM_VID_FIM_DEFAULT_GRAMMAR_FILE_CONTENTS,FIM_DEFAULT_GRAMMAR_FILE_CONTENTS);
 		}
+		setVariable(FIM_VID_ALL_FILE_LOADERS,Var(fim_loaders_to_string()));
 
 		if(e && strlen(e)<FIM_PATH_MAX-8)//strlen("/" FIM_CNS_USR_RC_FILEPATH)+2
 		{
