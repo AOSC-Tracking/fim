@@ -58,7 +58,7 @@ namespace fim
 std::cout << (size_t)getmilliseconds() << " : "<<MSG<<" : "; \
 std::cout.setf ( std::ios::hex, std::ios::basefield ); \
 std::cout.setf ( std::ios::showbase ); \
-std::cout << *(fim_int*)(C) <<"\n"; \
+std::cout << *(fim_key_t*)(C) <<"\n"; \
 std::cout.unsetf ( std::ios::showbase ); \
 std::cout.unsetf ( std::ios::hex );
 #else /* FIM_SDL_DEBUG */
