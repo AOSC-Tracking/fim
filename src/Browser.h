@@ -56,11 +56,21 @@ class fle_t : public string /* file list element */
 
 class flist_t : public std::vector<fim::fle_t>
 {
+	private:
+	/*
+	 * cf_ is zero only when there are no files in the list.
+	 * the current file index is in current_n()
+	 */
+	fim_int cf_;
 	public:
-	flist_t(void){}
+	flist_t(void):cf_(0){}
 	flist_t(const args_t & a);
 	void get_stat(void);
 	void _sort(const fim_char_t sc);
+	fim_int cf(void)const{return cf_;}
+	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
+	void adj_cf(void){cf_ = size() <= 0 ? 0 : FIM_MIN(cf_,size()-1); /* FIXME: use a smarter method here */ }
+	const fim::string pop(fim::string filename); // FIXME: const &
 };
 
 /*
@@ -82,12 +92,6 @@ class Browser
 #endif /* FIM_WANT_PIC_LBFL */
 
 	const fim::string nofile_; /* a dummy empty filename */
-
-	/*
-	 * cf_ is zero only when there are no files in the list.
-	 * the current file index is in current_n()
-	 */
-	fim_int cf_;
 
 #ifndef FIM_WINDOWS
 	/* when compiled with no multiple windowing support, one viewport only will last. */
@@ -134,7 +138,6 @@ class Browser
 		llist_(args_t()),
 #endif /* FIM_WANT_PIC_LBFL */
 		nofile_(""),
-		cf_(0),
 		commandConsole_(cc),
 #ifdef FIM_READ_STDIN_IMAGE
 		default_image_(FIM_NULL),
