@@ -2290,6 +2290,68 @@ err:
 #endif /* FIM_WANT_PIC_LBFL */
 	}
 
+#if FIM_WANT_BENCHMARKS
+	fim_int Browser::get_n_qbenchmarks(void)const
+	{
+		return 2;
+	}
+	void Browser::quickbench_init(fim_int qbi)
+	{
+		string msg;
+		
+		switch(qbi)
+		{
+			case 0:
+			msg="fim browser push check";
+			std::cout << msg << " : " << "please be patient\n";
+			break;
+			case 1:
+			msg="fim browser pop check";
+			std::cout << msg << " : " << "please be patient\n";
+			break;
+		}
+	}
+	void Browser::quickbench_finalize(fim_int qbi)
+	{
+	}
+	void Browser::quickbench(fim_int qbi)
+	{
+		static fim_int ci = 0;
+		switch(qbi)
+		{
+			case 0:
+			push(string(ci)+".jpg");
+			ci++;
+			break;
+			case 1:
+			ci--;
+			pop(string(ci)+".jpg");
+			break;
+		}
+	}
+	string Browser::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const
+	{
+		string msg=FIM_CNS_EMPTY_STRING;
+
+		switch(qbi)
+		{
+			case 0:
+			msg+="fim browser push check";
+			msg+=" : ";
+			msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
+			msg+=" push()/s\n";
+			break;
+			case 1:
+			msg+="fim browser pop check";
+			msg+=" : ";
+			msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
+			msg+=" pop()/s\n";
+			break;
+		}
+		return msg;
+	}
+#endif /* FIM_WANT_BENCHMARKS */
+
 } /* namespace fim */
 
 namespace fim
