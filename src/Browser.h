@@ -29,6 +29,7 @@
 #define FIM_FLAG_PUSH_ONE 4 /* one is enough */
 #define FIM_FLAG_PUSH_HIDDEN 8 /* */
 #define FIM_FLAG_DEL(V,F)    (V) &= ~(F)
+#define FIM_WANT_LIMIT_DUPBN 1 /* limit to duplicate base name */
 
 namespace fim
 {
@@ -72,7 +73,7 @@ class Browser
 #endif /* FIM_NAMESPACES */
 {
 	private:
-	enum MatchMode{ FullFileNameMatch, PartialFileNameMatch, VarMatch, CmtMatch, MarkedMatch }; /* FIXME */
+	enum MatchMode{ FullFileNameMatch, PartialFileNameMatch, VarMatch, CmtMatch, MarkedMatch, DupFileNameMatch, UniqFileNameMatch, FirstFileNameMatch, LastFileNameMatch }; /* FIXME */
 	enum FilterAction{ Mark, Unmark, Delete }; /* FIXME */
 	flist_t flist_; /* the names of files in the slideshow.  */
 #if FIM_WANT_PIC_LBFL
