@@ -21,6 +21,7 @@
 #ifndef FIM_BROWSER_H
 #define FIM_BROWSER_H
 #include "fim.h"
+#include <algorithm> // std::count
 
 #define FIM_FLAG_NONREC 0 /* let this be zero */
 #define FIM_FLAG_DEFAULT FIM_FLAG_NONREC
@@ -54,6 +55,27 @@ class fle_t : public string /* file list element */
 	operator string (void)const;
 };
 
+class fim_bitset_t:public std::vector<fim_bool_t>
+{
+	public:
+	fim_bitset_t(size_t n):std::vector<fim_bool_t>(n,false){}
+	size_t count(void)const{return std::count(this->begin(),this->end(),true);}
+	fim_bool_t any(void)const{return count()!=0;}
+	void set(size_t pos, fim_bool_t value = true){ (*this)[pos]=value; }
+	void negate(void){ size_t tsize = size(); for(size_t pos=0;pos<tsize;++pos) this->begin()[pos] = ! this->begin()[pos]; }
+}; /* fim_bitset_t */
+
+/*
+std::ostream& operator << (std::ostream& os, const fim_bitset_t &bs)
+{
+	// FIXME: temporarily here !
+	os << bs.size() << ":";
+	for(size_t i=0;i<bs.size();++i)
+		os << bs.at(i) ? 1 : 0;
+	os << "\n";
+	return os;
+} */
+
 class flist_t : public std::vector<fim::fle_t>
 {
 	private:
@@ -69,8 +91,16 @@ class flist_t : public std::vector<fim::fle_t>
 	void _sort(const fim_char_t sc);
 	fim_int cf(void)const{return FIM_MAX(cf_,0);}
 	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
-	void adj_cf(void){cf_ = size() <= 0 ? 0 : FIM_MIN(cf_,size()-1); /* FIXME: use a smarter method here */ }
+	void adj_cf(void){cf_ = ( size() <= 0 ) ? 0 : FIM_MIN(cf_,size()-1); /* FIXME: use a smarter method here */ }
 	const fim::string pop(const fim::string & filename);
+	void erase_at_bitset(const fim_bitset_t & bs, fim_bool_t negative = false)
+{
+	size_t ecount = 0, tsize = size();
+	for(size_t pos=0;pos<tsize;++pos)
+		if(bs.at(pos) != negative)
+			this->erase(this->begin()+pos-ecount),ecount++;
+	adj_cf();
+}
 };
 
 /*
