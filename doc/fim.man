@@ -201,7 +201,7 @@ Set scroll steps for internal variable _steps (default is 20%).
 Interruptible slideshow mode; will wait for {number} of seconds (assigned to the _want_sleep_seconds variable after each loading; implemented by executing while(_fileindex<_filelistlen){sleep _want_sleep_seconds; next;} as a first command.
 .TP
 .B  \-\-sanity\-check
-A quick sanity check before starting the interactive fim execution, but after the initialization.
+Perform a quick sanity check, just after the initialization, and terminate.
 .TP
 .B \-t, \-\-no\-framebuffer
 Fim will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).

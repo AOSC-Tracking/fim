@@ -223,7 +223,7 @@ FIM_NULL
 "Interruptible slideshow mode; will wait for " FIM_CNS_EX_NUM_STRING " of seconds (assigned to the " FIM_VID_WANT_SLEEPS " variable after each loading; implemented by executing " FIM_CNS_SLIDESHOW_CMD " as a first command."
     },
     {"sanity-check",      no_argument,       FIM_NULL, 0x70617363,"perform a sanity check.",FIM_NULL, /* Was -S until r1001 */
-"A quick sanity check before starting the interactive fim execution, but after the initialization."
+"Perform a quick sanity check, just after the initialization, and terminate."
     },	/* NEW */
     {"no-framebuffer",      no_argument,       FIM_NULL, 't',"display images in text mode (as -o " FIM_DDN_INN_AA ").",FIM_NULL,
 "Fim will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).\n"
