@@ -310,29 +310,6 @@ ret:
 		return s;
 	}
 
-	const fim::string flist_t::pop(fim::string filename)
-	{
-		fim::string s;
-
-		assert(this->cf());
-		if( filename == FIM_CNS_EMPTY_STRING )
-		{
-			this->erase( this->begin() + cf_ );
-			if( cf_ >= (int)this->size() && cf_ > 0 )
-				cf_--;
-			s = (*this)[this->size()-1];
-		}
-		else
-		{
-			// FIXME: shall use a search member function/function
-			for( size_t i=0; i < this->size(); ++i )
-				if( fim::string((*this)[i]) == filename )
-					this->erase(this->begin()+i);
-                        cf_ = FIM_MAX(FIM_MIN(this->size()-1,cf_),0);
-		}
-		return s;
-	}
-
 	const fim::string Browser::pop(fim::string filename)
 	{	
 		/*
@@ -343,6 +320,7 @@ ret:
 
 		if( flist_.size() <= 1 )
 			goto ret;
+
 		s = flist_.pop(filename);
 
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
@@ -2169,11 +2147,11 @@ err:
 		/*
 		 * dilemma : should the current() filename and next() operations
 		 * be relative to viewport's own current's ?
-		 * TODO: move to flist_t:::...
 		 * */
 		if( empty_file_list() )
-			return nofile_; // FIXME: patch!
-	       	return flist_.cf() >= 0 ? flist_[flist_.cf()] : nofile_;
+			return nofile_;
+
+	       	return flist_[flist_.cf()];
 	}
 
 	int Browser::empty_file_list(void)const
@@ -2357,6 +2335,29 @@ ret:
 #else /* FIM_USE_CXX11 */
 		this->reserve(this->size());
 #endif /* FIM_USE_CXX11 */
+	}
+
+	const fim::string flist_t::pop(const fim::string & filename)
+	{
+		fim::string s;
+
+		assert(this->cf());
+		if( filename == FIM_CNS_EMPTY_STRING )
+		{
+			this->erase( this->begin() + cf_ );
+			if( cf_ >= (int)this->size() && cf_ > 0 )
+				cf_--;
+			s = (*this)[this->size()-1];
+		}
+		else
+		{
+			// FIXME: shall use a search member function/function
+			for( size_t i=0; i < this->size(); ++i )
+				if( fim::string((*this)[i]) == filename )
+					this->erase(this->begin()+i);
+                        cf_ = FIM_MAX(FIM_MIN(this->size()-1,cf_),0);
+		}
+		return s;
 	}
 
 	//std::string fle_t::operator(){return fn;}

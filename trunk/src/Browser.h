@@ -67,10 +67,10 @@ class flist_t : public std::vector<fim::fle_t>
 	flist_t(const args_t & a);
 	void get_stat(void);
 	void _sort(const fim_char_t sc);
-	fim_int cf(void)const{return cf_;}
+	fim_int cf(void)const{return FIM_MAX(cf_,0);}
 	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
 	void adj_cf(void){cf_ = size() <= 0 ? 0 : FIM_MIN(cf_,size()-1); /* FIXME: use a smarter method here */ }
-	const fim::string pop(fim::string filename); // FIXME: const &
+	const fim::string pop(const fim::string & filename);
 };
 
 /*
