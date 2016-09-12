@@ -73,8 +73,6 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 }
 #endif /* FIM_WANT_BENCHMARKS */
 
-
-
 	fim_err_t CommandConsole::init(fim::string device)
 	{
 		/*
@@ -415,6 +413,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		{
 #if FIM_WANT_BENCHMARKS
 			fim_bench_subsystem(displaydevice_);
+			fim_bench_subsystem(&browser_);
 			fim_bench_subsystem(this);
 #endif /* FIM_WANT_BENCHMARKS */
 			quit(return_code_);
@@ -435,7 +434,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		switch(qbi)
 		{
 			case 0:
-			msg+="fim variables set/get test";
+			msg+="fim console random variables set/get test";
 			msg+=" : ";
 			msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
 			msg+=" set/get /s\n";
@@ -445,6 +444,15 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 
 	void CommandConsole::quickbench_init(fim_int qbi)
 	{
+		string msg;
+		
+		switch(qbi)
+		{
+			case 0:
+			msg="fim console check";
+			std::cout << msg << " : " << "please be patient\n";
+			break;
+		}
 	}
 
 	void CommandConsole::quickbench_finalize(fim_int qbi)

@@ -76,10 +76,17 @@ class flist_t : public std::vector<fim::fle_t>
 /*
  * A Browser object oversees image browsing.
  */
-#ifdef FIM_NAMESPACES
-class Browser:public Namespace
-#else /* FIM_NAMESPACES */
 class Browser
+#ifdef FIM_NAMESPACES
+:public Namespace
+#if FIM_WANT_BENCHMARKS
+,public Benchmarkable
+#endif /* FIM_WANT_BENCHMARKS */
+#else /* FIM_NAMESPACES */
+ public Benchmarkable
+#if FIM_WANT_BENCHMARKS
+	: public Benchmarkable,
+#endif /* FIM_WANT_BENCHMARKS */
 #endif /* FIM_NAMESPACES */
 {
 	private:
@@ -220,7 +227,14 @@ class Browser
 	fim_float_t file_progress(void)const { /* FIXME: relies on range 0... */ double fp = (((double)(1+this->current_n()))/this->n_files()); return FIM_MIN(1.0,fp);} 
 	void mark_from_list(const args_t & argsc);
 	bool dump_desc(const fim::string nf, fim_char_t sc, const bool want_all_vars=false, const bool want_append=false)const;
-};
+#if FIM_WANT_BENCHMARKS
+	virtual fim_int get_n_qbenchmarks(void)const;
+	virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const;
+	virtual void quickbench_init(fim_int qbi);
+	virtual void quickbench_finalize(fim_int qbi);
+	virtual void quickbench(fim_int qbi);
+#endif /* FIM_WANT_BENCHMARKS */
+}; /* Browser */
 }
 
 #endif /* FIM_BROWSER_H */

@@ -244,7 +244,7 @@ string DisplayDevice::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_
 	switch(qbi)
 	{
 		case 0:
-		msg+="fim check";
+		msg+="fim display check";
 		msg+=" : ";
 		msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
 		msg+=" clears/s\n";
@@ -257,7 +257,7 @@ void DisplayDevice::quickbench_init(fim_int qbi)
 	switch(qbi)
 	{
 		case 0:
-		string msg="fim check";
+		string msg="fim display check";
 		std::cout << msg << " : " << "please be patient\n";
 		break;
 	}
