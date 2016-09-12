@@ -618,6 +618,32 @@ nop:
 			if( args.size() > 1 )
 				;// result = result + "Limiting to " + args[0] + " = " + args[1] + "\n";
 			tlist_ = flist_; /* limiting */
+#if FIM_WANT_LIMIT_DUPBN
+			if( args[0] == "~=" )
+			{
+				// result = result + "Limiting to duplicate files\n";
+				do_filter(args,DupFileNameMatch,false);
+			}
+			else
+			if( args[0] == "~1" )
+			{
+				// result = result + "Limiting to first occurrences of files\n";
+				do_filter(args,FirstFileNameMatch,false);
+			}
+			else
+			if( args[0] == "~$" )
+			{
+				// result = result + "Limiting to last occurrences of files\n";
+				do_filter(args,LastFileNameMatch,false);
+			}
+			else
+			if( args[0] == "~!" )
+			{
+				// result = result + "Limiting to unique files\n";
+				do_filter(args,UniqFileNameMatch,false);
+			}
+			else
+#endif /* FIM_WANT_LIMIT_DUPBN */
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 			if( args[0] == "!" )
 			{
@@ -1681,7 +1707,75 @@ err:
 		const bool wom = (flist_.size() > 1000); // warn on more. FIXME: 1000 is arbitrary..
 		fim_int matched = 0, marked = 0;
 
+//if(negative==true)
+//	std::cout << "limit to uniq !\n";
+//else
+//	std::cout << "limit to dups !\n";
+
 		FIM_PR('*');
+#if FIM_WANT_LIMIT_DUPBN
+		if ( rm == DupFileNameMatch || rm == UniqFileNameMatch || rm == FirstFileNameMatch || rm == LastFileNameMatch)
+		{
+			bool only_first = true; // FIXME: true makes sense on true duplicates, false to compare them
+
+			if(wom) commandConsole_.set_status_bar("limiting...", "*");
+
+			flist_t slist_=flist_; /* FIXME: this is skippable if list sorted  */
+			slist_._sort(FIM_SYM_SORT_BN);
+
+			for(size_t i=0;i<slist_.size();++i)
+			{
+				size_t j=i,ii,jj;
+
+				while(j+1<slist_.size() && 0 == 
+					strcmp(fim_basename_of(slist_[i].c_str()),fim_basename_of(slist_[j+1].c_str())) )
+					++j;
+
+				// j+1-i duplicate basenames
+				if ( rm == DupFileNameMatch )
+				{
+					if(i==j)
+						ii=i,jj=i; // no dups: no results
+					else
+						ii=i,jj=j+1; // all dups: all results
+				}
+				if ( rm == UniqFileNameMatch )
+				{
+					if(i==j)
+						ii=i,jj=i+1; // uniq; a result
+					else
+						ii=i,jj=i; // there are dups: no results
+				}
+				if ( rm == FirstFileNameMatch)
+				{
+					ii=i,jj=i+1; // first is result
+				}
+				if ( rm == LastFileNameMatch)
+				{
+					ii=j,jj=j+1; // last is result
+				}
+				if(faction == Delete)
+				{
+					for(;i<=j;++i)
+					if( i < ii || i >= jj ) 
+					{
+						fim_int fi = find_file_index(slist_[i]);
+						if(fi>=0)
+							++matched,
+							flist_.erase(flist_.begin()+fi);
+					}
+				}
+				else
+				{
+					for(i=ii;i<jj;++i)
+						++matched,
+						marked += cc.markFile(slist_[i],(faction == Mark),false);
+				}
+				i=j;
+			}
+			goto rfrsh;
+		}
+#endif /* FIM_WANT_LIMIT_DUPBN */
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		if ( rm == MarkedMatch )
 		{
