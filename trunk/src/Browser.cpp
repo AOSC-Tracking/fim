@@ -64,6 +64,8 @@
 #endif /* HAVE_FNMATCH_H */
 #endif /* 0 */
 
+#define FIM_CNS_ENOUGH_FILES_TO_WARN 1000
+
 namespace fim
 {
 	int Browser::current_n(void)const
@@ -1685,39 +1687,32 @@ err:
 	fim::string Browser::do_filter(const args_t &args, MatchMode rm, bool negative, enum FilterAction faction)
 	{
 		/*
-		 * TODO: flags for negative, ... 
+		 * TODO: introduce flags for negative (instead of a bool).
 		 * TODO: message like 'marked xxx files' ...
 		 */
 		fim::string result;
 		int N = 0;
-		const bool wom = (flist_.size() > 1000); // warn on more. FIXME: 1000 is arbitrary..
-		fim_int matched = 0, marked = 0;
-
-//if(negative==true)
-//	std::cout << "limit to uniq !\n";
-//else
-//	std::cout << "limit to dups !\n";
+		const bool wom = (flist_.size() > FIM_CNS_ENOUGH_FILES_TO_WARN );
+		fim_int marked = 0;
+		fim_bitset_t lbs(flist_.size()); // limit bitset, used for mark / unmark / delete / etc
 
 		FIM_PR('*');
 #if FIM_WANT_LIMIT_DUPBN
 		if ( rm == DupFileNameMatch || rm == UniqFileNameMatch || rm == FirstFileNameMatch || rm == LastFileNameMatch)
 		{
-			bool only_first = true; // FIXME: true makes sense on true duplicates, false to compare them
-
 			if(wom) commandConsole_.set_status_bar("limiting...", "*");
 
-			flist_t slist_=flist_; /* FIXME: this is skippable if list sorted  */
+			flist_t slist_ = flist_; /* this could be skippable if list sorted  */
 			slist_._sort(FIM_SYM_SORT_BN);
 
 			for(size_t i=0;i<slist_.size();++i)
 			{
-				size_t j=i,ii,jj;
+				size_t j=i,ii=0,jj=0;
 
 				while(j+1<slist_.size() && 0 == 
 					strcmp(fim_basename_of(slist_[i].c_str()),fim_basename_of(slist_[j+1].c_str())) )
 					++j;
-
-				// j+1-i duplicate basenames
+				// j+1-i same basenames
 				if ( rm == DupFileNameMatch )
 				{
 					if(i==j)
@@ -1740,25 +1735,15 @@ err:
 				{
 					ii=j,jj=j+1; // last is result
 				}
-				if(faction == Delete)
+				for(i=ii;i<jj;++i)
 				{
-					for(;i<=j;++i)
-					if( i < ii || i >= jj ) 
-					{
-						fim_int fi = find_file_index(slist_[i]);
-						if(fi>=0)
-							++matched,
-							flist_.erase(flist_.begin()+fi);
-					}
-				}
-				else
-				{
-					for(i=ii;i<jj;++i)
-						++matched,
-						marked += cc.markFile(slist_[i],(faction == Mark),false);
+					fim_int fi = find_file_index(slist_[i]);
+					if(fi>=0)
+						lbs.set(fi);
 				}
 				i=j;
 			}
+			negative = !negative;
 			goto rfrsh;
 		}
 #endif /* FIM_WANT_LIMIT_DUPBN */
@@ -1767,14 +1752,8 @@ err:
 		{
 			if(wom) commandConsole_.set_status_bar("limiting marked...", "*");
 			for(size_t i=0;i<flist_.size();++i)
-				if( cc.isMarkedFile(flist_[i]) != negative )
-				{
-					++matched;
-					if(faction == Delete)
-						flist_.erase(flist_.begin()+i), --i;
-					else
-						marked += cc.markFile(flist_[i],(faction == Mark),false);
-				}
+				if( cc.isMarkedFile(flist_[i]) == negative )
+					lbs.set(i);
 			goto rfrsh;
 		}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
@@ -1818,39 +1797,40 @@ err:
 #endif /* FIM_WANT_PIC_LVDN */
 
 				if( match )
-				{
-					++matched;
-//					std::cout << "removing" << flist_[i]<<FIM_CNS_NEWLINE;
-					if(faction == Delete)
-					{
-						flist_.erase(flist_.begin()+i);
-						--i; /* i needs to be reconsidered */
-					}
-					else
-						marked += cc.markFile(flist_[i],(faction == Mark),false);
-				}
+					lbs.set(i);
 			}
 	//		if(lf != flist_.size() )
 	//			cout << "limited to " << int(flist_.size()) << " files, excluding " << int(lf - flist_.size()) << " files." <<FIM_CNS_NEWLINE;
+			if(negative) negative = !negative;
 			goto rfrsh;
 		}
 		else
 		{
-			/*
-			 * removes the current file from the list
-			 */
-/*			if(cf_-1==current_n())--cf_;
-			flist_.erase(flist_.begin()+current_n());
-			if(cf_==0 && n_files()) ++cf_;
-			result = FIM_CNS_EMPTY_RESULT;*/
+			/* removes the current file from the list */
 			result = pop_current();
 			goto nop;
 		}
 		}
 rfrsh:
+		if (negative)
+			lbs.negate();
+
+		if (lbs.any())
+		{
+			if(faction == Delete)
+				flist_.erase_at_bitset(lbs);
+			else /* Mark / Unmark */
+			{
+				size_t tsize = lbs.size();
+				for(size_t pos=0;pos<tsize;++pos)
+					if(lbs.at(pos))
+						marked += cc.markFile(flist_[pos],(faction == Mark),false);
+			}
+		}
+
 		if ((faction != Delete) && marked)
 			cout << ( faction == Mark ? "  Marked " : "Unmarked "  ) << marked << " files\n";
-		flist_.adj_cf();
+
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		goto nop;
