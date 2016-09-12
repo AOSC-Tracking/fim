@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1063)
+ * Command "list 'mark' {args}" accepts now exactly what "limit {args}" does.
 # (r1059)
  * Doc fix: stating that --sanity-check terminates the program, rather than continuing.
 # (r1056,r1062)

@@ -103,7 +103,7 @@ namespace fim
 				{
 					args_t argsc(args);
 					argsc.erase(argsc.begin());
-					do_filter(argsc,CmtMatch,false,domark ? Mark : Unmark);
+					do_filter_cmd(argsc,true,domark ? Mark : Unmark);
 				}
 				else
 #endif /* FIM_WANT_PIC_LBFL */
@@ -589,6 +589,45 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
+	void Browser::do_filter_cmd(const args_t &args, bool negative, enum FilterAction faction)
+	{
+#if FIM_WANT_LIMIT_DUPBN
+			if( args[0] == "~=" )
+			{
+				// result = result + "Limiting to duplicate files\n";
+				do_filter(args,DupFileNameMatch,negative,faction);
+			}
+			else
+			if( args[0] == "~^" )
+			{
+				// result = result + "Limiting to first occurrences of files\n";
+				do_filter(args,FirstFileNameMatch,negative,faction);
+			}
+			else
+			if( args[0] == "~$" )
+			{
+				// result = result + "Limiting to last occurrences of files\n";
+				do_filter(args,LastFileNameMatch,negative,faction);
+			}
+			else
+			if( args[0] == "~!" )
+			{
+				// result = result + "Limiting to unique files\n";
+				do_filter(args,UniqFileNameMatch,negative,faction);
+			}
+			else
+#endif /* FIM_WANT_LIMIT_DUPBN */
+#if FIM_WANT_FILENAME_MARK_AND_DUMP
+			if( args[0] == "!" )
+			{
+				// result = result + "Limiting to marked files\n";
+				do_filter(args,MarkedMatch,!negative,faction); /* this is remove on filenames; need remove on comments */
+			}
+			else
+#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
+				do_filter(args,VarMatch,!negative,faction); /* this is remove on filenames; need remove on comments */
+	}
+
 #if FIM_WANT_PIC_LBFL
 	fim::string Browser::fcmd_limit(const args_t &args)
 	{
@@ -602,46 +641,16 @@ nop:
 		if( args.size() > 0 )
 		{
 			fim_int lbl = n_files(); /* length before limiting */
+			enum FilterAction faction = Delete;
+
 			if(tlist_.size())
 			       	flist_ = tlist_; /* reset the first time */
 			if( args.size() > 1 )
 				;// result = result + "Limiting to " + args[0] + " = " + args[1] + "\n";
 			tlist_ = flist_; /* limiting */
-#if FIM_WANT_LIMIT_DUPBN
-			if( args[0] == "~=" )
-			{
-				// result = result + "Limiting to duplicate files\n";
-				do_filter(args,DupFileNameMatch,false);
-			}
-			else
-			if( args[0] == "~^" )
-			{
-				// result = result + "Limiting to first occurrences of files\n";
-				do_filter(args,FirstFileNameMatch,false);
-			}
-			else
-			if( args[0] == "~$" )
-			{
-				// result = result + "Limiting to last occurrences of files\n";
-				do_filter(args,LastFileNameMatch,false);
-			}
-			else
-			if( args[0] == "~!" )
-			{
-				// result = result + "Limiting to unique files\n";
-				do_filter(args,UniqFileNameMatch,false);
-			}
-			else
-#endif /* FIM_WANT_LIMIT_DUPBN */
-#if FIM_WANT_FILENAME_MARK_AND_DUMP
-			if( args[0] == "!" )
-			{
-				// result = result + "Limiting to marked files\n";
-				do_filter(args,MarkedMatch,true); /* this is remove on filenames; need remove on comments */
-			}
-			else
-#endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
-				do_filter(args,VarMatch,true); /* this is remove on filenames; need remove on comments */
+
+			do_filter_cmd(args,false,faction);
+
 			if(lbl != n_files())
 				reload();
 		}
