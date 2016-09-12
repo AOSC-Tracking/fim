@@ -614,7 +614,7 @@ nop:
 				do_filter(args,DupFileNameMatch,false);
 			}
 			else
-			if( args[0] == "~1" )
+			if( args[0] == "~^" )
 			{
 				// result = result + "Limiting to first occurrences of files\n";
 				do_filter(args,FirstFileNameMatch,false);

@@ -5,11 +5,11 @@
 
 # (r1059)
  * Doc fix: stating that --sanity-check terminates the program, rather than continuing.
-# (r1056)
+# (r1056,r1062)
  * New criteria for the "limit" command:
    If invoked with '~!' will restrict to files with unique basename.
    If with '~=', to files with duplicate basename;
-   if with '~1', to the first of the files with duplicate basename;
+   if with '~^', to the first of the files with duplicate basename;
    if with '~$', to the last of the files with duplicate basename. 
 # (r1053)
  * Added variable _all_file_loaders: space-separated list of hardcoded file loaders usable with _file_loader.
