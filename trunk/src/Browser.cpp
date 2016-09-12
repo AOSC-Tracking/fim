@@ -68,7 +68,7 @@ namespace fim
 {
 	int Browser::current_n(void)const
 	{
-	       	return cf_;
+	       	return flist_.cf();
 	}
 
 	fim::string Browser::fcmd_list(const args_t &args)
@@ -290,7 +290,6 @@ ret:
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
 	{	
-		cf_ = 0;
 	}
 
 	const fim::string Browser::pop_current(void)
@@ -305,9 +304,32 @@ ret:
 
 		if( flist_.size() <= 0 )
 			return nofile_;
-		assert(cf_);
+		assert(flist_.cf());
 		flist_.erase( flist_.begin() + current_n() );
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
+		return s;
+	}
+
+	const fim::string flist_t::pop(fim::string filename)
+	{
+		fim::string s;
+
+		assert(this->cf());
+		if( filename == FIM_CNS_EMPTY_STRING )
+		{
+			this->erase( this->begin() + cf_ );
+			if( cf_ >= (int)this->size() && cf_ > 0 )
+				cf_--;
+			s = (*this)[this->size()-1];
+		}
+		else
+		{
+			// FIXME: shall use a search member function/function
+			for( size_t i=0; i < this->size(); ++i )
+				if( fim::string((*this)[i]) == filename )
+					this->erase(this->begin()+i);
+                        cf_ = FIM_MAX(FIM_MIN(this->size()-1,cf_),0);
+		}
 		return s;
 	}
 
@@ -317,28 +339,15 @@ ret:
 		 * pops the last image filename from the filenames list
 		 * ( note that it doesn't refresh the image in any way ! )
 		 */
-		fim::string s;
+		fim::string s = nofile_;
 
 		if( flist_.size() <= 1 )
-			return nofile_;
-		assert(cf_);
-		if( filename == FIM_CNS_EMPTY_STRING )
-		{
-			flist_.erase( flist_.begin() + current_n() );
-			if( cf_ >= (int)flist_.size() && cf_ > 0 )
-				cf_--;
-			s = flist_[flist_.size()-1];
-		}
-		else
-		{
-			// FIXME: shall use a search member function/function
-			for( size_t i=0; i < flist_.size(); ++i )
-				if( fim::string(flist_[i]) == filename )
-					flist_.erase(flist_.begin()+i);
-                        cf_ = FIM_MAX(FIM_MIN(flist_.size()-1,cf_),0);
-		}
+			goto ret;
+		s = flist_.pop(filename);
+
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
+ret:
 		return s;
 	}
 
@@ -1444,8 +1453,7 @@ nop:
 #if FIM_WANT_GOTOLAST
 		if(getGlobalIntVariable(FIM_VID_LASTFILEINDEX) != current_image())
 			setGlobalVariable(FIM_VID_LASTFILEINDEX, current_image());
-		cf_ = n;
-		cf_ = FIM_MOD(cf_,N);
+		flist_.set_cf(FIM_MOD(n,N));
 #if FIM_WANT_LASTGOTODIRECTION
 		if( ( n_files() + current_image() - getGlobalIntVariable(FIM_VID_LASTFILEINDEX) ) % n_files() > n_files() / 2 )
 			setGlobalVariable(FIM_VID_LASTGOTODIRECTION,"-1");
@@ -1472,7 +1480,7 @@ ret:
 		 * returns to the next image in the list, the mechanism
 		 * p.s.: n<>0
 		 */
-		int ccp = cf_ + n;
+		int ccp = flist_.cf() + n;
 		int N = flist_.size();
 
 		if( !N )
@@ -1511,7 +1519,7 @@ ret:
 		 */
 		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
 		//const int cf=cf_,cp=c_page(),pc=n_pages(),fc=n_files();
-		const int cf = cf_,cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages()),fc = n_files();
+		const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages()),fc = n_files();
 		fim_int gv = 0,nf = cf,mv = 0,np = cp;
 		FIM_PR('*');
 
@@ -1864,11 +1872,7 @@ err:
 rfrsh:
 		if ((faction != Delete) && marked)
 			cout << ( faction == Mark ? "  Marked " : "Unmarked "  ) << marked << " files\n";
-		N = flist_.size();
-		if( N <= 0 )
-			cf_ = 0;
-		else
-			cf_ = FIM_MIN(cf_,N-1);
+		flist_.adj_cf();
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		goto nop;
@@ -2165,11 +2169,11 @@ err:
 		/*
 		 * dilemma : should the current() filename and next() operations
 		 * be relative to viewport's own current's ?
+		 * TODO: move to flist_t:::...
 		 * */
 		if( empty_file_list() )
 			return nofile_; // FIXME: patch!
-	       	//return cf_?flist_[current_n()]:nofile_;
-	       	return cf_ >= 0 ? flist_[cf_] : nofile_;
+	       	return flist_.cf() >= 0 ? flist_[flist_.cf()] : nofile_;
 	}
 
 	int Browser::empty_file_list(void)const
@@ -2224,7 +2228,8 @@ err:
 	fim_int Browser::current_image(void)const
 	{
 		/* counting from 1 */
-		return cf_ + 1;
+		// TODO: move to flist_t:::...
+		return flist_.cf() + 1;
 	}
 
 	fim_int Browser::n_pages(void)const
@@ -2336,7 +2341,7 @@ ret:
 			fit->stat_ = fim_get_stat(*fit);
 	}
 
-	flist_t::flist_t(const args_t & a)
+	flist_t::flist_t(const args_t & a):cf_(0)
        	{
 		/* FIXME: unused for now */
 		this->reserve(a.size());
