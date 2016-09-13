@@ -318,14 +318,43 @@ ret:
 	bool write_to_file(fim::string filename, fim::string lines, bool append)
 	{
 		std::ofstream fs;
-		fs.open(filename.c_str(),
-				std::ios::binary | ( append ? std::ios::app : std::ios::binary ));
-		if(fs.is_open())
-			fs << lines.c_str();
-		fs.close();
-		sync();
 
-		return true; // TODO: need error diagnostics
+		fs.open(filename.c_str(), std::ios::out | ( append ? std::ios::app : std::ios::binary ));
+
+		if(fs.rdstate()!=std::ios_base::goodbit)
+		{
+			cout << "Error opening file " << filename << " for writing !\n";
+			goto err;
+		}
+
+		if(fs.is_open())
+		{
+			fs << lines.c_str();
+
+			if(fs.rdstate()!=std::ios_base::goodbit)
+			{
+				cout << "Error writing to file " << filename << " !\n";
+				goto err;
+			}
+
+			fs.close();
+
+			if(fs.rdstate()!=std::ios_base::goodbit)
+			{
+				cout << "Error closing file " << filename << " !\n";
+				goto err;
+			}
+		}
+		else 
+		{
+			cout << "Error after opening file " << filename << " !\n";
+			goto err;
+		}
+
+		sync();
+		return true;
+err:
+		return false;
 	}
 
 /*

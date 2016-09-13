@@ -101,7 +101,7 @@ namespace fim
 				bool domark = (args[0]=="mark");
 #if FIM_WANT_PIC_LBFL
 				if(args.size() > 1)
-					do_filter_cmd(args_t(args.begin()+1,args.end()),true,domark ? Mark : Unmark);
+					result = do_filter_cmd(args_t(args.begin()+1,args.end()),true,domark ? Mark : Unmark);
 				else
 #endif /* FIM_WANT_PIC_LBFL */
 			       		cc.markCurrentFile(domark); 
@@ -584,8 +584,10 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	void Browser::do_filter_cmd(const args_t args, bool negative, enum FilterAction faction)
+	fim::string Browser::do_filter_cmd(const args_t args, bool negative, enum FilterAction faction)
 	{
+		fim::string result = FIM_CNS_EMPTY_RESULT;
+
 		/* Interprets a mark/limiting pattern. */
 		if(args.size()>0)
 		{
@@ -593,25 +595,25 @@ nop:
 			if( args[0] == "~=" )
 			{
 				// result = result + "Limiting to duplicate files\n";
-				do_filter(args,DupFileNameMatch,negative,faction);
+				result = do_filter(args,DupFileNameMatch,negative,faction);
 			}
 			else
 			if( args[0] == "~^" )
 			{
 				// result = result + "Limiting to first occurrences of files\n";
-				do_filter(args,FirstFileNameMatch,negative,faction);
+				result = do_filter(args,FirstFileNameMatch,negative,faction);
 			}
 			else
 			if( args[0] == "~$" )
 			{
 				// result = result + "Limiting to last occurrences of files\n";
-				do_filter(args,LastFileNameMatch,negative,faction);
+				result = do_filter(args,LastFileNameMatch,negative,faction);
 			}
 			else
 			if( args[0] == "~!" )
 			{
 				// result = result + "Limiting to unique files\n";
-				do_filter(args,UniqFileNameMatch,negative,faction);
+				result = do_filter(args,UniqFileNameMatch,negative,faction);
 			}
 			else
 #endif /* FIM_WANT_LIMIT_DUPBN */
@@ -619,12 +621,13 @@ nop:
 			if( args[0] == "!" )
 			{
 				// result = result + "Limiting to marked files\n";
-				do_filter(args,MarkedMatch,!negative,faction); /* this is remove on filenames; need remove on comments */
+				result = do_filter(args,MarkedMatch,!negative,faction); /* this is remove on filenames; need remove on comments */
 			}
 			else
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
-				do_filter(args,VarMatch,!negative,faction); /* this is remove on filenames; need remove on comments */
+				result = do_filter(args,VarMatch,!negative,faction); /* this is remove on filenames; need remove on comments */
 		}
+		return result;
 	}
 
 #if FIM_WANT_PIC_LBFL
@@ -645,7 +648,7 @@ nop:
 			if(tlist_.size() && !fim_args_opt_have(args,"-further"))
 			       	flist_ = tlist_; // limit on full list
 
-			do_filter_cmd(args_t(args.begin()+aoc,args.end()),false,faction);
+			result = do_filter_cmd(args_t(args.begin()+aoc,args.end()),false,faction);
 
 			if(n_files() != lbl)
 				reload();
@@ -654,11 +657,14 @@ nop:
 		{
 			// result = "Restoring the original browsable files list.";
 			if(limited_)
+			{
+			       	commandConsole_.set_status_bar("restoring files list", "*");
 				flist_ = tlist_; // original list
+			}
 			limited_ = false;
 		}
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files()); /* TODO: need a specific 'refresh' function */
-nop:
+//nop:
 		return result;
 	}
 #endif /* FIM_WANT_PIC_LBFL */
@@ -930,7 +936,9 @@ ret:
 #else /* FIM_AUTOSKIP_FAILED */
 			{}	/* beware that this could be dangerous and trigger loops */
 #endif /* FIM_AUTOSKIP_FAILED */
+#if FIM_WANT_BACKGROUND_LOAD
 apf:		/* after prefetch */
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPREFETCH,current());
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)wp);
 ret:
@@ -1130,9 +1138,9 @@ rret:
 
 	bool Browser::push(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{
-		int eec = 0; // expansion error code
 		bool pec = false; // push error code
 #if 0
+		int eec = 0; // expansion error code
 #if HAVE_WORDEXP_H
 	{
 		wordexp_t p;
@@ -1161,9 +1169,9 @@ rret:
 		}
 	}
 #endif /* HAVE_GLOB_H */
-#endif
+#endif /* 0 */
 		pec = push_noglob(nf.c_str(),pf,show_must_go_on);
-ret:
+// ret:
 		return pec;
 	}
 
@@ -1295,7 +1303,7 @@ ret:
 		 *	sorts the image filenames list
 		 */
 		flist_._sort(sc);
-		return n_files() ? (flist_[current_n()]) : nofile_;
+		return current();
 	}
 
 	fim::string Browser::_random_shuffle(bool dts)
@@ -1308,7 +1316,7 @@ ret:
 		if( dts )
 			std::srand(time(FIM_NULL));	/* FIXME: AFAIK, effect of srand() on random_shuffle is not mandated by any standard. */
 		std::random_shuffle(flist_.begin(),flist_.end());
-		return n_files() ? (flist_[current_n()]) : nofile_;
+		return current();
 	}
 
 	fim::string Browser::_clear_list(void)
@@ -1325,7 +1333,7 @@ ret:
 		 *	sorts the image filenames list
 		 */
 		std::reverse(flist_.begin(),flist_.end());
-		return n_files()?(flist_[current_n()]):nofile_;
+		return current();
 	}
 
 	fim::string Browser::_swap(void)
@@ -1335,7 +1343,7 @@ ret:
 		 */
 		if( n_files() > 1 && current_n() )
 			std::swap(flist_[0],flist_[current_n()]);
-		return n_files()?(flist_[current_n()]):nofile_;
+		return current();
 	}
 
 	fim::string Browser::regexp_goto(const args_t &args, fim_int src_dir)
@@ -1345,7 +1353,7 @@ ret:
 		 * TODO: this member function shall only find the index and return it !
 		 */
 		size_t i,j,c = current_n(),s = flist_.size();
-		const char *rso = cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) ? cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str() : "bi";
+		const char *rso = cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) ? cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str() : "bi"; /* just note that using rso is not safe thorough the whole function */
 		int rsic = 1; /* ignore case */
 		int rsbn = 1; /* base name */
 		FIM_PR('*');
@@ -1509,7 +1517,6 @@ ret:
 		/*
 		 */
 		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
-		//const int cf=cf_,cp=c_page(),pc=n_pages(),fc=n_files();
 		const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages()),fc = n_files();
 		fim_int gv = 0,nf = cf,mv = 0,np = cp;
 		FIM_PR('*');
@@ -1640,7 +1647,7 @@ ret:
 			gv = FIM_MOD(gv,mv);
 			nf = FIM_MOD(nf,fc);
 			np = FIM_MOD(np,pc);
-go:
+//go:
 			if(0)
 			cout << "goto: "
 				<<" s:" << s
@@ -1702,7 +1709,6 @@ err:
 		 * TODO: message like 'marked xxx files' ...
 		 */
 		fim::string result;
-		int N = 0;
 		const bool wom = (flist_.size() > FIM_CNS_ENOUGH_FILES_TO_WARN );
 		fim_int marked = 0;
 		fim_bitset_t lbs(flist_.size()); // limit bitset, used for mark / unmark / delete / etc
@@ -1711,11 +1717,23 @@ err:
 #if FIM_WANT_LIMIT_DUPBN
 		if ( rm == DupFileNameMatch || rm == UniqFileNameMatch || rm == FirstFileNameMatch || rm == LastFileNameMatch)
 		{
-			if(wom) commandConsole_.set_status_bar("limiting...", "*");
+			flist_t slist = flist_;
 
-			flist_t slist = flist_; /* this could be skippable if list sorted  */
-			slist._sort(FIM_SYM_SORT_BN);
+			slist._sort(FIM_SYM_SORT_BN); /* avoidable step, if list sorted  */
+			if(wom)
+			{
+				const char * msg = "";
+				switch( rm )
+				{
+					case(  DupFileNameMatch): msg = "limiting to duplicate base filenames..."; break;
+					case( UniqFileNameMatch): msg = "limiting to unique base filenames..."; break;
+					case(FirstFileNameMatch): msg = "limiting to first base filenames..."; break;
+					case( LastFileNameMatch): msg = "limiting to last base filenames..."; break;
+				}
+			       	commandConsole_.set_status_bar(msg, "*");
+			}
 
+			/* as an improvement, might use a std::map<file name type, bit>, rather than this */
 			for(size_t i=0;i<slist.size();++i)
 			{
 				size_t j=i,ii=0,jj=0;
@@ -1773,10 +1791,9 @@ err:
 			result = "the files list is empty\n";
 			goto nop;
 		}
+		if(args.size()>0)
 		{
-		args_t rlist = args;	//the remove list
-		if(rlist.size()>0)
-		{
+			args_t rlist = args;	//the remove list
 			/*
 			 * the list is unsorted. it may contain duplicates
 			 * if this software will have success, we will have indices here :)
@@ -1791,28 +1808,40 @@ err:
 			if ( rm == VarMatch )
 				rm = FullFileNameMatch;
 #endif /* FIM_WANT_PIC_LVDN */
-			if(wom) commandConsole_.set_status_bar("limiting matching...", "*");
+			// if(wom) commandConsole_.set_status_bar("limiting matching...", "*");
+			if(wom)
+			{
+				const char * msg = "";
+				switch( rm )
+				{
+					case(FullFileNameMatch   ): msg = "limiting to full filename match..."; break;
+					case(PartialFileNameMatch): msg = "limiting to partial filename match..."; break;
+					case(VarMatch            ): msg = "limiting to variable match..."; break;
+					case(CmtMatch            ): msg = "limiting to comment match..."; break;
+				}
+			       	commandConsole_.set_status_bar(msg, "*");
+			}
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
 			{
 				bool match = false;
 #if HAVE_FNMATCH_H && 0
-				match |= ( rm == FullFileNameMatch && ( ( 0 == fnmatch(rlist[r].c_str(), flist_[i].c_str(),0)  ) ) != negative );
+				match |= ( rm == FullFileNameMatch && ( ( 0 == fnmatch(rlist[r].c_str(), flist_[i].c_str(),0)  ) != negative ) );
 #else /* HAVE_FNMATCH_H */
-				match |= ( rm == FullFileNameMatch && ( ( flist_[i] == rlist[r] ) ) != negative );
+				match |= ( rm == FullFileNameMatch && ( ( flist_[i] == rlist[r] ) != negative ) );
 #endif /* HAVE_FNMATCH_H */
-				match |= ( rm == PartialFileNameMatch && ( ( flist_[i].re_match(rlist[r].c_str()) ) ) != negative );
+				match |= ( rm == PartialFileNameMatch && ( ( flist_[i].re_match(rlist[r].c_str()) ) != negative ) );
 #if FIM_WANT_PIC_LVDN
 				match |= ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(std::string(flist_[i]).c_str())].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
 				match |= ( rm == CmtMatch     && ( ( string(cc.id_    [fim_basename_of(std::string(flist_[i]).c_str())]).re_match(rlist[0].c_str()) ) != negative ) );
 #endif /* FIM_WANT_PIC_LVDN */
-
 				if( match )
-					lbs.set(i);
+					lbs.set(i); // TODO: further cycles on r are unnecessary after match.
 			}
 	//		if(lf != flist_.size() )
 	//			cout << "limited to " << int(flist_.size()) << " files, excluding " << int(lf - flist_.size()) << " files." <<FIM_CNS_NEWLINE;
-			if(negative) negative = !negative;
+			if(negative)
+			       	negative = !negative;
 			goto rfrsh;
 		}
 		else
@@ -1821,26 +1850,34 @@ err:
 			result = pop_current();
 			goto nop;
 		}
-		}
 rfrsh:
 		if (negative)
 			lbs.negate();
-
 		if (lbs.any())
 		{
+			size_t tsize = lbs.size(),cnt=lbs.count();
+
+			if(faction == Delete)
+				cnt=tsize-cnt;
+
+			result = "Selected ";
+		       	result += string((fim_int)cnt);
+			result += " files out of ";
+			result += string((fim_int)tsize);
+			result += ".\n";
+
 			if(faction == Delete)
 				flist_.erase_at_bitset(lbs);
 			else /* Mark / Unmark */
 			{
-				size_t tsize = lbs.size();
 				for(size_t pos=0;pos<tsize;++pos)
 					if(lbs.at(pos))
 						marked += cc.markFile(flist_[pos],(faction == Mark),false);
 			}
 		}
 
-		if ((faction != Delete) && marked)
-			cout << ( faction == Mark ? "  Marked " : "Unmarked "  ) << marked << " files\n";
+		//if ((faction != Delete) && marked)
+		//	cout << ( faction == Mark ? "  Marked " : "Unmarked "  ) << marked << " files\n";
 
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
@@ -2197,7 +2234,6 @@ err:
 	fim_int Browser::current_image(void)const
 	{
 		/* counting from 1 */
-		// TODO: move to flist_t:::...
 		return flist_.cf() + 1;
 	}
 
@@ -2242,11 +2278,14 @@ err:
 
 	bool Browser::dump_desc(const fim::string nf, fim_char_t sc, const bool want_all_vars, const bool want_append)const
 	{
-		// dumps descriptions of the current images list.
-		// on no comment does not touch the file.
+		/* 
+		   Dumps descriptions of the current images list.
+		   on no comment does not touch the file.
+		 */
 #if FIM_WANT_PIC_LBFL
 		// TODO: if no nf, then standard output
 		fim::string cmtfc; // comment file contents
+
 		for(size_t i=0;i<flist_.size();++i)
 		{
 			fim::string bof = FIM_IMGDSCS_WANT_BASENAME ? fim_basename_of(flist_[i].c_str()) : flist_[i].c_str();
@@ -2270,15 +2309,20 @@ err:
 #endif /* FIM_WANT_PIC_LVDN */
 		}
 
-		write_to_file(nf,cmtfc,want_append); // TODO: error diagnostics are missing
+		if ( write_to_file(nf,cmtfc,want_append) )
+			cout << "Successfully wrote to file " << nf << " .\n";
+		else
+			goto err;
 /*
  		// TODO: this will print info about all of them
 		cc.id_.print_descs(std::cout,sc);
 */
 		return true;
+err:
 #else /* FIM_WANT_PIC_LBFL */
-		return false;
+		/* ... */
 #endif /* FIM_WANT_PIC_LBFL */
+		return false;
 	}
 
 #if FIM_WANT_BENCHMARKS
@@ -2308,15 +2352,16 @@ err:
 	void Browser::quickbench(fim_int qbi)
 	{
 		static fim_int ci = 0;
+
 		switch(qbi)
 		{
 			case 0:
-			push(string(ci)+".jpg");
+			push(string(ci)+string(".jpg"));
 			ci++;
 			break;
 			case 1:
 			ci--;
-			pop(string(ci)+".jpg");
+			push(string(ci)+string(".jpg"));
 			break;
 		}
 	}
@@ -2414,12 +2459,10 @@ ret:
 	}
 
 	//std::string fle_t::operator(){return fn;}
-	fle_t::fle_t(){}
+	fle_t::fle_t(void) { }
 	fle_t::fle_t(const string &s):string(s){fim_bzero(&stat_,sizeof(stat_));}
-	fle_t::fle_t(const string &s, const fim_stat_t & ss):string(s),stat_(ss)
-	{
-	}
-	fle_t::operator string () const { return string(*this);} 
+	fle_t::fle_t(const string &s, const fim_stat_t & ss):string(s),stat_(ss) { }
+	fle_t::operator string (void) const { return string(*this);} 
 
 struct FimBaseNameSorter
 {
@@ -2432,7 +2475,6 @@ struct FimBaseNameSorter
 		if(ls && rs)
 			scr = (strcmp(fim_basename_of(ls),fim_basename_of(rs)));
 		return (scr < 0);
-		
 	}
 } fimBaseNameSorter;
 
