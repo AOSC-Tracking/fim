@@ -422,8 +422,10 @@ ret:		return key;
 #endif /* FIM_WANT_LIMIT_DUPBN */
 		" On '~i' [MINIDX][-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX. "
 #if FIM_WANT_FLIST_STAT 
-		" On '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize; "
-		" on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's \"st_mtime\", in seconds). "
+		" On '~z' will limit to files having the current file's size; "
+		" on '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize within these limits; "
+		" on '~d' will limit to files having the current file's date +- one day; "
+		" on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's \"st_mtime\", in seconds) within this interval. "
 #endif /* FIM_WANT_FLIST_STAT */
 		" For other values of {expression}, limit to files whose description string matches {expression}. "
 		" Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
