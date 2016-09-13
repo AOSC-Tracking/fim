@@ -631,32 +631,31 @@ nop:
 	fim::string Browser::fcmd_limit(const args_t &args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
+		int aoc = fim_args_opt_count(args,'-');
 
-		if( args.size() > 2 )
+		if( args.size()-aoc > 0 )
 		{
-			result = "Provided more than two arguments to " FIM_FLT_LIMIT ". Using the first two, ignoring the rest.\n";
-		}
-
-		if( args.size() > 0 )
-		{
-			fim_int lbl = n_files(); /* length before limiting */
+			fim_int lbl = n_files(); // length before limiting
 			enum FilterAction faction = Delete;
 
-			if(tlist_.size())
-			       	flist_ = tlist_; /* reset the first time */
-			if( args.size() > 1 )
-				;// result = result + "Limiting to " + args[0] + " = " + args[1] + "\n";
-			tlist_ = flist_; /* limiting */
+			if(!limited_)
+				limited_ = true,
+				tlist_ = flist_; // a copy
 
-			do_filter_cmd(args,false,faction);
+			if(tlist_.size() && !fim_args_opt_have(args,"-further"))
+			       	flist_ = tlist_; // limit on full list
 
-			if(lbl != n_files())
+			do_filter_cmd(args_t(args.begin()+aoc,args.end()),false,faction);
+
+			if(n_files() != lbl)
 				reload();
 		}
 		else
 		{
 			// result = "Restoring the original browsable files list.";
-			flist_ = tlist_; /* reset */
+			if(limited_)
+				flist_ = tlist_; // original list
+			limited_ = false;
 		}
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files()); /* TODO: need a specific 'refresh' function */
 nop:

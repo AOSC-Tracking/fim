@@ -133,7 +133,8 @@ class Browser
 	flist_t flist_; /* the names of files in the slideshow.  */
 #if FIM_WANT_PIC_LBFL
 	flist_t tlist_; /* the names of files in the slideshow.  */
-	flist_t llist_; /* limited file list */
+	flist_t llist_; /* limited file list (FIXME: still unused) */
+	fim_bool_t limited_; // FIXME: this->limited_
 #endif /* FIM_WANT_PIC_LBFL */
 
 	const fim::string nofile_; /* a dummy empty filename */
@@ -181,6 +182,7 @@ class Browser
 #endif /* FIM_WANT_PIC_LBFL */
 #if FIM_WANT_PIC_LBFL
 		llist_(args_t()),
+		limited_(false),
 #endif /* FIM_WANT_PIC_LBFL */
 		nofile_(""),
 		commandConsole_(cc),
