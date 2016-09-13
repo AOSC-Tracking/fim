@@ -128,7 +128,7 @@ class Browser
 #endif /* FIM_NAMESPACES */
 {
 	private:
-	enum MatchMode{ FullFileNameMatch, PartialFileNameMatch, VarMatch, CmtMatch, MarkedMatch, DupFileNameMatch, UniqFileNameMatch, FirstFileNameMatch, LastFileNameMatch, TimeMatch, SizeMatch }; /* FIXME */
+	enum MatchMode{ FullFileNameMatch, PartialFileNameMatch, VarMatch, CmtMatch, MarkedMatch, DupFileNameMatch, UniqFileNameMatch, FirstFileNameMatch, LastFileNameMatch, TimeMatch, SizeMatch, ListIdxMatch }; /* FIXME */
 	enum FilterAction{ Mark, Unmark, Delete }; /* FIXME */
 	flist_t flist_; /* the names of files in the slideshow.  */
 #if FIM_WANT_PIC_LBFL

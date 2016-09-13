@@ -70,6 +70,7 @@
 
 #define FIM_CNS_ENOUGH_FILES_TO_WARN 1000
 #define FIM_WITHIN(MIN,VAL,MAX) ((MIN)<=(VAL) && (VAL)<=(MAX))
+#define FIM_CNS_Ki 1000
 
 namespace fim
 {
@@ -619,6 +620,12 @@ nop:
 			{
 				// result = result + "Limiting to unique files\n";
 				result = do_filter(args,UniqFileNameMatch,negative,faction);
+			}
+			else
+			if( args[0] == "~i" && args.size()>1 )
+			{
+				// result = result + "Limiting according to list interval\n";
+				result = do_filter(args,ListIdxMatch,negative,faction);
 			}
 			else
 #if FIM_WANT_FLIST_STAT 
@@ -1735,6 +1742,68 @@ err:
 		fim_bitset_t lbs(flist_.size()); // limit bitset, used for mark / unmark / delete / etc
 
 		FIM_PR('*');
+
+		if ( args.size() > 1 && rm == ListIdxMatch )
+		{
+			size_t min_idx=0,max_idx=FIM_MAX_VALUE_FOR_TYPE(size_t);
+			std::string ss(args[1]);
+			std::istringstream is(ss);
+
+			if(is.peek()!='-') // MIN-
+			{
+				if(!isdigit(is.peek()))
+				{
+					result = "Bad MINIDX[-MAXIDX] expression ! MINIDX or MAXIDX should be a number.";
+					goto nop;
+				}
+				is >> min_idx;
+				if(tolower(is.peek())=='k')
+					is.ignore(1), min_idx *= FIM_CNS_Ki;
+				while(is.peek() != -1 && is.peek() != '-')
+					is.ignore(1);
+				if(is.peek() == -1)
+				{
+					max_idx=min_idx;
+					goto parsed_idx;
+				}
+			}
+
+			if(is.peek()=='-') // -MAX
+			{
+				is.ignore(1);
+				is >> max_idx;
+				if(tolower(is.peek())=='k')
+					is.ignore(1), max_idx *= FIM_CNS_Ki;
+			}
+parsed_idx:
+			if(min_idx>max_idx)
+				std::swap(min_idx,max_idx);
+		
+			if(min_idx>=flist_.size() || max_idx < 1)
+			{
+				if(wom) commandConsole_.set_status_bar("requested index range is wrong (not so many files) :-)", "*");
+				goto nop;
+			}
+
+			min_idx=FIM_MIN(FIM_MAX(min_idx,1),flist_.size());
+			max_idx=FIM_MIN(FIM_MAX(max_idx,1),flist_.size());
+
+			// std::cout << "Limiting index between " << min_idx << " and " << max_idx << " .\n";
+
+			if(min_idx==1 && max_idx>=flist_.size())
+			{
+				if(wom) commandConsole_.set_status_bar("requested index limit range covers entire list :-)", "*");
+				goto nop;
+			}
+
+			if(wom) commandConsole_.set_status_bar("limiting to list index range...", "*");
+
+			/* not efficient but conceptually clean in this context */
+			for(size_t fi=min_idx;fi<=max_idx;++fi)
+				lbs.set(fi-1);
+			negative = !negative;
+			goto rfrsh;
+		}
 
 		if ( args.size() > 1 && ( rm == TimeMatch || rm == SizeMatch ) )
 		{

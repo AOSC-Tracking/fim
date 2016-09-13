@@ -4,11 +4,13 @@
                 Version 0.6-trunk
 
 
+# (r1068)
+ * "limit '~i' MINIDX[-MAXIDX]", with MINIDX and MAXIDX numbers (eventually with K as x 1000 multiplier) will restrict to filenames in positions between those.
 # (r1067)
- * "limit '~z' MINSIZE[-MAXSIZE]", with MINSIZE and MAXSIZE numbers with eventually K or M, will act according to filesize.
- * "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, will act according to file modify date.
+ * "limit '~z' MINSIZE[-MAXSIZE]", with MINSIZE and MAXSIZE numbers with eventually K (x 1024) or M (x 1024 1024) multipliers, will limit according to file size.
+ * "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, will limit according to file modify date (expressed as seconds since the epoch, see 'man 2 time').
 # (r1065)
- * "limit '-refine' ..." will make 'limit' act on the current list, rather than on the full anew. 
+ * "limit '-further' ..." will make 'limit' act on the current list, rather than on the full anew. 
 # (r1063)
  * Command "list 'mark' {args}" accepts now exactly what "limit {args}" does.
 # (r1059)
