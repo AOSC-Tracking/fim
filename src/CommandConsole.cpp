@@ -420,10 +420,10 @@ ret:		return key;
 		" if '~^', to the first of the files with duplicate basename; "
 		" if '~$', to the last of the files with duplicate basename. "
 #endif /* FIM_WANT_LIMIT_DUPBN */
-		" On '~i' MINIDX[-MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX. "
+		" On '~i' [MINIDX][-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX. "
 #if FIM_WANT_FLIST_STAT 
-		" On '~z' MINSIZE[-MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize; "
-		" on '~d' MINTIME[-MAXTIME], (each a number) will limit on file time (struct stat's \"st_mtime\", in seconds). "
+		" On '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize; "
+		" on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's \"st_mtime\", in seconds). "
 #endif /* FIM_WANT_FLIST_STAT */
 		" For other values of {expression}, limit to files whose description string matches {expression}. "
 		" Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
