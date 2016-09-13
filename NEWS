@@ -3,6 +3,10 @@
 
                 Version 0.6-trunk
 
+
+# (r1067)
+ * "limit '~z' MINSIZE[-MAXSIZE]", with MINSIZE and MAXSIZE numbers with eventually K or M, will act according to filesize.
+ * "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, will act according to file modify date.
 # (r1065)
  * "limit '-refine' ..." will make 'limit' act on the current list, rather than on the full anew. 
 # (r1063)

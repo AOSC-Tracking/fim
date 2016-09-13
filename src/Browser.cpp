@@ -47,6 +47,10 @@
 #include <algorithm>	/* std::swap */
 #endif /* FIM_USE_CXX11 */
 
+#if FIM_WANT_FLIST_STAT 
+#include <sstream>	// std::istringstream 
+#endif /* FIM_WANT_FLIST_STAT */
+
 #if 0
 #if HAVE_WORDEXP_H
 #include <wordexp.h>
@@ -65,6 +69,7 @@
 #endif /* 0 */
 
 #define FIM_CNS_ENOUGH_FILES_TO_WARN 1000
+#define FIM_WITHIN(MIN,VAL,MAX) ((MIN)<=(VAL) && (VAL)<=(MAX))
 
 namespace fim
 {
@@ -616,6 +621,22 @@ nop:
 				result = do_filter(args,UniqFileNameMatch,negative,faction);
 			}
 			else
+#if FIM_WANT_FLIST_STAT 
+			if( args[0] == "~d" && args.size()>1 )
+			{
+				// result = result + "Limiting according to time interval\n";
+				result = do_filter(args,TimeMatch,negative,faction);
+			}
+			else
+			if( args[0] == "~z" && args.size()>1 )
+			{
+				// result = result + "Limiting according to file size\n";
+				result = do_filter(args,SizeMatch,negative,faction);
+			}
+			else
+#else /* FIM_WANT_FLIST_STAT */
+			/* FIXME: need info here */
+#endif /* FIM_WANT_FLIST_STAT */
 #endif /* FIM_WANT_LIMIT_DUPBN */
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 			if( args[0] == "!" )
@@ -1714,6 +1735,106 @@ err:
 		fim_bitset_t lbs(flist_.size()); // limit bitset, used for mark / unmark / delete / etc
 
 		FIM_PR('*');
+
+		if ( args.size() > 1 && ( rm == TimeMatch || rm == SizeMatch ) )
+		{
+#if FIM_WANT_FLIST_STAT 
+			off_t min_size=0,max_size=FIM_MAX_VALUE_FOR_TYPE(off_t);
+			time_t min_mtime=0,max_mtime=FIM_MAX_VALUE_FOR_TYPE(time_t);
+			std::string ss(args[1]);
+			std::istringstream is(ss);
+
+			if ( rm == SizeMatch )
+			{
+				if(is.peek()!='-') // MIN-
+				{
+					if(!isdigit(is.peek()))
+					{
+						result = "Bad MINSIZE[-MAXSIZE] expression ! MINSIZE or MAXSIZE should be a number followed by K or M.";
+						goto nop;
+					}
+					is >> min_size;
+					if(tolower(is.peek())=='k')
+						is.ignore(1), min_size *= FIM_CNS_K;
+					else
+					if(tolower(is.peek())=='m')
+						is.ignore(1), min_size *= FIM_CNS_M;
+					while(is.peek() != -1 && is.peek() != '-')
+						is.ignore(1);
+					if(is.peek() == -1)
+					{
+						max_size=min_size;
+						goto parsed_limits;
+					}
+				}
+
+				if(is.peek()=='-') // -MAX
+				{
+					is.ignore(1);
+					is >> max_size;
+					if(tolower(is.peek())=='k')
+						is.ignore(1), max_size *= FIM_CNS_K;
+					else
+					if(tolower(is.peek())=='m')
+						is.ignore(1), max_size *= FIM_CNS_M;
+				}
+			}
+
+			if ( rm == TimeMatch )
+			{
+				// FIXME: this code is still unfinished
+				if(is.peek()!='-') // MIN-
+				{
+					if(!isdigit(is.peek()))
+					{
+						result = "Bad MINTIME[-MAXTIME] expression ! MINTIME or MAXTIME should be a number.";
+						goto nop;
+					}
+					is >> min_mtime;
+					while(is.peek() != -1 && is.peek() != '-')
+						is.ignore(1);
+					if(is.peek() == -1)
+					{
+						max_mtime=min_mtime;
+						goto parsed_limits;
+					}
+				}
+
+				if(is.peek()=='-') // -MAX
+				{
+					is.ignore(1);
+					is >> max_mtime;
+				}
+			}
+parsed_limits:
+			if(min_size>max_size)
+				std::swap(min_size,max_size);
+			if(min_mtime>max_mtime)
+				std::swap(min_mtime,max_mtime);
+
+			// std::cout << "Limiting size between " << min_size << " and " << max_size << " bytes.\n";
+			// std::cout << "Limiting time between " << min_mtime << " and " << max_mtime << " .\n";
+
+			if(wom) commandConsole_.set_status_bar("getting stat() info...", "*");
+			flist_.get_stat();
+			if ( rm == SizeMatch )
+				if(wom) commandConsole_.set_status_bar("limiting to a size...", "*");
+			if ( rm == TimeMatch )
+				if(wom) commandConsole_.set_status_bar("limiting to a timespan...", "*");
+			for(size_t fi=0;fi<flist_.size();++fi)
+			{
+				if ( rm == SizeMatch )
+					if ( ! FIM_WITHIN ( min_size, flist_[fi].stat_.st_size, max_size ) )
+						lbs.set(fi);
+
+				if ( rm == TimeMatch )
+					if ( ! FIM_WITHIN ( min_mtime, flist_[fi].stat_.st_mtime, max_mtime ) )
+						lbs.set(fi);
+			}
+#else /* FIM_WANT_FLIST_STAT */
+#endif /* FIM_WANT_FLIST_STAT */
+			goto rfrsh;
+		}
 #if FIM_WANT_LIMIT_DUPBN
 		if ( rm == DupFileNameMatch || rm == UniqFileNameMatch || rm == FirstFileNameMatch || rm == LastFileNameMatch)
 		{
@@ -2413,6 +2534,7 @@ ret:
 
 	void flist_t::get_stat(void)
 	{
+		// TODO: this is costly, might print a message here.
 		for(flist_t::iterator fit=begin();fit!=end();++fit)
 			fit->stat_ = fim_get_stat(*fit);
 	}
