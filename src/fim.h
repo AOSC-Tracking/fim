@@ -224,7 +224,13 @@ enum fim_xflags_t /*FIM_ENUM_BASE*/ { FIM_X_NULL=0,FIM_X_HISTORY=1,FIM_X_QUIET=2
 typedef std::pair<fim::string,fim_image_source_t > 	   cache_key_t;	//the current cache key
 enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 }
+
 typedef std::vector<fim::string> args_t;
+namespace fim{
+int fim_args_opt_count(const args_t& args, const char oc); // FIXME: in CommandConsole-cmd.cpp
+bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in CommandConsole-cmd.cpp
+}
+
 #define FIM_STDIN_IMAGE_NAME "<STDIN>"
 /* should belong to a namespace different from the file name space, and possibly figuring alphabetically as the first one */
 

@@ -912,7 +912,7 @@ nop:
 #endif /* HAVE_GETENV */
 	}
 
-static int fim_args_opt_count(const args_t& args)
+int fim_args_opt_count(const args_t& args, const char oc)
 {
 	// FIXME: temporarily here 
 	int aoc = 0;
@@ -920,7 +920,7 @@ static int fim_args_opt_count(const args_t& args)
 
 	for(size_t i=0;i<args.size();++i)
 	{
-		if ( args[i][0] == '-' )
+		if ( args[i][0] == oc )
 			aoc++;
 		else
 			break;
@@ -928,7 +928,7 @@ static int fim_args_opt_count(const args_t& args)
 	return aoc;
 }
 
-static bool fim_args_opt_have(const args_t& args, fim::string optname)
+bool fim_args_opt_have(const args_t& args, fim::string optname)
 {
 	// FIXME: temporarily here 
 	fim::string s;
@@ -943,7 +943,7 @@ static bool fim_args_opt_have(const args_t& args, fim::string optname)
 	{
 #if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t';
-		int aoc = fim_args_opt_count(args);
+		int aoc = fim_args_opt_count(args,'-');
 
 		if(2 > args.size()-aoc )
 			goto err;

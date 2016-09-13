@@ -408,16 +408,19 @@ ret:		return key;
 		addCommand(new Command(fim::string(FIM_FLT_IF),fim::string("if(expression){action;}['else'{action;}] : see if"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
 		addCommand(new Command(fim::string(FIM_FLT_INFO),fim::string(FIM_FLT_INFO" : display information about the current file" ),&browser_,&Browser::fcmd_info));
 #if FIM_WANT_PIC_LBFL
-		addCommand(new Command(fim::string(FIM_FLT_LIMIT),fim::string(FIM_FLT_LIMIT " [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE ". If one argument only is provided, restrict to files whose description string matches {expression}. If two arguments are provided, restrict to files having property {variable} set to {value}."
+		addCommand(new Command(fim::string(FIM_FLT_LIMIT),fim::string(FIM_FLT_LIMIT " ['-further'] [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE ". "
+		" If '-further' is present, will start with the current list; if not, with the full list. "
+		" If {variable} and {values} are provided, limit to files having property {variable} set to {value}. "
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-		" If invoked with one exclamation point ('!') as argument will restrict to the currently marked files only. "
+		" If {expression} is one exclamation point ('!'), will limit to the currently marked files only. "
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #if FIM_WANT_LIMIT_DUPBN
-		" If invoked with '~!' will restrict to files with unique basename. "
-		" If with '~=', to files with duplicate basename; "
-		" if with '~^', to the first of the files with duplicate basename; "
-		" if with '~$', to the last of the files with duplicate basename. "
+		" If {expression} is '~!' will limit to files with unique basename; "
+		" if '~=', to files with duplicate basename; "
+		" if '~^', to the first of the files with duplicate basename; "
+		" if '~$', to the last of the files with duplicate basename. "
 #endif /* FIM_WANT_LIMIT_DUPBN */
+		" For other values of {expression}, limit to files whose description string matches {expression}. "
 		" Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
 #endif /* FIM_WANT_PIC_LBFL */
 		addCommand(new Command(fim::string(FIM_FLT_LIST),fim::string(FIM_CMD_HELP_LIST),&browser_,&Browser::fcmd_list));

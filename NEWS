@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1065)
+ * "limit '-refine' ..." will make 'limit' act on the current list, rather than on the full anew. 
 # (r1063)
  * Command "list 'mark' {args}" accepts now exactly what "limit {args}" does.
 # (r1059)
