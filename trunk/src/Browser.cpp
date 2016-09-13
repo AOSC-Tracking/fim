@@ -76,6 +76,7 @@ namespace fim
 	fim::string Browser::fcmd_list(const args_t &args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
+
 		FIM_PR('*');
 		if(args.size()<1)
 		{
@@ -100,11 +101,7 @@ namespace fim
 				bool domark = (args[0]=="mark");
 #if FIM_WANT_PIC_LBFL
 				if(args.size() > 1)
-				{
-					args_t argsc(args);
-					argsc.erase(argsc.begin());
-					do_filter_cmd(argsc,true,domark ? Mark : Unmark);
-				}
+					do_filter_cmd(args_t(args.begin()+1,args.end()),true,domark ? Mark : Unmark);
 				else
 #endif /* FIM_WANT_PIC_LBFL */
 			       		cc.markCurrentFile(domark); 
@@ -181,9 +178,7 @@ namespace fim
 			}
 			else if(args[0]=="remove")
 			{
-				args_t argsc(args);
-				argsc.erase(argsc.begin());
-				result = do_filter(argsc);
+				result = do_filter(args_t(args.begin()+1,args.end()));
 			}
 			else if(args[0]=="push")
 			{
@@ -222,8 +217,13 @@ ret:
 
 	std::ostream& Browser::print(std::ostream &os)const
 	{
+#if FIM_USE_CXX11
+		for(auto le : flist_)
+			os << le << FIM_CNS_NEWLINE;
+#else /* FIM_USE_CXX11 */
 		for(size_t i=0; i<flist_.size(); ++i)
 			os << flist_[i] << FIM_CNS_NEWLINE;
+#endif /* FIM_USE_CXX11 */
 		return os;
 	}
 
@@ -302,14 +302,9 @@ ret:
 		 *
 		 * WARNING : SAME AS ERASE !
 		 */
-		fim::string s;
-
-		if( flist_.size() <= 0 )
-			return nofile_;
-		assert(flist_.cf());
-		flist_.erase( flist_.begin() + current_n() );
+		flist_.pop_current();
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
-		return s;
+		return nofile_;
 	}
 
 	const fim::string Browser::pop(fim::string filename)
@@ -589,8 +584,11 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	void Browser::do_filter_cmd(const args_t &args, bool negative, enum FilterAction faction)
+	void Browser::do_filter_cmd(const args_t args, bool negative, enum FilterAction faction)
 	{
+		/* Interprets a mark/limiting pattern. */
+		if(args.size()>0)
+		{
 #if FIM_WANT_LIMIT_DUPBN
 			if( args[0] == "~=" )
 			{
@@ -626,6 +624,7 @@ nop:
 			else
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 				do_filter(args,VarMatch,!negative,faction); /* this is remove on filenames; need remove on comments */
+		}
 	}
 
 #if FIM_WANT_PIC_LBFL
@@ -781,9 +780,13 @@ nop:
 			++ lehsof;
 #ifdef FIM_REMOVE_FAILED
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
+#if FIM_USE_CXX11
+				do_filter(args_t({c.c_str()}));	// remove is an experimental function
+#else /* FIM_USE_CXX11 */
 				args_t args;
 				args.push_back(c.c_str());
 				do_filter(args);	// remove is an experimental function
+#endif /* FIM_USE_CXX11 */
 #ifdef FIM_AUTOSKIP_FAILED
 				if(n_files())
 				{
@@ -1711,15 +1714,15 @@ err:
 		{
 			if(wom) commandConsole_.set_status_bar("limiting...", "*");
 
-			flist_t slist_ = flist_; /* this could be skippable if list sorted  */
-			slist_._sort(FIM_SYM_SORT_BN);
+			flist_t slist = flist_; /* this could be skippable if list sorted  */
+			slist._sort(FIM_SYM_SORT_BN);
 
-			for(size_t i=0;i<slist_.size();++i)
+			for(size_t i=0;i<slist.size();++i)
 			{
 				size_t j=i,ii=0,jj=0;
 
-				while(j+1<slist_.size() && 0 == 
-					strcmp(fim_basename_of(slist_[i].c_str()),fim_basename_of(slist_[j+1].c_str())) )
+				while(j+1<slist.size() && 0 == 
+					strcmp(fim_basename_of(slist[i].c_str()),fim_basename_of(slist[j+1].c_str())) )
 					++j;
 				// j+1-i same basenames
 				if ( rm == DupFileNameMatch )
@@ -1746,7 +1749,7 @@ err:
 				}
 				for(i=ii;i<jj;++i)
 				{
-					fim_int fi = find_file_index(slist_[i]);
+					fim_int fi = find_file_index(slist[i]);
 					if(fi>=0)
 						lbs.set(fi);
 				}

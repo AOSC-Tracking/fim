@@ -101,6 +101,14 @@ class flist_t : public std::vector<fim::fle_t>
 			this->erase(this->begin()+pos-ecount),ecount++;
 	adj_cf();
 }
+	fim_bool_t pop_current(void)
+	{
+		if( this->size() <= 0 )
+			return false;
+		assert(cf()); // FIXME
+		this->erase( this->begin() + cf() );
+		return true;
+	}
 };
 
 /*
@@ -239,7 +247,7 @@ class Browser
 	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN);
 	fim::string _clear_list(void);
 	private:
-	void do_filter_cmd(const args_t &args, bool negative, enum FilterAction faction);
+	void do_filter_cmd(const args_t args, bool negative, enum FilterAction faction);
 	fim::string do_filter(const args_t &args, MatchMode rm=FullFileNameMatch, bool negative=false, enum FilterAction faction = Delete);
 	fim_err_t loadCurrentImage(void);
 	fim::string reload(void);
