@@ -89,7 +89,7 @@ class flist_t : public std::vector<fim::fle_t>
 	flist_t(const args_t & a);
 	void get_stat(void);
 	void _sort(const fim_char_t sc);
-	fim_int cf(void)const{return FIM_MAX(cf_,0);}
+	fim_int cf(void)const{/* counting from 0 */ return FIM_MAX(cf_,0);}
 	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
 	void adj_cf(void){cf_ = ( size() <= 0 ) ? 0 : FIM_MIN(cf_,size()-1); /* FIXME: use a smarter method here */ }
 	const fim::string pop(const fim::string & filename);
@@ -249,7 +249,7 @@ class Browser
 	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN);
 	fim::string _clear_list(void);
 	private:
-	void do_filter_cmd(const args_t args, bool negative, enum FilterAction faction);
+	fim::string do_filter_cmd(const args_t args, bool negative, enum FilterAction faction);
 	fim::string do_filter(const args_t &args, MatchMode rm=FullFileNameMatch, bool negative=false, enum FilterAction faction = Delete);
 	fim_err_t loadCurrentImage(void);
 	fim::string reload(void);
