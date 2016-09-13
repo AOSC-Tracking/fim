@@ -1851,7 +1851,66 @@ parsed_idx:
 
 			if ( rm == TimeMatch )
 			{
-				// FIXME: this code is still unfinished
+				if(strchr(args[1].c_str(),'/'))
+				{
+					// DD/MM/YYYY format
+					min_mtime=0;
+
+					if(isdigit(is.peek()))
+					{
+						struct tm min_mtime_str;
+						fim_bzero(&min_mtime_str,sizeof(min_mtime_str));
+
+						is >> min_mtime_str.tm_mday;
+						if(is.peek() != '/')
+							goto errpd;
+						is.ignore(1);
+						is >> min_mtime_str.tm_mon;
+						min_mtime_str.tm_mon-=1;
+						if(is.peek() != '/')
+							goto errpd;
+						is.ignore(1);
+						is >> min_mtime_str.tm_year;
+						min_mtime_str.tm_year-=1900;
+
+						min_mtime=mktime(&min_mtime_str);
+					}
+					else
+						; // -MAX
+
+					if(is.peek() == -1)
+						max_mtime = min_mtime;
+
+					if(is.peek() != '-')
+						goto errpd;
+					is.ignore(1); // eat '-'
+
+					if(!isdigit(is.peek()))
+						goto errpd;
+					else
+					{
+						struct tm max_mtime_str;
+						fim_bzero(&max_mtime_str,sizeof(max_mtime_str));
+
+						is >> max_mtime_str.tm_mday;
+						if(is.peek() != '/')
+							goto errpd;
+						is.ignore(1);
+						is >> max_mtime_str.tm_mon;
+						max_mtime_str.tm_mon-=1;
+						if(is.peek() != '/')
+							goto errpd;
+						is.ignore(1);
+						is >> max_mtime_str.tm_year;
+						max_mtime_str.tm_year-=1900;
+
+						max_mtime=mktime(&max_mtime_str);
+					}
+					// std::cout << min_mtime << " .. "  << max_mtime << "\n";
+
+					goto parsed_limits;
+				}
+				// FIXME: this code is still far from clean / perfect.
 				if(is.peek()!='-') // MIN-
 				{
 					if(!isdigit(is.peek()))
@@ -1903,6 +1962,8 @@ parsed_limits:
 #else /* FIM_WANT_FLIST_STAT */
 #endif /* FIM_WANT_FLIST_STAT */
 			goto rfrsh;
+	errpd:
+			goto nop;
 		}
 #if FIM_WANT_LIMIT_DUPBN
 		if ( rm == DupFileNameMatch || rm == UniqFileNameMatch || rm == FirstFileNameMatch || rm == LastFileNameMatch)

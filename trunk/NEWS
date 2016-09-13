@@ -9,6 +9,8 @@
 # (r1067)
  * "limit '~z' MINSIZE[-MAXSIZE]", with MINSIZE and MAXSIZE numbers with eventually K (x 1024) or M (x 1024 1024) multipliers, will limit according to file size.
  * "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, will limit according to file modify date (expressed as seconds since the epoch, see 'man 2 time').
+ * "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, will limit according to file modify date (expressed as seconds since the epoch, see 'man 2 time').
+ * "limit '~d' MINDATE[-MINDATE]", with MINDATE and MAXDATE dates as in DD/MM/YYYY, and after 1900.
 # (r1065)
  * "limit '-further' ..." will make 'limit' act on the current list, rather than on the full anew. 
 # (r1063)
