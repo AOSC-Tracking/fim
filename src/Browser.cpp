@@ -629,13 +629,13 @@ nop:
 			}
 			else
 #if FIM_WANT_FLIST_STAT 
-			if( args[0] == "~d" && args.size()>1 )
+			if( args[0] == "~d" )
 			{
 				// result = result + "Limiting according to time interval\n";
 				result = do_filter(args,TimeMatch,negative,faction);
 			}
 			else
-			if( args[0] == "~z" && args.size()>1 )
+			if( args[0] == "~z" )
 			{
 				// result = result + "Limiting according to file size\n";
 				result = do_filter(args,SizeMatch,negative,faction);
@@ -1730,6 +1730,8 @@ err:
 		return errmsg;
 	}
 
+	fim_stat_t fim_get_stat(const string &fn, bool * dopushp);
+
 	fim::string Browser::do_filter(const args_t &args, MatchMode rm, bool negative, enum FilterAction faction)
 	{
 		/*
@@ -1805,16 +1807,24 @@ parsed_idx:
 			goto rfrsh;
 		}
 
-		if ( args.size() > 1 && ( rm == TimeMatch || rm == SizeMatch ) )
+		if ( rm == TimeMatch || rm == SizeMatch )
 		{
 #if FIM_WANT_FLIST_STAT 
 			off_t min_size=0,max_size=FIM_MAX_VALUE_FOR_TYPE(off_t);
 			time_t min_mtime=0,max_mtime=FIM_MAX_VALUE_FOR_TYPE(time_t);
-			std::string ss(args[1]);
+			std::string ss(args[args.size()>1?1:0]); // if 0 we'll ignore this
 			std::istringstream is(ss);
 
 			if ( rm == SizeMatch )
 			{
+				if(args.size()==1)
+				{
+					fim_stat_t fss = fim_get_stat(current(),FIM_NULL);
+					if( ( min_size=max_size=fss.st_size ) == 0 ) 
+						goto nop;
+					goto parsed_limits;
+				}
+				
 				if(is.peek()!='-') // MIN-
 				{
 					if(!isdigit(is.peek()))
@@ -1851,6 +1861,16 @@ parsed_idx:
 
 			if ( rm == TimeMatch )
 			{
+				if(args.size()==1)
+				{
+					fim_stat_t fss = fim_get_stat(current(),FIM_NULL);
+					if( ( min_mtime=max_mtime=fss.st_mtime ) == 0 ) 
+						goto nop;
+					min_mtime-=60*60*24;
+					max_mtime+=60*60*24;
+					goto parsed_limits;
+				}
+				
 				if(strchr(args[1].c_str(),'/'))
 				{
 					// DD/MM/YYYY format
@@ -1943,19 +1963,23 @@ parsed_limits:
 			// std::cout << "Limiting size between " << min_size << " and " << max_size << " bytes.\n";
 			// std::cout << "Limiting time between " << min_mtime << " and " << max_mtime << " .\n";
 
-			if(wom) commandConsole_.set_status_bar("getting stat() info...", "*");
+			if(wom)
+				 commandConsole_.set_status_bar("getting stat() info...", "*");
 			flist_.get_stat();
+
 			if ( rm == SizeMatch )
-				if(wom) commandConsole_.set_status_bar("limiting to a size...", "*");
-			if ( rm == TimeMatch )
-				if(wom) commandConsole_.set_status_bar("limiting to a timespan...", "*");
-			for(size_t fi=0;fi<flist_.size();++fi)
 			{
-				if ( rm == SizeMatch )
+				if(wom)
+					commandConsole_.set_status_bar("limiting to a size...", "*");
+				for(size_t fi=0;fi<flist_.size();++fi)
 					if ( ! FIM_WITHIN ( min_size, flist_[fi].stat_.st_size, max_size ) )
 						lbs.set(fi);
-
-				if ( rm == TimeMatch )
+			}
+			if ( rm == TimeMatch )
+			{
+				if(wom)
+					commandConsole_.set_status_bar("limiting to a timespan...", "*");
+				for(size_t fi=0;fi<flist_.size();++fi)
 					if ( ! FIM_WITHIN ( min_mtime, flist_[fi].stat_.st_mtime, max_mtime ) )
 						lbs.set(fi);
 			}
@@ -2643,7 +2667,7 @@ err:
 
 namespace fim
 {
-	static fim_stat_t fim_get_stat(const string &fn, bool * dopushp = FIM_NULL)
+	fim_stat_t fim_get_stat(const string &fn, bool * dopushp)
 	{
 		bool dopush = false;
 #if FIM_WANT_FLIST_STAT
@@ -2666,7 +2690,7 @@ ret:
 	{
 		// TODO: this is costly, might print a message here.
 		for(flist_t::iterator fit=begin();fit!=end();++fit)
-			fit->stat_ = fim_get_stat(*fit);
+			fit->stat_ = fim_get_stat(*fit,FIM_NULL);
 	}
 
 	flist_t::flist_t(const args_t & a):cf_(0)
