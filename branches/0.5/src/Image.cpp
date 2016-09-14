@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -941,9 +941,9 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 #if 1
 				case('k'):
 				{
-					const char * cmnts = getStringVariable(FIM_VID_COMMENT).c_str();
-					if(cmnts && *cmnts)
-						snprintf(clbp, rbc, "[%s] ",cmnts); /* FIXME: need sanitization */
+					string cv = getStringVariable(FIM_VID_COMMENT);
+					if( cv.c_str() && *cv.c_str() )
+						snprintf(clbp, rbc, "[%s] ",cv.c_str()); /* FIXME: need sanitization */
 				}
 #endif
 				break;
