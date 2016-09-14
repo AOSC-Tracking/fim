@@ -34,7 +34,6 @@
 #endif /* FIM_IMAGE_INSPECT */
 
 #define FIM_WANT_ASCALE_FRIENDLY_ROTATION 1
-#define FIM_ASSUMES_NONNULL_STRING_CSTR 1 /* FIXME: move elsewhere */
 
 #if FIM_WANT_PIC_CMTS
 	std::ostream& operator<<(std::ostream &os, const ImgDscs & id)
@@ -937,14 +936,12 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					/* browser property. TODO: move outta here */
 					snprintf(clbp, rbc, "%d",(int)(n?n:1));
 				break;
-#if FIM_ASSUMES_NONNULL_STRING_CSTR
 				case('k'):
 				{
 					string cv = getStringVariable(FIM_VID_COMMENT);
 					if( cv.c_str() && *cv.c_str() )
 						snprintf(clbp, rbc, "[%s] ",cv.c_str()); /* FIXME: need sanitization */
 				}
-#endif /* FIM_ASSUMES_NONNULL_STRING_CSTR */
 				break;
 				case('l'):
 					/* browser property. TODO: move outta here */
