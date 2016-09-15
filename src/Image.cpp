@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -505,7 +505,7 @@ namespace fim
 		newscale_(image.newscale_),
 		angle_(image.angle_),
 		newangle_(image.newangle_),
-		page_(page_),//FIXME
+		page_(image.page_),
                 img_     (NULL),
                 fimg_    (NULL),
 		orientation_(image.orientation_),
