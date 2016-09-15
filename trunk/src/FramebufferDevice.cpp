@@ -179,7 +179,10 @@ static void _fb_switch_signal(int signal)
 fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
 {
     fim_byte_t *pos,*start;
-    int i,c,j,w;
+#if 0
+    int j,w;
+#endif
+    int i,c;
 #if FIM_FONT_MAGNIFY_FACTOR <= 0
     const fim_int fim_fmf = fim::fim_fmf_; 
 #endif	/* FIM_FONT_MAGNIFY_FACTOR */
@@ -425,7 +428,7 @@ void FramebufferDevice::svga_display_image_new(
 	 * */
     unsigned int     dwidth  = FIM_MIN(img->i.width,  bw);
     unsigned int     dheight = FIM_MIN(img->i.height, bh);
-    unsigned int     data, video, bank, offset, bytes, y;
+    unsigned int     data, video, /*bank,*/ offset, /*bytes,*/ y;
     int yo=(bh-dheight)/2;
     int xo=(bw-dwidth )/2;
     int cxo=bw-dwidth-xo;
@@ -437,13 +440,13 @@ void FramebufferDevice::svga_display_image_new(
     /*fb_clear_screen();//EXPERIMENTAL
     if(xoff&&yoff)clear_rect(0,xoff,0,yoff);*/
 
-    bytes = FB_BPP;
+    //bytes = FB_BPP;
 
     /* offset for image data (image > screen, select visible area) */
     offset = (yoff * img->i.width + xoff) * 3;
     
     /* offset for video memory (image < screen, center image) */
-    video = 0, bank = 0;
+    video = 0;//, bank = 0;
     video += FB_BPP * (bx);
     if (img->i.width < bw)
     {	    
@@ -832,7 +835,6 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
 	 label[FIM_FBI_FB_MODES_LABEL_BUFSIZE],
 	 value[FIM_FBI_FB_MODES_VALUE_BUFSIZE];
     int  geometry=0, timings=0;
-    int retval = 0;
  
     /* load current values */
     if (-1 == ioctl(fb_,FBIOGET_VSCREENINFO,&fb_var_)) {

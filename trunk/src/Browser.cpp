@@ -1223,7 +1223,7 @@ rret:
 
 		if(cc.getIntVariable(FIM_VID_PRELOAD_CHECKS)!=1)
 		{
-			int sl = strlen(nf.c_str());
+			size_t sl = strlen(nf.c_str());
 
 			if(sl < 1)
 				goto ret;
@@ -2729,7 +2729,7 @@ ret:
 			for( size_t i=0; i < this->size(); ++i )
 				if( fim::string((*this)[i]) == filename )
 					this->erase(this->begin()+i);
-                        cf_ = FIM_MAX(FIM_MIN(this->size()-1,cf_),0);
+                        adj_cf();
 		}
 		return s;
 	}

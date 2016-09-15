@@ -179,7 +179,7 @@ static void fim_ExifContentForeachEntryFunc (ExifEntry *entry, void * user_data)
 
 	if(nsp)
 		/* std::cout << "|" << title << "|\n", */
-		nsp->setVariable(string("EXIF_") + title,value);
+		nsp->setVariable(string("EXIF_") + string(title),value);
 }
 
 static void fim_ExifDataForeachContentFunc (ExifContent *content, void * user_data)

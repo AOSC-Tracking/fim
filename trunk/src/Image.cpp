@@ -72,7 +72,6 @@ namespace fim
 
 	static void fim_negate_rgb(fim_byte_t * data, int howmany)
 	{
-		register int avg;
 		for( fim_byte_t * p = data; p < data + howmany ;p++)
 			*p = ~ *p;
 	}
@@ -130,6 +129,9 @@ namespace fim
 	}
 
 	Image::Image(const fim_char_t *fname, FILE*fd, fim_page_t page):
+#ifdef FIM_NAMESPACES
+		Namespace(&cc,FIM_SYM_NAMESPACE_IMAGE_CHAR),
+#endif /* FIM_NAMESPACES */
 		scale_(0.0),
 		ascale_(0.0),
 		newscale_(0.0),
@@ -141,12 +143,9 @@ namespace fim
 		orientation_(FIM_NO_ROT),
                 invalid_(false),
 		no_file_(true),
-		fs_(0), ms_(0),
-#ifdef FIM_NAMESPACES
-		Namespace(&cc,FIM_SYM_NAMESPACE_IMAGE_CHAR),
-#endif /* FIM_NAMESPACES */
 		fis_(fim::string(fname)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
-                fname_     (FIM_CNS_DEFAULT_IFNAME)
+                fname_     (FIM_CNS_DEFAULT_IFNAME),
+		fs_(0), ms_(0)
 
 	{
 		/*
@@ -804,6 +803,9 @@ err:
 	}*/
 
 	Image::Image(const Image& image):
+#ifdef FIM_NAMESPACES
+		Namespace(image.rnsp_,FIM_SYM_NAMESPACE_IMAGE_CHAR),
+#endif /* FIM_NAMESPACES */
 		scale_(image.scale_),
 		ascale_(image.ascale_),
 		newscale_(image.newscale_),
@@ -817,11 +819,8 @@ err:
                 invalid_(image.invalid_),
 		no_file_(true),
 		fis_(image.fis_),
-		fs_(0), ms_(0),
-#ifdef FIM_NAMESPACES
-		Namespace(image.rnsp_,FIM_SYM_NAMESPACE_IMAGE_CHAR),
-#endif /* FIM_NAMESPACES */
-                fname_     (image.fname_)
+                fname_     (image.fname_),
+		fs_(0), ms_(0)
 	{
 		/*
 		 * builds a clone of this image.

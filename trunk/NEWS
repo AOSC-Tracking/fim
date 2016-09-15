@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1076)
+ * misc fixes of minor things causing compile warnings
 # (r1075)
  * fix: was likely using uninitialized data in Image()
 # (r1074)

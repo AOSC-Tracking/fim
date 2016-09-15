@@ -229,6 +229,7 @@ rerr:
 
 		MiniConsole::MiniConsole(CommandConsole & cc,int lw, int r)
 		:
+		Namespace(&cc),
 		buffer_(FIM_NULL),
 		line_(FIM_NULL),
 		bp_(FIM_NULL),
@@ -238,8 +239,8 @@ rerr:
 		cline_(0),
 		lwidth_(0),
 		rows_(0),
-		cc_(cc),
-		Namespace(&cc)
+		scroll_(0),
+		cc_(cc)
 		{
 			/*
 			 * We initialize the console
@@ -466,13 +467,13 @@ rerr:
 
 		fim_err_t MiniConsole::scroll_down(void)
 		{
-			scroll_=scroll_<1?0:--scroll_;
+			scroll_=scroll_<1?0:scroll_-1;
 			return FIM_ERR_NO_ERROR;
 		}
 
 		fim_err_t MiniConsole::scroll_up(void)
 		{
-			scroll_=scroll_<rows_?++scroll_:scroll_;
+			scroll_=scroll_<rows_?scroll_+1:scroll_;
 			return FIM_ERR_NO_ERROR;
 		}
 
