@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1073)
+ * bugfix: a function in AADevice (fim_aa_get_input) was missing return value
 # (r1071,r1072)
  * documented the %k expando for _info_fmt_str and bugfix (avoiding data corruption when handling %k)
 # (r1068)
