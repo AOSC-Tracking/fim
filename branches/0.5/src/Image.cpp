@@ -811,7 +811,7 @@ err:
 		newscale_(image.newscale_),
 		angle_(image.angle_),
 		newangle_(image.newangle_),
-		page_(page_),//FIXME
+		page_(image.page_),
                 img_     (FIM_NULL),
                 fimg_    (FIM_NULL),
 		orientation_(image.orientation_),

@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1075)
+ * fix: was likely using uninitialized data in Image()
 # (r1074)
  * fix: a few more checks when reading PCX files
 # (r1073)
