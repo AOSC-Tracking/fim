@@ -427,6 +427,71 @@ public:
 		os << (size()) << " entries in " << byte_size() << " bytes";
 		return os;
 	}
+#if FIM_WANT_PIC_LVDN
+	string get_variables_id_list(size_t up_to_max)const
+	{
+		// FIXME: not using up_to_max properly yet (by popularity, etc) !
+		size_t cnt = 0;
+		string vls;
+		fim_var_id_set vis;
+		for( vd_t::const_iterator li = vd_.begin();li != vd_.end(); ++li )
+			li->second.get_id_list(vis);
+
+		if(vis.size())
+			vls += string("there are "),
+			vls += string(Var((fim_int)vis.size())),
+			vls += string(" variable ids:");
+		else
+			vls += string("no variable ids.");
+
+		for( fim_var_id_set::const_iterator li = vis.begin();li != vis.end()
+			&& cnt < up_to_max
+			; ++li )
+			cnt++,
+			vls += " ",
+			vls += *li;
+		if( vis.size() > up_to_max ) 
+			vls += " ...";
+		return vls;
+	}
+#endif /* FIM_WANT_PIC_LVDN */
+
+#if FIM_WANT_PIC_LVDN
+	string get_values_list_for(const string & id, size_t up_to_max)const
+	{
+		// FIXME: not using up_to_max properly yet (by popularity, etc) !
+		string vls;
+		size_t cnt = 0;
+		//fim_var_val_set vvs; // FIXME: Var is not yet ready to be used in a std::set
+		fim_var_id_set vvs;//FIXME: temporary
+		for( vd_t::const_iterator li = vd_.begin();li != vd_.end(); ++li )
+			if( li->second.isSetVar(id) )
+				vvs.insert(li->second.getStringVariable(id));
+		if(vvs.size())
+			vls += string("there are "),
+			vls += string(Var((fim_int)vvs.size())),
+			vls += string(" values for variable "),
+			vls += id,
+			vls += string(":");
+		else
+			vls += string("no instances for variable "),
+			vls += id,
+			vls += string(".");
+
+		//for( fim_var_val_set::const_iterator li = vvs.begin();li != vvs.end()
+		for( fim_var_id_set ::const_iterator li = vvs.begin();li != vvs.end()
+			&& cnt < up_to_max
+			; ++li )
+			cnt++,
+			vls += " '",
+			vls += *li, // TODO: shall unescape this value 
+			vls += "'";
+			//vls += li->getString(); // TODO: shall unescape this value 
+		if( vvs.size() > up_to_max ) 
+			vls += " ...";
+		return vls;
+	}
+#endif /* FIM_WANT_PIC_LVDN */
 	/*
 	std::ostream& print_descs(std::ostream &os, fim_char_t sc)const
 	{

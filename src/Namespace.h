@@ -26,7 +26,12 @@
 
 namespace fim
 {
-	typedef std::map<const fim::string,Var> variables_t;	//id->var
+	typedef fim::string fim_var_id;	//id
+	typedef std::map<const fim_var_id,Var> variables_t;	//id->var
+	//typedef std::vector<fim_var_id> fim_var_id_list;
+	typedef std::set<fim_var_id> fim_var_id_set;
+	typedef std::set<Var> fim_var_val_set;
+
 	class Namespace
 	{
 		protected:
@@ -81,6 +86,11 @@ namespace fim
 		virtual ~Namespace(void){}
 		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
 		std::ostream& print(std::ostream &os)const;
+		void get_id_list(fim_var_id_set & set)const
+		{
+			for(variables_t::const_iterator fit=variables_.begin();fit!=variables_.end();++fit)
+				set.insert(fit->first);
+		}
 	};
 		std::ostream& operator<<(std::ostream &os, const Namespace & ns);
 }
