@@ -101,8 +101,10 @@ bool COLORMAP_DEFINED;
 /* libpcx routines */
 static pcx_err_t pcx_load_image_info_fp(FILE *fp, int * numpagesp, unsigned int *wp, unsigned int *hp)
 {
-	fseek(fp,0,SEEK_SET);
-	fread(&PCX_HEADER, 128, 1, fp);
+	if(fseek(fp,0,SEEK_SET) != 0)
+	  PCX_RETURN_ERROR("Error setting file pointer\n");
+	if(fread(&PCX_HEADER, 128, 1, fp) != 1)
+	  PCX_RETURN_ERROR("Error reading first 128 bytes of PCX file\n");
 	if(fseek(fp,0,SEEK_SET) != 0)
 	  PCX_RETURN_ERROR("Error setting file pointer\n");
 		
