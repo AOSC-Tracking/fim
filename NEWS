@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1074)
+ * fix: a few more checks when reading PCX files
 # (r1073)
  * bugfix: a function in AADevice (fim_aa_get_input) was missing return value
 # (r1071,r1072)
