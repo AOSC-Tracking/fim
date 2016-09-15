@@ -705,12 +705,14 @@ nop:
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
 		{
 			fim::string dss ;
+			const fim_char_t *dssp=NULL;
 
 			if( cc.isSetVar(FIM_VID_DISPLAY_STATUS_FMT) )
 			{
 				dss = c_image()->getInfoCustom(cc.getStringVariable(FIM_VID_DISPLAY_STATUS_FMT).c_str());
 			}
-			commandConsole_.set_status_bar(dss != FIM_CNS_EMPTY_STRING ? dss.c_str() : l, image()?(image()->getInfo().c_str()):"*");
+			dssp=dss.c_str();
+			commandConsole_.set_status_bar( (dssp && *dssp ) ? dssp : l, image()?(image()->getInfo().c_str()):"*");
 		}
 		else
 		{
@@ -2107,8 +2109,8 @@ parsed_limits:
 #endif /* HAVE_FNMATCH_H */
 				match |= ( rm == PartialFileNameMatch && ( ( flist_[i].re_match(rlist[r].c_str()) ) != negative ) );
 #if FIM_WANT_PIC_LVDN
-				match |= ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(std::string(flist_[i]).c_str())].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
-				match |= ( rm == CmtMatch     && ( ( string(cc.id_    [fim_basename_of(std::string(flist_[i]).c_str())]).re_match(rlist[0].c_str()) ) != negative ) );
+				match |= ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(flist_[i].c_str())].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
+				match |= ( rm == CmtMatch     && ( ( string(cc.id_    [fim_basename_of(flist_[i].c_str())]).re_match(rlist[0].c_str()) ) != negative ) );
 #endif /* FIM_WANT_PIC_LVDN */
 				if( match )
 					lbs.set(i); // TODO: further cycles on r are unnecessary after match.
