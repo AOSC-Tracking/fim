@@ -3,6 +3,7 @@
 
                 Version 0.5-rc3
 
+ * bugfix: a function in AADevice was missing return value
  * documented the %k expando for _info_fmt_str and bugfix (avoiding data corruption when handling %k)
  * to ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
  * fix: when stdint.h is available use uint8_t, uint16_t, uint32_t instead of non-portable __u8, __u16, __u32
