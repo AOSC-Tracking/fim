@@ -71,6 +71,8 @@
 #define FIM_CNS_ENOUGH_FILES_TO_WARN 1000
 #define FIM_WITHIN(MIN,VAL,MAX) ((MIN)<=(VAL) && (VAL)<=(MAX))
 #define FIM_CNS_Ki 1000
+#define FIM_CNS_MANY_DUMPED_TOKENS 1000000
+#define FIM_CNS_A_FEW_DUMPED_TOKENS 20
 
 namespace fim
 {
@@ -663,11 +665,23 @@ nop:
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 		int aoc = fim_args_opt_count(args,'-');
+		size_t max_vars = FIM_CNS_A_FEW_DUMPED_TOKENS, max_vals = FIM_CNS_A_FEW_DUMPED_TOKENS;
 
 		if( args.size()-aoc > 0 )
 		{
 			fim_int lbl = n_files(); // length before limiting
 			enum FilterAction faction = Delete;
+
+#if FIM_WANT_PIC_LVDN
+			if( args.size()-aoc == 1 && aoc == 1 && 
+				( fim_args_opt_have(args,"-list") || fim_args_opt_have(args,"-listall" ) ) )
+			{
+				if( fim_args_opt_have(args,"-listall"))
+					max_vars=FIM_CNS_MANY_DUMPED_TOKENS;
+				result = cc.id_.get_values_list_for(args[1],max_vars) + string("\n");
+				goto nop;
+			}
+#endif /* FIM_WANT_PIC_LVDN */
 
 			if(!limited_)
 				limited_ = true,
@@ -683,16 +697,27 @@ nop:
 		}
 		else
 		{
-			// result = "Restoring the original browsable files list.";
+#if FIM_WANT_PIC_LVDN
+			if( args.size()-aoc == 0 && aoc == 1 && 
+				( fim_args_opt_have(args,"-list") || fim_args_opt_have(args,"-listall" ) ) )
+			{
+				if( fim_args_opt_have(args,"-listall"))
+					max_vals=FIM_CNS_MANY_DUMPED_TOKENS;
+				result = cc.id_.get_variables_id_list(max_vals) + string("\n");
+				goto nop;
+			}
+#endif /* FIM_WANT_PIC_LVDN */
+
 			if(limited_)
 			{
+				// result = "Restoring the original browsable files list.";
 			       	commandConsole_.set_status_bar("restoring files list", "*");
 				flist_ = tlist_; // original list
+				limited_ = false;
 			}
-			limited_ = false;
 		}
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files()); /* TODO: need a specific 'refresh' function */
-//nop:
+nop:
 		return result;
 	}
 #endif /* FIM_WANT_PIC_LBFL */
