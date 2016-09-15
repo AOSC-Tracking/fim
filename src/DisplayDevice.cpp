@@ -23,15 +23,19 @@
 #include "DisplayDevice.h"
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	DisplayDevice::DisplayDevice(MiniConsole & mc):fontname_(FIM_NULL)
+	DisplayDevice::DisplayDevice(MiniConsole & mc):
+	finalized_(false)
 	,mc_(mc)
-#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	DisplayDevice::DisplayDevice():fontname_(FIM_NULL)
-#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,f_(FIM_NULL)
+	,fontname_(FIM_NULL)
+#else /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	DisplayDevice::DisplayDevice():
+	finalized_(false)
+	,f_(FIM_NULL)
+	,fontname_(FIM_NULL)
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,debug_(false)
 	,redraw_(FIM_REDRAW_UNNECESSARY)
-	,finalized_(false)
 	{
 		const fim_char_t *line;
 

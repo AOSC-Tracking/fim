@@ -172,7 +172,7 @@ err:
 
 		if(nsp)
 			retval = nsp->setVariable(rnid(varname),value);
-err:
+//err:
 		return retval;
 	}
 
@@ -183,7 +183,7 @@ err:
 
 		if(nsp)
 			retval = nsp->setVariable(rnid(varname),value);
-err:
+//err:
 		return retval;
 	}
 
@@ -194,7 +194,7 @@ err:
 
 		if(nsp)
 			retval = nsp->setVariable(rnid(varname),value);
-err:
+//err:
 		return retval;
 	}
 
@@ -205,7 +205,7 @@ err:
 
 		if(nsp)
 			retval = nsp->setVariable(rnid(varname),value);
-err:
+//err:
 		return retval;
 	}
 
@@ -216,7 +216,7 @@ err:
 
 		if(nsp)
 			retval = nsp->getIntVariable(rnid(varname));
-err:
+//err:
 		return retval;
 	}
 

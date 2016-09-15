@@ -838,9 +838,9 @@ namespace fim
 		}
 		else
 		{
-			int fhdivs,shdivs,hdivs,upd;
+			int fhdivs,/*shdivs,*/hdivs,upd;
 			fhdivs=first_ ->count_hdivs();
-			shdivs=second_->count_hdivs();
+			//shdivs=second_->count_hdivs();
 			hdivs=count_hdivs();
 			upd=h/hdivs;
 			if(hdivs>h)// no space left
@@ -886,9 +886,9 @@ namespace fim
 		}
 		else
 		{
-			int fvdivs,svdivs,vdivs,upd;
+			int fvdivs,/*svdivs,*/vdivs,upd;
 			fvdivs=first_ ->count_vdivs();
-			svdivs=second_->count_vdivs();
+			//svdivs=second_->count_vdivs();
 			vdivs=count_vdivs();
 			upd=w/vdivs;
 			if(vdivs>w)// no space left

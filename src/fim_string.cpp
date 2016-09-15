@@ -538,7 +538,7 @@ namespace fim
 		regex_t regex;
 		const int nmatch=1;
 		regmatch_t pmatch[nmatch];
-		int off=0,sl=0;
+		int off=0;//,sl=0;
 		std::string rs =FIM_CNS_EMPTY_STRING;
 		int ts=this->size();
 
@@ -548,7 +548,7 @@ namespace fim
 		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE | flags ) != 0 )
 			return;
 
-		sl=strlen(s);
+		//sl=strlen(s);
 		//const int s_len=strlen(s);
 		while(regexec(&regex,off+c_str(),nmatch,pmatch,REG_NOTBOL)==0)
 		{

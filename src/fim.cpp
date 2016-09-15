@@ -1009,7 +1009,6 @@ void fim_args_from_desc_file(args_t & argsc, const fim_fn_t &dfn, const fim_char
 	{
 		std::stringstream  ls(ln);
 		std::string fn;
-		const fim_char_t nl = '\n';
 		fim_fn_t ds;
 
 		if( ls.peek() == FIM_SYM_PIC_CMT_CHAR )

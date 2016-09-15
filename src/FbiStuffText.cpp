@@ -2,7 +2,7 @@
 /*
  FbiStuffBitText.cpp : fbi functions for rendering image bytes as text
 
- (c) 2013-2015 Michele Martone
+ (c) 2013-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -164,7 +164,6 @@ static void
 text_read(fim_byte_t *dst, unsigned int line, void *data)
 {
 	struct text_state *h = (struct text_state *) data;
-	unsigned int y,x = 0;
 	int fr,cc=0;
 
     	if(line==0)

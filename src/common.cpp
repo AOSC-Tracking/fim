@@ -727,10 +727,10 @@ double getmilliseconds(void)
          * For internal usage: returns with milliseconds precision the current clock time.
          * NOTE : this function is NOT essential.
          */
-	int err;//t,pt in ms; d in us
+	//int err;//t,pt in ms; d in us
 	double dt=0.0;
         struct timeval tv;
-        err=gettimeofday(&tv, FIM_NULL);
+        /*err=*/gettimeofday(&tv, FIM_NULL);
 	dt+=tv.tv_usec/1000;
 	dt+=tv.tv_sec *1000;
 	// note : we ignore err!
@@ -1001,7 +1001,7 @@ fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_cal
 	nmemb *= 3;
 	/* FIXME: shall implement overflow checks here */
 	if(want_calloc)
-		return (fim_byte_t*)fim_calloc(nmemb, 1);
+		return (fim_byte_t*)fim_calloc(nmemb, size);
 	else
 		return (fim_byte_t*)fim_malloc(nmemb);
 }
@@ -1040,7 +1040,7 @@ size_t fim_maxrss(void)
 {
 #if HAVE_SYS_RESOURCE_H
 	struct rusage usage;
-	int gru = getrusage(RUSAGE_SELF,&usage);
+	/* int gru = */getrusage(RUSAGE_SELF,&usage);// TODO: shall report in case of error.
 	// printf("ru_maxrss: %ld (maximum resident set size -- MB)\n",usage.ru_maxrss / 1024);
 	// return quantity in B
 	return usage.ru_maxrss * 1024;

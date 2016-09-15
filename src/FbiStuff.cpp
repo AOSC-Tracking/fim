@@ -1521,6 +1521,7 @@ err:
 	return FIM_NULL;
 }
 
+#ifdef FIM_WANT_SEEK_MAGIC
 static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t base_offset)
 {
 	/*
@@ -1578,6 +1579,7 @@ static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t b
 err:
 	return 0;
 }
+#endif /* FIM_WANT_SEEK_MAGIC */
 
 static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h) 
 {
@@ -1601,7 +1603,11 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
      * This function is complicated and should be reworked, in some way.
      * FIXME : many memory allocations are not checked for failure: DANGER
      * */
+#ifdef FIM_TRY_INKSCAPE
+#ifdef FIM_WITH_LIBPNG 
     fim_char_t command[FIM_PIPE_CMD_BUFSIZE]; /* FIXME: overflow risk ! */
+#endif /* FIM_WITH_LIBPNG  */
+#endif /* FIM_TRY_INKSCAPE */
     struct ida_loader *loader = FIM_NULL;
     struct ida_image *img=FIM_NULL;
     struct list_head *item=FIM_NULL;
@@ -1609,7 +1615,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     FILE *fp=FIM_NULL;
     unsigned int y;
     void *data=FIM_NULL;
-    int fr=0;
+    size_t fr=0;
 #if FIM_HAVE_FULL_PROBING_LOADER
     bool rozlsl=false;/* retry on zero length signature loader */
 #endif /* FIM_HAVE_FULL_PROBING_LOADER */
