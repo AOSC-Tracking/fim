@@ -144,6 +144,8 @@ FIM_NULL
       " Special comment lines like \"#!fim:+=val\" will add val to current description." 
       " Special comment lines like \"#!fim:^=val\" will set val to be the base of each description." 
       " Special comment lines like \"#!fim:!=\" will reset all cached variables." 
+      " Special comment lines like \"#!fim:/=dir\" will prepend dir to each file's basename." 
+      " Special comment lines like \"#!fim:\\e=dir\" will prepend dir to each file's name."  /* FIXME: \e stays for \ */
 #if FIM_WANT_PIC_RCMT 
       " Special description text begins with markers: "
       " with \"#!fim:=\" the last description line to be used;"

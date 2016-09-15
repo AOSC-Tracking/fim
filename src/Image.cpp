@@ -119,9 +119,17 @@ namespace fim
 	void Image::desc_update(void)
 	{
 #if FIM_WANT_PIC_CMTS
-		fim_fn_t key(fim_basename_of(fname_.c_str()));
+		fim_fn_t key(fname_.c_str());
 		if(cc.id_.find(key) != cc.id_.end() )
+		{
 			setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
+		}
+		else
+		{
+			key = fim_fn_t (fim_basename_of(fname_.c_str()));
+			if(cc.id_.find(key) != cc.id_.end() )
+				setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
+		}
 #if FIM_WANT_PIC_LVDN
 		assign_ns(cc.id_.vd_[key]);
 #endif /* FIM_WANT_PIC_LVDN */

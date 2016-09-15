@@ -191,8 +191,6 @@ class Image
 typedef string fim_fn_t; /* file name */
 typedef string fim_ds_t; /* file description */
 
-#define FIM_IMGDSCS_WANT_BASENAME true /* FIXME: this shall become a user controlled option */
-
 class ImgDscs: public std::map<fim_fn_t,fim_ds_t>
 {
 	public:
@@ -252,7 +250,7 @@ public:
 		std::ifstream mfs (dfn.c_str(),std::ios::app);
 		std::string ln;
 #if FIM_WANT_PIC_CCMT
-		std::string cps,cas; // contextual prepend/append string
+		std::string cps,cas,din; // contextual prepend/append/dirname string
 #endif /* FIM_WANT_PIC_CCMT */
 #if FIM_WANT_PIC_RCMT
 		std::string ld; // last description
@@ -260,6 +258,7 @@ public:
 #if FIM_WANT_PIC_LVDN
 		VNamespace ns;
 #endif /* FIM_WANT_PIC_LVDN */
+		bool imgdscs_want_basename = true; /* FIXME: shall be more clear/flexible with this */
 
 		while( std::getline(mfs,ln))
 		{
@@ -306,6 +305,26 @@ public:
 							if( varname == "!" )
 							{
 								ns = VNamespace();//reset
+							}
+							else
+							if( varname == "/" )
+							{
+								std::string varval = fn.substr(es);
+								if( fn[es] )
+									din = varval;
+								else
+									din = "";
+								imgdscs_want_basename = true;
+							}
+							else
+							if( varname == "\\" )
+							{
+								std::string varval = fn.substr(es);
+								if( fn[es] )
+									din = varval;
+								else
+									din = "";
+								imgdscs_want_basename = false;
 							}
 							else
 #endif /* FIM_WANT_PIC_CCMT */
@@ -380,18 +399,18 @@ public:
 #if FIM_WANT_PIC_CCMT
 					ds = cps + ds + cas;
 #endif /* FIM_WANT_PIC_CCMT */
-					if(! FIM_IMGDSCS_WANT_BASENAME )
+					if(! imgdscs_want_basename )
 					{
-						(*this)[fn]=ds;
+						(*this)[din+fn]=ds;
 #if FIM_WANT_PIC_LVDN
-						vd_[std::string(fn)]=ns;
+						vd_[std::string(din+fn)]=ns;
 #endif /* FIM_WANT_PIC_LVDN */
 					}
 					else
 					{
-						(*this)[fim_basename_of(fn.c_str())]=ds;
+						(*this)[din+fim_basename_of(fn.c_str())]=ds;
 #if FIM_WANT_PIC_LVDN
-						vd_[fim_basename_of(fn.c_str())]=ns;
+						vd_[din+fim_basename_of(fn.c_str())]=ns;
 #endif /* FIM_WANT_PIC_LVDN */
 					}
 				}

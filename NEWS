@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1079)
+ * Introduced a "#!fim:/=dir" special description line to specify dir prepended to basename.
+ * Introduced a "#!fim:\=dir" special description line to specify dir prepended to filepath.
 # (r1076)
  * misc fixes of minor things causing compile warnings
 # (r1075)
@@ -13,7 +16,7 @@
  * bugfix: a function in AADevice (fim_aa_get_input) was missing return value
 # (r1071,r1072)
  * documented the %k expando for _info_fmt_str and bugfix (avoiding data corruption when handling %k)
-# (r1077)
+# (r1078)
  * limit '-list'      will list existing variables identifiers as set via 'desc'
  * limit '-list' 'id' will list existing values for instances of variable 'id' as set via 'desc'
 # (r1068)
