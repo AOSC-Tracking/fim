@@ -188,8 +188,8 @@ class Image
 
 #if FIM_WANT_PIC_CMTS
 /* FIXME: temporarily here */
-typedef std::string fim_fn_t; /* file name */
-typedef std::string fim_ds_t; /* file description */
+typedef string fim_fn_t; /* file name */
+typedef string fim_ds_t; /* file description */
 
 #define FIM_IMGDSCS_WANT_BASENAME true /* FIXME: this shall become a user controlled option */
 

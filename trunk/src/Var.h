@@ -186,6 +186,7 @@ class Var
 		
 	}
 
+	operator fim_int(void)const{return getInt();}
 //	operator int(void)const{return getInt();}
 ///	operator float(void)const{return getFloat();}
 //	operator string(void)const{return getString();}

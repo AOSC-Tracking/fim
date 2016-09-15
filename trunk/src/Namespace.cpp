@@ -44,6 +44,11 @@ namespace fim
 			return (fim_int)variables_[varname].set(value);
 		}
 
+		Var Namespace::setVariable(const fim::string& varname,const fim::string&value)
+		{
+			return (fim_int)variables_[varname].set(value);
+		}
+
 		fim_int Namespace::setVariable(const fim::string& varname,const fim_char_t*value)
 		{
 			fim::string s(value);
@@ -123,6 +128,12 @@ namespace fim
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim::string& varname,const fim_char_t*value)
+		{
+			FIM_NS_SV(varname,value);
+			return FIM_CNS_EMPTY_INT_VAL;
+		}
+
+		fim_int Namespace::setGlobalVariable(const fim::string& varname, const fim::string & value)
 		{
 			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_INT_VAL;

@@ -137,6 +137,8 @@ namespace fim
  		operator int  (void)const;
 #endif /* FIM_WANT_LONG_INT */
 		operator float(void)const;
+		operator const char*(void)const{return c_str();}
+		operator bool (void)const{return c_str()!=NULL;}
 
 		string operator+(const string s)const;
 		/* copy constructor */

@@ -209,6 +209,17 @@ err:
 		return retval;
 	}
 
+	Var CommandConsole::setVariable(const fim::string varname,const fim::string&value)
+	{
+		Var retval = (fim_int)0;
+		Namespace *nsp = rns(varname);
+
+		if(nsp)
+			retval = nsp->setVariable(rnid(varname),value);
+err:
+		return retval;
+	}
+
 	fim_int CommandConsole::getIntVariable(const fim::string &varname)const
 	{
 		fim_int retval = 0;
