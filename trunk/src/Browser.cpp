@@ -2590,8 +2590,10 @@ err:
 
 		for(size_t i=0;i<flist_.size();++i)
 		{
-			fim::string bof = FIM_IMGDSCS_WANT_BASENAME ? fim_basename_of(flist_[i].c_str()) : flist_[i].c_str();
+			fim::string bof = flist_[i].c_str();
 #if FIM_WANT_PIC_LVDN
+			if( cc.id_.find(bof) == cc.id_.end() )
+				bof = fim_basename_of(flist_[i].c_str());
 			if(want_all_vars)
 				cmtfc += cc.id_.vd_[bof].get_variables_list(true, true);
 #endif /* FIM_WANT_PIC_LVDN */
