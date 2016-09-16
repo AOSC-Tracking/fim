@@ -68,6 +68,22 @@
 #endif /* HAVE_FNMATCH_H */
 #endif /* 0 */
 
+#if HAVE_TIME_H
+#include <time.h>
+#endif /* HAVE_TIME_H */
+#if HAVE_TIME_H && ( _XOPEN_SOURCE >= 500 || _XOPEN_SOURCE && _XOPEN_SOURCE_EXTENDED )
+#define FIM_USE_GETDATE
+#endif
+
+#ifdef FIM_USE_GETDATE
+/* TODO: shall use it like:
+	struct tm*tmp;
+	tmp=getdate("2009/12/28");
+	if(tmp)
+		min_mtime_str=*tmp;
+*/
+#endif /* FIM_USE_GETDATE */
+
 #define FIM_CNS_ENOUGH_FILES_TO_WARN 1000
 #define FIM_WITHIN(MIN,VAL,MAX) ((MIN)<=(VAL) && (VAL)<=(MAX))
 #define FIM_CNS_Ki 1000

@@ -528,7 +528,7 @@ Other
 .B Fim 
 man pages: \fR\fIfimgs\fR(1), \fR\fIfimrc\fR(1).
 .fi
-Or related programs: \fR\fIfbset\fR(1), \fR\fIcon2fb\fR(1), \fR\fIconvert\fR(1), \fR\fIvim\fR(1), \fR\fIfb.modes\fR(8), \fR\fIfbset\fR(8), \fR\fIfbgrab\fR(1), \fR\fIfbdev\fR(4), \fR\fIsetfont\fR(8), \fR\fIxfs\fR(1).
+Or related programs: \fR\fIfbset\fR(1), \fR\fIcon2fb\fR(1), \fR\fIconvert\fR(1), \fR\fIvim\fR(1), \fR\fImutt\fR(1), \fR\fIexiftool\fR(1), \fR\fIexiftags\fR(1), \fR\fIexiftime\fR(1), \fR\fIexifcom\fR(1), \fR\fIfbi\fR(1), \fR\fIfbida\fR(1), \fR\fIfeh\fR(1), \fR\fIfb.modes\fR(8), \fR\fIfbset\fR(8), \fR\fIfbgrab\fR(1), \fR\fIfbdev\fR(4), \fR\fIsetfont\fR(8), \fR\fIxfs\fR(1).
 .SH AUTHOR
 .nf
 Michele Martone <dezperado _CUT_ autistici _CUT_ org> is the author of fim, "fbi improved". 

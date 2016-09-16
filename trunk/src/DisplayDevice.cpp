@@ -122,10 +122,10 @@ ret:		return r;
 		 *	NOTE : this call should 'steal' circa 1/10 of second..
 		 */
 		fd_set          set;
-		size_t rc=0;
-		fim_key_t c=-1,r;/*	-1 means 'no character pressed	*/
+		ssize_t rc=0,r;
+		fim_key_t c=-1;/*	-1 means 'no character pressed	*/
 		struct termios tattr, sattr;
-
+std::cout<<__FILE__<<"\n";
 		//we set the terminal in raw mode.
                 if (! isatty(cc.fim_stdin_))
 		{
@@ -144,7 +144,7 @@ ret:		return r;
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		//r=read(fim_stdin_,&c,4);
 		// FIXME : read(.,.,3) is NOT portable. DANGER
-		r=read(cc.fim_stdin_,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);c=(0x1b)+(c<<8);/* we should do something with rc now */}
+		r=read(cc.fim_stdin_,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);if(rc)c=(0x1b)+(c<<8);/* we should do something with rc now */}
 		//we restore the previous console attributes
 		tcsetattr (0, TCSAFLUSH, &sattr);
 		if( r<=0 )
