@@ -577,7 +577,7 @@ err:
 		if(cmd.re_match(FIM_SYM_NAMESPACE_REGEX)==true)
 		{
 			mask=4,
-			nschar=cmd[0],
+			nschar=cmd[(size_t)0],
 			cmd=cmd.substr(2,cmd.size());
 		}
 		if(mask==0 || (mask&1))
@@ -1459,10 +1459,7 @@ ret:
 
 	bool CommandConsole::isVariable(const fim::string &varname)const
 	{
-		const fim_char_t* s=FIM_NULL;
-
-		s = getStringVariable(varname).c_str();
-		return (s && *s);
+		return getStringVariable(varname).size();
 	}
 
 	fim_err_t CommandConsole::printVariable(const fim::string &varname)const

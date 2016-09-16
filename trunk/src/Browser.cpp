@@ -1408,10 +1408,15 @@ ret:
 		 * TODO: this member function shall only find the index and return it !
 		 */
 		size_t i,j,c = current_n(),s = flist_.size();
-		const char *rso = cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) ? cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str() : "bi"; /* just note that using rso is not safe thorough the whole function */
+		const char *rso = FIM_NULL;
 		int rsic = 1; /* ignore case */
 		int rsbn = 1; /* base name */
 		FIM_PR('*');
+
+		if( cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) )
+		       rso = strdupa ( cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str());
+		if(!rso)
+			rso = "bi";
 
 		if ( rso && strchr(rso,'i') )
 			rsic = 1;
