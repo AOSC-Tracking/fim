@@ -452,14 +452,12 @@ namespace fim
 #if 0
 				int fh=displaydevice_->f_ ? displaydevice_->f_->sheight():1; // FIXME : this is not clean
 				int fw=displaydevice_->f_ ? displaydevice_->f_->swidth():1; // FIXME : this is not clean
-				const char * cmnts = image_->getStringVariable(FIM_VID_COMMENT).c_str();
-				int sl = strlen(cmnts), rw = viewport_width() / fw, wh = viewport_height();
+				int sl = strlen(image_->getStringVariable(FIM_VID_COMMENT).c_str()), rw = viewport_width() / fw, wh = viewport_height();
 				for( int li = 0 ; sl > rw * li ; ++li )
 					if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
-				const char * cmnts = image_->getStringVariable(FIM_VID_COMMENT).c_str();
-				this->fs_ml_puts(cmnts,wcoi-1);
+				this->fs_ml_puts(image_->getStringVariable(FIM_VID_COMMENT).c_str(),wcoi-1);
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
