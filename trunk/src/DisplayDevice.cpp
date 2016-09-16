@@ -125,7 +125,6 @@ ret:		return r;
 		ssize_t rc=0,r;
 		fim_key_t c=-1;/*	-1 means 'no character pressed	*/
 		struct termios tattr, sattr;
-std::cout<<__FILE__<<"\n";
 		//we set the terminal in raw mode.
                 if (! isatty(cc.fim_stdin_))
 		{
