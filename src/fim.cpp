@@ -889,7 +889,7 @@ string(
 ".B Fim \n"
 "man pages: " FIM_MAN_fR("fimgs") "(1), " FIM_MAN_fR("fimrc") "(1).\n"
 ".fi\n"
-"Or related programs: " FIM_MAN_fR("fbset") "(1), " FIM_MAN_fR("con2fb") "(1), " FIM_MAN_fR("convert") "(1), " FIM_MAN_fR("vim") "(1), " FIM_MAN_fR("fb.modes") "(8), " FIM_MAN_fR("fbset") "(8), " FIM_MAN_fR("fbgrab") "(1), " FIM_MAN_fR("fbdev") "(4), " FIM_MAN_fR("setfont") "(8), " FIM_MAN_fR("xfs") "(1).\n"
+"Or related programs: " FIM_MAN_fR("fbset") "(1), " FIM_MAN_fR("con2fb") "(1), " FIM_MAN_fR("convert") "(1), " FIM_MAN_fR("vim") "(1), " FIM_MAN_fR("mutt") "(1), " FIM_MAN_fR("exiftool") "(1), " FIM_MAN_fR("exiftags") "(1), " FIM_MAN_fR("exiftime") "(1), " FIM_MAN_fR("exifcom") "(1), " FIM_MAN_fR("fbi") "(1), " FIM_MAN_fR("fbida") "(1), " FIM_MAN_fR("feh") "(1), " FIM_MAN_fR("fb.modes") "(8), " FIM_MAN_fR("fbset") "(8), " FIM_MAN_fR("fbgrab") "(1), " FIM_MAN_fR("fbdev") "(4), " FIM_MAN_fR("setfont") "(8), " FIM_MAN_fR("xfs") "(1).\n"
 ".SH AUTHOR\n"
 ".nf\n"
 FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
