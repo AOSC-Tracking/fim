@@ -74,6 +74,12 @@
 	typedef unsigned char fim_byte_t;	/* a type for bytes */
 	typedef size_t fim_size_t;	/* always size_t */
 	enum fim_redraw_t { FIM_REDRAW_UNNECESSARY=0, FIM_REDRAW_NECESSARY=1};
+#if FIM_USE_CXX11
+	// TODO: move using aliases here ...
+#else /* FIM_USE_CXX11 */
+	// TODO: move typedefs here ...
+#endif /* FIM_USE_CXX11 */
+	// TODO: same also in CommandConsole.h
 //}
 
 /* we wait for variadic macros support in standard C++ */

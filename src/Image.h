@@ -188,14 +188,23 @@ class Image
 
 #if FIM_WANT_PIC_CMTS
 /* FIXME: temporarily here */
+#if FIM_USE_CXX11
+using fim_fn_t = string ; /* file name */
+using fim_ds_t = string ; /* file description */
+#else /* FIM_USE_CXX11 */
 typedef string fim_fn_t; /* file name */
 typedef string fim_ds_t; /* file description */
+#endif /* FIM_USE_CXX11 */
 
 class ImgDscs: public std::map<fim_fn_t,fim_ds_t>
 {
 	public:
 #if FIM_WANT_PIC_LVDN
+#if FIM_USE_CXX11
+	using vd_t = std::map<std::string,VNamespace> ;
+#else /* FIM_USE_CXX11 */
 	typedef std::map<std::string,VNamespace> vd_t;
+#endif /* FIM_USE_CXX11 */
 	vd_t vd_;
 #endif /* FIM_WANT_PIC_LVDN */
 	template<class T> struct ImgDscsCmp:public std::binary_function<typename T::value_type, typename T::mapped_type, bool>

@@ -26,11 +26,19 @@
 
 namespace fim
 {
+#if FIM_USE_CXX11
+	using fim_var_id = fim::string ;	//id
+	using variables_t = std::map<const fim_var_id,Var> ;	//id->var
+	//using fim_var_id_list = std::vector<fim_var_id> ;
+	using fim_var_id_set = std::set<fim_var_id> ;
+	using fim_var_val_set = std::set<Var> ;
+#else /* FIM_USE_CXX11 */
 	typedef fim::string fim_var_id;	//id
 	typedef std::map<const fim_var_id,Var> variables_t;	//id->var
 	//typedef std::vector<fim_var_id> fim_var_id_list;
 	typedef std::set<fim_var_id> fim_var_id_set;
 	typedef std::set<Var> fim_var_val_set;
+#endif /* FIM_USE_CXX11 */
 
 	class Namespace
 	{
