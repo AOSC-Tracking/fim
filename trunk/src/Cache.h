@@ -41,6 +41,15 @@ class Cache:public Namespace
 class Cache
 #endif /* FIM_NAMESPACES */
 {
+#if FIM_USE_CXX11
+	using lru_t = std::map<fim::Image*,fim_time_t > 	   ;	//filename - last usage time
+	using cachels_t =  std::map<cache_key_t,fim::Image* >  ;	//filename - image
+	using rcachels_t = std::map<fim::Image*,cache_key_t >  ;	//image - filename
+	using ccachels_t = std::map<cache_key_t,int >        ;	//filename - counter
+	using vcachels_t = std::map<cache_key_t,ViewportState >        ;	//filename to viewport state
+	using cloned_cachels_t = std::map<cache_key_t,std::vector<fim::Image*> > ;	//filename - cloned images??
+	using cuc_t = std::map<fim::Image*,int >  	   ;	//image - filename
+#else /* FIM_USE_CXX11 */
 	typedef std::map<fim::Image*,fim_time_t > 	   lru_t;	//filename - last usage time
 	typedef std::map<cache_key_t,fim::Image* >  cachels_t;	//filename - image
 	typedef std::map<fim::Image*,cache_key_t >  rcachels_t;	//image - filename
@@ -48,6 +57,7 @@ class Cache
 	typedef std::map<cache_key_t,ViewportState >        vcachels_t;	//filename to viewport state
 	typedef std::map<cache_key_t,std::vector<fim::Image*> > cloned_cachels_t;	//filename - cloned images??
 	typedef std::map<fim::Image*,int >  	   cuc_t;	//image - filename
+#endif /* FIM_USE_CXX11 */
 
 	cachels_t 	imageCache_;
 	rcachels_t	reverseCache_;
