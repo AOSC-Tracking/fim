@@ -474,7 +474,11 @@ fim_char_t * dupsqstr (const fim_char_t* s)
  *	Allocation and duplication of a single string (not necessarily terminating)
  */
 #ifdef HAVE_FGETLN
+#if FIM_USE_CXX14
+auto                dupstrn (const fim_char_t* s, size_t l) /* Return type inference could be useful in a few places; this is just an example reminder. */
+#else /* FIM_USE_CXX14 */
 static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
+#endif /* FIM_USE_CXX14 */
 {
 	fim_char_t *r = (fim_char_t*) fim_malloc (l + 1);
 	strncpy(r,s,l);
