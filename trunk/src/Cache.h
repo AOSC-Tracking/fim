@@ -111,6 +111,16 @@ class Cache
 
 	public:
 	Cache(void);
+#if FIM_USE_CXX11
+	public:
+	/* a deleted member function (e.g. not even a be'friend'ed class can call it) */
+	Cache& operator= (const Cache&cc) = delete;
+#else /* FIM_USE_CXX11 */
+	private:
+	/* a disabled member function (because private:) */
+	Cache& operator= (const Cache&cc) { return *this; }
+#endif /* FIM_USE_CXX11 */
+	public:
 
 #if FIM_WANT_BDI
 	Image dummy_img_;	// experimental

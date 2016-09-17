@@ -188,8 +188,16 @@ class CommandConsole
 	//const fim_char_t*get_prompt(void)const{return prompt_;}
 
 	CommandConsole(void);
+#if FIM_USE_CXX11
+	public:
+	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
+	CommandConsole& operator= (const CommandConsole&cc) = delete;
+#else /* FIM_USE_CXX11 */
 	private:
-	CommandConsole& operator= (const CommandConsole&cc);
+	/* a disabled copy constructor (because private:) */
+	CommandConsole& operator= (const CommandConsole&cc) { return *this; }
+#endif /* FIM_USE_CXX11 */
+
 	public:
 	bool display(void);
 	bool redisplay(void);
