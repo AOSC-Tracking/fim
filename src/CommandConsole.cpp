@@ -2557,15 +2557,11 @@ err:
 	       	return browser_.current();
 	}
 
-	CommandConsole& CommandConsole::operator= (const CommandConsole&cc)
-	{
-		return *this;/* a disabled copy constructor */
-	}
-
 	fim_sys_int CommandConsole::get_displaydevice_input(fim_key_t * c, bool want_poll)
 	{
 		return displaydevice_->get_input(c, want_poll);
 	}
+
 #if FIM_WANT_PIC_CMTS
 	bool CommandConsole::push_from_id(void)
 	{

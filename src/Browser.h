@@ -172,6 +172,12 @@ class Browser
 
 	Browser(CommandConsole &cc);
 	~Browser(void) { }
+#if FIM_USE_CXX11
+	public:
+	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
+	Browser& operator= (const Browser &b) = delete;
+	Browser(const Browser &b) = delete;
+#else /* FIM_USE_CXX11 */
 	private:
 	Browser& operator= (const Browser &b){return *this;/* a disabled copy constructor */}
 	Browser(const Browser &b):
@@ -196,6 +202,7 @@ class Browser
 		,pcache_(cache_)
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 		{}
+#endif /* FIM_USE_CXX11 */
 	public:
 	fim::string current(void)const;
 	fim::string regexp_goto(const args_t &args, fim_int src_dir=1);

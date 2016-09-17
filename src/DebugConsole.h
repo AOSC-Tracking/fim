@@ -74,6 +74,13 @@ namespace fim
 		fim_err_t scroll_up(void);
 		virtual size_t byte_size(void)const;
 
+#if FIM_USE_CXX11
+		public:
+		/* deleted member functions cannot be called not even by be'friend'ed clases */
+		MiniConsole& operator= (const MiniConsole&mc) = delete;
+		MiniConsole(const MiniConsole &mc) = delete;
+#else /* FIM_USE_CXX11 */
+		/* private member functions can be called even by be'friend'ed clases */
 		private:
 		MiniConsole& operator= (const MiniConsole&mc);
 		MiniConsole(const MiniConsole &mc) :
@@ -90,7 +97,9 @@ namespace fim
 			scroll_(0),
 			cc_(mc.cc_)
 			{/* this constructor should not be used */}
+#endif /* FIM_USE_CXX11 */
 
+		private:
 		int line_length(int li);
 		fim_err_t do_dump(int f, int l)const;
 		fim_err_t do_dump(void)const;
