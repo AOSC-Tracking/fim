@@ -496,14 +496,22 @@ dnl ============= GNU gpm, unofficial yet
 #      AC_MSG_ERROR(*** gpm lib not found ... no problem ... ***))
 #LIBS="$LIBS -lgpm"
 
-dnl ============= no readline case handling
+dnl ============= C++ version handling
 
-fim_want_cxx11=no
+fim_cxx_standard=98
 AC_ARG_ENABLE(c++11, AC_HELP_STRING([--enable-c++11], [Enable C++11 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++11) (EXPERIMENTAL).]),
 [       if test x$enableval = xno ; then
-		fim_want_cxx11=no
+ 		true;
 	else
-		fim_want_cxx11=yes
+        	fim_cxx_standard=11;
+        fi
+])
+
+AC_ARG_ENABLE(c++14, AC_HELP_STRING([--enable-c++14], [Enable C++14 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++14) (EXPERIMENTAL).]),
+[       if test x$enableval = xno ; then
+ 		true;
+	else
+        	fim_cxx_standard=14;
         fi
 ])
 
@@ -1580,6 +1588,7 @@ AC_ARG_ENABLE(optimizations, AC_HELP_STRING([--enable-optimizations], [Will try 
 
 dnl ==================
 AH_TEMPLATE([FIM_USE_CXX11])
+AH_TEMPLATE([FIM_USE_CXX14])
 dnl ==================
 AH_TEMPLATE([FIM_TRY_XCFTOPNM])
 AH_TEMPLATE([FIM_TRY_CONVERT])
@@ -1661,8 +1670,11 @@ dnl			AC_MSG_NOTICE([we run on linux! Good.])
 	fi
 
 dnl ==================
-        if test x$fim_want_cxx11 = xyes ; then
+        if test x$fim_cxx_standard = x11 ; then
 		AC_DEFINE([FIM_USE_CXX11])
+	fi
+        if test x$fim_cxx_standard = x14 ; then
+		AC_DEFINE([FIM_USE_CXX14])
 	fi
 dnl ==================
 
@@ -1921,7 +1933,7 @@ dnl	internal windowing system           : ${have_windows:-no}
         seek magic signatures               :*${fim_cv_seek_magic:-no}
         hardcoded font magnifying factor    :*${fim_cv_want_font_magnify_factor}
 	customizable status bar             : ${fim_cv_custom_status_bar:-no}
-	use C++11 constructs (internals)    : ${fim_want_cxx11}
+	use C++ standard (98/11/14)         : ${fim_cxx_standard}
 dnl
 	readline (-lrl) library support     : ${fim_want_readline}
 	use 'xcftopnm' for XCF files        :*${fim_cv_xcftopnm}
