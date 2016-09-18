@@ -43,9 +43,9 @@ class CommandConsole
 	private:
 	FontServer fontserver_;
 
-	fim::string postInitCommand_;
-	fim::string preConfigCommand_;
-	fim::string postExecutionCommand_;
+	fim_cls_id postInitCommand_;
+	fim_cls_id preConfigCommand_;
+	fim_cls_id postExecutionCommand_;
 
 	fim_int show_must_go_on_;
 	fim_int return_code_;	/* new, to support the 'return' command */
@@ -69,14 +69,14 @@ class CommandConsole
 	/*
 	 * the aliases to actions (compounds of commands)
 	 */
-	typedef std::map<fim::string,std::pair<fim::string,fim::string> > aliases_t;	//alias->[commands,description]
-	//typedef std::map<fim::string,fim::string> aliases_t;	//alias->commands
+	typedef std::map<fim::string,std::pair<fim_cmd_id,fim::string> > aliases_t;	//alias->[commands,description]
+	//typedef std::map<fim::string,fim_cmd_id> aliases_t;	//alias->commands
 	aliases_t aliases_;	//alias->commands
 	
 	/*
 	 * bindings of key codes to actions (compounds of commands)
 	 */
-	typedef std::map<fim_key_t,fim::string> bindings_t;		//code->commands
+	typedef std::map<fim_key_t,fim_cmd_id> bindings_t;		//code->commands
 	bindings_t bindings_;		//code->commands
 	typedef std::map<fim_key_t,fim::string> bindings_help_t; // code->help
 	bindings_help_t bindings_help_;		//code->commands
@@ -96,7 +96,7 @@ class CommandConsole
 	/*
 	 * the identifier->variable binding
 	 */
-	//typedef std::map<const fim::string,Var> variables_t;	//id->var
+	//typedef std::map<const fim_cmd_id,Var> variables_t;	//id->var
 	//variables_t variables_;	//id->var
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
@@ -134,7 +134,7 @@ class CommandConsole
 	/*
 	 * the last executed action (being a command line or key bounded command issued)
 	 */
-	fim::string last_action_;
+	fim_cls_id last_action_;
 	
 #ifdef FIM_RECORDING
 	bool recordMode_;
@@ -143,7 +143,7 @@ class CommandConsole
 	recorded_actions_t recorded_actions_;
 
 	bool dont_record_last_action_;
-	fim::string memorize_last(const fim::string &cmd);
+	fim::string memorize_last(const fim_cmd_id& cmd);
 	fim::string repeat_last(const args_t &args);
 	fim::string dump_record_buffer(const args_t &args);
 	fim::string do_dump_record_buffer(const args_t &args)const;
@@ -151,9 +151,9 @@ class CommandConsole
 	fim::string start_recording(void);
 	fim::string fcmd_recording(const args_t &args);
 	fim::string stop_recording(void);
-	fim::string sanitize_action(const fim::string &cmd)const;
+	fim::string sanitize_action(const fim_cmd_id& cmd)const;
 
-	void record_action(const fim::string &cmd);
+	void record_action(const fim_cmd_id& cmd);
 #endif /* FIM_RECORDING */
 
 	public:
@@ -183,7 +183,7 @@ class CommandConsole
 	public:
 	fim_sys_int get_displaydevice_input(fim_key_t * c, bool want_poll=false);
 
-	fim::string execute(fim::string cmd, args_t args);
+	fim::string execute(fim_cmd_id cmd, args_t args);
 
 	//const fim_char_t*get_prompt(void)const{return prompt_;}
 
@@ -257,11 +257,11 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_err_t execute_internal(const fim_char_t *ss, fim_xflags_t xflags);
 
 	fim_err_t addCommand(Command *c);
-	Command* findCommand(fim::string cmd)const;
-	int findCommandIdx(fim::string cmd)const;
+	Command* findCommand(fim_cmd_id cmd)const;
+	int findCommandIdx(fim_cmd_id cmd)const;
 	fim::string fcmd_alias(std::vector<Arg> args);
-	fim::string alias(const fim::string& a,const fim::string& c, const fim::string& d="");
-	fim::string aliasRecall(fim::string cmd)const;
+	fim::string alias(const fim_cmd_id& a, const fim_cmd_id& c, const fim_cmd_id& d="");
+	fim::string aliasRecall(fim_cmd_id cmd)const;
 	fim::string fcmd_system(const args_t& args);
 	fim::string fcmd_cd(const args_t& args);
 	fim::string fcmd_pwd(const args_t& args);
@@ -279,7 +279,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string autocmd_del(const fim::string event, const fim::string pattern, const fim::string action);
 	fim::string fcmd_autocmd_del(const args_t& args);
 	public:// 20110601
-	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim::string &cmd);
+	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim_cmd_id& cmd);
 	private:
 	fim::string autocmds_list(const fim::string event, const fim::string pattern)const;
 #endif /* FIM_AUTOCMDS */
@@ -306,7 +306,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	//fim_char_t ** tokenize_(const fim_char_t *s);
 	bool executeBinding(const fim_key_t c);
 	fim::string getBoundAction(const fim_key_t c)const;
-	//	void execute(fim::string cmd);
+	//	void execute(fim_cmd_id cmd);
 	fim::string fcmd_eval(const args_t &args);
 	void exit(fim_perr_t i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
@@ -333,7 +333,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int rsic)const;
 #ifdef FIM_AUTOCMDS
 	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
-	fim::string pre_autocmd_add(const fim::string &cmd);
+	fim::string pre_autocmd_add(const fim_cmd_id& cmd);
 	fim::string pre_autocmd_exec(void);
 #endif /* FIM_AUTOCMDS */
 	fim_int catchLoopBreakingCommand(fim_ts_t seconds=0);

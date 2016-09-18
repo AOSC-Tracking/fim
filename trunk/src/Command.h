@@ -2,7 +2,7 @@
 /*
  Command.h : Fim Command class header file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,15 +24,22 @@
 namespace fim
 {
 
+#if FIM_USE_CXX11
+	using fim_cmd_id = fim::string; // command id
+	using fim_cls_id = fim::string; // command line statement
+#else /* FIM_USE_CXX11 */
+	typedef fim::string fim_cmd_id; // command id
+	typedef fim::string fim_cls_id; // command line statement
+#endif /* FIM_USE_CXX11 */
 class Command
 {
 	public:
-	fim::string cmd_,
-		    help_ ;
-	Command(fim::string cmd,fim::string help,Browser *b=FIM_NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(0) { type=BrowserT;}
-	Command(fim::string cmd,fim::string help,CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
+	fim_cmd_id cmd_;
+	fim::string help_ ;
+	Command(fim_cmd_id cmd,fim::string help,Browser *b=FIM_NULL,fim::string(Browser::*bf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(0) { type=BrowserT;}
+	Command(fim_cmd_id cmd,fim::string help,CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(0) { type=CommandConsoleT;}
 #ifdef FIM_WINDOWS
-	Command(fim::string cmd,fim::string help,FimWindow *w=FIM_NULL,fim::string(FimWindow::*cf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
+	Command(fim_cmd_id cmd,fim::string help,FimWindow *w=FIM_NULL,fim::string(FimWindow::*cf)(const std::vector<fim::string>&)=FIM_NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(0) { type=WindowT;}
 #endif /* FIM_WINDOWS */
 
 	fim::string getHelp(void)const{return help_;}
