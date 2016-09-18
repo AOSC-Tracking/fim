@@ -2,7 +2,7 @@
 /*
  DebugConsole.h : Fim virtual console display.
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,14 +77,14 @@ namespace fim
 #if FIM_USE_CXX11
 		public:
 		/* deleted member functions cannot be called not even by be'friend'ed clases */
-		MiniConsole& operator= (const MiniConsole&mc) = delete;
-		MiniConsole(const MiniConsole &mc) = delete;
+		MiniConsole& operator= (const MiniConsole&rhs) = delete;
+		MiniConsole(const MiniConsole &rhs) = delete;
 #else /* FIM_USE_CXX11 */
 		/* private member functions can be called even by be'friend'ed clases */
 		private:
-		MiniConsole& operator= (const MiniConsole&mc);
-		MiniConsole(const MiniConsole &mc) :
-			Namespace(mc),
+		MiniConsole& operator= (const MiniConsole&rhs){return *this;/* a nilpotent assignment */}
+		MiniConsole(const MiniConsole &rhs) :
+			Namespace(rhs),
 			buffer_(FIM_NULL),
 			line_(FIM_NULL),
 			bp_(FIM_NULL),
@@ -95,7 +95,7 @@ namespace fim
 			lwidth_(0),
 			rows_(0),
 			scroll_(0),
-			cc_(mc.cc_)
+			cc_(rhs.cc_)
 			{/* this constructor should not be used */}
 #endif /* FIM_USE_CXX11 */
 
