@@ -499,22 +499,9 @@ dnl ============= GNU gpm, unofficial yet
 dnl ============= C++ version handling
 
 fim_cxx_standard=98
-AC_ARG_ENABLE(c++11, AC_HELP_STRING([--enable-c++11], [Enable C++11 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++11) (EXPERIMENTAL).]),
-[       if test x$enableval = xno ; then
- 		true;
-	else
-        	fim_cxx_standard=11;
-        fi
-])
-
-AC_ARG_ENABLE(c++14, AC_HELP_STRING([--enable-c++14], [Enable C++14 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++14) (EXPERIMENTAL).]),
-[       if test x$enableval = xno ; then
- 		true;
-	else
-        	fim_cxx_standard=14;
-        fi
-])
-
+AC_ARG_ENABLE(c++11, AC_HELP_STRING([--enable-c++11], [Enable C++11 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++11) (EXPERIMENTAL).]), [       if test x$enableval = xno ; then true; else fim_cxx_standard=11; fi ])
+AC_ARG_ENABLE(c++14, AC_HELP_STRING([--enable-c++14], [Enable C++14 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++14) (EXPERIMENTAL).]), [       if test x$enableval = xno ; then true; else fim_cxx_standard=14; fi ])
+dnl AC_ARG_ENABLE(c++17, AC_HELP_STRING([--enable-c++17], [Enable C++17 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++17) (EXPERIMENTAL).]), [       if test x$enableval = xno ; then true; else fim_cxx_standard=17; fi ])
 dnl ============= no readline case handling
 
 fim_want_readline=yes
@@ -1587,8 +1574,7 @@ AC_ARG_ENABLE(optimizations, AC_HELP_STRING([--enable-optimizations], [Will try 
 )
 
 dnl ==================
-AH_TEMPLATE([FIM_USE_CXX11])
-AH_TEMPLATE([FIM_USE_CXX14])
+AH_TEMPLATE([FIM_USE_CXX_STD])
 dnl ==================
 AH_TEMPLATE([FIM_TRY_XCFTOPNM])
 AH_TEMPLATE([FIM_TRY_CONVERT])
@@ -1670,12 +1656,18 @@ dnl			AC_MSG_NOTICE([we run on linux! Good.])
 	fi
 
 dnl ==================
+        if test x$fim_cxx_standard = x98 ; then
+		AC_DEFINE([FIM_USE_CXX_STD], 1998, [])
+	fi
         if test x$fim_cxx_standard = x11 ; then
-		AC_DEFINE([FIM_USE_CXX11])
+		AC_DEFINE([FIM_USE_CXX_STD], 2011, [])
 	fi
         if test x$fim_cxx_standard = x14 ; then
-		AC_DEFINE([FIM_USE_CXX14])
+		AC_DEFINE([FIM_USE_CXX_STD], 2014, [])
 	fi
+dnl        if test x$fim_cxx_standard = x17 ; then
+dnl		AC_DEFINE([FIM_USE_CXX_STD], 2017, [])
+dnl	fi
 dnl ==================
 
         if test x$fim_cv_convert = xyes ; then

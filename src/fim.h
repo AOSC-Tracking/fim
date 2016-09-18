@@ -155,6 +155,8 @@
 #define FIM_FONT_MAGNIFY_FACTOR_MIN 1  /* Framebuffer font magnifying factor, minimal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_MAX 16 /* Framebuffer font magnifying factor, maximal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_DEFAULT ( FIM_WANT_FONT_MAGNIFY_FACTOR > 0 ? FIM_WANT_FONT_MAGNIFY_FACTOR : ( FIM_WANT_FONT_MAGNIFY_FACTOR < 0 ? -FIM_WANT_FONT_MAGNIFY_FACTOR : 1 ) ) /* Framebuffer font magnifying factor, default value. */
+#define FIM_USE_CXX11 ( FIM_USE_CXX_STD >= 2011 ) /* */
+#define FIM_USE_CXX14 ( FIM_USE_CXX_STD >= 2014 ) /* */
 #define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
 #define FIM_WANT_IMAGE_LOAD_TIME 1
 #define FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK 1
