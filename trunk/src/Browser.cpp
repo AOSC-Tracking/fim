@@ -169,9 +169,7 @@ namespace fim
 			else
 			if(cc.getIntVariable(FIM_VID_LOADING_IN_BACKGROUND)!=0)
 			{
-				result = "File list temporarily locked; check out the ";
-			       	result += FIM_VID_LOADING_IN_BACKGROUND;
-				result += " variable later.";
+				result = "File list temporarily locked; check out the " FIM_VID_LOADING_IN_BACKGROUND " variable later.";
 				goto ret;
 			}
 #endif /* FIM_WANT_BACKGROUND_LOAD */
@@ -195,21 +193,13 @@ namespace fim
 			else if(args[0]=="swap")
 				result = _swap();
 			else if(args[0]=="pop")
-			{
 				/* deletes the last image from the files list.  someday may add filename matching based remove..  */
-				pop();
+				pop(),
 				result = this->n_files();
-			}
 			else if(args[0]=="remove")
-			{
 				result = do_filter(args_t(args.begin()+1,args.end()));
-			}
 			else if(args[0]=="push")
-			{
-				args_t argsc(args);
-				argsc.erase(argsc.begin());
-				result = do_push(argsc);
-			}
+				result = do_push(args_t(args.begin()+1,args.end()));
 #ifdef FIM_READ_DIRS
 			else if(args[0]=="pushdir")
 			{
