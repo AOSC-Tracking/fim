@@ -27,12 +27,59 @@
 //#define _FIM_DYNAMIC_STRING 1
 #define _FIM_STRING_WRAPPER 1
 
-
 #define FIM_CHARS_FOR_INT 32 /* should fit a pointer address printout */
 
 namespace fim
 {
-#ifndef _FIM_STRING_WRAPPER
+#if _FIM_STRING_WRAPPER
+	class string:public std::string
+	{
+		public:
+		string();
+
+		/* a virtual destructor will behave correctly when destroying this class
+		 * objects with base pointers .. */
+		~string(){}
+
+		/*
+			 if not, exception:
+			 terminate called after throwing an instance of 'std::logic_error'
+			 what():  basic_string::_S_construct FIM_NULL not valid
+		*/
+		string(const std::string&rhs):std::string(rhs){}
+		string(const fim_char_t*s):std::string(s?s:""){}
+
+		string(fim_char_t c);
+#if FIM_WANT_LONG_INT
+		string(int i);
+#endif /* FIM_WANT_LONG_INT */
+		string(fim_int i);
+		string(float i);
+		string(int * i);
+		string(size_t i);
+
+/*
+ 		the following two operators are very nice to use but pose unexpected problems.		
+*/
+ 		operator fim_int  (void)const;
+#if FIM_WANT_LONG_INT
+ 		operator int  (void)const;
+#endif /* FIM_WANT_LONG_INT */
+		operator float(void)const;
+		operator const char*(void)const{return c_str();}
+		operator bool (void)const{return c_str()!=NULL;}
+
+		string operator+(const string rhs)const;
+		/* copy constructor */
+		string(const string& rhs);
+		bool re_match(const fim_char_t*r)const;
+		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=0);
+		fim::string line(int ln)const;
+		size_t lines(void)const;
+		int find_re(const fim_char_t*r,int *mbuf=FIM_NULL)const;
+	}; /* fim::string */
+#else /* _FIM_STRING_WRAPPER */
+/* obsolete dead old code */
 
 #define fim_free(x) {free(x);}
 //#define fim_free(x) {std::cout<<"freeing "<<(int*)x<<"\n";free(x);x=FIM_NULL;std::cout<<"freeed!\n";}
@@ -102,57 +149,8 @@ namespace fim
 	operator int(void)const;
 	operator float(void)const;
 	};
-#else /* _FIM_STRING_WRAPPER */
-	class string:public std::string
-	{
-		public:
-		string();
-
-		/* a virtual destructor will behave correctly when destroying this class
-		 * objects with base pointers .. */
-		~string(){}
-
-		/*
-			 if not, exception:
-			 terminate called after throwing an instance of 'std::logic_error'
-			 what():  basic_string::_S_construct FIM_NULL not valid
-		*/
-		string(const std::string&rhs):std::string(rhs){}
-		string(const fim_char_t*s):std::string(s?s:""){}
-
-		string(fim_char_t c);
-#if FIM_WANT_LONG_INT
-		string(int i);
-#endif /* FIM_WANT_LONG_INT */
-		string(fim_int i);
-		string(float i);
-		string(int * i);
-		string(size_t i);
-
-/*
- 		the following two operators are very nice to use but pose unexpected problems.		
-*/
- 		operator fim_int  (void)const;
-#if FIM_WANT_LONG_INT
- 		operator int  (void)const;
-#endif /* FIM_WANT_LONG_INT */
-		operator float(void)const;
-		operator const char*(void)const{return c_str();}
-		operator bool (void)const{return c_str()!=NULL;}
-
-		string operator+(const string rhs)const;
-		/* copy constructor */
-		string(const string& rhs);
-		bool re_match(const fim_char_t*r)const;
-		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=0);
-		fim::string line(int ln)const;
-		size_t lines(void)const;
-		int find_re(const fim_char_t*r,int *mbuf=FIM_NULL)const;
-	};
-
-
 #endif /* _FIM_STRING_WRAPPER */
-}
 
+}
 
 #endif /* FIM_STRING_H */
