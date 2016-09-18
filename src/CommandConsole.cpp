@@ -1447,7 +1447,7 @@ ret:
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_var_t CommandConsole::getVariableType(const fim::string &varname)const
+	fim_var_t CommandConsole::getVariableType(const fim_var_id& varname)const
 	{
 		/*
 		 * returns the [internal] type of a variable
@@ -1461,12 +1461,12 @@ ret:
 		       	return FIM_ERR_NO_ERROR;
 	}
 
-	bool CommandConsole::isVariable(const fim::string &varname)const
+	bool CommandConsole::isVariable(const fim_var_id& varname)const
 	{
 		return getStringVariable(varname).size();
 	}
 
-	fim_err_t CommandConsole::printVariable(const fim::string &varname)const
+	fim_err_t CommandConsole::printVariable(const fim_var_id& varname)const
 	{	
 		/*
 		 * a variable is taken and converted to a string and printed

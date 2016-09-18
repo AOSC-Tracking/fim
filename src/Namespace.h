@@ -51,28 +51,28 @@ namespace fim
 	
 		public:
 
-		fim_int setVariable(const fim::string& varname,fim_int value);
-		fim_float_t setVariable(const fim::string& varname,fim_float_t value);
-		fim_int setVariable(const fim::string& varname,const fim_char_t*value);
-		Var setVariable(const fim::string& varname,const Var&value);
-		Var setVariable(const fim::string& varname,const fim::string&value);
+		fim_int setVariable(const fim_var_id& varname,fim_int value);
+		fim_float_t setVariable(const fim_var_id& varname,fim_float_t value);
+		fim_int setVariable(const fim_var_id& varname,const fim_char_t*value);
+		Var setVariable(const fim_var_id& varname,const Var&value);
+		Var setVariable(const fim_var_id& varname,const fim::string&value);
 
-		fim_int getIntVariable(const fim::string &varname)const;
-		fim_float_t getFloatVariable(const fim::string &varname)const;
-		fim::string getStringVariable(const fim::string &varname)const;
-		Var getVariable(const fim::string &varname)const;
+		fim_int getIntVariable(const fim_var_id& varname)const;
+		fim_float_t getFloatVariable(const fim_var_id& varname)const;
+		fim::string getStringVariable(const fim_var_id& varname)const;
+		Var getVariable(const fim_var_id& varname)const;
 
-		fim_bool_t isSetVar(const fim::string &varname)const;
-		void unsetVariable(const fim::string &varname);
+		fim_bool_t isSetVar(const fim_var_id& varname)const;
+		void unsetVariable(const fim_var_id& varname);
 
-		fim_int  setGlobalVariable(const fim::string& varname,fim_int value);
-	        fim_float_t setGlobalVariable(const fim::string& varname,fim_float_t value);
-		fim_int setGlobalVariable(const fim::string& varname,const fim_char_t*value);
-		fim_int setGlobalVariable(const fim::string& varname, const fim::string & value);
+		fim_int  setGlobalVariable(const fim_var_id& varname,fim_int value);
+	        fim_float_t setGlobalVariable(const fim_var_id& varname,fim_float_t value);
+		fim_int setGlobalVariable(const fim_var_id& varname,const fim_char_t*value);
+		fim_int setGlobalVariable(const fim_var_id& varname, const fim::string & value);
 
-		fim_int getGlobalIntVariable(const fim::string &varname)const;
-		fim_float_t getGlobalFloatVariable(const fim::string &varname)const;
-		fim::string getGlobalStringVariable(const fim::string &varname)const;
+		fim_int getGlobalIntVariable(const fim_var_id& varname)const;
+		fim_float_t getGlobalFloatVariable(const fim_var_id& varname)const;
+		fim::string getGlobalStringVariable(const fim_var_id& varname)const;
 		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
 		fim::string get_variables_list(bool with_values=false, bool fordesc=false)const;
 		virtual size_t byte_size(void)const = 0;

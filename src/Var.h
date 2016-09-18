@@ -146,7 +146,7 @@ class Var
 #endif
 	float setFloat(float f){type='f';return this->f=f;}
 	fim_int   setInt(fim_int i){type='i';return this->i=i;}
-	fim::string setString(fim::string &s){type='s';this->s=s;return this->s;}
+	fim::string setString(const fim::string &s){type='s';this->s=s;return this->s;}
 	int getType(void)const{return type;}
 	fim_int getInt(void)const{return(type=='i')?i:
 		(type=='f'?((fim_int)(f)):
