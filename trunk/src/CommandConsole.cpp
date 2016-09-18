@@ -542,11 +542,15 @@ err:
 		/*
 		 * an internal alias member function
 		 */
+#if FIM_USE_CXX11
+		return fcmd_alias({a,c,d});
+#else /* FIM_USE_CXX11 */
 		std::vector<fim::Arg> args;
 		args.push_back(Arg(a));
 		args.push_back(Arg(c));
 		args.push_back(Arg(d));
 		return fcmd_alias(args);
+#endif /* FIM_USE_CXX11 */
 	}
 
 	fim_char_t * CommandConsole::command_generator (const fim_char_t *text,int state,int mask)const

@@ -2,7 +2,7 @@
 /*
  CommandConsole-var.h : CommandConsole variables store
 
- (c) 2013-2015 Michele Martone
+ (c) 2013-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -258,6 +258,10 @@ err:
 		if(nsp)
 			return nsp->getVariable(rnid(varname));
 		else
+#if FIM_USE_CXX11
+			return {};
+#else /* FIM_USE_CXX11 */
 			return Var();
+#endif /* FIM_USE_CXX11 */
 	}
 }
