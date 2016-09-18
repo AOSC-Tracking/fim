@@ -111,6 +111,8 @@
  * introduced 'list "dumpmarked"' and 'list "unmarkall"' commands.
 # (r1003)
  * the -B switch is now short for --background-recursive.
+# (r1097)
+ * if compiled without --enable-c++11, -B / --background-recursive will behave as -R.
 # (r1002)
  * the -S switch is now short for --image-descriptions-file-separator (not anymore for --sanity-check).
 # (r1001)

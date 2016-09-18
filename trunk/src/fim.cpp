@@ -319,11 +319,11 @@ FIM_NULL
 	    FIM_NULL
     },
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
-#if FIM_WANT_BACKGROUND_LOAD
+//#if FIM_WANT_BACKGROUND_LOAD
     {"background-recursive", no_argument, FIM_NULL, /*0x6c696267*/'B',"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
 	    FIM_NULL
     },
-#endif /* FIM_WANT_BACKGROUND_LOAD */
+//#endif /* FIM_WANT_BACKGROUND_LOAD */
     { "/",   required_argument,       FIM_NULL, '/',"After startup jump to pattern; short for -c '" FIM_SYM_FW_SEARCH_KEY_STR "'.",FIM_NULL, FIM_NULL },
     {"//",   required_argument,       FIM_NULL, 0x2f2f0000,"After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "' but with search on the full path (with " FIM_SYM_CMD_SLSL ").",FIM_NULL, FIM_NULL },
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
@@ -1245,13 +1245,15 @@ void fim_args_from_desc_file(args_t & argsc, const fim_fn_t &dfn, const fim_char
 		    }
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 		    break;
-#if FIM_WANT_BACKGROUND_LOAD
 		case /*0x6c696267*/'B':
 		    //fim's
 		    pf |= FIM_FLAG_PUSH_REC ;
+#if FIM_WANT_BACKGROUND_LOAD
 		    pf |= FIM_FLAG_PUSH_ONE ;
-		    break;
+#else /* FIM_WANT_BACKGROUND_LOAD */
+		    std::cerr<< "warning: background loading is not supported (need to compile with C++11 enabled for this).\n";
 #endif /* FIM_WANT_BACKGROUND_LOAD */
+		    break;
 		case 's':
 	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,fim_atoi(optarg));
 		    if(fim_atoi(optarg)>0)
