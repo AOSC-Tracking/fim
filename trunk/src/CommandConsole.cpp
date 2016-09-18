@@ -101,7 +101,7 @@ namespace fim
 		return FIM_NULL;
 	}
 
-	fim::string CommandConsole::bind(fim_key_t c, const fim_cls_id binding)
+	fim::string CommandConsole::bind(fim_key_t c, const fim_cls binding)
 	{
 		/*
 		 * binds keycode c to the action specified in binding
@@ -180,7 +180,7 @@ namespace fim
 		return unbind(key);
 	}
 
-	fim_key_t CommandConsole::find_keycode_for_bound_cmd(fim_cls_id binding)
+	fim_key_t CommandConsole::find_keycode_for_bound_cmd(fim_cls binding)
 	{
 		/*
 		 * looks for a binding to 'cmd' and returns a string description for its bound key 
@@ -200,7 +200,7 @@ namespace fim
 ret:		return key;
 	}
 
-	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls_id binding)
+	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls binding)
 	{
 		/*
 		 * looks for a binding to 'cmd' and returns a string description for its bound key 

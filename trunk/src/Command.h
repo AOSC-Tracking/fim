@@ -26,10 +26,10 @@ namespace fim
 
 #if FIM_USE_CXX11
 	using fim_cmd_id = fim::string; // command id
-	using fim_cls_id = fim::string; // command line statement
+	using fim_cls = fim::string; // command line statement
 #else /* FIM_USE_CXX11 */
 	typedef fim::string fim_cmd_id; // command id
-	typedef fim::string fim_cls_id; // command line statement
+	typedef fim::string fim_cls; // command line statement
 #endif /* FIM_USE_CXX11 */
 class Command
 {
