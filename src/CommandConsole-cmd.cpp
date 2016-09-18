@@ -720,13 +720,8 @@ err:
 		fim::string res;
 		for(size_t i=0;i<recorded_actions_.size();++i)
 		{
-			fim::string ss=(int)recorded_actions_[i].second;
-			/*
-			 * FIXME : fim::string+=<int> is bugful
-			 * */
-			res+=FIM_FLT_USLEEP" '";
-//			res+=(int)recorded_actions_[i].second;
-			res+=ss;
+			res+=FIM_FLT_USLEEP " '";
+			res+=fim::string((int)recorded_actions_[i].second);
 			res+="';\n";
 			res+=recorded_actions_[i].first;
 			res+="\n";
@@ -798,23 +793,11 @@ err:
 			if(args[0]=="stop")
 				return stop_recording();
 			if(args[0]=="dump")
-			{
-				args_t argsc(args);
-				argsc.erase(argsc.begin());
-				return dump_record_buffer(argsc);
-			}
+				return dump_record_buffer(args_t(args.begin()+1,args.end()));
 			if(args[0]=="execute")
-			{
-				args_t argsc(args);
-				argsc.erase(argsc.begin());
-				return execute_record_buffer(argsc);
-			}
+				return execute_record_buffer(args_t(args.begin()+1,args.end()));
 			if(args[0]=="repeat_last")
-			{
-				args_t argsc(args);
-				argsc.erase(argsc.begin());
-				return repeat_last(argsc);
-			}
+				return repeat_last(args_t(args.begin()+1,args.end()));
 		}
 nop:
 		return FIM_CNS_EMPTY_RESULT;

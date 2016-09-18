@@ -25,17 +25,6 @@
 #ifdef FIM_READLINE_H
 #include "readline.h"	/* readline stuff */
 #endif /* FIM_READLINE_H */
-/*
- * We use the STL (Standard Template Library)
- */
-using std :: endl;
-using std :: ifstream;
-using std :: ofstream;
-using std :: map;
-using std :: multimap;
-using std :: pair;
-using std :: vector;
-
 
 /*
  * Global variables.
@@ -1679,7 +1668,6 @@ void fim_args_from_desc_file(args_t & argsc, const fim_fn_t &dfn, const fim_char
 ret:
 		return retcode;
 	}
-
 };
 
 fim_perr_t main(int argc,char *argv[])
