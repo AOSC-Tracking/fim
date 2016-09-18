@@ -43,9 +43,9 @@ class CommandConsole
 	private:
 	FontServer fontserver_;
 
-	fim_cls_id postInitCommand_;
-	fim_cls_id preConfigCommand_;
-	fim_cls_id postExecutionCommand_;
+	fim_cls postInitCommand_;
+	fim_cls preConfigCommand_;
+	fim_cls postExecutionCommand_;
 
 	fim_int show_must_go_on_;
 	fim_int return_code_;	/* new, to support the 'return' command */
@@ -134,7 +134,7 @@ class CommandConsole
 	/*
 	 * the last executed action (being a command line or key bounded command issued)
 	 */
-	fim_cls_id last_action_;
+	fim_cls last_action_;
 	
 #ifdef FIM_RECORDING
 	bool recordMode_;
@@ -310,9 +310,9 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_eval(const args_t &args);
 	void exit(fim_perr_t i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
-	fim::string bind(fim_key_t c,fim_cls_id binding);
+	fim::string bind(fim_key_t c,fim_cls binding);
 	public:
-	fim::string find_key_for_bound_cmd(fim_cls_id binding);
+	fim::string find_key_for_bound_cmd(fim_cls binding);
 	fim_err_t execDefaultConfiguration(void);
 	private:
 	fim::string unbind(const fim::string& key);
@@ -327,7 +327,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fim_perr_t quit(fim_perr_t i=FIM_CNS_ERR_QUIT);
 	public:
-	fim_key_t find_keycode_for_bound_cmd(fim_cls_id binding);
+	fim_key_t find_keycode_for_bound_cmd(fim_cls binding);
 
 	fim_bool_t drawOutput(const fim_char_t*s=FIM_NULL)const;
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int rsic)const;
