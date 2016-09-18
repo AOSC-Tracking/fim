@@ -500,7 +500,7 @@ comeon:
 		if(c_image())
 #endif	/* FIM_WANT_BDI */
 		{
-			fim::string c = current();
+			fim_fn_t c = current();
 			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
 			if(image())
 				image()->update();/* rotation update */ /* FIXME: shall separate scaling from orientation */
@@ -1179,7 +1179,7 @@ nostat:
 			else 
 			{
 				fim::string re = getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
-				fim::string fn = f + fim::string( de->d_name );
+				fim_fn_t fn = f + fim::string( de->d_name );
 
 				if( re == FIM_CNS_EMPTY_STRING )
 					re = FIM_CNS_PUSHDIR_RE;
@@ -1772,7 +1772,7 @@ err:
 		return errmsg;
 	}
 
-	fim_stat_t fim_get_stat(const string &fn, bool * dopushp);
+	fim_stat_t fim_get_stat(const fim_fn_t& fn, bool * dopushp);
 
 	fim::string Browser::do_filter(const args_t &args, MatchMode rm, bool negative, enum FilterAction faction)
 	{
@@ -2487,7 +2487,7 @@ err:
 		return (commandConsole_.current_viewport());
 	}
 
-	fim::string Browser::current(void)const
+	fim_fn_t Browser::current(void)const
 	{
 		/*
 		 * dilemma : should the current() filename and next() operations
@@ -2597,7 +2597,7 @@ err:
 			this->do_filter(argsc,Browser::PartialFileNameMatch,false,Browser::Mark);
 	}
 
-	bool Browser::dump_desc(const fim::string nf, fim_char_t sc, const bool want_all_vars, const bool want_append)const
+	bool Browser::dump_desc(const fim_fn_t nf, fim_char_t sc, const bool want_all_vars, const bool want_append)const
 	{
 		/* 
 		   Dumps descriptions of the current images list.
@@ -2715,7 +2715,7 @@ err:
 
 namespace fim
 {
-	fim_stat_t fim_get_stat(const string &fn, bool * dopushp)
+	fim_stat_t fim_get_stat(const fim_fn_t& fn, bool * dopushp)
 	{
 		bool dopush = false;
 #if FIM_WANT_FLIST_STAT
@@ -2784,13 +2784,13 @@ ret:
 
 	//std::string fle_t::operator(){return fn;}
 	fle_t::fle_t(void) { }
-	fle_t::fle_t(const string &s):string(s){fim_bzero(&stat_,sizeof(stat_));}
-	fle_t::fle_t(const string &s, const fim_stat_t & ss):string(s),stat_(ss) { }
-	fle_t::operator string (void) const { return string(*this);} 
+	fle_t::fle_t(const fim_fn_t& s):fim_fn_t(s){fim_bzero(&stat_,sizeof(stat_));}
+	fle_t::fle_t(const fim_fn_t& s, const fim_stat_t & ss):fim_fn_t(s),stat_(ss) { }
+	fle_t::operator fim_fn_t(void) const { return fim_fn_t(*this);} 
 
 struct FimBaseNameSorter
 {
-	bool operator() (const fim::string & lfn, const fim::string & rfn)
+	bool operator() (const fim_fn_t& lfn, const fim_fn_t& rfn)
 	{ 
 		const char * ls = lfn.c_str();
 		const char * rs = rfn.c_str();
@@ -2821,7 +2821,7 @@ struct FimDateSorter
 #else /* FIM_WANT_FLIST_STAT */
 struct FimDateSorter
 {
-	bool operator() (const fim::string & lfn, const fim::string & rfn)
+	bool operator() (const fim_fn_t& lfn, const fim_fn_t& rfn)
 	{ 
 		struct stat lstat_s;
 		struct stat rstat_s;

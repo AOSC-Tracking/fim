@@ -103,10 +103,10 @@ class CommandConsole
 	/*
 	 * the buffer of marked files
 	 */
-	typedef std::set<fim::string> marked_files_t;	//
+	typedef std::set<fim_fn_t> marked_files_t;	//
 	marked_files_t marked_files_;		//filenames
 	public:
-	bool isMarkedFile(std::string fname)const;
+	bool isMarkedFile(fim_fn_t fname)const;
 	fim::string marked_files_list(void)const;
 	fim::string marked_files_clear(void);
 	private:
@@ -168,7 +168,7 @@ class CommandConsole
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	public:
 	void markCurrentFile(bool mark = true);
-	fim_int markFile(const fim::string & file, bool mark = true, bool aloud = true);
+	fim_int markFile(const fim_fn_t& file, bool mark = true, bool aloud = true);
 	private:
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #ifdef FIM_WITH_AALIB
@@ -230,12 +230,12 @@ class CommandConsole
 	fim_err_t executeStdFileDescriptor(FILE *fd);
 	fim::string readStdFileDescriptor(FILE* fd, int*rp=FIM_NULL);
 #ifndef FIM_WANT_NOSCRIPTING
-	bool push_scriptfile(const fim::string ns);
+	bool push_scriptfile(const fim_fn_t ns);
 	bool with_scriptfile(void)const;
 	fim::string fcmd_executeFile(const args_t &args);
 #endif /* FIM_WANT_NOSCRIPTING */
 	private:
-	bool push(const fim::string nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
+	bool push(const fim_fn_t nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
 	fim::string fcmd_echo(const args_t &args);
 	fim::string do_echo(const args_t &args)const;
 	//	fim::string get_expr_type(const args_t &args);
@@ -283,8 +283,8 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	private:
 	fim::string autocmds_list(const fim::string event, const fim::string pattern)const;
 #endif /* FIM_AUTOCMDS */
-	typedef std::pair<fim::string,fim::string> autocmds_loop_frame_t;
-	typedef std::pair<autocmds_loop_frame_t,fim::string> autocmds_frame_t;
+	typedef std::pair<fim_fn_t, fim::string> autocmds_loop_frame_t;
+	typedef std::pair<autocmds_loop_frame_t,fim_fn_t> autocmds_frame_t;
 	typedef std::vector<autocmds_loop_frame_t > autocmds_stack__t;
 	typedef std::vector<autocmds_frame_t > autocmds_stack_t;
 	//typedef std::set<autocmds_frame_t> autocmds_stack_t;
@@ -310,9 +310,9 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string fcmd_eval(const args_t &args);
 	void exit(fim_perr_t i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
-	fim::string bind(fim_key_t c,fim::string binding);
+	fim::string bind(fim_key_t c,fim_cls_id binding);
 	public:
-	fim::string find_key_for_bound_cmd(fim::string binding);
+	fim::string find_key_for_bound_cmd(fim_cls_id binding);
 	fim_err_t execDefaultConfiguration(void);
 	private:
 	fim::string unbind(const fim::string& key);
@@ -327,12 +327,12 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fim_perr_t quit(fim_perr_t i=FIM_CNS_ERR_QUIT);
 	public:
-	fim_key_t find_keycode_for_bound_cmd(fim::string binding);
+	fim_key_t find_keycode_for_bound_cmd(fim_cls_id binding);
 
 	fim_bool_t drawOutput(const fim_char_t*s=FIM_NULL)const;
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int rsic)const;
 #ifdef FIM_AUTOCMDS
-	fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
+	fim::string autocmd_exec(const fim::string &event,const fim_fn_t& fname);
 	fim::string pre_autocmd_add(const fim_cmd_id& cmd);
 	fim::string pre_autocmd_exec(void);
 #endif /* FIM_AUTOCMDS */
@@ -341,7 +341,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	private:
 	/* fim_key_t catchInteractiveCommand(fim_ts_t seconds=0)const; */
 #ifdef FIM_AUTOCMDS
-	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname);
+	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim_fn_t& fname);
 	void autocmd_push_stack(const autocmds_loop_frame_t& frame);
 	void autocmd_pop_stack(const autocmds_loop_frame_t& frame);
 	public:

@@ -56,13 +56,8 @@
  */
 namespace fim
 {
-/*
- *	There is a general rule here:
- *	 Public functions should be safe when called in 
- *	 any internal state from the outside.
- *	 Private ones are stricter.
- * 
- */
+	/* Public functions can be safely called at any moment from client code; private ones not.  */
+
 	static void fim_desaturate_rgb(fim_byte_t * data, int howmany)
 	{
 		register int avg;
@@ -1239,7 +1234,7 @@ labeldone:
 
 	bool Image::prev_page(int j)
 	{
-		string s=fname_;
+		fim_fn_t s(fname_);
 		if(have_prevpage(j))
 			return load(s.c_str(),FIM_NULL,page_-j);
 		else
@@ -1248,7 +1243,7 @@ labeldone:
 
 	bool Image::goto_page(fim_page_t j)
 	{
-		string s=fname_;
+		fim_fn_t s(fname_);
 		bool retval = false;
 	//	if( j>0 )--j;
 		FIM_PR('*');
@@ -1272,7 +1267,7 @@ ret:
 
 	bool Image::next_page(int j)
 	{
-		string s=fname_;
+		fim_fn_t s(fname_);
 		if(have_nextpage(j))
 			return load(s.c_str(),FIM_NULL,page_+j);
 		else

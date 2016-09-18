@@ -132,7 +132,7 @@ namespace fim
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
-		fim_int Namespace::setGlobalVariable(const fim_var_id& varname, const fim::string & value)
+		fim_int Namespace::setGlobalVariable(const fim_var_id& varname, const fim::string& value)
 		{
 			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_INT_VAL;
@@ -168,7 +168,7 @@ namespace fim
 			return FIM_CNS_EMPTY_RESULT;
 		}
 
-		fim::string Namespace::autocmd_exec(const fim::string &event,const fim::string &fname)
+		fim::string Namespace::autocmd_exec(const fim::string&event, const fim_fn_t& fname)
 		{
 #ifdef FIM_AUTOCMDS
 			/* FIXME: need a better solution here ! */
@@ -218,7 +218,7 @@ namespace fim
 			return acl;
 		}
 
-		fim_err_t Namespace::find_matching_list(fim_cmd_id cmd, args_t & completions, bool prepend_ns)const
+		fim_err_t Namespace::find_matching_list(fim_cmd_id cmd, args_t& completions, bool prepend_ns)const
 		{
 			for(variables_t::const_iterator vi=variables_.begin();vi!=variables_.end();++vi)
 			{
@@ -234,19 +234,19 @@ namespace fim
 			return FIM_ERR_NO_ERROR;
 		}
 		
-		fim_err_t Namespace::assign_ns(const Namespace & ns)
+		fim_err_t Namespace::assign_ns(const Namespace& ns)
 		{
 			for(variables_t::const_iterator fit=ns.variables_.begin();fit!=ns.variables_.end();++fit)
 				setVariable((fit->first),Var(fit->second));
 			return FIM_ERR_NO_ERROR;
 		}
 
-	std::ostream& Namespace::print(std::ostream &os)const
+	std::ostream& Namespace::print(std::ostream&os)const
 	{
 		return os << this->get_variables_list(true);
 	}
 
-	std::ostream& operator<<(std::ostream &os, const Namespace & ns)
+	std::ostream& operator<<(std::ostream os, const Namespace& ns)
 	{
 		return ns.print(os);
 	}
