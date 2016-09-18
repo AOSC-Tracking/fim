@@ -208,21 +208,21 @@ class CommandConsole
 	~CommandConsole(void);
 
 	/* the following group is defined in Namespace.cpp */
-	fim_float_t getFloatVariable(const fim::string &varname)const;
-	fim::string getStringVariable(const fim::string &varname)const;
-	fim_int  getIntVariable(const fim::string & varname)const;
-	Var  getVariable(const fim::string & varname)const;
-	fim_int  setVariable(const fim::string& varname,fim_int value);
-	fim_float_t setVariable(const fim::string& varname, fim_float_t value);
-	fim_int setVariable(const fim::string& varname,const fim_char_t*value);
-	Var setVariable(const fim::string varname,const Var&value);
-	Var setVariable(const fim::string varname,const fim::string&value);
-	Namespace * rns(const fim::string varname);
-	const Namespace * c_rns(const fim::string varname)const;
-	fim::string rnid(const fim::string & varname)const;
+	fim_float_t getFloatVariable(const fim_var_id& varname)const;
+	fim::string getStringVariable(const fim_var_id& varname)const;
+	fim_int  getIntVariable(const fim_var_id& varname)const;
+	Var  getVariable(const fim_var_id& varname)const;
+	fim_int  setVariable(const fim_var_id& varname,fim_int value);
+	fim_float_t setVariable(const fim_var_id& varname, fim_float_t value);
+	fim_int setVariable(const fim_var_id& varname,const fim_char_t*value);
+	Var setVariable(const fim_var_id varname,const Var&value);
+	Var setVariable(const fim_var_id varname,const fim::string&value);
+	Namespace * rns(const fim_var_id varname);
+	const Namespace * c_rns(const fim_var_id varname)const;
+	fim_var_id rnid(const fim_var_id& varname)const;
 
-	fim_var_t getVariableType(const fim::string &varname)const;
-	fim_err_t printVariable(const fim::string & varname)const;
+	fim_var_t getVariableType(const fim_var_id& varname)const;
+	fim_err_t printVariable(const fim_var_id& varname)const;
 	bool push(const char * nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
 #if FIM_WANT_BACKGROUND_LOAD
 	bool background_push(void);
@@ -386,7 +386,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	void set_status_bar(const fim_char_t *desc, const fim_char_t *info);
         bool is_file(fim::string nf)const;
 	fim::string fcmd_do_getenv(const args_t& args);
-	bool isVariable(const fim::string &varname)const;
+	bool isVariable(const fim_var_id& varname)const;
 	fim::string dump_reference_manual(const args_t& args);
 	fim::string get_reference_manual(const args_t& args);
 	private:

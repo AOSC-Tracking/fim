@@ -24,7 +24,7 @@
 namespace fim
 {
 
-	fim::string CommandConsole::rnid(const fim::string & varname)const
+	fim_var_id CommandConsole::rnid(const fim_var_id& varname)const
 	{
 		fim::string id;
 #ifdef FIM_NAMESPACES
@@ -39,7 +39,7 @@ namespace fim
 		return id;
 	}
 
-	Namespace * CommandConsole::rns(const fim::string varname)
+	Namespace * CommandConsole::rns(const fim_var_id varname)
 	{
 		Namespace * nsp = FIM_NULL;
 #ifdef FIM_NAMESPACES
@@ -49,7 +49,7 @@ namespace fim
 			{
 			//a specific namespace was selected!
 			fim_char_t ns = varname[0];
-			fim::string id = varname.c_str()+2;
+			fim_var_id id = varname.c_str()+2;
 
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 #ifdef FIM_WINDOWS
@@ -102,7 +102,7 @@ err:
 		return nsp;
 	}
 
-	const Namespace * CommandConsole::c_rns(const fim::string varname)const
+	const Namespace * CommandConsole::c_rns(const fim_var_id varname)const
 	{
 		const Namespace * nsp = FIM_NULL;
 #ifdef FIM_NAMESPACES
@@ -112,7 +112,7 @@ err:
 			{
 			//a specific namespace was selected!
 			fim_char_t ns = varname[0];
-			fim::string id = varname.c_str()+2;
+			fim_var_id id = varname.c_str()+2;
 
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 #ifdef FIM_WINDOWS
@@ -165,7 +165,7 @@ err:
 		return nsp;
 	}
 
-	fim_int CommandConsole::setVariable(const fim::string& varname,fim_int value)
+	fim_int CommandConsole::setVariable(const fim_var_id& varname,fim_int value)
 	{
 		fim_int retval = 0;
 		Namespace *nsp = rns(varname);
@@ -176,7 +176,7 @@ err:
 		return retval;
 	}
 
-	fim_float_t CommandConsole::setVariable(const fim::string& varname,fim_float_t value)
+	fim_float_t CommandConsole::setVariable(const fim_var_id& varname,fim_float_t value)
 	{
 		fim_float_t retval = FIM_CNS_EMPTY_FP_VAL;
 		Namespace *nsp = rns(varname);
@@ -187,7 +187,7 @@ err:
 		return retval;
 	}
 
-	fim_int CommandConsole::setVariable(const fim::string& varname,const fim_char_t*value)
+	fim_int CommandConsole::setVariable(const fim_var_id& varname,const fim_char_t*value)
 	{
 		fim_int retval = 0;
 		Namespace *nsp = rns(varname);
@@ -198,7 +198,7 @@ err:
 		return retval;
 	}
 
-	Var CommandConsole::setVariable(const fim::string varname,const Var&value)
+	Var CommandConsole::setVariable(const fim_var_id varname,const Var&value)
 	{
 		Var retval = (fim_int)0;
 		Namespace *nsp = rns(varname);
@@ -209,7 +209,7 @@ err:
 		return retval;
 	}
 
-	Var CommandConsole::setVariable(const fim::string varname,const fim::string&value)
+	Var CommandConsole::setVariable(const fim_var_id varname,const fim::string&value)
 	{
 		Var retval = (fim_int)0;
 		Namespace *nsp = rns(varname);
@@ -220,7 +220,7 @@ err:
 		return retval;
 	}
 
-	fim_int CommandConsole::getIntVariable(const fim::string &varname)const
+	fim_int CommandConsole::getIntVariable(const fim_var_id& varname)const
 	{
 		fim_int retval = 0;
 		const Namespace *nsp = c_rns(varname);
@@ -231,7 +231,7 @@ err:
 		return retval;
 	}
 
-	fim_float_t CommandConsole::getFloatVariable(const fim::string &varname)const
+	fim_float_t CommandConsole::getFloatVariable(const fim_var_id& varname)const
 	{
 		fim_float_t retval = FIM_CNS_EMPTY_FP_VAL;
 		const Namespace *nsp = c_rns(varname);
@@ -241,7 +241,7 @@ err:
 		return retval;
 	}
 
-	fim::string CommandConsole::getStringVariable(const fim::string &varname)const
+	fim::string CommandConsole::getStringVariable(const fim_var_id& varname)const
 	{
 		fim::string retval = FIM_CNS_EMPTY_RESULT;
 		const Namespace *nsp = c_rns(varname);
@@ -251,7 +251,7 @@ err:
 		return retval;
 	}
 
-	Var CommandConsole::getVariable(const fim::string &varname)const
+	Var CommandConsole::getVariable(const fim_var_id& varname)const
 	{
 		const Namespace *nsp = c_rns(varname);
 

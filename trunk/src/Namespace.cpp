@@ -29,46 +29,45 @@
 
 namespace fim
 {
-		fim_int Namespace::setVariable(const fim::string& varname,fim_int value)
+		fim_int Namespace::setVariable(const fim_var_id& varname,fim_int value)
 		{
 			return variables_[varname].setInt(value);
 		}
 
-		fim_float_t Namespace::setVariable(const fim::string& varname,fim_float_t value)
+		fim_float_t Namespace::setVariable(const fim_var_id& varname,fim_float_t value)
 		{
 			return variables_[varname].setFloat(value);
 		}
 
-		Var Namespace::setVariable(const fim::string& varname,const Var&value)
+		Var Namespace::setVariable(const fim_var_id& varname,const Var&value)
 		{
 			return (fim_int)variables_[varname].set(value);
 		}
 
-		Var Namespace::setVariable(const fim::string& varname,const fim::string&value)
+		Var Namespace::setVariable(const fim_var_id& varname,const fim::string&value)
 		{
 			return (fim_int)variables_[varname].set(value);
 		}
 
-		fim_int Namespace::setVariable(const fim::string& varname,const fim_char_t*value)
+		fim_int Namespace::setVariable(const fim_var_id& varname,const fim_char_t*value)
 		{
-			fim::string s(value);
-			return (fim_int)(variables_[varname].setString(s));
+			return (fim_int)(variables_[varname].setString(string(value)));
 		}
 	
-		fim_bool_t Namespace::isSetVar(const fim::string &varname)const
+		fim_bool_t Namespace::isSetVar(const fim_var_id& varname)const
 		{
 			fim_bool_t isv = variables_.find(varname) != variables_.end();
 			return isv;
 		}
 
-		void Namespace::unsetVariable(const fim::string &varname)
+		void Namespace::unsetVariable(const fim_var_id& varname)
 		{
 			variables_t ::iterator vi=variables_.find(varname);
 			if( vi!= variables_.end() )
 				variables_.erase(varname);
 		}
 
-		fim_int Namespace::getIntVariable(const fim::string &varname)const
+		fim_int Namespace::getIntVariable(const fim_var_id& varname)const
 		{
 			variables_t::const_iterator vi=variables_.find(varname);
 			fim_int retval = FIM_CNS_EMPTY_INT_VAL;
@@ -78,7 +77,7 @@ namespace fim
 			return retval;
 		}
 
-		Var Namespace::getVariable(const fim::string &varname)const
+		Var Namespace::getVariable(const fim_var_id& varname)const
 		{
 			if(varname == "*")
 			{
@@ -95,7 +94,7 @@ namespace fim
 			}
 		}
 
-		fim_float_t Namespace::getFloatVariable(const fim::string &varname)const
+		fim_float_t Namespace::getFloatVariable(const fim_var_id& varname)const
 		{
 			variables_t::const_iterator vi=variables_.find(varname);
 			fim_float_t retval = FIM_CNS_EMPTY_FP_VAL;
@@ -105,7 +104,7 @@ namespace fim
 			return retval;
 		}
 
-		fim::string Namespace::getStringVariable(const fim::string &varname)const
+		fim::string Namespace::getStringVariable(const fim_var_id& varname)const
 		{
 			fim::string retval = FIM_CNS_EMPTY_RESULT;
 			variables_t::const_iterator vi=variables_.find(varname);
@@ -115,31 +114,31 @@ namespace fim
 			return retval;
 		}
 
-	        fim_float_t Namespace::setGlobalVariable(const fim::string& varname,fim_float_t value)
+	        fim_float_t Namespace::setGlobalVariable(const fim_var_id& varname,fim_float_t value)
 		{
 			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_FP_VAL;
 		}
 
-		fim_int Namespace::setGlobalVariable(const fim::string& varname,fim_int value)
+		fim_int Namespace::setGlobalVariable(const fim_var_id& varname,fim_int value)
 		{
 			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
-		fim_int Namespace::setGlobalVariable(const fim::string& varname,const fim_char_t*value)
+		fim_int Namespace::setGlobalVariable(const fim_var_id& varname,const fim_char_t*value)
 		{
 			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
-		fim_int Namespace::setGlobalVariable(const fim::string& varname, const fim::string & value)
+		fim_int Namespace::setGlobalVariable(const fim_var_id& varname, const fim::string & value)
 		{
 			FIM_NS_SV(varname,value);
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
-		fim_int Namespace::getGlobalIntVariable(const fim::string &varname)const
+		fim_int Namespace::getGlobalIntVariable(const fim_var_id& varname)const
 		{
 			/* FIXME: need a better solution here ! */
 #ifndef FIM_INDEPENDENT_NAMESPACE
@@ -149,7 +148,7 @@ namespace fim
 			return FIM_CNS_EMPTY_INT_VAL;
 		}
 
-		fim_float_t Namespace::getGlobalFloatVariable(const fim::string &varname)const
+		fim_float_t Namespace::getGlobalFloatVariable(const fim_var_id& varname)const
 		{
 			/* FIXME: need a better solution here ! */
 #ifndef FIM_INDEPENDENT_NAMESPACE
@@ -159,7 +158,7 @@ namespace fim
 			return FIM_CNS_EMPTY_FP_VAL;
 		}
 
-		fim::string Namespace::getGlobalStringVariable(const fim::string &varname)const
+		fim::string Namespace::getGlobalStringVariable(const fim_var_id& varname)const
 		{
 			/* FIXME: need a better solution here ! */
 #ifndef FIM_INDEPENDENT_NAMESPACE
