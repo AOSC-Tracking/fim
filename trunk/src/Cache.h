@@ -114,11 +114,11 @@ class Cache
 #if FIM_USE_CXX11
 	public:
 	/* a deleted member function (e.g. not even a be'friend'ed class can call it) */
-	Cache& operator= (const Cache&cc) = delete;
+	Cache& operator= (const Cache&rhs) = delete;
 #else /* FIM_USE_CXX11 */
 	private:
 	/* a disabled member function (because private:) */
-	Cache& operator= (const Cache&cc) { return *this; }
+	Cache& operator= (const Cache&rhs) { return *this; }
 #endif /* FIM_USE_CXX11 */
 	public:
 

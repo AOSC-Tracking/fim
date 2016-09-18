@@ -175,13 +175,13 @@ class Browser
 #if FIM_USE_CXX11
 	public:
 	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
-	Browser& operator= (const Browser &b) = delete;
-	Browser(const Browser &b) = delete;
+	Browser& operator= (const Browser &rhs) = delete;
+	Browser(const Browser &rhs) = delete;
 #else /* FIM_USE_CXX11 */
 	private:
-	Browser& operator= (const Browser &b){return *this;/* a disabled copy constructor */}
-	Browser(const Browser &b):
-		Namespace(b),
+	Browser& operator= (const Browser &rhs){return *this;/* a disabled copy constructor */}
+	Browser(const Browser &rhs):
+		Namespace(rhs),
 		flist_(args_t()),
 #if FIM_WANT_PIC_LBFL
 		tlist_(args_t()),

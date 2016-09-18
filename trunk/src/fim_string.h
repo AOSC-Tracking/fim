@@ -2,9 +2,9 @@
 #ifndef FIM_STRING_H
 #define FIM_STRING_H
 /*
- string.h : Fim's own string implementation header file
+ string.h : Fim's string type
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -86,9 +86,9 @@ namespace fim
 	bool operator >(const fim_char_t *s)const;
 	bool operator <(const fim_char_t *s)const;
 
-	string& operator =(const string& s);
-	string operator+=(const string& s);
-	string operator+(const string& s)const;
+	string& operator =(const string& rhs);
+	string operator+=(const string& rhs);
+	string operator+(const string& rhs)const;
 	int  reinit(const int n)const;
 	int  length(void)const;
 	static int  max_string(void){return TOKSIZE-1;}
@@ -117,7 +117,7 @@ namespace fim
 			 terminate called after throwing an instance of 'std::logic_error'
 			 what():  basic_string::_S_construct FIM_NULL not valid
 		*/
-		string(const std::string&s):std::string(s){}
+		string(const std::string&rhs):std::string(rhs){}
 		string(const fim_char_t*s):std::string(s?s:""){}
 
 		string(fim_char_t c);
@@ -140,9 +140,9 @@ namespace fim
 		operator const char*(void)const{return c_str();}
 		operator bool (void)const{return c_str()!=NULL;}
 
-		string operator+(const string s)const;
+		string operator+(const string rhs)const;
 		/* copy constructor */
-		string(const string& s);
+		string(const string& rhs);
 		bool re_match(const fim_char_t*r)const;
 		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=0);
 		fim::string line(int ln)const;
