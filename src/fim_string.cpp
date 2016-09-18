@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- string.cpp : A reimplementation of string class
+ string.h : Fim's string type
 
  (c) 2007-2016 Michele Martone
 
@@ -67,10 +67,10 @@ namespace fim
 		/* no allocation is necessary for an empty string */
 	}
 
-	string::string(const string& s)
+	string::string(const string& rhs)
 	{
 		_string_init();
-		this->assign(s.c_str());
+		this->assign(rhs.c_str());
 	}
 
 	string::string(const fim_char_t *str)
@@ -187,9 +187,9 @@ namespace fim
 		return (strcmp(this->s,s) <0);
 	}
 
-	string& string::operator =(const string& s)
+	string& string::operator =(const string& rhs)
 	{
-		assign(s);
+		assign(rhs);
 		return *this;
 	} 
 
@@ -397,8 +397,8 @@ namespace fim
 		return os;
 	}
 
-	//string::string(const string& s):std::string(s.c_str())
-	string::string(const string& s):std::string(s)
+	//string::string(const string& rhs):std::string(rhs.c_str())
+	string::string(const string& rhs):std::string(rhs)
 	{
 	}
 

@@ -810,33 +810,33 @@ err:
 			return;
 	}*/
 
-	Image::Image(const Image& image):
+	Image::Image(const Image& rhs):
 #ifdef FIM_NAMESPACES
-		Namespace(image.rnsp_,FIM_SYM_NAMESPACE_IMAGE_CHAR),
+		Namespace(rhs.rnsp_,FIM_SYM_NAMESPACE_IMAGE_CHAR),
 #endif /* FIM_NAMESPACES */
-		scale_(image.scale_),
-		ascale_(image.ascale_),
-		newscale_(image.newscale_),
-		angle_(image.angle_),
-		newangle_(image.newangle_),
-		page_(image.page_),
+		scale_(rhs.scale_),
+		ascale_(rhs.ascale_),
+		newscale_(rhs.newscale_),
+		angle_(rhs.angle_),
+		newangle_(rhs.newangle_),
+		page_(rhs.page_),
                 img_     (FIM_NULL),
                 fimg_    (FIM_NULL),
-		orientation_(image.orientation_),
+		orientation_(rhs.orientation_),
                 //invalid_(0),
-                invalid_(image.invalid_),
+                invalid_(rhs.invalid_),
 		no_file_(true),
-		fis_(image.fis_),
-                fname_     (image.fname_),
+		fis_(rhs.fis_),
+                fname_     (rhs.fname_),
 		fs_(0), ms_(0)
 	{
 		/*
-		 * builds a clone of this image.
+		 * builds a clone of this rhs.
 		 * it should be completely independent from this object.
 		 * */
 		reset();
-		img_  = fbi_image_clone(image.img_ );
-		fimg_ = fbi_image_clone(image.fimg_);
+		img_  = fbi_image_clone(rhs.img_ );
+		fimg_ = fbi_image_clone(rhs.fimg_);
 
 		/* an exception is launched immediately */
 		if(!img_ || !fimg_)

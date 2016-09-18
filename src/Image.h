@@ -132,7 +132,7 @@ class Image
 
 	fim::string getInfo(void);
 	fim::string getInfoCustom(const fim_char_t * ifsp)const;
-	Image(const Image& image); // yes, a private constructor (was)
+	Image(const Image& rhs); // yes, a private constructor (was)
 #if FIM_WANT_BDI
 	Image(void);
 #endif	/* FIM_WANT_BDI */

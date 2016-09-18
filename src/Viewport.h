@@ -2,7 +2,7 @@
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,10 +56,10 @@ class Viewport:public ViewportState
 			,const Rect &rect
 			);
 
-	Viewport(const Viewport &v);
+	Viewport(const Viewport &rhs);
 	~Viewport(void);
 	private:
-	Viewport& operator= (const Viewport&v);
+	Viewport& operator= (const Viewport&rhs);
 	fim_redraw_t redraw_;
 	public:
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY);

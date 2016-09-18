@@ -61,49 +61,49 @@ namespace fim
 		reset();
 	}
 
-	Viewport::Viewport(const Viewport &v)
+	Viewport::Viewport(const Viewport &rhs)
 		:
-	/*	steps_(v.steps_)
-		,hsteps_(v.hsteps_)
-		,vsteps_(v.vsteps_)
-		,top_(v.top_)
-		,left_(v.left_)
-		,panned_(v.panned_) */
+	/*	steps_(rhs.steps_)
+		,hsteps_(rhs.hsteps_)
+		,vsteps_(rhs.vsteps_)
+		,top_(rhs.top_)
+		,left_(rhs.left_)
+		,panned_(rhs.panned_) */
 #ifdef FIM_NAMESPACES
-		Namespace(v),
+		Namespace(rhs),
 #endif /* FIM_NAMESPACES */
-		psteps_(v.psteps_)
-		,displaydevice_(v.displaydevice_)
-		,corners_(v.corners_)
+		psteps_(rhs.psteps_)
+		,displaydevice_(rhs.displaydevice_)
+		,corners_(rhs.corners_)
 		,image_(FIM_NULL)
-		,commandConsole(v.commandConsole)
+		,commandConsole(rhs.commandConsole)
 	{
-		steps_ = v.steps_;
-		hsteps_ = v.hsteps_;
-		vsteps_ = v.vsteps_;
-		top_ = v.top_;
-		left_ = v.left_;
-		panned_ = v.panned_;
+		steps_ = rhs.steps_;
+		hsteps_ = rhs.hsteps_;
+		vsteps_ = rhs.vsteps_;
+		top_ = rhs.top_;
+		left_ = rhs.left_;
+		panned_ = rhs.panned_;
 		// WARNING
 		//reset();
 		try
 		{
 #ifndef FIM_BUGGED_CACHE
 	#ifdef FIM_CACHE_DEBUG
-			if(v.image_)
-				std::cout << "Viewport:Viewport():maybe will cache \"" <<v.image_->getName() << "\" from "<<v.image_<<FIM_CNS_NEWLINE ;
+			if(rhs.image_)
+				std::cout << "Viewport:Viewport():maybe will cache \"" <<rhs.image_->getName() << "\" from "<<rhs.image_<<FIM_CNS_NEWLINE ;
 			else
 				std::cout << "no image_ to cache..\n";
 	#endif /* FIM_CACHE_DEBUG */
-			if(v.image_ && !v.image_->check_invalid())
+			if(rhs.image_ && !rhs.image_->check_invalid())
 			{
 				ViewportState viewportState;
-				setImage( commandConsole.browser_.cache_.useCachedImage(v.image_->getKey(),&viewportState) );
+				setImage( commandConsole.browser_.cache_.useCachedImage(rhs.image_->getKey(),&viewportState) );
 				setState(viewportState);
 			}
 #else /* FIM_BUGGED_CACHE */
-			if(v.image_)
-				setImage ( new Image(*v.image_) ) ;
+			if(rhs.image_)
+				setImage ( new Image(*rhs.image_) ) ;
 #endif /* FIM_BUGGED_CACHE */
 		}
 		catch(FimException e)
@@ -993,7 +993,7 @@ ret:
 		return;
 	}
 
-	Viewport& Viewport::operator= (const Viewport&v){return *this;/* a disabled assignment */}
+	Viewport& Viewport::operator= (const Viewport&rhs){return *this;/* a disabled assignment */}
 
 	void Viewport::transform(bool mirror, bool flip)
 	{

@@ -2,7 +2,7 @@
 /*
  Var.h : Var class header file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -140,8 +140,8 @@ class Var
 	const Var& operator= (int   i){DBG("2i:"<<i<<"\n";type='i');this->i=i;return *this;}
 	const Var& operator= (float f){setFloat(f);return *this;}
 	const Var& operator= (fim::string &s){setString(s);return *this;}
-	/* const Var& operator= (const Var &v){type=v.type;;return *this;} */
-	const Var& operator= (const Var &v){set(v);return *this;}
+	/* const Var& operator= (const Var &rhs){type=v.type;;return *this;} */
+	const Var& operator= (const Var &rhs){set(rhs);return *this;}
 	Var concat(const Var &v)const{return this->getString()+v.getString();}
 #endif
 	float setFloat(float f){type='f';return this->f=f;}
@@ -214,7 +214,7 @@ class Var
 		}
 		return getFloat()!=v.getFloat();
 	}
-	Var operator==(const Var &v)const {DBG("EQV\n"); return 1-(*this != v).getInt(); }
+	Var operator==(const Var &rhs)const {DBG("EQV\n"); return 1-(*this != rhs).getInt(); }
 	Var operator/ (const Var &v)const
 	{
 		if(_both('i')) return getInt()/(v.getInt()!=0?v.getInt():1); 
@@ -287,9 +287,9 @@ class Var
 	#undef _some_string
 	#undef _both
 	#undef _types
-/*	Var operator==(const Var &v)const
+/*	Var operator==(const Var &rhs)const
 	{
-		return (type==v.getType()) && (i==v.getInt());
+		return (type==rhs.getType()) && (i==rhs.getInt());
 	}*/
 	std::ostream& print(std::ostream &os)const;
 };
