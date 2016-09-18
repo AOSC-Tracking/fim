@@ -19,6 +19,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "fim.h"
+#include <string>
 
 #define FIM_WANT_DEBUG_REGEXP 0
 
@@ -411,6 +412,9 @@ namespace fim
 	}
 
 #if FIM_WANT_LONG_INT
+#if FIM_USE_CXX11
+	string::string(int i):string(std::to_string(i)) { }
+#else /* FIM_USE_CXX11 */
 	string::string(int i)
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
@@ -418,8 +422,14 @@ namespace fim
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
 	}
+#endif /* FIM_USE_CXX11 */
 #endif /* FIM_WANT_LONG_INT */
 
+#if FIM_USE_CXX11
+	string::string(fim_int i):string(std::to_string(i)) { }
+	string::string(size_t i):string(std::to_string(i)) { }
+	string::string(float i):string(std::to_string(i)) { }
+#else /* FIM_WANT_LONG_INT */
 	string::string(fim_int i)
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
@@ -439,19 +449,20 @@ namespace fim
 		append(buf);
 	}
 
+	string::string(float i)
+	{
+		fim_char_t buf[FIM_ATOX_BUFSIZE];
+		sprintf(buf,"%f",i);
+		assign(buf);
+	}
+#endif /* FIM_USE_CXX11 */
+
 	string::string(int * i)
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
 		snprintf(buf,FIM_CHARS_FOR_INT-1,"%p",(void*)i);
 		buf[FIM_CHARS_FOR_INT-1]='\0';
 		append(buf);
-	}
-	
-	string::string(float i)
-	{
-		fim_char_t buf[FIM_ATOX_BUFSIZE];
-		sprintf(buf,"%f",i);
-		assign(buf);
 	}
 
 	string::string():std::string(""){}
