@@ -302,7 +302,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		/*
 		 * TODO: exceptions should be launched here in case ...
 		 * */
-		addCommand(new Command(fim::string(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&FimWindow::fcmd_cmd));
+		addCommand(new Command(fim_cmd_id(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&FimWindow::fcmd_cmd));
 #else /* FIM_WINDOWS */
 		try
 		{

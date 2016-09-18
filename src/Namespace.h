@@ -92,7 +92,7 @@ namespace fim
 			,ns_char_(ns_char)
 	       	{}
 		virtual ~Namespace(void){}
-		fim_err_t find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const;
+		fim_err_t find_matching_list(fim_cmd_id cmd, args_t & completions, bool prepend_ns)const;
 		std::ostream& print(std::ostream &os)const;
 		void get_id_list(fim_var_id_set & set)const
 		{

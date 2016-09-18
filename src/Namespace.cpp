@@ -218,7 +218,7 @@ namespace fim
 			return acl;
 		}
 
-		fim_err_t Namespace::find_matching_list(fim::string cmd, args_t & completions, bool prepend_ns)const
+		fim_err_t Namespace::find_matching_list(fim_cmd_id cmd, args_t & completions, bool prepend_ns)const
 		{
 			for(variables_t::const_iterator vi=variables_.begin();vi!=variables_.end();++vi)
 			{
