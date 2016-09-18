@@ -857,11 +857,11 @@ nop:
 #ifdef FIM_REMOVE_FAILED
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
 #if FIM_USE_CXX11
-				do_filter(args_t({c.c_str()}));	// remove is an experimental function
+				do_filter({c});
 #else /* FIM_USE_CXX11 */
 				args_t args;
 				args.push_back(c.c_str());
-				do_filter(args);	// remove is an experimental function
+				do_filter(args);
 #endif /* FIM_USE_CXX11 */
 #ifdef FIM_AUTOSKIP_FAILED
 				if(n_files())
@@ -887,7 +887,11 @@ ret:
 		 * reload the current filename
 		 * */
 		if( n_files() )
+#if FIM_USE_CXX11
+			return fcmd_reload({});
+#else /* FIM_USE_CXX11 */
 			return fcmd_reload( args_t() );
+#endif /* FIM_USE_CXX11 */
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -1506,7 +1510,11 @@ nop:
 		 *	FIX ME: ultimately, all file transitions should pass by here.
 		 */
 		fim::string result = FIM_CNS_EMPTY_RESULT;
+#if FIM_USE_CXX11
+		auto N = flist_.size();
+#else /* FIM_USE_CXX11 */
 		fim_int N = flist_.size();
+#endif /* FIM_USE_CXX11 */
 		FIM_PR('*');
 
 		if( !N )
@@ -1555,13 +1563,9 @@ ret:
 		 * returns to the next image in the list, the mechanism
 		 * p.s.: n<>0
 		 */
-		int ccp = flist_.cf() + n;
-		int N = flist_.size();
-
-		if( !N )
+		if( !flist_.size() )
 			return FIM_CNS_EMPTY_RESULT;
-		ccp = FIM_MOD(ccp,N);
-		return flist_[ccp];
+		return flist_[FIM_MOD(flist_.cf() + n,flist_.size())];
 	}
 
 	fim::string Browser::next(int n)
@@ -2518,7 +2522,11 @@ err:
 		/*
 		 *	display the current image
 		 */
+#if FIM_USE_CXX11
+		return fcmd_display({});
+#else /* FIM_USE_CXX11 */
 		return fcmd_display(args_t());
+#endif /* FIM_USE_CXX11 */
 	}
 
 	fim::string Browser::pop_current(const args_t &args)

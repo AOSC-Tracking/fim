@@ -736,12 +736,19 @@ namespace fim
 	fim::string Viewport::pan(const fim_char_t*a1, const fim_char_t*a2)
 	{
 		// FIXME: a quick hack
+#if FIM_USE_CXX11
+		if(a1 || a2)
+			return pan({ (a1 ? a1 : a2 ) });
+		else
+			return pan({});
+#else /* FIM_USE_CXX11 */
 		args_t args;
 		if(a1)
 			args.push_back(a1);
 		if(a2)
 			args.push_back(a2);
 		return pan(args);
+#endif /* FIM_USE_CXX11 */
 	}
 
 	bool Viewport::place(const fim_pan_t px, const fim_pan_t py)
