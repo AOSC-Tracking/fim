@@ -42,15 +42,15 @@ typedef struct stat fim_stat_t;
 typedef int fim_stat_t;
 #endif /* FIM_WANT_FLIST_STAT */
 
-class fle_t : public string /* file list element */
+class fle_t : public fim_fn_t /* file list element */
 {
        	public:
 #if FIM_WANT_FLIST_STAT 
        	fim_stat_t stat_;
 #endif /* FIM_WANT_FLIST_STAT */
        	/*std::string operator();*/
-	fle_t(const string &s);
-	fle_t(const string &s, const fim_stat_t & ss);
+	fle_t(const fim_fn_t& s);
+	fle_t(const fim_fn_t& s, const fim_stat_t & ss);
 	fle_t();
 	operator string (void)const;
 };
@@ -204,7 +204,7 @@ class Browser
 		{}
 #endif /* FIM_USE_CXX11 */
 	public:
-	fim::string current(void)const;
+	fim_fn_t current(void)const;
 	fim::string regexp_goto(const args_t &args, fim_int src_dir=1);
 	fim::string fcmd_prefetch(const args_t &args);
 	fim::string fcmd_goto_image(const args_t &args);
@@ -274,7 +274,7 @@ class Browser
 	virtual size_t byte_size(void)const;
 	fim_float_t file_progress(void)const { /* FIXME: relies on range 0... */ double fp = (((double)(1+this->current_n()))/this->n_files()); return FIM_MIN(1.0,fp);} 
 	void mark_from_list(const args_t & argsc);
-	bool dump_desc(const fim::string nf, fim_char_t sc, const bool want_all_vars=false, const bool want_append=false)const;
+	bool dump_desc(const fim_fn_t nf, fim_char_t sc, const bool want_all_vars=false, const bool want_append=false)const;
 #if FIM_WANT_BENCHMARKS
 	virtual fim_int get_n_qbenchmarks(void)const;
 	virtual string get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const;

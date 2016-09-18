@@ -170,7 +170,16 @@
 	fim::string fim_help_opt(const char*qs);
 namespace fim
 {
+	#if FIM_USE_CXX11
+	using fim_fn_t = string ; /* file name */
+	using fim_ds_t = string ; /* file description */
+	using sym_keys_t = std::map<fim::string,fim_key_t > ;	//symbol->code
+	#else /* FIM_USE_CXX11 */
+	typedef string fim_fn_t; /* file name */
+	typedef string fim_ds_t; /* file description */
 	typedef std::map<fim::string,fim_key_t > sym_keys_t;	//symbol->code
+	#endif /* FIM_USE_CXX11 */
+
 	void status(const fim_char_t *desc, const fim_char_t *info);
 
 class ViewportState

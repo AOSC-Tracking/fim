@@ -101,7 +101,7 @@ namespace fim
 		return FIM_NULL;
 	}
 
-	fim::string CommandConsole::bind(fim_key_t c,const fim::string binding)
+	fim::string CommandConsole::bind(fim_key_t c, const fim_cls_id binding)
 	{
 		/*
 		 * binds keycode c to the action specified in binding
@@ -180,7 +180,7 @@ namespace fim
 		return unbind(key);
 	}
 
-	fim_key_t CommandConsole::find_keycode_for_bound_cmd(fim::string binding)
+	fim_key_t CommandConsole::find_keycode_for_bound_cmd(fim_cls_id binding)
 	{
 		/*
 		 * looks for a binding to 'cmd' and returns a string description for its bound key 
@@ -200,7 +200,7 @@ namespace fim
 ret:		return key;
 	}
 
-	fim::string CommandConsole::find_key_for_bound_cmd(fim::string binding)
+	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls_id binding)
 	{
 		/*
 		 * looks for a binding to 'cmd' and returns a string description for its bound key 
@@ -709,7 +709,7 @@ err:
 
 		if(bi!=bindings_.end() && bi->second!=FIM_CNS_EMPTY_STRING)
 		{
-			fim::string cf=current();
+			fim_fn_t cf=current();
 			FIM_AUTOCMD_EXEC(FIM_ACM_PREINTERACTIVECOMMAND,cf);
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
@@ -1319,9 +1319,12 @@ rlnull:
 
 	fim::string CommandConsole::marked_files_clear(void)
 	{
-		fim::string res;
 		marked_files_.erase(marked_files_.begin(),marked_files_.end());
-		return res;
+#if FIM_USE_CXX11
+		return {};
+#else /* FIM_USE_CXX11 */
+		return fim::string();
+#endif /* FIM_USE_CXX11 */
 	}
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 
@@ -1733,7 +1736,7 @@ ok:
 
 	}
 
-	fim::string CommandConsole::autocmd_exec(const fim::string &event,const fim::string &fname)
+	fim::string CommandConsole::autocmd_exec(const fim::string &event, const fim_fn_t& fname)
 	{
 		/*
 		 *	WARNING : maybe there is the need of a sandbox, for
@@ -1765,7 +1768,7 @@ ok:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::autocmd_exec(const fim::string &event,const fim::string &pat,const fim::string &fname)
+	fim::string CommandConsole::autocmd_exec(const fim::string &event, const fim::string &pat, const fim_fn_t& fname)
 	{
 		/*
 		 * executes all the actions associated to the current event, if the current 
@@ -1993,7 +1996,7 @@ ok:
 #endif /* FIM_RECORDING */
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-	bool CommandConsole::isMarkedFile(std::string fname)const
+	bool CommandConsole::isMarkedFile(fim_fn_t fname)const
 	{
 		if(marked_files_.find(fname)==marked_files_.end())
 			return false;
@@ -2006,7 +2009,7 @@ ok:
 		markFile(browser_.current(), mark);
 	}
 
-	fim_int CommandConsole::markFile(const fim::string & file, bool mark, bool aloud)
+	fim_int CommandConsole::markFile(const fim_fn_t& file, bool mark, bool aloud)
 	{
 		/*
 		 * the current file will be added to the list of filenames
@@ -2100,12 +2103,12 @@ ok:
 		preConfigCommand_+=c;
 	}
 
-	void CommandConsole::appendPostExecutionCommand(const fim::string &c)
+	void CommandConsole::appendPostExecutionCommand(const fim::string &cmd)
 	{
 		/*
 		 * the supplied command is applied right before a normal termination of Fim
 		 * */
-		postExecutionCommand_+=c;
+		postExecutionCommand_+=cmd;
 	}
 	
 	bool CommandConsole::appendedPostInitCommand(void)const
@@ -2154,7 +2157,7 @@ ok:
 	}
 #endif /* FIM_WINDOWS */
 
-	bool CommandConsole::push(const fim::string nf, fim_flags_t pf)
+	bool CommandConsole::push(const fim_fn_t nf, fim_flags_t pf)
 	{
 		/*
 		 * returns true if push was ok
@@ -2194,7 +2197,7 @@ ok:
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
 #ifndef FIM_WANT_NOSCRIPTING
-	bool CommandConsole::push_scriptfile(const fim::string ns)
+	bool CommandConsole::push_scriptfile(const fim_fn_t ns)
 	{
 		/*
 		 * pushes a script up in the pre-execution scriptfile list

@@ -53,9 +53,9 @@ namespace fim
 
 		fim_int setVariable(const fim_var_id& varname,fim_int value);
 		fim_float_t setVariable(const fim_var_id& varname,fim_float_t value);
-		fim_int setVariable(const fim_var_id& varname,const fim_char_t*value);
-		Var setVariable(const fim_var_id& varname,const Var&value);
-		Var setVariable(const fim_var_id& varname,const fim::string&value);
+		fim_int setVariable(const fim_var_id& varname,const fim_char_t* value);
+		Var setVariable(const fim_var_id& varname,const Var& value);
+		Var setVariable(const fim_var_id& varname,const fim::string& value);
 
 		fim_int getIntVariable(const fim_var_id& varname)const;
 		fim_float_t getFloatVariable(const fim_var_id& varname)const;
@@ -67,16 +67,16 @@ namespace fim
 
 		fim_int  setGlobalVariable(const fim_var_id& varname,fim_int value);
 	        fim_float_t setGlobalVariable(const fim_var_id& varname,fim_float_t value);
-		fim_int setGlobalVariable(const fim_var_id& varname,const fim_char_t*value);
-		fim_int setGlobalVariable(const fim_var_id& varname, const fim::string & value);
+		fim_int setGlobalVariable(const fim_var_id& varname,const fim_char_t* value);
+		fim_int setGlobalVariable(const fim_var_id& varname, const fim::string& value);
 
 		fim_int getGlobalIntVariable(const fim_var_id& varname)const;
 		fim_float_t getGlobalFloatVariable(const fim_var_id& varname)const;
 		fim::string getGlobalStringVariable(const fim_var_id& varname)const;
-		fim::string autocmd_exec(const fim::string &event,const fim::string &fname);
+		fim::string autocmd_exec(const fim::string &event, const fim_fn_t& fname);
 		fim::string get_variables_list(bool with_values=false, bool fordesc=false)const;
 		virtual size_t byte_size(void)const = 0;
-		fim_err_t assign_ns(const Namespace & ns);
+		fim_err_t assign_ns(const Namespace& ns);
 
 		Namespace(
 #ifndef FIM_INDEPENDENT_NAMESPACE
@@ -92,15 +92,15 @@ namespace fim
 			,ns_char_(ns_char)
 	       	{}
 		virtual ~Namespace(void){}
-		fim_err_t find_matching_list(fim_cmd_id cmd, args_t & completions, bool prepend_ns)const;
-		std::ostream& print(std::ostream &os)const;
-		void get_id_list(fim_var_id_set & set)const
+		fim_err_t find_matching_list(fim_cmd_id cmd, args_t& completions, bool prepend_ns)const;
+		std::ostream& print(std::ostream& os)const;
+		void get_id_list(fim_var_id_set& set)const
 		{
 			for(variables_t::const_iterator fit=variables_.begin();fit!=variables_.end();++fit)
 				set.insert(fit->first);
 		}
 	};
-		std::ostream& operator<<(std::ostream &os, const Namespace & ns);
+	std::ostream& operator<<(std::ostream &os, const Namespace & ns);
 }
 
 #endif /* FIM_NAMESPACE_H */
