@@ -902,7 +902,8 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 
 
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
-	//if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != FIM_NULL)
+	//ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR);
+	//if( !ifs.empty() )
 	{
 		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE]; /* FIXME: reasons for having this static ? */
 		//char*ifsp=(char*)ifs.c_str(); // FIXME
@@ -1110,9 +1111,9 @@ fim::string Image::getInfo(void)
 
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
-	fim::string ifs;
+	fim::string ifs(getGlobalStringVariable(FIM_VID_INFO_FMT_STR));
 
-	if((ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR))!="" && ifs.c_str() != FIM_NULL)
+	if( !ifs.empty() )
 	{
 		fim::string clb = getInfoCustom(ifs.c_str());
 		snprintf(linebuffer, sizeof(linebuffer),"%s",clb.c_str());

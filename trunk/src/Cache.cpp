@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -480,7 +480,7 @@ ret:
 			usageCounter_[image->getKey()]--;
 #if FIM_WANT_MIPMAPS
 			fim::string ccv;
-			if((ccv=getGlobalStringVariable(FIM_VID_CACHE_CONTROL))!="" && ccv.c_str() != FIM_NULL && ccv[0]=='M')
+			if((!(ccv=getGlobalStringVariable(FIM_VID_CACHE_CONTROL).empty())) && ccv[0]=='M')
 				image->mm_free();
 #endif /* FIM_WANT_MIPMAPS */
 			if(
@@ -602,7 +602,7 @@ ret:
 			}
 #if FIM_WANT_MIPMAPS
 			fim::string ccv;
-			if((ccv=getGlobalStringVariable(FIM_VID_CACHE_CONTROL))!="" && ccv.c_str() != FIM_NULL && ccv[0]=='M')
+			if((!(ccv=getGlobalStringVariable(FIM_VID_CACHE_CONTROL).empty())) && ccv[0]=='M')
 				image->mm_make();
 #endif /* FIM_WANT_MIPMAPS */
 			lru_touch( key );
