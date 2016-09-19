@@ -293,7 +293,11 @@ class Var
 	}*/
 	std::ostream& print(std::ostream& os)const;
 	size_t size(void) const { return sizeof(Var) + s.capacity(); }
-	void shrink_to_fit(void) { s.shrink_to_fit(); }
+	void shrink_to_fit(void) {
+#if FIM_USE_CXX11
+	       	s.shrink_to_fit();
+#endif /* FIM_USE_CXX11 */
+       	}
 };
 	fim::string fim_var_help_db_query(const fim::string& id);
 	void fim_var_help_db_init(void);
