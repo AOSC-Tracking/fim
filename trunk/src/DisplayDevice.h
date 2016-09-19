@@ -2,7 +2,7 @@
 /*
  DisplayDevice.h : virtual device Fim driver header file
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ class DisplayDevice
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	public:
-	MiniConsole & mc_;
+	MiniConsole& mc_;
 #endif /* FIM_KEEP_BROKEN_CONSOLE */
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	/*
@@ -45,7 +45,7 @@ class DisplayDevice
 	fim_bool_t debug_;// really, only for making happy fbdev
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	DisplayDevice(MiniConsole &mc_);
+	DisplayDevice(MiniConsole& mc_);
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	DisplayDevice(void);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

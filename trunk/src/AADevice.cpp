@@ -663,7 +663,7 @@ err:
 	}
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	AADevice::AADevice(MiniConsole & mc_, fim::string opts ):DisplayDevice(mc_),
+	AADevice::AADevice(MiniConsole& mc_, fim::string opts ):DisplayDevice(mc_),
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	AADevice( fim::string opts ):DisplayDevice(),
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

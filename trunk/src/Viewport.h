@@ -46,17 +46,17 @@ class Viewport:public ViewportState
 	const Rect&corners_; // TODO: for now, no reassignCorners, but this will have to place old reassignWindow).
 #endif /* FIM_WINDOWS */
 	Image  *image_;	// !! 
-	CommandConsole &commandConsole;
+	CommandConsole& commandConsole;
 	public:
         void reset(void);
         void steps_reset(void);
 
 	Viewport( //yes, horrible
-			CommandConsole &c
+			CommandConsole& c
 			,const Rect &rect
 			);
 
-	Viewport(const Viewport &rhs);
+	Viewport(const Viewport& rhs);
 	~Viewport(void);
 	private:
 	Viewport& operator= (const Viewport&rhs);
@@ -70,7 +70,7 @@ class Viewport:public ViewportState
 #endif
 
 	/* viewport member functions */
-	fim::string pan(const args_t &args);
+	fim::string pan(const args_t& args);
 	fim::string pan(const fim_char_t*a1, const fim_char_t*a2);
 	bool place(const fim_pan_t px, const fim_pan_t py);
 	void setState(const ViewportState & viewportState);

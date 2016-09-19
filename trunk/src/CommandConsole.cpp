@@ -1692,7 +1692,7 @@ ret:
 			return "no autocmd's removed\n";
 	}
 
-	fim::string CommandConsole::autocmd_add(const fim::string &event,const fim::string &pat,const fim_cmd_id& cmd)
+	fim::string CommandConsole::autocmd_add(const fim::string& event,const fim::string& pat,const fim_cmd_id& cmd)
 	{
 		/*
 		 * the internal autocommand add function
@@ -1734,7 +1734,7 @@ ok:
 
 	}
 
-	fim::string CommandConsole::autocmd_exec(const fim::string &event, const fim_fn_t& fname)
+	fim::string CommandConsole::autocmd_exec(const fim::string& event, const fim_fn_t& fname)
 	{
 		/*
 		 *	WARNING : maybe there is the need of a sandbox, for
@@ -1766,7 +1766,7 @@ ok:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::autocmd_exec(const fim::string &event, const fim::string &pat, const fim_fn_t& fname)
+	fim::string CommandConsole::autocmd_exec(const fim::string& event, const fim::string& pat, const fim_fn_t& fname)
 	{
 		/*
 		 * executes all the actions associated to the current event, if the current 
@@ -2101,7 +2101,7 @@ ok:
 		preConfigCommand_+=c;
 	}
 
-	void CommandConsole::appendPostExecutionCommand(const fim::string &cmd)
+	void CommandConsole::appendPostExecutionCommand(const fim::string& cmd)
 	{
 		/*
 		 * the supplied command is applied right before a normal termination of Fim
@@ -2139,7 +2139,7 @@ ok:
 	}
 
 #ifdef FIM_WINDOWS
-	const FimWindow & CommandConsole::current_window(void)const
+	const FimWindow& CommandConsole::current_window(void)const
 	{
 		/*
 		 * returns a reference to the current window_.

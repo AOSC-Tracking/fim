@@ -2,7 +2,7 @@
 /*
  AADevice.h : aalib device Fim driver header file
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ class AADevice:public DisplayDevice
 	fim_char_t name_[2];	/* For ascii_save_.name */
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	AADevice(MiniConsole & mc_, fim::string opts);
+	AADevice(MiniConsole& mc_, fim::string opts);
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	AADevice( fim::string opts );
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

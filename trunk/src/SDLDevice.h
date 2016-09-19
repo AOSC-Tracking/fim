@@ -2,7 +2,7 @@
 /*
  SDLDevice.h : sdllib device Fim driver header file
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class SDLDevice:public DisplayDevice
 	public:
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	SDLDevice(MiniConsole & mc_,
+	SDLDevice(MiniConsole& mc_,
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	SDLDevice(
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

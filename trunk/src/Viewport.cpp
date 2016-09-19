@@ -38,7 +38,7 @@ namespace fim
 {
 
 	Viewport::Viewport(
-			CommandConsole &c
+			CommandConsole& c
 #ifdef FIM_WINDOWS
 			,const Rect & corners
 #endif /* FIM_WINDOWS */
@@ -61,7 +61,7 @@ namespace fim
 		reset();
 	}
 
-	Viewport::Viewport(const Viewport &rhs)
+	Viewport::Viewport(const Viewport& rhs)
 		:
 	/*	steps_(rhs.steps_)
 		,hsteps_(rhs.hsteps_)
@@ -787,7 +787,7 @@ namespace fim
 		return true;
 	}
 
-	fim::string Viewport::pan(const args_t &args)
+	fim::string Viewport::pan(const args_t& args)
 	{
 		/* FIXME: unfinished */
 		fim_pan_t hs=0,vs=0;

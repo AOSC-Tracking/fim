@@ -144,12 +144,12 @@ class CommandConsole
 
 	bool dont_record_last_action_;
 	fim::string memorize_last(const fim_cmd_id& cmd);
-	fim::string repeat_last(const args_t &args);
-	fim::string dump_record_buffer(const args_t &args);
-	fim::string do_dump_record_buffer(const args_t &args)const;
-	fim::string execute_record_buffer(const args_t &args);
+	fim::string repeat_last(const args_t& args);
+	fim::string dump_record_buffer(const args_t& args);
+	fim::string do_dump_record_buffer(const args_t& args)const;
+	fim::string execute_record_buffer(const args_t& args);
 	fim::string start_recording(void);
-	fim_cxr fcmd_recording(const args_t &args);
+	fim_cxr fcmd_recording(const args_t& args);
 	fim::string stop_recording(void);
 	fim::string sanitize_action(const fim_cmd_id& cmd)const;
 
@@ -232,16 +232,16 @@ class CommandConsole
 #ifndef FIM_WANT_NOSCRIPTING
 	bool push_scriptfile(const fim_fn_t ns);
 	bool with_scriptfile(void)const;
-	fim_cxr fcmd_executeFile(const args_t &args);
+	fim_cxr fcmd_executeFile(const args_t& args);
 #endif /* FIM_WANT_NOSCRIPTING */
 	private:
 	bool push(const fim_fn_t nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
-	fim_cxr fcmd_echo(const args_t &args);
-	fim::string do_echo(const args_t &args)const;
-	//	fim::string get_expr_type(const args_t &args);
-	fim_cxr fcmd_help(const args_t &args);
-	fim_cxr fcmd_quit(const args_t &args);
-	fim_cxr fcmd__stdout(const args_t &args);
+	fim_cxr fcmd_echo(const args_t& args);
+	fim::string do_echo(const args_t& args)const;
+	//	fim::string get_expr_type(const args_t& args);
+	fim_cxr fcmd_help(const args_t& args);
+	fim_cxr fcmd_quit(const args_t& args);
+	fim_cxr fcmd__stdout(const args_t& args);
 	/* naming this stdout raises problems on some systems 
 	   e.g.: 
 # uname -a
@@ -251,8 +251,8 @@ Reading specs from /usr/libexec/gcc/darwin/ppc/3.3/specs
 Thread model: posix
 gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 */
-	fim_cxr fcmd_foo (const args_t &args);
-	fim_cxr fcmd_status(const args_t &args);
+	fim_cxr fcmd_foo (const args_t& args);
+	fim_cxr fcmd_status(const args_t& args);
 	fim_err_t executeFile(const fim_char_t *s);
 	fim_err_t execute_internal(const fim_char_t *ss, fim_xflags_t xflags);
 
@@ -279,7 +279,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string autocmd_del(const fim::string event, const fim::string pattern, const fim::string action);
 	fim_cxr fcmd_autocmd_del(const args_t& args);
 	public:// 20110601
-	fim::string autocmd_add(const fim::string &event,const fim::string &pat,const fim_cmd_id& cmd);
+	fim::string autocmd_add(const fim::string& event,const fim::string& pat,const fim_cmd_id& cmd);
 	private:
 	fim::string autocmds_list(const fim::string event, const fim::string pattern)const;
 #endif /* FIM_AUTOCMDS */
@@ -301,13 +301,13 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string dummy(std::vector<Arg> args);
 	fim_cxr fcmd_variables_list(const args_t& args);
 	fim_cxr fcmd_commands_list(const args_t& args);
-	fim_cxr fcmd_set(const args_t &args);
+	fim_cxr fcmd_set(const args_t& args);
 	fim_cxr fcmd_unalias(const args_t& args);
 	//fim_char_t ** tokenize_(const fim_char_t *s);
 	bool executeBinding(const fim_key_t c);
 	fim::string getBoundAction(const fim_key_t c)const;
 	//	void execute(fim_cmd_id cmd);
-	fim_cxr fcmd_eval(const args_t &args);
+	fim_cxr fcmd_eval(const args_t& args);
 	void exit(fim_perr_t i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
 	fim::string bind(fim_key_t c,fim_cls binding);
@@ -332,7 +332,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_bool_t drawOutput(const fim_char_t*s=FIM_NULL)const;
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int rsic)const;
 #ifdef FIM_AUTOCMDS
-	fim::string autocmd_exec(const fim::string &event,const fim_fn_t& fname);
+	fim::string autocmd_exec(const fim::string& event,const fim_fn_t& fname);
 	fim::string pre_autocmd_add(const fim_cmd_id& cmd);
 	fim::string pre_autocmd_exec(void);
 #endif /* FIM_AUTOCMDS */
@@ -341,7 +341,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	private:
 	/* fim_key_t catchInteractiveCommand(fim_ts_t seconds=0)const; */
 #ifdef FIM_AUTOCMDS
-	fim::string autocmd_exec(const fim::string &event,const fim::string &pat,const fim_fn_t& fname);
+	fim::string autocmd_exec(const fim::string& event,const fim::string& pat,const fim_fn_t& fname);
 	void autocmd_push_stack(const autocmds_loop_frame_t& frame);
 	void autocmd_pop_stack(const autocmds_loop_frame_t& frame);
 	public:
@@ -353,7 +353,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 
 	fim::string get_alias_info(const fim::string aname)const;
 #ifdef FIM_WINDOWS
-	const FimWindow & current_window(void)const;
+	const FimWindow& current_window(void)const;
 #endif /* FIM_WINDOWS */
 	fim::string get_variables_list(void)const;
 	fim::string get_aliases_list(void)const;
@@ -363,7 +363,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	void printHelpMessage(const fim_char_t *pn="fim")const;
 	void appendPostInitCommand(const fim_char_t* c);
 	void appendPreConfigCommand(const fim_char_t* c);
-	void appendPostExecutionCommand(const fim::string &c);
+	void appendPostExecutionCommand(const fim::string& c);
 	bool appendedPostInitCommand(void)const;
 	bool appendedPreConfigCommand(void)const;
 

@@ -90,14 +90,14 @@ class flist_t : public std::vector<fim::fle_t>
 	fim_int cf_; // TODO: size_t
 	public:
 	flist_t(void):cf_(0){}
-	flist_t(const args_t &a);
+	flist_t(const args_t& a);
 	void get_stat(void);
 	void _sort(const fim_char_t sc);
 	fim_int cf(void)const{/* counting from 0 */ return FIM_MAX(cf_,0);}
 	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
 	void adj_cf(void){cf_ = ( size() <= 0 ) ? 0 : FIM_MIN(((size_t)cf_),size()-1); /* FIXME: use a smarter method here */ }
-	const fim::string pop(const fim::string &filename);
-	void erase_at_bitset(const fim_bitset_t &bs, fim_bool_t negative = false)
+	const fim::string pop(const fim::string& filename);
+	void erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative = false)
 {
 	size_t ecount = 0;
 #if FIM_USE_CXX11
@@ -155,7 +155,7 @@ class Browser
 	/* when compiled with no multiple windowing support, one viewport only will last. */
 	Viewport *only_viewport_;
 #endif /* FIM_WINDOWS */
-	CommandConsole &commandConsole_;
+	CommandConsole& commandConsole_;
 	Image *image(void)const;
 
 #ifdef FIM_READ_STDIN_IMAGE
@@ -182,17 +182,17 @@ class Browser
 	const Image *c_image(void)const;	// was private
 	int empty_file_list(void)const;
 
-	Browser(CommandConsole &cc);
+	Browser(CommandConsole& cc);
 	~Browser(void) { }
 #if FIM_USE_CXX11
 	public:
 	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
-	Browser& operator= (const Browser &rhs) = delete;
-	Browser(const Browser &rhs) = delete;
+	Browser& operator= (const Browser& rhs) = delete;
+	Browser(const Browser& rhs) = delete;
 #else /* FIM_USE_CXX11 */
 	private:
-	Browser& operator= (const Browser &rhs){return *this;/* a disabled copy constructor */}
-	Browser(const Browser &rhs):
+	Browser& operator= (const Browser& rhs){return *this;/* a disabled copy constructor */}
+	Browser(const Browser& rhs):
 		Namespace(rhs),
 		flist_(args_t()),
 #if FIM_WANT_PIC_LBFL
@@ -217,44 +217,44 @@ class Browser
 #endif /* FIM_USE_CXX11 */
 	public:
 	fim_fn_t current(void)const;
-	fim::string regexp_goto(const args_t &args, fim_int src_dir=1);
-	fim_cxr fcmd_prefetch(const args_t &args);
-	fim_cxr fcmd_goto_image(const args_t &args);
+	fim::string regexp_goto(const args_t& args, fim_int src_dir=1);
+	fim_cxr fcmd_prefetch(const args_t& args);
+	fim_cxr fcmd_goto_image(const args_t& args);
 	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
 	fim::string goto_image(fim_int n, bool isfg=false);
-	fim_cxr fcmd_align(const args_t &args);
-	fim::string pan(const args_t &args);
-	fim_cxr fcmd_scrolldown(const args_t &args);
-	fim_cxr fcmd_scrollforward(const args_t &args);
-	fim_cxr fcmd_scale(const args_t &args);
+	fim_cxr fcmd_align(const args_t& args);
+	fim::string pan(const args_t& args);
+	fim_cxr fcmd_scrolldown(const args_t& args);
+	fim_cxr fcmd_scrollforward(const args_t& args);
+	fim_cxr fcmd_scale(const args_t& args);
 #if FIM_WANT_FAT_BROWSER
-	fim_cxr fcmd_reduce(const args_t &args);
-	fim_cxr fcmd_magnify(const args_t &args);
-	fim_cxr fcmd_next(const args_t &args);
-	fim_cxr fcmd_prev(const args_t &args);
-	fim_cxr fcmd_no_image(const args_t &args);
+	fim_cxr fcmd_reduce(const args_t& args);
+	fim_cxr fcmd_magnify(const args_t& args);
+	fim_cxr fcmd_next(const args_t& args);
+	fim_cxr fcmd_prev(const args_t& args);
+	fim_cxr fcmd_no_image(const args_t& args);
 #endif /* FIM_WANT_FAT_BROWSER */
-	fim_cxr fcmd_rotate(const args_t &args);/* FIXME : UNFINISHED */
-	fim_cxr fcmd_display(const args_t &args);
+	fim_cxr fcmd_rotate(const args_t& args);/* FIXME : UNFINISHED */
+	fim_cxr fcmd_display(const args_t& args);
 	fim::string display_status(const fim_char_t *l);
-	fim_cxr fcmd_negate(const args_t &args);
-	fim_cxr fcmd_desaturate(const args_t &args);
+	fim_cxr fcmd_negate(const args_t& args);
+	fim_cxr fcmd_desaturate(const args_t& args);
 
 #if FIM_WANT_PIC_LBFL
-	fim_cxr fcmd_limit(const args_t &args);
+	fim_cxr fcmd_limit(const args_t& args);
 #endif /* FIM_WANT_PIC_LBFL */
-	fim_cxr fcmd_reload(const args_t &args);
-	fim_cxr fcmd_list(const args_t &args);
-	fim::string do_push(const args_t &args);
+	fim_cxr fcmd_reload(const args_t& args);
+	fim_cxr fcmd_list(const args_t& args);
+	fim::string do_push(const args_t& args);
 	fim::string prev(int n=1);
-	fim_cxr fcmd_info(const args_t &args);
+	fim_cxr fcmd_info(const args_t& args);
 	fim::string info(void);
-	std::ostream& print(std::ostream &os)const;
+	std::ostream& print(std::ostream& os)const;
 	void redisplay(void);
-	fim_cxr fcmd_redisplay(const args_t &args);
-	fim_cxr fcmd_load(const args_t &args);
+	fim_cxr fcmd_redisplay(const args_t& args);
+	fim_cxr fcmd_load(const args_t& args);
 	const fim::string pop_current(void);
-	fim::string pop_current(const args_t &args);
+	fim::string pop_current(const args_t& args);
 	bool present(const fim::string nf)const;
 	fim_int find_file_index(const fim::string nf)const;
 #ifdef FIM_READ_DIRS
@@ -269,7 +269,7 @@ class Browser
 	fim::string _clear_list(void);
 	private:
 	fim::string do_filter_cmd(const args_t args, bool negative, enum FilterAction faction);
-	fim::string do_filter(const args_t &args, MatchMode rm=FullFileNameMatch, bool negative=false, enum FilterAction faction = Delete);
+	fim::string do_filter(const args_t& args, MatchMode rm=FullFileNameMatch, bool negative=false, enum FilterAction faction = Delete);
 	fim_err_t loadCurrentImage(void);
 	fim::string reload(void);
 
@@ -285,7 +285,7 @@ class Browser
 	fim_int c_page(void)const;
 	virtual size_t byte_size(void)const;
 	fim_float_t file_progress(void)const { /* FIXME: relies on range 0... */ double fp = (((double)(1+this->current_n()))/this->n_files()); return FIM_MIN(1.0,fp);} 
-	void mark_from_list(const args_t &argsc);
+	void mark_from_list(const args_t& argsc);
 	bool dump_desc(const fim_fn_t nf, fim_char_t sc, const bool want_all_vars=false, const bool want_append=false)const;
 #if FIM_WANT_BENCHMARKS
 	virtual fim_int get_n_qbenchmarks(void)const;

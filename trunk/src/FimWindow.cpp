@@ -123,7 +123,7 @@ namespace fim
                 return FIM_CNS_EMPTY_RESULT;
         }
 
-	FimWindow::FimWindow(CommandConsole &c,const Rect& corners, Viewport* vp):
+	FimWindow::FimWindow(CommandConsole& c,const Rect& corners, Viewport* vp):
 #ifdef FIM_NAMESPACES
 	Namespace(&c,FIM_SYM_NAMESPACE_WINDOW_CHAR),
 #endif /* FIM_NAMESPACES */
@@ -151,7 +151,7 @@ namespace fim
 	}
 
 //#ifdef FIM_UNDEFINED
-	FimWindow::FimWindow(const FimWindow & root):
+	FimWindow::FimWindow(const FimWindow& root):
 #ifdef FIM_NAMESPACES
 			Namespace(root),
 #endif /* FIM_NAMESPACES */
@@ -234,7 +234,7 @@ namespace fim
 		return ( issplit() && focused().corners_.y_==shadowed().corners_.y_ ) ;
 	}
 	
-	const FimWindow & FimWindow::c_focused(void)const
+	const FimWindow& FimWindow::c_focused(void)const
 	{
 		/*
 		 * return a const reference to the focused window
@@ -247,7 +247,7 @@ namespace fim
 		else return second_->c_focused();
 	}
 
-	FimWindow & FimWindow::focused(void)const
+	FimWindow& FimWindow::focused(void)const
 	{
 		/*
 		 * return a reference to the focused window
@@ -260,7 +260,7 @@ namespace fim
 		else return *second_;
 	}
 
-	FimWindow & FimWindow::upper(void)
+	FimWindow& FimWindow::upper(void)
 	{
 		/*
 		 * return a reference to the upper window
@@ -270,7 +270,7 @@ namespace fim
 		return *first_;
 	}
 
-	FimWindow & FimWindow::lower(void)
+	FimWindow& FimWindow::lower(void)
 	{
 		/*
 		 * return a reference to the lower window
@@ -280,7 +280,7 @@ namespace fim
 		return *second_;
 	}
 
-	FimWindow & FimWindow::left(void)
+	FimWindow& FimWindow::left(void)
 	{
 		/*
 		 * return a reference to the left window
@@ -290,7 +290,7 @@ namespace fim
 		return *first_;
 	}
 
-	FimWindow & FimWindow::right(void)
+	FimWindow& FimWindow::right(void)
 	{
 		/*
 		 * return a reference to the right window
@@ -300,7 +300,7 @@ namespace fim
 		return *second_;
 	}
 
-	FimWindow & FimWindow::shadowed(void)const
+	FimWindow& FimWindow::shadowed(void)const
 	{
 		/*
 		 * return a const reference to the right window
@@ -313,7 +313,7 @@ namespace fim
 		else return *second_;
 	}
 
-	const FimWindow & FimWindow::c_shadowed(void)const
+	const FimWindow& FimWindow::c_shadowed(void)const
 	{
 		/*
 		 * return a const reference to the shadowed window
@@ -733,7 +733,7 @@ namespace fim
 		return y_ ;
 	}
 
-	bool FimWindow::can_vgrow(const FimWindow & window, fim_coo_t howmuch)
+	bool FimWindow::can_vgrow(const FimWindow& window, fim_coo_t howmuch)
 	{
 		/*
 		 * Assuming that the argument window is a contained one, 
@@ -749,7 +749,7 @@ namespace fim
 		return window.corners_.height() + howmuch + vspacing  < corners_.height();
 	}
 
-	bool FimWindow::can_hgrow(const FimWindow & window, fim_coo_t howmuch)
+	bool FimWindow::can_hgrow(const FimWindow& window, fim_coo_t howmuch)
 	{
 		/*
 		 * Assuming that the argument window is a contained one, 
@@ -1142,7 +1142,7 @@ namespace fim
 		return viewport_;
 	}	
 
-	Viewport & FimWindow::current_viewport(void)const
+	Viewport& FimWindow::current_viewport(void)const
 	{
 		/*
 		 * returns a reference to the current window's viewport_.
@@ -1195,7 +1195,7 @@ namespace fim
 		return bs;
 	}
 
-	FimWindow & FimWindow ::operator= (const FimWindow &w){return *this;/* a disabled assignment */}
+	FimWindow& FimWindow ::operator= (const FimWindow& w){return *this;/* a disabled assignment */}
 
 	fim_bool_t FimWindow::need_redraw(void)const
 	{

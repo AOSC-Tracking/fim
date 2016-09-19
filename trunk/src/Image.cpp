@@ -36,7 +36,7 @@
 #define FIM_WANT_ASCALE_FRIENDLY_ROTATION 1
 
 #if FIM_WANT_PIC_CMTS
-	std::ostream& operator<<(std::ostream &os, const ImgDscs & id)
+	std::ostream& operator<<(std::ostream& os, const ImgDscs & id)
 	{
 		return id.print(os);
 	}

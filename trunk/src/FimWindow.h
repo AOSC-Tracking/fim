@@ -148,8 +148,8 @@ class FimWindow
 	fim_err_t henlarge(fim_coo_t units);
 	fim_err_t venlarge(fim_coo_t units);
 
-	bool can_vgrow(const FimWindow & window, fim_coo_t howmuch);
-	bool can_hgrow(const FimWindow & window, fim_coo_t howmuch);
+	bool can_vgrow(const FimWindow& window, fim_coo_t howmuch);
+	bool can_hgrow(const FimWindow& window, fim_coo_t howmuch);
 
 
 
@@ -161,7 +161,7 @@ class FimWindow
 	 it is hust defined to make -Weffc++ happy
 	 so keep this private!
 	*/
-	FimWindow(const FimWindow & root);
+	FimWindow(const FimWindow& root);
 //#endif /* FIM_UNDEFINED */
 	bool isleaf(void)const;
 	bool isvalid(void)const;
@@ -183,13 +183,13 @@ class FimWindow
 	fim_err_t hlshrink(fim_coo_t units);
 	fim_err_t hrshrink(fim_coo_t units);
 
-	FimWindow & focused(void)const;
-	FimWindow & shadowed(void)const;
+	FimWindow& focused(void)const;
+	FimWindow& shadowed(void)const;
 
-	FimWindow & upper(void);
-	FimWindow & lower(void);
-	FimWindow & left(void);
-	FimWindow & right(void);
+	FimWindow& upper(void);
+	FimWindow& lower(void);
+	FimWindow& left(void);
+	FimWindow& right(void);
 
 	bool operator==(const FimWindow&window)const;
 
@@ -198,20 +198,20 @@ class FimWindow
 	/*
 	 * DANGER : nearly each of these member functions launches an exception!
 	 * */
-	const FimWindow & c_focused(void)const;
-	const FimWindow & c_shadowed(void)const;
+	const FimWindow& c_focused(void)const;
+	const FimWindow& c_shadowed(void)const;
 
-	Viewport & current_viewport(void)const;
-	CommandConsole &commandConsole_;
+	Viewport& current_viewport(void)const;
+	CommandConsole& commandConsole_;
 
-	FimWindow & operator= (const FimWindow &w);
+	FimWindow& operator= (const FimWindow& w);
 
 	public:
 	void setroot(void);	// only one root window should exist
 
 	/* The only public member function launching exceptions is the constructor now.
 	 * */
-	FimWindow(CommandConsole &c, const Rect& corners, Viewport* vp=FIM_NULL); // throws FIM_E_NO_MEM exception
+	FimWindow(CommandConsole& c, const Rect& corners, Viewport* vp=FIM_NULL); // throws FIM_E_NO_MEM exception
 	fim_err_t update(const Rect& corners);
 
 	Viewport * current_viewportp(void)const;

@@ -58,9 +58,9 @@ namespace fim
 		int  scroll_;
 
 		public:
-		CommandConsole & cc_;	// temporarily
+		CommandConsole& cc_;	// temporarily
 
-		MiniConsole(CommandConsole & cc,int lw=48, int r=12); /* FIXME: shall get rid of numerical constants! */
+		MiniConsole(CommandConsole& cc,int lw=48, int r=12); /* FIXME: shall get rid of numerical constants! */
 		virtual ~MiniConsole(void){}
 		fim_err_t dump(void);	// non const due to user variables reaction
 		fim_err_t grow(void);
@@ -78,12 +78,12 @@ namespace fim
 		public:
 		/* deleted member functions cannot be called not even by be'friend'ed clases */
 		MiniConsole& operator= (const MiniConsole&rhs) = delete;
-		MiniConsole(const MiniConsole &rhs) = delete;
+		MiniConsole(const MiniConsole& rhs) = delete;
 #else /* FIM_USE_CXX11 */
 		/* private member functions can be called even by be'friend'ed clases */
 		private:
 		MiniConsole& operator= (const MiniConsole&rhs){return *this;/* a nilpotent assignment */}
-		MiniConsole(const MiniConsole &rhs) :
+		MiniConsole(const MiniConsole& rhs) :
 			Namespace(rhs),
 			buffer_(FIM_NULL),
 			line_(FIM_NULL),
