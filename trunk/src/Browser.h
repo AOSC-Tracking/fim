@@ -50,7 +50,7 @@ class fle_t : public fim_fn_t /* file list element */
 #endif /* FIM_WANT_FLIST_STAT */
        	/*std::string operator();*/
 	fle_t(const fim_fn_t& s);
-	fle_t(const fim_fn_t& s, const fim_stat_t & ss);
+	fle_t(const fim_fn_t& s, const fim_stat_t &ss);
 	fle_t();
 	operator string (void)const;
 };
@@ -66,7 +66,7 @@ class fim_bitset_t:public std::vector<fim_bool_t>
 }; /* fim_bitset_t */
 
 /*
-std::ostream& operator << (std::ostream& os, const fim_bitset_t &bs)
+std::ostream& operator << (std::ostream& os, const fim_bitset_t& bs)
 {
 	// FIXME: temporarily here !
 	os << bs.size() << ":";
@@ -86,14 +86,14 @@ class flist_t : public std::vector<fim::fle_t>
 	fim_int cf_; // TODO: size_t
 	public:
 	flist_t(void):cf_(0){}
-	flist_t(const args_t & a);
+	flist_t(const args_t &a);
 	void get_stat(void);
 	void _sort(const fim_char_t sc);
 	fim_int cf(void)const{/* counting from 0 */ return FIM_MAX(cf_,0);}
 	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
 	void adj_cf(void){cf_ = ( size() <= 0 ) ? 0 : FIM_MIN(((size_t)cf_),size()-1); /* FIXME: use a smarter method here */ }
-	const fim::string pop(const fim::string & filename);
-	void erase_at_bitset(const fim_bitset_t & bs, fim_bool_t negative = false)
+	const fim::string pop(const fim::string &filename);
+	void erase_at_bitset(const fim_bitset_t &bs, fim_bool_t negative = false)
 {
 	size_t ecount = 0, tsize = size();
 	for(size_t pos=0;pos<tsize;++pos)
@@ -206,41 +206,41 @@ class Browser
 	public:
 	fim_fn_t current(void)const;
 	fim::string regexp_goto(const args_t &args, fim_int src_dir=1);
-	fim::string fcmd_prefetch(const args_t &args);
-	fim::string fcmd_goto_image(const args_t &args);
+	fim_cxr fcmd_prefetch(const args_t &args);
+	fim_cxr fcmd_goto_image(const args_t &args);
 	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
 	fim::string goto_image(fim_int n, bool isfg=false);
-	fim::string fcmd_align(const args_t &args);
+	fim_cxr fcmd_align(const args_t &args);
 	fim::string pan(const args_t &args);
-	fim::string fcmd_scrolldown(const args_t &args);
-	fim::string fcmd_scrollforward(const args_t &args);
-	fim::string fcmd_scale(const args_t &args);
+	fim_cxr fcmd_scrolldown(const args_t &args);
+	fim_cxr fcmd_scrollforward(const args_t &args);
+	fim_cxr fcmd_scale(const args_t &args);
 #if FIM_WANT_FAT_BROWSER
-	fim::string fcmd_reduce(const args_t &args);
-	fim::string fcmd_magnify(const args_t &args);
-	fim::string fcmd_next(const args_t &args);
-	fim::string fcmd_prev(const args_t &args);
-	fim::string fcmd_no_image(const args_t &args);
+	fim_cxr fcmd_reduce(const args_t &args);
+	fim_cxr fcmd_magnify(const args_t &args);
+	fim_cxr fcmd_next(const args_t &args);
+	fim_cxr fcmd_prev(const args_t &args);
+	fim_cxr fcmd_no_image(const args_t &args);
 #endif /* FIM_WANT_FAT_BROWSER */
-	fim::string fcmd_rotate(const args_t &args);/* FIXME : UNFINISHED */
-	fim::string fcmd_display(const args_t &args);
+	fim_cxr fcmd_rotate(const args_t &args);/* FIXME : UNFINISHED */
+	fim_cxr fcmd_display(const args_t &args);
 	fim::string display_status(const fim_char_t *l);
-	fim::string fcmd_negate(const args_t &args);
-	fim::string fcmd_desaturate(const args_t &args);
+	fim_cxr fcmd_negate(const args_t &args);
+	fim_cxr fcmd_desaturate(const args_t &args);
 
 #if FIM_WANT_PIC_LBFL
-	fim::string fcmd_limit(const args_t &args);
+	fim_cxr fcmd_limit(const args_t &args);
 #endif /* FIM_WANT_PIC_LBFL */
-	fim::string fcmd_reload(const args_t &args);
-	fim::string fcmd_list(const args_t &args);
+	fim_cxr fcmd_reload(const args_t &args);
+	fim_cxr fcmd_list(const args_t &args);
 	fim::string do_push(const args_t &args);
 	fim::string prev(int n=1);
-	fim::string fcmd_info(const args_t &args);
+	fim_cxr fcmd_info(const args_t &args);
 	fim::string info(void);
 	std::ostream& print(std::ostream &os)const;
 	void redisplay(void);
-	fim::string fcmd_redisplay(const args_t &args);
-	fim::string fcmd_load(const args_t &args);
+	fim_cxr fcmd_redisplay(const args_t &args);
+	fim_cxr fcmd_load(const args_t &args);
 	const fim::string pop_current(void);
 	fim::string pop_current(const args_t &args);
 	bool present(const fim::string nf)const;
@@ -273,7 +273,7 @@ class Browser
 	fim_int c_page(void)const;
 	virtual size_t byte_size(void)const;
 	fim_float_t file_progress(void)const { /* FIXME: relies on range 0... */ double fp = (((double)(1+this->current_n()))/this->n_files()); return FIM_MIN(1.0,fp);} 
-	void mark_from_list(const args_t & argsc);
+	void mark_from_list(const args_t &argsc);
 	bool dump_desc(const fim_fn_t nf, fim_char_t sc, const bool want_all_vars=false, const bool want_append=false)const;
 #if FIM_WANT_BENCHMARKS
 	virtual fim_int get_n_qbenchmarks(void)const;

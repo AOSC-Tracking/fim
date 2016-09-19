@@ -215,7 +215,7 @@ class FimWindow
 	fim_err_t update(const Rect& corners);
 
 	Viewport * current_viewportp(void)const;
-        fim::string fcmd_cmd(const std::vector<fim::string> &args);
+        fim_cxr fcmd_cmd(const std::vector<fim::string> &args);
 	bool recursive_redisplay(void)const;	//exception safe
 	bool recursive_display(void)const;		//exception safe
 

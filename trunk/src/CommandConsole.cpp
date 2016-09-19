@@ -298,7 +298,7 @@ ret:		return key;
 		return r;
 	}
 
-	fim::string CommandConsole::fcmd_alias(std::vector<Arg> args)
+	fim_cxr CommandConsole::fcmd_alias(std::vector<Arg> args)
 	{
 		/*
 		 * assigns to an alias some action
@@ -2549,12 +2549,12 @@ err:
 		return bs;
 	}
 
-	fim::string CommandConsole::fcmd_variables_list(const args_t& args)
+	fim_cxr CommandConsole::fcmd_variables_list(const args_t& args)
 	{
 		return get_variables_list();
 	}
 
-	fim::string CommandConsole::fcmd_commands_list(const args_t& args)
+	fim_cxr CommandConsole::fcmd_commands_list(const args_t& args)
 	{
 		return get_commands_list();
 	}
