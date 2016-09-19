@@ -183,7 +183,18 @@ class Image
 };
 }
 #if FIM_WANT_PIC_LVDN
-	class VNamespace: public Namespace { size_t byte_size(void)const{return 0; /* FIXME */}; };
+	class VNamespace: public Namespace
+	{
+	       	public:
+		size_t byte_size(void)const
+		{
+		       	size_t bs=0;
+			for( variables_t::const_iterator it = variables_.begin();it != variables_.end(); ++it )
+				bs += it->first.size() + sizeof(it->first),
+				bs += it->second.size() + sizeof(it->second);
+			return bs;
+	       	};
+       	};
 #endif /* FIM_WANT_PIC_LVDN */
 
 #if FIM_WANT_PIC_CMTS
@@ -418,6 +429,11 @@ public:
 			}
 		}
 		reset();
+#if FIM_WANT_PIC_LVDN
+		// print(std::cout) << "\n";
+		shrink_to_fit();
+		// print(std::cout) << "\n";
+#endif /* FIM_WANT_PIC_LVDN */
 	}
 	key_type fk(const mapped_type & sk) 
 	{
@@ -434,12 +450,30 @@ public:
 		}
 		return v;
 	}
+	void shrink_to_fit(void)
+	{
+#if FIM_USE_CXX11
+		for( iterator it = begin();it != end(); ++it )
+			/* note we cannot it->first.shrink_to_fit(), */
+			it->second.shrink_to_fit();
+#if FIM_WANT_PIC_LVDN
+		for( vd_t::iterator it = vd_.begin();it != vd_.end(); ++it )
+			/* note we cannot it->first.shrink_to_fit(), */
+			it->second.shrink_to_fit();
+#endif /* FIM_WANT_PIC_LVDN */
+#endif /* FIM_USE_CXX11 */
+	}
 	size_t byte_size(void)const
 	{
 		size_t bs = size() + sizeof(*this);
 		for( const_iterator it = begin();it != end(); ++it )
-			bs += it->first.size() + sizeof(it->first),
-			bs += it->second.size() + sizeof(it->second);
+			bs += it->first.capacity() + sizeof(it->first),
+			bs += it->second.capacity() + sizeof(it->second);
+#if FIM_WANT_PIC_LVDN
+		for( vd_t::const_iterator it = vd_.begin();it != vd_.end(); ++it )
+			bs += it->first.capacity() + sizeof(it->first),
+			bs += it->second.byte_size();
+#endif /* FIM_WANT_PIC_LVDN */
 		return bs;
 	}
 	std::ostream& print(std::ostream& os)const

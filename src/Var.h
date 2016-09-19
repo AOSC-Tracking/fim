@@ -292,6 +292,8 @@ class Var
 		return (type==rhs.getType()) && (i==rhs.getInt());
 	}*/
 	std::ostream& print(std::ostream& os)const;
+	size_t size(void) const { return sizeof(Var) + s.capacity(); }
+	void shrink_to_fit(void) { s.shrink_to_fit(); }
 };
 	fim::string fim_var_help_db_query(const fim::string& id);
 	void fim_var_help_db_init(void);

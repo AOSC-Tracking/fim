@@ -99,6 +99,14 @@ namespace fim
 			for(variables_t::const_iterator fit=variables_.begin();fit!=variables_.end();++fit)
 				set.insert(fit->first);
 		}
+		void shrink_to_fit(void)
+		{
+#if FIM_USE_CXX11
+			for(variables_t::iterator fit=variables_.begin();fit!=variables_.end();++fit)
+				/* note we cannot fit->first.shrink_to_fit(), */
+				fit->second.shrink_to_fit();
+#endif /* FIM_USE_CXX11 */
+		}
 	};
 	std::ostream& operator<<(std::ostream& os, const Namespace & ns);
 }
