@@ -57,7 +57,7 @@ err:
 		return key;
 	}
 
-	fim::string CommandConsole::fcmd_bind(const args_t& args)
+	fim_cxr CommandConsole::fcmd_bind(const args_t& args)
 	{
 		/*
 		 *	this is the interactive bind command
@@ -108,7 +108,7 @@ err:
 		return bind(key,args[1]);
 	}
 
-	fim::string CommandConsole::fcmd_unbind(const args_t& args)
+	fim_cxr CommandConsole::fcmd_unbind(const args_t& args)
 	{
 		/*
 		 * 	unbinds the action eventually bound to the first key name specified in args..
@@ -121,7 +121,7 @@ err:
 	}
 
 #if 0
-	fim::string CommandConsole::fcmd_setenv(const args_t& args)
+	fim_cxr CommandConsole::fcmd_setenv(const args_t& args)
 	{
 		/*
 		 *	
@@ -133,7 +133,7 @@ err:
 	}
 #endif
 
-	fim::string CommandConsole::fcmd_help(const args_t &args)
+	fim_cxr CommandConsole::fcmd_help(const args_t &args)
 	{	
 		Command *cmd = FIM_NULL;
 
@@ -254,7 +254,7 @@ err:
 		return "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
 	}
 
-	fim::string CommandConsole::fcmd_quit(const args_t &args)
+	fim_cxr CommandConsole::fcmd_quit(const args_t &args)
 	{
 		/*
 		 * now the postcycle execution autocommands are enabled !
@@ -268,7 +268,7 @@ err:
 	}
 
 #ifndef FIM_WANT_NOSCRIPTING
-	fim::string CommandConsole::fcmd_executeFile(const args_t &args)
+	fim_cxr CommandConsole::fcmd_executeFile(const args_t &args)
 	{
 		/*
 		 * TODO : catch exceptions
@@ -279,7 +279,7 @@ err:
 	}
 #endif /* FIM_WANT_NOSCRIPTING */
 	
-	fim::string CommandConsole::fcmd_foo(const args_t &args)
+	fim_cxr CommandConsole::fcmd_foo(const args_t &args)
 	{
 		/*
 		 * useful function for bogus commands, but autocompletable (like language constructs)
@@ -300,7 +300,7 @@ err:
 	}
 #endif
 
-	fim::string CommandConsole::fcmd_echo(const args_t &args)
+	fim_cxr CommandConsole::fcmd_echo(const args_t &args)
 	{
 		return do_echo(args);
 	}
@@ -317,7 +317,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd__stdout(const args_t &args)
+	fim_cxr CommandConsole::fcmd__stdout(const args_t &args)
 	{
 		/*
 		 * a command to echo to stdout arguments, for debug and learning purposes
@@ -330,7 +330,7 @@ err:
 	}
 
 #ifdef FIM_AUTOCMDS
-	fim::string CommandConsole::fcmd_autocmd(const args_t& args)
+	fim_cxr CommandConsole::fcmd_autocmd(const args_t& args)
 	{
 		/*
 		 * associates an action to a certain event in certain circumstances
@@ -358,7 +358,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_autocmd_del(const args_t& args)
+	fim_cxr CommandConsole::fcmd_autocmd_del(const args_t& args)
 	{
 		/*
 		 * deletes one or more autocommands
@@ -386,7 +386,7 @@ err:
 	}
 #endif /* FIM_AUTOCMDS */
 
-	fim::string CommandConsole::fcmd_set_in_console(const args_t& args)
+	fim_cxr CommandConsole::fcmd_set_in_console(const args_t& args)
 	{
 		/*
 		 * EXPERIMENTAL !!
@@ -397,7 +397,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_set_interactive_mode(const args_t& args)
+	fim_cxr CommandConsole::fcmd_set_interactive_mode(const args_t& args)
 	{
 #ifdef FIM_USE_READLINE
 		ic_=-1;set_status_bar("",FIM_NULL);
@@ -408,7 +408,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_sys_popen(const args_t& args)
+	fim_cxr CommandConsole::fcmd_sys_popen(const args_t& args)
 	{
 		/*
 		 *
@@ -467,7 +467,7 @@ err:
 	 * FBI/FIM FILE PROBING MECHANISMS ARE NOT THOUGHT WITH PIPES IN MIND!
 	 * THEREFORE WE MUST FIND A SMARTER TRICK TO IMPLEMENT THIS
 	 * */
-	fim::string CommandConsole::fcmd_pread(const args_t& args)
+	fim_cxr CommandConsole::fcmd_pread(const args_t& args)
 	{
 		/*
 		 * we read a whole image file from pipe
@@ -490,7 +490,7 @@ err:
 	}
 #endif /* FIM_PIPE_IMAGE_READ */
 
-	fim::string CommandConsole::fcmd_cd(const args_t& args)
+	fim_cxr CommandConsole::fcmd_cd(const args_t& args)
 	{
 		/*
 		 * change working directory
@@ -521,7 +521,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_basename(const args_t& args)
+	fim_cxr CommandConsole::fcmd_basename(const args_t& args)
 	{
 		/*
 		 * */
@@ -535,7 +535,7 @@ err:
 		return res;
 	}
 
-	fim::string CommandConsole::fcmd_pwd(const args_t& args)
+	fim_cxr CommandConsole::fcmd_pwd(const args_t& args)
 	{
 		/*
 		 * print working directory
@@ -565,7 +565,7 @@ err:
 	}
 
 #ifndef FIM_NO_SYSTEM
-	fim::string CommandConsole::fcmd_system(const args_t& args)
+	fim_cxr CommandConsole::fcmd_system(const args_t& args)
 	{
 		/*
 		 * executes the shell commands given in the arguments,
@@ -628,7 +628,7 @@ err:
 	}
 #endif /* FIM_NO_SYSTEM */
 	
-	fim::string CommandConsole::fcmd_status(const args_t &args)
+	fim_cxr CommandConsole::fcmd_status(const args_t &args)
 	{
 		/*
 		 * the status bar is updated with the given arguments collated.
@@ -640,7 +640,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_unalias(const args_t& args)
+	fim_cxr CommandConsole::fcmd_unalias(const args_t& args)
 	{
 		/*
 		 * removes the actions assigned to the specified aliases,
@@ -667,7 +667,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_dump_key_codes(const args_t& args)
+	fim_cxr CommandConsole::fcmd_dump_key_codes(const args_t& args)
 	{
 		return do_dump_key_codes(DefRefMode);
 	}
@@ -747,7 +747,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_eval(const args_t &args)
+	fim_cxr CommandConsole::fcmd_eval(const args_t &args)
 	{
 		/*
 		 * all of the commands given as arguments are executed.
@@ -780,7 +780,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_recording(const args_t &args)
+	fim_cxr CommandConsole::fcmd_recording(const args_t &args)
 	{
 		if(args.size()<1)
 		{
@@ -823,7 +823,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_set(const args_t &args)
+	fim_cxr CommandConsole::fcmd_set(const args_t &args)
 	{
 		/*
 		 * with no arguments, prints out the variable names.
@@ -864,14 +864,14 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::fcmd_clear(const args_t& args)
+	fim_cxr CommandConsole::fcmd_clear(const args_t& args)
 	{
 		displaydevice_->console_control(0x03);//experimental
 		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 
-	fim::string CommandConsole::fcmd_do_getenv(const args_t& args)
+	fim_cxr CommandConsole::fcmd_do_getenv(const args_t& args)
 	{
 		string help="usage : " FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING " will create a fim variable named " FIM_CNS_EX_ID_STRING " with value $" FIM_CNS_EX_ID_STRING " (if nonempty), from the current shell."
 #ifndef HAVE_GETENV
@@ -922,7 +922,7 @@ bool fim_args_opt_have(const args_t& args, fim::string optname)
 	return false;
 }
 
-	fim::string CommandConsole::fcmd_desc(const args_t& args)
+	fim_cxr CommandConsole::fcmd_desc(const args_t& args)
 	{
 #if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t';

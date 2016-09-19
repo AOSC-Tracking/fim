@@ -97,7 +97,7 @@ namespace fim
 	       	return flist_.cf();
 	}
 
-	fim::string Browser::fcmd_list(const args_t &args)
+	fim_cxr Browser::fcmd_list(const args_t &args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 
@@ -241,7 +241,7 @@ ret:
 		return os;
 	}
 
-	fim::string Browser::fcmd_redisplay(const args_t &args)
+	fim_cxr Browser::fcmd_redisplay(const args_t &args)
 	{
 		/* ...shall merge with fcmd_display() */
 		redisplay();
@@ -366,7 +366,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_scale(const args_t &args)
+	fim_cxr Browser::fcmd_scale(const args_t &args)
 	{
 		/*
 		 * scales the image to a certain scale factor
@@ -572,7 +572,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
-	fim::string Browser::fcmd_negate(const args_t &args)
+	fim_cxr Browser::fcmd_negate(const args_t &args)
 	{
 		/*
 		 */
@@ -585,7 +585,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_desaturate(const args_t &args)
+	fim_cxr Browser::fcmd_desaturate(const args_t &args)
 	{
 		/*
 		 */
@@ -667,7 +667,7 @@ nop:
 	}
 
 #if FIM_WANT_PIC_LBFL
-	fim::string Browser::fcmd_limit(const args_t &args)
+	fim_cxr Browser::fcmd_limit(const args_t &args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 		int aoc = fim_args_opt_count(args,'-');
@@ -754,7 +754,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_display(const args_t &args)
+	fim_cxr Browser::fcmd_display(const args_t &args)
 	{
 		/*
 		 * displays the current image, (if already loaded), on screen
@@ -816,7 +816,7 @@ nop:
 	}
 
 #if FIM_WANT_FAT_BROWSER
-	fim::string Browser::fcmd_no_image(const args_t &args)
+	fim_cxr Browser::fcmd_no_image(const args_t &args)
 	{
 		/* sets no image as the current one */
 		FIM_PR('*');
@@ -967,7 +967,7 @@ ret:
 		FIM_PR('.');
 	}
 
-	fim::string Browser::fcmd_prefetch(const args_t &args)
+	fim_cxr Browser::fcmd_prefetch(const args_t &args)
 	{
 #ifdef FIM_BUGGED_CACHE
 		return " prefetching disabled";
@@ -1011,7 +1011,7 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_reload(const args_t &args)
+	fim_cxr Browser::fcmd_reload(const args_t &args)
 	{
 		/*
 		 * deletes the structures associated to the present image
@@ -1049,7 +1049,7 @@ ret:
 		return result;
 	}
 
-	fim::string Browser::fcmd_load(const args_t &args)
+	fim_cxr Browser::fcmd_load(const args_t &args)
 	{
 		/*
 		 * loads the current file, if not already loaded
@@ -1574,7 +1574,7 @@ ret:
 		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
 	
-	fim::string Browser::fcmd_goto_image(const args_t &args)
+	fim_cxr Browser::fcmd_goto_image(const args_t &args)
 	{
 		if( args.size() > 0 )
 			return goto_image_internal(args[0].c_str(),FIM_X_NULL);
@@ -2133,7 +2133,7 @@ parsed_limits:
 				{
 					case(FullFileNameMatch   ): msg = "limiting to full filename match..."; break;
 					case(PartialFileNameMatch): msg = "limiting to partial filename match..."; break;
-					case(VarMatch            ): msg = "limiting to variable match..."; break;
+					case(VarMatch            ): msg = string("limiting variable \"") + string(rlist[0]) + string("\" matching value \"") + string(rlist[1]) + string("\" ..."); break;
 					case(CmtMatch            ): msg = "limiting to comment match..."; break;
 				}
 			       	commandConsole_.set_status_bar(msg, "*");
@@ -2205,7 +2205,7 @@ nop:
 		return result;
 	}
 
-	fim::string Browser::fcmd_scrollforward(const args_t &args)
+	fim_cxr Browser::fcmd_scrollforward(const args_t &args)
 	{
 		/*
 		 * scrolls the image as it were a book :)
@@ -2236,7 +2236,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_scrolldown(const args_t &args)
+	fim_cxr Browser::fcmd_scrolldown(const args_t &args)
 	{
 		/*
 		 * scrolls the image down 
@@ -2261,7 +2261,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_info(const args_t &args)
+	fim_cxr Browser::fcmd_info(const args_t &args)
 	{
 		/*
 		 *	short information in status-line format
@@ -2295,7 +2295,7 @@ nop:
 		return fcmd_info(args_t(0));
 	}
 
-	fim::string Browser::fcmd_rotate(const args_t &args)
+	fim_cxr Browser::fcmd_rotate(const args_t &args)
 	{
 		/*
 		 * rotates the displayed image a specified amount of degrees
@@ -2339,7 +2339,7 @@ ret:
 	}
 
 #if FIM_WANT_FAT_BROWSER
-	fim::string Browser::fcmd_magnify(const args_t &args)
+	fim_cxr Browser::fcmd_magnify(const args_t &args)
 	{
 		/*
 		 * magnifies the displayed image
@@ -2376,7 +2376,7 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string Browser::fcmd_reduce(const args_t &args)
+	fim_cxr Browser::fcmd_reduce(const args_t &args)
 	{
 		/*
 		 * reduces the displayed image size
@@ -2414,7 +2414,7 @@ ret:
 	}
 #endif /* FIM_WANT_FAT_BROWSER */
 
-	fim::string Browser::fcmd_align(const args_t &args)
+	fim_cxr Browser::fcmd_align(const args_t &args)
 	{
 		/*
 		 * aligns to top/bottom the displayed image
