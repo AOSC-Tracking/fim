@@ -62,7 +62,11 @@ class fim_bitset_t:public std::vector<fim_bool_t>
 	size_t count(void)const{return std::count(this->begin(),this->end(),true);}
 	fim_bool_t any(void)const{return count()!=0;}
 	void set(size_t pos, fim_bool_t value = true){ (*this)[pos]=value; }
+#if FIM_USE_CXX11
+	void negate(void){ for(auto bit : (*this)) bit = !bit;  }
+#else /* FIM_USE_CXX11 */
 	void negate(void){ size_t tsize = size(); for(size_t pos=0;pos<tsize;++pos) this->begin()[pos] = ! this->begin()[pos]; }
+#endif /* FIM_USE_CXX11 */
 }; /* fim_bitset_t */
 
 /*
@@ -95,10 +99,18 @@ class flist_t : public std::vector<fim::fle_t>
 	const fim::string pop(const fim::string &filename);
 	void erase_at_bitset(const fim_bitset_t &bs, fim_bool_t negative = false)
 {
-	size_t ecount = 0, tsize = size();
+	size_t ecount = 0;
+#if FIM_USE_CXX11
+	auto bit=this->begin();
+	for(auto fit=bit;fit!=this->end();++fit)
+		if(bs.at(fit-bit) != negative)
+			this->erase(fit-ecount),ecount++;
+#else /* FIM_USE_CXX11 */
+	size_t tsize = size();
 	for(size_t pos=0;pos<tsize;++pos)
 		if(bs.at(pos) != negative)
 			this->erase(this->begin()+pos-ecount),ecount++;
+#endif /* FIM_USE_CXX11 */
 	adj_cf();
 }
 	fim_bool_t pop_current(void)
@@ -137,7 +149,7 @@ class Browser
 	fim_bool_t limited_; // FIXME: this->limited_
 #endif /* FIM_WANT_PIC_LBFL */
 
-	const fim::string nofile_; /* a dummy empty filename */
+	const fim_fn_t nofile_; /* a dummy empty filename */
 
 #ifndef FIM_WINDOWS
 	/* when compiled with no multiple windowing support, one viewport only will last. */
@@ -190,7 +202,7 @@ class Browser
 		llist_(args_t()),
 		limited_(false),
 #endif /* FIM_WANT_PIC_LBFL */
-		nofile_(""),
+		nofile_(),
 		commandConsole_(cc),
 #ifdef FIM_READ_STDIN_IMAGE
 		default_image_(FIM_NULL),

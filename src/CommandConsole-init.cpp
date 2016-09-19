@@ -326,7 +326,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_PREHFIMRC,"");
 
   #ifndef FIM_WANT_NOSCRIPTING
-		if(preConfigCommand_!=fim::string(""))
+		if(!preConfigCommand_.empty())
 			execute_internal(preConfigCommand_.c_str(),FIM_X_HISTORY);
 
 		if(getIntVariable(FIM_VID_NO_DEFAULT_CONFIGURATION)==0 )
@@ -399,9 +399,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		for(size_t i=0;i<scripts_.size();++i) executeFile(scripts_[i].c_str());
 #endif		/* FIM_WANT_NOSCRIPTING */
 #ifdef FIM_AUTOCMDS
-		if(postInitCommand_!=fim::string(""))
+		if(!postInitCommand_.empty())
 			autocmd_add(FIM_ACM_PREEXECUTIONCYCLE,"",postInitCommand_.c_str());
-		if(postExecutionCommand_!=fim::string(""))
+		if(!postExecutionCommand_.empty())
 			autocmd_add(FIM_ACM_POSTEXECUTIONCYCLE,"",postExecutionCommand_.c_str());
 #endif /* FIM_AUTOCMDS */
 

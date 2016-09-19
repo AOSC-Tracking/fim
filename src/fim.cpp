@@ -636,7 +636,7 @@ int fim_dump_man_page(void)
 //"Return          next image, write the filename of the current image to stdout on exit from the program.\n"
 );
 
-#define FIM_ADD_DOCLINE_FOR_CMD(REP,CMD) if(cc.find_key_for_bound_cmd(CMD)!=""){if(REP!=1)mp+=FIM_XSTRINGIFY(REP);else mp+=" ";mp+=cc.find_key_for_bound_cmd(CMD);mp+="    ";if(REP!=1)mp+=FIM_XSTRINGIFY(REP);mp+=CMD;mp+="\n";}
+#define FIM_ADD_DOCLINE_FOR_CMD(REP,CMD) if(!cc.find_key_for_bound_cmd(CMD).empty()){if(REP!=1)mp+=FIM_XSTRINGIFY(REP);else mp+=" ";mp+=cc.find_key_for_bound_cmd(CMD);mp+="    ";if(REP!=1)mp+=FIM_XSTRINGIFY(REP);mp+=CMD;mp+="\n";}
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT);
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV);
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT_FILE);

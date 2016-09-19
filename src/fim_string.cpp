@@ -112,7 +112,7 @@ namespace fim
 		append(buf);
 	}
 
-	string::string():std::string(""){}
+	string::string(void):std::string(){}
 
 	string string::operator+(const string s)const
 	{

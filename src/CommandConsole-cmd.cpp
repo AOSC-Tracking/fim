@@ -525,7 +525,7 @@ err:
 	{
 		/*
 		 * */
-		static fim::string res="";
+		static fim::string res;
 		for(size_t i=0;i<args.size();++i)
 		{
 			fim::string arg=args[i];

@@ -2036,7 +2036,7 @@ parsed_limits:
 		{
 			flist_t slist = flist_;
 
-			slist._sort(FIM_SYM_SORT_BN); /* avoidable step, if list sorted  */
+			slist._sort(FIM_SYM_SORT_BN);
 			if(wom)
 			{
 				const char * msg = "";
@@ -2835,6 +2835,8 @@ struct FimDateSorter
 
 	void flist_t::_sort(const fim_char_t sc)
 	{
+		/* TODO: can cache sorting status, would make e.g. Browser::do_filter more efficient */
+
 		if(sc==FIM_SYM_SORT_FN)
 			std::sort(this->begin(),this->end());
 		if(sc==FIM_SYM_SORT_BN)

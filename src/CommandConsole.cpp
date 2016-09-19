@@ -109,9 +109,10 @@ namespace fim
 		 * note : the binding translation map is used as a necessary
 		 * indirection...
 		 */
-		bindings_t::const_iterator bi=bindings_.find(c);
+		bindings_t::const_iterator bi(bindings_.find(c));
 		fim::string rs("keycode ");
-		string ksym = key_syms_[c];
+		string ksym(key_syms_[c]);
+
 		if( ksym != FIM_CNS_EMPTY_STRING )
 			ksym = " (keysym \"" + ksym + "\")";
 
@@ -304,6 +305,7 @@ ret:		return key;
 		 * assigns to an alias some action
 		 */
 		fim::string cmdlist,desc;
+		string r;
 
 		if(args.size()==0)
 		{
@@ -320,23 +322,20 @@ ret:		return key;
 			desc   +=args[2].val_;
 		if(aliases_[args[0].val_].first!=FIM_CNS_EMPTY_STRING)
 		{
-			string r;
 			aliases_[args[0].val_]=std::pair<fim_cmd_id,fim::string>(cmdlist,desc);
 			r+=fim::string(FIM_FLT_ALIAS" ");
 			r+=args[0].val_;
 			r+=fim::string(" successfully replaced.\n");
-			return r;
 		}
 		else
 		{
-			string r;
 			aliases_[args[0].val_].first=cmdlist;
 			aliases_[args[0].val_].second=desc;
 			r+=fim::string(FIM_FLT_ALIAS" ");
 			r+=args[0].val_;
 			r+=fim::string(" successfully added.\n");
-			return r;
 		}
+		return r;
 	}
 
 	fim::string CommandConsole::dummy(std::vector<Arg> args)
@@ -1053,7 +1052,6 @@ err:
 		return 1;
 	}
 		
-
 #ifdef	FIM_USE_GPM
 	static int gh(Gpm_Event *event, void *clientdata)
 	{
@@ -1117,7 +1115,7 @@ err:
 					 * This code gets executed when the user is about to exit console mode, 
 					 * having she pressed the 'Enter' key and expecting result.
 					 * */
-					fim::string cf=current();
+					fim::string cf(current());
 					FIM_AUTOCMD_EXEC(FIM_ACM_PREINTERACTIVECOMMAND,cf);
 #ifdef FIM_RECORDING
 					if(recordMode_)
@@ -1224,10 +1222,10 @@ err:
 						/* 
 						 * if using "" instead string("")
 						 * warning: comparison with string literal results in unspecified behaviour */
-						else if(rl!=string(FIM_CNS_EMPTY_STRING))
+						else if(*rl != FIM_SYM_CHAR_NUL)
 						{
 							args_t args;
-							std::string rls("");
+							std::string rls;
 
 							if(c == FIM_SYM_BW_SEARCH_KEY)
 								rls+="-";
@@ -2116,14 +2114,14 @@ ok:
 		/*
 		 * whether some command will be executed right after initialization
 		 * */
-		return postInitCommand_!=fim::string("");
+		return !postInitCommand_.empty();
 	}
 
 	bool CommandConsole::appendedPreConfigCommand(void)const
 	{
 		/*
 		 * */
-		return preConfigCommand_!=fim::string("");
+		return !preConfigCommand_.empty();
 	}
 
 	Viewport* CommandConsole::current_viewport(void)const
@@ -2448,12 +2446,12 @@ ok:
 
 			statusline_cursor=rl_point;	/* rl_point is readline stuff */
 			ilen = fim_strlen(desc);
-			chars-=6+hpl+(*prompt_=='\0'?0:1);	/* displayable, non-service chars  */
+			chars-=6+hpl+(*prompt_==FIM_SYM_CHAR_NUL?0:1);	/* displayable, non-service chars  */
 			if(!chars)
 				goto done;
 			/* 11 is strlen(" | H - Help")*/
 			offset =(statusline_cursor/(chars))*(chars);
-			coffset=(*prompt_!='\0')+(statusline_cursor%(chars));
+			coffset=(*prompt_!=FIM_SYM_CHAR_NUL)+(statusline_cursor%(chars));
 		
 			sprintf(str, "%s%-*.*s | %s",prompt_, chars, chars, desc+offset, hk.c_str());
 			str[coffset]='_';
