@@ -541,7 +541,7 @@ namespace fim
 	class CommandConsole;
 	extern fim_stream cout;
 	extern fim_stream cerr;
-	std::ostream& operator<<(std::ostream &os,const string& s);
+	std::ostream& operator<<(std::ostream& os,const string& s);
 }
 
 #define FIM_I2BI(VID) VID "_" /* identifier to backup identifier */

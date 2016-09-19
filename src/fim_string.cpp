@@ -26,12 +26,12 @@
 namespace fim
 {
 #if _FIM_STRING_WRAPPER
-	std::ostream& operator<<(std::ostream &os,const string& s)
+	std::ostream& operator<<(std::ostream& os,const string& s)
 	{
 		return os << s.c_str();
 	}
 
-	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
+	std::ostream& operator<<(std::ostream& os, const std::vector<fim::string> & v)
 	{
 		std::cout<<"{";
 		for(size_t i=0;i<v.size();++i)
@@ -40,7 +40,7 @@ namespace fim
 		return os;
 	}
 
-	std::ostream& operator<<(std::ostream &os, const Browser & b)
+	std::ostream& operator<<(std::ostream& os, const Browser& b)
 	{
 		return os;
 	}
@@ -293,12 +293,12 @@ namespace fim
 #endif /* _FIM_DYNAMIC_STRING */
 	}
 
-	std::ostream& operator<<(std::ostream &os,const string& s)
+	std::ostream& operator<<(std::ostream& os,const string& s)
 	{
 		return s.print(os);
 	}
 
-	std::ostream& operator<<(std::ostream &os, const std::vector<fim::string> & v)
+	std::ostream& operator<<(std::ostream& os, const std::vector<fim::string> & v)
 	{
 		os<<"{";
 		for(size_t i=0;i<v.size();++i)
@@ -307,7 +307,7 @@ namespace fim
 		return os;
 	}
 
-	std::ostream& operator<<(std::ostream &os, const Browser & b)
+	std::ostream& operator<<(std::ostream& os, const Browser& b)
 	{
 		return b.print(os);
 	}
@@ -565,7 +565,7 @@ namespace fim
 		const fim_char_t*p=strstr(s,ss);if(!p)return -1;return p-s;
 	}
  	
-	std::ostream& string::print(std::ostream &os)const
+	std::ostream& string::print(std::ostream& os)const
 	{
 		if(this->isempty())return os;
 		return os<<this->s;

@@ -27,8 +27,8 @@ class Arg
 {
 	public:
 	fim::string val_;
-	Arg(const fim::string &s):val_(s){}
-	Arg(const Arg &rhs):val_(rhs.val_){}
+	Arg(const fim::string& s):val_(s){}
+	Arg(const Arg& rhs):val_(rhs.val_){}
 	bool operator==(fim_int i);
 	bool operator<=(fim_int i);
 	bool operator>=(fim_int i);

@@ -144,7 +144,7 @@ namespace fim
 	int  assign(const string&str);
 	int  assign(const fim_char_t*str);
 	int  find(const fim_char_t*ss)const;
- 	std::ostream& print(std::ostream &os)const;
+ 	std::ostream& print(std::ostream& os)const;
 //	int operator=(int &i,const string& s){i=-1;return i;}
 	operator int(void)const;
 	operator float(void)const;

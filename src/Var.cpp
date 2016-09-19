@@ -33,7 +33,7 @@ namespace fim
 		;/* freebsd 7.2 cc dies without */
 	}
 
-	fim::string fim_var_help_db_query(const fim::string &id)
+	fim::string fim_var_help_db_query(const fim::string& id)
 	{
 		string hs = fim_var_help_db[id];
 		if(hs==FIM_CNS_EMPTY_STRING)
@@ -71,12 +71,12 @@ manmode:
 		return s;
 	}
 
-	std::ostream& Var::print(std::ostream &os)const
+	std::ostream& Var::print(std::ostream& os)const
 	{
 		return os << this->getString();
 	}
 
-	std::ostream& operator<<(std::ostream &os, const Var & var)
+	std::ostream& operator<<(std::ostream& os, const Var& var)
 	{
 		return var.print(os);
 	}

@@ -2,7 +2,7 @@
 /*
  Imlib2.cpp : Imlib2 device Fim driver file
 
- (c) 2011-2015 Michele Martone
+ (c) 2011-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ static Colormap cm;
 static Window   win;
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	Imlib2Device::Imlib2Device(MiniConsole & mc_, fim::string opts):DisplayDevice(mc_),
+	Imlib2Device::Imlib2Device(MiniConsole& mc_, fim::string opts):DisplayDevice(mc_),
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	Imlib2Device::Imlib2Device(
 			fim::string opts

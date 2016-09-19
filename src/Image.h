@@ -80,7 +80,7 @@ class Image
 	bool have_prevpage(int j=1)const;
 
 	private:
-	Image& operator= (const Image &i){return *this;/* a nilpotent assignation */}
+	Image& operator= (const Image& i){return *this;/* a nilpotent assignation */}
 	fim_scale_t            scale_;	/* viewport variables */
 	fim_scale_t            ascale_;
 	fim_scale_t            newscale_;
@@ -208,21 +208,21 @@ class ImgDscs: public std::map<fim_fn_t,fim_ds_t>
 		}
 	};
 	ImgDscs::iterator li_;
-	ImgDscs::iterator fo(const key_type & sk, const ImgDscs::iterator & li)
+	ImgDscs::iterator fo(const key_type& sk, const ImgDscs::iterator & li)
 	{
 		return std::find_if(li,end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
 	}
-	ImgDscs::const_iterator fo(const key_type & sk, const ImgDscs::const_iterator & li)const
+	ImgDscs::const_iterator fo(const key_type& sk, const ImgDscs::const_iterator & li)const
 	{
 		return std::find_if(li,end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
 	}
 public:
-	ImgDscs::const_iterator fo(const key_type & sk)const
+	ImgDscs::const_iterator fo(const key_type& sk)const
 	{
 		return std::find_if(begin(),end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
 	}
 private:
-	ImgDscs::iterator fi(const key_type & sk)
+	ImgDscs::iterator fi(const key_type& sk)
 	{
 		ImgDscs::iterator li;
 
@@ -244,7 +244,7 @@ public:
 	{
 		reset();
 	}
-	void fetch(const fim_fn_t &dfn, const fim_char_t sc)
+	void fetch(const fim_fn_t& dfn, const fim_char_t sc)
 	{
 		/* dfn: descriptions file name */
 		/* sc: separator char */
@@ -442,7 +442,7 @@ public:
 			bs += it->second.size() + sizeof(it->second);
 		return bs;
 	}
-	std::ostream& print(std::ostream &os)const
+	std::ostream& print(std::ostream& os)const
 	{
 		os << (size()) << " entries in " << byte_size() << " bytes";
 		return os;
@@ -477,7 +477,7 @@ public:
 #endif /* FIM_WANT_PIC_LVDN */
 
 #if FIM_WANT_PIC_LVDN
-	string get_values_list_for(const string & id, size_t up_to_max)const
+	string get_values_list_for(const string& id, size_t up_to_max)const
 	{
 		// FIXME: not using up_to_max properly yet (by popularity, etc) !
 		string vls;
@@ -513,7 +513,7 @@ public:
 	}
 #endif /* FIM_WANT_PIC_LVDN */
 	/*
-	std::ostream& print_descs(std::ostream &os, fim_char_t sc)const
+	std::ostream& print_descs(std::ostream& os, fim_char_t sc)const
 	{
 		for( const_iterator it = begin();it != end(); ++it )
 			os << it->first << sc << it->second << "\n";
@@ -521,6 +521,6 @@ public:
 	}
 	*/
 }; /* ImgDscs */
-	std::ostream& operator<<(std::ostream &os, const ImgDscs & id);
+	std::ostream& operator<<(std::ostream& os, const ImgDscs & id);
 #endif /* FIM_WANT_PIC_CMTS */
 #endif /* FIM_IMAGE_H */

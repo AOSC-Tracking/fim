@@ -1825,7 +1825,7 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	FramebufferDevice::FramebufferDevice(MiniConsole & mc):	
+	FramebufferDevice::FramebufferDevice(MiniConsole& mc):	
 	DisplayDevice(mc)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	FramebufferDevice::FramebufferDevice():	

@@ -47,13 +47,13 @@ class Var
 	};
 	fim::string s;
 	public:
-	Var(const Var &v)
+	Var(const Var& v)
 	:type(0),i(0),s(v.s)
 	{
 		this->set(v);
 	}
 
-	int   set(const Var &v)
+	int   set(const Var& v)
 	{
 		DBG("(v:?)\n");
 		this->type=v.type;
@@ -135,18 +135,18 @@ class Var
 #if 0
 	void operator= (int   i){type='i';this->i=i;}
 	void operator= (float f){setFloat(f);}
-	void operator= (fim::string &s){setString(s);}
+	void operator= (fim::string& s){setString(s);}
 #else
 	const Var& operator= (int   i){DBG("2i:"<<i<<"\n";type='i');this->i=i;return *this;}
 	const Var& operator= (float f){setFloat(f);return *this;}
-	const Var& operator= (fim::string &s){setString(s);return *this;}
-	/* const Var& operator= (const Var &rhs){type=v.type;;return *this;} */
-	const Var& operator= (const Var &rhs){set(rhs);return *this;}
-	Var concat(const Var &v)const{return this->getString()+v.getString();}
+	const Var& operator= (fim::string& s){setString(s);return *this;}
+	/* const Var& operator= (const Var& rhs){type=v.type;;return *this;} */
+	const Var& operator= (const Var& rhs){set(rhs);return *this;}
+	Var concat(const Var& v)const{return this->getString()+v.getString();}
 #endif
 	float setFloat(float f){type='f';return this->f=f;}
 	fim_int   setInt(fim_int i){type='i';return this->i=i;}
-	fim::string setString(const fim::string &s){type='s';this->s=s;return this->s;}
+	fim::string setString(const fim::string& s){type='s';this->s=s;return this->s;}
 	int getType(void)const{return type;}
 	fim_int getInt(void)const{return(type=='i')?i:
 		(type=='f'?((fim_int)(f)):
@@ -194,16 +194,16 @@ class Var
 	/*
 	 * These should be refined some day :)
 	 * */
-	Var  operator<=(const Var &v)const { return getFloat()<=v.getFloat(); }
-	Var  operator>=(const Var &v)const { return getFloat()>=v.getFloat(); }
-	Var  operator< (const Var &v)const { return getFloat()< v.getFloat(); }
-	Var  operator> (const Var &v)const { return getFloat()> v.getFloat(); }
+	Var  operator<=(const Var& v)const { return getFloat()<=v.getFloat(); }
+	Var  operator>=(const Var& v)const { return getFloat()>=v.getFloat(); }
+	Var  operator< (const Var& v)const { return getFloat()< v.getFloat(); }
+	Var  operator> (const Var& v)const { return getFloat()> v.getFloat(); }
 	#define _both(t) (((getType()==t) && (v.getType()==t)))
 	#define _types() DBG("t1:"<<(getType())<<",t2:"<<(v.getType())<<"\n");
 	#define _some_string() (getType()=='s' || v.getType()=='s')
 	#define _numeric() (!_some_string())
 	#define _p_t(op) DBG(op<<"("<<(fim_char_t)getType()<<","<<(fim_char_t)v.getType()<<")\n");
-	Var operator!=(const Var &v)const {
+	Var operator!=(const Var& v)const {
 		//_p_t("!=")
 		_types() 
 		if(_both('i'))return getInt  () !=v.getInt  (); 
@@ -214,35 +214,35 @@ class Var
 		}
 		return getFloat()!=v.getFloat();
 	}
-	Var operator==(const Var &rhs)const {DBG("EQV\n"); return 1-(*this != rhs).getInt(); }
-	Var operator/ (const Var &v)const
+	Var operator==(const Var& rhs)const {DBG("EQV\n"); return 1-(*this != rhs).getInt(); }
+	Var operator/ (const Var& v)const
 	{
 		if(_both('i')) return getInt()/(v.getInt()!=0?v.getInt():1); 
 		return getFloat()/(v.getFloat()!=0.0?v.getFloat():1); 
 	}
-	Var operator* (const Var &v)const
+	Var operator* (const Var& v)const
 	{
 		if(_both('i'))return getInt  ()*v.getInt  (); 
 		if(_both('f'))return getFloat()*v.getFloat();
 		if(_both('s'))return getFloat()*v.getFloat();
 		return getFloat()*v.getFloat(); 
 	}
-	Var operator| (const Var &v)const
+	Var operator| (const Var& v)const
 	{
 		return getInt  ()|v.getInt  (); 
 	}
-	Var operator& (const Var &v)const
+	Var operator& (const Var& v)const
 	{
 		return getInt  ()&v.getInt  (); 
 	}
-	Var operator+ (const Var &v)const
+	Var operator+ (const Var& v)const
 	{
 		if(_both('i'))return getInt  ()+v.getInt  (); 
 		if(_both('f'))return getFloat()+v.getFloat();
 		if(_both('s'))return getString()+v.getString();//yes...
 		return getFloat()+v.getFloat(); 
 	}
-	Var operator- (const Var &v)const
+	Var operator- (const Var& v)const
 	{
 		DBG("SUB"<<getType()<<"-"<<v.getType()<<"\n"); 
 		DBG("SUB"<<getFloat()<<"-"<<v.getFloat()<<"\n"); 
@@ -259,12 +259,12 @@ class Var
 			aeq = strcmp(s,this->getString().c_str());
 		return aeq == 0;
 	}
-	int re (const Var &v)const
+	int re (const Var& v)const
 	{
 		return re_match(v).getInt();
 	}
 /*
-	Var operator< (const Var &v)const
+	Var operator< (const Var& v)const
 	{
 		if(_both('i'))return getInt  ()<v.getInt  (); 
 		if(_both('f'))return getFloat()<v.getFloat();
@@ -277,26 +277,26 @@ class Var
 	if(getType()=='f')return - getFloat(); 
 	if(getType()=='s')return - getFloat(); 
 	}
-	Var operator% (const Var &v)const { return getInt()%v.getInt(); }
-//	Var operator, (const Var &v)const { return (getString()+v.getString()); }
-	Var operator&&(const Var &v)const { return getInt()&&v.getInt(); }
-	Var operator||(const Var &v)const { return getInt()||v.getInt(); }
-	Var re_match(const Var &v)const { return getString().re_match(v.getString().c_str()); }
+	Var operator% (const Var& v)const { return getInt()%v.getInt(); }
+//	Var operator, (const Var& v)const { return (getString()+v.getString()); }
+	Var operator&&(const Var& v)const { return getInt()&&v.getInt(); }
+	Var operator||(const Var& v)const { return getInt()||v.getInt(); }
+	Var re_match(const Var& v)const { return getString().re_match(v.getString().c_str()); }
 	#undef _p_t
 	#undef _numeric
 	#undef _some_string
 	#undef _both
 	#undef _types
-/*	Var operator==(const Var &rhs)const
+/*	Var operator==(const Var& rhs)const
 	{
 		return (type==rhs.getType()) && (i==rhs.getInt());
 	}*/
-	std::ostream& print(std::ostream &os)const;
+	std::ostream& print(std::ostream& os)const;
 };
-	fim::string fim_var_help_db_query(const fim::string &id);
+	fim::string fim_var_help_db_query(const fim::string& id);
 	void fim_var_help_db_init(void);
 	fim::string fim_get_variables_reference(FimDocRefMode refmode);
-	std::ostream& operator<<(std::ostream &os, const Var & var);
+	std::ostream& operator<<(std::ostream& os, const Var& var);
 }
 
 

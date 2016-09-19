@@ -133,7 +133,7 @@ err:
 	}
 #endif
 
-	fim_cxr CommandConsole::fcmd_help(const args_t &args)
+	fim_cxr CommandConsole::fcmd_help(const args_t& args)
 	{	
 		Command *cmd = FIM_NULL;
 
@@ -254,7 +254,7 @@ err:
 		return "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
 	}
 
-	fim_cxr CommandConsole::fcmd_quit(const args_t &args)
+	fim_cxr CommandConsole::fcmd_quit(const args_t& args)
 	{
 		/*
 		 * now the postcycle execution autocommands are enabled !
@@ -268,7 +268,7 @@ err:
 	}
 
 #ifndef FIM_WANT_NOSCRIPTING
-	fim_cxr CommandConsole::fcmd_executeFile(const args_t &args)
+	fim_cxr CommandConsole::fcmd_executeFile(const args_t& args)
 	{
 		/*
 		 * TODO : catch exceptions
@@ -279,7 +279,7 @@ err:
 	}
 #endif /* FIM_WANT_NOSCRIPTING */
 	
-	fim_cxr CommandConsole::fcmd_foo(const args_t &args)
+	fim_cxr CommandConsole::fcmd_foo(const args_t& args)
 	{
 		/*
 		 * useful function for bogus commands, but autocompletable (like language constructs)
@@ -288,7 +288,7 @@ err:
 	}
 
 #if 0
-	fim::string CommandConsole::get_expr_type(const args_t &args);
+	fim::string CommandConsole::get_expr_type(const args_t& args);
 	{
 		/*
 		 * a command to echo arguments types, for debug and learning purposes
@@ -300,12 +300,12 @@ err:
 	}
 #endif
 
-	fim_cxr CommandConsole::fcmd_echo(const args_t &args)
+	fim_cxr CommandConsole::fcmd_echo(const args_t& args)
 	{
 		return do_echo(args);
 	}
 
-	fim::string CommandConsole::do_echo(const args_t &args)const
+	fim::string CommandConsole::do_echo(const args_t& args)const
 	{
 		/*
 		 * a command to echo arguments, for debug and learning purposes
@@ -317,7 +317,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr CommandConsole::fcmd__stdout(const args_t &args)
+	fim_cxr CommandConsole::fcmd__stdout(const args_t& args)
 	{
 		/*
 		 * a command to echo to stdout arguments, for debug and learning purposes
@@ -628,7 +628,7 @@ err:
 	}
 #endif /* FIM_NO_SYSTEM */
 	
-	fim_cxr CommandConsole::fcmd_status(const args_t &args)
+	fim_cxr CommandConsole::fcmd_status(const args_t& args)
 	{
 		/*
 		 * the status bar is updated with the given arguments collated.
@@ -707,12 +707,12 @@ err:
 	}
 
 #ifdef FIM_RECORDING
-	fim::string CommandConsole::dump_record_buffer(const args_t &args)
+	fim::string CommandConsole::dump_record_buffer(const args_t& args)
 	{
 		return do_dump_record_buffer(args);
 	}
 
-	fim::string CommandConsole::do_dump_record_buffer(const args_t &args)const
+	fim::string CommandConsole::do_dump_record_buffer(const args_t& args)const
 	{
 		/*
 		 * the recorded commands are dumped in the console
@@ -729,7 +729,7 @@ err:
 		return res;
 	}
 
-	fim::string CommandConsole::execute_record_buffer(const args_t &args)
+	fim::string CommandConsole::execute_record_buffer(const args_t& args)
 	{
 		/*
 		 * all of the commands in the record buffer are re-executed.
@@ -747,7 +747,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr CommandConsole::fcmd_eval(const args_t &args)
+	fim_cxr CommandConsole::fcmd_eval(const args_t& args)
 	{
 		/*
 		 * all of the commands given as arguments are executed.
@@ -761,7 +761,7 @@ err:
 	}
 #endif /* FIM_RECORDING */
 
-	fim::string CommandConsole::repeat_last(const args_t &args)
+	fim::string CommandConsole::repeat_last(const args_t& args)
 	{
 		/*
 		 * WARNING : there is an intricacy concerning the semantics of this command :
@@ -780,7 +780,7 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr CommandConsole::fcmd_recording(const args_t &args)
+	fim_cxr CommandConsole::fcmd_recording(const args_t& args)
 	{
 		if(args.size()<1)
 		{
@@ -823,7 +823,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr CommandConsole::fcmd_set(const args_t &args)
+	fim_cxr CommandConsole::fcmd_set(const args_t& args)
 	{
 		/*
 		 * with no arguments, prints out the variable names.

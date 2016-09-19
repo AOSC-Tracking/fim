@@ -2,7 +2,7 @@
 /*
  Imlib2Device.h : Imlib2 device Fim driver header file
 
- (c) 2011-2013 Michele Martone
+ (c) 2011-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ class Imlib2Device:public DisplayDevice
 	public:
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	Imlib2Device(MiniConsole & mc_,
+	Imlib2Device(MiniConsole& mc_,
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	Imlib2Device(
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

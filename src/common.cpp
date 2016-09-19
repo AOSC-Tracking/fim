@@ -64,7 +64,7 @@ void fim_touppers(fim_char_t *s)
 }
 */
 
-fim::string fim_dirname(const fim::string & arg)
+fim::string fim_dirname(const fim::string& arg)
 {
 #ifdef HAVE_LIBGEN_H
 	fim_char_t buf[FIM_PATH_MAX];
@@ -75,7 +75,7 @@ fim::string fim_dirname(const fim::string & arg)
 	return "";//FIXME
 #endif /* HAVE_LIBGEN_H */
 }
-	fim::string fim_shell_arg_escape(const fim::string & arg, bool quoted)
+	fim::string fim_shell_arg_escape(const fim::string& arg, bool quoted)
 	{
 		// FIXME: this escaping function is NOT safe; this code shall only serve as a placeholder for a better one.
 		fim::string ear=arg;

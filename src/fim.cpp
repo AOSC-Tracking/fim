@@ -989,7 +989,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 			return 0;
 }
 
-void fim_args_from_desc_file(args_t & argsc, const fim_fn_t &dfn, const fim_char_t sc)
+void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_t sc)
 {
 	/* dfn: descriptions file name */
 	/* sc: separator char */

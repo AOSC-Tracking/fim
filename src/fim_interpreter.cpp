@@ -83,7 +83,7 @@ namespace fim
  *	Invoked by the flex and bison files.
  *	This code will be fully cleaned when the Fim language will settle.
  */
-std::ostream & operator<<(std::ostream &os, const nodeType &p)
+std::ostream& operator<<(std::ostream& os, const nodeType& p)
 {
 	os<< "type " << p.type << FIM_SYM_ENDL;
 	return os;

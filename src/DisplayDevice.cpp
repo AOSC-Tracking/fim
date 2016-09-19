@@ -23,7 +23,7 @@
 #include "DisplayDevice.h"
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	DisplayDevice::DisplayDevice(MiniConsole & mc):
+	DisplayDevice::DisplayDevice(MiniConsole& mc):
 	finalized_(false)
 	,mc_(mc)
 	,f_(FIM_NULL)

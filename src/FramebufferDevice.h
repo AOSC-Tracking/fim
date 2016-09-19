@@ -242,7 +242,7 @@ class FramebufferDevice:public DisplayDevice
 #endif /* FIM_BOZ_PATCH */
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	FramebufferDevice(MiniConsole & mc_);
+	FramebufferDevice(MiniConsole& mc_);
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	FramebufferDevice(void);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

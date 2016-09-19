@@ -126,7 +126,7 @@ err:
 }
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	SDLDevice::SDLDevice(MiniConsole & mc_, fim::string opts):DisplayDevice(mc_),
+	SDLDevice::SDLDevice(MiniConsole& mc_, fim::string opts):DisplayDevice(mc_),
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	SDLDevice::SDLDevice(
 			fim::string opts

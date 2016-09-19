@@ -97,7 +97,7 @@ namespace fim
 	       	return flist_.cf();
 	}
 
-	fim_cxr Browser::fcmd_list(const args_t &args)
+	fim_cxr Browser::fcmd_list(const args_t& args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 
@@ -229,7 +229,7 @@ ret:
 		return result;
 	}
 
-	std::ostream& Browser::print(std::ostream &os)const
+	std::ostream& Browser::print(std::ostream& os)const
 	{
 #if FIM_USE_CXX11
 		for(auto le : flist_)
@@ -241,7 +241,7 @@ ret:
 		return os;
 	}
 
-	fim_cxr Browser::fcmd_redisplay(const args_t &args)
+	fim_cxr Browser::fcmd_redisplay(const args_t& args)
 	{
 		/* ...shall merge with fcmd_display() */
 		redisplay();
@@ -294,7 +294,7 @@ ret:
 	}
 #endif /* FIM_READ_STDIN_IMAGE */
 
-	Browser::Browser(CommandConsole &cc):
+	Browser::Browser(CommandConsole& cc):
 #ifdef FIM_NAMESPACES
 		Namespace(&cc,FIM_SYM_NAMESPACE_BROWSER_CHAR),
 #endif /* FIM_NAMESPACES */
@@ -340,7 +340,7 @@ ret:
 		return s;
 	}
 
-	fim::string Browser::pan(const args_t &args)
+	fim::string Browser::pan(const args_t& args)
 	{
 		FIM_PR('*');
 
@@ -366,7 +366,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_scale(const args_t &args)
+	fim_cxr Browser::fcmd_scale(const args_t& args)
 	{
 		/*
 		 * scales the image to a certain scale factor
@@ -572,7 +572,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
-	fim_cxr Browser::fcmd_negate(const args_t &args)
+	fim_cxr Browser::fcmd_negate(const args_t& args)
 	{
 		/*
 		 */
@@ -585,7 +585,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_desaturate(const args_t &args)
+	fim_cxr Browser::fcmd_desaturate(const args_t& args)
 	{
 		/*
 		 */
@@ -667,7 +667,7 @@ nop:
 	}
 
 #if FIM_WANT_PIC_LBFL
-	fim_cxr Browser::fcmd_limit(const args_t &args)
+	fim_cxr Browser::fcmd_limit(const args_t& args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 		int aoc = fim_args_opt_count(args,'-');
@@ -754,7 +754,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_display(const args_t &args)
+	fim_cxr Browser::fcmd_display(const args_t& args)
 	{
 		/*
 		 * displays the current image, (if already loaded), on screen
@@ -816,7 +816,7 @@ nop:
 	}
 
 #if FIM_WANT_FAT_BROWSER
-	fim_cxr Browser::fcmd_no_image(const args_t &args)
+	fim_cxr Browser::fcmd_no_image(const args_t& args)
 	{
 		/* sets no image as the current one */
 		FIM_PR('*');
@@ -967,7 +967,7 @@ ret:
 		FIM_PR('.');
 	}
 
-	fim_cxr Browser::fcmd_prefetch(const args_t &args)
+	fim_cxr Browser::fcmd_prefetch(const args_t& args)
 	{
 #ifdef FIM_BUGGED_CACHE
 		return " prefetching disabled";
@@ -1011,7 +1011,7 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_reload(const args_t &args)
+	fim_cxr Browser::fcmd_reload(const args_t& args)
 	{
 		/*
 		 * deletes the structures associated to the present image
@@ -1049,7 +1049,7 @@ ret:
 		return result;
 	}
 
-	fim_cxr Browser::fcmd_load(const args_t &args)
+	fim_cxr Browser::fcmd_load(const args_t& args)
 	{
 		/*
 		 * loads the current file, if not already loaded
@@ -1411,7 +1411,7 @@ ret:
 		return current();
 	}
 
-	fim::string Browser::regexp_goto(const args_t &args, fim_int src_dir)
+	fim::string Browser::regexp_goto(const args_t& args, fim_int src_dir)
 	{
 		/*
 		 * goes to the next filename-matching file
@@ -1574,7 +1574,7 @@ ret:
 		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
 	
-	fim_cxr Browser::fcmd_goto_image(const args_t &args)
+	fim_cxr Browser::fcmd_goto_image(const args_t& args)
 	{
 		if( args.size() > 0 )
 			return goto_image_internal(args[0].c_str(),FIM_X_NULL);
@@ -1774,7 +1774,7 @@ err:
 
 	fim_stat_t fim_get_stat(const fim_fn_t& fn, bool * dopushp);
 
-	fim::string Browser::do_filter(const args_t &args, MatchMode rm, bool negative, enum FilterAction faction)
+	fim::string Browser::do_filter(const args_t& args, MatchMode rm, bool negative, enum FilterAction faction)
 	{
 		/*
 		 * TODO: introduce flags for negative (instead of a bool).
@@ -2205,7 +2205,7 @@ nop:
 		return result;
 	}
 
-	fim_cxr Browser::fcmd_scrollforward(const args_t &args)
+	fim_cxr Browser::fcmd_scrollforward(const args_t& args)
 	{
 		/*
 		 * scrolls the image as it were a book :)
@@ -2236,7 +2236,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_scrolldown(const args_t &args)
+	fim_cxr Browser::fcmd_scrolldown(const args_t& args)
 	{
 		/*
 		 * scrolls the image down 
@@ -2261,7 +2261,7 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_info(const args_t &args)
+	fim_cxr Browser::fcmd_info(const args_t& args)
 	{
 		/*
 		 *	short information in status-line format
@@ -2295,7 +2295,7 @@ nop:
 		return fcmd_info(args_t(0));
 	}
 
-	fim_cxr Browser::fcmd_rotate(const args_t &args)
+	fim_cxr Browser::fcmd_rotate(const args_t& args)
 	{
 		/*
 		 * rotates the displayed image a specified amount of degrees
@@ -2339,7 +2339,7 @@ ret:
 	}
 
 #if FIM_WANT_FAT_BROWSER
-	fim_cxr Browser::fcmd_magnify(const args_t &args)
+	fim_cxr Browser::fcmd_magnify(const args_t& args)
 	{
 		/*
 		 * magnifies the displayed image
@@ -2376,7 +2376,7 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_reduce(const args_t &args)
+	fim_cxr Browser::fcmd_reduce(const args_t& args)
 	{
 		/*
 		 * reduces the displayed image size
@@ -2414,7 +2414,7 @@ ret:
 	}
 #endif /* FIM_WANT_FAT_BROWSER */
 
-	fim_cxr Browser::fcmd_align(const args_t &args)
+	fim_cxr Browser::fcmd_align(const args_t& args)
 	{
 		/*
 		 * aligns to top/bottom the displayed image
@@ -2519,7 +2519,7 @@ err:
 #endif /* FIM_USE_CXX11 */
 	}
 
-	fim::string Browser::pop_current(const args_t &args)
+	fim::string Browser::pop_current(const args_t& args)
 	{
 		/*
 		 *	pops the last image filename off the image list
@@ -2527,7 +2527,7 @@ err:
 		return pop_current();
 	}
 
-	fim::string Browser::do_push(const args_t &args)
+	fim::string Browser::do_push(const args_t& args)
 	{
 		/*
 		 *	pushes a new image filename on the back of the image list
@@ -2590,7 +2590,7 @@ err:
 		return bs;
 	}
 
-	void Browser::mark_from_list(const args_t & argsc)
+	void Browser::mark_from_list(const args_t& argsc)
 	{
 		/* TODO: one would like to have better matching options */
 		if (argsc.size() )
@@ -2741,7 +2741,7 @@ ret:
 			fit->stat_ = fim_get_stat(*fit,FIM_NULL);
 	}
 
-	flist_t::flist_t(const args_t & a):cf_(0)
+	flist_t::flist_t(const args_t& a):cf_(0)
        	{
 		/* FIXME: unused for now */
 		this->reserve(a.size());
@@ -2759,7 +2759,7 @@ ret:
 #endif /* FIM_USE_CXX11 */
 	}
 
-	const fim::string flist_t::pop(const fim::string & filename)
+	const fim::string flist_t::pop(const fim::string& filename)
 	{
 		fim::string s;
 

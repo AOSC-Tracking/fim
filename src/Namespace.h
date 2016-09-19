@@ -73,7 +73,7 @@ namespace fim
 		fim_int getGlobalIntVariable(const fim_var_id& varname)const;
 		fim_float_t getGlobalFloatVariable(const fim_var_id& varname)const;
 		fim::string getGlobalStringVariable(const fim_var_id& varname)const;
-		fim::string autocmd_exec(const fim::string &event, const fim_fn_t& fname);
+		fim::string autocmd_exec(const fim::string& event, const fim_fn_t& fname);
 		fim::string get_variables_list(bool with_values=false, bool fordesc=false)const;
 		virtual size_t byte_size(void)const = 0;
 		fim_err_t assign_ns(const Namespace& ns);
@@ -100,7 +100,7 @@ namespace fim
 				set.insert(fit->first);
 		}
 	};
-	std::ostream& operator<<(std::ostream &os, const Namespace & ns);
+	std::ostream& operator<<(std::ostream& os, const Namespace & ns);
 }
 
 #endif /* FIM_NAMESPACE_H */

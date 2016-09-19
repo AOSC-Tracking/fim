@@ -124,7 +124,7 @@ class Cache
 
 #if FIM_WANT_BDI
 	Image dummy_img_;	// experimental
-	Image & dummy_img(void){return dummy_img_;}	// experimental
+	Image& dummy_img(void){return dummy_img_;}	// experimental
 #endif	/* FIM_WANT_BDI */
 
 	/*	free() and counter update */
@@ -168,10 +168,10 @@ class PACA	/* Parallel Cache */
 #if FIM_WANT_BACKGROUND_LOAD
 	std::thread t;
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-	Cache & cache_;
+	Cache& cache_;
 	const int dpc = 0; /* debug parallel cache (FIXME: temporary) */
 
-	void operator () (const fid_t & rid)
+	void operator () (const fid_t& rid)
 	{
 		if(dpc) std::cout << __FUNCTION__ << ": "<< rid << " ...\n";
 		if(dpc) std::cout << (&cache_) << " : " << cache_.getReport() << "\n";
@@ -187,7 +187,7 @@ class PACA	/* Parallel Cache */
        	{
 		if(dpc) std::cout << __FUNCTION__ << "\n";
 	}
-	PACA(Cache & cache):cache_(cache) { }
+	PACA(Cache& cache):cache_(cache) { }
 
 	Image * useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page=0)
 	{
@@ -205,7 +205,7 @@ class PACA	/* Parallel Cache */
 		return image;
 	}
 
-	void asyncPrefetch(const fid_t & rid)
+	void asyncPrefetch(const fid_t& rid)
 	{
 		if(dpc) std::cout << __FUNCTION__ << ": " << rid << "\n";
 		if( t.joinable() )

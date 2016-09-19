@@ -227,7 +227,7 @@ rerr:
 			return FIM_ERR_GENERIC;
 		}
 
-		MiniConsole::MiniConsole(CommandConsole & cc,int lw, int r)
+		MiniConsole::MiniConsole(CommandConsole& cc,int lw, int r)
 		:
 		Namespace(&cc),
 		buffer_(FIM_NULL),
