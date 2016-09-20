@@ -1744,6 +1744,11 @@ extern "C" {
 			    ", built on %s\n",
 			    __DATE__
 	    		    " ( based on fbi version 1.31 (c) by 1999-2004 " FBI_AUTHOR_NAME " )\n"
+	#ifdef __cplusplus
+	"Compiled with C++ standard: " FIM_XSTRINGIFY(__cplusplus) "\n"
+	#else /* __cplusplus */
+	""
+	#endif /* __cplusplus */
 	#ifdef FIM_WITH_LIBPNG
 	#ifdef PNG_HEADER_VERSION_STRING 
 	"Compiled with " PNG_HEADER_VERSION_STRING ""
