@@ -501,7 +501,7 @@ err:
 		return current_h_;
 	}
 
-	inline void SDLDevice::setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b)
+	inline void SDLDevice::setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b) FIM_NOEXCEPT
 	{
 		/*
 		 * this function is taken straight from the sdl documentation: there are smarter ways to do this.
@@ -783,7 +783,7 @@ done:
 		return get_input_inner(c,&event_,&keypress_,want_poll);
 	}
 
-	fim_err_t SDLDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color)
+	fim_err_t SDLDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT
 	{
 		fim_coo_t y;
 		/*
@@ -796,7 +796,7 @@ done:
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t SDLDevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)
+	fim_err_t SDLDevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT
 	{
 		fim_coo_t y;
 		/*
@@ -809,7 +809,7 @@ done:
 		return FIM_ERR_NO_ERROR;
 	}
 
-void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data)
+void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data) FIM_NOEXCEPT
 {
 
 /* 
@@ -872,7 +872,7 @@ void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 #undef GLWIDTHBYTESPADDED
 }
 
-fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
+fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_NOEXCEPT
 {
     fim_sys_int i,c/*,j,w*/;
 

@@ -415,7 +415,7 @@ void FramebufferDevice::svga_display_image_new(
 	unsigned int bh,
 	unsigned int bw,
 		int ocskip,// output columns to skip for each line
-	int flags)
+	int flags) FIM_NOEXCEPT
 {
 /*	bx is the box's x origin
  *	by is the box's y origin
@@ -1169,7 +1169,7 @@ void FramebufferDevice::cleanup(void)
     //close(tty_);
 }
 
-fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror)/*dez's mirror patch*/
+fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT/*dez's mirror patch*/
 {
     fim_byte_t  *ptr  = (fim_byte_t *)dst;
 	dither_line(buffer, ptr, line, owidth, mirror);
@@ -1177,7 +1177,7 @@ fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, fi
 	return ptr;
 }
 
-fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror)/*dez's mirror patch*/
+fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT/*dez's mirror patch*/
 {
     fim_byte_t  *ptr  = (fim_byte_t *)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
@@ -1318,7 +1318,7 @@ fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_
 
 }*/
 
-fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, fim_byte_t *dst)
+fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, fim_byte_t *dst) FIM_NOEXCEPT 
 {
     fim_byte_t  *ptr  = (fim_byte_t*)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
@@ -1460,7 +1460,7 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
     }
 }
 
-void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int mirror)
+void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int mirror) FIM_NOEXCEPT
 {
     register long   a, b
 #ifndef FIM_IS_SLOWER_THAN_FBI
