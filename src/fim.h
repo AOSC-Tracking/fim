@@ -160,6 +160,11 @@
 #define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
 #define FIM_WANT_IMAGE_LOAD_TIME 1
 #define FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK 1
+#if FIM_USE_CXX11
+#define FIM_NOEXCEPT noexcept
+#else /* FIM_USE_CXX11 */
+#define FIM_NOEXCEPT
+#endif /* FIM_USE_CXX11 */
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec

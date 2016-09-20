@@ -76,11 +76,11 @@ class SDLDevice:public DisplayDevice
 	fim_coo_t height(void);
 	fim_err_t status_line(const fim_char_t *msg);
 	fim_bool_t handle_console_switch(void) { return false; }
-	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT;
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
-	void fs_render_fb(fim_coo_t x, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data);
-	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
+	void fs_render_fb(fim_coo_t x, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data) FIM_NOEXCEPT;
+	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_NOEXCEPT;
 	void flush(void);
 	void lock(void);
 	void unlock(void);
@@ -90,9 +90,9 @@ class SDLDevice:public DisplayDevice
 	private:
 	fim_err_t clear_rect_( void* dst, fim_coo_t oroff,fim_coo_t ocoff,fim_coo_t  orows,fim_coo_t ocols,fim_coo_t  ocskip);
 	/* TEMPORARY */
-	inline void setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b);
+	inline void setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b) FIM_NOEXCEPT;
 	void status_screen_(int desc,int draw_output){ return ; }
-	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color);
+	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT;
 	fim_coo_t txt_width(void) ;
 	fim_coo_t txt_height(void) ;
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);

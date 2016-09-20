@@ -386,14 +386,14 @@ void svga_display_image_new(
 	unsigned int bh,
 	unsigned int bw,
 		int ocskip,// output columns to skip for each line
-	int flags);
+	int flags) FIM_NOEXCEPT;
 
 /* ---------------------------------------------------------------------- */
 /* by dez
  */
-inline fim_byte_t * clear_line(int bpp, int line, int owidth, fim_byte_t *dst);
-fim_byte_t * convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror);/*dez's mirror patch*/
-fim_byte_t * convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror);/*dez's mirror patch*/
+inline fim_byte_t * clear_line(int bpp, int line, int owidth, fim_byte_t *dst) FIM_NOEXCEPT;
+fim_byte_t * convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT;/*dez's mirror patch*/
+fim_byte_t * convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT;/*dez's mirror patch*/
 
 
 
@@ -402,7 +402,7 @@ fim_byte_t * convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_
 
 
 void init_dither(int shades_r, int shades_g, int shades_b, int shades_gray);
-inline void dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int mirror);
+inline void dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int mirror) FIM_NOEXCEPT;
 
 void dither_line_gray(fim_byte_t *src, fim_byte_t *dst, int y, int width);
 
