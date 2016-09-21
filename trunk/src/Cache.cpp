@@ -46,11 +46,11 @@
 	extern CommandConsole cc;
 namespace fim
 {
-	static fim_time_t fim_time(void) /* stand-alone function */
+	static fim_time_t fim_time(void) FIM_NOEXCEPT /* stand-alone function */
 	{
 #ifdef HAVE_SYS_TIME_H
 		struct timeval tv;
-		const fim_time_t prec = 1000; /* fraction of second precision */
+		FIM_CONSTEXPR fim_time_t prec = 1000; /* fraction of second precision */
 		gettimeofday(&tv, NULL);
 		return tv.tv_sec * prec + tv.tv_usec / ( 1000000 / prec );
 #else /* HAVE_SYS_TIME_H */

@@ -3,7 +3,7 @@
 
                 Version 0.6-trunk
 
-# (r1103)
+# (r1104)
  * Language standard level (and a few features) will be enabled and set from the value of the predefined __cplusplus macro.
 # (r1079)
  * Introduced a "#!fim:/=dir" special description line to specify dir prepended to basename.

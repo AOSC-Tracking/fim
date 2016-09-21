@@ -2,7 +2,7 @@
 /*
  fim_plugin.cpp : Fim plugin stuff
 
- (c) 2011-2015 Michele Martone
+ (c) 2011-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ static void fim_opencv_detect_and_draw( IplImage* img, struct ida_image *iimg )
 	static int haar_file_existent=-1;
 	const fim_char_t*haarfile="haarcascade_frontalface_alt.xml";
 	string haarpath; 
-	const fim_char_t*FIM_HAAR_PATH="FIM_HAAR_PATH";
+	FIM_CONSTEXPR fim_char_t*FIM_HAAR_PATH="FIM_HAAR_PATH";
 
 	if(haar_file_existent==0)
 		return;
@@ -122,7 +122,7 @@ static void fim_opencv_detect_and_draw( IplImage* img, struct ida_image *iimg )
 static fim_err_t fim_opencv_plugin_example(struct ida_image *img, const fim_char_t *filename)
 {
 	fim_coo_t r,c,h=img->i.height,w=img->i.width;
-	const int b=30;
+	FIM_CONSTEXPR int b=30;
        	IplImage*cvimage=FIM_NULL;
 	int depth=IPL_DEPTH_8U;
        	int channels=3;

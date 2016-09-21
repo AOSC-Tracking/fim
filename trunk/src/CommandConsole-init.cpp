@@ -461,7 +461,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 
 	void CommandConsole::quickbench(fim_int qbi)
 	{
-		const fim_int max_sq=1024*1024;
+		FIM_CONSTEXPR fim_int max_sq=1024*1024;
 		/* FIXME: may be enhanced with sequence numbers ... */
 		cc.setVariable(fim_rand()%(max_sq),fim_rand());
 		cc.getIntVariable(fim_rand()%max_sq);

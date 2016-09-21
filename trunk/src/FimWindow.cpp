@@ -48,7 +48,7 @@ namespace fim
 		while(i<args.size())
                 {
 			fim_cmd_id cmd=args[i];
-			const fim_coo_t es=FIM_CNS_WENLARGE_STEPS_DEFAULT;
+			FIM_CONSTEXPR fim_coo_t es = FIM_CNS_WENLARGE_STEPS_DEFAULT;
 
 			if(cmd == "split" || cmd == "hsplit")
 			{

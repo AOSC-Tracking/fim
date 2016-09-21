@@ -45,7 +45,7 @@ namespace fim
 #if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
     fim_int fim_fmf_ = FIM_FONT_MAGNIFY_FACTOR_DEFAULT; /* FIXME */
 #else /* FIM_FONT_MAGNIFY_FACTOR */
-    const fim_int fim_fmf_ = FIM_FONT_MAGNIFY_FACTOR;
+    FIM_CONSTEXPR fim_int fim_fmf_ = FIM_FONT_MAGNIFY_FACTOR;
 #endif /* FIM_FONT_MAGNIFY_FACTOR */
 
 	FontServer::FontServer( )

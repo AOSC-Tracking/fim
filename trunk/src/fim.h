@@ -162,8 +162,10 @@
 #define FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK 1
 #if FIM_USE_CXX11
 #define FIM_NOEXCEPT noexcept
+#define FIM_CONSTEXPR constexpr
 #else /* FIM_USE_CXX11 */
 #define FIM_NOEXCEPT
+#define FIM_CONSTEXPR const
 #endif /* FIM_USE_CXX11 */
 
 #ifdef FIM_AUTOCMDS

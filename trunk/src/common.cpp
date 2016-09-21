@@ -529,7 +529,7 @@ fim_int fim_rand(void)
 		 *	member function returns true if there is match. false otherwise.
 		 */
 		regex_t regex;		//should be static!!!
-		const int nmatch=1;	// we are satisfied with the first match, aren't we ?
+		FIM_CONSTEXPR int nmatch=1;	// we are satisfied with the first match, aren't we ?
 		regmatch_t pmatch[nmatch];
 		bool match=true;
 

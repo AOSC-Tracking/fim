@@ -398,7 +398,7 @@ FIM_NULL
  camera.
 #endif
 
-const int fim_options_count=sizeof(fim_options)/sizeof(fim_options_t);
+FIM_CONSTEXPR int fim_options_count=sizeof(fim_options)/sizeof(fim_options_t);
 struct option options[fim_options_count];
 
 fim::string fim_help_opt(const char*qs)
