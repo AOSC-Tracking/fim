@@ -65,8 +65,8 @@ err:
 		 *	is associated to the user supplied action (be it a command, alias, etc..)
 		 *	FIX ME
 		 */
-		const fim_char_t *kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
-		const fim_char_t*kstr=FIM_NULL;
+		FIM_CONSTEXPR fim_char_t* kerr=FIM_FLT_BIND" : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
+		const fim_char_t* kstr=FIM_NULL;
 		fim_key_t key=FIM_SYM_NULL_KEY;
 
 		if(args.size()==0)

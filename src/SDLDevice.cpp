@@ -299,7 +299,7 @@ err:
 			setpixel(screen_, oj, ytimesw, (fim_coo_t)srcp[0], (fim_coo_t)srcp[1], (fim_coo_t)srcp[2]);
 		}
 #else
-			const Uint32 rmask=0x00000000,gmask=0x00000000,bmask=0x00000000,amask=0x00000000;
+			FIM_CONSTEXPR Uint32 rmask=0x00000000,gmask=0x00000000,bmask=0x00000000,amask=0x00000000;
 			SDL_Surface *src=SDL_CreateRGBSurfaceFrom(rgb,icols,irows,24,icols*3,rmask,gmask,bmask,amask);
 			if(src)
 			{
@@ -834,7 +834,7 @@ void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 
 	fim_coo_t row,bit,x;
 	fim_sys_int bpr;
-	const Uint8 rc = 0xff, gc = 0xff, bc = 0xff;
+	FIM_CONSTEXPR Uint8 rc = 0xff, gc = 0xff, bc = 0xff;
 	// const Uint8 rc = 0x00, gc = 0x00, bc = 0xff;
 
 	bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left), SCANLINE_PAD_BYTES);

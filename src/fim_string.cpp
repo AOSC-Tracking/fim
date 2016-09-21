@@ -130,7 +130,7 @@ namespace fim
 		 * FIXME : return values could be more informative
 		 * */
 		regex_t regex;
-		const int nmatch=1;
+		FIM_CONSTEXPR int nmatch=1;
 		regmatch_t pmatch[nmatch];
 
 		if( !r || !*r )
@@ -197,7 +197,7 @@ namespace fim
 		 * FIXME : not efficient
 		 * */
 		regex_t regex;
-		const int nmatch=1;
+		FIM_CONSTEXPR int nmatch=1;
 		regmatch_t pmatch[nmatch];
 		int off=0;//,sl=0;
 		std::string rs =FIM_CNS_EMPTY_STRING;

@@ -249,7 +249,7 @@ string DisplayDevice::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_
 		case 0:
 		msg+="fim display check";
 		msg+=" : ";
-		msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
+		msg+=string((float)(((fim_fms_t)(qbtimes*2))/((qbttime)*1.e-3)));
 		msg+=" clears/s\n";
 	}
 	return msg;
@@ -276,10 +276,17 @@ void DisplayDevice::quickbench(fim_int qbi)
 		a quick draw benchmark and sanity check.
 		currently performs only the clear function.
 	*/
+	fim_coo_t x1 = 0, x2 = width()-1, y1 = 0, y2 = height()-1;
 	switch(qbi)
 	{
 		case 0:
-		clear_rect(0, width()-1, 0,height()/2);
+		this->lock();
+		// clear_rect(x1, x2, y1, y2);
+		fill_rect(x1, x2, y1, y2, FIM_CNS_WHITE);
+		this->unlock();
+		this->lock();
+		fill_rect(x1, x2, y1, y2, FIM_CNS_BLACK);
+		this->unlock();
 		break;
 	}
 }

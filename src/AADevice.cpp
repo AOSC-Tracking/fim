@@ -623,7 +623,7 @@ err:
 	fim_err_t AADevice::resize(fim_coo_t w, fim_coo_t h)
 	{
 		/* resize is handled by aalib */
-		const bool want_resize_=true;
+		FIM_CONSTEXPR bool want_resize_=true;
 #if AA_LIB_VERSIONCODE>=104000
 		/* aalib version 104000 calls exit(-1) on zero-width/height contexts. this is simply stupid.
 		   the code we have here is not completely clean, but it catches the situation and proposes

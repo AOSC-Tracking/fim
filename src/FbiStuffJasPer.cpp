@@ -2,7 +2,7 @@
 /*
  FbiStuffXyz.cpp : An example file for reading new file types with hypothetical library libjp2.
 
- (c) 2014-2015 Michele Martone
+ (c) 2014-2016 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -71,7 +71,7 @@ static int jp2_image_render(jas_image_t *image, int vw, int vh, fim_byte_t *vdat
 	int vs;
 	int tlx;
 	int tly;
-	const int sc = 256;
+	FIM_CONSTEXPR int sc = 256;
 
 	if ((cmptlut[0] = jas_image_getcmptbytype(image,
 	  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R))) < 0 ||

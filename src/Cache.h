@@ -169,7 +169,7 @@ class PACA	/* Parallel Cache */
 	std::thread t;
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 	Cache& cache_;
-	const int dpc = 0; /* debug parallel cache (FIXME: temporary) */
+	static FIM_CONSTEXPR int dpc = 0; /* debug parallel cache (FIXME: temporary) */
 
 	void operator () (const fid_t& rid)
 	{
