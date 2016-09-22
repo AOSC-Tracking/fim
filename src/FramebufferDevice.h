@@ -303,7 +303,7 @@ class FramebufferDevice:public DisplayDevice
 	int  fb_font_width(void);
 	int  fb_font_height(void);
 
-	int status_line(const fim_char_t *msg);
+	int status_line(const fim_char_t *msg) FIM_OVERRIDE ;
 
 	//void fb_edit_line(fim_char_t *str, int pos);
 
@@ -315,10 +315,10 @@ class FramebufferDevice:public DisplayDevice
 	void fb_rect(int x1, int x2, int y1,int y2);
 
 	void fb_setpixel(int x, int y, unsigned int color);
-	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
+	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_OVERRIDE;
 
 	void fb_clear_rect(int x1, int x2, int y1,int y2);
-	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)FIM_OVERRIDE
 	{
 		fb_clear_rect(x1, x2, y1,y2);
 		return 0;
@@ -328,8 +328,8 @@ class FramebufferDevice:public DisplayDevice
 	void clear_screen(void);
 	void cleanup(void);
 
-	fim_err_t initialize (sym_keys_t &sym_keys){/*still unused : FIXME */ ;return FIM_ERR_NO_ERROR;}
-	void finalize (void);
+	fim_err_t initialize (sym_keys_t &sym_keys)FIM_OVERRIDE {/*still unused : FIXME */ ;return FIM_ERR_NO_ERROR;}
+	void finalize (void)FIM_OVERRIDE ;
 	struct fs_font * fb_font_get_current_font(void)
 	{
 	    return f_;
@@ -500,27 +500,27 @@ void init_one(int32_t *lut, int bits, int shift)
 	    lut[i] = (i >> (8 - bits)) << shift;
 }
 
-	int width(void)
+	int width(void)FIM_OVERRIDE 
 	{
 		return fb_var_.xres;
 	}
 
-	int height(void)
+	int height(void)FIM_OVERRIDE 
 	{
 		return fb_var_.yres;
 	}
 
-	int get_chars_per_column(void)
+	int get_chars_per_column(void)FIM_OVERRIDE 
 	{
 		return fb_var_.yres / fb_font_height();
 	}
 
-	int get_chars_per_line(void)
+	int get_chars_per_line(void)FIM_OVERRIDE 
 	{
 		return fb_var_.xres / fb_font_width();
 	}
 
-	fim_bool_t handle_console_switch(void)
+	fim_bool_t handle_console_switch(void) FIM_OVERRIDE
 	{
 		if (switch_last_ == fb_switch_state_)return false;
 
@@ -530,9 +530,9 @@ void init_one(int32_t *lut, int bits, int shift)
 
 	//void status_screen(const fim_char_t *msg, int draw);
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
-	fim_bpp_t get_bpp(void){return fb_var_.bits_per_pixel; };
+	fim_bpp_t get_bpp(void)FIM_OVERRIDE{return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice(void);
-	virtual fim_coo_t status_line_height(void)const;
+	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 };
 
 }
