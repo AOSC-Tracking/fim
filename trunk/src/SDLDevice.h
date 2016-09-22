@@ -67,40 +67,40 @@ class SDLDevice:public DisplayDevice
 		fim_flags_t flags// some flags
 		);
 
-	fim_err_t initialize(sym_keys_t &sym_keys);
-	void finalize(void) ;
+	fim_err_t initialize(sym_keys_t &sym_keys)FIM_OVERRIDE;
+	void finalize(void) FIM_OVERRIDE;
 
-	int get_chars_per_line(void) ;
-	int get_chars_per_column(void);
-	fim_coo_t width(void);
-	fim_coo_t height(void);
-	fim_err_t status_line(const fim_char_t *msg);
-	fim_bool_t handle_console_switch(void) { return false; }
+	int get_chars_per_line(void) FIM_OVERRIDE;
+	int get_chars_per_column(void) FIM_OVERRIDE;
+	fim_coo_t width(void) FIM_OVERRIDE;
+	fim_coo_t height(void) FIM_OVERRIDE;
+	fim_err_t status_line(const fim_char_t *msg) FIM_OVERRIDE;
+	fim_bool_t handle_console_switch(void) FIM_OVERRIDE { return false; }
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT;
-	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
-	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
+	fim_sys_int get_input(fim_key_t * c, bool want_poll=false) FIM_OVERRIDE;
+	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const FIM_OVERRIDE;
 	void fs_render_fb(fim_coo_t x, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data) FIM_NOEXCEPT;
-	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_NOEXCEPT;
-	void flush(void);
-	void lock(void);
-	void unlock(void);
-	fim_bpp_t get_bpp(void) { return bpp_; };
+	fim_err_t fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_NOEXCEPT FIM_OVERRIDE ;
+	void flush(void)FIM_OVERRIDE;
+	void lock(void) FIM_OVERRIDE ;
+	void unlock(void) FIM_OVERRIDE ;
+	fim_bpp_t get_bpp(void) FIM_OVERRIDE { return bpp_; };
 	bool sdl_window_update(void);
-	virtual fim_coo_t status_line_height(void)const;
+	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 	private:
 	fim_err_t clear_rect_( void* dst, fim_coo_t oroff,fim_coo_t ocoff,fim_coo_t  orows,fim_coo_t ocols,fim_coo_t  ocskip);
 	/* TEMPORARY */
 	inline void setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b) FIM_NOEXCEPT;
 	void status_screen_(int desc,int draw_output){ return ; }
-	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT;
+	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT FIM_OVERRIDE;
 	fim_coo_t txt_width(void) ;
 	fim_coo_t txt_height(void) ;
-	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
+	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE ;
 	private:
 	bool allowed_resolution(fim_coo_t w, fim_coo_t h);
-	virtual fim_err_t reinit(const fim_char_t *rs);
+	virtual fim_err_t reinit(const fim_char_t *rs) FIM_OVERRIDE;
 	fim_err_t parse_optstring(const fim_char_t *os);
-	virtual fim_err_t set_wm_caption(const fim_char_t *msg);
+	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
 	fim_err_t reset_wm_caption(void);
 	fim_err_t post_wmresize(void);
 };

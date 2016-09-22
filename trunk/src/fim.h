@@ -163,9 +163,11 @@
 #if FIM_USE_CXX11
 #define FIM_NOEXCEPT noexcept
 #define FIM_CONSTEXPR constexpr
+#define FIM_OVERRIDE override
 #else /* FIM_USE_CXX11 */
 #define FIM_NOEXCEPT
 #define FIM_CONSTEXPR const
+#define FIM_OVERRIDE 
 #endif /* FIM_USE_CXX11 */
 
 #ifdef FIM_AUTOCMDS

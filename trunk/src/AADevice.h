@@ -59,16 +59,16 @@ class AADevice:public DisplayDevice
 		fim_coo_t ocskip,// output columns to skip for each line
 		fim_flags_t flags// some flags
 		);
-	fim_err_t initialize(sym_keys_t &sym_keys);
-	void finalize(void);
+	fim_err_t initialize(sym_keys_t &sym_keys)FIM_OVERRIDE ;
+	void finalize(void)FIM_OVERRIDE ;
 
-	int get_chars_per_line(void);
-	int get_chars_per_column(void);
+	int get_chars_per_line(void)FIM_OVERRIDE ;
+	int get_chars_per_column(void)FIM_OVERRIDE ;
 	fim_coo_t txt_width(void);
 	fim_coo_t txt_height(void);
-	fim_coo_t width(void);
-	fim_coo_t height(void);
-	fim_err_t status_line(const fim_char_t *msg);
+	fim_coo_t width(void)FIM_OVERRIDE ;
+	fim_coo_t height(void)FIM_OVERRIDE ;
+	fim_err_t status_line(const fim_char_t *msg) FIM_OVERRIDE ;
 	//void status_screen(int desc,int draw_output){}
 	fim_bool_t handle_console_switch(void)
 	{
@@ -81,16 +81,16 @@ class AADevice:public DisplayDevice
 		fim_coo_t orows,fim_coo_t ocols,
 		fim_coo_t ocskip);
 
-	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1, fim_coo_t y2);
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1, fim_coo_t y2)FIM_OVERRIDE;
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color);
-	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
-	void flush(void);
+	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_OVERRIDE;
+	void flush(void)FIM_OVERRIDE ;
 	fim_err_t init_console(void);
-	fim_bpp_t get_bpp(void)
+	fim_bpp_t get_bpp(void) FIM_OVERRIDE 
 	{
 		return 1;
 	}
-	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
+	fim_sys_int get_input(fim_key_t * c, bool want_poll=false) FIM_OVERRIDE;
 	virtual fim_err_t reinit(const fim_char_t *rs);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	virtual fim_coo_t status_line_height(void)const;
