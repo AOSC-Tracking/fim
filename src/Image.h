@@ -58,6 +58,14 @@ namespace fim
  *	TODO : separate Image in a way multiple viewports could use the same image.
  */
 
+enum fim_cvd_t /* color vision deficiency  */ {
+       	FIM_CVD_NO=0, /* no deficiency */
+	FIM_CVD_PROTANOPIA=1, /* a red/green color deficiency */
+	FIM_CVD_DEUTERANOPIA=2, /* a red/green color deficiency */
+       	FIM_CVD_TRITANOPIA=3 /* a blue/yellow color deficiency */
+};
+
+
 #ifdef FIM_NAMESPACES
 class Image:public Namespace
 #else /* FIM_NAMESPACES */
@@ -157,6 +165,7 @@ class Image
 	void shred(void);
 	bool negate (void);/* let's read e-books by consuming less power :) */
 	bool desaturate (void);
+	bool colorblind(enum fim_cvd_t cvd);
 	bool gray_negate(void);
 
 	bool check_invalid(void);

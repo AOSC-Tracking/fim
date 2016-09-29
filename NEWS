@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1107)
+ * Initiated code for simulating Color Vision Deficiency (using resources from http://www.daltonize.org).
 # (r1104)
  * Language standard level (and a few features) will be enabled and set from the value of the predefined __cplusplus macro.
 # (r1079)
