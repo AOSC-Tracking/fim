@@ -65,6 +65,54 @@ namespace fim
 		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
 	}
 
+	static void fim_simulate_cvd(fim_byte_t * data, int howmany, enum fim_cvd_t cvd )
+	{
+		fim_float_t l,m,s; // long medium short [cones]
+		fim_byte_t r,g,b; // red green blue
+
+#define FIM_PD3_T(RC,R,GC,G,BC,B,T)	\
+	((RC*(T)R)+(GC*(T)G)+(BC*(T)B))
+
+#define FIM_PD3(RC,R,GC,G,BC,B)		\
+	FIM_PD3_T(RC,R,GC,G,BC,B,fim_float_t)	\
+
+		for( fim_byte_t * p = data; p < data + howmany ;p+=3)
+		{
+			r=p[0];
+			g=p[1];
+			b=p[2];
+
+			l=FIM_PD3(17.8824  ,r, 43.5161,g, 4.11935,b),
+			m=FIM_PD3(3.45565  ,r, 27.1554,g, 3.86714,b),
+			s=FIM_PD3(0.0299566,r,0.184309,g, 1.46709,b);
+
+			if(cvd == FIM_CVD_PROTANOPIA )
+				l=FIM_PD3(0.0      ,l,2.02344 ,m,-2.52581,s),
+				m=FIM_PD3(0.0      ,l,1.0     ,m, 0.0    ,s),
+				s=FIM_PD3(0.0      ,l,0.0     ,m, 1.0    ,s);
+			else
+			if(cvd == FIM_CVD_DEUTERANOPIA)
+				l=FIM_PD3(1.0      ,l,0.0,m,0.0     ,s),
+				m=FIM_PD3(0.494207 ,l,0.0,m,1.24827 ,s),
+				s=FIM_PD3(0.0      ,l,0.0,m,1.0     ,s);
+			else
+			if(cvd == FIM_CVD_TRITANOPIA)
+				l=FIM_PD3(1.0      ,l,0.0     ,m,0.0     ,s),
+				m=FIM_PD3(0.0      ,l,1.0     ,m,0.0     ,s),
+				s=FIM_PD3(-0.395913,l,0.801109,m,0.0     ,s);
+
+			r=FIM_PD3( 0.080944   ,l,-0.130504  ,m, 0.116721,s),
+			g=FIM_PD3(-0.0102485  ,l, 0.0540194 ,m,-0.113614,s),
+			b=FIM_PD3(-0.000365294,l,-0.00412163,m, 0.693513,s);
+
+			p[0]=r;
+			p[1]=g;
+			p[2]=b;
+		}
+#undef FIM_PD3
+#undef FIM_PD3_T
+	}
+
 	static void fim_negate_rgb(fim_byte_t * data, int howmany)
 	{
 		for( fim_byte_t * p = data; p < data + howmany ;p++)
@@ -1364,6 +1412,24 @@ ret:
 		return true;
 	} 
 #endif
+
+	bool Image::colorblind(enum fim_cvd_t cvd)
+	{
+		if( fimg_ &&  fimg_->data)
+			fim_simulate_cvd(fimg_->data, 3*fimg_->i.width*fimg_->i.height, cvd);
+
+		if(  img_ &&   img_->data && ! (fimg_ && img_->data==fimg_->data) )
+			fim_simulate_cvd(img_->data, 3*img_->i.width*img_->i.height, cvd);
+
+#if FIM_WANT_MIPMAPS
+		//if(  mm_.mdp)
+		//	fim_simulate_cvd(mm_.mdp, mm_.mmb, cvd);
+#endif /* FIM_WANT_MIPMAPS */
+
+       		should_redraw();
+
+		return true;
+	}
 
 	bool Image::desaturate(void)
 	{
