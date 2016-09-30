@@ -225,9 +225,9 @@ commands : display the existing commands
 
 .na
 .B
-desaturate
+color
 .fi
-desaturate : desaturate the displayed image colors. To get back the original you will have to reload the image.
+color [desaturate] : desaturate the displayed image colors; color [negate] : negate the displayed image colors; color [colorblind] : simulate a red\-green color vision deficiency (deuteranopia);  to get back the original you will have to reload the image.
 .fi
 
 .na
@@ -333,13 +333,6 @@ list : display the files list; list 'random_shuffle': randomly shuffle the file 
 load
 .fi
 load : load the image, if not yet loaded (see also reload)
-.fi
-
-.na
-.B
-negate
-.fi
-negate : negate the displayed image colors.
 .fi
 
 .na

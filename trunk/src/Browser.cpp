@@ -572,28 +572,25 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 	
-	fim_cxr Browser::fcmd_negate(const args_t& args)
+	fim_cxr Browser::fcmd_color(const args_t& args)
 	{
 		/*
 		 */
 		if( !image() )
 			goto nop;
 
-		if( image() && image()->negate() )
-			goto nop;
-nop:
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim_cxr Browser::fcmd_desaturate(const args_t& args)
-	{
-		/*
-		 */
-		if( !image() )
-			goto nop;
-
-		if( image() && image()->desaturate() )
-			goto nop;
+		if(args.size()>0)
+		{
+			if( args[0] == "desaturate" )
+				if( image()->desaturate() )
+					goto nop;
+			if( args[0] == "negate" )
+				if( image()->negate() )
+					goto nop;
+			if( args[0] == "colorblind" )
+				if( image()->colorblind(FIM_CVD_DEUTERANOPIA) )
+					goto nop;
+		}
 nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}

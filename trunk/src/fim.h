@@ -822,8 +822,8 @@ namespace fim
 #define FIM_FLT_BASENAME		"basename" /* not in vim */
 #define FIM_FLT_CD			"cd" /* in vim */
 #define FIM_FLT_CLEAR			"clear" /* not in vim */
+#define FIM_FLT_COLOR	              	"color" /* not in vim */
 #define FIM_FLT_COMMANDS		"commands" /* not in vim */
-#define FIM_FLT_DESATURATE              "desaturate" /* not in vim */
 #define FIM_FLT_DISPLAY			"display" /* in vim, with another meaning */
 #define FIM_FLT_DUMP_KEY_CODES		"dump_key_codes" /* not in vim */
 #define FIM_FLT_DESC			"desc" /* not in vim */
@@ -840,7 +840,6 @@ namespace fim
 #define FIM_FLT_LOAD			"load" /* not in vim */
 #define FIM_FLT_LIMIT			"limit" /* not in vim */
 #define FIM_FLT_LIST			"list" /* not in vim */
-#define FIM_FLT_NEGATE			"negate" /* not in vim */
 #define FIM_FLT_NO_IMAGE		"no_image" /* not in vim */
 #define FIM_FLT_PAN			"pan" /* not in vim */
 #define FIM_FLT_POPEN			"popen" /* not in vim */

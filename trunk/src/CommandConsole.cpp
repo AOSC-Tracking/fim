@@ -389,7 +389,13 @@ ret:		return key;
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_COMMANDS),fim::string(FIM_FLT_COMMANDS " : display the existing commands"),this,&CommandConsole::fcmd_commands_list));
 
-		addCommand(new Command(fim_cmd_id(FIM_FLT_DESATURATE),fim::string(FIM_FLT_DESATURATE" : desaturate the displayed image colors. To get back the original you will have to reload the image." ),&browser_,&Browser::fcmd_desaturate));
+		addCommand(new Command(fim_cmd_id(FIM_FLT_COLOR),
+		fim::string(
+		FIM_FLT_COLOR " [desaturate] : desaturate the displayed image colors; "
+		FIM_FLT_COLOR " [negate] : negate the displayed image colors; " 
+		FIM_FLT_COLOR " [colorblind] : simulate a red-green color vision deficiency (deuteranopia); " 
+		" to get back the original you will have to reload the image." 
+		),&browser_,&Browser::fcmd_color));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_DESC),fim::string(FIM_FLT_HELP_DESC),this,&CommandConsole::fcmd_desc));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_DISPLAY),fim::string(FIM_FLT_HELP_DISPLAY),&browser_,&Browser::fcmd_display));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_DUMP_KEY_CODES),fim::string(FIM_FLT_DUMP_KEY_CODES " : dump the active key codes (unescaped, for inspection)"),this,&CommandConsole::fcmd_dump_key_codes));
@@ -439,7 +445,6 @@ ret:		return key;
 #endif /* FIM_WANT_PIC_LBFL */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_LIST),fim::string(FIM_CMD_HELP_LIST),&browser_,&Browser::fcmd_list));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_LOAD),fim::string(FIM_FLT_LOAD" : load the image, if not yet loaded (see also " FIM_FLT_RELOAD ")"),&browser_,&Browser::fcmd_load));
-		addCommand(new Command(fim_cmd_id(FIM_FLT_NEGATE),fim::string(FIM_FLT_NEGATE" : negate the displayed image colors." ),&browser_,&Browser::fcmd_negate));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_PAN),fim::string( FIM_FLT_PAN" {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction;" " if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions;" " if {steps} is not specified, the \"" FIM_VID_STEPS "\" variable will be used;" " if present, the \"" FIM_VID_HSTEPS "\" variable will be considered for horizontal panning;" " if present, the \"" FIM_VID_VSTEPS "\" variable will be considered for vertical panning;" " the variables may be terminated by the \'%\' specifier" " "),&browser_,&Browser::pan));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_POPEN),fim::string(FIM_FLT_POPEN " " FIM_CNS_EX_SYSC_STRING " : pipe a command, invoking popen(): spawns a shell, invoking " FIM_CNS_EX_SYSC_STRING " and executing as fim commands the output of " FIM_CNS_EX_SYSC_STRING),this,&CommandConsole::fcmd_sys_popen));
 #ifdef FIM_PIPE_IMAGE_READ
