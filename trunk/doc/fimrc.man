@@ -1,3 +1,4 @@
+297
 .\"
 .\" $Id$
 .\"
@@ -8,7 +9,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /usr/local/etc/fimrc
+.B /etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
@@ -1458,3 +1459,4 @@ Michele Martone <dezperado _CUT_ autistici _CUT_ org>
 See copyright notice in \fR\fIfim\fR(1).
 
 
+297

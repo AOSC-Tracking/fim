@@ -745,7 +745,9 @@ err:
 					//std::cout << event.motion.x    << " " << event.motion.y    << "\n";
 					//std::cout << event.motion.xrel << " " << event.motion.yrel << "\n";
 					Viewport* cv = cc.current_viewport();
+					static bool discardedfirst = false;
 					if(cv)
+					if(discardedfirst)
 					if( event.motion.x > 0 && event.motion.y )
 					{
 						fim_off_t bf = 5;
@@ -765,6 +767,7 @@ err:
 							cv->redisplay();
 						}
 					}
+					discardedfirst=true;
 				}
 #endif /* FIM_WANT_EXPERIMENTAL_MOUSE_PAN */
 				break;

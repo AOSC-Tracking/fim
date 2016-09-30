@@ -324,7 +324,7 @@ namespace fim
 		 *
 		 * global or inner (not i: !) or local (v:) marker
 		 * */
-		int autotop=getGlobalIntVariable(FIM_VID_AUTOTOP)   | image_->getIntVariable(FIM_VID_AUTOTOP) /* | getIntVariable(FIM_VID_AUTOTOP)*/;
+		int autotop=/*getGlobalIntVariable(FIM_VID_AUTOTOP)   |*/ image_->getIntVariable(FIM_VID_AUTOTOP) /* | getIntVariable(FIM_VID_AUTOTOP)*/;
 		//int flip   =getGlobalIntVariable(FIM_VID_AUTOFLIP)  | image_->getIntVariable(FIM_VID_FLIPPED) | getIntVariable(FIM_VID_FLIPPED);
 		int flip   =
 		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image_->getIntVariable(FIM_VID_FLIPPED)== 1)/*|(getIntVariable(FIM_VID_FLIPPED)== 1)*/&&
@@ -343,15 +343,17 @@ namespace fim
 		if(desaturate)
 			image_->desaturate();
 
-		if (getGlobalIntVariable("i:" FIM_VID_WANT_AUTOCENTER)==1 && need_redraw() )
+		if ( ( autotop || getGlobalIntVariable("i:" FIM_VID_WANT_AUTOCENTER)==1 ) && need_redraw() )
 		{
 			/*
 			 * If this is the first image display, we have
 			 * the right to rescale the image.
 			 * */
+
 			if(autotop && image_->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
 		  	{
 			    top_=autotop>0?0:image_->height()-this->viewport_height();
+			    panned_ |= 0x1; // FIXME: shall do the same for l/r and introduce constants.
 			}
 			/* start with centered image, if larger than screen */
 			if (image_->width()  > this->viewport_width() )
@@ -359,6 +361,7 @@ namespace fim
 			if (image_->height() > this->viewport_height() &&  autotop==0)
 				top_ = (image_->height() - this->viewport_height()) / 2;
                        setGlobalVariable("i:" FIM_VID_WANT_AUTOCENTER,(fim_int)0);
+                       setGlobalVariable("i:"         FIM_VID_AUTOTOP,(fim_int)0);
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
