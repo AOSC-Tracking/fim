@@ -67,6 +67,7 @@ namespace fim
 
 	static void fim_simulate_cvd(fim_byte_t * data, int howmany, enum fim_cvd_t cvd )
 	{
+		/* Based on the formulas from from http://www.daltonize.org */
 		fim_float_t l,m,s; // long medium short [cones]
 		fim_byte_t r,g,b; // red green blue
 
@@ -90,12 +91,10 @@ namespace fim
 				l=FIM_PD3(0.0      ,l,2.02344 ,m,-2.52581,s),
 				m=FIM_PD3(0.0      ,l,1.0     ,m, 0.0    ,s),
 				s=FIM_PD3(0.0      ,l,0.0     ,m, 1.0    ,s);
-			else
 			if(cvd == FIM_CVD_DEUTERANOPIA)
 				l=FIM_PD3(1.0      ,l,0.0,m,0.0     ,s),
 				m=FIM_PD3(0.494207 ,l,0.0,m,1.24827 ,s),
 				s=FIM_PD3(0.0      ,l,0.0,m,1.0     ,s);
-			else
 			if(cvd == FIM_CVD_TRITANOPIA)
 				l=FIM_PD3(1.0      ,l,0.0     ,m,0.0     ,s),
 				m=FIM_PD3(0.0      ,l,1.0     ,m,0.0     ,s),
@@ -1422,8 +1421,8 @@ ret:
 			fim_simulate_cvd(img_->data, 3*img_->i.width*img_->i.height, cvd);
 
 #if FIM_WANT_MIPMAPS
-		//if(  mm_.mdp)
-		//	fim_simulate_cvd(mm_.mdp, mm_.mmb, cvd);
+		if(  mm_.mdp)
+			fim_simulate_cvd(mm_.mdp, mm_.mmb, cvd);
 #endif /* FIM_WANT_MIPMAPS */
 
        		should_redraw();

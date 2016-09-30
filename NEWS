@@ -3,9 +3,11 @@
 
                 Version 0.6-trunk
 
-# (r1107)
- * Initiated code for simulating Color Vision Deficiency (using resources from http://www.daltonize.org).
-# (r1104)
+# (r1008)
+ * Removed commands 'negate' and 'desaturate'; use new command "color": "color 'negate'" and "color 'desaturate'".
+# (r1007,r1008)
+ * "color 'colorblind'" will simulate a Color Vision Deficiency. Bound to key 'J'.
+# (r1004)
  * Language standard level (and a few features) will be enabled and set from the value of the predefined __cplusplus macro.
 # (r1079)
  * Introduced a "#!fim:/=dir" special description line to specify dir prepended to basename.
