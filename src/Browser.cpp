@@ -590,6 +590,10 @@ nop:
 			if( args[0] == "negate" )
 				if( image()->negate() )
 					goto nop;
+			if( args[0] == "identity" )
+				if( image()->identity() )
+					goto nop;
+
 			if( args.size()>1 && ( args[1] == "daltonize" || args[1] == "D" ) )
 				daltonize=true;
 			if( args[0] == "c" || args[0] == "colorblind"  ||

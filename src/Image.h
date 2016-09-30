@@ -65,6 +65,11 @@ enum fim_cvd_t /* color vision deficiency  */ {
        	FIM_CVD_TRITANOPIA=3 /* a blue/yellow color deficiency */
 };
 
+enum fim_tii_t /* test image index  */ {
+       	FIM_TII_NUL=0, /* */
+       	FIM_TII_16M=1 /* FIXME: unused, at the moment (shall use this for tests.) */
+};
+
 /* pixel intensity float (FIXME: new ) */
 #if FIM_USE_CXX11
 	using fim_pif_t = float;
@@ -148,7 +153,7 @@ class Image
 	fim::string getInfoCustom(const fim_char_t * ifsp)const;
 	Image(const Image& rhs); // yes, a private constructor (was)
 #if FIM_WANT_BDI
-	Image(void);
+	Image(enum fim_tii_t tii=FIM_TII_NUL);
 #endif	/* FIM_WANT_BDI */
 	fim_err_t rescale( fim_scale_t ns=0.0 );
 	fim_err_t rotate( fim_scale_t angle_=1.0 );
@@ -170,6 +175,7 @@ class Image
 	fim_scale_t ascale()const{ return (ascale_>0.0?ascale_:1.0); }
 	void shred(void);
 	bool negate (void);/* let's read e-books by consuming less power :) */
+	bool identity (void);/* let's read e-books by consuming less power :) */
 	bool desaturate (void);
 	bool colorblind(enum fim_cvd_t cvd, bool daltonize);
 	bool gray_negate(void);

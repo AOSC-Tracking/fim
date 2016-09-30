@@ -2,7 +2,7 @@
 /*
  FbiStuff.h : Misc fbi functionality routines, modified for fim
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2016 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -98,9 +98,10 @@ struct op_rotate_parm {
 // end filter.h
 
 /* 
- * dez's function, on the way to windowing Fim!
+ * fim's functions
  * */
 struct ida_image * fbi_image_clone(const struct ida_image *img);
+struct ida_image * fbi_image_black(fim_coo_t w, fim_coo_t h);
 
 }
 

@@ -43,7 +43,7 @@ Language elements surrounded by a single quote ("'") are literals.
 
 Warning: at the present state, this grammar has conflicts. A future release shall fix them.
 
-  program:
+  program: %empty
          | statement_list
 
   statement_list: statement
@@ -227,7 +227,7 @@ commands : display the existing commands
 .B
 color
 .fi
-color [desaturate] : desaturate the displayed image colors; color [negate] : negate the displayed image colors; color [colorblind|c|deuteranopia|d] : simulate a form of the deuteranopia color vision deficiency (cvd); color [protanopia|p] : simulate a form of the protanopia cvd; color [tritanopia|t] : simulate a form of the tritanopia cvd; color [daltonize|D] : if following a cvd specification, will attempt correcting it;  to get back the original you will have to reload the image.
+color [desaturate] : desaturate the displayed image colors; color [negate] : negate the displayed image colors; color [colorblind|c|deuteranopia|d] : simulate a form of the deuteranopia color vision deficiency (cvd); color [protanopia|p] : simulate a form of the protanopia cvd; color [tritanopia|t] : simulate a form of the tritanopia cvd; color [daltonize|D] : if following a cvd specification, will attempt correcting it; color [identity] : populate the image with 'RGB identity' pixels;  to get back the original you will have to reload the image.
 .fi
 
 .na
@@ -1201,7 +1201,8 @@ bind 'S' "toggleDisplayStatus";
 bind 'I' "toggleautonegate";
 bind 'i' "color 'negate';redisplay;";
 bind 'g' "color 'desaturate';redisplay;";
-bind 'J' "color 'colorblind' 'daltonize'; redisplay;";
+bind '[' "color 'colorblind'            ; redisplay;";
+bind ']' "color 'colorblind' 'daltonize'; redisplay;";
 bind 'G' "toggleDesaturate;";
 #bind 'R' "reload";
 #bind 'R' "redisplay";

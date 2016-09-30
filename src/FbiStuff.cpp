@@ -2465,6 +2465,31 @@ err:
     return dest;
 }
 
+struct ida_image * fbi_image_black(fim_coo_t w, fim_coo_t h)
+{
+	// TODO: use fbi_image_black in fbi_image_clone !
+	struct ida_image *nimg=FIM_NULL;
+	fim_coo_t n;
+
+	if(!(nimg=(ida_image*)fim_calloc(1,sizeof(struct ida_image))))
+		goto err;
+
+	nimg->i.width=w;
+       	nimg->i.height=h;
+	n = nimg->i.width * nimg->i.height * 3;
+	
+	nimg->data = (fim_byte_t*)fim_calloc(1, n );
+
+	if(!(nimg->data))
+	{
+		fim_free(nimg);
+		nimg = FIM_NULL;
+		goto err;
+	}
+err:
+	return nimg;
+}
+
 struct ida_image * fbi_image_clone(const struct ida_image *img)
 {
 	/* note that to fulfill free_image(), the descriptor and data couldn't be allocated together
