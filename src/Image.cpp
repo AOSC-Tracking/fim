@@ -307,6 +307,8 @@ if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
                 fimg_    = FIM_NULL;
                 img_     = FIM_NULL;
 		reset_scale_flags();
+		if( getGlobalIntVariable(FIM_VID_AUTOTOP ) )
+			setVariable(FIM_VID_AUTOTOP,getGlobalIntVariable(FIM_VID_AUTOTOP));
 	}
 
 	void Image::reset_scale_flags(void)

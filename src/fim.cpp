@@ -205,7 +205,7 @@ FIM_NULL
 "Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fBupper-offset\\fP is specified, further bytes will be probed, until \\fBupper-offset\\fP. If \\fB+offset-range\\fP is specified, so many further bytes will be probed. This is useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range."
     },
     {"text-reading",      no_argument,       FIM_NULL, 'P',"proceed scrolling as reading through a text document.",FIM_NULL,
-"Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
+"Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
     },
     {"scroll",     required_argument, FIM_NULL, 's',"set scroll variable value.","{value}",
 "Set scroll steps for internal variable " FIM_VID_STEPS " (default is " FIM_CNS_STEPS_DEFAULT ")."

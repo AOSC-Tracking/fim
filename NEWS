@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1113)
+ * Fix to the -P/--text-reading switch (seems to be broken in version 0.5).
 # (r1108)
  * Removed commands 'negate' and 'desaturate'; use new command "color": "color 'negate'" and "color 'desaturate'".
 # (r1107-r1011)
