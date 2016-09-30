@@ -74,8 +74,10 @@ namespace fim
 #define FIM_PD3_T(RC,R,GC,G,BC,B,T)	\
 	((RC*(T)R)+(GC*(T)G)+(BC*(T)B))
 
+#define FIM_RGB_TRIM(V) FIM_MIN(FIM_MAX(0.0,V),255.0)
+
 #define FIM_PD3(RC,R,GC,G,BC,B)		\
-	FIM_PD3_T(RC,R,GC,G,BC,B,fim_float_t)	\
+	(FIM_PD3_T(RC,R,GC,G,BC,B,fim_float_t))
 
 		for( fim_byte_t * p = data; p < data + howmany ;p+=3)
 		{
@@ -100,9 +102,9 @@ namespace fim
 				m=FIM_PD3(0.0      ,l,1.0     ,m,0.0     ,s),
 				s=FIM_PD3(-0.395913,l,0.801109,m,0.0     ,s);
 
-			r=FIM_PD3( 0.080944   ,l,-0.130504  ,m, 0.116721,s),
-			g=FIM_PD3(-0.0102485  ,l, 0.0540194 ,m,-0.113614,s),
-			b=FIM_PD3(-0.000365294,l,-0.00412163,m, 0.693513,s);
+			r=FIM_RGB_TRIM(FIM_PD3( 0.080944   ,l,-0.130504  ,m, 0.116721,s)),
+			g=FIM_RGB_TRIM(FIM_PD3(-0.0102485  ,l, 0.0540194 ,m,-0.113614,s)),
+			b=FIM_RGB_TRIM(FIM_PD3(-0.000365294,l,-0.00412163,m, 0.693513,s));
 
 			p[0]=r;
 			p[1]=g;

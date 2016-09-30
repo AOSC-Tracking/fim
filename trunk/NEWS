@@ -5,7 +5,7 @@
 
 # (r1008)
  * Removed commands 'negate' and 'desaturate'; use new command "color": "color 'negate'" and "color 'desaturate'".
-# (r1007,r1008)
+# (r1007,r1008,r1009)
  * "color 'colorblind'" will simulate a Color Vision Deficiency. Bound to key 'J'.
 # (r1004)
  * Language standard level (and a few features) will be enabled and set from the value of the predefined __cplusplus macro.
