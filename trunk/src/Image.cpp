@@ -70,6 +70,7 @@ namespace fim
 		/* Based on the formulas from from http://www.daltonize.org */
 		fim_float_t l,m,s; // long medium short [cones]
 		fim_byte_t r,g,b; // red green blue
+		fim_float_t dl,dm,ds; // long medium short [cones]
 
 #define FIM_PD3_T(RC,R,GC,G,BC,B,T)	\
 	((RC*(T)R)+(GC*(T)G)+(BC*(T)B))
@@ -90,21 +91,21 @@ namespace fim
 			s=FIM_PD3(0.0299566,r,0.184309,g, 1.46709,b);
 
 			if(cvd == FIM_CVD_PROTANOPIA )
-				l=FIM_PD3(0.0      ,l,2.02344 ,m,-2.52581,s),
-				m=FIM_PD3(0.0      ,l,1.0     ,m, 0.0    ,s),
-				s=FIM_PD3(0.0      ,l,0.0     ,m, 1.0    ,s);
+				dl=FIM_PD3(0.0      ,l,2.02344 ,m,-2.52581,s),
+				dm=FIM_PD3(0.0      ,l,1.0     ,m, 0.0    ,s),
+				ds=FIM_PD3(0.0      ,l,0.0     ,m, 1.0    ,s);
 			if(cvd == FIM_CVD_DEUTERANOPIA)
-				l=FIM_PD3(1.0      ,l,0.0,m,0.0     ,s),
-				m=FIM_PD3(0.494207 ,l,0.0,m,1.24827 ,s),
-				s=FIM_PD3(0.0      ,l,0.0,m,1.0     ,s);
+				dl=FIM_PD3(1.0      ,l,0.0,m,0.0     ,s),
+				dm=FIM_PD3(0.494207 ,l,0.0,m,1.24827 ,s),
+				ds=FIM_PD3(0.0      ,l,0.0,m,1.0     ,s);
 			if(cvd == FIM_CVD_TRITANOPIA)
-				l=FIM_PD3(1.0      ,l,0.0     ,m,0.0     ,s),
-				m=FIM_PD3(0.0      ,l,1.0     ,m,0.0     ,s),
-				s=FIM_PD3(-0.395913,l,0.801109,m,0.0     ,s);
+				dl=FIM_PD3(1.0      ,l,0.0     ,m,0.0     ,s),
+				dm=FIM_PD3(0.0      ,l,1.0     ,m,0.0     ,s),
+				ds=FIM_PD3(-0.395913,l,0.801109,m,0.0     ,s);
 
-			r=FIM_RGB_TRIM(FIM_PD3( 0.080944   ,l,-0.130504  ,m, 0.116721,s)),
-			g=FIM_RGB_TRIM(FIM_PD3(-0.0102485  ,l, 0.0540194 ,m,-0.113614,s)),
-			b=FIM_RGB_TRIM(FIM_PD3(-0.000365294,l,-0.00412163,m, 0.693513,s));
+			r=FIM_RGB_TRIM(FIM_PD3( 0.080944   ,dl,-0.130504  ,dm, 0.116721,ds)),
+			g=FIM_RGB_TRIM(FIM_PD3(-0.0102485  ,dl, 0.0540194 ,dm,-0.113614,ds)),
+			b=FIM_RGB_TRIM(FIM_PD3(-0.000365294,dl,-0.00412163,dm, 0.693513,ds));
 
 			p[0]=r;
 			p[1]=g;
