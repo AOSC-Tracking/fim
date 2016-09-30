@@ -397,6 +397,7 @@ ret:		return key;
 			FIM_FLT_COLOR " [protanopia|p] : simulate a form of the protanopia cvd; " 
 			FIM_FLT_COLOR " [tritanopia|t] : simulate a form of the tritanopia cvd; " 
 			FIM_FLT_COLOR " [daltonize|D] : if following a cvd specification, will attempt correcting it; " 
+			FIM_FLT_COLOR " [identity] : populate the image with 'RGB identity' pixels; " 
 		" to get back the original you will have to reload the image." 
 		),&browser_,&Browser::fcmd_color));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_DESC),fim::string(FIM_FLT_HELP_DESC),this,&CommandConsole::fcmd_desc));

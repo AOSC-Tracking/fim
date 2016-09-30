@@ -90,9 +90,9 @@ namespace fim
 			g=p[1];
 			b=p[2];
 
-			l=FIM_PD3(17.8824  ,r, 43.5161,g, 4.11935,b),
-			m=FIM_PD3(3.45565  ,r, 27.1554,g, 3.86714,b),
-			s=FIM_PD3(0.0299566,r,0.184309,g, 1.46709,b);
+			dl=l=FIM_PD3(17.8824  ,r, 43.5161,g, 4.11935,b),
+			dm=m=FIM_PD3(3.45565  ,r, 27.1554,g, 3.86714,b),
+			ds=s=FIM_PD3(0.0299566,r,0.184309,g, 1.46709,b);
 
 			if(cvd == FIM_CVD_PROTANOPIA )
 				dl=FIM_PD3(0.0      ,l,2.02344 ,m,-2.52581,s),
@@ -129,6 +129,20 @@ namespace fim
 #undef FIM_PD3_T
 #undef FIM_CPS
 #undef FIM_RGB_TRIM
+	}
+
+	static bool fim_generate_24bit_identity(fim_byte_t * data, int howmany)
+	{
+		int val=0x0;
+
+		for( fim_byte_t * p = data; p < data + howmany ;p+=3)
+		{
+			p[2] = (fim_byte_t )( ( val & 0x000000FF ) >>  0 );//b
+			p[1] = (fim_byte_t )( ( val & 0x0000FF00 ) >>  8 );
+			p[0] = (fim_byte_t )( ( val & 0x00FF0000 ) >> 16 );//r
+			++val;
+		}
+		return true;
 	}
 
 	static void fim_negate_rgb(fim_byte_t * data, int howmany)
@@ -1476,6 +1490,34 @@ ret:
 		return true;
 	}
 
+	bool Image::identity(void)
+	{
+		/* NEW */
+
+		/* FIXME */
+		/*return gray_negate();*/
+#if 0
+		if(! img_ || ! img_->data)
+			return false;
+		if(!fimg_ || !fimg_->data)
+			return false;
+#endif
+
+		if( fimg_ &&  fimg_->data)
+			fim_generate_24bit_identity(fimg_->data, 3*fimg_->i.width*fimg_->i.height);
+
+		if(  img_ &&   img_->data)
+			fim_generate_24bit_identity(img_->data, 3*img_->i.width*img_->i.height);
+
+#if FIM_WANT_MIPMAPS
+		if(  mm_.mdp)
+			fim_generate_24bit_identity(mm_.mdp, mm_.mmb);
+#endif /* FIM_WANT_MIPMAPS */
+
+       		should_redraw();
+		return true;
+	}
+
 	bool Image::negate(void)
 	{
 		/* NEW */
@@ -1524,12 +1566,28 @@ ret:
 	}
 
 #if FIM_WANT_BDI
-	Image::Image(void)
+	Image::Image(enum fim_tii_t tii)
 	{
-		/* although invalid, this image instance should support all operations on it */
-		// fim_bzero(this,sizeof(*this));
 		reset();
-		assert(check_invalid());
+
+		if( tii != FIM_TII_16M)
+		{
+			/* although invalid, this image instance should support all operations on it */
+			// fim_bzero(this,sizeof(*this));
+			assert(check_invalid());
+		}
+		else
+		{
+			fim_coo_t fourk=256*16;
+			img_  = fbi_image_black(fourk,fourk);
+			//fimg_  = fbi_image_black(fourk,fourk);
+			fimg_ = img_;
+
+			if(img_)
+				identity();
+			else
+				cout << "warning : problem generating an image\n";
+		}
 	}
 
 	bool Image::can_reload(void)const{return !no_file_;}
