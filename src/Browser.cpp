@@ -581,15 +581,29 @@ nop:
 
 		if(args.size()>0)
 		{
+			bool daltonize=false;
+			enum fim_cvd_t cvd=FIM_CVD_NO;
+
 			if( args[0] == "desaturate" )
 				if( image()->desaturate() )
 					goto nop;
 			if( args[0] == "negate" )
 				if( image()->negate() )
 					goto nop;
-			if( args[0] == "colorblind" )
-				if( image()->colorblind(FIM_CVD_DEUTERANOPIA) )
+			if( args.size()>1 && ( args[1] == "daltonize" || args[1] == "D" ) )
+				daltonize=true;
+			if( args[0] == "c" || args[0] == "colorblind"  ||
+			    args[0] == "d" || args[0] == "deuteranopia" )
+				cvd = FIM_CVD_DEUTERANOPIA;
+			if( args[0] == "p" || args[0] == "protanopia" )
+				cvd = FIM_CVD_PROTANOPIA;
+			if( args[0] == "t" || args[0] == "tritanopia" )
+				cvd = FIM_CVD_TRITANOPIA  ;
+
+			if(cvd!=FIM_CVD_NO)
+				if( image()->colorblind(cvd,daltonize) )
 					goto nop;
+			/* TODO: help printout here ? */
 		}
 nop:
 		return FIM_CNS_EMPTY_RESULT;

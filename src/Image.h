@@ -65,6 +65,12 @@ enum fim_cvd_t /* color vision deficiency  */ {
        	FIM_CVD_TRITANOPIA=3 /* a blue/yellow color deficiency */
 };
 
+/* pixel intensity float (FIXME: new ) */
+#if FIM_USE_CXX11
+	using fim_pif_t = float;
+#else /* FIM_USE_CXX11 */
+typedef float fim_pif_t;
+#endif /* FIM_USE_CXX11 */
 
 #ifdef FIM_NAMESPACES
 class Image:public Namespace
@@ -165,7 +171,7 @@ class Image
 	void shred(void);
 	bool negate (void);/* let's read e-books by consuming less power :) */
 	bool desaturate (void);
-	bool colorblind(enum fim_cvd_t cvd);
+	bool colorblind(enum fim_cvd_t cvd, bool daltonize);
 	bool gray_negate(void);
 
 	bool check_invalid(void);

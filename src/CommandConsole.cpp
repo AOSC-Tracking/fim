@@ -391,9 +391,12 @@ ret:		return key;
 
 		addCommand(new Command(fim_cmd_id(FIM_FLT_COLOR),
 		fim::string(
-		FIM_FLT_COLOR " [desaturate] : desaturate the displayed image colors; "
-		FIM_FLT_COLOR " [negate] : negate the displayed image colors; " 
-		FIM_FLT_COLOR " [colorblind] : simulate a red-green color vision deficiency (deuteranopia); " 
+			FIM_FLT_COLOR " [desaturate] : desaturate the displayed image colors; "
+			FIM_FLT_COLOR " [negate] : negate the displayed image colors; " 
+			FIM_FLT_COLOR " [colorblind|c|deuteranopia|d] : simulate a form of the deuteranopia color vision deficiency (cvd); " 
+			FIM_FLT_COLOR " [protanopia|p] : simulate a form of the protanopia cvd; " 
+			FIM_FLT_COLOR " [tritanopia|t] : simulate a form of the tritanopia cvd; " 
+			FIM_FLT_COLOR " [daltonize|D] : if following a cvd specification, will attempt correcting it; " 
 		" to get back the original you will have to reload the image." 
 		),&browser_,&Browser::fcmd_color));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_DESC),fim::string(FIM_FLT_HELP_DESC),this,&CommandConsole::fcmd_desc));
