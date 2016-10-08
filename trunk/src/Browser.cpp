@@ -197,7 +197,7 @@ namespace fim
 				pop(),
 				result = this->n_files();
 			else if(args[0]=="remove")
-				result = do_filter(args_t(args.begin()+1,args.end()));
+				result = do_filter(args_t(args.begin()+1,args.end())/*,FullFileNameMatch,false,Delete*/);
 			else if(args[0]=="push")
 				result = do_push(args_t(args.begin()+1,args.end()));
 #ifdef FIM_READ_DIRS
@@ -1801,6 +1801,7 @@ err:
 		fim_bitset_t lbs(flist_.size()); // limit bitset, used for mark / unmark / delete / etc
 
 		FIM_PR('*');
+		// std::cout << "match mode:" << rm << "  negation:" << negative << "  faction:" << faction << "\n"; // TODO: a debug mode shall enable such printouts.
 
 		if ( args.size() > 1 && rm == ListIdxMatch )
 		{
