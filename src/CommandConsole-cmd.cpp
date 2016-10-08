@@ -692,7 +692,7 @@ err:
 			else
 			{
 				acl+="\"";
-				if( ((*ki).first)[0] == '\\' )
+				if( ((*ki).first).at(0) == '\\' )
 					acl+='\\';
 				acl+=((*ki).first);
 				acl+="\"";
@@ -903,7 +903,7 @@ int fim_args_opt_count(const args_t& args, const char oc)
 
 	for(size_t i=0;i<args.size();++i)
 	{
-		if ( args[i][0] == oc )
+		if ( args[i].at(0) == oc )
 			aoc++;
 		else
 			break;
