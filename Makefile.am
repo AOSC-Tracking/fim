@@ -14,6 +14,18 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/image.jpg \
 	$(top_srcdir)/media/image.png \
 	$(top_srcdir)/media/fim.png \
+	$(top_srcdir)/media/numbers/0.gif \
+	$(top_srcdir)/media/numbers/1.gif \
+	$(top_srcdir)/media/numbers/2.gif \
+	$(top_srcdir)/media/numbers/3.gif \
+	$(top_srcdir)/media/numbers/4.gif \
+	$(top_srcdir)/media/numbers/5.gif \
+	$(top_srcdir)/media/numbers/6.gif \
+	$(top_srcdir)/media/numbers/7.gif \
+	$(top_srcdir)/media/numbers/8.gif \
+	$(top_srcdir)/media/numbers/9.gif \
+	$(top_srcdir)/media/multipage/sample.tex \
+	$(top_srcdir)/media/multipage/Makefile \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
 FIM_EXE=./src/fim
