@@ -479,8 +479,7 @@ ret:
 			FIM_PR('-');
 			usageCounter_[image->getKey()]--;
 #if FIM_WANT_MIPMAPS
-			fim::string ccv;
-			if((!(ccv=getGlobalStringVariable(FIM_VID_CACHE_CONTROL).empty())) && ccv[0]=='M')
+			if( getGlobalStringVariable(FIM_VID_CACHE_CONTROL).find('M') == 0 )
 				image->mm_free();
 #endif /* FIM_WANT_MIPMAPS */
 			if(
@@ -601,8 +600,7 @@ ret:
 				cloneUsageCounter_[image]=1;
 			}
 #if FIM_WANT_MIPMAPS
-			fim::string ccv;
-			if((!(ccv=getGlobalStringVariable(FIM_VID_CACHE_CONTROL).empty())) && ccv[0]=='M')
+			if( getGlobalStringVariable(FIM_VID_CACHE_CONTROL).find('M') == 0 )
 				image->mm_make();
 #endif /* FIM_WANT_MIPMAPS */
 			lru_touch( key );
