@@ -2362,7 +2362,7 @@ ok:
 		fim::string hk=FIM_CNS_EMPTY_STRING;	/* help key string */
 		int hkl=0;		/* help key string length */
 		FIM_CONSTEXPR int mhkl=5,eisl=9;
-		FIM_CONSTEXPR fim_char_t *hp=" - Help";
+		const fim_char_t *hp=" - Help";
 		int hpl=fim_strlen(hp);
 		prompt_[1]=FIM_SYM_CHAR_NUL;
 		fim_bool_t wcs = isSetVar(FIM_VID_WANT_CAPTION_STATUS);
