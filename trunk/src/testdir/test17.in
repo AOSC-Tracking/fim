@@ -1,0 +1,23 @@
+# This file is part of the fim test suite.
+# This test will fail on missing gif support.
+#autocmd "PreReload"   ".*txt" "_file_loader='Text'";
+#autocmd "PostReload"   ".*txt" "_file_loader=''";
+stdout "List/limit test: BEGIN.";
+cd "../../media/numbers";
+#list "push" "1.txt" "2.txt" "3.txt" "4.txt" "5.txt" "6.txt" "7.txt" "8.txt" "9.txt" ;
+list "push" "1.gif" "2.gif" "3.gif" "4.gif" "5.gif" "6.gif" "7.gif" "8.gif" "9.gif" ;
+list "remove" "../..//media/image.png" ;
+list "remove" "../..//media/fim.png" ;
+list "remove" "../..//media/image.jpg" ;
+stdout _filelistlen;
+list "sort" ;
+list;
+2;
+list "mark" ;
+7;
+list "mark" ;
+#
+stdout _filelistlen;
+limit "!" "marked" ; # 2 and 7
+stdout _filelistlen;
+stdout "List/limit test: DONE.";
