@@ -102,7 +102,8 @@ class flist_t : public std::vector<fim::fle_t>
 	size_t ecount = 0;
 #if FIM_USE_CXX11
 	auto bit=this->begin();
-	for(auto fit=bit;fit!=this->end();++fit)
+	auto eit=this->end();
+	for(auto fit=bit;fit!=eit;++fit)
 		if(bs.at(fit-bit) != negative)
 			this->erase(fit-ecount),ecount++;
 #else /* FIM_USE_CXX11 */
