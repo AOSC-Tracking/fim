@@ -1904,7 +1904,12 @@ fim_err_t FramebufferDevice::display(
 	if(bh<0)
 		goto err;
 
-	clear_rect(  0, width()-1, 0, height()-1); 
+	/* 
+	 * Uncommenting this clear_rect() might fix a few cases where a clear
+	 * screen seems missing, but also introduce flickering --- this has to
+	 * be fixed differently than enabling this as done in r882.
+	 */
+	// clear_rect(  0, width()-1, 0, height()-1);
 	svga_display_image_new(
 		(struct ida_image*)ida_image_img,
 		yoff,
