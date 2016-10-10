@@ -28,6 +28,7 @@
 #include "fim_plugin.h"
 #include "common.h"
 
+#include <cstdarg>	/* va_list, va_arg, va_start, va_end */
 #include <stdio.h>	/* fdopen, tmpfile */
 #include <unistd.h>	/* execlp (popen is dangerous) */
 #include <stdlib.h>	/* mkstemp */
