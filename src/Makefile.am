@@ -18,7 +18,8 @@ lex.yy.cc: lex.lex yacc.tab.cpp
 	@$(ECHO) "Applying a horrible hack to avoid the flex non-throwing isatty() redeclaration in 'extern "C" int isatty (int );'"
 	$(SED) -i 's/^.*extern.*isatty.*int.*$$//g' $@
 
-yacc.tab.hpp yacc.tab.cpp: yacc.ypp lex.lex
+yacc.tab.hpp: yacc.tab.cpp
+yacc.tab.cpp: yacc.ypp lex.lex
 	LC_ALL=C $(YACC) $(YFLAGS) $< -o $@
 
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
