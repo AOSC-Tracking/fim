@@ -1,5 +1,5 @@
 /*
- (c) 2011-2013 Michele Martone
+ (c) 2011-2016 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,8 @@
 int main(int argc,char *argv[])
 {
 	/* read binary data from stdin, dump a C array with byte data on stdout */
-	unsigned int byte=0,bc=0;
+	unsigned char byte=0;
+	unsigned int bc=0;
 	printf("{\n");
 	while(read(0,&byte,1)==1)
 		printf("0x%02x,%s",byte,(++bc)%16?"":"\n");
