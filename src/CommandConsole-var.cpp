@@ -28,7 +28,7 @@ namespace fim
 	{
 		fim::string id;
 #ifdef FIM_NAMESPACES
-		if( varname.at(1) == FIM_SYM_NAMESPACE_SEP && varname.length() > 2 )
+		if( varname.length() > 2 && varname.at(1) == FIM_SYM_NAMESPACE_SEP )
 		{
 			if( varname.length() > 2 )
 				id = varname.c_str()+2;
@@ -43,7 +43,7 @@ namespace fim
 	{
 		Namespace * nsp = FIM_NULL;
 #ifdef FIM_NAMESPACES
-		if( varname.at(1) == FIM_SYM_NAMESPACE_SEP )
+		if( varname.length() > 2 && varname.at(1) == FIM_SYM_NAMESPACE_SEP )
 		{
 			try
 			{
@@ -106,7 +106,7 @@ err:
 	{
 		const Namespace * nsp = FIM_NULL;
 #ifdef FIM_NAMESPACES
-		if( varname.at(1) == FIM_SYM_NAMESPACE_SEP )
+		if( varname.length() > 2 && varname.at(1) == FIM_SYM_NAMESPACE_SEP )
 		{
 			try
 			{
