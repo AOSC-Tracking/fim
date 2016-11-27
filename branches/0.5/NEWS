@@ -3,6 +3,7 @@
 
                 Version 0.5-rc3
 
+ * fix: configure script regex_t check was unnecessarily broken
  * fix: was likely using uninitialized data in Image()
  * fix: a few more checks when reading PCX files
  * bugfix: a function in AADevice was missing return value

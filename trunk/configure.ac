@@ -351,7 +351,7 @@ AC_CACHE_CHECK([whether your system regexp library is completely broken],
         AC_TRY_RUN([
 #include <unistd.h>
 #include <regex.h>
-main() { regex_t blah ; regmatch_t p; p.rm_eo = p.rm_eo; return regcomp(&blah, "foo.*bar", REG_NOSUB) || regexec (&blah, "foobar", 0, NULL, 0); }],
+int main() { regex_t blah ; regmatch_t p; p.rm_eo = p.rm_eo; return regcomp(&blah, "foo.*bar", REG_NOSUB) || regexec (&blah, "foobar", 0, NULL, 0); }],
         fim_cv_regex_broken=no, fim_cv_regex_broken=yes, fim_cv_regex_broken=yes))
         if test X$fim_cv_regex_broken = Xyes ; then
                 echo "Using the included GNU regex instead." >&AC_FD_MSG
