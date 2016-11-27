@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1126)
+ * Added a stand-alone `make ltests' goal to test fim' language only.
 # (r1124)
  * Fix to configure script regex_t check: was unnecessarily broken.
 # (r1113)
