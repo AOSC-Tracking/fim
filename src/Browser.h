@@ -112,7 +112,7 @@ class flist_t : public std::vector<fim::fle_t>
 	size_t tsize = size();
 	for(size_t pos=0;pos<tsize;++pos)
 		if(bs.at(pos) != positive )
-			nlist.push_back(this->begin()+pos);
+			nlist.push_back(*(this->begin()+pos));
 #endif /* FIM_USE_CXX11 */
 	adj_cf();
 	return nlist;
