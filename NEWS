@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1124)
+ * Fix to configure script regex_t check: was unnecessarily broken.
 # (r1113)
  * Fix to the -P/--text-reading switch (seems to be broken in version 0.5).
 # (r1108)
