@@ -1596,6 +1596,17 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			cc.browser_._random_shuffle(true);
 		if(want_random_shuffle==-1)
 			cc.browser_._random_shuffle(false);
+#ifdef FIM_CHECK_DUPLICATES
+		else
+		if(want_random_shuffle!= 0)
+		{
+			// if any sorting method is requested, we use chance to sort and remove duplicates
+			cc.browser_._sort();
+			cc.browser_._unique();
+			if( want_random_shuffle==0x736f7274 )
+				want_random_shuffle=0; // no need to perform this twice
+		}
+#endif /* FIM_CHECK_DUPLICATES */
 		if(want_random_shuffle==0x736f7274)
 			cc.browser_._sort();
 		if(want_random_shuffle==0x736f626e)

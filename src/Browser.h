@@ -98,6 +98,12 @@ class flist_t : public std::vector<fim::fle_t>
 	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
 	void adj_cf(void){cf_ = ( size() <= 0 ) ? 0 : FIM_MIN(((size_t)cf_),size()-1); /* FIXME: use a smarter method here */ }
 	const fim::string pop(const fim::string& filename);
+	void _unique()
+	{
+		// this only makes sense if the list is sorted.
+		this->erase(std::unique(this->begin(), this->end()), this->end());
+		adj_cf();
+	}
 
 	flist_t copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive = true)
 {
@@ -289,6 +295,7 @@ class Browser
 	fim::string display(void);
 	fim::string _random_shuffle(bool dts=true);
 	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN);
+	void _unique(void);
 	fim::string _clear_list(void);
 	private:
 	fim::string do_filter_cmd(const args_t args, bool negative, enum FilterAction faction);

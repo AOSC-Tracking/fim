@@ -1377,6 +1377,13 @@ ret:
 		return flist_.size();
 	}
 
+	void Browser::_unique(void)
+	{
+		// this only makes sense if flist_ is sorted.
+		flist_._unique();
+		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
+	}
+
 	fim::string Browser::_sort(const fim_char_t sc)
 	{
 		/*

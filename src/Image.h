@@ -292,6 +292,8 @@ public:
 		VNamespace ns;
 #endif /* FIM_WANT_PIC_LVDN */
 		bool imgdscs_want_basename = true; /* FIXME: shall be more clear/flexible with this */
+		// fim_fms_t dt;
+		// dt = - getmilliseconds();
 
 		while( std::getline(mfs,ln))
 		{
@@ -479,6 +481,8 @@ public:
 		shrink_to_fit();
 		// print(std::cout) << "\n";
 #endif /* FIM_WANT_PIC_LVDN */
+		// dt += getmilliseconds();
+		// std::cout << fim::string("fetched images descriptions in ") << dt << " ms" << std::endl;
 	}
 	key_type fk(const mapped_type & sk) 
 	{
