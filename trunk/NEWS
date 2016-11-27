@@ -3,7 +3,7 @@
 
                 Version 0.6-trunk
 
-# (r1127)
+# (r1127,r1128)
  * Optimized the `limit' command.
 # (r1126)
  * Added a stand-alone `make ltests' goal to test fim' language only.
