@@ -97,6 +97,28 @@ class flist_t : public std::vector<fim::fle_t>
 	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
 	void adj_cf(void){cf_ = ( size() <= 0 ) ? 0 : FIM_MIN(((size_t)cf_),size()-1); /* FIXME: use a smarter method here */ }
 	const fim::string pop(const fim::string& filename);
+
+	flist_t copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive = true)
+{
+	flist_t nlist;
+	size_t ecount = 0;
+#if FIM_USE_CXX11
+	auto bit=this->begin();
+	auto eit=this->end();
+	for(auto fit=bit;fit!=eit;++fit)
+		if(bs.at(fit-bit) != positive )
+			nlist.push_back(*fit);
+#else /* FIM_USE_CXX11 */
+	size_t tsize = size();
+	for(size_t pos=0;pos<tsize;++pos)
+		if(bs.at(pos) != positive )
+			nlist.push_back(this->begin()+pos);
+#endif /* FIM_USE_CXX11 */
+	adj_cf();
+	return nlist;
+}
+
+
 	void erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative = false)
 {
 	size_t ecount = 0;
