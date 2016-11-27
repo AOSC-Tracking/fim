@@ -1799,6 +1799,7 @@ err:
 		const bool wom = (flist_.size() > FIM_CNS_ENOUGH_FILES_TO_WARN );
 		fim_int marked = 0;
 		fim_bitset_t lbs(flist_.size()); // limit bitset, used for mark / unmark / delete / etc
+		// fim_fms_t dt;
 
 		FIM_PR('*');
 		// std::cout << "match mode:" << rm << "  negation:" << negative << "  faction:" << faction << "\n"; // TODO: a debug mode shall enable such printouts.
@@ -2154,6 +2155,8 @@ parsed_limits:
 				}
 			       	commandConsole_.set_status_bar(msg, "*");
 			}
+
+			// dt = - getmilliseconds();
 			for(size_t r=0;r<rlist.size();++r)
 			for(size_t i=0;i<flist_.size();++i)
 			{
@@ -2171,6 +2174,9 @@ parsed_limits:
 				if( match )
 					lbs.set(i); // TODO: further cycles on r are unnecessary after match.
 			}
+			// dt+ =  getmilliseconds();
+			// std::cout << fim::string("    limiting took ") << dt << " ms" << std::endl;
+
 	//		if(lf != flist_.size() )
 	//			cout << "limited to " << int(flist_.size()) << " files, excluding " << int(lf - flist_.size()) << " files." <<FIM_CNS_NEWLINE;
 			if(negative)
@@ -2186,6 +2192,7 @@ parsed_limits:
 rfrsh:
 		if (negative)
 			lbs.negate();
+		// dt = - getmilliseconds();
 		if (lbs.any())
 		{
 			size_t tsize = lbs.size(),cnt=lbs.count();
@@ -2200,7 +2207,12 @@ rfrsh:
 			result += ".\n";
 
 			if(faction == Delete)
-				flist_.erase_at_bitset(lbs);
+			{
+				if(cnt < tsize/2) // a very rough but effective first optimization
+					flist_ = flist_.copy_from_bitset(lbs);
+				else
+					flist_.erase_at_bitset(lbs);
+			}
 			else /* Mark / Unmark */
 			{
 				for(size_t pos=0;pos<tsize;++pos)
@@ -2208,6 +2220,8 @@ rfrsh:
 						marked += cc.markFile(flist_[pos],(faction == Mark),false);
 			}
 		}
+		// dt += getmilliseconds();
+		// std::cout << fim::string("bit limiting took ") << dt << " ms" << std::endl;
 
 		//if ((faction != Delete) && marked)
 		//	cout << ( faction == Mark ? "  Marked " : "Unmarked "  ) << marked << " files\n";
