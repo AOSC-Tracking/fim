@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1130)
+ * Won't check for duplicates on command line specified files.
 # (r1127,r1128)
  * Optimized the `limit' command.
 # (r1126)

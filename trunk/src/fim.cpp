@@ -1513,6 +1513,8 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    help_and_exit(argv[0],FIM_PERR_NO_ERROR,optarg);
 		}
 	    }
+		// fim_fms_t dt;
+		// dt = - getmilliseconds();
 		for (i = optind; i < argc; i++)
 		{
 	#ifdef FIM_READ_STDIN
@@ -1521,9 +1523,11 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			else
 	#endif /* FIM_READ_STDIN */
 			{
-				cc.push(argv[i],pf);
+				cc.push(argv[i],pf | FIM_FLAG_PUSH_ALLOW_DUPS);
 			}
 		}
+		// dt += getmilliseconds();
+		// std::cout << fim::string("fetched images list in ") << dt << " ms" << std::endl;
 	
 		lexer=new yyFlexLexer;	//used by YYLEX
 		if(!lexer)
