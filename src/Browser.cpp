@@ -1348,7 +1348,7 @@ rret:
 		}
 isfile:
 #ifdef FIM_CHECK_DUPLICATES
-		if( present(nf) )
+		if( ( ! ( pf & FIM_FLAG_PUSH_ALLOW_DUPS ) ) && present(nf) )
 		{
 			//there could be an option to have duplicates...
 			//std::cout << "no duplicates allowed..\n";
