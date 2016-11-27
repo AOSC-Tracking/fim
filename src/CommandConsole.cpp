@@ -419,7 +419,7 @@ ret:		return key;
 #if FIM_WANT_PIC_LBFL
 		addCommand(new Command(fim_cmd_id(FIM_FLT_LIMIT),fim::string(FIM_FLT_LIMIT " "
 #if FIM_WANT_PIC_LVDN
-		" {'-list'|'-listall'}|{'-list'|'-listall'} 'variable'|"
+		" {'-list'|'-listall'} 'variable'|"
 #endif /* FIM_WANT_PIC_LVDN */
 		"['-further'] [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE ". "
 #if FIM_WANT_PIC_LVDN

@@ -429,22 +429,46 @@ public:
 						}
 					}
 #endif /* FIM_WANT_PIC_RCMT */
-#if FIM_WANT_PIC_CCMT
-					ds = cps + ds + cas;
-#endif /* FIM_WANT_PIC_CCMT */
-					if(! imgdscs_want_basename )
+					const bool would_remove = false;
+					if (!would_remove)
 					{
-						(*this)[din+fn]=ds;
+#if FIM_WANT_PIC_CCMT
+						ds = cps + ds + cas;
+#endif /* FIM_WANT_PIC_CCMT */
+						if(! imgdscs_want_basename )
+						{
+							(*this)[din+fn]=ds;
 #if FIM_WANT_PIC_LVDN
-						vd_[std::string(din+fn)]=ns;
+							vd_[std::string(din+fn)]=ns;
 #endif /* FIM_WANT_PIC_LVDN */
+						}
+						else
+						{
+							(*this)[din+fim_basename_of(fn.c_str())]=ds;
+#if FIM_WANT_PIC_LVDN
+							vd_[din+fim_basename_of(fn.c_str())]=ns;
+#endif /* FIM_WANT_PIC_LVDN */
+						}
 					}
 					else
 					{
-						(*this)[din+fim_basename_of(fn.c_str())]=ds;
+						// TODO: FIXME: this branch waits to be activated.
+						// ... remove pic
+						const bool imgdscs_want_basename = true;
+						if(! imgdscs_want_basename )
+						{
+							(*this)[din+fn]=ds;
 #if FIM_WANT_PIC_LVDN
-						vd_[din+fim_basename_of(fn.c_str())]=ns;
+							vd_[std::string(din+fn)]=ns;
 #endif /* FIM_WANT_PIC_LVDN */
+						}
+						else
+						{
+							(*this)[din+fim_basename_of(fn.c_str())]=ds;
+#if FIM_WANT_PIC_LVDN
+							vd_[din+fim_basename_of(fn.c_str())]=ns;
+#endif /* FIM_WANT_PIC_LVDN */
+						}
 					}
 				}
 			}
