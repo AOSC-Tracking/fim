@@ -214,6 +214,9 @@ class Browser
 
 	Browser(CommandConsole& cc);
 	~Browser(void) { }
+#if FIM_WANT_PIC_CMTS_RELOAD
+	std::vector<std::pair<string,fim_char_t>> dfl_; // FIXME: should be private
+#endif /* FIM_WANT_PIC_CMTS_RELOAD */
 #if FIM_USE_CXX11
 	public:
 	/* a deleted copy constructor (e.g. not even a be'friend'ed class can call it) */
