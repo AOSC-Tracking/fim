@@ -159,7 +159,7 @@
 #define FIM_USE_CXX11 ( FIM_USE_CXX_STD >= 2011 ) || ( defined(__cplusplus) && (__cplusplus>=201103L) ) /* */
 #define FIM_USE_CXX14 ( FIM_USE_CXX_STD >= 2014 ) || ( defined(__cplusplus) && (__cplusplus> 201103L) ) /* */
 #define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
-#define FIM_WANT_PIC_CMTS_RELOAD FIM_USE_CXX11 && FIM_WANT_PIC_CMTS
+#define FIM_WANT_PIC_CMTS_RELOAD FIM_WANT_PIC_CMTS
 #define FIM_WANT_IMAGE_LOAD_TIME 1
 #define FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK 1
 #if FIM_USE_CXX11
