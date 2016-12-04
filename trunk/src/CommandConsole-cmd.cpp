@@ -922,6 +922,12 @@ bool fim_args_opt_have(const args_t& args, fim::string optname)
 	return false;
 }
 
+#if FIM_USE_CXX11
+	/* */
+#else /* FIM_USE_CXX11 */
+	static void fim_cc_fetch(const std::pair<string,fim_char_t> & dfp){cc.id_.fetch(dfp.first,dfp.second);}
+#endif /* FIM_USE_CXX11 */
+
 	fim_cxr CommandConsole::fcmd_desc(const args_t& args)
 	{
 #if FIM_WANT_PIC_CMTS
@@ -931,8 +937,12 @@ bool fim_args_opt_have(const args_t& args, fim::string optname)
 #if FIM_WANT_PIC_CMTS_RELOAD
 		if ( args.size()-aoc > 0 && args[aoc] == "reload" )
 		{
+#if FIM_USE_CXX11
 			for (auto & dfp : cc.browser_.dfl_) 
 				cc.id_.fetch(dfp.first,dfp.second);
+#else /* FIM_USE_CXX11 */
+			std::for_each(cc.browser_.dfl_.begin(),cc.browser_.dfl_.end(),fim_cc_fetch);
+#endif /* FIM_USE_CXX11 */
 			browser_.cache_.desc_update();
 		}
 #endif /* FIM_WANT_PIC_CMTS_RELOAD */

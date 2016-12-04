@@ -3,8 +3,8 @@
 
                 Version 0.6-trunk
 
-# (r1133)
- * desc 'reload' reload once again description files specified at the command line with --load-image-descriptions-file (TODO: c++11 only for now)
+# (r1133,r1134)
+ * desc 'reload' load once again description files specified at the command line with --load-image-descriptions-file
 # (r1130,r1131)
  * Won't check for duplicates on command line specified files unless sorting is requested.
 # (r1127,r1128)
