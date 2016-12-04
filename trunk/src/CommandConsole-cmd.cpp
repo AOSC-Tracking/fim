@@ -928,6 +928,15 @@ bool fim_args_opt_have(const args_t& args, fim::string optname)
 		fim_char_t sc = '\t';
 		int aoc = fim_args_opt_count(args,'-');
 
+#if FIM_WANT_PIC_CMTS_RELOAD
+		if ( args.size()-aoc > 0 && args[aoc] == "reload" )
+		{
+			for (auto & dfp : cc.browser_.dfl_) 
+				cc.id_.fetch(dfp.first,dfp.second);
+			browser_.cache_.desc_update();
+		}
+#endif /* FIM_WANT_PIC_CMTS_RELOAD */
+
 		if(2 > args.size()-aoc )
 			goto err;
 

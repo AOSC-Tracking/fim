@@ -1461,12 +1461,15 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 #endif /* FIM_WANT_PIC_LISTUNMARK */
 #if FIM_WANT_PIC_CMTS
-		case /*0x69646673*/'S':
+		case /*0x69646673*/'S': /* FIM_OSW_IMG_DSC_FILE_SEPC */
 		    if(optarg)
 			    sc = *optarg;
 		    break;
-		case /*0x6c696466*/'D':
+		case /*0x6c696466*/'D': /* FIM_OSW_LOAD_IMG_DSC_FILE */
 		    cc.id_.fetch(optarg,sc);
+#if FIM_WANT_PIC_CMTS_RELOAD
+		    cc.browser_.dfl_.push_back({optarg,sc});
+#endif /* FIM_WANT_PIC_CMTS_RELOAD */
 		    cc.setVariable(FIM_VID_COMMENT_OI,(fim_int)FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
 		    break;
 #endif /* FIM_WANT_PIC_CMTS */
