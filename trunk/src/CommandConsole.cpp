@@ -421,13 +421,14 @@ ret:		return key;
 #if FIM_WANT_PIC_LVDN
 		" {'-list'|'-listall'} 'variable'|"
 #endif /* FIM_WANT_PIC_LVDN */
-		"['-further'|'-merge'] [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE ". "
+		"['-further'|'-merge'|'-subtract'] [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE ". "
 #if FIM_WANT_PIC_LVDN
 		" If invoked with '-list'/'-listall' only, will list the current description variable ids. "
 		" If invoked with '-list'/'-listall' 'id', will list set values for the variable 'id'. "
 #endif /* FIM_WANT_PIC_LVDN */
 		" If '-further' is present, will start with the current list; if not, with the full list. "
-		" If '-merge' is present, the new list will be merged to the previous one and sorted. "
+		" If '-merge' is present, new matches will be merged in the existing list and sorted. "
+		" If '-subtract' is present, sort and filter out matches. "
 		" If {variable} and {values} are provided, limit to files having property {variable} set to {value}. "
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		" If {expression} is one exclamation point ('!'), will limit to the currently marked files only. "

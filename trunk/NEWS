@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1136)
+ * limit '-set_union' will merge current limited list with the new one.
 # (r1135)
  * limit '-merge' will merge current limited list with the new one.
 # (r1133,r1134)

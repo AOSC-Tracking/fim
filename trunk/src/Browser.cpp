@@ -692,7 +692,7 @@ nop:
 		{
 			fim_int lbl = n_files(); // length before limiting
 			enum FilterAction faction = Delete;
-			flist_t clist_; // current list copy
+			flist_t clist; // current list copy
 
 #if FIM_WANT_PIC_LVDN
 			if( args.size()-aoc == 1 && aoc == 1 && 
@@ -710,24 +710,24 @@ nop:
 				tlist_ = flist_; // a copy
 
 			if(                  fim_args_opt_have(args,"-merge"))
-			       	clist_ = flist_; // current list
+			       	clist = flist_; // current list
+			else
+			if(                  fim_args_opt_have(args,"-subtract"))
+			       	clist = flist_; // current list
 
 			if(tlist_.size() && !fim_args_opt_have(args,"-further"))
 			       	flist_ = tlist_; // limit on total list
 
 			result = do_filter_cmd(args_t(args.begin()+aoc,args.end()),false,faction);
 
-			if(clist_.size()) // -merge : merge updated flist_ and previous clist_
+			if(clist.size())
 			{
-				flist_t mlist_;
-				mlist_.reserve(flist_.size()+clist_.size());
-				clist_._sort(FIM_SYM_SORT_FN);
-				flist_._sort(FIM_SYM_SORT_FN);
-				std::set_union(flist_.begin(),flist_.end(),clist_.begin(),clist_.end(),std::back_inserter(mlist_));
-#if FIM_USE_CXX11
-				mlist_.shrink_to_fit();
-#endif /* FIM_USE_CXX11 */
-				flist_ = mlist_;
+				clist._sort(FIM_SYM_SORT_FN);
+				if(fim_args_opt_have(args,"-merge"))
+					flist_._set_union(clist);
+				else
+				if(fim_args_opt_have(args,"-subtract"))
+					flist_._set_difference_from(clist);
 			}
 
 			if(n_files() != lbl)

@@ -105,6 +105,30 @@ class flist_t : public std::vector<fim::fle_t>
 		adj_cf();
 	}
 
+	void _set_union(const flist_t & clist)
+	{
+					flist_t mlist;
+					this->_sort(FIM_SYM_SORT_FN);
+					mlist.reserve(this->size()+clist.size());
+					std::set_union(clist.begin(),clist.end(),this->begin(),this->end(),std::back_inserter(mlist));
+#if FIM_USE_CXX11
+					mlist.shrink_to_fit();
+#endif /* FIM_USE_CXX11 */
+					this->assign(mlist.begin(),mlist.end());
+	}
+
+	void _set_difference_from(const flist_t & clist)
+	{
+					flist_t mlist;
+					this->_sort(FIM_SYM_SORT_FN);
+					mlist.reserve(this->size()+clist.size());
+					std::set_difference(clist.begin(),clist.end(),this->begin(),this->end(),std::back_inserter(mlist));
+#if FIM_USE_CXX11
+					mlist.shrink_to_fit();
+#endif /* FIM_USE_CXX11 */
+					this->assign(mlist.begin(),mlist.end());
+	}
+
 	flist_t copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive = true)
 {
 	flist_t nlist;
