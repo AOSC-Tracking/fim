@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -129,23 +129,24 @@ class flist_t : public std::vector<fim::fle_t>
 					this->assign(mlist.begin(),mlist.end());
 	}
 
-	flist_t copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive = true)
+	flist_t copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive = true) const
 {
 	flist_t nlist;
 	size_t ecount = 0;
 #if FIM_USE_CXX11
-	auto bit=this->begin();
-	auto eit=this->end();
+	const auto bit=this->cbegin();
+	const auto eit=this->cend();
 	for(auto fit=bit;fit!=eit;++fit)
 		if(bs.at(fit-bit) != positive )
-			nlist.push_back(*fit);
+			nlist.emplace_back(*fit);// this might spare constructor
+			//nlist.push_back(*fit);
 #else /* FIM_USE_CXX11 */
 	size_t tsize = size();
 	for(size_t pos=0;pos<tsize;++pos)
 		if(bs.at(pos) != positive )
 			nlist.push_back(*(this->begin()+pos));
 #endif /* FIM_USE_CXX11 */
-	adj_cf();
+	//adj_cf();
 	return nlist;
 }
 
