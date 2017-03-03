@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -60,6 +60,8 @@ extern fim_sys_int yyparse();
 #include <mutex>
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
+#define FIM_CNS_IFELSE "if(expression){action;}['else'{action;}]"
+
 namespace fim
 {
 #if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
@@ -109,7 +111,6 @@ namespace fim
 		 * note : the binding translation map is used as a necessary
 		 * indirection...
 		 */
-		bindings_t::const_iterator bi(bindings_.find(c));
 		fim::string rs("keycode ");
 		string ksym(key_syms_[c]);
 
@@ -120,7 +121,7 @@ namespace fim
 
 		rs+=string((int)c);
 		rs+=ksym;
-		if(bi!=bindings_.end())
+		if(bindings_.find(c) != bindings_.end())
 			rs+=" successfully reassigned to \"";
 		else
 			rs+=" successfully assigned to \"";
@@ -222,9 +223,8 @@ ret:		return key;
 		 * unbinds the action eventually bound to the key combination code c
 		 */
 		fim::string rs(FIM_FLT_UNBIND" ");
-		bindings_t::const_iterator bi=bindings_.find(c);
 
-		if(bi!=bindings_.end())
+		if(bindings_.find(c) != bindings_.end())
 		{
 			bindings_.erase(c);
 			rs+=c;
@@ -383,9 +383,6 @@ ret:		return key;
 		addCommand(new Command(fim_cmd_id(FIM_FLT_CD),fim::string(FIM_CMD_HELP_CD  ),this,&CommandConsole::fcmd_cd));
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		addCommand(new Command(fim_cmd_id(FIM_FLT_CLEAR),fim::string(FIM_FLT_CLEAR" : clear the virtual console"),this,&CommandConsole::fcmd_clear));
-		// 20110507 we other means for scrolling the console, now
-		//addCommand(new Command(fim_cmd_id("scroll_console_up"  ),fim::string("scrolls up the virtual console"),this,&CommandConsole::scroll_up));
-		//addCommand(new Command(fim_cmd_id("scroll_console_down"),fim::string("scrolls down the virtual console"),this,&CommandConsole::scroll_down));
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_COMMANDS),fim::string(FIM_FLT_COMMANDS " : display the existing commands"),this,&CommandConsole::fcmd_commands_list));
 
@@ -404,7 +401,7 @@ ret:		return key;
 		addCommand(new Command(fim_cmd_id(FIM_FLT_DISPLAY),fim::string(FIM_FLT_HELP_DISPLAY),&browser_,&Browser::fcmd_display));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_DUMP_KEY_CODES),fim::string(FIM_FLT_DUMP_KEY_CODES " : dump the active key codes (unescaped, for inspection)"),this,&CommandConsole::fcmd_dump_key_codes));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_ECHO),fim::string(FIM_FLT_ECHO " " FIM_CNS_EX_ARGS_STRING ": print the " FIM_CNS_EX_ARGS_STRING " on console"),this,&CommandConsole::fcmd_echo));
-		addCommand(new Command(fim_cmd_id(FIM_FLT_ELSE),fim::string("if(expression){action;}['else'{action;}] : see else"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
+		addCommand(new Command(fim_cmd_id(FIM_FLT_ELSE),fim::string(FIM_CNS_IFELSE " : see if"),this,&CommandConsole::fcmd_foo));
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim_cmd_id(FIM_FLT_EVAL),fim::string(FIM_CMD_HELP_EVAL),this,&CommandConsole::fcmd_eval));
 #endif /* FIM_RECORDING */
@@ -414,7 +411,7 @@ ret:		return key;
 		addCommand(new Command(fim_cmd_id(FIM_FLT_GETENV),fim::string(FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING " : display the value of the " FIM_CNS_EX_ID_STRING " environment variable"),this,&CommandConsole::fcmd_do_getenv));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_GOTO),fim::string(FIM_CMD_HELP_GOTO),&browser_,&Browser::fcmd_goto_image));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_HELP),fim::string(FIM_CMD_HELP_HELP),this,&CommandConsole::fcmd_help));
-		addCommand(new Command(fim_cmd_id(FIM_FLT_IF),fim::string("if(expression){action;}['else'{action;}] : see if"),this,&CommandConsole::fcmd_foo));// FIXME: need a special "help grammar" command !
+		addCommand(new Command(fim_cmd_id(FIM_FLT_IF),fim::string(FIM_CNS_IFELSE " : see else"),this,&CommandConsole::fcmd_foo));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_INFO),fim::string(FIM_FLT_INFO" : display information about the current file" ),&browser_,&Browser::fcmd_info));
 #if FIM_WANT_PIC_LBFL
 		addCommand(new Command(fim_cmd_id(FIM_FLT_LIMIT),fim::string(FIM_FLT_LIMIT " "

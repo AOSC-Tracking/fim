@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -246,12 +246,20 @@ class ImgDscs: public std::map<fim_fn_t,fim_ds_t>
 	}
 	ImgDscs::const_iterator fo(const key_type& sk, const ImgDscs::const_iterator & li)const
 	{
-		return std::find_if(li,end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+#if FIM_USE_CXX11
+		return std::find_if(li,cend(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+#else /* FIM_USE_CXX11 */
+		return std::find_if(li,end() ,std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+#endif /* FIM_USE_CXX11 */
 	}
 public:
 	ImgDscs::const_iterator fo(const key_type& sk)const
 	{
-		return std::find_if(begin(),end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+#if FIM_USE_CXX11
+		return std::find_if(cbegin(),cend(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+#else /* FIM_USE_CXX11 */
+		return std::find_if( begin(), end(),std::bind2nd(ImgDscsCmp<ImgDscs>(),sk));
+#endif /* FIM_USE_CXX11 */
 	}
 private:
 	ImgDscs::iterator fi(const key_type& sk)
@@ -501,13 +509,12 @@ public:
 	}
 	void shrink_to_fit(void)
 	{
+		/* note we cannot it->first.shrink_to_fit(), */
 #if FIM_USE_CXX11
-		for( iterator it = begin();it != end(); ++it )
-			/* note we cannot it->first.shrink_to_fit(), */
+		for( auto it =     begin();it !=     end(); ++it )
 			it->second.shrink_to_fit();
 #if FIM_WANT_PIC_LVDN
-		for( vd_t::iterator it = vd_.begin();it != vd_.end(); ++it )
-			/* note we cannot it->first.shrink_to_fit(), */
+		for( auto it = vd_.begin();it != vd_.end(); ++it )
 			it->second.shrink_to_fit();
 #endif /* FIM_WANT_PIC_LVDN */
 #endif /* FIM_USE_CXX11 */
