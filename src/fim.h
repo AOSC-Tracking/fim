@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -162,6 +162,7 @@
 #define FIM_WANT_PIC_CMTS_RELOAD FIM_WANT_PIC_CMTS
 #define FIM_WANT_IMAGE_LOAD_TIME 1
 #define FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK 1
+#define FIM_WANT_PROGRESS_RECURSIVE_LOADING 0 /* print a line when loading recursively directories in background */
 #if FIM_USE_CXX11
 #define FIM_NOEXCEPT noexcept
 #define FIM_CONSTEXPR constexpr
@@ -987,7 +988,6 @@ namespace fim
 #define FIM_FLAG_FLIP 2
 #define FIM_FLAG_RGB2GRAY 4
 #define FIM_FLAG_RGB2GRAYGRAYGRAY 8
-
 
 /* FIM_XSTRINGIFY evaluates to a string with the supplied preprocessor symbol value */
 #define FIM_XSTRINGIFY(X) FIM_STRINGIFY(X)
