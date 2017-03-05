@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1176,6 +1176,16 @@ ret:
 #endif /* HAVE_LIBGEN_H */
 
 nostat:
+#if FIM_WANT_PROGRESS_RECURSIVE_LOADING
+		if( pf & FIM_FLAG_PUSH_BACKGROUND )
+		{
+			static int maxsize=0;
+			const char * FIM_CLEARTERM_STRING = "\x1B\x4D"; /* man terminfo */
+			std::cout << FIM_CLEARTERM_STRING << "scanning: " << flist_.size()<< nf << std::endl;
+			maxsize = FIM_MAX(nf.size(),maxsize);
+		}
+#endif
+
 		if ( ! ( dir = opendir(nf.c_str() ) ))
 			goto ret;
 
