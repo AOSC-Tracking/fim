@@ -38,8 +38,8 @@
  *	This is the main fim program header file.
  *	Established 20061225 ( yes, i know what do you think about me now )
  * */
-#include <cstdlib>	/* <stdlib.h> standard C library definitions			*/
-#include <cstdio>	/* <stdlib.h> standard C buffered I/O 				*/
+#include <cstdlib>	/* <cstdlib> standard C library definitions			*/
+#include <cstdio>	/* <cstdlib> standard C buffered I/O 				*/
 
 #include <cstring>	/* <string.h> standard C string manipulation functions		*/
 #include <iostream>	/* C++ I/O stream manipulation ( cout,cin, ... )		*/
@@ -380,7 +380,7 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
  * Fim Constants
  * */
 #define FIM_CNS_FIM	 "FIM - Fbi IMproved"
-#define FIM_CNS_LCY	 "2016" /* latest copyright year */
+#define FIM_CNS_LCY	 "2017" /* latest copyright year */
 //#define FIM_CNS_FIM_TXT	 "FIM.TXT"
 #define FIM_CNS_BUGS_FILE	 "BUGS"
 #define FIM_CNS_TERM_VAR	 "TERM"

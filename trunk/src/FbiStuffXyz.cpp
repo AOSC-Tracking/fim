@@ -36,7 +36,7 @@
 #if FIM_WITH_LIBXYZ
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H

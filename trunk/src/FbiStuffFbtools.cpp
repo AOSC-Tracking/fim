@@ -23,7 +23,7 @@
  * This file comes from fbi, and will undergo severe reorganization.
  * */
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>

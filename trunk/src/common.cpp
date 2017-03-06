@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -850,7 +850,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 #endif /* HAVE_GETLINE */
 #ifdef HAVE_FGETLN
 	{	
-		/* for BSD (in stdlib.h) */
+		/* for BSD (in cstdlib) */
 		fim_char_t *s,*ns;
 		size_t len=0;
 		s=fgetln(stream,&len);

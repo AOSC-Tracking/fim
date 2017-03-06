@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
 #include <cstdarg>	/* va_list, va_arg, va_start, va_end */
 #include <stdio.h>	/* fdopen, tmpfile */
 #include <unistd.h>	/* execlp (popen is dangerous) */
-#include <stdlib.h>	/* mkstemp */
+#include <cstdlib>	/* mkstemp */
 #include <math.h>
 #include <string.h>
 #include <stdarg.h>	/* va_start, va_end, ... */
@@ -1091,7 +1091,7 @@ struct ida_op desc_rotate = {
 // op.c
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 
 /* ----------------------------------------------------------------------- */
@@ -1390,7 +1390,7 @@ struct ida_op desc_autocrop = {
 
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <errno.h>
 

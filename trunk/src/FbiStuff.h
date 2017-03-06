@@ -2,7 +2,7 @@
 /*
  FbiStuff.h : Misc fbi functionality routines, modified for fim
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,7 @@
 # include <X11/Intrinsic.h>
 #endif /* USE_X11 */
 #include <stdio.h>//FILE
-#include <stdlib.h>//free()
+#include <cstdlib>//free()
 #include <errno.h>//free()
 #include <string.h>//memset,strerror,..
 
