@@ -2,7 +2,7 @@
 /*
  interpreter.cpp : Fim language interpreter
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -310,7 +310,12 @@ Var ex(NodeType p)
 				          	for(fim_size_t i=0;i<na.size();++i)
 							{
 								//std::cout << "?"<<na[i]<<FIM_SYM_ENDL;
-								args.push_back(na[i]);}// FIXME : non sono sicuro che questo serva
+								// FIXME : non sono sicuro che questo serva
+#if FIM_USE_CXX11
+								args.emplace_back(std::move(na[i]));}
+#else /* FIM_USE_CXX11 */
+								args.push_back(na[i]);}
+#endif /* FIM_USE_CXX11 */
 							  	DBG("A:"<<FIM_NOPS(np)<<FIM_SYM_ENDL);
 								break;
 #if 0
