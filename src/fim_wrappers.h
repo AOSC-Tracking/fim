@@ -2,7 +2,7 @@
 /*
  fim_wrappers.h : Some wrappers
 
- (c) 2011-2016 Michele Martone
+ (c) 2011-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,11 +24,11 @@
 namespace fim
 {
 /* symbolic wrappers for memory handling calls */
-#define fim_calloc(x,y) calloc((x),(y)) /* may make this routine aligned in the future */
-#define fim_stralloc(x) (fim_char_t*) calloc((x),(1)) /* ensures that first char is NUL */
-#define fim_malloc(x) malloc(x)
-#define fim_free(x) free(x)
-#define fim_memset(x,y,z) memset(x,y,z)
+#define fim_calloc(x,y) std::calloc((x),(y)) /* may make this routine aligned in the future */
+#define fim_stralloc(x) (fim_char_t*) std::calloc((x),(1)) /* ensures that first char is NUL */
+#define fim_malloc(x) std::malloc(x)
+#define fim_free(x) std::free(x)
+#define fim_memset(x,y,z) std::memset(x,y,z)
 #define fim_bzero(x,y) fim_memset(x,0,y) /* bzero has been made legacy by POSIX.2001 and deprecated since POSIX.2004 */
 }
 #endif /* FIM_WRAPPERS_H */
