@@ -2,7 +2,7 @@
 /*
  FbiStuffPcx.cpp : Code for reading PCX files.
 
- (c) 2014-2016 Michele Martone
+ (c) 2014-2017 Michele Martone
  The functions pcx_load_image_fp and pcx_load_image_info_fp are (c) 2014-2014 Mohammed Isam.
  Originally based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
@@ -26,7 +26,7 @@
 #if FIM_WITH_PCX
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H

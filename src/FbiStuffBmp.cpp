@@ -28,7 +28,7 @@
 #if FIM_WITH_BMP
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H

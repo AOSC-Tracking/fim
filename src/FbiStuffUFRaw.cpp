@@ -27,7 +27,7 @@
 
 #include "fim.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H
@@ -35,7 +35,7 @@
 #endif /* HAVE_ENDIAN_H */
 
 #include <ufraw.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <errno.h>
 #include <string.h>
 #define FIM_NEF_PRINTF printf /* */

@@ -2,7 +2,7 @@
 /*
  fim_plugin.cpp : Fim plugin stuff
 
- (c) 2011-2016 Michele Martone
+ (c) 2011-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 #include <highgui.h>
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <assert.h>
 #include <math.h>
