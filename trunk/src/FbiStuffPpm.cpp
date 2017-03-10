@@ -2,7 +2,7 @@
 /*
  FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -25,10 +25,10 @@
 
 
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 
 //#include "loader.h"
 #include "fim.h"
@@ -46,6 +46,7 @@ namespace fim
 struct ppm_state {
     FILE          *infile;
     int           width,height;
+    int Maxval;
     fim_byte_t *row;
 };
 
@@ -71,13 +72,17 @@ pnm_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     }
     sscanf(line,"%d %d",&h->width,&h->height);
     fr=fgets(line,sizeof(line),fp); /* ??? */
+    sscanf(line,"%d",&h->Maxval);
     if(!fr)goto oops;
     if (0 == h->width || 0 == h->height)
 	goto oops;
     i->width  = h->width;
     i->height = h->height;
     i->npages = 1;
-    h->row = (fim_byte_t*)fim_malloc(h->width*3);
+    if( h->Maxval < 256 )
+    	h->row = (fim_byte_t*)fim_malloc(h->width*3*1); // 1 byte  read per component
+    else
+    	h->row = (fim_byte_t*)fim_malloc(h->width*3*2); // 2 bytes read per component (but first taken)
     if(!h->row)goto oops;
 
     return h;
@@ -94,7 +99,20 @@ ppm_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct ppm_state *h = (struct ppm_state *) data;
     int fr;
-    fr=fim_fread(dst,h->width,3,h->infile);
+    if( h->Maxval < 256 )
+    	fr=fim_fread(dst,h->width,3,h->infile);
+    else
+    {
+        fim_byte_t *src = h->row;
+    	fr=fim_fread(src,h->width,6,h->infile);
+    	for (int x = 0; x < h->width; x++)
+	{
+		dst[3*x+0]=src[2*(3*x+0)];
+		dst[3*x+1]=src[2*(3*x+1)];
+		dst[3*x+2]=src[2*(3*x+2)];
+	}
+    }
+
     if(fr){/* FIXME : there should be error handling */}
 }
 
@@ -103,9 +121,11 @@ pgm_read(fim_byte_t *dst, unsigned int line, void *data)
 {
     struct ppm_state *h = (struct ppm_state *) data;
     fim_byte_t *src;
-    int x,fr;
+    int x,fr,inc=1;
 
-    fr=fim_fread(h->row,h->width,1,h->infile);
+    if( h->Maxval >= 256 )
+	inc=2;
+    fr=fim_fread(h->row,h->width,inc,h->infile);
     if(!fr){/* FIXME : there should be error handling */ return ; }
     src = h->row;
     for (x = 0; x < h->width; x++) {
@@ -113,7 +133,7 @@ pgm_read(fim_byte_t *dst, unsigned int line, void *data)
 	dst[1] = src[0];
 	dst[2] = src[0];
 	dst += 3;
-	src += 1;
+	src += inc;
     }
 }
 
