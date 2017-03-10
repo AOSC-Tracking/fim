@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1143)
+ * fix: support for PPM files with 2 bytes per sample.
 # (r1136)
  * limit '-set_union' will merge current limited list with the new one.
 # (r1135)
