@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-/* this option tells flex to provide us a 1==yywrap() with -fl */
 %option noyywrap
 %{
 #include <math.h>
