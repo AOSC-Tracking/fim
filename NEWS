@@ -3,6 +3,7 @@
 
                 Version 0.5-rc3
 
+ * fix: -lfl linkage is not really necessary: removed it.
  * fix: support for PPM files with 2 bytes per sample.
  * fix: configure script regex_t check was unnecessarily broken
  * fix: was likely using uninitialized data in Image()
