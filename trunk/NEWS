@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1145)
+ * configure will try to detect curses/ncurses.
 # (r1144)
  * fix: -lfl linkage is not really necessary: removed it.
 # (r1143)
