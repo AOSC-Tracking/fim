@@ -486,6 +486,11 @@ AC_SUBST(LIBTIFF)
 AM_CONDITIONAL(ENABLE_TIFF, test x$have_tiff = xyes)
 
 
+dnl ============= curses: optional
+AC_CHECK_LIB([curses],[noecho])
+dnl ============= ncurses: optional
+AC_CHECK_LIB([ncurses],[noecho])
+
 dnl ============= cacalib : optional
 AC_CHECK_LIB(caca, caca_create_canvas,have_cacalib=yes,have_cacalib=no)
 
@@ -531,8 +536,8 @@ if test x$have_readline = xno; then
       LIBS="$LIBS -lreadline"
       AC_DEFINE([FIM_USE_READLINE])
       ,have_readline=no
-      AC_MSG_ERROR(*** GNU readline library headers not found !  please install them or run ./configure --disable-readline ***)
-      ,[ -lcurses ]
+      AC_MSG_ERROR(*** GNU readline (or curses library ?) not found (used LIBS=${LIBS}) ! please install them or specify them in e.g. LIBS=... or run ./configure --disable-readline ***)
+      ,[]
       )
   else
       have_readline=no
@@ -545,7 +550,7 @@ if test x$have_readline = xyes; then
   if test x$fim_want_readline = xyes ; then
     AC_CHECK_LIB(curses, tputs,
       have_curses=yes
-      LIBS="$LIBS -lcurses"
+      LIBS="$LIBS"
       ,have_curses=no
       )
   fi
