@@ -1674,6 +1674,33 @@ ret:
 			isfg = (l=='f');
 			isre = ((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
 			isrj = (c=='+' || c=='-');
+
+#if FIM_WANT_VAR_GOTO
+			if( c == '-' || c == '+' && s[1] && ( isalpha(s[1]) || s[1] == '_' ) )
+			{
+				const char * sp = s+2;
+				int neg=(c=='-'?-1:1);
+
+				while(*sp && ( isalpha(*sp) || *sp == '_' || isdigit(*sp) ) )
+					++sp;
+
+				std::string varname(s+1,sp);
+				std::string varval = cc.id_.vd_[fim_basename_of(current())].getStringVariable(varname);
+
+				for(size_t fi=0;fi<fc;++fi)
+				{
+					size_t idx=(cf+neg*(1+fi))%fc;
+					std::string nvarval = cc.id_.vd_[fim_basename_of(flist_[idx])].getStringVariable(varname);
+					if(nvarval != varval)
+					{
+						//std::cout<<"["<<varname<<"]="<<varval<<" -> "<<nvarval<<std::endl;
+						//std::cout<<cf<<" -> "<<idx<<std::endl;
+						nf=idx;
+						goto go_jump;
+					}
+				}
+			}
+#endif /* FIM_WANT_VAR_GOTO */
 			if( isdigit(c)  || c == '-' || c == '+' )
 			{
 				gv = fim_atoi(s);
