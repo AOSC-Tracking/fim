@@ -3,8 +3,10 @@
 
                 Version 0.6-trunk
 
+# (r1149)
+ * Added a '_caption_over_image_fmt' variable to customize overlay string contents.
 # (r1147,r1148)
- * Added a `goto {+|-}identifier[+]' syntax to jump to next file having a different value of i:identifier, 
+ * Added a 'goto {+|-}identifier[+]' syntax to jump to next file having a different value of i:identifier, 
    also empty if without trailing `+'.
 # (r1145)
  * configure will try to detect curses/ncurses.

@@ -460,7 +460,10 @@ namespace fim
 					if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
-				this->fs_ml_puts(image_->getStringVariable(FIM_VID_COMMENT).c_str(),wcoi-1);
+				if(commandConsole.isSetVar(FIM_VID_COMMENT_OI_FMT))
+					this->fs_ml_puts(image_->getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT).c_str()),wcoi-1);
+				else
+					this->fs_ml_puts(image_->getStringVariable(FIM_VID_COMMENT).c_str(),wcoi-1);
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
