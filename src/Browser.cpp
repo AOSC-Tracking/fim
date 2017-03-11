@@ -1680,9 +1680,12 @@ ret:
 			{
 				const char * sp = s+2;
 				int neg=(c=='-'?-1:1);
+				bool ner=false; // non empty requirement
 
 				while(*sp && ( isalpha(*sp) || *sp == '_' || isdigit(*sp) ) )
 					++sp;
+				if(*sp == '+' )
+					ner = true;
 
 				std::string varname(s+1,sp);
 				std::string varval = cc.id_.vd_[fim_basename_of(current())].getStringVariable(varname);
@@ -1691,7 +1694,7 @@ ret:
 				{
 					size_t idx=(cf+neg*(1+fi))%fc;
 					std::string nvarval = cc.id_.vd_[fim_basename_of(flist_[idx])].getStringVariable(varname);
-					if(nvarval != varval)
+					if(nvarval != varval && ! ( ner == true && !nvarval.size() ) )
 					{
 						//std::cout<<"["<<varname<<"]="<<varval<<" -> "<<nvarval<<std::endl;
 						//std::cout<<cf<<" -> "<<idx<<std::endl;

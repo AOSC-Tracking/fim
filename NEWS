@@ -3,8 +3,9 @@
 
                 Version 0.6-trunk
 
-# (r1147)
- * Added a `goto [+|-]identifier' syntax to jump to next file having a different value of i:identifier.
+# (r1147,r1148)
+ * Added a `goto {+|-}identifier[+]' syntax to jump to next file having a different value of i:identifier, 
+   also empty if without trailing `+'.
 # (r1145)
  * configure will try to detect curses/ncurses.
 # (r1144)
