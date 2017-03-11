@@ -124,6 +124,16 @@ wc:
 	wc $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/yacc.ypp $(srcdir)/lex.lex
 	@#wc $(FIM) # missing headers..
 
+devhelp:
+	@echo -----------------------------------------------
+	@echo '			short Makefile dev help'
+	@echo -----------------------------------------------
+	@echo
+	@echo 'make uptrunk' will upload trunk tarballs to 
+	@echo   http://download.savannah.nongnu.org/releases/fbi-improved/
+	@echo
+	@make help
+
 help:
 	@echo -----------------------------------------------
 	@echo '			short Makefile help'
@@ -170,6 +180,9 @@ changelog:
 release: upload freshmeat
 
 upload: savannah 
+
+uptrunk:
+	read && scp $(distdir).tar.gz.sig  $(distdir).tar.gz $(distdir).tar.bz2.sig $(distdir).tar.bz2 dezperado@dl.sv.nongnu.org:/releases/fbi-improved/
 
 # echo -en "cd /releases/fbi-improved\nput $(distdir).tar.gz.sig\n put fim-${fim_cv_version}.tar.gz\n put fim-${fim_cv_version}.tar.bz2\n put fim-${fim_cv_version}.tar.bz2.sig"  | sftp "dezperado@dl.sv.gnu.org" -b 
 savannah_: signed-dist
