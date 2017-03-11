@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fim 1 "(c) 2007\-2016 Michele Martone"
+.TH fim 1 "(c) 2007\-2017 Michele Martone"
 .SH NAME
 fim \- \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
@@ -538,7 +538,7 @@ Michele Martone <dezperado _CUT_ autistici _CUT_ org> is the author of fim, "fbi
 .fi
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007\-2016 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
+Copyright (C) 2007\-2017 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
 .fi
 Copyright (C) 1999\-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 .B fim
