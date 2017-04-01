@@ -29,7 +29,6 @@ ongoing further inspiration.
 20141129	the configure is not well made w.r.t. exif, jasper, ...
 20141129	setGlobalVariable -> setGV
 20141129	setGlobalVariable("i:",FIM_VID_WANT_AUTOCENTER,1);
-20141127	shall clean up Image::getInfoCustom considerably
 20141123	update all flags documentation of FIM_VID_WANT_CAPTION_STATUS/...
 20141123	clean up Image::getInfo
 20141122	document/expand the FIM_WANT_EXPERIMENTAL_BASENAME functionality.

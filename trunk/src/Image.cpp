@@ -954,6 +954,20 @@ err:
 		return new Image(*this);
 	}
 
+fim_int Image::shall_mirror(void)const
+{
+	return
+	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(is_mirrored()))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
+}
+
+fim_int Image::shall_flip(void)const
+{
+	return
+	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(is_flipped()))&&
+	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
+}
+
 fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 {
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
@@ -965,26 +979,24 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 	imp=imagemode;
 
-	//if(getGlobalIntVariable(FIM_VID_AUTOFLIP))*(imp++)='F';
-	//if(getGlobalIntVariable(FIM_VID_AUTOMIRROR))*(imp++)='M';
-
-	// should flip ? should mirror ?
-	int flip   =
-	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(is_flipped()))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
-	int mirror   =
-	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(is_mirrored()))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
-
-	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
-	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
-	if(orientation_!=FIM_NO_ROT)
+	if(shall_flip())
+		*(imp++)=FIM_SYM_FLIPCHAR;
+	if(shall_mirror())
+		*(imp++)=FIM_SYM_MIRRCHAR;
+	switch(orientation_)
 	{
-		if(orientation_==FIM_ROT_L) *(imp++)=FIM_ROT_L_C;
-		else
-		if(orientation_==FIM_ROT_U) *(imp++)=FIM_ROT_U_C;
-		else
-		if(orientation_==FIM_ROT_R) *(imp++)=FIM_ROT_R_C;
+		case FIM_ROT_L:
+			*(imp++)=FIM_ROT_L_C;
+		break;
+		case FIM_ROT_U:
+			 *(imp++)=FIM_ROT_U_C;
+		break;
+		case FIM_ROT_R:
+			 *(imp++)=FIM_ROT_R_C;
+		break;
+		case FIM_NO_ROT:
+		default:
+			FIM_NO_OP_STATEMENT;
 	}
 	*imp=FIM_SYM_CHAR_NUL;
 
@@ -997,7 +1009,6 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 	// ms_ = byte_size();
 	size_t ms = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
-
 
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	//ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR);
@@ -1019,7 +1030,6 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 		goto sbum;
 		while(*sp=='%' && isprint(sp[1]))
 		{
-
 			++sp;
 			switch(*sp)
 			{
@@ -1226,19 +1236,10 @@ fim::string Image::getInfo(void)
 	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 	imp=imagemode;
 
-	//if(getGlobalIntVariable(FIM_VID_AUTOFLIP))*(imp++)='F';
-	//if(getGlobalIntVariable(FIM_VID_AUTOMIRROR))*(imp++)='M';
-
-	// should flip ? should mirror ?
-	int flip   =
-	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(is_flipped()))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
-	int mirror   =
-	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(is_mirrored()))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
-
-	if(flip  )*(imp++)=FIM_SYM_FLIPCHAR;
-	if(mirror)*(imp++)=FIM_SYM_MIRRCHAR;
+	if(shall_flip())
+		*(imp++)=FIM_SYM_FLIPCHAR;
+	if(shall_mirror())
+		*(imp++)=FIM_SYM_MIRRCHAR;
 	*imp='\0';
 
 	if(fimg_->i.npages>1)
