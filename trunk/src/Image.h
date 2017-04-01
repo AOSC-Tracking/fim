@@ -201,6 +201,7 @@ class Image
 	bool cacheable(void)const;
 	void desc_update();
 	fim_bool_t need_redraw(void)const{ return (redraw_ != FIM_REDRAW_UNNECESSARY); }
+	bool fetchExifToolInfo(const fim_char_t *fname);
 };
 }
 #if FIM_WANT_PIC_LVDN
