@@ -205,8 +205,10 @@ class Image
 	void desc_update();
 	fim_bool_t need_redraw(void)const{ return (redraw_ != FIM_REDRAW_UNNECESSARY); }
 	bool fetchExifToolInfo(const fim_char_t *fname);
-};
-}
+	fim_int shall_mirror(void)const;
+	fim_int shall_flip(void)const;
+}; /* Image */
+} /* Namespace fim */
 #if FIM_WANT_PIC_LVDN
 	class VNamespace: public Namespace
 	{
