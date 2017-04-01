@@ -886,12 +886,21 @@ err:
 		rescale();
 	}
 
-	void Image::magnify(fim_scale_t factor)
+	void Image::magnify(fim_scale_t factor, fim_bool_t aes)
 	{
 		/*
 		 * scale_ is adjusted by a multiplying factor
 		 * */
 		newscale_ = scale_ * factor;
+#if FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING
+		if(newscale_<2.0 && aes && ascale_ == 1.0)
+		{
+			fim_scale_t newscale = 1.0;
+			while ( newscale / 2 >= newscale_ )
+				newscale /= 2;
+			newscale_ = newscale;
+		}
+#endif /* FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING */
 		rescale();
 	}
 

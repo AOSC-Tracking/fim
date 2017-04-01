@@ -379,12 +379,33 @@ nop:
 		const fim_char_t*ss = FIM_NULL;
 		int sl = 0;
 		bool pcsc = false;
+		bool aes = false; // approximate exponential scaling
 		FIM_PR('*');
 
 		if( args.size() < 1 || !(ss=args[0].c_str() ))
 			goto nop;
 		fc = tolower(*ss);
 		sl = strlen(ss);
+
+#if FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING
+		{
+			if( fc == '<' )
+			{
+				newscale = 0.5;
+				fc='+';
+				aes = true;
+				goto comeon;
+			}
+			if( fc == '>' )
+			{
+				newscale = 2;
+				fc='+';
+				aes = true;
+				goto comeon;
+			}
+		}
+#endif /* FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING */
+
 		if( isalpha(fc) )
 		{
 			if( !( fc == 'w' || fc == 'h' || fc == 'a' || fc == 'b' ) )
@@ -546,7 +567,7 @@ comeon:
 					if( newscale )
 					{
 						if(image())
-							image()->magnify(newscale);
+							image()->magnify(newscale,aes);
 						if(viewport())
 							viewport()->scale_position_magnify(newscale);
 					}
