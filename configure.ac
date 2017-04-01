@@ -1140,7 +1140,7 @@ dnl ============================================================================
 
 AH_TEMPLATE([FIM_WANT_EXIFTOOL])
 fim_cv_exiftool=no
-AC_ARG_ENABLE(exiftool, AC_HELP_STRING([--enable-exiftool], [Turns on exiftool support (EXPERIMENTAL, shall provide the EXIFTOOLLINK variable with library or object files and EXIFTOOLCXXFLAGS)]),
+AC_ARG_ENABLE(exiftool, AC_HELP_STRING([--enable-exiftool], [Turns on exiftool support (EXPERIMENTAL, shall provide the EXIFTOOLLINK variable with library or object files and EXIFTOOLCXXFLAGS). Not recommended: slow. Use --enable-exif instead.]),
 	[if test x$enableval = xyes; then
 		fim_cv_exiftool=yes
 		CXXFLAGS="$CXXFLAGS $EXIFTOOLCXXFLAGS"

@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -211,6 +211,51 @@ namespace fim
 #endif /* FIM_WANT_PIC_CMTS */
 	}
 
+bool Image::fetchExifToolInfo(const fim_char_t *fname)
+{
+#if FIM_WANT_EXIFTOOL
+	fim_int ue = getGlobalIntVariable(FIM_VID_EXIFTOOL);
+	/* TODO: one might execute this code in a background thread */
+	/* std::cout << "will try exiftool on : " << fname << "\n"; */
+	fim::string etc;
+	ExifTool *et = new ExifTool();
+
+	if(et)
+	{
+    		TagInfo *info = et->ImageInfo(fname,FIM_NULL,2);
+
+		if (info)
+      	 	{
+        		for (TagInfo *i=info; i; i=i->next)
+		       	{
+				etc+=i->name;
+				etc+=" = ";
+				etc+=i->value;
+				etc+=";";
+				etc+="\n";
+				//std::cout << "reading " << i->name << "...\n";
+        		}
+        		delete info;
+   	 	}
+	       	else if (et->LastComplete() <= 0)
+	       	{
+			std::cerr << "Error executing exiftool!" << std::endl;
+   	 	}
+    		char *err = et->GetError();
+	    	if (err)
+		       	std::cerr << err;
+		delete et;      // delete our ExifTool object
+		//std::cout << "setting: " << etc << "\n",
+		if(ue == 1)
+		setVariable(FIM_VID_COMMENT,getVariable(FIM_VID_COMMENT)+etc);
+		if(ue == 2)
+			setVariable(FIM_VID_EXIFTOOL_COMMENT,etc.c_str());
+		return true;
+	}
+#endif /* FIM_WANT_EXIFTOOL */
+	return false;
+}
+
 	Image::Image(const fim_char_t *fname, FILE*fd, fim_page_t page):
 #ifdef FIM_NAMESPACES
 		Namespace(&cc,FIM_SYM_NAMESPACE_IMAGE_CHAR),
@@ -260,41 +305,8 @@ namespace fim
 #endif /* FIM_WANT_PIC_CMTS */
 
 #if FIM_WANT_EXIFTOOL
-if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
-{
-	fim_int ue = getGlobalIntVariable(FIM_VID_EXIFTOOL);
-	/* FIXME: one shall execute this code in a separate thread */
-	/* std::cout << "will try exiftool on : " << fname << "\n"; */
-	fim::string etc;
-	ExifTool *et = new ExifTool();
-    	TagInfo *info = et->ImageInfo(fname,FIM_NULL,2);
-
-	if (info)
-       	{
-        	for (TagInfo *i=info; i; i=i->next)
-	       	{
-			etc+=i->name;
-			etc+=" = ";
-			etc+=i->value;
-			etc+=";";
-			etc+="\n";
-			//std::cout << "reading " << i->name << "...\n";
-        	}
-        	delete info;
-    	}
-       	else if (et->LastComplete() <= 0)
-       	{
-		std::cerr << "Error executing exiftool!" << std::endl;
-    	}
-    	char *err = et->GetError();
-    	if (err) std::cerr << err;
-    	delete et;      // delete our ExifTool object
-	//std::cout << "setting: " << etc << "\n",
-	if(ue == 1)
-		setVariable(FIM_VID_COMMENT,getVariable(FIM_VID_COMMENT)+(etc.c_str()));
-	if(ue == 2)
-		setVariable(FIM_VID_EXIFTOOL_COMMENT,etc.c_str());
-}
+			if(fname && getGlobalIntVariable(FIM_VID_EXIFTOOL) != 0)
+				fetchExifToolInfo(fname);
 #endif /* FIM_WANT_EXIFTOOL */
 		}
 	}
