@@ -17,7 +17,14 @@
 # 20091214	TODO: and options to wget ?
 # 20090525	should use -o option to rename files to a known filename before loading them, in the temporary directory.
 
-DIR="${TMPDIR-/var/tmp}/fbps-$$"
+FIMSHMEM=/dev/shm
+FIMVARTD=/var/tmp
+if test -d ${FIMSHMEM} -a -w ${FIMSHMEM} ; then
+	FIMTMPDIR=$FIMSHMEM
+else
+	FIMTMPDIR=$FIMVARTD
+fi
+DIR="${TMPDIR-$FIMTMPDIR}/fbps-$$"
 #GSRESOLUTION=""
 #GSRESOLUTION=${GSRESOLUTION:--r240x240}
 GSRESOLUTION=${GSRESOLUTION:-120x120}
@@ -136,6 +143,7 @@ In case of compressed archives (in zip or rar formats), the images are decompres
 In this latter case, only images contained in the archive will be displayed (no nested archives or pdf's or ps's or dvi's).
 
 The temporary directory name is taken from the \$TMPDIR environment variable. 
+If unset, $FIMSHMEM and $FIMVARTD will be probed. 
 
 .SH OPTIONS
 To pass through options to \fB fim\fP, you may specify them after "--".
