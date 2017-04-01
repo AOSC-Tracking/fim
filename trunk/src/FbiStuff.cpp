@@ -2362,6 +2362,37 @@ err:
 
 #define FIM_OPTIMIZATION_20120129 1
 
+#if FIM_WANT_MIPMAPS
+static int find_mipmap_idx(struct ida_image & msrc, const fim_mipmap_t * mmp, fim_int width, fim_int height)
+{
+
+	int mmi;
+
+	for(mmi=0;mmi<mmp->nmm && mmp->mmw[mmi]>=width && mmp->mmh[mmi]>=height ;++mmi)
+	{
+		msrc.i.width  = mmp->mmw[mmi];
+		msrc.i.height = mmp->mmh[mmi];
+		msrc.data     = mmp->mdp + mmp->mmoffs[mmi];
+	}
+	return mmi;
+}
+#endif /* FIM_WANT_MIPMAPS */
+/*
+int is_power_of_two(float val)
+{
+	int mmi = 0;
+
+	if(val < 0)
+		val = -val;
+
+	if(val > 1.0)
+		val = 1.0/val;
+
+	while( val / 2.0 >= 1.0 )
+		val /= 2.0, --mmi;
+}
+*/
+
 struct ida_image*	
 FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ float scale, float ascale
 #if FIM_WANT_MIPMAPS
@@ -2378,7 +2409,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     int mmi=-1;
     struct ida_image msrc;
 #endif /* FIM_WANT_MIPMAPS */
-    /* dez: */ if(ascale<=0.0||ascale>=100.0)
+    if(ascale<=0.0||ascale>=100.0) /* dez: */
 	    ascale=1.0;
 
     dest = (ida_image*)fim_malloc(sizeof(*dest));
@@ -2388,12 +2419,10 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     fim_bzero(&rect,sizeof(rect));
     fim_bzero(&p,sizeof(p));
  
-//    p.width  = (int)(src->i.width  * scale * ascale);
-//    p.height = (int)(src->i.height * scale);
-    // ceil() : new
     p.width  = (int)ceilf((float)src->i.width  * scale * ascale);
     p.height = (int)ceilf((float)src->i.height * scale);
     p.dpi    = (int)(src->i.dpi);
+
     if (0 == p.width)
 	p.width = 1;
     if (0 == p.height)
@@ -2402,14 +2431,8 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 #if FIM_WANT_MIPMAPS
     if(mmp && ascale == 1.0 && scale < 1.0)
     {
-	msrc=*src;
-
-	for(mmi=0;mmi<mmp->nmm && mmp->mmw[mmi]>=p.width && mmp->mmh[mmi]>=p.height ;++mmi)
-	{
-		msrc.i.width  = mmp->mmw[mmi];
-		msrc.i.height = mmp->mmh[mmi];
-		msrc.data     = mmp->mdp + mmp->mmoffs[mmi];
-	}
+	msrc = *src;
+	mmi = find_mipmap_idx(msrc, mmp, p.width, p.height);
 	if(mmi>0)
 	{
 		src=&msrc;
@@ -2444,6 +2467,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 #if FIM_WANT_MIPMAPS
     if(mmi>=0 && msrc.i.width == dest->i.width && msrc.i.height == dest->i.height )
     {
+	if(FIM_WVMM) std::cout << "using mipmap without scaling" << std::endl;
 	memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
 	goto done;
     }

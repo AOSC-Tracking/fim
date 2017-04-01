@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1156)
+ * scale '<'/scale '>' will shrink/magnify the image using cached mipmaps.
 # (r1155)
  * fix: the largest mipmap was not always being used.
 # (r1153,1154)
