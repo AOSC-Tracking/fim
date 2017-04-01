@@ -2442,7 +2442,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     }
 
 #if FIM_WANT_MIPMAPS
-    if(mmi>0 && msrc.i.width == dest->i.width && msrc.i.height == dest->i.height )
+    if(mmi>=0 && msrc.i.width == dest->i.width && msrc.i.height == dest->i.height )
     {
 	memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
 	goto done;

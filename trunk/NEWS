@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1155)
+ * fix: the largest mipmap was not always being used.
 # (r1153,1154)
  * fimgs script will probe for unrar-free/rar/unrar-nonfree.
  * fimgs man page updated.
