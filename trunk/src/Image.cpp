@@ -1051,7 +1051,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 				{
 					string cv = getStringVariable(FIM_VID_COMMENT);
 					if( cv.c_str() && *cv.c_str() )
-						snprintf(clbp, rbc, "[%s] ",cv.c_str()); /* FIXME: need sanitization */
+						snprintf(clbp, rbc, "[%s] ",cv.c_str()); /* TODO: might generalize/change this */
 				}
 				break;
 				case('l'):

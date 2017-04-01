@@ -29,13 +29,10 @@ ongoing further inspiration.
 20141129	the configure is not well made w.r.t. exif, jasper, ...
 20141129	setGlobalVariable -> setGV
 20141129	setGlobalVariable("i:",FIM_VID_WANT_AUTOCENTER,1);
-20141123	update all flags documentation of FIM_VID_WANT_CAPTION_STATUS/...
 20141123	clean up Image::getInfo
 20141122	document/expand the FIM_WANT_EXPERIMENTAL_BASENAME functionality.
-20141113	shall document the new '%k' descriptor, or expand it for generality.
 20140830	version 0.4 does not cache limit on memory: may want to fix this.
 20140830	need a precise control of scaling rules and viewports cache, as well to extend the viewport cache to scaled images
-20131211	sort file names by modification date ?
 20131107	fix --disable-scripting case !
 20131107	this is spurious: fim::string execute(const std::vector<fim::string> &args)
 20131107	getIntVariable(varname) -> getIntVariable(varname, domain)
