@@ -156,6 +156,9 @@ class Image
 	Image(enum fim_tii_t tii=FIM_TII_NUL);
 #endif	/* FIM_WANT_BDI */
 	fim_err_t rescale( fim_scale_t ns=0.0 );
+	private:
+	fim_err_t do_rotate( void );
+	public:
 	fim_err_t rotate( fim_scale_t angle_=1.0 );
 
 	const fim_char_t* getName(void)const;

@@ -681,11 +681,72 @@ ret:
 // if the image rescaling mechanism is suspected of bugs, this will inhibit its use.
 #define FIM_BUGGED_RESCALE 0
 
+	fim_err_t Image::do_rotate( void )
+	{
+		/* orientation_ can be 0,1,2,3 */
+		if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
+		{
+			// we make a backup.. who knows!
+			// FIXME: should use a faster and memory-smarter member function : in-place
+			struct ida_image *rb=img_;
+			rb  = FbiStuff::rotate_image90(rb,orientation_==FIM_ROT_L?FIM_I_ROT_L:FIM_I_ROT_R);
+			if(rb)
+			{
+				FbiStuff::free_image(img_);
+				img_=rb;
+			}
+		}
+		if( img_ && orientation_ == FIM_ROT_U)
+		{	
+			// we make a backup.. who knows!
+			struct ida_image *rbb=FIM_NULL,*rb=FIM_NULL;
+			// FIXME: should use a faster and memory-smarter member function : in-place
+			rb  = FbiStuff::rotate_image90(img_,FIM_I_ROT_L);
+			if(rb)
+				rbb  = FbiStuff::rotate_image90(rb,FIM_I_ROT_L);
+			if(rbb)
+			{
+				FbiStuff::free_image(img_);
+				FbiStuff::free_image(rb);
+				img_=rbb;
+			}
+			else
+			{
+				if(rbb)
+					FbiStuff::free_image(rbb);
+				if(rb )
+					FbiStuff::free_image(rb);
+			}
+		}
+
+		/* we rotate only in case there is the need to do so */
+		if( img_ && ( angle_ != newangle_ || newangle_) )
+		{	
+			// we make a backup.. who knows!
+			struct ida_image *rbb=FIM_NULL,*rb=FIM_NULL;
+			rb  = FbiStuff::rotate_image(img_,newangle_);
+			if(rb)
+				rbb  = FbiStuff::rotate_image(rb,0);
+			if(rbb)
+			{
+				FbiStuff::free_image(img_);
+				FbiStuff::free_image(rb);
+				img_=rbb;
+			}
+			else
+			{
+				if(rbb)
+					FbiStuff::free_image(rbb);
+				if(rb )
+					FbiStuff::free_image(rb);
+			}
+		}
+	}
+
 	fim_err_t Image::rescale( fim_scale_t ns )
 	{
 		/*
 		 * effective image rescaling
-		 * TODO: should rather be called "apply"
 		 * */
 		fim_pgor_t neworientation;
 		fim_angle_t	gascale;
@@ -777,64 +838,7 @@ ret:
 				if( newascale != 1.0 )
 					newascale = 1.0 / newascale;
 #endif /* FIM_WANT_ASCALE_FRIENDLY_ROTATION */
-			/* orientation_ can be 0,1,2,3 */
-			if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
-			{
-				// we make a backup.. who knows!
-				// FIXME: should use a faster and memory-smarter member function : in-place
-				struct ida_image *rb=img_;
-				rb  = FbiStuff::rotate_image90(rb,orientation_==FIM_ROT_L?FIM_I_ROT_L:FIM_I_ROT_R);
-				if(rb)
-				{
-					FbiStuff::free_image(img_);
-					img_=rb;
-				}
-			}
-			if( img_ && orientation_ == FIM_ROT_U)
-			{	
-				// we make a backup.. who knows!
-				struct ida_image *rbb=FIM_NULL,*rb=FIM_NULL;
-				// FIXME: should use a faster and memory-smarter member function : in-place
-				rb  = FbiStuff::rotate_image90(img_,FIM_I_ROT_L);
-				if(rb)
-					rbb  = FbiStuff::rotate_image90(rb,FIM_I_ROT_L);
-				if(rbb)
-				{
-					FbiStuff::free_image(img_);
-					FbiStuff::free_image(rb);
-					img_=rbb;
-				}
-				else
-				{
-					if(rbb)
-						FbiStuff::free_image(rbb);
-					if(rb )
-						FbiStuff::free_image(rb);
-				}
-			}
-
-			/* we rotate only in case there is the need to do so */
-			if( img_ && ( angle_ != newangle_ || newangle_) )
-			{	
-				// we make a backup.. who knows!
-				struct ida_image *rbb=FIM_NULL,*rb=FIM_NULL;
-				rb  = FbiStuff::rotate_image(img_,newangle_);
-				if(rb)
-					rbb  = FbiStuff::rotate_image(rb,0);
-				if(rbb)
-				{
-					FbiStuff::free_image(img_);
-					FbiStuff::free_image(rb);
-					img_=rbb;
-				}
-				else
-				{
-					if(rbb)
-						FbiStuff::free_image(rbb);
-					if(rb )
-						FbiStuff::free_image(rb);
-				}
-			}
+			do_rotate();
 
 			if(!img_)
 			{
