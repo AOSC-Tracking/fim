@@ -277,17 +277,27 @@ ret:
 	}
 
 #ifdef FIM_READ_STDIN_IMAGE
+#if FIM_USE_CXX11
+	void Browser::set_default_image(std::unique_ptr<Image> stdin_image)
+#else /* FIM_USE_CXX11 */
 	void Browser::set_default_image(Image *stdin_image)
+#endif /* FIM_USE_CXX11 */
 	{
 		/*
 		 * this is used mainly to set image files read from pipe or stdin
 		 * */
 		FIM_PR('*');
+#if FIM_USE_CXX11
+		if( !stdin_image || stdin_image->check_invalid() )
+			goto ret;
+		default_image_ = std::move(stdin_image);
+#else /* FIM_USE_CXX11 */
 		if( !stdin_image || stdin_image->check_invalid() )
 			goto ret;
 		if( default_image_ )
 		       	delete default_image_;
 		default_image_ = stdin_image;
+#endif /* FIM_USE_CXX11 */
 ret:
 		FIM_PR('.');
 		return;
