@@ -2,7 +2,7 @@
 /*
  CommandConsole-cmd.cpp : Fim console commands
 
- (c) 2009-2016 Michele Martone
+ (c) 2009-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -447,12 +447,15 @@ err:
 			try{ stream_image=new Image(FIM_STDIN_IMAGE_NAME,fim_fread_tmpfile(tfd)); }
 			catch (FimException e){/* write me */}
 #ifdef FIM_READ_STDIN_IMAGE
-			// DANGEROUS TRICK!
 			if(stream_image)
 			{
+#if FIM_USE_CXX11
+				browser_.set_default_image(std::unique_ptr<Image>(std::move(stream_image)));
+#else /* FIM_USE_CXX11 */
 				browser_.set_default_image(stream_image);
-					if(!cc.browser_.cache_.setAndCacheStdinCachedImage(stream_image))
-						std::cerr << FIM_EMSG_CACHING_STDIN;// FIXME
+#endif /* FIM_USE_CXX11 */
+				if(!cc.browser_.cache_.setAndCacheStdinCachedImage(stream_image))
+					std::cerr << FIM_EMSG_CACHING_STDIN;
 				browser_.push(FIM_STDIN_IMAGE_NAME);
 			}
 #else /* FIM_READ_STDIN_IMAGE */

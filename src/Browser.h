@@ -22,6 +22,9 @@
 #define FIM_BROWSER_H
 #include "fim.h"
 #include <algorithm> // std::count
+#if FIM_USE_CXX11
+#include <memory> // std::unique_ptr
+#endif /* FIM_USE_CXX11 */
 
 #define FIM_FLAG_NONREC 0 /* let this be zero */
 #define FIM_FLAG_DEFAULT FIM_FLAG_NONREC
@@ -214,7 +217,11 @@ class Browser
 	Image *image(void)const;
 
 #ifdef FIM_READ_STDIN_IMAGE
+#if FIM_USE_CXX11
+	std::unique_ptr<Image> default_image_;	// experimental
+#else /* FIM_USE_CXX11 */
 	Image *default_image_;	// experimental
+#endif /* FIM_USE_CXX11 */
 #endif /* FIM_READ_STDIN_IMAGE */
 	Viewport* viewport(void)const;
 
@@ -232,7 +239,11 @@ class Browser
 	PACA pcache_;	// was private
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 #ifdef FIM_READ_STDIN_IMAGE
+#if FIM_USE_CXX11
+	void set_default_image(std::unique_ptr<Image> stdin_image);
+#else /* FIM_USE_CXX11 */
 	void set_default_image(Image *stdin_image);
+#endif /* FIM_USE_CXX11 */
 #endif /* FIM_READ_STDIN_IMAGE */
 	const Image *c_image(void)const;	// was private
 	int empty_file_list(void)const;
