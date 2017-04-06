@@ -49,7 +49,7 @@
 
 extern fim::CommandConsole fim::cc;
 
-static void fim_opencv_detect_and_draw( IplImage* img, struct ida_image *iimg )
+static void fim_opencv_detect_and_draw( IplImagePtr img, struct ida_image *iimg )
 {
 	/* 
 	 * this code is based on the example from the OpenCV wiki at:
@@ -123,7 +123,7 @@ static fim_err_t fim_opencv_plugin_example(struct ida_image *img, const fim_char
 {
 	fim_coo_t r,c,h=img->i.height,w=img->i.width;
 	FIM_CONSTEXPR int b=30;
-       	IplImage*cvimage=FIM_NULL;
+       	IplImagePtrcvimage=FIM_NULL;
 	int depth=IPL_DEPTH_8U;
        	int channels=3;
 	CvSize size;

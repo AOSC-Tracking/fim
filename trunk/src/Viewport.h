@@ -45,7 +45,7 @@ class Viewport:public ViewportState
 #ifdef FIM_WINDOWS
 	const Rect&corners_; // TODO: for now, no reassignCorners, but this will have to place old reassignWindow).
 #endif /* FIM_WINDOWS */
-	Image* image_;	// !! 
+	ImagePtr image_;	// !! 
 	CommandConsole& commandConsole;
 	public:
         void reset(void);
@@ -103,10 +103,10 @@ class Viewport:public ViewportState
 	void auto_width_scale(void);
 	void auto_height_scale(void);
 
-        void setImage(fim::Image* ni);
+        void setImage(fim::ImagePtr ni);
 	void scale_fix_top_left(void);
-        const Image* c_getImage(void)const;
-        Image* getImage(void)const;
+        const ImagePtr c_getImage(void)const;
+        ImagePtr getImage(void)const;
 
 	void auto_scale(void);
 	void auto_scale_if_bigger(void);

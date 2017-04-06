@@ -280,7 +280,7 @@ ret:
 #if FIM_USE_CXX11
 	void Browser::set_default_image(std::unique_ptr<Image> stdin_image)
 #else /* FIM_USE_CXX11 */
-	void Browser::set_default_image(Image* stdin_image)
+	void Browser::set_default_image(ImagePtr stdin_image)
 #endif /* FIM_USE_CXX11 */
 	{
 		/*
@@ -2589,12 +2589,12 @@ err:
 		return image;
 	}
 
-	Image* Browser::image(void)const
+	ImagePtr Browser::image(void)const
 	{
 		/*
 		 *	the image loaded in the current viewport is returned
 		 */
-		Image* image = FIM_NULL;
+		ImagePtr image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->getImage();

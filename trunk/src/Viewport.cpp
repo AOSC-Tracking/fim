@@ -521,7 +521,7 @@ namespace fim
 	}
 #endif
 
-        Image* Viewport::getImage(void)const
+        ImagePtr Viewport::getImage(void)const
 	{
 		/*
 		 * returns the image pointer, regardless its use! 
@@ -534,7 +534,7 @@ namespace fim
 			return image_;
 	}
 
-        const Image* Viewport::c_getImage(void)const
+        const ImagePtr Viewport::c_getImage(void)const
 	{
 		/*
 		 * returns the image pointer, regardless its use! 
@@ -548,7 +548,7 @@ namespace fim
 #endif	/* FIM_WANT_BDI */
 	}
 
-        void Viewport::setImage(fim::Image* ni)
+        void Viewport::setImage(fim::ImagePtr ni)
 	{
 		/* 
 		 * the image could be FIM_NULL

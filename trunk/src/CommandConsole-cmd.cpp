@@ -441,7 +441,7 @@ err:
 			 * but it would require to rewrite much of the file loading stuff
 			 * (which is quite fbi's untouched stuff right now)
 			 * */
-			Image* stream_image=FIM_NULL;
+			ImagePtr stream_image=FIM_NULL;
 			if(!tfd)
 				return FIM_ERR_GENERIC;
 			try{ stream_image=new Image(FIM_STDIN_IMAGE_NAME,fim_fread_tmpfile(tfd)); }
