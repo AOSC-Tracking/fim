@@ -71,7 +71,7 @@ namespace fim
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				nsp = (Image*) browser_.c_image(); /* FIXME: porcata assurda */
+				nsp = (ImagePtr) browser_.c_image(); /* FIXME: porcata assurda */
 				goto err;
 			}
 			else
@@ -134,7 +134,7 @@ err:
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				nsp = (Image*) browser_.c_image(); /* FIXME: porcata assurda */
+				nsp = (ImagePtr) browser_.c_image(); /* FIXME: porcata assurda */
 				goto err;
 			}
 			else

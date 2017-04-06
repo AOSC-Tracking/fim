@@ -208,6 +208,11 @@ class Image
 	fim_int shall_mirror(void)const;
 	fim_int shall_flip(void)const;
 }; /* Image */
+#if FIM_USE_CXX11
+	using ImagePtr = Image*;
+#else /* FIM_USE_CXX11 */
+	typedef Image ImagePtr;
+#endif /* FIM_USE_CXX11 */
 } /* Namespace fim */
 #if FIM_WANT_PIC_LVDN
 	class VNamespace: public Namespace

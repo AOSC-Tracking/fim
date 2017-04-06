@@ -81,14 +81,14 @@ namespace fim
 		return imageCache_.size();
 	}
 
-	Image* Cache::get_lru( bool unused )const
+	ImagePtr Cache::get_lru( bool unused )const
 	{
 		lru_t::const_iterator lrui;
 
 		/* warning : syscall ! */
 		fim_time_t m_time;
 		m_time = reltime();
-		Image*  l_img=NULL;
+		ImagePtr  l_img=NULL;
 		cachels_t::const_iterator ci;
 		FIM_LOUD_CACHE_STUFF;
 
@@ -134,7 +134,7 @@ ret:
 		return erase( get_lru(true)  );
 	}
 
-	int Cache::erase_clone(fim::Image* oi)
+	int Cache::erase_clone(fim::ImagePtr oi)
 	{
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
@@ -186,7 +186,7 @@ rt:
 		return ( usageCounter_.find(key)!=usageCounter_.end() ) ?  (*(usageCounter_.find(key))).second : 0;
 	}
 
-	bool Cache::is_in_clone_cache(fim::Image* oi)const
+	bool Cache::is_in_clone_cache(fim::ImagePtr oi)const
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		FIM_LOUD_CACHE_STUFF;
@@ -208,7 +208,7 @@ rt:
 			((*(imageCache_.find(key))).second!=NULL) ;
 	}
 
-	bool Cache::is_in_cache(fim::Image* oi)const
+	bool Cache::is_in_cache(fim::ImagePtr oi)const
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		FIM_LOUD_CACHE_STUFF;
@@ -220,7 +220,7 @@ rt:
 	}
 
 #if 0
-	int Cache::free(fim::Image* oi)
+	int Cache::free(fim::ImagePtr oi)
 	{
 		/*	acca' nun stimm'a'ppazzia'	*/
 		if(!oi)
@@ -310,9 +310,9 @@ ret:
 		return retval;
 	}
 
-	Image* Cache::loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc)
+	ImagePtr Cache::loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc)
 	{
-		Image* ni = NULL;
+		ImagePtr ni = NULL;
 		FIM_PR('*');
 
 		FIM_LOUD_CACHE_STUFF;
@@ -345,12 +345,12 @@ ret:
 		return ni;
 	}
 	
-	Image* Cache::getCachedImage(cache_key_t key)
+	ImagePtr Cache::getCachedImage(cache_key_t key)
 	{
 		/*
 		 * returns an image if already in cache ..
 		 * */
-		Image* ni = NULL;
+		ImagePtr ni = NULL;
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
 	
@@ -366,7 +366,7 @@ ret:
 		return ni;
 	}
 
-	bool Cache::cacheNewImage( fim::Image* ni )
+	bool Cache::cacheNewImage( fim::ImagePtr ni )
 	{
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
@@ -381,7 +381,7 @@ ret:
 		return true;
 	}
 	
-	int Cache::erase(fim::Image* oi)
+	int Cache::erase(fim::ImagePtr oi)
 	{
 		/*
 		 * erases the image from the image cache
@@ -445,7 +445,7 @@ ret:
 		return 0;
 	}
 
-	bool Cache::freeCachedImage(Image* image, const ViewportState *vsp)
+	bool Cache::freeCachedImage(ImagePtr image, const ViewportState *vsp)
 	{
 		/*
 		 * TODO: rename to free().
@@ -498,7 +498,7 @@ ret:
 				/* doing it here is dangerous : */
 				if( need_free() )
 				{
-					Image* lrui = get_lru(true);
+					ImagePtr lrui = get_lru(true);
 					FIM_PR('o');
 					if( lrui ) 
 					{
@@ -526,7 +526,7 @@ ret:
 		return true;
 	}
 
-	Image* Cache::useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page)
+	ImagePtr Cache::useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page)
 	{
 		/*
 		 * TODO: rename to get().
@@ -543,7 +543,7 @@ ret:
 		 *
 		 * So, if there is no such image, NULL is returned
 		 * */
-		Image* image = NULL;
+		ImagePtr image = NULL;
 
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR('*');
@@ -580,7 +580,7 @@ ret:
 				try
 				{
 #ifdef FIM_CACHE_DEBUG
-					Image* oi=image;
+					ImagePtr oi=image;
 #endif /* FIM_CACHE_DEBUG */
 					image = new Image(*image); // cloning
 #ifdef FIM_CACHE_DEBUG
@@ -619,7 +619,7 @@ ret:
 		return image;
 	}
 
-	Image* Cache::setAndCacheStdinCachedImage(Image* image)
+	ImagePtr Cache::setAndCacheStdinCachedImage(ImagePtr image)
 	{
 		/* FIXME : document me
 		 * */
@@ -633,7 +633,7 @@ ret:
 		try
 		{
 #ifdef FIM_CACHE_DEBUG
-			Image* oi=image;
+			ImagePtr oi=image;
 #endif /* FIM_CACHE_DEBUG */
 			image = new Image(*image); // cloning
 			if(image)
@@ -718,7 +718,7 @@ ret:
 			cache_report+="\n";
 		}
 		cache_report += "clone pool contents : \n";
-		for(std::set< fim::Image* >::const_iterator  cpi=clone_pool_.begin();cpi!=clone_pool_.end();++cpi)
+		for(std::set< fim::ImagePtr >::const_iterator  cpi=clone_pool_.begin();cpi!=clone_pool_.end();++cpi)
 		{	
 			cache_report+=fim_basename_of((*cpi)->getName());
 			cache_report+=" " ; 

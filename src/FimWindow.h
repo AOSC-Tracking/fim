@@ -219,7 +219,7 @@ class FimWindow
 	bool recursive_redisplay(void)const;	//exception safe
 	bool recursive_display(void)const;		//exception safe
 
-	const Image* getImage(void)const;		//exception safe
+	const ImagePtr getImage(void)const;		//exception safe
 
 #if 0
 	void print(void);

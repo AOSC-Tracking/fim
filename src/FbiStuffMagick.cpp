@@ -50,8 +50,8 @@
 #endif /* MagickLibVersion */
 
 struct magick_state_t {
-	Image* image; /* Warning: this is NOT to be confused with fim's Image class */
-	Image* cimage; /* Warning: this is NOT to be confused with fim's Image class */
+	ImagePtr image; /* Warning: this is NOT to be confused with fim's Image class */
+	ImagePtr cimage; /* Warning: this is NOT to be confused with fim's Image class */
 	ImageInfo* image_info;
 	MagickPassFail mpf; 
 	ExceptionInfo exception;
