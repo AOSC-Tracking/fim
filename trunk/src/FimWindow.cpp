@@ -2,7 +2,7 @@
 /*
  FimWindow.cpp : Fim's own windowing system
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1163,7 +1163,7 @@ namespace fim
 		return *viewport_;
 	}	
 
-	const Image *FimWindow::getImage(void)const
+	const Image* FimWindow::getImage(void)const
 	{
 		if( current_viewportp() )
 			return current_viewportp()->getImage();

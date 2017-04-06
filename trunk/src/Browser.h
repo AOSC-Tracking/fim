@@ -214,13 +214,13 @@ class Browser
 	Viewport *only_viewport_;
 #endif /* FIM_WINDOWS */
 	CommandConsole& commandConsole_;
-	Image *image(void)const;
+	Image* image(void)const;
 
 #ifdef FIM_READ_STDIN_IMAGE
 #if FIM_USE_CXX11
 	std::unique_ptr<Image> default_image_;	// experimental
 #else /* FIM_USE_CXX11 */
-	Image *default_image_;	// experimental
+	Image* default_image_;	// experimental
 #endif /* FIM_USE_CXX11 */
 #endif /* FIM_READ_STDIN_IMAGE */
 	Viewport* viewport(void)const;
@@ -242,10 +242,10 @@ class Browser
 #if FIM_USE_CXX11
 	void set_default_image(std::unique_ptr<Image> stdin_image);
 #else /* FIM_USE_CXX11 */
-	void set_default_image(Image *stdin_image);
+	void set_default_image(Image* stdin_image);
 #endif /* FIM_USE_CXX11 */
 #endif /* FIM_READ_STDIN_IMAGE */
-	const Image *c_image(void)const;	// was private
+	const Image* c_image(void)const;	// was private
 	int empty_file_list(void)const;
 
 	Browser(CommandConsole& cc);

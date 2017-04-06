@@ -2,7 +2,7 @@
 /*
  FbiStuffMagick.cpp : fim functions for decoding image files using libGraphicsMagick
 
- (c) 2011-2015 Michele Martone
+ (c) 2011-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,9 +50,9 @@
 #endif /* MagickLibVersion */
 
 struct magick_state_t {
-	Image * image; /* Warning: this is NOT to be confused with fim's Image class */
-	Image * cimage; /* Warning: this is NOT to be confused with fim's Image class */
-	ImageInfo *image_info;
+	Image* image; /* Warning: this is NOT to be confused with fim's Image class */
+	Image* cimage; /* Warning: this is NOT to be confused with fim's Image class */
+	ImageInfo* image_info;
 	MagickPassFail mpf; 
 	ExceptionInfo exception;
 };

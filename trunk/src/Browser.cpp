@@ -280,7 +280,7 @@ ret:
 #if FIM_USE_CXX11
 	void Browser::set_default_image(std::unique_ptr<Image> stdin_image)
 #else /* FIM_USE_CXX11 */
-	void Browser::set_default_image(Image *stdin_image)
+	void Browser::set_default_image(Image* stdin_image)
 #endif /* FIM_USE_CXX11 */
 	{
 		/*
@@ -2577,24 +2577,24 @@ err:
 		return FIM_CMD_HELP_ALIGN;
 	}
 
-	const Image *Browser::c_image(void)const
+	const Image* Browser::c_image(void)const
 	{
 		/*
 		 *	a const pointer to the currently loaded image
 		 */
-		const Image * image = FIM_NULL;
+		const Image* image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->c_getImage();
 		return image;
 	}
 
-	Image *Browser::image(void)const
+	Image* Browser::image(void)const
 	{
 		/*
 		 *	the image loaded in the current viewport is returned
 		 */
-		Image * image = FIM_NULL;
+		Image* image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->getImage();

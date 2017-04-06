@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -310,9 +310,9 @@ ret:
 		return retval;
 	}
 
-	Image * Cache::loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc)
+	Image* Cache::loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc)
 	{
-		Image *ni = NULL;
+		Image* ni = NULL;
 		FIM_PR('*');
 
 		FIM_LOUD_CACHE_STUFF;
@@ -345,12 +345,12 @@ ret:
 		return ni;
 	}
 	
-	Image * Cache::getCachedImage(cache_key_t key)
+	Image* Cache::getCachedImage(cache_key_t key)
 	{
 		/*
 		 * returns an image if already in cache ..
 		 * */
-		Image *ni = NULL;
+		Image* ni = NULL;
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
 	
@@ -445,7 +445,7 @@ ret:
 		return 0;
 	}
 
-	bool Cache::freeCachedImage(Image *image, const ViewportState *vsp)
+	bool Cache::freeCachedImage(Image* image, const ViewportState *vsp)
 	{
 		/*
 		 * TODO: rename to free().
@@ -498,7 +498,7 @@ ret:
 				/* doing it here is dangerous : */
 				if( need_free() )
 				{
-					Image * lrui = get_lru(true);
+					Image* lrui = get_lru(true);
 					FIM_PR('o');
 					if( lrui ) 
 					{
@@ -526,7 +526,7 @@ ret:
 		return true;
 	}
 
-	Image * Cache::useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page)
+	Image* Cache::useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page)
 	{
 		/*
 		 * TODO: rename to get().
@@ -543,7 +543,7 @@ ret:
 		 *
 		 * So, if there is no such image, NULL is returned
 		 * */
-		Image * image = NULL;
+		Image* image = NULL;
 
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR('*');
@@ -580,7 +580,7 @@ ret:
 				try
 				{
 #ifdef FIM_CACHE_DEBUG
-					Image * oi=image;
+					Image* oi=image;
 #endif /* FIM_CACHE_DEBUG */
 					image = new Image(*image); // cloning
 #ifdef FIM_CACHE_DEBUG
@@ -619,7 +619,7 @@ ret:
 		return image;
 	}
 
-	Image * Cache::setAndCacheStdinCachedImage(Image * image)
+	Image* Cache::setAndCacheStdinCachedImage(Image* image)
 	{
 		/* FIXME : document me
 		 * */
@@ -633,7 +633,7 @@ ret:
 		try
 		{
 #ifdef FIM_CACHE_DEBUG
-			Image * oi=image;
+			Image* oi=image;
 #endif /* FIM_CACHE_DEBUG */
 			image = new Image(*image); // cloning
 			if(image)

@@ -2,7 +2,7 @@
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -84,10 +84,10 @@ class Cache
 	fim_time_t last_used(cache_key_t key)const;
 
 	bool cacheNewImage( fim::Image* ni );
-	Image * loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc);
+	Image* loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc);
 
 	/*	returns an image from the cache or loads it from disk marking it as used in the LRU (internal) */
-	Image * getCachedImage(cache_key_t key);
+	Image* getCachedImage(cache_key_t key);
 
 	/*	the caller declares this image as free	*/
 //	int free(fim::Image* oi);
@@ -128,13 +128,13 @@ class Cache
 #endif	/* FIM_WANT_BDI */
 
 	/*	free() and counter update */
-	bool freeCachedImage(Image *image, const ViewportState *vsp);
+	bool freeCachedImage(Image* image, const ViewportState *vsp);
 
 	/*	getCachedImage() and counter update */
-	Image * useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page = 0);
+	Image* useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page = 0);
 	
 	/* FIXME */
-	Image * setAndCacheStdinCachedImage(Image * image);
+	Image* setAndCacheStdinCachedImage(Image* image);
 
 	/**/
 	int prefetch(cache_key_t key);
@@ -189,9 +189,9 @@ class PACA	/* Parallel Cache */
 	}
 	PACA(Cache& cache):cache_(cache) { }
 
-	Image * useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page=0)
+	Image* useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page=0)
 	{
-		Image * image = NULL;
+		Image* image = NULL;
 		if(dpc) std::cout << __FUNCTION__ << ": " << key.first << "\n";
 		if( t.joinable() )
 		{
