@@ -2,7 +2,7 @@
 /*
  Viewport.h : Viewport class headers
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ class Viewport:public ViewportState
 #ifdef FIM_WINDOWS
 	const Rect&corners_; // TODO: for now, no reassignCorners, but this will have to place old reassignWindow).
 #endif /* FIM_WINDOWS */
-	Image  *image_;	// !! 
+	Image* image_;	// !! 
 	CommandConsole& commandConsole;
 	public:
         void reset(void);

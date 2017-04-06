@@ -356,7 +356,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		return b;
 	}
 	
-static void ers(const char*value, Image *image)
+static void ers(const char*value, Image* image)
 {
 		// EXIF orientation value can be of the form "X - Y", with X and Y in
 		// {top,bottom,left,right}
@@ -954,7 +954,7 @@ err:
 #endif
 	}
 
-	Image * Image::getClone(void)
+	Image* Image::getClone(void)
 	{
 		/*
 		 * returns a clone of this image.
