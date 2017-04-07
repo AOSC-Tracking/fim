@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -955,7 +955,7 @@ done:
 static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t pf)
 {
 			/* TODO: move to CommandConsole */
-	    		bool wv = false; /*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
+	    		/*cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=...;");*/ /* or verbose ... */
 			fim_char_t *lineptr=FIM_NULL;
 			size_t bs=0;
 			int fc=0;
@@ -964,9 +964,9 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 			sa = sa ? sa : "\n";
 		
 			if(fn)
-					fd = fim_fopen(fn,"r");
+				fd = fim_fopen(fn,"r");
 			else
-					fd = stdin;
+				fd = stdin;
 
 			while(fim_getline(&lineptr,&bs,fd,*sa)>0)
 			{
@@ -978,7 +978,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 				cc.push(lineptr,pf);
 				// printf("%s\n",lineptr);
 				lineptr=FIM_NULL;
-				if(wv)
+				if(bool wv = false)
 					++fc, printf("%s %d\n",FIM_CNS_CLEARTERM,fc);
 			}
 
@@ -1579,14 +1579,10 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		else
 		if( read_stdin_choice == Script )
 		{
-		    	fim_char_t* buf;
-			buf=slurp_binary_fd(0,FIM_NULL);
-			if(buf)
-			       	cc.appendPostInitCommand(buf);
-			if(buf)
-			       	appendedPostInitCommand=true;
-	//		if(buf) appendedPreConfigCommand=true;
-			if(buf)
+			if( fim_char_t *buf = slurp_binary_fd(0,FIM_NULL) )
+			       	cc.appendPostInitCommand(buf),
+			       	appendedPostInitCommand=true,
+	//			appendedPreConfigCommand=true,
 			       	fim_free(buf);
 			close(0);
 			ndd=dup(2);

@@ -135,8 +135,6 @@ err:
 
 	fim_cxr CommandConsole::fcmd_help(const args_t& args)
 	{	
-		Command *cmd = FIM_NULL;
-
 		if(!args.empty() && args[0].length()>0 )
 		{
 			if((args[0].at(0))==FIM_CNS_SLASH_CHAR)
@@ -219,11 +217,10 @@ err:
 		{
 			fim::string sws;
 			sws = fim_help_opt(args[0].c_str());
-			if(sws != FIM_CNS_EMPTY_STRING)
+			if( sws != FIM_CNS_EMPTY_STRING )
 				return sws+string("\n");
 		}
-			cmd=findCommand(args[0]);
-			if(cmd)
+			if( Command *cmd = findCommand(args[0]) )
 				return
 					string("\"")+(args[0]+string("\" is a command, documented:\n"))+
 				      	cmd->getHelp()+string("\n");
@@ -510,15 +507,8 @@ err:
 				dir=fim_dirname(dir);
 			}
 #endif /* HAVE_LIBGEN_H */
-			int ret = chdir(dir.c_str());
-#if 1
-			if(ret)
+			if( int ret = chdir(dir.c_str()) )
 			       	return (fim::string("cd error : ")+fim::string(strerror(errno)));
-#else
-			// deprecated
-			if(ret)
-			       	return (fim::string("cd error : ")+fim::string(sys_errlist[errno]));
-#endif
 		}
 		setVariable(FIM_VID_PWD,fcmd_pwd(args_t()).c_str());
 		return FIM_CNS_EMPTY_RESULT;
@@ -546,12 +536,8 @@ err:
 		fim::string cwd=FIM_CNS_EMPTY_STRING;
 #if HAVE_GET_CURRENT_DIR_NAME
 		/* default */
-		fim_char_t *p=get_current_dir_name();
-		if(p)
-			cwd=p;
-		else
-		       	cwd=FIM_CNS_EMPTY_STRING;
-		if(p)
+		if( fim_char_t *p = get_current_dir_name() )
+			cwd=p,
 			fim_free(p);
 #else /* HAVE_GET_CURRENT_DIR_NAME */
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500

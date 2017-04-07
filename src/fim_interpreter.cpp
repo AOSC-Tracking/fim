@@ -369,9 +369,9 @@ Var ex(NodeType p)
 //						else
 //							std::cout  <<"GULP:"<< args.size() <<FIM_SYM_ENDL;
 						if(p)
-						if(FIM_OPRND(p,0))
-						if(FIM_SACC(FIM_OPRND(p,0))) result =
-				    	   	FIM_EC(FIM_SACC(FIM_OPRND(p,0)),args);
+							if(FIM_OPRND(p,0))
+								if(FIM_SACC(FIM_OPRND(p,0)))
+									result = FIM_EC(FIM_SACC(FIM_OPRND(p,0)),args);
 						/* sometimes there are NULLs  : BAD !!  */
 						return fim_atoi(result.c_str());
 			  		}
@@ -535,8 +535,9 @@ nodeType *vscon(fim_char_t*s,int typeHint)
 	return con(fim_rand());
 #endif
 	nodeType *p=scon(s);
-	if(p)p->type = vId; 
-	if(p)p->typeHint = typeHint; 
+	if(p)
+		p->type = vId,
+		p->typeHint = typeHint; 
 	return p;
 }
 

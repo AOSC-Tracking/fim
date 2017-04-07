@@ -1400,7 +1400,6 @@ rlnull:
 		/*
 		 * TODO : catch exceptions/interruptions
 		 */
-
 		fim_sys_int r;
 		fim_char_t buf[FIM_STREAM_BUFSIZE];	// NOTE: a larger buffer would be ok (e.g.: user configurable)...
 		fim::string cmds;

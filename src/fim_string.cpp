@@ -2,7 +2,7 @@
 /*
  string.h : Fim's string type
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -452,16 +452,17 @@ namespace fim
 	 * */
 	int string::reallocate(int l=0)
 	{
-		if(l<=0)return reset(0);
+		if(l<=0)
+			return reset(0);
 #ifdef _FIM_DYNAMIC_STRING
 		++l;
-		if(l<size())return size();
-		fim_char_t *ns;/* new string */
-		ns=(fim_char_t*)realloc((void*)s,l);/* the terminator is our stuff */
-		if(ns)
+		if(l<size())
+			return size();
+		if( fim_char_t * ns=(fim_char_t*)realloc((void*)s,l) ) /* the terminator is our stuff */
 		{
 			s=ns;
-			if(l>len)fim_bzero(s+len,l-len);
+			if(l>len)
+				fim_bzero(s+len,l-len);
 			len=l;
 		}
 		//if realloc fails, we keep the old one

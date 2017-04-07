@@ -2549,4 +2549,5 @@ err:
 			cc.displaydevice_->debug_:
 			0;
 	}
-}
+} /* namespace fim */
+

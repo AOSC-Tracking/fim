@@ -218,13 +218,10 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 	/* TODO: one might execute this code in a background thread */
 	/* std::cout << "will try exiftool on : " << fname << "\n"; */
 	fim::string etc;
-	ExifTool *et = new ExifTool();
 
-	if(et)
+	if ( ExifTool *et = new ExifTool() )
 	{
-    		TagInfo *info = et->ImageInfo(fname,FIM_NULL,2);
-
-		if (info)
+		if ( TagInfo *info = et->ImageInfo(fname,FIM_NULL,2) )
       	 	{
         		for (TagInfo *i=info; i; i=i->next)
 		       	{
@@ -633,8 +630,6 @@ ret:
                 /*
 		 * the image is declared invalid if the image structures are not loaded.
                  */
-
-		//ACHTUNG! 
 		if(!img_)
 			img_ = fimg_;
                 if(!img_)
@@ -650,8 +645,7 @@ ret:
 		/*
 		 * the image descriptors are freed if necessary and pointers blanked
 		 * */
-		const bool do_shred = false; /* this is only for debug purposes */
-        	if(do_shred)
+        	if(const bool do_shred = false) /* this is only for debug purposes */
         		this->shred();
                 if(fimg_!=img_ && img_ )
 		       	FbiStuff::free_image(img_ );
