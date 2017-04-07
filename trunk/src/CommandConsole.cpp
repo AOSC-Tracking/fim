@@ -375,8 +375,8 @@ ret:		return key;
 		addCommand(new Command(fim_cmd_id(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS " [" FIM_CNS_EX_ID_STRING " [" FIM_CNS_EX_CMDS_STRING " [" FIM_CNS_EX_DSC_STRING "]]]"),this,&CommandConsole::fcmd_foo));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_ALIGN),fim::string(FIM_CMD_HELP_ALIGN),&browser_,&Browser::fcmd_align));
 #ifdef FIM_AUTOCMDS
-		addCommand(new Command(fim_cmd_id(FIM_FLT_AUTOCMD),fim::string(FIM_FLT_AUTOCMD " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING " : manipulate auto commands"),this,&CommandConsole::fcmd_autocmd));
-		addCommand(new Command(fim_cmd_id(FIM_FLT_AUTOCMD_DEL),fim::string(FIM_FLT_AUTOCMD_DEL" : manipulate auto commands. usage: " FIM_FLT_AUTOCMD_DEL " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING),this,&CommandConsole::fcmd_autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
+		addCommand(new Command(fim_cmd_id(FIM_FLT_AUTOCMD),fim::string(FIM_FLT_AUTOCMD " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING " : manipulate autocommands"),this,&CommandConsole::fcmd_autocmd));
+		addCommand(new Command(fim_cmd_id(FIM_FLT_AUTOCMD_DEL),fim::string(FIM_FLT_AUTOCMD_DEL " : manipulate autocommands. usage: " FIM_FLT_AUTOCMD_DEL " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING),this,&CommandConsole::fcmd_autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
 #endif /* FIM_AUTOCMDS */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_BASENAME),fim::string(FIM_FLT_BASENAME" {filename} : returns the basename of {filename}"),this,&CommandConsole::fcmd_basename));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_BIND),fim::string(FIM_FLT_BIND" [" FIM_CNS_EX_KSY_STRING " [" FIM_CNS_EX_CMDS_STRING "]] : bind a keyboard symbol/shortcut " FIM_CNS_EX_KSY_STRING " to " FIM_CNS_EX_CMDS_STRING "" FIM_CNS_RAW_KEYS_MESG " Key binding is dynamical, so you can rebind keys even during program's execution. You can get a list of valid symbols (keysyms) by invoking " FIM_FLT_DUMP_KEY_CODES " or in the man page."),this,&CommandConsole::fcmd_bind));
@@ -716,8 +716,7 @@ err:
 
 		if(bi!=bindings_.end() && bi->second!=FIM_CNS_EMPTY_STRING)
 		{
-			fim_fn_t cf=current();
-			FIM_AUTOCMD_EXEC(FIM_ACM_PREINTERACTIVECOMMAND,cf);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREINTERACTIVECOMMAND,current());
 #ifdef FIM_ITERATED_COMMANDS
 			if(it_buf>1)
 			{
@@ -743,7 +742,7 @@ err:
 			else
 #endif /* FIM_ITERATED_COMMANDS */
 				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 		}
 
 		if(status)
@@ -1080,10 +1079,8 @@ err:
 		Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,FIM_NULL);
 #endif	/* FIM_USE_GPM */
 		fim::string initial = browser_.current();
-#ifdef FIM_AUTOCMDS
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLE,initial);
 		FIM_AUTOCMD_EXEC(FIM_ACM_PREEXECUTIONCYCLEARGS,initial);
-#endif /* FIM_AUTOCMDS */
 		*prompt_=FIM_SYM_PROMPT_NUL;
 
 #if FIM_WANT_BACKGROUND_LOAD
@@ -1123,8 +1120,7 @@ err:
 					 * This code gets executed when the user is about to exit console mode, 
 					 * having she pressed the 'Enter' key and expecting result.
 					 * */
-					fim::string cf(current());
-					FIM_AUTOCMD_EXEC(FIM_ACM_PREINTERACTIVECOMMAND,cf);
+					FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREINTERACTIVECOMMAND,current());
 #ifdef FIM_RECORDING
 					if(recordMode_)
 						record_action(fim::string(rl));
@@ -1134,12 +1130,10 @@ err:
 					ic_=(ic_==-1)?0:1; //a command could change the mode !
 //					this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);	//!!
 //					execute_internal("redisplay;",FIM_X_NULL);	//execution of the command line with history
-					FIM_AUTOCMD_EXEC(FIM_ACM_POSTINTERACTIVECOMMAND,cf);
+					FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 #ifdef FIM_RECORDING
 					memorize_last(rl);
 #endif /* FIM_RECORDING */
-					//p.s.:note that current() returns not necessarily the same in 
-					//the two FIM_AUTOCMD_EXEC() calls..
 				}
 				/*  else : *rl==FIM_CNS_EMPTY_STRING : doesn't happen :) */
 
@@ -1738,7 +1732,6 @@ ok:
 		 */
 	    	//return FIM_AUTOCMD_EXEC(FIM_ACM_POSTFIMRC,"");
 	    	return FIM_AUTOCMD_EXEC(FIM_ACM_POSTHFIMRC,"");
-
 	}
 
 	fim::string CommandConsole::autocmd_exec(const fim::string& event, const fim_fn_t& fname)

@@ -177,6 +177,8 @@
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
+#define FIM_AUTOCMD_EXEC_PRE(AC,CF) { const fim_fn_t _c = CF; autocmd_exec(AC,_c);
+#define FIM_AUTOCMD_EXEC_POST(AC)   autocmd_exec(AC,_c); }
 #else /* FIM_AUTOCMDS */
 #define FIM_AUTOCMD_EXEC
 #endif /* FIM_AUTOCMDS */
@@ -784,8 +786,8 @@ namespace fim
  * */
 //#define FIM_ACM_POSTSCREENRESIZE	"PostScreenResize"	/* "" */
 //#define FIM_ACM_PRESCREENRESIZE		"PreScreenResize"	/* "" */
-#define FIM_ACM_POSTSCALE	"PostScale"		/* "" */
 #define FIM_ACM_PRESCALE	"PreScale"		/* "" */
+#define FIM_ACM_POSTSCALE	"PostScale"		/* "" */
 #define FIM_ACM_PREPAN		"PrePan"		/* "" */
 #define FIM_ACM_POSTPAN		"PostPan"		/* "" */
 #define FIM_ACM_PREREDISPLAY	"PreRedisplay"		/* "" */
@@ -794,12 +796,12 @@ namespace fim
 #define FIM_ACM_POSTDISPLAY	"PostDisplay"		/* "" */
 #define FIM_ACM_PREPREFETCH	"PrePrefetch"		/* "" */
 #define FIM_ACM_POSTPREFETCH	"PostPrefetch"		/* "" */
-#define FIM_ACM_POSTRELOAD	"PostReload"		/* "" */
 #define FIM_ACM_PRERELOAD	"PreReload"		/* "" */
-#define FIM_ACM_POSTLOAD	"PostLoad"		/* "" */
+#define FIM_ACM_POSTRELOAD	"PostReload"		/* "" */
 #define FIM_ACM_PRELOAD		"PreLoad"		/* "" */
-#define FIM_ACM_POSTGOTO	"PostGoto"		/* "" */
+#define FIM_ACM_POSTLOAD	"PostLoad"		/* "" */
 #define FIM_ACM_PREGOTO		"PreGoto"		/* "" */
+#define FIM_ACM_POSTGOTO	"PostGoto"		/* "" */
 #define FIM_ACM_PRECONF		"PreConfigLoading"	/* "before loading any configuration file" */
 #define FIM_ACM_POSTCONF	"PostConfigLoading"	/* "after  loading any configuration file" */
 #define FIM_ACM_PREHFIMRC	"PreHardcodedConfigLoading"	/* "before loading hardcoded configuration" */
@@ -811,8 +813,8 @@ namespace fim
 #define FIM_ACM_PREINTERACTIVECOMMAND	"PreInteractiveCommand"		/* "" */
 #define FIM_ACM_POSTINTERACTIVECOMMAND	"PostInteractiveCommand"	/* "" */
 #define FIM_ACM_PREEXECUTIONCYCLE	"PreExecutionCycle"		/* "" */
-#define FIM_ACM_PREEXECUTIONCYCLEARGS	"PreExecutionCycleArgs"		/* "" */
 #define FIM_ACM_POSTEXECUTIONCYCLE	"PostExecutionCycle"		/* "" */
+#define FIM_ACM_PREEXECUTIONCYCLEARGS	"PreExecutionCycleArgs"		/* "" */
 #define FIM_ACM_PREWINDOW	"PreWindow"	/* "" */
 #define FIM_ACM_POSTWINDOW	"PostWindow"	/* "" */
 //#define FIM_ACM_PREROTATE	"PreRotate"	/* "" */
