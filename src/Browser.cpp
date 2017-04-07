@@ -254,12 +254,11 @@ ret:
 		 * Given the current() file, display it again like the first time.
 		 * This behaviour is different from reloading.
 		 */
-		fim::string c=current();
 		FIM_PR('*');
 
 		if(c_image())
 		{
-			FIM_AUTOCMD_EXEC(FIM_ACM_PREREDISPLAY,c);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREREDISPLAY,current());
 			if(c_image())
 			{
 				/*
@@ -271,7 +270,7 @@ ret:
 				if( commandConsole_.redisplay() )
 					this->display_status(current().c_str());
 			}
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTREDISPLAY,c);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTREDISPLAY);
 		}
 		FIM_PR('.');
 	}
@@ -355,14 +354,13 @@ ret:
 
 		if( c_image() )
 		{
-			fim::string c = current();
 			fim_char_t f = tolower(*args[0].c_str());
 			if( f )
 			{
-				FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
+				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 				if(c_image() && viewport())
 					viewport()->pan(args);
-				FIM_AUTOCMD_EXEC(FIM_ACM_POSTPAN,c);
+				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
 			}
 		}
 		else
@@ -527,8 +525,7 @@ comeon:
 		if(c_image())
 #endif	/* FIM_WANT_BDI */
 		{
-			fim_fn_t c = current();
-			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if(image())
 				image()->update();/* rotation update */ /* FIXME: shall separate scaling from orientation */
 			if( c_image() )
@@ -592,7 +589,7 @@ comeon:
 				else
 					image()->setscale(newscale);
 			}
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
 		}
 nop:
 		FIM_PR('.');
@@ -817,12 +814,11 @@ nop:
 		/*
 		 * displays the current image, (if already loaded), on screen
 		 */
-		fim::string c = current();
 		FIM_PR('*');
 
 		if( c_image() )
 		{
-			FIM_AUTOCMD_EXEC(FIM_ACM_PREDISPLAY,c);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREDISPLAY,current());
 			/* FIXME: need a "help" request answer. */
 			/*
 			 * the following is a trick to override redisplaying..
@@ -862,7 +858,7 @@ nop:
 //				FIXME:
 //				if(commandConsole_.window)commandConsole_.window->recursive_display();
 			}
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTDISPLAY,c);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTDISPLAY);
 		}
 		else
 		{
@@ -1033,7 +1029,7 @@ ret:
 		fim_int wp=1;
 		FIM_PR('*');
 
-			FIM_AUTOCMD_EXEC(FIM_ACM_PREPREFETCH,current());
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPREFETCH,current());
 		if( args.size() > 0 )
 			goto ret;
 
@@ -1062,7 +1058,7 @@ ret:
 #if FIM_WANT_BACKGROUND_LOAD
 apf:		/* after prefetch */
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPREFETCH,current());
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPREFETCH);
 		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)wp);
 ret:
 		FIM_PR('.');
@@ -1076,14 +1072,13 @@ ret:
 		 * and then
 		 * tries to load a new one from the current filename
 		 */
-		fim::string c = current();
 		fim::string result;
 
 		FIM_PR('*');
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if( empty_file_list() )
 		{ result = "sorry, no image to reload\n"; goto ret; }
-		FIM_AUTOCMD_EXEC(FIM_ACM_PRERELOAD,c);
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRERELOAD,current());
 #if FIM_HORRIBLE_CACHE_INVALIDATING_HACK
 		if( args.size() > 0 )
 		{
@@ -1099,8 +1094,8 @@ ret:
 		//if(image())image()->reload();
 
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
-		load_error_handle(c);
-		FIM_AUTOCMD_EXEC(FIM_ACM_POSTRELOAD,c);
+		load_error_handle(_c);
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTRELOAD);
 		result = FIM_CNS_EMPTY_RESULT;
 ret:
 		FIM_PR('.');
@@ -1112,7 +1107,6 @@ ret:
 		/*
 		 * loads the current file, if not already loaded
 		 */
-		fim::string c = current();
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 		FIM_PR('*');
 
@@ -1127,13 +1121,13 @@ ret:
 			result = "sorry, no image to load\n";	//warning
 			goto ret;
 		}
-		FIM_AUTOCMD_EXEC(FIM_ACM_PRELOAD,c);
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRELOAD,current());
 		commandConsole_.set_status_bar("please wait while loading...", "*");
 
 		loadCurrentImage();
 
-		load_error_handle(c);
-		FIM_AUTOCMD_EXEC(FIM_ACM_POSTLOAD,c);
+		load_error_handle(_c);
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTLOAD);
 ret:
 		FIM_PR('.');
 		return result;
@@ -1547,11 +1541,10 @@ ret:
 
 			if(hm)
 			{	
-				fim::string c = current();
-				FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c);
+				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREGOTO,current());
 				goto_image(i);
+				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTGOTO);
 #ifdef FIM_AUTOCMDS
-				FIM_AUTOCMD_EXEC(FIM_ACM_POSTGOTO,c);
 				if(!commandConsole_.inConsole())
 					commandConsole_.set_status_bar((current()+fim::string(" matches \"")+args[0]+fim::string("\"")).c_str(),FIM_NULL);
 				goto nop;
@@ -2331,10 +2324,9 @@ nop:
 		 *
 		 * FIX ME : move to Viewport
 		 */
-		fim::string c = current();
 		FIM_PR('*');
 
-		FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 		if(c_image() && viewport())
 		{
 			if(viewport()->onRight() && viewport()->onBottom())
@@ -2350,7 +2342,7 @@ nop:
 		}
 		else
 		       	next(1);
-		FIM_AUTOCMD_EXEC(FIM_ACM_POSTPAN,c);
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -2362,10 +2354,9 @@ nop:
 		 *
 		 * FIX ME : move to Viewport
 		 */
-		fim::string c = current();
 		FIM_PR('*');
 
-		FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 		if(c_image() && viewport())
 		{
 			if(viewport()->onBottom())
@@ -2375,7 +2366,7 @@ nop:
 		}
 		else
 		       	next(1);
-		FIM_AUTOCMD_EXEC(FIM_ACM_POSTPAN,c);
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -2433,9 +2424,8 @@ nop:
 		if(c_image())
 		{
 			//angle = (double)getGlobalFloatVariable(FIM_VID_ANGLE);
-			fim::string c = current();
-//			FIM_AUTOCMD_EXEC(FIM_ACM_PREROTATE,c);//FIXME
-			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c); //FIXME
+//			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREROTATE,current());
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if( c_image() )
 			{
 				if(angle)
@@ -2449,8 +2439,8 @@ nop:
 						image()->rotate();
 				}
 			}
-//			FIM_AUTOCMD_EXEC(FIM_ACM_POSTROTATE,c);//FIXME
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c); //FIXME
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
+//			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTROTATE);
 		}
 ret:
 		FIM_PR('.');
@@ -2467,11 +2457,10 @@ ret:
 		if(c_image())
 		{
 			fim_scale_t factor;
-			fim::string c = current();
 			factor = firstforzero(args);
 			if( !factor )
 				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
-			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if(c_image())
 			{
 				if(factor)
@@ -2489,7 +2478,7 @@ ret:
 						viewport()->scale_position_magnify();
 				}
 			}
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
 		}
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
@@ -2507,8 +2496,7 @@ ret:
 			factor = firstforzero(args);
 			if(!factor)
 				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
-			fim::string c = current();
-			FIM_AUTOCMD_EXEC(FIM_ACM_PRESCALE,c);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if(c_image())
 			{
 				if(factor)
@@ -2526,7 +2514,7 @@ ret:
 						viewport()->scale_position_reduce();
 				}
 			}
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTSCALE,c);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
 		}
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
@@ -2546,8 +2534,7 @@ ret:
 			goto err;
 		if( c_image() )
 		{
-			fim::string c = current();
-			FIM_AUTOCMD_EXEC(FIM_ACM_PREPAN,c);
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 			if(c_image() && viewport())
 			{
 				// FIXME: need a switch/case construct here
@@ -2562,7 +2549,7 @@ ret:
 				if(args[0].re_match("center"))
 					viewport()->align('c');
 			}
-			FIM_AUTOCMD_EXEC(FIM_ACM_POSTPAN,c);
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
 		}
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
