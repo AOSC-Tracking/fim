@@ -789,7 +789,6 @@ nop:
 
 	fim::string Browser::display_status(const fim_char_t *l)
 	{
-		fim_bool_t wcs = cc.isSetVar(FIM_VID_WANT_CAPTION_STATUS);
 		FIM_PR('*');
 
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
@@ -806,7 +805,7 @@ nop:
 		}
 		else
 		{
-			if(wcs)
+			if( fim_bool_t wcs = cc.isSetVar(FIM_VID_WANT_CAPTION_STATUS) )
 				wcs = cc.set_wm_caption(FIM_NULL);
 		}
 		FIM_PR('.');
@@ -1170,10 +1169,9 @@ ret:
 		/* 
 		 * returns whether the file nf is in the files list
 		 */
-		fim_int i = find_file_index(nf);
 		bool ip = false;
 
-		if( i >= 0 )
+		if( find_file_index(nf) >= 0 )
 			ip = true;
 		return ip;
 	}
@@ -2324,7 +2322,7 @@ rfrsh:
 nop:
 		FIM_PR('.');
 		return result;
-	}
+	} /* do_filter */
 
 	fim_cxr Browser::fcmd_scrollforward(const args_t& args)
 	{

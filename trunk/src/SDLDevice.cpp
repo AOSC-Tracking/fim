@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -300,8 +300,7 @@ err:
 		}
 #else
 			FIM_CONSTEXPR Uint32 rmask=0x00000000,gmask=0x00000000,bmask=0x00000000,amask=0x00000000;
-			SDL_Surface *src=SDL_CreateRGBSurfaceFrom(rgb,icols,irows,24,icols*3,rmask,gmask,bmask,amask);
-			if(src)
+			if(SDL_Surface *src=SDL_CreateRGBSurfaceFrom(rgb,icols,irows,24,icols*3,rmask,gmask,bmask,amask))
 			{
 				SDL_Rect srcrect;
 				SDL_Rect dstrect;
@@ -369,7 +368,6 @@ err:
 		fim_coo_t want_width=current_w_, want_height=current_h_/*, want_bpp=0*/;
 		fim_sdl_int want_flags=FIM_SDL_FLAGS;
 		fim_sdl_int delay=0,interval=0;
-		const fim_char_t*errstr=FIM_NULL;
 		//want_flags|=SDL_NOFRAME;
 		//std::cout << want_width << " : "<< want_height<<"\n";
 #if 0
@@ -397,8 +395,7 @@ err:
 			goto sdlerr;
 		}
 		{
-			const SDL_VideoInfo*bvip=SDL_GetVideoInfo();
-			if(bvip)
+			if( const SDL_VideoInfo*bvip=SDL_GetVideoInfo() )
 				bvi_=*bvip;
 		}
 		fim_perror(FIM_NULL);
@@ -468,8 +465,7 @@ err:
 		post_wmresize();
 		return FIM_ERR_NO_ERROR;
 sdlerr:
-		errstr=SDL_GetError();
-		if(errstr)
+		if( const fim_char_t * errstr = SDL_GetError() )
 			std::cerr << "SDL error string: \"" << errstr  << "\"\n";
 err:
 		return FIM_ERR_GENERIC;

@@ -178,75 +178,55 @@ err:
 	fim_int CommandConsole::setVariable(const fim_var_id& varname,fim_int value)
 	{
 		fim_int retval = 0;
-		Namespace *nsp = rns(varname);
-
-		if(nsp)
+		if( Namespace *nsp = rns(varname) )
 			retval = nsp->setVariable(rnid(varname),value);
-//err:
 		return retval;
 	}
 
 	fim_float_t CommandConsole::setVariable(const fim_var_id& varname,fim_float_t value)
 	{
 		fim_float_t retval = FIM_CNS_EMPTY_FP_VAL;
-		Namespace *nsp = rns(varname);
-
-		if(nsp)
+		if( Namespace *nsp = rns(varname) )
 			retval = nsp->setVariable(rnid(varname),value);
-//err:
 		return retval;
 	}
 
 	fim_int CommandConsole::setVariable(const fim_var_id& varname,const fim_char_t*value)
 	{
 		fim_int retval = 0;
-		Namespace *nsp = rns(varname);
-
-		if(nsp)
+		if( Namespace *nsp = rns(varname) )
 			retval = nsp->setVariable(rnid(varname),value);
-//err:
 		return retval;
 	}
 
 	Var CommandConsole::setVariable(const fim_var_id varname,const Var&value)
 	{
 		Var retval = (fim_int)0;
-		Namespace *nsp = rns(varname);
-
-		if(nsp)
+		if( Namespace *nsp = rns(varname) )
 			retval = nsp->setVariable(rnid(varname),value);
-//err:
 		return retval;
 	}
 
 	Var CommandConsole::setVariable(const fim_var_id varname,const fim::string&value)
 	{
 		Var retval = (fim_int)0;
-		Namespace *nsp = rns(varname);
-
-		if(nsp)
+		if( Namespace *nsp = rns(varname) )
 			retval = nsp->setVariable(rnid(varname),value);
-err:
 		return retval;
 	}
 
 	fim_int CommandConsole::getIntVariable(const fim_var_id& varname)const
 	{
 		fim_int retval = 0;
-		const Namespace *nsp = c_rns(varname);
-
-		if(nsp)
+		if( const Namespace *nsp = c_rns(varname) )
 			retval = nsp->getIntVariable(rnid(varname));
-//err:
 		return retval;
 	}
 
 	fim_float_t CommandConsole::getFloatVariable(const fim_var_id& varname)const
 	{
 		fim_float_t retval = FIM_CNS_EMPTY_FP_VAL;
-		const Namespace *nsp = c_rns(varname);
-
-		if(nsp)
+		if( const Namespace *nsp = c_rns(varname) )
 			retval = nsp->getFloatVariable(rnid(varname));
 		return retval;
 	}
@@ -254,18 +234,14 @@ err:
 	fim::string CommandConsole::getStringVariable(const fim_var_id& varname)const
 	{
 		fim::string retval = FIM_CNS_EMPTY_RESULT;
-		const Namespace *nsp = c_rns(varname);
-
-		if(nsp)
+		if( const Namespace *nsp = c_rns(varname) )
 			retval = nsp->getStringVariable(rnid(varname));
 		return retval;
 	}
 
 	Var CommandConsole::getVariable(const fim_var_id& varname)const
 	{
-		const Namespace *nsp = c_rns(varname);
-
-		if(nsp)
+		if( const Namespace *nsp = c_rns(varname) )
 			return nsp->getVariable(rnid(varname));
 		else
 #if FIM_USE_CXX11
