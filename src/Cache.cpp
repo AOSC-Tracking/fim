@@ -189,7 +189,7 @@ rt:
 	{
 		FIM_LOUD_CACHE_STUFF;
 		if(!oi)
-			return -1;
+			return false;
 		return ( clone_pool_.find(oi)!=clone_pool_.end() )	
 			&&
 			((*clone_pool_.find(oi)) == oi );
@@ -207,7 +207,7 @@ rt:
 	{
 		FIM_LOUD_CACHE_STUFF;
 		if(!oi)
-			return -1;
+			return false;
 		return ( reverseCache_.find(oi)!=reverseCache_.end() )	
 			&&
 			( (*(reverseCache_.find(oi))).second.first.c_str()== oi->getKey().first );
