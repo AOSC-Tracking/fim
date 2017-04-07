@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -528,7 +528,7 @@ namespace fim
 		 * */
 #if FIM_WANT_BDI
 		if(!image_)
-			return &commandConsole.browser_.cache_.dummy_img();
+			return ImagePtr(&commandConsole.browser_.cache_.dummy_img());
 		else
 #endif	/* FIM_WANT_BDI */
 			return image_;
@@ -655,7 +655,11 @@ namespace fim
 			viewportState.panned_ = panned_;
 			/* } */
 			if( !commandConsole.browser_.cache_.freeCachedImage(image_,&viewportState) )
+#if FIM_IMG_NAKED_PTRS
 				delete image_;	// do it yourself :P
+#else /* FIM_IMG_NAKED_PTRS */
+				;// TBD
+#endif /* FIM_IMG_NAKED_PTRS */
 		}
 #else /* FIM_BUGGED_CACHE */
 		// warning : in this cases exception handling is missing

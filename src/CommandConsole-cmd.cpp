@@ -444,13 +444,13 @@ err:
 			ImagePtr stream_image=FIM_NULL;
 			if(!tfd)
 				return FIM_ERR_GENERIC;
-			try{ stream_image=new Image(FIM_STDIN_IMAGE_NAME,fim_fread_tmpfile(tfd)); }
+			try{ stream_image=ImagePtr ( new Image(FIM_STDIN_IMAGE_NAME,fim_fread_tmpfile(tfd)) ); }
 			catch (FimException e){/* write me */}
 #ifdef FIM_READ_STDIN_IMAGE
 			if(stream_image)
 			{
 #if FIM_USE_CXX11
-				browser_.set_default_image(std::unique_ptr<Image>(std::move(stream_image)));
+				browser_.set_default_image(ImagePtr(std::move(stream_image)));
 #else /* FIM_USE_CXX11 */
 				browser_.set_default_image(stream_image);
 #endif /* FIM_USE_CXX11 */

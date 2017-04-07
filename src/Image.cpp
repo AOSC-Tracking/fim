@@ -560,7 +560,7 @@ uhmpf:
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 			cc.browser_.display_status(cc.browser_.current().c_str()); /* FIXME: an ugly way to force the proper status display */
 		if(isSetVar("EXIF_Orientation"))
-			ers(getStringVariable("EXIF_Orientation").c_str(),this);
+			ers(getStringVariable("EXIF_Orientation").c_str(),ImagePtr(this));
 
 		FIM_PR('.');
 		retval = true;

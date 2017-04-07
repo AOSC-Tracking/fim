@@ -35,6 +35,7 @@
 #include <sstream>
 #include <algorithm>
 #endif /* FIM_WANT_PIC_CMTS */
+#include <memory>
 
 namespace fim
 {
@@ -209,9 +210,16 @@ class Image
 	fim_int shall_flip(void)const;
 }; /* Image */
 #if FIM_USE_CXX11
+#if FIM_IMG_NAKED_PTRS
 	using ImagePtr = Image*;
+	using ImageCPtr = const Image*;
+#else /* FIM_IMG_NAKED_PTRS */
+	using ImagePtr = std::shared_ptr<Image>;
+	using ImageCPtr = std::shared_ptr<const Image>;
+#endif /* FIM_IMG_NAKED_PTRS */
 #else /* FIM_USE_CXX11 */
-	typedef Image ImagePtr;
+	typedef Image* ImagePtr;
+	typedef const Image* ImageCPtr;
 #endif /* FIM_USE_CXX11 */
 } /* Namespace fim */
 #if FIM_WANT_PIC_LVDN

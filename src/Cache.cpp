@@ -142,7 +142,11 @@ ret:
 		std::cout << "erasing clone " << fim_basename_of(oi->getName()) << "\n";
 #endif /* FIM_CACHE_DEBUG */
 		cloneUsageCounter_.erase(oi);
+#if FIM_IMG_NAKED_PTRS
 		delete oi;
+#else /* FIM_IMG_NAKED_PTRS */
+		// TBD
+#endif /* FIM_IMG_NAKED_PTRS */
 		clone_pool_.erase(oi);
 		return 0;
 	}
@@ -319,7 +323,7 @@ ret:
 		/*	load attempt as alternative approach	*/
 		try
 		{
-		if( ( ni = new Image(key.first.c_str(), NULL, page) ) )
+		if( ( ni = ImagePtr( new Image(key.first.c_str(), NULL, page) ) ) )
 		{
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
@@ -329,7 +333,11 @@ ret:
 			else
 				if (delnc) // delete non cacheable
 				{
+#if FIM_IMG_NAKED_PTRS
 					delete ni;
+#else /* FIM_IMG_NAKED_PTRS */
+					// TBD
+#endif /* FIM_IMG_NAKED_PTRS */
 					ni = NULL;
 				}
 		}
@@ -408,7 +416,11 @@ ret:
 			imageCache_.erase(reverseCache_[oi]);
 			reverseCache_.erase(oi);
 //			delete imageCache_[reverseCache_[oi]];
+#if FIM_IMG_NAKED_PTRS
 			delete oi;
+#else /* FIM_IMG_NAKED_PTRS */
+			// TBD
+#endif /* FIM_IMG_NAKED_PTRS */
 			setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
 			retval = 0;
 		}
@@ -582,7 +594,7 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 					ImagePtr oi=image;
 #endif /* FIM_CACHE_DEBUG */
-					image = new Image(*image); // cloning
+					image = ImagePtr ( new Image(*image) ); // cloning
 #ifdef FIM_CACHE_DEBUG
 					std::cout << "  cloned image: \"" <<fim_basename_of(image->getName())<< "\" "<< image << " from \""<<fim_basename_of(oi->getName()) <<"\" " << oi << "\n";
 #endif /* FIM_CACHE_DEBUG */
@@ -635,7 +647,7 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 			ImagePtr oi=image;
 #endif /* FIM_CACHE_DEBUG */
-			image = new Image(*image); // cloning
+			image = ImagePtr ( new Image(*image) ); // cloning
 			if(image)
 			{
 				cacheNewImage( image );
@@ -722,7 +734,11 @@ ret:
 		{	
 			cache_report+=fim_basename_of((*cpi)->getName());
 			cache_report+=" " ; 
-			cache_report+= string((int*)(*cpi)) ; 
+#if FIM_IMG_NAKED_PTRS
+			cache_report+= string((int*)(*cpi));
+#else /* FIM_IMG_NAKED_PTRS */
+			cache_report+= string((int*)((*cpi).get()));
+#endif /* FIM_IMG_NAKED_PTRS */
 			cache_report+=",";
 		}
 		cache_report+="\n";
@@ -741,7 +757,11 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 				std::cout << "about to free " << (ci->first.first) << "\n";
 #endif /* FIM_CACHE_DEBUG */
+#if FIM_IMG_NAKED_PTRS
 				delete ci->second;
+#else /* FIM_IMG_NAKED_PTRS */
+				// TBD
+#endif /* FIM_IMG_NAKED_PTRS */
 			}
 		imageCache_.clear(); /* destroy Image objects */
 	}
