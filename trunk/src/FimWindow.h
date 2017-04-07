@@ -29,10 +29,6 @@
 #include <vector>
 #include <iostream>
 
-
-#ifndef FIM_NULL
-	#define FIM_NULL 0
-#endif /* FIM_NULL */
 #define FIM_DISABLE_WINDOW_SPLITTING 1
 
 /*

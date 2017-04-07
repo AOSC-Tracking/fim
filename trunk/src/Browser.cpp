@@ -795,7 +795,7 @@ nop:
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
 		{
 			fim::string dss ;
-			const fim_char_t *dssp=NULL;
+			const fim_char_t *dssp=FIM_NULL;
 
 			if( cc.isSetVar(FIM_VID_DISPLAY_STATUS_FMT) )
 			{
@@ -1293,7 +1293,7 @@ rret:
 	{
                	glob_t pglob;
                	pglob.gl_offs = 0;
-       		eec = glob(nf.c_str(),GLOB_NOSORT| GLOB_NOMAGIC | GLOB_TILDE, NULL, &pglob);
+       		eec = glob(nf.c_str(),GLOB_NOSORT| GLOB_NOMAGIC | GLOB_TILDE, FIM_NULL, &pglob);
 		if( eec == 0 )
 		{
 			for(size_t g=0;g<pglob.gl_pathc;++g)

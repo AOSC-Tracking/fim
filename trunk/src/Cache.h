@@ -42,21 +42,21 @@ class Cache
 #endif /* FIM_NAMESPACES */
 {
 #if FIM_USE_CXX11
-	using lru_t = std::map<fim::ImagePtr,fim_time_t > 	   ;	//filename - last usage time
-	using cachels_t =  std::map<cache_key_t,fim::ImagePtr >  ;	//filename - image
-	using rcachels_t = std::map<fim::ImagePtr,cache_key_t >  ;	//image - filename
-	using ccachels_t = std::map<cache_key_t,int >        ;	//filename - counter
-	using vcachels_t = std::map<cache_key_t,ViewportState >        ;	//filename to viewport state
-	using cloned_cachels_t = std::map<cache_key_t,std::vector<fim::ImagePtr> > ;	//filename - cloned images??
-	using cuc_t = std::map<fim::ImagePtr,int >  	   ;	//image - filename
+	using lru_t = std::map<fim::ImagePtr,fim_time_t >;	//image -> time
+	using cachels_t =  std::map<cache_key_t,fim::ImagePtr >;	//key -> image
+	using rcachels_t = std::map<fim::ImagePtr,cache_key_t >;	//image -> key
+	using ccachels_t = std::map<cache_key_t,int >;	//key -> counter
+	using vcachels_t = std::map<cache_key_t,ViewportState >;	//key -> viewport state
+	using cloned_cachels_t = std::map<cache_key_t,std::vector<fim::ImagePtr> >;	//key -> clones
+	using cuc_t = std::map<fim::ImagePtr,int >;	//image -> clones usage counter
 #else /* FIM_USE_CXX11 */
-	typedef std::map<fim::ImagePtr,fim_time_t > 	   lru_t;	//filename - last usage time
-	typedef std::map<cache_key_t,fim::ImagePtr >  cachels_t;	//filename - image
-	typedef std::map<fim::ImagePtr,cache_key_t >  rcachels_t;	//image - filename
-	typedef std::map<cache_key_t,int >        ccachels_t;	//filename - counter
-	typedef std::map<cache_key_t,ViewportState >        vcachels_t;	//filename to viewport state
-	typedef std::map<cache_key_t,std::vector<fim::ImagePtr> > cloned_cachels_t;	//filename - cloned images??
-	typedef std::map<fim::ImagePtr,int >  	   cuc_t;	//image - filename
+	typedef std::map<fim::ImagePtr,fim_time_t > 	   lru_t;	//image -> time
+	typedef std::map<cache_key_t,fim::ImagePtr >  cachels_t;	//key -> image
+	typedef std::map<fim::ImagePtr,cache_key_t >  rcachels_t;	//image -> key
+	typedef std::map<cache_key_t,int >        ccachels_t;	//key->counter
+	typedef std::map<cache_key_t,ViewportState >        vcachels_t;	//key -> viewport state
+	typedef std::map<cache_key_t,std::vector<fim::ImagePtr> > cloned_cachels_t;	//key -> clones
+	typedef std::map<fim::ImagePtr,int >  	   cuc_t;	//image -> clones usage counter
 #endif /* FIM_USE_CXX11 */
 
 	cachels_t 	imageCache_;
@@ -68,12 +68,8 @@ class Cache
 	cuc_t		cloneUsageCounter_;
 	std::set< fim::ImagePtr > clone_pool_;
 	time_t time0_;
-//	clone_counter_t cloneCounter;
 
-	/*	whether we should free some cache ..	*/
 	bool need_free(void)const;
-
-	/**/
 	int lru_touch(cache_key_t key);
 
 	public:
@@ -82,33 +78,16 @@ class Cache
 	private:
 	bool is_in_clone_cache(fim::ImagePtr oi)const;
 	fim_time_t last_used(cache_key_t key)const;
-
 	bool cacheNewImage( fim::ImagePtr ni );
 	ImagePtr loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc);
-
-	/*	returns an image from the cache or loads it from disk marking it as used in the LRU (internal) */
 	ImagePtr getCachedImage(cache_key_t key);
-
-	/*	the caller declares this image as free	*/
-//	int free(fim::ImagePtr oi);
-
-	/*	erases the image from the cache	*/
 	int erase(fim::ImagePtr oi);
-
-	/*	erases the image clone from the cache	*/
 	int erase_clone(fim::ImagePtr oi);
-
-	/* get the lru_ element. if unused is true, only an unused image will be returned, _if any_*/
 	ImagePtr get_lru( bool unused = false )const;
-
 	int free_some_lru(void);
-
 	bool free_all(void);
-	
 	int used_image(cache_key_t key)const;
-
-	fim_time_t reltime(void)const;
-
+	fim_time_t get_reltime(void)const;
 	public:
 	Cache(void);
 #if FIM_USE_CXX11
@@ -117,36 +96,23 @@ class Cache
 	Cache& operator= (const Cache&rhs) = delete;
 #else /* FIM_USE_CXX11 */
 	private:
-	/* a disabled member function (because private:) */
+	/* a disabled member function (because of private: keyword) */
 	Cache& operator= (const Cache&rhs) { return *this; }
 #endif /* FIM_USE_CXX11 */
 	public:
-
 #if FIM_WANT_BDI
 	Image dummy_img_;	// experimental
 	Image& dummy_img(void){return dummy_img_;}	// experimental
 #endif	/* FIM_WANT_BDI */
-
-	/*	free() and counter update */
 	bool freeCachedImage(ImagePtr image, const ViewportState *vsp);
-
-	/*	getCachedImage() and counter update */
 	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page = 0);
-	
-	/* FIXME */
 	ImagePtr setAndCacheStdinCachedImage(ImagePtr image);
-
-	/**/
 	int prefetch(cache_key_t key);
-
 	void touch(cache_key_t key);
-
 	fim::string getReport(int type = FIM_CR_CD )const;
 	~Cache(void);
 	virtual size_t byte_size(void)const;
 	size_t img_byte_size(void)const;
-
-	/*	the count of cached images	*/
 	int cached_elements(void)const;
 	void desc_update(void);
 };
@@ -191,7 +157,7 @@ class PACA	/* Parallel Cache */
 
 	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page=0)
 	{
-		ImagePtr image = NULL;
+		ImagePtr image = FIM_NULL;
 		if(dpc) std::cout << __FUNCTION__ << ": " << key.first << "\n";
 		if( t.joinable() )
 		{

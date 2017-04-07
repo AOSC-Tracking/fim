@@ -51,44 +51,42 @@ namespace fim
 #ifdef HAVE_SYS_TIME_H
 		struct timeval tv;
 		FIM_CONSTEXPR fim_time_t prec = 1000; /* fraction of second precision */
-		gettimeofday(&tv, NULL);
+		gettimeofday(&tv, FIM_NULL);
 		return tv.tv_sec * prec + tv.tv_usec / ( 1000000 / prec );
 #else /* HAVE_SYS_TIME_H */
-		return time(NULL);
+		return time(FIM_NULL);
 #endif /* HAVE_SYS_TIME_H */
 	}
 
-	fim_time_t Cache::reltime(void)const
+	fim_time_t Cache::get_reltime(void)const
 	{
 		return fim_time()-time0_;
 	}
 
 	Cache::Cache(void)
 		:Namespace(&cc)
+		,time0_(fim_time())
 #if FIM_WANT_BDI
 		,dummy_img_()
 #endif	/* FIM_WANT_BDI */
 	{
-		/*	FIXME : potential flaw ?	*/
 		FIM_LOUD_CACHE_STUFF;
-		lru_.erase(lru_.begin(),lru_.end());
-		time0_ = fim_time();
 	}
 
 	int Cache::cached_elements(void)const
 	{
+		/*	the count of cached images	*/
 		FIM_LOUD_CACHE_STUFF;
 		return imageCache_.size();
 	}
 
 	ImagePtr Cache::get_lru( bool unused )const
 	{
+		/* get the least recently used element.
+		 * if unused is true, only an unused image will be returned, _if any_*/
 		lru_t::const_iterator lrui;
-
-		/* warning : syscall ! */
-		fim_time_t m_time;
-		m_time = reltime();
-		ImagePtr  l_img=NULL;
+		fim_time_t m_time(get_reltime()), l_time=0;
+		ImagePtr  l_img(FIM_NULL);
 		cachels_t::const_iterator ci;
 		FIM_LOUD_CACHE_STUFF;
 
@@ -97,10 +95,10 @@ namespace fim
 
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
 		if( ci->second /* <- so we can call this function in some intermediate states .. */
-			 && last_used(ci->first) < m_time  &&  (  (! unused) || (used_image(ci->first)<=0)  ) )
+			 && (l_time=last_used(ci->first)) < m_time  &&  (  (! unused) || (used_image(ci->first)<=0)  ) )
 		{
 			l_img  = ci->second;
-			m_time = last_used(ci->first);
+			m_time = l_time;
 		}
 ret:
 		return l_img;
@@ -108,9 +106,7 @@ ret:
 
 	bool Cache::free_all(void)
 	{
-		/*
-		 * free all unused elements from the cache
-		 */
+		/* free all unused elements from the cache */
 		rcachels_t rcc = reverseCache_;
 
 		FIM_LOUD_CACHE_STUFF;
@@ -124,8 +120,8 @@ ret:
 	int Cache::free_some_lru(void)
 	{
 		/*
-		 * this triggering deletion (and memory freeing) of cached elements
-		 * (yes, it is a sort of garbage collector, with its pros and cons)
+		 * trigger deletion (and memory free) of cached elements
+		 * (a sort of garbage collector)
 		 */
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
@@ -136,6 +132,7 @@ ret:
 
 	int Cache::erase_clone(fim::ImagePtr oi)
 	{
+		/*	erases the image clone from the cache	*/
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
 #ifdef FIM_CACHE_DEBUG
@@ -153,8 +150,8 @@ ret:
 
 	bool Cache::need_free(void)const
 	{
+		/*	whether we should free some cache ..	*/
 		/*	temporary : we free elements for more than some cached images	*/
-
 		/*
 		struct mallinfo mi = mallinfo();
 		cout << "allocated : " <<  mi.uordblks << "\n";
@@ -184,19 +181,15 @@ rt:
 
 	int Cache::used_image(cache_key_t key)const
 	{
-		/*	acca' nun stimm'a'ppazzia'	*/
-		//return usageCounter_[key] ;
 		FIM_LOUD_CACHE_STUFF;
 		return ( usageCounter_.find(key)!=usageCounter_.end() ) ?  (*(usageCounter_.find(key))).second : 0;
 	}
 
 	bool Cache::is_in_clone_cache(fim::ImagePtr oi)const
 	{
-		/*	acca' nun stimm'a'ppazzia'	*/
 		FIM_LOUD_CACHE_STUFF;
 		if(!oi)
 			return -1;
-		//return *(clone_pool_.find(oi))==oi;
 		return ( clone_pool_.find(oi)!=clone_pool_.end() )	
 			&&
 			((*clone_pool_.find(oi)) == oi );
@@ -204,17 +197,14 @@ rt:
 
 	bool Cache::is_in_cache(cache_key_t key)const
 	{
-		/*	acca' nun stimm'a'ppazzia'	*/
-		//return imageCache_[key]!=NULL;
 		FIM_LOUD_CACHE_STUFF;
 		return ( imageCache_.find(key)!=imageCache_.end() )
 			&&
-			((*(imageCache_.find(key))).second!=NULL) ;
+			((*(imageCache_.find(key))).second!=FIM_NULL) ;
 	}
 
 	bool Cache::is_in_cache(fim::ImagePtr oi)const
 	{
-		/*	acca' nun stimm'a'ppazzia'	*/
 		FIM_LOUD_CACHE_STUFF;
 		if(!oi)
 			return -1;
@@ -222,42 +212,6 @@ rt:
 			&&
 			( (*(reverseCache_.find(oi))).second.first.c_str()== oi->getKey().first );
 	}
-
-#if 0
-	int Cache::free(fim::ImagePtr oi)
-	{
-		/*	acca' nun stimm'a'ppazzia'	*/
-		if(!oi)
-			return -1;
-
-		if(!is_in_cache(oi))
-		{
-#if 0
-			/* if the image is not already one of ours, it 
-			 * is probably a cloned one, and the caller 
-			 * didn't know this.
-			 *
-			 * in this case we keep it in the cache, 
-			 * so it could be useful in the future.
-			 * */
-			if( oi->revertToLoaded() )//removes internal scale caches
-				cacheImage( oi ); //FIXME : validity should be checked ..
-#else
-			delete oi;
-#endif
-			return 0;
-		}
-
-		/*
-		 * fixme : we should explicitly mark for deletion someday.. 
-		 * */
-
-		//if(need_free())return erase(oi);
-		/*	careful here !!	*/
-		//if(need_free())free_some_lru();
-		else return 0;	/* no free needed */
-	}
-#endif
 
 	int Cache::prefetch(cache_key_t key)
 	{
@@ -316,14 +270,14 @@ ret:
 
 	ImagePtr Cache::loadNewImage(cache_key_t key, fim_page_t page, fim_bool_t delnc)
 	{
-		ImagePtr ni = NULL;
+		ImagePtr ni = FIM_NULL;
 		FIM_PR('*');
 
 		FIM_LOUD_CACHE_STUFF;
 		/*	load attempt as alternative approach	*/
 		try
 		{
-		if( ( ni = ImagePtr( new Image(key.first.c_str(), NULL, page) ) ) )
+		if( ( ni = ImagePtr( new Image(key.first.c_str(), FIM_NULL, page) ) ) )
 		{
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
@@ -338,39 +292,29 @@ ret:
 #else /* FIM_IMG_NAKED_PTRS */
 					// TBD
 #endif /* FIM_IMG_NAKED_PTRS */
-					ni = NULL;
+					ni = FIM_NULL;
 				}
 		}
 		}
 		catch(FimException e)
 		{
 			FIM_PR('E');
-			ni = NULL; /* not a big problem */
+			ni = FIM_NULL; /* not a big problem */
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
-//ret:
 		FIM_PR(' ');
 		return ni;
 	}
 	
 	ImagePtr Cache::getCachedImage(cache_key_t key)
 	{
-		/*
-		 * returns an image if already in cache ..
-		 * */
-		ImagePtr ni = NULL;
+		/* returns an image if already in cache. */
+		ImagePtr ni = FIM_NULL;
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
 	
-		/*	acca' nun stimm'a'ppazzia'	*/
-		//if(!key.first)return ni;
-
-		/*	cache lookup */
-		//this->cached_elements();
 		if( ( ni = this->imageCache_[key]) )
-		{
 			this->lru_touch(key);
-		}
 		return ni;
 	}
 
@@ -384,25 +328,20 @@ ret:
 		this->imageCache_[ni->getKey()]=ni;
 		this->reverseCache_[ni]= ni->getKey();
 		lru_touch( ni->getKey() );
-		usageCounter_[ ni->getKey()]=0; // we yet don't assume any usage
+		usageCounter_[ ni->getKey()]=0; // we don't assume any usage yet
 		setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
 		return true;
 	}
 	
 	int Cache::erase(fim::ImagePtr oi)
 	{
-		/*
-		 * erases the image from the image cache
-		 * */
-		/*	acca' nun stimm'a'ppazzia'	*/
+		/*	erases the image from the cache	*/
 		int retval=-1;
 		FIM_PR(' ');
 
 		FIM_LOUD_CACHE_STUFF;
 		if(!oi)
-		{
 			goto ret;
-		}
 
 		if(is_in_cache(oi) )
 		{
@@ -445,14 +384,13 @@ ret:
 	int Cache::lru_touch(cache_key_t key)
 	{
 		/*
-		 * if the specified file is cached, in this way it is marked as used, too
-		 *
-		 * NOTE : the usage count is not affected, 
+		 * if the specified file is cached, in this way it is marked as used, too.
+		 * the usage count is not affected, 
 		 * */
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
 //		std::cout << lru_[imageCache_[key]] << " -> ";
-		lru_[imageCache_[key]]= reltime();
+		lru_[imageCache_[key]]= get_reltime();
 //		std::cout << lru_[imageCache_[key]] << "\n";
 		return 0;
 	}
@@ -460,7 +398,7 @@ ret:
 	bool Cache::freeCachedImage(ImagePtr image, const ViewportState *vsp)
 	{
 		/*
-		 * TODO: rename to free().
+		 * Shall rename to free().
 		 *
 		 * If the supplied image is cached as a master image of a clone, it is freed and deregistered.
 		 * If not, no action is performed.
@@ -474,9 +412,7 @@ ret:
 
 //		if( is_in_cache(image) && usageCounter_[image->getKey()]==1 )
 		if(vsp)
-		{
 			viewportInfo_[image->getKey()] = *vsp;
-		}
 		if( is_in_clone_cache(image) )
 		{
 			usageCounter_[image->getKey()]--;
@@ -541,7 +477,7 @@ ret:
 	ImagePtr Cache::useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page)
 	{
 		/*
-		 * TODO: rename to get().
+		 * Shall rename to get().
 		 *
 		 * The caller invokes this member function to obtain an Image object pointer.
 		 * If the object is cached and it already used, a clone is built and returned.
@@ -553,9 +489,9 @@ ret:
 		 * A freeImage action will do the converse operation (and delete).
 		 * If the image is not already cached, it is loaded, if possible.
 		 *
-		 * So, if there is no such image, NULL is returned
+		 * So, if there is no such image, FIM_NULL is returned
 		 * */
-		ImagePtr image = NULL;
+		ImagePtr image = FIM_NULL;
 
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR('*');
@@ -603,7 +539,7 @@ ret:
 				{
 					FIM_PR('E');
 					/* we will survive :P */
-					image = NULL; /* we make sure no taint remains */
+					image = FIM_NULL; /* we make sure no taint remains */
 //					if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 				}
 				if(!image)
@@ -633,7 +569,7 @@ ret:
 
 	ImagePtr Cache::setAndCacheStdinCachedImage(ImagePtr image)
 	{
-		/* FIXME : document me
+		/* Cache an image coming from stdin (that is, not reloadable).
 		 * */
 		cache_key_t key(FIM_STDIN_IMAGE_NAME,FIM_E_STDIN);
 		FIM_LOUD_CACHE_STUFF;
@@ -657,7 +593,7 @@ ret:
 		{
 			FIM_PR('E');
 			/* we will survive :P */
-			image = NULL; /* we make sure no taint remains */
+			image = FIM_NULL; /* we make sure no taint remains */
 //			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
 		if(!image)
