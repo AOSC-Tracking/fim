@@ -2,7 +2,7 @@
 /*
  CommandConsole-var.h : CommandConsole variables store
 
- (c) 2013-2016 Michele Martone
+ (c) 2013-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -71,7 +71,12 @@ namespace fim
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				nsp = (ImagePtr) browser_.c_image(); /* FIXME: porcata assurda */
+				/* FIXME: porcata assurda */
+#if FIM_IMG_NAKED_PTRS
+				nsp = (Image*) browser_.c_image();
+#else /* FIM_IMG_NAKED_PTRS */
+				nsp = (Image*) browser_.c_image().get();
+#endif /* FIM_IMG_NAKED_PTRS */
 				goto err;
 			}
 			else
@@ -134,7 +139,12 @@ err:
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				nsp = (ImagePtr) browser_.c_image(); /* FIXME: porcata assurda */
+				/* FIXME: porcata assurda */
+#if FIM_IMG_NAKED_PTRS
+				nsp = (const Image*) browser_.c_image();
+#else /* FIM_IMG_NAKED_PTRS */
+				nsp = (const Image*) browser_.c_image().get();
+#endif /* FIM_IMG_NAKED_PTRS */
 				goto err;
 			}
 			else

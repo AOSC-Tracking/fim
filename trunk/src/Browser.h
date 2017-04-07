@@ -217,11 +217,11 @@ class Browser
 	ImagePtr image(void)const;
 
 #ifdef FIM_READ_STDIN_IMAGE
-#if FIM_USE_CXX11
-	std::unique_ptr<Image> default_image_;	// experimental
-#else /* FIM_USE_CXX11 */
+#if FIM_IMG_NAKED_PTRS
 	ImagePtr default_image_;	// experimental
-#endif /* FIM_USE_CXX11 */
+#else /* FIM_IMG_NAKED_PTRS */
+	std::shared_ptr<Image> default_image_;	// experimental
+#endif /* FIM_IMG_NAKED_PTRS */
 #endif /* FIM_READ_STDIN_IMAGE */
 	Viewport* viewport(void)const;
 
@@ -239,13 +239,9 @@ class Browser
 	PACA pcache_;	// was private
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 #ifdef FIM_READ_STDIN_IMAGE
-#if FIM_USE_CXX11
-	void set_default_image(std::unique_ptr<Image> stdin_image);
-#else /* FIM_USE_CXX11 */
 	void set_default_image(ImagePtr stdin_image);
-#endif /* FIM_USE_CXX11 */
 #endif /* FIM_READ_STDIN_IMAGE */
-	const Image* c_image(void)const;	// was private
+	ImageCPtr c_image(void)const;	// was private
 	int empty_file_list(void)const;
 
 	Browser(CommandConsole& cc);

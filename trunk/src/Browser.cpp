@@ -277,11 +277,7 @@ ret:
 	}
 
 #ifdef FIM_READ_STDIN_IMAGE
-#if FIM_USE_CXX11
-	void Browser::set_default_image(std::unique_ptr<Image> stdin_image)
-#else /* FIM_USE_CXX11 */
 	void Browser::set_default_image(ImagePtr stdin_image)
-#endif /* FIM_USE_CXX11 */
 	{
 		/*
 		 * this is used mainly to set image files read from pipe or stdin
@@ -2577,12 +2573,12 @@ err:
 		return FIM_CMD_HELP_ALIGN;
 	}
 
-	const Image* Browser::c_image(void)const
+	ImageCPtr Browser::c_image(void)const
 	{
 		/*
 		 *	a const pointer to the currently loaded image
 		 */
-		const Image* image = FIM_NULL;
+		ImageCPtr image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->c_getImage();
