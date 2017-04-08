@@ -42,21 +42,21 @@ class Cache
 #endif /* FIM_NAMESPACES */
 {
 #if FIM_USE_CXX11
-	using lru_t = std::map<fim::ImagePtr,fim_time_t >;	//image -> time
 	using cachels_t =  std::map<cache_key_t,fim::ImagePtr >;	//key -> image
+	using lru_t = std::map<cache_key_t,fim_time_t >;	//image -> time
 	using rcachels_t = std::map<fim::ImagePtr,cache_key_t >;	//image -> key
 	using ccachels_t = std::map<cache_key_t,int >;	//key -> counter
 	using vcachels_t = std::map<cache_key_t,ViewportState >;	//key -> viewport state
-	using cloned_cachels_t = std::map<cache_key_t,std::vector<fim::ImagePtr> >;	//key -> clones
-	using cuc_t = std::map<fim::ImagePtr,int >;	//image -> clones usage counter
+	//using cloned_cachels_t = std::map<cache_key_t,std::vector<fim::ImagePtr> >;	//key -> clones
+	//using cuc_t = std::map<fim::ImagePtr,int >;	//image -> clones usage counter
 #else /* FIM_USE_CXX11 */
-	typedef std::map<fim::ImagePtr,fim_time_t > 	   lru_t;	//image -> time
 	typedef std::map<cache_key_t,fim::ImagePtr >  cachels_t;	//key -> image
+	typedef std::map<cache_key_t,fim_time_t > 	   lru_t;	//image -> time
 	typedef std::map<fim::ImagePtr,cache_key_t >  rcachels_t;	//image -> key
 	typedef std::map<cache_key_t,int >        ccachels_t;	//key->counter
 	typedef std::map<cache_key_t,ViewportState >        vcachels_t;	//key -> viewport state
-	typedef std::map<cache_key_t,std::vector<fim::ImagePtr> > cloned_cachels_t;	//key -> clones
-	typedef std::map<fim::ImagePtr,int >  	   cuc_t;	//image -> clones usage counter
+	//typedef std::map<cache_key_t,std::vector<fim::ImagePtr> > cloned_cachels_t;	//key -> clones
+	//typedef std::map<fim::ImagePtr,int >  	   cuc_t;	//image -> clones usage counter
 #endif /* FIM_USE_CXX11 */
 
 	cachels_t 	imageCache_;
@@ -64,7 +64,7 @@ class Cache
 	lru_t		lru_;
 	ccachels_t	usageCounter_;
 	vcachels_t	viewportInfo_;
-	cloned_cachels_t cloneCache_;
+	//cloned_cachels_t cloneCache_;
 	cuc_t		cloneUsageCounter_;
 	std::set< fim::ImagePtr > clone_pool_;
 	time_t time0_;
@@ -110,11 +110,11 @@ class Cache
 	int prefetch(cache_key_t key);
 	void touch(cache_key_t key);
 	fim::string getReport(int type = FIM_CR_CD )const;
-	~Cache(void);
 	virtual size_t byte_size(void)const;
 	size_t img_byte_size(void)const;
 	int cached_elements(void)const;
 	void desc_update(void);
+	~Cache(void);
 };
 }
 
@@ -135,7 +135,7 @@ class PACA	/* Parallel Cache */
 	std::thread t;
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 	Cache& cache_;
-	static FIM_CONSTEXPR int dpc = 0; /* debug parallel cache (FIXME: temporary) */
+	static FIM_CONSTEXPR int dpc = 0; /* debug parallel cache */
 
 	void operator () (const fid_t& rid)
 	{
