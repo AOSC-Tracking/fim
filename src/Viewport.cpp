@@ -118,6 +118,18 @@ namespace fim
 		panned_ = viewportState.panned_;
 	}
 
+	ViewportState Viewport::getState(void)const
+	{
+		ViewportState viewportState;
+      		viewportState.hsteps_ = hsteps_;
+		viewportState.vsteps_ = vsteps_;
+		viewportState.steps_ = steps_;
+		viewportState.top_ = top_;
+		viewportState.left_ = left_;
+		viewportState.panned_ = panned_;
+		return viewportState;
+	}
+
 	void Viewport::pan_up(fim_pan_t s)
 	{
 		panned_ |= 0x1;
@@ -215,8 +227,6 @@ namespace fim
 
 	fim_coo_t Viewport::viewport_height(void)const
 	{
-		/*
-		 * */
 		fim_coo_t fh = displaydevice_->status_line_height();
 		if(fh)
 			fh*=(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
@@ -485,13 +495,12 @@ namespace fim
 	void Viewport::auto_scale(void)
 	{
 		fim_scale_t xs,ys;
+
 		if( check_invalid() )
 			return;
 		else
-		{
-			xs = (fim_scale_t)this->viewport_width()  / (fim_scale_t)(image_->original_width()*image_->ascale());
-			ys = (fim_scale_t)this->viewport_height() / (fim_scale_t)image_->original_height();
-		}
+			xs = viewport_xscale(),
+			ys = viewport_yscale();
 
 		image_->rescale(FIM_MIN(xs,ys));
 	}
@@ -623,13 +632,9 @@ namespace fim
 		/*
 		 * scales the image in a way to fit in the viewport width
 		 * */
-		fim_scale_t newscale;
 		if( check_invalid() )
 			return;
-
-		newscale = ((fim_scale_t)this->viewport_width()) / ((fim_scale_t)image_->original_width()*image_->ascale());
-
-		image_->rescale(newscale);
+		image_->rescale(viewport_xscale());
 	}
 
 	void Viewport::free(void)
@@ -638,14 +643,8 @@ namespace fim
 		 * frees the currently loaded image, if any
 		 */
 		if(image_)
-		{	
-			ViewportState viewportState;
-		      	viewportState.hsteps_ = hsteps_;
-			viewportState.vsteps_ = vsteps_;
-			viewportState.steps_ = steps_;
-			viewportState.top_ = top_;
-			viewportState.left_ = left_;
-			viewportState.panned_ = panned_;
+		{
+			ViewportState viewportState = getState();
 			commandConsole.browser_.cache_.freeCachedImage(image_,&viewportState);
 		}
 		image_ = FIM_NULL;
@@ -1010,5 +1009,17 @@ ret:
        	{
 		redraw_ = sr;
        	} 
+
+	fim_scale_t Viewport::viewport_xscale(void)const
+	{
+		assert(image_);
+		return ((fim_scale_t)this->viewport_width())  / (fim_scale_t)(image_->original_width()*image_->ascale());
+	}
+
+	fim_scale_t Viewport::viewport_yscale(void)const
+	{
+		assert(image_);
+		return ((fim_scale_t)this->viewport_height()) / (fim_scale_t)(image_->original_height());
+	}
 }
 

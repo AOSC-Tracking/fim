@@ -74,6 +74,7 @@ class Viewport:public ViewportState
 	fim::string pan(const fim_char_t*a1, const fim_char_t*a2);
 	bool place(const fim_pan_t px, const fim_pan_t py);
 	void setState(const ViewportState & viewportState);
+	ViewportState getState(void)const;
 	void pan_up   (fim_pan_t s=0);
 	void pan_down (fim_pan_t s=0);
 	void pan_right(fim_pan_t s=0);
@@ -90,6 +91,8 @@ class Viewport:public ViewportState
 //	int redraw;	// there is already an external one!
 	/* viewport member functions */
 	public:
+	fim_scale_t viewport_xscale(void)const;
+	fim_scale_t viewport_yscale(void)const;
 	fim_coo_t viewport_width(void)const;
 	fim_coo_t viewport_height(void)const;
 	/* viewport member functions */
