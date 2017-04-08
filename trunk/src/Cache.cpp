@@ -348,10 +348,10 @@ ret:
 			usageCounter_[oi->getKey()]=0;
 			/* NOTE : the user should call usageCounter_.erase(key) after this ! */
 #ifdef FIM_CACHE_DEBUG
-			std::cout << "will erase  "<< oi << " " <<  fim_basename_of(oi->getName()) << " time:"<< lru_[oi] << "\n";
+			std::cout << "will erase  "<< oi << " " <<  fim_basename_of(oi->getName()) << " time:"<< lru_[oi->getKey()] << "\n";
 			std::cout << "erasing original " << fim_basename_of(oi->getName()) << "\n";
 #endif /* FIM_CACHE_DEBUG */
-			lru_.erase(oi);
+			lru_.erase(oi->getKey());
 			imageCache_.erase(reverseCache_[oi]);
 			reverseCache_.erase(oi);
 //			delete imageCache_[reverseCache_[oi]];
@@ -374,9 +374,9 @@ ret:
 		FIM_LOUD_CACHE_STUFF;
 		if(imageCache_.find(key)==imageCache_.end())
 			goto ret;
-		if(lru_.find(imageCache_.find(key)->second )==lru_.end())
+		if(lru_.find(key)==lru_.end())
 			goto ret;
-		retval = lru_.find(imageCache_.find(key)->second )->second;
+		retval = lru_.find(key)->second;
 ret:
 		return retval;
 	}
@@ -389,9 +389,9 @@ ret:
 		 * */
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
-//		std::cout << lru_[imageCache_[key]] << " -> ";
-		lru_[imageCache_[key]]= get_reltime();
-//		std::cout << lru_[imageCache_[key]] << "\n";
+//		std::cout << lru_[key] << " -> ";
+		lru_[key]= get_reltime();
+//		std::cout << lru_[key] << "\n";
 		return 0;
 	}
 
@@ -738,7 +738,6 @@ ret:
 
 	void Cache::desc_update(void)
 	{
-		/* TODO: report error code */
 #if FIM_WANT_PIC_CMTS
 		cachels_t::const_iterator ci;
 
