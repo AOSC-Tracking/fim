@@ -104,19 +104,6 @@ ret:
 		return l_img;
 	}
 
-	bool Cache::free_all(void)
-	{
-		/* free all unused elements from the cache */
-		rcachels_t rcc = reverseCache_;
-
-		FIM_LOUD_CACHE_STUFF;
-		FIM_PR(' ');
-                for(    rcachels_t::const_iterator rcci=rcc.begin(); rcci!=rcc.end();++rcci )
-			if(usageCounter_[rcci->first->getKey()]==0)
-				erase( rcci->first );
-		return true;
-	}
-
 	int Cache::free_some_lru(void)
 	{
 		/*
@@ -138,7 +125,7 @@ ret:
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "erasing clone " << fim_basename_of(oi->getName()) << "\n";
 #endif /* FIM_CACHE_DEBUG */
-		cloneUsageCounter_.erase(oi);
+		//cloneUsageCounter_.erase(oi);
 #if FIM_IMG_NAKED_PTRS
 		delete oi;
 #else /* FIM_IMG_NAKED_PTRS */
@@ -201,16 +188,6 @@ rt:
 		return ( imageCache_.find(key)!=imageCache_.end() )
 			&&
 			((*(imageCache_.find(key))).second!=FIM_NULL) ;
-	}
-
-	bool Cache::is_in_cache(fim::ImagePtr oi)const
-	{
-		FIM_LOUD_CACHE_STUFF;
-		if(!oi)
-			return false;
-		return ( reverseCache_.find(oi)!=reverseCache_.end() )	
-			&&
-			( (*(reverseCache_.find(oi))).second.first.c_str()== oi->getKey().first );
 	}
 
 	int Cache::prefetch(cache_key_t key)
@@ -326,7 +303,6 @@ ret:
 		std::cout << "going to cache: "<< ni << "\n";
 #endif /* FIM_CACHE_DEBUG */
 		this->imageCache_[ni->getKey()]=ni;
-		this->reverseCache_[ni]= ni->getKey();
 		lru_touch( ni->getKey() );
 		usageCounter_[ ni->getKey()]=0; // we don't assume any usage yet
 		setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
@@ -343,7 +319,7 @@ ret:
 		if(!oi)
 			goto ret;
 
-		if(is_in_cache(oi) )
+		if(is_in_cache(oi->getKey()) )
 		{
 			usageCounter_[oi->getKey()]=0;
 			/* NOTE : the user should call usageCounter_.erase(key) after this ! */
@@ -352,9 +328,6 @@ ret:
 			std::cout << "erasing original " << fim_basename_of(oi->getName()) << "\n";
 #endif /* FIM_CACHE_DEBUG */
 			lru_.erase(oi->getKey());
-			imageCache_.erase(reverseCache_[oi]);
-			reverseCache_.erase(oi);
-//			delete imageCache_[reverseCache_[oi]];
 #if FIM_IMG_NAKED_PTRS
 			delete oi;
 #else /* FIM_IMG_NAKED_PTRS */
@@ -410,7 +383,6 @@ ret:
 		if( !image )
 			goto err;
 
-//		if( is_in_cache(image) && usageCounter_[image->getKey()]==1 )
 		if(vsp)
 			viewportInfo_[image->getKey()] = *vsp;
 		if( is_in_clone_cache(image) )
@@ -422,7 +394,7 @@ ret:
 			goto ret;
 		}
 		else
-		if( is_in_cache(image) )
+		if( is_in_cache(image->getKey()) )
 		{
 			FIM_PR('-');
 			usageCounter_[image->getKey()]--;
@@ -545,7 +517,7 @@ ret:
 				if(!image)
 					goto ret; //means that cloning failed.
 				clone_pool_.insert(image); // we have a clone
-				cloneUsageCounter_[image]=1;
+				//cloneUsageCounter_[image]=1;
 			}
 #if FIM_WANT_MIPMAPS
 			if( getGlobalStringVariable(FIM_VID_CACHE_CONTROL).find('M') == 0 )
@@ -724,7 +696,6 @@ ret:
 		bs += FIM_VCBS(viewportInfo_);
 		/* 
 		bs += sizeof(usageCounter_);
-		bs += sizeof(reverseCache_); */
 		/* TODO: incomplete ... */
 		return bs;
 	}
