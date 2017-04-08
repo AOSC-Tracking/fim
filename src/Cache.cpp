@@ -313,21 +313,24 @@ ret:
 	{
 		/*	erases the image from the cache	*/
 		int retval=-1;
+		cache_key_t key;
 		FIM_PR(' ');
 
 		FIM_LOUD_CACHE_STUFF;
 		if(!oi)
 			goto ret;
 
-		if(is_in_cache(oi->getKey()) )
+		if( is_in_cache(key = oi->getKey()) )
 		{
-			usageCounter_[oi->getKey()]=0;
+			usageCounter_[key]=0;
 			/* NOTE : the user should call usageCounter_.erase(key) after this ! */
 #ifdef FIM_CACHE_DEBUG
 			std::cout << "will erase  "<< oi << " " <<  fim_basename_of(oi->getName()) << " time:"<< lru_[oi->getKey()] << "\n";
 			std::cout << "erasing original " << fim_basename_of(oi->getName()) << "\n";
 #endif /* FIM_CACHE_DEBUG */
-			lru_.erase(oi->getKey());
+			lru_.erase(key);
+			imageCache_.erase(key);
+			usageCounter_.erase(key);
 #if FIM_IMG_NAKED_PTRS
 			delete oi;
 #else /* FIM_IMG_NAKED_PTRS */
@@ -428,7 +431,6 @@ ret:
 						if(( key.second != FIM_E_STDIN ))
 						{	
 							this->erase( lrui );
-							usageCounter_.erase(key);
 						}
 					}
 					// missing usageCounter_.erase()..

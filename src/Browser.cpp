@@ -951,7 +951,6 @@ ret:
 		FIM_PR('*');
 		try
 		{
-#ifndef FIM_BUGGED_CACHE
 	#ifdef FIM_CACHE_DEBUG
 		if( viewport() ) std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif /* FIM_CACHE_DEBUG */
@@ -970,31 +969,6 @@ ret:
 					useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState,getGlobalIntVariable(FIM_VID_PAGE)) );// FIXME
 			viewport()->setState(viewportState);
 		}
-#else /* FIM_BUGGED_CACHE */
-		// warning : in this cases exception handling is missing
-	#ifdef FIM_READ_STDIN_IMAGE
-		if( current() != FIM_STDIN_IMAGE_NAME )
-		{
-			FIM_PR('1');
-			if(viewport())
-				viewport()->setImage( new Image(current().c_str()) );
-		}
-		else
-		{
-			FIM_PR('2');
-			if( viewport() && default_image_ )
-			{
-				// a one time only image (new, experimental)
-				viewport()->setImage(default_image_->getClone());
-				//default_image_=FIM_NULL;
-			}
-		}
-	#else
-		FIM_PR('3');
-		if( viewport() )
-			viewport()->setImage( new Image(current().c_str()) );
-	#endif /* FIM_READ_STDIN_IMAGE */
-#endif /* FIM_BUGGED_CACHE */
 		}
 		catch(FimException e)
 		{
@@ -1023,9 +997,6 @@ ret:
 
 	fim_cxr Browser::fcmd_prefetch(const args_t& args)
 	{
-#ifdef FIM_BUGGED_CACHE
-		return " prefetching disabled";
-#endif /* FIM_BUGGED_CACHE */
 		fim_int wp=1;
 		FIM_PR('*');
 
