@@ -71,11 +71,13 @@ namespace fim
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				/* FIXME: porcata assurda */
+				if(window_ &&
+				   window_->current_viewportp() && 
+				   window_->current_viewportp()->getImage())
 #if FIM_IMG_NAKED_PTRS
-				nsp = (Image*) browser_.c_image();
+					nsp = window_->current_viewportp()->getImage();
 #else /* FIM_IMG_NAKED_PTRS */
-				nsp = (Image*) browser_.c_image().get();
+					nsp = window_->current_viewportp()->getImage().get();
 #endif /* FIM_IMG_NAKED_PTRS */
 				goto err;
 			}
@@ -139,11 +141,10 @@ err:
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				/* FIXME: porcata assurda */
 #if FIM_IMG_NAKED_PTRS
-				nsp = (const Image*) browser_.c_image();
+				nsp = browser_.c_image();
 #else /* FIM_IMG_NAKED_PTRS */
-				nsp = (const Image*) browser_.c_image().get();
+				nsp = browser_.c_image().get();
 #endif /* FIM_IMG_NAKED_PTRS */
 				goto err;
 			}
