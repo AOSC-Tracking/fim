@@ -44,7 +44,6 @@ class Cache
 #if FIM_USE_CXX11
 	using cachels_t =  std::map<cache_key_t,fim::ImagePtr >;	//key -> image
 	using lru_t = std::map<cache_key_t,fim_time_t >;	//image -> time
-	using rcachels_t = std::map<fim::ImagePtr,cache_key_t >;	//image -> key
 	using ccachels_t = std::map<cache_key_t,int >;	//key -> counter
 	using vcachels_t = std::map<cache_key_t,ViewportState >;	//key -> viewport state
 	//using cloned_cachels_t = std::map<cache_key_t,std::vector<fim::ImagePtr> >;	//key -> clones
@@ -52,7 +51,6 @@ class Cache
 #else /* FIM_USE_CXX11 */
 	typedef std::map<cache_key_t,fim::ImagePtr >  cachels_t;	//key -> image
 	typedef std::map<cache_key_t,fim_time_t > 	   lru_t;	//image -> time
-	typedef std::map<fim::ImagePtr,cache_key_t >  rcachels_t;	//image -> key
 	typedef std::map<cache_key_t,int >        ccachels_t;	//key->counter
 	typedef std::map<cache_key_t,ViewportState >        vcachels_t;	//key -> viewport state
 	//typedef std::map<cache_key_t,std::vector<fim::ImagePtr> > cloned_cachels_t;	//key -> clones
@@ -60,12 +58,11 @@ class Cache
 #endif /* FIM_USE_CXX11 */
 
 	cachels_t 	imageCache_;
-	rcachels_t	reverseCache_;
 	lru_t		lru_;
 	ccachels_t	usageCounter_;
 	vcachels_t	viewportInfo_;
 	//cloned_cachels_t cloneCache_;
-	cuc_t		cloneUsageCounter_;
+	//cuc_t		cloneUsageCounter_;
 	std::set< fim::ImagePtr > clone_pool_;
 	time_t time0_;
 
@@ -73,7 +70,6 @@ class Cache
 	int lru_touch(cache_key_t key);
 
 	public:
-	bool is_in_cache(fim::ImagePtr oi)const;
 	bool is_in_cache(cache_key_t key)const;
 	private:
 	bool is_in_clone_cache(fim::ImagePtr oi)const;
@@ -85,7 +81,6 @@ class Cache
 	int erase_clone(fim::ImagePtr oi);
 	ImagePtr get_lru( bool unused = false )const;
 	int free_some_lru(void);
-	bool free_all(void);
 	int used_image(cache_key_t key)const;
 	fim_time_t get_reltime(void)const;
 	public:
