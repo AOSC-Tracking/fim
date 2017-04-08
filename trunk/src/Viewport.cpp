@@ -88,7 +88,6 @@ namespace fim
 		//reset();
 		try
 		{
-#ifndef FIM_BUGGED_CACHE
 	#ifdef FIM_CACHE_DEBUG
 			if(rhs.image_)
 				std::cout << "Viewport:Viewport():maybe will cache \"" <<rhs.image_->getName() << "\" from "<<rhs.image_<<FIM_CNS_NEWLINE ;
@@ -101,10 +100,6 @@ namespace fim
 				setImage( commandConsole.browser_.cache_.useCachedImage(rhs.image_->getKey(),&viewportState) );
 				setState(viewportState);
 			}
-#else /* FIM_BUGGED_CACHE */
-			if(rhs.image_)
-				setImage ( new Image(*rhs.image_) ) ;
-#endif /* FIM_BUGGED_CACHE */
 		}
 		catch(FimException e)
 		{
@@ -642,10 +637,8 @@ namespace fim
 		/*
 		 * frees the currently loaded image, if any
 		 */
-#ifndef FIM_BUGGED_CACHE
 		if(image_)
 		{	
-			/* ViewportState viewportState() { */
 			ViewportState viewportState;
 		      	viewportState.hsteps_ = hsteps_;
 			viewportState.vsteps_ = vsteps_;
@@ -653,19 +646,8 @@ namespace fim
 			viewportState.top_ = top_;
 			viewportState.left_ = left_;
 			viewportState.panned_ = panned_;
-			/* } */
-			if( !commandConsole.browser_.cache_.freeCachedImage(image_,&viewportState) )
-#if FIM_IMG_NAKED_PTRS
-				delete image_;	// do it yourself :P
-#else /* FIM_IMG_NAKED_PTRS */
-				;// TBD
-#endif /* FIM_IMG_NAKED_PTRS */
+			commandConsole.browser_.cache_.freeCachedImage(image_,&viewportState);
 		}
-#else /* FIM_BUGGED_CACHE */
-		// warning : in this cases exception handling is missing
-		if(image_)
-			delete image_;
-#endif /* FIM_BUGGED_CACHE */
 		image_ = FIM_NULL;
 	}
 
