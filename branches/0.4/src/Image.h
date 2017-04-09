@@ -128,7 +128,6 @@ class Image
 
 	fim_err_t setscale(fim_scale_t ns);
 	/* viewport methods ? */
-	fim_err_t scale_increment(fim_scale_t ds);
 	fim_err_t scale_multiply (fim_scale_t sm);
 	bool negate ();/* let's read e-books by consuming less power :) */
 	bool desaturate ();

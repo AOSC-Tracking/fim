@@ -151,7 +151,6 @@ class Image
 
 	fim_err_t setscale(fim_scale_t ns);
 	/* viewport member functions ? */
-	fim_err_t scale_increment(fim_scale_t ds);
 	fim_err_t scale_multiply (fim_scale_t sm);
 	fim_scale_t ascale()const{ return (ascale_>0.0?ascale_:1.0); }
 	bool negate (void);/* let's read e-books by consuming less power :) */

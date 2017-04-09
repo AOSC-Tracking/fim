@@ -250,14 +250,6 @@ namespace fim
 		if(scale_*sm>0.0)newscale_=scale_*sm;rescale();return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t Image::scale_increment(fim_scale_t ds)
-	{
-		/*
-		 * current scale_ is multiplied by a factor
-		 * */
-		if(scale_+ds>0.0)newscale_=scale_+ds;rescale();return FIM_ERR_NO_ERROR;
-	}
-
 	fim_err_t Image::setscale(fim_scale_t ns)
 	{
 		/*

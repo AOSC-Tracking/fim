@@ -509,17 +509,8 @@ ret:
 		 * current scale_ is multiplied by a factor
 		 * */
 		if(scale_*sm>0.0)
-			newscale_=scale_*sm;rescale();
-		return FIM_ERR_NO_ERROR;
-	}
-
-	fim_err_t Image::scale_increment(fim_scale_t ds)
-	{
-		/*
-		 * current scale_ is multiplied by a factor
-		 * */
-		if(scale_+ds>0.0)
-			newscale_=scale_+ds;rescale();
+			newscale_=scale_*sm,
+			rescale();
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -528,7 +519,8 @@ ret:
 		/*
 		 * a new scale_ is set
 		 * */
-		newscale_=ns;rescale();
+		newscale_=ns,
+		rescale();
 		return FIM_ERR_NO_ERROR;
 	}
 
