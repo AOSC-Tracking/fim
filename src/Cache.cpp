@@ -66,9 +66,6 @@ namespace fim
 	Cache::Cache(void)
 		:Namespace(&cc)
 		,time0_(fim_time())
-#if FIM_WANT_BDI
-		,dummy_img_()
-#endif	/* FIM_WANT_BDI */
 	{
 		FIM_LOUD_CACHE_STUFF;
 	}

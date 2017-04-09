@@ -74,11 +74,7 @@ namespace fim
 				if(window_ &&
 				   window_->current_viewportp() && 
 				   window_->current_viewportp()->getImage())
-#if FIM_IMG_NAKED_PTRS
 					nsp = window_->current_viewportp()->getImage();
-#else /* FIM_IMG_NAKED_PTRS */
-					nsp = window_->current_viewportp()->getImage().get();
-#endif /* FIM_IMG_NAKED_PTRS */
 				goto err;
 			}
 			else

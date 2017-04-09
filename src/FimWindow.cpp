@@ -1163,7 +1163,7 @@ namespace fim
 		return *viewport_;
 	}	
 
-	const ImagePtr FimWindow::getImage(void)const
+	const Image* FimWindow::getImage(void)const
 	{
 		if( current_viewportp() )
 			return current_viewportp()->getImage();
