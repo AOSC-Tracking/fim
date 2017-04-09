@@ -1046,7 +1046,7 @@ AC_ARG_ENABLE(jasper, AC_HELP_STRING([--enable-jasper], [Turns on JPEG-2000 file
 		else
 			fim_cv_libjasper=no;
 		        AC_MSG_ERROR([Sorry, it does not seem like libjasper is installed or detectable.
-			Please run --disable-exif or install libjasper in a system-wide directory instead.
+			Please run --disable-jasper or install libjasper in a system-wide directory instead.
 			]);
 		fi
 	fi],[fim_cv_libjasper=no;])
