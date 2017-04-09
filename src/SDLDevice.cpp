@@ -164,7 +164,7 @@ err:
 //			oi,// output image row index
 //			oj;// output image columns index
 
-		fim_coo_t lor,loc;
+		//fim_coo_t lor,loc;
     		
 		if( oroff <0 )
 		       	return -8;
@@ -189,8 +189,8 @@ err:
 		 * no more than orows-oroff rows and ocols-ocoff columns will be rendered, however
 		 * */
 
-		lor = orows-1;
-		loc = ocols-1;
+		//lor = orows-1;
+		//loc = ocols-1;
 		
 		return  FIM_ERR_GENERIC;
 	}
@@ -555,7 +555,7 @@ err:
 //		fim_sys_int keypress_=0;
 		bool ctrl_on=0;
 		bool alt_on=0;
-		bool shift_on=0;
+		//bool shift_on=0;
 		fim_sys_int ret=0;
 		SDL_Event event=*eventp;
 
@@ -595,7 +595,7 @@ err:
 				if(event.key.keysym.mod == KMOD_RALT  || event.key.keysym.mod == KMOD_LALT  ) 
 					alt_on=true;
 				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )
-					shift_on=true;
+					;//shift_on=true;
 
 			//	std::cout << "sym : " << (fim_int)event.key.keysym.sym << "\n" ;
 			//	std::cout << "uni : " << (fim_int)event.key.keysym.unicode<< "\n" ;

@@ -2,7 +2,7 @@
 /*
  FbiStuffDjvu.cpp : fim functions for decoding DJVU files
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2017 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -114,7 +114,7 @@ djvu_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	if(page>=i->npages || page<0)goto err;
         ds->dp = ddjvu_page_create_by_pageno (ds->dd, page);/* pages, from 0 */
         if(!ds->dp) goto err;
-        while (!ddjvu_page_decoding_done (ds->dp)){1;/* we just kill time (FIXME : inefficient) */}
+        while (!ddjvu_page_decoding_done (ds->dp)){FIM_NO_OP_STATEMENT;/* we just kill time (FIXME : inefficient) */}
 
         ds->prect.w = ddjvu_page_get_width  (ds->dp) ;
 	ds->prect.h = ddjvu_page_get_height (ds->dp) ;

@@ -507,7 +507,7 @@ err:
 				dir=fim_dirname(dir);
 			}
 #endif /* HAVE_LIBGEN_H */
-			if( int ret = chdir(dir.c_str()) )
+			if( chdir(dir.c_str()) )
 			       	return (fim::string("cd error : ")+fim::string(strerror(errno)));
 		}
 		setVariable(FIM_VID_PWD,fcmd_pwd(args_t()).c_str());

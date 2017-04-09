@@ -1,5 +1,5 @@
 /*
- (c) 2011-2016 Michele Martone
+ (c) 2011-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#include <unistd.h> // read
 #include <stdio.h>
 int main(int argc,char *argv[])
 {
