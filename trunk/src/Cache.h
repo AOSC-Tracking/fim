@@ -167,7 +167,7 @@ class PACA	/* Parallel Cache */
 		if(dpc) std::cout << __FUNCTION__ << ": " << rid << "\n";
 		if( t.joinable() )
 		{
-			if(dpc) std::cout << __FUNCTION__ << ": " << rid << " return\n"; return;
+			//if(dpc) std::cout << __FUNCTION__ << ": " << rid << " return\n"; return;
 			if(dpc) std::cout << __FUNCTION__ << ": " << rid << " join()\n";
 	       		t.join();
 		}
