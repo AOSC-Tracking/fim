@@ -205,6 +205,25 @@ class ViewportState
 	public:
 	fim_off_t	steps_,hsteps_,vsteps_,top_,left_,panned_ ;	/* viewport variables */
 	ViewportState()	:steps_(0) ,hsteps_(0) ,vsteps_(0) ,top_(0) ,left_(0) ,panned_(0x0) {}
+	ViewportState store(ViewportState & viewportState)const
+	{
+      		viewportState.hsteps_ = hsteps_;
+		viewportState.vsteps_ = vsteps_;
+		viewportState.steps_ = steps_;
+		viewportState.top_ = top_;
+		viewportState.left_ = left_;
+		viewportState.panned_ = panned_;
+		return viewportState;
+	}
+	void restore(const ViewportState & viewportState)
+	{
+      		hsteps_ = viewportState.hsteps_;
+		vsteps_ = viewportState.vsteps_;
+		steps_ = viewportState.steps_;
+		top_ = viewportState.top_;
+		left_ = viewportState.left_;
+		panned_ = viewportState.panned_;
+	}
 };
 
 	class Arg;
