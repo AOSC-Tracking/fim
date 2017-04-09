@@ -306,10 +306,10 @@ ret:
 #if FIM_WANT_PIC_LBFL
 		flist_(tlist_),
 #endif /* FIM_WANT_PIC_LBFL */
-#if FIM_WANT_BACKGROUND_LOAD
-		pcache_(cache_),
-#endif /* FIM_WANT_BACKGROUND_LOAD */
 		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
+#if FIM_WANT_BACKGROUND_LOAD
+		,pcache_(cache_)
+#endif /* FIM_WANT_BACKGROUND_LOAD */
 	{	
 	}
 
@@ -1625,7 +1625,8 @@ ret:
 		/*
 		 */
 		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
-		const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages()),fc = n_files();
+		const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages());
+		fim_int fc = n_files();
 		fim_int gv = 0,nf = cf,mv = 0,np = cp;
 		FIM_PR('*');
 
@@ -1679,7 +1680,7 @@ ret:
 				std::string varname(s+1,sp);
 				std::string varval = cc.id_.vd_[fim_basename_of(current())].getStringVariable(varname);
 
-				for(size_t fi=0;fi<fc;++fi)
+				for(fim_int fi=0;fi<fc;++fi)
 				{
 					size_t idx=(cf+neg*(1+fi))%fc;
 					std::string nvarval = cc.id_.vd_[fim_basename_of(flist_[idx])].getStringVariable(varname);
@@ -2116,6 +2117,7 @@ parsed_limits:
 					case( UniqFileNameMatch): msg = "limiting to unique base filenames..."; break;
 					case(FirstFileNameMatch): msg = "limiting to first base filenames..."; break;
 					case( LastFileNameMatch): msg = "limiting to last base filenames..."; break;
+					default: msg = ""; /* not foreseen in this branch */
 				}
 			       	commandConsole_.set_status_bar(msg, "*");
 			}
@@ -2205,6 +2207,7 @@ parsed_limits:
 					case(PartialFileNameMatch): msg = "limiting to partial filename match..."; break;
 					case(VarMatch            ): msg = string("limiting variable \"") + string(rlist[0]) + string("\" matching value \"") + string(rlist[1]) + string("\" ..."); break;
 					case(CmtMatch            ): msg = "limiting to comment match..."; break;
+					default: msg = ""; /* not foreseen in this branch */
 				}
 			       	commandConsole_.set_status_bar(msg, "*");
 			}

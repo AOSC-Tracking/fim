@@ -377,13 +377,13 @@ void sanitize_string_from_nongraph_except_newline(fim_char_t *s, int c)
 	int n=c;
 	if(s)
 		while(*s && (c--||!n))
+		{
 			if(!isgraph(*s)&&*s!='\n')
-			{
-				*s=' ';
+				*s=' ',
 				++s;
-			}
 			else
 			       	++s;
+		}
 	return;
 }
 
@@ -395,13 +395,13 @@ void sanitize_string_from_nongraph(fim_char_t *s, int c)
 	int n=c;
 	if(s)
 		while(*s && (c--||!n))
+		{
 			if(!isgraph(*s)||*s=='\n')
-			{
-				*s=' ';
+				*s=' ',
 				++s;
-			}
 			else
 			       	++s;
+		}
 	return;
 }
 

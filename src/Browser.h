@@ -135,7 +135,6 @@ class flist_t : public std::vector<fim::fle_t>
 	flist_t copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive = true) const
 {
 	flist_t nlist;
-	size_t ecount = 0;
 #if FIM_USE_CXX11
 	const auto bit=this->cbegin();
 	const auto eit=this->cend();

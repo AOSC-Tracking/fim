@@ -735,6 +735,7 @@ ret:
 					FbiStuff::free_image(rb);
 			}
 		}
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t Image::rescale( fim_scale_t ns )
