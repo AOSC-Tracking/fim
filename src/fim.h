@@ -151,8 +151,8 @@
 #define FIM_WANT_FLIST_STAT ( HAVE_SYS_STAT_H && 1 ) /* stat() info in the file list */
 #define FIM_WANT_SORT_BY_STAT_INFO FIM_WANT_FLIST_STAT /* using stat() info for sorting (FIXME: shall cache this info at first sort or on -R) */
 #define FIM_WANT_MAGIC_FIMDESC 1
-#define FIM_EXPERIMEMTAL_IMG_NMSPC 1
-#define FIM_EXPERIMEMTAL_VAR_EXPANDOS 1
+#define FIM_EXPERIMENTAL_IMG_NMSPC 1
+#define FIM_EXPERIMENTAL_VAR_EXPANDOS 1
 #define FIM_FONT_MAGNIFY_FACTOR FIM_WANT_FONT_MAGNIFY_FACTOR /* Framebuffer font magnifying factor, >=1 (EXPERIMENTAL). Useful with very high resolutions and small fonts. */
 #define FIM_FONT_MAGNIFY_FACTOR_MIN 1  /* Framebuffer font magnifying factor, minimal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_MAX 16 /* Framebuffer font magnifying factor, maximal value. */
