@@ -978,7 +978,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 				cc.push(lineptr,pf);
 				// printf("%s\n",lineptr);
 				lineptr=FIM_NULL;
-				if(bool wv = false)
+				if(false)
 					++fc, printf("%s %d\n",FIM_CNS_CLEARTERM,fc);
 			}
 
