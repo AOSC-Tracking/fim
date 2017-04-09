@@ -137,11 +137,7 @@ err:
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-#if FIM_IMG_NAKED_PTRS
 				nsp = browser_.c_image();
-#else /* FIM_IMG_NAKED_PTRS */
-				nsp = browser_.c_image().get();
-#endif /* FIM_IMG_NAKED_PTRS */
 				goto err;
 			}
 			else

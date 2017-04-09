@@ -530,29 +530,23 @@ namespace fim
 
         Image* Viewport::getImage(void)const
 	{
-		/*
-		 * returns the image pointer, regardless its use! 
-		 * */
+		/* returns the image pointer, regardless its use!  */
 #if FIM_WANT_BDI
 		if(!image_)
 			return &fim_dummy_img;
 		else
 #endif	/* FIM_WANT_BDI */
+#if FIM_IMG_NAKED_PTRS
 			return image_;
+#else /* FIM_IMG_NAKED_PTRS */
+			return image_.get();
+#endif /* FIM_IMG_NAKED_PTRS */
 	}
 
         const Image* Viewport::c_getImage(void)const
 	{
-		/*
-		 * returns the image pointer, regardless its use! 
-		 *
-		 * FIXME : this check is heavy.. move it downwards the call tree!
-		 * */
-#if FIM_WANT_BDI
-		return check_valid() ? image_ : getImage();
-#else	/* FIM_WANT_BDI */
-		return check_valid() ? image_ : FIM_NULL;
-#endif	/* FIM_WANT_BDI */
+		/* returns the image pointer, regardless its use!  */
+		return getImage();
 	}
 
         void Viewport::setImage(fim::ImagePtr ni)
@@ -655,17 +649,11 @@ namespace fim
 
         bool Viewport::check_valid(void)const
 	{
-		/*
-		 * yes :)
-		 * */
 		return ! check_invalid();
 	}
 
         bool Viewport::check_invalid(void)const
 	{
-		/*
-		 * this should not happen! (and probably doesn't happen :) )
-		 * */
 		if(!image_)
 			return true;
 		else
