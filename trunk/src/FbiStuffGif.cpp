@@ -2,7 +2,7 @@
 /*
  FbiStuffGif.cpp : fbi functions for GIF files, modified for fim
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -243,7 +243,7 @@ gif_init(FILE *fp, const fim_char_t *filename, unsigned int page,
  oops:
     if (FbiStuff::fim_filereading_debug())
 	FIM_FBI_PRINTF("gif: fatal error, aborting\n");
-    if(h->gif);
+    if(h->gif)
     {
     	DGifCloseFile(h->gif FIM_DGifCloseFile_ARG);
         fim_free(h->gif);

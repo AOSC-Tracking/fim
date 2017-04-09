@@ -4,6 +4,7 @@
                 Version 0.4-rc3+?
 
  * fix: was likely using uninitialized data in Image()
+ * fix: gif error handling could have led to NULL pointer usage.
 
                 Version 0.4
 
