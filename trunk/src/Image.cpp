@@ -1111,7 +1111,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 				case('%'):
 					snprintf(clbp, rbc, "%c",'%');
 				break;
-#if FIM_EXPERIMEMTAL_VAR_EXPANDOS 
+#if FIM_EXPERIMENTAL_VAR_EXPANDOS 
 				case('?'): /* "%?forward_comment?_filename?back_comment?" */
 #if 1
 				if(strlen(sp+1)>=4)
@@ -1183,7 +1183,7 @@ strdone:
 				}
 #endif
 				break;
-#endif /* FIM_EXPERIMEMTAL_VAR_EXPANDOS */
+#endif /* FIM_EXPERIMENTAL_VAR_EXPANDOS */
 				// default:
 				/* rejecting char; may display an error message here */
 			}
