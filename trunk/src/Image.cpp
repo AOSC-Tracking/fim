@@ -1109,7 +1109,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 				if(strlen(sp+1)>=4)
 				{
 					char *fcp = FIM_NULL, *vip = FIM_NULL;
-					if( 2 == sscanf(sp,"?%a[A-Z_a-z]?%a[^?]?",&vip,&fcp) )
+					if( 2 == sscanf(sp,"?%m[A-Z_a-z]?%m[^?]?",&vip,&fcp) )
 					if(fcp && vip)
 					{
 						char *fcpp = fcp;
