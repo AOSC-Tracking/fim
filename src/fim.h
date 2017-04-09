@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -142,8 +142,8 @@
 #define FIM_WANT_PIC_LVDN 1 /* pictures load variables description namespace (FIXME: experimental) */
 #define FIM_WANT_PIC_LBFL 1 /* limit browser file list (see FIM_FLT_LIMIT) */
 #define FIM_WANT_PIC_RCMT 1 /* remember last comment with special "#!fim:=" syntax */
-#define FIM_EXPERIMEMTAL_IMG_NMSPC 1
-#define FIM_EXPERIMEMTAL_VAR_EXPANDOS 1
+#define FIM_EXPERIMENTAL_IMG_NMSPC 1
+#define FIM_EXPERIMENTAL_VAR_EXPANDOS 1
 #define FIM_FONT_MAGNIFY_FACTOR 1 /* EXPERIMENTAL,UNFINISHED: this only works on SDL and breaks the rest. Keep to 1. */
 
 #ifdef FIM_AUTOCMDS

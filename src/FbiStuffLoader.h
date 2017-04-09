@@ -2,7 +2,7 @@
 /*
  FbiStuffLoader.h : fbi functions for loading files, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -64,9 +64,9 @@ struct ida_image_info {
     int               thumbnail;
     unsigned int      real_width;
     unsigned int      real_height;
-#if FIM_EXPERIMEMTAL_IMG_NMSPC
+#if FIM_EXPERIMENTAL_IMG_NMSPC
     fim::Namespace *nsp;
-#endif /* FIM_EXPERIMEMTAL_IMG_NMSPC */
+#endif /* FIM_EXPERIMENTAL_IMG_NMSPC */
 };
 
 struct ida_image {
