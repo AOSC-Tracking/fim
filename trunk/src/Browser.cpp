@@ -1682,7 +1682,7 @@ ret:
 
 				for(fim_int fi=0;fi<fc;++fi)
 				{
-					size_t idx=(cf+neg*(1+fi))%fc;
+					size_t idx=FIM_MOD((cf+neg*(1+fi)+fc),fc);
 					std::string nvarval = cc.id_.vd_[fim_basename_of(flist_[idx])].getStringVariable(varname);
 					if(nvarval != varval && ! ( ner == true && !nvarval.size() ) )
 					{
