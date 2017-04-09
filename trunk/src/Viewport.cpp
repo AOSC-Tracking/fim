@@ -101,7 +101,7 @@ namespace fim
 			{
 				ViewportState viewportState;
 				setImage( commandConsole.browser_.cache_.useCachedImage(rhs.image_->getKey(),&viewportState) );
-				setState(viewportState);
+				restore(viewportState);
 			}
 		}
 		catch(FimException e)
@@ -109,28 +109,6 @@ namespace fim
 			image_=FIM_NULL;
 			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << FIM_CNS_NEWLINE;
 		}
-	}
-
-	void Viewport::setState(const ViewportState & viewportState)
-	{
-      		hsteps_ = viewportState.hsteps_;
-		vsteps_ = viewportState.vsteps_;
-		steps_ = viewportState.steps_;
-		top_ = viewportState.top_;
-		left_ = viewportState.left_;
-		panned_ = viewportState.panned_;
-	}
-
-	ViewportState Viewport::getState(void)const
-	{
-		ViewportState viewportState;
-      		viewportState.hsteps_ = hsteps_;
-		viewportState.vsteps_ = vsteps_;
-		viewportState.steps_ = steps_;
-		viewportState.top_ = top_;
-		viewportState.left_ = left_;
-		viewportState.panned_ = panned_;
-		return viewportState;
 	}
 
 	void Viewport::pan_up(fim_pan_t s)
@@ -641,7 +619,7 @@ namespace fim
 		 */
 		if(image_)
 		{
-			ViewportState viewportState = getState();
+			ViewportState viewportState = store(viewportState);
 			commandConsole.browser_.cache_.freeCachedImage(image_,&viewportState);
 		}
 		image_ = FIM_NULL;
