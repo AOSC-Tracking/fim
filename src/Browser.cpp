@@ -1666,7 +1666,7 @@ ret:
 			isrj = (c=='+' || c=='-');
 
 #if FIM_WANT_VAR_GOTO
-			if( c == '-' || c == '+' && s[1] && ( isalpha(s[1]) || s[1] == '_' ) )
+			if( isrj && s[1] && ( isalpha(s[1]) || s[1] == '_' ) )
 			{
 				const char * sp = s+2;
 				int neg=(c=='-'?-1:1);
