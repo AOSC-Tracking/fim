@@ -95,10 +95,6 @@ class Cache
 	Cache& operator= (const Cache&rhs) { return *this; }
 #endif /* FIM_USE_CXX11 */
 	public:
-#if FIM_WANT_BDI
-	Image dummy_img_;	// experimental
-	Image& dummy_img(void){return dummy_img_;}	// experimental
-#endif	/* FIM_WANT_BDI */
 	bool freeCachedImage(ImagePtr image, const ViewportState *vsp);
 	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page = 0);
 	ImagePtr setAndCacheStdinCachedImage(ImagePtr image);

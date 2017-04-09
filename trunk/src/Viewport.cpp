@@ -36,6 +36,9 @@
 #define FIM_WANT_VIEWPORT_TRANSFORM 1
 namespace fim
 {
+#if FIM_WANT_BDI
+	static Image fim_dummy_img;
+#endif	/* FIM_WANT_BDI */
 
 	Viewport::Viewport(
 			CommandConsole& c
@@ -525,20 +528,20 @@ namespace fim
 	}
 #endif
 
-        ImagePtr Viewport::getImage(void)const
+        Image* Viewport::getImage(void)const
 	{
 		/*
 		 * returns the image pointer, regardless its use! 
 		 * */
 #if FIM_WANT_BDI
 		if(!image_)
-			return ImagePtr(&commandConsole.browser_.cache_.dummy_img());
+			return &fim_dummy_img;
 		else
 #endif	/* FIM_WANT_BDI */
 			return image_;
 	}
 
-        const ImagePtr Viewport::c_getImage(void)const
+        const Image* Viewport::c_getImage(void)const
 	{
 		/*
 		 * returns the image pointer, regardless its use! 

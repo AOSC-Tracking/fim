@@ -2529,24 +2529,24 @@ err:
 		return FIM_CMD_HELP_ALIGN;
 	}
 
-	ImageCPtr Browser::c_image(void)const
+	const Image* Browser::c_image(void)const
 	{
 		/*
 		 *	a const pointer to the currently loaded image
 		 */
-		ImageCPtr image = FIM_NULL;
+		const Image* image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->c_getImage();
 		return image;
 	}
 
-	ImagePtr Browser::image(void)const
+	Image* Browser::image(void)const
 	{
 		/*
 		 *	the image loaded in the current viewport is returned
 		 */
-		ImagePtr image = FIM_NULL;
+		Image* image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
 			image = commandConsole_.current_viewport()->getImage();
