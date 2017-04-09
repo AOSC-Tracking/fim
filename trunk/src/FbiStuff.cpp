@@ -459,7 +459,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim
 //#endif /* FIM_WANTS_SLOW_RESIZE */
 	fim_byte_t* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx=0,dx;
+	register int sx=0,dx=0;
 
 	/*
 	 * this gives a ~ 50% gain
@@ -467,7 +467,6 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim
 		float d0f=0.0,d1f=0.0;
 		int   d0i=0,d1i=0;
 
-		dx=0;
 		if(src->i.width) for (sx=0;sx<(int)src->i.width-1;++sx )
 		{
 			d1f+=h->xscale;
@@ -497,7 +496,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim
 			sx/=3;
 		}
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
-		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
 
 
@@ -506,15 +505,14 @@ static inline void op_resize_work_row_expand_i_unrolled(const struct ida_image *
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	const fim_byte_t* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx,dx;
+	register int sx=0,dx=0;
 	/*
 	 * interleaved loop unrolling ..
 	 * this gives a ~ 50% gain
 	 * */
 		float d0f=0.0,d1f=0.0;
 		int   d0i=0,d1i=0;
-		dx=0;
-		sx=0;
+
 		if(src->i.width)
 		for (   ;sx<(int)src->i.width-1-4;sx+=4)
 		{
@@ -592,7 +590,7 @@ static inline void op_resize_work_row_expand_i_unrolled(const struct ida_image *
 			d0i=(unsigned int)d0f;
 		}
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
-		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
 
 const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *src, struct ida_rect *rect, fim_byte_t *FIM_RSTRCT dst, int line, void *FIM_RSTRCT data, int sr)
@@ -600,7 +598,7 @@ const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *sr
 	struct op_resize_state *FIM_RSTRCT h = (struct op_resize_state *)data;
 	const fim_byte_t*FIM_RSTRCT  srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx,dx;
+	register int sx=0,dx=0;
 
 	/*
 	 * this gives a ~ 70% gain
@@ -608,8 +606,6 @@ const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *sr
 		float d0f=0.0,d1f=0.0;
 		int   d0i=0,d1i=0;
 
-		sx=0;
-		dx=0;
 		if(src->i.width) for (   ;sx<(int)src->i.width;++sx )
 		{
 			d1f+=h->xscale;
@@ -657,7 +653,7 @@ const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *sr
 			dst[3*dx+2] = srcline[  3*sx+2] ;
 		}
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
-		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
 
 static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
@@ -665,7 +661,7 @@ static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *s
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	fim_byte_t* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx,dx;
+	register int sx=0,dx=0;
 
 	/*
 	 * this gives a ~ 60% gain
@@ -673,8 +669,6 @@ static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *s
 		float d0f=0.0,d1f=0.0;
 		int   d0i=0,d1i=0;
 
-		sx=0;
-		dx=0;
 		if(src->i.width) for (   ;sx<(int)src->i.width-1;++sx )
 		{
 			d1f+=h->xscale;
@@ -717,7 +711,7 @@ static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *s
 			sx/=3;
 		}
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
-		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
+		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
 
 #endif /* FIM_HAS_MISC_FBI_OPS */

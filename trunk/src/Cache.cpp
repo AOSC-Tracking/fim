@@ -695,7 +695,8 @@ ret:
 		bs += FIM_VCBS(viewportInfo_);
 		/* 
 		bs += sizeof(usageCounter_);
-		/* TODO: incomplete ... */
+		TODO: incomplete ...
+		*/
 		return bs;
 	}
 
