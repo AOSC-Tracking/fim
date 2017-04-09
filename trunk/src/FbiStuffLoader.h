@@ -1,4 +1,4 @@
-* $LastChangedDate$ */
+/* $LastChangedDate$ */
 /*
  FbiStuffLoader.h : fbi functions for loading files, modified for fim
 
