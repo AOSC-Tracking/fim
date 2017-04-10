@@ -164,6 +164,7 @@
 #define FIM_WANT_IMAGE_LOAD_TIME 1
 #define FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK 1
 #define FIM_WANT_PROGRESS_RECURSIVE_LOADING 0 /* print a line when loading recursively directories in background */
+#define FIM_WANT_RESIZE_HUGE_AFTER_LOAD 1 /* resize huge images at load time */
 #define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* in C++11, prefer smart pointers for Image* */
 #if FIM_USE_CXX11
 #define FIM_NOEXCEPT noexcept
