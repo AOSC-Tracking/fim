@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1184)
+ * will resize huge images not to exceed too much screen size.
+   (TODO: will introduce control option for this soon)
 # (r1181)
  * fix: gif error handling could have led to NULL pointer usage.
 # (r1156)
