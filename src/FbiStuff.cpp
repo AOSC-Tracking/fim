@@ -2204,8 +2204,8 @@ found_a_loader:	/* we have a loader */
 		fim_scale_t ef = 1.5; // estimation factor (of max viewport to current window)
 		fim_scale_t mswe = ef*cc.current_viewport()->viewport_width(); // max screen width estimate
 		fim_scale_t mshe = ef*cc.current_viewport()->viewport_height(); // max screen height estimate
-		fim_scale_t ws = ((fim_scale_t)img->i.width ) / (mf*mswe);
-		fim_scale_t hs = ((fim_scale_t)img->i.height) / (mf*mshe);
+		fim_scale_t ws = FIM_INT_SCALE_FRAC(img->i.width  , mf*mswe);
+		fim_scale_t hs = FIM_INT_SCALE_FRAC(img->i.height , mf*mshe);
 		if( ws > FIM_CNS_SCALEFACTOR_ONE && hs > FIM_CNS_SCALEFACTOR_ONE )
 		{
 			// std::cout << img->i.width << " " << img->i.height << std::endl;

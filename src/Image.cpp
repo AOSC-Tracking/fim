@@ -325,10 +325,10 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		/*
 		 * pointers are blanked and values set to default 
 		 * */
-                scale_   = 1.0;
-                newscale_= 1.0;
-                ascale_  = 1.0;
-                angle_   = 0.0;
+                scale_   = FIM_CNS_SCALE_DEFAULT;
+                newscale_= FIM_CNS_SCALE_DEFAULT;
+                ascale_  = FIM_CNS_SCALE_DEFAULT;
+                angle_   = FIM_CNS_ANGLE_DEFAULT;
 		setVariable(FIM_VID_SCALE  ,scale_*100);
 		setVariable(FIM_VID_ASCALE ,ascale_);
 		setVariable(FIM_VID_ANGLE  ,angle_);
