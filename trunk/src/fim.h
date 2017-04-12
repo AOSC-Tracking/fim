@@ -418,8 +418,10 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_EXAMPLE_FILENAME	 "file.jpg"
 #define FIM_CNS_SCALEFACTOR	 1.322f
 #define FIM_CNS_SCALEFACTOR_ONE 1.0f
+#define FIM_CNS_SCALE_DEFAULT FIM_CNS_SCALEFACTOR_ONE
 #define FIM_CNS_ANGLE_ONE 1.0f
 #define FIM_CNS_ANGLE_ZERO 0.0f
+#define FIM_CNS_ANGLE_DEFAULT FIM_CNS_ANGLE_ZERO
 #define FIM_CNS_GAMMA_DEFAULT 1.0
 #define FIM_CNS_GAMMA_DEFAULT_STR FIM_XSTRINGIFY(FIM_CNS_GAMMA_DEFAULT)
 #define FIM_CNS_SCALEFACTOR_MULTIPLIER 1.1f
@@ -497,6 +499,7 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
 #define FIM_MOD(X,C)        ((((X)%(C))+(C))%(C))
 #define FIM_INT_FRAC(Q,D) (((Q)+((D)-1))/(D))
+#define FIM_INT_SCALE_FRAC(Q,D) ((Q)/(D)) /* division of integer values by fim_scale_t */
 
 #define FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP \
 ".nf\n"\

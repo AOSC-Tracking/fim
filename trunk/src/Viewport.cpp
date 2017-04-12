@@ -597,7 +597,7 @@ namespace fim
 		if( check_invalid() )
 			return;
 
-		newscale = ((fim_scale_t)this->viewport_height()) / (fim_scale_t)image_->original_height();
+		newscale = FIM_INT_SCALE_FRAC(this->viewport_height(),image_->original_height());
 
 		image_->rescale(newscale);
 	}
@@ -661,8 +661,8 @@ namespace fim
 		 * */
 		if(factor<=0.0)
 			return;
-		left_ = (fim_off_t)ceilf(((fim_scale_t)left_)/factor);
-		top_  = (fim_off_t)ceilf(((fim_scale_t)top_ )/factor);
+		left_ = (fim_off_t)ceilf(FIM_INT_SCALE_FRAC(left_,factor));
+		top_  = (fim_off_t)ceilf(FIM_INT_SCALE_FRAC(top_ ,factor));
 		//if(!panned_  /* && we_want_centering */ )
 			this->recenter();
 	}
@@ -982,13 +982,13 @@ ret:
 	fim_scale_t Viewport::viewport_xscale(void)const
 	{
 		assert(image_);
-		return ((fim_scale_t)this->viewport_width())  / (fim_scale_t)(image_->original_width()*image_->ascale());
+		return FIM_INT_SCALE_FRAC(this->viewport_width(),image_->original_width()*image_->ascale());
 	}
 
 	fim_scale_t Viewport::viewport_yscale(void)const
 	{
 		assert(image_);
-		return ((fim_scale_t)this->viewport_height()) / (fim_scale_t)(image_->original_height());
+		return FIM_INT_SCALE_FRAC(this->viewport_height(),image_->original_height());
 	}
 }
 

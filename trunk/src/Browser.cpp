@@ -420,9 +420,9 @@ nop:
 			if( sl == 1 && ( fc =='+' || fc == '-' ) )
 			{
 				if( fc == '+' )
-					newscale=(fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
+					newscale = getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 				if( fc == '-' )
-					newscale=(fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
+					newscale = getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 				goto comeon;
 			}
 			if( sl >= 2 && ( fc == '+' || fc == '-' ) )
@@ -2397,7 +2397,7 @@ nop:
 
 		if(c_image())
 		{
-			//angle = (double)getGlobalFloatVariable(FIM_VID_ANGLE);
+			//angle = getGlobalFloatVariable(FIM_VID_ANGLE);
 //			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREROTATE,current());
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if( c_image() )
@@ -2433,7 +2433,7 @@ ret:
 			fim_scale_t factor;
 			factor = firstforzero(args);
 			if( !factor )
-				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
+				factor = getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if(c_image())
 			{
@@ -2469,7 +2469,7 @@ ret:
 			fim_scale_t factor;
 			factor = firstforzero(args);
 			if(!factor)
-				factor = (fim_scale_t)getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
+				factor = getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if(c_image())
 			{
