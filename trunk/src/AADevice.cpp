@@ -431,7 +431,7 @@ static bool aainvalid;
 	/*	The mulx and muly are not reliable */
 #if 0
 		if(ascii_context_->mulx>0 && ascii_context_->muly>0)
-			cc.setVariable("aascale",FIM_INT_SCALE_FRAC(ascii_context_->muly,ascii_context_->mulx));
+			cc.setVariable("aascale",FIM_INT_SCALE_FRAC(ascii_context_->muly,static_cast<fim_scale_t>(ascii_context_->mulx)));
 		cc.setVariable("aamuly",((fim_int)(ascii_context_->muly)));
 		cc.setVariable("aamulx",((fim_int)(ascii_context_->mulx)));
 #endif

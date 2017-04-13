@@ -597,7 +597,7 @@ namespace fim
 		if( check_invalid() )
 			return;
 
-		newscale = FIM_INT_SCALE_FRAC(this->viewport_height(),image_->original_height());
+		newscale = FIM_INT_SCALE_FRAC(this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
 
 		image_->rescale(newscale);
 	}
@@ -988,7 +988,7 @@ ret:
 	fim_scale_t Viewport::viewport_yscale(void)const
 	{
 		assert(image_);
-		return FIM_INT_SCALE_FRAC(this->viewport_height(),image_->original_height());
+		return FIM_INT_SCALE_FRAC(this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
 	}
 }
 

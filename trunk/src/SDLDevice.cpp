@@ -51,6 +51,7 @@ namespace fim
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 #define FIM_WANT_EXPERIMENTAL_MOUSE_PAN 1
+#define FIM_WANT_SDL_CLICK_MOUSE_SUPPORT 1
 
 #ifdef FIM_SDL_DEBUG
 #define FIM_SDL_INPUT_DEBUG(C,MSG)  \
@@ -709,8 +710,62 @@ err:
 				{
 					fim_coo_t x,y;
 					Uint8 ms=SDL_GetMouseState(&x,&y);
+#if FIM_WANT_SDL_CLICK_MOUSE_SUPPORT
+					Viewport* cv = cc.current_viewport();
+					fim_coo_t xt = cv->viewport_width()/3;
+					fim_coo_t yt = cv->viewport_height()/3;
+
+					if(!cc.inConsole() && ms&SDL_BUTTON_LMASK)
+					{
+					if( x < xt )
+					{
+						*c='b'; return 1;
+						if( y < yt )
+						{
+						}
+						else
+						if( y < 2*yt )
+						{
+						}
+						else
+						{
+						}
+					}
+					else
+					if( x < 2*xt )
+					{
+						if( y < yt )
+						{
+							*c='+'; return 1;
+						}
+						else
+						if( y < 2*yt )
+						{
+							*c='='; return 1;
+						}
+						else
+						{
+							*c='-'; return 1;
+						}
+					}
+					else
+					{
+						*c='n'; return 1;
+						if( y < yt )
+						{
+						}
+						else
+						if( y < 2*yt )
+						{
+						}
+						else
+						{
+						}
+					}
+					}
+#endif /* FIM_WANT_SDL_CLICK_MOUSE_SUPPORT */
+					cout << "mouse clicked at "<<x<<" "<<y<<" : "<< ((x>cv->viewport_width()/2)?'r':'l') <<"; state: "<<ms<<"\n";
 #if 0
-					cout << "mouse clicked at "<<x<<" "<<y<<" : "<< ((x>this->width()/2)?'r':'l') <<"; state: "<<ms<<"\n";
 					if(ms&SDL_BUTTON_RMASK) cout << "rmask\n";
 					if(ms&SDL_BUTTON_LMASK) cout << "lmask\n";
 					if(ms&SDL_BUTTON_MMASK) cout << "mmask\n";
