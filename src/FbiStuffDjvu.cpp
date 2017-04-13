@@ -121,8 +121,8 @@ djvu_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 #if 1
 	ddjvu_pageinfo_t pi;
 	ddjvu_document_get_pageinfo(ds->dd,page,&pi);
-        ds->prect.w = ((fim_scale_t) (ds->prect.w))* FIM_INT_SCALE_FRAC(prd,pi.dpi);
-        ds->prect.h = ((fim_scale_t) (ds->prect.h))* FIM_INT_SCALE_FRAC(prd,pi.dpi);
+        ds->prect.w = ((fim_scale_t) (ds->prect.w))* FIM_INT_SCALE_FRAC(prd,static_cast<fim_scale_t>(pi.dpi));
+        ds->prect.h = ((fim_scale_t) (ds->prect.h))* FIM_INT_SCALE_FRAC(prd,static_cast<fim_scale_t>(pi.dpi));
 	pi.dpi=prd;
 #endif
 
