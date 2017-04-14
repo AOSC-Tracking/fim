@@ -12,8 +12,8 @@
  * scale '<'/scale '>' will shrink/magnify the image using cached mipmaps.
 # (r1155)
  * fix: the largest mipmap was not always being used.
-# (r1153,1154)
- * fimgs script will probe for unrar-free/rar/unrar-nonfree.
+# (r1153,1154,1195)
+ * fimgs script will probe for unrar-nonfree/rar/unrar-free (in this order).
  * fimgs man page updated.
 # (r1149)
  * Added a '_caption_over_image_fmt' variable to customize overlay string contents.
