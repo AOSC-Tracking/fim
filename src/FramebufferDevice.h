@@ -530,7 +530,7 @@ void init_one(int32_t *lut, int bits, int shift)
 
 	//void status_screen(const fim_char_t *msg, int draw);
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
-	fim_bpp_t get_bpp(void)FIM_OVERRIDE{return fb_var_.bits_per_pixel; };
+	fim_bpp_t get_bpp(void)const FIM_OVERRIDE{return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice(void);
 	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 };

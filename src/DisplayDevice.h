@@ -71,7 +71,7 @@ class DisplayDevice
 	virtual int get_chars_per_line(void)const=0;
 	virtual int get_chars_per_column(void)const=0;
 	virtual fim_coo_t width(void)const=0;
-	virtual fim_bpp_t get_bpp(void)=0;
+	virtual fim_bpp_t get_bpp(void)const=0;
 	virtual fim_coo_t height(void)const=0;
 	virtual fim_coo_t status_line_height(void)const=0;
 	/* virtual fim_coo_t font_width(void)const{return 1;} */
