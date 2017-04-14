@@ -445,8 +445,8 @@ static bool aainvalid;
 	}
 	int AADevice::get_chars_per_line(){return aa_scrwidth(ascii_context_);}
 	int AADevice::get_chars_per_column(){return aa_scrheight(ascii_context_);}
-	fim_coo_t AADevice::txt_width() { return aa_scrwidth(ascii_context_ ) ;}
-	fim_coo_t AADevice::txt_height(){ return aa_scrheight(ascii_context_) ;}
+	fim_coo_t AADevice::txt_width(void)const { return aa_scrwidth(ascii_context_ ) ;}
+	fim_coo_t AADevice::txt_height(void)const{ return aa_scrheight(ascii_context_) ;}
 	fim_coo_t AADevice::width(void)const { return aa_imgwidth(ascii_context_ ) ;}
 	fim_coo_t AADevice::height(void)const{ return aa_imgheight(ascii_context_) ;}
 

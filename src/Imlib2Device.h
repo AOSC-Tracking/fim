@@ -89,8 +89,8 @@ class Imlib2Device:public DisplayDevice
 	/* TEMPORARY */
 	void status_screen_(int desc,int draw_output){ return ; }
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color);
-	fim_coo_t txt_width(void) ;
-	fim_coo_t txt_height(void) ;
+	fim_coo_t txt_width(void)const;
+	fim_coo_t txt_height(void)const;
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	private:
 	bool allowed_resolution(fim_coo_t w, fim_coo_t h);

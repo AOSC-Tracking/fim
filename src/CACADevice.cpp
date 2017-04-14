@@ -334,8 +334,8 @@
 	}
 
 	int CACADevice::get_chars_per_line(){return txt_width();}
-	int CACADevice::txt_width() { return width() ;}
-	int CACADevice::txt_height(){ return width() ;}
+	int CACADevice::txt_width(void)const { return width() ;}
+	int CACADevice::txt_height(void)const{ return width() ;}
 	int CACADevice::width(void)const { return caca_get_height();}
 	int CACADevice::height(void)const{ return caca_get_width() ;}
 	fim_err_t CACADevice::status_line(const fim_char_t *msg)
