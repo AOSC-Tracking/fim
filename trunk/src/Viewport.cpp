@@ -167,32 +167,36 @@ namespace fim
 		}
 	}
 
-	bool Viewport::onBottom(void)const
+	bool Viewport::onBottom(fim_coo_t approx_fraction)const
 	{
 		if( check_invalid() )
 			return false;
-		return (top_ + viewport_height() >= image_->height());
+		fim_coo_t tol = approx_fraction > 1 ? viewport_height() / approx_fraction : 0;
+		return (top_ + viewport_height() + tol >= image_->height());
 	}
 
-	bool Viewport::onRight(void)const
+	bool Viewport::onRight(fim_coo_t approx_fraction)const
 	{
 		if( check_invalid() )
 			return false;
-		return (left_ + viewport_width() >= image_->width());
+		fim_coo_t tol = approx_fraction > 1 ? viewport_width() / approx_fraction : 0;
+		return (left_ + viewport_width() + tol >= image_->width());
 	}
 
-	bool Viewport::onLeft(void)const
+	bool Viewport::onLeft(fim_coo_t approx_fraction)const
 	{
 		if( check_invalid() )
 			return false;
-		return (left_ <= 0 );
+		fim_coo_t tol = approx_fraction > 1 ? viewport_width() / approx_fraction : 0;
+		return (left_ <= tol );
 	}
 
-	bool Viewport::onTop(void)const
+	bool Viewport::onTop(fim_coo_t approx_fraction)const
 	{
 		if( check_invalid() )
 			return false;
-		return (top_ <= 0 );
+		fim_coo_t tol = approx_fraction > 1 ? viewport_height() / approx_fraction : 0;
+		return (top_ <= tol );
 	}
 
 	fim_coo_t Viewport::viewport_width(void)const

@@ -2303,10 +2303,12 @@ nop:
 		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 		if(c_image() && viewport())
 		{
-			if(viewport()->onRight() && viewport()->onBottom())
+			fim_coo_t approx_fraction=16;
+
+			if(viewport()->onRight(approx_fraction) && viewport()->onBottom(approx_fraction))
 				next();
 			else
-			if(viewport()->onRight())
+			if(viewport()->onRight(approx_fraction))
 			{
 				viewport()->pan("down",FIM_CNS_SCROLL_DEFAULT);
 				while(!(viewport()->onLeft()))viewport()->pan("left",FIM_CNS_SCROLL_DEFAULT);

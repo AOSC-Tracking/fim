@@ -79,10 +79,10 @@ class Viewport:public ViewportState
 	void pan_down (fim_pan_t s=0);
 	void pan_right(fim_pan_t s=0);
 	void pan_left (fim_pan_t s=0);
-	bool onBottom(void)const;
-	bool onRight(void)const;
-	bool onLeft(void)const;
-	bool onTop(void)const;
+	bool onBottom(fim_coo_t approx_fraction=0)const;
+	bool onRight(fim_coo_t approx_fraction=0)const;
+	bool onLeft(fim_coo_t approx_fraction=0)const;
+	bool onTop(fim_coo_t approx_fraction=0)const;
 
 	fim_coo_t xorigin(void);
 	fim_coo_t yorigin(void);
