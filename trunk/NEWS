@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1196)
+ * In case of CBZ,CBR,PDF,PS,DVI file, fimgs will use '--autotop --autowidth'.
 # (r1184)
  * will resize huge images not to exceed too much screen size.
    (TODO: will introduce control option for this soon)

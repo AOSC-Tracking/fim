@@ -83,7 +83,9 @@ check_in_path md5sum   || die "no md5sum in \$PATH"
 
 
 # parse options
-fbiopts="-w"
+fbi_read_opts="--autotop --autowidth"
+fbi_default_opts="--autozoom"
+fbiopts="$fbi_default_opts"
 gsopts="-q"
 passwd=""
 opt=1
@@ -152,8 +154,12 @@ In order to uncompress ZIP archives, fimgs will use 'zip'.
 
 In order to fetch http:// or https:// prefixed URLS, 'wget' will be used.
 
+In case of a CBZ, CBR, PDF, PS, or DVI file, will invoke \fB fim\fP with '$fbi_read_opts'.
+
 .SH OPTIONS
 To pass through options to \fB fim\fP, you may specify them after "--".
+
+Defaut options are '$fbi_default_opts'.
 
 .B -r {resolution}
 Specify resolution for the 'gs' -r option (e.g.: 96x96; default $GSRESOLUTION). 
@@ -308,6 +314,13 @@ then
 [[ "$f" =~ .tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
 [[ "$f" =~ .tar$    ]] && ( $UNTAR "$f" -C "$DIR" ) 
 [[ "$f" =~ .tar.bz2$ ]] && ( $UNBZ "$f" -C "$DIR" ) 
+
+function add_fbi_read_opts() { fbiopts="$fbiopts $fbi_read_opts"; }
+[[ "$f" =~ .cbr$    ]] && add_fbi_read_opts;
+[[ "$f" =~ .cbz$    ]] && add_fbi_read_opts;
+[[ "$f" =~ .ps$     ]] && add_fbi_read_opts;
+[[ "$f" =~ .dvi$    ]] && add_fbi_read_opts;
+[[ "$f" =~ .pdf$    ]] && add_fbi_read_opts;
 
 # ... but this fimgs script is lazy and it gets satisfied with a bare decompress !
 

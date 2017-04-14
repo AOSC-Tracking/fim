@@ -15,14 +15,18 @@ If the $TMPDIR environment variable is unset, /dev/shm and /var/tmp will be chec
 The $$ above is the script process ID.
 The script shall delete the temporary directory when \fB fim\fP terminates.
 
-In order to uncompress RAR archives, fimgs will use 'unrar\-free' or 'rar' or 'unrar\-nonfree'.
+In order to uncompress RAR archives, fimgs will use 'unrar\-nonfree' or 'rar' or 'unrar\-free'.
 
 In order to uncompress ZIP archives, fimgs will use 'zip'.
 
 In order to fetch http:// or https:// prefixed URLS, 'wget' will be used.
 
+In case of a CBZ, CBR, PDF, PS, or DVI file, will invoke \fB fim\fP with '\-\-autotop \-\-autowidth'.
+
 .SH OPTIONS
 To pass through options to \fB fim\fP, you may specify them after "\-\-".
+
+Defaut options are '\-\-autozoom'.
 
 .B \-r {resolution}
 Specify resolution for the 'gs' \-r option (e.g.: 96x96; default 120x120). 
@@ -42,6 +46,6 @@ Will display a help message.
 .\" rendered with 100, 120 or 150 dpi (default is 75).
 .SH SEE ALSO
 fim(1), fimrc(1), gs(1), fbi(1), fbgs(1), bash(1)
-,zip(1), unrar\-free(1), tar(1), gzip(1)
+,zip(1), rar(1), rar\-free(1), unrar\-free(1), tar(1), gzip(1)
 .SH AUTHOR
 Michele Martone <dezperado _ GUESS _ autistici.org>. 
