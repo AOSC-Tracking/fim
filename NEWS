@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1197)
+ * if scrollable border less than 1/16 of screen, 'scrollforward' will skip it.
 # (r1196)
  * In case of CBZ,CBR,PDF,PS,DVI file, fimgs will use '--autotop --autowidth'.
 # (r1184)
