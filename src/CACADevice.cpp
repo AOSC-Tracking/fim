@@ -2,7 +2,7 @@
 /*
  CACADevice.cpp : cacalib device Fim driver file
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -336,8 +336,8 @@
 	int CACADevice::get_chars_per_line(){return txt_width();}
 	int CACADevice::txt_width() { return width() ;}
 	int CACADevice::txt_height(){ return width() ;}
-	int CACADevice::width() { return caca_get_height();}
-	int CACADevice::height(){ return caca_get_width() ;}
+	int CACADevice::width(void)const { return caca_get_height();}
+	int CACADevice::height(void)const{ return caca_get_width() ;}
 	fim_err_t CACADevice::status_line(const fim_char_t *msg)
 	{
 		caca_printf(0,txt_height()-1,"%s",msg);

@@ -2,7 +2,7 @@
 /*
  Imlib2.cpp : Imlib2 device Fim driver file
 
- (c) 2011-2016 Michele Martone
+ (c) 2011-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -355,12 +355,12 @@ static fim_err_t initialize_keys(sym_keys_t &sym_keys)
 		return width() / f_->width;
 	}
 
-	fim_coo_t Imlib2Device::width(void)
+	fim_coo_t Imlib2Device::width(void)const
 	{
 		return current_w_;
 	}
 
-	fim_coo_t Imlib2Device::height(void)
+	fim_coo_t Imlib2Device::height(void)const
 	{
 		return current_h_;
 	}

@@ -2,7 +2,7 @@
 /*
  Imlib2Device.h : Imlib2 device Fim driver header file
 
- (c) 2011-2016 Michele Martone
+ (c) 2011-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -70,8 +70,8 @@ class Imlib2Device:public DisplayDevice
 
 	int get_chars_per_line(void) ;
 	int get_chars_per_column(void);
-	fim_coo_t width(void);
-	fim_coo_t height(void);
+	fim_coo_t width(void)const;
+	fim_coo_t height(void)const;
 	fim_err_t status_line(const fim_char_t *msg);
 	fim_bool_t handle_console_switch(void){return false;}
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);

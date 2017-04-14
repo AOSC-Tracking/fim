@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -500,12 +500,12 @@ void init_one(int32_t *lut, int bits, int shift)
 	    lut[i] = (i >> (8 - bits)) << shift;
 }
 
-	int width(void)FIM_OVERRIDE 
+	int width(void)const FIM_OVERRIDE 
 	{
 		return fb_var_.xres;
 	}
 
-	int height(void)FIM_OVERRIDE 
+	int height(void)const FIM_OVERRIDE 
 	{
 		return fb_var_.yres;
 	}
