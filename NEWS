@@ -5,7 +5,7 @@
 
 # (r1204)
  * bugfix: conversion from external program was vulnerable to failure due to missing check.
-# (r1202)
+# (r1202,r1205)
  * if an image has been decoded from a temporary file, its name is in i:_buffered_in_tmpfile.
 # (r1200)
  * will consider magic number "<svg" enough to classify a file as SVG.
