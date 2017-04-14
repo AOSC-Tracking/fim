@@ -68,8 +68,8 @@ class DisplayDevice
 	virtual void flush(void){};
 	virtual void lock(void){}
 	virtual void unlock(void){}
-	virtual int get_chars_per_line(void)const=0;
-	virtual int get_chars_per_column(void)const=0;
+	virtual fim_coo_t get_chars_per_line(void)const=0;
+	virtual fim_coo_t get_chars_per_column(void)const=0;
 	virtual fim_coo_t width(void)const=0;
 	virtual fim_bpp_t get_bpp(void)const=0;
 	virtual fim_coo_t height(void)const=0;

@@ -333,7 +333,7 @@
 		caca_end();
 	}
 
-	int CACADevice::get_chars_per_line(void)const{return txt_width();}
+	fim_coo_t CACADevice::get_chars_per_line(void)const{return txt_width();}
 	int CACADevice::txt_width(void)const { return width() ;}
 	int CACADevice::txt_height(void)const{ return width() ;}
 	int CACADevice::width(void)const { return caca_get_height();}
@@ -351,12 +351,12 @@
 		/* FIXME : only if initialized !*/
 		return FIM_ERR_GENERIC;
 	}
-	fim_bool_t CACADevice::handle_console_switch(){return true;}
+	fim_bool_t CACADevice::handle_console_switch(void){return true;}
 	fim_err_t CACADevice::console_control(fim_cc_t code){return FIM_ERR_GENERIC;}
 /*
  * This is embryo code and should be used for experimental purposes only!
  */
-	int CACADevice::get_chars_per_column(void)const{return height();}
+	fim_coo_t CACADevice::get_chars_per_column(void)const{return height();}
 	fim_coo_t CACADevice::status_line_height(void)const
 	{
 		return 1;
