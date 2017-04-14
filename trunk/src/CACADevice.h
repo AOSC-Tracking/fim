@@ -57,8 +57,8 @@ class CACADevice:public DisplayDevice
 	void finalize(void);
 
 	int get_chars_per_line(void);
-	int txt_width(void);
-	int txt_height(void);
+	int txt_width(void)const;
+	int txt_height(void)const;
 	int width(void)const;
 	int height(void)const;
 	fim_err_t status_line(const fim_char_t *msg);

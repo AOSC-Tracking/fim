@@ -64,8 +64,8 @@ class AADevice:public DisplayDevice
 
 	int get_chars_per_line(void)FIM_OVERRIDE ;
 	int get_chars_per_column(void)FIM_OVERRIDE ;
-	fim_coo_t txt_width(void);
-	fim_coo_t txt_height(void);
+	fim_coo_t txt_width(void)const;
+	fim_coo_t txt_height(void)const;
 	fim_coo_t width(void)const FIM_OVERRIDE ;
 	fim_coo_t height(void)const FIM_OVERRIDE ;
 	fim_err_t status_line(const fim_char_t *msg) FIM_OVERRIDE ;
