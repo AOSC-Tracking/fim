@@ -32,6 +32,7 @@
 #include <unistd.h>	/* execlp (popen is dangerous) */
 #include <stdlib.h>	/* mkstemp */
 #include <math.h>
+#include <sys/wait.h>  /* waitpid */
 #include <string.h>
 #include <stdarg.h>	/* va_start, va_end, ... */
 #if FIM_WITH_ARCHIVE
@@ -1475,7 +1476,7 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 	if(0!=pipe(p))
 		goto err;
 
-	switch(fork())
+	switch(pid_t pid = fork())
 	{
 		case -1:
 		fim_perror("fork");
@@ -1498,6 +1499,7 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 	        rc=execvp(cmd,argv);
 		exit(rc);
 		default:/* parent */
+		waitpid(pid,NULL,0);
 		close(p[1]);
 		fp = fdopen(p[0],"r");
 		if(FIM_NULL==fp)

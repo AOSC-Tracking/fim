@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1204)
+ * bugfix: conversion from external program was vulnerable to failure due to missing check.
 # (r1202)
  * if an image has been decoded from a temporary file, its name is in i:_buffered_in_tmpfile.
 # (r1200)

@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,7 @@
 #include <unistd.h>	/* execlp (popen is dangerous) */
 #include <stdlib.h>	/* mkstemp */
 #include <math.h>
+#include <sys/wait.h>  /* waitpid */
 #include <string.h>
 #include <stdarg.h>	/* va_start, va_end, ... */
 
@@ -1342,7 +1343,7 @@ FILE* FbiStuff::fim_execlp(const char *cmd, ...)
 	if(0!=pipe(p))
 		return NULL;
 
-	switch(fork())
+	switch(pid_t pid = fork())
 	{
 		case -1:
 		perror("fork");
@@ -1365,6 +1366,7 @@ FILE* FbiStuff::fim_execlp(const char *cmd, ...)
 	        rc=execvp(cmd,argv);
 		exit(rc);
 		default:/* parent */
+		waitpid(pid,NULL,0);
 		close(p[1]);
 		fp = fdopen(p[0],"r");
 		if(NULL==fp)
