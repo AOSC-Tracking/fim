@@ -68,7 +68,7 @@ static Window   win;
 		parse_optstring(os);
 	}
 
-fim_bpp_t Imlib2Device::get_bpp(){return depth; }
+fim_bpp_t Imlib2Device::get_bpp(void)const{return depth; }
 
 fim_err_t Imlib2Device::parse_optstring(const fim_char_t *os)
 {

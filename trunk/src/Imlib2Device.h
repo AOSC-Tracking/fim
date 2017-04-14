@@ -82,7 +82,7 @@ class Imlib2Device:public DisplayDevice
 	void flush(void);
 	void lock(void);
 	void unlock(void);
-	fim_bpp_t get_bpp(void);
+	fim_bpp_t get_bpp(void)const;
 	virtual fim_coo_t status_line_height(void)const;
 	private:
 	fim_sys_int get_input_i2l(fim_key_t * c);
