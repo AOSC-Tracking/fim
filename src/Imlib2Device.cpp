@@ -345,12 +345,12 @@ static fim_err_t initialize_keys(sym_keys_t &sym_keys)
 		finalized_=true;
 	}
 
-	int Imlib2Device::get_chars_per_column(void)
+	int Imlib2Device::get_chars_per_column(void)const
 	{
 		return height() / f_->height;
 	}
 
-	int Imlib2Device::get_chars_per_line(void)
+	int Imlib2Device::get_chars_per_line(void)const
 	{
 		return width() / f_->width;
 	}

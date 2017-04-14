@@ -300,8 +300,8 @@ class FramebufferDevice:public DisplayDevice
 
 	void console_switch(fim_bool_t is_busy);
 
-	int  fb_font_width(void);
-	int  fb_font_height(void);
+	int  fb_font_width(void)const;
+	int  fb_font_height(void)const;
 
 	int status_line(const fim_char_t *msg) FIM_OVERRIDE ;
 
@@ -510,12 +510,12 @@ void init_one(int32_t *lut, int bits, int shift)
 		return fb_var_.yres;
 	}
 
-	int get_chars_per_column(void)FIM_OVERRIDE 
+	int get_chars_per_column(void)const FIM_OVERRIDE 
 	{
 		return fb_var_.yres / fb_font_height();
 	}
 
-	int get_chars_per_line(void)FIM_OVERRIDE 
+	int get_chars_per_line(void)const FIM_OVERRIDE 
 	{
 		return fb_var_.xres / fb_font_width();
 	}

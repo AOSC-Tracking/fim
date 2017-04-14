@@ -70,8 +70,8 @@ class SDLDevice:public DisplayDevice
 	fim_err_t initialize(sym_keys_t &sym_keys)FIM_OVERRIDE;
 	void finalize(void) FIM_OVERRIDE;
 
-	int get_chars_per_line(void) FIM_OVERRIDE;
-	int get_chars_per_column(void) FIM_OVERRIDE;
+	int get_chars_per_line(void)const FIM_OVERRIDE;
+	int get_chars_per_column(void)const FIM_OVERRIDE;
 	fim_coo_t width(void)const FIM_OVERRIDE;
 	fim_coo_t height(void)const FIM_OVERRIDE;
 	fim_err_t status_line(const fim_char_t *msg) FIM_OVERRIDE;

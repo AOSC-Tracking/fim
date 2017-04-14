@@ -68,8 +68,8 @@ class Imlib2Device:public DisplayDevice
 	fim_err_t il2_initialize(void);
 	void finalize(void) ;
 
-	int get_chars_per_line(void) ;
-	int get_chars_per_column(void);
+	int get_chars_per_line(void)const ;
+	int get_chars_per_column(void)const;
 	fim_coo_t width(void)const;
 	fim_coo_t height(void)const;
 	fim_err_t status_line(const fim_char_t *msg);
