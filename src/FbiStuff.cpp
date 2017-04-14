@@ -1591,6 +1591,12 @@ static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h)
 	}
 }
 
+static fim::string fim_tempnam(const fim::string pfx="", const fim::string sfx="")
+{
+	return FIM_TMP_FILENAME + sfx;
+	// return tempnam(NULL,NULL); // deprecated
+}
+
 /*static struct ida_image**/
 struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim_int page, Namespace *nsp)
 {
@@ -1629,6 +1635,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
+    fim::string tpfn = fim_tempnam("fim_temporary_file","png");
 
     FIM_PR('*');
     if( re == FIM_CNS_EMPTY_STRING )
@@ -2024,14 +2031,14 @@ probe_loader:
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_DIA "'...", "*");
-	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",FIM_TMP_FILENAME ".png",FIM_NULL))&& 0==fim_fclose (fp))
+	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",tpfn.c_str(),FIM_NULL))&& 0==fim_fclose (fp))
 	{
-		if (FIM_NULL == (fp = fim_fopen(FIM_TMP_FILENAME".png","r")))
+		if (FIM_NULL == (fp = fim_fopen(tpfn.c_str(),"r")))
 		/* this could happen in case dia was removed from the system */
 			goto shall_skip_header;
 		else
 		{
-			unlink(FIM_TMP_FILENAME".png");
+			unlink(tpfn.c_str());
 			loader = &png_loader;
 		}
    	}
@@ -2081,8 +2088,8 @@ probe_loader:
 	 * note that braindamaged inkscape doesn't export to stdout ...
 	 * */
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_INKSCAPE "'...", "*");
-	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"", filename,FIM_TMP_FILENAME );
-	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --without-gui --export-png \"%s\"", filename,FIM_TMP_FILENAME );
+	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"", filename,tpfn);
+	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --without-gui --export-png \"%s\"", filename,tpfn);
 #if 0
 	/* FIXME : the following code should work, but it doesn't */
 	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png","/dev/stdout",FIM_NULL)))
@@ -2096,13 +2103,13 @@ probe_loader:
 	}
 #else
 	// The following are the arguments to inkscape in order to convert an SVG into PNG:
-	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--without-gui","--export-png",FIM_TMP_FILENAME,FIM_NULL))&&0==fim_fclose(fp))
+	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--without-gui","--export-png",tpfn.c_str(),FIM_NULL))&&0==fim_fclose(fp))
 	{
-		if (FIM_NULL == (fp = fim_fopen(FIM_TMP_FILENAME,"r")))
+		if (FIM_NULL == (fp = fim_fopen(tpfn,"r")))
 			goto shall_skip_header;
 		else
 		{
-			unlink(FIM_TMP_FILENAME);
+			unlink(tpfn);
 			loader = &png_loader;
 		}
 	}
