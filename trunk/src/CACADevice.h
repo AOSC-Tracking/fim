@@ -56,7 +56,7 @@ class CACADevice:public DisplayDevice
 	int initialize(sym_keys_t &sym_keys);
 	void finalize(void);
 
-	int get_chars_per_line(void)const;
+	fim_coo_t get_chars_per_line(void)const;
 	int txt_width(void)const;
 	int txt_height(void)const;
 	int width(void)const;
@@ -74,7 +74,7 @@ class CACADevice:public DisplayDevice
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) {/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
 
-	int get_chars_per_column(void)const;
+	fim_coo_t get_chars_per_column(void)const;
 	fim_bpp_t get_bpp(void)const
 	{
 		return 1;

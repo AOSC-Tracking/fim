@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -1828,7 +1828,7 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 	FramebufferDevice::FramebufferDevice(MiniConsole& mc):	
 	DisplayDevice(mc)
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	FramebufferDevice::FramebufferDevice():	
+	FramebufferDevice::FramebufferDevice(void):	
 	DisplayDevice()
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,vt_(0)

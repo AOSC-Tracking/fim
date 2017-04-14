@@ -49,8 +49,8 @@ class DummyDisplayDevice:public DisplayDevice
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	virtual ~DummyDisplayDevice(void){}
 
-	virtual int get_chars_per_line(void)const{return 0;/* this is a special value */}
-	virtual int get_chars_per_column(void)const{return 0;/* */}
+	virtual fim_coo_t get_chars_per_line(void)const{return 0;/* this is a special value */}
+	virtual fim_coo_t get_chars_per_column(void)const{return 0;/* */}
 	virtual fim_coo_t width(void)const{return 1;/* 0 would be so cruel */}
 	virtual fim_coo_t height(void)const{return 1;/* 0 would be so cruel */}
 	virtual fim_err_t status_line(const fim_char_t *msg){return FIM_ERR_NO_ERROR;}

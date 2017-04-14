@@ -510,12 +510,12 @@ void init_one(int32_t *lut, int bits, int shift)
 		return fb_var_.yres;
 	}
 
-	int get_chars_per_column(void)const FIM_OVERRIDE 
+	fim_coo_t get_chars_per_column(void)const FIM_OVERRIDE 
 	{
 		return fb_var_.yres / fb_font_height();
 	}
 
-	int get_chars_per_line(void)const FIM_OVERRIDE 
+	fim_coo_t get_chars_per_line(void)const FIM_OVERRIDE 
 	{
 		return fb_var_.xres / fb_font_width();
 	}
