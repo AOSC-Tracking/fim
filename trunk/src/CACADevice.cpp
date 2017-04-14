@@ -333,7 +333,7 @@
 		caca_end();
 	}
 
-	int CACADevice::get_chars_per_line(){return txt_width();}
+	int CACADevice::get_chars_per_line(void)const{return txt_width();}
 	int CACADevice::txt_width(void)const { return width() ;}
 	int CACADevice::txt_height(void)const{ return width() ;}
 	int CACADevice::width(void)const { return caca_get_height();}
@@ -356,7 +356,7 @@
 /*
  * This is embryo code and should be used for experimental purposes only!
  */
-	int CACADevice::get_chars_per_column(){return height();}
+	int CACADevice::get_chars_per_column(void)const{return height();}
 	fim_coo_t CACADevice::status_line_height(void)const
 	{
 		return 1;

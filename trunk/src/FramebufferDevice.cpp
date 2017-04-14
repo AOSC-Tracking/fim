@@ -1643,8 +1643,8 @@ int FramebufferDevice::fb_text_init2(void)
 {
     return fs_init_fb(255);
 }
-	int  FramebufferDevice::fb_font_width(void) { return f_->swidth(); }
-	int  FramebufferDevice::fb_font_height(void) { return f_->sheight(); }
+	int  FramebufferDevice::fb_font_width(void)const { return f_->swidth(); }
+	int  FramebufferDevice::fb_font_height(void)const { return f_->sheight(); }
 
 int FramebufferDevice::fs_init_fb(int white8)
 {

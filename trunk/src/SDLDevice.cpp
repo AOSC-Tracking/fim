@@ -478,12 +478,12 @@ err:
 		SDL_Quit();
 	}
 
-	int SDLDevice::get_chars_per_column(void)
+	int SDLDevice::get_chars_per_column(void)const
 	{
 		return height() / f_->sheight();
 	}
 
-	int SDLDevice::get_chars_per_line(void)
+	int SDLDevice::get_chars_per_line(void)const
 	{
 		return width() / f_->swidth();
 	}
