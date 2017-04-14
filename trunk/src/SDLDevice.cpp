@@ -488,12 +488,12 @@ err:
 		return width() / f_->swidth();
 	}
 
-	fim_coo_t SDLDevice::width(void)
+	fim_coo_t SDLDevice::width(void)const
 	{
 		return current_w_;
 	}
 
-	fim_coo_t SDLDevice::height(void)
+	fim_coo_t SDLDevice::height(void)const
 	{
 		return current_h_;
 	}

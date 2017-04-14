@@ -2,7 +2,7 @@
 /*
  SDLDevice.h : sdllib device Fim driver header file
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -72,8 +72,8 @@ class SDLDevice:public DisplayDevice
 
 	int get_chars_per_line(void) FIM_OVERRIDE;
 	int get_chars_per_column(void) FIM_OVERRIDE;
-	fim_coo_t width(void) FIM_OVERRIDE;
-	fim_coo_t height(void) FIM_OVERRIDE;
+	fim_coo_t width(void)const FIM_OVERRIDE;
+	fim_coo_t height(void)const FIM_OVERRIDE;
 	fim_err_t status_line(const fim_char_t *msg) FIM_OVERRIDE;
 	fim_bool_t handle_console_switch(void) FIM_OVERRIDE { return false; }
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT;

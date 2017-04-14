@@ -2,7 +2,7 @@
 /*
  CACADevice.h : cacalib device Fim driver header file
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -59,8 +59,8 @@ class CACADevice:public DisplayDevice
 	int get_chars_per_line(void);
 	int txt_width(void);
 	int txt_height(void);
-	int width(void);
-	int height(void);
+	int width(void)const;
+	int height(void)const;
 	fim_err_t status_line(const fim_char_t *msg);
 	void status_screen(int desc,int draw_output){}
 	fim_err_t console_control(fim_cc_t code);

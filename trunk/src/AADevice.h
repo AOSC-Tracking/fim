@@ -2,7 +2,7 @@
 /*
  AADevice.h : aalib device Fim driver header file
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -66,8 +66,8 @@ class AADevice:public DisplayDevice
 	int get_chars_per_column(void)FIM_OVERRIDE ;
 	fim_coo_t txt_width(void);
 	fim_coo_t txt_height(void);
-	fim_coo_t width(void)FIM_OVERRIDE ;
-	fim_coo_t height(void)FIM_OVERRIDE ;
+	fim_coo_t width(void)const FIM_OVERRIDE ;
+	fim_coo_t height(void)const FIM_OVERRIDE ;
 	fim_err_t status_line(const fim_char_t *msg) FIM_OVERRIDE ;
 	//void status_screen(int desc,int draw_output){}
 	fim_bool_t handle_console_switch(void)

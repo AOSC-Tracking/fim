@@ -2,7 +2,7 @@
 /*
  AADevice.cpp : aalib device Fim driver file
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -447,8 +447,8 @@ static bool aainvalid;
 	int AADevice::get_chars_per_column(){return aa_scrheight(ascii_context_);}
 	fim_coo_t AADevice::txt_width() { return aa_scrwidth(ascii_context_ ) ;}
 	fim_coo_t AADevice::txt_height(){ return aa_scrheight(ascii_context_) ;}
-	fim_coo_t AADevice::width() { return aa_imgwidth(ascii_context_ ) ;}
-	fim_coo_t AADevice::height(){ return aa_imgheight(ascii_context_) ;}
+	fim_coo_t AADevice::width(void)const { return aa_imgwidth(ascii_context_ ) ;}
+	fim_coo_t AADevice::height(void)const{ return aa_imgheight(ascii_context_) ;}
 
 	fim_err_t AADevice::init_console(void)
 	{

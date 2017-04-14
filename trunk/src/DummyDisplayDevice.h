@@ -2,7 +2,7 @@
 /*
  DummyDisplayDevice.h : virtual device Fim driver header file
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -51,8 +51,8 @@ class DummyDisplayDevice:public DisplayDevice
 
 	virtual int get_chars_per_line(void){return 0;/* this is a special value */}
 	virtual int get_chars_per_column(void){return 0;/* */}
-	virtual fim_coo_t width(void){return 1;/* 0 would be so cruel */}
-	virtual fim_coo_t height(void){return 1;/* 0 would be so cruel */}
+	virtual fim_coo_t width(void)const{return 1;/* 0 would be so cruel */}
+	virtual fim_coo_t height(void)const{return 1;/* 0 would be so cruel */}
 	virtual fim_err_t status_line(const fim_char_t *msg){return FIM_ERR_NO_ERROR;}
 	virtual fim_err_t console_control(fim_cc_t code){return FIM_ERR_NO_ERROR;}
 	virtual fim_bool_t handle_console_switch(void){return false;}
