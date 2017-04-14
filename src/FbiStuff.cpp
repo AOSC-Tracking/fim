@@ -1597,15 +1597,22 @@ static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h)
 
 static fim::string fim_tempnam(const fim::string pfx="", const fim::string sfx="")
 {
-	std::string tfn=FIM_TMP_FILENAME;
-	std::string tsfx="__FIM_TEMPORARY_FILE";
+	std::string tfn;
+	std::string tsfx = "__FIM_TEMPORARY_FILE";
 	tsfx += sfx;
 
-	//tfn=std::string(std::experimental::filesystem::temp_directory_path());
-	//tfn=tempnam(NULL,tsfx.c_str()); // deprecated
-	//tfn=tmpnam(NULL); // deprecated
-	// std::cout << "using temporary file:" << tfn << std::endl;
-	
+#ifdef FIM_TMP_FILENAME 
+	if( FIM_TMP_FILENAME && strlen(FIM_TMP_FILENAME) > 1 )
+		tfn = FIM_TMP_FILENAME;
+	else
+#endif /* FIM_TMP_FILENAME */
+	{
+		//tfn = std::string(std::experimental::filesystem::temp_directory_path());
+		tfn = tempnam(NULL,tsfx.c_str()); // deprecated
+		//tfn = tmpnam(NULL); // deprecated
+		// std::cout << "using temporary file:" << tfn << std::endl;
+	}
+
 	return tfn;
 }
 
