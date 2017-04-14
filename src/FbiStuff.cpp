@@ -1645,12 +1645,12 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
-    fim::string tpfn = fim_tempnam("fim_temporary_file",".png");
 
     FIM_PR('*');
     if( re == FIM_CNS_EMPTY_STRING )
 	    re = FIM_CNS_ARCHIVE_RE;
 #endif /* FIM_WITH_ARCHIVE */
+    fim::string tpfn = fim_tempnam("fim_temporary_file",".png");
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
     if(vl)
