@@ -32,9 +32,11 @@
 #include <stdio.h>	/* fdopen, tmpfile */
 #include <unistd.h>	/* execlp (popen is dangerous) */
 #include <cstdlib>	/* mkstemp */
+#include <cstdio>	/* tempnam */
 #include <math.h>
 #include <string.h>
 #include <stdarg.h>	/* va_start, va_end, ... */
+//#include <experimental/filesystem> // std::experimental::filesystem::temp_directory_path
 #if FIM_WITH_ARCHIVE
 #include <archive.h>
 #include <archive_entry.h>
@@ -1593,8 +1595,16 @@ static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h)
 
 static fim::string fim_tempnam(const fim::string pfx="", const fim::string sfx="")
 {
-	return FIM_TMP_FILENAME + sfx;
-	// return tempnam(NULL,NULL); // deprecated
+	std::string tfn=FIM_TMP_FILENAME;
+	std::string tsfx="__FIM_TEMPORARY_FILE";
+	tsfx += sfx;
+
+	//tfn=std::string(std::experimental::filesystem::temp_directory_path());
+	//tfn=tempnam(NULL,tsfx.c_str()); // deprecated
+	//tfn=tmpnam(NULL); // deprecated
+	// std::cout << "using temporary file:" << tfn << std::endl;
+	
+	return tfn;
 }
 
 /*static struct ida_image**/
@@ -1635,7 +1645,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
-    fim::string tpfn = fim_tempnam("fim_temporary_file","png");
+    fim::string tpfn = fim_tempnam("fim_temporary_file",".png");
 
     FIM_PR('*');
     if( re == FIM_CNS_EMPTY_STRING )
@@ -2034,12 +2044,13 @@ probe_loader:
 	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",tpfn.c_str(),FIM_NULL))&& 0==fim_fclose (fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(tpfn.c_str(),"r")))
-		/* this could happen in case dia was removed from the system */
+			/* this could happen in case dia was removed from the system */
 			goto shall_skip_header;
 		else
 		{
 			unlink(tpfn.c_str());
 			loader = &png_loader;
+			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
 		}
    	}
    }
@@ -2111,6 +2122,7 @@ probe_loader:
 		{
 			unlink(tpfn);
 			loader = &png_loader;
+			if(nsp) nsp->setVariable(FIM_VID_FILE_BUFFERED_FROM,tpfn);
 		}
 	}
     }

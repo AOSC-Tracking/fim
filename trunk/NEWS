@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1202)
+ * if an image has been decoded from a temporary file, its name is in i:_buffered_in_tmpfile.
 # (r1200)
  * will consider magic number "<svg" enough to classify a file as SVG.
  * load SVG by invoking inkscape <file.svg> --without-gui --export-png <temp.png>.

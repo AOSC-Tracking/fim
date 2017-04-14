@@ -615,6 +615,7 @@ namespace fim
 #define FIM_VID_IMAGE_LOAD_TIME			"_file_load_time"	/* "[out,i:] time taken to load the file and decode the image, in seconds" */
 #endif /* FIM_WANT_IMAGE_LOAD_TIME */
 #define FIM_VID_FILE_LOADER 		"_file_loader"		/* "[in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image" */
+#define FIM_VID_FILE_BUFFERED_FROM 		"_buffered_in_tmpfile."		/* "[out,i:] if an image has been decoded from a temporary file, its name is here" */
 #define FIM_VID_RETRY_LOADER_PROBE 		"_retry_loader_probe"		/* "[in,g:] if 1 and user specified a file loader and this fails, will probe for a different loader" */
 #define FIM_VID_NO_RC_FILE			"_no_rc_file"		/* "[in,g:] if 1, the ~/.fimrc file will not be loaded at startup" */
 #define FIM_VID_NO_EXTERNAL_LOADERS		"_no_external_loader_programs"		/* "[in,g:] if 1, no external loading programs will be tried for piping in an unsupported type image file" */
