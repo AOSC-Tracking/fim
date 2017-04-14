@@ -1869,6 +1869,17 @@ with_offset:
 	if (!strcmp(loader->name,ls.c_str()))
 		goto found_a_loader;
     }
+#if 0
+#ifdef FIM_TRY_INKSCAPE
+#ifdef FIM_WITH_LIBPNG 
+    if(ls=="svg")
+    {
+	    if(vl)FIM_VERB_PRINTF("using svg loader.\n");
+	    goto use_svg;
+    }
+#endif /* FIM_WITH_LIBPNG  */
+#endif /* FIM_TRY_INKSCAPE */
+#endif
     	if(vl)FIM_VERB_PRINTF("user specified loader string: %s is invalid!\n",ls.c_str());
     }
 		loader = FIM_NULL;
@@ -2056,18 +2067,22 @@ probe_loader:
 //#if 0
 #ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 
-    if (FIM_NULL == loader && (0 == memcmp(blk,"<?xml version=\"1.0\" encoding=\"UTF-8\"",36)))
+    if (FIM_NULL == loader && (
+		    (0 == memcmp(blk,"<?xml version=\"1.0\" encoding=\"UTF-8\"",36) ||
+		    (0 == memcmp(blk,"<svg",4))
+		     )))
     //if(regexp_match(filename,".*svg$"))
     {
+//use_svg:
     	/*
-	 * FIXME : use tmpfile() here. DANGER!
+	 * FIXME : uses tmpfile() here. DANGER!
 	 * */
 	/* an svg file was found, and we try to use inkscape with it
 	 * note that braindamaged inkscape doesn't export to stdout ...
 	 * */
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_INKSCAPE "'...", "*");
-	sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"",
-		filename,FIM_TMP_FILENAME );
+	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"", filename,FIM_TMP_FILENAME );
+	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --without-gui --export-png \"%s\"", filename,FIM_TMP_FILENAME );
 #if 0
 	/* FIXME : the following code should work, but it doesn't */
 	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png","/dev/stdout",FIM_NULL)))
@@ -2080,7 +2095,8 @@ probe_loader:
 		}
 	}
 #else
-	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--export-png",FIM_TMP_FILENAME,FIM_NULL))&&0==fim_fclose(fp))
+	// The following are the arguments to inkscape in order to convert an SVG into PNG:
+	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--without-gui","--export-png",FIM_TMP_FILENAME,FIM_NULL))&&0==fim_fclose(fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(FIM_TMP_FILENAME,"r")))
 			goto shall_skip_header;

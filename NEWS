@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1200)
+ * will consider magic number "<svg" enough to classify a file as SVG.
+ * load SVG by invoking inkscape <file.svg> --without-gui --export-png <temp.png>.
 # (r1197)
  * if scrollable border less than 1/16 of screen, 'scrollforward' will skip it.
 # (r1196)
