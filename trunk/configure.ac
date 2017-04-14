@@ -1549,8 +1549,8 @@ AC_SUBST(FIM_CUSTOM_HARDCODED_CONSOLEFONT, "$withval")
 ], [])
 AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )
 dnl ==================
-fim_cv_want_font_magnify_factor=1;
-AC_ARG_WITH(font-magnifying-factor, AC_HELP_STRING([--with-font-magnifying-factor=FACTOR], [If FACTOR>0, Will render text magnified by (hardcoded) FACTOR times. If FACTOR<=0, will allow run-time control of it via the _fbfont_magnify_factor variable. If negative, -FACTOR will be used as default. Default is 1 ]), [
+fim_cv_want_font_magnify_factor=0;
+AC_ARG_WITH(font-magnifying-factor, AC_HELP_STRING([--with-font-magnifying-factor=FACTOR], [If FACTOR>0, Will render text magnified by (hardcoded) FACTOR times. If FACTOR<=0, will allow run-time control of it via the _fbfont_magnify_factor variable. If negative, -FACTOR will be used as default. Default is 0 ]), [
 fim_cv_want_font_magnify_factor="$withval";
 ], [])
 AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )
@@ -1926,7 +1926,7 @@ dnl	internal windowing system           : ${have_windows:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
         seek magic signatures               :*${fim_cv_seek_magic:-no}
-        hardcoded font magnifying factor    :*${fim_cv_want_font_magnify_factor}
+        hardcoded font magnifying factor    : ${fim_cv_want_font_magnify_factor}
 	customizable status bar             : ${fim_cv_custom_status_bar:-no}
 	use C++ standard (98/11/14)         : ${fim_cxx_standard}
 dnl
