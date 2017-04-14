@@ -197,6 +197,10 @@
  * mipmap computing (controlled by _use_mipmaps) is now faster
 # (r1187)
    Text font can be scaled at runtime via variable _fbfont_magnify_factor.
+# (r1198)
+   If _fbfont_as_screen_fraction>0, font will be scaled to exceed 
+    1/_fbfont_as_screen_fraction of both width and height.
+   If _fbfont_as_screen_fraction<0, font scaling will be fixed.
 # (r942)
  * configure --with-font-magnifying-factor=FACTOR controls text magnification.
    If FACTOR is positive this value will be hardcoded and fixed. 
