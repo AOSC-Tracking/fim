@@ -504,9 +504,9 @@ dnl ============= GNU gpm, unofficial yet
 dnl ============= C++ version handling
 
 fim_cxx_standard=98
-AC_ARG_ENABLE(c++11, AC_HELP_STRING([--enable-c++11], [Enable C++11 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++11) (EXPERIMENTAL).]), [       if test x$enableval = xno ; then true; else fim_cxx_standard=11; fi ])
+AC_ARG_ENABLE(c++11, AC_HELP_STRING([--enable-c++11], [Enable C++11 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++11).]), [       if test x$enableval = xno ; then true; else fim_cxx_standard=11; fi ])
 AC_ARG_ENABLE(c++14, AC_HELP_STRING([--enable-c++14], [Enable C++14 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++14) (EXPERIMENTAL).]), [       if test x$enableval = xno ; then true; else fim_cxx_standard=14; fi ])
-dnl AC_ARG_ENABLE(c++17, AC_HELP_STRING([--enable-c++17], [Enable C++17 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++17) (EXPERIMENTAL).]), [       if test x$enableval = xno ; then true; else fim_cxx_standard=17; fi ])
+AC_ARG_ENABLE(c++17, AC_HELP_STRING([--enable-c++17], [Enable C++17 standard constructs (requires appropriate CXXFLAGS, e.g. -std=c++17) (EXPERIMENTAL).]), [       if test x$enableval = xno ; then true; else fim_cxx_standard=17; fi ])
 dnl ============= no readline case handling
 
 fim_want_readline=yes
@@ -1670,9 +1670,9 @@ dnl ==================
         if test x$fim_cxx_standard = x14 ; then
 		AC_DEFINE([FIM_USE_CXX_STD], 2014, [])
 	fi
-dnl        if test x$fim_cxx_standard = x17 ; then
-dnl		AC_DEFINE([FIM_USE_CXX_STD], 2017, [])
-dnl	fi
+        if test x$fim_cxx_standard = x17 ; then
+		AC_DEFINE([FIM_USE_CXX_STD], 2017, [])
+	fi
 dnl ==================
 
         if test x$fim_cv_convert = xyes ; then
@@ -1928,7 +1928,7 @@ dnl	internal windowing system           : ${have_windows:-no}
         seek magic signatures               :*${fim_cv_seek_magic:-no}
         hardcoded font magnifying factor    : ${fim_cv_want_font_magnify_factor}
 	customizable status bar             : ${fim_cv_custom_status_bar:-no}
-	use C++ standard (98/11/14)         : ${fim_cxx_standard}
+	use C++ standard (98/11/14/17)      : ${fim_cxx_standard}
 dnl
 	readline (-lrl) library support     : ${fim_want_readline}
 	use 'xcftopnm' for XCF files        :*${fim_cv_xcftopnm}

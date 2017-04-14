@@ -158,7 +158,8 @@
 #define FIM_FONT_MAGNIFY_FACTOR_MAX 16 /* Framebuffer font magnifying factor, maximal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_DEFAULT ( FIM_WANT_FONT_MAGNIFY_FACTOR > 0 ? FIM_WANT_FONT_MAGNIFY_FACTOR : ( FIM_WANT_FONT_MAGNIFY_FACTOR < 0 ? -FIM_WANT_FONT_MAGNIFY_FACTOR : 1 ) ) /* Framebuffer font magnifying factor, default value. */
 #define FIM_USE_CXX11 ( FIM_USE_CXX_STD >= 2011 ) || ( defined(__cplusplus) && (__cplusplus>=201103L) ) /* */
-#define FIM_USE_CXX14 ( FIM_USE_CXX_STD >= 2014 ) || ( defined(__cplusplus) && (__cplusplus> 201103L) ) /* */
+#define FIM_USE_CXX14 ( FIM_USE_CXX_STD >= 2014 ) || ( defined(__cplusplus) && (__cplusplus> 201402L) ) /* */
+#define FIM_USE_CXX17 ( FIM_USE_CXX_STD >= 2017 ) || ( defined(__cplusplus) && (__cplusplus> 201707L) ) /* */
 #define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
 #define FIM_WANT_PIC_CMTS_RELOAD FIM_WANT_PIC_CMTS
 #define FIM_WANT_IMAGE_LOAD_TIME 1
