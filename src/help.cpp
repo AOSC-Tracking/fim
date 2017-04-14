@@ -18,6 +18,7 @@ fim_var_help_db[FIM_VID_LOAD_HIDDEN_DIRS]= "[in,g:] if not 1, when pushing direc
 fim_var_help_db[FIM_VID_DEFAULT_ETC_FIMRC]= "[in,g:] string with the global configuration file name" ;
 fim_var_help_db[FIM_VID_IMAGE_LOAD_TIME]= "[out,i:] time taken to load the file and decode the image, in seconds" ;
 fim_var_help_db[FIM_VID_FILE_LOADER]= "[in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the -V switch output); [out] i:" FIM_VID_FILE_LOADER " stores the loader of the current image" ;
+fim_var_help_db[FIM_VID_FILE_BUFFERED_FROM]= "[out,i:] if an image has been decoded from a temporary file, its name is here" ;
 fim_var_help_db[FIM_VID_RETRY_LOADER_PROBE]= "[in,g:] if 1 and user specified a file loader and this fails, will probe for a different loader" ;
 fim_var_help_db[FIM_VID_NO_RC_FILE]= "[in,g:] if 1, the ~/.fimrc file will not be loaded at startup" ;
 fim_var_help_db[FIM_VID_NO_EXTERNAL_LOADERS]= "[in,g:] if 1, no external loading programs will be tried for piping in an unsupported type image file" ;

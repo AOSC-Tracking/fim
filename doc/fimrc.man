@@ -585,6 +585,11 @@ _autotop
 .fi
 .na
 .B
+_buffered_in_tmpfile.
+[out,i:] if an image has been decoded from a temporary file, its name is here
+.fi
+.na
+.B
 _cache_control
 [in,g:] string for cache control. if it starts with 'm' mipmaps will be cached; if it starts with 'M' then not. otherwise defaults will apply.
 .fi
@@ -1215,6 +1220,8 @@ bind 'g' "color 'desaturate';redisplay;";
 #bind ']' "color 'colorblind' 'daltonize'; redisplay;";
 bind '[' 'font_reduce;redisplay;';
 bind ']' 'font_magnify;redisplay;';
+bind '|' 'toggle_font_auto_scale;redisplay;';
+#bind '\' 'font_as_screen_fraction;redisplay;';
 bind 'G' "toggleDesaturate;";
 #bind 'R' "reload";
 #bind 'R' "redisplay";
@@ -1421,8 +1428,13 @@ alias 'left'   'align "left"';
 alias 'right'  'align "right"';
 alias 'top'   'align "top"';
 alias 'bottom'   'align "bottom"';
-alias "font_magnify" "_fbfont_as_screen_fraction=0;if(_fbfont_magnify_factor>=0) {_fbfont_magnify_factor=_fbfont_magnify_factor+1;}" "";
-alias "font_reduce" "_fbfont_as_screen_fraction=0;if(_fbfont_magnify_factor>1) {_fbfont_magnify_factor=_fbfont_magnify_factor\-1;}"   "";
+alias "font_magnify_dynamic" "if(_fbfont_as_screen_fraction>1){_fbfont_as_screen_fraction=_fbfont_as_screen_fraction\-1;}else{_fbfont_as_screen_fraction=_screen_width/100+_screen_height/100;}" "";
+alias "font_magnify_static"      "_fbfont_magnify_factor=_fbfont_magnify_factor+1;" "";
+alias "font_reduce_dynamic"  "if(_fbfont_as_screen_fraction>1){_fbfont_as_screen_fraction=_fbfont_as_screen_fraction+1;}" "";
+alias "font_reduce_static"       "_fbfont_magnify_factor=_fbfont_magnify_factor\-1;" "";
+alias "toggle_font_auto_scale" "if(_fbfont_as_screen_fraction<0){_fbfont_as_screen_fraction=0;echo 'Auto font scaling on.';}else{_fbfont_as_screen_fraction=\-1;echo 'Auto font scaling off.';}" "toggles font auto scaling";
+alias "font_magnify" "if(_fbfont_as_screen_fraction<0) {font_magnify_static;}else{font_magnify_dynamic;}" "increase font size (either relative or absolute)";
+alias "font_reduce"  "if(_fbfont_as_screen_fraction<0) {font_reduce_static;} else{font_reduce_dynamic;}"  "increase font size (either relative or absolute)";
 bind "PageUp" "if(_display_console==0){prev;}else{scu;}";
 bind "PageDown" "if(_display_console==0){next;}else{scd;}";
 bind "Home" "0;";
