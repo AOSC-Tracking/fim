@@ -2345,6 +2345,19 @@ ok:
 #if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
 		{
 			fim_int fim_fmf__ = getIntVariable(FIM_VID_FBFMF);
+
+			if( displaydevice_ && displaydevice_->f_ )
+			{
+				fim_int fim_afs__ = getIntVariable(FIM_VID_FBAFS);
+
+				if( fim_afs__ >= 0 )
+				{
+					if( fim_afs__ == 0 )
+						fim_afs__ = 50;
+					fim_fmf__ = displaydevice_->suggested_font_magnification(fim_afs__,fim_afs__);
+				}
+			}
+
 			if( fim_fmf__ < FIM_FONT_MAGNIFY_FACTOR_MIN )
 				fim_fmf__ = FIM_FONT_MAGNIFY_FACTOR_DEFAULT;
 				setVariable(FIM_VID_FBFMF,fim_fmf__);

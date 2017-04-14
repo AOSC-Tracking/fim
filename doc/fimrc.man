@@ -710,6 +710,11 @@ _fbfont
 .fi
 .na
 .B
+_fbfont_as_screen_fraction
+[in,g:] The rendered text will be scaled at least to this (integer) fraction of the screen. Disable font autoscaling with \-1. (Only enabled if configured with \-\-with\-font\-magnifying\-factor=FACTOR, with FACTOR<1).
+.fi
+.na
+.B
 _fbfont_magnify_factor
 [in,g:] The rendered text will use a font magnified by this (integer) factor. Maximal value is "16". (Only enabled if configured with \-\-with\-font\-magnifying\-factor=FACTOR, with FACTOR<1).
 .fi

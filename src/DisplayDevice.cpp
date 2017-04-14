@@ -296,3 +296,22 @@ void DisplayDevice::quickbench(fim_int qbi)
 	fim_err_t DisplayDevice::reinit(const fim_char_t *rs){return FIM_ERR_NO_ERROR;}
 	fim_err_t DisplayDevice::set_wm_caption(const fim_char_t *msg){return FIM_ERR_UNSUPPORTED;}
 
+	fim_coo_t DisplayDevice::suggested_font_magnification(const fim_coo_t wf, const fim_coo_t hf)const
+	{
+		// suggests a font magnification until font is wider than 1/wf and taller than 1/hf wrt screen.
+		// if a value is non positive, it will be ignored.
+		fim_coo_t fmf = 1;
+
+		if(wf>0 && hf<0)
+			while ( wf * fmf * this->f_->width  < this->width() )
+				++fmf;
+		if(wf<0 && hf>0)
+			while ( hf * fmf * this->f_->height < this->height() )
+				++fmf;
+		if(wf>0 && hf>0)
+			while ( wf * fmf * this->f_->width  < this->width() &&
+				hf * fmf * this->f_->height < this->height() )
+				++fmf;
+		return fmf;
+	}
+
