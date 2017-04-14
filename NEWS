@@ -51,8 +51,7 @@
 # (r1107-r1011)
  * "color CVS" (CVS among 'protanopia', 'deuteranopia', 'tritanopia', 'p', 'd', 't') simulates a color vision deficiency;
    adding 'daltonize' applies a tentative color correction.
-   "color 'colorblind'" is short for "color 'deuteranopia'" (bound to key '[').
-   Key ']' bound to "color 'colorblind' 'daltonize'".
+   "color 'colorblind'" is short for "color 'deuteranopia'".
 # (r1112)
  * "color 'identity'": populate the image with 'RGB identity' pixels.
 # (r1104)
@@ -201,6 +200,9 @@
    If _fbfont_as_screen_fraction>0, font will be scaled to exceed 
     1/_fbfont_as_screen_fraction of both width and height.
    If _fbfont_as_screen_fraction<0, font scaling will be fixed.
+# (r1199)
+ * Introduced "font_reduce" and "font_magnify" aliases and bound to '[' ']' keys.
+ * Introduced "toggle_font_auto_scale" alias and bound to '|' key.
 # (r942)
  * configure --with-font-magnifying-factor=FACTOR controls text magnification.
    If FACTOR is positive this value will be hardcoded and fixed. 
