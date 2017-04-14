@@ -178,14 +178,14 @@ align bottom : align to the lower side the current image; align top : align to t
 .B
 autocmd
 .fi
-autocmd {event} {pattern} {commands} : manipulate auto commands
+autocmd {event} {pattern} {commands} : manipulate autocommands
 .fi
 
 .na
 .B
 autocmd_del
 .fi
-autocmd_del : manipulate auto commands. usage: autocmd_del {event} {pattern} {commands}
+autocmd_del : manipulate autocommands. usage: autocmd_del {event} {pattern} {commands}
 .fi
 
 .na
@@ -290,7 +290,7 @@ getenv {identifier} : display the value of the {identifier} environment variable
 .B
 goto
 .fi
-goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'} | {{'+'|'\-'}{identifier}}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '\-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if an {identifier} is encountered after a '+' or '\-' sign, jump to next or previous image having a different value for i:{identifier}; if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via desc or \-\-load\-image\-descriptions\-file. See also _lastgotodirection and _re_search_opts.
+goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'} | {{'+'|'\-'}{identifier}['+']}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '\-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; if an {identifier} is encountered after a '+' or '\-' sign, jump to next or previous image having a different value for i:{identifier} (a trailing '+' will require a non empty value); if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via desc or \-\-load\-image\-descriptions\-file. See also _lastgotodirection and _re_search_opts.
 .fi
 
 .na
@@ -515,7 +515,7 @@ window {args} : this command is disabled. It shall be re\-enabled in a future ve
 " "  "!"  """  "#"  "$"  "%"  "&"  "'"  "("  ")"  "*"  "+"  ","  "\-"  "."  "/"  "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  ":"  ";"  "<"  "="  ">"  "?"  "@"  "A"  "Any"  "B"  "BackSpace"  "Backspace"  "C"  "C\-a"  "C\-b"  "C\-c"  "C\-d"  "C\-e"  "C\-f"  "C\-g"  "C\-h"  "C\-i"  "C\-j"  "C\-k"  "C\-l"  "C\-m"  "C\-n"  "C\-o"  "C\-p"  "C\-q"  "C\-r"  "C\-s"  "C\-t"  "C\-u"  "C\-v"  "C\-w"  "C\-x"  "C\-y"  "C\-z"  "D"  "Del"  "Down"  "E"  "End"  "Enter"  "Esc"  "F"  "G"  "H"  "Home"  "I"  "Ins"  "J"  "K"  "L"  "Left"  "M"  "N"  "O"  "P"  "PageDown"  "PageUp"  "Q"  "R"  "Right"  "S"  "T"  "Tab"  "U"  "Up"  "V"  "W"  "X"  "Y"  "Z"  "["  "\\"  "]"  "^"  "_"  "`"  "a"  "b"  "c"  "d"  "e"  "f"  "g"  "h"  "i"  "j"  "k"  "l"  "m"  "n"  "o"  "p"  "q"  "r"  "s"  "t"  "u"  "v"  "w"  "x"  "y"  "z"  "{"  "|"  "}"  "~"  
 
 .SH AUTOCOMMANDS REFERENCE
-Available autocommands are: PostScale, PreScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PostReload, PreReload, PostLoad, PreLoad, PostGoto, PreGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PreExecutionCycleArgs, PostExecutionCycle, PreWindow, PostWindow,  and they are triggered on actions as indicated by their name.
+Available autocommands are: PreScale, PostScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PreReload, PostReload, PreLoad, PostLoad, PreGoto, PostGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PostExecutionCycle, PreExecutionCycleArgs, PreWindow, PostWindow,  and they are triggered on actions as indicated by their name.
 .SH VARIABLES REFERENCE
 If undeclared, a variable will evaluate to 0.
 
