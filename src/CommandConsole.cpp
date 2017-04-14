@@ -2340,6 +2340,27 @@ ok:
 		return wcs;
 	}
 
+	fim_err_t CommandConsole::update_font_size(void)
+	{
+#if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
+		{
+			fim_int fim_fmf__ = getIntVariable(FIM_VID_FBFMF);
+			if( fim_fmf__ < FIM_FONT_MAGNIFY_FACTOR_MIN )
+				fim_fmf__ = FIM_FONT_MAGNIFY_FACTOR_DEFAULT;
+				setVariable(FIM_VID_FBFMF,fim_fmf__);
+			fim_fmf_ = FIM_MIN(fim_fmf__, FIM_FONT_MAGNIFY_FACTOR_MAX);
+#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+			/* FIXME: instead, call something like SDLDevice::post_wmresize(void) */
+			mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(fim_int)(displaydevice_->get_chars_per_column()/2));
+			mc_.reformat( displaydevice_->get_chars_per_line() );
+#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+		}
+#else /* FIM_FONT_MAGNIFY_FACTOR */
+		setVariable(FIM_VID_FBFMF,(fim_int)FIM_FONT_MAGNIFY_FACTOR);
+#endif /* FIM_FONT_MAGNIFY_FACTOR */
+		return FIM_ERR_NO_ERROR;
+	}
+
 	void CommandConsole::set_status_bar(const fim_char_t *desc, const fim_char_t *info)
 	{
 		/*
@@ -2374,22 +2395,7 @@ ok:
 				{hpl=0;/* no help key ? no message, then */}
 		}
 	
-#if ( FIM_FONT_MAGNIFY_FACTOR <= 0 )
-		{
-			fim_int fim_fmf__ = getIntVariable(FIM_VID_FBFMF);
-			if( fim_fmf__ < FIM_FONT_MAGNIFY_FACTOR_MIN )
-				fim_fmf__ = FIM_FONT_MAGNIFY_FACTOR_DEFAULT;
-				setVariable(FIM_VID_FBFMF,fim_fmf__);
-			fim_fmf_ = FIM_MIN(fim_fmf__, FIM_FONT_MAGNIFY_FACTOR_MAX);
-#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-			/* FIXME: instead, call something like SDLDevice::post_wmresize(void) */
-			mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(fim_int)(displaydevice_->get_chars_per_column()/2));
-			mc_.reformat( displaydevice_->get_chars_per_line() );
-#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-		}
-#else /* FIM_FONT_MAGNIFY_FACTOR */
-		setVariable(FIM_VID_FBFMF,(fim_int)FIM_FONT_MAGNIFY_FACTOR);
-#endif /* FIM_FONT_MAGNIFY_FACTOR */
+		update_font_size();
 
 		chars = displaydevice_->get_chars_per_line();
 		if(chars<1)

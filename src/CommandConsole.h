@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -417,6 +417,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	std::thread blt_; /* background loader thread */
 	std::vector<const char *> fnpv_; /* file names pointers vector */
 #endif /* FIM_WANT_BACKGROUND_LOAD */
+	fim_err_t update_font_size(void);
 };
 }
 
