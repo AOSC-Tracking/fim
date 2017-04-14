@@ -1555,9 +1555,10 @@ fim_cv_want_font_magnify_factor="$withval";
 ], [])
 AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )
 dnl ==================
-AC_ARG_WITH(tmpfile, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put temporary files created when interacting with external conversion programs (default is "/tmp/__FIM_TEMPORARY_FILE").]),
+dnl # /tmp/__FIM_TEMPORARY_FILE
+AC_ARG_WITH(tmpfile, AC_HELP_STRING([--with-tmpfile=FILE], [Specify where to put temporary files created when interacting with external conversion programs.]),
         [fim_cv_tmpfile=$withval],
-        [fim_cv_tmpfile="/tmp/__FIM_TEMPORARY_FILE"])
+        [fim_cv_tmpfile=""])
 dnl ==================
 AC_ARG_ENABLE(custom-status-bar, AC_HELP_STRING([--disable-custom-status-bar], [Customization of status bar via a printf-like string.]),
 [       if test x$enableval = xno; then
