@@ -3,7 +3,7 @@
 
                 Version 0.6-trunk
 
-# (r1210)
+# (r1210-r1213)
  * new experimental command 'font' to control displayed font and scan font directories. 
    keys '{' and '}' will cycle through scanned fonts.
 # (r1208)
