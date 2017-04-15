@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ namespace fim
 
 
 #if 1
-void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
+void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f, fim_int vl)
 { 
     const fim_char_t*font=(fim_char_t*)font_;
     const fim_char_t *fonts[2] = { font, FIM_NULL };
@@ -62,7 +62,7 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
     std::cout << "before consolefont:" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
     if (FIM_NULL == *_f)
-	*_f = fs_consolefont(font ? fonts : FIM_NULL);
+	*_f = fs_consolefont(font ? fonts : FIM_NULL, vl);
 #if FIM_FONT_DEBUG
     std::cout << "after consolefont :" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
@@ -74,11 +74,12 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
     std::cout << "after fs_open     :" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
     if (FIM_NULL == *_f) {
+	if(vl)
 	FIM_FPRINTF(ff_stderr, "font \"%s\" is not available\n",font);
 #if FIM_EXPERIMENTAL_FONT_CMD
-#else /* FIM_EXPERIMENTAL_FONT_CMD */
-	exit(1);
+	if(vl)
 #endif /* FIM_EXPERIMENTAL_FONT_CMD */
+	exit(1);
     }
 }
 
@@ -177,7 +178,7 @@ void fim_free_fs_font(struct fs_font *f_)
 	}
 }
 
-struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename)
+struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename, fim_int vl)
 {
     /* this function is too much involved: it shall be split in pieces */
     int  i=0;
@@ -266,6 +267,7 @@ openhardcodedfont:
     }
 #endif /* FIM_WANT_HARDCODED_FONT */
     if (FIM_NULL == fontfilename) {
+	if(vl)
 	FIM_FPRINTF(ff_stderr, "can't find console font file\n");
 	goto oops;
     }
@@ -276,12 +278,14 @@ openhardcodedfont:
 	/* FIXME */
 	fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,FIM_NULL);
 	#else /* FIM_USE_ZCAT */
+	if(vl)
 	FIM_FPRINTF(ff_stderr, "built with no gzip decoder!\n");
 	#endif /* FIM_USE_ZCAT */
     } else {
 	fp = fopen(fontfilename, "r");
     }
     if (FIM_NULL == fp) {
+	if(vl)
 	FIM_FPRINTF(ff_stderr, "can't open %s: %s\n",fontfilename,strerror(errno));
 	goto oops;
     }
@@ -292,14 +296,17 @@ gotafp:
     m0=fgetc(fp);
     m1=fgetc(fp);
     if (m0 == EOF     || m1 == EOF     ) {
+	if(vl)
 	FIM_FPRINTF(ff_stderr, "problems reading two first bytes from %s.\n",fontfilename);
 	goto oops;
     }
     if (m0 == FIM_PSF2_MAGIC0     && m1 == FIM_PSF2_MAGIC1     ) {
+	if(vl)
 	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) conform to PSF version 2, which is unsupported.\n",fontfilename,m0,m1);
 	goto oops;
     }
     if (m0 != FIM_PSF1_MAGIC0     || m1 != FIM_PSF1_MAGIC1     ) {
+	if(vl)
 	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) not conforming to PSF version 1\n",fontfilename,m0,m1);
 	goto oops;
     }
