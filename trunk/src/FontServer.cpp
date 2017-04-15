@@ -75,7 +75,10 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f)
 #endif /* FIM_FONT_DEBUG */
     if (FIM_NULL == *_f) {
 	FIM_FPRINTF(ff_stderr, "font \"%s\" is not available\n",font);
+#if FIM_EXPERIMENTAL_FONT_CMD
+#else /* FIM_EXPERIMENTAL_FONT_CMD */
 	exit(1);
+#endif /* FIM_EXPERIMENTAL_FONT_CMD */
     }
 }
 
