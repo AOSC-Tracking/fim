@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -351,8 +351,8 @@ class FramebufferDevice:public DisplayDevice
  * (by dez)
  */
 #define FB_BPP  (((fb_var_.bits_per_pixel+7)/8))
-#define FB_MEM_LINE_OFFSET  ((FB_BPP*fb_var_.xres))
-#define FB_MEM_OFFSET(x,y)  (( FB_BPP*(x) + FB_MEM_LINE_OFFSET * (y) ))
+#define FB_MEM_LINE_LENGTH  ((fb_fix_.line_length))
+#define FB_MEM_OFFSET(x,y)  (( FB_BPP*(x) + FB_MEM_LINE_LENGTH * (y) ))
 #define FB_MEM(x,y) ((fb_mem_+FB_MEM_OFFSET((x),(y))))
 
 

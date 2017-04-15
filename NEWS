@@ -3,6 +3,7 @@
 
                 Version 0.5-rc3
 
+ * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
  * bugfix: conversion from external program was vulnerable to failure due to missing check.
  * fix: gif error handling could have led to NULL pointer usage.
  * fix: the largest mipmap was not always being used.
