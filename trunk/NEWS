@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1208)
+ * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
 # (r1206,r1207)
  * configure --with-tmpfile will specify a new temporary directory. 
 # (r1204)
