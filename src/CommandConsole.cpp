@@ -26,6 +26,9 @@
  * */
 #include "fim.h"
 #include <sys/time.h>
+#if FIM_EXPERIMENTAL_FONT_CMD
+#include <dirent.h> // readdir
+#endif /* FIM_EXPERIMENTAL_FONT_CMD */
 #include <errno.h>
 
 #ifdef FIM_USE_READLINE
@@ -479,6 +482,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		addCommand(new Command(fim_cmd_id(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS " " FIM_CNS_EX_ID_STRING " | '-a' : delete the alias " FIM_CNS_EX_ID_STRING " or all aliases (use '-a', not -a)"),this,&CommandConsole::fcmd_unalias));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND " " FIM_CNS_EX_KSY_STRING " : unbind the action associated to a specified " FIM_CNS_EX_KSY_STRING FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::fcmd_unbind));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_WHILE),fim::string("while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the " FIM_KBD_ESC " or the " FIM_KBD_COLON " key"),this,&CommandConsole::fcmd_foo));/* may introduce a special "help grammar" command */
+		addCommand(new Command(fim_cmd_id("font"),fim::string("..."),this,&CommandConsole::fcmd_font));
 #ifdef FIM_WINDOWS
 		/* this is a stub for the manual generation (actually, the FimWindow object gets built later) */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW),this,&CommandConsole::fcmd_foo));
@@ -2565,6 +2569,115 @@ err:
 #endif /* FIM_WANT_PIC_CMTS */
 		return bs;
 	}
+
+#if FIM_EXPERIMENTAL_FONT_CMD
+	fim_cxr CommandConsole::fcmd_font(const args_t& args)
+	{
+		// unfinished, experimental. note that as of now, this leaks memory.
+		std::pair<std::string,struct fs_font *> fr;
+		static std::vector<std::pair<std::string,struct fs_font *> > fc;
+		static int fidx = 0;
+		int fcnt = fc.size();
+		string rs;
+
+		if(args.size()>0)
+		{
+			const fim::string cid = args[0];
+
+			if( cid == "scan" )
+			{
+				fim::string nf;
+				static std::vector<std::pair<std::string,struct fs_font *> > lfc;
+				DIR *dir = FIM_NULL;
+				struct dirent *de = FIM_NULL;
+				int nfiles=0;
+
+				if(args.size()>1)
+			        	nf = args[1];
+				else
+			        	nf = "/usr/share/consolefonts/";
+
+				if( !is_dir( nf ))
+					goto nop;
+				if ( ! ( dir = opendir(nf.c_str() ) ))
+					goto ret;
+
+				while( ( de = readdir(dir) ) != FIM_NULL )
+				{
+					struct fs_font *fsp=NULL;
+					std::string fontname;
+
+					if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] )
+						continue;
+					if( de->d_name[0] == '.' && !de->d_name[1] )
+						continue;
+					nfiles++;
+					fsp=NULL;
+	       				fontname = nf+ de->d_name;
+
+					FontServer::fb_text_init1(fontname.c_str(),&fsp);	// FIXME : move this outta here
+					if(fsp)
+						lfc.push_back({fontname,fsp});
+				}
+				closedir(dir);
+				for(auto & fs : fc)
+					fim_free_fs_font(fs.second),
+					fs.second=NULL;
+				fc.erase(fc.begin(),fc.end());
+				fc=lfc;
+
+				rs+="font: ";
+				rs+="loaded ";
+				rs+=string((int)fc.size());
+				rs+= " fonts out of ";
+				rs+=string((int)nfiles);
+				rs+="\n";
+			}
+
+			if( cid == "load" && args.size()>1 )
+			{
+				fr.first=args[1];
+				fr.second=NULL;
+				FontServer::fb_text_init1(fr.first.c_str(),&fr.second);	// FIXME : move this outta here
+				if(fr.second)
+					goto lofo;
+			}
+
+			if( cid == "info" )
+				rs = getStringVariable(FIM_VID_FBFONT),
+				rs += "\n";
+
+			if( cid == "next" || cid == "prev" )
+			if( fcnt>0 )
+			{
+				if( cid == "next" )
+					fidx=(fidx+1)%fcnt;
+				if( cid == "prev" )
+					fidx=(fidx+fcnt-1)%fcnt;
+				rs+="font: loaded ";
+				rs+=string((int)fidx);
+				rs+="/";
+				rs+=string((int)fcnt);
+				rs+=": ";
+				fr=fc[fidx];
+				goto lofo;
+			}
+			goto nop;
+lofo:
+			if( displaydevice_ && displaydevice_->f_ )
+			{
+				rs+=fr.first.c_str();
+				rs+="\n";
+				setVariable(FIM_VID_FBFONT,fr.first.c_str());
+				displaydevice_->f_ = fr.second;
+				update_font_size();
+			}
+		}
+nop:
+ret:
+		return rs;
+	}
+#endif /* FIM_EXPERIMENTAL_FONT_CMD */
 
 	fim_cxr CommandConsole::fcmd_variables_list(const args_t& args)
 	{

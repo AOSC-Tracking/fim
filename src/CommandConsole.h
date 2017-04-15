@@ -150,6 +150,9 @@ class CommandConsole
 	fim::string execute_record_buffer(const args_t& args);
 	fim::string start_recording(void);
 	fim_cxr fcmd_recording(const args_t& args);
+#if FIM_EXPERIMENTAL_FONT_CMD
+	fim_cxr fcmd_font(const args_t& args);
+#endif /* FIM_EXPERIMENTAL_FONT_CMD */
 	fim::string stop_recording(void);
 	fim::string sanitize_action(const fim_cmd_id& cmd)const;
 
