@@ -2629,8 +2629,9 @@ err:
 					if( de->d_name[0] == '.' && !de->d_name[1] )
 						continue;
 					nfiles++;
-	       				fr.first= nf + de->d_name;
-					fr.second=NULL;
+	       				fr.first = nf;
+	       				fr.first += de->d_name;
+					fr.second = NULL;
 					FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME : move this outta here
 					if(fr.second)
 						lfc.push_back(fr);
