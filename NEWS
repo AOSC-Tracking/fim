@@ -5,6 +5,7 @@
 
 # (r1210)
  * new experimental command 'font' to control displayed font and scan font directories. 
+   keys '{' and '}' will cycle through scanned fonts.
 # (r1208)
  * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
 # (r1206,r1207)
