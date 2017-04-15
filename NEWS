@@ -3,6 +3,7 @@
 
                 Version 0.4-rc3+?
 
+ * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
  * fix: was likely using uninitialized data in Image()
  * fix: gif error handling could have led to NULL pointer usage.
  * bugfix: conversion from external program was vulnerable to failure due to missing check.
