@@ -411,6 +411,14 @@ ret:		return key;
 #ifndef FIM_WANT_NOSCRIPTING
 		addCommand(new Command(fim_cmd_id(FIM_FLT_EXEC),fim::string(FIM_FLT_EXEC " " FIM_CNS_EX_FNS_STRING " : execute script " FIM_CNS_EX_FNS_STRING ""),this,&CommandConsole::fcmd_executeFile));
 #endif /* FIM_WANT_NOSCRIPTING */
+#if FIM_EXPERIMENTAL_FONT_CMD
+		addCommand(new Command(fim_cmd_id(FIM_FLT_FONT),fim::string(
+			FIM_FLT_FONT " 'scan' [{dirname}]: scan {dirname} or " FIM_LINUX_CONSOLEFONTS_DIR " looking for fonts in the internal fonts list; "
+			FIM_FLT_FONT " 'load' {filename}: load font {filename}; "
+			FIM_FLT_FONT " 'next'/'prev': load next/previous font in the internal fonts list; "
+			FIM_FLT_FONT " 'info': print current font filename; "
+			"" ),this,&CommandConsole::fcmd_font));
+#endif /* FIM_EXPERIMENTAL_FONT_CMD */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_GETENV),fim::string(FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING " : display the value of the " FIM_CNS_EX_ID_STRING " environment variable"),this,&CommandConsole::fcmd_do_getenv));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_GOTO),fim::string(FIM_CMD_HELP_GOTO),&browser_,&Browser::fcmd_goto_image));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_HELP),fim::string(FIM_CMD_HELP_HELP),this,&CommandConsole::fcmd_help));
@@ -482,7 +490,6 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		addCommand(new Command(fim_cmd_id(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS " " FIM_CNS_EX_ID_STRING " | '-a' : delete the alias " FIM_CNS_EX_ID_STRING " or all aliases (use '-a', not -a)"),this,&CommandConsole::fcmd_unalias));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND " " FIM_CNS_EX_KSY_STRING " : unbind the action associated to a specified " FIM_CNS_EX_KSY_STRING FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::fcmd_unbind));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_WHILE),fim::string("while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the " FIM_KBD_ESC " or the " FIM_KBD_COLON " key"),this,&CommandConsole::fcmd_foo));/* may introduce a special "help grammar" command */
-		addCommand(new Command(fim_cmd_id("font"),fim::string("..."),this,&CommandConsole::fcmd_font));
 #ifdef FIM_WINDOWS
 		/* this is a stub for the manual generation (actually, the FimWindow object gets built later) */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW),this,&CommandConsole::fcmd_foo));
@@ -2573,21 +2580,32 @@ err:
 #if FIM_EXPERIMENTAL_FONT_CMD
 	fim_cxr CommandConsole::fcmd_font(const args_t& args)
 	{
-		// unfinished, experimental. note that as of now, this leaks memory.
-		std::pair<std::string,struct fs_font *> fr;
-		static std::vector<std::pair<std::string,struct fs_font *> > fc;
+		// Experimental. Note that as of now, this leaks memory of the first loaded font.
+		typedef std::pair<std::string,struct fs_font *> fim_ffp_t; /* file font pair */
+		fim_ffp_t fr;
+		static std::vector<fim_ffp_t> fc;
 		static int fidx = 0;
-		int fcnt = fc.size();
+		size_t fcnt = fc.size();
+		const fim_int vl = 0; // font loading verbosity level (font loading will exit() if not 0)
 		string rs;
 
-		if(args.size()>0)
+		if(args.size()>=0)
 		{
-			const fim::string cid = args[0];
+			fim::string cid;
+
+			if(args.size()==0)
+		       		cid = "info";
+			else
+		       		cid = args[0];
+
+			if( cid == "next" || cid == "prev" )
+			       	if( fcnt == 0 )
+					cid = "scan"; // scan first time
 
 			if( cid == "scan" )
 			{
 				fim::string nf;
-				static std::vector<std::pair<std::string,struct fs_font *> > lfc;
+				std::vector<fim_ffp_t > lfc;
 				DIR *dir = FIM_NULL;
 				struct dirent *de = FIM_NULL;
 				int nfiles=0;
@@ -2595,7 +2613,9 @@ err:
 				if(args.size()>1)
 			        	nf = args[1];
 				else
-			        	nf = "/usr/share/consolefonts/";
+			        	nf = FIM_LINUX_CONSOLEFONTS_DIR;
+				if(nf.size() && nf[nf.size()-1]!='/')
+					nf += "/";
 
 				if( !is_dir( nf ))
 					goto nop;
@@ -2604,41 +2624,41 @@ err:
 
 				while( ( de = readdir(dir) ) != FIM_NULL )
 				{
-					struct fs_font *fsp=NULL;
-					std::string fontname;
-
 					if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] )
 						continue;
 					if( de->d_name[0] == '.' && !de->d_name[1] )
 						continue;
 					nfiles++;
-					fsp=NULL;
-	       				fontname = nf+ de->d_name;
-
-					FontServer::fb_text_init1(fontname.c_str(),&fsp);	// FIXME : move this outta here
-					if(fsp)
-						lfc.push_back({fontname,fsp});
+	       				fr.first= nf + de->d_name;
+					fr.second=NULL;
+					FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME : move this outta here
+					if(fr.second)
+						lfc.push_back(fr);
 				}
 				closedir(dir);
+#if FIM_USE_CXX11
 				for(auto & fs : fc)
-					fim_free_fs_font(fs.second),
-					fs.second=NULL;
+					fim_free_fs_font(fs.second), fs.second=NULL;
+#else /* FIM_USE_CXX11 */
+				for(	std::vector<fim_ffp_t>::iterator fi=fc.begin(); fi!=fc.end();++fi )
+					fim_free_fs_font(fi->second), fi->second=NULL;
+#endif /* FIM_USE_CXX11 */
 				fc.erase(fc.begin(),fc.end());
 				fc=lfc;
 
 				rs+="font: ";
-				rs+="loaded ";
+				rs+="preloaded ";
 				rs+=string((int)fc.size());
 				rs+= " fonts out of ";
 				rs+=string((int)nfiles);
-				rs+="\n";
+				rs+=" files scanned.\n";
 			}
 
 			if( cid == "load" && args.size()>1 )
 			{
 				fr.first=args[1];
 				fr.second=NULL;
-				FontServer::fb_text_init1(fr.first.c_str(),&fr.second);	// FIXME : move this outta here
+				FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME : move this outta here
 				if(fr.second)
 					goto lofo;
 			}
@@ -2648,23 +2668,30 @@ err:
 				rs += "\n";
 
 			if( cid == "next" || cid == "prev" )
-			if( fcnt>0 )
 			{
-				if( cid == "next" )
-					fidx=(fidx+1)%fcnt;
-				if( cid == "prev" )
-					fidx=(fidx+fcnt-1)%fcnt;
-				rs+="font: loaded ";
-				rs+=string((int)fidx);
-				rs+="/";
-				rs+=string((int)fcnt);
-				rs+=": ";
-				fr=fc[fidx];
-				goto lofo;
+				if( fcnt>0 )
+				{
+					if( cid == "next" )
+						fidx=(fidx+1)%fcnt;
+					if( cid == "prev" )
+						fidx=(fidx+fcnt-1)%fcnt;
+					rs+="font: loaded ";
+					rs+=string((int)fidx);
+					rs+="/";
+					rs+=string((int)fcnt);
+					rs+=": ";
+					fr=fc[fidx];
+					goto lofo;
+				}
+				else
+				{
+					rs+="first 'scan' a directory for fonts.\n";
+				}
 			}
 			goto nop;
 lofo:
 			if( displaydevice_ && displaydevice_->f_ )
+			if(fr.second)
 			{
 				rs+=fr.first.c_str();
 				rs+="\n";

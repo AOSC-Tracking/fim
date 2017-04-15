@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1210)
+ * new experimental command 'font' to control displayed font and scan font directories. 
 # (r1208)
  * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
 # (r1206,r1207)

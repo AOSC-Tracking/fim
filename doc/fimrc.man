@@ -281,6 +281,13 @@ exec {filename(s)} : execute script {filename(s)}
 
 .na
 .B
+font
+.fi
+font 'scan' [{dirname}]: scan {dirname} or /usr/share/consolefonts looking for fonts in the internal fonts list; font 'load' {filename}: load font {filename}; font 'next'/'prev': load next/previous font in the internal fonts list; font 'info': print current font filename; 
+.fi
+
+.na
+.B
 getenv
 .fi
 getenv {identifier} : display the value of the {identifier} environment variable
@@ -585,8 +592,8 @@ _autotop
 .fi
 .na
 .B
-_buffered_in_tmpfile.
-[out,i:] if an image has been decoded from a temporary file, its name is here
+_buffered_in_tmpfile
+[out,i:] if an image has been temporarily converted and decoded from a temporary file, its name is here
 .fi
 .na
 .B

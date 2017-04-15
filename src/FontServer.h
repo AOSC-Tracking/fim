@@ -131,9 +131,9 @@ public:
 
 #if 1
 /* 20080507 unused, as default_font ? */
-static void fb_text_init1(const fim_char_t *font, struct fs_font **_f);
+static void fb_text_init1(const fim_char_t *font, struct fs_font **_f, fim_int vl=1);
 
-static struct fs_font* fs_consolefont(const fim_char_t **filename);
+static struct fs_font* fs_consolefont(const fim_char_t **filename, fim_int vl=1);
 #endif
 
 

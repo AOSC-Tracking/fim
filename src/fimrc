@@ -76,6 +76,8 @@ bind 'g' "color 'desaturate';redisplay;";
 bind '[' 'font_reduce;redisplay;';
 bind ']' 'font_magnify;redisplay;';
 bind '|' 'toggle_font_auto_scale;redisplay;';
+bind '{' 'font "prev";redisplay;';                                                                                                         
+bind '}' 'font "next";redisplay;';                                                                                                         
 #bind '\' 'font_as_screen_fraction;redisplay;';
 bind 'G' "toggleDesaturate;";
 #bind 'R' "reload";
