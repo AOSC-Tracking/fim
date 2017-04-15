@@ -2614,13 +2614,15 @@ err:
 			        	nf = args[1];
 				else
 			        	nf = FIM_LINUX_CONSOLEFONTS_DIR;
-				if(nf.size() && nf[nf.size()-1]!='/')
-					nf += "/";
+				if(nf.size() && nf[nf.size()-1]!=FIM_CNS_DIRSEP_CHAR)
+					nf += FIM_CNS_DIRSEP_STRING;
 
 				if( !is_dir( nf ))
 					goto nop;
 				if ( ! ( dir = opendir(nf.c_str() ) ))
 					goto ret;
+
+				set_status_bar(" scanning for fonts...",FIM_NULL);
 
 				while( ( de = readdir(dir) ) != FIM_NULL )
 				{
@@ -2631,7 +2633,7 @@ err:
 					nfiles++;
 	       				fr.first = nf;
 	       				fr.first += de->d_name;
-					fr.second = NULL;
+					fr.second = FIM_NULL;
 					FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME : move this outta here
 					if(fr.second)
 						lfc.push_back(fr);
@@ -2639,10 +2641,10 @@ err:
 				closedir(dir);
 #if FIM_USE_CXX11
 				for(auto & fs : fc)
-					fim_free_fs_font(fs.second), fs.second=NULL;
+					fim_free_fs_font(fs.second), fs.second=FIM_NULL;
 #else /* FIM_USE_CXX11 */
 				for(	std::vector<fim_ffp_t>::iterator fi=fc.begin(); fi!=fc.end();++fi )
-					fim_free_fs_font(fi->second), fi->second=NULL;
+					fim_free_fs_font(fi->second), fi->second=FIM_NULL;
 #endif /* FIM_USE_CXX11 */
 				fc.erase(fc.begin(),fc.end());
 				fc=lfc;
@@ -2652,16 +2654,21 @@ err:
 				rs+=string((int)fc.size());
 				rs+= " fonts out of ";
 				rs+=string((int)nfiles);
-				rs+=" files scanned.\n";
+				rs+=" files scanned.";
+				set_status_bar(rs.c_str(),FIM_NULL);
+				rs+="\n";
 			}
 
 			if( cid == "load" && args.size()>1 )
 			{
 				fr.first=args[1];
-				fr.second=NULL;
+				fr.second=FIM_NULL;
 				FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME : move this outta here
 				if(fr.second)
 					goto lofo;
+				else
+					rs ="failed loading font file ",
+					rs+=fr.first;
 			}
 
 			if( cid == "info" )
