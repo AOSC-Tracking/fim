@@ -2303,7 +2303,9 @@ nop:
 		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 		if(c_getImage() && viewport())
 		{
-			fim_coo_t approx_fraction=16;
+			fim_coo_t approx_fraction = cc.getIntVariable(FIM_VID_SKIP_SCROLL);
+			if( approx_fraction == 1 )
+			       	approx_fraction = 16;
 
 			if(viewport()->onRight(approx_fraction) && viewport()->onBottom(approx_fraction))
 				next();

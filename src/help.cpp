@@ -112,6 +112,7 @@ fim_var_help_db[FIM_VID_MAX_CACHED_MEMORY]= "[in,experimental,g:] the maximum am
 fim_var_help_db[FIM_VID_CACHED_IMAGES]= "[out,g:] the number of images currently cached." ;
 fim_var_help_db[FIM_VID_SCREEN_WIDTH]= "[out,g:] the screen width"  ;
 fim_var_help_db[FIM_VID_SCREEN_HEIGHT]= "[out] the screen height" ;
+fim_var_help_db[FIM_VID_SKIP_SCROLL]= "[int,g:] if >1, fraction of page which will be skipped in when scrolling (e.g. 'scrollforward'); if 1, auto chosen; if <1, disabled." ;
 fim_var_help_db[FIM_VID_DBG_AUTOCMD_TRACE_STACK]= "[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)" ;
 fim_var_help_db[FIM_VID_DBG_COMMANDS]= "[in,g:] print out each command before its execution (for debugging purposes)" ;
 fim_var_help_db[FIM_VID_OPEN_OFFSET]= "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " ;
