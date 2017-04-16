@@ -625,6 +625,7 @@ namespace fim
 #define FIM_VID_STATUS_LINE 			"_status_line"		/* "[in,g:] if 1, will display the status bar" */
 #define FIM_VID_WANT_PREFETCH 			"_want_prefetch"	/* "[in,g:] if 1, will prefetch further files just after display of the first file; if 2 (and configured with --enable-cxx11) will load in the background" */
 #define FIM_VID_LOADING_IN_BACKGROUND		"_loading_in_background"	/* "[out,g:] 1 if program has been invoked with --recursive-background and still loading in background. " */
+#define FIM_VID_RESIZE_HUGE_ON_LOAD		"_downscale_huge_at_load"	/* "[in,g:] if 1, will downscale automatically huge images at load time." */
 #define FIM_VID_WANT_SLEEPS 			"_want_sleep_seconds"	/* "[in,g:] number of seconds of sleep during slideshow mode" */
 #define FIM_VID_WANT_EXIF_ORIENTATION		"_want_exif_orientation"	/* "[in,g:] if 1, will reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." */
 #define FIM_VID_EXIF_ORIENTATION 		"__exif_orientation"	/* "[out,i:] orientation information in the same format of " FIM_VID_ORIENTATION ", read from the orientation EXIF tags (i:EXIF_Orientation)." */
