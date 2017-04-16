@@ -137,7 +137,7 @@ err:
 			if( ns == FIM_SYM_NAMESPACE_IMAGE_CHAR )
 			{
 				//image variable
-				nsp = browser_.c_image();
+				nsp = browser_.c_getImage();
 				goto err;
 			}
 			else

@@ -213,7 +213,7 @@ class Browser
 	Viewport *only_viewport_;
 #endif /* FIM_WINDOWS */
 	CommandConsole& commandConsole_;
-	Image* image(void)const;
+	Image* getImage(void)const;
 
 #ifdef FIM_READ_STDIN_IMAGE
 #if FIM_IMG_NAKED_PTRS
@@ -240,7 +240,7 @@ class Browser
 #ifdef FIM_READ_STDIN_IMAGE
 	void set_default_image(ImagePtr stdin_image);
 #endif /* FIM_READ_STDIN_IMAGE */
-	const Image* c_image(void)const;	// was private
+	const Image* c_getImage(void)const;	// was private
 	int empty_file_list(void)const;
 
 	Browser(CommandConsole& cc);

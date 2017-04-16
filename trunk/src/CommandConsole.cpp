@@ -624,9 +624,9 @@ err:
 					completions.push_back((*vi).first);
 			}
 #if 1
-			if(browser_.c_image())
+			if(browser_.c_getImage())
 			if(nschar==FIM_SYM_NULL_NAMESPACE_CHAR || nschar==FIM_SYM_NAMESPACE_IMAGE_CHAR)
-				browser_.c_image()->find_matching_list(cmd,completions,true);
+				browser_.c_getImage()->find_matching_list(cmd,completions,true);
 			if(nschar==FIM_SYM_NULL_NAMESPACE_CHAR || nschar==FIM_SYM_NAMESPACE_BROWSER_CHAR)
 				browser_.find_matching_list(cmd,completions,true);
 #ifdef FIM_WINDOWS
@@ -1553,9 +1553,9 @@ ret:
 #ifdef FIM_NAMESPACES
 		acl+=browser_.get_variables_list();
 		acl+=sep;
-		if(browser_.c_image())
+		if(browser_.c_getImage())
 		{
-			acl+=browser_.c_image()->get_variables_list();
+			acl+=browser_.c_getImage()->get_variables_list();
 			acl+=sep;
 		}
 #endif /* FIM_NAMESPACES */
@@ -2334,9 +2334,9 @@ ok:
 		fim_err_t rc=FIM_ERR_NO_ERROR;
 		string wcss = getStringVariable(FIM_VID_WANT_CAPTION_STATUS);
 
-		if( wcss.c_str() && *wcss.c_str() && browser_.c_image())
+		if( wcss.c_str() && *wcss.c_str() && browser_.c_getImage())
 		{
-			fim::string clb = browser_.c_image()->getInfoCustom(wcss.c_str());
+			fim::string clb = browser_.c_getImage()->getInfoCustom(wcss.c_str());
 
 			rc = displaydevice_->set_wm_caption(clb.c_str());
 			wcs = false; /* window caption + status */
