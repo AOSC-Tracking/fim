@@ -1757,7 +1757,7 @@ AC_DEFINE_UNQUOTED([FIM_WANT_NO_OUTPUT_CONSOLE], $fim_cv_want_no_output_console,
 fi
 dnl ==================
 AH_TEMPLATE([FIM_WANT_UNICODE])
-AC_ARG_ENABLE(unicode, AC_HELP_STRING([--enable-unicode], [Unicode. (disabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_unicode=1 ; else fim_cv_want_unicode=0 ; fi ],[ fim_cv_want_unicode=0 ])
+AC_ARG_ENABLE(unicode, AC_HELP_STRING([--enable-unicode], [Unicode. (Unimplemented, disabled by default)]), [       if test x$enableval = xyes; then fim_cv_want_unicode=1 ; else fim_cv_want_unicode=0 ; fi ],[ fim_cv_want_unicode=0 ])
 if test x$fim_cv_want_unicode == x1 ; then 
 	# CXXFLAGS="$CXXFLAGS `freetype-config --cflags`"
 	# LIBS="$LIBS `freetype-config --libs`"

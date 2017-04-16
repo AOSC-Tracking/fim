@@ -3,246 +3,230 @@
 
                 Version 0.6-trunk
 
-# (r1217)
- * -r {width:height} / --resolution {width:height} will behave as expected in SDL mode.
-# (r1215)
- * if variable _downscale_huge_at_load is 1 (default now), will downscale automatically 
-   huge images at load time.
 # (r1210-r1213)
- * new experimental command 'font' to control displayed font and scan font directories. 
-   keys '{' and '}' will cycle through scanned fonts.
-# (r1208)
- * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
-# (r1206,r1207)
- * configure --with-tmpfile will specify a new temporary directory. 
-# (r1204)
- * bugfix: conversion from external program was vulnerable to failure due to missing check.
+ * Command 'font' controls displayed font and scans font directories.
+ * Keys '{' and '}' will cycle through scanned consolefonts.
+# (r1187)
+ * Variable _fbfont_magnify_factor will scale text font at runtime.
+# (r1198)
+ * Variable _fbfont_as_screen_fraction; if >0, font will be scaled to exceed 1/_fbfont_as_screen_fraction of both width and height.  If _fbfont_as_screen_fraction<0, font scaling will be fixed.
+# (r1199)
+ * Keys '[' ']' bound to new aliases "font_reduce" and "font_magnify".
+ * Key '|' bound to new alias "toggle_font_auto_scale".
+# (r1217)
+ * Switch -r {width:height} / --resolution {width:height} will behave as expected in SDL mode.
+# (r1184,r1215)
+ * Variable _downscale_huge_at_load, if 1 (default), will downscale automatically huge images at load time. To avoid loading images exceeding too much screen size.
 # (r1202,r1205)
- * if an image has been decoded from a temporary file, its name is in i:_buffered_in_tmpfile.
+ * Variable i:_buffered_in_tmpfile stores temporary decoding image filename, if any.
 # (r1200)
- * will consider magic number "<svg" enough to classify a file as SVG.
- * load SVG by invoking inkscape <file.svg> --without-gui --export-png <temp.png>.
+ * Internally load SVG by invoking inkscape <file.svg> --without-gui --export-png <temp.png>. A file beginning with "<svg" will be considered an SVG (Scalable Vector Graphics).
 # (r1197)
- * if scrollable border less than 1/16 of screen, 'scrollforward' will skip it.
-# (r1196)
- * In case of CBZ,CBR,PDF,PS,DVI file, fimgs will use '--autotop --autowidth'.
-# (r1184)
- * will resize huge images not to exceed too much screen size.
-   (TODO: will introduce control option for this soon)
-# (r1181)
- * fix: gif error handling could have led to NULL pointer usage.
+ * Command 'scrollforward' will skip a border if this is less than 1/16 of screen; this smoothes up documents reading.
 # (r1156)
- * scale '<'/scale '>' will shrink/magnify the image using cached mipmaps.
-# (r1155)
- * fix: the largest mipmap was not always being used.
+ * Commands  scale '<'  /  scale '>' will shrink/magnify the image using cached mipmaps.
+# (r1196)
+ * In case of CBZ,CBR,PDF,PS,DVI file, fimgs script will use '--autotop --autowidth'.
 # (r1153,1154,1195)
- * fimgs script will probe for unrar-nonfree/rar/unrar-free (in this order).
- * fimgs man page updated.
+ * fimgs script will now probe for unrar-nonfree/rar/unrar-free (in this order).
 # (r1149)
- * Added a '_caption_over_image_fmt' variable to customize overlay string contents.
+ * Variable '_caption_over_image_fmt' will now customize overlay string contents.
 # (r1147,r1148)
- * Added a 'goto {+|-}identifier[+]' syntax to jump to next file having a different value of i:identifier, 
-   also empty if without trailing `+'.
-# (r1145)
- * configure will try to detect curses/ncurses.
-# (r1144)
- * fix: -lfl linkage is not really necessary: removed it.
-# (r1143)
- * fix: support for PPM files with 2 bytes per sample.
+ * Command syntax 'goto {+|-}identifier[+]' (new) jumps to next file having a different value of i:identifier, also empty if without trailing `+'.
 # (r1136)
- * limit '-set_union' will merge current limited list with the new one.
+ * Command limit '-set_union' will merge current limited list with the new one.
 # (r1135)
- * limit '-merge' will merge current limited list with the new one.
+ * Command limit '-merge' will merge current limited list with the new one.
 # (r1133,r1134)
- * desc 'reload' load once again description files specified at the command line with --load-image-descriptions-file.
+ * Command desc 'reload' loads once again description files specified at the command line with --load-image-descriptions-file.
 # (r1130,r1131)
- * Won't check for duplicates on command line specified files unless sorting is requested.
-# (r1127,r1128)
- * Optimized the `limit' command.
+ * FIM won't check for duplicates on command line specified files unless sorting is requested.
 # (r1126)
- * Added a stand-alone `make ltests' goal to test fim' language only.
-# (r1124)
- * Fix to configure script regex_t check: was unnecessarily broken.
+# * Makefile: added a stand-alone `make ltests' goal to test fim' language only.
 # (r1113)
- * Fix to the -P/--text-reading switch (seems to be broken in version 0.5).
+ * Switch -P/--text-reading fixed. Seems to be broken in version 0.5. (FIXME)
 # (r1108)
- * Removed commands 'negate' and 'desaturate'; use new command "color": "color 'negate'" and "color 'desaturate'".
+ * Command "color": "color 'negate'" and "color 'desaturate'" introduced.
+ * Commands 'negate' and 'desaturate' deleted.
 # (r1107-r1011)
- * "color CVS" (CVS among 'protanopia', 'deuteranopia', 'tritanopia', 'p', 'd', 't') simulates a color vision deficiency;
-   adding 'daltonize' applies a tentative color correction.
-   "color 'colorblind'" is short for "color 'deuteranopia'".
+ * Command "color CVS" (CVS among 'protanopia', 'deuteranopia', 'tritanopia', 'p', 'd', 't') simulates a color vision deficiency; adding 'daltonize' applies a tentative color correction;  "color 'colorblind'" is short for "color 'deuteranopia'".
 # (r1112)
- * "color 'identity'": populate the image with 'RGB identity' pixels.
+ * Command "color 'identity'": populate the image with 'RGB identity' pixels.
 # (r1104)
- * Language standard level (and a few features) will be enabled and set from the value of the predefined __cplusplus macro.
-# (r1079)
+# * Language standard level (and a few features) will be enabled and set from the value of the predefined __cplusplus macro.
+# (r1079) (FIXME: man fimrc ?)
  * Introduced a "#!fim:/=dir" special description line to specify dir prepended to basename.
  * Introduced a "#!fim:\=dir" special description line to specify dir prepended to filepath.
-# (r1076)
- * misc fixes of minor things causing compile warnings
-# (r1075)
- * fix: was likely using uninitialized data in Image()
-# (r1074)
- * fix: a few more checks when reading PCX files
-# (r1073)
- * bugfix: a function in AADevice (fim_aa_get_input) was missing return value
-# (r1071,r1072)
- * documented the %k expando for _info_fmt_str and bugfix (avoiding data corruption when handling %k)
+# (r1072)
+# * Documented the %k expando for _info_fmt_str.
+# (r1127,r1128)
+# * Optimized further the `limit' command.
 # (r1078)
- * limit '-list'      will list existing variables identifiers as set via 'desc'
- * limit '-list' 'id' will list existing values for instances of variable 'id' as set via 'desc'
+ * Command limit '-list'      will list existing variables identifiers as set via 'desc'
+ * Command limit '-list' 'id' will list existing values for instances of variable 'id' as set via 'desc'
 # (r1068)
- * "limit '~i' MINIDX[-MAXIDX]", with MINIDX and MAXIDX numbers (eventually with K as x 1000 multiplier) will restrict to filenames in positions between those.
+ * Command "limit '~i' MINIDX[-MAXIDX]", with MINIDX and MAXIDX numbers (eventually with K as x 1000 multiplier) will restrict to filenames in positions between those.
 # (r1070)
- * "limit '~d'", will limit to files having exact current file's modify date +- one day.
+ * Command "limit '~d'", will limit to files having exact current file's modify date +- one day.
 # (r1067)
- * "limit '~z'", with, will limit to files having same file size as the current.
- * "limit '~z' MINSIZE[-MAXSIZE]", with MINSIZE and MAXSIZE numbers with eventually K (x 1024) or M (x 1024 1024) multipliers, will limit according to file size.
- * "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, will limit according to file modify date (expressed as seconds since the epoch, see 'man 2 time').
+ * Command "limit '~z'", with, will limit to files having same file size as the current.
+ * Command "limit '~z' MINSIZE[-MAXSIZE]", with MINSIZE and MAXSIZE numbers with eventually K (x 1024) or M (x 1024 1024) multipliers, will limit according to file size.
+ * Command "limit '~d' MINTIME[-MAXTIME]", with MINTIME and MAXTIME numbers, will limit according to file modify date (expressed as seconds since the epoch, see 'man 2 time').
 # (r1069)
- * "limit '~d' MINDATE[-MINDATE]", with MINDATE and MAXDATE dates as in DD/MM/YYYY, and after 1900.
+ * Command "limit '~d' MINDATE[-MINDATE]", with MINDATE and MAXDATE dates as in DD/MM/YYYY, and after 1900.
 # (r1065)
- * "limit '-further' ..." will make 'limit' act on the current list, rather than on the full anew. 
-# (r1063)
- * Command "list 'mark' {args}" accepts now exactly what "limit {args}" does.
-# (r1059)
- * Doc fix: stating that --sanity-check terminates the program, rather than continuing.
+ * Command "limit '-further' ..." will make 'limit' act on the current list, rather than on the full anew. 
 # (r1056,r1062)
- * New criteria for the "limit" command:
+ * Command "limit" uses new criteria:
    If invoked with '~!' will restrict to files with unique basename.
    If with '~=', to files with duplicate basename;
    if with '~^', to the first of the files with duplicate basename;
    if with '~$', to the last of the files with duplicate basename. 
 # (r1053)
- * Added variable _all_file_loaders: space-separated list of hardcoded file loaders usable with _file_loader.
+ * Variable '_all_file_loaders' introduced: space-separated list of hardcoded file loaders usable with '_file_loader'.
 # (r1051,r1052)
- * Optional -R/--recursive[=arg] argument, overwrites (if set) or appends to (if beginning with + or |) 
-   the "_pushdir_re" variable (recursed filename extensions).
+ * Switch -R/--recursive[=arg] has now an optional argument; overwrites (if set) or appends to (if beginning with + or |) the "_pushdir_re" variable (recursed filename extensions).
 # (r1046)
  * Introduced a "#!fim:+=" special description line to append to cached description.
  * Introduced a "#!fim:^=" special description line to prepend to cached description.
 # (r1045)
  * Introduced a "#!fim:!=" special description line to reset all variables of the cached namespace.
 # (r1043)
- * 'desc        "save"' functionality to save descriptions file data from the currently browsable images list.
+ * Command 'desc        "save"' functionality to save descriptions file data from the currently browsable images list.
 # (r1048)
- * 'desc "-append" "save"' will work in append mode.
+ * Command 'desc "-append" "save"' will work in append mode.
 # (r1044,r1047)
- * 'desc "-all" "save"' will save also all descriptions file variables.
+ * Command 'desc "-all" "save"' will save also all descriptions file variables.
 # (r1048)
- * 'desc "-nooverw" "-append" "save"' will either force overwrite; saving and appending possible, if user request.
+ * Command 'desc "-nooverw" "-append" "save"' will either force overwrite; saving and appending possible, if user request.
 # (r1039, also in branches/0.5)
- * to ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
-# (r1038, also in branches/0.5)
- * fix: when stdint.h is available use uint8_t, uint16_t, uint32_t instead of non-portable __u8, __u16, __u32
-# (r1037, also in branches/0.5)
- * fix: ./configure --disable-pcx was not properly disabling PCX format support
-# (r1036, also in branches/0.5)
- * fix: compilation was broken without framebuffer (FIM_WITH_NO_FRAMEBUFFER)
+ * To ease reproducible builds: imposing LC_ALL=C to $(YACC) and $(SORT), vim2html.pl reads SOURCE_DATE_EPOCH
 # (r1035)
- * introduced --mark-from-image-descriptions-file: read file names from a
-   description file and use them to mark current list files.
-# (r1030)
- * fix: introduced alphanumeric restriction in the shebang variables (must
-   begin with underscore or alphabetic, continue with underscore or alphanumeric).
+ * New switch --mark-from-image-descriptions-file: read file names from a description file and use them to mark current list files.
+# (r1030) (FIXME: to document better)
+ * Introduced alphanumeric restriction in the descriptions shebang variables: must begin with underscore or alphabetic, continue with underscore or alphanumeric.
 # (r1027)
- * Keys '(' and ')' are now bound respectively to "goto '^p'" and "goto '$p'";
-   that is jump to first or last page.
+ * Keys '(' and ')' are now bound respectively to "goto '^p'" and "goto '$p'"; that is jump to first or last page.
 # (r1026)
- * available symkeys are now documented in a section of man fimrc.
-# (r1025,r1028)
- * fix: cleaned up the internal keysyms initialization code.
+ * Available symkeys are now documented in a section of man fimrc.
 # (r1019)
 # TODO: not yet active
- * support for glob fnmatch wordexp...
+#  * Support for glob fnmatch wordexp...
 # (r1021)
- * switch -k --keysym-press <keysym> to execute simulated press of keysym at startup.
+ * Switch -k --keysym-press <keysym> to execute simulated press of keysym at startup.
 # (r1018)
- * added command line switch  -/  <pattern> as short for -c /<pattern>.
- * added command line switch --// <pattern> as short for -c /<pattern> with _re_search_opts='f'.
+ * New switch  -/  <pattern> as short for -c /<pattern>.
+ * New switch --// <pattern> as short for -c /<pattern> with _re_search_opts='f'.
 # (r1015)
- * will emit a status message when limiting long lists.
+# * Will emit a status message when limiting long lists.
 # (r1014)
- * Default key for 'scrollforward' is now space (' ') instead of 's'.
+ * Key space (' ') now assigned to 'scrollforward' (earlier was 's').
 # (r1013)
- * introduced context prepend/append shebang syntax "#!fim:^=" and "#!fim:+=" in description files.
+ * Introduced context prepend/append shebang syntax "#!fim:^=" and "#!fim:+=" in description files.
    (FIXME: undocumented)
-# (r1011)
- * fix: removed obsolete documentation for the "window" command, now disabled.
-# (r1010)
- * introduced the 'list "swap"' command.
-# (r1009)
- * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
 # (r1008)
- * switch --read-from-stdin-elds supports now the ASCII NUL terminator (via '').
+ * Switch --read-from-stdin-elds supports now the ASCII NUL terminator (via '').
 # (r1007)
- * switch -V (--version) will print out libspectre version info.
+# * Switch -V (--version) will print out libspectre version info.
 # (r1006)
- * switch -V (--version) will print to stdout (not anymore to stderr).
-# (r1004)
- * introduced 'list "dumpmarked"' and 'list "unmarkall"' commands.
+ * Switch -V (--version) will print to stdout (not anymore to stderr).
 # (r1003)
- * the -B switch is now short for --background-recursive.
+ * The -B switch is now short for --background-recursive.
 # (r1097)
- * if compiled without --enable-c++11, -B / --background-recursive will behave as -R.
+ * If compiled without --enable-c++11, -B / --background-recursive will behave as -R.
 # (r1002)
- * the -S switch is now short for --image-descriptions-file-separator (not anymore for --sanity-check).
+ * Switch -S is now short for --image-descriptions-file-separator (not anymore for --sanity-check).
 # (r1001)
- * the -D switch is now short for --load-image-descriptions-file (not anymore for --dump-default-fimrc).
+ * Switch -D is now short for --load-image-descriptions-file (not anymore for --dump-default-fimrc).
 # (r999,r1000)
- * introduced -L/--read-from-file switch: read an image list from file (similarly to the - switch).
+ * Switch -L/--read-from-file: read an image list from file (similarly to the - switch).
 # (r971)
- * introduced new variable _cache_control to control the cache mechanism
- * now caching of mipmaps on by default; can be turned off with _cache_control
+# * New variable _cache_control to control the cache mechanism.
+ * Now caching of mipmaps on by default; can be turned off with new variable '_cache_control'.
 # (r965)
- * if _push_pushes_dirs is 2, will also push hidden files and directories; that is,
-   ones whose names begin with a dot (.)
-# (r963)
- * if configure'ing with --enable-c++11, the --background-recursive switch will load
-   images in the background recursively, allowing viewing in the order they appear.
-  (FIXME: so far synchronization during loading is missing.)
-# (r961)
- * renamed configure switch --enable-cxx11 to --enable-c++11
-# (r955)
-  * i:_file_load_time will store the time taken to load the file and decode the image.
-# (r952)
- * _use_mipmaps=2 will compute the mipmaps faster, using every fourth source pixel.
-   This can be a good solution for photographs.
-# (r948)
- * if configure'ing with --enable-c++11, background image loading will be available
-  (FIXME: need controlling variable, need to handle failed loads)
-# (r947)
- * mipmap computing (controlled by _use_mipmaps) is now faster
-# (r1187)
-   Text font can be scaled at runtime via variable _fbfont_magnify_factor.
-# (r1198)
-   If _fbfont_as_screen_fraction>0, font will be scaled to exceed 
-    1/_fbfont_as_screen_fraction of both width and height.
-   If _fbfont_as_screen_fraction<0, font scaling will be fixed.
-# (r1199)
- * Introduced "font_reduce" and "font_magnify" aliases and bound to '[' ']' keys.
- * Introduced "toggle_font_auto_scale" alias and bound to '|' key.
+ * Variable '_push_pushes_dirs'; if it is 2, will also push hidden files and directories; that is, ones whose names begin with a dot (.).
 # (r942)
  * configure --with-font-magnifying-factor=FACTOR controls text magnification.
    If FACTOR is positive this value will be hardcoded and fixed. 
 # (r945)
    If FACTOR is negative, -FACTOR is default but still runtime modifiable.
    If FACTOR is 0 (default) a default of 1 will apply.
-   Option meant to be used with with very high resolutions and small fonts.
+   Option meant to be used on configurations with high resolutions and small consolefonts.
+# (r1206,r1207)
+ * configure --with-tmpfile will specify a new temporary directory. 
+# (r1145)
+ * configure will try to detect curses/ncurses.
+# (r1124)
+ * fix: in configure script, the regex_t check was unnecessarily broken.
+# (r1037, also in branches/0.5)
+ * fix: ./configure --disable-pcx was not properly disabling PCX format support
+# (r963)
+ * If configure'ing with --enable-c++11, the --background-recursive switch will load images in the background recursively, allowing viewing in the order they appear.
+#  (FIXME: so far synchronization during loading is missing.)
+# (r961)
+ * configure switch --enable-cxx11 : renamed to --enable-c++11
+# (r955)
+ * Variable i:_file_load_time will store the time taken to load the file and decode the image.
+# (r952)
+ * Variable _use_mipmaps=2 will compute the mipmaps faster, using every fourth source pixel.  This can be a good solution for speeding up large photographs scaling.
+# (r948)
+ * configure --enable-c++11 makes background image loading available.
+#  (FIXME: need controlling variable, need to handle failed loads)
+# (r947)
+# * Mipmap computing (controlled by _use_mipmaps) is now faster.
 # (r941)
- * FIXME: description files beginning with "#!fim:desc" (whatever extension) can now
-   be detected and loaded as they were normal image files (FIXME: undocumented)
- * FIXME: did something with --enable-unicode ?
+ * FIXME: description files beginning with "#!fim:desc" (whatever extension) can now be detected and loaded as they were normal image files (FIXME: undocumented)
+# * FIXME: did something with --enable-unicode ?
 # (r936)
- * added --reverse to reverse the file list
+ * New switch --reverse to reverse the file list.
 # (r933)
- * added --sort-mtime to sort file list according to modification time
- * added --sort-fsize to sort file list according to file size
- * to list command added subcommand 'sort_mtime' to sort file list according to modification time
- * to list command added subcommand 'sort_fsize' to sort file list according to file size
+ * New switch --sort-mtime to sort file list according to modification time.
+ * New switch --sort-fsize to sort file list according to file size.
+ * Command 'list' 'sort_mtime' to sort file list according to modification time.
+ * Command 'list' 'sort_fsize' to sort file list according to file size.
+# (r1063)
+ * Command "list 'mark' {args}" accepts now exactly what "limit {args}" does.
+# (r1004)
+ * Command syntax 'list "dumpmarked"' and 'list "unmarkall"' introduced.
+# (r1010)
+ * Command 'list "swap"' introduced.
 # (r931)
- * added the _lastgotodirection variable, with the last file goto direction
- * key Enter will now mark and then go forward or back according to _lastgotodirection 
+ * New '_lastgotodirection' variable, with the last file goto direction.
+ * Key 'Enter' will now 'mark' and then go forward or back according to variable '_lastgotodirection'.
+# (r1076)
+# * Misc fixes of minor things causing compile warnings.
+# (r1155)
+ * fix: the largest mipmap was not always being used.
+# (r1144)
+ * fix: -lfl linkage is not really necessary: removed it.
+# (r1143)
+ * fix: support for PPM files with 2 bytes per sample.
+# (r1074)
+ * fix: a few more checks when reading PCX files.
+# (r1059)
+ * fix: documented that switch --sanity-check terminates the program, rather than continuing.
+# (r1038, also in branches/0.5)
+ * fix: when stdint.h is available use uint8_t, uint16_t, uint32_t instead of non-portable __u8, __u16, __u32
+# (r1036, also in branches/0.5)
+ * fix: compilation was broken without framebuffer (FIM_WITH_NO_FRAMEBUFFER)
+# (r1025,r1028)
+ * fix: cleaned up the internal keysyms initialization code.
+# (r1011)
+ * fix: removed obsolete documentation for the "window" command, now disabled.
+# (r1181)
+ * bugfix: GIF error handling could have led to NULL pointer usage.
+# (r1075)
+# * bugfix: was likely using uninitialized data in Image().
+# (r1208)
+ * bugfix: on certain framebuffer configurations part of the screen was not being redrawn.
+# (r1204)
+ * bugfix: conversion from external program was vulnerable to failure due to a missing check.
+# (r1073)
+#  * bugfix: a function in AADevice (fim_aa_get_input) was missing return value.
+# (r1071)
+ * bugfix: avoiding data corruption when handling %k expando.
+# (r1009)
+ * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
 
                 Version 0.5
 

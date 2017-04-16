@@ -12,7 +12,6 @@
 	7		Technical overview (important for patch writers)
 	8		Availability in Linux distributions
 	8.1		Debian, Ubuntu
-	8.2		Gentoo Installation Tips
 	9		License
 	10		Contacts, mailing lists, URLs
 ================================================================================
@@ -48,7 +47,7 @@ FIM is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
 
 FIM is capable of regular expressions based (on filename) vim-like autocommands,
-comment-based search, EXIF tags display.
+comment-based search and filtering, EXIF tags display, custom font usage.
 It offers GNU readline command line autocompletion and history,
 completely customizable key bindings, external/internal (if/while-based)
 scriptability (through return codes, standard input/output, and commands given
@@ -80,7 +79,7 @@ Implemented features:
  - command aliases support (macros)
  - event autocommands (in Vim's 'autocmd' style)
  - regular expressions on filenames to enrich autocommand behaviour
- - image descriptions display
+ - image descriptions display (expando sequences)
  - regular expressions on image descriptions
  - configuration (initialization) file support (~/.fimrc)
  - usable built-in default configuration
@@ -97,8 +96,8 @@ Implemented features:
  - command iteration ( in the [n]<command key> form )
  - external script file execution
  - system call support
- - image caching (optional)
- - image prefetching (optional)
+ - image caching and mipmaps
+ - image prefetching
  - pipe commands from some input program
  - many of these features could be enabled or disabled at compile time editing the Makefile
  - runs under screen
@@ -112,13 +111,13 @@ Implemented features:
  - viewing any file as a binary/RGB pixelmap
  - viewing any file as (rendered) text
  - opening files at a specified file offset
-
-Yet unimplemented features:
-
- - autodocumentation, like gdb or vim
- - mutt-like patterns ~p, ~r ...
- - advanced pattern selection of images on other criterias ?
-
+ - image list limiting
+ - comments / captions / description files
+ - recursive loading from directories
+ - sorting files list on file size, name date
+ - text font control (size and consolefont selection)
+ - dump to stdout list of selected images 
+ - one-key based jump between last two images
 
  Follows a comparison of popular image viewers available on Linux, focusing on
  the peculiar FIM features.
@@ -266,7 +265,7 @@ The idea was to enrich Fbi with a command line and configurability features.
 An idea of the concept was settled when developing a small 'vim-like fbi patch'
 back in 2005.
 
-The code was applied as a patch an the existing fbi source tree, but was not by
+The code was applied as a patch on the existing fbi source tree, but was not by
 any means near to what is FIM today.
 
 FIM aims at a complete reorganization of the Fbi code, and ideally towards an
@@ -386,28 +385,6 @@ Tested platforms:
  The above list was valid on a Debian Jessie installation; it's fair to expect
  these packages names to change a little with time..
  
---------------------------------------------------------------------------------
-	8.2		Gentoo Installation Tips (obsolete)
-
-On the Gentoo Linux distribution , you should not have problems building FIM by
-first installing some libraries:
-
- $ emerge media-libs/giflib media-libs/jpeg media-libs/libpng media-libs/tiff
-and Bison (from 1.875d on) and Flex:
- $ emerge flex bison
-
-This should suffice.
-Once these requirements are satisfied, you could proceed with the 
-	./configure ; make ; make install
-sequence.
-Standard installation details are in the INSTALL file.
-
-BEWARE: THERE COULD BE PROBLEMS WITH FLEX/BISON! 
-
-WARNING: the gentoo linux fim package version (<=0.2) is obsolete!
-
-"flex version 2.5.4" and "bison (GNU Bison) 1.875d" are known to work.
-
 ================================================================================
 	9		License
 ================================================================================
@@ -429,7 +406,7 @@ from the GPL licensed Terminus Font package, version 4.30 by Dimitar Toshkov
 	10		Contacts, URLs
 ================================================================================
 
-FIM is (C) 2007-2015 Michele Martone.
+FIM is (C) 2007-2017 Michele Martone.
 
 You can contact me via email: "dezperado_FOobAr_autistici_Baz_org", after
 replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
