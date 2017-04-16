@@ -278,7 +278,7 @@ Specify an endline delimiter character for breaking lines read via \-/\-\-read\-
 
 .TP
 .B \-A, \-\-autotop
-		 Align images to the top (UNFINISHED).
+		 Align images to the top border (by setting _autotop=1 after initialization).
 .TP
 .B \-q, \-\-quiet
 Quiet mode. Sets _display_status=0;_display_busy=0;.

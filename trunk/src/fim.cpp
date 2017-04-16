@@ -295,7 +295,7 @@ FIM_NULL
 #endif /* HAVE_GETDELIM */
 	".\n"
     },
-    {"autotop",   no_argument,       FIM_NULL, 'A',"Align images to the top (UNFINISHED).",FIM_NULL,
+    {"autotop",   no_argument,       FIM_NULL, 'A',"Align images to the top border (by setting " FIM_VID_AUTOTOP "=1 after initialization)." , FIM_NULL,
 	    FIM_NULL
     },
 //    {"gamma",      required_argument, FIM_NULL, 'g',"set gamma (UNFINISHED)","{gamma}",
@@ -1118,7 +1118,6 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 'A':
 		    //fbi's
 		    //cc.setVariable(FIM_VID_AUTOTOP,(fim_int)1);
-		    //FIXME: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_AUTOTOP "=1;");
 	#endif /* FIM_AUTOCMDS */
