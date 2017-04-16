@@ -310,7 +310,7 @@ Thomas Niemann's tutorial to yacc & lex
 The yacc & lex HOWTO
 GNU readline manual
 Ray Lischner, STL Pocket Reference, O'Reilly, 2004 
-Herbert Schildt, C++- Complete Reference, Third Edition, Osborne McGraw-Hill, 1999
+Herbert Schildt "C++ - Complete Reference" Third Edition, Osborne McGraw-Hill, 1999
 http://www.gnu.org/software/m4/manual/
 http://www.gnu.org/software/autoconf/manual/
 http://www.gnu.org/software/automake/manual/
@@ -408,13 +408,12 @@ from the GPL licensed Terminus Font package, version 4.30 by Dimitar Toshkov
 
 FIM is (C) 2007-2017 Michele Martone.
 
-You can contact me via email: "dezperado_FOobAr_autistici_Baz_org", after
-replacing _FOobAr_ with a '@' and _Baz_ with a '.'.
+ Email: "dezperado_FOobAr_autistici_Baz_org", just care replacing
+         _FOobAr_ with a '@' and _Baz_ with a '.'.
+ GPG Key: 0xE0E669C8EF1258B8
 
 If it is for a bug report or installation help, be sure of reading the
-documentation and the BUGS file first, and then you're welcome.
-If it is for other suggestions or ideas, you are welcome, too (and don't miss
-the TODO file, too)!
+documentation and the BUGS file first.
 FIM is not perfect: a number of weaknesses are summarized in TODO and BUGS.
 
 

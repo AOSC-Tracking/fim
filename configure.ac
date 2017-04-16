@@ -1196,7 +1196,7 @@ AM_CONDITIONAL(FIM_WANT_HARDCODED_CONSOLEFONT, test x$have_hardcoded_font = xyes
 
 dnl ==================
 
-AC_ARG_ENABLE(long-int-vars, AC_HELP_STRING([--enable-long-int-vars], [Internals shall use 64 bit integers (EXPERIMENTAL].),
+AC_ARG_ENABLE(long-int-vars, AC_HELP_STRING([--enable-long-int-vars], [Internals shall use 64 bit integers.]),
 [if test x$enableval = xyes; then
         fim_cv_want_int64_int=yes;
 else
