@@ -973,6 +973,7 @@ namespace fim
 #define FIM_WANT_DISPLAY_FILESIZE (FIM_WANT_KEEP_FILESIZE && 0)
 #define FIM_WANT_DISPLAY_MEMSIZE  0
 #define FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING  FIM_WANT_MIPMAPS && 1
+#define FIM_WANT_R_SWITCH  1 /* --resolution width:height switch (the fim way, differently from fbi's) */
 /* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
 #define FIM_STREAM_BUFSIZE	4096
 #define FIM_MAXLINE_BUFSIZE	1024

@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1217)
+ * -r {width:height} / --resolution {width:height} will behave as expected in SDL mode.
 # (r1215)
  * if variable _downscale_huge_at_load is 1 (default now), will downscale automatically 
    huge images at load time.
