@@ -21,7 +21,7 @@
  * Variable i:_buffered_in_tmpfile stores temporary decoding image filename, if any.
 # (r1200)
  * Internally load SVG by invoking inkscape <file.svg> --without-gui --export-png <temp.png>. A file beginning with "<svg" will be considered an SVG (Scalable Vector Graphics).
-# (r1197)
+# (r1197,r1223)
  * Command 'scrollforward' will skip a border if this is less than a fraction of the screen; this smoothes up documents reading. The fraction is one over '_scroll_skip_page_fraction', if >1; 1/16 if 1, no tolerance if <1.
 # (r1156)
  * Commands  scale '<'  /  scale '>' will shrink/magnify the image using cached mipmaps.
