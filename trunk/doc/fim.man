@@ -5,9 +5,9 @@
 .SH NAME
 fim \- \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
-.B fim [{options}] [\-\-] {imagefile} [{imagefiles}]
+.B fim [{options}] [\-\-] {imagepath} [{imagepaths}]
 .fi
-.B ... | fim [{options}] [\-\-] [{imagefiles}] \-
+.B ... | fim [{options}] [\-\-] [{imagepaths}] \-
 .fi
 .B fim [{options}] [\-\-] [{files}] \- < {file_name_list_text_file}
 .fi
@@ -33,7 +33,10 @@ For '.SVG' vectorial images, fim will try to use 'inkscape'.
 For other formats fim will try to use ImageMagick's 'convert' executable.
 
 
-If \fB{imagefile}\fP is a directory, therein contained files of supported formats will be loaded. If \fB{imagefile}\fP contains a trailing slash (/), it will be treated as a directory; otherwise a check will be made using \fBstat(2)\fP. To change this default, see description of the _pushdir_re variable and the \-\-no\-stat\-push and \-\-recursive  options.
+If \fB{imagepath}\fP is a file, its format is guessed not by its name but by its contents (see e.g. the _file_loader variable to change this default).
+
+
+If \fB{imagepath}\fP is a directory, therein contained files of supported formats will be loaded. If \fB{imagepath}\fP contains a trailing slash (/), it will be treated as a directory; otherwise a check will be made using \fBstat(2)\fP. To change this default, see description of the _pushdir_re variable and the \-\-no\-stat\-push and \-\-recursive  options.
 
 
 If configured at build time, fim will be capable of using SDL or aalib output.
@@ -278,7 +281,7 @@ Specify an endline delimiter character for breaking lines read via \-/\-\-read\-
 
 .TP
 .B \-A, \-\-autotop
-		 Align images to the top border (by setting _autotop=1 after initialization).
+		 Align images to the top border (by setting '_autotop=1' after initialization).
 .TP
 .B \-q, \-\-quiet
 Quiet mode. Sets _display_status=0;_display_busy=0;.
