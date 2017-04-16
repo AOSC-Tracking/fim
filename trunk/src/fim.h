@@ -483,7 +483,12 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_EX_SCALE_STRING	"{scale}"
 #define FIM_CNS_SHELL	"/bin/sh"
 #define FIM_CNS_DSFF	"JPEG,PNG,GIF,BMP,TIFF,PPM,PGM,PBM,PCX" /* FIXME: this shall depend on build options */
-#define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.TIF$|\\.JPEG$|\\.JFIF$|\\.PPM$|\\.PGM$|\\.PBM$|\\.PCX$" /* FIXME: this shall depend on build options */
+#if FIM_USE_CXX11
+/* FIXME: shall FIM_CNS_PUSHDIR_RE depend on build options */
+#define FIM_CNS_PUSHDIR_RE	R"***(\.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX$)***" 
+#else /* FIM_USE_CXX11 */
+#define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.TIF$|\\.JPEG$|\\.JFIF$|\\.PPM$|\\.PGM$|\\.PBM$|\\.PCX$"
+#endif /* FIM_USE_CXX11 */
 #define FIM_CNS_ARCHIVE_RE	".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* FIXME: there is much more: CAB.. */
 #define FIM_CNS_VERBOSITY_LOADER		1 /* a value for FIM_VID_VERBOSITY */ 
 #define FIM_CNS_BPP_INVALID	0

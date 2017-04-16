@@ -2,7 +2,7 @@
 /*
  fim_stream.cpp : Textual output facility
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
