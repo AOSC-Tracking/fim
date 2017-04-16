@@ -31,6 +31,7 @@ if(_push_checks==''){_push_checks=1;}
 if(_want_exif_orientation==''){_want_exif_orientation=1;}
 if(ascale==''){ascale="1.0";}
 if(_use_mipmaps==''){_use_mipmaps=1;}
+if(_downscale_huge_at_load==''){_downscale_huge_at_load=1;}
 #
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}

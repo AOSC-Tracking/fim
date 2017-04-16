@@ -2242,6 +2242,7 @@ found_a_loader:	/* we have a loader */
 #endif /* FIM_WANT_EXPERIMENTAL_PLUGINS */
 
 #if FIM_WANT_RESIZE_HUGE_AFTER_LOAD
+    	if(cc.getIntVariable(FIM_VID_RESIZE_HUGE_ON_LOAD)==1)
 	if( cc.current_viewport() && img->i.width>0 && img->i.width>0 )
 	{
 		fim_scale_t mf = 1.5; // max factor (of image to viewport)

@@ -712,6 +712,11 @@ _do_sanity_check
 .fi
 .na
 .B
+_downscale_huge_at_load
+[in,g:] if 1, will downscale automatically huge images at load time.
+.fi
+.na
+.B
 _exiftool_comment
 [out,g:] comment extracted via the exiftool interface; see _use_exiftool.
 .fi
@@ -1183,6 +1188,7 @@ if(_push_checks==''){_push_checks=1;}
 if(_want_exif_orientation==''){_want_exif_orientation=1;}
 if(ascale==''){ascale="1.0";}
 if(_use_mipmaps==''){_use_mipmaps=1;}
+if(_downscale_huge_at_load==''){_downscale_huge_at_load=1;}
 #
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}
