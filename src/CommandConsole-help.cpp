@@ -2,7 +2,7 @@
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help member functions
 
- (c) 2011-2016 Michele Martone
+ (c) 2011-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ namespace fim
 #ifdef FIM_NAMESPACES
 		s+=browser_.get_variables_list();
 		s+=sep;
-		if(browser_.c_image())
+		if(browser_.c_getImage())
 		{
-			s+=browser_.c_image()->get_variables_list();
+			s+=browser_.c_getImage()->get_variables_list();
 			s+=sep;
 		}
 #endif /* FIM_NAMESPACES */

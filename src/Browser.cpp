@@ -36,7 +36,7 @@
 
 #define FIM_BROWSER_INSPECT 0
 #if FIM_BROWSER_INSPECT
-#define FIM_PR(X) printf("BROWSER:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),/*(image()?image()->getIntVariable(FIM_VID_PAGES):-1)*/-1,current().c_str());
+#define FIM_PR(X) printf("BROWSER:%c:%20s: f:%d/%d p:%d/%d %s\n",X,__func__,getGlobalIntVariable(FIM_VID_FILEINDEX),getGlobalIntVariable(FIM_VID_FILELISTLEN),getGlobalIntVariable(FIM_VID_PAGE),/*(getImage()?getImage()->getIntVariable(FIM_VID_PAGES):-1)*/-1,current().c_str());
 #else /* FIM_BROWSER_INSPECT */
 #define FIM_PR(X) 
 #endif /* FIM_BROWSER_INSPECT */
@@ -256,10 +256,10 @@ ret:
 		 */
 		FIM_PR('*');
 
-		if(c_image())
+		if(c_getImage())
 		{
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREREDISPLAY,current());
-			if(c_image())
+			if(c_getImage())
 			{
 				/*
 				 * FIXME : this is conceptually wrong.
@@ -352,13 +352,13 @@ ret:
 		if( args.size() < 1 || (!args[0].c_str()) )
 			goto nop;
 
-		if( c_image() )
+		if( c_getImage() )
 		{
 			fim_char_t f = tolower(*args[0].c_str());
 			if( f )
 			{
 				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
-				if(c_image() && viewport())
+				if(c_getImage() && viewport())
 					viewport()->pan(args);
 				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
 			}
@@ -522,13 +522,13 @@ comeon:
 #if FIM_WANT_BDI
 		if(1)
 #else	/* FIM_WANT_BDI */
-		if(c_image())
+		if(c_getImage())
 #endif	/* FIM_WANT_BDI */
 		{
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if(image())
-				image()->update();/* rotation update */ /* FIXME: shall separate scaling from orientation */
-			if( c_image() )
+			if(getImage())
+				getImage()->update();/* rotation update */ /* FIXME: shall separate scaling from orientation */
+			if( c_getImage() )
 			switch( fc )
 			{
 				case('w'):
@@ -551,15 +551,15 @@ comeon:
 				{
 					if( newscale )
 					{
-						if(image())
-							image()->reduce(newscale);
+						if(getImage())
+							getImage()->reduce(newscale);
 						if(viewport())
 							viewport()->scale_position_reduce(newscale);
 					}
 					else	
 					{
-						if(image())
-							image()->reduce();
+						if(getImage())
+							getImage()->reduce();
 						if(viewport())
 							viewport()->scale_position_reduce();
 					}
@@ -569,15 +569,15 @@ comeon:
 				{
 					if( newscale )
 					{
-						if(image())
-							image()->magnify(newscale,aes);
+						if(getImage())
+							getImage()->magnify(newscale,aes);
 						if(viewport())
 							viewport()->scale_position_magnify(newscale);
 					}
 					else	
 					{
-						if(image())
-							image()->magnify();
+						if(getImage())
+							getImage()->magnify();
 						if(viewport())
 							viewport()->scale_position_magnify();
 					}
@@ -585,9 +585,9 @@ comeon:
 				break;
 				default:
 				if( pcsc )
-					image()->scale_multiply(newscale);
+					getImage()->scale_multiply(newscale);
 				else
-					image()->setscale(newscale);
+					getImage()->setscale(newscale);
 			}
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
 		}
@@ -600,7 +600,7 @@ nop:
 	{
 		/*
 		 */
-		if( !image() )
+		if( !getImage() )
 			goto nop;
 
 		if(args.size()>0)
@@ -609,13 +609,13 @@ nop:
 			enum fim_cvd_t cvd=FIM_CVD_NO;
 
 			if( args[0] == "desaturate" )
-				if( image()->desaturate() )
+				if( getImage()->desaturate() )
 					goto nop;
 			if( args[0] == "negate" )
-				if( image()->negate() )
+				if( getImage()->negate() )
 					goto nop;
 			if( args[0] == "identity" )
-				if( image()->identity() )
+				if( getImage()->identity() )
 					goto nop;
 
 			if( args.size()>1 && ( args[1] == "daltonize" || args[1] == "D" ) )
@@ -629,7 +629,7 @@ nop:
 				cvd = FIM_CVD_TRITANOPIA  ;
 
 			if(cvd!=FIM_CVD_NO)
-				if( image()->colorblind(cvd,daltonize) )
+				if( getImage()->colorblind(cvd,daltonize) )
 					goto nop;
 			/* TODO: help printout here ? */
 		}
@@ -795,10 +795,10 @@ nop:
 
 			if( cc.isSetVar(FIM_VID_DISPLAY_STATUS_FMT) )
 			{
-				dss = c_image()->getInfoCustom(cc.getStringVariable(FIM_VID_DISPLAY_STATUS_FMT).c_str());
+				dss = c_getImage()->getInfoCustom(cc.getStringVariable(FIM_VID_DISPLAY_STATUS_FMT).c_str());
 			}
 			dssp=dss.c_str();
-			commandConsole_.set_status_bar( (dssp && *dssp ) ? dssp : l, image()?(image()->getInfo().c_str()):"*");
+			commandConsole_.set_status_bar( (dssp && *dssp ) ? dssp : l, getImage()?(getImage()->getInfo().c_str()):"*");
 		}
 		else
 		{
@@ -816,7 +816,7 @@ nop:
 		 */
 		FIM_PR('*');
 
-		if( c_image() )
+		if( c_getImage() )
 		{
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREDISPLAY,current());
 			/* FIXME: need a "help" request answer. */
@@ -830,14 +830,14 @@ nop:
 			}
 			if( args.size()>0 && args[0] == "resize" )
 			{
-				fim_coo_t nww = c_image()->width();
-				fim_coo_t nwh = c_image()->height();
+				fim_coo_t nww = c_getImage()->width();
+				fim_coo_t nwh = c_getImage()->height();
 				fim_bool_t wsl = (getGlobalIntVariable(FIM_VID_DISPLAY_BUSY)) ?  true : false;;
 
 #if 0
 				if( args.size() == 2 && args[1] == "original" )
-					nww = c_image()->original_width(),
-					nwh = c_image()->original_height() + fh;
+					nww = c_getImage()->original_width(),
+					nwh = c_getImage()->original_height() + fh;
 #endif
 				if( args.size()>2 )
 					nww = args[1],
@@ -845,8 +845,8 @@ nop:
 					wsl = false;
 				commandConsole_.resize(nww,nwh,wsl);
 			}
-			if(image() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
-			//	if(c_image())
+			if(getImage() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
+			//	if(c_getImage())
 			{
 				//fb_clear_screen();
 				//viewport().display();
@@ -894,7 +894,7 @@ nop:
 
 		if( lehsof )
 			goto ret; /* this prevents infinite recursion */
-		if( /*image() &&*/ viewport() && ! (viewport()->check_valid()) )
+		if( /*getImage() &&*/ viewport() && ! (viewport()->check_valid()) )
 		{
 			free_current_image();
 			++ lehsof;
@@ -1062,7 +1062,7 @@ ret:
 		free_current_image();
 #endif /* FIM_HORRIBLE_CACHE_INVALIDATING_HACK */
 		loadCurrentImage();
-		//if(image())image()->reload();
+		//if(getImage())getImage()->reload();
 
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(_c);
@@ -1082,7 +1082,7 @@ ret:
 		FIM_PR('*');
 
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
-		if( image() && ( image()->getName() == current()) )
+		if( getImage() && ( getImage()->getName() == current()) )
 		{
 			result = "image already loaded\n";		//warning
 			goto ret;
@@ -1550,14 +1550,14 @@ nop:
 
 		if( !isfg )
 #if FIM_WANT_BDI
-		if( N==1 &&              c_image()->is_multipage())
+		if( N==1 &&              c_getImage()->is_multipage())
 #else	/* FIM_WANT_BDI */
-		if( N==1 && c_image() && c_image()->is_multipage())
+		if( N==1 && c_getImage() && c_getImage()->is_multipage())
 #endif	/* FIM_WANT_BDI */
 		{
 			//if(1)std::cout<<"goto page "<<n<<FIM_CNS_NEWLINE;
 			FIM_PR(' ');
-			image()->goto_page(n);
+			getImage()->goto_page(n);
 			result = N;
 			goto ret;
 		}
@@ -1826,7 +1826,7 @@ go_jump:
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c); }
 				if( ispg )
-					image()->goto_page(np);
+					getImage()->goto_page(np);
 				else
 					goto_image(nf,isfg?true:false);
 
@@ -2301,7 +2301,7 @@ nop:
 		FIM_PR('*');
 
 		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
-		if(c_image() && viewport())
+		if(c_getImage() && viewport())
 		{
 			fim_coo_t approx_fraction=16;
 
@@ -2333,7 +2333,7 @@ nop:
 		FIM_PR('*');
 
 		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
-		if(c_image() && viewport())
+		if(c_getImage() && viewport())
 		{
 			if(viewport()->onBottom())
 				next();
@@ -2364,8 +2364,8 @@ nop:
 		fim::string r = current();
 		FIM_PR('*');
 
-		if(image())
-			r += image()->getInfo();
+		if(getImage())
+			r += getImage()->getInfo();
 		else
 			r += " (unloaded)";
 		FIM_PR('.');
@@ -2397,22 +2397,22 @@ nop:
 		if( angle == FIM_CNS_ANGLE_ZERO)
 			goto ret;
 
-		if(c_image())
+		if(c_getImage())
 		{
 			//angle = getGlobalFloatVariable(FIM_VID_ANGLE);
 //			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREROTATE,current());
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if( c_image() )
+			if( c_getImage() )
 			{
 				if(angle)
 				{
-					if(image())
-						image()->rotate(angle);
+					if(getImage())
+						getImage()->rotate(angle);
 				}
 				else	
 				{
-					if(image())
-						image()->rotate();
+					if(getImage())
+						getImage()->rotate();
 				}
 			}
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
@@ -2430,26 +2430,26 @@ ret:
 		 * magnifies the displayed image
 		 */ 
 		FIM_PR('*');
-		if(c_image())
+		if(c_getImage())
 		{
 			fim_scale_t factor;
 			factor = firstforzero(args);
 			if( !factor )
 				factor = getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if(c_image())
+			if(c_getImage())
 			{
 				if(factor)
 				{
-					if(image())
-						image()->magnify(factor);
+					if(getImage())
+						getImage()->magnify(factor);
 					if(viewport())
 						viewport()->scale_position_magnify(factor);
 				}
 				else	
 				{
-					if(image())
-						image()->magnify();
+					if(getImage())
+						getImage()->magnify();
 					if(viewport())
 						viewport()->scale_position_magnify();
 				}
@@ -2466,26 +2466,26 @@ ret:
 		 * reduces the displayed image size
 		 */ 
 		FIM_PR('*');
-		if(c_image())
+		if(c_getImage())
 		{
 			fim_scale_t factor;
 			factor = firstforzero(args);
 			if(!factor)
 				factor = getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if(c_image())
+			if(c_getImage())
 			{
 				if(factor)
 				{
-					if(image())
-						image()->reduce(factor);
+					if(getImage())
+						getImage()->reduce(factor);
 					if(viewport())
 						viewport()->scale_position_reduce(factor);
 				}
 				else	
 				{
-					if(image())
-						image()->reduce();
+					if(getImage())
+						getImage()->reduce();
 					if(viewport())
 						viewport()->scale_position_reduce();
 				}
@@ -2508,10 +2508,10 @@ ret:
 			goto err;
 		if( !args[0].c_str() || !args[0].re_match("^(bottom|top|left|right|center)") )
 			goto err;
-		if( c_image() )
+		if( c_getImage() )
 		{
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
-			if(c_image() && viewport())
+			if(c_getImage() && viewport())
 			{
 				// FIXME: need a switch/case construct here
 				if(args[0].re_match("top"))
@@ -2534,7 +2534,7 @@ err:
 		return FIM_CMD_HELP_ALIGN;
 	}
 
-	const Image* Browser::c_image(void)const
+	const Image* Browser::c_getImage(void)const
 	{
 		/*
 		 *	a const pointer to the currently loaded image
@@ -2546,7 +2546,7 @@ err:
 		return image;
 	}
 
-	Image* Browser::image(void)const
+	Image* Browser::getImage(void)const
 	{
 		/*
 		 *	the image loaded in the current viewport is returned
@@ -2645,9 +2645,9 @@ err:
 		fim_int pi = 0;
 
 #if !FIM_WANT_BDI
-		if( c_image() )
+		if( c_getImage() )
 #endif	/* FIM_WANT_BDI */
-			pi = c_image()->n_pages();
+			pi = c_getImage()->n_pages();
 		return pi;
 	}
 
@@ -2656,9 +2656,9 @@ err:
 		fim_int pi = 0;
 
 #if !FIM_WANT_BDI
-		if( c_image() )
+		if( c_getImage() )
 #endif	/* FIM_WANT_BDI */
-			pi = c_image()->c_page();
+			pi = c_getImage()->c_page();
 		return pi;
 	}
 
