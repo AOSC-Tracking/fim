@@ -284,8 +284,8 @@ Specify an endline delimiter character for breaking lines read via \-/\-\-read\-
 Quiet mode. Sets _display_status=0;_display_busy=0;.
 
 .TP
-.B \-r {resolution}, \-\-resolution {resolution}
-		 Set resolution (UNFINISHED).
+.B \-r {width:height}, \-\-resolution {width:height}
+		 Set resolution specification in pixels. Supported by SDL only (will be appended to \-\-output\-device argument).
 .TP
 .B \-R, \-\-recursive[=arg]
 		 Push files/directories to the files list recursively. The expression in variable _pushdir_re (default: "\.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX$") lists extensions of filenames which will be loaded in the list. You can overwrite its value by optionally passing an expression here as argument. If starting with '+' or '|', the expression following will be appended to it. 

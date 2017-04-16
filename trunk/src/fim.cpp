@@ -303,9 +303,15 @@ FIM_NULL
 //    },
     {"quiet",      no_argument,       FIM_NULL, 'q',"Quiet mode.",FIM_NULL, "Quiet mode. Sets " FIM_CNS_QUIET_CMD ".\n"
     },
-    {"resolution", required_argument, FIM_NULL, 'r',"Set resolution (UNFINISHED).","{resolution}",
+#if FIM_WANT_R_SWITCH
+    {"resolution", required_argument, FIM_NULL, 'r',"Set resolution specification in pixels. Supported by SDL only (will be appended to --" FIM_OSW_OUTPUT_DEVICE " argument).","{width:height}",
 	    FIM_NULL
     },
+#else /* FIM_WANT_R_SWITCH */
+    {"resolution", required_argument, FIM_NULL, 'r',"Set resolution (UNFINISHED).","{width:height}",
+	    FIM_NULL
+    },
+#endif /* FIM_WANT_R_SWITCH */
 #if FIM_WANT_RECURSE_FILTER_OPTION
     {"recursive", optional_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. "
       "The expression in variable " FIM_VID_PUSHDIR_RE " (default: \"" FIM_CNS_PUSHDIR_RE "\") lists extensions of filenames which will be loaded in the list. "
@@ -1032,6 +1038,9 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		bool appendedPostInitCommand=false;
 		bool appendedPreConfigCommand=false;
 		char sac = FIM_SYM_CHAR_ENDL;
+#if FIM_WANT_R_SWITCH
+		const char * rs=FIM_NULL;
+#endif /* FIM_WANT_R_SWITCH */
 		fim_flags_t pf = FIM_FLAG_DEFAULT; /* push flags */
 #if FIM_WANT_PIC_LISTUNMARK
 		args_t argsc;
@@ -1225,10 +1234,14 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    default_fbgamma = fim_atof(optarg);
 		    break;
 		case 'r':
+#if FIM_WANT_R_SWITCH
+		    rs=optarg;
+#else /* FIM_WANT_R_SWITCH */
+		    //fbi's:
+		    //pcd_res = atoi(optarg);
 		    cout << FIM_EMSG_UNFINISHED;
-		    //fbi's
-	// TODO
-	//	    pcd_res = atoi(optarg);
+		    //fim's (different):
+#endif /* FIM_WANT_R_SWITCH */
 		    break;
 		case 'R':
 		    //fim's
@@ -1666,6 +1679,18 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		}
 
 		// TODO : we still need a good output device probing mechanism
+
+#if FIM_WANT_R_SWITCH
+#ifdef FIM_WITH_LIBSDL
+		if(rs)
+		if(g_fim_output_device.find(FIM_DDN_INN_SDL)==0)
+		{
+			if(g_fim_output_device.find('=')==std::string::npos)
+				g_fim_output_device+="=";
+			g_fim_output_device+=rs;
+		}
+#endif /* FIM_WITH_LIBSDL */
+#endif /* FIM_WANT_R_SWITCH */
 
 		if((retcode=FIM_ERR_TO_PERR(cc.init(g_fim_output_device)))!=FIM_PERR_NO_ERROR) {goto ret;}
 #ifdef FIM_READ_STDIN_IMAGE
