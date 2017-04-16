@@ -297,7 +297,7 @@ namespace fim
 	bool Viewport::display(void)
 	{
 		/*
-		 *	the display function draws the image in the frame buffer
+		 *	the display function draws the image in the framebuffer
 		 *	memory.
 		 *	no scaling occurs, only some alignment.
 		 *
