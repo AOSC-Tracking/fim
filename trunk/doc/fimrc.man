@@ -982,6 +982,11 @@ _screen_width
 .fi
 .na
 .B
+_scroll_skip_page_fraction
+[int,g:] if >1, fraction of page which will be skipped in when scrolling (e.g. 'scrollforward'); if 1, auto chosen; if <1, disabled.
+.fi
+.na
+.B
 _seek_magic
 [optional,g:] will seek for a magic signature before opening a file (for now, use like this: fim \-c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
 .fi
@@ -1189,6 +1194,7 @@ if(_want_exif_orientation==''){_want_exif_orientation=1;}
 if(ascale==''){ascale="1.0";}
 if(_use_mipmaps==''){_use_mipmaps=1;}
 if(_downscale_huge_at_load==''){_downscale_huge_at_load=1;}
+if(_scroll_skip_page_fraction==''){_scroll_skip_page_fraction=0;}
 #
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}
@@ -1204,6 +1210,7 @@ alias "togglemirror" "i:mirrored=1\-i:mirrored;" "";
 alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
 alias "mirroronce" "mirror;togglemirror;" "";
 alias 'toggleLimitMarked' '__pre_limit_fileindex=_fileindex;_limit_mode=1\-_limit_mode; if(_limit_mode==1){limit "!";} else { limit; } if(_filelistlen<1){_limit_mode=0;limit;goto __pre_limit_fileindex;} i:fresh=1;redisplay; ' "toggle between limiting file list to the marked files and the full list";
+alias 'unlimit' 'limit' 'calling limit with no args unlimits the list';
 # Warning : binding to C\-s, C\-z and C\-c won't make effect, as these
 # codes are get caught by the console driver and will have no effect in fim.
 # Moreover, C\-z will crash fim and C\-c will terminate it.

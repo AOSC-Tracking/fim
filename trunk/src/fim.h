@@ -712,6 +712,7 @@ namespace fim
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[out,g:] the number of images currently cached." */
 #define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[out,g:] the screen width"  */
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[out] the screen height" */
+#define FIM_VID_SKIP_SCROLL			"_scroll_skip_page_fraction"		/* "[int,g:] if >1, fraction of page which will be skipped in when scrolling (e.g. 'scrollforward'); if 1, auto chosen; if <1, disabled." */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)" */
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in,g:] print out each command before its execution (for debugging purposes)" */
 #define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " */
