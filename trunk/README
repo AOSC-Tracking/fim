@@ -24,7 +24,7 @@ Mutt mail user agent.
 FIM aims to be a "Swiss Army knife" for viewing images.
 
 It derives from the Fbi image viewer (by Gerd Hoffmann), and works primarily in
-the Linux frame buffer console.
+the Linux framebuffer console.
 FIM is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
 
@@ -42,7 +42,7 @@ mail user agent.
 FIM aims to be a swiss army knife for viewing images.
 
 It derives from the Fbi image viewer (by Gerd Hoffmann), and works primarily in
-the Linux frame buffer console.
+the Linux framebuffer console.
 FIM is multidevice: it has X support (via the SDL and the Imlib2 libraries)
 and it supports ASCII art output (via the aalib library).
 
@@ -132,7 +132,7 @@ Implemented features:
  Features:
 
  status:(a)lpha/(m)ature   m       m   m         a     m     m    m	m   m
- environment(f=frame buffer)X      X X,svga      f     f     X    f	X   X
+ environment(f=framebuffer)X       X X,svga      f     f     X    f	X   X
  linux specific                        ?         *     *          *	*   ?
  key rebindings            *                           *     *		    ?
  external scriptability(bash,..)                 ~     *		~   ?
@@ -155,7 +155,7 @@ Implemented features:
  standard input interaction                            *		    ?
  rotation		   *	?    ?           ?     *     ?    ?     *   *
  history                                               *		  
- multi-device (X/SDL, frame buffer, aalib)             *                   
+ multi-device (X/SDL, framebuffer, aalib)              *                   
  mirroring                                             *                    *
  ...
 
@@ -230,7 +230,7 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
 ================================================================================
 
  - A Linux (not sure if it is necessary for it to be an x86; i think not) box
- - The frame buffer device ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
+ - The framebuffer device ( e.g.: /dev/fb0 or /dev/fb/0 ) enabled in the kernel
    ( and usually found in "/usr/src/linux/Documentation/fb" in the kernel source
     code tree ).
  - shared library files for: libpng, libjpeg, libgif, libtiff, libreadline,
@@ -270,16 +270,16 @@ any means near to what is FIM today.
 
 FIM aims at a complete reorganization of the Fbi code, and ideally towards an
 implementation of the most scriptable and configurable image viewer ever - not
-tied to the frame buffer device and to a single keyboard input.
+tied to the framebuffer device and to a single keyboard input.
 
 ================================================================================
 	7		Technical overview (important for patch writers,but old)
 ================================================================================
 
-To run FIM requires a Linux box with the frame buffer device enabled in the 
+To run FIM requires a Linux box with the framebuffer device enabled in the 
 kernel, and some popular image file decoding libraries.
 
-Information about the frame buffer can be found under the directory
+Information about the framebuffer can be found under the directory
  "./Documentation/fb"
  inside the kernel tree 
  (usually "/usr/src/linux/Documentation/fb" ).

@@ -2,21 +2,12 @@
 
 This file is a melange of ideas aimed towards further development.
 If you are interested into Fim internals, philosophy, and evolution, you
-are welcome to read and help improve this file, and subscribe to the
-fim-devel mailing list ( fbi-improved-devel@nongnu.org ).
+are welcome to give a look here.
+You can propose ideas to the fim-devel mailing list:
+  fbi-improved-devel@nongnu.org 
 
-If you would like to contribute to Fim, this file may give you ideas or
-advice, meanwhile if you would like to contribute with an idea, it may 
-contribute to this file, too.
-
-Of course, the BUGS file is a source of constant inspiration (we may say,
-of a maniacal taste ) for further improvement, too.
-
-If you just intend to learn more about Fim, please read the program
-documentation in the "doc" directory first along with the man pages.
-
-Warning : Stuff in this file may be outdated, but necessary for
-ongoing further inspiration.
+Warning : Notes in this file may be outdated, and just for ongoing further
+inspiration.
 
 -------------------------------------------------------------------------------
 	Misc Current development directions
@@ -31,7 +22,6 @@ ongoing further inspiration.
 20141129	setGlobalVariable("i:",FIM_VID_WANT_AUTOCENTER,1);
 20141123	clean up Image::getInfo
 20141122	document/expand the FIM_WANT_EXPERIMENTAL_BASENAME functionality.
-20140830	version 0.4 does not cache limit on memory: may want to fix this.
 20140830	need a precise control of scaling rules and viewports cache, as well to extend the viewport cache to scaled images
 20131107	fix --disable-scripting case !
 20131107	this is spurious: fim::string execute(const std::vector<fim::string> &args)
@@ -47,24 +37,19 @@ ongoing further inspiration.
 20130702	http://dvdhrm.wordpress.com/2012/12/10/kmscon-introduction/
 20130620	need a minimal ppm file for testing
 20130523	fix the bug when loading say, a a/1.fake  and getting the files list shortened by two instead of one.
-20130521	image decoder name as a variable.
 20130505	glob() on non existent files
-20130501	shall cache stat() results
 20130412	may use a library like http://www.littlecms.com/
 20120811	need proper jpeg error handling
 20120805	feeding a .png named PS file can lead to segfault. why ?
 20120804	should create a general 'filter' autocmd trigger
 20120804	negate and desaturate should be either applied instantly or accumulated in queue as transformations
 20120718	" - multiple internal windows with indipendent images displayed at once" is discontinued!
-20120718	make sure to substitute "framebuffer" with "frame buffer" in the docs and FIM.TXT
 20120705	some day would be nice to use dnotify
-20120408	bug: _filename non e' settato al primo caricamento: serve un goto_qualcosa prima
 20120407	to clone a whole fim instance in a new process
 20120130	to open svg files "natively"
 20120129	for scalings that are multiples of an integer, may write a specific code
 20120108	use zzuf; e.g.: for ((seed=0;seed<4;++seed));do zzuf -I jpg -s $seed src/fim media/ -c quit ; done 
 20111202	seem like an empty eps file crashes fim
-20111124	does not compile on hpcff
 20111122	fim inverts the colours of eps files
 20111112	font resources:
 		psf tools: http://www.seasip.info/Unix/PSF
@@ -84,7 +69,6 @@ ongoing further inspiration.
 20110930	hand-based panning in fim; see feh
 20110930	fim+sdl with an extra monitor aside fails. but mplayer seems to work, in this case. why ?
 20110929	shall give a recipe and render possible to view a 100%-scaled image with zero scaling.
-20110927	the cache system shall resist time index overflow 
 20110927	fix the bug opening the gif icon in media/ through graphicsmagick; manifests on hlst3
 20110926	every bit of fim functioning shall be documented
 20110926	fim manual sections in hardcoded strings shall be systematically coherent 
@@ -129,20 +113,15 @@ ongoing further inspiration.
 20110711	autocompletion of varname = <unescaped variable value>  would be both cool and useful
 20110711	shall give the user chance to specify the position of an autocommand (e.g.: -1, +1, etc) within the current autocommands list
 20110711	shall give the user chance to push dirs contents sorted
-20110710	make dox dies under cygwin (unsupported man options)
 20110709	need to write to fim-users mentioning the ChangeLog and the solved bugs
 20110709	grep .. | sed .. | fim_h_autocmds.h
 20110709	grep .. | sed .. | fim_h_error_codes.h
 20110709	grep .. | sed .. | fim_h_variables.h
 20110711	may use ESC as a readline-exiting key
-20110702	exif tags may goto i:exif:* variables
 20110702	bind '\\' 'scale "100%"'; # is not accepted; this is bad
 20110701	shall establish a policy in using #error
 20110701	an easy way for window resize on 'next', in sdl mode
 20110629	use CHAR_BIT in src/FbiStuffBit1.cpp
-20110628	fimgs has some problems
-20110627	./configure --no-history
-20110626	man8 fim; man5 fimrc
 20110624	vedi se e' possibile 'goto last' e se PostNext e' ancora li da qualche parte 
 20110623	2. does not work
 20110623	one may add :{+number} 

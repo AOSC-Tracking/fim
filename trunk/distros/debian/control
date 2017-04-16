@@ -9,8 +9,8 @@ Package: fim
 Architecture: any
 Depends: ${shlibs:Depends}
 Suggests: imagemagick
-Description: FBI Improved : Linux Frame Buffer Image viewer (Improved)
- This is an image viewer for Linux frame buffer devices.  
+Description: FBI Improved : Linux Framebuffer Image viewer (Improved)
+ This is an image viewer for Linux framebuffer devices.  
  It is based on original FBI, by Gerd Hoffmann. Supports the majority of the features 
  present in FBI plus built-in scriptability and a readline-based console.
  
