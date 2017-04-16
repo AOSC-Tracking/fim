@@ -82,6 +82,8 @@
    If with '~=', to files with duplicate basename;
    if with '~^', to the first of the files with duplicate basename;
    if with '~$', to the last of the files with duplicate basename. 
+# (r1220)
+ * Alias "unlimit" will reset the limited list.
 # (r1053)
  * Variable '_all_file_loaders' introduced: space-separated list of hardcoded file loaders usable with '_file_loader'.
 # (r1051,r1052)

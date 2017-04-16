@@ -435,10 +435,7 @@ fim_char_t * dupnstr (fim_int n)
 	//allocation of a single string
 	fim_char_t *r = (fim_char_t*) fim_malloc (FIM_PRINTINUM_BUFSIZE);
 	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
-	if(sizeof(fim_int)==sizeof(int))
-		sprintf(r,"%d",(int)n);
-	else
-		sprintf(r,"%lld",(long long int)n);
+	fim_snprintf_fim_int(r,n);
 	return (r);
 }
 
@@ -970,6 +967,18 @@ int fim_fgetc(FILE *stream)
 #else /* FIM_WANT_ZLIB */
 	return fgetc(stream);
 #endif /* FIM_WANT_ZLIB */
+}
+
+int fim_snprintf_fim_int(char *r, fim_int n)
+{
+	// this does not pass g++ -pedantic-errors
+	if(sizeof(fim_int)==sizeof(int))
+		return sprintf(r,"%d",(int)n);
+	else
+		return sprintf(r,"%lld",(int64_t)n);
+		//return sprintf(r,"%jd",(intmax_t)n);
+		//return sprintf(r,"%zd",(signed size_t)n);
+		//return sprintf(r,"%lld",(long long int)n);
 }
 
 int fim_snprintf_XB(char *str, size_t size, size_t q)

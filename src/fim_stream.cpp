@@ -62,10 +62,7 @@ namespace fim
 		{
 			/* FIXME */
 			fim_char_t s[FIM_ATOX_BUFSIZE];
-			if(sizeof(fim_int)==sizeof(int))
-				sprintf(s,"%d",(int)i);
-			else
-				sprintf(s,"%lld",(long long int)i);
+			fim_snprintf_fim_int(s,i);
 			*this<<s;
 			return *this;
 		}

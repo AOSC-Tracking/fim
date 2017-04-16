@@ -167,16 +167,12 @@ class Var
 	{
 		fim_char_t buf[16];
 		DBG("t:"<<(char)type <<"\n");
-		if(type=='s')return this->s;
+		if(type=='s')
+			return this->s;
 		else
 		{
 			if(type=='i')
-			{
-				if(sizeof(fim_int)==sizeof(int))
-					sprintf(buf,"%d",(int)i);
-				else
-					sprintf(buf,"%lld",(long long int)i);
-			}
+				fim_snprintf_fim_int(buf,i);
 			else
 			       	if(type=='f')
 					sprintf(buf,"%f",f);
