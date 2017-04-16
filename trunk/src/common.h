@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -87,6 +87,7 @@ size_t fim_fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
 int fim_rewind(FILE *stream);
 int fim_fseek(FILE *stream, long offset, int whence);
 int fim_fgetc(FILE *stream);
+int fim_snprintf_fim_int(char *r, fim_int n);
 int fim_snprintf_XB(char *str, size_t size, size_t q);
 fim_byte_t * fim_pm_alloc(unsigned int width, unsigned int height, bool want_calloc = false);
 const fim_char_t * fim_basename_of(const fim_char_t * s);

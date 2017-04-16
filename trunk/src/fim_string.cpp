@@ -80,11 +80,15 @@ namespace fim
 	string::string(fim_int i)
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
+#if 1
+		fim_snprintf_fim_int(buf,i);
+#else
 		if(sizeof(fim_int)==sizeof(int))
 			snprintf(buf,FIM_CHARS_FOR_INT-1,"%d",(int)i);
 		else
 			snprintf(buf,FIM_CHARS_FOR_INT-1,"%lld",(long long int)i);
 		buf[FIM_CHARS_FOR_INT-1]='\0';
+#endif
 		append(buf);
 	}
 
@@ -355,10 +359,7 @@ namespace fim
 	{
 		_string_init();
 		fim_char_t buf[FIM_CHARS_FOR_INT];
-		if(sizeof(fim_int)==sizeof(int))
-			sprintf(buf,"%d",(int)i);
-		else
-			sprintf(buf,"%lld",(long long int)i);
+		fim_snprintf_fim_int(buf,i);
 		assign(buf);
 	}
 
