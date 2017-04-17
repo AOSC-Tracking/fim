@@ -71,6 +71,7 @@ typedef int fim_sdl_int;
 
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 static fim_int fim_draw_help_map_; // This is static since it gets modified in a static function. This shall change.
+static const fim_char_t key_char_grid[10] = "'pP+a-=nN"; // by columns left to right, up to down
 
 	static void toggle_draw_help_map(void)
 	{
@@ -233,17 +234,17 @@ err:
 				fill_rect(1*2*xt, 1*2*xt+bug+eth, 0, yh-1, color);
 				fill_rect(2*2*xt, 2*2*xt+bug+eth, 0, yh-1, color);
 				// left column
-				fs_puts(f_, 1*xt, 1*yt, "'");
-				fs_puts(f_, 1*xt, 3*yt, "p");
-				fs_puts(f_, 1*xt, 5*yt, "P");
+				fs_putc(f_, 1*xt, 1*yt, key_char_grid[0]);
+				fs_putc(f_, 1*xt, 3*yt, key_char_grid[1]);
+				fs_putc(f_, 1*xt, 5*yt, key_char_grid[2]);
 				// middle column
-				fs_puts(f_, 3*xt, 1*yt, "+");
-				fs_puts(f_, 3*xt, 3*yt, "a");
-				fs_puts(f_, 3*xt, 5*yt, "-");
+				fs_putc(f_, 3*xt, 1*yt, key_char_grid[3]);
+				fs_putc(f_, 3*xt, 3*yt, key_char_grid[4]);
+				fs_putc(f_, 3*xt, 5*yt, key_char_grid[5]);
 				// right column
-				fs_puts(f_, 5*xt, 1*yt, "=");
-				fs_puts(f_, 5*xt, 3*yt, "n");
-				fs_puts(f_, 5*xt, 5*yt, "N");
+				fs_putc(f_, 5*xt, 1*yt, key_char_grid[6]);
+				fs_putc(f_, 5*xt, 3*yt, key_char_grid[7]);
+				fs_putc(f_, 5*xt, 5*yt, key_char_grid[8]);
 			}
 		return FIM_ERR_NO_ERROR;
 	}
@@ -778,16 +779,16 @@ err:
 					{
 						if( y < yt )
 						{
-							*c='\''; return 1;
+							*c=key_char_grid[0]; return 1;
 						}
 						else
 						if( y < 2*yt )
 						{
-							*c='p'; return 1;
+							*c=key_char_grid[1]; return 1;
 						}
 						else
 						{
-							*c='P'; return 1;
+							*c=key_char_grid[2]; return 1;
 						}
 					}
 					else
@@ -795,32 +796,32 @@ err:
 					{
 						if( y < yt )
 						{
-							*c='+'; return 1;
+							*c=key_char_grid[3]; return 1;
 						}
 						else
 						if( y < 2*yt )
 						{
-							*c='a'; return 1;
+							*c=key_char_grid[4]; return 1;
 						}
 						else
 						{
-							*c='-'; return 1;
+							*c=key_char_grid[5]; return 1;
 						}
 					}
 					else
 					{
 						if( y < yt )
 						{
-							*c='='; return 1;
+							*c=key_char_grid[6]; return 1;
 						}
 						else
 						if( y < 2*yt )
 						{
-							*c='n'; return 1;
+							*c=key_char_grid[7]; return 1;
 						}
 						else
 						{
-							*c='N'; return 1;
+							*c=key_char_grid[8]; return 1;
 						}
 					}
 					}
