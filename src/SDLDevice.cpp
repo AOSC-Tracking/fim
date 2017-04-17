@@ -75,9 +75,9 @@ static const fim_char_t key_char_grid[10] = "'pP+a-=nN"; // by columns left to r
 
 	static void toggle_draw_help_map(void)
 	{
-	       	fim_draw_help_map_=1-fim_draw_help_map_;
+	       	fim_draw_help_map_=(fim_draw_help_map_+1)%3;
 		if(Viewport* cv = cc.current_viewport())
-			cv->redisplay();
+			cv->redisplay(); // will indirectly trigger draw_help_map()
 	}
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 
@@ -214,6 +214,34 @@ err:
 
 	fim_err_t SDLDevice::draw_help_map(void)
 	{
+		if(fim_draw_help_map_==0)
+		{
+		}
+		if(fim_draw_help_map_==2)
+		{
+			Viewport* cv = cc.current_viewport();
+			fim_coo_t xw = cv->viewport_width();
+			fim_coo_t yh = cv->viewport_height();
+			fim_coo_t xt = xw/3;
+			fim_coo_t yt = yh/3;
+			fim_coo_t xtl = xt/16;
+			fim_coo_t ytl = yt/16;
+			fim_coo_t eth = 2;
+			fim_color_t color = FIM_CNS_WHITE;
+			fim_coo_t bug = 1;
+			// horizontal
+			fill_rect(0, xtl, 1*yt, 1*yt+eth, color); // left top
+			fill_rect(0, xtl, 2*yt, 2*yt+eth, color); // left bottom
+			fill_rect(xw-xtl, xw-1, 1*yt, 1*yt+eth, color); // right top
+			fill_rect(xw-xtl, xw-1, 2*yt, 2*yt+eth, color); // right bottom
+			// vertical
+			fill_rect(1*xt, 1*xt+bug+eth, 0*ytl, 1*ytl, color); // left top
+			fill_rect(2*xt, 2*xt+bug+eth, 0*ytl, 1*ytl, color); // right top
+			fill_rect(1*xt, 1*xt+bug+eth, yh-ytl, yh-1, color); // left bottom
+			fill_rect(2*xt, 2*xt+bug+eth, yh-ytl, yh-1, color); // right bottom
+		}
+		if(fim_draw_help_map_==1)
+		{
 			Viewport* cv = cc.current_viewport();
 			fim_coo_t xw = cv->viewport_width();
 			fim_coo_t yh = cv->viewport_height();
@@ -221,6 +249,7 @@ err:
 			fim_coo_t yt = yh/6;
 			fim_coo_t eth = 2;
 			fim_coo_t fd = FIM_MAX(f_->swidth(),f_->sheight());
+
 			if(xw > 6*fd && yh > 6*fd)
 			{
 				fim_coo_t bug = 1;
@@ -246,6 +275,7 @@ err:
 				fs_putc(f_, 5*xt, 3*yt, key_char_grid[7]);
 				fs_putc(f_, 5*xt, 5*yt, key_char_grid[8]);
 			}
+		}
 		return FIM_ERR_NO_ERROR;
 	}
 

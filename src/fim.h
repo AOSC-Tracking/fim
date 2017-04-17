@@ -652,7 +652,7 @@ namespace fim
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal,g:] if 1, will inhibit display" */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[g:] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
 #define FIM_VID_WANT_CAPTION_STATUS		"_want_wm_caption_status"	/* "[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret it just as a file info format string (see _info_fmt_str); if empty, will show the program version." */
-#define FIM_VID_WANT_MOUSE_CTRL		"_want_wm_mouse_ctrl"	/* "[in,g:] if set to 1, enable mouse click/movement behaviour when in SDL mode; clicking middle or right button will toggle usage info." */
+#define FIM_VID_WANT_MOUSE_CTRL		"_want_wm_mouse_ctrl"	/* "[in,g:] if set to 1, enable mouse click/movement behaviour when in SDL mode; clicking middle or right button will toggle on-screen usage info." */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[in,g:] the image scale multiplier used when magnifying images size" */
 #define FIM_VID_PWD				"_pwd"			/* "[out,g:] the current working directory; will be updated at startup and whenever the working directory changes" */
 #define FIM_VID_REDUCE_FACTOR			"_reduce_factor"		/* "[in,g:] the image scale multiplier used when reducing images size" */
