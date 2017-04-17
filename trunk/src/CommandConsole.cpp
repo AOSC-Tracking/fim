@@ -1101,7 +1101,13 @@ err:
 
 #if FIM_WANT_CMDLINE_KEYPRESS
 		for(size_t i=0;i<clkpv_.size();++i)
-			executeBinding( kstr_to_key(clkpv_[i].c_str() ) );
+		if( const char * c_str = clkpv_[i].c_str() )
+		{
+			for(;isdigit(*c_str);++c_str)
+				;//executeBinding( *c_str );
+			if( *c_str )
+				executeBinding( kstr_to_key( c_str ) );
+		}
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	 	while(show_must_go_on_)
 		{
