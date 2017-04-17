@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -761,7 +761,8 @@ err:
 						{
 							//std::cout << "pct:"<< px << " " << py << "\n";
 							cv->place(px,py);
-							cv->redisplay();
+							cv->display(); // draw only if necessary
+							//cv->redisplay(); // draw always
 						}
 					}
 				}
