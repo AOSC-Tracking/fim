@@ -69,7 +69,17 @@ std::cout.unsetf ( std::ios::hex );
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 typedef int fim_sdl_int;
 
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 static fim_int draw_help_map_; // This is static since it gets modified in a static function. This shall change.
+
+	static void toggle_draw_help_map(void)
+	{
+	       	draw_help_map_=1-draw_help_map_;
+		if(Viewport* cv = cc.current_viewport())
+			cv->redisplay();
+	}
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
+
 
 fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 {
@@ -146,7 +156,9 @@ err:
 	want_resize_(true)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 		draw_help_map_=0;
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 		keypress_ = 0;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		const fim_char_t*os=opts_.c_str();
@@ -381,8 +393,10 @@ err:
 			setpixel(screen_, oj, ytimesw, (fim_coo_t)srcp[0], (fim_coo_t)srcp[1], (fim_coo_t)srcp[2]);
 		}
 
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 		if(draw_help_map_)
 			draw_help_map();
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 
 		SDL_Flip(screen_);
@@ -818,8 +832,9 @@ err:
 					if(!cc.inConsole())
 					{
 						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
-						if(ms&SDL_BUTTON_RMASK) { *c='b'; return 1; }
-						if(ms&SDL_BUTTON_MMASK) { draw_help_map_=1-draw_help_map_; return 0; }
+						if(ms&SDL_BUTTON_RMASK) { toggle_draw_help_map(); return 0; }
+						if(ms&SDL_BUTTON_MMASK) { toggle_draw_help_map(); return 0; }
+						//if(ms&SDL_BUTTON_RMASK) { *c='b'; return 1; }
 						//if(ms&SDL_BUTTON_MMASK) { *c='q'; return 1; }
 						if(ms&SDL_BUTTON_X1MASK	) { *c='+'; return 1; }
 						if(ms&SDL_BUTTON_X2MASK	) { *c='-'; return 1; }
