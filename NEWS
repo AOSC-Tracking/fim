@@ -161,6 +161,8 @@
  * configure --with-tmpfile will specify a new temporary directory. 
 # (r1145)
  * configure will try to detect curses/ncurses.
+# (r1230)
+ * fix: lastly used image will be erased at last, after eventually prefetched images.
 # (r1124)
  * fix: in configure script, the regex_t check was unnecessarily broken.
 # (r1037, also in branches/0.5)

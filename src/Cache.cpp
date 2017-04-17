@@ -397,6 +397,7 @@ ret:
 		if( is_in_cache(image->getKey()) )
 		{
 			FIM_PR('-');
+			lru_touch( image->getKey() ); // we have been using it until now
 			usageCounter_[image->getKey()]--;
 #if FIM_WANT_MIPMAPS
 			if( getGlobalStringVariable(FIM_VID_CACHE_CONTROL).find('M') == 0 )
