@@ -650,7 +650,7 @@ namespace fim
 #define FIM_VID_PAGE				"page"			/* "[out,experimental,g:] the current page" */
 #define FIM_VID_PAGES				"pages"			/* "[out,experimental,i:] the current number of pages of an image" */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal,g:] if 1, will inhibit display" */
-#define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[experimental,g:] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
+#define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[g:] the iteration limit for N in \"N[commandname]\" iterated command invocations" */
 #define FIM_VID_WANT_CAPTION_STATUS		"_want_wm_caption_status"	/* "[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret it just as a file info format string (see _info_fmt_str); if empty, will show the program version." */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[in,g:] the image scale multiplier used when magnifying images size" */
 #define FIM_VID_PWD				"_pwd"			/* "[out,g:] the current working directory; will be updated at startup and whenever the working directory changes" */
@@ -658,8 +658,8 @@ namespace fim
 #define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[in,g:] value used for scaling up/down the scaling factors" */
 #define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[in,g:] value used for incrementing/decrementing the scaling factors" */
 #define FIM_VID_COMMENT 				"_comment"				/* "[i:,out] the image comment, extracted from the image file (if any)" */
-#define FIM_VID_COMMENT_OI 				"_caption_over_image"				/* "[experimental,in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background. " */
-#define FIM_VID_COMMENT_OI_FMT 				"_caption_over_image_fmt"		/* "[experimental,in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as _info_fmt_str." */
+#define FIM_VID_COMMENT_OI 				"_caption_over_image"				/* "[in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background. " */
+#define FIM_VID_COMMENT_OI_FMT 				"_caption_over_image_fmt"		/* "[in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as _info_fmt_str." */
 #define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[out,g:] comment extracted via the exiftool interface; see _use_exiftool." */
 #define FIM_VID_STEPS 				"_steps"				/* "[in,g:] the default steps, in pixels, when panning images" */
 #define FIM_VID_VERSION				"_fim_version"	/* "[out,g:] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
@@ -712,9 +712,9 @@ namespace fim
 #define FIM_VID_AUTOMIRROR			"_automirror"		/* "[in,g:] if 1, will mirror images by default" */
 #define FIM_VID_MIRRORED			"mirrored"		/* "[out,i:] 1, if the image is mirrored " */
 #define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[in,g:] if 1, the image will be displayed centered " */
-#define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[in,experimental,g:] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." */
-#define FIM_VID_MIN_CACHED_IMAGES		"_min_cached_images"	/* "[in,experimental,g:] the minimum number of images to keep from eviction; if less than four can lead to inefficiencies: e.g. when jumping between two images, each time an erase and a prefetch of neighboring images would trigger. default value is 4." */
-#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[in,experimental,g:] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." */
+#define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[in,g:] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." */
+#define FIM_VID_MIN_CACHED_IMAGES		"_min_cached_images"	/* "[in,g:] the minimum number of images to keep from eviction; if less than four can lead to inefficiencies: e.g. when jumping between two images, each time an erase and a prefetch of neighboring images would trigger. default value is 4." */
+#define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[in,g:] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." */
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[out,g:] the number of images currently cached." */
 #define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[out,g:] the screen width"  */
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[out] the screen height" */
