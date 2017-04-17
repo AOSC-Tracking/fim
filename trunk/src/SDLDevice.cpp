@@ -228,22 +228,22 @@ err:
 				//color = FIM_CNS_RED ;
 				//fill_rect(0, xw-1, 1*2*yt, 1*2*yt+eth, color);
 				//fill_rect(0, xw-1, 2*2*yt, 2*2*yt+eth, color);
-				fill_rect(1*2*xt, 2*2*xt, 1*2*yt, 1*2*yt+eth, color);
-				fill_rect(1*2*xt, 2*2*xt, 2*2*yt, 2*2*yt+eth, color);
+				fill_rect(0*2*xt, 3*2*xt, 1*2*yt, 1*2*yt+eth, color);
+				fill_rect(0*2*xt, 3*2*xt, 2*2*yt, 2*2*yt+eth, color);
 				fill_rect(1*2*xt, 1*2*xt+bug+eth, 0, yh-1, color);
 				fill_rect(2*2*xt, 2*2*xt+bug+eth, 0, yh-1, color);
 				// left column
-				//fs_puts(f_, 1*xt, 1*yt, "b");
-				fs_puts(f_, 1*xt, 3*yt, "b");
-				//fs_puts(f_, 1*xt, 5*yt, "b");
+				fs_puts(f_, 1*xt, 1*yt, "'");
+				fs_puts(f_, 1*xt, 3*yt, "p");
+				fs_puts(f_, 1*xt, 5*yt, "P");
 				// middle column
 				fs_puts(f_, 3*xt, 1*yt, "+");
 				fs_puts(f_, 3*xt, 3*yt, "a");
 				fs_puts(f_, 3*xt, 5*yt, "-");
 				// right column
-				//fs_puts(f_, 5*xt, 1*yt, "n");
+				fs_puts(f_, 5*xt, 1*yt, "=");
 				fs_puts(f_, 5*xt, 3*yt, "n");
-				//fs_puts(f_, 5*xt, 5*yt, "n");
+				fs_puts(f_, 5*xt, 5*yt, "N");
 			}
 		return FIM_ERR_NO_ERROR;
 	}
@@ -776,16 +776,18 @@ err:
 					{
 					if( x < xt )
 					{
-						*c='b'; return 1;
 						if( y < yt )
 						{
+							*c='\''; return 1;
 						}
 						else
 						if( y < 2*yt )
 						{
+							*c='p'; return 1;
 						}
 						else
 						{
+							*c='P'; return 1;
 						}
 					}
 					else
@@ -807,16 +809,18 @@ err:
 					}
 					else
 					{
-						*c='n'; return 1;
 						if( y < yt )
 						{
+							*c='='; return 1;
 						}
 						else
 						if( y < 2*yt )
 						{
+							*c='n'; return 1;
 						}
 						else
 						{
+							*c='N'; return 1;
 						}
 					}
 					}
@@ -894,7 +898,8 @@ done:
 
 	fim_sys_int SDLDevice::get_input(fim_key_t * c, bool want_poll)
 	{
-		return get_input_inner(c,&event_,&keypress_,want_poll);
+		fim_sys_int iv = get_input_inner(c,&event_,&keypress_,want_poll);
+		return iv;
 	}
 
 	fim_err_t SDLDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT
