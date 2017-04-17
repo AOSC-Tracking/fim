@@ -872,6 +872,11 @@ _max_iterated_commands
 .fi
 .na
 .B
+_min_cached_images
+[in,experimental,g:] the minimum number of images to keep from eviction; if less than four can lead to inefficiencies: e.g. when jumping between two images, each time an erase and a prefetch of neighboring images would trigger. default value is 4.
+.fi
+.na
+.B
 _no_default_configuration
 [in,g:] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. 
 .fi

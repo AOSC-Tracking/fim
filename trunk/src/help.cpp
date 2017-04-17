@@ -108,6 +108,7 @@ fim_var_help_db[FIM_VID_AUTOMIRROR]= "[in,g:] if 1, will mirror images by defaul
 fim_var_help_db[FIM_VID_MIRRORED]= "[out,i:] 1, if the image is mirrored " ;
 fim_var_help_db[FIM_VID_WANT_AUTOCENTER]= "[in,g:] if 1, the image will be displayed centered " ;
 fim_var_help_db[FIM_VID_MAX_CACHED_IMAGES]= "[in,experimental,g:] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." ;
+fim_var_help_db[FIM_VID_MIN_CACHED_IMAGES]= "[in,experimental,g:] the minimum number of images to keep from eviction; if less than four can lead to inefficiencies: e.g. when jumping between two images, each time an erase and a prefetch of neighboring images would trigger. default value is 4." ;
 fim_var_help_db[FIM_VID_MAX_CACHED_MEMORY]= "[in,experimental,g:] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." ;
 fim_var_help_db[FIM_VID_CACHED_IMAGES]= "[out,g:] the number of images currently cached." ;
 fim_var_help_db[FIM_VID_SCREEN_WIDTH]= "[out,g:] the screen width"  ;

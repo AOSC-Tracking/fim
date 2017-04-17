@@ -408,6 +408,10 @@ ret:
 				image->getKey().second!=FIM_E_STDIN 
 				)
 			{
+				int minci = getGlobalIntVariable(FIM_VID_MIN_CACHED_IMAGES);
+
+				if ( minci < 1 )
+					minci = 4;
 #if 0
 				if( need_free() && image->getKey().second!=FIM_E_STDIN )
 				{
@@ -417,7 +421,7 @@ ret:
 				}
 #else
 				/* doing it here is dangerous : */
-				if( need_free() )
+				if( need_free() && cached_elements() > minci )
 				{
 					ImagePtr lrui = get_lru(true);
 					FIM_PR('o');
