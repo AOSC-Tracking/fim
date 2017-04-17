@@ -165,6 +165,8 @@
  * configure --with-tmpfile will specify a new temporary directory. 
 # (r1145)
  * configure will try to detect curses/ncurses.
+# (r1235)
+ * fix: mouse movement under SDL used to trigger unnecessary screen redraws.
 # (r1230)
  * fix: lastly used image will be erased at last, after eventually prefetched images.
 # (r1124)

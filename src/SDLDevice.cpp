@@ -859,7 +859,8 @@ err:
 						{
 							//std::cout << "pct:"<< px << " " << py << "\n";
 							cv->place(px,py);
-							cv->redisplay();
+							cv->display(); // draw only if necessary
+							//cv->redisplay(); // draw always
 						}
 					}
 					discardedfirst=true;
