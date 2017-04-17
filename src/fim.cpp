@@ -124,7 +124,7 @@ struct fim_options_t fim_options[] = {
 FIM_NULL
     },
 #if FIM_WANT_CMDLINE_KEYPRESS
-    { "keysym-press",   required_argument,       FIM_NULL, 'k',"Execute simulated press of keysym at startup. Can be specified multiple times to simulate multiple keystrokes.",FIM_NULL, FIM_NULL },
+    { "keysym-press",   required_argument,       FIM_NULL, 'k',"Execute simulated press of keysym at startup. Keysym can be prefixed by a repetition count number. Option can be specified multiple times to simulate multiple keystrokes.",FIM_NULL, FIM_NULL },
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_PIC_CMTS
     {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, /*0x6c696466*/'D', "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_IMG_DSC_FILE_SEPC " specifies otherwise), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
