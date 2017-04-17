@@ -707,6 +707,7 @@ err:
 				//case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				//case SDL_MOUSEBUTTONUP:
+				if(cc.getIntVariable(FIM_VID_WANT_MOUSE_CTRL)==1)
 				{
 					fim_coo_t x,y;
 					Uint8 ms=SDL_GetMouseState(&x,&y);
@@ -771,7 +772,7 @@ err:
 					if(ms&SDL_BUTTON_MMASK) cout << "mmask\n";
 					if(ms&SDL_BUTTON_X1MASK) cout << "x1mask\n";
 					if(ms&SDL_BUTTON_X2MASK) cout << "x2mask\n";
-#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
+#endif /* 1 */
 					if(!cc.inConsole())
 					{
 						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
@@ -784,7 +785,7 @@ err:
 					}
 				}
 				break;
-#endif
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 				case SDL_KEYUP:
 				return 0;
 				break;

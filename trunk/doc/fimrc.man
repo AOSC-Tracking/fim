@@ -1067,6 +1067,11 @@ _want_wm_caption_status
 .fi
 .na
 .B
+_want_wm_mouse_ctrl
+[in,g:] if set to 1, enable mouse click/movement behaviour when in SDL mode.
+.fi
+.na
+.B
 angle
 [in,out,i:] a floating point number specifying the rotation angle, in degrees
 .fi
@@ -1201,6 +1206,7 @@ if(ascale==''){ascale="1.0";}
 if(_use_mipmaps==''){_use_mipmaps=1;}
 if(_downscale_huge_at_load==''){_downscale_huge_at_load=1;}
 if(_scroll_skip_page_fraction==''){_scroll_skip_page_fraction=0;}
+if(_want_wm_mouse_ctrl==''){_want_wm_mouse_ctrl=1;}
 #
 # External variables (not used internally).
 if(allow_round_scroll==''){allow_round_scroll=0;}
