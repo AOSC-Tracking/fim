@@ -23,6 +23,7 @@
  * fix: removed obsolete documentation for the "window" command, now disabled
  * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works
  * fix: cleaned up the internal keysyms initialization code
+ * fix: lastly used image will be erased at last, after eventually prefetched images.
 
                 Version 0.5-rc2
 

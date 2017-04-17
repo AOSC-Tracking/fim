@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -476,6 +476,7 @@ ret:
 		if( is_in_cache(image) )
 		{
 			FIM_PR('-');
+			lru_touch( image->getKey() ); // we have been using it until now
 			usageCounter_[image->getKey()]--;
 #if FIM_WANT_EXPERIMENTAL_MIPMAPS
 			image->mm_free();
