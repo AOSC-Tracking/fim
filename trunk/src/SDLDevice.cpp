@@ -51,7 +51,7 @@ namespace fim
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 #define FIM_WANT_EXPERIMENTAL_MOUSE_PAN 1
-#define FIM_WANT_SDL_CLICK_MOUSE_SUPPORT 1
+#define FIM_WANT_SDL_CLICK_MOUSE_SUPPORT 1 && FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 
 #ifdef FIM_SDL_DEBUG
 #define FIM_SDL_INPUT_DEBUG(C,MSG)  \
@@ -68,6 +68,8 @@ std::cout.unsetf ( std::ios::hex );
 
 	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 typedef int fim_sdl_int;
+
+static fim_int draw_help_map_; // This is static since it gets modified in a static function. This shall change.
 
 fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 {
@@ -144,6 +146,7 @@ err:
 	want_resize_(true)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
+		draw_help_map_=0;
 		keypress_ = 0;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		const fim_char_t*os=opts_.c_str();
@@ -194,6 +197,43 @@ err:
 		//loc = ocols-1;
 		
 		return  FIM_ERR_GENERIC;
+	}
+
+	fim_err_t SDLDevice::draw_help_map(void)
+	{
+			Viewport* cv = cc.current_viewport();
+			fim_coo_t xw = cv->viewport_width();
+			fim_coo_t yh = cv->viewport_height();
+			fim_coo_t xt = xw/6;
+			fim_coo_t yt = yh/6;
+			fim_coo_t eth = 2;
+			fim_coo_t fd = FIM_MAX(f_->swidth(),f_->sheight());
+			if(xw > 6*fd && yh > 6*fd)
+			{
+				fim_coo_t bug = 1;
+				//#define FIM_CNS_RED 0x00FF0000
+				fim_color_t color = FIM_CNS_WHITE;
+				//color = FIM_CNS_RED ;
+				//fill_rect(0, xw-1, 1*2*yt, 1*2*yt+eth, color);
+				//fill_rect(0, xw-1, 2*2*yt, 2*2*yt+eth, color);
+				fill_rect(1*2*xt, 2*2*xt, 1*2*yt, 1*2*yt+eth, color);
+				fill_rect(1*2*xt, 2*2*xt, 2*2*yt, 2*2*yt+eth, color);
+				fill_rect(1*2*xt, 1*2*xt+bug+eth, 0, yh-1, color);
+				fill_rect(2*2*xt, 2*2*xt+bug+eth, 0, yh-1, color);
+				// left column
+				//fs_puts(f_, 1*xt, 1*yt, "b");
+				fs_puts(f_, 1*xt, 3*yt, "b");
+				//fs_puts(f_, 1*xt, 5*yt, "b");
+				// middle column
+				fs_puts(f_, 3*xt, 1*yt, "+");
+				fs_puts(f_, 3*xt, 3*yt, "=");
+				fs_puts(f_, 3*xt, 5*yt, "-");
+				// right column
+				//fs_puts(f_, 5*xt, 1*yt, "n");
+				fs_puts(f_, 5*xt, 3*yt, "n");
+				//fs_puts(f_, 5*xt, 5*yt, "n");
+			}
+		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t SDLDevice::display(
@@ -341,6 +381,8 @@ err:
 			setpixel(screen_, oj, ytimesw, (fim_coo_t)srcp[0], (fim_coo_t)srcp[1], (fim_coo_t)srcp[2]);
 		}
 
+		if(draw_help_map_)
+			draw_help_map();
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
 
 		SDL_Flip(screen_);
@@ -777,7 +819,8 @@ err:
 					{
 						if(ms&SDL_BUTTON_LMASK) { *c='n'; return 1; }
 						if(ms&SDL_BUTTON_RMASK) { *c='b'; return 1; }
-						if(ms&SDL_BUTTON_MMASK) { *c='q'; return 1; }
+						if(ms&SDL_BUTTON_MMASK) { draw_help_map_=1-draw_help_map_; return 0; }
+						//if(ms&SDL_BUTTON_MMASK) { *c='q'; return 1; }
 						if(ms&SDL_BUTTON_X1MASK	) { *c='+'; return 1; }
 						if(ms&SDL_BUTTON_X2MASK	) { *c='-'; return 1; }
 						if(ms&SDL_BUTTON(SDL_BUTTON_WHEELUP)) { *c='+'; return 1; }
