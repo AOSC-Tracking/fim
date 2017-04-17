@@ -1104,7 +1104,7 @@ err:
 		if( const char * c_str = clkpv_[i].c_str() )
 		{
 			for(;isdigit(*c_str);++c_str)
-				;//executeBinding( *c_str );
+				executeBinding( *c_str );
 			if( *c_str )
 				executeBinding( kstr_to_key( c_str ) );
 		}
