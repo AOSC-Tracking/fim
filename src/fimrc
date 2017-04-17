@@ -12,6 +12,7 @@ if(_debug_commands==''){_debug_commands=0;}
 if(_command_expansion==''){_command_expansion=1;}
 if(_display_status==''){_display_status=0;}
 if(_max_cached_images==''){_max_cached_images=5;}
+if(_min_cached_images==''){_min_cached_images=4;}
 if(_max_cached_memory==''){_max_cached_memory=81920;}
 if(_max_iterated_commands==''){_max_iterated_commands=100;}
 if(_want_prefetch==''){_want_prefetch=1;}

@@ -713,6 +713,7 @@ namespace fim
 #define FIM_VID_MIRRORED			"mirrored"		/* "[out,i:] 1, if the image is mirrored " */
 #define FIM_VID_WANT_AUTOCENTER			"_want_autocenter"	/* "[in,g:] if 1, the image will be displayed centered " */
 #define FIM_VID_MAX_CACHED_IMAGES		"_max_cached_images"	/* "[in,experimental,g:] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully." */
+#define FIM_VID_MIN_CACHED_IMAGES		"_min_cached_images"	/* "[in,experimental,g:] the minimum number of images to keep from eviction; if less than four can lead to inefficiencies: e.g. when jumping between two images, each time an erase and a prefetch of neighboring images would trigger. default value is 4." */
 #define FIM_VID_MAX_CACHED_MEMORY		"_max_cached_memory"	/* "[in,experimental,g:] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently)." */
 #define FIM_VID_CACHED_IMAGES			"_cached_images"	/* "[out,g:] the number of images currently cached." */
 #define FIM_VID_SCREEN_WIDTH			"_screen_width"		/* "[out,g:] the screen width"  */
