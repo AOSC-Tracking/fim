@@ -50,7 +50,7 @@ namespace fim
 #define FIM_SDL_WANT_RESIZE 1
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
-#define FIM_WANT_EXPERIMENTAL_MOUSE_PAN 1
+#define FIM_WANT_MOUSE_PAN 1
 #define FIM_WANT_SDL_CLICK_MOUSE_SUPPORT 1 && FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 
 #ifdef FIM_SDL_DEBUG
@@ -66,12 +66,11 @@ std::cout.unsetf ( std::ios::hex );
 #define FIM_SDL_INPUT_DEBUG(C,MSG) {}
 #endif /* FIM_SDL_DEBUG */
 
-	/* WARNING : TEMPORARY, FOR DEVELOPEMENT PURPOSES */
 typedef int fim_sdl_int;
 
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 static fim_int fim_draw_help_map_; // This is static since it gets modified in a static function. This shall change.
-static fim_char_t key_char_grid[10] = "'pP+a-=nN"; // by columns left to right, up to down. note that this assignment sets NUL ;-)
+static fim_char_t key_char_grid[10] = "'pP+a-=nN"; // by columns left to right, up to down. note that this assignment sets NUL.
 
 	static void toggle_draw_help_map(void)
 	{
@@ -80,7 +79,6 @@ static fim_char_t key_char_grid[10] = "'pP+a-=nN"; // by columns left to right, 
 			cv->redisplay(); // will indirectly trigger draw_help_map()
 	}
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
-
 
 fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 {
@@ -216,9 +214,11 @@ err:
 	{
 		if(fim_draw_help_map_==0)
 		{
+			// nothing to draw
 		}
 		if(fim_draw_help_map_==2)
 		{
+			// 
 			Viewport* cv = cc.current_viewport();
 			fim_coo_t xw = cv->viewport_width();
 			fim_coo_t yh = cv->viewport_height();
@@ -228,12 +228,12 @@ err:
 			fim_coo_t ytl = yt/16;
 			fim_coo_t eth = 2;
 			fim_color_t color = FIM_CNS_WHITE;
-			fim_coo_t bug = 1;
+			fim_coo_t bug = 1; // second fill_rect arg
 			// horizontal
-			fill_rect(0, xtl, 1*yt, 1*yt+eth, color); // left top
-			fill_rect(0, xtl, 2*yt, 2*yt+eth, color); // left bottom
-			fill_rect(xw-xtl, xw-1, 1*yt, 1*yt+eth, color); // right top
-			fill_rect(xw-xtl, xw-1, 2*yt, 2*yt+eth, color); // right bottom
+			fill_rect(0, xtl+bug, 1*yt, 1*yt+eth, color); // left top
+			fill_rect(0, xtl+bug, 2*yt, 2*yt+eth, color); // left bottom
+			fill_rect(xw-xtl, xw-1+bug, 1*yt, 1*yt+eth, color); // right top
+			fill_rect(xw-xtl, xw-1+bug, 2*yt, 2*yt+eth, color); // right bottom
 			// vertical
 			fill_rect(1*xt, 1*xt+bug+eth, 0*ytl, 1*ytl, color); // left top
 			fill_rect(2*xt, 2*xt+bug+eth, 0*ytl, 1*ytl, color); // right top
@@ -252,14 +252,10 @@ err:
 
 			if(xw > 6*fd && yh > 6*fd)
 			{
-				fim_coo_t bug = 1;
-				//#define FIM_CNS_RED 0x00FF0000
+				fim_coo_t bug = 1; // second fill_rect arg
 				fim_color_t color = FIM_CNS_WHITE;
-				//color = FIM_CNS_RED ;
-				//fill_rect(0, xw-1, 1*2*yt, 1*2*yt+eth, color);
-				//fill_rect(0, xw-1, 2*2*yt, 2*2*yt+eth, color);
-				fill_rect(0*2*xt, 3*2*xt, 1*2*yt, 1*2*yt+eth, color);
-				fill_rect(0*2*xt, 3*2*xt, 2*2*yt, 2*2*yt+eth, color);
+				fill_rect(0*2*xt, xw, 1*2*yt, 1*2*yt+eth, color);
+				fill_rect(0*2*xt, xw, 2*2*yt, 2*2*yt+eth, color);
 				fill_rect(1*2*xt, 1*2*xt+bug+eth, 0, yh-1, color);
 				fill_rect(2*2*xt, 2*2*xt+bug+eth, 0, yh-1, color);
 				// left column
@@ -857,7 +853,7 @@ err:
 					}
 					}
 #endif /* FIM_WANT_SDL_CLICK_MOUSE_SUPPORT */
-					cout << "mouse clicked at "<<x<<" "<<y<<" : "<< ((x>cv->viewport_width()/2)?'r':'l') <<"; state: "<<ms<<"\n";
+					//cout << "mouse clicked at "<<x<<" "<<y<<" : "<< ((x>cv->viewport_width()/2)?'r':'l') <<"; state: "<<ms<<"\n";
 #if 0
 					if(ms&SDL_BUTTON_RMASK) cout << "rmask\n";
 					if(ms&SDL_BUTTON_LMASK) cout << "lmask\n";
@@ -884,7 +880,7 @@ err:
 				return 0;
 				break;
 				case SDL_MOUSEMOTION:
-#if FIM_WANT_EXPERIMENTAL_MOUSE_PAN 
+#if FIM_WANT_MOUSE_PAN
 				FIM_SDL_INPUT_DEBUG(c,"SDL_MOUSEMOTION");
 				{
 					//std::cout << current_w_    << " " << event.motion.y    << "\n";
@@ -916,7 +912,7 @@ err:
 					}
 					discardedfirst=true;
 				}
-#endif /* FIM_WANT_EXPERIMENTAL_MOUSE_PAN */
+#endif /* FIM_WANT_MOUSE_PAN */
 				break;
 				default:
 				FIM_SDL_INPUT_DEBUG(c,"default-unknown");
