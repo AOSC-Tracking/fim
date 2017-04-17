@@ -613,12 +613,12 @@ _cached_images
 .na
 .B
 _caption_over_image
-[experimental,in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background. 
+[in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background. 
 .fi
 .na
 .B
 _caption_over_image_fmt
-[experimental,in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as _info_fmt_str.
+[in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as _info_fmt_str.
 .fi
 .na
 .B
@@ -858,22 +858,22 @@ _magnify_factor
 .na
 .B
 _max_cached_images
-[in,experimental,g:] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully.
+[in,g:] the maximum number of images after which evictions will be forced. Setting this to 0 (no limits) is ok provided _max_cached_memory is set meaningfully.
 .fi
 .na
 .B
 _max_cached_memory
-[in,experimental,g:] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently).
+[in,g:] the maximum amount of memory (in KiB) at which images will be continued being added to the cache. Setting this to 0 (no limit) will lead to a crash (there is no protection currently).
 .fi
 .na
 .B
 _max_iterated_commands
-[experimental,g:] the iteration limit for N in "N[commandname]" iterated command invocations
+[g:] the iteration limit for N in "N[commandname]" iterated command invocations
 .fi
 .na
 .B
 _min_cached_images
-[in,experimental,g:] the minimum number of images to keep from eviction; if less than four can lead to inefficiencies: e.g. when jumping between two images, each time an erase and a prefetch of neighboring images would trigger. default value is 4.
+[in,g:] the minimum number of images to keep from eviction; if less than four can lead to inefficiencies: e.g. when jumping between two images, each time an erase and a prefetch of neighboring images would trigger. default value is 4.
 .fi
 .na
 .B
@@ -1179,6 +1179,7 @@ if(_debug_commands==''){_debug_commands=0;}
 if(_command_expansion==''){_command_expansion=1;}
 if(_display_status==''){_display_status=0;}
 if(_max_cached_images==''){_max_cached_images=5;}
+if(_min_cached_images==''){_min_cached_images=4;}
 if(_max_cached_memory==''){_max_cached_memory=81920;}
 if(_max_iterated_commands==''){_max_iterated_commands=100;}
 if(_want_prefetch==''){_want_prefetch=1;}
