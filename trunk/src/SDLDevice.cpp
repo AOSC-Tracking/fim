@@ -71,7 +71,7 @@ typedef int fim_sdl_int;
 
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 static fim_int fim_draw_help_map_; // This is static since it gets modified in a static function. This shall change.
-static const fim_char_t key_char_grid[10] = "'pP+a-=nN"; // by columns left to right, up to down
+static fim_char_t key_char_grid[10] = "'pP+a-=nN"; // by columns left to right, up to down. note that this assignment sets NUL ;-)
 
 	static void toggle_draw_help_map(void)
 	{
@@ -794,7 +794,8 @@ err:
 				//case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				//case SDL_MOUSEBUTTONUP:
-				if(cc.getIntVariable(FIM_VID_WANT_MOUSE_CTRL)==1)
+				if(fim::string wmc = cc.getStringVariable(FIM_VID_WANT_MOUSE_CTRL))
+				if( wmc.size()>=9 && strncpy(key_char_grid,wmc.c_str(),9) )
 				{
 					fim_coo_t x,y;
 					Uint8 ms=SDL_GetMouseState(&x,&y);
