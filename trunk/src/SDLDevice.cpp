@@ -238,7 +238,7 @@ err:
 				//fs_puts(f_, 1*xt, 5*yt, "b");
 				// middle column
 				fs_puts(f_, 3*xt, 1*yt, "+");
-				fs_puts(f_, 3*xt, 3*yt, "=");
+				fs_puts(f_, 3*xt, 3*yt, "a");
 				fs_puts(f_, 3*xt, 5*yt, "-");
 				// right column
 				//fs_puts(f_, 5*xt, 1*yt, "n");
@@ -798,7 +798,7 @@ err:
 						else
 						if( y < 2*yt )
 						{
-							*c='='; return 1;
+							*c='a'; return 1;
 						}
 						else
 						{
