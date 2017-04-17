@@ -315,3 +315,9 @@ void DisplayDevice::quickbench(fim_int qbi)
 		return fmf;
 	}
 
+	fim_err_t DisplayDevice::fs_putc(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t c)
+	{
+		fim_char_t s[2] = {c,FIM_SYM_CHAR_NUL};
+		return fs_puts(f, x, y, s);
+	}
+

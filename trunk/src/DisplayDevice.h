@@ -90,6 +90,7 @@ class DisplayDevice
 	public:
 	fim_bool_t need_redraw(void)const{ return ( redraw_ != FIM_REDRAW_UNNECESSARY ); }
 	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
+	virtual fim_err_t fs_putc(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t c);
 	void fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags);//experimental
 #if FIM_WANT_BENCHMARKS
 	virtual fim_int get_n_qbenchmarks(void)const;
