@@ -3,6 +3,7 @@
 
                 Version 0.5-rc3
 
+ * fix: mouse movement under SDL used to trigger unnecessary screen redraws.
  * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
  * bugfix: conversion from external program was vulnerable to failure due to missing check.
  * fix: gif error handling could have led to NULL pointer usage.
