@@ -466,7 +466,7 @@ ret:		return key;
 #endif /* FIM_PIPE_IMAGE_READ */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_PREFETCH),fim::string(FIM_FLT_PREFETCH " : prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening. See also the " FIM_VID_WANT_PREFETCH 			 " variable."),&browser_,&Browser::fcmd_prefetch));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_PWD),fim::string(FIM_CMD_HELP_PWD   ),this,&CommandConsole::fcmd_pwd));
-		addCommand(new Command(fim_cmd_id(FIM_FLT_QUIT),fim::string(FIM_FLT_QUIT " [{number}] : terminate the program; if {number} is specified, use it as the program return status"),this,&CommandConsole::fcmd_quit));
+		addCommand(new Command(fim_cmd_id(FIM_FLT_QUIT),fim::string(FIM_FLT_QUIT " [{number}] : terminate the program; if {number} is specified, use it as the program return status; autocommand \"" FIM_ACM_POSTINTERACTIVECOMMAND "\" does not trigger after this command"),this,&CommandConsole::fcmd_quit));
 #ifdef FIM_RECORDING
 		addCommand(new Command(fim_cmd_id(FIM_FLT_RECORDING),fim::string(
 FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_RECORDING " 'stop' : stop  recording the executed commands; " FIM_FLT_RECORDING " 'dump' : dump in the console the record buffer; " FIM_FLT_RECORDING " 'execute' : execute the record buffer; " FIM_FLT_RECORDING " 'repeat_last' : repeat the last performed action; "),this,&CommandConsole::fcmd_recording));
@@ -753,7 +753,8 @@ err:
 			else
 #endif /* FIM_ITERATED_COMMANDS */
 				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
+			if( show_must_go_on_ )
+				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 		}
 
 		if(status)
@@ -1141,7 +1142,8 @@ err:
 					ic_=(ic_==-1)?0:1; //a command could change the mode !
 //					this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);	//!!
 //					execute_internal("redisplay;",FIM_X_NULL);	//execution of the command line with history
-					FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
+					if( show_must_go_on_ )
+						FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 #ifdef FIM_RECORDING
 					memorize_last(rl);
 #endif /* FIM_RECORDING */

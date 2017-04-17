@@ -381,7 +381,7 @@ pwd : print the current directory name, and updates the _pwd variable
 .B
 quit
 .fi
-quit [{number}] : terminate the program; if {number} is specified, use it as the program return status
+quit [{number}] : terminate the program; if {number} is specified, use it as the program return status; autocommand "PostInteractiveCommand" does not trigger after this command
 .fi
 
 .na
