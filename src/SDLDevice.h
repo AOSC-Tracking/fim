@@ -103,6 +103,7 @@ class SDLDevice:public DisplayDevice
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
 	fim_err_t reset_wm_caption(void);
 	fim_err_t post_wmresize(void);
+	fim_err_t draw_help_map(void);
 };
 
 

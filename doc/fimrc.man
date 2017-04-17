@@ -1068,7 +1068,7 @@ _want_wm_caption_status
 .na
 .B
 _want_wm_mouse_ctrl
-[in,g:] if set to 1, enable mouse click/movement behaviour when in SDL mode.
+[in,g:] if set to 1, enable mouse click/movement behaviour when in SDL mode; clicking the middle button will display usage info.
 .fi
 .na
 .B
