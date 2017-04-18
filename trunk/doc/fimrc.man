@@ -1243,7 +1243,6 @@ bind '=' "scale '100%'";
 bind 'Del' "list 'pop';reload;";
 #bind 's' "list 'sort'";
 bind ' ' "scrollforward";
-bind 'C\-s' "swap;redisplay;";
 bind 'S' "toggleDisplayStatus";
 bind 'I' "toggleautonegate";
 bind 'i' "color 'negate';redisplay;";
@@ -1411,33 +1410,7 @@ alias "rotate270" "rotate90_ccw;display;" "";
 alias "rotate10"     "rotate  '10';display;" "";
 alias "rotate10_ccw" "rotate \-10;display;" "";
 
-# window related aliases and commands
-alias "wu" "window 'up'" "selects the window upwards the current";
-alias "wd" "window 'down'" "selects the window under the current";
-alias "wl" "window 'left'" "selects the window at left of the current";
-alias "wr" "window 'right'" "selects the window at right of the current";
-#bind 'K' "wu";
 bind 'K' 'if(_display_console==0){echo i:_filename.": ".i:_comment;toggleVerbosity}else{toggleVerbosity;}';
-# Note : on many consoles C\-j is by default equivalent to Enter.. so this may not work :)
-#bind 'C\-j' "wd";
-#bind 'J' "wd";
-#bind 'H' "wl";
-#bind 'L' "wr";
-#alias "split" "window 'split'" "split the current window horizontally";
-#alias "vsplit" "window 'vsplit'" "split the current window vertically";
-#alias "swap" "window 'swap'" "swap the enclosing window subwindows";
-#alias "ws " "window 'swap'" "see swap";
-#bind 'T' "split;redisplay;";
-##don't use C\-s : it will be usually caught by the console driver, and fim won't get it!
-##bind 'C\-s' "split;";
-#bind 'V' "vsplit;redisplay;";
-#bind 'U' "swap;redisplay;";
-#alias 'venlarge' 'window "venlarge"' "";
-#alias 'henlarge' 'window "henlarge"' "";
-#alias 'wnormalize' 'window "normalize"' "";
-#alias 'wclose' 'window "close"' "";
-#alias 'wc' 'window "close"' "closes the current window";
-#bind  'C' "wc;redisplay;";
 
 alias 'cache' 'echo _cache_status;' "displays cached images status";
 #bind 'c' 'cache;';
