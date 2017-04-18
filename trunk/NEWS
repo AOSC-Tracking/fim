@@ -29,6 +29,8 @@
  * Variable "_min_cached_images" is the minimum number of images to keep from eviction.
 # (r1156)
  * Commands  scale '<'  /  scale '>' will shrink/magnify the image using cached mipmaps.
+# (r1248)
+ * Will show mouse cursor in full screen (SDL mode).
 # (r1226)
  * Autocommand "PostInteractiveCommand" does not trigger anymore after 'quit' command.
 # (r1196)
