@@ -26,7 +26,7 @@ FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
 conf.h:       fimrc
 	$(ECHO) 'const fim_char_t * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $@
-	$(SED)  's/\\/\\\\/g;s/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< | $(GREP) -v '^###' >> $@
+	$(SED)  's/\\/\\\\/g;s/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< | $(GREP) -v '^.###' >> $@
 	$(ECHO) '"";' >> $@
 
 grammar.h: yacc.tab.cpp yacc.output
