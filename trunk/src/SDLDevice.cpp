@@ -225,22 +225,22 @@ err:
 			fim_coo_t yt = yh/3;
 			fim_coo_t xtl = xt/16;
 			fim_coo_t ytl = yt/16;
-			fim_coo_t eth = 2; // extra thickness
+			fim_coo_t eth = 1; // extra thickness
 			fim_color_t ic = FIM_CNS_WHITE;
 			fim_color_t oc = FIM_CNS_BLACK;
 			// test
 			//fill_rect(xw/2, xw/2, 0, yh-1, ic, oc); // test middle vertical 
 			//fill_rect(0, xw-1, yh/2, yh/2, ic, oc); // test middle horizontal
 			// horizontal
-			fill_rect(0, xtl, 1*yt, 1*yt+eth, ic, oc); // left top
-			fill_rect(0, xtl, 2*yt, 2*yt+eth, ic, oc); // left bottom
-			fill_rect(xw-xtl, xw-1, 1*yt, 1*yt+eth, ic, oc); // right top
-			fill_rect(xw-xtl, xw-1, 2*yt, 2*yt+eth, ic, oc); // right bottom
+			fill_rect(0, xtl, 1*yt-eth, 1*yt+eth, ic, oc); // left top
+			fill_rect(0, xtl, 2*yt-eth, 2*yt+eth, ic, oc); // left bottom
+			fill_rect(xw-xtl, xw-1, 1*yt-eth, 1*yt+eth, ic, oc); // right top
+			fill_rect(xw-xtl, xw-1, 2*yt-eth, 2*yt+eth, ic, oc); // right bottom
 			// vertical
-			fill_rect(1*xt, 1*xt+eth, 0*ytl, 1*ytl, ic, oc); // left top
-			fill_rect(2*xt, 2*xt+eth, 0*ytl, 1*ytl, ic, oc); // right top
-			fill_rect(1*xt, 1*xt+eth, yh-ytl, yh-1, ic, oc); // left bottom
-			fill_rect(2*xt, 2*xt+eth, yh-ytl, yh-1, ic, oc); // right bottom
+			fill_rect(1*xt-eth, 1*xt+eth, 0*ytl, 1*ytl, ic, oc); // left top
+			fill_rect(2*xt-eth, 2*xt+eth, 0*ytl, 1*ytl, ic, oc); // right top
+			fill_rect(1*xt-eth, 1*xt+eth, yh-ytl, yh-1, ic, oc); // left bottom
+			fill_rect(2*xt-eth, 2*xt+eth, yh-ytl, yh-1, ic, oc); // right bottom
 		}
 		if(fim_draw_help_map_==1)
 		{
@@ -249,17 +249,17 @@ err:
 			fim_coo_t yh = cv->viewport_height();
 			fim_coo_t xt = xw/6;
 			fim_coo_t yt = yh/6;
-			fim_coo_t eth = 2;
+			fim_coo_t eth = 1;
 			fim_coo_t fd = FIM_MAX(f_->swidth(),f_->sheight());
 
 			if(xw > 6*fd && yh > 6*fd)
 			{
 				fim_color_t ic = FIM_CNS_WHITE;
 				fim_color_t oc = FIM_CNS_BLACK;
-				fill_rect(0*2*xt, xw, 1*2*yt, 1*2*yt+eth, ic, oc);
-				fill_rect(0*2*xt, xw, 2*2*yt, 2*2*yt+eth, ic, oc);
-				fill_rect(1*2*xt, 1*2*xt+eth, 0, yh-1, ic, oc);
-				fill_rect(2*2*xt, 2*2*xt+eth, 0, yh-1, ic, oc);
+				fill_rect(0*2*xt, xw, 1*2*yt-eth, 1*2*yt+eth, ic, oc);
+				fill_rect(0*2*xt, xw, 2*2*yt-eth, 2*2*yt+eth, ic, oc);
+				fill_rect(1*2*xt-eth, 1*2*xt+eth, 0, yh-1, ic, oc);
+				fill_rect(2*2*xt-eth, 2*2*xt+eth, 0, yh-1, ic, oc);
 				// left column
 				fs_putc(f_, 1*xt, 1*yt, key_char_grid[0]);
 				fs_putc(f_, 1*xt, 3*yt, key_char_grid[1]);
