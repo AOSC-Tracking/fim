@@ -226,20 +226,21 @@ err:
 			fim_coo_t xtl = xt/16;
 			fim_coo_t ytl = yt/16;
 			fim_coo_t eth = 2; // extra thickness
-			fim_color_t color = FIM_CNS_WHITE;
+			fim_color_t ic = FIM_CNS_WHITE;
+			fim_color_t oc = FIM_CNS_BLACK;
 			// test
-			//fill_rect(xw/2, xw/2, 0, yh-1, color); // test middle vertical 
-			//fill_rect(0, xw-1, yh/2, yh/2, color); // test middle horizontal
+			//fill_rect(xw/2, xw/2, 0, yh-1, ic, oc); // test middle vertical 
+			//fill_rect(0, xw-1, yh/2, yh/2, ic, oc); // test middle horizontal
 			// horizontal
-			fill_rect(0, xtl, 1*yt, 1*yt+eth, color); // left top
-			fill_rect(0, xtl, 2*yt, 2*yt+eth, color); // left bottom
-			fill_rect(xw-xtl, xw-1, 1*yt, 1*yt+eth, color); // right top
-			fill_rect(xw-xtl, xw-1, 2*yt, 2*yt+eth, color); // right bottom
+			fill_rect(0, xtl, 1*yt, 1*yt+eth, ic, oc); // left top
+			fill_rect(0, xtl, 2*yt, 2*yt+eth, ic, oc); // left bottom
+			fill_rect(xw-xtl, xw-1, 1*yt, 1*yt+eth, ic, oc); // right top
+			fill_rect(xw-xtl, xw-1, 2*yt, 2*yt+eth, ic, oc); // right bottom
 			// vertical
-			fill_rect(1*xt, 1*xt+eth, 0*ytl, 1*ytl, color); // left top
-			fill_rect(2*xt, 2*xt+eth, 0*ytl, 1*ytl, color); // right top
-			fill_rect(1*xt, 1*xt+eth, yh-ytl, yh-1, color); // left bottom
-			fill_rect(2*xt, 2*xt+eth, yh-ytl, yh-1, color); // right bottom
+			fill_rect(1*xt, 1*xt+eth, 0*ytl, 1*ytl, ic, oc); // left top
+			fill_rect(2*xt, 2*xt+eth, 0*ytl, 1*ytl, ic, oc); // right top
+			fill_rect(1*xt, 1*xt+eth, yh-ytl, yh-1, ic, oc); // left bottom
+			fill_rect(2*xt, 2*xt+eth, yh-ytl, yh-1, ic, oc); // right bottom
 		}
 		if(fim_draw_help_map_==1)
 		{
@@ -253,11 +254,12 @@ err:
 
 			if(xw > 6*fd && yh > 6*fd)
 			{
-				fim_color_t color = FIM_CNS_WHITE;
-				fill_rect(0*2*xt, xw, 1*2*yt, 1*2*yt+eth, color);
-				fill_rect(0*2*xt, xw, 2*2*yt, 2*2*yt+eth, color);
-				fill_rect(1*2*xt, 1*2*xt+eth, 0, yh-1, color);
-				fill_rect(2*2*xt, 2*2*xt+eth, 0, yh-1, color);
+				fim_color_t ic = FIM_CNS_WHITE;
+				fim_color_t oc = FIM_CNS_BLACK;
+				fill_rect(0*2*xt, xw, 1*2*yt, 1*2*yt+eth, ic, oc);
+				fill_rect(0*2*xt, xw, 2*2*yt, 2*2*yt+eth, ic, oc);
+				fill_rect(1*2*xt, 1*2*xt+eth, 0, yh-1, ic, oc);
+				fill_rect(2*2*xt, 2*2*xt+eth, 0, yh-1, ic, oc);
 				// left column
 				fs_putc(f_, 1*xt, 1*yt, key_char_grid[0]);
 				fs_putc(f_, 1*xt, 3*yt, key_char_grid[1]);
@@ -941,6 +943,19 @@ done:
 			fim_memset(((fim_byte_t*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1+1)* Bpp_);
 		}
 		return FIM_ERR_NO_ERROR;
+	}
+
+	fim_err_t SDLDevice::fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t icolor, fim_color_t ocolor) FIM_NOEXCEPT
+	{
+		/*
+		 * This could be optimized.
+		 * e.g. four lines around inner box would be better.
+		 * */
+		fim_err_t rv = FIM_ERR_NO_ERROR;
+		rv = fill_rect(x1, x2, y1, y2, icolor);
+		if(x2-x1<3 || y2-y1<3)
+			rv = fill_rect(x1+1, x2-1, y1+1, y2-1, ocolor);
+		return rv;
 	}
 
 	fim_err_t SDLDevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT
