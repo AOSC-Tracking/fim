@@ -212,6 +212,8 @@ err:
 
 	fim_err_t SDLDevice::draw_help_map(void)
 	{
+		fim_coo_t bug = 0; // second fill_rect arg
+
 		if(fim_draw_help_map_==0)
 		{
 			// nothing to draw
@@ -226,9 +228,11 @@ err:
 			fim_coo_t yt = yh/3;
 			fim_coo_t xtl = xt/16;
 			fim_coo_t ytl = yt/16;
-			fim_coo_t eth = 2;
+			fim_coo_t eth = 2; // extra thickness
 			fim_color_t color = FIM_CNS_WHITE;
-			fim_coo_t bug = 1; // second fill_rect arg
+			// test
+			//fill_rect(xw/2, xw/2+bug, 0, yh-1, color); // test middle vertical 
+			//fill_rect(0, xw-1+bug, yh/2, yh/2, color); // test middle horizontal
 			// horizontal
 			fill_rect(0, xtl+bug, 1*yt, 1*yt+eth, color); // left top
 			fill_rect(0, xtl+bug, 2*yt, 2*yt+eth, color); // left bottom
@@ -252,7 +256,6 @@ err:
 
 			if(xw > 6*fd && yh > 6*fd)
 			{
-				fim_coo_t bug = 1; // second fill_rect arg
 				fim_color_t color = FIM_CNS_WHITE;
 				fill_rect(0*2*xt, xw, 1*2*yt, 1*2*yt+eth, color);
 				fill_rect(0*2*xt, xw, 2*2*yt, 2*2*yt+eth, color);
@@ -938,7 +941,7 @@ done:
 		 * */
 		for(y=y1;y<=y2;++y)
 		{
-			fim_memset(((fim_byte_t*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1)* Bpp_);
+			fim_memset(((fim_byte_t*)(screen_->pixels)) + y*screen_->pitch + x1*Bpp_,color, (x2-x1+1)* Bpp_);
 		}
 		return FIM_ERR_NO_ERROR;
 	}
