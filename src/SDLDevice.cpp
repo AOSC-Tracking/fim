@@ -212,15 +212,12 @@ err:
 
 	fim_err_t SDLDevice::draw_help_map(void)
 	{
-		fim_coo_t bug = 0; // second fill_rect arg
-
 		if(fim_draw_help_map_==0)
 		{
 			// nothing to draw
 		}
 		if(fim_draw_help_map_==2)
 		{
-			// 
 			Viewport* cv = cc.current_viewport();
 			fim_coo_t xw = cv->viewport_width();
 			fim_coo_t yh = cv->viewport_height();
@@ -231,18 +228,18 @@ err:
 			fim_coo_t eth = 2; // extra thickness
 			fim_color_t color = FIM_CNS_WHITE;
 			// test
-			//fill_rect(xw/2, xw/2+bug, 0, yh-1, color); // test middle vertical 
-			//fill_rect(0, xw-1+bug, yh/2, yh/2, color); // test middle horizontal
+			//fill_rect(xw/2, xw/2, 0, yh-1, color); // test middle vertical 
+			//fill_rect(0, xw-1, yh/2, yh/2, color); // test middle horizontal
 			// horizontal
-			fill_rect(0, xtl+bug, 1*yt, 1*yt+eth, color); // left top
-			fill_rect(0, xtl+bug, 2*yt, 2*yt+eth, color); // left bottom
-			fill_rect(xw-xtl, xw-1+bug, 1*yt, 1*yt+eth, color); // right top
-			fill_rect(xw-xtl, xw-1+bug, 2*yt, 2*yt+eth, color); // right bottom
+			fill_rect(0, xtl, 1*yt, 1*yt+eth, color); // left top
+			fill_rect(0, xtl, 2*yt, 2*yt+eth, color); // left bottom
+			fill_rect(xw-xtl, xw-1, 1*yt, 1*yt+eth, color); // right top
+			fill_rect(xw-xtl, xw-1, 2*yt, 2*yt+eth, color); // right bottom
 			// vertical
-			fill_rect(1*xt, 1*xt+bug+eth, 0*ytl, 1*ytl, color); // left top
-			fill_rect(2*xt, 2*xt+bug+eth, 0*ytl, 1*ytl, color); // right top
-			fill_rect(1*xt, 1*xt+bug+eth, yh-ytl, yh-1, color); // left bottom
-			fill_rect(2*xt, 2*xt+bug+eth, yh-ytl, yh-1, color); // right bottom
+			fill_rect(1*xt, 1*xt+eth, 0*ytl, 1*ytl, color); // left top
+			fill_rect(2*xt, 2*xt+eth, 0*ytl, 1*ytl, color); // right top
+			fill_rect(1*xt, 1*xt+eth, yh-ytl, yh-1, color); // left bottom
+			fill_rect(2*xt, 2*xt+eth, yh-ytl, yh-1, color); // right bottom
 		}
 		if(fim_draw_help_map_==1)
 		{
@@ -259,8 +256,8 @@ err:
 				fim_color_t color = FIM_CNS_WHITE;
 				fill_rect(0*2*xt, xw, 1*2*yt, 1*2*yt+eth, color);
 				fill_rect(0*2*xt, xw, 2*2*yt, 2*2*yt+eth, color);
-				fill_rect(1*2*xt, 1*2*xt+bug+eth, 0, yh-1, color);
-				fill_rect(2*2*xt, 2*2*xt+bug+eth, 0, yh-1, color);
+				fill_rect(1*2*xt, 1*2*xt+eth, 0, yh-1, color);
+				fill_rect(2*2*xt, 2*2*xt+eth, 0, yh-1, color);
 				// left column
 				fs_putc(f_, 1*xt, 1*yt, key_char_grid[0]);
 				fs_putc(f_, 1*xt, 3*yt, key_char_grid[1]);
