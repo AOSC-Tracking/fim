@@ -75,10 +75,10 @@ class Viewport:public ViewportState
 	bool place(const fim_pan_t px, const fim_pan_t py);
 	void setState(const ViewportState & viewportState);
 	ViewportState getState(void)const;
-	void pan_up   (fim_pan_t s=0);
-	void pan_down (fim_pan_t s=0);
-	void pan_right(fim_pan_t s=0);
-	void pan_left (fim_pan_t s=0);
+	fim_bool_t pan_up   (fim_pan_t s=0);
+	fim_bool_t pan_down (fim_pan_t s=0);
+	fim_bool_t pan_right(fim_pan_t s=0);
+	fim_bool_t pan_left (fim_pan_t s=0);
 	bool onBottom(fim_coo_t approx_fraction=0)const;
 	bool onRight(fim_coo_t approx_fraction=0)const;
 	bool onLeft(fim_coo_t approx_fraction=0)const;
