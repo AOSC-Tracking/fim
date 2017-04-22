@@ -315,11 +315,11 @@ The following keys and commands are hardcoded in the minimal configuration. Thes
  \-    reduce
  h    pan 'left'
  l    pan 'right'
- k    pan 'up'
- j    pan 'down'
+ k    pan 'up\-'
+ j    pan 'down+'
  q    quit
 You can type a number before a command binding to iterate the assigned command:
-3k    3pan 'up'
+3k    3pan 'up\-'
 
 .nf
 :       enter command line mode
