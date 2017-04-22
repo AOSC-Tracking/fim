@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1253)
+ * Command 'pan' accepts '-' and '+' to jump to prev/next file if border is reached.
 # (r1210-r1213)
  * Command 'font' controls displayed font and scans font directories.
  * Keys '{' and '}' will cycle through scanned consolefonts.

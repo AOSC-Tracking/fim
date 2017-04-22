@@ -929,6 +929,8 @@ namespace fim
 #define FIM_FLC_FLIP			"flip" /* not in vim */
 #define FIM_FLC_PAN_UP			"pan 'up'" /* not in vim */
 #define FIM_FLC_PAN_DOWN		"pan 'down'" /* not in vim */
+#define FIM_FLC_SCROLL_DOWN		"pan 'down+'" /* not in vim */
+#define FIM_FLC_SCROLL_UP		"pan 'up-'" /* not in vim */
 #define FIM_FLC_PAN_LEFT		"pan 'left'" /* not in vim */
 #define FIM_FLC_PAN_RIGHT		"pan 'right'" /* not in vim */
 #define FIM_FLC_NEXT_FILE		"goto '+1f'" /* not in vim */ // WAS: FIM_FLT_NEXT_PIC

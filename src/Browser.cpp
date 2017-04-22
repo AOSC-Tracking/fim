@@ -32,6 +32,7 @@
 #include <libgen.h>
 #endif /* HAVE_LIBGEN_H */
 
+#define FIM_PAN_GOES_NEXT 1
 #define FIM_READ_BLK_DEVICES 1
 
 #define FIM_BROWSER_INSPECT 0
@@ -358,8 +359,35 @@ ret:
 			if( f )
 			{
 				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
-				if(c_getImage() && viewport())
-					viewport()->pan(args);
+				if( c_getImage() && viewport() )
+				{
+					fim::string pr = viewport()->pan(args);
+#if FIM_PAN_GOES_NEXT
+					fim_char_t s = FIM_SYM_CHAR_NUL;
+				       	s = tolower(args[0].end()[-1]);
+			       		if( s != FIM_SYM_CHAR_NUL && pr == "no" ) // TODO: this is ugly
+					{
+						/*if( s != '+' && s != '-' )
+						switch(f)
+						{
+							case('u'):
+							case('l'):
+							case('e'):
+							s='-';
+							break;
+							case('d'):
+							case('r'):
+							case('w'):
+							s='+';
+							break;
+						}*/
+						if( s == '+' )
+				       			next(1);
+						if( s == '-' )
+		       					prev(1);
+					}
+#endif /* FIM_PAN_GOES_NEXT */
+				}
 				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
 			}
 		}

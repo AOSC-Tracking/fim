@@ -346,7 +346,7 @@ load : load the image, if not yet loaded (see also reload)
 .B
 pan
 .fi
-pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'} [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
+pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+\-] [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning;a + or \- sign at the end of the first argument will make jump to next or prev if border is reached; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
 .fi
 
 .na
@@ -1267,11 +1267,11 @@ bind 'u'   "list 'unmark'";
 bind 'Enter' "list 'mark';goto _lastgotodirection";
 bind '\-' "reduce";
 bind "Up" "pan_up";
-bind 'k' "pan_up";
+bind 'k' "pan 'up\-'";
 bind "Right" "pan_right";
 bind 'l' "pan_right";
 bind "Down" "pan_down";
-bind 'j' "pan_down";
+bind 'j' "pan 'down+'";
 bind "Left" "pan_left";
 bind 'h' "pan_left";
 bind 't' "align 'top'";

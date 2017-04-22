@@ -66,10 +66,12 @@
 		bind('d',FIM_FLT_DISPLAY);
 		bind('+',FIM_FLA_MAGNIFY);
 		bind('-',FIM_FLA_REDUCE);
-		bind('k',FIM_FLC_PAN_UP);
-		bind('l',FIM_FLC_PAN_RIGHT);
-		bind('j',FIM_FLC_PAN_DOWN);
+		//bind('k',FIM_FLC_PAN_UP);
+		//bind('j',FIM_FLC_PAN_DOWN);
+		bind('k',FIM_FLC_SCROLL_UP);
+		bind('j',FIM_FLC_SCROLL_DOWN);
 		bind('h',FIM_FLC_PAN_LEFT);
+		bind('l',FIM_FLC_PAN_RIGHT);
 		bind(29,"scale_factor_increase");
 		bind(31,"scale_factor_decrease");
 		bind(29,"scale_factor_grow");
