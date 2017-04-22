@@ -111,60 +111,68 @@ namespace fim
 		}
 	}
 
-	void Viewport::pan_up(fim_pan_t s)
+	fim_bool_t Viewport::pan_up(fim_pan_t s)
 	{
+		fim_bool_t rv = true;
 		panned_ |= 0x1;
 		if(s<0)
-			pan_down(-s);
+			rv = pan_down(-s);
 		else
 		{
 			if(this->onTop())
-				return;
+				return false;
 			s=(s==0)?steps_:s;
 			top_ -= s;
 		}
+		return rv;
 	}
 
-	void Viewport::pan_down(fim_pan_t s)
+	fim_bool_t Viewport::pan_down(fim_pan_t s)
 	{
+		fim_bool_t rv = true;
 		panned_ |= 0x1;
 		if(s<0)
-			pan_up(-s);
+			rv = pan_up(-s);
 		else
 		{
 			if(this->onBottom())
-				return;
+				return false;
 			s=(s==0)?steps_:s;
 			top_ += s;
 		}
+		return rv;
 	}
 
-	void Viewport::pan_right(fim_pan_t s)
+	fim_bool_t Viewport::pan_right(fim_pan_t s)
 	{
+		fim_bool_t rv = true;
 		panned_ |= 0x2;
 		if(s<0)
-			pan_left(-s);
+			rv = pan_left(-s);
 		else
 		{
 			if(onRight())
-				return;
+				return false;
 			s=(s==0)?steps_:s;
 			left_+=s;
 		}
+		return rv;
 	}
 
-	void Viewport::pan_left(fim_pan_t s)
+	fim_bool_t Viewport::pan_left(fim_pan_t s)
 	{
+		fim_bool_t rv = true;
 		panned_ |= 0x2;
 		if(s<0)
-			pan_right(-s);
+			rv = pan_right(-s);
 		else
 		{
 			if(onLeft())
-				return;
+				return false;
 			s=(s==0)?steps_:s;
 			left_-=s;
 		}
+		return rv;
 	}
 
 	bool Viewport::onBottom(fim_coo_t approx_fraction)const
@@ -753,12 +761,14 @@ namespace fim
 
 	fim::string Viewport::pan(const args_t& args)
 	{
+		fim::string result = FIM_CNS_EMPTY_RESULT;
 		/* FIXME: unfinished */
 		fim_pan_t hs=0,vs=0;
 		fim_bool_t ps=false;
 		fim_char_t f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
 		const fim_char_t*fs=args[0].c_str();
 		const fim_char_t*ss=FIM_NULL;
+		fim_bool_t prv = true;
 
 		if(args.size()<1 || (!fs))
 			goto nop;
@@ -798,30 +808,30 @@ namespace fim
 		switch(f)
 		{
 			case('u'):
-				pan_up(vs);
+				prv=pan_up(vs);
 			break;
 			case('d'):
-				pan_down(vs);
+				prv=pan_down(vs);
 			break;
 			case('r'):
-				pan_right(hs);
+				prv=pan_right(hs);
 			break;
 			case('l'):
-				pan_left(hs);
+				prv=pan_left(hs);
 			break;
 			case('n'):
 			case('s'):
 			if(f=='n')
-		       		pan_up(vs);
+		       		prv=pan_up(vs);
 			if(f=='s')
-			       	pan_down(vs);
+			       	prv=pan_down(vs);
 			switch(s)
 			{
 				case('e'):
-					pan_left(hs);
+					prv=pan_left(hs);
 				break;
 				case('w'):
-					pan_right(hs);
+					prv=pan_right(hs);
 				break;
 				default:
 					goto err;
@@ -832,9 +842,12 @@ namespace fim
 		}
 		should_redraw();
 nop:
-		return FIM_CNS_EMPTY_RESULT;
+		result = "maybe";
+		if(prv==false)
+			result = "no"; // TODO: this is ugly
+		return result;
 err:
-		return FIM_CNS_EMPTY_RESULT;
+		return result;
 	}
 
 	size_t Viewport::byte_size(void)const
