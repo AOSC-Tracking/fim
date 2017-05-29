@@ -26,6 +26,7 @@
 #include "fim.h"
 #include "common.h"
 #include "fim_interpreter.h"
+#include <cstdarg>	/* va_list, va_arg, va_start, va_end */
 
 /* TODO: need to rename the functions in here */
 
