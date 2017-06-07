@@ -74,7 +74,18 @@ err:
 
 		kstr=(args[0].c_str());
 		if(!kstr || 0 == strlen(kstr))
+		{
+#if FIM_WANT_BIND_ALL
+			if(args.size()>1)
+			{
+				for (auto bi=bindings_.begin(); bi != bindings_.end(); ++bi)
+					bindings_[bi->first]=args[1];
+				return "";
+			}
+			else
+#endif
 			return kerr;
+		}
 
 		key = kstr_to_key(args[0].c_str());
 
