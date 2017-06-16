@@ -175,7 +175,7 @@ class Var
 				if(sizeof(fim_int)==sizeof(int))
 					sprintf(buf,"%d",(int)i);
 				else
-					sprintf(buf,"%lld",(long long int)i);
+					sprintf(buf,"%lld",(int64_t)i);
 			}
 			else
 			       	if(type=='f')
