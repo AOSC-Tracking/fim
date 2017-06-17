@@ -7,6 +7,7 @@
  * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
  * fix: avoiding broken build on gcc 6 due to narrowing conversion.
  * fix: avoiding broken build with versions of libpng newer than 10209.
+ * fix: update configure.ac for new autoconf-2.69.
 
         	Version 0.3
 
