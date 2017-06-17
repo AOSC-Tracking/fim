@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -475,7 +475,8 @@ void FramebufferDevice::svga_display_image_new(
 #ifndef min
 #define min(x,y) ((x)<(y)?(x):(y))
 #endif
-    int fb_fix_line_length=FB_MEM_LINE_OFFSET;
+    //int fb_fix_line_length=FB_MEM_LINE_OFFSET;
+    int fb_fix_line_length=fb_fix.line_length;
     if(flip) {	fb_fix_line_length*=-1; video += (min(img->i.height,dheight)-1)*(fb_fix.line_length);}
     /*flip patch*/
     /* FIXME : COMPLETE ME ... */
