@@ -244,6 +244,7 @@
  * bugfix: avoiding data corruption when handling %k expando.
 # (r1009)
  * bugfix: repeating "recording 'repeat_last'" (default '.' key) by prepending a number now works.
+ * fix: configure will use `sdl-config --static-lib`'.
 
                 Version 0.5
 
