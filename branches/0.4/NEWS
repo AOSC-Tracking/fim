@@ -8,6 +8,8 @@
  * fix: gif error handling could have led to NULL pointer usage.
  * bugfix: conversion from external program was vulnerable to failure due to missing check.
  * fix: lastly used image will be erased at last, after eventually prefetched images.
+ * fix: configure will try to detect curses/ncurses.
+ * fix: configure will use `sdl-config --static-lib`'.
 
                 Version 0.4
 
