@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2017 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -109,8 +109,16 @@ png_init(FILE *fp, char *filename, unsigned int page,
     if (h->color_type == PNG_COLOR_TYPE_PALETTE)
 	png_set_palette_to_rgb(h->png);
     if (h->color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
+// according to http://www.libpng.org/pub/png/libpng-manual.txt, retrieved 20101129
+#ifdef PNG_LIBPNG_VER
+ #if (PNG_LIBPNG_VER>=10209)
+	png_set_expand_gray_1_2_4_to_8(h->png);
+ #else
 	png_set_gray_1_2_4_to_8(h->png);
-
+ #endif /* PNG_LIBPNG_VER */
+#else
+ #error  need a proper function name for png_set_gray_1_2_4_to_8, here.
+#endif /* PNG_LIBPNG_VER */
     if (png_get_bKGD(h->png, h->info, &file_bg)) {
 	png_set_background(h->png,file_bg,PNG_BACKGROUND_GAMMA_FILE,1,1.0);
     } else {
