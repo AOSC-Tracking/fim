@@ -26,6 +26,7 @@
  * fix: cleaned up the internal keysyms initialization code
  * fix: lastly used image will be erased at last, after eventually prefetched images.
  * fix: configure will try to detect curses/ncurses.
+ * fix: configure will use `sdl-config --static-lib`'.
 
                 Version 0.5-rc2
 
