@@ -5,6 +5,7 @@
 
  * bugfix: conversion from external program was vulnerable to failure due to missing check.
  * bugfix: on certain framebuffer configurations part of the screen would not be redrawn.
+ * fix: avoiding broken build on gcc due to narrowing conversion.
 
         	Version 0.3
 

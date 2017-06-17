@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -110,9 +110,9 @@ struct option fim_options[] = {
     {"script-from-stdin",      no_argument,       NULL, 'p'},
     {"sanity-check",      no_argument,       NULL, 'S'},	/* NEW */
     {"write-scriptout",      required_argument,       NULL, 'W'},
-    {"offset",      required_argument,       NULL,  0xFFD8FFE0},/* NEW */
+    {"offset",      required_argument,       NULL,  0x6f66660a},/* NEW */
     {"output-device",      required_argument,       NULL, 'o'},
-    {"dump-reference-help",      /*optional_argument : TODO */no_argument,       NULL, 0xd15cbab3},/* note : still undocumented switch */
+    {"dump-reference-help",      /*optional_argument : TODO */no_argument,       NULL, 0x6472690a},/* note : still undocumented switch */
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -368,7 +368,7 @@ int help_and_exit(char *argv0, int code=0)
 		    cc.pre_autocmd_add(FIM_VID_AUTOWIDTH"=1;"FIM_VID_AUTOTOP"=1;");
 	#endif
 		    break;
-		case 0xFFD8FFE0:
+		case 0x6f66660a:
 		    //fbi's
 	 	    // NEW
 	#ifdef FIM_AUTOCMDS
@@ -525,7 +525,7 @@ int help_and_exit(char *argv0, int code=0)
 		    //fim's
 		    	g_fim_output_device=optarg;
 		    break;
-		case 0xd15cbab3:
+		case 0x6472690a:
 		    //fim's
 		    cc.dump_reference_manual(args_t());
 	            std::exit(0);
