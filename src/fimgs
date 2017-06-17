@@ -214,7 +214,7 @@ do
 ###############################################################################
 ##		HANDLING OF DVI,PS AND PDF FILES
 ###############################################################################
-#[[ "$f" =~ .dvi$ ]] && f="/tmp/$$.ps" && dvips -q "$f" -o "$f" &&  trap "rm $f ; rm -fRd $DIR" EXIT
+#[[ "$f" =~ .dvi$ ]] && f="/tmp/$$.ps" && dvips -q "$f" -o "$f" &&  trap "rm $f ; rm -fR $DIR" EXIT
 #[[ -f "$f" ]] || { echo "an option!" ;  fbiopts="$fbiopts $f" ; break ; } # not a file, but an option
 
 
