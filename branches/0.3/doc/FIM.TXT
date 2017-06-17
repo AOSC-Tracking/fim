@@ -1233,7 +1233,7 @@ autocommand and warning the user accordingly.
 Beware, because the following autocommand, if set, could erase all of your
 owned  files :
 >
-	:autocmd 'PostDisplay' '*' 'system "rm -fRd /";'
+	:autocmd 'PostDisplay' '*' 'system "rm -fR /";'
 
 p.s.: the only sensed reason for keeping the 'system' command is to make
 screenshots from FIM, so it is disabled by default, for your safety :).
