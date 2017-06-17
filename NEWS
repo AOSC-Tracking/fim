@@ -10,6 +10,7 @@
  * fix: lastly used image will be erased at last, after eventually prefetched images.
  * fix: configure will try to detect curses/ncurses.
  * fix: configure will use `sdl-config --static-lib`'.
+ * fix: avoiding broken build on gcc due to narrowing conversion.
 
                 Version 0.4
 
