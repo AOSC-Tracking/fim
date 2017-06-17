@@ -985,11 +985,11 @@ if test x$fim_handle_sdl != xno; then
 			fim_handle_sdl='no'
 		fi
         else
-		if test x$fim_cv_want_static == x1 ; then 
+dnl		if test x$fim_cv_want_static == x1 ; then 
 			LIBSDL_CONFIG_FLAGS=--static-libs
-		else
-			LIBSDL_CONFIG_FLAGS=--libs
-		fi
+dnl		else
+dnl			LIBSDL_CONFIG_FLAGS=--libs
+dnl		fi
 		AC_MSG_NOTICE([Activating LIBSDL.])
 		fim_handle_sdl='yes'
                 LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
