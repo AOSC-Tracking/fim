@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -114,7 +114,7 @@ struct fim_options_t fim_options[] = {
     {"device",     required_argument, NULL, 'd',"specify a {framebuffer device}","{framebuffer device}",
 "Framebuffer device to use. Default is the one your vc is mapped to (as in fbi)."
     },
-    {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0xd15cbab3,"dump reference info","[=man]",
+    {"dump-reference-help",      optional_argument /*no_argument*/,       NULL, 0x6472690a,"dump reference info","[=man]",
 "Will dump to stdout the language reference help."
     },
     {"dump-default-fimrc",      no_argument,       NULL, 'D',"dump on standard output the default configuration",NULL,
@@ -176,7 +176,7 @@ NULL
 /* FIXME: shall document this */
 #endif /* FIM_WITH_LIBIMLIB2 */
     },
-    {"offset",      required_argument,       NULL,  0xFFD8FFE0,"will open the first image file at the specified offset","{bytes-offset}",
+    {"offset",      required_argument,       NULL,  0x6f66660a,"will open the first image file at the specified offset","{bytes-offset}",
 "Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files (useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range: using already chopped image files may be a workaround to this limitation)."
     },/* NEW */
     {"text-reading",      no_argument,       NULL, 'P',"proceed scrolling as reading through a text document",NULL,
@@ -793,7 +793,7 @@ done:
 		read_one_script_file_from_stdin=0;
 		int perform_sanity_check=0;
 	#endif /* FIM_READ_STDIN */
-		int c;
+		unsigned int c;
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
 		bool appendedPreConfigCommand=false;
@@ -935,7 +935,7 @@ done:
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='w';"FIM_VID_AUTOTOP"=1;");
 	#endif /* FIM_AUTOCMDS */
 		    break;
-		case 0xFFD8FFE0:
+		case 0x6f66660a:
 		    //fbi's
 	 	    // NEW
 	#ifdef FIM_AUTOCMDS
@@ -1139,7 +1139,7 @@ done:
 			}
 #endif /* FIM_WANT_OUTPUT_DEVICE_STRING_CASE_INSENSITIVE */
 		    break;
-		case 0xd15cbab3:
+		case 0x6472690a:
 		    //fim's
 		{
 			args_t args;
