@@ -345,7 +345,7 @@ class FramebufferDevice:public DisplayDevice
  * (by dez)
  */
 #define FB_BPP  (((fb_var.bits_per_pixel+7)/8))
-#define FB_MEM_LINE_LENGTH  ((fb_fix_.line_length))
+#define FB_MEM_LINE_LENGTH  ((fb_fix.line_length))
 #define FB_MEM_OFFSET(x,y)  (( FB_BPP*(x) + FB_MEM_LINE_LENGTH * (y) ))
 #define FB_MEM(x,y) ((fb_mem+FB_MEM_OFFSET((x),(y))))
 
