@@ -73,7 +73,11 @@ namespace fim
 			if(s)
 			{
 				if(fd_<=-1)
+#if FIM_INDEPENDENT_NAMESPACE
+					std::cout << s ; // for builds without console
+#else /* FIM_INDEPENDENT_NAMESPACE */
 					cc.status_screen(s);
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 				else
 				{
 					// 0 == dumb (no output)
