@@ -2,7 +2,7 @@
 /*
  Namespace.cpp : a class for local variables storage
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -246,7 +246,7 @@ namespace fim
 		return os << this->get_variables_list(true);
 	}
 
-	std::ostream& operator<<(std::ostream os, const Namespace& ns)
+	std::ostream& operator<<(std::ostream &os, const Namespace& ns)
 	{
 		return ns.print(os);
 	}
