@@ -173,9 +173,9 @@ static void fim_ExifContentForeachEntryFunc (ExifEntry *entry, void * user_data)
 	fim_char_t buffer[FIM_EXIF_BUFSIZE];
 	Namespace *nsp = (Namespace*) ((void**)user_data)[0];
 	ExifContent *c =  (ExifContent *) ((void**)user_data)[1];
-	const fim_char_t *value = exif_entry_get_value(entry, buffer, sizeof(buffer));
+	const fim_char_t * const value = exif_entry_get_value(entry, buffer, sizeof(buffer));
 	ExifIfd ifd = exif_content_get_ifd (c);
-	const fim_char_t *title = exif_tag_get_name_in_ifd (entry->tag,ifd); /* exif_tag_get_name() is deprecated */
+	const fim_char_t * const title = exif_tag_get_name_in_ifd (entry->tag,ifd); /* exif_tag_get_name() is deprecated */
 
 	if(nsp)
 		/* std::cout << "|" << title << "|\n", */

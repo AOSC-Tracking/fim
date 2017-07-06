@@ -61,7 +61,7 @@ static void fim_opencv_detect_and_draw( IplImagePtr img, struct ida_image *iimg 
 	static CvMemStorage* storage=FIM_NULL;
 	static CvHaarClassifierCascade* cascade=FIM_NULL;
 	static int haar_file_existent=-1;
-	const fim_char_t*haarfile="haarcascade_frontalface_alt.xml";
+	const fim_char_t*const haarfile="haarcascade_frontalface_alt.xml";
 	string haarpath; 
 	FIM_CONSTEXPR fim_char_t*FIM_HAAR_PATH="FIM_HAAR_PATH";
 

@@ -766,7 +766,7 @@ namespace fim
 		fim_pan_t hs=0,vs=0;
 		fim_bool_t ps=false;
 		fim_char_t f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
-		const fim_char_t*fs=args[0].c_str();
+		const fim_char_t*const fs=args[0].c_str();
 		const fim_char_t*ss=FIM_NULL;
 		fim_bool_t prv = true;
 

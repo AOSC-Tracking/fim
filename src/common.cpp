@@ -1033,7 +1033,7 @@ const fim_char_t * fim_basename_of(const fim_char_t * s)
 				return s+sl+1;
 		}
 #else
-		const fim_char_t *bn = strrchr(s,'/');
+		const fim_char_t * const bn = strrchr(s,'/');
 		if(bn)
 			s=bn+1;
 #endif

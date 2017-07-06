@@ -25,17 +25,17 @@ yacc.tab.cpp: yacc.ypp lex.lex
 FIM_LIB_OBJECTS = yacc.tab.o lex.yy.o
 
 conf.h:       fimrc
-	$(ECHO) 'const fim_char_t * FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $@
+	$(ECHO) 'const fim_char_t * const FIM_DEFAULT_CONFIG_FILE_CONTENTS =' > $@
 	$(SED)  's/\\/\\\\/g;s/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< | $(GREP) -v '^.###' >> $@
 	$(ECHO) '"";' >> $@
 
 grammar.h: yacc.tab.cpp yacc.output
-	$(ECHO) 'const fim_char_t * FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =' > $@
+	$(ECHO) 'const fim_char_t * const FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =' > $@
 	$(AWK) -f $(top_srcdir)/scripts/maintenance/yacc2grammar.awk yacc.output | $(CPP) -include $(top_srcdir)/scripts/maintenance/yacc2grammar.h  | $(GREP) -v '^#' | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
 	$(ECHO) '"";' >> $@
 
 examples.h: ../scripts/example/oneline.fim
-	$(ECHO) 'const fim_char_t * FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =' > $@
+	$(ECHO) 'const fim_char_t * const FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =' > $@
 	$(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' $< >> $@
 	$(ECHO) '"";' >> $@
 
