@@ -2,7 +2,7 @@
 /*
  CommandConsole-init.cpp : Fim console initialization
 
- (c) 2010-2016 Michele Martone
+ (c) 2010-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -215,7 +215,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			 * weird, isn't it ?
 			 * Regard this as a weird patch.
 			 * */
-			const fim_char_t * term = fim_getenv(FIM_CNS_TERM_VAR);
+			const fim_char_t * const term = fim_getenv(FIM_CNS_TERM_VAR);
 			if(term && string(term).re_match("screen"))
 			{
 				sym_keys_[FIM_KBD_LEFT]-=3072;
@@ -342,7 +342,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #ifndef FIM_NOFIMRC
   #ifndef FIM_WANT_NOSCRIPTING
 		fim_char_t rcfile[FIM_PATH_MAX];
-		const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
+		const fim_char_t * const e = fim_getenv(FIM_CNS_HOME_VAR);
 
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTHFIMRC,""); 
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_PREGFIMRC,""); 

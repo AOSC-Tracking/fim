@@ -1,4 +1,4 @@
-const fim_char_t * FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =
+const fim_char_t * const FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =
 "# jump to the third image:\n"
 "3;\n"
 "# jump to first image:\n"

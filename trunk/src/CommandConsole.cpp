@@ -169,7 +169,7 @@ namespace fim
 		 */
 		fim_key_t key=FIM_SYM_NULL_KEY;
 #ifdef FIM_WANT_RAW_KEYS_BINDING
-		const fim_char_t*kstr=kfstr.c_str();
+		const fim_char_t* const kstr=kfstr.c_str();
 
 		if(strlen(kstr)>=2 && isdigit(kstr[0]) && isdigit(kstr[1]))
 		{
@@ -1299,7 +1299,7 @@ rlnull:
 				ic_=0;
 				*prompt_=FIM_SYM_CHAR_NUL;
 				*prompt_=*(prompt_+1)=FIM_SYM_CHAR_NUL;
-				const fim_char_t * msg = " Warning: readline failed ! Probably no stdin is available, right ? Unfortunately fim is not yet ready for this case.\n";
+				const fim_char_t * const msg = " Warning: readline failed ! Probably no stdin is available, right ? Unfortunately fim is not yet ready for this case.\n";
 				cout << msg;
 				set_status_bar(msg,FIM_NULL);
 			}
@@ -2280,7 +2280,7 @@ ok:
 		if( do_load || do_save )
 		{
 			fim_char_t hfile[FIM_PATH_MAX];
-			const fim_char_t *e = fim_getenv(FIM_CNS_HOME_VAR);
+			const fim_char_t *const e = fim_getenv(FIM_CNS_HOME_VAR);
 
 			if(e && strlen(e)<FIM_PATH_MAX-14)//strlen(FIM_CNS_HIST_FILENAME)+2
 			{
@@ -2415,7 +2415,7 @@ ok:
 		fim::string hk=FIM_CNS_EMPTY_STRING;	/* help key string */
 		int hkl=0;		/* help key string length */
 		FIM_CONSTEXPR int mhkl=5,eisl=9;
-		const fim_char_t *hp=" - Help";
+		const fim_char_t *const hp=" - Help";
 		int hpl=fim_strlen(hp);
 		prompt_[1]=FIM_SYM_CHAR_NUL;
 		fim_bool_t wcs = isSetVar(FIM_VID_WANT_CAPTION_STATUS);
@@ -2510,7 +2510,7 @@ ok:
 			wcs = set_wm_caption(str);
 		if(!wcs)
 #endif /* FIM_WANT_CAPTION_CONTROL */
-			displaydevice_->status_line((const fim_char_t*)str); /* one may check the return value.... */
+			displaydevice_->status_line(str); /* one may check the return value.... */
 done:
 		fim_free(str);
 ret:

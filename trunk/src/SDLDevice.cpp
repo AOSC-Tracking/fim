@@ -160,7 +160,7 @@ err:
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 		keypress_ = 0;
 #if FIM_WANT_SDL_OPTIONS_STRING 
-		const fim_char_t*os=opts_.c_str();
+		const fim_char_t*const os=opts_.c_str();
 		parse_optstring(os);
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
 		fim_bzero(&bvi_,sizeof(bvi_));
@@ -551,7 +551,7 @@ err:
 		post_wmresize();
 		return FIM_ERR_NO_ERROR;
 sdlerr:
-		if( const fim_char_t * errstr = SDL_GetError() )
+		if( const fim_char_t * const errstr = SDL_GetError() )
 			std::cerr << "SDL error string: \"" << errstr  << "\"\n";
 err:
 		return FIM_ERR_GENERIC;

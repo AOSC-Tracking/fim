@@ -64,7 +64,7 @@ static Window   win;
 	,want_windowed_(false)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
-		const fim_char_t*os=opts.c_str();
+		const fim_char_t*const os=opts.c_str();
 		parse_optstring(os);
 	}
 
