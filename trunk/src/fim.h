@@ -503,8 +503,22 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_WHITE 0xFFFFFFFF	/* Temporarily here. Will better need an enum or another portable solution. */
 #define FIM_CNS_BLACK 0x00000000	/* Temporarily here. Will better need an enum or another portable solution. */
 
+#if FIM_USE_CXX14
+template<typename T, typename S>
+inline auto FIM_MIN(T x, S y)
+{
+	return ((x)<(y)?(x):(y));
+}
+template<typename T, typename S>
+inline auto FIM_MAX(T x, S y)
+{
+	return ((x)>(y)?(x):(y));
+}
+#else /* FIM_USE_CXX14 */
 #define FIM_MAX(x,y)        ((x)>(y)?(x):(y))
 #define FIM_MIN(x,y)        ((x)<(y)?(x):(y))
+#endif /* FIM_USE_CXX14 */
+
 #define FIM_MOD(X,C)        ((((X)%(C))+(C))%(C))
 #define FIM_INT_FRAC(Q,D) (((Q)+((D)-1))/(D))
 #define FIM_INT_SCALE_FRAC(Q,D) ((Q)/(D)) /* division of integer values by fim_scale_t */
