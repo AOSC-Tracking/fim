@@ -1325,7 +1325,7 @@ ret:
 			}
 		}
 
-		setGlobalVariable("i:" FIM_VID_NEGATED,1-getGlobalIntVariable("i:" FIM_VID_NEGATED ));
+		setVariable(FIM_VID_NEGATED,1-getIntVariable(FIM_VID_NEGATED ));
 
        		should_redraw();
 
@@ -1364,7 +1364,7 @@ ret:
 			fim_desaturate_rgb(mm_.mdp, mm_.mmb);
 #endif /* FIM_WANT_MIPMAPS */
 
-		setGlobalVariable("i:" FIM_VID_DESATURATED ,1-getGlobalIntVariable("i:" FIM_VID_DESATURATED ));
+		setVariable(FIM_VID_DESATURATED ,1-getIntVariable(FIM_VID_DESATURATED ));
        		should_redraw();
 		return FIM_ERR_NO_ERROR;
 	}
@@ -1399,7 +1399,7 @@ ret:
 			fim_negate_rgb(mm_.mdp, mm_.mmb);
 #endif /* FIM_WANT_MIPMAPS */
 
-		setGlobalVariable("i:" FIM_VID_NEGATED ,1-getGlobalIntVariable("i:" FIM_VID_NEGATED ));
+		setVariable(FIM_VID_NEGATED ,1-getIntVariable(FIM_VID_NEGATED ));
        		should_redraw();
 		return FIM_ERR_NO_ERROR;
 	}
