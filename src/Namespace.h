@@ -51,6 +51,9 @@ namespace fim
 	
 		public:
 
+#if FIM_WANT_LONG_INT
+		fim_int setVariable(const fim_var_id& varname,int value);
+#endif /* FIM_WANT_LONG_INT */
 		fim_int setVariable(const fim_var_id& varname,fim_int value);
 		fim_float_t setVariable(const fim_var_id& varname,fim_float_t value);
 		fim_int setVariable(const fim_var_id& varname,const fim_char_t* value);
