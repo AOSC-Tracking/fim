@@ -44,14 +44,14 @@
 
 namespace fim
 {
-	static void fim_desaturate_rgb(fim_byte_t * data, int howmany)
+	static void fim_desaturate_rgb(fim_byte_t * data, fim_pxc_t howmany)
 	{
 		register int avg;
 		for( fim_byte_t * p = data; p < data + howmany ;p+=3)
 		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
 	}
 
-	static void fim_simulate_cvd(fim_byte_t * data, int howmany, enum fim_cvd_t cvd, bool daltonize)
+	static void fim_simulate_cvd(fim_byte_t * data, fim_pxc_t howmany, enum fim_cvd_t cvd, bool daltonize)
 	{
 		/* Based on formulas from from http://www.daltonize.org */
 		fim_pif_t l,m,s; // long medium short [cones]
@@ -117,7 +117,7 @@ namespace fim
 #undef FIM_RGB_TRIM
 	}
 
-	static bool fim_generate_24bit_identity(fim_byte_t * data, int howmany)
+	static bool fim_generate_24bit_identity(fim_byte_t * data, fim_pxc_t howmany)
 	{
 		int val=0x0;
 
@@ -131,13 +131,13 @@ namespace fim
 		return true;
 	}
 
-	static void fim_negate_rgb(fim_byte_t * data, int howmany)
+	static void fim_negate_rgb(fim_byte_t * data, fim_pxc_t howmany)
 	{
 		for( fim_byte_t * p = data; p < data + howmany ;p++)
 			*p = ~ *p;
 	}
 
-	static void fim_shred(fim_byte_t * data, int howmany)
+	static void fim_shred(fim_byte_t * data, fim_pxc_t howmany)
 	{
 		fim_desaturate_rgb(data, howmany);
 		fim_negate_rgb(    data, howmany);
