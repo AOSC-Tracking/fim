@@ -118,6 +118,7 @@ class Image
         bool is_tiny(void)const;
 	public:
 	void reset_state(void);
+	void set_auto_props(fim_int autocenter, fim_int autotop);
 	virtual size_t byte_size(void)const;
 
 	bool can_reload(void)const;
