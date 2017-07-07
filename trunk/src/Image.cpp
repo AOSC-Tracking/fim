@@ -1471,5 +1471,10 @@ ret:
 	bool Image::has_mm(void)const { return mm_.ok(); }
 #endif /* FIM_WANT_MIPMAPS */
 	bool Image::cacheable(void)const { return this->n_pages() == 1 ; }
+	void Image::set_auto_props(fim_int autocenter, fim_int autotop)
+	{
+		setVariable(FIM_VID_WANT_AUTOCENTER,autocenter);
+		setVariable(        FIM_VID_AUTOTOP,autotop);
+	}
 }
 

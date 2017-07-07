@@ -358,8 +358,7 @@ namespace fim
 				left_ = (image_->width() - this->viewport_width()) / 2;
 			if (image_->height() > this->viewport_height() &&  autotop==0)
 				top_ = (image_->height() - this->viewport_height()) / 2;
-                       setGlobalVariable("i:" FIM_VID_WANT_AUTOCENTER,(fim_int)0);
-                       setGlobalVariable("i:"         FIM_VID_AUTOTOP,(fim_int)0);
+			image_->set_auto_props(0, 0);
 		}
 // uncommenting the next 2 lines will reintroduce a bug
 //		else
@@ -591,7 +590,7 @@ namespace fim
 		 * */
 		if(image_)
 			image_->reset_state(),
-			setGlobalVariable("i:" FIM_VID_WANT_AUTOCENTER,(fim_int)1);
+			image_->set_auto_props(1, 0);
 		should_redraw();
                 top_  = 0;
                 left_ = 0;
