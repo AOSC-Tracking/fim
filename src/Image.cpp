@@ -1267,12 +1267,12 @@ ret:
 		return (is_multipage() && have_page(page_-j));
 	}
  
-	int Image::is_mirrored(void)const
+	bool Image::is_mirrored(void)const
 	{
 		return FIM_XOR( this->getIntVariable(FIM_VID_EXIF_MIRRORED)==1, this->getIntVariable(FIM_VID_MIRRORED)==1 );
 	}
 
-	int Image::is_flipped(void)const
+	bool Image::is_flipped(void)const
 	{
 
 		return FIM_XOR( this->getIntVariable(FIM_VID_EXIF_FLIPPED) ==1, this->getIntVariable(FIM_VID_FLIPPED)==1 );
