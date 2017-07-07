@@ -884,7 +884,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[4],*imp;
-	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
+	fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	fim::string ifs;
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
@@ -1132,7 +1132,7 @@ fim::string Image::getInfo(void)
 	/* FIXME: for cleanup, shall eliminate this branch and introduce a default string. */
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[3],*imp;
-	int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
+	fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 	imp=imagemode;
 
 	if(shall_flip())
