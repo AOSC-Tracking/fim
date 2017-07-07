@@ -20,7 +20,7 @@
 */
 
 #include "Viewport.h"
-#include <math.h>	// ceilf
+#include <cmath>	// ceilf
 /*
  * TODO :
  *	Windowing related problems:

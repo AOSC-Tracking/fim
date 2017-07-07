@@ -35,10 +35,10 @@
 #ifdef USE_X11
 # include <X11/Intrinsic.h>
 #endif /* USE_X11 */
-#include <stdio.h>//FILE
+#include <cstdio>//FILE
 #include <cstdlib>//free()
-#include <errno.h>//free()
-#include <string.h>//memset,strerror,..
+#include <cerrno>//free()
+#include <cstring>//memset,strerror,..
 
 // WARNING : THIS IS PURE REDUNDANCE !
 /*

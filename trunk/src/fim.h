@@ -104,7 +104,7 @@
 
 #include <termios.h>	/* general terminal interface (Posix)			*/
 #include <fcntl.h>	/* file descriptor manipulation interface (Posix)	*/
-#include <time.h>	/* time related functionality (Posix)			*/
+#include <ctime>	/* time related functionality (Posix)			*/
 #include "common.h"	/* misc FIM stuff					*/
 /* #define FIM_USE_GPM 0 */
 #ifdef FIM_USE_GPM
@@ -113,7 +113,7 @@
 /*#include <unistd.h>*/ /* standard Posix symbolic constants and types		*/
 /*#include <sys/stat.h> */
 /*#include <sys/types.h>*/
-#include <math.h>
+#include <cmath>
  
 #define FIM_LINE_CERR std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
 #define FIM_LINE_COUT std::cout << "in " <<__func__ << " # " << __FILE__ << ":" << __LINE__ << "\n";

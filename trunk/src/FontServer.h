@@ -29,11 +29,11 @@
 
 #include "fim.h"
 
-# include <errno.h>
+# include <cerrno>
 # include <unistd.h> //for FIM_NULL
-# include <stdio.h> //for stderr..
+# include <cstdio> //for stderr..
 # include <cstdlib> //for exit..
-# include <string.h> //for strlen..
+# include <cstring> //for strlen..
 namespace fim
 {
 

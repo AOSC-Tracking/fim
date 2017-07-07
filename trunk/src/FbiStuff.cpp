@@ -29,14 +29,14 @@
 #include "common.h"
 
 #include <cstdarg>	/* va_list, va_arg, va_start, va_end */
-#include <stdio.h>	/* fdopen, tmpfile */
+#include <cstdio>	/* fdopen, tmpfile */
 #include <unistd.h>	/* execlp (popen is dangerous) */
 #include <cstdlib>	/* mkstemp */
 #include <cstdio>	/* tempnam */
-#include <math.h>
+#include <cmath>
 #include <sys/wait.h>  /* waitpid */
-#include <string.h>
-#include <stdarg.h>	/* va_start, va_end, ... */
+#include <cstring>
+#include <cstdarg>	/* va_start, va_end, ... */
 //#include <experimental/filesystem> // std::experimental::filesystem::temp_directory_path
 #if FIM_WITH_ARCHIVE
 #include <archive.h>
