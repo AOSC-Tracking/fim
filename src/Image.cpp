@@ -618,9 +618,6 @@ ret:
 		FIM_PR('.');
         }
 
-// if the image rescaling mechanism is suspected of bugs, this will inhibit its use.
-#define FIM_BUGGED_RESCALE 0
-
 	fim_err_t Image::do_rotate( void )
 	{
 		if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
@@ -693,9 +690,6 @@ ret:
 		fim_scale_t	newascale;
 		fim_angle_t	gangle;
 
-#if FIM_BUGGED_RESCALE
-		goto ret;
-#endif /* FIM_BUGGED_RESCALE */
 		if(ns>0.0)
 			newscale_=ns;//patch
 
