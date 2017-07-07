@@ -193,7 +193,6 @@ class Image
 	fim_coo_t original_height(void)const;
 	bool goto_page(fim_page_t j);
 
-	Image* getClone(void);
 //	void resize(int nw, int nh);
 	fim_int c_page(void)const;
 #if FIM_WANT_MIPMAPS
