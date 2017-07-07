@@ -415,7 +415,7 @@ namespace fim
 			//std::cout << "display " << " ( " << yorigin() << "," << xorigin() << " ) ";
 			//std::cout << " " << " ( " << viewport_height() << "," << viewport_width() << " )\n";
 			displaydevice_->display(
-					image_->img_,
+					image_->get_ida_image(),
 					top_,
 					left_,
 					image_->height(),
@@ -430,7 +430,7 @@ namespace fim
 					);}
 #else
 			displaydevice_->display(
-					image_->img_,
+					image_->get_ida_image(),
 					top_,
 					left_,
 					//displaydevice_->height(), displaydevice_->width(), displaydevice_->width(),
