@@ -112,7 +112,6 @@ class Image
 
 	fim_fn_t fname_;	/* viewport variable, too */
 	size_t fs_;		/* file size */
-	size_t ms_;		/* memory size */
 
         void free(void);
 	void reset(void);
