@@ -1209,15 +1209,6 @@ labeldone:
 		return do_scale_rotate();
 	}
 
-	bool Image::prev_page(int j)
-	{
-		fim_fn_t s(fname_);
-		if(have_prevpage(j))
-			return load(s.c_str(),FIM_NULL,page_-j);
-		else
-			return false;
-	} 
-
 	bool Image::goto_page(fim_page_t j)
 	{
 		fim_fn_t s(fname_);
@@ -1230,7 +1221,7 @@ labeldone:
 			j=fimg_->i.npages-1;
 		if( j>page_ ? have_nextpage(j-page_) : have_prevpage(page_-j) )
 		{
-			//if(0)cout<<"about to goto page "<<j<<"\n";
+			std::cout<<"about to goto page "<<j<<"\n";
 			setGlobalVariable(FIM_VID_PAGE ,(fim_int)j);
 			retval = load(s.c_str(),FIM_NULL,j);
 			//return true;
@@ -1240,15 +1231,6 @@ labeldone:
 ret:
 		FIM_PR('.');
 		return retval;
-	} 
-
-	bool Image::next_page(int j)
-	{
-		fim_fn_t s(fname_);
-		if(have_nextpage(j))
-			return load(s.c_str(),FIM_NULL,page_+j);
-		else
-			return false;
 	} 
 
 	cache_key_t Image::getKey(void)const
@@ -1263,16 +1245,19 @@ ret:
 		return false;
 	}
 
+	bool Image::have_page(int page)const
+	{
+		return ( page >=0 && page < fimg_->i.npages );
+	}
+
 	bool Image::have_nextpage(int j)const
 	{
-		/* FIXME : missing overflow check */
-		return (is_multipage() && page_+j < fimg_->i.npages);
+		return (is_multipage() && have_page(page_+j));
 	} 
 
 	bool Image::have_prevpage(int j)const
 	{
-		/* FIXME : missing overflow check */
-		return (is_multipage() && page_-j >= 0);
+		return (is_multipage() && have_page(page_-j));
 	}
  
 	int Image::is_mirrored(void)const
