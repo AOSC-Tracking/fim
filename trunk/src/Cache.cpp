@@ -144,8 +144,8 @@ ret:
 
 		these are not the values we want ..
 		*/
-		int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
-		int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY); /* getIntGlobalVariable */
+		fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+		fim_int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY); /* getIntGlobalVariable */
 		size_t smcm = mcm > 0 ? mcm : 0;
 
 	       	if( smcm > 0 && img_byte_size()/FIM_CNS_CSU > smcm )
@@ -408,7 +408,7 @@ ret:
 				image->getKey().second!=FIM_E_STDIN 
 				)
 			{
-				int minci = getGlobalIntVariable(FIM_VID_MIN_CACHED_IMAGES);
+				fim_int minci = getGlobalIntVariable(FIM_VID_MIN_CACHED_IMAGES);
 
 				if ( minci < 1 )
 					minci = 4;
@@ -586,8 +586,8 @@ ret:
 		if(type == FIM_CR_CN || type == FIM_CR_CD)
 		{
 			fim_char_t buf[FIM_PRINTFNUM_BUFSIZE];
-			int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
-			int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY);
+			fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+			fim_int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY);
 			mcm = mcm >= 0 ? mcm*FIM_CNS_CSU:0;
 			cache_report  = " ";
 			cache_report += "count:";
