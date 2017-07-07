@@ -1254,7 +1254,7 @@ op_autocrop_init_(const struct ida_image *src, struct ida_rect *unused,
     rect.y2 = src->i.height;
     data = desc_3x3.init(src, &rect, &img.i, &filter);
 
-    img.data   = (fim_byte_t*)fim_pm_alloc(img.i.width, img.i.height);
+    img.data = fim_pm_alloc(img.i.width, img.i.height);
     if(!img.data)return FIM_NULL;
 
     for (y = 0; y < (int)img.i.height; y++)
@@ -2207,7 +2207,7 @@ found_a_loader:	/* we have a loader */
 	}
 	goto shall_skip_header;
     }
-    img->data = (fim_byte_t*)fim_pm_alloc(img->i.width, img->i.height);
+    img->data = fim_pm_alloc(img->i.width, img->i.height);
     if(!img->data)goto errl;
 #ifndef FIM_IS_SLOWER_THAN_FBI
     for (y = 0; y < img->i.height; y++) {
@@ -2330,7 +2330,7 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     else	   {desc_p=&desc_rotate_cw ;}
 
     data = desc_p->init(src,&rect,&dest->i,&p);
-    dest->data = (fim_byte_t*)fim_pm_alloc(dest->i.width, dest->i.height);
+    dest->data = fim_pm_alloc(dest->i.width, dest->i.height);
     /* dez: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice_->switch_if_needed();
@@ -2410,7 +2410,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 
     p.angle    = (int) angle;
     data = desc_rotate.init(src,&rect,&dest->i,&p);
-    dest->data = (fim_byte_t*)fim_pm_alloc(dest->i.width, dest->i.height, true);
+    dest->data = fim_pm_alloc(dest->i.width, dest->i.height, true);
     /* dez: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
     for (y = 0; y < dest->i.height; y++) {
 	cc.displaydevice_->switch_if_needed();
@@ -2526,7 +2526,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
 	fim_free(dest);
     	goto err;
     }
-    dest->data = (fim_byte_t*)fim_pm_alloc(dest->i.width, dest->i.height);
+    dest->data = fim_pm_alloc(dest->i.width, dest->i.height);
     if(!(dest->data))
     {
 	    fim_free(data);
