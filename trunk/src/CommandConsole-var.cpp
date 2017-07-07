@@ -183,6 +183,12 @@ err:
 	}
 #endif /* FIM_WANT_LONG_INT */
 
+#if FIM_WANT_LONG_INT
+	fim_int CommandConsole::setVariable(const fim_var_id& varname,    unsigned int value)
+	{
+		return setVariable(varname,static_cast<fim_int>(value));
+	}
+#endif /* FIM_WANT_LONG_INT */
 
 	fim_float_t CommandConsole::setVariable(const fim_var_id& varname,fim_float_t value)
 	{
