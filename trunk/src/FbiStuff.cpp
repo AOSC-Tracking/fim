@@ -2348,15 +2348,14 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 {
     /*
      * dez's:
-     * this whole code was written for a fixed canvas rotation,
-     * not allowing any canvas adaptation at all ... urgh
+     * this whole code was originally (in fbi) not meant to change canvas.
      * */
     struct op_rotate_parm p;
     /* dez's 20080831 */
     struct ida_rect  rect;
     struct ida_image *dest;
     void *data;
-    unsigned int y;
+    fim_off_t y;
 
     dest = (ida_image*)fim_malloc(sizeof(*dest));
     /* dez: */ if(!dest)goto err;
@@ -2375,20 +2374,18 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     {
     /*
      * this is code for a preliminary 'canvas' enlargement prior to image rotation.
-     * experimental code.
-     *
-     * WARNING : this code seems buggy! (it is a horrible hack)
+     * unfinished code.
      * */   
-    int diagonal = (int) ceilf( sqrtf( (float)( src->i.width * src->i.width  +  src->i.height * src->i.height) ) + 1.0f );
-    int n_extra  = (diagonal - src->i.height  )/2;
-    int s_extra  = (diagonal - src->i.height - n_extra     );
-    int w_extra  = (diagonal - src->i.width      )/2;
-    int e_extra  = (diagonal - src->i.width - w_extra  );
+    fim_off_t diagonal = (fim_off_t) FIM_HYPOTHENUSE_OF_INT(src->i.width,src->i.height);
+    fim_off_t n_extra  = (diagonal - src->i.height  )/2;
+    fim_off_t s_extra  = (diagonal - src->i.height - n_extra     );
+    fim_off_t w_extra  = (diagonal - src->i.width      )/2;
+    fim_off_t e_extra  = (diagonal - src->i.width - w_extra  );
     /* we allocate a new, larger canvas */
     fim_byte_t * larger_data = (fim_byte_t*)fim_calloc(diagonal * diagonal * 3,1);
     if(larger_data)
     {
-	    for(y = n_extra; y < (unsigned int) diagonal - s_extra; ++y )
+	    for(y = n_extra; y < diagonal - s_extra; ++y )
 	    	memcpy(larger_data + (y * diagonal + w_extra )*3 , src->data + (y-n_extra) * src->i.width * 3 , src->i.width*3);
 	    src->i.width = diagonal;
 	    src->i.height = diagonal;
@@ -2419,12 +2416,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
 			 y, data);
     }
 
-
     desc_rotate.done(data);
-
-
-    //std::cout << "diagonal     : " << diagonal << "\n";
-   // std::cout << "src->i.width : " << src->i.width << "\n";
 err:
     return dest;
 }

@@ -543,6 +543,8 @@ inline auto FIM_MAX(T x, S y)
 ""
 
 #define FIM_MAX_MIPMAPS 32 /* pretty large ;-) */
+#define FIM_HYPOTHENUSE_OF(C1,C2) sqrt( (C1)*(C1) + (C2)*(C2) )
+#define FIM_HYPOTHENUSE_OF_INT(C1,C2) ceil( FIM_HYPOTHENUSE_OF(((double)(C1)),((double)(C2))) + 1.0 )
 
 enum fim_mmo_t { FIM_MMO_NORMAL=0, FIM_MMO_FASTER=1 };
 class fim_mipmap_t
