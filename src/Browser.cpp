@@ -615,7 +615,7 @@ comeon:
 				if( pcsc )
 					getImage()->scale_multiply(newscale);
 				else
-					getImage()->setscale(newscale);
+					getImage()->set_scale(newscale);
 			}
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
 		}
