@@ -256,7 +256,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		no_file_(true),
 		fis_(fim::string(fname)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
                 fname_     (FIM_CNS_DEFAULT_IFNAME),
-		fs_(0), ms_(0)
+		fs_(0)
 
 	{
 		reset();
@@ -856,7 +856,7 @@ err:
 		no_file_(true),
 		fis_(rhs.fis_),
                 fname_     (rhs.fname_),
-		fs_(0), ms_(0)
+		fs_(0)
 	{
 		reset();
 		img_  = fbi_image_clone(rhs.img_ );
@@ -1146,7 +1146,7 @@ fim::string Image::getInfo(void)
 		*pagesinfobuffer='\0';
 
 /* #if FIM_WANT_DISPLAY_MEMSIZE */
-	ms_ = fbi_img_pixel_count(fimg_);
+	size_t ms = fbi_img_pixel_count(fimg_); /* memory size */
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
 
 	snprintf(linebuffer, sizeof(linebuffer),
@@ -1169,7 +1169,7 @@ fim::string Image::getInfo(void)
 	     ,fs_/FIM_CNS_K
 #endif /* FIM_WANT_DISPLAY_FILESIZE */
 #if FIM_WANT_DISPLAY_MEMSIZE
-	     ,ms_/FIM_CNS_M
+	     ,ms/FIM_CNS_M
 #endif /* FIM_WANT_DISPLAY_MEMSIZE */
 	     );
 }
