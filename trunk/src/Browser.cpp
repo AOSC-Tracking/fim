@@ -553,6 +553,7 @@ comeon:
 		if(c_getImage())
 #endif	/* FIM_WANT_BDI */
 		{
+			fim_err_t errval = FIM_ERR_NO_ERROR;
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if(getImage())
 				getImage()->update();/* rotation update */ /* FIXME: shall separate scaling from orientation */
@@ -580,14 +581,14 @@ comeon:
 					if( newscale )
 					{
 						if(getImage())
-							getImage()->reduce(newscale);
+							errval = getImage()->reduce(newscale);
 						if(viewport())
 							viewport()->scale_position_reduce(newscale);
 					}
 					else	
 					{
 						if(getImage())
-							getImage()->reduce();
+							errval = getImage()->reduce();
 						if(viewport())
 							viewport()->scale_position_reduce();
 					}
@@ -598,14 +599,14 @@ comeon:
 					if( newscale )
 					{
 						if(getImage())
-							getImage()->magnify(newscale,aes);
+							errval = getImage()->magnify(newscale,aes);
 						if(viewport())
 							viewport()->scale_position_magnify(newscale);
 					}
 					else	
 					{
 						if(getImage())
-							getImage()->magnify();
+							errval = getImage()->magnify();
 						if(viewport())
 							viewport()->scale_position_magnify();
 					}
@@ -613,11 +614,15 @@ comeon:
 				break;
 				default:
 				if( pcsc )
-					getImage()->scale_multiply(newscale);
+					errval = getImage()->scale_multiply(newscale);
 				else
-					getImage()->set_scale(newscale);
+					errval = getImage()->set_scale(newscale);
 			}
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
+			if( errval != FIM_ERR_NO_ERROR )
+			{
+				// Here might handle reporting of an error..
+			}
 		}
 nop:
 		FIM_PR('.');
