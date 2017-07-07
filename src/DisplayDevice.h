@@ -53,7 +53,7 @@ class DisplayDevice
 	virtual void  finalize(void)=0;
 
 	virtual fim_err_t display(
-		void *ida_image_img, // source image structure
+		const void *ida_image_img, // source image structure
 		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
 		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
 		fim_coo_t icskip,	// input columns to skip for each line

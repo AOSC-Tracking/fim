@@ -405,7 +405,7 @@ void FramebufferDevice::console_switch(fim_bool_t is_busy)
 
 //void FramebufferDevice::svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip)
 void FramebufferDevice::svga_display_image_new(
-	struct ida_image *img,
+	const struct ida_image *img,
 	int yoff,
 	int xoff,
 		int irows,int icols,// rows and columns in the input image
@@ -1883,7 +1883,7 @@ void FramebufferDevice::status_screen(const fim_char_t *msg, int draw)
 }
 
 fim_err_t FramebufferDevice::display(
-	void *ida_image_img,
+	const void *ida_image_img,
 	fim_coo_t yoff,
 	fim_coo_t xoff,
 	fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
@@ -1911,7 +1911,7 @@ fim_err_t FramebufferDevice::display(
 	 */
 	// clear_rect(  0, width()-1, 0, height()-1);
 	svga_display_image_new(
-		(struct ida_image*)ida_image_img,
+		(const struct ida_image*)ida_image_img,
 		yoff,
 		xoff,
 		irows,icols,// rows and columns in the input image
