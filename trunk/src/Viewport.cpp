@@ -590,10 +590,8 @@ namespace fim
 		 * FIXME
 		 * */
 		if(image_)
-		{
-			image_->reset_scale_flags();
+			image_->reset_state(),
 			setGlobalVariable("i:" FIM_VID_WANT_AUTOCENTER,(fim_int)1);
-		}
 		should_redraw();
                 top_  = 0;
                 left_ = 0;

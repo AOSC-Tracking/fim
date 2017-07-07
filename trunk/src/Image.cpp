@@ -302,12 +302,12 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 	{
                 fimg_    = FIM_NULL;
                 img_     = FIM_NULL;
-		reset_scale_flags();
+		reset_state();
 		if( getGlobalIntVariable(FIM_VID_AUTOTOP ) )
 			setVariable(FIM_VID_AUTOTOP,getGlobalIntVariable(FIM_VID_AUTOTOP));
 	}
 
-	void Image::reset_scale_flags(void)
+	void Image::reset_state(void)
 	{
                 scale_   = FIM_CNS_SCALE_DEFAULT;
                 newscale_= FIM_CNS_SCALE_DEFAULT;
@@ -335,6 +335,16 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		b=load(fname_.c_str(),fd,page_);
 		fclose(fd);// FIXME : the fd could already be closed !
 		return b;
+	}
+
+	void Image::set_exif_extra(fim_int shouldrotate, fim_int shouldmirror, fim_int shouldflip)
+	{
+		if(shouldrotate)
+			setVariable(FIM_VID_EXIF_ORIENTATION,shouldrotate);
+		if(shouldmirror)
+			setVariable(FIM_VID_EXIF_MIRRORED,1);
+		if(shouldflip)
+			setVariable(FIM_VID_EXIF_FLIPPED,1);
 	}
 	
 static void ers(const char*value, ImagePtr image)
@@ -424,12 +434,7 @@ static void ers(const char*value, ImagePtr image)
 			shouldmirror = false,
 			shouldflip = false,
 			shouldrotate = Image::FIM_ROT_U;
-		if( shouldrotate )
-			image->setVariable(FIM_VID_EXIF_ORIENTATION,shouldrotate);
-		if(shouldmirror)
-			image->setVariable(FIM_VID_EXIF_MIRRORED,1);
-		if(shouldflip)
-			image->setVariable(FIM_VID_EXIF_FLIPPED,1);
+		image->set_exif_extra(shouldrotate, shouldmirror, shouldflip);
 uhmpf:
 		return;
 	}
