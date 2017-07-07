@@ -1091,7 +1091,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	//	    break;
 		case 'a':
 		    //fbi's
-		    //cc.setVariable(FIM_VID_AUTOTOP,(fim_int)1);
+		    //cc.setVariable(FIM_VID_AUTOTOP,1);
 		    //TODO: still needs some tricking .. 
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"='a';");
@@ -1101,7 +1101,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 #if FIM_WANT_TEXT_RENDERING
 		case 0x74657874:
-		    	cc.setVariable(FIM_VID_TEXT_DISPLAY,(fim_int)1);
+		    	cc.setVariable(FIM_VID_TEXT_DISPLAY,1);
 #else /* FIM_WANT_TEXT_RENDERING */
 			std::cerr<<"Warning: the --" FIM_OSW_TEXT " option was disabled at compile time.\n";
 #endif /* FIM_WANT_TEXT_RENDERING */
@@ -1111,18 +1111,18 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    //fim's
 		    if(optarg && strstr(optarg,"1")==optarg && !optarg[1])
 			{
-		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,(fim_int)1);
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,1);
 			}
 		    else
 		    if(optarg && strstr(optarg,"24")==optarg && !optarg[2])
 			{
-		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,(fim_int)24);
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,24);
 			}
                     else
 		    {
 			if(optarg)
 				std::cerr<<"Warning : the --" FIM_OSW_BINARY " option supports 1 or 24 bpp depths. Using "<<FIM_DEFAULT_AS_BINARY_BPP<<".\n";
-		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,(fim_int)FIM_DEFAULT_AS_BINARY_BPP);
+		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,FIM_DEFAULT_AS_BINARY_BPP);
                     }
 		    break;
 #else /* FIM_WANT_RAW_BITS_RENDERING */
@@ -1130,7 +1130,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_WANT_RAW_BITS_RENDERING */
 		case 'A':
 		    //fbi's
-		    //cc.setVariable(FIM_VID_AUTOTOP,(fim_int)1);
+		    //cc.setVariable(FIM_VID_AUTOTOP,1);
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_AUTOTOP "=1;");
 	#endif /* FIM_AUTOCMDS */
@@ -1138,7 +1138,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 'q':
 		    //fbi's
 		    //FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
-		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,(fim_int)0);
+		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,0);
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_CNS_QUIET_CMD);
 	#endif /* FIM_AUTOCMDS */
@@ -1161,13 +1161,13 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 0x70617363:
 		    //fim's
 	#ifdef FIM_AUTOCMDS
-		    cc.setVariable(FIM_VID_SANITY_CHECK,(fim_int)1);
+		    cc.setVariable(FIM_VID_SANITY_CHECK,1);
 		    perform_sanity_check=1;
 	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'v':
 		    //fbi's
-		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,(fim_int)1);
+		    //cc.setVariable(FIM_VID_DISPLAY_STATUS,1);
 	#ifdef FIM_AUTOCMDS
 		    cc.pre_autocmd_add(FIM_VID_DISPLAY_STATUS"=1;");
 	#endif /* FIM_AUTOCMDS */
@@ -1180,7 +1180,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 		case 0x6e7363:
 		    //fim's
-		    cc.setVariable(FIM_VID_PRELOAD_CHECKS,(fim_int)0);
+		    cc.setVariable(FIM_VID_PRELOAD_CHECKS,0);
 		    break;
 		case 0x4E4053:
 		    //fbi's
@@ -1412,33 +1412,33 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 		case 'N':
 		    //fim's
-			cc.setVariable(FIM_VID_NO_RC_FILE,(fim_int)1);
+			cc.setVariable(FIM_VID_NO_RC_FILE,1);
 		    break;
 		case 0x4E4E4E:// NNN
 		    //fim's
-		    	cc.setVariable(FIM_VID_NO_DEFAULT_CONFIGURATION,(fim_int)1);
+		    	cc.setVariable(FIM_VID_NO_DEFAULT_CONFIGURATION,1);
 		    break;
 		case 0x4E4E:// NN
 		    //fim's
-		    	cc.setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,(fim_int)0);
+		    	cc.setVariable(FIM_VID_LOAD_DEFAULT_ETC_FIMRC,0);
 		    break;
 		case 0x4E434C:// NCL
 		    //fim's
-		    	cc.setVariable(FIM_VID_CONSOLE_KEY,(fim_int)-1);
+		    	cc.setVariable(FIM_VID_CONSOLE_KEY,-1);
 		    break;
 #if FIM_WANT_HISTORY
 		case 0x4E484C:// NHL
 		    //fim's
-		    	cc.setVariable(FIM_VID_LOAD_FIM_HISTORY,(fim_int)-1);
+		    	cc.setVariable(FIM_VID_LOAD_FIM_HISTORY,-1);
 		    break;
 		case 0x4E4853:// NHS
 		    //fim's
-		    	cc.setVariable(FIM_VID_SAVE_FIM_HISTORY,(fim_int)-1);
+		    	cc.setVariable(FIM_VID_SAVE_FIM_HISTORY,-1);
 		    break;
 		case 0x4E48:// NH
 		    //fim's
-		    	cc.setVariable(FIM_VID_SAVE_FIM_HISTORY,(fim_int)-1);
-		    	cc.setVariable(FIM_VID_LOAD_FIM_HISTORY,(fim_int)-1);
+		    	cc.setVariable(FIM_VID_SAVE_FIM_HISTORY,-1);
+		    	cc.setVariable(FIM_VID_LOAD_FIM_HISTORY,-1);
 		    break;
 #endif /* FIM_WANT_HISTORY */
 		case 't':
@@ -1486,7 +1486,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #if FIM_WANT_PIC_CMTS_RELOAD
 		    cc.browser_.dfl_.push_back({optarg,sc});
 #endif /* FIM_WANT_PIC_CMTS_RELOAD */
-		    cc.setVariable(FIM_VID_COMMENT_OI,(fim_int)FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
+		    cc.setVariable(FIM_VID_COMMENT_OI,FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
 		    break;
 #endif /* FIM_WANT_PIC_CMTS */
 	#ifdef FIM_READ_STDIN

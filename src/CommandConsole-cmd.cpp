@@ -258,7 +258,7 @@ err:
 			}
 
 		}
-		this->setVariable(FIM_VID_DISPLAY_CONSOLE,(fim_int)1);
+		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
 		return "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
 	}
 

@@ -312,7 +312,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		no_file_ =true;	//reloading allowed
                 invalid_ =false;
                 orientation_=FIM_NO_ROT;
-		setVariable(FIM_VID_ORIENTATION, (fim_int)FIM_NO_ROT);
+		setVariable(FIM_VID_ORIENTATION, FIM_NO_ROT);
 	}
 
 	bool Image::reload(void)
@@ -420,9 +420,9 @@ static void ers(const char*value, ImagePtr image)
 		if( shouldrotate )
 			image->setVariable(FIM_VID_EXIF_ORIENTATION,shouldrotate);
 		if(shouldmirror)
-			image->setVariable(FIM_VID_EXIF_MIRRORED,(fim_int)1);
+			image->setVariable(FIM_VID_EXIF_MIRRORED,1);
 		if(shouldflip)
-			image->setVariable(FIM_VID_EXIF_FLIPPED,(fim_int)1);
+			image->setVariable(FIM_VID_EXIF_FLIPPED,1);
 uhmpf:
 		return;
 	}
@@ -510,24 +510,24 @@ uhmpf:
 #if FIM_WANT_IMAGE_LOAD_TIME
 		setVariable(FIM_VID_IMAGE_LOAD_TIME,(fim_float_t)((getmilliseconds()-dt)/1000.0));
 #endif /* FIM_WANT_IMAGE_LOAD_TIME */
-		setVariable(FIM_VID_PAGES  ,(fim_int)fimg_->i.npages);
-		setVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
-		setVariable(FIM_VID_WIDTH ,(fim_int)fimg_->i.width );
-		setVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
-		setVariable(FIM_VID_SWIDTH,(fim_int) img_->i.width );
+		setVariable(FIM_VID_PAGES  ,fimg_->i.npages);
+		setVariable(FIM_VID_HEIGHT ,fimg_->i.height);
+		setVariable(FIM_VID_WIDTH ,fimg_->i.width );
+		setVariable(FIM_VID_SHEIGHT, img_->i.height);
+		setVariable(FIM_VID_SWIDTH, img_->i.width );
 		setVariable(FIM_VID_FIM_BPP, getGlobalIntVariable(FIM_VID_FIM_BPP) );
 		setVariable(FIM_VID_SCALE  ,newscale_*100);
 		setVariable(FIM_VID_ASCALE,ascale_);
 		setVariable(FIM_VID_ANGLE , angle_);
-		setVariable(FIM_VID_NEGATED , (fim_int)0);
-		setVariable(FIM_VID_DESATURATED, (fim_int)0);
+		setVariable(FIM_VID_NEGATED , 0);
+		setVariable(FIM_VID_DESATURATED, 0);
 		setVariable(FIM_VID_FILENAME,fname_.c_str());
 #endif /* FIM_NAMESPACES */
 
-		setGlobalVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
-		setGlobalVariable(FIM_VID_WIDTH  ,(fim_int)fimg_->i.width );
-		setGlobalVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
-		setGlobalVariable(FIM_VID_SWIDTH ,(fim_int) img_->i.width );
+		setGlobalVariable(FIM_VID_HEIGHT ,fimg_->i.height);
+		setGlobalVariable(FIM_VID_WIDTH  ,fimg_->i.width );
+		setGlobalVariable(FIM_VID_SHEIGHT, img_->i.height);
+		setGlobalVariable(FIM_VID_SWIDTH , img_->i.width );
 		//setGlobalVariable(FIM_VID_SCALE  ,newscale_*100);
 		//setGlobalVariable(FIM_VID_ASCALE ,ascale_);
 	
@@ -795,10 +795,10 @@ ret:
 			/*
 			 * it is important to set these values after rotation, too!
 			 * */
-			setVariable(FIM_VID_HEIGHT ,(fim_int)fimg_->i.height);
-			setVariable(FIM_VID_WIDTH  ,(fim_int)fimg_->i.width );
-			setVariable(FIM_VID_SHEIGHT,(fim_int) img_->i.height);
-			setVariable(FIM_VID_SWIDTH ,(fim_int) img_->i.width );
+			setVariable(FIM_VID_HEIGHT ,fimg_->i.height);
+			setVariable(FIM_VID_WIDTH  ,fimg_->i.width );
+			setVariable(FIM_VID_SHEIGHT, img_->i.height);
+			setVariable(FIM_VID_SWIDTH , img_->i.width );
 			setVariable(FIM_VID_ASCALE , ascale_ );
 			//setGlobalVariable(FIM_VID_ANGLE  ,  angle_ );
 		}
@@ -1174,9 +1174,9 @@ labeldone:
 	fim_err_t Image::update(void)
 	{
 		fim_err_t errval = FIM_ERR_NO_ERROR;
-		setVariable(FIM_VID_FRESH,(fim_int)0);
+		setVariable(FIM_VID_FRESH,0);
 		if(fimg_)
-			setVariable(FIM_VID_PAGES,(fim_int)fimg_->i.npages);
+			setVariable(FIM_VID_PAGES,fimg_->i.npages);
 
                 fim_pgor_t neworientation=getOrientation();
 		if( neworientation!=orientation_)
@@ -1222,7 +1222,7 @@ labeldone:
 		if( j>page_ ? have_nextpage(j-page_) : have_prevpage(page_-j) )
 		{
 			std::cout<<"about to goto page "<<j<<"\n";
-			setGlobalVariable(FIM_VID_PAGE ,(fim_int)j);
+			setGlobalVariable(FIM_VID_PAGE ,j);
 			retval = load(s.c_str(),FIM_NULL,j);
 			//return true;
 		}

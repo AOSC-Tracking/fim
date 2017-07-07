@@ -432,8 +432,8 @@ static bool aainvalid;
 #if 0
 		if(ascii_context_->mulx>0 && ascii_context_->muly>0)
 			cc.setVariable("aascale",FIM_INT_SCALE_FRAC(ascii_context_->muly,static_cast<fim_scale_t>(ascii_context_->mulx)));
-		cc.setVariable("aamuly",((fim_int)(ascii_context_->muly)));
-		cc.setVariable("aamulx",((fim_int)(ascii_context_->mulx)));
+		cc.setVariable("aamuly",(ascii_context_->muly));
+		cc.setVariable("aamulx",(ascii_context_->mulx));
 #endif
 		return FIM_ERR_NO_ERROR;
 	}
@@ -650,8 +650,8 @@ err:
 
 		if(1==aa_resize(ascii_context_))
 		{
-			cc.setVariable(FIM_VID_SCREEN_WIDTH, (fim_int)width() );
-			cc.setVariable(FIM_VID_SCREEN_HEIGHT,(fim_int)height());
+			cc.setVariable(FIM_VID_SCREEN_WIDTH, width() );
+			cc.setVariable(FIM_VID_SCREEN_HEIGHT,height());
 			return FIM_ERR_NO_ERROR;
 		}
 		return FIM_ERR_GENERIC;
