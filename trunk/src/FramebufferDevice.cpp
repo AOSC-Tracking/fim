@@ -523,8 +523,9 @@ void FramebufferDevice::svga_display_image_new(
  	   convert_line_f=&fim::FramebufferDevice::convert_line;
 #endif /* FIM_IS_SLOWER_THAN_FBI */
 
+    fim_pxc_t pc = fbi_img_pixel_count(img);
     for (data = 0, y = by;
-	 data < img->i.width * img->i.height * 3
+	 data < pc 
 	     && data / img->i.width / 3 < dheight;
 	 data += img->i.width * 3, video += fb_fix_line_length)
     {
