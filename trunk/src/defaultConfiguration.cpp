@@ -78,8 +78,8 @@
 		bind(31,"scale_factor_shrink");
 #endif
 #if 1
-		setVariable(FIM_VID_CONSOLE_KEY,(fim_int)FIM_SYM_CONSOLE_KEY);
-		setVariable(FIM_VID_PUSH_PUSHES_DIRS,(fim_int)1);
+		setVariable(FIM_VID_CONSOLE_KEY,FIM_SYM_CONSOLE_KEY);
+		setVariable(FIM_VID_PUSH_PUSHES_DIRS,1);
 #endif
 #if 0
 		setVariable(FIM_VID_REDUCE_FACTOR,FIM_CNS_SCALEFACTOR);

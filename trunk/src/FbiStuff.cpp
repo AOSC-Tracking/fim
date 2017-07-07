@@ -1962,7 +1962,7 @@ probe_loader:
 	cc.set_status_bar("ok, a file list...", "*");
 	cc.id_.fetch(filename ,'\t');
 	cc.push_from_id();
-	cc.setVariable(FIM_VID_COMMENT_OI,(fim_int)FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
+	cc.setVariable(FIM_VID_COMMENT_OI,FIM_OSW_LOAD_IMG_DSC_FILE_VID_COMMENT_OI_VAL);
 	goto shall_skip_header;
     }
 #endif /* FIM_WANT_MAGIC_FIMDESC */

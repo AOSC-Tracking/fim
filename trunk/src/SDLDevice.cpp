@@ -683,8 +683,8 @@ err:
 				if(event.key.keysym.mod == KMOD_RSHIFT  || event.key.keysym.mod == KMOD_LSHIFT  )
 					;//shift_on=true;
 
-			//	std::cout << "sym : " << (fim_int)event.key.keysym.sym << "\n" ;
-			//	std::cout << "uni : " << (fim_int)event.key.keysym.unicode<< "\n" ;
+			//	std::cout << "sym : " << event.key.keysym.sym << "\n" ;
+			//	std::cout << "uni : " << event.key.keysym.unicode<< "\n" ;
 			//	if(shift_on)std::cout << "shift_on\n";
 
 				if( event.key.keysym.unicode == 0x0 )
@@ -1053,7 +1053,7 @@ fim_err_t SDLDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t y, const
 	}
 #else
 	//sometimes we can gather multiple calls..
-	if(fb_fix.line_length==(fim_int)w)
+	if(fb_fix.line_length==w)
 	{
 		//contiguous case
 		fim_bzero(start,w*f_->sheight());
@@ -1283,12 +1283,12 @@ err:
 
 	fim_err_t SDLDevice::post_wmresize(void)
 	{
-		cc.setVariable(FIM_VID_SCREEN_WIDTH, (fim_int)current_w_);
-		cc.setVariable(FIM_VID_SCREEN_HEIGHT,(fim_int)current_h_);
+		cc.setVariable(FIM_VID_SCREEN_WIDTH, current_w_);
+		cc.setVariable(FIM_VID_SCREEN_HEIGHT,current_h_);
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		// textual console reformatting
 		//mc_.setRows ( get_chars_per_column()/(2*f_->sheight()) );
-		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(fim_int)(height()/(2*f_->sheight())));
+		mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(height()/(2*f_->sheight())));
 		mc_.reformat(    width() /    f_->swidth()   );
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;

@@ -315,7 +315,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_WINDOWS */
 #ifdef FIM_NAMESPACES
 		if(displaydevice_)
-			setVariable(FIM_VID_FIM_BPP ,(fim_int) displaydevice_->get_bpp());
+			setVariable(FIM_VID_FIM_BPP ,displaydevice_->get_bpp());
 #endif /* FIM_NAMESPACES */
 		setVariable(FIM_VID_SCREEN_WIDTH, xres);
 		setVariable(FIM_VID_SCREEN_HEIGHT,yres);
