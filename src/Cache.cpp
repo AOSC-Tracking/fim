@@ -500,7 +500,6 @@ ret:
 			if( used_image( key ) )
 			{
 				// if the image was already used, cloning occurs
-//				image = image->getClone(); // EVIL !!
 				try
 				{
 #ifdef FIM_CACHE_DEBUG

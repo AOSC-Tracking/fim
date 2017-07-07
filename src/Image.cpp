@@ -941,15 +941,6 @@ err:
 #endif
 	}
 
-	Image* Image::getClone(void)
-	{
-		/*
-		 * returns a clone of this image.
-		 * it should be an object completely independent from this.
-		 * */
-		return new Image(*this);
-	}
-
 fim_int Image::shall_mirror(void)const
 {
 	return
