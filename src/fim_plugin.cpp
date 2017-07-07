@@ -33,15 +33,15 @@
 #include <cv.h>
 #include <highgui.h>
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
-#include <float.h>
-#include <limits.h>
-#include <time.h>
-#include <ctype.h>
+#include <cstring>
+#include <cassert>
+#include <cmath>
+#include <cfloat>
+#include <climits>
+#include <ctime>
+#include <cctype>
 
 #define FIM_INVERT_BYTE(x) x=~x
 #define FIM_BLAKEN_BYTE(x) x=0

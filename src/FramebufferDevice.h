@@ -42,9 +42,9 @@
 
 #ifndef FIM_WITH_NO_FRAMEBUFFER
 
-#include <stdio.h>
-#include <errno.h>
-#include <math.h>	//pow
+#include <cstdio>
+#include <cerrno>
+#include <cmath>	//pow
 
 #if HAVE_LINUX_VT_H
 #include <linux/vt.h>
