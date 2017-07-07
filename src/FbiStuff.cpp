@@ -133,7 +133,7 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 	mm.nmm=0;
 	mm.mmo=mmp->mmo;
 	mm.mmoffs[mm.nmm]=0;
-	if(FIM_WVMM) std::cout <<  3*src->i.width*src->i.height<< " bytes are needed for the original image\n";
+	if(FIM_WVMM) std::cout << fbi_img_pixel_count(src) << " bytes are needed for the original image\n";
 	for(d=2;w>=d && h>=d && mm.nmm<=FIM_MAX_MIPMAPS ;d*=2)
 	{
 		mm.mmw[mm.nmm]=w/d;
@@ -1141,7 +1141,7 @@ op_rotate_cw_(const struct ida_image *src, struct ida_rect *rect,
     fim_byte_t *pix;
     unsigned int i;
 
-    pix = (fim_byte_t*) src->data + src->i.width * src->i.height * 3 + line * 3;
+    pix = (fim_byte_t*) src->data + fbi_img_pixel_count(src) + line * 3;
     for (i = 0; i < src->i.height; i++) {
 	pix -= src->i.width * 3;
 	dst[0] = pix[0];
@@ -2538,14 +2538,14 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     if(mmi>=0 && msrc.i.width == dest->i.width && msrc.i.height == dest->i.height )
     {
 	if(FIM_WVMM) std::cout << "using mipmap without scaling" << std::endl;
-	memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
+	memcpy(dest->data,src->data,fbi_img_pixel_count(dest)); /* a special case */
 	goto done;
     }
 #endif /* FIM_WANT_MIPMAPS */
 
 #if FIM_OPTIMIZATION_20120129
     if(ascale==scale && ascale==1.0)
-	    memcpy(dest->data,src->data,3 * dest->i.width * dest->i.height); /* a special case */
+	    memcpy(dest->data,src->data,fbi_img_pixel_count(dest)); /* a special case */
     else
 #endif /* FIM_OPTIMIZATION_20120129 */
     for (y = 0; y < dest->i.height; y++) {
@@ -2571,7 +2571,7 @@ struct ida_image * fbi_image_black(fim_coo_t w, fim_coo_t h)
 
 	nimg->i.width=w;
        	nimg->i.height=h;
-	n = nimg->i.width * nimg->i.height * 3;
+	n = fbi_img_pixel_count(nimg);
 	
 	nimg->data = (fim_byte_t*)fim_calloc(1, n );
 
@@ -2583,6 +2583,13 @@ struct ida_image * fbi_image_black(fim_coo_t w, fim_coo_t h)
 	}
 err:
 	return nimg;
+}
+
+fim_pxc_t fbi_img_pixel_count(const struct ida_image *img)
+{
+	if(!img)
+		return 0;
+	return 3*img->i.width*img->i.height;
 }
 
 struct ida_image * fbi_image_clone(const struct ida_image *img)

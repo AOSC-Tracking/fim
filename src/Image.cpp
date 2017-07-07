@@ -620,7 +620,7 @@ ret:
 		FIM_PR('*');
                 if(fimg_!=img_ && img_ )
 		{
-			fim_shred(img_->data, 3*img_->i.width*img_->i.height);
+			fim_shred(img_->data, fbi_img_pixel_count(img_));
 		}
                 if(fimg_     )
 		{
@@ -943,7 +943,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 		*pagesinfobuffer='\0';
 		
 /* #if FIM_WANT_DISPLAY_MEMSIZE */
-	size_t ms = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
+	size_t ms = fbi_img_pixel_count(fimg_);
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
 
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
@@ -1173,7 +1173,7 @@ fim::string Image::getInfo(void)
 		*pagesinfobuffer='\0';
 
 /* #if FIM_WANT_DISPLAY_MEMSIZE */
-	ms_ = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
+	ms_ = fbi_img_pixel_count(fimg_);
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
 
 	snprintf(linebuffer, sizeof(linebuffer),
@@ -1334,7 +1334,7 @@ ret:
 		if(!fimg_ || !fimg_->data)
 			return false;
 	
-		for( n=0; n< 3*fimg_->i.width*fimg_->i.height ; n+=3 )
+		for( n=0; n< fbi_img_pixel_count(fimg_) ; n+=3 )
 		{
 			int r,g,b,s,d;
 			r=fimg_->data[n+0];
@@ -1351,7 +1351,7 @@ ret:
 			}
 		}
 
-		for( n=0; n< 3*img_->i.width*img_->i.height ; n+=3 )
+		for( n=0; n< fbi_img_pixel_count(img_) ; n+=3 )
 		{
 			int r,g,b,s,d;
 			r=img_->data[n+0];
@@ -1379,10 +1379,10 @@ ret:
 	bool Image::colorblind(enum fim_cvd_t cvd, bool daltonize)
 	{
 		if( fimg_ &&  fimg_->data)
-			fim_simulate_cvd(fimg_->data, 3*fimg_->i.width*fimg_->i.height, cvd, daltonize);
+			fim_simulate_cvd(fimg_->data, fbi_img_pixel_count(fimg_), cvd, daltonize);
 
 		if(  img_ &&   img_->data && ! (fimg_ && img_->data==fimg_->data) )
-			fim_simulate_cvd(img_->data, 3*img_->i.width*img_->i.height, cvd, daltonize);
+			fim_simulate_cvd(img_->data, fbi_img_pixel_count(img_), cvd, daltonize);
 
 #if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
@@ -1397,10 +1397,10 @@ ret:
 	bool Image::desaturate(void)
 	{
 		if( fimg_ &&  fimg_->data)
-			fim_desaturate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height);
+			fim_desaturate_rgb(fimg_->data, fbi_img_pixel_count(fimg_));
 
 		if(  img_ &&   img_->data)
-			fim_desaturate_rgb(img_->data, 3*img_->i.width*img_->i.height);
+			fim_desaturate_rgb(img_->data, fbi_img_pixel_count(img_));
 
 #if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
@@ -1417,10 +1417,10 @@ ret:
 	bool Image::identity(void)
 	{
 		if( fimg_ &&  fimg_->data)
-			fim_generate_24bit_identity(fimg_->data, 3*fimg_->i.width*fimg_->i.height);
+			fim_generate_24bit_identity(fimg_->data, fbi_img_pixel_count(fimg_));
 
 		if(  img_ &&   img_->data)
-			fim_generate_24bit_identity(img_->data, 3*img_->i.width*img_->i.height);
+			fim_generate_24bit_identity(img_->data, fbi_img_pixel_count(img_));
 
 #if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
@@ -1435,10 +1435,10 @@ ret:
 	{
 
 		if( fimg_ &&  fimg_->data)
-			fim_negate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height);
+			fim_negate_rgb(fimg_->data, fbi_img_pixel_count(fimg_));
 
 		if(  img_ &&   img_->data)
-			fim_negate_rgb(img_->data, 3*img_->i.width*img_->i.height);
+			fim_negate_rgb(img_->data, fbi_img_pixel_count(img_));
 
 #if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
@@ -1459,9 +1459,9 @@ ret:
 		size_t ms = 0;
 
 		if(fimg_)
-			ms += fimg_->i.height*fimg_->i.width*3;
+			ms += fbi_img_pixel_count(fimg_);
 		if(fimg_!=img_ && img_)
-			ms += img_->i.height* img_->i.width*3;
+			ms += fbi_img_pixel_count(img_);
 #if FIM_WANT_MIPMAPS
 		ms += mm_.byte_size();
 #endif /* FIM_WANT_MIPMAPS */

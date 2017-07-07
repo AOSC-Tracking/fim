@@ -102,6 +102,7 @@ struct op_rotate_parm {
  * */
 struct ida_image * fbi_image_clone(const struct ida_image *img);
 struct ida_image * fbi_image_black(fim_coo_t w, fim_coo_t h);
+fim_pxc_t fbi_img_pixel_count(const struct ida_image *img);
 
 }
 
