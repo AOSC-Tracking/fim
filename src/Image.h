@@ -149,9 +149,9 @@ class Image
 	fim_err_t scale_multiply (fim_scale_t sm);
 	fim_scale_t ascale(void)const{ return (ascale_>0.0?ascale_:1.0); }
 	void shred(void);
-	bool negate (void);
-	bool identity (void);
-	bool desaturate (void);
+	fim_err_t negate (void);
+	fim_err_t identity (void);
+	fim_err_t desaturate (void);
 	bool colorblind(enum fim_cvd_t cvd, bool daltonize);
 	bool gray_negate(void);
 

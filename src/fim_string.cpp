@@ -288,7 +288,6 @@ namespace fim
 
 	void string::_string_init(void)
 	{	
-		/* the string is initialized as unallocated and blank */
 #ifdef _FIM_DYNAMIC_STRING
 		s=FIM_NULL;
 		len=0;
@@ -601,7 +600,6 @@ namespace fim
 		l=min(l,max_string());	/* etica professionale */
 
 #ifdef _FIM_DYNAMIC_STRING
-		//blanking
 		if(s){fim_free(s); s=FIM_NULL;len=0;}
 		//do we need some allocation? only if l was already > 0
 		if(l+1<len && s)
@@ -623,7 +621,7 @@ namespace fim
 		}
 		else
 		{
-			/* we keep the string blanked  and we are happy */
+			/* we keep the string as it is */
 		}
 #else /* _FIM_DYNAMIC_STRING */
 		*s='\0';

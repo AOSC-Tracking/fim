@@ -259,10 +259,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		fs_(0), ms_(0)
 
 	{
-		/*
-		 *	an image object is created from an image filename
-		 */
-		reset();	// pointers blank
+		reset();
 		if( !load(fname,fd,/*getGlobalIntVariable(FIM_VID_PAGE)*/page) || check_invalid() || (!fimg_) ) 
 		{
 			FIM_PR('e');
@@ -296,9 +293,6 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 
 	void Image::reset(void)
 	{
-		/*
-		 * pointers are blanked and values set to default 
-		 * */
                 fimg_    = FIM_NULL;
                 img_     = FIM_NULL;
 		reset_scale_flags();
@@ -308,9 +302,6 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 
 	void Image::reset_scale_flags(void)
 	{
-		/*
-		 * pointers are blanked and values set to default 
-		 * */
                 scale_   = FIM_CNS_SCALE_DEFAULT;
                 newscale_= FIM_CNS_SCALE_DEFAULT;
                 ascale_  = FIM_CNS_SCALE_DEFAULT;
@@ -867,26 +858,10 @@ err:
                 fname_     (rhs.fname_),
 		fs_(0), ms_(0)
 	{
-		/*
-		 * builds a clone of this rhs.
-		 * it should be completely independent from this object.
-		 * */
 		reset();
 		img_  = fbi_image_clone(rhs.img_ );
 		fimg_ = fbi_image_clone(rhs.fimg_);
-
-		/* an exception is launched immediately */
-		if(!img_ || !fimg_)
-#if 0
-			///* temporarily, for security reasons :  throw FIM_E_NO_IMAGE*/;
-		{
-			std::cerr << "fatal error : " << __FILE__ << ":" << __LINE__ << " ( are you sure you gave an image file in standard input, uh ?)\n";
-			throw FimException();
-			std::exit(*(int*)FIM_NULL);// FIXME
-		}
-#else
-			invalid_=true;
-#endif
+        	check_invalid();
 	}
 
 fim_int Image::shall_mirror(void)const
@@ -1390,7 +1365,7 @@ ret:
 		return true;
 	}
 
-	bool Image::desaturate(void)
+	fim_err_t Image::desaturate(void)
 	{
 		if( fimg_ &&  fimg_->data)
 			fim_desaturate_rgb(fimg_->data, fbi_img_pixel_count(fimg_));
@@ -1404,13 +1379,11 @@ ret:
 #endif /* FIM_WANT_MIPMAPS */
 
 		setGlobalVariable("i:" FIM_VID_DESATURATED ,1-getGlobalIntVariable("i:" FIM_VID_DESATURATED ));
-
        		should_redraw();
-
-		return true;
+		return FIM_ERR_NO_ERROR;
 	}
 
-	bool Image::identity(void)
+	fim_err_t Image::identity(void)
 	{
 		if( fimg_ &&  fimg_->data)
 			fim_generate_24bit_identity(fimg_->data, fbi_img_pixel_count(fimg_));
@@ -1422,12 +1395,11 @@ ret:
 		if(  mm_.mdp)
 			fim_generate_24bit_identity(mm_.mdp, mm_.mmb);
 #endif /* FIM_WANT_MIPMAPS */
-
        		should_redraw();
-		return true;
+		return FIM_ERR_NO_ERROR;
 	}
 
-	bool Image::negate(void)
+	fim_err_t Image::negate(void)
 	{
 
 		if( fimg_ &&  fimg_->data)
@@ -1442,10 +1414,8 @@ ret:
 #endif /* FIM_WANT_MIPMAPS */
 
 		setGlobalVariable("i:" FIM_VID_NEGATED ,1-getGlobalIntVariable("i:" FIM_VID_NEGATED ));
-
        		should_redraw();
-
-		return true;
+		return FIM_ERR_NO_ERROR;
 	}
 
 	int Image::n_pages()const{return (fimg_?fimg_->i.npages:0);}
@@ -1471,15 +1441,13 @@ ret:
 
 		if( tii != FIM_TII_16M)
 		{
-			/* although invalid, this image instance should support all operations on it */
-			// fim_bzero(this,sizeof(*this));
+			/* nevertheless this instance shall support all operations on it */
 			assert(check_invalid());
 		}
 		else
 		{
 			fim_coo_t fourk=256*16;
 			img_  = fbi_image_black(fourk,fourk);
-			//fimg_  = fbi_image_black(fourk,fourk);
 			fimg_ = img_;
 
 			if(img_)
