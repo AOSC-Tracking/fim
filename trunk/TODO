@@ -398,7 +398,7 @@ Debian oriented stuff:
 Optimization:
 
 20070418	Got ~400% speedup on image display thanks to trivial changes in
-	the drawing code : memset and memcpy instead of assignations, and a less
+	the drawing code : memset and memcpy instead of assignments, and a less
 	trivial change by swapping RGB channels on loading time instead that on
 	drawing time. The analysis was made with the gprof profiler, nicely.
 

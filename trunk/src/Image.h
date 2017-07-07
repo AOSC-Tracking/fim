@@ -25,40 +25,16 @@
 #include "FbiStuff.h"
 #include "fim.h"
 #if FIM_WANT_PIC_CMTS
-/* FIXME: temporarily here */
-#include <iostream>
 #include <fstream>
 #include <istream>
 #include <ios>
 #include <string>
-#include <map>
 #include <sstream>
-#include <algorithm>
 #endif /* FIM_WANT_PIC_CMTS */
 #include <memory>
 
 namespace fim
 {
-/*
- *	A general rule in programming the Image member functions is that
- *	of keeping them minimal.
- *	Combining them is matter of the invoking function.
- *	So, there is NO internal triggering  here to call ANY 
- *	display function.
- *
- *
- * 	WARNING : 
- *
- *	This class is evolving towards something
- *	reflecting the content of an image file and 
- *	some rescaled images caches.
- *
- *	Note that the way our code stores image data is device-dependent.
- *	Therefore the need for a framebufferdevice reference in Image.
- *
- *	TODO : separate Image in a way multiple viewports could use the same image.
- */
-
 enum fim_cvd_t /* color vision deficiency  */ {
        	FIM_CVD_NO=0, /* no deficiency */
 	FIM_CVD_PROTANOPIA=1, /* a red/green color deficiency */
@@ -67,11 +43,11 @@ enum fim_cvd_t /* color vision deficiency  */ {
 };
 
 enum fim_tii_t /* test image index  */ {
-       	FIM_TII_NUL=0, /* */
-       	FIM_TII_16M=1 /* FIXME: unused, at the moment (shall use this for tests.) */
+       	FIM_TII_NUL=0,
+       	FIM_TII_16M=1
 };
 
-/* pixel intensity float (FIXME: new ) */
+/* pixel intensity float */
 #if FIM_USE_CXX11
 	using fim_pif_t = float;
 #else /* FIM_USE_CXX11 */
@@ -100,7 +76,7 @@ class Image
 	bool have_prevpage(int j=1)const;
 
 	private:
-	Image& operator= (const Image& i){return *this;/* a nilpotent assignation */}
+	Image& operator= (const Image& i){return *this;/* a nilpotent assignment */}
 	fim_scale_t            scale_;	/* viewport variables */
 	fim_scale_t            ascale_;
 	fim_scale_t            newscale_;
@@ -108,18 +84,17 @@ class Image
 	fim_scale_t            newangle_;
 	fim_page_t		 page_;
 
-	/* virtual stuff */
-	public://TMP
-	enum { FIM_ROT_L=3,FIM_ROT_R=1,FIM_ROT_U=2 };
-        struct ida_image *img_     ;     /* local (eventually) copy images */
+	public:
 	bool reload(void);
-	private://TMP
+	enum { FIM_ROT_L=3,FIM_ROT_R=1,FIM_ROT_U=2 };
+	const struct ida_image *get_ida_image(void)const{ return img_; }
+	private:
+        struct ida_image *img_     ;     /* local (eventually) copy images */
 #if FIM_WANT_MIPMAPS
 	fim_mipmap_t mm_;
 #endif /* FIM_WANT_MIPMAPS */
 	struct ida_image *fimg_    ;     /* master image */
 
-	/* image member functions */
 	bool load(const fim_char_t *fname, FILE *fd, int want_page);
 	public:
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY) { redraw_ = sr; }  /* for Viewport after drawing */
@@ -219,7 +194,7 @@ class Image
 	typedef Image* ImagePtr;
 	typedef const Image* ImageCPtr;
 #endif /* FIM_USE_CXX11 */
-} /* Namespace fim */
+} /* namespace fim */
 #if FIM_WANT_PIC_LVDN
 	class VNamespace: public Namespace
 	{
