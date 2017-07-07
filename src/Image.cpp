@@ -133,8 +133,15 @@ namespace fim
 
 	static void fim_negate_rgb(fim_byte_t * data, fim_pxc_t howmany)
 	{
+#if FIM_USE_CXX11
+		//This is just an example; in C++17 (not yet in compiler when writing this) we shall be able to have:
+		//#include <execution>
+		//std::for_each(std::execution::parallel_policy,data,data+howmany,[](fim_byte_t & b){b = ~ b;});
+		std::for_each(data,data+howmany,[](fim_byte_t & b){b = ~ b;});
+#else /* FIM_USE_CXX11 */
 		for( fim_byte_t * p = data; p < data + howmany ;p++)
 			*p = ~ *p;
+#endif /* FIM_USE_CXX11 */
 	}
 
 	static void fim_shred(fim_byte_t * data, fim_pxc_t howmany)
