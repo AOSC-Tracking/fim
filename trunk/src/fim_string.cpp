@@ -44,7 +44,6 @@ namespace fim
 		return os;
 	}
 
-	//string::string(const string& rhs):std::string(rhs.c_str())
 	string::string(const string& rhs):std::string(rhs)
 	{
 	}
@@ -79,15 +78,7 @@ namespace fim
 	string::string(fim_int i)
 	{
 		fim_char_t buf[FIM_CHARS_FOR_INT];
-#if 1
 		fim_snprintf_fim_int(buf,i);
-#else
-		if(sizeof(fim_int)==sizeof(int))
-			snprintf(buf,FIM_CHARS_FOR_INT-1,"%d",(int)i);
-		else
-			snprintf(buf,FIM_CHARS_FOR_INT-1,"%lld",(long long int)i);
-		buf[FIM_CHARS_FOR_INT-1]='\0';
-#endif
 		append(buf);
 	}
 
