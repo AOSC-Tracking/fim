@@ -117,7 +117,7 @@ class Image
 
         bool is_tiny(void)const;
 	public:
-	void reset_scale_flags(void);
+	void reset_state(void);
 	virtual size_t byte_size(void)const;
 
 	bool can_reload(void)const;
@@ -175,6 +175,7 @@ class Image
 	bool fetchExifToolInfo(const fim_char_t *fname);
 	fim_int shall_mirror(void)const;
 	fim_int shall_flip(void)const;
+	void set_exif_extra(fim_int shouldrotate, fim_int shouldmirror, fim_int shouldflip);
 }; /* class Image */
 #if FIM_USE_CXX11
 #if FIM_IMG_NAKED_PTRS
@@ -192,6 +193,7 @@ class Image
 #if FIM_WANT_PIC_LVDN
 	class VNamespace: public Namespace
 	{
+		friend class ImgDscs; // so that ImgDscs is allowed to setVariable()
 	       	public:
 		size_t byte_size(void)const
 		{

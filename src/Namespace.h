@@ -2,7 +2,7 @@
 /*
  Namespace.h : Namespace class headers
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,14 +42,14 @@ namespace fim
 
 	class Namespace
 	{
+		friend class CommandConsole;
+		friend class FbiStuff;
 		protected:
 #ifndef FIM_INDEPENDENT_NAMESPACE
 		CommandConsole*rnsp_; // root Namespace pointer
 #endif /* FIM_INDEPENDENT_NAMESPACE */
 		variables_t variables_;	//id->var
 		fim_char_t ns_char_; // ns_char_ ':' varname
-	
-		public:
 
 #if FIM_WANT_LONG_INT
 		fim_int setVariable(const fim_var_id& varname,int value);
@@ -57,9 +57,13 @@ namespace fim
 #endif /* FIM_WANT_LONG_INT */
 		fim_int setVariable(const fim_var_id& varname,fim_int value);
 		fim_float_t setVariable(const fim_var_id& varname,fim_float_t value);
+		public:
+		// FIXME: this exception for one static function in FbiStuffJpeg.cpp
 		fim_int setVariable(const fim_var_id& varname,const fim_char_t* value);
+		protected:
 		Var setVariable(const fim_var_id& varname,const Var& value);
 		Var setVariable(const fim_var_id& varname,const fim::string& value);
+		public:
 
 		fim_int getIntVariable(const fim_var_id& varname)const;
 		fim_float_t getFloatVariable(const fim_var_id& varname)const;
@@ -78,6 +82,7 @@ namespace fim
 		fim_int setGlobalVariable(const fim_var_id& varname,const fim_char_t* value);
 		fim_int setGlobalVariable(const fim_var_id& varname, const fim::string& value);
 
+		public:
 		fim_int getGlobalIntVariable(const fim_var_id& varname)const;
 		fim_float_t getGlobalFloatVariable(const fim_var_id& varname)const;
 		fim::string getGlobalStringVariable(const fim_var_id& varname)const;
