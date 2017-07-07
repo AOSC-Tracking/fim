@@ -4,7 +4,7 @@
 /*
  string.h : Fim's string type
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,9 +32,6 @@ namespace fim
 	{
 		public:
 		string();
-
-		/* a virtual destructor will behave correctly when destroying this class
-		 * objects with base pointers .. */
 		~string(){}
 
 		/*
