@@ -571,16 +571,14 @@ ret:
 	fim_err_t Image::scale_multiply(fim_scale_t sm)
 	{
 		if(scale_*sm>0.0)
-			newscale_=scale_*sm,
-			do_scale_rotate();
-		return FIM_ERR_NO_ERROR;
+			newscale_=scale_*sm;
+		return do_scale_rotate();
 	}
 
 	fim_err_t Image::set_scale(fim_scale_t ns)
 	{
-		newscale_=ns,
-		do_scale_rotate();
-		return FIM_ERR_NO_ERROR;
+		newscale_=ns;
+		return do_scale_rotate();
 	}
 
         bool Image::check_valid(void)
@@ -828,13 +826,13 @@ err:
 		return FIM_ERR_GENERIC;
 	}
 
-	void Image::reduce(fim_scale_t factor)
+	fim_err_t Image::reduce(fim_scale_t factor)
 	{
 		newscale_ = scale_ / factor;
-		do_scale_rotate();
+		return do_scale_rotate();
 	}
 
-	void Image::magnify(fim_scale_t factor, fim_bool_t aes)
+	fim_err_t Image::magnify(fim_scale_t factor, fim_bool_t aes)
 	{
 		newscale_ = scale_ * factor;
 #if FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING
@@ -846,7 +844,7 @@ err:
 			newscale_ = newscale;
 		}
 #endif /* FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING */
-		do_scale_rotate();
+		return do_scale_rotate();
 	}
 
 	Image::Image(const Image& rhs):
@@ -1204,20 +1202,18 @@ labeldone:
 	return fim::string(linebuffer);
 }
 
-	bool Image::update(void)
+	fim_err_t Image::update(void)
 	{
+		fim_err_t errval = FIM_ERR_NO_ERROR;
 		setVariable(FIM_VID_FRESH,(fim_int)0);
 		if(fimg_)
 			setVariable(FIM_VID_PAGES,(fim_int)fimg_->i.npages);
 
                 fim_pgor_t neworientation=getOrientation();
 		if( neworientation!=orientation_)
-		{
-			do_scale_rotate();
-			orientation_=neworientation;
-			return true;
-		}
-		return false;
+			if( ( errval = do_scale_rotate() ) == FIM_ERR_NO_ERROR )
+				orientation_=neworientation;
+		return errval;
 	}
 
 	fim_pgor_t Image::getOrientation(void)const

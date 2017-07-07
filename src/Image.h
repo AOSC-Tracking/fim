@@ -123,7 +123,7 @@ class Image
 	virtual size_t byte_size(void)const;
 
 	bool can_reload(void)const;
-	bool update(void);
+	fim_err_t update(void);
 
 	fim::string getInfo(void);
 	fim::string getInfoCustom(const fim_char_t * ifsp)const;
@@ -140,8 +140,8 @@ class Image
 	const fim_char_t* getName(void)const;
 	cache_key_t getKey(void)const;
 
-	void reduce( fim_scale_t factor=FIM_CNS_SCALEFACTOR);
-	void magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR, fim_bool_t aes=false);
+	fim_err_t reduce( fim_scale_t factor=FIM_CNS_SCALEFACTOR);
+	fim_err_t magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR, fim_bool_t aes=false);
 	
 	fim_pgor_t getOrientation(void)const;
 
