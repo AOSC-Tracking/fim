@@ -81,7 +81,7 @@ class Image
 	fim_scale_t            ascale_;
 	fim_scale_t            newscale_;
 	fim_scale_t            angle_;
-	fim_scale_t            newangle_;
+	fim_scale_t            newangle_;// 0-360 degrees
 	fim_page_t		 page_;
 
 	public:
@@ -117,7 +117,7 @@ class Image
         void free(void);
 	void reset(void);
 
-        bool tiny(void)const;
+        bool is_tiny(void)const;
 	public:
 	void reset_scale_flags(void);
 	virtual size_t byte_size(void)const;
@@ -131,29 +131,26 @@ class Image
 #if FIM_WANT_BDI
 	Image(enum fim_tii_t tii=FIM_TII_NUL);
 #endif	/* FIM_WANT_BDI */
-	fim_err_t rescale( fim_scale_t ns=0.0 );
+	fim_err_t do_scale_rotate( fim_scale_t ns=0.0 );
 	private:
 	fim_err_t do_rotate( void );
 	public:
-	fim_err_t rotate( fim_scale_t angle_=1.0 );
+	fim_err_t rotate( fim_angle_t angle_=1.0 );
 
 	const fim_char_t* getName(void)const;
 	cache_key_t getKey(void)const;
-
-	/* viewport member functions */
 
 	void reduce( fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	void magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR, fim_bool_t aes=false);
 	
 	fim_pgor_t getOrientation(void)const;
 
-	fim_err_t setscale(fim_scale_t ns);
-	/* viewport member functions ? */
+	fim_err_t set_scale(fim_scale_t ns);
 	fim_err_t scale_multiply (fim_scale_t sm);
 	fim_scale_t ascale(void)const{ return (ascale_>0.0?ascale_:1.0); }
 	void shred(void);
-	bool negate (void);/* let's read e-books by consuming less power :) */
-	bool identity (void);/* let's read e-books by consuming less power :) */
+	bool negate (void);
+	bool identity (void);
 	bool desaturate (void);
 	bool colorblind(enum fim_cvd_t cvd, bool daltonize);
 	bool gray_negate(void);
@@ -168,7 +165,6 @@ class Image
 	fim_coo_t original_height(void)const;
 	bool goto_page(fim_page_t j);
 
-//	void resize(int nw, int nh);
 	fim_int c_page(void)const;
 #if FIM_WANT_MIPMAPS
 	void mm_free(void);
@@ -181,7 +177,7 @@ class Image
 	bool fetchExifToolInfo(const fim_char_t *fname);
 	fim_int shall_mirror(void)const;
 	fim_int shall_flip(void)const;
-}; /* Image */
+}; /* class Image */
 #if FIM_USE_CXX11
 #if FIM_IMG_NAKED_PTRS
 	using ImagePtr = Image*;
@@ -264,7 +260,7 @@ private:
 		if(li_ == end())
 			li_ = begin();
 		else
-		++li_;
+			++li_;
 		return li;
 	}
 public:

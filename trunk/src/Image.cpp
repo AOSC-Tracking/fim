@@ -42,22 +42,8 @@
 	}
 #endif /* FIM_WANT_PIC_CMTS */
 
-/*
- * TODO :
- *	Windowing related problems:
- *
- * 	Implement a mechanism such that each Image instance owns
- *	one only copy of the original image, and zero or more rescaled versions,
- *	for display use only.
- * 	Once freed, an image could free all of its buffers, depending on the caching policy.
- *
- * 	When windowing will be implemented, note that redisplay will be also affected
- * 	after window geometry change. Update mechanisms are needed..
- */
 namespace fim
 {
-	/* Public functions can be safely called at any moment from client code; private ones not.  */
-
 	static void fim_desaturate_rgb(fim_byte_t * data, int howmany)
 	{
 		register int avg;
@@ -67,7 +53,7 @@ namespace fim
 
 	static void fim_simulate_cvd(fim_byte_t * data, int howmany, enum fim_cvd_t cvd, bool daltonize)
 	{
-		/* Based on the formulas from from http://www.daltonize.org */
+		/* Based on formulas from from http://www.daltonize.org */
 		fim_pif_t l,m,s; // long medium short [cones]
 		fim_pif_t dl,dm,ds; // long medium short [cones]
 		fim_pif_t er,eg,eb; // red green blue
@@ -567,9 +553,6 @@ ret:
 
 	Image::~Image(void)
 	{
-		/*
-		 * buffers are freed
-		 * */
 		FIM_PR('*');
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "freeing Image " << this << "\n";
@@ -578,11 +561,8 @@ ret:
 		FIM_PR('.');
 	}
 
-        bool Image::tiny(void)const
+        bool Image::is_tiny(void)const
 	{
-		/*
-		 * image width or height is <= 1
-		 * */
 		if(!img_)
 			return true;
 	       	return ( img_->i.width<=1 || img_->i.height<=1 )?true:false;
@@ -590,38 +570,26 @@ ret:
 
 	fim_err_t Image::scale_multiply(fim_scale_t sm)
 	{
-		/*
-		 * current scale_ is multiplied by a factor
-		 * */
 		if(scale_*sm>0.0)
 			newscale_=scale_*sm,
-			rescale();
+			do_scale_rotate();
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t Image::setscale(fim_scale_t ns)
+	fim_err_t Image::set_scale(fim_scale_t ns)
 	{
-		/*
-		 * a new scale_ is set
-		 * */
 		newscale_=ns,
-		rescale();
+		do_scale_rotate();
 		return FIM_ERR_NO_ERROR;
 	}
 
         bool Image::check_valid(void)
 	{
-		/*
-		 * well,why not ?
-		 * */
 		return ! check_invalid();
 	}
 
         bool Image::check_invalid(void)
         {
-                /*
-		 * the image is declared invalid if the image structures are not loaded.
-                 */
 		if(!img_)
 			img_ = fimg_;
                 if(!img_)
@@ -634,10 +602,7 @@ ret:
         void Image::free(void)
         {
 		FIM_PR('*');
-		/*
-		 * the image descriptors are freed if necessary and pointers blanked
-		 * */
-        	if(const bool do_shred = false) /* this is only for debug purposes */
+        	if(const bool do_shred = false) /* activate this only for debug purposes */
         		this->shred();
                 if(fimg_!=img_ && img_ )
 		       	FbiStuff::free_image(img_ );
@@ -669,7 +634,6 @@ ret:
 
 	fim_err_t Image::do_rotate( void )
 	{
-		/* orientation_ can be 0,1,2,3 */
 		if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
 		{
 			// we make a backup.. who knows!
@@ -730,7 +694,7 @@ ret:
 		return FIM_ERR_NO_ERROR;
 	}
 
-	fim_err_t Image::rescale( fim_scale_t ns )
+	fim_err_t Image::do_scale_rotate( fim_scale_t ns )
 	{
 		/*
 		 * effective image rescaling
@@ -748,7 +712,7 @@ ret:
 
 		if( check_invalid() )
 			goto err;
-		if(tiny() && newscale_<scale_)
+		if(is_tiny() && newscale_<scale_)
 		{
 			newscale_=scale_;
 			goto ret;
@@ -866,18 +830,12 @@ err:
 
 	void Image::reduce(fim_scale_t factor)
 	{
-		/*
-		 * scale_ is adjusted by a dividing factor
-		 * */
 		newscale_ = scale_ / factor;
-		rescale();
+		do_scale_rotate();
 	}
 
 	void Image::magnify(fim_scale_t factor, fim_bool_t aes)
 	{
-		/*
-		 * scale_ is adjusted by a multiplying factor
-		 * */
 		newscale_ = scale_ * factor;
 #if FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING
 		if(newscale_<2.0 && aes && ascale_ == 1.0)
@@ -888,16 +846,8 @@ err:
 			newscale_ = newscale;
 		}
 #endif /* FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING */
-		rescale();
+		do_scale_rotate();
 	}
-
-	/*
-	void Image::resize(int nw, int nh)
-	{
-		//fixme
-		if(check_invalid())
-			return;
-	}*/
 
 	Image::Image(const Image& rhs):
 #ifdef FIM_NAMESPACES
@@ -993,7 +943,6 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 		*pagesinfobuffer='\0';
 		
 /* #if FIM_WANT_DISPLAY_MEMSIZE */
-	// ms_ = byte_size();
 	size_t ms = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
 
@@ -1188,19 +1137,8 @@ labeldone:
 	return fim::string(linebuffer);
 }
 
-/*
- *	Creates a little description of some image,
- *	and places it in a NUL terminated static buffer.
- */
 fim::string Image::getInfo(void)
 {
-	/*
-	 * a short information about the current image is returned
-	 *
-	 * WARNING:
-	 * the returned info, if not FIM_NULL, belongs to a statical buffer which LIVES with the image!
-	 */
-	//FIX ME !
 	if(!fimg_)
 		return FIM_CNS_EMPTY_RESULT;
 
@@ -1233,12 +1171,10 @@ fim::string Image::getInfo(void)
 		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",(int)page_+1,(int)fimg_->i.npages);
 	else
 		*pagesinfobuffer='\0';
-		
+
 /* #if FIM_WANT_DISPLAY_MEMSIZE */
-	// ms_ = byte_size();
 	ms_ = fimg_ ? ( fimg_->i.height*fimg_->i.width*3 ) : 0;
 /* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
-
 
 	snprintf(linebuffer, sizeof(linebuffer),
 	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
@@ -1270,22 +1206,14 @@ labeldone:
 
 	bool Image::update(void)
 	{
-		/*
-		 * updates the image according to its variables
-		 *
-		 * FIXME: a temporary member function
-		 * */
 		setVariable(FIM_VID_FRESH,(fim_int)0);
 		if(fimg_)
 			setVariable(FIM_VID_PAGES,(fim_int)fimg_->i.npages);
 
-		/*
-		 * rotation dispatch
-		 * */
                 fim_pgor_t neworientation=getOrientation();
 		if( neworientation!=orientation_)
 		{
-			rescale();
+			do_scale_rotate();
 			orientation_=neworientation;
 			return true;
 		}
@@ -1295,7 +1223,7 @@ labeldone:
 	fim_pgor_t Image::getOrientation(void)const
 	{
 		/*
-		 * warning : this should work more intuitively
+		 * not very intuitive
 		 * */
 		fim_int eo = FIM_NO_ROT, weo = cc.getIntVariable(FIM_VID_WANT_EXIF_ORIENTATION);
 		eo += getIntVariable(FIM_VID_EXIF_ORIENTATION) * ( weo ? 1 : 0 );
@@ -1307,16 +1235,13 @@ labeldone:
 		) ,4));
 	}
 
-	fim_err_t Image::rotate( fim_scale_t angle_ )
+	fim_err_t Image::rotate( fim_angle_t angle_ )
 	{
-		/*
-		 * rotates the image the specified amount of degrees
-		 * */
-		float newangle_=this->angle_+angle_;
+		fim_angle_t newangle=this->angle_+angle_;
 		if( check_invalid() )
 		       	return FIM_ERR_GENERIC;
-		setVariable(FIM_VID_ANGLE,newangle_);
-		return rescale();	// FIXME : necessary *only* for image update and display
+		setVariable(FIM_VID_ANGLE,newangle);
+		return do_scale_rotate();
 	}
 
 	bool Image::prev_page(int j)
@@ -1332,7 +1257,7 @@ labeldone:
 	{
 		fim_fn_t s(fname_);
 		bool retval = false;
-	//	if( j>0 )--j;
+
 		FIM_PR('*');
 		if( !fimg_ )
 			goto ret;
@@ -1471,13 +1396,6 @@ ret:
 
 	bool Image::desaturate(void)
 	{
-#if 0
-		if(! img_ || ! img_->data)
-			return false;
-		if(!fimg_ || !fimg_->data)
-			return false;
-#endif
-
 		if( fimg_ &&  fimg_->data)
 			fim_desaturate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height);
 
@@ -1498,17 +1416,6 @@ ret:
 
 	bool Image::identity(void)
 	{
-		/* NEW */
-
-		/* FIXME */
-		/*return gray_negate();*/
-#if 0
-		if(! img_ || ! img_->data)
-			return false;
-		if(!fimg_ || !fimg_->data)
-			return false;
-#endif
-
 		if( fimg_ &&  fimg_->data)
 			fim_generate_24bit_identity(fimg_->data, 3*fimg_->i.width*fimg_->i.height);
 
@@ -1526,16 +1433,6 @@ ret:
 
 	bool Image::negate(void)
 	{
-		/* NEW */
-
-		/* FIXME */
-		/*return gray_negate();*/
-#if 0
-		if(! img_ || ! img_->data)
-			return false;
-		if(!fimg_ || !fimg_->data)
-			return false;
-#endif
 
 		if( fimg_ &&  fimg_->data)
 			fim_negate_rgb(fimg_->data, 3*fimg_->i.width*fimg_->i.height);

@@ -495,7 +495,7 @@ namespace fim
 			xs = viewport_xscale(),
 			ys = viewport_yscale();
 
-		image_->rescale(FIM_MIN(xs,ys));
+		image_->do_scale_rotate(FIM_MIN(xs,ys));
 	}
 
 	void Viewport::auto_scale_if_bigger(void)
@@ -611,7 +611,7 @@ namespace fim
 
 		newscale = FIM_INT_SCALE_FRAC(this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
 
-		image_->rescale(newscale);
+		image_->do_scale_rotate(newscale);
 	}
 
 	void Viewport::auto_width_scale(void)
@@ -621,7 +621,7 @@ namespace fim
 		 * */
 		if( check_invalid() )
 			return;
-		image_->rescale(viewport_xscale());
+		image_->do_scale_rotate(viewport_xscale());
 	}
 
 	void Viewport::free(void)
