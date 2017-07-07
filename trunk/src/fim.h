@@ -502,6 +502,7 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_CLEARTERM "\x1B\x4D" /* FIXME: still unused */
 #define FIM_CNS_WHITE 0xFFFFFFFF	/* Temporarily here. Will better need an enum or another portable solution. */
 #define FIM_CNS_BLACK 0x00000000	/* Temporarily here. Will better need an enum or another portable solution. */
+#define FIM_CNS_KEY_NULL		0x0 /* null key value for fim_key_t */
 
 #if FIM_USE_CXX14
 template<typename T, typename S>
