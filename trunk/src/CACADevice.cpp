@@ -228,8 +228,8 @@
 //#define height() aa_scrheight(ascii_context)
 
 	fim_err_t CACADevice::display(
-		//struct ida_image *img, // source image structure
-		void *ida_image_img, // source image structure
+		//const struct ida_image *img, // source image structure
+		const void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
 		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
 		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
@@ -248,7 +248,7 @@
 		 * shareable with FramebufferDevice would be nice, if implemented in CACADevice.
 		 * */
 		int i;
-		void* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
+		void* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 		if ( !rgb ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -2;

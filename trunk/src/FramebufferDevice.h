@@ -357,12 +357,12 @@ class FramebufferDevice:public DisplayDevice
 
 
 
-//void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
-//void svga_display_image_new(struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
+//void svga_display_image_new(const struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
+//void svga_display_image_new(const struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
 
 fim_err_t display(
-	//struct ida_image *img,
-	void *ida_image_img, // source image structure
+	//const struct ida_image *img,
+	const void *ida_image_img, // source image structure
 	fim_coo_t yoff,
 	fim_coo_t xoff,
 	fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
@@ -376,7 +376,7 @@ fim_err_t display(
 
 
 void svga_display_image_new(
-	struct ida_image *img,
+	const struct ida_image *img,
 	int yoff,
 	int xoff,
 		int irows,int icols,// rows and columns in the input image

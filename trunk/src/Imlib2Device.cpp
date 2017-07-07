@@ -125,7 +125,7 @@ err:
 
 	fim_err_t Imlib2Device::display(
 		//struct ida_image *img, // source image structure
-		void *ida_image_img, // source image structure
+		const void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
 		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
 		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image

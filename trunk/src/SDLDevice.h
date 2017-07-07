@@ -56,7 +56,7 @@ class SDLDevice:public DisplayDevice
 		);
 
 	virtual fim_err_t  display(
-		void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
+		const void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
 		//void* rgb,// destination gray array and source rgb array
 		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
 		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image

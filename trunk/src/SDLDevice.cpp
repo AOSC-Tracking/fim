@@ -278,8 +278,8 @@ err:
 	}
 
 	fim_err_t SDLDevice::display(
-		//struct ida_image *img, // source image structure
-		void *ida_image_img, // source image structure
+		//const struct ida_image *img, // source image structure
+		const void *ida_image_img, // source image structure
 		//void* rgb,// source rgb array
 		fim_coo_t iroff,fim_coo_t icoff, // row and column offset of the first input pixel
 		fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
@@ -299,7 +299,7 @@ err:
 		 * shareable with FramebufferDevice would be nice, if implemented in AADevice.
 		 * */
 		//was : void
-		fim_byte_t* rgb = ida_image_img?((struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
+		fim_byte_t* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 
 		if ( !rgb ) return -1;
 	
