@@ -2236,6 +2236,8 @@ ok:
 			mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(displaydevice_->get_chars_per_column()/2));
 			mc_.reformat( displaydevice_->get_chars_per_line() );
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+			if( displaydevice_ )
+				displaydevice_->format_console();
 		}
 #else /* FIM_FONT_MAGNIFY_FACTOR */
 		setVariable(FIM_VID_FBFMF,FIM_FONT_MAGNIFY_FACTOR);

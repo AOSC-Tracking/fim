@@ -2,7 +2,7 @@
 /*
  DebugConsole.cpp : Fim virtual console display.
 
- (c) 2008-2016 Michele Martone
+ (c) 2008-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,8 +24,6 @@
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 namespace fim
 {
-
-		#define min(x,y) ((x)<(y)?(x):(y))
 		int MiniConsole::line_length(int li)
 		{
 			if(li<cline_)
@@ -103,7 +101,7 @@ namespace fim
 
 	    		for(i=f_  ;i<=l   ;++i)
 			{
-				int t = (i<cline_?(line_[i+1]-line_[i]):(ccol_))%(min(maxcols,lwidth_)+1);
+				int t = (i<cline_?(line_[i+1]-line_[i]):(ccol_))%(FIM_MIN(maxcols,lwidth_)+1);
 				if( t<0 ){fim_free(buf);return FIM_ERR_GENERIC;} // hmmm
 				strncpy(buf,line_[i],t);
 				while(buf[t-1]=='\n' && t>0)--t;
@@ -120,7 +118,7 @@ namespace fim
 			/* FIXME : THE FOLLOWING IS A FIXUP FOR AA!  */
 	    		for(i=0  ;i<scroll_ ;++i)
 			{
-				int t = (min(maxcols,lwidth_)+1);
+				int t = (FIM_MIN(maxcols,lwidth_)+1);
 				fim_memset(buf,' ',t);
 				buf[t-1]='\0';
 				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*((l-f_+1)+i), (const fim_char_t*)buf);
@@ -131,7 +129,6 @@ namespace fim
 done:
 			fim_free(buf);
 			return FIM_ERR_NO_ERROR;
-		#undef min
 		}
 
 		fim_err_t MiniConsole::add(const fim_char_t* cso_)
