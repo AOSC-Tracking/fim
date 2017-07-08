@@ -217,13 +217,13 @@ class CommandConsole
 	Var  getVariable(const fim_var_id& varname)const;
 	fim_int  setVariable(const fim_var_id& varname,fim_int value);
 #if FIM_WANT_LONG_INT
-	fim_int  setVariable(const fim_var_id& varname,    int value);
-	fim_int  setVariable(const fim_var_id& varname,    unsigned int value);
+	int  setVariable(const fim_var_id& varname,    int value);
+	unsigned int setVariable(const fim_var_id& varname,    unsigned int value);
 #endif /* FIM_WANT_LONG_INT */
 	fim_float_t setVariable(const fim_var_id& varname, fim_float_t value);
-	fim_int setVariable(const fim_var_id& varname,const fim_char_t*value);
-	Var setVariable(const fim_var_id varname,const Var&value);
-	Var setVariable(const fim_var_id varname,const fim::string&value);
+	const fim_char_t*  setVariable(const fim_var_id& varname,const fim_char_t*value);
+	const Var& setVariable(const fim_var_id varname,const Var&value);
+	const fim::string& setVariable(const fim_var_id varname,const fim::string&value);
 	Namespace * rns(const fim_var_id varname);
 	const Namespace * c_rns(const fim_var_id varname)const;
 	fim_var_id rnid(const fim_var_id& varname)const;

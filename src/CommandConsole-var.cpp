@@ -170,21 +170,18 @@ err:
 
 	fim_int CommandConsole::setVariable(const fim_var_id& varname,fim_int value)
 	{
-		fim_int retval = 0;
 		if( Namespace *nsp = rns(varname) )
-			retval = nsp->setVariable(rnid(varname),value);
-		return retval;
+			nsp->setVariable(rnid(varname),value);
+		return value;
 	}
 
 #if FIM_WANT_LONG_INT
-	fim_int CommandConsole::setVariable(const fim_var_id& varname,    int value)
+	int CommandConsole::setVariable(const fim_var_id& varname,int value)
 	{
 		return setVariable(varname,static_cast<fim_int>(value));
 	}
-#endif /* FIM_WANT_LONG_INT */
 
-#if FIM_WANT_LONG_INT
-	fim_int CommandConsole::setVariable(const fim_var_id& varname,    unsigned int value)
+	unsigned int CommandConsole::setVariable(const fim_var_id& varname,unsigned int value)
 	{
 		return setVariable(varname,static_cast<fim_int>(value));
 	}
@@ -192,34 +189,30 @@ err:
 
 	fim_float_t CommandConsole::setVariable(const fim_var_id& varname,fim_float_t value)
 	{
-		fim_float_t retval = FIM_CNS_EMPTY_FP_VAL;
 		if( Namespace *nsp = rns(varname) )
-			retval = nsp->setVariable(rnid(varname),value);
-		return retval;
+			nsp->setVariable(rnid(varname),value);
+		return value;
 	}
 
-	fim_int CommandConsole::setVariable(const fim_var_id& varname,const fim_char_t*value)
+	const fim_char_t* CommandConsole::setVariable(const fim_var_id& varname,const fim_char_t*value)
 	{
-		fim_int retval = 0;
 		if( Namespace *nsp = rns(varname) )
-			retval = nsp->setVariable(rnid(varname),value);
-		return retval;
+			nsp->setVariable(rnid(varname),value);
+		return value;
 	}
 
-	Var CommandConsole::setVariable(const fim_var_id varname,const Var&value)
+	const Var & CommandConsole::setVariable(const fim_var_id varname,const Var&value)
 	{
-		Var retval = (fim_int)0;
 		if( Namespace *nsp = rns(varname) )
-			retval = nsp->setVariable(rnid(varname),value);
-		return retval;
+			nsp->setVariable(rnid(varname),value);
+		return value;
 	}
 
-	Var CommandConsole::setVariable(const fim_var_id varname,const fim::string&value)
+	const fim::string& CommandConsole::setVariable(const fim_var_id varname,const fim::string&value)
 	{
-		Var retval = (fim_int)0;
 		if( Namespace *nsp = rns(varname) )
-			retval = nsp->setVariable(rnid(varname),value);
-		return retval;
+			nsp->setVariable(rnid(varname),value);
+		return value;
 	}
 
 	fim_int CommandConsole::getIntVariable(const fim_var_id& varname)const

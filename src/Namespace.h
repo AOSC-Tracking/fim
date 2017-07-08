@@ -52,17 +52,17 @@ namespace fim
 		fim_char_t ns_char_; // ns_char_ ':' varname
 
 #if FIM_WANT_LONG_INT
-		fim_int setVariable(const fim_var_id& varname,int value);
-		fim_int setVariable(const fim_var_id& varname,unsigned int value);
+		int setVariable(const fim_var_id& varname,int value);
+		unsigned int setVariable(const fim_var_id& varname,unsigned int value);
 #endif /* FIM_WANT_LONG_INT */
 		fim_int setVariable(const fim_var_id& varname,fim_int value);
 		fim_float_t setVariable(const fim_var_id& varname,fim_float_t value);
 		public:
-		// FIXME: this exception for one static function in FbiStuffJpeg.cpp
-		fim_int setVariable(const fim_var_id& varname,const fim_char_t* value);
+		// FIXME: this overload of setVariable is public for use in one static function in FbiStuffJpeg.cpp
+		const fim_char_t* setVariable(const fim_var_id& varname,const fim_char_t* value);
 		protected:
-		Var setVariable(const fim_var_id& varname,const Var& value);
-		Var setVariable(const fim_var_id& varname,const fim::string& value);
+		const Var & setVariable(const fim_var_id& varname,const Var& value);
+		const fim::string& setVariable(const fim_var_id& varname,const fim::string& value);
 		public:
 
 		fim_int getIntVariable(const fim_var_id& varname)const;
@@ -75,12 +75,12 @@ namespace fim
 
 		fim_int  setGlobalVariable(const fim_var_id& varname,fim_int value);
 #if FIM_WANT_LONG_INT
-		fim_int setGlobalVariable(const fim_var_id& varname,int value);
-		fim_int setGlobalVariable(const fim_var_id& varname,unsigned int value);
+		int setGlobalVariable(const fim_var_id& varname,int value);
+		unsigned int setGlobalVariable(const fim_var_id& varname,unsigned int value);
 #endif /* FIM_WANT_LONG_INT */
 	        fim_float_t setGlobalVariable(const fim_var_id& varname,fim_float_t value);
-		fim_int setGlobalVariable(const fim_var_id& varname,const fim_char_t* value);
-		fim_int setGlobalVariable(const fim_var_id& varname, const fim::string& value);
+		const fim_char_t* setGlobalVariable(const fim_var_id& varname,const fim_char_t* value);
+		const fim::string& setGlobalVariable(const fim_var_id& varname, const fim::string& value);
 
 		public:
 		fim_int getGlobalIntVariable(const fim_var_id& varname)const;
