@@ -1038,7 +1038,7 @@ ret:
 			goto ret;
 
 		wp = getGlobalIntVariable(FIM_VID_WANT_PREFETCH);
-		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)0);
+		setGlobalVariable(FIM_VID_WANT_PREFETCH,0);
 #if FIM_WANT_BACKGROUND_LOAD
 		if(wp == 2)
 		{
@@ -1063,7 +1063,7 @@ ret:
 apf:		/* after prefetch */
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPREFETCH);
-		setGlobalVariable(FIM_VID_WANT_PREFETCH,(fim_int)wp);
+		setGlobalVariable(FIM_VID_WANT_PREFETCH,wp);
 ret:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
@@ -1087,7 +1087,7 @@ ret:
 		if( args.size() > 0 )
 		{
 			fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
-			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,(fim_int)0);
+			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,0);
 			free_current_image();
 			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,mci);
 		}
@@ -1154,7 +1154,7 @@ ret:
 		for(fim_size_t i=0;i<flist_.size();++i)
 			if( flist_[i] == nf )
 			{
-				fi = (fim_int)i;
+				fi = i;
 				goto ret;
 			}
 #endif
@@ -1606,7 +1606,7 @@ nop:
 #endif /* FIM_WANT_LASTGOTODIRECTION */
 #endif /* FIM_WANT_GOTOLAST */
 		FIM_PR(' ');
-		setGlobalVariable(FIM_VID_PAGE ,(fim_int)0);
+		setGlobalVariable(FIM_VID_PAGE,0);
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		//setGlobalVariable(FIM_VID_FILEINDEX,cf_);
 		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
@@ -2289,11 +2289,9 @@ rfrsh:
 			if(faction == Delete)
 				cnt=tsize-cnt;
 
-			result = "Selected ";
-		       	result += string((fim_int)cnt);
-			result += " files out of ";
-			result += string((fim_int)tsize);
-			result += ".\n";
+			std::ostringstream msg;
+		       	msg << "Selected " << cnt << " files out of " <<  tsize << ".\n";
+			result = msg.str();
 
 			if(faction == Delete)
 			{

@@ -235,7 +235,7 @@ rt:
 		{
 			FIM_PR('l');
 		}
-		setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
+		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
 ret:
 		FIM_PR('.');
@@ -302,7 +302,7 @@ ret:
 		this->imageCache_[ni->getKey()]=ni;
 		lru_touch( ni->getKey() );
 		usageCounter_[ ni->getKey()]=0; // we don't assume any usage yet
-		setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
+		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 		return true;
 	}
 	
@@ -333,7 +333,7 @@ ret:
 #else /* FIM_IMG_NAKED_PTRS */
 			// TBD
 #endif /* FIM_IMG_NAKED_PTRS */
-			setGlobalVariable(FIM_VID_CACHED_IMAGES,(fim_int)cached_elements());
+			setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
 			retval = 0;
 		}
 ret:

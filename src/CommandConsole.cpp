@@ -2392,7 +2392,7 @@ ok:
 			fim_fmf_ = FIM_MIN(fim_fmf__, FIM_FONT_MAGNIFY_FACTOR_MAX);
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 			/* FIXME: instead, call something like SDLDevice::post_wmresize(void) */
-			mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(fim_int)(displaydevice_->get_chars_per_column()/2));
+			mc_.setGlobalVariable(FIM_VID_CONSOLE_ROWS,(displaydevice_->get_chars_per_column()/2));
 			mc_.reformat( displaydevice_->get_chars_per_line() );
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		}
