@@ -114,7 +114,7 @@ class Viewport:public ViewportState
 	void auto_scale(void);
 	void auto_scale_if_bigger(void);
 
-	void free(void);
+	void free_image(void);
         bool check_invalid(void)const;
         bool check_valid(void)const;
 #if 0
@@ -130,6 +130,12 @@ class Viewport:public ViewportState
 	int snprintf_centering_info(char *str, size_t size)const;
 	void transform(bool mirror, bool flip);
 	void fs_ml_puts(const char *str, fim_int doclear);
+	private:
+	bool shall_negate(void)const;
+	bool shall_desaturate(void)const;
+	bool shall_mirror(void)const;
+	bool shall_flip(void)const;
+	bool shall_autotop(void)const;
 };
 }
 #endif /* FIM_VIEWPORT_H */

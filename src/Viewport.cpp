@@ -21,18 +21,6 @@
 
 #include "Viewport.h"
 #include <cmath>	// ceilf
-/*
- * TODO :
- *	Windowing related problems:
- *
- * 	Implement a mechanism such that each Image instance owns
- *	one only copy of the original image, and zero or more rescaled versions,
- *	for display use only.
- * 	Once freed, an image could free all of its buffers, depending on the caching policy.
- *
- * 	When windowing will be implemented, note that redisplay will be also affected
- * 	after window geometry change. Update mechanisms are needed..
- */
 #define FIM_WANT_VIEWPORT_TRANSFORM 1
 namespace fim
 {
@@ -302,6 +290,36 @@ namespace fim
 			displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, str+rw*li);
 	}
 
+	bool Viewport::shall_negate(void)const
+	{
+		return ((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->getIntVariable(FIM_VID_NEGATED)==0));
+	}
+
+	bool Viewport::shall_desaturate(void)const
+	{
+		return ((getGlobalIntVariable(FIM_VID_AUTODESATURATE)== 1)&&(image_->getIntVariable(FIM_VID_DESATURATED)==0));
+	}
+
+	bool Viewport::shall_mirror(void)const
+	{
+		return 
+		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image_->getIntVariable(FIM_VID_MIRRORED)== 1)/*|(getIntVariable(FIM_VID_MIRRORED)== 1)*/)&&
+		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image_->getIntVariable(FIM_VID_MIRRORED)==-1)/*|(getIntVariable(FIM_VID_MIRRORED)==-1)*/));
+	}
+
+	bool Viewport::shall_autotop(void)const
+	{
+		return /*getGlobalIntVariable(FIM_VID_AUTOTOP)   |*/ image_->getIntVariable(FIM_VID_AUTOTOP) /* | getIntVariable(FIM_VID_AUTOTOP)*/;
+	}
+
+	bool Viewport::shall_flip(void)const
+	{
+		//return getGlobalIntVariable(FIM_VID_AUTOFLIP)  | image_->getIntVariable(FIM_VID_FLIPPED) | getIntVariable(FIM_VID_FLIPPED);
+		return 
+		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image_->getIntVariable(FIM_VID_FLIPPED)== 1)/*|(getIntVariable(FIM_VID_FLIPPED)== 1)*/&&
+		!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(image_->getIntVariable(FIM_VID_FLIPPED)==-1)/*|(getIntVariable(FIM_VID_FLIPPED)==-1)*/));
+	}
+
 	bool Viewport::display(void)
 	{
 		/*
@@ -317,38 +335,19 @@ namespace fim
 			null_display();//  NEW
 		if( check_invalid() )
 			return false;
-		/*
-		 * should flip ? should mirror ?
-		 *
-		 * global or inner (not i: !) or local (v:) marker
-		 * */
-		fim_int autotop=/*getGlobalIntVariable(FIM_VID_AUTOTOP)   |*/ image_->getIntVariable(FIM_VID_AUTOTOP) /* | getIntVariable(FIM_VID_AUTOTOP)*/;
-		//fim_int flip   =getGlobalIntVariable(FIM_VID_AUTOFLIP)  | image_->getIntVariable(FIM_VID_FLIPPED) | getIntVariable(FIM_VID_FLIPPED);
-		fim_int flip   =
-		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image_->getIntVariable(FIM_VID_FLIPPED)== 1)/*|(getIntVariable(FIM_VID_FLIPPED)== 1)*/&&
-		!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(image_->getIntVariable(FIM_VID_FLIPPED)==-1)/*|(getIntVariable(FIM_VID_FLIPPED)==-1)*/));
-		fim_int mirror   =
-		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image_->getIntVariable(FIM_VID_MIRRORED)== 1)/*|(getIntVariable(FIM_VID_MIRRORED)== 1)*/)&&
-		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image_->getIntVariable(FIM_VID_MIRRORED)==-1)/*|(getIntVariable(FIM_VID_MIRRORED)==-1)*/));
-		fim_int negate   =	/* FIXME : temporarily here */
-		((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->getIntVariable(FIM_VID_NEGATED)==0));
-		fim_int desaturate  =	/* FIXME : temporarily here */
-		((getGlobalIntVariable(FIM_VID_AUTODESATURATE)== 1)&&(image_->getIntVariable(FIM_VID_DESATURATED)==0));
+
+		fim_int autotop = shall_autotop();
+
 		image_->update_meta();
 
-		if(negate)
+		if(shall_negate())
 			image_->negate();
-		if(desaturate)
+		if(shall_desaturate())
 			image_->desaturate();
 
 		if ( ( autotop || getGlobalIntVariable("i:" FIM_VID_WANT_AUTOCENTER)==1 ) && need_redraw() )
 		{
-			/*
-			 * If this is the first image display, we have
-			 * the right to rescale the image.
-			 * */
-
-			if(autotop && image_->height()>=this->viewport_height()) //THIS SHOULD BECOME AN AUTOCMD..
+			if(autotop && image_->height()>=this->viewport_height())
 		  	{
 			    top_=autotop>0?0:image_->height()-this->viewport_height();
 			    panned_ |= 0x1; // FIXME: shall do the same for l/r and introduce constants.
@@ -360,17 +359,9 @@ namespace fim
 				top_ = (image_->height() - this->viewport_height()) / 2;
 			image_->set_auto_props(0, 0);
 		}
-// uncommenting the next 2 lines will reintroduce a bug
-//		else
-//		if( need_redraw() )
 		{
-			/*	
-			 *	20070911
-			 *	this code is essential in order to protect from bad left_ and top_ values.
-			 * */
 			/*
-			 * This code should be studied in detail..
-			 * as it is is straight from fbi.
+			 * Old fbi code snippets.
 			 */
 	    		if (image_->height() <= this->viewport_height())
 	    		{
@@ -398,21 +389,18 @@ namespace fim
 		
 		if( need_redraw())
 		{
+			bool mirror = shall_mirror();
+			bool flip = shall_flip();
+			fim_flags_t flags = (mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0);
+
 			should_redraw(FIM_REDRAW_UNNECESSARY);
 			image_->should_redraw(FIM_REDRAW_UNNECESSARY);
-			/*
-			 * there should be more work to use double buffering (if possible!?)
-			 * and avoid image tearing!
-			 */
+
 #if FIM_WANT_VIEWPORT_TRANSFORM
 			this->transform(mirror, flip);
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 #ifdef FIM_WINDOWS
 			if(displaydevice_ )
-			{
-			// FIXME : we need a mechanism for keeping the image pointer valid during multiple viewport usage
-			//std::cout << "display " << " ( " << yorigin() << "," << xorigin() << " ) ";
-			//std::cout << " " << " ( " << viewport_height() << "," << viewport_width() << " )\n";
 			displaydevice_->display(
 					image_->get_ida_image(),
 					top_,
@@ -425,8 +413,8 @@ namespace fim
 					viewport_height(),
 				       	viewport_width(),
 				       	viewport_width(),
-					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
-					);}
+					flags
+					);
 #else
 			displaydevice_->display(
 					image_->get_ida_image(),
@@ -438,7 +426,7 @@ namespace fim
 					0,
 					// displaydevice_->height(), displaydevice_->width(), displaydevice_->width(),
 					viewport_height(), viewport_width(), viewport_width(),
-					(mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0)/*flags : FIXME*/
+					flags
 					);
 #endif					
 #if FIM_WANT_VIEWPORT_TRANSFORM
@@ -460,7 +448,7 @@ namespace fim
 				if(commandConsole.isSetVar(FIM_VID_COMMENT_OI_FMT))
 					this->fs_ml_puts(image_->getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT).c_str()),wcoi-1);
 				else
-					this->fs_ml_puts(image_->getStringVariable(FIM_VID_COMMENT).c_str(),wcoi-1);
+					this->fs_ml_puts(""/*image_->getStringVariable(FIM_VID_COMMENT).c_str()*/,wcoi-1);
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
@@ -509,14 +497,6 @@ namespace fim
 		}
 	}
 
-#if 0
-	int Viewport::valid(void)
-	{
-		// int instead of bool
-		return check_valid();
-	}
-#endif
-
         Image* Viewport::getImage(void)const
 	{
 		/* returns the image pointer, regardless its use!  */
@@ -540,19 +520,12 @@ namespace fim
 
         void Viewport::setImage(fim::ImagePtr ni)
 	{
-		/* 
-		 * the image could be FIM_NULL
-		 * this image is not tightly bound!
-		 *
-		 * FIXME
-		 */
 #ifdef FIM_CACHE_DEBUG
 		std::cout << "setting image \""<<ni->getName()<<"\" in viewport: "<< ni << "\n\n";
 #endif /* FIM_CACHE_DEBUG */
 
-		//image_ = FIM_NULL;
 		if(ni)
-			free();
+			free_image();
 		reset();
 		image_ = ni;
 	}
@@ -621,16 +594,10 @@ namespace fim
 		image_->do_scale_rotate(viewport_xscale());
 	}
 
-	void Viewport::free(void)
+	void Viewport::free_image(void)
 	{
-		/*
-		 * frees the currently loaded image, if any
-		 */
 		if(image_)
-		{
-			ViewportState viewportState = store(viewportState);
-			commandConsole.browser_.cache_.freeCachedImage(image_,&viewportState);
-		}
+			commandConsole.browser_.cache_.freeCachedImage(image_,this);
 		image_ = FIM_NULL;
 	}
 
@@ -698,8 +665,7 @@ namespace fim
 
 	Viewport::~Viewport(void)
 	{
-		// FIXME : we need a revival for free()
-		free();
+		free_image();
 	}
 
 	fim::string Viewport::pan(const fim_char_t*a1, const fim_char_t*a2)

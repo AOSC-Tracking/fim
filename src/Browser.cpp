@@ -1023,7 +1023,7 @@ ret:
 		 * */
 		FIM_PR('*');
 		if( viewport() )
-			viewport()->free();
+			viewport()->free_image();
 		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport().c_str());
 		FIM_PR('.');
 	}

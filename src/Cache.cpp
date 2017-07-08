@@ -376,7 +376,6 @@ ret:
 		 * If the supplied image is cached as a master image of a clone, it is freed and deregistered.
 		 * If not, no action is performed.
 		 * */
-		// WARNING : FIXME : DANGER !!
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR('*');
 
