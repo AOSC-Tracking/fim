@@ -645,7 +645,7 @@ err:
 		fim_sys_int ret=0;
 		SDL_Event event=*eventp;
 
-		*c = FIM_CNS_KEY_NULL;
+		*c = FIM_SYM_NULL_KEY;
 
 //		while(SDL_PollEvent(&event))
 		if(want_poll)

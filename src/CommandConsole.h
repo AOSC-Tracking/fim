@@ -229,7 +229,6 @@ class CommandConsole
 	fim_var_id rnid(const fim_var_id& varname)const;
 
 	fim_var_t getVariableType(const fim_var_id& varname)const;
-	fim_err_t printVariable(const fim_var_id& varname)const;
 	bool push(const char * nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
 #if FIM_WANT_BACKGROUND_LOAD
 	bool background_push(void);
@@ -245,7 +244,6 @@ class CommandConsole
 	bool push(const fim_fn_t nf, fim_flags_t pf=FIM_FLAG_DEFAULT);
 	fim_cxr fcmd_echo(const args_t& args);
 	fim::string do_echo(const args_t& args)const;
-	//	fim::string get_expr_type(const args_t& args);
 	fim_cxr fcmd_help(const args_t& args);
 	fim_cxr fcmd_quit(const args_t& args);
 	fim_cxr fcmd__stdout(const args_t& args);

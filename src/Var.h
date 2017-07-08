@@ -34,11 +34,11 @@
 
 namespace fim
 {
+	enum fim_vtc { FimTypeInt='i', FimTypeDefault='i', FimTypeFloat='f', FimTypeString='s', FimTypeWrong='!' };
 class Var
 {
-	enum fim_vtc { FimTypeInt='i', FimTypeDefault='i', FimTypeFloat='f', FimTypeString='s' };
-	typedef int fim_vtt;
-	fim_vtt type;
+	typedef int fim_var_t;
+	fim_var_t type;
 	union
 	{
 		fim_float_t f;
@@ -172,7 +172,7 @@ class Var
 	Var  operator< (const Var& v)const { return getFloat()< v.getFloat(); }
 	Var  operator> (const Var& v)const { return getFloat()> v.getFloat(); }
 	private:
-	bool both_typed(fim_vtt t, const Var& v)const {return getType() == t && ( ((getType()==t) && (v.getType()==t))); }
+	bool both_typed(fim_var_t t, const Var& v)const {return getType() == t && ( ((getType()==t) && (v.getType()==t))); }
 	//#define _types() DBG("t1:"<<(getType())<<",t2:"<<(v.getType())<<"\n");
 	public:
 	Var operator!=(const Var& v)const {

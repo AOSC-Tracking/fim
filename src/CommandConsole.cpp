@@ -19,11 +19,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-/*
- * TODO:
- * 	framebufferdevice -> device
- * 	member functions emitting output should be moved to a different class
- * */
 #include "fim.h"
 #include <sys/time.h>
 #if FIM_EXPERIMENTAL_FONT_CMD
@@ -276,17 +271,7 @@ ret:		return key;
 		aliases_t::const_iterator ai;
 
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
-		{
-#if 0
-			if(ai->second.first == FIM_CNS_EMPTY_STRING)continue;//FIX THIS : THIS SHOULD NOT OCCUR
-			aliases_expanded+=FIM_FLT_ALIAS" ";
-			aliases_expanded+=((*ai).first);
-			aliases_expanded+="=\"";
-			aliases_expanded+=((*ai).second.first);
-			aliases_expanded+="\"\n";
-#endif
 			aliases_expanded+=get_alias_info((*ai).first);
-		}
 		return aliases_expanded;
 	}
 
@@ -317,7 +302,7 @@ ret:		return key;
 		 * assigns to an alias some action
 		 */
 		fim::string cmdlist,desc;
-		string r;
+		std::ostringstream r;
 
 		if(args.size()==0)
 		{
@@ -335,19 +320,15 @@ ret:		return key;
 		if(aliases_[args[0].val_].first!=FIM_CNS_EMPTY_STRING)
 		{
 			aliases_[args[0].val_]=std::pair<fim_cmd_id,fim::string>(cmdlist,desc);
-			r+=fim::string(FIM_FLT_ALIAS" ");
-			r+=args[0].val_;
-			r+=fim::string(" successfully replaced.\n");
+			r << FIM_FLT_ALIAS " " << args[0].val_<< " successfully replaced.\n";
 		}
 		else
 		{
 			aliases_[args[0].val_].first=cmdlist;
 			aliases_[args[0].val_].second=desc;
-			r+=fim::string(FIM_FLT_ALIAS" ");
-			r+=args[0].val_;
-			r+=fim::string(" successfully added.\n");
+			r << FIM_FLT_ALIAS " " << args[0].val_ << " successfully added.\n";
 		}
-		return r;
+		return r.str();
 	}
 
 	fim::string CommandConsole::dummy(std::vector<Arg> args)
@@ -359,7 +340,7 @@ ret:		return key;
 		return "dummy function : for test purposes :)\n";
 	}
 
-	CommandConsole::CommandConsole(/*FramebufferDevice &_framebufferdevice*/):
+	CommandConsole::CommandConsole():
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	mc_(*this),
@@ -370,7 +351,6 @@ ret:		return key;
 	return_code_(0)
 	,mangle_tcattr_(false)
 	,browser_(*this)
-	//,framebufferdevice(_framebufferdevice)
 	,cycles_(0)
 #ifdef FIM_RECORDING
 	,recordMode_(false)			/* we start not recording anything */
@@ -498,14 +478,11 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 		addCommand(new Command(fim_cmd_id(FIM_FLT_VARIABLES),fim::string(FIM_FLT_VARIABLES " : display the existing variables"),this,&CommandConsole::fcmd_variables_list));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_UNALIAS),fim::string(FIM_FLT_UNALIAS " " FIM_CNS_EX_ID_STRING " | '-a' : delete the alias " FIM_CNS_EX_ID_STRING " or all aliases (use '-a', not -a)"),this,&CommandConsole::fcmd_unalias));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_UNBIND),fim::string(FIM_FLT_UNBIND " " FIM_CNS_EX_KSY_STRING " : unbind the action associated to a specified " FIM_CNS_EX_KSY_STRING FIM_CNS_RAW_KEYS_MESG),this,&CommandConsole::fcmd_unbind));
-		addCommand(new Command(fim_cmd_id(FIM_FLT_WHILE),fim::string("while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the " FIM_KBD_ESC " or the " FIM_KBD_COLON " key"),this,&CommandConsole::fcmd_foo));/* may introduce a special "help grammar" command */
+		addCommand(new Command(fim_cmd_id(FIM_FLT_WHILE),fim::string("while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the " FIM_KBD_ESC " or the " FIM_KBD_COLON " key."),this,&CommandConsole::fcmd_foo));/* may introduce a special "help grammar" command */
 #ifdef FIM_WINDOWS
 		/* this is a stub for the manual generation (actually, the FimWindow object gets built later) */
 		addCommand(new Command(fim_cmd_id(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW),this,&CommandConsole::fcmd_foo));
 #endif /* FIM_WINDOWS */
-//		addCommand(new Command(fim_cmd_id("type" ),fim::string("prints out the type of its arguments"),this,&CommandConsole::get_expr_type));
-//		addCommand(new Command(fim_cmd_id(FIM_FLT_NO_IMAGE),fim::string(FIM_FLT_NO_IMAGE" : displays no image at all (BROKEN)"),&browser_,&Browser::fcmd_no_image));/* FIXME: broken */
-		//addCommand(new Command(fim_cmd_id("print"   ),fim::string("displays the value of a variable"),this,&CommandConsole::fcmd_foo));
 		execDefaultConfiguration();
 		fcmd_cd(args_t());
 		setVariable(FIM_VID_VERSION,FIM_REVISION_NUMBER);
@@ -519,7 +496,6 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
 
 	fim_err_t CommandConsole::execDefaultConfiguration(void)
 	{
-		/* FIXME: #including a file not a clean practice, but it is clean regarding this file. */
 		#include "defaultConfiguration.cpp"
 		return FIM_ERR_NO_ERROR; 
 	}
@@ -527,11 +503,7 @@ FIM_FLT_RECORDING " 'start' : start recording the executed commands; " FIM_FLT_R
         bool CommandConsole::is_file(fim::string nf)const
         {
 		/*
-		 * note:
-		 * this function is written a little bit unsafely,
-		 * because the file could change between calls.
-		 * improvements are possible.
-		 * TODO: maybe access() should be used too (it checks file permissions, too)
+		 * consider using access() as an alternative.
 		 */
                 struct stat stat_s;
 
@@ -729,8 +701,7 @@ err:
 			       	it_buf=c - FIM_KEY_OFFSET;
 			goto ret;
 		}
-		/* FIXME 20110515 this prevents infinite recursion on iterated commands in SDL mode. this is probably a bug in the sdl input handling code and shall be solved */
-		if(c==FIM_SYM_NULL_KEY)
+		if(c==FIM_SYM_NULL_KEY) // this branch happens to be entered in SDL mode. investigate way to avoid this check.
 			goto ret;
 #endif /* FIM_ITERATED_COMMANDS */
 
@@ -850,7 +821,10 @@ ret:
 			fim_perror("in close(fim_pipedesc[1])");
 			goto ret;
 		}
-		try	{	iret=yyparse();		}
+		try
+		{
+			iret=yyparse();
+		}
 		catch	(FimException e)
 		{
 			if( e == FIM_E_TRAGIC || e == FIM_E_NO_MEM )
@@ -887,7 +861,6 @@ ret:
 			if( e == FIM_E_TRAGIC || true )
 			       	this->quit( FIM_E_TRAGIC );
 		}
-		//we add to history only meaningful commands/aliases.
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -1001,15 +974,12 @@ ret:
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
 			if(c==FIM_NULL)
 			{
-				/* FIXME : should stringify here and elsewhere
-				 * see also http://gcc.gnu.org/onlinedocs/cpp/index.html
-				 */
 				cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
 				goto ok;
 			}
 			else
 			{
-				if(getIntVariable(FIM_VID_DBG_COMMANDS)!=0)
+				if(getIntVariable(FIM_VID_DBG_COMMANDS))
 					std::cout << "in " << cmd << ":\n";
 				
 				cout << c->execute(args);
@@ -1024,19 +994,11 @@ ok:
 	fim_int CommandConsole::catchLoopBreakingCommand(fim_ts_t seconds)
 	{
 		/*	
-		 *	This member function is invoked during non interactive loops to
-		 *	provide interactive loop breaking.
-		 *
-		 *	The provided mechanism allows the user to press any key
-		 *	during the loop, and the loop will continue its execution,
-		 *	unless the pressed key is not exitBinding_.
-		 *
-		 *	If not, and the key is bound to some action; this action
-		 *	is executed.
-		 *
-		 *	NOTE: this could nest while loops !
-		 *
-		 *	returns 0 if no command was received.
+		 *	Interactive loops breaking logic.
+		 *	Allows user to press any key during loop.
+		 *	Loop will continue its execution, unless pressed key is exitBinding_.
+		 *	If not, and if the key is bound to some action, this action is executed.
+		 *	returns 1 if loop has to be broken.
 		 */
 		fim_key_t c;
 
@@ -1044,40 +1006,29 @@ ok:
 		       	goto err;	/* any key triggers an exit */
 
 		c = displaydevice_->catchInteractiveCommand(seconds);
-	//	while((c = displaydevice_.catchInteractiveCommand(seconds))!=-1)
 		while(c!=-1)
 		{
 			/* while characters read */
 			//if( c == -1 ) return 0;	/* no chars read */
 			sym_keys_t::const_iterator ki;
 
-//			if(c==sym_keys_[FIM_KBD_ESC]) return 1; 		/* the user hit the exitBinding_ key */
-//			if(c==sym_keys_[FIM_KBD_COLON]) return 1; 		/* the user hit the exitBinding_ key */
-//			// 20110601 need some string variables with these two keys (see while() interruption documentation) 
 			if((ki=sym_keys_.find(FIM_KBD_ESC))!=sym_keys_.end() && c==ki->second)
 				goto err;
 			if((ki=sym_keys_.find(FIM_KBD_COLON))!=sym_keys_.end() && c==ki->second)
 				goto err;
 			if( c != exitBinding_ )  /* characters read */
 			{
-				/*
-				 * we give the user chance to issue commands
-				 * and some times to realize this.
-				 *
-				 * is it a desirable behaviour ?
-				 */
-				executeBinding(c);
-				if(!show_must_go_on_)
+				executeBinding(c); /* any interactive action */
+				if(!show_must_go_on_) /* including quit.. */
 					goto err;
 				c = displaydevice_->catchInteractiveCommand(1);
-//				return 0;/* could be a command key */
 			}
 			if(c==exitBinding_)
-			       	goto err; 		/* the user hit the exitBinding_ key */
+			       	goto err;
 		}
-		return 0; 		/* no chars read  */
+		return 0;	/* no chars read  */
 err:
-		return 1;
+		return 1;	/* loop shall be broken */
 	}
 		
 #ifdef	FIM_USE_GPM
@@ -1087,7 +1038,7 @@ err:
 		exit(0);
 		//quit();
 		return 'n';
-		return 0;
+		//return 0;
 	}
 #endif	/* FIM_USE_GPM */
 
@@ -1141,7 +1092,8 @@ err:
 				{
 					goto rlnull;
 				}
-				else if(*rl!=FIM_SYM_CHAR_NUL)
+				else
+				if(*rl!=FIM_SYM_CHAR_NUL)
 				{
 					/*
 					 * This code gets executed when the user is about to exit console mode, 
@@ -1152,18 +1104,14 @@ err:
 					if(recordMode_)
 						record_action(fim::string(rl));
 #endif /* FIM_RECORDING */
-					//ic_=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
 					execute_internal(rl,FIM_X_HISTORY);	//execution of the command line with history
 					ic_=(ic_==-1)?0:1; //a command could change the mode !
-//					this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);	//!!
-//					execute_internal("redisplay;",FIM_X_NULL);	//execution of the command line with history
 					if( show_must_go_on_ )
 						FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 #ifdef FIM_RECORDING
 					memorize_last(rl);
 #endif /* FIM_RECORDING */
 				}
-				/*  else : *rl==FIM_CNS_EMPTY_STRING : doesn't happen :) */
 
 				if(rl && *rl==FIM_SYM_CHAR_NUL)
 				{
@@ -1249,20 +1197,16 @@ err:
 						{
 							goto rlnull;
 						}
-						/* 
-						 * if using "" instead string("")
-						 * warning: comparison with string literal results in unspecified behaviour */
-						else if(*rl != FIM_SYM_CHAR_NUL)
+						else
+						if(*rl != FIM_SYM_CHAR_NUL)
 						{
 							args_t args;
-							std::string rls;
+							std::ostringstream rls;
 
 							if(c == FIM_SYM_BW_SEARCH_KEY)
-								rls+="-";
-							rls+="/";
-							rls+=rl;
-							rls+="/";
-							args.push_back(rls);
+								rls << "-";
+							rls << "/" << rl << "/";
+							args.push_back(rls.str());
 							execute(FIM_FLT_GOTO,args);
 						}
 					}
@@ -1303,7 +1247,6 @@ rlnull:
 				cout << msg;
 				set_status_bar(msg,FIM_NULL);
 			}
-			/* this->quit(); */
 #endif /* FIM_USE_READLINE */
 		}
 #if FIM_WANT_BACKGROUND_LOAD
@@ -1328,7 +1271,7 @@ rlnull:
 	{
 		/*
 		 * the member function to be called to exit from the program safely.
-		 * it is used mainly for safe and exit after severe errors.
+		 * it is used mainly for safe exit after severe errors.
 		 * TODO : get rid of it.
 		 */
     		cleanup();
@@ -1358,10 +1301,6 @@ rlnull:
 
 	CommandConsole::~CommandConsole(void)
 	{
-		/*
-		 * NOTE:
-		 * as long as this class is a singleton, we couldn't care less about memory freeing :)
-		 */
 		fim::string sof=getStringVariable(FIM_VID_SCRIPTOUT_FILE);
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
@@ -1419,42 +1358,32 @@ rlnull:
 
 	fim::string CommandConsole::readStdFileDescriptor(FILE* fd, int*rp)
 	{
-		/*
-		 * TODO : catch exceptions/interruptions
-		 */
 		fim_sys_int r;
-		fim_char_t buf[FIM_STREAM_BUFSIZE];	// NOTE: a larger buffer would be ok (e.g.: user configurable)...
+		fim_char_t buf[FIM_STREAM_BUFSIZE];	// note: might make this user configurable
 		fim::string cmds;
 
 		if(fd==FIM_NULL)
 		{
-			/* return FIM_ERR_GENERIC; */
-		       	cmds = FIM_ERR_GENERIC;
-		       	goto ret;
-	       	}
+			cmds = FIM_ERR_GENERIC;
+			goto ret;
+		}
 
 		while((r=fread(buf,1,sizeof(buf)-1,fd))>0)
 		{
 			buf[r]='\0';
 			cmds+=buf;
-	/*		if(displaydevice_->catchInteractiveCommand(0)!=-1) goto ret; */
+			/*		if(displaydevice_->catchInteractiveCommand(0)!=-1) goto ret; */
 		}
 		if(rp)
 			*rp=r;
-ret:
+	ret:
 		return cmds;
 	}
-	
+		
 	fim_err_t CommandConsole::executeStdFileDescriptor(FILE* fd)
 	{
-		/*
-		 * FIX ME  HORRIBLE : FILE DESCRIPTOR USED AS A FILE HANDLE..
-		 *
-		 * TODO : catch exceptions
-		 */
 		fim_sys_int r;
 		fim_err_t errv = FIM_ERR_NO_ERROR;
-		/* fim_char_t buf[FIM_STREAM_BUFSIZE]; */
 		fim::string cmds = CommandConsole::readStdFileDescriptor(fd,&r);
 
 		if(r==-1)
@@ -1470,41 +1399,23 @@ ret:
 
 	fim_err_t CommandConsole::executeFile(const fim_char_t *s)
 	{
-		/*
-		 * executes a file denoted by filename
-		 * */
 		execute_internal(slurp_file(s).c_str(),FIM_X_QUIET);
 		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_var_t CommandConsole::getVariableType(const fim_var_id& varname)const
 	{
-		/*
-		 * returns the [internal] type of a variable
-		 * FIXME : eradicate this cancer
-		 * */
 		variables_t::const_iterator vi=variables_.find(varname);
 
 		if(vi!=variables_.end())
 			return vi->second.getType();
 		else
-		       	return FIM_ERR_NO_ERROR;
+		       	return FimTypeWrong;
 	}
 
 	bool CommandConsole::isVariable(const fim_var_id& varname)const
 	{
 		return getStringVariable(varname).size();
-	}
-
-	fim_err_t CommandConsole::printVariable(const fim_var_id& varname)const
-	{	
-		/*
-		 * a variable is taken and converted to a string and printed
-		 *
-		 * FIXME: should escape (possibly optionally) ?
-		 * */
-		fim::cout<<getStringVariable(varname);
-		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_bool_t CommandConsole::drawOutput(const fim_char_t *s)const
@@ -1558,49 +1469,31 @@ ret:
 		/*
 		 * returns the list of set variables
 		 */
-		fim::string acl,sep=" ";
+		std::ostringstream acl;
+		std::string sep=" ";
 		variables_t::const_iterator vi;
 
 		for( vi=variables_.begin();vi!=variables_.end();++vi)
-		{
-			acl+=((*vi).first);
-			acl+=" ";
-		}
+			acl << ((*vi).first) << " ";
 
 #ifdef FIM_NAMESPACES
-		acl+=browser_.get_variables_list();
-		acl+=sep;
+		acl << browser_.get_variables_list() << sep;
 		if(browser_.c_getImage())
-		{
-			acl+=browser_.c_getImage()->get_variables_list();
-			acl+=sep;
-		}
+			acl << browser_.c_getImage()->get_variables_list() << sep;
 #endif /* FIM_NAMESPACES */
 #ifdef FIM_WINDOWS
 		if(window_)
-		{
-			acl+=window_->get_variables_list();
-			acl+=sep;
-		}
+			acl << window_->get_variables_list() << sep;
 		if(current_viewport())
-		{
-			acl+=current_viewport()->get_variables_list();
-			acl+=sep;
-		}
+			acl << current_viewport()->get_variables_list() << sep;
 #endif /* FIM_WINDOWS */
-		return acl;
+		return acl.str();
 	}
 
 #ifdef FIM_AUTOCMDS
 	fim::string CommandConsole::autocmds_list(const fim::string event, const fim::string pattern)const
 	{
-		/*
-		 * as of now, lists the events for which an autocmd could be assigned.
-		 *
-		 * FIX ME
-		 */
-		fim::string acl;
-//		std::map<fim::string,std::map<fim::string,fim::string> >  autocmds_;
+		std::ostringstream acl;
 		autocmds_t::const_iterator ai;
 
 		if(event==FIM_CNS_EMPTY_STRING && pattern==FIM_CNS_EMPTY_STRING)
@@ -1612,15 +1505,7 @@ ret:
 		//.. display the list of autocommands...
 		for(	args_t::const_iterator aui=((*api)).second.begin();
 				aui!=((*api)).second.end();++aui )
-		{
-			acl+=FIM_FLT_AUTOCMD" \""; 
-			acl+=(*ai).first; 
-			acl+="\" \""; 
-			acl+=(*api).first; 
-			acl+="\" \""; 
-			acl+=(*aui); 
-			acl+="\"\n"; 
-		}
+			acl << FIM_FLT_AUTOCMD" \""  << (*ai).first << "\" \"" << (*api).first << "\" \"" << (*aui)  << "\"\n";
 		else
 		if(pattern==FIM_CNS_EMPTY_STRING)
 		{
@@ -1633,15 +1518,7 @@ ret:
 			//.. display the list of autocommands...
 			for(	args_t::const_iterator aui=((*api)).second.begin();
 					aui!=((*api)).second.end();++aui )
-			{
-				acl+=FIM_FLT_AUTOCMD" \""; 
-				acl+=(*ai).first; 
-				acl+="\" \""; 
-				acl+=(*api).first; 
-				acl+="\" \""; 
-				acl+=(*aui); 
-				acl+="\"\n"; 
-			}
+				acl << FIM_FLT_AUTOCMD" \"" << (*ai).first << "\" \"" << (*api).first << "\" \"" << (*aui) << "\"\n";
 		}
 		else
 		{
@@ -1658,22 +1535,14 @@ ret:
 				{
 					for(	args_t::const_iterator aui=((*api)).second.begin();
 					aui!=((*api)).second.end();++aui )
-					{
-						acl+=FIM_FLT_AUTOCMD" \""; 
-						acl+=(*ai).first; 
-						acl+="\" \""; 
-						acl+=(*api).first; 
-						acl+="\" \""; 
-						acl+=(*aui); 
-						acl+="\"\n"; 
-					}
+						acl << FIM_FLT_AUTOCMD" \"" << (*ai).first << "\" \"" << (*api).first << "\" \"" << (*aui) << "\"\n"; 
 				}
 			}
 		}
 		
-		if(acl==FIM_CNS_EMPTY_STRING)
-			acl="no autocommands loaded\n";
-		return acl;
+		if(acl.str()==FIM_CNS_EMPTY_STRING)
+			acl << "no autocommands loaded\n";
+		return acl.str();
 	}
 
 	fim::string CommandConsole::autocmd_del(const fim::string event, const fim::string pattern, const fim::string action)
@@ -1798,7 +1667,7 @@ ok:
 	{
 		/*
 		 * executes all the actions associated to the current event, if the current 
-		 * file name matches the individual patterns
+		 * file name matches the regexp pattern
 		 */
 //		cout << "autocmd_exec_cmd...\n";
 //		cout << "autocmd_exec_cmd. for pat '" << fname <<  "'\n";
@@ -2080,7 +1949,7 @@ ok:
 	void CommandConsole::printHelpMessage(const fim_char_t *pn)const
 	{
 		/*
-		 * a prompty help message is pretty printed in the console
+		 * a prompt-like help message is pretty printed in the console
 		 * */
 		std::cout<<" Usage: "<<pn<<" [OPTIONS] [FILES]\n";
 		/*  printf("\nThe help will be here soon!\n");*/
@@ -2095,9 +1964,7 @@ ok:
 		 * and are quite intricated...
 		 */
 		if(dont_record_last_action_==false)
-		{
 			last_action_=cmd;
-		}
 		dont_record_last_action_=false;	//from now on we can memorize again
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -2115,50 +1982,41 @@ ok:
 #endif /* FIM_RECORDING */
 	void CommandConsole::appendPostInitCommand(const fim_char_t* c)
 	{
-		/*
-		 * the supplied command is applied right before a normal execution of Fim
-		 * but after the configuration file loading
+		/* Passed via -c.
+		 * Executed right before a normal execution of Fim
+		 * but after the configuration file loading.
 		 * */
-		postInitCommand_+=c;
+		postInitCommand_+= c;
 	}
 
 	void CommandConsole::appendPreConfigCommand(const fim_char_t* c)
 	{
-		/*
+		/* Passed via -C.
+		 * Executed much before postInitCommand_.
 		 * */
-		preConfigCommand_+=c;
+		preConfigCommand_+= c;
 	}
 
 	void CommandConsole::appendPostExecutionCommand(const fim::string& cmd)
 	{
 		/*
-		 * the supplied command is applied right before a normal termination of Fim
+		 * Executed right before a normal termination of Fim.
 		 * */
 		postExecutionCommand_+=cmd;
 	}
 	
 	bool CommandConsole::appendedPostInitCommand(void)const
 	{
-		/*
-		 * whether some command will be executed right after initialization
-		 * */
 		return !postInitCommand_.empty();
 	}
 
 	bool CommandConsole::appendedPreConfigCommand(void)const
 	{
-		/*
-		 * */
 		return !preConfigCommand_.empty();
 	}
 
 	Viewport* CommandConsole::current_viewport(void)const
 	{
-		/*
-		 * returns a reference to the current viewport.
-		 *
-		 * TODO : did we catch all exceptions ?
-		 * */
 #ifdef FIM_WINDOWS
 		return current_window().current_viewportp();
 #else /* FIM_WINDOWS */
@@ -2169,33 +2027,17 @@ ok:
 #ifdef FIM_WINDOWS
 	const FimWindow& CommandConsole::current_window(void)const
 	{
-		/*
-		 * returns a reference to the current window_.
-		 * there should be one :)
-		 * if not, consider the situation TRAGIC
-		 * */
-		if(!window_)
-		{
-//			temporarily, for security reasons
-//			throw FIM_E_TRAGIC;
-		}
 		return *window_;
 	}
 #endif /* FIM_WINDOWS */
 
 	bool CommandConsole::push(const fim_fn_t nf, fim_flags_t pf)
 	{
-		/*
-		 * returns true if push was ok
-		 * */
 		return browser_.push(nf,pf);
 	}
 
 	bool CommandConsole::push(const char * nf, fim_flags_t pf)
 	{
-		/*
-		 * returns true if push was ok
-		 * */
 #if FIM_WANT_BACKGROUND_LOAD
 		if( pf & FIM_FLAG_PUSH_ONE )
 			fnpv_.push_back(nf);
@@ -2343,7 +2185,6 @@ ok:
 		set_status_bar(desc.c_str(), info);
 	}
 	
-
 	bool CommandConsole::set_wm_caption(const fim_char_t *str)
 	{
 		bool wcs = true;
@@ -2552,9 +2393,9 @@ ret:
 
 		if(getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 		{
-			std::ostringstream msg;
-			msg << "resized window to " << w << " x " << h;
-			cc.set_status_bar(msg.str().c_str(),FIM_NULL);
+			std::ostringstream oss;
+			oss << "resized window to " << w << " x " << h;
+			cc.set_status_bar(oss.str().c_str(),FIM_NULL);
 		}
 
 		return FIM_ERR_NO_ERROR;
@@ -2600,7 +2441,7 @@ err:
 		static int fidx = 0;
 		size_t fcnt = fc.size();
 		const fim_int vl = 0; // font loading verbosity level (font loading will exit() if not 0)
-		string rs;
+		std::ostringstream rs;
 
 		if(args.size()>=0)
 		{
@@ -2662,14 +2503,9 @@ err:
 				fc.erase(fc.begin(),fc.end());
 				fc=lfc;
 
-				rs+="font: ";
-				rs+="preloaded ";
-				rs+=string((int)fc.size());
-				rs+= " fonts out of ";
-				rs+=string((int)nfiles);
-				rs+=" files scanned.";
-				set_status_bar(rs.c_str(),FIM_NULL);
-				rs+="\n";
+				rs << "font: " << "preloaded " << fc.size() << " fonts out of " << nfiles << " files scanned.";
+				set_status_bar(rs.str().c_str(),FIM_NULL);
+				rs << "\n";
 			}
 
 			if( cid == "load" && args.size()>1 )
@@ -2680,13 +2516,11 @@ err:
 				if(fr.second)
 					goto lofo;
 				else
-					rs ="failed loading font file ",
-					rs+=fr.first;
+					rs << "failed loading font file " << fr.first;
 			}
 
 			if( cid == "info" )
-				rs = getStringVariable(FIM_VID_FBFONT),
-				rs += "\n";
+				rs << getStringVariable(FIM_VID_FBFONT) << "\n";
 
 			if( cid == "next" || cid == "prev" )
 			{
@@ -2696,26 +2530,19 @@ err:
 						fidx=(fidx+1)%fcnt;
 					if( cid == "prev" )
 						fidx=(fidx+fcnt-1)%fcnt;
-					rs+="font: loaded ";
-					rs+=string((int)fidx);
-					rs+="/";
-					rs+=string((int)fcnt);
-					rs+=": ";
+					rs << "font: loaded " << fidx << "/" << fcnt << ": ";
 					fr=fc[fidx];
 					goto lofo;
 				}
 				else
-				{
-					rs+="first 'scan' a directory for fonts.\n";
-				}
+					rs << "first 'scan' a directory for fonts.\n";
 			}
 			goto nop;
 lofo:
 			if( displaydevice_ && displaydevice_->f_ )
 			if(fr.second)
 			{
-				rs+=fr.first.c_str();
-				rs+="\n";
+				rs << fr.first.c_str() << "\n";
 				setVariable(FIM_VID_FBFONT,fr.first.c_str());
 				displaydevice_->f_ = fr.second;
 				update_font_size();
@@ -2723,7 +2550,7 @@ lofo:
 		}
 nop:
 ret:
-		return rs;
+		return rs.str();
 	}
 #endif /* FIM_EXPERIMENTAL_FONT_CMD */
 

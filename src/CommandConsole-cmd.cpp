@@ -295,19 +295,6 @@ err:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-#if 0
-	fim::string CommandConsole::get_expr_type(const args_t& args);
-	{
-		/*
-		 * a command to echo arguments types, for debug and learning purposes
-		 */
-		if(args.size()==0)fim::cout<<"type command\n";
-		for(size_t i=0;i<args.size();++i)fim::cout << (args[i].c_str()) << "\n";
-		return FIM_CNS_EMPTY_RESULT;
-
-	}
-#endif
-
 	fim_cxr CommandConsole::fcmd_echo(const args_t& args)
 	{
 		return do_echo(args);

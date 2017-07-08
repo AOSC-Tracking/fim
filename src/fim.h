@@ -276,7 +276,7 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_SYM_FW_SEARCH_KEY	'/'
 #define FIM_SYM_FW_SEARCH_KEY_STR	"/"
 #define FIM_SYM_BW_SEARCH_KEY	'?'
-#define FIM_SYM_NULL_KEY	0
+#define FIM_SYM_NULL_KEY	0x0 /* null key value for fim_key_t */
 #define FIM_SYM_NAMESPACE_SEP	':'
 #define FIM_SYM_DEVOPTS_SEP	'='
 #define FIM_SYM_DEVOPTS_SEP_STR	"="
@@ -483,7 +483,6 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_CLEARTERM "\x1B\x4D" /* FIXME: still unused */
 #define FIM_CNS_WHITE 0xFFFFFFFF	/* Temporarily here. Will better need an enum or another portable solution. */
 #define FIM_CNS_BLACK 0x00000000	/* Temporarily here. Will better need an enum or another portable solution. */
-#define FIM_CNS_KEY_NULL		0x0 /* null key value for fim_key_t */
 
 #if FIM_USE_CXX14
 template<typename T, typename S>
@@ -885,7 +884,6 @@ namespace fim
 #define FIM_FLT_LOAD			"load" /* not in vim */
 #define FIM_FLT_LIMIT			"limit" /* not in vim */
 #define FIM_FLT_LIST			"list" /* not in vim */
-#define FIM_FLT_NO_IMAGE		"no_image" /* not in vim */
 #define FIM_FLT_PAN			"pan" /* not in vim */
 #define FIM_FLT_POPEN			"popen" /* not in vim */
 #define FIM_FLT_PREAD			"pread" /* not in vim */
@@ -984,7 +982,7 @@ namespace fim
 #define FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING  FIM_WANT_MIPMAPS && 1
 #define FIM_WANT_R_SWITCH  1 /* --resolution width:height switch (the fim way, differently from fbi's) */
 /* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
-#define FIM_STREAM_BUFSIZE	4096
+#define FIM_STREAM_BUFSIZE	16*4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_PRINTFNUM_BUFSIZE	32
 #define FIM_PRINTINUM_BUFSIZE	4*sizeof(fim_int) /* for fim_int */
