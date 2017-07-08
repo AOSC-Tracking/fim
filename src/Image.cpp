@@ -1236,7 +1236,7 @@ labeldone:
 			j=fimg_->i.npages-1;
 		if( j>page_ ? have_nextpage(j-page_) : have_prevpage(page_-j) )
 		{
-			std::cout<<"about to goto page "<<j<<"\n";
+			//std::cout<<"about to goto page "<<j<<"\n";
 			setGlobalVariable(FIM_VID_PAGE ,j);
 			retval = load(s.c_str(),FIM_NULL,j);
 			//return true;
