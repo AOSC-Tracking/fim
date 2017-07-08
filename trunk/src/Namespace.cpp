@@ -22,7 +22,7 @@
 #include "fim.h"
 
 #ifndef FIM_INDEPENDENT_NAMESPACE
-#define FIM_NS_SV(VN,VL) if(rnsp_) return rnsp_->setVariable(VN,VL); /* FIXME: need a better solution here ! */
+#define FIM_NS_SV(VN,VL) if(rnsp_) rnsp_->setVariable(VN,VL); /* FIXME: need a better solution here ! */
 #else
 #define FIM_NS_SV(VN,VL)
 #endif /* FIM_INDEPENDENT_NAMESPACE */
@@ -31,39 +31,46 @@ namespace fim
 {
 		fim_int Namespace::setVariable(const fim_var_id& varname,fim_int value)
 		{
-			return variables_[varname].setInt(value);
+			variables_[varname].setInt(value);
+			return value;
 		}
 
 #if FIM_WANT_LONG_INT
-		fim_int Namespace::setVariable(const fim_var_id& varname,int value)
+		int Namespace::setVariable(const fim_var_id& varname,int value)
 		{
-			return setVariable(varname,static_cast<fim_int>(value));
+			setVariable(varname,static_cast<fim_int>(value));
+			return value;
 		}
 
-		fim_int Namespace::setVariable(const fim_var_id& varname,unsigned int value)
+		unsigned int Namespace::setVariable(const fim_var_id& varname,unsigned int value)
 		{
-			return setVariable(varname,static_cast<fim_int>(value));
+			setVariable(varname,static_cast<fim_int>(value));
+			return value;
 		}
 #endif /* FIM_WANT_LONG_INT */
 
 		fim_float_t Namespace::setVariable(const fim_var_id& varname,fim_float_t value)
 		{
-			return variables_[varname].setFloat(value);
+			variables_[varname].setFloat(value);
+			return value;
 		}
 
-		Var Namespace::setVariable(const fim_var_id& varname,const Var&value)
+		const Var& Namespace::setVariable(const fim_var_id& varname,const Var&value)
 		{
-			return (fim_int)variables_[varname].set(value);
+			variables_[varname].set(value);
+			return value;
 		}
 
-		Var Namespace::setVariable(const fim_var_id& varname,const fim::string&value)
+		const fim::string& Namespace::setVariable(const fim_var_id& varname,const fim::string&value)
 		{
-			return (fim_int)variables_[varname].set(value);
+			variables_[varname].set(value);
+			return value;
 		}
 
-		fim_int Namespace::setVariable(const fim_var_id& varname,const fim_char_t*value)
+		const fim_char_t* Namespace::setVariable(const fim_var_id& varname,const fim_char_t*value)
 		{
-			return (fim_int)(variables_[varname].setString(string(value)));
+			variables_[varname].setString(string(value));
+			return value;
 		}
 	
 		fim_bool_t Namespace::isSetVar(const fim_var_id& varname)const
@@ -129,37 +136,37 @@ namespace fim
 	        fim_float_t Namespace::setGlobalVariable(const fim_var_id& varname,fim_float_t value)
 		{
 			FIM_NS_SV(varname,value);
-			return FIM_CNS_EMPTY_FP_VAL;
+			return value;
 		}
 
 		fim_int Namespace::setGlobalVariable(const fim_var_id& varname,fim_int value)
 		{
 			FIM_NS_SV(varname,value);
-			return FIM_CNS_EMPTY_INT_VAL;
+			return value;
 		}
 
 #if FIM_WANT_LONG_INT
-		fim_int Namespace::setGlobalVariable(const fim_var_id& varname,int value)
+		int Namespace::setGlobalVariable(const fim_var_id& varname,int value)
 		{
 			return setVariable(varname,static_cast<fim_int>(value));
 		}
 
-		fim_int Namespace::setGlobalVariable(const fim_var_id& varname,unsigned value)
+		unsigned int Namespace::setGlobalVariable(const fim_var_id& varname,unsigned int value)
 		{
 			return setVariable(varname,static_cast<fim_int>(value));
 		}
 #endif /* FIM_WANT_LONG_INT */
 
-		fim_int Namespace::setGlobalVariable(const fim_var_id& varname,const fim_char_t*value)
+		const fim_char_t* Namespace::setGlobalVariable(const fim_var_id& varname,const fim_char_t*value)
 		{
 			FIM_NS_SV(varname,value);
-			return FIM_CNS_EMPTY_INT_VAL;
+			return value;
 		}
 
-		fim_int Namespace::setGlobalVariable(const fim_var_id& varname, const fim::string& value)
+		const fim::string& Namespace::setGlobalVariable(const fim_var_id& varname, const fim::string& value)
 		{
 			FIM_NS_SV(varname,value);
-			return FIM_CNS_EMPTY_INT_VAL;
+			return value;
 		}
 
 		fim_int Namespace::getGlobalIntVariable(const fim_var_id& varname)const
