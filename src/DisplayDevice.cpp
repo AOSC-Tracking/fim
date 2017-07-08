@@ -47,15 +47,9 @@
 	{
 		fim_sys_int r=0;
 		*c=0;
-		/*
-		 * It is sad to place this functionality here, but often the input subsystem 
-		 * is tightly bound to the output device.
-		 * FIXME : before, it accepted unsigned int
-		 * */
 #ifdef  FIM_SWITCH_FIXUP
-			/*
-			 * this way the console switches the right way :
-			 * the following code taken live from the original fbi.c
+			/* This way the console switches the right way. */
+			/* (The following code dates back to the original fbi.c)
 			 */
 
 			/*
@@ -101,29 +95,20 @@
 				*c=int2msbf(*c);
 			}
 #else  /* FIM_SWITCH_FIXUP */
-			/*
-			 * this way the console switches the wrong way
-			 */
+			/* This way the console switches the wrong way. */
 			r=read(fim_stdin_,&c,4);	//up to four chars should suffice
 #endif  /* FIM_SWITCH_FIXUP */
-			//std::cout << (fim_int)*c<<"\n";
 ret:		return r;
 	}
 
 	fim_key_t DisplayDevice::catchInteractiveCommand(fim_ts_t seconds)const
 	{
 		/*	
-		 *
-		 *	THIS DOES NOT WORK, BECAUSE IT IS A BLOCKING READ.
-		 *	MAKE THIS READ UNBLOCKING AND UNCOMMENT. <- ?
-		 *	
-		 *	FIX ME
-		 *
-		 *	NOTE : this call should 'steal' circa 1/10 of second..
+		 * This call 'steals' circa 1/10 of second..
 		 */
 		fd_set          set;
 		ssize_t rc=0,r;
-		fim_key_t c=-1;/*	-1 means 'no character pressed	*/
+		fim_key_t c=-1;/* -1 means 'no character pressed */
 		struct termios tattr, sattr;
 		//we set the terminal in raw mode.
                 if (! isatty(cc.fim_stdin_))
@@ -148,11 +133,22 @@ ret:		return r;
 		tcsetattr (0, TCSAFLUSH, &sattr);
 		if( r<=0 )
 			c=-1;	
-ret:		return c;		/*	we return the read key		*/
+ret:		return c; /* read key */
 	}
 
+void DisplayDevice::clear_screen_locking(void)
+{
+	//fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
+	this->lock();
+	fim_int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
+	fim_coo_t fh=f_?f_->sheight():1;
+	ls=FIM_MIN(ls,height()/fh);
+	clear_rect(0, width()-1, 0,fh*ls);
+	this->unlock();
+}
+
 #ifndef FIM_KEEP_BROKEN_CONSOLE
-void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags)//experimental
+void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags)
 {
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	fim_err_t r=FIM_ERR_NO_ERROR;
@@ -178,23 +174,9 @@ void DisplayDevice::fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw,
 			goto ret;
 	}
 
-	if(!draw )//CONVENTION!
+	if(!draw )
 		goto ret;
-	
-	//fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
-	this->lock();
-#if 1
-	// FIXME: this is temporary
-	{
-		fim_int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
-		fim_coo_t fh=f_?f_->sheight():1;
-		ls=FIM_MIN(ls,height()/fh);
-		clear_rect(0, width()-1, 0,fh*ls);
-	}
-#else
-	clear_rect(0, width()-1, 0,ls);
-#endif
-	this->unlock();
+	clear_screen_locking();
 	mc_.dump();
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 ret:
@@ -202,7 +184,7 @@ ret:
 }
 #endif /* FIM_KEEP_BROKEN_CONSOLE */
 
-fim_err_t DisplayDevice::console_control(fim_cc_t arg)//experimental
+fim_err_t DisplayDevice::console_control(fim_cc_t arg)
 {
 	if(arg==0x01)
 		fb_status_screen_new(FIM_NULL,false,arg);
@@ -242,15 +224,14 @@ fim_int DisplayDevice::get_n_qbenchmarks(void)const
 
 string DisplayDevice::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const
 {
-	string msg=FIM_CNS_EMPTY_STRING;
+	std::ostringstream oss;
+	string msg;
 
 	switch(qbi)
 	{
 		case 0:
-		msg+="fim display check";
-		msg+=" : ";
-		msg+=string((float)(((fim_fms_t)(qbtimes*2))/((qbttime)*1.e-3)));
-		msg+=" clears/s\n";
+		oss << "fim display check" << " : " << (float)(((fim_fms_t)(qbtimes*2))/((qbttime)*1.e-3)) << " clears/s\n";
+		msg=oss.str();
 	}
 	return msg;
 }
@@ -260,8 +241,7 @@ void DisplayDevice::quickbench_init(fim_int qbi)
 	switch(qbi)
 	{
 		case 0:
-		string msg="fim display check";
-		std::cout << msg << " : " << "please be patient\n";
+		std::cout << "fim display check" << " : " << "please be patient\n";
 		break;
 	}
 }
