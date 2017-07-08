@@ -313,7 +313,7 @@ class Browser
 	fim_cxr fcmd_info(const args_t& args);
 	fim::string info(void);
 	std::ostream& print(std::ostream& os)const;
-	void redisplay(void);
+	void redisplay(bool fresh=false);
 	fim_cxr fcmd_redisplay(const args_t& args);
 	fim_cxr fcmd_load(const args_t& args);
 	const fim::string pop_current(void);

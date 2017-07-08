@@ -42,7 +42,7 @@ namespace fim
 
 	class Namespace
 	{
-		friend class CommandConsole;
+		friend class CommandConsole; // for the various CommandConsole::setVariable()
 		friend class FbiStuff;
 		protected:
 #ifndef FIM_INDEPENDENT_NAMESPACE

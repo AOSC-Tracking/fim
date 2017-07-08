@@ -334,7 +334,7 @@ namespace fim
 		((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->getIntVariable(FIM_VID_NEGATED)==0));
 		fim_int desaturate  =	/* FIXME : temporarily here */
 		((getGlobalIntVariable(FIM_VID_AUTODESATURATE)== 1)&&(image_->getIntVariable(FIM_VID_DESATURATED)==0));
-		image_->update();
+		image_->update_meta();
 
 		if(negate)
 			image_->negate();

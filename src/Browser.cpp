@@ -249,7 +249,7 @@ ret:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	void Browser::redisplay(void)
+	void Browser::redisplay(bool fresh)
 	{
 		/*
 		 * Given the current() file, display it again like the first time.
@@ -556,7 +556,7 @@ comeon:
 			fim_err_t errval = FIM_ERR_NO_ERROR;
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
 			if(getImage())
-				getImage()->update();/* rotation update */ /* FIXME: shall separate scaling from orientation */
+				getImage()->update_meta();
 			if( c_getImage() )
 			switch( fc )
 			{
