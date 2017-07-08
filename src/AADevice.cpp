@@ -450,7 +450,7 @@ static bool aainvalid;
 	fim_coo_t AADevice::width(void)const { return aa_imgwidth(ascii_context_ ) ;}
 	fim_coo_t AADevice::height(void)const{ return aa_imgheight(ascii_context_) ;}
 
-	fim_err_t AADevice::init_console(void)
+	fim_err_t AADevice::format_console(void)
 	{
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 		//mc_.setRows ( -height()/2);

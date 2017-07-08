@@ -2543,7 +2543,7 @@ ret:
 			window_->update(Rect(0,0,w,h));
 #endif
 
-		displaydevice_->init_console();
+		displaydevice_->format_console();
 
 		if(current_viewport() && current_viewport()->c_getImage())
 			current_viewport()->getImage()->update_meta(1);

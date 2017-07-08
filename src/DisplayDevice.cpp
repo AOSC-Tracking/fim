@@ -213,7 +213,7 @@ fim_err_t DisplayDevice::console_control(fim_cc_t arg)//experimental
 	return FIM_ERR_NO_ERROR;
 }
 
-fim_err_t DisplayDevice::init_console(void)
+fim_err_t DisplayDevice::format_console(void)
 {
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	if(f_)
