@@ -23,7 +23,11 @@
 #include "fim.h"
 
 #ifdef HAVE_SYS_TIME_H
+#if FIM_USE_CXX11
 #include <cstdint>
+#else /* FIM_USE_CXX11 */
+#include <stdint.h>
+#endif /* FIM_USE_CXX11 */
 #include <unistd.h>
 typedef uint64_t fim_time_t;
 #else /* HAVE_SYS_TIME_H */
