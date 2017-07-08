@@ -2540,25 +2540,21 @@ ret:
 
 #ifdef FIM_WINDOWS
 		if(window_)
-	       	{
-		       	Rect nr(0,0,w,h);
-			cc.window_->update(nr);
-		}
+			window_->update(Rect(0,0,w,h));
 #endif
 
 		displaydevice_->init_console();
 
-		// FIXME: this is a hack
-		setVariable("i:" FIM_VID_FRESH,1);//FIXME: bad practice
-		browser_.fcmd_redisplay(args_t());
+		if(current_viewport() && current_viewport()->c_getImage())
+			current_viewport()->getImage()->update_meta(1);
+
+		browser_.redisplay();
 
 		if(getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 		{
-			fim::string msg="resized window to ";
-			msg+=fim::string(w);
-		       	msg+=" x ";
-		       	msg+=fim::string(h);
-			cc.set_status_bar(msg.c_str(),FIM_NULL);
+			std::ostringstream msg;
+			msg << "resized window to " << w << " x " << h;
+			cc.set_status_bar(msg.str().c_str(),FIM_NULL);
 		}
 
 		return FIM_ERR_NO_ERROR;

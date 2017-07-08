@@ -122,7 +122,7 @@ class Image
 	virtual size_t byte_size(void)const;
 
 	bool can_reload(void)const;
-	fim_err_t update(void);
+	fim_err_t update_meta(bool fresh=false);
 
 	fim::string getInfo(void);
 	fim::string getInfoCustom(const fim_char_t * ifsp)const;

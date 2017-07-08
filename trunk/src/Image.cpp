@@ -1183,10 +1183,13 @@ labeldone:
 	return fim::string(linebuffer);
 }
 
-	fim_err_t Image::update(void)
+	fim_err_t Image::update_meta(bool fresh)
 	{
 		fim_err_t errval = FIM_ERR_NO_ERROR;
-		setVariable(FIM_VID_FRESH,0);
+
+		if(fresh)
+			should_redraw(FIM_REDRAW_NECESSARY); // FIXME: this is duplication
+		setVariable(FIM_VID_FRESH,fresh ? 1 : 0);
 		if(fimg_)
 			setVariable(FIM_VID_PAGES,fimg_->i.npages);
 
