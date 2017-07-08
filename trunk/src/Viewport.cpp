@@ -89,7 +89,7 @@ namespace fim
 			{
 				ViewportState viewportState;
 				setImage( commandConsole.browser_.cache_.useCachedImage(rhs.image_->getKey(),&viewportState) );
-				restore(viewportState);
+				this->ViewportState::operator=(viewportState);
 			}
 		}
 		catch(FimException e)
