@@ -521,7 +521,7 @@ err:
 		       	*srp = true;
 		if(!c)
 			return 0;
-		*c = FIM_CNS_KEY_NULL;
+		*c = FIM_SYM_NULL_KEY;
 		*c = aa_getevent(fim_aa_ascii_context,0);/* 1 if want to receive AA_RELEASE events, too */
 		if(*c==AA_UNKNOWN)
 			*c=0;

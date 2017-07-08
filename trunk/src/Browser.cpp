@@ -903,6 +903,7 @@ nop:
 	}
 
 #if FIM_WANT_FAT_BROWSER
+#if 0
 	fim_cxr Browser::fcmd_no_image(const args_t& args)
 	{
 		/* sets no image as the current one */
@@ -911,6 +912,7 @@ nop:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
+#endif
 #endif /* FIM_WANT_FAT_BROWSER */
 
 	int Browser::load_error_handle(fim::string c)
