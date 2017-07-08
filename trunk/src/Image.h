@@ -171,7 +171,7 @@ class Image
 	bool has_mm(void)const;
 #endif /* FIM_WANT_MIPMAPS */
 	bool cacheable(void)const;
-	void desc_update();
+	void desc_update(void);
 	fim_bool_t need_redraw(void)const{ return (redraw_ != FIM_REDRAW_UNNECESSARY); }
 	bool fetchExifToolInfo(const fim_char_t *fname);
 	fim_int shall_mirror(void)const;
