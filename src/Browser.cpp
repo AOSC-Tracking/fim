@@ -1000,7 +1000,7 @@ ret:
 					 cache_.
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 					useCachedImage(cache_key_t(current(),(current()==FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),&viewportState,getGlobalIntVariable(FIM_VID_PAGE)) );// FIXME
-			viewport()->restore(viewportState);
+				viewport()->ViewportState::operator=(viewportState);
 		}
 		}
 		catch(FimException e)
