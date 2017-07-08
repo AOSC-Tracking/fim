@@ -82,7 +82,7 @@ class DisplayDevice
 	virtual fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color)=0;
 	virtual fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
-	virtual fim_err_t init_console(void);
+	virtual fim_err_t format_console(void);
 	virtual void switch_if_needed(void){}// really, only for making happy fbdev
 	virtual void cleanup(void){}// really, only for making happy fbdev
 	protected:

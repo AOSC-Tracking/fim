@@ -276,7 +276,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		xres=displaydevice_->width(),yres=displaydevice_->height();
 
 		// textual console reformatting (should go to displaydevice some day)
-		displaydevice_->init_console();
+		displaydevice_->format_console();
 		// FIXME: shall check the error result
 
 #ifdef FIM_WINDOWS
