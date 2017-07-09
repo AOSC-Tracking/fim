@@ -1844,12 +1844,14 @@ with_offset:
 	*/
    	if(sm!=FIM_CNS_EMPTY_STRING)
 	{
-		read_offset = find_regexp_offset(fp, sm.c_str() , read_offset);
-		if(read_offset>0)
+		long regexp_offset = find_regexp_offset(fp, sm.c_str(), read_offset);
+		if(regexp_offset>0)
 		{
+			read_offset=regexp_offset;
+			read_offset_u=read_offset+(strlen(sm.c_str()));
 			fim_fseek(fp,read_offset,SEEK_SET);
+			cc.setVariable(FIM_VID_SEEK_MAGIC,"");
 		}
-		cc.setVariable(FIM_VID_OPEN_OFFSET ,(fim_int)read_offset);
 	}
 #endif /* FIM_WANT_SEEK_MAGIC */
     fim_bzero(blk,sizeof(blk));

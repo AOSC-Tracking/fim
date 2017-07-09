@@ -507,7 +507,7 @@ unbind {keysym} : unbind the action associated to a specified {keysym}; if {keys
 .B
 while
 .fi
-while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key
+while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key.
 .fi
 
 .na
@@ -993,7 +993,7 @@ _scroll_skip_page_fraction
 .na
 .B
 _seek_magic
-[optional,g:] will seek for a magic signature before opening a file (for now, use like this: fim \-c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
+[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it within the range of that signature (use like this: fim \-C '_seek_magic=MAGIC_STRING;push filename' ) 
 .fi
 .na
 .B
