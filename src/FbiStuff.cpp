@@ -1473,7 +1473,6 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
    	if(sm!=FIM_CNS_EMPTY_STRING)
 	{
 		int sl = strlen(sm.c_str());
-        	if(vl>0)FIM_VERB_PRINTF("probing file signature (long %d) \"%s\"..\n",sl,sm.c_str());
 		read_offset = find_byte_stream(fp, sm.c_str(), read_offset);
 		if(read_offset>0)
 		{
@@ -1540,7 +1539,11 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	    break;
 	loader = NULL;
     }
-     
+    if( (loader==NULL) && read_offset > 0 )
+    {
+		goto head_not_found;
+    }
+   
 #ifdef FIM_WITH_LIBPNG 
 #ifdef FIM_TRY_DIA
     if (NULL == loader && (*blk==0x1f) && (*(unsigned char*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
@@ -1657,6 +1660,7 @@ struct ida_image* FbiStuff::read_image(char *filename, FILE* fd, int page)
 	loader = &ppm_loader;
     }
 #endif
+head_not_found:
     /*
      * no appropriate loader found for this image
      * */
