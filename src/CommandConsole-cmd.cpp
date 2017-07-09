@@ -508,7 +508,7 @@ err:
 			if( chdir(dir.c_str()) )
 			       	return (fim::string("cd error : ")+fim::string(strerror(errno)));
 		}
-		setVariable(FIM_VID_PWD,fcmd_pwd(args_t()).c_str());
+		setVariable(FIM_VID_PWD,fcmd_pwd(args_t()));
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -522,7 +522,7 @@ err:
 			fim::string arg=args[i];
 			res+=basename((fim_char_t*)arg.c_str());//FIXME
 		}
-		setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,res.c_str());
+		setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,res);
 		return res;
 	}
 
@@ -587,7 +587,7 @@ err:
 		{
 			FILE* fd=popen(cc.c_str(),"r");
 		//	cout << readStdFileDescriptor(fd);
-			setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,readStdFileDescriptor(fd).c_str());
+			setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,readStdFileDescriptor(fd));
 			cout << getStringVariable(FIM_VID_LAST_SYSTEM_OUTPUT);
 		       	pclose(fd);
 		}
@@ -601,7 +601,7 @@ err:
 			 * int fd=(int)popen("/bin/echo quit","r");
 			 */
 			//cout << readStdFileDescriptor(fd);
-			setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,readStdFileDescriptor(fd).c_str());
+			setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,readStdFileDescriptor(fd));
 			pclose(fd);
 		}
 #endif /* FIM_WANT_SINGLE_SYSTEM_INVOCATION */
@@ -827,7 +827,7 @@ nop:
 		 * warning!
 		 * */
 		if(2==args.size())
-			return setVariable(args[0],args [1].c_str());
+			return setVariable(args[0],args [1]);
 		else
 			return FIM_CMD_HELP_SET;
 	}

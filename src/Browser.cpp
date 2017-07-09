@@ -1026,7 +1026,7 @@ ret:
 		FIM_PR('*');
 		if( viewport() )
 			viewport()->free_image();
-		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport().c_str());
+		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport());
 		FIM_PR('.');
 	}
 
@@ -1611,7 +1611,7 @@ nop:
 		setGlobalVariable(FIM_VID_PAGE,0);
 		setGlobalVariable(FIM_VID_FILEINDEX,current_image());
 		//setGlobalVariable(FIM_VID_FILEINDEX,cf_);
-		setGlobalVariable(FIM_VID_FILENAME, current().c_str());
+		setGlobalVariable(FIM_VID_FILENAME, current());
 		FIM_PR(' ');
 		//loadCurrentImage();
 		result = n_files()?(flist_[current_n()]):nofile_;

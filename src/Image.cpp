@@ -190,13 +190,13 @@ namespace fim
 		fim_fn_t key(fname_.c_str());
 		if(cc.id_.find(key) != cc.id_.end() )
 		{
-			setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
+			setVariable(FIM_VID_COMMENT,(cc.id_[key]));
 		}
 		else
 		{
 			key = fim_fn_t (fim_basename_of(fname_.c_str()));
 			if(cc.id_.find(key) != cc.id_.end() )
-				setVariable(FIM_VID_COMMENT,(cc.id_[key]).c_str());
+				setVariable(FIM_VID_COMMENT,(cc.id_[key]));
 		}
 #if FIM_WANT_PIC_LVDN
 		assign_ns(cc.id_.vd_[key]);
@@ -239,7 +239,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		if(ue == 1)
 		setVariable(FIM_VID_COMMENT,getVariable(FIM_VID_COMMENT)+etc);
 		if(ue == 2)
-			setVariable(FIM_VID_EXIFTOOL_COMMENT,etc.c_str());
+			setVariable(FIM_VID_EXIFTOOL_COMMENT,etc);
 		return true;
 	}
 #endif /* FIM_WANT_EXIFTOOL */
@@ -533,7 +533,7 @@ uhmpf:
 		setVariable(FIM_VID_ANGLE , angle_);
 		setVariable(FIM_VID_NEGATED , 0);
 		setVariable(FIM_VID_DESATURATED, 0);
-		setVariable(FIM_VID_FILENAME,fname_.c_str());
+		setVariable(FIM_VID_FILENAME,fname_);
 #endif /* FIM_NAMESPACES */
 
 		setGlobalVariable(FIM_VID_HEIGHT ,fimg_->i.height);

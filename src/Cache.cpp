@@ -236,7 +236,7 @@ rt:
 			FIM_PR('l');
 		}
 		setGlobalVariable(FIM_VID_CACHED_IMAGES,cached_elements());
-		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
+		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport());
 ret:
 		FIM_PR('.');
 		return retval;
@@ -389,7 +389,7 @@ ret:
 			usageCounter_[image->getKey()]--;
 			FIM_PR('c');
 			erase_clone(image);	// we _always_ immediately delete clones
-			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
+			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport());
 			goto ret;
 		}
 		else
@@ -438,7 +438,7 @@ ret:
 				}
 #endif
 			}
-			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
+			setGlobalVariable(FIM_VID_CACHE_STATUS,getReport());
 			goto ret;
 		}
 err:
@@ -530,7 +530,7 @@ ret:
 			usageCounter_[key]++;
 		}
 done:
-		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
+		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport());
 ret:
 		if(vsp && image)
 		{
@@ -572,7 +572,7 @@ ret:
 		}
 		if(!image)
 			goto ret; //means that cloning failed.
-		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport().c_str());
+		setGlobalVariable(FIM_VID_CACHE_STATUS,getReport());
 ret:
 		return image;	//so, it could be a clone..
 	}
