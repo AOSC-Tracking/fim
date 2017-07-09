@@ -1225,7 +1225,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 				if(strchr(optarg,'+'))
 					ro=(size_t)atoi(strchr(optarg,'+')+1);
 				tmp=FIM_VID_OPEN_OFFSET;       tmp+="="; tmp+=string((fim_int)peppe_offset);/* FIXME */ tmp+=";";
-				tmp=FIM_VID_OPEN_OFFSET_RETRY; tmp+="="; tmp+=string((fim_int)ro);/* FIXME */ tmp+=";";
+				tmp+=FIM_VID_OPEN_OFFSET_RETRY; tmp+="="; tmp+=string((fim_int)ro);/* FIXME */ tmp+=";";
 				cc.pre_autocmd_add(tmp);
 				//std::cout << "adding autocmd " << tmp<< "\n";
 				//std::cout << "peppe_offset" << peppe_offset<< "\n";

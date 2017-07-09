@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1314)
+ * bugfix: --offset option was ignoring lower bytes-offset.
 # (r1312)
  * fix: a check was missing in the PS decoder when reading from stdin.
 # (r1253)
