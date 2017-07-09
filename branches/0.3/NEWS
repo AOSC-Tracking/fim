@@ -9,6 +9,7 @@
  * fix: avoiding broken build with versions of libpng newer than 10209.
  * fix: update configure.ac for new autoconf-2.69.
  * fix: gif decoder will build with e.g.: giflib-4.1.6, giflib-4.2.3, giflib-5.0.0, giflib-5.1.
+ * fix: a check was missing in the PS decoder when reading from stdin.
 
         	Version 0.3
 
