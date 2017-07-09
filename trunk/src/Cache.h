@@ -40,7 +40,7 @@ typedef time_t fim_time_t;
 namespace fim
 {
 #ifdef FIM_NAMESPACES
-class Cache:public Namespace
+class Cache:private Namespace
 #else
 class Cache
 #endif /* FIM_NAMESPACES */
