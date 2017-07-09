@@ -28,6 +28,7 @@
  * fix: configure will try to detect curses/ncurses.
  * fix: configure will use `sdl-config --static-lib`'.
  * fix: a check was missing in the PS decoder when reading from stdin.
+ * bugfix: --offset option was ignoring lower bytes-offset.
 
                 Version 0.5-rc2
 
