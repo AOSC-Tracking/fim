@@ -185,7 +185,7 @@ class flist_t : public std::vector<fim::fle_t>
  */
 class Browser
 #ifdef FIM_NAMESPACES
-:protected Namespace
+:public Namespace
 #if FIM_WANT_BENCHMARKS
 ,public Benchmarkable
 #endif /* FIM_WANT_BENCHMARKS */

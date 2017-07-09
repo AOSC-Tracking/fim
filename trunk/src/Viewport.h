@@ -34,7 +34,7 @@ namespace fim
 	 * relative to the way it is displayed.
 	 * */
 #ifdef FIM_NAMESPACES
-class Viewport:protected Namespace,public ViewportState
+class Viewport:public Namespace,public ViewportState
 #else /* FIM_NAMESPACES */
 class Viewport:public ViewportState
 #endif /* FIM_NAMESPACES */
