@@ -2049,7 +2049,11 @@ probe_loader:
 
     if((loader==FIM_NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
 		goto head_not_found;
-
+    if( (loader==FIM_NULL) && read_offset > 0 )
+    {
+    		if(vl>1)FIM_VERB_PRINTF("skipping external loading programs ..\n");
+		goto head_not_found;
+    }
 #ifdef FIM_WITH_LIBPNG 
 #ifdef FIM_TRY_DIA
     if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_DIA " ..\n");
