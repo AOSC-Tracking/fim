@@ -2545,7 +2545,7 @@ lofo:
 			if(fr.second)
 			{
 				rs << fr.first.c_str() << "\n";
-				setVariable(FIM_VID_FBFONT,fr.first.c_str());
+				setVariable(FIM_VID_FBFONT,fr.first);
 				displaydevice_->f_ = fr.second;
 				update_font_size();
 			}
