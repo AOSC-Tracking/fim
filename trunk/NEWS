@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1319)
+ * --verbose-load option for verbose file loading.
 # (r1317)
  * -C '_seek_magic=..' will now probe whole range of specified signature.
 # (r1316)
