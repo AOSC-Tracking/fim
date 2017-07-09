@@ -2229,7 +2229,7 @@ ok:
 
 			if( fim_fmf__ < FIM_FONT_MAGNIFY_FACTOR_MIN )
 				fim_fmf__ = FIM_FONT_MAGNIFY_FACTOR_DEFAULT;
-				setVariable(FIM_VID_FBFMF,fim_fmf__);
+			setVariable(FIM_VID_FBFMF,fim_fmf__);
 			fim_fmf_ = FIM_MIN(fim_fmf__, FIM_FONT_MAGNIFY_FACTOR_MAX);
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 			/* FIXME: instead, call something like SDLDevice::post_wmresize(void) */

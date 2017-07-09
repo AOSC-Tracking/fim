@@ -1,8 +1,8 @@
 /* $LastChangedDate$ */
 /*
- FbiStuffBit1.cpp : fbi functions for reading ELF files as they were raw 1 bit per pixel pixelmaps
+ FbiStuffBit1.cpp : reading any file as a raw 1 bit per pixel pixelmap
 
- (c) 2007-2015 Michele Martone
+ (c) 2007-2017 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -19,10 +19,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * this is basically toy code, so enjoy!
- * */
-
 
 #include "fim.h"
 
@@ -65,17 +61,25 @@ bit1_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
 
     h = (struct bit1_state *)fim_calloc(1,sizeof(*h));
-    if(!h)goto oops;
+    if(!h)
+	    goto oops;
     h->fp = fp;
-    if(fseek(fp,0,SEEK_END)!=0) goto oops;
-    if((h->flen=ftell(fp))==-1)goto oops;
-    i->width  = h->w = prw;	// must be congruent to 8
-    i->height = h->h = FIM_INT_FRAC(8*h->flen,h->w); // should pad
-    if(8*h->flen < h->w)
+    if(fseek(fp,0,SEEK_END)!=0)
+	    goto oops;
+    if((h->flen=ftell(fp))==-1)
+	    goto oops;
+
+    if(8*h->flen < static_cast<long>(prw))
     {
-    	i->width  = h->w = h->flen*8;
-    	i->height = h->h = 1;
+	i->width  = h->w = h->flen*8;
+	i->height = h->h = 1;
     }
+    else
+    {
+	i->width  = h->w = prw;	// must be congruent to 8
+	i->height = h->h = FIM_INT_FRAC(8*h->flen,h->w); // should pad
+    }
+
     i->npages = 1;
     return h;
  oops:
