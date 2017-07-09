@@ -2,7 +2,7 @@
 /*
  FbiStuffPs.cpp : fim functions for decoding PS files
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2017 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -71,7 +71,7 @@ ps_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	double rcscale = scale;
 	struct ps_state_t * ds=FIM_NULL;
 
-	if(filename==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return FIM_NULL;}	/* a drivers's problem */ 
+	if(std::string(filename)==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return FIM_NULL;}	/* a drivers's problem */ 
 	if(fp) fclose(fp);
 
 	ds = (struct ps_state_t*)fim_calloc(1,sizeof(struct ps_state_t));
