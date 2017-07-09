@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1316)
+ * fix in _seek_magic documentation.
 # (r1314)
  * bugfix: --offset option was ignoring lower bytes-offset.
 # (r1312)
