@@ -201,8 +201,8 @@ FIM_NULL
 /* FIXME: shall document this */
 #endif /* FIM_WITH_LIBIMLIB2 */
     },
-    {"offset",      required_argument,       FIM_NULL,  0x6f66660a, "will open the first image file at the specified offset.","{bytes-offset[[:upper-offset]|+offset-range]}",
-"Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fBupper-offset\\fP is specified, further bytes will be probed, until \\fBupper-offset\\fP. If \\fB+offset-range\\fP is specified, so many further bytes will be probed. This is useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range."
+    {"offset",      required_argument,       FIM_NULL,  0x6f66660a, "will open the first image file at the specified offset.","{bytes-offset[{:upper-offset}|{+offset-range}]}",
+"Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fB:upper-offset\\fP is specified, further bytes until \\fBupper-offset\\fP will be probed. If \\fB+offset-range\\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files."
     },
     {"text-reading",      no_argument,       FIM_NULL, 'P',"proceed scrolling as reading through a text document.",FIM_NULL,
 "Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  If the images you are watching are text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course)."
