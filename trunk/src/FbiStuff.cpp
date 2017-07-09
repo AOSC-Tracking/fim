@@ -1645,9 +1645,9 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     bool rozlsl=false;/* retry on zero length signature loader */
 #endif /* FIM_HAVE_FULL_PROBING_LOADER */
 #if FIM_ALLOW_LOADER_VERBOSITY
-    /*const*/ fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY)&FIM_CNS_VERBOSITY_LOADER);
+    /*const*/ const fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY));
 #else /* FIM_ALLOW_LOADER_VERBOSITY */
-    /*const*/ fim_int vl=0;
+    /*const*/ const fim_int vl=0;
 #endif /* FIM_ALLOW_LOADER_VERBOSITY */
 #if FIM_SHALL_BUFFER_STDIN
     fim_byte_t * sbuf=FIM_NULL;
@@ -1668,7 +1668,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     
     //if(vl)FIM_VERB_PRINTF("approaching loading \"%s\", FILE*:%p\n",filename,fd);
     if(vl)
-	    FIM_VERB_PRINTF("approaching loading page %d of \"%s\"\n",(int)page,filename);
+	    FIM_VERB_PRINTF("verbosely (level %d) loading page %d of \"%s\"\n",(int)vl,(int)page,filename);
     //WARNING
     //new_image = 1;
 
@@ -1713,10 +1713,14 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 	struct archive_entry *entry = FIM_NULL;
 	int r,pi;
 	size_t bs = 10240;
+
+    	if(vl) FIM_VERB_PRINTF("filename matches archives regexp: \"%s\"\n",re);
+
 	re = cc.getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
 
 	if( re == FIM_CNS_EMPTY_STRING )
 		re = FIM_CNS_PUSHDIR_RE;
+    	if(vl) FIM_VERB_PRINTF("will scan archive for files matching regexp: \"%s\"\n",re);
 
 	if( fim_getenv("PAGE") )
 		page = fim_atoi( fim_getenv("PAGE") );
@@ -1831,6 +1835,13 @@ noa:	1;
     read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
     read_offset_u = read_offset + cc.getIntVariable(FIM_VID_OPEN_OFFSET_RETRY);/* warning : this can lead to negative values */
     read_offset_u = FIM_MAX(read_offset,read_offset_u);
+    if(vl)
+    {
+	    if(read_offset||read_offset_u)
+		    FIM_VERB_PRINTF("file seek range specified: %lld:%lld\n",(long long int)read_offset,(long long int)read_offset_u);
+	    else
+		    FIM_VERB_PRINTF("no file seek range specified\n");
+    }
 with_offset:
     if(read_offset>0)
 	    fim_fseek(fp,read_offset,SEEK_SET);
@@ -1844,14 +1855,18 @@ with_offset:
 	*/
    	if(sm!=FIM_CNS_EMPTY_STRING)
 	{
+        	if(vl>0)FIM_VERB_PRINTF("Looking for file signature \"%s\" (long %lld)..\n",sm.c_str(),(long long int)strlen(sm.c_str()));
 		long regexp_offset = find_regexp_offset(fp, sm.c_str(), read_offset);
 		if(regexp_offset>0)
 		{
+        		if(vl>0)FIM_VERB_PRINTF("..found at%lld\n",(long long int)regexp_offset);
 			read_offset=regexp_offset;
 			read_offset_u=read_offset+(strlen(sm.c_str()));
 			fim_fseek(fp,read_offset,SEEK_SET);
 			cc.setVariable(FIM_VID_SEEK_MAGIC,"");
 		}
+		else
+        		if(vl>0)FIM_VERB_PRINTF("signature not found.\n");
 	}
 #endif /* FIM_WANT_SEEK_MAGIC */
     fim_bzero(blk,sizeof(blk));
@@ -1883,6 +1898,7 @@ with_offset:
     if (FIM_NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
     if(regexp_match(filename,".*NEF$") || regexp_match(filename,".*nef$"))
     {
+        if(vl>0)FIM_VERB_PRINTF("NEF name hook.\n");
 	loader = &nef_loader;
         goto found_a_loader;
     }
@@ -1961,6 +1977,7 @@ probe_loader:
 		    && (*(fim_byte_t*)(blk+9)=='c') 
 	)
     {
+        if(vl>0)FIM_VERB_PRINTF("Seems like a FIM file list ..\n");
 	cc.set_status_bar("ok, a file list...", "*");
 	cc.id_.fetch(filename ,'\t');
 	cc.push_from_id();
@@ -1971,6 +1988,7 @@ probe_loader:
 #ifdef FIM_SKIP_KNOWN_FILETYPES
     if (FIM_NULL == loader && (*blk==0x42) && (*(fim_byte_t*)(blk+1)==0x5a))
     {
+        if(vl>1)FIM_VERB_PRINTF("skipping BZ2 ..\n");
 	cc.set_status_bar("skipping 'bz2'...", "*");
 	goto shall_skip_header;
     }
@@ -1985,6 +2003,7 @@ probe_loader:
      && FIM_NULL == loader && (*(fim_byte_t*)(blk+2)==0x44) && (*(fim_byte_t*)(blk+3)==0x46))
     {
 	cc.set_status_bar("skipping 'pdf' (use fimgs for this)...", "*");
+        if(vl>1)FIM_VERB_PRINTF("skipping PDF ..\n");
 	goto shall_skip_header;
     }
 #endif /* HAVE_LIBPOPPLER */
@@ -1992,6 +2011,7 @@ probe_loader:
     if (FIM_NULL == loader && (*blk==0x25) && (*(fim_byte_t*)(blk+1)==0x21 )
      && FIM_NULL == loader && (*(fim_byte_t*)(blk+2)==0x50) && (*(fim_byte_t*)(blk+3)==0x53))
     {
+        if(vl>1)FIM_VERB_PRINTF("skipping PostScript ..\n");
 	cc.set_status_bar("skipping 'ps' (use fimgs for this)...", "*");
 	goto shall_skip_header;
     }
@@ -2006,6 +2026,7 @@ probe_loader:
 	    continue;
 	if (FIM_NULL == loader->magic)
 	    break;
+        if(vl>1)FIM_VERB_PRINTF("probing %s ..\n",loader->name);
 	if (0 == memcmp(blk+loader->moff,loader->magic,loader->mlen))
 	    break;
 	loader = FIM_NULL;
@@ -2049,6 +2070,7 @@ probe_loader:
 
 #ifdef FIM_WITH_LIBPNG 
 #ifdef FIM_TRY_DIA
+    if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_DIA " ..\n");
     if (FIM_NULL == loader && (*blk==0x1f) && (*(fim_byte_t*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_DIA "'...", "*");
@@ -2073,6 +2095,7 @@ probe_loader:
 #endif /* FIM_TRY_DIA */
 #endif /* FIM_WITH_LIBPNG  */
 #ifdef FIM_TRY_XFIG
+    if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_FIG2DEV " ..\n");
     if (FIM_NULL == loader && (0 == memcmp(blk,"#FIG",4)))
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_FIG2DEV "'...", "*");
@@ -2086,6 +2109,7 @@ probe_loader:
     }
 #endif /* FIM_TRY_XFIG */
 #ifdef FIM_TRY_XCFTOPNM
+    if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_XCFTOPNM " ..\n");
     if (FIM_NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_XCFTOPNM "'...", "*");
@@ -2130,6 +2154,7 @@ probe_loader:
 	}
 #else
 	// The following are the arguments to inkscape in order to convert an SVG into PNG:
+        if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_INKSCAPE " ..\n");
 	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_INKSCAPE,FIM_EPR_INKSCAPE,filename,"--without-gui","--export-png",tpfn.c_str(),FIM_NULL))&&0==fim_fclose(fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(tpfn,"r")))
@@ -2163,6 +2188,7 @@ probe_loader:
 //#endif
 #ifdef FIM_TRY_CONVERT
     if (FIM_NULL == loader) {
+        if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_CONVERT " ..\n");
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING" through '" FIM_EPR_CONVERT "'...", "*");
 	/* no loader found, try to use ImageMagick's convert */
 	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",FIM_NULL)))
@@ -2271,6 +2297,7 @@ found_a_loader:	/* we have a loader */
 			if(simg)
 		       		FbiStuff::free_image(img),
 				img=simg;
+	    		if(vl)FIM_VERB_PRINTF("image huge: scaled it down\n");
 		}
 	}
 #endif /* FIM_WANT_RESIZE_HUGE_AFTER_LOAD */
@@ -2282,7 +2309,7 @@ head_not_found: /* no appropriate loader found for this image */
     if( read_offset_u > read_offset )
     {
 	    read_offset++;
-	    //std::cout << "will retry with offset "<< read_offset  <<" :)\n" ;
+	    if(vl)FIM_VERB_PRINTF("file seek range adjusted to: %lld:%lld\n",(long long int)read_offset,(long long int)read_offset_u);
 	    goto with_offset;
     }
 errl:

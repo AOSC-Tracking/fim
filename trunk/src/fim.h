@@ -472,7 +472,6 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.TIF$|\\.JPEG$|\\.JFIF$|\\.PPM$|\\.PGM$|\\.PBM$|\\.PCX$"
 #endif /* FIM_USE_CXX11 */
 #define FIM_CNS_ARCHIVE_RE	".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* FIXME: there is much more: CAB.. */
-#define FIM_CNS_VERBOSITY_LOADER		1 /* a value for FIM_VID_VERBOSITY */ 
 #define FIM_CNS_BPP_INVALID	0
 #define FIM_CNS_K 1024
 #define FIM_CNS_M (FIM_CNS_K*FIM_CNS_K)
