@@ -1855,7 +1855,7 @@ with_offset:
 	*/
    	if(sm!=FIM_CNS_EMPTY_STRING)
 	{
-        	if(vl>0)FIM_VERB_PRINTF("Looking for file signature \"%s\" (long %lld)..\n",sm.c_str(),(long long int)strlen(sm.c_str()));
+        	if(vl>0)FIM_VERB_PRINTF("probing file signature (long %lld) \"%s\"..\n",(long long int)strlen(sm.c_str()),sm.c_str());
 		long regexp_offset = find_regexp_offset(fp, sm.c_str(), read_offset);
 		if(regexp_offset>0)
 		{
@@ -1865,8 +1865,6 @@ with_offset:
 			fim_fseek(fp,read_offset,SEEK_SET);
 			cc.setVariable(FIM_VID_SEEK_MAGIC,"");
 		}
-		else
-        		if(vl>0)FIM_VERB_PRINTF("signature not found.\n");
 	}
 #endif /* FIM_WANT_SEEK_MAGIC */
     fim_bzero(blk,sizeof(blk));
