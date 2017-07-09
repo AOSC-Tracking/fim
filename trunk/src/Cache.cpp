@@ -580,7 +580,7 @@ ret:
 	fim::string Cache::getReport(int type)const
 	{
 		/* TODO: rename to info(). */
-		fim::string cache_report;
+		std::ostringstream cache_report;
 
 		if(type == FIM_CR_CN || type == FIM_CR_CD)
 		{
@@ -588,73 +588,53 @@ ret:
 			fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
 			fim_int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY);
 			mcm = mcm >= 0 ? mcm*FIM_CNS_CSU:0;
-			cache_report  = " ";
-			cache_report += "count:";
-			cache_report += fim::string(cached_elements());
-			cache_report += "/";
-			cache_report += fim::string(mci);
-			cache_report += " ";
-			cache_report += "occupation:";
-			fim_snprintf_XB(buf, sizeof(buf), img_byte_size());cache_report += buf;
-			cache_report += "/";
-			fim_snprintf_XB(buf, sizeof(buf), mcm);cache_report += buf;
-			cache_report += " ";
+			cache_report << " " << "count:" << cached_elements() << "/" << mci << " occupation:";
+			fim_snprintf_XB(buf, sizeof(buf), img_byte_size());
+			cache_report << buf << "/";
+			fim_snprintf_XB(buf, sizeof(buf), mcm);
+			cache_report << buf << " ";
 			for(ccachels_t::const_iterator ci=usageCounter_.begin();ci!=usageCounter_.end();++ci)
 			if(
 			  ( type == FIM_CR_CD && ( imageCache_.find(ci->first) != imageCache_.end() ) ) ||
 			  ( type == FIM_CR_CN && ( imageCache_.find(ci->first) != imageCache_.end()  && ci->second) )
 			  )
 			{
-				cache_report+= fim_basename_of((*ci).first.first.c_str());
-				cache_report+=":";
-				cache_report+=fim::string((*ci).second);
-				cache_report+=":";
+				cache_report << fim_basename_of((*ci).first.first.c_str()) << ":";
+				cache_report << (*ci).second << ":";
 				fim_snprintf_XB(buf, sizeof(buf), imageCache_.find(ci->first)->second->byte_size());
-				cache_report += buf;
-				cache_report+="@";
-				cache_report+=fim::string((size_t)last_used(ci->first));
-				cache_report+=" ";
+				cache_report << buf << "@" << last_used(ci->first) << " ";
 			}
-			cache_report += "\n";
+			cache_report << "\n";
 			goto ret;
 		}
-		cache_report = "cache contents : \n";
+		cache_report << "cache contents : \n";
 		FIM_LOUD_CACHE_STUFF;
 #if 0
 		cachels_t::const_iterator ci;
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
 		{	
-			cache_report+=((*ci).first);
-			cache_report+=" ";
-			cache_report+=fim::string(usageCounter_[((*ci).first)]);
-			cache_report+="\n";
+			cache_report << ((*ci).first) << " " << fim::string(usageCounter_[((*ci).first)]) << "\n";
 		}
 #else
 		for(ccachels_t::const_iterator ci=usageCounter_.begin();ci!=usageCounter_.end();++ci)
 		{	
-			cache_report+=((*ci).first.first);
-			cache_report+=":";
-			cache_report+=fim::string((*ci).first.second);
-			cache_report+=" ,usage:";
-			cache_report+=fim::string((*ci).second);
-			cache_report+="\n";
+			cache_report<<((*ci).first.first) <<":" <<((*ci).first.second) <<" ,usage:" <<((*ci).second) <<"\n";
 		}
-		cache_report += "clone pool contents : \n";
+		cache_report << "clone pool contents : \n";
 		for(std::set< fim::ImagePtr >::const_iterator  cpi=clone_pool_.begin();cpi!=clone_pool_.end();++cpi)
 		{	
-			cache_report+=fim_basename_of((*cpi)->getName());
-			cache_report+=" " ; 
+			cache_report << fim_basename_of((*cpi)->getName()) <<" " 
 #if FIM_IMG_NAKED_PTRS
-			cache_report+= string((int*)(*cpi));
+				<< string((int*)(*cpi))
 #else /* FIM_IMG_NAKED_PTRS */
-			cache_report+= string((int*)((*cpi).get()));
+				<< ((int*)((*cpi).get()))
 #endif /* FIM_IMG_NAKED_PTRS */
-			cache_report+=",";
+				<<",";
 		}
-		cache_report+="\n";
+		cache_report << "\n";
 #endif
 ret:
-		return cache_report;
+		return cache_report.str();
 	}
 
 	Cache::~Cache(void)
