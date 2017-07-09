@@ -5,7 +5,7 @@
 
 # (r1319)
  * --verbose-load option for verbose file loading.
-# (r1317)
+# (r1317,r1321)
  * -C '_seek_magic=..' will now probe whole range of specified signature.
 # (r1316)
  * fix in _seek_magic documentation.

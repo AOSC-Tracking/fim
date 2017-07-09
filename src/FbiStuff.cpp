@@ -1521,59 +1521,45 @@ err:
 }
 
 #ifdef FIM_WANT_SEEK_MAGIC
-static long find_regexp_offset(FILE *fp, const fim_char_t *byte_stream, size_t base_offset)
+static long find_byte_stream(FILE *fp, const fim_char_t *byte_stream, size_t base_offset)
 {
-	/*
-		FIXME : EXPERIMENTAL, UNFINISHED
-		should merge this code with read_fd_chunk_something..
-		note  : won't find zeros..
-	*/
-	/*size_t*/
-	/*l ong*/
-	int  rb,sl,off,goff=0;
-	fim_char_t buf[FIM_FILE_BUF_SIZE];
+	size_t rb,sl,goff=0,boff=0;
+	const size_t bl = FIM_FILE_BUF_SIZE;
+	fim_char_t buf[bl];
 
 	if(!byte_stream)
-		goto err;/* bad argument */
+		goto err;
 
 	sl=strlen(byte_stream);
 
-	if(sl>FIM_FILE_BUF_SIZE-1)
-		goto err;/* FIXME : a limitation */
+	if(sl==0)
+	{
+		goto err;
+	}
+
+	if(sl>bl)
+	{
+		goto err;
+	}
 
 	if(base_offset)
 	{
-		//printf("%x%x\n",byte_stream[0],byte_stream[1]);
-    		if(fim_fseek(fp,base_offset,SEEK_SET)!=0);// NEW
-		{
-    			// fim_fseek(fp,0,SEEK_SET);
-			// should handle in some better way..
+    		if(fim_fseek(fp,base_offset,SEEK_SET)!=0)
 			goto err;
-		}
 		goff=base_offset;
 	}
 	else
 		goff+=ftell(fp);
 
-	/* we read in a good chunk of the file */
-	while((rb=fim_fread(buf,1,FIM_FILE_BUF_SIZE,fp))>0)
+	while((rb=fim_fread(buf+boff,1,bl-boff,fp))>0)
 	{
-		fim_bzero(buf+rb,(FIM_FILE_BUF_SIZE-rb));/* sanitization */
-		off=rb-sl;
-		while( off > 0 )
-		{
-
-			if( 0==bcmp( buf+off, byte_stream, sl ) )
-			{
-				/* hit */
-				std::cout << "hit!" << off << "\n";
-				return goff+off;
-//				return ftell(fp);
-			}
-			--off;
-		}
-		goff+=off;
-		goff+=rb;
+		if(memmem(buf,rb+boff,byte_stream,sl))
+			return goff+(((fim_char_t*)memmem(buf,rb+boff,byte_stream,sl))-buf);
+		if(rb+boff<bl)
+			goto err;
+		boff=sl-1;
+		memmove(buf,buf+bl-boff,boff);
+		goff+=bl-boff;
 	}
 err:
 	return 0;
@@ -1714,13 +1700,13 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 	int r,pi;
 	size_t bs = 10240;
 
-    	if(vl) FIM_VERB_PRINTF("filename matches archives regexp: \"%s\"\n",re);
+    	if(vl) FIM_VERB_PRINTF("filename matches archives regexp: \"%s\"\n",re.c_str());
 
 	re = cc.getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
 
 	if( re == FIM_CNS_EMPTY_STRING )
 		re = FIM_CNS_PUSHDIR_RE;
-    	if(vl) FIM_VERB_PRINTF("will scan archive for files matching regexp: \"%s\"\n",re);
+    	if(vl) FIM_VERB_PRINTF("will scan archive for files matching regexp: \"%s\"\n",re.c_str());
 
 	if( fim_getenv("PAGE") )
 		page = fim_atoi( fim_getenv("PAGE") );
@@ -1846,22 +1832,20 @@ with_offset:
     if(read_offset>0)
 	    fim_fseek(fp,read_offset,SEEK_SET);
 #ifdef FIM_WANT_SEEK_MAGIC
-	/* FIXME : EXPERIMENTAL */
-	string sm;
-   	sm = cc.getStringVariable(FIM_VID_SEEK_MAGIC);
+	std::string sm = cc.getStringVariable(FIM_VID_SEEK_MAGIC);
+	if( int sl = sm.length() )
+	{
 	/*
 		the user should be able to specify a magic string like:
 		sm="\xFF\xD8\xFF\xE0";
 	*/
-   	if(sm!=FIM_CNS_EMPTY_STRING)
-	{
-        	if(vl>0)FIM_VERB_PRINTF("probing file signature (long %lld) \"%s\"..\n",(long long int)strlen(sm.c_str()),sm.c_str());
-		long regexp_offset = find_regexp_offset(fp, sm.c_str(), read_offset);
+        	if(vl>0)FIM_VERB_PRINTF("probing file signature (long %d) \"%s\"..\n",sl,sm.c_str());
+		long regexp_offset = find_byte_stream(fp, sm.c_str(), read_offset);
 		if(regexp_offset>0)
 		{
-        		if(vl>0)FIM_VERB_PRINTF("..found at%lld\n",(long long int)regexp_offset);
 			read_offset=regexp_offset;
-			read_offset_u=read_offset+(strlen(sm.c_str()));
+			read_offset_u=read_offset+sl;
+        		if(vl>0)FIM_VERB_PRINTF("..found at %lld:%lld\n",(long long int)read_offset,(long long int)read_offset_u);
 			fim_fseek(fp,read_offset,SEEK_SET);
 			cc.setVariable(FIM_VID_SEEK_MAGIC,"");
 		}
