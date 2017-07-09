@@ -11,6 +11,7 @@
  * fix: configure will try to detect curses/ncurses.
  * fix: configure will use `sdl-config --static-lib`'.
  * fix: avoiding broken build on gcc due to narrowing conversion.
+ * fix: a check was missing in the PS decoder when reading from stdin.
 
                 Version 0.4
 
