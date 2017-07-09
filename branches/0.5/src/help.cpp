@@ -105,7 +105,7 @@ fim_var_help_db[FIM_VID_DBG_AUTOCMD_TRACE_STACK]= "[in,g:] dump to stdout autoco
 fim_var_help_db[FIM_VID_DBG_COMMANDS]= "[in,g:] print out each command before its execution (for debugging purposes)" ;
 fim_var_help_db[FIM_VID_OPEN_OFFSET]= "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " ;
 fim_var_help_db[FIM_VID_OPEN_OFFSET_RETRY]= "[in,optional,g:] number of adjacent bytes to probe in opening the file " ;
-fim_var_help_db[FIM_VID_SEEK_MAGIC]= "[optional,g:] will seek for a magic signature before opening a file (for now, use like this: fim -c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) " ;
+fim_var_help_db[FIM_VID_SEEK_MAGIC]= "[optional,g:] will seek for a magic signature before opening a file (for now, use like this: fim -C '_seek_magic=MAGIC_STRING;push filename' ) " ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_WIDTH]= "[in,optional,g:] if >0, bit based rendering will use this value for a default document width (instead of a default value) " ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_DPI]= "[in,optional,g:] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) " ;
 fim_var_help_db[FIM_VID_PRELOAD_CHECKS]= "[in,experimental,g:] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use --no-stat-push if you wish to set this to 0 at command line files specification " ;

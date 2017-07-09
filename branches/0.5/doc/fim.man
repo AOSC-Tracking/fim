@@ -181,8 +181,8 @@ The \fBaa\fP option may be specified as  \fBaa={['w']}\fP ; the \fB'w'\fP charac
 The \fBsdl\fP option may be specified as  \fBsdl={['w']['m']['r']['W']['M']['R']width:height}\fP , where \fBwidth\fP is and \fBheight\fP are integer numbers specifying the desired resolution; the \fB'w'\fP character requests windowed mode; the \fB'm'\fP character requests mouse pointer display; the \fB'r'\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.
 
 .TP
-.B  \-\-offset {bytes\-offset[[:upper\-offset]|+offset\-range]}
-Will use the specified \fBoffset\fP (in bytes) for opening the specified files. If \fBupper\-offset\fP is specified, further bytes will be probed, until \fBupper\-offset\fP. If \fB+offset\-range\fP is specified, so many further bytes will be probed. This is useful for viewing images on damaged file systems; however, since the internal variables representation is sizeof(int) bytes based, you have a limited offset range.
+.B  \-\-offset {bytes\-offset[{:upper\-offset}|{+offset\-range}]}
+Will use the specified \fBoffset\fP (in bytes) for opening the specified files. If \fB:upper\-offset\fP is specified, further bytes until \fBupper\-offset\fP will be probed. If \fB+offset\-range\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files.
 .TP
 .B \-P, \-\-text\-reading
 Enable textreading mode.  This has the effect that fim will display images scaled to the width of the screen, and aligned to the top.  Useful if the images you are watching text pages, all you have to do to get the next piece of text is to press space (in the default key configuration, of course).
@@ -352,7 +352,7 @@ FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode onl
 FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
 If unset, fim will probe for /dev/fb0.
 TERM		(only in fim) will influence the output device selection algorithm, especially if $TERM=="screen".
-DISPLAY	If this variable is set, then the sdl driver will be probed by default.
+DISPLAY	If this variable is set, then the imlib2 driver will be probed by default.
 .SH COMMON PROBLEMS
 .B fim
 needs read\-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
@@ -461,7 +461,6 @@ scanimage ... | tee scan.ppm | fim \-i
 .SH NOTES
 This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.
 The filename "<STDIN>" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.
-The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.
 .SH BUGS
 .B fim
 has bugs. Please read the 

@@ -924,7 +924,7 @@ _screen_width
 .na
 .B
 _seek_magic
-[optional,g:] will seek for a magic signature before opening a file (for now, use like this: fim \-c '_seek_magic=MAGIC_STRING;push file_to_seek_in.ext' ) 
+[optional,g:] will seek for a magic signature before opening a file (for now, use like this: fim \-C '_seek_magic=MAGIC_STRING;push filename' ) 
 .fi
 .na
 .B

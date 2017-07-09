@@ -131,7 +131,7 @@ The default configuration (the one hardcoded in the fim executable) is dumped on
 The \fBscriptfile\fP will be executed right after the default initialization file is executed.
 .TP
 .B \-f {fimrc}, \-\-etc\-fimrc {fimrc}
-Specify an alternative system wide initialization file (default: /etc/fimrc), which will be executed prior to any other configuration file.
+Specify an alternative system wide initialization file (default: /usr/local/etc/fimrc), which will be executed prior to any other configuration file.
 
 .TP
 .B \-F {commands}, \-\-final\-commands {commands}
@@ -152,7 +152,7 @@ Name of the video mode to use video mode (must be listed in /etc/fb.modes).  Def
 No personal initialization file will be read (default is ~/.fimrc) at startup.
 .TP
 .B 	 \-\-no\-etc\-rc\-file
-No system wide initialization file will be read (default is /etc/fimrc) at startup.
+No system wide initialization file will be read (default is /usr/local/etc/fimrc) at startup.
 .TP
 .B 	 \-\-no\-internal\-config
 No internal default configuration at startup (uses internal variable _no_default_configuration). Will only provide a minimal working configuration. 
@@ -323,7 +323,7 @@ FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode onl
 FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
 If unset, fim will probe for /dev/fb0.
 TERM		(only in fim) will influence the output device selection algorithm, especially if $TERM=="screen".
-DISPLAY	If this variable is set, then the sdl driver will be tried by default.
+DISPLAY	If this variable is set, then the imlib2 driver will be tried by default.
 .SH COMMON PROBLEMS
 .B fim
 needs read\-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
@@ -419,7 +419,6 @@ scanimage ... | tee scan.ppm | fim \-i
 .SH NOTES
 This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.
 The filename "<STDIN>" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.
-The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.
 .SH BUGS
 .B fim
 has bugs. Please read the 
@@ -428,12 +427,12 @@ file shipped in the documentation directory to discover the known ones.
 .SH  FILES
 
 .TP 15
-.B /usr/share/doc/fim
+.B /usr/local/share/doc/fim
 The directory with 
 .B Fim
 documentation files.
 .TP 15
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 The system wide
 .B Fim
 initialization file (executed at startup, after executing the hardcoded configuration).
