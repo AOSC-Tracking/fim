@@ -240,6 +240,9 @@ Randomly shuffle the files list before browsing (no seeding).
 .B \-v, \-\-verbose
 Be verbose: show status bar.
 .TP
+.B  \-\-verbose\-load
+Load files verbosely (repeat option to increase verbosity).
+.TP
 .B \-V, \-\-version
 Print to stdout program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then exit.
 .TP

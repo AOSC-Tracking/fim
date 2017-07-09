@@ -251,6 +251,9 @@ FIM_NULL
     {"verbose",    no_argument,       FIM_NULL, 'v',"verbose mode.",FIM_NULL,
 "Be verbose: show status bar."
     },
+    {"verbose-load",    no_argument,       FIM_NULL, 0x766c,"verbose file loading mode.",FIM_NULL,
+"Load files verbosely (repeat option to increase verbosity)."
+    },
     {"version",    no_argument,       FIM_NULL, 'V',"print program version.",FIM_NULL,
 "Print to stdout program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then exit."
     },
@@ -1053,6 +1056,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		/* TODO: shall merge the above in a FIM_WANT_PIC_DSCFILEREAD  */
 		fim_char_t sc = '\t'; /* separation character for --load-image-descriptions-file */
 #endif /* FIM_WANT_PIC_CMTS */
+		int load_verbosity=0;
 
 	    	g_fim_output_device=FIM_CNS_EMPTY_STRING;
 	
@@ -1163,6 +1167,17 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	#ifdef FIM_AUTOCMDS
 		    cc.setVariable(FIM_VID_SANITY_CHECK,1);
 		    perform_sanity_check=1;
+	#endif /* FIM_AUTOCMDS */
+		    break;
+		case 0x766c: // verbose-load
+		    //fim's
+	#ifdef FIM_AUTOCMDS
+		{
+		    string tmp;
+		    load_verbosity++;
+		    tmp=FIM_VID_VERBOSITY;tmp+="=";tmp+=string((fim_int)load_verbosity);tmp+=";";
+		    cc.pre_autocmd_add(tmp);
+		}
 	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'v':
