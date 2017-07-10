@@ -264,7 +264,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_err_t addCommand(Command *c);
 	Command* findCommand(fim_cmd_id cmd)const;
 	int findCommandIdx(fim_cmd_id cmd)const;
-	fim_cxr fcmd_alias(std::vector<Arg> args);
+	fim_cxr fcmd_alias(const args_t& args);
 	fim::string alias(const fim_cmd_id& a, const fim_cmd_id& c, const fim_cmd_id& d="");
 	fim::string aliasRecall(fim_cmd_id cmd)const;
 	fim_cxr fcmd_system(const args_t& args);
@@ -303,7 +303,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	private:
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	fim::string getAliasesList(void)const;
-	fim::string dummy(std::vector<Arg> args);
+	fim::string dummy(const args_t& args);
 	fim_cxr fcmd_variables_list(const args_t& args);
 	fim_cxr fcmd_commands_list(const args_t& args);
 	fim_cxr fcmd_set(const args_t& args);

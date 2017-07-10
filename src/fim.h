@@ -211,7 +211,6 @@ class ViewportState
 	ViewportState(void)	:steps_(0) ,hsteps_(0) ,vsteps_(0) ,top_(0) ,left_(0) ,panned_(0x0) {}
 };
 
-	class Arg;
 	class Browser;
 	class FontServer;
 	class FramebufferDevice;
@@ -551,7 +550,6 @@ class fim_mipmap_t
 #include "fim_string.h"
 #include "Command.h"
 #include "Benchmarkable.h"
-#include "Arg.h"
 #include "FontServer.h"
 #include "FbiStuff.h"
 #include "Var.h"

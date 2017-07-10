@@ -295,7 +295,7 @@ ret:		return key;
 		return r;
 	}
 
-	fim_cxr CommandConsole::fcmd_alias(std::vector<Arg> args)
+	fim_cxr CommandConsole::fcmd_alias(const args_t& args)
 	{
 		/*
 		 * assigns to an alias some action
@@ -309,28 +309,27 @@ ret:		return key;
 		}
 		if(args.size()<2)
 		{
-			return get_alias_info(args[0].val_);
+			return get_alias_info(args[0]);
 		}
-		//for(size_t i=1;i<args.size();++i) cmdlist+=args[i].val_;
 		if(args.size()>=2)
-			cmdlist+=args[1].val_;
+			cmdlist+=args[1];
 		if(args.size()>=3)
-			desc   +=args[2].val_;
-		if(aliases_[args[0].val_].first!=FIM_CNS_EMPTY_STRING)
+			desc   +=args[2];
+		if(aliases_[args[0]].first!=FIM_CNS_EMPTY_STRING)
 		{
-			aliases_[args[0].val_]=std::pair<fim_cmd_id,fim::string>(cmdlist,desc);
-			r << FIM_FLT_ALIAS " " << args[0].val_<< " successfully replaced.\n";
+			aliases_[args[0]]=std::pair<fim_cmd_id,fim::string>(cmdlist,desc);
+			r << FIM_FLT_ALIAS " " << args[0] << " successfully replaced.\n";
 		}
 		else
 		{
-			aliases_[args[0].val_].first=cmdlist;
-			aliases_[args[0].val_].second=desc;
-			r << FIM_FLT_ALIAS " " << args[0].val_ << " successfully added.\n";
+			aliases_[args[0]].first=cmdlist;
+			aliases_[args[0]].second=desc;
+			r << FIM_FLT_ALIAS " " << args[0]<< " successfully added.\n";
 		}
 		return r.str();
 	}
 
-	fim::string CommandConsole::dummy(std::vector<Arg> args)
+	fim::string CommandConsole::dummy(const args_t & args)
 	{
 		/*
 		 * useful for test purposes
@@ -543,10 +542,10 @@ err:
 #if FIM_USE_CXX11
 		return fcmd_alias({a,c,d});
 #else /* FIM_USE_CXX11 */
-		std::vector<fim::Arg> args;
-		args.push_back(Arg(a));
-		args.push_back(Arg(c));
-		args.push_back(Arg(d));
+		args_t args;
+		args.push_back(a);
+		args.push_back(c);
+		args.push_back(d);
 		return fcmd_alias(args);
 #endif /* FIM_USE_CXX11 */
 	}
@@ -944,12 +943,10 @@ ret:
 		if(cmd==FIM_FLT_ALIAS)
 		{
 			//assignment of an alias
-			std::vector<Arg> aargs;	//Arg args :P
+			args_t aargs;
 
 			for(size_t i=0;i<args.size();++i)
-			{
-				aargs.push_back(Arg(args[i]));
-			}
+				aargs.push_back(args[i]);
 			cout << this->fcmd_alias(aargs) << "\n";
 			goto ok;
 		}
