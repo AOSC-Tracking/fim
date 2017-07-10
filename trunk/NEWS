@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1331)
+ * Strings specified within single quotes will have single quotes escaped, just as double quotes.
+   So that e.g.: '\'hello\'' equals "'hello'" and "\"hello\"" equals '"hello"'.
 # (r1330)
  * variable '_debug_commands' is now a string.
 # (r1323,r1325)

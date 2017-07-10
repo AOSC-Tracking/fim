@@ -82,7 +82,8 @@ fim::string fim_dirname(const fim::string& arg)
 		fim::string res=FIM_CNS_EMPTY_STRING;
 		if(quoted)
 			res+="'";
-		ear.substitute("'","'\\''");
+		ear.substitute("'","\\'");
+		//ear.substitute("'","'\\''");
 		res+=ear;
 		if(quoted)
 			res+="'";
