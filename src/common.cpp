@@ -972,13 +972,13 @@ int fim_fgetc(FILE *stream)
 int fim_snprintf_fim_int(char *r, fim_int n)
 {
 	// this does not pass g++ -pedantic-errors
-	if(sizeof(fim_int)==sizeof(int))
-		return sprintf(r,"%d",(int)n);
-	else
+	if(FIM_LARGE_FIM_INT)
 		return sprintf(r,"%lld",(int64_t)n);
 		//return sprintf(r,"%jd",(intmax_t)n);
 		//return sprintf(r,"%zd",(signed size_t)n);
 		//return sprintf(r,"%lld",(long long int)n);
+	else
+		return sprintf(r,"%d",(int)n);
 }
 
 int fim_snprintf_XB(char *str, size_t size, size_t q)
@@ -1043,10 +1043,10 @@ const fim_char_t * fim_basename_of(const fim_char_t * s)
 
 fim_int fim_atoi(const char*s)
 {
-	if(sizeof(fim_int)==sizeof(int))
-		return atoi(s);
-	else
+	if(FIM_LARGE_FIM_INT)
 		return atoll(s);
+	else
+		return atoi(s);
 }
 
 size_t fim_maxrss(void)
