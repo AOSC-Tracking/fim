@@ -217,7 +217,7 @@ ret:		return key;
 
 		if( key != FIM_SYM_NULL_KEY)
 		{
-				return key_syms_[key];	
+			return key_syms_[key];	
 		}
 
 		return FIM_CNS_EMPTY_RESULT;
@@ -1157,6 +1157,12 @@ err:
 						 * */
 						sprintf(buf,"got : 0x%x (%d)\n",c,c);
 						cout << buf ;
+					}
+					if(getVariable(FIM_VID_DBG_COMMANDS).find('k') >= 0)
+					{
+						std::cout << FIM_CNS_DBG_CMDS_PFX << "keysym: '"<<c<<"' ";
+						std::cout << " ['"<<*key_syms_[c] <<"']";
+						std::cout << "\n";
 					}
 #ifndef FIM_USE_READLINE
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY) || 

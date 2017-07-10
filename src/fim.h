@@ -481,8 +481,8 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_CLEARTERM "\x1B\x4D" /* FIXME: still unused */
 #define FIM_CNS_WHITE 0xFFFFFFFF	/* Temporarily here. Will better need an enum or another portable solution. */
 #define FIM_CNS_BLACK 0x00000000	/* Temporarily here. Will better need an enum or another portable solution. */
-#define FIM_CNS_DBG_CMDS_MAX "ac" /* FIM_VID_DBG_COMMANDS */
-#define FIM_CNS_DBG_CMDS_PFX "#" /* FIM_VID_DBG_COMMANDS prefix */
+#define FIM_CNS_DBG_CMDS_MAX "ack" /* see FIM_VID_DBG_COMMANDS */
+#define FIM_CNS_DBG_CMDS_PFX "#" /* prefix. see FIM_VID_DBG_COMMANDS */
 
 #if FIM_USE_CXX14
 template<typename T, typename S>
@@ -721,7 +721,7 @@ namespace fim
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[out] the screen height" */
 #define FIM_VID_SKIP_SCROLL			"_scroll_skip_page_fraction"		/* "[int,g:] if >1, fraction of page which will be skipped in when scrolling (e.g. 'scrollforward'); if 1, auto chosen; if <1, disabled." */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)" */
-#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in,g:] if containing 'c', print out each command before its execution (for debugging purposes)" */
+#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in,g:] if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; (for debugging purposes)" */
 #define FIM_VID_OPEN_OFFSET			"_open_offset"		/* "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " */
 #define FIM_VID_OPEN_OFFSET_RETRY		"_open_offset_retry"	/* "[in,optional,g:] number of adjacent bytes to probe in opening the file " */
 #define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim -C '_seek_magic=MAGIC_STRING;push filename' ) " */

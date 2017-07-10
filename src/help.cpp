@@ -116,7 +116,7 @@ fim_var_help_db[FIM_VID_SCREEN_WIDTH]= "[out,g:] the screen width"  ;
 fim_var_help_db[FIM_VID_SCREEN_HEIGHT]= "[out] the screen height" ;
 fim_var_help_db[FIM_VID_SKIP_SCROLL]= "[int,g:] if >1, fraction of page which will be skipped in when scrolling (e.g. 'scrollforward'); if 1, auto chosen; if <1, disabled." ;
 fim_var_help_db[FIM_VID_DBG_AUTOCMD_TRACE_STACK]= "[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)" ;
-fim_var_help_db[FIM_VID_DBG_COMMANDS]= "[in,g:] if containing 'c', print out each command before its execution (for debugging purposes)" ;
+fim_var_help_db[FIM_VID_DBG_COMMANDS]= "[in,g:] if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; (for debugging purposes)" ;
 fim_var_help_db[FIM_VID_OPEN_OFFSET]= "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " ;
 fim_var_help_db[FIM_VID_OPEN_OFFSET_RETRY]= "[in,optional,g:] number of adjacent bytes to probe in opening the file " ;
 fim_var_help_db[FIM_VID_SEEK_MAGIC]= "[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim -C '_seek_magic=MAGIC_STRING;push filename' ) " ;
