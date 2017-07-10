@@ -1225,22 +1225,21 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    //fim's
 	#ifdef FIM_AUTOCMDS
 		{
-			fim_int ipeppe_offset;
-			ipeppe_offset = fim_atoi(optarg);
-			if(ipeppe_offset<0)
-				std::cerr<< "warning: ignoring user set negative offset value.\n";
+			fim_int read_offset_l = fim_atoi(optarg);
+			if(read_offset_l<0)
+				std::cerr<< "Warning: ignoring user set negative offset value (" << read_offset_l << ").\n";
 			else
-			if(ipeppe_offset>=0 && isdigit(*optarg))
+			if(read_offset_l>=0 && isdigit(*optarg))
 			{
 				std::ostringstream tmp;
-				size_t peppe_offset=0,ro=0;
-				ro=peppe_offset =(size_t)ipeppe_offset;
+				fim_int read_offset_u=read_offset_l;
 				if(strchr(optarg,':'))
-					ro=(size_t)atoi(strchr(optarg,':')+1)-peppe_offset;
+					read_offset_u=fim_atoi(strchr(optarg,':')+1)-read_offset_l;
 				if(strchr(optarg,'+'))
-					ro=(size_t)atoi(strchr(optarg,'+')+1);
-				tmp << FIM_VID_OPEN_OFFSET      << "=" << peppe_offset << ";";
-				tmp << FIM_VID_OPEN_OFFSET_RETRY<< "=" << ro << ";";
+					read_offset_u=fim_atoi(strchr(optarg,'+')+1);
+
+				tmp << FIM_VID_OPEN_OFFSET      << "=" << read_offset_l << ";";
+				tmp << FIM_VID_OPEN_OFFSET_RETRY<< "=" << read_offset_u << ";";
 				cc.pre_autocmd_add(tmp.str());
 			}
 		}

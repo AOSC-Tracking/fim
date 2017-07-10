@@ -1641,7 +1641,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     size_t sbbs=FIM_NULL;
 #endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
-    long read_offset = 0, read_offset_u = 0;
+    long read_offset_l = 0, read_offset_u = 0;
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
@@ -1817,20 +1817,19 @@ ena:
 noa:	1;
     }
 #endif /* FIM_WITH_ARCHIVE */
-    //size_t read_offset=cc.getIntVariable("g:" FIM_VID_OPEN_OFFSET);
-    read_offset=cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
-    read_offset_u = read_offset + cc.getIntVariable(FIM_VID_OPEN_OFFSET_RETRY);/* warning : this can lead to negative values */
-    read_offset_u = FIM_MAX(read_offset,read_offset_u);
+    read_offset_l = cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
+    read_offset_u = read_offset_l + cc.getIntVariable(FIM_VID_OPEN_OFFSET_RETRY);/* warning : this can lead to negative values */
+    read_offset_u = FIM_MAX(read_offset_l,read_offset_u);
     if(vl)
     {
-	    if(read_offset||read_offset_u)
-		    FIM_VERB_PRINTF("file seek range specified: %lld:%lld\n",(long long int)read_offset,(long long int)read_offset_u);
+	    if(read_offset_l||read_offset_u)
+		    FIM_VERB_PRINTF("file seek range specified: %lld:%lld\n",(long long int)read_offset_l,(long long int)read_offset_u);
 	    else
 		    FIM_VERB_PRINTF("no file seek range specified\n");
     }
 with_offset:
-    if(read_offset>0)
-	    fim_fseek(fp,read_offset,SEEK_SET);
+    if(read_offset_l>0)
+	    fim_fseek(fp,read_offset_l,SEEK_SET);
 #ifdef FIM_WANT_SEEK_MAGIC
 	std::string sm = cc.getStringVariable(FIM_VID_SEEK_MAGIC);
 	if( int sl = sm.length() )
@@ -1840,13 +1839,13 @@ with_offset:
 		sm="\xFF\xD8\xFF\xE0";
 	*/
         	if(vl>0)FIM_VERB_PRINTF("probing file signature (long %d) \"%s\"..\n",sl,sm.c_str());
-		long regexp_offset = find_byte_stream(fp, sm.c_str(), read_offset);
+		long regexp_offset = find_byte_stream(fp, sm.c_str(), read_offset_l);
 		if(regexp_offset>0)
 		{
-			read_offset=regexp_offset;
-			read_offset_u=read_offset+sl;
-        		if(vl>0)FIM_VERB_PRINTF("..found at %lld:%lld\n",(long long int)read_offset,(long long int)read_offset_u);
-			fim_fseek(fp,read_offset,SEEK_SET);
+			read_offset_l=regexp_offset;
+			read_offset_u=read_offset_l+sl;
+        		if(vl>0)FIM_VERB_PRINTF("..found at %lld:%lld\n",(long long int)read_offset_l,(long long int)read_offset_u);
+			fim_fseek(fp,read_offset_l,SEEK_SET);
 			cc.setVariable(FIM_VID_SEEK_MAGIC,"");
 		}
 	}
@@ -1873,8 +1872,8 @@ with_offset:
       }
     }
     fim_rewind(fp);
-    if(read_offset>0)
-	    fim_fseek(fp,read_offset,SEEK_SET);
+    if(read_offset_l>0)
+	    fim_fseek(fp,read_offset_l,SEEK_SET);
 
 #if FIM_WITH_UFRAW
     if (FIM_NULL == loader && filename && is_file_nonempty(filename) ) /* FIXME: this is a hack */
@@ -2049,7 +2048,7 @@ probe_loader:
 
     if((loader==FIM_NULL) && (cc.getIntVariable(FIM_VID_NO_EXTERNAL_LOADERS)==1))
 		goto head_not_found;
-    if( (loader==FIM_NULL) && read_offset > 0 )
+    if( (loader==FIM_NULL) && read_offset_l > 0 )
     {
     		if(vl>1)FIM_VERB_PRINTF("skipping external loading programs ..\n");
 		goto head_not_found;
@@ -2292,10 +2291,10 @@ found_a_loader:	/* we have a loader */
 shall_skip_header:
 head_not_found: /* no appropriate loader found for this image */
     img=FIM_NULL;
-    if( read_offset_u > read_offset )
+    if( read_offset_u > read_offset_l )
     {
-	    read_offset++;
-	    if(vl)FIM_VERB_PRINTF("file seek range adjusted to: %lld:%lld\n",(long long int)read_offset,(long long int)read_offset_u);
+	    read_offset_l++;
+	    if(vl)FIM_VERB_PRINTF("file seek range adjusted to: %lld:%lld\n",(long long int)read_offset_l,(long long int)read_offset_u);
 	    goto with_offset;
     }
 errl:
@@ -2305,8 +2304,8 @@ errl:
     if(sbuf)fim_free(sbuf);
 #endif /* FIM_SHALL_BUFFER_STDIN */
 ret:
-    if( read_offset > 0 && nsp )
-	    nsp->setVariable(FIM_VID_OPEN_OFFSET,(fim_int)read_offset); /* FIXME */
+    if( read_offset_l > 0 && nsp )
+	    nsp->setVariable(FIM_VID_OPEN_OFFSET,(fim_int)read_offset_l); /* FIXME */
     FIM_PR('.');
     return img;
 }

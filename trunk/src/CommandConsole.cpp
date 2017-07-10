@@ -138,7 +138,6 @@ namespace fim
 
 		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
 		{
-			//if(bi->second == FIM_CNS_EMPTY_STRING)continue;//FIX : THIS SHOULD NOT OCCUR
 			bindings_expanded+=FIM_FLT_BIND" \"";
 			key_syms_t::const_iterator ikbi=key_syms_.find(((*bi).first));
 			if(ikbi!=key_syms_.end())
