@@ -32,10 +32,19 @@ namespace fim
 
 	std::ostream& operator<<(std::ostream& os, const std::vector<fim::string> & v)
 	{
+#if 0
 		std::cout<<"{";
 		for(size_t i=0;i<v.size();++i)
-			std::cout<<v[i]<<",";
+			os<<v[i]<<",";
 		std::cout<<"}";
+#else
+		for(size_t i=0;i<v.size();++i)
+		{
+			if(i>0)
+				os << " ";
+			os << fim_shell_arg_escape(v[i]);
+		}
+#endif
 		return os;
 	}
 

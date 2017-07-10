@@ -976,7 +976,7 @@ ret:
 			else
 			{
 				if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
-					std::cout << "in " << cmd << ":\n";
+					std::cout << FIM_CNS_DBG_CMDS_PFX << "executing: " << cmd << " " << args << "\n";
 				
 				cout << c->execute(args);
 				goto ok;
@@ -1616,6 +1616,8 @@ ok:
 		 */
 	    	//return autocmd_add(FIM_ACM_PREEXECUTIONCYCLEARGS,"",cmd);
 	    	//return autocmd_add(FIM_ACM_POSTFIMRC,"",cmd);
+		if(getVariable(FIM_VID_DBG_COMMANDS).find('a') >= 0)
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "adding autocmd " << cmd << ":\n";
 	    	return autocmd_add(FIM_ACM_POSTHFIMRC,"",cmd);
 	}
 
@@ -1647,7 +1649,7 @@ ok:
 			autocmd_push_stack( frame );
 			for( api=autocmds_[event].begin();api!=autocmds_[event].end();++api )
 			{
-				autocmd_exec(event,(*api).first,fname);
+ 				autocmd_exec(event,(*api).first,fname);
 			}
 			autocmd_pop_stack( frame );
 		}
@@ -1676,7 +1678,8 @@ ok:
 			for (size_t i=0;i<autocmds_[event][pat].size();++i)
 			{
 				autocmds_frame_t frame(autocmds_loop_frame_t(event,fname),(autocmds_[event][pat][i]).c_str());
-//				cout << "should exec '"<<event<<"'->'"<<autocmds_[event][pat][i]<<"'\n";
+				if(getVariable(FIM_VID_DBG_COMMANDS).find('a') >= 0)
+					std::cout << FIM_CNS_DBG_CMDS_PFX << "autocmd: '"<<event<<"'->'"<<fim_shell_arg_escape(autocmds_[event][pat][i])<<"'\n";
 				autocmds_stack.push_back(frame);
 				execute_internal((autocmds_[event][pat][i]).c_str(),FIM_X_QUIET);
 				autocmds_stack.pop_back();

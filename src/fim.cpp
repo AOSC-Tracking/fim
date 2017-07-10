@@ -254,6 +254,9 @@ FIM_NULL
     {"verbose-load",    no_argument,       FIM_NULL, 0x766c,"verbose file loading mode.",FIM_NULL,
 "Load files verbosely (repeat option to increase verbosity)."
     },
+    {"verbose-interpreter",    no_argument,       FIM_NULL, 0x76696d0a,"verbose interpreter mode.",FIM_NULL,
+"Execute interpreter verbosely (Sets " FIM_VID_DBG_COMMANDS "=\"" FIM_CNS_DBG_CMDS_MAX "\" immediately)."
+    },
     {"version",    no_argument,       FIM_NULL, 'V',"print program version.",FIM_NULL,
 "Print to stdout program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then exit."
     },
@@ -1168,6 +1171,10 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    cc.setVariable(FIM_VID_SANITY_CHECK,1);
 		    perform_sanity_check=1;
 	#endif /* FIM_AUTOCMDS */
+		    break;
+		case 0x76696d0a: // verbose-interpreter
+		    //fim's
+		    cc.setVariable(FIM_VID_DBG_COMMANDS,FIM_CNS_DBG_CMDS_MAX);
 		    break;
 		case 0x766c: // verbose-load
 		    //fim's
