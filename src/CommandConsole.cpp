@@ -975,7 +975,7 @@ ret:
 			}
 			else
 			{
-				if(getIntVariable(FIM_VID_DBG_COMMANDS))
+				if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
 					std::cout << "in " << cmd << ":\n";
 				
 				cout << c->execute(args);

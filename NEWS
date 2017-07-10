@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1330)
+ * variable '_debug_commands' is now a string.
 # (r1323,r1325)
  * fix: misc for --offset, e.g. avoiding probing for external loader programs.
 # (r1319)
