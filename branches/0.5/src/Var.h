@@ -150,7 +150,7 @@ class Var
 	int getType(void)const{return type;}
 	fim_int getInt(void)const{return(type=='i')?i:
 		(type=='f'?((fim_int)(f)):
-		 (type=='s'?(atoi(s.c_str())):0)
+		 (type=='s'?(fim_atoi(s.c_str())):0)
 		 )
 		;}
 

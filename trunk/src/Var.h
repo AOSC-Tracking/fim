@@ -130,7 +130,7 @@ class Var
 	int getType(void)const{return type;}
 	fim_int getInt(void)const{return(type==FimTypeInt)?i:
 		(type==FimTypeFloat?((fim_int)(f)):
-		 (type==FimTypeString?(atoi(s.c_str())):0)
+		 (type==FimTypeString?(fim_atoi(s.c_str())):0)
 		 );
 		}
 
