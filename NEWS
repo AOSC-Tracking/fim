@@ -3,8 +3,8 @@
 
                 Version 0.6-trunk
 
-# (r1323)
- * fix: in --offset mode, avoiding probing for external loader programs.
+# (r1323,r1325)
+ * fix: misc for --offset, e.g. avoiding probing for external loader programs.
 # (r1319)
  * --verbose-load option for verbose file loading.
 # (r1317,r1321)

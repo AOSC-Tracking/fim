@@ -1232,7 +1232,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			if(read_offset_l>=0 && isdigit(*optarg))
 			{
 				std::ostringstream tmp;
-				fim_int read_offset_u=read_offset_l;
+				fim_int read_offset_u=0;
 				if(strchr(optarg,':'))
 					read_offset_u=fim_atoi(strchr(optarg,':')+1)-read_offset_l;
 				if(strchr(optarg,'+'))
