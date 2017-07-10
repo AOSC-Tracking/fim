@@ -243,6 +243,9 @@ Be verbose: show status bar.
 .B  \-\-verbose\-load
 Load files verbosely (repeat option to increase verbosity).
 .TP
+.B  \-\-verbose\-interpreter
+Execute interpreter verbosely (Sets _debug_commands="ac" immediately).
+.TP
 .B \-V, \-\-version
 Print to stdout program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then exit.
 .TP

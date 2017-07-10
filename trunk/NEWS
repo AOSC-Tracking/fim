@@ -3,7 +3,9 @@
 
                 Version 0.6-trunk
 
-# (r1331)
+# (r1334)
+ * New switch --verbose-interpreter to execute interpreter verbosely by setting adequately _debug_commands.
+# (r1331,r1333)
  * Strings specified within single quotes will have single quotes escaped, just as double quotes.
    So that e.g.: '\'hello\'' equals "'hello'" and "\"hello\"" equals '"hello"'.
 # (r1330)

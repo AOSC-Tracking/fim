@@ -481,6 +481,8 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_CLEARTERM "\x1B\x4D" /* FIXME: still unused */
 #define FIM_CNS_WHITE 0xFFFFFFFF	/* Temporarily here. Will better need an enum or another portable solution. */
 #define FIM_CNS_BLACK 0x00000000	/* Temporarily here. Will better need an enum or another portable solution. */
+#define FIM_CNS_DBG_CMDS_MAX "ac" /* FIM_VID_DBG_COMMANDS */
+#define FIM_CNS_DBG_CMDS_PFX "#" /* FIM_VID_DBG_COMMANDS prefix */
 
 #if FIM_USE_CXX14
 template<typename T, typename S>
@@ -583,7 +585,10 @@ namespace fim
 	class CommandConsole;
 	extern fim_stream cout;
 	extern fim_stream cerr;
+	// TODO: to fim_string.h
 	std::ostream& operator<<(std::ostream& os,const string& s);
+	std::ostream& operator<<(std::ostream& os, const std::vector<fim::string> & v);
+	std::ostream& operator<<(std::ostream& os, const Browser& b);
 }
 
 #define FIM_I2BI(VID) VID "_" /* identifier to backup identifier */
