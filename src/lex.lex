@@ -176,8 +176,8 @@ STRINGC_DQ {STRINGC}|\'
 	}
 
 \'((\\\')|[^\'])*\' {
-	//trec(yytext+1,"n\\\'","\n\\\'");
-	/* single quoted strings are not escaped */
+	/* single quoted strings escaping */
+		trec(yytext+1,"n\\\'","\n\\\'");
 		qastrcpy(yylval.sValue,yytext);;
 		return STRING;
 	}
