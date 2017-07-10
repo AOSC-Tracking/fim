@@ -1085,25 +1085,22 @@ done:
 		    //fim's
 	#ifdef FIM_AUTOCMDS
 		{
-			fim_int ipeppe_offset;
-			ipeppe_offset = fim_atoi(optarg);
-			if(ipeppe_offset<0)
-				std::cerr<< "warning: ignoring user set negative offset value.\n";
+			fim_int read_offset_l = fim_atoi(optarg);
+			if(read_offset_l<0)
+				std::cerr<< "Warning: ignoring user set negative offset value (" << read_offset_l << ").\n";
 			else
-			if(ipeppe_offset>=0 && isdigit(*optarg))
+			if(read_offset_l>=0 && isdigit(*optarg))
 			{
-				string tmp;
-				size_t peppe_offset=0,ro=0;
-				ro=peppe_offset =(size_t)ipeppe_offset;
+				std::ostringstream tmp;
+				fim_int read_offset_u=0;
 				if(strchr(optarg,':'))
-					ro=(size_t)atoi(strchr(optarg,':')+1)-peppe_offset;
+					read_offset_u=fim_atoi(strchr(optarg,':')+1)-read_offset_l;
 				if(strchr(optarg,'+'))
-					ro=(size_t)atoi(strchr(optarg,'+')+1);
-				tmp=FIM_VID_OPEN_OFFSET;       tmp+="="; tmp+=string((fim_int)peppe_offset);/* FIXME */ tmp+=";";
-				tmp+=FIM_VID_OPEN_OFFSET_RETRY; tmp+="="; tmp+=string((fim_int)ro);/* FIXME */ tmp+=";";
-				cc.pre_autocmd_add(tmp);
-				//std::cout << "adding autocmd " << tmp<< "\n";
-				//std::cout << "peppe_offset" << peppe_offset<< "\n";
+					read_offset_u=fim_atoi(strchr(optarg,'+')+1);
+
+				tmp << FIM_VID_OPEN_OFFSET      << "=" << read_offset_l << ";";
+				tmp << FIM_VID_OPEN_OFFSET_RETRY<< "=" << read_offset_u << ";";
+				cc.pre_autocmd_add(tmp.str());
 			}
 		}
 	#endif /* FIM_AUTOCMDS */

@@ -30,7 +30,7 @@
  * fix: a check was missing in the PS decoder when reading from stdin.
  * bugfix: --offset option was ignoring lower bytes-offset.
  * fix in _seek_magic and documentation.
- * fix: in --offset mode, avoiding probing for external loader programs.
+ * fix: in --offset mode, avoiding probing for external loader programs, handling of larger offsets.
 
                 Version 0.5-rc2
 
