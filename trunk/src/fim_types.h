@@ -36,12 +36,12 @@
 #include <stdint.h>
 #endif /* FIM_WANT_LONG_INT */
 
-//namespace fim
-//{
 #if FIM_WANT_LONG_INT
 	typedef int64_t fim_int;	/* a type for fim's internal integer type, always signed */
+#define FIM_LARGE_FIM_INT 1		/* == (sizeof(fim_int)!=sizeof(int)) */
 #else /* FIM_WANT_LONG_INT */
 	typedef int fim_int;		/* a type for fim's internal integer type, always signed */
+#define FIM_LARGE_FIM_INT 0		/* == (sizeof(fim_int)!=sizeof(int)) */
 #endif /* FIM_WANT_LONG_INT */
 	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
 	typedef int fim_off_t;		/* a type for pixel offsets (positive)  */
@@ -81,7 +81,6 @@
 	// TODO: move typedefs here ...
 #endif /* FIM_USE_CXX11 */
 	// TODO: same also in CommandConsole.h
-//}
 
 /* we wait for variadic macros support in standard C++ */
 #define FIM_FPRINTF fprintf
