@@ -663,7 +663,7 @@ _console_offset
 .na
 .B
 _debug_commands
-[in,g:] print out each command before its execution (for debugging purposes)
+[in,g:] if containing 'c', print out each command before its execution (for debugging purposes)
 .fi
 .na
 .B
@@ -993,7 +993,7 @@ _scroll_skip_page_fraction
 .na
 .B
 _seek_magic
-[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it within the range of that signature (use like this: fim \-C '_seek_magic=MAGIC_STRING;push filename' ) 
+[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim \-C '_seek_magic=MAGIC_STRING;push filename' ) 
 .fi
 .na
 .B
@@ -1180,7 +1180,7 @@ This is the default configuration, as contained in the _fim_default_config_file_
 # Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
 # It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
 if(_cache_control==''){_cache_control='m';}
-if(_debug_commands==''){_debug_commands=0;}
+if(_debug_commands==''){_debug_commands='';}
 if(_command_expansion==''){_command_expansion=1;}
 if(_display_status==''){_display_status=0;}
 if(_max_cached_images==''){_max_cached_images=5;}
