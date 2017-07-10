@@ -1599,7 +1599,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     size_t sbbs=FIM_NULL;
 #endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
-    long read_offset = 0, read_offset_u = 0;
+    fim_int read_offset = 0, read_offset_u = 0;
 #if FIM_WITH_ARCHIVE
     int npages = 0;
     fim::string re = cc.getGlobalStringVariable(FIM_VID_ARCHIVE_FILES);
