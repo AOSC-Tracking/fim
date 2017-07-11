@@ -531,27 +531,24 @@ public:
 	{
 		// FIXME: not using up_to_max properly yet (by popularity, etc) !
 		size_t cnt = 0;
-		string vls;
+		std::ostringstream vls;
 		fim_var_id_set vis;
 		for( vd_t::const_iterator li = vd_.begin();li != vd_.end(); ++li )
 			li->second.get_id_list(vis);
 
 		if(vis.size())
-			vls += string("there are "),
-			vls += string(Var((fim_int)vis.size())),
-			vls += string(" variable ids:");
+			vls << "there are " << vis.size() << " variable ids:";
 		else
-			vls += string("no variable ids.");
+			vls << "no variable ids.";
 
 		for( fim_var_id_set::const_iterator li = vis.begin();li != vis.end()
 			&& cnt < up_to_max
 			; ++li )
 			cnt++,
-			vls += " ",
-			vls += *li;
+			vls << " " << *li;
 		if( vis.size() > up_to_max ) 
-			vls += " ...";
-		return vls;
+			vls << " ...";
+		return vls.str();
 	}
 #endif /* FIM_WANT_PIC_LVDN */
 
