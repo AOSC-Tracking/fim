@@ -216,37 +216,34 @@ namespace fim
 		fim::string Namespace::get_variables_list(bool with_values, bool fordesc)const
 		{
 			/* A list of var=val like lines. */
-			fim::string acl;
+			std::ostringstream oss;
 			variables_t::const_iterator vi;
 
 			for( vi=variables_.begin();vi!=variables_.end();++vi)
 			{
 				if(fordesc)
-					acl+="#!fim:";
+					oss << "#!fim:";
 				if(ns_char_!=FIM_SYM_NULL_NAMESPACE_CHAR)
 				{
-					acl+=ns_char_;
-					acl+=FIM_SYM_NAMESPACE_SEP;
+					oss << ns_char_ << FIM_SYM_NAMESPACE_SEP;
 				}
-				acl+=((*vi).first);
+				oss << ((*vi).first);
 
 				if(fordesc)
 				{
-					acl+="=";
+					oss << "=";
 					if(with_values)
-						acl+=((*vi).second.getString());
-			       		acl+="\n"; // newline always
+						oss << ((*vi).second.getString());
+			       		oss << "\n"; // newline always
 				}
 				else
 				{
-					acl+=" ";
+					oss << " ";
 					if(with_values)
-						acl+=" = ",
-						acl+=((*vi).second.getString()),
-			       			acl+="\n"; // newline only on with_values
+						oss << " = " << ((*vi).second.getString()) << "\n"; // newline only on with_values
 				}
 			}
-			return acl;
+			return oss.str();
 		}
 
 		fim_err_t Namespace::find_matching_list(fim_cmd_id cmd, args_t& completions, bool prepend_ns)const

@@ -101,13 +101,9 @@ err:
 		if(args.size()==1)
 		{
 			//first arg should be a valid key code
-			fim::string binding_expanded;
-			binding_expanded+=FIM_FLT_BIND" '";
-			binding_expanded+=args[0];
-			binding_expanded+="' '";
-			binding_expanded+=bindings_[key];
-			binding_expanded+="'\n";
-			return binding_expanded;
+			std::ostringstream oss;
+			oss << FIM_FLT_BIND" '" << args[0] << "' '" << bindings_[key] << "'\n";
+			return oss.str();
 		}
 		if(args.size()<2)
 		       	return kerr;
@@ -244,14 +240,11 @@ err:
 			{
 				if(isVariable(args[0]))
 				{
-					fim::string hs;
-					hs+=fim::string("\"");
-					hs+=args[0] + fim::string( "\" is a variable, with value:\n" );
-					hs+=getStringVariable(args[0]);
-					hs+=fim::string("\nand description:\n");
-					hs+=fim_var_help_db_query(args[0]);
-					hs+=fim::string("\n");
-					return hs;
+					std::ostringstream oss;
+					oss << "\"" << args[0] << "\" is a variable, with value:\n" 
+						<< getStringVariable(args[0]) << "\nand description:\n" 
+						<< fim_var_help_db_query(args[0]) << "\n";
+					return oss.str();
 				}
 				else
 					cout << args[0] << " : no such command, alias, or variable.\n";
@@ -704,16 +697,11 @@ err:
 		/*
 		 * the recorded commands are dumped in the console
 		 * */
-		fim::string res;
+		std::ostringstream oss;
 		for(size_t i=0;i<recorded_actions_.size();++i)
-		{
-			res+=FIM_FLT_USLEEP " '";
-			res+=fim::string((int)recorded_actions_[i].second);
-			res+="';\n";
-			res+=recorded_actions_[i].first;
-			res+="\n";
-		}
-		return res;
+			oss << FIM_FLT_USLEEP " '" << recorded_actions_[i].second << "';\n"
+			       	<< recorded_actions_[i].first << "\n";
+		return oss.str();
 	}
 
 	fim::string CommandConsole::execute_record_buffer(const args_t& args)

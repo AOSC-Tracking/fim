@@ -44,30 +44,19 @@ namespace fim
 
 	fim::string fim_get_variables_reference(FimDocRefMode refmode)
 	{
-		string s =FIM_CNS_EMPTY_STRING;
+		std::ostringstream oss;
 		fim_var_help_t::const_iterator vi;
 		if(refmode==Man)
 			goto manmode;
 		for( vi=fim_var_help_db.begin();vi!=fim_var_help_db.end();++vi)
-		{
-			s+=vi->first;
-			s+=" : ";
-			s+=fim_var_help_db_query(vi->first);
-			s+="\n";
-		}
-		return s;
+			oss << vi->first << " : " << fim_var_help_db_query(vi->first) << "\n";
+		return oss.str();
 manmode:
 		for( vi=fim_var_help_db.begin();vi!=fim_var_help_db.end();++vi)
-		{
-			s+=".na\n"; /* No output-line adjusting; unelegant way to avoid man --html=cat's: cannot adjust line */
-			s+=".B\n";
-			s+=vi->first;
-			s+="\n";
-			s+=fim_var_help_db_query(vi->first);
-			s+="\n";
-			s+=".fi\n";
-		}
-		s.substitute("\\$","$\\:"); /* Zero-width break point on $ (that is, on long hardcoded regexps). */
+			oss << ".na\n" <<  /* No output-line adjusting; unelegant way to avoid man --html=cat's: cannot adjust line */
+				".B\n" << vi->first << "\n" << fim_var_help_db_query(vi->first) << "\n" << ".fi\n";
+		fim::string s(oss.str());
+	       	s.substitute("\\$","$\\:"); /* Zero-width break point on $ (that is, on long hardcoded regexps). */
 		return s;
 	}
 

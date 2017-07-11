@@ -133,25 +133,22 @@ namespace fim
 		/*
 		 * collates all registered action bindings_ together in a single string
 		 * */
-		fim::string bindings_expanded;
+		std::ostringstream oss;
 		bindings_t::const_iterator bi;
 
 		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
 		{
-			bindings_expanded+=FIM_FLT_BIND" \"";
+			oss << FIM_FLT_BIND" \"";
 			key_syms_t::const_iterator ikbi=key_syms_.find(((*bi).first));
 			if(ikbi!=key_syms_.end())
-			       	bindings_expanded+=ikbi->second;
-			bindings_expanded+="\" \"";
-			bindings_expanded+=((*bi).second);
+			       	oss << ikbi->second;
+			oss << "\" \"" << ((*bi).second);
 			if( bindings_help_.find((*bi).first) != bindings_help_.end() )
-				bindings_expanded+="\" # ",
-				bindings_expanded+=string(bindings_help_.find((*bi).first) -> second),
-				bindings_expanded+="\n";
+				oss << "\" # " << bindings_help_.find((*bi).first) -> second << "\n";
 			else
-				bindings_expanded+="\"\n";
+				oss << "\"\n";
 		}
-		return bindings_expanded;
+		return oss.str();
 	}
 
 	fim::string CommandConsole::unbind(const fim::string& kfstr)
@@ -228,22 +225,18 @@ ret:		return key;
 		/*
 		 * unbinds the action eventually bound to the key combination code c
 		 */
-		fim::string rs(FIM_FLT_UNBIND" ");
+		std::ostringstream oss;
 
 		if(bindings_.find(c) != bindings_.end())
 		{
 			bindings_.erase(c);
-			rs+=c;
-			rs+=": successfully unbound.\n";
+			oss << c << ": successfully unbound.\n";
 			if( bindings_help_.find(c) != bindings_help_.end() )
 				bindings_help_.erase(c);
 		}
 		else
-		{
-			rs+=c;
-			rs+=": there is not such binding.\n";
-		}
-		return rs;
+			oss << c << ": there is not such binding.\n";
+		return oss.str();
 	}
 
 	fim::string CommandConsole::aliasRecall(fim_cmd_id cmd)const
@@ -276,23 +269,18 @@ ret:		return key;
 
 	fim::string CommandConsole::get_alias_info(const fim::string aname)const
 	{
-		string  r;
-		r+=fim::string(FIM_FLT_ALIAS" \"");
-		r+=aname;
-		r+=fim::string("\" \"");
+		std::ostringstream oss;
+		oss << FIM_FLT_ALIAS" \"" << aname << "\" \"";
 
 		aliases_t::const_iterator ai=aliases_.find(aname);
 		if(ai!=aliases_.end())
-			r+=ai->second.first;
-		r+=fim::string("\"");
+			oss << ai->second.first;
+		oss << "\"";
 		if(ai!=aliases_.end())
 		if(ai->second.second!=FIM_CNS_EMPTY_STRING)
-		{
-			r+=" # ";
-			r+=ai->second.second;
-		}
-		r+=fim::string("\n");
-		return r;
+			oss << " # " << ai->second.second;
+		oss << fim::string("\n");
+		return oss.str();
 	}
 
 	fim_cxr CommandConsole::fcmd_alias(const args_t& args)
@@ -875,9 +863,9 @@ ret:
 		if(ocmd!=FIM_CNS_EMPTY_STRING)
 		{
 			//an alias should be expanded. arguments are appended.
-			fim::string ex;
+			std::ostringstream oss;
 			cmd=ocmd;
-			ex=ocmd;
+			oss << ocmd;
 			/*
 			 * WARNING : i am not sure this is the best choice
 			 */
@@ -886,14 +874,10 @@ ret:
 			{ferror("pipe error\n");exit(-1);}
 #ifndef			FIM_ALIASES_WITHOUT_ARGUMENTS
 			for(size_t i=0;i<args.size();++i)
-			{
-				ex+=fim::string(" \"");
-				ex+=args[i];
-				ex+=fim::string("\""); 
-			}
+				oss << " \"" << args[i] << fim::string("\""); 
 #endif			/* FIM_ALIASES_WITHOUT_ARGUMENTS */
-			sl=strlen(ex.c_str());
-			r=write(fim_pipedesc[1],ex.c_str(),sl);
+			sl=strlen(oss.str().c_str());
+			r=write(fim_pipedesc[1],oss.str().c_str(),sl);
 			if(r!=sl)
 			{ferror("pipe write error");exit(-1);} 
 			
@@ -1283,11 +1267,10 @@ rlnull:
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 	fim::string CommandConsole::marked_files_list(void)const
 	{
-		fim::string res;
+		std::ostringstream oss;
 		for(std::set<fim::string>::iterator i=marked_files_.begin();i!=marked_files_.end();++i)
-			res += *i,
-			res += "\n";
-		return res;
+			oss << *i << "\n";
+		return oss.str();
 	}
 
 	fim::string CommandConsole::marked_files_clear(void)
@@ -1439,15 +1422,12 @@ ret:
 		/*
 		 * returns the list of set action aliases
 		 */
-		fim::string aliases_list;
+		std::ostringstream oss;
 		aliases_t::const_iterator ai;
 
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
-		{	
-			aliases_list+=((*ai).first);
-			aliases_list+=" ";
-		}
-		return aliases_list;
+			oss << ((*ai).first) << " ";
+		return oss.str();
 	}
 
 	fim::string CommandConsole::get_commands_list(void)const
@@ -1455,15 +1435,15 @@ ret:
 		/*
 		 * returns the list of registered commands
 		 */
-		fim::string commands_list;
+		std::ostringstream oss;
 
 		for(size_t i=0;i<commands_.size();++i)
 		{
 			if(i)
-				commands_list+=" ";
-			commands_list+=(commands_[i]->cmd_);
+				oss << " ";
+			oss << (commands_[i]->cmd_);
 		}
-		return commands_list;
+		return oss.str();
 	}
 
 	fim::string CommandConsole::get_variables_list(void)const
