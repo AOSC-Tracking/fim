@@ -164,28 +164,28 @@ The way some one\-line statements are evaluated:
 .B
 alias
 .fi
-alias [{identifier} [{commands} [{description}]]]
+alias [{identifier} [{commands} [{description}]]]: without arguments, lists the current aliases. With one, shows an identifier's assigned command. With two, assigns to an identifier a user defined command or sequence of commands. With three, also assigns a help string.
 .fi
 
 .na
 .B
 align
 .fi
-align bottom : align to the lower side the current image; align top : align to the upper side the current image; 
+align 'bottom': align to the lower side the current image; align 'top': align to the upper side the current image; 
 .fi
 
 .na
 .B
 autocmd
 .fi
-autocmd {event} {pattern} {commands} : manipulate autocommands
+autocmd {event} {pattern} {commands}: manipulate autocommands (inspired from Vim autocmd's). Without arguments, list autocommands. With arguments, specifies for which type of event and which current file open, which commands to execute. See the default built\-in configuration files for examples.
 .fi
 
 .na
 .B
 autocmd_del
 .fi
-autocmd_del : manipulate autocommands. usage: autocmd_del {event} {pattern} {commands}
+autocmd_del: specify autocommands to delete them. Usage: autocmd_del {event} {pattern} {commands}
 .fi
 
 .na
@@ -199,7 +199,7 @@ basename {filename}: returns the basename of {filename} in the _last_system_outp
 .B
 bind
 .fi
-bind [{keysym} [{commands}]] : bind a keyboard symbol/shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys. Key binding is dynamical, so you can rebind keys even during program's execution. You can get a list of valid symbols (keysyms) by invoking dump_key_codes or in the man page.
+bind [{keysym} [{commands}]]: bind a keyboard symbol/shortcut {keysym} to {commands}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys. Key binding is dynamical, so you can rebind keys even during program's execution. You can get a list of valid symbols (keysyms) by invoking dump_key_codes or in the man page.
 .fi
 
 .na
@@ -213,42 +213,42 @@ cd {path}: change the current directory to {path}. cd \- will change to the prev
 .B
 clear
 .fi
-clear : clear the virtual console
+clear: clear the virtual console
 .fi
 
 .na
 .B
 commands
 .fi
-commands : display the existing commands
+commands: display the existing commands
 .fi
 
 .na
 .B
 color
 .fi
-color [desaturate] : desaturate the displayed image colors; color [negate] : negate the displayed image colors; color [colorblind|c|deuteranopia|d] : simulate a form of the deuteranopia color vision deficiency (cvd); color [protanopia|p] : simulate a form of the protanopia cvd; color [tritanopia|t] : simulate a form of the tritanopia cvd; color [daltonize|D] : if following a cvd specification, will attempt correcting it; color [identity] : populate the image with 'RGB identity' pixels;  to get back the original you will have to reload the image.
+color [desaturate]: desaturate the displayed image colors; color [negate]: negate the displayed image colors; color [colorblind|c|deuteranopia|d]: simulate a form of the deuteranopia color vision deficiency (cvd); color [protanopia|p]: simulate a form of the protanopia cvd; color [tritanopia|t]: simulate a form of the tritanopia cvd; color [daltonize|D]: if following a cvd specification, will attempt correcting it; color [identity]: populate the image with 'RGB identity' pixels;  to get back the original you will have to reload the image.
 .fi
 
 .na
 .B
 desc
 .fi
-desc 'load' {filename} [{sepchar}] : load description file {filename}, using the optional {sepchar} character as separator; 'reload' : load once again description files specified at the command line with \-\-load\-image\-descriptions\-file, with respective separators; ['\-all'] ['\-append'] 'save' {filename} [{sepchar}] : save current list descriptions to file {filename}, using the optional {sepchar} character as separator, and if '\-all' is present will save the variables, and if '\-append' is present, will only append, and if '\-nooverw' is present, will not overwrite existing files. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
+desc 'load' {filename} [{sepchar}]: load description file {filename}, using the optional {sepchar} character as separator; 'reload': load once again description files specified at the command line with \-\-load\-image\-descriptions\-file, with respective separators; ['\-all'] ['\-append'] 'save' {filename} [{sepchar}]: save current list descriptions to file {filename}, using the optional {sepchar} character as separator, and if '\-all' is present will save the variables, and if '\-append' is present, will only append, and if '\-nooverw' is present, will not overwrite existing files. See documentation of \-\-load\-image\-descriptions\-file for the format of {filename}.
 .fi
 
 .na
 .B
 display
 .fi
-display ['reinit' {string}]|'resize' {w} {h}] : display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the \-\-output\-device command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. 
+display ['reinit' {string}]|'resize' {w} {h}]: display the current file contents; if 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device; see documentation for the \-\-output\-device command line switch for allowed values of {string}; if 'resize' and no argument, will ask the window manager to size the window like the image; if 'resize' and two arguments, these will be used as width and height of window, to set. 
 .fi
 
 .na
 .B
 dump_key_codes
 .fi
-dump_key_codes : dump the active key codes (unescaped, for inspection)
+dump_key_codes: dump the active key codes (unescaped, for inspection purposes)
 .fi
 
 .na
@@ -262,21 +262,21 @@ echo {args}: print the {args} on console
 .B
 else
 .fi
-if(expression){action;}['else'{action;}] : see if
+if(expression){action;}['else'{action;}]: see else
 .fi
 
 .na
 .B
 eval
 .fi
-eval {args} : evaluate {args} as commands, executing them
+eval {args}: evaluate {args} as commands, executing them
 .fi
 
 .na
 .B
 exec
 .fi
-exec {filename(s)} : execute script {filename(s)}
+exec {filename(s)}: execute script {filename(s)}
 .fi
 
 .na
@@ -290,7 +290,7 @@ font 'scan' [{dirname}]: scan {dirname} or /usr/share/consolefonts looking for f
 .B
 getenv
 .fi
-getenv {identifier} : display the value of the {identifier} environment variable
+getenv {identifier}: display the value of the {identifier} environment variable
 .fi
 
 .na
@@ -304,105 +304,105 @@ goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'} | {{'+'|'\-'}{i
 .B
 help
 .fi
-help [{identifier}] : provide online help, assuming {identifier} is a variable, alias, or command identifier. If {identifier} begins with  /, the search will be on the help contents and a list of matching items will be given instead. A list of commands can be obtained simply invoking "commands"; a list of aliases with "alias"; a list of bindings with "bind".
+help [{identifier}]: provide online help, assuming {identifier} is a variable, alias, or command identifier. If {identifier} begins with  /, the search will be on the help contents and a list of matching items will be given instead. A list of commands can be obtained simply invoking "commands"; a list of aliases with "alias"; a list of bindings with "bind".
 .fi
 
 .na
 .B
 if
 .fi
-if(expression){action;}['else'{action;}] : see else
+if(expression){action;}['else'{action;}]: see else
 .fi
 
 .na
 .B
 info
 .fi
-info : display information about the current file
+info: display information about the current file
 .fi
 
 .na
 .B
 limit
 .fi
-limit  {'\-list'|'\-listall'} 'variable'|['\-further'|'\-merge'|'\-subtract'] [{expression} |{variable} {value}] : A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via \-\-load\-image\-descriptions\-file.  If invoked with '\-list'/'\-listall' only, will list the current description variable ids.  If invoked with '\-list'/'\-listall' 'id', will list set values for the variable 'id'.  If '\-further' is present, will start with the current list; if not, with the full list.  If '\-merge' is present, new matches will be merged in the existing list and sorted.  If '\-subtract' is present, sort and filter out matches.  If {variable} and {values} are provided, limit to files having property {variable} set to {value}.  If {expression} is one exclamation point ('!'), will limit to the currently marked files only.  If {expression} is '~!' will limit to files with unique basename;  if '~=', to files with duplicate basename;  if '~^', to the first of the files with duplicate basename;  if '~$\:', to the last of the files with duplicate basename.  On '~i' [MINIDX][\-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX.  On '~z' will limit to files having the current file's size;  on '~z' [MINSIZE][\-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize within these limits;  on '~d' will limit to files having the current file's date +\- one day;  on '~d' [MINTIME][\-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's "st_mtime", in seconds) within this interval.  For other values of {expression}, limit to files whose description string matches {expression}.  Invoked with no arguments, the original browsable files list is restored.
+limit  {'\-list'|'\-listall'} 'variable'|['\-further'|'\-merge'|'\-subtract'] [{expression} |{variable} {value}]: A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via \-\-load\-image\-descriptions\-file.  If invoked with '\-list'/'\-listall' only, will list the current description variable ids.  If invoked with '\-list'/'\-listall' 'id', will list set values for the variable 'id'.  If '\-further' is present, will start with the current list; if not, with the full list.  If '\-merge' is present, new matches will be merged in the existing list and sorted.  If '\-subtract' is present, sort and filter out matches.  If {variable} and {values} are provided, limit to files having property {variable} set to {value}.  If {expression} is one exclamation point ('!'), will limit to the currently marked files only.  If {expression} is '~!' will limit to files with unique basename;  if '~=', to files with duplicate basename;  if '~^', to the first of the files with duplicate basename;  if '~$\:', to the last of the files with duplicate basename.  On '~i' [MINIDX][\-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX.  On '~z' will limit to files having the current file's size;  on '~z' [MINSIZE][\-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize within these limits;  on '~d' will limit to files having the current file's date +\- one day;  on '~d' [MINTIME][\-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's "st_mtime", in seconds) within this interval.  For other values of {expression}, limit to files whose description string matches {expression}.  Invoked with no arguments, the original browsable files list is restored.
 .fi
 
 .na
 .B
 list
 .fi
-list : display the files list; list 'random_shuffle': randomly shuffle the file list; list 'reverse': reverse the file list; list 'clear': clear the file list; list 'sort': sort the file list; list 'sort_basename': sort the file list according to base name; list 'sort_fsize': sort the file list according to file size; list 'sort_mtime': sort the file list according to modification date; list 'pop' : pop the last file from the files list; list 'remove' [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; list 'push' {filename(s)} : push {filename(s)} to the back of the files list; list 'filesnum': display the number of files in the files list; list 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'marked': show which files have been marked so far; list 'dumpmarked': dump to stdout the marked files (you will want usually to 'unmarkall' afterwards); list 'unmarkall': unmark all the marked files; list 'pushdir'; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression \.JPG$\:|\.PNG$\:|\.GIF$\:|\.BMP$\:|\.TIFF$\:|\.TIF$\:|\.JPEG$\:|\.JFIF$\:|\.PPM$\:|\.PGM$\:|\.PBM$\:|\.PCX$\:; list 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively; list 'swap': will move the current image filename to the first in the list (you'll have to invoke reload to see the effect). Of the above commands, several will be temporarily non available for the duration of a background load (enabled by \-\-recursive\-background), which will last until _loading_in_background is 0. 
+list: display the files list; list 'random_shuffle': randomly shuffle the file list; list 'reverse': reverse the file list; list 'clear': clear the file list; list 'sort': sort the file list; list 'sort_basename': sort the file list according to base name; list 'sort_fsize': sort the file list according to file size; list 'sort_mtime': sort the file list according to modification date; list 'pop' : pop the last file from the files list; list 'remove' [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; list 'push' {filename(s)} : push {filename(s)} to the back of the files list; list 'filesnum': display the number of files in the files list; list 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'marked': show which files have been marked so far; list 'dumpmarked': dump to stdout the marked files (you will want usually to 'unmarkall' afterwards); list 'unmarkall': unmark all the marked files; list 'pushdir'; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression \.JPG$\:|\.PNG$\:|\.GIF$\:|\.BMP$\:|\.TIFF$\:|\.TIF$\:|\.JPEG$\:|\.JFIF$\:|\.PPM$\:|\.PGM$\:|\.PBM$\:|\.PCX$\:; list 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively; list 'swap': will move the current image filename to the first in the list (you'll have to invoke reload to see the effect). Of the above commands, several will be temporarily non available for the duration of a background load (enabled by \-\-recursive\-background), which will last until _loading_in_background is 0. 
 .fi
 
 .na
 .B
 load
 .fi
-load : load the image, if not yet loaded (see also reload)
+load: load the image, if not yet loaded (see also reload)
 .fi
 
 .na
 .B
 pan
 .fi
-pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+\-] [{steps}['%']] pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning;a + or \- sign at the end of the first argument will make jump to next or prev if border is reached; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
+pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+\-] [{steps}['%']]: pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning;a + or \- sign at the end of the first argument will make jump to next or prev if border is reached; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
 .fi
 
 .na
 .B
 popen
 .fi
-popen {syscmd} : pipe a command, invoking popen(): spawns a shell, invoking {syscmd} and executing as fim commands the output of {syscmd}
+popen {syscmd}: pipe a command, invoking popen(): spawns a shell, invoking {syscmd} and executing as fim commands the output of {syscmd}
 .fi
 
 .na
 .B
 pread
 .fi
-pread {args} : execute {args} as a shell command and read the output as an image file (using popen)
+pread {args}: execute {args} as a shell command and read the output as an image file (using popen)
 .fi
 
 .na
 .B
 prefetch
 .fi
-prefetch : prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening. See also the _want_prefetch variable.
+prefetch: prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening. See also the _want_prefetch variable.
 .fi
 
 .na
 .B
 pwd
 .fi
-pwd : print the current directory name, and updates the _pwd variable
+pwd: print the current directory name, and updates the _pwd variable
 .fi
 
 .na
 .B
 quit
 .fi
-quit [{number}] : terminate the program; if {number} is specified, use it as the program return status; autocommand "PostInteractiveCommand" does not trigger after this command
+quit [{number}]: terminate the program; if {number} is specified, use it as the program return status; autocommand "PostInteractiveCommand" does not trigger after this command
 .fi
 
 .na
 .B
 recording
 .fi
-recording 'start' : start recording the executed commands; recording 'stop' : stop  recording the executed commands; recording 'dump' : dump in the console the record buffer; recording 'execute' : execute the record buffer; recording 'repeat_last' : repeat the last performed action; 
+recording 'start': start recording the executed commands; recording 'stop': stop  recording the executed commands; recording 'dump': dump in the console the record buffer; recording 'execute': execute the record buffer; recording 'repeat_last': repeat the last performed action; 
 .fi
 
 .na
 .B
 redisplay
 .fi
-redisplay : re\-display the current file contents
+redisplay: re\-display the current file contents
 .fi
 
 .na
 .B
 reload
 .fi
-reload [{arg}] : load the image into memory; if {arg} is present, will force reloading, bypassing the cache (see also load)
+reload [{arg}]: load the image into memory; if {arg} is present, will force reloading, bypassing the cache (see also load)
 .fi
 
 .na
@@ -416,21 +416,21 @@ rotate {number}: rotate the image the specified amount of degrees [undocumented]
 .B
 scale
 .fi
-scale {['+'|'\-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+\-*/]'|['<'|'>']} : scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given '*' and a value, will multiply the current scale by that value; if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+\-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; if given '<' or '>', will shrink or magnify image using nearest mipmap (cached pre\-scaled version); 
+scale {['+'|'\-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+\-*/]'|['<'|'>']}: scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given '*' and a value, will multiply the current scale by that value; if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+\-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; if given '<' or '>', will shrink or magnify image using nearest mipmap (cached pre\-scaled version); 
 .fi
 
 .na
 .B
 scrolldown
 .fi
-scrolldown : scroll down the image, going next if at bottom
+scrolldown: scroll down the image, going next if at bottom
 .fi
 
 .na
 .B
 scrollforward
 .fi
-scrollforward : scroll the image as it were reading it
+scrollforward: scroll the image as it were reading it
 .fi
 
 .na
@@ -444,35 +444,35 @@ set: returns a list of variables which are set; set {identifier}: returns the va
 .B
 set_commandline_mode
 .fi
-set_commandline_mode : set console mode
+set_commandline_mode: set console mode
 .fi
 
 .na
 .B
 set_interactive_mode
 .fi
-set_interactive_mode : set interactive mode
+set_interactive_mode: set interactive mode
 .fi
 
 .na
 .B
 sleep
 .fi
-sleep [{number}=1] : sleep for the specified (default 1) number of seconds
+sleep [{number}=1]: sleep for the specified (default 1) number of seconds
 .fi
 
 .na
 .B
 status
 .fi
-status : set the status line to the collation of the given arguments
+status: set the status line to the collation of the given arguments
 .fi
 
 .na
 .B
 stdout
 .fi
-stdout {args} : writes to stdout its arguments {args}
+stdout {args}: writes to stdout its arguments {args}
 .fi
 
 .na
@@ -486,35 +486,35 @@ system {syscmd}: get the output of the shell command {syscmd}. (uses popen())
 .B
 variables
 .fi
-variables : display the existing variables
+variables: display the existing variables
 .fi
 
 .na
 .B
 unalias
 .fi
-unalias {identifier} | '\-a' : delete the alias {identifier} or all aliases (use '\-a', not \-a)
+unalias {identifier} | '\-a': delete the alias {identifier} or all aliases (use '\-a', not \-a)
 .fi
 
 .na
 .B
 unbind
 .fi
-unbind {keysym} : unbind the action associated to a specified {keysym}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.
+unbind {keysym}: unbind the action associated to a specified {keysym}; if {keysym} is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified {keysym} to. activate the _verbose_keys variable to discover (display device dependent) raw keys.
 .fi
 
 .na
 .B
 while
 .fi
-while(expression){action;}  A conditional cycle construct. May be interrupted by hitting the Esc or the : key.
+while(expression){action;}:  A conditional cycle construct. May be interrupted by hitting the Esc or the : key.
 .fi
 
 .na
 .B
 window
 .fi
-window {args} : this command is disabled. It shall be re\-enabled in a future version.
+window {args}: this command is disabled. It might be re\-enabled in a future version.
 .fi
 
 .SH KEYSYMS REFERENCE
@@ -526,7 +526,7 @@ Available autocommands are: PreScale, PostScale, PrePan, PostPan, PreRedisplay, 
 .SH VARIABLES REFERENCE
 If undeclared, a variable will evaluate to 0.
 
-There namespaces in which variables may exist are: current image, global. A namespace is specified by a prefix, which is one of: 'i:', which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable i:* expands to the collation of all the name\-value pairs for the current image.
+There namespaces in which variables may exist are: current image, global. A namespace is specified by a prefix, which can be: 'i:', be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable i:* expands to the collation of all the name\-value pairs for the current image.
 
 In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
 
