@@ -511,10 +511,7 @@ err:
 		 * */
 		static fim::string res;
 		for(size_t i=0;i<args.size();++i)
-		{
-			fim::string arg=args[i];
-			res+=basename((fim_char_t*)arg.c_str());//FIXME
-		}
+			res+=fim_basename_of(args[i]);
 		setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,res);
 		return res;
 	}
