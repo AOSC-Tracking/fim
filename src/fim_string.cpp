@@ -30,7 +30,7 @@ namespace fim
 		return os << s.c_str();
 	}
 
-	std::ostream& operator<<(std::ostream& os, const std::vector<fim::string> & v)
+	std::ostream& operator<<(std::ostream& os, const args_t& v)
 	{
 #if 0
 		std::cout<<"{";

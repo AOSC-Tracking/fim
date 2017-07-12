@@ -84,7 +84,7 @@ namespace fim
 		 * check whether cmd is a valid internal (registered) Fim command and returns index
 		 */
 		for(size_t i=0;i<commands_.size();++i) 
-			if(commands_[i] && commands_[i]->cmd_==cmd)
+			if(commands_[i] && commands_[i]->cmd()==cmd)
 				return i;
 		return FIM_INVALID_IDX;
 	}
@@ -509,7 +509,7 @@ err:
 		 * c is added to the commands list
 		 */
 		assert(c);
-		int idx=findCommandIdx(c->cmd_);
+		int idx=findCommandIdx(c->cmd());
 
 		if(idx!=FIM_INVALID_IDX)
 		{
@@ -572,8 +572,8 @@ err:
 		if(mask==0 || (mask&1))
 		for(size_t i=0;i<commands_.size();++i)
 		{
-			if(commands_[i]->cmd_.find(cmd)==0)
-			completions.push_back(commands_[i]->cmd_);
+			if(commands_[i]->cmd().find(cmd)==0)
+			completions.push_back(commands_[i]->cmd());
 		}
 		if(mask==0 || (mask&2))
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
@@ -623,22 +623,22 @@ err:
 				return dupstr(completions[i].c_str());// is this malloc free ?
 			}
 			else
-				;//std::cout << cmd << " no matches with " << commands_[i]->cmd_<<  "\n";
+				;//std::cout << cmd << " no matches with " << commands_[i]->cmd()<<  "\n";
 		}
 
 /*		for(int i=list_index;i<aliases_keys.size();++i)
 		{
 			if(!commands_[i])
 				continue;
-			if(commands_[i]->cmd_.find(cmd)==0)
+			if(commands_[i]->cmd().find(cmd)==0)
 			{
 				list_index++;
-				//std::cout << cmd << " matches with " << commands_[i]->cmd_<<  "\n";
+				//std::cout << cmd << " matches with " << commands_[i]->cmd()<<  "\n";
 				//fim_readline will free this strings..
-				return dupstr(commands_[i]->cmd_.c_str());
+				return dupstr(commands_[i]->cmd().c_str());
 			}
 			else
-				;//std::cout << cmd << " no matches with " << commands_[i]->cmd_<<  "\n";
+				;//std::cout << cmd << " no matches with " << commands_[i]->cmd()<<  "\n";
 		}*/
 		//TO DO : ADD VARIABLE AND ALIAS EXPANSION..
 		return FIM_NULL;
@@ -1441,7 +1441,7 @@ ret:
 		{
 			if(i)
 				oss << " ";
-			oss << (commands_[i]->cmd_);
+			oss << (commands_[i]->cmd());
 		}
 		return oss.str();
 	}

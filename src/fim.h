@@ -587,7 +587,7 @@ namespace fim
 	extern fim_stream cerr;
 	// TODO: to fim_string.h
 	std::ostream& operator<<(std::ostream& os,const string& s);
-	std::ostream& operator<<(std::ostream& os, const std::vector<fim::string> & v);
+	std::ostream& operator<<(std::ostream& os, const args_t& v);
 	std::ostream& operator<<(std::ostream& os, const Browser& b);
 }
 

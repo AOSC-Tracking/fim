@@ -472,7 +472,7 @@ ret:
 		FIM_PR('*');
 
 #ifdef FIM_CACHE_DEBUG
-		std::cout << "  useCachedImage(\""<<fim_basename_of(key.first.c_str())<<" of type "<< ( key.second == FIM_E_FILE ? " file ": " stdin ")<<"\")\n";
+		std::cout << "  useCachedImage(\""<<fim_basename_of(key.first)<<" of type "<< ( key.second == FIM_E_FILE ? " file ": " stdin ")<<"\")\n";
 #endif /* FIM_CACHE_DEBUG */
 		if(!is_in_cache(key)) 
 		{
@@ -599,7 +599,7 @@ ret:
 			  ( type == FIM_CR_CN && ( imageCache_.find(ci->first) != imageCache_.end()  && ci->second) )
 			  )
 			{
-				cache_report << fim_basename_of((*ci).first.first.c_str()) << ":";
+				cache_report << fim_basename_of((*ci).first.first) << ":";
 				cache_report << (*ci).second << ":";
 				fim_snprintf_XB(buf, sizeof(buf), imageCache_.find(ci->first)->second->byte_size());
 				cache_report << buf << "@" << last_used(ci->first) << " ";

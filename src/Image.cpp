@@ -194,7 +194,7 @@ namespace fim
 		}
 		else
 		{
-			key = fim_fn_t (fim_basename_of(fname_.c_str()));
+			key = fim_fn_t (fim_basename_of(fname_));
 			if(cc.id_.find(key) != cc.id_.end() )
 				setVariable(FIM_VID_COMMENT,(cc.id_[key]));
 		}
@@ -989,7 +989,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 					snprintf(clbp, rbc, "%s",getStringVariable(FIM_VID_FILENAME).c_str());
 				break;
 				case('N'):
-					snprintf(clbp, rbc, "%s",fim_basename_of(getStringVariable(FIM_VID_FILENAME).c_str()));
+					snprintf(clbp, rbc, "%s",fim_basename_of(getStringVariable(FIM_VID_FILENAME)));
 				break;
 				case('T'):
 					/* console property. TODO: move outta here */

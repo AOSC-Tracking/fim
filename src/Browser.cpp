@@ -2163,7 +2163,7 @@ parsed_limits:
 				size_t j=i,ii=0,jj=0;
 
 				while(j+1<slist.size() && 0 == 
-					strcmp(fim_basename_of(slist[i].c_str()),fim_basename_of(slist[j+1].c_str())) )
+					strcmp(fim_basename_of(slist[i]),fim_basename_of(slist[j+1])) )
 					++j;
 				// j+1-i same basenames
 				if ( rm == DupFileNameMatch )
@@ -2259,8 +2259,8 @@ parsed_limits:
 #endif /* HAVE_FNMATCH_H */
 				match |= ( rm == PartialFileNameMatch && ( ( flist_[i].re_match(rlist[r].c_str()) ) != negative ) );
 #if FIM_WANT_PIC_LVDN
-				match |= ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(flist_[i].c_str())].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
-				match |= ( rm == CmtMatch     && ( ( string(cc.id_    [fim_basename_of(flist_[i].c_str())]).re_match(rlist[0].c_str()) ) != negative ) );
+				match |= ( rm == VarMatch     && ( ( cc.id_.vd_[fim_basename_of(flist_[i])].getStringVariable(rlist[0]) == rlist[1] ) != negative ) );
+				match |= ( rm == CmtMatch     && ( ( string(cc.id_    [fim_basename_of(flist_[i])]).re_match(rlist[0]) ) != negative ) );
 #endif /* FIM_WANT_PIC_LVDN */
 				if( match )
 					lbs.set(i); // TODO: further cycles on r are unnecessary after match.
@@ -2729,7 +2729,7 @@ err:
 			fim::string bof = flist_[i].c_str();
 #if FIM_WANT_PIC_LVDN
 			if( cc.id_.find(bof) == cc.id_.end() )
-				bof = fim_basename_of(flist_[i].c_str());
+				bof = fim_basename_of(flist_[i]);
 			if(want_all_vars)
 				cmtfc += cc.id_.vd_[bof].get_variables_list(true, true);
 #endif /* FIM_WANT_PIC_LVDN */
