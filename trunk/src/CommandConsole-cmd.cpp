@@ -151,9 +151,9 @@ err:
 
 				ptn = args[0].substr(1,args[0].size());
 				for(size_t i=0;i<commands_.size();++i) 
-					if(commands_[i] && commands_[i]->help_.find(ptn) != commands_[i]->help_.npos)
+					if(commands_[i] && commands_[i]->getHelp().find(ptn) != commands_[i]->getHelp().npos)
 					{
-						cstr += commands_[i]->cmd_;
+						cstr += commands_[i]->cmd();
 						cstr += " ";
 					}
 
@@ -507,8 +507,6 @@ err:
 
 	fim_cxr CommandConsole::fcmd_basename(const args_t& args)
 	{
-		/*
-		 * */
 		static fim::string res;
 		for(size_t i=0;i<args.size();++i)
 			res+=fim_basename_of(args[i]);

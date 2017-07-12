@@ -73,7 +73,7 @@ namespace fim
 			goto manmode;
 		for(size_t i=0;i<commands_.size();++i)
 		{
-			s+=(commands_[i]->cmd_);
+			s+=(commands_[i]->cmd());
 			s+=" : ";
 			s+=(commands_[i])->getHelp();
 			s+="\n";
@@ -84,7 +84,7 @@ manmode:
 		{
 			s+=".na\n"; /* No output-line adjusting; unelegant way to avoid man --html=cat's: cannot adjust line */
 			s+=".B\n";
-			s+=(commands_[i]->cmd_);
+			s+=(commands_[i]->cmd());
 			s+="\n.fi\n";
 			s+=(commands_[i])->getHelp();
 			s+="\n";

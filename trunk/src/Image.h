@@ -443,9 +443,9 @@ public:
 						}
 						else
 						{
-							(*this)[din+fim_basename_of(fn.c_str())]=ds;
+							(*this)[din+fim_basename_of(fn)]=ds;
 #if FIM_WANT_PIC_LVDN
-							vd_[din+fim_basename_of(fn.c_str())]=ns;
+							vd_[din+fim_basename_of(fn)]=ns;
 #endif /* FIM_WANT_PIC_LVDN */
 						}
 					}
@@ -463,9 +463,9 @@ public:
 						}
 						else
 						{
-							(*this)[din+fim_basename_of(fn.c_str())]=ds;
+							(*this)[din+fim_basename_of(fn)]=ds;
 #if FIM_WANT_PIC_LVDN
-							vd_[din+fim_basename_of(fn.c_str())]=ns;
+							vd_[din+fim_basename_of(fn)]=ns;
 #endif /* FIM_WANT_PIC_LVDN */
 						}
 					}

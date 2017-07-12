@@ -155,11 +155,11 @@ ret:
 	return arg;
 }
 
-static std::vector<fim::string> var(NodeType p)
+static args_t var(NodeType p)
 {
 	/* evaluate a whole chain of arg entries */
 	NodeType np=p;
-  	std::vector<fim::string> args;
+  	args_t args;
 	int i;
 
 	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(np)=='a' )
@@ -174,8 +174,9 @@ static std::vector<fim::string> var(NodeType p)
 		else
 		if(FIM_OPRNDT(np) == typeOpr && FIM_OPRNDO(np)=='a' )
 		{
-		  	std::vector<fim::string> vargs=var(np);
-			for(size_t j=0;j<vargs.size();++j) args.push_back(vargs[j]);
+		  	args_t vargs=var(np);
+			for(size_t j=0;j<vargs.size();++j)
+				args.push_back(vargs[j]);
 		}
 		else
 		{
@@ -193,7 +194,7 @@ static std::vector<fim::string> var(NodeType p)
 		np=(FIM_OPRND(p,i));
 		if(FIM_OPRNDT(np) == typeOpr && FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT)
 		{
-		  	std::vector<fim::string> vargs=var(np);
+		  	args_t vargs=var(np);
 			for(size_t j=0;j<vargs.size();++j) args.push_back(vargs[j]);
 		}
 	}
@@ -210,7 +211,7 @@ static std::vector<fim::string> var(NodeType p)
 using namespace fim;
 Var ex(NodeType p)
 {
-  	std::vector<fim::string> args;
+  	args_t args;
 	fim_int typeHint;
 
 	if (!p)
@@ -306,8 +307,7 @@ Var ex(NodeType p)
 						while( np &&    FIM_NOPS(np) >=1 )
 						if( FIM_OPRNDO(np)=='a' )
 						{
-					  		std::vector<fim::string> na;
-					  		na=var(np);
+					  		args_t na=var(np);
 				          	for(fim_size_t i=0;i<na.size();++i)
 							{
 								//std::cout << "?"<<na[i]<<FIM_SYM_ENDL;
