@@ -192,7 +192,7 @@ autocmd_del : manipulate autocommands. usage: autocmd_del {event} {pattern} {com
 .B
 basename
 .fi
-basename {filename} : returns the basename of {filename}
+basename {filename}: returns the basename of {filename} in the _last_system_output variable.
 .fi
 
 .na
