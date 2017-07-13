@@ -440,15 +440,15 @@ namespace fim
 #if 0
 				int fh=displaydevice_->f_ ? displaydevice_->f_->sheight():1; // FIXME : this is not clean
 				int fw=displaydevice_->f_ ? displaydevice_->f_->swidth():1; // FIXME : this is not clean
-				int sl = strlen(image_->getStringVariable(FIM_VID_COMMENT).c_str()), rw = viewport_width() / fw, wh = viewport_height();
+				int sl = strlen(image_->getStringVariable(FIM_VID_COMMENT)), rw = viewport_width() / fw, wh = viewport_height();
 				for( int li = 0 ; sl > rw * li ; ++li )
 					if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
 				if(commandConsole.isSetVar(FIM_VID_COMMENT_OI_FMT))
-					this->fs_ml_puts(image_->getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT).c_str()),wcoi-1);
+					this->fs_ml_puts(image_->getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1);
 				else
-					this->fs_ml_puts(""/*image_->getStringVariable(FIM_VID_COMMENT).c_str()*/,wcoi-1);
+					this->fs_ml_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1);
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
@@ -729,7 +729,7 @@ namespace fim
 		fim_pan_t hs=0,vs=0;
 		fim_bool_t ps=false;
 		fim_char_t f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
-		const fim_char_t*const fs=args[0].c_str();
+		const fim_char_t*const fs=args[0];
 		const fim_char_t*ss=FIM_NULL;
 		fim_bool_t prv = true;
 
@@ -743,7 +743,7 @@ namespace fim
 		// FIXME: write me
 		if(args.size()>=2)
 		{
-			ps=((ss=args[1].c_str()) && *ss && ((ss[strlen(ss)-1])=='%'));
+			ps=((ss=args[1]) && *ss && ((ss[strlen(ss)-1])=='%'));
 			vs=hs=(int)(args[1]);
 		}
 		else

@@ -349,6 +349,7 @@ ret:		return key;
 	,dummydisplaydevice_()
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,displaydevice_(FIM_NULL)			/* the display device could be FIM_NULL ! (FIXME) */
+	,oldcwd_(fim_getcwd())
 	{
 		addCommand(new Command(fim_cmd_id(FIM_FLT_ALIAS),fim::string(FIM_FLT_ALIAS " [" FIM_CNS_EX_ID_STRING " [" FIM_CNS_EX_CMDS_STRING " [" FIM_CNS_EX_DSC_STRING "]]]: without arguments, lists the current aliases. With one, shows an identifier's assigned command. With two, assigns to an identifier a user defined command or sequence of commands. With three, also assigns a help string."),this,&CommandConsole::fcmd_foo));
 		addCommand(new Command(fim_cmd_id(FIM_FLT_ALIGN),fim::string(FIM_CMD_HELP_ALIGN),&browser_,&Browser::fcmd_align));
