@@ -35,7 +35,6 @@
 #endif
 
 #if FIM_INDEPENDENT_NAMESPACE
-#define FIM_INTERPRETER_OBSOLETE 0 /* candidates for removal */
 #define FIM_NO_BREAK /* fim::cc.catchLoopBreakingCommand(0)==0 */ 1
 #define FIM_OPRND(P,N) ((P)->opr.op[(N)])
 #define FIM_FACC(O)  (O)->fid.f
@@ -53,7 +52,6 @@
 #define FIM_EC(CMD,ARGS) /* fim::cc.execute(CMD,ARGS) */ "result" /*Var((fim_int)1)*/ /* FIXME: shall return Arg or Var or Val */
 typedef nodeType * NodeType;
 #else /* FIM_INDEPENDENT_NAMESPACE */
-#define FIM_INTERPRETER_OBSOLETE 0 /* candidates for removal */
 #define FIM_NO_BREAK fim::cc.catchLoopBreakingCommand(0)==0
 #define FIM_OPRND(P,N) ((P)->opr.op[(N)])
 #define FIM_FACC(O)  (O)->fid.f
@@ -101,19 +99,6 @@ static Var cvar(NodeType p)
 		}
 		goto ret;
 	}
-#if FIM_INTERPRETER_OBSOLETE
-	else
-	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(p)=='a' )
-	{
-		DBG("a:"<<FIM_SYM_ENDL);
-		for(int i=0;i<FIM_NOPS(p);++i)
-		{
-			//warning : only 1 should be allowed here..
-			np=(FIM_OPRND(p,i));
-			arg=cvar(np).getString();
-		}
-	}
-#endif /* FIM_INTERPRETER_OBSOLETE */
 	else
 	if(FIM_OPRNDT(p) == stringCon )
 	{
@@ -129,9 +114,8 @@ static Var cvar(NodeType p)
 	}
 	else if(FIM_OPRNDT(p) == intCon )
 	{
-		/* FIXME : int cast is due to some sick inner conversion */
 		DBG("cvar:intCon:"<<FIM_IACC(p)<<FIM_SYM_ENDL);
-		return Var((fim_int)(FIM_IACC(p)));
+		return Var(FIM_IACC(p));
 	}
 	else if(FIM_OPRNDT(p) == floatCon)
 	{
@@ -176,25 +160,6 @@ static args_t var(NodeType p)
 			DBG("CVARA\n");
 		}
 	}
-#if FIM_INTERPRETER_OBSOLETE
-	else
-	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT)
-	for(i=0;i<FIM_NOPS(p);++i)
-	{
-		DBG("'i'args:"<<i<<"/"<<FIM_NOPS(p)<<":\n");
-		np=(FIM_OPRND(p,i));
-		if(FIM_OPRNDT(np) == typeOpr && FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT)
-		{
-		  	args_t vargs=var(np);
-			for(size_t j=0;j<vargs.size();++j) args.push_back(vargs[j]);
-		}
-	}
-	else
-	{
-		DBG("~:\n");
-		args.push_back(cvar(np).getString());
-	}
-#endif /* FIM_INTERPRETER_OBSOLETE */
 	DBG("?:\n");
 	return args;
 }
@@ -212,7 +177,7 @@ Var ex(NodeType p)
 	{
 		case intCon:
 			DBG("intCon:\n");
-			return (fim_int)FIM_IACC(p);
+			return FIM_IACC(p);
 	        case floatCon:
 			DBG("ex:floatCon:"<<FIM_FACC(p)<<FIM_SYM_ENDL);
 			return FIM_FACC(p);
@@ -222,7 +187,7 @@ Var ex(NodeType p)
 			// eventually may handle already here if FIM_SACC(p) is "random" ...
 			if(FIM_GVT(FIM_SACC(p))==FIM_SYM_TYPE_INT)
 			{
-				DBG("vId:"<<FIM_SACC(p)<<":"<<(fim_int)fim::cc.getIntVariable(FIM_SACC(p))<<FIM_SYM_ENDL);
+				DBG("vId:"<<FIM_SACC(p)<<":"<<fim::cc.getIntVariable(FIM_SACC(p))<<FIM_SYM_ENDL);
 				return FIM_GV(FIM_SACC(p));
 			}
 
@@ -245,11 +210,6 @@ Var ex(NodeType p)
 			DBG("'typeOpr':\n");
 		switch(FIM_OPRNDO(p))
 		{
-#if FIM_INTERPRETER_OBSOLETE
-			case FIM_SYM_STRING_CONCAT:
-				DBG(".:\n");
-				return (ex(FIM_OPRND(p,0)) + ex(FIM_OPRND(p,1))); // TODO: the , operator
-#endif /* FIM_INTERPRETER_OBSOLETE */
 			case WHILE:
 				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK )
 					ex(FIM_OPRND(p,1));
@@ -379,50 +339,6 @@ Var ex(NodeType p)
 			s=FIM_SACC(FIM_OPRND(p,0));
 			DBG("SV:"<<s<<FIM_SYM_ENDL)
 			typeHint=FIM_OPRNDH(FIM_OPRND(p,0));
-#if FIM_INTERPRETER_OBSOLETE
-			if(typeHint==FIM_SYM_TYPE_FLOAT)
-			{
-				float fValue=FIM_FOPRND(p,1);
-				DBG("SVf"<<s<<FIM_SYM_ENDL);
-				FIM_SV(s,fValue);
-				return (fim_int)fValue;
-			}
-			else if(typeHint=='s')
-			{
-				DBG("SVs\n");
-				if(FIM_OPRNDT(FIM_OPRND(p,1))!=stringCon)
-				{
-					//this shouldn't happen
-				}
-				else 
-				{
-					DBG("SVs:"<<s<<":"<<FIM_SACC(FIM_OPRND(p,0))<<FIM_SYM_ENDL);
-					// got a string!
-		       		        FIM_SV(s,FIM_SACC(FIM_OPRND(p,0)));
-#if 0
-					if(0 && 0==strcmp(s,"random"))
-			                	return fim_rand();//FIXME
-					else
-#endif
-			                	//return fim::cc.getIntVariable(s);
-			                	return fim::cc.getStringVariable(s);
-				}
-				goto err;
-			}//FIM_SYM_TYPE_INT
-			else if(typeHint==FIM_SYM_TYPE_INT)
-			{
-				fim_int iValue=ex(FIM_OPRND(p,1)).getInt();
-				DBG("SVi:"<<s<<":"<<iValue<<""<<FIM_SYM_ENDL);
-				FIM_SV(s,iValue);
-				return iValue;
-			}
-			else if(typeHint=='v')
-			{
-				DBG("SVv\n");
-				//this shouldn't happen
-			}
-			else
-#endif /* FIM_INTERPRETER_OBSOLETE */
 			if(typeHint=='a')
 			{
 				DBG("SVa\n");
@@ -434,10 +350,6 @@ Var ex(NodeType p)
 			}
 			else
 			{
-#if FIM_INTERPRETER_OBSOLETE
-				DBG("SV?\n");
-				goto err;
-#endif /* FIM_INTERPRETER_OBSOLETE */
 			}
 		}
 #if FIM_WANT_AVOID_FP_EXCEPTIONS
@@ -498,25 +410,17 @@ nodeType *scon(fim_char_t*s)
 
 nodeType *vscon(fim_char_t*s,int typeHint)
 {
-	/*
-	 * NOTE:
-	 *
-	 * The following code is much more complicated than it could be.
-	 * But I like it in this way :)
-	 */
 #ifdef FIM_RANDOM
 #ifndef FIM_BIG_ENDIAN
 #if ((SIZEOF_INT)>=8)
 	if( *reinterpret_cast<int*>(s+0) == 0x006d6f646e6172 ) // ..modnar
 #else
-	/*
-	* Warning : this is LSB order, so it is not portable code.
-	*/
+	/* this is LSB order, so it is not portable code.  */
 	if( *reinterpret_cast<int*>(s+0) == 0x646e6172 // dnar
 	&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006d6f00    ) // .mo.
 #endif
 #else
-	/* WARNING : UNTESTED */
+
 #if ((SIZEOF_INT)>=8)
 	if( *reinterpret_cast<int*>(s+0) == 0x72616e646f6d00 ) // random..
 #else
