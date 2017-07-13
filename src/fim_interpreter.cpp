@@ -28,8 +28,6 @@
 #include "fim_interpreter.h"
 #include <cstdarg>	/* va_list, va_arg, va_start, va_end */
 
-/* TODO: need to rename the functions in here */
-
 #if 0
 #define DBG(X) std::cout<<__LINE__<<":"<<X;
 #else
@@ -79,11 +77,6 @@ namespace fim
 	extern CommandConsole cc;
 }
 
-/*
- *	Interpreter of fim's script language.
- *	Invoked by the flex and bison files.
- *	This code will be fully cleaned when the Fim language will settle.
- */
 std::ostream& operator<<(std::ostream& os, const nodeType& p)
 {
 	os<< "type " << p.type << FIM_SYM_ENDL;
@@ -97,12 +90,11 @@ static Var cvar(NodeType p)
 	/* evaluate a single 'arg' entry */
 	NodeType np=p;
   	fim::string arg;
-	int i;
 
 	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(p)==FIM_SYM_STRING_CONCAT)
 	{
 		DBG(".:"<<FIM_SYM_ENDL);
-		for(i=0;i<FIM_NOPS(p);++i)
+		for(int i=0;i<FIM_NOPS(p);++i)
 		{
 			np=(FIM_OPRND(p,i));
 			arg+=(string)(cvar(np).getString());
@@ -114,7 +106,7 @@ static Var cvar(NodeType p)
 	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(p)=='a' )
 	{
 		DBG("a:"<<FIM_SYM_ENDL);
-		for(i=0;i<FIM_NOPS(p);++i)
+		for(int i=0;i<FIM_NOPS(p);++i)
 		{
 			//warning : only 1 should be allowed here..
 			np=(FIM_OPRND(p,i));
@@ -160,10 +152,9 @@ static args_t var(NodeType p)
 	/* evaluate a whole chain of arg entries */
 	NodeType np=p;
   	args_t args;
-	int i;
 
 	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(np)=='a' )
-	for(i=0;i<FIM_NOPS(p);++i)
+	for(int i=0;i<FIM_NOPS(p);++i)
 	{
 		DBG("'a'args:"<<i<<"/"<<FIM_NOPS(p)<<":\n");
 		np=(FIM_OPRND(p,i));
@@ -542,7 +533,6 @@ nodeType *vscon(fim_char_t*s,int typeHint)
 	return p;
 }
 
-
 nodeType *fcon(float fValue)
 {
 	nodeType *p;
@@ -556,8 +546,6 @@ nodeType *fcon(float fValue)
 	p->fid.f = fValue;
 	return p;
 }
-
-
 
 nodeType *con(fim_int value)
 {
@@ -597,7 +585,6 @@ nodeType *opr(int oper, int nops, ...)
 
 void freeNode(nodeType *p)
 {
-	int i;
 	if (!p) return;
 	if (p->type == stringCon)
 		{fim_free(p->scon.s);p->scon.s=NULL;}
@@ -605,8 +592,8 @@ void freeNode(nodeType *p)
 		{fim_free(p->scon.s);p->scon.s=NULL;}
 	if (p->type == typeOpr)
 	{
-		for (i = 0; i < p->opr.nops; i++)
-		freeNode(p->opr.op[i]);
+		for (int i = 0; i < p->opr.nops; i++)
+			freeNode(p->opr.op[i]);
 	}
 	free (p);
 }
@@ -622,6 +609,4 @@ void yyerror(const fim_char_t *s)
 	fim::cout << s << FIM_SYM_ENDL;
 #endif /* FIM_INDEPENDENT_NAMESPACE */
 }
-
-
 

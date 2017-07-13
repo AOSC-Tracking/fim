@@ -30,13 +30,6 @@
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 namespace fim
 {
-	class FimConsole
-	{
-		public:
-		//virtual void add(string s)=0;
-	//	virtual int do_dump(int f, int l)const;
-	};
-
 	class MiniConsole
 #ifdef FIM_NAMESPACES
 	:public Namespace
