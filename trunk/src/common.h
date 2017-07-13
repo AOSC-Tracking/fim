@@ -43,7 +43,7 @@ void fim_perror(const fim_char_t *s);
 //void fim_touppers(fim_char_t *s);
 size_t fim_strlen(const fim_char_t *str);
 void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t);
-void trhex(fim_char_t *str);
+//void trhex(fim_char_t *str);
 void chomp(fim_char_t *s);
 void sanitize_string_from_nongraph(fim_char_t *s, int c=0);
 void sanitize_string_from_nongraph_except_newline(fim_char_t *s, int c=0);
