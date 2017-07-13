@@ -481,7 +481,8 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_CLEARTERM "\x1B\x4D" /* FIXME: still unused */
 #define FIM_CNS_WHITE 0xFFFFFFFF	/* Temporarily here. Will better need an enum or another portable solution. */
 #define FIM_CNS_BLACK 0x00000000	/* Temporarily here. Will better need an enum or another portable solution. */
-#define FIM_CNS_DBG_CMDS_MAX "ack" /* see FIM_VID_DBG_COMMANDS */
+#define FIM_CNS_DBG_CMDS_MAX "acki" /* see FIM_VID_DBG_COMMANDS */
+#define FIM_CNS_DBG_CMDS_MID "ack" /* see FIM_VID_DBG_COMMANDS */
 #define FIM_CNS_DBG_CMDS_PFX "#" /* prefix. see FIM_VID_DBG_COMMANDS */
 
 #if FIM_USE_CXX14
