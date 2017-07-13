@@ -722,7 +722,7 @@ namespace fim
 #define FIM_VID_SKIP_SCROLL			"_scroll_skip_page_fraction"		/* "[int,g:] if >1, fraction of page which will be skipped in when scrolling (e.g. 'scrollforward'); if 1, auto chosen; if <1, disabled." */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)" */
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in,g:] if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; (for debugging purposes)" */
-#define FIM_VID_OPEN_OFFSET_L			"_open_offset"		/* "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET " will be assigned to images opened at a nonzero offset " */
+#define FIM_VID_OPEN_OFFSET_L			"_open_offset"		/* "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET_L " will be assigned to images opened at a nonzero offset " */
 #define FIM_VID_OPEN_OFFSET_U		"_open_offset_retry"	/* "[in,optional,g:] number of adjacent bytes to probe in opening the file " */
 #define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim -C '_seek_magic=MAGIC_STRING;push filename' ) " */
 #define FIM_VID_PREFERRED_RENDERING_WIDTH	"_preferred_rendering_width"		/* "[in,optional,g:] if >0, bit based rendering will use this value for a default document width (instead of a default value) " */
