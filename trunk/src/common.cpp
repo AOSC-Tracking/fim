@@ -487,39 +487,43 @@ static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
 }
 #endif /* HAVE_FGETLN */
 
-static int pick_word(const fim_char_t *f, unsigned int *w)
+template<typename T>
+static int pick_word(const fim_char_t *f, T*wp)
 {
-	/*
-		FIXME : what is this ? :)
-	*/
 	int fd = open(f,O_RDONLY);
+
 	if(fd==-1)
 	       	goto ret;
-	if(read(fd,w,sizeof(int))==sizeof(int))
-		fd=0;
+
+	if(read(fd,wp,sizeof(T))==sizeof(T))
+		wp=FIM_NULL; // success
+	close(fd);
+	if(wp==FIM_NULL)
+		fd=0; // success
+	else
+		fd=-1;
 ret:
 	return fd;
 }
 
-/*
- * Will be improved, if needed.
- * */
 fim_int fim_rand(void)
 {
 	/*
 	 * Please don't use Fim random numbers for cryptographical purposes ;)
 	 * Note that we use /dev/urandom because it will never block on reading.
-	 * Reading from     /dev/random could instead block.
+	 * Reading from     /dev/random may block.
 	 * */
-	unsigned int w,r;
-	if(pick_word(FIM_LINUX_RAND_FILE,&w)==0)
-	       	r = (w%RAND_MAX);// TODO: are we sure that RAND_MAX corresponds to FIM_LINUX_RAND_FILE ?
+	fim_int w;
+	unsigned int u;
+
+	if(pick_word(FIM_LINUX_RAND_FILE,&u)==0)
+	       	w = (u%RAND_MAX);
 	else
 	{
 		srand(clock());
-		r = rand();
+		w = rand();
 	}
-	return (fim_int) r; /* FIXME: shall document this limitation  */
+	return w;
 }
 
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase, int ignorenewlines)
