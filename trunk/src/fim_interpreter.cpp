@@ -30,7 +30,7 @@
 
 #define FIM_INTERPRETER_ERROR "Unexpected !\n"
 
-#if 1
+#if 0
 #define DBG(X) if(dv)std::cout<<__LINE__<<":"<<X;
 #else
 #define DBG(X) if(dv)std::cout<<"# "<<X;
@@ -168,7 +168,7 @@ Var ex(NodeType p)
 {
   	args_t args;
 	fim_int typeHint;
-	const bool dv = false;
+	const bool dv = (FIM_GV(FIM_VID_DBG_COMMANDS).find('i')>=0);
 
 	if (!p)
 		goto ret;
