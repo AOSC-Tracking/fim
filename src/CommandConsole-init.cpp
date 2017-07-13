@@ -35,6 +35,10 @@
 #include "readline.h"
 #endif /* FIM_USE_READLINE */
 
+#if FIM_USE_CXX11
+#include <type_traits>
+#endif /* FIM_USE_CXX11 */
+
 namespace fim
 {
 
@@ -409,8 +413,21 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		rl::initialize_readline( displaydevice_==FIM_NULL, wcs );
 		load_or_save_history(true);
 #endif /* FIM_USE_READLINE */
+
+#if FIM_USE_CXX11
+		static_assert(std::is_signed<fim_int>(),"fim_int shall be a signed type");
+		static_assert(std::is_floating_point<fim_scale_t>(),"internal type error");
+		static_assert(std::is_floating_point<fim_angle_t>(),"internal type error");
+		static_assert(std::is_floating_point<fim_float_t>(),"internal type error");
+		static_assert(std::is_enum<fim_redraw_t>(),"internal type error");
+		static_assert(std::is_class<Var>(),"internal type error");
+		static_assert(std::is_abstract<DisplayDevice>(),"internal type error");
+		static_assert(std::is_polymorphic<DisplayDevice>(),"internal type error");
+		static_assert(std::is_polymorphic<Namespace>(),"internal type error");
+#endif /* FIM_USE_CXX11 */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
+
 #if FIM_WANT_BENCHMARKS
 			fim_bench_subsystem(displaydevice_);
 			fim_bench_subsystem(&browser_);
