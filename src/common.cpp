@@ -107,6 +107,7 @@ size_t fim_strlen(const fim_char_t *str)
 	return strlen(str);
 }
 
+#if 0
 void trhex(fim_char_t *str)
 {
 	/*	
@@ -151,6 +152,7 @@ void trhex(fim_char_t *str)
 ret:
 	return;
 }
+#endif
 
 void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 {
@@ -205,7 +207,7 @@ void trec(fim_char_t *str,const fim_char_t *f,const fim_char_t*t)
 #endif
 		while(*fp)
 		{
-			//  if the following charcter is backslash-escaped and is in our from-list ..
+			//  if the following character is backslash-escaped and is in our from-list ..
 			if( *_p == '\\' && *(_p+1) == *fp )
 			{
 				fim_char_t*pp;
