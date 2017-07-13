@@ -516,21 +516,21 @@ nodeType *vscon(fim_char_t*s,int typeHint)
 #ifdef FIM_RANDOM
 #ifndef FIM_BIG_ENDIAN
 #if ((SIZEOF_INT)>=8)
-	if( *(int*)(s+0) == 0x006d6f646e6172 ) // ..modnar
+	if( *reinterpret_cast<int*>(s+0) == 0x006d6f646e6172 ) // ..modnar
 #else
 	/*
 	* Warning : this is LSB order, so it is not portable code.
 	*/
-	if( *(int*)(s+0) == 0x646e6172 // dnar
-	&& (*(int*)(s+4)<<8)== 0x006d6f00    ) // .mo.
+	if( *reinterpret_cast<int*>(s+0) == 0x646e6172 // dnar
+	&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006d6f00    ) // .mo.
 #endif
 #else
 	/* WARNING : UNTESTED */
 #if ((SIZEOF_INT)>=8)
-	if( *(int*)(s+0) == 0x72616e646f6d00 ) // random..
+	if( *reinterpret_cast<int*>(s+0) == 0x72616e646f6d00 ) // random..
 #else
-	if( *(int*)(s+0) == 0x646e6172 // rand
-	&& (*(int*)(s+4)<<8)== 0x006f6d00    ) // .om.
+	if( *reinterpret_cast<int*>(s+0) == 0x646e6172 // rand
+	&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006f6d00    ) // .om.
 #endif
 #endif
 	return con(fim_rand());
