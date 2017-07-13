@@ -28,10 +28,13 @@
 #include "fim_interpreter.h"
 #include <cstdarg>	/* va_list, va_arg, va_start, va_end */
 
-#if 0
-#define DBG(X) std::cout<<__LINE__<<":"<<X;
+#define FIM_INTERPRETER_ERROR "Unexpected !\n"
+
+#if 1
+#define DBG(X) if(dv)std::cout<<__LINE__<<":"<<X;
 #else
-#define DBG(X) 
+#define DBG(X) if(dv)std::cout<<"# "<<X;
+//#define DBG(X) 
 #endif
 
 #if FIM_INDEPENDENT_NAMESPACE
@@ -81,9 +84,7 @@ std::ostream& operator<<(std::ostream& os, const nodeType& p)
 	return os;
 }
 
-Var ex(NodeType p); /* interpreter execution */
-
-static Var cvar(NodeType p)
+static Var cvar(NodeType p, const bool dv)
 {
 	/* evaluate a single 'arg' entry */
 	NodeType np=p;
@@ -91,76 +92,74 @@ static Var cvar(NodeType p)
 
 	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(p)==FIM_SYM_STRING_CONCAT)
 	{
-		DBG(".:"<<FIM_SYM_ENDL);
+		DBG("Concat (.)"<<FIM_SYM_ENDL);
 		for(int i=0;i<FIM_NOPS(p);++i)
 		{
 			np=(FIM_OPRND(p,i));
-			arg+=(string)(cvar(np).getString());
+			arg+=(string)(cvar(np,dv).getString());
 		}
 		goto ret;
 	}
 	else
 	if(FIM_OPRNDT(p) == stringCon )
 	{
-		DBG("stringCon:"<<FIM_SYM_ENDL);
+		DBG("stringCon"<<FIM_SYM_ENDL);
 		arg=(FIM_SACC(p));
 		return arg;
 	}
 	else
 	if(FIM_OPRNDT(p) == vId )
 	{	
-		DBG("cvId:"<<FIM_SYM_ENDL);
+		DBG("cvId"<<FIM_SYM_ENDL);
 		return FIM_GV(FIM_SACC(p));
 	}
 	else if(FIM_OPRNDT(p) == intCon )
 	{
-		DBG("cvar:intCon:"<<FIM_IACC(p)<<FIM_SYM_ENDL);
+		DBG("cvar:intCon: "<<FIM_IACC(p)<<FIM_SYM_ENDL);
 		return Var(FIM_IACC(p));
 	}
 	else if(FIM_OPRNDT(p) == floatCon)
 	{
-		DBG("cvar:floatCon:"<<FIM_FACC(p)<<FIM_SYM_ENDL);
+		DBG("cvar:floatCon: "<<FIM_FACC(p)<<FIM_SYM_ENDL);
 		return FIM_FACC(p);
 	}
 	else
 	{
-		DBG("nest:\n");
+		//DBG("nest:"<<FIM_OPRNDT(p)<<"\n");
 		return ex(p);
 	}
 ret:
 	return arg;
 }
 
-static args_t var(NodeType p)
+static args_t var(NodeType p, const bool dv)
 {
 	/* evaluate a whole chain of arg entries */
 	NodeType np=p;
   	args_t args;
 
-	if(FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(np)=='a' )
+	if( FIM_OPRNDT(p) == typeOpr && FIM_OPRNDO(np)=='a' )
 	for(int i=0;i<FIM_NOPS(p);++i)
 	{
-		DBG("'a'args:"<<i<<"/"<<FIM_NOPS(p)<<":\n");
 		np=(FIM_OPRND(p,i));
-		if(FIM_OPRNDT(np) == stringCon )
+		if( FIM_OPRNDT(np) == stringCon )
 		{
+			DBG("stringConstant: "<<fim_shell_arg_escape(FIM_SACC(np))<<"\n");
 			args.push_back(FIM_SACC(np));
 		}
 		else
-		if(FIM_OPRNDT(np) == typeOpr && FIM_OPRNDO(np)=='a' )
+		if(FIM_OPRNDT(np) == typeOpr && FIM_OPRNDO(np)=='a')
 		{
-		  	args_t vargs=var(np);
+		  	args_t vargs=var(np,dv);
 			for(size_t j=0;j<vargs.size();++j)
 				args.push_back(vargs[j]);
 		}
 		else
 		{
-			DBG("CVARB\n");
-			args.push_back(cvar(np).getString());
-			DBG("CVARA\n");
+			args.push_back(cvar(np,dv).getString());
 		}
 	}
-	DBG("?:\n");
+	//DBG("?:\n");
 	return args;
 }
 
@@ -169,6 +168,7 @@ Var ex(NodeType p)
 {
   	args_t args;
 	fim_int typeHint;
+	const bool dv = false;
 
 	if (!p)
 		goto ret;
@@ -176,70 +176,73 @@ Var ex(NodeType p)
 	switch(FIM_OPRNDT(p))
 	{
 		case intCon:
-			DBG("intCon:\n");
+			DBG("intConstant\n");
 			return FIM_IACC(p);
 	        case floatCon:
-			DBG("ex:floatCon:"<<FIM_FACC(p)<<FIM_SYM_ENDL);
+			DBG("floatConstant"<<FIM_FACC(p)<<FIM_SYM_ENDL);
 			return FIM_FACC(p);
 		case vId:
 		{
-			DBG("vId:\n");
-			// eventually may handle already here if FIM_SACC(p) is "random" ...
-			if(FIM_GVT(FIM_SACC(p))==FIM_SYM_TYPE_INT)
+			const fim_char_t*const varId=FIM_SACC(p);
+			// may handle here special value "random" ...
+			if(FIM_GVT(varId)==FIM_SYM_TYPE_INT)
 			{
-				DBG("vId:"<<FIM_SACC(p)<<":"<<fim::cc.getIntVariable(FIM_SACC(p))<<FIM_SYM_ENDL);
-				return FIM_GV(FIM_SACC(p));
+				DBG("getVar (int): "<<varId<<" = "<<fim::cc.getIntVariable(varId)<<FIM_SYM_ENDL);
+				return FIM_GV(varId);
 			}
-
-			if(FIM_GVT(FIM_SACC(p))==FIM_SYM_TYPE_FLOAT)
+			if(FIM_GVT(varId)==FIM_SYM_TYPE_FLOAT)
 			{
-				DBG("'f':\n");
-				return FIM_GV(FIM_SACC(p));
+				DBG("getVar (float): "<<varId<<" = "<<fim::cc.getFloatVariable(varId)<<FIM_SYM_ENDL);
+				return FIM_GV(varId);
 			}
 			else
 			{
-				DBG("'s':\n");
-				return FIM_GV(FIM_SACC(p));
+				DBG("getVar (string): "<<varId<<" = "<<fim_shell_arg_escape(fim::cc.getStringVariable(varId))<<FIM_SYM_ENDL);
+				return FIM_GV(varId);
 			}
 		}
 		case stringCon:
-			DBG("'stringCon':\n");
+			DBG("stringCon\n");
 			// a single string token was encountered
 			return Var(FIM_SACC(p));
 		case typeOpr:	/*	some operator	*/
-			DBG("'typeOpr':\n");
+			//DBG("typeOpr\n");
 		switch(FIM_OPRNDO(p))
 		{
 			case WHILE:
+				DBG("Begin While\n");
 				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK )
 					ex(FIM_OPRND(p,1));
+				DBG("End While\n");
 				goto ret;
 			case IF:
-				DBG("IF:"<<(ex(FIM_OPRND(p,0)).getInt())<<FIM_SYM_ENDL);
+				DBG("Begin If:"<<(ex(FIM_OPRND(p,0)).getInt())<<FIM_SYM_ENDL);
 				if (ex(FIM_OPRND(p,0)).getInt())
 					ex(FIM_OPRND(p,1));
 				else if (FIM_NOPS(p) > 2)
 					ex(FIM_OPRND(p,2));
+				DBG("End If\n");
 				goto ret;
 			case FIM_SYM_SEMICOLON:
-				DBG(";:\n"); // cmd;cmd
+				DBG("Semicolon (;)\n"); // cmd;cmd
 				ex(FIM_OPRND(p,0));
 				return ex(FIM_OPRND(p,1));
 			case 'r':
-				DBG("r\n");
 			if( FIM_NOPS(p) == 2 )
 			{
 				fim_int times=ex(FIM_OPRND(p,1)).getInt();
+				DBG("Begin Repeat " << times << "x\n");
 				if(times<0)
 					goto err;
 				for (fim_int i=0;i<times && FIM_NO_BREAK ;++i)
 					ex(FIM_OPRND(p,0));
+				DBG("End Repeat " << times << "x\n");
 				goto ret;
 			}
 			else
 				goto err;
 			case 'x': 
-				DBG("X\n");
+				//DBG("X\n");
 			  	/*
 			     * when encountering an 'x' node, the first (left) subtree should 
 			     * contain the string with the identifier of the command to 
@@ -248,83 +251,47 @@ Var ex(NodeType p)
 				{
 			  		if( FIM_NOPS(p) < 1 )
 			  		{
-						DBG("INTERNAL ERROR\n");
+						DBG(FIM_INTERPRETER_ERROR);
 						goto err;
 					}
 			  		if(FIM_NOPS(p)==2)	//int yacc.ypp we specified only 2 ops per x node
-		          	{
+		          		{
 						NodeType np=p;	
 						np=(FIM_OPRND(np,1)); //the right subtree first node
+						// DBG("ARGS:"<<FIM_NOPS(np)<<FIM_SYM_ENDL);
 						while( np &&    FIM_NOPS(np) >=1 )
 						if( FIM_OPRNDO(np)=='a' )
 						{
-					  		args_t na=var(np);
-				          	for(fim_size_t i=0;i<na.size();++i)
+							DBG("Args...\n");
+					  		args_t na=var(np,dv);
+							DBG("Args: "<<na.size()<<FIM_SYM_ENDL);
+				          		for(fim_size_t i=0;i<na.size();++i)
 							{
-								//std::cout << "?"<<na[i]<<FIM_SYM_ENDL;
-								// FIXME : non sono sicuro che questo serva
 #if FIM_USE_CXX11
-								args.emplace_back(std::move(na[i]));}
+								args.emplace_back(std::move(na[i]));
 #else /* FIM_USE_CXX11 */
-								args.push_back(na[i]);}
+								args.push_back(na[i]);
 #endif /* FIM_USE_CXX11 */
-							  	DBG("A:"<<FIM_NOPS(np)<<FIM_SYM_ENDL);
-								break;
-#if 0
-					  return 0;
-					  /*
-					   * we descend the right subtree  (the subtree of arguments)
-					   * (thus we waste the benefit of the multi argument operator!)
-					   */
-					  dp=FIM_OPRND(np,0);	//we descend 1 step in the left subtree (under arg)
-					  dp=FIM_OPRND(dp,0);
-	                          	  if(FIM_NOPS(np) < 2) 
-					  {
-						np=FIM_NULL;
-				          }
-					  else
-					  {
-						np=(FIM_OPRND(np,1));
-				          }
-	                   		  if( ((FIM_OPRND(dp,0))) && (dFIM_OPRNDT(p))==stringCon)//|| (dFIM_OPRNDT(p))==intCon) 
-					  {	
-						  //probably dead code
-					  }
-	                   		  if( ((FIM_OPRND(dp,0))) && (dFIM_OPRNDT(p))==typeOpr)//|| (dFIM_OPRNDT(p))==intCon) 
-					  {	
-						  //probably dead code
-					  }
-					  else if( ((dFIM_OPRNDO(p)==FIM_SYM_STRING_CONCAT)))
-					  {
-				  	//cout <<  "DEAD CODE\n";
-						  //probably dead code
-				          }
-					  else;
-					  assert(dp);
-#endif
+							}
+							break;
 						}
 						else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
 						{
-							//cout <<  "DEAD CODE\n";
-							//probably dead code
+							DBG(FIM_INTERPRETER_ERROR);
 						}
 					}
 					{
-						DBG("A.\n");
-						/*
-						 * single command execution
-						 */
 						fim::string result;
-						//std::cout  <<"GULP:"<< FIM_SACC(FIM_OPRND(p,0))<< args[0] <<FIM_SYM_ENDL;
-//						if(args.size()>0)
-//							std::cout  <<"GULP:"<< (fim_int*)FIM_SACC(FIM_OPRND(p,0))<<" "<<FIM_SACC(FIM_OPRND(p,0))<<" "<<args[0] <<FIM_SYM_ENDL;
-//						else
-//							std::cout  <<"GULP:"<< args.size() <<FIM_SYM_ENDL;
-						if(p)
-							if(FIM_OPRND(p,0))
-								if(FIM_SACC(FIM_OPRND(p,0)))
-									result = FIM_EC(FIM_SACC(FIM_OPRND(p,0)),args);
-						/* sometimes there are NULLs  : BAD !!  */
+						if(p && FIM_OPRND(p,0))
+						{
+							const fim_char_t * cmd = FIM_SACC(FIM_OPRND(p,0));
+							if(cmd)
+							{
+								DBG("Begin Exec: " << cmd << " " << args << "\n");
+								result = FIM_EC(cmd,args);
+								DBG("End Exec: " << cmd << " " << args << "\n");
+							}
+						}
 						return fim_atoi(result.c_str());
 			  		}
 		}
@@ -334,18 +301,17 @@ Var ex(NodeType p)
 			goto err;
 		case '=':
 		{
-			//assignment of a variable
 			fim_char_t *s=FIM_NULL;
 			s=FIM_SACC(FIM_OPRND(p,0));
-			DBG("SV:"<<s<<FIM_SYM_ENDL)
+			//DBG("SV:"<<s<<FIM_SYM_ENDL)
 			typeHint=FIM_OPRNDH(FIM_OPRND(p,0));
 			if(typeHint=='a')
 			{
-				DBG("SVa\n");
-				Var v=cvar(FIM_OPRND(p,1));
+				DBG("Assign (=)\n");
+				Var v=cvar(FIM_OPRND(p,1),dv);
 				FIM_SV(s,v);
-			        DBG("SET:"<<s<<":"<<v.getString()<<" '"<<(fim_char_t)v.getType()<<"'\n");
-			        DBG("GET:"<<s<<":"<<FIM_GV(s).getString()<<" "<<(fim_char_t)FIM_GV(s).getType()<<FIM_SYM_ENDL);
+			        DBG("Set:"<<s<<"="<<        v.getString()<<" ("<<(fim_char_t)v.getType()<<")\n");
+			        DBG("Get:"<<s<<"="<<FIM_GV(s).getString()<<" ("<<(fim_char_t)FIM_GV(s).getType()<<")\n");
 			       	return v;
 			}
 			else
@@ -356,24 +322,23 @@ Var ex(NodeType p)
 			case '%': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1%v2; else return v2;};
 			case '/': {Var v1=ex(FIM_OPRND(p,0)),v2=ex(FIM_OPRND(p,1)); if(v2.getInt())return v1/v2; else return v2;};
 #else /* FIM_WANT_AVOID_FP_EXCEPTIONS */
-			case '%': return ex(FIM_OPRND(p,0)) % ex(FIM_OPRND(p,1)); // FIXME: may generate an exception
-			case '/': return ex(FIM_OPRND(p,0)) / ex(FIM_OPRND(p,1)); // FIXME: may generate an exception
+			case '%': return ex(FIM_OPRND(p,0)) % ex(FIM_OPRND(p,1));
+			case '/': return ex(FIM_OPRND(p,0)) / ex(FIM_OPRND(p,1));
 #endif /* FIM_WANT_AVOID_FP_EXCEPTIONS */
 			case '+': return ex(FIM_OPRND(p,0)) + ex(FIM_OPRND(p,1));
 			case '!': return (fim_int)(((ex(FIM_OPRND(p,0))).getInt())==0?1:0);
 			case UMINUS: return Var((fim_int)0) - ex(FIM_OPRND(p,0));
 			case '-': 
-				DBG("SUB\n");
+				/*DBG("SUB (-)\n");*/
 				if ( 2==FIM_NOPS(p) ) {Var d= ex(FIM_OPRND(p,0)) - ex(FIM_OPRND(p,1));return d;}
 				else return Var((fim_int)0) - ex(FIM_OPRND(p,0));
 			case '*': return ex(FIM_OPRND(p,0)) * ex(FIM_OPRND(p,1));
 			case '<': return ex(FIM_OPRND(p,0)) < ex(FIM_OPRND(p,1));
 			case '>': return ex(FIM_OPRND(p,0)) > ex(FIM_OPRND(p,1));
-			//comparison operators : evaluation to integer..
 			case GE: return ex(FIM_OPRND(p,0)) >= ex(FIM_OPRND(p,1));
 			case LE: return ex(FIM_OPRND(p,0)) <= ex(FIM_OPRND(p,1));
 			case NE: return ex(FIM_OPRND(p,0)) != ex(FIM_OPRND(p,1));
-			case EQ: {DBG("EQ\n");return ex(FIM_OPRND(p,0)) == ex(FIM_OPRND(p,1));}
+			case EQ: {/*DBG("EQ (==)\n");*/return ex(FIM_OPRND(p,0)) == ex(FIM_OPRND(p,1));}
 			case REGEXP_MATCH: return ex(FIM_OPRND(p,0)).re_match(ex(FIM_OPRND(p,1)));
 			case AND:return ex(FIM_OPRND(p,0)) && ex(FIM_OPRND(p,1));
 			case OR :return ex(FIM_OPRND(p,0)) || ex(FIM_OPRND(p,1));
@@ -414,22 +379,24 @@ nodeType *vscon(fim_char_t*s,int typeHint)
 #ifndef FIM_BIG_ENDIAN
 #if ((SIZEOF_INT)>=8)
 	if( *reinterpret_cast<int*>(s+0) == 0x006d6f646e6172 ) // ..modnar
-#else
+#else /* SIZEOF_INT */
 	/* this is LSB order, so it is not portable code.  */
 	if( *reinterpret_cast<int*>(s+0) == 0x646e6172 // dnar
 	&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006d6f00    ) // .mo.
-#endif
-#else
+#endif /* SIZEOF_INT */
+#else /* FIM_BIG_ENDIAN */
 
 #if ((SIZEOF_INT)>=8)
 	if( *reinterpret_cast<int*>(s+0) == 0x72616e646f6d00 ) // random..
-#else
+#else /* SIZEOF_INT */
 	if( *reinterpret_cast<int*>(s+0) == 0x646e6172 // rand
 	&& (*reinterpret_cast<int*>(s+4)<<8)== 0x006f6d00    ) // .om.
-#endif
-#endif
-	return con(fim_rand());
-#endif
+#endif /* SIZEOF_INT */
+#endif /* FIM_BIG_ENDIAN */
+
+		return con(fim_rand());
+#endif /* FIM_RANDOM */
+
 	nodeType *p=scon(s);
 	if(p)
 		p->type = vId,
