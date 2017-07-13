@@ -940,9 +940,61 @@ namespace fim
 #define FIM_FLC_REDUCE			"scale '-'" /* not in vim */
 
 /* Help messages for Fim internal commands. */
+#define FIM_CMD_HELP_ALIAS  FIM_FLT_ALIAS " [" FIM_CNS_EX_ID_STRING " [" FIM_CNS_EX_CMDS_STRING " [" FIM_CNS_EX_DSC_STRING "]]]: without arguments, lists the current aliases. With one, shows an identifier's assigned command. With two, assigns to an identifier a user defined command or sequence of commands. With three, also assigns a help string."
 #define FIM_CMD_HELP_ALIGN FIM_FLT_ALIGN " 'bottom': align to the lower side the current image; " FIM_FLT_ALIGN " 'top': align to the upper side the current image; "
+#define FIM_CMD_HELP_AUTOCMD FIM_FLT_AUTOCMD " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING ": manipulate autocommands (inspired from Vim autocmd's). Without arguments, list autocommands. With arguments, specifies for which type of event and which current file open, which commands to execute. See the default built-in configuration files for examples."
+#define FIM_CMD_HELP_AUTOCMD_DEL FIM_FLT_AUTOCMD_DEL ": specify autocommands to delete them. Usage: " FIM_FLT_AUTOCMD_DEL " " FIM_CNS_EX_EVT_STRING " " FIM_CNS_EX_PAT_STRING " " FIM_CNS_EX_CMDS_STRING
+#define FIM_CMD_HELP_BASENAME FIM_FLT_BASENAME" {filename}: returns the basename of {filename} in the " FIM_VID_LAST_SYSTEM_OUTPUT " variable."
+#define FIM_CMD_HELP_BIND FIM_FLT_BIND" [" FIM_CNS_EX_KSY_STRING " [" FIM_CNS_EX_CMDS_STRING "]]: bind a keyboard symbol/shortcut " FIM_CNS_EX_KSY_STRING " to " FIM_CNS_EX_CMDS_STRING "" FIM_CNS_RAW_KEYS_MESG " Key binding is dynamical, so you can rebind keys even during program's execution. You can get a list of valid symbols (keysyms) by invoking " FIM_FLT_DUMP_KEY_CODES " or in the man page."
 #define FIM_CMD_HELP_LIST	FIM_FLT_LIST ": display the files list; " FIM_FLT_LIST " 'random_shuffle': randomly shuffle the file list; " FIM_FLT_LIST " 'reverse': reverse the file list; " FIM_FLT_LIST " 'clear': clear the file list; " FIM_FLT_LIST " 'sort': sort the file list; " FIM_FLT_LIST " 'sort_basename': sort the file list according to base name; " FIM_FLT_LIST " 'sort_fsize': sort the file list according to file size; " FIM_FLT_LIST " 'sort_mtime': sort the file list according to modification date; " FIM_FLT_LIST " 'pop' : pop the last file from the files list; " FIM_FLT_LIST " 'remove' [" FIM_CNS_EX_FNS_STRING "] : remove the current file, or the " FIM_CNS_EX_FNS_STRING ", if specified " "; " FIM_FLT_LIST " 'push' " FIM_CNS_EX_FNS_STRING " : push " FIM_CNS_EX_FNS_STRING " to the back of the files list; " FIM_FLT_LIST " 'filesnum': display the number of files in the files list; " FIM_FLT_LIST " 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file; " FIM_FLT_LIST " 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the '" FIM_FLT_LIMIT "' command, otherwise the current file; " FIM_FLT_LIST " 'marked': show which files have been marked so far; " FIM_FLT_LIST " 'dumpmarked': dump to stdout the marked files (you will want usually to 'unmarkall' afterwards); " FIM_FLT_LIST " 'unmarkall': unmark all the marked files; " FIM_FLT_LIST " 'pushdir'; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable " FIM_VID_PUSHDIR_RE " or, if empty, from constant regular expression " FIM_CNS_PUSHDIR_RE "; " FIM_FLT_LIST " 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively; " FIM_FLT_LIST " 'swap': will move the current image filename to the first in the list (you'll have to invoke " FIM_FLT_RELOAD " to see the effect). Of the above commands, several will be temporarily non available for the duration of a background load (enabled by --recursive-background), which will last until _loading_in_background is 0. "
+#define FIM_CMD_HELP_CLEAR FIM_FLT_CLEAR ": clear the virtual console"
+#define FIM_CMD_HELP_COMMANDS FIM_FLT_COMMANDS ": display the existing commands"
+#define FIM_CMD_HELP_COLOR \
+			FIM_FLT_COLOR " [desaturate]: desaturate the displayed image colors; "\
+			FIM_FLT_COLOR " [negate]: negate the displayed image colors; "\
+			FIM_FLT_COLOR " [colorblind|c|deuteranopia|d]: simulate a form of the deuteranopia color vision deficiency (cvd); "\
+			FIM_FLT_COLOR " [protanopia|p]: simulate a form of the protanopia cvd; "\
+			FIM_FLT_COLOR " [tritanopia|t]: simulate a form of the tritanopia cvd; "\
+			FIM_FLT_COLOR " [daltonize|D]: if following a cvd specification, will attempt correcting it; "\
+			FIM_FLT_COLOR " [identity]: populate the image with 'RGB identity' pixels; "\
+			" to get back the original you will have to reload the image." 
+#define FIM_CMD_HELP_DUMP_KEY_CODES FIM_FLT_DUMP_KEY_CODES ": dump the active key codes (unescaped, for inspection purposes)"
+#define FIM_CMD_HELP_ECHO FIM_FLT_ECHO " " FIM_CNS_EX_ARGS_STRING ": print the " FIM_CNS_EX_ARGS_STRING " on console"
+#define FIM_CMD_HELP_ELSE FIM_CNS_IFELSE ": see " FIM_FLT_ELSE
+#define FIM_CMD_HELP_EXEC FIM_FLT_EXEC " " FIM_CNS_EX_FNS_STRING ": execute script " FIM_CNS_EX_FNS_STRING ""
+#define FIM_CMD_HELP_FONT \
+			FIM_FLT_FONT " 'scan' [{dirname}]: scan {dirname} or " FIM_LINUX_CONSOLEFONTS_DIR " looking for fonts in the internal fonts list; "\
+			FIM_FLT_FONT " 'load' {filename}: load font {filename}; "\
+			FIM_FLT_FONT " 'next'/'prev': load next/previous font in the internal fonts list; "\
+			FIM_FLT_FONT " 'info': print current font filename; "
 #define FIM_CMD_HELP_CD			FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING ": change the current directory to " FIM_CNS_EX_PATH_STRING ". " FIM_FLT_CD " - will change to the previous current directory (before the last \":" FIM_FLT_CD " " FIM_CNS_EX_PATH_STRING "\" command)"
+#define FIM_CMD_HELP_GETENV FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING ": display the value of the " FIM_CNS_EX_ID_STRING " environment variable"
+#define FIM_CMD_HELP_IFELSE  FIM_CNS_IFELSE ": see " FIM_FLT_ELSE
+#define FIM_CMD_HELP_INFO   FIM_FLT_INFO ": display information about the current file"
+// #define FIM_CMD_HELP_LIMIT   // missing
+#define FIM_CMD_HELP_LOAD   FIM_FLT_LOAD ": load the image, if not yet loaded (see also " FIM_FLT_RELOAD ")"
+#define FIM_CMD_HELP_PAN    FIM_FLT_PAN " {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+-] [{steps}['%']]: pan the image {steps} pixels in the desired direction;" " if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions;" " if {steps} is not specified, the \"" FIM_VID_STEPS "\" variable will be used;" " if present, the \"" FIM_VID_HSTEPS "\" variable will be considered for horizontal panning;" "a + or - sign at the end of the first argument will make jump to next or prev if border is reached;" " if present, the \"" FIM_VID_VSTEPS "\" variable will be considered for vertical panning;" " the variables may be terminated by the \'%\' specifier" " "
+#define FIM_CMD_HELP_POPEN FIM_FLT_POPEN " " FIM_CNS_EX_SYSC_STRING ": pipe a command, invoking popen(): spawns a shell, invoking " FIM_CNS_EX_SYSC_STRING " and executing as fim commands the output of " FIM_CNS_EX_SYSC_STRING
+#define FIM_CMD_HELP_PREAD FIM_FLT_PREAD " " FIM_CNS_EX_ARGS_STRING ": execute " FIM_CNS_EX_ARGS_STRING " as a shell command and read the output as an image file (using " FIM_FLT_POPEN ")"
+#define FIM_CMD_HELP_PREFETCH FIM_FLT_PREFETCH ": prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening. See also the " FIM_VID_WANT_PREFETCH 			 " variable."
+#define FIM_CMD_HELP_QUIT FIM_FLT_QUIT " [{number}]: terminate the program; if {number} is specified, use it as the program return status; autocommand \"" FIM_ACM_POSTINTERACTIVECOMMAND "\" does not trigger after this command"
+#define FIM_CMD_HELP_RECORDING FIM_FLT_RECORDING " 'start': start recording the executed commands; " FIM_FLT_RECORDING " 'stop': stop  recording the executed commands; " FIM_FLT_RECORDING " 'dump': dump in the console the record buffer; " FIM_FLT_RECORDING " 'execute': execute the record buffer; " FIM_FLT_RECORDING " 'repeat_last': repeat the last performed action; "
+
+#define FIM_CMD_HELP_REDISPLAY  FIM_FLT_REDISPLAY ": re-display the current file contents"
+#define FIM_CMD_HELP_RELOAD FIM_FLT_RELOAD" [{arg}]: load the image into memory; if {arg} is present, will force reloading, bypassing the cache (see also " FIM_FLT_LOAD ")"
+#define FIM_CMD_HELP_ROTATE FIM_FLT_ROTATE " " FIM_CNS_EX_NUM_STRING ": rotate the image the specified amount of degrees [undocumented]" 
+#define FIM_CMD_HELP_SCROLLDOWN FIM_FLT_SCROLLDOWN ": scroll down the image, going next if at bottom" 
+#define FIM_CMD_HELP_SCROLLFORWARD FIM_FLT_SCROLLFORWARD ": scroll the image as it were reading it"
+#define FIM_CMD_HELP_SET_CONSOLE_MODE FIM_FLT_SET_CONSOLE_MODE ": set console mode"
+#define FIM_CMD_HELP_SET_INTERACTIVE_MODE FIM_FLT_SET_INTERACTIVE_MODE ": set interactive mode"
+#define FIM_CMD_HELP_SLEEP FIM_FLT_SLEEP " [" FIM_CNS_EX_NUM_STRING "=1]: sleep for the specified (default 1) number of seconds"
+#define FIM_CMD_HELP_STATUS FIM_FLT_STATUS ": set the status line to the collation of the given arguments"
+#define FIM_CMD_HELP_STDOUT FIM_FLT_STDOUT " " FIM_CNS_EX_ARGS_STRING ": writes to stdout its arguments " FIM_CNS_EX_ARGS_STRING ""
+#define FIM_CMD_HELP_VARIABLES FIM_FLT_VARIABLES ": display the existing variables"
+#define FIM_CMD_HELP_UNALIAS FIM_FLT_UNALIAS " " FIM_CNS_EX_ID_STRING " | '-a': delete the alias " FIM_CNS_EX_ID_STRING " or all aliases (use '-a', not -a)"
+#define FIM_CMD_HELP_UNBIND FIM_FLT_UNBIND " " FIM_CNS_EX_KSY_STRING ": unbind the action associated to a specified " FIM_CNS_EX_KSY_STRING FIM_CNS_RAW_KEYS_MESG
+#define FIM_CMD_HELP_WHILE "while(expression){action;}:  A conditional cycle construct. May be interrupted by hitting the " FIM_KBD_ESC " or the " FIM_KBD_COLON " key."
+
 #define FIM_CMD_HELP_SET			FIM_FLT_SET ": returns a list of variables which are set; " FIM_FLT_SET " " FIM_CNS_EX_ID_STRING ": returns the value of variable " FIM_CNS_EX_ID_STRING "; " FIM_FLT_SET " " FIM_CNS_EX_ID_STRING " " FIM_CNS_EX_CMDS_STRING ": sets variable " FIM_CNS_EX_ID_STRING " to value " FIM_CNS_EX_CMDS_STRING "; " 
 #define FIM_CMD_HELP_PWD			FIM_FLT_PWD ": print the current directory name, and updates the " FIM_VID_PWD " variable"
 #define FIM_CMD_HELP_EVAL			FIM_FLT_EVAL " " FIM_CNS_EX_ARGS_STRING ": evaluate " FIM_CNS_EX_ARGS_STRING " as commands, executing them"
