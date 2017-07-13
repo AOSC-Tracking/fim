@@ -2722,7 +2722,7 @@ err:
 		 */
 #if FIM_WANT_PIC_LBFL
 		// TODO: if no nf, then standard output
-		fim::string cmtfc; // comment file contents
+		std::ostringstream cmtfc; // comment file contents
 
 		for(size_t i=0;i<flist_.size();++i)
 		{
@@ -2731,25 +2731,21 @@ err:
 			if( cc.id_.find(bof) == cc.id_.end() )
 				bof = fim_basename_of(flist_[i]);
 			if(want_all_vars)
-				cmtfc += cc.id_.vd_[bof].get_variables_list(true, true);
+				cmtfc << cc.id_.vd_[bof].get_variables_list(true, true);
 #endif /* FIM_WANT_PIC_LVDN */
-			cmtfc += bof,
-			cmtfc += sc,
-			cmtfc += cc.id_[bof];
-			cmtfc += "\n";
+			cmtfc << bof << sc << cc.id_[bof] << "\n";
 #if FIM_WANT_PIC_LVDN
 #if 0
 			if(want_all_vars)
-				cmtfc += cc.id_.vd_[bof].get_variables_list(false,true),
-				cmtfc += "\n";
+				cmtfc << cc.id_.vd_[bof].get_variables_list(false,true) << "\n";
 #else
 			if(want_all_vars)
-				cmtfc += "#!fim:!=\n"; /* clean up vars for the next */
+				cmtfc << "#!fim:!=\n"; /* clean up vars for the next */
 #endif
 #endif /* FIM_WANT_PIC_LVDN */
 		}
 
-		if ( write_to_file(nf,cmtfc,want_append) )
+		if ( write_to_file(nf,cmtfc.str(),want_append) )
 			cout << "Successfully wrote to file " << nf << " .\n";
 		else
 			goto err;
@@ -2807,24 +2803,17 @@ err:
 	}
 	string Browser::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const
 	{
-		string msg=FIM_CNS_EMPTY_STRING;
-
+		std::ostringstream oss;
 		switch(qbi)
 		{
 			case 0:
-			msg+="fim browser push check";
-			msg+=" : ";
-			msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
-			msg+=" push()/s\n";
+			oss << "fim browser push check" << " : " << string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " push()/s\n";
 			break;
 			case 1:
-			msg+="fim browser pop check";
-			msg+=" : ";
-			msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
-			msg+=" pop()/s\n";
+			oss << "fim browser pop check" << " : " << ((fim_fms_t)qbtimes)/((qbttime)*1.e-3) << " pop()/s\n";
 			break;
 		}
-		return msg;
+		return oss.str();
 	}
 #endif /* FIM_WANT_BENCHMARKS */
 

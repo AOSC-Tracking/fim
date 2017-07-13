@@ -415,30 +415,27 @@ struct option options[fim_options_count];
 
 fim::string fim_help_opt(const char*qs)
 {
-	string result;
+	std::ostringstream oss;
 
 	if( qs && qs[0] == '-' && !qs[1] )
 	{
-		result += "The short command options of fim are: ";
+		oss << "The short command options of fim are: ";
 		for(size_t i=0;i<fim_options_count-1;++i)
 		if( isascii( fim_options[i].val ) )
 		{
 			if( fim_options[i].val != '-' )
-				result += "-";
-			result += fim_options[i].val;
-			result += " ";
+				oss << "-";
+			oss << fim_options[i].val << " ";
 		}
 		goto ret;
 	}
 
 	if( qs && qs[0] == '-' && qs[1] == '-' && !qs[2] )
 	{
-		result += "The long command options of fim are: ";
+		oss << "The long command options of fim are: ";
 		for(size_t i=0;i<fim_options_count-1;++i)
 		if( fim_options[i].name ) 
-			result += "--",
-			result += fim_options[i].name,
-			result += " ";
+			oss << "--" << fim_options[i].name << " ";
 		goto ret;
 	}
 
@@ -453,29 +450,28 @@ fim::string fim_help_opt(const char*qs)
 				( qs[1] == '-' && 0 == strcmp(qs+2,fim_options[i].name) )
 		  )
 		{
-			result += "A fim command option: ";
+			oss << "A fim command option: ";
 			if( isascii( fim_options[i].val ) )
 			{
-				result += "-", result += fim_options[i].val;
+				oss << "-" << fim_options[i].val;
 				if( fim_options[i].optdesc )
-			       		result += " =", result += fim_options[i].optdesc;
-				result += ", ";
+			       		oss << " =" << fim_options[i].optdesc;
+				oss << ", ";
 			}
 			if( ( fim_options[i].name ) )
 			{
-				result += "--", result += fim_options[i].name;
+				oss << "--" << fim_options[i].name;
 				if( fim_options[i].optdesc )
-			       		result += " =", result += fim_options[i].optdesc;
-				result += " ";
+			       		oss << " =" << fim_options[i].optdesc;
+				oss << " ";
 			}
-			result += ": ";
-			result += fim_options[i].desc;
-			// result += fim_options[i].mandesc; // man/groff markup should be cleaned up before printing
+			oss << ": " << fim_options[i].desc;
+			// oss << fim_options[i].mandesc; // man/groff markup should be cleaned up before printing
 			goto ret;
 		}
-		//result += fim_options[i].val << "\n";
+		//oss << fim_options[i].val << "\n";
 ret:
-	return result;
+	return oss.str();
 }
 
 class FimInstance
@@ -484,13 +480,13 @@ class FimInstance
 
 string fim_dump_man_page_snippets(void)
 {
-	string ms;
+	std::ostringstream oss;
 	const fim_char_t *helparg="m";
 	const fim_char_t *slob;
 	const fim_char_t *sloe;
 	const fim_char_t *slol;
 	const fim_char_t *slom;
-	ms+=
+	oss << 
 ".TP\n"
 ".B --\n"
 "The arguments before\n"
@@ -523,22 +519,19 @@ string fim_dump_man_page_snippets(void)
 		{
 	   		if((fim_options[i].val)!='-')
 			{
-				ms+=slol,ms+="-",ms+=string((fim_char_t)(fim_options[i].val));
+				oss << slol << "-" << (fim_char_t)(fim_options[i].val);
 				if(fim_options[i].has_arg==required_argument)
-				{
 					if(fim_options[i].optdesc)
-					       	ms+=" ",ms+=fim_options[i].optdesc;
-				}
-				ms+=",";
+						oss << " " << fim_options[i].optdesc;
+				oss << ",";
 			}
 	 	  	else
-			       	ms+=slol,ms+=" -, ";
+			       	oss << slol << " -, ";
 		}
 		else
-		       	//ms+=".TP\n.B \t";
-		       	ms+=".TP\n.B ";
-		ms+=slob;
-		ms+=fim_options[i].name ;
+		       	//oss << ".TP\n.B \t";
+		       	oss << ".TP\n.B ";
+		oss << slob << fim_options[i].name;
 		switch(fim_options[i].has_arg)
 		{
 			case no_argument:
@@ -546,39 +539,39 @@ string fim_dump_man_page_snippets(void)
 			case required_argument:
 			//std::cout << " <arg>";
 			if(fim_options[i].optdesc)
-			       	ms+=" ",ms+=fim_options[i].optdesc;
+			       	oss << " " << fim_options[i].optdesc;
 			else
-			       	ms+=" <arg>";
+			       	oss << " <arg>";
 			break;
 			case optional_argument:
 			if(fim_options[i].optdesc)
-			       	ms+=fim_options[i].optdesc;
+			       	oss << fim_options[i].optdesc;
 			else
-			       	ms+="[=arg]";
+			       	oss << "[=arg]";
 			break;
 			default:
 			;
 		};
-		ms+=slom;
+		oss << slom;
 		if(helparg&&*helparg=='d')
-			ms+="\t\t ",ms+=fim_options[i].desc;
+			oss << "\t\t " << fim_options[i].desc;
 		if(helparg&&*helparg=='m')
 		{
 			if(fim_options[i].mandesc)
-				ms+=fim_options[i].mandesc;
+				oss << fim_options[i].mandesc;
 			else
 			{
-				ms+="\t\t ";
+				oss << "\t\t ";
 				if(fim_options[i].desc)
-					ms+=fim_options[i].desc;
+					oss << fim_options[i].desc;
 			}
 		}
-		//if(helparg||*helparg!='m') ms+=FIM_SYM_ENDL;
-		ms+=sloe;
+		//if(helparg||*helparg!='m') oss << FIM_SYM_ENDL;
+		oss << sloe;
 		//if(helparg&&*helparg=='l') std::cout << "TODO: print extended help here\n";
 	}
-	ms+="\n";
-	return ms;
+	oss << "\n";
+	return oss.str();
 }
 
 int fim_dump_man_page(void)
