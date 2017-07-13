@@ -208,9 +208,8 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 {
 #if FIM_WANT_EXIFTOOL
 	fim_int ue = getGlobalIntVariable(FIM_VID_EXIFTOOL);
-	/* TODO: one might execute this code in a background thread */
-	/* std::cout << "will try exiftool on : " << fname << "\n"; */
-	fim::string etc;
+	/* one might execute this code in a background thread */
+	std::ostringstream oss;
 
 	if ( ExifTool *et = new ExifTool() )
 	{
@@ -218,11 +217,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
       	 	{
         		for (TagInfo *i=info; i; i=i->next)
 		       	{
-				etc+=i->name;
-				etc+=" = ";
-				etc+=i->value;
-				etc+=";";
-				etc+="\n";
+				oss << i->name << " = " << i->value << ";" << "\n";
 				//std::cout << "reading " << i->name << "...\n";
         		}
         		delete info;
@@ -235,11 +230,11 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 	    	if (err)
 		       	std::cerr << err;
 		delete et;      // delete our ExifTool object
-		//std::cout << "setting: " << etc << "\n",
+		//std::cout << "setting: " << oss.str() << "\n",
 		if(ue == 1)
-		setVariable(FIM_VID_COMMENT,getVariable(FIM_VID_COMMENT)+etc);
+		setVariable(FIM_VID_COMMENT,getVariable(FIM_VID_COMMENT)+oss.str());
 		if(ue == 2)
-			setVariable(FIM_VID_EXIFTOOL_COMMENT,etc);
+			setVariable(FIM_VID_EXIFTOOL_COMMENT,oss.str());
 		return true;
 	}
 #endif /* FIM_WANT_EXIFTOOL */
