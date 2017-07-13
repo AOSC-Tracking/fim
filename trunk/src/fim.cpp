@@ -1238,8 +1238,8 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 				if(strchr(optarg,'+'))
 					read_offset_u=fim_atoi(strchr(optarg,'+')+1);
 
-				tmp << FIM_VID_OPEN_OFFSET      << "=" << read_offset_l << ";";
-				tmp << FIM_VID_OPEN_OFFSET_RETRY<< "=" << read_offset_u << ";";
+				tmp << FIM_VID_OPEN_OFFSET_L << "=" << read_offset_l << ";";
+				tmp << FIM_VID_OPEN_OFFSET_U << "=" << read_offset_u << ";";
 				cc.pre_autocmd_add(tmp.str());
 			}
 		}

@@ -20,9 +20,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * This file comes from fbi, and will undergo severe reorganization.
+ * Much of this file derives from fbi.
  * */
-
 
 #include "fim.h"
 #include "fim_plugin.h"
@@ -1817,8 +1816,8 @@ ena:
 noa:	1;
     }
 #endif /* FIM_WITH_ARCHIVE */
-    read_offset_l = cc.getIntVariable(FIM_VID_OPEN_OFFSET);/* warning : user could supply negative values */
-    read_offset_u = read_offset_l + cc.getIntVariable(FIM_VID_OPEN_OFFSET_RETRY);/* warning : this can lead to negative values */
+    read_offset_l =                 cc.getIntVariable(FIM_VID_OPEN_OFFSET_L);
+    read_offset_u = read_offset_l + cc.getIntVariable(FIM_VID_OPEN_OFFSET_U);
     read_offset_u = FIM_MAX(read_offset_l,read_offset_u);
     if(vl)
     {
@@ -2305,7 +2304,7 @@ errl:
 #endif /* FIM_SHALL_BUFFER_STDIN */
 ret:
     if( read_offset_l > 0 && nsp )
-	    nsp->setVariable(FIM_VID_OPEN_OFFSET,(fim_int)read_offset_l); /* FIXME */
+	    nsp->setVariable(FIM_VID_OPEN_OFFSET_L,read_offset_l);
     FIM_PR('.');
     return img;
 }
