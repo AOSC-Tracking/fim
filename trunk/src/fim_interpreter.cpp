@@ -33,9 +33,17 @@
 #if 0
 #define DBG(X) if(dv)std::cout<<__LINE__<<":"<<X;
 #else
-#define DBG(X) if(dv)std::cout<<"# "<<X;
+#define DBG(X) if(dv)std::cout<<"# "<<indent(sd)<<X;
 //#define DBG(X) 
 #endif
+
+fim::string static indent(const int sd)
+{
+	fim::string is;
+	for(int i=0;i<sd;++i)
+		is+=" ";
+	return is;
+}
 
 #if FIM_INDEPENDENT_NAMESPACE
 #define FIM_NO_BREAK /* fim::cc.catchLoopBreakingCommand(0)==0 */ 1
@@ -84,7 +92,7 @@ std::ostream& operator<<(std::ostream& os, const nodeType& p)
 	return os;
 }
 
-static Var cvar(NodeType p, const bool dv)
+static Var cvar(NodeType p, const bool dv, const int sd)
 {
 	/* evaluate a single 'arg' entry */
 	NodeType np=p;
@@ -96,7 +104,7 @@ static Var cvar(NodeType p, const bool dv)
 		for(int i=0;i<FIM_NOPS(p);++i)
 		{
 			np=(FIM_OPRND(p,i));
-			arg+=(string)(cvar(np,dv).getString());
+			arg+=cvar(np,dv,sd).getString();
 		}
 		goto ret;
 	}
@@ -132,7 +140,7 @@ ret:
 	return arg;
 }
 
-static args_t var(NodeType p, const bool dv)
+static args_t var(NodeType p, const bool dv, const int sd)
 {
 	/* evaluate a whole chain of arg entries */
 	NodeType np=p;
@@ -150,13 +158,13 @@ static args_t var(NodeType p, const bool dv)
 		else
 		if(FIM_OPRNDT(np) == typeOpr && FIM_OPRNDO(np)=='a')
 		{
-		  	args_t vargs=var(np,dv);
+		  	args_t vargs=var(np,dv,sd);
 			for(size_t j=0;j<vargs.size();++j)
 				args.push_back(vargs[j]);
 		}
 		else
 		{
-			args.push_back(cvar(np,dv).getString());
+			args.push_back(cvar(np,dv,sd).getString());
 		}
 	}
 	//DBG("?:\n");
@@ -166,6 +174,7 @@ static args_t var(NodeType p, const bool dv)
 using namespace fim;
 Var ex(NodeType p)
 {
+	static int sd=0; // stack depth; shall become member of a class 'Interpreter'
   	args_t args;
 	fim_int typeHint;
 	const bool dv = (FIM_GV(FIM_VID_DBG_COMMANDS).find('i')>=0);
@@ -211,16 +220,20 @@ Var ex(NodeType p)
 		{
 			case WHILE:
 				DBG("Begin While\n");
+				++sd;
 				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK )
 					ex(FIM_OPRND(p,1));
+				--sd;
 				DBG("End While\n");
 				goto ret;
 			case IF:
 				DBG("Begin If:"<<(ex(FIM_OPRND(p,0)).getInt())<<FIM_SYM_ENDL);
+				++sd;
 				if (ex(FIM_OPRND(p,0)).getInt())
 					ex(FIM_OPRND(p,1));
 				else if (FIM_NOPS(p) > 2)
 					ex(FIM_OPRND(p,2));
+				--sd;
 				DBG("End If\n");
 				goto ret;
 			case FIM_SYM_SEMICOLON:
@@ -232,10 +245,12 @@ Var ex(NodeType p)
 			{
 				fim_int times=ex(FIM_OPRND(p,1)).getInt();
 				DBG("Begin Repeat " << times << "x\n");
+				++sd;
 				if(times<0)
 					goto err;
 				for (fim_int i=0;i<times && FIM_NO_BREAK ;++i)
 					ex(FIM_OPRND(p,0));
+				--sd;
 				DBG("End Repeat " << times << "x\n");
 				goto ret;
 			}
@@ -263,7 +278,7 @@ Var ex(NodeType p)
 						if( FIM_OPRNDO(np)=='a' )
 						{
 							DBG("Args...\n");
-					  		args_t na=var(np,dv);
+					  		args_t na=var(np,dv,sd);
 							DBG("Args: "<<na.size()<<FIM_SYM_ENDL);
 				          		for(fim_size_t i=0;i<na.size();++i)
 							{
@@ -288,7 +303,9 @@ Var ex(NodeType p)
 							if(cmd)
 							{
 								DBG("Begin Exec: " << cmd << " " << args << "\n");
+								++sd;
 								result = FIM_EC(cmd,args);
+								--sd;
 								DBG("End Exec: " << cmd << " " << args << "\n");
 							}
 						}
@@ -308,7 +325,7 @@ Var ex(NodeType p)
 			if(typeHint=='a')
 			{
 				DBG("Assign (=)\n");
-				Var v=cvar(FIM_OPRND(p,1),dv);
+				Var v=cvar(FIM_OPRND(p,1),dv,sd);
 				FIM_SV(s,v);
 			        DBG("Set:"<<s<<"="<<        v.getString()<<" ("<<(fim_char_t)v.getType()<<")\n");
 			        DBG("Get:"<<s<<"="<<FIM_GV(s).getString()<<" ("<<(fim_char_t)FIM_GV(s).getType()<<")\n");
