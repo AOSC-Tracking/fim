@@ -486,28 +486,26 @@ err:
 		/*
 		 * change working directory
 		 * */
-		static fim::string oldpwd=fcmd_pwd(args_t());
 		for(size_t i=0;i<args.size();++i)
 		{
 			fim::string dir=args[i];
-			if(dir=="-")dir=oldpwd;
-			oldpwd=fcmd_pwd(args_t());
+			if(dir=="-")
+				dir=oldcwd_;
+			oldcwd_=fim_getcwd();
 #ifdef HAVE_LIBGEN_H
 			if(!is_dir(dir))
-			{
 				dir=fim_dirname(dir);
-			}
 #endif /* HAVE_LIBGEN_H */
 			if( chdir(dir.c_str()) )
 			       	return (fim::string("cd error : ")+fim::string(strerror(errno)));
 		}
-		setVariable(FIM_VID_PWD,fcmd_pwd(args_t()));
+		setVariable(FIM_VID_PWD,fim_getcwd());
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim_cxr CommandConsole::fcmd_basename(const args_t& args)
 	{
-		static fim::string res;
+		fim::string res;
 		for(size_t i=0;i<args.size();++i)
 			res+=fim_basename_of(args[i]);
 		setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,res);
@@ -519,23 +517,7 @@ err:
 		/*
 		 * print working directory
 		 * */
-		fim::string cwd=FIM_CNS_EMPTY_STRING;
-#if HAVE_GET_CURRENT_DIR_NAME
-		/* default */
-		if( fim_char_t *p = get_current_dir_name() )
-			cwd=p,
-			fim_free(p);
-#else /* HAVE_GET_CURRENT_DIR_NAME */
-#if _BSD_SOURCE || _XOPEN_SOURCE >= 500
-		{
-			/* untested */
-			fim_char_t *buf[PATH_MAX];
-			getcwd(buf,PATH_MAX-1): 
-			buf[PATH_MAX-1]=FIM_SYM_CHAR_NUL;
-			cwd=buf;
-		}
-#endif /* _BSD_SOURCE || _XOPEN_SOURCE >= 500 */
-#endif /* HAVE_GET_CURRENT_DIR_NAME */
+		fim::string cwd = fim_getcwd();
 		return cwd;
 	}
 
@@ -652,33 +634,29 @@ err:
 		/*
 		 * dump all keysyms
 		 * */
-		fim::string acl;
+		std::ostringstream oss;
 		sym_keys_t::const_iterator ki;
 
 		if ( refmode == DefRefMode )
-			acl+="There are ",
-			acl+=fim::string((int)(sym_keys_.size())),
-			acl+=" bindings (dumping them here, unescaped).\n";
+			oss<<"There are " << fim::string((int)(sym_keys_.size())) << " bindings (dumping them here, unescaped).\n";
 
 		for( ki=sym_keys_.begin();ki!=sym_keys_.end();++ki)
 		{
 			if ( refmode == DefRefMode )
-				acl+=((*ki).first);
+				oss << ((*ki).first);
 			else
 			{
-				acl+="\"";
+				oss << "\"";
 				if( ((*ki).first).compare(0,1,"\\") == 0 )
-					acl+='\\';
-				acl+=((*ki).first);
-				acl+="\"";
+					oss << '\\';
+				oss << ((*ki).first) << "\"";
 			}
 			if ( refmode == DefRefMode )
-				acl+=" -> ",
-				acl+=fim::string((int)(((*ki).second)));
-			acl+="  ";
+				oss << " -> " << fim::string((int)(((*ki).second)));
+			oss << "  ";
 		}
-		acl+="\n";
-		return acl;
+		oss << "\n";
+		return oss.str();
 	}
 
 #ifdef FIM_RECORDING

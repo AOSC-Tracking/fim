@@ -1042,6 +1042,28 @@ const fim_char_t * fim_basename_of(const fim_char_t * s)
 	return s;
 }
 
+fim::string fim_getcwd(void)
+{
+		fim::string cwd;
+#if HAVE_GET_CURRENT_DIR_NAME
+		/* default */
+		if( fim_char_t *p = get_current_dir_name() )
+			cwd=p,
+			fim_free(p);
+#else /* HAVE_GET_CURRENT_DIR_NAME */
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500
+		{
+			/* untested */
+			fim_char_t *buf[PATH_MAX];
+			getcwd(buf,PATH_MAX-1): 
+			buf[PATH_MAX-1]=FIM_SYM_CHAR_NUL;
+			cwd=buf;
+		}
+#endif /* _BSD_SOURCE || _XOPEN_SOURCE >= 500 */
+#endif /* HAVE_GET_CURRENT_DIR_NAME */
+		return cwd;
+}
+
 fim_int fim_atoi(const char*s)
 {
 	if(FIM_LARGE_FIM_INT)
