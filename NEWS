@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1359)
+ * Specifying more than once any of -p -i - will issue a warning.
 # (r1334,r1335)
  * New switch --verbose-interpreter to execute interpreter verbosely by setting adequately _debug_commands='ack'.
 # (r1331,r1333)
