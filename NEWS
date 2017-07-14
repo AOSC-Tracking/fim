@@ -31,6 +31,7 @@
  * bugfix: --offset option was ignoring lower bytes-offset.
  * fix in _seek_magic and documentation.
  * fix: in --offset mode, avoiding probing for external loader programs, handling of larger offsets.
+ * fix: 'recording' command non functioning properly.
 
                 Version 0.5-rc2
 
