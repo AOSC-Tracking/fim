@@ -147,7 +147,7 @@ class CommandConsole
 	fim::string memorize_last(const fim_cmd_id& cmd);
 	fim::string repeat_last(const args_t& args);
 	fim::string dump_record_buffer(const args_t& args);
-	fim::string do_dump_record_buffer(const args_t& args)const;
+	fim::string do_dump_record_buffer(const args_t& args, bool headeronly=false)const;
 	fim::string execute_record_buffer(const args_t& args);
 	fim::string start_recording(void);
 	fim_cxr fcmd_recording(const args_t& args);
