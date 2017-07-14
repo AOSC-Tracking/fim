@@ -245,9 +245,6 @@ ret:
 #ifdef FIM_READ_STDIN_IMAGE
 	void Browser::set_default_image(ImagePtr stdin_image)
 	{
-		/*
-		 * this is used mainly to set image files read from pipe or stdin
-		 * */
 		FIM_PR('*');
 #if FIM_USE_CXX11
 		if( !stdin_image || stdin_image->check_invalid() )
@@ -282,12 +279,6 @@ ret:
 
 	const fim::string Browser::pop_current(void)
 	{
-		/*
-		 * pops the current image filename from the filenames list
-		 * ( note that it doesn't refresh the image in any way ! )
-		 *
-		 * WARNING : SAME AS ERASE !
-		 */
 		flist_.pop_current();
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return nofile_;
@@ -295,10 +286,6 @@ ret:
 
 	const fim::string Browser::pop(fim::string filename)
 	{	
-		/*
-		 * pops the last image filename from the filenames list
-		 * ( note that it doesn't refresh the image in any way ! )
-		 */
 		fim::string s = nofile_;
 
 		if( flist_.size() <= 1 )
@@ -331,7 +318,7 @@ ret:
 #if FIM_PAN_GOES_NEXT
 					fim_char_t s = FIM_SYM_CHAR_NUL;
 				       	s = tolower(args[0].end()[-1]);
-			       		if( s != FIM_SYM_CHAR_NUL && pr == "no" ) // TODO: this is ugly
+			       		if( s != FIM_SYM_CHAR_NUL && pr == "no" ) // ugly
 					{
 						/*if( s != '+' && s != '-' )
 						switch(f)
@@ -368,9 +355,9 @@ nop:
 	{
 		/*
 		 * scales the image to a certain scale factor
-		 * FIXME: no user error checking -- poor error reporting for the user
-		 * TODO: wxh / w:h syntax needed
-		 * FIXME: this shall belong to viewport
+		 *  - no user error checking -- poor error reporting for the user
+		 *  - wxh / w:h syntax needed
+		 *  - shall better belong to viewport
 		 */
 		fim_scale_t newscale = FIM_CNS_SCALEFACTOR_ZERO;
 		fim_char_t fc = FIM_SYM_CHAR_NUL;
@@ -597,8 +584,6 @@ nop:
 	
 	fim_cxr Browser::fcmd_color(const args_t& args)
 	{
-		/*
-		 */
 		if( !getImage() )
 			goto nop;
 
@@ -630,7 +615,6 @@ nop:
 			if(cvd!=FIM_CVD_NO)
 				if( getImage()->colorblind(cvd,daltonize) )
 					goto nop;
-			/* TODO: help printout here ? */
 		}
 nop:
 		return FIM_CNS_EMPTY_RESULT;
@@ -688,8 +672,18 @@ nop:
 			}
 			else
 #else /* FIM_WANT_FLIST_STAT */
-			/* FIXME: need info here */
+			if( args[0] == "~d" )
+			{
+				result = result + "~d unsupported\n";
+			}
+			else
+			if( args[0] == "~z" )
+			{
+				result = result + "~z unsupported\n";
+			}
 #endif /* FIM_WANT_FLIST_STAT */
+#else  /* FIM_WANT_LIMIT_DUPBN */
+				result = result + "Limited options unsupported.\n";
 #endif /* FIM_WANT_LIMIT_DUPBN */
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 			if( args[0] == "!" )
@@ -777,7 +771,7 @@ nop:
 				limited_ = false;
 			}
 		}
-		setGlobalVariable(FIM_VID_FILELISTLEN,n_files()); /* TODO: need a specific 'refresh' function */
+		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 nop:
 		return result;
 	}
@@ -866,11 +860,6 @@ ret:
 
 	fim::string Browser::reload(void)
 	{
-		/*
-		 * FIXME
-		 *
-		 * reload the current filename
-		 * */
 		if( n_files() )
 #if FIM_USE_CXX11
 			return fcmd_reload({});
@@ -882,11 +871,6 @@ ret:
 
 	fim_err_t Browser::loadCurrentImage(void)
 	{
-		/*
-		 * FIXME
-		 *
-		 * an attempt to load the current image
-		 * */
 		fim_err_t errval = FIM_ERR_NO_ERROR;
 
 		FIM_PR('*');
@@ -925,10 +909,6 @@ ret:
 
 	void Browser::free_current_image(void)
 	{
-		/*
-		 * FIXME
-		 * only cleans up the internal data structures
-		 * */
 		FIM_PR('*');
 		if( viewport() )
 			viewport()->free_image();
@@ -979,11 +959,6 @@ ret:
 
 	fim_cxr Browser::fcmd_reload(const args_t& args)
 	{
-		/*
-		 * deletes the structures associated to the present image
-		 * and then
-		 * tries to load a new one from the current filename
-		 */
 		fim::string result;
 
 		FIM_PR('*');
@@ -1025,12 +1000,12 @@ ret:
 		//for(size_t i=0;i<args.size();++i) push(args[i]);
 		if( getImage() && ( getImage()->getName() == current()) )
 		{
-			result = "image already loaded\n";		//warning
+			result = "image already loaded\n";//warning
 			goto ret;
 		}
 		if( empty_file_list() )
 		{
-			result = "sorry, no image to load\n";	//warning
+			result = "sorry, no image to load\n";//warning
 			goto ret;
 		}
 		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRELOAD,current());
@@ -1047,34 +1022,19 @@ ret:
 
 	fim_int Browser::find_file_index(const fim::string nf)const
 	{
-		/* 
-		 * returns whether the file nf is in the files list
-		 */
 		fim_int fi = -1;
-#if 1
 		for(flist_t::const_iterator fit=flist_.begin();fit!=flist_.end();++fit)
 			if( string(*fit) == nf )
 			{
 				fi = fit - flist_.begin();
 				goto ret;
 			}
-#else
-		for(fim_size_t i=0;i<flist_.size();++i)
-			if( flist_[i] == nf )
-			{
-				fi = i;
-				goto ret;
-			}
-#endif
 ret:
 		return fi;
 	}
 
 	bool Browser::present(const fim::string nf)const
 	{
-		/* 
-		 * returns whether the file nf is in the files list
-		 */
 		bool ip = false;
 
 		if( find_file_index(nf) >= 0 )
@@ -1085,7 +1045,6 @@ ret:
 #ifdef FIM_READ_DIRS
 	bool Browser::push_dir(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{
-		// TODO: may introduce some more variable to control recursive push 	
 		DIR *dir = FIM_NULL;
 		struct dirent *de = FIM_NULL;
 		fim::string f;
@@ -1243,8 +1202,7 @@ rret:
 		{
 #ifdef FIM_CHECK_FILE_EXISTENCE
 			/*
-			 * skip adding the filename in the list if
-			 * it is not existent or it is a directory...
+			 * skip adding filename to list if not existent or is a directory...
 			 */
 			struct stat stat_s;
 
@@ -1322,24 +1280,18 @@ ret:
 	
 	fim_int Browser::n_files(void)const
 	{
-		/*
-		 * the number of files in the filenames list
-		 */
 		return flist_.size();
 	}
 
 	void Browser::_unique(void)
 	{
-		// this only makes sense if flist_ is sorted.
+		// makes only sense if flist_ sorted.
 		flist_._unique();
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 	}
 
 	fim::string Browser::_sort(const fim_char_t sc)
 	{
-		/*
-		 *	sorts the image filenames list
-		 */
 		flist_._sort(sc);
 		return current();
 	}
@@ -1347,7 +1299,7 @@ ret:
 	fim::string Browser::_random_shuffle(bool dts)
 	{
 		/*
-		 *	sorts the image filenames list
+		 *	sorts image filenames list
 		 *	if dts==true, do time() based seeding
 		 *	TODO: it would be cool to support a user supplied seed value
 		 */
@@ -1359,17 +1311,12 @@ ret:
 
 	fim::string Browser::_clear_list(void)
 	{
-		/*
-		 */
 		flist_.erase(flist_.begin(),flist_.end());
 		return 0;
 	}
 
 	fim::string Browser::_reverse(void)
 	{
-		/*
-		 *	sorts the image filenames list
-		 */
 		std::reverse(flist_.begin(),flist_.end());
 		return current();
 	}
@@ -1468,9 +1415,6 @@ nop:
 
 	fim::string Browser::goto_image(fim_int n, bool isfg)
 	{
-		/*
-		 *	FIX ME: ultimately, all file transitions should pass by here.
-		 */
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 #if FIM_USE_CXX11
 		auto N = flist_.size();
@@ -1556,8 +1500,6 @@ ret:
 
 	fim::string Browser::goto_image_internal(const fim_char_t *s,fim_xflags_t xflags)
 	{
-		/*
-		 */
 		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
 		const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages());
 		fim_int fc = n_files();
@@ -2226,9 +2168,8 @@ nop:
 	fim_cxr Browser::fcmd_scrollforward(const args_t& args)
 	{
 		/*
-		 * scrolls the image as it were a book :)
-		 *
-		 * FIX ME : move to Viewport
+		 * scrolls image as it were a book
+		 * TODO: move to Viewport
 		 */
 		FIM_PR('*');
 
@@ -2262,7 +2203,7 @@ nop:
 		/*
 		 * scrolls the image down 
 		 *
-		 * FIX ME : move to Viewport
+		 * FIXME : move to Viewport
 		 */
 		FIM_PR('*');
 
@@ -2309,18 +2250,12 @@ nop:
 
 	fim::string Browser::info(void)
 	{
-		/*
-		 *	short information in status-line format
-		 */
 		return fcmd_info(args_t(0));
 	}
 
 	fim_cxr Browser::fcmd_rotate(const args_t& args)
 	{
-		/*
-		 * rotates the displayed image a specified amount of degrees
-		 */ 
-		fim_angle_t angle;
+		fim_angle_t angle; // degrees
 
 		FIM_PR('*');
 
@@ -2360,9 +2295,6 @@ ret:
 #if FIM_WANT_FAT_BROWSER
 	fim_cxr Browser::fcmd_magnify(const args_t& args)
 	{
-		/*
-		 * magnifies the displayed image
-		 */ 
 		FIM_PR('*');
 		if(c_getImage())
 		{
@@ -2396,9 +2328,6 @@ ret:
 
 	fim_cxr Browser::fcmd_reduce(const args_t& args)
 	{
-		/*
-		 * reduces the displayed image size
-		 */ 
 		FIM_PR('*');
 		if(c_getImage())
 		{
@@ -2433,10 +2362,6 @@ ret:
 
 	fim_cxr Browser::fcmd_align(const args_t& args)
 	{
-		/*
-		 * aligns to top/bottom the displayed image
-		 * TODO: incomplete
-		 */ 
 		FIM_PR('*');
 		if( args.size() < 1 )
 			goto err;
@@ -2447,7 +2372,6 @@ ret:
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 			if(c_getImage() && viewport())
 			{
-				// FIXME: need a switch/case construct here
 				if(args[0].re_match("top"))
 					viewport()->align('t');
 				if(args[0].re_match("bottom"))
@@ -2470,9 +2394,6 @@ err:
 
 	const Image* Browser::c_getImage(void)const
 	{
-		/*
-		 *	a const pointer to the currently loaded image
-		 */
 		const Image* image = FIM_NULL;
 
 		if( commandConsole_.current_viewport() )
@@ -2517,18 +2438,7 @@ err:
 
 	int Browser::empty_file_list(void)const
 	{
-		/*
-		 *	is the filename list empty ?
-		 */
 		return flist_.size() == 0;
-	}
-
-	fim::string Browser::pop_current(const args_t& args)
-	{
-		/*
-		 *	pops the last image filename off the image list
-		 */
-		return pop_current();
 	}
 
 	fim::string Browser::do_push(const args_t& args)
@@ -2653,6 +2563,7 @@ err:
 	{
 		return 2;
 	}
+
 	void Browser::quickbench_init(fim_int qbi)
 	{
 		string msg;
@@ -2669,9 +2580,11 @@ err:
 			break;
 		}
 	}
+
 	void Browser::quickbench_finalize(fim_int qbi)
 	{
 	}
+
 	void Browser::quickbench(fim_int qbi)
 	{
 		static fim_int ci = 0;
@@ -2688,6 +2601,7 @@ err:
 			break;
 		}
 	}
+
 	string Browser::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const
 	{
 		std::ostringstream oss;
@@ -2704,10 +2618,6 @@ err:
 	}
 #endif /* FIM_WANT_BENCHMARKS */
 
-} /* namespace fim */
-
-namespace fim
-{
 	fim_stat_t fim_get_stat(const fim_fn_t& fn, bool * dopushp)
 	{
 		bool dopush = false;

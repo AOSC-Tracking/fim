@@ -93,17 +93,8 @@ class CommandConsole
 
 	fim_err_t load_or_save_history(bool load_or_save);
 
-	/*
-	 * the identifier->variable binding
-	 */
-	//typedef std::map<const fim_cmd_id,Var> variables_t;	//id->var
-	//variables_t variables_;	//id->var
-
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-	/*
-	 * the buffer of marked files
-	 */
-	typedef std::set<fim_fn_t> marked_files_t;	//
+	typedef std::set<fim_fn_t> marked_files_t;
 	marked_files_t marked_files_;		//filenames
 	public:
 	bool isMarkedFile(fim_fn_t fname)const;
