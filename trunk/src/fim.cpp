@@ -328,7 +328,7 @@ FIM_NULL
     },
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 //#if FIM_WANT_BACKGROUND_LOAD
-    {"background-recursive", no_argument, FIM_NULL, /*0x6c696267*/'B',"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
+    {"background-recursive", no_argument, FIM_NULL, 'B',"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
 	    FIM_NULL
     },
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
@@ -1276,7 +1276,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    }
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 		    break;
-		case /*0x6c696267*/'B':
+		case 'B':
 		    //fim's
 		    pf |= FIM_FLAG_PUSH_REC ;
 #if FIM_WANT_BACKGROUND_LOAD
