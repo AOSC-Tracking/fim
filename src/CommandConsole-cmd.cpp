@@ -681,7 +681,12 @@ err:
 		/*
 		 * all of the commands in the record buffer are re-executed.
 		 * */
-		execute_internal(dump_record_buffer(args).c_str(),FIM_X_NULL);
+		if(recordMode_==Normal)
+		{
+			recordMode_=Playing;
+			execute_internal(dump_record_buffer(args).c_str(),FIM_X_NULL);
+			recordMode_=Normal;
+		}
 		/* for unknown reasons, the following code gives problems : image resizes don't work..
 		 * but the present (above) doesn't support interruptions ...
 		 * */
@@ -752,17 +757,19 @@ nop:
 
 	fim::string CommandConsole::start_recording(void)
 	{
-		if(recordMode_ == false)
+		if(recordMode_==Normal)
+		{
 			recorded_actions_.clear();
-		recordMode_=true;
+			recordMode_=Recording;
+			record_action("");
+		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::stop_recording(void)
 	{
-		if(recordMode_ == true && recorded_actions_.size()>0)
-			recorded_actions_.pop_back(); // pop last, stop_recording()-triggering command
-		recordMode_=false;
+		if(recordMode_==Recording)
+			recordMode_=Normal;
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
