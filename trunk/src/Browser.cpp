@@ -242,29 +242,6 @@ ret:
 		return os;
 	}
 
-	fim_cxr Browser::fcmd_redisplay(const args_t& args)
-	{
-		/*
-		 * Given the current() file, display it again like the first time.
-		 * This behaviour is different from reloading.
-		 */
-		FIM_PR('*');
-
-		if(c_getImage())
-		{
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREREDISPLAY,current());
-			if(c_getImage())
-			{
-				viewport()->recenter();
-				if( commandConsole_.redisplay() )
-					this->display_status(current().c_str());
-			}
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTREDISPLAY);
-		}
-		FIM_PR('.');
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
 #ifdef FIM_READ_STDIN_IMAGE
 	void Browser::set_default_image(ImagePtr stdin_image)
 	{
