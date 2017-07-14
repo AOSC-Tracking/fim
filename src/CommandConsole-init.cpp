@@ -213,11 +213,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			setVariable(FIM_VID_DEVICE_DRIVER,FIM_DDN_VAR_AA);
 #if FIM_WANT_SCREEN_KEY_REMAPPING_PATCH
 			/*
-			 * FIXME
-			 *
-			 * seems like the keymaps get shifted when running under screen
-			 * weird, isn't it ?
-			 * Regard this as a weird patch.
+			 * It seems like the keymaps get shifted when running under screen.
+			 * Regard this as a patch.
 			 * */
 			const fim_char_t * const term = fim_getenv(FIM_CNS_TERM_VAR);
 			if(term && string(term).re_match("screen"))
@@ -278,10 +275,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		}
 
 		xres=displaydevice_->width(),yres=displaydevice_->height();
-
-		// textual console reformatting (should go to displaydevice some day)
 		displaydevice_->format_console();
-		// FIXME: shall check the error result
 
 #ifdef FIM_WINDOWS
 		/* true pixels if we are in framebuffer mode */
@@ -415,15 +409,16 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 #endif /* FIM_USE_READLINE */
 
 #if FIM_USE_CXX11
-		static_assert(std::is_signed<fim_int>(),"fim_int shall be a signed type");
-		static_assert(std::is_floating_point<fim_scale_t>(),"internal type error");
-		static_assert(std::is_floating_point<fim_angle_t>(),"internal type error");
-		static_assert(std::is_floating_point<fim_float_t>(),"internal type error");
-		static_assert(std::is_enum<fim_redraw_t>(),"internal type error");
-		static_assert(std::is_class<Var>(),"internal type error");
-		static_assert(std::is_abstract<DisplayDevice>(),"internal type error");
-		static_assert(std::is_polymorphic<DisplayDevice>(),"internal type error");
-		static_assert(std::is_polymorphic<Namespace>(),"internal type error");
+		static_assert(std::is_signed<fim_int>(),FIM_EMSG_ITE);
+		static_assert(std::is_floating_point<fim_scale_t>(),FIM_EMSG_ITE);
+		static_assert(std::is_floating_point<fim_angle_t>(),FIM_EMSG_ITE);
+		static_assert(std::is_floating_point<fim_float_t>(),FIM_EMSG_ITE);
+		static_assert(std::is_enum<fim_redraw_t>(),FIM_EMSG_ITE);
+		static_assert(std::is_class<Var>(),FIM_EMSG_ITE);
+		static_assert(std::is_abstract<DisplayDevice>(),FIM_EMSG_ITE);
+		static_assert(std::is_polymorphic<DisplayDevice>(),FIM_EMSG_ITE);
+		static_assert(std::is_polymorphic<Namespace>(),FIM_EMSG_ITE);
+		static_assert(std::is_polymorphic<MiniConsole>(),FIM_EMSG_ITE);
 #endif /* FIM_USE_CXX11 */
 		if(getIntVariable(FIM_VID_SANITY_CHECK)==1 )
 		{
@@ -447,27 +442,23 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 
 	string CommandConsole::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_t qbttime)const
 	{
-		string msg=FIM_CNS_EMPTY_STRING;
+		std::ostringstream oss;
 		switch(qbi)
 		{
 			case 0:
-			msg+="fim console random variables set/get test";
-			msg+=" : ";
-			msg+=string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3)));
-			msg+=" set/get /s\n";
+			oss << "fim console random variables set/get test : " << ((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " set/get /s\n";
 		}
-		return msg;
+		return oss.str();
 	}
 
 	void CommandConsole::quickbench_init(fim_int qbi)
 	{
-		string msg;
-		
+		std::ostringstream oss;
 		switch(qbi)
 		{
 			case 0:
-			msg="fim console check";
-			std::cout << msg << " : " << "please be patient\n";
+			oss << "fim console check";
+			std::cout << oss.str() << " : " << "please be patient\n";
 			break;
 		}
 	}
@@ -478,10 +469,14 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 
 	void CommandConsole::quickbench(fim_int qbi)
 	{
-		FIM_CONSTEXPR fim_int max_sq=1024*1024;
-		/* FIXME: may be enhanced with sequence numbers ... */
-		cc.setVariable(fim_rand()%(max_sq),fim_rand());
-		cc.getIntVariable(fim_rand()%max_sq);
+		switch(qbi)
+		{
+			case 0:
+			FIM_CONSTEXPR fim_int max_sq=1024*1024;
+			cc.setVariable(fim_rand()%(max_sq),fim_rand());
+			cc.getIntVariable(fim_rand()%max_sq);
+			break;
+		}
 	}
 #endif /* FIM_WANT_BENCHMARKS */
 

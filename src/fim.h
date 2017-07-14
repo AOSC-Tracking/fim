@@ -355,6 +355,7 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_EMSG_CACHING_STDIN	"problems caching standard input image!\n"
 #define FIM_EMSG_OUT_OF_MEM	"out of memory\n"
 #define FIM_EMSG_UNFINISHED	"sorry, feature incomplete!\n"
+#define FIM_EMSG_ITE		"internal type error\n"
 
 /* Command related error messages */
 #define FIM_EMSG_NOMARKUNMARK	"sorry, mark/unmark functionality was opted out."
