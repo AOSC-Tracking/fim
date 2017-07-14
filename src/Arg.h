@@ -1,6 +1,6 @@
 /* $LastChangedDate$ */
 /*
- Arg.h : Argument class
+ Arg.h : argument lists
 
  (c) 2007-2017 Michele Martone
 
@@ -20,7 +20,12 @@
 */
 #ifndef FIM_ARG_H
 #define FIM_ARG_H
+#include <vector>
+#include "fim_string.h"
 namespace fim
 {
+typedef std::vector<fim::string> args_t;
+int fim_args_opt_count(const args_t& args, const char oc);
+bool fim_args_opt_have(const args_t& args, fim::string optname);
 }
 #endif /* FIM_ARG_H */

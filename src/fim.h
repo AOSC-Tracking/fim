@@ -129,6 +129,7 @@
 #include "fim_types.h"
 #include "fim_limits.h"
 #include "fim_wrappers.h"
+#include "Arg.h"
 
 #define FIM_WANT_REMEMBER_LAST_FILE_LOADER 1	/* TODO: shall use this feature to set a i:file_loader attribute; FIXME: move this down */
 #define FIM_WANT_BENCHMARKS	1	/* FIXME: move this down */
@@ -257,15 +258,8 @@ typedef std::pair<fim::string,fim_image_source_t > 	   cache_key_t;	//the curren
 enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 }
 
-typedef std::vector<fim::string> args_t;
-namespace fim{
-int fim_args_opt_count(const args_t& args, const char oc); // FIXME: in CommandConsole-cmd.cpp
-bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in CommandConsole-cmd.cpp
-}
-
 #define FIM_STDIN_IMAGE_NAME "<STDIN>"
 /* should belong to a namespace different from the file name space, and possibly figuring alphabetically as the first one */
-
 
 /*
  * Fim Symbols
