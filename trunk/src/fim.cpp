@@ -640,6 +640,7 @@ int fim_dump_man_page(void)
 //"Return          next image, write the filename of the current image to stdout on exit from the program.\n"
 );
 
+#define FIM_SROC(VAR,VAL) { if( VAR != VAL && VAR != Nothing ) std::cerr<<FIM_EMSG_DSMO; VAR = VAL; }
 #define FIM_ADD_DOCLINE_FOR_CMD(REP,CMD) if(!cc.find_key_for_bound_cmd(CMD).empty()){if(REP!=1)mp+=FIM_XSTRINGIFY(REP);else mp+=" ";mp+=cc.find_key_for_bound_cmd(CMD);mp+="    ";if(REP!=1)mp+=FIM_XSTRINGIFY(REP);mp+=CMD;mp+="\n";}
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT);
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV);
@@ -1345,7 +1346,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 'i':
 		    //fim's
 #ifdef FIM_READ_STDIN_IMAGE
-		    read_stdin_choice = ImageFile;
+		    FIM_SROC(read_stdin_choice,ImageFile);
 #else /* FIM_READ_STDIN_IMAGE */
 		    FIM_FPRINTF(stderr, FIM_EMSG_NO_READ_STDIN_IMAGE);
 #endif /* FIM_READ_STDIN_IMAGE */
@@ -1419,7 +1420,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 'p':
 		    //fim's (differing semantics from fbi's)
 	#ifndef FIM_WANT_NOSCRIPTING
-		    read_stdin_choice = Script;
+		    FIM_SROC(read_stdin_choice,Script);
         #else /* FIM_WANT_NOSCRIPTING */
 		    cout << FIM_EMSG_NO_SCRIPTING;
         #endif /* FIM_WANT_NOSCRIPTING */
@@ -1512,14 +1513,14 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	#ifdef FIM_READ_STDIN
 		case '-':
 		    //fim's
-		    read_stdin_choice = FilesList;
+		    FIM_SROC(read_stdin_choice,FilesList);
 		    break;
 		case 0x72667373:
 		    sac = *optarg;
 		    break;
 		case 0:
 		    //fim's
-		    read_stdin_choice = FilesList;
+		    FIM_SROC(read_stdin_choice,FilesList);
 		    break;
 	#endif /* FIM_READ_STDIN */
 		case 'L':
