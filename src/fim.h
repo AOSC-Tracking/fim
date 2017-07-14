@@ -383,6 +383,8 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_OSW_DUMP_SCRIPTOUT "write-scriptout"
 #define FIM_OSW_LOAD_IMG_DSC_FILE	"load-image-descriptions-file"
 #define FIM_OSW_IMG_DSC_FILE_SEPC	"image-descriptions-file-separator"
+#define FIM_OSW_SORT_FSIZE		"sort-fsize"
+#define FIM_OSW_SORT_MTIME		"sort-mtime"
 
 /*
  * Fim Constants
