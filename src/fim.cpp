@@ -58,13 +58,6 @@ struct fim_options_t{
   const fim_char_t *mandesc;/* this is fim specific */
 };
 
-#define FIM_SYM_CMD_SLSL FIM_VID_RE_SEARCH_OPTS "=\"f\""
-#define FIM_WANT_RECURSE_FILTER_OPTION 1 /* FIXME: NEW */
-
-/*
- * Yet unfinished. 
- * This structure keeps hold of Fim's options flags.
- */
 struct fim_options_t fim_options[] = {
     {"autozoom",   no_argument,       FIM_NULL, 'a',"scale according to a best fit.",FIM_NULL,
 "Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image (as in fbi)."
@@ -134,7 +127,7 @@ FIM_NULL
       " Special comment lines like \"#!fim:^=val\" will set val to be the base of each description." 
       " Special comment lines like \"#!fim:!=\" will reset all cached variables." 
       " Special comment lines like \"#!fim:/=dir\" will prepend dir to each file's basename." 
-      " Special comment lines like \"#!fim:\\e=dir\" will prepend dir to each file's name."  /* FIXME: \e stays for \ */
+      " Special comment lines like \"#!fim:\\e=dir\" will prepend dir to each file's name."  /* '\e' stays for '\ ' in man pages */
 #if FIM_WANT_PIC_RCMT 
       " Special description text begins with markers: "
       " with \"#!fim:=\" the last description line to be used;"
@@ -602,7 +595,9 @@ int fim_dump_man_page(void)
 			".SH DESCRIPTION\n"
 			".B\nfim\nis a `swiss army knife' for displaying image files.\n"
 			"It is capable of displaying image files using different graphical devices while offering a uniform look and feel; it features an internal command language specialized to the image viewing purposes; it is capable of interacting with standard input and output; the internal command language is accessible via a command line capable of autocompletion and history; it features command recording, supports initialization files, customizable key bindings, internal variables and command aliases, vim-like autocommands, JPEG comments, EXIF tags display, EXIF rotation/orientation, and much more.\n\n"
-			"As a default,\n.B\nfim\ndisplays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not).  " FIM_CNS_DSFF " formats are supported. \nFor 'XCF' (Gimp's) images, fim will try to use '" FIM_EPR_XCFTOPNM "'.\nFor '.FIG' vectorial images, fim will try to use '" FIM_EPR_FIG2DEV "'.\nFor '.DIA' vectorial images, fim will try to use '" FIM_EPR_DIA "'.\nFor '.SVG' vectorial images, fim will try to use '" FIM_EPR_INKSCAPE "'.\nFor other formats fim will try to use ImageMagick's '" FIM_EPR_CONVERT "' executable.\n"
+			"As a default,\n.B\nfim\ndisplays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not). Graphical file formats " FIM_CNS_DSFF_SN " are supported natively, while " FIM_CNS_DSFF_SL " are supported via third party libraries. \n"
+			"Further formats are supported via external converters. \n"
+			"For 'XCF' (Gimp's) images, fim will try to use '" FIM_EPR_XCFTOPNM "'.\nFor '.FIG' vectorial images, fim will try to use '" FIM_EPR_FIG2DEV "'.\nFor '.DIA' vectorial images, fim will try to use '" FIM_EPR_DIA "'.\nFor '.SVG' vectorial images, fim will try to use '" FIM_EPR_INKSCAPE "'.\nFor other formats fim will try to use ImageMagick's '" FIM_EPR_CONVERT "' executable.\n"
 			"\n")+
 			string("\n""If " FIM_MAN_fB("{imagepath}") " is a file, its format is guessed not by its name but by its contents (see e.g. the " FIM_VID_FILE_LOADER " variable to change this default).\n\n")+
 #ifdef FIM_READ_DIRS
@@ -652,7 +647,7 @@ int fim_dump_man_page(void)
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV_FILE);
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_NEXT_PAGE);
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_PREV_PAGE);
-			/* TODO: may use a search-based method for locating an keys to other commands... */
+			/* TODO: may use a search-based method for locating keys to other commands... */
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLA_MAGNIFY);
 			FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLA_REDUCE);
 			//FIM_ADD_DOCLINE_FOR_CMD(1,FIM_FLC_MIRROR);
@@ -1749,8 +1744,10 @@ fim_perr_t main(int argc,char *argv[])
 	return fiminstance.main(argc,argv);
 }
 
-		/* FIXME: we are including files here.
-		 * this is a horrible programming practice and shall be fixed. */
+/* 
+ * The function FimInstance::show_version declared here needs the following inclusions.
+ * Would be cleaner to move the rest of the file to a separate file.
+ * */
 #ifdef FIM_WITH_LIBPNG
 #include <png.h>
 #endif /* FIM_WITH_LIBPNG */
@@ -1918,6 +1915,6 @@ extern "C" {
 			    );
 		
 		fim_loaders_to_stderr(stream);
-	}
-	/* WARNING: PLEASE DO NOT WRITE ANY MORE CODE AFTER THIS DECLARATION (RIGHT ABOVE, AN UNCLEAN CODING PRACTICE WAS USED) */
+	} /* FimInstance::show_version */
 
+/* Please do not write any more code after THIS declaration */

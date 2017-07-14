@@ -271,11 +271,9 @@ err:
 #ifndef FIM_WANT_NOSCRIPTING
 	fim_cxr CommandConsole::fcmd_executeFile(const args_t& args)
 	{
-		/*
-		 * TODO : catch exceptions
-		 * */
 		for(size_t i=0;i<args.size();++i)
-			executeFile(args[i].c_str());
+			if( executeFile(args[i].c_str()) != FIM_ERR_NO_ERROR )
+				; // might be verbose ...
 		return FIM_CNS_EMPTY_RESULT;
 	}
 #endif /* FIM_WANT_NOSCRIPTING */

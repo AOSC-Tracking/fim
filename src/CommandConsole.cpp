@@ -1362,8 +1362,7 @@ ret:
 
 	fim_err_t CommandConsole::executeFile(const fim_char_t *s)
 	{
-		execute_internal(slurp_file(s).c_str(),FIM_X_QUIET);
-		return FIM_ERR_NO_ERROR;
+		return execute_internal(slurp_file(s).c_str(),FIM_X_QUIET);
 	}
 
 	fim_var_t CommandConsole::getVariableType(const fim_var_id& varname)const
