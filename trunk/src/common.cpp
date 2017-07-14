@@ -75,20 +75,28 @@ fim::string fim_dirname(const fim::string& arg)
 	return "";//FIXME
 #endif /* HAVE_LIBGEN_H */
 }
-	fim::string fim_shell_arg_escape(const fim::string& arg, bool quoted)
-	{
-		// FIXME: this escaping function is NOT safe; this code shall only serve as a placeholder for a better one.
-		fim::string ear=arg;
-		fim::string res=FIM_CNS_EMPTY_STRING;
-		if(quoted)
-			res+="'";
-		ear.substitute("'","\\'");
-		//ear.substitute("'","'\\''");
-		res+=ear;
-		if(quoted)
-			res+="'";
-		return res;
-	}
+
+fim::string fim_shell_arg_escape(const fim::string& arg, bool quoted)
+{
+	fim::string ear=arg;
+	fim::string res=FIM_CNS_EMPTY_STRING;
+
+	if(quoted)
+		res+="'";
+	ear.substitute("'","\\'");
+	res+=ear;
+	if(quoted)
+		res+="'";
+	return res;
+}
+
+fim::string fim_key_escape(const fim::string uk)
+{
+	// escape for display
+	std::ostringstream oss;
+	oss << "[" << uk << "]";
+	return oss.str();
+}
 
 void fim_perror(const fim_char_t *s)
 {

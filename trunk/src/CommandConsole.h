@@ -318,7 +318,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim::string unbind(fim_key_t c);
 	fim::string bind(fim_key_t c,fim_cls binding);
 	public:
-	fim::string find_key_for_bound_cmd(fim_cls binding);
+	fim::string find_key_for_bound_cmd(fim_cls cmd);
 	fim_err_t execDefaultConfiguration(void);
 	private:
 	fim::string unbind(const fim::string& key);

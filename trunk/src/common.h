@@ -38,6 +38,7 @@ int fim_isquote(int c);
 
 fim::string fim_dirname(const fim::string& arg);
 fim::string fim_shell_arg_escape(const fim::string& arg, bool quoted=true);
+fim::string fim_key_escape(const fim::string uk);
 void fim_perror(const fim_char_t *s);
 //void fim_tolowers(fim_char_t *s);
 //void fim_touppers(fim_char_t *s);
