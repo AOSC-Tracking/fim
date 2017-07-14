@@ -204,7 +204,6 @@ class CommandConsole
 #endif /* FIM_USE_CXX11 */
 
 	public:
-	bool display(void);
 	bool redisplay(void);
 	fim_char_t * command_generator (const fim_char_t *text,int state,int mask)const;
 	fim_perr_t executionCycle(void);

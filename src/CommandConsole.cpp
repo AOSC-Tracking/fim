@@ -1752,58 +1752,11 @@ ok:
 
 	bool CommandConsole::redisplay(void)
 	{
-		/*
-		 * quick and dirty display function
-		 */
-#ifdef FIM_WINDOWS
 		bool needed_redisplay=false;
 
-		try
-		{
-			if(window_)
-				needed_redisplay=window_->recursive_redisplay();
-		}
-		catch	(FimException e)
-		{
-			// well, we should to something : FIXME
-			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
-		}
+		if(window_)
+			needed_redisplay = window_->recursive_redisplay();
 		return needed_redisplay;
-#else /* FIM_WINDOWS */
-		//browser_.redisplay();
-		if(cc.viewport_)
-			return cc.viewport_->redisplay();
-		return true;
-#endif /* FIM_WINDOWS */
-	}
-
-	bool CommandConsole::display(void)
-	{
-		/*
-		 * quick and dirty display function
-		 */
-#ifdef FIM_WINDOWS
-		bool needed_redisplay=false;
-
-		try
-		{
-			if(window_ )
-				needed_redisplay=window_->recursive_display();
-#if 0
-			else
-				printf("%s : here should go image rendering code.\n",__LINE__);
-#endif
-		}
-		catch	(FimException e)
-		{
-			// well, we should to something : FIXME
-			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << "\n";
-		}
-		return needed_redisplay;
-#else /* FIM_WINDOWS */
-		browser_.redisplay();
-		return true;
-#endif /* FIM_WINDOWS */
 	}
 
 #ifdef FIM_RECORDING
@@ -2334,7 +2287,7 @@ ret:
 		if(current_viewport() && current_viewport()->c_getImage())
 			current_viewport()->getImage()->update_meta(1);
 
-		browser_.redisplay();
+		browser_.fcmd_redisplay(args_t());
 
 		if(getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 		{

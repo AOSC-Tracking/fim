@@ -244,13 +244,6 @@ ret:
 
 	fim_cxr Browser::fcmd_redisplay(const args_t& args)
 	{
-		/* ...shall merge with fcmd_display() */
-		redisplay();
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	void Browser::redisplay(bool fresh)
-	{
 		/*
 		 * Given the current() file, display it again like the first time.
 		 * This behaviour is different from reloading.
@@ -262,11 +255,6 @@ ret:
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREREDISPLAY,current());
 			if(c_getImage())
 			{
-				/*
-				 * FIXME : this is conceptually wrong.
-				 * should be:
-				 * viewport().redisplay();
-				 */
 				viewport()->recenter();
 				if( commandConsole_.redisplay() )
 					this->display_status(current().c_str());
@@ -274,6 +262,7 @@ ret:
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTREDISPLAY);
 		}
 		FIM_PR('.');
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 #ifdef FIM_READ_STDIN_IMAGE
@@ -867,11 +856,6 @@ nop:
 				fim_coo_t nwh = c_getImage()->height();
 				fim_bool_t wsl = (getGlobalIntVariable(FIM_VID_DISPLAY_BUSY)) ?  true : false;;
 
-#if 0
-				if( args.size() == 2 && args[1] == "original" )
-					nww = c_getImage()->original_width(),
-					nwh = c_getImage()->original_height() + fh;
-#endif
 				if( args.size()>2 )
 					nww = args[1],
 					nwh = args[2],
@@ -879,14 +863,8 @@ nop:
 				commandConsole_.resize(nww,nwh,wsl);
 			}
 			if(getImage() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
-			//	if(c_getImage())
 			{
-				//fb_clear_screen();
-				//viewport().display();
-				/*
-				 * we redraw the whole screen and thus all of the windows
-				 * */
-				if( commandConsole_.display() )
+				if( commandConsole_.redisplay() )
 					this->display_status(current().c_str());
 //				FIXME:
 //				if(commandConsole_.window)commandConsole_.window->recursive_display();
@@ -2615,18 +2593,6 @@ err:
 		 *	is the filename list empty ?
 		 */
 		return flist_.size() == 0;
-	}
-
-	fim::string Browser::display(void)
-	{
-		/*
-		 *	display the current image
-		 */
-#if FIM_USE_CXX11
-		return fcmd_display({});
-#else /* FIM_USE_CXX11 */
-		return fcmd_display(args_t());
-#endif /* FIM_USE_CXX11 */
 	}
 
 	fim::string Browser::pop_current(const args_t& args)

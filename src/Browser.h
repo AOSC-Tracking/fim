@@ -298,7 +298,7 @@ class Browser
 	fim_cxr fcmd_prev(const args_t& args);
 	//fim_cxr fcmd_no_image(const args_t& args);
 #endif /* FIM_WANT_FAT_BROWSER */
-	fim_cxr fcmd_rotate(const args_t& args);/* FIXME : UNFINISHED */
+	fim_cxr fcmd_rotate(const args_t& args);
 	fim_cxr fcmd_display(const args_t& args);
 	fim::string display_status(const fim_char_t *l);
 	fim_cxr fcmd_color(const args_t& args);
@@ -313,7 +313,6 @@ class Browser
 	fim_cxr fcmd_info(const args_t& args);
 	fim::string info(void);
 	std::ostream& print(std::ostream& os)const;
-	void redisplay(bool fresh=false);
 	fim_cxr fcmd_redisplay(const args_t& args);
 	fim_cxr fcmd_load(const args_t& args);
 	const fim::string pop_current(void);
@@ -326,7 +325,6 @@ class Browser
 	bool push(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
 	bool push_noglob(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
 
-	fim::string display(void);
 	fim::string _random_shuffle(bool dts=true);
 	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN);
 	void _unique(void);
