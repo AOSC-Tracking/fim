@@ -404,6 +404,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_err_t display_reinit(const fim_char_t *rs);
 	fim_cxr fcmd_basename(const args_t& args);
 	fim_cxr fcmd_desc(const args_t& args);
+	fim_cxr fcmd_display(const args_t& args);
 	fim_bool_t key_syms_update(void);
 #if FIM_WANT_BENCHMARKS
 	virtual fim_int get_n_qbenchmarks(void)const;

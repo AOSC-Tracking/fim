@@ -831,55 +831,6 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_display(const args_t& args)
-	{
-		/*
-		 * displays the current image, (if already loaded), on screen
-		 */
-		FIM_PR('*');
-
-		if( c_getImage() )
-		{
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREDISPLAY,current());
-			/* FIXME: need a "help" request answer. */
-			/*
-			 * the following is a trick to override redisplaying..
-			 */
-			if( args.size()>0 && args[0] == "reinit" )
-			{
-				string arg = args.size()>1?args[1]:"";
-				commandConsole_.display_reinit(arg.c_str());
-			}
-			if( args.size()>0 && args[0] == "resize" )
-			{
-				fim_coo_t nww = c_getImage()->width();
-				fim_coo_t nwh = c_getImage()->height();
-				fim_bool_t wsl = (getGlobalIntVariable(FIM_VID_DISPLAY_BUSY)) ?  true : false;;
-
-				if( args.size()>2 )
-					nww = args[1],
-					nwh = args[2],
-					wsl = false;
-				commandConsole_.resize(nww,nwh,wsl);
-			}
-			if(getImage() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
-			{
-				if( commandConsole_.redisplay() )
-					this->display_status(current().c_str());
-//				FIXME:
-//				if(commandConsole_.window)commandConsole_.window->recursive_display();
-			}
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTDISPLAY);
-		}
-		else
-		{
-		       	cout << "no image to display, sorry!";
-			commandConsole_.set_status_bar("no image loaded.", "*");
-		}
-		FIM_PR('.');
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
 #if FIM_WANT_FAT_BROWSER
 #if 0
 	fim_cxr Browser::fcmd_no_image(const args_t& args)
