@@ -1309,10 +1309,6 @@ rret:
 
 	bool Browser::push_noglob(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{	
-		/*
-		 * FIX ME:
-		 * are we sure we want no repetition!????
-		 * */
 		bool retval = false;
 		bool lib = false; /* load in background */
 
@@ -1333,13 +1329,9 @@ rret:
 				goto ret;
 
 			if( nf[sl-1] == FIM_CNS_SLASH_CHAR )
-			{
 				goto isdir;
-			}
 			else
-			{
 				goto isfile;
-			}
 		}
 
 		{
@@ -1408,7 +1400,8 @@ isfile:
 		}
 #endif /* FIM_CHECK_DUPLICATES */
 		flist_.push_back(nf);
-		//std::cout << "pushing " << nf << FIM_CNS_NEWLINE;
+		if(cc.getVariable(FIM_VID_DBG_COMMANDS).find('B') >= 0)
+			std::cout << FIM_CNS_CLEARTERM << FIM_CNS_DBG_CMDS_PFX << " pushing " << nf << FIM_CNS_NEWLINE;
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		retval = true;
 		goto ret;

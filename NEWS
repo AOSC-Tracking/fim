@@ -10,8 +10,8 @@
 # (r1331,r1333)
  * Strings specified within single quotes will have single quotes escaped, just as double quotes.
    So that e.g.: '\'hello\'' equals "'hello'" and "\"hello\"" equals '"hello"'.
-# (r1330,1351)
- * Variable '_debug_commands' is now a string.
+# (r1330,r1351,r1363)
+ * Variable '_debug_commands' is now a string with several verbosity options.
 # (r1323,r1325)
  * fix: misc for --offset, e.g. avoiding probing for external loader programs.
 # (r1319)

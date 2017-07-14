@@ -663,7 +663,7 @@ _console_offset
 .na
 .B
 _debug_commands
-[in,g:] debugging option string. if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps.
+[in,g:] debugging option string. if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files.
 .fi
 .na
 .B
