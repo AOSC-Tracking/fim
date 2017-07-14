@@ -316,7 +316,7 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	fim_cxr fcmd_eval(const args_t& args);
 	void exit(fim_perr_t i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
-	fim::string bind(fim_key_t c,fim_cls binding);
+	fim::string bind(const fim_key_t c, const fim_cls binding, const fim::string hstr="");
 	public:
 	fim::string find_key_for_bound_cmd(fim_cls cmd);
 	fim_err_t execDefaultConfiguration(void);
