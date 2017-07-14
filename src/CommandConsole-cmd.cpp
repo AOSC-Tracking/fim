@@ -752,20 +752,16 @@ nop:
 
 	fim::string CommandConsole::start_recording(void)
 	{
-		/*
-		 * recording of commands starts here
-		 * */
-		recorded_actions_.clear();
+		if(recordMode_ == false)
+			recorded_actions_.clear();
 		recordMode_=true;
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string CommandConsole::stop_recording(void)
 	{
-		/*
-		 * since the last recorded action was stop_recording, we pop out the last command
-		 */
-		if(recorded_actions_.size()>0)recorded_actions_.pop_back();
+		if(recordMode_ == true && recorded_actions_.size()>0)
+			recorded_actions_.pop_back(); // pop last, stop_recording()-triggering command
 		recordMode_=false;
 		return FIM_CNS_EMPTY_RESULT;
 	}
