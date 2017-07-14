@@ -316,10 +316,6 @@ ret:		return key;
 
 	fim::string CommandConsole::dummy(const args_t & args)
 	{
-		/*
-		 * useful for test purposes
-		 * */
-		//std::cout << "dummy function : for test purposes :)\n";
 		return "dummy function : for test purposes :)\n";
 	}
 
@@ -337,7 +333,7 @@ ret:		return key;
 	,cycles_(0)
 #ifdef FIM_RECORDING
 	,recordMode_(Normal)
-	,dont_record_last_action_(false)		/* this variable is only useful in record mode */
+	,dont_record_last_action_(false)
 #endif /* FIM_RECORDING */
 	,fim_stdin_(STDIN_FILENO)
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -352,7 +348,7 @@ ret:		return key;
 		addCommand(new Command(FIM_FLT_ALIGN,FIM_CMD_HELP_ALIGN,&browser_,&Browser::fcmd_align));
 #ifdef FIM_AUTOCMDS
 		addCommand(new Command(FIM_FLT_AUTOCMD,FIM_CMD_HELP_AUTOCMD,this,&CommandConsole::fcmd_autocmd));
-		addCommand(new Command(FIM_FLT_AUTOCMD_DEL,FIM_CMD_HELP_AUTOCMD_DEL,this,&CommandConsole::fcmd_autocmd_del));	/* this syntax is incompatible with vim ('autocmd!')*/
+		addCommand(new Command(FIM_FLT_AUTOCMD_DEL,FIM_CMD_HELP_AUTOCMD_DEL,this,&CommandConsole::fcmd_autocmd_del));
 #endif /* FIM_AUTOCMDS */
 		addCommand(new Command(FIM_FLT_BASENAME,FIM_CMD_HELP_BASENAME,this,&CommandConsole::fcmd_basename));
 		addCommand(new Command(FIM_FLT_BIND,FIM_CMD_HELP_BIND,this,&CommandConsole::fcmd_bind));
@@ -486,15 +482,11 @@ err:
 
 	fim_err_t CommandConsole::addCommand(Command *c)
 	{
-		/*
-		 * c is added to the commands list
-		 */
 		assert(c);
 		int idx=findCommandIdx(c->cmd());
 
 		if(idx!=FIM_INVALID_IDX)
 		{
-			// here, we replace rather than add
 			delete commands_[idx];
 			commands_[idx]=c;
 		}
@@ -631,9 +623,6 @@ err:
 
 	fim::string CommandConsole::getBoundAction(const fim_key_t c)const
 	{
-		/*
-		 * returns the action assigned to key biding c
-		 * */
 		bindings_t::const_iterator bi=bindings_.find(c);
 
 		if(bi!=bindings_.end()) 
@@ -645,9 +634,8 @@ err:
 	bool CommandConsole::executeBinding(const fim_key_t c)
 	{
 		/*
-		 *	Executes the command eventually bound to c.
-		 *	Doesn't log anything.
-		 *	If the binding is inexistent, ignores silently the error and return false.
+		 *	Executes a command, without logging / recording.
+		 *	If binding inexistent, ignores silently error and return false.
 		 */
 		bindings_t::const_iterator bi=bindings_.find(c);
 		fim_err_t status=FIM_ERR_NO_ERROR;
@@ -833,8 +821,7 @@ ret:
         fim::string CommandConsole::execute(fim_cmd_id cmd, args_t args)
 	{
 		/*
-		 *	This is the member function where the tokenized commands are executed.
-		 *	This member function executes single commands with arguments.
+		 * Single tokenized commands with arguments.
 		 */
 		Command *c=FIM_NULL;
 		/* first determine whether cmd is an alias */
@@ -1093,16 +1080,6 @@ err:
 				fim_char_t buf[FIM_VERBOSE_KEYS_BUFSIZE];
 
 				*prompt_ = FIM_SYM_PROMPT_NUL;
-//				fim_sys_int c=getchar();
-//				fim_sys_int c=fgetc(stdin);
-				/*
-				 *	problems :
-				 *	 I can't read Control key and 
-				 *	some upper case key together.
-				 *	 I am not quite sure about portability..
-				 *	... maybe a sample program which photograph
-				 *	the keyboard is needed!.
-				 */
 				c=0;
 				r=displaydevice_->get_input(&c);
 #ifdef	FIM_USE_GPM
@@ -1223,7 +1200,7 @@ rlnull:
 	void CommandConsole::exit(fim_perr_t i)const
 	{
 		/*
-		 *	This member function will exit the program as a whole.
+		 *	Exit the program as a whole.
 		 *      If various object destructors are set to destroy device
 		 *	contexts, it should do no harm to the console.
 		 *      (it will call statically declared object's destructors )
@@ -1234,7 +1211,7 @@ rlnull:
 	fim_perr_t CommandConsole::quit(fim_perr_t i)
 	{
 		/*
-		 * the member function to be called to exit from the program safely.
+		 * To be called to exit from the program safely.
 		 * it is used mainly for safe exit after severe errors.
 		 */
 		show_must_go_on_=0;
@@ -1409,9 +1386,6 @@ ret:
 
 	fim::string CommandConsole::get_commands_list(void)const
 	{
-		/*
-		 * returns the list of registered commands
-		 */
 		std::ostringstream oss;
 
 		for(size_t i=0;i<commands_.size();++i)
@@ -1425,9 +1399,6 @@ ret:
 
 	fim::string CommandConsole::get_variables_list(void)const
 	{
-		/*
-		 * returns the list of set variables
-		 */
 		std::ostringstream acl;
 		std::string sep=" ";
 		variables_t::const_iterator vi;
@@ -1506,8 +1477,6 @@ ret:
 
 	fim::string CommandConsole::autocmd_del(const fim::string event, const fim::string pattern, const fim::string action)
 	{
-		/*
-		 */
 		autocmds_t::iterator ai;
 		size_t n = 0;
 
@@ -1551,11 +1520,7 @@ ret:
 
 	fim::string CommandConsole::autocmd_add(const fim::string& event,const fim::string& pat,const fim_cmd_id& cmd)
 	{
-		/*
-		 * the internal autocommand add function
-		 *
-		 * TODO : VALID VS INVALID EVENTS?
-		 */
+		/* valid vs invalid events? check and warning .. */
 		if(cmd==FIM_CNS_EMPTY_STRING)
 		{
 			cout << "can't add empty autocommand\n";
@@ -1574,11 +1539,6 @@ ok:
 
 	fim::string CommandConsole::pre_autocmd_add(const fim_cmd_id& cmd)
 	{
-		/*
-		 * this autocommand will take argument related autocommands
-		 */
-	    	//return autocmd_add(FIM_ACM_PREEXECUTIONCYCLEARGS,"",cmd);
-	    	//return autocmd_add(FIM_ACM_POSTFIMRC,"",cmd);
 		if(getVariable(FIM_VID_DBG_COMMANDS).find('a') >= 0)
 			std::cout << FIM_CNS_DBG_CMDS_PFX << "adding autocmd " << cmd << ":\n";
 	    	return autocmd_add(FIM_ACM_POSTHFIMRC,"",cmd);
@@ -1586,24 +1546,14 @@ ok:
 
 	fim::string CommandConsole::pre_autocmd_exec(void)
 	{
-		/*
-		 */
-	    	//return FIM_AUTOCMD_EXEC(FIM_ACM_POSTFIMRC,"");
 	    	return FIM_AUTOCMD_EXEC(FIM_ACM_POSTHFIMRC,"");
 	}
 
 	fim::string CommandConsole::autocmd_exec(const fim::string& event, const fim_fn_t& fname)
 	{
-		/*
-		 *	WARNING : maybe there is the need of a sandbox, for
-		 *	any command could do harm to the iterators themselves!
-		 *
-		 *	SO THE FIRST MATCHING SHOULD RETURN!
-		 */
 		autocmds_p_t::const_iterator api;
 		/*
-		 *	we want to prevent from looping autocommands, so this rudimentary
-		 *	mechanism should avoid the majority of them.
+		 * we want to prevent from looping autocommands; this rudimentary mechanism shall avoid them.
 		 */
 		autocmds_loop_frame_t frame(event,fname);
 
@@ -1611,9 +1561,7 @@ ok:
 		{
 			autocmd_push_stack( frame );
 			for( api=autocmds_[event].begin();api!=autocmds_[event].end();++api )
-			{
  				autocmd_exec(event,(*api).first,fname);
-			}
 			autocmd_pop_stack( frame );
 		}
 		else
@@ -1626,10 +1574,6 @@ ok:
 
 	fim::string CommandConsole::autocmd_exec(const fim::string& event, const fim::string& pat, const fim_fn_t& fname)
 	{
-		/*
-		 * executes all the actions associated to the current event, if the current 
-		 * file name matches the regexp pattern
-		 */
 //		cout << "autocmd_exec_cmd...\n";
 //		cout << "autocmd_exec_cmd. for pat '" << fname <<  "'\n";
 
@@ -1653,13 +1597,11 @@ ok:
 
 	void CommandConsole::autocmd_push_stack(const autocmds_loop_frame_t& frame)
 	{
-		//WARNING : ERROR DETECTION IS MISSING
 		autocmds_loop_stack.push_back(frame);
 	}
 
 	void CommandConsole::autocmd_pop_stack(const autocmds_loop_frame_t& frame)
 	{
-		//WARNING : ERROR DETECTION IS MISSING
 		autocmds_loop_stack.pop_back();
 	}
 	
@@ -1689,10 +1631,8 @@ ok:
 	fim_bool_t CommandConsole::autocmd_in_stack(const autocmds_loop_frame_t& frame)const
 	{
 		/*
-		 * this function prevents a second autocommand triggered against 
-		 * the same file to execute
+		 * prevents a second autocommand triggered against the same file to execute
 		 */
-		//return  autocmds_loop_stack.find(frame)!=autocmds_loop_stack.end();
 		return  find(autocmds_loop_stack.begin(),autocmds_loop_stack.end(),frame)!=autocmds_loop_stack.end();
 	}
 #endif /* FIM_AUTOCMDS */
@@ -1845,21 +1785,12 @@ ok:
 
 	void CommandConsole::printHelpMessage(const fim_char_t *pn)const
 	{
-		/*
-		 * a prompt-like help message is pretty printed in the console
-		 * */
 		std::cout<<" Usage: "<<pn<<" [OPTIONS] [FILES]\n";
-		/*  printf("\nThe help will be here soon!\n");*/
 	}
 
 #ifdef FIM_RECORDING
 	fim::string CommandConsole::memorize_last(const fim_cmd_id& cmd)
 	{
-		/*
-		 * the last executed command is appended in the buffer.
-		 * of course, there are exceptions to these.
-		 * and are quite intricated...
-		 */
 		if(dont_record_last_action_==false)
 			last_action_=cmd;
 		dont_record_last_action_=false;	//from now on we can memorize again
@@ -1869,8 +1800,7 @@ ok:
 	fim::string CommandConsole::sanitize_action(const fim_cmd_id& cmd)const
 	{
 		/*
-		 * the purpose of this member function is to sanitize the action token
-		 * in order to gain a dumpable and self standing action
+		 * make cmd dumbable
 		 */
 		if(cmd.c_str()[strlen(cmd.c_str())-1]!=FIM_SYM_SEMICOLON)
 			return cmd+fim::string(FIM_SYM_SEMICOLON_STRING);
@@ -1970,6 +1900,7 @@ ok:
 	    	scripts_.push_back(ns);
 		return true; /* for now a fare return code */
 	}
+
 	bool CommandConsole::with_scriptfile(void)const
 	{
 		return scripts_.size() !=0 ;
@@ -2046,9 +1977,6 @@ ok:
 		return FIM_ERR_GENERIC;
 	}
 
-	/*
-	 * This routine terminates the program as cleanly as possible.
-	 */
 	void CommandConsole::cleanup(void)
 	{
 		/*
@@ -2065,8 +1993,7 @@ ok:
 	}
 
 	/*
-	 * inserts the desc text into the textual console,
-	 * and eventually displays it
+	 * insert desc text into the textual console; eventually display it
 	 */
 	void CommandConsole::status_screen(const fim_char_t *desc)
 	{
@@ -2281,7 +2208,6 @@ ret:
 		if(window_)
 			window_->update(Rect(0,0,w,h));
 #endif
-
 		displaydevice_->format_console();
 
 		if(current_viewport() && current_viewport()->c_getImage())
@@ -2301,7 +2227,6 @@ ret:
 
 	fim_err_t CommandConsole::display_reinit(const fim_char_t *rs)
 	{
-
 		if(!displaydevice_)
 			goto err;
 		return displaydevice_->reinit(rs);
@@ -2462,7 +2387,7 @@ ret:
 		return get_commands_list();
 	}
 
-	fim::string CommandConsole::current()const
+	fim::string CommandConsole::current(void)const
 	{
 	       	return browser_.current();
 	}
