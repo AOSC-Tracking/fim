@@ -205,17 +205,12 @@ namespace fim
 ret:		return key;
 	}
 
-	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls binding)
+	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls cmd)
 	{
-		/*
-		 * looks for a binding to 'cmd' and returns a string description for its bound key 
-		 */
-		fim_key_t key = find_keycode_for_bound_cmd(binding);
+		fim_key_t key = find_keycode_for_bound_cmd(cmd);
 
-		if( key != FIM_SYM_NULL_KEY)
-		{
+		if( key != FIM_SYM_NULL_KEY )
 			return key_syms_[key];	
-		}
 
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -1128,9 +1123,8 @@ err:
 					}
 					if(getVariable(FIM_VID_DBG_COMMANDS).find('k') >= 0)
 					{
-						std::cout << FIM_CNS_DBG_CMDS_PFX << "keysym: '"<<c<<"' ";
-						std::cout << " ['"<<*key_syms_[c] <<"']";
-						std::cout << "\n";
+						std::cout << FIM_CNS_DBG_CMDS_PFX << "keysym: '"<<c<<"' "
+							<< fim_key_escape(key_syms_[c]) << "\n";
 					}
 #ifndef FIM_USE_READLINE
 					if(c==(fim_key_t)getIntVariable(FIM_VID_CONSOLE_KEY) || 
@@ -2235,7 +2229,7 @@ ok:
 		if( ! displaydevice_   )
 		       	goto ret;
 
-		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP);/* FIXME: this is SLOW, and should be replaced */
+		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP); // slow
 		hkl=fim_strlen(hk.c_str());
 		/* FIXME: can we guarantee a bound on its length in some way ? */
 		if(hkl>mhkl)
