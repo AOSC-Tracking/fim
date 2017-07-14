@@ -344,7 +344,7 @@ ret:		return key;
 	,displaydevice_(NULL)			/* the display device could be NULL ! (FIXME) */
 #ifdef FIM_RECORDING
 	,dont_record_last_action_(false)		/* this variable is only useful in record mode */
-	,recordMode_(false)			/* we start not recording anything */
+	,recordMode_(Normal)			/* we start not recording anything */
 #endif /* FIM_RECORDING */
 	,fim_stdin_(STDIN_FILENO)
 	,cycles_(0)
@@ -1050,7 +1050,8 @@ ok:
 					autocmd_exec(FIM_ACM_PREINTERACTIVECOMMAND,cf);
 #endif /* FIM_AUTOCMDS */
 #ifdef FIM_RECORDING
-					if(recordMode_)record_action(fim::string(rl));
+					if(recordMode_==Recording)
+						record_action(fim::string(rl));
 #endif /* FIM_RECORDING */
 					//ic_=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
 					execute_internal(rl,FIM_X_HISTORY);	//execution of the command line with history
@@ -1165,7 +1166,7 @@ ok:
 
 						this->executeBinding(c);
 #ifdef FIM_RECORDING
-						if(recordMode_)
+						if(recordMode_==Recording)
 						       	record_action(getBoundAction(c));
 						memorize_last(getBoundAction(c));
 #endif /* FIM_RECORDING */

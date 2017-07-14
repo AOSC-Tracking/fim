@@ -336,7 +336,7 @@ ret:		return key;
 	,browser_(*this)
 	,cycles_(0)
 #ifdef FIM_RECORDING
-	,recordMode_(false)			/* we start not recording anything */
+	,recordMode_(Normal)
 	,dont_record_last_action_(false)		/* this variable is only useful in record mode */
 #endif /* FIM_RECORDING */
 	,fim_stdin_(STDIN_FILENO)
@@ -1060,7 +1060,7 @@ err:
 					 * */
 					FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREINTERACTIVECOMMAND,current());
 #ifdef FIM_RECORDING
-					if(recordMode_)
+					if(recordMode_==Recording)
 						record_action(fim::string(rl));
 #endif /* FIM_RECORDING */
 					execute_internal(rl,FIM_X_HISTORY);	//execution of the command line with history
@@ -1181,7 +1181,7 @@ err:
 						if( this->executeBinding(c) )
 						{
 #ifdef FIM_RECORDING
-							if(recordMode_)
+							if(recordMode_==Recording)
 							       	record_action(getBoundAction(c));
 							memorize_last(getBoundAction(c));
 #endif /* FIM_RECORDING */

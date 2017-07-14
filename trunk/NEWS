@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1366)
+ * fix: 'recording' command non functioning properly.
 # (r1365)
  * fix: will not pop back last if calling recording 'stop' outside of recording mode.
  * fix: won't clear recorded list if calling recording 'start' multiple times.

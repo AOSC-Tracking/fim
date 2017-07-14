@@ -354,7 +354,7 @@ ret:		return key;
 	//,framebufferdevice(_framebufferdevice)
 	,cycles_(0)
 #ifdef FIM_RECORDING
-	,recordMode_(false)			/* we start not recording anything */
+	,recordMode_(Normal)			/* we start not recording anything */
 	,dont_record_last_action_(false)		/* this variable is only useful in record mode */
 #endif /* FIM_RECORDING */
 	,fim_stdin_(STDIN_FILENO)
@@ -1077,7 +1077,7 @@ err:
 					fim::string cf=current();
 					FIM_AUTOCMD_EXEC(FIM_ACM_PREINTERACTIVECOMMAND,cf);
 #ifdef FIM_RECORDING
-					if(recordMode_)
+					if(recordMode_==Recording)
 						record_action(fim::string(rl));
 #endif /* FIM_RECORDING */
 					//ic_=0; // we 'exit' from the console for a while (WHY ? THIS CAUSES PRINTING PROBLEMS)
@@ -1202,7 +1202,7 @@ err:
 						if( this->executeBinding(c) )
 						{
 #ifdef FIM_RECORDING
-							if(recordMode_)
+							if(recordMode_==Recording)
 							       	record_action(getBoundAction(c));
 							memorize_last(getBoundAction(c));
 #endif /* FIM_RECORDING */
