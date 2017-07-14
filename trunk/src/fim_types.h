@@ -2,7 +2,7 @@
 /*
  fim_types.h : Basic Fim type declarations
 
- (c) 2011-2016 Michele Martone
+ (c) 2011-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,8 +18,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-/* This file will grow, as definitions will be moved there from fim.h */
 
 #ifndef FIM_TYPES_FIM_H
 #define FIM_TYPES_FIM_H

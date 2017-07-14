@@ -26,6 +26,9 @@
  */
 #define FIM_CHARS_FOR_INT 32 /* should fit a pointer address printout */
 
+#include <string>
+#include "fim_types.h"
+
 namespace fim
 {
 	class string:public std::string

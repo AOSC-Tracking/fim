@@ -841,33 +841,6 @@ nop:
 #endif /* HAVE_GETENV */
 	}
 
-int fim_args_opt_count(const args_t& args, const char oc)
-{
-	// FIXME: temporarily here 
-	int aoc = 0;
-	fim::string s;
-
-	for(size_t i=0;i<args.size();++i)
-	{
-		if ( args[i].length() && args[i].at(0) == oc )
-			aoc++;
-		else
-			break;
-	}
-	return aoc;
-}
-
-bool fim_args_opt_have(const args_t& args, fim::string optname)
-{
-	// FIXME: temporarily here 
-	fim::string s;
-
-	for(size_t i=0;i<args.size();++i)
-		if ( args[i] == optname )
-			return true;
-	return false;
-}
-
 #if FIM_USE_CXX11
 	/* */
 #else /* FIM_USE_CXX11 */
