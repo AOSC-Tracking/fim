@@ -189,7 +189,7 @@ FIM_NULL
     {FIM_OSW_SCRIPT_FROM_STDIN,      no_argument,       FIM_NULL, 'p',"read commands from standard input.",FIM_NULL,
 "Will read commands from stdin prior to entering in interactive mode."
     },
-    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       FIM_NULL, 'o',"specify the desired output driver (aka graphic mode).",FIM_DDN_VARS,
+    {FIM_OSW_OUTPUT_DEVICE,      required_argument,       FIM_NULL, 'o',"specify the desired output driver (aka graphic mode). ",FIM_DDN_VARS,
 "Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks."
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
@@ -197,9 +197,12 @@ FIM_NULL
 #if FIM_WANT_SDL_OPTIONS_STRING 
 "The \\fBsdl\\fP option may be specified as  \\fBsdl" FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the " FIM_MAN_fB("'w'") " character requests windowed mode; the " FIM_MAN_fB("'m'") " character requests mouse pointer display; the " FIM_MAN_fB("'r'") " character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
-#ifdef FIM_WITH_LIBIMLIB2
-/* FIXME: shall document this */
-#endif /* FIM_WITH_LIBIMLIB2 */
+//#ifdef FIM_WITH_LIBIMLIB2
+"The \\fB" "imlib2" "\\fP option requests imlib2.\n"
+//#endif /* FIM_WITH_LIBIMLIB2 */
+//#ifdef FIM_WITH_CACALIB
+"The \\fB" "caca" "\\fP option is now unmantained.\n"
+//#endif /* FIM_WITH_CACALIB */
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a, "will open the first image file at the specified offset.","{bytes-offset[{:upper-offset}|{+offset-range}]}",
 "Will use the specified \\fBoffset\\fP (in bytes) for opening the specified files. If \\fB:upper-offset\\fP is specified, further bytes until \\fBupper-offset\\fP will be probed. If \\fB+offset-range\\fP is specified instead, that many additional bytes will be probed.  Use this option to search damaged file systems for image files."
