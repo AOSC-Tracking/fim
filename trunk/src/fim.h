@@ -313,6 +313,8 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_SYM_SORT_MD	'm'
 #define FIM_SYM_SORT_BN	'b'
 #define FIM_SYM_SORT_FN 'f'
+#define FIM_SYM_CMD_SLSL FIM_VID_RE_SEARCH_OPTS "=\"f\""
+
 /*
  * External programs used by fim.
  */
@@ -466,14 +468,15 @@ bool fim_args_opt_have(const args_t& args, fim::string optname); // FIXME: in Co
 #define FIM_CNS_EX_NUM_STRING	"{number}"
 #define FIM_CNS_EX_SCALE_STRING	"{scale}"
 #define FIM_CNS_SHELL	"/bin/sh"
-#define FIM_CNS_DSFF	"JPEG,PNG,GIF,BMP,TIFF,PPM,PGM,PBM,PCX" /* FIXME: this shall depend on build options */
+#define FIM_CNS_DSFF_SL	"JPEG, PNG, GIF, TIFF, PPM, PGM, PBM" 
+#define FIM_CNS_DSFF_SN	"BMP, PCX" 
 #if FIM_USE_CXX11
-/* FIXME: shall FIM_CNS_PUSHDIR_RE depend on build options */
+/* this default FIM_CNS_PUSHDIR_RE might be built based on build options */
 #define FIM_CNS_PUSHDIR_RE	R"***(\.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX$)***" 
 #else /* FIM_USE_CXX11 */
 #define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.TIF$|\\.JPEG$|\\.JFIF$|\\.PPM$|\\.PGM$|\\.PBM$|\\.PCX$"
 #endif /* FIM_USE_CXX11 */
-#define FIM_CNS_ARCHIVE_RE	".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* FIXME: there is much more: CAB.. */
+#define FIM_CNS_ARCHIVE_RE	".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* there might be more: CAB.. */
 #define FIM_CNS_BPP_INVALID	0
 #define FIM_CNS_K 1024
 #define FIM_CNS_M (FIM_CNS_K*FIM_CNS_K)
@@ -1039,6 +1042,7 @@ namespace fim
 #define FIM_WANT_DISPLAY_MEMSIZE  0
 #define FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING  FIM_WANT_MIPMAPS && 1
 #define FIM_WANT_R_SWITCH  1 /* --resolution width:height switch (the fim way, differently from fbi's) */
+#define FIM_WANT_RECURSE_FILTER_OPTION 1 /* Enable -R=... */
 /* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
 #define FIM_STREAM_BUFSIZE	16*4096
 #define FIM_MAXLINE_BUFSIZE	1024

@@ -25,7 +25,8 @@ It is capable of displaying image files using different graphical devices while 
 As a default,
 .B
 fim
-displays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not).  JPEG,PNG,GIF,BMP,TIFF,PPM,PGM,PBM,PCX formats are supported. 
+displays the specified file(s) on the detected graphical device (e.g. with SDL if X is detected, or the linux framebuffer device if not). Graphical file formats BMP, PCX are supported natively, while JPEG, PNG, GIF, TIFF, PPM, PGM, PBM are supported via third party libraries. 
+Further formats are supported via external converters. 
 For 'XCF' (Gimp's) images, fim will try to use 'xcftopnm'.
 For '.FIG' vectorial images, fim will try to use 'fig2dev'.
 For '.DIA' vectorial images, fim will try to use 'dia'.
