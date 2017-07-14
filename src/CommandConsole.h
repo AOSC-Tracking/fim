@@ -138,7 +138,8 @@ class CommandConsole
 	fim::string last_action_;
 	
 #ifdef FIM_RECORDING
-	bool recordMode_;
+	enum RecordMode { Recording, Playing, Normal };
+	RecordMode recordMode_;
 	typedef std::pair<fim::string,fim_tms_t > recorded_action_t;
 	typedef std::vector<recorded_action_t > recorded_actions_t;
 	recorded_actions_t recorded_actions_;

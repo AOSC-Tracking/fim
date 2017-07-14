@@ -14,6 +14,7 @@
  * fix: a check was missing in the PS decoder when reading from stdin.
  * fix: for _seek_magic.
  * fix: in --offset mode, avoiding probing for external loader programs.
+ * fix: 'recording' command non functioning properly.
 
                 Version 0.4
 
