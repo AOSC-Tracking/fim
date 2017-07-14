@@ -639,7 +639,7 @@ namespace fim
 #define FIM_VID_EXIF_MIRRORED 			"__exif_mirrored"	/* "[out,i:] mirroring information, read from the EXIF tags of a given imag." */
 #define FIM_VID_EXIF_FLIPPED 			"__exif_flipped"	/* "[out,i:] flipping information, read from the EXIF tags of a given image." */
 #define FIM_VID_AUTOTOP				"_autotop"		/* "[in,g:] if 1, will align to the top freshly loaded images" */
-#define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[in,g:] if non empty, this string will be fed to the scale command" */
+#define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[in,g:] if non empty, this string will be fed to the " FIM_VID_SCALE " command; see its documentation for possible values." */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[out,g:] the current image numeric index" */
 #define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
 #define FIM_VID_LASTGOTODIRECTION			"_lastgotodirection"	/* "[out,g:] the last file goto direction (either string '+1' or string '-1')." */

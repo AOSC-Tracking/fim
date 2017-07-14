@@ -1207,7 +1207,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		case 0x4E4053:
 		    //fbi's
 	#ifdef FIM_AUTOCMDS
-		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"=' ';");// FIXME: shall document the allowed scaling character/options
+		    cc.pre_autocmd_add(FIM_VID_SCALE_STYLE"=' ';");
 	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 'H':
