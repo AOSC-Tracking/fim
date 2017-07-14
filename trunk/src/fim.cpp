@@ -237,14 +237,14 @@ FIM_NULL
     {"sort-basename",     no_argument,       FIM_NULL, 0x736f626e ,"sort images by basename.",FIM_NULL,
 "Sort files list before browsing according to file basename's."
     },
-#if FIM_WANT_SORT_BY_STAT_INFO
-    {"sort-mtime",     no_argument,       FIM_NULL, 0x7369626d ,"sort images by modification time.",FIM_NULL,
+//#if FIM_WANT_SORT_BY_STAT_INFO
+    {FIM_OSW_SORT_MTIME,     no_argument,       FIM_NULL, 0x7369626d ,"sort images by modification time.",FIM_NULL,
 "Sort files list before browsing according to file modification time."
     },
-    {"sort-fsize",     no_argument,       FIM_NULL, 0x73696273 ,"sort images by file size.",FIM_NULL,
+    {FIM_OSW_SORT_FSIZE,     no_argument,       FIM_NULL, 0x73696273 ,"sort images by file size.",FIM_NULL,
 "Sort files list before browsing according to file size."
     },
-#endif /* FIM_WANT_SORT_BY_STAT_INFO */
+//#endif /* FIM_WANT_SORT_BY_STAT_INFO */
     {"random",     no_argument,       FIM_NULL, 'u',"randomize images order.",FIM_NULL,
 "Randomly shuffle the files list before browsing (seed depending on time() function)."
     },
@@ -1315,16 +1315,22 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    //fim's
 		    want_random_shuffle=-1;
 		    break;
-#if FIM_WANT_SORT_BY_STAT_INFO
 		case 0x73696273:
 		    //fim's
+#if FIM_WANT_SORT_BY_STAT_INFO
 		    want_random_shuffle=c;
+#else /* FIM_WANT_SORT_BY_STAT_INFO */
+		    std::cerr<< "warning: --" FIM_OSW_SORT_FSIZE " option unsupported (stat() missing).\n";
+#endif /* FIM_WANT_SORT_BY_STAT_INFO */
 		    break;
 		case 0x7369626d:
 		    //fim's
+#if FIM_WANT_SORT_BY_STAT_INFO
 		    want_random_shuffle=c;
-		    break;
+#else /* FIM_WANT_SORT_BY_STAT_INFO */
+		    std::cerr<< "warning: --" FIM_OSW_SORT_MTIME " option unsupported (stat() missing).\n";
 #endif /* FIM_WANT_SORT_BY_STAT_INFO */
+		    break;
 		case 0x736f626e:
 		    //fim's
 		    want_random_shuffle=c;
@@ -1650,8 +1656,6 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			cc.browser_._sort(FIM_SYM_SORT_MD);
 		if(want_random_shuffle==0x73696273)
 			cc.browser_._sort(FIM_SYM_SORT_SZ);
-#else /* FIM_WANT_SORT_BY_STAT_INFO */
-		/* FIXME: notice for the user ... */
 #endif /* FIM_WANT_SORT_BY_STAT_INFO */
 		if(want_reverse_list==1)
 			cc.browser_._reverse();
