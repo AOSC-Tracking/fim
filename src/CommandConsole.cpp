@@ -427,7 +427,7 @@ ret:		return key;
 #ifdef FIM_RECORDING
 		addCommand(new Command(FIM_FLT_RECORDING,FIM_CMD_HELP_RECORDING,this,&CommandConsole::fcmd_recording));
 #endif /* FIM_RECORDING */
-		addCommand(new Command(FIM_FLT_REDISPLAY,FIM_CMD_HELP_REDISPLAY  ,&browser_,&Browser::fcmd_redisplay));
+		addCommand(new Command(FIM_FLT_REDISPLAY,FIM_CMD_HELP_REDISPLAY  ,this,&CommandConsole::fcmd_redisplay));
 		addCommand(new Command(FIM_FLT_RELOAD,FIM_CMD_HELP_RELOAD,&browser_,&Browser::fcmd_reload));
 		addCommand(new Command(FIM_FLT_ROTATE,FIM_CMD_HELP_ROTATE,&browser_,&Browser::fcmd_rotate));
 		addCommand(new Command(FIM_FLT_SCALE,FIM_CMD_HELP_SCALE,&browser_,&Browser::fcmd_scale));
@@ -2287,7 +2287,7 @@ ret:
 		if(current_viewport() && current_viewport()->c_getImage())
 			current_viewport()->getImage()->update_meta(1);
 
-		browser_.fcmd_redisplay(args_t());
+		this->fcmd_redisplay(args_t());
 
 		if(getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 		{
@@ -2515,6 +2515,22 @@ ret:
 		{
 		       	cout << "no image to display, sorry!";
 			this->set_status_bar("no image loaded.", "*");
+		}
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
+	fim_cxr CommandConsole::fcmd_redisplay(const args_t& args)
+	{
+		if(browser_.c_getImage())
+		{
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREREDISPLAY,current());
+			if(browser_.c_getImage())
+			{
+				current_viewport()->recenter();
+				if( redisplay() )
+					browser_.display_status(current().c_str());
+			}
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTREDISPLAY);
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
