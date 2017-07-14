@@ -1809,26 +1809,8 @@ ok:
 #ifdef FIM_RECORDING
 	void CommandConsole::record_action(const fim_cmd_id& cmd)
 	{
-		/*	(action,millisleeps waitingbefore) is registered	*/
-		/*
-		 * PROBLEM:
-		  clock_gettime() clock() times() getrusage() time() asctime() ctime(void)
-		  are NOT suitable
-
-		 * clock_gettime() needs librealtime, and segfaults
-		 * clock() gives process time, with no sense
-		 * times() gives process time
-		 * getrusage() gives process time
-		 * time() gives time in seconds..
-		 * asctime(),ctime() give time in seconds..
-		 *
-		 * gettimeofday was suggested by antani, instantaneously (thx antani)
-		 *
-		 * NOTE: recording the start_recording command itself is not harmful,
-		 * as it only sets a flag.
-		 * */
 		static time_t pt=0;
-		fim_tms_t t,d,err;//t,pt in ms; d in us
+		time_t ct,dt;
 	        struct timeval tv;
 
 		if(cmd==FIM_CNS_EMPTY_STRING)
@@ -1836,19 +1818,19 @@ ok:
 			pt=0;
 			return;
 		}
+
+		if(gettimeofday(&tv, FIM_NULL)!=0)
+			// error case.
+			return;
+
+		ct=tv.tv_usec/1000+tv.tv_sec*1000;
+
 	        if(!pt)
-		{
-			err=gettimeofday(&tv, FIM_NULL);
-			pt=tv.tv_usec/1000+tv.tv_sec*1000;
-		}
-	        err=gettimeofday(&tv, FIM_NULL);t=tv.tv_usec/1000+tv.tv_sec*1000;
-		if(err != 0)
-		{
-			/* TODO: error handling ... */
-		}
-		d=(t-pt)*1000;
-		pt=t;
-		recorded_actions_.push_back(recorded_action_t(sanitize_action(cmd),d));
+			pt=ct;
+
+		dt=(ct-pt)*1000;
+		pt=ct;
+		recorded_actions_.push_back(recorded_action_t(sanitize_action(cmd),dt));
 	}
 #endif /* FIM_RECORDING */
 
