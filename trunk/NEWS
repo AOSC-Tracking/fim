@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1365)
+ * fix: will not pop back last if calling recording 'stop' outside of recording mode.
+ * fix: won't clear recorded list if calling recording 'start' multiple times.
 # (r1359)
  * Specifying more than once any of -p -i - will issue a warning.
 # (r1334,r1335)
