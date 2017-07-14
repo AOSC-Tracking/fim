@@ -820,13 +820,12 @@ ret:
 				add_history(s);
 #endif /* FIM_USE_READLINE */
 ret:
-		fim_free(s);
-
+			fim_free(s);
 		}
 		catch	(FimException e)
 		{
 			if( e == FIM_E_TRAGIC || true )
-			       	this->quit( FIM_E_TRAGIC );
+			       	return this->quit( FIM_E_TRAGIC );
 		}
 		return FIM_ERR_NO_ERROR;
 	}
@@ -980,7 +979,7 @@ ok:
 			if( c != exitBinding_ )  /* characters read */
 			{
 				executeBinding(c); /* any interactive action */
-				if(!show_must_go_on_) /* including quit.. */
+				if(!show_must_go_on_)
 					goto err;
 				c = displaydevice_->catchInteractiveCommand(1);
 			}
@@ -997,7 +996,6 @@ err:
 	{
 		std::cout << "GPM event captured.\n";
 		exit(0);
-		//quit();
 		return 'n';
 		//return 0;
 	}
@@ -1238,10 +1236,10 @@ rlnull:
 		/*
 		 * the member function to be called to exit from the program safely.
 		 * it is used mainly for safe exit after severe errors.
-		 * TODO : get rid of it.
 		 */
+		show_must_go_on_=0;
     		cleanup();
-		return i;/* is should be used in return */
+		return i;
 	}
 
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
@@ -2115,7 +2113,6 @@ ok:
 
 	/*
 	 * This routine terminates the program as cleanly as possible.
-	 * It should be used whenever useful.
 	 */
 	void CommandConsole::cleanup(void)
 	{
