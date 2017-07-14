@@ -973,7 +973,7 @@ _scale_factor_multiplier
 .na
 .B
 _scale_style
-[in,g:] if non empty, this string will be fed to the scale command
+[in,g:] if non empty, this string will be fed to the scale command; see its documentation for possible values.
 .fi
 .na
 .B
