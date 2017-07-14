@@ -111,8 +111,9 @@ err:
 		       	return unbind(args[0]);
 
 		if(args.size()>=3)
-			bindings_help_[key]=args[2]; /* TODO: shall move to bind() */
-		return bind(key,args[1]);
+			return bind(key,args[1],args[2]);
+		else
+			return bind(key,args[1]);
 	}
 
 	fim_cxr CommandConsole::fcmd_unbind(const args_t& args)

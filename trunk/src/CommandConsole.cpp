@@ -101,7 +101,7 @@ namespace fim
 		return FIM_NULL;
 	}
 
-	fim::string CommandConsole::bind(fim_key_t c, const fim_cls binding)
+	fim::string CommandConsole::bind(const fim_key_t c, const fim_cls binding, const fim::string hstr)
 	{
 		/*
 		 * binds keycode c to the action specified in binding
@@ -125,6 +125,8 @@ namespace fim
 			rs+=" successfully assigned to \"";
 		rs+=bindings_[c];
 		rs+="\"\n";
+		if(hstr!="")
+			bindings_help_[c]=hstr;
 		return rs;
 	}
 
