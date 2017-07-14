@@ -299,7 +299,6 @@ class Browser
 	//fim_cxr fcmd_no_image(const args_t& args);
 #endif /* FIM_WANT_FAT_BROWSER */
 	fim_cxr fcmd_rotate(const args_t& args);
-	fim_cxr fcmd_display(const args_t& args);
 	fim::string display_status(const fim_char_t *l);
 	fim_cxr fcmd_color(const args_t& args);
 

@@ -363,7 +363,7 @@ ret:		return key;
 		addCommand(new Command(FIM_FLT_COMMANDS,FIM_CMD_HELP_COMMANDS,this,&CommandConsole::fcmd_commands_list));
 		addCommand(new Command(FIM_FLT_COLOR,FIM_CMD_HELP_COLOR,&browser_,&Browser::fcmd_color));
 		addCommand(new Command(FIM_FLT_DESC,FIM_FLT_HELP_DESC,this,&CommandConsole::fcmd_desc));
-		addCommand(new Command(FIM_FLT_DISPLAY,FIM_FLT_HELP_DISPLAY,&browser_,&Browser::fcmd_display));
+		addCommand(new Command(FIM_FLT_DISPLAY,FIM_FLT_HELP_DISPLAY,this,&CommandConsole::fcmd_display));
 		addCommand(new Command(FIM_FLT_DUMP_KEY_CODES,FIM_CMD_HELP_DUMP_KEY_CODES,this,&CommandConsole::fcmd_dump_key_codes));
 		addCommand(new Command(FIM_FLT_ECHO,FIM_CMD_HELP_ECHO,this,&CommandConsole::fcmd_echo));
 		addCommand(new Command(FIM_FLT_ELSE,FIM_CMD_HELP_ELSE,this,&CommandConsole::fcmd_foo));
@@ -2481,5 +2481,41 @@ ret:
 		return true;
 	}
 #endif /* FIM_WANT_PIC_CMTS */
-}
 
+	fim_cxr CommandConsole::fcmd_display(const args_t& args)
+	{
+		if( browser_.c_getImage() )
+		{
+			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREDISPLAY,current());
+			if( args.size()>0 && args[0] == "reinit" )
+			{
+				string arg = args.size()>1?args[1]:"";
+				this->display_reinit(arg.c_str());
+			}
+			if( args.size()>0 && args[0] == "resize" )
+			{
+				fim_coo_t nww = browser_.c_getImage()->width();
+				fim_coo_t nwh = browser_.c_getImage()->height();
+				fim_bool_t wsl = (getGlobalIntVariable(FIM_VID_DISPLAY_BUSY)) ?  true : false;;
+
+				if( args.size()>2 )
+					nww = args[1],
+					nwh = args[2],
+					wsl = false;
+				this->resize(nww,nwh,wsl);
+			}
+			if(browser_.c_getImage() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
+			{
+				if( this->redisplay() )
+					browser_.display_status(current().c_str());
+			}
+			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTDISPLAY);
+		}
+		else
+		{
+		       	cout << "no image to display, sorry!";
+			this->set_status_bar("no image loaded.", "*");
+		}
+		return FIM_CNS_EMPTY_RESULT;
+	}
+}
