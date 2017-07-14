@@ -661,15 +661,16 @@ err:
 #ifdef FIM_RECORDING
 	fim::string CommandConsole::dump_record_buffer(const args_t& args)
 	{
-		return do_dump_record_buffer(args);
+		return do_dump_record_buffer(args,false);
 	}
 
-	fim::string CommandConsole::do_dump_record_buffer(const args_t& args)const
+	fim::string CommandConsole::do_dump_record_buffer(const args_t& args, bool headeronly)const
 	{
-		/*
-		 * the recorded commands are dumped in the console
-		 * */
 		std::ostringstream oss;
+
+		if(headeronly)
+			oss << recorded_actions_.size() << " commands.\n";
+		else
 		for(size_t i=0;i<recorded_actions_.size();++i)
 			oss << FIM_FLT_USLEEP " '" << recorded_actions_[i].second << "';\n"
 			       	<< recorded_actions_[i].first << "\n";
@@ -683,6 +684,7 @@ err:
 		 * */
 		if(recordMode_==Normal)
 		{
+			cout << "Will execute " << do_dump_record_buffer(args_t(),true);
 			recordMode_=Playing;
 			execute_internal(dump_record_buffer(args).c_str(),FIM_X_NULL);
 			recordMode_=Normal;
@@ -757,20 +759,28 @@ nop:
 
 	fim::string CommandConsole::start_recording(void)
 	{
+		std::ostringstream oss;
+
 		if(recordMode_==Normal)
 		{
 			recorded_actions_.clear();
 			recordMode_=Recording;
-			record_action("");
+			record_action(std::string()); // initialization
+			oss << "Starting recording.\n";
 		}
-		return FIM_CNS_EMPTY_RESULT;
+		return oss.str();
 	}
 
 	fim::string CommandConsole::stop_recording(void)
 	{
+		std::ostringstream oss;
+
 		if(recordMode_==Recording)
+		{
+			oss << "Recorded " << do_dump_record_buffer(args_t(),true);
 			recordMode_=Normal;
-		return FIM_CNS_EMPTY_RESULT;
+		}
+		return oss.str();
 	}
 
 	fim_cxr CommandConsole::fcmd_set(const args_t& args)
