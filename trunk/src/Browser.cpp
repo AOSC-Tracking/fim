@@ -295,7 +295,7 @@ ret:
 		return s;
 	}
 
-	fim::string Browser::pan(const args_t& args)
+	fim::string Browser::fcmd_pan(const args_t& args)
 	{
 		FIM_PR('*');
 
@@ -2161,15 +2161,8 @@ nop:
 		return result;
 	} /* do_filter */
 
-	fim_cxr Browser::fcmd_scrollforward(const args_t& args)
+	fim_cxr Browser::scrollforward(const args_t& args)
 	{
-		/*
-		 * scrolls image as it were a book
-		 * TODO: move to Viewport
-		 */
-		FIM_PR('*');
-
-		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 		if(c_getImage() && viewport())
 		{
 			fim_coo_t approx_fraction = cc.getIntVariable(FIM_VID_SKIP_SCROLL);
@@ -2182,28 +2175,19 @@ nop:
 			if(viewport()->onRight(approx_fraction))
 			{
 				viewport()->pan("down",FIM_CNS_SCROLL_DEFAULT);
-				while(!(viewport()->onLeft()))viewport()->pan("left",FIM_CNS_SCROLL_DEFAULT);
+				while(!(viewport()->onLeft()))
+					viewport()->pan("left",FIM_CNS_SCROLL_DEFAULT);
 			}
 			else
 			       	viewport()->pan("right",FIM_CNS_SCROLL_DEFAULT);
 		}
 		else
 		       	next(1);
-		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
-		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim_cxr Browser::fcmd_scrolldown(const args_t& args)
+	fim_cxr Browser::scrolldown(const args_t& args)
 	{
-		/*
-		 * scrolls the image down 
-		 *
-		 * FIXME : move to Viewport
-		 */
-		FIM_PR('*');
-
-		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 		if(c_getImage() && viewport())
 		{
 			if(viewport()->onBottom())
@@ -2213,7 +2197,19 @@ nop:
 		}
 		else
 		       	next(1);
+		return FIM_CNS_EMPTY_RESULT;
+	}
+
+	fim_cxr Browser::fcmd_scroll(const args_t& args)
+	{
+		FIM_PR('*');
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
+		if(args.size()>0 && args[0]=="forward")
+			scrollforward(args);
+		else
+			scrolldown(args);
 		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
+nop:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}

@@ -897,8 +897,7 @@ namespace fim
 #define FIM_FLT_RELOAD			"reload" /* not in vim */
 #define FIM_FLT_ROTATE			"rotate" /* not in vim */
 #define FIM_FLT_SCALE			"scale" /* not in vim */
-#define FIM_FLT_SCROLLDOWN		"scrolldown" /* not in vim */
-#define FIM_FLT_SCROLLFORWARD		"scrollforward" /* not in vim */
+#define FIM_FLT_SCROLL			"scroll" /* not in vim */
 #define FIM_FLT_SET			"set" /* in vim */
 #define FIM_FLT_SET_INTERACTIVE_MODE	"set_interactive_mode" /* not in vim */
 #define FIM_FLT_SET_CONSOLE_MODE	"set_commandline_mode" /* not in vim */
@@ -985,8 +984,7 @@ namespace fim
 #define FIM_CMD_HELP_REDISPLAY  FIM_FLT_REDISPLAY ": re-display the current file contents"
 #define FIM_CMD_HELP_RELOAD FIM_FLT_RELOAD" [{arg}]: load the image into memory; if {arg} is present, will force reloading, bypassing the cache (see also " FIM_FLT_LOAD ")"
 #define FIM_CMD_HELP_ROTATE FIM_FLT_ROTATE " " FIM_CNS_EX_NUM_STRING ": rotate the image the specified amount of degrees [undocumented]" 
-#define FIM_CMD_HELP_SCROLLDOWN FIM_FLT_SCROLLDOWN ": scroll down the image, going next if at bottom" 
-#define FIM_CMD_HELP_SCROLLFORWARD FIM_FLT_SCROLLFORWARD ": scroll the image as it were reading it"
+#define FIM_CMD_HELP_SCROLL FIM_FLT_SCROLL ": scroll down the image, going next when hitting the bottom; " FIM_FLT_SCROLL " 'forward': scroll the image as we were reading left to right (see " FIM_VID_SKIP_SCROLL " variable ) "
 #define FIM_CMD_HELP_SET_CONSOLE_MODE FIM_FLT_SET_CONSOLE_MODE ": set console mode"
 #define FIM_CMD_HELP_SET_INTERACTIVE_MODE FIM_FLT_SET_INTERACTIVE_MODE ": set interactive mode"
 #define FIM_CMD_HELP_SLEEP FIM_FLT_SLEEP " [" FIM_CNS_EX_NUM_STRING "=1]: sleep for the specified (default 1) number of seconds"

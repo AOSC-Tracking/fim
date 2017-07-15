@@ -412,7 +412,7 @@ ret:		return key;
 #endif /* FIM_WANT_PIC_LBFL */
 		addCommand(new Command(FIM_FLT_LIST,FIM_CMD_HELP_LIST,&browser_,&Browser::fcmd_list));
 		addCommand(new Command(FIM_FLT_LOAD,FIM_CMD_HELP_LOAD,&browser_,&Browser::fcmd_load));
-		addCommand(new Command(FIM_FLT_PAN,FIM_CMD_HELP_PAN,&browser_,&Browser::pan));
+		addCommand(new Command(FIM_FLT_PAN,FIM_CMD_HELP_PAN,&browser_,&Browser::fcmd_pan));
 		addCommand(new Command(FIM_FLT_POPEN,FIM_CMD_HELP_POPEN,this,&CommandConsole::fcmd_sys_popen));
 #ifdef FIM_PIPE_IMAGE_READ
 		addCommand(new Command(FIM_FLT_PREAD,FIM_CMD_HELP_PREAD,this,&CommandConsole::fcmd_pread));
@@ -427,8 +427,7 @@ ret:		return key;
 		addCommand(new Command(FIM_FLT_RELOAD,FIM_CMD_HELP_RELOAD,&browser_,&Browser::fcmd_reload));
 		addCommand(new Command(FIM_FLT_ROTATE,FIM_CMD_HELP_ROTATE,&browser_,&Browser::fcmd_rotate));
 		addCommand(new Command(FIM_FLT_SCALE,FIM_CMD_HELP_SCALE,&browser_,&Browser::fcmd_scale));
-		addCommand(new Command(FIM_FLT_SCROLLDOWN,FIM_CMD_HELP_SCROLLDOWN,&browser_,&Browser::fcmd_scrolldown));
-		addCommand(new Command(FIM_FLT_SCROLLFORWARD,FIM_CMD_HELP_SCROLLFORWARD,&browser_,&Browser::fcmd_scrollforward));
+		addCommand(new Command(FIM_FLT_SCROLL,FIM_CMD_HELP_SCROLL,&browser_,&Browser::fcmd_scroll));
 		addCommand(new Command(FIM_FLT_SET,FIM_CMD_HELP_SET,this,&CommandConsole::fcmd_set));
 		addCommand(new Command(FIM_FLT_SET_CONSOLE_MODE,FIM_CMD_HELP_SET_CONSOLE_MODE,this,&CommandConsole::fcmd_set_in_console));
 		addCommand(new Command(FIM_FLT_SET_INTERACTIVE_MODE,FIM_CMD_HELP_SET_INTERACTIVE_MODE,this,&CommandConsole::fcmd_set_interactive_mode));
