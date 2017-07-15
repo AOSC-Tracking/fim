@@ -27,6 +27,7 @@
 #endif /* HAVE_LIBGEN_H */
 
 #define FIM_WANT_SYSTEM_CALL_DEBUG 0
+#define FIM_CMD_RET_HELP_MSG(CMD) "See " FIM_FLT_HELP " " CMD " for its invocation.\n"
 
 namespace fim
 {
@@ -738,7 +739,12 @@ err:
 	{
 		if(args.size()<1)
 		{
-			goto nop;
+			if(recordMode_==Normal)
+				return "Neither recording nor re-executing. Specify 'start' to start recording commands and then 'stop' to terminate, and 'dump' to see recorded commands.\n";
+			if(recordMode_==Recording)
+				return "Recording commands. Specify 'stop' to stop recording and then 'play' to execute them.\n";
+			if(recordMode_==Playing)
+				return "Executing recorded commands.\n";
 		}
 		else
 		{
@@ -748,13 +754,13 @@ err:
 				return stop_recording();
 			if(args[0]=="dump")
 				return dump_record_buffer(args_t(args.begin()+1,args.end()));
-			if(args[0]=="execute")
+			if(args[0]=="execute" || args[0]=="play")
 				return execute_record_buffer(args_t(args.begin()+1,args.end()));
 			if(args[0]=="repeat_last")
 				return repeat_last(args_t(args.begin()+1,args.end()));
 		}
 nop:
-		return FIM_CNS_EMPTY_RESULT;
+		return FIM_CMD_RET_HELP_MSG(FIM_FLT_RECORDING);
 	}
 
 	fim::string CommandConsole::start_recording(void)
