@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1379)
+ * Command goto {'-/'|'+/'} will jump to next or previous file in a different directory.
 # (r1366)
  * fix: 'recording' command non functioning properly.
 # (r1365)

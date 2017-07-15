@@ -176,7 +176,7 @@ namespace fim
 			else if(args[0]=="random_shuffle")
 				result = _random_shuffle();
 			else if(args[0]=="sort")
-				result = _sort();
+				result = _sort(FIM_SYM_SORT_FN);
 			else if(args[0]=="sort_basename")
 				result = _sort(FIM_SYM_SORT_BN);
 #if FIM_WANT_SORT_BY_STAT_INFO
@@ -1522,6 +1522,7 @@ ret:
 			bool ispg = false;
 			bool isfg = false;
 			bool isrj = false;
+			bool isdj = false;
 
 			if( !s )
 				goto ret;
@@ -1536,7 +1537,27 @@ ret:
 			isfg = (l=='f');
 			isre = ((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
 			isrj = (c=='+' || c=='-');
+			isdj = isrj && /* isalpha(s[1]) && */ s[sl-1] == '/' && sl == 2;
 
+#define FIM_WANT_GOTO_DIR 1
+#if FIM_WANT_GOTO_DIR
+			if( isdj )
+			{
+				int neg=(c=='-'?-1:1);
+				std::string bcn = fim_dirname(current());
+
+				for(fim_int fi=0;fi<fc;++fi)
+				{
+					size_t idx=FIM_MOD((cf+neg*(1+fi)+fc),fc);
+					std::string icn = fim_dirname(flist_[idx]);
+					if( icn != bcn  )
+					{
+						nf=idx;
+						goto go_jump;
+					}
+				}
+			}
+#endif /* FIM_WANT_GOTO_DIR */
 #if FIM_WANT_VAR_GOTO
 			if( isrj && s[1] && ( isalpha(s[1]) || s[1] == '_' ) )
 			{
