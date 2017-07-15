@@ -148,12 +148,12 @@ namespace fim
 #if FIM_WANT_LONG_INT
 		int Namespace::setGlobalVariable(const fim_var_id& varname,int value)
 		{
-			return setVariable(varname,static_cast<fim_int>(value));
+			return setGlobalVariable(varname,static_cast<fim_int>(value));
 		}
 
 		unsigned int Namespace::setGlobalVariable(const fim_var_id& varname,unsigned int value)
 		{
-			return setVariable(varname,static_cast<fim_int>(value));
+			return setGlobalVariable(varname,static_cast<fim_int>(value));
 		}
 #endif /* FIM_WANT_LONG_INT */
 
