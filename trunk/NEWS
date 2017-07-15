@@ -3,8 +3,13 @@
 
                 Version 0.6-trunk
 
-# (r1379)
- * Command goto {'-/'|'+/'} will jump to next or previous file in a different directory.
+# (r1379,r1380)
+ * Command goto {'-/'|'+/'}[C] will jump to a file based on C (default 'S').
+   If C is 's', to prev/next file with same directory name.
+   If C is 'd', to prev/next file with directory name down the same hierarchy.
+   If C is 'u', to prev/next file with directory name up the same hierarchy.
+   If C is 'b', to prev/next file with same basename.
+   If C is uppercase, to the prev/next file not matching the criteria.
 # (r1366)
  * fix: 'recording' command non functioning properly.
 # (r1365)

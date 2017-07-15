@@ -1537,20 +1537,61 @@ ret:
 			isfg = (l=='f');
 			isre = ((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
 			isrj = (c=='+' || c=='-');
-			isdj = isrj && /* isalpha(s[1]) && */ s[sl-1] == '/' && sl == 2;
+			isdj = isrj && s[1] == '/' && ( sl == 2 || ( sl == 3 && strchr("udsbUDSB",s[2])) );
 
-#define FIM_WANT_GOTO_DIR 1
 #if FIM_WANT_GOTO_DIR
 			if( isdj )
 			{
 				int neg=(c=='-'?-1:1);
-				std::string bcn = fim_dirname(current());
+				std::string bcn;
+				char ct = sl < 3 ? 'S' : s[2];
+				switch(tolower(ct))
+				{
+					case 'u':
+					case 'd':
+					case 's':
+						bcn = fim_dirname(current()); break;
+					case 'b':
+						bcn = fim_basename_of(current()); break;
+				}
 
 				for(fim_int fi=0;fi<fc;++fi)
 				{
 					size_t idx=FIM_MOD((cf+neg*(1+fi)+fc),fc);
-					std::string icn = fim_dirname(flist_[idx]);
-					if( icn != bcn  )
+					std::string icn;
+					bool match=false;
+
+					switch(tolower(ct))
+					{
+						case 'u':
+						case 'd':
+						case 's':
+						//case 'l':
+						//case 'm':
+				       			icn = fim_dirname(flist_[idx]); break;
+						case 'b':
+							icn = fim_basename_of(flist_[idx]); break;
+					}
+
+					switch(tolower(ct))
+					{
+						//case 'l':
+							//match = icn <  bcn; break;
+						//case 'm':
+							//match = icn >  bcn; break;
+						case 'u':
+							match = icn.length() <  bcn.length() && bcn.compare(0,icn.length(),icn) == 0 ; break;
+						case 'd':
+							match = bcn.length() <  icn.length() && icn.compare(0,bcn.length(),bcn) == 0 ; break;
+						case 's':
+						case 'b':
+							match = bcn == icn; break;
+					}
+
+					if(isupper(ct))
+						match = ! match;
+
+					if(match)
 					{
 						nf=idx;
 						goto go_jump;
