@@ -33,6 +33,7 @@
 #define FIM_FLAG_PUSH_ONE 4 /* one is enough */
 #define FIM_FLAG_PUSH_HIDDEN 8 /* */
 #define FIM_FLAG_PUSH_ALLOW_DUPS 16 /* */
+#define FIM_FLAG_PUSH_FILE_NO_CHECK 32 /* inner one, to save a few stat's; might better cache 'stat()' outpout instead.. */
 #define FIM_FLAG_DEL(V,F)    (V) &= ~(F)
 #define FIM_WANT_LIMIT_DUPBN 1 /* limit to duplicate base name */
 

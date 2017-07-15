@@ -1112,7 +1112,7 @@ nostat:
 				if( re == FIM_CNS_EMPTY_STRING )
 					re = FIM_CNS_PUSHDIR_RE;
 				if( fn.re_match(re.c_str()) )
-					retval |= push_path( f + fim::string(de->d_name) );
+					retval |= push_path( fn, pf | FIM_FLAG_PUSH_FILE_NO_CHECK );
 				//std::cout << re << " " << f + fim::string(de->d_name) << "!\n";
 			}
 #if FIM_WANT_BACKGROUND_LOAD
@@ -1178,6 +1178,9 @@ rret:
 			lib = true;
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 		FIM_PR('*');
+
+		if( pf & FIM_FLAG_PUSH_FILE_NO_CHECK )
+			goto isfile;
 
 		if( nf == FIM_STDIN_IMAGE_NAME )
 			goto isfile;
