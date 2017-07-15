@@ -316,10 +316,10 @@ class Browser
 	bool present(const fim::string nf)const;
 	fim_int find_file_index(const fim::string nf)const;
 #ifdef FIM_READ_DIRS
-	bool push_dir(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
+	bool push_dir(const fim::string & nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
 #endif /* FIM_READ_DIRS */
-	bool push_path(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
-	bool push_noglob(fim::string nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
+	bool push_path(const fim::string & nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
+	bool push_noglob(const fim::string & nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
 
 	fim::string _random_shuffle(bool dts=true);
 	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN);
