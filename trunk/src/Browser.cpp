@@ -1039,13 +1039,14 @@ ret:
 	}
 
 #ifdef FIM_READ_DIRS
-	bool Browser::push_dir(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
+	bool Browser::push_dir(const fim::string & nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{
 		DIR *dir = FIM_NULL;
 		struct dirent *de = FIM_NULL;
-		fim::string f;
+		fim::string dn=nf;
 		bool retval = false;
 		FIM_PR('*');
+		fim::string re;
 
 		if( show_must_go_on && !*show_must_go_on )
 			goto rret;
@@ -1054,10 +1055,10 @@ ret:
 			goto nostat;
 		/*	we want a dir .. */
 #ifdef HAVE_LIBGEN_H
-		if( !is_dir( nf.c_str() ) )
-			nf = fim_dirname(nf);
+		if( !is_dir( dn.c_str() ) )
+			dn = fim_dirname(dn);
 #else /* HAVE_LIBGEN_H */
-		if( !is_dir( nf ))
+		if( !is_dir( dn ))
 			goto ret;
 #endif /* HAVE_LIBGEN_H */
 
@@ -1067,54 +1068,48 @@ nostat:
 		{
 			static int maxsize=0;
 			const char * FIM_CLEARTERM_STRING = "\x1B\x4D"; /* man terminfo */
-			std::cout << FIM_CLEARTERM_STRING << "scanning: " << flist_.size()<< nf << std::endl;
-			maxsize = FIM_MAX(nf.size(),maxsize);
+			std::cout << FIM_CLEARTERM_STRING << "scanning: " << flist_.size()<< dn << std::endl;
+			maxsize = FIM_MAX(dn.size(),maxsize);
 		}
 #endif
-
-		if ( ! ( dir = opendir(nf.c_str() ) ))
+		if ( ! ( dir = opendir(dn.c_str() ) ))
 			goto ret;
 
-		f += nf;
-		f += FIM_CNS_DIRSEP_STRING;
+		dn += FIM_CNS_DIRSEP_STRING;
+	       	re = getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
+		if( re == FIM_CNS_EMPTY_STRING )
+			re = FIM_CNS_PUSHDIR_RE;
 		//are we sure -1 is not paranoid ?
 		while( ( de = readdir(dir) ) != FIM_NULL )
 		{
-			if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] )
-				continue;
 			if( de->d_name[0] == '.' && !de->d_name[1] )
 				continue;
+			if( de->d_name[0] == '.' &&  de->d_name[1] == '.' && !de->d_name[2] )
+				continue;
 #if FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK
-			/*
-			 * We follow the convention of ignoring hidden files.
-			 * */
+			/* We follow the convention of ignoring hidden files.  */
 			if( (!(pf & FIM_FLAG_PUSH_HIDDEN)) && de->d_name[0] == '.' )
 				continue;
 #endif /* FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK */
-			
-			/*
-			 * Warning : this is dangerous, as following circular links may cause memory exhaustion.
-			 * */
-			if( is_dir( f + fim::string(de->d_name)) )
+		{
+			/* Note: Following circular links may cause memory exhaustion.  */
+			fim_fn_t pn = dn + de->d_name;
+			if( is_dir( pn ) )
 			{
 #ifdef FIM_RECURSIVE_DIRS
 				if( pf & FIM_FLAG_PUSH_REC )
-					retval |= push_dir( f + fim::string(de->d_name), pf, show_must_go_on);
+					retval |= push_dir( pn, pf, show_must_go_on);
 				else
 #endif /* FIM_RECURSIVE_DIRS */
 					continue;
 			}
 			else 
 			{
-				fim::string re = getGlobalStringVariable(FIM_VID_PUSHDIR_RE);
-				fim_fn_t fn = f + fim::string( de->d_name );
-
-				if( re == FIM_CNS_EMPTY_STRING )
-					re = FIM_CNS_PUSHDIR_RE;
-				if( fn.re_match(re.c_str()) )
-					retval |= push_path( fn, pf | FIM_FLAG_PUSH_FILE_NO_CHECK );
-				//std::cout << re << " " << f + fim::string(de->d_name) << "!\n";
+				if( pn.re_match(re.c_str()) )
+					retval |= push_path( pn, pf | FIM_FLAG_PUSH_FILE_NO_CHECK );
+				//std::cout << re << " " << pn << "!\n";
 			}
+		}
 #if FIM_WANT_BACKGROUND_LOAD
 			if( ( pf & FIM_FLAG_PUSH_ONE ) && retval )
 				goto ret;
@@ -1129,7 +1124,7 @@ rret:
 	}
 #endif /* FIM_READ_DIRS */
 
-	bool Browser::push_path(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
+	bool Browser::push_path(const fim::string & nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{
 		bool pec = false; // push error code
 #if 0
@@ -1168,7 +1163,7 @@ rret:
 		return pec;
 	}
 
-	bool Browser::push_noglob(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
+	bool Browser::push_noglob(const fim::string & nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{	
 		bool retval = false;
 		bool lib = false; /* load in background */
@@ -1247,8 +1242,7 @@ rret:
 				 * i am not fully sure this is effective
 				 * */
 				if(!lib)
-					nf += " is not a regular file!",
-					commandConsole_.set_status_bar(nf.c_str(), "*");
+					commandConsole_.set_status_bar(fim::string(nf + " is not a regular file!").c_str(), "*");
 				goto ret;
 			}
 #endif /* FIM_CHECK_FILE_EXISTENCE */
