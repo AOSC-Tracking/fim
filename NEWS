@@ -10,6 +10,10 @@
    If C is 'u', to prev/next file with directory name up the same hierarchy.
    If C is 'b', to prev/next file with same basename.
    If C is uppercase, to the prev/next file not matching the criteria.
+# (r1381)
+ * Accordingly, aliases 'next_file_dir_same', 'next_file_dir_other', 'next_file_dir_up',
+   'next_file_dir_down', 'next_file_same_basename', 'prev_file_dir_same',
+   'prev_file_dir_other', 'prev_file_dir_up' 'prev_file_dir_down' 'prev_file_same_basename'.
 # (r1366)
  * fix: 'recording' command non functioning properly.
 # (r1365)

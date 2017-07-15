@@ -1397,6 +1397,16 @@ alias "font_magnify_manual"      "_fbfont_magnify_factor=_fbfont_magnify_factor+
 alias "font_reduce_auto"  "if(_fbfont_as_screen_fraction>1){_fbfont_as_screen_fraction=_fbfont_as_screen_fraction+1;}" "";
 alias "font_reduce_manual"       "_fbfont_magnify_factor=_fbfont_magnify_factor\-1" "";
 alias "toggle_font_auto_scale" "if(_fbfont_as_screen_fraction<0){_fbfont_as_screen_fraction=0;echo 'Auto font scaling on.';}else{_fbfont_as_screen_fraction=\-1;echo 'Auto font scaling off.';}" "toggles between manual and auto font scaling control";
+alias 'next_file_dir_same'      "goto '+/s';" "go to next file in same dir";
+alias 'next_file_dir_other'     "goto '+/S';" "go to next file in other dir";
+alias 'next_file_dir_up'        "goto '+/u';" "go to next file up the dir hierarchy";
+alias 'next_file_dir_down'      "goto '+/d';" "go to next file down the dir hierarchy";
+alias 'next_file_same_basename' "goto '+/b';" "go to next file with same basename";
+alias 'prev_file_dir_same'      "goto '\-/s';" "go to prev file in same dir";
+alias 'prev_file_dir_other'     "goto '\-/S';" "go to prev file in other dir";
+alias 'prev_file_dir_up'        "goto '\-/u';" "go to prev file up the dir hierarchy";
+alias 'prev_file_dir_down'      "goto '\-/d';" "go to prev file down the dir hierarchy";
+alias 'prev_file_same_basename' "goto '\-/b';" "go to prev file with same basename";
 #alias "font_magnify" "if(_fbfont_as_screen_fraction<0) {font_magnify_manual;}else{font_magnify_auto;}" "increase font size (either relative or absolute)";
 #alias "font_reduce"  "if(_fbfont_as_screen_fraction<0) {font_reduce_manual;} else{font_reduce_auto;}"  "increase font size (either relative or absolute)";
 alias "font_magnify" "_fbfont_as_screen_fraction=\-1;font_magnify_manual" "increase absolute font size and set manual font control";
