@@ -421,16 +421,9 @@ scale {['+'|'\-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+\-*/]'|['<'|'>']}: 
 
 .na
 .B
-scrolldown
+scroll
 .fi
-scrolldown: scroll down the image, going next if at bottom
-.fi
-
-.na
-.B
-scrollforward
-.fi
-scrollforward: scroll the image as it were reading it
+scroll: scroll down the image, going next when hitting the bottom; scroll 'forward': scroll the image as we were reading left to right (see _scroll_skip_page_fraction variable ) 
 .fi
 
 .na

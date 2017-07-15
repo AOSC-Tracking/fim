@@ -287,9 +287,10 @@ class Browser
 	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
 	fim::string goto_image(fim_int n, bool isfg=false);
 	fim_cxr fcmd_align(const args_t& args);
-	fim::string pan(const args_t& args);
-	fim_cxr fcmd_scrolldown(const args_t& args);
-	fim_cxr fcmd_scrollforward(const args_t& args);
+	fim::string fcmd_pan(const args_t& args);
+	fim_cxr scrolldown(const args_t& args);
+	fim_cxr scrollforward(const args_t& args);
+	fim_cxr fcmd_scroll(const args_t& args);
 	fim_cxr fcmd_scale(const args_t& args);
 #if FIM_WANT_FAT_BROWSER
 	//fim_cxr fcmd_no_image(const args_t& args);
