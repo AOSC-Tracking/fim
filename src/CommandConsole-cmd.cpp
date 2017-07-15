@@ -444,7 +444,7 @@ err:
 #endif /* FIM_USE_CXX11 */
 				if(!cc.browser_.cache_.setAndCacheStdinCachedImage(stream_image))
 					std::cerr << FIM_EMSG_CACHING_STDIN;
-				browser_.push(FIM_STDIN_IMAGE_NAME);
+				browser_.push_path(FIM_STDIN_IMAGE_NAME);
 			}
 #else /* FIM_READ_STDIN_IMAGE */
 			/* FIXME: this point should be better not reached */
