@@ -958,7 +958,7 @@ ret:
 		fim::string result;
 
 		FIM_PR('*');
-		//for(size_t i=0;i<args.size();++i) push(args[i]);
+		//for(size_t i=0;i<args.size();++i) push_path(args[i]);
 		if( empty_file_list() )
 		{ result = "sorry, no image to reload\n"; goto ret; }
 		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRERELOAD,current());
@@ -993,7 +993,7 @@ ret:
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 		FIM_PR('*');
 
-		//for(size_t i=0;i<args.size();++i) push(args[i]);
+		//for(size_t i=0;i<args.size();++i) push_path(args[i]);
 		if( getImage() && ( getImage()->getName() == current()) )
 		{
 			result = "image already loaded\n";//warning
@@ -1112,7 +1112,7 @@ nostat:
 				if( re == FIM_CNS_EMPTY_STRING )
 					re = FIM_CNS_PUSHDIR_RE;
 				if( fn.re_match(re.c_str()) )
-					retval |= push( f + fim::string(de->d_name) );
+					retval |= push_path( f + fim::string(de->d_name) );
 				//std::cout << re << " " << f + fim::string(de->d_name) << "!\n";
 			}
 #if FIM_WANT_BACKGROUND_LOAD
@@ -1129,7 +1129,7 @@ rret:
 	}
 #endif /* FIM_READ_DIRS */
 
-	bool Browser::push(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
+	bool Browser::push_path(fim::string nf, fim_flags_t pf, const fim_int * show_must_go_on)
 	{
 		bool pec = false; // push error code
 #if 0
@@ -2450,9 +2450,9 @@ err:
 			fim::string ss = args[i];
 
 			ss.substitute(" +$","");
-			push(ss);
+			push_path(ss);
 #else /* FIM_SMART_COMPLETION */
-			push(args[i]);
+			push_path(args[i]);
 #endif /* FIM_SMART_COMPLETION */
 		}
 		return FIM_CNS_EMPTY_RESULT;
@@ -2584,12 +2584,12 @@ err:
 		switch(qbi)
 		{
 			case 0:
-			push(string(ci)+string(".jpg"));
+			push_path(string(ci)+string(".jpg"));
 			ci++;
 			break;
 			case 1:
 			ci--;
-			push(string(ci)+string(".jpg"));
+			push_path(string(ci)+string(".jpg"));
 			break;
 		}
 	}
@@ -2600,7 +2600,7 @@ err:
 		switch(qbi)
 		{
 			case 0:
-			oss << "fim browser push check" << " : " << string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " push()/s\n";
+			oss << "fim browser push check" << " : " << string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " push_path()/s\n";
 			break;
 			case 1:
 			oss << "fim browser pop check" << " : " << ((fim_fms_t)qbtimes)/((qbttime)*1.e-3) << " pop()/s\n";

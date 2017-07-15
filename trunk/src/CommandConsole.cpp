@@ -1859,7 +1859,7 @@ ok:
 
 	bool CommandConsole::push(const fim_fn_t nf, fim_flags_t pf)
 	{
-		return browser_.push(nf,pf);
+		return browser_.push_path(nf,pf);
 	}
 
 	bool CommandConsole::push(const char * nf, fim_flags_t pf)
@@ -1868,7 +1868,7 @@ ok:
 		if( pf & FIM_FLAG_PUSH_ONE )
 			fnpv_.push_back(nf);
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-		return browser_.push(nf,pf);
+		return browser_.push_path(nf,pf);
 	}
 
 #if FIM_WANT_BACKGROUND_LOAD
@@ -1880,7 +1880,7 @@ ok:
 	{
 		setVariable(FIM_VID_LOADING_IN_BACKGROUND,1);
 		for( auto fnpi : this->fnpv_ )
-			this->browser_.push(fnpi,FIM_FLAG_PUSH_REC|FIM_FLAG_PUSH_BACKGROUND,&this->show_must_go_on_);
+			this->browser_.push_path(fnpi,FIM_FLAG_PUSH_REC|FIM_FLAG_PUSH_BACKGROUND,&this->show_must_go_on_);
 		this->fnpv_.erase(this->fnpv_.begin(),this->fnpv_.end());
 		this->fnpv_.shrink_to_fit(); /* no use for this now */
 		setVariable(FIM_VID_LOADING_IN_BACKGROUND,0);
