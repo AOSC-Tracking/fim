@@ -292,10 +292,6 @@ class Browser
 	fim_cxr fcmd_scrollforward(const args_t& args);
 	fim_cxr fcmd_scale(const args_t& args);
 #if FIM_WANT_FAT_BROWSER
-	fim_cxr fcmd_reduce(const args_t& args);
-	fim_cxr fcmd_magnify(const args_t& args);
-	fim_cxr fcmd_next(const args_t& args);
-	fim_cxr fcmd_prev(const args_t& args);
 	//fim_cxr fcmd_no_image(const args_t& args);
 #endif /* FIM_WANT_FAT_BROWSER */
 	fim_cxr fcmd_rotate(const args_t& args);
