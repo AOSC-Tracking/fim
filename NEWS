@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1382)
+ * Command 'goto' accepts multiple arguments; those after the first triggering a jump will be ignored.
 # (r1379,r1380)
  * Command goto {'-/'|'+/'}[C] will jump to a file based on C (default 'S').
    If C is 's', to prev/next file with same directory name.

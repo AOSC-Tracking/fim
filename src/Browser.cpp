@@ -1486,12 +1486,18 @@ ret:
 		return goto_image_internal(gs.c_str(),FIM_X_NULL);  
 	}
 	
-	fim_cxr Browser::fcmd_goto_image(const args_t& args)
+	fim_cxr Browser::fcmd_goto(const args_t& args)
 	{
+		fim::string result = FIM_CNS_EMPTY_RESULT;
 		if( args.size() > 0 )
-			return goto_image_internal(args[0].c_str(),FIM_X_NULL);
+		{
+			fim_int cfi = current_n();
+			for(size_t i = 0; i<args.size() && current_n() == cfi ; ++i)
+				result = goto_image_internal(args[i].c_str(),FIM_X_NULL);
+		}
 		else
-			return goto_image_internal(FIM_NULL,FIM_X_NULL);
+			result = goto_image_internal(FIM_NULL,FIM_X_NULL);
+		return result;
 	}
 
 	fim::string Browser::goto_image_internal(const fim_char_t *s,fim_xflags_t xflags)
