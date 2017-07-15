@@ -19,10 +19,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#define firstorval(x,v)  ((x.size()>0)?((int)(x[0])):(v))
-#define firstorzero(x)    firstorval((x),(0))
-#define firstorone(x)     firstorval((x),(1))
-#define firstforzero(x)   (x.size()>0?((float)(x[0])):0.0)
 #define FIM_HORRIBLE_CACHE_INVALIDATING_HACK 1
 
 #include <dirent.h>
@@ -2291,74 +2287,6 @@ ret:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}
-
-#if FIM_WANT_FAT_BROWSER
-	fim_cxr Browser::fcmd_magnify(const args_t& args)
-	{
-		FIM_PR('*');
-		if(c_getImage())
-		{
-			fim_scale_t factor;
-			factor = firstforzero(args);
-			if( !factor )
-				factor = getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if(c_getImage())
-			{
-				if(factor)
-				{
-					if(getImage())
-						getImage()->magnify(factor);
-					if(viewport())
-						viewport()->scale_position_magnify(factor);
-				}
-				else	
-				{
-					if(getImage())
-						getImage()->magnify();
-					if(viewport())
-						viewport()->scale_position_magnify();
-				}
-			}
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
-		}
-		FIM_PR('.');
-		return FIM_CNS_EMPTY_RESULT;
-	}
-
-	fim_cxr Browser::fcmd_reduce(const args_t& args)
-	{
-		FIM_PR('*');
-		if(c_getImage())
-		{
-			fim_scale_t factor;
-			factor = firstforzero(args);
-			if(!factor)
-				factor = getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if(c_getImage())
-			{
-				if(factor)
-				{
-					if(getImage())
-						getImage()->reduce(factor);
-					if(viewport())
-						viewport()->scale_position_reduce(factor);
-				}
-				else	
-				{
-					if(getImage())
-						getImage()->reduce();
-					if(viewport())
-						viewport()->scale_position_reduce();
-				}
-			}
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
-		}
-		FIM_PR('.');
-		return FIM_CNS_EMPTY_RESULT;
-	}
-#endif /* FIM_WANT_FAT_BROWSER */
 
 	fim_cxr Browser::fcmd_align(const args_t& args)
 	{
