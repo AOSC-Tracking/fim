@@ -373,7 +373,7 @@ ret:		return key;
 		addCommand(new Command(FIM_FLT_FONT,FIM_CMD_HELP_FONT,this,&CommandConsole::fcmd_font));
 #endif /* FIM_EXPERIMENTAL_FONT_CMD */
 		addCommand(new Command(FIM_FLT_GETENV,FIM_CMD_HELP_GETENV,this,&CommandConsole::fcmd_do_getenv));
-		addCommand(new Command(FIM_FLT_GOTO,FIM_CMD_HELP_GOTO,&browser_,&Browser::fcmd_goto_image));
+		addCommand(new Command(FIM_FLT_GOTO,FIM_CMD_HELP_GOTO,&browser_,&Browser::fcmd_goto));
 		addCommand(new Command(FIM_FLT_HELP,FIM_CMD_HELP_HELP,this,&CommandConsole::fcmd_help));
 		addCommand(new Command(FIM_FLT_IF,FIM_CMD_HELP_IFELSE,this,&CommandConsole::fcmd_foo));
 		addCommand(new Command(FIM_FLT_INFO,FIM_CMD_HELP_INFO,&browser_,&Browser::fcmd_info));

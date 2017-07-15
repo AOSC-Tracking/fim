@@ -283,7 +283,7 @@ class Browser
 	fim_fn_t current(void)const;
 	fim::string regexp_goto(const args_t& args, fim_int src_dir=1);
 	fim_cxr fcmd_prefetch(const args_t& args);
-	fim_cxr fcmd_goto_image(const args_t& args);
+	fim_cxr fcmd_goto(const args_t& args);
 	fim::string goto_image_internal(const fim_char_t *s, fim_xflags_t xflags);
 	fim::string goto_image(fim_int n, bool isfg=false);
 	fim_cxr fcmd_align(const args_t& args);
