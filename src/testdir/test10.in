@@ -1,3 +1,4 @@
+# Scoped variables test.
 # we need an image in order for i: scoped variables to work
 load;
 display;

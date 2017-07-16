@@ -1,3 +1,4 @@
+# Directory load test.
 stdout "this is a minimal test case for directory load capability";
 #stdout _filelistlen;
 #stdout offl;

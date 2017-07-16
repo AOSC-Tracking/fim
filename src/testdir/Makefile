@@ -34,7 +34,7 @@ clean:
 	@/bin/sh -c "if test -f test.out; then\
                   if diff $*.ok test.out; \
                   then mv -f test.out $*.out; \
-                  else echo $* FAILED >>test.log; mv -f test.out $*.failed; \
+                  else echo $* FAILED >>test.log; head -n 1 $*.in >>test.log; mv -f test.out $*.failed; \
                   fi \
                 else echo $* NO OUTPUT >>test.log; \
                 fi"

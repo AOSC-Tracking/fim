@@ -1,3 +1,4 @@
+# While loop test.
 stdout "square root algorithm computation with the babylonian method";
 s="256.0";
 r=s/2;

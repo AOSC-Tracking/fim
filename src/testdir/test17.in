@@ -1,3 +1,4 @@
+# List push/remove test.
 # This file is part of the fim test suite.
 # This test will fail on missing gif support.
 #autocmd "PreReload"   ".*txt" "_file_loader='Text'";
