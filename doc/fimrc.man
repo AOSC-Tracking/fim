@@ -192,7 +192,7 @@ autocmd_del: specify autocommands to delete them. Usage: autocmd_del {event} {pa
 .B
 basename
 .fi
-basename {filename}: returns the basename of {filename} in the _last_system_output variable.
+basename {filename}: returns the basename of {filename} in the _last_cmd_output variable.
 .fi
 
 .na
@@ -797,6 +797,11 @@ _info_fmt_str
 .B
 _inhibit_display
 [internal,g:] if 1, will inhibit display
+.fi
+.na
+.B
+_last_cmd_output
+[out,experimental,g:] the last command output
 .fi
 .na
 .B

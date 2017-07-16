@@ -520,7 +520,6 @@ err:
 		fim::string res;
 		for(size_t i=0;i<args.size();++i)
 			res+=fim_basename_of(args[i]);
-		setVariable(FIM_VID_LAST_SYSTEM_OUTPUT,res);
 		return res;
 	}
 
