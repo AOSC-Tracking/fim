@@ -6,7 +6,11 @@ help '';
 dump;
 help '-';
 dump;
+help '-h';
+dump;
 help '--';
+dump;
+help '--help';
 dump;
 #
 #help 'commands';
