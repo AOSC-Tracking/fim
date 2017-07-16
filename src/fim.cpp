@@ -113,8 +113,11 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_FINAL_COMMANDS,   required_argument,       FIM_NULL, 'F',"execute {commands} just before exit.","{commands}",
 "The \\fBcommands\\fP string will be executed after exiting the interactive loop of the program (right before terminating the program)."
     },
-    {"help",       optional_argument,       FIM_NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and exit.","[=s|d|l|m]",
-FIM_NULL
+    {"help",       optional_argument,       FIM_NULL, 'h',"Print (short, descriptive, long, or complete man) program invocation help, and exit."
+#if FIM_WANT_HELP_ARGS
+	    " If further arguments follow, individual help messages will be shown instead."
+#endif /* FIM_WANT_HELP_ARGS */
+		    ,FIM_HELP_EXTRA_OPTS, FIM_NULL
     },
 #if FIM_WANT_CMDLINE_KEYPRESS
     { "keysym-press",   required_argument,       FIM_NULL, 'k',"Execute simulated press of keysym at startup. Keysym can be prefixed by a repetition count number. Option can be specified multiple times to simulate multiple keystrokes.",FIM_NULL, FIM_NULL },
@@ -446,7 +449,7 @@ fim::string fim_help_opt(const char*qs)
 				( qs[1] == '-' && 0 == strcmp(qs+2,fim_options[i].name) )
 		  )
 		{
-			oss << "A fim command option: ";
+			oss << qs << " is a fim command option: ";
 			if( isascii( fim_options[i].val ) )
 			{
 				oss << "-" << static_cast<char>(fim_options[i].val);
@@ -591,6 +594,9 @@ int fim_dump_man_page(void)
 #ifdef FIM_READ_STDIN
 			string(".B fim --" FIM_OSW_SCRIPT_FROM_STDIN " [{options}] < {scriptfile}\n.fi\n")+
 #endif /* FIM_READ_STDIN */
+#if FIM_WANT_HELP_ARGS
+			string(".B fim --help" FIM_HELP_EXTRA_OPTS " [{help-item} ...] \n.fi\n")+
+#endif /* FIM_WANT_HELP_ARGS */
 			string("\n"
 			".SH DESCRIPTION\n"
 			".B\nfim\nis a `swiss army knife' for displaying image files.\n"
@@ -758,6 +764,12 @@ mp+=string(
 ".B not\n"
 "work.\n"
 ".SH INVOCATION EXAMPLES\n"
+".B fim --help -R -B\n"
+".fi \n"
+"# Will ask for help for options -R and -B.\n"
+".P\n"
+".P\n"
+"\n"
 ".B fim media/ \n"
 ".fi \n"
 "# Will load files from the directory media.\n"
@@ -1550,7 +1562,16 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 		default:
 		case 'h':
-		    help_and_exit(argv[0],FIM_PERR_NO_ERROR,optarg);
+#if FIM_WANT_HELP_ARGS
+		    if(optind < argc)
+		    {
+		    	for (i = optind; i < argc; i++)
+		    		std::cout << cc.get_help(argv[i]) << std::endl;
+	    		std::exit(FIM_PERR_NO_ERROR);
+		    }
+#endif /* FIM_WANT_HELP_ARGS */
+		    else
+		    	help_and_exit(argv[0],FIM_PERR_NO_ERROR,optarg);
 		}
 	    }
 		// fim_fms_t dt;

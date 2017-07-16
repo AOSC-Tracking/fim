@@ -142,16 +142,16 @@ err:
 	}
 #endif
 
-	fim_cxr CommandConsole::fcmd_help(const args_t& args)
-	{	
-		if(!args.empty() && args[0].length()>0 )
+	fim_cxr CommandConsole::get_help(const fim_cmd_id& item)const
+	{
+		if(item.size())
 		{
-			if((args[0].at(0))==FIM_CNS_SLASH_CHAR)
+			if((item.at(0))==FIM_CNS_SLASH_CHAR)
 			{
-				/* FIXME: this shall be regexp-based. */
+				/* regexp-based would be nicer */
 				fim::string hstr,cstr,astr,bstr,ptn;
 
-				ptn = args[0].substr(1,args[0].size());
+				ptn = item.substr(1,item.size());
 				for(size_t i=0;i<commands_.size();++i) 
 					if(commands_[i] && commands_[i]->getHelp().find(ptn) != commands_[i]->getHelp().npos)
 					{
@@ -225,34 +225,46 @@ err:
 
 		{
 			fim::string sws;
-			sws = fim_help_opt(args[0].c_str());
+			sws = fim_help_opt(item.c_str());
 			if( sws != FIM_CNS_EMPTY_STRING )
 				return sws+string("\n");
 		}
-			if( Command *cmd = findCommand(args[0]) )
+			if( Command *cmd = findCommand(item) )
 				return
-					string("\"")+(args[0]+string("\" is a command, documented:\n"))+
+					string("\"")+(item+string("\" is a command, documented:\n"))+
 				      	cmd->getHelp()+string("\n");
 			else
-			if(aliasRecall(fim::string(args[0]))!=FIM_CNS_EMPTY_STRING)
+			if(aliasRecall(fim::string(item))!=FIM_CNS_EMPTY_STRING)
 				return
-					string("\"")+(args[0]+string("\" is an alias, and was declared as:\n"))+
-					get_alias_info(args[0]);
+					string("\"")+(item+string("\" is an alias, and was declared as:\n"))+
+					get_alias_info(item);
 			else
 			{
-				if(isVariable(args[0]))
+				if(isVariable(item))
 				{
 					std::ostringstream oss;
-					oss << "\"" << args[0] << "\" is a variable, with value:\n" 
-						<< getStringVariable(args[0]) << "\nand description:\n" 
-						<< fim_var_help_db_query(args[0]) << "\n";
+					oss << "\"" << item << "\" is a variable, with value:\n" 
+						<< getStringVariable(item) << "\nand description:\n" 
+						<< fim_var_help_db_query(item) << "\n";
 					return oss.str();
 				}
 				else
-					cout << args[0] << " : no such command, alias, or variable.\n";
+					//cout << item << " : no such command, alias, or variable.\n";
+					return item + " : no such command, alias, or variable.\n";
 			}
-
 		}
+		return "";
+	}
+
+	fim_cxr CommandConsole::fcmd_help(const args_t& args)
+	{	
+		fim_cxr retval;
+
+		if(!args.empty() && args[0].length()>0 )
+			retval = get_help(args[0]);
+		if(retval)
+			return retval;
+
 		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
 		return "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
 	}
