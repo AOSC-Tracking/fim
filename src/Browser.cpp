@@ -243,11 +243,11 @@ ret:
 	{
 		FIM_PR('*');
 #if FIM_USE_CXX11
-		if( !stdin_image || stdin_image->check_invalid() )
+		if( !stdin_image || !stdin_image->check_valid() )
 			goto ret;
 		default_image_ = std::move(stdin_image);
 #else /* FIM_USE_CXX11 */
-		if( !stdin_image || stdin_image->check_invalid() )
+		if( !stdin_image || !stdin_image->check_valid() )
 			goto ret;
 		if( default_image_ )
 		       	delete default_image_;

@@ -76,7 +76,7 @@ namespace fim
 			else
 				std::cout << "no image_ to cache..\n";
 	#endif /* FIM_CACHE_DEBUG */
-			if(rhs.image_ && !rhs.image_->check_invalid())
+			if(rhs.image_ && rhs.image_->check_valid())
 			{
 				ViewportState viewportState;
 				setImage( commandConsole.browser_.cache_.useCachedImage(rhs.image_->getKey(),&viewportState) );
@@ -320,7 +320,7 @@ namespace fim
 		if(! need_redraw())
 			return false;
 		if( check_invalid() )
-			null_display();//  NEW
+			null_display();
 		if( check_invalid() )
 			return false;
 
@@ -544,14 +544,10 @@ namespace fim
 
         void Viewport::reset(void)
         {
-		/*
-		 * resets some image flags and should reset the image position in the viewport
-		 *
-		 * FIXME
-		 * */
 		if(image_)
-			image_->reset_state(),
+			image_->reset_viewport_props(),
 			image_->set_auto_props(1, 0);
+
 		should_redraw();
                 top_  = 0;
                 left_ = 0;
@@ -560,25 +556,19 @@ namespace fim
 
 	void Viewport::auto_height_scale(void)
 	{
-		/*
-		 * scales the image in a way to fit in the viewport height
-		 * */
 		fim_scale_t newscale;
 		if( check_invalid() )
 			return;
 
 		newscale = FIM_INT_SCALE_FRAC(this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
-
 		image_->do_scale_rotate(newscale);
 	}
 
 	void Viewport::auto_width_scale(void)
 	{
-		/*
-		 * scales the image in a way to fit in the viewport width
-		 * */
 		if( check_invalid() )
 			return;
+
 		image_->do_scale_rotate(viewport_xscale());
 	}
 
@@ -599,7 +589,7 @@ namespace fim
 		if(!image_)
 			return true;
 		else
-			return image_->check_invalid();
+			return !image_->check_valid();
 	}
 
 	void Viewport::scale_position_magnify(fim_scale_t factor)
