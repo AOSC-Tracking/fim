@@ -168,6 +168,14 @@ AC_CHECK_PROG([HAVE_MAN],[man],[yes],[no])
 #AC_CHECK_PROG([HAVE_LS],[ls],[yes],[no])
 #AC_CHECK_PROG([HAVE_CD],[cd],[yes],[no])
 #AC_CHECK_PROG([HAVE_CC],[cc],[yes],[no])
+dnl
+AC_ARG_VAR([LIBTIFF],[libtiff library (contributes to LIBS)])
+AC_ARG_VAR([LIBGIF],[libgif library (contributes to LIBS)])
+AC_ARG_VAR([LIBJPEG],[libjpeg library (contributes to LIBS)])
+AC_ARG_VAR([LIBPS],[libspectre library (contributes to LIBS)])
+AC_ARG_VAR([LIBDJVU],[libdjvu libdjvulibre (contributes to LIBS)])
+AC_ARG_VAR([LIBPOPPLER],[poppler libdjvulibre (contributes to LIBS)])
+dnl
 AC_PATH_PROG([RM],[rm],[no])
 AC_PATH_PROG([SED],[sed],[no])
 AC_PATH_PROG([GREP],[grep],[no])
@@ -1306,13 +1314,13 @@ AC_ARG_ENABLE(scan-consolefonts, AC_HELP_STRING([--enable-scan-consolefonts], [F
 )
 dnl ==================
 fim_cv_seek_magic=yes
-AC_ARG_ENABLE(seek-magic, AC_HELP_STRING([--enable-seek-magic], [Fim will be capable to seek on a specified magic string. (experimental)]),
-[       if test x$enableval = xyes; then
-		fim_cv_seek_magic=yes
+AC_ARG_ENABLE(seek-magic, AC_HELP_STRING([--disable-seek-magic], [Fim will be capable to seek on a specified magic string.]),
+[       if test x$enableval = xno; then
+		fim_cv_seek_magic=no
 	else
-                fim_cv_seek_magic=no
+                fim_cv_seek_magic=yes
         fi
-],[ fim_cv_seek_magic=no ]
+],[ fim_cv_seek_magic=yes ]
 )
 dnl ==================
 AC_ARG_ENABLE(pushdir, AC_HELP_STRING([--enable-pushdir], [Fim will scan directories for files.]),
@@ -1959,9 +1967,24 @@ dnl
 	TAR/ZIP/.. file support (libarchive):*${fim_handle_archive:-no}
 	GraphicsMagick support (libGraphicsMagick):*${fim_handle_graphicsmagick:-no}
 
+        YACC     : ${YACC}
+        LEX      : ${LEX}
+        CXX      : ${CXX}
+        CXXFLAGS : ${CXXFLAGS}
+        LIBS     : ${LIBS}
+        prefix   : ${prefix}
+dnl        LDFLAGS  : ${LDFLAGS}
+dnl Still out:
+dnl LEXLIB
+dnl LIBAA_CONFIG 
+dnl LIBPNG_CONFIG 
+dnl LIBSDL_CONFIG 
+dnl jasper ?
+dnl archive ?
+
 	If you are not satisfied with this configuration, please invoke
 	  ./configure --help=short
-	for a complete list of configure options specific to Fim.
+	for a complete list of configure options and variables specific to Fim.
 	When you are satisfied, run 'make' to build Fim and its documentation.
 	To install the program and its documentation, run 'make install' if you are root,
 	or run 'su -c '"make install"' if you are not root.
