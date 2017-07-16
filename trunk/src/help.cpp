@@ -13,6 +13,7 @@ fim_var_help_db[FIM_VID_DISPLAY_STATUS_FMT]= "[in,g:] custom info format string,
 fim_var_help_db[FIM_VID_PUSH_PUSHES_DIRS]= "[in,g:] if 1, the push command will also accept and push directories (using pushdir). if 2, will also push hidden files/directories, that is, ones whose names begin with a dot (.). " ;
 fim_var_help_db[FIM_VID_SANITY_CHECK]= "[in,experimental,g:] if 1, will execute a sanity check on startup" ;
 fim_var_help_db[FIM_VID_LAST_SYSTEM_OUTPUT]= "[out,experimental,g:] the standard output of the last call to the system command" ;
+fim_var_help_db[FIM_VID_LAST_CMD_OUTPUT]= "[out,experimental,g:] the last command output" ;
 fim_var_help_db[FIM_VID_LOAD_DEFAULT_ETC_FIMRC]= "[in,g:] if 1 at startup, will load the system wide initialization file" ;
 fim_var_help_db[FIM_VID_LOAD_HIDDEN_DIRS]= "[in,g:] if not 1, when pushing directories/files, those whose name begins with a dot (.) will be skipped." ;
 fim_var_help_db[FIM_VID_DEFAULT_ETC_FIMRC]= "[in,g:] string with the global configuration file name" ;

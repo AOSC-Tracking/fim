@@ -1,0 +1,22 @@
+# A test for the help system.
+alias 'dump' "stdout _last_cmd_output; stdout '*';";
+echo "A test for the help system";
+dump;
+help '';
+dump;
+help '-';
+dump;
+help '--';
+dump;
+#help 'commands';
+#dump;
+commands;
+dump;
+#help 'alias';
+#dump;
+alias;
+dump;
+#help 'variables';
+#dump;
+variables;
+dump;

@@ -928,7 +928,9 @@ ret:
 				if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
 					std::cout << FIM_CNS_DBG_CMDS_PFX << "executing: " << cmd << " " << args << "\n";
 				
-				cout << c->execute(args);
+				fim::string lco = c->execute(args);
+				cout << lco;
+				setVariable(FIM_VID_LAST_CMD_OUTPUT,lco);
 				goto ok;
 			}
 		}
