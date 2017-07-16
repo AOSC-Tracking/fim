@@ -233,11 +233,14 @@ err:
 				return
 					string("\"")+(item+string("\" is a command, documented:\n"))+
 				      	cmd->getHelp()+string("\n");
-			else
 			if(aliasRecall(fim::string(item))!=FIM_CNS_EMPTY_STRING)
 				return
 					string("\"")+(item+string("\" is an alias, and was declared as:\n"))+
 					get_alias_info(item);
+			if( getBoundAction(kstr_to_key(item))!=FIM_CNS_EMPTY_STRING)
+				return
+					string("\"")+(item+string("\" key is bound to command: "))+
+						( fim_shell_arg_escape(getBoundAction(kstr_to_key(item))) + "\n" );
 			else
 			{
 				if(isVariable(item))
@@ -249,8 +252,7 @@ err:
 					return oss.str();
 				}
 				else
-					//cout << item << " : no such command, alias, or variable.\n";
-					return item + " : no such command, alias, or variable.\n";
+					return item + ": no such command, alias, bound key or variable.\n";
 			}
 		}
 		return "";

@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1395)
+ * Command 'help' will also consider key bindings.
 # (r1389)
  * If further arguments follow switch --help, individual help messages will be shown.
 # (r1382)
