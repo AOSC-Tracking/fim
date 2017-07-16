@@ -26,7 +26,7 @@
  * */
 #include "fim.h"
 #ifdef FIM_DEFAULT_CONFIGURATION
-#include "conf.h"
+#include "conf.h" /* FIM_DEFAULT_CONFIG_FILE_CONTENTS declared here */ 
 #endif /* FIM_DEFAULT_CONFIGURATION */
 #include <sys/time.h>
 #include <errno.h>
