@@ -442,14 +442,14 @@ fim::string fim_help_opt(const char*qs)
 
 	for(size_t i=0;i<fim_options_count-1;++i)
 		if(
-				( ( (int) qs[1] ) == fim_options[i].val ) ||
+				( ( static_cast<int>(qs[1]) ) == fim_options[i].val ) ||
 				( qs[1] == '-' && 0 == strcmp(qs+2,fim_options[i].name) )
 		  )
 		{
 			oss << "A fim command option: ";
 			if( isascii( fim_options[i].val ) )
 			{
-				oss << "-" << fim_options[i].val;
+				oss << "-" << static_cast<char>(fim_options[i].val);
 				if( fim_options[i].optdesc )
 			       		oss << " =" << fim_options[i].optdesc;
 				oss << ", ";
@@ -459,7 +459,7 @@ fim::string fim_help_opt(const char*qs)
 				oss << "--" << fim_options[i].name;
 				if( fim_options[i].optdesc )
 			       		oss << " =" << fim_options[i].optdesc;
-				oss << " ";
+				//oss << " ";
 			}
 			oss << ": " << fim_options[i].desc;
 			// oss << fim_options[i].mandesc; // man/groff markup should be cleaned up before printing
