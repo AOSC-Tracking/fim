@@ -93,7 +93,6 @@ bind "y" "widen" # widen horizontally the image
 bind "{" "font "prev";redisplay"
 bind "|" "toggle_font_auto_scale;redisplay"
 bind "}" "font "next";redisplay"
-bind "Backspace" "prev"
 bind "Up" "pan_up"
 bind "Down" "pan_down"
 bind "Right" "pan_right"
