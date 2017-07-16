@@ -8,15 +8,24 @@ help '-';
 dump;
 help '--';
 dump;
+#
 #help 'commands';
 #dump;
 commands;
 dump;
+#
 #help 'alias';
 #dump;
 alias;
 dump;
+#
 #help 'variables';
 #dump;
 variables;
 dump;
+#
+#help 'bind';
+#dump;
+bind;
+dump;
+#
