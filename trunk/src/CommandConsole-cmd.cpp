@@ -254,13 +254,15 @@ err:
 	{	
 		fim_cxr retval;
 
-		if(!args.empty() && args[0].length()>0 )
+		if( !args.empty() && args[0].length()>0 )
 			retval = get_help(args[0]);
-		if(retval)
-			return retval;
 
 		this->setVariable(FIM_VID_DISPLAY_CONSOLE,1);
-		return "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
+
+		if(retval.empty())
+			retval = "" FIM_FLT_HELP " " FIM_CNS_EX_ID_STRING ": provides help for " FIM_CNS_EX_ID_STRING ", if it is a variable, alias, or command. Use " FIM_KBD_TAB " in commandline mode to get a list of commands. Command line mode can be entered with the default key '" FIM_SYM_CONSOLE_KEY_STR "', and left pressing " FIM_KBD_ENTER ".\n";
+		return retval;
+
 	}
 
 	fim_cxr CommandConsole::fcmd_quit(const args_t& args)
