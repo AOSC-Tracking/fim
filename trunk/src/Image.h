@@ -84,11 +84,11 @@ class Image
 	fim_page_t		 page_;
 
 	public:
-	bool reload(void);
+	//bool reload(void);
 	enum { FIM_ROT_L=3,FIM_ROT_R=1,FIM_ROT_U=2 };
 	const struct ida_image *get_ida_image(void)const{ return img_; }
 	private:
-        struct ida_image *img_     ;     /* local (eventually) copy images */
+        mutable struct ida_image *img_     ;     /* local (eventually) copy images */
 #if FIM_WANT_MIPMAPS
 	fim_mipmap_t mm_;
 #endif /* FIM_WANT_MIPMAPS */
@@ -98,15 +98,13 @@ class Image
 	public:
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY) { redraw_ = sr; }  /* for Viewport after drawing */
 
-	protected:
+	private:
 	fim_redraw_t redraw_;
 	enum { FIM_NO_ROT=0,FIM_ROT_ROUND=4 };
 	enum { FIM_ROT_L_C='L',FIM_ROT_R_C='R',FIM_ROT_U_C='U' };
 	enum { FIM_I_ROT_L=0, FIM_I_ROT_R=1}; /* internal */
 	fim_pgor_t              orientation_;	// orthogonal rotation
 
-	fim_bool_t invalid_;		//the first time the image is loaded it is set to 1
-	fim_bool_t no_file_;	//no file is associated to this image (used for reading from /dev/stdin at most once.)
 	fim_image_source_t fis_;
 
 	fim_fn_t fname_;	/* viewport variable, too */
@@ -115,9 +113,9 @@ class Image
         void free(void);
 	void reset(void);
 
-        bool is_tiny(void)const;
 	public:
-	void reset_state(void);
+        bool is_tiny(void)const;
+	void reset_viewport_props(void);
 	void set_auto_props(fim_int autocenter, fim_int autotop);
 	virtual size_t byte_size(void)const;
 
@@ -154,9 +152,7 @@ class Image
 	bool colorblind(enum fim_cvd_t cvd, bool daltonize);
 	bool gray_negate(void);
 
-	bool check_invalid(void);
-	bool check_valid(void);
-	bool valid(void)const{return !invalid_;}
+	bool check_valid(void)const;
 
 	int width(void)const;
 	fim_coo_t original_width(void)const;

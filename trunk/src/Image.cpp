@@ -254,22 +254,19 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
                 img_     (FIM_NULL),
                 fimg_    (FIM_NULL),
 		orientation_(FIM_NO_ROT),
-                invalid_(false),
-		no_file_(true),
 		fis_(fim::string(fname)==fim::string(FIM_STDIN_IMAGE_NAME)?FIM_E_STDIN:FIM_E_FILE),
                 fname_     (FIM_CNS_DEFAULT_IFNAME),
 		fs_(0)
 
 	{
 		reset();
-		if( !load(fname,fd,/*getGlobalIntVariable(FIM_VID_PAGE)*/page) || check_invalid() || (!fimg_) ) 
+		if( !load(fname,fd,/*getGlobalIntVariable(FIM_VID_PAGE)*/page) || !check_valid() || (!fimg_) ) 
 		{
 			FIM_PR('e');
 			// FIXME: sometimes load() intentionally skips a file. an appropriate message shall be printed out
 			cout << "warning : invalid loading "<<fname<<" ! \n";
 			if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 				cc.set_status_bar( fim::string("error while loading \"")+ fim::string(fname)+ fim::string("\"") , "*");
-			invalid_ = true;
 			throw FimException();
 		}
 		else
@@ -297,12 +294,12 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 	{
                 fimg_    = FIM_NULL;
                 img_     = FIM_NULL;
-		reset_state();
+		reset_viewport_props();
 		if( getGlobalIntVariable(FIM_VID_AUTOTOP ) )
 			setVariable(FIM_VID_AUTOTOP,getGlobalIntVariable(FIM_VID_AUTOTOP));
 	}
 
-	void Image::reset_state(void)
+	void Image::reset_viewport_props(void)
 	{
                 scale_   = FIM_CNS_SCALE_DEFAULT;
                 newscale_= FIM_CNS_SCALE_DEFAULT;
@@ -311,26 +308,22 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		setVariable(FIM_VID_SCALE  ,scale_*100);
 		setVariable(FIM_VID_ASCALE ,ascale_);
 		setVariable(FIM_VID_ANGLE  ,angle_);
-		no_file_ =true;	//reloading allowed
-                invalid_ =false;
                 orientation_=FIM_NO_ROT;
 		setVariable(FIM_VID_ORIENTATION, FIM_NO_ROT);
 	}
 
+/*
 	bool Image::reload(void)
 	{
-		/*
-			reloads the file (no hope for streams, therefore)
-			FIXME : still unused
-		*/
 		bool b=false;
 		FILE *fd=fim_fopen(fname_.c_str(),"r");
 		if(!fd)
 			return b;
 		b=load(fname_.c_str(),fd,page_);
-		fclose(fd);// FIXME : the fd could already be closed !
+		fclose(fd);// the fd could already be closed !
 		return b;
 	}
+*/
 
 	void Image::set_exif_extra(fim_int shouldrotate, fim_int shouldmirror, fim_int shouldflip)
 	{
@@ -484,7 +477,6 @@ uhmpf:
 
     		if(strcmp(FIM_STDIN_IMAGE_NAME,fname)==0)
 		{
-			no_file_=true;	//no file is associated to this image (to prevent reloading)
 			fis_ = FIM_E_STDIN; // yes, it seems redundant but it is necessary
 		}
 		else 
@@ -496,7 +488,6 @@ uhmpf:
 				fs_=stat_s.st_size;
 			}
 #endif /* FIM_WANT_KEEP_FILESIZE */
-			no_file_=false;	//reloading allowed
 		}
 
 		img_=fimg_;	/* no scaling : one copy only */
@@ -506,7 +497,6 @@ uhmpf:
 		{
 			FIM_PR('!');
 			cout<<"warning : image loading error!\n"   ;
-			invalid_=true;
 			goto ret;
 		}
 		else
@@ -579,20 +569,15 @@ ret:
 		return do_scale_rotate();
 	}
 
-        bool Image::check_valid(void)
-	{
-		return ! check_invalid();
-	}
 
-        bool Image::check_invalid(void)
+        bool Image::check_valid(void)const
         {
 		if(!img_)
 			img_ = fimg_;
                 if(!img_)
-                        invalid_ = true;
+                        return false;
 		else
-			invalid_ = false;
-                return invalid_;
+			return true;
         }
 
         void Image::free(void)
@@ -700,7 +685,7 @@ ret:
 		if(ns>0.0)
 			newscale_=ns;//patch
 
-		if( check_invalid() )
+		if( !check_valid() )
 			goto err;
 		if(is_tiny() && newscale_<scale_)
 		{
@@ -852,9 +837,6 @@ err:
                 img_     (FIM_NULL),
                 fimg_    (FIM_NULL),
 		orientation_(rhs.orientation_),
-                //invalid_(0),
-                invalid_(rhs.invalid_),
-		no_file_(true),
 		fis_(rhs.fis_),
                 fname_     (rhs.fname_),
 		fs_(0)
@@ -862,7 +844,7 @@ err:
 		reset();
 		img_  = fbi_image_clone(rhs.img_ );
 		fimg_ = fbi_image_clone(rhs.fimg_);
-        	check_invalid();
+        	!check_valid();
 	}
 
 fim_int Image::shall_mirror(void)const
@@ -1213,7 +1195,7 @@ labeldone:
 	fim_err_t Image::rotate( fim_angle_t angle_ )
 	{
 		fim_angle_t newangle=this->angle_+angle_;
-		if( check_invalid() )
+		if( !check_valid() )
 		       	return FIM_ERR_GENERIC;
 		setVariable(FIM_VID_ANGLE,newangle);
 		return do_scale_rotate();
@@ -1431,7 +1413,7 @@ ret:
 		if( tii != FIM_TII_16M)
 		{
 			/* nevertheless this instance shall support all operations on it */
-			assert(check_invalid());
+			assert(!check_valid());
 		}
 		else
 		{
@@ -1446,7 +1428,6 @@ ret:
 		}
 	}
 
-	bool Image::can_reload(void)const{return !no_file_;}
 	const fim_char_t* Image::getName(void)const{return fname_.c_str();}
 	fim_int Image::c_page(void)const{return page_;}
 #endif	/* FIM_WANT_BDI */
