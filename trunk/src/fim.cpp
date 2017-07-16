@@ -56,6 +56,7 @@ struct fim_options_t{
   const fim_char_t *desc;/* this is fim specific */
   const fim_char_t *optdesc;/* this is fim specific */
   const fim_char_t *mandesc;/* this is fim specific */
+  char cVal(void)const{return static_cast<char>(val);}
 };
 
 struct fim_options_t fim_options[] = {
@@ -424,7 +425,7 @@ fim::string fim_help_opt(const char*qs)
 		{
 			if( fim_options[i].val != '-' )
 				oss << "-";
-			oss << fim_options[i].val << " ";
+			oss << fim_options[i].cVal() << " ";
 		}
 		goto ret;
 	}
@@ -452,7 +453,7 @@ fim::string fim_help_opt(const char*qs)
 			oss << qs << " is a fim command option: ";
 			if( isascii( fim_options[i].val ) )
 			{
-				oss << "-" << static_cast<char>(fim_options[i].val);
+				oss << "-" << fim_options[i].cVal();
 				if( fim_options[i].optdesc )
 			       		oss << " =" << fim_options[i].optdesc;
 				oss << ", ";
@@ -468,7 +469,7 @@ fim::string fim_help_opt(const char*qs)
 			// oss << fim_options[i].mandesc; // man/groff markup should be cleaned up before printing
 			goto ret;
 		}
-		//oss << fim_options[i].val << "\n";
+		//oss << fim_options[i].cVal() << "\n";
 ret:
 	return oss.str();
 }
@@ -518,7 +519,7 @@ string fim_dump_man_page_snippets(void)
 		{
 	   		if((fim_options[i].val)!='-')
 			{
-				oss << slol << "-" << (fim_char_t)(fim_options[i].val);
+				oss << slol << "-" << fim_options[i].cVal();
 				if(fim_options[i].has_arg==required_argument)
 					if(fim_options[i].optdesc)
 						oss << " " << fim_options[i].optdesc;
@@ -940,7 +941,7 @@ fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ER
 	    {	
 		if(isascii(fim_options[i].val)){
 	   	if((fim_options[i].val)!='-')
-			std::cout << "\t-"<<(fim_char_t)(fim_options[i].val) ;
+			std::cout << "\t-"<<(fim_options[i].cVal()) ;
 	   	else std::cout << "\t-";}else std::cout<<"\t";
 		std::cout << "\t\t";
 	    	std::cout << "--"<<fim_options[i].name ;
