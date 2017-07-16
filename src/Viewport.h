@@ -29,33 +29,24 @@
 
 namespace fim
 {
-	/*
-	 * A viewport displays one single image, so it contains the information
-	 * relative to the way it is displayed.
-	 * */
 #ifdef FIM_NAMESPACES
 class Viewport:public Namespace,public ViewportState
 #else /* FIM_NAMESPACES */
 class Viewport:public ViewportState
 #endif /* FIM_NAMESPACES */
 {
-	protected:
+	private:
 	fim_bool_t	psteps_;
         DisplayDevice* displaydevice_;
 #ifdef FIM_WINDOWS
-	const Rect&corners_; // TODO: for now, no reassignCorners, but this will have to place old reassignWindow).
+	const Rect&corners_;
 #endif /* FIM_WINDOWS */
 	ImagePtr image_;
 	CommandConsole& commandConsole;
-	public:
         void reset(void);
         void steps_reset(void);
-
-	Viewport( //yes, horrible
-			CommandConsole& c
-			,const Rect &rect
-			);
-
+	public:
+	Viewport(CommandConsole& c ,const Rect &rect); 
 	Viewport(const Viewport& rhs);
 	~Viewport(void);
 	private:
@@ -64,17 +55,9 @@ class Viewport:public ViewportState
 	public:
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY);
 	fim_bool_t need_redraw(void)const;
-
-#if 0
-	int valid(void)const;
-#endif
-
-	/* viewport member functions */
 	fim::string pan(const args_t& args);
 	fim::string pan(const fim_char_t*a1, const fim_char_t*a2);
 	bool place(const fim_pan_t px, const fim_pan_t py);
-	void setState(const ViewportState & viewportState);
-	ViewportState getState(void)const;
 	fim_bool_t pan_up   (fim_pan_t s=0);
 	fim_bool_t pan_down (fim_pan_t s=0);
 	fim_bool_t pan_right(fim_pan_t s=0);
@@ -83,54 +66,41 @@ class Viewport:public ViewportState
 	bool onRight(fim_coo_t approx_fraction=0)const;
 	bool onLeft(fim_coo_t approx_fraction=0)const;
 	bool onTop(fim_coo_t approx_fraction=0)const;
-
 	fim_coo_t xorigin(void);
 	fim_coo_t yorigin(void);
-	protected:
-
-//	int redraw;	// there is already an external one!
-	/* viewport member functions */
-	public:
+	private:
 	fim_scale_t viewport_xscale(void)const;
 	fim_scale_t viewport_yscale(void)const;
+	public:
 	fim_coo_t viewport_width(void)const;
 	fim_coo_t viewport_height(void)const;
-	/* viewport member functions */
 	void align(const char c);
-
-	/* viewport member functions */
 	bool display(void);
 	bool redisplay(void);
 	void null_display(void);
-
 	void auto_width_scale(void);
 	void auto_height_scale(void);
-
         void setImage(fim::ImagePtr ni);
 	void scale_fix_top_left(void);
         const Image* c_getImage(void)const;
         Image* getImage(void)const;
-
 	void auto_scale(void);
 	void auto_scale_if_bigger(void);
-
 	void free_image(void);
         bool check_invalid(void)const;
         bool check_valid(void)const;
-#if 0
-	int valid(void);
-#endif
-	bool scrollforward(void);
 	void scale_position_magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
 	void scale_position_reduce(fim_scale_t factor=FIM_CNS_SCALEFACTOR);
+	private:
 	void recenter_horizontally(void);
 	void recenter_vertically(void);
+	public:
 	void recenter(void);
 	virtual size_t byte_size(void)const;
 	int snprintf_centering_info(char *str, size_t size)const;
-	void transform(bool mirror, bool flip);
-	void fs_ml_puts(const char *str, fim_int doclear);
 	private:
+	void transform(bool mirror, bool flip);
+	void fs_multiline_puts(const char *str, fim_int doclear);
 	bool shall_negate(void)const;
 	bool shall_desaturate(void)const;
 	bool shall_mirror(void)const;

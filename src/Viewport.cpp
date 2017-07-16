@@ -46,7 +46,6 @@ namespace fim
 			,image_(FIM_NULL)
 			,commandConsole(c)
 	{
-		// WARNING : this constructor will be filled soon
 		if(!displaydevice_)
 			throw FIM_E_TRAGIC;
 		reset();
@@ -54,12 +53,6 @@ namespace fim
 
 	Viewport::Viewport(const Viewport& rhs)
 		:
-	/*	steps_(rhs.steps_)
-		,hsteps_(rhs.hsteps_)
-		,vsteps_(rhs.vsteps_)
-		,top_(rhs.top_)
-		,left_(rhs.left_)
-		,panned_(rhs.panned_) */
 #ifdef FIM_NAMESPACES
 		Namespace(rhs),
 #endif /* FIM_NAMESPACES */
@@ -75,8 +68,6 @@ namespace fim
 		top_ = rhs.top_;
 		left_ = rhs.left_;
 		panned_ = rhs.panned_;
-		// WARNING
-		//reset();
 		try
 		{
 	#ifdef FIM_CACHE_DEBUG
@@ -197,8 +188,6 @@ namespace fim
 
 	fim_coo_t Viewport::viewport_width(void)const
 	{
-		/*
-		 * */
 #ifdef FIM_WINDOWS
 		return corners_.width();
 #else
@@ -271,9 +260,8 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	void Viewport::fs_ml_puts(const char *str, fim_int doclear)
+	void Viewport::fs_multiline_puts(const char *str, fim_int doclear)
 	{
-		/* multiline puts */
 		int fh=displaydevice_->f_ ? displaydevice_->f_->sheight():1; // FIXME : this is not clean
 		int fw=displaydevice_->f_ ? displaydevice_->f_->swidth():1; // FIXME : this is not clean
 		int sl = strlen(str), rw = viewport_width() / fw, wh = viewport_height();
@@ -446,9 +434,9 @@ namespace fim
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
 				if(commandConsole.isSetVar(FIM_VID_COMMENT_OI_FMT))
-					this->fs_ml_puts(image_->getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1);
+					this->fs_multiline_puts(image_->getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1);
 				else
-					this->fs_ml_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1);
+					this->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1);
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
