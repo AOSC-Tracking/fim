@@ -171,6 +171,7 @@
 #define FIM_WANT_GOTO_DIR 1
 #define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* in C++11, prefer smart pointers for Image* */
 #define FIM_EXPERIMENTAL_FONT_CMD 1 && defined(HAVE_DIRENT_H) && 1 /*  */
+#define FIM_WANT_HELP_ARGS 1 /*  */
 #if FIM_USE_CXX11
 #define FIM_NOEXCEPT noexcept
 #define FIM_CONSTEXPR constexpr
@@ -818,6 +819,7 @@ namespace fim
 #define FIM_DDN_VARS	 "[" FIM_DDN_INN_FB"|" FIM_DDN_INN_SDL "|" FIM_DDN_INN_AA  "|" FIM_DDN_INN_IL2 "|" FIM_DDN_INN_CACA	"|" FIM_DDN_INN_DUMB "]" 
 #define FIM_DDN_VARS_IN "[" FIM_DDN_ICI_FB FIM_DDN_ICI_SDL FIM_DDN_ICI_AA FIM_DDN_ICI_IL2 FIM_DDN_ICI_CACA FIM_DDN_INN_DUMB "]" 
 
+#define FIM_HELP_EXTRA_OPTS "[=s|d|l|m]"
 
 /*
  * Fim Autocommands

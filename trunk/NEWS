@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1389)
+ * If further arguments follow switch --help, individual help messages will be shown.
 # (r1382)
  * Command 'goto' accepts multiple arguments; those after the first triggering a jump will be ignored.
 # (r1379,r1380)

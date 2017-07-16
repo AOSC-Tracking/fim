@@ -15,6 +15,8 @@ fim \- \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPprove
 .fi
 .B fim \-\-script\-from\-stdin [{options}] < {scriptfile}
 .fi
+.B fim \-\-help[=s|d|l|m] [{help\-item} ...] 
+.fi
 
 .SH DESCRIPTION
 .B
@@ -138,7 +140,7 @@ Specify an alternative system wide initialization file (default: /usr/local/etc/
 The \fBcommands\fP string will be executed after exiting the interactive loop of the program (right before terminating the program).
 .TP
 .B \-h, \-\-help[=s|d|l|m]
-		 Print (short, descriptive, long, or complete man) program invocation help, and exit.
+		 Print (short, descriptive, long, or complete man) program invocation help, and exit. If further arguments follow, individual help messages will be shown instead.
 .TP
 .B \-k, \-\-keysym\-press <arg>
 		 Execute simulated press of keysym at startup. Keysym can be prefixed by a repetition count number. Option can be specified multiple times to simulate multiple keystrokes.
@@ -424,6 +426,12 @@ logins, but any kind of a pseudo tty (xterm, ssh, screen, ...) will
 .B not
 work.
 .SH INVOCATION EXAMPLES
+.B fim \-\-help \-R \-B
+.fi 
+# Will ask for help for options \-R and \-B.
+.P
+.P
+
 .B fim media/ 
 .fi 
 # Will load files from the directory media.
