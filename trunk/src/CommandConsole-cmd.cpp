@@ -221,39 +221,31 @@ err:
 					return "The following help items matched \"" + ptn + "\":\n" + hstr;
 				else
 					return "No item matched \"" + ptn + "\"\n";
+					// note that '/' will be caught here as well..
 			}
 
 		{
+			std::ostringstream oss;
 			fim::string sws;
+			// consider using fim_shell_arg_escape or a modification of it here.
 			sws = fim_help_opt(item.c_str());
 			if( sws != FIM_CNS_EMPTY_STRING )
-				return sws+string("\n");
-		}
+				oss << sws << "\n";
 			if( Command *cmd = findCommand(item) )
-				return
-					string("\"")+(item+string("\" is a command, documented:\n"))+
-				      	cmd->getHelp()+string("\n");
+				oss << "\"" << item << "\" is a command, documented:\n" << cmd->getHelp() << "\n";
 			if(aliasRecall(fim::string(item))!=FIM_CNS_EMPTY_STRING)
-				return
-					string("\"")+(item+string("\" is an alias, and was declared as:\n"))+
-					get_alias_info(item);
+				oss << "\"" << item << "\" is an alias, and was declared as:\n" << get_alias_info(item) << "\n";
 			if( getBoundAction(kstr_to_key(item))!=FIM_CNS_EMPTY_STRING)
-				return
-					string("\"")+(item+string("\" key is bound to command: "))+
-						( fim_shell_arg_escape(getBoundAction(kstr_to_key(item))) + "\n" );
+				oss << "\"" << item << "\" key is bound to command: " << getBoundAction(kstr_to_key(item))<<"\n";
+			if(isVariable(item))
+				oss << "\"" << item << "\" is a variable, with value:\n" 
+					<< getStringVariable(item) << "\nand description:\n" 
+					<< fim_var_help_db_query(item) << "\n";
+			if( oss.str() != FIM_CNS_EMPTY_STRING )
+				return oss.str();
 			else
-			{
-				if(isVariable(item))
-				{
-					std::ostringstream oss;
-					oss << "\"" << item << "\" is a variable, with value:\n" 
-						<< getStringVariable(item) << "\nand description:\n" 
-						<< fim_var_help_db_query(item) << "\n";
-					return oss.str();
-				}
-				else
-					return item + ": no such command, alias, bound key or variable.\n";
-			}
+				return item + ": no such command, alias, bound key or variable.\n";
+		}
 		}
 		return "";
 	}
