@@ -191,6 +191,9 @@ fim_SOURCES  = $(BUILT_SOURCES) \
 	$(srcdir)/fim_string.cpp
 
 Command.o: Command.h
+Viewport.o: Viewport.h
+Browser.o: Browser.h
+Image.o: Image.h
 CommandConsole.o: defaultConfiguration.o
 CommandConsole-init.o: conf.h defaultConfiguration.o
 help.o: conf.h defaultConfiguration.o
