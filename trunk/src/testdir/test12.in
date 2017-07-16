@@ -1,3 +1,4 @@
+# scaling and aalib test.
 autocmd "" "" "";
 alias "aalib_fix" ""; # FIXME : autocmd "" "" "" should suffice, but it does not!
 #_autocmd_trace_stack=1;
