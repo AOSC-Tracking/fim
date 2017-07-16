@@ -967,7 +967,7 @@ fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ER
 		}
 		std::cout << "\n Please read the documentation distributed with the program.\n"
 			  << " For further help, consult the online help in fim (:" FIM_FLT_HELP "), and man fim (1), fimrc (5).\n"
-			  << " Online help also available invoking --help {help-item}.\n"
+			  << " Pre-configuration online help also available invoking --help {help-item}.\n"
 			  << " For bug reporting read the " FIM_CNS_BUGS_FILE " file.\n";
 done:
 	    std::exit(code);

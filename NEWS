@@ -3,8 +3,8 @@
 
                 Version 0.6-trunk
 
-# (r1395)
- * Command 'help' will also consider key bindings.
+# (r1395,r1396)
+ * Command 'help' will also consider key bindings, and give multiple answers if matching.
 # (r1389)
  * If further arguments follow switch --help, individual help messages will be shown.
 # (r1382)
