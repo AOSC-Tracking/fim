@@ -294,21 +294,24 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 	{
                 fimg_    = FIM_NULL;
                 img_     = FIM_NULL;
-		reset_viewport_props();
+		reset_view_props();
 		if( getGlobalIntVariable(FIM_VID_AUTOTOP ) )
 			setVariable(FIM_VID_AUTOTOP,getGlobalIntVariable(FIM_VID_AUTOTOP));
 	}
 
-	void Image::reset_viewport_props(void)
+	void Image::reset_view_props(void)
 	{
                 scale_   = FIM_CNS_SCALE_DEFAULT;
                 newscale_= FIM_CNS_SCALE_DEFAULT;
                 ascale_  = FIM_CNS_SCALE_DEFAULT;
                 angle_   = FIM_CNS_ANGLE_DEFAULT;
-		setVariable(FIM_VID_SCALE  ,scale_*100);
+                orientation_=FIM_NO_ROT;
+
+		setVariable(FIM_VID_SCALE  ,newscale_*100);
 		setVariable(FIM_VID_ASCALE ,ascale_);
 		setVariable(FIM_VID_ANGLE  ,angle_);
-                orientation_=FIM_NO_ROT;
+		setVariable(FIM_VID_NEGATED , 0);
+		setVariable(FIM_VID_DESATURATED, 0);
 		setVariable(FIM_VID_ORIENTATION, FIM_NO_ROT);
 	}
 
@@ -501,7 +504,6 @@ uhmpf:
 		}
 		else
 		       	page_=want_page;
-		//cout<<"loaded page "<< want_page<<" to "<<((int*)this)<<"\n";
 
 #ifdef FIM_NAMESPACES
 #if FIM_WANT_IMAGE_LOAD_TIME
@@ -513,12 +515,14 @@ uhmpf:
 		setVariable(FIM_VID_SHEIGHT, img_->i.height);
 		setVariable(FIM_VID_SWIDTH, img_->i.width );
 		setVariable(FIM_VID_FIM_BPP, getGlobalIntVariable(FIM_VID_FIM_BPP) );
+		setVariable(FIM_VID_FILENAME,fname_);
+
 		setVariable(FIM_VID_SCALE  ,newscale_*100);
 		setVariable(FIM_VID_ASCALE,ascale_);
 		setVariable(FIM_VID_ANGLE , angle_);
 		setVariable(FIM_VID_NEGATED , 0);
 		setVariable(FIM_VID_DESATURATED, 0);
-		setVariable(FIM_VID_FILENAME,fname_);
+		setVariable(FIM_VID_ORIENTATION, FIM_NO_ROT);
 #endif /* FIM_NAMESPACES */
 
 		setGlobalVariable(FIM_VID_HEIGHT ,fimg_->i.height);
@@ -856,13 +860,28 @@ fim_int Image::shall_mirror(void)const
 	(((automirror== 1)/*|(mirrored== 1)*/|(is_mirrored()))&& !((automirror==-1)/*|(mirrored==-1)*/|(me_mirrored==-1)));
 }
 
-fim_int Image::shall_flip(void)const
+fim_int Image::check_flip(void)const
 {
 	fim_int autoflip = getGlobalIntVariable(FIM_VID_AUTOFLIP);
 	fim_int am_flipped = getIntVariable(FIM_VID_FLIPPED);
 	//fim_int flipped = getGlobalIntVariable("v:" FIM_VID_FLIPPED);
 	return
 	(((autoflip == 1)/*|(flipped == 1)*/| is_flipped()) && !((autoflip ==-1)/*|(flipped ==-1)*/|(am_flipped==-1)));
+}
+
+fim_int Image::check_negated(void)const
+{
+	return getIntVariable(FIM_VID_NEGATED);
+}
+
+fim_int Image::check_desaturated(void)const
+{
+	return getIntVariable(FIM_VID_DESATURATED);
+}
+
+fim_int Image::check_autotop(void)const
+{
+	return getIntVariable(FIM_VID_AUTOTOP);
 }
 
 fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
@@ -876,7 +895,7 @@ fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 	imp=imagemode;
 
-	if(shall_flip())
+	if(check_flip())
 		*(imp++)=FIM_SYM_FLIPCHAR;
 	if(shall_mirror())
 		*(imp++)=FIM_SYM_MIRRCHAR;
@@ -1121,7 +1140,7 @@ fim::string Image::getInfo(void)
 	fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 	imp=imagemode;
 
-	if(shall_flip())
+	if(check_flip())
 		*(imp++)=FIM_SYM_FLIPCHAR;
 	if(shall_mirror())
 		*(imp++)=FIM_SYM_MIRRCHAR;
