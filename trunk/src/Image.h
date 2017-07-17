@@ -55,7 +55,7 @@ typedef float fim_pif_t;
 #endif /* FIM_USE_CXX11 */
 
 #ifdef FIM_NAMESPACES
-class Image:public Namespace
+class Image:protected Namespace
 #else /* FIM_NAMESPACES */
 class Image
 #endif /* FIM_NAMESPACES */
@@ -115,7 +115,7 @@ class Image
 
 	public:
         bool is_tiny(void)const;
-	void reset_viewport_props(void);
+	void reset_view_props(void);
 	void set_auto_props(fim_int autocenter, fim_int autotop);
 	virtual size_t byte_size(void)const;
 
@@ -171,7 +171,10 @@ class Image
 	fim_bool_t need_redraw(void)const{ return (redraw_ != FIM_REDRAW_UNNECESSARY); }
 	bool fetchExifToolInfo(const fim_char_t *fname);
 	fim_int shall_mirror(void)const;
-	fim_int shall_flip(void)const;
+	fim_int check_flip(void)const;
+	fim_int check_negated(void)const;
+	fim_int check_desaturated(void)const;
+	fim_int check_autotop(void)const;
 	void set_exif_extra(fim_int shouldrotate, fim_int shouldmirror, fim_int shouldflip);
 }; /* class Image */
 #if FIM_USE_CXX11

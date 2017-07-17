@@ -28,6 +28,12 @@ dump;
 variables;
 dump;
 #
+# need also something like:
+#variables 'g:';
+#dump;
+#variables 'i:';
+#dump;
+#
 #help 'bind';
 #dump;
 bind;

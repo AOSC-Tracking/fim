@@ -280,35 +280,27 @@ namespace fim
 
 	bool Viewport::shall_negate(void)const
 	{
-		return ((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->getIntVariable(FIM_VID_NEGATED)==0));
+		return ((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->check_negated()==0));
 	}
 
 	bool Viewport::shall_desaturate(void)const
 	{
-		return ((getGlobalIntVariable(FIM_VID_AUTODESATURATE)== 1)&&(image_->getIntVariable(FIM_VID_DESATURATED)==0));
+		return ((getGlobalIntVariable(FIM_VID_AUTODESATURATE)== 1)&&(image_->check_desaturated()==0));
 	}
 
 	bool Viewport::shall_mirror(void)const
 	{
-		fim_int automirror= getGlobalIntVariable(FIM_VID_AUTOMIRROR);
-		fim_int me_mirrored = image_->getIntVariable(FIM_VID_MIRRORED);
-		//fim_int mirrored = getIntVariable(FIM_VID_MIRRORED);
-		return 
-		(((automirror== 1)|(me_mirrored == 1)/*|(mirrored == 1)*/)&& !((automirror==-1)|(me_mirrored ==-1)/*|(mirrored ==-1)*/));
+		return image_->shall_mirror();
 	}
 
 	bool Viewport::shall_autotop(void)const
 	{
-		return /*getGlobalIntVariable(FIM_VID_AUTOTOP)   |*/ image_->getIntVariable(FIM_VID_AUTOTOP) /* | getIntVariable(FIM_VID_AUTOTOP)*/;
+		return /*getGlobalIntVariable(FIM_VID_AUTOTOP)   |*/ image_->check_autotop() /* | getIntVariable(FIM_VID_AUTOTOP)*/;
 	}
 
 	bool Viewport::shall_flip(void)const
 	{
-		fim_int autoflip = getGlobalIntVariable(FIM_VID_AUTOFLIP);
-		fim_int am_flipped = image_->getIntVariable(FIM_VID_FLIPPED);
-		//fim_int me_flipped = getIntVariable(FIM_VID_FLIPPED);
-		return 
-		(( autoflip == 1)|(am_flipped == 1)/*|(me_flipped == 1)*/&& !((autoflip ==-1)|(am_flipped ==-1)/*|(me_flipped =-1)*/));
+		return image_->check_flip();
 	}
 
 	bool Viewport::display(void)
@@ -548,7 +540,7 @@ namespace fim
         void Viewport::reset(void)
         {
 		if(image_)
-			image_->reset_viewport_props(),
+			image_->reset_view_props(),
 			image_->set_auto_props(1, 0);
 
 		should_redraw();
