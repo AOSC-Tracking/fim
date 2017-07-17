@@ -849,16 +849,20 @@ err:
 
 fim_int Image::shall_mirror(void)const
 {
+	fim_int automirror= getGlobalIntVariable(FIM_VID_AUTOMIRROR);
+	fim_int me_mirrored = getIntVariable(FIM_VID_MIRRORED);
+	//fim_int mirrored = getGlobalIntVariable("v:" FIM_VID_MIRRORED);
 	return
-	(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)== 1)|(is_mirrored()))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(getGlobalIntVariable("v:" FIM_VID_MIRRORED)==-1)|(getIntVariable(FIM_VID_MIRRORED)==-1)));
+	(((automirror== 1)/*|(mirrored== 1)*/|(is_mirrored()))&& !((automirror==-1)/*|(mirrored==-1)*/|(me_mirrored==-1)));
 }
 
 fim_int Image::shall_flip(void)const
 {
+	fim_int autoflip = getGlobalIntVariable(FIM_VID_AUTOFLIP);
+	fim_int am_flipped = getIntVariable(FIM_VID_FLIPPED);
+	//fim_int flipped = getGlobalIntVariable("v:" FIM_VID_FLIPPED);
 	return
-	(((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)== 1)|(is_flipped()))&&
-	!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(getGlobalIntVariable("v:" FIM_VID_FLIPPED)==-1)|(getIntVariable(FIM_VID_FLIPPED)==-1)));
+	(((autoflip == 1)/*|(flipped == 1)*/| is_flipped()) && !((autoflip ==-1)/*|(flipped ==-1)*/|(am_flipped==-1)));
 }
 
 fim::string Image::getInfoCustom(const fim_char_t * ifsp)const
@@ -1187,7 +1191,7 @@ labeldone:
 		return (FIM_MOD(
 		( eo +
 	       	 getIntVariable(FIM_VID_ORIENTATION)
-		+getGlobalIntVariable("v:" FIM_VID_ORIENTATION)
+		//+getGlobalIntVariable("v:" FIM_VID_ORIENTATION)
 		+getGlobalIntVariable(FIM_VID_ORIENTATION)
 		) ,4));
 	}
