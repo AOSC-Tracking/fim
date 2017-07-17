@@ -290,9 +290,11 @@ namespace fim
 
 	bool Viewport::shall_mirror(void)const
 	{
+		fim_int automirror= getGlobalIntVariable(FIM_VID_AUTOMIRROR);
+		fim_int me_mirrored = image_->getIntVariable(FIM_VID_MIRRORED);
+		//fim_int mirrored = getIntVariable(FIM_VID_MIRRORED);
 		return 
-		(((getGlobalIntVariable(FIM_VID_AUTOMIRROR)== 1)|(image_->getIntVariable(FIM_VID_MIRRORED)== 1)/*|(getIntVariable(FIM_VID_MIRRORED)== 1)*/)&&
-		!((getGlobalIntVariable(FIM_VID_AUTOMIRROR)==-1)|(image_->getIntVariable(FIM_VID_MIRRORED)==-1)/*|(getIntVariable(FIM_VID_MIRRORED)==-1)*/));
+		(((automirror== 1)|(me_mirrored == 1)/*|(mirrored == 1)*/)&& !((automirror==-1)|(me_mirrored ==-1)/*|(mirrored ==-1)*/));
 	}
 
 	bool Viewport::shall_autotop(void)const
@@ -302,10 +304,11 @@ namespace fim
 
 	bool Viewport::shall_flip(void)const
 	{
-		//return getGlobalIntVariable(FIM_VID_AUTOFLIP)  | image_->getIntVariable(FIM_VID_FLIPPED) | getIntVariable(FIM_VID_FLIPPED);
+		fim_int autoflip = getGlobalIntVariable(FIM_VID_AUTOFLIP);
+		fim_int am_flipped = image_->getIntVariable(FIM_VID_FLIPPED);
+		//fim_int me_flipped = getIntVariable(FIM_VID_FLIPPED);
 		return 
-		((getGlobalIntVariable(FIM_VID_AUTOFLIP)== 1)|(image_->getIntVariable(FIM_VID_FLIPPED)== 1)/*|(getIntVariable(FIM_VID_FLIPPED)== 1)*/&&
-		!((getGlobalIntVariable(FIM_VID_AUTOFLIP)==-1)|(image_->getIntVariable(FIM_VID_FLIPPED)==-1)/*|(getIntVariable(FIM_VID_FLIPPED)==-1)*/));
+		(( autoflip == 1)|(am_flipped == 1)/*|(me_flipped == 1)*/&& !((autoflip ==-1)|(am_flipped ==-1)/*|(me_flipped =-1)*/));
 	}
 
 	bool Viewport::display(void)
