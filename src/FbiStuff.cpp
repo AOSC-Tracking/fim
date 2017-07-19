@@ -62,6 +62,9 @@
 #define FIM_PR(X) 
 #endif /* FIM_FBISTUFF_INSPECT */
 
+#define FIM_DD_DEBUG() cc.displaydevice_->debug_
+#define FIM_FB_SWITCH_IF_NEEDED() cc.displaydevice_->switch_if_needed() /* only really needed with Linux framebuffer device */
+
 namespace fim
 {
 
@@ -748,7 +751,7 @@ op_resize_work(const struct ida_image *FIM_RSTRCT src, struct ida_rect *rect,
 	    h->inleft  = 0;
 	}
 #if 0
-	if (cc.displaydevice_->debug_)
+        if(FIM_DD_DEBUG())
 	    FIM_FBI_PRINTF("y:  %6.2f%%: %d/%d => %d/%d\n",
 		    weight*100,h->srcrow,src->height,line,h->height);
 #endif
@@ -861,7 +864,7 @@ op_resize_work(const struct ida_image *FIM_RSTRCT src, struct ida_rect *rect,
 		left     = 0;
 	    }
 #if 0
-	    if (cc.displaydevice_->debug_)
+	    if(FIM_DD_DEBUG())
 		FIM_FBI_PRINTF(" x: %6.2f%%: %d/%d => %d/%d\n",
 			weight*100,sx,src->width,dx,h->width);
 #endif
@@ -1313,7 +1316,7 @@ op_autocrop_init_(const struct ida_image *src, struct ida_rect *unused,
 
     fim_free(img.data);
 #if 0 /* Disabled 20151213 */
-    if (cc.displaydevice_->debug_)
+    if(FIM_DD_DEBUG())
 	FIM_FBI_PRINTF("y: %d-%d/%d  --  x: %d-%d/%d\n",
 		rect.y1, rect.y2, img.i.height,
 		rect.x1, rect.x2, img.i.width);
@@ -1685,7 +1688,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     /* open file */
     if (FIM_NULL == (fp = fim_fopen(filename, "r"))) {
 	//comment by dez, temporary
-	if(cc.displaydevice_->debug_)
+	if(FIM_DD_DEBUG())
 		FIM_FBI_PRINTF("open %s: %s\n",filename,strerror(errno));
 	return FIM_NULL;
     }
@@ -2206,7 +2209,7 @@ found_a_loader:	/* we have a loader */
 #endif /* FIM_READ_STDIN_IMAGE */
     if (FIM_NULL == data) {
 	if(vl)FIM_VERB_PRINTF("loader failed\n");
-	if(cc.displaydevice_->debug_)
+	if(FIM_DD_DEBUG())
 		FIM_FBI_PRINTF("loading %s [%s] FAILED\n",filename,loader->name);
 	free_image(img);
 	img=FIM_NULL;
@@ -2227,7 +2230,7 @@ found_a_loader:	/* we have a loader */
     }
 #else /* FIM_IS_SLOWER_THAN_FBI */
     for (y = 0; y < img->i.height; y++) {
-	cc.displaydevice_->switch_if_needed();
+	FIM_FB_SWITCH_IF_NEEDED();
 	loader->read(img->data + img->i.width * 3 * y, y, data);
     }
 #endif /* FIM_IS_SLOWER_THAN_FBI */
@@ -2346,7 +2349,7 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     dest->data = fim_pm_alloc(dest->i.width, dest->i.height);
     /* dez: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice_->switch_if_needed();
+	FIM_FB_SWITCH_IF_NEEDED();
 	desc_p->work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -2423,7 +2426,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     dest->data = fim_pm_alloc(dest->i.width, dest->i.height, true);
     /* dez: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice_->switch_if_needed();
+	FIM_FB_SWITCH_IF_NEEDED();
 	desc_rotate.work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -2554,7 +2557,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     else
 #endif /* FIM_OPTIMIZATION_20120129 */
     for (y = 0; y < dest->i.height; y++) {
-	cc.displaydevice_->switch_if_needed();
+	FIM_FB_SWITCH_IF_NEEDED();
 	desc_resize.work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
 			 y, data);
@@ -2627,9 +2630,7 @@ err:
 
 	int FbiStuff::fim_filereading_debug(void)
 	{
-		return cc.displaydevice_ ?
-			cc.displaydevice_->debug_:
-			0;
+		return FIM_DD_DEBUG();
 	}
 } /* namespace fim */
 
