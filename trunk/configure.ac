@@ -1062,7 +1062,7 @@ AC_ARG_ENABLE(jasper, AC_HELP_STRING([--enable-jasper], [Turns on JPEG-2000 file
 dnl ================================================================================
 
 AC_CHECK_LIB(aa, aa_getfirst,fim_cv_libaa=yes,fim_cv_libaa=no)
-AC_ARG_ENABLE(aa, AC_HELP_STRING([--disable-aa], [Ascii Art (-o aa) support (via aalib)]), [if test x$enableval != xno; then fim_cv_libaa=yes; fi],[fim_cv_libaa=yes;])
+AC_ARG_ENABLE(aa, AC_HELP_STRING([--disable-aa], [Ascii Art (-o aa) support (via aalib)]), [if test x$enableval != xno; then fim_cv_libaa=yes; else fim_cv_libaa=no; fi],[fim_cv_libaa=yes;])
 
 if test x$fim_cv_libaa != xno; then
 	if test x$ac_cv_lib_aa_aa_getfirst = xyes; then
@@ -1089,9 +1089,10 @@ if test x$fim_cv_libaa != xno; then
 	fi
 else
 	fim_cv_aalib=no
-        AC_MSG_ERROR([Sorry, it does not seem like aalib is installed or detectable.
-	Please run --disable-aa or install aalib in a system-wide directory instead.
-	])
+	AC_MSG_WARN([Ascii Art (-o aa) support disabled.])
+        dnl AC_MSG_ERROR([Sorry, it does not seem like aalib is installed or detectable.
+	dnl Please run --disable-aa or install aalib in a system-wide directory instead.
+	dnl ])
 fi
 
 dnl ================================================================================

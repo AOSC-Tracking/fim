@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1413)
+ * fix: configure would fail on --disable-aa and absent aalib.
 # (r1403)
  * Configure has --enable-seek-magic by default. And is more verbose.
 # (r1395,r1396)
