@@ -3,6 +3,9 @@
 
                 Version 0.6-trunk
 
+# (r1417)
+ * framebuffer console switch off while loading: configure with the 
+   --enable-framebuffer-switch-while-loading switch to have it back.
 # (r1413)
  * fix: configure would fail on --disable-aa and absent aalib.
 # (r1403)
