@@ -1093,7 +1093,8 @@ nostat:
 #endif /* FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK */
 		{
 			/* Note: Following circular links may cause memory exhaustion.  */
-			fim_fn_t pn = dn + de->d_name;
+			fim_fn_t pn = dn;
+		       	pn += de->d_name;
 			if( is_dir( pn ) )
 			{
 #ifdef FIM_RECURSIVE_DIRS
@@ -1238,11 +1239,8 @@ rret:
 #endif /* FIM_READ_BLK_DEVICES */
 			)
 			{
-				/*
-				 * i am not fully sure this is effective
-				 * */
 				if(!lib)
-					commandConsole_.set_status_bar(fim::string(nf + " is not a regular file!").c_str(), "*");
+					commandConsole_.set_status_bar((nf+" is not a regular file!").c_str(), "*");
 				goto ret;
 			}
 #endif /* FIM_CHECK_FILE_EXISTENCE */

@@ -117,11 +117,17 @@ namespace fim
 
 	string::string(void):std::string(){}
 
-	string string::operator+(const string s)const
+	string string::operator+(const char * s)const
 	{
 		string res(*this);
-		res+=s.c_str();
+		if(s)
+			res+=s;
 		return string(res);
+	}
+
+	string string::operator+(const string s)const
+	{
+		return (*this)+s.c_str();
 	}
 
 	bool string::re_match(const fim_char_t*r)const
