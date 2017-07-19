@@ -55,7 +55,7 @@ typedef float fim_pif_t;
 #endif /* FIM_USE_CXX11 */
 
 #ifdef FIM_NAMESPACES
-class Image:private Namespace
+class Image:public Namespace
 #else /* FIM_NAMESPACES */
 class Image
 #endif /* FIM_NAMESPACES */
