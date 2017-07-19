@@ -418,6 +418,8 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	std::vector<const char *> fnpv_; /* file names pointers vector */
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 	fim_err_t update_font_size(void);
+	public:
+	void switch_if_needed(void);
 };
 }
 

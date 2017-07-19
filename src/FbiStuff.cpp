@@ -63,11 +63,11 @@
 #endif /* FIM_FBISTUFF_INSPECT */
 
 #define FIM_DD_DEBUG() cc.displaydevice_->debug_
-#if defined(FIM_FRAMEBUFFER_DEVICE_H) && defined(FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING)
-#define FIM_FB_SWITCH_IF_NEEDED() cc.displaydevice_->switch_if_needed() /* only needed in Linux framebuffer device on computers loading files so slowly that we might want to switch console in between */
-#else  /* FIM_FRAMEBUFFER_DEVICE_H FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING */
+#if FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING
+#define FIM_FB_SWITCH_IF_NEEDED() cc.switch_if_needed() 
+#else  /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
 #define FIM_FB_SWITCH_IF_NEEDED() /* */
-#endif /* FIM_FRAMEBUFFER_DEVICE_H FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING */
+#endif /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
 
 namespace fim
 {
