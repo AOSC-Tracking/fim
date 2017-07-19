@@ -907,7 +907,6 @@ AC_ARG_ENABLE(aa, AC_HELP_STRING([--enable-aa], [Turns on aalib support (EXPERIM
 		if test "x$LIBAA_CONFIG" = "xno"; then
 			# uhm
 	      		AC_MSG_WARN([***  no aalib-config ? ***])
-			fim_handle_png=no
 			fim_cv_aalib=no
 		else
 			CXXFLAGS="$CXXFLAGS `$LIBAA_CONFIG --cflags`"
