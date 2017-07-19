@@ -1077,7 +1077,6 @@ if test x$fim_cv_libaa != xno; then
 		if test "x$LIBAA_CONFIG" = "xno"; then
 			# uhm
 	      		AC_MSG_WARN([***  no aalib-config ? ***])
-			fim_handle_png=no
 			fim_cv_aalib=no
 		else
 			CXXFLAGS="$CXXFLAGS `$LIBAA_CONFIG --cflags`"
