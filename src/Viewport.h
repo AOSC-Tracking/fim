@@ -46,8 +46,8 @@ class Viewport:public ViewportState
         void reset(void);
         void steps_reset(void);
 	public:
-	Viewport(CommandConsole& c ,const Rect &rect); 
-	Viewport(const Viewport& rhs);
+	explicit Viewport(CommandConsole& c ,const Rect &rect); 
+	explicit Viewport(const Viewport& rhs);
 	~Viewport(void);
 	private:
 	Viewport& operator= (const Viewport&rhs);

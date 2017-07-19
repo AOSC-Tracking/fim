@@ -62,8 +62,8 @@ class Image
 {
 	public:
 
-	Image(const fim_char_t *fname, FILE *fd=FIM_NULL, fim_page_t page = 0);
-	Image(const fim_char_t *fname, Foo& foo, FILE *fd=FIM_NULL);
+	explicit Image(const fim_char_t *fname, FILE *fd=FIM_NULL, fim_page_t page = 0);
+	explicit Image(const fim_char_t *fname, Foo& foo, FILE *fd=FIM_NULL);
 	~Image(void);
 
 	int n_pages(void)const;

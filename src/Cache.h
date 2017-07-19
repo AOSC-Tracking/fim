@@ -144,11 +144,11 @@ class PACA	/* Parallel Cache */
 		if(dpc) std::cout << __FUNCTION__ << ": "<< rid << " ... done\n";
 	}
 
-	PACA(const PACA & paca) : cache_(paca.cache_)
+	explicit PACA(const PACA & paca) : cache_(paca.cache_)
        	{
 		if(dpc) std::cout << __FUNCTION__ << "\n";
 	}
-	PACA(Cache& cache):cache_(cache) { }
+	explicit PACA(Cache& cache):cache_(cache) { }
 
 	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page=0)
 	{
