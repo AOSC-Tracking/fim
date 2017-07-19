@@ -1313,6 +1313,16 @@ AC_ARG_ENABLE(scan-consolefonts, AC_HELP_STRING([--enable-scan-consolefonts], [F
 ],[ fim_cv_scan_consolefonts=yes ]
 )
 dnl ==================
+fim_cv_fb_console_switch_while_loading=no
+AC_ARG_ENABLE(framebuffer-switch-while-loading, AC_HELP_STRING([--enable-framebuffer-switch-while-loading], [Fim will be capable of redrawing while switching framebuffer console (makes only sense on very slow systems).]),
+[       if test x$enableval = xyes; then
+		fim_cv_fb_console_switch_while_loading=yes
+	else
+                fim_cv_fb_console_switch_while_loading=no
+        fi
+],[ fim_cv_fb_console_switch_while_loading=no ]
+)
+dnl ==================
 fim_cv_seek_magic=yes
 AC_ARG_ENABLE(seek-magic, AC_HELP_STRING([--disable-seek-magic], [Fim will be capable to seek on a specified magic string.]),
 [       if test x$enableval = xno; then
@@ -1732,6 +1742,12 @@ dnl ==================
     	fi
 
 dnl ==================
+    AH_TEMPLATE([FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING])
+            if test x$fim_cv_fb_console_switch_while_loading = xyes ; then
+    		AC_DEFINE([FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING])
+    	fi
+
+dnl ==================
     AH_TEMPLATE([FIM_WANT_SEEK_MAGIC])
             if test x$fim_cv_seek_magic = xyes ; then
     		AC_DEFINE([FIM_WANT_SEEK_MAGIC])
@@ -1935,6 +1951,7 @@ dnl	internal windowing system           : ${have_windows:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
         seek magic signatures               :*${fim_cv_seek_magic:-no}
+        framebuffer console load switchable :*${fim_cv_fb_console_switch_while_loading:-no}
         hardcoded font magnifying factor    : ${fim_cv_want_font_magnify_factor}
 	customizable status bar             : ${fim_cv_custom_status_bar:-no}
 	use C++ standard (98/11/14/17)      : ${fim_cxx_standard}
