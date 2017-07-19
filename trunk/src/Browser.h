@@ -181,9 +181,6 @@ class flist_t : public std::vector<fim::fle_t>
 	}
 };
 
-/*
- * A Browser object oversees image browsing.
- */
 class Browser
 #ifdef FIM_NAMESPACES
 :public Namespace
@@ -257,7 +254,7 @@ class Browser
 #else /* FIM_USE_CXX11 */
 	private:
 	Browser& operator= (const Browser& rhs){return *this;/* a disabled copy constructor */}
-	Browser(const Browser& rhs):
+	explicit Browser(const Browser& rhs):
 		Namespace(rhs),
 		flist_(args_t()),
 #if FIM_WANT_PIC_LBFL

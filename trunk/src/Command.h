@@ -37,10 +37,10 @@ class Command
 	fim::string help_;
 	public:
 	inline const fim_cmd_id & cmd(void){return cmd_;}
-	Command(fim_cmd_id cmd, fim::string help, Browser *b=FIM_NULL, fim::string(Browser::*bf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(BrowserT) {}
-	Command(fim_cmd_id cmd, fim::string help, CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(CommandConsoleT) {}
+	explicit Command(fim_cmd_id cmd, fim::string help, Browser *b=FIM_NULL, fim::string(Browser::*bf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(BrowserT) {}
+	explicit Command(fim_cmd_id cmd, fim::string help, CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(CommandConsoleT) {}
 #ifdef FIM_WINDOWS
-	Command(fim_cmd_id cmd, fim::string help, FimWindow *w=FIM_NULL, fim::string(FimWindow::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(WindowT) {}
+	explicit Command(fim_cmd_id cmd, fim::string help, FimWindow *w=FIM_NULL, fim::string(FimWindow::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(WindowT) {}
 #endif /* FIM_WINDOWS */
 
 	const fim::string & getHelp(void)const{return help_;}

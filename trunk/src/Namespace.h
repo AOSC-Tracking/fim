@@ -91,7 +91,7 @@ namespace fim
 		virtual size_t byte_size(void)const = 0;
 		fim_err_t assign_ns(const Namespace& ns);
 
-		Namespace(
+		explicit Namespace(
 #ifndef FIM_INDEPENDENT_NAMESPACE
 				CommandConsole *rnsp = FIM_NULL,
 #endif /* FIM_INDEPENDENT_NAMESPACE */

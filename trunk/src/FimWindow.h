@@ -31,11 +31,6 @@
 
 #define FIM_DISABLE_WINDOW_SPLITTING 1
 
-/*
- *	This code is still experimental and programmed in great hurry.
- *	FIXME
- */
-
 namespace fim
 {
 
@@ -157,7 +152,7 @@ class FimWindow
 	 it is hust defined to make -Weffc++ happy
 	 so keep this private!
 	*/
-	FimWindow(const FimWindow& root);
+	explicit FimWindow(const FimWindow& root);
 //#endif /* FIM_UNDEFINED */
 	bool isleaf(void)const;
 	bool isvalid(void)const;

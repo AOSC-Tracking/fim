@@ -37,11 +37,6 @@ namespace fim
 		string();
 		~string(){}
 
-		/*
-			 if not, exception:
-			 terminate called after throwing an instance of 'std::logic_error'
-			 what():  basic_string::_S_construct FIM_NULL not valid
-		*/
 		string(const std::string&rhs):std::string(rhs){}
 		string(const fim_char_t*s):std::string(s?s:""){}
 
@@ -54,9 +49,6 @@ namespace fim
 		string(int * i);
 		string(size_t i);
 
-/*
- 		the following two operators are very nice to use but pose unexpected problems.		
-*/
  		operator fim_int  (void)const;
 #if FIM_WANT_LONG_INT
  		operator int  (void)const;
