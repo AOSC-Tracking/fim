@@ -140,6 +140,7 @@ class FramebufferDevice:public DisplayDevice
 
 	int ys_ ;
 	int xs_ ;
+	fim_bool_t debug_;
 
 	//public:
 	void (*fs_setpixel)(void *ptr, unsigned int color);
@@ -337,9 +338,7 @@ class FramebufferDevice:public DisplayDevice
 
 	void switch_if_needed(void)
 	{
-		//fim's
-		if (switch_last_ != fb_switch_state_)
-		    console_switch(true);
+		handle_console_switch();
 	}
 
 #define FIM_FBI_TRUE            1
@@ -522,8 +521,8 @@ void init_one(int32_t *lut, int bits, int shift)
 
 	fim_bool_t handle_console_switch(void) FIM_OVERRIDE
 	{
-		if (switch_last_ == fb_switch_state_)return false;
-
+		if (switch_last_ == fb_switch_state_)
+			return false;
 		console_switch(true);
 		return true;
         }

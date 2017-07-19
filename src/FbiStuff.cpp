@@ -62,7 +62,7 @@
 #define FIM_PR(X) 
 #endif /* FIM_FBISTUFF_INSPECT */
 
-#define FIM_DD_DEBUG() cc.displaydevice_->debug_
+#define FIM_DD_DEBUG() FbiStuff::want_fbi_style_debug()
 #if FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING
 #define FIM_FB_SWITCH_IF_NEEDED() cc.switch_if_needed() 
 #else  /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
@@ -2635,6 +2635,11 @@ err:
 	int FbiStuff::fim_filereading_debug(void)
 	{
 		return FIM_DD_DEBUG();
+	}
+
+	bool FbiStuff::want_fbi_style_debug(void)
+	{
+		return FIM_WANT_FBI_INNER_DIAGNOSTICS;
 	}
 } /* namespace fim */
 
