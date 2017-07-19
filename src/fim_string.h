@@ -65,6 +65,7 @@ namespace fim
 		operator const char*(void)const{return c_str();}
 		operator bool (void)const{return c_str()!=NULL;}
 
+		string operator+(const char * s)const;
 		string operator+(const string rhs)const;
 		/* copy constructor */
 		string(const string& rhs);

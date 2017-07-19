@@ -30,6 +30,10 @@
 
 #define FIM_INTERPRETER_ERROR "Unexpected !\n"
 
+#ifdef DBG
+#undef DBG
+#endif /* DBG */
+
 #if 0
 #define DBG(X) if(dv)std::cout<<__LINE__<<":"<<X;
 #else
