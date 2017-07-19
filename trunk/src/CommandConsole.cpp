@@ -2460,4 +2460,11 @@ ret:
 		}
 		return FIM_CNS_EMPTY_RESULT;
 	}
+
+	void CommandConsole::switch_if_needed(void)
+	{
+#if FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING
+		displaydevice_->switch_if_needed();
+#endif /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
+	}
 }
