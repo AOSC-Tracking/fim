@@ -172,7 +172,7 @@ class CommandConsole
 	DummyDisplayDevice dummydisplaydevice_;
 
 	friend class MiniConsole; // MiniConsole uses displaydevice_ intensively.
-	friend class FbiStuff; // The dependency is on switch_if_needed and debug_ .
+	friend class FbiStuff; // The dependency is on debug_ .
 	friend class Viewport; // cleaning up this is bound to cleaning up use of CommandConsole in Viewport.
 	DisplayDevice *displaydevice_;
 	fim::string oldcwd_;
