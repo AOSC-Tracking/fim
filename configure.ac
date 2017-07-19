@@ -1057,7 +1057,6 @@ dnl ============================================================================
 
 AC_CHECK_LIB(aa, aa_getfirst,fim_cv_libaa=yes,fim_cv_libaa=no)
 AC_ARG_ENABLE(aa, AC_HELP_STRING([--disable-aa], [Ascii Art (-o aa) support (via aalib)]), [if test x$enableval != xno; then fim_cv_libaa=yes; else fim_cv_libaa=no; fi],[fim_cv_libaa=yes;])
-echo guarda -"$fim_cv_libaa"-
 if test x$fim_cv_libaa != xno; then
 	if test x$ac_cv_lib_aa_aa_getfirst = xyes; then
       		AC_MSG_NOTICE([Enabling aalib driver.])
