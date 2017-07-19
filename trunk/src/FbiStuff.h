@@ -68,6 +68,7 @@ static struct ida_image* scale_image(const struct ida_image *src, float scale, f
 #endif /* FIM_WANT_MIPMAPS */
 	);
 static int fim_filereading_debug(void);
+static bool want_fbi_style_debug(void);
 };
 
 // filter.h

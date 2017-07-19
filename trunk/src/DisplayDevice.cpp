@@ -34,7 +34,6 @@
 	,f_(FIM_NULL)
 	,fontname_(FIM_NULL)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	,debug_(false)
 	,redraw_(FIM_REDRAW_UNNECESSARY)
 	{
 		const fim_char_t *line;
@@ -82,11 +81,10 @@
 			        limit.tv_usec = 0;
 			        rc = select(fdmax, &set, FIM_NULL, FIM_NULL,
 			                    (0 != timeout && !paused) ? &limit : FIM_NULL);
-				if(handle_console_switch())	/* this may have side effects, though */
+				if(handle_console_switch())
 				{
-					r=0;	/* warning : originally a 'continue' in a loop ! */
+					r=0;	/* originally a 'continue' in a loop */
 					goto ret;
-
 				}
 				
 				if (FD_ISSET(cc.fim_stdin_,&set))

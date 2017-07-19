@@ -42,7 +42,6 @@ class DisplayDevice
 	public:
 	struct fs_font *f_;
 	const fim_char_t* fontname_;
-	fim_bool_t debug_;// really, only for making happy fbdev
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	DisplayDevice(MiniConsole& mc_);
