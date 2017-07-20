@@ -193,8 +193,8 @@ class Image FIM_FINAL
 #if FIM_WANT_PIC_LVDN
 	class VNamespace FIM_FINAL: public Namespace
 	{
-		friend class ImgDscs; // so that ImgDscs is allowed to setVariable()
 	       	public:
+		const Var & setVariable(const fim_var_id& varname,const Var& value){return Namespace::setVariable(varname,value);}
 		size_t byte_size(void)const
 		{
 		       	size_t bs=0;
