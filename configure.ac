@@ -1950,7 +1950,7 @@ dnl	internal windowing system           : ${have_windows:-no}
 	hardcoded PSF font (FBFONT=fim://)  : ${have_hardcoded_font:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
-        seek magic signatures               :*${fim_cv_seek_magic:-no}
+        seek magic signatures               : ${fim_cv_seek_magic:-no}
         framebuffer console load switchable :*${fim_cv_fb_console_switch_while_loading:-no}
         hardcoded font magnifying factor    : ${fim_cv_want_font_magnify_factor}
 	customizable status bar             : ${fim_cv_custom_status_bar:-no}
