@@ -564,7 +564,7 @@ public:
 				vvs.insert(li->second.getStringVariable(id));
 		if(vvs.size())
 			vls += string("there are "),
-			vls += string(Var((fim_int)vvs.size())),
+			vls += string(Var(static_cast<fim_int>(vvs.size()))),
 			vls += string(" values for variable "),
 			vls += id,
 			vls += string(":");
