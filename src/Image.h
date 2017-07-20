@@ -54,10 +54,10 @@ enum fim_tii_t /* test image index  */ {
 typedef float fim_pif_t;
 #endif /* FIM_USE_CXX11 */
 
+class Image FIM_FINAL 
 #ifdef FIM_NAMESPACES
-class Image:public Namespace
+:public Namespace
 #else /* FIM_NAMESPACES */
-class Image
 #endif /* FIM_NAMESPACES */
 {
 	public:
@@ -191,7 +191,7 @@ class Image
 #endif /* FIM_USE_CXX11 */
 } /* namespace fim */
 #if FIM_WANT_PIC_LVDN
-	class VNamespace: public Namespace
+	class VNamespace FIM_FINAL: public Namespace
 	{
 		friend class ImgDscs; // so that ImgDscs is allowed to setVariable()
 	       	public:

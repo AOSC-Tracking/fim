@@ -35,7 +35,7 @@
 namespace fim
 {
 	enum fim_vtc { FimTypeInt='i', FimTypeDefault='i', FimTypeFloat='f', FimTypeString='s', FimTypeWrong='!' };
-class Var
+class Var FIM_FINAL
 {
 	typedef int fim_var_t;
 	fim_var_t type;

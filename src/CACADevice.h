@@ -26,7 +26,7 @@
 #include <caca0.h>
 
 /*  20080504 this CACA driver doesn't work yet */
-class CACADevice:public DisplayDevice 
+class CACADevice FIM_FINAL:public DisplayDevice 
 {
 	private:
 	unsigned int r[256], g[256], b[256], a[256];

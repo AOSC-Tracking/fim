@@ -28,7 +28,7 @@
 
 namespace fim
 {
-class CommandConsole
+class CommandConsole FIM_FINAL
 #if FIM_WANT_BENCHMARKS
 	: public Benchmarkable,
 #endif /* FIM_WANT_BENCHMARKS */

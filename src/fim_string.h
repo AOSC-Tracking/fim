@@ -31,7 +31,7 @@
 
 namespace fim
 {
-	class string:public std::string
+	class string /*FIM_FINAL*/ :public std::string
 	{
 		public:
 		string();

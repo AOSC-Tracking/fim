@@ -31,7 +31,7 @@ namespace fim
 	typedef fim::string fim_cmd_id; // command id
 	typedef fim::string fim_cls; // command line statement
 #endif /* FIM_USE_CXX11 */
-class Command
+class Command FIM_FINAL
 {
 	fim_cmd_id cmd_;
 	fim::string help_;

@@ -22,7 +22,7 @@
 #define FIM_DUMMYDISPLAY_DEVICE_H
 
 
-class DummyDisplayDevice:public DisplayDevice
+class DummyDisplayDevice FIM_FINAL:public DisplayDevice
 {
 	/*
 	 * The generalization of a Fim output device.

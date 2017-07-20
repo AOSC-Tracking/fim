@@ -26,7 +26,7 @@
 #include <X11/Xlib.h>
 #include <Imlib2.h>
 
-class Imlib2Device:public DisplayDevice 
+class Imlib2Device FIM_FINAL:public DisplayDevice 
 {
 	private:
    	XEvent ev_;
