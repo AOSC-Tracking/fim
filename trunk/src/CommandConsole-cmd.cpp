@@ -64,7 +64,6 @@ err:
 		 *	this is the interactive bind command
 		 *	the user supplies a string with the key combination, and if valid, its keycode
 		 *	is associated to the user supplied action (be it a command, alias, etc..)
-		 *	FIX ME
 		 */
 		const fim_char_t* kerr=FIM_FLT_BIND " : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
 		const fim_char_t* kstr=FIM_NULL;
@@ -81,7 +80,7 @@ err:
 			{
 				for (auto bi=bindings_.begin(); bi != bindings_.end(); ++bi)
 					bindings_[bi->first]=args[1];
-				return "";
+				return "Re-bound all keys to " + args[1];
 			}
 			else
 #endif
@@ -121,7 +120,7 @@ err:
 	{
 		/*
 		 * 	unbinds the action eventually bound to the first key name specified in args..
-		 *	IDEAS : multiple unbindings ?
+		 * 	what about multiple unbindings ?
 		 *	maybe you should made surjective the binding_keys mapping..
 		 */
 		if(args.size()!=1)

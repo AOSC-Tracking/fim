@@ -109,7 +109,7 @@ namespace fim
 				if(vi!=variables_.end())
 					return vi->second;
 				else
-			       		return Var((fim_int)FIM_CNS_EMPTY_INT_VAL);
+			       		return Var();
 			}
 		}
 

@@ -43,8 +43,8 @@ class CommandConsole FIM_FINAL
 	private:
 	FontServer fontserver_;
 
-	fim_cls postInitCommand_;
-	fim_cls preConfigCommand_;
+	fim_cls postInitCommand_;  // Executed after preConfigCommand_.
+	fim_cls preConfigCommand_; // Executed before postInitCommand_.
 	fim_cls postExecutionCommand_;
 
 	fim_int show_must_go_on_;
@@ -239,15 +239,6 @@ class CommandConsole FIM_FINAL
 	fim_cxr fcmd_help(const args_t& args);
 	fim_cxr fcmd_quit(const args_t& args);
 	fim_cxr fcmd__stdout(const args_t& args);
-	/* naming this stdout raises problems on some systems 
-	   e.g.: 
-# uname -a
-Darwin hostname 7.9.0 Darwin Kernel Version 7.9.0: Wed Mar 30 20:11:17 PST 2005; root:xnu/xnu-517.12.7.obj~1/RELEASE
-# gcc -v
-Reading specs from /usr/libexec/gcc/darwin/ppc/3.3/specs
-Thread model: posix
-gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
-*/
 	fim_cxr fcmd_foo (const args_t& args);
 	fim_cxr fcmd_status(const args_t& args);
 	fim_err_t executeFile(const fim_char_t *s);
@@ -358,8 +349,8 @@ gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 	public:
 
 	void printHelpMessage(const fim_char_t *pn="fim")const;
-	void appendPostInitCommand(const fim_char_t* c);
-	void appendPreConfigCommand(const fim_char_t* c);
+	void appendPostInitCommand(const fim::string& c);
+	void appendPreConfigCommand(const fim::string& c);
 	void appendPostExecutionCommand(const fim::string& c);
 	bool appendedPostInitCommand(void)const;
 	bool appendedPreConfigCommand(void)const;

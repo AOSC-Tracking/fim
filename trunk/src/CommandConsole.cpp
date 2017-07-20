@@ -105,9 +105,6 @@ namespace fim
 	{
 		/*
 		 * binds keycode c to the action specified in binding
-
-		 * note : the binding translation map is used as a necessary
-		 * indirection...
 		 */
 		fim::string rs("keycode ");
 		string ksym(key_syms_[c]);
@@ -115,7 +112,7 @@ namespace fim
 		if( ksym != FIM_CNS_EMPTY_STRING )
 			ksym = " (keysym \"" + ksym + "\")";
 
-		rs+=string((int)c);
+		rs+=string(static_cast<fim_int>(c));
 		rs+=ksym;
 		if(bindings_.find(c) != bindings_.end())
 			rs+=" successfully reassigned to \"";
@@ -156,8 +153,6 @@ namespace fim
 	{
 		/*
 		 * 	unbinds the action eventually bound to the first key name specified in args..
-		 *	IDEAS : multiple unbindings ?
-		 *	maybe you should made surjective the binding_keys mapping..
 		 */
 		fim_key_t key=FIM_SYM_NULL_KEY;
 #ifdef FIM_WANT_RAW_KEYS_BINDING
@@ -188,13 +183,13 @@ namespace fim
 
 		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
 		{
-			/* FIXME: should move this functionality to an ad-hoc search routine */
 			if(bi->second==binding)
 			{
 				key = bi->first;	
 				goto ret;
 			}
 		}
+
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
 		{
 			if(ai->second.first==binding)
@@ -222,13 +217,13 @@ ret:		return key;
 		 * unbinds the action eventually bound to the key combination code c
 		 */
 		std::ostringstream oss;
+		bindings_t::const_iterator bi=bindings_.find(c);
 
-		if(bindings_.find(c) != bindings_.end())
+		if( bi != bindings_.end() )
 		{
-			bindings_.erase(c);
+			bindings_.erase(bi);
 			oss << c << ": successfully unbound.\n";
-			if( bindings_help_.find(c) != bindings_help_.end() )
-				bindings_help_.erase(c);
+			bindings_help_.erase(c); // if key c existent, erases associated help msg.
 		}
 		else
 			oss << c << ": there is not such binding.\n";
@@ -1807,7 +1802,7 @@ ok:
 		return cmd;
 	}
 #endif /* FIM_RECORDING */
-	void CommandConsole::appendPostInitCommand(const fim_char_t* c)
+	void CommandConsole::appendPostInitCommand(const fim::string& c)
 	{
 		/* Passed via -c.
 		 * Executed right before a normal execution of Fim
@@ -1816,11 +1811,9 @@ ok:
 		postInitCommand_+= c;
 	}
 
-	void CommandConsole::appendPreConfigCommand(const fim_char_t* c)
+	void CommandConsole::appendPreConfigCommand(const fim::string& c)
 	{
-		/* Passed via -C.
-		 * Executed much before postInitCommand_.
-		 * */
+		/* Passed via -C. */
 		preConfigCommand_+= c;
 	}
 

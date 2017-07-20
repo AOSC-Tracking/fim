@@ -129,7 +129,7 @@ class Var FIM_FINAL
 	fim::string setString(const fim::string& s){type=FimTypeString;this->s=s;return this->s;}
 	int getType(void)const{return type;}
 	fim_int getInt(void)const{return(type==FimTypeInt)?i:
-		(type==FimTypeFloat?((fim_int)(f)):
+		(type==FimTypeFloat?(static_cast<fim_int>(f)):
 		 (type==FimTypeString?(fim_atoi(s.c_str())):0)
 		 );
 		}
