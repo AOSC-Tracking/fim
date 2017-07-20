@@ -52,7 +52,7 @@ extern struct list_head loaders;
 namespace fim
 {
 
-class FbiStuff{
+class FbiStuff FIM_FINAL {
 public:
 static void free_image(struct ida_image *img);
 static FILE* fim_execlp(const fim_char_t *arg, ...);/* new */

@@ -29,10 +29,11 @@
 
 namespace fim
 {
+class Viewport FIM_FINAL
 #ifdef FIM_NAMESPACES
-class Viewport:public Namespace,public ViewportState
+       	:public Namespace,public ViewportState
 #else /* FIM_NAMESPACES */
-class Viewport:public ViewportState
+	:public ViewportState
 #endif /* FIM_NAMESPACES */
 {
 	private:

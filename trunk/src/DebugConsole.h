@@ -30,7 +30,7 @@
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 namespace fim
 {
-	class MiniConsole
+	class MiniConsole FIM_FINAL
 #ifdef FIM_NAMESPACES
 	:public Namespace
 #endif /* FIM_NAMESPACES */

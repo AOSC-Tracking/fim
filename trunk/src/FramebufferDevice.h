@@ -59,7 +59,7 @@ struct DEVS {
     const fim_char_t *ttynr;
 };
 
-class FramebufferDevice:public DisplayDevice 
+class FramebufferDevice FIM_FINAL:public DisplayDevice 
 {
 	long     red_mult_, green_mult_;
 	long     red_dither_[256]  FIM_ALIGNED;

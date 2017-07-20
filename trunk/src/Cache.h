@@ -39,10 +39,10 @@ typedef time_t fim_time_t;
 
 namespace fim
 {
+class Cache FIM_FINAL
 #ifdef FIM_NAMESPACES
-class Cache:private Namespace
+	:private Namespace
 #else
-class Cache
 #endif /* FIM_NAMESPACES */
 {
 #if FIM_USE_CXX11

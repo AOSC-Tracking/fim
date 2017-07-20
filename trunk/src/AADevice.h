@@ -30,7 +30,7 @@
  * */
 #define FIM_AALIB_DRIVER_DEBUG 0
 
-class AADevice:public DisplayDevice 
+class AADevice FIM_FINAL:public DisplayDevice 
 {
 	int allow_windowed;
 	private:

@@ -47,7 +47,7 @@ typedef struct stat fim_stat_t;
 typedef int fim_stat_t;
 #endif /* FIM_WANT_FLIST_STAT */
 
-class fle_t : public fim_fn_t /* file list element */
+class fle_t FIM_FINAL : public fim_fn_t /* file list element */
 {
        	public:
 #if FIM_WANT_FLIST_STAT 
@@ -60,7 +60,7 @@ class fle_t : public fim_fn_t /* file list element */
 	operator string (void)const;
 };
 
-class fim_bitset_t:public std::vector<fim_bool_t>
+class fim_bitset_t FIM_FINAL :public std::vector<fim_bool_t>
 {
 	public:
 	fim_bitset_t(size_t n):std::vector<fim_bool_t>(n,false){}
@@ -85,7 +85,7 @@ std::ostream& operator << (std::ostream& os, const fim_bitset_t& bs)
 	return os;
 } */
 
-class flist_t : public std::vector<fim::fle_t>
+class flist_t FIM_FINAL : public std::vector<fim::fle_t>
 {
 	private:
 	/*
@@ -181,7 +181,7 @@ class flist_t : public std::vector<fim::fle_t>
 	}
 };
 
-class Browser
+class Browser FIM_FINAL 
 #ifdef FIM_NAMESPACES
 :public Namespace
 #if FIM_WANT_BENCHMARKS

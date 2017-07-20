@@ -25,7 +25,7 @@
 #include "DisplayDevice.h"
 #include <SDL.h>
 
-class SDLDevice:public DisplayDevice 
+class SDLDevice FIM_FINAL :public DisplayDevice 
 {
 	private:
 

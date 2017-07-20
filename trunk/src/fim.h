@@ -178,10 +178,12 @@
 #define FIM_NOEXCEPT noexcept
 #define FIM_CONSTEXPR constexpr
 #define FIM_OVERRIDE override
+#define FIM_FINAL final
 #else /* FIM_USE_CXX11 */
 #define FIM_NOEXCEPT
 #define FIM_CONSTEXPR const
 #define FIM_OVERRIDE 
+#define FIM_FINAL 
 #endif /* FIM_USE_CXX11 */
 
 #ifdef FIM_AUTOCMDS
