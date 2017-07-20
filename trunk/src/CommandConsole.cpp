@@ -221,7 +221,11 @@ ret:		return key;
 
 		if( bi != bindings_.end() )
 		{
+#if FIM_USE_CXX11
 			bindings_.erase(bi);
+#else /* FIM_USE_CXX11 */
+			bindings_.erase(c);
+#endif /* FIM_USE_CXX11 */
 			oss << c << ": successfully unbound.\n";
 			bindings_help_.erase(c); // if key c existent, erases associated help msg.
 		}
