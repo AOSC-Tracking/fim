@@ -115,14 +115,13 @@ namespace fim
 		if( ksym != FIM_CNS_EMPTY_STRING )
 			ksym = " (keysym \"" + ksym + "\")";
 
-		bindings_[c]=binding; /* this is the operation; what follows is only debug info */
-
 		rs+=string((int)c);
 		rs+=ksym;
 		if(bindings_.find(c) != bindings_.end())
 			rs+=" successfully reassigned to \"";
 		else
 			rs+=" successfully assigned to \"";
+		bindings_[c]=binding; /* this is the operation; what follows is only debug info */
 		rs+=bindings_[c];
 		rs+="\"\n";
 		if(hstr!="")
