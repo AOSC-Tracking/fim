@@ -19,18 +19,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * This file comes from fbi, and will undergo severe reorganization.
- * */
 
 #ifndef FIM_FRAMEBUFFER_DEVICE_H
 #define FIM_FRAMEBUFFER_DEVICE_H
-
-/*
- * These are fbi's internals adapted to C++ and adapting to a loose OOP.
- * */
-
-
+/* Code in this file comes from fbi's C sources.  */
 
 #include "fim.h"
 #include "FontServer.h"
@@ -53,13 +45,11 @@
 #include <linux/fb.h>	// fb_fix_screeninfo
 #endif /* HAVE_LINUX_FB_H */
 
-
 /* from fbtools.h */
 #define FB_ACTIVE    0
 #define FB_REL_REQ   1
 #define FB_INACTIVE  2
 #define FB_ACQ_REQ   3
-
 
 namespace fim
 {
@@ -69,21 +59,8 @@ struct DEVS {
     const fim_char_t *ttynr;
 };
 
-
-
-//void _fb_switch_signal(int signal);
-
-
-
- 
-
-
-
-
 class FramebufferDevice:public DisplayDevice 
 {
-
-
 	long     red_mult_, green_mult_;
 	long     red_dither_[256]  FIM_ALIGNED;
 	long     green_dither_[256]FIM_ALIGNED;
@@ -95,7 +72,6 @@ class FramebufferDevice:public DisplayDevice
 	 *
 	 * Let's say in future we want to be able to manage multiple framebuffer devices.
 	 * Then framebuffer variables should be incapsulated well in separate objects.
-	 * We are heading forward on this road, slowly.
 	 * */
 #if 0
 	void fb_text_init1(fim_char_t *font)
@@ -118,31 +94,23 @@ class FramebufferDevice:public DisplayDevice
 	static const fim_coo_t border_height_=1;
 
 	int             vt_ ;
-	//public:
 	int32_t         lut_red_[256], lut_green_[256], lut_blue_[256];
-	int             dither_ , pcd_res_ /*, steps_*/ ;
+	int             dither_ , pcd_res_;
 	private:
 	float fbgamma_ ;
 
-	/*static float fbgamma_ = 1;*/
-	//public:
-
-
 	// FS.C
-	unsigned int       fs_bpp_, fs_black_, fs_white_;//STILL UNINITIALIZED
+	unsigned int       fs_bpp_, fs_black_, fs_white_;
 	int fs_init_fb(int white8);
 	private:
-	/* public */
 	int visible_ ;
 
-	/* private */
 	//fim_char_t *x11_font_ ;
 
 	int ys_ ;
 	int xs_ ;
 	fim_bool_t debug_;
 
-	//public:
 	void (*fs_setpixel)(void *ptr, unsigned int color);
 	private:
 
@@ -177,9 +145,6 @@ class FramebufferDevice:public DisplayDevice
 	fim_char_t                       *fbmode_;
 
 	public:
-	/*
-	 * FIXME : should be a static string, or troubles will come!
-	 * */
 	fim_err_t set_fbdev(fim_char_t *fbdev_)
 	{
 		/* only possible before init() */
@@ -190,9 +155,6 @@ class FramebufferDevice:public DisplayDevice
 		return FIM_ERR_NO_ERROR;
 	}
 
-	/*
-	 * FIXME : should be a static string, or troubles will come!
-	 * */
 	fim_err_t set_fbmode(fim_char_t *fbmode_)
 	{
 		/* only possible before init() */
@@ -223,12 +185,11 @@ class FramebufferDevice:public DisplayDevice
 		return FIM_ERR_NO_ERROR;
 	}
 
-	//private:
+	private:
 	int                        fd_, switch_last_;
 
 	unsigned short red_[256],  green_[256],  blue_[256];
 	struct fb_cmap cmap_;
-
 
 	//were static ..
 	struct fb_cmap            ocmap_;
@@ -242,19 +203,18 @@ class FramebufferDevice:public DisplayDevice
 	int with_boz_patch_;
 #endif /* FIM_BOZ_PATCH */
 
+	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	FramebufferDevice(MiniConsole& mc_);
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	FramebufferDevice(void);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-
+	private:
 
 /* -------------------------------------------------------------------- */
 	/* exported stuff                                                       */
-	public:
 	struct fb_fix_screeninfo   fb_fix_;
 	struct fb_var_screeninfo   fb_var_;
-	//private:
 	fim_byte_t             *fb_mem_;
 	int			   fb_mem_offset_;
 	int                        fb_switch_state_;
@@ -266,7 +226,6 @@ class FramebufferDevice:public DisplayDevice
 	#if 0
 	static int                       bpp,black,white;
 	#endif
-	private:
 
 	int                       orig_vt_no_;
 	struct vt_mode            vt_mode_;
@@ -279,17 +238,14 @@ class FramebufferDevice:public DisplayDevice
 	public:
 	fim_err_t framebuffer_init(void);
 
+	private:
 	struct DEVS *devices_;
 
-
-
 	void dev_init(void);
-	private:
 	int fb_init(const fim_char_t *device, fim_char_t *mode, int vt_
 			, int try_boz_patch=0
 			);
-	public:
-
+	//public:
 	void fb_memset (void *addr, int c, size_t len);
 	void fb_setcolor(int c) { fb_memset(fb_mem_+fb_mem_offset_,c,fb_fix_.smem_len); }
 
@@ -304,7 +260,9 @@ class FramebufferDevice:public DisplayDevice
 	int  fb_font_width(void)const;
 	int  fb_font_height(void)const;
 
+	public:
 	int status_line(const fim_char_t *msg) FIM_OVERRIDE ;
+	private:
 
 	//void fb_edit_line(fim_char_t *str, int pos);
 
@@ -324,6 +282,7 @@ class FramebufferDevice:public DisplayDevice
 		fb_clear_rect(x1, x2, y1,y2);
 		return 0;
 	}
+	public:
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) {/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
 
 	void clear_screen(void);
@@ -331,11 +290,13 @@ class FramebufferDevice:public DisplayDevice
 
 	fim_err_t initialize (sym_keys_t &sym_keys)FIM_OVERRIDE {/*still unused : FIXME */ ;return FIM_ERR_NO_ERROR;}
 	void finalize (void)FIM_OVERRIDE ;
+	private:
 	struct fs_font * fb_font_get_current_font(void)
 	{
 	    return f_;
 	}
-
+	
+	public:
 	void switch_if_needed(void)
 	{
 		handle_console_switch();
@@ -387,14 +348,13 @@ void svga_display_image_new(
 		int ocskip,// output columns to skip for each line
 	int flags) FIM_NOEXCEPT;
 
+	private:
 /* ---------------------------------------------------------------------- */
 /* by dez
  */
 inline fim_byte_t * clear_line(int bpp, int line, int owidth, fim_byte_t *dst) FIM_NOEXCEPT;
 fim_byte_t * convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT;/*dez's mirror patch*/
 fim_byte_t * convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT;/*dez's mirror patch*/
-
-
 
 
 
@@ -411,8 +371,9 @@ void fb_switch_release(void);
 void fb_switch_acquire(void);
 
 int fb_switch_init(void);
-
+	public:
 void fb_switch_signal(int signal);
+	private:
 
 int fb_text_init2(void);
 
@@ -486,7 +447,6 @@ void lut_init(int depth)
 	}
     }
 }
-
 void init_one(int32_t *lut, int bits, int shift)
 {
     int i;
@@ -498,7 +458,7 @@ void init_one(int32_t *lut, int bits, int shift)
 	for (i = 0; i < 256; i++)
 	    lut[i] = (i >> (8 - bits)) << shift;
 }
-
+	public:
 	int width(void)const FIM_OVERRIDE 
 	{
 		return fb_var_.xres;
@@ -528,7 +488,9 @@ void init_one(int32_t *lut, int bits, int shift)
         }
 
 	//void status_screen(const fim_char_t *msg, int draw);
+	private:
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
+	public:
 	fim_bpp_t get_bpp(void)const FIM_OVERRIDE{return fb_var_.bits_per_pixel; };
 	virtual ~FramebufferDevice(void);
 	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
@@ -536,8 +498,5 @@ void init_one(int32_t *lut, int bits, int shift)
 
 }
 
-
-
 #endif /* FIM_WITH_NO_FRAMEBUFFER */
 #endif /* FIM_FRAMEBUFFER_DEVICE_H */
-
