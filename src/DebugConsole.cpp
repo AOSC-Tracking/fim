@@ -37,98 +37,109 @@ namespace fim
 			return ccol_;
 		}
 
-		fim_err_t MiniConsole::do_dump(int f_, int l)const
+		fim_err_t MiniConsole::do_dump(int f, int l)const
 		{
 			/*
+			 * if f <= l and f>= 0 
+			 * lines from min(f,cline_) to min(l,cline_) will be dumped
 			 *
-			 * if f_ <= l and f_>= 0 
-			 * lines from min(f_,cline_) to min(l,cline_) will be dumped
-			 *
-			 * if f_<0 and l>=0 and f_+l<0 and -f_<=cline_,
-			 * lines from cline_+f_ to cline_-l will be dumped
-			 *
-			 * FIXME : this function returns often with -1 !
+			 * if f<0 and l>=0 and f+l<0 and -f<=cline_,
+			 * lines from cline_+f to cline_-l will be dumped
 			 * */
-			int i;
-			const int maxcols = cc_.displaydevice_->get_chars_per_line();
+			int fh; // font height
+			const int cancols = cc_.displaydevice_->get_chars_per_line(); // canvas columns
+			const int maxcols = FIM_MIN(cancols,lwidth_)+1;
+			fim_char_t *buf=FIM_NULL;
+			fim_err_t errval = FIM_ERR_GENERIC;
 	
-			if(f_<0 && l>=0 && f_+l<0 && -f_<=cline_) { f_=cline_+f_; l=cline_-l; }
+			if(f<0 && l>=0 && f+l<0 && -f<=cline_)
+		       	{
+			       	f=cline_+f;
+			       	l=cline_-l;
+		       	}
 			else
-				if(f_<=l && f_>=0){f_=f_>cline_?cline_:f_;l=l>cline_?cline_:l;}
+			if(f<=l && f>=0)
+			{
+				f=FIM_MIN(cline_,f);
+				l=FIM_MIN(cline_,l);
+			}
 			else
-				return FIM_ERR_GENERIC;// unsupported combination
+				goto err;
 			
-			if(maxcols<1)
+			if(cancols<1)
 			{
 #if FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE
-				if(maxcols==0)
+				if(cancols==0)
 				{
 					// a fixup for the dumb console
-					int n=1+line_[l]-line_[f_];
-					fim_char_t*buf=FIM_NULL;
-					if(n>0 && (buf=(fim_char_t*)
-								fim_malloc(n))!=FIM_NULL)
+					int n=1+line_[l]-line_[f];
+					fim_char_t*ibuf=FIM_NULL;
+					if(n>0 && (ibuf=(fim_char_t*) fim_malloc(n))!=FIM_NULL)
 					{
-						strncpy(buf,line_[f_],n);
-						buf[n-1]='\0';
-						cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,buf);
-						fim_free(buf);
+						strncpy(ibuf,line_[f],n);
+						ibuf[n-1]='\0';
+						cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,ibuf);
+						fim_free(ibuf);
 					}
 				}
 				else
 #endif /* FIM_WANT_OVERLY_VERBOSE_DUMB_CONSOLE */
-					return FIM_ERR_GENERIC;
+					goto err;
 			}
 
-			fim_char_t *buf = (fim_char_t*) fim_malloc(maxcols+1); // ! we work on a stack, don't we ?! Fortran teaches us something here.
-			if(!buf)
-				return FIM_ERR_GENERIC;
+			if(*bp_)
+				goto err;
+			//if *bp_ then we could print garbage so we exit before damage is done
 
-			if(*bp_){fim_free(buf);return FIM_ERR_GENERIC;}//if *bp_ then we could print garbage so we exit before damage is done
-
-			int fh=cc_.displaydevice_->f_ ? cc_.displaydevice_->f_->sheight():1; // FIXME : this is not clean
-			l-=f_; l%=(rows_+1); l+=f_;
+			fh=cc_.displaydevice_->f_ ? cc_.displaydevice_->f_->sheight():1; // FIXME : this is not clean
+			l-=f;
+		       	l%=(rows_+1);
+		       	l+=f;
 
 			/* FIXME : the following line_ is redundant in fb, but not in SDL 
 			 * moreover, it seems useless in AA (could be a bug)
 			 * */
-			if(fh*(l-f_+1)>=cc_.displaydevice_->height())
+			if(fh*(l-f+1)>=cc_.displaydevice_->height())
 				goto done;
-			cc_.displaydevice_->clear_rect(0, cc_.displaydevice_->width()-1, 0 ,fh*(l-f_+1) );
+			buf = (fim_char_t*) fim_malloc(cancols+1);
+			if(!buf)
+				goto err;
+			cc_.displaydevice_->clear_rect(0, cc_.displaydevice_->width()-1, 0 ,fh*(l-f+1) );
 
-			// fs_puts alone won't draw on screen, but in the back plane, so unlock/flip will be necessary
+			// fs_puts alone won't draw to screen, but to the back plane, so unlock/flip will be necessary
 			cc_.displaydevice_->lock();
 
-	    		for(i=f_  ;i<=l   ;++i)
+	    		for(int i=f  ;i<=l   ;++i)
 			{
-				int t = (i<cline_?(line_[i+1]-line_[i]):(ccol_))%(FIM_MIN(maxcols,lwidth_)+1);
-				if( t<0 ){fim_free(buf);return FIM_ERR_GENERIC;} // hmmm
+				int t = ( (i<cline_) ? (line_[i+1]-line_[i]) : (ccol_) )%maxcols;
+				if( t<0 )
+					goto err; // hmmm
 				strncpy(buf,line_[i],t);
-				while(buf[t-1]=='\n' && t>0)--t;
-				buf[maxcols]='\0';
-				while(t<maxcols){buf[t++]=' ';}
-				/*
-				 * Since the user is free to set any value > 0 for the line_ width,
-				 * we truncate the line_ for the interval exceeding the screen width.
-				 * */
-				buf[ maxcols ]='\0';
-				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*(i-f_), (const fim_char_t*)buf);
+				while(buf[t-1]=='\n' && t>0)
+					--t; // rewind newlines
+				while(t<cancols)
+					buf[t++]=' '; // after text, fill with blanks
+				/* lwidth_ is user set, but we truncate to cancols if exceeding */
+				buf[ cancols ]='\0';
+				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*(i-f), buf);
 			}
 
-			/* FIXME : THE FOLLOWING IS A FIXUP FOR AA!  */
-	    		for(i=0  ;i<scroll_ ;++i)
+			// extra empty lines (originally for aa)
+	    		for(int i=0  ;i<scroll_ ;++i)
 			{
-				int t = (FIM_MIN(maxcols,lwidth_)+1);
+				int t = maxcols;
 				fim_memset(buf,' ',t);
 				buf[t-1]='\0';
-				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*((l-f_+1)+i), (const fim_char_t*)buf);
+				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*((l-f+1)+i), buf);
 			}
 			cc_.displaydevice_->unlock();
-
 			cc_.displaydevice_->flush();
 done:
-			fim_free(buf);
-			return FIM_ERR_NO_ERROR;
+			errval = FIM_ERR_NO_ERROR;
+err:
+			if(buf)
+				fim_free(buf);
+			return errval;
 		}
 
 		fim_err_t MiniConsole::add(const fim_char_t* cso_)
@@ -422,7 +433,7 @@ rerr:
 		{
 			/*
 			 * We dump on screen the textual console contents.
-			 * We care about user set variables.
+			 * We consider user set variables.
 			 * */
 			fim_int co=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_OFFSET);
 			fim_int lw=getGlobalIntVariable(FIM_VID_CONSOLE_LINE_WIDTH );
