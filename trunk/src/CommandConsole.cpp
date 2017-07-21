@@ -511,16 +511,7 @@ err:
 
 	fim_char_t * CommandConsole::command_generator (const fim_char_t *text,int state,int mask)const
 	{
-		/*
-		 *	This is the reason why the commands should be kept
-		 *	in a list or vector, rather than a map...  :(
-		 *
-		 *	TODO : INSTEAD OF USING commands_[], make a new vector 
-		 *	TODO : the 'mask' mechanism is still a quick hack; it shall be adjusted more properly 
-		 *	with completions!
-		 *	FIXME
-		 *	DANGER : this member function allocates memory
-		 */
+		// inefficient. should cache results and skip repeated searches.
 		args_t completions;
 		aliases_t::const_iterator ai;
 		variables_t::const_iterator vi;
@@ -531,15 +522,15 @@ err:
 			list_index=0;
 		while(isdigit(*text))
 			text++;	//initial  repeat match
-		/*const*/ fim_cmd_id cmd(text);
-		if(cmd==FIM_CNS_EMPTY_STRING)
+		if(!*text)
 			return FIM_NULL;
-		if(cmd.re_match(FIM_SYM_NAMESPACE_REGEX)==true)
+		if(string(text).re_match(FIM_SYM_NAMESPACE_REGEX)==true)
 		{
 			mask=4,
-			nschar=cmd[(size_t)0],
-			cmd=cmd.substr(2,cmd.size());
+			nschar=text[0],
+			text+=2;
 		}
+		const fim_cmd_id cmd(text);
 		if(mask==0 || (mask&1))
 		for(size_t i=0;i<commands_.size();++i)
 		{
@@ -550,8 +541,7 @@ err:
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
 		{	
 			if((ai->first).find(cmd)==0){
-//			cout << ".." << ai->first << ".." << " matches " << cmd << "\n";
-			completions.push_back((*ai).first);}
+			completions.push_back(ai->first);}
 		}
 		if(mask==0 || (mask&4))
 		{
@@ -561,7 +551,6 @@ err:
 				if((vi->first).find(cmd)==0)
 					completions.push_back((*vi).first);
 			}
-#if 1
 			if(browser_.c_getImage())
 			if(nschar==FIM_SYM_NULL_NAMESPACE_CHAR || nschar==FIM_SYM_NAMESPACE_IMAGE_CHAR)
 				browser_.c_getImage()->find_matching_list(cmd,completions,true);
@@ -574,44 +563,14 @@ err:
 			if(nschar==FIM_SYM_NULL_NAMESPACE_CHAR || nschar==FIM_SYM_NAMESPACE_WINDOW_CHAR)
 				current_window().find_matching_list(cmd,completions,true);
 #endif
-#endif
 		}
 #ifndef FIM_COMMAND_AUTOCOMPLETION
-		/* THIS DIRECTIVE IS MOTIVATED BY SOME STRANGE BUG!
-		 */
 		sort(completions.begin(),completions.end());
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
 		
-/*		for(size_t i=list_index;i<completions.size();++i)
-				cout << cmd << " matches with " << completions[i].c_str()<<  "\n";*/
-		for(size_t i=list_index;i<completions.size();++i)
-		{
-			//if(completions[i].find(cmd)==0)
-			if(1)
-			{
-				list_index++;
-				//readline will free this string..
-				return dupstr(completions[i].c_str());// is this malloc free ?
-			}
-			else
-				;//std::cout << cmd << " no matches with " << commands_[i]->cmd()<<  "\n";
-		}
-
-/*		for(int i=list_index;i<aliases_keys.size();++i)
-		{
-			if(!commands_[i])
-				continue;
-			if(commands_[i]->cmd().find(cmd)==0)
-			{
-				list_index++;
-				//std::cout << cmd << " matches with " << commands_[i]->cmd()<<  "\n";
-				//fim_readline will free this strings..
-				return dupstr(commands_[i]->cmd().c_str());
-			}
-			else
-				;//std::cout << cmd << " no matches with " << commands_[i]->cmd()<<  "\n";
-		}*/
-		//TO DO : ADD VARIABLE AND ALIAS EXPANSION..
+		if(list_index<completions.size())
+			//readline frees this string.
+			return dupstr(completions[list_index++].c_str());
 		return FIM_NULL;
 	}
 
