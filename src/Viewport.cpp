@@ -261,24 +261,6 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
-	void Viewport::fs_multiline_puts(const char *str, fim_int doclear)
-	{
-		int fh=displaydevice_->f_ ? displaydevice_->f_->sheight():1; // FIXME : this is not clean
-		int fw=displaydevice_->f_ ? displaydevice_->f_->swidth():1; // FIXME : this is not clean
-		int sl = strlen(str), rw = viewport_width() / fw, wh = viewport_height();
-		int cpl = displaydevice_->get_chars_per_line();
-
-		if(doclear && cpl)
-		{
-			int lc = FIM_INT_FRAC(sl,cpl); /* lines count */
-			displaydevice_->clear_rect(0, viewport_width()-1, 0, FIM_MIN(fh*lc,wh-1));
-		}
-
-		for( int li = 0 ; sl > rw * li ; ++li )
-			if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
-			displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, str+rw*li);
-	}
-
 	bool Viewport::shall_negate(void)const
 	{
 		return ((getGlobalIntVariable(FIM_VID_AUTONEGATE)== 1)&&(image_->check_negated()==0));
@@ -430,9 +412,9 @@ namespace fim
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
 				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
-					this->fs_multiline_puts(commandConsole.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1);
+					displaydevice_->fs_multiline_puts(commandConsole.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1, viewport_width(), viewport_height());
 				else
-					this->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1);
+					displaydevice_->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1, viewport_width(), viewport_height());
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
