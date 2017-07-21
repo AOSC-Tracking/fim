@@ -605,7 +605,7 @@ ret:
 		FIM_PR('*');
                 if(fimg_!=img_ && img_ )
 		{
-			fim_shred(img_->data, fbi_img_pixel_count(img_));
+			fim_shred(img_->data, fbi_img_pixel_bytes(img_));
 		}
                 if(fimg_     )
 		{
@@ -919,9 +919,7 @@ fim::string Image::getInfo(void)
 	else
 		*pagesinfobuffer='\0';
 
-/* #if FIM_WANT_DISPLAY_MEMSIZE */
-	size_t ms = fbi_img_pixel_count(fimg_); /* memory size */
-/* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
+	size_t ms = fbi_img_pixel_bytes(fimg_); /* memory size */
 
 	snprintf(linebuffer, sizeof(linebuffer),
 	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
@@ -1067,7 +1065,7 @@ ret:
 		if(!fimg_ || !fimg_->data)
 			return false;
 	
-		for( n=0; n< fbi_img_pixel_count(fimg_) ; n+=3 )
+		for( n=0; n< fbi_img_pixel_bytes(fimg_) ; n+=3 )
 		{
 			int r,g,b,s,d;
 			r=fimg_->data[n+0];
@@ -1084,7 +1082,7 @@ ret:
 			}
 		}
 
-		for( n=0; n< fbi_img_pixel_count(img_) ; n+=3 )
+		for( n=0; n< fbi_img_pixel_bytes(img_) ; n+=3 )
 		{
 			int r,g,b,s,d;
 			r=img_->data[n+0];
@@ -1112,10 +1110,10 @@ ret:
 	bool Image::colorblind(enum fim_cvd_t cvd, bool daltonize)
 	{
 		if( fimg_ &&  fimg_->data)
-			fim_simulate_cvd(fimg_->data, fbi_img_pixel_count(fimg_), cvd, daltonize);
+			fim_simulate_cvd(fimg_->data, fbi_img_pixel_bytes(fimg_), cvd, daltonize);
 
 		if(  img_ &&   img_->data && ! (fimg_ && img_->data==fimg_->data) )
-			fim_simulate_cvd(img_->data, fbi_img_pixel_count(img_), cvd, daltonize);
+			fim_simulate_cvd(img_->data, fbi_img_pixel_bytes(img_), cvd, daltonize);
 
 #if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
@@ -1130,10 +1128,10 @@ ret:
 	fim_err_t Image::desaturate(void)
 	{
 		if( fimg_ &&  fimg_->data)
-			fim_desaturate_rgb(fimg_->data, fbi_img_pixel_count(fimg_));
+			fim_desaturate_rgb(fimg_->data, fbi_img_pixel_bytes(fimg_));
 
 		if(  img_ &&   img_->data)
-			fim_desaturate_rgb(img_->data, fbi_img_pixel_count(img_));
+			fim_desaturate_rgb(img_->data, fbi_img_pixel_bytes(img_));
 
 #if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
@@ -1148,10 +1146,10 @@ ret:
 	fim_err_t Image::identity(void)
 	{
 		if( fimg_ &&  fimg_->data)
-			fim_generate_24bit_identity(fimg_->data, fbi_img_pixel_count(fimg_));
+			fim_generate_24bit_identity(fimg_->data, fbi_img_pixel_bytes(fimg_));
 
 		if(  img_ &&   img_->data)
-			fim_generate_24bit_identity(img_->data, fbi_img_pixel_count(img_));
+			fim_generate_24bit_identity(img_->data, fbi_img_pixel_bytes(img_));
 
 #if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
@@ -1165,10 +1163,10 @@ ret:
 	{
 
 		if( fimg_ &&  fimg_->data)
-			fim_negate_rgb(fimg_->data, fbi_img_pixel_count(fimg_));
+			fim_negate_rgb(fimg_->data, fbi_img_pixel_bytes(fimg_));
 
 		if(  img_ &&   img_->data)
-			fim_negate_rgb(img_->data, fbi_img_pixel_count(img_));
+			fim_negate_rgb(img_->data, fbi_img_pixel_bytes(img_));
 
 #if FIM_WANT_MIPMAPS
 		if(  mm_.mdp)
@@ -1187,9 +1185,9 @@ ret:
 		size_t ms = 0;
 
 		if(fimg_)
-			ms += fbi_img_pixel_count(fimg_);
+			ms += fbi_img_pixel_bytes(fimg_);
 		if(fimg_!=img_ && img_)
-			ms += fbi_img_pixel_count(img_);
+			ms += fbi_img_pixel_bytes(img_);
 #if FIM_WANT_MIPMAPS
 		ms += mm_.byte_size();
 #endif /* FIM_WANT_MIPMAPS */
@@ -1277,6 +1275,6 @@ void Image::get_irs(char *imp)const
 }
 size_t Image::get_pixelmap_byte_size(void)const
 {
-	return fim::fbi_img_pixel_count(fimg_);
+	return fim::fbi_img_pixel_bytes(fimg_);
 }
 } /* namespace fim */
