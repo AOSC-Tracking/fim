@@ -2469,43 +2469,20 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 {
 	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
-	fim_char_t imagemode[4],*imp=imagemode;
+	fim_char_t imagemode[4];
 	fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	fim::string ifs;
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 	const Image * image = browser_.c_getImage();// TODO: Image -> Namespace ins
 
-	if(image->check_flip())
-		*(imp++)=FIM_SYM_FLIPCHAR;
-	if(image->shall_mirror())
-		*(imp++)=FIM_SYM_MIRRCHAR;
-	switch(image->orientation_)
-	{
-		case Image::FIM_ROT_L:
-			*(imp++)=Image::FIM_ROT_L_C;
-		break;
-		case Image::FIM_ROT_U:
-			 *(imp++)=Image::FIM_ROT_U_C;
-		break;
-		case Image::FIM_ROT_R:
-			 *(imp++)=Image::FIM_ROT_R_C;
-		break;
-		case Image::FIM_NO_ROT:
-		default:
-			FIM_NO_OP_STATEMENT;
-	}
-	*imp=FIM_SYM_CHAR_NUL;
+	image->get_irs(imagemode);
 
 	if(image->n_pages()>1)
-		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",(int)image->page_+1,(int)image->n_pages());
+		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",image->get_page(),image->n_pages());
 	else
 		*pagesinfobuffer='\0';
 		
-/* #if FIM_WANT_DISPLAY_MEMSIZE */
-	size_t ms = fbi_img_pixel_count(image->fimg_);
-/* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
-
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	//ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR);
 	//if( !ifs.empty() )
@@ -2531,7 +2508,7 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 			{
 				// "%p %wx%h %i/%l %F %M"
 				case('p'):
-					snprintf(clbp, rbc, "%.0f",image->scale_*100);
+					snprintf(clbp, rbc, "%.0f",image->get_scale()*100);
 				break;
 				case('w'):
 					snprintf(clbp, rbc, "%d",(int)image->width());
@@ -2561,10 +2538,10 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 					snprintf(clbp, rbc, "%s",pagesinfobuffer);
 				break;
 				case('F'):
-					fim_snprintf_XB(clbp, rbc,image->fs_);
+					fim_snprintf_XB(clbp, rbc,image->get_file_size());
 				break;
 				case('M'):
-					fim_snprintf_XB(clbp, rbc,ms);
+					fim_snprintf_XB(clbp, rbc,(int)image->get_pixelmap_byte_size());
 				break;
 				case('n'):
 					snprintf(clbp, rbc, "%s",image->getStringVariable(FIM_VID_FILENAME).c_str());
@@ -2582,7 +2559,7 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 				break;
 #if FIM_WANT_MIPMAPS
 				case('m'):
-					fim_snprintf_XB(clbp, rbc,image->mm_.byte_size());
+					fim_snprintf_XB(clbp, rbc,image->mm_byte_size());
 				break;
 #endif /* FIM_WANT_MIPMAPS */
 				case('C'):
