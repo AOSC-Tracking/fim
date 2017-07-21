@@ -410,6 +410,7 @@ class CommandConsole FIM_FINAL
 	fim_err_t update_font_size(void);
 	public:
 	void switch_if_needed(void);
+	fim::string getInfoCustom(const fim_char_t * ifsp)const;
 };
 }
 
