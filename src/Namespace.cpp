@@ -75,7 +75,7 @@ namespace fim
 	
 		fim_bool_t Namespace::isSetVar(const fim_var_id& varname)const
 		{
-			fim_bool_t isv = variables_.find(varname) != variables_.end();
+			fim_bool_t isv = ( variables_.find(varname) != variables_.end() );
 			return isv;
 		}
 
@@ -171,7 +171,6 @@ namespace fim
 
 		fim_int Namespace::getGlobalIntVariable(const fim_var_id& varname)const
 		{
-			/* FIXME: need a better solution here ! */
 #ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				return rnsp_->getIntVariable(varname);
@@ -181,7 +180,6 @@ namespace fim
 
 		fim_float_t Namespace::getGlobalFloatVariable(const fim_var_id& varname)const
 		{
-			/* FIXME: need a better solution here ! */
 #ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				return rnsp_->getFloatVariable(varname);
@@ -191,7 +189,6 @@ namespace fim
 
 		fim::string Namespace::getGlobalStringVariable(const fim_var_id& varname)const
 		{
-			/* FIXME: need a better solution here ! */
 #ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				return rnsp_->getStringVariable(varname);
@@ -202,7 +199,6 @@ namespace fim
 		fim::string Namespace::autocmd_exec(const fim::string&event, const fim_fn_t& fname)
 		{
 #ifdef FIM_AUTOCMDS
-			/* FIXME: need a better solution here ! */
 #ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				return rnsp_->autocmd_exec(event,fname);

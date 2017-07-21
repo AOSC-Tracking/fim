@@ -43,36 +43,30 @@ namespace fim
 	class Namespace
 	{
 		friend class CommandConsole; // for the various CommandConsole::setVariable()
-		friend class FbiStuff;
+
 		protected:
 #ifndef FIM_INDEPENDENT_NAMESPACE
 		CommandConsole*rnsp_; // root Namespace pointer
 #endif /* FIM_INDEPENDENT_NAMESPACE */
 		variables_t variables_;	//id->var
 		fim_char_t ns_char_; // ns_char_ ':' varname
-
+	
+		public:
 #if FIM_WANT_LONG_INT
 		int setVariable(const fim_var_id& varname,int value);
 		unsigned int setVariable(const fim_var_id& varname,unsigned int value);
 #endif /* FIM_WANT_LONG_INT */
 		fim_int setVariable(const fim_var_id& varname,fim_int value);
 		fim_float_t setVariable(const fim_var_id& varname,fim_float_t value);
-		public:
-		// FIXME: this overload of setVariable is public for use in one static function in FbiStuffJpeg.cpp
 		const fim_char_t* setVariable(const fim_var_id& varname,const fim_char_t* value);
-		protected:
 		const Var & setVariable(const fim_var_id& varname,const Var& value);
 		const fim::string& setVariable(const fim_var_id& varname,const fim::string& value);
-		public:
-
 		fim_int getIntVariable(const fim_var_id& varname)const;
 		fim_float_t getFloatVariable(const fim_var_id& varname)const;
 		fim::string getStringVariable(const fim_var_id& varname)const;
 		Var getVariable(const fim_var_id& varname)const;
-
 		fim_bool_t isSetVar(const fim_var_id& varname)const;
 		void unsetVariable(const fim_var_id& varname);
-
 		fim_int  setGlobalVariable(const fim_var_id& varname,fim_int value);
 #if FIM_WANT_LONG_INT
 		int setGlobalVariable(const fim_var_id& varname,int value);
@@ -81,8 +75,6 @@ namespace fim
 	        fim_float_t setGlobalVariable(const fim_var_id& varname,fim_float_t value);
 		const fim_char_t* setGlobalVariable(const fim_var_id& varname,const fim_char_t* value);
 		const fim::string& setGlobalVariable(const fim_var_id& varname, const fim::string& value);
-
-		public:
 		fim_int getGlobalIntVariable(const fim_var_id& varname)const;
 		fim_float_t getGlobalFloatVariable(const fim_var_id& varname)const;
 		fim::string getGlobalStringVariable(const fim_var_id& varname)const;
@@ -90,7 +82,6 @@ namespace fim
 		fim::string get_variables_list(bool with_values=false, bool fordesc=false)const;
 		virtual size_t byte_size(void)const = 0;
 		fim_err_t assign_ns(const Namespace& ns);
-
 		explicit Namespace(
 #ifndef FIM_INDEPENDENT_NAMESPACE
 				CommandConsole *rnsp = FIM_NULL,
