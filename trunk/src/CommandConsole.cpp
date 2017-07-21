@@ -2467,7 +2467,7 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 					snprintf(clbp, rbc, "%d",(int)image->height());
 				break;
 				case('i'):
-					snprintf(clbp, rbc, "%d",(int)browser_.current_n());
+					snprintf(clbp, rbc, "%d",(int)(browser_.current_n()+1));
 				break;
 				case('k'):
 				{
