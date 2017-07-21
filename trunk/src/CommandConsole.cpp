@@ -2015,7 +2015,7 @@ ok:
 
 		if( wcss.c_str() && *wcss.c_str() && browser_.c_getImage())
 		{
-			fim::string clb = browser_.c_getImage()->getInfoCustom(wcss.c_str());
+			fim::string clb = this->getInfoCustom(wcss.c_str());
 
 			rc = displaydevice_->set_wm_caption(clb.c_str());
 			wcs = false; /* window caption + status */
@@ -2464,4 +2464,236 @@ ret:
 		displaydevice_->switch_if_needed();
 #endif /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
 	}
+
+fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
+{
+	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
+	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
+	fim_char_t imagemode[4],*imp=imagemode;
+	fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
+#if FIM_WANT_CUSTOM_INFO_STATUS_BAR
+	fim::string ifs;
+#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
+	const Image * image = browser_.c_getImage();// TODO: Image -> Namespace ins
+
+	if(image->check_flip())
+		*(imp++)=FIM_SYM_FLIPCHAR;
+	if(image->shall_mirror())
+		*(imp++)=FIM_SYM_MIRRCHAR;
+	switch(image->orientation_)
+	{
+		case Image::FIM_ROT_L:
+			*(imp++)=Image::FIM_ROT_L_C;
+		break;
+		case Image::FIM_ROT_U:
+			 *(imp++)=Image::FIM_ROT_U_C;
+		break;
+		case Image::FIM_ROT_R:
+			 *(imp++)=Image::FIM_ROT_R_C;
+		break;
+		case Image::FIM_NO_ROT:
+		default:
+			FIM_NO_OP_STATEMENT;
+	}
+	*imp=FIM_SYM_CHAR_NUL;
+
+	if(image->n_pages()>1)
+		snprintf(pagesinfobuffer,sizeof(pagesinfobuffer)," [%d/%d]",(int)image->page_+1,(int)image->n_pages());
+	else
+		*pagesinfobuffer='\0';
+		
+/* #if FIM_WANT_DISPLAY_MEMSIZE */
+	size_t ms = fbi_img_pixel_count(image->fimg_);
+/* #endif */ /* FIM_WANT_DISPLAY_MEMSIZE */
+
+#if FIM_WANT_CUSTOM_INFO_STATUS_BAR
+	//ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR);
+	//if( !ifs.empty() )
+	{
+		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE]; /* FIXME: reasons for having this static ? */
+		//char*ifsp=(char*)ifs.c_str(); // FIXME
+		const char*fp=ifsp;
+		const char*sp=ifsp;
+		fim_char_t *clbp = clb;
+		int rbc = sizeof(clb)/sizeof(clb[0]);
+
+		clb[0]=FIM_SYM_CHAR_NUL;
+
+		while(*sp && *sp!='%')
+		{
+			++sp;
+		}
+		goto sbum;
+		while(*sp=='%' && isprint(sp[1]))
+		{
+			++sp;
+			switch(*sp)
+			{
+				// "%p %wx%h %i/%l %F %M"
+				case('p'):
+					snprintf(clbp, rbc, "%.0f",image->scale_*100);
+				break;
+				case('w'):
+					snprintf(clbp, rbc, "%d",(int)image->width());
+				break;
+				case('h'):
+					snprintf(clbp, rbc, "%d",(int)image->height());
+				break;
+				case('i'):
+					/* browser property. TODO: move outta here */
+					snprintf(clbp, rbc, "%d",(int)(n?n:1));
+				break;
+				case('k'):
+				{
+					string cv = image->getStringVariable(FIM_VID_COMMENT);
+					if( cv.c_str() && *cv.c_str() )
+						snprintf(clbp, rbc, "[%s] ",cv.c_str()); /* TODO: might generalize/change this */
+				}
+				break;
+				case('l'):
+					/* browser property. TODO: move outta here */
+					snprintf(clbp, rbc, "%d",(int)(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
+				break;
+				case('L'):
+					snprintf(clbp, rbc, "%s",imagemode);
+				break;
+				case('P'):
+					snprintf(clbp, rbc, "%s",pagesinfobuffer);
+				break;
+				case('F'):
+					fim_snprintf_XB(clbp, rbc,image->fs_);
+				break;
+				case('M'):
+					fim_snprintf_XB(clbp, rbc,ms);
+				break;
+				case('n'):
+					snprintf(clbp, rbc, "%s",image->getStringVariable(FIM_VID_FILENAME).c_str());
+				break;
+				case('N'):
+					snprintf(clbp, rbc, "%s",fim_basename_of(image->getStringVariable(FIM_VID_FILENAME)));
+				break;
+				case('T'):
+					/* console property. TODO: move outta here */
+					fim_snprintf_XB(clbp, rbc,cc.byte_size());
+				break;
+				case('R'):
+					/* console property. TODO: move outta here */
+					fim_snprintf_XB(clbp, rbc, fim_maxrss());
+				break;
+#if FIM_WANT_MIPMAPS
+				case('m'):
+					fim_snprintf_XB(clbp, rbc,image->mm_.byte_size());
+				break;
+#endif /* FIM_WANT_MIPMAPS */
+				case('C'):
+				{
+					fim_char_t buf[2*FIM_PRINTFNUM_BUFSIZE];
+					/* cache property. TODO: move outta here */
+					fim_snprintf_XB(buf, sizeof(buf),cc.browser_.cache_.img_byte_size());
+					snprintf(clbp, rbc, "#%d:%s",(int)cc.browser_.cache_.cached_elements(),buf);
+				}
+				break;
+				case('c'):
+					/* viewport property. TODO: move outta here */
+					cc.current_viewport()->snprintf_centering_info(clbp, rbc);
+				break;
+				case('v'):
+					snprintf(clbp, rbc, "%s",FIM_CNS_FIM_APPTITLE);
+				break;
+				case('%'):
+					snprintf(clbp, rbc, "%c",'%');
+				break;
+#if FIM_EXPERIMENTAL_VAR_EXPANDOS 
+				case('?'): /* "%?forward_comment?_filename?back_comment?" */
+#if 1
+				if(strlen(sp+1)>=4)
+				{
+					char *fcp = FIM_NULL, *vip = FIM_NULL;
+					if( 2 == sscanf(sp,"?%m[A-Z_a-z]?%m[^?]?",&vip,&fcp) )
+					if(fcp && vip)
+					{
+						char *fcpp = fcp;
+
+						if(*vip && image->isSetVar(vip) && *fcp )
+						{
+							char *vipp = FIM_NULL;
+strdo:
+							vipp = fcpp;
+							while(*fcpp && *fcpp != '%')
+								++fcpp;
+							snprintf(clb+strlen(clb), fcpp-vipp+1, "%s", vipp );
+							rbc -= strlen(clbp); clbp += strlen(clbp);
+
+							if(!*fcpp)
+								goto strdone;
+							++fcpp;
+							vipp = fcpp;
+							if(*fcpp==':')
+							{
+								++fcpp;
+								while(*fcpp && *fcpp!=':' && ( isalpha(*fcpp) || isdigit(*fcpp) || *fcpp=='_' ))
+									++fcpp;
+								if(*fcpp==':')
+								{
+									snprintf(clbp, rbc, "%s",image->getStringVariable(string(vipp).substr(1,fcpp-vipp-1)).c_str());
+									++fcpp;
+								}
+								else
+								{
+									//snprintf(clb+strlen(clb), sizeof(clb), "%s",(string(vipp).substr(1,fcpp-vipp-1)).c_str());
+									snprintf(clbp, rbc, "%s","<?>");
+								}
+									
+							}
+							else
+							{
+								//snprintf(clb+strlen(clb), sizeof(clb), "%s",fcpp);
+								snprintf(clbp, rbc, "%s","<?>");
+							}
+							goto strdo;
+						}
+strdone:
+						sp += strlen(fcp)+strlen(vip)+2;
+					}
+					if(fcp)std::free(fcp);
+					if(vip)std::free(vip);
+				}
+#else
+				if(strlen(sp+1)>=3)
+				{
+					char *fcp = FIM_NULL, *vip = FIM_NULL, *bcp = FIM_NULL;
+					if( 3 == sscanf(sp,"?%a[^?%]?%a[A-Z_a-z]?%a[^?%]?",&fcp,&vip,&bcp) )
+					if(fcp && bcp && vip)
+					{
+						if(*vip && image->isSetVar(vip))
+							snprintf(clbp, rbc, "%s%s%s",fcp,image->getStringVariable(vip).c_str(),bcp);
+						sp += strlen(fcp)+strlen(vip)+strlen(bcp)+3;
+					}
+					if(fcp)std::free(fcp);
+					if(bcp)std::free(bcp);
+					if(vip)std::free(vip);
+				}
+#endif
+				break;
+#endif /* FIM_EXPERIMENTAL_VAR_EXPANDOS */
+				// default:
+				/* rejecting char; may display an error message here */
+			}
+			++sp;
+			fp=sp;
+sbum:
+			while(*sp!='%' && sp[0])
+				++sp;
+			rbc -= strlen(clbp); clbp += strlen(clbp);
+			snprintf(clbp, FIM_MIN(sp-fp+1,rbc), "%s",fp);
+			rbc -= strlen(clbp); clbp += strlen(clbp);
+		}
+		//std::cout << "Custom format string chosen: "<< ifsp << ", resulting in: "<< clb <<"\n";
+		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
+		goto labeldone;
+	}
+#endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
+labeldone:
+	return fim::string(linebuffer);
+}
 }

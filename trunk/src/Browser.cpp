@@ -783,9 +783,7 @@ nop:
 			const fim_char_t *dssp=FIM_NULL;
 
 			if( cc.isSetVar(FIM_VID_DISPLAY_STATUS_FMT) )
-			{
-				dss = c_getImage()->getInfoCustom(cc.getStringVariable(FIM_VID_DISPLAY_STATUS_FMT).c_str());
-			}
+				dss = cc.getInfoCustom(cc.getStringVariable(FIM_VID_DISPLAY_STATUS_FMT).c_str());
 			dssp=dss.c_str();
 			commandConsole_.set_status_bar( (dssp && *dssp ) ? dssp : l, getImage()?(getImage()->getInfo().c_str()):"*");
 		}

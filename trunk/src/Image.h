@@ -61,6 +61,7 @@ class Image FIM_FINAL
 #endif /* FIM_NAMESPACES */
 {
 	public:
+	friend class CommandConsole;
 
 	explicit Image(const fim_char_t *fname, FILE *fd=FIM_NULL, fim_page_t page = 0);
 	explicit Image(const fim_char_t *fname, Foo& foo, FILE *fd=FIM_NULL);
@@ -123,7 +124,6 @@ class Image FIM_FINAL
 	fim_err_t update_meta(bool fresh=false);
 
 	fim::string getInfo(void);
-	fim::string getInfoCustom(const fim_char_t * ifsp)const;
 	Image(const Image& rhs); // yes, a private constructor (was)
 #if FIM_WANT_BDI
 	Image(enum fim_tii_t tii=FIM_TII_NUL);

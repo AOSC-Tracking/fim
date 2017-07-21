@@ -429,7 +429,7 @@ namespace fim
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
 				if(commandConsole.isSetVar(FIM_VID_COMMENT_OI_FMT))
-					this->fs_multiline_puts(image_->getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1);
+					this->fs_multiline_puts(commandConsole.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1);
 				else
 					this->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1);
 #endif
