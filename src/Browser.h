@@ -222,12 +222,12 @@ class Browser FIM_FINAL
 #endif /* FIM_READ_STDIN_IMAGE */
 	Viewport* viewport(void)const;
 
-	int current_n(void)const;
 	int current_n(int ccp)const;
 	const fim::string pop(fim::string filename=FIM_CNS_EMPTY_STRING);
 	
 	fim_int current_image(void)const;
 	public:
+	int current_n(void)const;
 	fim::string get_next_filename(int n)const; // FIXME: should be private
 	fim::string last_regexp_; // was private
 	fim_int last_src_dir_;
@@ -327,9 +327,10 @@ class Browser FIM_FINAL
 	fim::string do_filter(const args_t& args, MatchMode rm=FullFileNameMatch, bool negative=false, enum FilterAction faction = Delete);
 	fim_err_t loadCurrentImage(void);
 	fim::string reload(void);
-
+	public:
 	fim_int n_files(void)const;
 	fim_int n_pages(void)const;
+	private:
 	fim::string next(int n=1);
 
 	void free_current_image(void);
