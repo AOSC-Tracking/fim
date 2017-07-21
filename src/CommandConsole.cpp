@@ -318,6 +318,7 @@ ret:		return key;
 	}
 
 	CommandConsole::CommandConsole(void):
+	Namespace(this),
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
 	mc_(*this),
