@@ -48,7 +48,7 @@ namespace fim
 		
 		int  lwidth_;
 		int  rows_;
-		int  scroll_;
+		int  scroll_;	// last line displayed (up to rows_)
 
 		public:
 		CommandConsole& cc_;	// temporarily
