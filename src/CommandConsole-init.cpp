@@ -288,7 +288,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 
 		try
 		{
-			window_ = new FimWindow( *this, Rect(0,0,xres,yres) );
+			window_ = new FimWindow( *this, displaydevice_, Rect(0,0,xres,yres) );
 
 			if(window_)window_->setroot();
 		}

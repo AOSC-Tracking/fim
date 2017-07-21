@@ -173,7 +173,6 @@ class CommandConsole FIM_FINAL
 	DummyDisplayDevice dummydisplaydevice_;
 
 	friend class MiniConsole; // MiniConsole uses displaydevice_ intensively.
-	friend class Viewport; // cleaning up this is bound to cleaning up use of CommandConsole in Viewport.
 	DisplayDevice *displaydevice_;
 	fim::string oldcwd_;
 	public:

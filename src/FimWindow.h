@@ -23,6 +23,7 @@
 #define FIM_WINDOW_H
 
 #include "fim.h"
+#include "DisplayDevice.h"
 
 #ifdef FIM_WINDOWS
 
@@ -109,14 +110,7 @@ class FimWindow
 	enum Spacings{ hspacing=0, vspacing=0};
 	enum Moves{Up,Down,Left,Right,NoMove};
 
-	/* FIXME : temporary : this will be a Viewport ! */
-/*
- * should we model some status bar here ?
- *
- * note that status could also be located elsewhere.. it is 
- * not in the corners box coordinate system.
- *
- * */
+	DisplayDevice *displaydevice_;
 	public:
 	Rect corners_;//,status,canvas;
 	private:
@@ -202,7 +196,7 @@ class FimWindow
 
 	/* The only public member function launching exceptions is the constructor now.
 	 * */
-	FimWindow(CommandConsole& c, const Rect& corners, Viewport* vp=FIM_NULL); // throws FIM_E_NO_MEM exception
+	FimWindow(CommandConsole& c, DisplayDevice *dd, const Rect& corners, Viewport* vp=FIM_NULL); // throws FIM_E_NO_MEM exception
 	fim_err_t update(const Rect& corners);
 
 	Viewport * current_viewportp(void)const;

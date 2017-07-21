@@ -123,11 +123,11 @@ namespace fim
                 return FIM_CNS_EMPTY_RESULT;
         }
 
-	FimWindow::FimWindow(CommandConsole& c,const Rect& corners, Viewport* vp):
+	FimWindow::FimWindow(CommandConsole& c,DisplayDevice *displaydevice,const Rect& corners, Viewport* vp):
 #ifdef FIM_NAMESPACES
 	Namespace(&c,FIM_SYM_NAMESPACE_WINDOW_CHAR),
 #endif /* FIM_NAMESPACES */
-	corners_(corners),focus_(false),first_(FIM_NULL),second_(FIM_NULL),amroot_(false)
+	displaydevice_(displaydevice),corners_(corners),focus_(false),first_(FIM_NULL),second_(FIM_NULL),amroot_(false)
 	,viewport_(FIM_NULL),
 	commandConsole_(c)
 	{
@@ -144,7 +144,7 @@ namespace fim
 
 		}
 		else
-			viewport_=new Viewport( commandConsole_,  corners_ );
+			viewport_=new Viewport( commandConsole_, displaydevice,  corners_ );
 
 		if( viewport_ == FIM_NULL )
 		       	throw FIM_E_NO_MEM;
@@ -155,6 +155,7 @@ namespace fim
 #ifdef FIM_NAMESPACES
 			Namespace(root),
 #endif /* FIM_NAMESPACES */
+		displaydevice_(root.displaydevice_),
 		corners_(root.corners_),focus_(root.focus_),first_(root.first_),second_(root.second_),amroot_(false), viewport_(FIM_NULL),commandConsole_(root.commandConsole_)
 	{
 		/*
@@ -163,7 +164,7 @@ namespace fim
 		 *
 		 *  Note : this member function is useless, and should be kept private :D
 		 */
-		viewport_=new Viewport( commandConsole_, corners_ );
+		viewport_=new Viewport( commandConsole_, root.displaydevice_, corners_ );
 
 		if( viewport_ == FIM_NULL )
 		       	throw FIM_E_NO_MEM;
@@ -382,8 +383,8 @@ namespace fim
 		 * */
 		if(isleaf())
 		{
-			first_  = new FimWindow( commandConsole_, this->corners_.hsplit(Rect::Upper),viewport_);
-			second_ = new FimWindow( commandConsole_, this->corners_.hsplit(Rect::Lower),viewport_);
+			first_  = new FimWindow( commandConsole_, displaydevice_, this->corners_.hsplit(Rect::Upper),viewport_);
+			second_ = new FimWindow( commandConsole_, displaydevice_, this->corners_.hsplit(Rect::Lower),viewport_);
 			if(viewport_ && first_ && second_)
 			{
 #define FIM_COOL_WINDOWS_SPLITTING 0
@@ -410,8 +411,8 @@ namespace fim
 		 * */
 		if(isleaf())
 		{
-			first_  = new FimWindow( commandConsole_, this->corners_.vsplit(Rect::Left ),viewport_);
-			second_ = new FimWindow( commandConsole_, this->corners_.vsplit(Rect::Right),viewport_);
+			first_  = new FimWindow( commandConsole_, displaydevice_, this->corners_.vsplit(Rect::Left ),viewport_);
+			second_ = new FimWindow( commandConsole_, displaydevice_, this->corners_.vsplit(Rect::Right),viewport_);
 			if(viewport_ && first_ && second_)
 			{
 #if     FIM_COOL_WINDOWS_SPLITTING
