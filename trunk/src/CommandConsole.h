@@ -25,6 +25,7 @@
 #include "DummyDisplayDevice.h"
 
 #define FIM_WANT_RAW_KEYS_BINDING 1
+#define FIM_INVALID_IDX -1
 
 namespace fim
 {
@@ -64,7 +65,7 @@ class CommandConsole FIM_FINAL
 	/*
 	 * the registered command member functions and objects
 	 */
-	std::vector<Command*> commands_;			//command->member function
+	std::vector<Command> commands_;			//command->member function
 
 	/*
 	 * the aliases to actions (compounds of commands)
@@ -244,8 +245,8 @@ class CommandConsole FIM_FINAL
 	fim_err_t executeFile(const fim_char_t *s);
 	fim_err_t execute_internal(const fim_char_t *ss, fim_xflags_t xflags);
 
-	fim_err_t addCommand(Command *c);
-	Command* findCommand(fim_cmd_id cmd)const;
+	fim_err_t addCommand(Command c);
+	//Command &findCommand(fim_cmd_id cmd)const;
 	int findCommandIdx(fim_cmd_id cmd)const;
 	fim_cxr fcmd_alias(const args_t& args);
 	fim::string alias(const fim_cmd_id& a, const fim_cmd_id& c, const fim_cmd_id& d="");
@@ -300,7 +301,7 @@ class CommandConsole FIM_FINAL
 	fim::string unbind(fim_key_t c);
 	fim::string bind(const fim_key_t c, const fim_cls binding, const fim::string hstr="");
 	public:
-	fim::string find_key_for_bound_cmd(fim_cls cmd);
+	fim::string find_key_for_bound_cmd(fim_cls cmd)const;
 	fim_err_t execDefaultConfiguration(void);
 	private:
 	fim::string unbind(const fim::string& key);
@@ -315,7 +316,7 @@ class CommandConsole FIM_FINAL
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fim_perr_t quit(fim_perr_t i=FIM_CNS_ERR_QUIT);
 	public:
-	fim_key_t find_keycode_for_bound_cmd(fim_cls binding);
+	fim_key_t find_keycode_for_bound_cmd(fim_cls binding)const;
 
 	fim_bool_t drawOutput(const fim_char_t*s=FIM_NULL)const;
 	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int rsic)const;

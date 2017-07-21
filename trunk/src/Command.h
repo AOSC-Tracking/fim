@@ -36,7 +36,7 @@ class Command FIM_FINAL
 	fim_cmd_id cmd_;
 	fim::string help_;
 	public:
-	inline const fim_cmd_id & cmd(void){return cmd_;}
+	inline const fim_cmd_id & cmd(void)const{return cmd_;}
 	explicit Command(fim_cmd_id cmd, fim::string help, Browser *b=FIM_NULL, fim::string(Browser::*bf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(BrowserT) {}
 	explicit Command(fim_cmd_id cmd, fim::string help, CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(CommandConsoleT) {}
 #ifdef FIM_WINDOWS

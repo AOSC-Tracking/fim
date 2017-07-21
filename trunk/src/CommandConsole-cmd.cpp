@@ -152,9 +152,9 @@ err:
 
 				ptn = item.substr(1,item.size());
 				for(size_t i=0;i<commands_.size();++i) 
-					if(commands_[i] && commands_[i]->getHelp().find(ptn) != commands_[i]->getHelp().npos)
+					if(commands_[i].getHelp().find(ptn) != commands_[i].getHelp().npos)
 					{
-						cstr += commands_[i]->cmd();
+						cstr += commands_[i].cmd();
 						cstr += " ";
 					}
 
@@ -230,8 +230,8 @@ err:
 			sws = fim_help_opt(item.c_str());
 			if( sws != FIM_CNS_EMPTY_STRING )
 				oss << sws << "\n";
-			if( Command *cmd = findCommand(item) )
-				oss << "\"" << item << "\" is a command, documented:\n" << cmd->getHelp() << "\n";
+			if( findCommandIdx(item) != FIM_INVALID_IDX )
+				oss << "\"" << item << "\" is a command, documented:\n" << commands_[findCommandIdx(item)].getHelp() << "\n";
 			if(aliasRecall(fim::string(item))!=FIM_CNS_EMPTY_STRING)
 				oss << "\"" << item << "\" is an alias, and was declared as:\n" << get_alias_info(item) << "\n";
 			if( getBoundAction(kstr_to_key(item))!=FIM_CNS_EMPTY_STRING)
