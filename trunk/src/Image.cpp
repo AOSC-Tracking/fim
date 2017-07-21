@@ -1239,6 +1239,11 @@ ret:
 	       	FbiStuff::fim_mipmaps_compute(fimg_,&mm_);
 	}
 	bool Image::has_mm(void)const { return mm_.ok(); }
+	size_t Image::mm_byte_size(void)const
+	{
+		// might implement has_mm in terms of this
+		return this->mm_.byte_size();
+	}
 #endif /* FIM_WANT_MIPMAPS */
 	bool Image::cacheable(void)const { return this->n_pages() == 1 ; }
 	void Image::set_auto_props(fim_int autocenter, fim_int autotop)
@@ -1246,5 +1251,32 @@ ret:
 		setVariable(FIM_VID_WANT_AUTOCENTER,autocenter);
 		setVariable(        FIM_VID_AUTOTOP,autotop);
 	}
+void Image::get_irs(char *imp)const
+{
+	// imp shall be at least 4 chars long
+	if(this->check_flip())
+		*(imp++)=FIM_SYM_FLIPCHAR;
+	if(this->shall_mirror())
+		*(imp++)=FIM_SYM_MIRRCHAR;
+	switch(this->orientation_)
+	{
+		case Image::FIM_ROT_L:
+			*(imp++)=Image::FIM_ROT_L_C;
+		break;
+		case Image::FIM_ROT_U:
+			 *(imp++)=Image::FIM_ROT_U_C;
+		break;
+		case Image::FIM_ROT_R:
+			 *(imp++)=Image::FIM_ROT_R_C;
+		break;
+		case Image::FIM_NO_ROT:
+		default:
+			FIM_NO_OP_STATEMENT;
+	}
+	*imp=FIM_SYM_CHAR_NUL;
 }
-
+size_t Image::get_pixelmap_byte_size(void)const
+{
+	return fim::fbi_img_pixel_count(fimg_);
+}
+} /* namespace fim */

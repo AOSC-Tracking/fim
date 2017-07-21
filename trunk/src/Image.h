@@ -61,7 +61,6 @@ class Image FIM_FINAL
 #endif /* FIM_NAMESPACES */
 {
 	public:
-	friend class CommandConsole;
 
 	explicit Image(const fim_char_t *fname, FILE *fd=FIM_NULL, fim_page_t page = 0);
 	explicit Image(const fim_char_t *fname, Foo& foo, FILE *fd=FIM_NULL);
@@ -143,6 +142,10 @@ class Image FIM_FINAL
 	fim_pgor_t getOrientation(void)const;
 
 	fim_err_t set_scale(fim_scale_t ns);
+	fim_scale_t get_scale(void)const{return scale_;};
+	int get_page(void)const{return page_+1;};
+	size_t get_file_size(void)const{return fs_;/* need a Browser::file_info_cache */};
+	size_t get_pixelmap_byte_size(void)const;
 	fim_err_t scale_multiply (fim_scale_t sm);
 	fim_scale_t ascale(void)const{ return (ascale_>0.0?ascale_:1.0); }
 	void shred(void);
@@ -165,6 +168,7 @@ class Image FIM_FINAL
 	void mm_free(void);
 	void mm_make(void);
 	bool has_mm(void)const;
+	size_t mm_byte_size(void)const;
 #endif /* FIM_WANT_MIPMAPS */
 	bool cacheable(void)const;
 	void desc_update(void);
@@ -176,6 +180,7 @@ class Image FIM_FINAL
 	fim_int check_desaturated(void)const;
 	fim_int check_autotop(void)const;
 	void set_exif_extra(fim_int shouldrotate, fim_int shouldmirror, fim_int shouldflip);
+	void get_irs(char *irs)const;
 }; /* class Image */
 #if FIM_USE_CXX11
 #if FIM_IMG_NAKED_PTRS
