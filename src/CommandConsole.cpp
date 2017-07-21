@@ -47,7 +47,6 @@
 #else /* FIM_WANT_RAW_KEYS_BINDING */
 #define FIM_CNS_RAW_KEYS_MESG 
 #endif /* FIM_WANT_RAW_KEYS_BINDING */
-#define FIM_INVALID_IDX -1
 
 #define FIM_KEY_OFFSET '0'
 
@@ -84,23 +83,20 @@ namespace fim
 		 * check whether cmd is a valid internal (registered) Fim command and returns index
 		 */
 		for(size_t i=0;i<commands_.size();++i) 
-			if(commands_[i] && commands_[i]->cmd()==cmd)
+			if( commands_[i].cmd()==cmd)
 				return i;
 		return FIM_INVALID_IDX;
 	}
-
-	Command* CommandConsole::findCommand(fim_cmd_id cmd)const
+/*
+	Command &CommandConsole::findCommand(fim_cmd_id cmd)const
 	{
-		/*
-		 * check whether cmd is a valid internal (registered) Fim command and returns pointer
-		 */
 		int idx=findCommandIdx(cmd);
 
 		if(idx!=FIM_INVALID_IDX)
-			return commands_[idx];
+			return &(commands_[idx]);
 		return FIM_NULL;
 	}
-
+*/
 	fim::string CommandConsole::bind(const fim_key_t c, const fim_cls binding, const fim::string hstr)
 	{
 		/*
@@ -172,7 +168,7 @@ namespace fim
 		return unbind(key);
 	}
 
-	fim_key_t CommandConsole::find_keycode_for_bound_cmd(fim_cls binding)
+	fim_key_t CommandConsole::find_keycode_for_bound_cmd(fim_cls binding)const
 	{
 		/*
 		 * looks for a binding to 'cmd' and returns a string description for its bound key 
@@ -201,12 +197,16 @@ namespace fim
 ret:		return key;
 	}
 
-	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls cmd)
+	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls cmd)const
 	{
 		fim_key_t key = find_keycode_for_bound_cmd(cmd);
 
 		if( key != FIM_SYM_NULL_KEY )
-			return key_syms_[key];	
+		{
+			key_syms_t::const_iterator ki = key_syms_.find(key);
+			if( ki != key_syms_.end() )
+				return ki->second;
+		}
 
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -343,41 +343,41 @@ ret:		return key;
 	,displaydevice_(FIM_NULL)
 	,oldcwd_(fim_getcwd())
 	{
-		addCommand(new Command(FIM_FLT_ALIAS,FIM_CMD_HELP_ALIAS,this,&CommandConsole::fcmd_foo));
-		addCommand(new Command(FIM_FLT_ALIGN,FIM_CMD_HELP_ALIGN,&browser_,&Browser::fcmd_align));
+		addCommand(Command(FIM_FLT_ALIAS,FIM_CMD_HELP_ALIAS,this,&CommandConsole::fcmd_foo));
+		addCommand(Command(FIM_FLT_ALIGN,FIM_CMD_HELP_ALIGN,&browser_,&Browser::fcmd_align));
 #ifdef FIM_AUTOCMDS
-		addCommand(new Command(FIM_FLT_AUTOCMD,FIM_CMD_HELP_AUTOCMD,this,&CommandConsole::fcmd_autocmd));
-		addCommand(new Command(FIM_FLT_AUTOCMD_DEL,FIM_CMD_HELP_AUTOCMD_DEL,this,&CommandConsole::fcmd_autocmd_del));
+		addCommand(Command(FIM_FLT_AUTOCMD,FIM_CMD_HELP_AUTOCMD,this,&CommandConsole::fcmd_autocmd));
+		addCommand(Command(FIM_FLT_AUTOCMD_DEL,FIM_CMD_HELP_AUTOCMD_DEL,this,&CommandConsole::fcmd_autocmd_del));
 #endif /* FIM_AUTOCMDS */
-		addCommand(new Command(FIM_FLT_BASENAME,FIM_CMD_HELP_BASENAME,this,&CommandConsole::fcmd_basename));
-		addCommand(new Command(FIM_FLT_BIND,FIM_CMD_HELP_BIND,this,&CommandConsole::fcmd_bind));
-		addCommand(new Command(FIM_FLT_CD,FIM_CMD_HELP_CD,this,&CommandConsole::fcmd_cd));
+		addCommand(Command(FIM_FLT_BASENAME,FIM_CMD_HELP_BASENAME,this,&CommandConsole::fcmd_basename));
+		addCommand(Command(FIM_FLT_BIND,FIM_CMD_HELP_BIND,this,&CommandConsole::fcmd_bind));
+		addCommand(Command(FIM_FLT_CD,FIM_CMD_HELP_CD,this,&CommandConsole::fcmd_cd));
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-		addCommand(new Command(FIM_FLT_CLEAR,FIM_CMD_HELP_CLEAR,this,&CommandConsole::fcmd_clear));
+		addCommand(Command(FIM_FLT_CLEAR,FIM_CMD_HELP_CLEAR,this,&CommandConsole::fcmd_clear));
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-		addCommand(new Command(FIM_FLT_COMMANDS,FIM_CMD_HELP_COMMANDS,this,&CommandConsole::fcmd_commands_list));
-		addCommand(new Command(FIM_FLT_COLOR,FIM_CMD_HELP_COLOR,&browser_,&Browser::fcmd_color));
-		addCommand(new Command(FIM_FLT_DESC,FIM_FLT_HELP_DESC,this,&CommandConsole::fcmd_desc));
-		addCommand(new Command(FIM_FLT_DISPLAY,FIM_FLT_HELP_DISPLAY,this,&CommandConsole::fcmd_display));
-		addCommand(new Command(FIM_FLT_DUMP_KEY_CODES,FIM_CMD_HELP_DUMP_KEY_CODES,this,&CommandConsole::fcmd_dump_key_codes));
-		addCommand(new Command(FIM_FLT_ECHO,FIM_CMD_HELP_ECHO,this,&CommandConsole::fcmd_echo));
-		addCommand(new Command(FIM_FLT_ELSE,FIM_CMD_HELP_ELSE,this,&CommandConsole::fcmd_foo));
+		addCommand(Command(FIM_FLT_COMMANDS,FIM_CMD_HELP_COMMANDS,this,&CommandConsole::fcmd_commands_list));
+		addCommand(Command(FIM_FLT_COLOR,FIM_CMD_HELP_COLOR,&browser_,&Browser::fcmd_color));
+		addCommand(Command(FIM_FLT_DESC,FIM_FLT_HELP_DESC,this,&CommandConsole::fcmd_desc));
+		addCommand(Command(FIM_FLT_DISPLAY,FIM_FLT_HELP_DISPLAY,this,&CommandConsole::fcmd_display));
+		addCommand(Command(FIM_FLT_DUMP_KEY_CODES,FIM_CMD_HELP_DUMP_KEY_CODES,this,&CommandConsole::fcmd_dump_key_codes));
+		addCommand(Command(FIM_FLT_ECHO,FIM_CMD_HELP_ECHO,this,&CommandConsole::fcmd_echo));
+		addCommand(Command(FIM_FLT_ELSE,FIM_CMD_HELP_ELSE,this,&CommandConsole::fcmd_foo));
 #ifdef FIM_RECORDING
-		addCommand(new Command(FIM_FLT_EVAL,FIM_CMD_HELP_EVAL,this,&CommandConsole::fcmd_eval));
+		addCommand(Command(FIM_FLT_EVAL,FIM_CMD_HELP_EVAL,this,&CommandConsole::fcmd_eval));
 #endif /* FIM_RECORDING */
 #ifndef FIM_WANT_NOSCRIPTING
-		addCommand(new Command(FIM_FLT_EXEC,FIM_CMD_HELP_EXEC,this,&CommandConsole::fcmd_executeFile));
+		addCommand(Command(FIM_FLT_EXEC,FIM_CMD_HELP_EXEC,this,&CommandConsole::fcmd_executeFile));
 #endif /* FIM_WANT_NOSCRIPTING */
 #if FIM_EXPERIMENTAL_FONT_CMD
-		addCommand(new Command(FIM_FLT_FONT,FIM_CMD_HELP_FONT,this,&CommandConsole::fcmd_font));
+		addCommand(Command(FIM_FLT_FONT,FIM_CMD_HELP_FONT,this,&CommandConsole::fcmd_font));
 #endif /* FIM_EXPERIMENTAL_FONT_CMD */
-		addCommand(new Command(FIM_FLT_GETENV,FIM_CMD_HELP_GETENV,this,&CommandConsole::fcmd_do_getenv));
-		addCommand(new Command(FIM_FLT_GOTO,FIM_CMD_HELP_GOTO,&browser_,&Browser::fcmd_goto));
-		addCommand(new Command(FIM_FLT_HELP,FIM_CMD_HELP_HELP,this,&CommandConsole::fcmd_help));
-		addCommand(new Command(FIM_FLT_IF,FIM_CMD_HELP_IFELSE,this,&CommandConsole::fcmd_foo));
-		addCommand(new Command(FIM_FLT_INFO,FIM_CMD_HELP_INFO,&browser_,&Browser::fcmd_info));
+		addCommand(Command(FIM_FLT_GETENV,FIM_CMD_HELP_GETENV,this,&CommandConsole::fcmd_do_getenv));
+		addCommand(Command(FIM_FLT_GOTO,FIM_CMD_HELP_GOTO,&browser_,&Browser::fcmd_goto));
+		addCommand(Command(FIM_FLT_HELP,FIM_CMD_HELP_HELP,this,&CommandConsole::fcmd_help));
+		addCommand(Command(FIM_FLT_IF,FIM_CMD_HELP_IFELSE,this,&CommandConsole::fcmd_foo));
+		addCommand(Command(FIM_FLT_INFO,FIM_CMD_HELP_INFO,&browser_,&Browser::fcmd_info));
 #if FIM_WANT_PIC_LBFL
-		addCommand(new Command(FIM_FLT_LIMIT,fim::string(FIM_FLT_LIMIT " "
+		addCommand(Command(FIM_FLT_LIMIT,fim::string(FIM_FLT_LIMIT " "
 #if FIM_WANT_PIC_LVDN
 		" {'-list'|'-listall'} 'variable'|"
 #endif /* FIM_WANT_PIC_LVDN */
@@ -409,40 +409,40 @@ ret:		return key;
 		" For other values of {expression}, limit to files whose description string matches {expression}. "
 		" Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
 #endif /* FIM_WANT_PIC_LBFL */
-		addCommand(new Command(FIM_FLT_LIST,FIM_CMD_HELP_LIST,&browser_,&Browser::fcmd_list));
-		addCommand(new Command(FIM_FLT_LOAD,FIM_CMD_HELP_LOAD,&browser_,&Browser::fcmd_load));
-		addCommand(new Command(FIM_FLT_PAN,FIM_CMD_HELP_PAN,&browser_,&Browser::fcmd_pan));
-		addCommand(new Command(FIM_FLT_POPEN,FIM_CMD_HELP_POPEN,this,&CommandConsole::fcmd_sys_popen));
+		addCommand(Command(FIM_FLT_LIST,FIM_CMD_HELP_LIST,&browser_,&Browser::fcmd_list));
+		addCommand(Command(FIM_FLT_LOAD,FIM_CMD_HELP_LOAD,&browser_,&Browser::fcmd_load));
+		addCommand(Command(FIM_FLT_PAN,FIM_CMD_HELP_PAN,&browser_,&Browser::fcmd_pan));
+		addCommand(Command(FIM_FLT_POPEN,FIM_CMD_HELP_POPEN,this,&CommandConsole::fcmd_sys_popen));
 #ifdef FIM_PIPE_IMAGE_READ
-		addCommand(new Command(FIM_FLT_PREAD,FIM_CMD_HELP_PREAD,this,&CommandConsole::fcmd_pread));
+		addCommand(Command(FIM_FLT_PREAD,FIM_CMD_HELP_PREAD,this,&CommandConsole::fcmd_pread));
 #endif /* FIM_PIPE_IMAGE_READ */
-		addCommand(new Command(FIM_FLT_PREFETCH,FIM_CMD_HELP_PREFETCH,&browser_,&Browser::fcmd_prefetch));
-		addCommand(new Command(FIM_FLT_PWD,FIM_CMD_HELP_PWD,this,&CommandConsole::fcmd_pwd));
-		addCommand(new Command(FIM_FLT_QUIT,FIM_CMD_HELP_QUIT,this,&CommandConsole::fcmd_quit));
+		addCommand(Command(FIM_FLT_PREFETCH,FIM_CMD_HELP_PREFETCH,&browser_,&Browser::fcmd_prefetch));
+		addCommand(Command(FIM_FLT_PWD,FIM_CMD_HELP_PWD,this,&CommandConsole::fcmd_pwd));
+		addCommand(Command(FIM_FLT_QUIT,FIM_CMD_HELP_QUIT,this,&CommandConsole::fcmd_quit));
 #ifdef FIM_RECORDING
-		addCommand(new Command(FIM_FLT_RECORDING,FIM_CMD_HELP_RECORDING,this,&CommandConsole::fcmd_recording));
+		addCommand(Command(FIM_FLT_RECORDING,FIM_CMD_HELP_RECORDING,this,&CommandConsole::fcmd_recording));
 #endif /* FIM_RECORDING */
-		addCommand(new Command(FIM_FLT_REDISPLAY,FIM_CMD_HELP_REDISPLAY  ,this,&CommandConsole::fcmd_redisplay));
-		addCommand(new Command(FIM_FLT_RELOAD,FIM_CMD_HELP_RELOAD,&browser_,&Browser::fcmd_reload));
-		addCommand(new Command(FIM_FLT_ROTATE,FIM_CMD_HELP_ROTATE,&browser_,&Browser::fcmd_rotate));
-		addCommand(new Command(FIM_FLT_SCALE,FIM_CMD_HELP_SCALE,&browser_,&Browser::fcmd_scale));
-		addCommand(new Command(FIM_FLT_SCROLL,FIM_CMD_HELP_SCROLL,&browser_,&Browser::fcmd_scroll));
-		addCommand(new Command(FIM_FLT_SET,FIM_CMD_HELP_SET,this,&CommandConsole::fcmd_set));
-		addCommand(new Command(FIM_FLT_SET_CONSOLE_MODE,FIM_CMD_HELP_SET_CONSOLE_MODE,this,&CommandConsole::fcmd_set_in_console));
-		addCommand(new Command(FIM_FLT_SET_INTERACTIVE_MODE,FIM_CMD_HELP_SET_INTERACTIVE_MODE,this,&CommandConsole::fcmd_set_interactive_mode));
-		addCommand(new Command(FIM_FLT_SLEEP,FIM_CMD_HELP_SLEEP,this,&CommandConsole::fcmd_foo));
-		addCommand(new Command(FIM_FLT_STATUS,FIM_CMD_HELP_STATUS,this,&CommandConsole::fcmd_status));
-		addCommand(new Command(FIM_FLT_STDOUT,FIM_CMD_HELP_STDOUT ,this,&CommandConsole::fcmd__stdout));
+		addCommand(Command(FIM_FLT_REDISPLAY,FIM_CMD_HELP_REDISPLAY  ,this,&CommandConsole::fcmd_redisplay));
+		addCommand(Command(FIM_FLT_RELOAD,FIM_CMD_HELP_RELOAD,&browser_,&Browser::fcmd_reload));
+		addCommand(Command(FIM_FLT_ROTATE,FIM_CMD_HELP_ROTATE,&browser_,&Browser::fcmd_rotate));
+		addCommand(Command(FIM_FLT_SCALE,FIM_CMD_HELP_SCALE,&browser_,&Browser::fcmd_scale));
+		addCommand(Command(FIM_FLT_SCROLL,FIM_CMD_HELP_SCROLL,&browser_,&Browser::fcmd_scroll));
+		addCommand(Command(FIM_FLT_SET,FIM_CMD_HELP_SET,this,&CommandConsole::fcmd_set));
+		addCommand(Command(FIM_FLT_SET_CONSOLE_MODE,FIM_CMD_HELP_SET_CONSOLE_MODE,this,&CommandConsole::fcmd_set_in_console));
+		addCommand(Command(FIM_FLT_SET_INTERACTIVE_MODE,FIM_CMD_HELP_SET_INTERACTIVE_MODE,this,&CommandConsole::fcmd_set_interactive_mode));
+		addCommand(Command(FIM_FLT_SLEEP,FIM_CMD_HELP_SLEEP,this,&CommandConsole::fcmd_foo));
+		addCommand(Command(FIM_FLT_STATUS,FIM_CMD_HELP_STATUS,this,&CommandConsole::fcmd_status));
+		addCommand(Command(FIM_FLT_STDOUT,FIM_CMD_HELP_STDOUT ,this,&CommandConsole::fcmd__stdout));
 #ifndef FIM_NO_SYSTEM
-		addCommand(new Command(FIM_FLT_SYSTEM,FIM_CMD_HELP_SYSTEM,this,&CommandConsole::fcmd_system));
+		addCommand(Command(FIM_FLT_SYSTEM,FIM_CMD_HELP_SYSTEM,this,&CommandConsole::fcmd_system));
 #endif /* FIM_NO_SYSTEM */
-		addCommand(new Command(FIM_FLT_VARIABLES,FIM_CMD_HELP_VARIABLES,this,&CommandConsole::fcmd_variables_list));
-		addCommand(new Command(FIM_FLT_UNALIAS,FIM_CMD_HELP_UNALIAS,this,&CommandConsole::fcmd_unalias));
-		addCommand(new Command(FIM_FLT_UNBIND,FIM_CMD_HELP_UNBIND,this,&CommandConsole::fcmd_unbind));
-		addCommand(new Command(FIM_FLT_WHILE,FIM_CMD_HELP_WHILE,this,&CommandConsole::fcmd_foo));/* may introduce a special "help grammar" command */
+		addCommand(Command(FIM_FLT_VARIABLES,FIM_CMD_HELP_VARIABLES,this,&CommandConsole::fcmd_variables_list));
+		addCommand(Command(FIM_FLT_UNALIAS,FIM_CMD_HELP_UNALIAS,this,&CommandConsole::fcmd_unalias));
+		addCommand(Command(FIM_FLT_UNBIND,FIM_CMD_HELP_UNBIND,this,&CommandConsole::fcmd_unbind));
+		addCommand(Command(FIM_FLT_WHILE,FIM_CMD_HELP_WHILE,this,&CommandConsole::fcmd_foo));/* may introduce a special "help grammar" command */
 #ifdef FIM_WINDOWS
 		/* this is a stub for the manual generation (actually, the FimWindow object gets built later) */
-		addCommand(new Command(FIM_FLT_WINDOW,FIM_CMD_HELP_WINDOW,this,&CommandConsole::fcmd_foo));
+		addCommand(Command(FIM_FLT_WINDOW,FIM_CMD_HELP_WINDOW,this,&CommandConsole::fcmd_foo));
 #endif /* FIM_WINDOWS */
 		execDefaultConfiguration();
 		fcmd_cd(args_t());
@@ -478,16 +478,12 @@ err:
 		return false;
         }
 
-	fim_err_t CommandConsole::addCommand(Command *c)
+	fim_err_t CommandConsole::addCommand(Command c)
 	{
-		assert(c);
-		int idx=findCommandIdx(c->cmd());
+		int idx=findCommandIdx(c.cmd());
 
 		if(idx!=FIM_INVALID_IDX)
-		{
-			delete commands_[idx];
 			commands_[idx]=c;
-		}
 		else
 			commands_.push_back(c);
 		return FIM_ERR_NO_ERROR; 
@@ -534,8 +530,8 @@ err:
 		if(mask==0 || (mask&1))
 		for(size_t i=0;i<commands_.size();++i)
 		{
-			if(commands_[i]->cmd().find(cmd)==0)
-			completions.push_back(commands_[i]->cmd());
+			if(commands_[i].cmd().find(cmd)==0)
+			completions.push_back(commands_[i].cmd());
 		}
 		if(mask==0 || (mask&2))
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
@@ -780,7 +776,7 @@ ret:
 		/*
 		 * Single tokenized commands with arguments.
 		 */
-		Command *c=FIM_NULL;
+		int cidx=FIM_INVALID_IDX;
 		/* first determine whether cmd is an alias */
 		fim::string ocmd=aliasRecall(cmd);
 
@@ -860,23 +856,23 @@ ret:
 		}
 		else
 		{
-			c=findCommand(cmd);
+			cidx=findCommandIdx(cmd);
 
 #ifdef FIM_COMMAND_AUTOCOMPLETION
 			if(getIntVariable(FIM_VID_CMD_EXPANSION)==1)
-			if(c==FIM_NULL)
+			if(cidx==FIM_INVALID_IDX)
 			{
 				fim_char_t *match = this->command_generator(cmd.c_str(),0,0);
 
 				if(match)
 				{
 					//cout << "but found :`"<<match<<"...\n";
-					c=findCommand(match);
+					cidx=findCommandIdx(match);
 					fim_free(match);
 				}
 			}
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
-			if(c==FIM_NULL)
+			if(cidx==FIM_INVALID_IDX)
 			{
 				cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
 				goto ok;
@@ -886,7 +882,7 @@ ret:
 				if(getVariable(FIM_VID_DBG_COMMANDS).find('c') >= 0)
 					std::cout << FIM_CNS_DBG_CMDS_PFX << "executing: " << cmd << " " << args << "\n";
 				
-				fim::string lco = c->execute(args);
+				fim::string lco = commands_[cidx].execute(args);
 				cout << lco;
 				setVariable(FIM_VID_LAST_CMD_OUTPUT,lco);
 				goto ok;
@@ -1232,9 +1228,6 @@ rlnull:
 				}
 			}
 		}
-		for(size_t i=0;i<commands_.size();++i)
-			if(commands_[i])
-				delete commands_[i];
 
 	#ifdef FIM_WITH_AALIB
 		if(aad_ && !displaydevice_)
@@ -1351,7 +1344,7 @@ ret:
 		{
 			if(i)
 				oss << " ";
-			oss << (commands_[i]->cmd());
+			oss << (commands_.at(i).cmd());
 		}
 		return oss.str();
 	}

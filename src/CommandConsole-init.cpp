@@ -297,10 +297,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			if( e == FIM_E_NO_MEM || true ) quit(FIM_E_NO_MEM);
 		}
 
-		/*
-		 * TODO: exceptions should be launched here in case ...
-		 * */
-		addCommand(new Command(fim_cmd_id(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&FimWindow::fcmd_cmd));
+		addCommand(Command(fim_cmd_id(FIM_FLT_WINDOW),fim::string(FIM_CMD_HELP_WINDOW), window_,&FimWindow::fcmd_cmd));
 #else /* FIM_WINDOWS */
 		try
 		{
