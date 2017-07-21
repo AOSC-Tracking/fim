@@ -299,3 +299,21 @@ void DisplayDevice::quickbench(fim_int qbi)
 		return fs_puts(f, x, y, s);
 	}
 
+	void DisplayDevice::fs_multiline_puts(const char *str, fim_int doclear, int vw, int wh)
+	{
+		int fh=this->f_ ? this->f_->sheight():1; // FIXME : this is not clean
+		int fw=this->f_ ? this->f_->swidth():1; // FIXME : this is not clean
+		int sl = strlen(str), rw = vw / fw;
+		int cpl = this->get_chars_per_line();
+
+		if(doclear && cpl)
+		{
+			int lc = FIM_INT_FRAC(sl,cpl); /* lines count */
+			this->clear_rect(0, vw-1, 0, FIM_MIN(fh*lc,wh-1));
+		}
+
+		for( int li = 0 ; sl > rw * li ; ++li )
+			if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
+			this->fs_puts(this->f_, 0, fh*li, str+rw*li);
+	}
+
