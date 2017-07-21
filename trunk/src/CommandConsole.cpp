@@ -2426,14 +2426,14 @@ ret:
 
 fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 {
-	static fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
+	// see FIM_VID_INFO_FMT_STR FIM_VID_COMMENT_OI 	FIM_VID_COMMENT_OI_FMT
+	fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[4];
-	fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	fim::string ifs;
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
-	const Image * image = browser_.c_getImage();// TODO: Image -> Namespace ins
+	const Image * image = browser_.c_getImage();
 
 	image->get_irs(imagemode);
 
@@ -2443,11 +2443,9 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 		*pagesinfobuffer='\0';
 		
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
-	//ifs=getGlobalStringVariable(FIM_VID_INFO_FMT_STR);
-	//if( !ifs.empty() )
+	if( ifsp )
 	{
-		static fim_char_t clb[FIM_STATUSLINE_BUF_SIZE]; /* FIXME: reasons for having this static ? */
-		//char*ifsp=(char*)ifs.c_str(); // FIXME
+		fim_char_t clb[FIM_STATUSLINE_BUF_SIZE];
 		const char*fp=ifsp;
 		const char*sp=ifsp;
 		fim_char_t *clbp = clb;
@@ -2476,8 +2474,7 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 					snprintf(clbp, rbc, "%d",(int)image->height());
 				break;
 				case('i'):
-					/* browser property. TODO: move outta here */
-					snprintf(clbp, rbc, "%d",(int)(n?n:1));
+					snprintf(clbp, rbc, "%d",(int)browser_.current_n());
 				break;
 				case('k'):
 				{
@@ -2487,8 +2484,7 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 				}
 				break;
 				case('l'):
-					/* browser property. TODO: move outta here */
-					snprintf(clbp, rbc, "%d",(int)(getGlobalIntVariable(FIM_VID_FILELISTLEN)));
+					snprintf(clbp, rbc, "%d",(int)browser_.n_files());
 				break;
 				case('L'):
 					snprintf(clbp, rbc, "%s",imagemode);
@@ -2509,11 +2505,9 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 					snprintf(clbp, rbc, "%s",fim_basename_of(image->getStringVariable(FIM_VID_FILENAME)));
 				break;
 				case('T'):
-					/* console property. TODO: move outta here */
 					fim_snprintf_XB(clbp, rbc,cc.byte_size());
 				break;
 				case('R'):
-					/* console property. TODO: move outta here */
 					fim_snprintf_XB(clbp, rbc, fim_maxrss());
 				break;
 #if FIM_WANT_MIPMAPS
@@ -2524,14 +2518,12 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 				case('C'):
 				{
 					fim_char_t buf[2*FIM_PRINTFNUM_BUFSIZE];
-					/* cache property. TODO: move outta here */
-					fim_snprintf_XB(buf, sizeof(buf),cc.browser_.cache_.img_byte_size());
-					snprintf(clbp, rbc, "#%d:%s",(int)cc.browser_.cache_.cached_elements(),buf);
+					fim_snprintf_XB(buf, sizeof(buf),browser_.cache_.img_byte_size());
+					snprintf(clbp, rbc, "#%d:%s",(int)browser_.cache_.cached_elements(),buf);
 				}
 				break;
 				case('c'):
-					/* viewport property. TODO: move outta here */
-					cc.current_viewport()->snprintf_centering_info(clbp, rbc);
+					current_viewport()->snprintf_centering_info(clbp, rbc);
 				break;
 				case('v'):
 					snprintf(clbp, rbc, "%s",FIM_CNS_FIM_APPTITLE);
@@ -2632,4 +2624,4 @@ sbum:
 labeldone:
 	return fim::string(linebuffer);
 }
-}
+} /* namespace fim */
