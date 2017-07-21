@@ -801,8 +801,6 @@ nop:
 		 * with no arguments, prints out the variable names.
 		 * with one identifier as argument, prints out its value.
 		 * with two arguments, sets the first argument's value.
-		 *
-		 * NOTE : THIS IS NOT EXACTLY VIM'S BEHAVIOUR (FIXME)
 		 * */
 		if( ! args.size())
 			return get_variables_list();
