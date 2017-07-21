@@ -75,6 +75,7 @@ namespace fim
 	        fim_float_t setGlobalVariable(const fim_var_id& varname,fim_float_t value);
 		const fim_char_t* setGlobalVariable(const fim_var_id& varname,const fim_char_t* value);
 		const fim::string& setGlobalVariable(const fim_var_id& varname, const fim::string& value);
+		fim_bool_t isSetGlobalVar(const fim_var_id& varname)const;
 		fim_int getGlobalIntVariable(const fim_var_id& varname)const;
 		fim_float_t getGlobalFloatVariable(const fim_var_id& varname)const;
 		fim::string getGlobalStringVariable(const fim_var_id& varname)const;

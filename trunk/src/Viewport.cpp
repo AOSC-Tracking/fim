@@ -29,7 +29,8 @@ namespace fim
 #endif	/* FIM_WANT_BDI */
 
 	Viewport::Viewport(
-			CommandConsole& c
+			CommandConsole& c,
+			DisplayDevice *displaydevice
 #ifdef FIM_WINDOWS
 			,const Rect & corners
 #endif /* FIM_WINDOWS */
@@ -39,7 +40,7 @@ namespace fim
 			Namespace(&c,FIM_SYM_NAMESPACE_VIEWPORT_CHAR),
 #endif /* FIM_NAMESPACES */
 			psteps_(false),
-			displaydevice_(c.displaydevice_)	/* could be FIM_NULL */
+			displaydevice_(displaydevice)
 #ifdef FIM_WINDOWS
 			,corners_(corners)
 #endif /* FIM_WINDOWS */
@@ -428,7 +429,7 @@ namespace fim
 					if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
-				if(commandConsole.isSetVar(FIM_VID_COMMENT_OI_FMT))
+				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
 					this->fs_multiline_puts(commandConsole.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1);
 				else
 					this->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1);

@@ -47,7 +47,7 @@ class Viewport FIM_FINAL
         void reset(void);
         void steps_reset(void);
 	public:
-	explicit Viewport(CommandConsole& c ,const Rect &rect); 
+	explicit Viewport(CommandConsole& c, DisplayDevice *dd, const Rect &rect); 
 	explicit Viewport(const Viewport& rhs);
 	~Viewport(void);
 	private:

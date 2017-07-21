@@ -169,6 +169,14 @@ namespace fim
 			return value;
 		}
 
+		fim_bool_t Namespace::isSetGlobalVar(const fim_var_id& varname)const
+		{
+			fim_bool_t isv = false;
+			if(rnsp_)
+				isv = ( rnsp_->variables_.find(varname) != rnsp_->variables_.end() );
+			return isv;
+		}
+
 		fim_int Namespace::getGlobalIntVariable(const fim_var_id& varname)const
 		{
 #ifndef FIM_INDEPENDENT_NAMESPACE
