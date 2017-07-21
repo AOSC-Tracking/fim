@@ -523,7 +523,7 @@ void FramebufferDevice::svga_display_image_new(
  	   convert_line_f=&fim::FramebufferDevice::convert_line;
 #endif /* FIM_IS_SLOWER_THAN_FBI */
 
-    fim_pxc_t pc = fbi_img_pixel_count(img);
+    fim_pxc_t pc = fbi_img_pixel_bytes(img);
     for (data = 0, y = by;
 	 data < pc 
 	     && data / img->i.width / 3 < dheight;
