@@ -706,7 +706,10 @@ ret:
 		FIM_PR('*');
 		//for(size_t i=0;i<args.size();++i) push_path(args[i]);
 		if( empty_file_list() )
-		{ result = "sorry, no image to reload\n"; goto ret; }
+		{
+		       	result = "sorry, no image to reload\n"; 
+			goto ret;
+	       	}
 		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRERELOAD,current());
 		if( args.size() > 0 )
 			free_current_image(true);

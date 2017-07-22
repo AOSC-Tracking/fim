@@ -1,0 +1,11 @@
+# A test for 'reload'
+alias 'dump' "stdout _last_cmd_output; stdout '*';";
+list;
+dump;
+_debug_commands='Cl';
+stdout "* before  reloads";
+reload '';
+stdout "* between reloads";
+reload '';
+stdout "* after  reloads";
+#
