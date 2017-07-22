@@ -371,7 +371,7 @@ ret:
 		return 0;
 	}
 
-	bool Cache::freeCachedImage(ImagePtr image, const ViewportState *vsp)
+	bool Cache::freeCachedImage(ImagePtr image, const ViewportState *vsp, bool force)
 	{
 		/*
 		 * Shall rename to free().
@@ -406,9 +406,9 @@ ret:
 				image->mm_free();
 #endif /* FIM_WANT_MIPMAPS */
 			if(
-				(usageCounter_[image->getKey()])==0 && 
-				image->getKey().second!=FIM_E_STDIN 
-				)
+				( (usageCounter_[image->getKey()])==0 && 
+				image->getKey().second!=FIM_E_STDIN  )
+				 || force)
 			{
 				fim_int minci = getGlobalIntVariable(FIM_VID_MIN_CACHED_IMAGES);
 
@@ -422,15 +422,20 @@ ret:
 					usageCounter_.erase(key);
 				}
 #else
-				/* doing it here is dangerous : */
-				if( need_free() && cached_elements() > minci )
+				if(FIM_ALLOW_CACHE_DEBUG && force)
+					std::cout << FIM_CNS_DBG_CMDS_PFX << "cache forced to free  "<<image->getName()<<"\n";
+				if( ( need_free() && cached_elements() > minci ) || force )
 				{
-					ImagePtr lrui = get_lru(true);
+					ImagePtr lrui;
+					if(force)
+						lrui = image;
+					else
+						lrui = get_lru(true);
 					FIM_PR('o');
 					if( lrui ) 
 					{
 						cache_key_t key = lrui->getKey();
-						if( FIM_VCBS(viewportInfo_) > FIM_CNS_VICSZ )
+						if( ( FIM_VCBS(viewportInfo_) > FIM_CNS_VICSZ ) || force )
 							viewportInfo_.erase(key);
 						if(( key.second != FIM_E_STDIN ))
 						{	

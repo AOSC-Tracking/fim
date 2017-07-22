@@ -84,7 +84,7 @@ class Viewport FIM_FINAL
         Image* getImage(void)const;
 	void auto_scale(void);
 	void auto_scale_if_bigger(void);
-	void free_image(void);
+	void free_image(bool force);
         bool check_invalid(void)const;
         bool check_valid(void)const;
 	void scale_position_magnify(fim_scale_t factor=FIM_CNS_SCALEFACTOR);

@@ -99,7 +99,7 @@ class Cache FIM_FINAL
 	Cache& operator= (const Cache&rhs) { return *this; }
 #endif /* FIM_USE_CXX11 */
 	public:
-	bool freeCachedImage(ImagePtr image, const ViewportState *vsp);
+	bool freeCachedImage(ImagePtr image, const ViewportState *vsp, bool force);
 	ImagePtr useCachedImage(cache_key_t key, ViewportState *vsp, fim_page_t page = 0);
 	ImagePtr setAndCacheStdinCachedImage(ImagePtr image);
 	int prefetch(cache_key_t key);

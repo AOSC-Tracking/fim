@@ -438,7 +438,7 @@ namespace fim
 #endif /* FIM_CACHE_DEBUG */
 
 		if(ni)
-			free_image();
+			free_image(false);
 		reset();
 		image_ = ni;
 	}
@@ -497,10 +497,10 @@ namespace fim
 		image_->do_scale_rotate(viewport_xscale());
 	}
 
-	void Viewport::free_image(void)
+	void Viewport::free_image(bool force)
 	{
 		if(image_)
-			commandConsole_.browser_.cache_.freeCachedImage(image_,this);
+			commandConsole_.browser_.cache_.freeCachedImage(image_,this,force);
 		image_ = FIM_NULL;
 	}
 
@@ -568,7 +568,7 @@ namespace fim
 
 	Viewport::~Viewport(void)
 	{
-		free_image();
+		free_image(false);
 	}
 
 	bool Viewport::pan_to(const fim_pan_t px, const fim_pan_t py)
