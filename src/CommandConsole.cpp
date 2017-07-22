@@ -1123,14 +1123,10 @@ err:
 				}
 				else
 				{
-					//cout<< "error reading key from keyboard\n";
-					/*
-					 * 	This happens when console switching, too.
-					 * 	( switching out of the current! )
-					 * 	So a redraw after is not bad.
-					 * 	But it should work when stepping into the console,
-					 * 	not out..
-					 */
+					// framebuffer console switching is handled here
+					if(r==-1)
+						redisplay(), // fbi used to redraw elsewhere
+						browser_.display_status("");
 				}
 			}
 			continue;

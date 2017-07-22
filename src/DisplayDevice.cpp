@@ -83,7 +83,7 @@
 			                    (0 != timeout && !paused) ? &limit : FIM_NULL);
 				if(handle_console_switch())
 				{
-					r=0;	/* originally a 'continue' in a loop */
+					r=-1;	/* originally a 'continue' in a loop */
 					goto ret;
 				}
 				
