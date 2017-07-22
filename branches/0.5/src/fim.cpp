@@ -98,7 +98,7 @@ struct fim_options_t fim_options[] = {
 "command, they must be quoted and escaped in a manner suitable for your shell!\n"
 "\n"
 "For example,\n"
-"-c '*2;2pan_up;display;while(1){bottom_align;sleep \"1\" ; top_align}'\n"
+"-c '*2;2pan_up;display;while(1){align \"bottom\";sleep \"1\" ; align \"top\"}'\n"
 "(with the single quotes) will tell fim to first double the displayed image \n"
 "size, then pan two times up, then display the image ; and then \n"
 "do an endless loop consisting of bottom and top aligning, alternated.\n"
