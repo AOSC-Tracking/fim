@@ -325,7 +325,7 @@ ret:
 			usageCounter_[key]=0;
 			/* NOTE : the user should call usageCounter_.erase(key) after this ! */
 			if(FIM_ALLOW_CACHE_DEBUG)
-				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache erases          "/*<< oi << " "*/ <<  oi->getName() << " with timestamp " << lru_[oi->getKey()] << "\n";
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "cache erases          "/*<< oi << " "*/ <<  oi->getName() /*<< " with timestamp " << lru_[oi->getKey()] */ << "\n";
 			//if(FIM_ALLOW_CACHE_DEBUG)
 			//	std::cout << FIM_CNS_DBG_CMDS_PFX << "erasing original " << fim_basename_of(oi->getName()) << "\n";
 			lru_.erase(key);
