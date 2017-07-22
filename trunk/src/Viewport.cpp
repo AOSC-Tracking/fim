@@ -266,7 +266,7 @@ namespace fim
 
 		fim_int autotop = shall_autotop();
 
-		image_->update_meta();
+		this->update_meta(false);
 
 		if(shall_negate())
 			image_->negate();
@@ -1071,8 +1071,7 @@ comeon:
 		{
 			fim_err_t errval = FIM_ERR_NO_ERROR;
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current);
-			if(c_getImage())
-				getImage()->update_meta();
+			this->update_meta(false);
 			if( c_getImage() )
 			switch( fc )
 			{
@@ -1134,5 +1133,13 @@ comeon:
 		}
 nop:
 		return FIM_CNS_EMPTY_RESULT;
+	}
+
+	fim_err_t Viewport::update_meta(bool fresh)
+	{
+		fim_err_t errval = FIM_ERR_NO_ERROR;
+		if(c_getImage())
+			getImage()->update_meta(false);
+		return errval;
 	}
 } /* namespace fim */

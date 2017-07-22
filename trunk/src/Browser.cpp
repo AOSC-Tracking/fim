@@ -2123,12 +2123,6 @@ err:
 
 	Viewport* Browser::viewport(void)const
 	{
-		/* 
-		 * A valid pointer will be returned 
-		 * whenever the image is loaded !
-		 *
-		 * FIM_NULL is returned in case no viewport is loaded.
-		 * */
 		return (commandConsole_.current_viewport());
 	}
 

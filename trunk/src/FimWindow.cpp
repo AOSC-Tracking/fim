@@ -1157,6 +1157,7 @@ namespace fim
 		return *viewport_;
 	}	
 
+#if 0
 	const Image* FimWindow::getImage(void)const
 	{
 		if( current_viewportp() )
@@ -1164,6 +1165,7 @@ namespace fim
 		else
 			return FIM_NULL;
 	}
+#endif
 
 	FimWindow::~FimWindow(void)
 	{

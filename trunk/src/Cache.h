@@ -177,14 +177,12 @@ class PACA	/* Parallel Cache */
 		}
 		t = std::thread(*this,rid); // operator ()
 	}
-	~PACA()
+	~PACA(void)
 	{
 		if( t.joinable() )
 	       		t.join();
 	}
 }; /* PACA */
-}
+} /* namespace */
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-
 #endif /* FIM_CACHE_H */
-

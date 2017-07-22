@@ -118,7 +118,7 @@ class Image FIM_FINAL
 	virtual size_t byte_size(void)const;
 
 	bool can_reload(void)const;
-	fim_err_t update_meta(bool fresh=false);
+	fim_err_t update_meta(bool fresh);
 
 	fim::string getInfo(void)const;
 	Image(const Image& rhs); // yes, a private constructor (was)
