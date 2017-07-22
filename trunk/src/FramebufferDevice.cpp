@@ -388,12 +388,9 @@ void FramebufferDevice::console_switch(fim_bool_t is_busy)
 		ioctl(fd_,FBIOPAN_DISPLAY,&fb_var_);
 		redraw_ = FIM_REDRAW_NECESSARY;
 	/*
-	 * thanks to the next line, the image is redrawn each time 
-	 * the console is switched! 
+	 * we use to redraw on console switch here; not anymore; 
 	 */
-#ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-		mc_.cc_.redisplay();
-#endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
+	//mc_.cc_.redisplay(); // fbi used to redraw now
 	//if (is_busy) status("busy, please wait ...", FIM_NULL);		
 	break;
 	default:
