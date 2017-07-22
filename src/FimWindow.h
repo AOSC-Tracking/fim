@@ -183,7 +183,6 @@ class FimWindow
 	bool recursive_display(void)const;		//exception safe
 
 	const Image* getImage(void)const;		//exception safe
-
 #if 0
 	void print(void);
 	void print_focused(void);

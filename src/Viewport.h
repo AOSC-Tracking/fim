@@ -81,7 +81,7 @@ class Viewport FIM_FINAL
         void setImage(fim::ImagePtr ni);
 	void scale_fix_top_left(void);
         const Image* c_getImage(void)const;
-        Image* getImage(void)const;
+        Image* getImage(void)const; // FIXME: public only for CommandConsole::rns(const fim_var_id varname)
 	void auto_scale(void);
 	void auto_scale_if_bigger(void);
 	void free_image(bool force);
@@ -108,6 +108,7 @@ class Viewport FIM_FINAL
 	fim_err_t img_rotate(fim_angle_t angle);
 	bool img_goto_page(fim_page_t j);
 	fim_cxr img_scale(const args_t& args, const string &current);
+	fim_err_t update_meta(bool fresh);
 };
 } /* namespace fim */
 #endif /* FIM_VIEWPORT_H */

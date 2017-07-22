@@ -2155,8 +2155,8 @@ ret:
 #endif
 		displaydevice_->format_console();
 
-		if(current_viewport() && current_viewport()->c_getImage())
-			current_viewport()->getImage()->update_meta(1);
+		if(current_viewport())
+			current_viewport()->update_meta(true);
 
 		this->fcmd_redisplay(args_t());
 

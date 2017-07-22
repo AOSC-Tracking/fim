@@ -140,14 +140,11 @@ ret:
 	bool Cache::need_free(void)const
 	{
 		/*	whether we should free some cache ..	*/
-		/*	temporary : we free elements for more than some cached images	*/
 		/*
 		struct mallinfo mi = mallinfo();
 		cout << "allocated : " <<  mi.uordblks << "\n";
 		if( mi.uordblks > getIntGlobalVariable(FIM_VID_MAX_CACHED_MEMORY) )
 			return true;
-
-		these are not the values we want ..
 		*/
 		fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
 		fim_int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY); /* getIntGlobalVariable */
@@ -300,8 +297,6 @@ ret:
 		FIM_PR(' ');
 		//if(FIM_ALLOW_CACHE_DEBUG)
 		//	std::cout << FIM_CNS_DBG_CMDS_PFX << "going to cache: "<< *ni /*<< " [" << ni << "]" */<< "\n";
-		//if(FIM_ALLOW_CACHE_DEBUG)
-		//	std::cout << FIM_CNS_DBG_CMDS_PFX << "going to cache: "<< ni << "\n";
 		this->imageCache_[ni->getKey()]=ni;
 		lru_touch( ni->getKey() );
 		usageCounter_[ ni->getKey()]=0; // we don't assume any usage yet
@@ -374,8 +369,6 @@ ret:
 	bool Cache::freeCachedImage(ImagePtr image, const ViewportState *vsp, bool force)
 	{
 		/*
-		 * Shall rename to free().
-		 *
 		 * If the supplied image is cached as a master image of a clone, it is freed and deregistered.
 		 * If not, no action is performed.
 		 * */
@@ -698,5 +691,4 @@ ret:
 				ci->second->desc_update();
 #endif /* FIM_WANT_PIC_CMTS */
 	}
-}
-
+} /* namespace */
