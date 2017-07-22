@@ -96,7 +96,7 @@ namespace fim
 			return retval;
 		}
 
-		Var Namespace::getVariable(const fim_var_id& varname)const
+		const Var Namespace::getVariable(const fim_var_id& varname)const
 		{
 			if(varname == "*")
 			{
@@ -204,7 +204,7 @@ namespace fim
 			return FIM_CNS_EMPTY_RESULT;
 		}
 
-		Var Namespace::getGlobalVariable(const fim_var_id& varname)const
+		const Var Namespace::getGlobalVariable(const fim_var_id& varname)const
 		{
 #ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
