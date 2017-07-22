@@ -100,7 +100,7 @@ Please note that if your commands are more complicated than a simple 'next' or '
 command, they must be quoted and escaped in a manner suitable for your shell!
 
 For example,
-\-c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
+\-c '*2;2pan_up;display;while(1){align "bottom";sleep "1" ; align "top"}'
 (with the single quotes) will tell fim to first double the displayed image 
 size, then pan two times up, then display the image ; and then 
 do an endless loop consisting of bottom and top aligning, alternated.
@@ -352,7 +352,7 @@ FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode onl
 FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
 If unset, fim will probe for /dev/fb0.
 TERM		(only in fim) will influence the output device selection algorithm, especially if $TERM=="screen".
-DISPLAY	If this variable is set, then the imlib2 driver will be probed by default.
+DISPLAY	If this variable is set, then the sdl driver will be probed by default.
 .SH COMMON PROBLEMS
 .B fim
 needs read\-write access to the framebuffer devices (/dev/fbN or /dev/fb/N), i.e you (our
@@ -461,6 +461,7 @@ scanimage ... | tee scan.ppm | fim \-i
 .SH NOTES
 This manual page is neither accurate nor complete. In particular, issues related to driver selection shall be described more accurately. Also the accurate sequence of autocommands execution, variables application is critical to understanding fim, and should be documented.
 The filename "<STDIN>" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.
+The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.
 .SH BUGS
 .B fim
 has bugs. Please read the 
