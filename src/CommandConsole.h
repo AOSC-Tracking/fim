@@ -172,7 +172,6 @@ class CommandConsole FIM_FINAL
 #endif /* FIM_WITH_AALIB */
 	DummyDisplayDevice dummydisplaydevice_;
 
-	friend class MiniConsole; // MiniConsole uses displaydevice_ intensively.
 	DisplayDevice *displaydevice_;
 	fim::string oldcwd_;
 	public:

@@ -28,6 +28,7 @@
 #include "Namespace.h"
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
+	class DisplayDevice;
 namespace fim
 {
 	class MiniConsole FIM_FINAL
@@ -51,9 +52,13 @@ namespace fim
 		int  scroll_;	// last line displayed (up to rows_)
 
 		public:
-		CommandConsole& cc_;	// temporarily
+		//const CommandConsole& cc_;
+		CommandConsole &cc_;
+		private:
+		DisplayDevice *displaydevice_;
+		public:
 
-		MiniConsole(CommandConsole& cc,int lw=48, int r=12); /* FIXME: shall get rid of numerical constants! */
+		MiniConsole(CommandConsole& cc, DisplayDevice *dd, int lw=48, int r=12); /* FIXME: shall get rid of numerical constants! */
 		virtual ~MiniConsole(void){}
 		fim_err_t dump(void);	// non const due to user variables reaction
 		fim_err_t grow(void);
@@ -88,7 +93,8 @@ namespace fim
 			lwidth_(0),
 			rows_(0),
 			scroll_(0),
-			cc_(rhs.cc_)
+			cc_(rhs.cc_),
+			displaydevice_(rhs.displaydevice_)
 			{/* this constructor should not be used */}
 #endif /* FIM_USE_CXX11 */
 
@@ -100,6 +106,8 @@ namespace fim
 		fim_err_t grow_lines(int glines);
 		fim_err_t grow_buffer(int gbuffer);
 		fim_err_t grow(int glines, int gbuffer);
+		public:
+		void setDisplayDevice(DisplayDevice *displaydevice){displaydevice_=displaydevice;}
 	};
 }
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
