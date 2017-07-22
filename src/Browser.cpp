@@ -576,7 +576,7 @@ nop:
 			goto ret; /* this prevents infinite recursion */
 		if( /*c_getImage() &&*/ viewport() && ! (viewport()->check_valid()) )
 		{
-			free_current_image();
+			free_current_image(false);
 			++ lehsof;
 #ifdef FIM_REMOVE_FAILED
 				//pop(c);	//removes the currently specified file from the list. (pop doesn't work in this way)
@@ -625,7 +625,7 @@ ret:
 		if( viewport() ) std::cout << "browser::loadCurrentImage(\"" << current().c_str() << "\")\n";
 	#endif /* FIM_CACHE_DEBUG */
 		if( viewport()
-			&& !( current()!=FIM_STDIN_IMAGE_NAME && !is_file(current()) ) /* FIXME: this is an unelegant fix to prevent crashes on non-existent files. One shall better fix this by a good exception mechanism for Image::Image() and a clean approach w.r.t. e.g. free_current_image() */
+			&& !( current()!=FIM_STDIN_IMAGE_NAME && !is_file(current()) ) /* FIXME: this is an unelegant fix to prevent crashes on non-existent files. One shall better fix this by a good exception mechanism for Image::Image() and a clean approach w.r.t. e.g. free_current_image(true) */
 		)
 		{
 			ViewportState viewportState;
@@ -652,11 +652,11 @@ ret:
 		return errval;
 	}
 
-	void Browser::free_current_image(void)
+	void Browser::free_current_image(bool force)
 	{
 		FIM_PR('*');
 		if( viewport() )
-			viewport()->free_image();
+			viewport()->free_image(force);
 		setGlobalVariable(FIM_VID_CACHE_STATUS,cache_.getReport());
 		FIM_PR('.');
 	}
@@ -716,11 +716,11 @@ ret:
 		{
 			fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
 			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,0);
-			free_current_image();
+			free_current_image(false);
 			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,mci);
 		}
 #else /* FIM_HORRIBLE_CACHE_INVALIDATING_HACK */
-		free_current_image();
+		free_current_image(false);
 #endif /* FIM_HORRIBLE_CACHE_INVALIDATING_HACK */
 		loadCurrentImage();
 		//if(c_getImage())getImage()->reload();

@@ -327,7 +327,7 @@ class Browser FIM_FINAL
 	private:
 	fim::string next(int n=1);
 
-	void free_current_image(void);
+	void free_current_image(bool force);
 	int load_error_handle(fim::string c);
 	public:
 	fim::string _reverse(void);
