@@ -315,19 +315,6 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		setVariable(FIM_VID_ORIENTATION, FIM_NO_ROT);
 	}
 
-/*
-	bool Image::reload(void)
-	{
-		bool b=false;
-		FILE *fd=fim_fopen(fname_.c_str(),"r");
-		if(!fd)
-			return b;
-		b=load(fname_.c_str(),fd,page_);
-		fclose(fd);// the fd could already be closed !
-		return b;
-	}
-*/
-
 	void Image::set_exif_extra(fim_int shouldrotate, fim_int shouldmirror, fim_int shouldflip)
 	{
 		if(shouldrotate)
