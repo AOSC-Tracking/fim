@@ -249,7 +249,7 @@ Be verbose: show status bar.
 Load files verbosely (repeat option to increase verbosity).
 .TP
 .B  \-\-verbose\-interpreter
-Execute interpreter verbosely (Sets immediately _debug_commands="ack" if specified once, _debug_commands="acki" if specified  twice).
+Execute interpreter verbosely (Sets immediately _debug_commands="ackC" if specified once, _debug_commands="ackCi" if specified  twice).
 .TP
 .B \-V, \-\-version
 Print to stdout program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then exit.

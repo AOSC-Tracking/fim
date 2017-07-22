@@ -34,8 +34,8 @@
  * fix: won't clear recorded list if calling recording 'start' multiple times.
 # (r1359)
  * Specifying more than once any of -p -i - will issue a warning.
-# (r1334,r1335)
- * New switch --verbose-interpreter to execute interpreter verbosely by setting adequately _debug_commands='ack'.
+# (r1334,r1335,r1346)
+ * New switch --verbose-interpreter to execute interpreter verbosely by setting adequately _debug_commands='ackC'.
 # (r1331,r1333)
  * Strings specified within single quotes will have single quotes escaped, just as double quotes.
    So that e.g.: '\'hello\'' equals "'hello'" and "\"hello\"" equals '"hello"'.

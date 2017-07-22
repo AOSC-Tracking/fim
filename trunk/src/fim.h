@@ -488,8 +488,8 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_CLEARTERM "\x1B\x4D" /* clear term char */
 #define FIM_CNS_WHITE 0xFFFFFFFF	/* Temporarily here. Will better need an enum or another portable solution. */
 #define FIM_CNS_BLACK 0x00000000	/* Temporarily here. Will better need an enum or another portable solution. */
-#define FIM_CNS_DBG_CMDS_MAX "acki" /* for FIM_VID_DBG_COMMANDS */
-#define FIM_CNS_DBG_CMDS_MID "ack"  /* for FIM_VID_DBG_COMMANDS */
+#define FIM_CNS_DBG_CMDS_MAX "ackCi" /* for FIM_VID_DBG_COMMANDS */
+#define FIM_CNS_DBG_CMDS_MID "ackC"  /* for FIM_VID_DBG_COMMANDS */
 #define FIM_CNS_DBG_CMDS_PFX "#"    /* for FIM_VID_DBG_COMMANDS */
 
 #if FIM_USE_CXX14
@@ -730,7 +730,7 @@ namespace fim
 #define FIM_VID_SCREEN_HEIGHT			"_screen_height"		/* "[out] the screen height" */
 #define FIM_VID_SKIP_SCROLL			"_scroll_skip_page_fraction"		/* "[int,g:] if >1, fraction of page which will be skipped in when scrolling (e.g. 'scrollforward'); if 1, auto chosen; if <1, disabled." */
 #define FIM_VID_DBG_AUTOCMD_TRACE_STACK		"_autocmd_trace_stack"	/* "[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)" */
-#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in,g:] debugging option string. if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files." */
+#define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in,g:] debugging option string for printing out . if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files; if containing 'C', print cache activity." */
 #define FIM_VID_OPEN_OFFSET_L			"_open_offset"		/* "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET_L " will be assigned to images opened at a nonzero offset " */
 #define FIM_VID_OPEN_OFFSET_U		"_open_offset_retry"	/* "[in,optional,g:] number of adjacent bytes to probe in opening the file " */
 #define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim -C '_seek_magic=MAGIC_STRING;push filename' ) " */
