@@ -321,7 +321,7 @@ ret:		return key;
 	Namespace(this),
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 #ifndef FIM_KEEP_BROKEN_CONSOLE
-	mc_(*this),
+	mc_(*this,FIM_NULL),
 #endif /* FIM_KEEP_BROKEN_CONSOLE */
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	fontserver_(),
@@ -343,6 +343,7 @@ ret:		return key;
 	,displaydevice_(FIM_NULL)
 	,oldcwd_(fim_getcwd())
 	{
+		mc_.setDisplayDevice(&dummydisplaydevice_);
 		addCommand(Command(FIM_FLT_ALIAS,FIM_CMD_HELP_ALIAS,this,&CommandConsole::fcmd_foo));
 		addCommand(Command(FIM_FLT_ALIGN,FIM_CMD_HELP_ALIGN,&browser_,&Browser::fcmd_align));
 #ifdef FIM_AUTOCMDS

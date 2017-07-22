@@ -274,6 +274,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			std::cerr << "Using the default \""<<FIM_DDN_INN_DUMB<<"\" display device instead.\n";
 		}
 
+		mc_.setDisplayDevice(displaydevice_);
 		xres=displaydevice_->width(),yres=displaydevice_->height();
 		displaydevice_->format_console();
 

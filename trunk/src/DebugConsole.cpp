@@ -47,7 +47,7 @@ namespace fim
 			 * lines from cline_+f to cline_-l will be dumped
 			 * */
 			int fh; // font height
-			const int cancols = cc_.displaydevice_->get_chars_per_line(); // canvas columns
+			const int cancols = displaydevice_->get_chars_per_line(); // canvas columns
 			const int maxcols = FIM_MIN(cancols,lwidth_)+1;
 			fim_char_t *buf=FIM_NULL;
 			fim_err_t errval = FIM_ERR_GENERIC;
@@ -78,7 +78,7 @@ namespace fim
 					{
 						strncpy(ibuf,line_[f],n);
 						ibuf[n-1]='\0';
-						cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,ibuf);
+						displaydevice_->fs_puts(displaydevice_->f_,0,0,ibuf);
 						fim_free(ibuf);
 					}
 				}
@@ -91,7 +91,7 @@ namespace fim
 				goto err;
 			//if *bp_ then we could print garbage so we exit before damage is done
 
-			fh=cc_.displaydevice_->f_ ? cc_.displaydevice_->f_->sheight():1; // FIXME : this is not clean
+			fh=displaydevice_->f_ ? displaydevice_->f_->sheight():1; // FIXME : this is not clean
 			l-=f;
 		       	l%=(rows_+1);
 		       	l+=f;
@@ -99,15 +99,15 @@ namespace fim
 			/* FIXME : the following line_ is redundant in fb, but not in SDL 
 			 * moreover, it seems useless in AA (could be a bug)
 			 * */
-			if(fh*(l-f+1)>=cc_.displaydevice_->height())
+			if(fh*(l-f+1)>=displaydevice_->height())
 				goto done;
 			buf = (fim_char_t*) fim_malloc(cancols+1);
 			if(!buf)
 				goto err;
-			cc_.displaydevice_->clear_rect(0, cc_.displaydevice_->width()-1, 0 ,fh*(l-f+1) );
+			displaydevice_->clear_rect(0, displaydevice_->width()-1, 0 ,fh*(l-f+1) );
 
 			// fs_puts alone won't draw to screen, but to the back plane, so unlock/flip will be necessary
-			cc_.displaydevice_->lock();
+			displaydevice_->lock();
 
 	    		for(int i=f  ;i<=l   ;++i)
 			{
@@ -121,7 +121,7 @@ namespace fim
 					buf[t++]=' '; // after text, fill with blanks
 				/* lwidth_ is user set, but we truncate to cancols if exceeding */
 				buf[ cancols ]='\0';
-				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*(i-f), buf);
+				displaydevice_->fs_puts(displaydevice_->f_, 0, fh*(i-f), buf);
 			}
 
 			// extra empty lines (originally for aa)
@@ -130,10 +130,10 @@ namespace fim
 				int t = maxcols;
 				fim_memset(buf,' ',t);
 				buf[t-1]='\0';
-				cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_, 0, fh*((l-f+1)+i), buf);
+				displaydevice_->fs_puts(displaydevice_->f_, 0, fh*((l-f+1)+i), buf);
 			}
-			cc_.displaydevice_->unlock();
-			cc_.displaydevice_->flush();
+			displaydevice_->unlock();
+			displaydevice_->flush();
 done:
 			errval = FIM_ERR_NO_ERROR;
 err:
@@ -151,11 +151,11 @@ err:
 			fim_char_t*cso=(fim_char_t*)cso_;// FIXME
 
 #if FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE
-			if(cc_.displaydevice_ && 0==cc_.displaydevice_->get_chars_per_column())
+			if(displaydevice_ && 0==displaydevice_->get_chars_per_column())
 			{
 				// we display input as soon as it received.
 				if(this->getGlobalIntVariable(FIM_VID_DISPLAY_CONSOLE))
-					cc_.displaydevice_->fs_puts(cc_.displaydevice_->f_,0,0,(const fim_char_t*)cso);
+					displaydevice_->fs_puts(displaydevice_->f_,0,0,(const fim_char_t*)cso);
 			}
 #endif /* FIM_WANT_MILDLY_VERBOSE_DUMB_CONSOLE */
 			cs=dupstr(cso);
@@ -226,7 +226,7 @@ rerr:
 				rows_=-nr;
 				return FIM_ERR_NO_ERROR;
 			}
-			maxrows = cc_.displaydevice_->get_chars_per_column();
+			maxrows = displaydevice_->get_chars_per_column();
 			if(nr>0 && nr<=maxrows)
 			{
 				rows_=nr;
@@ -235,7 +235,7 @@ rerr:
 			return FIM_ERR_GENERIC;
 		}
 
-		MiniConsole::MiniConsole(CommandConsole& cc,int lw, int r)
+		MiniConsole::MiniConsole(CommandConsole& cc, DisplayDevice *dd,int lw, int r)
 		:
 		Namespace(&cc),
 		buffer_(FIM_NULL),
@@ -248,11 +248,9 @@ rerr:
 		lwidth_(0),
 		rows_(0),
 		scroll_(0),
-		cc_(cc)
+		cc_(cc),
+		displaydevice_(dd)
 		{
-			/*
-			 * We initialize the console
-			 * */
 			int BS=FIM_CONSOLE_BLOCKSIZE;	//block size of 1k
 
 			bsize_ = BS * FIM_CONSOLE_DEF_WIDTH;
