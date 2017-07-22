@@ -38,27 +38,18 @@ namespace fim
 	{
 		fim_char_t *buffer_;	// the raw console buffer
 		fim_char_t **line_;	// the (displayed) line_ pointers array
-
 		fim_char_t *bp_;	// pointer to the top of the buffer
-
 		int  bsize_;	// the buffer size
 		int  lsize_;	// the lines array size
-
 		int  ccol_;	// the currently pointed column
 		int  cline_;	// the line_ on the top of the buffer
-		
-		int  lwidth_;
-		int  rows_;
+		int  lwidth_;	// line width
+		int  rows_;	// rows count
 		int  scroll_;	// last line displayed (up to rows_)
-
-		public:
-		//const CommandConsole& cc_;
-		CommandConsole &cc_;
-		private:
+		const CommandConsole& cc_;
 		DisplayDevice *displaydevice_;
 		public:
-
-		MiniConsole(CommandConsole& cc, DisplayDevice *dd, int lw=48, int r=12); /* FIXME: shall get rid of numerical constants! */
+		MiniConsole(CommandConsole& cc, DisplayDevice *dd, int lw=48, int r=12); /* get rid of these default numerical constants! */
 		virtual ~MiniConsole(void){}
 		fim_err_t dump(void);	// non const due to user variables reaction
 		fim_err_t grow(void);
@@ -71,7 +62,6 @@ namespace fim
 		fim_err_t scroll_down(void);
 		fim_err_t scroll_up(void);
 		virtual size_t byte_size(void)const;
-
 #if FIM_USE_CXX11
 		public:
 		/* deleted member functions cannot be called not even by be'friend'ed clases */
@@ -97,7 +87,6 @@ namespace fim
 			displaydevice_(rhs.displaydevice_)
 			{/* this constructor should not be used */}
 #endif /* FIM_USE_CXX11 */
-
 		private:
 		int line_length(int li);
 		fim_err_t do_dump(int f, int l)const;

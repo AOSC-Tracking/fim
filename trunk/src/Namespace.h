@@ -27,11 +27,11 @@
 namespace fim
 {
 #if FIM_USE_CXX11
-	using fim_var_id = fim::string ;	//id
-	using variables_t = std::map<const fim_var_id,Var> ;	//id->var
+	using fim_var_id = fim::string;	//id
+	using variables_t = std::map<const fim_var_id,Var>;	//id->var
 	//using fim_var_id_list = std::vector<fim_var_id> ;
-	using fim_var_id_set = std::set<fim_var_id> ;
-	using fim_var_val_set = std::set<Var> ;
+	using fim_var_id_set = std::set<fim_var_id>;
+	using fim_var_val_set = std::set<Var>;
 #else /* FIM_USE_CXX11 */
 	typedef fim::string fim_var_id;	//id
 	typedef std::map<const fim_var_id,Var> variables_t;	//id->var
@@ -42,15 +42,12 @@ namespace fim
 
 	class Namespace
 	{
-		friend class CommandConsole; // for the various CommandConsole::setVariable()
-
 		protected:
 #ifndef FIM_INDEPENDENT_NAMESPACE
 		CommandConsole*rnsp_; // root Namespace pointer
 #endif /* FIM_INDEPENDENT_NAMESPACE */
 		variables_t variables_;	//id->var
-		fim_char_t ns_char_; // ns_char_ ':' varname
-	
+		fim_char_t ns_char_; // ns_char_ ':' id
 		public:
 #if FIM_WANT_LONG_INT
 		int setVariable(const fim_var_id& varname,int value);
@@ -116,6 +113,4 @@ namespace fim
 	};
 	std::ostream& operator<<(std::ostream& os, const Namespace & ns);
 }
-
 #endif /* FIM_NAMESPACE_H */
-
