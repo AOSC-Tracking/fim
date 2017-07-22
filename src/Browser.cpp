@@ -18,9 +18,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-#define FIM_HORRIBLE_CACHE_INVALIDATING_HACK 1
-
 #include <dirent.h>
 #include <sys/types.h>	/* POSIX Standard: 2.6 Primitive System Data Types (e.g.: ssize_t) */
 #include "fim.h"
@@ -711,19 +708,11 @@ ret:
 		if( empty_file_list() )
 		{ result = "sorry, no image to reload\n"; goto ret; }
 		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRERELOAD,current());
-#if FIM_HORRIBLE_CACHE_INVALIDATING_HACK
 		if( args.size() > 0 )
-		{
-			fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
-			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,0);
+			free_current_image(true);
+		else
 			free_current_image(false);
-			setGlobalVariable(FIM_VID_MAX_CACHED_IMAGES,mci);
-		}
-#else /* FIM_HORRIBLE_CACHE_INVALIDATING_HACK */
-		free_current_image(false);
-#endif /* FIM_HORRIBLE_CACHE_INVALIDATING_HACK */
 		loadCurrentImage();
-		//if(c_getImage())getImage()->reload();
 
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(_c);

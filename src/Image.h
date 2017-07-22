@@ -83,7 +83,6 @@ class Image FIM_FINAL
 	fim_page_t		 page_;
 
 	public:
-	//bool reload(void);
 	enum { FIM_ROT_L=3,FIM_ROT_R=1,FIM_ROT_U=2 };
 	const struct ida_image *get_ida_image(void)const{ return img_; }
 	private:
