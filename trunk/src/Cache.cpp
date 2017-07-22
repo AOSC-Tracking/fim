@@ -36,6 +36,12 @@
 
 //#define FIM_CACHE_DEBUG 0
 
+#ifdef FIM_CACHE_DEBUG
+#define FIM_ALLOW_CACHE_DEBUG getGlobalVariable(FIM_VID_DBG_COMMANDS).find('C') >= 0
+#else  /* FIM_CACHE_DEBUG */
+#define FIM_ALLOW_CACHE_DEBUG 0
+#endif /* FIM_CACHE_DEBUG */
+
 #if 0
 #define FIM_LOUD_CACHE_STUFF FIM_PR(-10); FIM_LINE_COUT
 #else
@@ -119,9 +125,8 @@ ret:
 		/*	erases the image clone from the cache	*/
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
-#ifdef FIM_CACHE_DEBUG
-		std::cout << "erasing clone " << fim_basename_of(oi->getName()) << "\n";
-#endif /* FIM_CACHE_DEBUG */
+		if(FIM_ALLOW_CACHE_DEBUG)
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "erasing clone " << fim_basename_of(oi->getName()) << "\n";
 		//cloneUsageCounter_.erase(oi);
 #if FIM_IMG_NAKED_PTRS
 		delete oi;
@@ -212,9 +217,8 @@ rt:
 			FIM_PR('s');
 			goto ret;// just a fix in the case the browser is still lame
 		}
-#ifdef FIM_CACHE_DEBUG
-		std::cout << "prefetch request for "<< key.first << " \n";
-#endif /* FIM_CACHE_DEBUG */
+		if(FIM_ALLOW_CACHE_DEBUG)
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "prefetch request for "<< key.first << " \n";
 
     		if( regexp_match(key.first.c_str(),FIM_CNS_ARCHIVE_RE,1) )
 		{
@@ -226,9 +230,8 @@ rt:
 		if(!loadNewImage(key,0,true))
 		{
 			retval = -1;
-#ifdef FIM_CACHE_DEBUG
-			std::cout << "loading failed\n";
-#endif /* FIM_CACHE_DEBUG */
+			if(FIM_ALLOW_CACHE_DEBUG)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "loading failed\n";
 			goto ret;
 		}
 		else
@@ -253,9 +256,8 @@ ret:
 		{
 		if( ( ni = ImagePtr( new Image(key.first.c_str(), FIM_NULL, page) ) ) )
 		{
-#ifdef FIM_CACHE_DEBUG
-			std::cout << "loadNewImage("<<key.first.c_str()<<")\n";
-#endif /* FIM_CACHE_DEBUG */
+			if(FIM_ALLOW_CACHE_DEBUG)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "loadNewImage("<<key.first.c_str()<<")\n";
 			if( ni->cacheable() )
 				cacheNewImage( ni );
 			else
@@ -296,9 +298,10 @@ ret:
 	{
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR(' ');
-#ifdef FIM_CACHE_DEBUG
-		std::cout << "going to cache: "<< ni << "\n";
-#endif /* FIM_CACHE_DEBUG */
+		//if(FIM_ALLOW_CACHE_DEBUG)
+		//	std::cout << FIM_CNS_DBG_CMDS_PFX << "going to cache: "<< *ni /*<< " [" << ni << "]" */<< "\n";
+		//if(FIM_ALLOW_CACHE_DEBUG)
+		//	std::cout << FIM_CNS_DBG_CMDS_PFX << "going to cache: "<< ni << "\n";
 		this->imageCache_[ni->getKey()]=ni;
 		lru_touch( ni->getKey() );
 		usageCounter_[ ni->getKey()]=0; // we don't assume any usage yet
@@ -321,10 +324,10 @@ ret:
 		{
 			usageCounter_[key]=0;
 			/* NOTE : the user should call usageCounter_.erase(key) after this ! */
-#ifdef FIM_CACHE_DEBUG
-			std::cout << "will erase  "<< oi << " " <<  fim_basename_of(oi->getName()) << " time:"<< lru_[oi->getKey()] << "\n";
-			std::cout << "erasing original " << fim_basename_of(oi->getName()) << "\n";
-#endif /* FIM_CACHE_DEBUG */
+			if(FIM_ALLOW_CACHE_DEBUG)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "will erase  "/*<< oi << " "*/ <<  fim_basename_of(oi->getName()) << " time:"<< lru_[oi->getKey()] << "\n";
+			//if(FIM_ALLOW_CACHE_DEBUG)
+			//	std::cout << FIM_CNS_DBG_CMDS_PFX << "erasing original " << fim_basename_of(oi->getName()) << "\n";
 			lru_.erase(key);
 			imageCache_.erase(key);
 			usageCounter_.erase(key);
@@ -471,14 +474,12 @@ ret:
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR('*');
 
-#ifdef FIM_CACHE_DEBUG
-		std::cout << "  useCachedImage(\""<<fim_basename_of(key.first)<<" of type "<< ( key.second == FIM_E_FILE ? " file ": " stdin ")<<"\")\n";
-#endif /* FIM_CACHE_DEBUG */
+		if(FIM_ALLOW_CACHE_DEBUG)
+			std::cout << FIM_CNS_DBG_CMDS_PFX << "useCachedImage(\""<<fim_basename_of(key.first)<<"\" of type "<< ( key.second == FIM_E_FILE ? " file ": " stdin ")<<")\n";
 		if(!is_in_cache(key)) 
 		{
-#ifdef FIM_CACHE_DEBUG
-			std::cout << "not in the cache: "<< key.first << " \n";
-#endif /* FIM_CACHE_DEBUG */
+			if(FIM_ALLOW_CACHE_DEBUG)
+				std::cout << FIM_CNS_DBG_CMDS_PFX << "not in the cache: "<< key.first << " \n";
 			image = loadNewImage(key,page,false);
 			if(!image)
 				goto ret; // bad luck!
@@ -491,9 +492,8 @@ ret:
 			image = getCachedImage(key);// in this way we update the LRU cache :)
 			if(!image)
 			{
-#ifdef FIM_CACHE_DEBUG
-				cout << "critical internal cache error!\n";
-#endif /* FIM_CACHE_DEBUG */
+				if(FIM_ALLOW_CACHE_DEBUG)
+					std::cout << FIM_CNS_DBG_CMDS_PFX << "critical internal cache error!\n";
 				goto done;
 			}
 			if( used_image( key ) )
@@ -501,13 +501,11 @@ ret:
 				// if the image was already used, cloning occurs
 				try
 				{
-#ifdef FIM_CACHE_DEBUG
-					ImagePtr oi=image;
-#endif /* FIM_CACHE_DEBUG */
+					//ImagePtr oi=image;
 					image = ImagePtr ( new Image(*image) ); // cloning
-#ifdef FIM_CACHE_DEBUG
-					std::cout << "  cloned image: \"" <<fim_basename_of(image->getName())<< "\" "<< image << " from \""<<fim_basename_of(oi->getName()) <<"\" " << oi << "\n";
-#endif /* FIM_CACHE_DEBUG */
+					if(FIM_ALLOW_CACHE_DEBUG)
+						std::cout << FIM_CNS_DBG_CMDS_PFX << "  cloned image: \"" <<fim_basename_of(image->getName())<< "\" "<< image << "\n";
+						//std::cout << "  cloned image: \"" <<fim_basename_of(image->getName())<< "\" "<< image << " from \""<<fim_basename_of(oi->getName()) <<"\" " << oi << "\n";
 				}
 				catch(FimException e)
 				{
@@ -554,14 +552,9 @@ ret:
 		
 		try
 		{
-#ifdef FIM_CACHE_DEBUG
-			ImagePtr oi=image;
-#endif /* FIM_CACHE_DEBUG */
 			image = ImagePtr ( new Image(*image) ); // cloning
 			if(image)
-			{
 				cacheNewImage( image );
-			}
 		}
 		catch(FimException e)
 		{
@@ -644,9 +637,8 @@ ret:
 		for( ci=imageCache_.begin();ci!=imageCache_.end();++ci)
 			if(ci->second)
 			{
-#ifdef FIM_CACHE_DEBUG
-				std::cout << "about to free " << (ci->first.first) << "\n";
-#endif /* FIM_CACHE_DEBUG */
+				if(FIM_ALLOW_CACHE_DEBUG)
+					std::cout << FIM_CNS_DBG_CMDS_PFX << "about to free " << (ci->first.first) << "\n";
 #if FIM_IMG_NAKED_PTRS
 				delete ci->second;
 #else /* FIM_IMG_NAKED_PTRS */
