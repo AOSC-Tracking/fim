@@ -879,6 +879,11 @@ fim_int Image::check_desaturated(void)const
 	return getIntVariable(FIM_VID_DESATURATED);
 }
 
+fim_int Image::check_autocenter(void)const
+{
+	return getIntVariable(FIM_VID_WANT_AUTOCENTER);
+}
+
 fim_int Image::check_autotop(void)const
 {
 	return getIntVariable(FIM_VID_AUTOTOP);

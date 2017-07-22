@@ -907,7 +907,7 @@ err:
 						if(px <= 100   && py <= 100  )
 						{
 							//std::cout << "pct:"<< px << " " << py << "\n";
-							cv->place(px,py);
+							cv->pan_to(px,py);
 							cv->display(); // draw only if necessary
 							//cv->redisplay(); // draw always
 						}

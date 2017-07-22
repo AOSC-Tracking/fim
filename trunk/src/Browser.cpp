@@ -310,11 +310,11 @@ ret:
 				FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREPAN,current());
 				if( c_getImage() && viewport() )
 				{
-					fim::string pr = viewport()->pan(args);
+					bool pr = viewport()->do_pan(args);
 #if FIM_PAN_GOES_NEXT
 					fim_char_t s = FIM_SYM_CHAR_NUL;
 				       	s = tolower(args[0].end()[-1]);
-			       		if( s != FIM_SYM_CHAR_NUL && pr == "no" ) // ugly
+			       		if( s != FIM_SYM_CHAR_NUL && pr == false )
 					{
 						/*if( s != '+' && s != '-' )
 						switch(f)
@@ -992,7 +992,7 @@ ret:
 		FIM_PR('*');
 
 		//for(size_t i=0;i<args.size();++i) push_path(args[i]);
-		if( getImage() && ( getImage()->getName() == current()) )
+		if( c_getImage() && ( c_getImage()->getName() == current()) )
 		{
 			result = "image already loaded\n";//warning
 			goto ret;

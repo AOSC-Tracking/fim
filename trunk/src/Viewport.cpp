@@ -29,7 +29,7 @@ namespace fim
 #endif	/* FIM_WANT_BDI */
 
 	Viewport::Viewport(
-			CommandConsole& c,
+			CommandConsole& commandConsole,
 			DisplayDevice *displaydevice
 #ifdef FIM_WINDOWS
 			,const Rect & corners
@@ -37,7 +37,7 @@ namespace fim
 			)
 			:
 #ifdef FIM_NAMESPACES
-			Namespace(&c,FIM_SYM_NAMESPACE_VIEWPORT_CHAR),
+			Namespace(&commandConsole,FIM_SYM_NAMESPACE_VIEWPORT_CHAR),
 #endif /* FIM_NAMESPACES */
 			psteps_(false),
 			displaydevice_(displaydevice)
@@ -45,7 +45,7 @@ namespace fim
 			,corners_(corners)
 #endif /* FIM_WINDOWS */
 			,image_(FIM_NULL)
-			,commandConsole(c)
+			,commandConsole_(commandConsole)
 	{
 		if(!displaydevice_)
 			throw FIM_E_TRAGIC;
@@ -61,7 +61,7 @@ namespace fim
 		,displaydevice_(rhs.displaydevice_)
 		,corners_(rhs.corners_)
 		,image_(FIM_NULL)
-		,commandConsole(rhs.commandConsole)
+		,commandConsole_(rhs.commandConsole_)
 	{
 		steps_ = rhs.steps_;
 		hsteps_ = rhs.hsteps_;
@@ -69,25 +69,17 @@ namespace fim
 		top_ = rhs.top_;
 		left_ = rhs.left_;
 		panned_ = rhs.panned_;
-		try
-		{
 	#ifdef FIM_CACHE_DEBUG
-			if(rhs.image_)
-				std::cout << "Viewport:Viewport():maybe will cache \"" <<rhs.image_->getName() << "\" from "<<rhs.image_<<FIM_CNS_NEWLINE ;
-			else
-				std::cout << "no image_ to cache..\n";
+		if(rhs.image_)
+			std::cout << "Viewport:Viewport():maybe will cache \"" <<rhs.image_->getName() << "\" from "<<rhs.image_<<FIM_CNS_NEWLINE ;
+		else
+			std::cout << "no image_ to cache..\n";
 	#endif /* FIM_CACHE_DEBUG */
-			if(rhs.image_ && rhs.image_->check_valid())
-			{
-				ViewportState viewportState;
-				setImage( commandConsole.browser_.cache_.useCachedImage(rhs.image_->getKey(),&viewportState) );
-				this->ViewportState::operator=(viewportState);
-			}
-		}
-		catch(FimException e)
+		if(rhs.image_ && rhs.image_->check_valid())
 		{
-			image_=FIM_NULL;
-			std::cerr << "fatal error" << __FILE__ << ":" << __LINE__ << FIM_CNS_NEWLINE;
+			ViewportState viewportState;
+			setImage( commandConsole_.browser_.cache_.useCachedImage(rhs.image_->getKey(),&viewportState) );
+			this->ViewportState::operator=(viewportState);
 		}
 	}
 
@@ -221,44 +213,13 @@ namespace fim
 	fim_coo_t Viewport::xorigin(void)
 	{
 		// horizontal origin coordinate (upper)
-#ifdef FIM_WINDOWS
 		return corners_.xorigin();
-#else
-		return 0;
-#endif /* FIM_WINDOWS */
 	}
 
 	fim_coo_t Viewport::yorigin(void)
 	{
 		// vertical origin coordinate (upper)
-#ifdef FIM_WINDOWS
 		return corners_.yorigin();
-#else /* FIM_WINDOWS */
-		return 0;
-#endif /* FIM_WINDOWS */
-	}
-
-	void Viewport::null_display(void)
-	{
-		/*
-		 * for recovery purposes. FIXME
-		 * */
-		if(! need_redraw())
-			return;
-#ifdef FIM_WINDOWS
-		/* FIXME : note that fbi's clear_rect() is a buggy function and thus the fs_bpp multiplication need ! */
-		{
-			displaydevice_->clear_rect(
-				xorigin(),
-				xorigin()+viewport_width()-1,
-				yorigin(),
-				yorigin()+viewport_height()-1
-				);
-		}
-#else /* FIM_WINDOWS */
-		/* FIXME */
-		displaydevice_->clear_rect( 0, (viewport_width()-1)*displaydevice_->get_bpp(), 0, (viewport_height()-1));
-#endif /* FIM_WINDOWS */
 	}
 
 	bool Viewport::shall_negate(void)const
@@ -298,9 +259,11 @@ namespace fim
 		if(! need_redraw())
 			return false;
 		if( check_invalid() )
-			null_display();
-		if( check_invalid() )
+		{
+			if( displaydevice_ )
+				displaydevice_->clear_rect( xorigin(), xorigin()+viewport_width()-1, yorigin(), yorigin()+viewport_height()-1);
 			return false;
+		}
 
 		fim_int autotop = shall_autotop();
 
@@ -311,7 +274,7 @@ namespace fim
 		if(shall_desaturate())
 			image_->desaturate();
 
-		if ( ( autotop || getGlobalIntVariable("i:" FIM_VID_WANT_AUTOCENTER)==1 ) && need_redraw() )
+		if ( ( autotop || image_->check_autocenter()==1 ) && need_redraw() )
 		{
 			if(autotop && image_->height()>=this->viewport_height())
 		  	{
@@ -367,6 +330,7 @@ namespace fim
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 #ifdef FIM_WINDOWS
 			if(displaydevice_ )
+#endif					
 			displaydevice_->display(
 					image_->get_ida_image(),
 					top_,
@@ -381,20 +345,6 @@ namespace fim
 				       	viewport_width(),
 					flags
 					);
-#else
-			displaydevice_->display(
-					image_->get_ida_image(),
-					top_,
-					left_,
-					//displaydevice_->height(), displaydevice_->width(), displaydevice_->width(),
-					viewport_height(), viewport_width(), viewport_width(),
-					0,
-					0,
-					// displaydevice_->height(), displaydevice_->width(), displaydevice_->width(),
-					viewport_height(), viewport_width(), viewport_width(),
-					flags
-					);
-#endif					
 #if FIM_WANT_VIEWPORT_TRANSFORM
 			this->transform(mirror, flip);
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
@@ -412,7 +362,7 @@ namespace fim
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
 				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
-					displaydevice_->fs_multiline_puts(commandConsole.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1, viewport_width(), viewport_height());
+					displaydevice_->fs_multiline_puts(commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1, viewport_width(), viewport_height());
 				else
 					displaydevice_->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1, viewport_width(), viewport_height());
 #endif
@@ -421,7 +371,7 @@ namespace fim
 
 #define FIM_WANT_BROWSER_PROGRESS_BAR 0 /* new */
 #if FIM_WANT_BROWSER_PROGRESS_BAR 
-			fim_float_t bp = commandConsole.browser_.file_progress() * 100.0;
+			fim_float_t bp = commandConsole_.browser_.file_progress() * 100.0;
 			const fim_pan_t bw = 1; // bar width
 			const fim_pan_t vw = viewport_width();
 			const fim_pan_t vh = viewport_height();
@@ -465,7 +415,6 @@ namespace fim
 
         Image* Viewport::getImage(void)const
 	{
-		/* returns the image pointer, regardless its use!  */
 #if FIM_WANT_BDI
 		if(!image_)
 			return &fim_dummy_img;
@@ -480,7 +429,6 @@ namespace fim
 
         const Image* Viewport::c_getImage(void)const
 	{
-		/* returns the image pointer, regardless its use!  */
 		return getImage();
 	}
 
@@ -553,7 +501,7 @@ namespace fim
 	void Viewport::free_image(void)
 	{
 		if(image_)
-			commandConsole.browser_.cache_.freeCachedImage(image_,this);
+			commandConsole_.browser_.cache_.freeCachedImage(image_,this);
 		image_ = FIM_NULL;
 	}
 
@@ -624,34 +572,16 @@ namespace fim
 		free_image();
 	}
 
-	fim::string Viewport::pan(const fim_char_t*a1, const fim_char_t*a2)
+	bool Viewport::pan_to(const fim_pan_t px, const fim_pan_t py)
 	{
-		// FIXME: a quick hack
-#if FIM_USE_CXX11
-		if(a1 || a2)
-			return pan({ (a1 ? a1 : a2 ) });
-		else
-			return pan({});
-#else /* FIM_USE_CXX11 */
-		args_t args;
-		if(a1)
-			args.push_back(a1);
-		if(a2)
-			args.push_back(a2);
-		return pan(args);
-#endif /* FIM_USE_CXX11 */
-	}
-
-	bool Viewport::place(const fim_pan_t px, const fim_pan_t py)
-	{
-		/* FIXME: find a nicer name. */
-		/* FIXME: shall merge this in an internal pan function. */
+		/* merge this with a pan function */
+		assert( 0 <= px && px <= 100 && 0 <= py && py <= 100 );
 		fim_pan_t _px = px, _py = py;
 
 #if FIM_WANT_VIEWPORT_TRANSFORM
-		if(image_ && image_->is_flipped()) /* FIXME: this is only i: ... */
+		if(image_ && image_->is_flipped())
 			_py = 100 - _py;
-		if(image_ && image_->is_mirrored()) /* FIXME: this is only i: ... */
+		if(image_ && image_->is_mirrored())
 			_px = 100 - _px;
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 
@@ -678,10 +608,25 @@ namespace fim
 		return true;
 	}
 
-	fim::string Viewport::pan(const args_t& args)
+	bool Viewport::pan(const fim_char_t*a1, const fim_char_t*a2)
 	{
-		fim::string result = FIM_CNS_EMPTY_RESULT;
-		/* FIXME: unfinished */
+#if FIM_USE_CXX11
+		if(a1 || a2)
+			return do_pan({ (a1 ? a1 : a2 ) });
+		else
+			return do_pan({});
+#else /* FIM_USE_CXX11 */
+		args_t args;
+		if(a1)
+			args.push_back(a1);
+		if(a2)
+			args.push_back(a2);
+		return do_pan(args);
+#endif /* FIM_USE_CXX11 */
+	}
+
+	bool Viewport::do_pan(const args_t& args)
+	{
 		fim_pan_t hs=0,vs=0;
 		fim_bool_t ps=false;
 		fim_char_t f=FIM_SYM_CHAR_NUL,s=FIM_SYM_CHAR_NUL;
@@ -690,13 +635,13 @@ namespace fim
 		fim_bool_t prv = true;
 
 		if(args.size()<1 || (!fs))
-			goto nop;
+			goto ret;
 		f=tolower(*fs);
 		if(!fs[0])
-			goto nop;
+			goto ret;
 		s=tolower(fs[1]);
         	steps_reset();
-		// FIXME: write me
+
 		if(args.size()>=2)
 		{
 			ps=((ss=args[1]) && *ss && ((ss[strlen(ss)-1])=='%'));
@@ -710,17 +655,14 @@ namespace fim
 		}
 		if(ps)
 		{
-			// FIXME: new, brittle
 			vs = FIM_INT_PCNT(viewport_height(),vs);
 			hs = FIM_INT_PCNT(viewport_width(), hs);
 		}
 
-		//std::cout << vs << " " << hs << " " << ps << FIM_CNS_NEWLINE;
-		
 #if FIM_WANT_VIEWPORT_TRANSFORM
-		if(image_ && image_->is_flipped()) /* FIXME: this is only i: ... */
+		if(image_ && image_->is_flipped())
 			vs=-vs;
-		if(image_ && image_->is_mirrored()) /* FIXME: this is only i: ... */
+		if(image_ && image_->is_mirrored())
 			hs=-hs;
 #endif /* FIM_WANT_VIEWPORT_TRANSFORM */
 
@@ -753,20 +695,15 @@ namespace fim
 					prv=pan_right(hs);
 				break;
 				default:
-					goto err;
+					goto ret;
 			}
 			break;
 			default:
-			goto err;
+			goto ret;
 		}
 		should_redraw();
-nop:
-		result = "maybe";
-		if(prv==false)
-			result = "no"; // TODO: this is ugly
-		return result;
-err:
-		return result;
+ret:
+		return prv;
 	}
 
 	size_t Viewport::byte_size(void)const
