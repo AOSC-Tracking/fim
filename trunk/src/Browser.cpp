@@ -504,7 +504,7 @@ comeon:
 		{
 			fim_err_t errval = FIM_ERR_NO_ERROR;
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if(getImage())
+			if(c_getImage())
 				getImage()->update_meta();
 			if( c_getImage() )
 			switch( fc )
@@ -529,14 +529,14 @@ comeon:
 				{
 					if( newscale )
 					{
-						if(getImage())
+						if(c_getImage())
 							errval = getImage()->reduce(newscale);
 						if(viewport())
 							viewport()->scale_position_reduce(newscale);
 					}
 					else	
 					{
-						if(getImage())
+						if(c_getImage())
 							errval = getImage()->reduce();
 						if(viewport())
 							viewport()->scale_position_reduce();
@@ -547,14 +547,14 @@ comeon:
 				{
 					if( newscale )
 					{
-						if(getImage())
+						if(c_getImage())
 							errval = getImage()->magnify(newscale,aes);
 						if(viewport())
 							viewport()->scale_position_magnify(newscale);
 					}
 					else	
 					{
-						if(getImage())
+						if(c_getImage())
 							errval = getImage()->magnify();
 						if(viewport())
 							viewport()->scale_position_magnify();
@@ -580,7 +580,7 @@ nop:
 	
 	fim_cxr Browser::fcmd_color(const args_t& args)
 	{
-		if( !getImage() )
+		if( !c_getImage() )
 			goto nop;
 
 		if(args.size()>0)
@@ -785,7 +785,7 @@ nop:
 			if( cc.isSetVar(FIM_VID_DISPLAY_STATUS_FMT) )
 				dss = cc.getInfoCustom(cc.getStringVariable(FIM_VID_DISPLAY_STATUS_FMT).c_str());
 			dssp=dss.c_str();
-			commandConsole_.set_status_bar( (dssp && *dssp ) ? dssp : l, getImage()?(getImage()->getInfo().c_str()):"*");
+			commandConsole_.set_status_bar( (dssp && *dssp ) ? dssp : l, c_getImage()?(c_getImage()->getInfo().c_str()):"*");
 		}
 		else
 		{
@@ -823,7 +823,7 @@ nop:
 
 		if( lehsof )
 			goto ret; /* this prevents infinite recursion */
-		if( /*getImage() &&*/ viewport() && ! (viewport()->check_valid()) )
+		if( /*c_getImage() &&*/ viewport() && ! (viewport()->check_valid()) )
 		{
 			free_current_image();
 			++ lehsof;
@@ -972,7 +972,7 @@ ret:
 		free_current_image();
 #endif /* FIM_HORRIBLE_CACHE_INVALIDATING_HACK */
 		loadCurrentImage();
-		//if(getImage())getImage()->reload();
+		//if(c_getImage())getImage()->reload();
 
 //		while( n_files() && viewport() && ! (viewport()->check_valid() ) && load_error_handle(c) );
 		load_error_handle(_c);
@@ -2292,8 +2292,8 @@ nop:
 		fim::string r = current();
 		FIM_PR('*');
 
-		if(getImage())
-			r += getImage()->getInfo();
+		if(c_getImage())
+			r += c_getImage()->getInfo();
 		else
 			r += " (unloaded)";
 		FIM_PR('.');
@@ -2328,12 +2328,12 @@ nop:
 			{
 				if(angle)
 				{
-					if(getImage())
+					if(c_getImage())
 						getImage()->rotate(angle);
 				}
 				else	
 				{
-					if(getImage())
+					if(c_getImage())
 						getImage()->rotate();
 				}
 			}

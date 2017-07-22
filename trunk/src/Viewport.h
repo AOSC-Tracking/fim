@@ -18,8 +18,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-
 #ifndef FIM_VIEWPORT_H
 #define FIM_VIEWPORT_H
 
@@ -67,12 +65,11 @@ class Viewport FIM_FINAL
 	bool onRight(fim_coo_t approx_fraction=0)const;
 	bool onLeft(fim_coo_t approx_fraction=0)const;
 	bool onTop(fim_coo_t approx_fraction=0)const;
-	fim_coo_t xorigin(void);
-	fim_coo_t yorigin(void);
+	fim_coo_t xorigin(void)const;
+	fim_coo_t yorigin(void)const;
 	private:
 	fim_scale_t viewport_xscale(void)const;
 	fim_scale_t viewport_yscale(void)const;
-	void null_display(void);
 	public:
 	fim_coo_t viewport_width(void)const;
 	fim_coo_t viewport_height(void)const;
@@ -101,7 +98,6 @@ class Viewport FIM_FINAL
 	int snprintf_centering_info(char *str, size_t size)const;
 	private:
 	void transform(bool mirror, bool flip);
-	void fs_multiline_puts(const char *str, fim_int doclear);
 	bool shall_negate(void)const;
 	bool shall_desaturate(void)const;
 	bool shall_mirror(void)const;

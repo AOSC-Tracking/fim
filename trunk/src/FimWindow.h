@@ -18,7 +18,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
 #ifndef FIM_WINDOW_H
 #define FIM_WINDOW_H
 
@@ -34,14 +33,9 @@
 
 namespace fim
 {
-
-/*
- * temporarily disabled window enlarge functionality
- * */
 #define FIM_BUGGED_ENLARGE 0
 
 /*
- 
   The window class should model the behaviour of a binary splitting window
  in a portable manner.
   It should not be tied to a particular window system or graphical environment,
@@ -56,7 +50,6 @@ namespace fim
  |              |
  +--------------+
                  (x+w,y+h) : lower right point out
-
 */
 class Rect
 {
@@ -76,7 +69,6 @@ class Rect
 	Rect vsplit(Splitmode s);
 	Rect split(Splitmode s);
 
-	/* todo : to unsigned integer ! */
 	fim_err_t vlgrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 	fim_err_t vlshrink(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
 	fim_err_t vugrow(fim_coo_t units=FIM_CNS_WGROW_STEPS_DEFAULT);
@@ -104,7 +96,6 @@ class FimWindow:public Namespace
 class FimWindow
 #endif /* FIM_NAMESPACES */
 {
-	
 	private:
 
 	enum Spacings{ hspacing=0, vspacing=0};
@@ -133,21 +124,11 @@ class FimWindow
 	fim_err_t henlarge(fim_coo_t units);
 	fim_err_t venlarge(fim_coo_t units);
 
-	bool can_vgrow(const FimWindow& window, fim_coo_t howmuch);
-	bool can_hgrow(const FimWindow& window, fim_coo_t howmuch);
-
-
+	bool can_vgrow(const FimWindow& window, fim_coo_t howmuch)const;
+	bool can_hgrow(const FimWindow& window, fim_coo_t howmuch)const;
 
 	private:
-//#ifdef FIM_UNDEFINED
-	/*
-	 seems useless, who knows ?
-	 throws FIM_E_NO_MEM exception
-	 it is hust defined to make -Weffc++ happy
-	 so keep this private!
-	*/
 	explicit FimWindow(const FimWindow& root);
-//#endif /* FIM_UNDEFINED */
 	bool isleaf(void)const;
 	bool isvalid(void)const;
 	bool issplit(void)const;
@@ -180,9 +161,6 @@ class FimWindow
 
 	Viewport *viewport_;
 
-	/*
-	 * DANGER : nearly each of these member functions launches an exception!
-	 * */
 	const FimWindow& c_focused(void)const;
 	const FimWindow& c_shadowed(void)const;
 
@@ -217,8 +195,6 @@ class FimWindow
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY); /* FIXME: this is a wrapper to Viewport's, until multiple windows get introduced again. */
 	fim_bool_t need_redraw(void)const;
 };
-
 }
 #endif /* FIM_WINDOWS */
 #endif /* FIM_WINDOW_H */
-

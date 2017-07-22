@@ -734,7 +734,7 @@ namespace fim
 		return y_ ;
 	}
 
-	bool FimWindow::can_vgrow(const FimWindow& window, fim_coo_t howmuch)
+	bool FimWindow::can_vgrow(const FimWindow& window, fim_coo_t howmuch)const
 	{
 		/*
 		 * Assuming that the argument window is a contained one, 
@@ -750,7 +750,7 @@ namespace fim
 		return window.corners_.height() + howmuch + vspacing  < corners_.height();
 	}
 
-	bool FimWindow::can_hgrow(const FimWindow& window, fim_coo_t howmuch)
+	bool FimWindow::can_hgrow(const FimWindow& window, fim_coo_t howmuch)const
 	{
 		/*
 		 * Assuming that the argument window is a contained one, 

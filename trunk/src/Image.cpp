@@ -889,7 +889,7 @@ fim_int Image::check_autotop(void)const
 	return getIntVariable(FIM_VID_AUTOTOP);
 }
 
-fim::string Image::getInfo(void)
+fim::string Image::getInfo(void)const
 {
 	if(!fimg_)
 		return FIM_CNS_EMPTY_RESULT;
