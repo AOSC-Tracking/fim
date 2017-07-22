@@ -46,7 +46,7 @@ class CommandConsole FIM_FINAL
 
 	fim_cls postInitCommand_;  // Executed after preConfigCommand_.
 	fim_cls preConfigCommand_; // Executed before postInitCommand_.
-	fim_cls postExecutionCommand_;
+	fim_cls postExecutionCommand_; // Executed right before a normal termination of Fim.
 
 	fim_int show_must_go_on_;
 	fim_int return_code_;	/* new, to support the 'return' command */

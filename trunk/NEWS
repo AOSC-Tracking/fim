@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1447)
+ * If no semicolon (;) terminating -C argument, one will be appended.
 # (r1417)
  * framebuffer console switch off while loading: configure with the 
    --enable-framebuffer-switch-while-loading switch to have it back.
