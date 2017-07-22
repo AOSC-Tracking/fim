@@ -656,7 +656,7 @@ _console_offset
 .na
 .B
 _debug_commands
-[in,g:] debugging option string. if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files.
+[in,g:] debugging option string for printing out . if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files; if containing 'C', print cache activity.
 .fi
 .na
 .B
@@ -1351,8 +1351,8 @@ alias "pan_nw" "pan 'nw'" "pans the image to the upper left";
 alias "pan_ne" "pan 'ne'" "pans the image to the upper right";
 alias "pan_se" "pan 'se'" "pans the image to the lower left";
 alias "pan_sw" "pan 'sw'" "pans the image to the lower right";
-alias "pan_down" "if(_display_console==0){pan 'down';}else{scd;}" "pans the image down";
-alias "pan_up"   "if(_display_console==0){pan 'up'  ;}else{scu;}"   "pans the image up";
+alias "pan_down" "if(_display_console==0){pan 'down';}else{scd;}" "pans the image down / scrolls console down";
+alias "pan_up"   "if(_display_console==0){pan 'up'  ;}else{scu;}"   "pans the image up / scrolls console up";
 alias "pan_left" "pan 'left'" "pans the image left";
 alias "pan_right" "pan 'right'" "pans the image right";
 alias "diagonal_nw" "pan_nw" "pans the image to the upper left";
