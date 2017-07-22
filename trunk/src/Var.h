@@ -262,7 +262,7 @@ class Var FIM_FINAL
 	       	s.shrink_to_fit();
 #endif /* FIM_USE_CXX11 */
        	}
-	int find(const fim_char_t c){const char*p=FIM_NULL,*r=FIM_NULL;if(getType()==FimTypeString && (p=s.c_str()) && (r=strchr(s.c_str(),c)))return r-p; return -1; }
+	int find(const fim_char_t c)const{const char*p=FIM_NULL,*r=FIM_NULL;if(getType()==FimTypeString && (p=s.c_str()) && (r=strchr(s.c_str(),c)))return r-p; return -1; }
 };
 	fim::string fim_var_help_db_query(const fim::string& id);
 	void fim_var_help_db_init(void);

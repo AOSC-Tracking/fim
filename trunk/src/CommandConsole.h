@@ -205,7 +205,7 @@ class CommandConsole FIM_FINAL
 	fim_float_t getFloatVariable(const fim_var_id& varname)const;
 	fim::string getStringVariable(const fim_var_id& varname)const;
 	fim_int  getIntVariable(const fim_var_id& varname)const;
-	Var  getVariable(const fim_var_id& varname)const;
+	const Var  getVariable(const fim_var_id& varname)const;
 	fim_int  setVariable(const fim_var_id& varname,fim_int value);
 #if FIM_WANT_LONG_INT
 	int  setVariable(const fim_var_id& varname,    int value);

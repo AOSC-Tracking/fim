@@ -239,7 +239,7 @@ err:
 		return retval;
 	}
 
-	Var CommandConsole::getVariable(const fim_var_id& varname)const
+	const Var CommandConsole::getVariable(const fim_var_id& varname)const
 	{
 		if( const Namespace *nsp = c_rns(varname) )
 			return nsp->getVariable(rnid(varname));

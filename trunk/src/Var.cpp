@@ -26,7 +26,6 @@ namespace fim
 
 	void fim_var_help_db_init(void)
 	{
-		/* The inclusion of the next file is not essential : it serves only to populate the variables help database. */
 		#define FIM_WANT_INLINE_HELP 1
 		#include "help.cpp"
 		#undef  FIM_WANT_INLINE_HELP
