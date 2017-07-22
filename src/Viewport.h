@@ -43,11 +43,11 @@ class Viewport FIM_FINAL
 	const Rect&corners_;
 #endif /* FIM_WINDOWS */
 	ImagePtr image_;
-	CommandConsole& commandConsole;
+	CommandConsole& commandConsole_;
         void reset(void);
         void steps_reset(void);
 	public:
-	explicit Viewport(CommandConsole& c, DisplayDevice *dd, const Rect &rect); 
+	explicit Viewport(CommandConsole& commandConsole_, DisplayDevice *dd, const Rect &rect); 
 	explicit Viewport(const Viewport& rhs);
 	~Viewport(void);
 	private:
@@ -56,9 +56,9 @@ class Viewport FIM_FINAL
 	public:
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY);
 	fim_bool_t need_redraw(void)const;
-	fim::string pan(const args_t& args);
-	fim::string pan(const fim_char_t*a1, const fim_char_t*a2);
-	bool place(const fim_pan_t px, const fim_pan_t py);
+	bool do_pan(const args_t& args);
+	bool pan(const fim_char_t*a1, const fim_char_t*a2);
+	bool pan_to(const fim_pan_t px, const fim_pan_t py);
 	fim_bool_t pan_up   (fim_pan_t s=0);
 	fim_bool_t pan_down (fim_pan_t s=0);
 	fim_bool_t pan_right(fim_pan_t s=0);
@@ -72,13 +72,13 @@ class Viewport FIM_FINAL
 	private:
 	fim_scale_t viewport_xscale(void)const;
 	fim_scale_t viewport_yscale(void)const;
+	void null_display(void);
 	public:
 	fim_coo_t viewport_width(void)const;
 	fim_coo_t viewport_height(void)const;
 	void align(const char c);
 	bool display(void);
 	bool redisplay(void);
-	void null_display(void);
 	void auto_width_scale(void);
 	void auto_height_scale(void);
         void setImage(fim::ImagePtr ni);

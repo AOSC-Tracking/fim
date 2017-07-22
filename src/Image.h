@@ -179,6 +179,7 @@ class Image FIM_FINAL
 	fim_int check_negated(void)const;
 	fim_int check_desaturated(void)const;
 	fim_int check_autotop(void)const;
+	fim_int check_autocenter(void)const;
 	void set_exif_extra(fim_int shouldrotate, fim_int shouldmirror, fim_int shouldflip);
 	void get_irs(char *irs)const;
 }; /* class Image */
