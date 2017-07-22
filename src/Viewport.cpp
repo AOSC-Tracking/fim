@@ -210,13 +210,13 @@ namespace fim
 		return display();
 	}
 
-	fim_coo_t Viewport::xorigin(void)
+	fim_coo_t Viewport::xorigin(void)const
 	{
 		// horizontal origin coordinate (upper)
 		return corners_.xorigin();
 	}
 
-	fim_coo_t Viewport::yorigin(void)
+	fim_coo_t Viewport::yorigin(void)const
 	{
 		// vertical origin coordinate (upper)
 		return corners_.yorigin();

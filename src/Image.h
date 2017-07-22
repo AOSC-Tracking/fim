@@ -18,7 +18,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
 #ifndef FIM_IMAGE_H
 #define FIM_IMAGE_H
 
@@ -122,7 +121,7 @@ class Image FIM_FINAL
 	bool can_reload(void)const;
 	fim_err_t update_meta(bool fresh=false);
 
-	fim::string getInfo(void);
+	fim::string getInfo(void)const;
 	Image(const Image& rhs); // yes, a private constructor (was)
 #if FIM_WANT_BDI
 	Image(enum fim_tii_t tii=FIM_TII_NUL);
