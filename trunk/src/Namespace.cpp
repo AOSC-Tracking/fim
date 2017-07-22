@@ -204,6 +204,15 @@ namespace fim
 			return FIM_CNS_EMPTY_RESULT;
 		}
 
+		Var Namespace::getGlobalVariable(const fim_var_id& varname)const
+		{
+#ifndef FIM_INDEPENDENT_NAMESPACE
+			if(rnsp_)
+				return rnsp_->getVariable(varname);
+#endif /* FIM_INDEPENDENT_NAMESPACE */
+			return FIM_CNS_EMPTY_RESULT;
+		}
+
 		fim::string Namespace::autocmd_exec(const fim::string&event, const fim_fn_t& fname)
 		{
 #ifdef FIM_AUTOCMDS
