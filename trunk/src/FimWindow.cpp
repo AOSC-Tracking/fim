@@ -18,16 +18,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-/*
- *	This code is still experimental and programmed in great hurry.
- *	FIXME : there are bugs.
- */
-
 #include "fim.h"
 
 #ifdef FIM_WINDOWS
-
 namespace fim
 {
         fim_cxr FimWindow::fcmd_cmd(const args_t&args)
@@ -1301,4 +1294,3 @@ int main(void)
 }
 #endif
 #endif /* FIM_WINDOWS */
-

@@ -195,6 +195,6 @@ class FimWindow
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY); /* FIXME: this is a wrapper to Viewport's, until multiple windows get introduced again. */
 	fim_bool_t need_redraw(void)const;
 };
-}
+} /* namespace fim */
 #endif /* FIM_WINDOWS */
 #endif /* FIM_WINDOW_H */
