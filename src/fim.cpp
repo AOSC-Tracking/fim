@@ -81,7 +81,8 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_EXECUTE_COMMANDS, required_argument,       FIM_NULL, 'c',"execute {commands} after initialization.","{commands}",
 "The \\fBcommands\\fP string will be executed before entering the interactive loop.\n"
 "Please note that if your commands are more complicated than a simple 'next' or 'pornview'\n"
-"command, they must be quoted and escaped in a manner suitable for your shell!\n"
+"command, they must be quoted and escaped in a manner suitable to your shell.\n"
+"If no semicolon (;) at \\fBcommands\\fP end, one will be appended.\n"
 "\n"
 "For example,\n"
 "-c '*2;2pan_up;display;while(1){bottom_align;sleep \"1\" ; top_align}'\n"
@@ -90,7 +91,7 @@ struct fim_options_t fim_options[] = {
 "do an endless loop consisting of bottom and top aligning, alternated.\n"
     },
     {FIM_OSW_EXECUTE_COMMANDS_EARLY, required_argument,       FIM_NULL, 'C',"execute {commands} after initialization, before any config loading.","{commands}",
-"Just as the --" FIM_OSW_EXECUTE_COMMANDS " option, but commands will be executed before the loading of any config file.\n"
+"Similar to the --" FIM_OSW_EXECUTE_COMMANDS " option, but commands will be executed before the loading of any config file.\n"
 "\n"
 "For example,\n"
 "-C '" FIM_VID_SCALE_STYLE "=\" \"' will make fim start with no auto-scaling.\n"

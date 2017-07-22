@@ -1752,34 +1752,32 @@ ok:
 	fim::string CommandConsole::sanitize_action(const fim_cmd_id& cmd)const
 	{
 		/*
-		 * make cmd dumbable
+		 * make cmd dumpable
 		 */
 		if(cmd.c_str()[strlen(cmd.c_str())-1]!=FIM_SYM_SEMICOLON)
 			return cmd+fim::string(FIM_SYM_SEMICOLON_STRING);
 		return cmd;
 	}
 #endif /* FIM_RECORDING */
-	void CommandConsole::appendPostInitCommand(const fim::string& c)
+	void CommandConsole::appendPostInitCommand(const fim::string& cmd)
 	{
-		/* Passed via -c.
+		/* Passed via -c
 		 * Executed right before a normal execution of Fim
 		 * but after the configuration file loading.
 		 * */
-		postInitCommand_+= c;
+		postInitCommand_+=sanitize_action(cmd);
 	}
 
-	void CommandConsole::appendPreConfigCommand(const fim::string& c)
+	void CommandConsole::appendPreConfigCommand(const fim::string& cmd)
 	{
-		/* Passed via -C. */
-		preConfigCommand_+= c;
+		/* Passed via -C */
+		preConfigCommand_+=sanitize_action(cmd);
 	}
 
 	void CommandConsole::appendPostExecutionCommand(const fim::string& cmd)
 	{
-		/*
-		 * Executed right before a normal termination of Fim.
-		 * */
-		postExecutionCommand_+=cmd;
+		/* Passed via -W or -F */
+		postExecutionCommand_+=sanitize_action(cmd);
 	}
 	
 	bool CommandConsole::appendedPostInitCommand(void)const

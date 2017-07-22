@@ -103,7 +103,8 @@ Step into the first loaded file directory and push other files.
 .B \-c {commands}, \-\-execute\-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.
 Please note that if your commands are more complicated than a simple 'next' or 'pornview'
-command, they must be quoted and escaped in a manner suitable for your shell!
+command, they must be quoted and escaped in a manner suitable to your shell.
+If no semicolon (;) at \fBcommands\fP end, one will be appended.
 
 For example,
 \-c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
@@ -113,7 +114,7 @@ do an endless loop consisting of bottom and top aligning, alternated.
 
 .TP
 .B \-C {commands}, \-\-execute\-commands\-early {commands}
-Just as the \-\-execute\-commands option, but commands will be executed before the loading of any config file.
+Similar to the \-\-execute\-commands option, but commands will be executed before the loading of any config file.
 
 For example,
 \-C '_scale_style=" "' will make fim start with no auto\-scaling.
