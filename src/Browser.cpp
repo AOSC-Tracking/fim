@@ -349,271 +349,22 @@ nop:
 
 	fim_cxr Browser::fcmd_scale(const args_t& args)
 	{
-		/*
-		 * scales the image to a certain scale factor
-		 *  - no user error checking -- poor error reporting for the user
-		 *  - wxh / w:h syntax needed
-		 *  - shall better belong to viewport
-		 */
-		fim_scale_t newscale = FIM_CNS_SCALEFACTOR_ZERO;
-		fim_char_t fc = FIM_SYM_CHAR_NUL;
-		const fim_char_t*ss = FIM_NULL;
-		int sl = 0;
-		bool pcsc = false;
-		bool aes = false; // approximate exponential scaling
+		fim::string result = FIM_CNS_EMPTY_RESULT;
 		FIM_PR('*');
-
-		if( args.size() < 1 || !(ss=args[0].c_str() ))
-			goto nop;
-		fc = tolower(*ss);
-		sl = strlen(ss);
-
-#if FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING
-		{
-			if( fc == '<' )
-			{
-				newscale = 0.5;
-				fc='+';
-				aes = true;
-				goto comeon;
-			}
-			if( fc == '>' )
-			{
-				newscale = 2;
-				fc='+';
-				aes = true;
-				goto comeon;
-			}
-		}
-#endif /* FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING */
-
-		if( isalpha(fc) )
-		{
-			if( !( fc == 'w' || fc == 'h' || fc == 'a' || fc == 'b' ) )
-				goto nop;
-		}
-		else
-		{
-			if( sl == 1 && ( fc =='+' || fc == '-' ) )
-			{
-				if( fc == '+' )
-					newscale = getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
-				if( fc == '-' )
-					newscale = getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
-				goto comeon;
-			}
-			if( sl >= 2 && ( fc == '+' || fc == '-' ) )
-			{
-				fim_char_t sc =ss[1];
-
-				if( fc == '+' )
-				{
-					fim_scale_t vmf = getGlobalFloatVariable(FIM_VID_MAGNIFY_FACTOR);
-					fim_scale_t vrf = getGlobalFloatVariable(FIM_VID_REDUCE_FACTOR);
-					fim_scale_t sfd = getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_DELTA);
-					fim_scale_t sfm = getGlobalFloatVariable(FIM_VID_SCALE_FACTOR_MULTIPLIER);
-					if( sfd <= FIM_CNS_SCALEFACTOR_ZERO )
-						sfd = FIM_CNS_SCALEFACTOR_DELTA;
-					if( sfm <= FIM_CNS_SCALEFACTOR_ONE )
-					       	sfm = FIM_CNS_SCALEFACTOR_MULTIPLIER;
-
-					switch(sc)
-					{
-						case('+'):
-						{
-							vrf += sfd;
-							vmf += sfd;
-						}
-						break;
-						case('-'):
-						{
-							vrf -= sfd;
-							vmf -= sfd;
-						}
-						break;
-						case('*'):
-						{
-							vrf *= sfm;
-							vmf *= sfm;
-						}
-						break;
-						case('/'):
-						{
-							vrf /= sfm;
-							vmf /= sfm;
-						}
-						break;
-						default:
-						goto noplus;
-					}
-
-					setGlobalVariable(FIM_VID_REDUCE_FACTOR, vrf);
-					setGlobalVariable(FIM_VID_MAGNIFY_FACTOR,vmf);
-					goto nop;
-				}
-noplus:
-				if( fc == '+' || fc == '-')
-				{
-					newscale = fim_atof(ss+1);
-					pcsc = (strstr(ss,"%") != FIM_NULL );
-					if(pcsc)
-						newscale *= .01;
-					if( !newscale )
-						goto nop;
-#if 1
-					if( fc == '+' )
-						newscale = 1.0 + newscale;
-					if( fc == '-' )
-						newscale = 1.0 - newscale;
-					fc = FIM_SYM_CHAR_NUL;
-#endif
-					goto comeon;
-				}
-				goto nop;
-			}
-			if( sl )
-			{
-				if(fc=='*')
-				{
-					++ss;
-					if(!*ss)
-						goto nop; /* a '*' alone. may assign a special meaning to this... */
-				}
-				newscale = fim_atof(ss);
-				if(fc=='*')
-				{
-					fc = '+';
-					goto comeon;
-				}
-				pcsc = (strstr(ss,"%") != FIM_NULL );
-				if(pcsc)
-					newscale *= .01;
-				if( newscale == FIM_CNS_SCALEFACTOR_ZERO )
-				       	goto nop;
-				pcsc = false;
-				goto comeon;
-			}
-			goto nop;
-		}
-comeon:
-#if FIM_WANT_BDI
-		if(1)
-#else	/* FIM_WANT_BDI */
-		if(c_getImage())
-#endif	/* FIM_WANT_BDI */
-		{
-			fim_err_t errval = FIM_ERR_NO_ERROR;
-			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if(c_getImage())
-				getImage()->update_meta();
-			if( c_getImage() )
-			switch( fc )
-			{
-				case('w'):
-				if(viewport())
-					viewport()->auto_width_scale();
-				break;
-				case('h'):
-				if(viewport())
-				viewport()->auto_height_scale();
-				break;
-				case('a'):
-				if(viewport())
-					viewport()->auto_scale();
-				break;
-				case('b'):
-				if(viewport())
-					viewport()->auto_scale_if_bigger();
-				break;
-				case('-'):
-				{
-					if( newscale )
-					{
-						if(c_getImage())
-							errval = getImage()->reduce(newscale);
-						if(viewport())
-							viewport()->scale_position_reduce(newscale);
-					}
-					else	
-					{
-						if(c_getImage())
-							errval = getImage()->reduce();
-						if(viewport())
-							viewport()->scale_position_reduce();
-					}
-				}
-				break;
-				case('+'):
-				{
-					if( newscale )
-					{
-						if(c_getImage())
-							errval = getImage()->magnify(newscale,aes);
-						if(viewport())
-							viewport()->scale_position_magnify(newscale);
-					}
-					else	
-					{
-						if(c_getImage())
-							errval = getImage()->magnify();
-						if(viewport())
-							viewport()->scale_position_magnify();
-					}
-				}
-				break;
-				default:
-				if( pcsc )
-					errval = getImage()->scale_multiply(newscale);
-				else
-					errval = getImage()->set_scale(newscale);
-			}
-			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
-			if( errval != FIM_ERR_NO_ERROR )
-			{
-				// Here might handle reporting of an error..
-			}
-		}
-nop:
+		if(viewport())
+			result = viewport()->img_scale(args,current());
 		FIM_PR('.');
-		return FIM_CNS_EMPTY_RESULT;
+		return result;
 	}
 	
 	fim_cxr Browser::fcmd_color(const args_t& args)
 	{
-		if( !c_getImage() )
-			goto nop;
-
-		if(args.size()>0)
-		{
-			bool daltonize=false;
-			enum fim_cvd_t cvd=FIM_CVD_NO;
-
-			if( args[0] == "desaturate" )
-				if( getImage()->desaturate() )
-					goto nop;
-			if( args[0] == "negate" )
-				if( getImage()->negate() )
-					goto nop;
-			if( args[0] == "identity" )
-				if( getImage()->identity() )
-					goto nop;
-
-			if( args.size()>1 && ( args[1] == "daltonize" || args[1] == "D" ) )
-				daltonize=true;
-			if( args[0] == "c" || args[0] == "colorblind"  ||
-			    args[0] == "d" || args[0] == "deuteranopia" )
-				cvd = FIM_CVD_DEUTERANOPIA;
-			if( args[0] == "p" || args[0] == "protanopia" )
-				cvd = FIM_CVD_PROTANOPIA;
-			if( args[0] == "t" || args[0] == "tritanopia" )
-				cvd = FIM_CVD_TRITANOPIA  ;
-
-			if(cvd!=FIM_CVD_NO)
-				if( getImage()->colorblind(cvd,daltonize) )
-					goto nop;
-		}
-nop:
-		return FIM_CNS_EMPTY_RESULT;
+		fim::string result = FIM_CNS_EMPTY_RESULT;
+		FIM_PR('*');
+		if(viewport())
+			result = viewport()->img_color(args);
+		FIM_PR('.');
+		return result;
 	}
 
 	fim::string Browser::do_filter_cmd(const args_t args, bool negative, enum FilterAction faction)
@@ -1424,7 +1175,8 @@ nop:
 		{
 			//if(1)std::cout<<"goto page "<<n<<FIM_CNS_NEWLINE;
 			FIM_PR(' ');
-			getImage()->goto_page(n);
+			if(viewport())
+				viewport()->img_goto_page(n);
 			result = N;
 			goto ret;
 		}
@@ -1759,7 +1511,10 @@ go_jump:
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c); }
 				if( ispg )
-					getImage()->goto_page(np);
+				{
+					if(viewport())
+						viewport()->img_goto_page(np);
+				}
 				else
 					goto_image(nf,isfg?true:false);
 
@@ -2309,7 +2064,6 @@ nop:
 	fim_cxr Browser::fcmd_rotate(const args_t& args)
 	{
 		fim_angle_t angle; // degrees
-
 		FIM_PR('*');
 
 		if( args.size() == 0 )
@@ -2324,19 +2078,8 @@ nop:
 			//angle = getGlobalFloatVariable(FIM_VID_ANGLE);
 //			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREROTATE,current());
 			FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PRESCALE,current());
-			if( c_getImage() )
-			{
-				if(angle)
-				{
-					if(c_getImage())
-						getImage()->rotate(angle);
-				}
-				else	
-				{
-					if(c_getImage())
-						getImage()->rotate();
-				}
-			}
+			if(viewport())
+				viewport()->img_rotate(angle);
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTSCALE);
 //			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTROTATE);
 		}
@@ -2347,6 +2090,7 @@ ret:
 
 	fim_cxr Browser::fcmd_align(const args_t& args)
 	{
+		fim::string result = FIM_CMD_HELP_ALIGN;
 		FIM_PR('*');
 		if( args.size() < 1 )
 			goto err;
@@ -2369,32 +2113,19 @@ ret:
 					viewport()->align('c');
 			}
 			FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
+			result = FIM_CNS_EMPTY_RESULT;
 		}
-		FIM_PR('.');
-		return FIM_CNS_EMPTY_RESULT;
 err:
 		FIM_PR('.');
-		return FIM_CMD_HELP_ALIGN;
+		return result;
 	}
 
 	const Image* Browser::c_getImage(void)const
 	{
 		const Image* image = FIM_NULL;
 
-		if( commandConsole_.current_viewport() )
-			image = commandConsole_.current_viewport()->c_getImage();
-		return image;
-	}
-
-	Image* Browser::getImage(void)const
-	{
-		/*
-		 *	the image loaded in the current viewport is returned
-		 */
-		Image* image = FIM_NULL;
-
-		if( commandConsole_.current_viewport() )
-			image = commandConsole_.current_viewport()->getImage();
+		if( viewport() )
+			image = viewport()->c_getImage();
 		return image;
 	}
 

@@ -205,13 +205,7 @@ class Browser FIM_FINAL
 #endif /* FIM_WANT_PIC_LBFL */
 
 	const fim_fn_t nofile_; /* a dummy empty filename */
-
-#ifndef FIM_WINDOWS
-	/* when compiled with no multiple windowing support, one viewport only will last. */
-	Viewport *only_viewport_;
-#endif /* FIM_WINDOWS */
 	CommandConsole& commandConsole_;
-	Image* getImage(void)const;
 
 #ifdef FIM_READ_STDIN_IMAGE
 #if FIM_IMG_NAKED_PTRS
@@ -351,6 +345,5 @@ class Browser FIM_FINAL
 	virtual void quickbench(fim_int qbi);
 #endif /* FIM_WANT_BENCHMARKS */
 }; /* Browser */
-}
-
+} /* namespace fim */
 #endif /* FIM_BROWSER_H */
