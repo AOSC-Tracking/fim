@@ -80,18 +80,18 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 	fim_err_t CommandConsole::init(fim::string device)
 	{
 		/*
-		 * TODO : move most of this stuff to the constructor, some day.
+		 * TODO: move most of this stuff to the constructor, some day.
 		 */
 		fim_int xres=0,yres=0;
 		bool device_failure=false;
 		int dosso=device.find(FIM_SYM_DEVOPTS_SEP_STR);
 		bool wcs = false;
 		std::string dopts;
-		/* new : prevents atof, sprintf and such conversion mismatches! */
-		setlocale(LC_ALL,"C");	/* portable (among Linux hosts) : should use dots for numerical radix separator */
+		/* prevents atof, sprintf and such conversion mismatches. */
+		setlocale(LC_ALL,"C");	/* portable (among Linux hosts): should use dots for numerical radix separator */
 		//setlocale(LC_NUMERIC,"en_US"); /* lame  */
 		//setlocale(LC_ALL,""); /* just lame */
-		displaydevice_=FIM_NULL;	/* TODO : is this really necessary ? */
+		assert(displaydevice_==FIM_NULL);
 
 		if(dosso>0)
 			dopts=device.substr(dosso+strlen(FIM_SYM_DEVOPTS_SEP_STR),device.length()).c_str();
@@ -444,7 +444,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		switch(qbi)
 		{
 			case 0:
-			oss << "fim console random variables set/get test : " << ((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " set/get /s\n";
+			oss << "fim console random variables set/get test: " << ((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " set/get /s\n";
 		}
 		return oss.str();
 	}
@@ -456,7 +456,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		{
 			case 0:
 			oss << "fim console check";
-			std::cout << oss.str() << " : " << "please be patient\n";
+			std::cout << oss.str() << ": " << "please be patient\n";
 			break;
 		}
 	}

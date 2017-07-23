@@ -18,9 +18,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-
-
 #include "fim.h"
 #ifdef HAVE_LIBGEN_H
 #include <libgen.h>
@@ -65,7 +62,7 @@ err:
 		 *	the user supplies a string with the key combination, and if valid, its keycode
 		 *	is associated to the user supplied action (be it a command, alias, etc..)
 		 */
-		const fim_char_t* kerr=FIM_FLT_BIND " : invalid key argument (should be one of : k, C-k, K, <Left..> }\n";
+		const fim_char_t* kerr=FIM_FLT_BIND ": invalid key argument (should be one of: k, C-k, K, <Left..> }\n";
 		const fim_char_t* kstr=FIM_NULL;
 		fim_key_t key=FIM_SYM_NULL_KEY;
 
@@ -124,7 +121,7 @@ err:
 		 *	maybe you should made surjective the binding_keys mapping..
 		 */
 		if(args.size()!=1)
-			return FIM_FLT_UNBIND" : specify the key to unbind\n";
+			return FIM_FLT_UNBIND ": specify the key to unbind\n";
 		return unbind(args[0]);
 	}
 
@@ -190,21 +187,21 @@ err:
 						{
 							bstr += ikbi->second;
 						       	bstr += " ";
-							// std::cout << "key : " << ikbi->second << "\n";
+							// std::cout << "key: " << ikbi->second << "\n";
 						}
 						else
 						if(bi->second.find(ptn) != bi->second.npos)
 						{
 							bstr += ikbi->second;
 						       	bstr += " ";
-							// std::cout << "def : " << ikbi->second << "\n";
+							// std::cout << "def: " << ikbi->second << "\n";
 						}
 						if(bhi != bindings_help_.end() )
 						if(bhi->second.find(ptn) != bhi->second.npos)
 						{
 							bstr += ikbi->second;
 						       	bstr += " ";
-							// std::cout << "dsc : " << ikbi->second << "\n";
+							// std::cout << "dsc: " << ikbi->second << "\n";
 						}
 					}
 				}
@@ -338,12 +335,12 @@ err:
 		}
 		if(args.size()==1)
 		{
-			/* autocmd Event : should list all autocmds for the given Event */
+			/* autocmd Event: list all autocmds for Event */
 			return autocmds_list(args[0],"");
 		}
 		if(args.size()==2)
 		{
-			/* autocmd Event Pattern : should list all autocmds for the given Event Pattern */
+			/* autocmd Event Pattern: list all autocmds for Event Pattern */
 			return autocmds_list(args[0],args[1]);
 		}
 		if(args.size()==3)
@@ -365,12 +362,12 @@ err:
 		}
 		if(args.size()==1)
 		{
-			/* autocmd Event : should delete all autocmds for the given Event */
+			/* autocmd Event: delete all autocmds for Event */
 			return autocmd_del(args[0],"","");
 		}
 		if(args.size()==2)
 		{
-			/* autocmd Event Pattern : should delete all autocmds for the given Event Pattern */
+			/* autocmd Event Pattern: delete all autocmds for Event Pattern */
 			return autocmd_del(args[0],args[1],"");
 		}
 		if(args.size()==3)
@@ -424,9 +421,9 @@ err:
 
 	fim_err_t CommandConsole::fpush(FILE *tfd)
 	{
-			/* todo : read errno in case of error and print some report.. */
+			/* todo: read errno in case of error and print some report.. */
 	
-			/* pipes are not seekable : this breaks down all the Fim file handling mechanism */
+			/* pipes are not seekable: this is incompatible with Fim's file handling mechanism */
 			/*
 			while( (rc=read(0,buf,FIM_PIPE_BUFSIZE))>0 ) fwrite(buf,rc,1,tfd);
 			rewind(tfd);
@@ -504,7 +501,7 @@ err:
 				dir=fim_dirname(dir);
 #endif /* HAVE_LIBGEN_H */
 			if( chdir(dir.c_str()) )
-			       	return (fim::string("cd error : ")+fim::string(strerror(errno)));
+			       	return (fim::string("cd error: ")+fim::string(strerror(errno)));
 		}
 		setVariable(FIM_VID_PWD,fim_getcwd());
 		return FIM_CNS_EMPTY_RESULT;
@@ -609,11 +606,11 @@ err:
 		 * removes the actions assigned to the specified aliases,
 		 */
 		if(args.size()<1)
-			return FIM_FLT_UNALIAS" : please specify an alias to remove or all (-a)!\n";
+			return FIM_FLT_UNALIAS ": please specify an alias to remove or all (-a)!\n";
 
 		if(args[0]==string("-a"))
 		{
-			/* FIXME : the lexer/parser is bugged and it takes -a as an expression if not between double quotes ("-a") */
+			/* the lexer/parser has limitation and it takes -a as a numerical expression if not between double quotes ("-a") */
 			aliases_.clear();
 			return FIM_CNS_EMPTY_RESULT;
 		}
@@ -623,10 +620,10 @@ err:
 		{
 			aliases_.erase(args[i]);
 			return FIM_CNS_EMPTY_RESULT;
-			/* fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" successfully unaliased.\n"); */
+			/* fim::string(FIM_FLT_UNALIAS ": \"")+args[i]+fim::string("\" successfully unaliased.\n"); */
 		}
 		else
-		       	return fim::string(FIM_FLT_UNALIAS" : \"")+args[i]+fim::string("\" there is not such alias.\n");
+		       	return fim::string(FIM_FLT_UNALIAS ": \"")+args[i]+fim::string("\" there is not such alias.\n");
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -696,7 +693,7 @@ err:
 			execute_internal(dump_record_buffer(args).c_str(),FIM_X_NULL);
 			recordMode_=Normal;
 		}
-		/* for unknown reasons, the following code gives problems : image resizes don't work..
+		/* for unknown reasons, the following code gives problems: image resizes don't work..
 		 * but the present (above) doesn't support interruptions ...
 		 * */
 /*		fim::string res;
@@ -725,7 +722,7 @@ err:
 	fim::string CommandConsole::repeat_last(const args_t& args)
 	{
 		/*
-		 * WARNING : there is an intricacy concerning the semantics of this command :
+		 * WARNING: there are a few points concerning this command:
 		 * - This command should NOT be registered as last_command, nor any alias 
 		 *   triggering it. But this solution would require heavy parsing and very
 		 *   complicated machinery and information propagation... 
@@ -843,7 +840,7 @@ nop:
 
 	fim_cxr CommandConsole::fcmd_do_getenv(const args_t& args)
 	{
-		string help="usage : " FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING " will create a fim variable named " FIM_CNS_EX_ID_STRING " with value $" FIM_CNS_EX_ID_STRING " (if nonempty), from the current shell."
+		string help="usage: " FIM_FLT_GETENV " " FIM_CNS_EX_ID_STRING " will create a fim variable named " FIM_CNS_EX_ID_STRING " with value $" FIM_CNS_EX_ID_STRING " (if nonempty), from the current shell."
 #ifndef HAVE_GETENV
 		" (note that getenv call was not available at build time, so it won't work)\n"
 #endif /* HAVE_GETENV */
@@ -921,5 +918,4 @@ err:
 #endif /* FIM_WANT_PIC_CMTS */
 		return FIM_CNS_EMPTY_RESULT;
 	}
-
-}
+} /* namespace fim */

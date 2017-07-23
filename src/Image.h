@@ -151,8 +151,6 @@ class Image FIM_FINAL
 	fim_err_t identity (void);
 	fim_err_t desaturate (void);
 	bool colorblind(enum fim_cvd_t cvd, bool daltonize);
-	bool gray_negate(void);
-
 	bool check_valid(void)const;
 
 	int width(void)const;
@@ -161,7 +159,6 @@ class Image FIM_FINAL
 	fim_coo_t original_height(void)const;
 	bool goto_page(fim_page_t j);
 
-	fim_int c_page(void)const;
 #if FIM_WANT_MIPMAPS
 	void mm_free(void);
 	void mm_make(void);

@@ -690,7 +690,7 @@ FIM_INTERNAL_LANGUAGE_SHORTCUT_SHORT_HELP
 //"J		 change the currently focused window with the lower\n"
 //"K		 change the currently focused window with the upper\n"
 //"L		 change the currently focused window with the one on the right\n"
-//"U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise  : try V, m,  U and see by yourself :) )\n"
+//"U		 swap the currently focused window with the split sibling one (it is not my intention to be obscure, but precise: try V, m,  U and see by yourself)\n"
 //"d		move the image diagonally north-west\n"
 //"D		move the image diagonally south-east\n"
 //"x		move the image diagonally north-east\n"
@@ -727,7 +727,7 @@ mp+="\n";
 mp+=string(
 //"			For instance,  /usr/share/consolefonts/LatArCyrHeb-08.psf.gz is a Linux console file.\n"
 //"			Consult 'man setfont' for your current font paths.\n"
-//"			NOTE : Currently xfs is disabled.\n"
+//"			NOTE: Currently xfs is disabled.\n"
 "" FIM_ENV_FBGAMMA "		(just like in fbi) gamma correction (applies to dithered 8 bit mode only). Default is " FIM_CNS_GAMMA_DEFAULT_STR ".\n"
 "" FIM_ENV_FRAMEBUFFER "	(just like in fbi) user set framebuffer device file (applies only to the " FIM_DDN_INN_FB " mode).\n"
 "If unset, fim will probe for " FIM_DEFAULT_FB_FILE ".\n"
@@ -750,9 +750,9 @@ mp+=string(
 "has.  On a private box it might be fine to handle it this way\n"
 "through.\n"
 "\n"
-"If using udev, you can edit :\n"
+"If using udev, you can edit:\n"
 "/etc/udev/permissions.d/50-udev.permissions\n"
-"and set these lines like here :\n"
+"and set these lines like here:\n"
 " # fb devices\n"
 " fb:root:root:0600\n"
 " fb[0-9]*:root:root:0600\n"
@@ -935,7 +935,7 @@ fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ER
 		goto done;
 	}
 	    cc.printHelpMessage(argv0);
-	    std::cout << " where OPTIONS are taken from :\n";
+	    std::cout << " where OPTIONS are taken from:\n";
 	    if(helparg&&*helparg=='l')
 		    std::cout << "(EXPERIMENTAL: long help ('l') printout still unsupported)\n";
 	    for(size_t i=0;i<fim_options_count-1;++i)
@@ -1136,7 +1136,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
                     else
 		    {
 			if(optarg)
-				std::cerr<<"Warning : the --" FIM_OSW_BINARY " option supports 1 or 24 bpp depths. Using "<<FIM_DEFAULT_AS_BINARY_BPP<<".\n";
+				std::cerr<<"Warning: the --" FIM_OSW_BINARY " option supports 1 or 24 bpp depths. Using "<<FIM_DEFAULT_AS_BINARY_BPP<<".\n";
 		    	cc.setVariable(FIM_VID_BINARY_DISPLAY,FIM_DEFAULT_AS_BINARY_BPP);
                     }
 		    break;

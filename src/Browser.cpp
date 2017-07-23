@@ -130,7 +130,7 @@ namespace fim
                                 std::string mfl = cc.marked_files_list();
 		                if( mfl != FIM_CNS_EMPTY_STRING )
                                 {
-                                        result += "The following files have been marked by the user :\n";
+                                        result += "The following files have been marked by the user:\n";
                                         result += mfl;
                                 }
                                 else
@@ -560,9 +560,9 @@ nop:
 	int Browser::load_error_handle(fim::string c)
 	{
 		/*
-		 * assume there was a load attempt : check and take some action in case of error
+		 * assume there was a load attempt: check and take some action in case of error
 		 *
-		 * FIXME : this behaviour is BUGGY, because recursion will be killed off 
+		 * FIXME: this behaviour is BUGGY, because recursion will be killed off 
 		 *         by the autocommand loop prevention mechanism. (this is not true, as 20090215)
 		 * */
 		static int lehsof = 0;	/* './fim FILE NONFILE' and hitting 'prev' will make this necessary  */
@@ -613,6 +613,7 @@ ret:
 
 	fim_err_t Browser::loadCurrentImage(void)
 	{
+		// this function needs revision
 		fim_err_t errval = FIM_ERR_NO_ERROR;
 
 		FIM_PR('*');
@@ -642,8 +643,6 @@ ret:
 			FIM_PR('E');
 			if(viewport())
 				viewport()->setImage( FIM_NULL );
-//		commented temporarily for safety reasons
-//			if( e != FIM_E_NO_IMAGE )throw FIM_E_TRAGIC;  /* hope this never occurs :P */
 		}
 		FIM_PR('.');
 		return errval;
@@ -1387,7 +1386,6 @@ ret:
 			if( c == '?' )
 			{
 				gv = find_file_index(string(s).substr(1,sl-1));
-				//std::cout<<string(s).substr(1,sl-1)<<" "<<gv<<FIM_CNS_NEWLINE;
 				if( gv < 0 )
 				{
 					goto ret;
@@ -1435,7 +1433,6 @@ ret:
 			}
 			if( isfg && ispg )
 			{
-				// std::cout << "!\n";
 				goto err;
 			}
 			//if((!isre) && (!isrj))nf=gv;
@@ -1443,12 +1440,11 @@ ret:
 			if( (!isrj) && gv > 0 )
 				gv = gv - 1;// user input is interpreted as 1-based 
 			gv = FIM_MOD(gv,mv);
-			/* gv=FIM_MAX(FIM_MIN(gv,mv-1),0); */
-			//cout << "at " << cf <<", gv="<<gv <<", mod="<<mv<<FIM_CNS_NEWLINE;
+
 			if( ispg )
 			{
 				if( isrj )
-					{ np = cp + gv;}// FIXME: what if gv gv<1 ? pity :)
+					{ np = cp + gv;}
 				else
 					np = gv;
 			}
@@ -1456,14 +1452,14 @@ ret:
 			{
 				np = 0; /* first page -- next file's page count is unknown ! */
 				if( isrj )
-					{nf = cf + gv;}// FIXME: what if gv gv<1 ? pity :)
+					{nf = cf + gv;}
 				else
 					nf = gv;
 			}
 			gv = FIM_MOD(gv,mv);
 			nf = FIM_MOD(nf,fc);
 			np = FIM_MOD(np,pc);
-//go:
+
 			if(0)
 			cout << "goto: "
 				<<" s:" << s
@@ -1576,7 +1572,7 @@ parsed_idx:
 		
 			if(min_idx>=flist_.size() || max_idx < 1)
 			{
-				if(wom) commandConsole_.set_status_bar("requested index range is wrong (not so many files) :-)", "*");
+				if(wom) commandConsole_.set_status_bar("requested index range is wrong (not so many files...)", "*");
 				goto nop;
 			}
 
@@ -1587,7 +1583,7 @@ parsed_idx:
 
 			if(min_idx==1 && max_idx>=flist_.size())
 			{
-				if(wom) commandConsole_.set_status_bar("requested index limit range covers entire list :-)", "*");
+				if(wom) commandConsole_.set_status_bar("requested index limit range covers entire list.", "*");
 				goto nop;
 			}
 
@@ -1723,7 +1719,8 @@ parsed_idx:
 
 					goto parsed_limits;
 				}
-				// FIXME: this code is still far from clean / perfect.
+
+				// shall proof this code once more for corner cases 
 				if(is.peek()!='-') // MIN-
 				{
 					if(!isdigit(is.peek()))
@@ -2027,15 +2024,6 @@ nop:
 		/*
 		 *	short information in status-line format
 		 */
-#if 0
-		string fl;
-		for(size_t r=0;r<flist_.size();++r)
-		{
-			fl+=flist_[r];
-			fl+=FIM_CNS_NEWLINE;
-		}
-		return fl;
-#else
 		fim::string r = current();
 		FIM_PR('*');
 
@@ -2045,7 +2033,6 @@ nop:
 			r += " (unloaded)";
 		FIM_PR('.');
 		return r;
-#endif
 	}
 
 	fim::string Browser::info(void)
@@ -2128,13 +2115,8 @@ err:
 
 	fim_fn_t Browser::current(void)const
 	{
-		/*
-		 * dilemma : should the current() filename and next() operations
-		 * be relative to viewport's own current's ?
-		 * */
 		if( empty_file_list() )
 			return nofile_;
-
 	       	return flist_[flist_.cf()];
 	}
 
@@ -2145,20 +2127,13 @@ err:
 
 	fim::string Browser::do_push(const args_t& args)
 	{
-		/*
-		 *	pushes a new image filename on the back of the image list
-		 */
+		/* push to image list */
 		for(size_t i=0;i<args.size();++i)
 		{
 #ifdef FIM_SMART_COMPLETION
-			/* due to this patch, filenames could arrive here with some trailing space. 
-			 * we trim them here, which is not correct if someone intends to push
-			 * a space-trailing filenme.
-			 * 
-			 * FIXME : regard this as a bug
-			 * */
+			/* This patch allows first filename argument unquoted. */
+			/* However, fim syntax uses space to separate arguments; so the following limitation here.  */
 			fim::string ss = args[i];
-
 			ss.substitute(" +$","");
 			push_path(ss);
 #else /* FIM_SMART_COMPLETION */
@@ -2170,29 +2145,17 @@ err:
 
 	fim_int Browser::current_image(void)const
 	{
-		/* counting from 1 */
+		/* count from 1 */
 		return flist_.cf() + 1;
 	}
 
 	fim_int Browser::n_pages(void)const
 	{
 		fim_int pi = 0;
-
 #if !FIM_WANT_BDI
 		if( c_getImage() )
 #endif	/* FIM_WANT_BDI */
 			pi = c_getImage()->n_pages();
-		return pi;
-	}
-
-	fim_int Browser::c_page(void)const
-	{
-		fim_int pi = 0;
-
-#if !FIM_WANT_BDI
-		if( c_getImage() )
-#endif	/* FIM_WANT_BDI */
-			pi = c_getImage()->c_page();
 		return pi;
 	}
 
@@ -2274,11 +2237,11 @@ err:
 		{
 			case 0:
 			msg="fim browser push check";
-			std::cout << msg << " : " << "please be patient\n";
+			std::cout << msg << ": " << "please be patient\n";
 			break;
 			case 1:
 			msg="fim browser pop check";
-			std::cout << msg << " : " << "please be patient\n";
+			std::cout << msg << ": " << "please be patient\n";
 			break;
 		}
 	}
@@ -2310,10 +2273,10 @@ err:
 		switch(qbi)
 		{
 			case 0:
-			oss << "fim browser push check" << " : " << string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " push_path()/s\n";
+			oss << "fim browser push check" << ": " << string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " push_path()/s\n";
 			break;
 			case 1:
-			oss << "fim browser pop check" << " : " << ((fim_fms_t)qbtimes)/((qbttime)*1.e-3) << " pop()/s\n";
+			oss << "fim browser pop check" << ": " << ((fim_fms_t)qbtimes)/((qbttime)*1.e-3) << " pop()/s\n";
 			break;
 		}
 		return oss.str();

@@ -236,12 +236,7 @@ ret:		return key;
 
 	fim::string CommandConsole::aliasRecall(fim_cmd_id cmd)const
 	{
-		/*
-		 * returns the alias command eventually specified by token cmd
-		 *
-		 * Note : return aliases_[cmd] would create an entry associated to cmd 
-		 * ( and this member function could not be const anymore ).
-		 */
+		// returns the expanded alias specified by cmd
 		aliases_t::const_iterator ai=aliases_.find(cmd);
 
 		if(ai!=aliases_.end())
@@ -251,9 +246,7 @@ ret:		return key;
 
 	fim::string CommandConsole::getAliasesList(void)const
 	{
-		/*
-		 * collates all registered action aliases together in a single string
-		 * */
+		// collates all expanded aliases
 		fim::string aliases_expanded;
 		aliases_t::const_iterator ai;
 
@@ -280,9 +273,7 @@ ret:		return key;
 
 	fim_cxr CommandConsole::fcmd_alias(const args_t& args)
 	{
-		/*
-		 * assigns to an alias some action
-		 */
+		// create an alias
 		fim::string cmdlist,desc;
 		std::ostringstream r;
 
@@ -314,7 +305,7 @@ ret:		return key;
 
 	fim::string CommandConsole::dummy(const args_t & args)
 	{
-		return "dummy function : for test purposes :)\n";
+		return "dummy function for test purposes\n";
 	}
 
 	CommandConsole::CommandConsole(void):
@@ -572,7 +563,7 @@ err:
 	}
 
 #define istrncpy(x,y,z) {strncpy(x,y,z-1);x[z-1]='\0';}
-#define ferror(s) {/*fatal error*/FIM_FPRINTF(stderr, "%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);}/* temporarily, for security reason : no exceptions launched */
+#define ferror(s) {/*fatal error*/FIM_FPRINTF(stderr, "%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);}/* temporarily, for security reason: no exceptions launched */
 //#define ferror(s) {/*fatal error*/FIM_FPRINTF(stderr, "%s,%d:%s(please submit this error as a bug!)\n",__FILE__,__LINE__,s);throw FIM_E_TRAGIC;}
 
 	fim::string CommandConsole::getBoundAction(const fim_key_t c)const
@@ -661,11 +652,10 @@ ret:
 	{
 		try{
 		/*
-		 *	This member function executes a character string containing a script.
-		 *	The second argument specifies whether the command is added or 
-		 *	not to the command history buffer.
+		 *	execute a string containing a fim script.
+		 *	second argument specifies whether to add to history.
 		 *
-		 *	note : the pipe here opened shall be closed in the yyparse()
+		 *	note: the pipe here opened shall be closed in the yyparse()
 		 *	call, by the YY_INPUT macro (defined by me in lex.lex)
 		 */
 		fim_bool_t add_history_=(xflags&FIM_X_HISTORY)?true:false;
@@ -696,7 +686,7 @@ ret:
 			//strerror(errno);
 			std::cerr << "error piping with the command interpreter ( pipe() gave "<< r<< " )\n";
 			std::cerr << "the command was:\"" << ss << "\"\n";
-			std::cerr << "we had : "<< aliases_.size()<< " aliases_\n";
+			std::cerr << "we had: "<< aliases_.size()<< " aliases_\n";
 //			std::exit(-1);
 //			ferror("pipe error\n");
 //   			cleanup();
@@ -787,9 +777,7 @@ ret:
 			std::ostringstream oss;
 			cmd=ocmd;
 			oss << ocmd;
-			/*
-			 * WARNING : i am not sure this is the best choice
-			 */
+			// pipe to the parser
 			fim_sys_int r = pipe(fim_pipedesc),sl;
 			if(r!=0)
 			{ferror("pipe error\n");exit(-1);}
@@ -867,7 +855,7 @@ ret:
 
 				if(match)
 				{
-					//cout << "but found :`"<<match<<"...\n";
+					//cout << "but found:`"<<match<<"...\n";
 					cidx=findCommandIdx(match);
 					fim_free(match);
 				}
@@ -875,7 +863,7 @@ ret:
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
 			if(cidx==FIM_INVALID_IDX)
 			{
-				cout << "sorry, no such command :`"<<cmd.c_str()<<"'\n";
+				cout << "sorry, no such command:`"<<cmd.c_str()<<"'\n";
 				goto ok;
 			}
 			else
@@ -889,7 +877,7 @@ ret:
 				goto ok;
 			}
 		}
-		return "If you see this string, please report it to the program maintainer :P\n";
+		return "If you see this string, please report it to the program maintainer.\n";
 ok:
 		return FIM_CNS_EMPTY_RESULT;
 	}
@@ -976,7 +964,7 @@ err:
 			cycles_++;
 #if 0
 			/* dead code */
-			// FIXME : document this
+			// FIXME: document this
 			fd_set          set;
 			struct timeval  limit;
 			FD_SET(0, &set);
@@ -1051,7 +1039,7 @@ err:
 						/*
 						 * <0x20 ? print ^ 0x40+..
 						 * */
-						sprintf(buf,"got : 0x%x (%d)\n",c,c);
+						sprintf(buf,"got: 0x%x (%d)\n",c,c);
 						cout << buf ;
 					}
 					if(getVariable(FIM_VID_DBG_COMMANDS).find('k') >= 0)
@@ -1198,7 +1186,7 @@ rlnull:
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		if(!marked_files_.empty())
 		{
-			std::cerr << "The following files were marked by the user :\n";
+			std::cerr << "The following files were marked by the user:\n";
 			std::cerr << "\n";
 			std::cout << marked_files_list();
 		}
@@ -1207,7 +1195,7 @@ rlnull:
 		{
         		if(is_file(sof))
 			{
-				std::cerr << "Warning : the "<<sof<<" file exists and will not be overwritten!\n";
+				std::cerr << "Warning: the "<<sof<<" file exists and will not be overwritten!\n";
 			}
 			else
 			{
@@ -1215,7 +1203,7 @@ rlnull:
 
 				if(!out)
 				{
-					std::cerr << "Warning : The "<<sof<<" file could not be opened for writing!\n";
+					std::cerr << "Warning: The "<<sof<<" file could not be opened for writing!\n";
 					std::cerr << "check output directory permissions and retry!\n";
 				}
 				else
@@ -1311,7 +1299,7 @@ ret:
 		/*
 		 * whether the console should draw or not itself upon the arrival of textual output
 		 * */
-		//std::cout << s << " : " << (this->inConsole() )<< ( (s&&*s) ) << "\n";
+		//std::cout << s << ": " << (this->inConsole() )<< ( (s&&*s) ) << "\n";
 		fim_bool_t sd=(	(	this->inConsole()	/* in the command line */
 				&& (s&&*s) 		/* actually some text to add */
 			) 
@@ -1515,7 +1503,7 @@ ok:
 		}
 		else
 		{
-			cout << "WARNING : there is a loop for "
+			cout << "WARNING: there is a loop for "
 			     << "(event:" << event << ",filename:" << fname << ")";
 		}
 		return FIM_CNS_EMPTY_RESULT;
@@ -1622,7 +1610,7 @@ ok:
 		if(regexec(&regex,s+0,nmatch,pmatch,0)!=REG_NOMATCH)
 		{
 //			cout << "'"<< s << "' matches with '" << r << "'\n";
-/*			cout << "match : " << "\n";
+/*			cout << "match: " << "\n";
 			cout << "\"";
 			for(int m=pmatch[0].rm_so;m<pmatch[0].rm_eo;++m)
 				cout << s[0+m];
@@ -1927,7 +1915,7 @@ ok:
 		/*
 		 * the display device should exit cleanly to avoid cluttering the console
 		 * ... or the window system
-		 * used by : fb_catch_exit_signals() : should this matter ?
+		 * used by: fb_catch_exit_signals(): should this matter ?
 		 * */
 
 		if(mangle_tcattr_)
@@ -2060,9 +2048,6 @@ ok:
 		if (desc && info)
 		{
 			/* non interactive print */
-			/*
-			 * FIXME : and what if chars < 11 ? :)
-			 * */
 			ilen = fim_strlen(info);
 			if(chars-eisl-ilen-hkl>0)
 			{
@@ -2090,13 +2075,13 @@ ok:
 				else
 				{
 				       	if(chars>0)
-				       	sprintf(str, "!");
-			       	}	/* :D */
+				 	      	sprintf(str, "!");
+			       	}
 			}
 		}
 #ifdef FIM_USE_READLINE
 		else
-		if(chars>=6+hkl && desc) /* would be a nonsense :) */
+		if(chars>=6+hkl && desc) /* would be a nonsense */
 		{
 			/* interactive print */
 			static int statusline_cursor=0;
@@ -2256,7 +2241,7 @@ err:
 	       				fr.first = nf;
 	       				fr.first += de->d_name;
 					fr.second = FIM_NULL;
-					FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME : move this outta here
+					FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME: move this outta here
 					if(fr.second)
 						lfc.push_back(fr);
 				}
@@ -2280,7 +2265,7 @@ err:
 			{
 				fr.first=args[1];
 				fr.second=FIM_NULL;
-				FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME : move this outta here
+				FontServer::fb_text_init1(fr.first.c_str(),&fr.second,vl);	// FIXME: move this outta here
 				if(fr.second)
 					goto lofo;
 				else
