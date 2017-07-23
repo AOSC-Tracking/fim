@@ -39,7 +39,7 @@ For other formats fim will try to use ImageMagick's 'convert' executable.
 If \fB{imagepath}\fP is a file, its format is guessed not by its name but by its contents (see e.g. the _file_loader variable to change this default).
 
 
-If \fB{imagepath}\fP is a directory, therein contained files of supported formats will be loaded. If \fB{imagepath}\fP contains a trailing slash (/), it will be treated as a directory; otherwise a check will be made using \fBstat(2)\fP. To change this default, see description of the _pushdir_re variable and the \-\-no\-stat\-push and \-\-recursive  options.
+If \fB{imagepath}\fP is a directory, therein contained files of supported formats will be loaded. If \fB{imagepath}\fP contains a trailing slash (/), it will be treated as a directory; otherwise a check will be made using \fBstat(2)\fP. To change this default, see description of the _pushdir_re variable and the \-\-no\-stat\-push and \-\-recursive options.
 
 
 If configured at build time, fim will be capable of using SDL or aalib output.

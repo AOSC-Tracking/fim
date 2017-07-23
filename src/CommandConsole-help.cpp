@@ -89,9 +89,9 @@ manmode:
 
 	fim::string CommandConsole::print_commands(void)const
 	{
-		cout << "VARIABLES : "<<get_variables_list()<<"\n";
-		cout << "COMMANDS : "<<get_commands_list()<<"\n";
-		cout << "ALIASES : "<<get_aliases_list()<<"\n";
+		cout << "VARIABLES: "<<get_variables_list()<<"\n";
+		cout << "COMMANDS: "<<get_commands_list()<<"\n";
+		cout << "ALIASES: "<<get_aliases_list()<<"\n";
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
@@ -188,7 +188,7 @@ manmode:
 			".nf\n"
 			+FIM_DEFAULT_EXAMPLE_FILE_CONTENTS+
 			"\n"
-		".SH CONFIGURATION FILE EXAMPLES\n"
+		".SH CONFIGURATION FILE EXAMPLE\n"
 			"This is the default configuration, as contained in the " FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS " variable.\n"
 			"\n.nf\n"
 			+FIM_DEFAULT_CONFIG_FILE_CONTENTS+

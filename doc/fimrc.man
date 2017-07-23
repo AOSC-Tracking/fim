@@ -297,7 +297,29 @@ getenv {identifier}: display the value of the {identifier} environment variable
 .B
 goto
 .fi
-goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'} | {'+/'|'\-/'}[C] | {{'+'|'\-'}{identifier}['+']}: jump to an image; if {number} is given, and not surrounded by any specifier, will go to image at index {number} ; if followed by '%', the effective index will be computed as a percentage to the current available images; if prepended by '\-' or '+', the jump will be relative to the current index; the 'f' specifier asks for the jump to occur within the files; the 'p' specifier asks for the jump to occur in terms of pages, within the current file; '+/'C or '\-/'C will jump to next or previous file according to C: if 's' if same directory, if 'd' if down the directory hierarchy, if 'u' if down the directory hierarchy, if 'b' if same basename, if upper case match is negative, if missing defaults to 'S' (jump to file in different dir); if an {identifier} is encountered after a '+' or '\-' sign, jump to next or previous image having a different value for i:{identifier} (a trailing '+' will require a non empty value); if /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern; if given '+//', will jump to the first different image matching the last given regular expression pattern. Match will occur on both file name and description, eventually loaded via desc or \-\-load\-image\-descriptions\-file. See also _lastgotodirection and _re_search_opts. You can specify multiple arguments to goto: those after the first triggering a jump will be ignored.
+goto {['+'|'\-']{number}['%']['f'|'p']} | {/{regexp}/} | {'+//'} | {'+/'|'\-/'}[C] | {{'+'|'\-'}{identifier}['+']}: jump to an image;
+.fi
+if {number} is given, and not surrounded by any specifier, will go to image at index {number};
+.fi
+if followed by '%', the effective index will be computed as a percentage to the current available images;
+.fi
+if prepended by '\-' or '+', the jump will be relative to the current index;
+.fi
+the 'f' specifier asks for the jump to occur within the files;
+.fi
+the 'p' specifier asks for the jump to occur in terms of pages, within the current file.
+.fi
+If /{regexp}/ is given, will jump to the first image matching the given /{regexp}/ regular expression pattern;
+.fi
+if given '+//', will jump to the first different image matching the last given regular expression pattern.
+.fi
+ '+/'C or '\-/'C will jump to next or previous file according to C: if 's' if same directory, if 'd' if down the directory hierarchy, if 'u' if down the directory hierarchy, if 'b' if same basename, if upper case match is negative, if missing defaults to 'S' (jump to file in different dir).
+.fi
+If an {identifier} is encountered after a '+' or '\-' sign, jump to next or previous image having a different value for i:{identifier} (a trailing '+' will require a non empty value).
+.fi
+Match will occur on both file name and description, eventually loaded via desc or \-\-load\-image\-descriptions\-file. See also _lastgotodirection and _re_search_opts.
+.fi
+ You can specify multiple arguments to goto: those after the first triggering a jump will be ignored.
 .fi
 
 .na
@@ -325,14 +347,90 @@ info: display information about the current file
 .B
 limit
 .fi
-limit  {'\-list'|'\-listall'} 'variable'|['\-further'|'\-merge'|'\-subtract'] [{expression} |{variable} {value}]: A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via \-\-load\-image\-descriptions\-file.  If invoked with '\-list'/'\-listall' only, will list the current description variable ids.  If invoked with '\-list'/'\-listall' 'id', will list set values for the variable 'id'.  If '\-further' is present, will start with the current list; if not, with the full list.  If '\-merge' is present, new matches will be merged in the existing list and sorted.  If '\-subtract' is present, sort and filter out matches.  If {variable} and {values} are provided, limit to files having property {variable} set to {value}.  If {expression} is one exclamation point ('!'), will limit to the currently marked files only.  If {expression} is '~!' will limit to files with unique basename;  if '~=', to files with duplicate basename;  if '~^', to the first of the files with duplicate basename;  if '~$\:', to the last of the files with duplicate basename.  On '~i' [MINIDX][\-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX.  On '~z' will limit to files having the current file's size;  on '~z' [MINSIZE][\-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize within these limits;  on '~d' will limit to files having the current file's date +\- one day;  on '~d' [MINTIME][\-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's "st_mtime", in seconds) within this interval.  For other values of {expression}, limit to files whose description string matches {expression}.  Invoked with no arguments, the original browsable files list is restored.
+limit  {'\-list'|'\-listall'} 'variable'|['\-further'|'\-merge'|'\-subtract'] [{expression} |{variable} {value}]: A browsable file list filtering function (like limiting in the 'mutt' program). Uses information loaded via \-\-load\-image\-descriptions\-file. 
+.fi
+ If invoked with '\-list'/'\-listall' only, will list the current description variable ids. 
+.fi
+ If invoked with '\-list'/'\-listall' 'id', will list set values for the variable 'id'. 
+.fi
+ If '\-further' is present, will start with the current list; if not, with the full list. 
+.fi
+ If '\-merge' is present, new matches will be merged in the existing list and sorted. 
+.fi
+ If '\-subtract' is present, sort and filter out matches. 
+.fi
+ If {variable} and {values} are provided, limit to files having property {variable} set to {value}. 
+.fi
+ If {expression} is one exclamation point ('!'), will limit to the currently marked files only. 
+.fi
+ If {expression} is '~!' will limit to files with unique basename; 
+.fi
+ if '~=', to files with duplicate basename; 
+.fi
+ if '~^', to the first of the files with duplicate basename; 
+.fi
+ if '~$\:', to the last of the files with duplicate basename. 
+.fi
+ On '~i' [MINIDX][\-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX. 
+.fi
+ On '~z' will limit to files having the current file's size; 
+.fi
+ on '~z' [MINSIZE][\-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize within these limits; 
+.fi
+ on '~d' will limit to files having the current file's date +\- one day; 
+.fi
+ on '~d' [MINTIME][\-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's "st_mtime", in seconds) within this interval. 
+.fi
+ For other values of {expression}, limit to files whose description string matches {expression}. 
+.fi
+ Invoked with no arguments, the original browsable files list is restored.
 .fi
 
 .na
 .B
 list
 .fi
-list: display the files list; list 'random_shuffle': randomly shuffle the file list; list 'reverse': reverse the file list; list 'clear': clear the file list; list 'sort': sort the file list; list 'sort_basename': sort the file list according to base name; list 'sort_fsize': sort the file list according to file size; list 'sort_mtime': sort the file list according to modification date; list 'pop' : pop the last file from the files list; list 'remove' [{filename(s)}] : remove the current file, or the {filename(s)}, if specified ; list 'push' {filename(s)} : push {filename(s)} to the back of the files list; list 'filesnum': display the number of files in the files list; list 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the 'limit' command, otherwise the current file; list 'marked': show which files have been marked so far; list 'dumpmarked': dump to stdout the marked files (you will want usually to 'unmarkall' afterwards); list 'unmarkall': unmark all the marked files; list 'pushdir'; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression \.JPG$\:|\.PNG$\:|\.GIF$\:|\.BMP$\:|\.TIFF$\:|\.TIF$\:|\.JPEG$\:|\.JFIF$\:|\.PPM$\:|\.PGM$\:|\.PBM$\:|\.PCX$\:; list 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively; list 'swap': will move the current image filename to the first in the list (you'll have to invoke reload to see the effect). Of the above commands, several will be temporarily non available for the duration of a background load (enabled by \-\-recursive\-background), which will last until _loading_in_background is 0. 
+list: display the files list; 
+.fi
+list 'random_shuffle': randomly shuffle the file list;
+.fi
+list 'reverse': reverse the file list;
+.fi
+list 'clear': clear the file list;
+.fi
+list 'sort': sort the file list;
+.fi
+list 'sort_basename': sort the file list according to base name;
+.fi
+list 'sort_fsize': sort the file list according to file size;
+.fi
+list 'sort_mtime': sort the file list according to modification date; 
+.fi
+list 'pop' : pop the last file from the files list;
+.fi
+list 'remove' [{filename(s)}]: remove the current file, or the {filename(s)}, if specified;
+.fi
+list 'push' {filename(s)} : push {filename(s)} to the back of the files list; 
+.fi
+list 'filesnum': display the number of files in the files list;
+.fi
+list 'mark' [{args}] : mark image file names for stdout printing at exit, with {args} mark the ones matching according to the rules of the 'limit' command, otherwise the current file;
+.fi
+list 'unmark' [{args}] : unmark marked image file names, with {args} unmark the ones matching according to the rules of the 'limit' command, otherwise the current file;
+.fi
+list 'marked': show which files have been marked so far;
+.fi
+list 'dumpmarked': dump to stdout the marked files (you will want usually to 'unmarkall' afterwards);
+.fi
+list 'unmarkall': unmark all the marked files;
+.fi
+list 'pushdir'; {dirname}: will push all the files in {dirname}, when matching the regular expression in variable _pushdir_re or, if empty, from constant regular expression \.JPG$\:|\.PNG$\:|\.GIF$\:|\.BMP$\:|\.TIFF$\:|\.TIF$\:|\.JPEG$\:|\.JFIF$\:|\.PPM$\:|\.PGM$\:|\.PBM$\:|\.PCX$\:;
+.fi
+list 'pushdirr' {dirname}: like pushdir, but will also push encountered directory entries recursively;
+.fi
+list 'swap': will move the current image filename to the first in the list (you'll have to invoke reload to see the effect).
+.fi
+Of the above commands, several will be temporarily non available for the duration of a background load (enabled by \-\-background\-recursive), which will last until _loading_in_background is 0.
 .fi
 
 .na
@@ -346,7 +444,17 @@ load: load the image, if not yet loaded (see also reload)
 .B
 pan
 .fi
-pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+\-] [{steps}['%']]: pan the image {steps} pixels in the desired direction; if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions; if {steps} is not specified, the "_steps" variable will be used; if present, the "_hsteps" variable will be considered for horizontal panning;a + or \- sign at the end of the first argument will make jump to next or prev if border is reached; if present, the "_vsteps" variable will be considered for vertical panning; the variables may be terminated by the '%' specifier 
+pan {'down'|'up'|'left'|'right'|'ne'|'nw'|'se'|'sw'}[+\-] [{steps}['%']]: pan the image {steps} pixels in the desired direction;
+.fi
+ if the '%' specifier is present, {steps} will be treated as a percentage of current screen dimensions;
+.fi
+ if {steps} is not specified, the "_steps" variable will be used;
+.fi
+ if present, the "_hsteps" variable will be considered for horizontal panning;a + or \- sign at the end of the first argument will make jump to next or prev if border is reached;
+.fi
+ if present, the "_vsteps" variable will be considered for vertical panning.
+.fi
+ The variables may be terminated by the '%' specifier.
 .fi
 
 .na
@@ -416,7 +524,27 @@ rotate {number}: rotate the image the specified amount of degrees [undocumented]
 .B
 scale
 .fi
-scale {['+'|'\-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+\-*/]'|['<'|'>']}: scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b'); if given '*' and a value, will multiply the current scale by that value; if given 'w', will scale according to the screen width; if given 'h', scale to the screen height; if given 'a', to the minimum of 'w' and 'h'; if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'; if {value} is a number, will scale relatively to the original image width; if the number is followed by '%', the relative scale will be treated on a percent scale; if given '++'('+\-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta"; if given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier"; if given '<' or '>', will shrink or magnify image using nearest mipmap (cached pre\-scaled version); 
+scale {['+'|'\-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+\-*/]'|['<'|'>']}: scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b');
+.fi
+if given '*' and a value, will multiply the current scale by that value;
+.fi
+if given 'w', will scale according to the screen width;
+.fi
+if given 'h', scale to the screen height;
+.fi
+if given 'a', to the minimum of 'w' and 'h';
+.fi
+if given 'b', like 'a', provided that the image width exceeds 'w' or 'h'.
+.fi
+If {value} is a number, will scale relatively to the original image width.
+.fi
+If the number is followed by '%', the relative scale will be treated on a percent scale.
+.fi
+If given '++'('+\-'), will increment (decrement) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_delta".
+.fi
+If given '+*'('+/'), will multiply (divide) the "_magnify_factor", "_reduce_factor" variables by "_scale_factor_multiplier".
+.fi
+If given '<' or '>', will shrink or magnify image using nearest mipmap (cached pre\-scaled version).
 .fi
 
 .na
@@ -841,7 +969,7 @@ _load_hidden_dirs
 .na
 .B
 _loading_in_background
-[out,g:] 1 if program has been invoked with \-\-recursive\-background and still loading in background. 
+[out,g:] 1 if program has been invoked with \-\-background\-recursive and still loading in background. 
 .fi
 .na
 .B
@@ -1164,7 +1292,7 @@ $;
 # executes the "date" system command
 !"date";
 
-.SH CONFIGURATION FILE EXAMPLES
+.SH CONFIGURATION FILE EXAMPLE
 This is the default configuration, as contained in the _fim_default_config_file_contents variable.
 
 .nf
