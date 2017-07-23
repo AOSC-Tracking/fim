@@ -972,12 +972,10 @@ done:
 	//	    pcd_res = atoi(optarg);
 		    break;
 		case 's':
-	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,atoi(optarg));
 		    if(atoi(optarg)>0)
 		    {
-		    	// fixme : still buggy
-		    	fim::string s=FIM_VID_STEPS;
-			s+=fim::string((int)atoi(optarg));
+		    	fim::string s=FIM_VID_STEPS"=";
+			s+=optarg;
 			s+=";";
 	#ifdef FIM_AUTOCMDS
 			cc.pre_autocmd_add(s);
