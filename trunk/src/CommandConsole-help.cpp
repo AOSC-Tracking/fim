@@ -18,7 +18,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
 #include "fim.h"
 
 namespace fim
@@ -29,36 +28,8 @@ namespace fim
 		 * returns the reference of registered functions
 		 */
 		fim::string s;
-		fim::string sep=" ";
 		s+= fim_get_variables_reference(refmode);
-
-		// FIXME: shall fix the following to work
-#if 0
-#ifdef FIM_NAMESPACES
-		s+=browser_.get_variables_list();
-		s+=sep;
-		if(browser_.c_getImage())
-		{
-			s+=browser_.c_getImage()->get_variables_list();
-			s+=sep;
-		}
-#endif /* FIM_NAMESPACES */
-#endif
-#if 0
-#ifdef FIM_WINDOWS
-		if(window_)
-		{
-			s+=window_->get_variables_list();
-			s+=sep;
-		}
-		if(current_viewport())
-		{
-			s+=current_viewport()->get_variables_list();
-			s+=sep;
-		}
-#endif /* FIM_WINDOWS */
-#endif
-		// FIXME: incomplete
+		// ...
 		return s;
 	}
 
@@ -142,7 +113,6 @@ manmode:
 			"\n"
 			"\n"
 		".SH FIM LANGUAGE GRAMMAR\n"
-//			"Incomplete section.\n"
 			"This section specifies the grammar of the \n.B fim\nlanguage.\n\n"
 			"Language elements surrounded by a single quote (\"'\") are literals.\n\n"
 			"Warning: at the present state, this grammar has conflicts. A future release shall fix them.\n"
@@ -177,9 +147,11 @@ manmode:
 		".SH AUTOCOMMANDS REFERENCE\n"
 			"Available autocommands are: "
 			FIM_AUTOCOMMANDS_LIST
-			" and they are triggered on actions as indicated by their name.\n"
+			" and they are triggered on actions as suggested by their name.\n"
+			" Those associated to actual commands are mentioned in the associated commands reference.\n"
 		".SH VARIABLES REFERENCE\n"
 			"If undeclared, a variable will evaluate to 0.\n\n"
+			"When assigning a variable to a string, use single or double quoting, otherwise it will be treated as a number.\n\n"
 			"The namespaces in which variables may exist are: " FIM_SYM_NAMESPACE_PREFIXES_DSC ". A namespace is specified by a prefix, which can be: " FIM_SYM_NAMESPACE_PREFIXES ", be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable " FIM_SYM_NAMESPACE_IMAGE_ALL_STR " expands to the collation of all the name-value pairs for the current image.\n"
 			"\nIn the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n"
 			"\n"
@@ -193,14 +165,13 @@ manmode:
 			"\n.nf\n"
 			+FIM_DEFAULT_CONFIG_FILE_CONTENTS+
 			"\n"
-//			string("Incomplete section.\n")+
 		".SH NOTES\n"
-			"This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.\n"
-			"The conditions for autocommands triggering are not specified as they should.\n"
-			"A formal description of the various one-line commands, as well a more extensive example list is needed.\n"
-			"Many of the listed variables are only valid within a namespace, and this shall be documented clearly.\n"
+			"This manual page could be improved.\n"
+			"Certain side effects of commands are not documented.\n"
+			"Neither a formal description of the various commands.\n"
+			"Interaction of commands and variables is also not completely documented.\n"
 		".SH BUGS\n"
-			"The\n.B fim\nlanguage has a number of problems that shall be first documented, then fixed.\n"
+			"The\n.B fim\nlanguage shall be more liberal with quoting.\n"
 		".SH SEE ALSO\n"
 			"" FIM_MAN_fR("fim") "(1), " FIM_MAN_fR("fimgs") "(1), " FIM_MAN_fR("regex") "(1).\n"
 		".SH AUTHOR\n"
@@ -228,5 +199,4 @@ manmode:
 		std::cout << get_reference_manual(args);
 		return FIM_CNS_EMPTY_RESULT;
 	}
-}
-
+} /* namespace fim */

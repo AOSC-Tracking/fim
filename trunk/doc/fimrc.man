@@ -379,9 +379,11 @@ With '+/'C or '\-/'C will jump to next or previous file according to C: if 's' i
 .fi
 If an {identifier} is encountered after a '+' or '\-' sign, jump to next or previous image having a different value for i:{identifier} (a trailing '+' will require a non empty value).
 .fi
-Match will occur on both file name and description, eventually loaded via desc or \-\-load\-image\-descriptions\-file. See also '_lastgotodirection' and '_re_search_opts'.
+Match will occur on both file name and description, eventually loaded via desc or \-\-load\-image\-descriptions\-file; see also '_lastgotodirection' and '_re_search_opts'.
 .fi
  You can specify multiple arguments to goto: those after the first triggering a jump will be ignored.
+.fi
+Executes autocommands for events PreGoto and PostGoto.
 .fi
 
 .na
@@ -505,6 +507,8 @@ load
 .fi
 load: load the image, if not yet loaded (see also 'reload').
 .fi
+Executes autocommands for events PreLoad and PostLoad.
+.fi
 
 .na
 .B
@@ -523,6 +527,8 @@ A '+' or '\-' sign at the end of the first argument will make jump to next or pr
 If present, the '_vsteps' variable will be considered for vertical panning.
 .fi
 The variables may be terminated by the '%' specifier.
+.fi
+Executes autocommands for events PrePan and PostPan.
 .fi
 
 .na
@@ -544,6 +550,8 @@ pread {args}: execute {args} as a shell command and read the output as an image 
 prefetch
 .fi
 prefetch: prefetch (read into the cache) the two nearby image files (next and previous), for a faster subsequent opening.
+.fi
+Executes autocommands for events PrePrefetch and PostPrefetch.
 .fi
 See also the '_want_prefetch' variable.
 .fi
@@ -596,12 +604,16 @@ reload [{arg}]: load the image into memory.
 .fi
 If {arg} is present, will force reloading, bypassing the cache (see also 'load').
 .fi
+Executes autocommands for events PreReload and PostReload.
+.fi
 
 .na
 .B
 rotate
 .fi
 rotate {number}: rotate the image the specified amount of degrees. If unspecified, by one. If you are interested in orthogonal rotations, see '_orientation' and related aliases.
+.fi
+Executes autocommands for events PreScale and PostScale.
 .fi
 
 .na
@@ -630,6 +642,8 @@ If given '+*'('+/'), will multiply (divide) the '_magnify_factor', '_reduce_fact
 .fi
 If given '<' or '>', will shrink or magnify image using nearest mipmap (cached pre\-scaled version).
 .fi
+Executes autocommands for events PreScale and PostScale.
+.fi
 
 .na
 .B
@@ -638,6 +652,8 @@ scroll
 scroll: scroll down the image, going next when hitting the bottom.
 .fi
 scroll 'forward': scroll the image as we were reading left to right (see '_scroll_skip_page_fraction' variable).
+.fi
+Executes autocommands for events PrePan and PostPan.
 .fi
 
 .na
@@ -739,9 +755,12 @@ window {args}: this command is disabled.
 " "  "!"  """  "#"  "$"  "%"  "&"  "'"  "("  ")"  "*"  "+"  ","  "\-"  "."  "/"  "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  ":"  ";"  "<"  "="  ">"  "?"  "@"  "A"  "Any"  "B"  "BackSpace"  "Backspace"  "C"  "C\-a"  "C\-b"  "C\-c"  "C\-d"  "C\-e"  "C\-f"  "C\-g"  "C\-h"  "C\-i"  "C\-j"  "C\-k"  "C\-l"  "C\-m"  "C\-n"  "C\-o"  "C\-p"  "C\-q"  "C\-r"  "C\-s"  "C\-t"  "C\-u"  "C\-v"  "C\-w"  "C\-x"  "C\-y"  "C\-z"  "D"  "Del"  "Down"  "E"  "End"  "Enter"  "Esc"  "F"  "G"  "H"  "Home"  "I"  "Ins"  "J"  "K"  "L"  "Left"  "M"  "N"  "O"  "P"  "PageDown"  "PageUp"  "Q"  "R"  "Right"  "S"  "T"  "Tab"  "U"  "Up"  "V"  "W"  "X"  "Y"  "Z"  "["  "\\"  "]"  "^"  "_"  "`"  "a"  "b"  "c"  "d"  "e"  "f"  "g"  "h"  "i"  "j"  "k"  "l"  "m"  "n"  "o"  "p"  "q"  "r"  "s"  "t"  "u"  "v"  "w"  "x"  "y"  "z"  "{"  "|"  "}"  "~"  
 
 .SH AUTOCOMMANDS REFERENCE
-Available autocommands are: PreScale, PostScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PreReload, PostReload, PreLoad, PostLoad, PreGoto, PostGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PostExecutionCycle, PreExecutionCycleArgs, PreWindow, PostWindow,  and they are triggered on actions as indicated by their name.
+Available autocommands are: PreScale, PostScale, PrePan, PostPan, PreRedisplay, PostRedisplay, PreDisplay, PostDisplay, PrePrefetch, PostPrefetch, PreReload, PostReload, PreLoad, PostLoad, PreGoto, PostGoto, PreConfigLoading, PostConfigLoading, PreHardcodedConfigLoading, PostHardcodedConfigLoading, PreUserConfigLoading, PostUserConfigLoading, PreGlobalConfigLoading, PostGlobalConfigLoading, PreInteractiveCommand, PostInteractiveCommand, PreExecutionCycle, PostExecutionCycle, PreExecutionCycleArgs, PreWindow, PostWindow,  and they are triggered on actions as suggested by their name.
+ Those associated to actual commands are mentioned in the associated commands reference.
 .SH VARIABLES REFERENCE
 If undeclared, a variable will evaluate to 0.
+
+When assigning a variable to a string, use single or double quoting, otherwise it will be treated as a number.
 
 The namespaces in which variables may exist are: current image, global. A namespace is specified by a prefix, which can be: 'i:', be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable i:* expands to the collation of all the name\-value pairs for the current image.
 
@@ -1511,8 +1530,7 @@ alias "toggleKeyVerbosity" "_verbose_keys=1\-_verbose_keys;redisplay" "";
 alias "toggleDesaturate" "_autodesaturate=1\-_autodesaturate;redisplay" "";
 alias "idempotent_cmd" "goto '+0p'";
 #
-# autocommands are essential to Fim's automated behaviour.
-# Examples:
+# Autocommands examples:
 #autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n'";
 #autocmd "PostDisplay" ".*png" "echo 'this is a png file'";
 #autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file'";
@@ -1672,14 +1690,14 @@ echo "WELCOME: to switch to the command line interface press ':'";
 # Feel free to modify it, but with caution!
 
 .SH NOTES
-This manual page is incomplete: a number of topics, as type conversions, or operator precedence, or exact command usage is left unspecified.
-The conditions for autocommands triggering are not specified as they should.
-A formal description of the various one\-line commands, as well a more extensive example list is needed.
-Many of the listed variables are only valid within a namespace, and this shall be documented clearly.
+This manual page could be improved.
+Certain side effects of commands are not documented.
+Neither a formal description of the various commands.
+Interaction of commands and variables is also not completely documented.
 .SH BUGS
 The
 .B fim
-language has a number of problems that shall be first documented, then fixed.
+language shall be more liberal with quoting.
 .SH SEE ALSO
 \fR\fIfim\fR(1), \fR\fIfimgs\fR(1), \fR\fIregex\fR(1).
 .SH AUTHOR
