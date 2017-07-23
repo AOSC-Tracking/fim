@@ -15,6 +15,7 @@
  * fix: for _seek_magic.
  * fix: in --offset mode, avoiding probing for external loader programs.
  * fix: 'recording' command non functioning properly.
+ * fix: -s switch was broken.
 
                 Version 0.4
 

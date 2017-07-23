@@ -1120,12 +1120,10 @@ done:
 		    pf = FIM_FLAG_PUSH_REC ;
 		    break;
 		case 's':
-	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,fim_atoi(optarg));
 		    if(fim_atoi(optarg)>0)
 		    {
-		    	// fixme : still buggy
-		    	fim::string s=FIM_VID_STEPS;
-			s+=fim::string(fim_atoi(optarg));
+		    	fim::string s=FIM_VID_STEPS"=";
+			s+=optarg;
 			s+=";";
 	#ifdef FIM_AUTOCMDS
 			cc.pre_autocmd_add(s);
