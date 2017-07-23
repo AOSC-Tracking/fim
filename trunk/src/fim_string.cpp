@@ -30,24 +30,6 @@ namespace fim
 		return os << s.c_str();
 	}
 
-	std::ostream& operator<<(std::ostream& os, const args_t& v)
-	{
-#if 0
-		std::cout<<"{";
-		for(size_t i=0;i<v.size();++i)
-			os<<v[i]<<",";
-		std::cout<<"}";
-#else
-		for(size_t i=0;i<v.size();++i)
-		{
-			if(i>0)
-				os << " ";
-			os << fim_shell_arg_escape(v[i]);
-		}
-#endif
-		return os;
-	}
-
 	std::ostream& operator<<(std::ostream& os, const Browser& b)
 	{
 		return os;

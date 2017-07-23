@@ -589,22 +589,14 @@ class fim_mipmap_t
 
 namespace fim
 {
-	class Browser;
-	class CommandConsole;
 	extern fim_stream cout;
 	extern fim_stream cerr;
-	// TODO: to fim_string.h
-	std::ostream& operator<<(std::ostream& os,const string& s);
-	std::ostream& operator<<(std::ostream& os, const args_t& v);
-	std::ostream& operator<<(std::ostream& os, const Browser& b);
 }
 
 #define FIM_I2BI(VID) VID "_" /* identifier to backup identifier */
 
 /*
- * Fim language variable identifiers, with their help strings.
- * TODO: shall specify more information about these variables
- *
+ * Fim language variable identifiers and help comment strings (notice their format).
  * Please note that the prefix FIM_VID is reserved to variable identifiers exclusively. 
  * */
 //#define FIM_VID_NEWLINE 			"_newline"	/* "" */
@@ -618,7 +610,7 @@ namespace fim
 #define FIM_VID_DISPLAY_CONSOLE 		"_display_console"	/* "[in,g:] if 1, will display the output console." */
 #define FIM_VID_DEVICE_DRIVER 			"_device_string"	/* "[out,g:] the current display device string." */
 #define FIM_VID_DISPLAY_STATUS			"_display_status"	/* "[in,g:] if 1, will display the status bar." */
-#define FIM_VID_DISPLAY_STATUS_FMT		"_display_status_fmt"	/* "[in,g:] custom info format string, displayed in the lower left corner of the status bar; if unset: full pathname; otherwise a custom format string specified just as _info_fmt_str." */
+#define FIM_VID_DISPLAY_STATUS_FMT		"_display_status_fmt"	/* "[in,g:] custom info format string, displayed in the lower left corner of the status bar; if unset: full pathname; otherwise a custom format string specified just as " FIM_VID_INFO_FMT_STR"." */
 #define FIM_VID_PUSH_PUSHES_DIRS		"_push_pushes_dirs"	/* "[in,g:] if 1, the push command will also accept and push directories (using pushdir). if 2, will also push hidden files/directories, that is, ones whose names begin with a dot (.). " */
 #define FIM_VID_SANITY_CHECK			"_do_sanity_check"	/* "[in,experimental,g:] if 1, will execute a sanity check on startup." */
 #define FIM_VID_LAST_SYSTEM_OUTPUT		"_last_system_output"	/* "[out,experimental,g:] the standard output of the last call to the system command." */
@@ -660,7 +652,7 @@ namespace fim
 #define FIM_VID_PAGES				"pages"			/* "[out,experimental,i:] the current number of pages of an image." */
 #define FIM_VID_OVERRIDE_DISPLAY		"_inhibit_display"	/* "[internal,g:] if 1, will inhibit display." */
 #define FIM_VID_MAX_ITERATED_COMMANDS		"_max_iterated_commands"	/* "[g:] the iteration limit for N in \"N[commandname]\" iterated command invocations." */
-#define FIM_VID_WANT_CAPTION_STATUS		"_want_wm_caption_status"	/* "[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret it just as a file info format string (see _info_fmt_str); if empty, will show the program version." */
+#define FIM_VID_WANT_CAPTION_STATUS		"_want_wm_caption_status"	/* "[in,g:] this works only if supported by the display device (currently only SDL). if set to a number that is not 0, will show the status (or command) line in the window manager caption; if set to a non-empty string, will interpret it just as a file info format string (see " FIM_VID_INFO_FMT_STR "); if empty, will show the program version." */
 #define FIM_VID_WANT_MOUSE_CTRL		"_want_wm_mouse_ctrl"	/* "[in,g:] if at least 9 chars long, enable mouse click/movement behaviour when in SDL mode; the 9 chars will correspond to a 3x3 screen clickable grid and the equivalent command keys; clicking middle or right button will toggle on-screen usage info." */
 #define FIM_VID_MAGNIFY_FACTOR			"_magnify_factor"	/* "[in,g:] the image scale multiplier used when magnifying images size." */
 #define FIM_VID_PWD				"_pwd"			/* "[out,g:] the current working directory; will be updated at startup and whenever the working directory changes." */
@@ -669,8 +661,8 @@ namespace fim
 #define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[in,g:] value used for incrementing/decrementing the scaling factors." */
 #define FIM_VID_COMMENT 				"_comment"				/* "[i:,out] the image comment, extracted from the image file (if any)." */
 #define FIM_VID_COMMENT_OI 				"_caption_over_image"				/* "[in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background. " */
-#define FIM_VID_COMMENT_OI_FMT 				"_caption_over_image_fmt"		/* "[in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as _info_fmt_str." */
-#define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[out,g:] comment extracted via the exiftool interface; see _use_exiftool." */
+#define FIM_VID_COMMENT_OI_FMT 				"_caption_over_image_fmt"		/* "[in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as " FIM_VID_INFO_FMT_STR"." */
+#define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[out,g:] comment extracted via the exiftool interface; see " FIM_VID_EXIFTOOL "." */
 #define FIM_VID_STEPS 				"_steps"				/* "[in,g:] the default steps, in pixels, when panning images." */
 #define FIM_VID_VERSION				"_fim_version"	/* "[out,g:] fim version number; may be used for keeping compatibility of fim scripts across evolving versions."  */
 #define FIM_VID_FBFONT                           "_fbfont"       /* "[out,g:] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." */
@@ -699,11 +691,11 @@ namespace fim
 #define FIM_VID_DISPLAY_STATUS_BAR		"_display_status_bar"		/* "[in,g:] if 1, will display the status bar." */
 #define FIM_VID_DISPLAY_BUSY			"_display_busy"			/* "[in,g:] if 1, will display a message on the status bar when processing." */
 #define FIM_VID_WANT_MIPMAPS			"_use_mipmaps"			/* "[in,g:] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. If 2, will use every fourth source pixel instead of averaging (good for photos, not for graphs)." */
-#define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[in,g:] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment." */
+#define FIM_VID_EXIFTOOL			"_use_exiftool"			/* "[in,g:] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to " FIM_VID_EXIFTOOL_COMMENT "." */
 #define FIM_VID_SCALE				"scale"				/* "[in,i:] the scale of the current image." */
 #define FIM_VID_ASCALE				"ascale"			/* "[in,out,i:] the asymmetric scaling of the current image." */
 #define FIM_VID_ANGLE				"angle"				/* "[in,out,i:] a floating point number specifying the rotation angle, in degrees." */
-#define FIM_VID_ORIENTATION			"_orientation"		/* "[internal,i:] Orthogonal clockwise rotation (orientation) is controlled by: 'i:_orientation', 'g:_orientation' and applied on a per-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, \":i:_orientation=1\" and \":i:_orientation=5\" are equivalent: they rotate the image one time by 90'." */
+#define FIM_VID_ORIENTATION			"_orientation"		/* "[internal,i:] Orthogonal clockwise rotation (orientation) is controlled by: 'i:" FIM_VID_ORIENTATION "', 'g:" FIM_VID_ORIENTATION "' and applied on a per-image basis. In particular, the values of the three variables are summed up and the sum is interpreted as the image orientation.  If the sum is 0, no rotation will apply; if it is 1, a single ( 90') rotation will apply; if it is 2, a double (180') rotation will apply; if it is 3, a triple (270') rotation will apply.  If the sum is not one of 0,1,2,3, the value of the sum modulo 4 is considered.  Therefore, \":i:" FIM_VID_ORIENTATION "=1\" and \":i:" FIM_VID_ORIENTATION "=5\" are equivalent: they rotate the image one time by 90'." */
 #define FIM_VID_WIDTH				"width"			/* "[out,i:] the current image original width." */
 #define FIM_VID_HEIGHT				"height"		/* "[out,i:] the current image original height." */
 #define FIM_VID_SWIDTH				"swidth"		/* "[out,i:] the current image scaled width." */
@@ -733,7 +725,7 @@ namespace fim
 #define FIM_VID_DBG_COMMANDS			"_debug_commands"	/* "[in,g:] debugging option string for printing out . if containing 'a', print out autocmd info; if containing 'c', print out each command; if containing 'k', print out each pressed key; if containing 'j', print interpreter internal steps; if containing 'B', clear screen and print background loading files; if containing 'C', print cache activity." */
 #define FIM_VID_OPEN_OFFSET_L			"_open_offset"		/* "[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:" FIM_VID_OPEN_OFFSET_L " will be assigned to images opened at a nonzero offset." */
 #define FIM_VID_OPEN_OFFSET_U		"_open_offset_retry"	/* "[in,optional,g:] number of adjacent bytes to probe in opening the file." */
-#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim -C '_seek_magic=MAGIC_STRING;push filename')." */
+#define FIM_VID_SEEK_MAGIC			"_seek_magic"		/* "[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim -C '" FIM_VID_SEEK_MAGIC "=MAGIC_STRING;push filename')." */
 #define FIM_VID_PREFERRED_RENDERING_WIDTH	"_preferred_rendering_width"		/* "[in,optional,g:] if >0, bit based rendering will use this value for a default document width (instead of a default value)." */
 #define FIM_VID_PREFERRED_RENDERING_DPI	"_preferred_rendering_dpi"		/* "[in,optional,g:] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value)." */
 #define FIM_VID_PRELOAD_CHECKS			"_push_checks"	/* "[in,experimental,g:] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use --no-stat-push if you wish to set this to 0 at command line files specification." */

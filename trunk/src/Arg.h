@@ -27,5 +27,6 @@ namespace fim
 typedef std::vector<fim::string> args_t;
 int fim_args_opt_count(const args_t& args, const char oc);
 bool fim_args_opt_have(const args_t& args, fim::string optname);
+std::ostream& operator<<(std::ostream& os, const args_t& v);
 }
 #endif /* FIM_ARG_H */

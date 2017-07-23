@@ -67,5 +67,10 @@ namespace fim
 		size_t lines(void)const;
 		int find_re(const fim_char_t*r,int *mbuf=FIM_NULL)const;
 	}; /* fim::string */
-}
+
+	class Browser;
+	class CommandConsole;
+	std::ostream& operator<<(std::ostream& os,const string& s);
+	std::ostream& operator<<(std::ostream& os, const Browser& b);
+} /* namespace fim */
 #endif /* FIM_STRING_H */
