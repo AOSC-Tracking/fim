@@ -43,7 +43,7 @@
 #endif /* HAVE_GET_CURRENT_DIR_NAME */
 
 #if FIM_WANT_RAW_KEYS_BINDING
-#define FIM_CNS_RAW_KEYS_MESG "; if " FIM_CNS_EX_KSY_STRING " is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified " FIM_CNS_EX_KSY_STRING " to. activate the " FIM_VID_VERBOSE_KEYS " variable to discover (display device dependent) raw keys." 
+#define FIM_CNS_RAW_KEYS_MESG "If " FIM_CNS_EX_KSY_STRING " is at least two characters long and begins with 0 (zero), the integer number after the 0 will be treated as a raw keycode to bind the specified " FIM_CNS_EX_KSY_STRING " to." FIM_CNS_CMDSEP "Use the '" FIM_VID_VERBOSE_KEYS "' variable to discover (display device dependent) raw keys." 
 #else /* FIM_WANT_RAW_KEYS_BINDING */
 #define FIM_CNS_RAW_KEYS_MESG 
 #endif /* FIM_WANT_RAW_KEYS_BINDING */
@@ -382,32 +382,32 @@ ret:		return key;
 #if FIM_WANT_PIC_LVDN
 		" {'-list'|'-listall'} 'variable'|"
 #endif /* FIM_WANT_PIC_LVDN */
-		"['-further'|'-merge'|'-subtract'] [{expression} |{variable} {value}]: A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE ". "
+		"['-further'|'-merge'|'-subtract'] [{expression} |{variable} {value}]: A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE "."
 #if FIM_WANT_PIC_LVDN
-		FIM_CNS_CMDSEP " If invoked with '-list'/'-listall' only, will list the current description variable ids. "
-		FIM_CNS_CMDSEP " If invoked with '-list'/'-listall' 'id', will list set values for the variable 'id'. "
+		FIM_CNS_CMDSEP " If invoked with '-list'/'-listall' only, will list the current description variable ids."
+		FIM_CNS_CMDSEP " If invoked with '-list'/'-listall' 'id', will list set values for the variable 'id'."
 #endif /* FIM_WANT_PIC_LVDN */
-		FIM_CNS_CMDSEP " If '-further' is present, will start with the current list; if not, with the full list. "
-		FIM_CNS_CMDSEP " If '-merge' is present, new matches will be merged in the existing list and sorted. "
-		FIM_CNS_CMDSEP " If '-subtract' is present, sort and filter out matches. "
-		FIM_CNS_CMDSEP " If {variable} and {values} are provided, limit to files having property {variable} set to {value}. "
+		FIM_CNS_CMDSEP " If '-further' is present, will start with the current list; if not, with the full list."
+		FIM_CNS_CMDSEP " If '-merge' is present, new matches will be merged in the existing list and sorted."
+		FIM_CNS_CMDSEP " If '-subtract' is present, sort and filter out matches."
+		FIM_CNS_CMDSEP " If {variable} and {values} are provided, limit to files having property {variable} set to {value}."
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-		FIM_CNS_CMDSEP " If {expression} is one exclamation point ('!'), will limit to the currently marked files only. "
+		FIM_CNS_CMDSEP " If {expression} is one exclamation point ('!'), will limit to the currently marked files only."
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #if FIM_WANT_LIMIT_DUPBN
-		FIM_CNS_CMDSEP " If {expression} is '~!' will limit to files with unique basename; "
-		FIM_CNS_CMDSEP " if '~=', to files with duplicate basename; "
-		FIM_CNS_CMDSEP " if '~^', to the first of the files with duplicate basename; "
-		FIM_CNS_CMDSEP " if '~$', to the last of the files with duplicate basename. "
+		FIM_CNS_CMDSEP " If {expression} is '~!' will limit to files with unique basename."
+		FIM_CNS_CMDSEP " if '~=', to files with duplicate basename."
+		FIM_CNS_CMDSEP " if '~^', to the first of the files with duplicate basename."
+		FIM_CNS_CMDSEP " if '~$', to the last of the files with duplicate basename."
 #endif /* FIM_WANT_LIMIT_DUPBN */
-		FIM_CNS_CMDSEP " On '~i' [MINIDX][-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX. "
+		FIM_CNS_CMDSEP " On '~i' [MINIDX][-][MAXIDX], (each a number eventually followed by a multiplier 'K') will limit on filenames in position MINIDX to MAXIDX."
 #if FIM_WANT_FLIST_STAT 
-		FIM_CNS_CMDSEP " On '~z' will limit to files having the current file's size; "
-		FIM_CNS_CMDSEP " on '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize within these limits; "
-		FIM_CNS_CMDSEP " on '~d' will limit to files having the current file's date +- one day; "
-		FIM_CNS_CMDSEP " on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's \"st_mtime\", in seconds) within this interval. "
+		FIM_CNS_CMDSEP " On '~z' will limit to files having the current file's size."
+		FIM_CNS_CMDSEP " on '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier among 'k','K','m','M') will limit on filesize within these limits."
+		FIM_CNS_CMDSEP " on '~d' will limit to files having the current file's date +- one day."
+		FIM_CNS_CMDSEP " on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's 'st_mtime', in seconds) within this interval."
 #endif /* FIM_WANT_FLIST_STAT */
-		FIM_CNS_CMDSEP " For other values of {expression}, limit to files whose description string matches {expression}. "
+		FIM_CNS_CMDSEP " For other values of {expression}, limit to files whose description string matches {expression}."
 		FIM_CNS_CMDSEP " Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
 #endif /* FIM_WANT_PIC_LBFL */
 		addCommand(Command(FIM_FLT_LIST,FIM_CMD_HELP_LIST,&browser_,&Browser::fcmd_list));
