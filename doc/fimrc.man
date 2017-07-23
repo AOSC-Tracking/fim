@@ -522,7 +522,7 @@ Available autocommands are: PostScale, PreScale, PrePan, PostPan, PreRedisplay, 
 .SH VARIABLES REFERENCE
 If undeclared, a variable will evaluate to 0.
 
-There namespaces in which variables may exist are: current image, global. A namespace is specified by a prefix, which is one of: 'i:', which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable i:* expands to the collation of all the name\-value pairs for the current image.
+The namespaces in which variables may exist are: current image, global. A namespace is specified by a prefix, which is one of: 'i:', which shall be prepended to the variable name. The global namespace is equivalent to the empty one:''. The special variable i:* expands to the collation of all the name\-value pairs for the current image.
 
 In the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).
 
