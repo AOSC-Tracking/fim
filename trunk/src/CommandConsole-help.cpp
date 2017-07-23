@@ -75,9 +75,13 @@ namespace fim
 		return oss.str();
 manmode:
 		for(size_t i=0;i<commands_.size();++i)
+		{
+			string chs =(commands_[i]).getHelp();
+			chs.substitute("\n","\n.fi\n");
 			oss << ".na\n" /* No output-line adjusting; unelegant way to avoid man --html=cat's: cannot adjust line */
 				<< ".B\n" << (commands_[i].cmd()) << "\n.fi\n"
-				<< (commands_[i]).getHelp() << "\n" << ".fi\n" << "\n";
+				<< chs << "\n" << ".fi\n" << "\n";
+		}
 		fim::string s(oss.str());
 		s.substitute("\\$","$\\:"); /* Zero-width break point on $ (that is, on long hardcoded regexps). */
 		return s;
