@@ -8,7 +8,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
@@ -526,7 +526,7 @@ In the following, the [internal] variables are the ones referenced in the source
 .na
 .B
 _TERM
-[out,g:] the environment TERM variable
+[out,g:] the environment TERM variable.
 .fi
 .na
 .B
@@ -546,7 +546,7 @@ __exif_orientation
 .na
 .B
 _all_file_loaders
-[out,g:] space\-separated list of hardcoded file loaders usable with _file_loader. 
+[out,g:] space\-separated list of hardcoded file loaders usable with _file_loader.
 .fi
 .na
 .B
@@ -556,37 +556,37 @@ _archive_files
 .na
 .B
 _autocmd_trace_stack
-[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes)
+[in,g:] dump to stdout autocommands (autocmd) stack trace during their execution (for debugging purposes).
 .fi
 .na
 .B
 _autodesaturate
-[in,g:] if 1, will desaturate images by default
+[in,g:] if 1, will desaturate images by default.
 .fi
 .na
 .B
 _autoflip
-[in,g:] if 1, will flip images by default
+[in,g:] if 1, will flip images by default.
 .fi
 .na
 .B
 _automirror
-[in,g:] if 1, will mirror images by default
+[in,g:] if 1, will mirror images by default.
 .fi
 .na
 .B
 _autonegate
-[in,g:] if 1, will negate images by default
+[in,g:] if 1, will negate images by default.
 .fi
 .na
 .B
 _autotop
-[in,g:] if 1, will align to the top freshly loaded images
+[in,g:] if 1, will align to the top freshly loaded images.
 .fi
 .na
 .B
 _buffered_in_tmpfile
-[out,i:] if an image has been temporarily converted and decoded from a temporary file, its name is here
+[out,i:] if an image has been temporarily converted and decoded from a temporary file, its name is here.
 .fi
 .na
 .B
@@ -596,7 +596,7 @@ _cache_control
 .na
 .B
 _cache_status
-[out,g:] string with current information on cache status
+[out,g:] string with current information on cache status.
 .fi
 .na
 .B
@@ -616,42 +616,42 @@ _caption_over_image_fmt
 .na
 .B
 _command_expansion
-[in,g:] if 1, will enable autocompletion (on execution) of alias and command strings
+[in,g:] if 1, will enable autocompletion (on execution) of alias and command strings.
 .fi
 .na
 .B
 _comment
-[i:,out] the image comment, extracted from the image file (if any)
+[i:,out] the image comment, extracted from the image file (if any).
 .fi
 .na
 .B
 _console_buffer_free
-[out,g:] amount of unused memory in the output console buffer
+[out,g:] amount of unused memory in the output console buffer.
 .fi
 .na
 .B
 _console_buffer_total
-[out,g:] amount of memory allocated for the output console buffer
+[out,g:] amount of memory allocated for the output console buffer.
 .fi
 .na
 .B
 _console_buffer_used
-[out,g:] amount of used memory in the output console buffer
+[out,g:] amount of used memory in the output console buffer.
 .fi
 .na
 .B
 _console_key
-[in,g:] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding
+[in,g:] the key binding (an integer variable) for spawning the command line; will have precedence over any other binding.
 .fi
 .na
 .B
 _console_lines
-[out,g:] the number of buffered output console text lines
+[out,g:] the number of buffered output console text lines.
 .fi
 .na
 .B
 _console_offset
-[in,out,g:] position of the text beginning in the output console, expressed in lines
+[in,out,g:] position of the text beginning in the output console, expressed in lines.
 .fi
 .na
 .B
@@ -661,37 +661,37 @@ _debug_commands
 .na
 .B
 _device_string
-[out,g:] the current display device string
+[out,g:] the current display device string.
 .fi
 .na
 .B
 _display_as_binary
-[in,g:] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual
+[in,g:] will force loading of the specified files as pixelmaps (no image decoding will be performed); if 1, using one bit per pixel;  if 24, using 24 bits per pixel; otherwise will load and decode the files as usual.
 .fi
 .na
 .B
 _display_as_rendered_text
-[in,g:] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual
+[in,g:] will force loading of the specified files as text files (no image decoding will be performed); if 1; otherwise will load and decode the files as usual.
 .fi
 .na
 .B
 _display_busy
-[in,g:] if 1, will display a message on the status bar when processing
+[in,g:] if 1, will display a message on the status bar when processing.
 .fi
 .na
 .B
 _display_console
-[in,g:] if 1, will display the output console
+[in,g:] if 1, will display the output console.
 .fi
 .na
 .B
 _display_status
-[in,g:] if 1, will display the status bar
+[in,g:] if 1, will display the status bar.
 .fi
 .na
 .B
 _display_status_bar
-[in,g:] if 1, will display the status bar
+[in,g:] if 1, will display the status bar.
 .fi
 .na
 .B
@@ -701,7 +701,7 @@ _display_status_fmt
 .na
 .B
 _do_sanity_check
-[in,experimental,g:] if 1, will execute a sanity check on startup
+[in,experimental,g:] if 1, will execute a sanity check on startup.
 .fi
 .na
 .B
@@ -731,47 +731,47 @@ _fbfont_magnify_factor
 .na
 .B
 _file_load_time
-[out,i:] time taken to load the file and decode the image, in seconds
+[out,i:] time taken to load the file and decode the image, in seconds.
 .fi
 .na
 .B
 _file_loader
-[in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the \-V switch output); [out] i:_file_loader stores the loader of the current image
+[in,i:,g:] if not empty, this string will force a file loader (among the ones listed in the \-V switch output); [out] i:_file_loader stores the loader of the current image.
 .fi
 .na
 .B
 _fileindex
-[out,g:] the current image numeric index
+[out,g:] the current image numeric index.
 .fi
 .na
 .B
 _filelistlen
-[out,g:] current image list length (number of visible images)
+[out,g:] current image list length (number of visible images).
 .fi
 .na
 .B
 _filename
-[out,i:] the current file name string
+[out,i:] the current file name string.
 .fi
 .na
 .B
 _fim_bpp
-[out,g:] the bits per pixel count
+[out,g:] the bits per pixel count.
 .fi
 .na
 .B
 _fim_default_config_file_contents
-[out,g:] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config)
+[out,g:] the contents of the default (hardcoded) configuration file (executed after the minimal hardcoded config).
 .fi
 .na
 .B
 _fim_default_grammar_file_contents
-[out,g:] the contents of the default (hardcoded) grammar file
+[out,g:] the contents of the default (hardcoded) grammar file.
 .fi
 .na
 .B
 _fim_scriptout_file
-[in,g:] the name of the file to write to when recording sessions
+[in,g:] the name of the file to write to when recording sessions.
 .fi
 .na
 .B
@@ -781,12 +781,12 @@ _fim_version
 .na
 .B
 _hsteps
-[in,g:] the default steps, in pixels, when panning images horizontally (overrides steps)
+[in,g:] the default steps, in pixels, when panning images horizontally (overrides steps).
 .fi
 .na
 .B
 _ignorecase
-[in,g:] if 1, will allow for case insensitive regexp\-based match in autocommands (autocmd); 
+[in,g:] if 1, will allow for case insensitive regexp\-based match in autocommands (autocmd).
 .fi
 .na
 .B
@@ -796,22 +796,22 @@ _info_fmt_str
 .na
 .B
 _inhibit_display
-[internal,g:] if 1, will inhibit display
+[internal,g:] if 1, will inhibit display.
 .fi
 .na
 .B
 _last_cmd_output
-[out,experimental,g:] the last command output
+[out,experimental,g:] the last command output.
 .fi
 .na
 .B
 _last_file_loader
-[out,g:] after each image load, _last_file_loader will be set to the last file loader used
+[out,g:] after each image load, _last_file_loader will be set to the last file loader used.
 .fi
 .na
 .B
 _last_system_output
-[out,experimental,g:] the standard output of the last call to the system command
+[out,experimental,g:] the standard output of the last call to the system command.
 .fi
 .na
 .B
@@ -826,12 +826,12 @@ _lastgotodirection
 .na
 .B
 _load_default_etc_fimrc
-[in,g:] if 1 at startup, will load the system wide initialization file
+[in,g:] if 1 at startup, will load the system wide initialization file.
 .fi
 .na
 .B
 _load_fim_history
-[in,g:] if 1 on startup, will load the ~/.fim_history file on startup
+[in,g:] if 1 on startup, will load the ~/.fim_history file on startup.
 .fi
 .na
 .B
@@ -846,12 +846,12 @@ _loading_in_background
 .na
 .B
 _lwidth
-[in,g:] if>0, will force the output console text width
+[in,g:] if>0, will force the output console text width.
 .fi
 .na
 .B
 _magnify_factor
-[in,g:] the image scale multiplier used when magnifying images size
+[in,g:] the image scale multiplier used when magnifying images size.
 .fi
 .na
 .B
@@ -866,7 +866,7 @@ _max_cached_memory
 .na
 .B
 _max_iterated_commands
-[g:] the iteration limit for N in "N[commandname]" iterated command invocations
+[g:] the iteration limit for N in "N[commandname]" iterated command invocations.
 .fi
 .na
 .B
@@ -876,27 +876,27 @@ _min_cached_images
 .na
 .B
 _no_default_configuration
-[in,g:] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one. 
+[in,g:] if 0, a default, hardcoded configuration will be executed at startup, after the minimal hardcoded one.
 .fi
 .na
 .B
 _no_external_loader_programs
-[in,g:] if 1, no external loading programs will be tried for piping in an unsupported type image file
+[in,g:] if 1, no external loading programs will be tried for piping in an unsupported type image file.
 .fi
 .na
 .B
 _no_rc_file
-[in,g:] if 1, the ~/.fimrc file will not be loaded at startup
+[in,g:] if 1, the ~/.fimrc file will not be loaded at startup.
 .fi
 .na
 .B
 _open_offset
-[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:_open_offset will be assigned to images opened at a nonzero offset 
+[in,optional,g:,i:] offset (specified in bytes) used when opening a file; [out] i:_open_offset will be assigned to images opened at a nonzero offset.
 .fi
 .na
 .B
 _open_offset_retry
-[in,optional,g:] number of adjacent bytes to probe in opening the file 
+[in,optional,g:] number of adjacent bytes to probe in opening the file.
 .fi
 .na
 .B
@@ -906,17 +906,17 @@ _orientation
 .na
 .B
 _preferred_rendering_dpi
-[in,optional,g:] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value) 
+[in,optional,g:] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value).
 .fi
 .na
 .B
 _preferred_rendering_width
-[in,optional,g:] if >0, bit based rendering will use this value for a default document width (instead of a default value) 
+[in,optional,g:] if >0, bit based rendering will use this value for a default document width (instead of a default value).
 .fi
 .na
 .B
 _push_checks
-[in,experimental,g:] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use \-\-no\-stat\-push if you wish to set this to 0 at command line files specification 
+[in,experimental,g:] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use \-\-no\-stat\-push if you wish to set this to 0 at command line files specification.
 .fi
 .na
 .B
@@ -931,42 +931,42 @@ _pushdir_re
 .na
 .B
 _pwd
-[out,g:] the current working directory; will be updated at startup and whenever the working directory changes
+[out,g:] the current working directory; will be updated at startup and whenever the working directory changes.
 .fi
 .na
 .B
 _re_search_opts
-[in,g:] affects regexp\-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname. 
+[in,g:] affects regexp\-based searches; if an empty string, defaults will apply; if contains 'i' ('I'), case insensitive (sensitive) searches will occur; if contains 'b', will match on basename, if contains 'f' on full pathname.
 .fi
 .na
 .B
 _reduce_factor
-[in,g:] the image scale multiplier used when reducing images size
+[in,g:] the image scale multiplier used when reducing images size.
 .fi
 .na
 .B
 _retry_loader_probe
-[in,g:] if 1 and user specified a file loader and this fails, will probe for a different loader
+[in,g:] if 1 and user specified a file loader and this fails, will probe for a different loader.
 .fi
 .na
 .B
 _rows
-[in,g:] if >0, will set the number of displayed text lines in the console
+[in,g:] if >0, will set the number of displayed text lines in the console.
 .fi
 .na
 .B
 _save_fim_history
-[in,g:] if 1 on exit, will save the ~/.fim_history file on exit
+[in,g:] if 1 on exit, will save the ~/.fim_history file on exit.
 .fi
 .na
 .B
 _scale_factor_delta
-[in,g:] value used for incrementing/decrementing the scaling factors
+[in,g:] value used for incrementing/decrementing the scaling factors.
 .fi
 .na
 .B
 _scale_factor_multiplier
-[in,g:] value used for scaling up/down the scaling factors
+[in,g:] value used for scaling up/down the scaling factors.
 .fi
 .na
 .B
@@ -976,12 +976,12 @@ _scale_style
 .na
 .B
 _screen_height
-[out] the screen height
+[out] the screen height.
 .fi
 .na
 .B
 _screen_width
-[out,g:] the screen width
+[out,g:] the screen width.
 .fi
 .na
 .B
@@ -991,57 +991,57 @@ _scroll_skip_page_fraction
 .na
 .B
 _seek_magic
-[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim \-C '_seek_magic=MAGIC_STRING;push filename' ) 
+[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim \-C '_seek_magic=MAGIC_STRING;push filename').
 .fi
 .na
 .B
 _status_line
-[in,g:] if 1, will display the status bar
+[in,g:] if 1, will display the status bar.
 .fi
 .na
 .B
 _steps
-[in,g:] the default steps, in pixels, when panning images
+[in,g:] the default steps, in pixels, when panning images.
 .fi
 .na
 .B
 _sys_rc_file
-[in,g:] string with the global configuration file name
+[in,g:] string with the global configuration file name.
 .fi
 .na
 .B
 _use_exiftool
-[in,g:] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment
+[in,g:] if >0 and supported, exiftool will be used to get additional information. if 1, this will be appened to _comment; if 2, will go to _exiftool_comment.
 .fi
 .na
 .B
 _use_mipmaps
-[in,g:] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. If 2, will use every fourth source pixel instead of averaging (good for photos, not for graphs). 
+[in,g:] if >0, will use mipmaps to speed up downscaling of images (this has a memory overhead equivalent to one image copy); mipmaps will not be cached. If 2, will use every fourth source pixel instead of averaging (good for photos, not for graphs).
 .fi
 .na
 .B
 _verbose_errors
-[in,g:] if 1, will display on stdout internal errors, while parsing commands
+[in,g:] if 1, will display on stdout internal errors, while parsing commands.
 .fi
 .na
 .B
 _verbose_keys
-[in,g:] if 1, after each interactive mode key hit, the console will display the hit key raw keycode
+[in,g:] if 1, after each interactive mode key hit, the console will display the hit key raw keycode.
 .fi
 .na
 .B
 _verbosity
-[in,experimental,g:] program verbosity
+[in,experimental,g:] program verbosity.
 .fi
 .na
 .B
 _vsteps
-[in,g:] the default steps, in pixels, when panning images vertically (overrides steps)
+[in,g:] the default steps, in pixels, when panning images vertically (overrides steps).
 .fi
 .na
 .B
 _want_autocenter
-[in,g:] if 1, the image will be displayed centered 
+[in,g:] if 1, the image will be displayed centered.
 .fi
 .na
 .B
@@ -1051,12 +1051,12 @@ _want_exif_orientation
 .na
 .B
 _want_prefetch
-[in,g:] if 1, will prefetch further files just after display of the first file; if 2 (and configured with \-\-enable\-cxx11) will load in the background
+[in,g:] if 1, will prefetch further files just after display of the first file; if 2 (and configured with \-\-enable\-cxx11) will load in the background.
 .fi
 .na
 .B
 _want_sleep_seconds
-[in,g:] number of seconds of sleep during slideshow mode
+[in,g:] number of seconds of sleep during slideshow mode.
 .fi
 .na
 .B
@@ -1071,77 +1071,77 @@ _want_wm_mouse_ctrl
 .na
 .B
 angle
-[in,out,i:] a floating point number specifying the rotation angle, in degrees
+[in,out,i:] a floating point number specifying the rotation angle, in degrees.
 .fi
 .na
 .B
 ascale
-[in,out,i:] the asymmetric scaling of the current image
+[in,out,i:] the asymmetric scaling of the current image.
 .fi
 .na
 .B
 desaturated
-[out,i:] 1, if the image is desaturated
+[out,i:] 1, if the image is desaturated.
 .fi
 .na
 .B
 flipped
-[out,i:] 1, if the image is flipped
+[out,i:] 1, if the image is flipped.
 .fi
 .na
 .B
 fresh
-[in,out,i:,experimental] 1 if the image was loaded, before all autocommands (autocmd) execution
+[in,out,i:,experimental] 1 if the image was loaded, before all autocommands (autocmd) execution.
 .fi
 .na
 .B
 height
-[out,i:] the current image original height
+[out,i:] the current image original height.
 .fi
 .na
 .B
 mirrored
-[out,i:] 1, if the image is mirrored 
+[out,i:] 1, if the image is mirrored.
 .fi
 .na
 .B
 negated
-[out,i:] 1, if the image is negated
+[out,i:] 1, if the image is negated.
 .fi
 .na
 .B
 page
-[out,experimental,g:] the current page
+[out,experimental,g:] the current page.
 .fi
 .na
 .B
 pages
-[out,experimental,i:] the current number of pages of an image
+[out,experimental,i:] the current number of pages of an image.
 .fi
 .na
 .B
 random
-[out] a pseudorandom number
+[out] a pseudorandom number.
 .fi
 .na
 .B
 scale
-[in,i:] the scale of the current image
+[in,i:] the scale of the current image.
 .fi
 .na
 .B
 sheight
-[out,i:] the current image scaled height
+[out,i:] the current image scaled height.
 .fi
 .na
 .B
 swidth
-[out,i:] the current image scaled width
+[out,i:] the current image scaled width.
 .fi
 .na
 .B
 width
-[out,i:] the current image original width
+[out,i:] the current image original width.
 .fi
 .SH COMMAND LINE USAGE EXAMPLES
 .nf
