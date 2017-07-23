@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1468)
+ * fix: -s switch was broken.
 # (r1447)
  * If no semicolon (;) terminating -C argument, one will be appended.
 # (r1417)

@@ -1301,12 +1301,10 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 		    break;
 		case 's':
-	//	    if(atoi(optarg)>0) cc.setVariable(FIM_VID_STEPS,fim_atoi(optarg));
 		    if(fim_atoi(optarg)>0)
 		    {
-		    	// fixme : still buggy
-		    	fim::string s=FIM_VID_STEPS;
-			s+=fim::string(fim_atoi(optarg));
+		    	fim::string s=FIM_VID_STEPS"=";
+			s+=optarg;
 			s+=";";
 	#ifdef FIM_AUTOCMDS
 			cc.pre_autocmd_add(s);
