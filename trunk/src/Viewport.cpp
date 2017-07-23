@@ -201,10 +201,7 @@ namespace fim
 
 	bool Viewport::redisplay(void)
 	{
-		/*
-		 * we 'force' redraw.
-		 * display() has still the last word :P
-		 * */
+		// we 'force' a redraw
 		should_redraw();
 		return display();
 	}

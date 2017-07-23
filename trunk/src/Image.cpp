@@ -264,7 +264,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 		{
 			FIM_PR('e');
 			// FIXME: sometimes load() intentionally skips a file. an appropriate message shall be printed out
-			cout << "warning : invalid loading "<<fname<<" ! \n";
+			cout << "warning: invalid loading "<<fname<<" ! \n";
 			if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 				cc.set_status_bar( fim::string("error while loading \"")+ fim::string(fname)+ fim::string("\"") , "*");
 			throw FimException();
@@ -480,13 +480,13 @@ uhmpf:
 #endif /* FIM_WANT_KEEP_FILESIZE */
 		}
 
-		img_=fimg_;	/* no scaling : one copy only */
+		img_=fimg_;	/* no scaling: one copy only */
 		should_redraw();
 
 		if(! img_)
 		{
 			FIM_PR('!');
-			cout<<"warning : image loading error!\n"   ;
+			cout<<"warning: image loading error!\n"   ;
 			goto ret;
 		}
 		else
@@ -606,7 +606,7 @@ ret:
 		if( img_ && ( orientation_==FIM_ROT_L || orientation_ == FIM_ROT_R ))
 		{
 			// we make a backup.. who knows!
-			// FIXME: should use a faster and memory-smarter member function : in-place
+			// FIXME: should use a faster and memory-smarter member function: in-place
 			struct ida_image *rb=img_;
 			rb  = FbiStuff::rotate_image90(rb,orientation_==FIM_ROT_L?FIM_I_ROT_L:FIM_I_ROT_R);
 			if(rb)
@@ -619,7 +619,7 @@ ret:
 		{	
 			// we make a backup.. who knows!
 			struct ida_image *rbb=FIM_NULL,*rb=FIM_NULL;
-			// FIXME: should use a faster and memory-smarter member function : in-place
+			// FIXME: should use a faster and memory-smarter member function: in-place
 			rb  = FbiStuff::rotate_image90(img_,FIM_I_ROT_L);
 			if(rb)
 				rbb  = FbiStuff::rotate_image90(rb,FIM_I_ROT_L);
@@ -713,7 +713,7 @@ ret:
 		{
 			/*
 			 * In case of memory allocation failure, we would
-			 * like to recover the current image  :) . 
+			 * like to recover the current image. 
 			 *
 			 * Here it would be nice to add some sort of memory manager 
 			 * keeping score of copies and ... too complicated ...
@@ -1044,61 +1044,6 @@ ret:
 		return FIM_XOR( this->getIntVariable(FIM_VID_EXIF_FLIPPED) ==1, this->getIntVariable(FIM_VID_FLIPPED)==1 );
 	}
 
-#if 0
-	bool Image::gray_negate(void)
-	{
-		/* FIXME : NEW, but unused */
-		int n;
-		int th=1;/* 0 ... 256 * 3 * 3 */
-
-		if(!img_ || !img_->data)
-			return false;
-
-		if(!fimg_ || !fimg_->data)
-			return false;
-	
-		for( n=0; n< fbi_img_pixel_bytes(fimg_) ; n+=3 )
-		{
-			int r,g,b,s,d;
-			r=fimg_->data[n+0];
-			g=fimg_->data[n+1];
-			b=fimg_->data[n+2];
-			s=r+g+b;
-			d=( s - 3 * r ) * ( s - 3 * g ) * ( s - 3 * b );
-			d=d<0?-d:d;
-			if( d < th )
-			{
-				fimg_->data[n+0]=~fimg_->data[n+0];
-				fimg_->data[n+1]=~fimg_->data[n+1];
-				fimg_->data[n+2]=~fimg_->data[n+2];
-			}
-		}
-
-		for( n=0; n< fbi_img_pixel_bytes(img_) ; n+=3 )
-		{
-			int r,g,b,s,d;
-			r=img_->data[n+0];
-			g=img_->data[n+1];
-			b=img_->data[n+2];
-			s=r+g+b;
-			d=( s - 3 * r ) * ( s - 3 * g ) * ( s - 3 * b );
-			d=d<0?-d:d;
-			if( d < th )
-			{
-				img_->data[n+0]=~img_->data[n+0];
-				img_->data[n+1]=~img_->data[n+1];
-				img_->data[n+2]=~img_->data[n+2];
-			}
-		}
-
-		setVariable(FIM_VID_NEGATED,1-getIntVariable(FIM_VID_NEGATED ));
-
-       		should_redraw();
-
-		return true;
-	} 
-#endif
-
 	bool Image::colorblind(enum fim_cvd_t cvd, bool daltonize)
 	{
 		if( fimg_ &&  fimg_->data)
@@ -1205,12 +1150,11 @@ ret:
 			if(img_)
 				identity();
 			else
-				cout << "warning : problem generating an image\n";
+				cout << "warning: problem generating an image\n";
 		}
 	}
 
 	const fim_char_t* Image::getName(void)const{return fname_.c_str();}
-	fim_int Image::c_page(void)const{return page_;}
 #endif	/* FIM_WANT_BDI */
 
 #if FIM_WANT_MIPMAPS

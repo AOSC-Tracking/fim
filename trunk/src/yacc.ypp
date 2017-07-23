@@ -234,13 +234,7 @@ statement:
 	| IDENTIFIER      { $$ = FIM_OPR('x',1,FIM_SCON($1));     }
 	| IDENTIFIER FILE_PATH {
 #ifdef	FIM_SMART_COMPLETION
-		/*
-		  This patch was thought with filename completion in mind, in a way
-		  the user is not obligated to quote the filename if it is assured its existence.
-		 */
-		 /*
-		  FIXME : are we sure $2 should not be freed here ?
-		 */
+		/* This patch allows first filename argument unquoted. */
 		$$ = FIM_OPR('x',2,FIM_SCON($1),FIM_OPR('a',1,FIM_SCON(dupstr($2))));
 		fim_free($2);
 #else

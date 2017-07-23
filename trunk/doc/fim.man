@@ -411,9 +411,9 @@ files world writable, but be aware of the security implications this
 has.  On a private box it might be fine to handle it this way
 through.
 
-If using udev, you can edit :
+If using udev, you can edit:
 /etc/udev/permissions.d/50\-udev.permissions
-and set these lines like here :
+and set these lines like here:
  # fb devices
  fb:root:root:0600
  fb[0\-9]*:root:root:0600
