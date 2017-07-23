@@ -985,7 +985,7 @@ namespace fim
 #define FIM_CMD_HELP_RECORDING FIM_FLT_RECORDING " 'start': start recording the executed commands. " FIM_CNS_CMDSEP FIM_FLT_RECORDING " 'stop': stop  recording the executed commands." FIM_CNS_CMDSEP FIM_FLT_RECORDING " 'dump': dump in the console the record buffer." FIM_CNS_CMDSEP FIM_FLT_RECORDING " 'execute': execute the record buffer." FIM_CNS_CMDSEP FIM_FLT_RECORDING " 'repeat_last': repeat the last performed action."
 #define FIM_CMD_HELP_REDISPLAY  FIM_FLT_REDISPLAY ": re-display the current file contents."
 #define FIM_CMD_HELP_RELOAD FIM_FLT_RELOAD" [{arg}]: load the image into memory." FIM_CNS_CMDSEP "If {arg} is present, will force reloading, bypassing the cache (see also '" FIM_FLT_LOAD "')."
-#define FIM_CMD_HELP_ROTATE FIM_FLT_ROTATE " " FIM_CNS_EX_NUM_STRING ": rotate the image the specified amount of degrees [undocumented]." 
+#define FIM_CMD_HELP_ROTATE FIM_FLT_ROTATE " " FIM_CNS_EX_NUM_STRING ": rotate the image the specified amount of degrees. If unspecified, by one. If you are interested in orthogonal rotations, see '" FIM_VID_ORIENTATION "' and related aliases."
 #define FIM_CMD_HELP_SCROLL FIM_FLT_SCROLL ": scroll down the image, going next when hitting the bottom." FIM_CNS_CMDSEP FIM_FLT_SCROLL " 'forward': scroll the image as we were reading left to right (see '" FIM_VID_SKIP_SCROLL "' variable)."
 #define FIM_CMD_HELP_SET_CONSOLE_MODE FIM_FLT_SET_CONSOLE_MODE ": set console mode."
 #define FIM_CMD_HELP_SET_INTERACTIVE_MODE FIM_FLT_SET_INTERACTIVE_MODE ": set interactive mode."
