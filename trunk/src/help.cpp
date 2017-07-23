@@ -27,7 +27,7 @@ fim_var_help_db[FIM_VID_SCRIPTOUT_FILE]= "[in,g:] the name of the file to write 
 fim_var_help_db[FIM_VID_PUSHDIR_RE]= "[in] regular expression to match against when pushing files from a directory or an archive. By default this is \"" FIM_CNS_PUSHDIR_RE "\"." ;
 fim_var_help_db[FIM_VID_STATUS_LINE]= "[in,g:] if 1, will display the status bar." ;
 fim_var_help_db[FIM_VID_WANT_PREFETCH]= "[in,g:] if 1, will prefetch further files just after display of the first file; if 2 (and configured with --enable-cxx11) will load in the background." ;
-fim_var_help_db[FIM_VID_LOADING_IN_BACKGROUND]= "[out,g:] 1 if program has been invoked with --recursive-background and still loading in background. " ;
+fim_var_help_db[FIM_VID_LOADING_IN_BACKGROUND]= "[out,g:] 1 if program has been invoked with --" FIM_OSW_BGREC " and still loading in background. " ;
 fim_var_help_db[FIM_VID_RESIZE_HUGE_ON_LOAD]= "[in,g:] if 1, will downscale automatically huge images at load time." ;
 fim_var_help_db[FIM_VID_WANT_SLEEPS]= "[in,g:] number of seconds of sleep during slideshow mode." ;
 fim_var_help_db[FIM_VID_WANT_EXIF_ORIENTATION]= "[in,g:] if 1, will reorient images using information from EXIF metadata (and stored in in " FIM_VID_EXIF_ORIENTATION ", " FIM_VID_EXIF_MIRRORED ", " FIM_VID_EXIF_FLIPPED" )." ;
@@ -123,5 +123,5 @@ fim_var_help_db[FIM_VID_OPEN_OFFSET_U]= "[in,optional,g:] number of adjacent byt
 fim_var_help_db[FIM_VID_SEEK_MAGIC]= "[optional,g:] will seek a 'magic' signature in the file after opening it, and will try decoding it starting within the range of that signature (use like this: fim -C '" FIM_VID_SEEK_MAGIC "=MAGIC_STRING;push filename')." ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_WIDTH]= "[in,optional,g:] if >0, bit based rendering will use this value for a default document width (instead of a default value)." ;
 fim_var_help_db[FIM_VID_PREFERRED_RENDERING_DPI]= "[in,optional,g:] if >0, pdf, ps, djvu rendering will use this value for a default document dpi (instead of a default value)." ;
-fim_var_help_db[FIM_VID_PRELOAD_CHECKS]= "[in,experimental,g:] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use --no-stat-push if you wish to set this to 0 at command line files specification." ;
+fim_var_help_db[FIM_VID_PRELOAD_CHECKS]= "[in,experimental,g:] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use --" FIM_OSW_NO_STAT_PUSH " if you wish to set this to 0 at command line files specification." ;
 #endif /* FIM_WANT_INLINE_HELP */

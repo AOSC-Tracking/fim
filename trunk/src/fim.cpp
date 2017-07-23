@@ -270,7 +270,7 @@ struct fim_options_t fim_options[] = {
     {"autowindow",   no_argument,   FIM_NULL,0x61757769,"adapt window to image size.",FIM_NULL,
 "Will resize the window size (if supported) to the image size. Don't use this with other image scaling options."
     },
-    {"no-stat-push",   no_argument,   FIM_NULL,0x6e7363,"do not check file/dir existence with stat(2) at push time",FIM_NULL,
+    {FIM_OSW_NO_STAT_PUSH,   no_argument,   FIM_NULL,0x6e7363,"do not check file/dir existence with stat(2) at push time",FIM_NULL,
 "Sets " FIM_VID_PRELOAD_CHECKS "=0 before initialization, thus disabling file/dir existence checks with stat(2) at push push time (and speeding up startup)."
     },
     {"autoheight",   no_argument,       FIM_NULL, 'H',"scale according to height.",FIM_NULL,
@@ -320,7 +320,7 @@ struct fim_options_t fim_options[] = {
     },
 #endif /* FIM_WANT_R_SWITCH */
 #if FIM_WANT_RECURSE_FILTER_OPTION
-    {"recursive", optional_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. "
+    {FIM_OSW_RECURSIVE, optional_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. "
       "The expression in variable " FIM_VID_PUSHDIR_RE " (default: \"" FIM_CNS_PUSHDIR_RE "\") lists extensions of filenames which will be loaded in the list. "
       "You can overwrite its value by optionally passing an expression here as argument. "
       "If starting with '+' or '|', the expression following will be appended to it. "
@@ -328,12 +328,12 @@ struct fim_options_t fim_options[] = {
 	    FIM_NULL
     },
 #else /* FIM_WANT_RECURSE_FILTER_OPTION */
-    {"recursive", no_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. See variable " FIM_VID_PUSHDIR_RE " for extensions of filenames which will be loaded in the list. "			, FIM_NULL,
+    {FIM_OSW_RECURSIVE, no_argument, FIM_NULL, 'R',"Push files/directories to the files list recursively. See variable " FIM_VID_PUSHDIR_RE " for extensions of filenames which will be loaded in the list. "			, FIM_NULL,
 	    FIM_NULL
     },
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 //#if FIM_WANT_BACKGROUND_LOAD
-    {"background-recursive", no_argument, FIM_NULL, 'B',"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
+    {FIM_OSW_BGREC, no_argument, FIM_NULL, 'B',"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
 	    FIM_NULL
     },
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
@@ -609,7 +609,7 @@ int fim_dump_man_page(void)
 			"\n")+
 			string("\n""If " FIM_MAN_fB("{imagepath}") " is a file, its format is guessed not by its name but by its contents (see e.g. the " FIM_VID_FILE_LOADER " variable to change this default).\n\n")+
 #ifdef FIM_READ_DIRS
-			string("\n""If " FIM_MAN_fB("{imagepath}") " is a directory, therein contained files of supported formats will be loaded. If " FIM_MAN_fB("{imagepath}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise a check will be made using " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_VID_PUSHDIR_RE " variable and the --no-stat-push and --recursive  options.\n\n")+
+			string("\n""If " FIM_MAN_fB("{imagepath}") " is a directory, therein contained files of supported formats will be loaded. If " FIM_MAN_fB("{imagepath}") " contains a trailing slash (" FIM_CNS_SLASH_STRING "), it will be treated as a directory; otherwise a check will be made using " FIM_MAN_fB("stat(2)") ". To change this default, see description of the " FIM_VID_PUSHDIR_RE " variable and the --" FIM_OSW_NO_STAT_PUSH " and --" FIM_OSW_RECURSIVE " options.\n\n")+
 #endif /* FIM_READ_DIRS */
 
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
@@ -1034,7 +1034,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 }
 
 	public:
-	fim_perr_t main(int argc,char *argv[])
+	int main(int argc,char *argv[])
 	{
 		fim_perr_t retcode=FIM_PERR_NO_ERROR;
 		/*

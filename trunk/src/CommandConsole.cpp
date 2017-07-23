@@ -384,31 +384,31 @@ ret:		return key;
 #endif /* FIM_WANT_PIC_LVDN */
 		"['-further'|'-merge'|'-subtract'] [{expression} |{variable} {value}]: A browsable file list filtering function (like limiting in the \'mutt\' program). Uses information loaded via --" FIM_OSW_LOAD_IMG_DSC_FILE ". "
 #if FIM_WANT_PIC_LVDN
-		" If invoked with '-list'/'-listall' only, will list the current description variable ids. "
-		" If invoked with '-list'/'-listall' 'id', will list set values for the variable 'id'. "
+		FIM_CNS_CMDSEP " If invoked with '-list'/'-listall' only, will list the current description variable ids. "
+		FIM_CNS_CMDSEP " If invoked with '-list'/'-listall' 'id', will list set values for the variable 'id'. "
 #endif /* FIM_WANT_PIC_LVDN */
-		" If '-further' is present, will start with the current list; if not, with the full list. "
-		" If '-merge' is present, new matches will be merged in the existing list and sorted. "
-		" If '-subtract' is present, sort and filter out matches. "
-		" If {variable} and {values} are provided, limit to files having property {variable} set to {value}. "
+		FIM_CNS_CMDSEP " If '-further' is present, will start with the current list; if not, with the full list. "
+		FIM_CNS_CMDSEP " If '-merge' is present, new matches will be merged in the existing list and sorted. "
+		FIM_CNS_CMDSEP " If '-subtract' is present, sort and filter out matches. "
+		FIM_CNS_CMDSEP " If {variable} and {values} are provided, limit to files having property {variable} set to {value}. "
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
-		" If {expression} is one exclamation point ('!'), will limit to the currently marked files only. "
+		FIM_CNS_CMDSEP " If {expression} is one exclamation point ('!'), will limit to the currently marked files only. "
 #endif /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 #if FIM_WANT_LIMIT_DUPBN
-		" If {expression} is '~!' will limit to files with unique basename; "
-		" if '~=', to files with duplicate basename; "
-		" if '~^', to the first of the files with duplicate basename; "
-		" if '~$', to the last of the files with duplicate basename. "
+		FIM_CNS_CMDSEP " If {expression} is '~!' will limit to files with unique basename; "
+		FIM_CNS_CMDSEP " if '~=', to files with duplicate basename; "
+		FIM_CNS_CMDSEP " if '~^', to the first of the files with duplicate basename; "
+		FIM_CNS_CMDSEP " if '~$', to the last of the files with duplicate basename. "
 #endif /* FIM_WANT_LIMIT_DUPBN */
-		" On '~i' [MINIDX][-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX. "
+		FIM_CNS_CMDSEP " On '~i' [MINIDX][-][MAXIDX], (each a number eventually followed by a multiplier K) will limit on filenames in position MINIDX to MAXIDX. "
 #if FIM_WANT_FLIST_STAT 
-		" On '~z' will limit to files having the current file's size; "
-		" on '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize within these limits; "
-		" on '~d' will limit to files having the current file's date +- one day; "
-		" on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's \"st_mtime\", in seconds) within this interval. "
+		FIM_CNS_CMDSEP " On '~z' will limit to files having the current file's size; "
+		FIM_CNS_CMDSEP " on '~z' [MINSIZE][-][MAXSIZE], (each a number eventually followed by a multiplier of k,K,m,M) will limit on filesize within these limits; "
+		FIM_CNS_CMDSEP " on '~d' will limit to files having the current file's date +- one day; "
+		FIM_CNS_CMDSEP " on '~d' [MINTIME][-][MAXTIME], (each the count of seconds since the Epoch (First of Jan. of 1970) or a date as DD/MM/YYYY) will limit on file time (struct stat's \"st_mtime\", in seconds) within this interval. "
 #endif /* FIM_WANT_FLIST_STAT */
-		" For other values of {expression}, limit to files whose description string matches {expression}. "
-		" Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
+		FIM_CNS_CMDSEP " For other values of {expression}, limit to files whose description string matches {expression}. "
+		FIM_CNS_CMDSEP " Invoked with no arguments, the original browsable files list is restored." ),&browser_,&Browser::fcmd_limit));
 #endif /* FIM_WANT_PIC_LBFL */
 		addCommand(Command(FIM_FLT_LIST,FIM_CMD_HELP_LIST,&browser_,&Browser::fcmd_list));
 		addCommand(Command(FIM_FLT_LOAD,FIM_CMD_HELP_LOAD,&browser_,&Browser::fcmd_load));
