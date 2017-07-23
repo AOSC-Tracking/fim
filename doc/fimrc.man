@@ -601,7 +601,7 @@ If {arg} is present, will force reloading, bypassing the cache (see also 'load')
 .B
 rotate
 .fi
-rotate {number}: rotate the image the specified amount of degrees [undocumented].
+rotate {number}: rotate the image the specified amount of degrees. If unspecified, by one. If you are interested in orthogonal rotations, see '_orientation' and related aliases.
 .fi
 
 .na
