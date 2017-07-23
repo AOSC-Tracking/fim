@@ -18,12 +18,6 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-/*
- * TODO:
- * 	framebufferdevice -> device
- * 	output member functions should be moved in some other, new class
- * */
 #include "fim.h"
 #ifdef FIM_DEFAULT_CONFIGURATION
 #include "conf.h" /* FIM_DEFAULT_CONFIG_FILE_CONTENTS declared here */ 

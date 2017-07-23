@@ -133,8 +133,7 @@ alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay" "";
 alias "toggleDesaturate" "_autodesaturate=1-_autodesaturate;redisplay" "";
 alias "idempotent_cmd" "goto '+0p'";
 #
-# autocommands are essential to Fim's automated behaviour.
-# Examples:
+# Autocommands examples:
 #autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n'";
 #autocmd "PostDisplay" ".*png" "echo 'this is a png file'";
 #autocmd "PostDisplay" ".*jpg" "echo 'this is a jpg file'";
