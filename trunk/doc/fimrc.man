@@ -536,7 +536,7 @@ __exif_flipped
 .na
 .B
 __exif_mirrored
-[out,i:] mirroring information, read from the EXIF tags of a given imag.
+[out,i:] mirroring information, read from the EXIF tags of a given image.
 .fi
 .na
 .B
