@@ -247,7 +247,6 @@
 		 * FIXME : centering mechanisms missing here; an intermediate function
 		 * shareable with FramebufferDevice would be nice, if implemented in CACADevice.
 		 * */
-		int i;
 		void* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 		if ( !rgb ) return FIM_ERR_GENERIC;
 	

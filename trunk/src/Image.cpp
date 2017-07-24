@@ -211,7 +211,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 	/* one might execute this code in a background thread */
 	std::ostringstream oss;
 
-	if ( ExifTool *et = new ExifTool() )
+	if ( ExifTool *et = new ExifTool )
 	{
 		if ( TagInfo *info = et->ImageInfo(fname,FIM_NULL,2) )
       	 	{
