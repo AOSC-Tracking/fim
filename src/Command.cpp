@@ -18,8 +18,17 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
 #include "fim.h"
+#include "Command.h"
 namespace fim
 {
-}
+	fim::string Command::execute(const args_t&args)
+	{
+		assert(browser_ && browserf_);
+		return (browser_->*browserf_)(args); // Browser or CommandConsole or FimWindow
+	}
+	const fim_cmd_id & Command::cmd(void)const{return cmd_;}
+	const fim::string & Command::getHelp(void)const{return help_;}
+	Command::Command(fim_cmd_id cmd, fim::string help, Browser *b, fim::string(Browser::*bf)(const args_t&))
+	       	:cmd_(cmd),help_(help),browserf_(bf),browser_(b) {}
+} /* namespace fim */

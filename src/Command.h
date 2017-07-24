@@ -36,50 +36,34 @@ class Command FIM_FINAL
 	fim_cmd_id cmd_;
 	fim::string help_;
 	public:
-	inline const fim_cmd_id & cmd(void)const{return cmd_;}
-	explicit Command(fim_cmd_id cmd, fim::string help, Browser *b=FIM_NULL, fim::string(Browser::*bf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),browserf(bf),browser(b),type(BrowserT) {}
-	explicit Command(fim_cmd_id cmd, fim::string help, CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),consolef(cf),console(c),type(CommandConsoleT) {}
+	const fim_cmd_id & cmd(void)const;
+	explicit Command(fim_cmd_id cmd, fim::string help, Browser *b=FIM_NULL, fim::string(Browser::*bf)(const args_t&)=FIM_NULL);
+	explicit Command(fim_cmd_id cmd, fim::string help, CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),consolef_(cf),commandconsole_(c) {}
 #ifdef FIM_WINDOWS
-	explicit Command(fim_cmd_id cmd, fim::string help, FimWindow *w=FIM_NULL, fim::string(FimWindow::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),windowf(cf),window(w),type(WindowT) {}
+	explicit Command(fim_cmd_id cmd, fim::string help, FimWindow *w=FIM_NULL, fim::string(FimWindow::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),windowf_(cf),window_(w) {}
 #endif /* FIM_WINDOWS */
-
-	const fim::string & getHelp(void)const{return help_;}
+	const fim::string & getHelp(void)const;
 	private:
-	enum
-	{
-		BrowserT,
-#ifdef FIM_WINDOWS
-		WindowT,
-#endif /* FIM_WINDOWS */
-		CommandConsoleT 
-	};
 	union{
-		fim::string (Browser::*browserf)(const args_t&) ;
-		fim::string (CommandConsole::*consolef)(const args_t&) ;
+		fim::string (Browser::*browserf_)(const args_t&) ;
+		fim::string (CommandConsole::*consolef_)(const args_t&) ;
 #ifdef FIM_WINDOWS
-		fim::string (FimWindow::*windowf)(const args_t&) ;
+		fim::string (FimWindow::*windowf_)(const args_t&) ;
 #endif /* FIM_WINDOWS */
 	};
 	union{
-		Browser *browser;
-		CommandConsole *console;
+		Browser *browser_;
+		CommandConsole *commandconsole_;
 #ifdef FIM_WINDOWS
-		FimWindow *window;
+		FimWindow *window_;
 #endif /* FIM_WINDOWS */
 	};
 	fim_cmd_type_t type;
-
 	public:
 	~Command(void) { }
-	
-	fim::string execute(const args_t&args)
-	{
-		assert(browser && browserf);
-		return (browser->*browserf)(args);
-	}
-
+	fim::string execute(const args_t&args);
 	bool operator < (const Command&c)const{return cmd_< c.cmd_;}
 	bool operator <=(const Command&c)const{return cmd_<=c.cmd_;}
 };
-}
+} /* namespace fim */
 #endif /* FIM_COMMAND_H */
