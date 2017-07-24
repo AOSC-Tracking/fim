@@ -29,27 +29,46 @@ namespace fim
 #if FIM_USE_CXX11
 	using fim_cmd_id = fim::string; // command id
 	using fim_cls = fim::string; // command line statement
-#else /* FIM_USE_CXX11 */
-	typedef fim::string fim_cmd_id; // command id
-	typedef fim::string fim_cls; // command line statement
-#endif /* FIM_USE_CXX11 */
+
 class Command FIM_FINAL
 {
 	fim_cmd_id cmd_;
 	fim::string help_;
 	public:
+	template<class O> explicit Command(fim_cmd_id cmd, fim::string help, O*op, fim::string(O::*fp)(const args_t&));
+
+	private:
+	typedef std::function<fim::string (const args_t&)> cmf_t;
+	cmf_t cmf_;
+
+	public:
 	const fim_cmd_id & cmd(void)const;
+	const fim::string & getHelp(void)const;
+	fim::string execute(const args_t&args);
+	bool operator < (const Command&c)const{return cmd_< c.cmd_;}
+	bool operator <=(const Command&c)const{return cmd_<=c.cmd_;}
+	~Command(void) { }
+};
+	template<class O>
+	Command::Command(fim_cmd_id cmd, fim::string help, O*op, fim::string(O::*fp)(const args_t&))
+	       	:cmd_(cmd),help_(help),cmf_(std::bind(fp,op,std::placeholders::_1)) {}
+
+#else /* FIM_USE_CXX11 */
+	typedef fim::string fim_cmd_id; // command id
+	typedef fim::string fim_cls; // command line statement
+
+class Command FIM_FINAL
+{
+	fim_cmd_id cmd_;
+	fim::string help_;
+	public:
 	explicit Command(fim_cmd_id cmd, fim::string help, Browser *b, fim::string(Browser::*bf)(const args_t&));
 	explicit Command(fim_cmd_id cmd, fim::string help, CommandConsole *c,fim::string(CommandConsole::*cf)(const args_t&));
 #ifdef FIM_WINDOWS
 	explicit Command(fim_cmd_id cmd, fim::string help, FimWindow *w, fim::string(FimWindow::*cf)(const args_t&));
 #endif /* FIM_WINDOWS */
-	const fim::string & getHelp(void)const;
+
 	private:
-#if FIM_USE_CXX11
-	typedef std::function<fim::string (const args_t&)> cmf_t;
-	cmf_t cmf_;
-#else /* FIM_USE_CXX11 */
 	union{
 		fim::string (Browser::*browserf_)(const args_t&) ;
 		fim::string (CommandConsole::*consolef_)(const args_t&) ;
@@ -64,12 +83,15 @@ class Command FIM_FINAL
 		FimWindow *window_;
 #endif /* FIM_WINDOWS */
 	};
-#endif /* FIM_USE_CXX11 */
+
 	public:
-	~Command(void) { }
+	const fim_cmd_id & cmd(void)const;
+	const fim::string & getHelp(void)const;
 	fim::string execute(const args_t&args);
 	bool operator < (const Command&c)const{return cmd_< c.cmd_;}
 	bool operator <=(const Command&c)const{return cmd_<=c.cmd_;}
+	~Command(void) { }
 };
+#endif /* FIM_USE_CXX11 */
 } /* namespace fim */
 #endif /* FIM_COMMAND_H */

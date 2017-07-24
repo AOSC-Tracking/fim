@@ -2,7 +2,7 @@
 /*
  Command.cpp :
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,14 +30,6 @@ namespace fim
 		assert(cmf_);
 		return (cmf_)(args);
 	}
-	Command::Command(fim_cmd_id cmd, fim::string help, Browser *op, fim::string(Browser::*fp)(const args_t&))
-	       	:cmd_(cmd),help_(help),cmf_(std::bind(fp,op,std::placeholders::_1)) {}
-#ifdef FIM_WINDOWS
-	Command::Command(fim_cmd_id cmd, fim::string help, FimWindow *op, fim::string(FimWindow::*fp)(const args_t&))
-	       	:cmd_(cmd),help_(help),cmf_(std::bind(fp,op,std::placeholders::_1)) {}
-#endif /* FIM_WINDOWS */
-	Command::Command(fim_cmd_id cmd, fim::string help, CommandConsole *op,fim::string(CommandConsole::*fp)(const args_t&))
-	       	:cmd_(cmd),help_(help),cmf_(std::bind(fp,op,std::placeholders::_1)) {}
 #else /* FIM_USE_CXX11 */
 	fim::string Command::execute(const args_t&args)
 	{
