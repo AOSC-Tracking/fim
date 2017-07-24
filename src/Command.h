@@ -21,9 +21,11 @@
 #ifndef FIM_COMMAND_H
 #define FIM_COMMAND_H
 #include "fim.h"
+#if FIM_USE_CXX11
+#include <functional>
+#endif /* FIM_USE_CXX11 */
 namespace fim
 {
-
 #if FIM_USE_CXX11
 	using fim_cmd_id = fim::string; // command id
 	using fim_cls = fim::string; // command line statement
@@ -37,13 +39,17 @@ class Command FIM_FINAL
 	fim::string help_;
 	public:
 	const fim_cmd_id & cmd(void)const;
-	explicit Command(fim_cmd_id cmd, fim::string help, Browser *b=FIM_NULL, fim::string(Browser::*bf)(const args_t&)=FIM_NULL);
-	explicit Command(fim_cmd_id cmd, fim::string help, CommandConsole *c=FIM_NULL,fim::string(CommandConsole::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),consolef_(cf),commandconsole_(c) {}
+	explicit Command(fim_cmd_id cmd, fim::string help, Browser *b, fim::string(Browser::*bf)(const args_t&));
+	explicit Command(fim_cmd_id cmd, fim::string help, CommandConsole *c,fim::string(CommandConsole::*cf)(const args_t&));
 #ifdef FIM_WINDOWS
-	explicit Command(fim_cmd_id cmd, fim::string help, FimWindow *w=FIM_NULL, fim::string(FimWindow::*cf)(const args_t&)=FIM_NULL) :cmd_(cmd),help_(help),windowf_(cf),window_(w) {}
+	explicit Command(fim_cmd_id cmd, fim::string help, FimWindow *w, fim::string(FimWindow::*cf)(const args_t&));
 #endif /* FIM_WINDOWS */
 	const fim::string & getHelp(void)const;
 	private:
+#if FIM_USE_CXX11
+	typedef std::function<fim::string (const args_t&)> cmf_t;
+	cmf_t cmf_;
+#else /* FIM_USE_CXX11 */
 	union{
 		fim::string (Browser::*browserf_)(const args_t&) ;
 		fim::string (CommandConsole::*consolef_)(const args_t&) ;
@@ -58,7 +64,7 @@ class Command FIM_FINAL
 		FimWindow *window_;
 #endif /* FIM_WINDOWS */
 	};
-	fim_cmd_type_t type;
+#endif /* FIM_USE_CXX11 */
 	public:
 	~Command(void) { }
 	fim::string execute(const args_t&args);
