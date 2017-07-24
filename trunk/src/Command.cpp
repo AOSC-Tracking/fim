@@ -22,13 +22,32 @@
 #include "Command.h"
 namespace fim
 {
+	const fim_cmd_id & Command::cmd(void)const{return cmd_;}
+	const fim::string & Command::getHelp(void)const{return help_;}
+#if FIM_USE_CXX11
+	fim::string Command::execute(const args_t&args)
+	{
+		assert(cmf_);
+		return (cmf_)(args);
+	}
+	Command::Command(fim_cmd_id cmd, fim::string help, Browser *op, fim::string(Browser::*fp)(const args_t&))
+	       	:cmd_(cmd),help_(help),cmf_(std::bind(fp,op,std::placeholders::_1)) {}
+#ifdef FIM_WINDOWS
+	Command::Command(fim_cmd_id cmd, fim::string help, FimWindow *op, fim::string(FimWindow::*fp)(const args_t&))
+	       	:cmd_(cmd),help_(help),cmf_(std::bind(fp,op,std::placeholders::_1)) {}
+#endif /* FIM_WINDOWS */
+	Command::Command(fim_cmd_id cmd, fim::string help, CommandConsole *op,fim::string(CommandConsole::*fp)(const args_t&))
+	       	:cmd_(cmd),help_(help),cmf_(std::bind(fp,op,std::placeholders::_1)) {}
+#else /* FIM_USE_CXX11 */
 	fim::string Command::execute(const args_t&args)
 	{
 		assert(browser_ && browserf_);
 		return (browser_->*browserf_)(args); // Browser or CommandConsole or FimWindow
 	}
-	const fim_cmd_id & Command::cmd(void)const{return cmd_;}
-	const fim::string & Command::getHelp(void)const{return help_;}
-	Command::Command(fim_cmd_id cmd, fim::string help, Browser *b, fim::string(Browser::*bf)(const args_t&))
-	       	:cmd_(cmd),help_(help),browserf_(bf),browser_(b) {}
+	Command::Command(fim_cmd_id cmd, fim::string help, Browser *b, fim::string(Browser::*bf)(const args_t&)) :cmd_(cmd),help_(help),browserf_(bf),browser_(b) {}
+#ifdef FIM_WINDOWS
+	Command::Command(fim_cmd_id cmd, fim::string help, FimWindow *w, fim::string(FimWindow::*cf)(const args_t&)) :cmd_(cmd),help_(help),windowf_(cf),window_(w) {}
+#endif /* FIM_WINDOWS */
+	Command::Command(fim_cmd_id cmd, fim::string help, CommandConsole *c,fim::string(CommandConsole::*cf)(const args_t&)) :cmd_(cmd),help_(help),consolef_(cf),commandconsole_(c) {}
+#endif /* FIM_USE_CXX11 */
 } /* namespace fim */
