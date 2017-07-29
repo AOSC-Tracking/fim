@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1474)
+ * New configure option, defaulting to: --enable-paths-in-man: Generate man pages with configure specified paths (e.g. sysconfdir, docdir).
 # (r1468)
  * fix: -s switch was broken.
 # (r1447)
