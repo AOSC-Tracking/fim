@@ -1333,6 +1333,16 @@ AC_ARG_ENABLE(seek-magic, AC_HELP_STRING([--disable-seek-magic], [Fim will be ca
 ],[ fim_cv_seek_magic=yes ]
 )
 dnl ==================
+fim_cv_paths_in_man=yes
+AC_ARG_ENABLE(paths-in-man, AC_HELP_STRING([--disable-paths-in-man], [Generate man pages with configure specified paths (e.g. sysconfdir, docdir).]),
+[       if test x$enableval = xno; then
+		fim_cv_paths_in_man=no
+	else
+                fim_cv_paths_in_man=yes
+        fi
+],[ fim_cv_paths_in_man=yes ]
+)
+dnl ==================
 AC_ARG_ENABLE(pushdir, AC_HELP_STRING([--enable-pushdir], [Fim will scan directories for files.]),
 [       if test x$enableval = xno; then
 		fim_cv_read_dirs=no
@@ -1754,6 +1764,12 @@ dnl ==================
     	fi
 
 dnl ==================
+    AH_TEMPLATE([FIM_PATHS_IN_MAN])
+            if test x$fim_cv_paths_in_man = xyes ; then
+    		AC_DEFINE([FIM_PATHS_IN_MAN])
+    	fi
+
+dnl ==================
     AH_TEMPLATE([FIM_WANT_FONT_MAGNIFY_FACTOR])
     AC_DEFINE_UNQUOTED([FIM_WANT_FONT_MAGNIFY_FACTOR],$fim_cv_want_font_magnify_factor)
 
@@ -1951,6 +1967,7 @@ dnl	internal windowing system           : ${have_windows:-no}
 	will read image files from stdin(-i): ${fim_cv_read_stdin_image:-no}
 	GNU regexps (default is Posix)      :*${fim_cv_regex:-no}
         seek magic signatures               : ${fim_cv_seek_magic:-no}
+	man page with user configured paths : ${fim_cv_paths_in_man}
         framebuffer console load switchable :*${fim_cv_fb_console_switch_while_loading:-no}
         hardcoded font magnifying factor    : ${fim_cv_want_font_magnify_factor}
 	customizable status bar             : ${fim_cv_custom_status_bar:-no}
