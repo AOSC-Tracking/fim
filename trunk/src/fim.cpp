@@ -1826,8 +1826,11 @@ extern "C" {
 			    ", by "
 			    FIM_AUTHOR
 	#endif /* FIM_AUTHOR  */
+#define FIM_WANT_REPRODUCIBLE_BUILDS 1
+#if !FIM_WANT_REPRODUCIBLE_BUILDS
 			    ", built on %s\n",
 			    __DATE__
+#endif
 	    		    " ( based on fbi version 1.31 (c) by 1999-2004 " FBI_AUTHOR_NAME " )\n"
 	#ifdef __cplusplus
 	"Compiled with C++ standard: " FIM_XSTRINGIFY(__cplusplus) "\n"

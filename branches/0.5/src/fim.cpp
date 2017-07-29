@@ -1559,8 +1559,11 @@ fim_perr_t main(int argc,char *argv[])
 			    ", by "
 			    FIM_AUTHOR
 	#endif /* FIM_AUTHOR  */
+#define FIM_WANT_REPRODUCIBLE_BUILDS 1
+#if !FIM_WANT_REPRODUCIBLE_BUILDS
 			    ", built on %s\n",
 			    __DATE__
+#endif
 	    		    " ( based on fbi version 1.31 (c) by 1999-2004 " FBI_AUTHOR_NAME " )\n"
 	#ifdef FIM_WITH_LIBPNG
 	#ifdef PNG_HEADER_VERSION_STRING 
