@@ -1,6 +1,9 @@
 	
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
+                Version 0.5-rc4
+ * bugfix: expando mechanism crashed on long comment strings.
+
                 Version 0.5-rc3
 
  * fix: mouse movement under SDL used to trigger unnecessary screen redraws.

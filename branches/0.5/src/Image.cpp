@@ -1010,8 +1010,9 @@ strdo:
 							vipp = fcpp;
 							while(*fcpp && *fcpp != '%')
 								++fcpp;
-							snprintf(clb+strlen(clb), fcpp-vipp+1, "%s", vipp );
-							rbc -= strlen(clbp); clbp += strlen(clbp);
+							snprintf(clbp, FIM_MIN(rbc,fcpp-vipp+1), "%s", vipp );
+							rbc -= strlen(clbp);
+							clbp += strlen(clbp);
 
 							if(!*fcpp)
 								goto strdone;
@@ -1039,6 +1040,8 @@ strdo:
 								//snprintf(clb+strlen(clb), sizeof(clb), "%s",fcpp);
 								snprintf(clbp, rbc, "%s","<?>");
 							}
+							rbc -= strlen(clbp);
+							clbp += strlen(clbp);
 							goto strdo;
 						}
 strdone:
