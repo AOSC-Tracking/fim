@@ -1072,6 +1072,7 @@ namespace fim
 #define FIM_FILE_BUF_SIZE 	(1024*256)
 #define FIM_ATOX_BUFSIZE 	(32)
 #define FIM_STATUSLINE_BUF_SIZE 	(2*128)
+#define FIM_IMG_DESC_ITEM_MAX_LEN 	(16*FIM_STATUSLINE_BUF_SIZE)
 #define FIM_FBI_PPM_LINEBUFSIZE 	(1024)
 #define FIM_LINUX_CONSOLEFONTS_DIR "/usr/share/consolefonts"
 #define FIM_LINUX_STDIN_FILE "/dev/stdin"
