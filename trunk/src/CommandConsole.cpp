@@ -2400,7 +2400,7 @@ ret:
 fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 {
 	// see FIM_VID_INFO_FMT_STR FIM_VID_COMMENT_OI 	FIM_VID_COMMENT_OI_FMT
-	fim_char_t linebuffer[FIM_STATUSLINE_BUF_SIZE];
+	fim::string linebuffer;
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[4];
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
@@ -2418,21 +2418,19 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 #if FIM_WANT_CUSTOM_INFO_STATUS_BAR
 	if( ifsp )
 	{
-		fim_char_t clb[FIM_STATUSLINE_BUF_SIZE];
 		const char*fp=ifsp;
 		const char*sp=ifsp;
-		fim_char_t *clbp = clb;
-		int rbc = sizeof(clb)/sizeof(clb[0]);
-
-		clb[0]=FIM_SYM_CHAR_NUL;
 
 		while(*sp && *sp!='%')
-		{
 			++sp;
-		}
-		goto sbum;
+		linebuffer.append(ifsp,sp-ifsp);
 		while(*sp=='%' && isprint(sp[1]))
 		{
+			fim_char_t clb[FIM_IMG_DESC_ITEM_MAX_LEN];
+			fim_char_t *clbp = clb;
+			int rbc = sizeof(clb)/sizeof(clb[0]);
+			clb[0]=FIM_SYM_CHAR_NUL;
+
 			++sp;
 			switch(*sp)
 			{
@@ -2536,22 +2534,13 @@ strdo:
 								while(*fcpp && *fcpp!=':' && ( isalpha(*fcpp) || isdigit(*fcpp) || *fcpp=='_' ))
 									++fcpp;
 								if(*fcpp==':')
-								{
-									snprintf(clbp, rbc, "%s",image->getStringVariable(string(vipp).substr(1,fcpp-vipp-1)).c_str());
+									snprintf(clbp, rbc, "%s",image->getStringVariable(string(vipp).substr(1,fcpp-vipp-1)).c_str()),
 									++fcpp;
-								}
 								else
-								{
-									//snprintf(clb+strlen(clb), sizeof(clb), "%s",(string(vipp).substr(1,fcpp-vipp-1)).c_str());
 									snprintf(clbp, rbc, "%s","<?>");
-								}
-									
 							}
 							else
-							{
-								//snprintf(clb+strlen(clb), sizeof(clb), "%s",fcpp);
 								snprintf(clbp, rbc, "%s","<?>");
-							}
 							rbc -= strlen(clbp);
 							clbp += strlen(clbp);
 							goto strdo;
@@ -2585,19 +2574,18 @@ strdone:
 			}
 			++sp;
 			fp=sp;
-sbum:
 			while(*sp!='%' && sp[0])
 				++sp;
 			rbc -= strlen(clbp); clbp += strlen(clbp);
 			snprintf(clbp, FIM_MIN(sp-fp+1,rbc), "%s",fp);
 			rbc -= strlen(clbp); clbp += strlen(clbp);
+			linebuffer+=clb;
 		}
 		//std::cout << "Custom format string chosen: "<< ifsp << ", resulting in: "<< clb <<"\n";
-		snprintf(linebuffer, sizeof(linebuffer),"%s",clb);
 		goto labeldone;
 	}
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 labeldone:
-	return fim::string(linebuffer);
+	return linebuffer;
 }
 } /* namespace fim */
