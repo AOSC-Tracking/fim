@@ -3,8 +3,8 @@
 
                 Version 0.6-trunk
 
-# (r1477)
- * Description line can be of any length, and individual component substrings length limit is larger now.
+# (r1477,r1478)
+ * Description line can be of any length (EXPERIMENTAL).
 # (r1474)
  * New configure option, defaulting to: --enable-paths-in-man: Generate man pages with configure specified paths (e.g. sysconfdir, docdir).
 # (r1468)

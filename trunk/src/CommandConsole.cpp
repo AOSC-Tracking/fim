@@ -49,6 +49,7 @@
 #endif /* FIM_WANT_RAW_KEYS_BINDING */
 
 #define FIM_KEY_OFFSET '0'
+#define FIM_UNLIMITED_INFO_STRINGS 1 /* Description line can be of any length */
 
 extern fim_sys_int yyparse();
 #if FIM_WANT_BACKGROUND_LOAD
@@ -2426,6 +2427,9 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 		linebuffer.append(ifsp,sp-ifsp);
 		while(*sp=='%' && isprint(sp[1]))
 		{
+#if FIM_UNLIMITED_INFO_STRINGS
+			string app;
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
 			fim_char_t clb[FIM_IMG_DESC_ITEM_MAX_LEN];
 			fim_char_t *clbp = clb;
 			int rbc = sizeof(clb)/sizeof(clb[0]);
@@ -2451,7 +2455,11 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 				{
 					string cv = image->getStringVariable(FIM_VID_COMMENT);
 					if( cv.c_str() && *cv.c_str() )
+#if FIM_UNLIMITED_INFO_STRINGS
+						app+='[', app+=cv, app+=']';
+#else /* FIM_UNLIMITED_INFO_STRINGS */
 						snprintf(clbp, rbc, "[%s] ",cv.c_str()); /* TODO: might generalize/change this */
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
 				}
 				break;
 				case('l'):
@@ -2470,10 +2478,18 @@ fim::string CommandConsole::getInfoCustom(const fim_char_t * ifsp)const
 					fim_snprintf_XB(clbp, rbc,(int)image->get_pixelmap_byte_size());
 				break;
 				case('n'):
+#if FIM_UNLIMITED_INFO_STRINGS
+					app += image->getStringVariable(FIM_VID_FILENAME).c_str();
+#else /* FIM_UNLIMITED_INFO_STRINGS */
 					snprintf(clbp, rbc, "%s",image->getStringVariable(FIM_VID_FILENAME).c_str());
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
 				break;
 				case('N'):
+#if FIM_UNLIMITED_INFO_STRINGS
+					app += fim_basename_of(image->getStringVariable(FIM_VID_FILENAME));
+#else /* FIM_UNLIMITED_INFO_STRINGS */
 					snprintf(clbp, rbc, "%s",fim_basename_of(image->getStringVariable(FIM_VID_FILENAME)));
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
 				break;
 				case('T'):
 					fim_snprintf_XB(clbp, rbc,cc.byte_size());
@@ -2520,9 +2536,13 @@ strdo:
 							vipp = fcpp;
 							while(*fcpp && *fcpp != '%')
 								++fcpp;
+#if FIM_UNLIMITED_INFO_STRINGS
+							app += std::string(vipp,fcpp);
+#else /* FIM_UNLIMITED_INFO_STRINGS */
 							snprintf(clbp, FIM_MIN(rbc,fcpp-vipp+1), "%s", vipp );
 							rbc -= strlen(clbp);
 							clbp += strlen(clbp);
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
 
 							if(!*fcpp)
 								goto strdone;
@@ -2533,16 +2553,30 @@ strdo:
 								++fcpp;
 								while(*fcpp && *fcpp!=':' && ( isalpha(*fcpp) || isdigit(*fcpp) || *fcpp=='_' ))
 									++fcpp;
+								string vn = string(vipp).substr(1,fcpp-vipp-1);
+								string vv = image->getStringVariable(vn);
 								if(*fcpp==':')
-									snprintf(clbp, rbc, "%s",image->getStringVariable(string(vipp).substr(1,fcpp-vipp-1)).c_str()),
+#if FIM_UNLIMITED_INFO_STRINGS
+									app += vv.c_str(),
+#else /* FIM_UNLIMITED_INFO_STRINGS */
+									snprintf(clbp, rbc, "%s",vv.c_str()),
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
 									++fcpp;
 								else
+#if FIM_UNLIMITED_INFO_STRINGS
+									app += "<?>";
+#else /* FIM_UNLIMITED_INFO_STRINGS */
 									snprintf(clbp, rbc, "%s","<?>");
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
 							}
 							else
+#if FIM_UNLIMITED_INFO_STRINGS
+								app += "<?>";
+#else /* FIM_UNLIMITED_INFO_STRINGS */
 								snprintf(clbp, rbc, "%s","<?>");
 							rbc -= strlen(clbp);
 							clbp += strlen(clbp);
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
 							goto strdo;
 						}
 strdone:
@@ -2577,9 +2611,20 @@ strdone:
 			while(*sp!='%' && sp[0])
 				++sp;
 			rbc -= strlen(clbp); clbp += strlen(clbp);
-			snprintf(clbp, FIM_MIN(sp-fp+1,rbc), "%s",fp);
-			rbc -= strlen(clbp); clbp += strlen(clbp);
-			linebuffer+=clb;
+#if FIM_UNLIMITED_INFO_STRINGS
+			if(!app.empty())
+			{
+				if(sp-fp>1)
+					app = std::string(fp,sp) + app;
+				linebuffer+=app;
+			}
+			else
+#endif /* FIM_UNLIMITED_INFO_STRINGS */
+			{
+				snprintf(clbp, FIM_MIN(sp-fp+1,rbc), "%s",fp);
+				rbc -= strlen(clbp); clbp += strlen(clbp);
+				linebuffer+=clb;
+			}
 		}
 		//std::cout << "Custom format string chosen: "<< ifsp << ", resulting in: "<< clb <<"\n";
 		goto labeldone;
