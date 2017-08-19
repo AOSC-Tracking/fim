@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1484)
+ * If _caption_over_image=3, image will be possibly drawn below the caption.
 # (r1480)
  * The 'v' and 'S' keys will redraw as well.
 # (r1477,r1478)
