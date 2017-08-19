@@ -21,6 +21,7 @@
 #include "Viewport.h"
 #include <cmath>	// ceilf
 #define FIM_WANT_VIEWPORT_TRANSFORM 1
+#define FIM_HSCALE_AFTER_CMT 0
 namespace fim
 {
 #if FIM_WANT_BDI
@@ -187,16 +188,45 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
+	fim_coo_t Viewport::extra_top_height(void)const
+	{
+		fim_coo_t slh = 0;
+#if FIM_HSCALE_AFTER_CMT
+		fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
+
+		if(ds && image_)
+		{
+			fim_int wcoi = getGlobalIntVariable(FIM_VID_COMMENT_OI);
+#if FIM_WANT_PIC_CMTS
+			if(wcoi>1)
+			{
+				fim_coo_t fh = displaydevice_->status_line_height();// TODO: need a displaydevice->font_height()
+				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
+				{
+					int cpl=displaydevice_->get_chars_per_line();
+					std::string i = commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT));
+					int el = ((i.size()+cpl-1)/cpl);
+					slh=fh*el;
+				}
+			}
+#endif /* FIM_WANT_PIC_CMTS */
+			slh = FIM_MIN(viewport_height()/2,slh);
+		}
+#endif
+		return slh;
+	}
+
 	fim_coo_t Viewport::viewport_height(void)const
 	{
-		fim_coo_t fh = displaydevice_->status_line_height();
-		if(fh)
-			fh*=(getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
+		fim_coo_t vph=0;
+		fim_coo_t fh = displaydevice_->status_line_height();// TODO: need displaydevice->font_height()
+		fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
 #ifdef FIM_WINDOWS
-		return corners_.height()-fh;
+		vph = corners_.height()-fh*ds;
 #else
-		return displaydevice_->height()-fh;
+		vph = displaydevice_->height()-fh*ds;
 #endif /* FIM_WINDOWS */
+		return vph;
 	}
 
 	bool Viewport::redisplay(void)
@@ -334,9 +364,9 @@ namespace fim
 					image_->height(),
 					image_->width(),
 					image_->width(),
-					yorigin(),
+					extra_top_height()+yorigin(),
 					xorigin(),
-					viewport_height(),
+					-extra_top_height()+viewport_height(),
 				       	viewport_width(),
 				       	viewport_width(),
 					flags
@@ -482,7 +512,7 @@ namespace fim
 		if( check_invalid() )
 			return;
 
-		newscale = FIM_INT_SCALE_FRAC(this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
+		newscale = FIM_INT_SCALE_FRAC(-this->extra_top_height()+this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
 		image_->do_scale_rotate(newscale);
 	}
 
