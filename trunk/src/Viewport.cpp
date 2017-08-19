@@ -188,6 +188,20 @@ namespace fim
 #endif /* FIM_WINDOWS */
 	}
 
+	fim_coo_t Viewport::extra_height(void)const
+	{
+		return
+		       	extra_bottom_height()+
+		       	extra_top_height();
+	}
+
+	fim_coo_t Viewport::extra_bottom_height(void)const
+	{
+		fim_coo_t lh = displaydevice_->status_line_height();
+		fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
+		return ds * lh;
+	}
+
 	fim_coo_t Viewport::extra_top_height(void)const
 	{
 		fim_coo_t slh = 0;
@@ -200,7 +214,7 @@ namespace fim
 #if FIM_WANT_PIC_CMTS
 			if(wcoi>1)
 			{
-				fim_coo_t fh = displaydevice_->status_line_height();// TODO: need a displaydevice->font_height()
+				fim_coo_t fh = displaydevice_->font_height();
 				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
 				{
 					int cpl=displaydevice_->get_chars_per_line();
@@ -218,13 +232,11 @@ namespace fim
 
 	fim_coo_t Viewport::viewport_height(void)const
 	{
-		fim_coo_t vph=0;
-		fim_coo_t fh = displaydevice_->status_line_height();// TODO: need displaydevice->font_height()
-		fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
+		fim_coo_t vph = 0;
 #ifdef FIM_WINDOWS
-		vph = corners_.height()-fh*ds;
+		vph = corners_.height();
 #else
-		vph = displaydevice_->height()-fh*ds;
+		vph = displaydevice_->height();
 #endif /* FIM_WINDOWS */
 		return vph;
 	}
@@ -366,7 +378,7 @@ namespace fim
 					image_->width(),
 					extra_top_height()+yorigin(),
 					xorigin(),
-					-extra_top_height()+viewport_height(),
+					-extra_bottom_height()-extra_top_height()+viewport_height(),
 				       	viewport_width(),
 				       	viewport_width(),
 					flags
@@ -511,8 +523,7 @@ namespace fim
 		fim_scale_t newscale;
 		if( check_invalid() )
 			return;
-
-		newscale = FIM_INT_SCALE_FRAC(-this->extra_top_height()+this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
+		newscale = viewport_yscale();
 		image_->do_scale_rotate(newscale);
 	}
 
@@ -887,7 +898,8 @@ ret:
 	fim_scale_t Viewport::viewport_yscale(void)const
 	{
 		assert(image_);
-		return FIM_INT_SCALE_FRAC(this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
+		fim_coo_t eh = this->extra_height();
+		return FIM_INT_SCALE_FRAC(-eh+this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
 	}
 
 	fim_cxr Viewport::img_color(const args_t& args)
