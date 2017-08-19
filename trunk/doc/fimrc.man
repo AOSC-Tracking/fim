@@ -1605,7 +1605,7 @@ bind 'd' "diagonal_nw";
 bind 'D' "diagonal_se";
 bind 'x' "diagonal_ne";
 bind 'X' "diagonal_sw";
-alias "toggleDisplayStatus" "_display_status=1\-_display_status" "";
+alias "toggleDisplayStatus" "_display_status=1\-_display_status;redisplay" "";
 alias "toggleDisplayBusy"   "_display_busy=1\-_display_busy" "";
 alias "sort" "list 'sort'"  "sorts the files list ordered";
 bind 'o' "sort";
