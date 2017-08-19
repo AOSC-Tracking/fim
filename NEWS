@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1480)
+ * The 'v' and 'S' keys will redraw as well.
 # (r1477,r1478)
  * Description line can be of any length (EXPERIMENTAL).
 # (r1474)
