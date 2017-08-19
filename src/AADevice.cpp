@@ -659,7 +659,12 @@ err:
 
 	fim_coo_t AADevice::status_line_height(void)const
 	{
-		return 1;
+		return FIM_AALIB_FONT_HEIGHT;
+	}
+
+	fim_coo_t AADevice::font_height(void)const
+	{
+		return FIM_AALIB_FONT_HEIGHT;
 	}
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE

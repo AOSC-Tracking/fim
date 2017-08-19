@@ -358,8 +358,13 @@
 	fim_coo_t CACADevice::get_chars_per_column(void)const{return height();}
 	fim_coo_t CACADevice::status_line_height(void)const
 	{
-		return 1;
+		return FIM_CACALIB_FONT_HEIGHT;
 	}
+	fim_coo_t CACADevice::status_line_height(void)const
+	{
+		return FIM_CACALIB_FONT_HEIGHT;
+	}
+
 	fim_sys_int CACADevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		/* FIXME: better make this virtual pure before writing the next Device ..  */

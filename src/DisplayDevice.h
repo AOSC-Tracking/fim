@@ -73,6 +73,7 @@ class DisplayDevice
 	virtual fim_bpp_t get_bpp(void)const=0;
 	virtual fim_coo_t height(void)const=0;
 	virtual fim_coo_t status_line_height(void)const=0;
+	virtual fim_coo_t font_height(void)const{return f_->sheight();}
 	/* virtual fim_coo_t font_width(void)const{return 1;} */
 	virtual fim_err_t status_line(const fim_char_t *msg)=0;
 	fim_err_t console_control(fim_cc_t code);

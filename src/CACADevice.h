@@ -25,6 +25,7 @@
 #include "DisplayDevice.h"
 #include <caca0.h>
 
+#define FIM_CACALIB_FONT_HEIGHT 1
 /*  20080504 this CACA driver doesn't work yet */
 class CACADevice FIM_FINAL:public DisplayDevice 
 {
@@ -80,6 +81,7 @@ class CACADevice FIM_FINAL:public DisplayDevice
 		return 1;
 	}
 	virtual fim_coo_t status_line_height(void)const;
+	virtual fim_coo_t font_height(void)const;
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 };
 

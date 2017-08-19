@@ -29,6 +29,7 @@
  * Debugging only!
  * */
 #define FIM_AALIB_DRIVER_DEBUG 0
+#define FIM_AALIB_FONT_HEIGHT 1
 
 class AADevice FIM_FINAL:public DisplayDevice 
 {
@@ -94,6 +95,7 @@ class AADevice FIM_FINAL:public DisplayDevice
 	virtual fim_err_t reinit(const fim_char_t *rs);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	virtual fim_coo_t status_line_height(void)const;
+	virtual fim_coo_t font_height(void)const;
 };
 
 #endif /* FIM_WITH_AALIB  */
