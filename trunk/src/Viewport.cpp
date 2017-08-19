@@ -21,7 +21,7 @@
 #include "Viewport.h"
 #include <cmath>	// ceilf
 #define FIM_WANT_VIEWPORT_TRANSFORM 1
-#define FIM_HSCALE_AFTER_CMT 0
+#define FIM_HSCALE_AFTER_CMT 1
 namespace fim
 {
 #if FIM_WANT_BDI
@@ -214,7 +214,7 @@ namespace fim
 		{
 			fim_int wcoi = getGlobalIntVariable(FIM_VID_COMMENT_OI);
 #if FIM_WANT_PIC_CMTS
-			if(wcoi>1) // ==1 is transparent background
+			if(wcoi>=3)
 			{
 				fim_coo_t fh = displaydevice_->font_height();
 				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
