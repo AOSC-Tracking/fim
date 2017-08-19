@@ -849,7 +849,7 @@ _cached_images
 .na
 .B
 _caption_over_image
-[in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background; if 3, image will be drawn possibly below. 
+[in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background; if 3, image will be drawn possibly below. It will take at most half of the screen.
 .fi
 .na
 .B

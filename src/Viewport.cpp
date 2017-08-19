@@ -217,13 +217,10 @@ namespace fim
 			if(wcoi>=3)
 			{
 				fim_coo_t fh = displaydevice_->font_height();
-				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
-				{
-					fim_coo_t cpl = displaydevice_->get_chars_per_line();
-					std::string i = commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT));
-					fim_coo_t el = ((i.size()+cpl-1)/cpl);
-					slh=fh*el;
-				}
+				std::string i = get_caption_text();
+				fim_coo_t cpl = displaydevice_->get_chars_per_line();
+				fim_coo_t el = ((i.size()+cpl-1)/cpl);
+				slh=fh*el;
 			}
 #endif /* FIM_WANT_PIC_CMTS */
 			slh = FIM_MIN(viewport_height()/2,slh);
@@ -410,10 +407,7 @@ namespace fim
 					if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
-				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
-					displaydevice_->fs_multiline_puts(commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1, viewport_width(), vh);
-				else
-					displaydevice_->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1, viewport_width(), vh);
+				displaydevice_->fs_multiline_puts( get_caption_text().c_str(), wcoi-1, viewport_width(), vh);
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
@@ -1190,5 +1184,25 @@ nop:
 		if(c_getImage())
 			getImage()->update_meta(false);
 		return errval;
+	}
+
+	std::string Viewport::get_caption_text(void)const
+	{
+		std::string ct;
+
+		if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
+		{
+			fim_coo_t cpl = displaydevice_->get_chars_per_line();
+			fim_coo_t maxchrs = cpl*(displaydevice_->get_chars_per_column()/2);
+			std::string i = commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT));
+			if(i.length()>maxchrs)
+			{
+				ct=i.substr(0,maxchrs);
+				if(maxchrs>3) ct[maxchrs-1]='.', ct[maxchrs-2]='.', ct[maxchrs-3]='.';
+			}
+			else
+				ct=i;
+		}
+		return ct;
 	}
 } /* namespace fim */
