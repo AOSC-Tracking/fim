@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1485)
+ * Caption of _caption_over_image will take at most half of the screen.
 # (r1484)
  * If _caption_over_image=3, image will be possibly drawn below the caption.
 # (r1480)

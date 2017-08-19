@@ -667,7 +667,7 @@ namespace fim
 #define FIM_VID_SCALE_FACTOR_MULTIPLIER		"_scale_factor_multiplier"	/* "[in,g:] value used for scaling up/down the scaling factors." */
 #define FIM_VID_SCALE_FACTOR_DELTA		"_scale_factor_delta"		/* "[in,g:] value used for incrementing/decrementing the scaling factors." */
 #define FIM_VID_COMMENT 				"_comment"				/* "[i:,out] the image comment, extracted from the image file (if any)." */
-#define FIM_VID_COMMENT_OI 				"_caption_over_image"				/* "[in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background; if 3, image will be drawn possibly below. " */
+#define FIM_VID_COMMENT_OI 				"_caption_over_image"				/* "[in,g:] if set not to 0, will display a custom comment string specified according to the value of_caption_over_image_fmt; if larger than 1, with black background; if 3, image will be drawn possibly below. It will take at most half of the screen." */
 #define FIM_VID_COMMENT_OI_FMT 				"_caption_over_image_fmt"		/* "[in,g:] custom info format string, displayed in a caption over the image; if unset: i:_comment; otherwise a custom format string specified just as " FIM_VID_INFO_FMT_STR"." */
 #define FIM_VID_EXIFTOOL_COMMENT 				"_exiftool_comment"				/* "[out,g:] comment extracted via the exiftool interface; see " FIM_VID_EXIFTOOL "." */
 #define FIM_VID_STEPS 				"_steps"				/* "[in,g:] the default steps, in pixels, when panning images." */

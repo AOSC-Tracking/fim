@@ -107,6 +107,7 @@ class Viewport FIM_FINAL
 	bool shall_mirror(void)const;
 	bool shall_flip(void)const;
 	bool shall_autotop(void)const;
+	std::string get_caption_text(void)const;
 	public:
 	fim_cxr img_color(const args_t& args);
 	fim_err_t img_rotate(fim_angle_t angle);
