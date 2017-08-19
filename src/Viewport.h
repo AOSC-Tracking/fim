@@ -73,6 +73,7 @@ class Viewport FIM_FINAL
 	public:
 	fim_coo_t viewport_width(void)const;
 	fim_coo_t viewport_height(void)const;
+	fim_coo_t extra_top_height(void)const;
 	void align(const char c);
 	bool display(void);
 	bool redisplay(void);
