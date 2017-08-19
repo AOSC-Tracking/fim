@@ -73,6 +73,7 @@ class Viewport FIM_FINAL
 	public:
 	fim_coo_t viewport_width(void)const;
 	fim_coo_t viewport_height(void)const;
+	fim_coo_t pixelable_height(void)const;
 	fim_coo_t extra_top_height(void)const;
 	fim_coo_t extra_bottom_height(void)const;
 	fim_coo_t extra_height(void)const;

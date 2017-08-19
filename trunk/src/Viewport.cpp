@@ -151,8 +151,9 @@ namespace fim
 	{
 		if( check_invalid() )
 			return false;
-		fim_coo_t tol = approx_fraction > 1 ? viewport_height() / approx_fraction : 0;
-		return (top_ + viewport_height() + tol >= image_->height());
+		fim_coo_t ph = pixelable_height();
+		fim_coo_t tol = approx_fraction > 1 ? ph / approx_fraction : 0;
+		return (top_ + ph + tol >= image_->height());
 	}
 
 	bool Viewport::onRight(fim_coo_t approx_fraction)const
@@ -175,7 +176,8 @@ namespace fim
 	{
 		if( check_invalid() )
 			return false;
-		fim_coo_t tol = approx_fraction > 1 ? viewport_height() / approx_fraction : 0;
+		fim_coo_t ph = pixelable_height();
+		fim_coo_t tol = approx_fraction > 1 ? ph / approx_fraction : 0;
 		return (top_ <= tol );
 	}
 
@@ -212,14 +214,14 @@ namespace fim
 		{
 			fim_int wcoi = getGlobalIntVariable(FIM_VID_COMMENT_OI);
 #if FIM_WANT_PIC_CMTS
-			if(wcoi>1)
+			if(wcoi>1) // ==1 is transparent background
 			{
 				fim_coo_t fh = displaydevice_->font_height();
 				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
 				{
-					int cpl=displaydevice_->get_chars_per_line();
+					fim_coo_t cpl = displaydevice_->get_chars_per_line();
 					std::string i = commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT));
-					int el = ((i.size()+cpl-1)/cpl);
+					fim_coo_t el = ((i.size()+cpl-1)/cpl);
 					slh=fh*el;
 				}
 			}
@@ -238,6 +240,13 @@ namespace fim
 #else
 		vph = displaydevice_->height();
 #endif /* FIM_WINDOWS */
+		return vph;
+	}
+
+	fim_coo_t Viewport::pixelable_height(void)const
+	{
+		fim_coo_t vph = viewport_height();
+		vph -= extra_height();
 		return vph;
 	}
 
@@ -304,6 +313,8 @@ namespace fim
 		}
 
 		fim_int autotop = shall_autotop();
+		const fim_pan_t vh = this->viewport_height();
+		const fim_pan_t ph = this->pixelable_height();
 
 		this->update_meta(false);
 
@@ -314,23 +325,23 @@ namespace fim
 
 		if ( ( autotop || image_->check_autocenter()==1 ) && need_redraw() )
 		{
-			if(autotop && image_->height()>=this->viewport_height())
+			if(autotop && image_->height()>=ph)
 		  	{
-			    top_=autotop>0?0:image_->height()-this->viewport_height();
+			    top_=autotop>0?0:image_->height()-ph;
 			    panned_ |= 0x1; // FIXME: shall do the same for l/r and introduce constants.
 			}
 			/* start with centered image, if larger than screen */
 			if (image_->width()  > this->viewport_width() )
 				left_ = (image_->width() - this->viewport_width()) / 2;
-			if (image_->height() > this->viewport_height() &&  autotop==0)
-				top_ = (image_->height() - this->viewport_height()) / 2;
+			if (image_->height() > ph &&  autotop==0)
+				top_ = (image_->height() - ph) / 2;
 			image_->set_auto_props(0, 0);
 		}
 		{
 			/*
 			 * Old fbi code snippets.
 			 */
-	    		if (image_->height() <= this->viewport_height())
+	    		if (image_->height() <= ph)
 	    		{
 				top_ = 0;
 	    		}
@@ -338,8 +349,8 @@ namespace fim
 			{
 				if (top_ < 0)
 					top_ = 0;
-				if (top_ + this->viewport_height() > image_->height())
-		    			top_ = image_->height() - this->viewport_height();
+				if (top_ + ph > image_->height())
+		    			top_ = image_->height() - ph;
 	    		}
 			if (image_->width() <= this->viewport_width())
 			{
@@ -378,7 +389,7 @@ namespace fim
 					image_->width(),
 					extra_top_height()+yorigin(),
 					xorigin(),
-					-extra_bottom_height()-extra_top_height()+viewport_height(),
+					ph,
 				       	viewport_width(),
 				       	viewport_width(),
 					flags
@@ -400,9 +411,9 @@ namespace fim
 					displaydevice_->fs_puts(displaydevice_->f_, 0, fh*li, cmnts+rw*li);
 #else
 				if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
-					displaydevice_->fs_multiline_puts(commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1, viewport_width(), viewport_height());
+					displaydevice_->fs_multiline_puts(commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT)),wcoi-1, viewport_width(), vh);
 				else
-					displaydevice_->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1, viewport_width(), viewport_height());
+					displaydevice_->fs_multiline_puts(""/*image_->getStringVariable(FIM_VID_COMMENT)*/,wcoi-1, viewport_width(), vh);
 #endif
 			}
 #endif /* FIM_WANT_PIC_CMTS */
@@ -412,7 +423,6 @@ namespace fim
 			fim_float_t bp = commandConsole_.browser_.file_progress() * 100.0;
 			const fim_pan_t bw = 1; // bar width
 			const fim_pan_t vw = viewport_width();
-			const fim_pan_t vh = viewport_height();
 			const fim_coo_t xc = vw; // x coordinate
 			fim_color_t bc = FIM_CNS_WHITE;
 			bc = FIM_CNS_WHITE;
@@ -446,7 +456,7 @@ namespace fim
 		else
 		{
 			if((this->viewport_width()<(image_->original_width()*image_->ascale()))
-			||(this->viewport_height() < image_->original_height()))
+			||(this->pixelable_height() < image_->original_height()))
 				auto_scale();
 		}
 	}
@@ -593,7 +603,7 @@ namespace fim
 	void Viewport::recenter_vertically(void)
 	{
 		if(image_)
-			top_ = (image_->height() - this->viewport_height()) / 2;
+			top_ = (image_->height() - this->pixelable_height()) / 2;
 	}
 
 	void Viewport::recenter(void)
@@ -626,7 +636,7 @@ namespace fim
 		{
 			fim_pan_t ih = image_->height();
 			fim_pan_t iw = image_->width();
-			fim_pan_t vh = this->viewport_height();
+			fim_pan_t vh = this->pixelable_height();
 			fim_pan_t vw = this->viewport_width();
 			fim_off_t top = top_, left = left_;
 
@@ -692,7 +702,7 @@ namespace fim
 		}
 		if(ps)
 		{
-			vs = FIM_INT_PCNT(viewport_height(),vs);
+			vs = FIM_INT_PCNT(pixelable_height(),vs);
 			hs = FIM_INT_PCNT(viewport_width(), hs);
 		}
 
@@ -763,7 +773,7 @@ ret:
 		const float ct=1.0;
 
 		vum = top_;
-	        vlm = image_->height() - viewport_height() - vum;
+	        vlm = image_->height() - pixelable_height() - vum;
 		hum = left_;
 	       	hlm = image_->width() - viewport_width() - hum;
 		vum = FIM_MAX(vum,0);
@@ -842,7 +852,7 @@ ret:
 			if(this->onBottom())
 				goto ret;
 			if( check_valid() )
-				top_ = image_->height() - this->viewport_height();
+				top_ = image_->height() - this->pixelable_height();
 		}
 		break;
 		case 't':
@@ -877,7 +887,7 @@ ret:
 		if(mirror)
 		{ if( image_ && image_->width() > viewport_width() ) left_ = image_->width() - viewport_width() - left_; }
 		if(flip)
-		{ if( image_ && image_->height() > viewport_height() ) top_ = image_->height() - viewport_height() - top_; }
+		{ if( image_ && image_->height() > pixelable_height() ) top_ = image_->height() - pixelable_height() - top_; }
 	}
 	
 	fim_bool_t Viewport::need_redraw(void)const
@@ -898,8 +908,8 @@ ret:
 	fim_scale_t Viewport::viewport_yscale(void)const
 	{
 		assert(image_);
-		fim_coo_t eh = this->extra_height();
-		return FIM_INT_SCALE_FRAC(-eh+this->viewport_height(),static_cast<fim_scale_t>(image_->original_height()));
+		fim_coo_t ph = this->pixelable_height();
+		return FIM_INT_SCALE_FRAC(ph,static_cast<fim_scale_t>(image_->original_height()));
 	}
 
 	fim_cxr Viewport::img_color(const args_t& args)
