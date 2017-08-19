@@ -356,10 +356,11 @@
  * This is embryo code and should be used for experimental purposes only!
  */
 	fim_coo_t CACADevice::get_chars_per_column(void)const{return height();}
-	fim_coo_t CACADevice::status_line_height(void)const
+	fim_coo_t CACADevice::font_height(void)const
 	{
 		return FIM_CACALIB_FONT_HEIGHT;
 	}
+
 	fim_coo_t CACADevice::status_line_height(void)const
 	{
 		return FIM_CACALIB_FONT_HEIGHT;
