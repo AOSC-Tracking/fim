@@ -178,11 +178,13 @@
 #define FIM_CONSTEXPR constexpr
 #define FIM_OVERRIDE override
 #define FIM_FINAL final
+#define FIM_NORETURN [[noreturn]]
 #else /* FIM_USE_CXX11 */
 #define FIM_NOEXCEPT
 #define FIM_CONSTEXPR const
 #define FIM_OVERRIDE 
 #define FIM_FINAL 
+#define FIM_NORETURN 
 #endif /* FIM_USE_CXX11 */
 
 #ifdef FIM_AUTOCMDS

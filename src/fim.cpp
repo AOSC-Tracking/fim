@@ -922,7 +922,7 @@ FIM_AUTHOR" is the author of fim, \"fbi improved\". \n"
 	return 0;
 }
 
-fim_perr_t help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ERROR, const fim_char_t*helparg=FIM_NULL)
+fim_perr_t FIM_NORETURN help_and_exit(const fim_char_t *argv0, fim_perr_t code=FIM_PERR_NO_ERROR, const fim_char_t*helparg=FIM_NULL)
 {
 	if(helparg&&*helparg=='b')
 	{

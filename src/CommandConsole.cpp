@@ -1150,7 +1150,7 @@ rlnull:
 		return quit(return_code_);
 	}
 
-	void CommandConsole::exit(fim_perr_t i)const
+	FIM_NORETURN void CommandConsole::exit(fim_perr_t i)const
 	{
 		/*
 		 *	Exit the program as a whole.
