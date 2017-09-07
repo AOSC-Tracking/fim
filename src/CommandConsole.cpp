@@ -53,10 +53,13 @@
 
 extern fim_sys_int yyparse();
 #if FIM_WANT_BACKGROUND_LOAD
-#include <thread>
-#include <chrono>
 #include <mutex>
 #endif /* FIM_WANT_BACKGROUND_LOAD */
+#define FIM_USE_STD_CHRONO FIM_USE_CXX14
+#if FIM_WANT_BACKGROUND_LOAD || FIM_USE_STD_CHRONO 
+#include <thread>
+#include <chrono>
+#endif /* */
 
 #define FIM_CNS_IFELSE "if(expression){action;}['else'{action;}]"
 
@@ -810,11 +813,20 @@ ret:
 		}
 		if(cmd==FIM_FLT_USLEEP)
 		{
+#if FIM_USE_STD_CHRONO
+			using namespace std::chrono_literals;
+			std::chrono::microseconds useconds = 1us;
+
+			if(args.size()>0)
+				useconds*=atoi(args[0].c_str());
+			std::this_thread::sleep_for(useconds);
+#else /* FIM_USE_STD_CHRONO */
 			fim_tus_t useconds=1;
 			
 			if(args.size()>0)
 				useconds=atoi(args[0].c_str());
 			usleep(useconds);
+#endif /* FIM_USE_STD_CHRONO */
 			goto ok;
 		}
 		else
