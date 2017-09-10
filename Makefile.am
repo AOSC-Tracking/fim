@@ -67,6 +67,7 @@ tests:	all
 	ulimit -t 1000 || true
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/version.sh
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/font.sh
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -E $(top_srcdir)/scripts/example/oneline.fim -c quit 
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
 	make ltests
