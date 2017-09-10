@@ -2,6 +2,7 @@
 	FIM NEWS -- history of (main) user-visible changes in FIM.
 
                 Version 0.5-rc4
+ * bugfix: description file reading could crash due to wrong check.
  * bugfix: expando mechanism crashed on long comment strings.
 
                 Version 0.5-rc3
