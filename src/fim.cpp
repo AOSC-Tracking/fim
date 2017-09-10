@@ -475,7 +475,7 @@ ret:
 	return oss.str();
 }
 
-class FimInstance
+class FimInstance FIM_FINAL
 {
 	static void show_version(FILE * stream);
 

@@ -86,7 +86,7 @@ class AADevice FIM_FINAL:public DisplayDevice
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color);
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_OVERRIDE;
 	void flush(void)FIM_OVERRIDE ;
-	fim_err_t format_console(void);
+	//fim_err_t format_console(void);
 	fim_bpp_t get_bpp(void)const FIM_OVERRIDE 
 	{
 		return 1;

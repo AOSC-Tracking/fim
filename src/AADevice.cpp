@@ -449,7 +449,7 @@ static bool aainvalid;
 	fim_coo_t AADevice::txt_height(void)const{ return aa_scrheight(ascii_context_) ;}
 	fim_coo_t AADevice::width(void)const { return aa_imgwidth(ascii_context_ ) ;}
 	fim_coo_t AADevice::height(void)const{ return aa_imgheight(ascii_context_) ;}
-
+#if 0
 	fim_err_t AADevice::format_console(void)
 	{
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
@@ -459,7 +459,7 @@ static bool aainvalid;
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;
 	}
-
+#endif
 	fim_err_t AADevice::fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
 	{
 #if (!FIM_AALIB_DRIVER_DEBUG)

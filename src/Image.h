@@ -209,7 +209,7 @@ class Image FIM_FINAL
 
 #if FIM_WANT_PIC_CMTS
 
-class ImgDscs: public std::map<fim_fn_t,fim_ds_t>
+class ImgDscs FIM_FINAL: public std::map<fim_fn_t,fim_ds_t>
 {
 	public:
 #if FIM_WANT_PIC_LVDN
