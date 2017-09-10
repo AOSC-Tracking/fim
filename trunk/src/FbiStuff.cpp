@@ -2489,6 +2489,7 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     unsigned int y;
 #if FIM_WANT_MIPMAPS
     int mmi=-1;
+    FIM_DEPRECATED("Shall improve mipmap implementation, e.g. by avoiding pointers in C++11 mode.")
     struct ida_image msrc;
 #endif /* FIM_WANT_MIPMAPS */
     if(ascale<=0.0||ascale>=100.0) /* dez: */
