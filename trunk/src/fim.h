@@ -179,15 +179,18 @@
 #define FIM_OVERRIDE override
 #define FIM_FINAL final
 #define FIM_NORETURN [[noreturn]]
-#define FIM_FALLTHROUGH [[fallthrough]];
 #else /* FIM_USE_CXX11 */
 #define FIM_NOEXCEPT
 #define FIM_CONSTEXPR const
 #define FIM_OVERRIDE 
 #define FIM_FINAL 
 #define FIM_NORETURN 
-#define FIM_FALLTHROUGH 
 #endif /* FIM_USE_CXX11 */
+#if FIM_USE_CXX17
+#define FIM_FALLTHROUGH [[fallthrough]];
+#else /* FIM_USE_CXX17 */
+#define FIM_FALLTHROUGH 
+#endif /* FIM_USE_CXX17 */
 
 #ifdef FIM_AUTOCMDS
 #define FIM_AUTOCMD_EXEC autocmd_exec
