@@ -405,10 +405,10 @@ public:
 									ds = ld;
 								break;
 								case('+'): // #!fim:+
-									ds = ld + ds.substr(csil+1);
+									ds = ld + ds.substr(csil);
 								break;
 								case('^'): // #!fim:^
-									ds = ds.substr(csil+1) + ld;
+									ds = ds.substr(csil) + ld;
 								break;
 								case('s'): // #!fim:s/from/to '/' not allowed in from or to
 								{
