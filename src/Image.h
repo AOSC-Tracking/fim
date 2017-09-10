@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2017 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -267,7 +267,7 @@ public:
 				if( std::getline(ls,fn,nl) )
 				{
 					/* ignoring it: it's a comment line */
-					size_t vn = fn.find_first_of("!fim:",1);
+					size_t vn = fn.find("!fim:",1);
 					if( vn != std::string::npos && fn[vn+=5] )
 					{
 						size_t es = fn.find_first_of("=",vn);
@@ -300,7 +300,7 @@ public:
 					const bool want_basename = true; /*  */
 #if FIM_WANT_PIC_RCMT
 					{
-						size_t csi = ds.find_first_of("#!fim:",0);
+						size_t csi = ds.find("#!fim:",0);
 						size_t csil = 6;
 
 						if( csi != 0 )
