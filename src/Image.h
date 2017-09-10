@@ -304,7 +304,7 @@ public:
 			{
 				if( std::getline(ls,fn,nl) )
 				{
-					size_t vn = fn.find_first_of("!fim:",1); /* vn will point to first variable id char */
+					size_t vn = fn.find("!fim:",1); /* vn will point to first variable id char */
 
 					if( vn != std::string::npos && fn[vn+=5] )
 					{
@@ -389,7 +389,7 @@ public:
 				{
 #if FIM_WANT_PIC_RCMT
 					{
-						size_t csi = ds.find_first_of("#!fim:",0);
+						size_t csi = ds.find("#!fim:",0);
 						size_t csil = 6;
 
 						if( csi != 0 )

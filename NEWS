@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1490)
+ * bugfix: description file reading could crash due to wrong check.
 # (r1485)
  * Caption of _caption_over_image will take at most half of the screen.
 # (r1484)
