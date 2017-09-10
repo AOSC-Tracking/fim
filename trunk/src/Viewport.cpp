@@ -192,9 +192,8 @@ namespace fim
 
 	fim_coo_t Viewport::extra_height(void)const
 	{
-		return
-		       	extra_bottom_height()+
-		       	extra_top_height();
+		fim_coo_t eh = extra_bottom_height() + extra_top_height();
+		return eh;
 	}
 
 	fim_coo_t Viewport::extra_bottom_height(void)const
@@ -210,7 +209,7 @@ namespace fim
 #if FIM_HSCALE_AFTER_CMT
 		fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
 
-		if(ds && image_)
+		if(ds && image_ && displaydevice_->get_bpp())
 		{
 			fim_int wcoi = getGlobalIntVariable(FIM_VID_COMMENT_OI);
 #if FIM_WANT_PIC_CMTS
