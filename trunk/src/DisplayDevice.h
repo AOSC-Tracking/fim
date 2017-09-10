@@ -82,15 +82,15 @@ class DisplayDevice
 	virtual fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color)=0;
 	virtual fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const;
-	virtual fim_err_t format_console(void);
+	virtual fim_err_t format_console(void) FIM_FINAL;
 	virtual void switch_if_needed(void){}// really, only for making happy fbdev
 	virtual void cleanup(void){}// really, only for making happy fbdev
 	protected:
 	fim_redraw_t redraw_; /* expected to be FIM_REDRAW_UNNECESSARY after each display() */
 	public:
-	fim_bool_t need_redraw(void)const{ return ( redraw_ != FIM_REDRAW_UNNECESSARY ); }
+	virtual fim_bool_t need_redraw(void)const FIM_FINAL { return ( redraw_ != FIM_REDRAW_UNNECESSARY ); }
 	virtual fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)=0;
-	virtual fim_err_t fs_putc(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t c);
+	virtual fim_err_t fs_putc(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t c) FIM_FINAL;
 	void fb_status_screen_new(const fim_char_t *msg, fim_bool_t draw, fim_flags_t flags);//experimental
 #if FIM_WANT_BENCHMARKS
 	virtual fim_int get_n_qbenchmarks(void)const;
@@ -101,7 +101,7 @@ class DisplayDevice
 #endif /* FIM_WANT_BENCHMARKS */
 	private:
 	virtual void console_switch(fim_bool_t is_busy){}// really, only for making happy fbdev
-	void clear_screen_locking(void);
+	virtual void clear_screen_locking(void) FIM_FINAL;
 	public:
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h);
 	virtual fim_err_t reinit(const fim_char_t *rs);

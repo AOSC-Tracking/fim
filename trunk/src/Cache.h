@@ -123,7 +123,7 @@ namespace fim
 
 typedef fim::string fid_t;
 
-class PACA	/* Parallel Cache */
+class PACA FIM_FINAL	/* Parallel Cache */
 {
 	public:
 #if FIM_WANT_BACKGROUND_LOAD

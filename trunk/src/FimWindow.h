@@ -51,7 +51,7 @@ namespace fim
  +--------------+
                  (x+w,y+h) : lower right point out
 */
-class Rect
+class Rect  FIM_FINAL
 {
 	public:
 	fim_coo_t x_,y_,w_,h_;	// units, not pixels
@@ -91,9 +91,9 @@ class Rect
 };
 
 #ifdef FIM_NAMESPACES
-class FimWindow:public Namespace
+class FimWindow FIM_FINAL:public Namespace
 #else /* FIM_NAMESPACES */
-class FimWindow
+class FimWindow FIM_FINAL
 #endif /* FIM_NAMESPACES */
 {
 	private:

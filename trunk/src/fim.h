@@ -546,7 +546,7 @@ inline auto FIM_MAX(T x, S y)
 #define FIM_HYPOTHENUSE_OF_INT(C1,C2) ceil( FIM_HYPOTHENUSE_OF(((double)(C1)),((double)(C2))) + 1.0 )
 
 enum fim_mmo_t { FIM_MMO_NORMAL=0, FIM_MMO_FASTER=1 };
-class fim_mipmap_t
+class fim_mipmap_t FIM_FINAL
 {
 	public:
 	size_t mmoffs[FIM_MAX_MIPMAPS]; /* mipmap offset */
