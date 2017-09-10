@@ -186,6 +186,11 @@
 #define FIM_FINAL 
 #define FIM_NORETURN 
 #endif /* FIM_USE_CXX11 */
+#if FIM_USE_CXX14
+#define FIM_DEPRECATED(MSG) [[deprecated(MSG)]]
+#else /* FIM_USE_CXX14 */
+#define FIM_DEPRECATED(MSG) 
+#endif /* FIM_USE_CXX14 */
 #if FIM_USE_CXX17
 #define FIM_FALLTHROUGH [[fallthrough]];
 #else /* FIM_USE_CXX17 */
