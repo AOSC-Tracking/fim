@@ -155,7 +155,7 @@ The way some one\-line statements are evaluated:
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
 /png		 a shortcut for /.*png.*
 
-!{syscmd}		executes the {syscmd} quoted string as a "/bin/sh" shell command
+!{syscmd}		executes the {syscmd} quoted string as an argument to the  "system" fim command.
 
 
 .SH COMMANDS REFERENCE
@@ -706,7 +706,7 @@ stdout {args}: writes to stdout its arguments {args}.
 .B
 system
 .fi
-system {syscmd}: get the output of the shell command {syscmd}. (uses popen()).
+system {syscmd}: get the output of executing the {syscmd} system command. Uses the popen() system call. Usually popen invokes "/bin/sh \-c {syscmd}". This might not handle a multi\-word command; in that case you will have to put it into a script. See 'man popen' for more.
 .fi
 
 .na

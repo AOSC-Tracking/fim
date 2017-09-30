@@ -551,7 +551,7 @@ inline auto FIM_MAX(T x, S y)
 "/*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'\n"\
 "/png		 a shortcut for /.*png.*\n"\
 "\n"\
-"!" FIM_CNS_EX_SYSC_STRING "		executes the " FIM_CNS_EX_SYSC_STRING " quoted string as a \"" FIM_CNS_SHELL "\" shell command\n"\
+"!" FIM_CNS_EX_SYSC_STRING "		executes the " FIM_CNS_EX_SYSC_STRING " quoted string as an argument to the  \"" FIM_FLT_SYSTEM "\" fim command.\n"\
 ""
 
 #define FIM_MAX_MIPMAPS 32 /* pretty large ;-) */
@@ -1022,7 +1022,7 @@ namespace fim
 #define FIM_CMD_HELP_SET	FIM_FLT_SET ": returns a list of variables which are set." FIM_CNS_CMDSEP FIM_FLT_SET " " FIM_CNS_EX_ID_STRING ": returns the value of variable " FIM_CNS_EX_ID_STRING "." FIM_CNS_CMDSEP FIM_FLT_SET " " FIM_CNS_EX_ID_STRING " " FIM_CNS_EX_CMDS_STRING ": sets variable " FIM_CNS_EX_ID_STRING " to value " FIM_CNS_EX_CMDS_STRING "." 
 #define FIM_CMD_HELP_PWD	FIM_FLT_PWD ": print the current directory name, and updates the '" FIM_VID_PWD "' variable."
 #define FIM_CMD_HELP_EVAL	FIM_FLT_EVAL " " FIM_CNS_EX_ARGS_STRING ": evaluate " FIM_CNS_EX_ARGS_STRING " as commands, executing them."
-#define FIM_CMD_HELP_SYSTEM	FIM_FLT_SYSTEM " " FIM_CNS_EX_SYSC_STRING ": get the output of the shell command " FIM_CNS_EX_SYSC_STRING ". (uses popen())."
+#define FIM_CMD_HELP_SYSTEM	FIM_FLT_SYSTEM " " FIM_CNS_EX_SYSC_STRING ": get the output of executing the " FIM_CNS_EX_SYSC_STRING " system command. Uses the popen() system call. Usually popen invokes \"" FIM_CNS_SHELL " -c " FIM_CNS_EX_SYSC_STRING "\". This might not handle a multi-word command; in that case you will have to put it into a script. See 'man popen' for more."
 #if FIM_DISABLE_WINDOW_SPLITTING
 #define FIM_CMD_HELP_WINDOW FIM_FLT_WINDOW " " FIM_CNS_EX_ARGS_STRING ": this command is disabled." /*FIM_CNS_CMDSEP " It might be re-enabled in a future version."*/
 #else /* FIM_DISABLE_WINDOW_SPLITTING */
