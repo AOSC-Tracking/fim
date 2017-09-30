@@ -272,6 +272,31 @@ public:
 	{
 		reset();
 	}
+	std::string expand(const VNamespace & ns, const fim_fn_t ds)const
+	{
+#if FIM_WANT_DESC_VEXP
+							fim_fn_t ss; // substituted string
+							const fim_char_t ec = '@';
+							std::string::size_type bci = 0, eci = 0;
+							while ( ( bci = ds.find(ec,eci) ) != std::string::npos )
+							{
+								ss+=ds.substr(eci,bci-eci);
+								if(!isalpha(ds[eci=++bci]))
+									continue;
+								while(eci < ds.size() && isalpha(ds[++eci]))
+									;
+								if(ns.isSetVar(ds.substr(bci,eci-bci)))
+									ss+=ns.getStringVariable(ds.substr(bci,eci-bci));
+								else
+									ss+='@',
+									ss+=ds.substr(bci,eci-bci); // might issue warning instead
+							}
+							ss+=ds.substr(eci);
+							return ss;
+#else /* FIM_WANT_DESC_VEXP */
+							return ds;
+#endif /* FIM_WANT_DESC_VEXP */
+	}
 	void fetch(const fim_fn_t& dfn, const fim_char_t sc)
 	{
 		/* dfn: descriptions file name */
@@ -433,6 +458,7 @@ public:
 #if FIM_WANT_PIC_CCMT
 						ds = cps + ds + cas;
 #endif /* FIM_WANT_PIC_CCMT */
+						ds = expand(ns,ds);
 						if(! imgdscs_want_basename )
 						{
 							(*this)[din+fn]=ds;
@@ -453,6 +479,7 @@ public:
 						// TODO: FIXME: this branch waits to be activated.
 						// ... remove pic
 						const bool imgdscs_want_basename = true;
+						ds = expand(ns,ds);
 						if(! imgdscs_want_basename )
 						{
 							(*this)[din+fn]=ds;
