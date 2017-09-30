@@ -112,6 +112,15 @@ namespace fim
 				fit->second.shrink_to_fit();
 #endif /* FIM_USE_CXX11 */
 		}
+		void cleanup(void)
+		{
+			// erase variables whose id's begin with '_'
+			fim_var_id_set set;
+			get_id_list(set);
+			for(fim_var_id_set::iterator sit=set.begin();sit!=set.end();++sit)
+				if((*sit)[0]=='_')
+					variables_.erase(*sit);
+		}
 	};
 	std::ostream& operator<<(std::ostream& os, const Namespace & ns);
 }

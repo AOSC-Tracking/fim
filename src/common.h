@@ -96,6 +96,7 @@ fim::string fim_getcwd(void);
 fim_int fim_atoi(const char*s);
 size_t fim_maxrss(void);
 fim_bool_t fim_is_id(const char*s);
+fim_bool_t fim_is_id_char(const char c);
 
 /* exceptions */
 typedef int FimException;

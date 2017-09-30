@@ -281,9 +281,9 @@ public:
 							while ( ( bci = ds.find(ec,eci) ) != std::string::npos )
 							{
 								ss+=ds.substr(eci,bci-eci);
-								if(!isalpha(ds[eci=++bci]))
+								if(!fim_is_id_char(ds[eci=++bci]))
 									continue;
-								while(eci < ds.size() && isalpha(ds[++eci]))
+								while(eci < ds.size() && fim_is_id_char(ds[++eci]))
 									;
 								if(ns.isSetVar(ds.substr(bci,eci-bci)))
 									ss+=ns.getStringVariable(ds.substr(bci,eci-bci));
@@ -453,6 +453,9 @@ public:
 					}
 #endif /* FIM_WANT_PIC_RCMT */
 					const bool would_remove = false;
+					VNamespace cns;
+					cns=ns;
+					cns.cleanup();
 					if (!would_remove)
 					{
 #if FIM_WANT_PIC_CCMT
@@ -463,14 +466,14 @@ public:
 						{
 							(*this)[din+fn]=ds;
 #if FIM_WANT_PIC_LVDN
-							vd_[std::string(din+fn)]=ns;
+							vd_[std::string(din+fn)]=cns;
 #endif /* FIM_WANT_PIC_LVDN */
 						}
 						else
 						{
 							(*this)[din+fim_basename_of(fn)]=ds;
 #if FIM_WANT_PIC_LVDN
-							vd_[din+fim_basename_of(fn)]=ns;
+							vd_[din+fim_basename_of(fn)]=cns;
 #endif /* FIM_WANT_PIC_LVDN */
 						}
 					}
@@ -484,14 +487,14 @@ public:
 						{
 							(*this)[din+fn]=ds;
 #if FIM_WANT_PIC_LVDN
-							vd_[std::string(din+fn)]=ns;
+							vd_[std::string(din+fn)]=cns;
 #endif /* FIM_WANT_PIC_LVDN */
 						}
 						else
 						{
 							(*this)[din+fim_basename_of(fn)]=ds;
 #if FIM_WANT_PIC_LVDN
-							vd_[din+fim_basename_of(fn)]=ns;
+							vd_[din+fim_basename_of(fn)]=cns;
 #endif /* FIM_WANT_PIC_LVDN */
 						}
 					}
