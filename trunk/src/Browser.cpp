@@ -35,6 +35,8 @@
 #define FIM_PR(X) 
 #endif /* FIM_BROWSER_INSPECT */
 
+#define FIM_DIFFERENT_VARS FIM_WANT_PIC_LVDN && FIM_USE_CXX11 /* experimental */
+
 #if FIM_USE_CXX11
 #include <utility>	/* std::swap */
 #else /* FIM_USE_CXX11 */
@@ -216,7 +218,41 @@ namespace fim
 #endif /* FIM_RECURSIVE_DIRS */
 			}
 #endif /* FIM_READ_DIRS */
-			else result = FIM_CMD_HELP_LIST;
+#if FIM_DIFFERENT_VARS
+			else if(args[0]=="variables" || args[0]=="vars")
+			{
+				fim_var_id_set ids;
+				for(const auto ns : cc.id_.vd_)
+				for(const auto ip : ns.second)
+					if(ip.first[0]!='_')
+						ids.insert(ip.first); // list unique vars
+				std::map<fim_var_id,int> vp;
+				std::map<fim_var_id,std::set<std::string>> vv;
+				for(const auto id : ids)
+				{
+					for(const auto ns : cc.id_.vd_)
+					if(ns.second.isSetVar(id))
+					{
+						Var val = ns.second.getVariable(id);
+						vv[id].insert(val.getString());
+					}
+					vp[id]=vv[id].size();
+					if(vp[id]>1)
+					{
+						result += id;
+						result += ": ";
+					       	result += vp[id];
+						result += "\n";
+						for(const auto val : vv[id])
+							result += " ",
+							result += val,
+							result += "\n";
+					}
+				}
+			}
+#endif /* FIM_DIFFERENT_VARS */
+			else
+				result = FIM_CMD_HELP_LIST;
 		}
 ret:
 		FIM_PR('.');

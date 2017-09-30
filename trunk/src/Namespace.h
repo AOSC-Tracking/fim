@@ -97,6 +97,8 @@ namespace fim
 		virtual ~Namespace(void){}
 		fim_err_t find_matching_list(fim_cmd_id cmd, args_t& completions, bool prepend_ns)const;
 		std::ostream& print(std::ostream& os)const;
+		variables_t::const_iterator begin(void)const{return variables_.begin();}
+		variables_t::const_iterator end(void)const{return variables_.end();}
 		void get_id_list(fim_var_id_set& set)const
 		{
 			for(variables_t::const_iterator fit=variables_.begin();fit!=variables_.end();++fit)
