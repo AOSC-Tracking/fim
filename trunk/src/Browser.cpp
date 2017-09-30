@@ -241,7 +241,7 @@ namespace fim
 					{
 						result += id;
 						result += ": ";
-					       	result += vp[id];
+					       	result += std::to_string(vp[id]);
 						result += "\n";
 						for(const auto val : vv[id])
 							result += " ",
