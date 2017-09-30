@@ -52,6 +52,7 @@ namespace fim
 #undef FIM_SDL_DEBUG
 #define FIM_WANT_MOUSE_PAN 1
 #define FIM_WANT_SDL_CLICK_MOUSE_SUPPORT 1 && FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
+#define FIM_WANT_SDL_CLICK_MENU FIM_WANT_SDL_CLICK_MOUSE_SUPPORT && 1
 
 #ifdef FIM_SDL_DEBUG
 #define FIM_SDL_INPUT_DEBUG(C,MSG)  \
@@ -71,13 +72,25 @@ typedef int fim_sdl_int;
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 static fim_int fim_draw_help_map_; // This is static since it gets modified in a static function. This shall change.
 static fim_char_t key_char_grid[10] = "'pP+a-=nN"; // by columns left to right, up to down. note that this assignment sets NUL.
-
-	static void toggle_draw_help_map(void)
-	{
-	       	fim_draw_help_map_=(fim_draw_help_map_+1)%3;
-		if(Viewport* cv = cc.current_viewport())
-			cv->redisplay(); // will indirectly trigger draw_help_map()
-	}
+static void toggle_draw_help_map(void)
+{
+       	fim_draw_help_map_=(fim_draw_help_map_+1)%3;
+	if(Viewport* cv = cc.current_viewport())
+		cv->redisplay(); // will indirectly trigger draw_help_map()
+}
+static fim_int fim_draw_help_map_tmp_=0; // 
+static void flip_draw_help_map_tmp(bool flip)
+{
+#if FIM_WANT_SDL_CLICK_MENU
+	if(!flip)
+		if(fim_draw_help_map_tmp_==0)
+			return; // nothing to do
+	fim_draw_help_map_tmp_=1-fim_draw_help_map_tmp_;
+	if(fim_draw_help_map_tmp_)
+	if(Viewport* cv = cc.current_viewport())
+		cv->redisplay(); // will indirectly trigger draw_help_map()
+#endif /* FIM_WANT_SDL_CLICK_MENU */
+}
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 
 fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
@@ -242,7 +255,7 @@ err:
 			fill_rect(1*xt-eth, 1*xt+eth, yh-ytl, yh-1, ic, oc); // left bottom
 			fill_rect(2*xt-eth, 2*xt+eth, yh-ytl, yh-1, ic, oc); // right bottom
 		}
-		if(fim_draw_help_map_==1)
+		if(fim_draw_help_map_==1 || fim_draw_help_map_tmp_)
 		{
 			Viewport* cv = cc.current_viewport();
 			fim_coo_t xw = cv->viewport_width();
@@ -423,7 +436,7 @@ err:
 		}
 
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
-		if(fim_draw_help_map_)
+		if(fim_draw_help_map_ || fim_draw_help_map_tmp_)
 			draw_help_map();
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 		if(SDL_MUSTLOCK(screen_)) SDL_UnlockSurface(screen_);
@@ -712,6 +725,9 @@ err:
 					&&	event.key.keysym.sym!=SDLK_RALT
 					&&	event.key.keysym.sym!=SDLK_LCTRL
 					&&	event.key.keysym.sym!=SDLK_RCTRL
+					&&	event.key.keysym.sym!=SDLK_LSUPER
+					&&	event.key.keysym.sym!=SDLK_RSUPER
+					&&	event.key.keysym.sym!=SDLK_MENU	
 					)
 					{
 						/* arrows.. .. */
@@ -721,7 +737,27 @@ err:
 					}
 					else
 					{
-						FIM_SDL_INPUT_DEBUG(c,"shift");
+						if( event.key.keysym.sym==SDLK_LSHIFT )
+							FIM_SDL_INPUT_DEBUG(c,"left shift");
+						if( event.key.keysym.sym==SDLK_RSHIFT )
+							FIM_SDL_INPUT_DEBUG(c,"right shift");
+						if( event.key.keysym.sym==SDLK_MENU )
+						{
+							flip_draw_help_map_tmp(true);
+							FIM_SDL_INPUT_DEBUG(c,"menu");
+						}
+						if( event.key.keysym.sym==SDLK_LSUPER )
+							FIM_SDL_INPUT_DEBUG(c,"left win");
+						if( event.key.keysym.sym==SDLK_RSUPER )
+							FIM_SDL_INPUT_DEBUG(c,"right win");
+						if( event.key.keysym.sym==SDLK_RALT )
+							FIM_SDL_INPUT_DEBUG(c,"right alt");
+						if( event.key.keysym.sym==SDLK_LALT )
+							FIM_SDL_INPUT_DEBUG(c,"left alt");
+						if( event.key.keysym.sym==SDLK_RCTRL )
+							FIM_SDL_INPUT_DEBUG(c,"right control");
+						if( event.key.keysym.sym==SDLK_LCTRL )
+							FIM_SDL_INPUT_DEBUG(c,"left control");
 						/* we ignore lone shift or alt .. */
 						return 0;
 					}
@@ -903,8 +939,8 @@ err:
 						fim_off_t py = FIM_INT_DET_PCNT(event.motion.y-by/2,vy-by);
 						px = FIM_DELIMIT_TO_100(px);
 						py = FIM_DELIMIT_TO_100(py);
-						if(px >=   0   && py >=   0  )
-						if(px <= 100   && py <= 100  )
+						if(px >=   0   && py >=   0 
+						&& px <= 100   && py <= 100  )
 						{
 							//std::cout << "pct:"<< px << " " << py << "\n";
 							cv->pan_to(px,py);
@@ -923,6 +959,7 @@ err:
 		}
 done:
 		FIM_SDL_INPUT_DEBUG(c,"no key");
+		flip_draw_help_map_tmp(false);
 		return 0;
 	}
 
