@@ -5,6 +5,8 @@
 
 # (r1499)
  * expansion of @variables in read descriptions (TODO: document)
+# (r1501)
+ * The 'menu key' in SDL mode will show a temporary mouse click actions menu.
 # (r1490,r1491)
  * bugfix: description file reading could crash due to wrong check.
 # (r1485)
