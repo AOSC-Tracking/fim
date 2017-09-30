@@ -221,28 +221,34 @@ namespace fim
 #if FIM_DIFFERENT_VARS
 			else if(args[0]=="variables" || args[0]=="vars")
 			{
+				auto min_vals = args.size()>1 ? std::atoi(args[1]) : 2;
+				min_vals = FIM_MAX(min_vals,1);
 				fim_var_id_set ids;
 				for(const auto ns : cc.id_.vd_)
 				for(const auto ip : ns.second)
 					if(ip.first[0]!='_')
 						ids.insert(ip.first); // list unique vars
-				std::map<fim_var_id,int> vp;
-				std::map<fim_var_id,std::set<std::string>> vv;
+				std::map<fim_var_id,std::pair<int,int>> vp; // id -> (vals count, files count)
+				std::map<fim_var_id,std::set<std::string>> vv; // id -> {values}
 				for(const auto id : ids)
 				{
+					vp[id].second=0;
 					for(const auto ns : cc.id_.vd_)
 					if(ns.second.isSetVar(id))
 					{
+						vp[id].second++;
 						Var val = ns.second.getVariable(id);
 						vv[id].insert(val.getString());
 					}
-					vp[id]=vv[id].size();
-					if(vp[id]>0)
+					vp[id].first=vv[id].size();
+					if(vp[id].first>=min_vals)
 					{
 						result += id;
 						result += ": ";
-					       	result += std::to_string(vp[id]);
-						result += "\n";
+					       	result += std::to_string(vp[id].first);
+						result += " vals / ";
+					       	result += std::to_string(vp[id].second);
+						result += " files\n";
 						for(const auto val : vv[id])
 							result += " ",
 							result += val,
