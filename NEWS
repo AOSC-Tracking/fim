@@ -5,7 +5,7 @@
 
 # (r1503)
  * description variables beginning with '_' will not go into i: (TODO: document)
-# (r1502)
+# (r1502,r1504)
  * list 'vars' will list differing description variables (TODO: document).
 # (r1499)
  * expansion of @variables in read descriptions (TODO: document)
