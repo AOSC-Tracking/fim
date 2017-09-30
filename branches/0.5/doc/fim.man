@@ -302,7 +302,7 @@ You can type a number before a command binding to iterate the assigned command:
 /*.png$		 entering this pattern (with /) makes fim jump to the next image whose filename ends with 'png'
 /png		 a shortcut for /.*png.*
 
-!{syscmd}		executes the {syscmd} quoted string as a "/bin/sh" shell command
+!{syscmd}		executes the {syscmd} quoted string as an argument to the  "system" fim command.
 
 
 You can visualize all of the default bindings invoking fim \-\-dump\-default\-fimrc | grep bind .

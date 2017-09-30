@@ -12,7 +12,7 @@ AC_PREREQ([2.54])
 
 define([svnversion],esyscmd([sh -c "svnversion | tr  -c '[0-9]' ' ' | sed 's/ *//g;s/^$/-1/g' "]))dnl
 # WARNING : here 0.0 denotes the package version, which will be corrected some lines after this.
-AC_INIT([fim],[0.5-rc3],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
+AC_INIT([fim],[0.5-rc4],[dezperado_FOobAr_autistici_Baz_org, by replacing _FOobAr_ with a @ and _Baz_ with a .])
 AC_CONFIG_SRCDIR([src/fim.cpp])
 
 if test x"svnversion" != x ; then
