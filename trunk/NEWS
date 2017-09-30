@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1499)
+ * expansion of @variables in read descriptions (TODO: document)
 # (r1490,r1491)
  * bugfix: description file reading could crash due to wrong check.
 # (r1485)

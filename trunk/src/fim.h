@@ -146,6 +146,7 @@
 #define FIM_WANT_PIC_LBFL 1 /* limit browser file list (see FIM_FLT_LIMIT) */
 #define FIM_WANT_PIC_RCMT 1 /* remember last comment with special "#!fim:=" syntax */
 #define FIM_WANT_PIC_CCMT 1 && FIM_WANT_PIC_LVDN /* contextual last comment with special "#!fim:^=" and "#!fim:$=" syntax */
+#define FIM_WANT_DESC_VEXP ( FIM_WANT_PIC_LVDN && 1 ) /* description variable expansion */
 #define FIM_WANT_VAR_GOTO 1 && FIM_WANT_PIC_CCMT /* goto based on variables values */
 #define FIM_WANT_CMDLINE_KEYPRESS 1 /* commandline option to execute certain keypresses at startup time */
 #define FIM_WANT_FLIST_STAT ( HAVE_SYS_STAT_H && 1 ) /* stat() info in the file list */
