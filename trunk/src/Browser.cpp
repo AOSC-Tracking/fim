@@ -237,7 +237,7 @@ namespace fim
 						vv[id].insert(val.getString());
 					}
 					vp[id]=vv[id].size();
-					if(vp[id]>1)
+					if(vp[id]>0)
 					{
 						result += id;
 						result += ": ";

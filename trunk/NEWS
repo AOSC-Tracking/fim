@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1503)
+ * description variables beginning with '_' will not go into i: (TODO: document)
 # (r1502)
  * list 'vars' will list differing description variables (TODO: document).
 # (r1499)

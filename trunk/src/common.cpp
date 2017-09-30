@@ -1114,3 +1114,10 @@ fim_bool_t fim_is_id(const char*s)
 no:
 	return false;
 }
+
+fim_bool_t fim_is_id_char(const char c)
+{
+	// valid only within desc file ids
+	return isalpha(c) || c == '_';
+}
+
