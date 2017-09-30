@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1502)
+ * list 'vars' will list differing description variables (TODO: document).
 # (r1499)
  * expansion of @variables in read descriptions (TODO: document)
 # (r1501)
