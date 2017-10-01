@@ -281,7 +281,12 @@ public:
 							while ( ( bci = ds.find(ec,eci) ) != std::string::npos )
 							{
 								ss+=ds.substr(eci,bci-eci);
-								if(!fim_is_id_char(ds[eci=++bci]))
+								if(ds[eci=++bci]=='#')
+								{
+									eci=ds.size();
+									break;
+								}
+								if(!fim_is_id_char(ds[eci=bci]))
 									continue;
 								while(eci < ds.size() && fim_is_id_char(ds[++eci]))
 									;
