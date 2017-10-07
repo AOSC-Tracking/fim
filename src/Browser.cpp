@@ -1086,6 +1086,7 @@ ret:
 	fim::string Browser::_clear_list(void)
 	{
 		flist_.erase(flist_.begin(),flist_.end());
+		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
