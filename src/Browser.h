@@ -92,14 +92,14 @@ class flist_t FIM_FINAL : public std::vector<fim::fle_t>
 	 * cf_ is zero only when there are no files in the list.
 	 * the current file index is in current_n()
 	 */
-	fim_int cf_; // TODO: size_t
+	size_type cf_;
 	public:
 	flist_t(void):cf_(0){}
 	flist_t(const args_t& a);
 	void get_stat(void);
 	void _sort(const fim_char_t sc);
-	fim_int cf(void)const{/* counting from 0 */ return FIM_MAX(cf_,0);}
-	void set_cf(fim_int cf){cf_=cf;} /* FIXME: need check/adjust !*/
+	size_type cf(void)const{/* counting from 0 */ return FIM_MAX(cf_,0);}
+	void set_cf(size_type cf){cf_=cf;} /* FIXME: need check/adjust !*/
 	void adj_cf(void){cf_ = ( size() <= 0 ) ? 0 : FIM_MIN(((size_t)cf_),size()-1); /* FIXME: use a smarter method here */ }
 	const fim::string pop(const fim::string& filename);
 	void _unique()
