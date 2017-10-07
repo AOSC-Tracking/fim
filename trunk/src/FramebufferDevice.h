@@ -44,6 +44,7 @@
 #if HAVE_LINUX_FB_H
 #include <linux/fb.h>	// fb_fix_screeninfo
 #endif /* HAVE_LINUX_FB_H */
+#include <cstddef>	// ptrdiff_t
 
 /* from fbtools.h */
 #define FB_ACTIVE    0

@@ -2355,7 +2355,6 @@ ret:
 			fit->stat_ = fim_get_stat(*fit,FIM_NULL);
 	}
 
-#if 0
 	flist_t::flist_t(const args_t& a):cf_(0)
        	{
 		/* FIXME: unused for now */
@@ -2373,7 +2372,6 @@ ret:
 		this->reserve(this->size());
 #endif /* FIM_USE_CXX11 */
 	}
-#endif
 
 	const fim::string flist_t::pop(const fim::string& filename)
 	{
@@ -2384,11 +2382,11 @@ ret:
 #if FIM_USE_CXX11
 			this->erase(std::remove_if(this->begin(),this->end(),[&](const fim::fle_t&fl)->bool{return fim::string(fl)==filename;}),this->end());
 #else
-#if 1
+#if 0
 			struct flecmp {
 				const fim::string&en;
 				flecmp(const fim::string &fn):en(fn){} 
-				bool operator()(const fim_fn_t&r){return fim::string(r) == en;} 
+				bool operator()(const fim_fn_t&r)const{return fim::string(r) == en;} 
 			};
 			flecmp fci(filename);
 			this->erase(std::remove_if(this->begin(),this->end(),fci),this->end());
