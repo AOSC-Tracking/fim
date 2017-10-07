@@ -114,6 +114,7 @@ namespace fim
 			if(args[0]=="filesnum")
 			{
 				result = n_files();
+				goto ret;
 			}
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 			else if(args[0]=="mark" || args[0]=="unmark")
