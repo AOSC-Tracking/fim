@@ -34,6 +34,7 @@
 #ifdef HAVE_ENDIAN_H
 # include <endian.h>
 #endif /* HAVE_ENDIAN_H */
+#include <algorithm> // fill_n
 
 //#include "loader.h"
 
@@ -225,7 +226,7 @@ bmp_read(fim_byte_t *dst, unsigned int line, void *data)
 	}
 	break;
     default:
-	fim_memset(dst,128,h->hdr.width*3);
+	std::fill_n(dst,h->hdr.width*3,128);
 	break;
     }
 }

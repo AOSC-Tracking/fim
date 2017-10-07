@@ -1338,7 +1338,7 @@ fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, fim_by
 	    ptr2[x] = 0x0;
 	}
 #else /* FIM_IS_SLOWER_THAN_FBI */
-	fim_memset(ptr,clear_byte,2*owidth);
+	std::fill_n(ptr,2*owidth,clear_byte);
 #endif /* FIM_IS_SLOWER_THAN_FBI */
 	ptr2 += owidth;
 	return (fim_byte_t*)ptr2;
@@ -1350,7 +1350,7 @@ fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, fim_by
 	    ptr[3*x+0] = 0x0;
 	}
 #else /* FIM_IS_SLOWER_THAN_FBI */
-	fim_memset(ptr,clear_byte,3*owidth);
+	std::fill_n(ptr,3*owidth,clear_byte);
 #endif /* FIM_IS_SLOWER_THAN_FBI */
 	ptr += owidth * 3;
 	return ptr;
@@ -1360,7 +1360,7 @@ fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, fim_by
 	    ptr4[x] = 0x0;
 	}
 #else /* FIM_IS_SLOWER_THAN_FBI */
-	fim_memset(ptr,clear_byte,4*owidth);
+	std::fill_n(ptr,4*owidth,clear_byte);
 #endif /* FIM_IS_SLOWER_THAN_FBI */
 	ptr4 += owidth;
 	return (fim_byte_t*)ptr4;
