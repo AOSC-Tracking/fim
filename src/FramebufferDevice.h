@@ -252,7 +252,7 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 
 
 	void fb_setvt(int vtno);
-	int fb_setmode(fim_char_t *name);
+	int fb_setmode(fim_char_t const * const name);
 	int fb_activate_current(int tty_);
 
 	void console_switch(fim_bool_t is_busy);
@@ -263,8 +263,6 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	public:
 	int status_line(const fim_char_t *msg) FIM_OVERRIDE ;
 	private:
-
-	//void fb_edit_line(fim_char_t *str, int pos);
 
 	void fb_text_box(int x, int y, fim_char_t *lines[], unsigned int count);
 
