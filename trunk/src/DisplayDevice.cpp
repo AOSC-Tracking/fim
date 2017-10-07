@@ -136,7 +136,6 @@ ret:		return c; /* read key */
 
 void DisplayDevice::clear_screen_locking(void)
 {
-	//fb_memset(fb_mem ,0,fb_fix.line_length * (fb_var.yres/2)*(fs_bpp));
 	this->lock();
 	fim_int ls=cc.getIntVariable(FIM_VID_CONSOLE_ROWS);
 	fim_coo_t fh=f_?f_->sheight():1;

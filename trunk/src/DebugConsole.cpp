@@ -127,8 +127,8 @@ namespace fim
 			// extra empty lines (originally for aa)
 	    		for(int i=0  ;i<scroll_ ;++i)
 			{
-				int t = maxcols;
-				fim_memset(buf,' ',t);
+				const int t = maxcols;
+				std::fill_n(buf,t,' ');
 				buf[t-1]='\0';
 				displaydevice_->fs_puts(displaydevice_->f_, 0, fh*((l-f+1)+i), buf);
 			}
