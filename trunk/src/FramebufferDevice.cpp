@@ -825,7 +825,7 @@ void FramebufferDevice::fb_setvt(int vtno)
     }
 }
 
-int FramebufferDevice::fb_setmode(fim_char_t *name)
+int FramebufferDevice::fb_setmode(fim_char_t const * const name)
 {
     FILE *fp;
     fim_char_t line[FIM_FBI_FB_MODES_LINE_BUFSIZE],
@@ -839,7 +839,6 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
 	exit(1);
     }
     
-
 #if 0
 #ifdef FIM_WANTS_DOUBLE_BUFFERING
             /* FIXME : the page flipping mechanisms missing (unfinished)
@@ -864,11 +863,11 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
 
     if (FIM_NULL == name)
     {
-	goto err;
+	goto nerr;
     }
     if (FIM_NULL == (fp = fopen("/etc/fb.modes","r")))
     {
-	goto err;
+	goto nerr;
     }
     while (FIM_NULL != fgets(line,FIM_FBI_FB_MODES_LINE_BUFSIZE-1,fp)) {
 	if (1 == sscanf(line, "mode \"%31[^\"]\"",label) &&
@@ -946,6 +945,7 @@ int FramebufferDevice::fb_setmode(fim_char_t *name)
     }
 err:
     return -1;
+nerr: // not really an error
 ret:
     return 0;
 }
@@ -1003,26 +1003,6 @@ ret:
 rerr:
     return FIM_ERR_GENERIC;
 }
-
-#if 0
-/* 20110909 FIXME: unused */
-void FramebufferDevice::fb_edit_line(fim_byte_t *str, int pos)
-{
-    int x,y;
-    
-    if (!visible_)
-	return;
-
-    y = fb_var_.yres - f_->height - ys_;
-    x = pos * f_->width;
-    fb_memset(fb_mem_ + fb_fix_.line_length * y, 0,
-	      fb_fix_.line_length * (f_->height+ys_));
-    fb_line(0, fb_var_.xres, y, y);
-    fs_puts(f_, 0, y+ys_, (const fim_char_t*)str);
-    fb_line(x, x + f_->width, fb_var_.yres-1, fb_var_.yres-1);
-    fb_line(x, x + f_->width, fb_var_.yres-2, fb_var_.yres-2);
-}
-#endif
 
 void FramebufferDevice::fb_text_box(int x, int y, fim_char_t *lines[], unsigned int count)
 {
@@ -1254,18 +1234,8 @@ fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_
 		}*/
 #endif
 		//owidth/=3;
-	}else
-/*this is still slow ... FIXME*/
-#if 0
-	for (x = 0; x < owidth; x++) {
-	    x*=3;
-            xm=3*owidth-x-3;
-	    ptr[xm+2] = buffer[x+0];
-	    ptr[xm+1] = buffer[x+1];
-	    ptr[xm+0] = buffer[x+2];
-	    x/=3;
 	}
-#else
+	else
 	for (x = 0; x < owidth; x++) {
 	    x*=3;
             xm=3*owidth-x-3;
@@ -1274,7 +1244,6 @@ fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_
 	    ptr[xm+0] = buffer[x+0];
 	    x/=3;
 	}
-#endif
 #endif
 	ptr += owidth * 3;
 	return ptr;
@@ -1886,7 +1855,7 @@ fim_err_t FramebufferDevice::display(
 	fim_coo_t xoff,
 	fim_coo_t irows,fim_coo_t icols,// rows and columns in the input image
 	fim_coo_t icskip,	// input columns to skip for each line
-	fim_coo_t by,//FIXME : this four arguments should be unsigned !
+	fim_coo_t by,
 	fim_coo_t bx,
 	fim_coo_t bh,
 	fim_coo_t bw,
