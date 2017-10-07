@@ -541,9 +541,9 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
     /*
      * This member function will probe for a valid framebuffer device.
      *
-     * The try_boz_patch will make fim go straight ahead ignoring lots of errors.
+     * The try_boz_patch will make framebuffer fim go straight ahead ignoring lots of errors.
      * Like the ones when running fim under screen.
-     * Like the ones when running fim under X. :)
+     * Like the ones when running fim under X.
      * */
     fim_char_t fbdev_[FIM_FBDEV_FILE_MAX_CHARS];
     struct vt_stat vts;
@@ -560,10 +560,9 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
 	FIM_FPRINTF(stderr, "ioctl VT_GETSTATE: %s (not a linux console?)\n",
 		strerror(errno));
 	return -1;
-//	exit(1);
     }
     
-    /* no device supplied ? we will probe for one */
+    /* no device supplied ? we probe for one */
     if (FIM_NULL == device) {
 	device = fim_getenv(FIM_ENV_FRAMEBUFFER);
 	/* no environment - supplied device ? */
@@ -643,7 +642,7 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
 #if 0
 	/* 
 	 * FIXME:
-	 * mm's strict mode ckecking (right now, this function triggers an exit() but things should change) */
+	 * mm's strict mode checking (right now, this function triggers an exit() but things should change) */
 #ifdef FIM_BOZ_PATCH
     	if(!try_boz_patch)
 #endif /* FIM_BOZ_PATCH */
@@ -747,13 +746,13 @@ void FramebufferDevice::fb_memset (void *addr, int c, size_t len)
     
     i = (c & 0xff) << 8;
     i |= i << 16;
-    len >>= 2;	/* FIXME : WHY ? */
 #ifdef FIM_IS_SLOWER_THAN_FBI
+    len >>= 2;
     unsigned int *p;
     for (p = (unsigned int*) addr; len--; p++)
 	*p = i;
 #else /* FIM_IS_SLOWER_THAN_FBI */
-    fim_memset(addr, i, len );
+    fim_memset(addr, c, len );
 #endif /* FIM_IS_SLOWER_THAN_FBI */
 #else
     fim_memset(addr, c, len);
@@ -1117,7 +1116,7 @@ void FramebufferDevice::fb_clear_rect(int x1, int x2, int y1,int y2)
     ptr += x1 * fs_bpp_;
 
     for (y = y1; y <= y2; y++) {
-	fb_memset(ptr, 0, (x2 - x1 + 1) * fs_bpp_ * 4 /* FIXME : 4 */);
+	fb_memset(ptr, 0, (x2 - x1 + 1) * fs_bpp_);
 	ptr += fb_fix_.line_length;
     }
 ret:
