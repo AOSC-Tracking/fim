@@ -2392,6 +2392,83 @@ ret:
 		return s;
 	}
 
+	void flist_t::_unique()
+	{
+		// this only makes sense if the list is sorted.
+		this->erase(std::unique(this->begin(), this->end()), this->end());
+		adj_cf();
+	}
+
+	void flist_t::_set_union(const flist_t & clist)
+	{
+					flist_t mlist;
+					this->_sort(FIM_SYM_SORT_FN);
+					mlist.reserve(this->size()+clist.size());
+					std::set_union(clist.begin(),clist.end(),this->begin(),this->end(),std::back_inserter(mlist));
+#if FIM_USE_CXX11
+					mlist.shrink_to_fit();
+#endif /* FIM_USE_CXX11 */
+					this->assign(mlist.begin(),mlist.end());
+	}
+
+	void flist_t::_set_difference_from(const flist_t & clist)
+	{
+					flist_t mlist;
+					this->_sort(FIM_SYM_SORT_FN);
+					mlist.reserve(this->size()+clist.size());
+					std::set_difference(clist.begin(),clist.end(),this->begin(),this->end(),std::back_inserter(mlist));
+#if FIM_USE_CXX11
+					mlist.shrink_to_fit();
+#endif /* FIM_USE_CXX11 */
+					this->assign(mlist.begin(),mlist.end());
+	}
+
+void flist_t::erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative)
+{
+	size_t ecount = 0;
+#if FIM_USE_CXX11
+	auto bit=this->begin();
+	auto eit=this->end();
+	for(auto fit=bit;fit!=eit;++fit)
+		if(bs.at(fit-bit) != negative)
+			this->erase(fit-ecount),ecount++;
+#else /* FIM_USE_CXX11 */
+	size_t tsize = size();
+	for(size_t pos=0;pos<tsize;++pos)
+		if(bs.at(pos) != negative)
+			this->erase(this->begin()+pos-ecount),ecount++;
+#endif /* FIM_USE_CXX11 */
+	adj_cf();
+}
+	fim_bool_t flist_t::pop_current(void)
+	{
+		if( this->size() <= 0 )
+			return false;
+		assert(cf()); // FIXME
+		this->erase( this->begin() + cf() );
+		return true;
+	}
+
+flist_t flist_t::copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive) const
+{
+	flist_t nlist;
+#if FIM_USE_CXX11
+	const auto bit=this->cbegin();
+	const auto eit=this->cend();
+	for(auto fit=bit;fit!=eit;++fit)
+		if(bs.at(fit-bit) != positive )
+			nlist.emplace_back(*fit);// this might spare constructor
+			//nlist.push_back(*fit);
+#else /* FIM_USE_CXX11 */
+	size_t tsize = size();
+	for(size_t pos=0;pos<tsize;++pos)
+		if(bs.at(pos) != positive )
+			nlist.push_back(*(this->begin()+pos));
+#endif /* FIM_USE_CXX11 */
+	//adj_cf();
+	return nlist;
+}
+
 	//std::string fle_t::operator(){return fn;}
 	fle_t::fle_t(void) { }
 	fle_t::fle_t(const fim_fn_t& s):fim_fn_t(s){fim_bzero(&stat_,sizeof(stat_));}
