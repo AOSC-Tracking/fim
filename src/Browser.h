@@ -91,9 +91,7 @@ class flist_t FIM_FINAL : public std::vector<fim::fle_t>
 	size_type cf_;
 	public:
 	flist_t(void):cf_(0){}
-#if 0
 	flist_t(const args_t& a);
-#endif
 	void _sort(const fim_char_t sc);
 	void _unique();
 	size_type cf(void)const{return FIM_MAX(cf_,0);}
