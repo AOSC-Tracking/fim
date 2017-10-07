@@ -1085,7 +1085,7 @@ ret:
 	fim::string Browser::_clear_list(void)
 	{
 		flist_.erase(flist_.begin(),flist_.end());
-		return 0;
+		return FIM_CNS_EMPTY_RESULT;
 	}
 
 	fim::string Browser::_reverse(void)
@@ -2377,7 +2377,7 @@ ret:
 		if( filename == FIM_CNS_EMPTY_STRING )
 		{
 			this->erase( this->begin() + cf_ );
-			if( cf_ >= (int)this->size() && cf_ > 0 )
+			if( cf_ >= this->size() && cf_ > 0 )
 				cf_--;
 			s = (*this)[this->size()-1];
 		}
