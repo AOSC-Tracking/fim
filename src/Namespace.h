@@ -118,7 +118,7 @@ namespace fim
 			fim_var_id_set set;
 			get_id_list(set);
 			for(fim_var_id_set::iterator sit=set.begin();sit!=set.end();++sit)
-				if((*sit)[0]=='_')
+				if((*sit).c_str()[0]=='_')
 					variables_.erase(*sit);
 		}
 	};

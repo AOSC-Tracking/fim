@@ -226,7 +226,7 @@ namespace fim
 				fim_var_id_set ids;
 				for(const auto ns : cc.id_.vd_)
 				for(const auto ip : ns.second)
-					if(ip.first[0]!='_')
+					if(ip.first.c_str()[0]!='_')
 						ids.insert(ip.first); // list unique vars
 				std::map<fim_var_id,std::pair<int,int>> vp; // id -> (vals count, files count)
 				std::map<fim_var_id,std::set<std::string>> vv; // id -> {values}
