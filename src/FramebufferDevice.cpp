@@ -61,8 +61,8 @@ static void foo(){} /* let's make our compiler happy */
 
 /*#include <asm/page.h>*/ /* seems like this gives problems */
 #if 0
-#include <signal.h>	  /* added by dez. missing when compiling with -ansi */
-#include <asm/signal.h>	  /* added by dez. missing when compiling with -ansi */
+#include <signal.h>	  /* added in fim. missing when compiling with -ansi */
+#include <asm/signal.h>	  /* added in fim. missing when compiling with -ansi */
 #endif
 
 
@@ -225,8 +225,7 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 	if (x > fb_var_.xres - f_->swidth())
 	    return FIM_ERR_GENERIC;
     }
-    //return x;//FIXME
-	return FIM_ERR_NO_ERROR;
+    return FIM_ERR_NO_ERROR;
 }
 
 void FramebufferDevice::fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data)
@@ -690,7 +689,7 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
     }
 #endif
 #ifdef PAGE_MASK
-    fb_mem_offset_ = (unsigned int)(fb_fix_.smem_start) & (~PAGE_MASK);
+    fb_mem_offset_ = (fb_fix_.smem_start) & (~PAGE_MASK);
 #else /* PAGE_MASK */
     /* some systems don't have this symbol outside their kernel headers - will do any harm ? */
     /* FIXME : what are the wider implications of this ? */
@@ -701,7 +700,7 @@ int FramebufferDevice::fb_init(const fim_char_t *device, fim_char_t *mode, int v
 #ifdef MAP_FAILED
     if (fb_mem_ == MAP_FAILED) 
 #else
-    if (-1L == (long)fb_mem_)  /* TODO: remove this */
+    if (-1L == static_cast<long>fb_mem_)
 #endif
     {
 	fim_perror("mmap failed");
@@ -1117,7 +1116,7 @@ void FramebufferDevice::cleanup(void)
     //close(tty_);
 }
 
-fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT/*dez's mirror patch*/
+fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT/*fim mirror patch*/
 {
     fim_byte_t  *ptr  = (fim_byte_t *)dst;
 	dither_line(buffer, ptr, line, owidth, mirror);
@@ -1125,13 +1124,13 @@ fim_byte_t * FramebufferDevice::convert_line_8(int bpp, int line, int owidth, fi
 	return ptr;
 }
 
-fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT/*dez's mirror patch*/
+fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT/*fim mirror patch*/
 {
     fim_byte_t  *ptr  = (fim_byte_t *)dst;
     unsigned short *ptr2 = (unsigned short*)dst;
     unsigned int  *ptr4 = (unsigned int *)dst;
     int x;
-    int xm;/*mirror patch*/
+    int xm;/*fim mirror patch*/
 
     switch (fb_var_.bits_per_pixel) {
     case 8:
@@ -1248,12 +1247,6 @@ fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_
 	return FIM_NULL;
     }
 }
-
-/*dez's*/
-/*fim_byte_t * FramebufferDevice::clear_lines(int bpp, int lines, int owidth, fim_byte_t *dst)
-{
-
-}*/
 
 fim_byte_t * FramebufferDevice::clear_line(int bpp, int line, int owidth, fim_byte_t *dst) FIM_NOEXCEPT 
 {
@@ -1408,10 +1401,10 @@ void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int
     long           *ymod, xmod;
 
     ymod = (long int*) DM[y & DITHER_MASK];
-    /*	mirror patch by dez	*/
+    /*	fim mirror patch */
     register const int inc=mirror?-1:1;
     dst=mirror?dst+width-1:dst;
-    /*	mirror patch by dez	*/
+    /*	fim mirror patch */
     if(FIM_UNLIKELY(width<1))
 	    goto nodither; //who knows
 
@@ -1443,7 +1436,7 @@ void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int
 	a = red_dither_[*(src++)]; \
 	a >>= (ymod[xmod] < a)?8:0; \
 	*(dst) = b+a & 0xff; \
-    /*	mirror patch by dez	*/ \
+    /*	fim mirror patch */
 	dst+=inc;
 
 #else
@@ -1467,7 +1460,7 @@ void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int
 	    a >>= 8; \
 	b += a; \
 	*(dst) = b & 0xff; \
-    /*	mirror patch by dez	*/ \
+    /*	fim mirror patch 	*/ \
 	dst+=inc; \
 	} \
 	/*	*(dst++) = b & 0xff;*/ 
@@ -1616,7 +1609,7 @@ int FramebufferDevice::fs_init_fb(int white8)
 }
 
 /*
- *	This function treats the framebuffer screen as a text outout terminal.
+ *	This function treats the framebuffer screen as a text output terminal.
  *	So it prints all the contents of its buffer on screen..
  *	if noDraw is set, the screen will be not refreshed.
 	 *	FIM_NULL,FIM_NULL is the clearing combination !!

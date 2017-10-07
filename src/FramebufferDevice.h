@@ -195,10 +195,8 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	struct fb_cmap            ocmap_;
 	unsigned short            ored_[256], ogreen_[256], oblue_[256];
 
-
 	struct DEVS devs_default_;
 	struct DEVS devs_devfs_;
-
 #ifdef FIM_BOZ_PATCH
 	int with_boz_patch_;
 #endif /* FIM_BOZ_PATCH */
@@ -216,7 +214,7 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	struct fb_fix_screeninfo   fb_fix_;
 	struct fb_var_screeninfo   fb_var_;
 	fim_byte_t             *fb_mem_;
-	int			   fb_mem_offset_;
+	ptrdiff_t                  fb_mem_offset_;
 	int                        fb_switch_state_;
 
 /* -------------------------------------------------------------------- */
@@ -234,7 +232,6 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	struct termios            term_;
 	struct fb_var_screeninfo  fb_ovar_;
 
-
 	public:
 	fim_err_t framebuffer_init(void);
 
@@ -248,8 +245,6 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	//public:
 	void fb_memset (void *addr, int c, size_t len);
 	void fb_setcolor(int c) { fb_memset(fb_mem_+fb_mem_offset_,c,fb_fix_.smem_len); }
-
-
 
 	void fb_setvt(int vtno);
 	int fb_setmode(fim_char_t const * const name);
@@ -305,15 +300,12 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 #define ARRAY_SIZE(x)   (sizeof(x)/sizeof(x[0]))
 
 /*
- * framebuffer memory offset for x pixels left and y right from the screen
- * (by dez)
+ * framebuffer memory offset for x pixels left and y right from the screen (fim)
  */
 #define FB_BPP  (((fb_var_.bits_per_pixel+7)/8))
 #define FB_MEM_LINE_LENGTH  ((fb_fix_.line_length))
 #define FB_MEM_OFFSET(x,y)  (( FB_BPP*(x) + FB_MEM_LINE_LENGTH * (y) ))
 #define FB_MEM(x,y) ((fb_mem_+FB_MEM_OFFSET((x),(y))))
-
-
 
 //void svga_display_image_new(const struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
 //void svga_display_image_new(const struct ida_image *img, int xoff, int yoff,unsigned int bx,unsigned int bw,unsigned int by,unsigned int bh,int mirror,int flip);
@@ -332,7 +324,6 @@ fim_err_t display(
 	fim_coo_t ocskip,// output columns to skip for each line
 	fim_flags_t flags);
 
-
 void svga_display_image_new(
 	const struct ida_image *img,
 	int yoff,
@@ -348,35 +339,21 @@ void svga_display_image_new(
 
 	private:
 /* ---------------------------------------------------------------------- */
-/* by dez
- */
 inline fim_byte_t * clear_line(int bpp, int line, int owidth, fim_byte_t *dst) FIM_NOEXCEPT;
-fim_byte_t * convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT;/*dez's mirror patch*/
-fim_byte_t * convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT;/*dez's mirror patch*/
-
-
-
-
+fim_byte_t * convert_line(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT;/*fim mirror patch*/
+fim_byte_t * convert_line_8(int bpp, int line, int owidth, fim_byte_t *dst, fim_byte_t *buffer, int mirror) FIM_NOEXCEPT;/*fim mirror patch*/
 
 void init_dither(int shades_r, int shades_g, int shades_b, int shades_gray);
 inline void dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int mirror) FIM_NOEXCEPT;
-
 void dither_line_gray(fim_byte_t *src, fim_byte_t *dst, int y, int width);
-
-
 void fb_switch_release(void);
-
 void fb_switch_acquire(void);
-
 int fb_switch_init(void);
 	public:
 void fb_switch_signal(int signal);
 	private:
-
 int fb_text_init2(void);
 
-
-/*static void*/
 void svga_dither_palette(int r, int g, int b)
 {
     int             rs, gs, bs, i;
@@ -445,6 +422,7 @@ void lut_init(int depth)
 	}
     }
 }
+
 void init_one(int32_t *lut, int bits, int shift)
 {
     int i;
@@ -493,8 +471,6 @@ void init_one(int32_t *lut, int bits, int shift)
 	virtual ~FramebufferDevice(void);
 	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 };
-
 }
-
 #endif /* FIM_WITH_NO_FRAMEBUFFER */
 #endif /* FIM_FRAMEBUFFER_DEVICE_H */
