@@ -463,7 +463,6 @@ void init_one(int32_t *lut, int bits, int shift)
 		return true;
         }
 
-	//void status_screen(const fim_char_t *msg, int draw);
 	private:
 	void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, fim_byte_t *data);
 	public:
