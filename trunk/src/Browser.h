@@ -88,27 +88,25 @@ std::ostream& operator << (std::ostream& os, const fim_bitset_t& bs)
 class flist_t FIM_FINAL : public std::vector<fim::fle_t>
 {
 	private:
-	/*
-	 * cf_ is zero only when there are no files in the list.
-	 * the current file index is in current_n()
-	 */
 	size_type cf_;
 	public:
 	flist_t(void):cf_(0){}
+#if 0
 	flist_t(const args_t& a);
+#endif
 	void _sort(const fim_char_t sc);
 	void _unique();
-	size_type cf(void)const{/* counting from 0 */ return FIM_MAX(cf_,0);}
+	size_type cf(void)const{return FIM_MAX(cf_,0);}
 	fim_bool_t pop_current(void);
 	void erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative = false);
 	flist_t copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive = true) const;
 	void _set_difference_from(const flist_t & clist);
 	void _set_union(const flist_t & clist);
 	void get_stat(void);
-	void set_cf(size_type cf){cf_=cf;} /* FIXME: need check/adjust !*/
+	void set_cf(size_type cf){cf_=FIM_MOD(cf,size());}
 	const fim::string pop(const fim::string& filename);
 	private:
-	void adj_cf(void){cf_ = ( size() <= 0 ) ? 0 : FIM_MIN(cf_,size()-1); /* FIXME: use a smarter method here */ }
+	void adj_cf(void){cf_ = size() ? size()-1:0; }
 };
 
 class Browser FIM_FINAL 

@@ -195,6 +195,8 @@ namespace fim
 				result = this->n_files();
 			else if(args[0]=="remove")
 				result = do_filter(args_t(args.begin()+1,args.end())/*,FullFileNameMatch,false,Delete*/);
+				//result = flist_.pop(args.begin()[1]), // example for alternative
+				//result = this->n_files();
 			else if(args[0]=="push")
 				result = do_push(args_t(args.begin()+1,args.end()));
 #ifdef FIM_READ_DIRS
@@ -1218,7 +1220,7 @@ nop:
 #if FIM_WANT_GOTOLAST
 		if(getGlobalIntVariable(FIM_VID_LASTFILEINDEX) != current_image())
 			setGlobalVariable(FIM_VID_LASTFILEINDEX, current_image());
-		flist_.set_cf(FIM_MOD(n,N));
+		flist_.set_cf(n);
 #if FIM_WANT_LASTGOTODIRECTION
 		if( ( n_files() + current_image() - getGlobalIntVariable(FIM_VID_LASTFILEINDEX) ) % n_files() > n_files() / 2 )
 			setGlobalVariable(FIM_VID_LASTGOTODIRECTION,"-1");
@@ -2353,6 +2355,7 @@ ret:
 			fit->stat_ = fim_get_stat(*fit,FIM_NULL);
 	}
 
+#if 0
 	flist_t::flist_t(const args_t& a):cf_(0)
        	{
 		/* FIXME: unused for now */
@@ -2370,26 +2373,41 @@ ret:
 		this->reserve(this->size());
 #endif /* FIM_USE_CXX11 */
 	}
+#endif
 
 	const fim::string flist_t::pop(const fim::string& filename)
 	{
 		fim::string s;
 
-		assert(this->cf());
-		if( filename == FIM_CNS_EMPTY_STRING )
+		if( filename != FIM_CNS_EMPTY_STRING )
 		{
-			this->erase( this->begin() + cf_ );
-			if( cf_ >= this->size() && cf_ > 0 )
-				cf_--;
-			s = (*this)[this->size()-1];
-		}
-		else
-		{
-			// FIXME: shall use a search member function/function
+#if FIM_USE_CXX11
+			this->erase(std::remove_if(this->begin(),this->end(),[&](const fim::fle_t&fl)->bool{return fim::string(fl)==filename;}),this->end());
+#else
+#if 1
+			struct flecmp {
+				const fim::string&en;
+				flecmp(const fim::string &fn):en(fn){} 
+				bool operator()(const fim_fn_t&r){return fim::string(r) == en;} 
+			};
+			flecmp fci(filename);
+			this->erase(std::remove_if(this->begin(),this->end(),fci),this->end());
+#else
 			for( size_t i=0; i < this->size(); ++i )
 				if( fim::string((*this)[i]) == filename )
 					this->erase(this->begin()+i);
+#endif
+#endif
                         adj_cf();
+		}
+		else
+		if( size() )
+		{
+			assert(cf_>=0);
+			s = (*this)[cf_];
+			this->erase( this->begin() + cf_ );
+			if(cf_)
+			       	cf_--;
 		}
 		return s;
 	}
@@ -2467,7 +2485,6 @@ flist_t flist_t::copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive) c
 		if(bs.at(pos) != positive )
 			nlist.push_back(*(this->begin()+pos));
 #endif /* FIM_USE_CXX11 */
-	//adj_cf();
 	return nlist;
 }
 
