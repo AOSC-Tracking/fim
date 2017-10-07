@@ -839,28 +839,7 @@ int FramebufferDevice::fb_setmode(fim_char_t const * const name)
 	exit(1);
     }
     
-#if 0
-#ifdef FIM_WANTS_DOUBLE_BUFFERING
-            /* FIXME : the page flipping mechanisms missing (unfinished)
-             * please note that in addition to this code, we should also
-             * specify timing parameters.
-             * The following is experimental code only.
-             * Note that on the developement machine neither fbset does work!
-	     */
-            fb_var_.xres_virtual = fb_var_.xres ;
-            fb_var_.yres_virtual = fb_var_.yres ;
-            fb_var_.yres_virtual = fb_var_.yres * 2;
-	    //printf("%d %d %d %d\n", fb_var_.xres_virtual,fb_var_.xres, fb_var_.yres_virtual,fb_var_.yres);
-	    fb_var_.activate = FB_ACTIVATE_NOW;
-            fb_var_.accel_flags = 0;
-            /* ... */
-	    if (-1 == ioctl(fb_,FBIOPUT_VSCREENINFO,&fb_var_))
-		fim_perror("ioctl FBIOPUT_VSCREENINFO"),printf("!failed\n");
-	    printf("%d %d %d %d\n", fb_var_.xres_virtual,fb_var_.xres, fb_var_.yres_virtual,fb_var_.yres);
-#endif
-#endif
-    /* name="640x480-72"; */
-
+    /* example name="640x480-72"; */
     if (FIM_NULL == name)
     {
 	goto nerr;
@@ -915,14 +894,6 @@ int FramebufferDevice::fb_setmode(fim_char_t const * const name)
 	    /* set */
 	    fb_var_.xoffset = 0;
 	    fb_var_.yoffset = 0;
-
-#if 0
-#ifdef FIM_WANTS_DOUBLE_BUFFERING
-            // FIXME : the page flipping mechanisms missing (unfinished)
-            fb_var_.xres_virtual = fb_var_.xres;
-            fb_var_.yres_virtual = fb_var_.yres * 2;
-#endif
-#endif
 
 	    if (-1 == ioctl(fb_,FBIOPUT_VSCREENINFO,&fb_var_))
 		fim_perror("ioctl FBIOPUT_VSCREENINFO");
