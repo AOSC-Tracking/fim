@@ -1128,15 +1128,17 @@ if test x$fim_handle_sdl != xno; then
 			fim_handle_sdl='no'
 		fi
         else
-dnl		if test x$fim_cv_want_static == x1 ; then 
-			LIBSDL_CONFIG_FLAGS=--static-libs
-dnl		else
-dnl			LIBSDL_CONFIG_FLAGS=--libs
-dnl		fi
 		AC_MSG_NOTICE([Activating LIBSDL.])
 		fim_handle_sdl='yes'
                 LIBSDL_CXXFLAGS=`$LIBSDL_CONFIG --cflags`
                 CXXFLAGS="$CXXFLAGS $LIBSDL_CXXFLAGS"
+		LIBSDL_CONFIG_FLAGS=--static-libs
+		if $LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS ; then 
+			LIBSDL_CONFIG_FLAGS=--static-libs
+		else
+			LIBSDL_CONFIG_FLAGS=--libs
+		fi
+		AC_MSG_NOTICE([Invoking $LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS.])
                 LIBS="$LIBS `$LIBSDL_CONFIG $LIBSDL_CONFIG_FLAGS`"
 		# finish this !
                 #FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS SDLDevice.o"
