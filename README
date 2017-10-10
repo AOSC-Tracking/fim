@@ -201,7 +201,7 @@ Other nice command line picture viewers:  pv (http://www.trashmail.net/pv/),
  make aatest
  
  # run a pool of test scripts, which should validate most fim functionalities
- # for common usage.
+ # for common usage (requires png and gif support).
  make tests
 
  # if you are a fim developer/hacker, test thoroughly all configure options 
