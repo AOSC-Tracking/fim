@@ -2180,7 +2180,7 @@ probe_loader:
 #ifdef FIM_TRY_CONVERT
     if (FIM_NULL == loader) {
         if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_CONVERT " ..\n");
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" through '" FIM_EPR_CONVERT "'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_CONVERT "'...", "*");
 	/* no loader found, try to use ImageMagick's convert */
 	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",FIM_NULL)))
 		goto shall_skip_header;
