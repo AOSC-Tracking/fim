@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1523)
+ * Added an --no-pipe-load / -X switch to _no_external_loader_programs=1;
 # (r1503)
  * description variables beginning with '_' will not go into i: (TODO: document)
 # (r1502,r1504)

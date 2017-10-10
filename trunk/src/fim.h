@@ -406,6 +406,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_OSW_SORT_MTIME		"sort-mtime"
 #define FIM_OSW_BGREC			"background-recursive"
 #define FIM_OSW_RECURSIVE		"recursive"
+#define FIM_OSW_NOEXTPIPLOA		"no-pipe-load"
 #define FIM_OSW_NO_STAT_PUSH		"no-stat-push"
 
 /*
@@ -1061,6 +1062,7 @@ namespace fim
 #define FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING  FIM_WANT_MIPMAPS && 1
 #define FIM_WANT_R_SWITCH  1 /* --resolution width:height switch (the fim way, differently from fbi's) */
 #define FIM_WANT_RECURSE_FILTER_OPTION 1 /* Enable -R=... */
+#define FIM_WANT_NOEXTPROPIPE 1 /* */
 /* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
 #define FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING defined(FIM_FRAMEBUFFER_DEVICE_H) && defined(FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING) /* only needed in Linux framebuffer device on computers loading files so slowly that we might want to switch console in between */
 #define FIM_STREAM_BUFSIZE	16*4096

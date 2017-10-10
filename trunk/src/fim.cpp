@@ -332,6 +332,12 @@ struct fim_options_t fim_options[] = {
 	    FIM_NULL
     },
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
+#if FIM_WANT_NOEXTPROPIPE
+    {FIM_OSW_NOEXTPIPLOA, no_argument, FIM_NULL, 'X',"Do not load via external converter programs. "
+	    , FIM_NULL,
+	    FIM_NULL
+    },
+#endif /* FIM_WANT_NOEXTPROPIPE */
 //#if FIM_WANT_BACKGROUND_LOAD
     {FIM_OSW_BGREC, no_argument, FIM_NULL, 'B',"Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).", FIM_NULL,
 	    FIM_NULL
@@ -1054,6 +1060,9 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		int ndd=0;/*  on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
 		bool appendedPostInitCommand=false;
 		bool appendedPreConfigCommand=false;
+#if FIM_WANT_NOEXTPROPIPE
+		bool np=false;
+#endif /* FIM_WANT_NOEXTPROPIPE */
 		char sac = FIM_SYM_CHAR_ENDL;
 #if FIM_WANT_R_SWITCH
 		const char * rs=FIM_NULL;
@@ -1091,6 +1100,9 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #if FIM_WANT_CMDLINE_KEYPRESS
 		"k:"
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
+#if FIM_WANT_NOEXTPROPIPE
+		"X"
+#endif /* FIM_WANT_NOEXTPROPIPE */
 				    ,
 				options, &opt_index);
 		if (c == -1)
@@ -1292,6 +1304,18 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    }
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 		    break;
+#if FIM_WANT_NOEXTPROPIPE
+		case 'X':
+		    //fim's
+		    if(np == false)
+		    {
+		    	np = true;
+	#ifdef FIM_AUTOCMDS
+		    	cc.pre_autocmd_add(FIM_VID_NO_EXTERNAL_LOADERS"=1;");
+	#endif /* FIM_AUTOCMDS */
+		    }
+		    break;
+#endif /* FIM_WANT_NOEXTPROPIPE */
 		case 'B':
 		    //fim's
 		    pf |= FIM_FLAG_PUSH_REC ;
