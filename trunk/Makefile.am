@@ -65,6 +65,8 @@ tests:	all
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
 	ulimit -t 1000 || true
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -V | grep upported.file.formats | grep gif
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -V | grep upported.file.formats | grep png
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/version.sh
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/font.sh
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
