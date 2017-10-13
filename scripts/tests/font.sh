@@ -6,7 +6,7 @@
 f=src/fim 
 if test x != "$top_srcdir"; then true ; else top_srcdir=./ ; fi
 ff="$top_srcdir/media/fim.png media/icon_smile.gif"
-fa="-c quit $ff "
+fa="-b -c quit $ff "
 fv="-V "
 
 fail()
