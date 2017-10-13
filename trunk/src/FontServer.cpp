@@ -66,6 +66,10 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f, fim
 #if FIM_FONT_DEBUG
     std::cout << "after consolefont :" << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_FONT_DEBUG */
+#if FIM_WANT_HARDCODED_FONT
+    //if (FIM_NULL == *_f)
+	// *_f =...;
+#endif /* FIM_WANT_HARDCODED_FONT */
 #ifdef FIM_USE_X11_FONTS
     if (FIM_NULL == *_f && 0 == fs_connect(FIM_NULL))
 	*_f = fs_open(font ? font : x11_font);
@@ -80,6 +84,16 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f, fim
 	if(vl)
 #endif /* FIM_EXPERIMENTAL_FONT_CMD */
 	exit(1);
+    }
+    else
+    {
+#if FIM_EXPERIMENTAL_FONT_CMD
+#if FIM_WANT_HARDCODED_FONT
+	font=FIM_DEFAULT_HARDCODEDFONT_STRING;
+#endif /* FIM_WANT_HARDCODED_FONT */
+	if(vl>1)
+		FIM_FPRINTF(ff_stderr, "Using font \"%s\"\n",font);
+#endif /* FIM_EXPERIMENTAL_FONT_CMD */
     }
 }
 
@@ -209,7 +223,13 @@ scanlistforafontfile:
 	{
 #if FIM_WANT_HARDCODED_FONT
     		if (0 == strcmp(filename[i],FIM_DEFAULT_HARDCODEDFONT_STRING))
+		{
+    			fontfilename = FIM_NULL;
+#if FIM_FONT_DEBUG
+    			std::cout << "switching to hardcoded font, equivalent to: " << FIM_ENV_FBFONT << "=" << FIM_DEFAULT_HARDCODEDFONT_STRING << "\n";
+#endif /* FIM_FONT_DEBUG */
 			goto openhardcodedfont;
+		}
 #endif /* FIM_WANT_HARDCODED_FONT */
 #if FIM_FONT_DEBUG
     std::cout << "no access to " << filename[i] << "\n";
@@ -301,12 +321,12 @@ gotafp:
 	goto oops;
     }
     if (m0 == FIM_PSF2_MAGIC0     && m1 == FIM_PSF2_MAGIC1     ) {
-	if(vl)
+	if(vl>1)
 	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) conform to PSF version 2, which is unsupported.\n",fontfilename,m0,m1);
 	goto oops;
     }
     if (m0 != FIM_PSF1_MAGIC0     || m1 != FIM_PSF1_MAGIC1     ) {
-	if(vl)
+	if(vl>1)
 	FIM_FPRINTF(ff_stderr, "can't use font %s: first two magic bytes (0x%x 0x%x) not conforming to PSF version 1\n",fontfilename,m0,m1);
 	goto oops;
     }
