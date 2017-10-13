@@ -65,13 +65,13 @@ tests:	all
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
 	ulimit -t 1000 || true
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -V | grep upported.file.formats | grep gif
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb -V | grep upported.file.formats | grep png
+	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep gif
+	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep png
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/version.sh
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/font.sh
-	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
-	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -E $(top_srcdir)/scripts/example/oneline.fim -c quit 
-	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -E $(top_srcdir)/scripts/example/oneline.fim -c quit 
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
 	make ltests
 
 ltests:
