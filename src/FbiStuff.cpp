@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * Much of this file derives from fbi.
+ * Much of this file derives originally from fbi and has not been properly refactored.
  * */
 
 #include "fim.h"
@@ -69,6 +69,7 @@
 #define FIM_FB_SWITCH_IF_NEEDED() /* */
 #endif /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
 #define FIM_MSG_WAIT_PIPING(CP) "please wait while piping through" " '" CP "'..."
+#define FIM_TEXTURED_ROTATION 0
 
 namespace fim
 {
@@ -150,7 +151,7 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 		mm.mmoffs[mm.nmm+1]=mm.mmb;
 		++mm.nmm;
 	}
-	if(FIM_WVMM) std::cout << mm.nmm << " mipmaps are possible\n";
+	if(FIM_WVMM) std::cout << mm.nmm << " mipmaps can be computed\n";
 	if(FIM_WVMM) std::cout << mm.mmb << " bytes are needed for the mipmaps\n";
 	if(mm.nmm<1)
 	{
@@ -916,19 +917,19 @@ op_rotate_init(const struct ida_image *src, struct ida_rect *rect,
 
     h = (struct op_rotate_state *)fim_malloc(sizeof(*h));
     if(!h)return FIM_NULL;
-    /* dez's : FIXME : FIM_NULL check missing */
+    /* fim's : FIXME : FIM_NULL check missing */
     h->angle = args->angle * 2 * M_PI / 360;
     h->sina  = sin(h->angle);
     h->cosa  = cos(h->angle);
-    /* dez's : cX means source center's X */
+    /* fim's : cX means source center's X */
     h->cx    = (rect->x2 - rect->x1) / 2 + rect->x1;
     h->cy    = (rect->y2 - rect->y1) / 2 + rect->y1;
 
     /* the area we have to process (worst case: 45°) */
     diag     = sqrt((rect->x2 - rect->x1)*(rect->x2 - rect->x1) +
 		    (rect->y2 - rect->y1)*(rect->y2 - rect->y1))/2;
-    /* dez's : diag is a half diagonal */
-    /* dez's : calc is the source input rectangle bounded
+    /* fim's : diag is a half diagonal */
+    /* fim's : calc is the source input rectangle bounded
      * by source image valid coordinates ... */
     h->calc.x1 = (int)(h->cx - diag);
     h->calc.x2 = (int)(h->cx + diag);
@@ -955,13 +956,13 @@ fim_byte_t* op_rotate_getpixel(const struct ida_image *src, struct ida_rect *rec
 				  int sx, int sy, int dx, int dy)
 {
     static fim_byte_t black[] = { 0, 0, 0};
-#if 0
+#if FIM_TEXTURED_ROTATION
     int xdiff  =   rect->x2 - rect->x1;
     int ydiff  =   rect->y2 - rect->y1;
 #endif
     if (sx < rect->x1 || sx >= rect->x2 ||
 	sy < rect->y1 || sy >= rect->y2) {
-#if 0
+#if FIM_TEXTURED_ROTATION
 	/* experimental : textured rotation (i.e.: with wrapping) */
 	while(sx <  rect->x1)sx+=xdiff;
 	while(sx >= rect->x2)sx-=xdiff;
@@ -972,7 +973,6 @@ fim_byte_t* op_rotate_getpixel(const struct ida_image *src, struct ida_rect *rec
 	/* original */
 	if (dx < rect->x1 || dx >= rect->x2 ||
 	    dy < rect->y1 || dy >= rect->y2)
-	    /* dez's : FIXME : i can't understand what this code stands for ! */
 	    return src->data + dy * src->i.width * 3 + dx * 3;
 	return black;
 #endif
@@ -991,7 +991,7 @@ op_rotate_work(const struct ida_image *src, struct ida_rect *rect,
 
     pix = src->data + y * src->i.width * 3;
     /*
-     * useless (dez)
+     * useless (fim)
      * memcpy(dst,pix,src->i.width * 3);
      */
     if (y < h->calc.y1 || y >= h->calc.y2)
@@ -1389,10 +1389,6 @@ struct ida_op desc_autocrop = {
 
 
 
-
-
-
-
 #include <stdio.h>
 #include <cstdlib>
 #include <string.h>
@@ -1692,7 +1688,6 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     if(fd==FIM_NULL){
     /* open file */
     if (FIM_NULL == (fp = fim_fopen(filename, "r"))) {
-	//comment by dez, temporary
 	if(FIM_DD_DEBUG())
 		FIM_FBI_PRINTF("open %s: %s\n",filename,strerror(errno));
 	return FIM_NULL;
@@ -2065,11 +2060,7 @@ probe_loader:
     if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_DIA " ..\n");
     if (FIM_NULL == loader && (*blk==0x1f) && (*(fim_byte_t*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_DIA), "*");
-    	/*
-	 * dez's
-	 * */
-	/* a gimp xcf file was found, and we try to use xcftopnm */
+	/* a gimp xcf file was found, and we try to use xcftopnm (fim) */
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_DIA), "*");
 	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",tpfn.c_str(),FIM_NULL))&& 0==fim_fclose (fp))
 	{
@@ -2091,10 +2082,7 @@ probe_loader:
     if (FIM_NULL == loader && (0 == memcmp(blk,"#FIG",4)))
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_FIG2DEV), "*");
-    	/*
-	 * dez's
-	 * */
-	/* a xfig file was found, and we try to use fig2dev */
+	/* a xfig file was found, and we try to use fig2dev (fim) */
 	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_FIG2DEV,FIM_EPR_FIG2DEV,"-L","ppm",filename,FIM_NULL)))
 		goto shall_skip_header;
 	loader = &ppm_loader;
@@ -2105,10 +2093,7 @@ probe_loader:
     if (FIM_NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
     {
 	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_XCFTOPNM), "*");
-    	/*
-	 * dez's
-	 * */
-	/* a gimp xcf file was found, and we try to use xcftopnm */
+	/* a gimp xcf file was found, and we try to use xcftopnm (fim) */
 	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_XCFTOPNM,FIM_EPR_XCFTOPNM,filename,FIM_NULL)))
 		goto shall_skip_header;
 	loader = &ppm_loader;
@@ -2317,9 +2302,8 @@ ret:
     return img;
 }
 
-/*all dez's
- *
- * rotate the image 90 degrees (M_PI/2) at a time
+/*
+ * rotate the image 90 degrees (M_PI/2) at a time (fim)
  * */
 struct ida_image*
 FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
@@ -2333,7 +2317,7 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
     struct ida_op *desc_p;
 
     dest =(ida_image*) fim_malloc(sizeof(*dest));
-    /* dez: */ if(!dest)goto err;
+    /* fim: */ if(!dest)goto err;
     fim_bzero(dest,sizeof(*dest));
     fim_bzero(&rect,sizeof(rect));
     fim_bzero(&p,sizeof(p));
@@ -2352,7 +2336,7 @@ FbiStuff::rotate_image90(struct ida_image *src, unsigned int rotation)
 
     data = desc_p->init(src,&rect,&dest->i,&p);
     dest->data = fim_pm_alloc(dest->i.width, dest->i.height);
-    /* dez: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
+    /* fim: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
     for (y = 0; y < dest->i.height; y++) {
 	FIM_FB_SWITCH_IF_NEEDED();
 	desc_p->work(src,&rect,
@@ -2368,18 +2352,17 @@ struct ida_image*
 FbiStuff::rotate_image(struct ida_image *src, float angle)
 {
     /*
-     * dez's:
      * this whole code was originally (in fbi) not meant to change canvas.
      * */
     struct op_rotate_parm p;
-    /* dez's 20080831 */
+    /* fim's 20080831 */
     struct ida_rect  rect;
     struct ida_image *dest;
     void *data;
     fim_off_t y;
 
     dest = (ida_image*)fim_malloc(sizeof(*dest));
-    /* dez: */ if(!dest)goto err;
+    /* fim: */ if(!dest)goto err;
     fim_bzero(dest,sizeof(*dest));
     fim_bzero(&rect,sizeof(rect));
     fim_bzero(&p,sizeof(p));
@@ -2429,7 +2412,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     p.angle    = (int) angle;
     data = desc_rotate.init(src,&rect,&dest->i,&p);
     dest->data = fim_pm_alloc(dest->i.width, dest->i.height, true);
-    /* dez: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
+    /* fim: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
     for (y = 0; y < dest->i.height; y++) {
 	FIM_FB_SWITCH_IF_NEEDED();
 	desc_rotate.work(src,&rect,
@@ -2493,11 +2476,11 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     FIM_DEPRECATED("Shall improve mipmap implementation, e.g. by avoiding pointers in C++11 mode.")
     struct ida_image msrc;
 #endif /* FIM_WANT_MIPMAPS */
-    if(ascale<=0.0||ascale>=100.0) /* dez: */
+    if(ascale<=0.0||ascale>=100.0) /* fim: */
 	    ascale=1.0;
 
     dest = (ida_image*)fim_malloc(sizeof(*dest));
-    /* dez: */ if(!dest)
+    /* fim: */ if(!dest)
 	    goto err;
     fim_bzero(dest,sizeof(*dest));
     fim_bzero(&rect,sizeof(rect));
