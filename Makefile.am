@@ -75,6 +75,7 @@ tests:	all
 	make ltests
 
 ltests:
+	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpg
 	if test $(abs_builddir) = $(abs_srcdir) ; then make -C src/testdir ; fi
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
