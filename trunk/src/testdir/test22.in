@@ -1,4 +1,5 @@
 # A test for 'reload'
+stdout "* loaded "._filelistlen." files";
 alias 'dump' "stdout _last_cmd_output; stdout '*';";
 list;
 dump;

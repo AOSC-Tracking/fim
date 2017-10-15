@@ -1,4 +1,5 @@
 # This script tests file browsing capabilities.
+stdout "* loaded "._filelistlen." files";
 sep="#";
 autocmd "" "" "";
 alias "sn" "stdout _filename;";
@@ -10,8 +11,8 @@ alias "u" "U;next '1';";
 #alias "sf" "stdout _fileindex;sn;";
 alias "n" "next 1;u;";
 #alias "n" "next 1;sleep 1;";
-stdout sep."this test is probably flawed";
 stdout sep."'next' testing:";
+#list; stdout _last_cmd_output;
 n;
 sf;
 n;

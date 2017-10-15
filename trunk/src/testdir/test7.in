@@ -1,21 +1,18 @@
 # This script tests auto width scaling capabilities of fim.
-# floating point madness.. this test will break easily (maybe better to deactivate it at all!)
-# todo : auto width
 autocmd "" "" "";
 alias "toggleAutoWidth" "i:autowidth=1-i:autowidth;g:auto_scale_v=0;reload;";
 load;
 display;
-# when loaded, images should have no relationship to screeen width
-# FIXME : the following has no policy
-#stdout "i:width==i:swidth  :".(i:width==i:swidth);
-#stdout "i:height==i:sheight:".(i:height==i:sheight);
+# after load, images should have no relationship to screeen width:
+stdout "i:width==i:swidth  :".(i:width==i:swidth);
+stdout "i:height==i:sheight:".(i:height==i:sheight);
 
 if(1==0)
 {
-stdout "i:width  :" .i:width;
-stdout "i:swidth :".i:swidth;
-stdout "i:height :".i:height;
-stdout "i:sheight:".i:sheight;
+ 	stdout "i:width  :" .i:width;
+ 	stdout "i:swidth :".i:swidth;
+ 	stdout "i:height :".i:height;
+ 	stdout "i:sheight:".i:sheight;
 }
 i:autowidth=0;
 #stdout "ii";
@@ -24,9 +21,7 @@ i:autowidth=0;
 #stdout i:autowidth;
 #stdout "ii";
 toggleAutoWidth;
-# 20110622 commented the following
-#stdout "i:autowidth=".i:autowidth." (should be 1)";
-stdout "#i:autowidth=1 (should be 1)";
+stdout "i:autowidth=".i:autowidth." (should be 1)";
 #stdout "ia:";
 #toggleAutoWidth;
 #stdout i:autowidth;
@@ -43,14 +38,13 @@ reload;
 #};
 #
 scaled_width= ((i:width *scale)/100.0);
-# FIXME : missing ascale effect
+# aalib ascale not handled here
 scaled_height=((i:height*scale)/100.0);
 if(scaled_height<1) scaled_height=1; # fix for dumb driver
 if(_device_string=="aalib")
 {
 	scaled_width=scaled_width*2;
 }
-#stdout "FIXME : aalib dual resolution is not well handled!";
 
 #stdout "_screen_width==i:swidth._screen_width:".(_screen_width==i:swidth);
 #stdout "_screen_height==i:sheight           :".(_screen_height==i:sheight);
@@ -83,10 +77,10 @@ if ( (scaled_width!=i:swidth) || (scaled_height!=i:sheight) )
 }
 else
 {
-	stdout "auto scaling seems ok";
+	stdout "auto scaling test ok";
 }
 
-# auto height scaling missing
+# auto height scaling test missing
 #stdout _screen_height==i:sheight;
 
 rc=0;
