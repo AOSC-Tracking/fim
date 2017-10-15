@@ -68,6 +68,7 @@
 #else  /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
 #define FIM_FB_SWITCH_IF_NEEDED() /* */
 #endif /* FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING */
+#define FIM_MSG_WAIT_PIPING(CP) "please wait while piping through" " '" CP "'..."
 
 namespace fim
 {
@@ -2064,12 +2065,12 @@ probe_loader:
     if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_DIA " ..\n");
     if (FIM_NULL == loader && (*blk==0x1f) && (*(fim_byte_t*)(blk+1)==0x8b))// i am not sure if this is the FULL signature!
     {
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_DIA "'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_DIA), "*");
     	/*
 	 * dez's
 	 * */
 	/* a gimp xcf file was found, and we try to use xcftopnm */
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_DIA "'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_DIA), "*");
 	if(FIM_NULL!=(fp=fim_execlp(FIM_EPR_DIA,FIM_EPR_DIA,filename,"-e",tpfn.c_str(),FIM_NULL))&& 0==fim_fclose (fp))
 	{
 		if (FIM_NULL == (fp = fim_fopen(tpfn.c_str(),"r")))
@@ -2089,7 +2090,7 @@ probe_loader:
     if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_FIG2DEV " ..\n");
     if (FIM_NULL == loader && (0 == memcmp(blk,"#FIG",4)))
     {
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_FIG2DEV "'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_FIG2DEV), "*");
     	/*
 	 * dez's
 	 * */
@@ -2103,7 +2104,7 @@ probe_loader:
     if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_XCFTOPNM " ..\n");
     if (FIM_NULL == loader && (0 == memcmp(blk,"gimp xcf file",13)))
     {
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_XCFTOPNM "'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_XCFTOPNM), "*");
     	/*
 	 * dez's
 	 * */
@@ -2129,7 +2130,7 @@ probe_loader:
 	/* an svg file was found, and we try to use inkscape with it
 	 * note that braindamaged inkscape doesn't export to stdout ...
 	 * */
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_INKSCAPE "'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_INKSCAPE), "*");
 	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --export-png \"%s\"", filename,tpfn);
 	//sprintf(command,FIM_EPR_INKSCAPE" \"%s\" --without-gui --export-png \"%s\"", filename,tpfn);
 #if 0
@@ -2180,7 +2181,7 @@ probe_loader:
 #ifdef FIM_TRY_CONVERT
     if (FIM_NULL == loader) {
         if(vl>1)FIM_VERB_PRINTF("probing " FIM_EPR_CONVERT " ..\n");
-	cc.set_status_bar(FIM_MSG_WAIT_PIPING" '" FIM_EPR_CONVERT "'...", "*");
+	cc.set_status_bar(FIM_MSG_WAIT_PIPING(FIM_EPR_CONVERT), "*");
 	/* no loader found, try to use ImageMagick's convert */
 	if(FIM_NULL==(fp=fim_execlp(FIM_EPR_CONVERT,FIM_EPR_CONVERT,filename,"ppm:-",FIM_NULL)))
 		goto shall_skip_header;

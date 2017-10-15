@@ -1107,7 +1107,6 @@ namespace fim
  */
 #define FIM_MSG_CONSOLE_FIRST_LINE_BANNER "=== This is the fim output console. You can scroll it up and down. ===\n"
 #define FIM_MSG_CONSOLE_LONG_LINE "\n============================================================\n"
-#define FIM_MSG_WAIT_PIPING "please wait while piping through"
 
 /*
  * Some Fim internals flags.
