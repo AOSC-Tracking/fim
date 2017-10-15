@@ -120,7 +120,7 @@ manmode:
 			+string(FIM_DEFAULT_GRAMMAR_FILE_CONTENTS)+
 			"\n"
 			"A STRING can be either a single quoted string or a double quoted string.\n"
-			"A FLOAT is a floating point number.\n"
+			"A floating point number can be either unquoted (UNQUOTED_FLOAT) or quoted (QUOTED_FLOAT).\n"
 			"A QUOTED_FLOAT is a floating point number, either single (\"'\") or double (\"\"\") quoted.\n"
 			"An INTEGER shall be an unsigned integer number.\n"
 			"An IDENTIFIER shall be one of the valid fim commands (see \n.B COMMANDS REFERENCE\n) or a valid alias.\n"

@@ -124,7 +124,7 @@ Warning: at the present state, this grammar has conflicts. A future release shal
             | STRING
 
 A STRING can be either a single quoted string or a double quoted string.
-A FLOAT is a floating point number.
+A floating point number can be either unquoted (UNQUOTED_FLOAT) or quoted (QUOTED_FLOAT).
 A QUOTED_FLOAT is a floating point number, either single ("'") or double (""") quoted.
 An INTEGER shall be an unsigned integer number.
 An IDENTIFIER shall be one of the valid fim commands (see 
