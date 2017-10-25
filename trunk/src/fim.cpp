@@ -1677,6 +1677,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_WANT_PIC_LISTUNMARK */
 		if(want_random_shuffle== 1)
 			cc.browser_._random_shuffle(true);
+		else
 		if(want_random_shuffle==-1)
 			cc.browser_._random_shuffle(false);
 #ifdef FIM_CHECK_DUPLICATES
