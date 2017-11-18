@@ -8,7 +8,7 @@ fimrc \- \fB fim \fP configuration file and language reference
 .SH SYNOPSIS
 .B ~/.fimrc
 .fi
-.B /etc/fimrc
+.B /usr/local/etc/fimrc
 .fi
 .B fim \-\-script\-from\-stdin [ {options} ] < {scriptfile}
 .fi
@@ -489,6 +489,8 @@ list 'unmark' [{args}]: unmark marked image file names, with {args} unmark the o
 list 'marked': show which files have been marked so far.
 .fi
 list 'dumpmarked': dump to stdout the marked files (you will want usually to 'unmarkall' afterwards).
+.fi
+list 'markall': mark all the current list files.
 .fi
 list 'unmarkall': unmark all the marked files.
 .fi

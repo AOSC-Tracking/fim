@@ -144,12 +144,22 @@ namespace fim
 			{
 				std::cout << cc.marked_files_list();
 				goto ret;
-		    } 
+			}
+			else if(args[0]=="markall")
+			{
+				int marked = 0;
+				for(size_t fi=0;fi<flist_.size();++fi)
+					marked += cc.markFile(flist_[fi],true,false);
+				result += "marked ";
+				result += marked;
+			       	result +=" files\n";
+				goto ret;
+			}
 			else if(args[0]=="unmarkall")
 			{
 				cc.marked_files_clear();
 				goto ret;
-		    } 
+			}
 #else /* FIM_WANT_FILENAME_MARK_AND_DUMP */
 			else if(args[0]=="mark")
 				result = FIM_EMSG_NOMARKUNMARK;
@@ -158,6 +168,8 @@ namespace fim
 			else if(args[0]=="unmark")
 				result = FIM_EMSG_NOMARKUNMARK;
 			else if(args[0]=="dumpmarked")
+				result = FIM_EMSG_NOMARKUNMARK;
+			else if(args[0]=="markall")
 				result = FIM_EMSG_NOMARKUNMARK;
 			else if(args[0]=="unmarkall")
 				result = FIM_EMSG_NOMARKUNMARK;
