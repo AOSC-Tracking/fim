@@ -281,6 +281,8 @@
  * Command 'list' 'sort_fsize' to sort file list according to file size.
 # (r1063)
  * Command "list 'mark' {args}" accepts now exactly what "limit {args}" does.
+# (r1535)
+ * Command syntax 'list "markall"' introduced.
 # (r1004)
  * Command syntax 'list "dumpmarked"' and 'list "unmarkall"' introduced.
 # (r1010)
