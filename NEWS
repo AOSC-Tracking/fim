@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1539)
+ * bugfix: in --as-text will avoid repeated reload of file.
 # (r1526)
  * Hardcoded font (if configured in) will serve as fallback font.
 # (r1523)

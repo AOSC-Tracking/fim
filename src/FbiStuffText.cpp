@@ -97,6 +97,7 @@ text_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 
     h->ch = ( ( ftellr + h->cw - 1 ) / h->cw );
 
+    i->npages = 1;
     i->width  = h->w = /* prw */ h->fw * h->cw;
     i->height = h->h = h->ch * h->fh;
     return h;
