@@ -386,6 +386,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
  * Some environment variables used by Fim.
  */
 #define FIM_ENV_DISPLAY "DISPLAY"
+#define FIM_ENV_SSH "SSH_TTY"
 #define FIM_ENV_FRAMEBUFFER "FRAMEBUFFER"
 #define FIM_ENV_FBGAMMA "FBGAMMA"
 #define FIM_ENV_FBFONT "FBFONT"
