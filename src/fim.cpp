@@ -1724,6 +1724,11 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		/* output device guess */
 		if( g_fim_output_device==FIM_CNS_EMPTY_STRING )
 		{
+#ifdef FIM_WITH_AALIB
+			if( fim_getenv(FIM_ENV_SSH) ) /* is this a ssh session ? */
+				g_fim_output_device=FIM_DDN_INN_AA;
+			else
+#endif /* FIM_WITH_AALIB */
 			#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2)
 			/* check to see if we are under X */
 			if( fim_getenv(FIM_ENV_DISPLAY) )
