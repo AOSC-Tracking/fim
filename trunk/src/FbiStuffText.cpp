@@ -175,7 +175,7 @@ text_read(fim_byte_t *dst, unsigned int line, void *data)
 			fim_byte_t *dstp=dst+3*( (cc/h->cw)*h->fh*h->w + (cc%h->cw)*h->fw);
 
 			if(!isprint(fr))
-				fr=' ';
+				fr=FIM_SYM_UNKNOWN_CHAR;
 			fs_render_fb(dstp, h->w*3 , h->f_->eindex[fr], 3, h->f_->gindex[fr]);
 			cc++;
 		}
