@@ -94,7 +94,7 @@ Regard this as an easter bunny option.
 .B  \-\-as\-text
 Display (any filetype) files contents as they were text.
 Image width will not exceed the value of the _preferred_rendering_width variable.
-Will only show printable single byte characters.
+Non\-printable characters will be displayed as " ".
 Regard this as an easter bunny option.
 
 .TP

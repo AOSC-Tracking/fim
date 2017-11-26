@@ -74,7 +74,7 @@ struct fim_options_t fim_options[] = {
     {FIM_OSW_TEXT,     no_argument,       FIM_NULL, 0x74657874, "view any file as rendered text.",FIM_NULL,
 "Display (any filetype) files contents as they were text.\n" 
 "Image width will not exceed the value of the " FIM_VID_PREFERRED_RENDERING_WIDTH " variable.\n"
-"Will only show printable single byte characters.\n"
+"Non-printable characters will be displayed as \"" FIM_SYM_UNKNOWN_STRING "\".\n"
 "Regard this as an easter bunny option.\n"
     },
 #endif /* FIM_WANT_RAW_BITS_RENDERING */

@@ -325,6 +325,8 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_SYM_SEMICOLON_STRING	";"
 #define FIM_SYM_ENDL	"\n"
 #define FIM_SYM_PIC_CMT_CHAR    '#'
+#define FIM_SYM_UNKNOWN_CHAR    ' ' /* replacement for non-printable characters */
+#define FIM_SYM_UNKNOWN_STRING  " " /* *FIM_SYM_UNKNOWN_STRING == FIM_SYM_UNKNOWN_CHAR */
 #define FIM_SYM_SORT_SZ	'z'
 #define FIM_SYM_SORT_MD	'm'
 #define FIM_SYM_SORT_BN	'b'
@@ -374,6 +376,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_EMSG_OUT_OF_MEM	"out of memory\n"
 #define FIM_EMSG_UNFINISHED	"sorry, feature incomplete!\n"
 #define FIM_EMSG_ITE		"internal type error\n"
+#define FIM_EMSG_ICE		"internal consistency error\n"
 #define FIM_EMSG_DSMO		"Warning: Asking to ignore already specified stdin reading option!\n"
 
 /* Command related error messages */
