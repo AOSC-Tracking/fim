@@ -3,7 +3,7 @@
 
                 Version 0.6-trunk
 
-# (r1540)
+# (r1540,r1541)
  * if SSH_TTY set and no output device specified, will give precedence to aalib.
 # (r1539)
  * bugfix: in --as-text will avoid repeated reload of file.

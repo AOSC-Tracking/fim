@@ -739,6 +739,9 @@ mp+=string(
 "" FIM_ENV_FRAMEBUFFER "	(just like in fbi) user set framebuffer device file (applies only to the " FIM_DDN_INN_FB " mode).\n"
 "If unset, fim will probe for " FIM_DEFAULT_FB_FILE ".\n"
 "" FIM_CNS_TERM_VAR "		(only in fim) will influence the output device selection algorithm, especially if $" FIM_CNS_TERM_VAR "==\"screen\".\n"
+#if defined(FIM_WITH_AALIB)
+"" FIM_ENV_SSH "	if set and no output device specified, will give precedence to the " FIM_DDN_INN_AA " driver.\n"
+#endif /* FIM_WITH_AALIB */
 #if defined(FIM_WITH_LIBSDL)
 "" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_SDL " driver will be probed by default.\n"
 #elif defined(FIM_WITH_LIBIMLIB2)
