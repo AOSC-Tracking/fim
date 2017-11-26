@@ -6,6 +6,7 @@
  * documentation fixes.
  * bugfix: description file reading could crash due to wrong check.
  * bugfix: expando mechanism crashed on long comment strings.
+ * bugfix: in --as-text will avoid repeated reload of file.
 
                 Version 0.5-rc3
 
