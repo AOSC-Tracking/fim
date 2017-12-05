@@ -612,11 +612,12 @@ namespace fim
 		free_image(false);
 	}
 
-	bool Viewport::pan_to(const fim_pan_t px, const fim_pan_t py)
+	template <class PT>
+	bool Viewport::pan_to_t(const PT px, const PT py)
 	{
 		/* merge this with a pan function */
 		assert( 0 <= px && px <= 100 && 0 <= py && py <= 100 );
-		fim_pan_t _px = px, _py = py;
+		PT _px = px, _py = py;
 
 #if FIM_WANT_VIEWPORT_TRANSFORM
 		if(image_ && image_->is_flipped())
@@ -646,6 +647,16 @@ namespace fim
 			}
 		}
 		return true;
+	}
+
+	bool Viewport::pan_to(const fim_pan_t px, const fim_pan_t py)
+	{
+		return pan_to_t<fim_pan_t>(px, py);
+	}
+
+	bool Viewport::pan_to(const double px, const double py)
+	{
+		return pan_to_t<double>(px, py);
 	}
 
 	bool Viewport::pan(const fim_char_t*a1, const fim_char_t*a2)

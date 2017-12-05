@@ -935,12 +935,9 @@ err:
 						fim_off_t vy = cv->viewport_height();
 						fim_off_t bx = vx / bf;
 						fim_off_t by = vy / bf;
-						fim_off_t px = FIM_INT_DET_PCNT(event.motion.x-bx/2,vx-bx);
-						fim_off_t py = FIM_INT_DET_PCNT(event.motion.y-by/2,vy-by);
-						px = FIM_DELIMIT_TO_100(px);
-						py = FIM_DELIMIT_TO_100(py);
-						if(px >=   0   && py >=   0 
-						&& px <= 100   && py <= 100  )
+						fim_off_t px = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.x-bx/2,vx-bx));
+						fim_off_t py = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.y-by/2,vy-by));
+						if(1)
 						{
 							//std::cout << "pct:"<< px << " " << py << "\n";
 							cv->pan_to(px,py);
