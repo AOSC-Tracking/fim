@@ -51,12 +51,15 @@ class Viewport FIM_FINAL
 	private:
 	Viewport& operator= (const Viewport&rhs);
 	fim_redraw_t redraw_;
+	template <class PT>
+	bool pan_to_t(const PT px, const PT py);
 	public:
 	void should_redraw(enum fim_redraw_t sr = FIM_REDRAW_NECESSARY);
 	fim_bool_t need_redraw(void)const;
 	bool do_pan(const args_t& args);
 	bool pan(const fim_char_t*a1, const fim_char_t*a2);
 	bool pan_to(const fim_pan_t px, const fim_pan_t py);
+	bool pan_to(const double px, const double py);
 	fim_bool_t pan_up   (fim_pan_t s=0);
 	fim_bool_t pan_down (fim_pan_t s=0);
 	fim_bool_t pan_right(fim_pan_t s=0);
