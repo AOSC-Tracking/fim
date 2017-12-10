@@ -427,13 +427,13 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_HOME_VAR	 "HOME"
 #define FIM_CNS_HIST_FILENAME	 ".fim_history"
 #define FIM_CNS_HIST_COMPLETE_FILENAME	 "~/.fim_history"
-#ifdef FIM_PATHS_IN_MAN
+//#ifdef FIM_PATHS_IN_MAN
 #define FIM_CNS_SYS_RC_FILEPATH	 "@sysconfdir@/fimrc"
 #define FIM_CNS_DOC_PATH	 "@docdir@"
-#else /*  FIM_PATHS_IN_MAN */
-#define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
-#define FIM_CNS_DOC_PATH	 "/usr/share/doc/fim"
-#endif /* FIM_PATHS_IN_MAN */
+//#else /*  FIM_PATHS_IN_MAN */
+//#define FIM_CNS_SYS_RC_FILEPATH	 "/etc/fimrc"
+//#define FIM_CNS_DOC_PATH	 "/usr/share/doc/fim"
+//#endif /* FIM_PATHS_IN_MAN */
 #define FIM_CNS_USR_RC_FILEPATH	 ".fimrc"
 #define FIM_CNS_USR_RC_COMPLETE_FILEPATH	 "~/.fimrc"
 #define FIM_CNS_EXAMPLE_FILENAME	 "file.jpg"
