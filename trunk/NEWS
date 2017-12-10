@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1544)
+ * key combination C-w assigned to setting auto-scaling to width.
 # (r1543)
  * smoother scroll of large images.
 # (r1540,r1541)
