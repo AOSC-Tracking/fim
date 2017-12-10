@@ -166,10 +166,15 @@ dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 
 MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g' -e 's,-,\\-,g'
 
-doc/fim.man doc/fimrc.man doc/fimgs.man: $(FIM_EXE)
-	$(FIM_EXE) $(FIMNORCOPTS) --help=m                   |$(MANSUBST) > doc/fim.man
-	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man  |$(MANSUBST) > doc/fimrc.man
-	$(FIMGS_EXE) -m -- $(FIMNORCOPTS)                    |$(MANSUBST) > doc/fimgs.man
+doc/fim.man.in doc/fimrc.man.in doc/fimgs.man.in: $(FIM_EXE)
+	$(FIM_EXE) $(FIMNORCOPTS) --help=m                    > doc/fim.man.in
+	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man   > doc/fimrc.man.in
+	$(FIMGS_EXE) -m -- $(FIMNORCOPTS)                     > doc/fimgs.man.in
+
+doc/fim.man doc/fimrc.man doc/fimgs.man: doc/fim.man.in doc/fimrc.man.in doc/fimgs.man.in
+	cat doc/fim.man.in   |$(MANSUBST) > doc/fim.man
+	cat doc/fimrc.man.in |$(MANSUBST) > doc/fimrc.man
+	cat doc/fimgs.man.in |$(MANSUBST) > doc/fimgs.man
 
 # fixme : missing integration with ChangeLog file
 mail-announce:
