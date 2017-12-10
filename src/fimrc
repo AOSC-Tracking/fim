@@ -178,7 +178,8 @@ bind 'C-n' "goto '+//'";
 bind 'C-p' "goto '-//'";
 bind 'C-b' "goto '-//'"; # Warning: many configurations cannot detect C-b.
 bind 'W' "display 'resize'" "if supported, resizes the window to match the current image pixels size";
-bind 'C-w' "scale '100%';display 'resize'" "if supported, scales the image to 100% and resizes the window to match its size (if fits)";
+#bind 'C-w' "scale '100%';display 'resize'" "if supported, scales the image to 100% and resizes the window to match its size (if fits)";
+bind 'C-w' "if(_scale_style!='w'){_scale_style='w';scale 'w';}else{_scale_style='';scale '100%';}" "scale to width";
 alias "endless_slideshow" "while(1){display;sleep '1';next;}" "performs an automated slideshow, endlessly";
 alias "bookview"          "while(1){display;sleep '2';scroll 'down';}" "";
 alias "comicview"         "while(1){display;sleep '1';scroll 'down';}" "";
@@ -204,7 +205,7 @@ bind '<' "rotate10_ccw;display";
 bind '>' "rotate10;display";
 bind '_' "_scale_style='';scale '100%'";
 bind ',' "_display_console=1;echo _last_system_output";
-bind 'C-a' "if(_scale_style!='a'){_scale_style='a';scale 'a';}else{_scale_style='';scale '100%';}";
+bind 'C-a' "if(_scale_style!='a'){_scale_style='a';scale 'a';}else{_scale_style='';scale '100%';}" "scale to height";
 ####bind 'h' "scale 'h'";
 #
 alias "pan_nw" "pan 'nw'" "pans the image to the upper left";
