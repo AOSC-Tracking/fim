@@ -928,22 +928,41 @@ err:
 					static bool discardedfirst = false;
 					if(cv)
 					if(discardedfirst)
+					if(const Image* ci = cv->c_getImage())
 					if( event.motion.x > 0 && event.motion.y )
 					{
+						// 1/(2*bf) of each screen side will be insensitive to mouse movement.
 						fim_off_t bf = 5;
 						fim_off_t vx = cv->viewport_width();
 						fim_off_t vy = cv->viewport_height();
 						fim_off_t bx = vx / bf;
 						fim_off_t by = vy / bf;
-						fim_off_t px = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.x-bx/2,vx-bx));
-						fim_off_t py = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.y-by/2,vy-by));
-						if(1)
+						fim_coo_t rih = ci->width();
+						fim_coo_t riw = ci->height();
+
+						if(FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL)
 						{
+							// variable resolution mouse scroll (maximal smoothess)
+							// max of xres/yres discrete scrolls.
+							fim_off_t xres = FIM_MIN(vx-bx,riw), yres = FIM_MIN(vy-by,rih);
+							double px = FIM_DELIMIT_TO_X(FIM_INT_DET_PX(event.motion.x-bx/2,vx-bx,xres),xres);
+							double py = FIM_DELIMIT_TO_X(FIM_INT_DET_PX(event.motion.y-by/2,vy-by,yres),yres);
+							px*=100.0/xres;
+							py*=100.0/yres;
+							cv->pan_to(px,py);
+						}
+						else
+						{
+							// percentage scroll.
+							// downside: if image very wide/tall/big, will
+							// steps might be very large.
+							fim_off_t px = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.x-bx/2,vx-bx));
+							fim_off_t py = FIM_DELIMIT_TO_100(FIM_INT_DET_PCNT(event.motion.y-by/2,vy-by));
 							//std::cout << "pct:"<< px << " " << py << "\n";
 							cv->pan_to(px,py);
-							cv->display(); // draw only if necessary
-							//cv->redisplay(); // draw always
 						}
+						cv->display(); // draw only if necessary
+						//cv->redisplay(); // draw always
 					}
 					discardedfirst=true;
 				}

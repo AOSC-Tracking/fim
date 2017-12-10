@@ -123,6 +123,8 @@
 #define FIM_INT_PCNT_SAFE(P,L)   (FIM_INT_PCNT(FIM_MIN(100,FIM_MAX(P,0)),(L)))
 #define FIM_INT_DET_PCNT(P,T)    (((static_cast<double>(P))/(static_cast<double>(T)))*100.0) 
 #define FIM_DELIMIT_TO_100(X) FIM_MIN(FIM_MAX(X,0),100)
+#define FIM_INT_DET_PX(P,T,X)    (((static_cast<double>(P))/(static_cast<double>(T)))*(1.0*X)) 
+#define FIM_DELIMIT_TO_X(Y,X) FIM_MIN(FIM_MAX(Y,0),X)
 #define FIM_XOR(X,Y) ((X)^(Y))
 
 #include "fim_types.h"
@@ -174,6 +176,7 @@
 #define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* in C++11, prefer smart pointers for Image* */
 #define FIM_EXPERIMENTAL_FONT_CMD 1 && defined(HAVE_DIRENT_H) && 1 /*  */
 #define FIM_WANT_HELP_ARGS 1 /*  */
+#define FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL 1 /* the larger the image, the more scroll steps  */
 #if FIM_USE_CXX11
 #define FIM_NOEXCEPT noexcept
 #define FIM_CONSTEXPR constexpr
