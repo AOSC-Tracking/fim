@@ -2526,7 +2526,13 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     dest->data = fim_pm_alloc(dest->i.width, dest->i.height);
     if(!(dest->data))
     {
+#if FIM_ALLOW_LOADER_VERBOSITY
+    	    const fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY));
+#else /* FIM_ALLOW_LOADER_VERBOSITY */
+    	    const fim_int vl=0;
+#endif /* FIM_ALLOW_LOADER_VERBOSITY */
 	    fim_free(data);
+	    if(vl>0)FIM_VERB_PRINTF("Failed allocating a %d x %d pixelmap.\n", dest->i.width, dest->i.height);
 	    fim_free(dest);
 	    goto err;
     }
