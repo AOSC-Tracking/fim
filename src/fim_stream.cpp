@@ -57,6 +57,13 @@ namespace fim
 			return *this;
 		}
 
+		fim_stream& fim_stream::operator<<(unsigned int i)
+		{
+			fim_char_t s[FIM_ATOX_BUFSIZE];sprintf(s,"%u",i);
+			*this<<s;
+			return *this;
+		}
+
 #if FIM_WANT_LONG_INT
 		fim_stream& fim_stream::operator<<(fim_int i)
 		{
