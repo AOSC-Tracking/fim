@@ -3,8 +3,6 @@
 
                 Version 0.6-trunk
 
-# (r1549)
- * a message will be emitted when failing allocation at enlarge.
 # (r1544)
  * key combination C-w assigned to setting auto-scaling to width.
 # (r1543)

@@ -3,6 +3,8 @@
 
                 Version 0.5-rc4 (in progress)
 
+ * failed enlarge shall not lead to inconsistent image state.
+ * a message will be emitted when failing allocation at enlarge.
  * documentation fixes.
  * bugfix: description file reading could crash due to wrong check.
  * bugfix: expando mechanism crashed on long comment strings.

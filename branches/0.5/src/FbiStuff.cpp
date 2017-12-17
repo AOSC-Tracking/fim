@@ -2398,6 +2398,10 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     dest->data = (fim_byte_t*)fim_pm_alloc(dest->i.width, dest->i.height);
     if(!(dest->data))
     {
+    	    fim_char_t s[FIM_STATUSLINE_BUF_SIZE];
+	    sprintf(s, "Failed allocating a %d x %d pixelmap.", dest->i.width, dest->i.height);
+	    fim::cout << s << "\n"; 
+	    cc.set_status_bar(s, "*");
 	    fim_free(data);
 	    fim_free(dest);
 	    goto err;
