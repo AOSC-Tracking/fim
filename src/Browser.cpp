@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1402,21 +1402,30 @@ ret:
 #if FIM_WANT_VAR_GOTO
 			if( isrj && s[1] && ( isalpha(s[1]) || s[1] == '_' ) )
 			{
-				const char * sp = s+2;
+				const char * ib = s+1, *ie = s+2;
 				int neg=(c=='-'?-1:1);
 				bool ner=false; // non empty requirement
+				std::map<std::string,std::string> vals;
+				std::vector<std::string> keys; // ordered
 
-				while(*sp && ( isalpha(*sp) || *sp == '_' || isdigit(*sp) ) )
-					++sp;
-				if(*sp == '+' )
+				do
+				{
+					while(*ie && ( isalpha(*ie) || *ie == '_' || isdigit(*ie) ) )
+						++ie;
+					std::string varname(ib,ie);
+					keys.push_back(varname);
+					std::string varval = cc.id_.vd_[fim_basename_of(current())].getStringVariable(varname);
+					vals[varname]=varval;
+				} while(*ie=='|' && *(ib=++ie));
+				if(*ie == '+' )
 					ner = true;
 
-				std::string varname(s+1,sp);
-				std::string varval = cc.id_.vd_[fim_basename_of(current())].getStringVariable(varname);
-
 				for(fim_int fi=0;fi<fc;++fi)
+				for(fim_int ii=0;ii<keys.size();++ii)
 				{
-					size_t idx=FIM_MOD((cf+neg*(1+fi)+fc),fc);
+					std::string varname(keys[ii]);
+					std::string varval(vals[varname]);
+					size_t idx = FIM_MOD((cf+neg*(1+fi)+fc),fc);
 					std::string nvarval = cc.id_.vd_[fim_basename_of(flist_[idx])].getStringVariable(varname);
 					if(nvarval != varval && ! ( ner == true && !nvarval.size() ) )
 					{
@@ -1573,7 +1582,7 @@ ret:
 err:
 		FIM_PR('.');
 		return errmsg;
-	}
+	} /* goto_image_internal */
 
 	fim_stat_t fim_get_stat(const fim_fn_t& fn, bool * dopushp);
 
