@@ -22,6 +22,9 @@ all:	$(HTMLDOCS) $(EXTRA_DIST)
 FIM.html fim-stylesheet.css: doctags FIM.TXT
 	./doctags $(srcdir)/FIM.TXT > tags ; $(srcdir)/vim2html.pl tags $(srcdir)/FIM.TXT
 
+fim.man:
+	make doc/fim.man -C $(top_srcdir)/
+	
 fim.man.html: fim.man
 	$(MAN2HTML) ./$< | $(MAN2HTMLS) >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
