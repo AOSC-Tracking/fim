@@ -1,7 +1,7 @@
 #!/bin/bash
 # $Id$
 
-# (c) 2007-2017 Michele Martone
+# (c) 2007-2018 Michele Martone
 
 # This is a modified version of the original fbgs script by Gerd Hoffman.
 # Note: it probably won't work on bash version < 3.0.
@@ -68,7 +68,6 @@ function die() { einfo "ERROR : "$@ 1>&2 ; exit ${FIMERRCV}; }
 # our favourite framebuffer viewing program :)
 FBI=fim
 
-check_in_path $FBI  || die "no fim in \$PATH"
 check_in_path sort  || die "no sort in \$PATH"
 check_in_path echo  || die "no echo in \$PATH"
 check_in_path find  || die "no find in \$PATH"
@@ -131,7 +130,7 @@ do
 			;;
 		-m)	shift
 cat << EOF
-.TH fimgs 1 "(c) 2007-2017 Michele Martone"
+.TH fimgs 1 "(c) 2007-2018 Michele Martone"
 .SH NAME
 fimgs - poor man's [http://]PostScript/pdf/dvi/cbr/rar/cbz/zip viewer based on fim
 .SH SYNOPSIS
@@ -212,6 +211,7 @@ EOF
 #	shift
 done
 ###############################################################################
+check_in_path $FBI  || die "no fim in \$PATH"
 ###############################################################################
 ##		HANDLING OF CBR AND CBZ ARCHIVES
 ###############################################################################
