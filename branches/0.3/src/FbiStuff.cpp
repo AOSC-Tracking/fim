@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2018 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -1278,8 +1278,8 @@ extern struct ida_loader bit24_loader ;
 extern struct ida_loader bit1_loader ;
 
 // 20080108 WARNING
-// 20080801 removed the loader functions from this file, as init_rd was not __init : did I break something ?
-//static void __init init_rd(void)
+// 20080801 removed the loader functions from this file, as init_rd was not fimfim__init : did I break something ?
+//static void fimfim__init init_rd(void)
 /*static void init_rd(void)
 {
     load_register(&ppm_loader);
@@ -1310,7 +1310,7 @@ static struct ida_writer ppm_writer = {
 };
 
 // 20080108 WARNING
-//static void __init init_wr(void)
+//static void fimfim__init init_wr(void)
 static void init_wr(void)
 {
     write_register(&ppm_writer);

@@ -2,7 +2,7 @@
 /*
  FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2018 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -148,7 +148,7 @@ struct ida_loader pgm_loader = {
     /*done:*/  pnm_done,
 };
 
-static void __init init_rd(void)
+static void fim__init init_rd(void)
 {
     fim_load_register(&ppm_loader);
     fim_load_register(&pgm_loader);
@@ -176,7 +176,7 @@ static struct ida_writer ppm_writer = {
     /*write:*/  ppm_write,
 };
 
-static void __init init_wr(void)
+static void fim__init init_wr(void)
 {
     fim_write_register(&ppm_writer);
 }

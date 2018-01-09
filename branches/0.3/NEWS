@@ -12,6 +12,7 @@
  * fix: a check was missing in the PS decoder when reading from stdin.
  * fix: for _seek_magic.
  * fix: in --offset mode, avoiding probing for external loader programs.
+ * fix: symbol from fbi sources clashed with gcc-6 onwards, breaking compilation.
 
         	Version 0.3
 
