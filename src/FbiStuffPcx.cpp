@@ -2,7 +2,7 @@
 /*
  FbiStuffPcx.cpp : Code for reading PCX files.
 
- (c) 2014-2016 Michele Martone
+ (c) 2014-2018 Michele Martone
  The functions pcx_load_image_fp and pcx_load_image_info_fp are (c) 2014-2014 Mohammed Isam.
  Originally based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
@@ -708,7 +708,7 @@ struct ida_loader pcx_loader = {
     /*done:*/  pcx_done,
 };
 
-static void __init init_rd(void)
+static void fim__init init_rd(void)
 {
 	fim_load_register(&pcx_loader);
 }

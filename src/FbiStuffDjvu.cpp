@@ -2,7 +2,7 @@
 /*
  FbiStuffDjvu.cpp : fim functions for decoding DJVU files
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2018 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -212,7 +212,7 @@ static struct ida_loader djvu_loader = {
     /*done:*/  djvu_done,
 };
 
-static void __init init_rd(void)
+static void fim__init init_rd(void)
 {
     fim_load_register(&djvu_loader);
 }
