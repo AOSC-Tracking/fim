@@ -2,7 +2,7 @@
 /*
  FbiStuffBmp.cpp : fbi functions for BMP files, modified for fim
 
- (c) 2008-2009 Michele Martone
+ (c) 2008-2018 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -248,7 +248,7 @@ static struct ida_loader bmp_loader = {
     /*done:*/  bmp_done,
 };
 
-static void __init init_rd(void)
+static void fimfim__init init_rd(void)
 {
     load_register(&bmp_loader);
 }

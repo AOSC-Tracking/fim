@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2018 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -212,7 +212,7 @@ static struct ida_loader png_loader = {
     /*done:*/  png_done,
 };
 
-static void __init init_rd(void)
+static void fimfim__init init_rd(void)
 {
     load_register(&png_loader);
 }
@@ -280,7 +280,7 @@ static struct ida_writer png_writer = {
     /*write:*/  png_write,
 };
 
-static void __init init_wr(void)
+static void fimfim__init init_wr(void)
 {
     write_register(&png_writer);
 }

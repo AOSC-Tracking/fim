@@ -149,7 +149,7 @@ extern struct ida_writer ps_writer;
 extern struct ida_writer jpeg_writer;
 
 /* lists */
-#define __init __attribute__ ((constructor))
+#define fimfim__init __attribute__ ((constructor))
 #define __fini __attribute__ ((destructor))
 
 extern struct list_head loaders;

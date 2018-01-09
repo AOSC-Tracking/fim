@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2009 Michele Martone
+ (c) 2007-2018 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -316,7 +316,7 @@ static struct ida_loader jpeg_loader = {
     /*done:*/  jpeg_done,
 };
 
-static void __init init_rd(void)
+static void fimfim__init init_rd(void)
 {
     load_register(&jpeg_loader);
 }
@@ -401,7 +401,7 @@ struct ida_writer jpeg_writer = {
     /*/*conf:*/*/   jpeg_conf,
 };
 
-static void __init init_wr(void)
+static void fimfim__init init_wr(void)
 {
     write_register(&jpeg_writer);
 }
