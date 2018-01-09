@@ -39,6 +39,8 @@
 
 #if FIM_USE_CXX11
 #include <utility>	/* std::swap */
+#include <random>	/* std::random_device */
+#include <algorithm>	/* std::shuffle */
 #else /* FIM_USE_CXX11 */
 #include <algorithm>	/* std::swap */
 #endif /* FIM_USE_CXX11 */
@@ -1091,9 +1093,19 @@ ret:
 		 *	if dts==true, do time() based seeding
 		 *	TODO: it would be cool to support a user supplied seed value
 		 */
+#if FIM_USE_CXX11
+		std::random_device rd;
+		std::mt19937 g(rd());
+		if( dts )
+			g.seed(time(FIM_NULL));
+		else
+			g.seed(std::mt19937::default_seed);
+		std::shuffle(flist_.begin(),flist_.end(),g);
+#else /* FIM_USE_CXX11 */
 		if( dts )
 			std::srand(time(FIM_NULL));	/* FIXME: AFAIK, effect of srand() on random_shuffle is not mandated by any standard. */
 		std::random_shuffle(flist_.begin(),flist_.end());
+#endif /* FIM_USE_CXX11 */
 		return current();
 	}
 
