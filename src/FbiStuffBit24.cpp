@@ -2,7 +2,7 @@
 /*
  FbiStuffBit24.cpp : fbi functions for reading ELF files as they were raw 24 bit per pixel pixelmaps
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2018 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -129,7 +129,7 @@ struct ida_loader bit24_loader = {
     /*done:*/  bit24_done,
 };
 
-static void __init init_rd(void)
+static void fim__init init_rd(void)
 {
     fim_load_register(&bit24_loader);
 }

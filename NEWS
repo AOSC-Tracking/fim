@@ -17,6 +17,7 @@
  * fix: in --offset mode, avoiding probing for external loader programs.
  * fix: 'recording' command non functioning properly.
  * fix: -s switch was broken.
+ * fix: symbol from fbi sources clashed with gcc-6 onwards, breaking compilation.
 
                 Version 0.4
 

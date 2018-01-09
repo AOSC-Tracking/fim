@@ -2,7 +2,7 @@
 /*
  FbiStuffBitText.cpp : fbi functions for rendering image bytes as text
 
- (c) 2013-2017 Michele Martone
+ (c) 2013-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -207,7 +207,7 @@ struct ida_loader text_loader = {
     /*done:*/  text_done,
 };
 
-static void __init init_rd(void)
+static void fim__init init_rd(void)
 {
     fim_load_register(&text_loader);
 }
