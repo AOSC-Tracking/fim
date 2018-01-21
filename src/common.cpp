@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -878,6 +878,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 
 	bool is_dir(const fim::string nf)
 	{
+#if HAVE_SYS_STAT_H
 		struct stat stat_s;
 		/*	if the directory doesn't exist, return */
 		if(-1==stat(nf.c_str(),&stat_s))
@@ -885,6 +886,9 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 		if( ! S_ISDIR(stat_s.st_mode))
 			return false;
 		return true;
+#else /* HAVE_SYS_STAT_H */
+		return false;
+#endif /* HAVE_SYS_STAT_H */
 	}
 
 	bool is_file(const fim::string nf)
@@ -893,6 +897,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 #if 0
 		return !is_dir(nf);
 #else
+#if HAVE_SYS_STAT_H
 		struct stat stat_s;
 		/*	if the file (it can be a device, but not a directory) doesn't exist, return */
 		if(-1==stat(nf.c_str(),&stat_s))
@@ -900,6 +905,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 		if( S_ISDIR(stat_s.st_mode))
 			return false;
 		/*if(!S_IFREG(stat_s.st_mode))return false;*/
+#endif /* HAVE_SYS_STAT_H */
 		return true;
 #endif
 	}
@@ -910,6 +916,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 #if 0
 		return !is_dir(nf);
 #else
+#if HAVE_SYS_STAT_H
 		struct stat stat_s;
 		/*	if the file (it can be a device, but not a directory) doesn't exist, return */
 		if(-1==stat(nf.c_str(),&stat_s))
@@ -919,6 +926,7 @@ ssize_t fim_getline(fim_char_t **lineptr, size_t *n, FILE *stream, int delim)
 		/*if(!S_IFREG(stat_s.st_mode))return false;*/
 		if( stat_s.st_size == 0 )
 			return false;
+#endif /* HAVE_SYS_STAT_H */
 		return true;
 #endif
 	}

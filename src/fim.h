@@ -78,10 +78,11 @@
  #define _POSIX_PATH_MAX 4096
 #endif /* _POSIX_PATH_MAX */
 
-/* FIXME : should create some fim specific sys.h header, some day */
-#include <sys/types.h>		/* stat */
+#include <sys/types.h>		/* */
+#if HAVE_SYS_STAT_H
 #include <sys/stat.h>		/* stat */
-#include <unistd.h>		/* stat */
+#endif /* HAVE_SYS_STAT_H */
+#include <unistd.h>		/* */
 #ifdef FIM_WITH_PTHREADS
 #include <pthread.h>		/* */
 #endif /* FIM_WITH_PTHREADS */
@@ -110,7 +111,6 @@
 #include <gpm.h>	/* mouse events						*/
 #endif /* FIM_USE_GPM */
 /*#include <unistd.h>*/ /* standard Posix symbolic constants and types		*/
-/*#include <sys/stat.h> */
 /*#include <sys/types.h>*/
 #include <cmath>
  
