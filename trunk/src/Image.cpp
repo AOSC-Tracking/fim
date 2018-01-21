@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -472,11 +472,13 @@ uhmpf:
 		else 
 		{
 #if FIM_WANT_KEEP_FILESIZE
+#if HAVE_SYS_STAT_H
 			struct stat stat_s;
 			if(-1!=stat(fname,&stat_s))
 			{
 				fs_=stat_s.st_size;
 			}
+#endif /* HAVE_SYS_STAT_H */
 #endif /* FIM_WANT_KEEP_FILESIZE */
 		}
 

@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -462,12 +462,14 @@ ret:		return key;
 		/*
 		 * consider using access() as an alternative.
 		 */
+#if HAVE_SYS_STAT_H
                 struct stat stat_s;
 
                 if(-1==stat(nf.c_str(),&stat_s))
 			goto err;
                 if( S_ISDIR(stat_s.st_mode))
 			goto err;
+#endif /* HAVE_SYS_STAT_H */
                 return true;
 err:
                 /* if the file doesn't exist, return false */
@@ -1905,6 +1907,7 @@ ok:
 
 				if( do_load )
 					read_history(hfile);
+#if HAVE_SYS_STAT_H
 				else
 				{
 					bool need_chmod=!is_file(hfile);		// will try to chmod if already non existent
@@ -1912,6 +1915,7 @@ ok:
 					if(need_chmod)
 						chmod(hfile,S_IRUSR|S_IWUSR);	// we write the first .fim_history in mode -rw------- (600)
 				}
+#endif /* HAVE_SYS_STAT_H */
 			}
 		}
 

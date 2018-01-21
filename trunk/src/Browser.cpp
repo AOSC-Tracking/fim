@@ -994,7 +994,8 @@ rret:
 		}
 
 		{
-#ifdef FIM_CHECK_FILE_EXISTENCE
+#ifdef FIM_CHECK_FILE_EXISTENCE 
+#ifdef HAVE_SYS_STAT_H 
 			/*
 			 * skip adding filename to list if not existent or is a directory...
 			 */
@@ -1018,6 +1019,7 @@ rret:
 			/*	if it is a directory , return */
 			//if(  S_ISDIR(stat_s.st_mode))return FIM_CNS_EMPTY_RESULT;
 #ifdef FIM_READ_DIRS
+//#if HAVE_SYS_STAT_H
 			{
 				fim_int ppd = getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS);
 				if( ppd >= 1 && S_ISDIR(stat_s.st_mode))
@@ -1029,6 +1031,7 @@ rret:
 					goto isdir;
 				}
 			}
+//#endif /* HAVE_SYS_STAT_H */
 #endif /* FIM_READ_DIRS */
 			/*	we want a regular file .. */
 			if(
@@ -1042,6 +1045,7 @@ rret:
 					commandConsole_.set_status_bar((nf+" is not a regular file!").c_str(), "*");
 				goto ret;
 			}
+#endif /* HAVE_SYS_STAT_H */
 #endif /* FIM_CHECK_FILE_EXISTENCE */
 		}
 isfile:
@@ -1059,8 +1063,8 @@ isfile:
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 		retval = true;
 		goto ret;
-#ifdef FIM_READ_DIRS
 isdir:
+#ifdef FIM_READ_DIRS
 		retval = push_dir(nf,pf,show_must_go_on);
 #endif /* FIM_READ_DIRS */
 ret:
@@ -2365,8 +2369,8 @@ err:
 	fim_stat_t fim_get_stat(const fim_fn_t& fn, bool * dopushp)
 	{
 		bool dopush = false;
+		fim_stat_t stat_s;
 #if FIM_WANT_FLIST_STAT
-		struct stat stat_s;
 		if(-1==stat(fn.c_str(),&stat_s))
 			goto ret;
 		if( S_ISDIR(stat_s.st_mode))
@@ -2383,9 +2387,11 @@ ret:
 
 	void flist_t::get_stat(void)
 	{
-		// TODO: this is costly, might print a message here.
+#if FIM_WANT_FLIST_STAT
+		// TODO: this is expensive: might print a message here.
 		for(flist_t::iterator fit=begin();fit!=end();++fit)
 			fit->stat_ = fim_get_stat(*fit,FIM_NULL);
+#endif /* FIM_WANT_FLIST_STAT */
 	}
 
 	flist_t::flist_t(const args_t& a):cf_(0)
@@ -2395,7 +2401,7 @@ ret:
 		for(args_t::const_iterator fit=a.begin();fit!=a.end();++fit)
 		{
 			bool dopush;
-			struct stat stat_s = fim_get_stat(*fit,&dopush);
+			fim_stat_t stat_s = fim_get_stat(*fit,&dopush);
 			if(dopush)
 				push_back(fim::fle_t(*fit,stat_s));
 		}
@@ -2521,8 +2527,17 @@ flist_t flist_t::copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive) c
 
 	//std::string fle_t::operator(){return fn;}
 	fle_t::fle_t(void) { }
-	fle_t::fle_t(const fim_fn_t& s):fim_fn_t(s){fim_bzero(&stat_,sizeof(stat_));}
-	fle_t::fle_t(const fim_fn_t& s, const fim_stat_t & ss):fim_fn_t(s),stat_(ss) { }
+	fle_t::fle_t(const fim_fn_t& s):fim_fn_t(s)
+	{
+#if FIM_WANT_FLIST_STAT 
+		fim_bzero(&stat_,sizeof(stat_));
+#endif /* FIM_WANT_FLIST_STAT */
+	}
+	fle_t::fle_t(const fim_fn_t& s, const fim_stat_t & ss):fim_fn_t(s)
+#if FIM_WANT_FLIST_STAT 
+	,stat_(ss)
+#endif /* FIM_WANT_FLIST_STAT */
+	{ }
 	fle_t::operator fim_fn_t(void) const { return fim_fn_t(*this);} 
 
 struct FimBaseNameSorter
