@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1559)
+ * key combination C-r now assigned to "reload ''".
 # (r1555)
  * fix: symbol from fbi sources clashed with gcc-6 onwards, breaking compilation.
 # (r1544)
