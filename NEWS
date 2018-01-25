@@ -18,6 +18,7 @@
  * fix: 'recording' command non functioning properly.
  * fix: -s switch was broken.
  * fix: symbol from fbi sources clashed with gcc-6 onwards, breaking compilation.
+ * fix: short options -b, -h were not getting optional argument.
 
                 Version 0.4
 
