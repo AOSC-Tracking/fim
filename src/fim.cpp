@@ -1099,8 +1099,12 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		}
 
 	    	for (;;) {
-		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:RL:B"
+		    c = getopt_long(argc, argv, "C:HAb::wc:uvah::PqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:L:B"
+#if FIM_WANT_RECURSE_FILTER_OPTION
+	   	"R::"
+#else /* FIM_WANT_RECURSE_FILTER_OPTION */
+	   	"R"
+#endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 #if FIM_WANT_CMDLINE_KEYPRESS
 		"k:"
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */

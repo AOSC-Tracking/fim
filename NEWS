@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1561)
+ * fix: short options -b, -h, -R were not getting optional argument (e.g. -b1).
 # (r1559)
  * key combination C-r now assigned to "reload ''".
 # (r1555)
