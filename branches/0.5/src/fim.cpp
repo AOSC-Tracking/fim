@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2016 Michele Martone
+ (c) 2007-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -949,8 +949,7 @@ done:
 		}
 
 	    	for (;;) {
-		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "C:HAb?wc:uvahPqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:SR",
+		    c = getopt_long(argc, argv, "C:HAb::wc:uvah::PqVr:m:d:g:s:T:E:f:DNhF:tfipW:o:SR",
 				options, &opt_index);
 		if (c == -1)
 		    break;

@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ struct option fim_options[] = {
     {"write-scriptout",      required_argument,       NULL, 'W'},
     {"offset",      required_argument,       NULL,  0x6f66660a},/* NEW */
     {"output-device",      required_argument,       NULL, 'o'},
-    {"dump-reference-help",      /*optional_argument : TODO */no_argument,       NULL, 0x6472690a},/* note : still undocumented switch */
+    {"dump-reference-help",      no_argument,       NULL, 0x6472690a},/* note : still undocumented switch */
 
     /* long-only options */
 //    {"autoup",     no_argument,       &autoup,   1 },
@@ -278,8 +278,7 @@ int help_and_exit(char *argv0, int code=0)
 	
 		setlocale(LC_ALL,"");	//uhm..
 	    	for (;;) {
-		    /*c = getopt_long(argc, argv, "wc:u1evahPqVbpr:t:m:d:g:s:f:l:T:E:DNhF:",*/
-		    c = getopt_long(argc, argv, "Ab?wc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:S",
+		    c = getopt_long(argc, argv, "Ab::wc:uvahPqVr:m:d:g:s:T:E:DNhF:tfipW:o:S",
 				fim_options, &opt_index);
 		if (c == -1)
 		    break;
