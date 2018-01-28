@@ -701,6 +701,7 @@ namespace fim
 #define FIM_VID_FBFONT                           "_fbfont"       /* "[out,g:] The current console font file string. If the internal hardcoded font has been used, then its value is \"" FIM_DEFAULT_HARDCODEDFONT_STRING "\"." */
 #define FIM_VID_FBFMF                           "_fbfont_magnify_factor"       /* "[in,g:] The rendered text will use a font magnified by this (integer) factor. Maximal value is \"" FIM_XSTRINGIFY(FIM_FONT_MAGNIFY_FACTOR_MAX) "\". (Only enabled if configured with --with-font-magnifying-factor=FACTOR, with FACTOR<1)." */
 #define FIM_VID_FBAFS                           "_fbfont_as_screen_fraction"       /* "[in,g:] The rendered text will be scaled at least to this (integer) fraction of the screen. Disable font autoscaling with -1. (Only enabled if configured with --with-font-magnifying-factor=FACTOR, with FACTOR<1)." */
+#define FIM_VID_FB_VERBOSITY			"_fbfont_verbosity"       /* "[in,g:] if > 0, verbose font loading" */
 #define FIM_VID_HSTEPS 				"_hsteps"				/* "[in,g:] the default steps, in pixels, when panning images horizontally (overrides steps)." */
 #define FIM_VID_VSTEPS 				"_vsteps"				/* "[in,g:] the default steps, in pixels, when panning images vertically (overrides steps)." */
 #define FIM_VID_CONSOLE_ROWS 			"_rows"			/* "[in,g:] if >0, will set the number of displayed text lines in the console." */
