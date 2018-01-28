@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ class flist_t FIM_FINAL : public std::vector<fim::fle_t>
 	public:
 	flist_t(void):cf_(0){}
 	flist_t(const args_t& a);
-	void _sort(const fim_char_t sc);
+	void _sort(const fim_char_t sc, const char*id="");
 	void _unique();
 	size_type cf(void)const{return FIM_MAX(cf_,0);}
 	fim_bool_t pop_current(void);
@@ -239,7 +239,7 @@ class Browser FIM_FINAL
 	bool push_noglob(const fim::string & nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
 
 	fim::string _random_shuffle(bool dts=true);
-	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN);
+	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN, const char*id="");
 	void _unique(void);
 	fim::string _clear_list(void);
 	private:

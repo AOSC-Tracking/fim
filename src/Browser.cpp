@@ -194,7 +194,9 @@ namespace fim
 			else if(args[0]=="sort_basename")
 				result = _sort(FIM_SYM_SORT_BN);
 			else if(args[0]=="sort_comment")
-				result = _sort(FIM_SYM_SORT_BV);
+				result = _sort(FIM_SYM_SORT_BV,FIM_VID_COMMENT);
+			else if(args[0]=="sort_var" && args.size()>=2)
+				result = _sort(FIM_SYM_SORT_BV,args[1].c_str());
 #if FIM_WANT_SORT_BY_STAT_INFO
 			else if(args[0]=="sort_mtime")
 				result = _sort(FIM_SYM_SORT_MD);
@@ -1086,9 +1088,9 @@ ret:
 		setGlobalVariable(FIM_VID_FILELISTLEN,n_files());
 	}
 
-	fim::string Browser::_sort(const fim_char_t sc)
+	fim::string Browser::_sort(const fim_char_t sc, const char*id)
 	{
-		flist_._sort(sc);
+		flist_._sort(sc,id);
 		return current();
 	}
 
@@ -2604,7 +2606,7 @@ struct FimDateSorter
 #endif /* FIM_WANT_FLIST_STAT */
 #endif /* FIM_WANT_SORT_BY_STAT_INFO */
 
-	void flist_t::_sort(const fim_char_t sc)
+	void flist_t::_sort(const fim_char_t sc, const char*id)
 	{
 		/* TODO: can cache sorting status, would make e.g. Browser::do_filter more efficient */
 
@@ -2614,7 +2616,8 @@ struct FimDateSorter
 			std::sort(this->begin(),this->end(),fimBaseNameSorter);
 		if(sc==FIM_SYM_SORT_BV)
 		{
-			FimByVarSorter fimByVarSorter {FIM_VID_COMMENT};
+			FimByVarSorter fimByVarSorter;
+			fimByVarSorter.id=id;
 			std::sort(this->begin(),this->end(),fimByVarSorter);
 		}
 #if FIM_WANT_SORT_BY_STAT_INFO
