@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1571)
+ * Command 'list' 'sort_var' 'var' to sort file list according to values of 'i:var'.
 # (r1570)
  * Command 'list' 'sort_comment' to sort file list according to 'i:_comment' value.
 # (r1564)
