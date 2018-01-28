@@ -256,6 +256,9 @@ struct fim_options_t fim_options[] = {
     {"verbose-load",    no_argument,       FIM_NULL, 0x766c,"verbose file loading mode.",FIM_NULL,
 "Load files verbosely (repeat option to increase verbosity)."
     },
+    {"verbose-font-load",    no_argument,       FIM_NULL, 0x7666,"verbose font loading mode.",FIM_NULL,
+"Load font verbosely (sets " FIM_VID_FB_VERBOSITY ")." /* (repeat option to increase verbosity)." */
+    },
     {"verbose-interpreter",    no_argument,       FIM_NULL, 0x76696d0a,"verbose interpreter mode.",FIM_NULL,
 "Execute interpreter verbosely (Sets immediately " FIM_VID_DBG_COMMANDS "=\"" FIM_CNS_DBG_CMDS_MID "\" if specified once, " FIM_VID_DBG_COMMANDS "=\"" FIM_CNS_DBG_CMDS_MAX "\" if specified  twice)."
     },
@@ -1080,6 +1083,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		fim_char_t sc = '\t'; /* separation character for --load-image-descriptions-file */
 #endif /* FIM_WANT_PIC_CMTS */
 		int load_verbosity=0;
+		int font_verbosity=0;
 		int internal_verbosity=0;
 
 	    	g_fim_output_device=FIM_CNS_EMPTY_STRING;
@@ -1207,6 +1211,13 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			cc.setVariable(FIM_VID_DBG_COMMANDS,FIM_CNS_DBG_CMDS_MAX);
 		    else
 			cc.setVariable(FIM_VID_DBG_COMMANDS,FIM_CNS_DBG_CMDS_MID);
+		    break;
+		case 0x7666: // verbose-fonts-load
+		    //fim's
+	#ifdef FIM_AUTOCMDS
+		    font_verbosity++;
+		    cc.setVariable(FIM_VID_FB_VERBOSITY,1/*font_verbosity*/);
+	#endif /* FIM_AUTOCMDS */
 		    break;
 		case 0x766c: // verbose-load
 		    //fim's

@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * This file comes from fbi, and waits for a severe reorganization.
+ * This file derives from fbi, and deserves a severe reorganization.
  * */
 
 #include <dirent.h>
