@@ -184,7 +184,7 @@ log: changelog
 
 # from trunk, we should call svn2cl .. to get the full fim changelog history 
 changelog:
-	svn2cl ..
+	svn2cl -i ..
 
 release: upload freshmeat
 
