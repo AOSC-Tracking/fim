@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fimrc 5 "(c) 2011-2017 Michele Martone"
+.TH fimrc 5 "(c) 2011-2018 Michele Martone"
 .SH NAME
 fimrc - \fB fim \fP configuration file and language reference
 
@@ -469,6 +469,10 @@ list 'clear': clear the file list.
 list 'sort': sort the file list.
 .fi
 list 'sort_basename': sort the file list according to base name.
+.fi
+list 'sort_comment': sort the file list according to the value of the _comment variable.
+.fi
+list 'sort_var' {var}: sort the file list according to the value of the i:{var} variable.
 .fi
 list 'sort_fsize': sort the file list according to file size.
 .fi
