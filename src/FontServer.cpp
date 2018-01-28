@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2018 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -20,15 +20,14 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * This file comes from fbi, and will undergo severe reorganization.
+ * This file comes from fbi, and waits for a severe reorganization.
  * */
-
-
 
 #include <dirent.h>
 #include "fim.h"
 
 #define FIM_FONT_DEBUG 0
+#define FIM_FDS if(FIM_FONT_DEBUG) std::cout
 //#define ff_stderr stdout
 #define ff_stderr stderr
 #define FIM_PSF1_MAGIC0     0x36
@@ -58,14 +57,14 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f, fim
 { 
     const fim_char_t*font=(fim_char_t*)font_;
     const fim_char_t *fonts[2] = { font, FIM_NULL };
-#if FIM_FONT_DEBUG
-    std::cout << "before consolefont:" << "(0x"<<((void*)*_f) <<")\n";
-#endif /* FIM_FONT_DEBUG */
     if (FIM_NULL == *_f)
+    {
+    	//FIM_FDS << "before consolefont: " << "(0x"<<((void*)*_f) <<")\n";
 	*_f = fs_consolefont(font ? fonts : FIM_NULL, vl);
-#if FIM_FONT_DEBUG
-    std::cout << "after consolefont :" << "(0x"<<((void*)*_f) <<")\n";
-#endif /* FIM_FONT_DEBUG */
+	if(_f)
+    		FIM_FDS << "loaded a font\n";
+    	//FIM_FDS << "after consolefont : " << "(0x"<<((void*)*_f) <<")\n";
+    }
 #if FIM_WANT_HARDCODED_FONT
     //if (FIM_NULL == *_f)
 	// *_f =...;
@@ -73,10 +72,8 @@ void FontServer::fb_text_init1(const fim_char_t *font_, struct fs_font **_f, fim
 #ifdef FIM_USE_X11_FONTS
     if (FIM_NULL == *_f && 0 == fs_connect(FIM_NULL))
 	*_f = fs_open(font ? font : x11_font);
+    FIM_FDS << "after fs_open     : " << "(0x"<<((void*)*_f) <<")\n";
 #endif /* FIM_USE_X11_FONTS */
-#if FIM_FONT_DEBUG
-    std::cout << "after fs_open     :" << "(0x"<<((void*)*_f) <<")\n";
-#endif /* FIM_FONT_DEBUG */
     if (FIM_NULL == *_f) {
 	if(vl)
 	FIM_FPRINTF(ff_stderr, "font \"%s\" is not available\n",font);
@@ -105,6 +102,7 @@ static const fim_char_t *default_font[] = {
 #ifdef FIM_DEFAULT_CONSOLEFONT
 	FIM_DEFAULT_CONSOLEFONT,
 #endif /* FIM_DEFAULT_CONSOLEFONT */
+    "/usr/share/kbd/consolefonts/cp866-8x16.psf.gz", /* sles11 */
     "/usr/share/consolefonts/Uni3-TerminusBoldVGA14.psf.gz",
     "/usr/lib/kbd/consolefonts/lat9-16.psf.gz",/* added for a Mandriva backport */
     "/usr/share/consolefonts/lat1-16.psf",
@@ -216,6 +214,9 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename, fim_int 
 
     if (FIM_NULL == filename)
 	filename = fim::default_font;
+#ifdef FIM_DEFAULT_CONSOLEFONT
+    FIM_FDS << "configured with default (prioritary) consolefont: " << FIM_DEFAULT_CONSOLEFONTo << "\n";
+#endif /* FIM_DEFAULT_CONSOLEFONT */
 
 scanlistforafontfile:
     for(i = 0; filename[i] != FIM_NULL; i++) {
@@ -225,15 +226,11 @@ scanlistforafontfile:
     		if (0 == strcmp(filename[i],FIM_DEFAULT_HARDCODEDFONT_STRING))
 		{
     			fontfilename = FIM_NULL;
-#if FIM_FONT_DEBUG
-    			std::cout << "switching to hardcoded font, equivalent to: " << FIM_ENV_FBFONT << "=" << FIM_DEFAULT_HARDCODEDFONT_STRING << "\n";
-#endif /* FIM_FONT_DEBUG */
+    			FIM_FDS << "switching to hardcoded font, equivalent to: " << FIM_ENV_FBFONT << "=" << FIM_DEFAULT_HARDCODEDFONT_STRING << "\n";
 			goto openhardcodedfont;
 		}
 #endif /* FIM_WANT_HARDCODED_FONT */
-#if FIM_FONT_DEBUG
-    std::cout << "no access to " << filename[i] << "\n";
-#endif /* FIM_FONT_DEBUG */
+	    FIM_FDS << "no access to font file " << filename[i] << "\n";
 	    fim_perror(FIM_NULL);
 	    continue;
 	}
@@ -241,14 +238,12 @@ scanlistforafontfile:
     }
     fontfilename=filename[i];
     filename+=i;//new
-#if FIM_FONT_DEBUG
-    std::cout << "probing :" << fontfilename << "\n";
-#endif /* FIM_FONT_DEBUG */
 
 #if FIM_LINUX_CONSOLEFONTS_DIR_SCAN 
     if(FIM_NULL == fontfilename)
     {
-	/* will scan FIM_LINUX_CONSOLEFONTS_DIR directory for console fonts */
+    	FIM_FDS << "will scan " << FIM_LINUX_CONSOLEFONTS_DIR " directory for console fonts" << "\n";
+	
 	fim::string nf = FIM_LINUX_CONSOLEFONTS_DIR;
 	DIR *dir=FIM_NULL;
 	struct dirent *de=FIM_NULL;
@@ -291,10 +286,12 @@ openhardcodedfont:
 	FIM_FPRINTF(ff_stderr, "can't find console font file\n");
 	goto oops;
     }
+    FIM_FDS << "probing font file: " << fontfilename << "\n";
 
     h = fontfilename+strlen(fontfilename)-3;
     if ( h>fontfilename && 0 == strcmp(h,".gz")) {
 	#ifdef FIM_USE_ZCAT
+    	FIM_FDS << "uncompressing by piping through " << FIM_EPR_ZCAT << "\n";
 	/* FIXME */
 	fp = FbiStuff::fim_execlp(FIM_EPR_ZCAT,FIM_EPR_ZCAT,fontfilename,FIM_NULL);
 	#else /* FIM_USE_ZCAT */
