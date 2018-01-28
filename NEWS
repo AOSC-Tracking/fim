@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1563)
+ * Variable '_fbfont_verbosity' sets verbose font loading.
 # (r1561)
  * fix: short options -b, -h, -R were not getting optional argument (e.g. -b1).
 # (r1559)

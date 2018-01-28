@@ -26,7 +26,7 @@
 #include <dirent.h>
 #include "fim.h"
 
-#define FIM_FONT_DEBUG 0
+#define FIM_FONT_DEBUG cc.getIntVariable(FIM_VID_FB_VERBOSITY)
 #define FIM_FDS if(FIM_FONT_DEBUG) std::cout
 //#define ff_stderr stdout
 #define ff_stderr stderr
