@@ -1,13 +1,12 @@
 	$Id$
 
 This file is a melange of ideas aimed towards further development.
-If you are interested into Fim internals, philosophy, and evolution, you
-are welcome to give a look here.
+If you are interested into Fim internals, philosophy, or get some 
+inspiration, you are welcome to give a look here.
 You can propose ideas to the fim-devel mailing list:
   fbi-improved-devel@nongnu.org 
 
-Warning : Notes in this file may be outdated, and just for ongoing further
-inspiration.
+Warning : This file is outdated; actual development notes are taken elsewhere.
 
 -------------------------------------------------------------------------------
 	Misc Current development directions
