@@ -377,7 +377,7 @@ If given '+//', will jump to the first different image matching the last given r
 .fi
 With '+/'C or '-/'C will jump to next or previous file according to C: if 's' if same directory, if 'd' if down the directory hierarchy, if 'u' if down the directory hierarchy, if 'b' if same basename, if upper case match is negative, if missing defaults to 'S' (jump to file in different dir).
 .fi
-If an {identifier} is encountered after a '+' or '-' sign, jump to next or previous image having a different value for i:{identifier} (a trailing '+' will require a non empty value).
+If {identifier|identifier2...}] is encountered after a '+' or '-' sign, jump to next or previous image having a different value for any corresponding i:{identifier} (a trailing '+' will require a non empty value).
 .fi
 Match will occur on both file name and description, eventually loaded via desc or --load-image-descriptions-file; see also '_lastgotodirection' and '_re_search_opts'.
 .fi
@@ -975,6 +975,11 @@ _fbfont_magnify_factor
 .fi
 .na
 .B
+_fbfont_verbosity
+[in,g:] if > 0, verbose font loading
+.fi
+.na
+.B
 _file_load_time
 [out,i:] time taken to load the file and decode the image, in seconds.
 .fi
@@ -1413,7 +1418,7 @@ $;
 This is the default configuration, as contained in the _fim_default_config_file_contents variable.
 
 .nf
-# $LastChangedDate: 2017-12-10 22:43:04 +0100 (Sun, 10 Dec 2017) $
+# $LastChangedDate: 2018-01-21 17:19:31 +0100 (Sun, 21 Jan 2018) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
@@ -1519,7 +1524,8 @@ bind "Left" "pan_left";
 bind 'h' "pan_left";
 bind 't' "align 'top'";
 bind 'C-g' "system 'fbgrab fim.png'";
-bind 'C-r' "recording 'start'";
+#bind 'C-r' "recording 'start'";
+bind 'C-r' "reload ''";
 bind 'Q' "recording 'stop'";
 bind 'D' "recording 'dump'";
 bind 'E' "recording 'execute'";
