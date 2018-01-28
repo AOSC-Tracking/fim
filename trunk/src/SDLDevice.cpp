@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2018 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -937,8 +937,8 @@ err:
 						fim_off_t vy = cv->viewport_height();
 						fim_off_t bx = vx / bf;
 						fim_off_t by = vy / bf;
-						fim_coo_t rih = ci->width();
-						fim_coo_t riw = ci->height();
+						fim_coo_t riw = ci->width();
+						fim_coo_t rih = ci->height();
 
 						if(FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL)
 						{
