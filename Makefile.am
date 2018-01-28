@@ -81,7 +81,7 @@ ltests:
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
 # new target, still not working
-tests-all: tests $(FIMSCRIPTSDIR)/configure-brute-check.sh
+tests-all: tests
 	cd src && which cppcheck && cppcheck *cpp *.h || true
 	$(SHELL) $(FIMSCRIPTSDIR)/configure-brute-check.sh
 	
