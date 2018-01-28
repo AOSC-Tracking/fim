@@ -66,6 +66,7 @@ std::cout.unsetf ( std::ios::hex );
 #else /* FIM_SDL_DEBUG */
 #define FIM_SDL_INPUT_DEBUG(C,MSG) {}
 #endif /* FIM_SDL_DEBUG */
+#define FIM_WANT_POSITION_DISPLAYED FIM_WANT_MOUSE_PAN && 0
 
 typedef int fim_sdl_int;
 
@@ -149,6 +150,10 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 err:
 	return FIM_ERR_GENERIC;
 }
+
+#if FIM_WANT_POSITION_DISPLAYED
+static int gx,gy;
+#endif /* FIM_WANT_POSITION_DISPLAYED */
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	SDLDevice::SDLDevice(MiniConsole& mc_, fim::string opts):DisplayDevice(mc_),
@@ -254,6 +259,17 @@ err:
 			fill_rect(2*xt-eth, 2*xt+eth, 0*ytl, 1*ytl, ic, oc); // right top
 			fill_rect(1*xt-eth, 1*xt+eth, yh-ytl, yh-1, ic, oc); // left bottom
 			fill_rect(2*xt-eth, 2*xt+eth, yh-ytl, yh-1, ic, oc); // right bottom
+
+#if FIM_WANT_POSITION_DISPLAYED
+			fim_coo_t yp = gy;
+			fim_coo_t xp = gx;
+
+			if(yp>=eth && yp<yh-eth)
+				fill_rect(0, xw, yp-eth, yp+eth, ic, oc); // h
+
+			if(xp>=eth && xp<xw-eth)
+				fill_rect(  xp-eth,   xp+eth, 0, yh-1, ic, oc); // v
+#endif /* FIM_WANT_POSITION_DISPLAYED */
 		}
 		if(fim_draw_help_map_==1 || fim_draw_help_map_tmp_)
 		{
@@ -939,6 +955,11 @@ err:
 						fim_off_t by = vy / bf;
 						fim_coo_t riw = ci->width();
 						fim_coo_t rih = ci->height();
+
+#if FIM_WANT_POSITION_DISPLAYED
+						gx = (riw<vx) ? -1 : event.motion.x;
+						gy = (rih<vy) ? -1 : event.motion.y;
+#endif /* FIM_WANT_POSITION_DISPLAYED */
 
 						if(FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL)
 						{
