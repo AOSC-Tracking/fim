@@ -1,3 +1,8 @@
+2018-01-28 11:12  dezperado
+
+	* ChangeLog, doc/fim.man.in, doc/fimgs.man.in, doc/fimrc.man.in:
+	  man page rebuild and ChangeLog update.
+
 2018-01-28 10:58  dezperado
 
 	* NEWS, src/FontServer.cpp, src/fim.cpp: Added an
