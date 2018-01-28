@@ -487,6 +487,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_EX_FNS_STRING	"{filename(s)}"
 #define FIM_CNS_EX_KC_STRING	"{keycode}"
 #define FIM_CNS_EX_ID_STRING	"{identifier}"
+#define FIM_CNS_EX_VAR_STRING	"{var}"
 #define FIM_CNS_EX_IDS_STRING	"{identifier|identifier2...}]"
 #define FIM_CNS_EX_EXP_STRING	"{expression}"
 #define FIM_CNS_EX_PAT_STRING	"{pattern}"

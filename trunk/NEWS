@@ -29,8 +29,8 @@
  * description variables beginning with '_' will not go into i: (TODO: document)
 # (r1502,r1504)
  * list 'vars' will list differing description variables (TODO: document).
-# (r1499,r1506,r1567)
- * expansion of @variables and @# comments in read descriptions (TODO: document)
+# (r1499,r1506,r1567,r1568)
+ * expansion of @variables and @# comments in read descriptions.
 # (r1501)
  * The 'menu key' in SDL mode will show a temporary mouse click actions menu.
 # (r1490,r1491)

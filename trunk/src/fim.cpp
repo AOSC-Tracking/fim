@@ -126,7 +126,10 @@ struct fim_options_t fim_options[] = {
     { "keysym-press",   required_argument,       FIM_NULL, 'k',"Execute simulated press of keysym at startup. Keysym can be prefixed by a repetition count number. Option can be specified multiple times to simulate multiple keystrokes.",FIM_NULL, FIM_NULL },
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_PIC_CMTS
-    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, /*0x6c696466*/'D', "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless --" FIM_OSW_IMG_DSC_FILE_SEPC " specifies otherwise), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
+    {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, /*0x6c696466*/'D', "load image descriptions file", "{filename}", "Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless a different character is specified via --" FIM_OSW_IMG_DSC_FILE_SEPC "), then the description text. Each description will be put in the " FIM_VID_COMMENT " variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment)."
+#if FIM_WANT_DESC_VEXP
+	" If a '@' followed by a " FIM_CNS_EX_VAR_STRING " (made by alphabetic and '_' characters) is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value will be substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
+#endif /* FIM_WANT_DESC_VEXP */
 #if FIM_WANT_PIC_LVDN
       " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time (cached variable)."
       " Special comment lines like \"#!fim:+=val\" will add val to current description." 
