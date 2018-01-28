@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2018 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -287,7 +287,10 @@ public:
 									break;
 								}
 								if(!fim_is_id_char(ds[eci=bci]))
+								{
+									ss+='@';
 									continue;
+								}
 								while(eci < ds.size() && fim_is_id_char(ds[++eci]))
 									;
 								if(ns.isSetVar(ds.substr(bci,eci-bci)))
