@@ -193,6 +193,8 @@ namespace fim
 				result = _sort(FIM_SYM_SORT_FN);
 			else if(args[0]=="sort_basename")
 				result = _sort(FIM_SYM_SORT_BN);
+			else if(args[0]=="sort_comment")
+				result = _sort(FIM_SYM_SORT_BV);
 #if FIM_WANT_SORT_BY_STAT_INFO
 			else if(args[0]=="sort_mtime")
 				result = _sort(FIM_SYM_SORT_MD);
@@ -2554,6 +2556,23 @@ struct FimBaseNameSorter
 	}
 } fimBaseNameSorter;
 
+struct FimByVarSorter
+{
+	std::string id;
+	bool operator() (const fim_fn_t& lfn, const fim_fn_t& rfn)
+	{ 
+		const char * ls = lfn.c_str();
+		const char * rs = rfn.c_str();
+		int scr = 0;
+
+		const std::string lsv = cc.id_.vd_[fim_basename_of(ls)].getStringVariable(id);
+		const std::string rsv = cc.id_.vd_[fim_basename_of(rs)].getStringVariable(id);
+
+		scr = (strcmp(lsv.c_str(),rsv.c_str()));
+		return (scr < 0);
+	}
+};
+
 #if FIM_WANT_SORT_BY_STAT_INFO
 #if FIM_WANT_FLIST_STAT 
 struct FimSizeSorter
@@ -2593,6 +2612,11 @@ struct FimDateSorter
 			std::sort(this->begin(),this->end());
 		if(sc==FIM_SYM_SORT_BN)
 			std::sort(this->begin(),this->end(),fimBaseNameSorter);
+		if(sc==FIM_SYM_SORT_BV)
+		{
+			FimByVarSorter fimByVarSorter {FIM_VID_COMMENT};
+			std::sort(this->begin(),this->end(),fimByVarSorter);
+		}
 #if FIM_WANT_SORT_BY_STAT_INFO
 		if(sc==FIM_SYM_SORT_MD)
 		{
