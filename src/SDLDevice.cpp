@@ -945,6 +945,7 @@ err:
 					if(cv)
 					if(discardedfirst)
 					if(const Image* ci = cv->c_getImage())
+					if(ci->check_valid())
 					if( event.motion.x > 0 && event.motion.y )
 					{
 						// 1/(2*bf) of each screen side will be insensitive to mouse movement.
