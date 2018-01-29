@@ -31,8 +31,8 @@
  * Added an --no-pipe-load / -X switch to _no_external_loader_programs=1;
 # (r1503)
  * description variables beginning with '_' will not go into i: .
-# (r1502,r1504)
- * list 'vars' will list differing description variables (TODO: document).
+# (r1502,r1504,r1580)
+ * list 'vars|variables': list variables in all i:* read from description file.
 # (r1499,r1506,r1567,r1568)
  * expansion of @variables and @# comments in read descriptions.
 # (r1501)
