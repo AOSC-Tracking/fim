@@ -758,7 +758,7 @@ SECTION(Copyright and Thanks,copyright)
 <tr>
 <td>
 <h5>
-FIM_ABBR is copyright (C) 2007-2015 Michele Martone
+COPYRIGHT_NOTICE
 and derives from the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
 See the <a href="README.html">README.TXT</a> file for more licensing info.
 <tr>

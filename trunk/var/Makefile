@@ -23,6 +23,7 @@ FTPSCRIPT=./script.lftp
 FTPURL=ftp://dezperado@ftp5.autistici.org
 SRCDIR=./
 MIRROR=$$(cat $(FIMDIR)/README | grep "^Releases  "|sed s/^.*\ :.//g)
+COPYRIGHT_NOTICE=$$(cat $(FIMDIR)/README | grep "^FIM.is.Copyright  "|sed s/^.*\ :.//g)
 MAILINGLIST=$$(cat $(FIMDIR)/README | grep "^Mailing List "|sed s/^.*\ :.//g)
 URL=$(MIRROR)/"fim-`cat $(FIMDIR)/VERSION`".tar.gz
 
@@ -59,6 +60,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	m4 -DVERSION="$(FVERSION)"  \
 	-D REPOSITORY=$(REPOSITORY) \
 	-D MIRROR=$(MIRROR) \
+	-D COPYRIGHT_NOTICE=$(COPYRIGHT_NOTICE) \
 	-D TGZ=$(TGZ) \
 	-D SIG=$(SIG) \
 	-D URL=$(URL) \
