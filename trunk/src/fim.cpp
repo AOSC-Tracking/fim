@@ -131,7 +131,7 @@ struct fim_options_t fim_options[] = {
 	" If a '@' followed by a " FIM_CNS_EX_VAR_STRING " (made by alphabetic and '_' characters) is encountered, and i:" FIM_CNS_EX_VAR_STRING " is set, its value will be substituted here. If \"@#\" is encountered, the remainder of the description line is ignored." 
 #endif /* FIM_WANT_DESC_VEXP */
 #if FIM_WANT_PIC_LVDN
-      " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time (cached variable)."
+      " Special comment lines like \"#!fim:var=val\" will lead i:var to be assigned value val (unquoted) at image loading time (cached variable); i:var will not be assigned if var starting with underscore ('_')."
       " Special comment lines like \"#!fim:+=val\" will add val to current description." 
       " Special comment lines like \"#!fim:^=val\" will set val to be the base of each description." 
       " Special comment lines like \"#!fim:!=\" will reset all cached variables." 
