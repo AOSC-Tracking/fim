@@ -38,11 +38,13 @@ FIMGS_EXE=./src/fimgs
 srcdir = src
 
 # still unfinished
+.PHONY: signed-tgzdist
 signed-tgzdist: dist
 	gpg -sbv -u 0xE0E669C8EF1258B8 $(distdir).tar.gz
 	ls -l $(distdir).tar.gz  $(distdir).tar.gz.sig
 
 # still unfinished
+.PHONY: signed-dist
 signed-dist: dist
 	make dist-bzip2 && gpg -sbv -u 0xE0E669C8EF1258B8 $(distdir).tar.bz2
 	ls -l $(distdir).tar.bz2 $(distdir).tar.bz2.sig
@@ -57,10 +59,12 @@ signed-dist: dist
 FIMNORCOPTS=-N --no-etc-rc-file
 
 # this rule is deprecated, too: testing should be performed with 'make tests' (FIXME)
+.PHONY: sanity-check
 sanity-check:	all
 	@$(FIM_EXE) $(FIMNORCOPTS) -E $(top_srcdir)/scripts/tests/sanity.fim -t
 
 # this is the official way of testing fim
+.PHONY: tests
 tests:	all
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
@@ -74,6 +78,7 @@ tests:	all
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
 	make ltests
 
+.PHONY: ltests
 ltests:
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
 	if test $(abs_builddir) = $(abs_srcdir) ; then make -C src/testdir ; fi
@@ -81,6 +86,7 @@ ltests:
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
 # new target, still not working
+.PHONY: tests-all
 tests-all: tests
 	cd src && which cppcheck && cppcheck *cpp *.h || true
 	$(SHELL) $(FIMSCRIPTSDIR)/configure-brute-check.sh
@@ -89,10 +95,12 @@ tests-all: tests
 #	$(AWK)  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS > f
 
 # this rule is deprecated, too
+.PHONY: test
 test:	all
 	@$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/* #~/M*s/*g
 
 # this rule is deprecated, too
+.PHONY: aatest
 aatest:	all
 	@$(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/* -o aa #~/M*s/*g
 
@@ -102,6 +110,7 @@ aatest:	all
 #	ls -l ../fim*.tgz  -v
 
 # this rule is encouraged
+.PHONY: report
 report:
 	@cat VERSION
 	@echo '-'
@@ -114,9 +123,11 @@ report:
 	@echo 'now please report the bug with this information to the author via email' ;
 
 # this rule is redundant
+.PHONY: exec
 exec:   test
 
 # this rule is smart, isn't it ? I love it !
+.PHONY: edit
 edit:
 	$(EDITOR) $(srcdir)/fim.cpp +':split $(srcdir)/fim.h' # Vim ! :)
 
@@ -124,10 +135,12 @@ edit:
 	@true
 
 # this rule is informative and for acting like a peacock 
+.PHONY: wc
 wc:
 	wc $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/yacc.ypp $(srcdir)/lex.lex
 	@#wc $(FIM) # missing headers..
 
+.PHONY: devhelp
 devhelp:
 	@echo -----------------------------------------------
 	@echo '			short Makefile dev help'
@@ -138,6 +151,7 @@ devhelp:
 	@echo
 	@make help
 
+.PHONY: help
 help:
 	@echo -----------------------------------------------
 	@echo '			short Makefile help'
@@ -155,13 +169,17 @@ help:
 	@echo 'Thanks for your collaboration.'
 	@echo
 
+.PHONY: ai
 ai:
 	make site up -C var/
 
+.PHONY: up
 up: upload news
 
+.PHONY: news
 news: freshmeat mail-announce
 
+.PHONY: dox
 dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 
 MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g' -e 's,-,\\-,g'
@@ -177,31 +195,40 @@ doc/fim.man doc/fimrc.man doc/fimgs.man: doc/fim.man.in doc/fimrc.man.in doc/fim
 	cat doc/fimgs.man.in |$(MANSUBST) > doc/fimgs.man
 
 # fixme : missing integration with ChangeLog file
+.PHONY: mail-announce
 mail-announce:
 	@ figlet fim | mutt -s "fim-`cat VERSION` release" "fbi-improved-devel@nongnu.org"  -i -
 
+.PHONY: log
 log: changelog
 
 # from trunk, we should call svn2cl .. to get the full fim changelog history 
+.PHONY: changelog
 changelog:
 	svn2cl -i ..
 
+.PHONY: release
 release: upload freshmeat
 
+.PHONY: upload
 upload: savannah 
 
+.PHONY: uptrunk
 uptrunk:
 	read && scp $(distdir).tar.gz.sig  $(distdir).tar.gz $(distdir).tar.bz2.sig $(distdir).tar.bz2 dezperado@dl.sv.nongnu.org:/releases/fbi-improved/
 
 # echo -en "cd /releases/fbi-improved\nput $(distdir).tar.gz.sig\n put fim-${fim_cv_version}.tar.gz\n put fim-${fim_cv_version}.tar.bz2\n put fim-${fim_cv_version}.tar.bz2.sig"  | sftp "dezperado@dl.sv.gnu.org" -b 
+.PHONY: savannah_
 savannah_: signed-dist
 	grep trunk VERSION || echo do
 	lynx -dump dl.sv.gnu.org/releases/fbi-improved
 
+.PHONY: savannah-lookup
 savannah-lookup:
 	lynx -dump dl.sv.gnu.org/releases/fbi-improved
 
 # fixme : missing integration with ChangeLog file and such information
+.PHONY: freshmeat_old
 freshmeat_old: 
 	@ $(AWK)  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
 	@echo freshmeat-submit -v "fbi-`cat VERSION`" \
@@ -227,6 +254,7 @@ freshmeat_old:
 #	--url-demo         $$(cat README | grep "^Web Page  "|sed s/^.*:.//g)
 #	--bzipped-tar-url  $$(cat README | grep "^Web Page  "|sed s/^.*:.//g)
 
+.PHONY: freshmeat-submit
 freshmeat-submit:
 	@echo Project: fim
 	@echo Version: `cat VERSION`
@@ -243,10 +271,12 @@ freshmeat-submit:
 	@echo 
 	@ $(AWK)  -- 'v=0;($$1 == "Version" && $$2=="'`cat VERSION`'"){while((input=getline) && $$1!="Version"){print}};'  NEWS 
 
+.PHONY: freshmeat
 freshmeat:
 	@ echo "are you sure you want to freshmeat-submit ? (any key to abort, yes to continue)"  && read yes && [[ "$${yes}" == "yes" ]] && \
 	make freshmeat-submit | grep -v '^make\[' | freshmeat-submit
 
+.PHONY: commit
 commit: log
 	svn commit
 
