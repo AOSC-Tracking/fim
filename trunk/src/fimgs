@@ -337,7 +337,7 @@ done
 #echo "options are $fbiopts"
 
 # there should be some filter to avoid feed garbage to fim ... 
-find $DIR/ -type f -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.gif' -or -iname '*.bmp' -or -iname '*.tiff' | sort -n | $FBI $fbiopts  -- -
+find $DIR/ -type f -iname '*.jpg' -or -iname '*.jpeg' -or -iname '*.png' -or -iname '*.gif' -or -iname '*.bmp' -or -iname '*.tiff' -or -iname '*.tif' | sort -n | $FBI $fbiopts  -- -
 
 # when no framebuffer device is available, we could invoke another console viewer, couldn't we ?
 # cacaview $DIR/*
