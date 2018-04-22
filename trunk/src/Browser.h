@@ -269,6 +269,7 @@ class Browser FIM_FINAL
 	virtual void quickbench_finalize(fim_int qbi);
 	virtual void quickbench(fim_int qbi);
 #endif /* FIM_WANT_BENCHMARKS */
+	bool filechanged(void);
 }; /* Browser */
 } /* namespace fim */
 #endif /* FIM_BROWSER_H */

@@ -1040,6 +1040,15 @@ err:
 
 				*prompt_ = FIM_SYM_PROMPT_NUL;
 				c=0;
+
+#if FIM_WANT_RELOAD_ON_FILE_CHANGE
+				if(browser_.filechanged())
+				{
+					args_t args;
+					args.push_back("''");
+					execute(FIM_FLT_RELOAD,args);
+				}
+#endif /* FIM_WANT_RELOAD_ON_FILE_CHANGE */
 				r=displaydevice_->get_input(&c);
 #ifdef	FIM_USE_GPM
 				if(Gpm_GetEvent(EVENT)==1)
