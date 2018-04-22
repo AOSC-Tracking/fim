@@ -2370,6 +2370,30 @@ err:
 	}
 #endif /* FIM_WANT_BENCHMARKS */
 
+	bool Browser::filechanged(void)
+	{
+#if FIM_WANT_RELOAD_ON_FILE_CHANGE
+#if FIM_WANT_FLIST_STAT 
+		fim_stat_t nfs = fim_get_stat(current(), NULL);
+
+		if( flist_[current_n()].stat_.st_ctime != nfs.st_ctime )
+		{
+			if( flist_[current_n()].stat_.st_ctime == 0 )
+				flist_[current_n()].stat_.st_ctime = nfs.st_ctime;
+			else
+				return true;
+		}
+		if( flist_[current_n()].stat_.st_mtime != nfs.st_mtime )
+		{
+			if( flist_[current_n()].stat_.st_mtime == 0 )
+				flist_[current_n()].stat_.st_mtime = nfs.st_mtime;
+			else
+				return true;
+		}
+#endif /* FIM_WANT_FLIST_STAT */
+#endif /* FIM_WANT_RELOAD_ON_FILE_CHANGE */
+		return false;
+	}
 	fim_stat_t fim_get_stat(const fim_fn_t& fn, bool * dopushp)
 	{
 		bool dopush = false;

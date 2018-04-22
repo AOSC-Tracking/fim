@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1583)
+ * Reload automatically on file change.
 # (r1571)
  * Command 'list' 'sort_var' 'var' to sort file list according to values of 'i:var'.
 # (r1570)
