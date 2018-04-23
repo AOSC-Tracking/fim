@@ -73,6 +73,7 @@ check_in_path echo  || die "no echo in \$PATH"
 check_in_path find  || die "no find in \$PATH"
 check_in_path wget  || die "no wget in \$PATH"
 check_in_path gs    || die "no gs (ghostscript) in \$PATH"
+check_in_path xz    || die "no xz               in \$PATH"
 check_in_path tar   || die "no tar in \$PATH"
 check_in_path basename   || die "no basename in \$PATH"
 check_in_path md5sum   || die "no md5sum in \$PATH"
@@ -151,6 +152,8 @@ In order to uncompress RAR archives, fimgs will use 'unrar-nonfree' or 'rar' or 
 
 In order to uncompress ZIP archives, fimgs will use 'zip'.
 
+In order to uncompress TAR.GZ or TAR.BZ2 or TAR.XZ archives, fimgs will use 'tar'.
+
 In order to fetch http:// or https:// prefixed URLS, 'wget' will be used.
 
 In case of a CBZ, CBR, PDF, PS, or DVI file, will invoke \fB fim\fP with '$fbi_read_opts'.
@@ -192,6 +195,7 @@ EOF
 			echo -e " Postscript (.ps) file"
 			echo -e " TAR (.tar) archive"
 			echo -e " BZ2 (.bz2) archive"
+			echo -e " XZ (.xz) archive"
 			echo -e " GZIP (.gz) archive"
 			echo -e " https://  resource (web resource)"
 			echo -e " http://  resource (web resource)"
@@ -226,6 +230,7 @@ UNCBR="$UNRAR x"                   # suits for Alexander Roshal's RAR 3.51
 UNTAR="tar xf"
 UNTGZ="tar xzf"
 UNBZ="tar xjf"
+UNXZ="tar xJf"
 #while [[ "$1" != "" ]]
 #while [[ "$#" -gt "0" ]]
 while test x"$opt" = x"1"
@@ -297,7 +302,7 @@ gs	-dSAFER -dNOPAUSE -dBATCH			\
 #	echo
 #	exit 1
 #elif ( ( [[ "$f" =~ \\.cbr$  ]] || [[ "$f" =~ \\.cbz$  ]] ) || ( [[ "$f" =~ \\.rar$  ]] || [[ "$f" =~ \\.zip$  ]] ) || ( [[ "$f" =~ \\.tgz$  ]] || [[ "$f" =~ \\.tar.gz$  ]] ) || ( [[ "$f" =~ \\.tar$  ]] || [[ "$f" =~ \\.tar.bz2$  ]] ) )  && ! [[ "$f" =~ '^http://' ]]
-elif ( ( [[ "$f" =~ .CBR$  ]] || [[ "$f" =~ .CBZ$  ]] || [[ "$f" =~ .cbr$  ]] || [[ "$f" =~ .cbz$  ]] ) || ( [[ "$f" =~ .rar$  ]] || [[ "$f" =~ .zip$  ]] ) || ( [[ "$f" =~ .tgz$  ]] || [[ "$f" =~ .tar.gz$  ]] ) || ( [[ "$f" =~ .tar$  ]] || [[ "$f" =~ .tar.bz2$  ]] ) )  && ! [[ "$f" =~ 'http://' ]] && ! [[ "$f" =~ 'https://' ]]
+elif ( ( [[ "$f" =~ .CBR$  ]] || [[ "$f" =~ .CBZ$  ]] || [[ "$f" =~ .cbr$  ]] || [[ "$f" =~ .cbz$  ]] ) || ( [[ "$f" =~ .rar$  ]] || [[ "$f" =~ .zip$  ]] ) || ( [[ "$f" =~ .tgz$  ]] || [[ "$f" =~ .tar.gz$  ]] ) || ( [[ "$f" =~ .tar$  ]] || [[ "$f" =~ .tar.bz2$  ]] || [[ "$f" =~ .tar.xz$  ]] ) )  && ! [[ "$f" =~ 'http://' ]] && ! [[ "$f" =~ 'https://' ]]
 then
 # in the case of an archive ...
 # an ideal fimgs script would unpack recursively in search for interesting files..
@@ -314,6 +319,7 @@ then
 [[ "$f" =~ .tar.gz$ ]] && ( $UNTGZ "$f" -C "$DIR" ) 
 [[ "$f" =~ .tar$    ]] && ( $UNTAR "$f" -C "$DIR" ) 
 [[ "$f" =~ .tar.bz2$ ]] && ( $UNBZ "$f" -C "$DIR" ) 
+[[ "$f" =~ .tar.xz$ ]] && ( $UNXZ "$f" -C "$DIR" ) 
 
 function add_fbi_read_opts() { fbiopts="$fbiopts $fbi_read_opts"; }
 [[ "$f" =~ .cbr$    ]] && add_fbi_read_opts;
