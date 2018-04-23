@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1584)
+ * fimgs: handling tar.xz archives.
 # (r1583)
  * Reload automatically on file change.
 # (r1571)
