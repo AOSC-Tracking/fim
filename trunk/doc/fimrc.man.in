@@ -470,10 +470,6 @@ list 'sort': sort the file list.
 .fi
 list 'sort_basename': sort the file list according to base name.
 .fi
-list 'sort_comment': sort the file list according to the value of the _comment variable.
-.fi
-list 'sort_var' {var}: sort the file list according to the value of the i:{var} variable.
-.fi
 list 'sort_fsize': sort the file list according to file size.
 .fi
 list 'sort_mtime': sort the file list according to modification date. 

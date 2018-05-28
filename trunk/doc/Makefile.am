@@ -17,6 +17,7 @@ htmldir = $(docdir)
 dist_html_DATA = $(HTMLDOCS)
 dist_doc_DATA = FIM.TXT
 
+.PHONY: all
 all:	$(HTMLDOCS) $(EXTRA_DIST)
 
 FIM.html fim-stylesheet.css: doctags FIM.TXT

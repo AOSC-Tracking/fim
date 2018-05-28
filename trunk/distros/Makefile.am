@@ -24,13 +24,16 @@ PREFIX=gentoo/media-gfx/fim
 $(PREFIX)/Manifest: $(PREFIX)/fim-$(VERSION).ebuild Makefile
 	cd $(PREFIX)/ && ebuild fim-$(VERSION).ebuild digest
 
+.PHONY: all
 all:
 
 # well, this is of interest only of developer's interes
 #all:	ebuild
 
+.PHONY: ebuild
 ebuild:	$(PREFIX)/Manifest
 
+.PHONY: clean
 clean:
 	rm -fR $(PREFIX)/Manifest $(PREFIX)/files 
 
