@@ -24,6 +24,16 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/numbers/7.gif \
 	$(top_srcdir)/media/numbers/8.gif \
 	$(top_srcdir)/media/numbers/9.gif \
+	$(top_srcdir)/media/numbers_pcx/0.pcx \
+	$(top_srcdir)/media/numbers_pcx/1.pcx \
+	$(top_srcdir)/media/numbers_pcx/2.pcx \
+	$(top_srcdir)/media/numbers_pcx/3.pcx \
+	$(top_srcdir)/media/numbers_pcx/4.pcx \
+	$(top_srcdir)/media/numbers_pcx/5.pcx \
+	$(top_srcdir)/media/numbers_pcx/6.pcx \
+	$(top_srcdir)/media/numbers_pcx/7.pcx \
+	$(top_srcdir)/media/numbers_pcx/8.pcx \
+	$(top_srcdir)/media/numbers_pcx/9.pcx \
 	$(top_srcdir)/media/multipage/sample.tex \
 	$(top_srcdir)/media/multipage/Makefile \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
@@ -62,6 +72,9 @@ FIMNORCOPTS=-N --no-etc-rc-file
 .PHONY: sanity-check
 sanity-check:	all
 	@$(FIM_EXE) $(FIMNORCOPTS) -E $(top_srcdir)/scripts/tests/sanity.fim -t
+
+.PHONY: check
+check:	tests
 
 # this is the official way of testing fim
 .PHONY: tests
