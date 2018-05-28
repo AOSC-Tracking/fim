@@ -1,3 +1,42 @@
+2018-01-28 22:33  dezperado
+
+	* [r1576] README, TODO: general refresh of TODO and README.
+
+2018-01-28 22:32  dezperado
+
+	* [r1575] Makefile.am: fix to broken tests-all rule in Makefile.am.
+
+2018-01-28 17:14  dezperado
+
+	* [r1574] doc/fim.man.in, doc/fimrc.man.in, src/fim.h: copyright
+	  year set to 2018
+
+2018-01-28 17:13  dezperado
+
+	* [r1573] src/SDLDevice.cpp: embryonal code for showing
+	  mouse/alignment position graphically in sdl
+
+2018-01-28 16:42  dezperado
+
+	* [r1572] src/SDLDevice.cpp: fix: x and y were swapped in a mouse
+	  based scroll check.
+
+2018-01-28 15:00  dezperado
+
+	* [r1571] NEWS, src/Browser.cpp, src/Browser.h, src/fim.h: Command
+	  'list' 'sort_var' 'var' to sort file list according to values of
+	  'i:var'.
+
+2018-01-28 14:38  dezperado
+
+	* [r1570] NEWS, src/Browser.cpp, src/fim.h: Command 'list'
+	  'sort_comment' to sort file list according to 'i:_comment' value.
+
+2018-01-28 13:37  dezperado
+
+	* [r1569] ChangeLog, Makefile.am: using 'svn2cl -i' instead of
+	  'svn2cl'
+
 2018-01-28 13:24  dezperado
 
 	* [r1568] NEWS, doc/fim.man.in, src/fim.cpp, src/fim.h: Documented

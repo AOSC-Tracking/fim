@@ -81,6 +81,7 @@ endif
 BUILT_SOURCES = lex.yy.cc yacc.tab.cpp conf.h yacc.tab.hpp 
 
 # this hook triggers on 'make dist'
+.PHONY: dist-hook
 dist-hook:
 	-for file in $(BUILT_SOURCES) ; do $(RM) -f $(distdir)/$$file ; done
 
