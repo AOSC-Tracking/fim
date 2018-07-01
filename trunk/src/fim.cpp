@@ -1006,6 +1006,12 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 				fd = fim_fopen(fn,"r");
 			else
 				fd = stdin;
+	
+			if(!fd)
+			{
+				// note: shall print a warning
+				goto ret;
+			}
 
 			while(fim_getline(&lineptr,&bs,fd,*sa)>0)
 			{
@@ -1025,6 +1031,7 @@ static fim_err_t fim_load_filelist(const char *fn, const char * sa, fim_flags_t 
 				fim_free(lineptr);
 			if(fn && fd)
 					fim_fclose(fd);
+ret:
 			return 0;
 }
 
