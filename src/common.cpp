@@ -489,6 +489,7 @@ static fim_char_t * dupstrn (const fim_char_t* s, size_t l)
 #endif /* FIM_USE_CXX14 */
 {
 	fim_char_t *r = (fim_char_t*) fim_malloc (l + 1);
+	if(!r){/*assert(r);*/throw FIM_E_NO_MEM;}
 	strncpy(r,s,l);
 	r[l]='\0';
 	return (r);
