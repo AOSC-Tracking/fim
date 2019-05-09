@@ -36,9 +36,11 @@ POD='\(sdl\|fb\|imlib2\)'
 $f $fv 2>&1 | $g -i 'supported output devices.*:' | $g "$POD"|| resign "missing a pixel oriented driver (as one of $POD)"
 $f $fv 2>&1 | $g 'supported file formats:'   | $g '\(png\|gif\)' | resign "missing adequate file format support"
 
+if test x"$SSH_TTY" = x"" ; then
 export FBFONT=/dev/null
 if $f $fa ; then fail "$f $fa does not fail as it should on wrong font file" ; 
 else echo "$f $fa correctly recognizes an invalid FBFONT variable and exits" ; fi
+else echo "Skipping FBFONT=/dev/null because seems we're running under ssh" ; fi
 
 export FBFONT=$top_srcdir/var/fonts/Lat15-Terminus16.psf
 if ! $f $fa ; then fail "$f $fa fails, but it should not, as a correct font was provided" ; 
