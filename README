@@ -198,7 +198,7 @@ You find all of these on any decent Linux distribution.
 
  sudo apt-get install subversion
  sudo apt-get install automake autoconf libtool # to generate configure, etc
- sudo apt-get pkg-config                        # to generate configure
+ sudo apt-get install pkg-config                # to generate configure
  sudo apt-get install libreadline-dev libexif-dev
  sudo apt-get install libjpeg-dev libpng-dev libtiff-dev libgif-dev
  sudo apt-get install libsdl1.2-dev libaa1-dev 
