@@ -32,4 +32,10 @@ RUN make clean
 RUN make
 RUN src/fim --version
 RUN src/fim --help
-# 
+
+# Test
+USER "root"
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install --yes man2html vim
+USER "user"
+RUN sed -i "s/\(export.*psf\)/\1;exit;/g" scripts/tests/font.sh
+RUN make tests
