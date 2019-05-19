@@ -3,7 +3,7 @@ ARG IMG="debian:unstable"
 FROM "${IMG}"
 
 # Update the package lists
-RUN apt-get update
+RUN apt-get update --fix-missing
 
 # Copy the current directory to the container and continue inside it
 COPY "." "/mnt"
