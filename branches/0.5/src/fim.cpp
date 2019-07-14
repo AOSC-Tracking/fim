@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2019 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ FIM_NULL
 "Be verbose: show status bar."
     },
     {"version",    no_argument,       FIM_NULL, 'V',"print program version.",FIM_NULL,
-"Display program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate."
+"Display program version, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate. Invoke twice to get compile flags."
     },
     {"autowidth",   no_argument,       FIM_NULL, 'w',"scale according to width.",FIM_NULL,
 "Scale the image according to the screen width."
@@ -428,7 +428,7 @@ ret:
 
 class FimInstance
 {
-	static void show_version();
+	static void show_version(const int vl);
 
 string fim_dump_man_page_snippets(void)
 {
@@ -1189,9 +1189,15 @@ done:
 		    default_vt = atoi(optarg);
 		    break;
 		case 'V':
-		    show_version();
+		{
+		    int vl = 0;
+		    while( (c = getopt_long(argc, argv, "V", options, &opt_index)) != -1 )
+			if (c == 'V')
+		            vl=1;
+                    show_version(vl);
 		    return 0;
 		    break;
+		}
 		case 0x4352:
 		    //fim's
 		    cc.appendPostInitCommand( "if(" FIM_VID_FILELISTLEN "==1){_ffn=i:" FIM_VID_FILENAME ";" FIM_FLT_CD " i:" FIM_VID_FILENAME ";" FIM_FLT_LIST " 'remove' i:" FIM_VID_FILENAME ";" FIM_FLT_BASENAME " _ffn;_bfn='./'." FIM_VID_LAST_SYSTEM_OUTPUT ";" FIM_FLT_LIST " 'pushdir' '.';" FIM_FLT_LIST " 'sort';" FIM_FLT_GOTO " '?'._bfn;" FIM_FLT_RELOAD ";" FIM_FLT_REDISPLAY ";}if(" FIM_VID_FILELISTLEN "==0){" FIM_FLT_STDOUT " 'No files loaded: exiting.';" FIM_FLT_QUIT " 0;}");
@@ -1534,7 +1540,7 @@ fim_perr_t main(int argc,char *argv[])
 //#include <poppler/PDFDoc.h> // getPDFMajorVersion getPDFMinorVersion
 //#endif /* HAVE_LIBPOPPLER */
 
-	void FimInstance::show_version(void)
+	void FimInstance::show_version(const int vl)
 	{
 	    FIM_FPRINTF(stderr, 
 			    FIM_CNS_FIM" "
@@ -1602,15 +1608,27 @@ fim_perr_t main(int argc,char *argv[])
 	#ifdef FIM_CONFIGURATION
 			"Configuration invocation: " FIM_CONFIGURATION "\n" 
 	#endif /* FIM_CONFIGURATION */
+	);
 	#ifdef CXXFLAGS
+	if(vl)
+		FIM_FPRINTF(stderr, 
 			"Compile flags: CXXFLAGS=" CXXFLAGS
 	#ifdef CFLAGS
 			"  CFLAGS=" CFLAGS
 	#endif /* CFLAGS */
 			"\n"
+	);
 	#endif /* CXXFLAGS */
-			"Fim options (features included (+) or not (-)):\n"
+
+  	std::string vstr = 
+	"Fim options (features included (+) or not (-)):\n"
 	#include "version.h"
+	;
+	if(vl==0 && vstr.find("\nCXXFLAGS=") > 0)
+		vstr = std::string( vstr.begin(), vstr.begin()+vstr.find("\nCXXFLAGS=") );
+	FIM_FPRINTF(stderr, vstr.c_str() );
+	
+	FIM_FPRINTF(stderr, 
 	/* i think some flags are missing .. */
 		"\nSupported output devices (for --" FIM_OSW_OUTPUT_DEVICE "): "
 	#ifdef FIM_WITH_AALIB
@@ -1659,9 +1677,8 @@ fim_perr_t main(int argc,char *argv[])
 #ifdef HAVE_MATRIX_MARKET_DECODER
 		" mtx (Matrix Market)"
 #endif /* HAVE_MATRIX_MARKET_DECODER */
-		"\n"
-			    );
-		
+		"\n");
+
 		fim_loaders_to_stderr();
 	}
 	/* WARNING: PLEASE DO NOT WRITE ANY MORE CODE AFTER THIS DECLARATION (RIGHT ABOVE, AN UNCLEAN CODING PRACTICE WAS USED) */
