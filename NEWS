@@ -11,6 +11,7 @@
  * bugfix: in --as-text will avoid repeated reload of file.
  * fix: symbol from fbi sources clashed with gcc-6 onwards, breaking compilation.
  * fix: short options -b, -h were not getting optional argument.
+ * fix: piping from external commands was hanging.
 
                 Version 0.5-rc3
 
