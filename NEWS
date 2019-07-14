@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1594)
+ * fix: piping from external commands was hanging.
 # (r1585)
  * internal: fix: error handling was missing.
 # (r1584)

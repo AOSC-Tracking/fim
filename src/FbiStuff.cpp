@@ -1512,7 +1512,7 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 	        rc=execvp(cmd,argv);
 		exit(rc);
 		default:/* parent */
-		waitpid(pid,NULL,0);
+		waitpid(pid,NULL,WNOHANG);
 		close(p[1]);
 		fp = fdopen(p[0],"r");
 		if(FIM_NULL==fp)
