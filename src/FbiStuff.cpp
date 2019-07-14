@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2019 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -1366,7 +1366,7 @@ FILE* FbiStuff::fim_execlp(const char *cmd, ...)
 	        rc=execvp(cmd,argv);
 		exit(rc);
 		default:/* parent */
-		waitpid(pid,NULL,0);
+		waitpid(pid,NULL,WNOHANG);
 		close(p[1]);
 		fp = fdopen(p[0],"r");
 		if(NULL==fp)
