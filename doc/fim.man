@@ -222,7 +222,7 @@ Randomly shuffle the files list before browsing (no seeding).
 Be verbose: show status bar.
 .TP
 .B \-V, \-\-version
-Display program version, compile flags, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate.
+Display program version, enabled features, linked libraries information, supported filetypes/file loaders, and then terminate. Invoke twice to get compile flags.
 .TP
 .B \-w, \-\-autowidth
 Scale the image according to the screen width.
