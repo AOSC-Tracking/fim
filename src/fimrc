@@ -132,7 +132,7 @@ bind '`' "toggleLimitMarked";
 alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay" "";
 alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay" "";
 alias "toggleDesaturate" "_autodesaturate=1-_autodesaturate;redisplay" "";
-alias "idempotent_cmd" "goto '+0p'";
+alias "idempotent_cmd" "goto ''";
 #
 # Autocommands examples:
 #autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n'";
