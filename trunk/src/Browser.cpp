@@ -1347,7 +1347,7 @@ ret:
 			extern fim_cycles_t cycles_last;
 			extern fim_key_t c_last;
 			extern bool again_same_keypress;
-			static int same_keypress_times=0;
+			static int same_keypress_repeat=0;
 #endif /* FIM_WANT_NEXT_ACCEL */
 
 
@@ -1368,9 +1368,9 @@ ret:
 
 #if FIM_WANT_NEXT_ACCEL
 			if( isfg && !isre && isrj && again_same_keypress==true )
-				same_keypress_times=same_keypress_times++ % 12;
+				same_keypress_repeat = FIM_MIN(same_keypress_repeat+1,12);
 			else
-				same_keypress_times=0;
+				same_keypress_repeat = 0;
 #endif /* FIM_WANT_NEXT_ACCEL */
 
 #if FIM_WANT_GOTO_DIR
@@ -1521,12 +1521,8 @@ ret:
 						isfg = true, ispg = false;
 			}
 #if FIM_WANT_NEXT_ACCEL
-#define FIM_IPOW(E) ((1)<<(E))
-#define FIM_JMP_AT_STEP(S) FIM_IPOW(S)
-			if( !isre && isrj && same_keypress_times>0 )
-				gv *= FIM_JMP_AT_STEP(same_keypress_times);
-#undef FIM_IPOW
-#undef FIM_JMP_AT_STEP
+			if( !isre && isrj && same_keypress_repeat>0 )
+				gv *= std::pow(2,same_keypress_repeat);
 #endif /* FIM_WANT_NEXT_ACCEL */
 			if( ispg )
 				mv = pc;
