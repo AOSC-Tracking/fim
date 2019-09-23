@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2019 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -952,6 +952,10 @@ err:
 		/*
 		 * the cycle with fetches the instruction stream.
 		 * */
+#if FIM_WANT_NEXT_ACCEL
+		static fim_cycles_t cycles_last;
+		static fim_key_t c_last;
+#endif /* FIM_WANT_NEXT_ACCEL */
 #ifdef	FIM_USE_GPM
 		Gpm_PushRoi(0,0,1023,768,GPM_DOWN|GPM_UP|GPM_DRAG|GPM_ENTER|GPM_LEAVE,gh,FIM_NULL);
 #endif	/* FIM_USE_GPM */
@@ -976,6 +980,10 @@ err:
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	 	while(show_must_go_on_)
 		{
+#if FIM_WANT_NEXT_ACCEL
+			extern bool again_same_keypress;
+			again_same_keypress=false;
+#endif /* FIM_WANT_NEXT_ACCEL */
 			cycles_++;
 #if 0
 			/* dead code */
@@ -1122,7 +1130,12 @@ err:
 					else
 #endif /* FIM_USE_READLINE */
 					{
-
+#if FIM_WANT_NEXT_ACCEL
+						if(cycles_last+1==cycles_ && c_last==c)
+							again_same_keypress=true;
+						cycles_last=cycles_;
+						c_last=c;
+#endif /* FIM_WANT_NEXT_ACCEL */
 						if( this->executeBinding(c) )
 						{
 #ifdef FIM_RECORDING

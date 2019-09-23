@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2019 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1343,6 +1343,13 @@ ret:
 			bool isfg = false;
 			bool isrj = false;
 			bool isdj = false;
+#if FIM_WANT_NEXT_ACCEL
+			extern fim_cycles_t cycles_last;
+			extern fim_key_t c_last;
+			extern bool again_same_keypress;
+			static int same_keypress_times=0;
+#endif /* FIM_WANT_NEXT_ACCEL */
+
 
 			if( !s )
 				goto ret;
@@ -1358,6 +1365,27 @@ ret:
 			isre = ((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
 			isrj = (c=='+' || c=='-');
 			isdj = isrj && s[1] == '/' && ( sl == 2 || ( sl == 3 && strchr("udsbUDSB",s[2])) );
+
+#if FIM_WANT_NEXT_ACCEL
+			if( isfg && !isre && isrj && again_same_keypress==true )
+			{
+				int en;
+#define FIM_IPOW(E) ((1)<<(E))
+#define FIM_JMP_AT_STEP(S) FIM_IPOW(S)
+				same_keypress_times=same_keypress_times++ % 12;
+				en = FIM_JMP_AT_STEP(same_keypress_times);
+#undef FIM_IPOW
+#undef FIM_JMP_AT_STEP
+				if(c == '-')
+					en = -en;
+				nf = FIM_MOD(nf+en,fc);
+				goto go_jump;
+			}
+			else
+			{
+				same_keypress_times=0;
+			}
+#endif /* FIM_WANT_NEXT_ACCEL */
 
 #if FIM_WANT_GOTO_DIR
 			if( isdj )
