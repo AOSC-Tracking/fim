@@ -1368,23 +1368,9 @@ ret:
 
 #if FIM_WANT_NEXT_ACCEL
 			if( isfg && !isre && isrj && again_same_keypress==true )
-			{
-				int en;
-#define FIM_IPOW(E) ((1)<<(E))
-#define FIM_JMP_AT_STEP(S) FIM_IPOW(S)
 				same_keypress_times=same_keypress_times++ % 12;
-				en = FIM_JMP_AT_STEP(same_keypress_times);
-#undef FIM_IPOW
-#undef FIM_JMP_AT_STEP
-				if(c == '-')
-					en = -en;
-				nf = FIM_MOD(nf+en,fc);
-				goto go_jump;
-			}
 			else
-			{
 				same_keypress_times=0;
-			}
 #endif /* FIM_WANT_NEXT_ACCEL */
 
 #if FIM_WANT_GOTO_DIR
@@ -1534,6 +1520,14 @@ ret:
 					if( fc > 1 )
 						isfg = true, ispg = false;
 			}
+#if FIM_WANT_NEXT_ACCEL
+#define FIM_IPOW(E) ((1)<<(E))
+#define FIM_JMP_AT_STEP(S) FIM_IPOW(S)
+			if( !isre && isrj && same_keypress_times>0 )
+				gv *= FIM_JMP_AT_STEP(same_keypress_times);
+#undef FIM_IPOW
+#undef FIM_JMP_AT_STEP
+#endif /* FIM_WANT_NEXT_ACCEL */
 			if( ispg )
 				mv = pc;
 			else
