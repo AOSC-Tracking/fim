@@ -1343,10 +1343,11 @@ ret:
 			bool isfg = false;
 			bool isrj = false;
 			bool isdj = false;
+			bool isac = false; // accelerated
+			bool isbl = false; // boundaries limited [0...mv-1]
 #if FIM_WANT_NEXT_ACCEL
 			extern fim_int same_keypress_repeats;
 #endif /* FIM_WANT_NEXT_ACCEL */
-
 
 			if( !s )
 				goto ret;
@@ -1362,6 +1363,10 @@ ret:
 			isre = ((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
 			isrj = (c=='+' || c=='-');
 			isdj = isrj && s[1] == '/' && ( sl == 2 || ( sl == 3 && strchr("udsbUDSB",s[2])) );
+#if FIM_WANT_NEXT_ACCEL
+			isac = !isre && isrj && same_keypress_repeats>0;
+			isbl = isac;
+#endif /* FIM_WANT_NEXT_ACCEL */
 
 #if FIM_WANT_GOTO_DIR
 			if( isdj )
@@ -1511,7 +1516,7 @@ ret:
 						isfg = true, ispg = false;
 			}
 #if FIM_WANT_NEXT_ACCEL
-			if( !isre && isrj && same_keypress_repeats>0 )
+			if( isac )
 				gv *= std::pow(2,FIM_MIN(same_keypress_repeats,12));
 #endif /* FIM_WANT_NEXT_ACCEL */
 			if( ispg )
@@ -1534,12 +1539,18 @@ ret:
 			//if(isrj && gv<0 && cf==1){cf=0;}//TODO: this is a bugfix
 			if( (!isrj) && gv > 0 )
 				gv = gv - 1;// user input is interpreted as 1-based 
-			gv = FIM_MOD(gv,mv);
+
+			if( !isbl )
+				gv = FIM_MOD(gv,mv);
 
 			if( ispg )
 			{
 				if( isrj )
-					{ np = cp + gv;}
+				{
+					np = cp + gv;
+					if( isbl )
+						np = FIM_MIN(FIM_MAX(np,0),mv-1);
+				}
 				else
 					np = gv;
 			}
@@ -1547,7 +1558,11 @@ ret:
 			{
 				np = 0; /* first page -- next file's page count is unknown ! */
 				if( isrj )
-					{nf = cf + gv;}
+				{
+					nf = cf + gv;
+					if( isbl )
+						nf = FIM_MIN(FIM_MAX(nf,0),mv-1);
+				}
 				else
 					nf = gv;
 			}
