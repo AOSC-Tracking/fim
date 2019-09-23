@@ -981,8 +981,8 @@ err:
 	 	while(show_must_go_on_)
 		{
 #if FIM_WANT_NEXT_ACCEL
-			extern bool again_same_keypress;
-			again_same_keypress=false;
+			extern fim_int same_keypress_repeats;
+			bool same_keypress_repeat=false;
 #endif /* FIM_WANT_NEXT_ACCEL */
 			cycles_++;
 #if 0
@@ -1132,7 +1132,8 @@ err:
 					{
 #if FIM_WANT_NEXT_ACCEL
 						if(cycles_last+1==cycles_ && c_last==c)
-							again_same_keypress=true;
+							same_keypress_repeat=true,
+							same_keypress_repeats++;
 						cycles_last=cycles_;
 						c_last=c;
 #endif /* FIM_WANT_NEXT_ACCEL */
@@ -1154,6 +1155,10 @@ err:
 						browser_.display_status("");
 				}
 			}
+#if FIM_WANT_NEXT_ACCEL
+			if(!same_keypress_repeat)
+				same_keypress_repeats=0;
+#endif /* FIM_WANT_NEXT_ACCEL */
 			continue;
 #ifdef FIM_USE_READLINE
 rlnull:
