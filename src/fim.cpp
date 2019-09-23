@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2019 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,6 +46,9 @@ namespace fim
 	fim_float_t default_fbgamma=-1.0;
 	fim_stream cout/*(1)*/;
 	fim_stream cerr(2);
+#if FIM_WANT_NEXT_ACCEL
+	bool again_same_keypress=false;
+#endif /* FIM_WANT_NEXT_ACCEL */
 }
 
 struct fim_options_t{

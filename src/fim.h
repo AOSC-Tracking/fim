@@ -2,7 +2,7 @@
 /*
  fim.h : Fim main header file
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2019 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1077,6 +1077,7 @@ namespace fim
 /* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
 #define FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING defined(FIM_FRAMEBUFFER_DEVICE_H) && defined(FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING) /* only needed in Linux framebuffer device on computers loading files so slowly that we might want to switch console in between */
 #define FIM_WANT_RELOAD_ON_FILE_CHANGE 1 /* detect file change and reload */
+#define FIM_WANT_NEXT_ACCEL 1 /* keeping pressed accelerates browse speed */
 #define FIM_STREAM_BUFSIZE	16*4096
 #define FIM_MAXLINE_BUFSIZE	1024
 #define FIM_PRINTFNUM_BUFSIZE	32
