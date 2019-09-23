@@ -3,8 +3,10 @@
 
                 Version 0.6-trunk
 
+# (r1599--r1602)
+ * keeping a key pressed accelerate goto (experimental).
 # (r1594)
- * fix: piping from external commands was hanging.
+ * internal: fix: piping from external commands was using 0 instead of 'WNOHANG', leading to hanging.
 # (r1585)
  * internal: fix: error handling was missing.
 # (r1584)

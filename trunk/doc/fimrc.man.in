@@ -383,7 +383,7 @@ Match will occur on both file name and description, eventually loaded via desc o
 .fi
  You can specify multiple arguments to goto: those after the first triggering a jump will be ignored.
 .fi
-Executes autocommands for events PreGoto and PostGoto.
+Executes autocommands for events PreGoto and PostGoto. Keeping pressed shall accelerate images browsing.
 .fi
 
 .na
@@ -469,6 +469,12 @@ list 'clear': clear the file list.
 list 'sort': sort the file list.
 .fi
 list 'sort_basename': sort the file list according to base name.
+.fi
+list 'sort_comment': sort the file list according to the value of the _comment variable.
+.fi
+list 'sort_var' {var}: sort the file list according to the value of the i:{var} variable.
+.fi
+list 'vars|variables': list variables in all i:* read from description file.
 .fi
 list 'sort_fsize': sort the file list according to file size.
 .fi
@@ -1418,7 +1424,7 @@ $;
 This is the default configuration, as contained in the _fim_default_config_file_contents variable.
 
 .nf
-# $LastChangedDate: 2018-01-21 17:19:31 +0100 (Sun, 21 Jan 2018) $
+# $LastChangedDate: 2019-09-23 08:39:19 +0200 (Mon, 23 Sep 2019) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
@@ -1536,7 +1542,7 @@ bind '`' "toggleLimitMarked";
 alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay" "";
 alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay" "";
 alias "toggleDesaturate" "_autodesaturate=1-_autodesaturate;redisplay" "";
-alias "idempotent_cmd" "goto '+0p'";
+alias "idempotent_cmd" "goto ''";
 #
 # Autocommands examples:
 #autocmd "PostInteractiveCommand" "fim.png" "echo '\\nmatched an interactive command on fim.png\\n'";
