@@ -19,6 +19,8 @@ In order to uncompress RAR archives, fimgs will use 'unrar-nonfree' or 'rar' or 
 
 In order to uncompress ZIP archives, fimgs will use 'zip'.
 
+In order to uncompress TAR.GZ or TAR.BZ2 or TAR.XZ archives, fimgs will use 'tar'.
+
 In order to fetch http:// or https:// prefixed URLS, 'wget' will be used.
 
 In case of a CBZ, CBR, PDF, PS, or DVI file, will invoke \fB fim\fP with '--autotop --autowidth'.
