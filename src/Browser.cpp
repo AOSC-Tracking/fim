@@ -1344,10 +1344,7 @@ ret:
 			bool isrj = false;
 			bool isdj = false;
 #if FIM_WANT_NEXT_ACCEL
-			extern fim_cycles_t cycles_last;
-			extern fim_key_t c_last;
-			extern bool again_same_keypress;
-			static int same_keypress_repeat=0;
+			extern fim_int same_keypress_repeats;
 #endif /* FIM_WANT_NEXT_ACCEL */
 
 
@@ -1365,13 +1362,6 @@ ret:
 			isre = ((sl>=2) && ('/'==s[sl-1]) && (((sl>=3) && (c=='+' || c=='-') && s[1]=='/') ||( c=='/')));
 			isrj = (c=='+' || c=='-');
 			isdj = isrj && s[1] == '/' && ( sl == 2 || ( sl == 3 && strchr("udsbUDSB",s[2])) );
-
-#if FIM_WANT_NEXT_ACCEL
-			if( isfg && !isre && isrj && again_same_keypress==true )
-				same_keypress_repeat = FIM_MIN(same_keypress_repeat+1,12);
-			else
-				same_keypress_repeat = 0;
-#endif /* FIM_WANT_NEXT_ACCEL */
 
 #if FIM_WANT_GOTO_DIR
 			if( isdj )
@@ -1521,8 +1511,8 @@ ret:
 						isfg = true, ispg = false;
 			}
 #if FIM_WANT_NEXT_ACCEL
-			if( !isre && isrj && same_keypress_repeat>0 )
-				gv *= std::pow(2,same_keypress_repeat);
+			if( !isre && isrj && same_keypress_repeats>0 )
+				gv *= std::pow(2,FIM_MIN(same_keypress_repeats,12));
 #endif /* FIM_WANT_NEXT_ACCEL */
 			if( ispg )
 				mv = pc;

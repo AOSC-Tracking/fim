@@ -47,7 +47,7 @@ namespace fim
 	fim_stream cout/*(1)*/;
 	fim_stream cerr(2);
 #if FIM_WANT_NEXT_ACCEL
-	bool again_same_keypress=false;
+	fim_int same_keypress_repeats=0;
 #endif /* FIM_WANT_NEXT_ACCEL */
 }
 
