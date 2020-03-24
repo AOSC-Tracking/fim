@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2020 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -147,6 +147,7 @@ class Browser FIM_FINAL
 	
 	fim_int current_image(void)const;
 	public:
+	flist_t get_file_list(void)const { return flist_; }
 	int current_n(void)const;
 	fim::string get_next_filename(int n)const; // FIXME: should be private
 	fim::string last_regexp_; // was private

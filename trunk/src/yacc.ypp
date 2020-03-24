@@ -2,7 +2,7 @@
 /*
  yacc.ypp : Parser source file template
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2020 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@
 %token <sValue> FILE_PATH
 //%token <sValue> NEWLINE
 %token <sValue> COMMAND		//unimplemented yet
-%token WHILE IF DO ELSE SYSTEM AND BAND OR BOR NOT
+%token WHILE IF DO ELSE SYSTEM AND BAND OR BOR NOT FESF
 //%token NEWLINE
 //%nonassoc IFX
 //%nonassoc FI
@@ -210,6 +210,8 @@ statement:
 	   NOT arguments        { $$ = FIM_OPR('x',2,FIM_SCON(dupstr(FIM_FLT_SYSTEM)),$2); }
 //	|  SYSTEM arguments        { $$ = FIM_OPR('x',2,FIM_SCON(dupstr(FIM_FLT_SYSTEM)),$2); }
 	// [n]cmd
+	| INTEGER ',' INTEGER IDENTIFIER  { $$ = FIM_OPR(FESF,3,FIM_ICON($1),FIM_ICON($3),FIM_SCON($4)); }
+	| INTEGER ',' INTEGER IDENTIFIER arguments  { $$ = FIM_OPR(FESF,4,FIM_ICON($1),FIM_ICON($3),FIM_SCON($4),$5); }
 	| INTEGER IDENTIFIER { if($1>0){$$ = FIM_OPR('r',2,FIM_OPR('x',1,FIM_SCON($2)),FIM_ICON($1)); }}
 	// goto
 	| SLASH_AND_REGEXP { $$ = FIM_OPR('x',2,FIM_SCON(dupstr(FIM_FLT_GOTO)),FIM_OPR('a',1,FIM_OPR('a',1,FIM_SCON(dupsqstr ($1))))); }
