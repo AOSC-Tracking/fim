@@ -28,6 +28,8 @@ const fim_char_t * const FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =
 "                         | statement ';' ';' ';'\n"
 "\n"
 "  statement: '!' arguments\n"
+"           | INTEGER ',' INTEGER IDENTIFIER\n"
+"           | INTEGER ',' INTEGER IDENTIFIER arguments\n"
 "           | INTEGER IDENTIFIER\n"
 "           | SLASH_AND_REGEXP\n"
 "           | '+' UNQUOTED_FLOAT '%'\n"

@@ -3,6 +3,11 @@
 
                 Version 0.6-trunk
 
+# (r1605)
+ * added " INTEGER , INTEGER IDENTIFIER arguments" syntax to repeat a command 
+   on each file in the interval and substitute its name to '{}' in the arguments
+   to an iterated command IDENTIFIER.
+   (FIXME: undocumented)
 # (r1599--r1602)
  * keeping a key pressed accelerate goto (experimental).
 # (r1594)

@@ -2,7 +2,7 @@
 /*
  interpreter.cpp : Fim language interpreter
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2020 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -244,6 +244,68 @@ Var ex(NodeType p)
 				DBG("Semicolon (;)\n"); // cmd;cmd
 				ex(FIM_OPRND(p,0));
 				return ex(FIM_OPRND(p,1));
+			case FESF:
+			if( FIM_NOPS(p) >= 3 )
+			{
+				const fim_int n1 = ex(FIM_OPRND(p,0)).getInt();
+				const fim_int n2 = ex(FIM_OPRND(p,1)).getInt();
+				const flist_t fl = cc.browser_.get_file_list();
+				fim::string result;
+
+				for( fim_int fi = FIM_MAX(0,n1-1); fi<n2; ++fi )
+				if( fi < fl.size() )
+				{
+  					args_t fargs;
+
+					if( FIM_NOPS(p) > 3 )
+		          		{
+						NodeType np=p;	
+						np=(FIM_OPRND(np,3)); // right subtree first node
+
+						while( np &&    FIM_NOPS(np) >=1 )
+						if( FIM_OPRNDO(np)=='a' )
+						{
+							DBG("Args...\n");
+					  		args_t na=var(np,dv,sd);
+							DBG("Args: "<<na.size()<<FIM_SYM_ENDL);
+				          		for(fim_size_t i=0;i<na.size();++i)
+							{
+								fim::string ss = na[i].c_str();
+								ss.substitute( "\\{\\}", fl[fi] );
+								na[i] = ss;
+#if FIM_USE_CXX11
+								fargs.emplace_back(std::move(na[i]));
+#else /* FIM_USE_CXX11 */
+								fargs.push_back(na[i]);
+#endif /* FIM_USE_CXX11 */
+							}
+							break;
+						}
+						else if( FIM_OPRNDO(np)==FIM_SYM_STRING_CONCAT )
+						{
+							DBG(FIM_INTERPRETER_ERROR);
+						}
+					}
+
+					if(p && FIM_OPRND(p,2))
+					{
+						const fim_char_t * cmd = FIM_SACC(FIM_OPRND(p,2));
+
+						if(cmd)
+						{
+							DBG("Begin Exec: " << cmd << " " << fargs << "\n");
+							++sd;
+							result = FIM_EC(cmd,fargs);
+							// NOTE: would make sense to interrupt loop after first failing command
+							--sd;
+							DBG("End Exec: " << cmd << " " << fargs << "\n");
+						}
+					}
+		}
+				goto ret;
+			}
+			else
+				goto err;
 			case 'r':
 			if( FIM_NOPS(p) == 2 )
 			{
