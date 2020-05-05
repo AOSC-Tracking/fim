@@ -2,7 +2,7 @@
 /*
  Namespace.cpp : a class for local variables storage
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2020 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -172,8 +172,10 @@ namespace fim
 		fim_bool_t Namespace::isSetGlobalVar(const fim_var_id& varname)const
 		{
 			fim_bool_t isv = false;
+#ifndef FIM_INDEPENDENT_NAMESPACE
 			if(rnsp_)
 				isv = ( rnsp_->variables_.find(varname) != rnsp_->variables_.end() );
+#endif /* FIM_INDEPENDENT_NAMESPACE */
 			return isv;
 		}
 

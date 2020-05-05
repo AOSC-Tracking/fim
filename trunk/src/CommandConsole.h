@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2020 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@
 
 namespace fim
 {
-class CommandConsole FIM_FINAL
+class CommandConsole FIM_FINAL : 
 #if FIM_WANT_BENCHMARKS
-	: public Benchmarkable,
+	public Benchmarkable,
 #endif /* FIM_WANT_BENCHMARKS */
 	public Namespace
 {

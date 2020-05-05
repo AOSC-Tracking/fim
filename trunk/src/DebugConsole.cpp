@@ -2,7 +2,7 @@
 /*
  DebugConsole.cpp : Fim virtual console display.
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2020 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ rerr:
 
 		MiniConsole::MiniConsole(CommandConsole& cc, DisplayDevice *dd,int lw, int r)
 		:
-		Namespace(&cc),
+		Namespace(cc),
 		buffer_(FIM_NULL),
 		line_(FIM_NULL),
 		bp_(FIM_NULL),
