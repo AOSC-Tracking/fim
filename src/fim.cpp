@@ -343,8 +343,8 @@ FIM_NULL
  .P
  .nf
  Shift+D         delete image
- R               rotate 90° clockwise
- L               rotate 90° counter-clock wise
+ R               rotate 90 degrees clockwise
+ L               rotate 90 degrees counter-clock wise
  .fi
  .P
  The delete function actually wants a capital letter 'D', thus you have
