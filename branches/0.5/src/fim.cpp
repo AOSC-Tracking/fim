@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2019 Michele Martone
+ (c) 2007-2021 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1609,16 +1609,6 @@ fim_perr_t main(int argc,char *argv[])
 			"Configuration invocation: " FIM_CONFIGURATION "\n" 
 	#endif /* FIM_CONFIGURATION */
 	);
-	#ifdef CXXFLAGS
-	if(vl)
-		FIM_FPRINTF(stderr, 
-			"Compile flags: CXXFLAGS=" CXXFLAGS
-	#ifdef CFLAGS
-			"  CFLAGS=" CFLAGS
-	#endif /* CFLAGS */
-			"\n"
-	);
-	#endif /* CXXFLAGS */
 
   	std::string vstr = 
 	"Fim options (features included (+) or not (-)):\n"
