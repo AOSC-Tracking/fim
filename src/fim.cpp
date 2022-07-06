@@ -2,7 +2,7 @@
 /*
  fim.cpp : Fim main program and accessory functions
 
- (c) 2007-2019 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1459,7 +1459,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 		case 'c':
 		    //fim's
-		    cc.appendPostInitCommand(optarg);
+		    cc.appendPostInitCommand(std::string(optarg)+"\n");
 		    appendedPostInitCommand=true;
 		    break;
 		case 'C':
