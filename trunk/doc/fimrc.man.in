@@ -72,6 +72,8 @@ Warning: at the present state, this grammar has conflicts. A future release shal
                          | statement ';' ';' ';'
 
   statement: '!' arguments
+           | INTEGER ',' INTEGER IDENTIFIER
+           | INTEGER ',' INTEGER IDENTIFIER arguments
            | INTEGER IDENTIFIER
            | SLASH_AND_REGEXP
            | '+' UNQUOTED_FLOAT '%'
@@ -1182,7 +1184,7 @@ _push_pushes_dirs
 .na
 .B
 _pushdir_re
-[in] regular expression to match against when pushing files from a directory or an archive. By default this is "\.JPG$\:|\.PNG$\:|\.GIF$\:|\.BMP$\:|\.TIFF$\:|\.TIF$\:|\.JPEG$\:|\.JFIF$\:|\.PPM$\:|\.PGM$\:|\.PBM$\:|\.PCX$\:".
+[in] regular expression to match against when pushing files from a directory or an archive. By default this is "\.JPG$\:|\.PNG$\:|\.GIF$\:|\.BMP$\:|\.TIFF$\:|\.TIF$\:|\.JPEG$\:|\.JFIF$\:|\.PPM$\:|\.PGM$\:|\.PBM$\:|\.PCX|\.WEBP$\:".
 .fi
 .na
 .B
