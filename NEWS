@@ -3,8 +3,10 @@
 
                 Version 0.6-trunk
 
+# (r1615)
+ * Default "_pushdir_re" variable matches now .webp filename extension when loading a directory.
 # (r1613)
- * fix: fim -c '/<pattern>' was broken
+ * fix: fim -c '/<pattern>' was broken.
 # (r1605)
  * added " INTEGER , INTEGER IDENTIFIER arguments" syntax to repeat a command 
    on each file in the interval and substitute its name to '{}' in the arguments
