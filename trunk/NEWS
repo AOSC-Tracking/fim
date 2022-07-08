@@ -3,6 +3,10 @@
 
                 Version 0.6-trunk
 
+# (r1616)
+ * Using --load-shadow-dir <dir> adds a shadow directory (experimental).
+   Then 'scale "shadow"' (bound to key '"') will substitute the current displayed image with that 
+   of the first same-named file located under a shadow directory.
 # (r1615)
  * Default "_pushdir_re" variable matches now .webp filename extension when loading a directory.
 # (r1613)

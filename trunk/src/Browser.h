@@ -2,7 +2,7 @@
 /*
  Browser.h : Image browser header file
 
- (c) 2007-2020 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -124,6 +124,9 @@ class Browser FIM_FINAL
 	enum MatchMode{ FullFileNameMatch, PartialFileNameMatch, VarMatch, CmtMatch, MarkedMatch, DupFileNameMatch, UniqFileNameMatch, FirstFileNameMatch, LastFileNameMatch, TimeMatch, SizeMatch, ListIdxMatch }; /* FIXME */
 	enum FilterAction{ Mark, Unmark, Delete }; /* FIXME */
 	flist_t flist_; /* the names of files in the slideshow.  */
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
+	flist_t hlist_;
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 #if FIM_WANT_PIC_LBFL
 	flist_t tlist_; /* the names of files in the slideshow.  */
 	flist_t llist_; /* limited file list (FIXME: still unused) */
@@ -238,6 +241,9 @@ class Browser FIM_FINAL
 #endif /* FIM_READ_DIRS */
 	bool push_path(const fim::string & nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
 	bool push_noglob(const fim::string & nf, fim_flags_t pf=FIM_FLAG_PUSH_REC, const fim_int * show_must_go_on=FIM_NULL);
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
+	void push_shadow_dir(std::string fn);
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 
 	fim::string _random_shuffle(bool dts=true);
 	fim::string _sort(const fim_char_t sc=FIM_SYM_SORT_FN, const char*id="");

@@ -1,7 +1,7 @@
 .\"
 .\" $Id$
 .\"
-.TH fim 1 "(c) 2007-2018 Michele Martone"
+.TH fim 1 "(c) 2007-2022 Michele Martone"
 .SH NAME
 fim - \fBf\fPbi (linux \fBf\fPrame\fBb\fPuffer \fBi\fPmageviewer) \fBim\fPproved
 .SH SYNOPSIS
@@ -315,6 +315,9 @@ Quiet mode. Sets _display_status=0;_display_busy=0;.
 .B -B, --background-recursive
 		 Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).
 .TP
+.B  --load-shadow-dir <arg>
+		 Add a shadow directory. Then 'scale "shadow"' will substitute the image being displayed (just that: not the filename) with that of the first same-named file located under a shadow directory.
+.TP
 .B -/, --/ <arg>
 		 After startup jump to pattern; short for -c '/'.
 .TP
@@ -568,7 +571,7 @@ Michele Martone <dezperado _CUT_ autistici _CUT_ org> is the author of fim, "fbi
 .fi
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2018 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
+Copyright (C) 2007-2022 Michele Martone <dezperado _CUT_ autistici _CUT_ org> (author of fim)
 .fi
 Copyright (C) 1999-2004 Gerd Hoffmann <kraxel _CUT_ bytesex.org> is the author of "fbi", upon which
 .B fim

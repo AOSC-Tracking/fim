@@ -1,4 +1,5 @@
 # A test for the console.
+# Its results need update on each configuration / commands list update.
 alias "console_refresh" "toggleVerbosity; scu; scd; scz; toggleVerbosity;";
 alias "console_out" "stdout '_console_buffer_total:'._console_buffer_total; stdout '_console_buffer_free:'._console_buffer_free; stdout '_console_buffer_use:'._console_buffer_use;";
 #
