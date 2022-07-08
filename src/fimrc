@@ -321,6 +321,7 @@ bind "^" "0;";
 bind "$" "$;";
 #bind "Backspace" "prev"; # console code for C-h and Backspace is the same :-)
 bind "'" "goto _lastfileindex"; 
+bind '"' "scale 'shadow';i:fresh=1;redisplay;"; 
 bind '(' "goto '^p'";
 bind ')' "goto '$p'";
 _display_status=1; # lower status line

@@ -353,6 +353,9 @@ struct fim_options_t fim_options[] = {
 	    FIM_NULL
     },
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
+    {"load-shadow-dir",   required_argument,       FIM_NULL, 0x68696768,"Add a shadow directory. Then 'scale \"shadow\"' will substitute the image being displayed (just that: not the filename) with that of the first same-named file located under a shadow directory.",FIM_NULL, FIM_NULL },
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
     { "/",   required_argument,       FIM_NULL, '/',"After startup jump to pattern; short for -c '" FIM_SYM_FW_SEARCH_KEY_STR "'.",FIM_NULL, FIM_NULL },
     {"//",   required_argument,       FIM_NULL, 0x2f2f0000,"After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "' but with search on the full path (with " FIM_SYM_CMD_SLSL ").",FIM_NULL, FIM_NULL },
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
@@ -1613,6 +1616,11 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			    );
 		    appendedPostInitCommand=true;
 		    break;
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
+		case 0x68696768:
+			cc.browser_.push_shadow_dir(std::string(optarg));
+		    break;
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 #if FIM_WANT_CMDLINE_KEYPRESS
 		case 'k':
 			cc.clkpv_.push_back(optarg);

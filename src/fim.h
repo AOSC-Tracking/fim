@@ -174,6 +174,7 @@
 #define FIM_WANT_FBI_INNER_DIAGNOSTICS false
 #define FIM_WANT_FBI_FBDEV_DIAGNOSTICS false
 #define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* in C++11, prefer smart pointers for Image* */
+#define FIM_EXPERIMENTAL_SHADOW_DIRS FIM_READ_DIRS && FIM_USE_CXX11 /* shadow list of high-res images to jump on demand */
 #define FIM_EXPERIMENTAL_FONT_CMD 1 && defined(HAVE_DIRENT_H) && 1 /*  */
 #define FIM_WANT_HELP_ARGS 1 /*  */
 #define FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL 1 /* the larger the image, the more scroll steps  */
@@ -421,7 +422,7 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
  * Fim Constants
  * */
 #define FIM_CNS_FIM	 "FIM - Fbi IMproved"
-#define FIM_CNS_LCY	 "2018" /* latest copyright year */
+#define FIM_CNS_LCY	 "2022" /* latest copyright year */
 //#define FIM_CNS_FIM_TXT	 "FIM.TXT"
 #define FIM_CNS_BUGS_FILE	 "BUGS"
 #define FIM_CNS_TERM_VAR	 "TERM"

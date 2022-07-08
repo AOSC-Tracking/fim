@@ -1,4 +1,5 @@
 # A test for the help system.
+# Its results need update on each help system update.
 alias 'dump' "stdout _last_cmd_output; stdout '*';";
 echo "A test for the help system";
 dump;

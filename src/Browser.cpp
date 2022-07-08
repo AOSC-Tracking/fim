@@ -2,7 +2,7 @@
 /*
  Browser.cpp : Fim image browser
 
- (c) 2007-2019 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -412,7 +412,34 @@ nop:
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 		FIM_PR('*');
 		if(viewport())
-			result = viewport()->img_scale(args,current());
+		{
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
+			if(args.size() == 1 && args[0] == "shadow")
+			{
+				const fim::string result = FIM_CNS_EMPTY_RESULT;
+				const auto bn = std::string(fim_basename_of(current()));
+				fim::fle_t fn;
+
+				for (const auto e : hlist_)
+					if ( bn == std::string(fim_basename_of(e)) )
+					{
+						fn = e;
+						break;
+					}
+				if ( fn.size() && hlist_.size() > 0 )
+				{
+					const fim::fle_t tmp = flist_[flist_.cf()];
+					flist_[flist_.cf()] = fn;
+					loadCurrentImage();
+					flist_[flist_.cf()] = tmp;
+					viewport()->update_meta(true);
+					return result;
+				}
+			}
+			else
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
+				result = viewport()->img_scale(args,current());
+		}
 		FIM_PR('.');
 		return result;
 	}
@@ -1075,6 +1102,16 @@ ret:
 		FIM_PR('.');
 		return retval;
 	}
+
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
+	void Browser::push_shadow_dir(std::string fn)
+	{
+		const size_t hll = hlist_.size();
+		std::swap(flist_,hlist_);
+		push_dir(fn,FIM_FLAG_PUSH_REC,NULL);
+		std::swap(flist_,hlist_);
+	}
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 	
 	fim_int Browser::n_files(void)const
 	{
@@ -2275,6 +2312,10 @@ err:
 
 		bs += cache_.byte_size();;
 		bs += sizeof(*this);
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
+		for (const auto e : hlist_)
+			bs += e.capacity();
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 		/* TODO: this is incomplete ... */
 		return bs;
 	}
