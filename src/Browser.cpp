@@ -2630,7 +2630,6 @@ flist_t flist_t::copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive) c
 	,stat_(ss)
 #endif /* FIM_WANT_FLIST_STAT */
 	{ }
-	fle_t::operator fim_fn_t(void) const { return fim_fn_t(*this);} 
 
 struct FimBaseNameSorter
 {
