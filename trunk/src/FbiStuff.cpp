@@ -2,7 +2,7 @@
 /*
  FbiStuff.cpp : Misc fbi functions, modified for fim
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -470,7 +470,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim
 //#endif /* FIM_WANTS_SLOW_RESIZE */
 	fim_byte_t* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx=0,dx=0;
+	FIM_REGISTER int sx=0,dx=0;
 
 	/*
 	 * this gives a ~ 50% gain
@@ -516,7 +516,7 @@ static inline void op_resize_work_row_expand_i_unrolled(const struct ida_image *
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	const fim_byte_t* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx=0,dx=0;
+	FIM_REGISTER int sx=0,dx=0;
 	/*
 	 * interleaved loop unrolling ..
 	 * this gives a ~ 50% gain
@@ -609,7 +609,7 @@ const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *sr
 	struct op_resize_state *FIM_RSTRCT h = (struct op_resize_state *)data;
 	const fim_byte_t*FIM_RSTRCT  srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx=0,dx=0;
+	FIM_REGISTER int sx=0,dx=0;
 
 	/*
 	 * this gives a ~ 70% gain
@@ -622,7 +622,7 @@ const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *sr
 			d1f+=h->xscale;
 			d1i=(unsigned int)d1f;
 
-			register fim_byte_t r,g,b;
+			FIM_REGISTER fim_byte_t r,g,b;
 			r=srcline[  3*sx+ 0];
 			g=srcline[  3*sx+ 1];
 			b=srcline[  3*sx+ 2];
@@ -672,7 +672,7 @@ static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *s
 	struct op_resize_state *h = (struct op_resize_state *)data;
 	fim_byte_t* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
-	register int sx=0,dx=0;
+	FIM_REGISTER int sx=0,dx=0;
 
 	/*
 	 * this gives a ~ 60% gain
@@ -685,7 +685,7 @@ static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *s
 			d1f+=h->xscale;
 			d1i=(unsigned int)d1f;
 
-			register fim_byte_t r,g,b;
+			FIM_REGISTER fim_byte_t r,g,b;
 			r=srcline[  3*sx+ 0];
 			g=srcline[  3*sx+ 1];
 			b=srcline[  3*sx+ 2];
@@ -734,7 +734,7 @@ op_resize_work(const struct ida_image *FIM_RSTRCT src, struct ida_rect *rect,
     float outleft,left,weight,d0,d1,d2;
     const fim_byte_t *FIM_RSTRCT csrcline;
     float *FIM_RSTRCT fsrcline;
-    register unsigned int i,sx,dx;
+    FIM_REGISTER unsigned int i,sx,dx;
     float *FIM_RSTRCT rowbuf = h->rowbuf; 
 
 #ifndef FIM_WANTS_SLOW_RESIZE
@@ -1572,8 +1572,8 @@ err:
 static void rgb2bgr(fim_byte_t *data, const fim_coo_t w, const fim_coo_t h) 
 {
 
-	register fim_byte_t t;
-	register fim_byte_t *p=data,
+	FIM_REGISTER fim_byte_t t;
+	FIM_REGISTER fim_byte_t *p=data,
 		 	*pm=p+w*3*h;
 	while(p<pm)
 	{

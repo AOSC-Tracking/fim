@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.cpp : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -1195,8 +1195,8 @@ fim_byte_t * FramebufferDevice::convert_line(int bpp, int line, int owidth, fim_
 		 * this is far worse than the preceding !
 		 */
 		memcpy(ptr,buffer,owidth*3);
-		//register fim_char_t t;
-		//register i=x;
+		//FIM_REGISTER fim_char_t t;
+		//FIM_REGISTER i=x;
 		/*since RGB and GBR swap already done, this is not necessary*/
 		/*for (i = 0; i < owidth; i+=3)
 		{
@@ -1394,7 +1394,7 @@ void FramebufferDevice::init_dither(int shades_r, int shades_g, int shades_b, in
 
 void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int y, int width,int mirror) FIM_NOEXCEPT
 {
-    register long   a, b
+    FIM_REGISTER long   a, b
 #ifndef FIM_IS_SLOWER_THAN_FBI
     __attribute((aligned(16)))
 #endif /* FIM_IS_SLOWER_THAN_FBI */
@@ -1404,7 +1404,7 @@ void inline FramebufferDevice::dither_line(fim_byte_t *src, fim_byte_t *dst, int
 
     ymod = (long int*) DM[y & DITHER_MASK];
     /*	fim mirror patch */
-    register const int inc=mirror?-1:1;
+    FIM_REGISTER const int inc=mirror?-1:1;
     dst=mirror?dst+width-1:dst;
     /*	fim mirror patch */
     if(FIM_UNLIKELY(width<1))
@@ -1493,7 +1493,7 @@ nodither:
 void FramebufferDevice::dither_line_gray(fim_byte_t *src, fim_byte_t *dst, int y, int width)
 {
     long           *ymod, xmod;
-    register long   a;
+    FIM_REGISTER long   a;
 
     ymod = (long int*) DM[y & DITHER_MASK];
 

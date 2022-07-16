@@ -1115,6 +1115,11 @@ namespace fim
 #define FIM_DEFAULT_FB_FILE "/dev/fb0"
 #define FIM_DEFAULT_AS_BINARY_BPP 24
 #define FIM_DEFAULT_HARDCODEDFONT_STRING	"fim://" 
+#if __cplusplus < 201703L
+#define FIM_REGISTER register
+#else
+#define FIM_REGISTER 
+#endif
 
 /*
  * Various  Fim messages.
