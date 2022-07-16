@@ -2,7 +2,7 @@
 /*
  Image.cpp : Image manipulation and display
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ namespace fim
 {
 	static void fim_desaturate_rgb(fim_byte_t * data, fim_pxc_t howmany)
 	{
-		register int avg;
+		FIM_REGISTER int avg;
 		for( fim_byte_t * p = data; p < data + howmany ;p+=3)
 		{ avg=p[0]+p[1]+p[2]; p[0]=p[1]=p[2]=(fim_byte_t) (avg/3); }
 	}
