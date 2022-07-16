@@ -2,7 +2,7 @@
 /*
  Cache.h : Cache manager header file
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ class PACA FIM_FINAL	/* Parallel Cache */
 		if(dpc) std::cout << __FUNCTION__ << ": "<< rid << " ... done\n";
 	}
 
-	explicit PACA(const PACA & paca) : cache_(paca.cache_)
+	PACA(const PACA & paca) : cache_(paca.cache_)
        	{
 		if(dpc) std::cout << __FUNCTION__ << "\n";
 	}
