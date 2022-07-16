@@ -1192,6 +1192,10 @@ else
 fi
 AM_CONDITIONAL(FIM_WANT_HARDCODED_CONSOLEFONT, test x$have_hardcoded_font = xyes )
 
+dnl ==================
+
+AC_CHECK_PROG(have_gs,gs,yes,no)
+AM_CONDITIONAL(HAVE_GS, test x$have_gs = xyes)
 
 dnl ==================
 

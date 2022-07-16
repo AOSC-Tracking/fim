@@ -198,10 +198,14 @@ dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 
 MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g' -e 's,-,\\-,g'
 
-doc/fim.man.in doc/fimrc.man.in doc/fimgs.man.in: $(FIM_EXE)
+doc/fim.man.in doc/fimrc.man.in: $(FIM_EXE)
 	$(FIM_EXE) $(FIMNORCOPTS) --help=m                    > doc/fim.man.in
 	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man   > doc/fimrc.man.in
+
+doc/fimgs.man.in: $(FIM_EXE)
+if HAVE_GS
 	$(FIMGS_EXE) -m -- $(FIMNORCOPTS)                     > doc/fimgs.man.in
+endif
 
 doc/fim.man doc/fimrc.man doc/fimgs.man: doc/fim.man.in doc/fimrc.man.in doc/fimgs.man.in
 	cat doc/fim.man.in   |$(MANSUBST) > doc/fim.man
