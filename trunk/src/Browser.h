@@ -53,11 +53,9 @@ class fle_t FIM_FINAL : public fim_fn_t /* file list element */
 #if FIM_WANT_FLIST_STAT 
        	fim_stat_t stat_;
 #endif /* FIM_WANT_FLIST_STAT */
-       	/*std::string operator();*/
 	fle_t(const fim_fn_t& s);
 	fle_t(const fim_fn_t& s, const fim_stat_t &ss);
 	fle_t();
-	operator string (void)const;
 };
 
 class fim_bitset_t FIM_FINAL :public std::vector<fim_bool_t>
