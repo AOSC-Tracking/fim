@@ -2,7 +2,7 @@
 /*
  CommandConsole.h : Fim console dispatcher header file
 
- (c) 2007-2020 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -295,7 +295,7 @@ class CommandConsole FIM_FINAL :
 	fim::string getBoundAction(const fim_key_t c)const;
 	//	void execute(fim_cmd_id cmd);
 	fim_cxr fcmd_eval(const args_t& args);
-	void exit(fim_perr_t i)const;// FIXME: exit vs quit
+	FIM_NORETURN void exit(fim_perr_t i)const;// FIXME: exit vs quit
 	fim::string unbind(fim_key_t c);
 	fim::string bind(const fim_key_t c, const fim_cls binding, const fim::string hstr="");
 	public:
