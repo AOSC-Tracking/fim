@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1623)
+ * correct configure script check for regcomp() -- could lead to false negatives.
 # (r1621)
  * Don't break build on missing 'gs'.
 # (r1616)
