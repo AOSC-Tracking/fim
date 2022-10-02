@@ -34,6 +34,9 @@ fimrc.man.html: fimrc.man
 
 ERRMSG="No $(MAN2HTML) at build time : please install $(MAN2HTML) and reissue :"
 
+fimgs.man:
+	make doc/fimgs.man -C $(top_srcdir)/
+
 fimgs.man.html: fimgs.man
 	$(MAN2HTML) ./$< | $(MAN2HTMLS) >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
