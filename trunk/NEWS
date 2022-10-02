@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1624)
+ * fix possibly broken `make -j` in rebuilding fimgs.man.
 # (r1623)
  * correct configure script check for regcomp() -- could lead to false negatives.
 # (r1621)
