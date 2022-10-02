@@ -1596,8 +1596,10 @@ static fim::string fim_tempnam(const fim::string pfx="", const fim::string sfx="
 	else
 #endif /* FIM_TMP_FILENAME */
 	{
+		char * const tn = tempnam(NULL,tsfx.c_str()); // deprecated
+		tfn = tn;
+		free(tn);
 		//tfn = std::string(std::experimental::filesystem::temp_directory_path());
-		tfn = tempnam(NULL,tsfx.c_str()); // deprecated
 		//tfn = tmpnam(NULL); // deprecated
 		// std::cout << "using temporary file:" << tfn << std::endl;
 	}
