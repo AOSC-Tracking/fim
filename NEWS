@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1625)
+ * Eliminate memory leaks in PNG, EXIF, and font decoding code.
 # (r1624)
  * fix possibly broken `make -j` in rebuilding fimgs.man.
 # (r1623)

@@ -2,7 +2,7 @@
 /*
  FbiStuffPng.cpp : fbi functions for PNG files, modified for fim
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -264,6 +264,7 @@ png_done(void *data)
     {
 	load_add_extra(h->i,EXTRA_COMMENT,(fim_byte_t*)h->cmt,strlen(h->cmt));
     	fim_free(h->cmt);
+	load_free_extras(h->i);
     }
 
     fim_free(h->image);
