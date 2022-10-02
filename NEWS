@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1626)
+ * Eliminate a memory leak from file loading code. 
 # (r1625)
  * Eliminate memory leaks in PNG, EXIF, and font decoding code.
 # (r1624)
