@@ -179,7 +179,10 @@ err:
 			 * nc amounts to the exact extra room needed )
 			 * */
 			if(nc+1+(int)(bp_-buffer_)>bsize_ || nl+1+cline_>lsize_)
+			{
+				fim_free(cs);
 				return FIM_ERR_BUFFER_FULL;//no room : realloc needed ; 1 is for secur1ty
+			}
 			scroll_=scroll_-nl<0?0:scroll_-nl;
 
 			// we copy the whole new string in our buffer_

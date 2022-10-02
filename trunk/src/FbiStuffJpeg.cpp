@@ -2,7 +2,7 @@
 /*
  FbiStuffJpeg.cpp : fbi functions for JPEG files, modified for fim
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -433,6 +433,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 #else /* FIM_EXPERIMENTAL_IMG_NMSPC */
 			dump_exif(stdout,ed,FIM_NULL);
 #endif /* FIM_EXPERIMENTAL_IMG_NMSPC */
+		exif_data_unref(ed);
 	}
 #endif /* FIM_WITH_LIBEXIF */
 #endif /* HAVE_NEW_EXIF */
