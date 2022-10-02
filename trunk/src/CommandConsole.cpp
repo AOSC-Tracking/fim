@@ -2,7 +2,7 @@
 /*
  CommandConsole.cpp : Fim console dispatcher
 
- (c) 2007-2020 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -203,7 +203,7 @@ ret:		return key;
 
 	fim::string CommandConsole::find_key_for_bound_cmd(fim_cls cmd)const
 	{
-		fim_key_t key = find_keycode_for_bound_cmd(cmd);
+		const fim_key_t key = find_keycode_for_bound_cmd(cmd);
 
 		if( key != FIM_SYM_NULL_KEY )
 		{
@@ -221,7 +221,7 @@ ret:		return key;
 		 * unbinds the action eventually bound to the key combination code c
 		 */
 		std::ostringstream oss;
-		bindings_t::const_iterator bi=bindings_.find(c);
+		const bindings_t::const_iterator bi=bindings_.find(c);
 
 		if( bi != bindings_.end() )
 		{
@@ -241,7 +241,7 @@ ret:		return key;
 	fim::string CommandConsole::aliasRecall(fim_cmd_id cmd)const
 	{
 		// returns the expanded alias specified by cmd
-		aliases_t::const_iterator ai=aliases_.find(cmd);
+		const aliases_t::const_iterator ai=aliases_.find(cmd);
 
 		if(ai!=aliases_.end())
 		       	return ai->second.first;
@@ -264,7 +264,7 @@ ret:		return key;
 		std::ostringstream oss;
 		oss << FIM_FLT_ALIAS" \"" << aname << "\" \"";
 
-		aliases_t::const_iterator ai=aliases_.find(aname);
+		const aliases_t::const_iterator ai=aliases_.find(aname);
 		if(ai!=aliases_.end())
 			oss << ai->second.first;
 		oss << "\"";
@@ -478,7 +478,7 @@ err:
 
 	fim_err_t CommandConsole::addCommand(Command c)
 	{
-		int idx=findCommandIdx(c.cmd());
+		const int idx=findCommandIdx(c.cmd());
 
 		if(idx!=FIM_INVALID_IDX)
 			commands_[idx]=c;
@@ -574,7 +574,7 @@ err:
 
 	fim::string CommandConsole::getBoundAction(const fim_key_t c)const
 	{
-		bindings_t::const_iterator bi=bindings_.find(c);
+		const bindings_t::const_iterator bi=bindings_.find(c);
 
 		if(bi!=bindings_.end()) 
 			return bi->second;
@@ -588,7 +588,7 @@ err:
 		 *	Executes a command, without logging / recording.
 		 *	If binding inexistent, ignores silently error and return false.
 		 */
-		bindings_t::const_iterator bi=bindings_.find(c);
+		const bindings_t::const_iterator bi=bindings_.find(c);
 		fim_err_t status=FIM_ERR_NO_ERROR;
 #ifdef FIM_ITERATED_COMMANDS
 		static fim_int it_buf=-1; /* FIXME: make this it_buf_ instead. */
@@ -664,7 +664,7 @@ ret:
 		 *	note: the pipe here opened shall be closed in the yyparse()
 		 *	call, by the YY_INPUT macro (defined by me in lex.lex)
 		 */
-		fim_bool_t add_history_=(xflags&FIM_X_HISTORY)?true:false;
+		const fim_bool_t add_history_=(xflags&FIM_X_HISTORY)?true:false;
 		/* fim_bool_t suppress_output_=(xflags&FIM_X_QUIET)?true:false; */
 		fim_char_t *s=dupstr(ss);//this malloc is free
 		int iret=0;
@@ -1093,7 +1093,7 @@ err:
 					if( c == FIM_SYM_FW_SEARCH_KEY || c == FIM_SYM_BW_SEARCH_KEY )
 					{
 						/* a hack to handle vim-style regexp searches */
-						fim_sys_int tmp=rl_filename_completion_desired;
+						const fim_sys_int tmp=rl_filename_completion_desired;
 						rl_hook_func_t *osh=rl_startup_hook;
 						rl_startup_hook=rl::fim_search_rl_startup_hook;
 						fim_char_t *rl = FIM_NULL;
@@ -1303,7 +1303,7 @@ rlnull:
 	{
 		fim_sys_int r;
 		fim_err_t errv = FIM_ERR_NO_ERROR;
-		fim::string cmds = CommandConsole::readStdFileDescriptor(fd,&r);
+		const fim::string cmds = CommandConsole::readStdFileDescriptor(fd,&r);
 
 		if(r==-1)
 		{
@@ -1323,7 +1323,7 @@ ret:
 
 	fim_var_t CommandConsole::getVariableType(const fim_var_id& varname)const
 	{
-		variables_t::const_iterator vi=variables_.find(varname);
+		const variables_t::const_iterator vi=variables_.find(varname);
 
 		if(vi!=variables_.end())
 			return vi->second.getType();
@@ -1342,7 +1342,7 @@ ret:
 		 * whether the console should draw or not itself upon the arrival of textual output
 		 * */
 		//std::cout << s << ": " << (this->inConsole() )<< ( (s&&*s) ) << "\n";
-		fim_bool_t sd=(	(	this->inConsole()	/* in the command line */
+		const fim_bool_t sd=(	(	this->inConsole()	/* in the command line */
 				&& (s&&*s) 		/* actually some text to add */
 			) 
 			|| this->getIntVariable(FIM_VID_DISPLAY_CONSOLE)	/* or user requested for showing console */
@@ -1379,7 +1379,7 @@ ret:
 	fim::string CommandConsole::get_variables_list(void)const
 	{
 		std::ostringstream acl;
-		std::string sep=" ";
+		const std::string sep=" ";
 		variables_t::const_iterator vi;
 
 		for( vi=variables_.begin();vi!=variables_.end();++vi)
@@ -1418,7 +1418,7 @@ ret:
 		else
 		if(pattern==FIM_CNS_EMPTY_STRING)
 		{
-			autocmds_t::const_iterator ai=autocmds_.find(event);
+			const autocmds_t::const_iterator ai=autocmds_.find(event);
 			//for each autocommand event registered
 			//for each file pattern registered, display the list..
 			if(ai!=autocmds_.end())
@@ -1431,7 +1431,7 @@ ret:
 		}
 		else
 		{
-			autocmds_t::const_iterator ai=autocmds_.find(event);
+			const autocmds_t::const_iterator ai=autocmds_.find(event);
 
 			//for each autocommand event registered
 			//for each file pattern registered, display the list..
