@@ -2,7 +2,7 @@
 /*
  Cache.cpp : Cache manager source file
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -146,9 +146,9 @@ ret:
 		if( mi.uordblks > getIntGlobalVariable(FIM_VID_MAX_CACHED_MEMORY) )
 			return true;
 		*/
-		fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
-		fim_int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY); /* getIntGlobalVariable */
-		size_t smcm = mcm > 0 ? mcm : 0;
+		const fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+		const fim_int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY); /* getIntGlobalVariable */
+		const size_t smcm = mcm > 0 ? mcm : 0;
 
 	       	if( smcm > 0 && img_byte_size()/FIM_CNS_CSU > smcm )
 			goto rt;
@@ -576,7 +576,7 @@ ret:
 		if(type == FIM_CR_CN || type == FIM_CR_CD)
 		{
 			fim_char_t buf[FIM_PRINTFNUM_BUFSIZE];
-			fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
+			const fim_int mci = getGlobalIntVariable(FIM_VID_MAX_CACHED_IMAGES);
 			fim_int mcm = getGlobalIntVariable(FIM_VID_MAX_CACHED_MEMORY);
 			mcm = mcm >= 0 ? mcm*FIM_CNS_CSU:0;
 			cache_report << " " << "count:" << cached_elements() << "/" << mci << " occupation:";

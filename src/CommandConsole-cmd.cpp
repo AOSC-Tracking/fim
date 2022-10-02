@@ -2,7 +2,7 @@
 /*
  CommandConsole-cmd.cpp : Fim console commands
 
- (c) 2009-2017 Michele Martone
+ (c) 2009-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -900,10 +900,10 @@ nop:
 		else
 		if ( args[aoc] == "save" )
 		{
-			bool saveall = fim_args_opt_have(args,"-all");
-			bool wappend = fim_args_opt_have(args,"-append");
-			bool nooverw = fim_args_opt_have(args,"-nooverw");
-			string sdn = args[aoc+1];
+			const bool saveall = fim_args_opt_have(args,"-all");
+			const bool wappend = fim_args_opt_have(args,"-append");
+			const bool nooverw = fim_args_opt_have(args,"-nooverw");
+			const string sdn = args[aoc+1];
 
 			if(2 < args.size()-aoc)
 				sc = *args[2+aoc].c_str();

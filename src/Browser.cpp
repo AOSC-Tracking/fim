@@ -536,13 +536,13 @@ nop:
 	fim_cxr Browser::fcmd_limit(const args_t& args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
-		int aoc = fim_args_opt_count(args,'-');
+		const int aoc = fim_args_opt_count(args,'-');
 		size_t max_vars = FIM_CNS_A_FEW_DUMPED_TOKENS, max_vals = FIM_CNS_A_FEW_DUMPED_TOKENS;
 
 		if( args.size()-aoc > 0 )
 		{
-			fim_int lbl = n_files(); // length before limiting
-			enum FilterAction faction = Delete;
+			const fim_int lbl = n_files(); // length before limiting
+			const enum FilterAction faction = Delete;
 			flist_t clist; // current list copy
 
 #if FIM_WANT_PIC_LVDN
@@ -617,7 +617,7 @@ nop:
 
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS) == 1 )
 		{
-			fim::string dss ;
+			fim::string dss;
 			const fim_char_t *dssp=FIM_NULL;
 
 			if( cc.isSetVar(FIM_VID_DISPLAY_STATUS_FMT) )
@@ -704,7 +704,7 @@ ret:
 	fim_err_t Browser::loadCurrentImage(void)
 	{
 		// this function needs revision
-		fim_err_t errval = FIM_ERR_NO_ERROR;
+		const fim_err_t errval = FIM_ERR_NO_ERROR;
 
 		FIM_PR('*');
 		try
@@ -1013,7 +1013,7 @@ rret:
 
 		if(cc.getIntVariable(FIM_VID_PRELOAD_CHECKS)!=1)
 		{
-			size_t sl = strlen(nf.c_str());
+			const size_t sl = strlen(nf.c_str());
 
 			if(sl < 1)
 				goto ret;
@@ -1183,7 +1183,8 @@ ret:
 		 * goes to the next filename-matching file
 		 * TODO: this member function shall only find the index and return it !
 		 */
-		size_t i,j,c = current_n(),s = flist_.size();
+		const size_t c = current_n(),s = flist_.size();
+		size_t i,j;
 		const char *rso = FIM_NULL;
 		int rsic = 1; /* ignore case */
 		int rsbn = 1; /* base name */
@@ -1342,7 +1343,7 @@ ret:
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 		if( args.size() > 0 )
 		{
-			fim_int cfi = current_n();
+			const fim_int cfi = current_n();
 			for(size_t i = 0; i<args.size() && current_n() == cfi ; ++i)
 				result = goto_image_internal(args[i].c_str(),FIM_X_NULL);
 		}
@@ -1355,7 +1356,7 @@ ret:
 	{
 		const fim_char_t*errmsg = FIM_CNS_EMPTY_STRING;
 		const int cf = flist_.cf(),cp =getGlobalIntVariable(FIM_VID_PAGE),pc = FIM_MAX(1,n_pages());
-		fim_int fc = n_files();
+		const fim_int fc = n_files();
 		fim_int gv = 0,nf = cf,mv = 0,np = cp;
 		FIM_PR('*');
 
@@ -1408,9 +1409,10 @@ ret:
 #if FIM_WANT_GOTO_DIR
 			if( isdj )
 			{
-				int neg=(c=='-'?-1:1);
+				const int neg=(c=='-'?-1:1);
 				std::string bcn;
-				char ct = sl < 3 ? 'S' : s[2];
+				const char ct = sl < 3 ? 'S' : s[2];
+
 				switch(tolower(ct))
 				{
 					case 'u':
@@ -1423,7 +1425,7 @@ ret:
 
 				for(fim_int fi=0;fi<fc;++fi)
 				{
-					size_t idx=FIM_MOD((cf+neg*(1+fi)+fc),fc);
+					const size_t idx=FIM_MOD((cf+neg*(1+fi)+fc),fc);
 					std::string icn;
 					bool match=false;
 
@@ -1469,7 +1471,7 @@ ret:
 			if( isrj && s[1] && ( isalpha(s[1]) || s[1] == '_' ) )
 			{
 				const char * ib = s+1, *ie = s+2;
-				int neg=(c=='-'?-1:1);
+				const int neg=(c=='-'?-1:1);
 				bool ner=false; // non empty requirement
 				std::map<std::string,std::string> vals;
 				std::vector<std::string> keys; // ordered
@@ -1633,7 +1635,7 @@ ret:
 					argsc.push_back(last_regexp_);
 				else
                                 {
-				        int sks = (c == '+' || c == '-' ) ? 1 : 0;
+				        const int sks = (c == '+' || c == '-' ) ? 1 : 0;
 					argsc.push_back(string(s).substr(1+sks,sl-2-sks));
                                 }
 				FIM_PR('.');
@@ -1684,7 +1686,7 @@ err:
 		if ( args.size() > 1 && rm == ListIdxMatch )
 		{
 			size_t min_idx=0,max_idx=FIM_MAX_VALUE_FOR_TYPE(size_t);
-			std::string ss(args[1]);
+			const std::string ss(args[1]);
 			std::istringstream is(ss);
 
 			if(is.peek()!='-') // MIN-
@@ -1755,7 +1757,7 @@ parsed_idx:
 			{
 				if(args.size()==1)
 				{
-					fim_stat_t fss = fim_get_stat(current(),FIM_NULL);
+					const fim_stat_t fss = fim_get_stat(current(),FIM_NULL);
 					if( ( min_size=max_size=fss.st_size ) == 0 ) 
 						goto nop;
 					goto parsed_limits;
@@ -1799,7 +1801,7 @@ parsed_idx:
 			{
 				if(args.size()==1)
 				{
-					fim_stat_t fss = fim_get_stat(current(),FIM_NULL);
+					const fim_stat_t fss = fim_get_stat(current(),FIM_NULL);
 					if( ( min_mtime=max_mtime=fss.st_mtime ) == 0 ) 
 						goto nop;
 					min_mtime-=60*60*24;
@@ -2438,7 +2440,7 @@ err:
 	{
 #if FIM_WANT_RELOAD_ON_FILE_CHANGE
 #if FIM_WANT_FLIST_STAT 
-		fim_stat_t nfs = fim_get_stat(current(), NULL);
+		const fim_stat_t nfs = fim_get_stat(current(), NULL);
 
 		if( flist_[current_n()].stat_.st_ctime != nfs.st_ctime )
 		{
@@ -2576,13 +2578,13 @@ void flist_t::erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative)
 {
 	size_t ecount = 0;
 #if FIM_USE_CXX11
-	auto bit=this->begin();
-	auto eit=this->end();
+	const auto bit=this->begin();
+	const auto eit=this->end();
 	for(auto fit=bit;fit!=eit;++fit)
 		if(bs.at(fit-bit) != negative)
 			this->erase(fit-ecount),ecount++;
 #else /* FIM_USE_CXX11 */
-	size_t tsize = size();
+	const size_t tsize = size();
 	for(size_t pos=0;pos<tsize;++pos)
 		if(bs.at(pos) != negative)
 			this->erase(this->begin()+pos-ecount),ecount++;
@@ -2609,7 +2611,7 @@ flist_t flist_t::copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive) c
 			nlist.emplace_back(*fit);// this might spare constructor
 			//nlist.push_back(*fit);
 #else /* FIM_USE_CXX11 */
-	size_t tsize = size();
+	const size_t tsize = size();
 	for(size_t pos=0;pos<tsize;++pos)
 		if(bs.at(pos) != positive )
 			nlist.push_back(*(this->begin()+pos));
