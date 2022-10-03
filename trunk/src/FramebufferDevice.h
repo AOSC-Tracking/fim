@@ -2,7 +2,7 @@
 /*
  FramebufferDevice.h : Linux Framebuffer functions from fbi, adapted for fim
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -96,7 +96,7 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 
 	int             vt_ ;
 	int32_t         lut_red_[256], lut_green_[256], lut_blue_[256];
-	int             dither_ , pcd_res_;
+	int             dither_;
 	private:
 	float fbgamma_ ;
 

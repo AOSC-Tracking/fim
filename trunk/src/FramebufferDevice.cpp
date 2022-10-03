@@ -1619,7 +1619,6 @@ int FramebufferDevice::fs_init_fb(int white8)
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	,vt_(0)
 	,dither_(FIM_FBI_FALSE)
-	,pcd_res_(3)
 	,fbgamma_(FIM_CNS_GAMMA_DEFAULT)
 	,fs_bpp_(), fs_black_(), fs_white_()
 	,visible_(1)

@@ -512,6 +512,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim
 }
 
 
+#ifndef FIM_WANTS_SLOW_RESIZE
 static inline void op_resize_work_row_expand_i_unrolled(const struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
@@ -604,6 +605,7 @@ static inline void op_resize_work_row_expand_i_unrolled(const struct ida_image *
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
+#endif /* FIM_WANTS_SLOW_RESIZE */
 
 const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *src, struct ida_rect *rect, fim_byte_t *FIM_RSTRCT dst, int line, void *FIM_RSTRCT data, int sr)
 {
@@ -668,6 +670,7 @@ const inline void op_resize_work_unrolled4_row_expand(const struct ida_image *sr
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
 
+#ifndef FIM_WANTS_SLOW_RESIZE
 static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *src, struct ida_rect *rect, fim_byte_t *dst, int line, void *data, int sr)
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
@@ -725,6 +728,7 @@ static inline void op_resize_work_unrolled2_row_expand(const struct ida_image *s
 		//for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }dx=0;
 		if(line==(int)h->height-1)for (dx=0;dx<Mdx;++dx ) { dst[3*dx+0]=0x00; dst[3*dx+1]=0x00; dst[3*dx+2]=0x00; }
 }
+#endif /* FIM_WANTS_SLOW_RESIZE */
 
 #endif /* FIM_HAS_MISC_FBI_OPS */
 static void

@@ -251,7 +251,6 @@ rerr:
 		lwidth_(0),
 		rows_(0),
 		scroll_(0),
-		cc_(cc),
 		displaydevice_(dd)
 		{
 			int BS=FIM_CONSOLE_BLOCKSIZE;	//block size of 1k

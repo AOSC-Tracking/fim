@@ -2,7 +2,7 @@
 /*
  Image.h : Image class headers
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -300,7 +300,11 @@ public:
 									ss+=ds.substr(bci,eci-bci); // might issue warning instead
 							}
 							ss+=ds.substr(eci);
+#if FIM_USE_CXX11
+							return std::move(ss);
+#else /* FIM_USE_CXX11 */
 							return ss;
+#endif /* FIM_USE_CXX11 */
 #else /* FIM_WANT_DESC_VEXP */
 							return ds;
 #endif /* FIM_WANT_DESC_VEXP */

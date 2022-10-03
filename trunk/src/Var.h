@@ -2,7 +2,7 @@
 /*
  Var.h : Var class header file
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -245,9 +245,9 @@ class Var FIM_FINAL
 		return re_match(v).getInt();
 	}
 	Var operator- (void)const {
-		if(getType()==FimTypeInt)return - getInt(); 
 		if(getType()==FimTypeFloat)return - getFloat(); 
 		if(getType()==FimTypeString)return - getFloat(); 
+		/*if(getType()==FimTypeInt)*/return - getInt(); 
 	}
 	Var operator% (const Var& v)const { return getInt()%v.getInt(); }
 //	Var operator, (const Var& v)const { return (getString()+v.getString()); }

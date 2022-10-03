@@ -1494,7 +1494,7 @@ ret:
 						(*api).second.erase(aui);
 		}
 		if(n)
-			return n+" autocmd's removed\n";
+			return fim::string(n)+" autocmd's removed\n";
 		else
 			return "no autocmd's removed\n";
 	}
