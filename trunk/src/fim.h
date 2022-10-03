@@ -160,9 +160,9 @@
 #define FIM_FONT_MAGNIFY_FACTOR_MIN 1  /* Framebuffer font magnifying factor, minimal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_MAX 16 /* Framebuffer font magnifying factor, maximal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_DEFAULT ( FIM_WANT_FONT_MAGNIFY_FACTOR > 0 ? FIM_WANT_FONT_MAGNIFY_FACTOR : ( FIM_WANT_FONT_MAGNIFY_FACTOR < 0 ? -FIM_WANT_FONT_MAGNIFY_FACTOR : 1 ) ) /* Framebuffer font magnifying factor, default value. */
-#define FIM_USE_CXX11 ( FIM_USE_CXX_STD >= 2011 ) || ( defined(__cplusplus) && (__cplusplus>=201103L) ) /* */
-#define FIM_USE_CXX14 ( FIM_USE_CXX_STD >= 2014 ) || ( defined(__cplusplus) && (__cplusplus> 201402L) ) /* */
-#define FIM_USE_CXX17 ( FIM_USE_CXX_STD >= 2017 ) || ( defined(__cplusplus) && (__cplusplus> 201707L) ) /* */
+#define FIM_USE_CXX11 ( FIM_USE_CXX_STD >= 2011 ) || ( __cplusplus>=201103L ) /* */
+#define FIM_USE_CXX14 ( FIM_USE_CXX_STD >= 2014 ) || ( __cplusplus> 201402L ) /* */
+#define FIM_USE_CXX17 ( FIM_USE_CXX_STD >= 2017 ) || ( __cplusplus> 201707L ) /* */
 #define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
 #define FIM_WANT_PIC_CMTS_RELOAD ( FIM_USE_CXX11 && FIM_WANT_PIC_CMTS )
 #define FIM_WANT_IMAGE_LOAD_TIME 1
@@ -175,7 +175,7 @@
 #define FIM_WANT_FBI_FBDEV_DIAGNOSTICS false
 #define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* in C++11, prefer smart pointers for Image* */
 #define FIM_EXPERIMENTAL_SHADOW_DIRS FIM_READ_DIRS && FIM_USE_CXX11 /* shadow list of high-res images to jump on demand */
-#define FIM_EXPERIMENTAL_FONT_CMD 1 && defined(HAVE_DIRENT_H) && 1 /*  */
+#define FIM_EXPERIMENTAL_FONT_CMD HAVE_DIRENT_H /*  */
 #define FIM_WANT_HELP_ARGS 1 /*  */
 #define FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL 1 /* the larger the image, the more scroll steps  */
 #if FIM_USE_CXX11
@@ -1077,7 +1077,9 @@ namespace fim
 #define FIM_WANT_RECURSE_FILTER_OPTION 1 /* Enable -R=... */
 #define FIM_WANT_NOEXTPROPIPE 1 /* */
 /* #define FIM_WANT_CUSTOM_INFO_STRING  1 */
-#define FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING defined(FIM_FRAMEBUFFER_DEVICE_H) && defined(FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING) /* only needed in Linux framebuffer device on computers loading files so slowly that we might want to switch console in between */
+#if defined(FIM_FRAMEBUFFER_DEVICE_H) && defined(FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING) /* only needed in Linux framebuffer device on computers loading files so slowly that we might want to switch console in between */
+#define FIM_WANT_CONSOLE_SWITCH_WHILE_LOADING 1
+#endif
 #define FIM_WANT_RELOAD_ON_FILE_CHANGE 1 /* detect file change and reload */
 #define FIM_WANT_NEXT_ACCEL 1 /* keeping pressed accelerates browse speed */
 #define FIM_STREAM_BUFSIZE	16*4096
