@@ -2,7 +2,7 @@
 /*
  SDLDevice.h : sdllib device Fim driver header file
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ class SDLDevice FIM_FINAL :public DisplayDevice
 		fim_coo_t orows,fim_coo_t ocols,// rows and columns to draw in output buffer
 		fim_coo_t ocskip,// output columns to skip for each line
 		fim_flags_t flags// some flags
-		);
+		) FIM_OVERRIDE;
 
 	fim_err_t initialize(sym_keys_t &sym_keys)FIM_OVERRIDE;
 	void finalize(void) FIM_OVERRIDE;
@@ -76,7 +76,7 @@ class SDLDevice FIM_FINAL :public DisplayDevice
 	fim_coo_t height(void)const FIM_OVERRIDE;
 	fim_err_t status_line(const fim_char_t *msg) FIM_OVERRIDE;
 	fim_bool_t handle_console_switch(void) FIM_OVERRIDE { return false; }
-	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT;
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_NOEXCEPT FIM_OVERRIDE;
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false) FIM_OVERRIDE;
 	virtual fim_key_t catchInteractiveCommand(fim_ts_t seconds)const FIM_OVERRIDE;
 	void fs_render_fb(fim_coo_t x, fim_coo_t y, FSXCharInfo *charInfo, fim_byte_t *data) FIM_NOEXCEPT;
