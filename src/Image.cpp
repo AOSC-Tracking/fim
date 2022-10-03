@@ -837,7 +837,6 @@ err:
 		reset();
 		img_  = fbi_image_clone(rhs.img_ );
 		fimg_ = fbi_image_clone(rhs.fimg_);
-        	!check_valid();
 	}
 
 fim_int Image::shall_mirror(void)const
@@ -1024,7 +1023,8 @@ ret:
 
 	bool Image::have_page(int page)const
 	{
-		return ( page >=0 && page < 0L + fimg_->i.npages );
+		return ( page >=0 && (0U + page) < (0U + fimg_->i.npages) ); // 0U is to impose signedness and type on either word length
+
 	}
 
 	bool Image::have_nextpage(int j)const

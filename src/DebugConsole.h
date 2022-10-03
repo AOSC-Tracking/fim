@@ -2,7 +2,7 @@
 /*
  DebugConsole.h : Fim virtual console display.
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,7 +46,6 @@ namespace fim
 		int  lwidth_;	// line width
 		int  rows_;	// rows count
 		int  scroll_;	// last line displayed (up to rows_)
-		const CommandConsole& cc_;
 		DisplayDevice *displaydevice_;
 		public:
 		MiniConsole(CommandConsole& cc, DisplayDevice *dd, int lw=48, int r=12); /* get rid of these default numerical constants! */
@@ -83,7 +82,6 @@ namespace fim
 			lwidth_(0),
 			rows_(0),
 			scroll_(0),
-			cc_(rhs.cc_),
 			displaydevice_(rhs.displaydevice_)
 			{/* this constructor should not be used */}
 #endif /* FIM_USE_CXX11 */

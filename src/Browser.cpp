@@ -324,7 +324,10 @@ ret:
 		Namespace(&cc,FIM_SYM_NAMESPACE_BROWSER_CHAR),
 #endif /* FIM_NAMESPACES */
 #if FIM_WANT_PIC_LBFL
-		flist_(tlist_),
+		flist_(),
+#endif /* FIM_WANT_PIC_LBFL */
+#if FIM_WANT_PIC_LBFL
+		tlist_(),
 #endif /* FIM_WANT_PIC_LBFL */
 		nofile_(FIM_CNS_EMPTY_STRING),commandConsole_(cc)
 #if FIM_WANT_BACKGROUND_LOAD
