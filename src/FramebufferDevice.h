@@ -251,7 +251,7 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	int fb_setmode(fim_char_t const * const name);
 	int fb_activate_current(int tty_);
 
-	void console_switch(fim_bool_t is_busy);
+	void console_switch(fim_bool_t is_busy) FIM_OVERRIDE;
 
 	int  fb_font_width(void)const;
 	int  fb_font_height(void)const;
@@ -277,10 +277,10 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 		return 0;
 	}
 	public:
-	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) {/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
+	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_OVERRIDE {/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
 
 	void clear_screen(void);
-	void cleanup(void);
+	void cleanup(void) FIM_OVERRIDE;
 
 	fim_err_t initialize (sym_keys_t &sym_keys)FIM_OVERRIDE {/*still unused : FIXME */ ;return FIM_ERR_NO_ERROR;}
 	void finalize (void)FIM_OVERRIDE ;
@@ -291,7 +291,7 @@ class FramebufferDevice FIM_FINAL:public DisplayDevice
 	}
 	
 	public:
-	void switch_if_needed(void)
+	void switch_if_needed(void) FIM_OVERRIDE
 	{
 		handle_console_switch();
 	}
@@ -323,7 +323,7 @@ fim_err_t display(
 	fim_coo_t bh,
 	fim_coo_t bw,
 	fim_coo_t ocskip,// output columns to skip for each line
-	fim_flags_t flags);
+	fim_flags_t flags) FIM_OVERRIDE;
 
 void svga_display_image_new(
 	const struct ida_image *img,
