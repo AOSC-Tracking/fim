@@ -273,6 +273,7 @@ namespace rl
 
 //#define FIM_FBI_PRINTF( ... ) fprintf(stderr, __VA_ARGS__ )
 /* " warning: anonymous variadic macros were introduced in C99" (here and elsewhere) */
+#define FIM_WANT_FBI_PRINTF 0
 #define FIM_NO_OP_STATEMENT 1
 #define FIM_FBI_PRINTF( ... ) FIM_NO_OP_STATEMENT 
 #define FIM_VERB_PRINTF printf

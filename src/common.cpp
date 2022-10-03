@@ -997,7 +997,7 @@ int fim_snprintf_fim_int(char *r, fim_int n)
 {
 	// this does not pass g++ -pedantic-errors
 	if(FIM_LARGE_FIM_INT)
-		return sprintf(r,"%lld",(int64_t)n);
+		return sprintf(r,"%lld",(long long int)n);
 		//return sprintf(r,"%jd",(intmax_t)n);
 		//return sprintf(r,"%zd",(signed size_t)n);
 		//return sprintf(r,"%lld",(long long int)n);

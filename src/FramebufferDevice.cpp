@@ -222,7 +222,7 @@ fim_err_t FramebufferDevice::fs_puts(struct fs_font *f_, fim_coo_t x, fim_coo_t 
 	start = pos + x*fs_bpp_ + fb_fix_.line_length * (f_->sheight()-fim_fmf*f_->eindex[c]->ascent);
 	fs_render_fb(start,fb_fix_.line_length,f_->eindex[c],f_->gindex[c]);
 	x += f_->eindex[c]->width*fim_fmf;
-	if (x > fb_var_.xres - f_->swidth())
+	if (0U + x > fb_var_.xres - f_->swidth())
 	    return FIM_ERR_GENERIC;
     }
     return FIM_ERR_NO_ERROR;
@@ -805,7 +805,7 @@ void FramebufferDevice::fb_setvt(int vtno)
 		/* on some systems, we get 'int dup(int)', declared with attribute warn_unused_result */
     		int ndd;
     		ndd = dup(0);
-		ndd = dup(0);
+		ndd+= dup(0);
 	}
 
 #ifdef FIM_BOZ_PATCH
@@ -960,7 +960,7 @@ fim_err_t FramebufferDevice::status_line(const fim_char_t *msg)
     if (!visible_)
 	goto ret;
 
-    if(fb_var_.yres< 1 + f_->sheight() + ys_)
+    if(fb_var_.yres< 1U + f_->sheight() + ys_)
 	/* we need enough pixels, and have no assumptions on weird visualization devices_ */
 	goto rerr;
 

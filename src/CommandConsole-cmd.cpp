@@ -762,7 +762,6 @@ err:
 			if(args[0]=="repeat_last")
 				return repeat_last(args_t(args.begin()+1,args.end()));
 		}
-nop:
 		return FIM_CMD_RET_HELP_MSG(FIM_FLT_RECORDING);
 	}
 

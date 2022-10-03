@@ -92,7 +92,7 @@ class flist_t FIM_FINAL : public std::vector<fim::fle_t>
 	flist_t(const args_t& a);
 	void _sort(const fim_char_t sc, const char*id="");
 	void _unique();
-	size_type cf(void)const{return FIM_MAX(cf_,0);}
+	size_type cf(void)const{return FIM_MAX(cf_,0U);}
 	fim_bool_t pop_current(void);
 	void erase_at_bitset(const fim_bitset_t& bs, fim_bool_t negative = false);
 	flist_t copy_from_bitset(const fim_bitset_t& bs, fim_bool_t positive = true) const;

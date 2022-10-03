@@ -576,7 +576,7 @@ ret:
         void Image::free(void)
         {
 		FIM_PR('*');
-        	if(const bool do_shred = false) /* activate this only for debug purposes */
+        	if(false) /* activate this only for debug purposes */
         		this->shred();
                 if(fimg_!=img_ && img_ )
 		       	FbiStuff::free_image(img_ );
@@ -913,7 +913,9 @@ fim::string Image::getInfo(void)const
 	else
 		*pagesinfobuffer='\0';
 
-	size_t ms = fbi_img_pixel_bytes(fimg_); /* memory size */
+#if FIM_WANT_DISPLAY_MEMSIZE
+	const size_t ms = fbi_img_pixel_bytes(fimg_); /* memory size */
+#endif /* FIM_WANT_DISPLAY_MEMSIZE */
 
 	snprintf(linebuffer, sizeof(linebuffer),
 	     "[ %s%.0f%% %dx%d%s%s %d/%d ]"
@@ -1022,7 +1024,7 @@ ret:
 
 	bool Image::have_page(int page)const
 	{
-		return ( page >=0 && page < fimg_->i.npages );
+		return ( page >=0 && page < 0L + fimg_->i.npages );
 	}
 
 	bool Image::have_nextpage(int j)const

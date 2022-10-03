@@ -2,7 +2,7 @@
 /*
  fim_types.h : Basic Fim type declarations
 
- (c) 2011-2017 Michele Martone
+ (c) 2011-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@
 	typedef int fim_int;		/* a type for fim's internal integer type, always signed */
 #define FIM_LARGE_FIM_INT 0		/* == (sizeof(fim_int)!=sizeof(int)) */
 #endif /* FIM_WANT_LONG_INT */
+	typedef unsigned int fim_uint;	/* unsigned int */
 	typedef int fim_pan_t;		/* a type for pixel offsets (neg/pos)  */
 	typedef int fim_off_t;		/* a type for pixel offsets (positive)  */
 	typedef float fim_scale_t;	/* a type for image scaling */
