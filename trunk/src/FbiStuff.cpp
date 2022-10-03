@@ -120,7 +120,8 @@ err:
 	return errval;
 }
 
-fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_t * mmp)
+fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_t * mmp 
+	FIM_DEPRECATED("In mipmap implementation shall use std::copy instead of pointers and memcpy."))
 {
 	/* 
 	   Computation of mipmaps.
@@ -172,7 +173,7 @@ fim_err_t FbiStuff::fim_mipmaps_compute(const struct ida_image *src, fim_mipmap_
 		mipmap_compute(w/d,h/d,w/(2*d),h/(2*d),mm.mdp+mm.mmoffs[mmidx-1],mm.mdp+mm.mmoffs[mmidx],mm.mmo);
 	}
 	if(FIM_WVMM) std::cout << __FUNCTION__ << " took " << (getmilliseconds() - t0) << " ms\n";
-    	memcpy(mmp,&mm,sizeof(mm));
+    	memcpy((void*)mmp,(void*)&mm,sizeof(mm));
 	mm.mdp = FIM_NULL; // this is to avoid mm's destructor to free(mm.mdp)
 	return FIM_ERR_NO_ERROR; 
 err:
@@ -1621,7 +1622,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 #endif /* FIM_USE_CXX11 */
 #ifdef FIM_TRY_INKSCAPE
 #ifdef FIM_WITH_LIBPNG 
-    fim_char_t command[FIM_PIPE_CMD_BUFSIZE]; /* FIXME: overflow risk ! */
+    //fim_char_t command[FIM_PIPE_CMD_BUFSIZE]; /* FIXME: overflow risk ! */
 #endif /* FIM_WITH_LIBPNG  */
 #endif /* FIM_TRY_INKSCAPE */
     struct ida_loader *loader = FIM_NULL;
@@ -2361,7 +2362,6 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     struct ida_rect  rect;
     struct ida_image *dest;
     void *data;
-    fim_off_t y;
 
     dest = (ida_image*)fim_malloc(sizeof(*dest));
     /* fim: */ if(!dest)goto err;
@@ -2391,7 +2391,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     fim_byte_t * larger_data = (fim_byte_t*)fim_calloc(diagonal * diagonal * 3,1);
     if(larger_data)
     {
-	    for(y = n_extra; y < diagonal - s_extra; ++y )
+	    for(fim_off_t y = n_extra; y < diagonal - s_extra; ++y )
 	    	memcpy(larger_data + (y * diagonal + w_extra )*3 , src->data + (y-n_extra) * src->i.width * 3 , src->i.width*3);
 	    src->i.width = diagonal;
 	    src->i.height = diagonal;
@@ -2415,7 +2415,7 @@ FbiStuff::rotate_image(struct ida_image *src, float angle)
     data = desc_rotate.init(src,&rect,&dest->i,&p);
     dest->data = fim_pm_alloc(dest->i.width, dest->i.height, true);
     /* fim: */ if(!(dest->data)){fim_free(dest);dest=FIM_NULL;goto err;}
-    for (y = 0; y < dest->i.height; y++) {
+    for (fim_uint y = 0; y < dest->i.height; y++) {
 	FIM_FB_SWITCH_IF_NEEDED();
 	desc_rotate.work(src,&rect,
 			 dest->data + 3 * dest->i.width * y,
@@ -2475,7 +2475,6 @@ FbiStuff::scale_image(const struct ida_image *src, /*const fim_mipmap_t *mmp,*/ 
     unsigned int y;
 #if FIM_WANT_MIPMAPS
     int mmi=-1;
-    FIM_DEPRECATED("Shall improve mipmap implementation, e.g. by avoiding pointers in C++11 mode.")
     struct ida_image msrc;
 #endif /* FIM_WANT_MIPMAPS */
     if(ascale<=0.0||ascale>=100.0) /* fim: */

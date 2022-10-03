@@ -38,11 +38,12 @@
 namespace fim
 {
 
-
+#if FIM_WANT_FBI_PRINTF 
 static const fim_char_t *ct[] = {
     "gray",  "X1", "rgb",  "palette",
     "graya", "X5", "rgba", "X7",
 };
+#endif /* FIM_WANT_FBI_PRINTF */
 
 struct fim_png_state {
     FILE         *infile;

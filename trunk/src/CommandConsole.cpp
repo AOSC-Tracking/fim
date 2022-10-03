@@ -1019,8 +1019,10 @@ err:
 #endif /* FIM_RECORDING */
 					execute_internal(rl,FIM_X_HISTORY);	//execution of the command line with history
 					ic_=(ic_==-1)?0:1; //a command could change the mode !
-					if( show_must_go_on_ )
-						FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
+					if( !show_must_go_on_ )
+						goto skip_ac;
+					FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
+skip_ac:
 #ifdef FIM_RECORDING
 					memorize_last(rl);
 #endif /* FIM_RECORDING */

@@ -1106,7 +1106,6 @@ ret:
 #if FIM_EXPERIMENTAL_SHADOW_DIRS
 	void Browser::push_shadow_dir(std::string fn)
 	{
-		const size_t hll = hlist_.size();
 		std::swap(flist_,hlist_);
 		push_dir(fn,FIM_FLAG_PUSH_REC,NULL);
 		std::swap(flist_,hlist_);
@@ -1488,8 +1487,8 @@ ret:
 				if(*ie == '+' )
 					ner = true;
 
-				for(fim_int fi=0;fi<fc;++fi)
-				for(fim_int ii=0;ii<keys.size();++ii)
+				for(fim_uint fi=0;fi<fc;++fi)
+				for(fim_uint ii=0;ii<keys.size();++ii)
 				{
 					std::string varname(keys[ii]);
 					std::string varval(vals[varname]);
@@ -1725,8 +1724,8 @@ parsed_idx:
 				goto nop;
 			}
 
-			min_idx=FIM_MIN(FIM_MAX(min_idx,1),flist_.size());
-			max_idx=FIM_MIN(FIM_MAX(max_idx,1),flist_.size());
+			min_idx=FIM_MIN(FIM_MAX(min_idx,1U),flist_.size());
+			max_idx=FIM_MIN(FIM_MAX(max_idx,1U),flist_.size());
 
 			// std::cout << "Limiting index between " << min_idx << " and " << max_idx << " .\n";
 
@@ -2163,7 +2162,6 @@ nop:
 		else
 			scrolldown(args);
 		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTPAN);
-nop:
 		FIM_PR('.');
 		return FIM_CNS_EMPTY_RESULT;
 	}

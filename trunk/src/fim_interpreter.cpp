@@ -2,7 +2,7 @@
 /*
  interpreter.cpp : Fim language interpreter
 
- (c) 2007-2020 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -252,7 +252,7 @@ Var ex(NodeType p)
 				const flist_t fl = cc.browser_.get_file_list();
 				fim::string result;
 
-				for( fim_int fi = FIM_MAX(0,n1-1); fi<n2; ++fi )
+				for( fim_uint fi = FIM_MAX(0,n1-1); fi<n2; ++fi )
 				if( fi < fl.size() )
 				{
   					args_t fargs;

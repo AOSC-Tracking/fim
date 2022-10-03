@@ -2,7 +2,7 @@
 /*
  Viewport.cpp : Viewport class implementation
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1202,9 +1202,9 @@ nop:
 
 		if(isSetGlobalVar(FIM_VID_COMMENT_OI_FMT))
 		{
-			fim_coo_t cpl = displaydevice_->get_chars_per_line();
-			fim_coo_t maxchrs = cpl*(displaydevice_->get_chars_per_column()/2);
-			std::string i = commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT));
+			const fim_uint cpl = displaydevice_->get_chars_per_line();
+			const fim_uint maxchrs = cpl*(displaydevice_->get_chars_per_column()/2);
+			const std::string i = commandConsole_.getInfoCustom(getGlobalStringVariable(FIM_VID_COMMENT_OI_FMT));
 			if(i.length()>maxchrs)
 			{
 				ct=i.substr(0,maxchrs);

@@ -2,7 +2,7 @@
 /*
  FbiStuffGif.cpp : fbi functions for GIF files, modified for fim
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -97,7 +97,9 @@ gif_fileread(struct gif_state *h)
     GifRecordType RecordType;
     GifByteType *Extension = FIM_NULL;
     int ExtCode = 0, rc = 0;
+#if FIM_WANT_FBI_PRINTF
     const fim_char_t *type = FIM_NULL;
+#endif /* FIM_WANT_FBI_PRINTF */
 
     for (;;) {
 	if (GIF_ERROR == DGifGetRecordType(h->gif,&RecordType)) {
@@ -123,6 +125,7 @@ gif_fileread(struct gif_state *h)
 		    FimPrintGifError(h);
 		    return (GifRecordType)-1;
 		}
+#if FIM_WANT_FBI_PRINTF
 		if (FbiStuff::fim_filereading_debug()) {
 		    switch (ExtCode) {
 		    case COMMENT_EXT_FUNC_CODE:     type="comment";   break;
@@ -133,6 +136,7 @@ gif_fileread(struct gif_state *h)
 		    }
 		    FIM_FBI_PRINTF("gif: extcode=0x%x [%s]\n",ExtCode,type);
 		}
+#endif /* FIM_WANT_FBI_PRINTF */
 	    }
 	    break;
 	case TERMINATE_RECORD_TYPE:
