@@ -2,7 +2,7 @@
 /*
  CommandConsole-init.cpp : Fim console initialization
 
- (c) 2010-2017 Michele Martone
+ (c) 2010-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -343,7 +343,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		{
 			string ef=getStringVariable(FIM_VID_DEFAULT_ETC_FIMRC);
 			if(is_file(ef.c_str()))
-				if(FIM_ERR_NO_ERROR!=executeFile(ef.c_str()));
+				if(FIM_ERR_NO_ERROR!=executeFile(ef.c_str()))
+		    			std::cerr << "Problems loading " << ef << std::endl;
 		}
 		
 		/* execution of command line-set autocommands */

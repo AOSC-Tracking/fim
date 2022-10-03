@@ -1,8 +1,6 @@
 /* $LastChangedDate$ */
-/*
- FimWindow.cpp : Fim's own windowing system
-
- (c) 2007-2017 Michele Martone
+/* FimWindow.cpp : Fim's own windowing system 
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +19,9 @@
 #include "fim.h"
 
 #ifdef FIM_WINDOWS
+
+#define FIM_WINDOW_PROBLEM "FimWindow Internal Error"
+
 namespace fim
 {
         fim_cxr FimWindow::fcmd_cmd(const args_t&args)
@@ -1086,7 +1087,8 @@ namespace fim
 		}
 		catch(FimException e)
 		{
-			if( e != FIM_E_WINDOW_ERROR) ;// this would be bad..
+			if( e != FIM_E_WINDOW_ERROR) // this would be bad..
+		    		std::cerr << FIM_WINDOW_PROBLEM << std::endl;
 		}
 		return re;
 	}
@@ -1113,7 +1115,8 @@ namespace fim
 		}
 		catch(FimException e)
 		{
-			if( e != FIM_E_WINDOW_ERROR) ;// this would be bad..
+			if( e != FIM_E_WINDOW_ERROR) // this would be bad..
+		   		std::cerr << FIM_WINDOW_PROBLEM << std::endl;
 		}
 		return re;
 	}
@@ -1152,7 +1155,8 @@ namespace fim
 		if(!isleaf())
 			return focused().current_viewport();
 
-		if(!viewport_)/* temporarily, for security reasons throw FIM_E_TRAGIC*/; // isleaf(void)
+		if(!viewport_)/* temporarily, for security reasons throw FIM_E_TRAGIC*/ // isleaf(void)
+		    	std::cerr << FIM_WINDOW_PROBLEM << std::endl;
 
 		return *viewport_;
 	}	
