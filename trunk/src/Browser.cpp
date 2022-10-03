@@ -2441,7 +2441,12 @@ err:
 	{
 #if FIM_WANT_RELOAD_ON_FILE_CHANGE
 #if FIM_WANT_FLIST_STAT 
-		const fim_stat_t nfs = fim_get_stat(current(), NULL);
+		const fim_fn_t fn = current();
+
+		if( fn == FIM_STDIN_IMAGE_NAME )
+			return false;
+
+		const fim_stat_t nfs = fim_get_stat(fn, NULL);
 
 		if( flist_[current_n()].stat_.st_ctime != nfs.st_ctime )
 		{
