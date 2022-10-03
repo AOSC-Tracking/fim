@@ -436,8 +436,6 @@ err:
 	return Var((fim_int)-1);
 }
 
-#define SIZEOF_NODETYPE ((fim_char_t *)&p->con - (fim_char_t *)p)
-
 /*
  * string constant handling
  */
@@ -445,10 +443,8 @@ nodeType *scon(fim_char_t*s)
 {
 	if(s==NULL)yyerror("TOKEN NULL!\n");
 	nodeType *p;
-	size_t nodeSize;
 	/* allocate node */
-	nodeSize = SIZEOF_NODETYPE + sizeof(stringNodeType);
-	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
+	if ((p =(nodeType*) malloc(sizeof(nodeType))) == NULL)
 		yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = stringCon; 
@@ -490,10 +486,8 @@ nodeType *vscon(fim_char_t*s,int typeHint)
 nodeType *fcon(float fValue)
 {
 	nodeType *p;
-	size_t nodeSize;
 	/* allocate node */
-	nodeSize = SIZEOF_NODETYPE + sizeof(fidNodeType);
-	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
+	if ((p =(nodeType*) malloc(sizeof(nodeType))) == NULL)
 	yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = floatCon;
@@ -504,10 +498,8 @@ nodeType *fcon(float fValue)
 nodeType *con(fim_int value)
 {
 	nodeType *p;
-	size_t nodeSize;
 	/* allocate node */
-	nodeSize = SIZEOF_NODETYPE + sizeof(conNodeType);
-	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
+	if ((p =(nodeType*) malloc(sizeof(nodeType))) == NULL)
 	yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = intCon;
@@ -519,12 +511,9 @@ nodeType *opr(int oper, int nops, ...)
 {
 	va_list ap;
 	nodeType *p;
-	size_t nodeSize;
 	int i;
 	/* allocate node */
-	nodeSize = SIZEOF_NODETYPE + sizeof(oprNodeType) +
-	(nops - 1) * sizeof(nodeType*);
-	if ((p =(nodeType*) malloc(nodeSize)) == NULL)
+	if ((p =(nodeType*) malloc(sizeof(nodeType) * nops)) == NULL)
 	yyerror(FIM_EMSG_OUT_OF_MEM);
 	/* copy information */
 	p->type = typeOpr;
