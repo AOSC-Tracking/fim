@@ -2443,24 +2443,18 @@ err:
 #if FIM_WANT_FLIST_STAT 
 		const fim_fn_t fn = current();
 
-		if( fn == FIM_STDIN_IMAGE_NAME )
-			return false;
-
-		const fim_stat_t nfs = fim_get_stat(fn, NULL);
-
-		if( flist_[current_n()].stat_.st_ctime != nfs.st_ctime )
+		if( fn != FIM_STDIN_IMAGE_NAME )
 		{
-			if( flist_[current_n()].stat_.st_ctime == 0 )
-				flist_[current_n()].stat_.st_ctime = nfs.st_ctime;
-			else
-				return true;
-		}
-		if( flist_[current_n()].stat_.st_mtime != nfs.st_mtime )
-		{
-			if( flist_[current_n()].stat_.st_mtime == 0 )
-				flist_[current_n()].stat_.st_mtime = nfs.st_mtime;
-			else
-				return true;
+			const int cn = current_n();
+			const fim_stat_t nfs = fim_get_stat(fn, NULL);
+			const fim_stat_t ofs = flist_[cn].stat_;
+
+			if( ofs.st_ctime != nfs.st_ctime || ofs.st_mtime != nfs.st_mtime )
+			{
+				flist_[cn].stat_ =  nfs;
+				if( ofs.st_ctime && ofs.st_mtime )
+					return true;
+			}
 		}
 #endif /* FIM_WANT_FLIST_STAT */
 #endif /* FIM_WANT_RELOAD_ON_FILE_CHANGE */
