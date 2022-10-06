@@ -11,7 +11,7 @@
  * fix possibly broken `make -j` in rebuilding fimgs.man.
 # (r1623)
  * correct configure script check for regcomp() -- could lead to false negatives.
-# (r1621)
+# (r1621,r1637)
  * Don't break build on missing 'gs'.
 # (r1616)
  * Using --load-shadow-dir <dir> adds a shadow directory (experimental).

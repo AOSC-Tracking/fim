@@ -269,7 +269,7 @@ png_done(void *data)
     }
 
     fim_free(h->image);
-    png_destroy_read_struct(&h->png, &h->info, FIM_NULL);
+    png_destroy_read_struct(&h->png, &h->info, &end_info);
     fim_fclose(h->infile);
     fim_free(h);
 }
