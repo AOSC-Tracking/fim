@@ -79,7 +79,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		fim_int xres=0,yres=0;
 		bool device_failure=false;
 		int dosso=device.find(FIM_SYM_DEVOPTS_SEP_STR);
-		bool wcs = false;
+#ifdef FIM_USE_READLINE
+		bool wcs = false; /* want cookie stream (readline but no stdin) */
+#endif /* FIM_USE_READLINE */
 		std::string dopts;
 		/* prevents atof, sprintf and such conversion mismatches. */
 		setlocale(LC_ALL,"C");	/* portable (among Linux hosts): should use dots for numerical radix separator */
@@ -136,7 +138,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			{
 				device_failure=true;
 			}
-			wcs = true; /* FIXME: want cookie stream (for readline with no stdin) */
+#ifdef FIM_USE_READLINE
+			wcs = true;
+#endif /* FIM_USE_READLINE */
 		}
 		#endif /* FIM_WITH_LIBIMLIB2 */
 
@@ -165,7 +169,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			{
 				device_failure=true;
 			}
-			wcs = true; /* FIXME: want cookie stream (for readline with no stdin) */
+#ifdef FIM_USE_READLINE
+			wcs = true;
+#endif /* FIM_USE_READLINE */
 		}
 		#endif /* FIM_WITH_LIBSDL */
 

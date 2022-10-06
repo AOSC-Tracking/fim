@@ -69,6 +69,7 @@ namespace fim
     	extern fim_int fim_fmf_; /* FIXME */
 #endif /* FIM_FONT_MAGNIFY_FACTOR */
 
+#ifdef FIM_USE_READLINE
 	static  bool nochars(const fim_char_t *s)
 	{
 		/*
@@ -80,6 +81,7 @@ namespace fim
 			++s;
 		return *s=='\0'?true:false;
 	}
+#endif /* FIM_USE_READLINE */
 
 	int CommandConsole::findCommandIdx(fim_cmd_id cmd)const
 	{
@@ -664,7 +666,6 @@ ret:
 		 *	note: the pipe here opened shall be closed in the yyparse()
 		 *	call, by the YY_INPUT macro (defined by me in lex.lex)
 		 */
-		const fim_bool_t add_history_=(xflags&FIM_X_HISTORY)?true:false;
 		/* fim_bool_t suppress_output_=(xflags&FIM_X_QUIET)?true:false; */
 		fim_char_t *s=dupstr(ss);//this malloc is free
 		int iret=0;
@@ -753,7 +754,7 @@ ret:
 		}
 
 #ifdef FIM_USE_READLINE
-		if(add_history_)
+		if ( xflags & FIM_X_HISTORY )
 			if(nochars(s)==false)
 				add_history(s);
 #endif /* FIM_USE_READLINE */
@@ -2066,7 +2067,7 @@ ok:
 		fim_bool_t wcs = isSetVar(FIM_VID_WANT_CAPTION_STATUS);
 	
 		if( ! displaydevice_   )
-		       	goto ret;
+			goto done;
 
 		hk=this->find_key_for_bound_cmd(FIM_FLT_HELP); // slow
 		hkl=fim_strlen(hk.c_str());
@@ -2085,11 +2086,11 @@ ok:
 
 		chars = displaydevice_->get_chars_per_line();
 		if(chars<1)
-			goto ret;
+			goto done;
 
 		str = fim_stralloc(chars+1);
 		if(!str)
-			goto ret;
+			goto done;
 
 		if (desc && info)
 		{
@@ -2154,8 +2155,8 @@ ok:
 #endif /* FIM_WANT_CAPTION_CONTROL */
 			displaydevice_->status_line(str); /* one may check the return value.... */
 done:
-		fim_free(str);
-ret:
+		if (str)
+			fim_free(str);
 		return;
 	}
 
