@@ -775,7 +775,7 @@ ret:
 		 */
 		int cidx=FIM_INVALID_IDX;
 		/* first determine whether cmd is an alias */
-		fim::string ocmd=aliasRecall(cmd);
+		const fim::string ocmd=aliasRecall(cmd);
 
 		if(ocmd!=FIM_CNS_EMPTY_STRING)
 		{
@@ -2238,7 +2238,7 @@ err:
 		fim_ffp_t fr;
 		static std::vector<fim_ffp_t> fc;
 		static int fidx = 0;
-		size_t fcnt = fc.size();
+		const size_t fcnt = fc.size();
 		const fim_int vl = 0; // font loading verbosity level (font loading will exit() if not 0)
 		std::ostringstream rs;
 

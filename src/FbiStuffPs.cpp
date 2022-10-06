@@ -2,7 +2,7 @@
 /*
  FbiStuffPs.cpp : fim functions for decoding PS files
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2022 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -65,10 +65,10 @@ static void*
 ps_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	  struct ida_image_info *i, int thumbnail)
 {
-	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
-	prd=prd<1?FIM_RENDERING_DPI:prd;
-	double scale = 1.0* (((double)prd)/((double)FIM_SPECTRE_DEFAULT_DPI)) ;
-	double rcscale = scale;
+	const fim_int prdv=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
+	const fim_int prd=prdv<1?FIM_RENDERING_DPI:prdv;
+	const double scale = 1.0* (((double)prd)/((double)FIM_SPECTRE_DEFAULT_DPI)) ;
+	const double rcscale = scale;
 	struct ps_state_t * ds=FIM_NULL;
 
 	if(std::string(filename)==FIM_STDIN_IMAGE_NAME){std::cerr<<"sorry, stdin multipage file reading is not supported\n";return FIM_NULL;}	/* a drivers's problem */ 

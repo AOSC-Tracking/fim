@@ -151,8 +151,8 @@ namespace fim
 	{
 		if( check_invalid() )
 			return false;
-		fim_coo_t ph = pixelable_height();
-		fim_coo_t tol = approx_fraction > 1 ? ph / approx_fraction : 0;
+		const fim_coo_t ph = pixelable_height();
+		const fim_coo_t tol = approx_fraction > 1 ? ph / approx_fraction : 0;
 		return (top_ + ph + tol >= image_->height());
 	}
 
@@ -160,7 +160,7 @@ namespace fim
 	{
 		if( check_invalid() )
 			return false;
-		fim_coo_t tol = approx_fraction > 1 ? viewport_width() / approx_fraction : 0;
+		const fim_coo_t tol = approx_fraction > 1 ? viewport_width() / approx_fraction : 0;
 		return (left_ + viewport_width() + tol >= image_->width());
 	}
 
@@ -168,7 +168,7 @@ namespace fim
 	{
 		if( check_invalid() )
 			return false;
-		fim_coo_t tol = approx_fraction > 1 ? viewport_width() / approx_fraction : 0;
+		const fim_coo_t tol = approx_fraction > 1 ? viewport_width() / approx_fraction : 0;
 		return (left_ <= tol );
 	}
 
@@ -176,8 +176,8 @@ namespace fim
 	{
 		if( check_invalid() )
 			return false;
-		fim_coo_t ph = pixelable_height();
-		fim_coo_t tol = approx_fraction > 1 ? ph / approx_fraction : 0;
+		const fim_coo_t ph = pixelable_height();
+		const fim_coo_t tol = approx_fraction > 1 ? ph / approx_fraction : 0;
 		return (top_ <= tol );
 	}
 
@@ -192,14 +192,14 @@ namespace fim
 
 	fim_coo_t Viewport::extra_height(void)const
 	{
-		fim_coo_t eh = extra_bottom_height() + extra_top_height();
+		const fim_coo_t eh = extra_bottom_height() + extra_top_height();
 		return eh;
 	}
 
 	fim_coo_t Viewport::extra_bottom_height(void)const
 	{
-		fim_coo_t lh = displaydevice_->status_line_height();
-		fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
+		const fim_coo_t lh = displaydevice_->status_line_height();
+		const fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
 		return ds * lh;
 	}
 
@@ -207,7 +207,7 @@ namespace fim
 	{
 		fim_coo_t slh = 0;
 #if FIM_HSCALE_AFTER_CMT
-		fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
+		const fim_coo_t ds = (getGlobalIntVariable(FIM_VID_DISPLAY_STATUS)==1?1:0);
 
 		if(ds && image_ && displaydevice_->get_bpp())
 		{
@@ -215,10 +215,10 @@ namespace fim
 #if FIM_WANT_PIC_CMTS
 			if(wcoi>=3)
 			{
-				fim_coo_t fh = displaydevice_->font_height();
-				std::string i = get_caption_text();
-				fim_coo_t cpl = displaydevice_->get_chars_per_line();
-				fim_coo_t el = ((i.size()+cpl-1)/cpl);
+				const fim_coo_t fh = displaydevice_->font_height();
+				const std::string i = get_caption_text();
+				const fim_coo_t cpl = displaydevice_->get_chars_per_line();
+				const fim_coo_t el = ((i.size()+cpl-1)/cpl);
 				slh=fh*el;
 			}
 #endif /* FIM_WANT_PIC_CMTS */
@@ -230,11 +230,10 @@ namespace fim
 
 	fim_coo_t Viewport::viewport_height(void)const
 	{
-		fim_coo_t vph = 0;
 #ifdef FIM_WINDOWS
-		vph = corners_.height();
+		const fim_coo_t vph = corners_.height();
 #else
-		vph = displaydevice_->height();
+		const fim_coo_t vph = displaydevice_->height();
 #endif /* FIM_WINDOWS */
 		return vph;
 	}
@@ -363,9 +362,9 @@ namespace fim
 		
 		if( need_redraw())
 		{
-			bool mirror = shall_mirror();
-			bool flip = shall_flip();
-			fim_flags_t flags = (mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0);
+			const bool mirror = shall_mirror();
+			const bool flip = shall_flip();
+			const fim_flags_t flags = (mirror?FIM_FLAG_MIRROR:0)|(flip?FIM_FLAG_FLIP:0);
 
 			should_redraw(FIM_REDRAW_UNNECESSARY);
 			image_->should_redraw(FIM_REDRAW_UNNECESSARY);
@@ -413,12 +412,11 @@ namespace fim
 
 #define FIM_WANT_BROWSER_PROGRESS_BAR 0 /* new */
 #if FIM_WANT_BROWSER_PROGRESS_BAR 
-			fim_float_t bp = commandConsole_.browser_.file_progress() * 100.0;
+			const fim_float_t bp = commandConsole_.browser_.file_progress() * 100.0;
 			const fim_pan_t bw = 1; // bar width
 			const fim_pan_t vw = viewport_width();
 			const fim_coo_t xc = vw; // x coordinate
-			fim_color_t bc = FIM_CNS_WHITE;
-			bc = FIM_CNS_WHITE;
+			const fim_color_t bc = FIM_CNS_WHITE;
 			if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, 0, FIM_FLT_PCNT_OF_100(bp,vh-1), bc);
 			// if(xc>bw) displaydevice_->fill_rect(xc-bw, xc, FIM_FLT_PCNT_OF_100(bp,vh-1),vh, bc);
 			// displaydevice_->fill_rect(0, 1, 0, FIM_FLT_PCNT_OF_100(bp,displaydevice_->height()-1), bc);
@@ -877,7 +875,7 @@ ret:
 			this->recenter_vertically(); this->recenter_horizontally();
 		break;
 		default:
-		goto ret;
+			goto ret;
 		}
 		should_redraw();
 ret:
@@ -912,7 +910,7 @@ ret:
 	fim_scale_t Viewport::viewport_yscale(void)const
 	{
 		assert(image_);
-		fim_coo_t ph = this->pixelable_height();
+		const fim_coo_t ph = this->pixelable_height();
 		return FIM_INT_SCALE_FRAC(ph,static_cast<fim_scale_t>(image_->original_height()));
 	}
 

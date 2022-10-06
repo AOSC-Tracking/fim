@@ -2,7 +2,7 @@
 /*
  FbiStuffBit24.cpp : reading any file as a raw 24 bits per pixel pixelmap
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2022 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -57,9 +57,9 @@ bit24_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	 struct ida_image_info *i, int thumbnail)
 {
     struct bit24_state *h=FIM_NULL;
-    fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
-    prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
-    
+    const fim_int prwv=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
+    const fim_int prw=prwv<1?FIM_BITRENDERING_DEF_WIDTH:prwv;
+ 
     h = (struct bit24_state *)fim_calloc(1,sizeof(*h));
     if(!h)
 	    goto oops;

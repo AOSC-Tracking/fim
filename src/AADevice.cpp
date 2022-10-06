@@ -2,7 +2,7 @@
 /*
  AADevice.cpp : aalib device Fim driver file
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ static bool aainvalid;
 	)
 	{
 		/* output screen variables */
-		fim_byte_t PIXELVAL = (fim_byte_t) PIXELCOL;
+		const fim_byte_t PIXELVAL = (fim_byte_t) PIXELCOL;
 		fim_coo_t 
 			oi,// output image row index
 			oj;// output image columns index
@@ -137,7 +137,7 @@ static bool aainvalid;
 		fim_byte_t*srcp;
 		fim_coo_t idr,idc,lor,loc;
     		
-		fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
+		const fim_flags_t mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
 
 		if ( !src ) return FIM_ERR_GENERIC;
 	
@@ -496,7 +496,7 @@ static bool aainvalid;
 
 	fim_err_t AADevice::status_line(const fim_char_t *msg)
 	{
-		fim_coo_t th=txt_height();
+		const fim_coo_t th=txt_height();
 		if(th<1)
 			goto err;
 #if (!FIM_AALIB_DRIVER_DEBUG)
@@ -576,48 +576,40 @@ err:
 		if(sr)
 			return rc;
 
-		if(*c==65907)
+		rc = 1;
+		switch (*c)
 		{
-			status_line((const fim_char_t*)"control key not yet supported in aa. sorry!");
-			return 1;
-			/* left ctrl (arbitrary) */
+			case (65907):
+				status_line((const fim_char_t*)"control key not yet supported in aa. sorry!");
+				/* left ctrl (arbitrary) */
+			break;
+			case (65908):
+				status_line((const fim_char_t*)"control key not yet supported in aa. sorry!");
+				/* right ctrl (arbitrary) */
+			break;
+			case (65909):
+				status_line((const fim_char_t*)"lock key not yet supported in aa. sorry!");
+				/* right ctrl (arbitrary) */
+			break;
+			case (65906):
+				status_line((const fim_char_t*)"shift key not yet supported in aa. sorry!");
+				/* shift (arbitrary) */
+			break;
+			case (AA_MOUSE):
+				status_line((const fim_char_t *)"mouse events not yet supported in aa. sorry!");
+				/* */
+			break;
+			case (AA_RESIZE):
+				//status_line((const fim_char_t *)"window resizing not yet supported. sorry!");
+				cc.resize(0,0);
+				/*aa_resize(ascii_context_);*//*we are not yet ready : the FimWindow and Viewport stuff .. */
+				rc = 0;
+				/* */
+			break;
 		}
-		if(*c==65908)
-		{
-			status_line((const fim_char_t*)"control key not yet supported in aa. sorry!");
-			return 1;
-			/* right ctrl (arbitrary) */
-		}
-		if(*c==65909)
-		{
-			status_line((const fim_char_t*)"lock key not yet supported in aa. sorry!");
-			return 1;
-			/* right ctrl (arbitrary) */
-		}
-		if(*c==65906)
-		{
-			status_line((const fim_char_t*)"shift key not yet supported in aa. sorry!");
-			return 1;
-			/* shift (arbitrary) */
-		}
-		if(*c==AA_MOUSE)
-		{
-			status_line((const fim_char_t *)"mouse events not yet supported in aa. sorry!");
-			return 1;
-			/* */
-		}
-		if(*c==AA_RESIZE )
-		{
-			//status_line((const fim_char_t *)"window resizing not yet supported. sorry!");
-			cc.resize(0,0);
-			/*aa_resize(ascii_context_);*//*we are not yet ready : the FimWindow and Viewport stuff .. */
-			return 0;
-			/* */
-		}
-
 		//std::cout << "event : " << *c << "\n";
 		//if(*c<0x80) return 1;
-		return 1;
+		return rc;
 	}
 
 	fim_err_t AADevice::resize(fim_coo_t w, fim_coo_t h)

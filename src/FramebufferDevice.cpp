@@ -1492,10 +1492,9 @@ nodither:
 }
 void FramebufferDevice::dither_line_gray(fim_byte_t *src, fim_byte_t *dst, int y, int width)
 {
-    long           *ymod, xmod;
+    long           xmod;
     FIM_REGISTER long   a;
-
-    ymod = (long int*) DM[y & DITHER_MASK];
+    long           *ymod = (long int*) DM[y & DITHER_MASK];
 
     while (width--) {
 	xmod = width & DITHER_MASK;
@@ -1732,5 +1731,4 @@ fim_coo_t FramebufferDevice::status_line_height(void)const
 	return f_ ? border_height_ + f_->sheight() : 0;
 }
 #endif  //ifdef FIM_WITH_NO_FRAMEBUFFER, else
-
 

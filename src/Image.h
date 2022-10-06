@@ -348,13 +348,13 @@ public:
 
 						if( es != std::string::npos )
 						{
-							std::string varname = fn.substr(vn,es-vn);
+							const std::string varname = fn.substr(vn,es-vn);
 							++es;
 #if FIM_WANT_PIC_CCMT
 							/* FIXME: rationalize this code */
 							if( varname == "^" )
 							{
-								std::string varval = fn.substr(es);
+								const std::string varval = fn.substr(es);
 								if( fn[es] )
 									cps = varval;
 								else
@@ -363,7 +363,7 @@ public:
 							else
 							if( varname == "+" )
 							{
-								std::string varval = fn.substr(es);
+								const std::string varval = fn.substr(es);
 								if( fn[es] )
 									cas = varval;
 								else
@@ -377,7 +377,7 @@ public:
 							else
 							if( varname == "/" )
 							{
-								std::string varval = fn.substr(es);
+								const std::string varval = fn.substr(es);
 								if( fn[es] )
 									din = varval;
 								else
@@ -387,7 +387,7 @@ public:
 							else
 							if( varname == "\\" )
 							{
-								std::string varval = fn.substr(es);
+								const std::string varval = fn.substr(es);
 								if( fn[es] )
 									din = varval;
 								else
@@ -400,7 +400,7 @@ public:
 							{
 								if ( fim_is_id(varname.c_str()) )
 								{
-									std::string varval = fn.substr(es);
+									const std::string varval = fn.substr(es);
 									ns.setVariable(varname,Var(varval));
 								}
 								else
@@ -408,7 +408,7 @@ public:
 							}
 							else
 							{
-								std::string varname = fn.substr(vn,es-1-vn);
+								const std::string varname = fn.substr(vn,es-1-vn);
 								ns.unsetVariable(varname);
 							}
 						}
@@ -425,7 +425,7 @@ public:
 				{
 #if FIM_WANT_PIC_RCMT
 					{
-						size_t csi = ds.find("#!fim:",0);
+						const size_t csi = ds.find("#!fim:",0);
 						size_t csil = 6;
 
 						if( csi != 0 )

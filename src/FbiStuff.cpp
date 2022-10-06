@@ -467,7 +467,7 @@ void op_resize_work_row_expand(struct ida_image *src, struct ida_rect *rect, fim
 {
 	struct op_resize_state *h = (struct op_resize_state *)data;
 //#ifndef FIM_WANTS_SLOW_RESIZE	/*uncommenting this triggers failure */
-       int sr=h->srcrow;if(sr<0)sr=-sr;//who knows
+	const int sr=abs((int)h->srcrow); //who knows
 //#endif /* FIM_WANTS_SLOW_RESIZE */
 	fim_byte_t* srcline=src->data+src->i.width*3*(sr);
 	const int Mdx=h->width;
@@ -743,9 +743,7 @@ op_resize_work(const struct ida_image *FIM_RSTRCT src, struct ida_rect *rect,
     float *FIM_RSTRCT rowbuf = h->rowbuf; 
 
 #ifndef FIM_WANTS_SLOW_RESIZE
-    int sr=h->srcrow;
-    if(sr<0)
-	    sr=-sr;//who knows
+    const int sr=abs((int)h->srcrow); //who knows
 #endif /* FIM_WANTS_SLOW_RESIZE */
 
     /* scale y */
@@ -962,8 +960,8 @@ fim_byte_t* op_rotate_getpixel(const struct ida_image *src, struct ida_rect *rec
 {
     static fim_byte_t black[] = { 0, 0, 0};
 #if FIM_TEXTURED_ROTATION
-    int xdiff  =   rect->x2 - rect->x1;
-    int ydiff  =   rect->y2 - rect->y1;
+    const int xdiff  =   rect->x2 - rect->x1;
+    const int ydiff  =   rect->y2 - rect->y1;
 #endif
     if (sx < rect->x1 || sx >= rect->x2 ||
 	sy < rect->y1 || sy >= rect->y2) {
@@ -1491,38 +1489,39 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 	#define FIM_SUBPROCESS_MAXARGV 128
 	fim_char_t * argv[FIM_SUBPROCESS_MAXARGV],*s;	/* FIXME */
 	int argc=0;
+
 	if(0!=pipe(p))
 		goto err;
 
 	switch(pid_t pid = fork())
 	{
 		case -1:
-		fim_perror("fork");
-		close(p[0]);
-		close(p[1]);
-		goto err; // FIXME
+			fim_perror("fork");
+			close(p[0]);
+			close(p[1]);
+			goto err; // FIXME
 		case 0:/* child */
-		dup2(p[1],1/*stdout*/);
-		close(p[0]);
-		close(p[1]);
-	        va_start(ap,cmd);
-		while(FIM_NULL!=(s=va_arg(ap,fim_char_t*)) && argc<FIM_SUBPROCESS_MAXARGV-1)
-		{
-			argv[argc]=s;
-			argc++;
-		}
-		argv[argc]=FIM_NULL;
+			dup2(p[1],1/*stdout*/);
+			close(p[0]);
+			close(p[1]);
+	        	va_start(ap,cmd);
+			while(FIM_NULL!=(s=va_arg(ap,fim_char_t*)) && argc<FIM_SUBPROCESS_MAXARGV-1)
+			{
+				argv[argc]=s;
+				argc++;
+			}
+			argv[argc]=FIM_NULL;
 
-	        va_end(ap);
-	        rc=execvp(cmd,argv);
-		exit(rc);
+	        	va_end(ap);
+	        	rc=execvp(cmd,argv);
+			exit(rc);
 		default:/* parent */
-		waitpid(pid,NULL,WNOHANG);
-		close(p[1]);
-		fp = fdopen(p[0],"r");
-		if(FIM_NULL==fp)
-			goto err;
-		return fp;
+			waitpid(pid,NULL,WNOHANG);
+			close(p[1]);
+			fp = fdopen(p[0],"r");
+			if(FIM_NULL==fp)
+				goto err;
+			return fp;
 	}
 err:
 	return FIM_NULL;
@@ -1638,16 +1637,15 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
     void *data=FIM_NULL;
     size_t fr=0;
 #if FIM_HAVE_FULL_PROBING_LOADER
-    bool rozlsl=false;/* retry on zero length signature loader */
+    const bool rozlsl=false;/* retry on zero length signature loader */
 #endif /* FIM_HAVE_FULL_PROBING_LOADER */
 #if FIM_ALLOW_LOADER_VERBOSITY
-    /*const*/ const fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY));
+    const fim_int vl=(cc.getIntVariable(FIM_VID_VERBOSITY));
 #else /* FIM_ALLOW_LOADER_VERBOSITY */
-    /*const*/ const fim_int vl=0;
+    const fim_int vl=0;
 #endif /* FIM_ALLOW_LOADER_VERBOSITY */
 #if FIM_SHALL_BUFFER_STDIN
     fim_byte_t * sbuf=FIM_NULL;
-    //fim_size_t sbbs=FIM_NULL;
     size_t sbbs=FIM_NULL;
 #endif /* FIM_SHALL_BUFFER_STDIN */
     int want_retry=0;
@@ -1707,7 +1705,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 	struct archive *a = FIM_NULL;
 	struct archive_entry *entry = FIM_NULL;
 	int r,pi;
-	size_t bs = 10240;
+	const size_t bs = 10240;
 
     	if(vl) FIM_VERB_PRINTF("filename matches archives regexp: \"%s\"\n",re.c_str());
 
@@ -1793,7 +1791,7 @@ struct ida_image* FbiStuff::read_image(const fim_char_t *filename, FILE* fd, fim
 					FILE *tfd=FIM_NULL;
 					if( ( tfd=tmpfile() )!=FIM_NULL )
 					{	
-						int tfp = fileno(tfd);
+						const int tfp = fileno(tfd);
 						r = archive_read_data_into_fd(a,tfp);
 						rewind(tfd);
 						fd = FIM_NULL;
@@ -1848,7 +1846,7 @@ with_offset:
 		sm="\xFF\xD8\xFF\xE0";
 	*/
         	if(vl>0)FIM_VERB_PRINTF("probing file signature (long %d) \"%s\"..\n",sl,sm.c_str());
-		long regexp_offset = find_byte_stream(fp, sm.c_str(), read_offset_l);
+		const long regexp_offset = find_byte_stream(fp, sm.c_str(), read_offset_l);
 		if(regexp_offset>0)
 		{
 			read_offset_l=regexp_offset;
@@ -1896,7 +1894,7 @@ with_offset:
 
 #if FIM_ALLOW_LOADER_STRING_SPECIFICATION
     {
-    fim::string ls=cc.getStringVariable(FIM_VID_FILE_LOADER);
+    const fim::string ls=cc.getStringVariable(FIM_VID_FILE_LOADER);
     want_retry=(cc.getIntVariable(FIM_VID_RETRY_LOADER_PROBE));
     if(ls!=FIM_CNS_EMPTY_STRING)
     if(FIM_NULL==loader)/* we could have forced one */
@@ -1927,7 +1925,7 @@ with_offset:
 
 #if FIM_WANT_TEXT_RENDERING
     {
-    	fim_int bd=cc.getIntVariable(FIM_VID_TEXT_DISPLAY);
+    	const fim_int bd=cc.getIntVariable(FIM_VID_TEXT_DISPLAY);
     	if(bd==1)
 	{
 		loader = &text_loader;
@@ -1937,7 +1935,7 @@ with_offset:
 #endif
 #if FIM_WANT_RAW_BITS_RENDERING
     {
-    fim_int bd=cc.getIntVariable(FIM_VID_BINARY_DISPLAY);
+    const fim_int bd=cc.getIntVariable(FIM_VID_BINARY_DISPLAY);
     if(bd!=0)
     {
     	if(bd==1)

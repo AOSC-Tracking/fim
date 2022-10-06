@@ -2,7 +2,7 @@
 /*
  common.cpp : Miscellaneous stuff..
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -385,7 +385,7 @@ void chomp(fim_char_t *s)
  * */
 void sanitize_string_from_nongraph_except_newline(fim_char_t *s, int c)
 {	
-	int n=c;
+	const int n=c;
 	if(s)
 		while(*s && (c--||!n))
 		{
@@ -403,7 +403,7 @@ void sanitize_string_from_nongraph_except_newline(fim_char_t *s, int c)
  * */
 void sanitize_string_from_nongraph(fim_char_t *s, int c)
 {	
-	int n=c;
+	const int n=c;
 	if(s)
 		while(*s && (c--||!n))
 		{
@@ -635,7 +635,8 @@ const fim_char_t* next_row(const fim_char_t*s, int cols)
 	 * next_row("12")     -> \0
 	 * next_row("1234")   ->  4
 	 * */
-	const fim_char_t *b=s;int l=strlen(s);
+	const fim_char_t *b=s;
+	int l=strlen(s);
 	if(!s)
 		return FIM_NULL;
 	if((s=strchr(s,'\n'))!=FIM_NULL)
@@ -712,8 +713,9 @@ int swap_bytes_in_int(int in)
 {
 	// to Most Significant Byte First
 	// FIXME : this function should be optimized
+	const int b=sizeof(int);
 	int out=0;
-	int b=sizeof(int),i=-1;
+	int i=-1;
 	while(i++<b/2)
 	{
 		((fim_byte_t*)&out)[i]=((fim_byte_t*)&in)[b-i-1];
@@ -724,7 +726,7 @@ int swap_bytes_in_int(int in)
 
 int int2lsbf(int in)
 {
-	int one=0x01;
+	const int one=0x01;
 	if( 0x01 & (*(fim_byte_t*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
 		return swap_bytes_in_int(in);
 	return in;
@@ -732,7 +734,7 @@ int int2lsbf(int in)
 
 int int2msbf(int in)
 {
-	int one=0x01;
+	const int one=0x01;
 	if( 0x01 & (*(fim_byte_t*)(&one)) )/*true on msbf (like ppc), false on lsbf (like x86)*/
 		return in;
 	return swap_bytes_in_int(in);
@@ -788,7 +790,8 @@ FILE * fim_fread_tmpfile(FILE * fp)
 	{
 		/* todo : read errno in case of error and print some report.. */
 		const size_t buf_size=FIM_STREAM_BUFSIZE;
-		fim_char_t buf[buf_size];size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
+		fim_char_t buf[buf_size];
+		size_t rc=0,wc=0;/* on some systems fwrite has attribute warn_unused_result */
 		while( (rc=fim_fread(buf,1,buf_size,fp))>0 )
 		{
 			wc=fwrite(buf,1,rc,tfd);

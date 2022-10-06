@@ -541,7 +541,7 @@ ret:
 	{
 		/* Cache an image coming from stdin (that is, not reloadable).
 		 * */
-		cache_key_t key(FIM_STDIN_IMAGE_NAME,FIM_E_STDIN);
+		const cache_key_t key(FIM_STDIN_IMAGE_NAME,FIM_E_STDIN);
 		FIM_LOUD_CACHE_STUFF;
 		FIM_PR('*');
 
