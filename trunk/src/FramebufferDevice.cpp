@@ -1722,8 +1722,6 @@ void FramebufferDevice::finalize (void)
 
 FramebufferDevice::~FramebufferDevice(void)
 {
-	/* added in fim : fbi did not have this */
-	fim_free_fs_font(f_);
 }
 
 fim_coo_t FramebufferDevice::status_line_height(void)const

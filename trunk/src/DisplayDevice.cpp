@@ -211,6 +211,7 @@ fim_err_t DisplayDevice::format_console(void)
 
 DisplayDevice::~DisplayDevice(void)
 {
+	/* added in fim : fbi did not have this */
 	fim_free_fs_font(f_);
 }
 
