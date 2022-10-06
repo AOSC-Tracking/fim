@@ -2,7 +2,7 @@
 /*
  FontServer.cpp : Font Server code from fbi, adapted for fim.
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -178,15 +178,15 @@ no:
 	return -1;
 }
 
-void fim_free_fs_font(struct fs_font *f_)
+void fim_free_fs_font(struct fs_font *f)
 {
-	if(f_)
+	if(f)
 	{
-		if(f_->eindex) fim_free(f_->eindex);
-		if(f_->gindex) fim_free(f_->gindex);
-		if(f_->glyphs) fim_free(f_->glyphs);
-		if(f_->extents) fim_free(f_->extents);
-		fim_free(f_);
+		if(f->eindex) fim_free(f->eindex);
+		if(f->gindex) fim_free(f->gindex);
+		if(f->glyphs) fim_free(f->glyphs);
+		if(f->extents) fim_free(f->extents);
+		fim_free(f);
 	}
 }
 
