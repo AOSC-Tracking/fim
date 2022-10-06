@@ -2,7 +2,7 @@
 /*
  yacc.ypp : Parser source file template
 
- (c) 2007-2020 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -240,7 +240,7 @@ statement:
 		$$ = FIM_OPR('x',2,FIM_SCON($1),FIM_OPR('a',1,FIM_SCON(dupstr($2))));
 		fim_free($2);
 #else
-		$$ = FIM_OPR('x',2,FIM_SCON(FIM_FLT_ECHO),FIM_OPR('a',1,FIM_SCON("Please quote or double-quote your argument or enable FIM_SMART_COMPLETION at compile time\n")));
+		$$ = FIM_OPR('x',2,FIM_SCON(dupstr(FIM_FLT_ECHO)),FIM_OPR('a',1,FIM_SCON(dupstr("Please quote or double-quote your argument or enable FIM_SMART_COMPLETION at compile time\n"))));
 #endif
 		}
 	| IDENTIFIER arguments { $$ = FIM_OPR('x',2,FIM_SCON($1),$2);  /* here I would like to use FIM_SMART_COMPLETION but for now it works with the FILE_PATH trick above. */ }
