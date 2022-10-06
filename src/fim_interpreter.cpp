@@ -455,6 +455,7 @@ nodeType *scon(fim_char_t*s)
 nodeType *vscon(fim_char_t*s,int typeHint)
 {
 #ifdef FIM_RANDOM
+	if( strlen(s) > 3 ) // make sure s points to 3+ bytes
 #ifndef FIM_BIG_ENDIAN
 #if ((SIZEOF_INT)>=8)
 	if( *reinterpret_cast<int*>(s+0) == 0x006d6f646e6172 ) // ..modnar
