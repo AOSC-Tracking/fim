@@ -2,7 +2,7 @@
 /*
  CommandConsole-var.h : CommandConsole variables store
 
- (c) 2013-2017 Michele Martone
+ (c) 2013-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@ namespace fim
 			try
 			{
 			//a specific namespace was selected!
-			fim_char_t ns = varname.at(0);
-			fim_var_id id = varname.c_str()+2;
+			const fim_char_t ns = varname.at(0);
+			const fim_var_id id = varname.c_str()+2;
 
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 #ifdef FIM_WINDOWS
@@ -113,8 +113,8 @@ err:
 			try
 			{
 			//a specific namespace was selected!
-			fim_char_t ns = varname.at(0);
-			fim_var_id id = varname.c_str()+2;
+			const fim_char_t ns = varname.at(0);
+			const fim_var_id id = varname.c_str()+2;
 
 			if( ns == FIM_SYM_NAMESPACE_WINDOW_CHAR )
 #ifdef FIM_WINDOWS

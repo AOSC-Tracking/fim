@@ -67,7 +67,7 @@ void fim_png_rd_cmts(void *data, png_infop info)
     {
     	struct fim_png_state *h = (struct fim_png_state *) data;
 	png_textp text_ptr = FIM_NULL;
-	int num_comments = png_get_text(h->png, info, &text_ptr, FIM_NULL);
+	const int num_comments = png_get_text(h->png, info, &text_ptr, FIM_NULL);
 	int ti = 0;
 	fim::string fs;
 

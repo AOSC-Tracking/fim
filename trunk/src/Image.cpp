@@ -841,8 +841,8 @@ err:
 
 fim_int Image::shall_mirror(void)const
 {
-	fim_int automirror= getGlobalIntVariable(FIM_VID_AUTOMIRROR);
-	fim_int me_mirrored = getIntVariable(FIM_VID_MIRRORED);
+	const fim_int automirror= getGlobalIntVariable(FIM_VID_AUTOMIRROR);
+	const fim_int me_mirrored = getIntVariable(FIM_VID_MIRRORED);
 	//fim_int mirrored = getGlobalIntVariable("v:" FIM_VID_MIRRORED);
 	return
 	(((automirror== 1)/*|(mirrored== 1)*/|(is_mirrored()))&& !((automirror==-1)/*|(mirrored==-1)*/|(me_mirrored==-1)));
@@ -850,8 +850,8 @@ fim_int Image::shall_mirror(void)const
 
 fim_int Image::check_flip(void)const
 {
-	fim_int autoflip = getGlobalIntVariable(FIM_VID_AUTOFLIP);
-	fim_int am_flipped = getIntVariable(FIM_VID_FLIPPED);
+	const fim_int autoflip = getGlobalIntVariable(FIM_VID_AUTOFLIP);
+	const fim_int am_flipped = getIntVariable(FIM_VID_FLIPPED);
 	//fim_int flipped = getGlobalIntVariable("v:" FIM_VID_FLIPPED);
 	return
 	(((autoflip == 1)/*|(flipped == 1)*/| is_flipped()) && !((autoflip ==-1)/*|(flipped ==-1)*/|(am_flipped==-1)));
@@ -898,7 +898,7 @@ fim::string Image::getInfo(void)const
 	/* FIXME: for cleanup, shall eliminate this branch and introduce a default string. */
 	fim_char_t pagesinfobuffer[FIM_STATUSLINE_BUF_SIZE];
 	fim_char_t imagemode[3],*imp;
-	fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
+	const fim_int n=getGlobalIntVariable(FIM_VID_FILEINDEX);
 	imp=imagemode;
 
 	if(check_flip())

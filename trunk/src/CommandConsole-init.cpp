@@ -289,7 +289,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		}
 		catch(FimException e)
 		{
-			if( e == FIM_E_NO_MEM || true ) quit(FIM_E_NO_MEM);
+			if( e == FIM_E_NO_MEM || true )
+				quit(FIM_E_NO_MEM);
 		}
 
 		addCommand(Command(FIM_FLT_WINDOW,FIM_CMD_HELP_WINDOW, window_,&FimWindow::fcmd_cmd));
@@ -387,7 +388,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTUFIMRC,""); 
 	    	FIM_AUTOCMD_EXEC(FIM_ACM_POSTCONF,"");
 #ifndef FIM_WANT_NOSCRIPTING
-		for(size_t i=0;i<scripts_.size();++i) executeFile(scripts_[i].c_str());
+		for(size_t i=0;i<scripts_.size();++i)
+			executeFile(scripts_[i].c_str());
 #endif		/* FIM_WANT_NOSCRIPTING */
 #ifdef FIM_AUTOCMDS
 		if(!postInitCommand_.empty())
@@ -442,7 +444,7 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		switch(qbi)
 		{
 			case 0:
-			oss << "fim console random variables set/get test: " << ((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " set/get /s\n";
+				oss << "fim console random variables set/get test: " << ((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " set/get /s\n";
 		}
 		return oss.str();
 	}
@@ -453,8 +455,8 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		switch(qbi)
 		{
 			case 0:
-			oss << "fim console check";
-			std::cout << oss.str() << ": " << "please be patient\n";
+				oss << "fim console check";
+				std::cout << oss.str() << ": " << "please be patient\n";
 			break;
 		}
 	}
@@ -468,9 +470,9 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 		switch(qbi)
 		{
 			case 0:
-			FIM_CONSTEXPR fim_int max_sq=1024*1024;
-			cc.setVariable(fim_rand()%(max_sq),fim_rand());
-			cc.getIntVariable(fim_rand()%max_sq);
+				FIM_CONSTEXPR fim_int max_sq=1024*1024;
+				cc.setVariable(fim_rand()%(max_sq),fim_rand());
+				cc.getIntVariable(fim_rand()%max_sq);
 			break;
 		}
 	}

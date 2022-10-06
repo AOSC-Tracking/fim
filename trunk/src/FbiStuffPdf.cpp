@@ -2,7 +2,7 @@
 /*
  FbiStuffPdf.cpp : fim functions for decoding PDF files
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2022 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -135,14 +135,14 @@ pdf_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 	_[0]='\0';
 	struct pdf_state_t * ds=FIM_NULL;
 	int rotation=0,pageNo=page+1;
-	double zoomReal=100.0;
+	const double zoomReal=100.0;
 	double hDPI;
 	double vDPI;
 	GBool  useMediaBox ;
 	GBool  crop        ;
 	GBool  doLinks     ;
-	fim_int prd=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
-	prd=prd<1?FIM_RENDERING_DPI:prd;
+	const fim_int prdv=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_DPI);
+	const fim_int prd=prdv<1?FIM_RENDERING_DPI:prdv;
 
 	if(filename==std::string(FIM_STDIN_IMAGE_NAME))
 	{

@@ -228,8 +228,8 @@ string DisplayDevice::get_bresults_string(fim_int qbi, fim_int qbtimes, fim_fms_
 	switch(qbi)
 	{
 		case 0:
-		oss << "fim display check" << " : " << (float)(((fim_fms_t)(qbtimes*2))/((qbttime)*1.e-3)) << " clears/s\n";
-		msg=oss.str();
+			oss << "fim display check" << " : " << (float)(((fim_fms_t)(qbtimes*2))/((qbttime)*1.e-3)) << " clears/s\n";
+			msg=oss.str();
 	}
 	return msg;
 }
@@ -254,17 +254,17 @@ void DisplayDevice::quickbench(fim_int qbi)
 		a quick draw benchmark and sanity check.
 		currently performs only the clear function.
 	*/
-	fim_coo_t x1 = 0, x2 = width()-1, y1 = 0, y2 = height()-1;
+	const fim_coo_t x1 = 0, x2 = width()-1, y1 = 0, y2 = height()-1;
 	switch(qbi)
 	{
 		case 0:
-		this->lock();
-		// clear_rect(x1, x2, y1, y2);
-		fill_rect(x1, x2, y1, y2, FIM_CNS_WHITE);
-		this->unlock();
-		this->lock();
-		fill_rect(x1, x2, y1, y2, FIM_CNS_BLACK);
-		this->unlock();
+			this->lock();
+			// clear_rect(x1, x2, y1, y2);
+			fill_rect(x1, x2, y1, y2, FIM_CNS_WHITE);
+			this->unlock();
+			this->lock();
+			fill_rect(x1, x2, y1, y2, FIM_CNS_BLACK);
+			this->unlock();
 		break;
 	}
 }
@@ -301,19 +301,19 @@ void DisplayDevice::quickbench(fim_int qbi)
 
 	void DisplayDevice::fs_multiline_puts(const char *str, fim_int doclear, int vw, int wh)
 	{
-		int fh=this->f_ ? this->f_->sheight():1; // FIXME : this is not clean
-		int fw=this->f_ ? this->f_->swidth():1; // FIXME : this is not clean
-		int sl = strlen(str), rw = vw / fw;
-		int cpl = this->get_chars_per_line();
+		const int fh=this->f_ ? this->f_->sheight():1; // FIXME : this is not clean
+		const int fw=this->f_ ? this->f_->swidth():1; // FIXME : this is not clean
+		const int sl = strlen(str), rw = vw / fw;
+		const int cpl = this->get_chars_per_line();
 
 		if(doclear && cpl)
 		{
-			int lc = FIM_INT_FRAC(sl,cpl); /* lines count */
+			const int lc = FIM_INT_FRAC(sl,cpl); /* lines count */
 			this->clear_rect(0, vw-1, 0, FIM_MIN(fh*lc,wh-1));
 		}
 
 		for( int li = 0 ; sl > rw * li ; ++li )
 			if((li+1)*fh<wh) /* FIXME: maybe this check shall better reside in fs_puts() ? */
-			this->fs_puts(this->f_, 0, fh*li, str+rw*li);
+				this->fs_puts(this->f_, 0, fh*li, str+rw*li);
 	}
 

@@ -2,7 +2,7 @@
 /*
  FbiStuffPcx.cpp : Code for reading PCX files.
 
- (c) 2014-2018 Michele Martone
+ (c) 2014-2022 Michele Martone
  The functions pcx_load_image_fp and pcx_load_image_info_fp are (c) 2014-2014 Mohammed Isam.
  Originally based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
@@ -150,8 +150,8 @@ static pcx_err_t pcx_load_image_fp(FILE *fp, unsigned int page, unsigned char * 
 	int padding;
 	long pos, count;
 	unsigned char repeat, value;
-	int FLAG_MASK = 192;   //11000000
-	int REVERSE_MASK = 63; //00111111
+	const int FLAG_MASK = 192;   //11000000
+	const int REVERSE_MASK = 63; //00111111
 	int plane, i;
 	
 	if(fseek(fp,0,SEEK_SET) != 0)

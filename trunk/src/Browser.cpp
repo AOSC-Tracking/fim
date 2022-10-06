@@ -121,7 +121,7 @@ namespace fim
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 			else if(args[0]=="mark" || args[0]=="unmark")
 			{
-				bool domark = (args[0]=="mark");
+				const bool domark = (args[0]=="mark");
 #if FIM_WANT_PIC_LBFL
 				if(args.size() > 1)
 					result = do_filter_cmd(args_t(args.begin()+1,args.end()),true,domark ? Mark : Unmark);
@@ -132,7 +132,7 @@ namespace fim
 		       	} 
 			else if(args[0]=="marked")
 			{
-                                std::string mfl = cc.marked_files_list();
+                                const std::string mfl = cc.marked_files_list();
 		                if( mfl != FIM_CNS_EMPTY_STRING )
                                 {
                                         result += "The following files have been marked by the user:\n";
@@ -242,8 +242,7 @@ namespace fim
 #if FIM_DIFFERENT_VARS
 			else if(args[0]=="variables" || args[0]=="vars")
 			{
-				auto min_vals = args.size()>1 ? std::atoi(args[1]) : 2;
-				min_vals = FIM_MAX(min_vals,1);
+				const auto min_vals = args.size()>1 ? FIM_MAX(std::atoi(args[1]),1) : 2;
 				fim_var_id_set ids;
 				for(const auto ns : cc.id_.vd_)
 				for(const auto ip : ns.second)
@@ -419,7 +418,6 @@ nop:
 #if FIM_EXPERIMENTAL_SHADOW_DIRS
 			if(args.size() == 1 && args[0] == "shadow")
 			{
-				const fim::string result = FIM_CNS_EMPTY_RESULT;
 				const auto bn = std::string(fim_basename_of(current()));
 				fim::fle_t fn;
 
@@ -540,7 +538,6 @@ nop:
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 		const int aoc = fim_args_opt_count(args,'-');
-		size_t max_vars = FIM_CNS_A_FEW_DUMPED_TOKENS, max_vals = FIM_CNS_A_FEW_DUMPED_TOKENS;
 
 		if( args.size()-aoc > 0 )
 		{
@@ -552,6 +549,7 @@ nop:
 			if( args.size()-aoc == 1 && aoc == 1 && 
 				( fim_args_opt_have(args,"-list") || fim_args_opt_have(args,"-listall" ) ) )
 			{
+				size_t max_vars = FIM_CNS_A_FEW_DUMPED_TOKENS;
 				if( fim_args_opt_have(args,"-listall"))
 					max_vars=FIM_CNS_MANY_DUMPED_TOKENS;
 				result = cc.id_.get_values_list_for(args[1],max_vars) + string("\n");
@@ -593,6 +591,7 @@ nop:
 			if( args.size()-aoc == 0 && aoc == 1 && 
 				( fim_args_opt_have(args,"-list") || fim_args_opt_have(args,"-listall" ) ) )
 			{
+				size_t max_vals = FIM_CNS_A_FEW_DUMPED_TOKENS;
 				if( fim_args_opt_have(args,"-listall"))
 					max_vals=FIM_CNS_MANY_DUMPED_TOKENS;
 				result = cc.id_.get_variables_id_list(max_vals) + string("\n");
@@ -926,8 +925,8 @@ nostat:
 #endif /* FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK */
 		{
 			/* Note: Following circular links may cause memory exhaustion.  */
-			fim_fn_t pn = dn;
-		       	pn += de->d_name;
+			const fim_fn_t pn = dn + fim_fn_t(de->d_name);
+
 			if( is_dir( pn ) )
 			{
 #ifdef FIM_RECURSIVE_DIRS
@@ -1055,7 +1054,7 @@ rret:
 #ifdef FIM_READ_DIRS
 //#if HAVE_SYS_STAT_H
 			{
-				fim_int ppd = getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS);
+				const fim_int ppd = getGlobalIntVariable(FIM_VID_PUSH_PUSHES_DIRS);
 				if( ppd >= 1 && S_ISDIR(stat_s.st_mode))
 				{
 #if FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK
@@ -1266,9 +1265,9 @@ nop:
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
 #if FIM_USE_CXX11
-		auto N = flist_.size();
+		const auto N = flist_.size();
 #else /* FIM_USE_CXX11 */
-		fim_int N = flist_.size();
+		const fim_int N = flist_.size();
 #endif /* FIM_USE_CXX11 */
 		FIM_PR('*');
 
@@ -1646,7 +1645,7 @@ ret:
 go_jump:
 			if( ( nf != cf ) || ( np != cp ) )
 			{	
-				fim::string c = current();
+				const fim::string c = current();
 				if(!(xflags&FIM_X_NOAUTOCMD))
 				{ FIM_AUTOCMD_EXEC(FIM_ACM_PREGOTO,c); }
 				if( ispg )
@@ -1723,7 +1722,8 @@ parsed_idx:
 		
 			if(min_idx>=flist_.size() || max_idx < 1)
 			{
-				if(wom) commandConsole_.set_status_bar("requested index range is wrong (not so many files...)", "*");
+				if(wom)
+					commandConsole_.set_status_bar("requested index range is wrong (not so many files...)", "*");
 				goto nop;
 			}
 
@@ -1734,11 +1734,13 @@ parsed_idx:
 
 			if(min_idx==1 && max_idx>=flist_.size())
 			{
-				if(wom) commandConsole_.set_status_bar("requested index limit range covers entire list.", "*");
+				if(wom)
+					commandConsole_.set_status_bar("requested index limit range covers entire list.", "*");
 				goto nop;
 			}
 
-			if(wom) commandConsole_.set_status_bar("limiting to list index range...", "*");
+			if(wom)
+				commandConsole_.set_status_bar("limiting to list index range...", "*");
 
 			/* not efficient but conceptually clean in this context */
 			for(size_t fi=min_idx;fi<=max_idx;++fi)
@@ -1752,7 +1754,7 @@ parsed_idx:
 #if FIM_WANT_FLIST_STAT 
 			off_t min_size=0,max_size=FIM_MAX_VALUE_FOR_TYPE(off_t);
 			time_t min_mtime=0,max_mtime=FIM_MAX_VALUE_FOR_TYPE(time_t);
-			std::string ss(args[args.size()>1?1:0]); // if 0 we'll ignore this
+			const std::string ss(args[args.size()>1?1:0]); // if 0 we'll ignore this
 			std::istringstream is(ss);
 
 			if ( rm == SizeMatch )
@@ -1996,7 +1998,8 @@ parsed_limits:
 #if FIM_WANT_FILENAME_MARK_AND_DUMP
 		if ( rm == MarkedMatch )
 		{
-			if(wom) commandConsole_.set_status_bar("limiting marked...", "*");
+			if(wom)
+				commandConsole_.set_status_bar("limiting marked...", "*");
 			for(size_t i=0;i<flist_.size();++i)
 				if( cc.isMarkedFile(flist_[i]) == negative )
 					lbs.set(i);
@@ -2079,10 +2082,9 @@ rfrsh:
 		// dt = - getmilliseconds();
 		if (lbs.any())
 		{
-			size_t tsize = lbs.size(),cnt=lbs.count();
+			const size_t tsize = lbs.size();;
+			const size_t cnt = (faction == Delete) ? tsize - lbs.count() : lbs.count();
 
-			if(faction == Delete)
-				cnt=tsize-cnt;
 
 			std::ostringstream msg;
 		       	msg << "Selected " << cnt << " files out of " <<  tsize << ".\n";
@@ -2121,9 +2123,8 @@ nop:
 	{
 		if(c_getImage() && viewport())
 		{
-			fim_coo_t approx_fraction = cc.getIntVariable(FIM_VID_SKIP_SCROLL);
-			if( approx_fraction == 1 )
-			       	approx_fraction = 16;
+			const fim_int vss = cc.getIntVariable(FIM_VID_SKIP_SCROLL);
+			const fim_coo_t approx_fraction = ( vss == 1 ? 16 : vss );
 
 			if(viewport()->onRight(approx_fraction) && viewport()->onBottom(approx_fraction))
 				next();
@@ -2390,12 +2391,12 @@ err:
 		switch(qbi)
 		{
 			case 0:
-			msg="fim browser push check";
-			std::cout << msg << ": " << "please be patient\n";
+				msg="fim browser push check";
+				std::cout << msg << ": " << "please be patient\n";
 			break;
 			case 1:
-			msg="fim browser pop check";
-			std::cout << msg << ": " << "please be patient\n";
+				msg="fim browser pop check";
+				std::cout << msg << ": " << "please be patient\n";
 			break;
 		}
 	}
@@ -2411,12 +2412,12 @@ err:
 		switch(qbi)
 		{
 			case 0:
-			push_path(string(ci)+string(".jpg"));
-			ci++;
+				push_path(string(ci)+string(".jpg"));
+				ci++;
 			break;
 			case 1:
-			ci--;
-			push_path(string(ci)+string(".jpg"));
+				ci--;
+				push_path(string(ci)+string(".jpg"));
 			break;
 		}
 	}
@@ -2427,10 +2428,10 @@ err:
 		switch(qbi)
 		{
 			case 0:
-			oss << "fim browser push check" << ": " << string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " push_path()/s\n";
+				oss << "fim browser push check" << ": " << string((float)(((fim_fms_t)qbtimes)/((qbttime)*1.e-3))) << " push_path()/s\n";
 			break;
 			case 1:
-			oss << "fim browser pop check" << ": " << ((fim_fms_t)qbtimes)/((qbttime)*1.e-3) << " pop()/s\n";
+				oss << "fim browser pop check" << ": " << ((fim_fms_t)qbtimes)/((qbttime)*1.e-3) << " pop()/s\n";
 			break;
 		}
 		return oss.str();
@@ -2495,7 +2496,7 @@ ret:
 		for(args_t::const_iterator fit=a.begin();fit!=a.end();++fit)
 		{
 			bool dopush;
-			fim_stat_t stat_s = fim_get_stat(*fit,&dopush);
+			const fim_stat_t stat_s = fim_get_stat(*fit,&dopush);
 			if(dopush)
 				push_back(fim::fle_t(*fit,stat_s));
 		}

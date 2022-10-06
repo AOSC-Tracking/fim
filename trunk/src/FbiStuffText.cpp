@@ -2,7 +2,7 @@
 /*
  FbiStuffBitText.cpp : fbi functions for rendering image bytes as text
 
- (c) 2013-2018 Michele Martone
+ (c) 2013-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,9 +65,8 @@ text_init(FILE *fp, const fim_char_t *filename, unsigned int page,
 {
     struct text_state *h=FIM_NULL;
     long ftellr;
-    fim_int prw=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
-
-    prw=prw<1?FIM_BITRENDERING_DEF_WIDTH:prw;
+    const fim_int prwv=cc.getIntVariable(FIM_VID_PREFERRED_RENDERING_WIDTH);
+    const fim_int prw=prwv<1?FIM_BITRENDERING_DEF_WIDTH:prwv;
     
     h = (struct text_state *)fim_calloc(1,sizeof(*h));
     if(!h)
@@ -132,9 +131,8 @@ static void fs_render_fb(fim_byte_t *ptr, int pitch, FSXCharInfo *charInfo, int 
         :(nBytes) == 8 ? ((((bits) + 63) >> 3) & ~7)    /* pad to 8 bytes */\
         : 0)
 
-    int row,bit,bpr,x;
-
-    bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left),
+    int row,bit,x;
+    const int bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left),
 			     SCANLINE_PAD_BYTES);
     for (row = 0; row < (charInfo->ascent + charInfo->descent); row++) {
 	for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++) {

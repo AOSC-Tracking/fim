@@ -2,7 +2,7 @@
 /*
  FbiStuffNef.cpp : fbi functions for NEF files, modified for fim
 
- (c) 2014-2018 Michele Martone
+ (c) 2014-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -104,7 +104,7 @@ nef_init(FILE *fp, const fim_char_t *filename_, unsigned int page,
 	void * pixel_region = FIM_NULL;
 	int argc = 0;
 	char **argv = FIM_NULL;
-	fim_char_t *filename = strdupa(filename_);
+	const fim_char_t *filename = strdupa(filename_);
 
 	FIM_NEF_PRINTF("NEF loading\n");
 

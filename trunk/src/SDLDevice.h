@@ -27,7 +27,7 @@
 
 class SDLDevice FIM_FINAL :public DisplayDevice 
 {
-	private:
+private:
 
 	SDL_Surface *screen_;
 	SDL_Event event_;
@@ -45,7 +45,7 @@ class SDLDevice FIM_FINAL :public DisplayDevice
 	bool want_mouse_display_;
 	bool want_resize_;
 
-	public:
+public:
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	SDLDevice(MiniConsole& mc_,
@@ -87,7 +87,7 @@ class SDLDevice FIM_FINAL :public DisplayDevice
 	fim_bpp_t get_bpp(void)const FIM_OVERRIDE { return bpp_; };
 	bool sdl_window_update(void);
 	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
-	private:
+private:
 	fim_err_t clear_rect_( void* dst, fim_coo_t oroff,fim_coo_t ocoff,fim_coo_t  orows,fim_coo_t ocols,fim_coo_t  ocskip);
 	/* TEMPORARY */
 	inline void setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b) FIM_NOEXCEPT;
@@ -97,7 +97,7 @@ class SDLDevice FIM_FINAL :public DisplayDevice
 	fim_coo_t txt_width(void)const ;
 	fim_coo_t txt_height(void)const ;
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE ;
-	private:
+private:
 	bool allowed_resolution(fim_coo_t w, fim_coo_t h);
 	virtual fim_err_t reinit(const fim_char_t *rs) FIM_OVERRIDE;
 	fim_err_t parse_optstring(const fim_char_t *os);
@@ -106,7 +106,6 @@ class SDLDevice FIM_FINAL :public DisplayDevice
 	fim_err_t post_wmresize(void);
 	fim_err_t draw_help_map(void);
 };
-
 
 #endif /* FIM_WITH_LIBSDL */
 #endif /* FIM_SDLDEVICE_H */

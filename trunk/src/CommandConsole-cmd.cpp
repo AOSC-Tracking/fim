@@ -222,9 +222,8 @@ err:
 
 		{
 			std::ostringstream oss;
-			fim::string sws;
+			const fim::string sws = fim_help_opt(item.c_str());
 			// consider using fim_shell_arg_escape or a modification of it here.
-			sws = fim_help_opt(item.c_str());
 			if( sws != FIM_CNS_EMPTY_STRING )
 				oss << sws << "\n";
 			if( findCommandIdx(item) != FIM_INVALID_IDX )
@@ -871,7 +870,7 @@ err:
 	{
 #if FIM_WANT_PIC_CMTS
 		fim_char_t sc = '\t';
-		int aoc = fim_args_opt_count(args,'-');
+		const int aoc = fim_args_opt_count(args,'-');
 
 #if FIM_WANT_PIC_CMTS_RELOAD
 		if ( args.size()-aoc > 0 && args[aoc] == "reload" )

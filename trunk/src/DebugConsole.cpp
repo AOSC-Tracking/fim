@@ -72,7 +72,7 @@ namespace fim
 				if(cancols==0)
 				{
 					// a fixup for the dumb console
-					int n=1+line_[l]-line_[f];
+					const int n=1+line_[l]-line_[f];
 					fim_char_t*ibuf=FIM_NULL;
 					if(n>0 && (ibuf=(fim_char_t*) fim_malloc(n))!=FIM_NULL)
 					{
@@ -146,7 +146,8 @@ err:
 		{
 			fim_char_t *s=FIM_NULL,*b=FIM_NULL;
 			int nc;
-			int nl,ol=cline_;
+			int nl;
+			const int ol=cline_;
 			fim_char_t *cs=FIM_NULL;/* using co would mean provoking the compiler */
 			fim_char_t*cso=(fim_char_t*)cso_;// FIXME
 
@@ -253,7 +254,7 @@ rerr:
 		scroll_(0),
 		displaydevice_(dd)
 		{
-			int BS=FIM_CONSOLE_BLOCKSIZE;	//block size of 1k
+			const int BS=FIM_CONSOLE_BLOCKSIZE;	//block size of 1k
 
 			bsize_ = BS * FIM_CONSOLE_DEF_WIDTH;
 			lsize_ = BS *   8;
@@ -277,7 +278,6 @@ rerr:
 			}
 			else
 			{
-			
 				line_[cline_]=buffer_;
 			}
 			add(FIM_MSG_CONSOLE_FIRST_LINE_BANNER);
