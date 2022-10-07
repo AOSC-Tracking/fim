@@ -179,7 +179,7 @@ err:
 			 * we check for room (please note that nl >= the effective new lines introduced , while
 			 * nc amounts to the exact extra room needed )
 			 * */
-			if(nc+1+(int)(bp_-buffer_)>bsize_ || nl+1+cline_>lsize_)
+			if( ( nc+1+(bp_-buffer_) ) > bsize_ || nl+1+cline_ > lsize_ )
 			{
 				fim_free(cs);
 				return FIM_ERR_BUFFER_FULL;//no room : realloc needed ; 1 is for secur1ty
@@ -346,7 +346,9 @@ rerr:
 				return  FIM_ERR_GENERIC;
 			if(gbuffer==0)
 				return  FIM_ERR_NO_ERROR;
-			fim_char_t *p;int i,d;
+			fim_char_t *p;
+			int i;
+			ptrdiff_t d;
 			p=buffer_;
 			buffer_=(fim_char_t*)realloc(buffer_,(bsize_+gbuffer)*sizeof(fim_char_t));
 			if(!buffer_){buffer_=p;return FIM_ERR_GENERIC;/* no change */}
@@ -417,7 +419,7 @@ rerr:
 			{
 				// no realloc, no risk
 				fim::string buf=buffer_;
-				if(((int)buf.size())==((int)(bp_-buffer_)))
+				if( buf.size() == (size_t)(bp_-buffer_) )
 				{
 					ccol_=0;cline_=0;lwidth_=newlwidth;*line_=buffer_;bp_=buffer_;
 					// the easy way
