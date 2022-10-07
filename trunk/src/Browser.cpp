@@ -1186,15 +1186,10 @@ ret:
 		 */
 		const size_t c = current_n(),s = flist_.size();
 		size_t i,j;
-		const char *rso = FIM_NULL;
+		const fim::string rso = cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) ? cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS) : "bi";
 		int rsic = 1; /* ignore case */
 		int rsbn = 1; /* base name */
 		FIM_PR('*');
-
-		if( cc.isSetVar(FIM_VID_RE_SEARCH_OPTS) )
-		       rso = strdupa ( cc.getStringVariable(FIM_VID_RE_SEARCH_OPTS).c_str());
-		if(!rso)
-			rso = "bi";
 
 		if ( rso && strchr(rso,'i') )
 			rsic = 1;
