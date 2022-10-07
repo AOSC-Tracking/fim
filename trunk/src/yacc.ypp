@@ -214,7 +214,7 @@ statement:
 	| INTEGER ',' INTEGER IDENTIFIER arguments  { $$ = FIM_OPR(FESF,4,FIM_ICON($1),FIM_ICON($3),FIM_SCON($4),$5); }
 	| INTEGER IDENTIFIER { if($1>0){$$ = FIM_OPR('r',2,FIM_OPR('x',1,FIM_SCON($2)),FIM_ICON($1)); }}
 	// goto
-	| SLASH_AND_REGEXP { $$ = FIM_OPR('x',2,FIM_SCON(dupstr(FIM_FLT_GOTO)),FIM_OPR('a',1,FIM_OPR('a',1,FIM_SCON(dupsqstr ($1))))); }
+	| SLASH_AND_REGEXP { $$ = FIM_OPR('x',2,FIM_SCON(dupstr(FIM_FLT_GOTO)),FIM_OPR('a',1,FIM_OPR('a',1,FIM_SCON(dupsqstr ($1))))); fim_free($1); }
 	// magnification
 	| '+' UNQUOTED_FLOAT   '%' { $$ = FIM_OPR('x',2,FIM_SCON(dupstr(FIM_FLT_SCALE)),FIM_OPR('a',1,FIM_OPR('a',1,FIM_SCON(dupnstr('+',((float)$2),'%'))))); }
 	| '+' QUOTED_FLOAT   '%' { $$ = FIM_OPR('x',2,FIM_SCON(dupstr(FIM_FLT_SCALE)),FIM_OPR('a',1,FIM_OPR('a',1,FIM_SCON(dupnstr('+',((float)$2),'%'))))); }
