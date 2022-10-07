@@ -25,7 +25,7 @@ PRE  { font-family: monospace; background: #CCC fixed; color: #222; display: blo
 PRE.TEXTFB { text-align: left; border-color: #00F ; }
 PRE.SHCMD { text-align: left; border-color: #080 ; }
 PRE.FIMRCF { text-align: left; border-color: #F00 ; }
-PRE.README { text-align: left; border-color: #FFF ; }
+PRE.README { text-align: left; border-color: #FFF ; white-space: pre-wrap; }
 CODE.TEXTFI{ border-color: #00F ; }
 CODE.SHCMD { border-color: #080 ; }
 CODE.FIMTXT{ border-color: #FFF ; background: #000 fixed; color: #FFF; }
