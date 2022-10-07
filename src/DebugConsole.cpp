@@ -352,7 +352,8 @@ rerr:
 			if(!buffer_){buffer_=p;return FIM_ERR_GENERIC;/* no change */}
 			if((d=(p-buffer_))!=0)// in the case a shift is needed
 			{
-				for(i=0;i<cline_;++i)line_[i]-=d;
+				for(i=0;i<=cline_;++i)
+					line_[i]-=d;
 				bp_-=d;
 			}
 			bsize_+=gbuffer;
