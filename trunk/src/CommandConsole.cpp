@@ -777,6 +777,7 @@ ret:
 		int cidx=FIM_INVALID_IDX;
 		/* first determine whether cmd is an alias */
 		const fim::string ocmd=aliasRecall(cmd);
+		const int int0 = (args.size()>0) ? atoi(args[0].c_str()) : 1;
 
 		if(ocmd!=FIM_CNS_EMPTY_STRING)
 		{
@@ -818,16 +819,10 @@ ret:
 		{
 #if FIM_USE_STD_CHRONO
 			using namespace std::chrono_literals;
-			std::chrono::microseconds useconds = 1us;
-
-			if(args.size()>0)
-				useconds*=atoi(args[0].c_str());
+			const std::chrono::microseconds useconds = 1us * int0;
 			std::this_thread::sleep_for(useconds);
 #else /* FIM_USE_STD_CHRONO */
-			fim_tus_t useconds=1;
-			
-			if(args.size()>0)
-				useconds=atoi(args[0].c_str());
+			const fim_tus_t useconds=int0;
 			usleep(useconds);
 #endif /* FIM_USE_STD_CHRONO */
 			goto ok;
@@ -835,10 +830,7 @@ ret:
 		else
 		if(cmd==FIM_FLT_SLEEP)
 		{
-			fim_ts_t seconds=1;
-
-			if(args.size()>0)
-				seconds=atoi(args[0].c_str());
+			const fim_ts_t seconds=int0;
 #if 0
 			sleep(seconds);
 #else

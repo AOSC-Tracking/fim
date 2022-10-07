@@ -955,10 +955,10 @@ op_rotate_init(const struct ida_image *src, struct ida_rect *rect,
 }
 
 static inline
-fim_byte_t* op_rotate_getpixel(const struct ida_image *src, struct ida_rect *rect,
+const fim_byte_t* const op_rotate_getpixel(const struct ida_image *src, struct ida_rect *rect,
 				  int sx, int sy, int dx, int dy)
 {
-    static fim_byte_t black[] = { 0, 0, 0};
+    static const fim_byte_t black[] = { 0, 0, 0};
 #if FIM_TEXTURED_ROTATION
     const int xdiff  =   rect->x2 - rect->x1;
     const int ydiff  =   rect->y2 - rect->y1;
@@ -988,7 +988,7 @@ op_rotate_work(const struct ida_image *src, struct ida_rect *rect,
 	       fim_byte_t *dst, int y, void *data)
 {
     struct op_rotate_state *h = (struct op_rotate_state *) data;
-    fim_byte_t *pix;
+    const fim_byte_t *pix;
     float fx,fy,w;
     int x,sx,sy;
 
