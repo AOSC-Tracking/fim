@@ -3,15 +3,19 @@
 
                 Version 0.6-trunk
 
+# (r1641)
+ * Avoid leak in language parser.
+# (r1644-r1646)
+ * Avoid console buffer memory corruption.
 # (r1626)
  * Eliminate a memory leak from file loading code. 
-# (r1625)
+# (r1625,r1637)
  * Eliminate memory leaks in PNG, EXIF, and font decoding code.
 # (r1624)
  * fix possibly broken `make -j` in rebuilding fimgs.man.
 # (r1623)
  * correct configure script check for regcomp() -- could lead to false negatives.
-# (r1621,r1637)
+# (r1621)
  * Don't break build on missing 'gs'.
 # (r1616)
  * Using --load-shadow-dir <dir> adds a shadow directory (experimental).

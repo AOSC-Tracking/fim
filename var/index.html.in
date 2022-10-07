@@ -57,12 +57,12 @@ dnl
 <link rel="stylesheet" type="text/css" href="fim.css">
 </head>
 <body bgcolor="#ffeedd" link="#AA6600" vlink="#884400">
-<table align="center" cellspacing="15pt" border="0" width="60%" >
+<table align="center" cellspacing="15pt" border="0" width="100%" >
 SECTION(Welcome to the FIM_ABBR (Fbi IMproved) image viewer program homepage,top)
 <tr>
 <td align="center">
-<A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="40%" ALT="A screenshot of a regular (framebuffer) FIM run (SDL would look the same)"></A>
-<A HREF="#screenshots_aa"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_aa.png" WIDTH="40%" ALT="A screenshot of an ASCII Art FIM run"></A>
+<A HREF="#screenshots_fb"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_fb.jpg" WIDTH="45%" ALT="A screenshot of a regular (framebuffer) FIM run (SDL would look the same)"></A>
+<A HREF="#screenshots_aa"><IMG CLASS="SCREENSHOTI" SRC="fim_diana_aa.png" WIDTH="45%" ALT="A screenshot of an ASCII Art FIM run"></A>
 </td>
 </tr>
 
