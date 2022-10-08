@@ -76,6 +76,37 @@ fim::string fim_dirname(const fim::string& arg)
 #endif /* HAVE_LIBGEN_H */
 }
 
+fim::string fim_auto_quote(const fim::string& arg, int quoted)
+{
+	char qc = 0;
+	fim::string ear=arg;
+	fim::string res=FIM_CNS_EMPTY_STRING;
+
+	if (quoted == 0)
+	{
+		quoted = 2;
+		if (arg.size() == 1)
+			if ( arg[0] == '\"' )
+				quoted = 1;
+		// ...
+	}
+	if (quoted == 1)
+		qc = '\'';
+	if (quoted == 2)
+		qc = '"';
+
+	if(qc)
+		res+=qc;
+	if(qc == '\'')
+		ear.substitute("'","\\'");
+	if(qc == '\"')
+		ear.substitute("\"","\\\"");
+	res+=ear;
+	if(qc)
+		res+=qc;
+	return res;
+}
+
 fim::string fim_shell_arg_escape(const fim::string& arg, bool quoted)
 {
 	fim::string ear=arg;

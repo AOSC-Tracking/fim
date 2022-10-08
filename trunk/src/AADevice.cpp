@@ -517,6 +517,8 @@ err:
 	static aa_context *fim_aa_ascii_context; /* This was a global variable just for the use in fim_aa_get_input. Now one it's of no use.  */
 	static fim_sys_int fim_aa_get_input(fim_key_t * c, bool want_poll, bool * srp)
 	{
+		fim_key_t e = 0;
+
 		if(srp)
 		       	*srp = true;
 		if(!c)
@@ -530,24 +532,27 @@ err:
 		if(!*c)
 			return 0;
 
-		if(*c==AA_UP   ){*c=FIM_KKE_UP;return 1;}
-		if(*c==AA_DOWN ){*c=FIM_KKE_DOWN;return 1;}
-		if(*c==AA_LEFT ){*c=FIM_KKE_LEFT;return 1;}
-		if(*c==AA_RIGHT){*c=FIM_KKE_RIGHT;return 1;}
-		if(*c==AA_BACKSPACE){*c=FIM_KKE_BACKSPACE;return 1;}
-
-		/* Note: these five bindings work only under X11 .. */
-		if(*c==65765){*c=FIM_KKE_PAGE_UP;return 1;}
-		if(*c==65766){*c=FIM_KKE_PAGE_DOWN;return 1;}
-		if(*c==65779){*c=FIM_KKE_INSERT;return 1;}
-		if(*c==65760){*c=FIM_KKE_HOME;return 1;}
-		if(*c==65767){*c=FIM_KKE_END;return 1;}
-
-		if(*c==AA_ESC)
+		switch (*c)
 		{
-			*c=FIM_KKE_ESC;
+			case (AA_UP   ):     e=FIM_KKE_UP; break;
+			case (AA_DOWN ):     e=FIM_KKE_DOWN;break;
+			case (AA_LEFT ):     e=FIM_KKE_LEFT;break;
+			case (AA_RIGHT):     e=FIM_KKE_RIGHT;break;
+			case (AA_BACKSPACE): e=FIM_KKE_BACKSPACE;break;
+
+			/* Note: these five bindings work only under X11 .. */
+			case (65765): e=FIM_KKE_PAGE_UP;break;
+			case (65766): e=FIM_KKE_PAGE_DOWN;break;
+			case (65779): e=FIM_KKE_INSERT;break;
+			case (65760): e=FIM_KKE_HOME;break;
+			case (65767): e=FIM_KKE_END;break;
+
+			case (AA_ESC): e=FIM_KKE_ESC; break;
+		}
+		if (e)
+		{
+			*c = e;
 			return 1;
-			/* esc  */
 		}
 		if(srp)
 			*srp = false;
