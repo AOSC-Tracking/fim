@@ -174,7 +174,23 @@
 #define FIM_WANT_FBI_INNER_DIAGNOSTICS false
 #define FIM_WANT_FBI_FBDEV_DIAGNOSTICS false
 #define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* in C++11, prefer smart pointers for Image* */
-#define FIM_EXPERIMENTAL_SHADOW_DIRS FIM_READ_DIRS && FIM_USE_CXX11 /* shadow list of high-res images to jump on demand */
+
+/* shadow list of high-res images to jump on demand */
+#ifndef FIM_EXPERIMENTAL_SHADOW_DIRS
+#if HAVE_FILESYSTEM
+#if FIM_USE_CXX17
+#define FIM_EXPERIMENTAL_SHADOW_DIRS 2 /* 1: at load time  2: at view time */
+#endif /* FIM_USE_CXX17 */
+#endif /* HAVE_FILESYSTEM */
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
+#ifndef FIM_EXPERIMENTAL_SHADOW_DIRS
+#if FIM_USE_CXX11
+#if FIM_READ_DIRS
+#define FIM_EXPERIMENTAL_SHADOW_DIRS 1 /* 1: at load time  2: at view time */
+#endif /* FIM_READ_DIRS */
+#endif /* FIM_USE_CXX11 */
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
+
 #define FIM_EXPERIMENTAL_FONT_CMD HAVE_DIRENT_H /*  */
 #define FIM_WANT_HELP_ARGS 1 /*  */
 #define FIM_WANT_VARIABLE_RESOLUTION_MOUSE_SCROLL 1 /* the larger the image, the more scroll steps  */
