@@ -36,6 +36,7 @@ PACKAGE=fim
 FIMHTMLDOCS= FIM.html fimrc.man.html fim.man.html fimgs.man.html
 PAGES= $(SITEDIR)/index.html $(FIMHTMLDOCS)
 CP=cp -p
+N2H=he --escape --use-named-refs
 
 help:
 	@echo
@@ -78,7 +79,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D MUTT_ABBR=$(MUTT_ABBR) \
 	-D ASCII_ABBR=$(ASCII_ABBR) \
 	-D EMACS_ABBR=$(EMACS_ABBR) \
-	-D NEWSCONTENTS="$$( grep -v '^#' $(FIMDIR)/NEWS )" \
+	-D NEWSCONTENTS="$$( grep -v '^#' $(FIMDIR)/NEWS | $(N2H) )" \
 	-D THANKSCONTENTS="$$( cat $(FIMDIR)/THANKS )" \
 	-D MANFIMCONTENTS="$$( cat $(FIMDIR)/doc/fim.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fim.man.html_/g;s/href=\"#/href=\"#fim.man.html_/g' )" \
 	-D MANFIMRCCONTENTS="$$( cat $(FIMDIR)/doc/fimrc.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fimrc.man.html_/g;s/href=\"#/href=\"#fimrc.man.html_/g')" \
