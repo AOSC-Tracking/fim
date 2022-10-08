@@ -21,6 +21,7 @@ FIMSITE=html-dezperado/fim
 SITEDIR=./www
 FTPSCRIPT=./script.lftp
 FTPURL=ftp://dezperado@ftp5.autistici.org
+SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )"
 SRCDIR=./
 MIRROR=$$(cat $(FIMDIR)/README | grep "^Releases  "|sed s/^.*\ :.//g)
 COPYRIGHT_NOTICE=$$(cat $(FIMDIR)/README | grep "^FIM.is.Copyright  "|sed s/^.*\ :.//g)
@@ -86,7 +87,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D MANFIMRCCONTENTS="$$( cat $(FIMDIR)/doc/fimrc.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fimrc.man.html_/g;s/href=\"#/href=\"#fimrc.man.html_/g')" \
 	-D MANFIMGSCONTENTS="$$( cat $(FIMDIR)/doc/fimgs.man.html | $(FIMDIR)/scripts/maintenance/htmlbody.awk | sed 's/name=\"/name=\"fimgs.man.html_/g;s/href=\"#/href=\"#fimgs.man.html_/g')" \
 	-D DATE="`date +'%d/%m/%Y'`" \
-	-D SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )" \
+	-D SIZE=$(SIZE) \
 	-D HOMEPAGE=$(HOMEPAGE) \
 	-D NGNUPAGE=$(NGNUPAGE) \
 	-D MAILINGLIST=$(MAILINGLIST) \
@@ -99,6 +100,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 pages:	$(PAGES) $(SITEDIR)/index.html
 
 site:	pages
+	test -n "$(SIZE)"
 	#make tgz # this directory cares just for the www pages
 	#sed 's/$$VERSION./'`cat $(FIMDIR)/VERSION`'/g' $(SRCDIR)/$(INDEXIN) > $(SITEDIR)/index.html
 	mkdir -p $(SITEDIR)

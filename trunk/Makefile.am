@@ -186,7 +186,7 @@ help:
 	@echo
 
 .PHONY: ai
-ai:
+ai: $(distdir).tar.gz.sig  $(distdir).tar.gz $(distdir).tar.bz2.sig $(distdir).tar.bz2
 	make site up -C var/
 
 .PHONY: up
