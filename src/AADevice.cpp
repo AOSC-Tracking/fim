@@ -529,22 +529,11 @@ err:
 			std::cout << "";/* FIXME : removing this breaks things. console-related problem, I guess */
 		if(!*c)
 			return 0;
-#if 0
-		if(*c==AA_UP   ){*c=272;return 1;}
-		if(*c==AA_DOWN ){*c=274;return 1;}
-		if(*c==AA_LEFT ){*c=276;return 1;}
-		if(*c==AA_RIGHT){*c=275;return 1;}
-#else
-		if(*c==AA_UP   ){*c=AA_UP;return 1;}
-		if(*c==AA_DOWN ){*c=AA_DOWN;return 1;}
-		if(*c==AA_LEFT ){*c=AA_LEFT;return 1;}
-		if(*c==AA_RIGHT){*c=AA_RIGHT;return 1;}
-#endif
-		/* FIXME : see defaultConfiguration.cpp */
-		if(*c==AA_UP   ){*c=4283163;return 1;}
-		if(*c==AA_DOWN ){*c=4348699;return 1;}
-		if(*c==AA_LEFT ){*c=4479771;return 1;}
-		if(*c==AA_RIGHT){*c=4414235;return 1;}
+
+		if(*c==AA_UP   ){*c=FIM_KKE_UP;return 1;}
+		if(*c==AA_DOWN ){*c=FIM_KKE_DOWN;return 1;}
+		if(*c==AA_LEFT ){*c=FIM_KKE_LEFT;return 1;}
+		if(*c==AA_RIGHT){*c=FIM_KKE_RIGHT;return 1;}
 		if(*c==AA_BACKSPACE){*c=127;return 1;}
 
 		/* FIXME : these five bindings work only under X .. */
