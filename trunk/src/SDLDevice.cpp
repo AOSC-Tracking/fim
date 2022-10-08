@@ -1070,14 +1070,15 @@ void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
         : 0)
 
 	fim_coo_t row,bit,x;
-	fim_sys_int bpr;
 	FIM_CONSTEXPR Uint8 rc = 0xff, gc = 0xff, bc = 0xff;
 	// const Uint8 rc = 0x00, gc = 0x00, bc = 0xff;
+	const fim_sys_int bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left), SCANLINE_PAD_BYTES);
+	const Uint16 pitch = screen_->pitch;
+	const Uint16 incr = pitch / Bpp_;
 
-	bpr = GLWIDTHBYTESPADDED((charInfo->right - charInfo->left), SCANLINE_PAD_BYTES);
 	for (row = 0; row < (charInfo->ascent + charInfo->descent); row++)
 	{
-		for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++) 
+		for (x = 0, bit = 0; bit < (charInfo->right - charInfo->left); bit++, x++) 
 		{
 			if (data[bit>>3] & fs_masktab[bit&7])
 			{	// WARNING !
@@ -1088,14 +1089,13 @@ void SDLDevice::fs_render_fb(fim_coo_t x_, fim_coo_t y, FSXCharInfo *charInfo, f
 				fim_int fim_fmf = fim::fim_fmf_; 
 #endif	/* FIM_FONT_MAGNIFY_FACTOR */
 #if FIM_FONT_MAGNIFY_FACTOR == 1
-				setpixel(screen_,x_+x,(y+row)*screen_->pitch/Bpp_,rc,gc,bc);
+				setpixel(screen_,x_+x,(y+row)*incr,rc,gc,bc);
 #else	/* FIM_FONT_MAGNIFY_FACTOR */
 				for(fim_coo_t mi = 0; mi < fim_fmf; ++mi)
 				for(fim_coo_t mj = 0; mj < fim_fmf; ++mj)
-					setpixel(screen_,x_+fim_fmf*x+mj,(y+fim_fmf*row+mi)*screen_->pitch/Bpp_,rc,gc,bc);
+					setpixel(screen_,x_+fim_fmf*x+mj,(y+fim_fmf*row+mi)*incr,rc,gc,bc);
 #endif	/* FIM_FONT_MAGNIFY_FACTOR */
 			}
-			x += Bpp_/Bpp_;/* FIXME */
 		}
 		data += bpr;
 	}
