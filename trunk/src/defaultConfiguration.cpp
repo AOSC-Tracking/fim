@@ -55,8 +55,8 @@
 		bind(FIM_KKE_DOWN,"pan 'down'");
 		bind(FIM_KKE_LEFT,"pan 'left'");
 		bind(' ',FIM_FLT_SCROLLDOWN);
-		bind(2117491483,"next");
-		bind(2117425947,"prev");
+		bind(FIM_KKE_PAGE_DOWN,"next");
+		bind(FIM_KKE_PAGE_UP,"prev");
 		bind('i',FIM_FLT_INFO);
 #endif
 #if 1
@@ -146,18 +146,18 @@
 		sym_keys_[FIM_KBD_RIGHT]=FIM_KKE_RIGHT;
 		sym_keys_[FIM_KBD_UP]=FIM_KKE_UP;
 		sym_keys_[FIM_KBD_DOWN]=FIM_KKE_DOWN;
-		sym_keys_[FIM_KBD_PAGEDOWN]=2117491483;
-		sym_keys_[FIM_KBD_PAGEUP]=2117425947;
-		sym_keys_[FIM_KBD_ENTER]=10;
-		sym_keys_[FIM_KBD_BACKSPACE_]=127;
-		sym_keys_[FIM_KBD_BACKSPACE]=127;
-		sym_keys_[FIM_KBD_DEL]=2117294875;
-		sym_keys_[FIM_KBD_INS]=2117229339;
-		sym_keys_[FIM_KBD_HOME]=2117163803;
-		sym_keys_[FIM_KBD_END] =2117360411;
+		sym_keys_[FIM_KBD_PAGEDOWN]=FIM_KKE_PAGE_DOWN;
+		sym_keys_[FIM_KBD_PAGEUP]=FIM_KKE_PAGE_UP;
+		sym_keys_[FIM_KBD_ENTER]=FIM_KKE_ENTER;
+		sym_keys_[FIM_KBD_BACKSPACE_]=FIM_KKE_BACKSPACE;
+		sym_keys_[FIM_KBD_BACKSPACE]=FIM_KKE_BACKSPACE;
+		sym_keys_[FIM_KBD_DEL]=FIM_KKE_DEL;
+		sym_keys_[FIM_KBD_INS]=FIM_KKE_INSERT;
+		sym_keys_[FIM_KBD_HOME]=FIM_KKE_HOME;
+		sym_keys_[FIM_KBD_END] =FIM_KKE_END;
 		sym_keys_[FIM_KBD_TAB] =9;
 		sym_keys_[FIM_KBD_ANY] =0;	/* EXPERIMENTAL */
-		sym_keys_[FIM_KBD_ESC] =27;
+		sym_keys_[FIM_KBD_ESC] =FIM_KKE_ESC;
 
 		exitBinding_ = sym_keys_[FIM_KBD_ENTER];	/*  Enter will terminate loops */
 //		sym_keys_[" "]=' ';

@@ -396,7 +396,7 @@ static bool aainvalid;
 		name_[0] = FIM_SYM_CHAR_NUL;
 		name_[1] = FIM_SYM_CHAR_NUL;
 		if(allow_windowed==0)
-			setenv(FIM_ENV_DISPLAY,"",1); /* running fim -o aalib in a window may render fim unusable */
+			;//setenv(FIM_ENV_DISPLAY,"",1); /* running fim -o aalib in a window may render fim unusable */
 		ascii_save_.name = (fim_aa_char*)name_;
 		ascii_save_.format = &aa_text_format;
 		ascii_save_.file = FIM_NULL;
@@ -534,18 +534,18 @@ err:
 		if(*c==AA_DOWN ){*c=FIM_KKE_DOWN;return 1;}
 		if(*c==AA_LEFT ){*c=FIM_KKE_LEFT;return 1;}
 		if(*c==AA_RIGHT){*c=FIM_KKE_RIGHT;return 1;}
-		if(*c==AA_BACKSPACE){*c=127;return 1;}
+		if(*c==AA_BACKSPACE){*c=FIM_KKE_BACKSPACE;return 1;}
 
-		/* FIXME : these five bindings work only under X .. */
-		if(*c==65765){*c=2117491483;return 1;}/* pageup   (arbitrary) */
-		if(*c==65766){*c=2117425947;return 1;}/* pagedown (arbitrary) */
-		if(*c==65779){*c=2117229339;return 1;}/* ins  (arbitrary) */
-		if(*c==65760){*c=2117163803;return 1;}/* home (arbitrary) */
-		if(*c==65767){*c=2117360411;return 1;}/* end  (arbitrary) */
+		/* Note: these five bindings work only under X11 .. */
+		if(*c==65765){*c=FIM_KKE_PAGE_UP;return 1;}
+		if(*c==65766){*c=FIM_KKE_PAGE_DOWN;return 1;}
+		if(*c==65779){*c=FIM_KKE_INSERT;return 1;}
+		if(*c==65760){*c=FIM_KKE_HOME;return 1;}
+		if(*c==65767){*c=FIM_KKE_END;return 1;}
 
 		if(*c==AA_ESC)
 		{
-			*c=27;
+			*c=FIM_KKE_ESC;
 			return 1;
 			/* esc  */
 		}
