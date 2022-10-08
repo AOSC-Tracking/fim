@@ -517,7 +517,7 @@
  * `make fim' goal has been deleted
 # (r848)
  * changed librsb library detection: now it's e.g.:
-   LIBS="`librsb-config  --ldflags --extra_libs` " CXXFLAGS="`librsb-config --cflags ` \
+   LIBS="`librsb-config  --ldflags --extra_libs` " CXXFLAGS="`librsb-config --cflags` "\
    ./configure --enable-matrices-rendering
 # (r882)
  * bugfix: in some situations fim -o fb was not clearing the screen before drawing the image
