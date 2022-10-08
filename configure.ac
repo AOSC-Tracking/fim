@@ -303,6 +303,7 @@ AC_CHECK_HEADERS([sys/mman.h])
 AC_CHECK_HEADERS([cstdio stdio.h], [break],AC_MSG_ERROR([[Cannot find cstdio or stdio.h.  Fim requires at least one or the other.]]))
 
 AC_CHECK_HEADERS([climits limits.h], [break], AC_MSG_ERROR([[Cannot find limits.h nor climits.  Fim requires it!.]]))
+AC_CHECK_HEADERS([filesystem], AC_DEFINE([HAVE_FILESYSTEM], [1], [Define to 1 if have <filesystem>]))
 
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([int *])
@@ -1083,6 +1084,8 @@ else
 	dnl ])
 fi
 
+dnl ================================================================================
+AC_CHECK_LIB([stdc++fs],[main],[LIBS="${LIBS} -lstdc++fs"])
 dnl ================================================================================
 
 ## sdl driver
