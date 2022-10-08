@@ -11,8 +11,8 @@
  * Avoid console buffer memory corruption.
 # (r1626)
  * Eliminate a memory leak from file loading code. 
-# (r1625,r1637,r1657,r1658)
- * Eliminate memory leaks in PNG, JPG< EXIF, and font decoding code.
+# (r1625,r1637,r1657,r1658,r1661)
+ * Eliminate memory leaks in PNG, JPG, EXIF, and font decoding code.
 # (r1624,r1650)
  * fix possibly broken `make -j` in rebuilding fimgs.man and fimrc.man.
 # (r1623)
