@@ -2,7 +2,7 @@
 /*
  common.h : Miscellaneous stuff header file
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -73,6 +73,7 @@ int newlines_count(const fim_char_t*s);
 const fim_char_t* next_row(const fim_char_t*s, int cols);
 int fim_common_test(void);
 
+double getmicroseconds(void);
 double getmilliseconds(void);
 const fim_char_t * fim_getenv(const fim_char_t * name);
 FILE * fim_fread_tmpfile(FILE * fp);

@@ -740,6 +740,17 @@ int int2msbf(int in)
 	return swap_bytes_in_int(in);
 }
 
+double getmicroseconds(void)
+{
+	double dt=0.0;
+        struct timeval tv;
+        /*err=*/gettimeofday(&tv, FIM_NULL);
+	dt+=tv.tv_usec;
+	dt+=tv.tv_sec *1000 * 1000;
+	// note : we ignore err!
+	return dt;
+}
+
 double getmilliseconds(void)
 {
 	/*
@@ -747,13 +758,7 @@ double getmilliseconds(void)
          * NOTE : this function is NOT essential.
          */
 	//int err;//t,pt in ms; d in us
-	double dt=0.0;
-        struct timeval tv;
-        /*err=*/gettimeofday(&tv, FIM_NULL);
-	dt+=tv.tv_usec/1000;
-	dt+=tv.tv_sec *1000;
-	// note : we ignore err!
-	return dt;
+	return getmicroseconds() / 1000;
 }
 
 #if 0
