@@ -104,6 +104,8 @@ struct jpeg_state {
     /* thumbnail */
     fim_byte_t  *thumbnail;
     unsigned int   tpos, tsize;
+
+    struct ida_image_info *i; /* here for load_free_extras */
 };
 
 /* ---------------------------------------------------------------------- */
@@ -389,6 +391,7 @@ jpeg_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     if(!h) goto oops;
 
     h->infile = fp;
+    h->i = i;
 
     h->jerr.error_exit=FIM_NULL; // ?
     h->cinfo.err = jpeg_std_error(&h->jerr);	/* FIXME : should use an error manager of ours (this one exits the program!) */
@@ -545,6 +548,7 @@ jpeg_done(void *data)
 	fim_fclose(h->infile);
     if (h->thumbnail)
 	fim_free(h->thumbnail);
+    load_free_extras(h->i);
     fim_free(h);
 }
 
