@@ -821,10 +821,19 @@ namespace fim
 /*
  * Fim Keyboard Keys Encodings
  * */
+#define FIM_KKE_ENTER			10
+#define FIM_KKE_ESC			27
+#define FIM_KKE_BACKSPACE		127
 #define FIM_KKE_LEFT			4479771
 #define FIM_KKE_RIGHT			4414235
 #define FIM_KKE_UP			4283163
 #define FIM_KKE_DOWN			4348699
+#define FIM_KKE_PAGE_UP			2117425947
+#define FIM_KKE_PAGE_DOWN		2117491483
+#define FIM_KKE_INSERT			2117229339
+#define FIM_KKE_HOME			2117163803
+#define FIM_KKE_END			2117360411
+#define FIM_KKE_DEL			2117294875
 
 /*
  * Fim Display Driver Names
