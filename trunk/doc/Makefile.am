@@ -29,6 +29,9 @@ fim.man:
 fim.man.html: fim.man
 	$(MAN2HTML) ./$< | $(MAN2HTMLS) >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
+fimrc.man:
+	make doc/fimrc.man -C $(top_srcdir)/
+
 fimrc.man.html: fimrc.man
 	$(MAN2HTML) ./$< | $(MAN2HTMLS) >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
