@@ -31,7 +31,8 @@ TGZ="fim-`cat $(FIMDIR)/VERSION`".tar.gz
 SIG=$(TGZ).sig
 REPOSITORY=`cat $(FIMDIR)/README | grep "^Repository"|sed s/^.*\ :.//g`
 FVERSION=`cat $(FIMDIR)/VERSION`
-HOMEPAGE=$$(cat $(FIMDIR)/README | grep "^Web Page  "|sed s/^.*\ :.//g)
+HOMEPAGE=$$(cat $(FIMDIR)/README | grep "^Homepage  "|sed s/^.*\ :.//g)
+NGNUPAGE=$$(cat $(FIMDIR)/README | grep "^Savannah Page  "|sed s/^.*\ :.//g)
 PACKAGE=fim
 FIMHTMLDOCS= FIM.html fimrc.man.html fim.man.html fimgs.man.html
 PAGES= $(SITEDIR)/index.html $(FIMHTMLDOCS)
@@ -87,6 +88,7 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D DATE="`date +'%d/%m/%Y'`" \
 	-D SIZE="$$( du -sb $(FIMDIR)/$(TGZ) | cut -f 1 )" \
 	-D HOMEPAGE=$(HOMEPAGE) \
+	-D NGNUPAGE=$(NGNUPAGE) \
 	-D MAILINGLIST=$(MAILINGLIST) \
 	$(SRCDIR)/$(INDEXIN) \
 	 > $(SITEDIR)/index.html 
