@@ -2439,7 +2439,7 @@ err:
 #if FIM_WANT_FLIST_STAT 
 		const fim_fn_t fn = current();
 
-		if( fn != FIM_STDIN_IMAGE_NAME )
+		if( fn.size() && fn != FIM_STDIN_IMAGE_NAME )
 		{
 			const int cn = current_n();
 			const fim_stat_t nfs = fim_get_stat(fn, NULL);
