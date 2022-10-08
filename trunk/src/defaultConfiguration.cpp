@@ -4,7 +4,7 @@
   The following code contains key bindings and aliases definitions
   which make up a first usable configuration for FIM.
  
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,10 +50,10 @@
 		bind('R',FIM_FLT_REDISPLAY);
 		bind('m',FIM_FLC_MIRROR);
 		bind('f',FIM_FLC_FLIP);
-		bind(4283163,"pan 'up'");
-		bind(4414235,"pan 'right'");
-		bind(4348699,"pan 'down'");
-		bind(4479771,"pan 'left'");
+		bind(FIM_KKE_UP,"pan 'up'");
+		bind(FIM_KKE_RIGHT,"pan 'right'");
+		bind(FIM_KKE_DOWN,"pan 'down'");
+		bind(FIM_KKE_LEFT,"pan 'left'");
 		bind(' ',FIM_FLT_SCROLLDOWN);
 		bind(2117491483,"next");
 		bind(2117425947,"prev");
@@ -138,14 +138,14 @@
 		*/
 		
 		/*
-		 * The following means that when a decimal 4479771 will be read from
+		 * The following means that when a decimal FIM_KKE_LEFT will be read from
 		 * the keyboard, it will be interpreted as a Left pressure.
 		 */
-		sym_keys_[FIM_KBD_LEFT]=4479771;
+		sym_keys_[FIM_KBD_LEFT]=FIM_KKE_LEFT;
 		// and so on..
-		sym_keys_[FIM_KBD_RIGHT]=4414235;
-		sym_keys_[FIM_KBD_UP]=4283163;
-		sym_keys_[FIM_KBD_DOWN]=4348699;
+		sym_keys_[FIM_KBD_RIGHT]=FIM_KKE_RIGHT;
+		sym_keys_[FIM_KBD_UP]=FIM_KKE_UP;
+		sym_keys_[FIM_KBD_DOWN]=FIM_KKE_DOWN;
 		sym_keys_[FIM_KBD_PAGEDOWN]=2117491483;
 		sym_keys_[FIM_KBD_PAGEUP]=2117425947;
 		sym_keys_[FIM_KBD_ENTER]=10;

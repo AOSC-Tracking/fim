@@ -785,7 +785,7 @@ namespace fim
 #define FIM_VID_PRELOAD_CHECKS			"_push_checks"	/* "[in,experimental,g:] if 1 (default), will check with stat() existence of input files before push'ing them (set this to 0 to speed up loading very long file lists; in these cases a trailing slash (/) will have to be used to tell fim a pathname is a directory). This only works after initialization (thus, after command line files have been push'ed); use --" FIM_OSW_NO_STAT_PUSH " if you wish to set this to 0 at command line files specification." */
 
 /*
- * Fim Keyboard Descriptions
+ * Fim Keyboard Keys Descriptions
  * */
 #define FIM_KBD_TAB			"Tab"
 #define FIM_KBD_ENTER			"Enter"
@@ -817,6 +817,14 @@ namespace fim
 #define FIM_KBD_GT			">"
 #define FIM_KBD_LT			"<"
 #define FIM_KBD_UNDERSCORE			"_"
+
+/*
+ * Fim Keyboard Keys Encodings
+ * */
+#define FIM_KKE_LEFT			4479771
+#define FIM_KKE_RIGHT			4414235
+#define FIM_KKE_UP			4283163
+#define FIM_KKE_DOWN			4348699
 
 /*
  * Fim Display Driver Names
