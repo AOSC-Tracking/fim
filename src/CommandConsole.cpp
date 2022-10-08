@@ -138,15 +138,19 @@ namespace fim
 
 		for( bi=bindings_.begin();bi!=bindings_.end();++bi)
 		{
-			oss << FIM_FLT_BIND" \"";
 			key_syms_t::const_iterator ikbi=key_syms_.find(((*bi).first));
 			if(ikbi!=key_syms_.end())
-			       	oss << ikbi->second;
-			oss << "\" \"" << ((*bi).second);
-			if( bindings_help_.find((*bi).first) != bindings_help_.end() )
-				oss << "\" # " << bindings_help_.find((*bi).first) -> second << "\n";
-			else
-				oss << "\"\n";
+			       	if ( ikbi->second.size() )
+			       	if ( ! iscntrl(ikbi->second[0]) )
+				{
+					oss << FIM_FLT_BIND" ";
+			       		oss << fim_auto_quote(ikbi->second,0);
+					oss << " \"" << ((*bi).second);
+					if( bindings_help_.find((*bi).first) != bindings_help_.end() )
+						oss << "\" # " << bindings_help_.find((*bi).first) -> second << "\n";
+					else
+						oss << "\"\n";
+				}
 		}
 		return oss.str();
 	}
