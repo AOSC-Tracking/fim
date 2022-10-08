@@ -87,6 +87,9 @@
 #define FIM_CNS_Ki 1000
 #define FIM_CNS_MANY_DUMPED_TOKENS 1000000
 #define FIM_CNS_A_FEW_DUMPED_TOKENS 20
+#if FIM_EXPERIMENTAL_SHADOW_DIRS == 2
+#include <filesystem>	// c++17 on
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 
 namespace fim
 {
@@ -409,6 +412,18 @@ nop:
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
+#if FIM_EXPERIMENTAL_SHADOW_DIRS
+	fim_cxr Browser::shadow_file_swap(const fim_fn_t fn)
+	{
+		const fim::fle_t tmp = flist_[flist_.cf()];
+		flist_[flist_.cf()] = fn;
+		loadCurrentImage();
+		flist_[flist_.cf()] = tmp;
+		viewport()->update_meta(true);
+		return FIM_CNS_EMPTY_RESULT;
+	}
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
+
 	fim_cxr Browser::fcmd_scale(const args_t& args)
 	{
 		fim::string result = FIM_CNS_EMPTY_RESULT;
@@ -419,8 +434,8 @@ nop:
 			if(args.size() == 1 && args[0] == "shadow")
 			{
 				const auto bn = std::string(fim_basename_of(current()));
+#if FIM_EXPERIMENTAL_SHADOW_DIRS == 1
 				fim::fle_t fn;
-
 				for (const auto e : hlist_)
 					if ( bn == std::string(fim_basename_of(e)) )
 					{
@@ -428,14 +443,23 @@ nop:
 						break;
 					}
 				if ( fn.size() && hlist_.size() > 0 )
+					return shadow_file_swap(fn);
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
+#if FIM_EXPERIMENTAL_SHADOW_DIRS == 2
+				namespace fs = std::filesystem;
+				for ( const auto shadow_dir: shadow_dirs_ )
+				if ( fs::is_directory(shadow_dir) )
+				for( const auto & p: fs::recursive_directory_iterator(shadow_dir) )
 				{
-					const fim::fle_t tmp = flist_[flist_.cf()];
-					flist_[flist_.cf()] = fn;
-					loadCurrentImage();
-					flist_[flist_.cf()] = tmp;
-					viewport()->update_meta(true);
-					return result;
+					if(fs::is_regular_file(p))
+					{
+						const fim_fn_t cfn = p.path().string().c_str(); // candidate full name
+						const fim_fn_t cbn = fim_basename_of(cfn); // candidate base name
+						if (cbn == bn)
+							return shadow_file_swap(cfn);
+					}
 				}
+#endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 			}
 			else
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
@@ -1108,9 +1132,14 @@ ret:
 #if FIM_EXPERIMENTAL_SHADOW_DIRS
 	void Browser::push_shadow_dir(std::string fn)
 	{
+#if FIM_EXPERIMENTAL_SHADOW_DIRS == 1
 		std::swap(flist_,hlist_);
 		push_dir(fn,FIM_FLAG_PUSH_REC,NULL);
 		std::swap(flist_,hlist_);
+#endif
+#if FIM_EXPERIMENTAL_SHADOW_DIRS == 2
+		shadow_dirs_.push_back(fn);
+#endif
 	}
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 	
@@ -2311,7 +2340,7 @@ err:
 
 		bs += cache_.byte_size();;
 		bs += sizeof(*this);
-#if FIM_EXPERIMENTAL_SHADOW_DIRS
+#if FIM_EXPERIMENTAL_SHADOW_DIRS == 1
 		for (const auto e : hlist_)
 			bs += e.capacity();
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
