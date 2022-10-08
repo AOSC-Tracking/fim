@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1649)
+ * Bugfix with aalib (-o aa): don't truncate long lines.
 # (r1641)
  * Avoid leak in language parser.
 # (r1644-r1646)

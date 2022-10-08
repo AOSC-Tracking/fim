@@ -203,7 +203,7 @@ fim_err_t DisplayDevice::format_console(void)
 	else
 	{
 		mc_.setRows ( height()/2 );
-		mc_.reformat( width()    );
+		mc_.reformat( get_chars_per_line()    );
 	}
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 	return FIM_ERR_NO_ERROR;
