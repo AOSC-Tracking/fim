@@ -198,7 +198,7 @@ struct fim_options_t fim_options[] = {
 "Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks."
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
-"The \\fBaa\\fP option may be specified as  \\fBaa" FIM_SYM_DEVOPTS_SEP_STR "{['w']}\\fP ; the " FIM_MAN_fB("'w'") " character allows windowed mode in case of aalib running under X (otherwise, the DISPLAY environment variable will be unset for the current instance of fim).\n"
+"The \\fBaa\\fP option can be specified as \\fBaa[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default, windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable."
 #if FIM_WANT_SDL_OPTIONS_STRING 
 "The \\fBsdl\\fP option may be specified as  \\fBsdl" FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the " FIM_MAN_fB("'w'") " character requests windowed mode; the " FIM_MAN_fB("'m'") " character requests mouse pointer display; the " FIM_MAN_fB("'r'") " character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
