@@ -2,7 +2,7 @@
 /*
  CommandConsole-help.cpp : Fim console dispatcher--help member functions
 
- (c) 2011-2017 Michele Martone
+ (c) 2011-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ manmode:
 			"An INTEGER shall be an unsigned integer number.\n"
 			"An IDENTIFIER shall be one of the valid fim commands (see \n.B COMMANDS REFERENCE\n) or a valid alias.\n"
 			"A VARIABLE shall be an already declared or undeclared variable identifier (see \n.B VARIABLES REFERENCE\n) or a valid alias, created using the \n.B alias\ncommand.\n"
-			"The \"=~\" operator treats the right expression as a STRING, and uses is as a regular expression for matching purposes.\n"
+			"The \"=~\" operator treats the right expression as a STRING, and uses it as a regular expression for matching purposes.\n"
 			"The SLASH_AND_REGEXP is a slash (\"/\") followed by a STRING, interpreted as a regular expression.\n"
 			"See ""\\fR\\fI""regex""\\fR""(1) for regular expression syntax.\n"
 			"\n"
