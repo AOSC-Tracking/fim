@@ -115,7 +115,7 @@ namespace fim
 				if( t<0 )
 					goto err; // hmmm
 				strncpy(buf,line_[i],t);
-				while(buf[t-1]=='\n' && t>0)
+				while( t>0 && buf[t-1]=='\n' )
 					--t; // rewind newlines
 				while(t<cancols)
 					buf[t++]=' '; // after text, fill with blanks
