@@ -2,7 +2,7 @@
 /*
  FbiStuffTiff.cpp : fbi functions for TIFF files, modified for fim
 
- (c) 2007-2018 Michele Martone
+ (c) 2007-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -112,8 +112,6 @@ tiff_init(FILE *fp, const fim_char_t *filename, unsigned int page,
     } else {
 	if (FbiStuff::fim_filereading_debug())
 	    FIM_FBI_PRINTF("tiff: reading scanline by scanline\n");
-	h->row = (uint32*)fim_malloc(TIFFScanlineSize(h->tif));
-        if(!h->row)goto oops;
     }
 
     i->width  = h->width;
