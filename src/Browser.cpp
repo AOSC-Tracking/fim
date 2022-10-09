@@ -156,7 +156,7 @@ namespace fim
 				for(size_t fi=0;fi<flist_.size();++fi)
 					marked += cc.markFile(flist_[fi],true,false);
 				result += "marked ";
-				result += marked;
+				result += fim::string(marked);
 			       	result +=" files\n";
 				goto ret;
 			}

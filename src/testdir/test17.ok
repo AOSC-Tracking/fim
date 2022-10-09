@@ -12,7 +12,11 @@ cleared list ok
 last list ok
 cleared list ok
 cleared list len ok
-pushdir list ok
-List/limit test: DONE.
 2.gif
 7.gif
+dumpmarked quiet -- ok
+unmarkall quiet -- ok
+TODO -- why: marked 0 files
+ ?
+pushdir list ok
+List/limit test: DONE.

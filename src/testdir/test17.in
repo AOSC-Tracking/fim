@@ -20,10 +20,12 @@ list "filesnum";
 if( _last_cmd_output != "9" ) stdout "wrong after-remove list len: "._last_cmd_output; else stdout "after-remove list len ok";
 stdout _filelistlen;
 #
+list "marked" ; # empty
 2;
 list "mark" ;
 7;
 list "mark" ;
+list "marked" ; # two
 #
 stdout _filelistlen;
 limit "!" "marked" ; # 2 and 7
@@ -53,6 +55,15 @@ if( _last_cmd_output != "" ) stdout "wrong cleared list: "._last_cmd_output; els
 #
 if( _filelistlen != 0 ) stdout "wrong cleared list len: "._filelistlen; else stdout "cleared list len ok";
 #
+#
+list "dumpmarked"; 
+if( _last_cmd_output != "" ) stdout "dumpmarked not quiet"._last_cmd_output; else stdout "dumpmarked quiet -- ok";
+list "unmarkall";
+if( _last_cmd_output != "" ) stdout "unmarkall not quiet"._last_cmd_output; else stdout "unmarkall quiet -- ok";
+list "markall";
+stdout 'TODO -- why: '._last_cmd_output.' ?';
+# TODO: also need list "unmark";
+#
 cd "..";
 list "pushdir" "numbers";
 list "sort";
@@ -63,6 +74,5 @@ stdout "List/limit test: DONE.";
 #
 # TODO: still need:
 # variables vars pushdirr random_shuffle sort_basename sort_mtime sort_fsize swap pop
-# marked unmark dumpmarked unmarkall
 #
 # marked files output list will follow
