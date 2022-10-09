@@ -7,13 +7,13 @@ The short command options of fim are: -a -b -c -C -d -E -f -F -h -k -D -S -i -m 
 "-" key is bound to command: reduce
 
 *
--h is a fim command option: -h =[=s|d|l|m], --help =[=s|d|l|m]: Print (short, descriptive, long, or complete man) program invocation help, and exit. If further arguments follow, individual help messages will be shown instead.
+-h is a fim command option: -h =[=s|d|l|m], --help =[=s|d|l|m]: print program invocation help and exit
 
 *
 The long command options of fim are: --autozoom --binary --as-text --cd-and-readdir --execute-commands --execute-commands-early --device --dump-reference-help --dump-default-fimrc --execute-script --etc-fimrc --final-commands --help --keysym-press --load-image-descriptions-file --image-descriptions-file-separator --image-from-stdin --mark-from-image-descriptions-file --mode --no-rc-file --no-etc-rc-file --no-internal-config --no-commandline --no-history-save --no-history-load --no-history --script-from-stdin --output-device --offset --text-reading --scroll --slideshow --sanity-check --no-framebuffer --vt --reverse --sort --sort-basename --sort-mtime --sort-fsize --random --random-no-seed --verbose --verbose-load --verbose-font-load --verbose-interpreter --version --autowidth --no-auto-scale --autowindow --no-stat-push --autoheight --write-scriptout --read-from-file --read-from-stdin --read-from-stdin-elds --autotop --quiet --resolution --recursive --no-pipe-load --background-recursive --load-shadow-dir --/ --// 
 
 *
---help is a fim command option: -h =[=s|d|l|m], --help =[=s|d|l|m]: Print (short, descriptive, long, or complete man) program invocation help, and exit. If further arguments follow, individual help messages will be shown instead.
+--help is a fim command option: -h =[=s|d|l|m], --help =[=s|d|l|m]: print program invocation help and exit
 
 *
 alias align autocmd autocmd_del basename bind cd clear commands color desc display dump_key_codes echo else eval exec font getenv goto help if info limit list load pan popen pread prefetch pwd quit recording redisplay reload rotate scale scroll set set_commandline_mode set_interactive_mode sleep status stdout system variables unalias unbind while window

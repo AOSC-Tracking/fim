@@ -99,7 +99,7 @@ Regard this as an easter bunny option.
 
 .TP
 .B  --cd-and-readdir
-Step into the first loaded file directory and push other files.
+Step into the first loaded directory and, then push other files.
 .TP
 .B -c {commands}, --execute-commands {commands}
 The \fBcommands\fP string will be executed before entering the interactive loop.
@@ -125,11 +125,11 @@ For example,
 .B -d {framebuffer device}, --device {framebuffer device}
 Framebuffer device to use. Default is the one your vc is mapped to (as in fbi).
 .TP
-.B  --dump-reference-help[=man].
+.B  --dump-reference-help[=man]
 Will dump to stdout the language reference help.
 .TP
 .B  --dump-default-fimrc
-The default configuration (the one hardcoded in the fim executable) is dumped on standard output and fim exits.
+The default configuration (the one hardcoded in the fim executable) is dumped to standard output and fim exits.
 .TP
 .B -E {scriptfile}, --execute-script {scriptfile}
 The \fBscriptfile\fP will be executed right after the default initialization file is executed.
@@ -142,10 +142,10 @@ Specify an alternative system wide initialization file (default: @sysconfdir@/fi
 The \fBcommands\fP string will be executed after exiting the interactive loop of the program (right before terminating the program).
 .TP
 .B -h, --help[=s|d|l|m]
-		 Print (short, descriptive, long, or complete man) program invocation help, and exit. If further arguments follow, individual help messages will be shown instead.
+Print (short, descriptive, long, or complete man) program invocation help, and exit. If further arguments follow, individual help messages will be shown instead.
 .TP
 .B -k, --keysym-press <arg>
-		 Execute simulated press of keysym at startup. Keysym can be prefixed by a repetition count number. Option can be specified multiple times to simulate multiple keystrokes.
+Execute simulated press of keysym at startup. Keysym can be prefixed by a repetition count number. This option can be specified multiple times to simulate multiple keystrokes.
 .TP
 .B -D {filename}, --load-image-descriptions-file {filename}
 Load image descriptions from {filename}. In {filename} each line is the name of an image file (its basename will be taken), then a Tab character (unless a different character is specified via --image-descriptions-file-separator), then the description text. Each description will be put in the _comment variable of the image at load time. Will override the comment eventually loaded from the file (e.g. JPEG, PNG or TIFF comment). If a '@' followed by a {var} (made by alphabetic and '_' characters) is encountered, and i:{var} is set, its value will be substituted here. If "@#" is encountered, the remainder of the description line is ignored. Special comment lines like "#!fim:var=val" will lead i:var to be assigned value val (unquoted) at image loading time (cached variable); i:var will not be assigned if var starting with underscore ('_'). Special comment lines like "#!fim:+=val" will add val to current description. Special comment lines like "#!fim:^=val" will set val to be the base of each description. Special comment lines like "#!fim:!=" will reset all cached variables. Special comment lines like "#!fim:/=dir" will prepend dir to each file's basename. Special comment lines like "#!fim:\e=dir" will prepend dir to each file's name. Special description text begins with markers:  with "#!fim:=" the last description line to be used; with "#!fim:+" what follows + will be appended to the last description line; with "#!fim:^" what follows ^ will be prepended to the last description line; with "#!fim:s/f/t" the last description line will be used, but occurrences of string f will be substituted with string t (f and t can contain anything but not a /). If val is empty that variable will be unset. These variables are stored also in an internal index used by the limit command. This option sets _caption_over_image=2, so that a caption will be displayed over the image.
@@ -241,7 +241,7 @@ Sort files list before browsing according to file size.
 Randomly shuffle the files list before browsing (seed depending on time() function).
 .TP
 .B  --random-no-seed
-Randomly shuffle the files list before browsing (no seeding).
+Pseudo-random shuffle the files list before browsing (no seeding).
 .TP
 .B -v, --verbose
 Be verbose: show status bar.
@@ -265,7 +265,7 @@ Scale the image according to the screen width.
 Do not scale the images after loading (will set '_scale_style=" "';).
 .TP
 .B  --autowindow
-Will resize the window size (if supported) to the image size. Don't use this with other image scaling options.
+Will resize the window size (if supported by the video mode) to the image size. Don't use this with other image scaling options.
 .TP
 .B  --no-stat-push
 Sets _push_checks=0 before initialization, thus disabling file/dir existence checks with stat(2) at push push time (and speeding up startup).
@@ -296,32 +296,32 @@ Specify an endline delimiter character for breaking lines read via -/--read-from
 
 .TP
 .B -A, --autotop
-		 Align images to the top border (by setting '_autotop=1' after initialization).
+Align images to the top border (by setting '_autotop=1' after initialization).
 .TP
 .B -q, --quiet
-Quiet mode. Sets _display_status=0;_display_busy=0;.
+Quiet execution mode. Sets _display_status=0;_display_busy=0;.
 
 .TP
 .B -r {width:height}, --resolution {width:height}
-		 Set resolution specification in pixels. Supported by SDL only (will be appended to --output-device argument).
+Set resolution specification in pixels. Supported by SDL only (will be appended to --output-device argument).
 .TP
-.B -R, --recursive[=arg]
-		 Push files/directories to the files list recursively. The expression in variable _pushdir_re (default: "\.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX|\.WEBP$") lists extensions of filenames which will be loaded in the list. You can overwrite its value by optionally passing an expression here as argument. If starting with '+' or '|', the expression following will be appended to it. 
+.B -R, --recursive[={exp}]
+Push files/directories to the files list recursively. The expression in variable _pushdir_re (default: "\.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX|\.WEBP$") lists extensions of filenames which will be loaded in the list. You can overwrite its value by optionally passing an expression {exp} here as argument. If starting with '+' or '|', the expression following will be appended to it. 
 .TP
 .B -X, --no-pipe-load
-		 Do not load via external converter programs. 
+Do not load via external converter programs: only use built-in file decoders.
 .TP
 .B -B, --background-recursive
-		 Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).
+Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).
 .TP
-.B  --load-shadow-dir <arg>
-		 Add a shadow directory. Then 'scale "shadow"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in the a directory. This works as intended as long as there are unique filenames.
+.B  --load-shadow-dir {dir}
+Add {dir} to the shadow directory list. Then 'scale "shadow"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in a shadow directory. This works as intended as long as unique filenames are involved.
 .TP
-.B -/, --/ <arg>
-		 After startup jump to pattern; short for -c '/'.
+.B -/ {pattern}, --/ {pattern}
+After startup jump to pattern; short for -c '/'.
 .TP
-.B  --// <arg>
-		 After startup jump to pattern; as -c '/' but with search on the full path (with _re_search_opts="f").
+.B  --// {pattern}
+After startup jump to pattern; as -c '/' but with search on the full path (with _re_search_opts="f").
 
 .SH PROGRAM RETURN STATUS
 The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error; 42 on a signal-triggered program exit;  or a different value in case of an another error.
