@@ -160,7 +160,7 @@
 #define FIM_FONT_MAGNIFY_FACTOR_MIN 1  /* Framebuffer font magnifying factor, minimal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_MAX 16 /* Framebuffer font magnifying factor, maximal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_DEFAULT ( FIM_WANT_FONT_MAGNIFY_FACTOR > 0 ? FIM_WANT_FONT_MAGNIFY_FACTOR : ( FIM_WANT_FONT_MAGNIFY_FACTOR < 0 ? -FIM_WANT_FONT_MAGNIFY_FACTOR : 1 ) ) /* Framebuffer font magnifying factor, default value. */
-#define FIM_USE_CXX11 ( FIM_USE_CXX_STD >= 2011 ) || ( __cplusplus>=201103L ) /* */
+#define FIM_USE_CXX11 ( (FIM_USE_CXX_STD >= 2011 ) || ( __cplusplus>=201103L) ) /* */
 #define FIM_USE_CXX14 ( FIM_USE_CXX_STD >= 2014 ) || ( __cplusplus> 201402L ) /* */
 #define FIM_USE_CXX17 ( FIM_USE_CXX_STD >= 2017 ) || ( __cplusplus> 201707L ) /* */
 #define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
@@ -173,7 +173,7 @@
 #define FIM_WANT_GOTO_DIR 1
 #define FIM_WANT_FBI_INNER_DIAGNOSTICS false
 #define FIM_WANT_FBI_FBDEV_DIAGNOSTICS false
-#define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* in C++11, prefer smart pointers for Image* */
+#define FIM_IMG_NAKED_PTRS (!FIM_USE_CXX11) /* from C++11 onwards, use smart pointers over Image* */
 
 /* shadow list of high-res images to jump on demand */
 #ifndef FIM_EXPERIMENTAL_SHADOW_DIRS

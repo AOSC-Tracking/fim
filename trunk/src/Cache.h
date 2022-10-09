@@ -61,6 +61,9 @@ class Cache FIM_FINAL
 	//typedef std::map<fim::ImagePtr,int >  	   cuc_t;	//image -> clones usage counter
 #endif /* FIM_USE_CXX11 */
 
+#if FIM_IMG_NAKED_PTRS
+	FIM_DEPRECATED("Please build without FIM_IMG_NAKED_PTRS (naked pointers): portions of fim code (e.g. avoiding leaks in multipage documents memory management) are not functional in the older standard.")
+#endif /* FIM_IMG_NAKED_PTRS */
 	cachels_t 	imageCache_;
 	lru_t		lru_;
 	ccachels_t	usageCounter_;
