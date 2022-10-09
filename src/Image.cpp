@@ -325,7 +325,7 @@ bool Image::fetchExifToolInfo(const fim_char_t *fname)
 			setVariable(FIM_VID_EXIF_FLIPPED,1);
 	}
 	
-static void ers(const char*value, ImagePtr image)
+static void ers(const char*value, Image * image)
 {
 		// EXIF orientation value can be of the form "X - Y", with X and Y in
 		// {top,bottom,left,right}
@@ -524,7 +524,7 @@ uhmpf:
 		if( getGlobalIntVariable(FIM_VID_DISPLAY_STATUS_BAR)||getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 			cc.browser_.display_status(cc.browser_.current().c_str()); /* FIXME: an ugly way to force the proper status display */
 		if(isSetVar("EXIF_Orientation"))
-			ers(getStringVariable("EXIF_Orientation").c_str(),ImagePtr(this));
+			ers(getStringVariable("EXIF_Orientation").c_str(),this);
 
 		FIM_PR('.');
 		retval = true;
