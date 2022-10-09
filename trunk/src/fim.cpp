@@ -354,7 +354,7 @@ struct fim_options_t fim_options[] = {
     },
 //#endif /* FIM_WANT_BACKGROUND_LOAD */
 #if FIM_EXPERIMENTAL_SHADOW_DIRS
-    {"load-shadow-dir",   required_argument,       FIM_NULL, 0x68696768,"Add a shadow directory. Then 'scale \"shadow\"' will substitute the image being displayed (just that: not the filename) with that of the first same-named file located under a shadow directory.",FIM_NULL, FIM_NULL },
+    {"load-shadow-dir",   required_argument,       FIM_NULL, 0x68696768,"Add a shadow directory. Then 'scale \"shadow\"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in the a directory. This works as intended as long as there are unique filenames.",FIM_NULL, FIM_NULL },
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
     { "/",   required_argument,       FIM_NULL, '/',"After startup jump to pattern; short for -c '" FIM_SYM_FW_SEARCH_KEY_STR "'.",FIM_NULL, FIM_NULL },
     {"//",   required_argument,       FIM_NULL, 0x2f2f0000,"After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "' but with search on the full path (with " FIM_SYM_CMD_SLSL ").",FIM_NULL, FIM_NULL },

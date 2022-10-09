@@ -316,7 +316,7 @@ Quiet mode. Sets _display_status=0;_display_busy=0;.
 		 Push files/directories to the files list recursively, in background during program execution (any sorting options will be ignored).
 .TP
 .B  --load-shadow-dir <arg>
-		 Add a shadow directory. Then 'scale "shadow"' will substitute the image being displayed (just that: not the filename) with that of the first same-named file located under a shadow directory.
+		 Add a shadow directory. Then 'scale "shadow"' will temporarily substitute the image being displayed with that of the first same-named file located under a shadow directory. Useful to browse low-res images, but still being able to quickly view the hi-res original residing in the a directory. This works as intended as long as there are unique filenames.
 .TP
 .B -/, --/ <arg>
 		 After startup jump to pattern; short for -c '/'.

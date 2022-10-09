@@ -630,7 +630,7 @@ Executes autocommands for events PreScale and PostScale.
 .B
 scale
 .fi
-scale {['+'|'-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+-*/]'|['<'|'>']}: scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b').
+scale {['+'|'-']{value}['%']|'*'{value}|'w'|'h'|'a'|'b'|'+[+-*/]'|['<'|'>']|'shadow'}: scale the image according to a scale {value} (e.g.: 0.5,40%,'w','h','a','b').
 .fi
 If given '*' and a value, will multiply the current scale by that value.
 .fi
@@ -650,7 +650,7 @@ If given '++'('+-'), will increment (decrement) the '_magnify_factor', '_reduce_
 .fi
 If given '+*'('+/'), will multiply (divide) the '_magnify_factor', '_reduce_factor' variables by '_scale_factor_multiplier'.
 .fi
-If given '<' or '>', will shrink or magnify image using nearest mipmap (cached pre-scaled version).
+If given '<' or '>', will shrink or magnify image using nearest mipmap (cached pre-scaled version). If given 'shadow' as a parameter, search a same-named file in one of the directories specified to --load-shadow-dir.
 .fi
 Executes autocommands for events PreScale and PostScale.
 .fi
