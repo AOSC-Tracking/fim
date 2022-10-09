@@ -1,5 +1,5 @@
 	
-	FIM NEWS -- history of (main) user-visible changes in FIM.
+	FIM NEWS -- history of main user-visible changes in FIM.
 
                 Version 0.6-trunk
 
@@ -21,7 +21,7 @@
  * correct configure script check for regcomp() -- could lead to false negatives.
 # (r1621)
  * Don't break build on missing 'gs'.
-# (r1616,r1659,r1660)
+# (r1616,r1659,r1660,r1667)
  * Using --load-shadow-dir <dir> adds a shadow directory (experimental).
    Then 'scale "shadow"' (bound to key '"') will substitute the current displayed image with that 
    of the first same-named file located under a shadow directory.
