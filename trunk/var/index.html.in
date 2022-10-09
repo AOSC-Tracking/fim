@@ -81,7 +81,7 @@ It has been developed with Linux in mind, but can be built to run on several Uni
 
 <br> &nbsp;<br>
 
-It is lightweight: it depends on a relatively few libraries, it displays in full screen and you control it using the keyboard.
+It is lightweight: it depends on a relatively few libraries, it can display in full screen and you control it using the keyboard.
 
 <BR>
 It is universal: it can open many file formats and it can display pictures in the following video modes:
@@ -111,24 +111,24 @@ and it is richly documented
 (see the <a href="#docs">documentation section</a>).
 <br> &nbsp;<br>
 
-Its official homepage is: <a href="HOMEPAGE">HOMEPAGE</a>
+Official FIM_ABBR homepage: <a href="HOMEPAGE">HOMEPAGE</a> (this ugly one here, yes).
 <br> &nbsp;<br>
 
-Its Savannah web page is on : <a href="HOMEPAGE">HOMEPAGE</a>
+Savannah Project web page: <a href="SVNNPAGE">SVNNPAGE</a>.
 <br> &nbsp;<br>
 
-The official mirror for stable releases is located on Savannah mirror network: <a href="MIRROR">MIRROR</a>
+Official mirror (on the Savannah mirror network): <a href="MIRROR">MIRROR</a>.
 <br> &nbsp;<br>
 
-The official mailing list is at: <a href="MAILINGLIST">MAILINGLIST</a>
+Official FIM_ABBR mailing list: <a href="MAILINGLIST">MAILINGLIST</a>.
 <br> &nbsp;<br>
 
 
-FIM_ABBR is an idea by
-Michele Martone, although inspiration has been drawn
-from other softwares as well as from certain science fiction movie scenes.
+FIM_ABBR has been realized by
+Michele Martone, with inspiration
+from other software (especially <a href="VIMPAGE">VIM_ABBR</a>) and science fiction movies.
 &nbsp;<br>
-FIM_ABBR started as a fork of the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
+FIM_ABBR started as a fork of the <a href="FBIPAGE">Fbi</a> image viewer by Gerd Hoffmann.
 <br> &nbsp;<br>
 
 If you like FIM_ABBR, consider:
@@ -762,7 +762,7 @@ SECTION(Copyright and Thanks,copyright)
 <td>
 <h5>
 COPYRIGHT_NOTICE
-and derives from the <a href="http://www.bytesex.org">Fbi</a> image viewer by Gerd Hoffmann.
+and derives from the <a href="FBIPAGE">Fbi</a> image viewer by Gerd Hoffmann.
 See the <a href="README.html">README.TXT</a> file for more licensing info.
 <tr>
 <td>
