@@ -33,7 +33,9 @@ SIG=$(TGZ).sig
 REPOSITORY=`cat $(FIMDIR)/README | grep "^Repository"|sed s/^.*\ :.//g`
 FVERSION=`cat $(FIMDIR)/VERSION`
 HOMEPAGE=$$(cat $(FIMDIR)/README | grep "^Homepage  "|sed s/^.*\ :.//g)
-NGNUPAGE=$$(cat $(FIMDIR)/README | grep "^Savannah Page  "|sed s/^.*\ :.//g)
+SVNNPAGE=$$(cat $(FIMDIR)/README | grep "^Savannah.Page"|sed s/^.*Page:.//g)
+FBIPAGE=https://www.kraxel.org/blog/linux/fbida/
+VIMPAGE=https://www.vim.org/
 PACKAGE=fim
 FIMHTMLDOCS= FIM.html fimrc.man.html fim.man.html fimgs.man.html
 PAGES= $(SITEDIR)/index.html $(FIMHTMLDOCS)
@@ -89,7 +91,9 @@ $(SITEDIR)/index.html: $(INDEXIN) $(FIMDIR)/NEWS
 	-D DATE="`date +'%d/%m/%Y'`" \
 	-D SIZE=$(SIZE) \
 	-D HOMEPAGE=$(HOMEPAGE) \
-	-D NGNUPAGE=$(NGNUPAGE) \
+	-D SVNNPAGE=$(SVNNPAGE) \
+	-D FBIPAGE=$(FBIPAGE) \
+	-D VIMPAGE=$(VIMPAGE) \
 	-D MAILINGLIST=$(MAILINGLIST) \
 	$(SRCDIR)/$(INDEXIN) \
 	 > $(SITEDIR)/index.html 
