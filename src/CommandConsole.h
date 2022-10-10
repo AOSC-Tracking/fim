@@ -410,6 +410,7 @@ class CommandConsole FIM_FINAL :
 	public:
 	void switch_if_needed(void);
 	fim::string getInfoCustom(const fim_char_t * ifsp)const;
+	fim_int show_must_go_on(void) const;
 };
 }
 

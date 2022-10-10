@@ -67,7 +67,7 @@ fim::string static indent(const int sd)
 #define FIM_EC(CMD,ARGS) /* fim::cc.execute(CMD,ARGS) */ "result" /*Var((fim_int)1)*/ /* FIXME: shall return Arg or Var or Val */
 typedef nodeType * NodeType;
 #else /* FIM_INDEPENDENT_NAMESPACE */
-#define FIM_NO_BREAK fim::cc.catchLoopBreakingCommand(0)==0
+#define FIM_NO_BREAK ( abs(fim::cc.show_must_go_on()) == 1 && ( fim::cc.catchLoopBreakingCommand(0)==0) )
 #define FIM_OPRND(P,N) ((P)->opr.op[(N)])
 #define FIM_FACC(O)  (O)->fid.f
 #define FIM_SACC(O)  (O)->scon.s

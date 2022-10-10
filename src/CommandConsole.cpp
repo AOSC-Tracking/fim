@@ -645,7 +645,7 @@ err:
 			else
 #endif /* FIM_ITERATED_COMMANDS */
 				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
-			if( show_must_go_on_ )
+			if( show_must_go_on_ > 0 )
 				FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTINTERACTIVECOMMAND);
 		}
 
@@ -901,9 +901,13 @@ ok:
 		 *	Allows user to press any key during loop.
 		 *	Loop will continue its execution, unless pressed key is exitBinding_.
 		 *	If not, and if the key is bound to some action, this action is executed.
-		 *	returns 1 if loop has to be broken.
+		 *	If loop has to be broken, returns 1 and changes show_must_go_on_ to 2.
 		 */
 		fim_key_t c;
+
+		if ( !show_must_go_on_ )
+		       	goto err;
+		show_must_go_on_ = 1;
 
 		if ( exitBinding_ == 0 )
 		       	goto err;	/* any key triggers an exit */
@@ -931,7 +935,8 @@ ok:
 		}
 		return 0;	/* no chars read  */
 err:
-		return 1;	/* loop shall be broken */
+		show_must_go_on_ = 2;
+		return 1;	/* break any enclosing loop */
 	}
 		
 #ifdef	FIM_USE_GPM
@@ -1174,6 +1179,7 @@ rlnull:
 #if FIM_WANT_BACKGROUND_LOAD
 		blt_.join();
 #endif /* FIM_WANT_BACKGROUND_LOAD */
+		show_must_go_on_ = -1; /* without this it would break loops in postExecutionCommand_ aka -F */
 		FIM_AUTOCMD_EXEC(FIM_ACM_POSTEXECUTIONCYCLE,initial);
 		return quit(return_code_);
 	}
@@ -2674,5 +2680,10 @@ strdone:
 #endif /* FIM_WANT_CUSTOM_INFO_STATUS_BAR */
 labeldone:
 	return linebuffer;
+}
+
+fim_int CommandConsole::show_must_go_on(void) const
+{
+	return show_must_go_on_;
 }
 } /* namespace fim */
