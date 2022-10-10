@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1677)
+ * Slideshow function (e.g `fim --slideshow=5 *.jpg`) now more responsive.
 # (r1662)
  * Arrow keys are now working in aalib (-o aa).
 # (r1649)
