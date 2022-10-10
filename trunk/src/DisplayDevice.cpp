@@ -126,7 +126,10 @@ ret:		return r;
 		tcsetattr (0, TCSAFLUSH, &tattr);
 		//r=read(fim_stdin_,&c,4);
 		// FIXME : read(.,.,3) is NOT portable. DANGER
-		r=read(cc.fim_stdin_,&c,1); if(r>0&&c==0x1b){rc=read(0,&c,3);if(rc)c=(0x1b)+(c<<8);/* we should do something with rc now */}
+		unsigned char uc;
+		r = read(cc.fim_stdin_,&uc,1);
+		c = uc;
+		if(r>0&&c==0x1b){rc=read(0,&c,3);if(rc)c=(0x1b)+(c<<8);/* we should do something with rc now */}
 		//we restore the previous console attributes
 		tcsetattr (0, TCSAFLUSH, &sattr);
 		if( r<=0 )
