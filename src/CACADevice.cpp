@@ -369,8 +369,28 @@
 	fim_sys_int CACADevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		/* FIXME: better make this virtual pure before writing the next Device ..  */
-		int ce = caca_wait_event(CACA_EVENT_KEY_PRESS);
-		//caca_get_event(...);
-		return ce;
+		fim_sys_int rc = 0;
+		int ce;
+
+		ce = caca_get_event(CACA_EVENT_ANY);
+
+		if (ce == CACA_EVENT_RESIZE )
+		{
+			rc = 1;
+			std::cout << "resize !" << *c <<  "\n";
+		}
+		if (ce & CACA_EVENT_QUIT )
+		{
+			rc = 1;
+			std::cout << "quit !" << "\n";
+		}
+		if (ce & CACA_EVENT_KEY_PRESS)
+		{
+			rc = 1;
+			*c = (ce & 0xffff); // CACA_EVENT_ANY in caca.h, not in caca0.h
+			//*c = (ce & CACA_EVENT_ANY);
+			std::cout << "pressed: " << *c <<  " !\n";
+		}
+		return rc;
 	}
 #endif /* FIM_WITH_CACALIB */
