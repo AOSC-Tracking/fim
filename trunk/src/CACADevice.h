@@ -2,7 +2,7 @@
 /*
  CACADevice.h : cacalib device Fim driver header file
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,13 @@
 #ifdef FIM_WITH_CACALIB
 
 #include "DisplayDevice.h"
+
+#define FIM_WANTS_CACA_VERSION 1
+#if ( FIM_WANTS_CACA_VERSION == 0 )
 #include <caca0.h>
+#else
+#include <caca.h>
+#endif
 
 #define FIM_CACALIB_FONT_HEIGHT 1
 /*  20080504 this CACA driver doesn't work yet */
@@ -35,7 +41,10 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	int XSIZ, YSIZ;
 	struct caca_bitmap *caca_bitmap;
 	fim_char_t *bitmap;
-
+#if ( FIM_WANTS_CACA_VERSION == 1 )
+	caca_canvas_t *cv_{};
+	caca_display_t *dp_{};
+#endif
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
 	CACADevice(MiniConsole& mc_):DisplayDevice(mc_){}
