@@ -2,7 +2,7 @@
 /*
  CACADevice.cpp : cacalib device Fim driver file
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -286,6 +286,9 @@
 //		ocols  = min( icols-icoff,  width());// rows and columns to draw in output buffer
 //		ocskip = width();// output columns to skip for each line
 		
+		ocskip = txt_width();// output columns to skip for each line
+
+	#if ( FIM_WANTS_CACA_VERSION == 0 )
 		caca_set_window_title("caca-fim");
 		caca_clear();
 		caca_refresh();
@@ -298,14 +301,48 @@
 
 		ocskip = width();// output columns to skip for each line
 		ocskip = width();// output columns to skip for each line
-
+#else
+		std::cout << "irows: " << irows << std::endl;
+		std::cout << "icols: " << icols << std::endl;
+		std::cout << "orows: " << orows << std::endl;
+		std::cout << "ocols: " << ocols << std::endl;
+		std::cout << "oroff: " << oroff << std::endl;
+		std::cout << "ocoff: " << oroff << std::endl;
+		std::cout << "txt_width: " << txt_width() << std::endl;
+		std::cout << "txt_height: " << txt_height() << std::endl;
+  		caca_set_color_ansi(cv_, CACA_WHITE, CACA_BLACK);
+    		struct caca_dither *dither = caca_create_dither(24, icols, irows, 3 * icols, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
+		caca_set_dither_algorithm(dither, caca_get_dither_algorithm_list(NULL)[4]);
+		caca_dither_bitmap(cv_, ocoff, oroff, txt_width(), txt_height(), dither, rgb );
+		caca_refresh_display(dp_);
+		caca_free_dither(dither);
+#endif
 		return FIM_ERR_NO_ERROR;
 	}
 
 	fim_err_t CACADevice::initialize(sym_keys_t &sym_keys)
 	{
 		int rc=0;
+#if ( FIM_WANTS_CACA_VERSION == 1 )
+		cv_ = caca_create_canvas(32, 16);
+		if(cv_ == NULL)
+		{
+			rc=1;
+			goto err;
+		}
+		dp_ = caca_create_display(cv_);
+		if(dp_ == NULL)
+		{
+			rc=1;
+			goto err;
+		}
+		caca_refresh_display(dp_);
+		caca_set_display_title(dp_,"FIM");
+		caca_get_event(dp_, CACA_EVENT_KEY_PRESS, NULL, -1);
+err:
+#endif
 
+#if ( FIM_WANTS_CACA_VERSION == 0 )
 		rc = caca_init();
 		if(rc)return rc;
 
@@ -324,24 +361,44 @@
 		caca_set_color(CACA_COLOR_RED,CACA_COLOR_BLACK);
 		caca_putstr(0,0,"What a caca!");
 		caca_refresh();
+#endif
 		return rc?FIM_ERR_GENERIC:FIM_ERR_NO_ERROR;
 	}
 
 	void CACADevice::finalize(void)
 	{
+#if ( FIM_WANTS_CACA_VERSION == 0 )
 		caca_end();
+#endif
+#if ( FIM_WANTS_CACA_VERSION == 1 )
+		caca_free_display(dp_);
+		caca_free_canvas(cv_);
+#endif
 	}
 
 	fim_coo_t CACADevice::get_chars_per_line(void)const{return txt_width();}
+#if ( FIM_WANTS_CACA_VERSION == 0 )
 	int CACADevice::txt_width(void)const { return width() ;}
 	int CACADevice::txt_height(void)const{ return width() ;}
 	int CACADevice::width(void)const { return caca_get_height();}
 	int CACADevice::height(void)const{ return caca_get_width() ;}
+#else
+	int CACADevice::txt_width(void)const { return caca_get_canvas_width(cv_) ;}
+	int CACADevice::txt_height(void)const{ return caca_get_canvas_height(cv_) ;}
+	int CACADevice::width(void)const { return caca_get_display_width(dp_);}
+	int CACADevice::height(void)const{ return caca_get_display_height(dp_) ;}
+#endif
 	fim_err_t CACADevice::status_line(const fim_char_t *msg)
 	{
+#if ( FIM_WANTS_CACA_VERSION == 0 )
 		caca_printf(0,txt_height()-1,"%s",msg);
 		caca_printf(0,0,"foooooooo");
 		caca_putstr(0,0,"foooooooo");
+#else
+  		caca_set_color_ansi(cv_, CACA_WHITE, CACA_BLACK);
+		caca_put_str(cv_, 0, txt_height()-1, msg);
+		caca_refresh_display(dp_);
+#endif
 		return FIM_ERR_NO_ERROR;
 	}
 	fim_err_t CACADevice::fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str){return FIM_ERR_NO_ERROR;}
@@ -372,8 +429,8 @@
 		fim_sys_int rc = 0;
 		int ce;
 
+#if ( FIM_WANTS_CACA_VERSION == 0 )
 		ce = caca_get_event(CACA_EVENT_ANY);
-
 		if (ce == CACA_EVENT_RESIZE )
 		{
 			rc = 1;
@@ -391,6 +448,48 @@
 			//*c = (ce & CACA_EVENT_ANY);
 			std::cout << "pressed: " << *c <<  " !\n";
 		}
+#else
+		caca_event ev;
+		ce = caca_get_event(dp_, CACA_EVENT_ANY /*CACA_EVENT_KEY_PRESS*/, &ev, -1);
+		const auto et = caca_get_event_type(&ev);
+		ce = ev.data.key.ch;
+		if ( et == CACA_EVENT_RESIZE )
+		{
+			rc = 1;
+			std::cout << "resize !" << *c <<  "\n";
+		}
+		if ( et == CACA_EVENT_QUIT )
+		{
+			rc = 1;
+			std::cout << "quit !" << *c <<  "\n";
+		}
+		if ( et == CACA_EVENT_KEY_PRESS)
+		{
+			rc = 1;
+			fim_key_t k = 0;
+			*c = (ce & CACA_EVENT_ANY);
+        		switch(caca_get_event_key_ch(&ev))
+			{
+				case (CACA_KEY_UP):        rc=1;k=FIM_KKE_UP;    break;
+				case (CACA_KEY_DOWN):      rc=1;k=FIM_KKE_DOWN;  break;
+				case (CACA_KEY_LEFT):      rc=1;k=FIM_KKE_LEFT;  break;
+				case (CACA_KEY_RIGHT):     rc=1;k=FIM_KKE_RIGHT; break;
+				case (CACA_KEY_INSERT):    rc=1;k=FIM_KKE_INSERT;  break;
+				case (CACA_KEY_HOME):      rc=1;k=FIM_KKE_HOME;  break;
+				case (CACA_KEY_END):       rc=1;k=FIM_KKE_END;  break;
+				case (CACA_KEY_PAGEUP):    rc=1;k=FIM_KKE_PAGE_UP;  break;
+				case (CACA_KEY_PAGEDOWN):  rc=1;k=FIM_KKE_PAGE_DOWN; break;
+				case (CACA_KEY_RETURN):  rc=1;k=FIM_KKE_ENTER;  break;
+				case (CACA_KEY_BACKSPACE):  rc=1;k=FIM_KKE_BACKSPACE;  break;
+				//case (CACA_KEY_F1):  k=FIM_KKE_F1; break;
+		       	}
+			if (k)
+				*c = k;
+			else
+				*c = (ce & CACA_EVENT_ANY);
+			std::cout << "pressed: " << (char)*c <<  " !\n";
+		}
+#endif
 		return rc;
 	}
 #endif /* FIM_WITH_CACALIB */
