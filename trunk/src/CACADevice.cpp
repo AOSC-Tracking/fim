@@ -288,7 +288,7 @@
 		
 		ocskip = txt_width();// output columns to skip for each line
 
-	#if ( FIM_WANTS_CACA_VERSION == 0 )
+#if ( FIM_WANTS_CACA_VERSION == 0 )
 		caca_set_window_title("caca-fim");
 		caca_clear();
 		caca_refresh();
@@ -301,7 +301,7 @@
 
 		ocskip = width();// output columns to skip for each line
 		ocskip = width();// output columns to skip for each line
-#else
+#endif
 		std::cout << "irows: " << irows << std::endl;
 		std::cout << "icols: " << icols << std::endl;
 		std::cout << "orows: " << orows << std::endl;
@@ -310,10 +310,34 @@
 		std::cout << "ocoff: " << oroff << std::endl;
 		std::cout << "txt_width: " << txt_width() << std::endl;
 		std::cout << "txt_height: " << txt_height() << std::endl;
+
+#if ( FIM_WANTS_CACA_VERSION == 1 )
+		caca_clear_canvas(cv_);
   		caca_set_color_ansi(cv_, CACA_WHITE, CACA_BLACK);
-    		struct caca_dither *dither = caca_create_dither(24, icols, irows, 3 * icols, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
+#if 1
+		if(icols<width()) { ocoff =(width() -icols+1)/2; ocols = icols-icoff; }
+		else { ocoff = 0; ocols= min(width(),icols-icoff); }
+		if(irows<height()) { oroff =(height()-irows+1)/2; orows = irows-iroff; }
+		else { oroff = 0; orows= min( height(),irows-iroff); }
+		struct caca_dither *dither = caca_create_dither(32, width(), height(), 4 * width(), 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
+		caca_set_dither_algorithm(dither, caca_get_dither_algorithm_list(NULL)[4]);
+		char * dst = (char*)fim_calloc(width()*height(),4);
+		for (int r=oroff; r < oroff+orows; ++r )
+		for (int c=ocoff; c < ocoff+ocols; ++c )
+		for (int p=0; p < 3; ++p )
+		{
+			int ir = ((r-oroff)+iroff);
+			int ic = ((c-ocoff)+icoff);
+			char sp = ((char*)rgb)[(ir*icskip + ic)*3 + p];
+			dst[(r*width() + c)*4 + p] = sp;
+		}
+		caca_dither_bitmap(cv_, 0, 0, txt_width(), txt_height(), dither, dst);
+		fim_free(dst);
+#else
+    		struct caca_dither *dither = caca_create_dither(24, icols, irows, 3 * icols , 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
 		caca_set_dither_algorithm(dither, caca_get_dither_algorithm_list(NULL)[4]);
 		caca_dither_bitmap(cv_, ocoff, oroff, txt_width(), txt_height(), dither, rgb );
+#endif
 		caca_refresh_display(dp_);
 		caca_free_dither(dither);
 #endif
@@ -323,25 +347,6 @@
 	fim_err_t CACADevice::initialize(sym_keys_t &sym_keys)
 	{
 		int rc=0;
-#if ( FIM_WANTS_CACA_VERSION == 1 )
-		cv_ = caca_create_canvas(32, 16);
-		if(cv_ == NULL)
-		{
-			rc=1;
-			goto err;
-		}
-		dp_ = caca_create_display(cv_);
-		if(dp_ == NULL)
-		{
-			rc=1;
-			goto err;
-		}
-		caca_refresh_display(dp_);
-		caca_set_display_title(dp_,"FIM");
-		caca_get_event(dp_, CACA_EVENT_KEY_PRESS, NULL, -1);
-err:
-#endif
-
 #if ( FIM_WANTS_CACA_VERSION == 0 )
 		rc = caca_init();
 		if(rc)return rc;
@@ -362,6 +367,25 @@ err:
 		caca_putstr(0,0,"What a caca!");
 		caca_refresh();
 #endif
+#if ( FIM_WANTS_CACA_VERSION == 1 )
+		cv_ = caca_create_canvas(32, 16);
+		if(cv_ == NULL)
+		{
+			rc=1;
+			goto err;
+		}
+		dp_ = caca_create_display(cv_);
+		if(dp_ == NULL)
+		{
+			rc=1;
+			goto err;
+		}
+		caca_refresh_display(dp_);
+		caca_set_display_title(dp_,"FIM");
+//		caca_get_event(dp_, CACA_EVENT_KEY_PRESS, NULL, -1);
+err:
+#endif
+
 		return rc?FIM_ERR_GENERIC:FIM_ERR_NO_ERROR;
 	}
 
@@ -382,7 +406,8 @@ err:
 	int CACADevice::txt_height(void)const{ return width() ;}
 	int CACADevice::width(void)const { return caca_get_height();}
 	int CACADevice::height(void)const{ return caca_get_width() ;}
-#else
+#endif
+#if ( FIM_WANTS_CACA_VERSION == 1 )
 	int CACADevice::txt_width(void)const { return caca_get_canvas_width(cv_) ;}
 	int CACADevice::txt_height(void)const{ return caca_get_canvas_height(cv_) ;}
 	int CACADevice::width(void)const { return caca_get_display_width(dp_);}
@@ -401,7 +426,18 @@ err:
 #endif
 		return FIM_ERR_NO_ERROR;
 	}
-	fim_err_t CACADevice::fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str){return FIM_ERR_NO_ERROR;}
+	fim_err_t CACADevice::fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str)
+	{
+#if ( FIM_WANTS_CACA_VERSION == 0 )
+		return FIM_ERR_NO_ERROR;
+#endif
+#if ( FIM_WANTS_CACA_VERSION == 1 )
+		caca_set_color_ansi(cv_, CACA_WHITE, CACA_BLACK);
+		caca_put_str(cv_, x, y, str);
+		caca_refresh_display(dp_);
+		return FIM_ERR_NO_ERROR;
+#endif
+	}
 	fim_err_t CACADevice::clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2)
 	{
 		/* FIXME : only if initialized !*/
@@ -412,7 +448,7 @@ err:
 /*
  * This is embryo code and should be used for experimental purposes only!
  */
-	fim_coo_t CACADevice::get_chars_per_column(void)const{return height();}
+	fim_coo_t CACADevice::get_chars_per_column(void)const{return txt_height();}
 	fim_coo_t CACADevice::font_height(void)const
 	{
 		return FIM_CACALIB_FONT_HEIGHT;
@@ -491,5 +527,12 @@ err:
 		}
 #endif
 		return rc;
+	}
+
+	fim_err_t CACADevice::resize(fim_coo_t w, fim_coo_t h)
+	{
+#if ( FIM_WANTS_CACA_VERSION == 1 )
+#endif
+		return FIM_ERR_NO_ERROR;
 	}
 #endif /* FIM_WITH_CACALIB */
