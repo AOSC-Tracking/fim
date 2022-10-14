@@ -66,7 +66,7 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	int initialize(sym_keys_t &sym_keys);
 	void finalize(void);
 
-	fim_coo_t get_chars_per_line(void)const;
+	fim_coo_t get_chars_per_line(void)const FIM_OVERRIDE; 
 	int txt_width(void)const;
 	int txt_height(void)const;
 	int width(void)const;
@@ -92,8 +92,8 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	virtual fim_coo_t status_line_height(void)const;
 	virtual fim_coo_t font_height(void)const;
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
+	fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE;
 };
-
 
 #endif /* FIM_WITH_CACALIB */
 #endif /* FIM_CACADEVICE_H */
