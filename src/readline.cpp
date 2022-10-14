@@ -2,7 +2,7 @@
 /*
  readline.cpp : Code dealing with the GNU readline library.
 
- (c) 2008-2015 Michele Martone
+ (c) 2008-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -407,11 +407,12 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 	        rl_event_hook=redisplay_hook;
 	        rl_pre_input_hook=redisplay_hook;
 	}
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBIMLIB2)
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_CACALIB) || defined(FIM_WITH_LIBIMLIB2)
 	//if( g_fim_output_device==FIM_DDN_INN_SDL 
 	if(g_fim_output_device.find(FIM_DDN_INN_SDL)==0
 		/* uncommenting the following may give problems; but commenting it will break X11-backed aalib input ..  */ 
 		|| g_fim_output_device==FIM_DDN_INN_AA
+		|| g_fim_output_device==FIM_DDN_INN_CACA
 		|| g_fim_output_device==FIM_DDN_INN_IL2
 	)
 	{
