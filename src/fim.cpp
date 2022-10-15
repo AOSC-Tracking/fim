@@ -40,6 +40,11 @@ namespace fim
 	/*
 	 * Globals : should be encapsulated.
 	 * */
+#if FIM_WITH_DEBUG  /* poor man's debugging mechanism */
+	size_t g_allocs_bytes{0};
+	size_t g_allocs_n{0};
+	std::map<void*,size_t> g_allocs;
+#endif
 	fim::CommandConsole cc;
 	fim_char_t *default_fbdev=FIM_NULL,*default_fbmode=FIM_NULL;
 	int default_vt=-1;
