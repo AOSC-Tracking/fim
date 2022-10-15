@@ -1412,7 +1412,7 @@ fi
 dnl ==================
 
 fim_cv_warnings=no
-AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug],[Turns on debug options (recommended for debugging)]),
+AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug],[Turns on debug options (for debugging -- developer stuff)]),
 [if test x$enableval = xyes; then
         fim_cv_debug=yes
 fi])
@@ -1427,8 +1427,7 @@ fi])
 
 if test x$GCC = xyes ; then
 	if test x$fim_cv_debug = xyes; then
-        # CXXFLAGS are resetted
-        CXXFLAGS="-g"
+        	CXXFLAGS="${CXXFLAGS} -g"
 	fi
 fi
 
@@ -1875,6 +1874,12 @@ dnl AH_TEMPLATE([FIM_USE_X11_FONTS])
 dnl AC_DEFINE([FIM_USE_X11_FONTS])
 AH_TEMPLATE([FIM_TMP_FILENAME])
 AC_DEFINE_UNQUOTED([FIM_TMP_FILENAME],"$fim_cv_tmpfile")
+AH_TEMPLATE([FIM_WITH_DEBUG])
+if test "x$fim_cv_debug" = xyes; then
+	AC_DEFINE([FIM_WITH_DEBUG])
+else
+	true;
+fi
 AH_TEMPLATE([FIM_ITERATED_COMMANDS])
 AC_DEFINE([FIM_ITERATED_COMMANDS])
 AH_TEMPLATE([FIM_SKIP_KNOWN_FILETYPES])

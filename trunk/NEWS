@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1689)
+ * configure --enable-debug is developer option now.
 # (r1679-r1688)
  * libcaca (-o caca) mode is working again, with limitations.
 # (r1677,r1678)
