@@ -36,6 +36,7 @@
 class CACADevice FIM_FINAL:public DisplayDevice 
 {
 	private:
+	fim::string dopts;
 	unsigned int r[256], g[256], b[256], a[256];
 
 	int XSIZ, YSIZ;
@@ -47,9 +48,9 @@ class CACADevice FIM_FINAL:public DisplayDevice
 #endif
 	public:
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	CACADevice(MiniConsole& mc_):DisplayDevice(mc_){}
+	CACADevice(MiniConsole& mc_, fim::string dopts_):DisplayDevice(mc_),dopts{dopts_}{}
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	CACADevice():DisplayDevice(){}
+	CACADevice(fim::string dopts_):DisplayDevice(),dopts{dopts_}{}
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 
 	fim_err_t display(

@@ -181,9 +181,11 @@ static fim_err_t fim_bench_subsystem(Benchmarkable * bo)
 			DisplayDevice *cacad=FIM_NULL;
 			cacad=new CACADevice(
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-					mc_
+					mc_,
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-					); if(cacad && cacad->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete cacad ; cacad=FIM_NULL;}
+					dopts
+					);
+			if(cacad && cacad->initialize(sym_keys_)!=FIM_ERR_NO_ERROR){delete cacad ; cacad=FIM_NULL;}
 			if(cacad && displaydevice_==FIM_NULL)
 			{
 				displaydevice_=cacad;
