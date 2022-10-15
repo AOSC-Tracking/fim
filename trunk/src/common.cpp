@@ -290,7 +290,7 @@ ret:
 				fim_byte_t *tb;
 				// if(nrb==inc) a full read. let's try again
 				// else we assume this is the last read (could not be true, of course)
-				tb=(fim_byte_t*)realloc(buf,rb+=nrb);
+				tb=(fim_byte_t*)fim_realloc(buf,rb+=nrb);
 				if(tb!=FIM_NULL)
 					buf=tb;
 				else
@@ -324,7 +324,7 @@ ret:
 				fim_char_t *tb;
 				// if(nrb==inc) a full read. let's try again
 				// else we assume this is the last read (could not be true, of course)
-				tb=(fim_char_t*)realloc(buf,rb+=nrb);
+				tb=(fim_char_t*)fim_realloc(buf,rb+=nrb);
 				if(tb!=FIM_NULL)
 					buf=tb;
 				else

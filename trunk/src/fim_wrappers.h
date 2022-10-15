@@ -25,7 +25,7 @@ namespace fim
 {
 /* symbolic wrappers for memory handling calls */
 #if FIM_WITH_DEBUG 
-#define FIM_MEMDBG_EXT_DECLS extern std::map<void*,size_t> g_allocs; extern size_t g_allocs_n; extern size_t g_allocs_bytes;
+#define FIM_MEMDBG_EXT_DECLS extern std::map<void*,size_t> g_allocs; extern ssize_t g_allocs_n; extern ssize_t g_allocs_bytes;
 #define FIM_MEMDBG_VERBOSE 0
 inline void * fim_calloc_debug(size_t x,size_t y)
 {
@@ -89,11 +89,42 @@ inline void * fim_free_debug(void * p)
 	std::free(p);
 	return p;
 }
-#define fim_free(x) fim_free_debug(x),x=0
+inline void * fim_realloc_debug(void * p, size_t sz)
+{ 
+	FIM_MEMDBG_EXT_DECLS
+	if(!p)
+		return fim_malloc(sz);
+	if(p)
+	{
+		ssize_t osz = g_allocs[p];
+		if (FIM_MEMDBG_VERBOSE)
+		{
+			std::cout << " [" << p << "] ";
+			std::cout << g_allocs_n << "/" << g_allocs_bytes;
+			std::cout << " [" << g_allocs[p] << "] ";
+			std::cout << " -> +";
+			std::cout << sz-osz;
+			std::cout << " -> ";
+		}
+		g_allocs_bytes += sz - osz;
+		g_allocs.erase(p);
+		p = realloc(p, sz);
+		g_allocs[p]=sz;
+		if (FIM_MEMDBG_VERBOSE)
+		{
+			std::cout << g_allocs_n << "/" << g_allocs_bytes;
+			std::cout << std::endl;
+		}
+	}
+	return p;
+}
+#define fim_free(x) fim_free_debug(x), x=FIM_NULL
 #define fim_stralloc(x) (fim_char_t*) fim_calloc((x),(1)) /* ensures that first char is NUL */
+#define fim_realloc(p,sz) fim_realloc_debug(p,sz)
 #else /* FIM_WITH_DEBUG */
 #define fim_calloc(x,y) std::calloc((x),(y)) /* may make this routine aligned in the future */
 #define fim_malloc(x) std::malloc(x)
+#define fim_realloc(p,sz) realloc(p,sz)
 #define fim_free(x) std::free(x), x=FIM_NULL
 #define fim_stralloc(x) (fim_char_t*) std::calloc((x),(1)) /* ensures that first char is NUL */
 #endif /* FIM_WITH_DEBUG */

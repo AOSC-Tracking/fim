@@ -328,7 +328,7 @@ rerr:
 				return FIM_ERR_NO_ERROR;
 			fim_char_t **p;
 			p=line_;
-			line_=(fim_char_t**)realloc(line_,bsize_+glines*sizeof(fim_char_t*));
+			line_=(fim_char_t**)fim_realloc(line_,bsize_+glines*sizeof(fim_char_t*));
 			if(!line_){line_=p;return FIM_ERR_GENERIC;/* no change */}
 			lsize_+=glines;
 			return FIM_ERR_NO_ERROR;
@@ -350,7 +350,7 @@ rerr:
 			int i;
 			ptrdiff_t d;
 			p=buffer_;
-			buffer_=(fim_char_t*)realloc(buffer_,(bsize_+gbuffer)*sizeof(fim_char_t));
+			buffer_=(fim_char_t*)fim_realloc(buffer_,(bsize_+gbuffer)*sizeof(fim_char_t));
 			if(!buffer_){buffer_=p;return FIM_ERR_GENERIC;/* no change */}
 			if((d=(p-buffer_))!=0)// in the case a shift is needed
 			{
