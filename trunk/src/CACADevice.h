@@ -93,6 +93,7 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	virtual fim_coo_t font_height(void)const;
 	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
 	fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE;
+	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
 };
 
 #endif /* FIM_WITH_CACALIB */
