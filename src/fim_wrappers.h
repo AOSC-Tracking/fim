@@ -2,7 +2,7 @@
 /*
  fim_wrappers.h : Some wrappers
 
- (c) 2011-2017 Michele Martone
+ (c) 2011-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,10 +24,66 @@
 namespace fim
 {
 /* symbolic wrappers for memory handling calls */
+#if FIM_WITH_DEBUG 
+#define FIM_MEMDBD_EXT_DECLS extern std::map<void*,size_t> g_allocs; extern size_t g_allocs_n; extern size_t g_allocs_bytes;
+inline void * fim_calloc_debug(size_t x,size_t y)
+{
+	FIM_MEMDBD_EXT_DECLS
+       	void *p=std::calloc((x),(y)); 
+	if (p)
+	{
+		std::cout << " [" << p << "] ";
+		std::cout << g_allocs_n << "/" << g_allocs_bytes;
+		std::cout << " [" << (x*y) << "] ";
+		std::cout << " -> ";
+		g_allocs[p] = (x*y);
+		g_allocs_n++;
+		g_allocs_bytes += (x*y);
+		std::cout << g_allocs_n << "/" << g_allocs_bytes;
+		std::cout << std::endl;
+	}
+	return p;
+}
+#define fim_calloc(x,y) fim_calloc_debug(x,y) 
+#define fim_malloc(x) fim_calloc_debug(x,1)
+inline void * fim_free_debug(void * p)
+{ 
+	FIM_MEMDBD_EXT_DECLS
+	if(!p)
+		return p;
+	if(p)
+	{
+		if (g_allocs.find(p) == g_allocs.end())
+		{
+			std::cout << " [" << p << "] ";
+			std::cout << " Freeing what never allocated ?!\n";
+			assert(0);
+		}
+		if (g_allocs_n == 0)
+		{
+			std::cout << " Freeing more than allocated ?!\n";
+		}
+		std::cout << " [" << p << "] ";
+		std::cout << g_allocs_n << "/" << g_allocs_bytes;
+		std::cout << " [" << g_allocs[p] << "] ";
+		std::cout << " -> ";
+		g_allocs_n--;
+		g_allocs_bytes -= g_allocs[p];
+		g_allocs.erase(p);
+		std::cout << g_allocs_n << "/" << g_allocs_bytes;
+		std::cout << std::endl;
+	}
+	std::free(p);
+	return p;
+}
+#define fim_free(x) fim_free_debug(x),x=0
+#define fim_stralloc(x) (fim_char_t*) fim_calloc((x),(1)) /* ensures that first char is NUL */
+#else /* FIM_WITH_DEBUG */
 #define fim_calloc(x,y) std::calloc((x),(y)) /* may make this routine aligned in the future */
-#define fim_stralloc(x) (fim_char_t*) std::calloc((x),(1)) /* ensures that first char is NUL */
 #define fim_malloc(x) std::malloc(x)
 #define fim_free(x) std::free(x), x=FIM_NULL
+#define fim_stralloc(x) (fim_char_t*) std::calloc((x),(1)) /* ensures that first char is NUL */
+#endif /* FIM_WITH_DEBUG */
 #define fim_memset(x,y,z) std::memset(x,y,z)
 #define fim_bzero(x,y) fim_memset(x,0,y) /* bzero has been made legacy by POSIX.2001 and deprecated since POSIX.2004 */
 }
