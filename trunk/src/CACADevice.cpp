@@ -248,6 +248,7 @@
 		 * shareable with FramebufferDevice would be nice, if implemented in CACADevice.
 		 * */
 		void* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
+		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;
 		if ( !rgb ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -2;
@@ -304,12 +305,14 @@
 #endif
 		std::cout << "irows: " << irows << std::endl;
 		std::cout << "icols: " << icols << std::endl;
+		std::cout << "iroff: " << iroff << std::endl;
+		std::cout << "icoff: " << icoff << std::endl;
 		std::cout << "orows: " << orows << std::endl;
 		std::cout << "ocols: " << ocols << std::endl;
 		std::cout << "oroff: " << oroff << std::endl;
-		std::cout << "ocoff: " << oroff << std::endl;
-		std::cout << "txt_width: " << txt_width() << std::endl;
-		std::cout << "txt_height: " << txt_height() << std::endl;
+		std::cout << "ocoff: " << ocoff << std::endl;
+		//std::cout << "txt_width: " << txt_width() << std::endl;
+		//std::cout << "txt_height: " << txt_height() << std::endl;
 
 #if ( FIM_WANTS_CACA_VERSION == 1 )
 		caca_clear_canvas(cv_);
@@ -322,12 +325,25 @@
 		struct caca_dither *dither = caca_create_dither(32, width(), height(), 4 * width(), 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
 		caca_set_dither_algorithm(dither, caca_get_dither_algorithm_list(NULL)[4]);
 		char * dst = (char*)fim_calloc(width()*height(),4);
+		if(!mirror && !flip)
 		for (int r=oroff; r < oroff+orows; ++r )
 		for (int c=ocoff; c < ocoff+ocols; ++c )
 		for (int p=0; p < 3; ++p )
 		{
 			int ir = ((r-oroff)+iroff);
 			int ic = ((c-ocoff)+icoff);
+			char sp = ((char*)rgb)[(ir*icskip + ic)*3 + p];
+			dst[(r*width() + c)*4 + p] = sp;
+		}
+		else
+		for (int r=oroff; r < oroff+orows; ++r )
+		for (int c=ocoff; c < ocoff+ocols; ++c )
+		for (int p=0; p < 3; ++p )
+		{
+			int ir = ((r-oroff)+iroff);
+			int ic = ((c-ocoff)+icoff);
+			if (flip) ir = irows -1 - ((r-oroff)+iroff);
+			if (mirror) ic = icols -1 - ((c-ocoff)+icoff);
 			char sp = ((char*)rgb)[(ir*icskip + ic)*3 + p];
 			dst[(r*width() + c)*4 + p] = sp;
 		}
@@ -381,7 +397,6 @@
 			goto err;
 		}
 		caca_refresh_display(dp_);
-		caca_set_display_title(dp_,"FIM");
 //		caca_get_event(dp_, CACA_EVENT_KEY_PRESS, NULL, -1);
 err:
 #endif
@@ -491,7 +506,8 @@ err:
 		ce = ev.data.key.ch;
 		if ( et == CACA_EVENT_RESIZE )
 		{
-			rc = 1;
+			rc = 0;
+			cc.resize(0,0);
 			std::cout << "resize !" << *c <<  "\n";
 		}
 		if ( et == CACA_EVENT_QUIT )
@@ -534,5 +550,9 @@ err:
 #if ( FIM_WANTS_CACA_VERSION == 1 )
 #endif
 		return FIM_ERR_NO_ERROR;
+	}
+	fim_err_t CACADevice::set_wm_caption(const fim_char_t *msg)
+	{
+		caca_set_display_title(dp_,msg);
 	}
 #endif /* FIM_WITH_CACALIB */
