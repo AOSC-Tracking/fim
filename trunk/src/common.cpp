@@ -1110,8 +1110,10 @@ fim::string fim_getcwd(void)
 #if HAVE_GET_CURRENT_DIR_NAME
 		/* default */
 		if( fim_char_t *p = get_current_dir_name() )
-			cwd=p,
-			fim_free(p);
+		{
+			cwd=p;
+			free(p);
+		}
 #else /* HAVE_GET_CURRENT_DIR_NAME */
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500
 		{
