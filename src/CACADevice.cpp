@@ -78,155 +78,6 @@
 		
 	}
 
-
-	int _matrix_copy_rgb_to_gray(
-		void* dst, void* src,	// destination gray array and source rgb array
-		int iroff,int icoff,	// row  and column  offset of the first input pixel
-		int irows,int icols,	// rows and columns in the input image
-		int icskip,		// input columns to skip for each line
-		int oroff,int ocoff,	// row  and column  offset of the first output pixel
-		int orows,int ocols,	// rows and columns drawable in the output buffer
-		int ocskip,		// output columns to skip for each line
-		int flags		// some flags :flag values in fim.h : FIXME
-	)
-	{
-		/*
-		 * This routine will be optimized, some day.
-		 * Note that it is not a member function.
-		 * TODO : optimize and generalize, in all possible ways:
-		 * 	RGBTOGRAY
-		 * 	RGBTOGRAYGRAYGRAY
-		 * 	...
-		 *
-		 * This routine copies the pixelmap starting at (iroff,icoff) in the input image
-		 * to the output buffer, starting at (oroff,ocoff).
-		 *
-		 * The last source pixel copied will be the one :
-		 * 	(min(irows-1,orows-1-oroff+iroff),min(icols-1,ocols-1-ocoff+icoff))
-		 * in the input buffer and will be written to:
-		 * 	(min(orows-1,irows-1-iroff+oroff),min(ocols-1,icols-1-icoff+ocoff))
-		 * in the output buffer.
-		 *
-		 * It assumes that both pixelmaps are stored in row major order, with row strides
-		 * of icskip (columns in the  input matrix between rows) for the  input array src,
-		 * of ocskip (columns in the output matrix between rows) for the output array dst.
-		 *
-		 * The routine needs to know the  input image rows (irows), columns (icols).
-		 * The routine needs to know the output image rows (orows), columns (ocols).
-		 *
-		 * It assumes the input pixelmap having three bytes for pixel, and the puts in the 
-		 * output buffer the corresponding single byte gray values.
-		 * */
-
-		int
-			ii,// output image row index
-			ij;// output image columns index
-
-		/* output screen variables */
-		int 
-			oi,// output image row index
-			oj;// output image columns index
-
-		int gray;
-		char *srcp;
-		int idr,idc,lor,loc;
-    		
-		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;//STILL UNUSED : FIXME
-
-		if ( !src ) return FIM_ERR_GENERIC;
-	
-		if( iroff <0 ) return -3;
-		if( icoff <0 ) return -4;
-		if( irows <=0 ) return -5;
-		if( icols <=0 ) return -6;
-		if( icskip<0 ) return -7;
-		if( oroff <0 ) return -8;
-		if( ocoff <0 ) return -9;
-		if( orows <=0 ) return -10;
-		if( ocols <=0 ) return -11;
-		if( ocskip<0 ) return -12;
-		if( flags <0 ) return -13;
-
-		if( iroff>irows ) return -3-4*100 ;
-		if( icoff>icols ) return -4-6*100;
-		if( oroff>orows ) return -8-10*100;
-		if( ocoff>ocols ) return -9-11*100;
-
-		if( icskip<icols ) return -7-6*100;
-		if( ocskip<ocols ) return -12-11*100;
-
-		/*
-		 * orows and ocols is the total number of rows and columns in the output window.
-		 * no more than orows-oroff rows and ocols-ocoff columns will be rendered, however
-		 * */
-
-//		dr=(min(irows-1,orows-1-oroff+iroff))-(min(orows-1,irows-1-iroff+oroff));
-//		dc=(min(icols-1,ocols-1-ocoff+icoff))-(min(ocols-1,icols-1-icoff+ocoff));
-
-		idr = iroff-oroff;
-		idc = icoff-ocoff;
-
-		lor = (min(orows-1,irows-1-iroff+oroff));
-		loc = (min(ocols-1,icols-1-icoff+ocoff));
-
-/*		cout << iroff << " " << icoff << " " << irows << " " << icols << " " << icskip << "\n";
-		cout << oroff << " " << ocoff << " " << orows << " " << ocols << " " << ocskip << "\n";
-		cout << idr << " " << idc << " " << "\n";
-		cout << loc << " " << lor << " " << "\n";*/
-
-		/* TODO : unroll me and optimize me :) */
-		if(!mirror && !flip)
-		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
-		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
-		{
-			ii    = oi + idr;
-			ij    = oj + idc;
-			srcp  = ((char*)src)+(3*(ii*icskip+ij));
-			gray  = (int)srcp[0];
-			gray += (int)srcp[1];
-			gray += (int)srcp[2];
-			((char*)(dst))[oi*ocskip+oj]=(char)(gray/3);
-		}
-		else
-		for(oi=oroff;FIM_LIKELY(oi<lor);++oi)
-		for(oj=ocoff;FIM_LIKELY(oj<loc);++oj)
-		{
-			/*
-			 * FIXME : these expressions () are correct, but some garbage is printed in flip mode!
-			 * therefore instead of lor-oi+1 we use lor-oi !!
-			 * DANGER
-			 * */
-			/*if(flip)  ii    = (lor-oi) + idr;
-			else      ii    = oi + idr;
-
-			if(mirror)ij    = (loc-oj) + idc;
-			else      ij    = oj + idc;
-			if(ij<0)return FIM_ERR_GENERIC;*/
-
-			ii    = oi + idr;
-			ij    = oj + idc;
-			
-			if(mirror)ij=((icols-1)-ij);
-			if( flip )ii=((irows-1)-ii);
-			srcp  = ((char*)src)+(3*(ii*icskip+ij));
-			if(mirror)ij=((icols-1)-ij);
-			if( flip )ii=((irows-1)-ii);
-
-			gray  = (int)srcp[0];
-			gray += (int)srcp[1];
-			gray += (int)srcp[2];
-			((char*)(dst))[oi*ocskip+oj]=(char)(gray/3);
-		}
-
-		return  0;
-	}
-
-//#define width() aa_imgwidth(ascii_context)
-//#define height() aa_imgheight(ascii_context)
-
-//#define width() aa_scrwidth(ascii_context)
-//#define height() aa_scrheight(ascii_context)
-
 	fim_err_t CACADevice::display(
 		//const struct ida_image *img, // source image structure
 		const void *ida_image_img, // source image structure
@@ -241,11 +92,7 @@
 	)
 	{
 		/*
-		 * TODO : generalize this routine and put in common.cpp
-		 * */
-		/*
-		 * FIXME : centering mechanisms missing here; an intermediate function
-		 * shareable with FramebufferDevice would be nice, if implemented in CACADevice.
+		 * TODO : generalize code from here and elsewhere to obtain reusable centering and copy code (with aa, fbdev).
 		 * */
 		void* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;
@@ -282,11 +129,6 @@
 		if( ocskip <  width() ) return -11-99*100;
 		if( icskip<icols ) return -6-5*100;
 
-//		I must still decide on the destiny of the following
-//		orows  = min( irows-iroff, height());
-//		ocols  = min( icols-icoff,  width());// rows and columns to draw in output buffer
-//		ocskip = width();// output columns to skip for each line
-		
 		ocskip = txt_width();// output columns to skip for each line
 
 #if ( FIM_WANTS_CACA_VERSION == 0 )
@@ -303,6 +145,7 @@
 		ocskip = width();// output columns to skip for each line
 		ocskip = width();// output columns to skip for each line
 #endif
+#if 0
 		std::cout << "irows: " << irows << std::endl;
 		std::cout << "icols: " << icols << std::endl;
 		std::cout << "iroff: " << iroff << std::endl;
@@ -311,8 +154,9 @@
 		std::cout << "ocols: " << ocols << std::endl;
 		std::cout << "oroff: " << oroff << std::endl;
 		std::cout << "ocoff: " << ocoff << std::endl;
-		//std::cout << "txt_width: " << txt_width() << std::endl;
-		//std::cout << "txt_height: " << txt_height() << std::endl;
+		std::cout << "txt_width: " << txt_width() << std::endl;
+		std::cout << "txt_height: " << txt_height() << std::endl;
+#endif
 
 #if ( FIM_WANTS_CACA_VERSION == 1 )
 		caca_clear_canvas(cv_);
@@ -397,10 +241,8 @@
 			goto err;
 		}
 		caca_refresh_display(dp_);
-//		caca_get_event(dp_, CACA_EVENT_KEY_PRESS, NULL, -1);
 err:
 #endif
-
 		return rc?FIM_ERR_GENERIC:FIM_ERR_NO_ERROR;
 	}
 
@@ -434,7 +276,8 @@ err:
 		caca_printf(0,txt_height()-1,"%s",msg);
 		caca_printf(0,0,"foooooooo");
 		caca_putstr(0,0,"foooooooo");
-#else
+#endif
+#if ( FIM_WANTS_CACA_VERSION == 1 )
   		caca_set_color_ansi(cv_, CACA_WHITE, CACA_BLACK);
 		caca_put_str(cv_, 0, txt_height()-1, msg);
 		caca_refresh_display(dp_);
@@ -499,7 +342,8 @@ err:
 			//*c = (ce & CACA_EVENT_ANY);
 			std::cout << "pressed: " << *c <<  " !\n";
 		}
-#else
+#endif
+#if ( FIM_WANTS_CACA_VERSION == 1 )
 		caca_event ev;
 		ce = caca_get_event(dp_, CACA_EVENT_ANY /*CACA_EVENT_KEY_PRESS*/, &ev, -1);
 		const auto et = caca_get_event_type(&ev);
