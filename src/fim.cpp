@@ -1874,12 +1874,15 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	#ifdef FIM_WITH_AALIB
 			g_fim_output_device=FIM_DDN_INN_AA;
 	#else /* FIM_WITH_AALIB */
+	#ifdef FIM_WITH_CACALIB
+			g_fim_output_device=FIM_DDN_INN_CACA;
+	#else /* FIM_WITH_CACALIB */
 			g_fim_output_device=FIM_DDN_INN_DUMB ;
+	#endif /* FIM_WITH_CACALIB */
 	#endif /* FIM_WITH_AALIB */
 #endif	//#ifndef FIM_WITH_NO_FRAMEBUFFER
 		}
-
-		// TODO : we still need a good output device probing mechanism
+		// TODO : need better output device probing mechanism
 
 #if FIM_WANT_R_SWITCH
 #ifdef FIM_WITH_LIBSDL
