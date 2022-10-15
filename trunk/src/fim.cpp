@@ -245,7 +245,8 @@ struct fim_options_t fim_options[] = {
 "The \\fB" "imlib2" "\\fP option requests imlib2.\n"
 //#endif /* FIM_WITH_LIBIMLIB2 */
 //#ifdef FIM_WITH_CACALIB
-"The \\fB" "caca" "\\fP option is now unmantained.\n"
+"The \\fBcaca\\fP option can be specified as \\fBcaca[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default, windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable."
+"The command line functionality in \\fB" "caca" "\\fP mode is limited.\n"
 //#endif /* FIM_WITH_CACALIB */
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,

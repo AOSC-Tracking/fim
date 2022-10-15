@@ -156,6 +156,10 @@
 	fim_err_t CACADevice::initialize(sym_keys_t &sym_keys)
 	{
 		int rc=0;
+		if(strstr(dopts,"w")!=FIM_NULL)
+			;
+		else
+			setenv(FIM_ENV_DISPLAY,"",1);
 #if ( FIM_WANTS_CACA_VERSION == 0 )
 		rc = caca_init();
 		if(rc)return rc;
