@@ -1039,7 +1039,7 @@ skip_ac:
 					set_status_bar(FIM_CNS_EMPTY_STRING,FIM_NULL);
 				}
 				if(rl)
-					fim_free(rl);
+					free(rl);
 			}
 			else
 #endif /* FIM_USE_READLINE */
@@ -1131,6 +1131,7 @@ skip_ac:
 							args.push_back(rls.str());
 							execute(FIM_FLT_GOTO,args);
 						}
+						free(rl);
 					}
 					else
 #endif /* FIM_USE_READLINE */
