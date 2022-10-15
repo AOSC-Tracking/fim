@@ -3,7 +3,7 @@
 
                 Version 0.6-trunk
 
-# (r1679,r1684)
+# (r1679,r1685)
  * libcaca (-o caca) mode is working again, with limitations.
 # (r1677,r1678)
  * Slideshow function (e.g `fim --slideshow=5 *.jpg`) now more responsive.
