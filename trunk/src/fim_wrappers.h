@@ -25,22 +25,29 @@ namespace fim
 {
 /* symbolic wrappers for memory handling calls */
 #if FIM_WITH_DEBUG 
-#define FIM_MEMDBD_EXT_DECLS extern std::map<void*,size_t> g_allocs; extern size_t g_allocs_n; extern size_t g_allocs_bytes;
+#define FIM_MEMDBG_EXT_DECLS extern std::map<void*,size_t> g_allocs; extern size_t g_allocs_n; extern size_t g_allocs_bytes;
+#define FIM_MEMDBG_VERBOSE 0
 inline void * fim_calloc_debug(size_t x,size_t y)
 {
-	FIM_MEMDBD_EXT_DECLS
+	FIM_MEMDBG_EXT_DECLS
        	void *p=std::calloc((x),(y)); 
 	if (p)
 	{
-		std::cout << " [" << p << "] ";
-		std::cout << g_allocs_n << "/" << g_allocs_bytes;
-		std::cout << " [" << (x*y) << "] ";
-		std::cout << " -> ";
+		if (FIM_MEMDBG_VERBOSE)
+		{
+			std::cout << " [" << p << "] ";
+			std::cout << g_allocs_n << "/" << g_allocs_bytes;
+			std::cout << " [" << (x*y) << "] ";
+			std::cout << " -> ";
+		}
 		g_allocs[p] = (x*y);
 		g_allocs_n++;
 		g_allocs_bytes += (x*y);
-		std::cout << g_allocs_n << "/" << g_allocs_bytes;
-		std::cout << std::endl;
+		if (FIM_MEMDBG_VERBOSE)
+		{
+			std::cout << g_allocs_n << "/" << g_allocs_bytes;
+			std::cout << std::endl;
+		}
 	}
 	return p;
 }
@@ -48,7 +55,7 @@ inline void * fim_calloc_debug(size_t x,size_t y)
 #define fim_malloc(x) fim_calloc_debug(x,1)
 inline void * fim_free_debug(void * p)
 { 
-	FIM_MEMDBD_EXT_DECLS
+	FIM_MEMDBG_EXT_DECLS
 	if(!p)
 		return p;
 	if(p)
@@ -63,15 +70,21 @@ inline void * fim_free_debug(void * p)
 		{
 			std::cout << " Freeing more than allocated ?!\n";
 		}
-		std::cout << " [" << p << "] ";
-		std::cout << g_allocs_n << "/" << g_allocs_bytes;
-		std::cout << " [" << g_allocs[p] << "] ";
-		std::cout << " -> ";
+		if (FIM_MEMDBG_VERBOSE)
+		{
+			std::cout << " [" << p << "] ";
+			std::cout << g_allocs_n << "/" << g_allocs_bytes;
+			std::cout << " [" << g_allocs[p] << "] ";
+			std::cout << " -> ";
+		}
 		g_allocs_n--;
 		g_allocs_bytes -= g_allocs[p];
 		g_allocs.erase(p);
-		std::cout << g_allocs_n << "/" << g_allocs_bytes;
-		std::cout << std::endl;
+		if (FIM_MEMDBG_VERBOSE)
+		{
+			std::cout << g_allocs_n << "/" << g_allocs_bytes;
+			std::cout << std::endl;
+		}
 	}
 	std::free(p);
 	return p;
