@@ -234,10 +234,10 @@ struct fim_options_t fim_options[] = {
     },
     {FIM_OSW_OUTPUT_DEVICE,      required_argument,       FIM_NULL, 'o',
 	"specify the desired output driver (aka graphic mode) ", FIM_DDN_VARS,
-"Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks."
+"Will use the specified \\fBdevice\\fP as fim video output device, overriding automatic checks.\n"
 "The available devices depend on the original configuration/compilation options, so you should\n"
 "get the list of available output devices issuing \\fBfim --version\\fP.\n"
-"The \\fBaa\\fP option can be specified as \\fBaa[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default, windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable."
+"The \\fBaa\\fP option can be specified as \\fBaa[" FIM_SYM_DEVOPTS_SEP_STR "{['w'|'W']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided aalib is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
 #if FIM_WANT_SDL_OPTIONS_STRING 
 "The \\fBsdl\\fP option may be specified as  \\fBsdl" FIM_SYM_DEVOPTS_SEP_STR "{['w']['m']['r']['W']['M']['R']width:height}\\fP , where \\fBwidth\\fP is and \\fBheight\\fP are integer numbers specifying the desired resolution; the " FIM_MAN_fB("'w'") " character requests windowed mode; the " FIM_MAN_fB("'m'") " character requests mouse pointer display; the " FIM_MAN_fB("'r'") " character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.\n"
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
@@ -245,8 +245,8 @@ struct fim_options_t fim_options[] = {
 "The \\fB" "imlib2" "\\fP option requests imlib2.\n"
 //#endif /* FIM_WITH_LIBIMLIB2 */
 //#ifdef FIM_WITH_CACALIB
-"The \\fBcaca\\fP option can be specified as \\fBcaca[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default, windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable."
-"The command line functionality in \\fB" "caca" "\\fP mode is limited.\n"
+"The \\fBcaca\\fP option can be specified as \\fBcaca[" FIM_SYM_DEVOPTS_SEP_STR "{['w']}]\\fP ; if supplied, " FIM_MAN_fB("'w'") " selects windowed mode, provided libcaca is running under X; by default (or with " FIM_MAN_fB("'W'") "), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.\n"
+"The command line functionality in \\fB" "caca" "\\fP and \\fB" "aa" "\\fP modes is limited.\n"
 //#endif /* FIM_WITH_CACALIB */
     },
     {"offset",      required_argument,       FIM_NULL,  0x6f66660a,
