@@ -502,7 +502,7 @@ rerr:
 		fim_free(buffer_);
 #if FIM_WITH_DEBUG 
 		{
-			FIM_MEMDBD_EXT_DECLS
+			FIM_MEMDBG_EXT_DECLS
 			if (g_allocs_n || g_allocs_bytes)
 			{
 				std::cout << " g_allocs_n: " << g_allocs_n << std::endl;
