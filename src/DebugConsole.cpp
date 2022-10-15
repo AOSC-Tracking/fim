@@ -495,5 +495,23 @@ rerr:
 			return bs;
 		}
 		fim_err_t MiniConsole::add(const fim_byte_t* cso){return add((const fim_char_t*)cso);}
+
+	MiniConsole::~MiniConsole(void)
+	{
+		fim_free(line_);
+		fim_free(buffer_);
+#if FIM_WITH_DEBUG 
+		{
+			FIM_MEMDBD_EXT_DECLS
+			if (g_allocs_n || g_allocs_bytes)
+			{
+				std::cout << " g_allocs_n: " << g_allocs_n << std::endl;
+				std::cout << " g_allocs_bytes: " << g_allocs_bytes << std::endl;
+				std::cout << " maxrss: " << fim_maxrss() << std::endl;
+			}
+			assert(g_allocs_n + g_allocs_bytes == 0);
+		}
+#endif
+	}
 }
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */

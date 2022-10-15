@@ -89,7 +89,7 @@ void fim_png_rd_cmts(void *data, png_infop info)
 		const char * s = fs.c_str();
 
 		if(!h->cmt)
-			h->cmt = (char*) calloc(strlen(s)+1,1);
+			h->cmt = (char*) fim_calloc(strlen(s)+1,1);
 		else
 		{
 			h->cmt = (char*) realloc(h->cmt,strlen(h->cmt)+strlen(s)+1);
