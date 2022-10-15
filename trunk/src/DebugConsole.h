@@ -49,7 +49,7 @@ namespace fim
 		DisplayDevice *displaydevice_;
 		public:
 		MiniConsole(CommandConsole& cc, DisplayDevice *dd, int lw=48, int r=12); /* get rid of these default numerical constants! */
-		virtual ~MiniConsole(void){}
+		virtual ~MiniConsole(void);
 		fim_err_t dump(void);	// non const due to user variables reaction
 		fim_err_t grow(void);
 		fim_err_t setRows(int nr);

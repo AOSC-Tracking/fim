@@ -2,7 +2,7 @@
 /*
  FbiStuffLoader.cpp : fbi functions for loading files, modified for fim
 
- (c) 2008-2017 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -114,12 +114,12 @@ int load_add_extra(struct ida_image_info *info, enum ida_extype type,
 {
     struct ida_extra *extra;
 
-    extra = (struct ida_extra*)malloc(sizeof(*extra));
+    extra = (struct ida_extra*)fim_malloc(sizeof(*extra));
     if (FIM_NULL == extra)
 	return -1;
     if(type==EXTRA_COMMENT) ++size;// dez's
     fim_bzero(extra,sizeof(*extra));
-    extra->data = (fim_byte_t*)malloc(size);
+    extra->data = (fim_byte_t*)fim_malloc(size);
     if (FIM_NULL == extra->data) {
 	fim_free(extra);
 	return -1;

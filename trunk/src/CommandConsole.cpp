@@ -1278,17 +1278,6 @@ rlnull:
 		if(viewport_)
 		       	delete viewport_;
 #endif /* FIM_WINDOWS */
-#if FIM_WITH_DEBUG 
-		{
-			FIM_MEMDBD_EXT_DECLS
-			if (g_allocs_n || g_allocs_bytes)
-			{
-				std::cout << " g_allocs_n: " << g_allocs_n << std::endl;
-				std::cout << " g_allocs_bytes: " << g_allocs_bytes << std::endl;
-				std::cout << " maxrss: " << fim_maxrss() << std::endl;
-			}
-		}
-#endif
 	}
 
 	fim::string CommandConsole::readStdFileDescriptor(FILE* fd, int*rp)
