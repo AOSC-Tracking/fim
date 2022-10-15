@@ -62,36 +62,36 @@ class CACADevice FIM_FINAL:public DisplayDevice
 		fim_coo_t orows,fim_coo_t ocols,// rows and columns to draw in output buffer
 		fim_coo_t ocskip,// output columns to skip for each line
 		fim_flags_t flags// some flags
-		);
-	int initialize(sym_keys_t &sym_keys);
-	void finalize(void);
+		) FIM_OVERRIDE;
+	int initialize(sym_keys_t &sym_keys) FIM_OVERRIDE;
+	void finalize(void) FIM_OVERRIDE;
 
 	fim_coo_t get_chars_per_line(void)const FIM_OVERRIDE; 
 	int txt_width(void)const;
 	int txt_height(void)const;
-	int width(void)const;
-	int height(void)const;
-	fim_err_t status_line(const fim_char_t *msg);
+	int width(void)const FIM_OVERRIDE;
+	int height(void)const FIM_OVERRIDE;
+	fim_err_t status_line(const fim_char_t *msg) FIM_OVERRIDE;
 	void status_screen(int desc,int draw_output){}
 	fim_err_t console_control(fim_cc_t code);
-	fim_bool_t handle_console_switch(void);
+	fim_bool_t handle_console_switch(void) FIM_OVERRIDE;
 	int clear_rect_(
 		void* dst,
 		int oroff,int ocoff,
 		int orows,int ocols,
 		int ocskip);
-	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2);
-	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) {/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
-	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str);
+	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_OVERRIDE;
+	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_OVERRIDE {/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
+	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_OVERRIDE;
 
-	fim_coo_t get_chars_per_column(void)const;
-	fim_bpp_t get_bpp(void)const
+	fim_coo_t get_chars_per_column(void)const FIM_OVERRIDE;
+	fim_bpp_t get_bpp(void)const FIM_OVERRIDE
 	{
 		return 1;
 	}
-	virtual fim_coo_t status_line_height(void)const;
-	virtual fim_coo_t font_height(void)const;
-	fim_sys_int get_input(fim_key_t * c, bool want_poll=false);
+	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
+	virtual fim_coo_t font_height(void)const FIM_OVERRIDE;
+	fim_sys_int get_input(fim_key_t * c, bool want_poll=false) FIM_OVERRIDE;
 	fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE;
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
 };

@@ -238,7 +238,7 @@ static int fim_post_rl_getc(int c)
 	return c;
 }
 
-#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBIMLIB2)
+#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_CACALIB) || defined(FIM_WITH_LIBIMLIB2)
 static int fim_rl_sdl_aa_getc_hook(void)
 {
 	//unsigned int c;
@@ -275,7 +275,7 @@ int fim_rl_sdl_aa_getc(FILE * fd)
 {
 	return 0;/* yes, a dummy function instead of getc() */
 }
-#endif /* defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_LIBIMLIB2) */
+#endif /* defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_CACALIB) || defined(FIM_WITH_LIBIMLIB2) */
 
 int fim_rl_getc(FILE * fd)
 {
