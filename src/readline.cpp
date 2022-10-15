@@ -408,12 +408,12 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
 	        rl_pre_input_hook=redisplay_hook;
 	}
 #if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_CACALIB) || defined(FIM_WITH_LIBIMLIB2)
-	//if( g_fim_output_device==FIM_DDN_INN_SDL 
-	if(g_fim_output_device.find(FIM_DDN_INN_SDL)==0
+	if(	false
+		|| g_fim_output_device.find(FIM_DDN_INN_SDL)==0
 		/* uncommenting the following may give problems; but commenting it will break X11-backed aalib input ..  */ 
-		|| g_fim_output_device==FIM_DDN_INN_AA
-		|| g_fim_output_device==FIM_DDN_INN_CACA
-		|| g_fim_output_device==FIM_DDN_INN_IL2
+		|| g_fim_output_device.find(FIM_DDN_INN_AA)==0
+		|| g_fim_output_device.find(FIM_DDN_INN_CACA)==0
+		|| g_fim_output_device.find(FIM_DDN_INN_IL2)==0
 	)
 	{
 		rl_getc_function=fim_rl_sdl_aa_getc;
@@ -433,15 +433,13 @@ void initialize_readline (fim_bool_t with_no_display_device, fim_bool_t wcs)
  		rl_bind_keyseq("\x14", rl_backward_char);		// left
 	}
 	#endif
-	if(
-			g_fim_output_device.find(FIM_DDN_INN_FB)==0 ||
-			g_fim_output_device.find(FIM_DDN_INN_AA)==0 ||
-			0
-	  )
+
 #if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	if(
-		       	g_fim_output_device==FIM_DDN_INN_AA
-		       	|| g_fim_output_device==FIM_DDN_INN_FB
+		       	false
+			|| g_fim_output_device.find(FIM_DDN_INN_AA)==0
+			|| g_fim_output_device.find(FIM_DDN_INN_FB)==0
+			|| g_fim_output_device.find(FIM_DDN_INN_CACA)==0
 	  )
 	{
 		fim_want_rl_cl_with_esc=0;
