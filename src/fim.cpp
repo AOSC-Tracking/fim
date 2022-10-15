@@ -41,8 +41,8 @@ namespace fim
 	 * Globals : should be encapsulated.
 	 * */
 #if FIM_WITH_DEBUG  /* poor man's debugging mechanism */
-	size_t g_allocs_bytes{0};
-	size_t g_allocs_n{0};
+	ssize_t g_allocs_bytes{0};
+	ssize_t g_allocs_n{0};
 	std::map<void*,size_t> g_allocs;
 #endif
 	fim::CommandConsole cc;

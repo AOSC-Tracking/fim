@@ -92,7 +92,7 @@ void fim_png_rd_cmts(void *data, png_infop info)
 			h->cmt = (char*) fim_calloc(strlen(s)+1,1);
 		else
 		{
-			h->cmt = (char*) realloc(h->cmt,strlen(h->cmt)+strlen(s)+1);
+			h->cmt = (char*) fim_realloc(h->cmt,strlen(h->cmt)+strlen(s)+1);
 			if(h->cmt)
 				strcat(h->cmt," ");
 		}
