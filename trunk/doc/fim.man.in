@@ -190,11 +190,14 @@ Do not load or save execution history at startup.
 Will read commands from stdin prior to entering in interactive mode.
 .TP
 .B -o [fb|sdl|aa|imlib2|caca|dumb], --output-device [fb|sdl|aa|imlib2|caca|dumb]
-Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.The available devices depend on the original configuration/compilation options, so you should
+Will use the specified \fBdevice\fP as fim video output device, overriding automatic checks.
+The available devices depend on the original configuration/compilation options, so you should
 get the list of available output devices issuing \fBfim --version\fP.
-The \fBaa\fP option can be specified as \fBaa[={['w']}]\fP ; if supplied, \fB'w'\fP selects windowed mode, provided aalib is running under X; by default, windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.The \fBsdl\fP option may be specified as  \fBsdl={['w']['m']['r']['W']['M']['R']width:height}\fP , where \fBwidth\fP is and \fBheight\fP are integer numbers specifying the desired resolution; the \fB'w'\fP character requests windowed mode; the \fB'm'\fP character requests mouse pointer display; the \fB'r'\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.
+The \fBaa\fP option can be specified as \fBaa[={['w'|'W']}]\fP ; if supplied, \fB'w'\fP selects windowed mode, provided aalib is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
+The \fBsdl\fP option may be specified as  \fBsdl={['w']['m']['r']['W']['M']['R']width:height}\fP , where \fBwidth\fP is and \fBheight\fP are integer numbers specifying the desired resolution; the \fB'w'\fP character requests windowed mode; the \fB'm'\fP character requests mouse pointer display; the \fB'r'\fP character requests support for window resize; the same letters uppercase request explicit negation of the mentioned features.
 The \fBimlib2\fP option requests imlib2.
-The \fBcaca\fP option can be specified as \fBcaca[={['w']}]\fP ; if supplied, \fB'w'\fP selects windowed mode, provided libcaca is running under X; by default, windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.The command line functionality in \fBcaca\fP mode is limited.
+The \fBcaca\fP option can be specified as \fBcaca[={['w']}]\fP ; if supplied, \fB'w'\fP selects windowed mode, provided libcaca is running under X; by default (or with \fB'W'\fP), windowed mode is being turned off internally during initialization by unsetting the DISPLAY environment variable.
+The command line functionality in \fBcaca\fP and \fBaa\fP modes is limited.
 
 .TP
 .B  --offset {bytes-offset[{:upper-offset}|{+offset-range}]}
