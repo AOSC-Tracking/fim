@@ -643,6 +643,7 @@ err:
 				it_buf=-1;
 			}
 			else
+				it_buf = -1,
 #endif /* FIM_ITERATED_COMMANDS */
 				status=execute_internal(getBoundAction(c).c_str(),FIM_X_NULL);
 			if( show_must_go_on_ > 0 )

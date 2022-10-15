@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1693)
+ * fix: pressing keys "1n1n" will not execute 'n' 11 times but twice.
 # (r1689)
  * configure --enable-debug is developer option now.
 # (r1679-r1688)
