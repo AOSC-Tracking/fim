@@ -29,55 +29,6 @@
 
 #define min(x,y) ((x)<(y)?(x):(y))
 
-	int CACADevice::clear_rect_(
-		void* dst,	// destination gray array and source rgb array
-		int oroff,int ocoff,	// row  and column  offset of the first output pixel
-		int orows,int ocols,	// rows and columns drawable in the output buffer
-		int ocskip		// output columns to skip for each line
-	)
-	{
-		/* output screen variables */
-		int 
-			oi,// output image row index
-			oj;// output image columns index
-
-		int gray;
-		int idr,idc,lor,loc;
-    		
-		if( oroff <0 ) return -8;
-		if( ocoff <0 ) return -9;
-		if( orows <=0 ) return -10;
-		if( ocols <=0 ) return -11;
-		if( ocskip<0 ) return -12;
-
-		if( oroff>orows ) return -8-10*100;
-		if( ocoff>ocols ) return -9-11*100;
-
-		if( ocskip<ocols ) return -12-11*100;
-
-		/*
-		 * orows and ocols is the total number of rows and columns in the output window.
-		 * no more than orows-oroff rows and ocols-ocoff columns will be rendered, however
-		 * */
-
-		lor = orows-1;
-		loc = ocols-1;
-
-/*		cout << iroff << " " << icoff << " " << irows << " " << icols << " " << icskip << "\n";
-		cout << oroff << " " << ocoff << " " << orows << " " << ocols << " " << ocskip << "\n";
-		cout << idr << " " << idc << " " << "\n";
-		cout << loc << " " << lor << " " << "\n";*/
-
-		/* TODO : unroll me :) */
-		for(oi=oroff;oi<lor;++oi)
-		for(oj=ocoff;oj<loc;++oj)
-		{
-			((char*)(dst))[oi*ocskip+oj]=0;
-		}
-		return  0;
-		
-	}
-
 	fim_err_t CACADevice::display(
 		//const struct ida_image *img, // source image structure
 		const void *ida_image_img, // source image structure
@@ -95,7 +46,7 @@
 		 * TODO : generalize code from here and elsewhere to obtain reusable centering and copy code (with aa, fbdev).
 		 * */
 		void* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
-		int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;
+		const int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;
 		if ( !rgb ) return FIM_ERR_GENERIC;
 	
 		if( iroff <0 ) return -2;
@@ -174,9 +125,9 @@
 		for (int c=ocoff; c < ocoff+ocols; ++c )
 		for (int p=0; p < 3; ++p )
 		{
-			int ir = ((r-oroff)+iroff);
-			int ic = ((c-ocoff)+icoff);
-			char sp = ((char*)rgb)[(ir*icskip + ic)*3 + p];
+			const int ir = ((r-oroff)+iroff);
+			const int ic = ((c-ocoff)+icoff);
+			const char sp = ((char*)rgb)[(ir*icskip + ic)*3 + p];
 			dst[(r*width() + c)*4 + p] = sp;
 		}
 		else
@@ -184,11 +135,9 @@
 		for (int c=ocoff; c < ocoff+ocols; ++c )
 		for (int p=0; p < 3; ++p )
 		{
-			int ir = ((r-oroff)+iroff);
-			int ic = ((c-ocoff)+icoff);
-			if (flip) ir = irows -1 - ((r-oroff)+iroff);
-			if (mirror) ic = icols -1 - ((c-ocoff)+icoff);
-			char sp = ((char*)rgb)[(ir*icskip + ic)*3 + p];
+			const int ir = flip  ?irows-((r-oroff)+iroff)-1: ((r-oroff)+iroff);
+			const int ic = mirror?icols-((c-ocoff)+icoff)-1:((c-ocoff)+icoff);
+			const char sp = ((char*)rgb)[(ir*icskip + ic)*3 + p];
 			dst[(r*width() + c)*4 + p] = sp;
 		}
 		caca_dither_bitmap(cv_, 0, 0, txt_width(), txt_height(), dither, dst);
@@ -320,11 +269,9 @@ err:
 	fim_sys_int CACADevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		/* FIXME: better make this virtual pure before writing the next Device ..  */
-		fim_sys_int rc = 0;
-		int ce;
-
 #if ( FIM_WANTS_CACA_VERSION == 0 )
-		ce = caca_get_event(CACA_EVENT_ANY);
+		fim_sys_int rc = 0;
+		const int ce = caca_get_event(CACA_EVENT_ANY);
 		if (ce == CACA_EVENT_RESIZE )
 		{
 			rc = 1;
@@ -344,26 +291,29 @@ err:
 		}
 #endif
 #if ( FIM_WANTS_CACA_VERSION == 1 )
+		fim_sys_int rc = 0;
 		caca_event ev;
-		ce = caca_get_event(dp_, CACA_EVENT_ANY /*CACA_EVENT_KEY_PRESS*/, &ev, -1);
+		int ce = caca_get_event(dp_, CACA_EVENT_ANY /*CACA_EVENT_KEY_PRESS*/, &ev, -1);
 		const auto et = caca_get_event_type(&ev);
 		ce = ev.data.key.ch;
 		if ( et == CACA_EVENT_RESIZE )
 		{
 			rc = 0;
 			cc.resize(0,0);
-			std::cout << "resize !" << *c <<  "\n";
 		}
+		else
 		if ( et == CACA_EVENT_QUIT )
 		{
 			rc = 1;
-			std::cout << "quit !" << *c <<  "\n";
+			*c=cc.find_keycode_for_bound_cmd(FIM_FLT_QUIT);
 		}
+		else
 		if ( et == CACA_EVENT_KEY_PRESS)
 		{
-			rc = 1;
 			fim_key_t k = 0;
+			rc = 1;
 			*c = (ce & CACA_EVENT_ANY);
+
         		switch(caca_get_event_key_ch(&ev))
 			{
 				case (CACA_KEY_UP):        rc=1;k=FIM_KKE_UP;    break;
@@ -383,7 +333,7 @@ err:
 				*c = k;
 			else
 				*c = (ce & CACA_EVENT_ANY);
-			std::cout << "pressed: " << (char)*c <<  " !\n";
+			// std::cout << "pressed: " << (char)*c <<  " !\n";
 		}
 #endif
 		return rc;
@@ -397,6 +347,9 @@ err:
 	}
 	fim_err_t CACADevice::set_wm_caption(const fim_char_t *msg)
 	{
+#if ( FIM_WANTS_CACA_VERSION == 1 )
 		caca_set_display_title(dp_,msg);
+#endif
+		return FIM_ERR_NO_ERROR;
 	}
 #endif /* FIM_WITH_CACALIB */
