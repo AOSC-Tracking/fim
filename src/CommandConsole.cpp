@@ -511,15 +511,21 @@ err:
 
 	fim_char_t * CommandConsole::command_generator (const fim_char_t *text,int state,int mask)const
 	{
-		// inefficient. should cache results and skip repeated searches.
-		args_t completions;
+		// Caching results and skip repeated searches, but ugly (uses static variables).
+		// Note: as it feeds input for readline(), it uses malloc/free, not fim_malloc/fim_free.
+		static args_t completions;
+		static size_t list_index=0;
 		aliases_t::const_iterator ai;
 		variables_t::const_iterator vi;
-		static size_t list_index=0;
 		fim_char_t nschar='\0';
+		fim_cmd_id cmd;
 
 		if(state==0)
+			completions.erase(completions.begin(),completions.end()),
 			list_index=0;
+		else
+			goto done;
+
 		while(isdigit(*text))
 			text++;	//initial  repeat match
 		if(!*text)
@@ -530,7 +536,7 @@ err:
 			nschar=text[0],
 			text+=2;
 		}
-		const fim_cmd_id cmd(text);
+		cmd = text;
 		if(mask==0 || (mask&1))
 		for(size_t i=0;i<commands_.size();++i)
 		{
@@ -567,10 +573,10 @@ err:
 #ifndef FIM_COMMAND_AUTOCOMPLETION
 		sort(completions.begin(),completions.end());
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
-		
+done:
 		if(list_index<completions.size())
 			//readline frees this string.
-			return dupstr(completions[list_index++].c_str());
+			return strdup(completions[list_index++].c_str()); // not fim's dupstr
 		return FIM_NULL;
 	}
 
@@ -870,7 +876,7 @@ ret:
 				{
 					//cout << "but found:`"<<match<<"...\n";
 					cidx=findCommandIdx(match);
-					fim_free(match);
+					free(match);
 				}
 			}
 #endif /* FIM_COMMAND_AUTOCOMPLETION */
