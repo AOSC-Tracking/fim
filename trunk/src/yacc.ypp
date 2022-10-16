@@ -105,8 +105,11 @@
 //%nonassoc UMINUS
 %left UMINUS
 //higher priority
-%type <nPtr> statement expression statement_list statements_block arguments conditional_statement if_statement loop_statement atomic_statements_block non_atomic_statements_block
+%type <nPtr> statement expression statement_list statements_block arguments conditional_statement if_statement loop_statement atomic_statements_block non_atomic_statements_block error
 // func_dec
+
+%destructor {freeNode($$);} <nPtr>
+%destructor {fim_free($$);} <sValue>
 
 %%
 
