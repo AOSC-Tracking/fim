@@ -44,7 +44,10 @@ private:
 	bool want_windowed_;
 	bool want_mouse_display_;
 	bool want_resize_;
+	SDL_Rect ** modes_;
 
+	void get_modes_list(void);
+	fim_err_t get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h);
 public:
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
