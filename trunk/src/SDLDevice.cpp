@@ -170,7 +170,8 @@ static int gx,gy;
 	opts_(opts),
 	want_windowed_(FIM_SDL_FLAGS & SDL_FULLSCREEN ? false : true),
 	want_mouse_display_(true),
-	want_resize_(true)
+	want_resize_(true),
+	modes_(FIM_NULL)
 	{
 		FontServer::fb_text_init1(fontname_,&f_);	// FIXME : move this outta here
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
@@ -509,9 +510,10 @@ static int gx,gy;
 			std::cout << "problems initializing SDL (SDL_Init)\n";
 			goto sdlerr;
 		}
+		if( const SDL_VideoInfo * bvip = SDL_GetVideoInfo() )
 		{
-			if( const SDL_VideoInfo*bvip=SDL_GetVideoInfo() )
 				bvi_=*bvip;
+				get_modes_list();
 		}
 		fim_perror(FIM_NULL);
 		
@@ -531,6 +533,9 @@ static int gx,gy;
 			}
 			fim_perror(FIM_NULL);
 		}
+
+		if ( want_windowed_ && want_width == 0 && want_height == 0 )
+			get_resolution('a',want_width,want_height);
 
 		if(resize(want_width,want_height))
 		{
@@ -1235,6 +1240,14 @@ done:
 		SDL_Flip(screen_);
 	}
 
+
+	void SDLDevice::get_modes_list(void)
+	{
+		if (!modes_)
+			if ( bvi_.vfmt )
+				modes_ = SDL_ListModes(bvi_.vfmt, SDL_HWSURFACE|SDL_FULLSCREEN);
+	}
+		
 	bool SDLDevice::allowed_resolution(fim_coo_t w, fim_coo_t h)
 	{
 		if(w==0 || h==0)
@@ -1370,4 +1383,56 @@ err:
 	}
 #endif
 
+	fim_err_t SDLDevice::get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h)
+	{
+		if ( !modes_ )
+			return FIM_ERR_GENERIC;
+
+		if( modes_ == (SDL_Rect **) -1 )
+			return FIM_ERR_GENERIC;
+
+		int i;
+		for(i=0;modes_[i];++i)
+#ifdef FIM_SDL_DEBUG
+			printf("  %d x %d\n", modes_[i]->w, modes_[i]->h);
+#else
+			;
+#endif
+		const int mc = i;
+
+		if (mc)
+		switch (spec)
+		{
+			case 'L':
+				i = 0;
+			break;
+			case 'l':
+				i = std::min ( 1, mc - 1 );
+			break;
+			case 's':
+				i = std::max ( 0, mc - 2 );
+			break;
+			case 'S':
+				i = mc - 1;
+			break;
+			default:
+			case 'a':
+				i = -1;
+				w = bvi_.current_w;
+				h = bvi_.current_h;
+				h-= bvi_.current_h / 3;
+				w-= bvi_.current_w / 3;
+			break;
+			case 'A':
+				w = bvi_.current_w;
+				h = bvi_.current_h;
+				h-= bvi_.current_h / 10;
+				i = -1;
+			break;
+		}
+		if ( i >= 0 )
+			w = modes_[i]->w,
+			h = modes_[i]->h;
+		return FIM_ERR_NO_ERROR;
+	}
 
