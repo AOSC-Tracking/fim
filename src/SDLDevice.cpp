@@ -491,6 +491,7 @@ static int gx,gy;
 		want_height=480;
 		want_width=480;
 #endif
+		setenv("SDL_VIDEO_CENTERED","1",0); 
 		if(want_windowed_)
 			want_flags&=~SDL_FULLSCREEN;
 #if FIM_SDL_WANT_RESIZE 
