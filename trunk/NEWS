@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1700)
+ * With SDL (-o sdl), center window by default.
 # (r1693)
  * fix: pressing keys "1n1n" will not execute 'n' 11 times but twice.
 # (r1689)
