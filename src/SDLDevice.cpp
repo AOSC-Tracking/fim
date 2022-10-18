@@ -2,7 +2,7 @@
 /*
  SDLDevice.cpp : sdllib device Fim driver file
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2022 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -48,6 +48,7 @@ namespace fim
 #define FIM_SDL_ALLOW_QUIT 1
 #define FIM_SDL_WANT_KEYREPEAT 1
 #define FIM_SDL_WANT_RESIZE 1
+#define FIM_SDL_WANT_PERCENTAGE 0
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 #define FIM_WANT_MOUSE_PAN 1
@@ -119,24 +120,40 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 		}
 		if(*os)
 		{
-			if(2==sscanf(os,"%d:%d",&current_w,&current_h))
-
+#if FIM_SDL_WANT_PERCENTAGE
+			if(2==sscanf(os,"%d",&current_w))
 			{
-			//	std::cout << w << " : "<< h<<"\n";
-				current_w=FIM_MAX(current_w,0);
-				current_h=FIM_MAX(current_h,0);
-				if(!allowed_resolution(current_w,current_h))
-					goto err;
+				current_w = FIM_MIN(current_w, 100);
+				current_h = current_w;
+			}
+			else
+			if(2==sscanf(os,"%d%%",&current_w))
+			{
+				current_h = current_w;
+			}
+			else
+			if(2==sscanf(os,"%d:%d%%",&current_w,&current_h))
+			{
+				current_w = FIM_MIN(current_w, 100);
+				current_h = FIM_MIN(current_h, 100);
+			}
+			else
+#endif /* FIM_SDL_WANT_PERCENTAGE */
+			if(2==sscanf(os,"%d:%d",&current_w,&current_h))
+			{
 			}
 			else
 			{
 				current_w=current_h=0;
 				std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
-				// TODO: a better invaling string message needed here
 			}
+			current_w_=FIM_MAX(current_w,0);
+			current_h_=FIM_MAX(current_h,0);
+			// std::cout << current_w << " : "<< current_h<<"\n";
+			if(!allowed_resolution(current_w,current_h))
+				goto err;
 		}
 	}
-	// commit
 	want_windowed_=want_windowed;
 	want_mouse_display_=want_mouse_display;
 #if FIM_SDL_WANT_RESIZE 
@@ -177,56 +194,12 @@ static int gx,gy;
 #if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 		fim_draw_help_map_=0;
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
-		keypress_ = 0;
 #if FIM_WANT_SDL_OPTIONS_STRING 
 		const fim_char_t*const os=opts_.c_str();
 		parse_optstring(os);
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
 		fim_bzero(&bvi_,sizeof(bvi_));
 		//current_w_=current_h_=0;
-	}
-
-	fim_err_t SDLDevice::clear_rect_(
-		void* dst,	// destination array 
-		fim_coo_t oroff,fim_coo_t ocoff,	// row  and column  offset of the first output pixel
-		fim_coo_t orows,fim_coo_t ocols,	// rows and columns drawable in the output buffer
-		fim_coo_t ocskip		// output columns to skip for each line
-	)
-	{
-		/* output screen variables */
-//		fim_coo_t 
-//			oi,// output image row index
-//			oj;// output image columns index
-
-		//fim_coo_t lor,loc;
-    		
-		if( oroff <0 )
-		       	return -8;
-		if( ocoff <0 )
-		       	return -9;
-		if( orows <=0 )
-		       	return -10;
-		if( ocols <=0 )
-		       	return -11;
-		if( ocskip<0 )
-		       	return -12;
-
-		if( oroff>orows )
-		       	return -8-10*100;
-		if( ocoff>ocols )
-		       	return -9-11*100;
-		if( ocskip<ocols )
-		       	return -12-11*100;
-
-		/*
-		 * orows and ocols is the total number of rows and columns in the output window.
-		 * no more than orows-oroff rows and ocols-ocoff columns will be rendered, however
-		 * */
-
-		//lor = orows-1;
-		//loc = ocols-1;
-		
-		return  FIM_ERR_GENERIC;
 	}
 
 	fim_err_t SDLDevice::draw_help_map(void)
@@ -482,23 +455,8 @@ static int gx,gy;
 		 *
 		 * */
 		fim_coo_t want_width=current_w_, want_height=current_h_/*, want_bpp=0*/;
-		fim_sdl_int want_flags=FIM_SDL_FLAGS;
-		fim_sdl_int delay=0,interval=0;
-		//want_flags|=SDL_NOFRAME;
 		//std::cout << want_width << " : "<< want_height<<"\n";
-#if 0
-		//want_windowed_=true;
-		want_height=480;
-		want_width=480;
-#endif
 		setenv("SDL_VIDEO_CENTERED","1",0); 
-		if(want_windowed_)
-			want_flags&=~SDL_FULLSCREEN;
-#if FIM_SDL_WANT_RESIZE 
-		if(want_resize_ && ! want_windowed_)
-			want_flags|=SDL_RESIZABLE;
-#endif /* FIM_SDL_WANT_RESIZE */
-		//want_flags|=SDL_DOUBLEBUF;
 		
 		if(!allowed_resolution(want_width,want_height))
 		{
@@ -520,9 +478,8 @@ static int gx,gy;
 		
 		if(FIM_SDL_WANT_KEYREPEAT)
 		{
-		//	std::cout<<"interval:"<<interval<<"\n"; std::cout<<"delay :"<<delay <<"\n";
-			delay=SDL_DEFAULT_REPEAT_DELAY;
-			interval=SDL_DEFAULT_REPEAT_INTERVAL;
+			fim_sdl_int delay = SDL_DEFAULT_REPEAT_DELAY, interval = SDL_DEFAULT_REPEAT_INTERVAL;
+
 			if(SDL_EnableKeyRepeat(delay,interval)<0)
 			{
 
@@ -536,7 +493,11 @@ static int gx,gy;
 		}
 
 		if ( want_windowed_ && want_width == 0 && want_height == 0 )
+#if FIM_SDL_WANT_PERCENTAGE
+			get_resolution( (( opts_.find('%') != opts_.npos ) ? '%' : 'a'),want_width,want_height);
+#else /* FIM_SDL_WANT_PERCENTAGE */
 			get_resolution('a',want_width,want_height);
+#endif /* FIM_SDL_WANT_PERCENTAGE */
 
 		if(resize(want_width,want_height))
 		{
@@ -673,7 +634,6 @@ err:
 
 	static fim_sys_int get_input_inner(fim_key_t * c, SDL_Event*eventp, fim_sys_int *keypressp, bool want_poll)
 	{
-//		fim_sys_int keypress_=0;
 		bool ctrl_on=0;
 		bool alt_on=0;
 		//bool shift_on=0;
@@ -1009,6 +969,7 @@ done:
 
 	fim_sys_int SDLDevice::get_input(fim_key_t * c, bool want_poll)
 	{
+		int keypress_ = 0;
 		fim_sys_int iv = get_input_inner(c,&event_,&keypress_,want_poll);
 		return iv;
 	}
@@ -1249,7 +1210,7 @@ done:
 				modes_ = SDL_ListModes(bvi_.vfmt, SDL_HWSURFACE|SDL_FULLSCREEN);
 	}
 		
-	bool SDLDevice::allowed_resolution(fim_coo_t w, fim_coo_t h)
+	bool SDLDevice::allowed_resolution(fim_coo_t w, fim_coo_t h) const
 	{
 		if(w==0 || h==0)
 			goto ok;
@@ -1359,7 +1320,7 @@ err:
 		return rc;
 	}
 	
-	fim_err_t SDLDevice::reset_wm_caption(void)
+	fim_err_t SDLDevice::reset_wm_caption(void)const
 	{
 		SDL_WM_SetCaption(FIM_CNS_FIM_APPTITLE,FIM_SDL_ICONPATH);
 		return FIM_ERR_NO_ERROR;
@@ -1384,7 +1345,7 @@ err:
 	}
 #endif
 
-	fim_err_t SDLDevice::get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h)
+	fim_err_t SDLDevice::get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h) const
 	{
 		if ( !modes_ )
 			return FIM_ERR_GENERIC;
@@ -1424,6 +1385,13 @@ err:
 				h-= bvi_.current_h / 3;
 				w-= bvi_.current_w / 3;
 			break;
+#if FIM_SDL_WANT_PERCENTAGE
+			case '%':
+				h = (bvi_.current_h * h) / 100;
+				w = (bvi_.current_w * w) / 100;
+				i = -1;
+			break;
+#endif /* FIM_SDL_WANT_PERCENTAGE */
 			case 'A':
 				w = bvi_.current_w;
 				h = bvi_.current_h;
