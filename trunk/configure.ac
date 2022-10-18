@@ -1418,6 +1418,11 @@ AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug],[Turns on debug options (fo
 fi])
 
 dnl ==================
+if test "x$fim_cv_debug" = xyes; then
+	AC_CHECK_PROG([HAVE_VALGRIND],[valgrind],[yes],[no])
+fi
+AM_CONDITIONAL(HAVE_VALGRIND, test x$HAVE_VALGRIND = xyes)
+dnl ==================
 
 fim_cv_warnings=no
 AC_ARG_ENABLE(warnings, AS_HELP_STRING([--enable-warnings],[Turns on compiler warnings (recommended, for debugging)]),
