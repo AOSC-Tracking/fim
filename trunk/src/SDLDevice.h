@@ -34,8 +34,6 @@ private:
 	const SDL_VideoInfo* vi_;
 	SDL_VideoInfo bvi_;
 
-	int keypress_ ;
-
 	fim_coo_t current_w_;
 	fim_coo_t current_h_;
 	fim_bpp_t Bpp_,bpp_;
@@ -47,16 +45,14 @@ private:
 	SDL_Rect ** modes_;
 
 	void get_modes_list(void);
-	fim_err_t get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h);
+	fim_err_t get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h) const;
 public:
 
 #ifndef FIM_WANT_NO_OUTPUT_CONSOLE
-	SDLDevice(MiniConsole& mc_,
+	SDLDevice(MiniConsole& mc_, fim::string opts);
 #else /* FIM_WANT_NO_OUTPUT_CONSOLE */
-	SDLDevice(
+	SDLDevice( fim::string opts);
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
-			fim::string opts
-		);
 
 	virtual fim_err_t  display(
 		const void *ida_image_img, // source image structure (struct ida_image *)(but we refuse to include header files here!)
@@ -91,8 +87,6 @@ public:
 	bool sdl_window_update(void);
 	virtual fim_coo_t status_line_height(void)const FIM_OVERRIDE;
 private:
-	fim_err_t clear_rect_( void* dst, fim_coo_t oroff,fim_coo_t ocoff,fim_coo_t  orows,fim_coo_t ocols,fim_coo_t  ocskip);
-	/* TEMPORARY */
 	inline void setpixel(SDL_Surface *screen_, fim_coo_t x, fim_coo_t y, Uint8 r, Uint8 g, Uint8 b) FIM_NOEXCEPT;
 	void status_screen_(int desc,int draw_output){ return ; }
 	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_NOEXCEPT FIM_OVERRIDE;
@@ -100,12 +94,11 @@ private:
 	fim_coo_t txt_width(void)const ;
 	fim_coo_t txt_height(void)const ;
 	virtual fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE ;
-private:
-	bool allowed_resolution(fim_coo_t w, fim_coo_t h);
+	bool allowed_resolution(fim_coo_t w, fim_coo_t h) const;
 	virtual fim_err_t reinit(const fim_char_t *rs) FIM_OVERRIDE;
 	fim_err_t parse_optstring(const fim_char_t *os);
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
-	fim_err_t reset_wm_caption(void);
+	fim_err_t reset_wm_caption(void)const;
 	fim_err_t post_wmresize(void);
 	fim_err_t draw_help_map(void);
 };
