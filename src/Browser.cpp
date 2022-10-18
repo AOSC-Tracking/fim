@@ -247,16 +247,16 @@ namespace fim
 			{
 				const auto min_vals = args.size()>1 ? FIM_MAX(std::atoi(args[1]),1) : 2;
 				fim_var_id_set ids;
-				for(const auto ns : cc.id_.vd_)
-				for(const auto ip : ns.second)
+				for(const auto & ns : cc.id_.vd_)
+				for(const auto & ip : ns.second)
 					if(ip.first.c_str()[0]!='_')
 						ids.insert(ip.first); // list unique vars
 				std::map<fim_var_id,std::pair<int,int>> vp; // id -> (vals count, files count)
 				std::map<fim_var_id,std::set<std::string>> vv; // id -> {values}
-				for(const auto id : ids)
+				for(const auto & id : ids)
 				{
 					vp[id].second=0;
-					for(const auto ns : cc.id_.vd_)
+					for(const auto & ns : cc.id_.vd_)
 					if(ns.second.isSetVar(id))
 					{
 						vp[id].second++;
@@ -272,7 +272,7 @@ namespace fim
 						result += " vals / ";
 					       	result += std::to_string(vp[id].second);
 						result += " files\n";
-						for(const auto val : vv[id])
+						for(const auto & val : vv[id])
 							result += " ",
 							result += val,
 							result += "\n";
@@ -436,7 +436,7 @@ nop:
 				const auto bn = std::string(fim_basename_of(current()));
 #if FIM_EXPERIMENTAL_SHADOW_DIRS == 1
 				fim::fle_t fn;
-				for (const auto e : hlist_)
+				for (const auto & e : hlist_)
 					if ( bn == std::string(fim_basename_of(e)) )
 					{
 						fn = e;
@@ -2341,7 +2341,7 @@ err:
 		bs += cache_.byte_size();;
 		bs += sizeof(*this);
 #if FIM_EXPERIMENTAL_SHADOW_DIRS == 1
-		for (const auto e : hlist_)
+		for (const auto & e : hlist_)
 			bs += e.capacity();
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 		/* TODO: this is incomplete ... */
