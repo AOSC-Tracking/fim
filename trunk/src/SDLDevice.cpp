@@ -48,7 +48,7 @@ namespace fim
 #define FIM_SDL_ALLOW_QUIT 1
 #define FIM_SDL_WANT_KEYREPEAT 1
 #define FIM_SDL_WANT_RESIZE 1
-#define FIM_SDL_WANT_PERCENTAGE 0
+#define FIM_SDL_WANT_PERCENTAGE 1
 #define FIM_SDL_DEBUG 1
 #undef FIM_SDL_DEBUG
 #define FIM_WANT_MOUSE_PAN 1
@@ -120,38 +120,32 @@ fim_err_t SDLDevice::parse_optstring(const fim_char_t *os)
 		}
 		if(*os)
 		{
+			if(const int si = sscanf(os,"%d:%d",&current_w,&current_h))
+			{
+				if ( si == 1)
+					current_h = current_w;
 #if FIM_SDL_WANT_PERCENTAGE
-			if(2==sscanf(os,"%d",&current_w))
-			{
-				current_w = FIM_MIN(current_w, 100);
-				current_h = current_w;
-			}
-			else
-			if(2==sscanf(os,"%d%%",&current_w))
-			{
-				current_h = current_w;
-			}
-			else
-			if(2==sscanf(os,"%d:%d%%",&current_w,&current_h))
-			{
-				current_w = FIM_MIN(current_w, 100);
-				current_h = FIM_MIN(current_h, 100);
-			}
-			else
-#endif /* FIM_SDL_WANT_PERCENTAGE */
-			if(2==sscanf(os,"%d:%d",&current_w,&current_h))
-			{
+				if ( strrchr(os,'%') && !strrchr(os,'%')[1] )
+#endif
+					current_w = FIM_MIN(current_w, 100),
+					current_h = FIM_MIN(current_h, 100);
 			}
 			else
 			{
-				current_w=current_h=0;
+				current_w = current_h = 0;
 				std::cerr << "user specification of resolution (\""<<os<<"\") wrong: it shall be in \"width:height\" format! \n";
 			}
 			current_w_=FIM_MAX(current_w,0);
 			current_h_=FIM_MAX(current_h,0);
 			// std::cout << current_w << " : "<< current_h<<"\n";
-			if(!allowed_resolution(current_w,current_h))
-				goto err;
+#if FIM_SDL_WANT_PERCENTAGE
+			if ( ! ( strrchr(os,'%') && !strrchr(os,'%')[1] ) )
+#endif
+			if(!allowed_resolution(current_w_,current_h_))
+			{
+				// std::cerr << "setting to auto detection (0:0)\n";
+				current_w = current_h = 0;
+			}
 		}
 	}
 	want_windowed_=want_windowed;
@@ -195,8 +189,7 @@ static int gx,gy;
 		fim_draw_help_map_=0;
 #endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 #if FIM_WANT_SDL_OPTIONS_STRING 
-		const fim_char_t*const os=opts_.c_str();
-		parse_optstring(os);
+		parse_optstring(opts_.c_str());
 #endif /* FIM_WANT_SDL_OPTIONS_STRING */
 		fim_bzero(&bvi_,sizeof(bvi_));
 		//current_w_=current_h_=0;
@@ -204,6 +197,7 @@ static int gx,gy;
 
 	fim_err_t SDLDevice::draw_help_map(void)
 	{
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 		if(fim_draw_help_map_==0)
 		{
 			// nothing to draw
@@ -277,6 +271,7 @@ static int gx,gy;
 				fs_putc(f_, 5*xt, 5*yt, key_char_grid[8]);
 			}
 		}
+#endif /* FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT */
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -451,58 +446,46 @@ static int gx,gy;
 
 	fim_err_t SDLDevice::initialize(sym_keys_t &sym_keys)
 	{
-		/*
-		 *
-		 * */
 		fim_coo_t want_width=current_w_, want_height=current_h_/*, want_bpp=0*/;
-		//std::cout << want_width << " : "<< want_height<<"\n";
+
 		setenv("SDL_VIDEO_CENTERED","1",0); 
 		
-		if(!allowed_resolution(want_width,want_height))
+		if (SDL_Init(SDL_INIT_VIDEO) < 0 )
 		{
-			std::cout << "requested window size ("<<want_width<<":"<<want_height<<") smaller than the smallest allowed.\n";
+			std::cerr << "problems initializing SDL (SDL_Init)\n";
 			goto sdlerr;
 		}
 
-		if (SDL_Init(SDL_INIT_VIDEO) < 0 )
-		{
-			std::cout << "problems initializing SDL (SDL_Init)\n";
-			goto sdlerr;
-		}
 		if( const SDL_VideoInfo * bvip = SDL_GetVideoInfo() )
 		{
-				bvi_=*bvip;
-				get_modes_list();
+			bvi_=*bvip;
+			get_modes_list();
 		}
 		fim_perror(FIM_NULL);
 		
 		if(FIM_SDL_WANT_KEYREPEAT)
 		{
 			fim_sdl_int delay = SDL_DEFAULT_REPEAT_DELAY, interval = SDL_DEFAULT_REPEAT_INTERVAL;
-
-			if(SDL_EnableKeyRepeat(delay,interval)<0)
-			{
-
-			}
-			else
-			{
+			if( SDL_EnableKeyRepeat(delay,interval) >= 0 )
 				SDL_GetKeyRepeat(&delay,&interval);
-		//		std::cout<<"interval:"<<interval<<"\n"; std::cout<<"delay :"<<delay <<"\n";
-			}
 			fim_perror(FIM_NULL);
 		}
 
-		if ( want_windowed_ && want_width == 0 && want_height == 0 )
+		if ( want_windowed_ )
+		{
 #if FIM_SDL_WANT_PERCENTAGE
-			get_resolution( (( opts_.find('%') != opts_.npos ) ? '%' : 'a'),want_width,want_height);
-#else /* FIM_SDL_WANT_PERCENTAGE */
-			get_resolution('a',want_width,want_height);
-#endif /* FIM_SDL_WANT_PERCENTAGE */
+			const bool pcnt = opts_.find('%') != opts_.npos ? true : false;
+#else
+			const bool pcnt = false;
+#endif
+		       	if ( ( want_width == 0 && want_height == 0 ) || pcnt )
+				get_resolution( ( pcnt ? '%' : 'a'), want_width, want_height);
+		}
 
 		if(resize(want_width,want_height))
 		{
-			std::cout << "problems initializing SDL (SDL_SetVideoMode)\n";
-			SDL_Quit();
+			std::cerr << "problems initializing SDL (SDL_SetVideoMode)\n";
+			finalize();
 			goto err;
 		}
 		fim_perror(FIM_NULL);
@@ -555,8 +538,9 @@ err:
 
 	void SDLDevice::finalize(void)
 	{
+		if ( ! finalized_ )
+			SDL_Quit();
 		finalized_=true;
-		SDL_Quit();
 	}
 
 	fim_coo_t SDLDevice::get_chars_per_column(void)const
@@ -725,7 +709,9 @@ err:
 							FIM_SDL_INPUT_DEBUG(c,"right shift");
 						if( event.key.keysym.sym==SDLK_MENU )
 						{
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 							flip_draw_help_map_tmp(true);
+#endif
 							FIM_SDL_INPUT_DEBUG(c,"menu");
 						}
 						if( event.key.keysym.sym==SDLK_LSUPER )
@@ -963,7 +949,9 @@ err:
 		}
 done:
 		FIM_SDL_INPUT_DEBUG(c,"no key");
+#if FIM_WANT_SDL_PROOF_OF_CONCEPT_MOUSE_SUPPORT
 		flip_draw_help_map_tmp(false);
+#endif
 		return 0;
 	}
 
@@ -1215,9 +1203,16 @@ done:
 		if(w==0 || h==0)
 			goto ok;
 		if(w<FIM_SDL_MINWIDTH || h<FIM_SDL_MINHEIGHT)
-			return false;
+			if ( ! want_windowed_ )
+			{
+				std::cerr << "requested window size ("<< w <<":"<< h <<") too small for fullscreen...\n";
+				return false;
+			}
 		if(w<f_->swidth() || h<f_->sheight())
+		{
+			std::cerr << "requested window size ("<< w <<":"<< h <<") smaller than font size...\n";
 			return false;
+		}
 ok:
 		return true;
 	}
@@ -1279,7 +1274,7 @@ ok:
 			reset_wm_caption();
 		if(!sdl_window_update())
 		{
-			std::cout << "problems initializing SDL (SDL_GetVideoInfo)\n";
+			std::cerr << "problems initializing SDL (SDL_GetVideoInfo)\n";
 			return FIM_ERR_GENERIC;
 		}
 
@@ -1290,16 +1285,17 @@ ok:
 	fim_err_t SDLDevice::reinit(const fim_char_t *rs)
 	{
 #if FIM_SDL_WANT_RESIZE 
+		if ( parse_optstring(rs) == FIM_ERR_NO_ERROR )
+		{
+			if ( cc.resize(current_w_,current_h_) == FIM_ERR_NO_ERROR )
+			{
+				opts_ = rs;
+				return FIM_ERR_NO_ERROR;
+			}
+		}
 #else
 		cout << "reinit not allowed\n";
-		goto err;
 #endif
-		// FIXME: a wrong command string shall be ignored!
-		if(parse_optstring(rs)!=FIM_ERR_NO_ERROR)
-			goto err;
-		return cc.resize(current_w_,current_h_);
-	err:
-		//std::cerr<<"problems!\n";
 		return FIM_ERR_GENERIC;
 	}
 
@@ -1307,16 +1303,13 @@ ok:
 	{
 		fim_err_t rc=FIM_ERR_NO_ERROR;
 #if FIM_WANT_CAPTION_CONTROL
-		if((!msg) || (!want_windowed_))
-		{
+		if( msg && want_windowed_ )
+			SDL_WM_SetCaption(msg,FIM_SDL_ICONPATH);
+		else
 		       	rc=FIM_ERR_UNSUPPORTED;
-		       	goto err;
-		}
-		SDL_WM_SetCaption(msg,FIM_SDL_ICONPATH);
 #else
 		rc=FIM_ERR_UNSUPPORTED;
 #endif
-err:
 		return rc;
 	}
 	

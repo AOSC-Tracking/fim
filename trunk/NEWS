@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1705)
+ * With SDL one can specify window size as percentage of allowed size (-o sdl=w55%).
 # (r1700)
  * With SDL (-o sdl), center window by default.
 # (r1693)
