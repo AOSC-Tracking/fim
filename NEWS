@@ -3,8 +3,8 @@
 
                 Version 0.6-trunk
 
-# (r1709)
- * Note: Slideshow function (e.g. `fim --slideshow=5 media/`) switch goes through the files list once, instead of cycling forever as in fbi.
+# (r1709,1710)
+ * Fix: Slideshow function (e.g. `fim --slideshow=5 media/`) will now cycle forever, unless --once/-1 option specified (as in fbi).
 # (r1707)
  * Fix: after 'quit' no command shall execute anymore (unless in -F).
 # (r1705)
