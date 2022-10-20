@@ -3,9 +3,9 @@
 
                 Version 0.6-trunk
 
-# (r1709,1710)
+# (r1709,r1710)
  * Fix: Slideshow function (e.g. `fim --slideshow=5 media/`) will now cycle forever, unless --once/-1 option specified (as in fbi).
-# (r1707)
+# (r1707,r1711)
  * Fix: after 'quit' no command shall execute anymore (unless in -F).
 # (r1705)
  * With SDL one can specify window size as percentage of allowed size (-o sdl=w55%).

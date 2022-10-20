@@ -186,7 +186,7 @@ Var ex(NodeType p)
 	if (!p)
 		goto ret;
 
-	if (abs(fim::cc.show_must_go_on()) == 1)
+	if (abs(fim::cc.show_must_go_on()) != 0)
 	switch(FIM_OPRNDT(p))
 	{
 		case intCon:
@@ -226,6 +226,7 @@ Var ex(NodeType p)
 			case WHILE:
 				DBG("Begin While\n");
 				++sd;
+				fim::cc.catchLoopBreakingCommand(0);
 				while(ex(FIM_OPRND(p,0)).getInt() && FIM_NO_BREAK )
 					ex(FIM_OPRND(p,1));
 				--sd;
@@ -315,6 +316,7 @@ Var ex(NodeType p)
 				++sd;
 				if(times<0)
 					goto err;
+				fim::cc.catchLoopBreakingCommand(0);
 				for (fim_int i=0;i<times && FIM_NO_BREAK ;++i)
 					ex(FIM_OPRND(p,0));
 				--sd;
