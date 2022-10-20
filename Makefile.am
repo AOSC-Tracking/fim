@@ -82,9 +82,14 @@ tests:	all
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
 	ulimit -t 1000 || true
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 0; quit 1;' -F 'quit 2; quit 3' || test "$$?" = 2
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 0; quit 1;' -F 'quit 2; quit 3'; test "$$?" = 2
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -C 'quit 0; quit 1;'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 0; quit 1;'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 3'; test "$$?" = 3
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 2' -F 'quit 0; quit 1;'
+	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c "quit $$r" || test $$? = $$r ; done ;
+	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -C "quit $$r" || test $$? = $$r ; done ;
+	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' -F "quit $$r" || test $$? = $$r ; done ;
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep gif
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep png
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
