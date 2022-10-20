@@ -186,6 +186,7 @@ Var ex(NodeType p)
 	if (!p)
 		goto ret;
 
+	if (abs(fim::cc.show_must_go_on()) == 1)
 	switch(FIM_OPRNDT(p))
 	{
 		case intCon:
