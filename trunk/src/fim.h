@@ -697,6 +697,7 @@ namespace fim
 #define FIM_VID_AUTOTOP				"_autotop"		/* "[in,g:] if 1, will align to the top freshly loaded images." */
 #define FIM_VID_SCALE_STYLE			"_scale_style"		/* "[in,g:] if non empty, this string will be fed to the " FIM_VID_SCALE " command; see its documentation for possible values." */
 #define FIM_VID_FILEINDEX			"_fileindex"		/* "[out,g:] the current image numeric index." */
+#define FIM_VID_LOOP_ONCE			"_loop_only_once"	/* "[internal,g:] if 1 and doing a --slideshow, do it once." */
 #define FIM_VID_LASTFILEINDEX			"_lastfileindex"	/* "[out,g:] the last visited image numeric index. Useful for jumping back and forth easily between two images with 'goto _lastfileindex'." */
 #define FIM_VID_LASTGOTODIRECTION			"_lastgotodirection"	/* "[out,g:] the last file goto direction (either string '+1' or string '-1')." */
 #define FIM_VID_FILELISTLEN			"_filelistlen"		/* "[out,g:] current image list length (number of visible images)." */
@@ -1086,7 +1087,7 @@ namespace fim
 #define FIM_FLT_HELP_DISPLAY FIM_FLT_DISPLAY " ['reinit' {string}]|'resize' {w} {h}]: display the current file contents." FIM_CNS_CMDSEP "If 'reinit' switch is supplied, the '{string}' specifier will be used to reinitialize (e.g.: change resolution, window system options) the display device." FIM_CNS_CMDSEP "See documentation for the --" FIM_OSW_OUTPUT_DEVICE " command line switch for allowed values of {string}." FIM_CNS_CMDSEP "If 'resize' and no argument, will ask the window manager to size the window like the image." FIM_CNS_CMDSEP "If 'resize' and two arguments, these will be used as width and height of window, to set."
 
 /*  */
-#define FIM_CNS_SLIDESHOW_CMD FIM_FLT_RELOAD "; i:fresh=1; while(" FIM_VID_FILEINDEX "<" FIM_VID_FILELISTLEN "){sleep " FIM_VID_WANT_SLEEPS "; next;}"
+#define FIM_CNS_SLIDESHOW_CMD FIM_FLT_RELOAD "; i:fresh=1; while(" FIM_VID_FILEINDEX "<=" FIM_VID_FILELISTLEN "-" FIM_VID_LOOP_ONCE "){sleep " FIM_VID_WANT_SLEEPS "; next;} sleep " FIM_VID_WANT_SLEEPS "; "
 #define FIM_CNS_QUIET_CMD FIM_VID_DISPLAY_STATUS "=0;" FIM_VID_DISPLAY_BUSY "=0;"
 
 /*

@@ -282,7 +282,7 @@ struct fim_options_t fim_options[] = {
 	"Implemented by executing " FIM_CNS_SLIDESHOW_CMD " as a first command. "
 	"Can be interrupted by " FIM_KBD_COLON " or " FIM_KBD_ESC ". "
 	"The other keys will execute accordingly to their function but will not interrupt the slideshow. "
-	"Differently than in fbi, this will cycle once"
+	"Like in fbi, this will cycle forever, unless --once is specified."
     },
     {"sanity-check",      no_argument,       FIM_NULL, 0x70617363,
 	"only perform a sanity check", FIM_NULL, /* Was -S until r1001 */
@@ -461,7 +461,9 @@ struct fim_options_t fim_options[] = {
 	    "jump to file path matching pattern","{pattern}","After startup jump to pattern; as -c '" FIM_SYM_FW_SEARCH_KEY_STR "' but with search on the full path (with " FIM_SYM_CMD_SLSL ")."
     },
 /*    {"timeout",    required_argument, FIM_NULL, 't',"",FIM_NULL},*/  /* timeout value */	/* fbi's */
-/*    {"once",       no_argument,       FIM_NULL, '1',"",FIM_NULL},*/  /* loop only once */
+    {"once",       no_argument,       FIM_NULL, '1',
+	    "if running --slideshow, loop only once", FIM_NULL,
+	    "If running --slideshow, loop only once (s in fbi)." },  /* loop only once */ /* fbi's and fim's */
 /*    {"font",       required_argument, FIM_NULL, 'f',"",FIM_NULL},*/  /* font */
 /*    {"edit",       no_argument,       FIM_NULL, 'e',"",FIM_NULL},*/  /* enable editing */	/* fbi's */
 /*    {"list",       required_argument, FIM_NULL, 'l',"",FIM_NULL},*/
@@ -1221,7 +1223,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		}
 
 	    	for (;;) {
-		    c = getopt_long(argc, argv, "C:HAb::wc:uvah::PqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:L:B"
+		    c = getopt_long(argc, argv, "1C:HAb::wc:uvah::PqVr:m:d:g:s:T:E:f:D:NhF:tfipW:o:S:L:B"
 #if FIM_WANT_RECURSE_FILTER_OPTION
 	   	"R::"
 #else /* FIM_WANT_RECURSE_FILTER_OPTION */
@@ -1241,11 +1243,11 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 	/*	case 0:
 		    // long option, nothing to do
 		    break;*/
-	//	case '1':
+		case '1':
 		    //fbi's
+		    cc.setVariable(FIM_VID_LOOP_ONCE,1);
 	//	    FIM_FPRINTF(stderr, "sorry, this feature will be implemented soon\n");
-	//	    once = 1;
-	//	    break;
+		    break;
 		case 'a':
 		    //fbi's
 		    //cc.setVariable(FIM_VID_AUTOTOP,1);

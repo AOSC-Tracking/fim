@@ -1103,6 +1103,11 @@ _loading_in_background
 .fi
 .na
 .B
+_loop_only_once
+[internal,g:] if 1 and doing a --slideshow, do it once.
+.fi
+.na
+.B
 _lwidth
 [in,g:] if>0, will force the output console text width.
 .fi

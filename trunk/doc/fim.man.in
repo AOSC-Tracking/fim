@@ -210,7 +210,7 @@ Enable textreading mode.  This has the effect that fim will display images scale
 Set scroll steps for internal variable _steps (default is 20%).
 .TP
 .B  --slideshow {number}
-Interruptible slideshow mode. Wait for {number} of seconds (assigned to the _want_sleep_seconds variable) after each image. Implemented by executing reload; i:fresh=1; while(_fileindex<_filelistlen){sleep _want_sleep_seconds; next;} as a first command. Can be interrupted by : or Esc. The other keys will execute accordingly to their function but will not interrupt the slideshow. Differently than in fbi, this will cycle once
+Interruptible slideshow mode. Wait for {number} of seconds (assigned to the _want_sleep_seconds variable) after each image. Implemented by executing reload; i:fresh=1; while(_fileindex<=_filelistlen-_loop_only_once){sleep _want_sleep_seconds; next;} sleep _want_sleep_seconds;  as a first command. Can be interrupted by : or Esc. The other keys will execute accordingly to their function but will not interrupt the slideshow. Like in fbi, this will cycle forever, unless --once is specified.
 .TP
 .B  --sanity-check
 Perform a quick sanity check, just after the initialization, and terminate.
@@ -325,6 +325,9 @@ After startup jump to pattern; short for -c '/'.
 .TP
 .B  --// {pattern}
 After startup jump to pattern; as -c '/' but with search on the full path (with _re_search_opts="f").
+.TP
+.B -1, --once
+If running --slideshow, loop only once (s in fbi).
 
 .SH PROGRAM RETURN STATUS
 The program return status is 0 on correct operation; 252 on unsupported device specification; 248 on bad input; 255 on a generic error; 42 on a signal-triggered program exit;  or a different value in case of an another error.
