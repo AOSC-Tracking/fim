@@ -281,7 +281,8 @@ struct fim_options_t fim_options[] = {
 	"Wait for " FIM_CNS_EX_NUM_STRING " of seconds (assigned to the " FIM_VID_WANT_SLEEPS " variable) after each image. "
 	"Implemented by executing " FIM_CNS_SLIDESHOW_CMD " as a first command. "
 	"Can be interrupted by " FIM_KBD_COLON " or " FIM_KBD_ESC ". "
-	"The other keys will execute accordingly to their function but will not interrupt the slideshow."
+	"The other keys will execute accordingly to their function but will not interrupt the slideshow. "
+	"Differently than in fbi, this will cycle once"
     },
     {"sanity-check",      no_argument,       FIM_NULL, 0x70617363,
 	"only perform a sanity check", FIM_NULL, /* Was -S until r1001 */
