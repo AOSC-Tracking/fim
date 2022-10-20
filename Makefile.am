@@ -82,8 +82,9 @@ tests:	all
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
 	ulimit -t 1000 || true
-	@test `$(FIM_EXE) $(FIMNORCOPTS) --help=s | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=d | wc -c`
-	@test `$(FIM_EXE) $(FIMNORCOPTS) --help=d | wc -c` -lt `$(FIM_EXE) $(FIMNORCOPTS) --help=m | wc -c`
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 0; quit 1;' -F 'quit 2; quit 3' || test "$$?" = 2
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -C 'quit 0; quit 1;'
+	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 0; quit 1;'
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep gif
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep png
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
