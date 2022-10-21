@@ -1137,6 +1137,7 @@ if test x$fim_handle_sdl != xno; then
                 AC_DEFINE(FIM_WITH_LIBSDL, 1, [Defined, if libsdl support is enabled])
         fi
 fi
+AM_CONDITIONAL(ENABLE_SDL, test x$fim_handle_sdl = xyes)
 
 dnl ================================================================================
 
