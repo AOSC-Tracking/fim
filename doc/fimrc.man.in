@@ -1558,7 +1558,7 @@ alias "idempotent_cmd" "goto ''";
 #autocmd "PostDisplay" "" "echo '\\nthis is a file\\n'";
 #autocmd "PostGoto"   "" "set_interactive_mode";
 autocmd "PostGoto"      "" "reload";
-autocmd "PostWindow"    "" "display";
+autocmd "PostWindow" ""   "i:fresh=1;redisplay;";
 autocmd "PreRedisplay"  "" "i:_will_display=1";
 autocmd "PreRedisplay"  "" "if(_scale_style!='' && i:fresh){i:fresh=0;scale _scale_style ;i:fresh=0;}";
 autocmd "PostRedisplay" ""   "i:_will_display=0";

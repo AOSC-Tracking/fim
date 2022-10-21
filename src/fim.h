@@ -929,8 +929,8 @@ namespace fim
 #define FIM_ACM_PREEXECUTIONCYCLE	"PreExecutionCycle"		/* "" */
 #define FIM_ACM_POSTEXECUTIONCYCLE	"PostExecutionCycle"		/* "" */
 #define FIM_ACM_PREEXECUTIONCYCLEARGS	"PreExecutionCycleArgs"		/* "" */
-#define FIM_ACM_PREWINDOW	"PreWindow"	/* "" */
-#define FIM_ACM_POSTWINDOW	"PostWindow"	/* "" */
+#define FIM_ACM_PREWINDOW	"PreWindow"	/* "before a display reinit (after  PreRedisplay)" */
+#define FIM_ACM_POSTWINDOW	"PostWindow"	/* "after  a display reinit (before PreRedisplay)" */
 //#define FIM_ACM_PREROTATE	"PreRotate"	/* "" */
 //#define FIM_ACM_POSTROTATE	"PostRotate"	/* "" */
 
