@@ -93,25 +93,37 @@ tests:	all
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' --slideshow 0 -1 # if this does not hang is good
 	timeout 1 $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' --slideshow 0 ; test $$? = 124
 if ENABLE_SDL
-	$(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/ -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)'
+if ENABLE_PCX
+	$(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)' # pcx needs no library
 endif
+endif
+if ENABLE_GIF
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep gif
-	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep png
-	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
+endif
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/version.sh
 	@top_srcdir=$(top_srcdir) $(SHELL) $(top_srcdir)/scripts/tests/font.sh
-	@test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb -R media/ -k 1 -k n -k 1 -k n -k q -F 'stdout _fileindex'`" == 3
+	@test "`$(FIM_EXE) $(FIMNORCOPTS) -o dumb -R media/ -k 1 -k n -k 1 -k n -k q -F 'stdout _fileindex'`" == 3 # 3 and not 11
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media -c '_caption_over_image=3;display;quit;'
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit;'
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -E $(top_srcdir)/scripts/example/oneline.fim -c quit 
+if ENABLE_PNG
+	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep png
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c 'next'   -c quit # leak fixed
+endif
+if ENABLE_TIFF
 	@if $(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep tiff && which convert ; then \
 		convert $(top_srcdir)/media/image.png $(top_srcdir)/image.tiff && \
 		$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/image.tiff -c 'next' -c quit; fi # leak fixed
-	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/image.png -c 'echo i:*' -k Tab -c quit # bogus test: should rather exercise MiniConsole
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/ -c 'echo i:*' -k Tab -c quit # bogus test: should rather exercise MiniConsole
+endif
+if ENABLE_JPEG
+	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
 	if which wrjpgcom; then wrjpgcom -replace -comment 'add JPEG comment' $(top_srcdir)/media/image.jpg > image_commented.jpg && $(FIM_EXE) $(FIMNORCOPTS) -o dumb -X image_commented.jpg -c quit && rm -f image_commented.jpg; fi # leak fixed
-	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # leak fixed
-	if which timeout; then if ! timeout 2 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/image.png -o dumb -c '/media' -c 'quit' ; then echo 'Seems like -c "/<filename>" is broken!'; false; fi; fi
+endif
+if ENABLE_PNG
+	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X $(top_srcdir)/media/image.png -c '/*.jpg' -c quit # parser leak fixed
+endif
+	if which timeout; then if ! timeout 2 $(FIM_EXE) $(FIMNORCOPTS) $(top_srcdir)/media/ -o dumb -c '/media' -c 'quit' ; then echo 'Seems like -c "/<filename>" is broken!'; false; fi; fi
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
 	make ltests
 if HAVE_VALGRIND
@@ -122,8 +134,10 @@ endif
 
 .PHONY: ltests
 ltests:
+if ENABLE_JPEG
 	$(FIM_EXE) $(FIMNORCOPTS)         -V | grep upported.file.formats | grep jpeg
 	if test $(abs_builddir) = $(abs_srcdir) ; then make -C src/testdir ; fi
+endif
 
 FIMSCRIPTSDIR=`pwd`/scripts/maintenance/
 
