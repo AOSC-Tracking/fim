@@ -145,7 +145,7 @@ autocmd "PostGoto"      "" "reload";
 ###autocmd "PostGoto" "" "load";
 ###autocmd "PostDisplay"  "" "i:fresh=1" ;
 ###autocmd "PreWindow"  "" "";
-autocmd "PostWindow"    "" "display";
+autocmd "PostWindow" ""   "i:fresh=1;redisplay;";
 autocmd "PreRedisplay"  "" "i:_will_display=1";
 autocmd "PreRedisplay"  "" "if(_scale_style!='' && i:fresh){i:fresh=0;scale _scale_style ;i:fresh=0;}";
 autocmd "PostRedisplay" ""   "i:_will_display=0";

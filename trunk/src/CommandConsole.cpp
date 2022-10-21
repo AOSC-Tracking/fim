@@ -2200,7 +2200,9 @@ done:
 		if(current_viewport())
 			current_viewport()->update_meta(true);
 
+		FIM_AUTOCMD_EXEC_PRE(FIM_ACM_PREWINDOW,current());
 		this->fcmd_redisplay(args_t());
+		FIM_AUTOCMD_EXEC_POST(FIM_ACM_POSTWINDOW);
 
 		if(getGlobalIntVariable(FIM_VID_DISPLAY_BUSY))
 		{
