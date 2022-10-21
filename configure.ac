@@ -620,7 +620,7 @@ else
   fim_handle_jpeg=no
 fi
 AC_SUBST(LIBJPEG)
-AM_CONDITIONAL(ENABLE_JPEG, test x$have_jpeg = xyes)
+AM_CONDITIONAL(ENABLE_JPEG, test x$fim_handle_jpeg = xyes)
 
 dnl ============= dvi file handling (via TeX-Guy)
 dnl 
@@ -908,6 +908,8 @@ else
 	AC_MSG_NOTICE([Disabling PCX file format support.])
 	AC_DEFINE(FIM_WITH_PCX, 0, [PCX file support.])
 fi
+AM_CONDITIONAL(ENABLE_PCX, test x$fim_handle_pcx = xyes)
+
 dnl ================================================================================
 
 ## png file handling
@@ -946,6 +948,8 @@ if test x$fim_handle_png = xyes; then
                 AC_DEFINE(FIM_WITH_LIBPNG, 1, [Defined, if libpng support is enabled])
         fi
 fi
+AC_SUBST(LIBPNG)
+AM_CONDITIONAL(ENABLE_PNG, test x$fim_handle_png = xyes)
 
 #AM_CONDITIONAL(BUILD_PNG, test x$fim_handle_png = xyes)
 
