@@ -234,7 +234,8 @@ static int fim_post_rl_getc(int c)
 #endif /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 	}
 #endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
-	if(FIM_WANT_RL_KEY_DUMPOUT)cout << "got key: " << (int)(c) << " : " << (c==FIM_SYM_ESC)<<"\n";
+	if(FIM_WANT_RL_KEY_DUMPOUT)
+		cout << "got key: '" << (fim_char_t)c << "'  code: " << (int)(c) << "  is esc: " << (c==FIM_SYM_ESC)<<"\n";
 	return c;
 }
 

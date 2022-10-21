@@ -2,7 +2,7 @@
 /*
  fim_stream.h : Textual output facility
 
- (c) 2007-2013 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,12 +39,13 @@ namespace fim
 
 		fim_stream& operator<<(const  fim_char_t* s);
 
+		fim_stream& operator<<(const  fim_char_t c);
+
 		fim_stream& operator<<(const fim_byte_t* s);
 
 		fim_stream& operator<<(const  fim::string&s);
 
 		fim_stream& operator<<(float f);
-
 #if FIM_WANT_LONG_INT
 		fim_stream& operator<<(fim_int i);
 #endif /* FIM_WANT_LONG_INT */
