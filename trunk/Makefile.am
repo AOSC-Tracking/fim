@@ -91,16 +91,16 @@ tests:	all
 	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -C "quit $$r" || test $$? = $$r ; done ;
 	for r in 0 1 2 254 255 ; do $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' -F "quit $$r" || test $$? = $$r ; done ;
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' --slideshow 0 -1 # if this does not hang is good
-	timeout 1 $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' --slideshow 0 ; test $$? = 124
+	$(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit' --slideshow 0 ; test $$? = 124
 if ENABLE_CACA
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o caca -K ':quit' -K '' # TODO: add timeout
+	$(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o caca -K ':quit' -K ''
 endif
 if ENABLE_AA
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o aa   -K ':quit' -K '' # TODO: add timeout
+	$(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o aa   -K ':quit' -K ''
 endif
 if ENABLE_SDL
 	if test -n "$(DISPLAY)"; then \
-		$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl  -K ':quit' -K ''; # TODO: add timeout\
+		$(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl  -K ':quit' -K ''; \
 	fi
 endif
 if ENABLE_SDL

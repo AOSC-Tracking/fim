@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1724)
+ * If possible, use 'timeout' in 'make tests'.
 # (r1718-r1720)
  * Switch -K aka --chars-press <chars> simulates input of characters at startup.
 # (r1709,r1710)
