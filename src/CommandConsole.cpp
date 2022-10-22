@@ -919,7 +919,15 @@ ok:
 		if ( exitBinding_ == 0 )
 		       	goto err;	/* any key triggers an exit */
 
-		c = displaydevice_->catchInteractiveCommand(seconds);
+#if FIM_WANT_CMDLINE_KEYPRESS
+		if ( ! cc.clkpv_.empty() )
+		{
+			c = cc.clkpv_.front();
+			cc.clkpv_.pop();
+		}
+		else
+#endif
+			c = displaydevice_->catchInteractiveCommand(seconds);
 		while(c!=-1)
 		{
 			/* while characters read */
