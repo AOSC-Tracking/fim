@@ -524,7 +524,7 @@ err:
 		if(!c)
 			return 0;
 		*c = FIM_SYM_NULL_KEY;
-		*c = aa_getevent(fim_aa_ascii_context,0);/* 1 if want to receive AA_RELEASE events, too */
+		*c = aa_getevent(fim_aa_ascii_context,0);/* 1 for blocking wait */
 		if(*c==AA_UNKNOWN)
 			*c=0;
 		if(*c)
