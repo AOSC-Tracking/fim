@@ -32,7 +32,11 @@
 
 #define FIM_COMPLETE_ONLY_IF_QUOTED  1
 #define FIM_COMPLETE_INSERTING_DOUBLE_QUOTE  0
-#define FIM_WANT_RL_KEY_DUMPOUT 0
+#define FIM_WANT_RL_VERBOSE 0
+#define FIM_WANT_RL_KEY_DUMPOUT FIM_WANT_RL_VERBOSE
+#define FIM_RL_DBG_COUT(OP) cout << "RL:" << __FILE__ ":" << __LINE__ << ":" << __func__ << "()" <<  OP << "\n";
+#define FIM_RL_KEY_DBG(C) " pressed key: '" << (fim_char_t)C << "'  code: " << (int)(C) << "  is esc: " << (C==FIM_SYM_ESC)
+#define FIM_PR(OP) if (FIM_WANT_RL_VERBOSE) FIM_RL_DBG_COUT(OP) 
 
 /*
  * This file is severely messed up :).
@@ -47,7 +51,9 @@ fim_char_t * fim_readline(const fim_char_t *prompt)
 {
 	fim_char_t * rc=FIM_NULL;
 	fim_rl_pc=FIM_SYM_CHAR_NUL;
+	FIM_PR(" prompt: " << prompt << "\n");
 	rc=readline(prompt);
+	FIM_PR(" rc: " << (rc==FIM_NULL?"(NULL)":(*rc?rc:"(NUL)")) << "\n");
 	fim_rl_pc=FIM_SYM_CHAR_NUL;
 	return rc;
 }
@@ -220,12 +226,17 @@ static int redisplay_hook_no_fb(void)
 
 static int fim_post_rl_getc(int c)
 {
+	FIM_PR(FIM_RL_KEY_DBG(c));
 #if FIM_WANT_READLINE_CLEAR_WITH_ESC
 	if(c==FIM_SYM_ESC && fim_want_rl_cl_with_esc)
 	{
+		FIM_PR("esc -> enter\n");
 		if(rl_line_buffer)
+		{
 			rl_point=0,
 			rl_line_buffer[0]=FIM_SYM_PROMPT_NUL;
+			FIM_PR("left readline mode\n");
+		}
 
 		c=FIM_SYM_ENTER;
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER
@@ -234,8 +245,7 @@ static int fim_post_rl_getc(int c)
 #endif /* FIM_WANT_DOUBLE_ESC_TO_ENTER */
 	}
 #endif /* FIM_WANT_READLINE_CLEAR_WITH_ESC */
-	if(FIM_WANT_RL_KEY_DUMPOUT)
-		cout << "got key: '" << (fim_char_t)c << "'  code: " << (int)(c) << "  is esc: " << (c==FIM_SYM_ESC)<<"\n";
+	FIM_PR(FIM_RL_KEY_DBG(c));
 	return c;
 }
 
@@ -245,12 +255,14 @@ static int fim_rl_sdl_aa_getc_hook(void)
 	//unsigned int c;
 	fim_key_t c;
 	c=0;
+	FIM_PR("  fim_rl_pc=" << fim_rl_pc);
 	
 	if(cc.get_displaydevice_input(&c,true)==1)
 	{
 		c=fim_post_rl_getc(c);
 		if(c&(1<<31))
 		{
+			FIM_PR(FIM_RL_KEY_DBG(c));
 			rl_set_keymap(rl_get_keymap_by_name("emacs-meta"));	/* FIXME : this is a dirty trick : */
 			//c&=!(1<<31);		/* FIXME : a dirty trick */
 			c&=0xFFFFFF^(1<<31);	/* FIXME : a dirty trick */
@@ -260,6 +272,7 @@ static int fim_rl_sdl_aa_getc_hook(void)
 		}
 		else
 		{
+			FIM_PR(FIM_RL_KEY_DBG(c));
 			rl_set_keymap(rl_get_keymap_by_name("emacs"));		/* FIXME : this is a dirty trick : */
 			//std::cout << "char in : "<< (fim_byte_t)c <<" !\n";
 			rl_stuff_char(c);	/* warning : this may fail */
@@ -274,6 +287,7 @@ static int fim_rl_sdl_aa_getc_hook(void)
 
 int fim_rl_sdl_aa_getc(FILE * fd)
 {
+	FIM_PR("");
 	return 0;/* yes, a dummy function instead of getc() */
 }
 #endif /* defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_AALIB) || defined(FIM_WITH_CACALIB) || defined(FIM_WITH_LIBIMLIB2) */
@@ -283,6 +297,7 @@ int fim_rl_getc(FILE * fd)
 	int c=FIM_SYM_CHAR_NUL;
 #if 1
 	c=rl_getc(fd);
+	FIM_PR(FIM_RL_KEY_DBG(c));
 #if FIM_WANT_DOUBLE_ESC_TO_ENTER
 	if(c==FIM_SYM_ESC)
 	{
@@ -343,6 +358,7 @@ int fim_search_rl_startup_hook(void)
 	const fim_char_t * hs=cc.browser_.last_regexp_.c_str();
 	if(hs)
 	{
+		FIM_PR(hs);
 		rl_replace_line(hs,0);
 		rl_point=strlen(hs);
 	}
