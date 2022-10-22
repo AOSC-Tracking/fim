@@ -99,11 +99,15 @@ if ENABLE_AA
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o aa   -K ':quit' -K '' # TODO: add timeout
 endif
 if ENABLE_SDL
-	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl  -K ':quit' -K '' # TODO: add timeout
+	if test -n "$(DISPLAY)"; then \
+		$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl  -K ':quit' -K ''; # TODO: add timeout\
+	fi
 endif
 if ENABLE_SDL
 if ENABLE_PCX
-	$(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)' # pcx needs no library
+	if test -n "$(DISPLAY)"; then \
+		$(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)' # pcx needs no library\
+	fi
 endif
 endif
 if ENABLE_GIF
