@@ -32,16 +32,17 @@
 #endif
 
 #define FIM_CACALIB_FONT_HEIGHT 1
-/*  20080504 this CACA driver doesn't work yet */
 class CACADevice FIM_FINAL:public DisplayDevice 
 {
 	private:
 	fim::string dopts;
-	unsigned int r[256], g[256], b[256], a[256];
 
+#if ( FIM_WANTS_CACA_VERSION == 0 )
+	unsigned int r[256], g[256], b[256], a[256];
 	int XSIZ, YSIZ;
 	struct caca_bitmap *caca_bitmap;
 	fim_char_t *bitmap;
+#endif
 #if ( FIM_WANTS_CACA_VERSION == 1 )
 	caca_canvas_t *cv_{};
 	caca_display_t *dp_{};
@@ -76,13 +77,8 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	void status_screen(int desc,int draw_output){}
 	fim_err_t console_control(fim_cc_t code);
 	fim_bool_t handle_console_switch(void) FIM_OVERRIDE;
-	int clear_rect_(
-		void* dst,
-		int oroff,int ocoff,
-		int orows,int ocols,
-		int ocskip);
 	fim_err_t clear_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2) FIM_OVERRIDE;
-	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_OVERRIDE {/* FIXME: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
+	fim_err_t fill_rect(fim_coo_t x1, fim_coo_t x2, fim_coo_t y1,fim_coo_t y2, fim_color_t color) FIM_OVERRIDE {/* note: bogus implementation */ return clear_rect(x1,x2,y1,y2); }
 	fim_err_t fs_puts(struct fs_font *f, fim_coo_t x, fim_coo_t y, const fim_char_t *str) FIM_OVERRIDE;
 
 	fim_coo_t get_chars_per_column(void)const FIM_OVERRIDE;
@@ -96,6 +92,5 @@ class CACADevice FIM_FINAL:public DisplayDevice
 	fim_err_t resize(fim_coo_t w, fim_coo_t h) FIM_OVERRIDE;
 	virtual fim_err_t set_wm_caption(const fim_char_t *msg) FIM_OVERRIDE;
 };
-
 #endif /* FIM_WITH_CACALIB */
 #endif /* FIM_CACADEVICE_H */
