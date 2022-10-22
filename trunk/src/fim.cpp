@@ -154,8 +154,13 @@ struct fim_options_t fim_options[] = {
     },
     { "chars-press",   required_argument,       FIM_NULL, 'K',
 	"input keyboard characters at startup","{chars}",
-       	"Input one or more keyboard characters at program startup (simulate keyboard presses). This option can be specified multiple times. Each additional time, a press of " FIM_KBD_ENTER " (ASCII code " FIM_XSTRINGIFY(FIM_SYM_ENTER) ") key will be prepended. "
-	"So e.g. -K ':next;' will activate the command line and enter \"next;\" without executing it; passing -K \":next;\" -K \"next\" will execute \"next\", leave the command line, and execute in sequence any command bound to keys 'n', 'e', 'x', 't'. "
+       	"Input one or more keyboard characters at program startup (simulate keyboard presses). "
+	"This option can be specified multiple times. "
+	"Each additional time (or if the string is empty), a press of " FIM_KBD_ENTER " (ASCII code " FIM_XSTRINGIFY(FIM_SYM_ENTER) ") key is prepended. "
+	"Examples: -K '' simulates press of an " FIM_KBD_ENTER "; "
+	" -K ':next;' activates the command line and enter \"next;\" without executing it; "
+	" -K \":next;\" -K \"next\" executes \"next\", stays in the command line and enter keys \"next\"; "
+	" -K \":next;\" -K \"\" -K \"next\" executes \"next\", leaves the command line, and executes in sequence any command bound to keys 'n', 'e', 'x', 't'. "
     },
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_PIC_CMTS
@@ -1734,9 +1739,9 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 #if FIM_WANT_CMDLINE_KEYPRESS
 		case 'K':
-			if (!cc.clkpv_.empty())
+			if ((!cc.clkpv_.empty()) || !optarg || !*optarg) 
 				cc.clkpv_.push(FIM_SYM_ENTER);
-			for (char * cp = optarg; *cp; ++cp )
+			for (char * cp = optarg; cp && *cp; ++cp)
 				cc.clkpv_.push(*cp);
 		    break;
 		case 'k':
