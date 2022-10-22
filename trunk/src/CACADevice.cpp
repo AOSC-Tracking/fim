@@ -19,8 +19,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-/*  20080504 this CACA driver doesn't work yet */
-
 #include "fim.h"
 
 #ifdef FIM_WITH_CACALIB
@@ -43,7 +41,7 @@
 	)
 	{
 		/*
-		 * TODO : generalize code from here and elsewhere to obtain reusable centering and copy code (with aa, fbdev).
+		 * TODO : first cleanup, then generalize code from here and elsewhere to obtain reusable centering and copy code (with aa, fbdev).
 		 * */
 		void* rgb = ida_image_img?((const struct ida_image*)ida_image_img)->data:FIM_NULL;// source rgb array
 		const int mirror=flags&FIM_FLAG_MIRROR, flip=flags&FIM_FLAG_FLIP;
@@ -73,7 +71,7 @@
 	
 		orows  = min( orows, height());
 		ocols  = min( ocols,  width()); 
-		ocskip = width(); 	//FIXME maybe this is not enough and should be commented or rewritten!
+		ocskip = width(); 	//notice ocskip is mofidied further below...
 
 		if( orows  > height() ) return -9 -99*100;
 		if( ocols  >  width() ) return -10-99*100;
@@ -272,7 +270,6 @@ err:
 
 	fim_sys_int CACADevice::get_input(fim_key_t * c, bool want_poll)
 	{
-		/* FIXME: better make this virtual pure before writing the next Device ..  */
 #if ( FIM_WANTS_CACA_VERSION == 0 )
 		fim_sys_int rc = 0;
 		const int ce = caca_get_event(CACA_EVENT_ANY);
