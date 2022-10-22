@@ -21,7 +21,7 @@
  * configure --enable-debug is developer option now.
 # (r1679-r1688,r1721-r1722)
  * libcaca (-o caca) mode is working again, with limitations.
-# (r1677,r1678)
+# (r1677,r1678,r1725)
  * Slideshow function (e.g `fim --slideshow=5 *.jpg`) now more responsive.
 # (r1662)
  * Arrow keys are now working in aalib (-o aa).
