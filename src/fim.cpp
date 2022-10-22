@@ -148,12 +148,14 @@ struct fim_options_t fim_options[] = {
     },
 #if FIM_WANT_CMDLINE_KEYPRESS
     { "keysym-press",   required_argument,       FIM_NULL, 'k',
-	"execute simulated press of keysym at startup",FIM_NULL,
-       	"Execute simulated press of keysym at startup. Keysym can be prefixed by a repetition count number. This option can be specified multiple times to simulate multiple keystrokes."
+	"execute command bound to keysym at startup","{keysym}",
+       	"Execute command bound (via the " FIM_FLT_BIND " command) to of a specified keysym at startup. A keysym can be prefixed by a repetition count number. Specified multiple times to simulate multiple keystrokes. "
+	"See man " FIM_MAN_fR("fimrc") "(5) for a list of keysyms and the use of " FIM_FLT_BIND "."
     },
     { "chars-press",   required_argument,       FIM_NULL, 'K',
-	"execute simulated press of keyboard characters at startup",FIM_NULL,
-       	"Execute simulated press of (one or more) keyboard characters. This option can be specified multiple times. After each additional time, a press of Enter key will be prepended."
+	"input keyboard characters at startup","{chars}",
+       	"Input one or more keyboard characters at program startup (simulate keyboard presses). This option can be specified multiple times. Each additional time, a press of " FIM_KBD_ENTER " (ASCII code " FIM_XSTRINGIFY(FIM_SYM_ENTER) ") key will be prepended. "
+	"So e.g. -K ':next;' will activate the command line and enter \"next;\" without executing it; passing -K \":next;\" -K \"next\" will execute \"next\", leave the command line, and execute in sequence any command bound to keys 'n', 'e', 'x', 't'. "
     },
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_PIC_CMTS
@@ -379,8 +381,8 @@ struct fim_options_t fim_options[] = {
 	"All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
     },
     {"read-from-file",      required_argument,       FIM_NULL, 'L',
-	"read an image list from file",FIM_NULL,
-	"Read file list from file: each line one file to load (similar to --read-from-stdin; use --read-from-stdin-elds to control line breaking).\n"
+	"read an image list from a file","{fileslistfile}",
+	"Read file list from a file: each line one file to load (similar to --read-from-stdin; use --read-from-stdin-elds to control line breaking).\n"
 "\n"
     },
 #ifdef FIM_READ_STDIN
@@ -397,7 +399,7 @@ struct fim_options_t fim_options[] = {
     },
 #endif /* FIM_READ_STDIN */
     {"read-from-stdin-elds",      required_argument,       FIM_NULL, 0x72667373,
-	"endline delimiter character for --read-from-stdin/--read-from-file", FIM_NULL,
+	"endline delimiter character for --read-from-stdin/--read-from-file", "{delimiter-char}",
 	"Specify an endline delimiter character for breaking lines read via -/--read-from-stdin/--read-from-file (which shall be specified after this). Line text before the delimiter will be treated as names of files to load; the text after will be ignored. This is also useful e.g. to load description files (see --" FIM_OSW_LOAD_IMG_DSC_FILE ") as filename list files. Default is the newline character (0x0A)"
 #ifdef HAVE_GETDELIM
 	"; to specify an ASCII NUL byte (0x00) use ''"
@@ -742,7 +744,7 @@ int fim_dump_man_page(void)
 			string("\n""If configured at build time, fim will be capable of using SDL or aalib output.\n\n")+
 	//		string("Please note that a user guide of \n.B fim\nis in the " FIM_CNS_FIM_TXT " file distributed in the source package.\n\n")+
 			string("This man page only describes the\n.B fim\ncommand line options.\n"
-			"See man " FIM_MAN_fR("fimrc") "(5) for a full specification of the \n.B\nfim\nlanguage, commands, variables, and an example configuration file.\n"
+			"See man " FIM_MAN_fR("fimrc") "(5) for a full specification of the \n.B\nfim\nlanguage, commands, variables, keysym, and an example configuration file.\n"
 			"\n"
 			".SH USAGE\n"
 			"You may invoke\n.B\nfim\nfrom an interactive shell and control it with the keyboard, as you would do with any image viewer with reasonable key bindings.\n"
