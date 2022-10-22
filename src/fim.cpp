@@ -1727,7 +1727,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 #if FIM_WANT_CMDLINE_KEYPRESS
 		case 'k':
-			cc.clkpv_.push_back(optarg);
+			cc.clkcv_.push_back(optarg);
 		    break;
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 		default:
