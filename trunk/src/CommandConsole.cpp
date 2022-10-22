@@ -978,8 +978,8 @@ err:
 #endif /* FIM_WANT_BACKGROUND_LOAD */
 
 #if FIM_WANT_CMDLINE_KEYPRESS
-		for(size_t i=0;i<clkpv_.size();++i)
-		if( const char * c_str = clkpv_[i].c_str() )
+		for(size_t i=0;i<clkcv_.size();++i)
+		if( const char * c_str = clkcv_[i].c_str() )
 		{
 			for(;isdigit(*c_str);++c_str)
 				executeBinding( *c_str );

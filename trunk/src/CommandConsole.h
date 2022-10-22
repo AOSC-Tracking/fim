@@ -281,7 +281,7 @@ class CommandConsole FIM_FINAL :
 	fim_key_t kstr_to_key(const fim_char_t * kstr)const;
 #if FIM_WANT_CMDLINE_KEYPRESS
 	public:
-	std::vector<fim::string > clkpv_; /* command line key presses vector*/
+	std::vector<fim::string > clkcv_; /* command line key-bound commands vector*/
 	private:
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	fim::string getAliasesList(void)const;
