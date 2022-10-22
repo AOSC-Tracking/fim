@@ -3,14 +3,14 @@
 help {identifier}: provides help for {identifier}, if it is a variable, alias, or command. Use Tab in commandline mode to get a list of commands. Command line mode can be entered with the default key ':', and left pressing Enter.
 
 *
-The short command options of fim are: -a -b -c -C -d -E -f -F -h -k -D -S -i -m -N -p -o -P -s -t -T -u -v -V -w -H -W -L - -A -q -r -R -X -B -/ -1 
+The short command options of fim are: -a -b -c -C -d -E -f -F -h -k -K -D -S -i -m -N -p -o -P -s -t -T -u -v -V -w -H -W -L - -A -q -r -R -X -B -/ -1 
 "-" key is bound to command: reduce
 
 *
 -h is a fim command option: -h =[=s|d|l|m], --help =[=s|d|l|m]: print program invocation help and exit
 
 *
-The long command options of fim are: --autozoom --binary --as-text --cd-and-readdir --execute-commands --execute-commands-early --device --dump-reference-help --dump-default-fimrc --execute-script --etc-fimrc --final-commands --help --keysym-press --load-image-descriptions-file --image-descriptions-file-separator --image-from-stdin --mark-from-image-descriptions-file --mode --no-rc-file --no-etc-rc-file --no-internal-config --no-commandline --no-history-save --no-history-load --no-history --script-from-stdin --output-device --offset --text-reading --scroll --slideshow --sanity-check --no-framebuffer --vt --reverse --sort --sort-basename --sort-mtime --sort-fsize --random --random-no-seed --verbose --verbose-load --verbose-font-load --verbose-interpreter --version --autowidth --no-auto-scale --autowindow --no-stat-push --autoheight --write-scriptout --read-from-file --read-from-stdin --read-from-stdin-elds --autotop --quiet --resolution --recursive --no-pipe-load --background-recursive --load-shadow-dir --/ --// --once 
+The long command options of fim are: --autozoom --binary --as-text --cd-and-readdir --execute-commands --execute-commands-early --device --dump-reference-help --dump-default-fimrc --execute-script --etc-fimrc --final-commands --help --keysym-press --chars-press --load-image-descriptions-file --image-descriptions-file-separator --image-from-stdin --mark-from-image-descriptions-file --mode --no-rc-file --no-etc-rc-file --no-internal-config --no-commandline --no-history-save --no-history-load --no-history --script-from-stdin --output-device --offset --text-reading --scroll --slideshow --sanity-check --no-framebuffer --vt --reverse --sort --sort-basename --sort-mtime --sort-fsize --random --random-no-seed --verbose --verbose-load --verbose-font-load --verbose-interpreter --version --autowidth --no-auto-scale --autowindow --no-stat-push --autoheight --write-scriptout --read-from-file --read-from-stdin --read-from-stdin-elds --autotop --quiet --resolution --recursive --no-pipe-load --background-recursive --load-shadow-dir --/ --// --once 
 
 *
 --help is a fim command option: -h =[=s|d|l|m], --help =[=s|d|l|m]: print program invocation help and exit

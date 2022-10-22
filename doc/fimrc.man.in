@@ -1431,7 +1431,7 @@ $;
 This is the default configuration, as contained in the _fim_default_config_file_contents variable.
 
 .nf
-# $LastChangedDate: 2022-07-09 00:34:39 +0200 (Sat, 09 Jul 2022) $
+# $LastChangedDate: 2022-10-21 14:20:24 +0200 (Fri, 21 Oct 2022) $
 # Contents of the default 'fimrc' file, hardcoded in the fim executable.
 # Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
 # Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.

@@ -151,6 +151,10 @@ struct fim_options_t fim_options[] = {
 	"execute simulated press of keysym at startup",FIM_NULL,
        	"Execute simulated press of keysym at startup. Keysym can be prefixed by a repetition count number. This option can be specified multiple times to simulate multiple keystrokes."
     },
+    { "chars-press",   required_argument,       FIM_NULL, 'K',
+	"execute simulated press of keyboard characters at startup",FIM_NULL,
+       	"Execute simulated press of (one or more) keyboard characters. This option can be specified multiple times. After each additional time, a press of Enter key will be prepended."
+    },
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_PIC_CMTS
     {FIM_OSW_LOAD_IMG_DSC_FILE,       required_argument,       FIM_NULL, /*0x6c696466*/'D',
@@ -1231,6 +1235,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 #endif /* FIM_WANT_RECURSE_FILTER_OPTION */
 #if FIM_WANT_CMDLINE_KEYPRESS
 		"k:"
+		"K:"
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 #if FIM_WANT_NOEXTPROPIPE
 		"X"
@@ -1726,6 +1731,12 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		    break;
 #endif /* FIM_EXPERIMENTAL_SHADOW_DIRS */
 #if FIM_WANT_CMDLINE_KEYPRESS
+		case 'K':
+			if (!cc.clkpv_.empty())
+				cc.clkpv_.push(FIM_SYM_ENTER);
+			for (char * cp = optarg; *cp; ++cp )
+				cc.clkpv_.push(*cp);
+		    break;
 		case 'k':
 			cc.clkcv_.push_back(optarg);
 		    break;

@@ -1748,6 +1748,7 @@ dnl ==================
             if test x$fim_cv_aalib = xyes ; then
     		AC_DEFINE([FIM_WITH_AALIB])
     	fi
+	AM_CONDITIONAL(ENABLE_AA, test x$fim_cv_aalib = xyes)
 
 dnl ==================
 
@@ -1756,6 +1757,7 @@ dnl ==================
     		AC_DEFINE([FIM_WITH_CACALIB])
     		LIBS="$LIBS -lcaca"
     	fi
+	AM_CONDITIONAL(ENABLE_CACA, test x$fim_cv_cacalib = xyes)
 
 dnl ==================
     AH_TEMPLATE([FIM_WANT_FB_CONSOLE_SWITCH_WHILE_LOADING])

@@ -51,6 +51,7 @@
 #include <stack>	/* STL (Standard Template Library) stack structure template	*/
 
 #include <vector>	/* STL (Standard Template Library) vector structure template	*/
+#include <queue>	/* STL (Standard Template Library) queue adaptor		*/
 #include <utility>	/* STL (Standard Template Library) ?				*/
 #include <list> 	/* STL (Standard Template Library) list structure template	*/
 #include <set> 		/* STL (Standard Template Library) set structure template 	*/
