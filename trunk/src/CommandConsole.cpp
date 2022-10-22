@@ -1068,7 +1068,7 @@ skip_ac:
 					execute(FIM_FLT_RELOAD,args);
 				}
 #endif /* FIM_WANT_RELOAD_ON_FILE_CHANGE */
-				r=displaydevice_->get_input(&c);
+				r = get_displaydevice_input(&c,false);
 #ifdef	FIM_USE_GPM
 				if(Gpm_GetEvent(EVENT)==1)
 					quit();
@@ -2383,6 +2383,15 @@ ret:
 
 	fim_sys_int CommandConsole::get_displaydevice_input(fim_key_t * c, bool want_poll)
 	{
+#if FIM_WANT_CMDLINE_KEYPRESS
+		if ( ! cc.clkpv_.empty() )
+		{
+			*c = cc.clkpv_.front();
+			cc.clkpv_.pop();
+			// std::cout << "emitting " << (fim_char_t)*c << " ("  << cc.clkpv_.size() << " chars left)\n";
+			return 1;
+		}
+#endif
 		return displaydevice_->get_input(c, want_poll);
 	}
 

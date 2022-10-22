@@ -282,6 +282,7 @@ class CommandConsole FIM_FINAL :
 #if FIM_WANT_CMDLINE_KEYPRESS
 	public:
 	std::vector<fim::string > clkcv_; /* command line key-bound commands vector*/
+	std::queue<char,std::list<char>> clkpv_; /* command line key presses vector*/
 	private:
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
 	fim::string getAliasesList(void)const;

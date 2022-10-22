@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1718)
+ * Switch -K aka --chars-press <chars> simulate input of characters at startup.
 # (r1709,r1710)
  * Fix: Slideshow function (e.g. `fim --slideshow=5 media/`) will now cycle forever, unless --once/-1 option specified (as in fbi).
 # (r1707,r1711)
