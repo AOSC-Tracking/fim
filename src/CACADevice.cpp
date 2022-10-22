@@ -294,7 +294,7 @@ err:
 #if ( FIM_WANTS_CACA_VERSION == 1 )
 		fim_sys_int rc = 0;
 		caca_event ev;
-		int ce = caca_get_event(dp_, CACA_EVENT_ANY /*CACA_EVENT_KEY_PRESS*/, &ev, -1);
+		int ce = caca_get_event(dp_, CACA_EVENT_ANY /*CACA_EVENT_KEY_PRESS*/, &ev, 1000); // microseconds timeout or -1 for blocking
 		const auto et = caca_get_event_type(&ev);
 		ce = ev.data.key.ch;
 		if ( et == CACA_EVENT_RESIZE )
