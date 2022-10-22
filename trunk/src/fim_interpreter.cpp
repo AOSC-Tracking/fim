@@ -245,6 +245,13 @@ Var ex(NodeType p)
 			case FIM_SYM_SEMICOLON:
 				DBG("Semicolon (;)\n"); // cmd;cmd
 				ex(FIM_OPRND(p,0));
+				if (abs(fim::cc.show_must_go_on()) == 2)
+				{
+					/* Workaround to interrupt an entire semantic command tree after interactive command break.
+					 * Shall better use return codes of yyparse() for this. */
+					fim::cout << "Command loop interrupted interactively." << FIM_SYM_ENDL;
+					goto ret;
+				}
 				return ex(FIM_OPRND(p,1));
 			case FESF:
 			if( FIM_NOPS(p) >= 3 )
