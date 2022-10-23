@@ -254,23 +254,28 @@ ret:		return key;
 		return FIM_CNS_EMPTY_RESULT;
 	}
 
-	fim::string CommandConsole::getAliasesList(void)const
+	fim::string CommandConsole::getAliasesList(FimDocRefMode refmode)const
 	{
 		// collates all expanded aliases
 		fim::string aliases_expanded;
 		aliases_t::const_iterator ai;
 
 		for( ai=aliases_.begin();ai!=aliases_.end();++ai)
-			aliases_expanded+=get_alias_info((*ai).first);
+			aliases_expanded+=get_alias_info((*ai).first, refmode);
 		return aliases_expanded;
 	}
 
-	fim::string CommandConsole::get_alias_info(const fim::string aname)const
+	fim::string CommandConsole::get_alias_info(const fim::string aname, FimDocRefMode refmode)const
 	{
 		std::ostringstream oss;
-		oss << FIM_FLT_ALIAS" \"" << aname << "\" \"";
-
 		const aliases_t::const_iterator ai=aliases_.find(aname);
+		
+		if(refmode==Man)
+			oss << FIM_FLT_ALIAS << "\n.B\n\"" << aname << "\"\n\"";
+		else
+			oss << ".na\n" /* No output-line adjusting; inelegant way to avoid man --html=cat's: cannot adjust line */
+			    << FIM_FLT_ALIAS" \"" << aname << "\" \"";
+
 		if(ai!=aliases_.end())
 			oss << ai->second.first;
 		oss << "\"";
@@ -278,6 +283,8 @@ ret:		return key;
 		if(ai->second.second!=FIM_CNS_EMPTY_STRING)
 			oss << " # " << ai->second.second;
 		oss << fim::string("\n");
+		if(refmode==Man)
+			oss << ".fi\n";
 		return oss.str();
 	}
 

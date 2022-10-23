@@ -1406,6 +1406,84 @@ swidth
 width
 [out,i:] the current image original width.
 .fi
+.SH DEFAULT ALIASES REFERENCE
+Hardcoded aliases are: 
+
+.fi
+alias
+.B
+"A"
+"'_autotop=1-_autotop;'"
+.fi
+alias
+.B
+"magnify"
+"scale '+'" # magnify the displayed image by the _magnify_factor variable or {args}
+.fi
+alias
+.B
+"next"
+"goto '+1'" # go to the next page or picture file
+.fi
+alias
+.B
+"next_file"
+"goto '+1f'" # go to the next file in the list
+.fi
+alias
+.B
+"next_page"
+"goto '+1p'" # go to the next page in the file
+.fi
+alias
+.B
+"prev"
+"goto '-1'" # go to the previous page or picture file
+.fi
+alias
+.B
+"prev_file"
+"goto '-1f'" # go to the previous file in the list
+.fi
+alias
+.B
+"prev_page"
+"goto '-1p'" # go to the previous page in the file
+.fi
+alias
+.B
+"reduce"
+"scale '-'" # reduce the displayed image by _reduce_factor or {args}
+.fi
+alias
+.B
+"scale_factor_decrease"
+"scale '+-'" # subtract _scale_factor_delta to the scale factors _reduce_factor and _magnify_factor
+.fi
+alias
+.B
+"scale_factor_grow"
+"scale '+*'" # multiply the scale factors _reduce_factor and _magnify_factor by _scale_factor_multiplier
+.fi
+alias
+.B
+"scale_factor_increase"
+"scale '++'" # add _scale_factor_delta to the scale factors _reduce_factor and _magnify_factor
+.fi
+alias
+.B
+"scale_factor_shrink"
+"scale '+/'" # divide the scale factors _reduce_factor and _magnify_factor by _scale_factor_multiplier
+.fi
+
+.fi
+They can be redefined with 
+.B alias
+or deleted with the 
+.B unalias
+command.
+.fi
+Further default aliases are usually loaded at startup -- see the CONFIGURATION FILE EXAMPLE section below.
 .SH COMMAND LINE USAGE EXAMPLES
 .nf
 # jump to the third image:
@@ -1428,7 +1506,9 @@ $;
 !"date";
 
 .SH CONFIGURATION FILE EXAMPLE
-This is the default configuration, as contained in the _fim_default_config_file_contents variable.
+Part of the default configuration comes from the _fim_default_config_file_contents variable, shown here.
+.nf
+One can skip its loading by using the _no_default_configuration variable.
 
 .nf
 # $LastChangedDate: 2022-10-21 14:20:24 +0200 (Fri, 21 Oct 2022) $
