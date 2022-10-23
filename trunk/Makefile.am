@@ -96,17 +96,17 @@ if ENABLE_CACA
 	$(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o caca -K ':quit' -K ''
 endif
 if ENABLE_AA
-	$(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o aa   -K ':quit' -K ''
+	ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o aa   -K ':quit' -K ''
 endif
 if ENABLE_SDL
 	if test -n "$(DISPLAY)"; then \
-		$(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl  -K ':quit' -K ''; \
+		ASAN_OPTIONS=detect_leaks=0 $(TIMEOUT) $(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -o sdl  -K ':quit' -K ''; \
 	fi
 endif
 if ENABLE_SDL
 if ENABLE_PCX
 	if test -n "$(DISPLAY)"; then \
-		$(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)' # pcx needs no library\
+		ASAN_OPTIONS=detect_leaks=0 $(FIM_EXE) $(FIMNORCOPTS) -o sdl $(top_srcdir)/media/numbers_pcx/ -R -q -a -c 'display "reinit" "w200:200"' -c 'quit (i:swidth!=_screen_height) || (i:swidth!=_screen_width)' # pcx needs no library\
 	fi
 endif
 endif
@@ -140,9 +140,11 @@ endif
 	@$(FIM_EXE) $(FIMNORCOPTS) -o dumb -X -c 'quit 14' ; if test $$? == 14 ; then echo '[*] Error code return test PASSED' ; else echo 'Error code return test FAILED'; false ; fi
 	make ltests
 if HAVE_VALGRIND
-	make clean -C src/testdir ;
-	VALGRIND='valgrind --tool=memcheck --leak-check=yes --num-callers=15 --exit-on-first-error=yes --error-exitcode=255' \
-		make ltests
+	if ! ldd $(FIM_EXE) | grep libasan.so.5; then \
+		make clean -C src/testdir ; \
+		VALGRIND='valgrind --tool=memcheck --leak-check=yes --num-callers=15 --exit-on-first-error=yes --error-exitcode=255' \
+			make ltests; \
+	fi
 endif
 
 .PHONY: ltests
