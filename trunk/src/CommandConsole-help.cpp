@@ -156,12 +156,24 @@ manmode:
 			"\nIn the following, the [internal] variables are the ones referenced in the source code (not including the hardcoded configuration, which may be inspected and/or invalidated by the user at runtime).\n"
 			"\n"
 		       	+get_variables_reference(refmode)+
+		".SH DEFAULT ALIASES REFERENCE\n"
+			"Hardcoded aliases are: \n"
+			"\n.fi\n"
+		       	+getAliasesList(refmode)+
+			"\n.fi\n"
+			"They can be redefined with "
+			"\n.B " FIM_FLT_ALIAS "\nor deleted with the "
+			"\n.B " FIM_FLT_UNALIAS "\ncommand."
+			"\n.fi\n"
+			"Further default aliases are usually loaded at startup -- see the CONFIGURATION FILE EXAMPLE section below.\n"
 		".SH COMMAND LINE USAGE EXAMPLES\n"
 			".nf\n"
 			+FIM_DEFAULT_EXAMPLE_FILE_CONTENTS+
 			"\n"
 		".SH CONFIGURATION FILE EXAMPLE\n"
-			"This is the default configuration, as contained in the " FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS " variable.\n"
+			"Part of the default configuration comes from the " FIM_VID_FIM_DEFAULT_CONFIG_FILE_CONTENTS " variable, shown here."
+			"\n.nf\n"
+			"One can skip its loading by using the " FIM_VID_NO_DEFAULT_CONFIGURATION " variable.\n"
 			"\n.nf\n"
 			+FIM_DEFAULT_CONFIG_FILE_CONTENTS+
 			"\n"

@@ -285,7 +285,7 @@ class CommandConsole FIM_FINAL :
 	std::queue<char,std::list<char>> clkpv_; /* command line key presses vector*/
 	private:
 #endif /* FIM_WANT_CMDLINE_KEYPRESS */
-	fim::string getAliasesList(void)const;
+	fim::string getAliasesList(FimDocRefMode refmode=DefRefMode)const;
 	fim::string dummy(const args_t& args);
 	fim_cxr fcmd_variables_list(const args_t& args);
 	fim_cxr fcmd_commands_list(const args_t& args);
@@ -339,7 +339,7 @@ class CommandConsole FIM_FINAL :
 #endif /* FIM_AUTOCMDS */
 	fim::string current(void)const;
 
-	fim::string get_alias_info(const fim::string aname)const;
+	fim::string get_alias_info(const fim::string aname, FimDocRefMode refmode=DefRefMode)const;
 #ifdef FIM_WINDOWS
 	const FimWindow& current_window(void)const;
 #endif /* FIM_WINDOWS */
