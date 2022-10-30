@@ -57,11 +57,13 @@
 #include <set> 		/* STL (Standard Template Library) set structure template 	*/
 #include <cassert>	/* <assert.h> C assertions ( IEEE Std 1003.1-2001 aka Posix ) 	*/
 
+#if HAVE_REGEX_H
 #ifndef USE_GNU_REGEX
 # include <regex.h>		/*	the Posix (GNU implementation,not functionality) readline library	*/
 #else
 # include "regex.h"		/*	the GNU (implementation and functionality) readline library	*/
 #endif /* USE_GNU_REGEX */
+#endif /* HAVE_REGEX_H */
 
 #ifdef HAVE_CLIMITS
  #include <climits>
@@ -107,7 +109,9 @@
 #endif
 #define FIM_PATH_MAX _POSIX_PATH_MAX
 
+#if HAVE_TERMIOS_H
 #include <termios.h>	/* general terminal interface (Posix)			*/
+#endif /* HAVE_TERMIOS_H */
 #include <fcntl.h>	/* file descriptor manipulation interface (Posix)	*/
 #include <ctime>	/* time related functionality (Posix)			*/
 #include "common.h"	/* misc FIM stuff					*/
@@ -168,7 +172,12 @@
 #define FIM_USE_CXX11 ( (FIM_USE_CXX_STD >= 2011 ) || ( __cplusplus>=201103L) ) /* */
 #define FIM_USE_CXX14 ( (FIM_USE_CXX_STD >= 2014 ) || ( __cplusplus> 201402L) ) /* */
 #define FIM_USE_CXX17 ( (FIM_USE_CXX_STD >= 2017 ) || ( __cplusplus> 201707L) ) /* */
-#define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && 1 ) /* FIXME: this is experimental */
+#if defined(__MINGW32__ ) || defined(__MINGW64__)
+#define FIM_USING_MINGW 1
+#else
+#define FIM_USING_MINGW 0
+#endif
+#define FIM_WANT_BACKGROUND_LOAD ( FIM_USE_CXX11 && !FIM_USING_MINGW ) /* FIXME: this is experimental */
 #define FIM_WANT_PIC_CMTS_RELOAD ( FIM_USE_CXX11 && FIM_WANT_PIC_CMTS )
 #define FIM_WANT_IMAGE_LOAD_TIME 1
 #define FIM_RECURSIVE_HIDDEN_DIRS_SKIP_CHECK 1
@@ -1112,7 +1121,7 @@ namespace fim
 #define FIM_WANT_DISPLAY_FILESIZE (FIM_WANT_KEEP_FILESIZE && 0)
 #define FIM_WANT_DISPLAY_MEMSIZE  0
 #define FIM_WANT_APPROXIMATE_EXPONENTIAL_SCALING  FIM_WANT_MIPMAPS && 1
-#define FIM_WANT_R_SWITCH  1 /* --resolution width:height switch (the fim way, differently from fbi's) */
+#define FIM_WANT_R_SWITCH  FIM_WITH_LIBSDL /* --resolution width:height switch (the fim way, differently from fbi's) */
 #define FIM_WANT_RECURSE_FILTER_OPTION 1 /* Enable -R=... */
 #define FIM_WANT_NOEXTPROPIPE 1 /* */
 /* #define FIM_WANT_CUSTOM_INFO_STRING  1 */

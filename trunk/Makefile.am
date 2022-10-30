@@ -38,7 +38,7 @@ EXTRA_DIST=  COPYING  \
 	$(top_srcdir)/media/multipage/Makefile \
 	$(top_srcdir)/var/fonts/Lat15-Terminus16.psf \
 	depcomp missing install-sh
-FIM_EXE=./src/fim
+FIM_EXE=./src/fim$(EXEEXT)
 FIMGS_EXE=./src/fimgs
 
 
@@ -82,6 +82,7 @@ tests:	all
 	ulimit -c unlimited || true
 	ulimit -v 32000 || true
 	ulimit -t 1000 || true
+if HAVE_RUNNABLE_TESTS
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 0; quit 1;' -F 'quit 2; quit 3'; test "$$?" = 2
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -C 'quit 0; quit 1;'
 	$(FIM_EXE) $(FIMNORCOPTS) -o dumb $(top_srcdir)/media/ -c 'quit 0; quit 1;'
@@ -145,6 +146,7 @@ if HAVE_VALGRIND
 		VALGRIND='valgrind --tool=memcheck --leak-check=yes --num-callers=15 --exit-on-first-error=yes --error-exitcode=255' \
 			make ltests; \
 	fi
+endif
 endif
 
 .PHONY: ltests
@@ -256,8 +258,10 @@ dox: doc/fim.man doc/fimrc.man doc/fimgs.man
 MANSUBST = sed -e 's,@sysconfdir\@,$(sysconfdir),g' -e 's,@docdir\@,$(docdir),g' -e 's,-,\\-,g'
 
 doc/fim.man.in doc/fimrc.man.in: $(FIM_EXE)
+if HAVE_RUNNABLE_TESTS
 	$(FIM_EXE) $(FIMNORCOPTS) --help=m                    > doc/fim.man.in
 	$(FIM_EXE) $(FIMNORCOPTS) --dump-reference-help=man   > doc/fimrc.man.in
+endif
 
 doc/fimgs.man.in: $(FIM_EXE)
 if HAVE_GS

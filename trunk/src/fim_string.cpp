@@ -2,7 +2,7 @@
 /*
  string.h : Fim's string type
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -120,6 +120,7 @@ namespace fim
 		 *
 		 * FIXME : return values could be more informative
 		 * */
+#if HAVE_REGEX_H
 		regex_t regex;
 		FIM_CONSTEXPR int nmatch=1;
 		regmatch_t pmatch[nmatch];
@@ -136,6 +137,7 @@ namespace fim
 			return true;
 		}
 		regfree(&regex);
+#endif /* HAVE_REGEX_H */
 		return false;
 	}
 
@@ -154,6 +156,7 @@ namespace fim
 		 * FIXME : return values could be more informative
 		 * NOTE: mbuf is int, but pmatch->rm_so and pmatch->rm_eo are regoff_t from regex.h
 		 * */
+#if HAVE_REGEX_H
 		regex_t regex;
 		const size_t nmatch=1;
 		regmatch_t pmatch[nmatch];
@@ -175,11 +178,13 @@ namespace fim
 			return pmatch->rm_so;
 		}
 		regfree(&regex);
+#endif /* HAVE_REGEX_H */
 		return -1;
 	}
 
 	void string::substitute(const fim_char_t*r, const fim_char_t* s, int flags)
 	{
+#if HAVE_REGEX_H
 		/* TODO: replace using <regex> */
 		/*
 		 * each occurrence of regular expression r will be substituted with s
@@ -225,6 +230,7 @@ namespace fim
 		if(rs!=*this)
 			*this=rs.c_str();
 		regfree(&regex);
+#endif /* HAVE_REGEX_H */
 		return;
 	}
 

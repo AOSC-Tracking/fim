@@ -30,7 +30,9 @@
  * Global variables.
  * */
 	fim::string g_fim_output_device;
+#if HAVE_FLEXLEXER_H
 	FlexLexer *lexer;
+#endif /* HAVE_FLEXLEXER_H */
 
 /*
  * (nearly) all Fim stuff is in the fim namespace.
@@ -1778,6 +1780,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		// dt += getmilliseconds();
 		// std::cout << fim::string("fetched images list in ") << dt << " ms" << std::endl;
 	
+#if HAVE_FLEXLEXER_H
 		lexer=new yyFlexLexer;	//used by YYLEX
 		if(!lexer)
 		{
@@ -1785,6 +1788,7 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 			retcode=-1;
 			goto ret;
 		}
+#endif /* HAVE_FLEXLEXER_H */
 
 	#ifdef FIM_READ_STDIN	
 		if( ( read_stdin_choice == FilesList ) +
@@ -1920,7 +1924,6 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		// TODO : need better output device probing mechanism
 
 #if FIM_WANT_R_SWITCH
-#ifdef FIM_WITH_LIBSDL
 		if(rs)
 		if(g_fim_output_device.find(FIM_DDN_INN_SDL)==0)
 		{
@@ -1928,7 +1931,6 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 				g_fim_output_device+="=";
 			g_fim_output_device+=rs;
 		}
-#endif /* FIM_WITH_LIBSDL */
 #endif /* FIM_WANT_R_SWITCH */
 
 		if((retcode=FIM_ERR_TO_PERR(cc.init(g_fim_output_device)))!=FIM_PERR_NO_ERROR) {goto ret;}

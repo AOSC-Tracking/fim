@@ -30,7 +30,9 @@
 #include "readline.h"
 #endif /* FIM_USE_READLINE */
 
+#if HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
+#endif /* HAVE_SYS_IOCTL_H */
 
 #include <signal.h>
 #include <fstream>
@@ -55,7 +57,7 @@ extern fim_sys_int yyparse();
 #if FIM_WANT_BACKGROUND_LOAD
 #include <mutex>
 #endif /* FIM_WANT_BACKGROUND_LOAD */
-#define FIM_USE_STD_CHRONO FIM_USE_CXX14
+#define FIM_USE_STD_CHRONO FIM_USE_CXX14 && !FIM_USING_MINGW
 #if FIM_WANT_BACKGROUND_LOAD || FIM_USE_STD_CHRONO 
 #include <thread>
 #include <chrono>
@@ -676,6 +678,7 @@ ret:
 
 	fim_err_t CommandConsole::execute_internal(const fim_char_t *ss, fim_xflags_t xflags)
 	{
+#if HAVE_PIPE
 		try{
 		/*
 		 *	execute a string containing a fim script.
@@ -784,6 +787,7 @@ ret:
 			if( e == FIM_E_TRAGIC || true )
 			       	return this->quit( FIM_E_TRAGIC );
 		}
+#endif /* HAVE_PIPE */
 		return FIM_ERR_NO_ERROR;
 	}
 
@@ -799,6 +803,7 @@ ret:
 
 		if(ocmd!=FIM_CNS_EMPTY_STRING)
 		{
+#if HAVE_PIPE
 			//an alias should be expanded. arguments are appended.
 			std::ostringstream oss;
 			cmd=ocmd;
@@ -831,6 +836,7 @@ ret:
 			yyparse();
 			fim_perror(FIM_NULL);//FIXME: shall use only one yyparse-calling function!
 			close(fim_pipedesc[0]);
+#endif /* HAVE_PIPE */
 			goto ok;
 		}
 		if(cmd==FIM_FLT_USLEEP)
@@ -1650,6 +1656,7 @@ ok:
 		 *	given a string s, and a Posix regular expression r, this
 		 *	member function returns true if there is match. false otherwise.
 		 */
+#if HAVE_REGEX_H
 		regex_t regex;		//should be static!!!
 		const fim_size_t nmatch=1;	// we are satisfied with the first match, aren't we ?
 		regmatch_t pmatch[nmatch];
@@ -1693,6 +1700,7 @@ ok:
 			/*	no match	*/
 		}
 		regfree(&regex);
+#endif /* HAVE_REGEX_H */
 		return false;
 		//return true;
 	}
@@ -1918,6 +1926,7 @@ ok:
 	 */
 	void CommandConsole::tty_raw(void)
 	{
+#if HAVE_TERMIOS_H
 		struct termios tattr;
 		//we set the terminal in raw mode.
 		    
@@ -1930,15 +1939,18 @@ ok:
 		tattr.c_cc[VMIN] = 1;
 		tattr.c_cc[VTIME] = 0;
 		tcsetattr (0, TCSAFLUSH, &tattr);
+#endif /* HAVE_TERMIOS_H */
 	}
 	
 	void CommandConsole::tty_restore(void)
 	{	
+#if HAVE_TERMIOS_H
 		//POSIX.1 compliant:
 		//"a SIGIO signal is sent whenever input or output becomes possible on that file descriptor"
 		fcntl(0,F_SETFL,saved_fl_);
 		//the Terminal Console State Attributes will be set right NOW
 		tcsetattr (0, TCSANOW, &saved_attributes_);
+#endif /* HAVE_TERMIOS_H */
 	}
 
 	fim_err_t CommandConsole::load_or_save_history(bool load_or_save)

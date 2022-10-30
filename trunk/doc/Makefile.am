@@ -2,7 +2,7 @@
 
 HTMLDOCS=FIM.html fim.man.html  fimgs.man.html fimrc.man.html
 
-CLEANFILES= doctags *.o  tags $(HTMLDOCS)
+CLEANFILES= doctags$(EXEEXT) *.o  tags $(HTMLDOCS)
 
 EXTRA_DIST = FIM.TXT fim.man doctags.c fim-stylesheet.css ./vim2html.pl fimgs.man fimrc.man fim.man.in fimgs.man.in fimrc.man.in
 #MAN2HTML=man2html
@@ -20,8 +20,10 @@ dist_doc_DATA = FIM.TXT
 .PHONY: all
 all:	$(HTMLDOCS) $(EXTRA_DIST)
 
-FIM.html fim-stylesheet.css: doctags FIM.TXT
-	./doctags $(srcdir)/FIM.TXT > tags ; $(srcdir)/vim2html.pl tags $(srcdir)/FIM.TXT
+FIM.html fim-stylesheet.css: doctags$(EXEEXT) FIM.TXT
+if HAVE_RUNNABLE_TESTS
+	./doctags$(EXEEXT) $(srcdir)/FIM.TXT > tags ; $(srcdir)/vim2html.pl tags $(srcdir)/FIM.TXT
+endif
 
 fim.man:
 	make doc/fim.man -C $(top_srcdir)/
@@ -43,9 +45,9 @@ fimgs.man:
 fimgs.man.html: fimgs.man
 	$(MAN2HTML) ./$< | $(MAN2HTMLS) >  $@ || $(ECHO) "$(ERRMSG) $(MAN2HTML) $< >  $@"
 
-doctags: doctags.c
+doctags$(EXEEXT): doctags.c
 	        $(CC) -o $@ $<
 
 #clean:
-#	        $(RM) -f  doctags.o doctags FIM.html tags fim-stylesheet.css fim.man.html fimgs.man.html
+#	        $(RM) -f  doctags.o doctags$(EXEEXT) FIM.html tags fim-stylesheet.css fim.man.html fimgs.man.html
 

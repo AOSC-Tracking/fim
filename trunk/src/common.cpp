@@ -392,8 +392,9 @@ ret:
 			cout << "Error after opening file " << filename << " !\n";
 			goto err;
 		}
-
+#if HAVE_SYNC
 		sync();
+#endif /* HAVE_SYNC */
 		return true;
 err:
 		return false;
@@ -572,10 +573,12 @@ fim_int fim_rand(void)
 		 *	given a string s, and a Posix regular expression r, this
 		 *	member function returns true if there is match. false otherwise.
 		 */
+		bool match=false;
+#if HAVE_REGEX_H
 		regex_t regex;		//should be static!!!
 		FIM_CONSTEXPR int nmatch=1;	// we are satisfied with the first match, aren't we ?
 		regmatch_t pmatch[nmatch];
-		bool match=true;
+		match=true;
 
 		/*
 		 * we allow for the default match, in case of null regexp
@@ -627,6 +630,7 @@ fim_int fim_rand(void)
 		regfree(&regex);
 		match = false;
 ret:
+#endif /* HAVE_REGEX_H */
 		return match;
 	}
 

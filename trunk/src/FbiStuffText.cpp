@@ -167,7 +167,7 @@ text_read(fim_byte_t *dst, unsigned int line, void *data)
 
     	if(line==0)
 	{
-		bzero(dst,3*h->h*h->w);
+		fim_bzero(dst,3*h->h*h->w);
 		fseek(h->fp, 0,SEEK_SET );
 		while( ( fr = fgetc(h->fp) ) != EOF && cc < h->maxc  )
 		{
