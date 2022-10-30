@@ -721,19 +721,19 @@ int fim_dump_man_page(void)
 			".SH NAME\n"
 			"fim - \\fBf\\fPbi (linux \\fBf\\fPrame\\fBb\\fPuffer \\fBi\\fPmageviewer) \\fBim\\fPproved\n"
 			".SH SYNOPSIS\n"
-			".B fim [{options}] [--] {imagepath} [{imagepaths}]\n.fi\n"
-			".B ... | fim [{options}] [--] [{imagepaths}] -\n.fi\n")+
+			FIM_MAN_Bn("fim [{options}] [--] {imagepath} [{imagepaths}]")
+			FIM_MAN_Bn("... | fim [{options}] [--] [{imagepaths}] -"))+
 #ifdef FIM_READ_STDIN
-			string(".B fim [{options}] [--] [{files}] - < {file_name_list_text_file}\n.fi\n")+
+			string(FIM_MAN_Bn("fim [{options}] [--] [{files}] - < {file_name_list_text_file}"))+
 #endif /* FIM_READ_STDIN */
 #ifdef FIM_READ_STDIN_IMAGE
-			string(".B fim --" FIM_OSW_IMAGE_FROM_STDIN " [{options}] < {imagefile}\n.fi\n")+
+			string(FIM_MAN_Bn("fim --" FIM_OSW_IMAGE_FROM_STDIN " [{options}] < {imagefile}"))+
 #endif /* FIM_READ_STDIN_IMAGE */
 #ifdef FIM_READ_STDIN
-			string(".B fim --" FIM_OSW_SCRIPT_FROM_STDIN " [{options}] < {scriptfile}\n.fi\n")+
+			string(FIM_MAN_Bn("fim --" FIM_OSW_SCRIPT_FROM_STDIN " [{options}] < {scriptfile}"))+
 #endif /* FIM_READ_STDIN */
 #if FIM_WANT_HELP_ARGS
-			string(".B fim --help" FIM_HELP_EXTRA_OPTS " [{help-item} ...] \n.fi\n")+
+			string(FIM_MAN_Bn("fim --help" FIM_HELP_EXTRA_OPTS " [{help-item} ...] "))+
 #endif /* FIM_WANT_HELP_ARGS */
 			string("\n"
 			".SH DESCRIPTION\n"
@@ -903,41 +903,32 @@ mp+=string(
 ".B not\n"
 "work.\n"
 ".SH INVOCATION EXAMPLES\n"
-".B fim --help -R -B\n"
-".fi \n"
+FIM_MAN_Bn("fim --help -R -B")
 "# Will ask for help for options -R and -B.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B fim media/ \n"
-".fi \n"
+FIM_MAN_Bn("fim media/ ")
 "# Will load files from the directory media.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B fim -R media/ --sort \n"
-".fi \n"
+FIM_MAN_Bn("fim -R media/ --sort ")
 "# Will open files found by recursive traversal of directory media, then sorting the list.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B\n"
-".B find /mnt/media/ -name *.jpg | fim - \n"
-".fi \n"
+FIM_MAN_Bn("find /mnt/media/ -name *.jpg | fim - ")
 "# Will make fim read the file list from standard input.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B\n"
-"find /mnt/media/ -name *.jpg | shuf | fim -\n"
-".fi\n"
+FIM_MAN_Bn("find /mnt/media/ -name *.jpg | shuf | fim -")
 "# will make fim read the file list from standard input, randomly shuffled.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B\n"
-"cat script.fim | fim -p images/*\n"
-".fi\n"
+FIM_MAN_Bn("cat script.fim | fim -p images/*")
 "# Will make fim read the script file\n"
 ".B script.fim\n"
 "from standard input prior to displaying files in the directory\n"
@@ -946,48 +937,39 @@ mp+=string(
 ".P\n"
 #ifdef FIM_READ_STDIN_IMAGE
 "\n"
-".B \n"
-"scanimage ... | tee scan.ppm | fim -i\n"
-".fi\n"
+FIM_MAN_Bn("scanimage ... | tee scan.ppm | fim -i")
 "# Will make fim read the image scanned from a flatbed scanner as soon as it is read \n"
 ".P\n"
 ".P\n"
 "\n"
-".B \n"
-"h5topng -x 1 -y 2 dataset.hdf -o /dev/stdout | fim -i\n"
-".fi\n"
+FIM_MAN_Bn("h5topng -x 1 -y 2 dataset.hdf -o /dev/stdout | fim -i")
 "# Use fim to visualize a slice from an HDF5 dataset file\n"
 ".P\n"
 ".P\n"
 #endif /* FIM_READ_STDIN_IMAGE */
 "\n"
-".B fim * > selection.txt\n"
-".fi\n"
+FIM_MAN_Bn("fim * > selection.txt")
 "# Will output the file names marked interactively with the '" FIM_FLT_LIST " \"mark\"' command in fim to a file.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B fim * | fim -\n"
-".fi\n"
+FIM_MAN_Bn("fim * | fim -")
 "# will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B fim\n-c 'pread \"vgrabbj -d /dev/video0 -o png\";reload'\n"
-".fi\n"
+FIM_MAN_Bn("fim\n-c 'pread \"vgrabbj -d /dev/video0 -o png\";reload'")
 "# will display an image grabbed from a webcam.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B fim\n-o " FIM_DDN_INN_AA " -c 'pread \"vgrabbj -d /dev/video0 -o png\";reload;system \"fbgrab\" \"asciime.png\"'\n"
+FIM_MAN_Bn("fim\n-o " FIM_DDN_INN_AA " -c 'pread \"vgrabbj -d /dev/video0 -o png\";reload;system \"fbgrab\" \"asciime.png\"'")
 ".fi\n"
 "# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam.\n"
 ".P\n"
 ".P\n"
 "\n"
-".B fim\n"
-"-c 'while(1){pread \"vgrabbj -d /dev/video0 -o png\";reload;sleep 1;};'\n"
-".fi\n"
+FIM_MAN_Bn("fim\n" "-c 'while(1){pread \"vgrabbj -d /dev/video0 -o png\";reload;sleep 1;};'\n")
 "# will display a sequence of images grabbed from a webcam; circa 1 per second.\n"
 ".P\n"
 ".P\n"
