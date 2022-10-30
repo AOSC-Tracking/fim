@@ -2,7 +2,7 @@
 /*
  lex.lex : Lexer source file template
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,7 +57,6 @@ int fim_pipedesc[2];
 	result = (buf[0]==EOF||r<1)?EOB_ACT_END_OF_FILE:EOB_ACT_CONTINUE_SCAN; \
 	result = (buf[0]==EOF||r<1)?0:1; \
 	if(result<=0) {close(fim_pipedesc[0]);close(fim_pipedesc[1]);} \
-	if(r==0)number_to_move == YY_MORE_ADJ; \
 }
 
 
