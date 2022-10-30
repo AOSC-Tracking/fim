@@ -71,7 +71,7 @@ fim_char_t * dupnstr (fim_int n);
 fim_char_t * dupsqstr (const fim_char_t* s);
 fim_int fim_rand(void);
 
-bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase=1, int ignorenewlines=0);
+bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase=1, int ignorenewlines=0, int globexception=1);
 
 int strchr_count(const fim_char_t*s, int c);
 int lines_count(const fim_char_t*s, int cols);

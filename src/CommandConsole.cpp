@@ -1656,53 +1656,7 @@ ok:
 		 *	given a string s, and a Posix regular expression r, this
 		 *	member function returns true if there is match. false otherwise.
 		 */
-#if HAVE_REGEX_H
-		regex_t regex;		//should be static!!!
-		const fim_size_t nmatch=1;	// we are satisfied with the first match, aren't we ?
-		regmatch_t pmatch[nmatch];
-
-		/*
-		 * we allow for the default match, in case of null regexp
-		 */
-		if(!r || !strlen(r))
-			return true;
-
-		/* fixup code for a mysterious bug
-		 */
-		if(*r=='*')
-			return false;
-
-		//if(regcomp(&regex,"^ \\+$", 0 | REG_EXTENDED | REG_ICASE )==-1)
-		if(regcomp(&regex,r, 0 | REG_EXTENDED | (rsic==0?0:REG_ICASE) )!=0)
-		{
-			/* error calling regcomp (invalid regexp?)! (should we warn the user ?) */
-			//cout << "error calling regcomp (invalid regexp?)!" << "\n";
-			return false;
-		}
-		else
-		{
-//			cout << "done calling regcomp!" << "\n";
-		}
-		//if(regexec(&regex,s+0,nmatch,pmatch,0)==0)
-		if(regexec(&regex,s+0,nmatch,pmatch,0)!=REG_NOMATCH)
-		{
-//			cout << "'"<< s << "' matches with '" << r << "'\n";
-/*			cout << "match: " << "\n";
-			cout << "\"";
-			for(int m=pmatch[0].rm_so;m<pmatch[0].rm_eo;++m)
-				cout << s[0+m];
-			cout << "\"\n";*/
-			regfree(&regex);
-			return true;
-		}
-		else
-		{
-			/*	no match	*/
-		}
-		regfree(&regex);
-#endif /* HAVE_REGEX_H */
-		return false;
-		//return true;
+		return ::regexp_match(s, r, rsic, true);
 	}
 
 	bool CommandConsole::redisplay(void)
