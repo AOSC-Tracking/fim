@@ -303,7 +303,7 @@ struct fim_options_t fim_options[] = {
     },	/* NEW */
     {"no-framebuffer",      no_argument,       FIM_NULL, 't',
 	"display images in text mode (as -o " FIM_DDN_INN_AA ")",FIM_NULL,
-	"Fim will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).\n"
+	FIM_MAN_fB("fim") " will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).\n"
 	"If aalib was not enabled at tompile time, fim will work without displaying images at all."
     },
     {"vt",         required_argument, FIM_NULL, 'T',
@@ -385,7 +385,7 @@ struct fim_options_t fim_options[] = {
     },
     {FIM_OSW_DUMP_SCRIPTOUT,      required_argument,       FIM_NULL, 'W',
 	"will record any executed command to the a {scriptfile}", "{scriptfile}",
-	"All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
+	"All the characters that you type are recorded in the file {scriptout}, until you exit " FIM_MAN_fB("fim") ".  This is useful if you want to create a script file to be used with \"fim -c\" or \":exec\" (analogous to Vim's -s and \":source!\").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). "
     },
     {"read-from-file",      required_argument,       FIM_NULL, 'L',
 	"read an image list from a file","{fileslistfile}",
@@ -983,41 +983,40 @@ FIM_MAN_Bn("fim\n" "-c 'while(1){pread \"vgrabbj -d /dev/video0 -o png\";reload;
 "The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.\n"
 #endif /* FIM_WITH_LIBSDL */
 ".SH BUGS\n"
-".B fim\n"
-"has bugs. Please read the \n"
+FIM_MAN_fB("fim")
+" has bugs. Please read the \n"
 ".B BUGS\n"
 "file shipped in the documentation directory to discover the known ones.\n"
 ".SH  FILES\n"
 "\n"
 ".TP 15\n"
 ".B " FIM_CNS_DOC_PATH "\n"
-"The directory with \n"
-".B Fim\n"
-"documentation files.\n"
+"The directory with "
+FIM_MAN_fB("fim")
+" documentation files.\n"
 ".TP 15\n"
 ".B " FIM_CNS_SYS_RC_FILEPATH "\n"
-"The system wide\n"
-".B Fim\n"
-"initialization file (executed at startup, after executing the hardcoded configuration).\n"
+"The system wide "
+FIM_MAN_fB("fim")
+" initialization file (executed at startup, after executing the hardcoded configuration).\n"
 
 ".TP 15\n"
 ".B " FIM_CNS_USR_RC_COMPLETE_FILEPATH "\n"
-"The personal\n"
-".B Fim\n"
-"initialization file (executed at startup, after the system wide initialization file).\n"
+"The personal "
+FIM_MAN_fB("fim")
+" initialization file (executed at startup, after the system wide initialization file).\n"
 
 ".TP 15\n"
 ".B ~/.inputrc\n"
-"If\n.B Fim\n"
-"is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see"
+"If "
+FIM_MAN_fB("fim")
+" is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see"
 " (man " FIM_MAN_fR("readline") "(3))."
 "\n"
 			      )+
 string(
 ".SH SEE ALSO\n"
-"Other \n"
-".B Fim \n"
-"man pages: " FIM_MAN_fR("fimgs") "(1), " FIM_MAN_fR("fimrc") "(1).\n"
+"Other " FIM_MAN_fB("fim") " man pages: " FIM_MAN_fR("fimgs") "(1), " FIM_MAN_fR("fimrc") "(1).\n"
 ".fi\n"
 "Or related programs: " FIM_MAN_fR("fbset") "(1), " FIM_MAN_fR("con2fb") "(1), " FIM_MAN_fR("convert") "(1), " FIM_MAN_fR("vim") "(1), " FIM_MAN_fR("mutt") "(1), " FIM_MAN_fR("exiftool") "(1), " FIM_MAN_fR("exiftags") "(1), " FIM_MAN_fR("exiftime") "(1), " FIM_MAN_fR("exifcom") "(1), " FIM_MAN_fR("fbi") "(1), " FIM_MAN_fR("fbida") "(1), " FIM_MAN_fR("feh") "(1), " FIM_MAN_fR("fb.modes") "(8), " FIM_MAN_fR("fbset") "(8), " FIM_MAN_fR("fbgrab") "(1), " FIM_MAN_fR("fbdev") "(4), " FIM_MAN_fR("setfont") "(8), " FIM_MAN_fR("xfs") "(1).\n"
 ".SH AUTHOR\n"
