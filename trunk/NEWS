@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1739,TODO)
+ * This is the last FIM version supporting the C++03 standard.
 # (r1731)
  * Refresh configure and Makefile templates.
 # (r1729)

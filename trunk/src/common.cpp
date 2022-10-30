@@ -573,7 +573,6 @@ fim_int fim_rand(void)
 		 *	given a string s, and a Posix regular expression r, this
 		 *	member function returns true if there is match. false otherwise.
 		 */
-		/* TODO: replace using <regex> */
 		bool match=false;
 		match=true;
 #if FIM_USE_CXX_REGEX
@@ -583,8 +582,7 @@ fim_int fim_rand(void)
 		if(!r || !*r || !strlen(r))
 			goto ret;
 
-		/* fixup code for a mysterious bug
-		 */
+		/* fixup code for a mysterious bug (TODO: check if still relevant) */
 		if(globexception && *r=='*')
 		{
 			match = false;
