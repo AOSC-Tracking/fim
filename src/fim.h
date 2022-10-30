@@ -547,11 +547,11 @@ enum FimDocRefMode FIM_ENUM_BASE { Txt, Man, DefRefMode=Txt};
 #define FIM_CNS_DSFF_SN	"BMP, PCX" 
 #if FIM_USE_CXX11
 /* this default FIM_CNS_PUSHDIR_RE might be built based on build options */
-#define FIM_CNS_PUSHDIR_RE	R"***(\.JPG$|\.PNG$|\.GIF$|\.BMP$|\.TIFF$|\.TIF$|\.JPEG$|\.JFIF$|\.PPM$|\.PGM$|\.PBM$|\.PCX|\.WEBP$)***" 
+#define FIM_CNS_PUSHDIR_RE	R"***(\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|WEBP)$)***" 
 #else /* FIM_USE_CXX11 */
-#define FIM_CNS_PUSHDIR_RE	"\\.JPG$|\\.PNG$|\\.GIF$|\\.BMP$|\\.TIFF$|\\.TIF$|\\.JPEG$|\\.JFIF$|\\.PPM$|\\.PGM$|\\.PBM$|\\.PCX|\\.WEBP$"
+#define FIM_CNS_PUSHDIR_RE	    "\\.(JPG|PNG|GIF|BMP|TIFF|TIF|JPEG|JFIF|PPM|PGM|PBM|PCX|WEBP)$"
 #endif /* FIM_USE_CXX11 */
-#define FIM_CNS_ARCHIVE_RE	".*(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* there might be more: CAB.. */
+#define FIM_CNS_ARCHIVE_RE	"\\.(RAR|ZIP|TAR|TAR.GZ|TGZ|TAR.BZ2|TBZ|TBZ2|CBR|CBZ|LHA|7Z|XAR|ISO)$" /* there might be more: CAB.. */
 #define FIM_CNS_BPP_INVALID	0
 #define FIM_CNS_K 1024
 #define FIM_CNS_M (FIM_CNS_K*FIM_CNS_K)
