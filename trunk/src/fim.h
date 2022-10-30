@@ -32,6 +32,10 @@
 #include "../config.h"
 #endif /* HAVE_CONFIG_H */
 
+#define FIM_USE_CXX11 ( (FIM_USE_CXX_STD >= 2011 ) || ( __cplusplus>=201103L) ) /* */
+#define FIM_USE_CXX14 ( (FIM_USE_CXX_STD >= 2014 ) || ( __cplusplus> 201402L) ) /* */
+#define FIM_USE_CXX17 ( (FIM_USE_CXX_STD >= 2017 ) || ( __cplusplus> 201707L) ) /* */
+
 #if FIM_WITH_DEBUG 
 #else
 #define NDEBUG 1	/* turns off assert() functionality */
@@ -57,6 +61,11 @@
 #include <set> 		/* STL (Standard Template Library) set structure template 	*/
 #include <cassert>	/* <assert.h> C assertions ( IEEE Std 1003.1-2001 aka Posix ) 	*/
 
+#define FIM_USE_CXX_REGEX FIM_USE_CXX11 && HAVE_REGEX
+
+#if FIM_USE_CXX_REGEX
+# include <regex>
+#endif /* FIM_USE_CXX_REGEX */
 #if HAVE_REGEX_H
 #ifndef USE_GNU_REGEX
 # include <regex.h>		/*	the Posix (GNU implementation,not functionality) readline library	*/
@@ -169,9 +178,6 @@
 #define FIM_FONT_MAGNIFY_FACTOR_MIN 1  /* Framebuffer font magnifying factor, minimal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_MAX 16 /* Framebuffer font magnifying factor, maximal value. */
 #define FIM_FONT_MAGNIFY_FACTOR_DEFAULT ( FIM_WANT_FONT_MAGNIFY_FACTOR > 0 ? FIM_WANT_FONT_MAGNIFY_FACTOR : ( FIM_WANT_FONT_MAGNIFY_FACTOR < 0 ? -FIM_WANT_FONT_MAGNIFY_FACTOR : 1 ) ) /* Framebuffer font magnifying factor, default value. */
-#define FIM_USE_CXX11 ( (FIM_USE_CXX_STD >= 2011 ) || ( __cplusplus>=201103L) ) /* */
-#define FIM_USE_CXX14 ( (FIM_USE_CXX_STD >= 2014 ) || ( __cplusplus> 201402L) ) /* */
-#define FIM_USE_CXX17 ( (FIM_USE_CXX_STD >= 2017 ) || ( __cplusplus> 201707L) ) /* */
 #if defined(__MINGW32__ ) || defined(__MINGW64__)
 #define FIM_USING_MINGW 1
 #else

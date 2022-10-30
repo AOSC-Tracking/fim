@@ -575,16 +575,35 @@ fim_int fim_rand(void)
 		 */
 		/* TODO: replace using <regex> */
 		bool match=false;
+		match=true;
+#if FIM_USE_CXX_REGEX
+		/*
+		 * we allow for the default match, in case of null regexp
+		 */
+		if(!r || !*r || !strlen(r))
+			goto ret;
+
+		/* fixup code for a mysterious bug
+		 */
+		if(globexception && *r=='*')
+		{
+			match = false;
+			goto ret;
+		}
+
+		try {
+			match = std::regex_search(s, std::regex(r, ignorecase ? ( std::regex_constants::extended | std::regex_constants::icase) : std::regex_constants::extended ));
+		} catch (std::exception e) { match = false; }
+#else /* FIM_USE_CXX_REGEX */
 #if HAVE_REGEX_H
 		regex_t regex;		//should be static!!!
 		FIM_CONSTEXPR int nmatch=1;	// we are satisfied with the first match, aren't we ?
 		regmatch_t pmatch[nmatch];
-		match=true;
 
 		/*
 		 * we allow for the default match, in case of null regexp
 		 */
-		if(!r || !strlen(r))
+		if(!r || !*r || !strlen(r))
 			goto ret;
 
 		/* fixup code for a mysterious bug (TODO: check if still relevant) */
@@ -630,8 +649,9 @@ fim_int fim_rand(void)
 		};
 		regfree(&regex);
 		match = false;
-ret:
 #endif /* HAVE_REGEX_H */
+#endif /* FIM_USE_CXX_REGEX */
+ret:
 		return match;
 	}
 
