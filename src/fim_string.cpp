@@ -165,23 +165,25 @@ namespace fim
 
 	void string::substitute(const fim_char_t*r, const fim_char_t* s, int flags)
 	{
+		/* each occurrence of regular expression r will be substituted with s */
+		if( !r || !*r || !s )
+			return;
+
+#if FIM_USE_CXX_REGEX
+		std::string os;
+		try {
+			os = std::regex_replace( *this, std::regex(r, ( std::regex_constants::extended | std::regex_constants::icase /*| std::regex_constants::format_sed*/) ), s);
+		} catch (std::exception e) { }
+		if(os!=*this)
+			*this=os.c_str();
+#else /* FIM_USE_CXX_REGEX */
 #if HAVE_REGEX_H
-		/* TODO: replace using <regex> */
-		/*
-		 * each occurrence of regular expression r will be substituted with s
-		 *
-		 * FIXME : return values could be more informative
-		 * FIXME : not efficient
-		 * */
 		regex_t regex;
 		FIM_CONSTEXPR int nmatch=1;
 		regmatch_t pmatch[nmatch];
 		int off=0;//,sl=0;
 		std::string rs =FIM_CNS_EMPTY_STRING;
 		int ts=this->size();
-
-		if( !r || !*r || !s )
-			return;
 
 		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE | flags ) != 0 )
 			return;
@@ -212,6 +214,7 @@ namespace fim
 			*this=rs.c_str();
 		regfree(&regex);
 #endif /* HAVE_REGEX_H */
+#endif /* FIM_USE_CXX_REGEX */
 		return;
 	}
 

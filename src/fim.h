@@ -64,8 +64,8 @@
 #define FIM_USE_CXX_REGEX FIM_USE_CXX11 && HAVE_REGEX
 
 #if FIM_USE_CXX_REGEX
-# include <regex>
-#endif /* FIM_USE_CXX_REGEX */
+# include <regex>		/*	C++11 STL regular expressions: regex_search regex_replace */
+#else /* FIM_USE_CXX_REGEX */
 #if HAVE_REGEX_H
 #ifndef USE_GNU_REGEX
 # include <regex.h>		/*	the Posix (GNU implementation,not functionality) readline library	*/
@@ -73,6 +73,7 @@
 # include "regex.h"		/*	the GNU (implementation and functionality) readline library	*/
 #endif /* USE_GNU_REGEX */
 #endif /* HAVE_REGEX_H */
+#endif /* FIM_USE_CXX_REGEX */
 
 #ifdef HAVE_CLIMITS
  #include <climits>
