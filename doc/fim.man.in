@@ -219,7 +219,7 @@ Interruptible slideshow mode. Wait for {number} of seconds (assigned to the _wan
 Perform a quick sanity check, just after the initialization, and terminate.
 .TP
 .B -t, --no-framebuffer
-Fim will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).
+\fBfim\fP will not use the framebuffer but the aalib (ASCII art) driver instead (if you are curious, see (info aalib)).
 If aalib was not enabled at tompile time, fim will work without displaying images at all.
 .TP
 .B -T {terminal}, --vt {terminal}
@@ -280,7 +280,7 @@ Sets _push_checks=0 before initialization, thus disabling file/dir existence che
 Scale the image according to the screen height.
 .TP
 .B -W {scriptfile}, --write-scriptout {scriptfile}
-All the characters that you type are recorded in the file {scriptout}, until you exit Fim.  This is  useful  if  you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
+All the characters that you type are recorded in the file {scriptout}, until you exit \fBfim\fP.  This is useful if you want to create a script file to be used with "fim -c" or ":exec" (analogous to Vim's -s and ":source!").  If the {scriptout} file exists, it will be not touched (as in Vim's -w). 
 .TP
 .B -L {fileslistfile}, --read-from-file {fileslistfile}
 Read file list from a file: each line one file to load (similar to --read-from-stdin; use --read-from-stdin-elds to control line breaking).
@@ -538,36 +538,25 @@ This manual page is neither accurate nor complete. In particular, issues related
 The filename "<STDIN>" is reserved for images read from standard input (view this as a limitation), and thus handling files with such name may incur in limitations.
 The SDL driver is quite inefficient, for a variety of reasons. In particular, its interaction with the readline library can be problematic (e.g.: when running in sdl mode without a terminal). This shall be fixed.
 .SH BUGS
-.B fim
-has bugs. Please read the 
+\fBfim\fP has bugs. Please read the 
 .B BUGS
 file shipped in the documentation directory to discover the known ones.
 .SH  FILES
 
 .TP 15
 .B @docdir@
-The directory with 
-.B Fim
-documentation files.
+The directory with \fBfim\fP documentation files.
 .TP 15
 .B @sysconfdir@/fimrc
-The system wide
-.B Fim
-initialization file (executed at startup, after executing the hardcoded configuration).
+The system wide \fBfim\fP initialization file (executed at startup, after executing the hardcoded configuration).
 .TP 15
 .B ~/.fimrc
-The personal
-.B Fim
-initialization file (executed at startup, after the system wide initialization file).
+The personal \fBfim\fP initialization file (executed at startup, after the system wide initialization file).
 .TP 15
 .B ~/.inputrc
-If
-.B Fim
-is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man \fR\fIreadline\fR(3)).
+If \fBfim\fP is built with GNU readline support, it will be susceptible to chages in the user set ~/.inputrc configuration file contents.  For details, see (man \fR\fIreadline\fR(3)).
 .SH SEE ALSO
-Other 
-.B Fim 
-man pages: \fR\fIfimgs\fR(1), \fR\fIfimrc\fR(1).
+Other \fBfim\fP man pages: \fR\fIfimgs\fR(1), \fR\fIfimrc\fR(1).
 .fi
 Or related programs: \fR\fIfbset\fR(1), \fR\fIcon2fb\fR(1), \fR\fIconvert\fR(1), \fR\fIvim\fR(1), \fR\fImutt\fR(1), \fR\fIexiftool\fR(1), \fR\fIexiftags\fR(1), \fR\fIexiftime\fR(1), \fR\fIexifcom\fR(1), \fR\fIfbi\fR(1), \fR\fIfbida\fR(1), \fR\fIfeh\fR(1), \fR\fIfb.modes\fR(8), \fR\fIfbset\fR(8), \fR\fIfbgrab\fR(1), \fR\fIfbdev\fR(4), \fR\fIsetfont\fR(8), \fR\fIxfs\fR(1).
 .SH AUTHOR

@@ -1518,7 +1518,7 @@ One can skip its loading by using the _no_default_configuration variable.
 # Lines beginning with a pound (#) are ignored by fim (they are treated as comments).
 #
 # Internal variables.
-# Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
+# Some of these variables influence fim's behaviour (input variables), some are set by fim (output variables).
 # It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
 if(_cache_control==''){_cache_control='m';}
 if(_debug_commands==''){_debug_commands='';}
