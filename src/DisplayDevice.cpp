@@ -45,6 +45,7 @@
 	fim_sys_int DisplayDevice::get_input(fim_key_t * c, bool want_poll)
 	{
 		fim_sys_int r=0;
+#if HAVE_SYS_SELECT_H
 		*c=0;
 #ifdef  FIM_SWITCH_FIXUP
 			/* This way the console switches the right way. */
@@ -96,17 +97,20 @@
 			/* This way the console switches the wrong way. */
 			r=read(fim_stdin_,&c,4);	//up to four chars should suffice
 #endif  /* FIM_SWITCH_FIXUP */
-ret:		return r;
+ret:
+#endif /* HAVE_SYS_SELECT_H */
+		return r;
 	}
 
 	fim_key_t DisplayDevice::catchInteractiveCommand(fim_ts_t seconds)const
 	{
+		fim_key_t c=-1;/* -1 means 'no character pressed */
+#if HAVE_TERMIOS_H
 		/*	
 		 * This call 'steals' circa 1/10 of second..
 		 */
 		fd_set          set;
 		ssize_t rc=0,r;
-		fim_key_t c=-1;/* -1 means 'no character pressed */
 		struct termios tattr, sattr;
 		//we set the terminal in raw mode.
                 if (! isatty(cc.fim_stdin_))
@@ -134,7 +138,9 @@ ret:		return r;
 		tcsetattr (0, TCSAFLUSH, &sattr);
 		if( r<=0 )
 			c=-1;	
-ret:		return c; /* read key */
+ret:		
+#endif /* HAVE_TERMIOS_H */
+		return c; /* read key */
 	}
 
 void DisplayDevice::clear_screen_locking(void)

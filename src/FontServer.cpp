@@ -307,7 +307,9 @@ openhardcodedfont:
 	goto oops;
     }
     FIM_SAVE_CONSOLEFONTNAME(fontfilename);
+#if FIM_WANT_HARDCODED_FONT
 gotafp:
+#endif /* FIM_WANT_HARDCODED_FONT */
 {
     int m0=0,m1=0;
     m0=fgetc(fp);

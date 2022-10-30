@@ -52,7 +52,9 @@ class CommandConsole FIM_FINAL :
 	fim_int return_code_;	/* new, to support the 'return' command */
 	bool mangle_tcattr_;
 
+#if HAVE_TERMIOS_H
 	struct termios  saved_attributes_;
+#endif /* HAVE_TERMIOS_H */
 	fim_sys_int             saved_fl_; /* file status flags for stdin */
 
 	public:

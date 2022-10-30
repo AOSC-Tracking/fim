@@ -3,6 +3,8 @@
 
                 Version 0.6-trunk
 
+# (r1729)
+ * Build fixes for the MinGW environment.
 # (r1727)
  * man fimrc: added a section with default aliases,
 # (r1724)

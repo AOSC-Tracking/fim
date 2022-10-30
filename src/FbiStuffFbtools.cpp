@@ -2,7 +2,7 @@
 /*
  FbiStuffFbtools.cpp : fbi functions from fbtools.c, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <termios.h>
 #include <signal.h>	// sigaction, ...
 #include <setjmp.h>
 #ifdef HAVE_SYS_USER_H
@@ -36,6 +35,8 @@
 
 #include "FbiStuffFbtools.h"
 #include "FramebufferDevice.h"
+
+#define HAVE_SIGJMP_BUF !FIM_USING_MINGW
 
 namespace fim
 {
@@ -46,6 +47,7 @@ namespace fim
 /* -------------------------------------------------------------------- */
 /* handle fatal errors                                                  */
 
+#if HAVE_SIGJMP_BUF
 //static jmp_buf fb_fatal_cleanup;	/* old, broken */
 static sigjmp_buf fb_fatal_cleanup;	/* posix */
 
@@ -54,9 +56,11 @@ fb_catch_exit_signal(int signal)
 {
     siglongjmp(fb_fatal_cleanup,signal);
 }
+#endif /* HAVE_SIGJMP_BUF */
 
 void fb_catch_exit_signals(void)
 {
+#if HAVE_SIGJMP_BUF
     struct sigaction act,old;
     int termsig;
 
@@ -82,6 +86,7 @@ void fb_catch_exit_signals(void)
 #ifdef HAVE_SYS_SIGLIST
     FIM_FBI_PRINTF("Oops: %s\n",sys_siglist[termsig]);
 #endif /* HAVE_SYS_SIGLIST */
+#endif /* HAVE_SIGJMP_BUF */
     std::exit(FIM_PERR_OOPS);
 }
 

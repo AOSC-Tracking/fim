@@ -30,9 +30,11 @@ conf.h:       fimrc
 	$(ECHO) '"";' >> $@
 
 grammar.h: yacc.tab.cpp yacc.output
+if WITH_FLEXLEXER
 	$(ECHO) 'const fim_char_t * const FIM_DEFAULT_GRAMMAR_FILE_CONTENTS =' > $@
 	$(AWK) -f $(top_srcdir)/scripts/maintenance/yacc2grammar.awk yacc.output | $(CPP) -include $(top_srcdir)/scripts/maintenance/yacc2grammar.h  | $(GREP) -v '^#' | $(SED) 's/"/\\\"/g;s/^/"/g;s/$$/\\n"/g;' >> $@
 	$(ECHO) '"";' >> $@
+endif
 
 examples.h: ../scripts/example/oneline.fim
 	$(ECHO) 'const fim_char_t * const FIM_DEFAULT_EXAMPLE_FILE_CONTENTS =' > $@
@@ -65,20 +67,26 @@ help-acm.cpp: fim.h
 	$(ECHO)  ' '>> $@
 	$(ECHO) '//#endif' >> $@
 
-b2ba: b2ba.c
+b2ba$(EXEEXT): b2ba.c
 	$(CC) -o $@ $<
 
 if FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT
-default_font_byte_array.h: $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) b2ba
-	./b2ba < $< > $@
+default_font_byte_array.h: $(FIM_CUSTOM_HARDCODED_CONSOLEFONT) b2ba$(EXEEXT)
+	./b2ba$(EXEEXT) < $< > $@
 else
-default_font_byte_array.h:   ../var/fonts/Lat15-Terminus16.psf b2ba
-	./b2ba < $< > $@
+default_font_byte_array.h:   ../var/fonts/Lat15-Terminus16.psf b2ba$(EXEEXT)
+	./b2ba$(EXEEXT) < $< > $@
 endif
 
 # the following sources are built at make time
 # old bison versions could have problems with this (e.g.: generating yacc.tab.cpp.h instead of yacc.tab.hpp)
-BUILT_SOURCES = lex.yy.cc yacc.tab.cpp conf.h yacc.tab.hpp 
+BUILT_SOURCES =
+if WITH_FLEXLEXER
+BUILT_SOURCES += lex.yy.cc yacc.tab.cpp conf.h yacc.tab.hpp 
+else
+yacc.output:
+	touch $@
+endif
 
 # this hook triggers on 'make dist'
 .PHONY: dist-hook
@@ -101,7 +109,7 @@ EXTRA_fim_SOURCES += FbiStuffXyz.cpp
 EXTRA_fim_SOURCES += FbiStuffPcx.cpp
 EXTRA_fim_SOURCES += FbiStuffBmp.cpp
 
-CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba
+CLEANFILES=$(BUILT_SOURCES) yacc.output b2ba$(EXEEXT)
 
 #CPP_FLAGS="$CPP_FLAGS -D X_DISPLAY_MISSING"
 #AM_CPPFLAGS=

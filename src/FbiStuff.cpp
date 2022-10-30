@@ -33,8 +33,10 @@
 #include <cstdlib>	/* mkstemp */
 #include <cstdio>	/* tempnam */
 #include <cmath>
+#if HAVE_SYS_WAIT_H
 #include <sys/wait.h>  /* waitpid */
-#include <cstring>
+#endif /* HAVE_SYS_WAIT_H */
+#include <cstring>	/* memmem */
 #include <cstdarg>	/* va_start, va_end, ... */
 //#include <experimental/filesystem> // std::experimental::filesystem::temp_directory_path
 #if FIM_WITH_ARCHIVE
@@ -1481,6 +1483,7 @@ void FbiStuff::free_image(struct ida_image *img)
 
 FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 {
+#if HAVE_PIPE
 	/* new */
 	va_list ap;
         int rc;
@@ -1524,6 +1527,7 @@ FILE* FbiStuff::fim_execlp(const fim_char_t *cmd, ...)
 			return fp;
 	}
 err:
+#endif /* HAVE_PIPE */
 	return FIM_NULL;
 }
 

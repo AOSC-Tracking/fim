@@ -20,13 +20,18 @@
 */
 #ifndef FIM_COMMON_H
 #define FIM_COMMON_H
+#include "fim_types.h"
+#if HAVE_FLEXLEXER_H
 #undef yyFlexLexer
 #include <FlexLexer.h>
-#include "fim_types.h"
+#endif /* HAVE_FLEXLEXER_H */
 extern int fim_pipedesc[2];
 
+#if HAVE_FLEXLEXER_H
 extern FlexLexer *lexer;
 //#define YYLEX lexer->yylex()
+#endif /* HAVE_FLEXLEXER_H */
+
 namespace fim
 {
 	class CommandConsole;

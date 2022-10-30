@@ -120,6 +120,11 @@ AC_CHECK_FUNC([getdelim], AC_DEFINE([HAVE_GETDELIM], [1], [If present, will be u
 AC_CHECK_FUNC([fgetln], AC_DEFINE([HAVE_FGETLN], [1], [If present, fgetln() will be used as a replacement for getline(). (on BSD)]))
 AC_CHECK_FUNC([get_current_dir_name], AC_DEFINE([HAVE_GET_CURRENT_DIR_NAME], [1], [Should live when _GNU_SOURCE, but it could be not the case.]))
 AC_CHECK_FUNC([rsb_lib_init])
+AC_CHECK_FUNC([pipe])
+AH_TEMPLATE([HAVE_MEMMEM])
+AC_CHECK_FUNC([memmem], AC_DEFINE([HAVE_MEMMEM], [1], [Have memmem]))
+AH_TEMPLATE([HAVE_SYNC])
+AC_CHECK_FUNC([sync], AC_DEFINE([HAVE_SYNC], [1], [Have sync]))
 
 AC_CHECK_LIB([m],[pow])
 AC_CHECK_LIB([fl],[yylex])
@@ -295,6 +300,8 @@ AC_CHECK_HEADERS([fontconfig/fcfreetype.h])
 AC_HEADER_DIRENT()
 AC_CHECK_HEADERS([stdarg.h sys/ioctl.h ioctl.h sysexits.h])
 AC_CHECK_HEADERS([sys/time.h sys/resource.h])
+AC_CHECK_HEADERS([sys/select.h])
+AC_CHECK_HEADERS([sys/wait.h])
 AC_CHECK_HEADERS([time.h])
 AC_CHECK_HEADERS([unix.h])
 AC_CHECK_HEADERS([libgen.h])
@@ -316,6 +323,44 @@ if test "x$fim_big_endian" = "xyes" ; then
 fi
 
 
+dnl ============= begin misc external programs detection
+AC_CHECK_HEADERS([_regex.h])
+if test x$ac_cv_header__regex_h = xyes; then
+	AH_TEMPLATE([HAVE__REGEX_H])
+	AC_DEFINE([HAVE__REGEX_H],[1],[We have _regex.h])
+fi
+AC_CHECK_HEADERS([regex.h])
+if test x$ac_cv_header_regex_h = xyes; then
+	AH_TEMPLATE([HAVE_REGEX_H])
+	AC_DEFINE([HAVE_REGEX_H],[1],[We have regex.h])
+fi
+AC_CHECK_HEADERS([termios.h])
+if test x$ac_cv_header_termios_h = xyes; then
+	AH_TEMPLATE([HAVE_TERMIOS_H])
+	AC_DEFINE([HAVE_TERMIOS_H],[1],[We have termios.h])
+fi
+if test x$ac_cv_header_sys_ioctl_h = xyes; then
+	AH_TEMPLATE([HAVE_SYS_IOCTL_H])
+	AC_DEFINE([HAVE_SYS_IOCTL_H],[1],[We have sys/ioctl.h])
+fi
+if test x$ac_cv_header_sys_select_h = xyes; then
+	AH_TEMPLATE([HAVE_SYS_SELECT_H])
+	AC_DEFINE([HAVE_SYS_SELECT_H],[1],[We have sys/select.h])
+fi
+if test x$ac_cv_header_sys_wait_h = xyes; then
+	AH_TEMPLATE([HAVE_SYS_WAIT_H])
+	AC_DEFINE([HAVE_SYS_WAIT_H],[1],[We have sys/wait.h])
+fi
+AC_CHECK_HEADERS([FlexLexer.h])
+if test x$ac_cv_func_pipe = xyes; then
+	AH_TEMPLATE([HAVE_PIPE])
+	AC_DEFINE([HAVE_PIPE],[1],[We have pipe()])
+fi
+if test x$ac_cv_header_FlexLexer_h = xyes; then
+	AH_TEMPLATE([HAVE_FLEXLEXER_H])
+	AC_DEFINE([HAVE_FLEXLEXER_H],[1],[We have FlexLexer.h])
+fi
+AM_CONDITIONAL(WITH_FLEXLEXER, test x$ac_cv_header_FlexLexer_h = xyes)
 dnl ============= begin misc external programs detection
 dnl ============= end misc external programs detection
 
@@ -365,6 +410,9 @@ AC_ARG_WITH(regex, AS_HELP_STRING([--with-regex],[Use the GNU regex library inst
         [fim_cv_regex=yes],
         [AC_CHECK_FUNCS(regcomp, fim_cv_regex=no, fim_cv_regex=yes)])
 
+if test X$ac_cv_header__regex_h = Xno ; then
+	fim_cv_regex=no;
+fi
 if test X$fim_cv_regex = Xno ; then
 AC_CACHE_CHECK([whether your system regexp library is completely broken],
         [fim_cv_regex_broken],
@@ -378,7 +426,7 @@ int main() { regex_t blah ; /*regmatch_t p; p.rm_eo = p.rm_eo;*/ const int rr = 
         fi
 fi
 
-if test X$fim_cv_regex = Xyes; then
+if test X$fim_cv_regex = Xyes -a X$ac_cv_header__regex_h != Xno; then
         AC_DEFINE(USE_GNU_REGEX,1,[ Define if you want to use the included (GNU) regex.c. ])
         AC_LIBOBJ(regex)
 fi
@@ -1192,7 +1240,7 @@ else
 fi],[ fim_cv_hardcoded_font=yes; ])
 
 AH_TEMPLATE([FIM_WANT_HARDCODED_FONT])
-if test x$fim_cv_hardcoded_font = xyes; then
+if test x$fim_cv_hardcoded_font = xyes -a x$ac_cv_func_fmemopen = xyes ; then
 	have_hardcoded_font=yes
 	AC_DEFINE([FIM_WANT_HARDCODED_FONT],1,[Enable a hardcoded font in the executable.])
 else
@@ -1589,6 +1637,8 @@ fim_cv_want_font_magnify_factor="$withval";
 ], [])
 AM_CONDITIONAL(FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT, test x$fim_cv_want_custom_hardcoded_consolefont = xtrue )
 dnl ==================
+AM_CONDITIONAL([HAVE_RUNNABLE_TESTS],[test x"$host_cpu" == x"$build_cpu" -a x"$host_os" == x"$build_os" ])
+dnl ==================
 dnl # /tmp/__FIM_TEMPORARY_FILE
 AC_ARG_WITH(tmpfile, AS_HELP_STRING([--with-tmpfile=FILE],[Specify where to put temporary files created when interacting with external conversion programs.]),
         [fim_cv_tmpfile=$withval],
@@ -1767,7 +1817,7 @@ dnl ==================
 
 dnl ==================
     AH_TEMPLATE([FIM_WANT_SEEK_MAGIC])
-            if test x$fim_cv_seek_magic = xyes ; then
+            if test x$fim_cv_seek_magic = xyes -a x$ac_cv_func_memmem = xyes; then
     		AC_DEFINE([FIM_WANT_SEEK_MAGIC])
     	fi
 
