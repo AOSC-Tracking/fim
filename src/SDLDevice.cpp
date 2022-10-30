@@ -1336,7 +1336,6 @@ ok:
 #endif /* FIM_WANT_NO_OUTPUT_CONSOLE */
 		return FIM_ERR_NO_ERROR;
 	}
-#endif
 
 	fim_err_t SDLDevice::get_resolution(const char spec, fim_coo_t & w, fim_coo_t & h) const
 	{
@@ -1397,4 +1396,4 @@ ok:
 			h = modes_[i]->h;
 		return FIM_ERR_NO_ERROR;
 	}
-
+#endif /* FIM_WITH_LIBSDL */
