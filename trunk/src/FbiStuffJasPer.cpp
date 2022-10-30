@@ -2,7 +2,7 @@
 /*
  FbiStuffXyz.cpp : An example file for reading new file types with hypothetical library libjp2.
 
- (c) 2014-2018 Michele Martone
+ (c) 2014-2022 Michele Martone
  based on code (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -37,7 +37,7 @@
 #include <string.h>
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H
-# include <endian.h>
+ #include <endian.h>
 #endif /* HAVE_ENDIAN_H */
 #include <jasper/jasper.h>
 

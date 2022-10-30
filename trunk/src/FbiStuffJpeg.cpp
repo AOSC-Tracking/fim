@@ -72,14 +72,14 @@ extern "C"
 /*								*/
 
 #ifdef USE_X11
-# include <X11/Xlib.h>
-# include <X11/Intrinsic.h>
-# include <Xm/Xm.h>
-# include <Xm/Text.h>
-# include <Xm/SelectioB.h>
-# include "RegEdit.h"
-# include "ida.h"
-# include "viewer.h"
+ #include <X11/Xlib.h>
+ #include <X11/Intrinsic.h>
+ #include <Xm/Xm.h>
+ #include <Xm/Text.h>
+ #include <Xm/SelectioB.h>
+ #include "RegEdit.h"
+ #include "ida.h"
+ #include "viewer.h"
 #endif /* USE_X11 */
 namespace fim
 {

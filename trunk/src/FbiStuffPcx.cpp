@@ -30,7 +30,7 @@
 #include <string.h>
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H
-# include <endian.h>
+ #include <endian.h>
 #endif /* HAVE_ENDIAN_H */
 
 namespace fim

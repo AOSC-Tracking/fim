@@ -2,7 +2,7 @@
 /*
  FbiStuffBmp.cpp : fbi functions for BMP files, modified for fim
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 #include <string.h>
 #include <errno.h>
 #ifdef HAVE_ENDIAN_H
-# include <endian.h>
+ #include <endian.h>
 #endif /* HAVE_ENDIAN_H */
 #include <algorithm> // fill_n
 
@@ -49,17 +49,17 @@ typedef unsigned short uint16;
 
 /* bitmap files are little endian */
 #if BYTE_ORDER == LITTLE_ENDIAN
-# define le16_to_cpu(x) (x)
-# define le32_to_cpu(x) (x)
+ #define le16_to_cpu(x) (x)
+ #define le32_to_cpu(x) (x)
 #elif BYTE_ORDER == BIG_ENDIAN
-# define le16_to_cpu(x) (((x>>8) & 0x00ff) |\
+ #define le16_to_cpu(x) (((x>>8) & 0x00ff) |\
                          ((x<<8) & 0xff00))
-# define le32_to_cpu(x) (((x>>24) & 0x000000ff) |\
+ #define le32_to_cpu(x) (((x>>24) & 0x000000ff) |\
                          ((x>>8)  & 0x0000ff00) |\
                          ((x<<8)  & 0x00ff0000) |\
                          ((x<<24) & 0xff000000))
 #else /* BYTE_ORDER == LITTLE_ENDIAN */
-# error "Oops: unknown byte order"
+ #error "Oops: unknown byte order"
 #endif /* BYTE_ORDER == LITTLE_ENDIAN */
 
 /* ---------------------------------------------------------------------- */

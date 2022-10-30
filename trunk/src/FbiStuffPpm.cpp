@@ -2,7 +2,7 @@
 /*
  FbiStuffPpm.cpp : fbi functions for PPM files, modified for fim
 
- (c) 2008-2018 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 #include "fim.h"
 #include "FbiStuffLoader.h"
 #ifdef USE_X11
-# include "viewer.h"
+ #include "viewer.h"
 #endif /* USE_X11 */
 
 /* ---------------------------------------------------------------------- */
