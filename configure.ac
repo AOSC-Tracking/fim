@@ -1469,6 +1469,7 @@ else
 	# we revert to no just for the printout
 	fim_cv_read_stdin_image=no
 fi
+AM_CONDITIONAL(WANT_READ_STDIN_IMAGE, test x$fim_cv_read_stdin_image = xyes)
 
 dnl ==================
 
