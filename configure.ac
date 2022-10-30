@@ -1910,7 +1910,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CHECK_PROG([HAVE_TIMEOUT],[timeout],[yes],[no])
 if test x"$ac_cv_prog_HAVE_TIMEOUT" = x"yes"; then
 	AC_MSG_NOTICE(Will use 'timeout --foreground 10' in certain tests.)
-	AC_SUBST(TIMEOUT,"timeout --foreground 1")
+	AC_SUBST(TIMEOUT,"timeout --foreground 10")
 fi
 
 AH_TEMPLATE([FIM_RANDOM])
