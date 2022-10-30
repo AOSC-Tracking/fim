@@ -1,7 +1,7 @@
 # $Id$
 
 subdir = src
-AUTOMAKE_OPTIONS = no-dependencies dejagnu
+AUTOMAKE_OPTIONS = no-dependencies dejagnu subdir-objects
 #AUTOMAKE_OPTIONS+= nostdinc
 SUBDIRS = 
 check_PROGRAMS = fim

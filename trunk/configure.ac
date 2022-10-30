@@ -62,7 +62,7 @@ AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_YACC
-AC_PROG_LEX
+AC_PROG_LEX(yywrap)
 
 AC_PROG_INSTALL
 AC_PROG_RANLIB
@@ -277,7 +277,9 @@ if test x$fim_handle_framebuffer = xno ; then
 	AC_DEFINE(FIM_WITH_NO_FRAMEBUFFER, 1, [Defined when framebuffer device support is turned off.])
 fi
 
-AC_HEADER_STDC
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
 AC_FUNC_MMAP
 
 AC_CHECK_FUNCS([bzero memset memcmp strncmp strcpy])
@@ -376,17 +378,17 @@ dnl fi
 
 dnl AC_CHECK_FUNCS(setrlimit getsid)
 
-AC_DIAGNOSE([obsolete],[your code may safely assume C89 semantics that RETSIGTYPE is void.
-Remove this warning and the `AC_CACHE_CHECK' when you adjust the code.])dnl
-AC_CACHE_CHECK([return type of signal handlers],[ac_cv_type_signal],[AC_COMPILE_IFELSE(
-[AC_LANG_PROGRAM([#include <sys/types.h>
-#include <signal.h>
-],
-		 [return *(signal (0, 0)) (0) == 1;])],
-		   [ac_cv_type_signal=int],
-		   [ac_cv_type_signal=void])])
-AC_DEFINE_UNQUOTED([RETSIGTYPE],[$ac_cv_type_signal],[Define as the return type of signal handlers
-		    (`int' or `void').])
+dnl m4_warn([obsolete],[your code may safely assume C89 semantics that RETSIGTYPE is void.
+dnl Remove this warning and the `AC_CACHE_CHECK' when you adjust the code.])dnl
+dnl AC_CACHE_CHECK([return type of signal handlers],[ac_cv_type_signal],[AC_COMPILE_IFELSE(
+dnl [AC_LANG_PROGRAM([#include <sys/types.h>
+dnl #include <signal.h>
+dnl ],
+dnl 		 [return *(signal (0, 0)) (0) == 1;])],
+dnl 		   [ac_cv_type_signal=int],
+dnl 		   [ac_cv_type_signal=void])])
+dnl AC_DEFINE_UNQUOTED([RETSIGTYPE],[$ac_cv_type_signal],[Define as the return type of signal handlers
+dnl 		    (`int' or `void').])
 
 
 dnl ==================
