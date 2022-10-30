@@ -2,7 +2,7 @@
 /*
  Imlib2.cpp : Imlib2 device Fim driver file
 
- (c) 2011-2017 Michele Martone
+ (c) 2011-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -455,7 +455,7 @@ fim_sys_int Imlib2Device::get_input_i2l(fim_key_t * c)
 		// FIXME: move outta here this check & resize (shall intercept the event first, though)
  		current_w_=attributes.width;
  		current_h_=attributes.height;
-		cc.resize(current_w_,current_h_);
+		cc.display_resize(current_w_,current_h_);
 	}
 	return rc;
 }
@@ -615,7 +615,7 @@ done:
 	{
 		if(parse_optstring(rs)!=FIM_ERR_NO_ERROR)
 			goto err;
-		return cc.resize(current_w_,current_h_);
+		return cc.display_resize(current_w_,current_h_);
 	err:
 		//std::cerr<<"problems!\n";
 		return FIM_ERR_GENERIC;

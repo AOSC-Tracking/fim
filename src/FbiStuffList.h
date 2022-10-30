@@ -2,7 +2,7 @@
 /*
  FbiStuffList.h : fbi functions for lists, modified for fim
 
- (c) 2008-2013 Michele Martone
+ (c) 2008-2022 Michele Martone
  (c) 1998-2006 Gerd Knorr <kraxel@bytesex.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * This file comes from fbi, and will undergo severe reorganization.
+ * This file comes from fbi.
  * */
 
 #ifndef FBI_STUFF_LIST_H

@@ -595,7 +595,7 @@ err:
 			break;
 			case (AA_RESIZE):
 				//status_line((const fim_char_t *)"window resizing not yet supported. sorry!");
-				cc.resize(0,0);
+				cc.display_resize(0,0);
 				/*aa_resize(ascii_context_);*//*we are not yet ready : the FimWindow and Viewport stuff .. */
 				rc = 0;
 				/* */
