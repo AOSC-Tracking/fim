@@ -326,6 +326,11 @@ fi
 
 
 dnl ============= begin misc external programs detection
+AC_CHECK_HEADERS([regex])
+if test x$ac_cv_header_regex = xyes; then
+	AH_TEMPLATE([HAVE_REGEX])
+	AC_DEFINE([HAVE_REGEX],[1],[We have <regex>])
+fi
 AC_CHECK_HEADERS([_regex.h])
 if test x$ac_cv_header__regex_h = xyes; then
 	AH_TEMPLATE([HAVE__REGEX_H])
@@ -408,7 +413,7 @@ fi
 dnl ==================
 
 
-AC_ARG_WITH(regex, AS_HELP_STRING([--with-regex],[Use the GNU regex library instead of the POSIX one]),
+AC_ARG_WITH(regex, AS_HELP_STRING([--with-regex],[Obsolete switch -- do not use it.]),
         [fim_cv_regex=yes],
         [AC_CHECK_FUNCS(regcomp, fim_cv_regex=no, fim_cv_regex=yes)])
 
