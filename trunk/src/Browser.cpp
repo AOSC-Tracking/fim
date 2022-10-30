@@ -315,6 +315,8 @@ ret:
 		       	delete default_image_;
 		default_image_ = stdin_image;
 #endif /* FIM_USE_CXX11 */
+		if(!cache_.setAndCacheStdinCachedImage(default_image_))
+			std::cerr << FIM_EMSG_CACHING_STDIN;
 ret:
 		FIM_PR('.');
 		return;
