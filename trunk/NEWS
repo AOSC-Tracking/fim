@@ -90,8 +90,8 @@
  * key combination C-w assigned to setting auto-scaling to width.
 # (r1543)
  * smoother scroll of large images.
-# (r1540,r1541)
- * if SSH_TTY set and no output device specified, will give precedence to aalib.
+# (r1540,r1541,r1741)
+ * if SSH_TTY set and no output device specified, give precedence to aalib, then libcaca.
 # (r1539)
  * bugfix: in --as-text will avoid repeated reload of file.
 # (r1526)

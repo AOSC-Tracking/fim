@@ -416,7 +416,7 @@ FBGAMMA		(just like in fbi) gamma correction (applies to dithered 8 bit mode onl
 FRAMEBUFFER	(just like in fbi) user set framebuffer device file (applies only to the fb mode).
 If unset, fim will probe for /dev/fb0.
 TERM		(only in fim) will influence the output device selection algorithm, especially if $TERM=="screen".
-SSH_TTY	if set and no output device specified, will give precedence to the aa driver.
+SSH_TTY	if set and no output device specified, give precedence to caca, then aa (if present).
 DISPLAY	If this variable is set, then the sdl driver will be probed by default.
 .SH COMMON PROBLEMS
 .B fim
