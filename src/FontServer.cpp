@@ -215,7 +215,7 @@ struct fs_font* FontServer::fs_consolefont(const fim_char_t **filename, fim_int 
     if (FIM_NULL == filename)
 	filename = fim::default_font;
 #ifdef FIM_DEFAULT_CONSOLEFONT
-    FIM_FDS << "configured with default (prioritary) consolefont: " << FIM_DEFAULT_CONSOLEFONTo << "\n";
+    FIM_FDS << "configured with default (prioritary) consolefont: " << FIM_DEFAULT_CONSOLEFONT << "\n";
 #endif /* FIM_DEFAULT_CONSOLEFONT */
 
 scanlistforafontfile:
