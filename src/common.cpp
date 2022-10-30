@@ -591,7 +591,7 @@ fim_int fim_rand(void)
 
 		try {
 			match = std::regex_search(s, std::regex(r, ignorecase ? ( std::regex_constants::extended | std::regex_constants::icase) : std::regex_constants::extended ));
-		} catch (std::exception e) { match = false; }
+		} catch (const std::exception &) { match = false; }
 #else /* FIM_USE_CXX_REGEX */
 #if HAVE_REGEX_H
 		regex_t regex;		//should be static!!!
