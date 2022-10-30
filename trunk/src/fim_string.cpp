@@ -173,7 +173,7 @@ namespace fim
 		std::string os;
 		try {
 			os = std::regex_replace( *this, std::regex(r, ( std::regex_constants::extended | std::regex_constants::icase /*| std::regex_constants::format_sed*/) ), s);
-		} catch (std::exception e) { }
+		} catch (const std::exception &) { }
 		if(os!=*this)
 			*this=os.c_str();
 #else /* FIM_USE_CXX_REGEX */
