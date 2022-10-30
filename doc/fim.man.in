@@ -449,37 +449,39 @@ work.
 .SH INVOCATION EXAMPLES
 .B fim --help -R -B
 .fi 
-# Will ask for help for options -R and -B.
+# get help for options \fB-R\fP and 
+.B -B
 .P
 .P
 
 .B fim media/ 
 .fi 
-# Will load files from the directory media.
+# load files from the directory 
+.B media/
 .P
 .P
 
 .B fim -R media/ --sort 
 .fi 
-# Will open files found by recursive traversal of directory media, then sorting the list.
+# open files found by recursive traversal of directory media, then sorting the list
 .P
 .P
 
 .B find /mnt/media/ -name *.jpg | fim - 
 .fi 
-# Will make fim read the file list from standard input.
+# read input files list from standard input
 .P
 .P
 
 .B find /mnt/media/ -name *.jpg | shuf | fim -
 .fi 
-# will make fim read the file list from standard input, randomly shuffled.
+# read input files list from standard input, randomly shuffled
 .P
 .P
 
 .B cat script.fim | fim -p images/*
 .fi 
-# Will make fim read the script file
+# read a script file
 .B script.fim
 from standard input prior to displaying files in the directory
 .B images
@@ -488,32 +490,32 @@ from standard input prior to displaying files in the directory
 
 .B scanimage ... | tee scan.ppm | fim -i
 .fi 
-# Will make fim read the image scanned from a flatbed scanner as soon as it is read 
+# read the image scanned from a flatbed scanner as soon as it is read
 .P
 .P
 
 .B h5topng -x 1 -y 2 dataset.hdf -o /dev/stdout | fim -i
 .fi 
-# Use fim to visualize a slice from an HDF5 dataset file
+# visualize a slice from an HDF5 dataset file
 .P
 .P
 
 .B fim * > selection.txt
 .fi 
-# Will output the file names marked interactively with the 'list "mark"' command in fim to a file.
+# output the file names marked interactively with the 'list "mark"' command in fim to a file
 .P
 .P
 
 .B fim * | fim -
 .fi 
-# will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.
+# output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again
 .P
 .P
 
 .B fim
 -c 'pread "vgrabbj -d /dev/video0 -o png";reload'
 .fi 
-# will display an image grabbed from a webcam.
+# display an image grabbed from a webcam
 .P
 .P
 
@@ -521,7 +523,7 @@ from standard input prior to displaying files in the directory
 -o aa -c 'pread "vgrabbj -d /dev/video0 -o png";reload;system "fbgrab" "asciime.png"'
 .fi 
 .fi
-# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam.
+# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam
 .P
 .P
 
@@ -529,7 +531,7 @@ from standard input prior to displaying files in the directory
 -c 'while(1){pread "vgrabbj -d /dev/video0 -o png";reload;sleep 1;};'
 
 .fi 
-# will display a sequence of images grabbed from a webcam; circa 1 per second.
+# will display a sequence of images grabbed from a webcam; circa 1 per second
 .P
 .P
 

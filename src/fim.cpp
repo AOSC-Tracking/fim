@@ -904,32 +904,32 @@ mp+=string(
 "work.\n"
 ".SH INVOCATION EXAMPLES\n"
 FIM_MAN_Bn("fim --help -R -B")
-"# Will ask for help for options -R and -B.\n"
+"# get help for options " FIM_MAN_fB("-R") " and \n.B -B\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("fim media/ ")
-"# Will load files from the directory media.\n"
+"# load files from the directory \n.B media/\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("fim -R media/ --sort ")
-"# Will open files found by recursive traversal of directory media, then sorting the list.\n"
+"# open files found by recursive traversal of directory media, then sorting the list\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("find /mnt/media/ -name *.jpg | fim - ")
-"# Will make fim read the file list from standard input.\n"
+"# read input files list from standard input\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("find /mnt/media/ -name *.jpg | shuf | fim -")
-"# will make fim read the file list from standard input, randomly shuffled.\n"
+"# read input files list from standard input, randomly shuffled\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("cat script.fim | fim -p images/*")
-"# Will make fim read the script file\n"
+"# read a script file\n"
 ".B script.fim\n"
 "from standard input prior to displaying files in the directory\n"
 ".B images\n"
@@ -938,39 +938,39 @@ FIM_MAN_Bn("cat script.fim | fim -p images/*")
 #ifdef FIM_READ_STDIN_IMAGE
 "\n"
 FIM_MAN_Bn("scanimage ... | tee scan.ppm | fim -i")
-"# Will make fim read the image scanned from a flatbed scanner as soon as it is read \n"
+"# read the image scanned from a flatbed scanner as soon as it is read\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("h5topng -x 1 -y 2 dataset.hdf -o /dev/stdout | fim -i")
-"# Use fim to visualize a slice from an HDF5 dataset file\n"
+"# visualize a slice from an HDF5 dataset file\n"
 ".P\n"
 ".P\n"
 #endif /* FIM_READ_STDIN_IMAGE */
 "\n"
 FIM_MAN_Bn("fim * > selection.txt")
-"# Will output the file names marked interactively with the '" FIM_FLT_LIST " \"mark\"' command in fim to a file.\n"
+"# output the file names marked interactively with the '" FIM_FLT_LIST " \"mark\"' command in fim to a file\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("fim * | fim -")
-"# will output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again.\n"
+"# output the file names marked with 'm' in fim to a second instance of fim, in which these could be marked again\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("fim\n-c 'pread \"vgrabbj -d /dev/video0 -o png\";reload'")
-"# will display an image grabbed from a webcam.\n"
+"# display an image grabbed from a webcam\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("fim\n-o " FIM_DDN_INN_AA " -c 'pread \"vgrabbj -d /dev/video0 -o png\";reload;system \"fbgrab\" \"asciime.png\"'")
 ".fi\n"
-"# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam.\n"
+"# if running in framebuffer mode, will save a png screenshot with an ASCII rendering of an image grabbed from a webcam\n"
 ".P\n"
 ".P\n"
 "\n"
 FIM_MAN_Bn("fim\n" "-c 'while(1){pread \"vgrabbj -d /dev/video0 -o png\";reload;sleep 1;};'\n")
-"# will display a sequence of images grabbed from a webcam; circa 1 per second.\n"
+"# will display a sequence of images grabbed from a webcam; circa 1 per second\n"
 ".P\n"
 ".P\n"
 "\n"
