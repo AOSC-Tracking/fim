@@ -143,6 +143,7 @@ AC_ARG_ENABLE(imlib2, AS_HELP_STRING([--enable-imlib2],[Enable Imlib2 library su
 AC_CHECK_LIB([Imlib2],[imlib_create_image],
   [
 if test x"$fim_handle_imlib2" = x"yes" ; then 
+  AC_MSG_WARN([Imlib2 support is still INCOMPLETE, you should better use sdl!])
   FIM_LIB_OBJECTS="$FIM_LIB_OBJECTS Imlib2Device.o";
   LIBS="$LIBS `imlib2-config --libs|tr '\n' ' '` ";
   CXXFLAGS="$CXXFLAGS `imlib2-config --cflags |tr '\n' ' '` ";
@@ -413,7 +414,7 @@ fi
 dnl ==================
 
 
-AC_ARG_WITH(regex, AS_HELP_STRING([--with-regex],[Obsolete switch -- do not use it.]),
+AC_ARG_WITH(regex, AS_HELP_STRING([--with-regex],[Obsolete switch -- do not use this. (deprecated)]),
         [fim_cv_regex=yes],
         [AC_CHECK_FUNCS(regcomp, fim_cv_regex=no, fim_cv_regex=yes)])
 
@@ -1508,7 +1509,7 @@ dnl ==================
 
 fim_cv_cacalib=no
 
-AC_ARG_ENABLE(cacalib, AS_HELP_STRING([--enable-cacalib],[Turns on cacalib support (STILL INCOMPLETE)]),
+AC_ARG_ENABLE(cacalib, AS_HELP_STRING([--enable-cacalib],[Turns on cacalib support]),
 	[if test x$enableval = xyes; then
 	if test x$have_cacalib = xyes; then
 	fim_cv_cacalib=yes

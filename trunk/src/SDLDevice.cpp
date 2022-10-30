@@ -641,7 +641,7 @@ err:
 			{
 #if FIM_SDL_WANT_RESIZE 
 				case SDL_VIDEORESIZE:
-						cc.resize(event.resize.w,event.resize.h);
+						cc.display_resize(event.resize.w,event.resize.h);
 				break;
 #endif /* FIM_SDL_WANT_RESIZE */
 				case SDL_QUIT:
@@ -1287,7 +1287,7 @@ ok:
 #if FIM_SDL_WANT_RESIZE 
 		if ( parse_optstring(rs) == FIM_ERR_NO_ERROR )
 		{
-			if ( cc.resize(current_w_,current_h_) == FIM_ERR_NO_ERROR )
+			if ( cc.display_resize(current_w_,current_h_) == FIM_ERR_NO_ERROR )
 			{
 				opts_ = rs;
 				return FIM_ERR_NO_ERROR;

@@ -2160,7 +2160,7 @@ done:
 #endif /* FIM_USE_READLINE */
 	}
 
-	fim_err_t CommandConsole::resize(fim_coo_t w, fim_coo_t h, fim_bool_t wsl)
+	fim_err_t CommandConsole::display_resize(fim_coo_t w, fim_coo_t h, fim_bool_t wsl)
 	{
 		if(!displaydevice_)
 			return FIM_ERR_GENERIC;
@@ -2406,7 +2406,7 @@ ret:
 					nww = args[1],
 					nwh = args[2],
 					wsl = false;
-				this->resize(nww,nwh,wsl);
+				this->display_resize(nww,nwh,wsl);
 			}
 			if(browser_.c_getImage() && (getGlobalIntVariable(FIM_VID_OVERRIDE_DISPLAY)!=1))
 			{

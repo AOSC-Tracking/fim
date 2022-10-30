@@ -300,7 +300,7 @@ err:
 		if ( et == CACA_EVENT_RESIZE )
 		{
 			rc = 0;
-			cc.resize(0,0);
+			cc.display_resize(0,0);
 		}
 		else
 		if ( et == CACA_EVENT_QUIT )
