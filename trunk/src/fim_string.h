@@ -4,7 +4,7 @@
 /*
  string.h : Fim's string type
 
- (c) 2007-2017 Michele Martone
+ (c) 2007-2022 Michele Martone
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ namespace fim
 		void substitute(const fim_char_t*r, const fim_char_t* s, int flags=0);
 		fim::string line(int ln)const;
 		size_t lines(void)const;
-		int find_re(const fim_char_t*r,int *mbuf=FIM_NULL)const;
+//		int find_re(const fim_char_t*r,int *mbuf=FIM_NULL)const;
 	}; /* fim::string */
 
 	class Browser;

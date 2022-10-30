@@ -567,12 +567,13 @@ fim_int fim_rand(void)
 	return w;
 }
 
-	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase, int ignorenewlines)
+	bool regexp_match(const fim_char_t*s, const fim_char_t*r, int ignorecase, int ignorenewlines, int globexception)
 	{
 		/*
 		 *	given a string s, and a Posix regular expression r, this
 		 *	member function returns true if there is match. false otherwise.
 		 */
+		/* TODO: replace using <regex> */
 		bool match=false;
 #if HAVE_REGEX_H
 		regex_t regex;		//should be static!!!
@@ -586,9 +587,8 @@ fim_int fim_rand(void)
 		if(!r || !strlen(r))
 			goto ret;
 
-		/* fixup code for a mysterious bug
-		 */
-		if(*r=='*')
+		/* fixup code for a mysterious bug (TODO: check if still relevant) */
+		if(globexception && *r=='*')
 		{
 			match = false;
 			goto ret;
@@ -596,6 +596,7 @@ fim_int fim_rand(void)
 
 		if(ignorenewlines)
 		{
+			/* TODO: unfinished, maybe obsolete */
 			fim::string aux;
 			aux=s;
 		}

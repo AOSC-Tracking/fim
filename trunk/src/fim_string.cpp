@@ -114,31 +114,10 @@ namespace fim
 
 	bool string::re_match(const fim_char_t*r)const
 	{
-		/* TODO: replace using <regex> */
-		/*
-		 * each occurrence of regular expression r will be substituted with t
-		 *
-		 * FIXME : return values could be more informative
-		 * */
-#if HAVE_REGEX_H
-		regex_t regex;
-		FIM_CONSTEXPR int nmatch=1;
-		regmatch_t pmatch[nmatch];
-
 		if( !r || !*r )
 			return false;
 
-		if( regcomp(&regex,r, 0 | REG_EXTENDED | REG_ICASE ) != 0 )
-			return false;
-
-		if(regexec(&regex,c_str(),nmatch,pmatch,0)==0)
-		{
-			regfree(&regex);
-			return true;
-		}
-		regfree(&regex);
-#endif /* HAVE_REGEX_H */
-		return false;
+		return ::regexp_match(c_str(), r, true, true /* obsolete second arg */, false);
 	}
 
 #if FIM_WANT_LONG_INT
@@ -147,6 +126,7 @@ namespace fim
  	string::operator fim_int  (void)const{return fim_atoi(this->c_str());}
 	string::operator float(void)const{return fim_atof(this->c_str());}
 
+#if 0
 	int string::find_re(const fim_char_t*r, int *mbuf)const
 	{
 		/* TODO: replace using <regex> */
@@ -181,6 +161,7 @@ namespace fim
 #endif /* HAVE_REGEX_H */
 		return -1;
 	}
+#endif
 
 	void string::substitute(const fim_char_t*r, const fim_char_t* s, int flags)
 	{
