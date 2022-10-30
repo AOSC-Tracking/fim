@@ -868,9 +868,7 @@ mp+=string(
 "" FIM_ENV_FRAMEBUFFER "	(just like in fbi) user set framebuffer device file (applies only to the " FIM_DDN_INN_FB " mode).\n"
 "If unset, fim will probe for " FIM_DEFAULT_FB_FILE ".\n"
 "" FIM_CNS_TERM_VAR "		(only in fim) will influence the output device selection algorithm, especially if $" FIM_CNS_TERM_VAR "==\"screen\".\n"
-#if defined(FIM_WITH_AALIB)
-"" FIM_ENV_SSH "	if set and no output device specified, will give precedence to the " FIM_DDN_INN_AA " driver.\n"
-#endif /* FIM_WITH_AALIB */
+"" FIM_ENV_SSH "	if set and no output device specified, give precedence to " FIM_DDN_INN_CACA ", then " FIM_DDN_INN_AA " (if present).\n"
 #if defined(FIM_WITH_LIBSDL)
 "" FIM_ENV_DISPLAY "	If this variable is set, then the " FIM_DDN_INN_SDL " driver will be probed by default.\n"
 #elif defined(FIM_WITH_LIBIMLIB2)
@@ -1889,11 +1887,16 @@ void fim_args_from_desc_file(args_t& argsc, const fim_fn_t& dfn, const fim_char_
 		/* output device guess */
 		if( g_fim_output_device==FIM_CNS_EMPTY_STRING )
 		{
-#ifdef FIM_WITH_AALIB
 			if( fim_getenv(FIM_ENV_SSH) ) /* is this a ssh session ? */
+			{
+	#ifdef FIM_WITH_AALIB
 				g_fim_output_device=FIM_DDN_INN_AA;
+	#endif /* FIM_WITH_AALIB */
+	#ifdef FIM_WITH_CACALIB
+				g_fim_output_device=FIM_DDN_INN_CACA;
+	#endif /* FIM_WITH_CACALIB */
+			}
 			else
-#endif /* FIM_WITH_AALIB */
 			#if defined(FIM_WITH_LIBSDL) || defined(FIM_WITH_LIBIMLIB2)
 			/* check to see if we are under X */
 			if( fim_getenv(FIM_ENV_DISPLAY) )
