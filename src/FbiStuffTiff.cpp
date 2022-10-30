@@ -33,7 +33,7 @@
 #include "FbiStuff.h"
 #include "FbiStuffLoader.h"
 #ifdef USE_X11
-# include "viewer.h"
+ #include "viewer.h"
 #endif /* USE_X11 */
 
 namespace fim

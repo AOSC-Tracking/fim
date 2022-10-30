@@ -1400,7 +1400,7 @@ struct ida_op desc_autocrop = {
 #include <errno.h>
 
 #ifdef USE_X11
-# include "viewer.h"
+ #include "viewer.h"
 #endif /* USE_X11 */
 
 /* ---------------------------------------------------------------------- */
